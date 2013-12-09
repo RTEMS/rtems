@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,48 +27,43 @@
 extern "C" {
 #endif
 
-/*
- *  The following defines the information control block used to manage
- *  this class of objects.  The second item is used to manage the set
- *  of "file descriptors" associated with the message queues.
+/**
+ *  This defines the information control block used to manage
+ *  this class of objects.
  */
-
 POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information;
+
+/**
+ *  The is used to manage the set of "file descriptors" associated with
+ *  the message queues.
+ */
 POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information_fds;
 
 /**
  * @brief Initialize message_queue manager related data structures.
  *
- * DESCRIPTION:
- *
  * This routine performs the initialization necessary for this manager.
  *
- * NOTE:  The structure of the routines is identical to that of POSIX
- *        Message_queues to leave the option of having unnamed message
- *        queues at a future date.  They are currently not part of the
- *        POSIX standard but unnamed message_queues are.  This is also
- *        the reason for the apparently unnecessary tracking of
- *        the process_shared attribute.  [In addition to the fact that
- *        it would be trivial to add pshared to the mq_attr structure
- *        and have process private message queues.]
+ * @note The structure of the routines is identical to that of POSIX
+ *       Message_queues to leave the option of having unnamed message
+ *       queues at a future date.  They are currently not part of the
+ *       POSIX standard but unnamed message_queues are.  This is also
+ *       the reason for the apparently unnecessary tracking of
+ *       the process_shared attribute.  [In addition to the fact that
+ *       it would be trivial to add pshared to the mq_attr structure
+ *       and have process private message queues.]
  *
- *        This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
- *        time.
+ * @note This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open time.
  *
  */
-
 void _POSIX_Message_queue_Manager_initialization(void);
 
-/*
- *
- *  _POSIX_Message_queue_Create_support
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Message Queue Create Support
  *
  *  This routine performs the creation of a message queue utilizing the
  *  core message queue.
  */
-
 int _POSIX_Message_queue_Create_support(
   const char                    *name,
   size_t                         name_len,
@@ -78,9 +73,7 @@ int _POSIX_Message_queue_Create_support(
 );
 
 /**
- * @brief Delete a POSIX message queue.
- *
- * DESCRIPTION:
+ * @brief Delete a POSIX Message Queue
  *
  * This routine supports the mq_unlink and mq_close routines by
  * doing most of the work involved with removing a message queue.
@@ -89,26 +82,22 @@ void _POSIX_Message_queue_Delete(
   POSIX_Message_queue_Control *the_mq
 );
 
-/*
+/*@
  *  @brief POSIX Message Queue Receive Support
- *
- *  DESCRIPTION:
  *
  *  This routine supports the various flavors of receiving a message.
  *
- *  NOTE:  The structure of the routines is identical to that of POSIX
- *         Message_queues to leave the option of having unnamed message
- *         queues at a future date.  They are currently not part of the
- *         POSIX standard but unnamed message_queues are.  This is also
- *         the reason for the apparently unnecessary tracking of
- *         the process_shared attribute.  [In addition to the fact that
- *         it would be trivial to add pshared to the mq_attr structure
- *         and have process private message queues.]
+ *  @note The structure of the routines is identical to that of POSIX
+ *        Message_queues to leave the option of having unnamed message
+ *        queues at a future date.  They are currently not part of the
+ *        POSIX standard but unnamed message_queues are.  This is also
+ *        the reason for the apparently unnecessary tracking of
+ *        the process_shared attribute.  [In addition to the fact that
+ *        it would be trivial to add pshared to the mq_attr structure
+ *        and have process private message queues.]
  *
- *         This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
- *         time.
+ * @note This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open time.
  */
-
 ssize_t _POSIX_Message_queue_Receive_support(
   mqd_t               mqdes,
   char               *msg_ptr,
@@ -118,14 +107,11 @@ ssize_t _POSIX_Message_queue_Receive_support(
   Watchdog_Interval   timeout
 );
 
-/*
- *  _POSIX_Message_queue_Send_support
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Message Queue Send Support
  *
  *  This routine posts a message to a specified message queue.
  */
-
 int _POSIX_Message_queue_Send_support(
   mqd_t               mqdes,
   const char         *msg_ptr,
@@ -135,34 +121,35 @@ int _POSIX_Message_queue_Send_support(
   Watchdog_Interval   timeout
 );
 
-/*
- *  _POSIX_Message_queue_Allocate
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Message Queue Allocate
  *
  *  This function allocates a message queue control block from
  *  the inactive chain of free message queue control blocks.
  */
+RTEMS_INLINE_ROUTINE
+  POSIX_Message_queue_Control *_POSIX_Message_queue_Allocate( void )
+{
+  return (POSIX_Message_queue_Control *)
+    _Objects_Allocate( &_POSIX_Message_queue_Information );
+}
 
-RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Allocate( void );
-
-/*
- *  _POSIX_Message_queue_Free
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Message Queue Free
  *
  *  This routine frees a message queue control block to the
  *  inactive chain of free message queue control blocks.
  */
-
-RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free (
+RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free(
   POSIX_Message_queue_Control *the_mq
-);
+)
+{
+  _Objects_Free( &_POSIX_Message_queue_Information, &the_mq->Object );
+}
 
-/*
- *  _POSIX_Message_queue_Get
- *
- *  DESCRIPTION:
+
+/**
+ *  @brief POSIX Message Queue Get
  *
  *  This function maps message queue IDs to message queue control blocks.
  *  If ID corresponds to a local message queue, then it returns
@@ -172,75 +159,68 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free (
  *  and the_message queue is undefined.  Otherwise, location is set
  *  to OBJECTS_ERROR and the_mq is undefined.
  */
-
 RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
   Objects_Id         id,
   Objects_Locations *location
-);
+)
+{
+  return (POSIX_Message_queue_Control *)
+    _Objects_Get( &_POSIX_Message_queue_Information, id, location );
+}
 
-/*
- *  _POSIX_Message_queue_Is_null
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Message Queue Is NULL
  *
  *  This function returns TRUE if the_message_queue is NULL and FALSE otherwise.
  */
-
-RTEMS_INLINE_ROUTINE bool    _POSIX_Message_queue_Is_null (
+RTEMS_INLINE_ROUTINE bool _POSIX_Message_queue_Is_null (
   POSIX_Message_queue_Control *the_mq
-);
+)
+{
+  return !the_mq;
+}
+
 
 /*
- *  _POSIX_Message_queue_Priority_to_core
+ *  @brief POSIX Message Queue Convert Message Priority to Score
  *
- *  DESCRIPTION:
- *
- *  XXX
+ *  This method converts a POSIX message priority to the priorities used
+ *  by the Score.
  */
-
-RTEMS_INLINE_ROUTINE CORE_message_queue_Submit_types _POSIX_Message_queue_Priority_to_core(
+RTEMS_INLINE_ROUTINE CORE_message_queue_Submit_types
+  _POSIX_Message_queue_Priority_to_core(
   unsigned int priority
-);
+)
+{
+  return (CORE_message_queue_Submit_types) priority * -1;
+}
+
 
 /*
- *  _POSIX_Message_queue_Priority_from_core
+ *  @brief POSIX Message Queue Convert Message Priority from Score
  *
- *  DESCRIPTION:
- *
- *  XXX
+ *  This method converts a POSIX message priority from the priorities used
+ *  by the Score.
  */
-
 RTEMS_INLINE_ROUTINE unsigned int _POSIX_Message_queue_Priority_from_core(
   CORE_message_queue_Submit_types priority
-);
+)
+{
+  /* absolute value without a library dependency */
+  return (unsigned int) ((priority >= 0) ? priority : -priority);
+}
 
-/*
- *  _POSIX_Message_queue_Translate_core_message_queue_return_code
+/**
+ *  @brief POSIX Message Queue Translate Score Return Code
  *
- *  DESCRIPTION:
- *
- *  XXX
  */
-
 int _POSIX_Message_queue_Translate_core_message_queue_return_code(
   uint32_t   the_message_queue_status
 );
  
-/*
- *  _POSIX_Message_queue_Allocate
+/**
+ *  @brief POSIX Message Queue Allocate File Descriptor
  */
- 
-RTEMS_INLINE_ROUTINE
-  POSIX_Message_queue_Control *_POSIX_Message_queue_Allocate( void )
-{
-  return (POSIX_Message_queue_Control *)
-    _Objects_Allocate( &_POSIX_Message_queue_Information );
-}
- 
-/*
- *  _POSIX_Message_queue_Allocate_fd
- */
- 
 RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *
   _POSIX_Message_queue_Allocate_fd( void )
 {
@@ -248,21 +228,9 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *
     _Objects_Allocate( &_POSIX_Message_queue_Information_fds );
 }
  
-/*
- *  _POSIX_Message_queue_Free
+/**
+ *  @brief POSIX Message Queue Free File Descriptor
  */
- 
-RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free (
-  POSIX_Message_queue_Control *the_mq
-)
-{
-  _Objects_Free( &_POSIX_Message_queue_Information, &the_mq->Object );
-}
-
-/*
- *  _POSIX_Message_queue_Free_fd
- */
- 
 RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free_fd (
   POSIX_Message_queue_Control_fd *the_mq_fd
 )
@@ -270,10 +238,9 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free_fd (
   _Objects_Free( &_POSIX_Message_queue_Information_fds, &the_mq_fd->Object );
 }
 
-/*
- *  _POSIX_Message_queue_Namespace_remove
+/**
+ *  @brief POSIX Message Queue Remove from Namespace
  */
- 
 RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Namespace_remove (
   POSIX_Message_queue_Control *the_mq
 )
@@ -283,22 +250,8 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Namespace_remove (
 }
  
 /*
- *  _POSIX_Message_queue_Get
+ *  @brief POSIX Message Queue Get File Descriptor
  */
- 
-RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
-  Objects_Id         id,
-  Objects_Locations *location
-)
-{
-  return (POSIX_Message_queue_Control *)
-    _Objects_Get( &_POSIX_Message_queue_Information, id, location );
-}
- 
-/*
- *  _POSIX_Message_queue_Get_fd
- */
- 
 RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *_POSIX_Message_queue_Get_fd (
   mqd_t              id,
   Objects_Locations *location
@@ -311,44 +264,6 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *_POSIX_Message_queue_Get_fd
   );
 }
  
-/*
- *  _POSIX_Message_queue_Is_null
- */
- 
-RTEMS_INLINE_ROUTINE bool _POSIX_Message_queue_Is_null (
-  POSIX_Message_queue_Control *the_mq
-)
-{
-  return !the_mq;
-}
-
-/*
- *  _POSIX_Message_queue_Priority_to_core
- */
- 
-RTEMS_INLINE_ROUTINE CORE_message_queue_Submit_types _POSIX_Message_queue_Priority_to_core(
-  unsigned int priority
-)
-{
-  return (CORE_message_queue_Submit_types) priority * -1;
-}
-
-/*
- *  _POSIX_Message_queue_Priority_from_core
- * 
- *  DESCRIPTION:
- *
- *  XXX
- */
- 
-RTEMS_INLINE_ROUTINE unsigned int _POSIX_Message_queue_Priority_from_core(
-  CORE_message_queue_Submit_types priority
-)
-{
-  /* absolute value without a library dependency */
-  return (unsigned int) ((priority >= 0) ? priority : -priority);
-}
-
 /**
  * @see _POSIX_Name_to_id().
  */
