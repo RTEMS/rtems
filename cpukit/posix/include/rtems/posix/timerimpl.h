@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -26,19 +26,19 @@
 extern "C" {
 #endif
 
-/* Timer is free */
+/** Timer is free */
 #define POSIX_TIMER_STATE_FREE        0x01
 
-/* Created timer but not running */
+/** Created timer but not running */
 #define POSIX_TIMER_STATE_CREATE_NEW  0x02
 
-/* Created timer and running */
+/** Created timer and running */
 #define POSIX_TIMER_STATE_CREATE_RUN  0x03
 
-/* Created, ran and stopped timer */
+/** Created, ran and stopped timer */
 #define POSIX_TIMER_STATE_CREATE_STOP 0x04
 
-/* Indicates that the fire time is relative to the current one */
+/** Indicates that the fire time is relative to the current one */
 #define POSIX_TIMER_RELATIVE       0
 
 /*
@@ -50,24 +50,22 @@ extern "C" {
 #error "POSIX_TIMER_RELATIVE == TIMER_ABSTIME"
 #endif
 
-/*
- *  _POSIX_Timers_Manager_initialization
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Timer Manager Initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */
 void _POSIX_Timer_Manager_initialization(void);
 
-/*
- *  @brief Operation that is run when a timer expires
+/**
+ *  @brief POSIX Timer Manager Timer Service Routine Helper
  *
- *  Timer TSR
+ *  This is the operation that is run when a timer expires.
  */
 void _POSIX_Timer_TSR(Objects_Id timer, void *data);
 
-/*
- *  Watchdog Insert helper
+/**
+ *  @brief POSIX Timer Watchdog Insertion Helper
  */
 bool _POSIX_Timer_Insert_helper(
   Watchdog_Control               *timer,
@@ -77,35 +75,29 @@ bool _POSIX_Timer_Insert_helper(
   void                           *arg
 );
 
-/*
+/**
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
 POSIX_EXTERN Objects_Information  _POSIX_Timer_Information;
 
-/*
- *  _POSIX_Timer_Allocate
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Timer Allocate
  *
  *  This function allocates a timer control block from
  *  the inactive chain of free timer control blocks.
  */
-
 RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Allocate( void )
 {
   return (POSIX_Timer_Control *) _Objects_Allocate( &_POSIX_Timer_Information );
 }
 
-/*
- *  _POSIX_Timer_Free
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Timer Free
  *
  *  This routine frees a timer control block to the
  *  inactive chain of free timer control blocks.
  */
-
 RTEMS_INLINE_ROUTINE void _POSIX_Timer_Free (
   POSIX_Timer_Control *the_timer
 )
@@ -113,10 +105,8 @@ RTEMS_INLINE_ROUTINE void _POSIX_Timer_Free (
   _Objects_Free( &_POSIX_Timer_Information, &the_timer->Object );
 }
 
-/*
- *  _POSIX_Timer_Get
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Timer Get
  *
  *  This function maps timer IDs to timer control blocks.
  *  If ID corresponds to a local timer, then it returns
@@ -124,7 +114,6 @@ RTEMS_INLINE_ROUTINE void _POSIX_Timer_Free (
  *  is set to OBJECTS_LOCAL.  Otherwise, location is set
  *  to OBJECTS_ERROR and the returned value is undefined.
  */
-
 RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Get (
   timer_t            id,
   Objects_Locations *location
@@ -134,14 +123,11 @@ RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Get (
     _Objects_Get( &_POSIX_Timer_Information, (Objects_Id) id, location );
 }
 
-/*
- *  _POSIX_Timer_Is_null
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Timer Is NULL
  *
  *  This function returns TRUE if the_timer is NULL and FALSE otherwise.
  */
-
 RTEMS_INLINE_ROUTINE bool _POSIX_Timer_Is_null (
   POSIX_Timer_Control *the_timer
 )
