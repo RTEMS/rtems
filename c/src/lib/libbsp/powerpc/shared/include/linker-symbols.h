@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup bsp_linker
+ * @ingroup powerpc_linker
  *
  * @brief Symbols defined in linker command base file.
  */
@@ -30,9 +30,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup bsp_linker Linker Support
+ * @defgroup powerpc_linker Linker Support
  *
- * @ingroup bsp_kit
+ * @ingroup powerpc_shared
  *
  * @brief Linker support.
  *

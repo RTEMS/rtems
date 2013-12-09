@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup raspberrypi
+ * @ingroup arm_raspberrypi
  *
  * @brief Global BSP definitions.
  */

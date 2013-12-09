@@ -90,7 +90,7 @@ static inline rtems_vector_number bsp_interrupt_handler_index(
 /**
  * @defgroup bsp_interrupt BSP Interrupt Support
  *
- * @ingroup rtems_interrupt_extension
+ * @ingroup bsp_shared
  * 
  * @brief Generic BSP Interrupt Support
  *

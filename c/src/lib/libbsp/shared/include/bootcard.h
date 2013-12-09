@@ -20,12 +20,6 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-/**
- * @defgroup bsp_kit Board Support Package
- *
- * @brief Board support package dependent code.
- */
-
 #ifndef LIBBSP_SHARED_BOOTCARD_H
 #define LIBBSP_SHARED_BOOTCARD_H
 
@@ -43,9 +37,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup bsp_bootcard Bootcard
+ * @defgroup shared_bootcard Bootcard
  *
- * @ingroup bsp_kit
+ * @ingroup bsp_shared
  *
  * @brief Standard system startup.
  *

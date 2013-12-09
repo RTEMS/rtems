@@ -34,7 +34,7 @@ extern "C" {
 /**
  * @defgroup arm_start System Start
  *
- * @ingroup bsp_arm
+ * @ingroup arm_shared
  *
  * @brief ARM system low level start.
  *
@@ -140,11 +140,3 @@ BSP_START_TEXT_SECTION static inline void bsp_start_clear_bss(void)
 #endif /* __cplusplus */
 
 #endif /* LIBBSP_ARM_SHARED_START_H */
-
-/**
- * @defgroup bsp_arm ARM
- *
- * @ingroup bsp_kit
- *
- * @brief ARM Board Support Packages.
- */

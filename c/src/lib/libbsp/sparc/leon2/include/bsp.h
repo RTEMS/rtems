@@ -1,9 +1,9 @@
 /**
  * @file
- * @ingroup sparc_bsp
- * @defgroup sparc_leon2 SPARC Leon2
+ *
  * @ingroup sparc_leon2
- * @brief Sparc Leon2 BSP
+ *
+ * @brief Global BSP Definitions.
  */
 
 /*  bsp.h
@@ -40,6 +40,15 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
 #include <rtems/irq-extension.h>
+
+/**
+ *  @defgroup sparc_leon2 LEON2 Support
+ *
+ *  @ingroup bsp_sparc
+ *
+ *  @brief LEON2 Support Package
+ *
+ */
 
 /* SPARC CPU variant: LEON2 */
 #define LEON2 1

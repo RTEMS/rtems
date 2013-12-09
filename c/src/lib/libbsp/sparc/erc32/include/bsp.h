@@ -1,9 +1,9 @@
 /**
  * @file
- * @ingroup sparc_bsp
- * @defgroup sparc_erc32 SPARC ERC32
+ *
  * @ingroup sparc_erc32
- * @brief SPARC ERC32 BSP
+ *
+ * @brief Global BSP Definitions.
  */
 
 /*  bsp.h
@@ -41,6 +41,14 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
 #include <rtems/irq-extension.h>
+
+/**
+ * @defgroup sparc_erc32 ERC32 Support
+ *
+ * @ingroup bsp_sparc
+ *
+ * @brief ERC32 Support Package
+ */
 
 /*
  *  BSP provides its own Idle thread body

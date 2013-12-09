@@ -33,7 +33,7 @@ extern "C" {
 /**
  * @defgroup bsp_stack Task Stack Allocator
  *
- * @ingroup bsp_kit
+ * @ingroup bsp_shared
  *
  * @brief Task stack initialization, allocation and free functions.
  *

@@ -22,7 +22,7 @@
 /**
  * @defgroup bsp_clock Clock Support
  *
- * @ingroup bsp_kit
+ * @ingroup bsp_shared
  *
  * @brief Clock support 
  *

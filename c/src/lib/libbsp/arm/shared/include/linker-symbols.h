@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup bsp_linker
+ * @ingroup arm_linker
  *
  * @brief Symbols defined in linker command base file.
  */
@@ -28,9 +28,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup bsp_linker Linker Support
+ * @defgroup arm_linker Linker Support
  *
- * @ingroup bsp_kit
+ * @ingroup arm_shared
  *
  * @brief Linker support.
  *
