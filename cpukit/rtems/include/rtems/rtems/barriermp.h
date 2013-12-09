@@ -7,7 +7,7 @@
  * with the Multiprocessing Support in the Barrier Manager.
  */
 
-/* COPYRIGHT (c) 1989-2008.
+/* COPYRIGHT (c) 1989-2013.
  * On-Line Applications Research Corporation (OAR).
  *
  * The license and distribution terms for this file may be
@@ -29,7 +29,8 @@ extern "C" {
  *
  *  @ingroup ClassicMP
  *
- *  This encapsulates functionality which XXX
+ *  This encapsulates functionality related to the transparent multiprocessing
+ *  support within the Classic API Barrier Manager.
  */
 /**@{*/
 

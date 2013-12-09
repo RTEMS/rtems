@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -46,7 +46,7 @@ int sem_post(
         &the_semaphore->Semaphore,
         the_semaphore->Object.id,
 #if defined(RTEMS_MULTIPROCESSING)
-        NULL         /* XXX need to define a routine to handle this case */
+        NULL         /* POSIX Semaphores are local only */
 #else
         NULL
 #endif

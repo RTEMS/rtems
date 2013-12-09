@@ -9,7 +9,7 @@
  * This include file defines Classic API interfaces to Object Services.
  */
 
-/* COPYRIGHT (c) 1989-2011.
+/* COPYRIGHT (c) 1989-2013.
  * On-Line Applications Research Corporation (OAR).
  *
  * The license and distribution terms for this file may be
@@ -34,7 +34,8 @@ extern "C" {
  *
  *  @ingroup ClassicRTEMS
  *
- *  This encapsulates functionality which XXX
+ *  This encapsulates functionality related to the Classic API Object
+ *  Class Services.
  */
 /**@{*/
 

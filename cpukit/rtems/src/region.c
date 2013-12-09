@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -62,7 +62,7 @@ void _Region_Manager_initialization(void)
 #if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Register_packet_processor(
     MP_PACKET_REGION,
-    0  /* XXX _Region_MP_Process_packet */
+    0  /* Multiprocessing is not currently supported for Regions */
   );
 #endif
 

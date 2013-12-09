@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,7 +20,10 @@
 
 #include <rtems/score/objectimpl.h>
 
-/* XXX: This is for language bindings */
+/*
+ * This is implemented as a macro. This body is provided to support
+ * bindings from non-C based languages.
+ */
 int rtems_object_id_api_minimum(void);
 
 int rtems_object_id_api_minimum(void)

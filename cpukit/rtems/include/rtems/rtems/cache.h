@@ -9,27 +9,12 @@
  * Functionality Associated with the Cache Manager 
  */
 
-/* COPYRIGHT (c) 1989-2008.
+/* COPYRIGHT (c) 1989-2013.
  * On-Line Applications Research Corporation (OAR).
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
- *
- *
- * The functions in this file define the API to the RTEMS Cache Manager and
- * are divided into data cache and instruction cache functions. Data cache
- * functions are only meaningful if a data cache is supported. Instruction
- * cache functions are only meaningful if an instruction cache is supported.
- *
- * The functions below are implemented with CPU dependent support routines
- * implemented as part of libcpu. In the event that a CPU does not support a
- * specific function, the CPU dependent routine does nothing (but does exist).
- *
- * At this point, the Cache Manager makes no considerations, and provides no
- * support for BSP specific issues such as a secondary cache. In such a system,
- * the CPU dependent routines would have to be modified, or a BSP layer added
- * to this Manager.
  */
 
 #ifndef _RTEMS_RTEMS_CACHE_H
@@ -47,7 +32,19 @@ extern "C" {
  *
  *  @ingroup ClassicRTEMS
  *
- *  This encapsulates functionality which XXX
+ *  The functions in this file define the API to the RTEMS Cache Manager and
+ *  are divided into data cache and instruction cache functions. Data cache
+ *  functions are only meaningful if a data cache is supported. Instruction
+ *  cache functions are only meaningful if an instruction cache is supported.
+ *
+ *  The functions are implemented with CPU dependent support routines
+ *  implemented as part of libcpu. In the event that a CPU does not support a
+ *  specific function, the CPU dependent routine does nothing (but does exist).
+ *
+ *  At this point, the Cache Manager makes no considerations, and provides no
+ *  support for BSP specific issues such as a secondary cache. In such a system,
+ *  the CPU dependent routines would have to be modified, or a BSP layer added
+ *  to this Manager.
  */
 /**@{*/
 
