@@ -48,6 +48,27 @@ AC_CHECK_DECLS([pthread_attr_getguardsize],[],[],[[#include <pthread.h>]])
 # Added to pthreads after initial revision.  May not be in toolset
 AC_CHECK_DECLS([pthread_attr_setguardsize],[],[],[[#include <pthread.h>]])
 
+# Added to newlib pthreads for RTEMS SMP (np), may not be present
+AC_CHECK_DECLS([pthread_attr_setaffinity_np],[].[],,[[#include <pthread.h>]])
+
+# Added to newlib pthreads for RTEMS SMP (np), may not be present
+AC_CHECK_DECLS([pthread_attr_getaffinity_np],[].[],,[[#include <pthread.h>]])
+
+# Added to newlib pthreads for RTEMS SMP (np), may not be present
+AC_CHECK_DECLS([pthread_setaffinity_np],[].[],,[[#include <pthread.h>]])
+
+# Added to newlib pthreads for RTEMS SMP (np), may not be present
+AC_CHECK_DECLS([pthread_getaffinity_np],[].[],,[[#include <pthread.h>]])
+
+# Added to newlib pthreads for RTEMS (np), may not be present
+AC_CHECK_DECLS([pthread_getattr_np],[].[],,[[#include <pthread.h>]])
+
+# Added to newlib pthreads for RTEMS SMP (np), may not be present
+AC_CHECK_HEADERS([cpuset.h])
+
+# Mandated by POSIX, not declared in some versions of newlib.
+AC_CHECK_DECLS([getrusage],,,[#include sys/resource.h])
+
 # Mandated by POSIX, not declared in some versions of newlib.
 AC_CHECK_DECLS([getrusage],,,[#include sys/resource.h])
 
