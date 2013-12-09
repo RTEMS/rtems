@@ -51,7 +51,7 @@ typedef struct {
   /** This field is the Thread id also used as an rbtree key */
   Objects_Id thread_id;
   /** This field points to the POSIX key value of specific thread */
-  void *value;
+  const void *value;
 }  POSIX_Keys_Key_value_pair;
 
 /**

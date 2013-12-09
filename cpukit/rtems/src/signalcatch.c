@@ -69,7 +69,6 @@ rtems_status_code rtems_signal_catch(
   RTEMS_API_Control  *api;
   ASR_Information    *asr;
 
-/* XXX normalize mode */
   executing = _Thread_Get_executing();
   api = (RTEMS_API_Control*)executing->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
