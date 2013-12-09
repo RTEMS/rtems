@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup arm_csb337
+ *
+ * @brief SED1356 LCD/CRT Controllers for KIT637_V6 (CSB637)
+ *        16-Bit access mode
+ */
+
 /*
  * sed1356.h: SED1356 LCD/CRT Controllers for KIT637_V6 (CSB637)
  *            16-Bit access mode

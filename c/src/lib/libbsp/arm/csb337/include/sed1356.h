@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup arm_csb337
+ *
+ * @brief Public Interface for SED Video Controller Operations.
+ */
+
 /*
  * Public Interface for SED Video Controller Operations
  *

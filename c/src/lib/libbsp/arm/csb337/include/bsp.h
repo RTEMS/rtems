@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup arm_csb337
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  * CSB337 BSP header file
  *
@@ -23,6 +31,16 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <libchip/serial.h>
 
+/**
+ * @defgroup arm_csb337 CSB337 Support
+ *
+ * @ingroup bsp_arm
+ *
+ * @brief CSB337 support package.
+ *
+ * @{
+ */
+
 #define BSP_FEATURE_IRQ_EXTENSION
 
 /* What is the input clock freq in hertz? */
@@ -37,8 +55,8 @@ static inline int32_t BSP_get_baud(void) {return 38400;}
 
 #define ST_PIMR_PIV	33	/* 33 ticks of the 32.768Khz clock ~= 1msec */
 
-/*
- * Network driver configuration
+/**
+ * @brief Network driver configuration
  */
 extern struct rtems_bsdnet_ifconfig *config;
 
@@ -46,6 +64,8 @@ extern struct rtems_bsdnet_ifconfig *config;
 int rtems_at91rm9200_emac_attach(struct rtems_bsdnet_ifconfig *config, int attaching);
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"eth0"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_at91rm9200_emac_attach
+
+/** @} */
 
 #ifdef __cplusplus
 }
