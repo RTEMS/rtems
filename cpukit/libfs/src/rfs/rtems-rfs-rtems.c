@@ -888,7 +888,7 @@ rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t* mt_entry,
   if (rc)
   {
     free (rtems);
-    return rtems_rfs_rtems_error ("initialise: open", rc);
+    return rtems_rfs_rtems_error ("initialise: open", errno);
   }
 
   mt_entry->fs_info                          = fs;
