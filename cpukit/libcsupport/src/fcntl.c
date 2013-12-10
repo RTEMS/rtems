@@ -24,14 +24,10 @@
 
 #include <rtems/libio_.h>
 
-static int duplicate_iop( rtems_libio_t *iop, int fd2 )
+static int duplicate_iop( rtems_libio_t *iop )
 {
   int rv = 0;
 
-  /*
-   * FIXME: We ignore the start value fd2 for the file descriptor search.  This
-   * is not POSIX conform.
-   */
   rtems_libio_t *diop = rtems_libio_allocate();
 
   if (diop != NULL) {
@@ -57,6 +53,47 @@ static int duplicate_iop( rtems_libio_t *iop, int fd2 )
     }
   } else {
     rv = -1;
+  }
+
+  return rv;
+}
+
+static int duplicate2_iop( rtems_libio_t *iop, int fd2 )
+{
+  rtems_libio_t *iop2;
+  int            rv = 0;
+
+  rtems_libio_check_fd( fd2 );
+  iop2 = rtems_libio_iop( fd2 );
+
+  if (iop != iop2)
+  {
+    int oflag;
+
+    if ((iop2->flags & LIBIO_FLAGS_OPEN) != 0) {
+      rv = (*iop2->pathinfo.handlers->close_h)( iop2 );
+    }
+
+    if (rv == 0) {
+      oflag = rtems_libio_to_fcntl_flags( iop->flags );
+      oflag &= ~O_CREAT;
+      iop2->flags |= rtems_libio_fcntl_flags( oflag );
+
+      rtems_filesystem_instance_lock( &iop->pathinfo );
+      rtems_filesystem_location_clone( &iop2->pathinfo, &iop->pathinfo );
+      rtems_filesystem_instance_unlock( &iop->pathinfo );
+
+      /*
+       * XXX: We call the open handler here to have a proper open and close
+       *      pair.
+       *
+       * FIXME: What to do with the path?
+       */
+      rv = (*iop2->pathinfo.handlers->open_h)( iop2, NULL, oflag, 0 );
+      if ( rv == 0 ) {
+        rv = fd2;
+      }
+    }
   }
 
   return rv;
@@ -88,8 +125,12 @@ static int vfcntl(
 
   switch ( cmd ) {
     case F_DUPFD:        /* dup */
+      ret = duplicate_iop( iop );
+      break;
+
+    case F_DUP2FD:       /* dup2 */
       fd2 = va_arg( ap, int );
-      ret = duplicate_iop( iop, fd2 );
+      ret = duplicate2_iop( iop, fd2 );
       break;
 
     case F_GETFD:        /* get f_flags */

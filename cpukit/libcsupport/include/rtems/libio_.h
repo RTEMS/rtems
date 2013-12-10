@@ -42,6 +42,13 @@ extern "C" {
 #define RTEMS_FILESYSTEM_SYMLOOP_MAX 32
 
 /*
+ * Not defined in newlib so provide here. Users should use dup2 and
+ * not this non-portable fcntl command. Provided here to allow the
+ * RTEMS implementation to work.
+ */
+#define F_DUP2FD 20
+
+/*
  *  Semaphore to protect the io table
  */
 
