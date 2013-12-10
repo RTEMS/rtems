@@ -13,6 +13,7 @@ SUBDIRS += psxtmcond03
 SUBDIRS += psxtmcond04
 SUBDIRS += psxtmcond05
 SUBDIRS += psxtmcond06
+SUBDIRS += psxtmcond07
 SUBDIRS += psxtmcond08
 SUBDIRS += psxtmcond09
 SUBDIRS += psxtmcond10
