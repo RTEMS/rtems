@@ -390,53 +390,51 @@ ssize_t pipe_read(
   if (! PIPE_LOCK(pipe))
     return -EINTR;
 
-  while (read < count) {
-    while (PIPE_EMPTY(pipe)) {
-      /* Not an error */
-      if (pipe->Writers == 0)
-        goto out_locked;
+  while (PIPE_EMPTY(pipe)) {
+    /* Not an error */
+    if (pipe->Writers == 0)
+      goto out_locked;
 
-      if (LIBIO_NODELAY(iop)) {
-        ret = -EAGAIN;
-        goto out_locked;
-      }
-
-      /* Wait until pipe is no more empty or no writer exists */
-      pipe->waitingReaders ++;
-      PIPE_UNLOCK(pipe);
-      if (! PIPE_READWAIT(pipe))
-        ret = -EINTR;
-      if (! PIPE_LOCK(pipe)) {
-        /* WARN waitingReaders not restored! */
-        ret = -EINTR;
-        goto out_nolock;
-      }
-      pipe->waitingReaders --;
-      if (ret != 0)
-        goto out_locked;
+    if (LIBIO_NODELAY(iop)) {
+      ret = -EAGAIN;
+      goto out_locked;
     }
 
-    /* Read chunk bytes */
-    chunk = MIN(count - read,  pipe->Length);
-    chunk1 = pipe->Size - pipe->Start;
-    if (chunk > chunk1) {
-      memcpy(buffer + read, pipe->Buffer + pipe->Start, chunk1);
-      memcpy(buffer + read + chunk1, pipe->Buffer, chunk - chunk1);
+    /* Wait until pipe is no more empty or no writer exists */
+    pipe->waitingReaders ++;
+    PIPE_UNLOCK(pipe);
+    if (! PIPE_READWAIT(pipe))
+      ret = -EINTR;
+    if (! PIPE_LOCK(pipe)) {
+      /* WARN waitingReaders not restored! */
+      ret = -EINTR;
+      goto out_nolock;
     }
-    else
-      memcpy(buffer + read, pipe->Buffer + pipe->Start, chunk);
-
-    pipe->Start += chunk;
-    pipe->Start %= pipe->Size;
-    pipe->Length -= chunk;
-    /* For buffering optimization */
-    if (PIPE_EMPTY(pipe))
-      pipe->Start = 0;
-
-    if (pipe->waitingWriters > 0)
-      PIPE_WAKEUPWRITERS(pipe);
-    read += chunk;
+    pipe->waitingReaders --;
+    if (ret != 0)
+      goto out_locked;
   }
+
+  /* Read chunk bytes */
+  chunk = MIN(count - read,  pipe->Length);
+  chunk1 = pipe->Size - pipe->Start;
+  if (chunk > chunk1) {
+    memcpy(buffer + read, pipe->Buffer + pipe->Start, chunk1);
+    memcpy(buffer + read + chunk1, pipe->Buffer, chunk - chunk1);
+  }
+  else
+    memcpy(buffer + read, pipe->Buffer + pipe->Start, chunk);
+
+  pipe->Start += chunk;
+  pipe->Start %= pipe->Size;
+  pipe->Length -= chunk;
+  /* For buffering optimization */
+  if (PIPE_EMPTY(pipe))
+    pipe->Start = 0;
+
+  if (pipe->waitingWriters > 0)
+    PIPE_WAKEUPWRITERS(pipe);
+  read += chunk;
 
 out_locked:
   PIPE_UNLOCK(pipe);
