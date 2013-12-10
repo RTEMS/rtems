@@ -53,7 +53,7 @@ static const IMFS_node_control *const
   [IMFS_SYM_LINK] = &IMFS_node_control_sym_link,
   [IMFS_MEMORY_FILE] = &IMFS_node_control_memfile,
   [IMFS_LINEAR_FILE] = &IMFS_node_control_linfile,
-  [IMFS_FIFO] = &IMFS_node_control_default
+  [IMFS_FIFO] = &IMFS_node_control_fifo
 };
 
 int IMFS_initialize(
