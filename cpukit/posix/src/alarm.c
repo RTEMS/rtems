@@ -51,7 +51,7 @@ static void _POSIX_signals_Alarm_TSR(
      *  There is no reason to think this might fail but we should be
      *  cautious.
      */
-    assert(status == 0);
+    _Assert(status == 0);
   #endif
 }
 
