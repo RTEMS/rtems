@@ -1,4 +1,4 @@
-#  COPYRIGHT (c) 1989-2009.
+#  COPYRIGHT (c) 1989-2013.
 #  On-Line Applications Research Corporation (OAR).
 #
 #  The license and distribution terms for this file may be
@@ -22,6 +22,8 @@ concepts:
   associated one mutex instance that it is an error for another task
   to attempt to block on the same condition variable using a different
   mutex.
+
++ Verify EPERM is returned on pthread_cond_wait when mutex is not locked
 
 + Verify error conditions in pthread_mutexattr_settype
 

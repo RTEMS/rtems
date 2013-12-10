@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,10 +27,23 @@ void *BlockingThread(
   void *argument
 )
 {
-  puts( "BlockingThread - pthread_cond_wait on Mutex1 - OK" );
-  (void) pthread_cond_wait( &Condition, &Mutex1 );
+  int sc;
 
-  puts( "ERROR - BlockingThread returned from pthread_cond_wait!" );
+  puts( "BlockingThread - pthread_cond_wait with mutex not locked - EPERM" );
+  sc = pthread_cond_wait( &Condition, &Mutex1 );
+  fatal_posix_service_status( sc, EPERM, "mutex1 not locked" );
+
+  sc = pthread_mutex_lock( &Mutex1 );
+  fatal_posix_service_status( sc, 0, "mutex1 lock" );
+  
+  puts( "BlockingThread - pthread_cond_wait on Mutex1 - OK" );
+  sc = pthread_cond_wait( &Condition, &Mutex1 );
+
+  printf(
+    "ERROR - BlockingThread returned from pthread_cond_wait! (rc=%d/%s)\n",
+    sc,
+    strerror(sc)
+  );
   rtems_test_exit( 0 );
 
   return NULL;
