@@ -22,5 +22,6 @@ bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_sectio
 bsp_vector_table_in_start_section = 1;
 
 bsp_translation_table_base = ORIGIN (RAM_MMU);
+bsp_translation_table_end = ORIGIN (RAM_MMU) + LENGTH (RAM_MMU);
 
 INCLUDE linkcmds.armv4
