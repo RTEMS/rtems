@@ -142,7 +142,7 @@ openlog (const char *ident, int logstat, int logfac)
 	 */
 	myAddress.sin_family = AF_INET;
 	myAddress.sin_addr.s_addr = INADDR_ANY;
-	myAddress.sin_port = 0;
+	myAddress.sin_port = htons (SYSLOG_PORT);;
 	memset (myAddress.sin_zero, '\0', sizeof myAddress.sin_zero);
 	if (bind (LogFd, (struct sockaddr *)&myAddress, sizeof (myAddress)) < 0) {
 		close (LogFd);
