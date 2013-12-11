@@ -730,8 +730,8 @@ static void mcf548x_fec_initialize_hardware(struct mcf548x_enet_struct *sc)
   /*
    * Set transmit fifo watermark register (X_WMRK), default = 64
    */
-  MCF548X_FEC_FECTFAR(chan) = MCF548X_FEC_FECTFAR_ALARM(128);
-  MCF548X_FEC_FECTFWR(chan) = MCF548X_FEC_FECTFWR_X_WMRK_64;   /* 64 bytes */
+  MCF548X_FEC_FECTFAR(chan) = MCF548X_FEC_FECTFAR_ALARM(512);
+  MCF548X_FEC_FECTFWR(chan) = MCF548X_FEC_FECTFWR_X_WMRK_256;
 
  /*
   * Set individual address filter for unicast address
