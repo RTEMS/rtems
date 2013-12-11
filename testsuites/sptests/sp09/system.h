@@ -74,8 +74,6 @@ void Screen12( void );
 
 void Screen13( void );
 
-void Screen14( void );
-
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
@@ -101,9 +99,6 @@ void Screen14( void );
 
 TEST_EXTERN rtems_id   Task_id[ 11 ];       /* array of task ids */
 TEST_EXTERN rtems_name Task_name[ 11 ];     /* array of task names */
-
-TEST_EXTERN rtems_name Timer_name[ 2 ];     /* array of timer names */
-TEST_EXTERN rtems_id   Timer_id[ 2 ];       /* array of timer ids */
 
 TEST_EXTERN rtems_name Semaphore_name[ 4 ]; /* array of semaphore names */
 TEST_EXTERN rtems_id   Semaphore_id[ 4 ];   /* array of semaphore ids */

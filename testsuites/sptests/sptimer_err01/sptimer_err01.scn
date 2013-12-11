@@ -1,0 +1,23 @@
+*** TEST SPTIMER_ERR01 ***
+TA1 - rtems_timer_create - RTEMS_INVALID_ADDRESS
+TA1 - rtems_timer_create - RTEMS_INVALID_NAME
+TA1 - rtems_timer_create - 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_timer_create - 2 - RTEMS_TOO_MANY
+TA1 - rtems_timer_delete - local RTEMS_INVALID_ID
+TA1 - rtems_timer_delete - global RTEMS_INVALID_ID
+TA1 - rtems_timer_ident - RTEMS_INVALID_NAME
+TA1 - rtems_timer_cancel - RTEMS_INVALID_ID
+TA1 - rtems_timer_reset - RTEMS_INVALID_ID
+TA1 - rtems_timer_reset - RTEMS_NOT_DEFINED
+TA1 - rtems_timer_fire_after - RTEMS_INVALID_ID
+TA1 - rtems_timer_fire_when - RTEMS_INVALID_ID
+TA1 - rtems_timer_fire_after - RTEMS_INVALID_ADDRESS
+TA1 - rtems_timer_fire_after - RTEMS_INVALID_NUMBER
+TA1 - rtems_timer_fire_when - RTEMS_INVALID_ADDRESS
+TA1 - rtems_timer_fire_when - 08:30:45   02/05/1987 - RTEMS_INVALID_CLOCK
+TA1 - rtems_clock_get_tod       - 09:00:00   12/31/1992
+TA1 - rtems_timer_fire_when - 08:30:45   02/05/1990 - before RTEMS_INVALID_CLOCK
+TA1 - rtems_timer_get_information - RTEMS_INVALID_ADDRESS
+TA1 - rtems_timer_get_information - RTEMS_INVALID_ID
+*** END OF TEST SPTIMER_ERR01 ***
+

@@ -1,0 +1,22 @@
+#  COPYRIGHT (c) 1989-2013.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sptimer_err02
+
+directives:
+
+  rtems_timer_create, rtems_timer_server_fire_after,
+  rtems_timer_server_fire_when, rtems_timer_initiate_server,
+  
+
+concepts:
+
++  Verifies error codes returned by the executive for rtems_timer functions in
+   a server context.

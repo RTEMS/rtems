@@ -197,5 +197,7 @@ spthreadq01/Makefile
 sptimespec01/Makefile
 spwatchdog/Makefile
 spwkspace/Makefile
+sptimer_err01/Makefile
+sptimer_err02/Makefile
 ])
 AC_OUTPUT

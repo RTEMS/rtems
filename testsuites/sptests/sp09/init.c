@@ -33,8 +33,6 @@ rtems_task Init(
   Task_name[ 9 ]       =  rtems_build_name( 'T', 'A', '9', ' ' );
   Task_name[ 10 ]      =  rtems_build_name( 'T', 'A', 'A', ' ' );
 
-  Timer_name[ 1 ]      =  rtems_build_name( 'T', 'M', '1', ' ' );
-
   Semaphore_name[ 1 ]  =  rtems_build_name( 'S', 'M', '1', ' ' );
   Semaphore_name[ 2 ]  =  rtems_build_name( 'S', 'M', '2', ' ' );
   Semaphore_name[ 3 ]  =  rtems_build_name( 'S', 'M', '3', ' ' );

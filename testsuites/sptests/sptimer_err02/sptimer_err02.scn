@@ -1,0 +1,18 @@
+*** TEST SPTIMER_ERR02 ***
+TA1 - rtems_timer_create - 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_timer_server_fire_after - RTEMS_INCORRECT_STATE
+TA1 - rtems_timer_server_fire_when - RTEMS_INCORRECT_STATE
+TA1 - rtems_timer_initiate_server - RTEMS_INVALID_PRIORITY
+TA1 - rtems_timer_initiate_server - RTEMS_UNSATISFIED
+TA1 - rtems_timer_initiate_server - SUCCESSFUL
+TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_ADDRESS
+TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_ID
+TA1 - rtems_timer_server_fire_when - RTEMS_INVALID_ID
+TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_ADDRESS
+TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_NUMBER
+TA1 - rtems_timer_server_fire_when - 08:30:45   02/05/1987 - RTEMS_INVALID_CLOCK
+TA1 - rtems_clock_get_tod       - 09:00:00   12/31/1992
+TA1 - rtems_timer_server_fire_when - RTEMS_INVALID_ADDRESS
+TA1 - rtems_timer_server_fire_when - 08:30:45   02/05/1990 - before RTEMS_INVALID_CLOCK
+*** END OF TEST SPTIMER_ERR02 ***
+
