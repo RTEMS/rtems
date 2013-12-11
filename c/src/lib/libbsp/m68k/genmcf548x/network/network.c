@@ -36,6 +36,7 @@
  *  COPYRIGHT (c) 2009, IMD
  *
  */
+
 #include <rtems.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
@@ -59,33 +60,17 @@
 #include <mcf548x/MCD_dma.h>
 #include <mcf548x/mcdma_glue.h>
 
-#define ETH_PROMISCOUS_MODE 1 /* FIXME: remove me */
-
 /*
  * Number of interfaces supported by this driver
  */
 #define NIFACES 2
 
 #define FEC_WATCHDOG_TIMEOUT 5 /* check media every 5 seconds */
-/*
- * buffer descriptor handling
- */
-
-#define SET_BD_STATUS(bd, stat)	{		\
-    (bd)->statCtrl = stat;			\
-}
-#define SET_BD_LENGTH(bd, len) {		\
-    (bd)->length = len;				\
-}
-#define SET_BD_BUFFER(bd, buf) {		\
-    (bd)->dataPointer= (uint32_t)(buf);		\
-}
-#define GET_BD_STATUS(bd)		((bd)->statCtrl)
-#define GET_BD_LENGTH(bd)		((bd)->length)
-#define GET_BD_BUFFER(bd)		((void *)((bd)->dataPointer))
 
 #define DMA_BD_RX_NUM	32 /* Number of receive buffer descriptors	*/
 #define DMA_BD_TX_NUM	32 /* Number of transmit buffer descriptors	*/
+
+#define FEC_EVENT RTEMS_EVENT_0
 
 /*
  * internal SRAM
@@ -133,9 +118,6 @@ extern char _SysSramBase[];
 					 /(MCF548X_FEC1_IRQ_VECTOR	\
 					   -MCF548X_FEC0_IRQ_VECTOR))
 
-#define FEC_RECV_TASK_NO        4
-#define FEC_XMIT_TASK_NO        5
-
 #define MCDMA_FEC_RX_CHAN(chan) (0 + NIFACES*(chan))
 #define MCDMA_FEC_TX_CHAN(chan) (1 + NIFACES*(chan))
 
@@ -149,19 +131,6 @@ extern char _SysSramBase[];
 #define MCF548X_FEC_TX_INITIATOR(chan) (MCF548X_FEC0_TX_INITIATOR		\
 				      +(chan)*(MCF548X_FEC1_TX_INITIATOR	\
 					       -MCF548X_FEC0_TX_INITIATOR))
-
-/*
- * RTEMS event used by interrupt handler to signal daemons.
- * This must *not* be the same event used by the TCP/IP task synchronization.
- */
-#define INTERRUPT_EVENT RTEMS_EVENT_1
-#define FATAL_INT_EVENT RTEMS_EVENT_3
-
-/*
- * RTEMS event used to start transmit daemon.
- * This must not be the same as INTERRUPT_EVENT.
- */
-#define START_TRANSMIT_EVENT RTEMS_EVENT_2
 
 /* BD and parameters are stored in SRAM(refer to sdma.h) */
 #define MCF548X_FEC_BD_BASE    ETH_BD_BASE
@@ -198,6 +167,12 @@ extern char _SysSramBase[];
 (MCF548X_FEC_EIMR_LC   | MCF548X_FEC_EIMR_RL    | \
  MCF548X_FEC_EIMR_XFUN | MCF548X_FEC_EIMR_XFERR | MCF548X_FEC_EIMR_RFERR)
 
+typedef enum {
+  FEC_STATE_RESTART_0,
+  FEC_STATE_RESTART_1,
+  FEC_STATE_NORMAL,
+} fec_state;
+
 /*
  * Device data
  */
@@ -206,12 +181,10 @@ struct mcf548x_enet_struct {
   struct mbuf             **rxMbuf;
   struct mbuf             **txMbuf;
   int                     chan;
+  fec_state               state;
   int                     acceptBroadcast;
   int                     rxBdCount;
   int                     txBdCount;
-  int                     txBdHead;
-  int                     txBdTail;
-  int                     txBdActiveCount;
   MCD_bufDescFec          *rxBd;
   MCD_bufDescFec          *txBd;
   int                     rxDmaChan; /* dma task */
@@ -232,13 +205,14 @@ struct mcf548x_enet_struct {
   unsigned long           rxGiant;
   unsigned long           rxNonOctet;
   unsigned long           rxBadCRC;
-  unsigned long           rxOverrun;
+  unsigned long           rxFIFOError;
   unsigned long           rxCollision;
 
   unsigned long           txInterrupts;
   unsigned long           txDeferred;
   unsigned long           txLateCollision;
   unsigned long           txUnderrun;
+  unsigned long           txFIFOError;
   unsigned long           txMisaligned;
   unsigned long           rxNotFirst;
   unsigned long           txRetryLimit;
@@ -246,70 +220,29 @@ struct mcf548x_enet_struct {
 
 static struct mcf548x_enet_struct enet_driver[NIFACES];
 
-extern int taskTable;
-static void mcf548x_fec_restart(struct mcf548x_enet_struct *sc);
+static void mcf548x_fec_restart(struct mcf548x_enet_struct *sc, rtems_id otherDaemon);
 
-
-
-/*
- * Function:	mcf548x_fec_rx_bd_init
- *
- * Description:	Initialize the receive buffer descriptor ring.
- *
- * Returns:		void
- *
- * Notes:       Space for the buffers of rx BDs is allocated by the rx deamon
- *
- */
-static void mcf548x_fec_rx_bd_init(struct mcf548x_enet_struct *sc) {
-  int rxBdIndex;
-  struct mbuf *m;
-  struct ifnet *ifp = &sc->arpcom.ac_if;
-
-  /*
-   * Fill RX buffer descriptor ring.
-   */
-  for( rxBdIndex = 0; rxBdIndex < sc->rxBdCount; rxBdIndex++ ) {
-    MGETHDR (m, M_WAIT, MT_DATA);
-    MCLGET (m, M_WAIT);
-
-    m->m_pkthdr.rcvif = ifp;
-    sc->rxMbuf[rxBdIndex] = m;
-    rtems_cache_invalidate_multiple_data_lines(mtod(m,const void *),
-					       ETHER_MAX_LEN);
-    SET_BD_BUFFER(sc->rxBd+rxBdIndex,mtod(m, void *));
-    SET_BD_LENGTH(sc->rxBd+rxBdIndex,ETHER_MAX_LEN);
-    SET_BD_STATUS(sc->rxBd+rxBdIndex,
-		  MCF548X_FEC_RBD_EMPTY
-		  | MCF548X_FEC_RBD_INT
-		  | ((rxBdIndex == sc->rxBdCount-1)
-		     ? MCF548X_FEC_RBD_WRAP
-		     : 0));
-  }
+static void fec_send_event(rtems_id task)
+{
+  rtems_bsdnet_event_send(task, FEC_EVENT);
 }
 
-/*
- * Function:	mcf548x_fec_rx_bd_cleanup
- *
- * Description:	put all mbufs pending in rx BDs back to buffer pool
- *
- * Returns:		void
- *
- */
-static void mcf548x_fec_rx_bd_cleanup(struct mcf548x_enet_struct *sc) {
-  int rxBdIndex;
-  struct mbuf *m,*n;
+static void fec_wait_for_event(void)
+{
+  rtems_event_set out;
+  rtems_bsdnet_event_receive(
+    FEC_EVENT,
+    RTEMS_EVENT_ANY | RTEMS_WAIT,
+    RTEMS_NO_TIMEOUT,
+    &out
+  );
+}
 
-  /*
-   * Drain RX buffer descriptor ring.
-   */
-  for( rxBdIndex = 0; rxBdIndex < sc->rxBdCount; rxBdIndex++ ) {
-    n = sc->rxMbuf[rxBdIndex];
-    while (n != NULL) {
-      m = n;
-      MFREE(m,n);
-    }
-  }
+static void mcf548x_fec_request_restart(struct mcf548x_enet_struct *sc)
+{
+  sc->state = FEC_STATE_RESTART_0;
+  fec_send_event(sc->txDaemonTid);
+  fec_send_event(sc->rxDaemonTid);
 }
 
 /*
@@ -349,7 +282,7 @@ static void mcf548x_eth_addr_filter_set(struct mcf548x_enet_struct *sc)  {
   * This is because the CRC generatore in hardware is implemented
   * as a shift-register with as many ex-ores as the radixes
   * in the polynomium. This suggests that we represent the
-  * polynomiumm itself as a 32-bit constant.
+  * polynomiumm itsc as a 32-bit constant.
   */
   for(byte = 0; byte < 6; byte++)
     {
@@ -539,7 +472,7 @@ static int mcf548x_eth_mii_write(
  * Notes:
  *
  */
-static int mcf548x_fec_reset(struct mcf548x_enet_struct *sc) {
+static void mcf548x_fec_reset(struct mcf548x_enet_struct *sc) {
   volatile int delay;
   int chan     = sc->chan;
   /*
@@ -566,8 +499,6 @@ static int mcf548x_fec_reset(struct mcf548x_enet_struct *sc) {
    * wait at least 16 clock cycles
    */
   for (delay = 0;delay < 16*4;delay++) {};
-
-  return true;
 }
 
 
@@ -647,13 +578,7 @@ void mcf548x_fec_off(struct mcf548x_enet_struct *sc)
   * Disable the Ethernet Controller
   */
   MCF548X_FEC_ECR(chan) &= ~(MCF548X_FEC_ECR_ETHER_EN);
-
-  /*
-   * cleanup all buffers
-   */
-  mcf548x_fec_rx_bd_cleanup(sc);
-
-  }
+}
 
 /*
  * MCF548X FEC interrupt handler
@@ -682,17 +607,18 @@ void mcf548x_fec_irq_handler(rtems_vector_number vector)
     sc->txUnderrun++;
   }
   if (ievent & MCF548X_FEC_EIR_XFERR) {
-    sc->txUnderrun++;
+    sc->txFIFOError++;
   }
   if (ievent & MCF548X_FEC_EIR_RFERR) {
-    sc->rxOverrun++;
+    sc->rxFIFOError++;
   }
   /*
    * fatal error ocurred?
    */
   if (ievent & (MCF548X_FEC_EIR_RFERR | MCF548X_FEC_EIR_XFERR)) {
     MCF548X_FEC_EIMR(chan) &=~(MCF548X_FEC_EIMR_RFERR | MCF548X_FEC_EIMR_XFERR);
-    rtems_bsdnet_event_send(sc->rxDaemonTid, FATAL_INT_EVENT);
+    printk("fifo\n");
+    mcf548x_fec_request_restart(sc);
   }
 }
 
@@ -708,7 +634,7 @@ void mcf548x_mcdma_rx_irq_handler(void * param)
 
     mcdma_glue_irq_disable(sc->rxDmaChan);/*Disable receive ints*/
     sc->rxInterrupts++; 		/* Rx int has occurred */
-    rtems_bsdnet_event_send(sc->rxDaemonTid, INTERRUPT_EVENT);
+    fec_send_event(sc->rxDaemonTid);
   }
 }
 
@@ -728,341 +654,9 @@ void mcf548x_mcdma_tx_irq_handler(void * param)
 
     sc->txInterrupts++; /* Tx int has occurred */
 
-    rtems_bsdnet_event_send(sc->txDaemonTid, INTERRUPT_EVENT);
+    fec_send_event(sc->txDaemonTid);
   }
 }
-
-
-
-
-
- /*
-  * Function:	    mcf548x_fec_retire_tbd
-  *
-  * Description:	Soak up buffer descriptors that have been sent.
-  *
-  * Returns:		void
-  *
-  * Notes:
-  *
-  */
-static void mcf548x_fec_retire_tbd(struct mcf548x_enet_struct *sc,
-				   bool force)
-{
-  struct mbuf *n;
-  /*
-   * Clear already transmitted BDs first. Will not work calling same
-   * from fecExceptionHandler(TFINT).
-   */
-
-  while ((sc->txBdActiveCount > 0) &&
-	 (force ||
-	  ((MCF548X_FEC_TBD_READY & GET_BD_STATUS(sc->txBd+sc->txBdTail))
-	   == 0x0))) {
-    if (sc->txMbuf[sc->txBdTail] != NULL) {
-      /*
-       * NOTE: txMbuf can be NULL, if mbuf has been split into different BDs
-       */
-      MFREE (sc->txMbuf[sc->txBdTail],n);
-      sc->txMbuf[sc->txBdTail] = NULL;
-    }
-    sc->txBdActiveCount--;
-    if(++sc->txBdTail >= sc->txBdCount) {
-      sc->txBdTail = 0;
-    }
-  }
-}
-
-
-static void mcf548x_fec_sendpacket(struct ifnet *ifp,struct mbuf *m) {
-  struct mcf548x_enet_struct *sc = ifp->if_softc;
-  struct mbuf *l = NULL;
-  int nAdded;
-  uint32_t status;
-  rtems_event_set events;
-  MCD_bufDescFec *thisBd;
-  MCD_bufDescFec *firstBd = NULL;
-  void *data_ptr;
-  size_t data_len;
-
- /*
-  * Free up buffer descriptors
-  */
-  mcf548x_fec_retire_tbd(sc,false);
-
- /*
-  * Set up the transmit buffer descriptors.
-  * No need to pad out short packets since the
-  * hardware takes care of that automatically.
-  * No need to copy the packet to a contiguous buffer
-  * since the hardware is capable of scatter/gather DMA.
-  */
-  nAdded = 0;
-
-  for(;;) {
-
-   /*
-    * Wait for buffer descriptor to become available.
-    */
-    if((sc->txBdActiveCount + nAdded) == sc->txBdCount) {
-
-      /*
-       * Clear old events
-       */
-      MCDMA_CLR_PENDING(sc->txDmaChan);
-      /*
-       * Wait for buffer descriptor to become available.
-       * Note that the buffer descriptors are checked
-       * *before* * entering the wait loop -- this catches
-       * the possibility that a buffer descriptor became
-       * available between the `if' above, and the clearing
-       * of the event register.
-       * This is to catch the case where the transmitter
-       * stops in the middle of a frame -- and only the
-       * last buffer descriptor in a frame can generate
-       * an interrupt.
-       */
-      mcf548x_fec_retire_tbd(sc,false);
-
-      while((sc->txBdActiveCount + nAdded) == sc->txBdCount) {
-	mcdma_glue_irq_enable(sc->txDmaChan);
-	rtems_bsdnet_event_receive(INTERRUPT_EVENT,
-				   RTEMS_WAIT | RTEMS_EVENT_ANY,
-				   RTEMS_NO_TIMEOUT, &events);
-        mcf548x_fec_retire_tbd(sc,false);
-      }
-    }
-
-    if(m->m_len == 0) {
-      /*
-       * Just toss empty mbufs
-       */
-      struct mbuf *n;
-      MFREE(m, n);
-      m = n;
-      if(l != NULL) {
-        l->m_next = m;
-      }
-    }
-    else {
-      /*
-       * Flush the buffer for this descriptor
-       */
-      rtems_cache_flush_multiple_data_lines((const void *)mtod(m, void *),
-					    m->m_len);
-      /*
-       * Fill in the buffer descriptor,
-       * set "end of frame" bit in status,
-       * if last mbuf in chain
-       */
-      thisBd = sc->txBd + sc->txBdHead;
-      /*
-       * FIXME: do not send interrupt after every frame
-       * doing this every quarter of BDs is much more efficent
-       */
-      status = (((m->m_next == NULL)
-		 ? MCF548X_FEC_TBD_LAST | MCF548X_FEC_TBD_INT
-		 : 0)
-		| ((sc->txBdHead == sc->txBdCount-1)
-		   ? MCF548X_FEC_TBD_WRAP
-		   :0 ));
-      /*
-       * Don't set the READY flag till the
-       * whole packet has been readied.
-       */
-      if (firstBd != NULL) {
-	status |= MCF548X_FEC_TBD_READY;
-      }
-      else {
-	firstBd = thisBd;
-      }
-
-      data_ptr = mtod(m, void *);
-      data_len = m->m_len;
-      sc->txMbuf[sc->txBdHead] = m;
-      /* go to next part in chain */
-      l = m;
-      m = m->m_next;
-
-      SET_BD_BUFFER(thisBd, data_ptr);
-      SET_BD_LENGTH(thisBd, data_len);
-      SET_BD_STATUS(thisBd, status);
-
-      nAdded++;
-      if(++(sc->txBdHead) == sc->txBdCount) {
-        sc->txBdHead = 0;
-      }
-    }
-    /*
-     * Set the transmit buffer status.
-     * Break out of the loop if this mbuf is the last in the frame.
-     */
-    if(m == NULL) {
-      if(nAdded) {
-	SET_BD_STATUS(firstBd,
-		      GET_BD_STATUS(firstBd) | MCF548X_FEC_TBD_READY);
-	MCD_continDma(sc->txDmaChan);
-        sc->txBdActiveCount += nAdded;
-      }
-      break;
-    }
-  } /* end of for(;;) */
-}
-
-
-/*
- * Driver transmit daemon
- */
-void mcf548x_fec_txDaemon(void *arg)
-  {
-  struct mcf548x_enet_struct *sc = (struct mcf548x_enet_struct *)arg;
-  struct ifnet *ifp = &sc->arpcom.ac_if;
-  struct mbuf *m;
-  rtems_event_set events;
-
-  for(;;) {
-   /*
-    * Wait for packet
-    */
-    mcdma_glue_irq_enable(sc->txDmaChan);
-    rtems_bsdnet_event_receive(START_TRANSMIT_EVENT|INTERRUPT_EVENT,
-			       RTEMS_EVENT_ANY | RTEMS_WAIT,
-			       RTEMS_NO_TIMEOUT,
-			       &events);
-
-    /*
-     * Send packets till queue is empty
-     */
-    for(;;)
-      {
-
-      /*
-       * Get the next mbuf chain to transmit.
-       */
-      IF_DEQUEUE(&ifp->if_snd, m);
-
-      if (!m)
-        break;
-
-      mcf548x_fec_sendpacket(ifp, m);
-
-      }
-
-    ifp->if_flags &= ~IFF_OACTIVE;
-
-    }
-
-  }
-
-
-/*
- * reader task
- */
-static void mcf548x_fec_rxDaemon(void *arg){
-  struct mcf548x_enet_struct *sc = (struct mcf548x_enet_struct *)arg;
-  struct ifnet *ifp = &sc->arpcom.ac_if;
-  struct mbuf *m;
-  struct ether_header *eh;
-  int rxBdIndex;
-  uint32_t status;
-  size_t size;
-  rtems_event_set events;
-  size_t len = 1;
-  MCD_bufDescFec *bd;
-
-  /*
-   * Input packet handling loop
-   */
-  rxBdIndex = 0;
-
-  for (;;) {
-    /*
-     * Clear old events
-     */
-    MCDMA_CLR_PENDING(sc->rxDmaChan);
-    /*
-     * Get the first BD pointer and its length.
-     */
-    bd     = sc->rxBd + rxBdIndex;
-    status = GET_BD_STATUS( bd );
-    len    = GET_BD_LENGTH( bd );
-
-    /*
-     * Loop through BDs until we find an empty one. This indicates that
-     * the DMA is still using it.
-     */
-    while( !(status & MCF548X_FEC_RBD_EMPTY) ) {
-
-      /*
-       * Remember the data pointer from this transfer.
-       */
-      GET_BD_BUFFER(bd);
-      m    = sc->rxMbuf[rxBdIndex];
-      m->m_len = m->m_pkthdr.len = (len
-				    - sizeof(uint32_t)
-				    - sizeof(struct ether_header));
-      eh = mtod(m, struct ether_header *);
-      m->m_data += sizeof(struct ether_header);
-      ether_input(ifp, eh, m);
-
-      /*
-       * Done w/ the BD. Clean it.
-       */
-      sc->rxMbuf[rxBdIndex] = NULL;
-
-      /*
-       * Add a new buffer to the ring.
-       */
-      MGETHDR (m, M_WAIT, MT_DATA);
-      MCLGET (m, M_WAIT);
-      m->m_pkthdr.rcvif = ifp;
-      size = ETHER_MAX_LEN;
-
-      sc->rxMbuf[rxBdIndex] = m;
-      rtems_cache_invalidate_multiple_data_lines(mtod(m,const void *),
-						 size);
-
-      SET_BD_BUFFER(bd,mtod(m, void *));
-      SET_BD_LENGTH(bd,size);
-      SET_BD_STATUS(bd,
-		    MCF548X_FEC_RBD_EMPTY
-		    |MCF548X_FEC_RBD_INT
-		    |((rxBdIndex == sc->rxBdCount-1)
-		      ? MCF548X_FEC_RBD_WRAP
-		      : 0)
-		    );
-
-      /*
-       * advance to next BD
-       */
-      if (++rxBdIndex >= sc->rxBdCount) {
-	rxBdIndex = 0;
-      }
-      /*
-       * Get next BD pointer and its length.
-       */
-      bd     = sc->rxBd + rxBdIndex;
-      status = GET_BD_STATUS( bd );
-      len    = GET_BD_LENGTH( bd );
-    }
-    /*
-     * Unmask RXF (Full frame received) event
-     */
-    mcdma_glue_irq_enable(sc->rxDmaChan);
-
-    rtems_bsdnet_event_receive (INTERRUPT_EVENT | FATAL_INT_EVENT,
-				RTEMS_WAIT | RTEMS_EVENT_ANY,
-				RTEMS_NO_TIMEOUT, &events);
-    if (events & FATAL_INT_EVENT) {
-      /*
-       * fatal interrupt ocurred, so reinit fec and restart mcdma tasks
-       */
-      mcf548x_fec_restart(sc);
-      rxBdIndex = 0;
-    }
-  }
-}
-
 
 /*
  * Function:	mcf548x_fec_initialize_hardware
@@ -1136,8 +730,8 @@ static void mcf548x_fec_initialize_hardware(struct mcf548x_enet_struct *sc)
   /*
    * Set transmit fifo watermark register (X_WMRK), default = 64
    */
-  MCF548X_FEC_FECTFAR(chan) = MCF548X_FEC_FECTFAR_ALARM(256);	/* 256 bytes */
-  MCF548X_FEC_FECTFWR(chan) = MCF548X_FEC_FECTFWR_X_WMRK_64;	/* 64 bytes */
+  MCF548X_FEC_FECTFAR(chan) = MCF548X_FEC_FECTFAR_ALARM(128);
+  MCF548X_FEC_FECTFWR(chan) = MCF548X_FEC_FECTFWR_X_WMRK_64;   /* 64 bytes */
 
  /*
   * Set individual address filter for unicast address
@@ -1168,15 +762,11 @@ static void mcf548x_fec_tx_start(struct ifnet *ifp)
 
   ifp->if_flags |= IFF_OACTIVE;
 
-  rtems_bsdnet_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
+  fec_send_event(sc->txDaemonTid);
 
   }
 
-
-/*
- * start the DMA channel
- */
-static void mcf548x_fec_startDMA(struct mcf548x_enet_struct *sc)
+static void fec_start_dma_and_controller(struct mcf548x_enet_struct *sc)
 {
   int chan = sc->chan;
   int mcdma_rc;
@@ -1231,7 +821,384 @@ static void mcf548x_fec_startDMA(struct mcf548x_enet_struct *sc)
       if (mcdma_rc != MCD_OK) {
 	rtems_panic("FEC: cannot start tx DMA");
       }
+
+  /*
+   * Enable FEC-Lite controller
+   */
+  MCF548X_FEC_ECR(chan) |= MCF548X_FEC_ECR_ETHER_EN;
 }
+
+static void mcf548x_fec_restart(struct mcf548x_enet_struct *sc, rtems_id otherDaemon)
+{
+  if (sc->state == FEC_STATE_RESTART_1) {
+    mcf548x_fec_initialize_hardware(sc);
+    fec_start_dma_and_controller(sc);
+    sc->state = FEC_STATE_NORMAL;
+  } else {
+    sc->state = FEC_STATE_RESTART_1;
+  }
+
+  fec_send_event(otherDaemon);
+  while (sc->state != FEC_STATE_NORMAL) {
+    fec_wait_for_event();
+  }
+}
+
+static void fec_reset_bd_and_discard_tx_frames(
+  int bdCount,
+  MCD_bufDescFec *bdRing,
+  struct mbuf **mbufs
+)
+{
+  int bdIndex = 0;
+
+  for (bdIndex = 0; bdIndex < bdCount; ++bdIndex) {
+    bool bdIsLast = bdIndex == bdCount - 1;
+    struct mbuf *m = mbufs[bdIndex];
+
+    bdRing[bdIndex].statCtrl = bdIsLast ? MCF548X_FEC_TBD_WRAP : 0;
+
+    if (m != NULL) {
+      mbufs[bdIndex] = NULL;
+      m_free(m);
+    }
+  }
+}
+
+static void fec_reset_tx_dma(
+  int dmaChan,
+  int bdCount,
+  MCD_bufDescFec *bdRing,
+  struct mbuf **mbufs,
+  struct mbuf *m
+)
+{
+  if (m != NULL) {
+    m_freem(m);
+  }
+
+  MCD_killDma(dmaChan);
+
+  fec_reset_bd_and_discard_tx_frames(bdCount, bdRing, mbufs);
+}
+
+static struct mbuf *fec_next_fragment(
+  struct ifnet *ifp,
+  struct mbuf *m,
+  bool *isFirst
+)
+{
+  struct mbuf *n = NULL;
+
+  *isFirst = false;
+
+  while (true) {
+    if (m == NULL) {
+      IF_DEQUEUE(&ifp->if_snd, m);
+
+      if (m != NULL) {
+        *isFirst = true;
+      } else {
+        ifp->if_flags &= ~IFF_OACTIVE;
+
+        return NULL;
+      }
+    }
+
+    if (m->m_len > 0) {
+      break;
+    } else {
+      m = m_free(m);
+    }
+  }
+
+  n = m->m_next;
+  while (n != NULL && n->m_len <= 0) {
+    n = m_free(n);
+  }
+  m->m_next = n;
+
+  return m;
+}
+
+static bool fec_transmit(
+  struct ifnet *ifp,
+  int dmaChan,
+  int bdCount,
+  MCD_bufDescFec *bdRing,
+  struct mbuf **mbufs,
+  int *bdIndexPtr,
+  struct mbuf **mPtr,
+  MCD_bufDescFec **firstPtr
+)
+{
+  bool bdShortage = false;
+  int bdIndex = *bdIndexPtr;
+  struct mbuf *m = *mPtr;
+  MCD_bufDescFec *first = *firstPtr;
+
+  while (true) {
+    MCD_bufDescFec *bd = &bdRing[bdIndex];
+
+    MCDMA_CLR_PENDING(dmaChan);
+    if ((bd->statCtrl & MCF548X_FEC_TBD_READY) == 0) {
+      struct mbuf *done = mbufs[bdIndex];
+      bool isFirst = false;
+
+      if (done != NULL) {
+        m_free(done);
+        mbufs[bdIndex] = NULL;
+      }
+
+      m = fec_next_fragment(ifp, m, &isFirst);
+      if (m != NULL) {
+        bool bdIsLast = bdIndex == bdCount - 1;
+        u16 status = bdIsLast ? MCF548X_FEC_TBD_WRAP : 0;
+
+        bd->length = (u16) m->m_len;
+        bd->dataPointer = mtod(m, u32);
+
+        mbufs[bdIndex] = m;
+
+        rtems_cache_flush_multiple_data_lines(mtod(m, void *), m->m_len);
+
+        if (isFirst) {
+          first = bd;
+        } else {
+          status |= MCF548X_FEC_TBD_READY;
+        }
+
+        if (m->m_next != NULL) {
+          bd->statCtrl = status;
+        } else {
+          bd->statCtrl = status | MCF548X_FEC_TBD_INT | MCF548X_FEC_TBD_LAST;
+          first->statCtrl |= MCF548X_FEC_TBD_READY;
+          MCD_continDma(dmaChan);
+        }
+
+        m = m->m_next;
+      } else {
+        break;
+      }
+    } else {
+      bdShortage = true;
+      break;
+    }
+
+    if (bdIndex < bdCount - 1) {
+      ++bdIndex;
+    } else {
+      bdIndex = 0;
+    }
+  }
+
+  *bdIndexPtr = bdIndex;
+  *mPtr = m;
+  *firstPtr = first;
+
+  return bdShortage;
+}
+
+static MCD_bufDescFec *fec_init_tx_dma(
+  MCD_bufDescFec *bdRing,
+  int bdCount
+)
+{
+  int bdIndex;
+
+  for (bdIndex = 0; bdIndex < bdCount; ++bdIndex) {
+    bool bdIsLast = bdIndex == bdCount - 1;
+
+    bdRing[bdIndex].dataPointer = 0;
+    bdRing[bdIndex].length = 0;
+    bdRing[bdIndex].statCtrl = bdIsLast ? MCF548X_FEC_RBD_WRAP : 0;
+  }
+
+  return bdRing;
+}
+
+static void mcf548x_fec_txDaemon(void *arg)
+{
+  struct mcf548x_enet_struct *sc = arg;
+  struct ifnet *ifp = &sc->arpcom.ac_if;
+  int dmaChan = sc->txDmaChan;
+  int bdIndex = 0;
+  int bdCount = sc->txBdCount;
+  struct mbuf **mbufs = &sc->txMbuf[0];
+  struct mbuf *m = NULL;
+  MCD_bufDescFec *bdRing = fec_init_tx_dma(sc->txBd, bdCount);
+  MCD_bufDescFec *first = NULL;
+  bool bdShortage = false;
+
+  memset(mbufs, 0, bdCount * sizeof(*mbufs));
+
+  while (true) {
+    if (bdShortage) {
+      mcdma_glue_irq_enable(dmaChan);
+    }
+    fec_wait_for_event();
+
+    if (sc->state != FEC_STATE_NORMAL) {
+      fec_reset_tx_dma(dmaChan, bdCount, bdRing, mbufs, m);
+      mcf548x_fec_restart(sc, sc->rxDaemonTid);
+      bdIndex = 0;
+      m = NULL;
+      first = NULL;
+    }
+
+    bdShortage = fec_transmit(
+      ifp,
+      dmaChan,
+      bdCount,
+      bdRing,
+      mbufs,
+      &bdIndex,
+      &m,
+      &first
+    );
+  }
+}
+
+static struct mbuf *fec_add_mbuf(
+  int how,
+  struct ifnet *ifp,
+  MCD_bufDescFec *bd,
+  bool bdIsLast
+)
+{
+  struct mbuf *m;
+
+  MGETHDR(m, how, MT_DATA);
+  if (m != NULL) {
+    MCLGET(m, how);
+    if ((m->m_flags & M_EXT) != 0) {
+      m->m_pkthdr.rcvif = ifp;
+
+      rtems_cache_invalidate_multiple_data_lines(mtod(m, void *), ETHER_MAX_LEN);
+
+      bd->dataPointer = mtod(m, u32);
+      bd->length = ETHER_MAX_LEN;
+      bd->statCtrl = MCF548X_FEC_RBD_EMPTY
+        | MCF548X_FEC_RBD_INT
+        | (bdIsLast ? MCF548X_FEC_RBD_WRAP : 0);
+    } else {
+      m_free(m);
+    }
+  }
+
+  return m;
+}
+
+static MCD_bufDescFec *fec_init_rx_dma(
+  MCD_bufDescFec *bdRing,
+  struct ifnet *ifp,
+  int bdCount,
+  struct mbuf **mbufs
+)
+{
+  int bdIndex;
+
+  for (bdIndex = 0; bdIndex < bdCount; ++bdIndex) {
+    bool bdIsLast = bdIndex == bdCount - 1;
+
+    mbufs[bdIndex] = fec_add_mbuf(M_WAIT, ifp, &bdRing[bdIndex], bdIsLast);
+  }
+
+  return bdRing;
+}
+
+static void fec_reset_rx_dma(
+  int dmaChan,
+  int bdCount,
+  MCD_bufDescFec *bdRing
+)
+{
+  int bdIndex;
+
+  MCD_killDma(dmaChan);
+
+  for (bdIndex = 0; bdIndex < bdCount - 1; ++bdIndex) {
+    bdRing[bdIndex].length = ETHER_MAX_LEN;
+    bdRing[bdIndex].statCtrl = MCF548X_FEC_RBD_EMPTY | MCF548X_FEC_RBD_INT;
+  }
+
+  bdRing[bdIndex].length = ETHER_MAX_LEN;
+  bdRing[bdIndex].statCtrl = MCF548X_FEC_RBD_EMPTY | MCF548X_FEC_RBD_INT | MCF548X_FEC_RBD_WRAP;
+}
+
+static int fec_ether_input(
+  struct ifnet *ifp,
+  int dmaChan,
+  int bdIndex,
+  int bdCount,
+  MCD_bufDescFec *bdRing,
+  struct mbuf **mbufs
+)
+{
+  while (true) {
+    bool bdIsLast = bdIndex == bdCount - 1;
+    MCD_bufDescFec *bd = &bdRing[bdIndex];
+    struct mbuf *m = mbufs[bdIndex];
+    struct mbuf *n;
+    u16 status;
+
+    MCDMA_CLR_PENDING(dmaChan);
+    status = bd->statCtrl;
+
+    if ((status & MCF548X_FEC_RBD_EMPTY) != 0) {
+      break;
+    }
+
+    n = fec_add_mbuf(0, ifp, bd, bdIsLast);
+    if (n != NULL) {
+      int len = bd->length - ETHER_HDR_LEN - ETHER_CRC_LEN;
+      struct ether_header *eh = mtod(m, struct ether_header *);
+
+      m->m_len = len;
+      m->m_pkthdr.len = len;
+      m->m_data = mtod(m, char *) + ETHER_HDR_LEN;
+
+      ether_input(ifp, eh, m);
+    } else {
+      n = m;
+    }
+
+    mbufs[bdIndex] = n;
+
+    if (bdIndex < bdCount - 1) {
+      ++bdIndex;
+    } else {
+      bdIndex = 0;
+    }
+  }
+
+  return bdIndex;
+}
+
+static void mcf548x_fec_rxDaemon(void *arg)
+{
+  struct mcf548x_enet_struct *sc = arg;
+  struct ifnet *ifp = &sc->arpcom.ac_if;
+  int dmaChan = sc->rxDmaChan;
+  int bdIndex = 0;
+  int bdCount = sc->rxBdCount;
+  struct mbuf **mbufs = &sc->rxMbuf[0];
+  MCD_bufDescFec *bdRing = fec_init_rx_dma(sc->rxBd, ifp, bdCount, mbufs);
+
+  while (true) {
+    mcdma_glue_irq_enable(dmaChan);
+    fec_wait_for_event();
+
+    bdIndex = fec_ether_input(ifp, dmaChan, bdIndex, bdCount, bdRing, mbufs);
+
+    if (sc->state != FEC_STATE_NORMAL) {
+      fec_reset_rx_dma(dmaChan, bdCount, bdRing);
+      mcf548x_fec_restart(sc, sc->txDaemonTid);
+      bdIndex = 0;
+    }
+  }
+}
+
 /*
  * Initialize and start the device
  */
@@ -1292,12 +1259,6 @@ static void mcf548x_fec_init(void *arg)
       bsp_interrupt_vector_enable(MCF548X_IRQ_FEC(chan));
 
       MCF548X_FEC_EIMR(chan) = FEC_INTR_MASK_USED;
-      mcf548x_fec_rx_bd_init(sc);
-
-      /*
-       * reset and Set up mcf548x FEC hardware
-       */
-      mcf548x_fec_initialize_hardware(sc);
 
       /*
        * Start driver tasks
@@ -1308,23 +1269,9 @@ static void mcf548x_fec_init(void *arg)
 					     mcf548x_fec_txDaemon, sc);
       sc->rxDaemonTid = rtems_bsdnet_newproc(rxTaskName, 4096,
 					     mcf548x_fec_rxDaemon, sc);
-      /*
-       * Clear SmartDMA task interrupt pending bits.
-       */
-      MCDMA_CLR_PENDING(sc->rxDmaChan );
-      MCDMA_CLR_PENDING(sc->txDmaChan );
-
-      /*
-       * start the DMA channels
-       */
-      mcf548x_fec_startDMA(sc);
-      /*
-       * Enable FEC-Lite controller
-       */
-      MCF548X_FEC_ECR(chan) |= MCF548X_FEC_ECR_ETHER_EN;
-
-
     }
+
+  mcf548x_fec_request_restart(sc);
 
   /*
    * Set flags appropriately
@@ -1347,107 +1294,23 @@ static void mcf548x_fec_init(void *arg)
 
 static void enet_stats (struct mcf548x_enet_struct *sc)
 {
-  printf ("      Rx Interrupts:%-8lu", sc->rxInterrupts);
-  printf ("       Not First:%-8lu", sc->rxNotFirst);
-  printf ("        Not Last:%-8lu\n", sc->rxNotLast);
-  printf ("              Giant:%-8lu", sc->rxGiant);
-  printf ("       Non-octet:%-8lu\n", sc->rxNonOctet);
-  printf ("            Bad CRC:%-8lu", sc->rxBadCRC);
-  printf ("         Overrun:%-8lu", sc->rxOverrun);
-  printf ("       Collision:%-8lu\n", sc->rxCollision);
+  printf ("       Rx Interrupts:%-8lu", sc->rxInterrupts);
+  printf ("        Rx Not First:%-8lu", sc->rxNotFirst);
+  printf ("         Rx Not Last:%-8lu\n", sc->rxNotLast);
+  printf ("            Rx Giant:%-8lu", sc->rxGiant);
+  printf ("        Rx Non-octet:%-8lu", sc->rxNonOctet);
+  printf ("          Rx Bad CRC:%-8lu\n", sc->rxBadCRC);
+  printf ("       Rx FIFO Error:%-8lu", sc->rxFIFOError);
+  printf ("        Rx Collision:%-8lu", sc->rxCollision);
 
-  printf ("      Tx Interrupts:%-8lu", sc->txInterrupts);
-  printf ("        Deferred:%-8lu", sc->txDeferred);
-  printf ("  Late Collision:%-8lu\n", sc->txLateCollision);
-  printf ("   Retransmit Limit:%-8lu", sc->txRetryLimit);
-  printf ("        Underrun:%-8lu", sc->txUnderrun);
-  printf ("      Misaligned:%-8lu\n", sc->txMisaligned);
+  printf ("       Tx Interrupts:%-8lu\n", sc->txInterrupts);
+  printf ("         Tx Deferred:%-8lu", sc->txDeferred);
+  printf ("   Tx Late Collision:%-8lu", sc->txLateCollision);
+  printf (" Tx Retransmit Limit:%-8lu\n", sc->txRetryLimit);
+  printf ("         Tx Underrun:%-8lu", sc->txUnderrun);
+  printf ("       Tx FIFO Error:%-8lu", sc->txFIFOError);
+  printf ("       Tx Misaligned:%-8lu\n", sc->txMisaligned);
 
-}
-
-/*
- * restart the driver, reinit the fec
- * this function is responsible to reinitialize the FEC in case a fatal
- * error has ocurred. This is needed, wen a RxFIFO Overrun or a TxFIFO underrun
- * has ocurred. In these cases, the FEC is automatically disabled, and
- * both FIFOs must be reset and the BestComm tasks must be restarted
- *
- * Note: the daemon tasks will continue to run
- * (in fact this function will be called in the context of the rx daemon task)
- */
-#define NEW_DMA_SETUP
-
-static void mcf548x_fec_restart(struct mcf548x_enet_struct *sc)
-{
-  int chan = sc->chan;
-  /*
-   * FIXME: bring Tx Daemon into idle state
-   */
-#ifdef NEW_DMA_SETUP
-  /*
-   * cleanup remaining receive mbufs
-   */
-  mcf548x_fec_rx_bd_cleanup(sc);
-#endif
-  /*
-   * Stop DMA tasks
-   */
-  MCD_killDma (sc->rxDmaChan);
-  MCD_killDma (sc->txDmaChan);
-  /*
-   * FIXME: wait, until Tx Daemon is in idle state
-   */
-
-  /*
-   * Disable transmit / receive interrupts
-   */
-  mcdma_glue_irq_disable(sc->txDmaChan);
-  mcdma_glue_irq_disable(sc->rxDmaChan);
-#ifdef NEW_DMA_SETUP
-  /*
-   * recycle pending tx buffers
-   * FIXME: try to extract pending Tx buffers
-   */
-  mcf548x_fec_retire_tbd(sc,true);
-#endif
-  /*
-   * re-initialize the FEC hardware
-   */
-  mcf548x_fec_initialize_hardware(sc);
-
-#ifdef NEW_DMA_SETUP
-
-  /*
-   * reinit receive mbufs
-   */
-  mcf548x_fec_rx_bd_init(sc);
-#endif
-  /*
-   * Clear SmartDMA task interrupt pending bits.
-   */
-  MCDMA_CLR_PENDING( sc->rxDmaChan );
-
-  /*
-   * start the DMA channels again
-   */
-  mcf548x_fec_startDMA(sc);
-  /*
-   * reenable rx/tx interrupts
-   */
-  mcdma_glue_irq_enable(sc->rxDmaChan);
-  mcdma_glue_irq_enable(sc->txDmaChan);
-  /*
-   * (re-)init fec hardware
-   */
-  mcf548x_fec_initialize_hardware(sc);
-  /*
-   * reenable fec FIFO error interrupts
-   */
-  MCF548X_FEC_EIMR(chan) = FEC_INTR_MASK_USED;
-  /*
-   * Enable FEC-Lite controller
-   */
-  MCF548X_FEC_ECR(chan) |= MCF548X_FEC_ECR_ETHER_EN;
 }
 
 int32_t mcf548x_fec_setMultiFilter(struct ifnet *ifp)
