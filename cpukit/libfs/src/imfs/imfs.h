@@ -380,7 +380,7 @@ extern const IMFS_node_control IMFS_node_control_sym_link;
 extern const IMFS_node_control IMFS_node_control_memfile;
 extern const IMFS_node_control IMFS_node_control_linfile;
 extern const IMFS_node_control IMFS_node_control_fifo;
-extern const IMFS_node_control IMFS_node_control_default;
+extern const IMFS_node_control IMFS_node_control_enosys;
 
 extern const rtems_filesystem_operations_table miniIMFS_ops;
 extern const rtems_filesystem_operations_table IMFS_ops;

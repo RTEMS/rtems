@@ -20,6 +20,7 @@
 
 #include "imfs.h"
 
+#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -139,6 +140,16 @@ void IMFS_node_free( const rtems_filesystem_location_info_t *loc )
   }
 }
 
+static IMFS_jnode_t *IMFS_node_initialize_enosys(
+  IMFS_jnode_t *node,
+  const IMFS_types_union *info
+)
+{
+  errno = ENOSYS;
+
+  return NULL;
+}
+
 IMFS_jnode_t *IMFS_node_initialize_default(
   IMFS_jnode_t *node,
   const IMFS_types_union *info
@@ -159,10 +170,10 @@ IMFS_jnode_t *IMFS_node_destroy_default( IMFS_jnode_t *node )
   return node;
 }
 
-const IMFS_node_control IMFS_node_control_default = {
+const IMFS_node_control IMFS_node_control_enosys = {
   .imfs_type = IMFS_INVALID_NODE,
   .handlers = &rtems_filesystem_handlers_default,
-  .node_initialize = IMFS_node_initialize_default,
+  .node_initialize = IMFS_node_initialize_enosys,
   .node_remove = IMFS_node_remove_default,
   .node_destroy = IMFS_node_destroy_default
 };

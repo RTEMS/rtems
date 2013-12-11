@@ -49,11 +49,11 @@ static const IMFS_node_control *const
   IMFS_mini_node_controls [IMFS_TYPE_COUNT] = {
   [IMFS_DIRECTORY] = &IMFS_node_control_directory,
   [IMFS_DEVICE] = &IMFS_node_control_device,
-  [IMFS_HARD_LINK] = &IMFS_node_control_default,
-  [IMFS_SYM_LINK] = &IMFS_node_control_default,
+  [IMFS_HARD_LINK] = &IMFS_node_control_enosys,
+  [IMFS_SYM_LINK] = &IMFS_node_control_enosys,
   [IMFS_MEMORY_FILE] = &IMFS_node_control_memfile,
   [IMFS_LINEAR_FILE] = &IMFS_node_control_linfile,
-  [IMFS_FIFO] = &IMFS_node_control_default
+  [IMFS_FIFO] = &IMFS_node_control_enosys
 };
 
 int miniIMFS_initialize(

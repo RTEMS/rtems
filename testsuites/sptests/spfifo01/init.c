@@ -38,22 +38,11 @@ static void test_main(void)
     "Creating named fifo '" FIFO_PATH "'.\n"
     "Must result in failure since pipes are disabled in the configuration."
   );
+
+  errno = 0;
   status = mkfifo(FIFO_PATH, 0777);
-  rtems_test_assert(status == 0);
-
-  fd = open(FIFO_PATH, O_RDWR);
-  rtems_test_assert(fd >= 0);
-
-  n = read(fd, buf, sizeof(buf));
-  rtems_test_assert(n == -1);
-  rtems_test_assert(errno == ENOTSUP);
-
-  n = write(fd, buf, sizeof(buf));
-  rtems_test_assert(n == -1);
-  rtems_test_assert(errno == ENOTSUP);
-
-  status = close(fd);
-  rtems_test_assert(status == 0);
+  rtems_test_assert(status == -1);
+  rtems_test_assert(errno == ENOSYS);
 
   puts("*** END OF FIFO / PIPE OPEN TEST - 1 ***");
 }
