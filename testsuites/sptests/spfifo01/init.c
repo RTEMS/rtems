@@ -26,10 +26,8 @@ rtems_task Init(rtems_task_argument argument);
 
 static void test_main(void)
 {
-  int status = -1;
-  int fd;
-  char buf [1];
-  ssize_t n;
+  mode_t rwx = S_IRWXU | S_IRWXG | S_IRWXO;
+  int status;
 
   puts("\n\n*** FIFO / PIPE OPEN TEST - 1 ***");
 
@@ -40,7 +38,12 @@ static void test_main(void)
   );
 
   errno = 0;
-  status = mkfifo(FIFO_PATH, 0777);
+  status = mkfifo(FIFO_PATH, rwx);
+  rtems_test_assert(status == -1);
+  rtems_test_assert(errno == ENOSYS);
+
+  errno = 0;
+  status = mknod(FIFO_PATH, S_IFIFO | rwx, 0);
   rtems_test_assert(status == -1);
   rtems_test_assert(errno == ENOSYS);
 
