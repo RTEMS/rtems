@@ -24,6 +24,7 @@
 #include <linux/pagemap.h>
 #include <linux/stat.h>
 #include <linux/types.h>
+#include <sys/uio.h>
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -38,11 +39,6 @@
 
 struct _inode;
 struct super_block;
-
-struct iovec {
-        void *iov_base;
-        ssize_t iov_len; 
-};
 
 static inline unsigned int full_name_hash(const unsigned char * name, size_t len) {
 
