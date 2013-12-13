@@ -1,3 +1,20 @@
+/**
+ * @file
+ *
+ * @ingroup realview-pbx-a9_tm27
+ *
+ * @brief GIC tmtests/tm27 support.
+ */
+
+
+/**
+ * @defgroup realview-pbx-a9_tm27 GIC tmtests/tm27
+ *
+ * @ingroup arm_realview-pbx-a9
+ *
+ * @brief GIC tmtests/tm27 support.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *

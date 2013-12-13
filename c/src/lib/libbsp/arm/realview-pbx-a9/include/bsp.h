@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup arm_realview-pbx-a9
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
@@ -58,3 +66,12 @@ void rvpbxa9_fatal(rvpbxa9_fatal_code code) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 #endif /* ASM */
 
 #endif /* LIBBSP_ARM_REALVIEW_PBX_A9_BSP_H */
+
+/**
+ * @defgroup arm_realview-pbx-a9 Realview PBX-A9
+ *
+ * @ingroup bsp_arm
+ *
+ * @brief Realview PBX-A9 support package
+ *
+ */

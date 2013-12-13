@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup realview-pbx-a9_interrupt
+ *
+ * @brief Interrupt definitions.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
@@ -22,6 +30,14 @@
 
 #include <bsp/arm-a9mpcore-irq.h>
 #include <bsp/arm-gic-irq.h>
+
+/**
+ * @defgroup realview-pbx-a9_interrupt Interrrupt Support
+ *
+ * @ingroup arm_realview-pbx-a9
+ *
+ * @brief Interrupt support.
+ */
 
 #ifdef __cplusplus
 extern "C" {
