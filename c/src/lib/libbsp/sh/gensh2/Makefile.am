@@ -36,7 +36,7 @@ CLEANFILES = scitab.c
 # startup
 libbsp_a_SOURCES += startup/hw_init.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
-    ../shared/bspstart.c ../../shared/bsppretaskinghook.c \
+    ../shared/startup/bspstart.c ../../shared/bsppretaskinghook.c \
     ../../shared/bspgetworkarea.c ../../shared/sbrk.c ../../shared/bootcard.c \
     ../../shared/gnatinstallhandler.c ../../shared/bspclean.c \
     ../shared/bsphwinit.c
