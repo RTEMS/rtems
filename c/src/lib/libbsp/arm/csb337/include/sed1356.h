@@ -6,6 +6,14 @@
  * @brief Public Interface for SED Video Controller Operations.
  */
 
+/**
+ * @defgroup csb337_sed1356 SED Video Controller
+ *
+ * @ingroup arm_csb337
+ *
+ * @brief Public Interface for SED Video Controller Operations.
+ */
+
 /*
  * Public Interface for SED Video Controller Operations
  *
