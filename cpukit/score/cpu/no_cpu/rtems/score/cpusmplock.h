@@ -64,11 +64,13 @@ static inline void _CPU_SMP_lock_Initialize( CPU_SMP_lock_Control *lock )
  */
 static inline void _CPU_SMP_lock_Acquire( CPU_SMP_lock_Control *lock )
 {
+#if 0
   unsigned int my_ticket = _Atomic_Fetch_and_increment( &lock->next_ticket );
 
   while ( _Atomic_Load_and_acquire( &lock->now_serving ) != my_ticket ) {
     _Wait_some_time();
   }
+#endif
 }
 
 /**
@@ -78,7 +80,9 @@ static inline void _CPU_SMP_lock_Acquire( CPU_SMP_lock_Control *lock )
  */
 static inline void _CPU_SMP_lock_Release( CPU_SMP_lock_Control *lock )
 {
+#if 0
   _Atomic_Store_and_release( &lock->now_serving, lock->now_serving + 1 );
+#endif
 }
 
 /**
