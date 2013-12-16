@@ -27,6 +27,7 @@
 #include <utime.h>
 #include <string.h>
 #include <inttypes.h>
+#include <limits.h>
 
 #include <stdio.h>
 #include <unistd.h>
@@ -217,6 +218,7 @@ int doErrorTest(void)
   }
   fd = fileno(fp);
 
+#ifdef __rtems__
   /* writev --  bad iovec pointer */
   puts("writev bad iovec pointer -- EINVAL");
   rc = writev(fd, NULL, 4);
@@ -236,7 +238,7 @@ int doErrorTest(void)
   }
 
   /* writev --  bad iovcnt 0 */
-  puts("readv bad iovcnt of 0 -- EINVAL");
+  puts("writev bad iovcnt of 0 -- EINVAL");
   rc = writev(fd, vec, 0);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "writev error 3: %d=%s\n", errno, strerror(errno) );
@@ -252,6 +254,7 @@ int doErrorTest(void)
     fclose(fp);
     return FALSE;
   }
+#endif /* __rtems__ */
 
   /* writev --  bad iovcnt negative */
   puts("writev bad iovcnt negative -- EINVAL");
@@ -271,6 +274,7 @@ int doErrorTest(void)
     return FALSE;
   }
 
+#ifdef __rtems__
   /* writev --  bad iov[i].iov_base */
   vec[0].iov_base = vec;
   vec[0].iov_len = 100;
@@ -296,6 +300,7 @@ int doErrorTest(void)
     fclose(fp);
     return FALSE;
   }
+#endif /* __rtems__ */
 
   /*  writev --  bad iov[i].iov_len < 0 */
   vec[0].iov_base = vec;
@@ -310,12 +315,12 @@ int doErrorTest(void)
     return FALSE;
   }
 
-  /*  readv --  bad iov[i].iov_len = 0 */
+  /*  readv --  bad iov[i].iov_len < 0 */
   vec[0].iov_base = vec;
   vec[0].iov_len = 100;
   vec[1].iov_base = vec;
   vec[1].iov_len = -1024;
-  puts("readv bad iov[i].iov_len = 0 -- EINVAL");
+  puts("readv bad iov[i].iov_len < 0 -- EINVAL");
   rc = readv(fd, vec, 2);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "readv error 6: %d=%s\n", errno, strerror(errno) );
@@ -343,8 +348,10 @@ int doErrorTest(void)
   vec[0].iov_len = SIZE_MAX;
   vec[1].iov_base = vec;
   vec[1].iov_len = SIZE_MAX;
+  vec[2].iov_base = vec;
+  vec[2].iov_len = SIZE_MAX;
   puts("readv iov_len total overflows -- EINVAL");
-  rc = readv(fd, vec, 2);
+  rc = readv(fd, vec, 3);
   if ( (rc != -1) || (errno != EINVAL) ) {
     printf( "read error 7: rc=%d %d=%s\n", rc, errno, strerror(errno) );
     fclose(fp);
@@ -376,6 +383,24 @@ int doErrorTest(void)
     fclose(fp);
     return FALSE;
   }
+
+#ifdef __rtems__
+  puts("readv bad iovcnt of IOV_MAX + 1 -- EINVAL");
+  rc = readv(fd, vec, IOV_MAX + 1);
+  if ( (rc != -1) || (errno != EINVAL) ) {
+    printf( "readv error 9: %d=%s\n", errno, strerror(errno) );
+    fclose(fp);
+    return FALSE;
+  }
+
+  puts("writev bad iovcnt of IOV_MAX + 1 -- EINVAL");
+  rc = writev(fd, vec, IOV_MAX + 1);
+  if ( (rc != -1) || (errno != EINVAL) ) {
+    printf( "writev error 9: %d=%s\n", errno, strerror(errno) );
+    fclose(fp);
+    return FALSE;
+  }
+#endif /* __rtems__ */
 
   fclose(fp);
   return TRUE;

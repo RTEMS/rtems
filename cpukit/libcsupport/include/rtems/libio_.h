@@ -21,7 +21,9 @@
 #ifndef _RTEMS_RTEMS_LIBIO__H
 #define _RTEMS_RTEMS_LIBIO__H
 
+#include <sys/uio.h>
 #include <errno.h>
+#include <limits.h>
 
 #include <rtems.h>
 #include <rtems/libio.h>
@@ -837,6 +839,60 @@ static inline bool rtems_filesystem_is_parent_directory(
 )
 {
   return tokenlen == 2 && token [0] == '.' && token [1] == '.';
+}
+
+static inline ssize_t rtems_libio_iovec_eval(
+  int fd,
+  const struct iovec *iov,
+  int iovcnt,
+  uint32_t flags,
+  rtems_libio_t **iopp
+)
+{
+  ssize_t        total;
+  int            v;
+  rtems_libio_t *iop;
+
+  rtems_libio_check_fd( fd );
+  iop = rtems_libio_iop( fd );
+  rtems_libio_check_is_open( iop );
+  rtems_libio_check_permissions_with_error( iop, flags, EBADF );
+
+  *iopp = iop;
+
+  /*
+   *  Argument validation on IO vector
+   */
+  if ( iov == NULL )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
+  if ( iovcnt <= 0 )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
+  if ( iovcnt > IOV_MAX )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
+  /*
+   *  OpenGroup says that you are supposed to return EINVAL if the
+   *  sum of the iov_len values in the iov array would overflow a
+   *  ssize_t.
+   */
+  total = 0;
+  for ( v = 0 ; v < iovcnt ; ++v ) {
+    size_t len = iov[ v ].iov_len;
+
+    if ( len > ( size_t ) ( SSIZE_MAX - total ) ) {
+      rtems_set_errno_and_return_minus_one( EINVAL );
+    }
+
+    total += ( ssize_t ) len;
+
+    if ( iov[ v ].iov_base == NULL ) {
+      rtems_set_errno_and_return_minus_one( EINVAL );
+    }
+  }
+
+  return total;
 }
 
 /** @} */
