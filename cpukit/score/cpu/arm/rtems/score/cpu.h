@@ -422,7 +422,8 @@ void _CPU_Context_Initialize(
      uint32_t _level;                       \
      uint32_t _error = _err;                \
      _CPU_ISR_Disable( _level );            \
-     __asm__ volatile ("mov r0, %0\n"           \
+     (void) _level;                         \
+     __asm__ volatile ("mov r0, %0\n"       \
                    : "=r" (_error)          \
                    : "0" (_error)           \
                    : "r0" );                \
