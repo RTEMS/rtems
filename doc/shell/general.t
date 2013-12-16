@@ -11,6 +11,7 @@ The RTEMS shell has the following general commands:
 
 @itemize @bullet
 
+@item @code{help} - Print command help
 @item @code{alias} - Add alias for an existing command
 @item @code{date} - Print or set current date and time
 @item @code{echo} - Produce message in a shell script
@@ -34,6 +35,87 @@ This section details the General Commands available.  A
 subsection is dedicated to each of the commands and
 describes the behavior and configuration of that
 command as well as providing an example usage.
+@c
+@c
+@c
+@page
+@subsection help - Print command help
+
+@pgindex help
+
+@subheading SYNOPSYS:
+
+@example
+help misc
+@end example
+
+@subheading DESCRIPTION:
+
+This command prints the command help. Help without arguments prints a
+list of topics and help with a topic prints the help for that topic.
+
+@subheading EXIT STATUS:
+
+This command returns 0.
+
+@subheading NOTES:
+
+The help print will break the output up based on the environment
+variable SHELL_LINES. If this environment variable is not set the
+default is 16 lines. If set the number of lines is set to that the
+value. If the shell lines is set 0 there will be no break.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{alias}:
+
+@example
+SHLL [/] $ help
+help: ('r' repeat last cmd - 'e' edit last cmd)
+  TOPIC? The topics are
+   mem, misc, files, help, rtems, network, monitor
+SHLL [/] $ help misc
+help: list for the topic 'misc'
+alias        - alias old new
+time         - time command [arguments...]
+joel         - joel [args] SCRIPT
+date         - date [YYYY-MM-DD HH:MM:SS]
+echo         - echo [args]
+sleep        - sleep seconds [nanoseconds]
+id           - show uid, gid, euid, and egid
+tty          - show ttyname
+whoami       - show current user
+logoff       - logoff from the system
+setenv       - setenv [var] [string]
+getenv       - getenv [var]
+unsetenv     - unsetenv [var]
+umask        - umask [new_umask]
+Press any key to continue...
+rtc          - real time clock read and set
+SHLL [/] $ setenv SHELL_ENV 0
+SHLL [/] $ help misc
+help: list for the topic 'misc'
+alias        - alias old new
+time         - time command [arguments...]
+joel         - joel [args] SCRIPT
+date         - date [YYYY-MM-DD HH:MM:SS]
+echo         - echo [args]
+sleep        - sleep seconds [nanoseconds]
+id           - show uid, gid, euid, and egid
+tty          - show ttyname
+whoami       - show current user
+logoff       - logoff from the system
+setenv       - setenv [var] [string]
+getenv       - getenv [var]
+unsetenv     - unsetenv [var]
+umask        - umask [new_umask]
+rtc          - real time clock read and set
+@end example
+
+@subheading CONFIGURATION:
+
+This command has no configuration.
+
 @c
 @c
 @c
@@ -80,7 +162,7 @@ rtems
 @findex CONFIGURE_SHELL_NO_COMMAND_ALIAS
 @findex CONFIGURE_SHELL_COMMAND_ALIAS
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_ALIAS} to have this
 command included.
@@ -130,7 +212,7 @@ date DATE TIME
 This command operates one of two modes.  When invoked with no
 arguments, it prints the current date and time.  When invoked
 with both @code{date} and @code{time} arguments, it sets the
-current time.  
+current time.
 
 The @code{date} is specified in @code{YYYY-MM-DD} format.
 The @code{time} is specified in @code{HH:MM:SS} format.
@@ -160,7 +242,7 @@ Fri Feb 29 06:45:35 2008
 @findex CONFIGURE_SHELL_NO_COMMAND_DATE
 @findex CONFIGURE_SHELL_COMMAND_DATE
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_DATE} to have this
 command included.
@@ -208,7 +290,7 @@ echo [-n | -e] args ...
 
 echo prints its arguments on the standard output, separated by spaces.
 Unless the @b{-n} option is present, a newline is output following the
-arguments.  The @b{-e} option causes echo to treat the escape sequences 
+arguments.  The @b{-e} option causes echo to treat the escape sequences
 specially, as described in the following paragraph.  The @b{-e} option is the
 default, and is provided solely for compatibility with other systems.
 Only one of the options @b{-n} and @b{-e} may be given.
@@ -242,7 +324,7 @@ Output a (horizontal) tab character.
 Output a vertical tab.
 
 @item \0digits
-Output the character whose value is given by zero to three digits.  
+Output the character whose value is given by zero to three digits.
 If there are zero digits, a nul character is output.
 
 @item \\
@@ -279,7 +361,7 @@ SHLL [/] $ echo
 @findex CONFIGURE_SHELL_NO_COMMAND_ECHO
 @findex CONFIGURE_SHELL_COMMAND_ECHO
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_ECHO} to have this
 command included.
@@ -359,14 +441,14 @@ SHLL [/] $ sleep 0 5000000
 It is not clear from the above but there is a ten second
 pause after executing the first command before the prompt
 is printed.  The second command completes very quickly
-from a human perspective and there is no noticeable 
+from a human perspective and there is no noticeable
 delay in the prompt being printed.
 @subheading CONFIGURATION:
 
 @findex CONFIGURE_SHELL_NO_COMMAND_SLEEP
 @findex CONFIGURE_SHELL_COMMAND_SLEEP
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_SLEEP} to have this
 command included.
@@ -449,7 +531,7 @@ uid=0(root),gid=0(root),euid=0(root),egid=0(root)
 @findex CONFIGURE_SHELL_NO_COMMAND_ID
 @findex CONFIGURE_SHELL_COMMAND_ID
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_ID} to have this
 command included.
@@ -520,7 +602,7 @@ SHLL [/] $ tty
 @findex CONFIGURE_SHELL_NO_COMMAND_TTY
 @findex CONFIGURE_SHELL_COMMAND_TTY
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_TTY} to have this
 command included.
@@ -591,7 +673,7 @@ rtems
 @findex CONFIGURE_SHELL_NO_COMMAND_WHOAMI
 @findex CONFIGURE_SHELL_COMMAND_WHOAMI
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_WHOAMI} to have this
 command included.
@@ -663,7 +745,7 @@ SHLL [/] $ getenv BASEPATH
 @findex CONFIGURE_SHELL_NO_COMMAND_GETENV
 @findex CONFIGURE_SHELL_COMMAND_GETENV
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_GETENV} to have this
 command included.
@@ -736,7 +818,7 @@ SHLL [/] $ setenv BASEPATH /mnt/hda1
 @findex CONFIGURE_SHELL_NO_COMMAND_SETENV
 @findex CONFIGURE_SHELL_COMMAND_SETENV
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_SETENV} to have this
 command included.
@@ -807,7 +889,7 @@ SHLL [/] $ unsetenv BASEPATH
 @findex CONFIGURE_SHELL_NO_COMMAND_UNSETENV
 @findex CONFIGURE_SHELL_COMMAND_UNSETENV
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_UNSETENV} to have this
 command included.
@@ -950,7 +1032,7 @@ logoff from the system...
 @findex CONFIGURE_SHELL_NO_COMMAND_LOGOFF
 @findex CONFIGURE_SHELL_COMMAND_LOGOFF
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_LOGOFF} to have this
 command included.
@@ -999,7 +1081,7 @@ rtc
 @findex CONFIGURE_SHELL_NO_COMMAND_RTC
 @findex CONFIGURE_SHELL_COMMAND_RTC
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_RTC} to have this
 command included.

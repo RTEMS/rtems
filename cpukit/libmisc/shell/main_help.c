@@ -12,6 +12,7 @@
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 
 #include <rtems.h>
@@ -79,9 +80,16 @@ static int rtems_shell_help(
   char * argv[]
 )
 {
-  int col,line,arg;
+  int col,line,lines,arg;
+  char* lines_env;
   rtems_shell_topic_t *topic;
   rtems_shell_cmd_t * shell_cmd = rtems_shell_first_cmd;
+
+  lines_env = getenv("SHELL_LINES");
+  if (lines_env)
+    lines = strtol(lines_env, 0, 0);
+  else
+    lines = 16;
 
   if (argc<2) {
     printf("help: ('r' repeat last cmd - 'e' edit last cmd)\n"
@@ -106,7 +114,7 @@ static int rtems_shell_help(
   }
   line = 0;
   for (arg = 1;arg<argc;arg++) {
-    if (line>16) {
+    if (lines && (line > lines)) {
       printf("Press any key to continue...");getchar();
       printf("\n");
       line = 0;
@@ -127,7 +135,7 @@ static int rtems_shell_help(
     while (shell_cmd) {
       if (!strcmp(topic->topic,shell_cmd->topic))
         line+= rtems_shell_help_cmd(shell_cmd);
-      if (line>16) {
+      if (lines && (line > lines)) {
         printf("Press any key to continue...");
         getchar();
         printf("\n");
