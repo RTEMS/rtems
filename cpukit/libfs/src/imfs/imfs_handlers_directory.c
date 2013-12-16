@@ -50,17 +50,19 @@ static int IMFS_stat_directory(
 }
 
 static const rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
-  rtems_filesystem_default_open,
-  rtems_filesystem_default_close,
-  imfs_dir_read,
-  rtems_filesystem_default_write,
-  rtems_filesystem_default_ioctl,
-  rtems_filesystem_default_lseek_directory,
-  IMFS_stat_directory,
-  rtems_filesystem_default_ftruncate_directory,
-  rtems_filesystem_default_fsync_or_fdatasync_success,
-  rtems_filesystem_default_fsync_or_fdatasync_success,
-  rtems_filesystem_default_fcntl
+  .open_h = rtems_filesystem_default_open,
+  .close_h = rtems_filesystem_default_close,
+  .read_h = imfs_dir_read,
+  .write_h = rtems_filesystem_default_write,
+  .ioctl_h = rtems_filesystem_default_ioctl,
+  .lseek_h = rtems_filesystem_default_lseek_directory,
+  .fstat_h = IMFS_stat_directory,
+  .ftruncate_h = rtems_filesystem_default_ftruncate_directory,
+  .fsync_h = rtems_filesystem_default_fsync_or_fdatasync_success,
+  .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync_success,
+  .fcntl_h = rtems_filesystem_default_fcntl,
+  .readv_h = rtems_filesystem_default_readv,
+  .writev_h = rtems_filesystem_default_writev
 };
 
 static IMFS_jnode_t *IMFS_node_initialize_directory(

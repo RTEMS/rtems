@@ -29,6 +29,7 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <sys/statvfs.h>
+#include <sys/uio.h>
 
 #include <unistd.h>
 #include <termios.h>
@@ -808,6 +809,29 @@ typedef ssize_t (*rtems_filesystem_read_t)(
 );
 
 /**
+ * @brief Reads an IO vector from a node.
+ *
+ * This handler is responsible to update the offset field of the IO descriptor.
+ *
+ * @param[in, out] iop The IO pointer.
+ * @param[in] iov The IO vector with buffer for read data.  The caller must
+ * ensure that the IO vector values are valid.
+ * @param[in] iovcnt The count of buffers in the IO vector.
+ * @param[in] total The total count of bytes in the buffers in the IO vector.
+ *
+ * @retval non-negative Count of read characters.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_readv().
+ */
+typedef ssize_t (*rtems_filesystem_readv_t)(
+  rtems_libio_t      *iop,
+  const struct iovec *iov,
+  int                 iovcnt,
+  ssize_t             total
+);
+
+/**
  * @brief Writes to a node.
  *
  * This handler is responsible to update the offset field of the IO descriptor.
@@ -825,6 +849,29 @@ typedef ssize_t (*rtems_filesystem_write_t)(
   rtems_libio_t *iop,
   const void    *buffer,
   size_t         count
+);
+
+/**
+ * @brief Writes an IO vector to a node.
+ *
+ * This handler is responsible to update the offset field of the IO descriptor.
+ *
+ * @param[in, out] iop The IO pointer.
+ * @param[in] iov The IO vector with buffer for write data.  The caller must
+ * ensure that the IO vector values are valid.
+ * @param[in] iovcnt The count of buffers in the IO vector.
+ * @param[in] total The total count of bytes in the buffers in the IO vector.
+ *
+ * @retval non-negative Count of written characters.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_writev().
+ */
+typedef ssize_t (*rtems_filesystem_writev_t)(
+  rtems_libio_t      *iop,
+  const struct iovec *iov,
+  int                 iovcnt,
+  ssize_t             total
 );
 
 /**
@@ -992,6 +1039,8 @@ struct _rtems_filesystem_file_handlers_r {
   rtems_filesystem_fcntl_t fcntl_h;
   rtems_filesystem_poll_t poll_h;
   rtems_filesystem_kqfilter_t kqfilter_h;
+  rtems_filesystem_readv_t readv_h;
+  rtems_filesystem_writev_t writev_h;
 };
 
 /**
@@ -1033,6 +1082,18 @@ ssize_t rtems_filesystem_default_read(
 );
 
 /**
+ * @brief Calls the read handler for each IO vector entry.
+ *
+ * @see rtems_filesystem_readv_t.
+ */
+ssize_t rtems_filesystem_default_readv(
+  rtems_libio_t      *iop,
+  const struct iovec *iov,
+  int                 iovcnt,
+  ssize_t             total
+);
+
+/**
  * @retval -1 Always.  The errno is set to ENOTSUP.
  *
  * @see rtems_filesystem_write_t.
@@ -1041,6 +1102,18 @@ ssize_t rtems_filesystem_default_write(
   rtems_libio_t *iop,
   const void    *buffer,
   size_t         count
+);
+
+/**
+ * @brief Calls the write handler for each IO vector entry.
+ *
+ * @see rtems_filesystem_write_t.
+ */
+ssize_t rtems_filesystem_default_writev(
+  rtems_libio_t      *iop,
+  const struct iovec *iov,
+  int                 iovcnt,
+  ssize_t             total
 );
 
 /**

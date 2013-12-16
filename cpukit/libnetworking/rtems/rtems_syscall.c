@@ -812,15 +812,17 @@ rtems_bsdnet_fstat (const rtems_filesystem_location_info_t *loc, struct stat *sp
 }
 
 static const rtems_filesystem_file_handlers_r socket_handlers = {
-	rtems_filesystem_default_open,		/* open */
-	rtems_bsdnet_close,			/* close */
-	rtems_bsdnet_read,			/* read */
-	rtems_bsdnet_write,			/* write */
-	rtems_bsdnet_ioctl,			/* ioctl */
-	rtems_filesystem_default_lseek,		/* lseek */
-	rtems_bsdnet_fstat,			/* fstat */
-	rtems_filesystem_default_ftruncate,	/* ftruncate */
-	rtems_filesystem_default_fsync_or_fdatasync,	/* fsync */
-	rtems_filesystem_default_fsync_or_fdatasync,	/* fdatasync */
-	rtems_bsdnet_fcntl 			/* fcntl */
+	.open_h = rtems_filesystem_default_open,
+	.close_h = rtems_bsdnet_close,
+	.read_h = rtems_bsdnet_read,
+	.write_h = rtems_bsdnet_write,
+	.ioctl_h = rtems_bsdnet_ioctl,
+	.lseek_h = rtems_filesystem_default_lseek,
+	.fstat_h = rtems_bsdnet_fstat,
+	.ftruncate_h = rtems_filesystem_default_ftruncate,
+	.fstat_h = rtems_filesystem_default_fsync_or_fdatasync,
+	.fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
+	.fcntl_h = rtems_bsdnet_fcntl,
+	.readv_h = rtems_filesystem_default_readv,
+	.writev_h = rtems_filesystem_default_writev
 };

@@ -34,17 +34,19 @@ static int IMFS_stat_file(
 }
 
 static const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
-  memfile_open,
-  rtems_filesystem_default_close,
-  memfile_read,
-  memfile_write,
-  rtems_filesystem_default_ioctl,
-  rtems_filesystem_default_lseek_file,
-  IMFS_stat_file,
-  memfile_ftruncate,
-  rtems_filesystem_default_fsync_or_fdatasync_success,
-  rtems_filesystem_default_fsync_or_fdatasync_success,
-  rtems_filesystem_default_fcntl
+  .open_h = memfile_open,
+  .close_h = rtems_filesystem_default_close,
+  .read_h = memfile_read,
+  .write_h = memfile_write,
+  .ioctl_h = rtems_filesystem_default_ioctl,
+  .lseek_h = rtems_filesystem_default_lseek_file,
+  .fstat_h = IMFS_stat_file,
+  .ftruncate_h = memfile_ftruncate,
+  .fsync_h = rtems_filesystem_default_fsync_or_fdatasync_success,
+  .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync_success,
+  .fcntl_h = rtems_filesystem_default_fcntl,
+  .readv_h = rtems_filesystem_default_readv,
+  .writev_h = rtems_filesystem_default_writev
 };
 
 const IMFS_node_control IMFS_node_control_memfile = {

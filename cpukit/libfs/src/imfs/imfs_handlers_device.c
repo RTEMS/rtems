@@ -34,17 +34,19 @@ static int IMFS_stat_device(
 }
 
 static const rtems_filesystem_file_handlers_r IMFS_device_handlers = {
-  device_open,
-  device_close,
-  device_read,
-  device_write,
-  device_ioctl,
-  rtems_filesystem_default_lseek_file,
-  IMFS_stat_device,
-  device_ftruncate,
-  rtems_filesystem_default_fsync_or_fdatasync,
-  rtems_filesystem_default_fsync_or_fdatasync,
-  rtems_filesystem_default_fcntl
+  .open_h = device_open,
+  .close_h = device_close,
+  .read_h = device_read,
+  .write_h = device_write,
+  .ioctl_h = device_ioctl,
+  .lseek_h = rtems_filesystem_default_lseek_file,
+  .fstat_h = IMFS_stat_device,
+  .ftruncate_h = device_ftruncate,
+  .fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
+  .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
+  .fcntl_h = rtems_filesystem_default_fcntl,
+  .readv_h = rtems_filesystem_default_readv,
+  .writev_h = rtems_filesystem_default_writev
 };
 
 static IMFS_jnode_t *IMFS_node_initialize_device(

@@ -22,15 +22,17 @@
 #include "msdos.h"
 
 const rtems_filesystem_file_handlers_r msdos_file_handlers = {
-    rtems_filesystem_default_open,
-    msdos_file_close,
-    msdos_file_read,
-    msdos_file_write,
-    rtems_filesystem_default_ioctl,
-    rtems_filesystem_default_lseek_file,
-    msdos_file_stat,
-    msdos_file_ftruncate,
-    msdos_file_sync,
-    msdos_sync,
-    rtems_filesystem_default_fcntl
+  .open_h = rtems_filesystem_default_open,
+  .close_h = msdos_file_close,
+  .read_h = msdos_file_read,
+  .write_h = msdos_file_write,
+  .ioctl_h = rtems_filesystem_default_ioctl,
+  .lseek_h = rtems_filesystem_default_lseek_file,
+  .fstat_h = msdos_file_stat,
+  .ftruncate_h = msdos_file_ftruncate,
+  .fsync_h = msdos_file_sync,
+  .fdatasync_h = msdos_sync,
+  .fcntl_h = rtems_filesystem_default_fcntl,
+  .readv_h = rtems_filesystem_default_readv,
+  .writev_h = rtems_filesystem_default_writev
 };

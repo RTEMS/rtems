@@ -675,5 +675,7 @@ static const rtems_filesystem_file_handlers_r rtems_tfs_handlers = {
   .ftruncate_h = rtems_tfs_ftruncate,
   .fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
   .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
-  .fcntl_h = rtems_filesystem_default_fcntl
+  .fcntl_h = rtems_filesystem_default_fcntl,
+  .readv_h = rtems_filesystem_default_readv,
+  .writev_h = rtems_filesystem_default_writev
 };

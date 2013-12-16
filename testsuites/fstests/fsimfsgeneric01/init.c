@@ -20,6 +20,7 @@
 
 #include <sys/stat.h>
 #include <sys/ioctl.h>
+#include <sys/uio.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
@@ -41,6 +42,8 @@ typedef enum {
   TEST_FSYNC,
   TEST_FDATASYNC,
   TEST_FCNTL,
+  TEST_READV,
+  TEST_WRITEV,
   TEST_CLOSED,
   TEST_FSTAT_UNLINK,
   TEST_REMOVED,
@@ -68,7 +71,7 @@ static int handler_close(
 {
   test_state *state = IMFS_generic_get_context_by_iop(iop);
 
-  rtems_test_assert(*state == TEST_FCNTL);
+  rtems_test_assert(*state == TEST_WRITEV);
   *state = TEST_CLOSED;
 
   return 0;
@@ -202,6 +205,36 @@ static int handler_fcntl(
   return 0;
 }
 
+static ssize_t handler_readv(
+  rtems_libio_t *iop,
+  const struct iovec *iov,
+  int iovcnt,
+  ssize_t total
+)
+{
+  test_state *state = IMFS_generic_get_context_by_iop(iop);
+
+  rtems_test_assert(*state == TEST_FCNTL);
+  *state = TEST_READV;
+
+  return 0;
+}
+
+static ssize_t handler_writev(
+  rtems_libio_t *iop,
+  const struct iovec *iov,
+  int iovcnt,
+  ssize_t total
+)
+{
+  test_state *state = IMFS_generic_get_context_by_iop(iop);
+
+  rtems_test_assert(*state == TEST_READV);
+  *state = TEST_WRITEV;
+
+  return 0;
+}
+
 static const rtems_filesystem_file_handlers_r node_handlers = {
   .open_h = handler_open,
   .close_h = handler_close,
@@ -213,7 +246,9 @@ static const rtems_filesystem_file_handlers_r node_handlers = {
   .ftruncate_h = handler_ftruncate,
   .fsync_h = handler_fsync,
   .fdatasync_h = handler_fdatasync,
-  .fcntl_h = handler_fcntl
+  .fcntl_h = handler_fcntl,
+  .readv_h = handler_readv,
+  .writev_h = handler_writev
 };
 
 static IMFS_jnode_t *node_initialize(
@@ -269,6 +304,10 @@ static void test_imfs_make_generic_node(void)
   char buf [1];
   ssize_t n = 0;
   off_t off = 0;
+  struct iovec iov = {
+    .iov_base = &buf [0],
+    .iov_len = (int) sizeof(buf)
+  };
 
   rv = IMFS_make_generic_node(
     path,
@@ -304,6 +343,12 @@ static void test_imfs_make_generic_node(void)
 
   rv = fcntl(fd, F_GETFD);
   rtems_test_assert(rv >= 0);
+
+  rv = readv(fd, &iov, 1);
+  rtems_test_assert(rv == 0);
+
+  rv = writev(fd, &iov, 1);
+  rtems_test_assert(rv == 0);
 
   rv = close(fd);
   rtems_test_assert(rv == 0);

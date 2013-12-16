@@ -36,31 +36,12 @@ ssize_t readv(
 )
 {
   ssize_t        total;
-  int            v;
   rtems_libio_t *iop;
 
   total = rtems_libio_iovec_eval( fd, iov, iovcnt, LIBIO_FLAGS_READ, &iop );
 
   if ( total > 0 ) {
-    /*
-     *  Now process the readv().
-     */
-    total = 0;
-    for ( v = 0 ; v < iovcnt ; v++ ) {
-      ssize_t bytes = ( *iop->pathinfo.handlers->read_h )(
-        iop,
-        iov[ v ].iov_base,
-        iov[ v ].iov_len
-      );
-
-      if ( bytes < 0 )
-        return -1;
-
-      total += bytes;
-
-      if ( bytes != iov[ v ].iov_len )
-        break;
-    }
+    total = ( *iop->pathinfo.handlers->readv_h )( iop, iov, iovcnt, total );
   }
 
   return total;

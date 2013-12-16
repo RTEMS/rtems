@@ -45,17 +45,19 @@ static int IMFS_stat_link(
 }
 
 static const rtems_filesystem_file_handlers_r IMFS_link_handlers = {
-  rtems_filesystem_default_open,
-  rtems_filesystem_default_close,
-  rtems_filesystem_default_read,
-  rtems_filesystem_default_write,
-  rtems_filesystem_default_ioctl,
-  rtems_filesystem_default_lseek,
-  IMFS_stat_link,
-  rtems_filesystem_default_ftruncate,
-  rtems_filesystem_default_fsync_or_fdatasync,
-  rtems_filesystem_default_fsync_or_fdatasync,
-  rtems_filesystem_default_fcntl
+  .open_h = rtems_filesystem_default_open,
+  .close_h = rtems_filesystem_default_close,
+  .read_h = rtems_filesystem_default_read,
+  .write_h = rtems_filesystem_default_write,
+  .ioctl_h = rtems_filesystem_default_ioctl,
+  .lseek_h = rtems_filesystem_default_lseek,
+  .fstat_h = IMFS_stat_link,
+  .ftruncate_h = rtems_filesystem_default_ftruncate,
+  .fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
+  .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
+  .fcntl_h = rtems_filesystem_default_fcntl,
+  .readv_h = rtems_filesystem_default_readv,
+  .writev_h = rtems_filesystem_default_writev
 };
 
 static IMFS_jnode_t *IMFS_node_initialize_hard_link(

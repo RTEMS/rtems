@@ -162,5 +162,7 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_dir_handlers = {
   .ftruncate_h = rtems_filesystem_default_ftruncate_directory,
   .fsync_h     = rtems_filesystem_default_fsync_or_fdatasync,
   .fdatasync_h = rtems_rfs_rtems_fdatasync,
-  .fcntl_h     = rtems_filesystem_default_fcntl
+  .fcntl_h     = rtems_filesystem_default_fcntl,
+  .readv_h     = rtems_filesystem_default_readv,
+  .writev_h    = rtems_filesystem_default_writev
 };

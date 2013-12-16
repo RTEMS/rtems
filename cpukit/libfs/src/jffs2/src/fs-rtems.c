@@ -516,7 +516,9 @@ static const rtems_filesystem_file_handlers_r rtems_jffs2_directory_handlers = {
 	.ftruncate_h = rtems_filesystem_default_ftruncate_directory,
 	.fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
-	.fcntl_h = rtems_filesystem_default_fcntl
+	.fcntl_h = rtems_filesystem_default_fcntl,
+	.readv_h = rtems_filesystem_default_readv,
+	.writev_h = rtems_filesystem_default_writev
 };
 
 static ssize_t rtems_jffs2_file_read(rtems_libio_t *iop, void *buf, size_t len)
@@ -654,7 +656,9 @@ static const rtems_filesystem_file_handlers_r rtems_jffs2_file_handlers = {
 	.ftruncate_h = rtems_jffs2_file_ftruncate,
 	.fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
-	.fcntl_h = rtems_filesystem_default_fcntl
+	.fcntl_h = rtems_filesystem_default_fcntl,
+	.readv_h = rtems_filesystem_default_readv,
+	.writev_h = rtems_filesystem_default_writev
 };
 
 static const rtems_filesystem_file_handlers_r rtems_jffs2_link_handlers = {
@@ -668,7 +672,9 @@ static const rtems_filesystem_file_handlers_r rtems_jffs2_link_handlers = {
 	.ftruncate_h = rtems_filesystem_default_ftruncate,
 	.fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
-	.fcntl_h = rtems_filesystem_default_fcntl
+	.fcntl_h = rtems_filesystem_default_fcntl,
+	.readv_h = rtems_filesystem_default_readv,
+	.writev_h = rtems_filesystem_default_writev
 };
 
 static void rtems_jffs2_set_location(rtems_filesystem_location_info_t *loc, struct _inode *inode)
