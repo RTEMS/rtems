@@ -78,6 +78,9 @@
 #include "config.h"
 #endif
 
+#define _KERNEL
+#define __BSD_VISIBLE	1
+
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -86,8 +89,6 @@
 #include <rtems/libio.h>
 #include <rtems/error.h>
 
-#define _KERNEL
-#define __BSD_VISIBLE	1
 #include <rtems/rtems_bsdnet.h>
 
 #include <sys/errno.h>
