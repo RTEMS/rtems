@@ -25,6 +25,10 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 # FIXME: We should get rid of this. It's a cludge.
 AC_CHECK_SIZEOF([time_t])
 
+# Added to newlib pthreads for RTEMS SMP (np), may not be present
+AC_CHECK_HEADERS([sys/cpuset.h])
+AM_CONDITIONAL(HAS_CPUSET,test x"${ac_cv_header_sys_cpuset_h}" = x"yes")
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 spintrcritical20/Makefile
@@ -199,5 +203,6 @@ spwatchdog/Makefile
 spwkspace/Makefile
 sptimer_err01/Makefile
 sptimer_err02/Makefile
+spcpuset01/Makefile
 ])
 AC_OUTPUT

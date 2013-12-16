@@ -1,0 +1,12 @@
+#  COPYRIGHT (c) 1989-2013.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This is a set of simple tests that verify that the fixed size
+functions in cpuset.h:  CPU_ZERO, CPU_COUNT,CPU_ISET, CPU_EQUAL, 
+CPU_CMP, CPU_EMPTY, CPU_SET, CPU_CLR, CPU_AND, CPU_NAND, CPU_OR, 
+and CPU_XOR
