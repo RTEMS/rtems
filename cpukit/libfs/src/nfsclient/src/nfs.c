@@ -2870,6 +2870,8 @@ struct _rtems_filesystem_file_handlers_r nfs_file_file_handlers = {
 	.fsync_h     = rtems_filesystem_default_fsync_or_fdatasync,
 	.fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fcntl_h     = rtems_filesystem_default_fcntl,
+	.kqfilter_h  = rtems_filesystem_default_kqfilter,
+	.poll_h      = rtems_filesystem_default_poll,
 	.readv_h     = rtems_filesystem_default_readv,
 	.writev_h    = rtems_filesystem_default_writev
 };
@@ -2888,6 +2890,8 @@ struct _rtems_filesystem_file_handlers_r nfs_dir_file_handlers = {
 	.fsync_h     = rtems_filesystem_default_fsync_or_fdatasync,
 	.fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fcntl_h     = rtems_filesystem_default_fcntl,
+	.kqfilter_h  = rtems_filesystem_default_kqfilter,
+	.poll_h      = rtems_filesystem_default_poll,
 	.readv_h     = rtems_filesystem_default_readv,
 	.writev_h    = rtems_filesystem_default_writev
 };
@@ -2906,6 +2910,8 @@ struct _rtems_filesystem_file_handlers_r nfs_link_file_handlers = {
 	.fsync_h     = rtems_filesystem_default_fsync_or_fdatasync,
 	.fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fcntl_h     = rtems_filesystem_default_fcntl,
+	.kqfilter_h  = rtems_filesystem_default_kqfilter,
+	.poll_h      = rtems_filesystem_default_poll,
 	.readv_h     = rtems_filesystem_default_readv,
 	.writev_h    = rtems_filesystem_default_writev
 };

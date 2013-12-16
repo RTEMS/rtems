@@ -61,6 +61,8 @@ static const rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
   .fsync_h = rtems_filesystem_default_fsync_or_fdatasync_success,
   .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync_success,
   .fcntl_h = rtems_filesystem_default_fcntl,
+  .kqfilter_h = rtems_filesystem_default_kqfilter,
+  .poll_h = rtems_filesystem_default_poll,
   .readv_h = rtems_filesystem_default_readv,
   .writev_h = rtems_filesystem_default_writev
 };

@@ -517,6 +517,8 @@ static const rtems_filesystem_file_handlers_r rtems_jffs2_directory_handlers = {
 	.fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fcntl_h = rtems_filesystem_default_fcntl,
+	.kqfilter_h = rtems_filesystem_default_kqfilter,
+	.poll_h = rtems_filesystem_default_poll,
 	.readv_h = rtems_filesystem_default_readv,
 	.writev_h = rtems_filesystem_default_writev
 };
@@ -657,6 +659,8 @@ static const rtems_filesystem_file_handlers_r rtems_jffs2_file_handlers = {
 	.fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fcntl_h = rtems_filesystem_default_fcntl,
+	.kqfilter_h = rtems_filesystem_default_kqfilter,
+	.poll_h = rtems_filesystem_default_poll,
 	.readv_h = rtems_filesystem_default_readv,
 	.writev_h = rtems_filesystem_default_writev
 };
@@ -673,6 +677,8 @@ static const rtems_filesystem_file_handlers_r rtems_jffs2_link_handlers = {
 	.fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fcntl_h = rtems_filesystem_default_fcntl,
+	.kqfilter_h = rtems_filesystem_default_kqfilter,
+	.poll_h = rtems_filesystem_default_poll,
 	.readv_h = rtems_filesystem_default_readv,
 	.writev_h = rtems_filesystem_default_writev
 };

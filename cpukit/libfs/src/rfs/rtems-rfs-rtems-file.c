@@ -354,6 +354,8 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_file_handlers = {
   .fsync_h     = rtems_rfs_rtems_fdatasync,
   .fdatasync_h = rtems_rfs_rtems_fdatasync,
   .fcntl_h     = rtems_filesystem_default_fcntl,
+  .kqfilter_h  = rtems_filesystem_default_kqfilter,
+  .poll_h      = rtems_filesystem_default_poll,
   .readv_h     = rtems_filesystem_default_readv,
   .writev_h    = rtems_filesystem_default_writev
 };
