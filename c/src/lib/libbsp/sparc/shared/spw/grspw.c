@@ -84,6 +84,7 @@
 #include <assert.h>
 #include <ctype.h>
 #include <rtems/bspIo.h>
+#include <rtems/malloc.h>
 #include <ambapp.h>
 #include <grlib.h>
 #include <grspw.h>
@@ -149,8 +150,6 @@ typedef struct {
 
 #define BUFMEM_PER_LINK (SPACEWIRE_TXBUFS_NR*(SPACEWIRE_TXD_SIZE+SPACEWIRE_TXH_SIZE) + SPACEWIRE_RXBUFS_NR*SPACEWIRE_RXPCK_SIZE)
 
-#define SPW_ALIGN(p,c) ((((unsigned int)(p))+((c)-1))&~((c)-1))
-
 typedef struct {
    /* configuration parameters */
    spw_config config;
@@ -190,9 +189,6 @@ typedef struct {
 
 #ifdef GRSPW_STATIC_MEM
    unsigned int membase, memend, mem_bdtable;
-#else
-   char _rxtable[SPACEWIRE_BDTABLE_SIZE*2];
-   char _txtable[SPACEWIRE_BDTABLE_SIZE*2];
 #endif
 
    LEON3_SPACEWIRE_Regs_Map *regs;
@@ -1383,8 +1379,8 @@ static int grspw_hw_init(GRSPW_DEV *pDev) {
         pDev->rx = (SPACEWIRE_RXBD *) pDev->mem_bdtable;
         pDev->tx = (SPACEWIRE_RXBD *) pDev->mem_bdtable + SPACEWIRE_BDTABLE_SIZE;
 #else
-        pDev->rx = (SPACEWIRE_RXBD *) SPW_ALIGN(&pDev->_rxtable, SPACEWIRE_BDTABLE_SIZE);
-        pDev->tx = (SPACEWIRE_TXBD *) SPW_ALIGN(&pDev->_txtable, SPACEWIRE_BDTABLE_SIZE);
+        pDev->rx = (SPACEWIRE_RXBD *) rtems_heap_allocate_aligned_with_boundry( SPACEWIRE_BDTABLE_SIZE, 1024, 0 );
+        pDev->tx = (SPACEWIRE_TXBD *) rtems_heap_allocate_aligned_with_boundry( SPACEWIRE_BDTABLE_SIZE, 1024, 0 );
 #endif
         SPACEWIRE_DBG("hw_init [minor %i]\n", pDev->minor);
 
@@ -1425,6 +1421,10 @@ static void grspw_hw_reset(GRSPW_DEV *pDev)
         SPW_STATUS_WRITE(pDev, SPW_STATUS_TO | SPW_STATUS_CE | SPW_STATUS_ER | SPW_STATUS_DE | SPW_STATUS_PE |
                          SPW_STATUS_WE | SPW_STATUS_IA | SPW_STATUS_EE); /*clear status*/
         SPW_CTRL_WRITE(pDev, SPW_CTRL_LINKSTART); /*start link core*/
+        #ifndef GRSPW_STATIC_MEM
+                free(pDev->rx);
+                free(pDec->tx);
+        #endif
 }
 
 static void grspw_hw_read_config(GRSPW_DEV *pDev)
