@@ -361,7 +361,7 @@ int doErrorTest(void)
   /*  writev --  all zero length buffers */
   vec[0].iov_base = vec;
   vec[0].iov_len = 0;
-  vec[1].iov_base = vec;
+  vec[1].iov_base = NULL;
   vec[1].iov_len = 0;
   puts("writev iov_len works with no effect -- OK");
   rc = writev(fd, vec, 2);
@@ -374,7 +374,7 @@ int doErrorTest(void)
   /*  readv --  all zero length buffers */
   vec[0].iov_base = vec;
   vec[0].iov_len = 0;
-  vec[1].iov_base = vec;
+  vec[1].iov_base = NULL;
   vec[1].iov_len = 0;
   puts("readv iov_len works with no effect -- OK");
   rc = readv(fd, vec, 2);

@@ -887,7 +887,7 @@ static inline ssize_t rtems_libio_iovec_eval(
 
     total += ( ssize_t ) len;
 
-    if ( iov[ v ].iov_base == NULL ) {
+    if ( iov[ v ].iov_base == NULL && len != 0 ) {
       rtems_set_errno_and_return_minus_one( EINVAL );
     }
   }

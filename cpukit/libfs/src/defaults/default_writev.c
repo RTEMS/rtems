@@ -41,19 +41,23 @@ ssize_t rtems_filesystem_default_writev(
   total = 0;
 
   for ( v = 0 ; v < iovcnt ; ++v ) {
-    ssize_t bytes = ( *iop->pathinfo.handlers->write_h )(
-      iop,
-      iov[ v ].iov_base,
-      iov[ v ].iov_len
-    );
+    size_t len = iov[ v ].iov_len;
 
-    if ( bytes < 0 )
-      return -1;
+    if ( len > 0 ) {
+      ssize_t bytes = ( *iop->pathinfo.handlers->write_h )(
+        iop,
+        iov[ v ].iov_base,
+        len
+      );
 
-    total += bytes;
+      if ( bytes < 0 )
+        return -1;
 
-    if ( bytes != iov[ v ].iov_len )
-      break;
+      total += bytes;
+
+      if ( bytes != ( ssize_t ) len )
+        break;
+    }
   }
 
   return total;
