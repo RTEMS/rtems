@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup lm3s69xx_ssi 
+ *
+ * @brief SSI support.
+ */
+
 /*
  * Copyright © 2013 Eugeniy Meshcheryakov <eugen@debian.org>
  *
@@ -9,6 +17,14 @@
 #define LIBBSP_ARM_LM3S69XX_SSI_H
 #include <rtems/libi2c.h>
 #include <bspopts.h>
+
+/**
+ * @defgroup lm3s69xx_ssi SSI Support
+ *
+ * @ingroup arm_lm3s69xx
+ *
+ * @brief SSI Support
+ */
 
 #ifdef __cplusplus
 extern "C" {

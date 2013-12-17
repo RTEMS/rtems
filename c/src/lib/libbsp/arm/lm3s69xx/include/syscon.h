@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup lm3s69xx_syscon
+ *
+ * @brief Syscon support.
+ */
+
 /*
  * Copyright © 2013 Eugeniy Meshcheryakov <eugen@debian.org>
  *
@@ -8,6 +16,14 @@
 #ifndef LIBBSP_ARM_LM3S69XX_SYSCON_H
 #define LIBBSP_ARM_LM3S69XX_SYSCON_H
 #include <stdbool.h>
+
+/**
+ * @defgroup lm3s69xx_syscon Syscon Support
+ *
+ * @ingroup arm_lm3s69xx
+ *
+ * @brief Syscon Support
+ */
 
 #ifdef __cplusplus
 extern "C" {

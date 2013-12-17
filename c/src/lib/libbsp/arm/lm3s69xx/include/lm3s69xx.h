@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup lm3s69xx_reg
+ *
+ * @brief Register definitions.
+ */
+
 /*
  * Copyright © 2013 Eugeniy Meshcheryakov <eugen@debian.org>
  *
@@ -18,6 +26,14 @@
 #define LIBBSP_ARM_LM3S69XX_LM3S69XX_H
 #include <bspopts.h>
 #include <bsp/utility.h>
+
+/**
+ * @defgroup lm3s69xx_reg Register Definitions
+ *
+ * @ingroup arm_lm3s69xx
+ *
+ * @brief Register Definitions 
+ */
 
 #define LM3S69XX_SYSCON_BASE 0x400fe000
 

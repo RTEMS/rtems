@@ -1,3 +1,11 @@
+/**
+ * @file
+ * 
+ * @ingroup lm3s69xx_io
+ *
+ * @brief IO definitions.
+ */
+
 /*
  * Copyright © 2013 Eugeniy Meshcheryakov <eugen@debian.org>
  *
@@ -10,6 +18,14 @@
 #define LIBBSP_ARM_LM3S69XX_IO_H
 #include <bspopts.h>
 #include <stdbool.h>
+
+/**
+ * @defgroup lm3s69xx_io IO Support
+ *
+ * @ingroup arm_lm3s69xx
+ *
+ * @brief IO support.
+ */
 
 typedef enum {
   LM3S69XX_GPIO_DIRECTION_INPUT,

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup lm3s69xx_interrupt
+ *
+ * @brief Interrupt definitions.
+ */
+
 /*
  * Copyright © 2013 Eugeniy Meshcheryakov <eugen@debian.org>
  *
@@ -23,6 +31,14 @@
 #include <rtems/irq.h>
 #include <rtems/irq-extension.h>
 #include <bspopts.h>
+
+/**
+ * @defgroup lm3s69xx_interrupt Interrupt Support
+ *
+ * @ingroup arm_lm3s69xx
+ *
+ * @brief Interrupt support.
+ */
 
 #endif /* ASM */
 

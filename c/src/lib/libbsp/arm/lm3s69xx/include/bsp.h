@@ -1,3 +1,11 @@
+/**
+ * @file
+ * 
+ * @ingroup arm_lm3s69xx
+ *
+ * @brief Global BSP Definitions
+ */
+
 /*
  * Copyright (c) 2011-2012 Sebastian Huber.  All rights reserved.
  *
@@ -36,3 +44,11 @@
 #endif /* ASM */
 
 #endif /* LIBBSP_ARM_LM3S69XX_BSP_H */
+
+/**
+ * @defgroup arm_lm3s69xx LM3S69XX Support
+ *
+ * @ingroup bsp_arm
+ *
+ * @brief LM3S69XX Support Package
+ */

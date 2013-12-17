@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup lm3s69xx_uart
+ *
+ * brief UART support.
+ */
+
 /*
  * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
  *
@@ -16,6 +24,14 @@
 #define LIBBSP_ARM_LM3S69XX_UART_H
 
 #include <libchip/serial.h>
+
+/**
+ * defgroup lm3s69xx_uart UART Support
+ *
+ * @ingroup arm_lm3s69xx
+ *
+ * @brief UART support.
+ */
 
 #ifdef __cplusplus
 extern "C" {
