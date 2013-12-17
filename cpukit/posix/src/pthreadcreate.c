@@ -237,6 +237,8 @@ int pthread_create(
    *  POSIX threads are allocated and started in one operation.
    */
 
+  _Thread_Disable_dispatch();
+
   status = _Thread_Start(
     the_thread,
     THREAD_START_POINTER,
@@ -244,13 +246,6 @@ int pthread_create(
     arg,
     0                     /* unused */
   );
-
-  if ( schedpolicy == SCHED_SPORADIC ) {
-    _Watchdog_Insert_ticks(
-      &api->Sporadic_timer,
-      _Timespec_To_ticks( &api->schedparam.ss_replenish_period )
-    );
-  }
 
   /*
    *  _Thread_Start only fails if the thread was in the incorrect state
@@ -260,10 +255,20 @@ int pthread_create(
    */
 
   if ( !status ) {
+    _Thread_Enable_dispatch();
     _POSIX_Threads_Free( the_thread );
     _RTEMS_Unlock_allocator();
     return EINVAL;
   }
+
+  if ( schedpolicy == SCHED_SPORADIC ) {
+    _Watchdog_Insert_ticks(
+      &api->Sporadic_timer,
+      _Timespec_To_ticks( &api->schedparam.ss_replenish_period )
+    );
+  }
+
+  _Thread_Enable_dispatch();
 
   /*
    *  Return the id and indicate we successfully created the thread
