@@ -198,6 +198,8 @@ int pthread_create(
    */
   the_thread->do_post_task_switch_extension = true;
 
+  _Thread_Disable_dispatch();
+
   /*
    *  POSIX threads are allocated and started in one operation.
    */
@@ -217,6 +219,7 @@ int pthread_create(
      *        thread while we are creating it.
      */
     if ( !status ) {
+      _Thread_Enable_dispatch();
       _POSIX_Threads_Free( the_thread );
       _RTEMS_Unlock_allocator();
       return EINVAL;
@@ -229,6 +232,8 @@ int pthread_create(
       _Timespec_To_ticks( &api->schedparam.sched_ss_repl_period )
     );
   }
+
+  _Thread_Enable_dispatch();
 
   /*
    *  Return the id and indicate we successfully created the thread
