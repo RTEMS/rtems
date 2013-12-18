@@ -1,0 +1,18 @@
+#  testsuites/psxtests/psxcleanup/psxcleanup.doc
+#  Copyright (c) 2013 Anukul Sangwan <email.anukul@gmail.com>.
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: psxcleanup
+
+directives:
++ read
++ write
+
+concepts:
+
++ Run the test in read mode, and lock in write mode post cleanup.
