@@ -149,7 +149,7 @@ rtems_rfs_shell_data (rtems_rfs_file_system* fs, int argc, char *argv[])
 
   rtems_rfs_shell_unlock_rfs (fs);
 
-  bpcent = (blocks * 1000) / rtems_rfs_fs_blocks (fs);
+  bpcent = (blocks * 1000) / (rtems_rfs_fs_blocks (fs) - 1);
   ipcent = (inodes * 1000) / rtems_rfs_fs_inodes (fs);
 
   printf ("       blocks used: %zd (%d.%d%%)\n",

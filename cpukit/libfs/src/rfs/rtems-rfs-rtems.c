@@ -753,7 +753,7 @@ rtems_rfs_rtems_statvfs (
   sb->f_bsize   = rtems_rfs_fs_block_size (fs);
   sb->f_frsize  = rtems_rfs_fs_media_block_size (fs);
   sb->f_blocks  = rtems_rfs_fs_media_blocks (fs);
-  sb->f_bfree   = rtems_rfs_fs_blocks (fs) - blocks;
+  sb->f_bfree   = rtems_rfs_fs_blocks (fs) - blocks - 1; /* do not count the superblock */
   sb->f_bavail  = sb->f_bfree;
   sb->f_files   = rtems_rfs_fs_inodes (fs);
   sb->f_ffree   = rtems_rfs_fs_inodes (fs) - inodes;
