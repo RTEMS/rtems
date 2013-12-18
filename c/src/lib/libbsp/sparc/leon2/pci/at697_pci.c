@@ -304,7 +304,7 @@ int at697pci_cfg_w32(pci_dev_t dev, int offset, uint32_t val)
 	int func = PCI_DEV_FUNC(dev);
 	int retval;
 
-	if (slot > 21 || (offset & ~0xfc))
+	if (slot > 15 || (offset & ~0xfc))
 		return PCISTS_EINVAL;
 
 	regs = at697pcipriv->regs;
@@ -313,7 +313,7 @@ int at697pci_cfg_w32(pci_dev_t dev, int offset, uint32_t val)
 
 	if ( bus == 0 ) {
 		/* PCI Access - TYPE 0 */
-		address = (1<<(11+slot)) | (func << 8) | offset;
+		address = (1<<(16+slot)) | (func << 8) | offset;
 	} else {
 		/* PCI access - TYPE 1 */
 		address = ((bus & 0xff) << 16) | ((slot & 0x1f) << 11) |
