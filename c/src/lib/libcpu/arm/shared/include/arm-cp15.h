@@ -49,6 +49,10 @@ extern "C" {
 /**
  * @name MMU Defines
  *
+ * See section B3.8.2, "Short-descriptor format memory region attributes,
+ * without TEX remap" in the "ARM Architecture Reference Manual ARMv7-A and
+ * ARMv7-R edition".
+ *
  * @{
  */
 
@@ -110,19 +114,19 @@ extern "C" {
 #endif
 
 #define ARMV7_MMU_DATA_READ_ONLY \
-  ARMV7_MMU_READ_ONLY
+  (ARMV7_MMU_READ_ONLY | ARM_MMU_SECT_TEX_0)
 
 #define ARMV7_MMU_DATA_READ_ONLY_CACHED \
   ARMV7_MMU_READ_ONLY_CACHED
 
 #define ARMV7_MMU_DATA_READ_WRITE \
-  ARMV7_MMU_READ_WRITE
+  (ARMV7_MMU_READ_WRITE | ARM_MMU_SECT_TEX_0)
 
 #define ARMV7_MMU_DATA_READ_WRITE_CACHED \
   ARMV7_MMU_READ_WRITE_CACHED
 
 #define ARMV7_MMU_CODE \
-  ARMV7_MMU_READ_ONLY
+  (ARMV7_MMU_READ_ONLY | ARM_MMU_SECT_TEX_0)
 
 #define ARMV7_MMU_CODE_CACHED \
   ARMV7_MMU_READ_ONLY_CACHED
