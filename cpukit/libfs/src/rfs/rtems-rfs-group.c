@@ -232,10 +232,24 @@ rtems_rfs_group_bitmap_alloc (rtems_rfs_file_system* fs,
       return 0;
     }
 
+    /*
+     * If we are still looking back and forth around the
+     * group_start, then alternate the direction and
+     * increment the offset on every other iteration.
+     * Otherwise we are marching through the groups, so just
+     * increment the offset.
+     */
     if (updown)
+    {
       direction = direction > 0 ? -1 : 1;
+      if ( direction == -1 )
+        offset++;
+    }
+    else
+    {
+       offset++;
+    }
 
-    offset++;
   }
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_GROUP_BITMAPS))
