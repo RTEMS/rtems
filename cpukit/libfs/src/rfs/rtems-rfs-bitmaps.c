@@ -599,7 +599,8 @@ rtems_rfs_bitmap_create_search (rtems_rfs_bitmap_control* control)
 
     size -= available;
 
-    if (bit == rtems_rfs_bitmap_element_bits ())
+    /* Iterate from 0 to 1 less than the number of bits in an element */
+    if (bit == (rtems_rfs_bitmap_element_bits () - 1))
     {
       bit = 0;
       search_map++;
