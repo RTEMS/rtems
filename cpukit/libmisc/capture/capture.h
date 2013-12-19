@@ -45,6 +45,15 @@ extern "C" {
 #define RTEMS_CAPTURE_TRIGGER_TASKS (32)
 
 /**
+ * rtems_capture_time_t
+ *
+ * DESCRIPTION:
+ *
+ * A capture timestamp.
+ */
+typedef Timestamp_Control rtems_capture_time_t;
+
+/**
  * rtems_capture_from_t
  *
  *  DESCRIPTION:
@@ -156,12 +165,9 @@ typedef struct rtems_capture_task_s
   rtems_task_priority          start_priority;
   uint32_t                     stack_size;
   uint32_t                     stack_clean;
-  uint32_t                     ticks;
-  uint32_t                     tick_offset;
-  uint32_t                     ticks_in;
-  uint32_t                     tick_offset_in;
-  uint32_t                     last_ticks;
-  uint32_t                     last_tick_offset;
+  rtems_capture_time_t         time;
+  rtems_capture_time_t         time_in;
+  rtems_capture_time_t         last_time;
   rtems_capture_control_t*     control;
   struct rtems_capture_task_s* forw;
   struct rtems_capture_task_s* back;
@@ -185,8 +191,7 @@ typedef struct rtems_capture_record_s
 {
   rtems_capture_task_t* task;
   uint32_t              events;
-  uint32_t              ticks;
-  uint32_t              tick_offset;
+  rtems_capture_time_t  time;
 } rtems_capture_record_t;
 
 /**
@@ -254,8 +259,7 @@ typedef enum rtems_capture_trigger_e
  *
  */
 
-typedef void (*rtems_capture_timestamp)
-                (uint32_t* ticks, uint32_t* micro);
+typedef void (*rtems_capture_timestamp)(rtems_capture_time_t* time);
 
 /**
  * rtems_capture_open
@@ -509,25 +513,15 @@ rtems_capture_read (uint32_t                 threshold,
 rtems_status_code
 rtems_capture_release (uint32_t count);
 
-/**
- * rtems_capture_tick_time
- *
- *  DESCRIPTION:
- *
- * This function returns the tick period in micro-seconds.
- */
-uint32_t
-rtems_capture_tick_time (void);
-
 /*
- * rtems_capture_tick_time
+ * rtems_capture_time
  *
  *  DESCRIPTION:
  *
- * This function returns the tick period in micro-seconds.
+ * This function returns the time period in nano-seconds.
  */
-uint32_t
-rtems_capture_tick_time (void);
+void
+rtems_capture_time (rtems_capture_time_t* uptime);
 
 /**
  * rtems_capture_event_text
@@ -772,43 +766,16 @@ rtems_capture_task_stack_used (rtems_capture_task_t* task)
 }
 
 /**
- * rtems_capture_task_ticks
- *
- *  DESCRIPTION:
- *
- * This function returns the current execution time as ticks.
- */
-static inline uint32_t
-rtems_capture_task_ticks (rtems_capture_task_t* task)
-{
-  return task->ticks;
-}
-
-/**
- * rtems_capture_task_tick_offset
- *
- *  DESCRIPTION:
- *
- * This function returns the current execution time tick offset.
- */
-static inline uint32_t
-rtems_capture_task_tick_offset (rtems_capture_task_t* task)
-{
-  return task->tick_offset;
-}
-
-/**
  * rtems_capture_task_time
  *
  *  DESCRIPTION:
  *
  * This function returns the current execution time.
  */
-static inline unsigned long long
+static inline uint64_t
 rtems_capture_task_time (rtems_capture_task_t* task)
 {
-  unsigned long long t = task->ticks;
-  return (t * rtems_capture_tick_time ()) + task->tick_offset;;
+  return task->time;
 }
 
 /**
@@ -819,16 +786,12 @@ rtems_capture_task_time (rtems_capture_task_t* task)
  * This function returns the execution time as a different between the
  * last time the detla time was and now.
  */
-static inline unsigned long long
+static inline uint64_t
 rtems_capture_task_delta_time (rtems_capture_task_t* task)
 {
-  unsigned long long t = task->ticks - task->last_ticks;
-  uint32_t     o = task->tick_offset - task->last_tick_offset;
-
-  task->last_ticks       = task->ticks;
-  task->last_tick_offset = task->tick_offset;
-
-  return (t * rtems_capture_tick_time ()) + o;
+  uint64_t t = task->time - task->last_time;
+  task->last_time = task->time;
+  return t;
 }
 
 /**
@@ -843,7 +806,7 @@ static inline uint32_t
 rtems_capture_task_count (void)
 {
   rtems_capture_task_t* task = rtems_capture_get_task_list ();
-  uint32_t        count = 0;
+  uint32_t              count = 0;
 
   while (task)
   {

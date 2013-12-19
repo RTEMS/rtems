@@ -29,7 +29,9 @@
 #include <string.h>
 
 #include "capture.h"
+
 #include <rtems/score/statesimpl.h>
+#include <rtems/score/todimpl.h>
 
 /*
  * These events are always recorded and are not part of the
@@ -81,7 +83,6 @@ static rtems_id                 capture_id;
 static rtems_capture_timestamp  capture_timestamp;
 static rtems_task_priority      capture_ceiling;
 static rtems_task_priority      capture_floor;
-static uint32_t                 capture_tick_period;
 static rtems_id                 capture_reader;
 
 /*
@@ -112,15 +113,14 @@ static const char* capture_event_text[] =
  * This function returns the current time. If a handler is provided
  * by the user get the time from that.
  */
-static inline void rtems_capture_get_time (uint32_t* ticks,
-                                           uint32_t* tick_offset)
+static inline void
+rtems_capture_get_time (rtems_capture_time_t* time)
 {
   if (capture_timestamp)
-    capture_timestamp (ticks, tick_offset);
+    capture_timestamp (time);
   else
   {
-    *ticks       = rtems_clock_get_ticks_since_boot();
-    *tick_offset = 0;
+    _TOD_Get_uptime(time);
   }
 }
 
@@ -396,6 +396,7 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
   rtems_capture_task_t*    task;
   rtems_capture_control_t* control;
   rtems_name               name;
+  rtems_capture_time_t     time;
   bool                     ok;
 
   ok = rtems_workspace_allocate (sizeof (*task), (void **) &task);
@@ -405,6 +406,11 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
     capture_flags |= RTEMS_CAPTURE_NO_MEMORY;
     return NULL;
   }
+
+  /*
+   * Get the current time.
+   */
+  rtems_capture_get_time (&time);
 
   /*
    * Check the type of name the object has.
@@ -420,13 +426,10 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
   task->refcount         = 0;
   task->out              = 0;
   task->tcb              = new_task;
-  task->ticks            = 0;
-  task->tick_offset      = 0;
-  task->ticks_in         = 0;
-  task->tick_offset_in   = 0;
+  task->time             = 0;
+  task->time_in          = time;
   task->control          = 0;
-  task->last_ticks       = 0;
-  task->last_tick_offset = 0;
+  task->last_time        = 0;
 
   task->tcb->extensions[capture_extension_index] = task;
 
@@ -547,7 +550,7 @@ rtems_capture_record (rtems_capture_task_t* task,
         if ((events & RTEMS_CAPTURE_RECORD_EVENTS) == 0)
           task->flags |= RTEMS_CAPTURE_TRACED;
 
-        rtems_capture_get_time (&capture_in->ticks, &capture_in->tick_offset);
+        rtems_capture_get_time (&capture_in->time);
 
         if (capture_in == &capture_records[capture_size - 1])
           capture_in = capture_records;
@@ -893,8 +896,7 @@ rtems_capture_switch_task (rtems_tcb* current_task,
    */
   if (capture_flags & RTEMS_CAPTURE_ON)
   {
-    uint32_t ticks;
-    uint32_t tick_offset;
+    rtems_capture_time_t time;
 
     /*
      * Get the cpature task control block so we can update the
@@ -929,10 +931,10 @@ rtems_capture_switch_task (rtems_tcb* current_task,
       ht = rtems_capture_create_capture_task (heir_task);
 
     /*
-     * Update the execution time. Assume the tick will not overflow
+     * Update the execution time. Assume the time will not overflow
      * for now. This may need to change.
      */
-    rtems_capture_get_time (&ticks, &tick_offset);
+    rtems_capture_get_time (&time);
 
     /*
      * We could end up with null pointers for both the current task
@@ -942,31 +944,13 @@ rtems_capture_switch_task (rtems_tcb* current_task,
     if (ht)
     {
       ht->in++;
-      ht->ticks_in       = ticks;
-      ht->tick_offset_in = tick_offset;
+      ht->time_in = time;
     }
 
     if (ct)
     {
       ct->out++;
-      ct->ticks += ticks - ct->ticks_in;
-
-      if (capture_timestamp)
-      {
-        tick_offset += capture_tick_period - ct->tick_offset_in;
-
-        if (tick_offset < capture_tick_period)
-          ct->tick_offset = tick_offset;
-        else
-        {
-          ct->ticks++;
-          ct->tick_offset = tick_offset - capture_tick_period;
-        }
-      }
-      else
-      {
-        ct->tick_offset += 100;
-      }
+      ct->time += time - ct->time_in;
     }
 
     if (rtems_capture_trigger (ct, ht, RTEMS_CAPTURE_SWITCH))
@@ -1028,11 +1012,6 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribu
   capture_extensions.fatal          = NULL;
 
   /*
-   * Get the tick period from the BSP Configuration Table.
-   */
-  capture_tick_period = rtems_configuration_get_microseconds_per_tick();
-
-  /*
    * Register the user extension handlers for the CAPture Engine.
    */
   name = rtems_build_name ('C', 'A', 'P', 'E');
@@ -1070,7 +1049,6 @@ rtems_capture_close (void)
   rtems_interrupt_level    level;
   rtems_capture_task_t*    task;
   rtems_capture_control_t* control;
-  rtems_capture_record_t*  records;
   rtems_status_code        sc;
 
   rtems_interrupt_disable (level);
@@ -1083,7 +1061,6 @@ rtems_capture_close (void)
 
   capture_flags &= ~(RTEMS_CAPTURE_ON | RTEMS_CAPTURE_ONLY_MONITOR);
 
-  records = capture_records;
   capture_records = NULL;
 
   rtems_interrupt_enable (level);
@@ -1136,6 +1113,12 @@ rtems_capture_close (void)
  *
  * This function allows control of tracing at a global level.
  */
+static void
+rtems_capture_task_setup (Thread_Control *tcb)
+{
+  rtems_capture_create_capture_task (tcb);
+}
+
 rtems_status_code
 rtems_capture_control (bool enable)
 {
@@ -1153,6 +1136,8 @@ rtems_capture_control (bool enable)
     capture_flags |= RTEMS_CAPTURE_ON;
   else
     capture_flags &= ~RTEMS_CAPTURE_ON;
+
+  rtems_iterate_over_all_threads (rtems_capture_task_setup);
 
   rtems_interrupt_enable (level);
 
@@ -1841,16 +1826,17 @@ rtems_capture_release (uint32_t count)
 }
 
 /*
- * rtems_capture_tick_time
+ * rtems_capture_time
  *
  *  DESCRIPTION:
  *
- * This function returns the tick period in nano-seconds.
+ * This function returns the current time. If a handler is provided
+ * by the user get the time from that.
  */
-uint32_t
-rtems_capture_tick_time (void)
+void
+rtems_capture_time (rtems_capture_time_t* uptime)
 {
-  return capture_tick_period;
+  rtems_capture_get_time(uptime);
 }
 
 /*
