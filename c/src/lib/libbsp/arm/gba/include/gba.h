@@ -1,8 +1,11 @@
 /**
- *  @file gba.h
+ * @file
  *
- *  This include file contains definitions related to the ARM BSP.
+ * @ingroup arm_gba
+ *
+ * @brief GameBoy Advance definitions.
  */
+
 /*
  *  RTEMS GBA BSP
  *

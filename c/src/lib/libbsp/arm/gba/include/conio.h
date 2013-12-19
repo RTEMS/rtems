@@ -1,8 +1,11 @@
 /**
- *  @file conio.h
+ * @file
  *
- *  This file contains the GBA conio I/O package.
+ * @ingroup gba_conio
+ *
+ * @brief GBA conio I/O package.
  */
+
 /*
  *  RTEMS GBA BSP
  *
@@ -19,6 +22,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @defgroup gba_conio GBA Conio I/O
+ *
+ * @ingroup arm_gba
+ *
+ * @brief GBA Conio I/O support.
+ */
 
 /*---------------------------------------------------------------------------*
  * Includes                                                                  *

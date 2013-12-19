@@ -1,8 +1,11 @@
 /**
- *  @file defaultfont.c
+ * @file
  *
- *  This file contains default font definitions.
+ * @ingroup arm_gba
+ *
+ * @brief Default font definitions.
  */
+
 /*
  *  RTEMS GBA BSP
  *

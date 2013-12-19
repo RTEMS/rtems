@@ -1,8 +1,11 @@
 /**
- *  @file bsp.h
+ * @file 
  *
- *  This include file contains definitions related to the GBA BSP.
+ * @ingroup arm_gba
+ *
+ * @brief Global BSP definitions.
  */
+
 /*
  *  RTEMS GBA BSP
  *
@@ -60,4 +63,11 @@ extern void gba_set_memory(int start, int stop, int data);
 
 
 #endif /* __BSP_H_ */
+/**
+ * @defgroup arm_gba GBA Support
+ *
+ * @ingroup bsp_arm
+ *
+ * @brief GBA support package.
+ */
 

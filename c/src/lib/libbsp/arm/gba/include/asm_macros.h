@@ -1,8 +1,11 @@
 /**
- *  @file  asm_macros.h
+ * @file
  *
- *  This include file contains definitions related to the GBA BSP.
+ * @ingroup arm_gba
+ *
+ * @brief ASM macros.
  */
+
 /*
  *  RTEMS GBA BSP
  *

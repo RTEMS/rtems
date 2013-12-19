@@ -1,10 +1,11 @@
 /**
- *  @file gba_registers.h
+ *  @file
  *
- *  Game Boy Advance registers.
+ *  @ingroup gba_reg
  *
- *  This include file contains definitions related to the ARM BSP.
+ *  @brief Register definitions.
  */
+
 /*
  *  RTEMS GBA BSP
  *
@@ -37,6 +38,14 @@
 #ifndef __asm__
 extern volatile unsigned int  *Regs;        /**< Chip registers              */
 #endif
+
+/**
+ * @defgroup gba_reg Register Definitions
+ *
+ * @ingroup arm_gba
+ *
+ * @brief Register definitions.
+ */
 
 
 /*---------------------------------------------------------------------------+

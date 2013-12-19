@@ -1,10 +1,11 @@
 /**
- * @file arm_mode_bits.h
+ * @file
  *
- *  ARM statusregister mode bits.
+ * @ingroup arm_gba
  *
- *  This include file contains definitions related to the ARM BSP.
+ * @brief ARM status register mode bits.
  */
+
 /*
  *  RTEMS GBA BSP
  *
