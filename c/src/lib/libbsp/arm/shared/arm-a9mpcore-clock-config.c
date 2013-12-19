@@ -18,8 +18,18 @@
 
 #define A9MPCORE_PT ((volatile a9mpcore_pt *) BSP_ARM_A9MPCORE_PT_BASE)
 
+static uint64_t a9mpcore_clock_last_tick_k;
+
 /* This is defined in clockdrv_shell.h */
 void Clock_isr(rtems_irq_hdl_param arg);
+
+uint32_t a9mpcore_clock_periphclk(void) __attribute__ ((weak));
+
+uint32_t a9mpcore_clock_periphclk(void)
+{
+  /* default to the BSP option. */
+  return BSP_ARM_A9MPCORE_PERIPHCLK;
+}
 
 static void a9mpcore_clock_at_tick(void)
 {
@@ -50,8 +60,11 @@ static void a9mpcore_clock_handler_install(void)
 static void a9mpcore_clock_initialize(void)
 {
   volatile a9mpcore_pt *pt = A9MPCORE_PT;
-  uint64_t interval = ((uint64_t) BSP_ARM_A9MPCORE_PERIPHCLK
+  uint64_t periphclk = (uint64_t) a9mpcore_clock_periphclk();
+  uint64_t interval = (periphclk
     * (uint64_t) rtems_configuration_get_microseconds_per_tick()) / 1000000;
+
+  a9mpcore_clock_last_tick_k = (1000000000ULL << 32) / periphclk;
 
   pt->load = (uint32_t) interval - 1;
   pt->ctrl = A9MPCORE_PT_CTRL_AUTO_RLD
@@ -83,7 +96,7 @@ static void a9mpcore_clock_cleanup(void)
 static uint32_t a9mpcore_clock_nanoseconds_since_last_tick(void)
 {
   volatile a9mpcore_pt *pt = A9MPCORE_PT;
-  uint64_t k = (1000000000ULL << 32) / BSP_ARM_A9MPCORE_PERIPHCLK;
+  uint64_t k = a9mpcore_clock_last_tick_k;
   uint32_t c = pt->cntr;
   uint32_t p = pt->load + 1;
 

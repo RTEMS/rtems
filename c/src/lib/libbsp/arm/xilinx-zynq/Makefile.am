@@ -33,6 +33,7 @@ include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += ../../shared/include/stackalloc.h
 include_bsp_HEADERS += ../../shared/tod.h
 include_bsp_HEADERS += ../shared/include/start.h
+include_bsp_HEADERS += ../shared/include/arm-a9mpcore-clock.h
 include_bsp_HEADERS += ../shared/include/arm-a9mpcore-irq.h
 include_bsp_HEADERS += ../shared/include/arm-a9mpcore-regs.h
 include_bsp_HEADERS += ../shared/include/arm-a9mpcore-start.h
@@ -127,7 +128,7 @@ libbsp_a_SOURCES += include/cache_.h
 libbsp_a_CPPFLAGS += -I$(srcdir)/include
 
 # Start hooks
-libbsp_a_SOURCES += startup/bspstarthooks.c
+libbsp_a_SOURCES += startup/bspstarthooks.c startup/bspstartmmu.c
 
 if HAS_SMP
 libbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
