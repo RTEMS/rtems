@@ -26,6 +26,7 @@
 #include <rtems/clockdrv.h>
 
 #include <bsp/default-initial-extension.h>
+#include <bsp/start.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,6 +46,14 @@ typedef enum {
 } zynq_fatal_code;
 
 void zynq_fatal(zynq_fatal_code code) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+
+/*
+ * Zynq specific set up of the MMU. Provide in the application to override
+ * the defaults in the BSP. Note the defaults do not map in the GP0 and GP1
+ * AXI ports. You should add the specific regions that map into your
+ * PL rather than just open the whole of the GP[01] address space up.
+ */
+BSP_START_TEXT_SECTION void zynq_setup_mmu_and_cache(void);
 
 #ifdef __cplusplus
 }

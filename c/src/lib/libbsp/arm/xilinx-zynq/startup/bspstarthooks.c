@@ -17,36 +17,6 @@
 #include <bsp/arm-cp15-start.h>
 #include <bsp/arm-a9mpcore-start.h>
 
-BSP_START_DATA_SECTION static const arm_cp15_start_section_config
-zynq_mmu_config_table[] = {
-  ARMV7_CP15_START_DEFAULT_SECTIONS,
-  {
-    .begin = 0xe0000000U,
-    .end = 0xe0200000U,
-    .flags = ARMV7_MMU_DEVICE
-  }, {
-    .begin = 0xf8000000U,
-    .end = 0xf9000000U,
-    .flags = ARMV7_MMU_DEVICE
-  }
-};
-
-BSP_START_TEXT_SECTION static void setup_mmu_and_cache(void)
-{
-  uint32_t ctrl = arm_cp15_start_setup_mmu_and_cache(
-    ARM_CP15_CTRL_A,
-    ARM_CP15_CTRL_AFE | ARM_CP15_CTRL_Z
-  );
-
-  arm_cp15_start_setup_translation_table_and_enable_mmu_and_cache(
-    ctrl,
-    (uint32_t *) bsp_translation_table_base,
-    ARM_MMU_DEFAULT_CLIENT_DOMAIN,
-    &zynq_mmu_config_table[0],
-    RTEMS_ARRAY_SIZE(zynq_mmu_config_table)
-  );
-}
-
 BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 {
   arm_a9mpcore_start_hook_0();
@@ -56,6 +26,6 @@ BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
 {
   arm_a9mpcore_start_hook_1();
   bsp_start_copy_sections();
-  setup_mmu_and_cache();
+  zynq_setup_mmu_and_cache();
   bsp_start_clear_bss();
 }
