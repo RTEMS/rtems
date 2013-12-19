@@ -90,15 +90,24 @@ int uid_read_message( struct MW_UID_MESSAGE *m, unsigned long timeout )
 {
   rtems_status_code status;
   size_t            size = 0;
-  unsigned long     micro_secs = timeout*1000;
   int               wait = (timeout != 0);
+  int ticks = RTEMS_MICROSECONDS_TO_TICKS(timeout * 1000);
+
+  if (timeout == (unsigned long) -1) {
+    ticks = RTEMS_NO_TIMEOUT;
+  } else if (timeout && ticks == 0) {
+    /* if timeout greater than 0 and smaller than a tick, round up to avoid
+     * unintentionally RTEMS_NO_TIMEOUT
+     */
+    ticks = 1;
+  }
 
   status = rtems_message_queue_receive(
    queue_id,
    (void*)m,
    &size,
    wait ? RTEMS_WAIT : RTEMS_NO_WAIT,
-   RTEMS_MICROSECONDS_TO_TICKS(micro_secs)
+   ticks
   );
 
   if( status == RTEMS_SUCCESSFUL ) {
