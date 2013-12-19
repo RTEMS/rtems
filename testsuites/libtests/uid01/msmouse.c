@@ -1,10 +1,9 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
- *  On-Line Applications Research Corporation (OAR).
+ * Copyright (c) 2013 Daniel Ramirez <javamonn@gmail.com>
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifdef HAVE_CONFIG_H

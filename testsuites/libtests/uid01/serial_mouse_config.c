@@ -1,4 +1,12 @@
 /*
+ * Copyright (c) 2013 Daniel Ramirez <javamonn@gmail.com>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ */
+
+/*
  *
  * MODULE DESCRIPTION:
  * This module implements the RTEMS drivers for the PC serial ports
