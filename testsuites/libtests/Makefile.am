@@ -24,7 +24,7 @@ SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \
     block08 block09 block10 block11 block12 stringto01 \
     tar01 tar02 tar03 \
     math mathf mathl complex \
-    mouse01
+    mouse01 uid01
 
 if NETTESTS
 if HAS_POSIX

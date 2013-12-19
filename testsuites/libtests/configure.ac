@@ -89,6 +89,7 @@ malloc05/Makefile
 monitor/Makefile
 monitor02/Makefile
 mouse01/Makefile
+uid01/Makefile
 putenvtest/Makefile
 rtems++/Makefile
 rtmonuse/Makefile
