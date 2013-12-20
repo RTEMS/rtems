@@ -187,6 +187,7 @@
 #define GAISLER_GRPWRX       0x08e
 #define GAISLER_GPREGBANK    0x08f
 #define GAISLER_MIG_SERIES7  0x090
+#define GAISLER_SPWTDP       0x097
 
 #define GAISLER_PIPEWRAPPER  0xffa
 #define GAISLER_L2TIME       0xffd  /* internal device: leon2 timer */

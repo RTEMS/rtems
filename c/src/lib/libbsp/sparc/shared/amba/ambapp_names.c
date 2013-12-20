@@ -173,6 +173,7 @@ static ambapp_device_name GAISLER_devices[] =
   {GAISLER_GRPWRX, "GRPWRX"},
   {GAISLER_GPREGBANK, "GPREGBANK"},
   {GAISLER_MIG_SERIES7, "MIG_SERIES7"},
+  {GAISLER_SPWTDP, "SPWTDP"},
   {0, NULL}
 };
 
