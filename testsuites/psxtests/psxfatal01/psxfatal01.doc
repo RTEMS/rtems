@@ -1,0 +1,18 @@
+#  testsuites/psxtests/psxfatal01/psxfatal01.doc
+#   
+#  Copyright (c) 2013 Mandar Juvekar <mjuvekar0@gmail.com>.
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: psxfatal01
+
+directives:
++ None
+
+concepts:
+
++ Ensures that a fatal error occurs if the initialization thread is NULL.
