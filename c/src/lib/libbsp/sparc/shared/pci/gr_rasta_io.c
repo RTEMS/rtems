@@ -44,6 +44,13 @@ extern unsigned int _RAM_START;
 /* Offset from 0x80000000 (dual bus version) */
 #define AHB1_BASE_ADDR 0x80000000
 #define AHB1_IOAREA_BASE_ADDR 0x80100000
+#define AHB1_IOAREA_OFS (AHB1_IOAREA_BASE_ADDR - AHB1_BASE_ADDR)
+
+/* Second revision constants (GRPCI2) */
+#define GRPCI2_BAR0_TO_AHB_MAP 0x04  /* Fixme */
+#define GRPCI2_BAR1_TO_AHB_MAP 0x08  /* Fixme */
+#define GRPCI2_PCI_CONFIG      0x20  /* Fixme */
+
 
 /* #define DEBUG 1 */
 
@@ -69,6 +76,28 @@ struct grpci_regs {
 	volatile unsigned int stat_cmd;
 };
 
+struct grpci2_regs {
+	volatile unsigned int ctrl;
+	volatile unsigned int statcap;
+	volatile unsigned int pcimstprefetch;
+	volatile unsigned int ahbtopciiomap;
+	volatile unsigned int dmactrl;
+	volatile unsigned int dmadesc;
+	volatile unsigned int dmachanact;
+	volatile unsigned int reserved;
+	volatile unsigned int pcibartoahb[6];
+	volatile unsigned int reserved2[2];
+	volatile unsigned int ahbtopcimemmap[16];
+	volatile unsigned int trcctrl;
+	volatile unsigned int trccntmode;
+	volatile unsigned int trcadpat;
+	volatile unsigned int trcadmask;
+	volatile unsigned int trcctrlsigpat;
+	volatile unsigned int trcctrlsigmask;
+	volatile unsigned int trcadstate;
+	volatile unsigned int trcctrlsigstate;
+};
+
 struct gr_rasta_io_ver {
 	const unsigned int	amba_freq_hz;	/* The frequency */
 	const unsigned int	amba_ioarea;	/* The address where the PnP IOAREA starts at */
@@ -92,6 +121,7 @@ struct gr_rasta_io_priv {
 	struct gr_rasta_io_ver		*version;
 	struct irqmp_regs		*irq;
 	struct grpci_regs		*grpci;
+	struct grpci2_regs		*grpci2;
 	struct drvmgr_map_entry		bus_maps_down[3];
 	struct drvmgr_map_entry		bus_maps_up[2];
 
@@ -223,6 +253,7 @@ void gr_rasta_io_isr (void *arg)
 	DBG("RASTA-IO-IRQ: 0x%x\n", tmp);
 }
 
+/* PCI Hardware (Revision 0 and 1) initialization */
 int gr_rasta_io_hw_init(struct gr_rasta_io_priv *priv)
 {
 	unsigned int *page0 = NULL;
@@ -232,24 +263,12 @@ int gr_rasta_io_hw_init(struct gr_rasta_io_priv *priv)
 	struct pci_dev_info *devinfo = priv->devinfo;
 	uint32_t bar0, bar0_size;
 
-	/* Select version of GR-RASTA-IO board */
-	switch (devinfo->rev) {
-		case 0:
-			priv->version = &gr_rasta_io_ver0;
-			break;
-		case 1:
-			priv->version = &gr_rasta_io_ver1;
-			break;
-		default:
-			return -2;
-	}
-
 	bar0 = devinfo->resources[0].address;
 	bar0_size = devinfo->resources[0].size;
 	page0 = (unsigned int *)(bar0 + bar0_size/2); 
 
 	/* Point PAGE0 to start of Plug and Play information */
-	*page0 = priv->version->amba_ioarea & 0xf0000000;
+	*page0 = priv->version->amba_ioarea & 0xff000000;
 
 #if 0
 	{
@@ -271,7 +290,7 @@ int gr_rasta_io_hw_init(struct gr_rasta_io_priv *priv)
 	/* AMBA MAP bar0 (in CPU) ==> 0x80000000(remote amba address) */
 	priv->amba_maps[0].size = bar0_size/2;
 	priv->amba_maps[0].local_adr = bar0;
-	priv->amba_maps[0].remote_adr = 0x80000000;
+	priv->amba_maps[0].remote_adr = AHB1_BASE_ADDR;
 
 	/* AMBA MAP bar1 (in CPU) ==> 0x40000000(remote amba address) */
 	priv->amba_maps[1].size = devinfo->resources[1].size;
@@ -290,14 +309,14 @@ int gr_rasta_io_hw_init(struct gr_rasta_io_priv *priv)
 
 	/* Start AMBA PnP scan at first AHB bus */
 	ambapp_scan(&priv->abus,
-			bar0 + (priv->version->amba_ioarea & ~0xf0000000),
+			bar0 + (priv->version->amba_ioarea & ~0xff000000),
 			NULL, &priv->amba_maps[0]);
 
 	/* Initialize Frequency of AMBA bus */
 	ambapp_freq_init(&priv->abus, NULL, priv->version->amba_freq_hz);
 
 	/* Point PAGE0 to start of APB area */
-	*page0 = 0x80000000;	
+	*page0 = AHB1_BASE_ADDR;	
 
 	/* Find GRPCI controller */
 	tmp = (void *)ambapp_for_each(&priv->abus,
@@ -365,6 +384,153 @@ int gr_rasta_io_hw_init(struct gr_rasta_io_priv *priv)
 	priv->bus_maps_up[1].size = 0;
 
 	/* Successfully registered the RASTA board */
+	return 0;
+}
+
+/* PCI Hardware (Revision 1) initialization */
+int gr_rasta_io2_hw_init(struct gr_rasta_io_priv *priv)
+{
+	int i;
+	uint32_t data;
+	unsigned int ctrl;
+	uint8_t tmp2;
+	struct ambapp_dev *tmp;
+	int status;
+	struct ambapp_ahb_info *ahb;
+	uint8_t cap_ptr;
+	pci_dev_t pcidev = priv->pcidev;
+	struct pci_dev_info *devinfo = priv->devinfo;
+	unsigned int pci_freq_hz;
+
+	/* Check capabilities list bit */
+	pci_cfg_r8(pcidev, PCI_STATUS, &tmp2);
+
+	if (!((tmp2 >> 4) & 1)) {
+		/* Capabilities list not available which it should be in the
+		 * GRPCI2
+		 */
+		return -3;
+	}
+
+	/* Read capabilities pointer */
+	pci_cfg_r8(pcidev, PCI_CAP_PTR, &cap_ptr);
+
+	/* Set AHB address mappings for target PCI bars
+	 * BAR0: 16MB  : Mapped to I/O at 0x80000000
+	 * BAR1: 256MB : Mapped to MEM at 0x40000000
+	 */
+	pci_cfg_w32(pcidev, cap_ptr+GRPCI2_BAR0_TO_AHB_MAP, AHB1_BASE_ADDR);
+	pci_cfg_w32(pcidev, cap_ptr+GRPCI2_BAR1_TO_AHB_MAP, 0x40000000);
+
+	/* Set PCI bus to be same endianess as PCI system */
+	pci_cfg_r32(pcidev, cap_ptr+GRPCI2_PCI_CONFIG, &data);
+	if (pci_endian == PCI_BIG_ENDIAN)
+		data = data & 0xFFFFFFFE;
+	else
+		data = data | 0x00000001;
+	pci_cfg_w32(pcidev, cap_ptr+GRPCI2_PCI_CONFIG, data);
+
+#if 0
+	/* set parity error response */
+	pci_cfg_r32(pcidev, PCI_COMMAND, &data);
+	pci_cfg_w32(pcidev, PCI_COMMAND, (data|PCI_COMMAND_PARITY));
+#endif
+
+	/* Scan AMBA Plug&Play */
+
+	/* AMBA MAP bar0 (in PCI) ==> 0x40000000 (remote amba address) */
+	priv->amba_maps[0].size = devinfo->resources[0].size;
+	priv->amba_maps[0].local_adr = devinfo->resources[0].address;
+	priv->amba_maps[0].remote_adr = AHB1_BASE_ADDR;
+
+	/* AMBA MAP bar0 (in PCI) ==> 0x80000000 (remote amba address) */
+	priv->amba_maps[1].size = devinfo->resources[1].size;
+	priv->amba_maps[1].local_adr = devinfo->resources[1].address;
+	priv->amba_maps[1].remote_adr = 0x40000000;
+
+	/* Addresses not matching with map be untouched */
+	priv->amba_maps[2].size = 0xfffffff0;
+	priv->amba_maps[2].local_adr = 0;
+	priv->amba_maps[2].remote_adr = 0;
+
+	/* Mark end of table */
+	priv->amba_maps[3].size=0;
+
+	/* Start AMBA PnP scan at first AHB bus */
+	ambapp_scan(
+		&priv->abus,
+		devinfo->resources[0].address + AHB1_IOAREA_OFS,
+		NULL,
+		&priv->amba_maps[0]);
+
+	/* Initialize Frequency of AMBA bus. The AMBA bus runs at same
+	 * frequency as PCI bus
+	 */
+	ambapp_freq_init(&priv->abus, NULL, priv->version->amba_freq_hz);
+
+	/* Find IRQ controller, Clear all current IRQs */
+	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
+				(OPTIONS_ALL|OPTIONS_APB_SLVS),
+				VENDOR_GAISLER, GAISLER_IRQMP,
+				ambapp_find_by_idx, NULL);
+	if ( !tmp ) {
+		return -4;
+	}
+	priv->irq = (struct irqmp_regs *)DEV_TO_APB(tmp)->start;
+	/* Set up GR-RASTA-SPW-ROUTER irq controller */
+	priv->irq->mask[0] = 0;
+	priv->irq->iclear = 0xffff;
+	priv->irq->ilevel = 0;
+
+	priv->bus_maps_down[0].name = "PCI BAR0 -> AMBA";
+	priv->bus_maps_down[0].size = priv->amba_maps[0].size;
+	priv->bus_maps_down[0].from_adr = (void *)priv->amba_maps[0].local_adr;
+	priv->bus_maps_down[0].to_adr = (void *)priv->amba_maps[0].remote_adr;
+	priv->bus_maps_down[1].name = "PCI BAR1 -> AMBA";
+	priv->bus_maps_down[1].size = priv->amba_maps[1].size;
+	priv->bus_maps_down[1].from_adr = (void *)priv->amba_maps[1].local_adr;
+	priv->bus_maps_down[1].to_adr = (void *)priv->amba_maps[1].remote_adr;
+	priv->bus_maps_down[2].size = 0;
+
+	/* Find GRPCI2 controller AHB Slave interface */
+	tmp = (void *)ambapp_for_each(&priv->abus,
+					(OPTIONS_ALL|OPTIONS_AHB_SLVS),
+					VENDOR_GAISLER, GAISLER_GRPCI2,
+					ambapp_find_by_idx, NULL);
+	if ( !tmp ) {
+		return -5;
+	}
+	ahb = (struct ambapp_ahb_info *)tmp->devinfo;
+	priv->bus_maps_up[0].name = "AMBA GRPCI2 Window";
+	priv->bus_maps_up[0].size = ahb->mask[0]; /* AMBA->PCI Window on GR-RASTA-SPW-ROUTER board */
+	priv->bus_maps_up[0].from_adr = (void *)ahb->start[0];
+	priv->bus_maps_up[0].to_adr = (void *)
+				(priv->ahbmst2pci_map & ~(ahb->mask[0]-1));
+	priv->bus_maps_up[1].size = 0;
+
+	/* Find GRPCI2 controller APB Slave interface */
+	tmp = (void *)ambapp_for_each(&priv->abus,
+					(OPTIONS_ALL|OPTIONS_APB_SLVS),
+					VENDOR_GAISLER, GAISLER_GRPCI2,
+					ambapp_find_by_idx, NULL);
+	if ( !tmp ) {
+		return -6;
+	}
+	priv->grpci2 = (struct grpci2_regs *)
+		((struct ambapp_apb_info *)tmp->devinfo)->start;
+
+	/* Set AHB to PCI mapping for all AMBA AHB masters */
+	for(i = 0; i < 16; i++) {
+		priv->grpci2->ahbtopcimemmap[i] = priv->ahbmst2pci_map &
+							~(ahb->mask[0]-1);
+	}
+
+	/* Make sure dirq(0) sampling is enabled */
+	ctrl = priv->grpci2->ctrl;
+	ctrl = (ctrl & 0xFFFFFF0F) | (1 << 4);
+	priv->grpci2->ctrl = ctrl;
+
+	/* Successfully registered the RASTA-SPW-ROUTER board */
 	return 0;
 }
 
@@ -448,7 +614,24 @@ int gr_rasta_io_init1(struct drvmgr_dev *dev)
 		return DRVMGR_FAIL;
 	}
 
-	status = gr_rasta_io_hw_init(priv);
+	/* Select version of GR-RASTA-IO board */
+	switch (devinfo->rev) {
+		case 0:
+			priv->version = &gr_rasta_io_ver0;
+			status = gr_rasta_io_hw_init(priv);
+			break;
+		case 1:
+			priv->version = &gr_rasta_io_ver1;
+			status = gr_rasta_io_hw_init(priv);
+			break;
+		case 2:
+			priv->version = &gr_rasta_io_ver1; /* same cfg as 1 */
+			status = gr_rasta_io2_hw_init(priv);
+			break;
+		default:
+			return -2;
+	}
+
 	if ( status != 0 ) {
 		genirq_destroy(priv->genirq);
 		free(priv);
