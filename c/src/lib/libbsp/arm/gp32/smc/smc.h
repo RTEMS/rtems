@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup gp32_smc
+ * @brief SMC disk driver initialization entry point
+ */
+
 #ifndef __SMC_H__
 #define __SMC_H__
 
@@ -9,7 +15,15 @@ extern "C" {
 
 #include "rtems/blkdev.h"
 
-/* smc_initialize --
+/**
+ * @defgroup gp32_smc SMC Disk Driver
+ * @ingroup arm_gp32
+ * @brief SMC Disk Driver Support
+ * @{
+ */
+
+/**
+ * @brief smc_initialize
  *     SMC disk driver initialization entry point.
  */
 rtems_device_driver
@@ -20,6 +34,8 @@ smc_initialize(
 
 #define SMC_DRIVER_TABLE_ENTRY \
     { smc_initialize, GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES }
+
+/** @} */
 
 #ifdef __cplusplus
 }
