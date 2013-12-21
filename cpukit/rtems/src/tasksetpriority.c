@@ -42,9 +42,13 @@ rtems_status_code rtems_task_set_priority(
 
     case OBJECTS_LOCAL:
       /* XXX need helper to "convert" from core priority */
-      *old_priority = the_thread->current_priority;
+      *old_priority = _RTEMS_tasks_Priority_from_Core(
+                        the_thread->current_priority
+                      );
       if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
-        the_thread->real_priority = new_priority;
+        the_thread->real_priority = _RTEMS_tasks_Priority_to_Core(
+                                      new_priority
+                                    );
         if ( the_thread->resource_count == 0 ||
              the_thread->current_priority > new_priority )
           _Thread_Change_priority( the_thread, new_priority, false );

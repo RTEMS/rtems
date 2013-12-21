@@ -27,6 +27,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <rtems/rtems/tasksimpl.h>
 
 #include "capture.h"
 
@@ -433,7 +434,9 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
 
   task->tcb->extensions[capture_extension_index] = task;
 
-  task->start_priority = new_task->Start.initial_priority;
+  task->start_priority = _RTEMS_tasks_Priority_from_Core(
+                           new_task->Start.initial_priority
+                         );
   task->stack_size     = new_task->Start.Initial_stack.size;
   task->stack_clean    = task->stack_size;
 

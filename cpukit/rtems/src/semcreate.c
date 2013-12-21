@@ -25,6 +25,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/semimpl.h>
+#include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/coresemimpl.h>
 #include <rtems/score/threaddispatch.h>
@@ -156,7 +157,9 @@ rtems_status_code rtems_semaphore_create(
       the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_FIFO;
 
     if ( _Attributes_Is_binary_semaphore( attribute_set ) ) {
-      the_mutex_attr.priority_ceiling      = priority_ceiling;
+      the_mutex_attr.priority_ceiling      = _RTEMS_tasks_Priority_to_Core(
+                                               priority_ceiling
+                                             );
       the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
       the_mutex_attr.only_owner_release    = false;
 

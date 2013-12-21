@@ -116,6 +116,18 @@ RTEMS_INLINE_ROUTINE Priority_Control _RTEMS_tasks_Priority_to_Core(
 }
 
 /**
+ *  @brief Converts a core priority into an RTEMS API priority.
+ *
+ *  This function converts a core priority into an RTEMS API priority.
+ */
+RTEMS_INLINE_ROUTINE rtems_task_priority _RTEMS_tasks_Priority_from_Core (
+  Priority_Control priority
+)
+{
+  return (rtems_task_priority) priority;
+}
+
+/**
  *  @brief Checks whether the priority is a valid user task.
  *
  *  This function returns TRUE if the_priority is a valid user task priority

@@ -80,7 +80,7 @@ void _RTEMS_tasks_MP_Send_process_packet (
 rtems_status_code _RTEMS_tasks_MP_Send_request_packet (
   RTEMS_tasks_MP_Remote_operations operation,
   Objects_Id                       task_id,
-  rtems_task_priority                 new_priority,
+  rtems_task_priority              new_priority,
   uint32_t                         notepad,
   uint32_t                         note
 )
