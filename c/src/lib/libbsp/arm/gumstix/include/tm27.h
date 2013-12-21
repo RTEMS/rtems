@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup gumstix_tm27
+ * @brief tm27 timing test support
+ */
+
 /*
  *  tm27.h
  *
@@ -13,8 +19,16 @@
 #ifndef __tm27_h
 #define __tm27_h
 
-/*
- *  Define the interrupt mechanism for Time Test 27
+/**
+ * @defgroup gumstix_tm27 tm27 Support
+ * @ingroup arm_gumstix
+ * @brief tm27 Timing Test Support
+ * @{
+ */
+
+/**
+ * @name Interrupt mechanisms for Time Test 27
+ * @{
  */
 
 #define MUST_WAIT_FOR_INTERRUPT 0
@@ -26,5 +40,9 @@
 #define Clear_tm27_intr() /* empty */
 
 #define Lower_tm27_intr() /* empty */
+
+/** @} */
+
+/** @} */
 
 #endif
