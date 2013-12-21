@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup edb7312_interrupt
+ * @brief Interrupt definitions.
+ */
+
 /*
  * Cirrus EP7312 Intererrupt handler
  *
@@ -23,7 +29,18 @@
 
 #endif /* __asm__ */
 
-  /* int interrupt status/mask register 1 */
+/**
+ * @defgroup edb7312_interrupt Interrupt Support
+ * @ingroup arm_edb7312
+ * @brief Interrupt Support
+ * @{
+ */
+
+/**
+ * @name int interrupt status/mask register 1
+ * @{
+ */
+
 #define BSP_EXTFIQ     0
 #define BSP_BLINT      1
 #define BSP_WEINT      2
@@ -40,18 +57,36 @@
 #define BSP_URXINT1   13
 #define BSP_UMSINT    14
 #define BSP_SSEOTI    15
- /* int interrupt status/mask register 2 */
+
+/** @} */
+
+/**
+ * @name int interrupt status/mask register 2
+ * @{
+ */
+
 #define BSP_KBDINT    16
 #define BSP_SS2RX     17
 #define BSP_SS2TX     18
 #define BSP_UTXINT2   19
 #define BSP_URXINT2   20
- /* int interrupt status/mask register 3 */
+
+/** @} */
+
+/**
+ * @name int interrupt status/mask register 3
+ * @{
+ */
+
 #define BSP_DAIINT    21
 #define BSP_MAX_INT   22
+
+/** @} */
 
 #define BSP_INTERRUPT_VECTOR_MIN 0
 
 #define BSP_INTERRUPT_VECTOR_MAX (BSP_MAX_INT - 1)
+
+/** @} */
 
 #endif /* __IRQ_H__ */

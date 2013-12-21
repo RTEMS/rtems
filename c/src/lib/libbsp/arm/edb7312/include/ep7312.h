@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup edb7312_registers
+ * @brief Register declarations.
+ */
+
 /*
  * Cirrus EP7312 register declarations
  *
@@ -19,6 +25,13 @@
 #define __EP7312_H__
 
 #define EP7312_REG_BASE 0x80000000
+
+/**
+ * @defgroup edb7312_registers Register Definitions
+ * @ingroup arm_edb7312
+ * @brief Cirrus EP7312 Register Definitions
+ * @{
+ */
 
 #define EP7312_PADR    ((volatile uint8_t*)(EP7312_REG_BASE + 0x0000))
 #define EP7312_PBDR    ((volatile uint8_t*)(EP7312_REG_BASE + 0x0001))
@@ -89,7 +102,12 @@
 #define EP7312_RANDID3 ((volatile uint32_t*)(EP7312_REG_BASE + 0x270C))
 
 /* serial port bits */
-/* BITS in UBRLCR1 */
+
+/**
+ * @name BITS in UBRLCR1
+ * @{
+ */
+
 #define EP7312_UART_WRDLEN5    0x00000000
 #define EP7312_UART_WRDLEN6    0x00020000
 #define EP7312_UART_WRDLEN7    0x00040000
@@ -100,29 +118,60 @@
 #define EP7312_UART_PRTEN      0x00002000
 #define EP7312_UART_BREAK      0x00001000
 
-/* BITS in INTSR1 */
+/** @} */
+
+/**
+ * @name BITS in INTSR1
+ * @{
+ */
+
 #define EP7312_UART_UTXINT1    0x00002000
 #define	EP7312_UART_URXINT1    0x00001000
 
-/* BITS in UARTTDR1 */
+/** @} */
+
+/**
+ * @name BITS in UARTTDR1
+ * @{
+ */
+
 #define EP7312_UART_FRMERR     0x00000100
 #define EP7312_UART_PARERR     0x00000200
 #define EP7312_UART_OVERR      0x00000400
 
-/* BITS in system status flag register 1 */
+/** @} */
+
+/**
+ * @name BITS in system status flag register 1
+ * @{
+ */
+
 #define EP7312_UART_UBUSY1     0x00000800
 #define EP7312_UART_URXFE1     0x00400000
 #define EP7312_UART_UTXFF1     0x00800000
 
+/** @} */
+
 /* system configuration bits */
-/* BITS in SYSCON1 */
+
+/**
+ * @name  BITS in SYSCON1
+ * @{
+ */
+
 #define EP7312_SYSCON1_UART1EN       0x00000100
 #define EP7312_SYSCON1_TC1_PRESCALE  0x00000010
 #define EP7312_SYSCON1_TC1_512KHZ    0x00000020
 #define EP7312_SYSCON1_TC2_PRESCALE  0x00000040
 #define EP7312_SYSCON1_TC2_512KHZ    0x00000080
 
-/* INTR1 (Interrupt 1) mask/status register bits */
+/** @} */
+
+/**
+ * @name INTR1 (Interrupt 1) mask/status register bits
+ * @{
+ */
+
 #define EP7312_INTR1_EXTFIQ  0x00000001
 #define EP7312_INTR1_BLINT   0x00000002
 #define EP7312_INTR1_WEINT   0x00000004
@@ -140,14 +189,30 @@
 #define EP7312_INTR1_UMSINT  0x00004000
 #define EP7312_INTR1_SSEOTI  0x00008000
 
-/* INTR2 (Interrupt 2) mask/status register bits */
+/** @} */
+
+/**
+ * @name INTR2 (Interrupt 2) mask/status register bits
+ * @{
+ */
+
 #define EP7312_INTR2_KBDINT  0x00000001
 #define EP7312_INTR2_SS2RX   0x00000002
 #define EP7312_INTR2_SS2TX   0x00000004
 #define EP7312_INTR2_URXINT2 0x00001000
 #define EP7312_INTR2_UTXINT2 0x00002000
 
-/* INTR3 (Interrupt 3) mask/status register bits */
+/** @} */
+
+/**
+ * @name INTR3 (Interrupt 3) mask/status register bits
+ * @{
+ */
+
 #define EP7312_INTR2_DAIINT  0x00000001
+
+/** @} */
+
+/** @} */
 
 #endif /* __EP7312_H__ */
