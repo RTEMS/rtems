@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup stm32f4_gpio
+ * @brief STM32F4XXXX GPIO support.
+ */
+
 /*
  * Copyright (c) 2012 Sebastian Huber.  All rights reserved.
  *

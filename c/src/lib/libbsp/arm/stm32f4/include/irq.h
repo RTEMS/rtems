@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup stm32f4_interrupt
+ * @brief Interrupt definitions.
+ */
+
 /*
  * Copyright (c) 2012 Sebastian Huber.  All rights reserved.
  *
@@ -30,6 +36,13 @@ extern "C" {
 #endif /* __cplusplus */
 
 #endif /* ASM */
+
+/**
+ * @defgroup stm32f4_interrupt Interrupt Support
+ * @ingroup arm_stm32f4
+ * @brief Interrupt Support
+ * @{
+ */
 
 #define STM32F4_IRQ_WWDG 0
 #define STM32F4_IRQ_PVD 1
@@ -122,5 +135,7 @@ extern "C" {
 
 #define BSP_INTERRUPT_VECTOR_MIN 0
 #define BSP_INTERRUPT_VECTOR_MAX 81
+
+/** @} */
 
 #endif /* LIBBSP_ARM_STM32F4_IRQ_H */

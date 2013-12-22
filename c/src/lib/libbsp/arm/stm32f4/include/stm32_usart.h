@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup stm32_usart
+ * @brief STM32 USART support
+ */
+
 /*
  * Copyright (c) 2012 Sebastian Huber.  All rights reserved.
  *
@@ -16,6 +22,13 @@
 #define LIBBSP_ARM_STM32F4_STM32_USART_H
 
 #include <bsp/utility.h>
+
+/**
+ * @defgroup stm32_usart STM32 USART Support
+ * @ingroup stm32f4_usart
+ * @brief STM32 USART Support
+ * @{
+ */
 
 typedef struct {
 	uint32_t sr;
@@ -91,5 +104,7 @@ typedef struct {
 #define STM32F4_USART_GTPR_PSC_GET(reg) BSP_FLD32GET(reg, 0, 7)
 #define STM32F4_USART_GTPR_PSC_SET(reg, val) BSP_FLD32SET(reg, val, 0, 7)
 } stm32f4_usart;
+
+/** @} */
 
 #endif /* LIBBSP_ARM_STM32F4_STM32_USART_H */

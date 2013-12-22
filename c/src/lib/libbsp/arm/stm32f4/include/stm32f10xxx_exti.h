@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup stm32f4_exti
+ * @brief STM32F10XXX EXTI support
+ */
+
 /*
  * Copyright (c) 2013 Christian Mauderer.  All rights reserved.
  *
@@ -17,6 +23,13 @@
 
 #include <bsp/utility.h>
 
+/**
+ * @defgroup stm32f4_exti EXTI Support
+ * @ingroup arm_stm32f4
+ * @brief STM32F10XXX EXTI Support
+ * @{
+ */
+
 typedef struct {
 	uint32_t imr;
 #define STM32F4_EXTI_IMR(line) BSP_BIT32(line)
@@ -31,5 +44,7 @@ typedef struct {
 	uint32_t pr;
 #define STM32F4_EXTI_PR(line) BSP_BIT32(line)
 } stm32f4_exti;
+
+/** @} */
 
 #endif /* LIBBSP_ARM_STM32F4_STM32F10XXX_EXTI_H */

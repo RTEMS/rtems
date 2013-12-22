@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup stm32f4_io
+ * @brief IO support.
+ */
+
 /*
  * Copyright (c) 2012 Sebastian Huber.  All rights reserved.
  *
@@ -23,6 +29,13 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ * @defgroup stm32f4_io IO Support
+ * @ingroup arm_stm32f4
+ * @brief IO Support
+ * @{
+ */
+
 #define STM32F4_GPIO_PIN(port, index) ((((port) << 4) | (index)) & 0xff)
 
 #define STM32F4_GPIO_PORT_OF_PIN(pin) (((pin) >> 4) & 0xf)
@@ -30,6 +43,11 @@ extern "C" {
 #define STM32F4_GPIO_INDEX_OF_PIN(pin) ((pin) & 0xf)
 
 #ifdef STM32F4_FAMILY_F4XXXX
+
+/**
+ * @name Family F4XXXX
+ * @{
+ */
 
 typedef enum {
   STM32F4_GPIO_MODE_INPUT,
@@ -113,8 +131,15 @@ typedef union {
 #define STM32F4_GPIO_CONFIG_TERMINAL \
   { { 0xff, 0xff, 0x3, 0x1, 0x3, 0x3, 0x1, 0xf, 0xf } }
 
+/** @} */
+
 #endif /* STM32F4_FAMILY_F4XXXX */
 #ifdef STM32F4_FAMILY_F10XXX
+
+/**
+ * @name Family F10XXX
+ * @{
+ */
 
 typedef enum {
   STM32F4_GPIO_MODE_INPUT,
@@ -237,6 +262,8 @@ typedef union {
 #define STM32F4_GPIO_CONFIG_TERMINAL \
   { { 0xff, 0xff, 0x3, 0x3, 0x1, 0xff, 0x7 } }
 
+/** @} */
+
 #endif /* STM32F4_FAMILY_F10XXX */
 
 extern const stm32f4_gpio_config stm32f4_start_config_gpio [];
@@ -256,6 +283,11 @@ void stm32f4_gpio_set_output(int pin, bool set);
 bool stm32f4_gpio_get_input(int pin);
 
 #ifdef STM32F4_FAMILY_F4XXXX
+
+/**
+ * @name Family F4XXXX
+ * @{
+ */
 
 #define STM32F4_PIN_USART(port, idx, altfunc) \
   { \
@@ -296,8 +328,15 @@ bool stm32f4_gpio_get_input(int pin);
 #define STM32F4_PIN_USART6_TX_PC6 STM32F4_PIN_USART(2, 6, STM32F4_GPIO_AF_USART6)
 #define STM32F4_PIN_USART6_RX_PC7 STM32F4_PIN_USART(2, 7, STM32F4_GPIO_AF_USART6)
 
+/** @} */
+
 #endif /* STM32F4_FAMILY_F4XXXX */
 #ifdef STM32F4_FAMILY_F10XXX
+
+/**
+ * @name Family F10XXX
+ * @{
+ */
 
 #define STM32F4_PIN_USART_TX(port, idx, remapvalue) \
   { \
@@ -365,6 +404,8 @@ bool stm32f4_gpio_get_input(int pin);
 
 #define STM32F4_PIN_I2C2_SCL      STM32F4_PIN_I2C(1, 10, STM32F4_GPIO_REMAP_DONT_CHANGE)
 #define STM32F4_PIN_I2C2_SDA      STM32F4_PIN_I2C(1, 11, STM32F4_GPIO_REMAP_DONT_CHANGE)
+
+/** @} */
 
 #endif /* STM32F4_FAMILY_F10XXX */
 

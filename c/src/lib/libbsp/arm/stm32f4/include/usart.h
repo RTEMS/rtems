@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup stm32f4_usart
+ * @brief USART (universal synchronous/asynchronous receiver/transmitter) support.
+ */
+
 /*
  * Copyright (c) 2012 Sebastian Huber.  All rights reserved.
  *
@@ -17,11 +23,20 @@
 
 #include <libchip/serial.h>
 
+/**
+ * @defgroup stm32f4_usart USART Support
+ * @ingroup arm_stm32f4
+ * @brief USART Support
+ * @{
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
 extern const console_fns stm32f4_usart_fns;
+
+/** @} */
 
 #ifdef __cplusplus
 }

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup stm32f4_i2c I2C Support
+ * @brief I2C-module.
+ */
+
 /*
  * Copyright (c) 2013 Christian Mauderer.  All rights reserved.
  *
@@ -29,15 +35,24 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ * @defgroup stm32f4_i2c I2C Support
+ * @ingroup arm_stm32f4
+ * @brief I2C Module
+ * @{
+ */
+
 typedef struct {
-  /* The address of the slave without the read write bit. A 7-Bit address should
-   * be placed in the bits [6..0] */
+  /**
+   * @brief The address of the slave without the read write bit.
+   * A 7-Bit address should be placed in the bits [6..0]
+   */
   uint16_t addr;
-  /* Read (true) or write (false) data */
+  /** @brief Read (true) or write (false) data */
   bool read;
-  /* Size of data to read or write */
+  /** @brief Size of data to read or write */
   size_t len;
-  /* Buffer for data */
+  /** @brief Buffer for data */
   uint8_t *buf;
 } stm32f4_i2c_message;
 
@@ -54,16 +69,16 @@ typedef struct {
   uint8_t addr_with_rw;
 } stm32f4_i2c_bus_entry;
 
-/* Initialise the i2c module. */
+/** @brief Initialise the i2c module. */
 rtems_status_code stm32f4_i2c_init(stm32f4_i2c_bus_entry *e);
 
-/* Process a i2c message */
+/** @brief Process a i2c message */
 rtems_status_code stm32f4_i2c_process_message(
   stm32f4_i2c_bus_entry *e,
   stm32f4_i2c_message *msg
 );
 
-/* Set another baud rate than the default one */
+/** @brief Set another baud rate than the default one */
 rtems_status_code stm32f4_i2c_set_bitrate(
   stm32f4_i2c_bus_entry *e,
   uint32_t br
@@ -71,6 +86,8 @@ rtems_status_code stm32f4_i2c_set_bitrate(
 
 extern stm32f4_i2c_bus_entry *const stm32f4_i2c1;
 extern stm32f4_i2c_bus_entry *const stm32f4_i2c2;
+
+/** @} */
 
 #ifdef __cplusplus
 }

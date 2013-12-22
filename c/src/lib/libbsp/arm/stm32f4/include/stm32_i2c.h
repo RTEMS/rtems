@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup stm32_i2c
+ * @brief STM32 I2C support.
+ */
+
 /*
  * Copyright (c) 2013 Christian Mauderer.  All rights reserved.
  *
@@ -16,6 +22,13 @@
 #define LIBBSP_ARM_STM32F4_STM32_I2C_H
 
 #include <bsp/utility.h>
+
+/**
+ * @defgroup stm32_i2c STM32 I2C Support
+ * @ingroup stm32f4_i2c
+ * @brief STM32 I2C Support
+ * @{
+ */
 
 typedef struct {
 	uint32_t cr1;
@@ -94,5 +107,7 @@ typedef struct {
 #define STM32F4_I2C_TRISE_GET(reg) BSP_FLD32GET(reg, 0, 5)
 #define STM32F4_I2C_TRISE_SET(reg, val) BSP_FLD32SET(reg, val, 0, 5)
 } stm32f4_i2c;
+
+/** @} */
 
 #endif /* LIBBSP_ARM_STM32F4_STM32_I2C_H */

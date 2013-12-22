@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup stm32f10xxx_rcc
+ * @brief STM32F10XXX RCC support.
+ */
+
 /*
  * Copyright (c) 2013 Christian Mauderer.  All rights reserved.
  *
@@ -17,6 +23,13 @@
 
 #include <bsp/utility.h>
 
+/**
+ * @defgroup stm32f10xxx_rcc STM32F10XXX RCC Support
+ * @ingroup stm32f4_rcc
+ * @brief STM32F10XXX RCC Support
+ * @{
+ */
+
 typedef struct {
 	uint32_t cr;
 	uint32_t cfgr;
@@ -29,5 +42,7 @@ typedef struct {
 	uint32_t ahbstr;
 	uint32_t cfgr2;
 } stm32f4_rcc;
+
+/** @} */
 
 #endif /* LIBBSP_ARM_STM32F4_STM32F10XXX_RCC_H */

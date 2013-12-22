@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup stm32f4_rcc
+ * @brief RCC support.
+ */
+
 /*
  * Copyright (c) 2012 Sebastian Huber.  All rights reserved.
  *
@@ -22,10 +28,23 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ * @defgroup stm32f4_rcc RCC Support
+ * @ingroup arm_stm32f4
+ * @brief RCC Support
+ * @{
+ */
+
 #define STM32F4_RCC_INDEX(reg, idx) (((reg) << 5) | (idx))
 
 typedef enum {
 #ifdef STM32F4_FAMILY_F4XXXX
+
+  /**
+   * @name Family F4XXXX
+   * @{
+   */
+
   STM32F4_RCC_OTGHS = STM32F4_RCC_INDEX(0, 29),
   STM32F4_RCC_ETHMAC = STM32F4_RCC_INDEX(0, 25),
   STM32F4_RCC_DMA2 = STM32F4_RCC_INDEX(0, 22),
@@ -86,8 +105,17 @@ typedef enum {
   STM32F4_RCC_USART1 = STM32F4_RCC_INDEX(5, 4),
   STM32F4_RCC_TIM8 = STM32F4_RCC_INDEX(5, 1),
   STM32F4_RCC_TIM1 = STM32F4_RCC_INDEX(5, 0),
+
+  /** @} */
+
 #endif /* STM32F4_FAMILY_F4XXXX */
 #ifdef STM32F4_FAMILY_F10XXX
+
+  /**
+   * @name Family F10
+   * @{
+   */
+
   STM32F4_RCC_DMA1 = STM32F4_RCC_INDEX(0, 0),
   STM32F4_RCC_DMA2 = STM32F4_RCC_INDEX(0, 1),
   STM32F4_RCC_SRAM = STM32F4_RCC_INDEX(0, 2),
@@ -143,6 +171,9 @@ typedef enum {
   STM32F4_RCC_BKP = STM32F4_RCC_INDEX(2, 27),
   STM32F4_RCC_PWR = STM32F4_RCC_INDEX(2, 28),
   STM32F4_RCC_DAC = STM32F4_RCC_INDEX(2, 29),
+
+  /** @} */
+
 #endif /* STM32F4_FAMILY_F10XXX */
 } stm32f4_rcc_index;
 
@@ -155,6 +186,8 @@ void stm32f4_rcc_set_clock(stm32f4_rcc_index index, bool set);
 #ifdef STM32F4_FAMILY_F4XXXX
 void stm32f4_rcc_set_low_power_clock(stm32f4_rcc_index index, bool set);
 #endif /* STM32F4_FAMILY_F4XXXX */
+
+/** @} */
 
 #ifdef __cplusplus
 }

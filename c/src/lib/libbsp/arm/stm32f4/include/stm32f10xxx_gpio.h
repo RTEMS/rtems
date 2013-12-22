@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup stm32f4_gpio
+ * @brief STM32F10XXX GPIO support.
+ */
+
 /*
  * Copyright (c) 2013 Christian Mauderer.  All rights reserved.
  *
@@ -17,6 +23,13 @@
 
 #include <bsp/utility.h>
 
+/**
+ * @defgroup stm32f4_gpio GPIO Support
+ * @ingroup stm32f4_io
+ * @brief GPIO Support
+ * @{
+ */
+
 typedef struct {
 	uint32_t cr[2];
 	uint32_t idr;
@@ -32,5 +45,7 @@ typedef struct {
 	uint32_t exticr[4];
 	uint32_t mapr2;
 } stm32f4_afio;
+
+/** @} */
 
 #endif /* LIBBSP_ARM_STM32F4_STM32F10XXX_GPIO_H */

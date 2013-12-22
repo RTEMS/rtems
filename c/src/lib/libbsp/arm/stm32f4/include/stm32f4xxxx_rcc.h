@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup stm32f4xxxx_rcc
+ * @brief STM32F4XXXX RCC support.
+ */
+
 /*
  * Copyright (c) 2012 Sebastian Huber.  All rights reserved.
  *
@@ -16,6 +22,13 @@
 #define LIBBSP_ARM_STM32F4_STM32F4XXXX_RCC_H
 
 #include <bsp/utility.h>
+
+/**
+ * @defgroup stm32f4xxxx_rcc STM32F4XXXX RCC Support
+ * @ingroup stm32f4_rcc
+ * @brief STM32F4XXXX RCC Support
+ * @{
+ */
 
 typedef struct {
 	uint32_t cr;
@@ -40,5 +53,7 @@ typedef struct {
 	uint32_t sscgr;
 	uint32_t plli2scfgr;
 } stm32f4_rcc;
+
+/** @} */
 
 #endif /* LIBBSP_ARM_STM32F4_STM32F4XXXX_RCC_H */
