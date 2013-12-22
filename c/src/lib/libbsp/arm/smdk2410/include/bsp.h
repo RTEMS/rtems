@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup arm_smdk2410
+ * @brief Global BSP definitions.
+ */
+
 /*-------------------------------------------------------------------------+
 | bsp.h - ARM BSP
 |
@@ -18,6 +24,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @defgroup arm_smdk2410 SMDK2410 Support
+ * @ingroup bsp_arm
+ * @brief SMDK2410 Support Package
+ */
 
 /**
  *  This file will not be pre-installed because the smdk2410 BSP uses
