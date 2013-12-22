@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup zynq_interrupt
+ * @brief Interrupt definitions.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
@@ -26,6 +32,13 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @defgroup zynq_interrupt Interrupt Support
+ * @ingroup arm_zynq
+ * @brief Interrupt Support
+ * @{
+ */
 
 #define ZYNQ_IRQ_CPU_0 32
 #define ZYNQ_IRQ_CPU_1 33
@@ -90,6 +103,8 @@ extern "C" {
 
 #define BSP_INTERRUPT_VECTOR_MIN 0
 #define BSP_INTERRUPT_VECTOR_MAX 92
+
+/** @} */
 
 #ifdef __cplusplus
 }

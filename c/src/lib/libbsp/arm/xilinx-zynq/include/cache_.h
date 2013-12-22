@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup zynq_cache
+ * @brief Cache definitions and functions.
+ */
+
 /*
  * Authorship
  * ----------
@@ -58,120 +64,212 @@
 
 #define ZYNQ_L2_CACHE_LINE_SIZE 32
 
-/* L2CC Register Offsets */
+/**
+ * @defgroup zynq_cache Cache Support
+ * @ingroup arm_zynq
+ * @brief Cache Functions and Defitions
+ * @{
+ */
+
+/**
+ * @brief L2CC Register Offsets
+ */
 typedef struct {
   uint32_t cache_id;                                    /* Cache ID */
   uint32_t cache_type;                                  /* Cache type */
 
   uint8_t  reserved_8[0x100 - 8];
   uint32_t ctrl;                                        /* Control */
-#define L2CC_ENABLE_MASK                 0x00000001     /* Enables the L2CC */
+/** @brief Enables the L2CC */
+#define L2CC_ENABLE_MASK                 0x00000001
 
-  uint32_t aux_ctrl;                                    /* Auxiliary control */
-#define L2CC_AUX_EBRESPE_MASK            0x40000000     /* Early BRESP Enable */
-#define L2CC_AUX_IPFE_MASK               0x20000000     /* Instruction Prefetch Enable */
-#define L2CC_AUX_DPFE_MASK               0x10000000     /* Data Prefetch Enable */
-#define L2CC_AUX_NSIC_MASK               0x08000000     /* Non-secure interrupt access control */
-#define L2CC_AUX_NSLE_MASK               0x04000000     /* Non-secure lockdown enable */
-#define L2CC_AUX_CRP_MASK                0x02000000     /* Cache replacement policy */
-#define L2CC_AUX_FWE_MASK                0x01800000     /* Force write allocate */
-#define L2CC_AUX_SAOE_MASK               0x00400000     /* Shared attribute override enable */
-#define L2CC_AUX_PE_MASK                 0x00200000     /* Parity enable */
-#define L2CC_AUX_EMBE_MASK               0x00100000     /* Event monitor bus enable */
-#define L2CC_AUX_WAY_SIZE_MASK           0x000E0000     /* Way-size */
-#define L2CC_AUX_ASSOC_MASK              0x00010000     /* Associativity */
-#define L2CC_AUX_SAIE_MASK               0x00002000     /* Shared attribute invalidate enable */
-#define L2CC_AUX_EXCL_CACHE_MASK         0x00001000     /* Exclusive cache configuration */
-#define L2CC_AUX_SBDLE_MASK              0x00000800     /* Store buffer device limitation Enable */
-#define L2CC_AUX_HPSODRE_MASK            0x00000400     /* High Priority for SO and Dev Reads Enable */
-#define L2CC_AUX_FLZE_MASK               0x00000001     /* Full line of zero enable */
+  /** @brief Auxiliary control */
+  uint32_t aux_ctrl;
+/** @brief Early BRESP Enable */
+#define L2CC_AUX_EBRESPE_MASK            0x40000000
+/** @brief Instruction Prefetch Enable */
+#define L2CC_AUX_IPFE_MASK               0x20000000
+/** @brief Data Prefetch Enable */
+#define L2CC_AUX_DPFE_MASK               0x10000000
+/** @brief Non-secure interrupt access control */
+#define L2CC_AUX_NSIC_MASK               0x08000000
+/** @brief Non-secure lockdown enable */
+#define L2CC_AUX_NSLE_MASK               0x04000000
+/** @brief Cache replacement policy */
+#define L2CC_AUX_CRP_MASK                0x02000000
+/** @brief Force write allocate */
+#define L2CC_AUX_FWE_MASK                0x01800000
+/** @breif Shared attribute override enable */
+#define L2CC_AUX_SAOE_MASK               0x00400000
+/** @brief Parity enable */
+#define L2CC_AUX_PE_MASK                 0x00200000
+/** @brief Event monitor bus enable */
+#define L2CC_AUX_EMBE_MASK               0x00100000
+/** @brief Way-size */
+#define L2CC_AUX_WAY_SIZE_MASK           0x000E0000
+/** @brief Way-size */
+#define L2CC_AUX_ASSOC_MASK              0x00010000
+/** @brief Shared attribute invalidate enable */
+#define L2CC_AUX_SAIE_MASK               0x00002000
+/** @brief Exclusive cache configuration */
+#define L2CC_AUX_EXCL_CACHE_MASK         0x00001000
+/** @brief Store buffer device limitation Enable */
+#define L2CC_AUX_SBDLE_MASK              0x00000800
+/** @brief High Priority for SO and Dev Reads Enable */
+#define L2CC_AUX_HPSODRE_MASK            0x00000400
 
-#define L2CC_AUX_REG_DEFAULT_MASK        0x72360000     /* Enable all prefetching, */
-                                                        /* Cache replacement policy, Parity enable, */
-                                                        /* Event monitor bus enable and Way Size (64 KB) */
+/** @brief Full line of zero enable */
+#define L2CC_AUX_FLZE_MASK               0x00000001
+
+/** @brief Enable all prefetching, */
+#define L2CC_AUX_REG_DEFAULT_MASK        0x72360000
 #define L2CC_AUX_REG_ZERO_MASK           0xFFF1FFFF
 
-  uint32_t tag_ram_ctrl;
-#define L2CC_TAG_RAM_DEFAULT_MASK        0x00000111     /* Latency for tag RAM */
-  uint32_t data_ram_ctrl;
-#define L2CC_DATA_RAM_DEFAULT_MASK       0x00000121     /* Latency for data RAM */
+   /** @brief Latency for tag RAM */
+   uint32_t tag_ram_ctrl;
+#define L2CC_TAG_RAM_DEFAULT_MASK        0x00000111
+   /** @brief Latency for data RAM */
+   uint32_t data_ram_ctrl;
+#define L2CC_DATA_RAM_DEFAULT_MASK       0x00000121
 
   uint8_t  reserved_110[0x200 - 0x110];
-  uint32_t ev_ctrl;                                     /* Event counter control */
-  uint32_t ev_cnt1_cfg;                                 /* Event counter 1 configuration */
-  uint32_t ev_cnt0_cfg;                                 /* Event counter 0 configuration */
-  uint32_t ev_cnt1;                                     /* Event counter 1 value */
-  uint32_t ev_cnt0;                                     /* Event counter 0 value */
-  uint32_t int_mask;                                    /* Interrupt enable mask */
-  uint32_t int_mask_status;                             /* Masked   interrupt status (read-only)*/
-  uint32_t int_raw_status;                              /* Unmasked interrupt status */
-  uint32_t int_clr;                                     /* Interrupt clear */
-/* Interrupt bit masks */
-#define L2CC_INT_DECERR_MASK             0x00000100     /* DECERR from L3 */
-#define L2CC_INT_SLVERR_MASK             0x00000080     /* SLVERR from L3 */
-#define L2CC_INT_ERRRD_MASK              0x00000040     /* Error on L2 data RAM (Read) */
-#define L2CC_INT_ERRRT_MASK              0x00000020     /* Error on L2 tag RAM (Read) */
-#define L2CC_INT_ERRWD_MASK              0x00000010     /* Error on L2 data RAM (Write) */
-#define L2CC_INT_ERRWT_MASK              0x00000008     /* Error on L2 tag RAM (Write) */
-#define L2CC_INT_PARRD_MASK              0x00000004     /* Parity Error on L2 data RAM (Read) */
-#define L2CC_INT_PARRT_MASK              0x00000002     /* Parity Error on L2 tag RAM (Read) */
-#define L2CC_INT_ECNTR_MASK              0x00000001     /* Event Counter1/0 Overflow Increment */
+  /** @brief Event counter control */
+  uint32_t ev_ctrl;
+  /** @brief Event counter 1 configuration */
+  uint32_t ev_cnt1_cfg;
+  /** @brief Event counter 0 configuration */
+  uint32_t ev_cnt0_cfg;
+  /** @brief Event counter 1 value */
+  uint32_t ev_cnt1;
+  /** @brief Event counter 0 value */
+  uint32_t ev_cnt0;
+  /** @brief Interrupt enable mask */
+  uint32_t int_mask;
+  /** @brief Masked   interrupt status (read-only)*/
+  uint32_t int_mask_status;
+  /** @brief Unmasked interrupt status */
+  uint32_t int_raw_status;
+  /** @brief Interrupt clear */
+  uint32_t int_clr;
 
+/**
+ * @name Interrupt bit masks
+ *
+ * @{
+ */
+ 
+/** @brief DECERR from L3 */
+#define L2CC_INT_DECERR_MASK             0x00000100
+/** @brief SLVERR from L3 */
+#define L2CC_INT_SLVERR_MASK             0x00000080
+/** @brief Error on L2 data RAM (Read) */
+#define L2CC_INT_ERRRD_MASK              0x00000040
+/** @brief Error on L2 tag RAM (Read) */
+#define L2CC_INT_ERRRT_MASK              0x00000020
+/** @brief Error on L2 data RAM (Write) */
+#define L2CC_INT_ERRWD_MASK              0x00000010
+/** @brief Error on L2 tag RAM (Write) */
+#define L2CC_INT_ERRWT_MASK              0x00000008
+/** @brief Parity Error on L2 data RAM (Read) */
+#define L2CC_INT_PARRD_MASK              0x00000004
+/** @brief Parity Error on L2 tag RAM (Read) */
+#define L2CC_INT_PARRT_MASK              0x00000002
+/** @brief Event Counter1/0 Overflow Increment */
+#define L2CC_INT_ECNTR_MASK              0x00000001
+
+/** @} */
+ 
   uint8_t  reserved_224[0x730 - 0x224];
-  uint32_t cache_sync;                                  /* Drain the STB */
+  /** @brief Drain the STB */
+  uint32_t cache_sync;
   uint8_t  reserved_734[0x770 - 0x734];
-  uint32_t inv_pa;                                      /* Invalidate line by PA */
+  /** @brief Invalidate line by PA */
+  uint32_t inv_pa;
   uint8_t  reserved_774[0x77c - 0x774];
-  uint32_t inv_way;                                     /* Invalidate by Way */
+  /** @brief Invalidate by Way */
+  uint32_t inv_way;
   uint8_t  reserved_780[0x7b0 - 0x780];
-  uint32_t clean_pa;                                    /* Clean Line by PA */
+  /** @brief Clean Line by PA */
+  uint32_t clean_pa;
   uint8_t  reserved_7b4[0x7b8 - 0x7b4];
-  uint32_t clean_index;                                 /* Clean Line by Set/Way */
-  uint32_t clean_way;                                   /* Clean by Way */
+  /** @brief Clean Line by Set/Way */
+  uint32_t clean_index;
+  /** @brief Clean by Way */
+  uint32_t clean_way;
   uint8_t  reserved_7c0[0x7f0 - 0x7c0];
-  uint32_t clean_inv_pa;                                /* Clean and Invalidate Line by PA */
+  /** @brief Clean and Invalidate Line by PA */
+  uint32_t clean_inv_pa;
   uint8_t  reserved_7f4[0x7f8 - 0x7f4];
-  uint32_t clean_inv_indx;                              /* Clean and Invalidate Line by Set/Way */
-  uint32_t clean_inv_way;                               /* Clean and Invalidate by Way */
+  /** @brief Clean and Invalidate Line by Set/Way */
+  uint32_t clean_inv_indx;
+  /** @brief Clean and Invalidate by Way */
+  uint32_t clean_inv_way;
 
-  uint8_t  reserved_800[0x900 - 0x800];
-  uint32_t d_lockdown_0;                                /* Data        lock down 0 */
-  uint32_t i_lockdown_0;                                /* Instruction lock down 0 */
-  uint32_t d_lockdown_1;                                /* Data        lock down 1 */
-  uint32_t i_lockdown_1;                                /* Instruction lock down 1 */
-  uint32_t d_lockdown_2;                                /* Data        lock down 2 */
-  uint32_t i_lockdown_2;                                /* Instruction lock down 2 */
-  uint32_t d_lockdown_3;                                /* Data        lock down 3 */
-  uint32_t i_lockdown_3;                                /* Instruction lock down 3 */
-  uint32_t d_lockdown_4;                                /* Data        lock down 4 */
-  uint32_t i_lockdown_4;                                /* Instruction lock down 4 */
-  uint32_t d_lockdown_5;                                /* Data        lock down 5 */
-  uint32_t i_lockdown_5;                                /* Instruction lock down 5 */
-  uint32_t d_lockdown_6;                                /* Data        lock down 6 */
-  uint32_t i_lockdown_6;                                /* Instruction lock down 6 */
-  uint32_t d_lockdown_7;                                /* Data        lock down 7 */
-  uint32_t i_lockdown_7;                                /* Instruction lock down 7 */
+  /** @brief Data        lock down 0 */
+  uint32_t d_lockdown_0;
+  /** @brief Instruction lock down 0 */
+  uint32_t i_lockdown_0;
+  /** @brief Data        lock down 1 */
+  uint32_t d_lockdown_1;
+  /** @brief Instruction lock down 1 */
+  uint32_t i_lockdown_1;
+  /** @brief Data        lock down 2 */
+  uint32_t d_lockdown_2;
+  /** @brief Instruction lock down 2 */
+  uint32_t i_lockdown_2;
+  /** @brief Data        lock down 3 */
+  uint32_t d_lockdown_3;
+  /** @brief Instruction lock down 3 */
+  uint32_t i_lockdown_3;
+  /** @brief Data        lock down 4 */
+  uint32_t d_lockdown_4;
+  /** @brief Instruction lock down 4 */
+  uint32_t i_lockdown_4;
+  /** @brief Data        lock down 5 */
+  uint32_t d_lockdown_5;
+  /** @brief Instruction lock down 5 */
+  uint32_t i_lockdown_5;
+  /** @brief Data        lock down 6 */
+  uint32_t d_lockdown_6;
+  /** @brief Instruction lock down 6 */
+  uint32_t i_lockdown_6;
+  /** @brief Data        lock down 7 */
+  uint32_t d_lockdown_7;
+  /** @brief Instruction lock down 7 */
+  uint32_t i_lockdown_7;
 
   uint8_t  reserved_940[0x950 - 0x940];
-  uint32_t lock_line_en;                                /* Lockdown by Line Enable */
-  uint32_t unlock_way;                                  /* Cache lockdown by way */
+  /** @brief Lockdown by Line Enable */
+  uint32_t lock_line_en;
+  /** @brief Cache lockdown by way */
+  uint32_t unlock_way;
 
   uint8_t  reserved_958[0xc00 - 0x958];
-  uint32_t addr_filtering_start;                        /* Address range redirect, part 1 */
-  uint32_t addr_filtering_end;                          /* Address range redirect, part 2 */
-#define L2CC_ADDR_FILTER_VALID_MASK      0xFFF00000     /* Address filtering valid bits*/
-#define L2CC_ADDR_FILTER_ENABLE_MASK     0x00000001     /* Address filtering enable bit*/
+  /** @brief Address range redirect, part 1 */
+  uint32_t addr_filtering_start;
+  /** @brief Address range redirect, part 2 */
+  uint32_t addr_filtering_end;
+/** @brief Address filtering valid bits*/
+#define L2CC_ADDR_FILTER_VALID_MASK      0xFFF00000
+/** @brief Address filtering enable bit*/
+#define L2CC_ADDR_FILTER_ENABLE_MASK     0x00000001
 
   uint8_t  reserved_c08[0xf40 - 0xc08];
-  uint32_t debug_ctrl;                                  /* Debug control */
-#define L2CC_DEBUG_SPIDEN_MASK           0x00000004     /* Debug SPIDEN bit */
-#define L2CC_DEBUG_DWB_MASK              0x00000002     /* Debug DWB bit, forces write through */
-#define L2CC_DEBUG_DCL_MASK              0x00000002     /* Debug DCL bit, disables cache line fill */
+  /** @brief Debug control */
+  uint32_t debug_ctrl;
+/** @brief Debug SPIDEN bit */
+#define L2CC_DEBUG_SPIDEN_MASK           0x00000004
+/** @brief Debug DWB bit, forces write through */
+#define L2CC_DEBUG_DWB_MASK              0x00000002
+/** @breif Debug DCL bit, disables cache line fill */
+#define L2CC_DEBUG_DCL_MASK              0x00000002
 
   uint8_t  reserved_f44[0xf60 - 0xf44];
-  uint32_t prefetch_ctrl;                               /* Purpose prefetch enables */
+  /** @brief Purpose prefetch enables */
+  uint32_t prefetch_ctrl;
   uint8_t  reserved_f64[0xf80 - 0xf64];
-  uint32_t power_ctrl;                                  /* Purpose power controls */
+  /** @brief Purpose power controls */
+  uint32_t power_ctrl;
 } L2CC;
 
 static inline void
@@ -882,5 +980,7 @@ _CPU_cache_unfreeze_instruction(void)
   zynq_cache_l1_cache_unfreeze_instruction();
   zynq_cache_l2_cache_unfreeze();
 }
+
+/** @} */
 
 #endif /* LIBBSP_ARM_ZYNQ_CACHE__H */

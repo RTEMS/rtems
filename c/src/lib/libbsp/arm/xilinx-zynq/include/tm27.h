@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup zynq_tm27
+ * @brief Interrupt mechanisms for tm27 test.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
@@ -18,6 +24,12 @@
 
 #ifndef __tm27_h
 #define __tm27_h
+
+/**
+ * @defgroup zynq_tm27 TM27 Test Support
+ * @ingroup arm_zynq
+ * @brief Interrupt Mechanisms for tm27 test
+ */
 
 #include <bsp/arm-gic-tm27.h>
 

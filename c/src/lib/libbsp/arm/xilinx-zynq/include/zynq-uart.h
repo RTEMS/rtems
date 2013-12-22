@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup zynq_uart
+ * @brief UART support.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
@@ -20,6 +26,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @defgroup zynq_uart UART Support
+ * @ingroup arm_zynq
+ * @brief UART Support
+ */
 
 extern const console_fns zynq_uart_fns;
 

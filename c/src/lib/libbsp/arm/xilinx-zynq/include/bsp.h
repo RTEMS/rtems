@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup arm_zynq
+ * @brief Global BSP definitions.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
@@ -32,6 +38,13 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ * @defgroup arm_zynq Xilinx-Zynq Support
+ * @ingroup bsp_arm
+ * @brief Xilinz-Zynq Board Support Package
+ * @{
+ */
+
 #define BSP_ARM_A9MPCORE_SCU_BASE 0xf8f00000
 
 #define BSP_ARM_GIC_CPUIF_BASE 0xf8f00100
@@ -47,13 +60,17 @@ typedef enum {
 
 void zynq_fatal(zynq_fatal_code code) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
-/*
- * Zynq specific set up of the MMU. Provide in the application to override
+/**
+ * @brief Zynq specific set up of the MMU.
+ *
+ * Provide in the application to override
  * the defaults in the BSP. Note the defaults do not map in the GP0 and GP1
  * AXI ports. You should add the specific regions that map into your
  * PL rather than just open the whole of the GP[01] address space up.
  */
 BSP_START_TEXT_SECTION void zynq_setup_mmu_and_cache(void);
+
+/** @} */
 
 #ifdef __cplusplus
 }

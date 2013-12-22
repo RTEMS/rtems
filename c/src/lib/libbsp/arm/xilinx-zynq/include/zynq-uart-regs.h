@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup zynq_uart_regs
+ * @brief UART register definitions.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
@@ -10,6 +16,13 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
+ */
+
+/**
+ * @defgroup zynq_uart_regs UART Register Definitions
+ * @ingroup zynq_uart
+ * @brief UART Register Definitions
+ * @{
  */
 
 #ifndef LIBBSP_ARM_XILINX_ZYNQ_UART_REGS_H
@@ -129,5 +142,7 @@ typedef struct {
 #define ZYNQ_UART_TX_FIFO_TRG_LVL_TTRIG_GET(reg) BSP_FLD32GET(reg, 0, 5)
 #define ZYNQ_UART_TX_FIFO_TRG_LVL_TTRIG_SET(reg, val) BSP_FLD32SET(reg, val, 0, 5)
 } zynq_uart;
+
+/** @} */
 
 #endif /* LIBBSP_ARM_XILINX_ZYNQ_UART_REGS_H */
