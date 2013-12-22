@@ -125,14 +125,10 @@ extern "C" {
  * @{
  */
 
-/** @brief osc freq,10MHz~25MHz, change to a real one if needed */
-#define Fosc    11059200
-/** @brief system freq 2^n time of  Fosc(1~32) <=60MHZ */
-#define Fcclk   (Fosc << 2)
-/** @brief CCO freq 2,4,8,16 time of Fcclk 156MHz~320MHz */
-#define Fcco    (Fcclk <<2)
-/** @brief VPB freq only(Fcclk / 4) 1~4 */
-#define Fpclk   (Fcclk >>2) * 1
+#define Fosc    11059200          /** @brief osc freq,10MHz~25MHz, change to a real one if needed */
+#define Fcclk   (Fosc << 2)       /** @brief system freq 2^n time of  Fosc(1~32) <=60MHZ */
+#define Fcco    (Fcclk <<2)       /** @brief CCO freq 2,4,8,16 time of Fcclk 156MHz~320MHz */
+#define Fpclk   (Fcclk >>2) * 1   /** @brief VPB freq only(Fcclk / 4) 1~4 */
 /* This was M.  That is a BAD BAD public constant.  I renamed it to
  * JOEL_M so it wouldn't conflict with user code.  If you can find
  * a better name, fix this.  But nothing I found uses it.
@@ -177,12 +173,10 @@ extern "C" {
  */
 
 //#define FLASH_SIZE      (0x200000-FLASH_BOOT)   // Total area of Flash region in words 8 bit
-/** @brief Total area of Flash region in words 8 bit */
-#define FLASH_SIZE        (0x80000-FLASH_BOOT)
+#define FLASH_SIZE        (0x80000-FLASH_BOOT)   /** @brief Total area of Flash region in words 8 bit */
 //#define FLASH_SIZE      (0x80000-FLASH_BOOT)      // Total area of Flash region in words 8 bit
 #define FLASH_BEGIN       0x80000000
-/** @brief First 0x8000 bytes reserved for boot loader etc. */
-#define FLASH_BASE        (FLASH_BEGIN+FLASH_BOOT)
+#define FLASH_BASE        (FLASH_BEGIN+FLASH_BOOT)   /** @brief First 0x8000 bytes reserved for boot loader etc. */
 
 /** @} */
 
@@ -191,10 +185,8 @@ extern "C" {
  * @{
  */
 
-/** @brief Total area of Flash region in words 8 bit */
-#define SRAM_SIZE         0x100000
-/** @brief First 0x8000 bytes reserved for boot loader etc. */
-#define SRAM_BASE         0x81000000
+#define SRAM_SIZE         0x100000                  /** @brief Total area of Flash region in words 8 bit */
+#define SRAM_BASE         0x81000000                /** @brief First 0x8000 bytes reserved for boot loader etc. */
 
 /** @} */
 
