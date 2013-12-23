@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_milkymist_ac97 lm32_milkymist_shared
+ * @brief Milkymist AC97 driver
+ */
+
 /*  milkymist_ac97.h
  *
  *  Milkymist AC97 driver for RTEMS
@@ -7,6 +13,13 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  COPYRIGHT (c) 2010 Sebastien Bourdeauducq
+ */
+
+/**
+ * @defgroup lm32_milkymist_ac97 Milkymist AC97
+ * @ingroup lm32_milkymist_shared
+ * @brief Milkymist AC97 driver
+ * @{
  */
 
 #ifndef __MILKYMIST_AC97_H_
@@ -53,6 +66,8 @@ rtems_device_driver ac97_control(
 
 #define AC97_DRIVER_TABLE_ENTRY {ac97_initialize, \
 ac97_open, NULL, NULL, NULL, ac97_control}
+
+/** @} */
 
 #ifdef __cplusplus
 }

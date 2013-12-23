@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_milkymist_versions lm32_milkymist_shared
+ * @brief Milkymist versioning driver
+ */
+
 /*  milkymist_versions.h
  *
  *  Milkymist versioning driver for RTEMS
@@ -7,6 +13,13 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  COPYRIGHT (c) 2010 Sebastien Bourdeauducq
+ */
+
+/**
+ * @defgroup lm32_milkymist_versions Milkymist versioning
+ * @ingroup lm32_milkymist_shared
+ * @brief Milkymist versioning driver
+ * @{
  */
 
 #ifndef __MILKYMIST_VERSIONS_H_
@@ -30,6 +43,8 @@ rtems_device_driver versions_read(
 
 #define VERSIONS_DRIVER_TABLE_ENTRY {versions_initialize, \
 NULL, NULL, versions_read, NULL, NULL}
+
+/** @} */
 
 #ifdef __cplusplus
 }

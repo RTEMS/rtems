@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_milkymist_network lm32_milkymist_shared
+ * @brief Driver for Minimac ethernet
+ */
+
 /*  network.h
  *
  *  RTEMS driver for Minimac ethernet IP-core of Milkymist SoC
@@ -10,6 +16,12 @@
  *  Telecom SudParis, France
  */
 
+/**
+ * @defgroup lm32_milkymist_network Minimac ethernet driver
+ * @ingroup lm32_milkymist_shared
+ * @brief Driver for Minimac ethernet IP-core of Milkymist SoC
+ * @{
+ */
 
 #ifndef __MILKYMIST_NETWORKING_H_
 #define __MILKYMIST_NETWORKING_H_

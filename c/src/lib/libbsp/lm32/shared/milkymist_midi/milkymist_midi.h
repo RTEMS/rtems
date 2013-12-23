@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_milkymist_midi lm32_milkymist_shared
+ * @brief Milkymist MIDI driver
+ */
+
 /*  milkymist_midi.h
  *
  *  Milkymist MIDI driver for RTEMS
@@ -7,6 +13,13 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  COPYRIGHT (c) 2010 Sebastien Bourdeauducq
+ */
+
+/**
+ * @defgroup lm32_milkymist_midi Milkymist MIDI
+ * @ingroup lm32_milkymist_shared
+ * @brief Milkymist MIDI driver
+ * @{
  */
 
 #ifndef __MILKYMIST_MIDI_H_
@@ -36,6 +49,8 @@ rtems_device_driver midi_read(
 
 #define MIDI_DRIVER_TABLE_ENTRY {midi_initialize, \
 midi_open, NULL, midi_read, NULL, NULL}
+
+/** @} */
 
 #ifdef __cplusplus
 }

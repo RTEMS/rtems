@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_tsmac
+ * @brief LatticeMico32 TSMAC (Tri-Speed MAC) definitions
+ */
+
 /*
  *  This file contains definitions for LatticeMico32 TSMAC (Tri-Speed MAC)
  *

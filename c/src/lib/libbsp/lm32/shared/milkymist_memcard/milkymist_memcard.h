@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_milkymist_memcard lm32_milkymist_shared
+ * @brief Milkymist memory card driver
+ */
+
 /*  milkymist_memcard.h
  *
  *  Milkymist memory card driver for RTEMS
@@ -9,9 +15,18 @@
  *  COPYRIGHT (c) 2010 Sebastien Bourdeauducq
  */
 
+/**
+ * @defgroup lm32_milkymist_memcard Milkymist memory card
+ * @ingroup lm32_milkymist_shared
+ * @brief Milkymist memory card driver
+ * @{
+ */
+
 #ifndef __MILKYMIST_MEMCARD_H_
 #define __MILKYMIST_MEMCARD_H_
 
 rtems_status_code memcard_register(void);
 
 #endif /* __MILKYMIST_MEMCARD_H_ */
+
+/** @} */

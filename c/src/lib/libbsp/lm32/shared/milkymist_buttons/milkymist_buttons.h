@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_milkymist_buttons lm32_milkymist_shared
+ * @brief Milkymist buttons driver
+ */
+
 /*  milkymist_buttons.h
  *
  *  Milkymist buttons driver for RTEMS
@@ -7,6 +13,13 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  COPYRIGHT (c) 2011 Sebastien Bourdeauducq
+ */
+
+/**
+ * @defgroup lm32_milkymist_buttons Milkymist buttons
+ * @ingroup lm32_milkymist_shared
+ * @brief Milkymist buttons driver
+ * @{
  */
 
 #ifndef __MILKYMIST_BUTTONS_H_
@@ -36,6 +49,8 @@ rtems_device_driver buttons_read(
 
 #define BUTTONS_DRIVER_TABLE_ENTRY { buttons_initialize, \
 buttons_open, NULL, buttons_read, NULL, NULL}
+
+/** @} */
 
 #ifdef __cplusplus
 }

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_gdb
+ * @brief definition of the interface between the stub and gdb
+ */
+
 /*
  * gdb_if.h - definition of the interface between the stub and gdb
  *
@@ -12,10 +18,17 @@
  *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+/**
+ * @defgroup lm32_gdb LM32 GDB Interface
+ * @ingroup lm32_shared
+ * @brief Definition of the interface between the stub and gdb,
+ * @{
+ */
+
 #ifndef _GDB_IF_H
 #define _GDB_IF_H
 
-/* Max number of threads in qM response */
+/** @brief Max number of threads in qM response */
 #define QM_MAX_THREADS (20)
 
 struct rtems_gdb_stub_thread_info {
@@ -70,7 +83,7 @@ void rtems_gdb_process_query(
   int   thread
 );
 
-/* Exception IDs */
+/** @brief Exception IDs */
 #define LM32_EXCEPTION_RESET                  0x0
 #define LM32_EXCEPTION_INST_BREAKPOINT        0x1
 #define LM32_EXCEPTION_INST_BUS_ERROR         0x2
@@ -80,10 +93,10 @@ void rtems_gdb_process_query(
 #define LM32_EXCEPTION_INTERRUPT              0x6
 #define LM32_EXCEPTION_SYSTEM_CALL            0x7
 
-/* Breakpoint instruction */
+/** @brief Breakpoint instruction */
 #define LM32_BREAK                            0xac000002UL
 
-/* This numbering must be consistant with GDBs numbering in gdb/lm32-tdep.c */
+/** @brief This numbering must be consistant with GDBs numbering in gdb/lm32-tdep.c */
 enum lm32_regnames {
   LM32_REG_R0, LM32_REG_R1, LM32_REG_R2, LM32_REG_R3, LM32_REG_R4, LM32_REG_R5,
   LM32_REG_R6, LM32_REG_R7, LM32_REG_R8, LM32_REG_R9, LM32_REG_R10,
@@ -108,3 +121,5 @@ enum lm32_int_regnames {
 };
 
 #endif /* _GDB_IF_H */
+
+/** @} */

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_milkymist_tmu lm32_milkymist_shared
+ * @brief Milkymist TMU driver
+ */
+
 /*  milkymist_tmu.h
  *
  *  Milkymist TMU driver for RTEMS
@@ -7,6 +13,13 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  COPYRIGHT (c) 2010 Sebastien Bourdeauducq
+ */
+
+/**
+ * @defgroup lm32_milkymist_tmu Milkymist TMU
+ * @ingroup lm32_milkymist_shared
+ * @brief Milkymist TMU driver
+ * @{
  */
 
 #ifndef __MILKYMIST_TMU_H_
@@ -75,6 +88,8 @@ rtems_device_driver tmu_control(
 
 #define TMU_DRIVER_TABLE_ENTRY {tmu_initialize, \
 NULL, NULL, NULL, NULL, tmu_control}
+
+/** @} */
 
 #ifdef __cplusplus
 }

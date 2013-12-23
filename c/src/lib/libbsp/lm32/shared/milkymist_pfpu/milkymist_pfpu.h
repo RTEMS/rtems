@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_milkymist_pfpu lm32_milkymist_shared
+ * @brief Milkymist PFPU driver
+ */
+
 /*  milkymist_pfpu.h
  *
  *  Milkymist PFPU driver for RTEMS
@@ -7,6 +13,13 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  COPYRIGHT (c) 2010 Sebastien Bourdeauducq
+ */
+
+/**
+ * @defgroup lm32_milkymist_pfpu Milkymist PFPU
+ * @ingroup lm32_milkymist_shared
+ * @brief Milkymist PFPU driver
+ * @{
  */
 
 #ifndef __MILKYMIST_PFPU_H_
@@ -29,8 +42,10 @@ struct pfpu_td {
 	unsigned int *program;
 	unsigned int progsize;
 	float *registers;
-	bool update; /* < shall we update the "registers" array after completion */
-	bool invalidate; /* < shall we invalidate L1 data cache after completion */
+	/** @brief shall we update the "registers" array after completion */
+	bool update;
+	/** @brief shall we invalidate L1 data cache after completion */
+	bool invalidate;
 };
 
 rtems_device_driver pfpu_initialize(
@@ -47,6 +62,8 @@ rtems_device_driver pfpu_control(
 
 #define PFPU_DRIVER_TABLE_ENTRY {pfpu_initialize, \
 NULL, NULL, NULL, NULL, pfpu_control}
+
+/** @} */
 
 #ifdef __cplusplus
 }

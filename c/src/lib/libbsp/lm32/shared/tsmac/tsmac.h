@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_tsmac
+ * @brief LatticeMico32 TSMAC (Tri-Speed MAC) definitions.
+ */
+
 /*
  *  This file contains definitions for LatticeMico32 TSMAC (Tri-Speed MAC)
  *
@@ -10,6 +16,13 @@
  *
  *  Jukka Pietarinen <jukka.pietarinen@mrf.fi>, 2008,
  *  Micro-Research Finland Oy
+ */
+
+/**
+ * @defgroup lm32_tsmac LM32 TSMAC
+ * @ingroup lm32_shared
+ * @brief LatticeMico32 TSMAC (Tri-Speed MAC) definitions.
+ * @{
  */
 
 #ifndef _BSPTSMAC_H
@@ -156,3 +169,4 @@ void ipalign(struct mbuf *m);
 #endif
 
 #endif /* _BSPTSMAC_H */
+/** @} */

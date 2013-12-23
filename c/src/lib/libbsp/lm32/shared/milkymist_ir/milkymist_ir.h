@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_milkymist_ir lm32_milkymist_shared
+ * @brief Milkymist RC5 IR driver
+ */
+
 /*  milkymist_ir.h
  *
  *  Milkymist RC5 IR driver for RTEMS
@@ -7,6 +13,13 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  COPYRIGHT (c) 2010 Sebastien Bourdeauducq
+ */
+
+/**
+ * @defgroup lm32_milkymist_ir Milkymist IR
+ * @ingroup lm32_milkymist_shared
+ * @brief Milkymist RC5 IR driver
+ * @{
  */
 
 #ifndef __MILKYMIST_IR_H_
@@ -36,6 +49,8 @@ rtems_device_driver ir_read(
 
 #define IR_DRIVER_TABLE_ENTRY {ir_initialize, \
 ir_open, NULL, ir_read, NULL, NULL}
+
+/** @} */
 
 #ifdef __cplusplus
 }

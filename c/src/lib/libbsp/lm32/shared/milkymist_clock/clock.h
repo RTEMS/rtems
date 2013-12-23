@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_clock lm32_milkymist_shared
+ * @brief LatticeMico32 Timer (Clock) definitions
+ */
+
 /*
  *  This file contains definitions for LatticeMico32 Timer (Clock)
  *

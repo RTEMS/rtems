@@ -1,9 +1,22 @@
+/**
+ * @file
+ * @ingroup lm32_milkymist_uart lm32_milkymist_shared
+ * @brief Milkymist UART definitions
+ */
+
 /*
  *  This file contains definitions for the Milkymist UART
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
+ */
+
+/**
+ * @defgroup lm32_milkymist_uart Milkymist UART
+ * @ingroup lm32_milkymist_shared
+ * @brief Milkymist UART definitions
+ * @{
  */
 
 #ifndef _BSPUART_H
@@ -14,3 +27,5 @@ void BSP_uart_polled_write(char ch);
 int BSP_uart_polled_read(void);
 
 #endif /* _BSPUART_H */
+
+/** @} */

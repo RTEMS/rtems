@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_milkymist_usbinput lm32_milkymist_shared
+ * @brief Milkymist USB input devices driver
+ */
+
 /*  comloc.h
  *
  *  Milkymist USB input devices driver for RTEMS
