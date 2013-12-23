@@ -1,3 +1,11 @@
+/**
+ *  @file
+ *
+ *  @ingroup arm_shared
+ *
+ *  @brief ARM PL111 FB Support
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *

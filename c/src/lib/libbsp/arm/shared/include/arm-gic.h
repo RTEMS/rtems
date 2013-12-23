@@ -1,3 +1,11 @@
+/**
+ *  @file
+ *
+ *  @ingroup arm_gic
+ *
+ *  @brief ARM GIC Support
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
@@ -22,6 +30,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ *  @defgroup arm_gic ARM GIC
+ *
+ *  @ingroup arm_shared
+ *
+ *  @brief ARM_GIC Support Package
+ */
 
 #define GIC_ID_TO_ONE_BIT_REG_INDEX(id) ((id) >> 5)
 #define GIC_ID_TO_ONE_BIT_REG_BIT(id) (1U << ((id) & 0x1fU))

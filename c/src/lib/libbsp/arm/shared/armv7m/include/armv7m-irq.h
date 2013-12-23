@@ -1,3 +1,11 @@
+/**
+  *  @file
+  *
+  *  @ingroup arm_shared
+  *
+  *  @brief ARMV7M Support
+  */
+
 /*
  * Copyright (c) 2012 Sebastian Huber.  All rights reserved.
  *

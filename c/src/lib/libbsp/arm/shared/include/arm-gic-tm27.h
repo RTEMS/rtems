@@ -1,3 +1,11 @@
+/**
+ *  @file
+ *
+ *  @ingroup arm_gic
+ *
+ *  @brief ARM GIC TM27 Support
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *

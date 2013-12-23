@@ -1,3 +1,11 @@
+/**
+ *  @file
+ *
+ *  @ingroup arm_shared
+ *
+ *  @brief ARM_A9MPCORE_REGS Support
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *

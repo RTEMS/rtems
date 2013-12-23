@@ -1,3 +1,11 @@
+/**
+ *  @file
+ *
+ *  @ingroup arm_gic
+ *
+ *  @brief ARM GIC Register definitions
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
