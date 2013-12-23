@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_shared lm32_uart
+ * @brief LatticeMico32 UART definitions
+ */
+
 /*
  *  This file contains definitions for LatticeMico32 UART
  *
@@ -10,6 +16,13 @@
  *
  *  Jukka Pietarinen <jukka.pietarinen@mrf.fi>, 2008,
  *  Micro-Research Finland Oy
+ */
+
+/**
+ * @defgroup lm32_uart LM32 UART
+ * @ingroup lm32_shared
+ * @brief LatticeMico32 UART definitions
+ * @{
  */
 
 #ifndef _BSPUART_H
@@ -85,3 +98,5 @@ void BSP_uart_init(int baud);
 #define LM32_UART_DIV      (0x001C)
 
 #endif /* _BSPUART_H */
+
+/** @} */

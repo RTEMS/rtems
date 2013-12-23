@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup lm32_milkymist_flash lm32_milkymist_shared
+ * @brief Milkymist Flash
+ */
+
 /*  milkymist_flash.h
  *  
  *  Copyright (C) 2010 Sebastien Bourdeauducq
@@ -6,6 +12,13 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
+ */
+
+/**
+ * @defgroup lm32_milkymist_flash Milkymist Flash
+ * @ingroup lm32_milkymist_shared
+ * @brief Milkymist Flash
+ * @{
  */
 
 #ifndef __MILKYMIST_FLASH_H_

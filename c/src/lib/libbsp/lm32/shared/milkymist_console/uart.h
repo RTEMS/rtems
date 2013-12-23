@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_uart lm32_milkymist_shared
+ * @ingroup lm32_uart lm32_milkymist_shared
  * @brief Milkymist UART definitions
  */
 
@@ -12,13 +12,6 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-/**
- * @defgroup lm32_milkymist_uart Milkymist UART
- * @ingroup lm32_milkymist_shared
- * @brief Milkymist UART definitions
- * @{
- */
-
 #ifndef _BSPUART_H
 #define _BSPUART_H
 
@@ -27,5 +20,3 @@ void BSP_uart_polled_write(char ch);
 int BSP_uart_polled_read(void);
 
 #endif /* _BSPUART_H */
-
-/** @} */
