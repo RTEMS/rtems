@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup i386_pcibios
+ * @brief
+ */
+
 /*
  * This software is Copyright (C) 1998 by T.sqware - all rights limited
  * It is provided in to the public domain "as is", can be freely modified
@@ -5,18 +11,25 @@
  * an endorsement by T.sqware of the product in which it is included.
  */
 
+/**
+ * @defgroup i386_pcibios
+ * @ingroup i386_pci
+ * @brief
+ * @{
+ */
+
 #ifndef _PCIB_H
 #define _PCIB_H
 
 #include <rtems/pci.h>
 
-/*
+/** @brief
  * Make device signature from bus number, device numebr and function
  * number
  */
 #define PCIB_DEVSIG_MAKE(b,d,f) ((b<<8)|(d<<3)|(f))
 
-/*
+/** @brief
  * Extract valrous part from device signature
  */
 #define PCIB_DEVSIG_BUS(x) (((x)>>8) &0xff)
@@ -39,6 +52,8 @@ int pcib_conf_write32(int sig, int off, uint32_t data);
 int
 pci_find_device( unsigned short vendorid, unsigned short deviceid,
                    int instance, int *pbus, int *pdev, int *pfun );
+
+/** @} */
 
 #ifdef __cplusplus
 }

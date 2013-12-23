@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup i386_io
+ * @brief I/O
+ */
+
 /*
  * Copyright (c) 2000 - Rosimildo da Silva.  All Rights Reserved.
  *
@@ -8,6 +14,13 @@
  *
  *  by: Rosimildo da Silva:  rdasilva@connecttel.com
  *
+ */
+
+/**
+ * @defgroup i386_io I/O
+ * @ingroup i386_comm
+ * @brief I/O
+ * @{
  */
 
 #ifndef i386_io_h__
@@ -56,3 +69,5 @@
 #define sti()   __asm__ __volatile__("sti");
 
 #endif /* i386_io_h__ */
+
+/** @} */

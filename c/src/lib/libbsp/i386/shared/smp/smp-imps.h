@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @ingroup i386_smp
+ * @brief Intel MultiProcessor Specification (MPS)
+ * version 1.1 and 1.4 SMP hardware control
+ */
+
 /*
  * Author: Erich Boleyn  <erich@uruk.org>
  *         http://www.uruk.org/~erich/
@@ -51,6 +58,15 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
+/**
+ *  @defgroup i386_smp SMP
+ *  @ingroup i386_shared
+ *  @brief
+ *  Header file implementing Intel MultiProcessor Specification (MPS)
+ *  version 1.1 and 1.4 SMP hardware control for Intel Architecture CPUs,
+ *  with hooks for running correctly on a standard PC without the hardware.
+ */
+
 #ifndef _SMP_IMPS_H
 #define _SMP_IMPS_H
 
@@ -74,7 +90,7 @@
 
 #define IMPS_MAX_CPUS                   APIC_BCAST_ID
 
-/*
+/** @brief
  *  This is the value that must be in the "sig" member of the MP
  *  Floating Pointer Structure.
  */
@@ -82,13 +98,13 @@
 #define IMPS_FPS_IMCRP_BIT      0x80
 #define IMPS_FPS_DEFAULT_MAX    7
 
-/*
+/** @brief
  *  This is the value that must be in the "sig" member of the MP
  *  Configuration Table Header.
  */
 #define IMPS_CTH_SIGNATURE      ('P' | ('C'<<8) | ('M'<<16) | ('P'<<24))
 
-/*
+/** @brief
  *  These are the "type" values for Base MP Configuration Table entries.
  */
 #define         IMPS_FLAG_ENABLED       1
@@ -108,8 +124,8 @@
  *  Typedefs and data item definitions done here.
  */
 
-typedef struct imps_fps imps_fps;       /* MP floating pointer structure */
-typedef struct imps_cth imps_cth;       /* MP configuration table header */
+typedef struct imps_fps imps_fps;       ///< MP floating pointer structure
+typedef struct imps_cth imps_cth;       ///< MP configuration table header
 typedef struct imps_processor imps_processor;
 typedef struct imps_bus imps_bus;
 typedef struct imps_ioapic imps_ioapic;
@@ -120,7 +136,7 @@ typedef struct imps_interrupt imps_interrupt;
  *  Data structures defined here
  */
 
-/*
+/** @brief
  *  MP Floating Pointer Structure (fps)
  *
  *  Look at page 4-3 of the MP spec for the starting definitions of
@@ -136,7 +152,7 @@ struct imps_fps
   unsigned char feature_info[5];
 };
 
-/*
+/** @brief
  *  MP Configuration Table Header  (cth)
  *
  *  Look at page 4-5 of the MP spec for the starting definitions of
@@ -159,7 +175,7 @@ struct imps_cth
         char reserved[1];
 };
 
-/*
+/** @brief
  *  Base MP Configuration Table Types.  They are sorted according to
  *  type (i.e. all of type 0 come first, etc.).  Look on page 4-6 for
  *  the start of the descriptions.
@@ -167,7 +183,7 @@ struct imps_cth
 
 struct imps_processor
 {
-  unsigned char type;                     /* must be 0 */
+  unsigned char type;                     ///< must be 0
   unsigned char apic_id;
   unsigned char apic_ver;
   unsigned char flags;
@@ -178,14 +194,14 @@ struct imps_processor
 
 struct imps_bus
 {
-  unsigned char type;                     /* must be 1 */
+  unsigned char type;                     ///< must be 1
   unsigned char id;
   char bus_type[6];
 };
 
 struct imps_ioapic
 {
-  unsigned char type;                     /* must be 2 */
+  unsigned char type;                     ///< must be 2
   unsigned char id;
   unsigned char ver;
   unsigned char flags;
@@ -194,7 +210,7 @@ struct imps_ioapic
 
 struct imps_interrupt
 {
-  unsigned char type;                     /* must be 3 or 4 */
+  unsigned char type;                     ///< must be 3 or 4
   unsigned char int_type;
   unsigned short flags;
   unsigned char source_bus_id;
@@ -207,13 +223,13 @@ struct imps_interrupt
  *  Exported globals here.
  */
 
-/*
+/** @brief
  *  These map from virtual cpu numbers to APIC id's and back.
  */
 extern unsigned char imps_cpu_apic_map[IMPS_MAX_CPUS];
 extern unsigned char imps_apic_cpu_map[IMPS_MAX_CPUS];
 
-/* base address of application processor reset code at 0x70000 */
+/** @brief base address of application processor reset code at 0x70000 */
 extern char _binary_appstart_bin_start[];
 extern char _binary_appstart_bin_size[];
 
@@ -226,3 +242,4 @@ extern char _binary_appstart_bin_size[];
 
 #endif  /* !_SMP_IMPS_H */
 
+/** @} */

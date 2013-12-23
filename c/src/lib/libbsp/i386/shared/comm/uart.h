@@ -1,8 +1,21 @@
+/**
+ * @file
+ * @ingroup i386_uart
+ * @brief i386 UART definitions
+ */
+
 /*
  * This software is Copyright (C) 1998 by T.sqware - all rights limited
  * It is provided in to the public domain "as is", can be freely modified
  * as far as this copyight notice is kept unchanged, but does not imply
  * an endorsement by T.sqware of the product in which it is included.
+ */
+
+/**
+ * @defgroup i386_uart UART
+ * @ingroup i386_comm
+ * @brief i386 UART definitions
+ * @{
  */
 
 #ifndef _BSPUART_H
@@ -34,57 +47,58 @@ extern int BSP_poll_char_via_serial(void);
 extern void BSP_output_char_via_serial(char val);
 extern int BSPConsolePort;
 extern int BSPBaseBaud;
-/*
+
+/** @brief
  * Command values for BSP_uart_intr_ctrl(),
  * values are strange in order to catch errors
  * with assert
  */
 #define BSP_UART_INTR_CTRL_DISABLE  (0)
-#define BSP_UART_INTR_CTRL_GDB      (0xaa) /* RX only */
-#define BSP_UART_INTR_CTRL_ENABLE   (0xbb) /* Normal operations */
-#define BSP_UART_INTR_CTRL_TERMIOS  (0xcc) /* RX & line status */
+#define BSP_UART_INTR_CTRL_GDB      (0xaa) ///< RX only
+#define BSP_UART_INTR_CTRL_ENABLE   (0xbb) ///< Normal operations
+#define BSP_UART_INTR_CTRL_TERMIOS  (0xcc) ///< RX & line status
 
-/* Return values for uart_polled_status() */
-#define BSP_UART_STATUS_ERROR    (-1) /* No character */
-#define BSP_UART_STATUS_NOCHAR   (0)  /* No character */
-#define BSP_UART_STATUS_CHAR     (1)  /* Character present */
-#define BSP_UART_STATUS_BREAK    (2)  /* Break point is detected */
+/** @brief Return values for uart_polled_status() */
+#define BSP_UART_STATUS_ERROR    (-1) ///< No character
+#define BSP_UART_STATUS_NOCHAR   (0)  ///< No character
+#define BSP_UART_STATUS_CHAR     (1)  ///< Character present
+#define BSP_UART_STATUS_BREAK    (2)  ///< Break point is detected
 
-/* PC UART definitions */
+/** @brief PC UART definitions */
 #define BSP_UART_COM1            (0)
 #define BSP_UART_COM2            (1)
 
-/*
+/** @brief
  * Base IO for UART
  */
 
 #define COM1_BASE_IO	0x3F8
 #define COM2_BASE_IO	0x2F8
 
-/*
+/** @brief
  * Offsets from base
  */
 
-/* DLAB 0 */
-#define RBR  (0)    /* Rx Buffer Register (read) */
-#define THR  (0)    /* Tx Buffer Register (write) */
-#define IER  (1)    /* Interrupt Enable Register */
+/** @brief DLAB 0 */
+#define RBR  (0)    ///< Rx Buffer Register (read)
+#define THR  (0)    ///< Tx Buffer Register (write)
+#define IER  (1)    ///< Interrupt Enable Register
 
-/* DLAB X */
-#define IIR  (2)    /* Interrupt Ident Register (read) */
-#define FCR  (2)    /* FIFO Control Register (write) */
-#define LCR  (3)    /* Line Control Register */
-#define MCR  (4)    /* Modem Control Register */
-#define LSR  (5)    /* Line Status Register */
-#define MSR  (6)    /* Modem Status  Register */
-#define SCR  (7)    /* Scratch register */
+/** @brief DLAB X */
+#define IIR  (2)    ///< Interrupt Ident Register (read)
+#define FCR  (2)    ///< FIFO Control Register (write)
+#define LCR  (3)    ///< Line Control Register
+#define MCR  (4)    ///< Modem Control Register
+#define LSR  (5)    ///< Line Status Register
+#define MSR  (6)    ///< Modem Status  Register
+#define SCR  (7)    ///< Scratch register
 
-/* DLAB 1 */
-#define DLL  (0)    /* Divisor Latch, LSB */
-#define DLM  (1)    /* Divisor Latch, MSB */
-#define AFR  (2)    /* Alternate Function register */
+/** @brief DLAB 1 */
+#define DLL  (0)    ///< Divisor Latch, LSB
+#define DLM  (1)    ///< Divisor Latch, MSB
+#define AFR  (2)    ///< Alternate Function register
 
-/*
+/** @brief
  * Interrupt source definition via IIR
  */
 #define MODEM_STATUS				0
@@ -94,7 +108,7 @@ extern int BSPBaseBaud;
 #define RECEIVER_ERROR  			6
 #define CHARACTER_TIMEOUT_INDICATION		12
 
-/*
+/** @brief
  * Bits definition of IER
  */
 #define	RECEIVE_ENABLE		0x1
@@ -103,28 +117,28 @@ extern int BSPBaseBaud;
 #define MODEM_ENABLE	   	0x8
 #define INTERRUPT_DISABLE	0x0
 
-/*
+/** @brief
  * Bits definition of the Line Status Register (LSR)
  */
-#define DR	0x01	/* Data Ready */
-#define OE	0x02	/* Overrun Error */
-#define PE	0x04	/* Parity Error */
-#define FE	0x08	/* Framing Error */
-#define BI	0x10	/* Break Interrupt */
-#define THRE	0x20	/* Transmitter Holding Register Empty */
-#define TEMT	0x40	/* Transmitter Empty */
-#define ERFIFO	0x80	/* Error receive Fifo */
+#define DR	0x01	///< Data Ready
+#define OE	0x02	///< Overrun Error
+#define PE	0x04	///< Parity Error
+#define FE	0x08	///< Framing Error
+#define BI	0x10	///< Break Interrupt
+#define THRE	0x20	///< Transmitter Holding Register Empty
+#define TEMT	0x40	///< Transmitter Empty
+#define ERFIFO	0x80	///< Error receive Fifo
 
-/*
+/** @brief
  * Bits definition of the MODEM Control Register (MCR)
  */
-#define DTR	0x01	/* Data Terminal Ready */
-#define RTS 	0x02	/* Request To Send */
-#define OUT_1	0x04	/* Output 1, (reserved on COMPAQ I/O Board) */
-#define OUT_2	0x08	/* Output 2, Enable Asynchronous Port Interrupts */
-#define LB	0x10	/* Enable Internal Loop Back */
+#define DTR	0x01	///< Data Terminal Ready
+#define RTS 	0x02	///< Request To Send
+#define OUT_1	0x04	///< Output 1, (reserved on COMPAQ I/O Board)
+#define OUT_2	0x08	///< Output 2, Enable Asynchronous Port Interrupts
+#define LB	0x10	///< Enable Internal Loop Back
 
-/*
+/** @brief
  * Bits definition of the Line Control Register (LCR)
  */
 #define CHR_5_BITS 0
@@ -132,41 +146,43 @@ extern int BSPBaseBaud;
 #define CHR_7_BITS 2
 #define CHR_8_BITS 3
 
-#define WL	0x03	/* Word length mask */
-#define STB	0x04	/* 1 Stop Bit, otherwise 2 Stop Bits */
-#define PEN	0x08	/* Parity Enabled */
-#define EPS	0x10	/* Even Parity Select, otherwise Odd */
-#define SP	0x20	/* Stick Parity */
-#define BCB	0x40	/* Break Control Bit */
-#define DLAB	0x80	/* Enable Divisor Latch Access */
+#define WL	0x03	///< Word length mask
+#define STB	0x04	///< 1 Stop Bit, otherwise 2 Stop Bits
+#define PEN	0x08	///< Parity Enabled
+#define EPS	0x10	///< Even Parity Select, otherwise Odd
+#define SP	0x20	///< Stick Parity
+#define BCB	0x40	///< Break Control Bit
+#define DLAB	0x80	///< Enable Divisor Latch Access
 
-/*
+/** @brief
  * Bits definition of the MODEM Status Register (MSR)
  */
-#define DCTS	0x01	/* Delta Clear To Send */
-#define DDSR	0x02	/* Delta Data Set Ready */
-#define TERI	0x04 	/* Trailing Edge Ring Indicator */
-#define DDCD	0x08	/* Delta Carrier Detect Indicator */
-#define CTS  	0x10 	/* Clear To Send (when loop back is active) */
-#define DSR	0x20	/* Data Set Ready (when loop back is active) */
-#define RI  	0x40 	/* Ring Indicator (when loop back is active) */
-#define DCD	0x80	/* Data Carrier Detect (when loop back is active) */
+#define DCTS	0x01	///< Delta Clear To Send
+#define DDSR	0x02	///< Delta Data Set Ready
+#define TERI	0x04 	///< Trailing Edge Ring Indicator
+#define DDCD	0x08	///< Delta Carrier Detect Indicator
+#define CTS  	0x10 	///< Clear To Send (when loop back is active)
+#define DSR	0x20	///< Data Set Ready (when loop back is active)
+#define RI  	0x40 	///< Ring Indicator (when loop back is active)
+#define DCD	0x80	///< Data Carrier Detect (when loop back is active)
 
-/*
+/** @brief
  * Bits definition of the FIFO Control Register : WD16C552 or NS16550
  */
 
-#define FIFO_CTRL   0x01    /* Set to 1 permit access to other bits */
-#define FIFO_EN	    0x01    /* Enable the FIFO */
-#define XMIT_RESET  0x02    /* Transmit FIFO Reset */
-#define RCV_RESET   0x04    /* Receive FIFO Reset */
-#define FCR3	    0x08    /* do not understand manual! */
+#define FIFO_CTRL   0x01    ///< Set to 1 permit access to other bits
+#define FIFO_EN	    0x01    ///< Enable the FIFO
+#define XMIT_RESET  0x02    ///< Transmit FIFO Reset
+#define RCV_RESET   0x04    ///< Receive FIFO Reset
+#define FCR3	    0x08    ///< do not understand manual!
 
-#define RECEIVE_FIFO_TRIGGER1	0x0  /* trigger recieve interrupt after 1 byte  */
-#define RECEIVE_FIFO_TRIGGER4	0x40 /* trigger recieve interrupt after 4 byte  */
-#define RECEIVE_FIFO_TRIGGER8	0x80 /* trigger recieve interrupt after 8 byte  */
-#define RECEIVE_FIFO_TRIGGER12	0xc0 /* trigger recieve interrupt after 12 byte */
-#define TRIG_LEVEL  		0xc0 /* Mask for the trigger level 		*/
+#define RECEIVE_FIFO_TRIGGER1	0x0  ///< trigger recieve interrupt after 1 byte
+#define RECEIVE_FIFO_TRIGGER4	0x40 ///< trigger recieve interrupt after 4 byte
+#define RECEIVE_FIFO_TRIGGER8	0x80 ///< trigger recieve interrupt after 8 byte
+#define RECEIVE_FIFO_TRIGGER12	0xc0 ///< trigger recieve interrupt after 12 byte
+#define TRIG_LEVEL  		0xc0 ///< Mask for the trigger level
+
+/** @} */
 
 #ifdef __cplusplus
 }

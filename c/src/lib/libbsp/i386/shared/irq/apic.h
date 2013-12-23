@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup i386_apic
+ * @brief Local and I/O APIC definitions
+ */
+
 /*
  * Author: Erich Boleyn  <erich@uruk.org>
  *         http://www.uruk.org/~erich/
@@ -25,6 +31,13 @@
  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/**
+ * @defgroup i386_apci
+ * @ingroup i386_pci
+ * @brief Intel Architecture local and I/O APIC definitions
+ * @{
  */
 
 /*
@@ -58,10 +71,10 @@
 /*
  *  Shared defines for I/O and local APIC definitions
  */
-/* APIC version register */
+/** @brief APIC version register */
 #define APIC_VERSION(x)                         ((x) & 0xFF)
 #define APIC_MAXREDIR(x)                        (((x) >> 16) & 0xFF)
-/* APIC id register */
+/** @brief APIC id register */
 #define APIC_ID(x)                              ((x) >> 24)
 #define APIC_VER_NEW                            0x10
 
@@ -108,3 +121,5 @@
 #define LAPIC_TDCR                              0x3E0
 
 #endif  /* _APIC_H */
+
+/** @} */
