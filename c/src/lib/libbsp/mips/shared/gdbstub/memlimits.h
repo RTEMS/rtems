@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup mips_limits
+ * @brief Definition of machine and system dependent address limits.
+ */
+
 /*
  * limits.h - definition of machine & system dependent address limits
  *
@@ -44,6 +50,13 @@
  * of kseg0 and kseg1 which map to the same physical addresses
  * to have different readability and/or writeability attributes.
  */
+
+/**
+ * @defgroup mips_limits Address Limits
+ * @ingroup mips_shared
+ * @brief Address Limits
+ */
+
 
 /*
 #define K0_LIMIT_FOR_READ  (K0BASE+0x18000000)

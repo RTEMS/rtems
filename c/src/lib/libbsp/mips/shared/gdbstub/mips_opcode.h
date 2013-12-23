@@ -1,4 +1,10 @@
-/*-
+/**
+ * @file
+ * @ingroup
+ * @brief Instruction formats and opcode values for MIPS
+ */
+
+/*
  * Copyright (c) 1992 The Regents of the University of California.
  * All rights reserved.
  *
@@ -45,9 +51,18 @@
 #ifndef _MIPS_OPCODE_H
 #define _MIPS_OPCODE_H
 
-/*
- * Define the instruction formats.
+/**
+ * @defgroup mips_ops MIPS Opcodes
+ * @ingroup mips_shared
+ * @brief MIPS Instruction Formats and Opcode Values
+ * @{
  */
+
+/**
+ * @name Instruction formats
+ * @{
+ */
+
 typedef union {
     unsigned word;
 
@@ -116,9 +131,13 @@ typedef union {
 #endif
 } InstFmt;
 
-/*
- * Values for the 'op' field.
+/** @} */
+
+/**
+ * @name 'op' field values
+ * @{
  */
+
 #define OP_SPECIAL	000
 #define OP_REGIMM	001
 #define OP_J		002
@@ -184,9 +203,11 @@ typedef union {
 #define OP_SDC2		076
 #define OP_SD		077
 
-/*
- * Values for the 'func' field when 'op' == OP_SPECIAL.
+/**
+ * @name 'func' field values when 'op' == OP_SPECIAL.
+ * @{
  */
+
 #define OP_SLL		000
 #define OP_SRL		002
 #define OP_SRA		003
@@ -247,9 +268,13 @@ typedef union {
 #define OP_DSRL32	076
 #define OP_DSRA32	077
 
-/*
- * Values for the 'func' field when 'op' == OP_REGIMM.
+/** @} */
+
+/**
+ * 'func' field values when 'op' == OP_REGIMM.
+ * @{
  */
+
 #define OP_BLTZ		000
 #define OP_BGEZ		001
 #define OP_BLTZL	002
@@ -267,9 +292,13 @@ typedef union {
 #define OP_BLTZALL	022
 #define OP_BGEZALL	023
 
-/*
- * Values for the 'rs' field when 'op' == OP_COPz.
+/** @} */
+
+/**
+ * @name 'rs' field values when 'op' == OP_COPz.
+ * @{
  */
+
 #define OP_MF		000
 #define OP_DMF		001
 #define OP_CF		002
@@ -278,18 +307,30 @@ typedef union {
 #define OP_CT		006
 #define OP_BC		010
 
-/*
- * Values for the 'rt' field when 'op' == OP_COPz and 'rt' == OP_BC.
+/** @} */
+
+/**
+ * @name 'rt' field values when 'op' == OP_COPz and 'rt' == OP_BC.
+ * @{
  */
+
 #define COPz_BCF	0x00
 #define COPz_BCT	0x01
 #define COPz_BCFL	0x02
 #define COPz_BCTL	0x03
 
-/*
- * Instructions with specal significance to debuggers.
+/** @} */
+
+/**
+ * @name Instructions with specal significance to debuggers.
+ * @{
  */
-#define BREAK_INSTR	0x0000000d	/* instruction code for break */
-#define NOP_INSTR	0x00000000	/* instruction code for no-op */
+
+#define BREAK_INSTR	0x0000000d	///< @brief instruction code for break
+#define NOP_INSTR	0x00000000	///< @brief instruction code for no-op
+
+/** @} */
+
+/** @} */
 
 #endif  /* _MIPS_OPCODE_H */

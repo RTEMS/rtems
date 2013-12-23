@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup mips_regs
+ * @brief Standard MIPS register names.
+ */
+
 /*
  * regs.S -- standard MIPS register names.
  *
@@ -14,7 +20,18 @@
  * they apply.
  */
 
-/* Standard MIPS register names: */
+/**
+ * @defgroup mips_regs MIPS Registers
+ * @ingroup mips_shared
+ * @brief MIPS Registers
+ * @{
+ */
+
+/**
+ * @name Standard MIPS register names:
+ * @{
+ */
+
 #define zero	$0
 #define z0	$0
 #define v0	$2
@@ -41,18 +58,24 @@
 #define s7	$23
 #define t8	$24
 #define t9	$25
-#define k0	$26	/* kernel private register 0 */
-#define k1	$27	/* kernel private register 1 */
-#define gp	$28	/* global data pointer */
-#define sp 	$29	/* stack-pointer */
-#define fp	$30	/* frame-pointer */
-#define ra	$31	/* return address */
-#define pc	$pc	/* pc, used on mips16 */
+#define k0	$26	///< @brief kernel private register 0 */
+#define k1	$27	///< @brief kernel private register 1 */
+#define gp	$28	///< @brief global data pointer */
+#define sp 	$29	///< @brief stack-pointer */
+#define fp	$30	///< @brief frame-pointer */
+#define ra	$31	///< @brief return address */
+#define pc	$pc	///< @brief pc, used on mips16 */
 
 #define fp0	$f0
 #define fp1	$f1
 
-/* Useful memory constants: */
+/** @} */
+
+/**
+ * @name Useful memory constants:
+ * @{
+ */
+
 #define K0BASE		0x80000000
 #ifndef __mips64
 #define K1BASE		0xA0000000
@@ -60,46 +83,69 @@
 #define K1BASE		0xFFFFFFFFA0000000LL
 #endif
 
+/** @} */
+
 #define PHYS_TO_K1(a)   ((unsigned)(a) | K1BASE)
 
-/* Standard Co-Processor 0 register numbers: */
-#define C0_COUNT	$9		/* Count Register */
-#define C0_SR		$12		/* Status Register */
-#define C0_CAUSE	$13		/* last exception description */
-#define C0_EPC		$14		/* Exception error address */
-#define C0_CONFIG	$16		/* CPU configuration */
+/**
+ * @name Standard Co-Processor 0 register numbers:
+ * @{
+ */
 
-/* Standard Status Register bitmasks: */
-#define SR_CU1		0x20000000	/* Mark CP1 as usable */
-#define SR_FR		0x04000000	/* Enable MIPS III FP registers */
-#define SR_BEV		0x00400000	/* Controls location of exception vectors */
-#define SR_PE		0x00100000	/* Mark soft reset (clear parity error) */
+#define C0_COUNT	$9		///< @brief Count Register */
+#define C0_SR		$12		///< @brief Status Register */
+#define C0_CAUSE	$13		///< @brief last exception description */
+#define C0_EPC		$14		///< @brief Exception error address */
+#define C0_CONFIG	$16		///< @brief CPU configuration */
 
-#define SR_KX		0x00000080	/* Kernel extended addressing enabled */
-#define SR_SX		0x00000040	/* Supervisor extended addressing enabled */
-#define SR_UX		0x00000020	/* User extended addressing enabled */
+/** @} */
 
-/* Standard (R4000) cache operations. Taken from "MIPS R4000
-   Microprocessor User's Manual" 2nd edition: */
+/**
+ * @name Standard Status Register bitmasks:
+ * @{
+ */
 
-#define CACHE_I		(0)	/* primary instruction */
-#define CACHE_D		(1)	/* primary data */
-#define CACHE_SI	(2)	/* secondary instruction */
-#define CACHE_SD	(3)	/* secondary data (or combined instruction/data) */
+#define SR_CU1		0x20000000	///< @brief Mark CP1 as usable */
+#define SR_FR		0x04000000	///< @brief Enable MIPS III FP registers */
+#define SR_BEV		0x00400000	///< @brief Controls location of exception vectors */
+#define SR_PE		0x00100000	///< @brief Mark soft reset (clear parity error) */
 
-#define INDEX_INVALIDATE		(0)	/* also encodes WRITEBACK if CACHE_D or CACHE_SD */
+#define SR_KX		0x00000080	///< @brief Kernel extended addressing enabled */
+#define SR_SX		0x00000040	///< @brief Supervisor extended addressing enabled */
+#define SR_UX		0x00000020	///< @brief User extended addressing enabled */
+
+/** @} */
+
+/**
+ * @name Standard (R4000) cache operations.
+ * @brief Taken from "MIPS R4000 Microprocessor User's Manual" 2nd edition:
+ * @{
+ */
+
+#define CACHE_I		(0)	///< @brief primary instruction */
+#define CACHE_D		(1)	///< @brief primary data */
+#define CACHE_SI	(2)	///< @brief secondary instruction */
+#define CACHE_SD	(3)	///< @brief secondary data (or combined instruction/data) */
+
+#define INDEX_INVALIDATE		(0)	///< @brief also encodes WRITEBACK if CACHE_D or CACHE_SD */
 #define INDEX_LOAD_TAG			(1)
 #define INDEX_STORE_TAG			(2)
-#define CREATE_DIRTY_EXCLUSIVE		(3)	/* CACHE_D and CACHE_SD only */
+#define CREATE_DIRTY_EXCLUSIVE		(3)	///< @brief CACHE_D and CACHE_SD only */
 #define HIT_INVALIDATE			(4)
-#define CACHE_FILL			(5)	/* CACHE_I only */
-#define HIT_WRITEBACK_INVALIDATE	(5)	/* CACHE_D and CACHE_SD only */
-#define HIT_WRITEBACK			(6)	/* CACHE_I, CACHE_D and CACHE_SD only */
-#define HIT_SET_VIRTUAL			(7)	/* CACHE_SI and CACHE_SD only */
+#define CACHE_FILL			(5)	///< @brief CACHE_I only */
+#define HIT_WRITEBACK_INVALIDATE	(5)	///< @brief CACHE_D and CACHE_SD only */
+#define HIT_WRITEBACK			(6)	///< @brief CACHE_I, CACHE_D and CACHE_SD only */
+#define HIT_SET_VIRTUAL			(7)	///< @brief CACHE_SI and CACHE_SD only */
 
 #define BUILD_CACHE_OP(o,c)		(((o) << 2) | (c))
 
-/* Individual cache operations: */
+/** @} */
+
+/**
+ * @name Individual cache operations:
+ * @{
+ */
+
 #define INDEX_INVALIDATE_I		BUILD_CACHE_OP(INDEX_INVALIDATE,CACHE_I)
 #define INDEX_WRITEBACK_INVALIDATE_D	BUILD_CACHE_OP(INDEX_INVALIDATE,CACHE_D)
 #define INDEX_INVALIDATE_SI             BUILD_CACHE_OP(INDEX_INVALIDATE,CACHE_SI)
@@ -133,5 +179,9 @@
 
 #define HIT_SET_VIRTUAL_SI		BUILD_CACHE_OP(HIT_SET_VIRTUAL,CACHE_SI)
 #define HIT_SET_VIRTUAL_SD              BUILD_CACHE_OP(HIT_SET_VIRTUAL,CACHE_SD)
+
+/** @} */
+
+/** @} */
 
 /*> EOF regs.S <*/

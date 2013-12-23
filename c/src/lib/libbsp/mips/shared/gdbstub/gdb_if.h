@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup mips_gdb
+ * @brief Definition of the interface between stub and gdb
+ */
+
 /*
  * gdb_if.h - definition of the interface between the stub and gdb
  *
@@ -12,10 +18,17 @@
  *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+/**
+ * @defgroup mips_gdb GDB Interface
+ * @ingroup mips_shared
+ * @brief GDB Interface
+ * @{
+ */
+
 #ifndef _GDB_IF_H
 #define _GDB_IF_H
 
-/* Max number of threads in qM response */
+/** @brief Max number of threads in qM response */
 #define QM_MAX_THREADS (20)
 
 struct rtems_gdb_stub_thread_info {
@@ -24,8 +37,9 @@ struct rtems_gdb_stub_thread_info {
   char more_display[256];
 };
 
-/*
- *  Prototypes
+/**
+ * @name Prototypes
+ * @{
  */
 
 int parse_zbreak(const char *in, int *type, unsigned char **addr, int *len);
@@ -70,9 +84,14 @@ void rtems_gdb_process_query(
   int   thread
 );
 
-/*
- * MIPS registers, numbered in the order in which gdb expects to see them.
+/** @} */
+
+/**
+ * @name MIPS registers
+ * @brief Numbered in the order in which gdb expects to see them.
+ * @{
  */
+
 #define	ZERO		0
 #define	AT		1
 #define	V0		2
@@ -157,6 +176,8 @@ void rtems_gdb_process_query(
 
 #define	NUM_REGS	72
 
+/** @} */
+
 void mips_gdb_stub_install(int enableThreads) ;
 
 #define MEMOPT_READABLE   1
@@ -167,5 +188,7 @@ void mips_gdb_stub_install(int enableThreads) ;
 #endif
 
 int gdbstub_add_memsegment(unsigned,unsigned,int);
+
+/** @} */
 
 #endif /* _GDB_IF_H */

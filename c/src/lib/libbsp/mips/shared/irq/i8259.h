@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup mips_i8259_irq
+ * @brief Data structure and functions used to control i8259 chip.
+ */
+
 /* irq.h
  *
  *  This include file describe the data structure and the functions implemented
@@ -19,9 +25,18 @@
 #ifndef I8259_H
 #define I8259_H
 
-/*
- * 8259 edge/level control definitions at VIA
+/**
+ * @defgroup mips_i8259_irq i8259 Chip Support
+ * @ingroup mips_shared
+ * @brief i8259 Chip Support
+ * @{
  */
+
+/**
+ * @name 8259 edge/level control definitions at VIA
+ * @{
+ */
+
 #if 1 
 #define ISA8259_M_ELCR 		0x4d0
 #define ISA8259_S_ELCR 		0x4d1
@@ -44,20 +59,30 @@
 #define ELCRM_INT1_LVL          0x2
 #define ELCRM_INT0_LVL          0x1
 
-/* 
- * PIC's command and mask registers 
- */
-#define PIC_MASTER_COMMAND_IO_PORT		0x20	/* Master PIC command register */
-#define PIC_SLAVE_COMMAND_IO_PORT		0xa0	/* Slave PIC command register */
-#define PIC_MASTER_IMR_IO_PORT			0x21	/* Master PIC Interrupt Mask Register */
-#define PIC_SLAVE_IMR_IO_PORT		 	0xa1	/* Slave PIC Interrupt Mask Register */
+/** @} */
 
-/* 
- * Command for specific EOI (End Of Interrupt): Interrupt acknowledge 
+/**
+ * @name PIC's command and mask registers
+ * @{
  */
-#define PIC_EOSI	0x60	/* End of Specific Interrupt (EOSI) */
-#define	SLAVE_PIC_EOSI  0x62	/* End of Specific Interrupt (EOSI) for cascade */
-#define PIC_EOI		0x20	/* Generic End of Interrupt (EOI) */
+
+#define PIC_MASTER_COMMAND_IO_PORT		0x20	///< @brief Master PIC command register */
+#define PIC_SLAVE_COMMAND_IO_PORT		0xa0	///< @brief Slave PIC command register */
+#define PIC_MASTER_IMR_IO_PORT			0x21	///< @brief Master PIC Interrupt Mask Register */
+#define PIC_SLAVE_IMR_IO_PORT		 	0xa1	///< @brief Slave PIC Interrupt Mask Register */
+
+/** @} */
+
+/**
+ * @name Command for specific EOI (End Of Interrupt): Interrupt acknowledge
+ * @{
+ */
+
+#define PIC_EOSI	0x60	///< @brief End of Specific Interrupt (EOSI) */
+#define	SLAVE_PIC_EOSI  0x62	///< @brief End of Specific Interrupt (EOSI) for cascade */
+#define PIC_EOI		0x20	///< @brief Generic End of Interrupt (EOI) */
+
+/** @} */
 
 #ifndef ASM
 
@@ -69,12 +94,17 @@ extern "C" {
  * rtems_irq_number Definitions
  */
 #if 0
-/*
- * ISA IRQ handler related definitions
+
+/**
+ * @name ISA IRQ handler related definitions
+ * @{
  */
+
 #define BSP_ISA_IRQ_NUMBER		(16)
 #define BSP_ISA_IRQ_LOWEST_OFFSET	(0)
 #define BSP_ISA_IRQ_MAX_OFFSET		(BSP_ISA_IRQ_LOWEST_OFFSET + BSP_ISA_IRQ_NUMBER - 1)
+
+/** @} */
 
 #ifndef qemu
 #define BSP_PCI_IRQ_NUMBER		(16)
@@ -101,28 +131,43 @@ extern "C" {
 
 #define BSP_MISC_IRQ_LOWEST_OFFSET	(BSP_PROCESSOR_IRQ_MAX_OFFSET + 1)
 #define BSP_MISC_IRQ_MAX_OFFSET		(BSP_MISC_IRQ_LOWEST_OFFSET + BSP_MISC_IRQ_NUMBER - 1)
-/*
- * Summary
+
+/**
+ * @name Summary
+ * @{
  */
+
 #define BSP_IRQ_NUMBER			(BSP_MISC_IRQ_MAX_OFFSET + 1)
 #define BSP_LOWEST_OFFSET		(BSP_ISA_IRQ_LOWEST_OFFSET)
 #define BSP_MAX_OFFSET			(BSP_MISC_IRQ_MAX_OFFSET)
-/*
- * Some ISA IRQ symbolic name definition
+
+/** @} */
+
+/**
+ * @name Some ISA IRQ symbolic name definition
+ * @{
  */
+
 #define BSP_ISA_PERIODIC_TIMER      	(0)
 #define BSP_ISA_KEYBOARD          	(1)
 #define BSP_ISA_UART_COM2_IRQ		(3)
 #define BSP_ISA_UART_COM1_IRQ		(4)
 #define BSP_ISA_RT_TIMER1	      	(8)
 #define BSP_ISA_RT_TIMER3		(10)
-/*
- * Some PCI IRQ symbolic name definition
+
+/** @} */
+
+/**
+ * @name Some PCI IRQ symbolic name definition
+ * @{
  */
+
 #define BSP_PCI_IRQ0			(BSP_PCI_IRQ_LOWEST_OFFSET)
 #if     BSP_PCI_IRQ_NUMBER > 0
 #define BSP_PCI_ISA_BRIDGE_IRQ		(BSP_PCI_IRQ0)
 #endif
+
+/** @} */
 
 #if defined(mvme2100)
 #define BSP_DEC21143_IRQ                (BSP_PCI_IRQ_LOWEST_OFFSET + 1)
@@ -142,17 +187,21 @@ extern "C" {
 #define BSP_UART_COM2_IRQ		BSP_ISA_UART_COM2_IRQ
 #endif
 
-/*
- * Some Processor execption handled as RTEMS IRQ symbolic name definition
+/**
+ * @brief Some Processor execption handled as RTEMS IRQ symbolic name definition
  */
 #define BSP_DECREMENTER			(BSP_PROCESSOR_IRQ_LOWEST_OFFSET)
 #endif
 
-/*
- * Type definition for RTEMS managed interrupts
+/**
+ * @name Type definition for RTEMS managed interrupts
+ * @{
  */
+
 typedef unsigned short rtems_i8259_masks;
 extern  volatile rtems_i8259_masks i8259s_cache;
+
+/** @} */
 
 /*-------------------------------------------------------------------------+
 | Function Prototypes.
@@ -160,33 +209,46 @@ extern  volatile rtems_i8259_masks i8259s_cache;
 /*
  * ------------------------ Intel 8259 (or emulation) Mngt Routines -------
  */
+
+/**
+ * @name Function Prototypes
+ * @{
+ */
+
 void BSP_i8259s_init(void);
 
-/*
- * function to disable a particular irq at 8259 level. After calling
- * this function, even if the device asserts the interrupt line it will
- * not be propagated further to the processor
+/**
+ * @brief function to disable a particular irq at 8259 level.
  *
- * RETURNS: 1/0 if the interrupt was enabled/disabled originally or
- *          a value < 0 on error.
+ * After calling this function, even if the device asserts the interrupt
+ * line it will not be propagated further to the processor.
+ *
+ * @retval 1 the interrupt was enabled originally
+ * @retval 0 the interrupt was disabled originally
+ * @retval <0 error
  */
 int BSP_irq_disable_at_i8259s        (const rtems_irq_number irqLine);
-/*
- * function to enable a particular irq at 8259 level. After calling
- * this function, if the device asserts the interrupt line it will
- * be propagated further to the processor
+
+/**
+ * @brief function to enable a particular irq at 8259 level.
+ *
+ * After calling this function, if the device asserts the interrupt line
+ * it will be propagated further to the processor.
  */
 int BSP_irq_enable_at_i8259s		(const rtems_irq_number irqLine);
-/*
- * function to acknowledge a particular irq at 8259 level. After calling
- * this function, if a device asserts an enabled interrupt line it will
- * be propagated further to the processor. Mainly usefull for people
- * writing raw handlers as this is automagically done for RTEMS managed
+
+/**
+ * @brief function to acknowledge a particular irq at 8259 level.
+ *
+ * After calling this function, if a device asserts an enabled interrupt
+ * line it will be propagated further to the processor. Mainly useful for
+ * people writing raw handlers as this is automagically done for RTEMS managed
  * handlers.
  */
 int BSP_irq_ack_at_i8259s           	(const rtems_irq_number irqLine);
-/*
- * function to check if a particular irq is enabled at 8259 level. After calling
+
+/**
+ * @brief function to check if a particular irq is enabled at 8259 level.
  */
 int BSP_irq_enabled_at_i8259s        	(const rtems_irq_number irqLine);
 
@@ -194,6 +256,10 @@ int BSP_i8259s_int_process(void);
 
 extern void BSP_rtems_irq_mng_init(unsigned cpuId);
 extern void BSP_i8259s_init(void);
+
+/** @} */
+
+/** @} */
 
 #ifdef __cplusplus
 };
