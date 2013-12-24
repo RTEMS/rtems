@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup tll6527m_cplb
+ * @brief CPLB configurations.
+ */
+
 /*  cplb.h
  *  
  *  Copyright (c) 2006 by Atos Automacao Industrial Ltda.
@@ -9,6 +15,13 @@
  */
 #ifndef _CPLB_H
 #define _CPLB_H
+
+/**
+ * @defgroup tll6527m_cplb CPLB Configuration
+ * @ingroup bfin_tll6527m
+ * @brief CPLB Configuration
+ * @{
+ */
 
 /* CPLB configurations */
 #define CPLB_DEF_CACHE_WT	CPLB_L1_CHBL | CPLB_WT
@@ -28,5 +41,7 @@
 
 #define CPLB_DDOCACHE_WT	CPLB_DNOCACHE | CPLB_DEF_CACHE_WT
 #define CPLB_DDOCACHE_WB	CPLB_DNOCACHE | CPLB_DEF_CACHE_WB
+
+/** @} */
 
 #endif /* _CPLB_H */

@@ -1,4 +1,10 @@
 /**
+ * @file
+ * @ingroup bfin_tll6527m
+ * @brief Global BSP definitions.
+ */
+
+/**
  *@file bsp.h
  *  
  *  This include file contains all board IO definitions for TLL6527M.
@@ -29,8 +35,14 @@ extern "C" {
 #include <rtems/bfin/bf52x.h>
 #include <bf52x.h>
 
+/**
+ * @defgroup bfin_tll6527m TLL6527M Support
+ * @ingroup bsp_bfin
+ * @brief TLL6527M Support Package
+ * @{
+ */
 
-/* 
+/*
  * PLL and clock setup values:
  */
 
@@ -44,32 +56,52 @@ extern "C" {
  *  SCLK  = 130 MHz
  */
 
-#define PLL_CSEL    0x0000      /* CCLK = VCO      */
-#define PLL_SSEL    0x0003      /* SCLK = CCLK/3   */
-#define PLL_MSEL    0x3A00      /* VCO = 29xCLKIN  */
-#define PLL_DF      0x0001      /* CLKIN = XTL/2   */
-
-#define CLKIN		    (25000000)  /* Input clock to the PLL */
-#define CCLK        (600000000)   /* CORE CLOCK     */
-#define SCLK        (100000000)   /* SYSTEM CLOCK   */
-
-/*
- * UART setup values
+/**
+ * @name PLL Configuration
+ * @{
  */
-#define BAUDRATE    57600       /* Console Baudrate   */
-#define WORD_5BITS  0x00        /* 5 bits word        */
-#define WORD_6BITS  0x01        /* 6 bits word        */
-#define WORD_7BITS  0x02        /* 7 bits word        */
-#define WORD_8BITS  0x03        /* 8 bits word        */
-#define EVEN_PARITY 0x18        /* Enable EVEN parity */
-#define ODD_PARITY  0x08        /* Enable ODD parity  */
-#define TWO_STP_BIT 0x04        /* 2 stop bits        */
 
-rtems_isr_entry set_vector(                     /* returns old vector */
-  rtems_isr_entry     handler,                  /* isr routine        */
-  rtems_vector_number vector,                   /* vector number      */
-  int                 type                      /* RTEMS or RAW intr  */
+#define PLL_CSEL    0x0000      ///< @brief CCLK = VCO      */
+#define PLL_SSEL    0x0003      ///< @brief SCLK = CCLK/3   */
+#define PLL_MSEL    0x3A00      ///< @brief VCO = 29xCLKIN  */
+#define PLL_DF      0x0001      ///< @brief CLKIN = XTL/2   */
+
+/** @} */
+
+/**
+ * @name Clock setup values
+ * @{
+ */
+
+#define CLKIN		    (25000000)  ///< @brief Input clock to the PLL */
+#define CCLK        (600000000)   ///< @brief CORE CLOCK     */
+#define SCLK        (100000000)   ///< @brief SYSTEM CLOCK   */
+
+/** @} */
+
+/**
+ * @name UART setup values
+ * @{
+ */
+
+#define BAUDRATE    57600       ///< @brief Console Baudrate   */
+#define WORD_5BITS  0x00        ///< @brief 5 bits word        */
+#define WORD_6BITS  0x01        ///< @brief 6 bits word        */
+#define WORD_7BITS  0x02        ///< @brief 7 bits word        */
+#define WORD_8BITS  0x03        ///< @brief 8 bits word        */
+#define EVEN_PARITY 0x18        ///< @brief Enable EVEN parity */
+#define ODD_PARITY  0x08        ///< @brief Enable ODD parity  */
+#define TWO_STP_BIT 0x04        ///< @brief 2 stop bits        */
+
+/** @} */
+
+rtems_isr_entry set_vector(                     ///< @brief returns old vector */
+  rtems_isr_entry     handler,                  ///< @brief isr routine        */
+  rtems_vector_number vector,                   ///< @brief vector number      */
+  int                 type                      ///< @brief RTEMS or RAW intr  */
 );
+
+/** @} */
 
 #ifdef __cplusplus
 }

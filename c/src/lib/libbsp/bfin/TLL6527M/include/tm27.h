@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup tll6527m_tm27
+ * @brief Interrupt mechanisms for tm27 test.
+ */
+
 /*
  *  tm27.h
  *
@@ -15,6 +21,13 @@
 #ifndef __tm27_h
 #define __tm27_h
 
+/**
+ * @defgroup tll6527m_tm27 TM27 Test Support
+ * @ingroup bfin_tll6527m
+ * @brief Interrupt Mechanisms for TM27
+ * @{
+ */
+
 /*
  *  Define the interrupt mechanism for Time Test 27
  */
@@ -31,5 +44,7 @@
 #define Clear_tm27_intr() /* empty */
 
 #define Lower_tm27_intr() /* empty */
+
+/** @} */
 
 #endif
