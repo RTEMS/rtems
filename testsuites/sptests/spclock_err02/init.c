@@ -1,12 +1,5 @@
-/*  Screen13
- *
- *  This routine generates error screen 13 for test 9.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2011.
+/*
+ *  COPYRIGHT (c) 2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,10 +11,18 @@
 #include "config.h"
 #endif
 
-#include "system.h"
+#include <tmacros.h>
+#include "test_support.h"
 
-void Screen13()
+/* forward declaration to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+
+rtems_task Init(
+  rtems_task_argument argument
+)
 {
+  puts( "\n\n*** TEST SPCLOCK_ERR02 ***" );
+
   rtems_time_of_day time;
   rtems_status_code status;
 
@@ -112,4 +113,17 @@ void Screen13()
   status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_set" );
   print_time( "TA1 - rtems_clock_get_tod - ", &time, " - RTEMS_SUCCESSFUL\n" );
+
+  puts( "*** END OF TEST SPCLOCK_ERR02 ***" );
 }
+
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>
+/* end of file */

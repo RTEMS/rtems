@@ -1,0 +1,20 @@
+#  COPYRIGHT (c) 2013.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: spclock_erro02
+
+directives:
+  rtems_clock_set, rtems_clock_get_tod, 
+
+concepts:
+
+  a.  Verifies all error codes returned by the executive in single
+      processor configurations.

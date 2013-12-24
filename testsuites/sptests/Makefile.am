@@ -38,6 +38,7 @@ SUBDIRS += speventsystem01
 SUBDIRS += spinternalerror01
 SUBDIRS += spinternalerror02
 SUBDIRS += sptimer_err01 sptimer_err02
+SUBDIRS += spclock_err02
 
 if HAS_CPUSET
 SUBDIRS += spcpuset01

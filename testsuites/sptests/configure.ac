@@ -124,6 +124,7 @@ spcbssched02/Makefile
 spcbssched03/Makefile
 spchain/Makefile
 spclockget/Makefile
+spclock_err02/Makefile
 spcoverage/Makefile
 spedfsched01/Makefile
 spedfsched02/Makefile

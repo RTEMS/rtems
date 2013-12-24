@@ -72,8 +72,6 @@ void Screen11( void );
 
 void Screen12( void );
 
-void Screen13( void );
-
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER

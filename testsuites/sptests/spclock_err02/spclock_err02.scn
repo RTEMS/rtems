@@ -1,0 +1,18 @@
+*** TEST SPCLOCK_ERR02 ***
+TA1 - rtems_io_close - RTEMS_INVALID_NUMBER
+TA1 - rtems_io_control - RTEMS_INVALID_NUMBER
+TA1 - rtems_io_initialize - RTEMS_INVALID_NUMBER
+TA1 - rtems_io_open - RTEMS_INVALID_NUMBER
+TA1 - rtems_io_read - RTEMS_INVALID_NUMBER
+TA1 - rtems_io_write - RTEMS_INVALID_NUMBER
+TA1 - rtems_clock_set - 23:59:59   12/31/2000 - RTEMS_SUCCESSFUL
+TA1 - rtems_clock_get_tod - 00:00:00   01/01/2001 - RTEMS_SUCCESSFUL
+TA1 - rtems_clock_set - 23:59:59   12/31/1999 - RTEMS_SUCCESSFUL
+TA1 - rtems_clock_get_tod - 00:00:00   01/01/2000 - RTEMS_SUCCESSFUL
+TA1 - rtems_clock_set - 23:59:59   12/31/2100 - RTEMS_SUCCESSFUL
+TA1 - rtems_clock_get_tod - 17:31:44   11/24/1964 - RTEMS_SUCCESSFUL
+TA1 - rtems_clock_set - 23:59:59   12/31/2099 - RTEMS_SUCCESSFUL
+TA1 - rtems_clock_get_tod - 17:31:44   11/25/1963 - RTEMS_SUCCESSFUL
+TA1 - rtems_clock_set - 23:59:59   12/31/1991 - RTEMS_SUCCESSFUL
+TA1 - rtems_clock_get_tod - 00:00:00   01/01/1992 - RTEMS_SUCCESSFUL
+*** END OF TEST SPCLOCK_ERR02 ***
