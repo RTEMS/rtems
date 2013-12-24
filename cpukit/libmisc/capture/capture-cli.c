@@ -221,16 +221,16 @@ rtems_capture_cli_print_timestamp (uint64_t uptime)
   uint32_t hours;
   uint32_t minutes;
   uint32_t seconds;
-  uint32_t usecs;
+  uint32_t nanosecs;
 
-  seconds = uptime / 1000000000LLU;
-  minutes = seconds / 60;
-  hours   = minutes / 60;
-  minutes = minutes % 60;
-  seconds = seconds % 60;
-  usecs = (uptime / 1000) % 1000000;
+  seconds  = uptime / 1000000000LLU;
+  minutes  = seconds / 60;
+  hours    = minutes / 60;
+  minutes  = minutes % 60;
+  seconds  = seconds % 60;
+  nanosecs = uptime % 1000000000;
 
-  fprintf (stdout, "%5lu:%02lu:%02lu.%06lu", hours, minutes, seconds, usecs);
+  fprintf (stdout, "%5lu:%02lu:%02lu.%09lu", hours, minutes, seconds, nanosecs);
 }
 
 /*
@@ -1354,6 +1354,7 @@ rtems_capture_cli_trace_records (int                                argc,
   uint32_t                read;
   rtems_capture_record_t* rec;
   int                     arg;
+  rtems_capture_time_t    last_t = 0;
 
   for (arg = 1; arg < argc; arg++)
   {
@@ -1420,22 +1421,21 @@ rtems_capture_cli_trace_records (int                                argc,
                  (uint64_t) rec->time);
       else
       {
-        rtems_capture_time_t t;
-        uint32_t             event;
-        int                  e;
+        uint64_t diff = 0;
+        uint32_t event;
+        int      e;
 
         event = rec->events >> RTEMS_CAPTURE_EVENT_START;
-
-        t = rec->time;
 
         for (e = RTEMS_CAPTURE_EVENT_START; e < RTEMS_CAPTURE_EVENT_END; e++)
         {
           if (event & 1)
           {
-            fprintf (stdout, "%12Lu %9lu.%09lu ",
-                     t,
-                     (unsigned long) (t / 1000000000ULL),
-                     (unsigned long) (t % 10000000000ULL));
+            rtems_capture_cli_print_timestamp (rec->time);
+            if (last_t)
+              diff = rec->time - last_t;
+            last_t = rec->time;
+            fprintf (stdout, " %9" PRId64 " ", diff);
             rtems_monitor_dump_id (rtems_capture_task_id (rec->task));
             fprintf (stdout, " %c%c%c%c",
                      (char) (rec->task->name >> 24) & 0xff,
