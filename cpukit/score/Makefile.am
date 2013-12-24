@@ -215,7 +215,7 @@ libscore_a_SOURCES += src/schedulersimple.c \
     src/schedulersimplereadyqueueenqueuefirst.c \
     src/schedulersimpleschedule.c \
     src/schedulersimpleunblock.c \
-    src/schedulersimpleyield.c 
+    src/schedulersimpleyield.c
 
 ## SCHEDULEREDF_C_FILES
 libscore_a_SOURCES += src/scheduleredf.c \
@@ -275,7 +275,7 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
     src/threadstartmultitasking.c src/iterateoverthreads.c \
     src/threadblockingoperationcancel.c
-    
+
 if HAS_SMP
 libscore_a_SOURCES += src/threaddispatchdisablelevel.c
 endif
@@ -294,7 +294,7 @@ libscore_a_SOURCES += src/threadq.c src/threadqdequeue.c \
 libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \
     src/timespecisvalid.c src/timespeclessthan.c \
     src/timespecsubtract.c src/timespectoticks.c src/timespecdivide.c \
-    src/timespecdividebyinteger.c
+    src/timespecdividebyinteger.c src/timespecgetasnanoseconds.c
 
 ## TIMESTAMP_INT64_C_FILES
 libscore_a_SOURCES += src/ts64addto.c src/ts64dividebyinteger.c \

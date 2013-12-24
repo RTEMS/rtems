@@ -18,12 +18,13 @@ the clock manager are:
 @item @code{@value{DIRPREFIX}clock_get} - Get date and time information
 @item @code{@value{DIRPREFIX}clock_get_tod} - Get date and time in TOD format
 @item @code{@value{DIRPREFIX}clock_get_tod_timeval} - Get date and time in timeval format
-@item @code{@value{DIRPREFIX}clock_get_seconds_since_epoch} - Get seconds since epoch 
+@item @code{@value{DIRPREFIX}clock_get_seconds_since_epoch} - Get seconds since epoch
 @item @code{@value{DIRPREFIX}clock_get_ticks_per_second} - Get ticks per second
 @item @code{@value{DIRPREFIX}clock_get_ticks_since_boot} - Get ticks since boot
 @item @code{@value{DIRPREFIX}clock_get_uptime} - Get time since boot
 @item @code{@value{DIRPREFIX}clock_get_uptime_timeval} - Get time since boot in timeval format
 @item @code{@value{DIRPREFIX}clock_get_uptime_seconds} - Get seconds since boot
+@item @code{@value{DIRPREFIX}clock_get_uptime_nanoseconds} - Get nanoseconds since boot
 @item @code{@value{DIRPREFIX}clock_set_nanoseconds_extension} - Install the nanoseconds since last tick handler
 @item @code{@value{DIRPREFIX}clock_tick} - Announce a clock tick
 @end itemize
@@ -85,11 +86,11 @@ type Time_Of_Day is
 The native date and time format is the only format
 supported when setting the system date and time using the
 @code{@value{DIRPREFIX}clock_set} directive.  Some applications
-expect to operate on a "UNIX-style" date and time data structure.  The 
+expect to operate on a "UNIX-style" date and time data structure.  The
 @code{@value{DIRPREFIX}clock_get_tod_timeval} always returns
-the date and time in @code{struct timeval} format.  The 
+the date and time in @code{struct timeval} format.  The
 @code{@value{DIRPREFIX}clock_get} directive can optionally return
-the current date and time in this format.  
+the current date and time in this format.
 
 The @code{struct timeval} data structure has two fields: @code{tv_sec}
 and @code{tv_usec} which are seconds and microseconds, respectively.
@@ -142,8 +143,8 @@ created when the timeout option is used on the
 @code{@value{DIRPREFIX}message_queue_receive},
 @code{@value{DIRPREFIX}event_receive},
 @code{@value{DIRPREFIX}semaphore_obtain} and
-@code{@value{DIRPREFIX}region_get_segment} directives.  
-Each task may have one and only one timeout active at a time.  
+@code{@value{DIRPREFIX}region_get_segment} directives.
+Each task may have one and only one timeout active at a time.
 When a timeout expires, it unblocks the task with a timeout status code.
 
 @section Operations
@@ -192,7 +193,7 @@ is specified using one of the following constants
 associated with the enumerated type
 @code{@value{DIRPREFIX}clock_get_options}:
 
-@findex rtems_clock_get_options 
+@findex rtems_clock_get_options
 
 @itemize @bullet
 @item @code{@value{RPREFIX}CLOCK_GET_TOD} - obtain native style date and time
@@ -322,7 +323,7 @@ option is set to either @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH},
 @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE}) and the date and time
 has not been set with a previous call to
 @code{@value{DIRPREFIX}clock_set}, then the
-@code{@value{RPREFIX}NOT_DEFINED} status code is returned. 
+@code{@value{RPREFIX}NOT_DEFINED} status code is returned.
 The caller can always obtain the number of ticks per second (option is
 @code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND}) and the number of
 ticks since the executive was initialized option is
@@ -333,7 +334,7 @@ type @code{rtems_clock_get_options}.  The data type expected for
 @code{time_buffer} is based on the value of @code{option} as
 indicated below:
 
-@findex rtems_clock_get_options 
+@findex rtems_clock_get_options
 @ifset is-C
 @itemize @bullet
 @item @code{@value{RPREFIX}CLOCK_GET_TOD} - (rtems_time_of_day *)
@@ -417,7 +418,7 @@ procedure Clock_Get_TOD (
 This directive obtains the system date and time.  If the date and time
 has not been set with a previous call to
 @code{@value{DIRPREFIX}clock_set}, then the
-@code{@value{RPREFIX}NOT_DEFINED} status code is returned. 
+@code{@value{RPREFIX}NOT_DEFINED} status code is returned.
 
 @subheading NOTES:
 
@@ -468,7 +469,7 @@ This directive obtains the system date and time in POSIX
 @code{struct timeval} format.  If the date and time
 has not been set with a previous call to
 @code{@value{DIRPREFIX}clock_set}, then the
-@code{@value{RPREFIX}NOT_DEFINED} status code is returned. 
+@code{@value{RPREFIX}NOT_DEFINED} status code is returned.
 
 @subheading NOTES:
 
@@ -519,7 +520,7 @@ This directive returns the number of seconds since the RTEMS
 epoch and the current system date and time.  If the date and time
 has not been set with a previous call to
 @code{@value{DIRPREFIX}clock_set}, then the
-@code{@value{RPREFIX}NOT_DEFINED} status code is returned. 
+@code{@value{RPREFIX}NOT_DEFINED} status code is returned.
 
 @subheading NOTES:
 
@@ -620,7 +621,7 @@ time to be reset to an uninitialized state.  Another call to
 system date and time to application specific specifications.
 
 This directive simply returns the number of times the dirivective
-@code{@value{DIRPREFIX}clock_tick} has been invoked since the 
+@code{@value{DIRPREFIX}clock_tick} has been invoked since the
 system was booted.
 
 @c
@@ -736,6 +737,36 @@ This directive may be called from an ISR.
 @c
 @c
 @page
+@subsection CLOCK_GET_UPTIME_NANOSECONDS - Get the nanoseconds since boot
+
+@cindex clock get nanoseconds uptime
+@cindex uptime
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_clock_get_uptime_nanoseconds
+@example
+uint64_t rtems_clock_get_uptime_nanoseconds(void);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+The system uptime in nanoseconds.
+
+@subheading DESCRIPTION:
+
+This directive returns the nanoseconds since the system was booted.
+
+@subheading NOTES:
+
+This directive may be called from an ISR.
+
+@c
+@c
+@c
+@page
 @subsection CLOCK_SET_NANOSECONDS_EXTENSION - Install the nanoseconds since last tick handler
 
 @cindex clock set nanoseconds extension
@@ -765,7 +796,7 @@ NOT SUPPORTED FROM Ada BINDING
 
 @subheading DESCRIPTION:
 
-This directive is used by the Clock device driver to install the 
+This directive is used by the Clock device driver to install the
 @code{routine} which will be invoked by the internal RTEMS method used to
 obtain a highly accurate time of day.  It is usually called during
 the initialization of the driver.
@@ -780,7 +811,7 @@ on the device used as a clock source.
 
 This directive may be called from an ISR.
 
-This directive is called as part of every service to obtain the 
+This directive is called as part of every service to obtain the
 current date and time as well as timestamps.
 
 @c
@@ -828,4 +859,3 @@ The @code{microseconds_per_tick} and @code{ticks_per_timeslice}
 parameters in the Configuration Table contain the number of
 microseconds per tick and number of ticks per timeslice,
 respectively.
-

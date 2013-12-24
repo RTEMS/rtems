@@ -89,6 +89,21 @@ extern "C" {
 	((_time)->tv_nsec)
 
 /**
+ *  @brief Get the timestamp as nanoseconds.
+ *
+ *  This method returns the timestamp as nanoseconds.
+ *
+ *  @param[in] time points to the timestamp.
+ *  @param[in] nanoseconds the nanoseconds since the last tick.
+ *
+ *  @retval The time in nanoseconds.
+ */
+uint64_t _Timespec_Get_As_nanoseconds(
+  const struct timespec *time,
+  const uint32_t nanoseconds
+);
+
+/**
  * @brief Check if timespec is valid.
  *
  *  This method determines the validity of a timespec.

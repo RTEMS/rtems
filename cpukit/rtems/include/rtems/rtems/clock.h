@@ -257,6 +257,13 @@ void rtems_clock_get_uptime_timeval( struct timeval *uptime );
 time_t rtems_clock_get_uptime_seconds( void );
 
 /**
+ * @brief Returns the system uptime in nanoseconds.
+ *
+ * @retval The system uptime in nanoseconds.
+ */
+uint64_t rtems_clock_get_uptime_nanoseconds( void );
+
+/**
  * @brief TOD Validate
  *
  * This support function returns true if @a the_tod contains

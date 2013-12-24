@@ -367,6 +367,26 @@ static inline uint32_t _Timestamp64_implementation_Get_nanoseconds(
   );
 #endif
 
+static inline uint64_t _Timestamp64_implementation_Get_As_nanoseconds(
+  const Timestamp64_Control *_time,
+  const uint32_t nanoseconds
+)
+{
+  return *_time + (uint64_t) nanoseconds;
+}
+
+/**
+ *  @brief Get the 64-bit timestamp as nanoseconds.
+ *
+ *  This method returns the 64-bit timestamp as it is already in nanoseconds.
+ *
+ *  @param[in] _time points to the timestamp
+ *
+ *  @retval The nanoseconds portion of @a _time.
+ */
+#define _Timestamp64_Get_As_nanoseconds( _time, _nanoseconds ) \
+  _Timestamp64_implementation_Get_As_nanoseconds( _time, _nanoseconds )
+
 static inline void _Timestamp64_implementation_To_timespec(
   const Timestamp64_Control *_timestamp,
   struct timespec           *_timespec

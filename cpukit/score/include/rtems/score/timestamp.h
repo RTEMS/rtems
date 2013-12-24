@@ -330,6 +330,23 @@ extern "C" {
 #endif
 
 /**
+ *  @brief Get the timestamp as nanoseconds.
+ *
+ *  This method returns the timestamp as nanoseconds.
+ *
+ *  @param[in] _time points to the timestamp
+ *
+ *  @retval The time in nanoseconds.
+ */
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
+  #define _Timestamp_Get_As_nanoseconds( _timestamp, _nanoseconds ) \
+          _Timespec_Get_As_nanoseconds( _timestamp, _nanoseconds )
+#else
+  #define _Timestamp_Get_As_nanoseconds( _timestamp, _nanoseconds ) \
+	  _Timestamp64_Get_As_nanoseconds( _timestamp, _nanoseconds )
+#endif
+
+/**
  *  @brief Convert timestamp to struct timespec.
  *
  *  This method returns the seconds portion of the specified @a _timestamp.
