@@ -121,7 +121,7 @@ rtems_capture_get_time (rtems_capture_time_t* time)
     capture_timestamp (time);
   else
   {
-    _TOD_Get_uptime(time);
+    *time = rtems_clock_get_uptime_nanoseconds ();
   }
 }
 
@@ -953,7 +953,8 @@ rtems_capture_switch_task (rtems_tcb* current_task,
     if (ct)
     {
       ct->out++;
-      ct->time += time - ct->time_in;
+      if (ct->time_in)
+        ct->time += time - ct->time_in;
     }
 
     if (rtems_capture_trigger (ct, ht, RTEMS_CAPTURE_SWITCH))

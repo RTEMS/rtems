@@ -51,7 +51,7 @@ extern "C" {
  *
  * A capture timestamp.
  */
-typedef Timestamp_Control rtems_capture_time_t;
+typedef uint64_t rtems_capture_time_t;
 
 /**
  * rtems_capture_from_t
