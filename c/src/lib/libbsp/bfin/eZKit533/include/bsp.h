@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup bfin_ezkit533
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all board IO definitions for eZKit533.
@@ -30,55 +36,72 @@ extern "C" {
 #include <rtems/score/bfin.h>
 #include <rtems/bfin/bf533.h>
 
-/*
- * PLL and clock setup values:
+/**
+ * @defgroup bfin_ezkit533 eZKit533 Support
+ * @ingroup bsp_bfin
+ * @brief eZKit533 Board Support Package
+ * @{
  */
 
-/*
- *  PLL configuration for ezkit533
+/**
+ * @name PLL and clock setup values:
+ * @brief  PLL configuration for ezkit533
  *
  *  XTL   =  27 MHz
  *  CLKIN =  13 MHz
  *  VCO   = 391 MHz
  *  CCLK  = 391 MHz
  *  SCLK  = 130 MHz
+ *
+ * @{
+ *
  */
 
-#define PLL_CSEL    0x0000      /* CCLK = VCO      */
-#define PLL_SSEL    0x0003      /* SCLK = CCLK/3   */
-#define PLL_MSEL    0x3A00      /* VCO = 29xCLKIN  */
-#define PLL_DF      0x0001      /* CLKIN = XTL/2   */
+#define PLL_CSEL    0x0000      ///< @brief CCLK = VCO      */
+#define PLL_SSEL    0x0003      ///< @brief SCLK = CCLK/3   */
+#define PLL_MSEL    0x3A00      ///< @brief VCO = 29xCLKIN  */
+#define PLL_DF      0x0001      ///< @brief CLKIN = XTL/2   */
 
-#define CCLK        391000000   /* CORE CLOCK     */
-#define SCLK        130000000   /* SYSTEM CLOCK   */
+#define CCLK        391000000   ///< @brief CORE CLOCK     */
+#define SCLK        130000000   ///< @brief SYSTEM CLOCK   */
 
-/*
- * UART setup values
+/** @} */
+
+/**
+ * @name UART setup values
+ * @{
  */
-#define BAUDRATE    57600       /* Console Baudrate   */
-#define WORD_5BITS  0x00        /* 5 bits word        */
-#define WORD_6BITS  0x01        /* 6 bits word        */
-#define WORD_7BITS  0x02        /* 7 bits word        */
-#define WORD_8BITS  0x03        /* 8 bits word        */
-#define EVEN_PARITY 0x18        /* Enable EVEN parity */
-#define ODD_PARITY  0x08        /* Enable ODD parity  */
-#define TWO_STP_BIT 0x04        /* 2 stop bits        */
 
-/*
- * Ezkit flash ports
+#define BAUDRATE    57600       ///< @brief Console Baudrate   */
+#define WORD_5BITS  0x00        ///< @brief 5 bits word        */
+#define WORD_6BITS  0x01        ///< @brief 6 bits word        */
+#define WORD_7BITS  0x02        ///< @brief 7 bits word        */
+#define WORD_8BITS  0x03        ///< @brief 8 bits word        */
+#define EVEN_PARITY 0x18        ///< @brief Enable EVEN parity */
+#define ODD_PARITY  0x08        ///< @brief Enable ODD parity  */
+#define TWO_STP_BIT 0x04        ///< @brief 2 stop bits        */
+
+/** @} */
+
+/**
+ * @name Ezkit flash ports
+ * @{
  */
+
 #define FlashA_PortB_Dir  0x20270007L
 #define FlashA_PortB_Data 0x20270005L
 
-/*
- * Blackfin environment memory map
+/** @} */
+
+/**
+ * @brief Blackfin environment memory map
  */
 #define L1_DATA_SRAM_A 0xff800000L
 
 #define FIFOLENGTH 0x100
 
-/*
- *  Simple spin delay in microsecond units for device drivers.
+/**
+ * @brief Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  */
 
@@ -86,29 +109,41 @@ extern "C" {
   { \
   }
 
-/* Constants */
+/**
+ * @name Constants
+ * @{
+ */
 
 #define RAM_START 0
 #define RAM_END   0x100000
 
-/* functions */
+/** @} */
 
-/*
- * Helper Function to use the EzKits LEDS.
+/**
+ * @name functions
+ * @{
+ */
+
+/**
+ * @brief Helper Function to use the EzKits LEDS.
  * Can be used by the Application.
  */
 void setLED (uint8_t value);
 
-/*
- * Helper Function to use the EzKits LEDS
+/**
+ * @brief Helper Function to use the EzKits LEDS
  */
 uint8_t getLED (void);
 
-rtems_isr_entry set_vector(                     /* returns old vector */
-  rtems_isr_entry     handler,                  /* isr routine        */
-  rtems_vector_number vector,                   /* vector number      */
-  int                 type                      /* RTEMS or RAW intr  */
+rtems_isr_entry set_vector(                     ///< @brief returns old vector */
+  rtems_isr_entry     handler,                  ///< @brief isr routine        */
+  rtems_vector_number vector,                   ///< @brief vector number      */
+  int                 type                      ///< @brief RTEMS or RAW intr  */
 );
+
+/** @} */
+
+/** @} */
 
 #ifdef __cplusplus
 }

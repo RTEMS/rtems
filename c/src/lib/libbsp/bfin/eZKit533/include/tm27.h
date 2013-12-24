@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup ezkit533_tm27
+ * @brief Interrupt mechanisms for the tm27 test.
+ */
+
 /*
  *  tm27.h
  *
@@ -12,6 +18,13 @@
 
 #ifndef __tm27_h
 #define __tm27_h
+
+/**
+ * @defgroup ezkit533_tm27 TM27 Test Support
+ * @ingroup bfin_ezkit533
+ * @brief Interrupt Mechanisms for TM27
+ * @{
+ */
 
 /*
  *  Define the interrupt mechanism for Time Test 27
@@ -29,5 +42,7 @@
 #define Clear_tm27_intr() /* empty */
 
 #define Lower_tm27_intr() /* empty */
+
+/** @} */
 
 #endif
