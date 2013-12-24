@@ -1,3 +1,11 @@
+/**
+ * @file
+ * 
+ * @ingroup lm32_evr
+ * 
+ * @brief TM27 timing test routines.
+ */
+
 /*
  *  tm27.h
  *

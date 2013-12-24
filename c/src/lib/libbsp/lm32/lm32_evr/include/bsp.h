@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup lm32_evr
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all board IO definitions.
@@ -25,6 +33,14 @@
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
+
+/**
+ * @defgroup lm32_evr EVR Support
+ *
+ * @ingroup bsp_lm32
+ *
+ * @brief EVR support package.
+ */
 
 #if defined(RTEMS_NETWORKING)
 #include <rtems/rtems_bsdnet.h>

@@ -1,3 +1,11 @@
+/**
+ * @file
+ * 
+ * @ingroup lm32_evr
+ *
+ * @brief C overhead definitions.
+ */
+
 /*  coverhd.h
  *
  *  This include file has defines to represent the overhead associated
