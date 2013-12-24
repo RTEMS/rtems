@@ -1,0 +1,28 @@
+#  testsuites/psxtests/psx14/psx14.doc
+#
+#  Copyright (c) 2013 Mandar Juvekar <mjuvekar0@gmail.com>.
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: psx14
+
+directives:
++ rtems_object_api_maximum_class
++ rtems_object_api_minimum_class
++ rtems_object_get_api_class_name
++ rtems_objects_get_api_name
++ rtems_object_get_name
+
+concepts:
++ Ensure that the init thread has an empty name.
++ Ensure setting a thread name and getting the name works when the thread has
+  no name.
++ Ensure that setting a thread name and getting the name works when the thread
+  has a name.
++ Prints the minimum and maximum class identifiers for POSIX API.
++ Prints the api name for POSIX API (POSIX).
++ Prints the api class name for POSIX_KEYS (Key).
