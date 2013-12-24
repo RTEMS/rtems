@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup lm32_milkymist
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all board IO definitions.
@@ -19,6 +27,14 @@
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
+
+/**
+ * @defgroup lm32_milkymist Milkymist Support
+ * 
+ * @ingroup bsp_lm32
+ * 
+ * @brief Milkymist support package.
+ */
 
 #ifdef __cplusplus
 extern "C" {

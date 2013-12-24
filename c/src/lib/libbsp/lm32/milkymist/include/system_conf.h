@@ -1,3 +1,11 @@
+/**
+ * @file
+ * 
+ * @ingroup lm32_milkymist
+ *
+ * @brief System configuration.
+ */
+
 /*  system_conf.h
  *  Global System conf
  *
