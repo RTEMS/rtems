@@ -1,0 +1,27 @@
+#  /testsuites/psxtests/psx03/psx03.scn
+#
+#  Copyright (c) 2013 Rishi Sharma <rishisharma7361@gmail.com>.
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: psx03
+
+directives:
++ pthread_kill
+
+concepts:
++ The SIGUSR2 is useful for simple interprocess communication.
++ SIGUSR2 is blocked
++ waiting for a signal for 3 seconds
++ pthread_kill is used send a signal to a thread
++ Task 1: The pthread_kill() function sends the signal SIGUSR2 to Init
++ correctly times out waiting for signal and block
++ receives pthread_kill signal
++ pthread_kill sends the signal SIGUSR1 to Init
++ SIGUSR1 is assigned a signal 16
++ SIGUSR2 is unblocked
++ SIGUSR2 is received and assigned a signal 17
