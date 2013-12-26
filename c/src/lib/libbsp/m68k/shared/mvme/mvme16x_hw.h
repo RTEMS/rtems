@@ -1,3 +1,11 @@
+/**
+ *  @file
+ *
+ *  @ingroup m68k_mvme
+ *
+ *  @brief MVME16x IO definitions
+ */
+
 /*  mvme16x_hw.h
  *
  *  This include file contains all MVME16x board IO definitions
@@ -21,8 +29,12 @@
 extern "C" {
 #endif
 
-/*
- * Network driver configuration
+/**
+ *  @defgroup m68k_mvme MVME16X IO Support
+ *
+ *  @ingroup m68k_shared
+ *
+ *  @brief IO Support Package
  */
 
 struct rtems_bsdnet_ifconfig;

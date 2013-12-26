@@ -1,6 +1,12 @@
-/*
- * gdb_if.h - definition of the interface between the stub and gdb
+/**
+ *  @file
  *
+ *  @ingroup m68k_gdbstub
+ *
+ *  @brief definition of the interface between the stub and gdb
+ */
+
+/*
  *                   THIS SOFTWARE IS NOT COPYRIGHTED
  *
  *  The following software is offered for use in the public domain.
@@ -14,6 +20,14 @@
 
 #ifndef _GDB_IF_H
 #define _GDB_IF_H
+
+/**
+ *  @defgroup m68k_gdbstub GDB Stub
+ *
+ *  @ingroup m68k_shared
+ *
+ *  @brief GDB Stub interface support
+ */
 
 /* Max number of threads in qM response */
 #define QM_MAX_THREADS (20)
