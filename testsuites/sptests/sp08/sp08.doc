@@ -1,4 +1,4 @@
-#  COPYRIGHT (c) 1989-1999.
+﻿#  COPYRIGHT (c) 1989-2013.
 #  On-Line Applications Research Corporation (OAR).
 #
 #  The license and distribution terms for this file may be
@@ -6,17 +6,16 @@
 #  http://www.rtems.com/license/LICENSE.
 #
 
-
-This file describes the directives and concepts tested by this test set.
-
-test set name:  test8
+test set name:  sp08
 
 directives:
-  ex_init, ex_start, t_create, t_start, tm_tick, i_return,
-  t_mode
+  rtems_task_create
+  rtems_task_start
+  rtems_clock_tick
+  rtems_task_mode
 
 concepts:
 
-  a. Verifies every mode change possible.
+  + Verifies every mode change possible.
 
-  b. Verifies the fatal error handler.
+  + Verifies the fatal error handler.
