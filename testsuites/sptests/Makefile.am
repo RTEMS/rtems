@@ -28,7 +28,8 @@ SUBDIRS = \
     spintrcritical17 spintrcritical18 spmkdir spmountmgr01 spheapprot \
     sppagesize spsem01 spsem02 spsimplesched01 spsimplesched02 \
     spsimplesched03 spnsext01 spedfsched01 spedfsched02 spedfsched03 \
-    spcbssched01 spcbssched02 spcbssched03 spqreslib sptimespec01
+    spcbssched01 spcbssched02 spcbssched03 spqreslib sptimespec01 \
+    spregion_err01
 SUBDIRS += spintrcritical20
 SUBDIRS += spintrcritical19
 SUBDIRS += spcontext01

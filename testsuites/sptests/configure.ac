@@ -205,5 +205,6 @@ spwkspace/Makefile
 sptimer_err01/Makefile
 sptimer_err02/Makefile
 spcpuset01/Makefile
+spregion_err01/Makefile
 ])
 AC_OUTPUT

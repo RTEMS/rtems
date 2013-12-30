@@ -48,7 +48,7 @@ rtems_timer_service_routine Io_during_interrupt(
   rtems_id ignored
 );
 
-void Screen1( void );
+/*void Screen1( void );
 
 void Screen2( void );
 
@@ -68,9 +68,9 @@ void Screen9( void );
 
 void Screen10( void );
 
-void Screen11( void );
+void Screen11( void );*/
 
-//void Screen12( void );
+void Screen12( void );
 
 /* configuration information */
 
