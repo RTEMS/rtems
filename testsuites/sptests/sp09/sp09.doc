@@ -12,12 +12,12 @@ This file describes the directives and concepts tested by this test set.
 test set name:  test9
 
 directives:
-  ex_init, ex_start, tm_tick, i_return, t_resume, t_setpri, t_setreg, t_start,
-  t_suspend, tm_wkafter, tm_wkwhen, ev_receive, ev_send, sm_create, sm_delete,
-  sm_ident, sm_p, sm_v, q_broadcast, q_create, q_delete, q_ident, q_receive,
-  q_send, q_urgent, as_catch, as_send, as_return, rn_create, rn_delete,
-  rn_getseg, rn_ident, rn_retseg, pt_create, pt_delete, pt_getbug, pt_ident,
-  pt_retbuf, de_close, de_cntrl, de_init, de_open, de_read, de_write
+  tm_tick, t_resume, t_setpri, t_setreg, t_start, t_suspend, tm_wkafter,
+  tm_wkwhen, ev_receive, ev_send, sm_create, sm_delete, sm_ident,
+  sm_p, sm_v, q_broadcast, q_create, q_delete, q_ident, q_receive,
+  q_send, q_urgent, as_catch, as_send, as_return, pt_create, pt_delete,
+  pt_getbug, pt_ident, pt_retbuf, de_close, de_cntrl, de_init, de_open,
+  de_read, de_write
 
 concepts:
 

@@ -42,8 +42,6 @@ rtems_task Init(
 
   Partition_name[ 1 ]  =  rtems_build_name( 'P', 'T', '1', ' ' );
 
-  Region_name[ 1 ]     =  rtems_build_name( 'R', 'N', '1', ' ' );
-
   Port_name[ 1 ]       =  rtems_build_name( 'D', 'P', '1', ' ' );
 
   Period_name[ 1 ]     =  rtems_build_name( 'T', 'M', '1', ' ' );

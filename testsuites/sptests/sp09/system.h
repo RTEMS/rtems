@@ -82,7 +82,6 @@ void Screen11( void );
 #define CONFIGURE_MAXIMUM_SEMAPHORES          2
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1
 #define CONFIGURE_MAXIMUM_PARTITIONS          1
-#define CONFIGURE_MAXIMUM_REGIONS             1
 #define CONFIGURE_MAXIMUM_PERIODS             1
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS     0
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
@@ -107,9 +106,6 @@ TEST_EXTERN rtems_id   Queue_id[ 3 ];       /* array of queue ids */
 TEST_EXTERN rtems_name Partition_name[ 2 ]; /* array of partition names */
 TEST_EXTERN rtems_id   Partition_id[ 2 ];   /* array of partition ids */
 
-TEST_EXTERN rtems_name Region_name[ 2 ];    /* array of region names */
-TEST_EXTERN rtems_id   Region_id[ 2 ];      /* array of region ids */
-
 TEST_EXTERN rtems_name Port_name[ 2 ];      /* array of port names */
 TEST_EXTERN rtems_id   Port_id[ 2 ];        /* array of port ids */
 
@@ -123,10 +119,5 @@ TEST_EXTERN rtems_id   Junk_id;             /* id used to return errors */
 
 TEST_EXTERN uint8_t   Partition_good_area[256] CPU_STRUCTURE_ALIGNMENT;
 #define Partition_bad_area (void *) 0x00000005
-
-TEST_EXTERN uint32_t   Region_good_area[4096] CPU_STRUCTURE_ALIGNMENT;
-#define Region_bad_area    (void *) 0x00000005
-#define REGION_START_OFFSET 1024
-#define REGION_LENGTH       512
 
 /* end of include file */

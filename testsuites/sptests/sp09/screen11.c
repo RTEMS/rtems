@@ -20,6 +20,8 @@
 
 #include "system.h"
 
+uint32_t Other_Memory;
+
 void Screen11()
 {
   void              *buffer_address_1;
@@ -296,7 +298,7 @@ void Screen11()
 
   status = rtems_partition_return_buffer(
     Partition_id[ 1 ],
-    Region_good_area                  /* NOTE: Region Memory */
+    &Other_Memory
   );
   fatal_directive_status(
     status,
