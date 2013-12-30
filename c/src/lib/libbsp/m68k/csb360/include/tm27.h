@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup m68k_csb360
+ *
+ * @brief Time Test 27 routines.
+ */
+
 /*
  *  tm27.h
  *

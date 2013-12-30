@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup m68k_csb360
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  * Board Support Package for CSB360 evaluation board
  * BSP definitions
@@ -19,6 +27,14 @@
 #define _BSP_H
 
 #include <mcf5272/mcf5272.h>
+
+/**
+ * @defgroup m68k_csb360 CSB360 Support
+ *
+ * @ingroup bsp_m68k
+ *
+ * @brief CSB360 support.
+ */
 
 
 /*** Board resources allocation ***/
