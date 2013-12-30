@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup i386_pc386
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*-------------------------------------------------------------------------+
 | bsp.h v1.1 - PC386 BSP - 1997/08/07
 +--------------------------------------------------------------------------+
@@ -52,6 +60,14 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <libcpu/cpu.h>
 #include <rtems/bspIo.h>
+
+/**
+ * @degroup pc386_i386 PC386 Support
+ *
+ * @ingroup bsp_i386
+ *
+ * @brief PC386 support.
+ */
 
 #define BSP_HAS_FRAME_BUFFER 1
 

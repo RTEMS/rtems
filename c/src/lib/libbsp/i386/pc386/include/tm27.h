@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup i386_pc386
+ *
+ * @brief Implementation of interrupt mechanisms for Time Test 27.
+ */
+
 /*
  *  tm27.h
  *

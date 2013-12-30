@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup pc386_3c509
+ *
+ * @brief 3C509 PC card support.
+ */
+
 /*
  * Copyright (c) 1993 Herb Peyerl (hpeyerl@novatel.ca) All rights reserved.
  *
@@ -45,6 +53,14 @@
  * Pccard support for 3C589 by:
  *		HAMADA Naoki
  *		nao@tom-yam.or.jp
+ */
+
+/**
+ * @defgroup pc386_3c509 3C509 Support
+ *
+ * @ingroup i386_pc386
+ *
+ * @brief 3C509 support.
  */
 
 /*

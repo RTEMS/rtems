@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup i386_pc386
+ *
+ * @brief VGA definitions.
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup i386_pc386
+ *
+ * @brief Paux driver routines.
+ */
+
 #ifndef __paux_drv__
 #define __paux_drv__
 /***************************************************************************

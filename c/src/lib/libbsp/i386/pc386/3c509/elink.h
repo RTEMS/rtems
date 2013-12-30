@@ -1,3 +1,11 @@
+/**
+ * @file
+ * 
+ * @ingroup pc386_3c509
+ *
+ * @brief EtherLink definitions.
+ */
+
 /*
  * Copyright (c) 1994 Charles Hannum.  All rights reserved.
  *

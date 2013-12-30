@@ -1,10 +1,9 @@
 /**
- *  @file bsp/rtd316.h
+ * @file
  *
- *  @brief RTD316 Driver Interface Definition
+ * @ingroup i386_pc386
  *
- *  This file provides the interface to the RTD316 Dual
- *  serial port utility module.
+ * @brief RTD316 driver interface defintions.
  */
 
 /*

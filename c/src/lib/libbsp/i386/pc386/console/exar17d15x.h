@@ -1,8 +1,9 @@
 /**
- * @file bsp/exar17d15x.h
+ * @file
  *
- *  This file provides the interface to the Exar Multiport
- *  PCI UART controller.
+ * @ingroup i386_pc386
+ *
+ * @brief Exar Multiport PCI UART interface.
  */
 
 /*

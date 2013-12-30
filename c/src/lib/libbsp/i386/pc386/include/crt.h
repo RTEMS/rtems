@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup i386_pc386
+ *
+ * @brief CRT controller definitions.
+ */
+
 /*
  * crt.h  - This file contains definitions for constants related to PC console.
  *          More information can be found at

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup i386_pc386
+ *
+ * @brief Keyboard and mouse definitions.
+ */
+
 /*
  *	include/linux/pc_keyb.h
  *	PC Keyboard And Keyboard Controller

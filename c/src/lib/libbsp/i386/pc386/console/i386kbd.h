@@ -1,3 +1,11 @@
+/**
+ * @file
+ * 
+ * @ingroup i386_pc386
+ *
+ * @brief I386 keyboard definitions.
+ */
+
 /*
  *  linux/include/asm-i386/keyboard.h
  *
