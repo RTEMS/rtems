@@ -1,17 +1,16 @@
 /**
-  *  @file
-  *
-  *  @ingroup h8300_bsp
-  *
-  *  @brief h8 simulator definitions in gdb
-  */
-
-/*  bsp.h
+ *  @file
+ *
+ *  @ingroup h8300_bsp
+ *
+ *  @brief h8 simulator definitions in gdb
  *
  *  This include file contains some definitions specific to the
  *  h8 simulator in gdb.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -35,13 +34,12 @@ extern "C" {
 #include <rtems/clockdrv.h>
 
 /**
-  *  @defgroup h8300_bsp Clock Tick Support
-  *
-  *  @ingroup h8300_h8sim
-  *
-  *  @brief Clock Tick Support Package
-  */
-
+ *  @defgroup h8300_bsp Clock Tick Support
+ *
+ *  @ingroup h8300_h8sim
+ *
+ *  @brief Clock Tick Support Package
+ */
 Thread clock_driver_sim_idle_body(uintptr_t);
 #define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
 
@@ -49,7 +47,6 @@ Thread clock_driver_sim_idle_body(uintptr_t);
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  */
-
 #define rtems_bsp_delay( microseconds ) \
   { register uint32_t         _delay=(microseconds); \
     register uint32_t         _tmp = 0; /* initialized to avoid warning */ \

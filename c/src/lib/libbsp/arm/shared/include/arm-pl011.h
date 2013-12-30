@@ -1,10 +1,10 @@
 /**
-  *  @file
-  *
-  *  @ingroup arm_shared
-  *
-  *  @brief ARM PL011 Support Package
-  */
+ *  @file
+ *
+ *  @ingroup arm_shared
+ *
+ *  @brief ARM PL011 Support Package
+ */
 
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.

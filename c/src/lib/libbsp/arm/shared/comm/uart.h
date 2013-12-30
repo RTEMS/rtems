@@ -1,10 +1,10 @@
 /**
-  *  @file
-  *
-  *  @ingroup arm_comm
-  *
-  *  @brief UART Support
-  */
+ *  @file
+ *
+ *  @ingroup arm_comm
+ *
+ *  @brief UART Support
+ */
 
 /*
  * This software is Copyright (C) 1998 by T.sqware - all rights limited
