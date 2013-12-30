@@ -1,3 +1,11 @@
+/**
+ *  @file
+ *
+ *  @ingroup m32r_bsp
+ *
+ *  @brief m32r definitions in gdb
+ */
+
 /*  bsp.h
  *
  *  This include file contains some definitions specific to the
@@ -26,7 +34,14 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
-/* support for simulated clock tick */
+/**
+ *  @defgroup m32r_bsp Clock Tick Support
+ *
+ *  @ingroup m32r_m32rsim
+ *
+ *  @brief Clock Tick Support Package
+ */
+
 Thread clock_driver_sim_idle_body(uintptr_t);
 #define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
 
