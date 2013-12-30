@@ -1,0 +1,38 @@
+*** TEST SPREGION_ERR01 ***
+TA1 - rtems_region_create - RTEMS_INVALID_NAME
+TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_create - RTEMS_INVALID_SIZE
+TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_create - RTEMS_SUCCESSFUL
+TA1 - rtems_region_extend - NULL address - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_extend - address within - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_create - RTEMS_TOO_MANY
+TA1 - rtems_region_delete - unknown RTEMS_INVALID_ID
+TA1 - rtems_region_delete - local RTEMS_INVALID_ID
+TA1 - rtems_region_ident - RTEMS_INVALID_NAME
+TA1 - rtems_region_get_information - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_get_information - unknown RTEMS_INVALID_ID
+TA1 - rtems_region_get_free_information - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_get_free_information - unknown RTEMS_INVALID_ID
+TA1 - rtems_region_get_segment - RTEMS_INVALID_ID
+TA1 - rtems_region_get_segment - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_get_segment - 0 size - RTEMS_INVALID_SIZE
+TA1 - rtems_region_get_segment - too big - RTEMS_INVALID_SIZE
+TA1 - rtems_region_get_segment - RTEMS_SUCCESSFUL
+TA1 - rtems_region_get_segment - RTEMS_UNSATISFIED
+TA1 - rtems_region_get_segment - timeout in 3 seconds
+TA1 - rtems_region_get_segment - woke up with RTEMS_TIMEOUT
+TA1 - rtems_region_get_segment_size - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_get_segment_size - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_get_segment_size - unknown RTEMS_INVALID_ID
+TA1 - rtems_region_delete - RTEMS_RESOURCE_IN_USE
+TA1 - rtems_region_resize_segment - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_resize_segment - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_resize_segment - RTEMS_INVALID_ID
+TA1 - rtems_region_return_segment - RTEMS_INVALID_ID
+TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS
+TA1 - rtems_debug_disable - RTEMS_DEBUG_REGION
+TA1 - rtems_debug_enable - RTEMS_DEBUG_REGION
+TA1 - rtems_region_extend - RTEMS_INVALID_ID
+TA1 - rtems_region_extend - within heap - RTEMS_INVALID_ADDRESS
+*** END OF TEST SPREGION_ERR01 ***
