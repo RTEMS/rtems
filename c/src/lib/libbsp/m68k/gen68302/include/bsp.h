@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup m68k_gen68302
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all board IO definitions.
@@ -26,6 +34,14 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
 #include <rtems/clockdrv.h>
+
+/**
+ * @defgroup m68k_gen68302 GEN68302 Support
+ *
+ * @ingroup bsp_m68k
+ *
+ * @brief GEN68302 support.
+ */
 
 /*
  *  Simple spin delay in microsecond units for device drivers.

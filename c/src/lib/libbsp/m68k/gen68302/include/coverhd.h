@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup m68k_gen68302
+ *
+ * @brief C overhead definitions.
+ */
+
 /*  coverhd.h
  *
  *  This include file has defines to represent the overhead associated

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup m68k_gen68302
+ *
+ * @brief Motorola 68302 definitions.
+ */
+
 /*
  *  Implements the Motorola 68302 multi-protocol chip parameter
  *  definition header.
