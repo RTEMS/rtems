@@ -140,7 +140,9 @@ typedef struct {
 	uint32_t extpolar;
 	uint32_t reserved_150 [12];
 	uint32_t rsid;
-	uint32_t reserved_184 [7];
+	uint32_t reserved_184 [1];
+	uint32_t matrixarb;
+	uint32_t reserved_18c [5];
 	uint32_t scs;
 #define LPC17XX_SCB_SCS_EMC_SHIFT_CTL BSP_BIT32(0)
 #define LPC17XX_SCB_SCS_EMC_RESET_DIS BSP_BIT32(1)
