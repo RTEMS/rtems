@@ -81,6 +81,14 @@ $(PROJECT_INCLUDE)/bsp/start.h: ../shared/include/start.h $(PROJECT_INCLUDE)/bsp
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/start.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/start.h
 
+$(PROJECT_INCLUDE)/bsp/arm-pl111-fb.h: ../shared/include/arm-pl111-fb.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-pl111-fb.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-pl111-fb.h
+
+$(PROJECT_INCLUDE)/bsp/arm-pl111-regs.h: ../shared/include/arm-pl111-regs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-pl111-regs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-pl111-regs.h
+
 $(PROJECT_INCLUDE)/bsp/lpc-timer.h: ../shared/lpc/include/lpc-timer.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc-timer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc-timer.h

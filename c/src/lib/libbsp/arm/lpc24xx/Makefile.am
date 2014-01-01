@@ -32,6 +32,8 @@ include_bsp_HEADERS += ../../shared/include/stackalloc.h
 include_bsp_HEADERS += ../../shared/include/uart-output-char.h
 include_bsp_HEADERS += ../../shared/tod.h
 include_bsp_HEADERS += ../shared/include/start.h
+include_bsp_HEADERS += ../shared/include/arm-pl111-fb.h
+include_bsp_HEADERS += ../shared/include/arm-pl111-regs.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-timer.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-i2s.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-emc.h
@@ -153,6 +155,10 @@ libbsp_a_SOURCES += ssp/ssp.c
 # I2C
 libbsp_a_SOURCES += i2c/i2c.c \
 	i2c/i2c-config.c
+
+# Framebuffer
+libbsp_a_SOURCES += ../shared/arm-pl111-fb.c
+libbsp_a_SOURCES += startup/fb-config.c
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
