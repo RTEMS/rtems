@@ -80,6 +80,8 @@ static rtems_status_code pl111_fb_initialize(pl111_fb_context *ctx)
   if (ctx->frame_buffer != NULL) {
     volatile pl111 *regs = cfg->regs;
 
+    (*cfg->set_up)(cfg);
+
     regs->lcd.upbase = (uint32_t) ctx->frame_buffer;
 
     regs->lcd.timing0 = cfg->timing0;
@@ -88,7 +90,7 @@ static rtems_status_code pl111_fb_initialize(pl111_fb_context *ctx)
     regs->lcd.timing3 = cfg->timing3;
     regs->lcd.control = cfg->control;
 
-    arm_pl111_fb_pins_set_up(cfg);
+    (*cfg->pins_set_up)(cfg);
 
     regs->lcd.control = cfg->control
       | PL111_LCD_CONTROL_LCD_EN;
@@ -119,7 +121,8 @@ static void pl111_fb_destroy(const pl111_fb_context *ctx)
 
   regs->lcd.control = cfg->control;
 
-  arm_pl111_fb_pins_tear_down(cfg);
+  (*cfg->pins_tear_down)(cfg);
+  (*cfg->tear_down)(cfg);
 }
 
 static void pl111_fb_get_fix_screen_info(struct fb_fix_screeninfo *info)
