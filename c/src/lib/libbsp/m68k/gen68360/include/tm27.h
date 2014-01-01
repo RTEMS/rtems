@@ -1,4 +1,11 @@
-/*
+/**
+ *  @file
+ *
+ *  @ingroup m68k_tm27
+ *
+ *  @brief Time Test 27
+ */
+
  *  tm27.h
  *
  *  The license and distribution terms for this file may be
@@ -13,9 +20,12 @@
 #ifndef __tm27_h
 #define __tm27_h
 
-/*
- *  Stuff for Time Test 27
- *  Don't bother with hardware -- just use a software-interrupt
+/**
+ *  @defgroup m68k_tm27 Stuff for Time Test 27
+ *
+ *  @ingroup m68k_gen68360
+ *
+ *  @brief Don't bother with hardware -- just use a software-interrupt
  */
 
 #define MUST_WAIT_FOR_INTERRUPT 0

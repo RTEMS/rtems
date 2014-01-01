@@ -1,6 +1,11 @@
-/*
- * This file was machine-generated from the tmoverhd.exe output
+/**
+ *  @file
+ *
+ *  @ingroup m68k_coverhd
+ *
+ *  @brief This file was machine-generated from the tmoverhd.exe output
  */
+
 #define CALLING_OVERHEAD_INITIALIZE_EXECUTIVE 2
 #define CALLING_OVERHEAD_SHUTDOWN_EXECUTIVE 2
 #define CALLING_OVERHEAD_TASK_CREATE 4

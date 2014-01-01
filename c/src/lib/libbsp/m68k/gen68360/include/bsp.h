@@ -1,5 +1,12 @@
+/**
+ *  @file
+ *
+ *  @ingroup gen68360_bsp
+ *
+ *  @brief Board Support Package for `Generic' Motorola MC68360
+ */
+
 /*
- * Board Support Package for `Generic' Motorola MC68360
  *
  * Based on the `gen68302' board support package, and covered by the
  * original distribution terms.
@@ -36,9 +43,14 @@ extern "C" {
 #include <rtems/iosupp.h>
 #include <rtems/clockdrv.h>
 
-/*
- * Network driver configuration
+/**
+ *  @defgroup gen68360_bsp Network driver
+ *
+ *  @ingroup m68k_gen68360
+ *
+ *  @brief Network driver configuration
  */
+
 struct rtems_bsdnet_ifconfig;
 extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int attaching);
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"scc1"
