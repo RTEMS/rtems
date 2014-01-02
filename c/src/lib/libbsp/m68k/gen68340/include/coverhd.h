@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup m68k_gen68340
+ *
+ * @brief C overhead definitions.
+ */
+
 /*
  * This file was machine-generated from the tmoverhd.exe output
  */

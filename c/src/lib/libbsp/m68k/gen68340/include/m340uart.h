@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup m68k_gen68340
+ *
+ * @brief UART console driver definitions.
+ */
+
 /*
  *  Header file for console driver
  *  defines for accessing M68340/68349 UART registers

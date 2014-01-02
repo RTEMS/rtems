@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup m68k_gen68340
+ *
+ * @brief Time driver definitions.
+ */
+
 /*
  *  Header file for timer driver
  *  defines for accessing M68340 timer registers

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup m68k_gen68340
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  * Board Support Package for `Generic' Motorola MC68340
  *
@@ -29,6 +37,14 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
 #include <rtems/clockdrv.h>
+
+/**
+ * @defgroup m68k_gen68340 Motorola MC68340 Support
+ *
+ * @ingroup bsp_m68k
+ *
+ * @brief Motorola MC68340 support.
+ */
 
 /*
  *  Simple spin delay in microsecond units for device drivers.
