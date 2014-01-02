@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup m68k_genmcf548x
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*===============================================================*\
 | Project: RTEMS generic mcf548x BSP                              |
 +-----------------------------------------------------------------+
@@ -51,6 +59,14 @@ extern "C" {
 #endif
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
+
+/**
+ * @defgroup m68k_genmcf548x MCF548X Support
+ *
+ * @ingroup bsp_m68k
+ *
+ * @brief MCT548X support.
+ */
 
 #include <rtems.h>
 #include <rtems/iosupp.h>

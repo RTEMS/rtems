@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup genmcf548x_interrupt
+ *
+ * @brief Interrupt definitions.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
@@ -18,6 +26,15 @@
 #include <rtems.h>
 #include <rtems/irq.h>
 #include <rtems/irq-extension.h>
+
+/**
+ * @defgroup genmcf548x_interrupt Interrupt Support
+ *
+ * @ingroup m68k_genmcf548x
+ *
+ * @brief Interrupt support.
+ */
+
 
 #define MCF548X_IRQ_EPORT_EPF1 1
 #define MCF548X_IRQ_EPORT_EPF2 2

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup m68k_genmcf548x
+ *
+ * @brief Time Test 27 routines.
+ */
+
 /*
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
