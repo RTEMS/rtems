@@ -25,34 +25,9 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
-  Screen1();
-  rtems_test_pause_and_screen_number( 2 );
+  rtems_test_pause_and_screen_number( 11 );
 
-  Screen2();
-  rtems_test_pause_and_screen_number( 3 );
-
-  Screen3();
-  rtems_test_pause_and_screen_number( 4 );
-
-  Screen4();
-  rtems_test_pause_and_screen_number( 5 );
-
-  Screen5();
-  rtems_test_pause_and_screen_number( 6 );
-
-  Screen6();
-  rtems_test_pause_and_screen_number( 7 );
-
-  Screen7();
-  rtems_test_pause_and_screen_number( 8 );
-
-  Screen8();
-  rtems_test_pause_and_screen_number( 9 );
-
-  Screen9();
-  rtems_test_pause_and_screen_number( 10 );
-
-  Screen10();
+  Screen11();
 
   puts( "*** END OF TEST 9 ***" );
   rtems_test_exit( 0 );
