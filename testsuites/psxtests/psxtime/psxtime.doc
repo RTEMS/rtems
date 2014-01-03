@@ -1,0 +1,24 @@
+#  testsuites/psxtests/psxtime/psxtime.doc
+#  Copyright (c) 2013 Shaily Sangwan <shailysangwan@gmail.com>.
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: psxtime
+
+directives:
++ gettimeofday
++ rtems_clock_set
++ rtems_clock_get_tod 
++ time
++ localtime
++ gmtime
+
+
+
+concepts:
+
++ Tests the getting and setting of POSIX timing routines, runs the directives on various time instances and adjusts the time delay
