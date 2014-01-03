@@ -1,6 +1,10 @@
-/*  bsp.h
+/**
+ *  @file
  *
- *  This include file contains all Motorola 680x0 IDP board IO definitions.
+ *  @ingroup idp_bsp
+ *
+ *  @brief This include file contains all Motorola 680x0 IDP board
+ *  IO definitions.
  */
 
 #ifndef _BSP_H
@@ -14,6 +18,14 @@
 #include <rtems/clockdrv.h>
 #include <rtems/motorola/mc68230.h>
 #include <rtems/motorola/mc68681.h>
+
+/**
+ *  @defgroup idp_bsp IO definitions
+ *
+ *  @ingroup m68k_idp
+ *
+ *  @brief Motorola 680x0 IDP board IO definitions
+ */
 
 #define DUART_ADDR	0xb00003   /* base address of the MC68681 DUART */
 

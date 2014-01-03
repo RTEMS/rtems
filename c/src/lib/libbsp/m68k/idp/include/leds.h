@@ -1,6 +1,13 @@
+/**
+ *  @file
+ *
+ *  @ingroup m68k_leds
+ *
+ *  @brief Led Control
+ */
+
 /*
- * leds.c -- control the led's on a Motorola mc68ec0x0 board.
- *           Written by rob@cygnus.com (Rob Savoye)
+ * Written by rob@cygnus.com (Rob Savoye)
  */
 
 #ifndef __LEDS_H__
@@ -17,6 +24,14 @@
 #define LED_7           ~0x80
 #define LEDS_OFF	0xff
 #define LEDS_ON		0x0
+
+/**
+ *  @defgroup m68k_leds Led Control
+ *
+ *  @ingroup m68k_idp
+ *
+ *  @brief control the led's on a Motorola mc68ec0x0 board
+ */
 
 #define FUDGE(x) ((x >= 0xa && x <= 0xf) ? (x + 'a') & 0x7f : (x + '0') & 0x7f)
 
