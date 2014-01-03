@@ -1,5 +1,12 @@
+/**
+ *  @file
+ *
+ *  @ingroup mvme3100_bsp
+ *
+ *  @brief This file contains BSP API definition.
+ */
+
 /*
- *  bsp.h  -- contain BSP API definition.
  *
  *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
  *
@@ -21,8 +28,12 @@
 #include <rtems/clockdrv.h>
 #include <bsp/vectors.h>
 
-/*
- *  confdefs.h overrides for this BSP:
+/**
+ *  @defgroup mvme3100_bsp confdefs.h overrides
+ *
+ *  @ingroup powerpc_mvme3100
+ *
+ *  @brief confdefs.h overrides for this BSP:
  */
 
 #define BSP_INTERRUPT_STACK_SIZE          (16 * 1024)

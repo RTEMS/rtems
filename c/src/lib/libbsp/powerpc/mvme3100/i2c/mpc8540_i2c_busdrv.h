@@ -1,3 +1,11 @@
+/**
+ *  @file
+ *
+ *  @ingroup powerpc_mpc8540i2cbusdrv
+ *
+ *  @brief I2C bus driver for mpc8540-based boards
+ */
+
 #ifndef MPC8540_I2C_BUS_DRIVER_H
 #define MPC8540_I2C_BUS_DRIVER_H
 

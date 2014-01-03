@@ -1,7 +1,13 @@
+/**
+ *  @file
+ *
+ *  @ingroup powerpc_vmeconfig
+ *
+ *  @brief mvme3100 BSP specific address space configuration parameters
+ */
+
 #ifndef RTEMS_BSP_VME_CONFIG_H
 #define RTEMS_BSP_VME_CONFIG_H
-
-/* mvme3100 BSP specific address space configuration parameters */
 
 /*
  * Authorship
@@ -97,6 +103,15 @@
  * universe. The default setup tries to use interrupt
  * sharing.
  */
+
+/**
+ *  @defgroup powerpc_vme BSP_VME_INSTALL_IRQ_MGR Support
+ *
+ *  @ingroup powerpc_mvme3100
+ *
+ *  @brief BSP_VME_INSTALL_IRQ_MGR Support Package
+ */
+
 #define BSP_VME_INSTALL_IRQ_MGR(err)    \
 	do {                                \
 		err = vmeTsi148InstallIrqMgrAlt(\

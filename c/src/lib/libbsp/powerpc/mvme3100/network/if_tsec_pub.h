@@ -1,3 +1,11 @@
+/**
+ *  @file
+ *
+ *  @ingroup powerpc_iftsecpub
+ *
+ *  @brief IF_TSEC_PUB Support
+ */
+
 #ifndef IF_TSEC_PUBLIC_INTERFACE_H
 #define IF_TSEC_PUBLIC_INTERFACE_H
 
@@ -60,8 +68,12 @@ struct tsec_private;
 
 /********** Low-level Driver API ****************/
 
-/*
- * This API provides driver access to applications that
+/**
+ *  @defgroup powerpc_iftsecpub Low-level Driver API
+ *
+ *  @ingroup powerpc_mvme3100
+ *
+ *  @brief This API provides driver access to applications that
  * want to use e.g., the second ethernet interface
  * independently from the BSD TCP/IP stack. E.g., for
  * raw ethernet packet communication...
