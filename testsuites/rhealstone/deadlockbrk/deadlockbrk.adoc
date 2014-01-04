@@ -1,0 +1,37 @@
+= Deadlock Break Benchmark
+
+This benchmark measures the average time to break a deadlock that occurs
+when a high priority task preempts a low priority task that is holding a
+resource that the high priority task needs. In RTEMS, these situations
+are mitigated through use of a semaphore with priority inheritance. A
+task holding a semaphore with priority inheritance enabled has its
+priority boosted to match that of the highest priority task blocked on
+that semaphore.
+
+== Directives
+
+  * rtems_semaphore_obtain
+  * rtems_semaphore_release
+  * rtems_task_suspend
+  * rtems_task_resume
+
+
+== Methodology
+
+This benchmark is structured in a way that is very similar to the semaphore-
+shuffle benchmark, but instead uses three tasks of differing priorities and
+suspend/resume instead of yield directives.
+
+The benchmark is run and timed once with no semaphore operations. This is the
+overhead time. The benchmark starts with the high priority task, which suspends
+itself, passing control to the mid priority task. The mid priority task then
+suspends itself, passing control to the low priority task. The low priority task
+resumes the mid priority task, which then resumes the high priority task. The
+process is repeated a total of BENCHMARKS times. This process is then executed
+with the low priority task holding a semaphore that the high priority task blocks
+on when trying to obtain. Due to priority inheritance (the deadlock break
+mechanism) the low priority task will execute instead of the mid priority task.
+The same system of suspend/resumes then occurs.
+
+The average is found and the overhead (the time of the first run) is subtracted
+out in the call to put_time.

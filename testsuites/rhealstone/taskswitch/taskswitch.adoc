@@ -1,0 +1,27 @@
+== Task Switch Benchmark
+
+This benchmark measures the average time it takes the system to switch between
+two independent and active tasks of equal priority. Task switching is synchronous
+and non-preemptive.
+
+=== Directives
+
+  * rtems_task_wake_after
+
+
+=== Methodology
+
+This benchmark utilizes rtems_task_wake_after( RTEMS_YIELD_PROCESSOR ) to
+achieve a synchronous, non-preemptive task switch. rtems_task_wake_after
+used in this context is essentially just a yield.
+
+As this is an average, we structure the benchmark code in a way that results
+in some overhead being included that inflates the total elapsed time. This
+overhead includes:
+  * the time it takes to iterate through the for loops (minimal
+  * overhead code in rtems_task_wake_after
+
+We instantiate two tasks, and time how long it takes for them to switch back
+and forth between themselves a total of BENCHMARKS * 2 times. We then use
+the put_time call to divide this total elapsed time by BENCHMARKS * 2, giving
+an average, and subtract out the overhead time we found earlier.

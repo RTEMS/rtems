@@ -1,0 +1,26 @@
+= Semaphore Shuffle Benchmark
+
+This benchmark measures the average delay between a task's release of a
+semaphore and the activation of another task blocked on that semaphore.
+
+== Directives
+
+  * rtems_semaphore_obtain
+  * rtems_semaphore_release
+  * rtems_task_wake_after
+
+
+== Methodology
+
+This benchmark has two equal priority tasks switch between themselves a total
+of BENCHMARKS * 2 times. This is timed, and then execute the same code but
+having the tasks pass a semphore between themselves. A task obtains the
+semphore, then yields to the other task, which blocks on the semaphore. The
+task owning the semaphore then releases it and yields. This process is
+repeated by the other task.
+
+This benchmark has overhead, especially in the time it takes to switch between
+the two tasks, which happens a total of 2 times per semaphore shuffle. By first
+timing how long it takes the tasks to switch between themselves without any
+semaphore related calls, the overhead time is found. This time is then subtracted
+from the total time of the benchmark, with semaphore shuffling occuring.

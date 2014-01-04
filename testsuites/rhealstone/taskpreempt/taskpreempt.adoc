@@ -1,0 +1,36 @@
+= Task Preemption Benchmark
+
+This benchmark measures the average time it takes the system to recognize
+a ready higher priority task and switch to it from a lower priority task.
+This differs from a task-switch in the sense that there is no explicit
+yield, the system forces the context switch.
+
+== Directives
+
+  * rtems_task_suspend
+  * rtems_task_resume
+
+== Methodology
+
+Preemption usually occurs in a program when a high priority task moves from
+a suspended or idle state to a ready state in response to an event. This is
+achieved in the benchmark by using rtems_task_suspend and rtems_task_resume
+to move the high priority task in between states.
+
+As this is an average, we structure the benchmark code in a way that results
+in some overhead being included that inflates the total elapsed time. This
+overhead includes:
+  * loop overhead (minimal)
+  * the time it takes to task-switch from the high priority task back to
+    the low priority task.
+  * The time it takes to change the state of a task (suspend/resume).
+
+We instantiate two tasks, one with a higher priority than the other. The
+benchmark starts with the high priority task suspended. The benchmark code
+has the lower priority task resume the high priority task, at which point
+the preemption we are seeking to time occurs. The high priority task, now
+executing, suspends it self, and a non-preemptive task switch back to the
+low priority task occurs. This is repeated a total of BENCHMARKS times.
+
+The average time is found by using put_time to divide the total elapsed time
+by the number of benchmarks, and subtracting out the overhead found earlier.

@@ -1,0 +1,21 @@
+= Interrupt Latency Benchmark
+
+This benchmark measures the time between the CPU's receipt of an interrupt
+request and the execution of the first intruction in that interrupt service
+routine.
+
+== Directives
+
+  * Intall_tm27_vector
+  * Cause_tm27_intr
+
+
+== Methodology
+
+This benchmark takes advantage of the existing tm27 test support implemented
+by most BSP's to achieve as much hardware independence as possible. Most BSPs
+have an instruction to install an interrupt vector, and then provide code for
+the ISR. rtems/testsuites/tmtests/tm27 uses this to test a variety of interrupt
+related concepts. The benchmark is simple, the vector is installed, the time
+is started, the interrupt is caused, and the time is ended in the first
+instruction of the ISR. This is the only Rhealstone that is not an average.

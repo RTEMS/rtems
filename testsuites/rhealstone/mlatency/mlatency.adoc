@@ -1,0 +1,22 @@
+= Message Latency Benchmark
+
+This benchmark measures the intertask message latency. This is the delay within
+RTEMS between a running task using the rtems_message_queue to send a message to
+a waiting task and that task waking up and receiving the message.
+
+== Directives
+
+  * rtems_message_queue_send
+  * rtems_message_queue_receive
+
+
+== Methodology
+
+This benchmark consists of a high priority task and a low priority task. The
+benchmark starts in the high priority task, which blocks on a call to rtems_
+message_queue recieve. By accounting for the overhead of the task switch from
+the high priority task to the low priority task, and the actual time to recieve
+the message, the intertask message latency is found.
+
+The average is found and the overhead (the time of the first run) is subtracted
+out in the call to put_time.
