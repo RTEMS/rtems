@@ -20,5 +20,4 @@
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>
-
 /* end of include file */
