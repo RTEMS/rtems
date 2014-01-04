@@ -1,0 +1,25 @@
+*** TEST PARTITION ERROR 01 ***
+TA1 - rtems_partition_create - RTEMS_INVALID_NAME
+TA1 - rtems_partition_create - length - RTEMS_INVALID_SIZE
+TA1 - rtems_partition_create - buffer size - RTEMS_INVALID_SIZE
+TA1 - rtems_partition_create - length < buffer size - RTEMS_INVALID_SIZE
+TA1 - rtems_partition_create - buffer size < overhead - RTEMS_INVALID_SIZE
+TA1 - rtems_partition_create - RTEMS_MP_NOT_CONFIGURED
+TA1 - rtems_partition_create - RTEMS_INVALID_ADDRESS
+TA1 - rtems_partition_create - RTEMS_INVALID_SIZE
+TA1 - rtems_partition_delete - unknown RTEMS_INVALID_ID
+TA1 - rtems_partition_delete - local RTEMS_INVALID_ID
+TA1 - rtems_partition_get_buffer - RTEMS_INVALID_ADDRESS
+TA1 - rtems_partition_get_buffer - RTEMS_INVALID_ID
+TA1 - rtems_partition_ident - RTEMS_INVALID_NAME
+TA1 - rtems_partition_return_buffer - RTEMS_INVALID_ID
+TA1 - rtems_partition_create - RTEMS_INVALID_ADDRESS
+TA1 - rtems_partition_create - RTEMS_SUCCESSFUL
+TA1 - rtems_partition_create - RTEMS_TOO_MANY
+TA1 - rtems_partition_get_buffer - RTEMS_SUCCESSFUL
+TA1 - rtems_partition_get_buffer - RTEMS_SUCCESSFUL
+TA1 - rtems_partition_get_buffer - RTEMS_UNSATISFIED
+TA1 - rtems_partition_delete - RTEMS_RESOURCE_IN_USE
+TA1 - rtems_partition_return_buffer - RTEMS_INVALID_ADDRESS - out of range
+TA1 - rtems_partition_return_buffer - RTEMS_INVALID_ADDRESS - not on boundary
+*** END OF TEST PARTITION ERROR 01 ***

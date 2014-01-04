@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,93 +14,327 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+uint32_t Other_Memory;
+
+TEST_EXTERN rtems_name Partition_name[ 2 ]; /* array of partition names */
+TEST_EXTERN rtems_id   Partition_id[ 2 ];   /* array of partition ids */
+
+TEST_EXTERN uint8_t   Partition_good_area[256] CPU_STRUCTURE_ALIGNMENT;
+#define Partition_bad_area (void *) 0x00000005
+
+void test_partition_errors(void);
+
+void test_partition_errors(void)
+{
+  void              *buffer_address_1;
+  void              *buffer_address_2;
+  void              *buffer_address_3;
+  rtems_status_code  status;
+  size_t             size;
+  rtems_id           junk_id;
+
+  Partition_name[ 1 ]  =  rtems_build_name( 'P', 'T', '1', ' ' );
+
+  status = rtems_partition_create(
+    0,
+    Partition_good_area,
+    128,
+    40,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NAME,
+    "rtems_partition_create with illegal name"
+  );
+  puts( "TA1 - rtems_partition_create - RTEMS_INVALID_NAME" );
+
+  status = rtems_partition_create(
+    Partition_name[ 1 ],
+    Partition_good_area,
+    0,
+    71,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_SIZE,
+    "rtems_partition_create with illegal length"
+  );
+  puts( "TA1 - rtems_partition_create - length - RTEMS_INVALID_SIZE" );
+
+  status = rtems_partition_create(
+    Partition_name[ 1 ],
+    Partition_good_area,
+    128,
+    0,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_SIZE,
+    "rtems_partition_create with illegal buffer size"
+  );
+  puts( "TA1 - rtems_partition_create - buffer size - RTEMS_INVALID_SIZE" );
+
+  status = rtems_partition_create(
+    Partition_name[ 1 ],
+    Partition_good_area,
+    128,
+    256,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_SIZE,
+    "rtems_partition_create with buffer_size > length"
+  );
+  puts(
+    "TA1 - rtems_partition_create - length < buffer size - RTEMS_INVALID_SIZE"
+  );
+
+  /*
+   * Attempt to create a partition with a buffer size that is not large
+   * enough to account for the overhead.
+   */
+  puts(
+    "TA1 - rtems_partition_create - buffer size < overhead - RTEMS_INVALID_SIZE"
+  );
+#define SIZEOF_CHAIN_NODE 2 * sizeof(void *)
+  for ( size=0 ; size < SIZEOF_CHAIN_NODE ; size++) {
+    status = rtems_partition_create(
+      Partition_name[ 1 ],
+      Partition_good_area,
+      size,
+      256,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &junk_id
+    );
+    if ( status != RTEMS_INVALID_SIZE )
+      printf( "ERROR when size == %zu\n", size );
+
+    fatal_directive_status(
+      status,
+      RTEMS_INVALID_SIZE,
+      "rtems_partition_create with buffer_size > length"
+    );
+  }
+
+  /*
+   *  The check for an object being global is only made if
+   *  multiprocessing is enabled.
+   */
+
+#if defined(RTEMS_MULTIPROCESSING)
+  status = rtems_partition_create(
+    Partition_name[ 1 ],
+    Partition_good_area,
+    128,
+    64,
+    RTEMS_GLOBAL,
+    &junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_MP_NOT_CONFIGURED,
+    "rtems_partition_create of global"
+  );
+#endif
+  puts( "TA1 - rtems_partition_create - RTEMS_MP_NOT_CONFIGURED" );
+
+#if defined(_C3x) || defined(_C4x)
+  puts( "TA1 - rtems_partition_create - RTEMS_INVALID_ADDRESS - SKIPPED" );
+#else
+  status = rtems_partition_create(
+    Partition_name[ 1 ],
+    Partition_bad_area,
+    128,
+    64,
+    RTEMS_GLOBAL,
+    &junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_partition_create with bad address"
+  );
+  puts( "TA1 - rtems_partition_create - RTEMS_INVALID_ADDRESS" );
+#endif
+
+#if defined(_C3x) || defined(_C4x)
+  puts( "TA1 - rtems_partition_create - RTEMS_INVALID_SIZE - SKIPPED" );
+#else
+  status = rtems_partition_create(
+    Partition_name[ 1 ],
+    Partition_good_area,
+    128,
+    35,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_SIZE,
+    "rtems_partition_create with unaligned buffer_size"
+  );
+  puts( "TA1 - rtems_partition_create - RTEMS_INVALID_SIZE" );
+#endif
+
+  status = rtems_partition_delete( 100 );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_partition_delete with illegal id"
+  );
+  puts( "TA1 - rtems_partition_delete - unknown RTEMS_INVALID_ID" );
+
+  status = rtems_partition_delete( rtems_build_id( 1, 1, 1, 256 ) );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_partition_delete with illegal id"
+  );
+  puts( "TA1 - rtems_partition_delete - local RTEMS_INVALID_ID" );
+
+  /* get bad address */
+  status = rtems_partition_get_buffer( 100, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_partition_get_buffer with NULL param"
+  );
+  puts( "TA1 - rtems_partition_get_buffer - RTEMS_INVALID_ADDRESS" );
+
+  /* get bad Id */
+  status = rtems_partition_get_buffer( 100, &buffer_address_1 );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_partition_get_buffer with illegal id"
+  );
+  puts( "TA1 - rtems_partition_get_buffer - RTEMS_INVALID_ID" );
+
+  status = rtems_partition_ident( 0, RTEMS_SEARCH_ALL_NODES, &junk_id );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NAME,
+    "rtems_partition_ident with illegal name"
+  );
+  puts( "TA1 - rtems_partition_ident - RTEMS_INVALID_NAME" );
+
+  status = rtems_partition_return_buffer( 100, buffer_address_1 );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_partition_return_buffer with illegal id"
+  );
+  puts( "TA1 - rtems_partition_return_buffer - RTEMS_INVALID_ID" );
+
+  /* create bad area */
+  status = rtems_partition_create(
+    Partition_name[ 1 ],
+    NULL,
+    128,
+    64,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_partition_return_buffer with NULL area"
+  );
+  puts( "TA1 - rtems_partition_create - RTEMS_INVALID_ADDRESS" );
+
+  /* create OK */
+  status = rtems_partition_create(
+    Partition_name[ 1 ],
+    Partition_good_area,
+    128,
+    64,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Partition_id[ 1 ]
+  );
+  directive_failed( status, "rtems_partition_create" );
+  puts( "TA1 - rtems_partition_create - RTEMS_SUCCESSFUL" );
+
+  status = rtems_partition_create(
+    Partition_name[ 1 ],
+    Partition_good_area,
+    128,
+    32,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &junk_id
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_TOO_MANY,
+    "rtems_partition_create of too many"
+  );
+  puts( "TA1 - rtems_partition_create - RTEMS_TOO_MANY" );
+
+  status = rtems_partition_get_buffer( Partition_id[ 1 ], &buffer_address_1 );
+  directive_failed( status, "rtems_partition_get_buffer");
+  puts( "TA1 - rtems_partition_get_buffer - RTEMS_SUCCESSFUL" );
+
+  status = rtems_partition_get_buffer( Partition_id[ 1 ], &buffer_address_2 );
+  directive_failed( status, "rtems_partition_get_buffer" );
+  puts( "TA1 - rtems_partition_get_buffer - RTEMS_SUCCESSFUL" );
+
+  status = rtems_partition_get_buffer( Partition_id[ 1 ], &buffer_address_3 );
+  fatal_directive_status(
+    status,
+    RTEMS_UNSATISFIED,
+    "rtems_partition_get_buffer unsatisfied"
+  );
+  puts( "TA1 - rtems_partition_get_buffer - RTEMS_UNSATISFIED" );
+
+  status = rtems_partition_delete( Partition_id[ 1 ] );
+  fatal_directive_status(
+    status,
+    RTEMS_RESOURCE_IN_USE,
+    "rtems_partition_delete with buffers in use"
+  );
+  puts( "TA1 - rtems_partition_delete - RTEMS_RESOURCE_IN_USE" );
+
+  status = rtems_partition_return_buffer(
+    Partition_id[ 1 ],
+    &Other_Memory
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_partition_return_buffer with buffer address out of partition"
+  );
+  puts(
+    "TA1 - rtems_partition_return_buffer - RTEMS_INVALID_ADDRESS - out of range"
+  );
+
+  status = rtems_partition_return_buffer(
+    Partition_id[ 1 ],
+    &Partition_good_area[ 7 ]
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_partition_return_buffer with buffer address not on boundary"
+  );
+  puts_nocr( "TA1 - rtems_partition_return_buffer - " );
+  puts     ( "RTEMS_INVALID_ADDRESS - not on boundary");
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
+  puts( "\n\n*** TEST PARTITION ERROR 01 ***" );
 
-  puts( "\n\n*** TEST 9 ***" );
+  test_partition_errors();
 
-  Task_name[ 1 ]       =  rtems_build_name( 'T', 'A', '1', ' ' );
-  Task_name[ 2 ]       =  rtems_build_name( 'T', 'A', '2', ' ' );
-  Task_name[ 3 ]       =  rtems_build_name( 'T', 'A', '3', ' ' );
-  Task_name[ 4 ]       =  rtems_build_name( 'T', 'A', '4', ' ' );
-  Task_name[ 5 ]       =  rtems_build_name( 'T', 'A', '5', ' ' );
-  Task_name[ 6 ]       =  rtems_build_name( 'T', 'A', '6', ' ' );
-  Task_name[ 7 ]       =  rtems_build_name( 'T', 'A', '7', ' ' );
-  Task_name[ 8 ]       =  rtems_build_name( 'T', 'A', '8', ' ' );
-  Task_name[ 9 ]       =  rtems_build_name( 'T', 'A', '9', ' ' );
-  Task_name[ 10 ]      =  rtems_build_name( 'T', 'A', 'A', ' ' );
-
-  Semaphore_name[ 1 ]  =  rtems_build_name( 'S', 'M', '1', ' ' );
-  Semaphore_name[ 2 ]  =  rtems_build_name( 'S', 'M', '2', ' ' );
-  Semaphore_name[ 3 ]  =  rtems_build_name( 'S', 'M', '3', ' ' );
-
-  Queue_name[ 1 ]      =  rtems_build_name( 'M', 'Q', '1', ' ' );
-  Queue_name[ 2 ]      =  rtems_build_name( 'M', 'Q', '2', ' ' );
-
-  Partition_name[ 1 ]  =  rtems_build_name( 'P', 'T', '1', ' ' );
-
-  Port_name[ 1 ]       =  rtems_build_name( 'D', 'P', '1', ' ' );
-
-  Period_name[ 1 ]     =  rtems_build_name( 'T', 'M', '1', ' ' );
-
-  /* priority of 0 error */
-  status = rtems_task_create(
-     Task_name[1],
-     0,
-     RTEMS_MINIMUM_STACK_SIZE,
-     RTEMS_DEFAULT_MODES,
-     RTEMS_DEFAULT_ATTRIBUTES,
-     &Task_id[ 1 ]
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_PRIORITY,
-    "rtems_task_create with illegal priority"
-  );
-  puts( "INIT - rtems_task_create - priority of 0 - RTEMS_INVALID_PRIORITY" );
-
-  /* priority > 255 error */
-  status = rtems_task_create(
-     Task_name[1],
-     257,
-     RTEMS_MINIMUM_STACK_SIZE,
-     RTEMS_DEFAULT_MODES,
-     RTEMS_DEFAULT_ATTRIBUTES,
-     &Task_id[ 1 ]
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_PRIORITY,
-    "rtems_task_create with illegal priority"
-  );
-  puts(
-    "INIT - rtems_task_create - priority too high - RTEMS_INVALID_PRIORITY"
-  );
-
-  status = rtems_task_create(
-    Task_name[ 1 ],
-    4,
-    RTEMS_MINIMUM_STACK_SIZE * 3,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &Task_id[ 1 ]
-  );
-  directive_failed( status, "rtems_task_create of TA1" );
-
-  status = rtems_task_restart( Task_id[ 1 ], 0 );
-  fatal_directive_status(
-    status,
-    RTEMS_INCORRECT_STATE,
-    "rtems_task_restart of DORMANT task"
-  );
-  puts( "INIT - rtems_task_restart - RTEMS_INCORRECT_STATE" );
-
-  status = rtems_task_start( Task_id[ 1 ], Task_1, 0 );
-  directive_failed( status, "rtems_task_start of TA1" );
-
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  puts( "*** END OF TEST PARTITION ERROR 01 ***" );
+  rtems_test_exit( 0 );
 }
