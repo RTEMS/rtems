@@ -1,9 +1,10 @@
-/*  system.h
- *
+/*
  *  This include file contains information that is included in every
  *  function in the test set.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -68,10 +69,6 @@ void Screen9( void );
 
 void Screen10( void );
 
-//void Screen11( void );
-
-//void Screen12( void );
-
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
@@ -81,7 +78,6 @@ void Screen10( void );
 #define CONFIGURE_MAXIMUM_TIMERS              1
 #define CONFIGURE_MAXIMUM_SEMAPHORES          2
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1
-#define CONFIGURE_MAXIMUM_PARTITIONS          1
 #define CONFIGURE_MAXIMUM_PERIODS             1
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS     0
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
@@ -103,9 +99,6 @@ TEST_EXTERN rtems_id   Semaphore_id[ 4 ];   /* array of semaphore ids */
 TEST_EXTERN rtems_name Queue_name[ 3 ];     /* array of queue names */
 TEST_EXTERN rtems_id   Queue_id[ 3 ];       /* array of queue ids */
 
-TEST_EXTERN rtems_name Partition_name[ 2 ]; /* array of partition names */
-TEST_EXTERN rtems_id   Partition_id[ 2 ];   /* array of partition ids */
-
 TEST_EXTERN rtems_name Port_name[ 2 ];      /* array of port names */
 TEST_EXTERN rtems_id   Port_id[ 2 ];        /* array of port ids */
 
@@ -116,8 +109,5 @@ TEST_EXTERN rtems_id   Junk_id;             /* id used to return errors */
 
 #define Internal_port_area (void *) 0x00001000
 #define External_port_area (void *) 0x00002000
-
-TEST_EXTERN uint8_t   Partition_good_area[256] CPU_STRUCTURE_ALIGNMENT;
-#define Partition_bad_area (void *) 0x00000005
 
 /* end of include file */

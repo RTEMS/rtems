@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,8 +39,6 @@ rtems_task Init(
 
   Queue_name[ 1 ]      =  rtems_build_name( 'M', 'Q', '1', ' ' );
   Queue_name[ 2 ]      =  rtems_build_name( 'M', 'Q', '2', ' ' );
-
-  Partition_name[ 1 ]  =  rtems_build_name( 'P', 'T', '1', ' ' );
 
   Port_name[ 1 ]       =  rtems_build_name( 'D', 'P', '1', ' ' );
 

@@ -1,4 +1,4 @@
-#  COPYRIGHT (c) 1989-1999.
+#  COPYRIGHT (c) 1989-2014.
 #  On-Line Applications Research Corporation (OAR).
 #
 #  The license and distribution terms for this file may be
@@ -15,9 +15,8 @@ directives:
   tm_tick, t_resume, t_setpri, t_setreg, t_start, t_suspend, tm_wkafter,
   tm_wkwhen, ev_receive, ev_send, sm_create, sm_delete, sm_ident,
   sm_p, sm_v, q_broadcast, q_create, q_delete, q_ident, q_receive,
-  q_send, q_urgent, as_catch, as_send, as_return, pt_create, pt_delete,
-  pt_getbug, pt_ident, pt_retbuf, de_close, de_cntrl, de_init, de_open,
-  de_read, de_write
+  q_send, q_urgent, as_catch, as_send, as_return
+  de_init, de_open,  de_read, de_write, de_close, de_cntrl
 
 concepts:
 
