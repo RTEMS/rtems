@@ -1,7 +1,13 @@
+/**
+ *  @file
+ *
+ *  @ingroup shared_vmeuniverse
+ *
+ *  @brief Driver for the Tundra Universe II pci-vme bridge
+ */
+
 #ifndef VME_UNIVERSE_UTIL_H
 #define VME_UNIVERSE_UTIL_H
-
-/* Driver for the Tundra Universe II pci-vme bridge */
 
 /*
  * Authorship
@@ -48,8 +54,13 @@
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
 
-/* Register definitions */
-/* NOTE: all registers contents in PCI space are LITTLE ENDIAN */
+/**
+ *  @defgroup shared_vmeuniverse Register definitions
+ *
+ *  @ingroup bsp_shared
+ *
+ *  @brief all registers contents in PCI space are LITTLE ENDIAN
+ */
 
 #ifdef __vxworks
 #include <vme.h>

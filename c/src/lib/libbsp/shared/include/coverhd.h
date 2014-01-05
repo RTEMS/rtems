@@ -1,7 +1,13 @@
-/* coverhd.h
+/**
+ *  @file
  *
- *  This include file has defines to represent the overhead associated
+ *  @ingroup shared_coverhd
+ *
+ *  @brief This include file has defines to represent the overhead associated
  *  with calling a particular directive from C on this target.
+ */
+
+/* coverhd.h
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).

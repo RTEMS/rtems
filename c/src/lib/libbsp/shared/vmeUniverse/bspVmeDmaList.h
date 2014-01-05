@@ -1,9 +1,19 @@
+/**
+ *  @file
+ *
+ *  @ingroup shared_bspvmedmalist
+ *
+ *  @brief This header should only be used inside a BSP
+ * chosing to use bspVmeDmaList for implementing VMEDMA.h
+ */
+
 #ifndef BSP_VME_DMA_LIST_H
 #define BSP_VME_DMA_LIST_H
 
 
 
-/* The bspVmeDmaList utility implements part of the API defined by
+/*
+ * The bspVmeDmaList utility implements part of the API defined by
  * 'VMEDMA.h' namely all 'VMEDmaListDescriptor' related entry points:
  *
  * BSP_VMEDmaListDescriptorDestroy(),
@@ -31,9 +41,6 @@
  * and
  *
  * BSP_VMEDmaListDescriptorStartTool()
- *
- * This header should only be used inside a BSP
- * chosing to use bspVmeDmaList for implementing VMEDMA.h
  */
 
 /*
@@ -92,8 +99,12 @@ typedef struct VMEDmaListNodeRec_    *VMEDmaListNode;
 
 typedef struct VMEDmaListClassRec_   *VMEDmaListClass;
 
-/* Create and setup a new descriptor.
- * The BSP must supply the appropriate controller class.
+/**
+ *  @defgroup shared_bspvmedmalist Create and setup a new descriptor.
+ *
+ *  @ingroup shared_vmeuniverse
+ *
+ *  @brief The BSP must supply the appropriate controller class.
  */
 
 VMEDmaListNode

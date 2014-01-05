@@ -1,8 +1,13 @@
-/*
- *  tfs.h - Header file for TFS transactions, used by both application and
- *  monnitor.
+/**
+ *  @file
  *
- *  Based upon code from MicroMonitor 1.17 from http://www.umonfw.com/
+ *  @ingroup shared_tfs
+ *
+ *  @brief Header file for TFS transactions, used by both application and
+ *  monnitor.
+ */
+
+/*  Based upon code from MicroMonitor 1.17 from http://www.umonfw.com/
  *  which includes this notice:
  *
  **************************************************************************
@@ -34,6 +39,14 @@
 
 #ifndef _tfs_h
 #define _tfs_h
+
+/**
+ *  @defgroup shared_tfs TFS Support
+ *
+ *  @ingroup shared_umon
+ *
+ *  @brief TFS Support Package
+ */
 
 #define TFSINFOSIZE		23		/* Max size of info string (mod4-1). */
 

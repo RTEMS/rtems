@@ -1,10 +1,17 @@
+/**
+ *  @file
+ *
+ *  @ingroup shared_bspvmedmalistp
+ *
+ *  @brief Private Interface to the bspVmeDmaList facility
+ */
+
 #ifndef BSP_VME_DMA_LIST_P_H
 #define BSP_VME_DMA_LIST_P_H
 
 #include <bsp/bspVmeDmaList.h>
 
-/* Private Interface to the bspVmeDmaList facility
- *
+/*
  * This is used by chip drivers to implement the
  * 'class' members so that 'bspVmeDmaList' can access
  * the device in an abstract manner.
@@ -60,7 +67,13 @@ extern "C" {
 
 typedef void           *DmaDescriptor;
 
-/* Member functions to be implemented by chip drivers */
+/**
+ *  @defgroup shared_bspvmedmalistp member functions
+ *
+ *  @ingroup shared_vmeuniverse
+ *
+ *  @brief Member functions to be implemented by chip drivers
+ */
 
 typedef DmaDescriptor (*DmaDescriptorAlloc)(void);
 typedef void          (*DmaDescriptorFree) (DmaDescriptor d);

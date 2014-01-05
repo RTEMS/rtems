@@ -1,7 +1,12 @@
-/*
- *  cli.h - Header file for Command Line Interface related stuff
+/**
+ *  @file
  *
- *  Based upon code from MicroMonitor 1.17 from http://www.umonfw.com/
+ *  @ingroup shared_cli
+ *
+ *  @brief Header file for Command Line Interface related stuff
+ */
+
+/*  Based upon code from MicroMonitor 1.17 from http://www.umonfw.com/
  *  which includes this notice:
  *
  **************************************************************************
@@ -38,8 +43,14 @@
 extern "C" {
 #endif
 
-/* Command table structure used by the monitor:
+/**
+ *  @defgroup shared_cli Command table structure
+ *
+ *  @ingroup shared_umon
+ *
+ *  @brief Command table structure used by the monitor:
  */
+
 struct	monCommand {
     char    *name;					/* Name of command seen by user. */
     int	    (*func)(int,char **);	/* Called when command is invoked. */

@@ -1,7 +1,13 @@
+/**
+ *  @file
+ *
+ *  @ingroup shared_vmeamdefs
+ *
+ *  @brief vxworks compatible addressing modes
+ */
+
 #ifndef VME_AM_DEFINITIONS_H
 #define VME_AM_DEFINITIONS_H
-
-/* vxworks compatible addressing modes */
 
 /*
  * Authorship
@@ -47,7 +53,14 @@
  *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
-/* NOTE: 64-bit *addresses* are not supported [data are]. */
+
+/**
+ *  @defgroup shared_vmeamdefs VME_AM_DEFS
+ *
+ *  @ingroup shared_vmeuniverse
+ *
+ *  @brief 64-bit *addresses* are not supported [data are].
+ */
 
 #ifndef VME_AM_STD_SUP_BLT
 #define	VME_AM_STD_SUP_BLT			0x3f

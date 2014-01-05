@@ -1,3 +1,11 @@
+/**
+ *  @file
+ *
+ *  @ingroup shared_vmeuniversedma
+ *
+ *  @brief vmeUniverseDMA Support
+ */
+
 #ifndef VME_UNIVERSE_DMA_H
 #define VME_UNIVERSE_DMA_H
 
@@ -51,6 +59,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ *  @defgroup shared_vmeuniversedma vmeUniverseDMA Support
+ *
+ *  @ingroup shared_vmeuniverse
+ *
+ *  @brief vmeUniverseDMA Support Package
+ */
 
 extern struct VMEDmaListClassRec_ vmeUniverseDmaListClass;
 

@@ -1,3 +1,11 @@
+/**
+ *  @file
+ *
+ *  @ingroup shared_defaultinitialextension
+ *
+ *  @brief DEFAULT_INITIAL_EXTENSION Support
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *
@@ -20,6 +28,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ *  @defgroup shared_defaultinitialextension DEFAULT_INITIAL_EXTENSION Support
+ *
+ *  @ingroup shared_include
+ *
+ *  @brief DEFAULT_INITIAL_EXTENSION Support Package
+ */
 
 void bsp_fatal_extension(
   rtems_fatal_source source,

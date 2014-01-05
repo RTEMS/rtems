@@ -1,7 +1,13 @@
+/**
+ *  @file
+ *
+ *  @ingroup shared_vmedma
+ *
+ *  @brief Public interface of DMA routines
+ */
+
 #ifndef BSP_VME_DMA_H
 #define BSP_VME_DMA_H
-
-/* Public interface of DMA routines */
 
 /*
  * Authorship
@@ -53,6 +59,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ *  @defgroup shared_vmedma VMEDMA Support
+ *
+ *  @ingroup shared_vmeuniverse
+ *
+ *  @brief VMEDMA Support Package
+ */
 
 
 /* NOTE: Access to DMA Channels is *not* protected / thread-safe.

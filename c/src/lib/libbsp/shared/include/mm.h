@@ -1,3 +1,11 @@
+/**
+ *  @file
+ *
+ *  @ingroup shared_mm
+ *
+ *  @brief MM Support
+ */
+
 /*
  * Copyright (c) 2013 Hesham AL-Matary.
  * Copyright (c) 2013 Gedare Bloom.
@@ -16,6 +24,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ *  @defgroup shared_mm MM Support
+ *
+ *  @ingroup shared_include
+ *
+ *  @brief MM Support Package
+ */
 
 void bsp_memory_management_initialize(void);
 

@@ -1,7 +1,13 @@
+/**
+ *  @file
+ *
+ *  @ingroup shared_vmetsi148
+ *
+ *  @brief Driver for the Tundra Tsi148 pci-vme bridge
+ */
+
 #ifndef VME_TSI148_DRIVER_H
 #define VME_TSI148_DRIVER_H
-
-/* Driver for the Tundra Tsi148 pci-vme bridge */
 
 /*
  * Authorship
@@ -51,6 +57,14 @@
 #include <stdint.h>
 #include <bsp/vme_am_defs.h>
 
+
+/**
+ *  @defgroup shared_vmetsi148 VMETSI148 Support
+ *
+ *  @ingroup shared_vmeuniverse
+ *
+ *  @brief VMETSI148 Support Package
+ */
 
 /* NOTE: A64 currently not implemented */
 

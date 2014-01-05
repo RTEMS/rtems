@@ -1,3 +1,11 @@
+/**
+ *  @file
+ *
+ *  @ingroup shared_vmetsi148dma
+ *
+ *  @brief vmeTsi148DMA Support
+ */
+
 #ifndef VME_TSI148_DMA_H
 #define VME_TSI148_DMA_H
 
@@ -51,7 +59,14 @@
 extern "C" {
 #endif
 
-/* DMA List access functions for use by bspVmeDmaList */
+/**
+ *  @defgroup shared_vmetsi148dma DMA List
+ *
+ *  @ingroup shared_vmeuniverse
+ *
+ *  @brief DMA List access functions for use by bspVmeDmaList
+ */
+
 extern struct VMEDmaListClassRec_ vmeTsi148DmaListClass;
 
 typedef struct VmeTsi148DmaListDescriptorRec_ *VmeTsi148DmaListDescriptor;

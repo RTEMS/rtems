@@ -1,5 +1,12 @@
+/**
+ *  @file
+ *
+ *  @ingroup shared_tod
+ *
+ *  @brief Real Time Clock (MK48T08) for RTEMS on Score603e
+ */
+
 /*
- * Real Time Clock (MK48T08) for RTEMS on Score603e
  *
  *  Based on MVME162 TOD by:
  *    COPYRIGHT (C) 1997
@@ -18,8 +25,12 @@
 extern "C" {
 #endif
 
-/*
- *  Set the RTC.
+/**
+ *  @defgroup shared_tod RTC
+ *
+ *  @ingroup bsp_shared
+ *
+ *  @brief Set the RTC
  */
 
 int setRealTime(

@@ -1,8 +1,13 @@
-/*
- *  monlib.h - Used by both the monitor and the application that
- *             may reside on top of the monitor
+/**
+ *  @file
  *
- *  Based upon code from MicroMonitor 1.17 from http://www.umonfw.com/
+ *  @ingroup shared_monlib
+ *
+ *  @brief Used by both the monitor and the application that
+ *  may reside on top of the monitor
+ */
+
+/*  Based upon code from MicroMonitor 1.17 from http://www.umonfw.com/
  *  which includes this notice:
  *
  **************************************************************************
@@ -41,6 +46,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ *  @defgroup shared_monlib MONLIB Support
+ *
+ *  @ingroup shared_umon
+ *
+ *  @brief MONLIB Support Package
+ */
 
 extern int monConnect(int (*monptr)(int,void *,void *,void *),
 		void (*lock)(void),void (*unlock)(void));
