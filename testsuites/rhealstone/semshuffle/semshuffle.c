@@ -30,6 +30,8 @@ rtems_task Init( rtems_task_argument ignored )
   rtems_task_priority  pri;
   rtems_mode           prev_mode;
 
+  Print_Warning();
+
   sem_attr =  RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY;
 
   sem_name = rtems_build_name( 'S','0',' ',' ' );

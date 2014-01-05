@@ -33,6 +33,8 @@ void Init(
 {
   rtems_status_code status;
 
+  Print_Warning();
+
   status = rtems_message_queue_create(
     rtems_build_name( 'M', 'Q', '1', ' '  ),
     1,

@@ -52,7 +52,7 @@ rtems_task Init(
 )
 {
   rtems_status_code status;
-  rtems_id Task_id
+  rtems_id Task_id;
 
   Print_Warning();
 
