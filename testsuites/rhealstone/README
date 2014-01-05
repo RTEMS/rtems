@@ -2,10 +2,11 @@
 
 This is an implementation of the Rhealstone benchmarks for RTEMS.
 
-The Rhealstone metric is a set of benchmarks that aim to provide an independently
-verifiable objective measure of real-time performance in different systems. The
-Rhealstone metric is composed of six independent benchmarks, each of which measure
-an activity that is critical in real time systems:
+The Rhealstone metric is a set of benchmarks that aim to provide an
+independently verifiable objective measure of real-time performance in
+different systems. The Rhealstone metric is composed of six independent
+benchmarks, each of which measure an activity that is critical in real
+time systems:
 
 * Task switch time
 * Task preemption time
