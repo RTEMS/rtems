@@ -1,4 +1,4 @@
-#  COPYRIGHT (c) 1989-1999.
+#  COPYRIGHT (c) 1989-2013.
 #  On-Line Applications Research Corporation (OAR).
 #
 #  The license and distribution terms for this file may be
@@ -9,15 +9,22 @@
 
 This file describes the directives and concepts tested by this test set.
 
-test set name:  test16
+test set name:  sp16
 
 directives:
-  ex_init, ex_start, t_create, t_start, t_delete, tm_tick, i_return,
-  rn_create, rn_ident, rn_getbuf, rn_retbuf, rn_delete
+  rtmes_task_create
+  rtems_task_start
+  rtems_task_delete
+  rtems_clock_tick
+  rtems_region_create
+  rtems_region_ident
+  rtems_region_getbuf
+  rtems_region_retbuf
+  rtems_region_delete
 
 concepts:
 
-  a.  This test checks out the region manager.
+  +  This test checks out the region manager.
 
-  b.  Verifies implementation of SuperCore TOD_MICROSECONDS_TO_TICKS.  Normal
+  +  Verifies implementation of SuperCore TOD_MICROSECONDS_TO_TICKS.  Normal
       computation in applications is via a macro at the Classic API level.

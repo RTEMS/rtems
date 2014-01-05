@@ -9,24 +9,24 @@
 
 This file describes the directives and concepts tested by this test set.
 
-test set name:  test17
+test set name:  sp17
 
 directives:
-+ rtems_task_create
-+ rtems_task_start
-+ rtems_task_delete
+  rtems_task_create
+  rtems_task_start
+  rtems_task_delete
 
 concepts:
 
-  a.  Verifies system can create and start both the executive's system
+  +  Verifies system can create and start both the executive's system
       initialization and idle task.
 
-  b.  Verifies can print strings to the CRT on port 2 of the mvme136 board
+  +  Verifies can print strings to the CRT on port 2 of the mvme136 board
       using Print and Println in the board support package.
 
-  c.  Verifies executive initialization performed correctly.
+  +  Verifies executive initialization performed correctly.
 
-  d.  Verifies that a task can get the task identification number
+  +  Verifies that a task can get the task identification number
       of another task.
 
-  e.  Verifies that a signal can be sent to a remote task.
+  +  Verifies that a signal can be sent to a remote task.
