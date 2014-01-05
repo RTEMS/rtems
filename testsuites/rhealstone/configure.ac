@@ -2,7 +2,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-tests-rhealstone],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
-AC_CONFIG_SRCDIR([taskswitch])
+AC_CONFIG_SRCDIR([rhtaskswitch])
 AC_CONFIG_HEADER([config.h])
 RTEMS_TOP([../..],[..])
 
@@ -25,11 +25,11 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-taskswitch/Makefile
-taskpreempt/Makefile
-ilatency/Makefile
-mlatency/Makefile
-semshuffle/Makefile
-deadlockbrk/Makefile
+rhtaskswitch/Makefile
+rhtaskpreempt/Makefile
+rhilatency/Makefile
+rhmlatency/Makefile
+rhsemshuffle/Makefile
+rhdeadlockbrk/Makefile
 ])
 AC_OUTPUT

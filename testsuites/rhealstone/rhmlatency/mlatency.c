@@ -128,11 +128,11 @@ rtems_task Task02( rtems_task_argument ignored )
   telapsed = benchmark_timer_read();
 
   put_time(
-     "Rhealstone: Intertask Message Latency",
-     telapsed,                     /* Total time of all benchmarks */
-     BENCHMARKS - 1,               /* Total benchmarks */
-     tloop_overhead,               /* Overhead of loops */
-     treceive_overhead             /* Overhead of recieve call and task switch */
+   "Rhealstone: Intertask Message Latency",
+   telapsed,                     /* Total time of all benchmarks */
+   BENCHMARKS - 1,               /* Total benchmarks */
+   tloop_overhead,               /* Overhead of loops */
+   treceive_overhead             /* Overhead of recieve call and task switch */
   );
 
   rtems_test_exit( 0 );
@@ -146,7 +146,7 @@ rtems_task Task02( rtems_task_argument ignored )
 #define CONFIGURE_MAXIMUM_TASKS              3
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES     1
 #define CONFIGURE_TICKS_PER_TIMESLICE        0
-#define CONFIGURE_INIT
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
+#define CONFIGURE_INIT
 #include <rtems/confdefs.h>
