@@ -38,7 +38,7 @@ uint16_t rtems_jffs2_compressor_rtime_compress(
 	uint32_t *dstlen
 )
 {
-	short positions[256];
+	unsigned short positions[256];
 	int outpos = 0;
 	int pos=0;
 
@@ -86,7 +86,7 @@ int rtems_jffs2_compressor_rtime_decompress(
 	uint32_t destlen
 )
 {
-	short positions[256];
+	unsigned short positions[256];
 	int outpos = 0;
 	int pos=0;
 
