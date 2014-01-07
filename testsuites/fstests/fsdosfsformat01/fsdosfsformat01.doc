@@ -1,11 +1,25 @@
+#  COPYRIGHT (c) 2014.
+#  On-Line Applications Research Corporation (OAR).
+#  Cynthia Rempel <cynthia@rtems.org>
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
 This file describes the directives and concepts tested by this test set.
 
 test set name: fsdosfsformat01
 
 directives:
-
-  TBD
+  + msdos_format
+  + rtems_disk_io_initialize
+  + rtems_sparse_disk_create_and_register
 
 concepts:
-
-  TBD
+  See how FAT12 and FAT16 format works under various scenarios
+  + optimizing for disk space
+  + invalid values
+  + optimizing for read/write speed
+  + make sectors per cluster too high
+  + largest FAT12 disk
+  + default parameters
