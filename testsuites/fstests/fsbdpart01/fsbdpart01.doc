@@ -1,11 +1,28 @@
+#  COPYRIGHT (c) 2014.
+#  On-Line Applications Research Corporation (OAR).
+#  Cynthia Rempel <cynthia@rtems.org>
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+
 This file describes the directives and concepts tested by this test set.
 
 test set name: fsbdpart01
 
 directives:
-
-  TBD
+  + rtems_bdpart_create
+  + rtems_bdpart_dump
+  + rtems_bdpart_read
+  + rtems_bdpart_register
+  + rtems_bdpart_register_from_disk
+  + rtems_bdpart_to_partition_type
+  + rtems_bdpart_unregister
+  + rtems_bdpart_write
+  + rtems_disk_fd_get_disk_device
+  + rtems_ide_part_table_initialize
 
 concepts:
-
-  TBD
+  + tests block device partition by creating partitions and reading the
+    partition table.
