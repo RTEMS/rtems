@@ -565,7 +565,7 @@ total_size += size_ports;
 
 printf( "What is maximum_periods? " );
 maximum_periods = getint();
-size_periods = PER_PORT * maximum_periods;
+size_periods = PER_PERIOD * maximum_periods;
 total_size += size_periods;
 
 printf( "What is maximum_extensions? " );
