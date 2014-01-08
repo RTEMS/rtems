@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -196,7 +196,7 @@ rtems_task Init(
   status = chmod( "/fifo", S_IRWXU );
   rtems_test_assert( status == 0 );
 
-  printk( "chown /fifo to %o -- OK", 0 );
+  printf( "chown /fifo to %o -- OK\n", 0 );
   status = chown( "/fifo", 0, 0 );
   rtems_test_assert( status == 0 );
 

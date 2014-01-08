@@ -61,4 +61,5 @@ Creating a fifo -- OK
 chown /fifo to 10 -- OK
 Changing euid to 10
 chmod /fifo -- OK
-chown /fifo to 0 -- OK*** END OF TEST IMFS 02 ***
+chown /fifo to 0 -- OK
+*** END OF TEST IMFS 02 ***
