@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -124,7 +124,7 @@ void open_fifo(int expected, int flags)
   int fd;
 
   fd = open("/fifo01", flags);
-  printf( "status=%d errno=%d/(%s)\n", fd, errno, strerror(errno) );
+  printf( "expect status=%d errno=%d/(%s)\n", fd, errno, strerror(errno) );
   if ( expected ) {
     rtems_test_assert(fd == -1);
     rtems_test_assert(errno == expected); 
@@ -142,7 +142,7 @@ rtems_task Init(
   int num_opens = 0;
   int index = 0;
 
-  puts( "\n\n*** TEST FIFO 08 ***" );
+  puts( "\n\n*** TEST FIFO 02 ***" );
 
   puts( "Creating all barriers" );
   create_all_barriers();
@@ -188,11 +188,13 @@ rtems_task Init(
   ++num_opens;
 
   puts("\nMultiple opens\n");
-  for(index = 0; index < NUM_OPEN_REQ - num_opens; ++index) {
+  index = 0;
+  do {
 
-    open_fifo(0, O_RDONLY | O_NONBLOCK);
     printf("%d... ", index+1);
-  }
+    open_fifo(0, O_RDONLY | O_NONBLOCK);
+    ++index;
+  } while ( index < NUM_OPEN_REQ - num_opens );
 
   puts( "*** END OF TEST FIFO 08 ***" );
 

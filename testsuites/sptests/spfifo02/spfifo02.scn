@@ -1,1 +1,53 @@
-XXX fill in with test output
+*** TEST FIFO 02 ***
+Creating all barriers
+3 Barriers created
+Creating all semaphores
+4 Semaphores created
+Creating FIFO
+Opening FIFO.. expect ENOMEM (semaphore for pipe could not be created)
+expect status=-1 errno=12/(Not enough space)
+Deleting semaphore id=0x1a010008
+Opening FIFO.. expect ENOMEM since no memory is available
+expect status=-1 errno=12/(Not enough space)
+Opening FIFO.. expect ENOMEM (barrier-1 for pipe could not be created)
+expect status=-1 errno=12/(Not enough space)
+Deleting barrier id=0x52010002
+Opening FIFO.. expect ENOMEM (barrier-2 for pipe could not be created
+expect status=-1 errno=12/(Not enough space)
+Deleting barrier id=0x52010001
+Opening FIFO.. expect ENOMEM (semaphore-1 for pipe could not be created
+expect status=-1 errno=12/(Not enough space)
+Deleting semaphore id=0x1a010007
+Opening FIFO in RDWR mode. Expect OK
+expect status=3 errno=12/(Not enough space)
+Opening FIFO in non blocking RDONLY mode. Expect OK
+expect status=3 errno=12/(Not enough space)
+Opening FIFO in non blocking WRONLY mode. Expect ENXIO
+expect status=-1 errno=6/(No such device or address)
+
+Multiple opens
+
+1... expect status=3 errno=6/(No such device or address)
+2... expect status=3 errno=6/(No such device or address)
+3... expect status=3 errno=6/(No such device or address)
+4... expect status=3 errno=6/(No such device or address)
+5... expect status=3 errno=6/(No such device or address)
+6... expect status=3 errno=6/(No such device or address)
+7... expect status=3 errno=6/(No such device or address)
+8... expect status=3 errno=6/(No such device or address)
+9... expect status=3 errno=6/(No such device or address)
+10... expect status=3 errno=6/(No such device or address)
+11... expect status=3 errno=6/(No such device or address)
+12... expect status=3 errno=6/(No such device or address)
+13... expect status=3 errno=6/(No such device or address)
+14... expect status=3 errno=6/(No such device or address)
+15... expect status=3 errno=6/(No such device or address)
+16... expect status=3 errno=6/(No such device or address)
+17... expect status=3 errno=6/(No such device or address)
+18... expect status=3 errno=6/(No such device or address)
+19... expect status=3 errno=6/(No such device or address)
+20... expect status=3 errno=6/(No such device or address)
+21... expect status=3 errno=6/(No such device or address)
+22... expect status=3 errno=6/(No such device or address)
+23... expect status=3 errno=6/(No such device or address)
+*** END OF TEST FIFO 08 ***
