@@ -1,4 +1,4 @@
-# Copyright 2008 Chris Johns (chrisj@rtems.org)
+# Copyright 2008-2014 Chris Johns (chrisj@rtems.org)
 #
 # The license and distribution terms for this file may be
 # found in the file LICENSE in this distribution or at
@@ -9,10 +9,27 @@ This file describes the directives and concepts tested by this test set.
 
 test set name: block06
 
-directives:
+Test 1: Get task 0 to get buffer 0 from the pool then release it twice.
 
-  TODO
+Test 2: Get task 0 to get buffers 0 -> 4 from the pool hold them. Then get
+        task 1 and task 2 to get them with blocking. The 2 tasks tests the
+        priority blocking on the buffer.
 
-concepts:
+Test 3: Read a block from disk into the buffer, modify the block and release
+        it modified. Use a block great then 4 because 0 -> 4 are in the cache.
 
-  TODO
+Test 4: Read every buffer in the pool and hold. Then get task 1 to ask for
+        another buffer that is being accessed. It will block waiting for it to
+		appear.
+ 
+Test 5: Read every buffer in the pool and hold. Then get task 1 to ask for a
+        new buffer. It will block waiting for one to appear.
+
+Test 6: Get 5 buffers, release modify 4 then sync the last.
+
+Test 7: Get 5 buffers, release modify them all then sync the device.
+
+Test 8: Get 5 buffers, release modify the last 2 then the reset from 0.
+
+TODO: if possible, break into separate tests
+

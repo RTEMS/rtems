@@ -1,11 +1,34 @@
+#  COPYRIGHT (c) 2014.
+#  On-Line Applications Research Corporation (OAR).
+#  Cynthia Rempel <cynthia@rtems.org>
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
 This file describes the directives and concepts tested by this test set.
 
 test set name: fsdosfssync01
 
 directives:
-
-  TBD
+  + close
+  + creat
+  + fsync
+  + lseek
+  + mount_and_make_target_path
+  + msdos_format
+  + open
+  + rtems_disk_io_initialize
+  + rtems_disk_fd_purge
+  + unmount
+  + write
 
 concepts:
-
-  TBD
+  + initializes the disk
+  + opens the disk
+  + formats, mounts the disk, creates a path
+  + creates a file uses fsync to clear the buffer and closes the file
+  + writes to a file, uses lseek to find the end of the file, clears the buffer
+    and closes the file
+  + checks the file size
+  + unmounts the filesystem and closes the disk

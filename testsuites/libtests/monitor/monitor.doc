@@ -7,20 +7,18 @@
 #
 This file describes the directives and concepts tested by this test set.
 
-test set name: flashdisk01
+test set name: monitor
 
 directives:
-  + close
-  + ioctl
-  + mkdir
-  + mknod
-  + mount
-  + mount_and_make_target_path
-  + open
-  + rtems_rfs_format
-  + unmount
-
+  + rtems_monitor_init
+  + rtems_shell_wait_for_input
+  + rtems_task_create
+  + rtems_task_delete
+  + rtems_task_start
+  + rtems_task_wake_after
+  
 concepts:
-  + tests whether a flash filesystem can be mounted and unmounted
- 
-
+  + start the monitor task
+  
+NOTE: the monitor task can be used to obtain information about a variety of
+      RTEMS objects.

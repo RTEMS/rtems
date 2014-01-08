@@ -7,20 +7,34 @@
 #
 This file describes the directives and concepts tested by this test set.
 
-test set name: flashdisk01
+test set name: complex
 
 directives:
-  + close
-  + ioctl
-  + mkdir
-  + mknod
-  + mount
-  + mount_and_make_target_path
-  + open
-  + rtems_rfs_format
-  + unmount
-
+  + cabs
+  + cacos
+  + cacosh
+  + carg
+  + casin
+  + casinh
+  + catan
+  + catanh
+  + ccos
+  + ccosh
+  + cexp
+  + cimag
+  + clog
+  + conj
+  + cpow
+  + cproj
+  + creal
+  + csin
+  + csinh
+  + csqrt
+  + ctan
+  + ctanh
+  + printf
+  
 concepts:
-  + tests whether a flash filesystem can be mounted and unmounted
- 
+  + verifies the functionality of complex mathematical routines
+  + printf using float and long double formats
 

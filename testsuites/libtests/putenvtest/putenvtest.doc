@@ -7,20 +7,16 @@
 #
 This file describes the directives and concepts tested by this test set.
 
-test set name: flashdisk01
+test set name: putenv
 
 directives:
-  + close
-  + ioctl
-  + mkdir
-  + mknod
-  + mount
-  + mount_and_make_target_path
-  + open
-  + rtems_rfs_format
-  + unmount
-
+  + getenv
+  + putenv
+  
 concepts:
-  + tests whether a flash filesystem can be mounted and unmounted
- 
+  + sets the FOO environmental variable to BAR, and prints the result to the
+    screen
 
+TODO: add an rtems_assert statement verifying that the FOO environmental
+      variable is indeed BAR (in addition to/instead of printing to the screen)
+	  to ease automated reporting

@@ -1,11 +1,55 @@
+#  COPYRIGHT (c) 2014.
+#  On-Line Applications Research Corporation (OAR).
+#  Cynthia Rempel <cynthia@rtems.org>
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
 This file describes the directives and concepts tested by this test set.
 
 test set name: fsnofs01
 
 directives:
+  + access
+  + chdir
+  + chmod
+  + chown
+  + chroot
+  + lchown
+  + link
+  + lstat
+  + mkdir
+  + mkfifo
+  + mknod
+  + open
+  + pathconf
+  + readlink
+  + rename
+  + rtems_chain_head
+  + rtems_chain_tail
+  + rtems_filesystem_global_location_obtain
+  + rtems_filesystem_global_location_release
+  + rtems_filesystem_location_copy
+  + rtems_filesystem_location_copy_and_detach
+  + rtems_filesystem_location_detach
+  + rtems_filesystem_location_free
+  + rtems_filesystem_global_location_obtain_null
+  + rtems_libio_set_private_env
+  + rtems_libio_share_private_env
+  + rtems_libio_use_global_env
+  + rmdir
+  + stat
+  + statvfs
+  + symlink
+  + truncate
+  + unlink
+  + utime
 
-  TBD
-
+  
 concepts:
+  + tests obtaining and replacing file system locations
+  + tests error handling of attempting to obtain and replace null file system
+    locations
+  + tests various calls to the filesystem
+  + tests user environment options
 
-  TBD

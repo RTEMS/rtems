@@ -7,20 +7,11 @@
 #
 This file describes the directives and concepts tested by this test set.
 
-test set name: flashdisk01
+test set name: monitor02
 
 directives:
-  + close
-  + ioctl
-  + mkdir
-  + mknod
-  + mount
-  + mount_and_make_target_path
-  + open
-  + rtems_rfs_format
-  + unmount
-
+  + rtems_shell_make_args
+  + rtems_shell_main_monitor
+  
 concepts:
-  + tests whether a flash filesystem can be mounted and unmounted
- 
-
+  + provide canned commands to the monitor
