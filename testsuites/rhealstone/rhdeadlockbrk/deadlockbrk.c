@@ -34,6 +34,8 @@ rtems_task Init( rtems_task_argument ignored )
 
   Print_Warning();
 
+  puts( "*** START OF RHDEADLOCKBRK ***" );
+
   sem_attr = RTEMS_INHERIT_PRIORITY | RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY;
 
   sem_name = rtems_build_name( 'S','0',' ',' ' );
@@ -139,6 +141,7 @@ rtems_task Task01( rtems_task_argument ignored )
        tswitch_overhead,        /* Overhead of loop and task switches */
        tobtain_overhead
     );
+    puts( "*** END OF RHDEADLOCKBRK ***" );
     rtems_test_exit( 0 );
   }
 

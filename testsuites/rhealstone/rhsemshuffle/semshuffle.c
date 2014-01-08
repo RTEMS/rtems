@@ -32,6 +32,8 @@ rtems_task Init( rtems_task_argument ignored )
 
   Print_Warning();
 
+  puts( "*** START OF RHSEMSHUFFLE ***" );
+
   sem_attr =  RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY;
 
   sem_name = rtems_build_name( 'S','0',' ',' ' );
@@ -146,6 +148,7 @@ rtems_task Task02( rtems_task_argument ignored )
        tswitch_overhead,        /* Overhead of loop and task switches */
        0
     );
+    puts( "*** END OF RHSEMSHUFFLE ***" );
     rtems_test_exit( 0 );
   }
 }

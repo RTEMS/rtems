@@ -56,6 +56,8 @@ rtems_task Init(
 
   Print_Warning();
 
+  puts( "*** START OF RHILATENCY ***" );
+
   if (_Scheduler.Operations.initialize != _Scheduler_priority_Initialize) {
     puts( "  Error ==> " );
     puts( "Test only supported for deterministic priority scheduler\n" );
@@ -106,6 +108,7 @@ rtems_task Task_1(
     0
   );
 
+  puts( "*** END OF RHILATENCY ***" );
   rtems_test_exit( 0 );
 }
 

@@ -35,6 +35,8 @@ void Init(
 
   Print_Warning();
 
+  puts( "*** START OF RHMLATENCY ***" );
+
   status = rtems_message_queue_create(
     rtems_build_name( 'M', 'Q', '1', ' '  ),
     1,
@@ -135,6 +137,7 @@ rtems_task Task02( rtems_task_argument ignored )
    treceive_overhead             /* Overhead of recieve call and task switch */
   );
 
+  puts( "*** END OF RHMLATENCY ***" );
   rtems_test_exit( 0 );
 }
 
