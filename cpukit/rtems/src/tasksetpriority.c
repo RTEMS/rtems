@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -41,7 +41,6 @@ rtems_status_code rtems_task_set_priority(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      /* XXX need helper to "convert" from core priority */
       *old_priority = _RTEMS_tasks_Priority_from_Core(
                         the_thread->current_priority
                       );
