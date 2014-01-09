@@ -10,15 +10,11 @@ This file describes the directives and concepts tested by this test set.
 test set name: stackchk
 
 directives:
-  + close
-  + open
-  + send
-  + recv
-  + rtems_bsdnet_initialize_network
-  + rtems_io_register_name
+  + rtems_clock_get_tod
+  + rtems_task_ident
+  + rtems_task_wake_after
+  + rtems_stack_checker_report_usage
 
 concepts:
-  + initializes the bsd network driver
-  + registers an io driver
-  + opens a buffer, sends a buffer across the network, receives a buffer,
-    and closes the file
+  + This set of three tasks do some simple task switching for about
+    15 seconds and then call a routine to "blow the stack".

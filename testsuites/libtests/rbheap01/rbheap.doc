@@ -1,0 +1,145 @@
+#  COPYRIGHT (c) 2014.
+#  On-Line Applications Research Corporation (OAR).
+#  Cynthia Rempel <cynthia@rtems.org>
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: rbheap01
+
+test_init_chunk_alignment:
+
+test_init_begin_greater_than_end:
+directives:
+  + rtems_rbheap_initialize
+
+concepts:
+  + verifies RTEMS_INVALID_ADDRESS is returned when the beginning address is
+    larger than the ending address.
+
+test_init_begin_greater_than_aligned_begin:
+directives:
+  + rtems_rbheap_initialize
+
+concepts:
+  + verifies RTEMS_INVALID_ADDRESS is returned when the beginning address has a
+    negative offset from an address aligned with the pagesize.
+
+test_init_aligned_begin_greater_than_aligned_end:
+directives:
+  + rtems_rbheap_initialize
+
+concepts:
+  + verifies RTEMS_INVALID_ADDRESS is returned when the beginning address has a
+    positive offset from the ending address.
+
+test_init_empty_descriptors:
+directives:
+  + rtems_rbheap_initialize
+
+concepts:
+  + verifies RTEMS_NO_MEMORY is returned when attempting to initialize an rbtree
+    to an empty descriptor
+
+test_alloc_and_free_one:
+directives:
+  + rtems_rbheap_allocate
+  + rtems_rbheap_free
+
+concepts:
+  + allocates and frees a red-black-tree
+
+test_alloc_zero:
+directives:
+  + rtems_rbheap_allocate
+
+concepts:
+  + verifies that the allocating no memory for a red-black-tree returns a
+    NULL pointer
+
+test_alloc_huge_chunk:
+directives:
+  + rtems_rbheap_allocate
+
+concepts:
+  + verifies that the allocating more memory than is available for a
+    red-black-tree returns a NULL pointer
+
+test_alloc_one_chunk:
+directives:
+  + rtems_rbheap_allocate
+  + rtems_rbheap_free
+
+concepts:
+  + verifies that allocating one chunk of memory from an rbheap returns memory
+  + verifies that one chunk of memory can be freed
+
+test_alloc_many_chunks:
+directives:
+  + rtems_rbheap_allocate
+  + rtems_rbheap_free
+
+concepts:
+  + verifies that allocating eight (8) chunks of memory from an rbheap returns
+    memory
+  + verifies that one chunk of memory can be freed
+
+test_alloc_misaligned:
+directives:
+  + rtems_rbheap_allocate
+
+concepts:
+  + verifies that rtems_rbheap_allocate returns NULL (does not allocate memory)
+    if the size allocated is not aligned with the pagesize
+
+test_alloc_with_malloc_extend:
+directives:
+  + rtems_rbheap_allocate
+  + rtems_rbheap_initialize
+  + rtems_heap_greedy_allocate
+  + rtems_heap_greedy_free
+
+concepts:
+  + allocate as much memory as possible
+  + verify no more can be allocated
+  + free as much memory as possible
+  + verify memory can be allocated again
+
+test_free_null:
+directives:
+  + rtems_rbheap_free
+
+concepts:
+  + verify RTEMS_SUCCESSFUL is returned when freeing a NULL pointer
+
+test_free_invalid:
+directives:
+  + rtems_rbheap_free
+
+concepts:
+  + verifies freeing a non-zero rbheap fails with RTEMS_INVALID_ID
+
+test_free_double:
+directives:
+  + rtems_rbheap_allocate
+  + rtems_rbheap_free
+
+concepts:
+  + verifies allocating an rbheap returns memory
+  + verifies freeing a heap twice fails with RTEMS_INCORRECT_STATE
+
+test_free_merge_left_or_right:
+
+NOTE: test_free_merge_left_or_right should probably be broken into
+test_free_merge_left and test_free_merge_right...
+
+directives:
+  + rtems_rbheap_allocate
+  + rtems_rbheap_free
+
+concepts:
+  + allocates 5 rbheaps and frees memory in different ways
+
+TODO: break into different tests
