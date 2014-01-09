@@ -1,9 +1,22 @@
-#  COPYRIGHT (c) 1989-1999.
+#  COPYRIGHT (c) 1989-2014.
 #  On-Line Applications Research Corporation (OAR).
-#
+#  Cynthia Rempel <cynthia@rtems.org>
 #  The license and distribution terms for this file may be
 #  found in the file LICENSE in this distribution or at
 #  http://www.rtems.com/license/LICENSE.
 #
 
+This test benchmarks the following operations:
 
+  + rtems_task_ident
+  + rtems_message_queue_ident
+  + rtems_semaphore_ident
+  + rtems_partition_ident
+  + rtems_region_ident
+  + rtems_port_ident
+  + rtems_timer_ident
+  + rtems_rate_monotonic_ident
+
+For more information
+1. tmtests/include/timesys.h
+2. tmtests/README

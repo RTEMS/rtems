@@ -1,9 +1,19 @@
-#  COPYRIGHT (c) 1989-1999.
+#  COPYRIGHT (c) 1989-2014.
 #  On-Line Applications Research Corporation (OAR).
-#
+#  Cynthia Rempel <cynthia@rtems.org>
 #  The license and distribution terms for this file may be
 #  found in the file LICENSE in this distribution or at
 #  http://www.rtems.com/license/LICENSE.
 #
 
+This test benchmarks the following operations:
 
+  + rtems_task_create
+  + rtems_task_delete
+  + rtems_task_restart
+  + rtems_task_start
+  + rtems_semaphore_release
+
+For more information
+1. tmtests/include/timesys.h
+2. tmtests/README

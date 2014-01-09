@@ -1,9 +1,32 @@
-#  COPYRIGHT (c) 1989-1999.
+#  COPYRIGHT (c) 1989-2014.
 #  On-Line Applications Research Corporation (OAR).
-#
+#  Cynthia Rempel <cynthia@rtems.org>
 #  The license and distribution terms for this file may be
 #  found in the file LICENSE in this distribution or at
 #  http://www.rtems.com/license/LICENSE.
 #
 
+This test benchmarks the following operations:
 
+  + rtems_partition_create
+  + rtems_partition_delete
+  + rtems_partition_get_buffer
+  + rtems_partition_return_buffer
+  + rtems_region_create
+  + rtems_region_delete
+  + rtems_region_get_segment
+  + rtems_io_close
+  + rtems_io_control
+  + rtems_io_initialize
+  + rtems_io_open
+  + rtems_io_read
+  + rtems_io_write
+  + rtems_region_get_segment
+  + rtems_region_return_segment
+  + rtems_partition_return_buffer
+
+For more information
+1. tmtests/include/timesys.h
+2. tmtests/README
+
+TODO: break into multiple tests, if possible
