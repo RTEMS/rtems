@@ -1,8 +1,12 @@
-/*
+/**
+ *  @file
+ *
  *  This program is run to determine the data space and work space
  *  requirements of the current version of RTEMS.
- *
- *  COPYRIGHT (c) 1989-2009.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -565,7 +569,7 @@ total_size += size_ports;
 
 printf( "What is maximum_periods? " );
 maximum_periods = getint();
-size_periods = PER_PORT * maximum_periods;
+size_periods = PER_PERIOD * maximum_periods;
 total_size += size_periods;
 
 printf( "What is maximum_extensions? " );
