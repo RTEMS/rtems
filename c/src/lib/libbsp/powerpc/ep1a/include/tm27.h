@@ -1,5 +1,11 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ * @file
+ * @ingroup powerpc_ep1a
+ * @brief Implementations for interrupt mechanisms for Time Test 27
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
