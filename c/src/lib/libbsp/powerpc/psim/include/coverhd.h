@@ -1,4 +1,10 @@
-/*  coverhd.h
+/**
+ * @file
+ * @ingroup powerpc_psim
+ * @brief C Overhead definitions
+ */
+
+/*  
  *
  *  This include file has defines to represent the overhead associated
  *  with calling a particular directive from C.  These are used in the
