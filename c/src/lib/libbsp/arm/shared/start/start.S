@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -44,7 +44,7 @@
 	.extern	_ARMV4_Exception_data_abort_default
 	.extern	_ARMV4_Exception_pref_abort_default
 	.extern	_ARMV4_Exception_reserved_default
-	.extern	_ARMV4_Exception_irq_default
+	.extern	_ARMV4_Exception_interrupt
 	.extern	_ARMV4_Exception_fiq_default
 	.extern	_ARMV7M_Exception_default
 
@@ -110,7 +110,7 @@ handler_addr_reserved:
 
 handler_addr_irq:
 
-	.word	_ARMV4_Exception_irq_default
+	.word	_ARMV4_Exception_interrupt
 
 handler_addr_fiq:
 
