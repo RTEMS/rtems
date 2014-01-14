@@ -143,6 +143,7 @@ psxfchx01/Makefile
 psxfile01/Makefile
 psxfile02/Makefile
 psxfilelock01/Makefile
+psxgetattrnp01/Makefile
 psxgetrusage01/Makefile
 psxhdrs/Makefile
 psxid01/Makefile

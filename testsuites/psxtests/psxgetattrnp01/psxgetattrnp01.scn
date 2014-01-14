@@ -1,0 +1,22 @@
+*** POSIX ATTRIBUTE TEST 1 ***
+Init - pthread_getattr_np - attr NULL - EINVAL
+Init - pthread_getattr_np - invalid id - ESRCH
+Init - pthread_attr_init
+Init - pthread_attr_setinheritsched - PTHREAD_EXPLICIT_SCHED
+Init - pthread_attr_setschedpolicy to SCHED_RR
+Init - pthread_attr_setschedparam to minimum priority + 2
+Init - pthread_attr_getstack
+Init - pthread_attr_setstack double the stacksize
+Init - pthread_attr_getguardsize
+Init - pthread_attr_setguardsize double the guardsize
+Init - raise priority to max
+Init - pthread_create
+Init - Lower priority
+Thread - pthread_getattr_np - Verify value
+Thread - pthread_setschedparam: Setting highest priority SCHED_FIFO
+Thread - Detach
+Thread - pthread_getattr_np
+Thread - Verify SCHED_FIFO policy
+Thread - Verify max priority
+Thread - Verify detached
+*** END OF POSIX ATTRIBUTE TEST 1 ***

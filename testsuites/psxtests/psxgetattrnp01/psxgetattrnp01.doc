@@ -1,0 +1,23 @@
+#  COPYRIGHT (c) 1989-2014.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxgetattr01
+
+directives:
+
+  pthread_getattr
+  
+concepts:
+
++ Verify error conditions in pthread_getattr
+
++ Verify attribute set other than default on a created thread
+
++ Verify attribute set when changed by a running thread
