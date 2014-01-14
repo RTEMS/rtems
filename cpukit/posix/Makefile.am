@@ -130,6 +130,7 @@ libposix_a_SOURCES += src/pthreadatfork.c src/pthreadattrdestroy.c \
     src/pthreadattrsetschedparam.c src/pthreadattrsetschedpolicy.c \
     src/pthreadattrsetscope.c src/pthreadattrsetstackaddr.c \
     src/pthreadattrsetstack.c src/pthreadattrsetstacksize.c \
+    src/pthreadgetattrnp.c \
     src/pthreadattrgetguardsize.c src/pthread.c \
     src/pthreadcreate.c src/pthreaddetach.c src/pthreadequal.c \
     src/pthreadexit.c src/pthreadgetcpuclockid.c \
