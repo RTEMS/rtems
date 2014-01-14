@@ -222,7 +222,7 @@ rtems_cache_invalidate_multiple_instruction_lines( const void * i_addr, size_t n
 
   final_address = (void *)((size_t)i_addr + n_bytes - 1);
   i_addr = (void *)((size_t)i_addr & ~(CPU_INSTRUCTION_CACHE_ALIGNMENT - 1));
-  while( final_address > i_addr ) {
+  while( final_address >= i_addr ) {
     _CPU_cache_invalidate_1_instruction_line( i_addr );
     i_addr = (void *)((size_t)i_addr + CPU_INSTRUCTION_CACHE_ALIGNMENT);
   }
