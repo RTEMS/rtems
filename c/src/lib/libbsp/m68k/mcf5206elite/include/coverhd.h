@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup m68k_mcf5206elite
+ * @brief C Overhead definitions
+ */
+
 /*
  * This file based on output of tmoverhd test.
  */

@@ -1,4 +1,10 @@
-/*  coverhd.h
+/**
+ * @file
+ * @ingroup m68k_ods68302
+ * @brief C Overhead definitions
+ */
+
+/*  
  *
  *  This include file has defines to represent the overhead associated
  *  with calling a particular directive from C.  These are used in the
