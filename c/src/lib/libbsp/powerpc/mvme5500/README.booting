@@ -21,6 +21,7 @@ Booting requirement :
 
 MVME5500> gevEdit mot-script-boot
 (Blank line terminates input.)
+waitProbe
 tftpGet -a4000000 -cxx.xx.xx.xx -sxx.xx.xx.xx -m255.255.254.0 -d/dev/enet0 -fepics/hostname/bin/rtems5500-cexp.bin
 netShut
 go -a4000000
@@ -31,6 +32,11 @@ MVME5500>
 
 Note : (cxx.xx.xx.xx is the client IP address and 
         sxx.xx.xx.xx is the server IP address)
+
+WARNING : It is extremely important that the MOTLoad "waitProbe", "netShut"
+          sequence be executed before booting RTEMS. Otherwise, network
+          interface interrupt handlers installed by MOTLoad may cause memory
+          corruption
 
 4) Other reference web sites for mvme5500 BSP:
 http://lansce.lanl.gov/EPICS/presentations/KateFeng%20RTEMS-mvme55001.ppt

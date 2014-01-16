@@ -31,6 +31,11 @@ detailed information)
 
 NOTE:  The BSP supports the mvme3100 board.
 
+WARNING: It is extremely important that a MOTLoad "waitProbe", "netShut"
+         sequence be executed before booting RTEMS. Otherwise, network
+         interface interrupt handlers installed by MOTLoad may cause memory
+         corruption
+
 CONSOLE: 2 serial devices, UART driver from 'shared' - no surprises
        ("/dev/ttyS0", [="/dev/console"], "/dev/ttyS1"). (Only
        /dev/ttyS0 is accessible from the front panel.)
