@@ -104,7 +104,7 @@ STATIC void
 flash_array_mode_s160(struct bankdesc *, uint32_t);
 
 STATIC uint32_t
-flash_write_line_s160(struct bankdesc *, uint32_t, char *, uint32_t);
+flash_write_line_s160(struct bankdesc *, uint32_t, const char *, uint32_t);
 
 /********* Global Variables ********************/
 
@@ -426,7 +426,7 @@ flash_print_stat_s160(struct bankdesc *b, uint32_t sta, int verbose)
 }
 
 STATIC uint32_t
-flash_write_line_s160(struct bankdesc *b, uint32_t a, char *s, uint32_t N)
+flash_write_line_s160(struct bankdesc *b, uint32_t a, const char *s, uint32_t N)
 {
 uint32_t        sta, nxt, j, v;
 union    bconv  buf;
