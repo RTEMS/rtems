@@ -572,7 +572,7 @@ int FPathConfTest (void)
     close(fd);
 
     fd = open("testfile1.tst", O_WRONLY);
-    
+
     error = fpathconf(fd, _PC_LINK_MAX);
 
     retval = TRUE;
@@ -718,6 +718,6 @@ int main(
   else
     printf ("\n\nError opening files for write!!!!\n");
 
-  printf( "\n\n*** END OF TEST PSX13 ***" );
+  printf( "\n\n*** END OF TEST PSX13 ***\n" );
   rtems_test_exit(0);
 }
