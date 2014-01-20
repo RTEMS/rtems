@@ -49,7 +49,6 @@ void
 vsyslog (int pri, const char *fmt, va_list ap)
 {
 	int cnt;
-	char *cp;
 	char *msgp, cbuf[200];
 	int sent;
 
@@ -65,26 +64,21 @@ vsyslog (int pri, const char *fmt, va_list ap)
 	if ((pri & LOG_FACMASK) == 0)
 		pri |= LogFacility;
 
-	cnt = sprintf (cbuf, "<%d>", pri);
-	cp = msgp = cbuf + cnt;
-	if (LogTag) {
-		const char *lp = LogTag;
-		while ((*cp = *lp++) != '\0')
-			cp++;
-	}
-	if (LogStatus & LOG_PID) {
+	cnt = snprintf (cbuf, sizeof (cbuf), "<%d>", pri);
+	msgp = cbuf + (cnt < sizeof (cbuf) ? cnt : sizeof (cbuf) - 1);
+	if (LogTag && cnt < sizeof (cbuf) - 1)
+		cnt += snprintf (cbuf + cnt, sizeof (cbuf) - cnt, "%s", LogTag);
+	if (LogStatus & LOG_PID && cnt < sizeof (cbuf) - 1) {
 		rtems_id tid;
 		rtems_task_ident (RTEMS_SELF, 0, &tid);
-		cnt = sprintf (cp, "[%#lx]", (unsigned long)tid);
-		cp += cnt;
+		cnt += snprintf (cbuf + cnt, sizeof (cbuf) - cnt, "[%#lx]", (unsigned long)tid);
 	}
-	if (LogTag) {
-		*cp++ = ':';
-		*cp++ = ' ';
-	}
-	cnt = vsprintf (cp, fmt, ap);
-	cnt += cp - cbuf;
-	if (cbuf[cnt-1] == '\n')
+	if (LogTag && cnt < sizeof (cbuf) - 1)
+		cnt += snprintf (cbuf + cnt, sizeof (cbuf) - cnt, ": ");
+	cnt += vsnprintf (cbuf + cnt, sizeof (cbuf) - cnt, fmt, ap);
+	if (cnt > sizeof (cbuf) - 1)
+		cnt = sizeof (cbuf) - 1;
+	while (cnt > 0 && cbuf[cnt-1] == '\n')
 		cbuf[--cnt] = '\0';
 
 	if (LogStatus & LOG_PERROR)
