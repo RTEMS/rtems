@@ -1,16 +1,7 @@
 Status
 ======
 
-This driver appears to work OK for polled output at this point.  
-
-It needs to be tested for:
-
-  + polled input
-  + interrupt driver output
-  + interrupt driver input
-
-This driver does not support the new style RTEMS interrupt processing
-used on the i386 and some PowerPC models.
+There are no known problems with this driver.
 
 Configuration Table Use
 =======================
