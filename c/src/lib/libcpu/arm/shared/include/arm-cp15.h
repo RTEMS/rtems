@@ -572,6 +572,7 @@ static inline void arm_cp15_tlb_lockdown_entry(const void *mva)
  * @{
  */
 
+/* Read cache type register CTR */
 static inline uint32_t arm_cp15_get_cache_type(void)
 {
   ARM_SWITCH_REGISTERS;
@@ -587,6 +588,7 @@ static inline uint32_t arm_cp15_get_cache_type(void)
   return val;
 }
 
+/* Read size of smallest cache line of all instruction/data caches controlled by the processor */
 static inline uint32_t arm_cp15_get_min_cache_line_size(void)
 {
   uint32_t mcls = 0;
@@ -594,13 +596,53 @@ static inline uint32_t arm_cp15_get_min_cache_line_size(void)
   uint32_t format = (ct >> 29) & 0x7U;
 
   if (format == 0x4) {
+    /* ARMv7 format */
     mcls = (1U << (ct & 0xf)) * 4;
   } else if (format == 0x0) {
+    /* ARMv6 format */
     uint32_t mask = (1U << 12) - 1;
     uint32_t dcls = (ct >> 12) & mask;
     uint32_t icls = ct & mask;
 
     mcls = dcls <= icls ? dcls : icls;
+  }
+
+  return mcls;
+}
+
+/* Read size of smallest data cache lines */
+static inline uint32_t arm_cp15_get_data_cache_line_size(void)
+{
+  uint32_t mcls = 0;
+  uint32_t ct = arm_cp15_get_cache_type();
+  uint32_t format = (ct >> 29) & 0x7U;
+
+  if (format == 0x4) {
+    /* ARMv7 format */
+    mcls = (1U << ((ct & 0xf0000) >> 16)) * 4;
+  } else if (format == 0x0) {
+    /* ARMv6 format */
+    uint32_t mask = (1U << 12) - 1;
+    mcls = (ct >> 12) & mask;
+  }
+
+  return mcls;
+}
+
+/* Read size of smallest instruction cache lines */
+static inline uint32_t arm_cp15_get_instruction_cche_line_size(void)
+{
+  uint32_t mcls = 0;
+  uint32_t ct = arm_cp15_get_cache_type();
+  uint32_t format = (ct >> 29) & 0x7U;
+
+  if (format == 0x4) {
+    /* ARMv7 format */
+    mcls = (1U << (ct & 0x0000f)) * 4;
+  } else if (format == 0x0) {
+    /* ARMv6 format */
+    uint32_t mask = (1U << 12) - 1;
+    mcls = ct & mask;;
   }
 
   return mcls;
@@ -638,6 +680,11 @@ static inline uint32_t arm_cp15_get_cache_level_id(void)
   );
 
   return val;
+}
+
+static inline uint32_t arm_cp15_get_level_of_cache_coherency(const uint32_t clidr)
+{
+  return( (clidr & 0x7000000) >> 23 );
 }
 
 /* CSSELR, Cache Size Selection Register */
@@ -679,6 +726,57 @@ static inline void arm_cp15_cache_invalidate(void)
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[sbz], c7, c7, 0\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [sbz] "r" (sbz)
+    : "memory"
+  );
+}
+
+/* ICIALLUIS, Instruction Cache Invalidate All to PoU, Inner Shareable */
+
+static inline void arm_cp15_instruction_cache_inner_shareable_invalidate_all(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t sbz = 0;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[sbz], c7, c1, 0\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [sbz] "r" (sbz)
+    : "memory"
+  );
+}
+
+/* BPIALLIS, Branch Predictor Invalidate All, Inner Shareable */
+
+static inline void arm_cp15_branch_predictor_inner_shareable_invalidate_all(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t sbz = 0;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[sbz], c7, c1, 6\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [sbz] "r" (sbz)
+    : "memory"
+  );
+}
+
+/* BPIALL, Branch Predictor Invalidate All */
+
+static inline void arm_cp15_branch_predictor_invalidate_all(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t sbz = 0;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[sbz], c7, c5, 6\n"
     ARM_SWITCH_BACK
     : ARM_SWITCH_OUTPUT
     : [sbz] "r" (sbz)
@@ -855,7 +953,6 @@ static inline void arm_cp15_data_cache_clean_and_invalidate(void)
     : [sbz] "r" (sbz)
     : "memory"
   );
-
 }
 
 static inline void arm_cp15_data_cache_clean_and_invalidate_line(const void *mva)
