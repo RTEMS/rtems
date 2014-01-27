@@ -40,6 +40,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/copyrt.h>
+#include <rtems/score/cpusetimpl.h>
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
@@ -134,6 +135,10 @@ void rtems_initialize_data_structures(void)
     _MPCI_Handler_initialization( RTEMS_TIMEOUT );
   #endif
 
+  _SMP_Handler_initialize();
+
+  _CPU_set_Handler_initialization();
+
 /* MANAGERS */
 
   _RTEMS_API_Initialize();
@@ -145,8 +150,6 @@ void rtems_initialize_data_structures(void)
   #ifdef RTEMS_POSIX_API
     _POSIX_API_Initialize();
   #endif
-
-  _SMP_Handler_initialize();
 
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
 
