@@ -114,6 +114,11 @@ void *_Workspace_Allocate(
   return memory;
 }
 
+void *_Workspace_Allocate_aligned( size_t size, size_t alignment )
+{
+  return _Heap_Allocate_aligned( &_Workspace_Area, size, alignment );
+}
+
 /*
  *  _Workspace_Free
  */

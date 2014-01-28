@@ -72,6 +72,17 @@ void *_Workspace_Allocate(
 );
 
 /**
+ * @brief Allocate aligned memory from workspace.
+ *
+ * @param[in] size The size of the requested memory.
+ * @param[in] alignment The alignment of the requested memory.
+ *
+ * @retval NULL Not enough resources.
+ * @retval other The memory area begin.
+ */
+void *_Workspace_Allocate_aligned( size_t size, size_t alignment );
+
+/**
  * @brief Free memory to the workspace.
  *
  *  This function frees the specified block of memory.  If the block

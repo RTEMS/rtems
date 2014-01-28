@@ -54,6 +54,17 @@ static void test_workspace_string_duplicate(void)
   _Workspace_Free( dup_e );
 }
 
+static void test_workspace_allocate_aligned(void)
+{
+  uintptr_t align = 512;
+  void *p = _Workspace_Allocate_aligned( 1, align );
+
+  rtems_test_assert( p != NULL );
+  rtems_test_assert( ((uintptr_t) p & (align - 1)) == 0 );
+
+  _Workspace_Free( p );
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -99,6 +110,9 @@ rtems_task Init(
 
   puts( "_Workspace_String_duplicate - samples" );
   test_workspace_string_duplicate();
+
+  puts( "_Workspace_Allocate_aligned" );
+  test_workspace_allocate_aligned();
 
   puts( "*** END OF TEST WORKSPACE CLASSIC API ***" );
   rtems_test_exit( 0 );

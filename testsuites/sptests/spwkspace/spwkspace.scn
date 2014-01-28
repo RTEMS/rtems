@@ -7,4 +7,6 @@ rtems_workspace_allocate - too many bytes
 rtems_workspace_allocate - 42 bytes
 rtems_workspace_free - NULL
 rtems_workspace_free - previous pointer to 42 bytes
+_Workspace_String_duplicate - samples
+_Workspace_Allocate_aligned
 *** END OF TEST WORKSPACE CLASSIC API ***
