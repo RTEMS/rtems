@@ -61,6 +61,21 @@ SECTIONS
     PROVIDE(__romdatastart = .); /* IF_ROROM */
   } > RAM
 
+  .tdata : {
+    __TLS_Data_begin = .;
+    *(.tdata .tdata.* .gnu.linkonce.td.*)
+    __TLS_Data_end = .;
+  } > RAM
+  .tbss : {
+    __TLS_BSS_begin = .;
+    *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+    __TLS_BSS_end = .;
+  } > RAM
+  __TLS_Data_size = __TLS_Data_end - __TLS_Data_begin;
+  __TLS_BSS_size = __TLS_BSS_end - __TLS_BSS_begin;
+  __TLS_Size = __TLS_BSS_end - __TLS_Data_begin;
+  __TLS_Alignment = ALIGNOF (.tdata);
+
   .data : {
     . = ALIGN(32 / 8);
     PROVIDE (__datastart = .); /* IF_ROROM */

@@ -93,6 +93,20 @@ SECTIONS
     *(.rodata.*) 
     *(.gnu.linkonce.r*) 
   } > ram
+  .tdata : {
+    __TLS_Data_begin = .;
+    *(.tdata .tdata.* .gnu.linkonce.td.*)
+    __TLS_Data_end = .;
+  } > ram
+  .tbss : {
+    __TLS_BSS_begin = .;
+    *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+    __TLS_BSS_end = .;
+  } > ram
+  __TLS_Data_size = __TLS_Data_end - __TLS_Data_begin;
+  __TLS_BSS_size = __TLS_BSS_end - __TLS_BSS_begin;
+  __TLS_Size = __TLS_BSS_end - __TLS_Data_begin;
+  __TLS_Alignment = ALIGNOF (.tdata);
   .ctors   : 
   {
     ___ctors = .;

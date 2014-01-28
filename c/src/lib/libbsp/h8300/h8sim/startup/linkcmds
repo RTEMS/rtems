@@ -59,7 +59,21 @@ SECTIONS
 
 	 _etext = .;
     }  >ram
-   .tors SIZEOF(.text) + ADDR(.text): {
+    .tdata SIZEOF(.text) + ADDR(.text): {
+        __TLS_Data_begin = .;
+        *(.tdata .tdata.* .gnu.linkonce.td.*)
+        __TLS_Data_end = .;
+    }  >ram
+    .tbss SIZEOF(.tdata) + ADDR(.tdata): {
+        __TLS_BSS_begin = .;
+        *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+        __TLS_BSS_end = .;
+    }  >ram
+    __TLS_Data_size = __TLS_Data_end - __TLS_Data_begin;
+    __TLS_BSS_size = __TLS_BSS_end - __TLS_BSS_begin;
+    __TLS_Size = __TLS_BSS_end - __TLS_Data_begin;
+    __TLS_Alignment = ALIGNOF (.tdata);
+   .tors SIZEOF(.tbss) + ADDR(.tbss): {
         ___ctors = . ;
         *(.ctors)
         ___ctors_end = . ;

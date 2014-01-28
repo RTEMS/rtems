@@ -57,11 +57,19 @@ SECTIONS {
 		*(.gcc_except_table .gcc_except_table.*)
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.tdata : ALIGN_WITH_INPUT {
+		_TLS_Data_begin = .;
 		*(.tdata .tdata.* .gnu.linkonce.td.*)
+		_TLS_Data_end = .;
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.tbss : ALIGN_WITH_INPUT {
+		_TLS_BSS_begin = .;
 		*(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+		_TLS_BSS_end = .;
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	_TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+	_TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
+	_TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
+	_TLS_Alignment = ALIGNOF (.tdata);
 	.preinit_array : ALIGN_WITH_INPUT {
 		PROVIDE_HIDDEN (__preinit_array_start = .);
 		KEEP (*(.preinit_array))

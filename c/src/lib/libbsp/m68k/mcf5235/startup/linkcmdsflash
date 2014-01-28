@@ -144,8 +144,25 @@ SECTIONS
         _estuff = .;
     PROVIDE (_etext = .);
     } >flash
+
+    .tdata : {
+        _TLS_Data_begin = .;
+        *(.tdata .tdata.* .gnu.linkonce.td.*)
+        _TLS_Data_end = .;
+    } >flash
+
+    .tbss : {
+        _TLS_BSS_begin = .;
+        *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+        _TLS_BSS_end = .;
+    } >flash
+
+    _TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+    _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
+    _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
+    _TLS_Alignment = ALIGNOF (.tdata);
         
-        .data 0x4000 : AT ( ADDR(.text) + SIZEOF ( .text ) )
+        .data 0x4000 : AT ( ADDR(.tdata) + SIZEOF ( .tdata ) )
 	{
             PROVIDE( _data_dest_start = . );
             PROVIDE( _copy_start = .);

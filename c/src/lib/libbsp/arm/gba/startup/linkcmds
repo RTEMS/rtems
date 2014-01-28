@@ -139,6 +139,20 @@ SECTIONS
     SORT(CONSTRUCTORS)
     . = ALIGN(4);
   } =0xFF
+  .tdata : {
+    _TLS_Data_begin = .;
+    *(.tdata .tdata.* .gnu.linkonce.td.*)
+    _TLS_Data_end = .;
+  } =0xFF
+  .tbss : {
+    _TLS_BSS_begin = .;
+    *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+    _TLS_BSS_end = .;
+  }
+  _TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+  _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
+  _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
+  _TLS_Alignment = ALIGNOF (.tdata);
   __rodata_end = . ;
 
   .eh_frame :
@@ -219,22 +233,7 @@ SECTIONS
 /*************************************************************************
   calculate __ro_end
  *************************************************************************/
-  __ro_end =
-	ADDR(.text) +
-	SIZEOF(.text) +
-	SIZEOF(.init) +
-	SIZEOF(.fini) +
-	SIZEOF(.rodata) +
-	SIZEOF(.eh_frame) +
-	SIZEOF(.gcc_except_table) +
-	SIZEOF(.ctors) +
-	SIZEOF(.dtors) +
-	SIZEOF(.jcr) +
-	SIZEOF(.ARM.extab) +
-	SIZEOF(.ARM.exidx) +
-	SIZEOF(.preinit_array) +
-	SIZEOF(.init_array) +
-	SIZEOF(.fini_array);
+  __ro_end = .;
   PROVIDE(__text_end__ = __ro_end );
 
 /*** IWRAM ***/
@@ -301,7 +300,6 @@ SECTIONS
     *(EXCLUDE_FILE(*.rodata.* *.ewram.o *.iwram.o) .data)
     *(.data.* .gnu.linkonce.d.*)
     *(.data1)
-    *(.tdata .tdata.* .gnu.linkonce.td.*)
     *(.sdata .sdata.* .gnu.linkonce.s.*)
     . = ALIGN(4);
   } =0xFF
@@ -322,7 +320,6 @@ SECTIONS
   .bss :
   {
     *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
-    *(.tbss .tbss.* .gnu.linkonce.tb.*)
     *(.tcommon)
     *(.sbss .sbss.* .gnu.linkonce.sb.*)
     *(.scommon)

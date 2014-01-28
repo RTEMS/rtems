@@ -123,10 +123,27 @@ SECTIONS
 
         *(.console_gdb_xfer)
         *(.bootstrap_data)
+    } > boot_flash
+
+    .tdata : {
+        _TLS_Data_begin = .;
+        *(.tdata .tdata.* .gnu.linkonce.td.*)
+        _TLS_Data_end = .;
         . = ALIGN(16);
         _estuff = .;
         PROVIDE (_etext = .);
     } > boot_flash
+
+    .tbss : {
+        _TLS_BSS_begin = .;
+        *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+        _TLS_BSS_end = .;
+    } > boot_flash
+
+    _TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+    _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
+    _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
+    _TLS_Alignment = ALIGNOF (.tdata);
 
     .data 0x40000500 : AT (_estuff)
     {

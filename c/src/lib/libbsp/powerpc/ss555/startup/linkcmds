@@ -132,6 +132,13 @@ SECTIONS
     text.end = .;
     PROVIDE (etext = .);
     PROVIDE (__etext = .);
+  }
+  text.size = text.end - text.start;
+
+  .tdata : {
+    _TLS_Data_begin = .;
+    *(.tdata .tdata.* .gnu.linkonce.td.*)
+    _TLS_Data_end = .;
 
     /* 
      * .data section contents, copied to RAM at system startup. 
@@ -139,7 +146,15 @@ SECTIONS
     . = ALIGN(0x20);
     data.contents.start = .;
   }
-  text.size = text.end - text.start;
+  .tbss : {
+    _TLS_BSS_begin = .;
+    *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+    _TLS_BSS_end = .;
+  }
+  _TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+  _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
+  _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
+  _TLS_Alignment = ALIGNOF (.tdata);
 
   /*
    * If debugging, stack the read/write sections directly after the text

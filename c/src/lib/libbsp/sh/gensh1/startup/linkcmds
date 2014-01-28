@@ -128,9 +128,23 @@ SECTIONS
   } > ram
   _etext = .;
   PROVIDE (etext = .);
-  .fini    .  : { *(.fini)    } =0
-  .rodata  .  : { *(.rodata*) *(.gnu.linkonce.r*) }
-  .rodata1 .  : { *(.rodata1) }
+  .fini    .  : { *(.fini)    } > ram =0
+  .rodata  .  : { *(.rodata*) *(.gnu.linkonce.r*) } > ram
+  .rodata1 .  : { *(.rodata1) } > ram
+  .tdata : {
+    __TLS_Data_begin = .;
+    *(.tdata .tdata.* .gnu.linkonce.td.*)
+    __TLS_Data_end = .;
+  } > ram
+  .tbss : {
+    __TLS_BSS_begin = .;
+    *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+    __TLS_BSS_end = .;
+  } > ram
+  __TLS_Data_size = __TLS_Data_end - __TLS_Data_begin;
+  __TLS_BSS_size = __TLS_BSS_end - __TLS_BSS_begin;
+  __TLS_Size = __TLS_BSS_end - __TLS_Data_begin;
+  __TLS_Alignment = ALIGNOF (.tdata);
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  */
   . = ALIGN(128) + (. & (128 - 1));

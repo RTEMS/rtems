@@ -115,6 +115,24 @@ SECTIONS
                  . = ALIGN (16);
                 PROVIDE (_etext = .);
         } >ram
+
+	.tdata : {
+		_TLS_Data_begin = .;
+		*(.tdata .tdata.* .gnu.linkonce.td.*)
+		_TLS_Data_end = .;
+	} >ram
+
+	.tbss : {
+		_TLS_BSS_begin = .;
+		*(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+		_TLS_BSS_end = .;
+	} >ram
+
+	_TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+	_TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
+	_TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
+	_TLS_Alignment = ALIGNOF (.tdata);
+
         .data : {
                 PROVIDE (_copy_start = .);
                 *(.data*)

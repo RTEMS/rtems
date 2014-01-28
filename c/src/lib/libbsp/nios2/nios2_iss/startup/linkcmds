@@ -195,9 +195,26 @@ SECTIONS
         . = ALIGN(32 / 8);
         *(.rodata .rodata.* .gnu.linkonce.r.*)
         *(.rodata1)
+    } > onchip_memory_0
+
+    .tdata : {
+        _TLS_Data_begin = .;
+        *(.tdata .tdata.* .gnu.linkonce.td.*)
+        _TLS_Data_end = .;
+    } > onchip_memory_0
+
+    .tbss : {
+        _TLS_BSS_begin = .;
+        *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+        _TLS_BSS_end = .;
         . = ALIGN(32 / 8);
         PROVIDE (__ram_rodata_end = ABSOLUTE(.));
     } > onchip_memory_0
+
+    _TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+    _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
+    _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
+    _TLS_Alignment = ALIGNOF (.tdata);
 
     PROVIDE (__flash_rodata_start = LOADADDR(.rodata));
 
