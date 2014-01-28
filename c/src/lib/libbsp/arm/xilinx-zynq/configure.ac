@@ -29,7 +29,10 @@ RTEMS_BSPOPTS_SET([BSP_ARM_A9MPCORE_PERIPHCLK],[xilinx_zynq_zedboard*],[66666666
 RTEMS_BSPOPTS_SET([BSP_ARM_A9MPCORE_PERIPHCLK],[*],[100000000U])
 RTEMS_BSPOPTS_HELP([BSP_ARM_A9MPCORE_PERIPHCLK],[ARM Cortex-A9 MPCore PERIPHCLK clock frequency in Hz])
 
-RTEMS_BSPOPTS_SET([CLOCK_DRIVER_USE_FAST_IDLE],[*qemu],[1])
+USE_FAST_IDLE=0
+AS_IF([test "x${RTEMS_BSP}" == xxilinx_zynq_a9_qemu], [USE_FAST_IDLE=1])
+
+RTEMS_BSPOPTS_SET([CLOCK_DRIVER_USE_FAST_IDLE],[*qemu],[${USE_FAST_IDLE}])
 RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_FAST_IDLE],
 [This sets a mode where the time runs as fast as possible when a clock ISR
 occurs while the IDLE thread is executing.  This can significantly reduce
@@ -38,11 +41,85 @@ simulation times.])
 RTEMS_BSPOPTS_SET([BSP_CONSOLE_MINOR],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_CONSOLE_MINOR],[minor number of console device])
 
+ZYNQ_CPUS="1"
 RTEMS_CHECK_SMP
 AM_CONDITIONAL(HAS_SMP,[test "$rtems_cv_HAS_SMP" = "yes"])
+AS_IF([test "$rtems_cv_HAS_SMP" = "yes"],
+      [ZYNQ_CPUS="2"])
+
+#
+# Zynq Memory map can be controlled from the configure command line. Use ...
+#
+#   ..../configure --target=arm-rtems4.11 ... ZYNQ_RAM_LENGTH=256M
+#
+AS_IF([test "x${RTEMS_BSP}" == xxilinx_zynq_a9_qemu],
+      [ZYNQ_RAM_ORIGIN="0x00000000"
+       ZYNQ_RAM_LENGTH="256M"
+       ZYNQ_RAM_MMU="0x0fffc000"
+       ZYNQ_RAM_MMU_LENGTH="16k"
+       ZYNQ_RAM_ORIGIN_AVAILABLE="${ZYNQ_RAM_ORIGIN}"
+       ZYNQ_RAM_LENGTH_AVAILABLE="${ZYNQ_RAM_LENGTH} - 16k"
+       ZYNQ_RAM_INT_0_ORIGIN="0x00000000"
+       ZYNQ_RAM_INT_0_LENGTH="64k + 64k + 64k"
+       ZYNQ_RAM_INT_1_ORIGIN="0xFFFF0000"
+       ZYNQ_RAM_INT_1_LENGTH="64k - 512"])
+
+AS_IF([test "x${RTEMS_BSP}" == xxilinx_zynq_zc702],
+      [ZYNQ_RAM_ORIGIN="0x00100000"
+       ZYNQ_RAM_LENGTH="1024M"
+       ZYNQ_RAM_MMU="${ZYNQ_RAM_ORIGIN}"
+       ZYNQ_RAM_MMU_LENGTH="16k"
+       ZYNQ_RAM_ORIGIN_AVAILABLE="${ZYNQ_RAM_ORIGIN} + 0x00004000"
+       ZYNQ_RAM_LENGTH_AVAILABLE="${ZYNQ_RAM_LENGTH} - 1M - 16k"
+       ZYNQ_RAM_INT_0_ORIGIN="0x00000000"
+       ZYNQ_RAM_INT_0_LENGTH="64k + 64k + 64k"
+       ZYNQ_RAM_INT_1_ORIGIN="0xFFFF0000"
+       ZYNQ_RAM_INT_1_LENGTH="64k - 512"])
+
+AS_IF([test "x${RTEMS_BSP}" == xxilinx_zynq_zc706],
+      [ZYNQ_RAM_ORIGIN="0x00400000"
+       ZYNQ_RAM_LENGTH="1024M"
+       ZYNQ_RAM_MMU="${ZYNQ_RAM_ORIGIN}"
+       ZYNQ_RAM_MMU_LENGTH="16k"
+       ZYNQ_RAM_ORIGIN_AVAILABLE="${ZYNQ_RAM_ORIGIN} + 0x00004000"
+       ZYNQ_RAM_LENGTH_AVAILABLE="${ZYNQ_RAM_LENGTH} - 4M - 16k"
+       ZYNQ_RAM_INT_0_ORIGIN="0x00000000"
+       ZYNQ_RAM_INT_0_LENGTH="64k + 64k + 64k"
+       ZYNQ_RAM_INT_1_ORIGIN="0xFFFF0000"
+       ZYNQ_RAM_INT_1_LENGTH="64k - 512"])
+
+AS_IF([test "x${RTEMS_BSP}" == xxilinx_zynq_zedboard],
+      [ZYNQ_RAM_ORIGIN="0x00100000"
+       ZYNQ_RAM_LENGTH="512M"
+       ZYNQ_RAM_MMU="${ZYNQ_RAM_ORIGIN}"
+       ZYNQ_RAM_MMU_LENGTH="16k"
+       ZYNQ_RAM_ORIGIN_AVAILABLE="${ZYNQ_RAM_ORIGIN} + 0x00004000"
+       ZYNQ_RAM_LENGTH_AVAILABLE="${ZYNQ_RAM_LENGTH} - 1M - 16k"
+       ZYNQ_RAM_INT_0_ORIGIN="0x00000000"
+       ZYNQ_RAM_INT_0_LENGTH="64k + 64k + 64k"
+       ZYNQ_RAM_INT_1_ORIGIN="0xFFFF0000"
+       ZYNQ_RAM_INT_1_LENGTH="64k - 512"])
+
+AC_DEFUN([ZYNQ_LINKCMD],[
+AC_ARG_VAR([$1],[$2; default $3])dnl
+[$1]=[$]{[$1]:-[$3]}
+])
+
+ZYNQ_LINKCMD([ZYNQ_CPUS],[Number of active cores],[${ZYNQ_CPUS}])
+ZYNQ_LINKCMD([ZYNQ_RAM_ORIGIN],[normal RAM region origin],[${ZYNQ_RAM_ORIGIN}])
+ZYNQ_LINKCMD([ZYNQ_RAM_LENGTH],[normal RAM region length],[${ZYNQ_RAM_LENGTH}])
+ZYNQ_LINKCMD([ZYNQ_RAM_MMU],[MMU region origin],[${ZYNQ_RAM_MMU}])
+ZYNQ_LINKCMD([ZYNQ_RAM_MMU_LENGTH],[MMU region length],[${ZYNQ_RAM_MMU_LENGTH}])
+ZYNQ_LINKCMD([ZYNQ_RAM_ORIGIN_AVAILABLE],[origin of available RAM],[${ZYNQ_RAM_ORIGIN_AVAILABLE}])
+ZYNQ_LINKCMD([ZYNQ_RAM_LENGTH_AVAILABLE],[length of available RAM],[${ZYNQ_RAM_LENGTH_AVAILABLE}])
+ZYNQ_LINKCMD([ZYNQ_RAM_INT_0_ORIGIN],[internal 0 RAM region origin],[${ZYNQ_RAM_INT_0_ORIGIN}])
+ZYNQ_LINKCMD([ZYNQ_RAM_INT_0_LENGTH],[internal 0 RAM region length],[${ZYNQ_RAM_INT_0_LENGTH}])
+ZYNQ_LINKCMD([ZYNQ_RAM_INT_1_ORIGIN],[internal 1 RAM region origin],[${ZYNQ_RAM_INT_1_ORIGIN}])
+ZYNQ_LINKCMD([ZYNQ_RAM_INT_1_LENGTH],[internal 1 RAM region length],[${ZYNQ_RAM_INT_1_LENGTH}])
 
 RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
-RTEMS_BSP_LINKCMDS
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([
+Makefile
+startup/linkcmds])
 AC_OUTPUT
