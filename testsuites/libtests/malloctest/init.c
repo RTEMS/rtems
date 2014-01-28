@@ -1157,6 +1157,25 @@ static void test_rtems_heap_allocate_aligned_with_boundary(void)
   rtems_test_assert( p == NULL );
 }
 
+static void test_heap_size_with_overhead(void)
+{
+  uintptr_t s;
+
+  puts( "_Heap_Size_with_overhead" );
+
+  s = _Heap_Size_with_overhead(0, 0, 0);
+  rtems_test_assert(s == HEAP_BLOCK_HEADER_SIZE + CPU_ALIGNMENT - 1);
+
+  s = _Heap_Size_with_overhead(CPU_ALIGNMENT, 0, 0);
+  rtems_test_assert(s == HEAP_BLOCK_HEADER_SIZE + CPU_ALIGNMENT - 1);
+
+  s = _Heap_Size_with_overhead(CPU_ALIGNMENT, 0, 2 * CPU_ALIGNMENT);
+  rtems_test_assert(s == HEAP_BLOCK_HEADER_SIZE + 2 * CPU_ALIGNMENT - 1);
+
+  s = _Heap_Size_with_overhead(CPU_ALIGNMENT, 123, 0);
+  rtems_test_assert(s == HEAP_BLOCK_HEADER_SIZE + CPU_ALIGNMENT - 1 + 123);
+}
+
 /*
  *  A simple test of posix_memalign
  */
@@ -1268,6 +1287,7 @@ rtems_task Init(
   test_heap_extend_allocation_order_with_empty_heap();
   test_heap_no_extend();
   test_heap_info();
+  test_heap_size_with_overhead();
   test_protected_heap_info();
   test_rtems_heap_allocate_aligned_with_boundary();
   test_greedy_allocate();

@@ -59,6 +59,7 @@ malloc_info - called with NULL
 
 malloc_info - check free space drops after malloc
 malloc_info - verify free space returns to previous value
+_Heap_Size_with_overhead
 _Protected_heap_Get_information - NULL heap
 _Protected_heap_Get_information - NULL info
 posix_memalign - NULL return pointer -- EINVAL

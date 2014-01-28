@@ -464,6 +464,29 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Area_overhead(
   return 2 * (page_size - 1) + HEAP_BLOCK_HEADER_SIZE;
 }
 
+/**
+ * @brief Returns the size with administration and alignment overhead for one
+ * allocation.
+ */
+RTEMS_INLINE_ROUTINE uintptr_t _Heap_Size_with_overhead(
+  uintptr_t page_size,
+  uintptr_t size,
+  uintptr_t alignment
+)
+{
+  if ( page_size != 0 ) {
+    page_size = _Heap_Align_up( page_size, CPU_ALIGNMENT );
+  } else {
+    page_size = CPU_ALIGNMENT;
+  }
+
+  if ( page_size < alignment ) {
+    page_size = alignment;
+  }
+
+  return HEAP_BLOCK_HEADER_SIZE + page_size - 1 + size;
+}
+
 /** @} */
 
 #ifdef __cplusplus
