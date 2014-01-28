@@ -96,4 +96,6 @@ void _Thread_Close(
 
   _Workspace_Free( the_thread->extensions );
   the_thread->extensions = NULL;
+
+  _Workspace_Free( the_thread->Start.tls_area );
 }

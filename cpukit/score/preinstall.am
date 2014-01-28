@@ -279,6 +279,10 @@ $(PROJECT_INCLUDE)/rtems/score/timestamp64.h: include/rtems/score/timestamp64.h 
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/timestamp64.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/timestamp64.h
 
+$(PROJECT_INCLUDE)/rtems/score/tls.h: include/rtems/score/tls.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tls.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tls.h
+
 $(PROJECT_INCLUDE)/rtems/score/tod.h: include/rtems/score/tod.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tod.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tod.h

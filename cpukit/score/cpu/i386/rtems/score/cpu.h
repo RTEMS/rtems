@@ -443,7 +443,7 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                   _isr, _entry_point, _is_fp ) \
+                                   _isr, _entry_point, _is_fp, _tls_area ) \
   do { \
     uint32_t   _stack; \
     \

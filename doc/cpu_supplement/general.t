@@ -314,6 +314,33 @@ interrupts and halts the processor.
 In each of the architecture specific chapters, this describes the precise
 operations of the default CPU specific fatal error handler.
 
+@section Thread-Local Storage
+
+In order to support thread-local storage (TLS) the CPU port must implement the
+facilities mandated by the application binary interface (ABI) of the CPU
+architecture.  The CPU port must initialize the TLS area in the
+@code{_CPU_Context_Initialize} function.
+
+The board support package (BSP) must provide the following sections and symbols
+in its linker command file:
+
+@example
+.tdata : @{
+  _TLS_Data_begin = .;
+  *(.tdata .tdata.* .gnu.linkonce.td.*)
+  _TLS_Data_end = .;
+@}
+.tbss : @{
+  _TLS_BSS_begin = .;
+  *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+  _TLS_BSS_end = .;
+@}
+_TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+_TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
+_TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
+_TLS_Alignment = ALIGNOF (.tdata);
+@end example
+
 @c
 @c
 @c

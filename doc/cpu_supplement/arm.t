@@ -97,3 +97,7 @@ following actions:
 @item places the error code in @code{r0}, and
 @item executes an infinite loop to simulate a halt processor instruction.
 @end itemize
+
+@section Thread-Local Storage
+
+Thread-local storage is supported.

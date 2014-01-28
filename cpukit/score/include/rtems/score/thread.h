@@ -229,6 +229,8 @@ typedef struct {
   #endif
   /** This field is the initial stack area address. */
   void                                *stack;
+  /** The thread-local storage (TLS) area */
+  void                                *tls_area;
 } Thread_Start_information;
 
 /**

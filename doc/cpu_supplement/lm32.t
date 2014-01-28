@@ -163,6 +163,10 @@ interrupts and halts the processor.
 In each of the architecture specific chapters, this describes the precise
 operations of the default CPU specific fatal error handler.
 
+@section Thread-Local Storage
+
+Thread-local storage is not implemented.
+
 @c
 @c
 @c

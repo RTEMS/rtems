@@ -26,6 +26,7 @@
 
 #include <rtems/score/armv7m.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/tls.h>
 
 #ifdef ARM_MULTILIB_ARCH_V7M
 
@@ -35,7 +36,8 @@ void _CPU_Context_Initialize(
   size_t stack_area_size,
   uint32_t new_level,
   void (*entry_point)( void ),
-  bool is_fp
+  bool is_fp,
+  void *tls_area
 )
 {
   char *stack_area_end = (char *) stack_area_begin + stack_area_size;
@@ -44,6 +46,10 @@ void _CPU_Context_Initialize(
 
   context->register_lr = entry_point;
   context->register_sp = stack_area_end;
+
+  if ( tls_area != NULL ) {
+    _TLS_TCB_at_area_begin_initialize( tls_area );
+  }
 }
 
 #endif /* ARM_MULTILIB_ARCH_V7M */

@@ -773,6 +773,9 @@ default fatal error handler disables processor interrupts to
 level 15, places the error code in g1, and goes into an infinite
 loop to simulate a halt processor instruction.
 
+@section Thread-Local Storage
+
+Thread-local storage is supported.
 
 @c
 @c  COPYRIGHT (c) 1988-2002.

@@ -1019,6 +1019,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  * @param[in] new_level is the interrupt level for the task
  * @param[in] entry_point is the task's entry point
  * @param[in] is_fp is set to TRUE if the task is a floating point task
+ * @param[in] tls_area is the thread-local storage (TLS) area
  *
  * NOTE:  Implemented as a subroutine for the SPARC port.
  */
@@ -1028,7 +1029,8 @@ void _CPU_Context_Initialize(
   uint32_t          size,
   uint32_t          new_level,
   void             *entry_point,
-  bool              is_fp
+  bool              is_fp,
+  void             *tls_area
 );
 
 /**

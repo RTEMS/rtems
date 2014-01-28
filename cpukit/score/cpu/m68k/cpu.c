@@ -19,6 +19,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/tls.h>
 
 #if defined( __mcoldfire__ ) && ( M68K_HAS_FPU == 1 )
   uint32_t _CPU_cacr_shadow;
@@ -181,3 +182,29 @@ void _CPU_Context_restore_fp (Context_Control_fp **fp_context_ptr)
   _fpCCR = *fp;
 }
 #endif
+
+void _CPU_Context_Initialize(
+  Context_Control *the_context,
+  void *stack_area_begin,
+  size_t stack_area_size,
+  uint32_t new_level,
+  void (*entry_point)( void ),
+  bool is_fp,
+  void *tls_area
+)
+{
+  uint32_t stack;
+
+  the_context->sr      = 0x3000 | (new_level << 8);
+  stack                = (uint32_t)stack_area_begin + stack_area_size - 4;
+  the_context->a7_msp  = (void *)stack;
+  *(void **)stack      = (void *)entry_point;
+
+#if (defined(__mcoldfire__) && ( M68K_HAS_FPU == 1 ))
+  the_context->fpu_dis = is_fp ? 0x00 : 0x10;
+#endif
+
+  if ( tls_area != NULL ) {
+    _TLS_TCB_before_tls_block_initialize( tls_area );
+  }
+}

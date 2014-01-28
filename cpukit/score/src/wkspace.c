@@ -21,6 +21,8 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/heapimpl.h>
 #include <rtems/score/interr.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/tls.h>
 #include <rtems/config.h>
 
 #include <string.h>  /* for memset */
@@ -29,6 +31,25 @@
 #if defined(DEBUG_WORKSPACE)
   #include <rtems/bspIo.h>
 #endif
+
+static uint32_t _Get_maximum_thread_count(void)
+{
+  uint32_t thread_count = 0;
+
+  thread_count += _Thread_Get_maximum_internal_threads();
+
+  thread_count += rtems_resource_maximum_per_allocation(
+    Configuration_RTEMS_API.maximum_tasks
+  );
+
+#if defined(RTEMS_POSIX_API)
+  thread_count += rtems_resource_maximum_per_allocation(
+    Configuration_POSIX_API.maximum_threads
+  );
+#endif
+
+  return thread_count;
+}
 
 void _Workspace_Handler_initialization(
   Heap_Area *areas,
@@ -42,7 +63,16 @@ void _Workspace_Handler_initialization(
   bool unified = rtems_configuration_get_unified_work_area();
   uintptr_t page_size = CPU_HEAP_ALIGNMENT;
   uintptr_t overhead = _Heap_Area_overhead( page_size );
+  uintptr_t tls_size = (uintptr_t) _TLS_Size;
   size_t i;
+
+  if ( tls_size > 0 ) {
+    uintptr_t tls_alignment = (uintptr_t) _TLS_Alignment;
+    uintptr_t tls_alloc = _TLS_Get_allocation_size( tls_size, tls_alignment );
+
+    remaining += _Get_maximum_thread_count()
+      * _Heap_Size_with_overhead( page_size, tls_alloc, tls_alignment );
+  }
 
   for (i = 0; i < area_count; ++i) {
     Heap_Area *area = &areas [i];

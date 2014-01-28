@@ -211,7 +211,8 @@ void _CPU_Context_Initialize(
   uint32_t  		_size,
   uint32_t  		_isr,
   void 	(*_entry_point)(void),
-  int			_is_fp )
+  int			_is_fp,
+  void			*_tls_base)
 {
   _the_context->r15 = (uint32_t *) ((uint32_t) (_stack_base) + (_size) );
 #if defined(__sh1__) || defined(__sh2__) || defined(__SH2E__)

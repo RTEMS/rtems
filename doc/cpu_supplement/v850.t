@@ -102,3 +102,7 @@ following actions:
 @item places the error code in @code{r10}, and
 @item executes a halt processor instruction.
 @end itemize
+
+@section Thread-Local Storage
+
+Thread-local storage is not implemented.

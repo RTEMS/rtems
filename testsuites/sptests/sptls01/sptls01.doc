@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: sptls01
+
+directives:
+
+  - None
+
+concepts:
+
+  - Ensure that thread-local storage (TLS) works minimum alignment requirements.

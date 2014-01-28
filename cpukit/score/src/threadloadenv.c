@@ -58,7 +58,8 @@ void _Thread_Load_environment(
     the_thread->Start.Initial_stack.size,
     isr_level,
     _Thread_Handler,
-    is_fp
+    is_fp,
+    the_thread->Start.tls_area
   );
 
 }

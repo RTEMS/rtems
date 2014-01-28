@@ -20,6 +20,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/stackimpl.h>
+#include <rtems/score/tls.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
@@ -48,6 +49,7 @@ bool _Thread_Initialize(
   void                *extensions_area;
   bool                 extension_status;
   int                  i;
+  uintptr_t            tls_size = (uintptr_t) _TLS_Size;
 
 #if defined( RTEMS_SMP )
   if ( rtems_configuration_is_smp_enabled() && !is_preemptible ) {
@@ -70,6 +72,7 @@ bool _Thread_Initialize(
 
   extensions_area = NULL;
   the_thread->libc_reent = NULL;
+  the_thread->Start.tls_area = NULL;
 
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
     fp_area = NULL;
@@ -104,6 +107,19 @@ bool _Thread_Initialize(
      stack,
      actual_stack_size
   );
+
+  /* Thread-local storage (TLS) area allocation */
+  if ( tls_size > 0 ) {
+    uintptr_t tls_align = _TLS_Heap_align_up( (uintptr_t) _TLS_Alignment );
+    uintptr_t tls_alloc = _TLS_Get_allocation_size( tls_size, tls_align );
+
+    the_thread->Start.tls_area =
+      _Workspace_Allocate_aligned( tls_alloc, tls_align );
+
+    if ( the_thread->Start.tls_area == NULL ) {
+      goto failed;
+    }
+  }
 
   /*
    *  Allocate the floating point area for this thread
@@ -223,6 +239,8 @@ bool _Thread_Initialize(
     return true;
 
 failed:
+  _Workspace_Free( the_thread->Start.tls_area );
+
   _Workspace_Free( the_thread->libc_reent );
 
   for ( i=0 ; i <= THREAD_API_LAST ; i++ )

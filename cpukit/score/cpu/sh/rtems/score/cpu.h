@@ -603,7 +603,8 @@ SCORE_EXTERN void _CPU_Context_Initialize(
   uint32_t              _size,
   uint32_t              _isr,
   void    (*_entry_point)(void),
-  int                   _is_fp );
+  int                   _is_fp,
+  void                  *_tls_area );
 
 /*
  *  This routine is responsible for somehow restarting the currently

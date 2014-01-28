@@ -60,9 +60,12 @@ extern "C" {
  *  @param[in] _entry is this thread's entry point
  *  @param[in] _is_fp is set to true if this thread has floating point
  *         enabled
+ *  @param[in] _tls_area The thread-local storage (TLS) area begin.
  */
-#define _Context_Initialize(_the_context, _stack, _size, _isr, _entry, _is_fp) \
-   _CPU_Context_Initialize( _the_context, _stack, _size, _isr, _entry, _is_fp )
+#define _Context_Initialize( _the_context, _stack, _size, _isr, _entry, \
+  _is_fp, _tls_area ) \
+    _CPU_Context_Initialize( _the_context, _stack, _size, _isr, _entry, \
+      _is_fp, _tls_area )
 
 /**
  *  This macro is invoked from _Thread_Handler to do whatever CPU

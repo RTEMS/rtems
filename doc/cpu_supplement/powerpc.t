@@ -623,6 +623,10 @@ If the Program Exception returns, then the following actions are performed:
 
 @end itemize
 
+@section Thread-Local Storage
+
+Thread-local storage is supported.
+
 @c
 @c
 @c

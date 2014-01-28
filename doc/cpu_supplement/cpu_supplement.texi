@@ -65,10 +65,15 @@
 * ARM Specific Information::
 * Atmel AVR Specific Information::
 * Blackfin Specific Information::
+* Renesas H8/300 Specific Information::
 * Intel/AMD x86 Specific Information::
 * Lattice Mico32 Specific Information::
+* Renesas M32C Specific Information::
+* Renesas M32R Specific Information::
 * M68xxx and Coldfire Specific Information::
+* Xilinx MicroBlaze Specific Information::
 * MIPS Specific Information::
+* Altera Nios II Specific Information::
 * PowerPC Specific Information::
 * SuperH Specific Information::
 * SPARC Specific Information::
@@ -83,10 +88,15 @@
 @include arm.texi
 @include avr.texi
 @include bfin.texi
+@include h8300.texi
 @include i386.texi
 @include lm32.texi
+@include m32c.texi
+@include m32r.texi
 @include m68k.texi
+@include microblaze.texi
 @include mips.texi
+@include nios2.texi
 @include powerpc.texi
 @include sh.texi
 @include sparc.texi

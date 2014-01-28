@@ -20,6 +20,7 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/tls.h>
 #include <rtems/rtems/cache.h>
 
 RTEMS_STATIC_ASSERT(
@@ -232,7 +233,8 @@ void _CPU_Context_Initialize(
   uint32_t          size,
   uint32_t          new_level,
   void             *entry_point,
-  bool              is_fp
+  bool              is_fp,
+  void             *tls_area
 )
 {
     uint32_t     stack_high;  /* highest "stack aligned" address */
@@ -285,4 +287,10 @@ void _CPU_Context_Initialize(
    *  thread can have an _ISR_Dispatch stack frame on its stack.
    */
     the_context->isr_dispatch_disable = 0;
+
+  if ( tls_area != NULL ) {
+    void *tcb = _TLS_TCB_after_tls_block_initialize( tls_area );
+
+    the_context->g7 = (uintptr_t) tcb;
+  }
 }

@@ -62,10 +62,20 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 	vstm	r3, {d8-d15}
 #endif
 
+#ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
+	mrc	p15, 0, r3, c13, c0, 3
+	str	r3, [r0, #ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET]
+#endif
+
 /* Start restoring context */
 _restore:
 #ifdef ARM_MULTILIB_HAS_LOAD_STORE_EXCLUSIVE
 	clrex
+#endif
+
+#ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
+	ldr	r3, [r1, #ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET]
+	mcr	p15, 0, r3, c13, c0, 3
 #endif
 
 #ifdef ARM_MULTILIB_VFP_D32

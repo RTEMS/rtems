@@ -34,6 +34,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/cpu.h>
+#include <rtems/score/tls.h>
 #include <rtems/powerpc/powerpc.h>
 
 /*  _CPU_Initialize
@@ -62,13 +63,13 @@ void _CPU_Context_Initialize(
   uint32_t          size,
   uint32_t          new_level,
   void             *entry_point,
-  bool              is_fp
+  bool              is_fp,
+  void             *tls_area
 )
 {
   ppc_context *the_ppc_context;
   uint32_t   msr_value;
   uint32_t   sp;
-  register uint32_t gpr2 __asm__("2");
 
   sp = (uint32_t)stack_base + size - PPC_MINIMUM_STACK_FRAME_SIZE;
 
@@ -128,9 +129,18 @@ void _CPU_Context_Initialize(
   the_ppc_context->gpr1 = sp;
   the_ppc_context->msr = msr_value;
   the_ppc_context->lr = (uint32_t) entry_point;
-  the_ppc_context->gpr2 = gpr2;
 
 #ifdef __ALTIVEC__
   _CPU_Context_initialize_altivec( the_ppc_context );
 #endif
+
+  if ( tls_area != NULL ) {
+    void *tls_block = _TLS_TCB_before_tls_block_initialize( tls_area );
+
+    the_ppc_context->gpr2 = (uint32_t) tls_block + 0x7000;
+  } else {
+    register uint32_t gpr2 __asm__("2");
+
+    the_ppc_context->gpr2 = gpr2;
+  }
 }

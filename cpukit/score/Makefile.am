@@ -74,6 +74,7 @@ include_rtems_score_HEADERS += include/rtems/score/threadsync.h
 include_rtems_score_HEADERS += include/rtems/score/timespec.h
 include_rtems_score_HEADERS += include/rtems/score/timestamp.h
 include_rtems_score_HEADERS += include/rtems/score/timestamp64.h
+include_rtems_score_HEADERS += include/rtems/score/tls.h
 include_rtems_score_HEADERS += include/rtems/score/tod.h
 include_rtems_score_HEADERS += include/rtems/score/todimpl.h
 include_rtems_score_HEADERS += include/rtems/score/userext.h

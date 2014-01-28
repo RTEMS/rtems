@@ -932,13 +932,14 @@ uint32_t   _CPU_ISR_Get_level( void );
  *       point thread.  This is typically only used on CPUs where the
  *       FPU may be easily disabled by software such as on the SPARC
  *       where the PSR contains an enable FPU bit.
+ * @param[in] _tls_area The thread-local storage (TLS) area.
  *
  * Port Specific Information:
  *
  * XXX document implementation including references if appropriate
  */
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                 _isr, _entry_point, _is_fp ) \
+                                 _isr, _entry_point, _is_fp, _tls_area ) \
   { \
   }
 

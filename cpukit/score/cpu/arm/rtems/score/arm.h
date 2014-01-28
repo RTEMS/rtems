@@ -44,6 +44,11 @@ extern "C" {
   #define ARM_MULTILIB_HAS_LOAD_STORE_EXCLUSIVE
 #endif
 
+#if defined(__ARM_ARCH_7A__) \
+  || defined(__ARM_ARCH_7R__)
+  #define ARM_MULTILIB_HAS_THREAD_ID_REGISTER
+#endif
+
 #if defined(__ARM_NEON__)
   #define ARM_MULTILIB_VFP_D32
 #elif !defined(__SOFTFP__)

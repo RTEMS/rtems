@@ -117,6 +117,10 @@ actions:
 simulate a halt processor instruction.
 @end itemize
 
+@section Thread-Local Storage
+
+Thread-local storage is not supported due to a broken tool chain.
+
 @section Board Support Packages
 
 

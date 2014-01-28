@@ -295,6 +295,7 @@ uint32_t _CPU_ISR_Get_level( void );
  * @param[in] new_level is the interrupt level for the task
  * @param[in] entry_point is the task's entry point
  * @param[in] is_fp is set to @c true if the task is a floating point task
+ * @param[in] tls_area is the thread-local storage (TLS) area
  */
 void _CPU_Context_Initialize(
   Context_Control *context,
@@ -302,7 +303,8 @@ void _CPU_Context_Initialize(
   size_t stack_area_size,
   uint32_t new_level,
   void (*entry_point)( void ),
-  bool is_fp
+  bool is_fp,
+  void *tls_area
 );
 
 #define _CPU_Context_Restart_self( _the_context ) \

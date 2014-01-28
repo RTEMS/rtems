@@ -448,30 +448,15 @@ uint32_t   _CPU_ISR_Get_level( void );
  *     + initialize an FP context area
  */
 
-#if (defined(__mcoldfire__) && ( M68K_HAS_FPU == 1 ))
-#define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                 _isr, _entry_point, _is_fp ) \
-   do { \
-     uint32_t   _stack; \
-     \
-     (_the_context)->sr      = 0x3000 | ((_isr) << 8); \
-     _stack                  = (uint32_t)(_stack_base) + (_size) - 4; \
-     (_the_context)->a7_msp  = (void *)_stack; \
-     *(void **)_stack        = (void *)(_entry_point); \
-     (_the_context)->fpu_dis = (_is_fp == TRUE) ? 0x00 : 0x10;          \
-   } while ( 0 )
-#else
-#define _CPU_Context_Initialize( _the_context, _stack_base, _size,      \
-                                 _isr, _entry_point, _is_fp )           \
-   do {                                                                 \
-     uint32_t   _stack;                                                 \
-                                                                        \
-     (_the_context)->sr      = 0x3000 | ((_isr) << 8);                  \
-     _stack                  = (uint32_t)(_stack_base) + (_size) - 4;   \
-     (_the_context)->a7_msp  = (void *)_stack;                          \
-     *(void **)_stack        = (void *)(_entry_point);                  \
-   } while ( 0 )
-#endif
+void _CPU_Context_Initialize(
+  Context_Control *the_context,
+  void *stack_area_begin,
+  size_t stack_area_size,
+  uint32_t new_level,
+  void (*entry_point)( void ),
+  bool is_fp,
+  void *tls_area
+);
 
 /* end of Context handler macros */
 

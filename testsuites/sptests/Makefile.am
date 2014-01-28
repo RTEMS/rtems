@@ -30,6 +30,10 @@ SUBDIRS = \
     spsimplesched03 spnsext01 spedfsched01 spedfsched02 spedfsched03 \
     spcbssched01 spcbssched02 spcbssched03 spqreslib sptimespec01 \
     spregion_err01 sppartition_err01
+if HAS_CPLUSPLUS
+SUBDIRS += sptls02
+endif
+SUBDIRS += sptls01
 SUBDIRS += spintrcritical20
 SUBDIRS += spintrcritical19
 SUBDIRS += spcontext01

@@ -27,7 +27,8 @@ void _CPU_Context_Initialize(
   size_t stack_area_size,
   uint32_t new_level,
   void (*entry_point)( void ),
-  bool is_fp
+  bool is_fp,
+  void *tls_area
 )
 {
   const Nios2_MPU_Configuration *mpu_config = _Nios2_MPU_Get_configuration();

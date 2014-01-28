@@ -130,6 +130,10 @@ actions:
 simulate a halt processor instruction.
 @end itemize
 
+@section Thread-Local Storage
+
+Thread-local storage is not implemented.
+
 @section Board Support Packages
 
 

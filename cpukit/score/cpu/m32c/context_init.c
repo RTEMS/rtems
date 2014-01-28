@@ -50,7 +50,8 @@ void _CPU_Context_Initialize(
   size_t            size,
   uint32_t          new_level,
   void             *entry_point,
-  bool              is_fp
+  bool              is_fp,
+  void             *tls_area
 )
 {
   void *stackEnd = stack_base;

@@ -212,6 +212,10 @@
 
 /** @} */
 
+#ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
+  #define ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET 44
+#endif
+
 #ifdef ARM_MULTILIB_VFP_D32
   #define ARM_CONTEXT_CONTROL_D8_OFFSET 48
 #endif
@@ -266,6 +270,9 @@ typedef struct {
   uint32_t isr_nest_level;
 #else
   void *register_sp;
+#endif
+#ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
+  uint32_t thread_id;
 #endif
 #ifdef ARM_MULTILIB_VFP_D32
   uint64_t register_d8;
@@ -400,7 +407,8 @@ void _CPU_Context_Initialize(
   size_t stack_area_size,
   uint32_t new_level,
   void (*entry_point)( void ),
-  bool is_fp
+  bool is_fp,
+  void *tls_area
 );
 
 #define _CPU_Context_Get_SP( _context ) \
