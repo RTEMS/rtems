@@ -20,8 +20,6 @@
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/interr.h>
-#include <rtems/score/sysstate.h>
-#include <rtems/config.h>
 
 void _Thread_Handler_initialization(void)
 {
@@ -31,7 +29,6 @@ void _Thread_Handler_initialization(void)
     rtems_configuration_get_maximum_extensions();
   rtems_stack_allocate_init_hook stack_allocate_init_hook =
     rtems_configuration_get_stack_allocate_init_hook();
-  uint32_t     maximum_internal_threads;
   #if defined(RTEMS_MULTIPROCESSING)
     uint32_t maximum_proxies =
       _Configuration_MP_table->maximum_proxies;
@@ -68,18 +65,11 @@ void _Thread_Handler_initialization(void)
    *  per CPU in an SMP system.  In addition, if this is a loosely
    *  coupled multiprocessing system, account for the MPCI Server Thread.
    */
-  maximum_internal_threads = rtems_configuration_get_maximum_processors();
-
-  #if defined(RTEMS_MULTIPROCESSING)
-    if ( _System_state_Is_multiprocessing )
-      maximum_internal_threads += 1;
-  #endif
-
   _Objects_Initialize_information(
     &_Thread_Internal_information,
     OBJECTS_INTERNAL_API,
     OBJECTS_INTERNAL_THREADS,
-    maximum_internal_threads,
+    _Thread_Get_maximum_internal_threads(),
     sizeof( Thread_Control ),
                                 /* size of this object's control block */
     false,                      /* true if names for this object are strings */
