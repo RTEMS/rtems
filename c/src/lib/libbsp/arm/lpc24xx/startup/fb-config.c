@@ -52,7 +52,7 @@ static void fb_set_up(const pl111_fb_config *cfg)
   }
 
   #ifdef ARM_MULTILIB_ARCH_V4
-    PINSEL11 = BSP_FLD32(LCD_MODE_TFT_16_BIT_5_6_5, 1, 3) | LCD_ENABLE;
+    PINSEL11 = BSP_FLD32(LCD_MODE_TFT_16_BIT_5_6_5, 1, 3) | BSP_BIT32(0);
   #endif
 
   #ifdef ARM_MULTILIB_ARCH_V7M
