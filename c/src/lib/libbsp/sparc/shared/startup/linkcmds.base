@@ -135,6 +135,9 @@ SECTIONS
       *(.rela.got)
       *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
     } >ram
+  .rtemsrwset : {
+    KEEP (*(SORT(.rtemsrwset.*)))
+  } >ram
   .data :
   {
     data_start = .;
@@ -147,9 +150,6 @@ SECTIONS
     edata = .;
     _edata = .;
   } > ram
-  .rtemsrwset : {
-    KEEP (*(SORT(.rtemsrwset.*)))
-  } >ram
   .dynamic	  : { *(.dynamic) 	} >ram
   .jcr		  : { *(.jcr) 		} >ram
   .got		  : { *(.got) 		} >ram
