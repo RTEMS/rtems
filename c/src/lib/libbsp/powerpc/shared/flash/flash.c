@@ -456,6 +456,11 @@ struct bankdesc *b = BSP_flashBspOps.bankcheck(bank, quiet);
 		return 0;
 	}
 
+	if ( !b->size && !(b->size = BSP_flashProbeSize(b)) ) {
+		fprintf(stderr,"Configuration Error - unable to determine flash size\n");
+		return 0;
+	}
+
 	if ( !b->dd && !(b->dd = BSP_flashCheckId(b, b->start,1)) ) {
 		fprintf(stderr,"Error: unable to detect flash device in bank #%i\n", bank);
 		return 0;
@@ -485,10 +490,6 @@ struct bankdesc *b;
 		return 0;
 	}
 
-	if ( !b->size && !(b->size = BSP_flashProbeSize(b)) ) {
-		fprintf(stderr,"Configuration Error - unable to determine flash size\n");
-		return 0;
-	}
 	if ( offset + size > b->size ) {
 		fprintf(stderr,"Error: requested size exceeds available flash (0x%08"PRIx32" bytes)\n", b->size);
 		return 0;
