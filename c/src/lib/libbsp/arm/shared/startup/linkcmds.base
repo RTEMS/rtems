@@ -75,7 +75,7 @@ SECTIONS {
 
 	.xbarrier : ALIGN_WITH_INPUT {
 		. = ALIGN (bsp_section_xbarrier_align);
-	} > REGION_VECTOR
+	} > REGION_VECTOR AT > REGION_VECTOR
 
 	.text : ALIGN_WITH_INPUT {
 		bsp_section_text_begin = .;
@@ -98,7 +98,7 @@ SECTIONS {
 
 	.robarrier : ALIGN_WITH_INPUT {
 		. = ALIGN (bsp_section_robarrier_align);
-	} > REGION_RODATA
+	} > REGION_RODATA AT > REGION_RODATA
 
 	.rodata : ALIGN_WITH_INPUT {
 		bsp_section_rodata_begin = .;
@@ -277,7 +277,7 @@ SECTIONS {
 
 	.rwbarrier : ALIGN_WITH_INPUT {
 		. = ALIGN (bsp_section_rwbarrier_align);
-	} > REGION_DATA
+	} > REGION_DATA AT > REGION_DATA
 
 	.vector : ALIGN_WITH_INPUT {
 		bsp_section_vector_begin = .;
