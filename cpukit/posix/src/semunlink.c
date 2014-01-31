@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -36,7 +36,7 @@ int sem_unlink(
 )
 {
   int  status;
-  register POSIX_Semaphore_Control *the_semaphore;
+  POSIX_Semaphore_Control          *the_semaphore;
   Objects_Id the_semaphore_id;
   size_t name_len;
 

@@ -9,7 +9,7 @@
  *  13.5.2 Dynamic Thread Scheduling Parameters Access,
  *         P1003.1c/Draft 10, p. 124
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -36,7 +36,7 @@ int pthread_getschedparam(
 {
   Objects_Locations        location;
   POSIX_API_Control       *api;
-  register Thread_Control *the_thread;
+  Thread_Control          *the_thread;
 
   if ( !policy || !param  )
     return EINVAL;

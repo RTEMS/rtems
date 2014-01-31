@@ -8,7 +8,7 @@
 /*
  *  16.1.3 Wait for Thread Termination, P1003.1c/Draft 10, p. 147
  *
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,7 +32,7 @@ int pthread_join(
   void      **value_ptr
 )
 {
-  register Thread_Control *the_thread;
+  Thread_Control          *the_thread;
   POSIX_API_Control       *api;
   Objects_Locations        location;
   void                    *return_pointer;

@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,7 +34,7 @@ int _POSIX_Condition_variables_Wait_support(
   bool                       already_timedout
 )
 {
-  register POSIX_Condition_variables_Control *the_cond;
+  POSIX_Condition_variables_Control          *the_cond;
   POSIX_Mutex_Control                        *the_mutex;
   Objects_Locations                           location;
   int                                         status;

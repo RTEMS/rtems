@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,7 +31,7 @@ int pthread_detach(
   pthread_t   thread
 )
 {
-  register Thread_Control *the_thread;
+  Thread_Control          *the_thread;
   POSIX_API_Control       *api;
   Objects_Locations        location;
 
