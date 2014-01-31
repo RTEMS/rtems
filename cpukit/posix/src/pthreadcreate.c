@@ -27,6 +27,7 @@
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/time.h>
+#include <rtems/score/cpusetimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/stackimpl.h>
@@ -136,6 +137,14 @@ int pthread_create(
   if ( rc )
     return rc;
 
+#if defined(RTEMS_SMP)
+#if __RTEMS_HAVE_SYS_CPUSET_H__
+  rc = _CPU_set_Is_valid( attr->affinityset, attr->affinitysetsize );
+  if ( rc != 0 )
+    return EINVAL;
+#endif
+#endif
+
   /*
    *  Currently all POSIX threads are floating point if the hardware
    *  supports it.
@@ -179,19 +188,25 @@ int pthread_create(
     0,                    /* isr level */
     name                  /* posix threads don't have a name */
   );
-
   if ( !status ) {
     _POSIX_Threads_Free( the_thread );
     _RTEMS_Unlock_allocator();
     return EAGAIN;
   }
 
+#if defined(RTEMS_SMP)
+#if __RTEMS_HAVE_SYS_CPUSET_H__
+   the_thread->affinity.setsize   = attr->affinitysetsize;
+   *the_thread->affinity.set      = *attr->affinityset;
+#endif
+#endif
+
   /*
    *  finish initializing the per API structure
    */
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-  api->Attributes  = *the_attr;
+  _POSIX_Threads_Copy_attributes( &api->Attributes, the_attr );
   api->detachstate = the_attr->detachstate;
   api->schedpolicy = schedpolicy;
   api->schedparam  = schedparam;

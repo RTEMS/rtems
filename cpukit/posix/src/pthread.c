@@ -17,10 +17,12 @@
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include <stdio.h>
 
 #include <errno.h>
 #include <pthread.h>
 #include <limits.h>
+#include <assert.h>
 
 #include <rtems/system.h>
 #include <rtems/config.h>
@@ -46,13 +48,14 @@
  *  NOTE: Be careful .. if the default attribute set changes,
  *        _POSIX_Threads_Initialize_user_threads will need to be examined.
  */
-const pthread_attr_t _POSIX_Threads_Default_attributes = {
-  true,                       /* is_initialized */
-  NULL,                       /* stackaddr */
-  0,                          /* stacksize -- will be adjusted to minimum */
-  PTHREAD_SCOPE_PROCESS,      /* contentionscope */
-  PTHREAD_INHERIT_SCHED,      /* inheritsched */
-  SCHED_FIFO,                 /* schedpolicy */
+pthread_attr_t _POSIX_Threads_Default_attributes = {
+  .is_initialized  = true,                       /* is_initialized */
+  .stackaddr       = NULL,                       /* stackaddr */
+  .stacksize       = 0,                          /* stacksize -- will be adjusted to minimum */
+  .contentionscope = PTHREAD_SCOPE_PROCESS,      /* contentionscope */
+  .inheritsched    = PTHREAD_INHERIT_SCHED,      /* inheritsched */
+  .schedpolicy     = SCHED_FIFO,                 /* schedpolicy */
+  .schedparam      =
   {                           /* schedparam */
     2,                        /* sched_priority */
     #if defined(_POSIX_SPORADIC_SERVER) || \
@@ -63,13 +66,19 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
       0                         /* sched_ss_max_repl */
     #endif
   },
+
   #if HAVE_DECL_PTHREAD_ATTR_SETGUARDSIZE
-    0,                        /* guardsize */
+    .guardsize = 0,                            /* guardsize */
   #endif
   #if defined(_POSIX_THREAD_CPUTIME)
-    1,                        /* cputime_clock_allowed */
+    .cputime_clock_allowed = 1,                        /* cputime_clock_allowed */
   #endif
-  PTHREAD_CREATE_JOINABLE,    /* detachstate */
+  .detachstate             = PTHREAD_CREATE_JOINABLE,    /* detachstate */
+  #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
+    .affinitysetsize         = 0,
+    .affinityset             = NULL,
+    .affinitysetpreallocated = {{0x0}}
+  #endif
 };
 
 /*
@@ -187,7 +196,7 @@ static bool _POSIX_Threads_Create_extension(
   created->API_Extensions[ THREAD_API_POSIX ] = api;
 
   /* XXX check all fields are touched */
-  api->Attributes  = _POSIX_Threads_Default_attributes;
+  _POSIX_Threads_Initialize_attributes( &api->Attributes );
   api->detachstate = _POSIX_Threads_Default_attributes.detachstate;
   api->schedpolicy = _POSIX_Threads_Default_attributes.schedpolicy;
   api->schedparam  = _POSIX_Threads_Default_attributes.schedparam;
@@ -346,6 +355,27 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
  */
 void _POSIX_Threads_Manager_initialization(void)
 {
+  #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
+    pthread_attr_t *attr;
+    int i;
+    int max_cpus = 1;
+
+    /* Initialize default attribute. */
+    attr = &_POSIX_Threads_Default_attributes;
+
+    /* We do not support a cpu count over CPU_SETSIZE  */
+    max_cpus = _SMP_Get_processor_count();
+    assert( max_cpus <= CPU_SETSIZE );
+
+    /*  Initialize the affinity to be the set of all available CPU's   */
+    attr->affinityset             = &attr->affinitysetpreallocated;
+    attr->affinitysetsize         = sizeof( *attr->affinityset );
+    CPU_ZERO_S( attr->affinitysetsize, &attr->affinitysetpreallocated );
+
+    for (i=0; i<max_cpus; i++)  
+      CPU_SET_S(i, attr->affinitysetsize, attr->affinityset );
+  #endif
+
   _Objects_Initialize_information(
     &_POSIX_Threads_Information, /* object information table */
     OBJECTS_POSIX_API,           /* object API */

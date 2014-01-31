@@ -34,6 +34,7 @@ int pthread_attr_init(
   if ( !attr )
     return EINVAL;
 
-  *attr = _POSIX_Threads_Default_attributes;
-   return 0;
+  _POSIX_Threads_Initialize_attributes( attr );
+
+  return 0;
 }
