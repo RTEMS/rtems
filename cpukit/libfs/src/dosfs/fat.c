@@ -474,7 +474,7 @@ fat_init_volume_info(fat_fs_info_t *fs_info, const char *device)
 {
     rtems_status_code   sc = RTEMS_SUCCESSFUL;
     int                 rc = RC_OK;
-    register fat_vol_t *vol = &fs_info->vol;
+    fat_vol_t          *vol = &fs_info->vol;
     uint32_t            data_secs = 0;
     char                boot_rec[FAT_MAX_BPB_SIZE];
     char                fs_info_sector[FAT_USEFUL_INFO_SIZE];
