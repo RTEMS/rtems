@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -60,7 +60,7 @@ rtems_status_code rtems_semaphore_create(
   rtems_id            *id
 )
 {
-  register Semaphore_Control *the_semaphore;
+  Semaphore_Control          *the_semaphore;
   CORE_mutex_Attributes       the_mutex_attr;
   CORE_semaphore_Attributes   the_semaphore_attr;
   CORE_mutex_Status           mutex_status;

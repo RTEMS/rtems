@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,7 +33,7 @@ rtems_status_code rtems_region_get_information(
 {
   Objects_Locations        location;
   rtems_status_code        return_status;
-  register Region_Control *the_region;
+  Region_Control          *the_region;
 
   if ( !the_info )
     return RTEMS_INVALID_ADDRESS;

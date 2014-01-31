@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,7 +33,7 @@ rtems_status_code rtems_port_create(
   rtems_id     *id
 )
 {
-  register Dual_ported_memory_Control *the_port;
+  Dual_ported_memory_Control          *the_port;
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;

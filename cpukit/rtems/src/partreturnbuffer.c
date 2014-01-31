@@ -2,7 +2,7 @@
  *  Partition Manager
  *
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -41,7 +41,7 @@ rtems_status_code rtems_partition_return_buffer(
   void     *buffer
 )
 {
-  register Partition_Control *the_partition;
+   Partition_Control           *the_partition;
   Objects_Locations           location;
 
   the_partition = _Partition_Get( id, &location );

@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -53,7 +53,7 @@ rtems_status_code rtems_partition_create(
   rtems_id        *id
 )
 {
-  register Partition_Control *the_partition;
+   Partition_Control           *the_partition;
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;

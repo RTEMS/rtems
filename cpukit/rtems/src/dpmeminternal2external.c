@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,7 +31,7 @@ rtems_status_code rtems_port_internal_to_external(
   void     **external
 )
 {
-  register Dual_ported_memory_Control *the_port;
+  Dual_ported_memory_Control          *the_port;
   Objects_Locations                    location;
   uint32_t                             ending;
 

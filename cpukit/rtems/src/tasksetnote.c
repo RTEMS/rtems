@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,7 +28,7 @@ rtems_status_code rtems_task_set_note(
   uint32_t note
 )
 {
-  register Thread_Control *the_thread;
+  Thread_Control          *the_thread;
   Objects_Locations        location;
   RTEMS_API_Control       *api;
   Thread_Control          *executing;

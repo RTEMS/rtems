@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,7 +39,7 @@ rtems_status_code rtems_message_queue_create(
   rtems_id        *id
 )
 {
-  register Message_queue_Control *the_message_queue;
+  Message_queue_Control          *the_message_queue;
   CORE_message_queue_Attributes   the_msgq_attributes;
 #if defined(RTEMS_MULTIPROCESSING)
   bool                            is_global;

@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -35,7 +35,7 @@ rtems_status_code rtems_task_create(
   rtems_id            *id
 )
 {
-  register Thread_Control *the_thread;
+  Thread_Control          *the_thread;
   bool                     is_fp;
 #if defined(RTEMS_MULTIPROCESSING)
   Objects_MP_Control      *the_global_object = NULL;

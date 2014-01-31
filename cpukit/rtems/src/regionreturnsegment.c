@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -45,7 +45,7 @@ rtems_status_code rtems_region_return_segment(
   uint32_t                 size;
 #endif
   int                      status;
-  register Region_Control *the_region;
+  Region_Control          *the_region;
 
   _RTEMS_Lock_allocator();
 

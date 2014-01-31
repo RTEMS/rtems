@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -37,7 +37,7 @@ rtems_status_code rtems_message_queue_broadcast(
   uint32_t   *count
 )
 {
-  register Message_queue_Control *the_message_queue;
+  Message_queue_Control          *the_message_queue;
   Objects_Locations               location;
   CORE_message_queue_Status       core_status;
 

@@ -21,7 +21,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -69,7 +69,7 @@ rtems_status_code rtems_semaphore_release(
   rtems_id   id
 )
 {
-  register Semaphore_Control *the_semaphore;
+  Semaphore_Control          *the_semaphore;
   Objects_Locations           location;
   CORE_mutex_Status           mutex_status;
   CORE_semaphore_Status       semaphore_status;
