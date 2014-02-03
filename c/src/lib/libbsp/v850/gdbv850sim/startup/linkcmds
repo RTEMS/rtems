@@ -7,9 +7,9 @@ _HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x0;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 /* Default linker script, for normal executables */
-OUTPUT_FORMAT("elf32-v850", "elf32-v850",
-	      "elf32-v850")
-OUTPUT_ARCH(v850)
+OUTPUT_FORMAT("elf32-v850-rh850", "elf32-v850-rh850",
+	      "elf32-v850-rh850")
+OUTPUT_ARCH(v850-rh850)
 ENTRY(_start)
 /* GROUP(-lc -lsim -lgcc) */
 SEARCH_DIR(.);
