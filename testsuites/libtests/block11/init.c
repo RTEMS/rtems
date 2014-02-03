@@ -54,6 +54,8 @@ static const char rda [] = "/dev/rda";
 
 static const char rda1 [] = "/dev/rda1";
 
+static const char dev_invalid [] = "/dev/invalid";
+
 static const char not_exist [] = "not_exist";
 
 static const char not_blkdev [] = "not_blkdev";
@@ -63,6 +65,29 @@ static const char invalid_blkdev [] = "invalid_blkdev";
 static long area_a [AREA_SIZE / sizeof(long)];
 
 static long area_b [AREA_SIZE / sizeof(long)];
+
+static rtems_status_code invalid_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
+)
+{
+  rtems_status_code sc;
+
+  sc = rtems_io_register_name(&dev_invalid[0], major, 0);
+  ASSERT_SC(sc);
+
+  return sc;
+}
+
+static rtems_status_code invalid_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
+)
+{
+  return RTEMS_INVALID_NUMBER;
+}
 
 static void area_init(long *area)
 {
@@ -235,6 +260,7 @@ static void test_blkdev_imfs_errors(void)
   int rv;
   ramdisk *rd;
   void *opaque;
+  struct stat st;
 
   rd = ramdisk_allocate(NULL, BLOCK_SIZE, BLOCK_COUNT, false);
   rtems_test_assert(rd != NULL);
@@ -298,7 +324,10 @@ static void test_blkdev_imfs_errors(void)
   );
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 
-  rv = mknod(not_blkdev, S_IFREG | S_IRWXU | S_IRWXG | S_IRWXO, 0);
+  rv = lstat(&dev_invalid[0], &st);
+  rtems_test_assert(rv == 0);
+
+  rv = mknod(not_blkdev, S_IFREG | S_IRWXU | S_IRWXG | S_IRWXO, st.st_rdev);
   rtems_test_assert(rv == 0);
 
   sc = rtems_blkdev_create_partition(
@@ -309,7 +338,7 @@ static void test_blkdev_imfs_errors(void)
   );
   rtems_test_assert(sc == RTEMS_INVALID_NODE);
 
-  rv = mknod(invalid_blkdev, S_IFBLK | S_IRWXU | S_IRWXG | S_IRWXO, 0);
+  rv = mknod(invalid_blkdev, S_IFBLK | S_IRWXU | S_IRWXG | S_IRWXO, st.st_rdev);
   rtems_test_assert(rv == 0);
 
   sc = rtems_blkdev_create_partition(
@@ -391,9 +420,13 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_INIT
 
-#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
+
+#define CONFIGURE_APPLICATION_EXTRA_DRIVERS \
+  { .initialization_entry = invalid_initialize, \
+    .control_entry = invalid_control }
 
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
