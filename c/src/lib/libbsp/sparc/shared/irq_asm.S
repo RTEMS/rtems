@@ -34,7 +34,6 @@
         srl      \TMP, 28, \TMP /* CPU number is upper 4 bits so shift */
 #else
         mov      0, \TMP
-        nop
 #endif
         sll      \TMP, PER_CPU_CONTROL_SIZE_LOG2, \TMP
         add      \REG, \TMP, \REG
