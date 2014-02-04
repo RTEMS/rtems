@@ -412,12 +412,11 @@ save_isf:
          *
          *  Register usage for this section:
          *
-         *    l4 = _Thread_Dispatch_disable_level pointer
          *    l5 = per cpu info pointer
          *    l6 = _Thread_Dispatch_disable_level value
          *    l7 = _ISR_Nest_level value
          *
-         *  NOTE: It is assumed that l4 - l7 will be preserved until the ISR
+         *  NOTE: It is assumed that l5 - l7 will be preserved until the ISR
          *        nest and thread dispatch disable levels are unnested.
          */
 
@@ -577,7 +576,6 @@ dont_fix_pil2:
          *
          *  Register usage for this section:
          *
-         *    l4 = _Thread_Dispatch_disable_level pointer
          *    l5 = per cpu info pointer
          *    l6 = _Thread_Dispatch_disable_level value
          *    l7 = _ISR_Nest_level value
