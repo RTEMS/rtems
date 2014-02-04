@@ -422,14 +422,14 @@ save_isf:
 
 	GET_SELF_CPU_CONTROL %l5, %l7
 
-	ld       [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL], %l6
-	ld       [%l5 + PER_CPU_ISR_NEST_LEVEL], %l7
-
-        add      %l6, 1, %l6
-        st       %l6, [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+        ld       [%l5 + PER_CPU_ISR_NEST_LEVEL], %l7
+        ld       [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL], %l6
 
         add      %l7, 1, %l7
         st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
+
+        add      %l6, 1, %l6
+        st       %l6, [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
         /*
          *  If ISR nest level was zero (now 1), then switch stack.
@@ -581,10 +581,10 @@ dont_fix_pil2:
          *    l7 = _ISR_Nest_level value
          */
 
+        st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
+
         sub      %l6, 1, %l6
         st       %l6, [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
-
-        st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
 
         /*
          *  If dispatching is disabled (includes nested interrupt case),
