@@ -105,11 +105,9 @@ void bsp_smp_broadcast_interrupt(void)
   max_cpus = rtems_smp_get_processor_count();
 
   for ( dest_cpu=0 ; dest_cpu < max_cpus ; dest_cpu++ ) {
-    if ( cpu == dest_cpu )
-      continue;
-    _CPU_SMP_Send_interrupt( dest_cpu );
-    /* this is likely needed due to the ISR code not being SMP aware yet */
-    bsp_smp_delay( 100000 );
+    if ( cpu != dest_cpu ) {
+      _CPU_SMP_Send_interrupt( dest_cpu );
+    }
   }
 }
 
