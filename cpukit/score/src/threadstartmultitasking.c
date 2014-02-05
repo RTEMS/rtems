@@ -78,7 +78,7 @@ void _Thread_Start_multitasking( Context_Control *context )
      */
     self_cpu->thread_dispatch_disable_level = 1;
 
-    _CPU_Context_switch_to_first_task_smp( &heir->Registers );
+    _CPU_Context_restore( &heir->Registers );
   }
 #endif
 }

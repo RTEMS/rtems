@@ -239,34 +239,6 @@ SYM(_CPU_Context_restore):
         GET_SELF_CPU_CONTROL %o3, %o4
         ba      SYM(_CPU_Context_restore_heir)
         mov     %i0, %o1                      ! in the delay slot
-        .align 4
-
-#if defined(RTEMS_SMP)
-/*
- *  void _CPU_Context_switch_to_first_task_smp(
- *    Context_Control *new_context
- *  )
- *
- *  This routine is only used to switch to the first task on a
- *  secondary core in an SMP configuration.  We do not need to
- *  flush any windows and, in fact, this can be dangerous
- *  as they may or may not be initialized properly.  So we just
- *  reinitialize the PSR and WIM.
- */
-        PUBLIC(_CPU_Context_switch_to_first_task_smp)
-SYM(_CPU_Context_switch_to_first_task_smp):
-	mov	%psr, %g1		! Turn of traps when modifying WIM
-	andn	%g1, SPARC_PSR_ET_MASK, %g1
-	mov	%g1, %psr
-	/* WIM and PSR will be set in done_flushing, it need args:
-	 * g1=PSR, g3=CWP, o1=Context
-	 */
-	and	%g1, SPARC_NUMBER_OF_REGISTER_WINDOWS - 1, %g3
-	nop
-	mov	%o0, %o1		! in the delay slot
-	GET_SELF_CPU_CONTROL %o3, %o4
-	ba,a	done_flushing
-#endif
 
 /*
  *  void _ISR_Handler()

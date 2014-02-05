@@ -1189,20 +1189,6 @@ void _CPU_Context_restore(
 ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 #if defined(RTEMS_SMP)
-  /**
-   * @brief SPARC specific method to switch to first task.
-   *
-   * This routine is only used to switch to the first task on a
-   * secondary core in an SMP configuration.  We do not need to
-   * flush all the windows and, in fact, this can be dangerous
-   * as they may or may not be initialized properly.
-   *
-   * @param[in] new_context is the context to restore
-   */
-  void _CPU_Context_switch_to_first_task_smp(
-    Context_Control *new_context
-  );
-
   RTEMS_COMPILER_PURE_ATTRIBUTE uint32_t _CPU_SMP_Get_current_processor( void );
 
   void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );

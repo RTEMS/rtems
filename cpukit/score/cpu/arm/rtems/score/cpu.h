@@ -470,9 +470,6 @@ void _CPU_Context_volatile_clobber( uintptr_t pattern );
 void _CPU_Context_validate( uintptr_t pattern );
 
 #ifdef RTEMS_SMP
-  #define _CPU_Context_switch_to_first_task_smp( _context ) \
-    _CPU_Context_restore( _context )
-
   RTEMS_COMPILER_PURE_ATTRIBUTE static inline uint32_t
     _CPU_SMP_Get_current_processor( void )
   {
