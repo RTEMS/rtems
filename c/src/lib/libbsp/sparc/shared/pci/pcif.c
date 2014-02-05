@@ -174,7 +174,7 @@ int pcif_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 	 */
 	if (dev == HOST_TGT)
 		bus = devfn = 0;
-	if (bus == 0)
+	else if (bus == 0)
 		devfn = PCI_DEV_DEVFUNC(dev) + PCI_DEV(0, 6, 0);
 	else
 		devfn = PCI_DEV_DEVFUNC(dev);
@@ -241,7 +241,7 @@ int pcif_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 	 */
 	if (dev == HOST_TGT)
 		bus = devfn = 0;
-	if (bus == 0)
+	else if (bus == 0)
 		devfn = PCI_DEV_DEVFUNC(dev) + PCI_DEV(0, 6, 0);
 	else
 		devfn = PCI_DEV_DEVFUNC(dev);
