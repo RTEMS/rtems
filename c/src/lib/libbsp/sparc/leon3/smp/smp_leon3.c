@@ -82,8 +82,10 @@ uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
     }
   #endif
 
-  if ( found_cpus == 1 )
-    return 1;
+  if ( found_cpus > 1 ) {
+    LEON_Unmask_interrupt(LEON3_MP_IRQ);
+    set_vector(bsp_ap_ipi_isr, LEON_TRAP_TYPE(LEON3_MP_IRQ), 1);
+  }
 
   for ( cpu=1 ; cpu < found_cpus ; cpu++ ) {
     const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
@@ -106,11 +108,6 @@ uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
           "online" : "offline"
       );
     #endif
-  }
-
-  if ( found_cpus > 1 ) {
-    LEON_Unmask_interrupt(LEON3_MP_IRQ);
-    set_vector(bsp_ap_ipi_isr, LEON_TRAP_TYPE(LEON3_MP_IRQ), 1);
   }
   return found_cpus;
 }
