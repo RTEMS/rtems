@@ -49,8 +49,6 @@ void leon3_secondary_cpu_initialize(uint32_t cpu)
   rtems_smp_secondary_cpu_initialize();
 }
 
-static void bsp_smp_delay( int );
-
 uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
 {
   uint32_t cpu;
@@ -109,25 +107,4 @@ void bsp_smp_broadcast_interrupt(void)
       _CPU_SMP_Send_interrupt( dest_cpu );
     }
   }
-}
-
-static __inline__ void __delay(unsigned long loops)
-{
-   __asm__ __volatile__("cmp %0, 0\n\t"
-     "1: bne 1b\n\t"
-     "subcc %0, 1, %0\n" :
-     "=&r" (loops) :
-     "0" (loops) :
-     "cc"
-  );
-}
-
-/*
- *  Kill time without depending on the timer being present or programmed.
- *
- *  This is not very sophisticated.
- */
-void bsp_smp_delay( int max )
-{
-   __delay( max );
 }

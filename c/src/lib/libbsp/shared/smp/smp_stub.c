@@ -34,7 +34,3 @@ void bsp_smp_broadcast_message(
 void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
 {
 }
-
-void bsp_smp_delay( int max )
-{
-}
