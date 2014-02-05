@@ -208,7 +208,7 @@ done_flushing:
         ! Now restore thread specific ISR dispatch prevention flag
         st      %o2, [%o3 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
 
-        ldd     [%o1 + I0_OFFSET], %i0        ! restore the output registers
+        ldd     [%o1 + I0_OFFSET], %i0        ! restore the input registers
         ldd     [%o1 + I2_OFFSET], %i2
         ldd     [%o1 + I4_OFFSET], %i4
         ldd     [%o1 + I6_FP_OFFSET], %i6
