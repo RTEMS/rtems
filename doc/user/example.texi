@@ -3,7 +3,7 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
-@node Example Application, Glossary, Directive Status Codes, Top
+@node Example Application, Glossary, Directive Status Codes STATUS_CODE_DESCRIPTION - Returns a description for a status code, Top
 @chapter Example Application
 
 @example

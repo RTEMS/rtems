@@ -3,8 +3,10 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
-@node Directive Status Codes, Example Application, Constant Bandwidth Server Scheduler API CBS_GET_APPROVED_BUDGET - Get scheduler approved execution time, Top
 @chapter Directive Status Codes
+
+@section Introduction
+
 @table @b
 @item @code{@value{RPREFIX}SUCCESSFUL} - successful completion
 @item @code{@value{RPREFIX}TASK_EXITTED} - returned from a task
@@ -35,3 +37,28 @@
 @item @code{@value{RPREFIX}NO_MEMORY} - could not get enough memory
 @end table
 
+@section Directives
+
+@page
+@subsection STATUS_CODE_DESCRIPTION - Returns a description for a status code
+
+@cindex fatal error
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_status_code_description
+@example
+const char *rtems_status_code_description(
+  rtems_status_code code
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+The status code description or "?" in case the passed status code is invalid.
+
+@subheading DESCRIPTION:
+
+Returns a description for a status code.

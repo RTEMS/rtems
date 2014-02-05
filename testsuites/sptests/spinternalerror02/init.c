@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Donierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -52,12 +52,29 @@ static void test_fatal_source_description(void)
   rtems_test_assert( source - 3 == RTEMS_FATAL_SOURCE_EXCEPTION );
 }
 
+static void test_status_code_description(void)
+{
+  rtems_status_code code = 0;
+  const char *desc = NULL;
+  const char *desc_last;
+
+  do {
+    desc_last = desc;
+    desc = rtems_status_code_description( code );
+    ++code;
+    puts( desc );
+  } while ( desc != desc_last );
+
+  rtems_test_assert( code - 3 == RTEMS_PROXY_BLOCKING );
+}
+
 static void Init(rtems_task_argument arg)
 {
   puts("\n\n*** TEST SPINTERNALERROR 2 ***");
 
   test_internal_error_description();
   test_fatal_source_description();
+  test_status_code_description();
 
   puts("*** END OF TEST SPINTERNALERROR 2 ***");
 
