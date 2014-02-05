@@ -130,8 +130,8 @@ rtems_task Task01(rtems_task_argument ignored)
 
   printf("TA01: exiting\n");
   printf("*** END OF SEM01 ***\n");
-  status = rtems_task_delete( RTEMS_SELF);
-  directive_failed( status, "rtems_task_delete TA01");
+
+  rtems_test_exit(0);
 }
 
 /* TA02 starts at Task02 with priority 34 */
