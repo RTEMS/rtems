@@ -52,9 +52,7 @@
         .align 4
         PUBLIC(_CPU_Context_switch)
 SYM(_CPU_Context_switch):
-        ! skip g0
-        st      %g1, [%o0 + G1_OFFSET]       ! save the global registers
-        std     %g2, [%o0 + G2_OFFSET]
+        std     %g2, [%o0 + G2_OFFSET]       ! save the global registers
         std     %g4, [%o0 + G4_OFFSET]
         std     %g6, [%o0 + G6_OFFSET]
 
@@ -68,10 +66,7 @@ SYM(_CPU_Context_switch):
         std     %i4, [%o0 + I4_OFFSET]
         std     %i6, [%o0 + I6_FP_OFFSET]
 
-        std     %o0, [%o0 + O0_OFFSET]       ! save the output registers
-        std     %o2, [%o0 + O2_OFFSET]
-        std     %o4, [%o0 + O4_OFFSET]
-        std     %o6, [%o0 + O6_SP_OFFSET]
+        std     %o6, [%o0 + O6_SP_OFFSET]    ! save the output registers
 
         ! o3 = self per-CPU control
         GET_SELF_CPU_CONTROL %o3, %o4
@@ -190,9 +185,7 @@ done_flushing:
         nop
         nop
 
-        ! skip g0
-        ld      [%o1 + G1_OFFSET], %g1        ! restore the global registers
-        ldd     [%o1 + G2_OFFSET], %g2
+        ldd     [%o1 + G2_OFFSET], %g2        ! restore the global registers
         ldd     [%o1 + G4_OFFSET], %g4
         ldd     [%o1 + G6_OFFSET], %g6
 
@@ -213,11 +206,7 @@ done_flushing:
         ldd     [%o1 + I4_OFFSET], %i4
         ldd     [%o1 + I6_FP_OFFSET], %i6
 
-        ldd     [%o1 + O2_OFFSET], %o2        ! restore the output registers
-        ldd     [%o1 + O4_OFFSET], %o4
-        ldd     [%o1 + O6_SP_OFFSET], %o6
-        ! do o0/o1 last to avoid destroying heir context pointer
-        ldd     [%o1 + O0_OFFSET], %o0        ! overwrite heir pointer
+        ldd     [%o1 + O6_SP_OFFSET], %o6     ! restore the output registers
 
         jmp     %o7 + 8                       ! return
         nop                                   ! delay slot

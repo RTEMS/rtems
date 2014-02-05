@@ -401,20 +401,17 @@ typedef struct {
 /**
  * @brief SPARC basic context.
  *
- * This structure defines the basic integer and processor state context
- * for the SPARC architecture.
+ * This structure defines the non-volatile integer and processor state context
+ * for the SPARC architecture according to "SYSTEM V APPLICATION BINARY
+ * INTERFACE - SPARC Processor Supplement", Third Edition.
  */
 typedef struct {
   /**
-   * Using a double g0_g1 will put everything in this structure on a
+   * Using a double g2_g3 will put everything in this structure on a
    * double word boundary which allows us to use double word loads
    * and stores safely in the context switch.
    */
-  double     g0_g1;
-  /** This will contain the contents of the g2 register. */
-  uint32_t   g2;
-  /** This will contain the contents of the g3 register. */
-  uint32_t   g3;
+  double     g2_g3;
   /** This will contain the contents of the g4 register. */
   uint32_t   g4;
   /** This will contain the contents of the g5 register. */
@@ -458,21 +455,12 @@ typedef struct {
   /** This will contain the contents of the i7 register. */
   uint32_t   i7;
 
-  /** This will contain the contents of the o0 register. */
-  uint32_t   o0;
-  /** This will contain the contents of the o1 register. */
-  uint32_t   o1;
-  /** This will contain the contents of the o2 register. */
-  uint32_t   o2;
-  /** This will contain the contents of the o3 register. */
-  uint32_t   o3;
-  /** This will contain the contents of the o4 register. */
-  uint32_t   o4;
-  /** This will contain the contents of the o5 register. */
-  uint32_t   o5;
   /** This will contain the contents of the o6 (e.g. frame pointer) register. */
   uint32_t   o6_sp;
-  /** This will contain the contents of the o7 register. */
+  /**
+   * This will contain the contents of the o7 (e.g. address of CALL
+   * instruction) register.
+   */
   uint32_t   o7;
 
   /** This will contain the contents of the processor status register. */
@@ -500,80 +488,64 @@ typedef struct {
  */
 
 /** This macro defines an offset into the context for use in assembly. */
-#define G0_OFFSET    0x00
+#define G2_OFFSET    0x00
 /** This macro defines an offset into the context for use in assembly. */
-#define G1_OFFSET    0x04
+#define G3_OFFSET    0x04
 /** This macro defines an offset into the context for use in assembly. */
-#define G2_OFFSET    0x08
+#define G4_OFFSET    0x08
 /** This macro defines an offset into the context for use in assembly. */
-#define G3_OFFSET    0x0C
+#define G5_OFFSET    0x0C
 /** This macro defines an offset into the context for use in assembly. */
-#define G4_OFFSET    0x10
+#define G6_OFFSET    0x10
 /** This macro defines an offset into the context for use in assembly. */
-#define G5_OFFSET    0x14
-/** This macro defines an offset into the context for use in assembly. */
-#define G6_OFFSET    0x18
-/** This macro defines an offset into the context for use in assembly. */
-#define G7_OFFSET    0x1C
+#define G7_OFFSET    0x14
 
 /** This macro defines an offset into the context for use in assembly. */
-#define L0_OFFSET    0x20
+#define L0_OFFSET    0x18
 /** This macro defines an offset into the context for use in assembly. */
-#define L1_OFFSET    0x24
+#define L1_OFFSET    0x1C
 /** This macro defines an offset into the context for use in assembly. */
-#define L2_OFFSET    0x28
+#define L2_OFFSET    0x20
 /** This macro defines an offset into the context for use in assembly. */
-#define L3_OFFSET    0x2C
+#define L3_OFFSET    0x24
 /** This macro defines an offset into the context for use in assembly. */
-#define L4_OFFSET    0x30
+#define L4_OFFSET    0x28
 /** This macro defines an offset into the context for use in assembly. */
-#define L5_OFFSET    0x34
+#define L5_OFFSET    0x2C
 /** This macro defines an offset into the context for use in assembly. */
-#define L6_OFFSET    0x38
+#define L6_OFFSET    0x30
 /** This macro defines an offset into the context for use in assembly. */
-#define L7_OFFSET    0x3C
+#define L7_OFFSET    0x34
 
 /** This macro defines an offset into the context for use in assembly. */
-#define I0_OFFSET    0x40
+#define I0_OFFSET    0x38
 /** This macro defines an offset into the context for use in assembly. */
-#define I1_OFFSET    0x44
+#define I1_OFFSET    0x3C
 /** This macro defines an offset into the context for use in assembly. */
-#define I2_OFFSET    0x48
+#define I2_OFFSET    0x40
 /** This macro defines an offset into the context for use in assembly. */
-#define I3_OFFSET    0x4C
+#define I3_OFFSET    0x44
 /** This macro defines an offset into the context for use in assembly. */
-#define I4_OFFSET    0x50
+#define I4_OFFSET    0x48
 /** This macro defines an offset into the context for use in assembly. */
-#define I5_OFFSET    0x54
+#define I5_OFFSET    0x4C
 /** This macro defines an offset into the context for use in assembly. */
-#define I6_FP_OFFSET 0x58
+#define I6_FP_OFFSET 0x50
 /** This macro defines an offset into the context for use in assembly. */
-#define I7_OFFSET    0x5C
+#define I7_OFFSET    0x54
 
 /** This macro defines an offset into the context for use in assembly. */
-#define O0_OFFSET    0x60
+#define O6_SP_OFFSET 0x58
 /** This macro defines an offset into the context for use in assembly. */
-#define O1_OFFSET    0x64
-/** This macro defines an offset into the context for use in assembly. */
-#define O2_OFFSET    0x68
-/** This macro defines an offset into the context for use in assembly. */
-#define O3_OFFSET    0x6C
-/** This macro defines an offset into the context for use in assembly. */
-#define O4_OFFSET    0x70
-/** This macro defines an offset into the context for use in assembly. */
-#define O5_OFFSET    0x74
-/** This macro defines an offset into the context for use in assembly. */
-#define O6_SP_OFFSET 0x78
-/** This macro defines an offset into the context for use in assembly. */
-#define O7_OFFSET    0x7C
+#define O7_OFFSET    0x5C
 
 /** This macro defines an offset into the context for use in assembly. */
-#define PSR_OFFSET   0x80
+#define PSR_OFFSET   0x60
 /** This macro defines an offset into the context for use in assembly. */
-#define ISR_DISPATCH_DISABLE_STACK_OFFSET 0x84
+#define ISR_DISPATCH_DISABLE_STACK_OFFSET 0x64
 
 /** This defines the size of the context area for use in assembly. */
-#define CONTEXT_CONTROL_SIZE 0x88
+#define CONTEXT_CONTROL_SIZE 0x68
 
 #ifndef ASM
 /**
