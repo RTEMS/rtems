@@ -13,8 +13,8 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems.h>
 #include <bsp.h>
+#include <leon.h>
 #include <rtems/bspIo.h>
 #include <rtems/bspsmp.h>
 #include <stdlib.h>
@@ -40,23 +40,14 @@ static rtems_isr bsp_ap_ipi_isr(
   rtems_smp_process_interrupt();
 }
 
-static void leon3_secondary_cpu_initialize(void)
+void leon3_secondary_cpu_initialize(uint32_t cpu)
 {
-  uint32_t cpu = rtems_smp_get_current_processor();
-
   sparc_leon3_set_cctrl( 0x80000F );
   LEON_Unmask_interrupt(LEON3_MP_IRQ);
   LEON3_IrqCtrl_Regs->mask[cpu] |= 1 << LEON3_MP_IRQ;
 
   rtems_smp_secondary_cpu_initialize();
 }
-
-/*
- *  Used to pass information to start.S when bringing secondary CPUs
- *  out of reset.
- */
-void *bsp_ap_stack;
-void *bsp_ap_entry;
 
 static void bsp_smp_delay( int );
 
@@ -87,28 +78,14 @@ uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
     set_vector(bsp_ap_ipi_isr, LEON_TRAP_TYPE(LEON3_MP_IRQ), 1);
   }
 
-  for ( cpu=1 ; cpu < found_cpus ; cpu++ ) {
-    const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
-
+  for ( cpu = 1 ; cpu < found_cpus ; ++cpu ) {
     #if defined(RTEMS_DEBUG)
       printk( "Waking CPU %d\n", cpu );
     #endif
 
-    bsp_ap_stack = per_cpu->interrupt_stack_high -
-                      CPU_MINIMUM_STACK_FRAME_SIZE;
-    bsp_ap_entry = leon3_secondary_cpu_initialize;
-
     LEON3_IrqCtrl_Regs->mpstat = 1 << cpu;
-    bsp_smp_delay( 1000000 );
-    #if defined(RTEMS_DEBUG)
-      printk(
-        "CPU %d is %s\n",
-        cpu,
-        per_cpu->state == PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING ?
-          "online" : "offline"
-      );
-    #endif
   }
+
   return found_cpus;
 }
 

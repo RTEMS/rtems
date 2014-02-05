@@ -310,6 +310,13 @@ void apbuart_outbyte_polled(
  */
 int apbuart_inbyte_nonblocking(struct apbuart_regs *regs);
 
+/**
+ * @brief Initializes a secondary processor.
+ *
+ * @param[in] cpu The processor executing this function.
+ */
+void leon3_secondary_cpu_initialize(uint32_t cpu);
+
 #endif /* !ASM */
 
 #ifdef __cplusplus

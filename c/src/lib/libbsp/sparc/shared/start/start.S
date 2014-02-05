@@ -16,11 +16,11 @@
  */
 
 #include <rtems/asm.h>
-#include <rtems/system.h>
+#include <rtems/score/percpu.h>
 #include <bspopts.h>
 
 #if defined(RTEMS_SMP) && defined(BSP_LEON3_SMP)
-  #define ENABLE_SMP
+  #define START_LEON3_ENABLE_SMP
 #endif
 
 /*
@@ -31,15 +31,6 @@
   nop; \
   nop; \
   nop;
-
-#if defined(ENABLE_SMP)
-/*
- * Variables to contain information used with bring a secondary core
- * out of reset.
- */
-  	.global bsp_ap_stack
-  	.global bsp_ap_entry
-#endif
 
 /*
  *  Software trap. Treat as BAD_TRAP for the time being...
@@ -231,20 +222,28 @@ SYM(hard_reset):
         nop
         nop
 
-#if defined(ENABLE_SMP)
-	rd	%asr17, %g1
-	srl	%g1, 28, %g1
-	and	%g1, 0xff, %g1			! extract cpu id
-	cmp	%g1, 0
+#if defined(START_LEON3_ENABLE_SMP)
+	rd	%asr17, %o0		! get CPU identifier
+	srl	%o0, 28, %o0		! CPU index is upper 4 bits so shift
+
+	cmp	%o0, 0
 	beq	cpu0
-	nop
-	set	SYM(bsp_ap_stack), %g1		! set the stack pointer
-	ld	[%g1], %sp
-	mov	%sp, %fp
-	set	SYM(bsp_ap_entry), %g1		! where to start
-	ld	[%g1], %g1
-	call	%g1
-	nop
+	 nop
+
+	sethi	%hi(_Per_CPU_Information), %o1 ! get per-CPU control
+	add	%o1, %lo(_Per_CPU_Information), %o1
+	sll	%o0, PER_CPU_CONTROL_SIZE_LOG2, %o2
+	add	%o1, %o2, %o1
+
+	ld	[%o1 + PER_CPU_INTERRUPT_STACK_HIGH], %sp ! set stack pointer
+	sub	%sp, 4, %sp		! stack starts at end of area - 4
+	andn	%sp, 0x0f, %sp		! align stack on 16-byte boundary
+	mov	%sp, %fp		! set frame pointer
+
+	call	SYM(leon3_secondary_cpu_initialize) ! does not return
+	 sub	%sp, CPU_MINIMUM_STACK_FRAME_SIZE, %sp
+	ba	SYM(bsp_reset)		! just in case
+	 nop
 cpu0:
 #endif
 
