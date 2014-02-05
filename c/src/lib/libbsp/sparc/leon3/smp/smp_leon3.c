@@ -68,18 +68,19 @@ uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
   sparc_leon3_set_cctrl( 0x80000F );
   found_cpus =
     ((LEON3_IrqCtrl_Regs->mpstat >> LEON3_IRQMPSTATUS_CPUNR) & 0xf)  + 1;
+
   #if defined(RTEMS_DEBUG)
     printk( "Found %d CPUs\n", found_cpus );
-  #endif
 
-  if ( found_cpus > configured_cpu_count ) {
-    printk(
-      "%d CPUs IS MORE THAN CONFIGURED -- ONLY USING %d\n",
-      found_cpus,
-      configured_cpu_count
-    );
-    found_cpus = configured_cpu_count;
-  }
+    if ( found_cpus > configured_cpu_count ) {
+      printk(
+        "%d CPUs IS MORE THAN CONFIGURED -- ONLY USING %d\n",
+        found_cpus,
+        configured_cpu_count
+      );
+      found_cpus = configured_cpu_count;
+    }
+  #endif
 
   if ( found_cpus == 1 )
     return 1;
