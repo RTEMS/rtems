@@ -142,6 +142,12 @@ libposix_a_SOURCES += src/pthreadatfork.c src/pthreadattrdestroy.c \
 ## RTEMS specific support methods
 libposix_a_SOURCES += src/pthreadattrcompare.c 
 
+if HAS_SMP
+## PTHREAD_AFFINITY_C_FILES 
+libposix_a_SOURCES += src/pthreadattrsetaffinitynp.c \
+    src/pthreadattrgetaffinitynp.c
+endif
+
 ## PSIGNAL_C_FILES
 libposix_a_SOURCES += src/psignal.c src/alarm.c src/kill.c src/killinfo.c \
     src/kill_r.c src/pause.c src/psignalclearprocesssignals.c \
