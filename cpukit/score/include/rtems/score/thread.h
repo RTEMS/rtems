@@ -31,6 +31,13 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/watchdog.h>
 
+#ifdef RTEMS_SMP
+#if __RTEMS_HAVE_SYS_CPUSET_H__
+#include <sys/cpuset.h>
+#include <rtems/score/cpuset.h>
+#endif
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -406,7 +413,18 @@ struct Thread_Control_struct {
    * happen in the meantime.
    */
   bool                                  is_executing;
+
+#if __RTEMS_HAVE_SYS_CPUSET_H__
+  /**
+   *  @brief This field controls affinity attributes for this thread.
+   *
+   *  Affinity attributes indicate which cpus the thread can run on
+   *  in an SMP system.
+   */
+  CPU_set_Control                       affinity;
+#endif 
 #endif
+
 #if __RTEMS_ADA__
   /** This field is the GNAT self context pointer. */
   void                                 *rtems_ada_self;

@@ -99,6 +99,14 @@ $(PROJECT_INCLUDE)/rtems/score/coresemimpl.h: include/rtems/score/coresemimpl.h 
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coresemimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coresemimpl.h
 
+$(PROJECT_INCLUDE)/rtems/score/cpuset.h: include/rtems/score/cpuset.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpuset.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpuset.h
+
+$(PROJECT_INCLUDE)/rtems/score/cpusetimpl.h: include/rtems/score/cpusetimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpusetimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpusetimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/heap.h: include/rtems/score/heap.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/heap.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/heap.h

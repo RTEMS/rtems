@@ -29,6 +29,8 @@ include_rtems_score_HEADERS += include/rtems/score/coremutex.h
 include_rtems_score_HEADERS += include/rtems/score/coremuteximpl.h
 include_rtems_score_HEADERS += include/rtems/score/coresem.h
 include_rtems_score_HEADERS += include/rtems/score/coresemimpl.h
+include_rtems_score_HEADERS += include/rtems/score/cpuset.h
+include_rtems_score_HEADERS += include/rtems/score/cpusetimpl.h
 include_rtems_score_HEADERS += include/rtems/score/heap.h
 include_rtems_score_HEADERS += include/rtems/score/heapimpl.h
 include_rtems_score_HEADERS += include/rtems/score/protectedheap.h
@@ -124,6 +126,8 @@ libscore_a_SOURCES += src/schedulerprioritysmp.c
 libscore_a_SOURCES += src/schedulersimplesmp.c
 libscore_a_SOURCES += src/schedulersmpstartidle.c
 libscore_a_SOURCES += src/smp.c
+libscore_a_SOURCES += src/cpuset.c
+libscore_a_SOURCES += src/cpusetprintsupport.c
 endif
 
 ## CORE_APIMUTEX_C_FILES

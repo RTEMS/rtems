@@ -5,7 +5,7 @@
  *  @ingroup ScoreThread
  */
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +24,7 @@
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/score/cpusetimpl.h>
 #include <rtems/config.h>
 
 bool _Thread_Initialize(
@@ -206,6 +207,10 @@ bool _Thread_Initialize(
 
   /* Initialize the cpu field for the non-SMP schedulers */
   the_thread->cpu                     = _Per_CPU_Get_by_index( 0 );
+#if __RTEMS_HAVE_SYS_CPUSET_H__
+   the_thread->affinity               = *(_CPU_set_Default());
+   the_thread->affinity.set           = &the_thread->affinity.preallocated;
+#endif
 #endif
 
   the_thread->current_state           = STATES_DORMANT;
