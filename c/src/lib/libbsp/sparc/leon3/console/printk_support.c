@@ -36,7 +36,7 @@ static int pre_printk_pos = 0;
 /* Initialize the BSP system debug console layer. It will scan AMBA Plu&Play
  * for a debug APBUART and enable RX/TX for that UART.
  */
-int bsp_debug_uart_init(void)
+void bsp_debug_uart_init(void)
 {
   int i;
   struct ambapp_dev *adev;
@@ -71,9 +71,7 @@ int bsp_debug_uart_init(void)
     dbg_uart = (struct apbuart_regs *)apb->start;
     dbg_uart->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
     dbg_uart->status = 0;
-    return 1;
-  } else
-    return 0;
+  }
 }
 
 /*

@@ -17,6 +17,7 @@
  */
 
 #include <bsp.h>
+#include <leon.h>
 #include <rtems/bspIo.h>
 #include <bsp/bootcard.h>
 
@@ -29,7 +30,6 @@ int CPU_SPARC_HAS_SNOOPING;
 int LEON3_Cpu_Index = 0;
 
 extern void amba_initialize(void);
-extern void bsp_debug_uart_init(void);
 
 /*
  * set_snooping
