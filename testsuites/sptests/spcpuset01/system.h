@@ -9,18 +9,22 @@
 
 #include "tmacros.h"
 #include "test_support.h"
+
+#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
+
 #include <sys/cpuset.h>
+
+/* global variables */
+extern cpu_set_t set1;
+extern cpu_set_t set2;
+extern cpu_set_t set3;
+#endif
 
 /* functions */
 
 rtems_task Init(
   rtems_task_argument argument
 );
-
-/* global variables */
-extern cpu_set_t set1;
-extern cpu_set_t set2;
-extern cpu_set_t set3;
 
 void cpuset_logic_test(void);
 

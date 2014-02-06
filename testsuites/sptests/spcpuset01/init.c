@@ -11,10 +11,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-
-#include <sys/cpuset.h>
 #include "system.h"
 
+
+#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
 static void test_cpu_zero_case_1(void)
 {
   size_t i;
@@ -153,3 +153,15 @@ rtems_task Init(
   puts( "*** END OF CPUSET01 Test ***" );
   exit( 0 );
 }
+#else
+#error "Init - No cpuset"
+rtems_task Init(
+  rtems_task_argument ignored
+)
+{
+  puts( "*** CPUSET01 Test ***" );
+  puts( "  cpuset not supported\n" );
+  puts( "*** END OF CPUSET01 Test ***" );
+  exit( 0 );
+}
+#endif
