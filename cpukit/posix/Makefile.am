@@ -139,6 +139,9 @@ libposix_a_SOURCES += src/pthreadatfork.c src/pthreadattrdestroy.c \
     src/pthreadsetschedparam.c src/pthreadsigmask.c \
     src/psxpriorityisvalid.c src/psxtransschedparam.c
 
+## RTEMS specific support methods
+libposix_a_SOURCES += src/pthreadattrcompare.c 
+
 ## PSIGNAL_C_FILES
 libposix_a_SOURCES += src/psignal.c src/alarm.c src/kill.c src/killinfo.c \
     src/kill_r.c src/pause.c src/psignalclearprocesssignals.c \
