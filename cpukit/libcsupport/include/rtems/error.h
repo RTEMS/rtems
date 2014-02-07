@@ -84,8 +84,6 @@ typedef Internal_errors_t rtems_error_code_t;
 #define RTEMS_ERROR_MASK \
   (RTEMS_ERROR_ERRNO | RTEMS_ERROR_ABORT | RTEMS_ERROR_PANIC) /* all */
 
-const char *rtems_status_text(rtems_status_code sc);
-
 /**
  *  @brief Report an Error
  *

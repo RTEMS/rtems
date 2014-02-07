@@ -1,16 +1,16 @@
 /**
  * @file
  *
- * @brief Implementation of rtems_fatal_source_description()
+ * @brief Implementation of rtems_fatal_source_text()
  *
  * @ingroup ClassicFatal
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -26,7 +26,7 @@
 
 #include <rtems/fatal.h>
 
-static const char *const fatal_source_desc [] = {
+static const char *const fatal_source_text[] = {
   "INTERNAL_ERROR_CORE",
   "INTERNAL_ERROR_RTEMS_API",
   "INTERNAL_ERROR_POSIX_API",
@@ -40,14 +40,14 @@ static const char *const fatal_source_desc [] = {
   "RTEMS_FATAL_SOURCE_EXCEPTION"
 };
 
-const char *rtems_fatal_source_description( rtems_fatal_source source )
+const char *rtems_fatal_source_text( rtems_fatal_source source )
 {
   size_t i = source;
-  const char *desc = "?";
+  const char *text = "?";
 
-  if ( i < RTEMS_ARRAY_SIZE( fatal_source_desc ) ) {
-    desc = fatal_source_desc [i];
+  if ( i < RTEMS_ARRAY_SIZE( fatal_source_text ) ) {
+    text = fatal_source_text[ i ];
   }
 
-  return desc;
+  return text;
 }

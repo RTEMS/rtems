@@ -65,7 +65,7 @@ char *Errors_Rtems[] = {
 void Put_Error( uint32_t source, uint32_t error )
 {
   if ( source == INTERNAL_ERROR_CORE ) {
-    printk( rtems_internal_error_description( error ) );
+    printk( rtems_internal_error_text( error ) );
   }
   else if (source == INTERNAL_ERROR_RTEMS_API ){
     if (error >  RTEMS_NOT_IMPLEMENTED )
@@ -77,7 +77,7 @@ void Put_Error( uint32_t source, uint32_t error )
 
 void Put_Source( rtems_fatal_source source )
 {
-  printk( "%s", rtems_fatal_source_description( source ) );
+  printk( "%s", rtems_fatal_source_text( source ) );
 }
 
 static bool is_expected_error( rtems_fatal_code error )

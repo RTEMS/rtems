@@ -40,16 +40,14 @@
 @section Directives
 
 @page
-@subsection STATUS_CODE_DESCRIPTION - Returns a description for a status code
-
-@cindex fatal error
+@subsection STATUS_TEXT - Returns a text for a status code
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@findex rtems_status_code_description
+@findex rtems_status_text
 @example
-const char *rtems_status_code_description(
+const char *rtems_status_text(
   rtems_status_code code
 );
 @end example
@@ -57,8 +55,9 @@ const char *rtems_status_code_description(
 
 @subheading DIRECTIVE STATUS CODES
 
-The status code description or "?" in case the passed status code is invalid.
+The status code text or "?" in case the passed status code is invalid.
 
 @subheading DESCRIPTION:
 
-Returns a description for a status code.
+Returns a text for a status code.  The text for each status code is the
+enumerator constant.

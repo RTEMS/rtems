@@ -86,24 +86,28 @@ void rtems_fatal(
 ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /**
- * @brief Returns a description for a fatal source.
+ * @brief Returns a text for a fatal source.
+ *
+ * The text for each fatal source is the enumerator constant.
  *
  * @param[in] source is the fatal source.
  *
- * @retval description The fatal source description.
- * @retval ? The passed fatal source is invalid.
+ * @retval text The fatal source text.
+ * @retval "?" The passed fatal source is invalid.
  */
-const char *rtems_fatal_source_description( rtems_fatal_source source );
+const char *rtems_fatal_source_text( rtems_fatal_source source );
 
 /**
- * @brief Returns a description for an internal error code.
+ * @brief Returns a text for an internal error code.
+ *
+ * The text for each internal error code is the enumerator constant.
  *
  * @param[in] error is the error code.
  *
- * @retval description The error code description.
- * @retval ? The passed error code is invalid.
+ * @retval text The error code text.
+ * @retval "?" The passed error code is invalid.
  */
-const char *rtems_internal_error_description( rtems_fatal_code error );
+const char *rtems_internal_error_text( rtems_fatal_code error );
 
 /** @} */
 

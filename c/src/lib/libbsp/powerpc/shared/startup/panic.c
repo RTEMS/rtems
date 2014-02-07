@@ -39,7 +39,7 @@ void _BSP_Fatal_error(unsigned int v)
   switch (THESRC) {
     case INTERNAL_ERROR_CORE:
       printk(" RTEMS Core\n");
-      err = rtems_internal_error_description(THEERR);
+      err = rtems_internal_error_text(THEERR);
     break;
 
       case INTERNAL_ERROR_RTEMS_API:

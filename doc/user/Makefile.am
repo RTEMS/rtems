@@ -144,7 +144,7 @@ fatal.texi: fatal.t
 	    -n "Board Support Packages" < $< > $@
 
 bsp.texi: bsp.t
-	$(BMENU2) -p "Fatal Error Manager INTERNAL_ERROR_DESCRIPTION - Returns a description for an internal error code" \
+	$(BMENU2) -p "Fatal Error Manager INTERNAL_ERROR_TEXT - Returns a text for an internal error code" \
 	    -u "Top" \
 	    -n "User Extensions Manager" < $< > $@
 

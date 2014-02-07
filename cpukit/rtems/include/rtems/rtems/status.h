@@ -242,14 +242,16 @@ RTEMS_INLINE_ROUTINE bool rtems_are_statuses_equal(
 int rtems_status_code_to_errno(rtems_status_code sc);
 
 /**
- * @brief Returns a description for a status code.
+ * @brief Returns a text for a status code.
+ *
+ * The text for each status code is the enumerator constant.
  *
  * @param[in] code The status code.
  *
- * @retval description The status code description.
- * @retval ? The passed status code is invalid.
+ * @retval text The status code text.
+ * @retval "?" The passed status code is invalid.
  */
-const char *rtems_status_code_description( rtems_status_code code );
+const char *rtems_status_text( rtems_status_code code );
 
 /**@}*/
 

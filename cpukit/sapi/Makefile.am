@@ -29,8 +29,8 @@ libsapi_a_SOURCES = src/debug.c src/extension.c src/extensioncreate.c \
     src/iounregisterdriver.c src/iowrite.c src/posixapi.c  \
     src/rtemsapi.c src/extensiondata.c src/getversionstring.c \
     src/chainappendnotify.c src/chaingetnotify.c src/chaingetwait.c \
-    src/chainprependnotify.c src/rbheap.c src/interrdesc.c \
-    src/fatal2.c src/fatalsrcdesc.c
+    src/chainprependnotify.c src/rbheap.c src/interrtext.c \
+    src/fatal2.c src/fatalsrctext.c
 libsapi_a_SOURCES += src/chainsmp.c
 libsapi_a_CPPFLAGS = $(AM_CPPFLAGS)
 

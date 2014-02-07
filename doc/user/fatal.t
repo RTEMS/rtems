@@ -230,16 +230,16 @@ Prints the exception frame via printk().
 @c
 @c
 @page
-@subsection FATAL_SOURCE_DESCRIPTION - Returns a description for a fatal source
+@subsection FATAL_SOURCE_TEXT - Returns a text for a fatal source
 
 @cindex fatal error
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@findex rtems_fatal_source_description
+@findex rtems_fatal_source_text
 @example
-const char *rtems_fatal_source_description(
+const char *rtems_fatal_source_text(
   rtems_fatal_source source
 );
 @end example
@@ -247,26 +247,27 @@ const char *rtems_fatal_source_description(
 
 @subheading DIRECTIVE STATUS CODES
 
-The fatal source description or "?" in case the passed fatal source is invalid.
+The fatal source text or "?" in case the passed fatal source is invalid.
 
 @subheading DESCRIPTION:
 
-Returns a description for a fatal source.
+Returns a text for a fatal source.  The text for fatal source is the enumerator
+constant.
 
 @c
 @c
 @c
 @page
-@subsection INTERNAL_ERROR_DESCRIPTION - Returns a description for an internal error code
+@subsection INTERNAL_ERROR_TEXT - Returns a text for an internal error code
 
 @cindex fatal error
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@findex rtems_internal_error_description
+@findex rtems_internal_error_text
 @example
-const char *rtems_internal_error_description(
+const char *rtems_internal_error_text(
   rtems_fatal_code error
 );
 @end example
@@ -274,8 +275,9 @@ const char *rtems_internal_error_description(
 
 @subheading DIRECTIVE STATUS CODES
 
-The error code description or "?" in case the passed error code is invalid.
+The error code text or "?" in case the passed error code is invalid.
 
 @subheading DESCRIPTION:
 
-Returns a description for an internal error code.
+Returns a text for an internal error code.  The text for each internal error
+code is the enumerator constant.

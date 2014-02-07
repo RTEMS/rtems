@@ -1,16 +1,16 @@
 /**
  * @file
  *
- * @brief Returns a description for an internal error code.
+ * @brief Returns a text for an internal error code.
  *
  * @ingroup ClassicFatal
  */
 
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -26,7 +26,7 @@
 
 #include <rtems/fatal.h>
 
-static const char *const internal_error_desc [] = {
+static const char *const internal_error_text[] = {
   "INTERNAL_ERROR_NO_CONFIGURATION_TABLE",
   "INTERNAL_ERROR_NO_CPU_TABLE",
   "INTERNAL_ERROR_TOO_LITTLE_WORKSPACE",
@@ -54,14 +54,14 @@ static const char *const internal_error_desc [] = {
   "INTERNAL_ERROR_CPU_ISR_INSTALL_VECTOR"
 };
 
-const char *rtems_internal_error_description( rtems_fatal_code error )
+const char *rtems_internal_error_text( rtems_fatal_code error )
 {
   size_t i = error;
-  const char *desc = "?";
+  const char *text = "?";
 
-  if ( i < RTEMS_ARRAY_SIZE( internal_error_desc ) ) {
-    desc = internal_error_desc [i];
+  if ( i < RTEMS_ARRAY_SIZE( internal_error_text ) ) {
+    text = internal_error_text[ i ];
   }
 
-  return desc;
+  return text;
 }

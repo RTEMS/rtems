@@ -24,7 +24,7 @@
 
 #include <rtems.h>
 
-static const char *const status_code_desc[] = {
+static const char *const status_code_text[] = {
   "RTEMS_SUCCESSFUL",
   "RTEMS_TASK_EXITTED",
   "RTEMS_MP_NOT_CONFIGURED",
@@ -56,14 +56,14 @@ static const char *const status_code_desc[] = {
   "RTEMS_PROXY_BLOCKING"
 };
 
-const char *rtems_status_code_description( rtems_status_code code )
+const char *rtems_status_text( rtems_status_code code )
 {
   size_t i = code;
-  const char *desc = "?";
+  const char *text = "?";
 
-  if ( i < RTEMS_ARRAY_SIZE( status_code_desc ) ) {
-    desc = status_code_desc [i];
+  if ( i < RTEMS_ARRAY_SIZE( status_code_text ) ) {
+    text = status_code_text [i];
   }
 
-  return desc;
+  return text;
 }

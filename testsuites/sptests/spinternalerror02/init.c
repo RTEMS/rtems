@@ -20,50 +20,50 @@
 
 #include <rtems.h>
 
-static void test_internal_error_description(void)
+static void test_internal_error_text(void)
 {
   rtems_fatal_code error = 0;
-  const char *desc = NULL;
-  const char *desc_last;
+  const char *text = NULL;
+  const char *text_last;
 
   do {
-    desc_last = desc;
-    desc = rtems_internal_error_description( error );
+    text_last = text;
+    text = rtems_internal_error_text( error );
     ++error;
-    puts( desc );
-  } while ( desc != desc_last );
+    puts( text );
+  } while ( text != text_last );
 
   rtems_test_assert( error - 3 == INTERNAL_ERROR_CPU_ISR_INSTALL_VECTOR );
 }
 
-static void test_fatal_source_description(void)
+static void test_fatal_source_text(void)
 {
   rtems_fatal_source source = 0;
-  const char *desc = NULL;
-  const char *desc_last;
+  const char *text = NULL;
+  const char *text_last;
 
   do {
-    desc_last = desc;
-    desc = rtems_fatal_source_description( source );
+    text_last = text;
+    text = rtems_fatal_source_text( source );
     ++source;
-    puts( desc );
-  } while ( desc != desc_last );
+    puts( text );
+  } while ( text != text_last );
 
   rtems_test_assert( source - 3 == RTEMS_FATAL_SOURCE_EXCEPTION );
 }
 
-static void test_status_code_description(void)
+static void test_status_text(void)
 {
   rtems_status_code code = 0;
-  const char *desc = NULL;
-  const char *desc_last;
+  const char *text = NULL;
+  const char *text_last;
 
   do {
-    desc_last = desc;
-    desc = rtems_status_code_description( code );
+    text_last = text;
+    text = rtems_status_text( code );
     ++code;
-    puts( desc );
-  } while ( desc != desc_last );
+    puts( text );
+  } while ( text != text_last );
 
   rtems_test_assert( code - 3 == RTEMS_PROXY_BLOCKING );
 }
@@ -72,9 +72,9 @@ static void Init(rtems_task_argument arg)
 {
   puts("\n\n*** TEST SPINTERNALERROR 2 ***");
 
-  test_internal_error_description();
-  test_fatal_source_description();
-  test_status_code_description();
+  test_internal_error_text();
+  test_fatal_source_text();
+  test_status_text();
 
   puts("*** END OF TEST SPINTERNALERROR 2 ***");
 

@@ -24,48 +24,6 @@
 
 int          rtems_panic_in_progress;
 
-const rtems_assoc_t rtems_status_assoc[] = {
-  { "successful completion",              RTEMS_SUCCESSFUL, 0 },
-  { "returned from a thread",             RTEMS_TASK_EXITTED, 0 },
-  { "multiprocessing not configured",     RTEMS_MP_NOT_CONFIGURED, 0 },
-  { "invalid object name",                RTEMS_INVALID_NAME, 0 },
-  { "invalid object id",                  RTEMS_INVALID_ID, 0 },
-  { "too many",                           RTEMS_TOO_MANY, 0 },
-  { "timed out waiting",                  RTEMS_TIMEOUT, 0 },
-  { "object deleted while waiting",       RTEMS_OBJECT_WAS_DELETED, 0 },
-  { "specified size was invalid",         RTEMS_INVALID_SIZE, 0 },
-  { "address specified is invalid",       RTEMS_INVALID_ADDRESS, 0 },
-  { "number was invalid",                 RTEMS_INVALID_NUMBER, 0 },
-  { "item has not been initialized",      RTEMS_NOT_DEFINED, 0 },
-  { "resources still outstanding",        RTEMS_RESOURCE_IN_USE, 0 },
-  { "request not satisfied",              RTEMS_UNSATISFIED, 0 },
-  { "thread is in wrong state",           RTEMS_INCORRECT_STATE, 0 },
-  { "thread already in state",            RTEMS_ALREADY_SUSPENDED, 0 },
-  { "illegal on calling thread",          RTEMS_ILLEGAL_ON_SELF, 0 },
-  { "illegal for remote object",          RTEMS_ILLEGAL_ON_REMOTE_OBJECT, 0 },
-  { "called from wrong environment",      RTEMS_CALLED_FROM_ISR, 0 },
-  { "invalid thread priority",            RTEMS_INVALID_PRIORITY, 0 },
-  { "invalid date/time",                  RTEMS_INVALID_CLOCK, 0 },
-  { "invalid node id",                    RTEMS_INVALID_NODE, 0 },
-  { "directive not configured",           RTEMS_NOT_CONFIGURED, 0 },
-  { "not owner of resource",              RTEMS_NOT_OWNER_OF_RESOURCE , 0 },
-  { "directive not implemented",          RTEMS_NOT_IMPLEMENTED, 0 },
-  { "RTEMS inconsistency detected",       RTEMS_INTERNAL_ERROR, 0 },
-  { "could not get enough memory",        RTEMS_NO_MEMORY, 0 },
-  { "driver IO error",                    RTEMS_IO_ERROR, 0 },
-  { "internal multiprocessing only",      THREAD_STATUS_PROXY_BLOCKING, 0 },
-  { 0, 0, 0 },
-};
-
-
-const char *rtems_status_text(
-  rtems_status_code status
-)
-{
-  return rtems_assoc_name_by_local(rtems_status_assoc, status);
-}
-
-
 int rtems_verror(
   rtems_error_code_t  error_flag,
   const char         *printf_format,
