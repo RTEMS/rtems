@@ -596,10 +596,9 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_proxy_blocking (
 
 RTEMS_INLINE_ROUTINE uint32_t _Thread_Get_maximum_internal_threads(void)
 {
-  uint32_t maximum_internal_threads = 0;
-
   /* Idle threads */
-  maximum_internal_threads += rtems_configuration_get_maximum_processors();
+  uint32_t maximum_internal_threads =
+    rtems_configuration_get_maximum_processors();
 
   /* MPCI thread */
 #if defined(RTEMS_MULTIPROCESSING)
