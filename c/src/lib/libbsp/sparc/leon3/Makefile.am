@@ -26,7 +26,6 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += ../shared/startup/linkcmds.base
 dist_project_lib_DATA += startup/linkcmds
 dist_project_lib_DATA += startup/linkcmds.leon3
-dist_project_lib_DATA += startup/linkcmds.leon3_qemu
 dist_project_lib_DATA += startup/linkcmds.ngmp
 
 noinst_LIBRARIES += libbsp.a

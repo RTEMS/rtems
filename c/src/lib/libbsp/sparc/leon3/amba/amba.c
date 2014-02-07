@@ -39,7 +39,6 @@ volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
 
 void amba_initialize(void)
 {
-#ifndef LEON3_QEMU
   int icsel;
   struct ambapp_dev *adev;
 
@@ -91,7 +90,4 @@ void amba_initialize(void)
     ambapp_freq_init(&ambapp_plb, adev,
                      (LEON3_Timer_Regs->scaler_reload + 1) * 1000000);
   }
-#else /* LEON3_QEMU */
-  LEON3_IrqCtrl_Regs = (volatile struct irqmp_regs *)0x80000200;
-#endif /* LEON3_QEMU */
 }

@@ -26,7 +26,6 @@ RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],
 Under the simulator (especially when FAST_UART is defined), polled seems to operate
 better.])
 
-RTEMS_BSPOPTS_SET([SIMSPARC_FAST_IDLE],[*qemu],[1])
 RTEMS_BSPOPTS_SET([SIMSPARC_FAST_IDLE],[*],[])
 RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
 [If defined, speed up the clock ticks while the idle task is running so
@@ -37,10 +36,6 @@ RTEMS_BSPOPTS_SET([BSP_LEON3_SMP],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_LEON3_SMP],
 [Always defined when on a LEON3 to enable the LEON3 support for
  determining the CPU core number in an SMP configuration.])
-
-RTEMS_BSPOPTS_SET([LEON3_QEMU],[*qemu],[1])
-RTEMS_BSPOPTS_HELP([LEON3_QEMU],
-[If defined, then use settings for QEMU simulator.])
 
 RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
 RTEMS_BSP_LINKCMDS
