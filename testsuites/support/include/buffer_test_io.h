@@ -136,6 +136,22 @@ extern "C" {
     }
 
     #endif
+
+#elif defined(TESTS_USE_PRINTF)
+
+  #include <stdio.h>
+  #include <stdlib.h>
+
+  #define rtems_test_exit(_s) \
+    do { \
+      exit(_s); \
+    } while (0)
+
+  #define FLUSH_OUTPUT() \
+    do { \
+      fflush(stdout); \
+    } while (0)
+
 /*
  *  USE IPRINT
  */
