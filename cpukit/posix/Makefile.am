@@ -145,7 +145,8 @@ libposix_a_SOURCES += src/pthreadattrcompare.c
 if HAS_SMP
 ## PTHREAD_AFFINITY_C_FILES 
 libposix_a_SOURCES += src/pthreadattrsetaffinitynp.c \
-    src/pthreadattrgetaffinitynp.c
+    src/pthreadattrgetaffinitynp.c  src/pthreadgetaffinitynp.c   \
+    src/pthreadsetaffinitynp.c
 endif
 
 ## PSIGNAL_C_FILES
