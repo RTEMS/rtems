@@ -86,6 +86,10 @@ $(PROJECT_INCLUDE)/bsp/start.h: ../shared/include/start.h $(PROJECT_INCLUDE)/bsp
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/start.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/start.h
 
+$(PROJECT_INCLUDE)/bsp/arm-a9mpcore-clock.h: ../shared/include/arm-a9mpcore-clock.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-a9mpcore-clock.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-a9mpcore-clock.h
+
 $(PROJECT_INCLUDE)/bsp/arm-a9mpcore-irq.h: ../shared/include/arm-a9mpcore-irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-a9mpcore-irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-a9mpcore-irq.h

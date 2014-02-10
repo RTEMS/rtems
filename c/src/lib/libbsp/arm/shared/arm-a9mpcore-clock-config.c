@@ -15,6 +15,7 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/arm-a9mpcore-regs.h>
+#include <bsp/arm-a9mpcore-clock.h>
 
 #define A9MPCORE_PT ((volatile a9mpcore_pt *) BSP_ARM_A9MPCORE_PT_BASE)
 
@@ -23,9 +24,7 @@ static uint64_t a9mpcore_clock_last_tick_k;
 /* This is defined in clockdrv_shell.h */
 void Clock_isr(rtems_irq_hdl_param arg);
 
-uint32_t a9mpcore_clock_periphclk(void) __attribute__ ((weak));
-
-uint32_t a9mpcore_clock_periphclk(void)
+__attribute__ ((weak)) uint32_t a9mpcore_clock_periphclk(void)
 {
   /* default to the BSP option. */
   return BSP_ARM_A9MPCORE_PERIPHCLK;
