@@ -269,5 +269,12 @@ librtems_a_SOURCES += src/signalmp.c
 librtems_a_SOURCES += src/taskmp.c
 endif
 
+## SMP Files
+if HAS_SMP
+librtems_a_SOURCES += src/tasksetaffinity.c
+librtems_a_SOURCES += src/taskgetaffinity.c
+endif
+
+
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am
