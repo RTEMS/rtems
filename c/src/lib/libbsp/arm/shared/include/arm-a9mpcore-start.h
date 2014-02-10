@@ -120,8 +120,19 @@ BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_0(void)
 #endif
 }
 
+BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_global_timer(void)
+{
+  volatile a9mpcore_gt *gt = (volatile a9mpcore_gt *) BSP_ARM_A9MPCORE_GT_BASE;
+
+  gt->ctrl = 0;
+  gt->cntrlower = 0;
+  gt->cntrupper = 0;
+  gt->ctrl = A9MPCORE_GT_CTRL_TMR_EN;
+}
+
 BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_1(void)
 {
+  arm_a9mpcore_start_global_timer();
   arm_a9mpcore_start_set_vector_base();
 }
 

@@ -58,12 +58,20 @@ typedef struct {
 } a9mpcore_gic;
 
 typedef struct {
-  uint32_t cntr;
-  uint32_t reserved_04;
+  uint32_t cntrlower;
+  uint32_t cntrupper;
+#define A9MPCORE_GT_CTRL_PRESCALER(val) BSP_FLD32(val, 8, 15)
+#define A9MPCORE_GT_CTRL_PRESCALER_GET(reg) BSP_FLD32GET(reg, 8, 15)
+#define A9MPCORE_GT_CTRL_PRESCALER_SET(reg, val) BSP_FLD32SET(reg, val, 8, 15)
+#define A9MPCORE_GT_CTRL_AUTOINC_EN BSP_BIT32(3)
+#define A9MPCORE_GT_CTRL_IRQ_EN BSP_BIT32(2)
+#define A9MPCORE_GT_CTRL_COMP_EN BSP_BIT32(1)
+#define A9MPCORE_GT_CTRL_TMR_EN BSP_BIT32(0)
   uint32_t ctrl;
+#define A9MPCORE_GT_IRQST_EFLG BSP_BIT32(0)
   uint32_t irqst;
-  uint32_t cmpval;
-  uint32_t reserved_14;
+  uint32_t cmpvallower;
+  uint32_t cmpvalupper;
   uint32_t autoinc;
 } a9mpcore_gt;
 

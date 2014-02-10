@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -17,7 +17,7 @@
 #include <bsp/arm-a9mpcore-regs.h>
 #include <bsp/arm-a9mpcore-clock.h>
 
-#define A9MPCORE_PT ((volatile a9mpcore_pt *) BSP_ARM_A9MPCORE_PT_BASE)
+#define A9MPCORE_GT ((volatile a9mpcore_gt *) BSP_ARM_A9MPCORE_GT_BASE)
 
 static uint64_t a9mpcore_clock_last_tick_k;
 
@@ -32,9 +32,9 @@ __attribute__ ((weak)) uint32_t a9mpcore_clock_periphclk(void)
 
 static void a9mpcore_clock_at_tick(void)
 {
-  volatile a9mpcore_pt *pt = A9MPCORE_PT;
+  volatile a9mpcore_gt *gt = A9MPCORE_GT;
 
-  pt->irqst = A9MPCORE_PT_IRQST_EFLG;
+  gt->irqst = A9MPCORE_GT_IRQST_EFLG;
 }
 
 static void a9mpcore_clock_handler_install(void)
@@ -42,7 +42,7 @@ static void a9mpcore_clock_handler_install(void)
   rtems_status_code sc;
 
   sc = rtems_interrupt_handler_install(
-    A9MPCORE_IRQ_PT,
+    A9MPCORE_IRQ_GT,
     "Clock",
     RTEMS_INTERRUPT_UNIQUE,
     (rtems_interrupt_handler) Clock_isr,
@@ -56,31 +56,56 @@ static void a9mpcore_clock_handler_install(void)
   }
 }
 
+static uint64_t a9mpcore_clock_get_counter(volatile a9mpcore_gt *gt)
+{
+  uint32_t cl;
+  uint32_t cu1;
+  uint32_t cu2;
+
+  do {
+    cu1 = gt->cntrupper;
+    cl = gt->cntrlower;
+    cu2 = gt->cntrupper;
+  } while (cu1 != cu2);
+
+  return ((uint64_t) cu2 << 32) | cl;
+}
+
 static void a9mpcore_clock_initialize(void)
 {
-  volatile a9mpcore_pt *pt = A9MPCORE_PT;
-  uint64_t periphclk = (uint64_t) a9mpcore_clock_periphclk();
-  uint64_t interval = (periphclk
-    * (uint64_t) rtems_configuration_get_microseconds_per_tick()) / 1000000;
+  volatile a9mpcore_gt *gt = A9MPCORE_GT;
+  uint64_t periphclk = a9mpcore_clock_periphclk();
+  uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
+  uint32_t interval = (uint32_t) ((periphclk * us_per_tick) / 1000000);
+  uint64_t cmpval;
 
-  a9mpcore_clock_last_tick_k = (1000000000ULL << 32) / periphclk;
+  a9mpcore_clock_last_tick_k = (UINT64_C(1000000000) << 32) / periphclk;
 
-  pt->load = (uint32_t) interval - 1;
-  pt->ctrl = A9MPCORE_PT_CTRL_AUTO_RLD
-    | A9MPCORE_PT_CTRL_IRQ_EN
-    | A9MPCORE_PT_CTRL_TMR_EN;
+  gt->ctrl &= A9MPCORE_GT_CTRL_TMR_EN;
+  gt->irqst = A9MPCORE_GT_IRQST_EFLG;
+
+  cmpval = a9mpcore_clock_get_counter(gt);
+  cmpval += interval;
+
+  gt->cmpvallower = (uint32_t) cmpval;
+  gt->cmpvalupper = (uint32_t) (cmpval >> 32);
+  gt->autoinc = interval;
+  gt->ctrl = A9MPCORE_GT_CTRL_AUTOINC_EN
+    | A9MPCORE_GT_CTRL_IRQ_EN
+    | A9MPCORE_GT_CTRL_COMP_EN
+    | A9MPCORE_GT_CTRL_TMR_EN;
 }
 
 static void a9mpcore_clock_cleanup(void)
 {
-  volatile a9mpcore_pt *pt = A9MPCORE_PT;
+  volatile a9mpcore_gt *gt = A9MPCORE_GT;
   rtems_status_code sc;
 
-  pt->ctrl = 0;
-  pt->irqst = A9MPCORE_PT_IRQST_EFLG;
+  gt->ctrl &= A9MPCORE_GT_CTRL_TMR_EN;
+  gt->irqst = A9MPCORE_GT_IRQST_EFLG;
 
   sc = rtems_interrupt_handler_remove(
-    A9MPCORE_IRQ_PT,
+    A9MPCORE_IRQ_GT,
     (rtems_interrupt_handler) Clock_isr,
     NULL
   );
@@ -94,16 +119,17 @@ static void a9mpcore_clock_cleanup(void)
 
 static uint32_t a9mpcore_clock_nanoseconds_since_last_tick(void)
 {
-  volatile a9mpcore_pt *pt = A9MPCORE_PT;
+  volatile a9mpcore_gt *gt = A9MPCORE_GT;
   uint64_t k = a9mpcore_clock_last_tick_k;
-  uint32_t c = pt->cntr;
-  uint32_t p = pt->load + 1;
+  uint32_t c = gt->cntrlower;
+  uint32_t n = gt->cmpvallower;
+  uint32_t i = gt->autoinc;
 
-  if ((pt->irqst & A9MPCORE_PT_IRQST_EFLG) != 0) {
-    c = pt->cntr - p;
+  if ((gt->irqst & A9MPCORE_GT_IRQST_EFLG) != 0) {
+    n = gt->cmpvallower - i;
   }
 
-  return (uint32_t) (((p - c) * k) >> 32);
+  return (uint32_t) (((c - n - i) * k) >> 32);
 }
 
 #define Clock_driver_support_at_tick() \
