@@ -1,0 +1,21 @@
+#  COPYRIGHT (c) 1989-2014.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpaffinity01
+
+directives:
+
+  - rtems_task_get_affinity()
+  - rtems_task_set_affinity()
+
+concepts:
+
+  - Ensure that classic get and set affinity work SMP.
+    Note: This does not test scheduling

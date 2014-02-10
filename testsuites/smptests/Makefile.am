@@ -10,6 +10,7 @@ SUBDIRS += smp05
 SUBDIRS += smp07
 SUBDIRS += smp08
 SUBDIRS += smp09
+SUBDIRS += smpaffinity01
 SUBDIRS += smpatomic01
 SUBDIRS += smpfatal01
 SUBDIRS += smpfatal02

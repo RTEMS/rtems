@@ -64,6 +64,7 @@ smp05/Makefile
 smp07/Makefile
 smp08/Makefile
 smp09/Makefile
+smpaffinity01/Makefile
 smpatomic01/Makefile
 smpfatal01/Makefile
 smpfatal02/Makefile
