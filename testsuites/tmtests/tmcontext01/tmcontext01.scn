@@ -1,0 +1,255 @@
+<?xml version="1.0"?>
+<!-- *** TEST TMCONTEXT 1 *** -->
+<Test>
+  <ContextSwitchTest environment="normal">
+    <Sample functionNestLevel="0">
+      <Min unit="ns">2440</Min><Q1 unit="ns">2440</Q1><Q2 unit="ns">2480</Q2><Q3 unit="ns">2480</Q3><Max unit="ns">2800</Max>
+    </Sample>
+    <Sample functionNestLevel="1">
+      <Min unit="ns">3520</Min><Q1 unit="ns">3760</Q1><Q2 unit="ns">3800</Q2><Q3 unit="ns">3800</Q3><Max unit="ns">4120</Max>
+    </Sample>
+    <Sample functionNestLevel="2">
+      <Min unit="ns">4280</Min><Q1 unit="ns">4720</Q1><Q2 unit="ns">4720</Q2><Q3 unit="ns">5040</Q3><Max unit="ns">5080</Max>
+    </Sample>
+    <Sample functionNestLevel="3">
+      <Min unit="ns">5320</Min><Q1 unit="ns">5640</Q1><Q2 unit="ns">5680</Q2><Q3 unit="ns">5960</Q3><Max unit="ns">6000</Max>
+    </Sample>
+    <Sample functionNestLevel="4">
+      <Min unit="ns">6360</Min><Q1 unit="ns">6600</Q1><Q2 unit="ns">6600</Q2><Q3 unit="ns">6920</Q3><Max unit="ns">6920</Max>
+    </Sample>
+    <Sample functionNestLevel="5">
+      <Min unit="ns">7480</Min><Q1 unit="ns">7520</Q1><Q2 unit="ns">7840</Q2><Q3 unit="ns">7840</Q3><Max unit="ns">7880</Max>
+    </Sample>
+    <Sample functionNestLevel="6">
+      <Min unit="ns">8480</Min><Q1 unit="ns">8480</Q1><Q2 unit="ns">8800</Q2><Q3 unit="ns">8800</Q3><Max unit="ns">8840</Max>
+    </Sample>
+    <Sample functionNestLevel="7">
+      <Min unit="ns">8840</Min><Q1 unit="ns">8960</Q1><Q2 unit="ns">9280</Q2><Q3 unit="ns">9280</Q3><Max unit="ns">9320</Max>
+    </Sample>
+    <Sample functionNestLevel="8">
+      <Min unit="ns">8920</Min><Q1 unit="ns">8960</Q1><Q2 unit="ns">9280</Q2><Q3 unit="ns">9280</Q3><Max unit="ns">9320</Max>
+    </Sample>
+    <Sample functionNestLevel="9">
+      <Min unit="ns">8920</Min><Q1 unit="ns">8960</Q1><Q2 unit="ns">8960</Q2><Q3 unit="ns">9280</Q3><Max unit="ns">9280</Max>
+    </Sample>
+    <Sample functionNestLevel="10">
+      <Min unit="ns">8800</Min><Q1 unit="ns">8960</Q1><Q2 unit="ns">9240</Q2><Q3 unit="ns">9280</Q3><Max unit="ns">9280</Max>
+    </Sample>
+    <Sample functionNestLevel="11">
+      <Min unit="ns">8920</Min><Q1 unit="ns">8960</Q1><Q2 unit="ns">9280</Q2><Q3 unit="ns">9280</Q3><Max unit="ns">9280</Max>
+    </Sample>
+    <Sample functionNestLevel="12">
+      <Min unit="ns">8920</Min><Q1 unit="ns">8960</Q1><Q2 unit="ns">9240</Q2><Q3 unit="ns">9280</Q3><Max unit="ns">9320</Max>
+    </Sample>
+    <Sample functionNestLevel="13">
+      <Min unit="ns">8920</Min><Q1 unit="ns">8960</Q1><Q2 unit="ns">9240</Q2><Q3 unit="ns">9280</Q3><Max unit="ns">9280</Max>
+    </Sample>
+    <Sample functionNestLevel="14">
+      <Min unit="ns">8920</Min><Q1 unit="ns">8960</Q1><Q2 unit="ns">9240</Q2><Q3 unit="ns">9280</Q3><Max unit="ns">9280</Max>
+    </Sample>
+    <Sample functionNestLevel="15">
+      <Min unit="ns">8920</Min><Q1 unit="ns">8960</Q1><Q2 unit="ns">8960</Q2><Q3 unit="ns">9280</Q3><Max unit="ns">9280</Max>
+    </Sample>
+  </ContextSwitchTest>
+  <ContextSwitchTest environment="dirty">
+    <Sample functionNestLevel="0">
+      <Min unit="ns">9720</Min><Q1 unit="ns">10560</Q1><Q2 unit="ns">10600</Q2><Q3 unit="ns">10680</Q3><Max unit="ns">11160</Max>
+    </Sample>
+    <Sample functionNestLevel="1">
+      <Min unit="ns">11840</Min><Q1 unit="ns">12280</Q1><Q2 unit="ns">12560</Q2><Q3 unit="ns">12600</Q3><Max unit="ns">12640</Max>
+    </Sample>
+    <Sample functionNestLevel="2">
+      <Min unit="ns">12880</Min><Q1 unit="ns">13560</Q1><Q2 unit="ns">13600</Q2><Q3 unit="ns">13640</Q3><Max unit="ns">13680</Max>
+    </Sample>
+    <Sample functionNestLevel="3">
+      <Min unit="ns">13960</Min><Q1 unit="ns">14640</Q1><Q2 unit="ns">14680</Q2><Q3 unit="ns">14720</Q3><Max unit="ns">14720</Max>
+    </Sample>
+    <Sample functionNestLevel="4">
+      <Min unit="ns">15000</Min><Q1 unit="ns">15680</Q1><Q2 unit="ns">15760</Q2><Q3 unit="ns">15760</Q3><Max unit="ns">15800</Max>
+    </Sample>
+    <Sample functionNestLevel="5">
+      <Min unit="ns">16320</Min><Q1 unit="ns">16720</Q1><Q2 unit="ns">16800</Q2><Q3 unit="ns">16800</Q3><Max unit="ns">17040</Max>
+    </Sample>
+    <Sample functionNestLevel="6">
+      <Min unit="ns">17320</Min><Q1 unit="ns">17560</Q1><Q2 unit="ns">17800</Q2><Q3 unit="ns">17880</Q3><Max unit="ns">18160</Max>
+    </Sample>
+    <Sample functionNestLevel="7">
+      <Min unit="ns">17440</Min><Q1 unit="ns">17800</Q1><Q2 unit="ns">17840</Q2><Q3 unit="ns">17880</Q3><Max unit="ns">18160</Max>
+    </Sample>
+    <Sample functionNestLevel="8">
+      <Min unit="ns">17360</Min><Q1 unit="ns">17800</Q1><Q2 unit="ns">17840</Q2><Q3 unit="ns">17880</Q3><Max unit="ns">18200</Max>
+    </Sample>
+    <Sample functionNestLevel="9">
+      <Min unit="ns">17400</Min><Q1 unit="ns">17800</Q1><Q2 unit="ns">17840</Q2><Q3 unit="ns">17880</Q3><Max unit="ns">18120</Max>
+    </Sample>
+    <Sample functionNestLevel="10">
+      <Min unit="ns">17320</Min><Q1 unit="ns">17800</Q1><Q2 unit="ns">17840</Q2><Q3 unit="ns">17880</Q3><Max unit="ns">18200</Max>
+    </Sample>
+    <Sample functionNestLevel="11">
+      <Min unit="ns">17360</Min><Q1 unit="ns">17840</Q1><Q2 unit="ns">17840</Q2><Q3 unit="ns">17880</Q3><Max unit="ns">18160</Max>
+    </Sample>
+    <Sample functionNestLevel="12">
+      <Min unit="ns">17360</Min><Q1 unit="ns">17800</Q1><Q2 unit="ns">17840</Q2><Q3 unit="ns">17880</Q3><Max unit="ns">18160</Max>
+    </Sample>
+    <Sample functionNestLevel="13">
+      <Min unit="ns">17360</Min><Q1 unit="ns">17800</Q1><Q2 unit="ns">17840</Q2><Q3 unit="ns">17880</Q3><Max unit="ns">18200</Max>
+    </Sample>
+    <Sample functionNestLevel="14">
+      <Min unit="ns">17760</Min><Q1 unit="ns">17840</Q1><Q2 unit="ns">17840</Q2><Q3 unit="ns">17880</Q3><Max unit="ns">18200</Max>
+    </Sample>
+    <Sample functionNestLevel="15">
+      <Min unit="ns">17360</Min><Q1 unit="ns">17800</Q1><Q2 unit="ns">17840</Q2><Q3 unit="ns">17880</Q3><Max unit="ns">18200</Max>
+    </Sample>
+  </ContextSwitchTest>
+  <ContextSwitchTest environment="dirty" load="1">
+    <Sample functionNestLevel="0">
+      <Min unit="ns">23800</Min><Q1 unit="ns">24440</Q1><Q2 unit="ns">24640</Q2><Q3 unit="ns">24720</Q3><Max unit="ns">25080</Max>
+    </Sample>
+    <Sample functionNestLevel="1">
+      <Min unit="ns">28040</Min><Q1 unit="ns">28560</Q1><Q2 unit="ns">28640</Q2><Q3 unit="ns">28680</Q3><Max unit="ns">28720</Max>
+    </Sample>
+    <Sample functionNestLevel="2">
+      <Min unit="ns">31600</Min><Q1 unit="ns">32160</Q1><Q2 unit="ns">32160</Q2><Q3 unit="ns">32200</Q3><Max unit="ns">32280</Max>
+    </Sample>
+    <Sample functionNestLevel="3">
+      <Min unit="ns">35400</Min><Q1 unit="ns">35720</Q1><Q2 unit="ns">35760</Q2><Q3 unit="ns">35920</Q3><Max unit="ns">36080</Max>
+    </Sample>
+    <Sample functionNestLevel="4">
+      <Min unit="ns">38960</Min><Q1 unit="ns">39280</Q1><Q2 unit="ns">39320</Q2><Q3 unit="ns">39560</Q3><Max unit="ns">39640</Max>
+    </Sample>
+    <Sample functionNestLevel="5">
+      <Min unit="ns">42480</Min><Q1 unit="ns">42840</Q1><Q2 unit="ns">43080</Q2><Q3 unit="ns">43120</Q3><Max unit="ns">43200</Max>
+    </Sample>
+    <Sample functionNestLevel="6">
+      <Min unit="ns">46120</Min><Q1 unit="ns">46600</Q1><Q2 unit="ns">46640</Q2><Q3 unit="ns">46680</Q3><Max unit="ns">46880</Max>
+    </Sample>
+    <Sample functionNestLevel="7">
+      <Min unit="ns">46080</Min><Q1 unit="ns">46600</Q1><Q2 unit="ns">46640</Q2><Q3 unit="ns">46680</Q3><Max unit="ns">46760</Max>
+    </Sample>
+    <Sample functionNestLevel="8">
+      <Min unit="ns">46320</Min><Q1 unit="ns">46600</Q1><Q2 unit="ns">46640</Q2><Q3 unit="ns">46680</Q3><Max unit="ns">47040</Max>
+    </Sample>
+    <Sample functionNestLevel="9">
+      <Min unit="ns">46040</Min><Q1 unit="ns">46600</Q1><Q2 unit="ns">46640</Q2><Q3 unit="ns">46680</Q3><Max unit="ns">46960</Max>
+    </Sample>
+    <Sample functionNestLevel="10">
+      <Min unit="ns">45960</Min><Q1 unit="ns">46600</Q1><Q2 unit="ns">46640</Q2><Q3 unit="ns">46680</Q3><Max unit="ns">46960</Max>
+    </Sample>
+    <Sample functionNestLevel="11">
+      <Min unit="ns">46040</Min><Q1 unit="ns">46600</Q1><Q2 unit="ns">46640</Q2><Q3 unit="ns">46680</Q3><Max unit="ns">46720</Max>
+    </Sample>
+    <Sample functionNestLevel="12">
+      <Min unit="ns">46080</Min><Q1 unit="ns">46600</Q1><Q2 unit="ns">46640</Q2><Q3 unit="ns">46680</Q3><Max unit="ns">46920</Max>
+    </Sample>
+    <Sample functionNestLevel="13">
+      <Min unit="ns">46080</Min><Q1 unit="ns">46600</Q1><Q2 unit="ns">46640</Q2><Q3 unit="ns">46680</Q3><Max unit="ns">46720</Max>
+    </Sample>
+    <Sample functionNestLevel="14">
+      <Min unit="ns">46280</Min><Q1 unit="ns">46600</Q1><Q2 unit="ns">46640</Q2><Q3 unit="ns">46680</Q3><Max unit="ns">46760</Max>
+    </Sample>
+    <Sample functionNestLevel="15">
+      <Min unit="ns">46360</Min><Q1 unit="ns">46600</Q1><Q2 unit="ns">46640</Q2><Q3 unit="ns">46680</Q3><Max unit="ns">47040</Max>
+    </Sample>
+  </ContextSwitchTest>
+  <ContextSwitchTest environment="dirty" load="2">
+    <Sample functionNestLevel="0">
+      <Min unit="ns">37560</Min><Q1 unit="ns">38200</Q1><Q2 unit="ns">38240</Q2><Q3 unit="ns">38480</Q3><Max unit="ns">38600</Max>
+    </Sample>
+    <Sample functionNestLevel="1">
+      <Min unit="ns">44880</Min><Q1 unit="ns">45480</Q1><Q2 unit="ns">45560</Q2><Q3 unit="ns">45600</Q3><Max unit="ns">45640</Max>
+    </Sample>
+    <Sample functionNestLevel="2">
+      <Min unit="ns">50920</Min><Q1 unit="ns">51560</Q1><Q2 unit="ns">51600</Q2><Q3 unit="ns">51800</Q3><Max unit="ns">51960</Max>
+    </Sample>
+    <Sample functionNestLevel="3">
+      <Min unit="ns">57320</Min><Q1 unit="ns">57640</Q1><Q2 unit="ns">57880</Q2><Q3 unit="ns">57920</Q3><Max unit="ns">58240</Max>
+    </Sample>
+    <Sample functionNestLevel="4">
+      <Min unit="ns">63320</Min><Q1 unit="ns">63920</Q1><Q2 unit="ns">63960</Q2><Q3 unit="ns">64000</Q3><Max unit="ns">64600</Max>
+    </Sample>
+    <Sample functionNestLevel="5">
+      <Min unit="ns">69840</Min><Q1 unit="ns">69960</Q1><Q2 unit="ns">70040</Q2><Q3 unit="ns">70240</Q3><Max unit="ns">70400</Max>
+    </Sample>
+    <Sample functionNestLevel="6">
+      <Min unit="ns">75600</Min><Q1 unit="ns">76200</Q1><Q2 unit="ns">76280</Q2><Q3 unit="ns">76320</Q3><Max unit="ns">76880</Max>
+    </Sample>
+    <Sample functionNestLevel="7">
+      <Min unit="ns">75440</Min><Q1 unit="ns">76240</Q1><Q2 unit="ns">76280</Q2><Q3 unit="ns">76320</Q3><Max unit="ns">76840</Max>
+    </Sample>
+    <Sample functionNestLevel="8">
+      <Min unit="ns">75640</Min><Q1 unit="ns">76200</Q1><Q2 unit="ns">76280</Q2><Q3 unit="ns">76320</Q3><Max unit="ns">76960</Max>
+    </Sample>
+    <Sample functionNestLevel="9">
+      <Min unit="ns">75640</Min><Q1 unit="ns">76240</Q1><Q2 unit="ns">76280</Q2><Q3 unit="ns">76320</Q3><Max unit="ns">76440</Max>
+    </Sample>
+    <Sample functionNestLevel="10">
+      <Min unit="ns">75920</Min><Q1 unit="ns">76240</Q1><Q2 unit="ns">76280</Q2><Q3 unit="ns">76320</Q3><Max unit="ns">76400</Max>
+    </Sample>
+    <Sample functionNestLevel="11">
+      <Min unit="ns">75600</Min><Q1 unit="ns">76200</Q1><Q2 unit="ns">76280</Q2><Q3 unit="ns">76320</Q3><Max unit="ns">76920</Max>
+    </Sample>
+    <Sample functionNestLevel="12">
+      <Min unit="ns">75360</Min><Q1 unit="ns">76200</Q1><Q2 unit="ns">76280</Q2><Q3 unit="ns">76320</Q3><Max unit="ns">76440</Max>
+    </Sample>
+    <Sample functionNestLevel="13">
+      <Min unit="ns">75360</Min><Q1 unit="ns">76200</Q1><Q2 unit="ns">76280</Q2><Q3 unit="ns">76320</Q3><Max unit="ns">76960</Max>
+    </Sample>
+    <Sample functionNestLevel="14">
+      <Min unit="ns">75640</Min><Q1 unit="ns">76160</Q1><Q2 unit="ns">76280</Q2><Q3 unit="ns">76320</Q3><Max unit="ns">76960</Max>
+    </Sample>
+    <Sample functionNestLevel="15">
+      <Min unit="ns">75960</Min><Q1 unit="ns">76240</Q1><Q2 unit="ns">76280</Q2><Q3 unit="ns">76320</Q3><Max unit="ns">76400</Max>
+    </Sample>
+  </ContextSwitchTest>
+  <ContextSwitchTest environment="dirty" load="3">
+    <Sample functionNestLevel="0">
+      <Min unit="ns">52400</Min><Q1 unit="ns">52480</Q1><Q2 unit="ns">52520</Q2><Q3 unit="ns">52800</Q3><Max unit="ns">53720</Max>
+    </Sample>
+    <Sample functionNestLevel="1">
+      <Min unit="ns">61680</Min><Q1 unit="ns">62600</Q1><Q2 unit="ns">62640</Q2><Q3 unit="ns">62680</Q3><Max unit="ns">62800</Max>
+    </Sample>
+    <Sample functionNestLevel="2">
+      <Min unit="ns">70160</Min><Q1 unit="ns">71160</Q1><Q2 unit="ns">71360</Q2><Q3 unit="ns">71480</Q3><Max unit="ns">72160</Max>
+    </Sample>
+    <Sample functionNestLevel="3">
+      <Min unit="ns">79000</Min><Q1 unit="ns">79960</Q1><Q2 unit="ns">80000</Q2><Q3 unit="ns">80000</Q3><Max unit="ns">80920</Max>
+    </Sample>
+    <Sample functionNestLevel="4">
+      <Min unit="ns">87600</Min><Q1 unit="ns">88480</Q1><Q2 unit="ns">88760</Q2><Q3 unit="ns">88800</Q3><Max unit="ns">88880</Max>
+    </Sample>
+    <Sample functionNestLevel="5">
+      <Min unit="ns">96320</Min><Q1 unit="ns">97280</Q1><Q2 unit="ns">97320</Q2><Q3 unit="ns">97360</Q3><Max unit="ns">98600</Max>
+    </Sample>
+    <Sample functionNestLevel="6">
+      <Min unit="ns">105160</Min><Q1 unit="ns">105840</Q1><Q2 unit="ns">106080</Q2><Q3 unit="ns">106160</Q3><Max unit="ns">107120</Max>
+    </Sample>
+    <Sample functionNestLevel="7">
+      <Min unit="ns">105200</Min><Q1 unit="ns">106040</Q1><Q2 unit="ns">106120</Q2><Q3 unit="ns">106160</Q3><Max unit="ns">107080</Max>
+    </Sample>
+    <Sample functionNestLevel="8">
+      <Min unit="ns">104880</Min><Q1 unit="ns">105920</Q1><Q2 unit="ns">106080</Q2><Q3 unit="ns">106160</Q3><Max unit="ns">106280</Max>
+    </Sample>
+    <Sample functionNestLevel="9">
+      <Min unit="ns">105760</Min><Q1 unit="ns">106000</Q1><Q2 unit="ns">106120</Q2><Q3 unit="ns">106160</Q3><Max unit="ns">106280</Max>
+    </Sample>
+    <Sample functionNestLevel="10">
+      <Min unit="ns">104880</Min><Q1 unit="ns">105880</Q1><Q2 unit="ns">106080</Q2><Q3 unit="ns">106160</Q3><Max unit="ns">107080</Max>
+    </Sample>
+    <Sample functionNestLevel="11">
+      <Min unit="ns">105720</Min><Q1 unit="ns">105960</Q1><Q2 unit="ns">106120</Q2><Q3 unit="ns">106160</Q3><Max unit="ns">106240</Max>
+    </Sample>
+    <Sample functionNestLevel="12">
+      <Min unit="ns">104960</Min><Q1 unit="ns">105880</Q1><Q2 unit="ns">106080</Q2><Q3 unit="ns">106160</Q3><Max unit="ns">106280</Max>
+    </Sample>
+    <Sample functionNestLevel="13">
+      <Min unit="ns">104880</Min><Q1 unit="ns">105880</Q1><Q2 unit="ns">106120</Q2><Q3 unit="ns">106160</Q3><Max unit="ns">106280</Max>
+    </Sample>
+    <Sample functionNestLevel="14">
+      <Min unit="ns">105720</Min><Q1 unit="ns">105880</Q1><Q2 unit="ns">106080</Q2><Q3 unit="ns">106160</Q3><Max unit="ns">106240</Max>
+    </Sample>
+    <Sample functionNestLevel="15">
+      <Min unit="ns">104920</Min><Q1 unit="ns">105840</Q1><Q2 unit="ns">106120</Q2><Q3 unit="ns">106160</Q3><Max unit="ns">106280</Max>
+    </Sample>
+  </ContextSwitchTest>
+</Test>
+<!-- *** END OF TEST TMCONTEXT 1 *** -->

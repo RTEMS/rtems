@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: tmcontext01
+
+directives:
+
+  - _CPU_Context_switch()
+
+concepts:
+
+  - Measure the context switch times depending on function nest level and cache
+    state.

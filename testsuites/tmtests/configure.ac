@@ -28,6 +28,7 @@ AC_SUBST(OPERATION_COUNT)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+tmcontext01/Makefile
 tmck/Makefile
 tmoverhd/Makefile
 tm01/Makefile

@@ -1,0 +1,273 @@
+/*
+ * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ */
+
+#ifdef HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
+#include <rtems/counter.h>
+#include <rtems.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <inttypes.h>
+#include <alloca.h>
+
+#include "tmacros.h"
+
+#define FUNCTION_LEVELS 16
+
+#define SAMPLES 123
+
+#define CPU_COUNT 32
+
+static rtems_counter_ticks t[SAMPLES];
+
+static volatile bool always_true = true;
+
+static size_t data_size;
+
+static volatile int *main_data;
+
+static Context_Control ctx;
+
+static void dirty_data_cache(volatile int *d)
+{
+  size_t n = data_size / sizeof(*d);
+  size_t i;
+
+  for (i = 0; i < n; ++i) {
+    d[i] = i;
+  }
+}
+
+static int prevent_opt_func(int m, int n)
+{
+  if (m == 0) {
+    return n + 1;
+  } else if (m > 0 && n == 0) {
+    return prevent_opt_func(m - 1, 1);
+  } else {
+    return prevent_opt_func(m - 1, prevent_opt_func(m, n - 1));
+  }
+}
+
+static int call_at_level(int start, int fl, int s, bool dirty)
+{
+  if (fl == start) {
+    /*
+     * Some architectures like the SPARC have register windows.  A side-effect
+     * of this context switch is that we start with a fresh window set.  On
+     * architectures like ARM or PowerPC this context switch has no effect.
+     */
+    _Context_Switch(&ctx, &ctx);
+  }
+
+  if (fl > 0) {
+    if (always_true) {
+      return call_at_level(start, fl - 1, s, dirty);
+    } else {
+      return prevent_opt_func(fl - 1, fl - 2);
+    }
+  } else {
+    char *volatile space;
+    rtems_counter_ticks a;
+    rtems_counter_ticks b;
+
+    if (dirty) {
+      dirty_data_cache(main_data);
+      rtems_cache_invalidate_entire_instruction();
+    }
+
+    a = rtems_counter_read();
+
+    /* Ensure that we use an untouched stack area */
+    space = alloca(1024);
+    (void) space;
+
+    _Context_Switch(&ctx, &ctx);
+
+    b = rtems_counter_read();
+    t[s] = rtems_counter_difference(b, a);
+
+    return 0;
+  }
+}
+
+static void load_task(rtems_task_argument arg)
+{
+  volatile int *load_data = (volatile int *) arg;
+
+  while (true) {
+    dirty_data_cache(load_data);
+  }
+}
+
+static int cmp(const void *ap, const void *bp)
+{
+  const rtems_counter_ticks *a = ap;
+  const rtems_counter_ticks *b = bp;
+
+  return *a - *b;
+}
+
+static void sort_t(void)
+{
+  qsort(&t[0], SAMPLES, sizeof(t[0]), cmp);
+}
+
+static void test_by_function_level(int fl, bool dirty)
+{
+  rtems_interrupt_level level;
+  rtems_interrupt_lock lock = RTEMS_INTERRUPT_LOCK_INITIALIZER;
+  int s;
+  uint64_t min;
+  uint64_t q1;
+  uint64_t q2;
+  uint64_t q3;
+  uint64_t max;
+
+  rtems_interrupt_lock_acquire(&lock, level);
+
+  for (s = 0; s < SAMPLES; ++s) {
+    call_at_level(fl, fl, s, dirty);
+  }
+
+  rtems_interrupt_lock_release(&lock, level);
+
+  sort_t();
+
+  min = t[0];
+  q1 = t[(1 * SAMPLES) / 4];
+  q2 = t[SAMPLES / 2];
+  q3 = t[(3 * SAMPLES) / 4];
+  max = t[SAMPLES - 1];
+
+  printf(
+    "    <Sample functionNestLevel=\"%i\">\n"
+    "      <Min unit=\"ns\">%" PRIu64 "</Min>"
+      "<Q1 unit=\"ns\">%" PRIu64 "</Q1>"
+      "<Q2 unit=\"ns\">%" PRIu64 "</Q2>"
+      "<Q3 unit=\"ns\">%" PRIu64 "</Q3>"
+      "<Max unit=\"ns\">%" PRIu64 "</Max>\n"
+    "    </Sample>\n",
+    fl,
+    rtems_counter_ticks_to_nanoseconds(min),
+    rtems_counter_ticks_to_nanoseconds(q1),
+    rtems_counter_ticks_to_nanoseconds(q2),
+    rtems_counter_ticks_to_nanoseconds(q3),
+    rtems_counter_ticks_to_nanoseconds(max)
+  );
+}
+
+static void test(bool dirty, uint32_t load)
+{
+  int fl;
+
+  printf(
+    "  <ContextSwitchTest environment=\"%s\"",
+    dirty ? "dirty" : "normal"
+  );
+
+  if (load > 0) {
+    printf(" load=\"%" PRIu32 "\"", load);
+  }
+
+  printf(">\n");
+
+  for (fl = 0; fl < FUNCTION_LEVELS; ++fl) {
+    test_by_function_level(fl, dirty);
+  }
+
+  printf("  </ContextSwitchTest>\n");
+}
+
+static void Init(rtems_task_argument arg)
+{
+  uint32_t load = 0;
+
+  printf(
+    "\n"
+    "\n"
+    "<?xml version=\"1.0\"?>\n"
+    "<!-- *** TEST TMCONTEXT 1 *** -->\n"
+    "<Test>\n"
+  );
+
+  data_size = rtems_cache_get_data_cache_size(0);
+  if (data_size > 0) {
+    main_data = malloc(data_size);
+    rtems_test_assert(main_data != NULL);
+  }
+
+  test(false, load);
+  test(true, load);
+
+  for (load = 1; load < rtems_smp_get_processor_count(); ++load) {
+    rtems_status_code sc;
+    rtems_id id;
+    volatile int *load_data = NULL;
+
+    if (data_size > 0) {
+      load_data = malloc(data_size);
+      if (load_data == NULL) {
+        load_data = main_data;
+      }
+    }
+
+    sc = rtems_task_create(
+      rtems_build_name('L', 'O', 'A', 'D'),
+      1,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_MODES,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &id
+    );
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_task_start(id, load_task, (rtems_task_argument) load_data);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    test(true, load);
+  }
+
+  printf(
+    "</Test>\n"
+    "<!-- *** END OF TEST TMCONTEXT 1 *** -->\n"
+  );
+
+  rtems_test_exit(0);
+}
+
+/*
+ * Do not use a clock driver, since this will disturb the test in the "normal"
+ * environment.
+ */
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS (1 + CPU_COUNT)
+
+#define CONFIGURE_INIT_TASK_STACK_SIZE (32 * 1024)
+
+#define CONFIGURE_SMP_APPLICATION
+
+#define CONFIGURE_SMP_MAXIMUM_PROCESSORS CPU_COUNT
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>
