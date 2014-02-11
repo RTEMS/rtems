@@ -28,7 +28,7 @@ int ambapp_find_by_idx(struct ambapp_dev *dev, int index, void *pcount)
   int *pi = pcount;
 
   if (pi) {
-    if (*pi-- == 0)
+    if ((*pi)-- == 0)
       return (int)dev;
     else
       return 0;
