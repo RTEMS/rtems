@@ -20,7 +20,7 @@
 
 #include <rtems/score/threadimpl.h>
 
-void _Thread_Start_multitasking( Context_Control *context )
+void _Thread_Start_multitasking( void )
 {
   Per_CPU_Control *self_cpu = _Per_CPU_Get();
   Thread_Control  *heir = self_cpu->heir;
@@ -28,7 +28,13 @@ void _Thread_Start_multitasking( Context_Control *context )
 #if defined(RTEMS_SMP)
   _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_UP );
 
+  /*
+   * Threads begin execution in the _Thread_Handler() function.   This
+   * function will set the thread dispatch disable level to zero and calls
+   * _Per_CPU_Release().
+   */
   _Per_CPU_Acquire( self_cpu );
+  self_cpu->thread_dispatch_disable_level = 1;
 
   self_cpu->executing->is_executing = false;
   heir->is_executing = true;
@@ -59,26 +65,9 @@ void _Thread_Start_multitasking( Context_Control *context )
      _Context_Restore_fp( &heir->fp_context );
 #endif
 
-#if defined(RTEMS_SMP)
-  if ( context != NULL ) {
-#endif
-
 #if defined(_CPU_Start_multitasking)
-    _CPU_Start_multitasking( context, &heir->Registers );
+    _CPU_Start_multitasking( &heir->Registers );
 #else
-    _Context_Switch( context, &heir->Registers );
-#endif
-
-#if defined(RTEMS_SMP)
-  } else {
-    /*
-     * Threads begin execution in the _Thread_Handler() function.   This
-     * function will set the thread dispatch disable level to zero and calls
-     * _Per_CPU_Release().
-     */
-    self_cpu->thread_dispatch_disable_level = 1;
-
-    _CPU_Context_restore( &heir->Registers );
-  }
+    _CPU_Context_Restart_self( &heir->Registers );
 #endif
 }

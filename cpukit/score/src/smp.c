@@ -40,7 +40,7 @@ void rtems_smp_secondary_cpu_initialize( void )
 
   _Per_CPU_Wait_for_state( self_cpu, PER_CPU_STATE_BEGIN_MULTITASKING );
 
-  _Thread_Start_multitasking( NULL );
+  _Thread_Start_multitasking();
 }
 
 void rtems_smp_process_interrupt( void )

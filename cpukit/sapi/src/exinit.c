@@ -33,7 +33,6 @@
 #include <rtems/config.h>
 #include <rtems/debug.h>
 #include <rtems/extensionimpl.h>
-#include <rtems/fatal.h>
 #include <rtems/init.h>
 #include <rtems/io.h>
 #include <rtems/score/sysstate.h>
@@ -215,25 +214,20 @@ void rtems_initialize_device_drivers(void)
 
 void rtems_initialize_start_multitasking(void)
 {
-  uint32_t status;
-
   _System_state_Set( SYSTEM_STATE_UP );
 
 #if defined(RTEMS_SMP)
   _SMP_Request_other_cores_to_perform_first_context_switch();
 #endif
 
-  _Thread_Start_multitasking( &_Thread_BSP_context );
+  _Thread_Start_multitasking();
 
   /*******************************************************************
    *******************************************************************
    *******************************************************************
    ******                 APPLICATION RUNS HERE                 ******
-   ******            RETURNS WHEN SYSTEM IS SHUT DOWN           ******
+   ******              THE FUNCTION NEVER RETURNS               ******
    *******************************************************************
    *******************************************************************
    *******************************************************************/
-
-  status = _Thread_Get_global_exit_status();
-  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
 }

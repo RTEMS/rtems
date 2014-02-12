@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_THREADIMPL_H
 
 #include <rtems/score/thread.h>
+#include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/statesimpl.h>
@@ -52,15 +53,6 @@ SCORE_EXTERN void *rtems_ada_self;
  *  manage this class of objects.
  */
 SCORE_EXTERN Objects_Information _Thread_Internal_information;
-
-/**
- *  The following context area contains the context of the "thread"
- *  which invoked the start multitasking routine.  This context is
- *  restored as the last action of the stop multitasking routine.  Thus
- *  control of the processor can be returned to the environment
- *  which initiated the system.
- */
-SCORE_EXTERN Context_Control _Thread_BSP_context;
 
 /**
  *  The following holds how many user extensions are in the system.  This
@@ -114,13 +106,8 @@ void _Thread_Create_idle(void);
  *  This routine initiates multitasking.  It is invoked only as
  *  part of initialization and its invocation is the last act of
  *  the non-multitasking part of the system initialization.
- *
- *
- *  - INTERRUPT LATENCY:
- *    + ready chain
- *    + select heir
  */
-void _Thread_Start_multitasking( Context_Control *context );
+void _Thread_Start_multitasking( void ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /**
  *  @brief Allocate the requested stack space for the thread.
@@ -446,36 +433,6 @@ void _Thread_blocking_operation_Cancel(
 );
 
 /**
- * This routine halts multitasking and returns control to
- * the "thread" (i.e. the BSP) which initially invoked the
- * routine which initialized the system.
- */
-
-RTEMS_INLINE_ROUTINE void _Thread_Stop_multitasking( void )
-{
-#if defined(_CPU_Stop_multitasking)
-  _CPU_Stop_multitasking( &_Thread_BSP_context );
-#else
-  /*
-   *  This may look a bit of an odd but _Context_Restart_self is just
-   *  a very careful restore of a specific context which ensures that
-   *  if we were running within the same context, it would work.
-   *
-   *  And we will not return to this thread, so there is no point of
-   *  saving the context.
-   */
-  _Context_Restart_self( &_Thread_BSP_context );
-#endif
-
-  /***************************************************************
-   ***************************************************************
-   *   SYSTEM SHUTS DOWN!!!  WE DO NOT RETURN TO THIS POINT!!!   *
-   ***************************************************************
-   ***************************************************************
-   */
-}
-
-/**
  * This function returns true if the_thread is the currently executing
  * thread, and false otherwise.
  */
@@ -628,24 +585,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Internal_free (
 )
 {
   _Objects_Free( &_Thread_Internal_information, &the_task->Object );
-}
-
-RTEMS_INLINE_ROUTINE void _Thread_Set_global_exit_status(
-  uint32_t exit_status
-)
-{
-  Thread_Control *idle = (Thread_Control *)
-    _Thread_Internal_information.local_table[ 1 ];
-
-  idle->Wait.return_code = exit_status;
-}
-
-RTEMS_INLINE_ROUTINE uint32_t _Thread_Get_global_exit_status( void )
-{
-  const Thread_Control *idle = (const Thread_Control *)
-    _Thread_Internal_information.local_table[ 1 ];
-
-  return idle->Wait.return_code;
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_Signal_notification( Thread_Control *thread )
