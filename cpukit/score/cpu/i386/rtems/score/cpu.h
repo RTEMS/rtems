@@ -694,6 +694,18 @@ static inline void _CPU_Context_validate( uintptr_t pattern )
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
+typedef uint32_t CPU_Counter_ticks;
+
+CPU_Counter_ticks _CPU_Counter_read( void );
+
+static inline CPU_Counter_ticks _CPU_Counter_difference(
+  CPU_Counter_ticks second,
+  CPU_Counter_ticks first
+)
+{
+  return second - first;
+}
+
 #endif /* ASM */
 
 #ifdef __cplusplus

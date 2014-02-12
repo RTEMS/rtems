@@ -38,6 +38,8 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     startup/bspreset.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c \
     startup/bspstart.c
+libbsp_a_SOURCES += ../../shared/cpucounterread.c
+libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 # clock
 libbsp_a_SOURCES += clock/clockdrv.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h

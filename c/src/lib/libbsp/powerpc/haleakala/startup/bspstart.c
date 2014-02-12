@@ -59,6 +59,8 @@
 #include <string.h>
 #include <fcntl.h>
 
+#include <rtems/counter.h>
+
 #include <bsp.h>
 #include <bsp/uart.h>
 #include <bsp/irq.h>
@@ -194,6 +196,7 @@ void bsp_start( void )
   /* Set globals visible to clock.c */
   /* timebase register ticks/microsecond = CPU Clk in MHz */
   bsp_clicks_per_usec = 400;
+  rtems_counter_initialize_converter(bsp_clicks_per_usec * 1000000);
 
   bsp_timer_internal_clock  = TRUE;
   bsp_timer_average_overhead = 2;

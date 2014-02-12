@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -19,6 +19,8 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  */
+
+#include <rtems/counter.h>
 
 #include <bsp.h>
 #include <bsp/lpc24xx.h>
@@ -59,6 +61,13 @@ void lpc24xx_timer_initialize(void)
 
   /* Start timer */
   T1TCR = TCR_EN;
+
+  rtems_counter_initialize_converter(LPC24XX_PCLK);
+}
+
+CPU_Counter_ticks _CPU_Counter_read(void)
+{
+  return lpc24xx_timer();
 }
 
 void lpc24xx_micro_seconds_delay(unsigned us)

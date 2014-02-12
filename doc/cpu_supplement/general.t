@@ -341,6 +341,27 @@ _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
 _TLS_Alignment = ALIGNOF (.tdata);
 @end example
 
+@section CPU counter
+
+The CPU support must implement the CPU counter interface.  A CPU counter is
+some free-running counter.  It ticks usually with a frequency close to the CPU
+or system bus clock.  On some architectures the actual implementation is board
+support package dependent.  The CPU counter is used for profiling of low-level
+functions.  It is also used to implement two busy wait functions
+@code{rtems_counter_delay_ticks()} and @code{rtems_counter_delay_nanoseconds()}
+which may be used in device drivers.  It may be also used as an entropy source
+for random number generators.
+
+The CPU counter interface uses a CPU port specific unsigned integer type
+@code{CPU_Counter_ticks} to represent CPU counter values.  The CPU port must
+provide the following two functions
+
+@itemize
+@item @code{_CPU_Counter_read()} to read the current CPU counter value, and
+@item @code{_CPU_Counter_difference()} to get the difference between two CPU
+counter values.
+@end itemize
+
 @c
 @c
 @c

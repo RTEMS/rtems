@@ -1426,6 +1426,40 @@ static inline uint32_t CPU_swap_u32(
 #define CPU_swap_u16( value ) \
   (((value&0xff) << 8) | ((value >> 8)&0xff))
 
+/**
+ * @brief Unsigned integer type for CPU counter values.
+ */
+typedef uint32_t CPU_Counter_ticks;
+
+/**
+ * @brief Returns the current CPU counter value.
+ *
+ * A CPU counter is some free-running counter.  It ticks usually with a
+ * frequency close to the CPU or system bus clock.  The board support package
+ * must ensure that this function works before the RTEMS initialization.
+ * Otherwise invalid profiling statistics will be gathered.
+ *
+ * @return The current CPU counter value.
+ */
+CPU_Counter_ticks _CPU_Counter_read( void );
+
+/**
+ * @brief Returns the difference between the second and first CPU counter
+ * value.
+ *
+ * This operation may be carried out as a modulo operation depending on the
+ * range of the CPU counter device.
+ *
+ * @param[in] second The second CPU counter value.
+ * @param[in] first The first CPU counter value.
+ *
+ * @return Returns second minus first modulo counter period.
+ */
+CPU_Counter_ticks _CPU_Counter_difference(
+  CPU_Counter_ticks second,
+  CPU_Counter_ticks first
+);
+
 #ifdef RTEMS_SMP
   /**
    * @brief Returns the index of the current processor.

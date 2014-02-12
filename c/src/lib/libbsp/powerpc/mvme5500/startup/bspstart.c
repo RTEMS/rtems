@@ -40,6 +40,7 @@
 #include <bsp/bspException.h>
 
 #include <rtems/bspIo.h>
+#include <rtems/counter.h>
 #include <rtems/sptables.h>
 
 /*
@@ -287,6 +288,9 @@ void bsp_start( void )
   /* P94 : 7455 TB/DECR is clocked by the system bus clock frequency */
 
   bsp_clicks_per_usec    = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
+  rtems_counter_initialize_converter(
+    BSP_bus_frequency / (BSP_time_base_divisor / 1000)
+  );
 
   /*
    * Initalize RTEMS IRQ system

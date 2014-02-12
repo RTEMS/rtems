@@ -19,6 +19,8 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#include <rtems/counter.h>
+
 #include <libchip/serial.h>
 
 #include <libcpu/powerpc-utility.h>
@@ -117,6 +119,7 @@ void bsp_start( void)
 #endif /* HAS_UBOOT */
   bsp_time_base_frequency = BSP_bus_frequency / 4;
   bsp_clicks_per_usec = bsp_time_base_frequency / 1000000;
+  rtems_counter_initialize_converter(bsp_time_base_frequency);
 
   /* Initialize some console parameters */
   for (i = 0; i < Console_Configuration_Count; ++i) {

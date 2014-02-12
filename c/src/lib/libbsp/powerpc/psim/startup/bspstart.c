@@ -20,6 +20,7 @@
 #include <bsp/bootcard.h>
 #include <bsp/linker-symbols.h>
 #include <rtems/bspIo.h>
+#include <rtems/counter.h>
 #include <rtems/powerpc/powerpc.h>
 
 #include <libcpu/cpuIdent.h>
@@ -92,6 +93,7 @@ void bsp_start( void )
   BSP_bus_frequency        = (unsigned int)PSIM_INSTRUCTIONS_PER_MICROSECOND;
   bsp_clicks_per_usec      = BSP_bus_frequency;
   BSP_time_base_divisor    = 1;
+  rtems_counter_initialize_converter(bsp_clicks_per_usec * 1000000);
 
   /*
    * Initialize default raw exception handlers.

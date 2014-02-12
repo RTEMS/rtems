@@ -555,6 +555,15 @@ static inline uint16_t CPU_swap_u16( uint16_t value )
 #endif
 }
 
+typedef uint32_t CPU_Counter_ticks;
+
+CPU_Counter_ticks _CPU_Counter_read( void );
+
+CPU_Counter_ticks _CPU_Counter_difference(
+  CPU_Counter_ticks second,
+  CPU_Counter_ticks first
+);
+
 #if CPU_PROVIDES_IDLE_THREAD_BODY == TRUE
   void *_CPU_Thread_Idle_body( uintptr_t ignored );
 #endif

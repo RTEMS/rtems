@@ -1,0 +1,16 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spcpucounter01
+
+directives:
+
+  - rtems_counter_read()
+  - rtems_counter_difference()
+  - rtems_counter_ticks_to_nanoseconds()
+  - rtems_counter_nanoseconds_to_ticks()
+
+concepts:
+
+  - Ensure that the CPU counter converter functions produce consistent values.
+  - Ensure that the busy wait functions are consistent with the clock tick
+    durations.

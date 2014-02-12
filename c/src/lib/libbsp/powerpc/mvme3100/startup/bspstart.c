@@ -23,6 +23,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <rtems/bspIo.h>
+#include <rtems/counter.h>
 #include <libcpu/spr.h>
 #include <libcpu/io.h>
 #include <libcpu/e500_mmu.h>
@@ -384,6 +385,9 @@ VpdBufRec          vpdData [] = {
 	_BSP_clear_hostbridge_errors(0 /* enableMCP */, 0/*quiet*/);
 
 	bsp_clicks_per_usec = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
+	rtems_counter_initialize_converter(
+		BSP_bus_frequency / (BSP_time_base_divisor / 1000)
+	);
 
 	/*
 	 * Initalize RTEMS IRQ system

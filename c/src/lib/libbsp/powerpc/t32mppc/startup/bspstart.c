@@ -13,6 +13,7 @@
  */
 
 #include <rtems/config.h>
+#include <rtems/counter.h>
 
 #include <bsp.h>
 #include <bsp/vectors.h>
@@ -62,6 +63,8 @@ void bsp_start(void)
 {
   get_ppc_cpu_type();
   get_ppc_cpu_revision();
+
+  rtems_counter_initialize_converter(bsp_time_base_frequency);
 
   /* Initialize exception handler */
   ppc_exc_initialize_with_vector_base(

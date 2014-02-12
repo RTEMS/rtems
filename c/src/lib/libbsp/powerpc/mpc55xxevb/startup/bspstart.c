@@ -29,6 +29,7 @@
 
 #include <rtems.h>
 #include <rtems/config.h>
+#include <rtems/counter.h>
 
 #include <libcpu/powerpc-utility.h>
 #include <bsp/vectors.h>
@@ -103,6 +104,7 @@ void bsp_start(void)
 
 	/* Time reference value */
 	bsp_clicks_per_usec = bsp_clock_speed / 1000000;
+	rtems_counter_initialize_converter(bsp_clock_speed);
 
 	/* Initialize exceptions */
 	ppc_exc_initialize_with_vector_base(

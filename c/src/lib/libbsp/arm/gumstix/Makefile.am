@@ -33,6 +33,8 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
   ../../shared/bootcard.c ../../shared/sbrk.c \
   ../../shared/gnatinstallhandler.c ../../shared/bsppretaskinghook.c \
   ../../shared/bspclean.c startup/bspstart.c startup/bspreset.c startup/memmap.c
+libbsp_a_SOURCES += ../../shared/cpucounterread.c
+libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 
 #console
 libbsp_a_SOURCES += console/uarts.c ../../shared/console.c \

@@ -40,6 +40,10 @@ $(PROJECT_INCLUDE)/rtems/config.h: include/rtems/config.h $(PROJECT_INCLUDE)/rte
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/config.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/config.h
 
+$(PROJECT_INCLUDE)/rtems/counter.h: include/rtems/counter.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/counter.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/counter.h
+
 $(PROJECT_INCLUDE)/rtems/extension.h: include/rtems/extension.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.h

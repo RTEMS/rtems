@@ -24,6 +24,7 @@
 #warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
 
 #include <rtems/bspIo.h>
+#include <rtems/counter.h>
 #include <rtems/powerpc/powerpc.h>
 
 #include <libcpu/cpuIdent.h>
@@ -108,6 +109,7 @@ void bsp_start(void)
   bsp_clock_speed     = BSP_CLOCK_HZ;	/* for SCI baud rate generator */
   bsp_timer_least_valid      = 0;
   bsp_timer_average_overhead = 0;
+  rtems_counter_initialize_converter(BSP_CRYSTAL_HZ / 4);
 
   /*
    * Initalize RTEMS IRQ system

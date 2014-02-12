@@ -44,6 +44,7 @@
 #include <rtems/powerpc/powerpc.h>
 
 #include <rtems/bspIo.h>
+#include <rtems/counter.h>
 #include <bsp/irq.h>
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
@@ -208,6 +209,7 @@ void bsp_start(void)
   bsp_timer_average_overhead = 3;
   bsp_timer_least_valid    = 3;
   bsp_clock_speed 	   = 40000000;
+  rtems_counter_initialize_converter(bsp_clock_speed);
 
 #ifdef REV_0_2
   /* set up some board specific registers */

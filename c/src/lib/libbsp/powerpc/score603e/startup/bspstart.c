@@ -19,6 +19,7 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
+#include <rtems/counter.h>
 #include <libcpu/cpuIdent.h>
 #include <bsp/irq.h>
 
@@ -210,6 +211,7 @@ void bsp_start( void )
     printk("bsp_start: set clicks poer usec\n");
   #endif
   bsp_clicks_per_usec = 66 / 4;
+  rtems_counter_initialize_converter(bsp_clicks_per_usec * 1000000);
 
   #if BSP_DATA_CACHE_ENABLED
     #if DEBUG

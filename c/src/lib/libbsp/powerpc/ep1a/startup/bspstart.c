@@ -27,6 +27,7 @@
 #include <libcpu/cpuIdent.h>
 #include <bsp/vectors.h>
 #include <rtems/powerpc/powerpc.h>
+#include <rtems/counter.h>
 
 extern unsigned long __bss_start[], __SBSS_START__[], __SBSS_END__[];
 extern unsigned long __SBSS2_START__[], __SBSS2_END__[];
@@ -300,6 +301,9 @@ void bsp_start( void )
   Read_ep1a_config_registers( myCpu );
 
   bsp_clicks_per_usec = BSP_processor_frequency/(BSP_time_base_divisor * 1000);
+  rtems_counter_initialize_converter(
+    BSP_processor_frequency / (BSP_time_base_divisor / 1000)
+  );
 
 ShowBATS();
 #if 0   /* XXX - Add back in cache enable when we get this up and running!! */

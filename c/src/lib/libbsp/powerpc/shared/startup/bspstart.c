@@ -19,6 +19,7 @@
 
 #include <bsp.h>
 #include <rtems/bspIo.h>
+#include <rtems/counter.h>
 #include <bsp/consoleIo.h>
 #include <libcpu/spr.h>
 #include <bsp/residual.h>
@@ -342,6 +343,9 @@ void bsp_start( void )
    *  initialize the device driver parameters
    */
   bsp_clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
+  rtems_counter_initialize_converter(
+    BSP_bus_frequency / (BSP_time_base_divisor / 1000)
+  );
 
   /*
    * Initalize RTEMS IRQ system

@@ -14,6 +14,7 @@ include_rtems_score_HEADERS += rtems/score/cpuatomic.h
 
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_SOURCES = context.S cpu.c
+libscorecpu_a_SOURCES += ../no_cpu/cpucounterread.c
 libscorecpu_a_SOURCES += sparc64-exception-frame-print.c
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 

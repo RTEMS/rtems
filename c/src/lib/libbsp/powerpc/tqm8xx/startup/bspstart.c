@@ -22,6 +22,7 @@
 #include <stdlib.h>
 
 #include <rtems.h>
+#include <rtems/counter.h>
 
 #include <libcpu/powerpc-utility.h>
 
@@ -179,6 +180,7 @@ void bsp_start( void)
   bsp_clicks_per_usec = bsp_time_base_frequency / 1000000;
   bsp_timer_least_valid = 3;
   bsp_timer_average_overhead = 3;
+  rtems_counter_initialize_converter(bsp_time_base_frequency);
 
   /* Initialize exception handler */
   ppc_exc_initialize(

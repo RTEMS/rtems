@@ -38,6 +38,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../sparc/shared/startup/bspgetworkarea.c ../../shared/sbrk.c startup/setvec.c \
     startup/spurious.c startup/bspidle.S startup/bspdelay.c \
     ../../shared/bspinit.c ../../sparc/shared/startup/early_malloc.c
+libbsp_a_SOURCES += startup/cpucounter.c
 
 # ISR Handler
 libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S

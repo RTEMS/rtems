@@ -12,6 +12,8 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#include <rtems/counter.h>
+
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/arm-a9mpcore-regs.h>
@@ -94,6 +96,15 @@ static void a9mpcore_clock_initialize(void)
     | A9MPCORE_GT_CTRL_IRQ_EN
     | A9MPCORE_GT_CTRL_COMP_EN
     | A9MPCORE_GT_CTRL_TMR_EN;
+
+  rtems_counter_initialize_converter((uint32_t) periphclk);
+}
+
+CPU_Counter_ticks _CPU_Counter_read(void)
+{
+  volatile a9mpcore_gt *gt = A9MPCORE_GT;
+
+  return gt->cntrlower;
 }
 
 static void a9mpcore_clock_cleanup(void)

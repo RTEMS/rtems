@@ -34,6 +34,8 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppretaskinghook.c  \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/cpucounterread.c
+libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 # console
 libbsp_a_SOURCES += ../gp32/console/uart.c ../../shared/console.c \
     ../../shared/console_select.c \

@@ -723,6 +723,18 @@ void _CPU_Exception_frame_print(
   const CPU_Exception_frame *frame
 );
 
+typedef uint32_t CPU_Counter_ticks;
+
+CPU_Counter_ticks _CPU_Counter_read( void );
+
+static inline CPU_Counter_ticks _CPU_Counter_difference(
+  CPU_Counter_ticks second,
+  CPU_Counter_ticks first
+)
+{
+  return second - first;
+}
+
 #if (M68K_HAS_FPSP_PACKAGE == 1)
 /*
  *  Hooks for the Floating Point Support Package (FPSP) provided by Motorola

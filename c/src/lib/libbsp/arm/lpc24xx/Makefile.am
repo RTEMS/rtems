@@ -101,6 +101,7 @@ libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/sbrk.c \
 	../../shared/src/stackalloc.c \
 	../../shared/src/uart-output-char.c
+libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 
 # Startup
 libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S

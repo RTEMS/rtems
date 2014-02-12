@@ -95,6 +95,7 @@
 /***********************************************************************/
 
 #include <rtems.h>
+#include <rtems/counter.h>
 
 #include <libcpu/powerpc-utility.h>
 
@@ -164,6 +165,7 @@ void bsp_start(void)
 
   bsp_time_base_frequency = XLB_CLOCK / 4;
   bsp_clicks_per_usec    = (XLB_CLOCK/4000000);
+  rtems_counter_initialize_converter(bsp_time_base_frequency);
 
   /* Initialize exception handler */
   ppc_exc_cache_wb_check = 0;

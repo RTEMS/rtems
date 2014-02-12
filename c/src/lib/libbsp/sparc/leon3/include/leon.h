@@ -317,6 +317,8 @@ int apbuart_inbyte_nonblocking(struct apbuart_regs *regs);
  */
 void leon3_secondary_cpu_initialize(uint32_t cpu);
 
+void leon3_cpu_counter_initialize(void);
+
 void bsp_debug_uart_init(void);
 
 #endif /* !ASM */

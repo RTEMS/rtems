@@ -22,6 +22,7 @@
 
 #include <rtems.h>
 #include <rtems/config.h>
+#include <rtems/counter.h>
 
 #include <libchip/serial.h>
 
@@ -89,6 +90,7 @@ void bsp_start(void)
     BSP_bus_frequency = bsp_uboot_board_info.bi_busfreq;
     bsp_clicks_per_usec = bsp_uboot_board_info.bi_busfreq / 8000000;
   #endif /* HAS_UBOOT */
+  rtems_counter_initialize_converter(BSP_bus_frequency / 8);
 
   /* Initialize some console parameters */
   for (i = 0; i < Console_Configuration_Count; ++i) {

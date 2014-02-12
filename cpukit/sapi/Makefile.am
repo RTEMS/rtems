@@ -6,6 +6,7 @@ include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = include/confdefs.h
 include_rtems_HEADERS += include/rtems/chain.h
 include_rtems_HEADERS += include/rtems/config.h
+include_rtems_HEADERS += include/rtems/counter.h
 include_rtems_HEADERS += include/rtems/extension.h
 include_rtems_HEADERS += include/rtems/extensionimpl.h
 include_rtems_HEADERS += include/rtems/fatal.h
@@ -32,6 +33,9 @@ libsapi_a_SOURCES = src/debug.c src/extension.c src/extensioncreate.c \
     src/chainprependnotify.c src/rbheap.c src/interrtext.c \
     src/fatal2.c src/fatalsrctext.c
 libsapi_a_SOURCES += src/chainsmp.c
+libsapi_a_SOURCES += src/cpucounterconverter.c
+libsapi_a_SOURCES += src/delayticks.c
+libsapi_a_SOURCES += src/delaynano.c
 libsapi_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include $(srcdir)/preinstall.am

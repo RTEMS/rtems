@@ -57,6 +57,7 @@
 #include <rtems.h>
 #include <rtems/config.h>
 #include <rtems/bspIo.h>
+#include <rtems/counter.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 
@@ -214,6 +215,9 @@ void bsp_start(void)
 
   /* Timebase register ticks/microsecond;  The application may override these */
   bsp_clicks_per_usec        = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
+  rtems_counter_initialize_converter(
+    BSP_bus_frequency / (BSP_time_base_divisor / 1000)
+  );
   bsp_timer_internal_clock   = true;
   bsp_timer_average_overhead = 2;
   bsp_timer_least_valid      = 3;

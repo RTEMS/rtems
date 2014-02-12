@@ -35,6 +35,8 @@ startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     startup/bspstart.c ../../shared/bspclean.c startup/bspreset.c \
     ../../shared/bspgetworkarea.c ../../shared/bsppredriverhook.c \
     ../../shared/bsppretaskinghook.c ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/cpucounterread.c
+libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

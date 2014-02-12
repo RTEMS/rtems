@@ -1233,6 +1233,18 @@ static inline uint16_t CPU_swap_u16( uint16_t value )
   return swapped;
 }
 
+typedef uint32_t CPU_Counter_ticks;
+
+CPU_Counter_ticks _CPU_Counter_read( void );
+
+static inline CPU_Counter_ticks _CPU_Counter_difference(
+  CPU_Counter_ticks second,
+  CPU_Counter_ticks first
+)
+{
+  return second - first;
+}
+
 #ifdef __cplusplus
 }
 #endif

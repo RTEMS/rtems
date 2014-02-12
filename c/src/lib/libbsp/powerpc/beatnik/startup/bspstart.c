@@ -31,6 +31,7 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
+#include <rtems/counter.h>
 #include <rtems/powerpc/powerpc.h>
 /*#include <bsp/consoleIo.h>*/
 #include <libcpu/spr.h>   /* registers.h is included here */
@@ -337,6 +338,9 @@ void bsp_start( void )
    */
 
   bsp_clicks_per_usec = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
+  rtems_counter_initialize_converter(
+    BSP_bus_frequency / (BSP_time_base_divisor / 1000)
+  );
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk(

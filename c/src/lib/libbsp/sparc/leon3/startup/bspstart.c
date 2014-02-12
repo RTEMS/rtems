@@ -79,6 +79,7 @@ void bsp_start( void )
    * interrupt support
    */
   amba_initialize();
+  leon3_cpu_counter_initialize();
 
   /* find debug UART for printk() */
   bsp_debug_uart_init();
