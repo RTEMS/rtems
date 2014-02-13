@@ -129,7 +129,7 @@ static uint32_t a9mpcore_clock_nanoseconds_since_last_tick(void)
     n = gt->cmpvallower - i;
   }
 
-  return (uint32_t) (((c - n - i) * k) >> 32);
+  return (uint32_t) (((c - n + i) * k) >> 32);
 }
 
 #define Clock_driver_support_at_tick() \
