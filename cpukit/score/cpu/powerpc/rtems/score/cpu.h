@@ -1040,7 +1040,7 @@ void _CPU_Context_validate( uintptr_t pattern );
     uint32_t pir;
 
     /* Use Book E Processor ID Register (PIR) */
-    __asm__ volatile (
+    __asm__ (
       "mfspr %[pir], 286"
       : [pir] "=&r" (pir)
     );

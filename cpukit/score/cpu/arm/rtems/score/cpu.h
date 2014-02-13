@@ -476,7 +476,7 @@ void _CPU_Context_validate( uintptr_t pattern );
     uint32_t mpidr;
 
     /* Use ARMv7 Multiprocessor Affinity Register (MPIDR) */
-    __asm__ volatile (
+    __asm__ (
       "mrc p15, 0, %[mpidr], c0, c0, 5\n"
       : [mpidr] "=&r" (mpidr)
     );
