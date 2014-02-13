@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -16,66 +16,48 @@
   #include "config.h"
 #endif
 
+#include <rtems/score/smplock.h>
+#include <rtems/score/atomic.h>
 #include <rtems.h>
 
 #include "tmacros.h"
 
-/* FIXME: Use C11 for atomic operations */
-
-static void atomic_store(int *addr, int value)
-{
-  *addr = value;
-
-  RTEMS_COMPILER_MEMORY_BARRIER();
-}
-
-static unsigned int atomic_load(const int *addr)
-{
-  RTEMS_COMPILER_MEMORY_BARRIER();
-
-  return *addr;
-}
-
 /* FIXME: Add barrier to Score */
 
 typedef struct {
-	int value;
-	int sense;
-  SMP_lock_Control lock;
+	Atomic_Uint value;
+	Atomic_Uint sense;
 } barrier_control;
 
 typedef struct {
-	int sense;
+	unsigned int sense;
 } barrier_state;
 
-#define BARRIER_CONTROL_INITIALIZER { 0, 0, SMP_LOCK_INITIALIZER }
+#define BARRIER_CONTROL_INITIALIZER \
+  { ATOMIC_INITIALIZER_UINT(0), ATOMIC_INITIALIZER_UINT(0) }
 
 #define BARRIER_STATE_INITIALIZER { 0 }
 
 static void barrier_wait(
   barrier_control *control,
   barrier_state *state,
-  int cpu_count
+  unsigned int cpu_count
 )
 {
-  int sense = ~state->sense;
-  int value;
+  unsigned int sense = ~state->sense;
+  unsigned int value;
 
   state->sense = sense;
 
-  _SMP_lock_Acquire(&control->lock);
-  value = control->value;
-  ++value;
-  control->value = value;
-  _SMP_lock_Release(&control->lock);
+  value = _Atomic_Fetch_add_uint(&control->value, 1, ATOMIC_ORDER_RELAXED);
 
-  if (value == cpu_count) {
-    atomic_store(&control->value, 0);
-    atomic_store(&control->sense, sense);
-  }
-
-  while (atomic_load(&control->sense) != sense) {
-    /* Wait */
+  if (value + 1 == cpu_count) {
+    _Atomic_Store_uint(&control->value, 0, ATOMIC_ORDER_RELAXED);
+    _Atomic_Store_uint(&control->sense, sense, ATOMIC_ORDER_RELEASE);
+  } else {
+    while (_Atomic_Load_uint(&control->sense, ATOMIC_ORDER_ACQUIRE) != sense) {
+      /* Wait */
+    }
   }
 }
 
@@ -92,7 +74,7 @@ typedef enum {
 } states;
 
 typedef struct {
-  int state;
+  Atomic_Uint state;
   barrier_control barrier;
   rtems_id timer_id;
   rtems_interval timeout;
@@ -102,7 +84,7 @@ typedef struct {
 } global_context;
 
 static global_context context = {
-  .state = INITIAL,
+  .state = ATOMIC_INITIALIZER_UINT(INITIAL),
   .barrier = BARRIER_CONTROL_INITIALIZER,
   .lock = SMP_LOCK_INITIALIZER
 };
@@ -119,35 +101,37 @@ static void stop_test_timer(rtems_id timer_id, void *arg)
 {
   global_context *ctx = arg;
 
-  atomic_store(&ctx->state, STOP_TEST);
+  _Atomic_Store_uint(&ctx->state, STOP_TEST, ATOMIC_ORDER_RELEASE);
 }
 
 static void wait_for_state(global_context *ctx, int desired_state)
 {
-  while (atomic_load(&ctx->state) != desired_state) {
+  while (
+    _Atomic_Load_uint(&ctx->state, ATOMIC_ORDER_ACQUIRE) != desired_state
+  ) {
     /* Wait */
   }
 }
 
 static bool assert_state(global_context *ctx, int desired_state)
 {
-  return atomic_load(&ctx->state) == desired_state;
+  return _Atomic_Load_uint(&ctx->state, ATOMIC_ORDER_RELAXED) == desired_state;
 }
 
 typedef void (*test_body)(
   int test,
   global_context *ctx,
   barrier_state *bs,
-  int cpu_count,
-  int cpu_self
+  unsigned int cpu_count,
+  unsigned int cpu_self
 );
 
 static void test_0_body(
   int test,
   global_context *ctx,
   barrier_state *bs,
-  int cpu_count,
-  int cpu_self
+  unsigned int cpu_count,
+  unsigned int cpu_self
 )
 {
   unsigned long counter = 0;
@@ -165,8 +149,8 @@ static void test_1_body(
   int test,
   global_context *ctx,
   barrier_state *bs,
-  int cpu_count,
-  int cpu_self
+  unsigned int cpu_count,
+  unsigned int cpu_self
 )
 {
   unsigned long counter = 0;
@@ -185,8 +169,8 @@ static void test_2_body(
   int test,
   global_context *ctx,
   barrier_state *bs,
-  int cpu_count,
-  int cpu_self
+  unsigned int cpu_count,
+  unsigned int cpu_self
 )
 {
   unsigned long counter = 0;
@@ -205,8 +189,8 @@ static void test_3_body(
   int test,
   global_context *ctx,
   barrier_state *bs,
-  int cpu_count,
-  int cpu_self
+  unsigned int cpu_count,
+  unsigned int cpu_self
 )
 {
   unsigned long counter = 0;
@@ -238,8 +222,8 @@ static void test_4_body(
   int test,
   global_context *ctx,
   barrier_state *bs,
-  int cpu_count,
-  int cpu_self
+  unsigned int cpu_count,
+  unsigned int cpu_self
 )
 {
   unsigned long counter = 0;
@@ -265,8 +249,8 @@ static const test_body test_bodies[TEST_COUNT] = {
 static void run_tests(
   global_context *ctx,
   barrier_state *bs,
-  int cpu_count,
-  int cpu_self,
+  unsigned int cpu_count,
+  unsigned int cpu_self,
   bool master
 )
 {
@@ -284,7 +268,7 @@ static void run_tests(
       );
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-      atomic_store(&ctx->state, START_TEST);
+      _Atomic_Store_uint(&ctx->state, START_TEST, ATOMIC_ORDER_RELEASE);
     }
 
     wait_for_state(ctx, START_TEST);
