@@ -88,7 +88,7 @@ static inline void _CPU_atomic_Init_ulong(
   unsigned long value
 )
 {
-  atomic_init(object, value);
+  atomic_init( object, value );
 }
 
 static inline void _CPU_atomic_Init_ptr(
@@ -96,7 +96,7 @@ static inline void _CPU_atomic_Init_ptr(
   void *pointer
 )
 {
-  atomic_init(object, pointer);
+  atomic_init( object, (uintptr_t) pointer );
 }
 
 /**
@@ -112,7 +112,7 @@ static inline unsigned long _CPU_atomic_Load_ulong(
   Atomic_Order order
 )
 {
-  return atomic_load_explicit( object, order );
+  return atomic_load_explicit( object, (memory_order) order );
 }
 
 static inline void *_CPU_atomic_Load_ptr(
@@ -120,7 +120,7 @@ static inline void *_CPU_atomic_Load_ptr(
   Atomic_Order order
 )
 {
-  return atomic_load_explicit( object, order );
+  return (void *) atomic_load_explicit( object, (memory_order) order );
 }
 
 /**
@@ -138,7 +138,7 @@ static inline void _CPU_atomic_Store_ulong(
   Atomic_Order order
 )
 {
-  atomic_store_explicit( object, value, order );
+  atomic_store_explicit( object, value, (memory_order) order );
 }
 
 static inline void _CPU_atomic_Store_ptr(
@@ -147,7 +147,7 @@ static inline void _CPU_atomic_Store_ptr(
   Atomic_Order order
 )
 {
-  atomic_store_explicit( object, pointer, order );
+  atomic_store_explicit( object, pointer, (memory_order) order );
 }
 
 /**
@@ -165,7 +165,7 @@ static inline unsigned long _CPU_atomic_Fetch_add_ulong(
   Atomic_Order order
 )
 {
-  return atomic_fetch_add_explicit( object, value, order );
+  return atomic_fetch_add_explicit( object, value, (memory_order) order );
 }
 
 static inline uintptr_t _CPU_atomic_Fetch_add_ptr(
@@ -174,7 +174,7 @@ static inline uintptr_t _CPU_atomic_Fetch_add_ptr(
   Atomic_Order order
 )
 {
-  return atomic_fetch_add_explicit( object, value, order );
+  return atomic_fetch_add_explicit( object, value, (memory_order) order );
 }
 
 /**
@@ -192,7 +192,7 @@ static inline unsigned long _CPU_atomic_Fetch_sub_ulong(
   Atomic_Order order
 )
 {
-  return atomic_fetch_sub_explicit( object, value, order );
+  return atomic_fetch_sub_explicit( object, value, (memory_order) order );
 }
 
 static inline uintptr_t _CPU_atomic_Fetch_sub_ptr(
@@ -201,7 +201,7 @@ static inline uintptr_t _CPU_atomic_Fetch_sub_ptr(
   Atomic_Order order
 )
 {
-  return atomic_fetch_sub_explicit( object, value, order );
+  return atomic_fetch_sub_explicit( object, value, (memory_order) order );
 }
 
 /**
@@ -219,7 +219,7 @@ static inline unsigned long _CPU_atomic_Fetch_or_ulong(
   Atomic_Order order
 )
 {
-  return atomic_fetch_or_explicit( object, value, order );
+  return atomic_fetch_or_explicit( object, value, (memory_order) order );
 }
 
 static inline uintptr_t _CPU_atomic_Fetch_or_ptr(
@@ -228,7 +228,7 @@ static inline uintptr_t _CPU_atomic_Fetch_or_ptr(
   Atomic_Order order
 )
 {
-  return atomic_fetch_or_explicit( object, value, order );
+  return atomic_fetch_or_explicit( object, value, (memory_order) order );
 }
 
 /**
@@ -246,7 +246,7 @@ static inline unsigned long _CPU_atomic_Fetch_and_ulong(
   Atomic_Order order
 )
 {
-  return atomic_fetch_and_explicit( object, value, order );
+  return atomic_fetch_and_explicit( object, value, (memory_order) order );
 }
 
 static inline uintptr_t _CPU_atomic_Fetch_and_ptr(
@@ -255,7 +255,7 @@ static inline uintptr_t _CPU_atomic_Fetch_and_ptr(
   Atomic_Order order
 )
 {
-  return atomic_fetch_and_explicit( object, value, order );
+  return atomic_fetch_and_explicit( object, value, (memory_order) order );
 }
 
 /**
@@ -273,7 +273,7 @@ static inline unsigned long _CPU_atomic_Exchange_ulong(
  Atomic_Order order
 )
 {
-  return atomic_exchange_explicit( object, value, order );
+  return atomic_exchange_explicit( object, value, (memory_order) order );
 }
 
 static inline void *_CPU_atomic_Exchange_ptr(
@@ -282,7 +282,11 @@ static inline void *_CPU_atomic_Exchange_ptr(
  Atomic_Order order
 )
 {
-  return atomic_exchange_explicit( object, pointer, pointer );
+  return (void *) atomic_exchange_explicit(
+    object,
+    (uintptr_t) pointer,
+    (memory_order) order
+  );
 }
 
 /**
@@ -328,7 +332,7 @@ static inline void _CPU_atomic_Flag_clear(
   Atomic_Order order
 )
 {
-  return atomic_flag_clear_explicit( object, order );
+  return atomic_flag_clear_explicit( object, (memory_order) order );
 }
 
 static inline bool _CPU_atomic_Flag_test_and_set(
@@ -336,7 +340,7 @@ static inline bool _CPU_atomic_Flag_test_and_set(
   Atomic_Order order
 )
 {
-  return atomic_flag_test_and_set_explicit( object, order );
+  return atomic_flag_test_and_set_explicit( object, (memory_order) order );
 }
 
 #ifdef __cplusplus
