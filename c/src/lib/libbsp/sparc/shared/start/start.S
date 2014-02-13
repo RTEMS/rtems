@@ -224,7 +224,7 @@ SYM(hard_reset):
 
 #if defined(START_LEON3_ENABLE_SMP)
 	rd	%asr17, %o0		! get CPU identifier
-	srl	%o0, 28, %o0		! CPU index is upper 4 bits so shift
+	srl	%o0, LEON3_ASR17_PROCESSOR_INDEX_SHIFT, %o0
 
 	cmp	%o0, 0
 	beq	cpu0

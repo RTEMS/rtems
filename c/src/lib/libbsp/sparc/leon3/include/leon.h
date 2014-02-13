@@ -123,7 +123,7 @@ extern volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;  /* LEON3 Interrupt Contr
 extern volatile struct gptimer_regs *LEON3_Timer_Regs; /* LEON3 GP Timer */
 
 /* LEON3 CPU Index of boot CPU */
-extern int LEON3_Cpu_Index;
+extern uint32_t LEON3_Cpu_Index;
 
 /* The external IRQ number, -1 if not external interrupts */
 extern int LEON3_IrqCtrl_EIrq;

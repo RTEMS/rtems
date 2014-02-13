@@ -17,9 +17,6 @@
 
 uint32_t _CPU_SMP_Get_current_processor( void )
 {
-  uint32_t id;
-  __asm__ __volatile__( "rd     %%asr17,%0\n\t" : "=r" (id) : );
-
-  return ((id >> 28) & 0xff);
+  return _LEON3_Get_current_processor();
 }
 

@@ -27,7 +27,7 @@
 int CPU_SPARC_HAS_SNOOPING;
 
 /* Index of CPU, in an AMP system CPU-index may be non-zero */
-int LEON3_Cpu_Index = 0;
+uint32_t LEON3_Cpu_Index = 0;
 
 extern void amba_initialize(void);
 
@@ -50,14 +50,6 @@ static inline int set_snooping(void)
   return (tmp >> 23) & 1;
 }
 
-/* ASM-function used to get the CPU-Index on calling LEON3 CPUs */
-static inline unsigned int get_asr17(void)
-{
-  unsigned int reg;
-  __asm__ (" mov %%asr17, %0 " : "=r"(reg) :);
-  return reg;
-}
-
 /*
  *  bsp_start
  *
@@ -72,7 +64,7 @@ void bsp_start( void )
    * and RTEMS on this CPU, and AMP system with mixed operating
    * systems
    */
-  LEON3_Cpu_Index = (get_asr17() >> 28) & 3;
+  LEON3_Cpu_Index = _LEON3_Get_current_processor();
 
   /* Scan AMBA Plug&Play and parse it into a RAM description (ambapp_plb),
    * find GPTIMER for bus frequency, find IRQ Controller and initialize

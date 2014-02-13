@@ -31,7 +31,7 @@
 #if BSP_LEON3_SMP
         /* LEON3 SMP support */
         rd       %asr17, \TMP
-        srl      \TMP, 28, \TMP /* CPU number is upper 4 bits so shift */
+        srl      \TMP, LEON3_ASR17_PROCESSOR_INDEX_SHIFT, \TMP
 #else
         mov      0, \TMP
 #endif

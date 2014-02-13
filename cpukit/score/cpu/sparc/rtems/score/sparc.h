@@ -147,6 +147,8 @@ extern "C" {
 /** This constant is the starting bit position of the IMPL in the PSR. */
 #define SPARC_PSR_IMPL_BIT_POSITION 28   /* bits 28 - 31 */
 
+#define LEON3_ASR17_PROCESSOR_INDEX_SHIFT 28
+
 #ifndef ASM
 
 /**
@@ -291,6 +293,18 @@ void sparc_enable_interrupts(uint32_t psr);
     (_level) = \
       (_psr_level & SPARC_PSR_PIL_MASK) >> SPARC_PSR_PIL_BIT_POSITION; \
   } while ( 0 )
+
+static inline uint32_t _LEON3_Get_current_processor( void )
+{
+  uint32_t asr17;
+
+  __asm__ (
+    "rd %%asr17, %0"
+    : "=&r" (asr17)
+  );
+
+  return asr17 >> LEON3_ASR17_PROCESSOR_INDEX_SHIFT;
+}
 
 #endif
 
