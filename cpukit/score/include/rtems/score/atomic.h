@@ -34,6 +34,7 @@ extern "C" {
 /**
  * @brief atomic data initializer for static initialization.
  */
+#define ATOMIC_INITIALIZER_UINT(value) CPU_ATOMIC_INITIALIZER_UINT(value)
 #define ATOMIC_INITIALIZER_ULONG(value) CPU_ATOMIC_INITIALIZER_ULONG(value)
 #define ATOMIC_INITIALIZER_PTR(value) CPU_ATOMIC_INITIALIZER_PTR(value)
 
@@ -48,6 +49,14 @@ extern "C" {
  * @param object an atomic type pointer of object.
  * @param pointer a pointer to be stored into object.
  */
+static inline void _Atomic_Init_uint(
+  volatile Atomic_Uint *object,
+  unsigned int value
+)
+{
+  _CPU_atomic_Init_uint(object, value);
+}
+
 static inline void _Atomic_Init_ulong(
   volatile Atomic_Ulong *object,
   unsigned long value
@@ -72,6 +81,14 @@ static inline void _Atomic_Init_ptr(
  * 
  * The order shall not be ATOMIC_ORDER_RELEASE.
  */
+static inline unsigned int _Atomic_Load_uint(
+  volatile Atomic_Uint *object,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Load_uint( object, order );
+}
+
 static inline unsigned long _Atomic_Load_ulong(
   volatile Atomic_Ulong *object,
   Atomic_Order order
@@ -97,6 +114,15 @@ static inline void *_Atomic_Load_ptr(
  * 
  * The order shall not be ATOMIC_ORDER_ACQUIRE.
  */
+static inline void _Atomic_Store_uint(
+  volatile Atomic_Uint *object,
+  unsigned int value,
+  Atomic_Order order
+)
+{
+  _CPU_atomic_Store_uint( object, value, order );
+}
+
 static inline void _Atomic_Store_ulong(
   volatile Atomic_Ulong *object,
   unsigned long value,
@@ -124,6 +150,15 @@ static inline void _Atomic_Store_ptr(
  * 
  * @retval a result value before add ops.
  */
+static inline unsigned int _Atomic_Fetch_add_uint(
+  volatile Atomic_Uint *object,
+  unsigned int value,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Fetch_add_uint( object, value, order );
+}
+
 static inline unsigned long _Atomic_Fetch_add_ulong(
   volatile Atomic_Ulong *object,
   unsigned long value,
@@ -151,6 +186,15 @@ static inline uintptr_t _Atomic_Fetch_add_ptr(
  * 
  * @retval a result value before sub ops.
  */
+static inline unsigned int _Atomic_Fetch_sub_uint(
+  volatile Atomic_Uint *object,
+  unsigned int value,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Fetch_sub_uint( object, value, order );
+}
+
 static inline unsigned long _Atomic_Fetch_sub_ulong(
   volatile Atomic_Ulong *object,
   unsigned long value,
@@ -178,6 +222,15 @@ static inline uintptr_t _Atomic_Fetch_sub_ptr(
  * 
  * @retval a result value before or ops.
  */
+static inline unsigned int _Atomic_Fetch_or_uint(
+  volatile Atomic_Uint *object,
+  unsigned int value,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Fetch_or_uint( object, value, order );
+}
+
 static inline unsigned long _Atomic_Fetch_or_ulong(
   volatile Atomic_Ulong *object,
   unsigned long value,
@@ -205,6 +258,15 @@ static inline uintptr_t _Atomic_Fetch_or_ptr(
  * 
  * @retval a result value before and ops.
  */
+static inline unsigned int _Atomic_Fetch_and_uint(
+  volatile Atomic_Uint *object,
+  unsigned int value,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Fetch_and_uint( object, value, order );
+}
+
 static inline unsigned long _Atomic_Fetch_and_ulong(
   volatile Atomic_Ulong *object,
   unsigned long value,
@@ -232,6 +294,15 @@ static inline uintptr_t _Atomic_Fetch_and_ptr(
  * 
  * @retval a result value before exchange ops.
  */
+static inline unsigned int _Atomic_Exchange_uint(
+ volatile Atomic_Uint *object,
+ unsigned int value,
+ Atomic_Order order
+)
+{
+  return _CPU_atomic_Exchange_uint( object, value, order );
+}
+
 static inline unsigned long _Atomic_Exchange_ulong(
  volatile Atomic_Ulong *object,
  unsigned long value,
@@ -264,6 +335,18 @@ static inline void *_Atomic_Exchange_ptr(
  * @retval true if the compare exchange successully.
  * @retval false if the compare exchange failed.
  */
+static inline bool _Atomic_Compare_exchange_uint(
+  volatile Atomic_Uint *object,
+  unsigned int *old_value,
+  unsigned int new_value,
+  Atomic_Order order_succ,
+  Atomic_Order order_fail
+)
+{
+  return _CPU_atomic_Compare_exchange_uint( object, old_value, new_value,
+    order_succ, order_fail );
+}
+
 static inline bool _Atomic_Compare_exchange_ulong(
   volatile Atomic_Ulong *object,
   unsigned long *old_value,
