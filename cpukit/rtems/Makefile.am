@@ -53,7 +53,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/tasksimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/timer.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/timerimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/types.h
-if ATOMIC
+if HAS_SMP
 include_rtems_rtems_HEADERS += include/rtems/rtems/atomic.h
 endif
 include_rtems_rtems_HEADERS += mainpage.h
