@@ -19,8 +19,6 @@
 #include <rtems/bspsmp.h>
 #include <stdlib.h>
 
-#define RTEMS_DEBUG
-
 static inline void sparc_leon3_set_cctrl( unsigned int val )
 {
   __asm__ volatile( "sta %0, [%%g0] 2" : : "r" (val) );
@@ -51,32 +49,35 @@ void leon3_secondary_cpu_initialize(uint32_t cpu)
 
 uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
 {
+  uint32_t max_cpu_count;
+  uint32_t used_cpu_count;
   uint32_t cpu;
-  uint32_t found_cpus = 0;
 
   sparc_leon3_set_cctrl( 0x80000F );
-  found_cpus =
+
+  max_cpu_count =
     ((LEON3_IrqCtrl_Regs->mpstat >> LEON3_IRQMPSTATUS_CPUNR) & 0xf)  + 1;
+  used_cpu_count = configured_cpu_count < max_cpu_count ?
+    configured_cpu_count : max_cpu_count;
 
   #if defined(RTEMS_DEBUG)
-    printk( "Found %d CPUs\n", found_cpus );
+    printk( "Found %d CPUs\n", max_cpu_count );
 
-    if ( found_cpus > configured_cpu_count ) {
+    if ( max_cpu_count > configured_cpu_count ) {
       printk(
         "%d CPUs IS MORE THAN CONFIGURED -- ONLY USING %d\n",
-        found_cpus,
+        max_cpu_count,
         configured_cpu_count
       );
-      found_cpus = configured_cpu_count;
     }
   #endif
 
-  if ( found_cpus > 1 ) {
+  if ( used_cpu_count > 1 ) {
     LEON_Unmask_interrupt(LEON3_MP_IRQ);
     set_vector(bsp_ap_ipi_isr, LEON_TRAP_TYPE(LEON3_MP_IRQ), 1);
   }
 
-  for ( cpu = 1 ; cpu < found_cpus ; ++cpu ) {
+  for ( cpu = 1 ; cpu < used_cpu_count ; ++cpu ) {
     #if defined(RTEMS_DEBUG)
       printk( "Waking CPU %d\n", cpu );
     #endif
@@ -84,7 +85,7 @@ uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
     LEON3_IrqCtrl_Regs->mpstat = 1 << cpu;
   }
 
-  return found_cpus;
+  return used_cpu_count;
 }
 
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
