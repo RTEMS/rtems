@@ -17,49 +17,11 @@
 #endif
 
 #include <rtems/score/smplock.h>
+#include <rtems/score/smpbarrier.h>
 #include <rtems/score/atomic.h>
 #include <rtems.h>
 
 #include "tmacros.h"
-
-/* FIXME: Add barrier to Score */
-
-typedef struct {
-	Atomic_Uint value;
-	Atomic_Uint sense;
-} barrier_control;
-
-typedef struct {
-	unsigned int sense;
-} barrier_state;
-
-#define BARRIER_CONTROL_INITIALIZER \
-  { ATOMIC_INITIALIZER_UINT(0), ATOMIC_INITIALIZER_UINT(0) }
-
-#define BARRIER_STATE_INITIALIZER { 0 }
-
-static void barrier_wait(
-  barrier_control *control,
-  barrier_state *state,
-  unsigned int cpu_count
-)
-{
-  unsigned int sense = ~state->sense;
-  unsigned int value;
-
-  state->sense = sense;
-
-  value = _Atomic_Fetch_add_uint(&control->value, 1, ATOMIC_ORDER_RELAXED);
-
-  if (value + 1 == cpu_count) {
-    _Atomic_Store_uint(&control->value, 0, ATOMIC_ORDER_RELAXED);
-    _Atomic_Store_uint(&control->sense, sense, ATOMIC_ORDER_RELEASE);
-  } else {
-    while (_Atomic_Load_uint(&control->sense, ATOMIC_ORDER_ACQUIRE) != sense) {
-      /* Wait */
-    }
-  }
-}
 
 #define TASK_PRIORITY 1
 
@@ -75,7 +37,7 @@ typedef enum {
 
 typedef struct {
   Atomic_Uint state;
-  barrier_control barrier;
+  SMP_barrier_Control barrier;
   rtems_id timer_id;
   rtems_interval timeout;
   unsigned long counter[TEST_COUNT];
@@ -85,7 +47,7 @@ typedef struct {
 
 static global_context context = {
   .state = ATOMIC_INITIALIZER_UINT(INITIAL),
-  .barrier = BARRIER_CONTROL_INITIALIZER,
+  .barrier = SMP_BARRIER_CONTROL_INITIALIZER,
   .lock = SMP_LOCK_INITIALIZER
 };
 
@@ -121,7 +83,7 @@ static bool assert_state(global_context *ctx, int desired_state)
 typedef void (*test_body)(
   int test,
   global_context *ctx,
-  barrier_state *bs,
+  SMP_barrier_State *bs,
   unsigned int cpu_count,
   unsigned int cpu_self
 );
@@ -129,7 +91,7 @@ typedef void (*test_body)(
 static void test_0_body(
   int test,
   global_context *ctx,
-  barrier_state *bs,
+  SMP_barrier_State *bs,
   unsigned int cpu_count,
   unsigned int cpu_self
 )
@@ -148,7 +110,7 @@ static void test_0_body(
 static void test_1_body(
   int test,
   global_context *ctx,
-  barrier_state *bs,
+  SMP_barrier_State *bs,
   unsigned int cpu_count,
   unsigned int cpu_self
 )
@@ -168,7 +130,7 @@ static void test_1_body(
 static void test_2_body(
   int test,
   global_context *ctx,
-  barrier_state *bs,
+  SMP_barrier_State *bs,
   unsigned int cpu_count,
   unsigned int cpu_self
 )
@@ -188,7 +150,7 @@ static void test_2_body(
 static void test_3_body(
   int test,
   global_context *ctx,
-  barrier_state *bs,
+  SMP_barrier_State *bs,
   unsigned int cpu_count,
   unsigned int cpu_self
 )
@@ -221,7 +183,7 @@ static void busy_section(void)
 static void test_4_body(
   int test,
   global_context *ctx,
-  barrier_state *bs,
+  SMP_barrier_State *bs,
   unsigned int cpu_count,
   unsigned int cpu_self
 )
@@ -248,7 +210,7 @@ static const test_body test_bodies[TEST_COUNT] = {
 
 static void run_tests(
   global_context *ctx,
-  barrier_state *bs,
+  SMP_barrier_State *bs,
   unsigned int cpu_count,
   unsigned int cpu_self,
   bool master
@@ -257,7 +219,7 @@ static void run_tests(
   int test;
 
   for (test = 0; test < TEST_COUNT; ++test) {
-    barrier_wait(&ctx->barrier, bs, cpu_count);
+    _SMP_barrier_Wait(&ctx->barrier, bs, cpu_count);
 
     if (master) {
       rtems_status_code sc = rtems_timer_fire_after(
@@ -276,7 +238,7 @@ static void run_tests(
     (*test_bodies[test])(test, ctx, bs, cpu_count, cpu_self);
   }
 
-  barrier_wait(&ctx->barrier, bs, cpu_count);
+  _SMP_barrier_Wait(&ctx->barrier, bs, cpu_count);
 }
 
 static void task(rtems_task_argument arg)
@@ -285,7 +247,7 @@ static void task(rtems_task_argument arg)
   uint32_t cpu_count = rtems_smp_get_processor_count();
   uint32_t cpu_self = rtems_smp_get_current_processor();
   rtems_status_code sc;
-  barrier_state bs = BARRIER_STATE_INITIALIZER;
+  SMP_barrier_State bs = SMP_BARRIER_STATE_INITIALIZER;
 
   run_tests(ctx, &bs, cpu_count, cpu_self, false);
 
@@ -301,7 +263,7 @@ static void test(void)
   uint32_t cpu;
   int test;
   rtems_status_code sc;
-  barrier_state bs = BARRIER_STATE_INITIALIZER;
+  SMP_barrier_State bs = SMP_BARRIER_STATE_INITIALIZER;
 
   for (cpu = 0; cpu < cpu_count; ++cpu) {
     if (cpu != cpu_self) {

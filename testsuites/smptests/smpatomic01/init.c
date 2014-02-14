@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -19,55 +19,11 @@
 #endif
 
 #include <rtems/score/atomic.h>
+#include <rtems/score/smpbarrier.h>
 #include <rtems.h>
 #include <string.h>
 
 #include "tmacros.h"
-
-/* FIXME: Add barrier to Score */
-
-typedef struct {
-	Atomic_Ulong value;
-	Atomic_Ulong sense;
-} SMP_barrier_Control;
-
-typedef struct {
-	unsigned long sense;
-} SMP_barrier_State;
-
-#define SMP_BARRIER_CONTROL_INITIALIZER \
-  { ATOMIC_INITIALIZER_ULONG( 0 ), ATOMIC_INITIALIZER_ULONG( 0 ) }
-
-#define SMP_BARRIER_STATE_INITIALIZER { 0 }
-
-static void _SMP_barrier_Wait(
-  SMP_barrier_Control *control,
-  SMP_barrier_State *state,
-  unsigned long count
-)
-{
-  unsigned long sense = ~state->sense;
-  unsigned long previous_value;
-
-  state->sense = sense;
-
-  previous_value = _Atomic_Fetch_add_ulong(
-    &control->value,
-    1,
-    ATOMIC_ORDER_RELAXED
-  );
-
-  if ( previous_value + 1 == count ) {
-    _Atomic_Store_ulong( &control->value, 0, ATOMIC_ORDER_RELAXED );
-    _Atomic_Store_ulong( &control->sense, sense, ATOMIC_ORDER_RELEASE );
-  } else {
-    while (
-      _Atomic_Load_ulong( &control->sense, ATOMIC_ORDER_ACQUIRE ) != sense
-    ) {
-      /* Wait */
-    }
-  }
-}
 
 #define MASTER_PRIORITY 1
 

@@ -59,6 +59,7 @@ include_rtems_score_HEADERS += include/rtems/score/schedulersimpleimpl.h
 include_rtems_score_HEADERS += include/rtems/score/schedulersmp.h
 include_rtems_score_HEADERS += include/rtems/score/schedulersmpimpl.h
 include_rtems_score_HEADERS += include/rtems/score/smp.h
+include_rtems_score_HEADERS += include/rtems/score/smpbarrier.h
 include_rtems_score_HEADERS += include/rtems/score/smplock.h
 include_rtems_score_HEADERS += include/rtems/score/stack.h
 include_rtems_score_HEADERS += include/rtems/score/stackimpl.h
@@ -276,6 +277,7 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadblockingoperationcancel.c
 
 if HAS_SMP
+libscore_a_SOURCES += src/smpbarrierwait.c
 libscore_a_SOURCES += src/threaddispatchdisablelevel.c
 endif
 
