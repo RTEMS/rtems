@@ -29,8 +29,6 @@ int CPU_SPARC_HAS_SNOOPING;
 /* Index of CPU, in an AMP system CPU-index may be non-zero */
 uint32_t LEON3_Cpu_Index = 0;
 
-extern void amba_initialize(void);
-
 /*
  * set_snooping
  *
