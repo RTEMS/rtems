@@ -128,6 +128,8 @@ LINKER_SYMBOL(bsp_translation_table_end)
 
 #define BSP_FAST_DATA_SECTION __attribute__((section(".bsp_fast_data")))
 
+LINKER_SYMBOL(bsp_processor_count)
+
 /** @} */
 
 #ifdef __cplusplus
