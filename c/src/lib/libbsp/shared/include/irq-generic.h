@@ -171,8 +171,8 @@ void bsp_interrupt_handler_default(rtems_vector_number vector);
  * specific bsp_interrupt_facility_initialize() function will be called after
  * all internals are initialized.  If the BSP specific initialization fails,
  * then this is a fatal error.  The fatal error source is
- * RTEMS_FATAL_SOURCE_BSP_GENERIC and the fatal error code is
- * BSP_GENERIC_FATAL_INTERRUPT_INITIALIZATION.
+ * RTEMS_FATAL_SOURCE_BSP and the fatal error code is
+ * BSP_FATAL_INTERRUPT_INITIALIZATION.
  */
 void bsp_interrupt_initialize(void);
 

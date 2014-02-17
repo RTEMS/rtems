@@ -99,6 +99,7 @@
 
 #include <bsp.h>
 #include <rtems/bspIo.h>
+#include <bsp/fatal.h>
 #include <bsp/irq.h>
 
 #include <rtems.h>
@@ -338,7 +339,7 @@ rtems_device_driver slt_initialize
       {
 
       printk("Unable to connect PSC Irq handler\n");
-      mpc5200_fatal(MPC5200_FATAL_SLICETIMER_0_IRQ_INSTALL);
+      bsp_fatal(MPC5200_FATAL_SLICETIMER_0_IRQ_INSTALL);
 
       }
 
@@ -353,7 +354,7 @@ rtems_device_driver slt_initialize
       {
 
       printk("Unable to connect PSC Irq handler\n");
-      mpc5200_fatal(MPC5200_FATAL_SLICETIMER_1_IRQ_INSTALL);
+      bsp_fatal(MPC5200_FATAL_SLICETIMER_1_IRQ_INSTALL);
 
       }
 

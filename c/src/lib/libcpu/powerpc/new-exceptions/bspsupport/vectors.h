@@ -370,8 +370,8 @@ void ppc_exc_initialize_with_vector_base(
  * @brief Initializes the exception handling.
  *
  * If the initialization fails, then this is a fatal error.  The fatal error
- * source is RTEMS_FATAL_SOURCE_BSP_GENERIC and the fatal error code is
- * BSP_GENERIC_FATAL_EXCEPTION_INITIALIZATION.
+ * source is RTEMS_FATAL_SOURCE_BSP and the fatal error code is
+ * PPC_FATAL_EXCEPTION_INITIALIZATION.
  *
  * Possible error reasons are
  * - no category set available for the current CPU,

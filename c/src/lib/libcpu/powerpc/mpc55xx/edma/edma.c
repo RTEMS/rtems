@@ -26,6 +26,7 @@
 #include <assert.h>
 
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <bsp/irq.h>
 
 #define EDMA_CHANNELS_PER_GROUP 32U
@@ -199,7 +200,7 @@ void mpc55xx_edma_init(void)
       NULL
     );
     if (sc != RTEMS_SUCCESSFUL) {
-      mpc55xx_fatal(MPC55XX_FATAL_EDMA_IRQ_INSTALL);
+      bsp_fatal(MPC55XX_FATAL_EDMA_IRQ_INSTALL);
     }
   }
 }
@@ -283,7 +284,7 @@ void mpc55xx_edma_release_channel(edma_channel_context *ctx)
     ctx
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    mpc55xx_fatal(MPC55XX_FATAL_EDMA_IRQ_REMOVE);
+    bsp_fatal(MPC55XX_FATAL_EDMA_IRQ_REMOVE);
   }
 }
 

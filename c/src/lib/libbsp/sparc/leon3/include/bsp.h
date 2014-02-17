@@ -209,10 +209,6 @@ extern void BSP_shared_interrupt_unmask(int irq);
  */
 extern void BSP_shared_interrupt_mask(int irq);
 
-typedef enum {
-  LEON3_FATAL_CPU_COUNTER_INIT
-} leon3_fatal_code;
-
 #ifdef __cplusplus
 }
 #endif

@@ -15,6 +15,7 @@
 #include <rtems/counter.h>
 
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <bsp/irq.h>
 #include <bsp/arm-a9mpcore-regs.h>
 #include <bsp/arm-a9mpcore-clock.h>
@@ -51,10 +52,7 @@ static void a9mpcore_clock_handler_install(void)
     NULL
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal(
-      RTEMS_FATAL_SOURCE_BSP_SPECIFIC,
-      BSP_ARM_A9MPCORE_FATAL_CLOCK_IRQ_INSTALL
-    );
+    bsp_fatal(BSP_ARM_A9MPCORE_FATAL_CLOCK_IRQ_INSTALL);
   }
 }
 
@@ -121,10 +119,7 @@ static void a9mpcore_clock_cleanup(void)
     NULL
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal(
-      RTEMS_FATAL_SOURCE_BSP_SPECIFIC,
-      BSP_ARM_A9MPCORE_FATAL_CLOCK_IRQ_REMOVE
-    );
+    bsp_fatal(BSP_ARM_A9MPCORE_FATAL_CLOCK_IRQ_REMOVE);
   }
 }
 

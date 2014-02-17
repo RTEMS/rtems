@@ -21,6 +21,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <bsp/irq.h>
 
 #include <mpc55xx/regs.h>
@@ -53,7 +54,7 @@ static void mpc55xx_clock_handler_install(rtems_isr_entry isr)
     NULL
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    mpc55xx_fatal(MPC55XX_FATAL_CLOCK_EMIOS_IRQ_INSTALL);
+    bsp_fatal(MPC55XX_FATAL_CLOCK_EMIOS_IRQ_INSTALL);
   }
 }
 
@@ -73,12 +74,12 @@ static void mpc55xx_clock_initialize(void)
   if (prescaler > 0) {
     interval /= (uint64_t) prescaler;
   } else {
-    mpc55xx_fatal(MPC55XX_FATAL_CLOCK_EMIOS_PRESCALER);
+    bsp_fatal(MPC55XX_FATAL_CLOCK_EMIOS_PRESCALER);
   }
 
   /* Check interval */
   if (interval == 0 || interval > MPC55XX_EMIOS_VALUE_MAX) {
-    mpc55xx_fatal(MPC55XX_FATAL_CLOCK_EMIOS_INTERVAL);
+    bsp_fatal(MPC55XX_FATAL_CLOCK_EMIOS_INTERVAL);
   }
 
   /* Configure eMIOS channel */
@@ -159,7 +160,7 @@ static void mpc55xx_clock_handler_install(rtems_isr_entry isr)
     NULL
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    mpc55xx_fatal(MPC55XX_FATAL_CLOCK_PIT_IRQ_INSTALL);
+    bsp_fatal(MPC55XX_FATAL_CLOCK_PIT_IRQ_INSTALL);
   }
 }
 

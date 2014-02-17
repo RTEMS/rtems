@@ -25,6 +25,7 @@
 #include <string.h>
 
 #include "../include/bsp.h"
+#include <bsp/fatal.h>
 #include <bsp/irq.h>
 #include "../mscan/mscan_int.h"
 
@@ -770,20 +771,20 @@ rtems_device_driver mscan_initialize(rtems_device_major_number major,
 
   /* Initialization requested via RTEMS */
   if ((status = mscan_channel_initialize(major, MSCAN_A)) != RTEMS_SUCCESSFUL)
-    mpc5200_fatal(MPC5200_FATAL_MSCAN_A_INIT);
+    bsp_fatal(MPC5200_FATAL_MSCAN_A_INIT);
 
   if ((status = mscan_channel_initialize(major, MSCAN_B)) != RTEMS_SUCCESSFUL)
-    mpc5200_fatal(MPC5200_FATAL_MSCAN_B_INIT);
+    bsp_fatal(MPC5200_FATAL_MSCAN_B_INIT);
 
   if ((status =
        mpc5200_mscan_set_mode(MSCAN_A,
                               MSCAN_INIT_NORMAL_MODE)) != RTEMS_SUCCESSFUL)
-    mpc5200_fatal(MPC5200_FATAL_MSCAN_A_SET_MODE);
+    bsp_fatal(MPC5200_FATAL_MSCAN_A_SET_MODE);
 
   if ((status =
        mpc5200_mscan_set_mode(MSCAN_B,
                               MSCAN_INIT_NORMAL_MODE)) != RTEMS_SUCCESSFUL)
-    mpc5200_fatal(MPC5200_FATAL_MSCAN_B_SET_MODE);
+    bsp_fatal(MPC5200_FATAL_MSCAN_B_SET_MODE);
 
   return status;
 

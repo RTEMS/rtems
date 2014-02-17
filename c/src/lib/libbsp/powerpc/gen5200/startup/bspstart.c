@@ -124,11 +124,6 @@ void _BSP_Fatal_error(unsigned int v)
   __asm__ __volatile ("sc");
 }
 
-void mpc5200_fatal(mpc5200_fatal_code code)
-{
-  rtems_fatal(RTEMS_FATAL_SOURCE_BSP_SPECIFIC, code);
-}
-
 void bsp_start(void)
 {
   ppc_cpu_id_t myCpu;

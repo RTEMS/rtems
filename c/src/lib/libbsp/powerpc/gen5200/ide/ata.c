@@ -17,6 +17,7 @@
 #include <bsp/ata.h>
 
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <bsp/mpc5200.h>
 
 #include <libcpu/powerpc-utility.h>
@@ -125,7 +126,7 @@ static void create_lock(ata_driver *self)
     &self->lock
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    mpc5200_fatal(MPC5200_FATAL_ATA_LOCK_CREATE);
+    bsp_fatal(MPC5200_FATAL_ATA_LOCK_CREATE);
   }
 }
 
@@ -133,7 +134,7 @@ static void destroy_lock(const ata_driver *self)
 {
   rtems_status_code sc = rtems_semaphore_delete(self->lock);
   if (sc != RTEMS_SUCCESSFUL) {
-    mpc5200_fatal(MPC5200_FATAL_ATA_LOCK_DESTROY);
+    bsp_fatal(MPC5200_FATAL_ATA_LOCK_DESTROY);
   }
 }
 
@@ -162,7 +163,7 @@ void ata_driver_create(ata_driver *self, const char *device_file_path, rtems_blo
         );
 
         if (sc != RTEMS_SUCCESSFUL) {
-          mpc5200_fatal(MPC5200_FATAL_ATA_DISK_CREATE);
+          bsp_fatal(MPC5200_FATAL_ATA_DISK_CREATE);
         }
       }
     }

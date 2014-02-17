@@ -22,6 +22,7 @@
 
 #include <bsp.h>
 #include <bsp/arm-pl111-fb.h>
+#include <bsp/fatal.h>
 
 typedef struct {
   rtems_id semaphore;
@@ -154,10 +155,7 @@ static void pl111_fb_release(const pl111_fb_context *ctx)
 {
   rtems_status_code sc = rtems_semaphore_release(ctx->semaphore);
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal(
-      RTEMS_FATAL_SOURCE_BSP_SPECIFIC,
-      BSP_ARM_PL111_FATAL_SEM_RELEASE
-    );
+    bsp_fatal(BSP_ARM_PL111_FATAL_SEM_RELEASE);
   }
 }
 
@@ -172,10 +170,7 @@ rtems_device_driver frame_buffer_initialize(
 
   sc = rtems_io_register_name(FRAMEBUFFER_DEVICE_0_NAME, major, 0);
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal(
-      RTEMS_FATAL_SOURCE_BSP_SPECIFIC,
-      BSP_ARM_PL111_FATAL_REGISTER_DEV
-    );
+    bsp_fatal(BSP_ARM_PL111_FATAL_REGISTER_DEV);
   }
 
   sc = rtems_semaphore_create(
@@ -186,10 +181,7 @@ rtems_device_driver frame_buffer_initialize(
     &ctx->semaphore
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal(
-      RTEMS_FATAL_SOURCE_BSP_SPECIFIC,
-      BSP_ARM_PL111_FATAL_SEM_CREATE
-    );
+    bsp_fatal(BSP_ARM_PL111_FATAL_SEM_CREATE);
   }
 
   return sc;

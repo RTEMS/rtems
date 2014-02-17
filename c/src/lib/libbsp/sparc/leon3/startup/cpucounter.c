@@ -13,6 +13,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <leon.h>
 
 #include <rtems/counter.h>
@@ -37,7 +38,7 @@ void leon3_cpu_counter_initialize(void)
     &idx
   );
   if (adev == NULL) {
-    rtems_fatal(RTEMS_FATAL_SOURCE_BSP_SPECIFIC, LEON3_FATAL_CPU_COUNTER_INIT);
+    bsp_fatal(LEON3_FATAL_CPU_COUNTER_INIT);
   }
 
   gpt = (volatile struct gptimer_regs *) DEV_TO_APB(adev)->start;

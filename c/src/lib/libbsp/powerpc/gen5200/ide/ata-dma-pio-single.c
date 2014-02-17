@@ -19,6 +19,7 @@
 #include <libcpu/powerpc-utility.h>
 
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <bsp/irq.h>
 
 typedef enum {
@@ -182,7 +183,7 @@ void ata_driver_dma_pio_single_create(ata_driver_dma_pio_single *self, const cha
       self
     );
     if (sc != RTEMS_SUCCESSFUL) {
-      mpc5200_fatal(MPC5200_FATAL_ATA_DMA_SINGLE_IRQ_INSTALL);
+      bsp_fatal(MPC5200_FATAL_ATA_DMA_SINGLE_IRQ_INSTALL);
     }
   }
 }

@@ -15,6 +15,7 @@
 #include <bsp/arm-pl111-fb.h>
 
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <bsp/io.h>
 #include <bsp/lcd.h>
 #include <bsp/lpc24xx.h>
@@ -48,7 +49,7 @@ static void fb_set_up(const pl111_fb_config *cfg)
 
   sc = lpc24xx_module_enable(LPC24XX_MODULE_LCD, LPC24XX_MODULE_PCLK_DEFAULT);
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal(RTEMS_FATAL_SOURCE_BSP_SPECIFIC, LPC24XX_FATAL_PL111_SET_UP);
+    bsp_fatal(LPC24XX_FATAL_PL111_SET_UP);
   }
 
   #ifdef ARM_MULTILIB_ARCH_V4
@@ -68,10 +69,7 @@ static void fb_pins_set_up(const pl111_fb_config *cfg)
 
   sc = lpc24xx_pin_config(tft_16_bit_5_6_5_pins, LPC24XX_PIN_SET_FUNCTION);
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal(
-      RTEMS_FATAL_SOURCE_BSP_SPECIFIC,
-      LPC24XX_FATAL_PL111_PINS_SET_UP
-    );
+    bsp_fatal(LPC24XX_FATAL_PL111_PINS_SET_UP);
   }
 }
 
@@ -81,10 +79,7 @@ static void fb_pins_tear_down(const pl111_fb_config *cfg)
 
   sc = lpc24xx_pin_config(tft_16_bit_5_6_5_pins, LPC24XX_PIN_SET_INPUT);
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal(
-      RTEMS_FATAL_SOURCE_BSP_SPECIFIC,
-      LPC24XX_FATAL_PL111_PINS_TEAR_DOWN
-    );
+    bsp_fatal(LPC24XX_FATAL_PL111_PINS_TEAR_DOWN);
   }
 }
 
@@ -98,10 +93,7 @@ static void fb_tear_down(const pl111_fb_config *cfg)
 
   sc = lpc24xx_module_disable(LPC24XX_MODULE_LCD);
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal(
-      RTEMS_FATAL_SOURCE_BSP_SPECIFIC,
-      LPC24XX_FATAL_PL111_TEAR_DOWN
-    );
+    bsp_fatal(LPC24XX_FATAL_PL111_TEAR_DOWN);
   }
 }
 

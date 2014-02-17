@@ -55,13 +55,6 @@ extern "C" {
 
 #define BSP_ARM_GIC_DIST_BASE 0xf8f01000
 
-typedef enum {
-  BSP_ARM_A9MPCORE_FATAL_CLOCK_IRQ_INSTALL,
-  BSP_ARM_A9MPCORE_FATAL_CLOCK_IRQ_REMOVE
-} zynq_fatal_code;
-
-void zynq_fatal(zynq_fatal_code code) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
-
 /**
  * @brief Zynq specific set up of the MMU.
  *

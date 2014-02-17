@@ -22,6 +22,7 @@
 
 #include <bsp.h>
 #include <bsp/console-generic.h>
+#include <bsp/fatal.h>
 
 #include <rtems/console.h>
 
@@ -80,7 +81,7 @@ rtems_device_driver console_initialize(
   rtems_device_minor_number console = console_generic_minor;
 
   if (count <= 0) {
-    mpc55xx_fatal(MPC55XX_FATAL_CONSOLE_GENERIC_COUNT);
+    bsp_fatal(MPC55XX_FATAL_CONSOLE_GENERIC_COUNT);
   }
 
   rtems_termios_initialize();
@@ -90,13 +91,13 @@ rtems_device_driver console_initialize(
 
     sc = rtems_io_register_name(info->device_path, major, minor);
     if (sc != RTEMS_SUCCESSFUL) {
-      mpc55xx_fatal(MPC55XX_FATAL_CONSOLE_GENERIC_REGISTER);
+      bsp_fatal(MPC55XX_FATAL_CONSOLE_GENERIC_REGISTER);
     }
   }
 
   sc = rtems_io_register_name(CONSOLE_DEVICE_NAME, major, console);
   if (sc != RTEMS_SUCCESSFUL) {
-    mpc55xx_fatal(MPC55XX_FATAL_CONSOLE_GENERIC_REGISTER_CONSOLE);
+    bsp_fatal(MPC55XX_FATAL_CONSOLE_GENERIC_REGISTER_CONSOLE);
   }
 
   console_generic_char_out_do_init();

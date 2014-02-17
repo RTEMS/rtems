@@ -41,6 +41,7 @@
  */
 
 #include <rtems.h>
+#include <bsp/fatal.h>
 #include <libchip/rtc.h>
 #include <string.h>
 #include "../tod/pcf8563.h"
@@ -185,7 +186,7 @@ pcf8563_set_time(int minor, const rtems_time_of_day *time)
     addr = RTC_Table[minor].ulDataPort;
 
     if ((time->year >= 2100) || (time->year <  1900)) {
-      mpc5200_fatal(MPC5200_FATAL_PCF8563_INVALID_YEAR);
+      bsp_fatal(MPC5200_FATAL_PCF8563_INVALID_YEAR);
     }
     info[0] = PCF8563_SECOND_ADR;
     info[1 + PCF8563_YEAR_ADR  -PCF8563_SECOND_ADR] = To_BCD(time->year % 100);

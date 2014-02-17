@@ -16,7 +16,7 @@
  */
 
 #include <bsp.h>
-#include <bsp/generic-fatal.h>
+#include <bsp/fatal.h>
 #include <rtems/libio.h>
 #include <rtems/console.h>
 #include <stdlib.h>
@@ -49,7 +49,7 @@ static void console_initialize_pointers(void)
   Console_Port_Count = Console_Configuration_Count;
   Console_Port_Tbl   = malloc( Console_Port_Count * sizeof( console_tbl * ) );
   if (Console_Port_Tbl == NULL)
-    bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_NO_MEMORY_0 );
+    bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_0 );
 
   for (i=0 ; i < Console_Port_Count ; i++)
     Console_Port_Tbl[i] = &Console_Configuration_Ports[i];
@@ -76,7 +76,7 @@ void console_register_devices(
    *  register devices.
    */
   if ( console_initialized ) {
-    bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_MULTI_INIT );
+    bsp_fatal( BSP_FATAL_CONSOLE_MULTI_INIT );
   }
 
   /*
@@ -89,12 +89,12 @@ void console_register_devices(
     Console_Port_Count * sizeof( console_tbl * )
   );
   if ( Console_Port_Tbl == NULL ) {
-    bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_NO_MEMORY_1 );
+    bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_1 );
   }
 
   Console_Port_Data  = calloc( Console_Port_Count, sizeof( console_data ) );
   if ( Console_Port_Data == NULL ) {
-    bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_NO_MEMORY_2 );
+    bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_2 );
   }
 
   /*
@@ -255,7 +255,7 @@ rtems_device_driver console_initialize(
     console_initialize_pointers();
     Console_Port_Data  = calloc( Console_Port_Count, sizeof( console_data ) );
     if ( Console_Port_Data == NULL ) {
-      bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_NO_MEMORY_3 );
+      bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_3 );
     }
   }
 
@@ -290,14 +290,14 @@ rtems_device_driver console_initialize(
       if (port->sDeviceName != NULL) {
         status = rtems_io_register_name( port->sDeviceName, major, minor );
         if (status != RTEMS_SUCCESSFUL) {
-          bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_REGISTER_DEV_0 );
+          bsp_fatal( BSP_FATAL_CONSOLE_REGISTER_DEV_0 );
         }
       }
 
       if (minor == Console_Port_Minor) {
         status = rtems_io_register_name( CONSOLE_DEVICE_NAME, major, minor );
         if (status != RTEMS_SUCCESSFUL) {
-          bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_REGISTER_DEV_1 );
+          bsp_fatal( BSP_FATAL_CONSOLE_REGISTER_DEV_1 );
         }
       }
 

@@ -69,21 +69,14 @@ typedef enum {
   RTEMS_FATAL_SOURCE_EXIT,
 
   /**
-   * @brief Fatal source for generic BSP errors.
+   * @brief Fatal source for BSP errors.
    *
-   * The fatal codes are defined in <bsp/generic-fatal.h>.  Examples are
-   * interrupt and exception initialization.
+   * The fatal codes are defined in <bsp/fatal.h>.  Examples are interrupt and
+   * exception initialization.
    *
-   * @see bsp_generic_fatal_code and bsp_generic_fatal().
+   * @see bsp_fatal_code and bsp_fatal().
    */
-  RTEMS_FATAL_SOURCE_BSP_GENERIC,
-
-  /**
-   * @brief Fatal source for BSP specific errors.
-   *
-   * The fatal code is BSP specific.
-   */
-  RTEMS_FATAL_SOURCE_BSP_SPECIFIC,
+  RTEMS_FATAL_SOURCE_BSP,
 
   /**
    * @brief Fatal source of assert().

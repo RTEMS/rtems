@@ -16,11 +16,6 @@
 #include <bsp/bootcard.h>
 #include <bsp/irq-generic.h>
 
-void zynq_fatal(zynq_fatal_code code)
-{
-  rtems_fatal(RTEMS_FATAL_SOURCE_BSP_SPECIFIC, code);
-}
-
 void bsp_start(void)
 {
   bsp_interrupt_initialize();

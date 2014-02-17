@@ -21,6 +21,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <bsp/start.h>
 #include <bsp/bootcard.h>
 #include <bsp/mpc55xx-config.h>
@@ -38,7 +39,7 @@
       }
 
       if (!lock) {
-        mpc55xx_fatal(MPC55XX_FATAL_FMPLL_LOCK);
+        bsp_fatal(MPC55XX_FATAL_FMPLL_LOCK);
       }
     }
   #endif

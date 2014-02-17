@@ -51,16 +51,6 @@ extern "C" {
 
 #define BSP_ARM_GIC_DIST_BASE 0x1f001000
 
-typedef enum {
-  BSP_ARM_A9MPCORE_FATAL_CLOCK_IRQ_INSTALL,
-  BSP_ARM_A9MPCORE_FATAL_CLOCK_IRQ_REMOVE,
-  BSP_ARM_PL111_FATAL_REGISTER_DEV,
-  BSP_ARM_PL111_FATAL_SEM_CREATE,
-  BSP_ARM_PL111_FATAL_SEM_RELEASE
-} rvpbxa9_fatal_code;
-
-void rvpbxa9_fatal(rvpbxa9_fatal_code code) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

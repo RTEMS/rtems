@@ -25,7 +25,7 @@
 #include <rtems.h>
 
 #include <bsp/vectors.h>
-#include <bsp/generic-fatal.h>
+#include <bsp/fatal.h>
 
 #define PPC_EXC_ASSERT_OFFSET(field, off) \
   RTEMS_STATIC_ASSERT( \
@@ -145,7 +145,7 @@ static void ppc_exc_initialize_booke(void *vector_base)
 
 static void ppc_exc_fatal_error(void)
 {
-  bsp_generic_fatal(BSP_GENERIC_FATAL_EXCEPTION_INITIALIZATION);
+  bsp_fatal(PPC_FATAL_EXCEPTION_INITIALIZATION);
 }
 
 void ppc_exc_initialize_with_vector_base(

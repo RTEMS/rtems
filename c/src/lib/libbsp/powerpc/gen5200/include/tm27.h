@@ -17,6 +17,7 @@
 #ifndef __tm27_h
 #define __tm27_h
 
+#include <bsp/fatal.h>
 #include <bsp/irq.h>
 
 /*
@@ -37,7 +38,7 @@ void Install_tm27_vector(void (*_handler)())
   clockIrqData.hdl = _handler;
   if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
         printk("Error installing clock interrupt handler!\n");
-        mpc5200_fatal(MPC5200_FATAL_TM27_IRQ_INSTALL);
+        bsp_fatal(MPC5200_FATAL_TM27_IRQ_INSTALL);
   }
 }
 

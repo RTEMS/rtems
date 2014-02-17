@@ -117,16 +117,6 @@ bool lpc24xx_uart_probe_2(int minor);
 
 bool lpc24xx_uart_probe_3(int minor);
 
-typedef enum {
-  BSP_ARM_PL111_FATAL_REGISTER_DEV,
-  BSP_ARM_PL111_FATAL_SEM_CREATE,
-  BSP_ARM_PL111_FATAL_SEM_RELEASE,
-  LPC24XX_FATAL_PL111_SET_UP,
-  LPC24XX_FATAL_PL111_PINS_SET_UP,
-  LPC24XX_FATAL_PL111_PINS_TEAR_DOWN,
-  LPC24XX_FATAL_PL111_TEAR_DOWN
-} lpc24xx_fatal_code;
-
 /** @} */
 
 #ifdef __cplusplus
