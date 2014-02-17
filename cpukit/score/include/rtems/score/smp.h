@@ -34,20 +34,6 @@ extern "C" {
  * @{
  */
 
-/**
- * @brief SMP message to request a processor shutdown.
- *
- * @see _SMP_Send_message().
- */
-#define SMP_MESSAGE_SHUTDOWN UINT32_C(0x1)
-
-/**
- * @brief SMP fatal codes.
- */
-typedef enum {
-  SMP_FATAL_SHUTDOWN
-} SMP_Fatal_code;
-
 #if defined( RTEMS_SMP )
   SCORE_EXTERN uint32_t _SMP_Processor_count;
 
@@ -60,56 +46,6 @@ typedef enum {
 #endif
 
 #if defined( RTEMS_SMP )
-
-/**
- *  @brief Sends a SMP message to a processor.
- *
- *  The target processor may be the sending processor.
- *
- *  @param[in] cpu The target processor of the message.
- *  @param[in] message The message.
- */
-void _SMP_Send_message( uint32_t cpu, uint32_t message );
-
-/**
- *  @brief Request of others CPUs.
- *
- *  This method is invoked by RTEMS when it needs to make a request
- *  of the other CPUs.  It should be implemented using some type of
- *  interprocessor interrupt. CPUs not including the originating
- *  CPU should receive the message.
- *
- *  @param [in] message is message to send
- */
-void _SMP_Broadcast_message(
-  uint32_t  message
-);
-
-/**
- *  @brief Request other cores to perform first context switch.
- *
- *  Send message to other cores requesting them to perform
- *  their first context switch operation.
- */
-void _SMP_Request_other_cores_to_perform_first_context_switch(void);
-
-#endif /* defined( RTEMS_SMP ) */
-
-/**
- *  @brief Request other cores to shutdown.
- *
- *  Send message to other cores requesting them to shutdown.
- */
-#if defined( RTEMS_SMP )
-  void _SMP_Request_other_cores_to_shutdown( void );
-#else
-  #define _SMP_Request_other_cores_to_shutdown() \
-    do { } while ( 0 )
-#endif
-
-/** @} */
-
-#if defined( RTEMS_SMP )
   RTEMS_COMPILER_PURE_ATTRIBUTE static inline uint32_t
     _SMP_Get_current_processor( void )
   {
@@ -118,6 +54,8 @@ void _SMP_Request_other_cores_to_perform_first_context_switch(void);
 #else
   #define _SMP_Get_current_processor() UINT32_C(0)
 #endif
+
+/** @} */
 
 #ifdef __cplusplus
 }

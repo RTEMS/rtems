@@ -20,7 +20,7 @@
 
 #include <rtems/score/interr.h>
 #include <rtems/score/isrlevel.h>
-#include <rtems/score/smp.h>
+#include <rtems/score/smpimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userextimpl.h>
 

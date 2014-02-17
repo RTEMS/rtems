@@ -45,6 +45,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/score/smpimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/userextimpl.h>
@@ -57,11 +58,6 @@
 #include <rtems/rtems/rtemsapi.h>
 #ifdef RTEMS_POSIX_API
   #include <rtems/posix/posixapi.h>
-#endif
-
-#if defined(RTEMS_SMP)
-  #include <rtems/score/smp.h>
-  #include <rtems/score/percpu.h>
 #endif
 
 Objects_Information *_Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
@@ -150,9 +146,7 @@ void rtems_initialize_data_structures(void)
     _POSIX_API_Initialize();
   #endif
 
-  #if defined(RTEMS_SMP)
-    _SMP_Handler_initialize();
-  #endif
+  _SMP_Handler_initialize();
 
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
 
@@ -216,9 +210,7 @@ void rtems_initialize_start_multitasking(void)
 {
   _System_state_Set( SYSTEM_STATE_UP );
 
-#if defined(RTEMS_SMP)
   _SMP_Request_other_cores_to_perform_first_context_switch();
-#endif
 
   _Thread_Start_multitasking();
 

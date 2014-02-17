@@ -307,13 +307,6 @@ static inline void _Per_CPU_Send_interrupt( const Per_CPU_Control *per_cpu )
 }
 
 /**
- *  @brief Initialize SMP Handler
- *
- *  This method initialize the SMP Handler.
- */
-void _SMP_Handler_initialize(void);
-
-/**
  *  @brief Allocate and Initialize Per CPU Structures
  *
  *  This method allocates and initialize the per CPU structure.

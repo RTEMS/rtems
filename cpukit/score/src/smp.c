@@ -19,10 +19,10 @@
 #endif
 
 #include <rtems/bspsmp.h>
+#include <rtems/score/smpimpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/smp.h>
 #include <rtems/config.h>
 #include <rtems/fatal.h>
 

@@ -61,6 +61,7 @@ include_rtems_score_HEADERS += include/rtems/score/schedulersmpimpl.h
 include_rtems_score_HEADERS += include/rtems/score/smp.h
 include_rtems_score_HEADERS += include/rtems/score/smpbarrier.h
 include_rtems_score_HEADERS += include/rtems/score/smplock.h
+include_rtems_score_HEADERS += include/rtems/score/smpimpl.h
 include_rtems_score_HEADERS += include/rtems/score/stack.h
 include_rtems_score_HEADERS += include/rtems/score/stackimpl.h
 include_rtems_score_HEADERS += include/rtems/score/states.h

@@ -227,6 +227,10 @@ $(PROJECT_INCLUDE)/rtems/score/smplock.h: include/rtems/score/smplock.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/smplock.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/smplock.h
 
+$(PROJECT_INCLUDE)/rtems/score/smpimpl.h: include/rtems/score/smpimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/smpimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/smpimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/stack.h: include/rtems/score/stack.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/stack.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/stack.h
