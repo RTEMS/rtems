@@ -1,0 +1,38 @@
+*** TEST SPCACHE 1 ***
+data cache flush and invalidate test
+data cache operations by line passed the test
+data cache line size 32 bytes
+load 4096 bytes with flush entire data
+  duration with normal cache 12660 ns
+  duration with warm cache 2580 ns
+  duration with flushed cache 2580 ns
+load 4096 bytes with flush multiple data
+  duration with normal cache 2600 ns
+  duration with warm cache 2580 ns
+  duration with flushed cache 11400 ns
+load 4096 bytes with invalidate multiple data
+  duration with normal cache 2580 ns
+  duration with warm cache 2580 ns
+  duration with invalidated cache 11620 ns
+store 4096 bytes with flush entire data
+  duration with normal cache 2600 ns
+  duration with warm cache 2580 ns
+  duration with flushed cache 2580 ns
+store 4096 bytes with flush multiple data
+  duration with normal cache 2580 ns
+  duration with warm cache 2580 ns
+  duration with flushed cache 3000 ns
+store 4096 bytes with invalidate multiple data
+  duration with normal cache 2580 ns
+  duration with warm cache 2580 ns
+  duration with invalidated cache 2640 ns
+instruction cache line size 32 bytes
+invalidate entire instruction
+  duration with normal cache 5780 ns
+  duration with warm cache 640 ns
+  duration with invalidated cache 640 ns
+invalidate multiple instruction
+  duration with normal cache 680 ns
+  duration with warm cache 640 ns
+  duration with invalidated cache 2600 ns
+*** END OF TEST SPCACHE 1 ***
