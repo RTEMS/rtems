@@ -29,7 +29,6 @@
 #if defined(RTEMS_SMP)
 
   #include <rtems/score/smp.h>
-  #include <rtems/bspsmp.h>
 
   void _SMP_Handler_initialize(void)
   {
@@ -39,7 +38,7 @@
     /*
      * Discover and initialize the secondary cores in an SMP system.
      */
-    max_cpus = bsp_smp_initialize( max_cpus );
+    max_cpus = _CPU_SMP_Initialize( max_cpus );
 
     _SMP_Processor_count = max_cpus;
 

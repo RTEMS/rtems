@@ -25,7 +25,7 @@ static void ipi_handler(void *arg)
   rtems_smp_process_interrupt();
 }
 
-uint32_t bsp_smp_initialize(uint32_t configured_cpu_count)
+uint32_t _CPU_SMP_Initialize(uint32_t configured_cpu_count)
 {
   rtems_status_code sc;
   uint32_t max_cpu_count = arm_gic_irq_processor_count();

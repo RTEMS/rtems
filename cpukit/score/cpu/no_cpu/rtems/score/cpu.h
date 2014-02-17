@@ -1462,6 +1462,24 @@ CPU_Counter_ticks _CPU_Counter_difference(
 
 #ifdef RTEMS_SMP
   /**
+   * @brief Performs CPU specific SMP initialization in the context of the main
+   * processor.
+   *
+   * This function is invoked on the main processor by RTEMS during
+   * initialization.  All interrupt stacks are allocated at this point in case
+   * the CPU port allocates the interrupt stacks.
+   *
+   * The CPU port should start secondary processors now.
+   *
+   * @param[in] configured_cpu_count The count of processors requested by the
+   * application configuration.
+   *
+   * @return The count of processors available for the application in the system.
+   * This value is less than or equal to the configured count of processors.
+   */
+  uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count );
+
+  /**
    * @brief Returns the index of the current processor.
    *
    * An architecture specific method must be used to obtain the index of the

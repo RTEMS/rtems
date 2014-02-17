@@ -15,7 +15,7 @@
 #include <rtems/bspsmp.h>
 #include <stdlib.h>
 
-uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
+uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count )
 {
   /* return the number of CPUs */
   return 1;

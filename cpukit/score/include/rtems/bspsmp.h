@@ -52,24 +52,6 @@ extern "C" {
 #ifndef ASM
 
 /**
- * @brief Performs BSP specific SMP initialization in the context of the main
- * processor.
- *
- * This function is invoked on the main processor by RTEMS during
- * initialization.  All interrupt stacks are allocated at this point in case
- * the CPU port allocates the interrupt stacks.
- *
- * The BSP may start secondary processors now.
- *
- * @param[in] configured_cpu_count The count of processors requested by the
- * application configuration.
- *
- * @return The count of processors available for the application in the system.
- * This value is less than or equal to the configured count of processors.
- */
-uint32_t bsp_smp_initialize( uint32_t configured_cpu_count );
-
-/**
  *  @brief Generate an interprocessor broadcast interrupt.
  *
  *  This method is invoked when RTEMS wants to let all of the other

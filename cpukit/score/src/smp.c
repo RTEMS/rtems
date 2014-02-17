@@ -138,7 +138,7 @@ void _SMP_Request_other_cores_to_shutdown( void )
   /*
    * Do not use _SMP_Get_processor_count() since this value might be not
    * initialized yet.  For example due to a fatal error in the middle of
-   * bsp_smp_initialize().
+   * _CPU_SMP_Initialize().
    */
   uint32_t ncpus = rtems_configuration_get_maximum_processors();
 
