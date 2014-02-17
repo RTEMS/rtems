@@ -17,7 +17,7 @@
 
 void force_error()
 {
-  _System_state_Set( SYSTEM_STATE_SHUTDOWN );
+  _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
   rtems_shutdown_executive( 0 );
   /* we will not run this far */
 }

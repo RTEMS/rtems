@@ -54,19 +54,14 @@ typedef enum {
   SYSTEM_STATE_UP,
 
   /**
-   * @brief The system is in the midst of a shutdown.
+   * @brief The system reached its terminal state.
    */
-  SYSTEM_STATE_SHUTDOWN,
-
-  /**
-   * @brief A fatal error has occurred.
-   */
-  SYSTEM_STATE_FAILED
+  SYSTEM_STATE_TERMINATED
 } System_state_Codes;
 
 #define SYSTEM_STATE_CODES_FIRST SYSTEM_STATE_BEFORE_INITIALIZATION
 
-#define SYSTEM_STATE_CODES_LAST SYSTEM_STATE_FAILED
+#define SYSTEM_STATE_CODES_LAST SYSTEM_STATE_TERMINATED
 
 #if defined(RTEMS_MULTIPROCESSING)
 SCORE_EXTERN bool _System_state_Is_multiprocessing;
@@ -114,13 +109,6 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_before_multitasking (
   return (state == SYSTEM_STATE_BEFORE_MULTITASKING);
 }
 
-RTEMS_INLINE_ROUTINE bool _System_state_Is_shutdown (
-  System_state_Codes state
-)
-{
-  return (state == SYSTEM_STATE_SHUTDOWN);
-}
-
 RTEMS_INLINE_ROUTINE bool _System_state_Is_up (
   System_state_Codes state
 )
@@ -128,11 +116,11 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_up (
   return (state == SYSTEM_STATE_UP);
 }
 
-RTEMS_INLINE_ROUTINE bool _System_state_Is_failed (
+RTEMS_INLINE_ROUTINE bool _System_state_Is_terminated (
   System_state_Codes state
 )
 {
-  return (state == SYSTEM_STATE_FAILED);
+  return (state == SYSTEM_STATE_TERMINATED);
 }
 
 /** @} */

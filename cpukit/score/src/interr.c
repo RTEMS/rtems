@@ -38,7 +38,7 @@ void _Internal_error_Occurred(
   _Internal_errors_What_happened.is_internal = is_internal;
   _Internal_errors_What_happened.the_error   = the_error;
 
-  _System_state_Set( SYSTEM_STATE_FAILED );
+  _System_state_Set( SYSTEM_STATE_TERMINATED );
 
   _CPU_Fatal_halt( the_error );
 

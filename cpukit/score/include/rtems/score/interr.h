@@ -192,7 +192,7 @@ extern Internal_errors_Information _Internal_errors_What_happened;
  *
  * Once all fatal handler executed the error information will be stored to
  * _Internal_errors_What_happened and the system state is set to
- * SYSTEM_STATE_FAILED.
+ * SYSTEM_STATE_TERMINATED.
  *
  * The final step is to call the CPU specific _CPU_Fatal_halt().
  *

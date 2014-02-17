@@ -94,7 +94,7 @@ static void test_system_not_up(void)
 
   rtems_interrupt_disable( level );
   System_state_Codes state = _System_state_Get();
-  _System_state_Set( SYSTEM_STATE_FAILED );
+  _System_state_Set( SYSTEM_STATE_TERMINATED );
   test_call_heap_walk( true );
   _System_state_Set( state );
   rtems_interrupt_enable( level );
