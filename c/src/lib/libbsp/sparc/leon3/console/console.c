@@ -27,6 +27,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -297,14 +298,14 @@ rtems_device_driver console_initialize(
   if (syscon_uart_index < uarts) {
     status = rtems_io_register_name("/dev/console", major, 0);
     if (status != RTEMS_SUCCESSFUL)
-      rtems_fatal_error_occurred(status);
+      bsp_fatal(LEON3_FATAL_CONSOLE_REGISTER_DEV);
   }
   strcpy(console_name,"/dev/console_a");
   for (i = 0; i < uarts; i++) {
     if (i == syscon_uart_index)
       continue; /* skip UART that is registered as /dev/console */
     console_name[13] = 'a' + i;
-    status = rtems_io_register_name( console_name, major, i+1);
+    rtems_io_register_name( console_name, major, i+1);
   }
 
   return RTEMS_SUCCESSFUL;

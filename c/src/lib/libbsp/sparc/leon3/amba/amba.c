@@ -12,6 +12,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <ambapp.h>
 
 /* AMBA Plug&Play information description.
@@ -58,7 +59,7 @@ void amba_initialize(void)
      *
      *  What else can we do but stop ...
      */
-    asm volatile( "mov 1, %g1; ta 0x0" );
+    bsp_fatal(LEON3_FATAL_NO_IRQMP_CONTROLLER);
   }
 
   LEON3_IrqCtrl_Regs = (volatile struct irqmp_regs *)DEV_TO_APB(adev)->start;
