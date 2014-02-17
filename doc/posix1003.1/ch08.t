@@ -101,6 +101,7 @@ putc(), Function, Implemented
 putchar(), Function, Implemented
 puts(), Function, Implemented
 remove(), Function, Implemented
+rename(), Function, Partial Implementation
 rewind(), Function, Implemented
 scanf(), Function, Implemented
 fscanf(), Function, Implemented

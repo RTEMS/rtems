@@ -255,7 +255,7 @@ readdir(), Supported
 readdir_r(), Supported
 realloc(), Supported
 remove(), Supported
-rename(), Supported
+rename(), see note 2
 rewind(), Supported
 rewinddir(), Supported
 rmdir(), Supported

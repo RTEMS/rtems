@@ -108,7 +108,7 @@ rmdir(), Function, Implemented
 @subsection Rename a File
 
 @example
-rename(), Function, Implemented
+rename(), Function, Partial Implementation
 @end example
 
 @section File Characteristics
