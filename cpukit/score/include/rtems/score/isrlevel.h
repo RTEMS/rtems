@@ -136,13 +136,13 @@ typedef uint32_t   ISR_Level;
     RTEMS_COMPILER_MEMORY_BARRIER();  \
   } while (0)
 
-#if defined( RTEMS_SMP )
-
 #define _ISR_Disable_without_giant( _level ) \
   do { \
     _CPU_ISR_Disable( _level ); \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
   } while (0)
+
+#if defined( RTEMS_SMP )
 
 #define _ISR_Enable_without_giant( _level ) \
   do { \

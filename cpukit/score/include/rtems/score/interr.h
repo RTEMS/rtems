@@ -176,7 +176,9 @@ extern Internal_errors_Information _Internal_errors_What_happened;
  * determines that a fatal error has occurred or a final system state is
  * reached (for example after exit()).
  *
- * The first action of this function is to call the fatal handler of the user
+ * The first action is to disable interrupts.
+ *
+ * The second action of this function is to call the fatal handler of the user
  * extensions.  For the initial extensions the following conditions are
  * required
  * - a valid stack pointer and enough stack space,

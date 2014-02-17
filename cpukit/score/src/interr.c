@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/interr.h>
+#include <rtems/score/isrlevel.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userextimpl.h>
 
@@ -32,6 +33,11 @@ void _Internal_error_Occurred(
   Internal_errors_t       the_error
 )
 {
+  ISR_Level level;
+
+  _ISR_Disable_without_giant( level );
+  (void) level;
+
   _User_extensions_Fatal( the_source, is_internal, the_error );
 
   _Internal_errors_What_happened.the_source  = the_source;
