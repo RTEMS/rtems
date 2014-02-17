@@ -98,12 +98,22 @@ RTEMS_CHECK_FUNC([pthread_attr_setstack],[#include <pthread.h>])
 RTEMS_CHECK_FUNC([pthread_attr_getstack],[#include <pthread.h>])
 
 # These are SMP related and were added to newlib by RTEMS.
-RTEMS_CHECK_FUNC([pthread_attr_setaffinity_np],[#include <pthread.h>])
-RTEMS_CHECK_FUNC([pthread_attr_getaffinity_np],[#include <pthread.h>])
-RTEMS_CHECK_FUNC([pthread_setaffinity_np],[#include <pthread.h>])
-RTEMS_CHECK_FUNC([pthread_getaffinity_np],[#include <pthread.h>])
-RTEMS_CHECK_FUNC([pthread_getattr_np],[#include <pthread.h>])
-AC_CHECK_HEADERS([cpuset.h])
+RTEMS_CHECK_FUNC([pthread_attr_setaffinity_np],[
+  #define _GNU_SOURCE
+  #include <pthread.h>])
+RTEMS_CHECK_FUNC([pthread_attr_getaffinity_np],[
+  #define _GNU_SOURCE
+  #include <pthread.h>])
+RTEMS_CHECK_FUNC([pthread_setaffinity_np],[
+  #define _GNU_SOURCE
+  #include <pthread.h>])
+RTEMS_CHECK_FUNC([pthread_getaffinity_np],[
+  #define _GNU_SOURCE
+  #include <pthread.h>])
+RTEMS_CHECK_FUNC([pthread_getattr_np],[
+  #define _GNU_SOURCE
+  #include <pthread.h>])
+AC_CHECK_HEADERS([sys/cpuset.h])
 
 # Mandated by POSIX, not declared in some versions of newlib.
 AC_CHECK_DECLS([getrusage],,,[#include sys/resource.h])
@@ -213,6 +223,12 @@ RTEMS_CPUOPT([__RTEMS_USE_TICKS_FOR_STATISTICS__],
   [test x"${USE_TICKS_FOR_STATISTICS}" = x"1"],
   [1],
   [disable nanosecond granularity for statistics])
+
+## Header file differences that need to be known in .h after install
+RTEMS_CPUOPT([__RTEMS_HAVE_SYS_CPUSET_H__],
+  [test x"${ac_cv_header_sys_cpuset_h}" = x"yes"],
+  [1],
+  [indicate if <sys/cpuset.h> is present in toolset])
 
 ## This improves both the size and coverage analysis.
 RTEMS_CPUOPT([__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__],
