@@ -52,31 +52,6 @@ extern "C" {
 #ifndef ASM
 
 /**
- * @brief Performs high-level initialization of a secondary processor and runs
- * the application threads.
- *
- * The low-level initialization code must call this function to hand over the
- * control of this processor to RTEMS.  Interrupts must be disabled.  It must
- * be possible to send inter-processor interrupts to this processor.  Since
- * interrupts are disabled the inter-processor interrupt delivery is postponed
- * until interrupts are enabled the first time.  Interrupts are enabled during
- * the execution begin of threads in case they have interrupt level zero (this
- * is the default).
- *
- * The pre-requisites for the call to this function are
- * - disabled interrupts,
- * - delivery of inter-processor interrupts is possible,
- * - a valid stack pointer and enough stack space,
- * - a valid code memory, and
- * - a valid BSS section.
- *
- * This function must not be called by the main processor.  This function does
- * not return to the caller.
- */
-void rtems_smp_secondary_cpu_initialize( void )
-  RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
-
-/**
  *  @brief Process the incoming interprocessor request.
  *
  *  This is the method called by the BSP's interrupt handler

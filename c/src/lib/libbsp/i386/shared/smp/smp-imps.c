@@ -56,6 +56,7 @@
 #include <bsp/apic.h>
 #include <bsp/smp-imps.h>
 #include <bsp/irq.h>
+#include <rtems/score/smpimpl.h>
 
 /*
  *  XXXXX  The following absolutely must be defined!!!
@@ -783,7 +784,7 @@ static void secondary_cpu_initialize(void)
   enable_sse();
 #endif
 
-  rtems_smp_secondary_cpu_initialize();
+  _SMP_Start_multitasking_on_secondary_processor();
 }
 
 #include <rtems/bspsmp.h>

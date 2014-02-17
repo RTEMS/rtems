@@ -15,6 +15,7 @@
 #include <assert.h>
 
 #include <rtems/bspsmp.h>
+#include <rtems/score/smpimpl.h>
 
 #include <libcpu/powerpc-utility.h>
 
@@ -133,7 +134,7 @@ void qoriq_secondary_cpu_initialize(void)
 
   bsp_interrupt_vector_enable(QORIQ_IRQ_IPI_0);
 
-  rtems_smp_secondary_cpu_initialize();
+  _SMP_Start_multitasking_on_secondary_processor();
 }
 
 static void ipi_handler(void *arg)

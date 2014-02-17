@@ -30,7 +30,7 @@
   #include <rtems/bspIo.h>
 #endif
 
-void rtems_smp_secondary_cpu_initialize( void )
+void _SMP_Start_multitasking_on_secondary_processor( void )
 {
   Per_CPU_Control *self_cpu = _Per_CPU_Get();
 

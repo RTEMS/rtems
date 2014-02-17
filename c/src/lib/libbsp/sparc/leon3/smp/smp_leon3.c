@@ -17,6 +17,7 @@
 #include <leon.h>
 #include <rtems/bspIo.h>
 #include <rtems/bspsmp.h>
+#include <rtems/score/smpimpl.h>
 #include <stdlib.h>
 
 static inline void sparc_leon3_set_cctrl( unsigned int val )
@@ -44,7 +45,7 @@ void leon3_secondary_cpu_initialize(uint32_t cpu)
   LEON_Unmask_interrupt(LEON3_MP_IRQ);
   LEON3_IrqCtrl_Regs->mask[cpu] |= 1 << LEON3_MP_IRQ;
 
-  rtems_smp_secondary_cpu_initialize();
+  _SMP_Start_multitasking_on_secondary_processor();
 }
 
 uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count )

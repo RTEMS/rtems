@@ -24,6 +24,7 @@
 #define LIBBSP_ARM_SHARED_ARM_A9MPCORE_START_H
 
 #include <rtems/bspsmp.h>
+#include <rtems/score/smpimpl.h>
 
 #include <libcpu/arm-cp15.h>
 
@@ -109,7 +110,7 @@ BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_0(void)
       ctrl |= ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M;
       arm_cp15_set_control(ctrl);
 
-      rtems_smp_secondary_cpu_initialize();
+      _SMP_Start_multitasking_on_secondary_processor();
     } else {
       /* FIXME: Shutdown processor */
       while (1) {
