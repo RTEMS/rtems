@@ -61,21 +61,21 @@ void rtems_smp_process_interrupt( void )
     #if defined(RTEMS_DEBUG)
       {
         void *sp = __builtin_frame_address(0);
-        if ( !(message & RTEMS_BSP_SMP_SHUTDOWN) ) {
+        if ( !(message & SMP_MESSAGE_SHUTDOWN) ) {
           printk(
             "ISR on CPU %d -- (0x%02x) (0x%p)\n",
             _Per_CPU_Get_index( self_cpu ),
             message,
             sp
           );
-          if ( message & RTEMS_BSP_SMP_SHUTDOWN )
+          if ( message & SMP_MESSAGE_SHUTDOWN )
             printk( "shutdown\n" );
         }
         printk( "Dispatch level %d\n", _Thread_Dispatch_get_disable_level() );
       }
     #endif
 
-    if ( ( message & RTEMS_BSP_SMP_SHUTDOWN ) != 0 ) {
+    if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
       _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_SHUTDOWN );
 
       rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );
@@ -149,7 +149,7 @@ void _SMP_Request_other_cores_to_shutdown( void )
       const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
 
       if ( per_cpu->state != PER_CPU_STATE_BEFORE_INITIALIZATION ) {
-        _SMP_Send_message( cpu, RTEMS_BSP_SMP_SHUTDOWN );
+        _SMP_Send_message( cpu, SMP_MESSAGE_SHUTDOWN );
       }
     }
   }

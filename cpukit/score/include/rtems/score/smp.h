@@ -35,11 +35,11 @@ extern "C" {
  */
 
 /**
- *  This defines the bit which indicates the interprocessor interrupt
- *  has been requested so that this CPU will be shutdown.  This is done
- *  as part of rtems_executive_shutdown().
+ * @brief SMP message to request a processor shutdown.
+ *
+ * @see _SMP_Send_message().
  */
-#define RTEMS_BSP_SMP_SHUTDOWN                  0x04
+#define SMP_MESSAGE_SHUTDOWN UINT32_C(0x1)
 
 #if !defined( ASM )
 
@@ -58,7 +58,7 @@ typedef enum {
     return _SMP_Processor_count;
   }
 #else
-  #define _SMP_Get_processor_count() ( ( uint32_t ) 1 )
+  #define _SMP_Get_processor_count() UINT32_C(1)
 #endif
 
 #if defined( RTEMS_SMP )
@@ -120,7 +120,7 @@ void _SMP_Request_other_cores_to_perform_first_context_switch(void);
     return _CPU_SMP_Get_current_processor();
   }
 #else
-  #define _SMP_Get_current_processor() ( ( uint32_t ) 0 )
+  #define _SMP_Get_current_processor() UINT32_C(0)
 #endif
 
 #ifdef __cplusplus
