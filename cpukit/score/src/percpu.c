@@ -37,27 +37,6 @@
     uint32_t cpu;
 
     /*
-     *  Initialize per cpu pointer table
-     */
-    for ( cpu = 1 ; cpu < max_cpus; ++cpu ) {
-
-      Per_CPU_Control *p = _Per_CPU_Get_by_index( cpu );
-
-#if CPU_ALLOCATE_INTERRUPT_STACK == TRUE
-      {
-        size_t size = rtems_configuration_get_interrupt_stack_size();
-        uintptr_t ptr;
-
-        p->interrupt_stack_low = _Workspace_Allocate_or_fatal_error( size );
-
-        ptr = (uintptr_t) _Addresses_Add_offset( p->interrupt_stack_low, size );
-        ptr &= ~(CPU_STACK_ALIGNMENT - 1);
-        p->interrupt_stack_high = (void *)ptr;
-      }
-#endif
-    }
-
-    /*
      * Discover and initialize the secondary cores in an SMP system.
      */
     max_cpus = bsp_smp_initialize( max_cpus );

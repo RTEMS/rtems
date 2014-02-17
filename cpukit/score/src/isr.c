@@ -18,11 +18,11 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/address.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/stackimpl.h>
+#include <rtems/score/address.h>
 #include <rtems/score/interr.h>
+#include <rtems/score/percpu.h>
+#include <rtems/score/stackimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
 
@@ -41,6 +41,8 @@ void _ISR_Handler_initialization( void )
 #if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
   {
     size_t stack_size = rtems_configuration_get_interrupt_stack_size();
+    uint32_t max_cpus = rtems_configuration_get_maximum_processors();
+    uint32_t cpu;
 
     if ( !_Stack_Is_enough( stack_size ) )
       _Internal_error_Occurred(
@@ -49,27 +51,32 @@ void _ISR_Handler_initialization( void )
         INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL
       );
 
-    _CPU_Interrupt_stack_low = _Workspace_Allocate_or_fatal_error(
-      stack_size
-    );
-
-    _CPU_Interrupt_stack_high = _Addresses_Add_offset(
-      _CPU_Interrupt_stack_low,
-      stack_size
-    );
-  }
+    for ( cpu = 0 ; cpu < max_cpus; ++cpu ) {
+      Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+      void *low = _Workspace_Allocate_or_fatal_error( stack_size );
+      void *high = _Addresses_Add_offset( low, stack_size );
 
 #if (CPU_STACK_ALIGNMENT != 0)
-  _CPU_Interrupt_stack_high = (void *)
-    ((uintptr_t) _CPU_Interrupt_stack_high & ~(CPU_STACK_ALIGNMENT - 1));
+      high = _Addresses_Align_down( high, CPU_STACK_ALIGNMENT );
 #endif
 
-  /* Interrupt stack might have to be aligned and/or setup
-   * in a specific way.
-   */
+      per_cpu->interrupt_stack_low = low;
+      per_cpu->interrupt_stack_high = high;
+
+      /*
+       * Interrupt stack might have to be aligned and/or setup in a specific
+       * way.  Do not use the local low or high variables here since
+       * _CPU_Interrupt_stack_setup() is a nasty macro that might want to play
+       * with the real memory locations.
+       */
 #if defined(_CPU_Interrupt_stack_setup)
-  _CPU_Interrupt_stack_setup(_CPU_Interrupt_stack_low, _CPU_Interrupt_stack_high);
+      _CPU_Interrupt_stack_setup(
+        per_cpu->interrupt_stack_low,
+        per_cpu->interrupt_stack_high
+      );
 #endif
+    }
+  }
 
 #endif
 
