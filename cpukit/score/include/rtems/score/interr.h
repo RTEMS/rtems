@@ -186,7 +186,10 @@ extern Internal_errors_Information _Internal_errors_What_happened;
  * - valid read-only data.
  *
  * For the initial extensions the read-write data (including BSS segment) is
- * not required.
+ * not required on single processor configurations.  On SMP configurations
+ * however the read-write data must be initialized since this function must
+ * determine the state of the other processors and request them to shut-down if
+ * necessary.
  *
  * Non-initial extensions require in addition valid read-write data.  The BSP
  * may install an initial extension that performs a system reset.  In this case

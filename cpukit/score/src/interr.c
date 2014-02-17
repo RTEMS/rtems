@@ -20,6 +20,7 @@
 
 #include <rtems/score/interr.h>
 #include <rtems/score/isrlevel.h>
+#include <rtems/score/smp.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userextimpl.h>
 
@@ -37,6 +38,8 @@ void _Internal_error_Occurred(
 
   _ISR_Disable_without_giant( level );
   (void) level;
+
+  _SMP_Request_other_cores_to_shutdown();
 
   _User_extensions_Fatal( the_source, is_internal, the_error );
 

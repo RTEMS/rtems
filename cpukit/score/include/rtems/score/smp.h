@@ -88,14 +88,19 @@ void _SMP_Broadcast_message(
  */
 void _SMP_Request_other_cores_to_perform_first_context_switch(void);
 
+#endif /* defined( RTEMS_SMP ) */
+
 /**
  *  @brief Request other cores to shutdown.
  *
  *  Send message to other cores requesting them to shutdown.
  */
-void _SMP_Request_other_cores_to_shutdown(void);
-
-#endif /* defined( RTEMS_SMP ) */
+#if defined( RTEMS_SMP )
+  void _SMP_Request_other_cores_to_shutdown( void );
+#else
+  #define _SMP_Request_other_cores_to_shutdown() \
+    do { } while ( 0 )
+#endif
 
 #endif /* !defined( ASM ) */
 

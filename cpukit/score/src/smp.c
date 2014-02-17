@@ -22,7 +22,7 @@
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/smp.h>
-#include <rtems/score/sysstate.h>
+#include <rtems/config.h>
 
 #if defined(RTEMS_DEBUG)
   #include <rtems/bspIo.h>
@@ -137,17 +137,23 @@ void _SMP_Request_other_cores_to_perform_first_context_switch( void )
 void _SMP_Request_other_cores_to_shutdown( void )
 {
   uint32_t self = _SMP_Get_current_processor();
-  uint32_t ncpus = _SMP_Get_processor_count();
-  uint32_t cpu;
 
-  _SMP_Broadcast_message( RTEMS_BSP_SMP_SHUTDOWN );
+  /*
+   * Do not use _SMP_Get_processor_count() since this value might be not
+   * initialized yet.  For example due to a fatal error in the middle of
+   * bsp_smp_initialize().
+   */
+  uint32_t ncpus = rtems_configuration_get_maximum_processors();
+
+  uint32_t cpu;
 
   for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
     if ( cpu != self ) {
-      _Per_CPU_Wait_for_state(
-        _Per_CPU_Get_by_index( cpu ),
-        PER_CPU_STATE_SHUTDOWN
-      );
+      const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+
+      if ( per_cpu->state != PER_CPU_STATE_BEFORE_INITIALIZATION ) {
+        _SMP_Send_message( cpu, RTEMS_BSP_SMP_SHUTDOWN );
+      }
     }
   }
 }

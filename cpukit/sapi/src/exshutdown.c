@@ -17,10 +17,6 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/interr.h>
 
-#if defined(RTEMS_SMP)
-  #include <rtems/score/smp.h>
-#endif
-
 void rtems_shutdown_executive( uint32_t result )
 {
   Internal_errors_Source  source;
@@ -28,10 +24,6 @@ void rtems_shutdown_executive( uint32_t result )
   Internal_errors_t       code;
 
   if ( _System_state_Is_up( _System_state_Get() ) ) {
-    #if defined(RTEMS_SMP)
-      _SMP_Request_other_cores_to_shutdown();
-    #endif
-
     source      = RTEMS_FATAL_SOURCE_EXIT;
     is_internal = false;
     code        = result;
