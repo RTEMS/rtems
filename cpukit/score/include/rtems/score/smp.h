@@ -41,8 +41,6 @@ extern "C" {
  */
 #define SMP_MESSAGE_SHUTDOWN UINT32_C(0x1)
 
-#if !defined( ASM )
-
 /**
  * @brief SMP fatal codes.
  */
@@ -108,8 +106,6 @@ void _SMP_Request_other_cores_to_perform_first_context_switch(void);
   #define _SMP_Request_other_cores_to_shutdown() \
     do { } while ( 0 )
 #endif
-
-#endif /* !defined( ASM ) */
 
 /** @} */
 
