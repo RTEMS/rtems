@@ -34,6 +34,27 @@ AM_CONDITIONAL(SMPTESTS,test "$rtems_cv_RTEMS_SMP" = "yes")
 
 AM_CONDITIONAL([HAS_POSIX],[test x"${rtems_cv_RTEMS_POSIX_API}" = xyes])
 
+# These are SMP related and were added to newlib by RTEMS.
+AC_CHECK_DECLS([pthread_attr_setaffinity_np],[],[],[[
+  #define _GNU_SOURCE
+  #include <pthread.h>]])
+AC_CHECK_DECLS([pthread_attr_getaffinity_np],[],[],[[
+  #define _GNU_SOURCE
+  #include <pthread.h>]])
+AC_CHECK_DECLS([pthread_setaffinity_np],[],[],[[
+  #define _GNU_SOURCE
+  #include <pthread.h>]])
+AC_CHECK_DECLS([pthread_getaffinity_np],[],[],[[
+  #define _GNU_SOURCE
+  #include <pthread.h>]])
+AC_CHECK_DECLS([pthread_getattr_np],[],[],[[
+  #define _GNU_SOURCE
+  #include <pthread.h>]])
+
+# Added to newlib pthreads for RTEMS SMP (np), may not be present
+AC_CHECK_HEADERS([sys/cpuset.h])
+AM_CONDITIONAL(HAS_CPUSET,test x"${ac_cv_header_sys_cpuset_h}" = x"yes")
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 smp01/Makefile
