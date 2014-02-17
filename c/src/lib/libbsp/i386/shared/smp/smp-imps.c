@@ -803,9 +803,3 @@ void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
 {
   send_ipi( target_processor_index, 0x30 );
 }
-
-void bsp_smp_broadcast_interrupt(void)
-{
-  /* Single broadcast interrupt */
-  send_ipi( 0, LAPIC_ICR_DS_ALLEX | 0x30 );
-}

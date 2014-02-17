@@ -9,26 +9,12 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems.h>
-#include <bsp.h>
-#include <rtems/bspIo.h>
-#include <rtems/bspsmp.h>
-#include <stdlib.h>
+#include <rtems/score/cpu.h>
 
 uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count )
 {
   /* return the number of CPUs */
   return 1;
-}
-
-void bsp_smp_broadcast_interrupt(void)
-{
-}
-
-void bsp_smp_broadcast_message(
-  uint32_t  message
-)
-{
 }
 
 void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )

@@ -163,12 +163,6 @@ uint32_t _CPU_SMP_Initialize(uint32_t configured_cpu_count)
   return cores;
 }
 
-void bsp_smp_broadcast_interrupt(void)
-{
-  uint32_t self = ppc_processor_id();
-  qoriq.pic.per_cpu [self].ipidr [IPI_INDEX].reg = ALL_CORES;
-}
-
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
 {
   uint32_t self = ppc_processor_id();

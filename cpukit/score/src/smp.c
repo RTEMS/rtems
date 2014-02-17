@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/bspsmp.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/smp.h>
@@ -102,18 +103,13 @@ void _SMP_Broadcast_message( uint32_t message )
   uint32_t ncpus = _SMP_Get_processor_count();
   uint32_t cpu;
 
+  _Assert_Thread_dispatching_repressed();
+
   for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
     if ( cpu != self ) {
-      Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
-      ISR_Level level;
-
-      _Per_CPU_ISR_disable_and_acquire( per_cpu, level );
-      per_cpu->message |= message;
-      _Per_CPU_Release_and_ISR_enable( per_cpu, level );
+      _SMP_Send_message( cpu, message );
     }
   }
-
-  bsp_smp_broadcast_interrupt();
 }
 
 void _SMP_Request_other_cores_to_perform_first_context_switch( void )

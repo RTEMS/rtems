@@ -44,18 +44,6 @@ uint32_t _CPU_SMP_Initialize(uint32_t configured_cpu_count)
   return used_cpu_count;
 }
 
-void bsp_smp_broadcast_interrupt(void)
-{
-  /*
-   * FIXME: This broadcasts the interrupt also to processors not used by RTEMS.
-   */
-  rtems_status_code sc = arm_gic_irq_generate_software_irq(
-    ARM_GIC_IRQ_SGI_0,
-    ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_EXCEPT_SELF,
-    0xff
-  );
-}
-
 void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
 {
   rtems_status_code sc = arm_gic_irq_generate_software_irq(

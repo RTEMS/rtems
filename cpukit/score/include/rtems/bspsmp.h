@@ -52,20 +52,6 @@ extern "C" {
 #ifndef ASM
 
 /**
- *  @brief Generate an interprocessor broadcast interrupt.
- *
- *  This method is invoked when RTEMS wants to let all of the other
- *  CPUs know that it has sent them message.  CPUs not including
- *  the originating CPU should receive the interrupt.
-
- *
- *  @note On CPUs without the capability to generate a broadcast
- *        to all other CPUs interrupt, this can be implemented by
- *        a loop of sending interrupts to specific CPUs.
- */
-void bsp_smp_broadcast_interrupt(void);
-
-/**
  * @brief Performs high-level initialization of a secondary processor and runs
  * the application threads.
  *
