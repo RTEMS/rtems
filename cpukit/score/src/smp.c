@@ -23,6 +23,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/smp.h>
 #include <rtems/config.h>
+#include <rtems/fatal.h>
 
 #if defined(RTEMS_DEBUG)
   #include <rtems/bspIo.h>
@@ -75,13 +76,9 @@ void rtems_smp_process_interrupt( void )
     #endif
 
     if ( ( message & RTEMS_BSP_SMP_SHUTDOWN ) != 0 ) {
-      _ISR_Disable_without_giant( level );
-
-      _Thread_Dispatch_set_disable_level( 0 );
-
       _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_SHUTDOWN );
 
-      _CPU_Fatal_halt( _Per_CPU_Get_index( self_cpu ) );
+      rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );
       /* does not continue past here */
     }
   }

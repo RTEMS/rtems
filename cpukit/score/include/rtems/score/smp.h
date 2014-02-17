@@ -43,6 +43,13 @@ extern "C" {
 
 #if !defined( ASM )
 
+/**
+ * @brief SMP fatal codes.
+ */
+typedef enum {
+  SMP_FATAL_SHUTDOWN
+} SMP_Fatal_code;
+
 #if defined( RTEMS_SMP )
   SCORE_EXTERN uint32_t _SMP_Processor_count;
 

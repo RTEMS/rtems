@@ -49,7 +49,7 @@ static void test_fatal_source_text(void)
     puts( text );
   } while ( text != text_last );
 
-  rtems_test_assert( source - 3 == RTEMS_FATAL_SOURCE_EXCEPTION );
+  rtems_test_assert( source - 3 == RTEMS_FATAL_SOURCE_SMP );
 }
 
 static void test_status_text(void)

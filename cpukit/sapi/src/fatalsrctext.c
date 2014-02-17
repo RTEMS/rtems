@@ -36,7 +36,8 @@ static const char *const fatal_source_text[] = {
   "RTEMS_FATAL_SOURCE_BSP",
   "RTEMS_FATAL_SOURCE_ASSERT",
   "RTEMS_FATAL_SOURCE_STACK_CHECKER",
-  "RTEMS_FATAL_SOURCE_EXCEPTION"
+  "RTEMS_FATAL_SOURCE_EXCEPTION",
+  "RTEMS_FATAL_SOURCE_SMP"
 };
 
 const char *rtems_fatal_source_text( rtems_fatal_source source )

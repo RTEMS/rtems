@@ -104,6 +104,13 @@ typedef enum {
   RTEMS_FATAL_SOURCE_EXCEPTION,
 
   /**
+   * @brief Fatal source of SMP domain.
+   *
+   * @see SMP_Fatal_code.
+   */
+  RTEMS_FATAL_SOURCE_SMP,
+
+  /**
    * @brief The last available fatal source.
    *
    * This enum value ensures that the enum type needs at least 32-bits for
