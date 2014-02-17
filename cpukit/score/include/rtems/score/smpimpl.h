@@ -90,6 +90,11 @@ void _SMP_Start_multitasking_on_secondary_processor( void )
   RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /**
+ * @brief Interrupt handler for inter-processor interrupts.
+ */
+void _SMP_Inter_processor_interrupt_handler( void );
+
+/**
  *  @brief Sends a SMP message to a processor.
  *
  *  The target processor may be the sending processor.

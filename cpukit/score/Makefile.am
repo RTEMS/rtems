@@ -10,7 +10,6 @@ include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = include/rtems/debug.h
 include_rtems_HEADERS += include/rtems/system.h
 include_rtems_HEADERS += include/rtems/seterr.h
-include_rtems_HEADERS += include/rtems/bspsmp.h
 
 include_rtems_scoredir = $(includedir)/rtems/score
 

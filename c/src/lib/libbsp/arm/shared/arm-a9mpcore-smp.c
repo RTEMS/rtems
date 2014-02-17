@@ -14,15 +14,15 @@
 
 #include <assert.h>
 
-#include <rtems/bspsmp.h>
+#include <rtems/score/smpimpl.h>
 
 #include <libcpu/arm-cp15.h>
 
 #include <bsp/irq.h>
 
-static void ipi_handler(void *arg)
+static void bsp_inter_processor_interrupt(void *arg)
 {
-  rtems_smp_process_interrupt();
+  _SMP_Inter_processor_interrupt_handler();
 }
 
 uint32_t _CPU_SMP_Initialize(uint32_t configured_cpu_count)
@@ -36,7 +36,7 @@ uint32_t _CPU_SMP_Initialize(uint32_t configured_cpu_count)
     ARM_GIC_IRQ_SGI_0,
     "IPI",
     RTEMS_INTERRUPT_UNIQUE,
-    ipi_handler,
+    bsp_inter_processor_interrupt,
     NULL
   );
   assert(sc == RTEMS_SUCCESSFUL);

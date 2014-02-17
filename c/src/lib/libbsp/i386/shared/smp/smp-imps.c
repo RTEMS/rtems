@@ -78,7 +78,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <rtems.h>
-#include <rtems/bspsmp.h>
 #include <rtems/bspIo.h>
 #include <libcpu/cpu.h>
 #include <assert.h>
@@ -743,13 +742,13 @@ static void smp_apic_ack(void)
   IMPS_LAPIC_WRITE(LAPIC_EOI, 0 );     /* ACK the interrupt */
 }
 
-static void ap_ipi_isr(void *arg)
+static void bsp_inter_processor_interrupt(void *arg)
 {
   (void) arg;
 
   smp_apic_ack();
 
-  rtems_smp_process_interrupt();
+  _SMP_Inter_processor_interrupt_handler();
 }
 
 static void ipi_install_irq(void)
@@ -760,7 +759,7 @@ static void ipi_install_irq(void)
     16,
     "smp-imps",
     RTEMS_INTERRUPT_UNIQUE,
-    ap_ipi_isr,
+    bsp_inter_processor_interrupt,
     NULL
   );
   assert(status == RTEMS_SUCCESSFUL);
@@ -787,7 +786,6 @@ static void secondary_cpu_initialize(void)
   _SMP_Start_multitasking_on_secondary_processor();
 }
 
-#include <rtems/bspsmp.h>
 uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count )
 {
   int cores;

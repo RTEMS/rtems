@@ -16,7 +16,6 @@
 #include <bsp.h>
 #include <leon.h>
 #include <rtems/bspIo.h>
-#include <rtems/bspsmp.h>
 #include <rtems/score/smpimpl.h>
 #include <stdlib.h>
 
@@ -32,11 +31,11 @@ static inline unsigned int sparc_leon3_get_cctrl( void )
   return v;
 }
 
-static rtems_isr bsp_ap_ipi_isr(
+static rtems_isr bsp_inter_processor_interrupt(
   rtems_vector_number vector
 )
 {
-  rtems_smp_process_interrupt();
+  _SMP_Inter_processor_interrupt_handler();
 }
 
 void leon3_secondary_cpu_initialize(uint32_t cpu)
@@ -75,7 +74,7 @@ uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count )
 
   if ( used_cpu_count > 1 ) {
     LEON_Unmask_interrupt(LEON3_MP_IRQ);
-    set_vector(bsp_ap_ipi_isr, LEON_TRAP_TYPE(LEON3_MP_IRQ), 1);
+    set_vector(bsp_inter_processor_interrupt, LEON_TRAP_TYPE(LEON3_MP_IRQ), 1);
   }
 
   for ( cpu = 1 ; cpu < used_cpu_count ; ++cpu ) {

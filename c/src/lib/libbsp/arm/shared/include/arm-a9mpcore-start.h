@@ -23,7 +23,6 @@
 #ifndef LIBBSP_ARM_SHARED_ARM_A9MPCORE_START_H
 #define LIBBSP_ARM_SHARED_ARM_A9MPCORE_START_H
 
-#include <rtems/bspsmp.h>
 #include <rtems/score/smpimpl.h>
 
 #include <libcpu/arm-cp15.h>

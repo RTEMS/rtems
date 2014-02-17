@@ -18,7 +18,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/bspsmp.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/threaddispatch.h>
@@ -45,7 +44,7 @@ void _SMP_Start_multitasking_on_secondary_processor( void )
   _Thread_Start_multitasking();
 }
 
-void rtems_smp_process_interrupt( void )
+void _SMP_Inter_processor_interrupt_handler( void )
 {
   Per_CPU_Control *self_cpu = _Per_CPU_Get();
 
