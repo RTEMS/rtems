@@ -49,19 +49,29 @@ AC_CHECK_DECLS([pthread_attr_getguardsize],[],[],[[#include <pthread.h>]])
 AC_CHECK_DECLS([pthread_attr_setguardsize],[],[],[[#include <pthread.h>]])
 
 # Added to newlib pthreads for RTEMS SMP (np), may not be present
-AC_CHECK_DECLS([pthread_attr_setaffinity_np],[].[],,[[#include <pthread.h>]])
+AC_CHECK_DECLS([pthread_attr_setaffinity_np],[],[],[[
+  #define _GNU_SOURCE
+  #include <pthread.h>]])
 
 # Added to newlib pthreads for RTEMS SMP (np), may not be present
-AC_CHECK_DECLS([pthread_attr_getaffinity_np],[].[],,[[#include <pthread.h>]])
+AC_CHECK_DECLS([pthread_attr_getaffinity_np],[],[],[[
+  #define _GNU_SOURCE
+  #include <pthread.h>]])
 
 # Added to newlib pthreads for RTEMS SMP (np), may not be present
-AC_CHECK_DECLS([pthread_setaffinity_np],[].[],,[[#include <pthread.h>]])
+AC_CHECK_DECLS([pthread_setaffinity_np],[],[],[[
+  #define _GNU_SOURCE
+  #include <pthread.h>]])
 
 # Added to newlib pthreads for RTEMS SMP (np), may not be present
-AC_CHECK_DECLS([pthread_getaffinity_np],[].[],,[[#include <pthread.h>]])
+AC_CHECK_DECLS([pthread_getaffinity_np],[],[],[[
+  #define _GNU_SOURCE
+  #include <pthread.h>]])
 
-# Added to newlib pthreads for RTEMS (np), may not be present
-AC_CHECK_DECLS([pthread_getattr_np],[].[],,[[#include <pthread.h>]])
+# Added to newlib pthreads for RTEMS SMP (np), may not be present
+AC_CHECK_DECLS([pthread_getattr_np],[],[],[[
+  #define _GNU_SOURCE
+  #include <pthread.h>]])
 
 # Added to newlib pthreads for RTEMS SMP (np), may not be present
 AC_CHECK_HEADERS([cpuset.h])
