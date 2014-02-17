@@ -14,26 +14,11 @@
 #endif
 
 #include <rtems/init.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/score/interr.h>
 
 void rtems_shutdown_executive( uint32_t result )
 {
-  Internal_errors_Source  source;
-  bool                    is_internal;
-  Internal_errors_t       code;
-
-  if ( _System_state_Is_up( _System_state_Get() ) ) {
-    source      = RTEMS_FATAL_SOURCE_EXIT;
-    is_internal = false;
-    code        = result;
-  } else {
-    source      = INTERNAL_ERROR_CORE;
-    is_internal = true;
-    code        = INTERNAL_ERROR_SHUTDOWN_WHEN_NOT_UP;
-  }
-
-  _Internal_error_Occurred( source, is_internal, code );
+  _Internal_error_Occurred( RTEMS_FATAL_SOURCE_EXIT, false, result );
 
   /***************************************************************
    ***************************************************************
