@@ -361,7 +361,6 @@ rtems_status_code ppc_exc_make_prologue(
  * @see ppc_exc_initialize().
  */
 void ppc_exc_initialize_with_vector_base(
-  uint32_t interrupt_disable_mask,
   uintptr_t interrupt_stack_begin,
   uintptr_t interrupt_stack_size,
   void *vector_base
@@ -381,13 +380,11 @@ void ppc_exc_initialize_with_vector_base(
  * - the minimal prologue creation failed.
  */
 static inline void ppc_exc_initialize(
-  uint32_t interrupt_disable_mask,
   uintptr_t interrupt_stack_begin,
   uintptr_t interrupt_stack_size
 )
 {
   ppc_exc_initialize_with_vector_base(
-    interrupt_disable_mask,
     interrupt_stack_begin,
     interrupt_stack_size,
     NULL

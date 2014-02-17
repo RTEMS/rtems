@@ -114,7 +114,6 @@ void bsp_start(void)
 
   /* Initialize exception handler */
   ppc_exc_initialize(
-    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     (uintptr_t) IntrStack_start,
     (uintptr_t) intrStack - (uintptr_t) IntrStack_start
   );

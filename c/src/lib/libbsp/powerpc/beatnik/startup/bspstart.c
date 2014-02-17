@@ -242,11 +242,7 @@ void bsp_start( void )
   /*
    * Initialize default raw exception handlers. See vectors/vectors_init.c
    */
-  ppc_exc_initialize(
-		  PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-		  intrStackStart,
-		  intrStackSize
-		  );
+  ppc_exc_initialize(intrStackStart, intrStackSize);
 
   printk("CPU: %s\n", get_ppc_cpu_type_name(current_ppc_cpu));
 

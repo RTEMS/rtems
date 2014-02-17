@@ -581,8 +581,8 @@ lidate */
 /**
  * @brief Default value for the interrupt disable mask.
  *
- * The interrupt disable mask is stored in the SPRG0 (= special purpose
- * register 272).
+ * The interrupt disable mask is stored in the global symbol
+ * _PPC_INTERRUPT_DISABLE_MASK.
  */
 #define PPC_INTERRUPT_DISABLE_MASK_DEFAULT MSR_EE
 
@@ -603,25 +603,16 @@ extern "C" {
 #define _CPU_MSR_SET( _msr_value ) \
 { __asm__ volatile ("mtmsr %0" : "=&r" ((_msr_value)) : "0" ((_msr_value))); }
 
-static inline void ppc_interrupt_set_disable_mask( uint32_t mask )
-{
-  __asm__ volatile (
-    "mtspr 272, %0"
-    :
-    : "r" (mask)
-  );
-}
+/**
+ * @brief A global symbol used to disable interrupts in the MSR.
+ *
+ * A one bit means that this bit should be cleared.
+ */
+extern char _PPC_INTERRUPT_DISABLE_MASK[];
 
 static inline uint32_t ppc_interrupt_get_disable_mask( void )
 {
-  uint32_t mask;
-
-  __asm__ volatile (
-    "mfspr %0, 272"
-    : "=r" (mask)
-  );
-
-  return mask;
+  return (uint32_t) _PPC_INTERRUPT_DISABLE_MASK;
 }
 
 static inline uint32_t ppc_interrupt_disable( void )
@@ -631,7 +622,8 @@ static inline uint32_t ppc_interrupt_disable( void )
 
   __asm__ volatile (
     "mfmsr %0;"
-    "mfspr %1, 272;"
+    "lis %1, _PPC_INTERRUPT_DISABLE_MASK@h;"
+    "ori %1, %1, _PPC_INTERRUPT_DISABLE_MASK@l;"
     "andc %1, %0, %1;"
     "mtmsr %1"
     : "=r" (level), "=r" (mask)

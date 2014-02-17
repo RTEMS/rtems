@@ -110,7 +110,6 @@ void bsp_start(void)
 
   /* Initialize exception handler */
   ppc_exc_initialize_with_vector_base(
-    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     (uintptr_t) bsp_section_work_begin,
     rtems_configuration_get_interrupt_stack_size(),
     bsp_exc_vector_base

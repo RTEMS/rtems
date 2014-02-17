@@ -116,7 +116,6 @@ void qoriq_secondary_cpu_initialize(void)
 
   /* Initialize exception handler */
   ppc_exc_initialize_with_vector_base(
-    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     (uintptr_t) second_cpu->interrupt_stack_low,
     rtems_configuration_get_interrupt_stack_size(),
     bsp_exc_vector_base

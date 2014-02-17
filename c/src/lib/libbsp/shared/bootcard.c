@@ -69,14 +69,6 @@ void boot_card(
   rtems_interrupt_level  bsp_isr_level;
 
   /*
-   * Special case for PowerPC: The interrupt disable mask is stored in SPRG0.
-   * It must be valid before we can use rtems_interrupt_disable().
-   */
-  #ifdef PPC_INTERRUPT_DISABLE_MASK_DEFAULT
-    ppc_interrupt_set_disable_mask( PPC_INTERRUPT_DISABLE_MASK_DEFAULT );
-  #endif /* PPC_INTERRUPT_DISABLE_MASK_DEFAULT */
-
-  /*
    *  Make sure interrupts are disabled.
    */
   (void) bsp_isr_level;

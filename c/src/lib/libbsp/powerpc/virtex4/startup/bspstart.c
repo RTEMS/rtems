@@ -208,9 +208,7 @@ void bsp_start(void)
   intrStackStart = CPU_UP_ALIGN((uint32_t)__bsp_ram_start);
   intrStackSize  = rtems_configuration_get_interrupt_stack_size();
 
-  ppc_exc_initialize(PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-                     intrStackStart,
-                     intrStackSize);
+  ppc_exc_initialize(intrStackStart, intrStackSize);
 
   /* Let the user know what parameters we were compiled with */
   printk("                  Base/Start     End         Size\n"

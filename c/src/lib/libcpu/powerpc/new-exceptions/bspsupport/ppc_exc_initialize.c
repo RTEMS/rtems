@@ -149,7 +149,6 @@ static void ppc_exc_fatal_error(void)
 }
 
 void ppc_exc_initialize_with_vector_base(
-  uint32_t interrupt_disable_mask,
   uintptr_t interrupt_stack_begin,
   uintptr_t interrupt_stack_size,
   void *vector_base
@@ -190,8 +189,6 @@ void ppc_exc_initialize_with_vector_base(
   /* Move interrupt stack values to special purpose registers */
   PPC_SET_SPECIAL_PURPOSE_REGISTER(SPRG1, interrupt_stack_pointer);
   PPC_SET_SPECIAL_PURPOSE_REGISTER(SPRG2, interrupt_stack_begin);
-
-  ppc_interrupt_set_disable_mask(interrupt_disable_mask);
 
 #ifndef PPC_EXC_CONFIG_BOOKE_ONLY
 

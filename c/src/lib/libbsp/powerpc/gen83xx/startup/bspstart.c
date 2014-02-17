@@ -136,7 +136,6 @@ void bsp_start( void)
   ppc_exc_cache_wb_check = 0;
 #endif
   ppc_exc_initialize(
-    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     (uintptr_t) bsp_section_work_begin,
     rtems_configuration_get_interrupt_stack_size()
   );

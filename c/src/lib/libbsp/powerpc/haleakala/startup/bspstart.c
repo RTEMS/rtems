@@ -206,7 +206,6 @@ void bsp_start( void )
    * Initialize default raw exception handlers.
    */
   ppc_exc_initialize(
-    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     (uintptr_t) intrStack_start,
     (uintptr_t) intrStack_size
   );

@@ -183,11 +183,7 @@ void bsp_start( void)
   rtems_counter_initialize_converter(bsp_time_base_frequency);
 
   /* Initialize exception handler */
-  ppc_exc_initialize(
-    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-    interrupt_stack_start,
-    interrupt_stack_size
-  );
+  ppc_exc_initialize(interrupt_stack_start, interrupt_stack_size);
 
   /* Initalize interrupt support */
   bsp_interrupt_initialize();

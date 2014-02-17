@@ -270,11 +270,7 @@ VpdBufRec          vpdData [] = {
 	/*
 	 * Initialize default raw exception handlers.
 	 */
-	ppc_exc_initialize(
-		PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-		intrStackStart,
-		intrStackSize
-	);
+	ppc_exc_initialize(intrStackStart, intrStackSize);
 
 	printk("CPU 0x%x - rev 0x%x\n", myCpu, myCpuRevision);
 

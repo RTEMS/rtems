@@ -170,7 +170,6 @@ void bsp_start(void)
   /* Initialize exception handler */
   ppc_exc_cache_wb_check = 0;
   ppc_exc_initialize(
-    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     (uintptr_t) bsp_interrupt_stack_start,
     (uintptr_t) bsp_interrupt_stack_size
   );
