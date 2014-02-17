@@ -58,7 +58,10 @@ typedef struct {
 #define A9MPCORE_SCU_INVSS_CPU3(ways) BSP_FLD32(val, 12, 15)
 #define A9MPCORE_SCU_INVSS_CPU3_GET(reg) /* Write only register */
 #define A9MPCORE_SCU_INVSS_CPU3_SET(reg, val) BSP_FLD32SET(reg, val, 12, 15)
-  uint32_t reserved_10[12];
+  uint32_t reserved_09[8];
+  uint32_t diagn_ctrl;
+#define A9MPCORE_SCU_DIAGN_CTRL_MIGRATORY_BIT_DISABLE BSP_BIT32(0)
+  uint32_t reserved_10[3];
   uint32_t fltstart;
   uint32_t fltend;
   uint32_t reserved_48[2];

@@ -30,6 +30,7 @@
 #include <bsp.h>
 #include <bsp/start.h>
 #include <bsp/arm-a9mpcore-regs.h>
+#include <bsp/arm-errata.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -79,25 +80,45 @@ BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_scu_invalidate(
   scu->invss = (ways & 0xf) << ((cpu_id & 0x3) * 4);
 }
 
-BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_0(void)
+BSP_START_TEXT_SECTION static void inline
+arm_a9mpcore_start_errata_764369_handler(volatile a9mpcore_scu *scu)
 {
 #ifdef RTEMS_SMP
-  volatile a9mpcore_scu *scu = (volatile a9mpcore_scu *) BSP_ARM_A9MPCORE_SCU_BASE;
-  uint32_t cpu_id;
-  uint32_t actlr;
+  if (arm_errata_is_applicable_processor_errata_764369()) {
+    scu->diagn_ctrl |= A9MPCORE_SCU_DIAGN_CTRL_MIGRATORY_BIT_DISABLE;
+  }
+#endif
+}
 
-  /* Enable Snoop Control Unit (SCU) */
+BSP_START_TEXT_SECTION static inline
+arm_a9mpcore_start_scu_enable(volatile a9mpcore_scu *scu)
+{
+  arm_a9mpcore_start_errata_764369_handler(scu);
   scu->ctrl |= A9MPCORE_SCU_CTRL_SCU_EN;
+}
 
+BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_0(void)
+{
+  volatile a9mpcore_scu *scu =
+    (volatile a9mpcore_scu *) BSP_ARM_A9MPCORE_SCU_BASE;
+  uint32_t cpu_id;
+
+  arm_a9mpcore_start_scu_enable(scu);
+
+#ifdef RTEMS_SMP
   /* Enable cache coherency support for this processor */
-  actlr = arm_cp15_get_auxiliary_control();
-  actlr |= ARM_CORTEX_A9_ACTL_SMP;
-  arm_cp15_set_auxiliary_control(actlr);
+  {
+    uint32_t actlr = arm_cp15_get_auxiliary_control();
+    actlr |= ARM_CORTEX_A9_ACTL_SMP;
+    arm_cp15_set_auxiliary_control(actlr);
+  }
+#endif
 
   cpu_id = arm_cortex_a9_get_multiprocessor_cpu_id();
 
   arm_a9mpcore_start_scu_invalidate(scu, cpu_id, 0xf);
 
+#ifdef RTEMS_SMP
   if (cpu_id != 0) {
     arm_a9mpcore_start_set_vector_base();
 
@@ -116,7 +137,9 @@ BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_0(void)
       );
 
       /* FIXME: Sharing the translation table between processors is brittle */
-      arm_cp15_set_translation_table_base((uint32_t *) bsp_translation_table_base);
+      arm_cp15_set_translation_table_base(
+        (uint32_t *) bsp_translation_table_base
+      );
 
       ctrl |= ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M;
       arm_cp15_set_control(ctrl);
