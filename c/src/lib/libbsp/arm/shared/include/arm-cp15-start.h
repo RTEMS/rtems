@@ -1,5 +1,5 @@
 /**
- * @file 
+ * @file
  *
  * @ingroup arm_start
  *
@@ -9,7 +9,7 @@
 
 /*
  * Copyright (c) 2013 Hesham AL-Matary.
- * Copyright (c) 2009-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -129,8 +129,7 @@ arm_cp15_start_set_translation_table_entries(
 }
 
 BSP_START_TEXT_SECTION static inline void
-arm_cp15_start_setup_translation_table_and_enable_mmu_and_cache(
-  uint32_t ctrl,
+arm_cp15_start_setup_translation_table(
   uint32_t *ttb,
   uint32_t client_domain,
   const arm_cp15_start_section_config *config_table,
@@ -151,6 +150,23 @@ arm_cp15_start_setup_translation_table_and_enable_mmu_and_cache(
   for (i = 0; i < config_count; ++i) {
     arm_cp15_start_set_translation_table_entries(ttb, &config_table [i]);
   }
+}
+
+BSP_START_TEXT_SECTION static inline void
+arm_cp15_start_setup_translation_table_and_enable_mmu_and_cache(
+  uint32_t ctrl,
+  uint32_t *ttb,
+  uint32_t client_domain,
+  const arm_cp15_start_section_config *config_table,
+  size_t config_count
+)
+{
+  arm_cp15_start_setup_translation_table(
+    ttb,
+    client_domain,
+    config_table,
+    config_count
+  );
 
   /* Enable MMU and cache */
   ctrl |= ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M;
