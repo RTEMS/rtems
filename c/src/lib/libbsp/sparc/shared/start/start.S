@@ -360,6 +360,7 @@ zerobss:
         sub     %sp, 0x60, %sp          ! room for boot_card to save args
         nop
 
+#if !defined(START_LEON3_ENABLE_SMP)
         PUBLIC(BSP_fatal_return)
         PUBLIC(bsp_reset)
 SYM(BSP_fatal_return):
@@ -367,5 +368,6 @@ SYM(bsp_reset):
 	mov	1, %g1
         ta      0                       ! Halt if _main returns ...
         nop
+#endif
 
 /* end of file */
