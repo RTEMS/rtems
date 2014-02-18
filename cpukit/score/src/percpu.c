@@ -18,40 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/address.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/percpu.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/config.h>
-#include <string.h>
 
 #if defined(RTEMS_SMP)
-
-  #include <rtems/score/smp.h>
-
-  void _SMP_Handler_initialize(void)
-  {
-    uint32_t max_cpus = rtems_configuration_get_maximum_processors();
-    uint32_t cpu;
-
-    /*
-     * Discover and initialize the secondary cores in an SMP system.
-     */
-    max_cpus = _CPU_SMP_Initialize( max_cpus );
-
-    _SMP_Processor_count = max_cpus;
-
-    for ( cpu = 1 ; cpu < max_cpus; ++cpu ) {
-      const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
-
-      _Per_CPU_Wait_for_state(
-        per_cpu,
-        PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING
-      );
-    }
-  }
-
   void _Per_CPU_Change_state(
     Per_CPU_Control *per_cpu,
     Per_CPU_State new_state

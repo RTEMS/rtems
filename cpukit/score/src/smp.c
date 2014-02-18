@@ -29,6 +29,28 @@
   #include <rtems/bspIo.h>
 #endif
 
+void _SMP_Handler_initialize( void )
+{
+  uint32_t max_cpus = rtems_configuration_get_maximum_processors();
+  uint32_t cpu;
+
+  /*
+   * Discover and initialize the secondary cores in an SMP system.
+   */
+  max_cpus = _CPU_SMP_Initialize( max_cpus );
+
+  _SMP_Processor_count = max_cpus;
+
+  for ( cpu = 1 ; cpu < max_cpus; ++cpu ) {
+    const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+
+    _Per_CPU_Wait_for_state(
+      per_cpu,
+      PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING
+    );
+  }
+}
+
 void _SMP_Start_multitasking_on_secondary_processor( void )
 {
   Per_CPU_Control *self_cpu = _Per_CPU_Get();
