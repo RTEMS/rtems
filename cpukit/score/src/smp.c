@@ -34,6 +34,12 @@ void _SMP_Handler_initialize( void )
   uint32_t max_cpus = rtems_configuration_get_maximum_processors();
   uint32_t cpu;
 
+  for ( cpu = 0 ; cpu < max_cpus; ++cpu ) {
+    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+
+    _ISR_lock_Initialize( &per_cpu->lock );
+  }
+
   /*
    * Discover and initialize the secondary cores in an SMP system.
    */
