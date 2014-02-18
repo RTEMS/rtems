@@ -39,7 +39,7 @@ void _Terminate(
   _ISR_Disable_without_giant( level );
   (void) level;
 
-  _SMP_Request_other_cores_to_shutdown();
+  _SMP_Request_shutdown();
 
   _User_extensions_Fatal( the_source, is_internal, the_error );
 

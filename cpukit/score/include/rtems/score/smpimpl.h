@@ -108,8 +108,6 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
     _Per_CPU_Release_and_ISR_enable( self_cpu, level );
 
     if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
-      _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_SHUTDOWN );
-
       rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );
       /* does not continue past here */
     }
@@ -143,27 +141,27 @@ void _SMP_Broadcast_message(
 #endif /* defined( RTEMS_SMP ) */
 
 /**
- *  @brief Request other cores to perform first context switch.
- *
- *  Send message to other cores requesting them to perform
- *  their first context switch operation.
+ * @brief Requests a multitasking start on all configured and available
+ * processors.
  */
 #if defined( RTEMS_SMP )
-  void _SMP_Request_other_cores_to_perform_first_context_switch( void );
+  void _SMP_Request_start_multitasking( void );
 #else
-  #define _SMP_Request_other_cores_to_perform_first_context_switch() \
+  #define _SMP_Request_start_multitasking() \
     do { } while ( 0 )
 #endif
 
 /**
- *  @brief Request other cores to shutdown.
+ * @brief Requests a shutdown of all processors.
  *
- *  Send message to other cores requesting them to shutdown.
+ * This function is a part of the system termination procedure.
+ *
+ * @see _Terminate().
  */
 #if defined( RTEMS_SMP )
-  void _SMP_Request_other_cores_to_shutdown( void );
+  void _SMP_Request_shutdown( void );
 #else
-  #define _SMP_Request_other_cores_to_shutdown() \
+  #define _SMP_Request_shutdown() \
     do { } while ( 0 )
 #endif
 

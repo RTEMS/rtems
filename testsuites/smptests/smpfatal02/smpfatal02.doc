@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpfatal02
+
+directives:
+
+  - _Per_CPU_State_change()
+
+concepts:
+
+  - Ensure that the system termination in case of fatal errors during driver
+    initialization works.

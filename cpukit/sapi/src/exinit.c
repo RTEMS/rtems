@@ -210,7 +210,7 @@ void rtems_initialize_start_multitasking(void)
 {
   _System_state_Set( SYSTEM_STATE_UP );
 
-  _SMP_Request_other_cores_to_perform_first_context_switch();
+  _SMP_Request_start_multitasking();
 
   _Thread_Start_multitasking();
 

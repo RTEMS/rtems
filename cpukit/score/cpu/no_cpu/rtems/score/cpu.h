@@ -1462,10 +1462,10 @@ CPU_Counter_ticks _CPU_Counter_difference(
 
 #ifdef RTEMS_SMP
   /**
-   * @brief Performs CPU specific SMP initialization in the context of the main
+   * @brief Performs CPU specific SMP initialization in the context of the boot
    * processor.
    *
-   * This function is invoked on the main processor by RTEMS during
+   * This function is invoked on the boot processor by RTEMS during
    * initialization.  All interrupt stacks are allocated at this point in case
    * the CPU port allocates the interrupt stacks.
    *

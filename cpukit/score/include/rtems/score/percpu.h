@@ -70,64 +70,83 @@ typedef struct Thread_Control_struct Thread_Control;
   #error "deferred FP switch not implemented for SMP"
 #endif
 
+/**
+ * @brief State of a processor.
+ *
+ * The processor state controls the life cycle of processors at the lowest
+ * level.  No multi-threading or other high-level concepts matter here.
+ *
+ * State changes must be initiated via _Per_CPU_Change_state().  This function
+ * may not return in case someone requested a shutdown.  The
+ * _SMP_Send_message() function will be used to notify other processors about
+ * state changes if the other processor is in the up state.
+ *
+ * Due to the sequential nature of the basic system initialization one
+ * processor has a special role.  It is the processor executing the boot_card()
+ * function.  This processor is called the boot processor.  All other
+ * processors are called secondary.
+ *
+ * @dot
+ * digraph states {
+ *   i [label="PER_CPU_STATE_INITIAL"];
+ *   rdy [label="PER_CPU_STATE_READY_TO_START_MULTITASKING"];
+ *   reqsm [label="PER_CPU_STATE_REQUEST_START_MULTITASKING"];
+ *   u [label="PER_CPU_STATE_UP"];
+ *   s [label="PER_CPU_STATE_SHUTDOWN"];
+ *   i -> rdy [label="processor\ncompleted initialization"];
+ *   rdy -> reqsm [label="boot processor\ncompleted initialization"];
+ *   reqsm -> u [label="processor\nstarts multitasking"];
+ *   i -> s;
+ *   rdy -> s;
+ *   reqsm -> s;
+ *   u -> s;
+ * }
+ * @enddot
+ */
 typedef enum {
   /**
    * @brief The per CPU controls are initialized to zero.
    *
-   * In this state the only valid field of the per CPU controls for secondary
-   * processors is the per CPU state.  The secondary processors should perform
-   * their basic initialization now and change into the
-   * PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING state once this is complete.
-   *
-   * The owner of the per CPU state field is the secondary processor in this
-   * state.
+   * The boot processor executes the sequential boot code in this state.  The
+   * secondary processors should perform their basic initialization now and
+   * change into the PER_CPU_STATE_READY_TO_START_MULTITASKING state once this
+   * is complete.
    */
-  PER_CPU_STATE_BEFORE_INITIALIZATION,
+  PER_CPU_STATE_INITIAL,
 
   /**
-   * @brief Secondary processor is ready to begin multitasking.
+   * @brief Processor is ready to start multitasking.
    *
    * The secondary processor performed its basic initialization and is ready to
    * receive inter-processor interrupts.  Interrupt delivery must be disabled
    * in this state, but requested inter-processor interrupts must be recorded
    * and must be delivered once the secondary processor enables interrupts for
-   * the first time.  The main processor will wait for all secondary processors
+   * the first time.  The boot processor will wait for all secondary processors
    * to change into this state.  In case a secondary processor does not reach
    * this state the system will not start.  The secondary processors wait now
-   * for a change into the PER_CPU_STATE_BEGIN_MULTITASKING state set by the
-   * main processor once all secondary processors reached the
-   * PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING state.
-   *
-   * The owner of the per CPU state field is the main processor in this state.
+   * for a change into the PER_CPU_STATE_REQUEST_START_MULTITASKING state set
+   * by the boot processor once all secondary processors reached the
+   * PER_CPU_STATE_READY_TO_START_MULTITASKING state.
    */
-  PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING,
+  PER_CPU_STATE_READY_TO_START_MULTITASKING,
 
   /**
-   * @brief Multitasking begin of secondary processor is requested.
+   * @brief Multitasking start of processor is requested.
    *
-   * The main processor completed system initialization and is about to perform
+   * The boot processor completed system initialization and is about to perform
    * a context switch to its heir thread.  Secondary processors should now
    * issue a context switch to the heir thread.  This normally enables
    * interrupts on the processor for the first time.
-   *
-   * The owner of the per CPU state field is the secondary processor in this
-   * state.
    */
-  PER_CPU_STATE_BEGIN_MULTITASKING,
+  PER_CPU_STATE_REQUEST_START_MULTITASKING,
 
   /**
    * @brief Normal multitasking state.
-   *
-   * The owner of the per CPU state field is the secondary processor in this
-   * state.
    */
   PER_CPU_STATE_UP,
 
   /**
    * @brief This is the terminal state.
-   *
-   * The owner of the per CPU state field is the secondary processor in this
-   * state.
    */
   PER_CPU_STATE_SHUTDOWN
 } Per_CPU_State;
@@ -313,14 +332,9 @@ static inline void _Per_CPU_Send_interrupt( const Per_CPU_Control *per_cpu )
  */
 void _Per_CPU_Initialize(void);
 
-void _Per_CPU_Change_state(
+void _Per_CPU_State_change(
   Per_CPU_Control *per_cpu,
   Per_CPU_State new_state
-);
-
-void _Per_CPU_Wait_for_state(
-  const Per_CPU_Control *per_cpu,
-  Per_CPU_State desired_state
 );
 
 #endif /* defined( RTEMS_SMP ) */
