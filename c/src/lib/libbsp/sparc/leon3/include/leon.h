@@ -319,6 +319,9 @@ void leon3_secondary_cpu_initialize(uint32_t cpu);
 
 void leon3_cpu_counter_initialize(void);
 
+/* GRLIB extended IRQ controller register */
+void leon3_ext_irq_init(void);
+
 void bsp_debug_uart_init(void);
 
 #endif /* !ASM */

@@ -10,7 +10,7 @@
  *
  */
 
-#include <bsp.h>
+#include <leon.h>
 
 /* GRLIB extended IRQ controller IRQ number */
 int LEON3_IrqCtrl_EIrq = -1;

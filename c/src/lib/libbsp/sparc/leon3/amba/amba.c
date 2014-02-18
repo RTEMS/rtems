@@ -13,6 +13,7 @@
 
 #include <bsp.h>
 #include <bsp/fatal.h>
+#include <leon.h>
 #include <ambapp.h>
 
 /* AMBA Plug&Play information description.
@@ -21,9 +22,6 @@
  * it easier for drivers to work with the bus architecture.
  */
 struct ambapp_bus ambapp_plb;
-
-/* GRLIB extended IRQ controller register */
-extern void leon3_ext_irq_init(void);
 
 /* Pointers to Interrupt Controller configuration registers */
 volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
