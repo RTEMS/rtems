@@ -23,7 +23,6 @@
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/config.h>
-#include <rtems/fatal.h>
 
 #if defined(RTEMS_DEBUG)
   #include <rtems/bspIo.h>
@@ -61,46 +60,6 @@ void _SMP_Start_multitasking_on_secondary_processor( void )
   _Per_CPU_Wait_for_state( self_cpu, PER_CPU_STATE_BEGIN_MULTITASKING );
 
   _Thread_Start_multitasking();
-}
-
-void _SMP_Inter_processor_interrupt_handler( void )
-{
-  Per_CPU_Control *self_cpu = _Per_CPU_Get();
-
-
-  if ( self_cpu->message != 0 ) {
-    uint32_t  message;
-    ISR_Level level;
-
-    _Per_CPU_ISR_disable_and_acquire( self_cpu, level );
-    message = self_cpu->message;
-    self_cpu->message = 0;
-    _Per_CPU_Release_and_ISR_enable( self_cpu, level );
-
-    #if defined(RTEMS_DEBUG)
-      {
-        void *sp = __builtin_frame_address(0);
-        if ( !(message & SMP_MESSAGE_SHUTDOWN) ) {
-          printk(
-            "ISR on CPU %d -- (0x%02x) (0x%p)\n",
-            _Per_CPU_Get_index( self_cpu ),
-            message,
-            sp
-          );
-          if ( message & SMP_MESSAGE_SHUTDOWN )
-            printk( "shutdown\n" );
-        }
-        printk( "Dispatch level %d\n", _Thread_Dispatch_get_disable_level() );
-      }
-    #endif
-
-    if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
-      _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_SHUTDOWN );
-
-      rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );
-      /* does not continue past here */
-    }
-  }
 }
 
 void _SMP_Send_message( uint32_t cpu, uint32_t message )

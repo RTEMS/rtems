@@ -19,6 +19,8 @@
 #define _RTEMS_SCORE_SMPIMPL_H
 
 #include <rtems/score/smp.h>
+#include <rtems/score/percpu.h>
+#include <rtems/fatal.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -92,7 +94,27 @@ void _SMP_Start_multitasking_on_secondary_processor( void )
 /**
  * @brief Interrupt handler for inter-processor interrupts.
  */
-void _SMP_Inter_processor_interrupt_handler( void );
+static inline void _SMP_Inter_processor_interrupt_handler( void )
+{
+  Per_CPU_Control *self_cpu = _Per_CPU_Get();
+
+  if ( self_cpu->message != 0 ) {
+    uint32_t  message;
+    ISR_Level level;
+
+    _Per_CPU_ISR_disable_and_acquire( self_cpu, level );
+    message = self_cpu->message;
+    self_cpu->message = 0;
+    _Per_CPU_Release_and_ISR_enable( self_cpu, level );
+
+    if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
+      _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_SHUTDOWN );
+
+      rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );
+      /* does not continue past here */
+    }
+  }
+}
 
 /**
  *  @brief Sends a SMP message to a processor.
