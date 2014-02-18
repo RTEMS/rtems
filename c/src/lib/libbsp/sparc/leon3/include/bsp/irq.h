@@ -10,6 +10,8 @@
 #ifndef LIBBSP_LEON3_IRQ_CONFIG_H
 #define LIBBSP_LEON3_IRQ_CONFIG_H
 
+#include <leon.h>
+
 #define BSP_INTERRUPT_VECTOR_MAX_STD 15 /* Standard IRQ controller */
 #define BSP_INTERRUPT_VECTOR_MAX_EXT 31 /* Extended IRQ controller */
 
@@ -18,8 +20,6 @@
 
 /* The check is different depending on IRQ controller, runtime detected */
 #define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
-
-extern int LEON3_IrqCtrl_EIrq;
 
 /**
  * @brief Returns true if the interrupt vector with number @a vector is valid.
