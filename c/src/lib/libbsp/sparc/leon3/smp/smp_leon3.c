@@ -29,7 +29,7 @@ static rtems_isr bsp_inter_processor_interrupt(
 void leon3_secondary_cpu_initialize(uint32_t cpu)
 {
   leon3_set_cache_control_register(0x80000F);
-  LEON_Unmask_interrupt(LEON3_MP_IRQ);
+  /* Unmask IPI interrupts at Interrupt controller for this CPU */
   LEON3_IrqCtrl_Regs->mask[cpu] |= 1 << LEON3_MP_IRQ;
 
   _SMP_Start_multitasking_on_secondary_processor();
