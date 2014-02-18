@@ -46,15 +46,6 @@ void _SMP_Handler_initialize( void )
   max_cpus = _CPU_SMP_Initialize( max_cpus );
 
   _SMP_Processor_count = max_cpus;
-
-  for ( cpu = 1 ; cpu < max_cpus; ++cpu ) {
-    const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
-
-    _Per_CPU_Wait_for_state(
-      per_cpu,
-      PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING
-    );
-  }
 }
 
 void _SMP_Start_multitasking_on_secondary_processor( void )
@@ -149,6 +140,11 @@ void _SMP_Request_other_cores_to_perform_first_context_switch( void )
     Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
 
     if ( cpu != self ) {
+      _Per_CPU_Wait_for_state(
+        per_cpu,
+        PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING
+      );
+
       _Per_CPU_Change_state( per_cpu, PER_CPU_STATE_BEGIN_MULTITASKING );
     }
   }
