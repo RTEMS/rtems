@@ -126,11 +126,6 @@ rtems_isr_entry  set_EE_vector(
 void initialize_external_exception_vector ();
 
 /*
- * console.c
- */
-void BSP_fatal_return( void );
-
-/*
  * Hwr_init.c
  */
 void init_PCI();
