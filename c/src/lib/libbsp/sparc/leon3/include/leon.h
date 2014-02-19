@@ -332,6 +332,8 @@ void leon3_ext_irq_init(void);
 
 void bsp_debug_uart_init(void);
 
+void leon3_power_down_loop(void) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+
 #endif /* !ASM */
 
 #ifdef __cplusplus

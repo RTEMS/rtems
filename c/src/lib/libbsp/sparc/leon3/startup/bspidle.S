@@ -19,7 +19,9 @@
 
         .align 4
         PUBLIC(bsp_idle_thread)
+        PUBLIC(leon3_power_down_loop)
 SYM(bsp_idle_thread):
+SYM(leon3_power_down_loop):
 pwdloop:  mov   %g0, %asr19
           ba    pwdloop
           nop
