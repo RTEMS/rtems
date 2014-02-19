@@ -109,6 +109,18 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
   void _Giant_Release( void );
 
   /**
+   * @brief Releases the giant lock completely if held by the executing processor.
+   *
+   * The thread dispatch disable level is not altered by this function.
+   *
+   * The only use case for this operation is in
+   * _SMP_Request_shutdown().
+   *
+   * @param[in] self_cpu The current processor index.
+   */
+  void _Giant_Drop( uint32_t self_cpu );
+
+  /**
    *  @brief Sets thread dispatch level to the value passed in.
    *
    * This routine sets thread dispatch level to the

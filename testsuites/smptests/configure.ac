@@ -67,6 +67,7 @@ smp09/Makefile
 smpatomic01/Makefile
 smpfatal01/Makefile
 smpfatal02/Makefile
+smpfatal03/Makefile
 smplock01/Makefile
 smpmigration01/Makefile
 smppsxsignal01/Makefile

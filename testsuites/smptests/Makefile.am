@@ -13,6 +13,7 @@ SUBDIRS += smp09
 SUBDIRS += smpatomic01
 SUBDIRS += smpfatal01
 SUBDIRS += smpfatal02
+SUBDIRS += smpfatal03
 SUBDIRS += smplock01
 SUBDIRS += smpmigration01
 SUBDIRS += smpschedule01

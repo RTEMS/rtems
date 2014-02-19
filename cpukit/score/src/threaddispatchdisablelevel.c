@@ -57,6 +57,19 @@ static void _Giant_Do_release( void )
   }
 }
 
+void _Giant_Drop( uint32_t self_cpu )
+{
+  Giant_Control *giant = &_Giant;
+
+  _Assert( _ISR_Get_level() != 0 );
+
+  if ( giant->owner_cpu == self_cpu ) {
+    giant->nest_level = 0;
+    giant->owner_cpu = NO_OWNER_CPU;
+    _SMP_lock_Release( &giant->lock );
+  }
+}
+
 uint32_t _Thread_Dispatch_increment_disable_level( void )
 {
   ISR_Level isr_level;
