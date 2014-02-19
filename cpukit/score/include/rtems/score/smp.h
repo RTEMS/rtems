@@ -46,8 +46,7 @@ extern "C" {
 #endif
 
 #if defined( RTEMS_SMP )
-  RTEMS_COMPILER_PURE_ATTRIBUTE static inline uint32_t
-    _SMP_Get_current_processor( void )
+  static inline uint32_t _SMP_Get_current_processor( void )
   {
     return _CPU_SMP_Get_current_processor();
   }

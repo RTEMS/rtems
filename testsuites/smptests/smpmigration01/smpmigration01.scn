@@ -1,17 +1,25 @@
 *** TEST SMPMIGRATION 1 ***
+total cycles 94476101
+average cycles 15746016
 runner 0
-        cpu 0 tokens 453284
-        cpu 0 cycles 14955317
-        cpu 1 tokens 453283
-        cpu 1 cycles 14978390
+        cpu 0 tokens 456994
+        cpu 0 cycles 16451659
+        cpu 0 cycle deviation 0.044814
+        cpu 1 tokens 456994
+        cpu 1 cycles 16895680
+        cpu 1 cycle deviation 0.073013
 runner 1
-        cpu 0 tokens 453283
-        cpu 0 cycles 21302793
-        cpu 1 tokens 453283
-        cpu 1 cycles 21318817
+        cpu 0 tokens 456993
+        cpu 0 cycles 20561545
+        cpu 0 cycle deviation 0.305825
+        cpu 1 tokens 456994
+        cpu 1 cycles 20548432
+        cpu 1 cycle deviation 0.304992
 runner 2
-        cpu 0 tokens 453283
-        cpu 0 cycles 19973312
-        cpu 1 tokens 453283
-        cpu 1 cycles 21315227
+        cpu 0 tokens 456994
+        cpu 0 cycles 10007206
+        cpu 0 cycle deviation -0.364461
+        cpu 1 tokens 456993
+        cpu 1 cycles 10011579
+        cpu 1 cycle deviation -0.364183
 *** END OF TEST SMPMIGRATION 1 ***

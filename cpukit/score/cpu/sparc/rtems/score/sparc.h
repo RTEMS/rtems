@@ -298,7 +298,7 @@ static inline uint32_t _LEON3_Get_current_processor( void )
 {
   uint32_t asr17;
 
-  __asm__ (
+  __asm__ volatile (
     "rd %%asr17, %0"
     : "=&r" (asr17)
   );

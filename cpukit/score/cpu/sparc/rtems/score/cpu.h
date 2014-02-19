@@ -1163,7 +1163,7 @@ void _CPU_Context_restore(
 #if defined(RTEMS_SMP)
   uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count );
 
-  RTEMS_COMPILER_PURE_ATTRIBUTE uint32_t _CPU_SMP_Get_current_processor( void );
+  uint32_t _CPU_SMP_Get_current_processor( void );
 
   void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
 

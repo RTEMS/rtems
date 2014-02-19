@@ -469,13 +469,12 @@ void _CPU_Context_validate( uintptr_t pattern );
 #ifdef RTEMS_SMP
   uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count );
 
-  RTEMS_COMPILER_PURE_ATTRIBUTE static inline uint32_t
-    _CPU_SMP_Get_current_processor( void )
+  static inline uint32_t _CPU_SMP_Get_current_processor( void )
   {
     uint32_t mpidr;
 
     /* Use ARMv7 Multiprocessor Affinity Register (MPIDR) */
-    __asm__ (
+    __asm__ volatile (
       "mrc p15, 0, %[mpidr], c0, c0, 5\n"
       : [mpidr] "=&r" (mpidr)
     );

@@ -1486,8 +1486,7 @@ CPU_Counter_ticks _CPU_Counter_difference(
    * current processor in the system.  The set of processor indices is the
    * range of integers starting with zero up to the processor count minus one.
    */
-  RTEMS_COMPILER_PURE_ATTRIBUTE static inline uint32_t
-    _CPU_SMP_Get_current_processor( void )
+  static inline uint32_t _CPU_SMP_Get_current_processor( void )
   {
     return 123;
   }
