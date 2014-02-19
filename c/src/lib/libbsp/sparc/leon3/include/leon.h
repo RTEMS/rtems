@@ -334,6 +334,15 @@ void bsp_debug_uart_init(void);
 
 void leon3_power_down_loop(void) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
+static inline uint32_t leon3_get_cpu_count(
+  volatile struct irqmp_regs *irqmp
+)
+{
+  uint32_t mpstat = irqmp->mpstat;
+
+  return ((mpstat >> LEON3_IRQMPSTATUS_CPUNR) & 0xf)  + 1;
+}
+
 #endif /* !ASM */
 
 #ifdef __cplusplus

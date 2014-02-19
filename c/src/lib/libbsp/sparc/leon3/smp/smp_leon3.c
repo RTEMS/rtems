@@ -55,8 +55,7 @@ uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count )
 
   sparc_leon3_set_cctrl( 0x80000F );
 
-  max_cpu_count =
-    ((LEON3_IrqCtrl_Regs->mpstat >> LEON3_IRQMPSTATUS_CPUNR) & 0xf)  + 1;
+  max_cpu_count = leon3_get_cpu_count(LEON3_IrqCtrl_Regs);
   used_cpu_count = configured_cpu_count < max_cpu_count ?
     configured_cpu_count : max_cpu_count;
 
