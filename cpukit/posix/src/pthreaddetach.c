@@ -42,6 +42,7 @@ int pthread_detach(
 
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
       api->detachstate = PTHREAD_CREATE_DETACHED;
+      api->Attributes.detachstate = PTHREAD_CREATE_DETACHED;
       _Objects_Put( &the_thread->Object );
       return 0;
 

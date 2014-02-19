@@ -73,6 +73,9 @@ int pthread_setschedparam(
 
       api->schedpolicy = policy;
       api->schedparam  = *param;
+      api->Attributes.schedpolicy = policy;
+      api->Attributes.schedparam  = *param;
+
       the_thread->budget_algorithm = budget_algorithm;
       the_thread->budget_callout   = budget_callout;
 
