@@ -66,7 +66,7 @@ static inline void rtems_exception_frame_print(
  *
  * @param[in] the_error is a 32-bit fatal error code.
  *
- * @see _Internal_error_Occurred().
+ * @see _Terminate().
  */
 void rtems_fatal_error_occurred(
   uint32_t   the_error
@@ -78,7 +78,7 @@ void rtems_fatal_error_occurred(
  * @param[in] source is the fatal source.
  * @param[in] error is the fatal code.
  *
- * @see _Internal_error_Occurred().
+ * @see _Terminate().
  */
 void rtems_fatal(
   rtems_fatal_source source,

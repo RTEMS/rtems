@@ -33,7 +33,7 @@ void _Objects_MP_Handler_early_initialization(void)
   maximum_nodes          = _Configuration_MP_table->maximum_nodes;
 
   if ( node < 1 || node > maximum_nodes )
-    _Internal_error_Occurred(
+    _Terminate(
       INTERNAL_ERROR_CORE,
       true,
       INTERNAL_ERROR_INVALID_NODE
@@ -105,7 +105,7 @@ bool _Objects_MP_Allocate_and_open (
     if ( is_fatal_error == false )
       return false;
 
-    _Internal_error_Occurred(
+    _Terminate(
       INTERNAL_ERROR_CORE,
       true,
       INTERNAL_ERROR_OUT_OF_GLOBAL_OBJECTS
@@ -144,7 +144,7 @@ void _Objects_MP_Close (
 
   }
 
-  _Internal_error_Occurred(
+  _Terminate(
     INTERNAL_ERROR_CORE,
     true,
     INTERNAL_ERROR_INVALID_GLOBAL_ID

@@ -74,7 +74,7 @@ void _RTEMS_tasks_Initialize_user_tasks_body( void )
       &id
     );
     if ( !rtems_is_status_successful( return_value ) )
-      _Internal_error_Occurred( INTERNAL_ERROR_RTEMS_API, true, return_value );
+      _Terminate( INTERNAL_ERROR_RTEMS_API, true, return_value );
 
     return_value = rtems_task_start(
       id,
@@ -82,6 +82,6 @@ void _RTEMS_tasks_Initialize_user_tasks_body( void )
       user_tasks[ index ].argument
     );
     if ( !rtems_is_status_successful( return_value ) )
-      _Internal_error_Occurred( INTERNAL_ERROR_RTEMS_API, true, return_value );
+      _Terminate( INTERNAL_ERROR_RTEMS_API, true, return_value );
   }
 }

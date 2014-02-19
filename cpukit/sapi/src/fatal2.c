@@ -31,5 +31,5 @@ void rtems_fatal(
   rtems_fatal_code error
 )
 {
-  _Internal_error_Occurred( source, false, error );
+  _Terminate( source, false, error );
 }

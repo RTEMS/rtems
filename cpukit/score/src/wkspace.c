@@ -117,7 +117,7 @@ void _Workspace_Handler_initialization(
   }
 
   if ( remaining > 0 ) {
-    _Internal_error_Occurred(
+    _Terminate(
       INTERNAL_ERROR_CORE,
       true,
       INTERNAL_ERROR_TOO_LITTLE_WORKSPACE
@@ -185,7 +185,7 @@ void *_Workspace_Allocate_or_fatal_error(
   #endif
 
   if ( memory == NULL )
-    _Internal_error_Occurred(
+    _Terminate(
       INTERNAL_ERROR_CORE,
       true,
       INTERNAL_ERROR_WORKSPACE_ALLOCATION

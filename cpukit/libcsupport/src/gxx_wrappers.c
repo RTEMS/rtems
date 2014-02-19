@@ -133,7 +133,7 @@ void *rtems_gxx_getspecific(__gthread_key_t key)
      */
     status = rtems_task_variable_add( RTEMS_SELF, (void **)key, key->dtor );
     if ( status != RTEMS_SUCCESSFUL ) {
-      _Internal_error_Occurred(
+      _Terminate(
         INTERNAL_ERROR_CORE,
         true,
         INTERNAL_ERROR_GXX_KEY_ADD_FAILED
@@ -204,7 +204,7 @@ void rtems_gxx_mutex_init (__gthread_mutex_t *mutex)
         status
       );
     #endif
-    _Internal_error_Occurred(
+    _Terminate(
       INTERNAL_ERROR_CORE,
       true,
       INTERNAL_ERROR_GXX_MUTEX_INIT_FAILED

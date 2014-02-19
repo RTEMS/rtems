@@ -151,7 +151,7 @@
  *  the method will NOT return to the caller.  This can assist the
  *  compiler in code generation and avoid unreachable paths.  This
  *  can impact the code generated following calls to
- *  rtems_fatal_error_occurred and _Internal_error_Occurred.
+ *  rtems_fatal_error_occurred and _Terminate.
  */
 #ifdef __GNUC__
   #define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE \

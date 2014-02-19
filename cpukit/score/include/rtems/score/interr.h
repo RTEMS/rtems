@@ -210,7 +210,7 @@ extern Internal_errors_Information _Internal_errors_What_happened;
  *
  * @see rtems_fatal_error_occurred() and rtems_fatal().
  */
-void _Internal_error_Occurred(
+void _Terminate(
   Internal_errors_Source  the_source,
   bool                    is_internal,
   Internal_errors_t       the_error

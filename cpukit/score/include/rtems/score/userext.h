@@ -181,7 +181,7 @@ typedef void( *User_extensions_thread_exitted_extension )(
 /**
  * @brief Fatal error extension.
  *
- * It corresponds to _Internal_error_Occurred() (used by the
+ * It corresponds to _Terminate() (used by the
  * rtems_fatal_error_occurred() directive).  The first parameter contains the
  * error source.  The second parameter indicates if it was an internal error.
  * The third parameter contains the error code.

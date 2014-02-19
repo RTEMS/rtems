@@ -159,7 +159,7 @@ static uint32_t instance = 0;
   )
   {
     /* FIXME */
-    _Internal_error_Occurred( INTERNAL_ERROR_CORE, false, 0xdeadbeef );
+    _Terminate( INTERNAL_ERROR_CORE, false, 0xdeadbeef );
   }
 #endif
 

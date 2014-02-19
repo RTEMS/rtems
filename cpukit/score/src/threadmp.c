@@ -77,7 +77,7 @@ Thread_Control *_Thread_MP_Allocate_proxy (
     return the_thread;
   }
 
-  _Internal_error_Occurred(
+  _Terminate(
     INTERNAL_ERROR_CORE,
     true,
     INTERNAL_ERROR_OUT_OF_PROXIES

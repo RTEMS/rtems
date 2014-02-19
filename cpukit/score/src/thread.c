@@ -36,7 +36,7 @@ void _Thread_Handler_initialization(void)
 
   if ( rtems_configuration_get_stack_allocate_hook() == NULL ||
        rtems_configuration_get_stack_free_hook() == NULL)
-    _Internal_error_Occurred(
+    _Terminate(
       INTERNAL_ERROR_CORE,
       true,
       INTERNAL_ERROR_BAD_STACK_HOOK

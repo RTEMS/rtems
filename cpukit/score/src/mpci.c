@@ -47,7 +47,7 @@ void _MPCI_Handler_initialization(
   users_mpci_table = _Configuration_MP_table->User_mpci_table;
 
   if ( _System_state_Is_multiprocessing && !users_mpci_table )
-    _Internal_error_Occurred(
+    _Terminate(
       INTERNAL_ERROR_CORE,
       true,
       INTERNAL_ERROR_NO_MPCI
@@ -149,7 +149,7 @@ MP_packet_Prefix *_MPCI_Get_packet ( void )
   (*_MPCI_table->get_packet)( &the_packet );
 
   if ( the_packet == NULL )
-    _Internal_error_Occurred(
+    _Terminate(
       INTERNAL_ERROR_CORE,
       true,
       INTERNAL_ERROR_OUT_OF_PACKETS
@@ -316,7 +316,7 @@ Thread _MPCI_Receive_server(
       the_function = _MPCI_Packet_processors[ the_packet->the_class ];
 
       if ( !the_function )
-        _Internal_error_Occurred(
+        _Terminate(
           INTERNAL_ERROR_CORE,
           true,
           INTERNAL_ERROR_BAD_PACKET
@@ -398,7 +398,7 @@ void _MPCI_Internal_packets_Process_packet (
 
         _MPCI_Return_packet( the_packet_prefix );
 
-        _Internal_error_Occurred(
+        _Terminate(
           INTERNAL_ERROR_CORE,
           true,
           INTERNAL_ERROR_INCONSISTENT_MP_INFORMATION

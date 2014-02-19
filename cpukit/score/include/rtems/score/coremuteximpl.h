@@ -258,7 +258,7 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
 )
 {
   if ( _CORE_mutex_Check_dispatch_for_seize( wait ) ) {
-    _Internal_error_Occurred(
+    _Terminate(
       INTERNAL_ERROR_CORE,
       false,
       INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE

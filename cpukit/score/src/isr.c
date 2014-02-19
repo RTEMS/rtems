@@ -45,7 +45,7 @@ void _ISR_Handler_initialization( void )
     uint32_t cpu;
 
     if ( !_Stack_Is_enough( stack_size ) )
-      _Internal_error_Occurred(
+      _Terminate(
         INTERNAL_ERROR_CORE,
         true,
         INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL

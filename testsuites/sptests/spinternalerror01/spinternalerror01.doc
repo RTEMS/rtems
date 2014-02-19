@@ -4,8 +4,8 @@ test set name: spinternalerror01
 
 directives:
 
-  _Internal_error_Occurred()
+  - _Terminate()
 
 concepts:
 
-  - Ensure that _Internal_error_Occurred() works right after low-level start.
+  - Ensure that _Terminate() works right after low-level start.

@@ -223,7 +223,7 @@ void _Thread_Handler( void )
 
   _User_extensions_Thread_exitted( executing );
 
-  _Internal_error_Occurred(
+  _Terminate(
     INTERNAL_ERROR_CORE,
     true,
     INTERNAL_ERROR_THREAD_EXITTED
