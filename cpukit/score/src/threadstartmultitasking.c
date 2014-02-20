@@ -23,7 +23,7 @@
 void _Thread_Start_multitasking( void )
 {
   Per_CPU_Control *self_cpu = _Per_CPU_Get();
-  Thread_Control  *heir = self_cpu->heir;
+  Thread_Control  *heir;
 
 #if defined(RTEMS_SMP)
   _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_UP );
@@ -35,7 +35,11 @@ void _Thread_Start_multitasking( void )
    */
   _Per_CPU_Acquire( self_cpu );
   self_cpu->thread_dispatch_disable_level = 1;
+#endif
 
+  heir = self_cpu->heir;
+
+#if defined(RTEMS_SMP)
   self_cpu->executing->is_executing = false;
   heir->is_executing = true;
 #endif
