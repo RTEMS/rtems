@@ -47,6 +47,11 @@ libbsp_a_SOURCES += ../../shared/console-polled.c
 libbsp_a_SOURCES += console/console-io.c
 libbsp_a_SOURCES += ../../shared/timerstub.c
 
+# Cache
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += ../../shared/include/cache_.h
+libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
+
 noinst_LIBRARIES = libbsp.a
 
 include $(srcdir)/preinstall.am

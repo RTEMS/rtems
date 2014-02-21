@@ -38,6 +38,7 @@ libbsp_a_SOURCES += startup/tm27supp.c
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc5xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc5xx/console-generic.rel \

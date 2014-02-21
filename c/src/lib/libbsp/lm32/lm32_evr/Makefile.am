@@ -42,6 +42,11 @@ libbsp_a_SOURCES += ../../lm32/shared/console/console.c ../../lm32/shared/consol
 # timer
 libbsp_a_SOURCES += ../../lm32/shared/timer/timer.c
 
+# Cache
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += ../../shared/include/cache_.h
+libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
+
 if HAS_NETWORKING
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES = ../../lm32/shared/tsmac/tsmac.c

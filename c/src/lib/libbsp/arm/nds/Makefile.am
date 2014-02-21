@@ -255,6 +255,11 @@ coproc.bin: coproc/coproc.S coproc/coproc.c libnds7.rel
 endif
 project_lib_DATA += coproc.bin
 
+# Cache
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += ../../shared/include/cache_.h
+libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
+
 libbsp_a_LIBADD = clock.rel console.rel gnatsupp.rel startup.rel irq.rel \
     timer.rel libnds9.rel rtc.rel fb.rel touchscreen.rel sound.rel \
     block.rel libdldi.rel

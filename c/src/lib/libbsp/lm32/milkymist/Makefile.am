@@ -110,6 +110,11 @@ libbsp_a_SOURCES += ../../lm32/shared/milkymist_video/video.c
 # versions
 libbsp_a_SOURCES += ../../lm32/shared/milkymist_versions/versions.c
 
+# Cache
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += ../../shared/include/cache_.h
+libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
+
 if HAS_NETWORKING
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES = ../../lm32/shared/milkymist_networking/network.c

@@ -50,8 +50,12 @@ libbsp_a_SOURCES += tod/ds1307.c tod/todcfg.c ../../shared/tod.c
 # nvram
 libbsp_a_SOURCES += nvram/nvram.c
 
+# Cache
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += ../../shared/include/cache_.h
+libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
+
 libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/misc.rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/mcfuart.rel \

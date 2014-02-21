@@ -54,6 +54,11 @@ libbsp_a_SOURCES += ../shared/abort/abort.c
 # smc
 libbsp_a_SOURCES += smc/smc.c smc/smc.h
 
+# Cache
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += ../../shared/include/cache_.h
+libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
+
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
     ../../../libcpu/@RTEMS_CPU@/s3c24xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/s3c24xx/timer.rel \
