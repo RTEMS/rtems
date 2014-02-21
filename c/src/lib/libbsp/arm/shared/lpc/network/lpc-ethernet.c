@@ -336,6 +336,7 @@ typedef struct {
   unsigned transmit_overflow_errors;
   unsigned transmit_fatal_errors;
   uint32_t phy_id;
+  int phy;
   rtems_vector_number interrupt_number;
   rtems_id control_task;
 } lpc_eth_driver_entry;
@@ -1091,12 +1092,15 @@ static int lpc_eth_mdio_wait_for_not_busy(void)
     ++i;
   }
 
+  LPC_ETH_PRINTK("tx: lpc_eth_mdio_wait %s after %d\n",
+                 i != one_second? "succeed": "timeout", i);
+
   return i != one_second ? 0 : ETIMEDOUT;
 }
 
-static uint32_t lpc_eth_mdio_read_anlpar(void)
+static uint32_t lpc_eth_mdio_read_anlpar(int phy)
 {
-  uint32_t madr = ETH_MADR_REG(MII_ANLPAR) | ETH_MADR_PHY(DEFAULT_PHY);
+  uint32_t madr = ETH_MADR_REG(MII_ANLPAR) | ETH_MADR_PHY(phy);
   uint32_t anlpar = 0;
   int eno = 0;
 
@@ -1130,8 +1134,8 @@ static int lpc_eth_mdio_read(
 {
   int eno = 0;
 
-  if (phy == -1 || phy == 0) {
-    lpc_eth->madr = ETH_MADR_REG(reg) | ETH_MADR_PHY(DEFAULT_PHY);
+  if (0 <= phy && phy <= 31) {
+    lpc_eth->madr = ETH_MADR_REG(reg) | ETH_MADR_PHY(phy);
     lpc_eth->mcmd = 0;
     lpc_eth->mcmd = ETH_MCMD_READ;
     eno = lpc_eth_mdio_wait_for_not_busy();
@@ -1155,8 +1159,8 @@ static int lpc_eth_mdio_write(
 {
   int eno = 0;
 
-  if (phy == -1 || phy == 0) {
-    lpc_eth->madr = ETH_MADR_REG(reg) | ETH_MADR_PHY(DEFAULT_PHY);
+  if (0 <= phy && phy <= 31) {
+    lpc_eth->madr = ETH_MADR_REG(reg) | ETH_MADR_PHY(phy);
     lpc_eth->mwtd = val;
     eno = lpc_eth_mdio_wait_for_not_busy();
   } else {
@@ -1166,15 +1170,15 @@ static int lpc_eth_mdio_write(
   return eno;
 }
 
-static int lpc_eth_phy_get_id(uint32_t *id)
+static int lpc_eth_phy_get_id(int phy, uint32_t *id)
 {
   uint32_t id1 = 0;
-  int eno = lpc_eth_mdio_read(DEFAULT_PHY, NULL, MII_PHYIDR1, &id1);
+  int eno = lpc_eth_mdio_read(phy, NULL, MII_PHYIDR1, &id1);
 
   if (eno == 0) {
     uint32_t id2 = 0;
 
-    eno = lpc_eth_mdio_read(DEFAULT_PHY, NULL, MII_PHYIDR2, &id2);
+    eno = lpc_eth_mdio_read(phy, NULL, MII_PHYIDR2, &id2);
     if (eno == 0) {
       *id = (id1 << 16) | (id2 & 0xfff0);
     }
@@ -1192,6 +1196,7 @@ typedef struct {
 } lpc_eth_phy_action;
 
 static int lpc_eth_phy_set_and_clear(
+  lpc_eth_driver_entry *e,
   const lpc_eth_phy_action *actions,
   size_t n
 )
@@ -1203,11 +1208,11 @@ static int lpc_eth_phy_set_and_clear(
     const lpc_eth_phy_action *action = &actions [i];
     uint32_t val;
 
-    eno = lpc_eth_mdio_read(DEFAULT_PHY, NULL, action->reg, &val);
+    eno = lpc_eth_mdio_read(e->phy, NULL, action->reg, &val);
     if (eno == 0) {
       val |= action->set;
       val &= ~action->clear;
-      eno = lpc_eth_mdio_write(DEFAULT_PHY, NULL, action->reg, val);
+      eno = lpc_eth_mdio_write(e->phy, NULL, action->reg, val);
     }
   }
 
@@ -1234,12 +1239,34 @@ static const lpc_eth_phy_action lpc_eth_phy_up_post_action_KSZ80X1RNL [] = {
 
 static int lpc_eth_phy_up(lpc_eth_driver_entry *e)
 {
-  int eno = lpc_eth_phy_get_id(&e->phy_id);
+  int eno;
+  int retries = 64;
+  uint32_t val;
+
+  e->phy = DEFAULT_PHY - 1;
+  while (true) {
+    e->phy = (e->phy + 1) % 32;
+
+    --retries;
+    eno = lpc_eth_phy_get_id(e->phy, &e->phy_id);
+    if (
+      (eno == 0 && e->phy_id != 0xfffffff0 && e->phy_id != 0)
+        || retries <= 0
+    ) {
+      break;
+    }
+
+    rtems_task_wake_after(1);
+  }
+
+  LPC_ETH_PRINTF("lpc_eth_phy_get_id: 0x%08" PRIx32 " from phy %d retries %d\n",
+                 e->phy_id, e->phy, retries);
 
   if (eno == 0) {
     switch (e->phy_id) {
       case PHY_KSZ80X1RNL:
         eno = lpc_eth_phy_set_and_clear(
+          e,
           &lpc_eth_phy_up_pre_action_KSZ80X1RNL [0],
           RTEMS_ARRAY_SIZE(lpc_eth_phy_up_pre_action_KSZ80X1RNL)
         );
@@ -1247,6 +1274,7 @@ static int lpc_eth_phy_up(lpc_eth_driver_entry *e)
       case 0:
       case 0xfffffff0:
         eno = EIO;
+        e->phy = DEFAULT_PHY;
         break;
       default:
         break;
@@ -1254,6 +1282,7 @@ static int lpc_eth_phy_up(lpc_eth_driver_entry *e)
 
     if (eno == 0) {
       eno = lpc_eth_phy_set_and_clear(
+        e,
         &lpc_eth_phy_up_action_default [0],
         RTEMS_ARRAY_SIZE(lpc_eth_phy_up_action_default)
       );
@@ -1263,6 +1292,7 @@ static int lpc_eth_phy_up(lpc_eth_driver_entry *e)
       switch (e->phy_id) {
         case PHY_KSZ80X1RNL:
           eno = lpc_eth_phy_set_and_clear(
+            e,
             &lpc_eth_phy_up_post_action_KSZ80X1RNL [0],
             RTEMS_ARRAY_SIZE(lpc_eth_phy_up_post_action_KSZ80X1RNL)
           );
@@ -1290,6 +1320,7 @@ static const lpc_eth_phy_action lpc_eth_phy_down_post_action_KSZ80X1RNL [] = {
 static void lpc_eth_phy_down(lpc_eth_driver_entry *e)
 {
   int eno = lpc_eth_phy_set_and_clear(
+    e,
     &lpc_eth_phy_down_action_default [0],
     RTEMS_ARRAY_SIZE(lpc_eth_phy_down_action_default)
   );
@@ -1298,6 +1329,7 @@ static void lpc_eth_phy_down(lpc_eth_driver_entry *e)
     switch (e->phy_id) {
       case PHY_KSZ80X1RNL:
         eno = lpc_eth_phy_set_and_clear(
+          e,
           &lpc_eth_phy_down_post_action_KSZ80X1RNL [0],
           RTEMS_ARRAY_SIZE(lpc_eth_phy_down_post_action_KSZ80X1RNL)
         );
@@ -1577,7 +1609,7 @@ static void lpc_eth_interface_watchdog(struct ifnet *ifp)
   lpc_eth_driver_entry *e = (lpc_eth_driver_entry *) ifp->if_softc;
 
   if (e->state == LPC_ETH_STATE_UP) {
-    uint32_t anlpar = lpc_eth_mdio_read_anlpar();
+    uint32_t anlpar = lpc_eth_mdio_read_anlpar(e->phy);
 
     if (e->anlpar != anlpar) {
       bool full_duplex = false;
