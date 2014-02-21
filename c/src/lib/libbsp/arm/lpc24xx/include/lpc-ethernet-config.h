@@ -69,6 +69,9 @@ extern "C" {
   static void lpc_eth_config_module_enable(void)
   {
     static const lpc24xx_pin_range pins [] = {
+      #ifdef LPC24XX_PIN_ETHERNET_POWER_DOWN
+        LPC24XX_PIN_ETHERNET_POWER_DOWN,
+      #endif
       LPC24XX_PIN_ETHERNET_RMII_0,
       LPC24XX_PIN_ETHERNET_RMII_1,
       LPC24XX_PIN_ETHERNET_RMII_2,
@@ -78,6 +81,15 @@ extern "C" {
 
     lpc24xx_module_enable(LPC24XX_MODULE_ETHERNET, LPC24XX_MODULE_PCLK_DEFAULT);
     lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
+
+    #ifdef LPC24XX_PIN_ETHERNET_POWER_DOWN
+      {
+        unsigned pin = lpc24xx_pin_get_first_index(&pins[0]);
+
+        lpc24xx_gpio_config(pin, LPC24XX_GPIO_OUTPUT);
+        lpc24xx_gpio_set(pin);
+      }
+    #endif
   }
 #else
   static void lpc_eth_config_module_enable(void)
