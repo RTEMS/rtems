@@ -232,6 +232,8 @@ static volatile lpc_eth_controller *const lpc_eth =
 
 #define ETH_MCFG_CLOCK_SELECT(val) BSP_FLD32(val, 2, 4)
 
+#define ETH_MCFG_RESETMIIMGMT BSP_BIT32(15)
+
 /* ETH_MCMD */
 
 #define ETH_MCMD_READ BSP_BIT32(0)
@@ -1327,7 +1329,11 @@ static int lpc_eth_up_or_down(lpc_eth_driver_entry *e, bool up)
     lpc_eth->mac1 = 0xf00;
 
     /* Initialize PHY */
-    lpc_eth->mcfg = ETH_MCFG_CLOCK_SELECT(0x7);
+    /* Clock value 10 (divide by 44 ) is safe on LPC178x up to 100 MHz AHB clock */
+    lpc_eth->mcfg = ETH_MCFG_CLOCK_SELECT(10) | ETH_MCFG_RESETMIIMGMT;
+    rtems_task_wake_after(1);
+    lpc_eth->mcfg = ETH_MCFG_CLOCK_SELECT(10);
+    rtems_task_wake_after(1);
     eno = lpc_eth_phy_up(e);
 
     if (eno == 0) {
