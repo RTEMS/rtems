@@ -295,6 +295,16 @@ rtems_status_code lpc24xx_pin_config(
 );
 
 /**
+ * @brief Returns the first pin index of a pin range.
+ */
+static inline unsigned lpc24xx_pin_get_first_index(
+  const lpc24xx_pin_range *range
+)
+{
+  return LPC24XX_IO_INDEX_BY_PORT(range->fields.port, range->fields.port_bit);
+}
+
+/**
  * @name ADC Pins
  *
  * @{
