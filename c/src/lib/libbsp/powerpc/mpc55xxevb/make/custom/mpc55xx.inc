@@ -16,7 +16,7 @@ RTEMS_CPU_MODEL = mpc55xx
 CPU_CFLAGS_FLOAT?=-msoft-float
 
 # FIXME
-CPU_CFLAGS = -mcpu=8540 -meabi -msdata -fno-common $(CPU_CFLAGS_FLOAT) \
+CPU_CFLAGS = -mcpu=8540 -meabi -msdata=sysv -fno-common $(CPU_CFLAGS_FLOAT) \
     -D__ppc_generic -mstrict-align
 
 CFLAGS_OPTIMIZE_V = -O2 -g -fno-keep-inline-functions

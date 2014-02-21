@@ -11,7 +11,7 @@ RTEMS_CPU_MODEL=mpc6xx
 #  and (hopefully) optimize for it. 
 #
 CPU_CFLAGS = -mcpu=603e -mstrict-align \
-             -meabi -msdata -fno-common
+             -meabi -msdata=sysv -fno-common
 
 # optimize flag: typically -O2
 CFLAGS_OPTIMIZE_V = -O2 -g -fno-keep-inline-functions
