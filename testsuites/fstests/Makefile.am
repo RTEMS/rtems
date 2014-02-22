@@ -31,6 +31,7 @@ SUBDIRS += mimfs_fspermission
 SUBDIRS += mimfs_fsrdwr
 SUBDIRS += mimfs_fssymlink
 SUBDIRS += mimfs_fstime
+SUBDIRS += mimfs_fsrename
 SUBDIRS += mrfs_fserror
 SUBDIRS += mrfs_fslink
 SUBDIRS += mrfs_fspatheval

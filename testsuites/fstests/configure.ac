@@ -107,6 +107,7 @@ mimfs_fspermission/Makefile
 mimfs_fsrdwr/Makefile
 mimfs_fssymlink/Makefile
 mimfs_fstime/Makefile
+mimfs_fsrename/Makefile
 mrfs_fserror/Makefile
 mrfs_fslink/Makefile
 mrfs_fspatheval/Makefile

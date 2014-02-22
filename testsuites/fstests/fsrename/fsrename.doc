@@ -1,0 +1,19 @@
+#  COPYRIGHT (c) 2014
+#  Andre Marques <andre.lousa.marques at gmail.com>
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.org/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  fsrename
+
+directives:
+
+  + rename
+
+concepts:
+
+  + check if rename implementation conforms to POSIX.1-2008

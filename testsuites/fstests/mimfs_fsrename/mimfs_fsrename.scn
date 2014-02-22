@@ -1,0 +1,287 @@
+*** BEGIN OF TEST FSRENAME MOUNTED IMFS ***
+Initializing filesystem MOUNTED IMFS
+
+Old is a simbolic link and rename operates on the simbolic link itself
+
+Testing rename     with arguments: symlink01, name02    EXPECT "0"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 78 
+Testing lstat      with arguments: name02, &statbuf     EXPECT "0"
+PASS
+Testing if name02 is now a symlink
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 86 
+Testing unlink     with arguments: name01               EXPECT "0"
+PASS
+Testing unlink     with arguments: name02               EXPECT "0"
+PASS
+Testing unlink     with arguments: symlink01            EXPECT "-1"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 94 
+
+New is a simbolic link and rename operates on the simbolic link itself
+
+Testing rename     with arguments: name02, symlink01    EXPECT "0"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 116 
+Testing lstat      with arguments: symlink01, &statbuf  EXPECT "0"
+PASS
+Testing that symlink01 is not a symlink
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 124 
+Testing unlink     with arguments: name01               EXPECT "0"
+PASS
+Testing unlink     with arguments: name02               EXPECT "-1"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 131 
+Testing unlink     with arguments: symlink01            EXPECT "0"
+PASS
+
+Testing with symbolic link loop's
+
+Testing rename     with arguments: "path01, name01"     EXPECT "ELOOP"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 149 
+Testing rename     with arguments: "path01, name01"     EXPECT "ELOOP"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 152 
+Testing unlink     with arguments: name01               EXPECT "-1"
+PASS
+Testing unlink     with arguments: symlink01            EXPECT "0"
+PASS
+Testing unlink     with arguments: symlink02            EXPECT "0"
+PASS
+Testing rename     with arguments: "name01, path01"     EXPECT "ELOOP"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 180 
+Testing rename     with arguments: "name01, path01"     EXPECT "ELOOP"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 183 
+Testing unlink     with arguments: name01               EXPECT "0"
+PASS
+Testing unlink     with arguments: symlink01            EXPECT "0"
+PASS
+Testing unlink     with arguments: symlink02            EXPECT "0"
+PASS
+
+Rename file with itself
+
+Testing rename     with arguments: name01, name01       EXPECT "0"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 244 
+Testing unlink     with arguments: name01               EXPECT "0"
+PASS
+
+Rename file with itself through a hard link in another directory
+
+Testing rename     with arguments: name01, path01       EXPECT "0"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 271 
+Testing unlink     with arguments: name01               EXPECT "0"
+PASS
+Testing unlink     with arguments: path01               EXPECT "0"
+PASS
+Testing rmdir      with arguments: dir01                EXPECT "0"
+PASS
+
+Rename directory with file
+
+Testing rename     with arguments: "dir01, name01"      EXPECT "ENOTDIR"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 343 
+Testing unlink     with arguments: name01               EXPECT "0"
+PASS
+Testing rmdir      with arguments: dir01                EXPECT "0"
+PASS
+
+Rename file with directory
+
+Testing rename     with arguments: "name01, dir01"      EXPECT "EISDIR"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 367 
+Testing unlink     with arguments: name01               EXPECT "0"
+PASS
+Testing rmdir      with arguments: dir01                EXPECT "0"
+PASS
+
+Rename directory with ancestor directory
+
+Testing rename     with arguments: "dir02, path01"      EXPECT "EINVAL"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 390 
+Testing rmdir      with arguments: path01               EXPECT "0"
+PASS
+Testing rmdir      with arguments: dir02                EXPECT "0"
+PASS
+
+Rename directory with non empty directory
+
+Testing rename     with arguments: dir01, dir02         EXPECT "-1"
+PASS
+Testing errno for EEXIST or ENOTEMPTY
+PASS
+Testing unlink     with arguments: path01               EXPECT "0"
+PASS
+Testing rmdir      with arguments: dir01                EXPECT "0"
+PASS
+Testing rmdir      with arguments: dir02                EXPECT "0"
+PASS
+
+Rename empty directory with another empty directory
+
+Testing rename     with arguments: dir01, dir02         EXPECT "0"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 448 
+Testing rmdir      with arguments: dir01                EXPECT "-1"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 454 
+Testing rmdir      with arguments: dir02                EXPECT "0"
+PASS
+Testing rename     with arguments: "dir02, path01"      EXPECT "EMLINK"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 483 
+Testing rmdir      with arguments: path01               EXPECT "-1"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 497 
+Testing rmdir      with arguments: dir02                EXPECT "0"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 498 
+Testing rmdir      with arguments: dir01                EXPECT "0"
+PASS
+
+Rename files within directories protected with S_ISVTX
+
+Testing rename     with arguments: path01, name02       EXPECT "-1"
+PASS
+Testing errno for EPERM or EACCES
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 535 
+Testing unlink     with arguments: path01               EXPECT "0"
+PASS
+Testing unlink     with arguments: name02               EXPECT "0"
+PASS
+Testing rmdir      with arguments: dir01                EXPECT "0"
+PASS
+Testing rename     with arguments: name02, path01       EXPECT "-1"
+PASS
+Testing errno for EPERM or EACCES
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 577 
+Testing unlink     with arguments: path01               EXPECT "0"
+PASS
+Testing unlink     with arguments: name02               EXPECT "0"
+PASS
+Testing rmdir      with arguments: dir01                EXPECT "0"
+PASS
+
+Rename file with non existant file
+
+Testing rename     with arguments: name01, name02       EXPECT "0"
+PASS
+Testing unlink     with arguments: name01               EXPECT "-1"
+PASS
+Testing unlink     with arguments: name02               EXPECT "0"
+PASS
+Testing rename     with arguments: "name02, name01"     EXPECT "ENOENT"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 660 
+Testing unlink     with arguments: name01               EXPECT "0"
+PASS
+Testing unlink     with arguments: name02               EXPECT "-1"
+PASS
+
+Rename file with non existant filepath
+
+Testing rename     with arguments: "path01, name01"     EXPECT "ENOENT"
+PASS
+Testing unlink     with arguments: name01               EXPECT "-1"
+PASS
+Testing rmdir      with arguments: dir01                EXPECT "0"
+PASS
+
+Rename directory with non existant directory
+
+Testing rename     with arguments: dir01, dir02         EXPECT "0"
+PASS
+Testing rmdir      with arguments: dir01                EXPECT "-1"
+PASS
+Testing rmdir      with arguments: dir02                EXPECT "0"
+PASS
+
+Rename file with a name size exceeding NAME_MAX
+
+Testing rename     with arguments: "name01, filename"   EXPECT "ENAMETOOLONG"
+PASS
+Testing unlink     with arguments: name01               EXPECT "0"
+PASS
+Testing unlink     with arguments: filename             EXPECT "-1"
+PASS
+
+Rename directory with current directory
+
+Testing rename     with arguments: "." , dir01          EXPECT "-1"
+PASS
+Testing errno for EINVAL or EBUSY
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 787 
+Testing rename     with arguments: dir01, "."           EXPECT "-1"
+PASS
+Testing errno for EINVAL or EBUSY
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 801 
+
+Rename directory with previous directory
+
+Testing rename     with arguments: ".." , dir01         EXPECT "-1"
+PASS
+Testing errno for EINVAL or EBUSY
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 817 
+Testing rename     with arguments: dir01, ".."          EXPECT "-1"
+PASS
+Testing errno for EINVAL or EBUSY
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 831 
+Testing rmdir      with arguments: dir01                EXPECT "0"
+PASS
+
+Testing empty filepaths
+
+Testing rename     with arguments: "name01, \"\""       EXPECT "ENOENT"
+PASS
+Testing            with arguments: name01               EXPECT "0"
+PASS
+Testing rename     with arguments: "\"\", name01"       EXPECT "ENOENT"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 869 
+Testing            with arguments: name01               EXPECT "0"
+PASS
+
+Rename two files on a directory with no write permission 
+
+Testing rename     with arguments: "name01 , name02"    EXPECT "EACCES"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 947 
+
+Rename file between two directories, with and without write access
+
+Testing rename     with arguments: "name01, path01"     EXPECT "EACCES"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 971 
+Testing rename     with arguments: "path01, name01"     EXPECT "EACCES"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 978 
+Testing            with arguments: name01               EXPECT "0"
+PASS
+Testing            with arguments: path01               EXPECT "0"
+PASS
+Testing            with arguments: path01               EXPECT "0"
+PASS
+Testing rmdir      with arguments: dir01                EXPECT "0"
+PASS
+Testing rmdir      with arguments: dir02                EXPECT "0"
+PASS
+
+Rename two files on a directory with no execute permission 
+
+Testing rename     with arguments: "path01 , path02"    EXPECT "EACCES"
+PASS
+
+Rename file between two directories, with and without execute access
+
+Testing rename     with arguments: "path01, path02"     EXPECT "EACCES"
+PASS
+Testing rename     with arguments: "path02, path01"     EXPECT "EACCES"
+FAIL   testsuites/fstests/mimfs_fsrename/../fsrename/test.c: 1103 
+Testing            with arguments: path01               EXPECT "0"
+PASS
+Testing            with arguments: path01               EXPECT "0"
+PASS
+Testing            with arguments: path02               EXPECT "0"
+PASS
+Testing rmdir      with arguments: dir01                EXPECT "0"
+PASS
+Testing rmdir      with arguments: dir02                EXPECT "0"
+PASS
+
+Rename files across diferent filesystems
+
+Testing rename     with arguments: "name01, path01"     EXPECT "EXDEV"
+PASS
+Testing            with arguments: path01               EXPECT "-1"
+PASS
+Testing            with arguments: name01               EXPECT "0"
+PASS
+
+
+Shutting down filesystem MOUNTED IMFS
+*** END OF TEST FSRENAME MOUNTED IMFS ***
