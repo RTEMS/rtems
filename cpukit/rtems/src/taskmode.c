@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -93,10 +93,8 @@ rtems_status_code rtems_task_mode(
    */
   if ( mask & RTEMS_PREEMPT_MASK ) {
 #if defined( RTEMS_SMP )
-    if (
-      rtems_configuration_is_smp_enabled()
-        && !_Modes_Is_preempt( mode_set )
-    ) {
+    if ( rtems_configuration_is_smp_enabled() &&
+         !_Modes_Is_preempt( mode_set ) ) {
       return RTEMS_NOT_IMPLEMENTED;
     }
 #endif
