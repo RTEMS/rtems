@@ -117,6 +117,11 @@ libbsp_a_SOURCES += ../../sparc/shared/i2c/i2cmst.c
 # timer
 libbsp_a_SOURCES += timer/timer.c
 
+# Cache
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += include/cache_.h
+libbsp_a_CPPFLAGS = -I$(srcdir)/include
+
 if HAS_SMP
 libbsp_a_SOURCES += smp/getcpuid.c
 libbsp_a_SOURCES += smp/smp_leon3.c
@@ -155,7 +160,6 @@ endif
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/access.rel \
-    ../../../libcpu/@RTEMS_CPU@/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/reg_win.rel \
     ../../../libcpu/@RTEMS_CPU@/syscall.rel
 
