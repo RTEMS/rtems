@@ -1,0 +1,57 @@
+/*
+ * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ */
+
+#ifdef HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
+#include <rtems/score/thread.h>
+
+#include "tmacros.h"
+
+static volatile int read_write_small = 0xdeadbeef;
+
+static const volatile int read_only_small = 0x601dc0fe;
+
+static void test(void)
+{
+  Thread_Control *executing = _Thread_Get_executing();
+
+  rtems_test_assert(read_write_small == 0xdeadbeef);
+  rtems_test_assert(read_only_small == 0x601dc0fe);
+
+  rtems_test_assert(executing->Start.tls_area == NULL);
+}
+
+static void Init(rtems_task_argument arg)
+{
+  puts("\n\n*** TEST SPTLS 3 ***");
+
+  test();
+
+  puts("*** END OF TEST SPTLS 3 ***");
+
+  rtems_test_exit(0);
+}
+
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>

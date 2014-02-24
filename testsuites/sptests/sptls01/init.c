@@ -24,6 +24,10 @@ static rtems_id master_task;
 
 static __thread volatile char tls_item = 123;
 
+static volatile int read_write_small = 0xdeadbeef;
+
+static const volatile int read_only_small = 0x601dc0fe;
+
 static void check_tls_item(int expected)
 {
   printf("TLS item = %i\n", tls_item);
@@ -36,41 +40,44 @@ static void task(rtems_task_argument arg)
 
   check_tls_item(123);
 
-	sc = rtems_event_transient_send(master_task);
-	rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_event_transient_send(master_task);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-	sc = rtems_task_suspend(RTEMS_SELF);
-	rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_suspend(RTEMS_SELF);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
 static void test(void)
 {
-	rtems_id id;
-	rtems_status_code sc;
+  rtems_id id;
+  rtems_status_code sc;
 
-	master_task = rtems_task_self();
+  master_task = rtems_task_self();
+
+  rtems_test_assert(read_write_small == 0xdeadbeef);
+  rtems_test_assert(read_only_small == 0x601dc0fe);
 
   check_tls_item(123);
   tls_item = 5;
 
   sc = rtems_task_create(
-		rtems_build_name('T', 'A', 'S', 'K'),
-		RTEMS_MINIMUM_PRIORITY,
-		RTEMS_MINIMUM_STACK_SIZE,
-		RTEMS_DEFAULT_MODES,
-		RTEMS_DEFAULT_ATTRIBUTES,
-		&id
-	);
-	rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    rtems_build_name('T', 'A', 'S', 'K'),
+    RTEMS_MINIMUM_PRIORITY,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-	sc = rtems_task_start(id, task, 0);
-	rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_start(id, task, 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-	sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-	rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-	sc = rtems_task_delete(id);
-	rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   check_tls_item(5);
 }

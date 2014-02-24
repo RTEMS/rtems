@@ -40,16 +40,21 @@ bool _Thread_Initialize(
   Objects_Name                          name
 )
 {
-  size_t               actual_stack_size = 0;
-  void                *stack = NULL;
+  size_t     actual_stack_size = 0;
+  void      *stack = NULL;
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-    void              *fp_area;
+    void    *fp_area;
   #endif
-  void                *sched = NULL;
-  void                *extensions_area;
-  bool                 extension_status;
-  int                  i;
-  uintptr_t            tls_size = (uintptr_t) _TLS_Size;
+  void      *sched = NULL;
+  void      *extensions_area;
+  bool       extension_status;
+  int        i;
+
+  /*
+   * Do not use _TLS_Size here since this will lead GCC to assume that this
+   * symbol is not 0 and the later > 0 test will be optimized away.
+   */
+  uintptr_t  tls_size = (uintptr_t) _TLS_BSS_end - (uintptr_t) _TLS_Data_begin;
 
 #if defined( RTEMS_SMP )
   if ( rtems_configuration_is_smp_enabled() && !is_preemptible ) {

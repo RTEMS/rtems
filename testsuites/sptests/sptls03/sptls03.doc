@@ -1,13 +1,14 @@
 This file describes the directives and concepts tested by this test set.
 
-test set name: sptls01
+test set name: sptls03
 
 directives:
 
-  - None
+  - _Thread_Initialize()
 
 concepts:
 
-  - Ensure that thread-local storage (TLS) works minimum alignment requirements.
+  - Ensure that the thread-local storage (TLS) is not allocated if TLS is not
+    used.
   - Ensure that the small-data variables are accessible.  On some architectures
     like PowerPC the TLS ABI conflicts with other variants.
