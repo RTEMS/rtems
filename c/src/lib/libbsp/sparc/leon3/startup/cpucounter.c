@@ -57,6 +57,7 @@ static void gpt_counter_initialize(
 void leon3_cpu_counter_initialize(void)
 {
   struct ambapp_dev *adev;
+  int idx = 1;
 
   adev = (void *) ambapp_for_each(
     &ambapp_plb,
@@ -64,47 +65,28 @@ void leon3_cpu_counter_initialize(void)
     VENDOR_GAISLER,
     GAISLER_GPTIMER,
     ambapp_find_by_idx,
-    NULL
+    &idx
   );
   if (adev != NULL) {
+    /* Use the second GPTIMER if available */
     volatile struct gptimer_regs *gpt = adev_to_gpt(adev);
-    unsigned prescaler = gpt->scaler_reload + 1;
+    uint32_t max_frequency = ambapp_freq_get(&ambapp_plb, adev);
+    unsigned min_prescaler = 8;
+    uint32_t frequency = max_frequency / min_prescaler;
 
-    /* Assume that GRMON initialized the first GPTIMER to 1MHz */
-    uint32_t frequency = 1000000;
+    gpt->scaler_reload = min_prescaler - 1;
+    gpt->timer[0].reload = 0xffffffff;
+    gpt->timer[0].ctrl = LEON3_GPTIMER_EN | LEON3_GPTIMER_RL
+      | LEON3_GPTIMER_LD;
 
-    uint32_t max_frequency = frequency * prescaler;
-    int idx = 1;
-
-    adev = (void *) ambapp_for_each(
-      &ambapp_plb,
-      OPTIONS_ALL | OPTIONS_APB_SLVS,
-      VENDOR_GAISLER,
-      GAISLER_GPTIMER,
-      ambapp_find_by_idx,
-      &idx
+    gpt_counter_initialize(gpt, 0, frequency, free_counter_difference);
+  } else if (LEON3_Timer_Regs != NULL) {
+    /* Fall back to the first GPTIMER if available */
+    gpt_counter_initialize(
+      LEON3_Timer_Regs,
+      LEON3_CLOCK_INDEX,
+      LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER,
+      clock_counter_difference
     );
-    if (adev != NULL) {
-      /* Use the second GPTIMER if available */
-      unsigned min_prescaler = 8;
-
-      gpt = adev_to_gpt(adev);
-
-      gpt->scaler_reload = min_prescaler - 1;
-      gpt->timer[0].reload = 0xffffffff;
-      gpt->timer[0].ctrl = LEON3_GPTIMER_EN | LEON3_GPTIMER_RL
-        | LEON3_GPTIMER_LD;
-
-      frequency = max_frequency / min_prescaler;
-      gpt_counter_initialize(gpt, 0, frequency, free_counter_difference);
-    } else {
-      /* Fall back to the first GPTIMER */
-      gpt_counter_initialize(
-        gpt,
-        LEON3_CLOCK_INDEX,
-        frequency,
-        clock_counter_difference
-      );
-    }
   }
 }

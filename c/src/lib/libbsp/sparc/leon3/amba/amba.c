@@ -88,7 +88,11 @@ void amba_initialize(void)
     LEON3_Timer_Regs = (volatile struct gptimer_regs *)DEV_TO_APB(adev)->start;
 
     /* Register AMBA Bus Frequency */
-    ambapp_freq_init(&ambapp_plb, adev,
-                     (LEON3_Timer_Regs->scaler_reload + 1) * 1000000);
+    ambapp_freq_init(
+      &ambapp_plb,
+      adev,
+      (LEON3_Timer_Regs->scaler_reload + 1)
+        * LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER
+    );
   }
 }

@@ -280,6 +280,13 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
   #define LEON3_CLOCK_INDEX 0
 #endif
 
+/*
+ * We assume that a boot loader (usually GRMON) initialized the GPTIMER 0 to
+ * run with 1MHz.  This is used to determine all clock frequencies of the PnP
+ * devices.  See also ambapp_freq_init() and ambapp_freq_get().
+ */
+#define LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER 1000000
+
 /* Load 32-bit word by forcing a cache-miss */
 static inline unsigned int leon_r32_no_cache(uintptr_t addr)
 {
