@@ -30,13 +30,6 @@
  *  The Real Time Clock Counter Timer uses this trap type.
  */
 
-#if defined(RTEMS_MULTIPROCESSING)
-  #define LEON3_CLOCK_INDEX \
-    (rtems_configuration_get_user_multiprocessing_table() ? LEON3_Cpu_Index : 0)
-#else
-  #define LEON3_CLOCK_INDEX 0
-#endif
-
 volatile struct gptimer_regs *LEON3_Timer_Regs = 0;
 static int clkirq;
 

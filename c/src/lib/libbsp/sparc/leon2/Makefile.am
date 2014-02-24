@@ -52,7 +52,6 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/sbrk.c startup/setvec.c startup/spurious.c startup/bspidle.c \
     ../../shared/bspinit.c startup/bspdelay.c \
     ../../sparc/shared/startup/early_malloc.c
-libbsp_a_SOURCES += ../../shared/cpucounterread.c
 # ISR Handler
 libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp

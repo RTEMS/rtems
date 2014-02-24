@@ -273,6 +273,13 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 #define LEON_REG_TIMER_COUNTER_DEFINED_MASK       0x00000003
 #define LEON_REG_TIMER_COUNTER_CURRENT_MODE_MASK  0x00000003
 
+#if defined(RTEMS_MULTIPROCESSING)
+  #define LEON3_CLOCK_INDEX \
+    (rtems_configuration_get_user_multiprocessing_table() ? LEON3_Cpu_Index : 0)
+#else
+  #define LEON3_CLOCK_INDEX 0
+#endif
+
 /* Load 32-bit word by forcing a cache-miss */
 static inline unsigned int leon_r32_no_cache(uintptr_t addr)
 {

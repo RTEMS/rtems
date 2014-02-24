@@ -1273,14 +1273,61 @@ static inline uint32_t CPU_swap_u32(
 
 typedef uint32_t CPU_Counter_ticks;
 
-CPU_Counter_ticks _CPU_Counter_read( void );
+typedef CPU_Counter_ticks (*SPARC_Counter_difference)(
+  CPU_Counter_ticks second,
+  CPU_Counter_ticks first
+);
+
+/*
+ * The SPARC processors supported by RTEMS have no built-in CPU counter
+ * support.  We have to use some hardware counter module for this purpose.  The
+ * BSP must provide a 32-bit register which contains the current CPU counter
+ * value and a function for the difference calculation.  It can use for example
+ * the GPTIMER instance used for the clock driver.
+ */
+typedef struct {
+  volatile const CPU_Counter_ticks *counter_register;
+  SPARC_Counter_difference counter_difference;
+} SPARC_Counter;
+
+extern SPARC_Counter _SPARC_Counter;
+
+/*
+ * Returns always a value of one regardless of the parameters.  This prevents
+ * an infinite loop in rtems_counter_delay_ticks().  Its only a reasonably safe
+ * default.
+ */
+CPU_Counter_ticks _SPARC_Counter_difference_default(
+  CPU_Counter_ticks second,
+  CPU_Counter_ticks first
+);
+
+static inline bool _SPARC_Counter_is_default( void )
+{
+  return _SPARC_Counter.counter_difference
+    == _SPARC_Counter_difference_default;
+}
+
+static inline void _SPARC_Counter_initialize(
+  volatile const CPU_Counter_ticks *counter_register,
+  SPARC_Counter_difference counter_difference
+)
+{
+  _SPARC_Counter.counter_register = counter_register;
+  _SPARC_Counter.counter_difference = counter_difference;
+}
+
+static inline CPU_Counter_ticks _CPU_Counter_read( void )
+{
+  return *_SPARC_Counter.counter_register;
+}
 
 static inline CPU_Counter_ticks _CPU_Counter_difference(
   CPU_Counter_ticks second,
   CPU_Counter_ticks first
 )
 {
-  return second - first;
+  return (*_SPARC_Counter.counter_difference)( second, first );
 }
 
 #endif /* ASM */
