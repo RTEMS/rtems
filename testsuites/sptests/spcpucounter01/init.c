@@ -56,7 +56,7 @@ static void test_delay_nanoseconds(void)
   rtems_counter_ticks end;
   rtems_counter_ticks delta;
   double ns_per_tick = NS_PER_TICK;
-  double ns_delta;
+  uint64_t ns_delta;
   rtems_interval tick;
   int n = 10;
   int i;
@@ -75,10 +75,20 @@ static void test_delay_nanoseconds(void)
     delta = rtems_counter_difference(end, start);
     ns_delta = rtems_counter_ticks_to_nanoseconds(delta);
 
-    rtems_test_assert(ns_delta >= ns_per_tick);
+    /* Special case for CPU counters using the clock driver counter */
+    if (ns_delta < rtems_configuration_get_nanoseconds_per_tick()) {
+      printf(
+        "warning: the RTEMS counter seems to be unable to\n"
+        "  measure intervals greater than the clock tick interval\n"
+      );
+
+      ns_delta += rtems_configuration_get_nanoseconds_per_tick();
+    }
 
     printf(
+      "busy wait duration: %" PRIu64 "ns\n"
       "busy wait relative to clock tick: %f\n",
+      ns_delta,
       (ns_delta - ns_per_tick) / ns_per_tick
     );
   }

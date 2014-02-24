@@ -2,14 +2,24 @@
 CPU counter frequency: 25000000Hz
 nanoseconds for frequency count ticks: 1000000000
 test delay nanoseconds (10 times)
-busy wait relative to clock tick: 0.001320
-busy wait relative to clock tick: 0.001640
-busy wait relative to clock tick: 0.001320
-busy wait relative to clock tick: 0.001160
+busy wait duration: 1000840ns
+busy wait relative to clock tick: 0.000840
+busy wait duration: 1001200ns
+busy wait relative to clock tick: 0.001200
+busy wait duration: 1001480ns
+busy wait relative to clock tick: 0.001480
+busy wait duration: 1001200ns
+busy wait relative to clock tick: 0.001200
+busy wait duration: 1001120ns
+busy wait relative to clock tick: 0.001120
+busy wait duration: 1001280ns
 busy wait relative to clock tick: 0.001280
+busy wait duration: 1001120ns
+busy wait relative to clock tick: 0.001120
+busy wait duration: 1001240ns
 busy wait relative to clock tick: 0.001240
-busy wait relative to clock tick: 0.001280
-busy wait relative to clock tick: 0.001280
-busy wait relative to clock tick: 0.001320
+busy wait duration: 1001120ns
+busy wait relative to clock tick: 0.001120
+busy wait duration: 1001280ns
 busy wait relative to clock tick: 0.001280
 *** END OF TEST SPCPUCOUNTER 1 ***
