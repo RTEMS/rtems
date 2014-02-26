@@ -1,6 +1,7 @@
 *** TEST SPCACHE 1 ***
 data cache flush and invalidate test
 data cache operations by line passed the test
+data cache operations by line passed the test (copy-back cache detected)
 data cache line size 32 bytes
 load 4096 bytes with flush entire data
   duration with normal cache 12660 ns

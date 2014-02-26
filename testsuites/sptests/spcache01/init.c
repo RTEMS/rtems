@@ -44,6 +44,7 @@ static void test_data_flush_and_invalidate(void)
     int n = 32;
     int i;
     size_t data_size = n * sizeof(data[0]);
+    bool write_through;
 
     printf("data cache flush and invalidate test\n");
 
@@ -65,8 +66,15 @@ static void test_data_flush_and_invalidate(void)
 
     rtems_cache_invalidate_multiple_data_lines(&data[0], data_size);
 
-    for (i = 0; i < n; ++i) {
-      rtems_test_assert(vdata[i] == i);
+    write_through = vdata[0] == ~0;
+    if (write_through) {
+      for (i = 0; i < n; ++i) {
+        rtems_test_assert(vdata[i] == ~i);
+      }
+    } else {
+      for (i = 0; i < n; ++i) {
+        rtems_test_assert(vdata[i] == i);
+      }
     }
 
     for (i = 0; i < n; ++i) {
@@ -82,7 +90,10 @@ static void test_data_flush_and_invalidate(void)
 
     rtems_interrupt_lock_release(&lock, level);
 
-    printf("data cache operations by line passed the test\n");
+    printf(
+      "data cache operations by line passed the test (%s cache detected)\n",
+      write_through ? "write-through" : "copy-back"
+    );
   } else {
     printf(
       "skip data cache flush and invalidate test"
