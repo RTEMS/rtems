@@ -88,6 +88,31 @@ struct grgpio_regs {
   volatile unsigned int bypass;      /* 0x18 Bypass register */
 };
 
+/* L2C - Level 2 Cache Controller registers */
+struct l2c_regs {
+  volatile unsigned int control;
+  volatile unsigned int status;
+  volatile unsigned int flush_mem_addr;
+  volatile unsigned int flush_set_index;
+  volatile unsigned int access_counter;
+  volatile unsigned int hit_counter;
+  volatile unsigned int bus_cycle_counter;
+  volatile unsigned int bus_usage_counter;
+  volatile unsigned int error_status_control;
+  volatile unsigned int error_addr;
+  volatile unsigned int tag_check_bit;
+  volatile unsigned int data_check_bit;
+  volatile unsigned int scrub_control_status;
+  volatile unsigned int scrub_delay;
+  volatile unsigned int error_injection;
+  volatile unsigned int reserved_3c[17];
+  volatile unsigned int mtrr;
+  volatile unsigned int reserved_84[131039];
+  volatile unsigned int diag_iface_tag[16384];
+  volatile unsigned int reserved_90000[376832];
+  volatile unsigned int diag_iface_data[524288];
+};
+
 #ifdef __cplusplus
 }
 #endif
