@@ -149,7 +149,7 @@ rtems_cache_invalidate_entire_data( void )
 /*
  * This function returns the data cache granularity.
  */
-int
+size_t
 rtems_cache_get_data_line_size( void )
 {
 #if defined(CPU_DATA_CACHE_ALIGNMENT)
@@ -264,7 +264,7 @@ rtems_cache_invalidate_entire_instruction( void )
 /*
  * This function returns the instruction cache granularity.
  */
-int
+size_t
 rtems_cache_get_instruction_line_size( void )
 {
 #if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)

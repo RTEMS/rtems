@@ -629,7 +629,7 @@ static void initializeHardware(struct bfin_ethernetSoftc *sc) {
      including other status structures, so we can safely manage both the
      processor and DMA writing to them.  So this rounds up the structure
      sizes to a multiple of the cache line size. */
-  cacheAlignment = rtems_cache_get_data_line_size();
+  cacheAlignment = (int) rtems_cache_get_data_line_size();
   if (cacheAlignment == 0)
      cacheAlignment = 1;
   rxStatusSize = cacheAlignment * ((sizeof(rxStatusT) + cacheAlignment - 1) /

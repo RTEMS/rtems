@@ -165,7 +165,7 @@ static void test_timing(void)
   uint64_t d[3];
 
   printf(
-    "data cache line size %i bytes\n",
+    "data cache line size %zi bytes\n",
     rtems_cache_get_data_line_size()
   );
 
@@ -290,7 +290,7 @@ static void test_timing(void)
   );
 
   printf(
-    "instruction cache line size %i bytes\n",
+    "instruction cache line size %zi bytes\n",
     rtems_cache_get_instruction_line_size()
   );
 

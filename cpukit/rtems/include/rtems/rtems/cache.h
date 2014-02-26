@@ -47,7 +47,7 @@ extern "C" {
  * @retval 0 No data cache is present.
  * @retval positive The data cache line size in bytes.
  */
-int rtems_cache_get_data_line_size( void );
+size_t rtems_cache_get_data_line_size( void );
 
 /**
  * @brief Returns the instruction cache line size in bytes.
@@ -58,7 +58,7 @@ int rtems_cache_get_data_line_size( void );
  * @retval 0 No instruction cache is present.
  * @retval positive The instruction cache line size in bytes.
  */
-int rtems_cache_get_instruction_line_size( void );
+size_t rtems_cache_get_instruction_line_size( void );
 
 /**
  * @brief Flushes multiple data cache lines.

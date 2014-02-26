@@ -21,7 +21,7 @@ int ppc_exc_alignment_handler(BSP_Exception_frame *frame, unsigned excNum)
 
   /* Do we have a dcbz instruction? */
   if ((opcode & 0xffe007ff) == 0x7c0007ec) {
-    unsigned clsz = (unsigned) rtems_cache_get_data_line_size();
+    unsigned clsz = rtems_cache_get_data_line_size();
     unsigned a = (opcode >> 16) & 0x1f;
     unsigned b = (opcode >> 11) & 0x1f;
     unsigned *regs = &frame->GPR0;
