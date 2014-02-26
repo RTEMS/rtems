@@ -22,6 +22,7 @@ SUBDIRS += smpsignal01
 SUBDIRS += smpswitchextension01
 SUBDIRS += smpunsupported01
 if HAS_POSIX
+SUBDIRS += smppsxaffinity01
 SUBDIRS += smppsxsignal01
 endif
 endif

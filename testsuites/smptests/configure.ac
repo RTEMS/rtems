@@ -71,6 +71,7 @@ smpfatal02/Makefile
 smpfatal03/Makefile
 smplock01/Makefile
 smpmigration01/Makefile
+smppsxaffinity01/Makefile
 smppsxsignal01/Makefile
 smpschedule01/Makefile
 smpsignal01/Makefile
