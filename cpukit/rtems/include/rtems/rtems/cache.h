@@ -61,6 +61,26 @@ size_t rtems_cache_get_data_line_size( void );
 size_t rtems_cache_get_instruction_line_size( void );
 
 /**
+ * @brief Returns the data cache size in bytes.
+ *
+ * @param[in] level The cache level of interest.  The cache level zero
+ * specifies the entire data cache.
+ *
+ * @returns The data cache size in bytes of the specified level.
+ */
+size_t rtems_cache_get_data_cache_size( uint32_t level );
+
+/**
+ * @brief Returns the instruction cache size in bytes.
+ *
+ * @param[in] level The cache level of interest.  The cache level zero
+ * specifies the entire instruction cache.
+ *
+ * @returns The instruction cache size in bytes of the specified level.
+ */
+size_t rtems_cache_get_instruction_cache_size( uint32_t level );
+
+/**
  * @brief Flushes multiple data cache lines.
  *
  * Dirty cache lines covering the area are transfered to memory.  Depending on

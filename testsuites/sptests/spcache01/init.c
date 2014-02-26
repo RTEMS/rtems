@@ -163,11 +163,27 @@ static void test_timing(void)
   rtems_interrupt_lock lock = RTEMS_INTERRUPT_LOCK_INITIALIZER;
   size_t data_size = sizeof(data);
   uint64_t d[3];
+  uint32_t cache_level;
+  size_t cache_size;
 
   printf(
-    "data cache line size %zi bytes\n",
-    rtems_cache_get_data_line_size()
+    "data cache line size %zi bytes\n"
+    "data cache size %zi bytes\n",
+    rtems_cache_get_data_line_size(),
+    rtems_cache_get_data_cache_size(0)
   );
+
+  cache_level = 1;
+  cache_size = rtems_cache_get_data_cache_size(cache_level);
+  while (cache_size > 0) {
+    printf(
+      "data cache level %" PRIu32 " size %zi bytes\n",
+      cache_level,
+      cache_size
+    );
+    ++cache_level;
+    cache_size = rtems_cache_get_data_cache_size(cache_level);
+  }
 
   rtems_interrupt_lock_acquire(&lock, level);
 
@@ -290,9 +306,23 @@ static void test_timing(void)
   );
 
   printf(
-    "instruction cache line size %zi bytes\n",
-    rtems_cache_get_instruction_line_size()
+    "instruction cache line size %zi bytes\n"
+    "instruction cache size %zi bytes\n",
+    rtems_cache_get_instruction_line_size(),
+    rtems_cache_get_instruction_cache_size(0)
   );
+
+  cache_level = 1;
+  cache_size = rtems_cache_get_instruction_cache_size(cache_level);
+  while (cache_size > 0) {
+    printf(
+      "instruction cache level %" PRIu32 " size %zi bytes\n",
+      cache_level,
+      cache_size
+    );
+    ++cache_level;
+    cache_size = rtems_cache_get_instruction_cache_size(cache_level);
+  }
 
   rtems_interrupt_lock_acquire(&lock, level);
 

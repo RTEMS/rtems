@@ -3,6 +3,9 @@ data cache flush and invalidate test
 data cache operations by line passed the test
 data cache operations by line passed the test (copy-back cache detected)
 data cache line size 32 bytes
+data cache size 262144 bytes
+data cache level 1 size 32768 bytes
+data cache level 2 size 262144 bytes
 load 4096 bytes with flush entire data
   duration with normal cache 12660 ns
   duration with warm cache 2580 ns
@@ -28,6 +31,9 @@ store 4096 bytes with invalidate multiple data
   duration with warm cache 2580 ns
   duration with invalidated cache 2640 ns
 instruction cache line size 32 bytes
+instruction cache size 262144 bytes
+instruction cache level 1 size 32768 bytes
+instruction cache level 2 size 262144 bytes
 invalidate entire instruction
   duration with normal cache 5780 ns
   duration with warm cache 640 ns

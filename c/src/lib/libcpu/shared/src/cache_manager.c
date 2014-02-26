@@ -160,6 +160,16 @@ rtems_cache_get_data_line_size( void )
 }
 
 
+size_t
+rtems_cache_get_data_cache_size( uint32_t level )
+{
+#if defined(CPU_CACHE_SUPPORT_PROVIDES_CACHE_SIZE_FUNCTIONS)
+  return _CPU_cache_get_data_cache_size( level );
+#else
+  return 0;
+#endif
+}
+
 /*
  * This function freezes the data cache; cache lines
  * are not replaced.
@@ -269,6 +279,17 @@ rtems_cache_get_instruction_line_size( void )
 {
 #if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
   return CPU_INSTRUCTION_CACHE_ALIGNMENT;
+#else
+  return 0;
+#endif
+}
+
+
+size_t
+rtems_cache_get_instruction_cache_size( uint32_t level )
+{
+#if defined(CPU_CACHE_SUPPORT_PROVIDES_CACHE_SIZE_FUNCTIONS)
+  return _CPU_cache_get_instruction_cache_size( level );
 #else
   return 0;
 #endif
