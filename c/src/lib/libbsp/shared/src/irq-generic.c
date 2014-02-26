@@ -88,11 +88,12 @@ static inline bool bsp_interrupt_is_empty_handler_entry(
 }
 
 static inline void bsp_interrupt_clear_handler_entry(
-  bsp_interrupt_handler_entry *e
+  bsp_interrupt_handler_entry *e,
+  rtems_vector_number vector
 )
 {
   e->handler = bsp_interrupt_handler_empty;
-  e->arg = NULL;
+  e->arg = (void *) vector;
   e->info = NULL;
   e->next = NULL;
 }
@@ -138,7 +139,7 @@ static bsp_interrupt_handler_entry *bsp_interrupt_allocate_handler_entry(void)
 static void bsp_interrupt_free_handler_entry(bsp_interrupt_handler_entry *e)
 {
   #ifdef BSP_INTERRUPT_NO_HEAP_USAGE
-    bsp_interrupt_clear_handler_entry(e);
+    bsp_interrupt_clear_handler_entry(e, 0);
   #else
     free(e);
   #endif
@@ -404,7 +405,7 @@ static rtems_status_code bsp_interrupt_handler_remove(
 
       /* Clear entry */
       rtems_interrupt_disable(level);
-      bsp_interrupt_clear_handler_entry(head);
+      bsp_interrupt_clear_handler_entry(head, vector);
       #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
         bsp_interrupt_handler_index_table [vector] = 0;
       #endif
