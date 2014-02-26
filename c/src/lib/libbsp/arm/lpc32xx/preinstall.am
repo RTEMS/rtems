@@ -94,6 +94,10 @@ $(PROJECT_INCLUDE)/bsp/arm-cp15-start.h: ../shared/include/arm-cp15-start.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-cp15-start.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-cp15-start.h
 
+$(PROJECT_INCLUDE)/bsp/arm-errata.h: ../shared/include/arm-errata.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-errata.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-errata.h
+
 $(PROJECT_INCLUDE)/bsp/lpc-timer.h: ../shared/lpc/include/lpc-timer.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc-timer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc-timer.h
@@ -113,6 +117,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc-emc.h
 $(PROJECT_INCLUDE)/bsp/lpc-lcd.h: ../shared/lpc/include/lpc-lcd.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc-lcd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc-lcd.h
+
+$(PROJECT_INCLUDE)/bsp/arm-release-id.h: ../shared/include/arm-release-id.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-release-id.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-release-id.h
 
 $(PROJECT_INCLUDE)/bsp/irq.h: include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
