@@ -357,6 +357,48 @@ static inline uint32_t leon3_get_cpu_count(
   return ((mpstat >> LEON3_IRQMPSTATUS_CPUNR) & 0xf)  + 1;
 }
 
+static inline void leon3_set_system_register(uint32_t addr, uint32_t val)
+{
+  __asm__ volatile(
+    "sta %1, [%0] 2"
+    :
+    : "r" (addr), "r" (val)
+  );
+}
+
+static inline uint32_t leon3_get_system_register(uint32_t addr)
+{
+  uint32_t val;
+
+  __asm__ volatile(
+    "lda [%1] 2, %0"
+    : "=r" (val)
+    : "r" (addr)
+  );
+
+  return val;
+}
+
+static inline void leon3_set_cache_control_register(uint32_t val)
+{
+  leon3_set_system_register(0x0, val);
+}
+
+static inline uint32_t leon3_get_cache_control_register(void)
+{
+  return leon3_get_system_register(0x0);
+}
+
+static inline uint32_t leon3_get_inst_cache_config_register(void)
+{
+  return leon3_get_system_register(0x8);
+}
+
+static inline uint32_t leon3_get_data_cache_config_register(void)
+{
+  return leon3_get_system_register(0xc);
+}
+
 #endif /* !ASM */
 
 #ifdef __cplusplus

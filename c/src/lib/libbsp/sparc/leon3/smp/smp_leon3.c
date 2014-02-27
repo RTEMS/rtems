@@ -19,18 +19,6 @@
 #include <rtems/score/smpimpl.h>
 #include <stdlib.h>
 
-static inline void sparc_leon3_set_cctrl( unsigned int val )
-{
-  __asm__ volatile( "sta %0, [%%g0] 2" : : "r" (val) );
-}
-
-static inline unsigned int sparc_leon3_get_cctrl( void )
-{
-  unsigned int v = 0;
-  __asm__ volatile( "lda [%%g0] 2, %0" : "=r" (v) : "0" (v) );
-  return v;
-}
-
 static rtems_isr bsp_inter_processor_interrupt(
   rtems_vector_number vector
 )
@@ -40,7 +28,7 @@ static rtems_isr bsp_inter_processor_interrupt(
 
 void leon3_secondary_cpu_initialize(uint32_t cpu)
 {
-  sparc_leon3_set_cctrl( 0x80000F );
+  leon3_set_cache_control_register(0x80000F);
   LEON_Unmask_interrupt(LEON3_MP_IRQ);
   LEON3_IrqCtrl_Regs->mask[cpu] |= 1 << LEON3_MP_IRQ;
 
@@ -53,7 +41,7 @@ uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count )
   uint32_t used_cpu_count;
   uint32_t cpu;
 
-  sparc_leon3_set_cctrl( 0x80000F );
+  leon3_set_cache_control_register(0x80000F);
 
   max_cpu_count = leon3_get_cpu_count(LEON3_IrqCtrl_Regs);
   used_cpu_count = configured_cpu_count < max_cpu_count ?

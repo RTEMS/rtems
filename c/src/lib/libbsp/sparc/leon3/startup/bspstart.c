@@ -32,7 +32,7 @@ uint32_t LEON3_Cpu_Index = 0;
 /*
  * set_snooping
  *
- * Read the data cache configuration register to determine if
+ * Read the cache control register to determine if
  * bus snooping is available and enabled. This is needed for some
  * drivers so that they can select the most efficient copy routines.
  *
@@ -40,12 +40,7 @@ uint32_t LEON3_Cpu_Index = 0;
 
 static inline int set_snooping(void)
 {
-  int tmp;
-  __asm__ (" lda [%%g0] 2, %0 "
-      : "=r"(tmp)
-      :
-  );
-  return (tmp >> 23) & 1;
+  return (leon3_get_cache_control_register() >> 23) & 1;
 }
 
 /*
