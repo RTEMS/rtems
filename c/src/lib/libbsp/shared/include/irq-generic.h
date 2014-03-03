@@ -9,10 +9,10 @@
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
- * Copyright (c) 2008-2012 embedded brains GmbH.
+ * Copyright (c) 2008-2014 embedded brains GmbH.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -28,6 +28,10 @@
 #include <stdbool.h>
 
 #include <rtems/irq-extension.h>
+
+#ifdef RTEMS_SMP
+  #include <rtems/score/atomic.h>
+#endif
 
 #include <bsp/irq.h>
 
@@ -52,6 +56,17 @@ extern "C" {
 
 #ifndef BSP_INTERRUPT_HANDLER_TABLE_SIZE
   #define BSP_INTERRUPT_HANDLER_TABLE_SIZE BSP_INTERRUPT_VECTOR_NUMBER
+#endif
+
+/* Internal macros for SMP support, do not use externally */
+#ifdef RTEMS_SMP
+  #define bsp_interrupt_disable(level) do { (void) level; } while (0)
+  #define bsp_interrupt_enable(level) do { } while (0)
+  #define bsp_interrupt_fence(order) _Atomic_Fence(order)
+#else
+  #define bsp_interrupt_disable(level) rtems_interrupt_disable(level)
+  #define bsp_interrupt_enable(level) rtems_interrupt_enable(level)
+  #define bsp_interrupt_fence(order) do { } while (0)
 #endif
 
 struct bsp_interrupt_handler_entry {
@@ -238,11 +253,18 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector);
 static inline void bsp_interrupt_handler_dispatch(rtems_vector_number vector)
 {
   if (bsp_interrupt_is_valid_vector(vector)) {
-    bsp_interrupt_handler_entry *e =
+    const bsp_interrupt_handler_entry *e =
       &bsp_interrupt_handler_table [bsp_interrupt_handler_index(vector)];
 
     do {
-      (*e->handler)(e->arg);
+      rtems_interrupt_handler handler;
+      void *arg;
+
+      arg = e->arg;
+      bsp_interrupt_fence(ATOMIC_ORDER_ACQUIRE);
+      handler = e->handler;
+      (*handler)(arg);
+
       e = e->next;
     } while (e != NULL);
   } else {

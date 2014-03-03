@@ -9,10 +9,10 @@
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
- * Copyright (c) 2008-2012 embedded brains GmbH.
+ * Copyright (c) 2008-2014 embedded brains GmbH.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -48,6 +48,13 @@ static void bsp_interrupt_handler_empty(void *arg)
 
   bsp_interrupt_handler_default(vector);
 }
+
+#ifdef RTEMS_SMP
+  static void bsp_interrupt_handler_do_nothing(void *arg)
+  {
+    (void) arg;
+  }
+#endif
 
 static inline bool bsp_interrupt_is_handler_unique(rtems_vector_number index)
 {
@@ -93,6 +100,7 @@ static inline void bsp_interrupt_clear_handler_entry(
 )
 {
   e->handler = bsp_interrupt_handler_empty;
+  bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
   e->arg = (void *) vector;
   e->info = NULL;
   e->next = NULL;
@@ -234,13 +242,14 @@ static rtems_status_code bsp_interrupt_handler_install(
      * the handler table and fill the entry with life.
      */
     if (bsp_interrupt_allocate_handler_index(vector, &index)) {
-      rtems_interrupt_disable(level);
-      bsp_interrupt_handler_table [index].handler = handler;
+      bsp_interrupt_disable(level);
       bsp_interrupt_handler_table [index].arg = arg;
+      bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
+      bsp_interrupt_handler_table [index].handler = handler;
       #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
         bsp_interrupt_handler_index_table [vector] = index;
       #endif
-      rtems_interrupt_enable(level);
+      bsp_interrupt_enable(level);
       bsp_interrupt_handler_table [index].info = info;
     } else {
       /* Handler table is full */
@@ -299,9 +308,10 @@ static rtems_status_code bsp_interrupt_handler_install(
     current->next = NULL;
 
     /* Link to list tail */
-    rtems_interrupt_disable(level);
+    bsp_interrupt_disable(level);
+    bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
     tail->next = current;
-    rtems_interrupt_enable(level);
+    bsp_interrupt_enable(level);
   }
 
   /* Make the handler unique if necessary */
@@ -387,9 +397,17 @@ static rtems_status_code bsp_interrupt_handler_remove(
        */
       current = match->next;
 
-      rtems_interrupt_disable(level);
-      *match = *current;
-      rtems_interrupt_enable(level);
+      bsp_interrupt_disable(level);
+      #ifdef RTEMS_SMP
+        match->handler = bsp_interrupt_handler_do_nothing;
+        bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
+      #endif
+      match->arg = current->arg;
+      bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
+      match->handler = current->handler;
+      match->info = current->info;
+      match->next = current->next;
+      bsp_interrupt_enable(level);
 
       bsp_interrupt_free_handler_entry(current);
     } else if (match == head) {
@@ -404,12 +422,12 @@ static rtems_status_code bsp_interrupt_handler_remove(
       sc = bsp_interrupt_vector_disable(vector);
 
       /* Clear entry */
-      rtems_interrupt_disable(level);
+      bsp_interrupt_disable(level);
       bsp_interrupt_clear_handler_entry(head, vector);
       #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
         bsp_interrupt_handler_index_table [vector] = 0;
       #endif
-      rtems_interrupt_enable(level);
+      bsp_interrupt_enable(level);
 
       /* Allow shared handlers */
       bsp_interrupt_set_handler_unique(index, false);
@@ -424,9 +442,10 @@ static rtems_status_code bsp_interrupt_handler_remove(
        * The match is the list tail and has a predecessor.
        * So terminate the predecessor and free the match.
        */
-      rtems_interrupt_disable(level);
+      bsp_interrupt_disable(level);
       previous->next = NULL;
-      rtems_interrupt_enable(level);
+      bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
+      bsp_interrupt_enable(level);
 
       bsp_interrupt_free_handler_entry(match);
     }
