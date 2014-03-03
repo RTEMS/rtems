@@ -43,6 +43,13 @@ extern "C" {
  */
 #define ATOMIC_INITIALIZER_FLAG CPU_ATOMIC_INITIALIZER_FLAG
 
+static inline void _Atomic_Fence(
+  Atomic_Order order
+)
+{
+  _CPU_atomic_Fence( order );
+}
+
 /**
  * @brief Initializes an atomic type value into a atomic object.
  *

@@ -21,6 +21,7 @@
 #include <rtems/score/atomic.h>
 #include <rtems/score/smpbarrier.h>
 #include <rtems.h>
+#include <limits.h>
 #include <string.h>
 
 #include "tmacros.h"
@@ -40,6 +41,8 @@ typedef struct {
   Atomic_Ulong atomic_value;
   unsigned long per_worker_value[CPU_COUNT];
   unsigned long normal_value;
+  char unused_space_for_cache_line_separation[128];
+  unsigned long second_value;
   Atomic_Flag global_flag;
 } test_context;
 
@@ -74,7 +77,7 @@ static void test_fini(
   unsigned long actual_value;
   size_t worker_index;
 
-  printf("=== atomic %s test case ==\n", test);
+  printf("=== atomic %s test case ===\n", test);
 
   for (worker_index = 0; worker_index < ctx->worker_count; ++worker_index) {
     unsigned long worker_value = ctx->per_worker_value[worker_index];
@@ -255,6 +258,48 @@ static void test_atomic_or_and_fini(test_context *ctx)
   test_fini(ctx, "or/and", true);
 }
 
+static void test_atomic_fence_init(test_context *ctx)
+{
+  ctx->normal_value = 0;
+  ctx->second_value = 0;
+  _Atomic_Fence(ATOMIC_ORDER_RELEASE);
+}
+
+static void test_atomic_fence_body(test_context *ctx, size_t worker_index)
+{
+  if (is_master_worker(worker_index)) {
+    unsigned long counter = 0;
+
+    while (!stop(ctx)) {
+      ++counter;
+      ctx->normal_value = counter;
+      _Atomic_Fence(ATOMIC_ORDER_RELEASE);
+      ctx->second_value = counter;
+    }
+  } else {
+    while (!stop(ctx)) {
+      unsigned long n;
+      unsigned long s;
+
+      s = ctx->second_value;
+      _Atomic_Fence(ATOMIC_ORDER_ACQUIRE);
+      n = ctx->normal_value;
+
+      rtems_test_assert(n - s < LONG_MAX);
+    }
+  }
+}
+
+static void test_atomic_fence_fini(test_context *ctx)
+{
+  printf(
+    "=== atomic fence test case ===\n"
+    "normal value = %lu, second value = %lu\n",
+    ctx->normal_value,
+    ctx->second_value
+  );
+}
+
 static const test_case test_cases[] = {
   {
     test_atomic_add_init,
@@ -276,6 +321,10 @@ static const test_case test_cases[] = {
     test_atomic_or_and_init,
     test_atomic_or_and_body,
     test_atomic_or_and_fini
+  }, {
+    test_atomic_fence_init,
+    test_atomic_fence_body,
+    test_atomic_fence_fini
   },
 };
 
@@ -432,7 +481,7 @@ static void test_simple_atomic_add_body(test_context *ctx)
   unsigned long a = 2, b = 1;
   unsigned long c;
 
-  puts("=== atomic simple add test case ==\n");
+  puts("=== atomic simple add test case ===\n");
 
   _Atomic_Store_uint(&ctx->atomic_int_value, ia, ATOMIC_ORDER_RELAXED);
   _Atomic_Fetch_add_uint(&ctx->atomic_int_value, ib, ATOMIC_ORDER_RELAXED);
@@ -452,7 +501,7 @@ static void test_simple_atomic_sub_body(test_context *ctx)
   unsigned long a = 2, b = 1;
   unsigned long c;
 
-  puts("=== atomic simple sub test case ==\n");
+  puts("=== atomic simple sub test case ===\n");
 
   _Atomic_Store_uint(&ctx->atomic_int_value, ia, ATOMIC_ORDER_RELAXED);
   _Atomic_Fetch_sub_uint(&ctx->atomic_int_value, ib, ATOMIC_ORDER_RELAXED);
@@ -472,7 +521,7 @@ static void test_simple_atomic_or_body(test_context *ctx)
   unsigned long a = 2, b = 1;
   unsigned long c;
 
-  puts("=== atomic simple or test case ==\n");
+  puts("=== atomic simple or test case ===\n");
 
   _Atomic_Store_uint(&ctx->atomic_int_value, ia, ATOMIC_ORDER_RELAXED);
   _Atomic_Fetch_or_uint(&ctx->atomic_int_value, ib, ATOMIC_ORDER_RELAXED);
@@ -492,7 +541,7 @@ static void test_simple_atomic_and_body(test_context *ctx)
   unsigned long a = 2, b = 1;
   unsigned long c;
 
-  puts("=== atomic simple and test case ==\n");
+  puts("=== atomic simple and test case ===\n");
 
   _Atomic_Store_uint(&ctx->atomic_int_value, ia, ATOMIC_ORDER_RELAXED);
   _Atomic_Fetch_and_uint(&ctx->atomic_int_value, ib, ATOMIC_ORDER_RELAXED);
@@ -512,7 +561,7 @@ static void test_simple_atomic_exchange_body(test_context *ctx)
   unsigned long a = 2, b = 1;
   unsigned long c;
 
-  puts("=== atomic simple exchange test case ==\n");
+  puts("=== atomic simple exchange test case ===\n");
 
   _Atomic_Store_uint(&ctx->atomic_int_value, ia, ATOMIC_ORDER_RELAXED);
   _Atomic_Exchange_uint(&ctx->atomic_int_value, ib, ATOMIC_ORDER_RELAXED);
@@ -532,7 +581,7 @@ static void test_simple_atomic_compare_exchange_body(test_context *ctx)
   unsigned long a = 2, b = 1;
   unsigned long c;
 
-  puts("=== atomic simple compare exchange test case ==\n");
+  puts("=== atomic simple compare exchange test case ===\n");
 
   _Atomic_Store_uint(&ctx->atomic_int_value, ia, ATOMIC_ORDER_RELAXED);
   _Atomic_Compare_exchange_uint(&ctx->atomic_int_value, &ia, ib,

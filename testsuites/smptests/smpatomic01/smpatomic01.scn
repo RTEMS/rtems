@@ -1,29 +1,31 @@
 *** TEST SMPATOMIC 1 ***
-=== atomic simple add test case ==
-=== atomic simple sub test case ==
-=== atomic simple or test case ==
-=== atomic simple and test case ==
-=== atomic simple exchange test case ==
-=== atomic simple compare exchange test case ==
-=== static and dynamic initialization test case ===
-=== atomic add test case ==
+=== atomic simple add test case ===
+=== atomic simple sub test case ===
+=== atomic simple or test case ===
+=== atomic simple and test case ===
+=== atomic simple exchange test case ===
+=== atomic simple compare exchange test case ===
+=== static and dynamic initialization test case ====
+=== atomic add test case ===
 worker 0 value: 16686
 worker 1 value: 36405
 atomic value: expected = 53091, actual = 53091
-=== atomic flag test case ==
+=== atomic flag test case ===
 worker 0 value: 5588
 worker 1 value: 16019
 atomic value: expected = 21607, actual = 21607
-=== atomic sub test case ==
+=== atomic sub test case ===
 worker 0 value: 4294950967
 worker 1 value: 4294930886
 atomic value: expected = 4294914557, actual = 4294914557
-=== atomic compare exchange test case ==
+=== atomic compare exchange test case ===
 worker 0 value: 2950
 worker 1 value: 22456
 atomic value: expected = 25406, actual = 25406
-=== atomic or/and test case ==
+=== atomic or/and test case ===
 worker 0 value: 1
 worker 1 value: 0
 atomic value: expected = 1, actual = 1
+=== atomic fence test case ===
+normal value = 10759507, second value = 10759507
 *** END OF TEST SMPATOMIC 1 ***

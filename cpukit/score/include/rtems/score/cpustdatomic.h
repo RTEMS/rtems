@@ -83,6 +83,13 @@ typedef enum {
 
 #define CPU_ATOMIC_INITIALIZER_FLAG ATOMIC_FLAG_INIT
 
+static inline void _CPU_atomic_Fence(
+  Atomic_Order order
+)
+{
+  atomic_thread_fence( (memory_order) order );
+}
+
 /**
  * @brief Initializes an atomic type value into a atomic object.
  *
