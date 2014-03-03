@@ -9,12 +9,13 @@
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2014 embedded brains GmbH.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -54,6 +55,12 @@ extern "C" {
 #define RTEMS_INTERRUPT_SHARED ((rtems_option) 0x00000000)
 
 /**
+ * @brief Forces that this interrupt handler replaces the first handler with
+ * the same argument.
+ */
+#define RTEMS_INTERRUPT_REPLACE ((rtems_option) 0x00000002)
+
+/**
  * @brief Returns true if the interrupt handler unique option is set.
  */
 #define RTEMS_INTERRUPT_IS_UNIQUE( options) \
@@ -64,6 +71,12 @@ extern "C" {
  */
 #define RTEMS_INTERRUPT_IS_SHARED( options) \
   (!RTEMS_INTERRUPT_IS_UNIQUE( options))
+
+/**
+ * @brief Returns true if the interrupt handler replace option is set.
+ */
+#define RTEMS_INTERRUPT_IS_REPLACE( options) \
+  ((options) & RTEMS_INTERRUPT_REPLACE)
 
 /**
  * @brief Interrupt handler routine type.
@@ -78,6 +91,7 @@ typedef void (*rtems_interrupt_handler)(void *);
  *
  * - @ref RTEMS_INTERRUPT_UNIQUE
  * - @ref RTEMS_INTERRUPT_SHARED
+ * - @ref RTEMS_INTERRUPT_REPLACE
  *
  * with the @a options parameter for the interrupt handler.
  *
@@ -87,6 +101,13 @@ typedef void (*rtems_interrupt_handler)(void *);
  *
  * If the option @ref RTEMS_INTERRUPT_UNIQUE is set then it shall be ensured
  * that this handler will be the only one for this vector.
+ *
+ * If the option @ref RTEMS_INTERRUPT_REPLACE is set then it shall be ensured
+ * that this handler will replace the first handler with the same argument for
+ * this vector if it exists, otherwise an error status shall be returned.  A
+ * second handler with the same argument for this vector shall remain
+ * unchanged.  The new handler will inherit the unique or shared option from
+ * the replaced handler.
  *
  * You can provide an informative description @a info.  This may be used for
  * system debugging and status tools.  The string has to be persistent during
@@ -108,6 +129,8 @@ typedef void (*rtems_interrupt_handler)(void *);
  * installed and there is already a handler installed this shall be returned.
  * @retval RTEMS_TOO_MANY If a handler with this argument is already installed
  * for the vector this shall be returned.
+ * @retval RTEMS_UNSATISFIED If no handler exists to replace with the specified
+ * argument and vector this shall be returned.
  * @retval RTEMS_IO_ERROR Reserved for board support package specific error
  * conditions.
  */
