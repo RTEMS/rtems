@@ -39,16 +39,36 @@ static void test(void)
   int rv;
   char buf [1];
   ssize_t n;
-  int fd = open(open_driver_path, O_RDWR);
+  int fd;
+
+  fd = open(open_driver_path, O_RDWR);
   rtems_test_assert(fd >= 0);
 
+  errno = 0;
   n = send(fd, buf, sizeof(buf), 0);
   rtems_test_assert(n == -1);
   rtems_test_assert(errno == ENOTSOCK);
 
+  errno = 0;
   n = recv(fd, buf, sizeof(buf), 0);
   rtems_test_assert(n == -1);
   rtems_test_assert(errno == ENOTSOCK);
+
+  rv = close(fd);
+  rtems_test_assert(rv == 0);
+
+  fd = socket(PF_INET, SOCK_DGRAM, 0);
+  rtems_test_assert(fd >= 0);
+
+  errno = 0;
+  rv = fsync(fd);
+  rtems_test_assert(rv == -1);
+  rtems_test_assert(errno == EINVAL);
+
+  errno = 0;
+  rv = fdatasync(fd);
+  rtems_test_assert(rv == -1);
+  rtems_test_assert(errno == EINVAL);
 
   rv = close(fd);
   rtems_test_assert(rv == 0);
