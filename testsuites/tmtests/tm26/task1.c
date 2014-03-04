@@ -133,7 +133,8 @@ static void set_thread_executing( Thread_Control *thread )
 
 static void thread_disable_dispatch( void )
 {
-#if defined( PREVENT_SMP_ASSERT_FAILURES )
+/* Yes, RTEMS_SMP and not PREVENT_SMP_ASSERT_FAILURES */
+#if defined( RTEMS_SMP )
   Per_CPU_Control *self_cpu;
   ISR_Level level;
 
