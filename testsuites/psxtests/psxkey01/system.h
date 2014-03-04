@@ -1,9 +1,12 @@
-/*  system.h
+/**
+ *  @file
  *
  *  This include file contains information that is included in every
  *  function in the test set.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -15,24 +18,15 @@
 
 #include <pmacros.h>
 
-void *POSIX_Init(
-  void *argument
-);
-
-void *Task_1(
-  void *argument
-);
-
-
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS  21
-#define CONFIGURE_MAXIMUM_POSIX_KEYS     21
+#define CONFIGURE_MAXIMUM_TASKS          1
+#define CONFIGURE_MAXIMUM_POSIX_KEYS     1
 
-#define CONFIGURE_POSIX_INIT_THREAD_TABLE
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>
 
@@ -45,9 +39,8 @@ void *Task_1(
 #endif
 
 TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_t        Task_id[CONFIGURE_MAXIMUM_POSIX_THREADS-1];
-TEST_EXTERN pthread_key_t    Key_id[CONFIGURE_MAXIMUM_POSIX_KEYS-1];
-TEST_EXTERN uint32_t   Data_array[ CONFIGURE_MAXIMUM_POSIX_THREADS ];
+TEST_EXTERN pthread_key_t    Key_id[CONFIGURE_MAXIMUM_POSIX_KEYS - 1];
+TEST_EXTERN uint32_t         Data_array[ CONFIGURE_MAXIMUM_TASKS ];
 
 #undef TEST_EXTERN
 /* end of include file */

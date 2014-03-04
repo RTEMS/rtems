@@ -15,6 +15,12 @@ include_rtems_posixdir = $(includedir)/rtems/posix
 
 include_rtems_posix_HEADERS = include/rtems/posix/sigset.h
 
+## Some POSIX threads features are needed all the time
+include_rtems_posix_HEADERS += include/rtems/posix/key.h
+include_rtems_posix_HEADERS += include/rtems/posix/keyimpl.h
+include_rtems_posix_HEADERS += include/rtems/posix/config.h
+include_rtems_posix_HEADERS += include/rtems/posix/posixapi.h
+
 if HAS_PTHREADS
 # include
 include_HEADERS = include/aio.h
@@ -26,15 +32,11 @@ include_rtems_posix_HEADERS += include/rtems/posix/aio_misc.h
 include_rtems_posix_HEADERS += include/rtems/posix/cancel.h
 include_rtems_posix_HEADERS += include/rtems/posix/cond.h
 include_rtems_posix_HEADERS += include/rtems/posix/condimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/config.h
-include_rtems_posix_HEADERS += include/rtems/posix/key.h
-include_rtems_posix_HEADERS += include/rtems/posix/keyimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueue.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueueimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/mutex.h
 include_rtems_posix_HEADERS += include/rtems/posix/muteximpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/onceimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/posixapi.h
 include_rtems_posix_HEADERS += include/rtems/posix/priorityimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/psignal.h
 include_rtems_posix_HEADERS += include/rtems/posix/psignalimpl.h
@@ -88,11 +90,6 @@ libposix_a_SOURCES += src/cond.c src/condattrdestroy.c \
     src/condbroadcast.c src/conddefaultattributes.c src/conddestroy.c \
     src/condinit.c src/condsignal.c src/condsignalsupp.c \
     src/condtimedwait.c src/condwait.c src/condwaitsupp.c src/condget.c
-
-## KEY_C_FILES
-libposix_a_SOURCES += src/key.c src/keycreate.c src/keydelete.c \
-    src/keygetspecific.c src/keyfreememory.c src/keyrundestructors.c \
-    src/keysetspecific.c
 
 ## MEMORY_C_FILES
 libposix_a_SOURCES += src/mprotect.c
@@ -157,6 +154,11 @@ libposix_a_SOURCES += src/psignal.c src/alarm.c src/kill.c src/killinfo.c \
     src/psignalclearsignals.c src/psignalunblockthread.c src/pthreadkill.c \
     src/pthreadsigmask.c src/sigaction.c
 endif
+
+## KEY_C_FILES
+libposix_a_SOURCES += src/key.c src/keycreate.c src/keydelete.c \
+    src/keygetspecific.c src/keyfreememory.c src/keyrundestructors.c \
+    src/keysetspecific.c
 
 libposix_a_SOURCES += src/sigaddset.c src/sigdelset.c src/sigfillset.c \
    src/sigemptyset.c src/sigismember.c

@@ -9,7 +9,7 @@
  * Copyright (c) 2012 Zhongwei Yao.
  * Copyright (c) 2010 embedded brains GmbH.
  *
- * COPYRIGHT (c) 1989-2007.
+ * COPYRIGHT (c) 1989-2014.
  * On-Line Applications Research Corporation (OAR).
  *
  * The license and distribution terms for this file may be
@@ -22,8 +22,8 @@
 #endif
 
 #include <rtems/posix/keyimpl.h>
-#include <rtems/posix/threadsup.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/thread.h>
 
 /*
  *  _POSIX_Keys_Run_destructors
@@ -46,9 +46,7 @@ void _POSIX_Keys_Run_destructors(
 
   _Thread_Disable_dispatch();
 
-  chain = &(
-      (POSIX_API_Control *)thread->API_Extensions[ THREAD_API_POSIX ]
-  )->Key_Chain;
+  chain = &thread->Key_Chain;
   iter = (POSIX_Keys_Key_value_pair *) _Chain_First( chain );
   while ( !_Chain_Is_tail( chain, &iter->Key_values_per_thread_node ) ) {
     next = (POSIX_Keys_Key_value_pair *)

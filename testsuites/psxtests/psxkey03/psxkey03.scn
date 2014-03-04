@@ -1,12 +1,15 @@
+sparc-rtems4.11-run is /home/joel/rtems-4.11-work/tools/bin/sparc-rtems4.11-run
+
+
 *** TEST KEY 03 ***
 Init - pthread_key_create with NULL destructor - OK
-Init - pthread_create - OK
+Init - create/start - OK
 Init - sleep - let thread run - OK
 Test_Thread - pthread_setspecific - OK
 Test_Thread - pthread_exit to run key destructors - OK
 Init - pthread_key_delete - OK
 Init - pthread_key_create with non-NULL destructor - OK
-Init - pthread_create - OK
+Init - task create/start - OK
 Init - sleep - let thread run - OK
 Test_Thread - pthread_setspecific - OK
 Test_Thread - pthread_exit to run key destructors - OK

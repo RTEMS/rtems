@@ -17,39 +17,30 @@
 #include "tmacros.h"
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+rtems_task Init(rtems_task_argument argument);
 void Key_destructor(void *key_data);
 
 void Key_destructor(void *key_data)
 {
 }
 
-void *POSIX_Init(
-  void *argument
-)
+rtems_task Init(rtems_task_argument argument)
 {
   int    status;
 
   puts( "\n\n*** POSIX KEY 01 TEST ***" );
 
-  /* set the time of day, and print our buffer in multiple ways */
-
-  set_time( TM_FRIDAY, TM_MAY, 24, 96, 11, 5, 0 );
-
   /* get id of this thread */
 
-  Init_id = pthread_self();
+  Init_id = rtems_task_self();
   printf( "Init's ID is 0x%08" PRIxpthread_t "\n", Init_id );
 
   rtems_workspace_greedy_allocate( NULL, 0 );
 
   puts("Init: pthread_key_create - OK");
-  empty_line();
   status = pthread_key_create( &Key_id[0], Key_destructor );
   fatal_directive_check_status_only( status, 0, "OK" );
 
   puts( "*** END OF POSIX KEY 01 TEST ***" );
   rtems_test_exit( 0 );
-
-  return NULL; /* just so the compiler thinks we returned something */
 }

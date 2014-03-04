@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2012 Zhongwei Yao.
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,11 +18,9 @@
 #include "pmacros.h"
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+rtems_task Init( rtems_task_argument ignored );
 
-void *POSIX_Init(
-  void *ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
   pthread_key_t    key1, key2;
   int              sc, *value;
@@ -69,12 +67,13 @@ void *POSIX_Init(
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS  1
+#define CONFIGURE_MAXIMUM_TASKS          1
 #define CONFIGURE_MAXIMUM_POSIX_KEYS     2
 
-#define CONFIGURE_POSIX_INIT_THREAD_TABLE
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

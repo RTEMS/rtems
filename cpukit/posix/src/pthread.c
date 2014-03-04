@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2013.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -247,9 +247,6 @@ static bool _POSIX_Threads_Create_extension(
     created
   );
 
-  /** initialize thread's key vaule node chain */
-  _Chain_Initialize_empty( &api->Key_Chain );
-
   return true;
 }
 
@@ -273,11 +270,6 @@ static void _POSIX_Threads_Delete_extension(
    *  Run the POSIX cancellation handlers
    */
   _POSIX_Threads_cancel_run( deleted );
-
-  /*
-   *  Run all the key destructors
-   */
-  _POSIX_Keys_Run_destructors( deleted );
 
   /*
    *  Wakeup all the tasks which joined with this one

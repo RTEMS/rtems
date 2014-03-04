@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,19 +22,21 @@
 #define POSIX_API_INIT
 
 #include <rtems/system.h>    /* include this before checking RTEMS_POSIX_API */
-#ifdef RTEMS_POSIX_API
 
+#include <rtems/config.h>
+#include <rtems/posix/keyimpl.h>
+#include <rtems/posix/posixapi.h>
+
+#ifdef RTEMS_POSIX_API
 #include <sys/types.h>
 #include <mqueue.h>
 #include <rtems/config.h>
 #include <rtems/posix/barrierimpl.h>
-#include <rtems/posix/condimpl.h>
 #include <rtems/posix/config.h>
-#include <rtems/posix/keyimpl.h>
+#include <rtems/posix/condimpl.h>
 #include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/onceimpl.h>
-#include <rtems/posix/posixapi.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthreadimpl.h>
@@ -43,6 +45,7 @@
 #include <rtems/posix/semaphoreimpl.h>
 #include <rtems/posix/spinlockimpl.h>
 #include <rtems/posix/time.h>
+#endif
 
 void _POSIX_Fatal_error( POSIX_Fatal_domain domain, int eno )
 {
@@ -68,18 +71,19 @@ void _POSIX_API_Initialize(void)
    */
   _Objects_Information_table[OBJECTS_POSIX_API] = _POSIX_Objects;
 
-  _POSIX_signals_Manager_Initialization();
-  _POSIX_Threads_Manager_initialization();
-  _POSIX_Condition_variables_Manager_initialization();
   _POSIX_Key_Manager_initialization();
-  _POSIX_Mutex_Manager_initialization();
-  _POSIX_Message_queue_Manager_initialization();
-  _POSIX_Once_Manager_initialization();
-  _POSIX_Semaphore_Manager_initialization();
-  _POSIX_Timer_Manager_initialization();
-  _POSIX_Barrier_Manager_initialization();
-  _POSIX_RWLock_Manager_initialization();
-  _POSIX_Spinlock_Manager_initialization();
-}
 
-#endif
+  #ifdef RTEMS_POSIX_API
+    _POSIX_signals_Manager_Initialization();
+    _POSIX_Threads_Manager_initialization();
+    _POSIX_Condition_variables_Manager_initialization();
+    _POSIX_Mutex_Manager_initialization();
+    _POSIX_Message_queue_Manager_initialization();
+    _POSIX_Once_Manager_initialization();
+    _POSIX_Semaphore_Manager_initialization();
+    _POSIX_Timer_Manager_initialization();
+    _POSIX_Barrier_Manager_initialization();
+    _POSIX_RWLock_Manager_initialization();
+    _POSIX_Spinlock_Manager_initialization();
+  #endif
+}

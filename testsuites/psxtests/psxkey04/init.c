@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2012 Zhongwei Yao.
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,26 +18,20 @@
 #include "pmacros.h"
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *Test_Thread1(void *argument);
-void *Test_Thread2(void *argument);
+rtems_task Init(rtems_task_argument argument);
+rtems_task Test_Thread1(rtems_task_argument argument);
+rtems_task Test_Thread2(rtems_task_argument argument);
 
-int Data_array[2] = {1, 2};
-pthread_t        thread1, thread2;
+int      Data_array[2] = {1, 2};
+rtems_id thread1, thread2;
 
 pthread_key_t Key;
 
-void *Test_Thread1(
-  void *argument
-)
+rtems_task Test_Thread1( rtems_task_argument argument )
 {
-  int sc;
-  int *value;
+  int              sc;
+  int             *value;
   struct timespec  delay_request;
-  /*
-   * Detach ourselves so we don't wait for a join that won't happen.
-   */
-  pthread_detach( pthread_self() );
 
   puts( "Test_Thread 1 - pthread_setspecific - OK" );
   sc = pthread_setspecific( Key, &Data_array[0] );
@@ -53,19 +47,13 @@ void *Test_Thread1(
   value = pthread_getspecific( Key );
   rtems_test_assert( *value == Data_array[0] );
 
-  return NULL;
+  rtems_task_delete( RTEMS_SELF );
 }
 
-void *Test_Thread2(
-  void *argument
-)
+rtems_task Test_Thread2( rtems_task_argument argument )
 {
   int sc;
   int *value;
-  /*
-   * Detach ourselves so we don't wait for a join that won't happen.
-   */
-  pthread_detach( pthread_self() );
 
   puts( "Test_Thread 2 - pthread_setspecific - OK" );
   sc = pthread_setspecific( Key, &Data_array[1] );
@@ -75,15 +63,14 @@ void *Test_Thread2(
   value = pthread_getspecific( Key );
   rtems_test_assert( *value == Data_array[1] );
 
-  return NULL;
+  rtems_task_delete( RTEMS_SELF );
 }
 
-void *POSIX_Init(
-  void *ignored
-)
+rtems_task Init( rtems_task_argument ignored )
 {
-  int              sc;
-  struct timespec  delay_request;
+  int               sc;
+  rtems_status_code rc;
+  struct timespec   delay_request;
 
   puts( "\n\n*** TEST KEY 04 ***" );
 
@@ -91,12 +78,32 @@ void *POSIX_Init(
   sc = pthread_key_create( &Key, NULL );
   rtems_test_assert( !sc );
 
-  puts( "Init - pthread_create - OK" );
-  sc = pthread_create( &thread1, NULL, Test_Thread1, NULL );
-  rtems_test_assert( !sc );
+  puts( "Init - create - OK" );
+  rc = rtems_task_create(
+    rtems_build_name( 'T', 'E', 'S', 'T' ), 
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &thread1
+  );
+  rtems_test_assert( rc == RTEMS_SUCCESSFUL );
 
-  sc = pthread_create( &thread2, NULL, Test_Thread2, NULL );
-  rtems_test_assert( !sc );
+  rc = rtems_task_start( thread1, Test_Thread1, 0 );
+  rtems_test_assert( rc == RTEMS_SUCCESSFUL );
+
+  rc = rtems_task_create(
+    rtems_build_name( 'T', 'E', 'S', 'T' ), 
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &thread2
+  );
+  rtems_test_assert( rc == RTEMS_SUCCESSFUL );
+
+  rc = rtems_task_start( thread2, Test_Thread2, 0 );
+  rtems_test_assert( rc == RTEMS_SUCCESSFUL );
 
   puts( "Init - sleep - let thread run - OK" );
   delay_request.tv_sec = 0;
@@ -117,10 +124,10 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS  3
+#define CONFIGURE_MAXIMUM_TASKS          3
 #define CONFIGURE_MAXIMUM_POSIX_KEYS     1
 
-#define CONFIGURE_POSIX_INIT_THREAD_TABLE
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

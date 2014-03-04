@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,9 +17,10 @@
 #include "pmacros.h"
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
+rtems_task Init(rtems_task_argument value );
+rtems_task Test_Thread( rtems_task_argument value );
+
 void destructor(void *value);
-void *Test_Thread(void *key_value);
 
 pthread_key_t Key;
 volatile bool destructor_ran;
@@ -29,32 +30,25 @@ void destructor(void *value)
   destructor_ran = true;
 }
 
-void *Test_Thread(
-  void *key_value
-)
+rtems_task Test_Thread( rtems_task_argument value )
 {
-  int sc;
-
-  /*
-   * Detach ourselves so we don't wait for a join that won't happen.
-   */
-  pthread_detach( pthread_self() );
+  int   sc;
+  void *key_value = (void *) value;
 
   puts( "Test_Thread - pthread_setspecific - OK" );
   sc = pthread_setspecific( Key, key_value );
   rtems_test_assert( !sc );
 
   puts( "Test_Thread - pthread_exit to run key destructors - OK" );
-  return NULL;
+  rtems_task_delete( RTEMS_SELF );
 }
 
-void *POSIX_Init(
-  void *ignored
-)
+rtems_task Init(rtems_task_argument ignored)
 {
-  pthread_t        thread;
-  int              sc;
-  struct timespec  delay_request;
+  rtems_id          thread;
+  rtems_status_code rc;
+  int               sc;
+  struct timespec   delay_request;
 
   puts( "\n\n*** TEST KEY 03 ***" );
 
@@ -65,9 +59,19 @@ void *POSIX_Init(
   sc = pthread_key_create( &Key, NULL );
   rtems_test_assert( !sc );
 
-  puts( "Init - pthread_create - OK" );
-  sc = pthread_create( &thread, NULL, Test_Thread, &sc );
-  rtems_test_assert( !sc );
+  puts( "Init - create/start - OK" );
+  rc = rtems_task_create(
+    rtems_build_name( 'T', 'E', 'S', 'T' ), 
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &thread
+  );
+  rtems_test_assert( rc == RTEMS_SUCCESSFUL );
+
+  rc = rtems_task_start( thread, Test_Thread, 0 );
+  rtems_test_assert( rc == RTEMS_SUCCESSFUL );
 
   puts( "Init - sleep - let thread run - OK" );
   delay_request.tv_sec = 0;
@@ -87,9 +91,19 @@ void *POSIX_Init(
   sc = pthread_key_create( &Key, destructor );
   rtems_test_assert( !sc );
 
-  puts( "Init - pthread_create - OK" );
-  sc = pthread_create( &thread, NULL, Test_Thread, NULL );
-  rtems_test_assert( !sc );
+  puts( "Init - task create/start - OK" );
+  rc = rtems_task_create(
+    rtems_build_name( 'T', 'E', 'S', 'T' ),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &thread
+  );
+  rtems_test_assert( rc == RTEMS_SUCCESSFUL );
+
+  rc = rtems_task_start( thread, Test_Thread, 0 );
+  rtems_test_assert( rc == RTEMS_SUCCESSFUL );
 
   puts( "Init - sleep - let thread run - OK" );
   sc = nanosleep( &delay_request, NULL );
@@ -111,10 +125,10 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS  2
+#define CONFIGURE_MAXIMUM_TASKS          2
 #define CONFIGURE_MAXIMUM_POSIX_KEYS     1
 
-#define CONFIGURE_POSIX_INIT_THREAD_TABLE
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

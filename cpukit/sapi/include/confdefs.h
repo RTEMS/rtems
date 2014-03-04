@@ -29,7 +29,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -1722,8 +1722,33 @@ const rtems_libio_helper rtems_fs_init_helper =
  *  POSIX API Configuration Parameters
  */
 
-#ifdef RTEMS_POSIX_API
+/*
+ *  POSIX Keys are available whether or not the POSIX API is enabled.
+ */
+#include <rtems/posix/key.h>
 
+#ifndef CONFIGURE_MAXIMUM_POSIX_KEYS
+  #define CONFIGURE_MAXIMUM_POSIX_KEYS            0
+  #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 0
+#else
+  #ifndef CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
+    #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
+      (CONFIGURE_MAXIMUM_POSIX_KEYS * \
+       (CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS))
+  #endif
+#endif
+
+#define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys, _key_value_pairs) \
+   (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
+    + _Configure_From_workspace( \
+        _key_value_pairs * sizeof(POSIX_Keys_Key_value_pair)))
+
+/*
+ *  The rest of the POSIX threads API features are only available when
+ *  POSIX is enabled.
+ */
+
+#ifdef RTEMS_POSIX_API
   #include <sys/types.h>
   #include <signal.h>
   #include <limits.h>
@@ -1732,7 +1757,6 @@ const rtems_libio_helper rtems_fs_init_helper =
   #include <rtems/posix/cond.h>
   #include <rtems/posix/mqueue.h>
   #include <rtems/posix/mutex.h>
-  #include <rtems/posix/key.h>
   #include <rtems/posix/psignal.h>
   #include <rtems/posix/pthread.h>
   #include <rtems/posix/rwlock.h>
@@ -1773,20 +1797,6 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condvars) \
       _Configure_Object_RAM(_condvars, \
                           sizeof(POSIX_Condition_variables_Control) )
-
-  #ifndef CONFIGURE_MAXIMUM_POSIX_KEYS
-    #define CONFIGURE_MAXIMUM_POSIX_KEYS            0
-    #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 0
-  #else
-    #ifndef CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
-      #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
-        CONFIGURE_MAXIMUM_POSIX_KEYS \
-        * (CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS)
-    #endif
-  #endif
-  #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys, _key_value_pairs) \
-     (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
-      + _Configure_From_workspace(_key_value_pairs * sizeof(POSIX_Keys_Key_value_pair)))
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_TIMERS
     #define CONFIGURE_MAXIMUM_POSIX_TIMERS 0
@@ -1894,8 +1904,6 @@ const rtems_libio_helper rtems_fs_init_helper =
       CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES( \
           CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES + \
           CONFIGURE_MAXIMUM_GO_CHANNELS + CONFIGURE_GO_INIT_CONDITION_VARIABLES) + \
-      CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS, \
-                                       CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS ) + \
       CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS( \
           CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ) + \
       CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES( \
@@ -2213,6 +2221,9 @@ const rtems_libio_helper rtems_fs_init_helper =
    CONFIGURE_MEMORY_FOR_TASKS( \
      CONFIGURE_TOTAL_TASKS_AND_THREADS, CONFIGURE_TOTAL_TASKS_AND_THREADS) + \
    CONFIGURE_MEMORY_FOR_CLASSIC + \
+   CONFIGURE_MEMORY_FOR_POSIX_KEYS( \
+      CONFIGURE_MAXIMUM_POSIX_KEYS, \
+      CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS ) + \
    CONFIGURE_MEMORY_FOR_POSIX + \
    CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS + \
    CONFIGURE_MEMORY_FOR_MP + \
@@ -2344,8 +2355,6 @@ const rtems_libio_helper rtems_fs_init_helper =
       CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES +
         CONFIGURE_MAXIMUM_ADA_TASKS + CONFIGURE_MAXIMUM_FAKE_ADA_TASKS +
         CONFIGURE_GO_INIT_CONDITION_VARIABLES + CONFIGURE_MAXIMUM_GO_CHANNELS,
-      CONFIGURE_MAXIMUM_POSIX_KEYS,
-      CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS,
       CONFIGURE_MAXIMUM_POSIX_TIMERS,
       CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
       CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,
@@ -2389,6 +2398,8 @@ const rtems_libio_helper rtems_fs_init_helper =
     CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
     CONFIGURE_STACK_SPACE_SIZE,               /* required stack space */
     CONFIGURE_MAXIMUM_USER_EXTENSIONS,        /* maximum dynamic extensions */
+    CONFIGURE_MAXIMUM_POSIX_KEYS,             /* POSIX keys are always */
+    CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS,  /*   enabled */
     CONFIGURE_MICROSECONDS_PER_TICK,          /* microseconds per clock tick */
     1000 * CONFIGURE_MICROSECONDS_PER_TICK,   /* nanoseconds per clock tick */
     CONFIGURE_TICKS_PER_TIMESLICE,            /* ticks per timeslice quantum */
@@ -2525,11 +2536,13 @@ const rtems_libio_helper rtems_fs_init_helper =
     uint32_t BARRIERS;
     uint32_t USER_EXTENSIONS;
 
+    /* POSIX API managers that are always enabled */
+    uint32_t POSIX_KEYS;
+
 #ifdef RTEMS_POSIX_API
     /* POSIX API Pieces */
     uint32_t POSIX_MUTEXES;
     uint32_t POSIX_CONDITION_VARIABLES;
-    uint32_t POSIX_KEYS;
     uint32_t POSIX_TIMERS;
     uint32_t POSIX_QUEUED_SIGNALS;
     uint32_t POSIX_MESSAGE_QUEUES;
@@ -2580,6 +2593,8 @@ const rtems_libio_helper rtems_fs_init_helper =
     CONFIGURE_MEMORY_FOR_PERIODS(CONFIGURE_MAXIMUM_PERIODS),
     CONFIGURE_MEMORY_FOR_BARRIERS(CONFIGURE_BARRIERS),
     CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(CONFIGURE_MAXIMUM_USER_EXTENSIONS),
+    CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS, \
+                                     CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS ),
 
 #ifdef RTEMS_POSIX_API
     /* POSIX API Pieces */
@@ -2589,8 +2604,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(
       CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES +
       CONFIGURE_MAXIMUM_GO_CHANNELS + CONFIGURE_GO_INIT_CONDITION_VARIABLES),
-    CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS, \
-                                     CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS ),
     CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(
       CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ),
     CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(
@@ -2655,13 +2668,15 @@ const rtems_libio_helper rtems_fs_init_helper =
 /*
  *  If an attempt was made to configure POSIX objects and
  *  the POSIX API was not configured into RTEMS, error out.
+ *
+ *  @note POSIX Keys are always available so the parameters 
+ *        CONFIGURE_MAXIMUM_POSIX_KEYS and
+ *        CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS  are not in this list.
  */
 #if !defined(RTEMS_POSIX_API)
   #if ((CONFIGURE_MAXIMUM_POSIX_THREADS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_MUTEXES != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES != 0) || \
-       (CONFIGURE_MAXIMUM_POSIX_KEYS != 0) || \
-       (CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_TIMERS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES != 0) || \
@@ -2747,14 +2762,11 @@ const rtems_libio_helper rtems_fs_init_helper =
  * POSIX Key pair shouldn't be less than POSIX Key, which is highly
  * likely to be error.
  */
-#if defined(RTEMS_POSIX_API)
-    #if (CONFIGURE_MAXIMUM_POSIX_KEYS != 0) && \
-      (CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS != 0)
-      #if (CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS < \
-        CONFIGURE_MAXIMUM_POSIX_KEYS)
-      #error "Fewer POSIX Key pairs than POSIX Key!"
-      #endif
-    #endif
+#if (CONFIGURE_MAXIMUM_POSIX_KEYS != 0) && \
+    (CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS != 0)
+  #if (CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS < CONFIGURE_MAXIMUM_POSIX_KEYS)
+    #error "Fewer POSIX Key pairs than POSIX Key!"
+  #endif
 #endif
 
 #endif

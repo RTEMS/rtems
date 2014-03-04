@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -471,8 +471,19 @@ struct Thread_Control_struct {
   void                                 *API_Extensions[ THREAD_API_LAST + 1 ];
   /** This field points to the user extension pointers. */
   void                                **extensions;
+
   /** This field points to the set of per task variables. */
   rtems_task_variable_t                *task_variables;
+
+  /**
+   * This is the thread key value chain's control, which is used
+   * to track all key value for specific thread, and when thread
+   * exits, we can remove all key value for specific thread by
+   * iterating this chain, or we have to search a whole rbtree,
+   * which is inefficient.
+   */
+  Chain_Control           Key_Chain;
+
 };
 
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)

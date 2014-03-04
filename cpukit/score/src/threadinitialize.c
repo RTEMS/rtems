@@ -2,6 +2,7 @@
  *  @file
  *
  *  @brief Initialize Thread
+ *
  *  @ingroup ScoreThread
  */
 /*
@@ -231,6 +232,11 @@ bool _Thread_Initialize(
   #else
     the_thread->cpu_time_used = 0;
   #endif
+
+  /*
+   * initialize thread's key vaule node chain
+   */
+  _Chain_Initialize_empty( &the_thread->Key_Chain );
 
   /*
    *  Open the object

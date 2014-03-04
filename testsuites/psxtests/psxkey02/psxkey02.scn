@@ -1,6 +1,8 @@
+sparc-rtems4.11-run is /home/joel/rtems-4.11-work/tools/bin/sparc-rtems4.11-run
+
+
 *** TEST KEY 02 ***
 Init - pthread_key_create - ENOMEM
 Init - pthread_key_delete - OK
 Init - verify workspace has same memory
 *** END OF TEST KEY 02 ***
-

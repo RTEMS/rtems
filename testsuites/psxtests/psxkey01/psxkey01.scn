@@ -1,5 +1,4 @@
 *** POSIX KEY 01 TEST ***
 Init's ID is 0x0b010001
 Init: pthread_key_create - OK
-
 *** END OF POSIX KEY 01 TEST ***

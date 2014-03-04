@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2012 Zhongwei Yao.
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,8 +19,8 @@
 #include "pmacros.h"
 
 /* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void *Test_Thread(void *argument);
+rtems_task Init(rtems_task_argument argument);
+rtems_task Test_Thread(rtems_task_argument argument);
 
 pthread_key_t Key;
 int created_thread_count, setted_thread_count, got_thread_count;
@@ -28,17 +28,15 @@ int all_thread_created;
 pthread_mutex_t mutex1, mutex2;
 pthread_cond_t create_condition_var, set_condition_var;
 
-void *Test_Thread(
-  void *argument
-)
+rtems_task Test_Thread(rtems_task_argument argument)
 {
   int sc;
   int *value_p, *value_p2;
 
   value_p = malloc( sizeof( int ) );
-  //printf( "Test_Thread%d  - Key pthread_setspecific - OK\n", (int)pthread_self() );
   sc = pthread_setspecific( Key, value_p );
   rtems_test_assert( !sc );
+
   pthread_mutex_lock( &mutex1 );
   ++setted_thread_count;
   pthread_cond_signal( &set_condition_var );
@@ -52,21 +50,20 @@ void *Test_Thread(
     pthread_cond_wait( &create_condition_var, &mutex2 );
   pthread_mutex_unlock( &mutex2 );
 
-  //printf( "Test_Thread%d  - Key pthread_getspecific - OK\n", (int)pthread_self() );
   value_p2 = pthread_getspecific( Key );
   rtems_test_assert( value_p == value_p2 );
   ++got_thread_count;
 
-  return NULL;
+  rtems_task_delete( RTEMS_SELF );
 }
 
-void *POSIX_Init(
-  void *ignored
-)
+rtems_task Init(rtems_task_argument argument)
 {
-  pthread_t        *thread_p;
-  int              sc;
-  struct timespec  delay_request;
+  rtems_id          *thread_p;
+  rtems_status_code  rc;
+  int                sc;
+  struct timespec    delay_request;
+
   all_thread_created = 0;
 
   puts( "\n\n*** TEST KEY 07 ***" );
@@ -74,12 +71,15 @@ void *POSIX_Init(
   puts( "Init - Mutex 1 create - OK" );
   sc = pthread_mutex_init( &mutex1, NULL );
   rtems_test_assert( !sc );
+
   puts( "Init - Mutex 2 create - OK" );
   sc = pthread_mutex_init( &mutex2, NULL );
   rtems_test_assert( !sc );
+
   puts( "Init - Condition variable 1 create - OK" );
   sc = pthread_cond_init( &create_condition_var, NULL );
   rtems_test_assert( !sc );
+
   puts( "Init - Condition variable 2 create - OK" );
   sc = pthread_cond_init( &set_condition_var, NULL );
   rtems_test_assert( !sc );
@@ -88,34 +88,54 @@ void *POSIX_Init(
   sc = pthread_key_create( &Key, NULL );
   rtems_test_assert( !sc );
 
-  for( ; ; )
-    {
-      thread_p = malloc( sizeof( pthread_t ) );
-      rtems_test_assert( thread_p );
-      pthread_mutex_lock( &mutex1 );
-      sc = pthread_create( thread_p, NULL, Test_Thread, NULL );
-      rtems_test_assert( ( sc == 0 ) || ( sc == EAGAIN ) );
-      /**
-       * check if return is EAGAIN, it means RTEMS Workspace RAM
-       * have been exhausted.
-       */
-      if ( sc == EAGAIN )
-        {
-          pthread_mutex_unlock( &mutex1 );
-          break;
-        }
-      ++created_thread_count;
-      /**
-       * wait for test thread set key, the while loop here is used to
-       * avoid suprious wakeup.
-       */
-      while( created_thread_count > setted_thread_count )
-        pthread_cond_wait( &set_condition_var, &mutex1 );
-      pthread_mutex_unlock( &mutex1 );
+  for ( ; ; ) {
+    thread_p = malloc( sizeof( rtems_id ) );
+    rtems_test_assert( thread_p );
+    pthread_mutex_lock( &mutex1 );
+
+    rc = rtems_task_create(
+      rtems_build_name( 'T', 'E', 'S', 'T' ), 
+      1,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_MODES,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      thread_p
+    );
+    rtems_test_assert(
+      ( rc == RTEMS_SUCCESSFUL ) || ( rc == RTEMS_UNSATISFIED )
+    );
+
+    if ( rc == RTEMS_SUCCESSFUL ) {
+      rc = rtems_task_start( *thread_p, Test_Thread, 0 );
+      rtems_test_assert( rc == RTEMS_SUCCESSFUL );
     }
-  printf( "Init - %d pthreads have been created - OK\n", created_thread_count );
-  printf( "Init - %d pthreads have been setted key data - OK\n", setted_thread_count );
+
+    /**
+     * check if return is EAGAIN, it means RTEMS Workspace RAM
+     * have been exhausted.
+     */
+    if ( rc == RTEMS_UNSATISFIED ) {
+      pthread_mutex_unlock( &mutex1 );
+      break;
+    }
+    ++created_thread_count;
+
+    /**
+     * wait for test thread set key, the while loop here is used to
+     * avoid suprious wakeup.
+     */
+    while( created_thread_count > setted_thread_count )
+      pthread_cond_wait( &set_condition_var, &mutex1 );
+    pthread_mutex_unlock( &mutex1 );
+  }
+  printf(
+    "Init - %d pthreads have been created - OK\n"
+    "Init - %d pthreads have been setted key data - OK\n",
+    created_thread_count,
+    setted_thread_count
+  );
   rtems_test_assert( created_thread_count == setted_thread_count );
+
   /* unblock all created pthread to let them set key data.*/
   pthread_mutex_lock( &mutex2 );
   all_thread_created = 1;
@@ -128,8 +148,12 @@ void *POSIX_Init(
   sc = nanosleep( &delay_request, NULL );
   rtems_test_assert( !sc );
 
-  printf( "Init - %d pthreads have been got key data - OK\n", got_thread_count );
+  printf(
+    "Init - %d pthreads have been got key data - OK\n",
+    got_thread_count
+  );
   rtems_test_assert( created_thread_count == got_thread_count );
+
   puts( "Init - pthread Key delete - OK" );
   sc = pthread_key_delete( Key );
   rtems_test_assert( sc == 0 );
@@ -137,12 +161,15 @@ void *POSIX_Init(
   puts( "Init - Mutex1 delete - OK" );
   sc = pthread_mutex_destroy( &mutex1 );
   rtems_test_assert( !sc );
+
   puts( "Init - Mutex2 delete - OK" );
   sc = pthread_mutex_destroy( &mutex2 );
   rtems_test_assert( !sc );
+
   puts( "Init - Condition variable 1 delete - OK" );
   sc = pthread_cond_destroy( &create_condition_var );
   rtems_test_assert( !sc );
+
   puts( "Init - Condition variable 2 delete - OK" );
   sc = pthread_cond_destroy( &set_condition_var );
   rtems_test_assert( !sc );
@@ -156,16 +183,13 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-
-#define CONFIGURE_MAXIMUM_POSIX_THREADS  rtems_resource_unlimited(10)
-#define CONFIGURE_MAXIMUM_POSIX_MUTEXES              2
+#define CONFIGURE_MAXIMUM_TASKS          rtems_resource_unlimited(10)
+#define CONFIGURE_MAXIMUM_POSIX_MUTEXES  2
 #define CONFIGURE_MAXIMUM_POSIX_KEYS     1
 #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES  2
 #define CONFIGURE_UNIFIED_WORK_AREAS
 
-
-
-#define CONFIGURE_POSIX_INIT_THREAD_TABLE
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

@@ -7,7 +7,7 @@
 
 /*
  * Copyright (c) 2012 Zhongwei Yao.
- * COPYRIGHT (c) 1989-2007.
+ * COPYRIGHT (c) 1989-2014.
  * On-Line Applications Research Corporation (OAR).
  *
  * The license and distribution terms for this file may be
@@ -20,7 +20,7 @@
 #endif
 
 #include <rtems/posix/keyimpl.h>
-#include <rtems/posix/threadsup.h>
+#include <rtems/score/thread.h>
 #include <rtems/score/chainimpl.h>
 
 #include <errno.h>
@@ -37,7 +37,6 @@ int pthread_setspecific(
   POSIX_Keys_Control          *the_key;
   Objects_Locations            location;
   POSIX_Keys_Key_value_pair   *value_pair_ptr;
-  POSIX_API_Control           *api;
 
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
@@ -55,7 +54,7 @@ int pthread_setspecific(
       value_pair_ptr->thread_id = _Thread_Executing->Object.id;
       value_pair_ptr->value = value;
       if ( _RBTree_Insert( &_POSIX_Keys_Key_value_lookup_tree,
-                                       &(value_pair_ptr->Key_value_lookup_node) ) ) {
+                           &(value_pair_ptr->Key_value_lookup_node) ) ) {
         _Freechain_Put( (Freechain_Control *)&_POSIX_Keys_Keypool,
                         (void *) value_pair_ptr );
         _Objects_Put( &the_key->Object );
@@ -64,9 +63,10 @@ int pthread_setspecific(
       }
 
       /** append rb_node to the thread API extension's chain */
-      api = (POSIX_API_Control *)\
-       (_Thread_Executing->API_Extensions[THREAD_API_POSIX]);
-      _Chain_Append_unprotected( &api->Key_Chain, &value_pair_ptr->Key_values_per_thread_node );
+      _Chain_Append_unprotected(
+        &_Thread_Executing->Key_Chain,
+        &value_pair_ptr->Key_values_per_thread_node
+      );
 
       _Objects_Put( &the_key->Object );
 

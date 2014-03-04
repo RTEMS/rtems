@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2013.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -73,22 +73,6 @@ typedef struct {
    * condition variables which are configured for this application.
    */
   uint32_t                            maximum_condition_variables;
-
-  /**
-   * This field contains the maximum number of POSIX API
-   * keys which are configured for this application.
-   */
-  uint32_t                            maximum_keys;
-
-  /**
-   * This field contains the maximum number of POSIX API
-   * key value pairs which are configured for this application.
-   *
-   * @note There can be potentially be a key/value pair for
-   *       every thread to use every key. But normally this
-   *       many are not needed in a system.
-   */
-  uint32_t                            maximum_key_value_pairs;
 
   /**
    * This field contains the maximum number of POSIX API

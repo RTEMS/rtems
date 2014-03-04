@@ -7,7 +7,7 @@
 
 /*
  * Copyright (c) 2012 Zhongwei Yao.
- * COPYRIGHT (c) 1989-2008.
+ * COPYRIGHT (c) 1989-2014.
  * On-Line Applications Research Corporation (OAR).
  *
  * The license and distribution terms for this file may be
@@ -19,8 +19,9 @@
 #include "config.h"
 #endif
 
+#include <rtems/config.h>
+
 #include <rtems/posix/keyimpl.h>
-#include <rtems/posix/config.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/wkspace.h>
@@ -72,7 +73,7 @@ int _POSIX_Keys_Key_value_lookup_tree_compare_function(
 
 static uint32_t _POSIX_Keys_Get_keypool_bump_count( void )
 {
-  uint32_t max = Configuration_POSIX_API.maximum_key_value_pairs;
+  uint32_t max = Configuration.maximum_key_value_pairs;
 
   return _Objects_Is_unlimited( max ) ?
     _Objects_Maximum_per_allocation( max ) : 0;
@@ -80,7 +81,7 @@ static uint32_t _POSIX_Keys_Get_keypool_bump_count( void )
 
 static uint32_t _POSIX_Keys_Get_initial_keypool_size( void )
 {
-  uint32_t max = Configuration_POSIX_API.maximum_key_value_pairs;
+  uint32_t max = Configuration.maximum_key_value_pairs;
 
   return _Objects_Maximum_per_allocation( max );
 }
@@ -135,7 +136,7 @@ void _POSIX_Key_Manager_initialization(void)
     &_POSIX_Keys_Information,   /* object information table */
     OBJECTS_POSIX_API,          /* object API */
     OBJECTS_POSIX_KEYS,         /* object class */
-    Configuration_POSIX_API.maximum_keys,
+    Configuration.maximum_keys,
                                 /* maximum objects of this class */
     sizeof( POSIX_Keys_Control ),
                                 /* size of this object's control block */

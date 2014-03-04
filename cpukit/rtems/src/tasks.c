@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -123,6 +123,11 @@ static void _RTEMS_tasks_Delete_extension(
     _RTEMS_Tasks_Invoke_task_variable_dtor( deleted, tvp );
     tvp = next;
   }
+
+  /*
+   *  Run all the key destructors
+   */
+  _POSIX_Keys_Run_destructors( deleted );
 
   /*
    *  Free API specific memory

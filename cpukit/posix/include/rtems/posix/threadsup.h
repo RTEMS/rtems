@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -89,15 +89,6 @@ typedef struct {
    */
   struct _pthread_cleanup_context *last_cleanup_context;
 #endif /* HAVE_STRUCT__PTHREAD_CLEANUP_CONTEXT */
-
-  /**
-   * This is the thread key value chain's control, which is used
-   * to track all key value for specific thread, and when thread
-   * exits, we can remove all key value for specific thread by
-   * iterating this chain, or we have to search a whole rbtree,
-   * which is inefficient.
-   */
-  Chain_Control           Key_Chain;
 
 } POSIX_API_Control;
 
