@@ -584,7 +584,9 @@ void complete_test( void )
   set_thread_heir( _Thread_Get_executing() );
   set_thread_dispatch_necessary( false );
 
-  _Thread_Dispatch_set_disable_level( 0 );
+  for (index = 0; index < 2 * OPERATION_COUNT; ++index) {
+    _Thread_Unnest_dispatch();
+  }
 
   /*
    *  Now dump all the times

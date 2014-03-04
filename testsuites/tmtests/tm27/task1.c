@@ -112,8 +112,6 @@ rtems_task Task_1(
 
   Interrupt_nest = 0;
 
-  _Thread_Dispatch_set_disable_level( 0 );
-
   Interrupt_occurred = 0;
 
   benchmark_timer_initialize();
@@ -145,7 +143,7 @@ rtems_task Task_1(
    *  No preempt .. nested
    */
 
-  _Thread_Dispatch_set_disable_level( 1 );
+  _Thread_Disable_dispatch();
 
   Interrupt_nest = 1;
 
@@ -159,7 +157,7 @@ rtems_task Task_1(
 #endif
   Interrupt_return_time = benchmark_timer_read();
 
-  _Thread_Dispatch_set_disable_level( 0 );
+  _Thread_Unnest_dispatch();
 
   put_time(
     "rtems interrupt: entry overhead returns to nested interrupt",
@@ -180,8 +178,6 @@ rtems_task Task_1(
   /*
    *  Does a preempt .. not nested
    */
-
-  _Thread_Dispatch_set_disable_level( 0 );
 
 #if defined(RTEMS_SMP)
   _ISR_Disable_without_giant(level);
@@ -252,8 +248,6 @@ rtems_task Task_2(
   /*
    *  Switch back to the other task to exit the test.
    */
-
-  _Thread_Dispatch_set_disable_level( 0 );
 
 #if defined(RTEMS_SMP)
   rtems_interrupt_disable(level);

@@ -118,46 +118,6 @@ uint32_t _Thread_Dispatch_decrement_disable_level( void )
   return disable_level;
 }
 
-
-/*
- * Note this method is taking a heavy handed approach to 
- * setting the dispatch level. This may be optimized at a 
- * later timee, but it must be in such a way that the nesting
- * level is decremented by the same number as the dispatch level.
- * This approach is safest until we are sure the nested spinlock
- * is successfully working with smp isr source code.  
- */
-
-uint32_t _Thread_Dispatch_set_disable_level(uint32_t value)
-{
-  ISR_Level isr_level;
-  uint32_t disable_level;
-
-  _ISR_Disable_without_giant( isr_level );
-  disable_level = _Thread_Dispatch_disable_level;
-  _ISR_Enable_without_giant( isr_level );
-
-  /*
-   * If we need the dispatch level to go higher 
-   * call increment method the desired number of times.
-   */
-
-  while ( value > disable_level ) {
-    disable_level = _Thread_Dispatch_increment_disable_level();
-  }
-
-  /*
-   * If we need the dispatch level to go lower
-   * call increment method the desired number of times.
-   */
-
-  while ( value < disable_level ) {
-    disable_level = _Thread_Dispatch_decrement_disable_level();
-  }
-
-  return value;
-}
-
 void _Giant_Acquire( void )
 {
   ISR_Level isr_level;

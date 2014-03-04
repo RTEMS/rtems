@@ -93,7 +93,6 @@ rtems_task Task_1(
 {
   Install_tm27_vector( Isr_handler ) ;
   Interrupt_nest = 0;
-  _Thread_Dispatch_set_disable_level( 0 );
 
   /* Benchmark code */
   benchmark_timer_initialize();

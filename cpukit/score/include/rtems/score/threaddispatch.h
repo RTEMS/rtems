@@ -121,14 +121,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
   void _Giant_Drop( uint32_t self_cpu );
 
   /**
-   *  @brief Sets thread dispatch level to the value passed in.
-   *
-   * This routine sets thread dispatch level to the
-   * value passed in.
-   */
-  uint32_t _Thread_Dispatch_set_disable_level(uint32_t value);
-
-  /**
    *  @brief Increments the thread dispatch level.
    *
    * This rountine increments the thread dispatch level
@@ -142,18 +134,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
    */
   uint32_t _Thread_Dispatch_decrement_disable_level(void);
 #else /* RTEMS_SMP */
-  /**
-   * @brief Set thread dispatch disable level.
-   *
-   * This routine sets thread dispatch level to the
-   * value passed in.
-   */
-  RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_set_disable_level(uint32_t value)
-  {
-    _Thread_Dispatch_disable_level = value;
-    return value;
-  }
-
   /**
    * @brief Increase thread dispatch disable level.
    *
