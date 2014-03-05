@@ -105,17 +105,31 @@ CPU_Counter_ticks _CPU_Counter_read(void)
   return gt->cntrlower;
 }
 
-static void a9mpcore_clock_cleanup(void)
+static void a9mpcore_clock_cleanup_isr(void *arg)
 {
   volatile a9mpcore_gt *gt = A9MPCORE_GT;
-  rtems_status_code sc;
+
+  (void) arg;
 
   gt->ctrl &= A9MPCORE_GT_CTRL_TMR_EN;
   gt->irqst = A9MPCORE_GT_IRQST_EFLG;
+}
 
-  sc = rtems_interrupt_handler_remove(
+static void a9mpcore_clock_cleanup(void)
+{
+  rtems_status_code sc;
+
+  /*
+   * The relevant registers / bits of the global timer are banked and chances
+   * are on an SPM system, that we are executing on the wrong CPU to reset
+   * them. Thus we will have the actual cleanup done with the next clock tick.
+   * The ISR will execute on the right CPU for the cleanup.
+   */
+  sc = rtems_interrupt_handler_install(
     A9MPCORE_IRQ_GT,
-    (rtems_interrupt_handler) Clock_isr,
+    "Clock",
+    RTEMS_INTERRUPT_REPLACE,
+    a9mpcore_clock_cleanup_isr,
     NULL
   );
   if (sc != RTEMS_SUCCESSFUL) {
