@@ -399,7 +399,14 @@ save_isf:
         subcc    %l7, 1, %l7             ! outermost interrupt handler?
         bnz      dont_switch_stacks      ! No, then do not switch stacks
 
-        nop
+#if defined( RTEMS_PROFILING )
+         sethi   %hi(SYM(_SPARC_Counter)), %o5
+        ld       [%o5 + %lo(SYM(_SPARC_Counter))], %l4
+        ld       [%l4], %o5
+#else
+         nop
+#endif
+
 	ld       [%l5 + PER_CPU_INTERRUPT_STACK_HIGH], %sp
 
 dont_switch_stacks:
@@ -453,7 +460,21 @@ dont_fix_pil2:
                                         !   WAS LOADED WHEN ISF WAS SAVED!!!
         mov      %l3, %o0               ! o0 = 1st arg = vector number
         call     %g4, 0
-        nop                             ! delay slot
+#if defined( RTEMS_PROFILING )
+         mov     %o5, %l3               ! save interrupt entry instant
+        cmp      %l7, 0
+        bne      profiling_not_outer_most_exit
+         nop
+        call     SYM(sparc_disable_interrupts), 0
+         nop
+        ld       [%l4], %o2             ! o2 = 3rd arg = interrupt exit instant
+        mov      %l3, %o1               ! o1 = 2nd arg = interrupt entry instant
+        call     SYM(_Profiling_Outer_most_interrupt_entry_and_exit), 0
+         mov     %l5, %o0               ! o0 = 1st arg = per-CPU control
+profiling_not_outer_most_exit:
+#else
+         nop                            ! delay slot
+#endif
 
         /*
          *  Redisable traps so we can finish up the interrupt processing.
