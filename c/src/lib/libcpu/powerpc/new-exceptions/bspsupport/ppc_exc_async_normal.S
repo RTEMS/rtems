@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -46,6 +46,22 @@
  */
 #define FRAME_OFFSET(reg) GPR2_OFFSET(reg)
 
+#ifdef RTEMS_PROFILING
+/*
+ * The PPC_EXC_MINIMAL_FRAME_SIZE is enough to store this additional register.
+ */
+#define ENTRY_INSTANT_REGISTER r15
+#define ENTRY_INSTANT_OFFSET(reg) GPR13_OFFSET(reg)
+
+.macro GET_TIME_BASE REG
+#ifdef ppc8540
+	mfspr	\REG, TBRL
+#else /* ppc8540 */
+	mftb	\REG
+#endif /* ppc8540 */
+.endm
+#endif /* RTEMS_PROFILING */
+
 #ifdef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	.global	bsp_interrupt_dispatch
 #endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
@@ -69,6 +85,14 @@ ppc_exc_min_prolog_async_tmpl_normal:
 	.int	ppc_exc_wrap_async_normal
 
 ppc_exc_wrap_async_normal:
+
+#ifdef RTEMS_PROFILING
+	/* Save non-volatile ENTRY_INSTANT_REGISTER */
+	stw	ENTRY_INSTANT_REGISTER, ENTRY_INSTANT_OFFSET(r1)
+
+	/* Get entry instant */
+	GET_TIME_BASE	ENTRY_INSTANT_REGISTER
+#endif /* RTEMS_PROFILING */
 
 	/* Save non-volatile FRAME_REGISTER */
 	stw	FRAME_REGISTER, FRAME_OFFSET(r1)
@@ -192,13 +216,33 @@ ppc_exc_wrap_async_normal:
 	lwz	FRAME_REGISTER, FRAME_OFFSET(r1)
 
 	/* Decrement ISR nest level and thread dispatch disable level */
+#ifdef RTEMS_PROFILING
+	subic.	ISR_NEST_REGISTER, ISR_NEST_REGISTER, 1
+	subi	DISPATCH_LEVEL_REGISTER, DISPATCH_LEVEL_REGISTER, 1
+	cmpwi	cr2, DISPATCH_LEVEL_REGISTER, 0
+#else /* RTEMS_PROFILING */
 	subi	ISR_NEST_REGISTER, ISR_NEST_REGISTER, 1
 	subic.	DISPATCH_LEVEL_REGISTER, DISPATCH_LEVEL_REGISTER, 1
+#endif /* RTEMS_PROFILING */
 	stw	ISR_NEST_REGISTER, PER_CPU_ISR_NEST_LEVEL(SELF_CPU_REGISTER)
 	stw	DISPATCH_LEVEL_REGISTER, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(SELF_CPU_REGISTER)
 
+#ifdef RTEMS_PROFILING
+	/* Store profiling data if necessary */
+	bne	profiling_done
+	mr	r3, SELF_CPU_REGISTER
+	mr	r4, ENTRY_INSTANT_REGISTER
+	GET_TIME_BASE	r5
+	bl	_Profiling_Outer_most_interrupt_entry_and_exit
+profiling_done:
+#endif /* RTEMS_PROFILING */
+
 	/* Call thread dispatcher if necessary */
+#ifdef RTEMS_PROFILING
+	bne	cr2, thread_dispatching_done
+#else /* RTEMS_PROFILING */
 	bne	thread_dispatching_done
+#endif /* RTEMS_PROFILING */
 	bl	_Thread_Dispatch
 thread_dispatching_done:
 
@@ -245,6 +289,11 @@ thread_dispatching_done:
 	PPC_GPR_LOAD	SCRATCH_4_REGISTER, SCRATCH_4_OFFSET(r1)
 	mtlr	SCRATCH_5_REGISTER
 	PPC_GPR_LOAD	SCRATCH_5_REGISTER, SCRATCH_5_OFFSET(r1)
+
+#ifdef RTEMS_PROFILING
+	/* Restore ENTRY_INSTANT_REGISTER */
+	lwz	ENTRY_INSTANT_REGISTER, ENTRY_INSTANT_OFFSET(r1)
+#endif /* RTEMS_PROFILING */
 
 	/* Pop stack */
 	addi	r1, r1, PPC_EXC_MINIMAL_FRAME_SIZE
