@@ -420,70 +420,6 @@ dont_switch_stacks:
 
         mov      %l0, %g5
 	and	 %l3, 0x0ff, %g4
-
-/* This is a fix for ERC32 with FPU rev.B or rev.C */
-
-#if defined(FPU_REVB)
-
-
-        subcc    %g4, 0x08, %g0
-	be	 fpu_revb
-        subcc    %g4, 0x11, %g0
-        bl       dont_fix_pil
-        subcc    %g4, 0x1f, %g0
-        bg       dont_fix_pil
-        sll      %g4, 8, %g4
-        and      %g4, SPARC_PSR_PIL_MASK, %g4
-        andn     %l0, SPARC_PSR_PIL_MASK, %g5
-        or       %g4, %g5, %g5
-	srl	 %l0, 12, %g4
-	andcc	 %g4, 1, %g0
-        be       dont_fix_pil
-	nop
-	ba,a	 enable_irq
-
-
-fpu_revb:
-	srl	 %l0, 12, %g4	! check if EF is set in %psr
-	andcc	 %g4, 1, %g0
-	be	 dont_fix_pil	! if FPU disabled than continue as normal
-	and	 %l3, 0xff, %g4
-        subcc    %g4, 0x08, %g0
-        bne      enable_irq	! if not a FPU exception then do two fmovs
-	set	 __sparc_fq, %g4
-	st	 %fsr, [%g4]	! if FQ is not empty and FQ[1] = fmovs
-	ld	 [%g4], %g4	! than this is bug 3.14
-	srl 	 %g4, 13, %g4
-	andcc 	 %g4, 1, %g0
-        be       dont_fix_pil
-	set	 __sparc_fq, %g4
-	std	 %fq, [%g4]
-	ld	 [%g4+4], %g4
-	set	 0x81a00020, %g5
-	subcc	 %g4, %g5, %g0
-	bne,a	 dont_fix_pil2
-        wr       %l0, SPARC_PSR_ET_MASK, %psr ! **** ENABLE TRAPS ****
-	ba,a	 simple_return
-	
-enable_irq:
-        or       %g5, SPARC_PSR_PIL_MASK, %g4
-        wr       %g4, SPARC_PSR_ET_MASK, %psr ! **** ENABLE TRAPS ****
-	nop; nop; nop
-	fmovs	 %f0, %f0
-	ba	 dont_fix_pil
-	fmovs	 %f0, %f0
-
-	.data
-	.global	__sparc_fq
-	.align 8
-__sparc_fq:
-	.word 0,0
-
-	.text
-/* end of ERC32 FPU rev.B/C fix */
-
-#else
-
         subcc    %g4, 0x11, %g0
         bl       dont_fix_pil
         subcc    %g4, 0x1f, %g0
@@ -493,8 +429,6 @@ __sparc_fq:
         andn     %l0, SPARC_PSR_PIL_MASK, %g5
         ba       pil_fixed
         or       %g4, %g5, %g5
-#endif
-
 dont_fix_pil:
         or       %g5, SPARC_PSR_PIL_MASK, %g5
 pil_fixed:
