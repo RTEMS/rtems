@@ -34,7 +34,7 @@ extern "C" {
  * the system correct size, that at least one
  * valid cpu is set and that no invalid cpus are set.
  */
-int _CPU_set_Is_valid( const cpu_set_t *cpuset, size_t setsize );
+bool _CPU_set_Is_valid( const cpu_set_t *cpuset, size_t setsize );
 
 /**
  * _CPU_set_Show

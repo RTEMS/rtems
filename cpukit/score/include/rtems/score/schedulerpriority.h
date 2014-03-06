@@ -34,6 +34,14 @@ extern "C" {
  */
 /**@{*/
 
+#if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
+  #define SCHEDULER_PRIORITY_ADDITIONAL_SMP_ENTRY_POINTS \
+    _Scheduler_default_Get_affinity,     /* get affinity entry point */ \
+    _Scheduler_default_Set_affinity      /* set affinity entry point */
+#else
+  #define SCHEDULER_PRIORITY_ADDITIONAL_SMP_ENTRY_POINTS
+#endif
+
 /**
  *  Entry points for the Deterministic Priority Based Scheduler.
  */
@@ -53,7 +61,8 @@ extern "C" {
     _Scheduler_priority_Priority_compare, /* compares two priorities */ \
     _Scheduler_default_Release_job,       /* new period of task */ \
     _Scheduler_default_Tick,              /* tick entry point */ \
-    _Scheduler_default_Start_idle         /* start idle entry point */ \
+    _Scheduler_default_Start_idle,        /* start idle entry point */ \
+    SCHEDULER_PRIORITY_ADDITIONAL_SMP_ENTRY_POINTS \
   }
 
 typedef struct {

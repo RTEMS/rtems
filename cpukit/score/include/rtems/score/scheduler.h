@@ -22,6 +22,9 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/priority.h>
+#if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
+  #include <sys/cpuset.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -98,6 +101,27 @@ typedef struct {
    * @see _Scheduler_Start_idle().
    */
   void ( *start_idle )( Thread_Control *thread, Per_CPU_Control *processor );
+
+#if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
+  /**
+   * @brief Obtain the processor affinity for a thread.
+   *
+   * @see _Scheduler_Get_affinity().
+   */
+  bool ( *get_affinity )( Thread_Control *thread, size_t cpusetsize, cpu_set_t *cpuset );
+  
+  /**
+   * @brief Set the processor affinity for a thread.
+   *
+   * @see _Scheduler_Set_affinity().
+   */
+  bool ( *set_affinity )(
+    Thread_Control  *thread,
+    size_t           cpusetsize,
+    const cpu_set_t *cpuset
+  );
+#endif
+
 } Scheduler_Operations;
 
 /**
@@ -189,6 +213,43 @@ void _Scheduler_default_Start_idle(
  * queues.
  */
 extern const bool _Scheduler_FIXME_thread_priority_queues_are_broken;
+
+#if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
+
+  /**
+   * @brief Get affinity for the default scheduler.
+   *
+   * @param[in] thread The associated thread.
+   * @param[in] cpusetsize The size of the cpuset.
+   * @param[out] cpuset Affinity set containing all CPUs.
+   *
+   * @retval 0 Successfully got cpuset
+   * @retval -1 The cpusetsize is invalid for the system
+   */
+  bool _Scheduler_default_Get_affinity(
+    Thread_Control *thread,
+    size_t          cpusetsize,
+    cpu_set_t      *cpuset
+  );
+
+  /** 
+   * @brief Set affinity for the default scheduler.
+   *
+   * @param[in] thread The associated thread.
+   * @param[in] cpusetsize The size of the cpuset.
+   * @param[in] cpuset Affinity new affinity set.
+   *
+   * @retval 0 Successful
+   *
+   *  This method always returns successful and does not save
+   *  the cpuset.
+   */
+  bool _Scheduler_default_Set_affinity(
+    Thread_Control  *thread,
+    size_t           cpusetsize,
+    const cpu_set_t *cpuset
+  );
+#endif
 
 /**@}*/
 

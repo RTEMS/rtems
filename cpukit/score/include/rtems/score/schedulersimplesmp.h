@@ -68,7 +68,9 @@ extern "C" {
     _Scheduler_priority_Priority_compare, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \
-    _Scheduler_simple_smp_Start_idle \
+    _Scheduler_simple_smp_Start_idle, \
+    _Scheduler_default_Get_affinity, \
+    _Scheduler_default_Set_affinity \
   }
 
 void _Scheduler_simple_smp_Initialize( void );

@@ -57,27 +57,27 @@ void _CPU_set_Handler_initialization()
  * the system correct size, that at least one
  * valid cpu is set and that no invalid cpus are set.
  */
-int _CPU_set_Is_valid( const cpu_set_t *cpuset, size_t setsize )
+bool _CPU_set_Is_valid( const cpu_set_t *cpuset, size_t setsize )
 {
   cpu_set_t             temp;
 
   if ( !cpuset )
-    return -1;
+    false;
 
   if (setsize != cpuset_default.setsize )
-    return -1;
+    return false;
 
   /* Validate at least 1 valid cpu is set in cpuset */
   CPU_AND_S( cpuset_default.setsize, &temp, cpuset, cpuset_default.set );
 
   if ( CPU_COUNT_S( setsize, &temp ) == 0 )
-    return -1;
+    return false;
 
   /* Validate that no invalid cpu's are set in cpuset */
   if ( !CPU_EQUAL_S( setsize, &temp, cpuset ) )
-    return -1;
+    return false;
 
-  return 0;
+  return true;
 }
 
 /**

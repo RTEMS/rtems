@@ -48,7 +48,7 @@ extern "C" {
  */
 
 /**
- * @brief Entry points for the Simple SMP Scheduler.
+ * @brief Entry points for the Priority SMP Scheduler.
  */
 #define SCHEDULER_PRIORITY_SMP_ENTRY_POINTS \
   { \
@@ -66,7 +66,9 @@ extern "C" {
     _Scheduler_priority_Priority_compare, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \
-    _Scheduler_priority_SMP_Start_idle \
+    _Scheduler_priority_SMP_Start_idle, \
+    _Scheduler_default_Get_affinity, \
+    _Scheduler_default_Set_affinity \
   }
 
 void _Scheduler_priority_SMP_Initialize( void );

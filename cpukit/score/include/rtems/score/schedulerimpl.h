@@ -240,6 +240,38 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Start_idle(
   ( *_Scheduler.Operations.start_idle )( thread, processor );
 }
 
+#if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
+  /**
+   * @brief Obtain the processor affinity for a thread.
+   *
+   * @param[in,out] thread The thread.
+   * @parma[out] cpuset The processor affinity for this thread
+   */
+  RTEMS_INLINE_ROUTINE int _Scheduler_Get_affinity(
+    Thread_Control *thread,
+    size_t          cpusetsize,
+    cpu_set_t      *cpuset
+  )
+  {
+    return (*_Scheduler.Operations.get_affinity)( thread, cpusetsize, cpuset );
+  }
+
+  /**
+   * @brief Set the processor affinity for a thread.
+   *
+   * @param[in,out] thread The thread.
+   * @parma[in] cpuset The processor affinity for this thread
+   */
+  RTEMS_INLINE_ROUTINE int _Scheduler_Set_affinity(
+    Thread_Control   *thread,
+    size_t            cpusetsize,
+    const cpu_set_t  *cpuset
+  )
+  {
+    return (*_Scheduler.Operations.set_affinity)( thread, cpusetsize, cpuset );
+  }
+#endif
+
 RTEMS_INLINE_ROUTINE void _Scheduler_Update_heir(
   Thread_Control *heir,
   bool force_dispatch
