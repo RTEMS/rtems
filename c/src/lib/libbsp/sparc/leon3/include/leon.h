@@ -399,6 +399,13 @@ static inline uint32_t leon3_get_data_cache_config_register(void)
   return leon3_get_system_register(0xc);
 }
 
+static inline bool leon3_irqmp_has_timestamp(
+  volatile struct irqmp_timestamp_regs *irqmp_ts
+)
+{
+  return (irqmp_ts->control >> 27) > 0;
+}
+
 #endif /* !ASM */
 
 #ifdef __cplusplus
