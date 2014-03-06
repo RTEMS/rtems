@@ -35,6 +35,14 @@ struct apbuart_regs {
   volatile unsigned int scaler;
 };
 
+/* IRQMP and IRQAMP interrupt controller timestamps */
+struct irqmp_timestamp_regs {
+  volatile unsigned int counter;     /* 0x00 */
+  volatile unsigned int control;     /* 0x04 */
+  volatile unsigned int assertion;   /* 0x08 */
+  volatile unsigned int ack;         /* 0x0c */
+};
+
 /* IRQMP and IRQAMP interrupt controllers */
 struct irqmp_regs {
   volatile unsigned int ilevel;      /* 0x00 */
@@ -44,7 +52,7 @@ struct irqmp_regs {
   volatile unsigned int mpstat;      /* 0x10 */
   volatile unsigned int bcast;       /* 0x14 */
   volatile unsigned int notused02;   /* 0x18 */
-  volatile unsigned int notused03;   /* 0x1c */
+  volatile unsigned int wdgctrl;     /* 0x1c */
   volatile unsigned int ampctrl;     /* 0x20 */
   volatile unsigned int icsel[2];    /* 0x24,0x28 */
   volatile unsigned int notused13;   /* 0x2c */
@@ -56,8 +64,10 @@ struct irqmp_regs {
   volatile unsigned int force[16];   /* 0x80 */
   /* Extended IRQ registers */
   volatile unsigned int intid[16];   /* 0xc0 */
-  /* 0x100, align to 4Kb boundary */
-  volatile unsigned int resv1[(0x1000-0x100)/4];
+  volatile struct irqmp_timestamp_regs timestamp[16]; /* 0x100 */
+  volatile unsigned int resetaddr[4]; /* 0x200 */
+  /* 0x210, align to 4Kb boundary */
+  volatile unsigned int resv1[(0x1000-0x210)/4];
 };
 
 /* GPTIMER Timer instance */
