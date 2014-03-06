@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -44,13 +44,10 @@
 #define EXCHANGE_SIZE 16
 
 #define SELF_CPU_CONTROL r7
+#define SP_OF_INTERRUPTED_CONTEXT r9
 
 #define CONTEXT_LIST {r0, r1, r2, r3, EXCHANGE_LR, EXCHANGE_SPSR, SELF_CPU_CONTROL, r12}
 #define CONTEXT_SIZE 32
-
-#ifdef ARM_MULTILIB_VFP_D32
-  #define VFP_CONTEXT_WITH_ALIGNMENT_SPACE (24 * 8 + 4 + 4)
-#endif
 
 .macro GET_SELF_CPU_CONTROL REG, TMP
 	ldr	\REG, =_Per_CPU_Information
@@ -81,22 +78,21 @@ _ARMV4_Exception_interrupt:
 	msr	CPSR_c, EXCHANGE_CPSR
 
 	/*
-	 * Save context.  We save the LR separately because it has to be
-	 * restored in SVC mode.  The other registers can be restored in INT
-	 * mode.
+	 * Save context.  We save the link register separately because it has
+	 * to be restored in SVC mode.  The other registers can be restored in
+	 * INT mode.  Ensure that stack remains 8 byte aligned.  Use register
+	 * necessary for the stack alignment for the stack pointer of the
+	 * interrupted context.
 	 */
 	stmdb	sp!, CONTEXT_LIST
-	stmdb	sp!, {lr}
+	stmdb	sp!, {SP_OF_INTERRUPTED_CONTEXT, lr}
 
 #ifdef ARM_MULTILIB_VFP_D32
 	/* Save VFP context */
-	sub	sp, #VFP_CONTEXT_WITH_ALIGNMENT_SPACE
-	add	r1, sp, #4
 	vmrs	r0, FPSCR
-	bic	r1, r1, #7
-	vstmia	r1!, {d0-d7}
-	vstmia	r1!, {d16-d31}
-	str	r0, [r1]
+	vstmdb	sp!, {d0-d7}
+	vstmdb	sp!, {d16-d31}
+	stmdb	sp!, {r0, r1}
 #endif
 
 	/* Get per-CPU control of current processor */
@@ -112,13 +108,12 @@ _ARMV4_Exception_interrupt:
 	ldr	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
 
 	/* Switch stack if necessary and save original stack pointer */
-	mov	r3, sp
+	mov	SP_OF_INTERRUPTED_CONTEXT, sp
 	cmp	r2, #0
 	moveq	sp, r1
-	stmdb	sp!, {r3}
 
 	/* Switch to THUMB instructions if necessary */
-	SWITCH_FROM_ARM_TO_THUMB        r1
+	SWITCH_FROM_ARM_TO_THUMB	r1
 
 	/* Increment interrupt nest and thread dispatch disable level */
 	ldr	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
@@ -139,9 +134,7 @@ _ARMV4_Exception_interrupt:
 	str	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
 	/* Restore stack pointer */
-	SWITCH_FROM_THUMB_TO_ARM
-	ldr	sp, [sp]
-	SWITCH_FROM_ARM_TO_THUMB	r0
+	mov	sp, SP_OF_INTERRUPTED_CONTEXT
 
 	/* Check thread dispatch disable level */
 	cmp	r3, #0
@@ -167,17 +160,14 @@ thread_dispatch_done:
 
 #ifdef ARM_MULTILIB_VFP_D32
 	/* Restore VFP context */
-	add	r1, sp, #4
-	bic	r1, r1, #7
-	vldmia	r1!, {d0-d7}
-	vldmia	r1!, {d16-d31}
-	ldr	r0, [r1]
-	add	sp, #VFP_CONTEXT_WITH_ALIGNMENT_SPACE
+	ldmia	sp!, {r0, r1}
+	vldmia	sp!, {d16-d31}
+	vldmia	sp!, {d0-d7}
 	vmsr	FPSCR, r0
 #endif
 
-	/* Restore link register */
-	ldmia	sp!, {lr}
+	/* Restore SP_OF_INTERRUPTED_CONTEXT register and link register */
+	ldmia	sp!, {SP_OF_INTERRUPTED_CONTEXT, lr}
 
 	/*
 	 * XXX: Remember and restore stack pointer.  The data on the stack is
