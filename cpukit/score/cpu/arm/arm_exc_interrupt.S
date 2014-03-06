@@ -122,6 +122,14 @@ _ARMV4_Exception_interrupt:
 	str	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
 	str	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
+#ifdef RTEMS_PROFILING
+	cmp	r2, #1
+	bne	profiling_entry_done
+	bl	_CPU_Counter_read
+	push	{r0, r1}
+profiling_entry_done:
+#endif
+
 	/* Call BSP dependent interrupt dispatcher */
 	bl	bsp_interrupt_dispatch
 
@@ -132,6 +140,18 @@ _ARMV4_Exception_interrupt:
 	sub	r3, #1
 	str	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
 	str	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+
+#ifdef RTEMS_PROFILING
+	cmp	r2, #0
+	bne	profiling_exit_done
+	bl	_CPU_Counter_read
+	pop	{r1, r3}
+	mov	r2, r0
+	mov	r0, SELF_CPU_CONTROL
+	bl	_Profiling_Outer_most_interrupt_entry_and_exit
+	ldr	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+profiling_exit_done:
+#endif
 
 	/* Restore stack pointer */
 	mov	sp, SP_OF_INTERRUPTED_CONTEXT
