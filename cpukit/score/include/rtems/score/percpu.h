@@ -472,6 +472,45 @@ void _Per_CPU_State_change(
   Per_CPU_State new_state
 );
 
+/**
+ * @brief Waits for all other processors to enter the ready to start
+ * multitasking state with a timeout in microseconds.
+ *
+ * In case one processor enters the shutdown state, this function does not
+ * return and terminates the system with the SMP_FATAL_SHUTDOWN_EARLY fatal SMP
+ * error.
+ *
+ * This function should be called only in _CPU_SMP_Initialize() if required by
+ * the CPU port or BSP.
+ *
+ * @code
+ * uint32_t _CPU_SMP_Initialize(uint32_t configured_cpu_count)
+ * {
+ *   uint32_t cnt = MIN(get_hardware_cpu_count(), configured_cpu_count);
+ *   uint32_t timeout = 123456;
+ *
+ *   do_some_stuff();
+ *
+ *   return _Per_CPU_State_wait_for_ready_to_start_multitasking(cnt, timeout);
+ * }
+ * @endcode
+ *
+ * In case the timeout expires the count of processors is reduced to reflect
+ * the set of processors which is actually available at this point in time.
+ *
+ * @param[in] processor_count The processor count is the minimum value of the
+ * configured count of processors and the processor count offered by the actual
+ * hardware.
+ * @param[in] timeout_in_us The timeout in microseconds.
+ *
+ * @return The count of processors available for the application in the system.
+ * This value is less than or equal to the processor count.
+ */
+uint32_t _Per_CPU_State_wait_for_ready_to_start_multitasking(
+  uint32_t processor_count,
+  uint32_t timeout_in_us
+);
+
 #endif /* defined( RTEMS_SMP ) */
 
 /*

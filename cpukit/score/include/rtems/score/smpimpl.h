@@ -47,7 +47,8 @@ extern "C" {
  * @brief SMP fatal codes.
  */
 typedef enum {
-  SMP_FATAL_SHUTDOWN
+  SMP_FATAL_SHUTDOWN,
+  SMP_FATAL_SHUTDOWN_EARLY
 } SMP_Fatal_code;
 
 /**
