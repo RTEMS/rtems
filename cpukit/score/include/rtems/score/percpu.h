@@ -76,7 +76,7 @@ typedef struct Thread_Control_struct Thread_Control;
  * The processor state controls the life cycle of processors at the lowest
  * level.  No multi-threading or other high-level concepts matter here.
  *
- * State changes must be initiated via _Per_CPU_Change_state().  This function
+ * State changes must be initiated via _Per_CPU_State_change().  This function
  * may not return in case someone requested a shutdown.  The
  * _SMP_Send_message() function will be used to notify other processors about
  * state changes if the other processor is in the up state.
@@ -220,9 +220,9 @@ typedef struct {
     /**
      * @brief Indicates the current state of the CPU.
      *
-     * This field is not protected by a lock.
+     * This field is not protected by the _Per_CPU_State_lock lock.
      *
-     * @see _Per_CPU_Change_state() and _Per_CPU_Wait_for_state().
+     * @see _Per_CPU_State_change().
      */
     Per_CPU_State state;
   #endif
