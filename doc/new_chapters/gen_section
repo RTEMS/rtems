@@ -7,6 +7,20 @@
 chapter=$1
 
 case ${chapter} in 
+  smp) # Classic API SMP
+    CHAPTER_CAPS="Symmetric Multiprocessing"
+    CHAPTER_LOWER="symmetric multiprocessing"
+    # XXX
+    ROUTINES="rtems_task_get_affinity \
+      rtems_task_set_affinity"
+    ;;
+  pthreadsmp) # POSIX API SMP
+    CHAPTER_CAPS="Thread Affinity"
+    CHAPTER_LOWER="Thread Affinity"
+    # XXX
+    ROUTINES="pthread_attr_getaffinity_np pthread_attr_setaffinity_np \
+      pthread_getaffinity_np pthread_setaffinity_np"
+    ;;
   process)
     CHAPTER_CAPS="Process Creation and Execution"
     CHAPTER_LOWER="process creation and execution"
@@ -152,7 +166,7 @@ if [ "x${CHAPTER_CAPS}" = "x" -o "x${CHAPTER_LOWER}" = "x" \
 fi
 
 echo "@c"
-echo "@c  COPYRIGHT (c) 1988-2002."
+echo "@c  COPYRIGHT (c) 1988-2014."
 echo "@c  On-Line Applications Research Corporation (OAR)."
 echo "@c  All rights reserved. "
 echo "@c"
@@ -170,7 +184,7 @@ echo "@itemize @bullet"
 
 for routine in ${ROUTINES}
 do
-  echo "@item @code{${routine}} - "
+  echo "@item @code{${routine}} - TBD"
 done
 echo "@end itemize"
 
@@ -189,6 +203,9 @@ echo ""
 
 for routine in ${ROUTINES}
 do
+  echo "@c"
+  echo "@c ${routine}"
+  echo "@c"
   echo "@page"
   echo "@subsection ${routine} - "
   echo ""
