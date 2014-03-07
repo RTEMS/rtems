@@ -24,6 +24,7 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <tar.h>
+#include <unistd.h>
 
 #include <rtems/untar.h>
 
@@ -96,6 +97,7 @@ int rtems_tarfs_load(
      * Generate an IMFS node depending on the file type.
      * - For directories, just create directories as usual.  IMFS
      *   will take care of the rest.
+     * - For symbolic links, create as usual
      * - For files, create a file node with special tarfs properties.
      */
     if (linkflag == DIRTYPE) {
@@ -135,6 +137,21 @@ int rtems_tarfs_load(
 
       nblocks = (((file_size) + 511) & ~511) / 512;
       offset += 512 * nblocks;
+    }
+    /*
+     * Create a symbolic link
+     */
+    else if (linkflag == SYMTYPE) {
+      const char *linkto = hdr_ptr + 157;
+      int len;
+
+      strncpy(full_filename, mountpoint, 255);
+      if (full_filename[(len=strlen(full_filename))-1] != '/')
+        strcat(full_filename, "/");
+      ++len;
+      strncat(full_filename, filename, 256-len-1);
+
+      rv = symlink(linkto, full_filename);
     }
   }
 

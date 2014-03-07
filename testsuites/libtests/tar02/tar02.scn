@@ -4,12 +4,18 @@ Loading tarfs image ... successful
 (0)This is a test of loading an RTEMS filesystem from an
 initial tar image.
 
-*** Skipping symlink -- NOT CURRENTLY SUPPORTED ***
+========= /symlink =========
+(0)This is a test of loading an RTEMS filesystem from an
+initial tar image.
+
 *************** Dump of Entire IMFS ***************
 /
 ....dev/
+........ttyS0 (device 0, 0)
 ........console (device 0, 0)
+........ttyS1 (device 0, 1)
 ....home/
-........test_file (file 73 0x12022c)
+........test_file (file 73 0x390f8)
+....symlink links not printed
 ***************      End of Dump       ***************
 *** END OF TAR02 TEST ***
