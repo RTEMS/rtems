@@ -45,7 +45,7 @@ void *Thread_1(
   rtems_test_assert( sc == 0 );
   rtems_test_assert( ! rtems_pthread_attribute_compare(&attr, &Thread_attr) );
 
-  param.sched_priority = max_priority; 
+  param.sched_priority = max_priority;
 
   puts( "Thread - pthread_setschedparam: Setting highest priority SCHED_FIFO" );
   sc = pthread_setschedparam( Thread_id, SCHED_FIFO, &param );
@@ -54,11 +54,11 @@ void *Thread_1(
   puts("Thread - Detach");
   sc = pthread_detach( Thread_id );
   rtems_test_assert( !sc );
-  
+
   puts("Thread - pthread_getattr_np");
   sc = pthread_getattr_np( Thread_id, &attr );
   rtems_test_assert( !sc );
-  
+
   puts("Thread - Verify SCHED_FIFO policy");
   sc = pthread_attr_getschedpolicy( &attr, &value );
   rtems_test_assert( !sc );
@@ -89,7 +89,7 @@ void *POSIX_Init(
 
   puts( "\n\n*** POSIX ATTRIBUTE TEST 1 ***" );
 
-  /* Initialize thread id */ 
+  /* Initialize thread id */
   Init_id = pthread_self();
   max_priority = sched_get_priority_max( SCHED_FIFO );
 
@@ -106,21 +106,21 @@ void *POSIX_Init(
   puts("Init - pthread_attr_init");
   sc = pthread_attr_init(&Thread_attr);
   rtems_test_assert(!sc);
-  
+
   puts("Init - pthread_attr_setinheritsched - PTHREAD_EXPLICIT_SCHED");
   sc = pthread_attr_setinheritsched( &Thread_attr, PTHREAD_EXPLICIT_SCHED );
   rtems_test_assert(!sc);
   rtems_test_assert( Thread_attr.inheritsched == PTHREAD_EXPLICIT_SCHED );
-  
+
   puts("Init - pthread_attr_setschedpolicy to SCHED_RR");
   sc = pthread_attr_setschedpolicy(&Thread_attr, SCHED_RR);
   rtems_test_assert(!sc);
-  
+
   puts("Init - pthread_attr_setschedparam to minimum priority + 2");
   param.sched_priority = sched_get_priority_min( SCHED_RR ) + 2;
   sc = pthread_attr_setschedparam( &Thread_attr, &param );
   rtems_test_assert(!sc);
- 
+
   puts("Init - pthread_attr_getstack");
   sc = pthread_attr_getstack( &Thread_attr, &stackaddr, &stacksize );
   rtems_test_assert(!sc);
@@ -181,7 +181,7 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS  2 
+#define CONFIGURE_MAXIMUM_POSIX_THREADS  2
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 

@@ -45,7 +45,7 @@ int pthread_attr_setaffinity_np(
   error = _CPU_set_Is_valid( cpuset, cpusetsize );
   if ( error != 0 )
     return EINVAL;
- 
+
   CPU_COPY( attr->affinityset, cpuset );
 
   return 0;

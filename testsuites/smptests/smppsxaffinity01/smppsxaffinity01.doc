@@ -14,7 +14,7 @@ directives:
 
   pthread_attr_getaffinity_np
   pthread_attr_setaffinity_np
-  
+
 concepts:
 
 + Verify error conditions and functionality of pthread_attr_getaffinity_np

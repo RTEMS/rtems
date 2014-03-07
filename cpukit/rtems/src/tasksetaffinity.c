@@ -27,7 +27,7 @@
 rtems_status_code rtems_task_set_affinity(
   rtems_id             id,
   size_t               cpusetsize,
-  cpu_set_t           *cpuset 
+  cpu_set_t           *cpuset
 )
 {
   Thread_Control        *the_thread;

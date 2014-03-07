@@ -16,7 +16,7 @@ directives:
 
   pthread_getaffinity_np
   pthread_setaffinity_np
-  
+
 concepts:
 
 + Verify error conditions and functionality of pthread_getaffinity_np

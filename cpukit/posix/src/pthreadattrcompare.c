@@ -48,8 +48,8 @@ int rtems_pthread_attribute_compare(
     return 1;
 
   if (memcmp(
-    &attr1->schedparam, 
-    &attr2->schedparam, 
+    &attr1->schedparam,
+    &attr2->schedparam,
     sizeof(struct sched_param)
   ))
     return 1;
@@ -71,16 +71,16 @@ int rtems_pthread_attribute_compare(
     if ( attr1->affinitysetsize != attr2->affinitysetsize )
       return 1;
 
-    if (!CPU_EQUAL_S( 
-      attr1->affinitysetsize, 
-      attr1->affinityset, 
+    if (!CPU_EQUAL_S(
+      attr1->affinitysetsize,
+      attr1->affinityset,
       attr2->affinityset
     ))
       return 1;
 
     if (!CPU_EQUAL_S(
-      attr1->affinitysetsize, 
-      &attr1->affinitysetpreallocated, 
+      attr1->affinitysetsize,
+      &attr1->affinitysetpreallocated,
       &attr2->affinitysetpreallocated
     ))
       return 1;

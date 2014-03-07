@@ -494,7 +494,7 @@ rtems_status_code rtems_task_variable_delete(
 /**
  *  @brief RTEMS Get Task Affinity
  *
- *  This directive returns the cpuset for the 
+ *  This directive returns the cpuset for the
  *  given task.  The cpuset size must be the
  *  same size as the task affinity set size.
  *
@@ -502,36 +502,36 @@ rtems_status_code rtems_task_variable_delete(
  * @param[in] cpusetsize is the size of the cpuset
  * @param[out] cpuset is the tasks affinity cpuset
  *
- * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful 
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  * @retval RTEMS_INVALID_ADDRESS if cpuset is NULL
  * @retval RTEMS_INVALID_NUMBER if cpusetsize is incorrect
- * @retval RTEMS_INVALID_ID if id not valid 
- */ 
+ * @retval RTEMS_INVALID_ID if id not valid
+ */
 rtems_status_code rtems_task_get_affinity(
   rtems_id             id,
   size_t               cpusetsize,
-  cpu_set_t           *cpuset 
+  cpu_set_t           *cpuset
 );
 
 /**
  *  @brief RTEMS Set Task Affinity
  *
- *  This directive sets the given tasks 
+ *  This directive sets the given tasks
  *  affinity cpuset.
  *
  * @param[in] id is the thread to extract
  * @param[in] cpusetsize is the size of the cpuset
  * @param[in] cpuset is affinity set to assign to the task
  *
- * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful 
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  * @retval RTEMS_INVALID_ADDRESS if cpuset is NULL
- * @retval RTEMS_INVALID_NUMBER if cpuset or cpusetsize is incorrect 
- * @retval RTEMS_INVALID_ID if id not valid 
- */ 
+ * @retval RTEMS_INVALID_NUMBER if cpuset or cpusetsize is incorrect
+ * @retval RTEMS_INVALID_ID if id not valid
+ */
 rtems_status_code rtems_task_set_affinity(
   rtems_id             id,
   size_t               cpusetsize,
-  cpu_set_t           *cpuset 
+  cpu_set_t           *cpuset
 );
 #endif
 

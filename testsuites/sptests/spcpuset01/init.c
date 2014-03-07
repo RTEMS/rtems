@@ -79,7 +79,7 @@ static void test_cpu_set_case_1(size_t cpu)
   printf( "Exercise CPU_ZERO, CPU_SET(%u), and CPU_ISET\n", cpu );
   CPU_ZERO(&set1);
   CPU_SET(cpu, &set1);
-  
+
   /* test if all bits except 1 clear */
   for (i=0 ; i<CPU_SETSIZE ; i++) {
     if (i==cpu)

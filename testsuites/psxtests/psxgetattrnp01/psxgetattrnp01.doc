@@ -13,7 +13,7 @@ test set name:  psxgetattr01
 directives:
 
   pthread_getattr
-  
+
 concepts:
 
 + Verify error conditions in pthread_getattr

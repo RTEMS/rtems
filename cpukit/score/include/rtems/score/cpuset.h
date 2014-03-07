@@ -4,7 +4,7 @@
  *  @brief Information About the CPU Set
  *
  *  This include file contains all information about the thread
- *  CPU Set.  
+ *  CPU Set.
  */
 
 /*
@@ -26,7 +26,7 @@ extern "C" {
 #endif
 
 #ifdef __RTEMS_HAVE_SYS_CPUSET_H__
- 
+
 /**
  *  @defgroup ScoreCpuset
  *
@@ -41,7 +41,7 @@ extern "C" {
  *  The following defines the control block used to manage the cpuset.
  *  The names do not include affinity in the front in case the set is
  *  ever used for something other than affinity.  The usage in thread
- *  uses the attribute affinity such that accesses will read 
+ *  uses the attribute affinity such that accesses will read
  *  thread->affinity.set.
  */
 typedef struct {

@@ -46,13 +46,13 @@ void Validate_setaffinity_errors(void)
   /* Verify pthread_setaffinity_np checks that all cpu's exist. */
   CPU_FILL(&cpuset);
   puts( "Init - pthread_setaffinity_np - Invalid cpu - EINVAL" );
-  sc = pthread_setaffinity_np( Init_id, sizeof(cpu_set_t), &cpuset ); 
+  sc = pthread_setaffinity_np( Init_id, sizeof(cpu_set_t), &cpuset );
   rtems_test_assert( sc == EINVAL );
-  
+
   /* Verify pthread_setaffinity_np checks that at least one cpu is set */
   CPU_ZERO(&cpuset);
   puts( "Init - pthread_setaffinity_np - no cpu - EINVAL" );
-  sc = pthread_setaffinity_np( Init_id, sizeof(cpu_set_t), &cpuset ); 
+  sc = pthread_setaffinity_np( Init_id, sizeof(cpu_set_t), &cpuset );
   rtems_test_assert( sc == EINVAL );
 
   /* Verify pthread_setaffinity_np checks that at thread id is valid */
@@ -60,7 +60,7 @@ void Validate_setaffinity_errors(void)
   puts( "Init - pthread_setaffinity_np - Invalid thread - ESRCH" );
   sc = pthread_setaffinity_np( 999, sizeof(cpu_set_t), &cpuset );
   rtems_test_assert( sc == ESRCH );
-  
+
   /* Verify pthread_setaffinity_np validates cpusetsize */
   puts( "Init - pthread_setaffinity_np - Invalid cpusetsize - EINVAL" );
   sc = pthread_setaffinity_np( Init_id,  sizeof(cpu_set_t) * 2, &cpuset );
@@ -72,7 +72,7 @@ void Validate_setaffinity_errors(void)
   rtems_test_assert( sc == EFAULT );
 }
 
-void Validate_getaffinity_errors(void) 
+void Validate_getaffinity_errors(void)
 {
   int                 sc;
   cpu_set_t           cpuset;
@@ -82,7 +82,7 @@ void Validate_getaffinity_errors(void)
   puts( "Init - pthread_getaffinity_np - Invalid thread - ESRCH" );
   sc = pthread_getaffinity_np( 999, sizeof(cpu_set_t), &cpuset );
   rtems_test_assert( sc == ESRCH );
-  
+
   /* Verify pthread_getaffinity_np validates cpusetsize */
   puts( "Init - pthread_getaffinity_np - Invalid cpusetsize - EINVAL" );
   sc = pthread_getaffinity_np( Init_id,  sizeof(cpu_set_t) * 2, &cpuset );
@@ -102,10 +102,10 @@ void Validate_affinity(void )
   cpu_set_t            cpuset2;
   uint32_t             i;
   int                  sc;
-  int                  cpu_count; 
+  int                  cpu_count;
   struct sched_param   param;
- 
- 
+
+
   puts( "Init - Set Init priority to high");
   sc = pthread_getattr_np( Init_id, &attr );
   rtems_test_assert( sc == 0 );
@@ -117,7 +117,7 @@ void Validate_affinity(void )
 
   sc = pthread_getaffinity_np( Init_id, sizeof(cpu_set_t), &cpuset0 );
   rtems_test_assert( !sc );
- 
+
   /* Get the number of processors that we are using. */
   cpu_count = rtems_smp_get_processor_count();
 
@@ -135,8 +135,8 @@ void Validate_affinity(void )
     rtems_test_assert( CPU_EQUAL(&cpuset0, &cpuset2) );
   }
 
-  /* 
-   * Create low priority thread for each remaining cpu with the affinity 
+  /*
+   * Create low priority thread for each remaining cpu with the affinity
    * set to only run on one cpu.
    */
   puts( "Init - Create  Low priority tasks");
@@ -177,7 +177,7 @@ void Validate_affinity(void )
     }
     rtems_test_assert( !sc );
   }
-  
+
   puts("Init - Validate affinity on Low priority tasks");
   CPU_COPY(&cpuset1, &cpuset0);
   for (i=0; i<cpu_count; i++){
@@ -198,13 +198,13 @@ void *POSIX_Init(
 {
   puts( "\n\n*** SMP POSIX AFFINITY ATTRIBUTE TEST 2 ***" );
 
-  /* Initialize thread id */ 
+  /* Initialize thread id */
   Init_id = pthread_self();
-  
+
   Validate_setaffinity_errors();
   Validate_getaffinity_errors();
   Validate_affinity();
- 
+
   puts( "*** SMP POSIX AFFINITY ATTRIBUTE TEST 2 ***" );
   rtems_test_exit(0);
 }
@@ -230,7 +230,7 @@ void *POSIX_Init(
 
 #define CONFIGURE_SMP_MAXIMUM_PROCESSORS NUM_CPUS
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS (NUM_CPUS*2) 
+#define CONFIGURE_MAXIMUM_POSIX_THREADS (NUM_CPUS*2)
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 

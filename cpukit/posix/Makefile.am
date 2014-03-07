@@ -141,10 +141,10 @@ libposix_a_SOURCES += src/pthreadatfork.c src/pthreadattrdestroy.c \
     src/psxpriorityisvalid.c src/psxtransschedparam.c
 
 ## RTEMS specific support methods
-libposix_a_SOURCES += src/pthreadattrcompare.c 
+libposix_a_SOURCES += src/pthreadattrcompare.c
 
 if HAS_SMP
-## PTHREAD_AFFINITY_C_FILES 
+## PTHREAD_AFFINITY_C_FILES
 libposix_a_SOURCES += src/pthreadattrsetaffinitynp.c \
     src/pthreadattrgetaffinitynp.c  src/pthreadgetaffinitynp.c   \
     src/pthreadsetaffinitynp.c

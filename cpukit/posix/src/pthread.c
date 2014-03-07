@@ -372,7 +372,7 @@ void _POSIX_Threads_Manager_initialization(void)
     attr->affinitysetsize         = sizeof( *attr->affinityset );
     CPU_ZERO_S( attr->affinitysetsize, &attr->affinitysetpreallocated );
 
-    for (i=0; i<max_cpus; i++)  
+    for (i=0; i<max_cpus; i++)
       CPU_SET_S(i, attr->affinitysetsize, attr->affinityset );
   #endif
 

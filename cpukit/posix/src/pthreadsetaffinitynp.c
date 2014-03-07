@@ -45,7 +45,7 @@ int pthread_setaffinity_np(
   error = _CPU_set_Is_valid( cpuset, cpusetsize );
   if ( error != 0 )
     return EINVAL;
-   
+
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 

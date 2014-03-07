@@ -41,7 +41,7 @@ int pthread_getaffinity_np(
 
   if ( !cpuset )
     return EFAULT;
- 
+
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 

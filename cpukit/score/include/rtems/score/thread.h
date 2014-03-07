@@ -422,7 +422,7 @@ struct Thread_Control_struct {
    *  in an SMP system.
    */
   CPU_set_Control                       affinity;
-#endif 
+#endif
 #endif
 
 #if __RTEMS_ADA__

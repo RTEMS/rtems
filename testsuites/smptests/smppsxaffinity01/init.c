@@ -30,7 +30,7 @@ void Validate_attrgetaffinity_errors(void);
 void Validate_attrsetaffinity_errors(void);
 void Validate_attr(void);
 
-void Validate_attrgetaffinity_errors(void) 
+void Validate_attrgetaffinity_errors(void)
 {
   int                 sc;
   cpu_set_t           cpuset;
@@ -53,7 +53,7 @@ void Validate_attrgetaffinity_errors(void)
 
 }
 
-void Validate_attrsetaffinity_errors(void) 
+void Validate_attrsetaffinity_errors(void)
 {
   int                 sc;
   cpu_set_t           cpuset;
@@ -105,11 +105,11 @@ void Validate_attr(void )
 
 
   cpus = rtems_smp_get_processor_count();
-  puts( 
+  puts(
     "Init - Validate pthread_attr_setaffinity_np and "
     "pthread_attr_getaffinity_np"
   );
-  
+
   /* Set each cpu seperately in the affinity set */
   for ( i=0; i<cpus; i++ ){
     CPU_ZERO(&cpuset1);
@@ -120,7 +120,7 @@ void Validate_attr(void )
 
     sc = pthread_attr_getaffinity_np( &attr, sizeof(cpu_set_t), &cpuset2 );
     rtems_test_assert( sc == 0 );
-    
+
     rtems_test_assert( CPU_EQUAL(&cpuset1, &cpuset2) );
   }
 }
@@ -131,13 +131,13 @@ void *POSIX_Init(
 {
   puts( "\n\n*** SMP POSIX AFFINITY ATTRIBUTE TEST 1 ***" );
 
-  /* Initialize thread id */ 
+  /* Initialize thread id */
   Init_id = pthread_self();
 
   Validate_attrsetaffinity_errors();
   Validate_attrgetaffinity_errors();
   Validate_attr();
- 
+
   puts( "*** END OF SMP POSIX AFFINITY ATTRIBUTE TEST 1 ***" );
   rtems_test_exit(0);
 }

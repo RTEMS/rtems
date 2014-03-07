@@ -31,7 +31,7 @@
   void _CPU_set_Show_with_plugin(
     void                  *context,
     rtems_printk_plugin_t  print,
-    const char            *description, 
+    const char            *description,
     const cpu_set_t       *cpuset
   );
 
@@ -44,7 +44,7 @@
   void _CPU_set_Show_with_plugin(
     void                  *context,
     rtems_printk_plugin_t  print,
-    const char            *description, 
+    const char            *description,
     const cpu_set_t       *cpuset
   )
   {
@@ -79,6 +79,6 @@
   {
     const CPU_set_Control *ctl;
     ctl = _CPU_set_Default();
-    _CPU_set_Show( description, ctl->set );  
+    _CPU_set_Show( description, ctl->set );
   }
 #endif

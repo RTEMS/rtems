@@ -89,7 +89,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate( void );
  * @param[out] src_attr is a pointer to the thread attribute
  * structure to copy from.
  */
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Copy_attributes( 
+RTEMS_INLINE_ROUTINE void _POSIX_Threads_Copy_attributes(
   pthread_attr_t        *dst_attr,
   const pthread_attr_t  *src_attr
 );
@@ -132,8 +132,8 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Get(
  *
  * This routine initializes the thread attributes structure.
  */
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes( 
-  pthread_attr_t  *attr 
+RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes(
+  pthread_attr_t  *attr
 );
 
 /**
@@ -210,7 +210,7 @@ int rtems_pthread_attribute_compare(
   const pthread_attr_t *attr1,
   const pthread_attr_t *attr2
 );
- 
+
 /*
  *  _POSIX_Threads_Allocate
  */
@@ -224,19 +224,19 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate( void )
  * _POSIX_Threads_Copy_attributes
  */
 
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Copy_attributes( 
+RTEMS_INLINE_ROUTINE void _POSIX_Threads_Copy_attributes(
   pthread_attr_t        *dst_attr,
   const pthread_attr_t  *src_attr
 )
 {
   *dst_attr = *src_attr;
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
-  _Assert( 
+  _Assert(
     dst_attr->affinitysetsize == sizeof(dst_attr->affinitysetpreallocated)
   );
   dst_attr->affinityset = &dst_attr->affinitysetpreallocated;
 #endif
-} 
+}
 
 /*
  *  _POSIX_Threads_Free
@@ -266,15 +266,15 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Get (
  * _POSIX_Threads_Initialize_attributes
  */
 
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes( 
-  pthread_attr_t  *attr 
+RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes(
+  pthread_attr_t  *attr
 )
 {
   _POSIX_Threads_Copy_attributes(
     attr,
     &_POSIX_Threads_Default_attributes
   );
-} 
+}
 
 /*
  *  _POSIX_Threads_Is_null

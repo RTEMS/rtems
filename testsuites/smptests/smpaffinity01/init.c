@@ -41,13 +41,13 @@ void Validate_setaffinity_errors(void)
   /* Note this check assumes you are running with less than 32 CPUs */
   CPU_FILL(&cpuset);
   puts( "Init - rtems_task_set_affinity - Invalid cpu - RTEMS_INVALID_NUMBER" );
-  sc = rtems_task_set_affinity( Init_id, sizeof(cpu_set_t), &cpuset ); 
+  sc = rtems_task_set_affinity( Init_id, sizeof(cpu_set_t), &cpuset );
   rtems_test_assert( sc == RTEMS_INVALID_NUMBER );
-  
+
   /* Verify rtems_task_set_affinity checks that at least one cpu is set */
   CPU_ZERO(&cpuset);
   puts( "Init - rtems_task_set_affinity - no cpu - RTEMS_INVALID_NUMBER" );
-  sc = rtems_task_set_affinity( Init_id, sizeof(cpu_set_t), &cpuset ); 
+  sc = rtems_task_set_affinity( Init_id, sizeof(cpu_set_t), &cpuset );
   rtems_test_assert( sc == RTEMS_INVALID_NUMBER );
 
   /* Verify rtems_task_set_affinity checks that at thread id is valid */
@@ -55,7 +55,7 @@ void Validate_setaffinity_errors(void)
   puts( "Init - rtems_task_set_affinity - Invalid thread - RTEMS_INVALID_ID" );
   sc = rtems_task_set_affinity( 999, sizeof(cpu_set_t), &cpuset );
   rtems_test_assert( sc == RTEMS_INVALID_ID );
-  
+
   /* Verify rtems_task_set_affinity validates cpusetsize */
   puts( "Init - rtems_task_set_affinity - Invalid cpusetsize - RTEMS_INVALID_NUMBER" );
   sc = rtems_task_set_affinity( Init_id,  sizeof(cpu_set_t) * 2, &cpuset );
@@ -67,7 +67,7 @@ void Validate_setaffinity_errors(void)
   rtems_test_assert( sc == RTEMS_INVALID_ADDRESS );
 }
 
-void Validate_getaffinity_errors(void) 
+void Validate_getaffinity_errors(void)
 {
   int                 sc;
   cpu_set_t           cpuset;
@@ -77,9 +77,9 @@ void Validate_getaffinity_errors(void)
   puts( "Init - rtems_task_get_affinity - Invalid thread - RTEMS_INVALID_ID" );
   sc = rtems_task_get_affinity( 999, sizeof(cpu_set_t), &cpuset );
   rtems_test_assert( sc == RTEMS_INVALID_ID );
-  
+
   /* Verify rtems_task_get_affinity validates cpusetsize */
-  puts( 
+  puts(
     "Init - rtems_task_get_affinity - Invalid cpusetsize - RTEMS_INVALID_NUMBER"
   );
   sc = rtems_task_get_affinity( Init_id,  sizeof(cpu_set_t) * 2, &cpuset );
@@ -98,18 +98,18 @@ void Validate_affinity(void )
   cpu_set_t            cpuset2;
   uint32_t             i;
   int                  sc;
-  int                  cpu_count; 
+  int                  cpu_count;
   rtems_task_priority  priority;
   char                 ch[2];
- 
- 
+
+
   puts( "Init - Set Init priority to high");
   sc = rtems_task_set_priority( Init_id, 1, &priority );
   directive_failed( sc, "Set Init Priority" );
 
   sc = rtems_task_get_affinity( Init_id, sizeof(cpu_set_t), &cpuset0 );
   directive_failed( sc, "Get Affinity of Init Task" );
- 
+
   /* Get the number of processors that we are using. */
   cpu_count = rtems_smp_get_processor_count();
 
@@ -129,14 +129,14 @@ void Validate_affinity(void )
 
     sc = rtems_task_start( Med_id[i], Task_1, i+1 );
     directive_failed( sc, "task start" );
-    
+
     sc = rtems_task_get_affinity( Med_id[i], sizeof(cpu_set_t), &cpuset2 );
     directive_failed( sc, "Get Affinity of Medium Priority Task" );
     rtems_test_assert( CPU_EQUAL(&cpuset0, &cpuset2) );
   }
 
-  /* 
-   * Create low priority thread for each remaining cpu with the affinity 
+  /*
+   * Create low priority thread for each remaining cpu with the affinity
    * set to only run on one cpu.
    */
   puts( "Init - Create  Low priority tasks");
@@ -190,7 +190,7 @@ void Validate_affinity(void )
 
     directive_failed( sc, "Low priority task set affinity" );
   }
-  
+
   puts("Init - Validate affinity on Low priority tasks");
   CPU_COPY(&cpuset1, &cpuset0);
   for (i=0; i<cpu_count; i++){
@@ -211,14 +211,14 @@ static void Init(rtems_task_argument arg)
 
   puts( "\n\n*** SMP AFFINITY 1 ***" );
 
-  /* Initialize thread id */ 
+  /* Initialize thread id */
   sc = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &Init_id );
   directive_failed( sc, "Identify Init Task" );
-  
+
   Validate_setaffinity_errors();
   Validate_getaffinity_errors();
   Validate_affinity();
- 
+
   puts( "*** END OF SMP AFFINITY TEST 1 ***" );
   rtems_test_exit(0);
 }

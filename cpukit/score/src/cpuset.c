@@ -46,7 +46,7 @@ void _CPU_set_Handler_initialization()
   cpuset_default.setsize = sizeof( *cpuset_default.set );
   CPU_ZERO_S( cpuset_default.setsize, &cpuset_default.preallocated );
 
-  for (i=0; i<max_cpus; i++)  
+  for (i=0; i<max_cpus; i++)
     CPU_SET_S(i, cpuset_default.setsize, cpuset_default.set );
 }
 
@@ -85,7 +85,7 @@ int _CPU_set_Is_valid( const cpu_set_t *cpuset, size_t setsize )
  *
  * This routine returns the default cpuset.
  */
-const CPU_set_Control *_CPU_set_Default() 
+const CPU_set_Control *_CPU_set_Default()
 {
   return &cpuset_default;
 }
