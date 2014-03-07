@@ -1,5 +1,5 @@
 @c
-@c COPYRIGHT (c) 1988-2002.
+@c COPYRIGHT (c) 1988-2014.
 @c On-Line Applications Research Corporation (OAR).
 @c All rights reserved.
 
@@ -8,7 +8,7 @@
 @section Introduction
 
 The thread manager implements the functionality required of the thread
-manager as defined by POSIX 1003.1b-1996. This standard requires that
+manager as defined by POSIX 1003.1b. This standard requires that
 a compliant operating system provide the facilties to manage multiple
 threads of control and defines the API that must be provided.
 
@@ -31,15 +31,20 @@ The services provided by the thread manager are:
 @item @code{pthread_attr_getschedpolicy} - Get Scheduling Policy
 @item @code{pthread_attr_setschedparam} - Set Scheduling Parameters
 @item @code{pthread_attr_getschedparam} - Get Scheduling Parameters
+@item @code{pthread_attr_getaffinity_np} - Get Thread Affinity Attribute
+@item @code{pthread_attr_setaffinity_np} - Set Thread Affinity Attribute
 @item @code{pthread_create} - Create a Thread
 @item @code{pthread_exit} - Terminate the Current Thread
 @item @code{pthread_detach} - Detach a Thread
+@item @code{pthread_getattr_np} - Get Thread Attributes
 @item @code{pthread_join} - Wait for Thread Termination
 @item @code{pthread_self} - Get Thread ID
 @item @code{pthread_equal} - Compare Thread IDs
 @item @code{pthread_once} - Dynamic Package Initialization
 @item @code{pthread_setschedparam} - Set Thread Scheduling Parameters
 @item @code{pthread_getschedparam} - Get Thread Scheduling Parameters
+@item @code{pthread_getaffinity_np} - Get Thread Affinity
+@item @code{pthread_setaffinity_np} - Set Thread Affinity
 @end itemize
 
 @section Background
@@ -873,6 +878,110 @@ family of routines to which this routine belongs is supported.
 @c
 @c
 @page
+@subsection pthread_attr_getaffinity_np - Get Thread Affinity Attribute
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#define _GNU_SOURCE
+#include <pthread.h>
+
+int pthread_attr_getaffinity_np(
+  const pthread_attr_t *attr,
+  size_t                cpusetsize,
+  cpu_set_t            *cpuset
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EFAULT
+The attribute pointer argument is invalid.
+
+@item EFAULT
+The cpuset pointer argument is invalid.
+
+@item EINVAL
+The @code{cpusetsize} does not match the value of @code{affinitysetsize}
+field in the thread attribute object.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{pthread_attr_getaffinity_np} routine is used to obtain the
+@code{affinityset} field from the thread attribute object @code{attr}.
+The value of this field is returned in @code{cpuset}.
+
+@subheading NOTES:
+
+NONE
+
+@c
+@c
+@c
+@page
+@subsection pthread_attr_setaffinity_np - Set Thread Affinity Attribute
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#define _GNU_SOURCE
+#include <pthread.h>
+
+int pthread_attr_setaffinity_np(
+  pthread_attr_t    *attr,
+  size_t             cpusetsize,
+  const cpu_set_t   *cpuset
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EFAULT
+The attribute pointer argument is invalid.
+
+@item EFAULT
+The cpuset pointer argument is invalid.
+
+@item EINVAL
+The @code{cpusetsize} does not match the value of @code{affinitysetsize}
+field in the thread attribute object.
+
+@item EINVAL
+The @code{cpuset} did not select a valid cpu.
+
+@item EINVAL
+The @code{cpuset} selected a cpu that was invalid.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{pthread_attr_setaffinity_np} routine is used to set the
+@code{affinityset} field in the thread attribute object @code{attr}.
+The value of this field is returned in @code{cpuset}.
+
+@subheading NOTES:
+
+NONE
+
+@c
+@c
+@c
+@page
 @subsection pthread_create - Create a Thread
 
 @findex pthread_create
@@ -1058,6 +1167,47 @@ another thread joinging with it.
 If any threads have previously joined with the specified thread, then they
 will remain joined with that thread. Any subsequent calls to
 @code{pthread_join} on the specified thread will fail.
+
+@c
+@c pthread_getattr_np
+@c
+@page
+@subsection pthread_getattr_np - Get Thread Attributes
+
+@findex pthread_getattr_np
+@cindex  get thread attributes
+
+@subheading CALLING SEQUENCE:
+
+@example
+#define _GNU_SOURCE
+#include <pthread.h>
+
+int pthread_getattr_np(
+  pthread_t       thread, 
+  pthread_attr_t *attr
+);
+@end example
+
+@subheading STATUS CODES:
+@table @b
+@item ESRCH
+The thread specified is invalid.
+
+@item EINVAL
+The attribute pointer argument is invalid.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{pthread_getattr_np} routine is used to obtain the
+attributes associated with @code{thread}.
+
+@subheading NOTES:
+
+Modification of the execution modes and priority through the Classic API
+may result in a combination that is not representable in the POSIX API.
 
 @c
 @c
@@ -1327,3 +1477,101 @@ The current policy and associated parameters values returned in
 As required by POSIX, RTEMS defines the feature symbol
 @code{_POSIX_THREAD_PRIORITY_SCHEDULING} to indicate that the
 family of routines to which this routine belongs is supported.
+
+@c
+@c pthread_getaffinity_np
+@c
+@page
+@subsection pthread_getaffinity_np - Get Thread Affinity
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#define _GNU_SOURCE
+#include <pthread.h>
+
+int pthread_getaffinity_np(
+  const pthread_t       id,
+  size_t                cpusetsize,
+  cpu_set_t            *cpuset
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EFAULT
+The cpuset pointer argument is invalid.
+
+@item EINVAL
+The @code{cpusetsize} does not match the value of @code{affinitysetsize}
+field in the thread attribute object.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{pthread_getaffinity_np} routine is used to obtain the
+@code{affinity.set} field from the thread control object associated 
+with the @code{id}.  The value of this field is returned in @code{cpuset}.
+
+@subheading NOTES:
+
+NONE
+
+@c
+@c pthread_setaffinity_np
+@c
+@page
+@subsection pthread_setaffinity_np - Set Thread Affinity
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#define _GNU_SOURCE
+#include <pthread.h>
+
+int pthread_setaffinity_np(
+  pthread_t          id,
+  size_t             cpusetsize,
+  const cpu_set_t   *cpuset
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EFAULT
+The cpuset pointer argument is invalid.
+
+@item EINVAL
+The @code{cpusetsize} does not match the value of @code{affinitysetsize}
+field in the thread attribute object.
+
+@item EINVAL
+The @code{cpuset} did not select a valid cpu.
+
+@item EINVAL
+The @code{cpuset} selected a cpu that was invalid.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{pthread_setaffinity_np} routine is used to set the
+@code{affinityset} field of the thread object @code{id}.
+The value of this field is returned in @code{cpuset}
+
+@subheading NOTES:
+
+NONE
