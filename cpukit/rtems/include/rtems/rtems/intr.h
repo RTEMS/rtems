@@ -180,6 +180,16 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
   _ISR_lock_Initialize( _lock )
 
 /**
+ * @brief Destroys an interrupt lock.
+ *
+ * Concurrent destruction leads to unpredictable results.
+ *
+ * @param[in,out] _lock The interrupt lock control.
+ */
+#define rtems_interrupt_lock_destroy( _lock ) \
+  _ISR_lock_Destroy( _lock )
+
+/**
  * @brief Acquires an interrupt lock.
  *
  * Interrupts will be disabled.  On SMP configurations this function acquires

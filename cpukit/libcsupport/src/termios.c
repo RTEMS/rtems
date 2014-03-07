@@ -445,6 +445,7 @@ rtems_termios_close (void *arg)
     if ((tty->device.pollRead == NULL) ||
         (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN))
       rtems_semaphore_delete (tty->rawInBuf.Semaphore);
+    rtems_interrupt_lock_destroy (&tty->interrupt_lock);
     free (tty->rawInBuf.theBuf);
     free (tty->rawOutBuf.theBuf);
     free (tty->cbuf);

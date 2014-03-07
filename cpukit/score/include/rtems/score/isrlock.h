@@ -95,6 +95,22 @@ static inline void _ISR_lock_Initialize( ISR_lock_Control *lock )
 }
 
 /**
+ * @brief Destroys an ISR lock.
+ *
+ * Concurrent destruction leads to unpredictable results.
+ *
+ * @param[in,out] lock The ISR lock control.
+ */
+static inline void _ISR_lock_Destroy( ISR_lock_Control *lock )
+{
+#if defined( RTEMS_SMP )
+  _SMP_lock_Destroy( &lock->lock );
+#else
+  (void) lock;
+#endif
+}
+
+/**
  * @brief Acquires an ISR lock.
  *
  * Interrupts will be disabled.  On SMP configurations this function acquires

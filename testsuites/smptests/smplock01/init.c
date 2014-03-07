@@ -138,14 +138,18 @@ static void test_2_body(
 )
 {
   unsigned long counter = 0;
-  SMP_lock_Control lock = SMP_LOCK_INITIALIZER;
+  SMP_lock_Control lock;
   SMP_lock_Context lock_context;
+
+  _SMP_lock_Initialize(&lock);
 
   while (assert_state(ctx, START_TEST)) {
     _SMP_lock_Acquire(&lock, &lock_context);
     _SMP_lock_Release(&lock, &lock_context);
     ++counter;
   }
+
+  _SMP_lock_Destroy(&lock);
 
   ctx->test_counter[test][cpu_self] = counter;
 }
@@ -159,8 +163,10 @@ static void test_3_body(
 )
 {
   unsigned long counter = 0;
-  SMP_lock_Control lock = SMP_LOCK_INITIALIZER;
+  SMP_lock_Control lock;
   SMP_lock_Context lock_context;
+
+  _SMP_lock_Initialize(&lock);
 
   while (assert_state(ctx, START_TEST)) {
     _SMP_lock_Acquire(&lock, &lock_context);
@@ -171,6 +177,8 @@ static void test_3_body(
     _SMP_lock_Release(&lock, &lock_context);
     ++counter;
   }
+
+  _SMP_lock_Destroy(&lock);
 
   ctx->test_counter[test][cpu_self] = counter;
 }

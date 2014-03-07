@@ -65,6 +65,7 @@ static rtems_task Init(rtems_task_argument argument)
     uptime = new_uptime;
   }
   rtems_interrupt_lock_release(&lock, &lock_context);
+  rtems_interrupt_lock_destroy(&lock);
 
   puts("*** END OF TEST NANO SECONDS EXTENSION 1 ***");
 

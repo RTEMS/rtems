@@ -178,6 +178,9 @@ static void test_isr_locks( void )
   _ISR_lock_Release( &lock, &lock_context );
 
   rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
+
+  _ISR_lock_Destroy( &lock );
+  _ISR_lock_Destroy( &initialized );
 }
 
 static rtems_mode get_interrupt_level( void )
@@ -212,6 +215,9 @@ static void test_interrupt_locks( void )
   rtems_interrupt_lock_release_isr( &lock, &lock_context );
 
   rtems_test_assert( normal_interrupt_level == get_interrupt_level() );
+
+  rtems_interrupt_lock_destroy( &lock );
+  rtems_interrupt_lock_destroy( &initialized );
 }
 
 void test_interrupt_inline(void)

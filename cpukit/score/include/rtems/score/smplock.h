@@ -64,16 +64,28 @@ typedef struct {
   { ATOMIC_INITIALIZER_UINT( 0U ), ATOMIC_INITIALIZER_UINT( 0U ) }
 
 /**
- * @brief Initializes an SMP ticket lock control.
+ * @brief Initializes an SMP ticket lock.
  *
  * Concurrent initialization leads to unpredictable results.
  *
- * @param[out] lock The SMP ticket lock control.
+ * @param[in,out] lock The SMP ticket lock control.
  */
 static inline void _SMP_ticket_lock_Initialize( SMP_ticket_lock_Control *lock )
 {
   _Atomic_Init_uint( &lock->next_ticket, 0U );
   _Atomic_Init_uint( &lock->now_serving, 0U );
+}
+
+/**
+ * @brief Destroys an SMP ticket lock.
+ *
+ * Concurrent destruction leads to unpredictable results.
+ *
+ * @param[in,out] lock The SMP ticket lock control.
+ */
+static inline void _SMP_ticket_lock_Destroy( SMP_ticket_lock_Control *lock )
+{
+  (void) lock;
 }
 
 /**
@@ -131,15 +143,27 @@ typedef struct {
 #define SMP_LOCK_INITIALIZER { SMP_TICKET_LOCK_INITIALIZER }
 
 /**
- * @brief Initializes an SMP lock control.
+ * @brief Initializes an SMP lock.
  *
  * Concurrent initialization leads to unpredictable results.
  *
- * @param[out] lock The SMP lock control.
+ * @param[in,out] lock The SMP lock control.
  */
 static inline void _SMP_lock_Initialize( SMP_lock_Control *lock )
 {
   _SMP_ticket_lock_Initialize( &lock->ticket_lock );
+}
+
+/**
+ * @brief Destroys an SMP lock.
+ *
+ * Concurrent destruction leads to unpredictable results.
+ *
+ * @param[in,out] lock The SMP lock control.
+ */
+static inline void _SMP_lock_Destroy( SMP_lock_Control *lock )
+{
+  _SMP_ticket_lock_Destroy( &lock->ticket_lock );
 }
 
 /**

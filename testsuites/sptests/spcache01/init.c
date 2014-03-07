@@ -90,6 +90,7 @@ static void test_data_flush_and_invalidate(void)
     }
 
     rtems_interrupt_lock_release(&lock, &lock_context);
+    rtems_interrupt_lock_destroy(&lock);
 
     printf(
       "data cache operations by line passed the test (%s cache detected)\n",
@@ -364,6 +365,8 @@ static void test_timing(void)
     d[1],
     d[2]
   );
+
+  rtems_interrupt_lock_destroy(&lock);
 }
 
 static void Init(rtems_task_argument arg)
