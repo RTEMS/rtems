@@ -21,6 +21,7 @@
 #include <bsp.h>
 #include <bspopts.h>
 #include <ambapp.h>
+#include <rtems/score/profiling.h>
 
 #if SIMSPARC_FAST_IDLE==1
 #define CLOCK_DRIVER_USE_FAST_IDLE 1
@@ -35,7 +36,43 @@ static int clkirq;
 
 #define CLOCK_VECTOR LEON_TRAP_TYPE( clkirq )
 
-#define Clock_driver_support_at_tick()
+static void leon3_clock_profiling_interrupt_delay(void)
+{
+#ifdef RTEMS_PROFILING
+  /*
+   * We need a small state machine to ignore the first clock interrupt, since
+   * it contains the sequential system initialization time.  Do the timestamp
+   * initialization on the fly.
+   */
+  static int state = 1;
+
+  volatile struct irqmp_timestamp_regs *irqmp_ts =
+    &LEON3_IrqCtrl_Regs->timestamp[0];
+  unsigned int s1_s2 = (1U << 25) | (1U << 26);
+
+  if (state == 0) {
+    unsigned int first = irqmp_ts->assertion;
+    unsigned int second = irqmp_ts->counter;
+
+    irqmp_ts->control |= s1_s2;
+
+    _Profiling_Update_max_interrupt_delay(_Per_CPU_Get(), second - first);
+  } else if (state == 1 && leon3_irqmp_has_timestamp(irqmp_ts)) {
+    unsigned int ks = 1U << 5;
+
+    state = 0;
+
+    irqmp_ts->control = ks | s1_s2 | (unsigned int) clkirq;
+  } else if (state == 1) {
+    state = 2;
+  }
+#endif
+}
+
+#define Clock_driver_support_at_tick() \
+  do { \
+    leon3_clock_profiling_interrupt_delay(); \
+  } while (0)
 
 #if defined(RTEMS_MULTIPROCESSING)
   #define Adjust_clkirq_for_node() \
