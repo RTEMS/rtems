@@ -106,6 +106,7 @@
 * User Extensions Manager::
 * Configuring a System::
 * Multiprocessing Manager::
+* Symmetric Multiprocessing Services::
 * Stack Bounds Checker::
 * CPU Usage Statistics::
 * Object Services::
@@ -149,6 +150,7 @@
 @include userext.texi
 @include conf.texi
 @include mp.texi
+@include smp.texi
 @include stackchk.texi
 @include cpuuse.texi
 @include object.texi

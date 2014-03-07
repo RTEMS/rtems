@@ -15,7 +15,7 @@ GENERATED_FILES = overview.texi concepts.texi datatypes.texi init.texi \
     signal.texi part.texi region.texi dpmem.texi io.texi fatal.texi \
     schedule.texi rtmon.texi barrier.texi bsp.texi userext.texi conf.texi \
     mp.texi stackchk.texi cpuuse.texi object.texi chains.texi timespec.texi \
-    cbs.texi dirstat.texi
+    cbs.texi dirstat.texi smp.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
@@ -161,10 +161,15 @@ conf.texi: conf.t
 mp.texi: mp.t
 	$(BMENU2) -p "Configuring a System Configuration Data Structures" \
 	    -u "Top" \
+	    -n "Symmetric Multiprocessing Services" < $< > $@
+
+smp.texi: smp.t
+	$(BMENU2) -p  "Multiprocessing Manager MULTIPROCESSING_ANNOUNCE - Announce the arrival of a packet"\
+	    -u "Top" \
 	    -n "Stack Bounds Checker" < $< > $@
 
 stackchk.texi: stackchk.t
-	$(BMENU2) -p "Multiprocessing Manager MULTIPROCESSING_ANNOUNCE - Announce the arrival of a packet" \
+	$(BMENU2) -p "Symmetric Multiprocessing Services rtems_task_set_affinity - Set Task Affinity" \
 	    -u "Top" \
 	    -n "CPU Usage Statistics" < $< > $@
 
