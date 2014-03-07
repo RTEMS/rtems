@@ -56,7 +56,8 @@
     bool doCons = false;
 
     #if defined(RTEMS_SMP)
-      static SMP_lock_Control constructor_lock = SMP_LOCK_INITIALIZER;
+      static SMP_lock_Control constructor_lock =
+        SMP_LOCK_INITIALIZER("constructor");
 
       SMP_lock_Context lock_context;
 

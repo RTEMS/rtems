@@ -48,7 +48,7 @@ static void test_data_flush_and_invalidate(void)
 
     printf("data cache flush and invalidate test\n");
 
-    rtems_interrupt_lock_initialize(&lock);
+    rtems_interrupt_lock_initialize(&lock, "test");
     rtems_interrupt_lock_acquire(&lock, &lock_context);
 
     for (i = 0; i < n; ++i) {
@@ -168,7 +168,7 @@ static void test_timing(void)
   uint32_t cache_level;
   size_t cache_size;
 
-  rtems_interrupt_lock_initialize(&lock);
+  rtems_interrupt_lock_initialize(&lock, "test");
 
   printf(
     "data cache line size %zi bytes\n"

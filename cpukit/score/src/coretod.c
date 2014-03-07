@@ -29,7 +29,7 @@ void _TOD_Handler_initialization(void)
 {
   TOD_Control *tod = &_TOD;
 
-  _ISR_lock_Initialize( &tod->lock );
+  _ISR_lock_Initialize( &tod->lock, "TOD" );
 
   _Timestamp_Set( &tod->now, TOD_SECONDS_1970_THROUGH_1988, 0 );
 

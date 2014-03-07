@@ -46,7 +46,7 @@ RTEMS_INLINE_ROUTINE void _ASR_Initialize (
   asr->signals_posted  = 0;
   asr->signals_pending = 0;
   asr->nest_level      = 0;
-  _ISR_lock_Initialize( &asr->Lock );
+  _ISR_lock_Initialize( &asr->Lock, "ASR" );
 }
 
 /**

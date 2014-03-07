@@ -32,7 +32,7 @@ void _SMP_Handler_initialize( void )
   for ( cpu = 0 ; cpu < max_cpus; ++cpu ) {
     Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
 
-    _SMP_ticket_lock_Initialize( &per_cpu->Lock );
+    _SMP_ticket_lock_Initialize( &per_cpu->Lock, "per-CPU" );
   }
 
   /*

@@ -167,7 +167,7 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
 /**
  * @brief Initializer for static initialization of interrupt locks.
  */
-#define RTEMS_INTERRUPT_LOCK_INITIALIZER ISR_LOCK_INITIALIZER
+#define RTEMS_INTERRUPT_LOCK_INITIALIZER( _name ) ISR_LOCK_INITIALIZER( _name )
 
 /**
  * @brief Initializes an interrupt lock.
@@ -175,9 +175,11 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * Concurrent initialization leads to unpredictable results.
  *
  * @param[in,out] _lock The interrupt lock.
+ * @param[in] _name The name for the interrupt lock.  This name must be
+ * persistent throughout the life time of this lock.
  */
-#define rtems_interrupt_lock_initialize( _lock ) \
-  _ISR_lock_Initialize( _lock )
+#define rtems_interrupt_lock_initialize( _lock, _name ) \
+  _ISR_lock_Initialize( _lock, _name )
 
 /**
  * @brief Destroys an interrupt lock.

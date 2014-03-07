@@ -23,7 +23,8 @@
  */
 struct ambapp_bus ambapp_plb;
 
-rtems_interrupt_lock LEON3_IrqCtrl_Lock = RTEMS_INTERRUPT_LOCK_INITIALIZER;
+rtems_interrupt_lock LEON3_IrqCtrl_Lock =
+  RTEMS_INTERRUPT_LOCK_INITIALIZER("LEON3 IrqCtrl");
 
 /* Pointers to Interrupt Controller configuration registers */
 volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;

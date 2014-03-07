@@ -138,7 +138,7 @@ static void test_by_function_level(int fl, bool dirty)
   uint64_t q3;
   uint64_t max;
 
-  rtems_interrupt_lock_initialize(&lock);
+  rtems_interrupt_lock_initialize(&lock, "test");
   rtems_interrupt_lock_acquire(&lock, &lock_context);
 
   for (s = 0; s < SAMPLES; ++s) {

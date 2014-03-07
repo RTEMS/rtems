@@ -45,7 +45,7 @@ RTEMS_STATIC_ASSERT(
 
 /*** PROCESS WIDE STUFF ****/
 
-ISR_lock_Control _POSIX_signals_Lock = ISR_LOCK_INITIALIZER;
+ISR_lock_Control _POSIX_signals_Lock = ISR_LOCK_INITIALIZER("POSIX signals");
 
 sigset_t  _POSIX_signals_Pending;
 

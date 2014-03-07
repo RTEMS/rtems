@@ -48,7 +48,7 @@ typedef struct {
 static global_context context = {
   .state = ATOMIC_INITIALIZER_UINT(INITIAL),
   .barrier = SMP_BARRIER_CONTROL_INITIALIZER,
-  .lock = SMP_LOCK_INITIALIZER
+  .lock = SMP_LOCK_INITIALIZER("global")
 };
 
 static const char *test_names[TEST_COUNT] = {
@@ -141,7 +141,7 @@ static void test_2_body(
   SMP_lock_Control lock;
   SMP_lock_Context lock_context;
 
-  _SMP_lock_Initialize(&lock);
+  _SMP_lock_Initialize(&lock, "local");
 
   while (assert_state(ctx, START_TEST)) {
     _SMP_lock_Acquire(&lock, &lock_context);
@@ -166,7 +166,7 @@ static void test_3_body(
   SMP_lock_Control lock;
   SMP_lock_Context lock_context;
 
-  _SMP_lock_Initialize(&lock);
+  _SMP_lock_Initialize(&lock, "local");
 
   while (assert_state(ctx, START_TEST)) {
     _SMP_lock_Acquire(&lock, &lock_context);

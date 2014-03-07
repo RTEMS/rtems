@@ -26,7 +26,8 @@
 
 #if defined(RTEMS_SMP)
 
-static SMP_lock_Control _Per_CPU_State_lock = SMP_LOCK_INITIALIZER;
+static SMP_lock_Control _Per_CPU_State_lock =
+  SMP_LOCK_INITIALIZER("per-CPU state");
 
 static void _Per_CPU_State_busy_wait(
   const Per_CPU_Control *per_cpu,

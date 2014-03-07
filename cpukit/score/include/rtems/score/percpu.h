@@ -40,7 +40,11 @@ extern "C" {
    * used in assembler code to easily get the per-CPU control for a particular
    * processor.
    */
-  #define PER_CPU_CONTROL_SIZE_LOG2 7
+  #if defined( RTEMS_PROFILING )
+    #define PER_CPU_CONTROL_SIZE_LOG2 8
+  #else
+    #define PER_CPU_CONTROL_SIZE_LOG2 7
+  #endif
 
   #define PER_CPU_CONTROL_SIZE ( 1 << PER_CPU_CONTROL_SIZE_LOG2 )
 #endif
@@ -287,6 +291,11 @@ typedef struct {
     SMP_ticket_lock_Control Lock;
 
     /**
+     * @brief Lock statistics context for the per-CPU lock.
+     */
+    SMP_lock_Stats_context Lock_stats_context;
+
+    /**
      * @brief Context for the Giant lock acquire and release pair of this
      * processor.
      */
@@ -333,7 +342,10 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 
 #if defined( RTEMS_SMP )
 #define _Per_CPU_Acquire( per_cpu ) \
-  _SMP_ticket_lock_Acquire( &( per_cpu )->Lock )
+  _SMP_ticket_lock_Acquire( \
+    &( per_cpu )->Lock, \
+    &( per_cpu )->Lock_stats_context \
+  )
 #else
 #define _Per_CPU_Acquire( per_cpu ) \
   do { \
@@ -343,7 +355,10 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 
 #if defined( RTEMS_SMP )
 #define _Per_CPU_Release( per_cpu ) \
-  _SMP_ticket_lock_Release( &( per_cpu )->Lock )
+  _SMP_ticket_lock_Release( \
+    &( per_cpu )->Lock, \
+    &( per_cpu )->Lock_stats_context \
+  )
 #else
 #define _Per_CPU_Release( per_cpu ) \
   do { \

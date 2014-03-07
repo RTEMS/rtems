@@ -51,7 +51,7 @@ static rtems_task Init(rtems_task_argument argument)
 
   n = (3 * n) / 2;
 
-  rtems_interrupt_lock_initialize(&lock);
+  rtems_interrupt_lock_initialize(&lock, "test");
   rtems_interrupt_lock_acquire(&lock, &lock_context);
   sc = rtems_clock_get_uptime(&uptime);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);

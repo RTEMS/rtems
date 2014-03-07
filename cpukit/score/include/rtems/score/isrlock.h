@@ -71,10 +71,10 @@ typedef struct {
  * @brief Initializer for static initialization of ISR locks.
  */
 #if defined( RTEMS_SMP )
-  #define ISR_LOCK_INITIALIZER \
-    { SMP_LOCK_INITIALIZER }
+  #define ISR_LOCK_INITIALIZER( name ) \
+    { SMP_LOCK_INITIALIZER( name ) }
 #else
-  #define ISR_LOCK_INITIALIZER \
+  #define ISR_LOCK_INITIALIZER( name ) \
     { }
 #endif
 
@@ -84,13 +84,19 @@ typedef struct {
  * Concurrent initialization leads to unpredictable results.
  *
  * @param[in,out] lock The ISR lock control.
+ * @param[in] name The name for the ISR lock.  This name must be persistent
+ * throughout the life time of this lock.
  */
-static inline void _ISR_lock_Initialize( ISR_lock_Control *lock )
+static inline void _ISR_lock_Initialize(
+  ISR_lock_Control *lock,
+  const char *name
+)
 {
 #if defined( RTEMS_SMP )
-  _SMP_lock_Initialize( &lock->lock );
+  _SMP_lock_Initialize( &lock->lock, name );
 #else
   (void) lock;
+  (void) name;
 #endif
 }
 

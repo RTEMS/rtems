@@ -29,7 +29,7 @@ typedef struct {
 } Giant_Control;
 
 static Giant_Control _Giant = {
-  .lock = SMP_LOCK_INITIALIZER,
+  .lock = SMP_LOCK_INITIALIZER("Giant"),
   .owner_cpu = NO_OWNER_CPU,
   .nest_level = 0
 };

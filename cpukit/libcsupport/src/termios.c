@@ -230,7 +230,7 @@ rtems_termios_open (
      */
     tty->device = *callbacks;
 
-    rtems_interrupt_lock_initialize (&tty->interrupt_lock);
+    rtems_interrupt_lock_initialize (&tty->interrupt_lock, "Termios");
 
     /*
      * Create I/O tasks

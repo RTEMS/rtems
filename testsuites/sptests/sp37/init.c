@@ -160,11 +160,11 @@ static void test_isr_level( void )
 static void test_isr_locks( void )
 {
   ISR_Level normal_interrupt_level = _ISR_Get_level();
-  ISR_lock_Control initialized = ISR_LOCK_INITIALIZER;
+  ISR_lock_Control initialized = ISR_LOCK_INITIALIZER("test");
   ISR_lock_Control lock;
   ISR_lock_Context lock_context;
 
-  _ISR_lock_Initialize( &lock );
+  _ISR_lock_Initialize( &lock, "test" );
   rtems_test_assert( memcmp( &lock, &initialized, sizeof( lock ) ) == 0 );
 
   _ISR_lock_ISR_disable_and_acquire( &lock, &lock_context );
@@ -197,11 +197,11 @@ static rtems_mode get_interrupt_level( void )
 static void test_interrupt_locks( void )
 {
   rtems_mode normal_interrupt_level = get_interrupt_level();
-  rtems_interrupt_lock initialized = RTEMS_INTERRUPT_LOCK_INITIALIZER;
+  rtems_interrupt_lock initialized = RTEMS_INTERRUPT_LOCK_INITIALIZER("test");
   rtems_interrupt_lock lock;
   rtems_interrupt_lock_context lock_context;
 
-  rtems_interrupt_lock_initialize( &lock );
+  rtems_interrupt_lock_initialize( &lock, "test" );
   rtems_test_assert( memcmp( &lock, &initialized, sizeof( lock ) ) == 0 );
 
   rtems_interrupt_lock_acquire( &lock, &lock_context );

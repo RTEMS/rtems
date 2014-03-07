@@ -22,7 +22,7 @@
 
 #include <rtems/score/smplock.h>
 
-static SMP_lock_Control chain_lock = SMP_LOCK_INITIALIZER;
+static SMP_lock_Control chain_lock = SMP_LOCK_INITIALIZER("chains");
 
 static void chain_acquire( SMP_lock_Context *lock_context )
 {
