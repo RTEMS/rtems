@@ -1188,6 +1188,7 @@ static int lpc_eth_phy_get_id(int phy, uint32_t *id)
 }
 
 #define PHY_KSZ80X1RNL 0x221550
+#define PHY_DP83848    0x20005c90
 
 typedef struct {
   unsigned reg;
@@ -1270,6 +1271,13 @@ static int lpc_eth_phy_up(lpc_eth_driver_entry *e)
           &lpc_eth_phy_up_pre_action_KSZ80X1RNL [0],
           RTEMS_ARRAY_SIZE(lpc_eth_phy_up_pre_action_KSZ80X1RNL)
         );
+        break;
+      case PHY_DP83848:
+        eno = lpc_eth_mdio_read(e->phy, NULL, 0x17, &val);
+        LPC_ETH_PRINTF("phy PHY_DP83848 RBR 0x%08" PRIx32 "\n", val);
+        /* val = 0x21; */
+        val = 0x32 ;
+        eno = lpc_eth_mdio_write(e->phy, NULL, 0x17, val);
         break;
       case 0:
       case 0xfffffff0:
