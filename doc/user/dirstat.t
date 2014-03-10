@@ -40,7 +40,7 @@
 @section Directives
 
 @page
-@subsection STATUS_TEXT - Returns a text for a status code
+@subsection STATUS_TEXT - Returns the enumeration name for a status code
 
 @subheading CALLING SEQUENCE:
 
@@ -55,9 +55,8 @@ const char *rtems_status_text(
 
 @subheading DIRECTIVE STATUS CODES
 
-The status code text or "?" in case the passed status code is invalid.
+The status code enumeration name or "?" in case the status code is invalid.
 
 @subheading DESCRIPTION:
 
-Returns a text for a status code.  The text for each status code is the
-enumerator constant.
+Returns the enumeration name for the specified status code.
