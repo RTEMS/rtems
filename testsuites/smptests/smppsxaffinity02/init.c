@@ -205,7 +205,7 @@ void *POSIX_Init(
   Validate_getaffinity_errors();
   Validate_affinity();
 
-  puts( "*** SMP POSIX AFFINITY ATTRIBUTE TEST 2 ***" );
+  puts( "*** END OF SMP POSIX AFFINITY ATTRIBUTE TEST 2 ***" );
   rtems_test_exit(0);
 }
 
