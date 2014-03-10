@@ -34,6 +34,7 @@ void _Thread_Start_multitasking( void )
    * _Per_CPU_Release().
    */
   _Per_CPU_Acquire( self_cpu );
+  _Profiling_Thread_dispatch_disable( self_cpu, 0 );
   self_cpu->thread_dispatch_disable_level = 1;
 #endif
 

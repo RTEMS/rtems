@@ -153,6 +153,7 @@ void _Thread_Handler( void )
       _Assert( _ISR_Get_level() != 0 );
 
       per_cpu->thread_dispatch_disable_level = 0;
+      _Profiling_Thread_dispatch_enable( per_cpu, 0 );
 
       _Per_CPU_Release( per_cpu );
 

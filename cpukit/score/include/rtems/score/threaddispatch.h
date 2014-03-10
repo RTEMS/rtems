@@ -16,6 +16,7 @@
 
 #include <rtems/score/percpu.h>
 #include <rtems/score/smplock.h>
+#include <rtems/score/profiling.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -140,12 +141,22 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
    */
   RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_increment_disable_level(void)
   {
-    uint32_t level = _Thread_Dispatch_disable_level;
+    uint32_t disable_level = _Thread_Dispatch_disable_level;
+#if defined( RTEMS_PROFILING )
+    ISR_Level level;
 
-    ++level;
-    _Thread_Dispatch_disable_level = level;
+    _ISR_Disable( level );
+    _Profiling_Thread_dispatch_disable( _Per_CPU_Get(), disable_level );
+#endif
 
-    return level;
+    ++disable_level;
+    _Thread_Dispatch_disable_level = disable_level;
+
+#if defined( RTEMS_PROFILING )
+    _ISR_Enable( level );
+#endif
+
+    return disable_level;
   }
 
   /**
@@ -155,12 +166,22 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
    */
   RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_decrement_disable_level(void)
   {
-    uint32_t level = _Thread_Dispatch_disable_level;
+    uint32_t disable_level = _Thread_Dispatch_disable_level;
+#if defined( RTEMS_PROFILING )
+    ISR_Level level;
 
-    --level;
-    _Thread_Dispatch_disable_level = level;
+    _ISR_Disable( level );
+#endif
 
-    return level;
+    --disable_level;
+    _Thread_Dispatch_disable_level = disable_level;
+
+#if defined( RTEMS_PROFILING )
+    _Profiling_Thread_dispatch_enable( _Per_CPU_Get(), disable_level );
+    _ISR_Enable( level );
+#endif
+
+    return disable_level;
   }
 #endif /* RTEMS_SMP */
 

@@ -40,6 +40,7 @@ void _Thread_Dispatch( void )
 
   per_cpu = _Per_CPU_Get();
   _Assert( per_cpu->thread_dispatch_disable_level == 0 );
+  _Profiling_Thread_dispatch_disable( per_cpu, 0 );
   per_cpu->thread_dispatch_disable_level = 1;
 
 #if defined( RTEMS_SMP )
@@ -170,6 +171,7 @@ void _Thread_Dispatch( void )
 post_switch:
   _Assert( per_cpu->thread_dispatch_disable_level == 1 );
   per_cpu->thread_dispatch_disable_level = 0;
+  _Profiling_Thread_dispatch_enable( per_cpu, 0 );
 
   _Per_CPU_Release_and_ISR_enable( per_cpu, level );
 

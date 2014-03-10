@@ -163,6 +163,10 @@ $(PROJECT_INCLUDE)/rtems/score/prioritybitmapimpl.h: include/rtems/score/priorit
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmapimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmapimpl.h
 
+$(PROJECT_INCLUDE)/rtems/score/profiling.h: include/rtems/score/profiling.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/profiling.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/profiling.h
+
 $(PROJECT_INCLUDE)/rtems/score/rbtree.h: include/rtems/score/rbtree.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rbtree.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rbtree.h

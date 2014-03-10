@@ -17,6 +17,7 @@
 
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/profiling.h>
 #include <rtems/score/sysstate.h>
 
 #define NO_OWNER_CPU 0xffffffffU
@@ -89,6 +90,7 @@ uint32_t _Thread_Dispatch_increment_disable_level( void )
   _Giant_Do_acquire( self_cpu );
 
   disable_level = self_cpu->thread_dispatch_disable_level;
+  _Profiling_Thread_dispatch_disable( self_cpu, disable_level );
   ++disable_level;
   self_cpu->thread_dispatch_disable_level = disable_level;
 
@@ -113,6 +115,7 @@ uint32_t _Thread_Dispatch_decrement_disable_level( void )
   _Giant_Do_release( self_cpu );
   _Assert( disable_level != 0 || _Giant.owner_cpu == NO_OWNER_CPU );
 
+  _Profiling_Thread_dispatch_enable( self_cpu, disable_level );
   _ISR_Enable_without_giant( isr_level );
 
   return disable_level;

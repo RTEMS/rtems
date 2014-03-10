@@ -155,6 +155,78 @@ typedef enum {
 #endif /* defined( RTEMS_SMP ) */
 
 /**
+ * @brief Per-CPU statistics.
+ */
+typedef struct {
+#if defined( RTEMS_PROFILING )
+  /**
+   * @brief The thread dispatch disabled begin instant in CPU counter ticks.
+   *
+   * This value is used to measure the time of disabled thread dispatching.
+   */
+  CPU_Counter_ticks thread_dispatch_disabled_instant;
+
+  /**
+   * @brief The maximum time of disabled thread dispatching in CPU counter
+   * ticks.
+   */
+  CPU_Counter_ticks max_thread_dispatch_disabled_time;
+
+  /**
+   * @brief The maximum time spent to process a single sequence of nested
+   * interrupts in CPU counter ticks.
+   *
+   * This is the time interval between the change of the interrupt nest level
+   * from zero to one and the change back from one to zero.
+   */
+  CPU_Counter_ticks max_interrupt_time;
+
+  /**
+   * @brief The maximum interrupt delay in CPU counter ticks if supported by
+   * the hardware.
+   */
+  CPU_Counter_ticks max_interrupt_delay;
+
+  /**
+   * @brief Count of times when the thread dispatch disable level changes from
+   * zero to one in thread context.
+   *
+   * This value may overflow.
+   */
+  uint64_t thread_dispatch_disabled_count;
+
+  /**
+   * @brief Total time of disabled thread dispatching in CPU counter ticks.
+   *
+   * The average time of disabled thread dispatching is the total time of
+   * disabled thread dispatching divided by the thread dispatch disabled
+   * count.
+   *
+   * This value may overflow.
+   */
+  uint64_t total_thread_dispatch_disabled_time;
+
+  /**
+   * @brief Count of times when the interrupt nest level changes from zero to
+   * one.
+   *
+   * This value may overflow.
+   */
+  uint64_t interrupt_count;
+
+  /**
+   * @brief Total time of interrupt processing in CPU counter ticks.
+   *
+   * The average time of interrupt processing is the total time of interrupt
+   * processing divided by the interrupt count.
+   *
+   * This value may overflow.
+   */
+  uint64_t total_interrupt_time;
+#endif /* defined( RTEMS_PROFILING ) */
+} Per_CPU_Stats;
+
+/**
  *  @brief Per CPU Core Structure
  *
  *  This structure is used to hold per core state information.
@@ -236,6 +308,8 @@ typedef struct {
      */
     Per_CPU_State state;
   #endif
+
+  Per_CPU_Stats Stats;
 } Per_CPU_Control;
 
 #if defined( RTEMS_SMP )
