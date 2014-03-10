@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpload01
+
+directives:
+
+  - rtems_semaphore_obtain()
+  - rtems_semaphore_release()
+  - rtems_profiling_report_xml()
+
+concepts:
+
+  - Produce some system load to get profiling data samples.
