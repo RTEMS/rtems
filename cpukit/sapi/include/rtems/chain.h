@@ -5,7 +5,7 @@
  */
 
 /*
- *  Copyright (c) 2010 embedded brains GmbH.
+ *  Copyright (c) 2010-2014 embedded brains GmbH.
  *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
@@ -19,7 +19,6 @@
 #define _RTEMS_CHAIN_H
 
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/isrlock.h>
 #include <rtems/rtems/event.h>
 
 #ifdef __cplusplus
@@ -37,16 +36,13 @@ extern "C" {
 
 typedef Chain_Node rtems_chain_node;
 
-typedef struct {
-  Chain_Control Chain;
-  ISR_lock_Control Lock;
-} rtems_chain_control;
+typedef Chain_Control rtems_chain_control;
 
 /**
  *  @brief Chain initializer for an empty chain with designator @a name.
  */
 #define RTEMS_CHAIN_INITIALIZER_EMPTY( name ) \
-  { CHAIN_INITIALIZER_EMPTY( name.Chain ), ISR_LOCK_INITIALIZER }
+  CHAIN_INITIALIZER_EMPTY( name )
 
 /**
  *  @brief Chain initializer for a chain with one @a node.
@@ -54,7 +50,7 @@ typedef struct {
  *  @see RTEMS_CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN().
  */
 #define RTEMS_CHAIN_INITIALIZER_ONE_NODE( node ) \
-  { CHAIN_INITIALIZER_ONE_NODE( node ), ISR_LOCK_INITIALIZER }
+  CHAIN_INITIALIZER_ONE_NODE( node )
 
 /**
  *  @brief Chain node initializer for a @a chain containing exactly this node.
@@ -62,7 +58,7 @@ typedef struct {
  *  @see RTEMS_CHAIN_INITIALIZER_ONE_NODE().
  */
 #define RTEMS_CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN( chain ) \
-  CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN( &( chain )->Chain )
+  CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN( chain )
 
 /**
  *  @brief Chain definition for an empty chain with designator @a name.
@@ -154,9 +150,8 @@ RTEMS_INLINE_ROUTINE void rtems_chain_initialize(
   size_t               node_size
 )
 {
-  _ISR_lock_Initialize( &the_chain->Lock );
   _Chain_Initialize(
-    &the_chain->Chain,
+    the_chain,
     starting_address,
     number_nodes,
     node_size
@@ -174,8 +169,7 @@ RTEMS_INLINE_ROUTINE void rtems_chain_initialize_empty(
   rtems_chain_control *the_chain
 )
 {
-  _ISR_lock_Initialize( &the_chain->Lock );
-  _Chain_Initialize_empty( &the_chain->Chain );
+  _Chain_Initialize_empty( the_chain );
 }
 
 /**
@@ -241,7 +235,7 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_head(
   rtems_chain_control *the_chain
 )
 {
-  return _Chain_Head( &the_chain->Chain );
+  return _Chain_Head( the_chain );
 }
 
 /**
@@ -257,7 +251,7 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_head(
   const rtems_chain_control *the_chain
 )
 {
-  return _Chain_Immutable_head( &the_chain->Chain );
+  return _Chain_Immutable_head( the_chain );
 }
 
 /**
@@ -273,7 +267,7 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_tail(
   rtems_chain_control *the_chain
 )
 {
-  return _Chain_Tail( &the_chain->Chain );
+  return _Chain_Tail( the_chain );
 }
 
 /** 
@@ -289,7 +283,7 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_tail(
   const rtems_chain_control *the_chain
 )
 {
-  return _Chain_Immutable_tail( &the_chain->Chain );
+  return _Chain_Immutable_tail( the_chain );
 }
 
 /**
@@ -306,7 +300,7 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_first(
   rtems_chain_control *the_chain
 )
 {
-  return _Chain_First( &the_chain->Chain );
+  return _Chain_First( the_chain );
 }
 
 /** 
@@ -323,7 +317,7 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_first(
   const rtems_chain_control *the_chain
 )
 {
-  return _Chain_Immutable_first( &the_chain->Chain );
+  return _Chain_Immutable_first( the_chain );
 }
 
 /**
@@ -340,7 +334,7 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_last(
   rtems_chain_control *the_chain
 )
 {
-  return _Chain_Last( &the_chain->Chain );
+  return _Chain_Last( the_chain );
 }
 
 /**
@@ -357,7 +351,7 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_last(
   const rtems_chain_control *the_chain
 )
 {
-  return _Chain_Immutable_last( &the_chain->Chain );
+  return _Chain_Immutable_last( the_chain );
 }
 
 /**
@@ -459,7 +453,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_empty(
   const rtems_chain_control *the_chain
 )
 {
-  return _Chain_Is_empty( &the_chain->Chain );
+  return _Chain_Is_empty( the_chain );
 }
 
 /**
@@ -514,7 +508,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_has_only_one_node(
   const rtems_chain_control *the_chain
 )
 {
-  return _Chain_Has_only_one_node( &the_chain->Chain );
+  return _Chain_Has_only_one_node( the_chain );
 }
 
 /**
@@ -534,7 +528,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_head(
   const rtems_chain_node *the_node
 )
 {
-  return _Chain_Is_head( &the_chain->Chain, the_node );
+  return _Chain_Is_head( the_chain, the_node );
 }
 
 /**
@@ -554,10 +548,9 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_tail(
   const rtems_chain_node *the_node
 )
 {
-  return _Chain_Is_tail( &the_chain->Chain, the_node );
+  return _Chain_Is_tail( the_chain, the_node );
 }
 
-#if !defined( RTEMS_SMP )
 /**
  * @brief Extract the specified node from a chain.
  *
@@ -567,33 +560,16 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_tail(
  *
  * @arg the_node specifies the node to extract
  */
+#if defined( RTEMS_SMP )
+void rtems_chain_extract(
+  rtems_chain_node *the_node
+);
+#else
 RTEMS_INLINE_ROUTINE void rtems_chain_extract(
   rtems_chain_node *the_node
 )
 {
   _Chain_Extract( the_node );
-}
-#endif
-
-#if defined( RTEMS_SMP )
-/**
- * @brief Extract the specified node from a chain.
- *
- * @param[in,out] chain The chain containing the node.
- * @param[in,out] node The node to extract.
- */
-void rtems_chain_explicit_extract(
-  rtems_chain_control *chain,
-  rtems_chain_node *node
-);
-#else
-RTEMS_INLINE_ROUTINE void rtems_chain_explicit_extract(
-  rtems_chain_control *chain,
-  rtems_chain_node *node
-)
-{
-  ( void ) chain;
-  rtems_chain_extract( node );
 }
 #endif
 
@@ -633,7 +609,7 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_get(
   rtems_chain_control *the_chain
 )
 {
-  return _Chain_Get( &the_chain->Chain );
+  return _Chain_Get( the_chain );
 }
 #endif
 
@@ -644,10 +620,9 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_get_unprotected(
   rtems_chain_control *the_chain
 )
 {
-  return _Chain_Get_unprotected( &the_chain->Chain );
+  return _Chain_Get_unprotected( the_chain );
 }
 
-#if !defined( RTEMS_SMP )
 /**
  * @brief Insert a node on a chain
  *
@@ -657,37 +632,18 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_get_unprotected(
  * NOTE: It disables interrupts to ensure the atomicity
  * of the extract operation.
  */
+#if defined( RTEMS_SMP )
+void rtems_chain_insert(
+  rtems_chain_node *after_node,
+  rtems_chain_node *the_node
+);
+#else
 RTEMS_INLINE_ROUTINE void rtems_chain_insert(
   rtems_chain_node *after_node,
   rtems_chain_node *the_node
 )
 {
   _Chain_Insert( after_node, the_node );
-}
-#endif
-
-/**
- * @brief Insert a node on a chain
- *
- * @param[in,out] chain The chain containing the after node.
- * @param[in,out] after_node Insert the node after this node.
- * @param[in,out] node The node to insert.
- */
-#if defined( RTEMS_SMP )
-void rtems_chain_explicit_insert(
-  rtems_chain_control *chain,
-  rtems_chain_node *after_node,
-  rtems_chain_node *node
-);
-#else
-RTEMS_INLINE_ROUTINE void rtems_chain_explicit_insert(
-  rtems_chain_control *chain,
-  rtems_chain_node *after_node,
-  rtems_chain_node *node
-)
-{
-  ( void ) chain;
-  rtems_chain_insert( after_node, node );
 }
 #endif
 
@@ -721,7 +677,7 @@ RTEMS_INLINE_ROUTINE void rtems_chain_append(
   rtems_chain_node    *the_node
 )
 {
-  _Chain_Append( &the_chain->Chain, the_node );
+  _Chain_Append( the_chain, the_node );
 }
 #endif
 
@@ -738,7 +694,7 @@ RTEMS_INLINE_ROUTINE void rtems_chain_append_unprotected(
   rtems_chain_node    *the_node
 )
 {
-  _Chain_Append_unprotected( &the_chain->Chain, the_node );
+  _Chain_Append_unprotected( the_chain, the_node );
 }
 
 /** 
@@ -763,7 +719,7 @@ RTEMS_INLINE_ROUTINE void rtems_chain_prepend(
   rtems_chain_node    *the_node
 )
 {
-  _Chain_Prepend( &the_chain->Chain, the_node );
+  _Chain_Prepend( the_chain, the_node );
 }
 #endif
 
@@ -783,7 +739,7 @@ RTEMS_INLINE_ROUTINE void rtems_chain_prepend_unprotected(
   rtems_chain_node    *the_node
 )
 {
-  _Chain_Prepend_unprotected( &the_chain->Chain, the_node );
+  _Chain_Prepend_unprotected( the_chain, the_node );
 }
 
 /**
@@ -805,7 +761,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_append_with_empty_check(
   rtems_chain_node *node
 )
 {
-  return _Chain_Append_with_empty_check( &chain->Chain, node );
+  return _Chain_Append_with_empty_check( chain, node );
 }
 #endif
 
@@ -828,7 +784,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_prepend_with_empty_check(
   rtems_chain_node *node
 )
 {
-  return _Chain_Prepend_with_empty_check( &chain->Chain, node );
+  return _Chain_Prepend_with_empty_check( chain, node );
 }
 #endif
 
@@ -855,7 +811,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_get_with_empty_check(
   rtems_chain_node **node
 )
 {
-  return _Chain_Get_with_empty_check( &chain->Chain, node );
+  return _Chain_Get_with_empty_check( chain, node );
 }
 #endif
 
@@ -873,7 +829,7 @@ RTEMS_INLINE_ROUTINE size_t rtems_chain_node_count_unprotected(
   const rtems_chain_control *chain
 )
 {
-  return _Chain_Node_count_unprotected( &chain->Chain );
+  return _Chain_Node_count_unprotected( chain );
 }
 
 /** @} */

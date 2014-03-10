@@ -106,7 +106,7 @@ static void test_chain_first_and_last(void)
 
   rtems_chain_initialize_empty( &chain );
   rtems_chain_append( &chain, &node1 );
-  rtems_chain_explicit_insert( &chain, &node1, &node2 );
+  rtems_chain_insert( &node1, &node2 );
 
   puts( "INIT - Verify rtems_chain_is_first" );
   cnode = rtems_chain_first(&chain);  
@@ -308,7 +308,7 @@ rtems_task Init(
   node1.id = 1;
   node2.id = 2;
   rtems_chain_append( &chain1, &node1.Node );
-  rtems_chain_explicit_insert( &chain1, &node1.Node, &node2.Node );
+  rtems_chain_insert( &node1.Node, &node2.Node );
 
   for ( p = rtems_chain_first(&chain1), id = 1 ;
         !rtems_chain_is_tail(&chain1, p) ;
