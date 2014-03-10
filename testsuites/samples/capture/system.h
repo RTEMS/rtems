@@ -12,6 +12,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/test.h>
 
 /* functions */
 
@@ -48,6 +49,8 @@ extern void setup_tasks_to_watch(void);
 #define CONFIGURE_EXTRA_TASK_STACKS (75 * RTEMS_MINIMUM_STACK_SIZE)
 
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS (5)
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #include <rtems/confdefs.h>
 

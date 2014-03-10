@@ -37,6 +37,6 @@ rtems_task Application_task(
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
   printf( "This task was invoked with the node argument (%" PRIdrtems_task_argument ")\n", node );
   printf( "This task has the id of 0x%" PRIxrtems_id "\n",  tid );
-  printf( "*** END OF SAMPLE MULTIPROCESSOR APPLICATION ***\n" );
+  TEST_END();
   exit( 0 );
 }

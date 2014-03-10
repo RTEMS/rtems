@@ -12,6 +12,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/test.h>
 
 /* functions */
 
@@ -35,6 +36,8 @@ rtems_task Application_task(
 #define CONFIGURE_MAXIMUM_TASKS           2
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 /*
  *  Put the overrides of default configuration parameters here.

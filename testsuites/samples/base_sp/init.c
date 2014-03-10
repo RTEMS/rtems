@@ -19,6 +19,8 @@
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
+const char rtems_test_name[] = "SAMPLE SINGLE PROCESSOR APPLICATION";
+
 #define ARGUMENT 0
 
 rtems_task Init(
@@ -29,7 +31,7 @@ rtems_task Init(
   rtems_id          tid;
   rtems_status_code status;
 
-  printf( "\n\n*** SAMPLE SINGLE PROCESSOR APPLICATION ***\n" );
+  TEST_BEGIN();
   printf( "Creating and starting an application task\n" );
 
   task_name = rtems_build_name( 'T', 'A', '1', ' ' );

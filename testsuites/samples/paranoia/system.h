@@ -12,6 +12,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/test.h>
 
 /* functions */
 
@@ -33,6 +34,8 @@ rtems_task Init(
 #define CONFIGURE_INIT_TASK_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
 
 #define CONFIGURE_EXTRA_TASK_STACKS       (1 * RTEMS_MINIMUM_STACK_SIZE)
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #include <rtems/confdefs.h>
 

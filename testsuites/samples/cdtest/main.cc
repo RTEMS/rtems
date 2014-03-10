@@ -23,6 +23,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/test.h>
 
 #include <cstdio>
 #include <cstdlib>
@@ -30,6 +31,8 @@
 #ifdef RTEMS_TEST_IO_STREAM
 #include <iostream>
 #endif
+
+const char rtems_test_name[] = "CONSTRUCTOR/DESTRUCTOR";
 
 extern "C" 
 {
@@ -176,12 +179,11 @@ rtems_task main_task(
   rtems_task_argument 
 )
 {
-    printf( "\n\n*** CONSTRUCTOR/DESTRUCTOR TEST ***\n" );
+    TEST_BEGIN();
 
     cdtest();
 
-    printf( "*** END OF CONSTRUCTOR/DESTRUCTOR TEST ***\n\n\n" );
-
+    TEST_END();
 
     printf( "*** TESTING C++ EXCEPTIONS ***\n\n" );
 

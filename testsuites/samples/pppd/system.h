@@ -2,6 +2,7 @@
 #define SYSTEM_H
 
 #include <rtems.h>
+#include <rtems/test.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
@@ -39,6 +40,8 @@ extern int pppdapp_initialize(void);
                                            RTEMS_NO_TIMESLICE | \
                                            RTEMS_NO_ASR | \
                                            RTEMS_INTERRUPT_LEVEL(0))
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #include <rtems/confdefs.h>
 

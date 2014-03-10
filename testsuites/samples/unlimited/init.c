@@ -18,6 +18,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+const char rtems_test_name[] = "UNLIMITED TASK";
+
 rtems_id task_id[MAX_TASKS];
 
 rtems_task Init(
@@ -28,13 +30,13 @@ rtems_task Init(
   rtems_mode          old_mode;
   uint32_t            task;
 
+  TEST_BEGIN();
+
   /* lower the task priority to allow created tasks to execute */
 
   rtems_task_set_priority(
     RTEMS_SELF, RTEMS_MAXIMUM_PRIORITY - 1, &old_priority);
   rtems_task_mode(RTEMS_PREEMPT,  RTEMS_PREEMPT_MASK, &old_mode);
-
-  printf( "\n*** UNLIMITED TASK TEST ***\n" );
 
   /*
    * Invalid state if the task id is 0
@@ -47,7 +49,7 @@ rtems_task Init(
   test2();
   test3();
 
-  printf( "\n*** END OF UNLIMITED TASK TEST ***\n" );
+  TEST_END();
   exit( 0 );
 }
 

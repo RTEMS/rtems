@@ -29,6 +29,8 @@
 
 #include <stdlib.h>
 
+const char rtems_test_name[] = "HELLO WORLD";
+
 rtems_task Init(
   rtems_task_argument ignored
 )
@@ -36,9 +38,9 @@ rtems_task Init(
 #if BSP_SMALL_MEMORY
   printf ("NO STDC++. MEMORY TOO SMALL");
 #else
-  std::cout << "\n\n*** HELLO WORLD TEST ***" << std::endl;
+  std::cout << "\n\n*** " << rtems_test_name << " TEST ***" << std::endl;
   std::cout << "Hello World" << std::endl;
-  std::cout << "*** END OF HELLO WORLD TEST ***" << std::endl;
+  std::cout << "*** END OF " << rtems_test_name << " TEST ***" << std::endl;
 #endif
   exit( 0 );
 }

@@ -8,7 +8,11 @@
 #include "config.h"
 #endif
 
+#include <rtems/test.h>
+
 #include <bsp.h>
+
+const char rtems_test_name[] = "LOOPBACK";
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -32,6 +36,8 @@
 
 #define CONFIGURE_INIT
 rtems_task Init(rtems_task_argument argument);
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #include <rtems/confdefs.h>
 
@@ -241,6 +247,8 @@ Init (rtems_task_argument ignored)
 {
     rtems_status_code sc;
 
+    rtems_test_begin();
+
     sc = rtems_semaphore_create(rtems_build_name('P','m','t','x'),
                 1,
                 RTEMS_PRIORITY|RTEMS_BINARY_SEMAPHORE|RTEMS_INHERIT_PRIORITY|
@@ -275,7 +283,7 @@ Init (rtems_task_argument ignored)
     spawnTask(clientTask, 120, 6);
 
     rtems_task_wake_after(500);
-    puts( "*** END OF LOOPBACK TEST ***" );
+    rtems_test_end();
     exit( 0 );
 }
 #else

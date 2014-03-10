@@ -32,6 +32,8 @@
 #include <rtems/nvdisk-sram.h>
 #include <rtems/shell.h>
 
+const char rtems_test_name[] = "FILE I/O";
+
 #if FILEIO_BUILD
 
 /**
@@ -1220,7 +1222,7 @@ Init (rtems_task_argument ignored)
   rtems_id   Task_id;
   rtems_status_code status;
 
-  puts( "\n\n*** TEST FILE I/O SAMPLE ***" );
+  TEST_BEGIN();
 
   status = rtems_shell_wait_for_input(
     STDIN_FILENO,
@@ -1244,7 +1246,7 @@ Init (rtems_task_argument ignored)
     status = rtems_task_delete( RTEMS_SELF );
     directive_failed( status, "delete" ); 
   } else {
-    puts( "*** END OF TEST FILE I/O SAMPLE ***" );
+    TEST_END();
 
     rtems_test_exit( 0 );
   }

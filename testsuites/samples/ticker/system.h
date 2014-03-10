@@ -12,6 +12,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/test.h>
 #include <inttypes.h>
 #include "tmacros.h"
 
@@ -47,6 +48,8 @@ extern rtems_name Task_name[ 4 ];       /* array of task names */
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #include <rtems/confdefs.h>
 

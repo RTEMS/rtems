@@ -41,6 +41,6 @@ rtems_task Application_task(
     "and has id of 0x%" PRIxrtems_id "\n", argument, tid
   );
 
-  printf( "*** END OF SAMPLE SINGLE PROCESSOR APPLICATION ***\n" );
+  TEST_END();
   exit( 0 );
 }

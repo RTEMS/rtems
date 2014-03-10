@@ -28,6 +28,8 @@ rtems_task Init(rtems_task_argument argument);
   static void notification(int fd, int seconds_remaining, void *arg);
 #endif
 
+const char rtems_test_name[] = "CAPTURE ENGINE";
+
 volatile int can_proceed = 1;
 
 #if !BSP_SMALL_MEMORY
@@ -51,7 +53,7 @@ rtems_task Init(
   rtems_task_priority old_priority;
   rtems_mode          old_mode;
 
-  puts( "\n\n*** TEST CAPTURE ENGINE ***" );
+  rtems_test_begin();
 
   status = rtems_shell_wait_for_input(
     STDIN_FILENO,
@@ -78,7 +80,7 @@ rtems_task Init(
 
     rtems_task_delete (RTEMS_SELF);
   } else {
-    puts( "*** END OF TEST CAPTURE ENGINE ***" );
+    rtems_test_end();
 
     exit( 0 );
   }

@@ -37,7 +37,7 @@ rtems_task Test_task(
   for ( ; ; ) {
     status = rtems_clock_get_tod( &time );
     if ( time.second >= 35 ) {
-      puts( "*** END OF CLOCK TICK TEST ***" );
+      TEST_END();
       rtems_test_exit( 0 );
     }
     put_name( Task_name[ task_index ], FALSE );

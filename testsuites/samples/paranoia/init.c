@@ -18,6 +18,8 @@
 
 extern int paranoia(int, char **);
 
+const char rtems_test_name[] = "PARANOIA";
+
 char *args[2] = { "paranoia", 0 };
 
 rtems_task Init(
@@ -37,9 +39,9 @@ rtems_task Init(
   M68KFPSPInstallExceptionHandlers ();
 #endif
 
-  printf( "\n\n*** PARANOIA TEST ***\n" );
+  rtems_test_begin();
   paranoia(1, args);
-  printf( "*** END OF PARANOIA TEST ***\n" );
+  rtems_test_end();
 #endif /* BSP_SMALL_MEMORY */
   exit( 0 );
 }

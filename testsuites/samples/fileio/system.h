@@ -12,6 +12,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/test.h>
 #include "tmacros.h"
 
 /* functions */
@@ -72,6 +73,9 @@ rtems_task Init(
 #define CONFIGURE_MALLOC_STATISTICS
 
 #define CONFIGURE_UNIFIED_WORK_AREAS
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #include <rtems/confdefs.h>
 
 /* end of include file */

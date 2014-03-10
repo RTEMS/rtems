@@ -12,6 +12,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/test.h>
 
 /* configuration information */
 
@@ -32,6 +33,8 @@
 
 /* Only remove when this macro is removed from confdefs.h. It tests it. */
 #define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #include <rtems/confdefs.h>
 

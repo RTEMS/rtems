@@ -34,6 +34,8 @@
 #include "tmacros.h"
 #include "pritime.h"
 
+const char rtems_test_name[] = "NANOSECOND CLOCK";
+
 static char *my_ctime( time_t t )
 {
   static char b[32];
@@ -62,7 +64,7 @@ rtems_task Init(
   rtems_time_of_day time;
   int index;
 
-  puts( "\n\n*** NANOSECOND CLOCK TEST ***" );
+  TEST_BEGIN();
 
   time.year   = 2007;
   time.month  = 03;
@@ -137,7 +139,7 @@ rtems_task Init(
 
   sleep(1);
 
-  puts( "*** END OF NANOSECOND CLOCK TEST ***" );
+  TEST_END();
   exit(0);
 }
 

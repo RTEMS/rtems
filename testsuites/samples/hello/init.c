@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#include <rtems/test.h>
+
 #include <bsp.h> /* for device driver prototypes */
 
 #include <stdio.h>
@@ -19,13 +21,15 @@
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
+const char rtems_test_name[] = "HELLO WORLD";
+
 rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  printf( "\n\n*** HELLO WORLD TEST ***\n" );
+  rtems_test_begin();
   printf( "Hello World\n" );
-  printf( "*** END OF HELLO WORLD TEST ***\n" );
+  rtems_test_end();
   exit( 0 );
 }
 
@@ -38,6 +42,8 @@ rtems_task Init(
 #define CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
