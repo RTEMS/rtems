@@ -31,7 +31,7 @@
 #include <rtems/bspIo.h>
 
 static void printNum(
-  long num,
+  long long num,
   unsigned base,
   bool sign,
   unsigned maxwidth,
@@ -53,41 +53,57 @@ void vprintk(
   for (; *fmt != '\0'; fmt++) {
     unsigned base = 0;
     unsigned width = 0;
-    bool lflag = false;
+    enum {
+      LFLAG_INT,
+      LFLAG_LONG,
+      LFLAG_LONG_LONG
+    } lflag = LFLAG_INT;
     bool minus = false;
     bool sign = false;
     char lead = ' ';
-    char c;
+    char c = *fmt;
+    long long num;
 
-    if (*fmt != '%') {
-      rtems_putc(*fmt);
+    if (c != '%') {
+      rtems_putc(c);
       continue;
     }
-    fmt++;
-    if (*fmt == '0' ) {
+
+    ++fmt; c = *fmt;
+
+    if (c == '0') {
       lead = '0';
-      fmt++;
-    }
-    if (*fmt == '-' ) {
-      minus = true;
-      fmt++;
-    }
-    while (*fmt >= '0' && *fmt <= '9' ) {
-      width *= 10;
-      width += ((unsigned) *fmt - '0');
-      fmt++;
+      ++fmt; c = *fmt;
     }
 
-    if ((c = *fmt) == 'l') {
-      lflag = true;
-      c = *++fmt;
+    if (c == '-') {
+      minus = true;
+      ++fmt; c = *fmt;
     }
+
+    while (c >= '0' && c <= '9' ) {
+      width *= 10;
+      width += ((unsigned) c - '0');
+      ++fmt; c = *fmt;
+    }
+
+    if (c == 'l') {
+      lflag = LFLAG_LONG;
+      ++fmt; c = *fmt;
+
+      if (c == 'l') {
+        lflag = LFLAG_LONG_LONG;
+        ++fmt; c = *fmt;
+      }
+    }
+
     if ( c == 'c' ) {
       /* need a cast here since va_arg() only takes fully promoted types */
       char chr = (char) va_arg(ap, int);
       rtems_putc(chr);
       continue;
     }
+
     if ( c == 's' ) {
       unsigned i, len;
       char *s, *str;
@@ -135,19 +151,27 @@ void vprintk(
     } else if ( c == 'x' || c == 'X' ) {
       base = 16; sign = false;
     } else if ( c == 'p' ) {
-      base = 16; sign = false; lflag = true;
+      base = 16; sign = false; lflag = LFLAG_LONG;
     } else {
       rtems_putc(c);
       continue;
     }
 
-    printNum(
-      lflag ? va_arg(ap, long) : (long) va_arg(ap, int),
-      base,
-      sign,
-      width,
-      lead
-    );
+    switch (lflag) {
+      case LFLAG_INT:
+        num = sign ? (long long) va_arg(ap, int)
+          : (long long) va_arg(ap, unsigned int);
+        break;
+      case LFLAG_LONG:
+        num = sign ? (long long) va_arg(ap, long)
+          : (long long) va_arg(ap, unsigned long);
+        break;
+      case LFLAG_LONG_LONG:
+        num = va_arg(ap, long long);
+        break;
+    }
+
+    printNum(num, base, sign, width, lead);
   }
 }
 
@@ -157,24 +181,25 @@ void vprintk(
  *  @param[in] base is the base used to print the number
  */
 static void printNum(
-  long num,
+  long long num,
   unsigned base,
   bool sign,
   unsigned maxwidth,
   char lead
 )
 {
-  unsigned long unsigned_num;
-  unsigned long n;
+  unsigned long long unsigned_num;
+  unsigned long long n;
   unsigned count;
-  char toPrint[20];
+  #define UINT64_MAX_IN_OCTAL_FORMAT "1777777777777777777777"
+  char toPrint[sizeof(UINT64_MAX_IN_OCTAL_FORMAT)];
 
   if ( sign && (num <  0) ) {
     rtems_putc('-');
-    unsigned_num = (unsigned long) -num;
+    unsigned_num = (unsigned long long) -num;
     if (maxwidth) maxwidth--;
   } else {
-    unsigned_num = (unsigned long) num;
+    unsigned_num = (unsigned long long) num;
   }
 
   count = 0;

@@ -56,6 +56,11 @@ void do_putk(void)
 
 void do_printk(void)
 {
+  long lm = 2147483647L;
+  unsigned long ulm = 4294967295UL;
+  long long llm = 9223372036854775807LL;
+  long long ullm = 18446744073709551615ULL;
+
   printk( "bad format -- %%q in parentheses (%q)\n" );
 
   printk( "bad format -- %%lq in parentheses (%lq)\n", 0x1234 );
@@ -72,6 +77,30 @@ void do_printk(void)
   printk( "%%X of 16 -- %X\n", 16 );
   printk( "%%x of 16 -- %x\n", 16 );
   printk( "%%p of 0x1234 -- %p\n", (void *)0x1234 );
+
+  /* long */
+  printk( "%%lo of 2147483647 -- %lo\n", lm );
+  printk( "%%li of 2147483647 -- %li\n", lm );
+  printk( "%%lu of 2147483647 -- %lu\n", lm );
+  printk( "%%lx of 2147483647 -- %lx\n", lm );
+  printk( "%%lo of -2147483648 -- %lo\n", -lm - 1L );
+  printk( "%%li of -2147483648 -- %li\n", -lm - 1L );
+  printk( "%%lx of -2147483648 -- %lx\n", -lm - 1L );
+  printk( "%%lo of 4294967295 -- %lo\n", ulm );
+  printk( "%%lu of 4294967295 -- %lu\n", ulm );
+  printk( "%%lx of 4294967295 -- %lx\n", ulm );
+
+  /* long long */
+  printk( "%%llo of 9223372036854775807 -- %llo\n", llm );
+  printk( "%%lli of 9223372036854775807 -- %lli\n", llm );
+  printk( "%%llu of 9223372036854775807 -- %llu\n", llm );
+  printk( "%%llx of 9223372036854775807 -- %llx\n", llm );
+  printk( "%%llo of -9223372036854775808 -- %llo\n", -llm - 1LL );
+  printk( "%%lli of -9223372036854775808 -- %lli\n", -llm - 1LL );
+  printk( "%%llx of -9223372036854775808 -- %llx\n", -llm - 1LL );
+  printk( "%%llo of 18446744073709551615 -- %llo\n", ullm );
+  printk( "%%llu of 18446744073709551615 -- %llu\n", ullm );
+  printk( "%%llx of 18446744073709551615 -- %llx\n", ullm );
 
   /* negative numbers */
   printk( "%%d of -16 -- %d\n", -16 );
