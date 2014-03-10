@@ -139,7 +139,7 @@ int pthread_create(
 
 #if defined(RTEMS_SMP)
 #if __RTEMS_HAVE_SYS_CPUSET_H__
-  rc = _CPU_set_Is_valid( attr->affinityset, attr->affinitysetsize );
+  rc = _CPU_set_Is_valid( the_attr->affinityset, the_attr->affinitysetsize );
   if ( rc != 0 )
     return EINVAL;
 #endif
