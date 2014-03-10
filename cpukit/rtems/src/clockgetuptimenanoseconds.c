@@ -24,12 +24,12 @@ uint64_t rtems_clock_get_uptime_nanoseconds( void )
 {
   Timestamp_Control  snapshot_as_timestamp;
   uint32_t           nanoseconds;
-  ISR_Level          level;
+  ISR_lock_Context   lock_context;
 
-  _TOD_Acquire( &_TOD, level );
+  _TOD_Acquire( &_TOD, &lock_context );
     snapshot_as_timestamp = _TOD.uptime;
     nanoseconds = ( *_TOD.nanoseconds_since_last_tick )();
-  _TOD_Release( &_TOD, level );
+  _TOD_Release( &_TOD, &lock_context );
 
   return _Timestamp_Get_As_nanoseconds( &snapshot_as_timestamp, nanoseconds );
 }

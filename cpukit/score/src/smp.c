@@ -32,7 +32,7 @@ void _SMP_Handler_initialize( void )
   for ( cpu = 0 ; cpu < max_cpus; ++cpu ) {
     Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
 
-    _ISR_lock_Initialize( &per_cpu->lock );
+    _SMP_ticket_lock_Initialize( &per_cpu->Lock );
   }
 
   /*
@@ -69,8 +69,7 @@ void _SMP_Start_multitasking_on_secondary_processor( void )
 
 void _SMP_Request_shutdown( void )
 {
-  uint32_t self = _SMP_Get_current_processor();
-  Per_CPU_Control *self_cpu = _Per_CPU_Get_by_index( self );
+  Per_CPU_Control *self_cpu = _Per_CPU_Get();
 
   _Per_CPU_State_change( self_cpu, PER_CPU_STATE_SHUTDOWN );
 
@@ -80,7 +79,7 @@ void _SMP_Request_shutdown( void )
    * In case the executing thread still holds SMP locks, then other processors
    * already waiting for this SMP lock will spin forever.
    */
-  _Giant_Drop( self );
+  _Giant_Drop( self_cpu );
 }
 
 void _SMP_Send_message( uint32_t cpu, uint32_t message )

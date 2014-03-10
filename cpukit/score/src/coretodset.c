@@ -30,7 +30,7 @@ void _TOD_Set_with_timestamp(
   uint32_t nanoseconds = _Timestamp_Get_nanoseconds( tod_as_timestamp );
   Watchdog_Interval seconds_next = _Timestamp_Get_seconds( tod_as_timestamp );
   Watchdog_Interval seconds_now;
-  ISR_Level level;
+  ISR_lock_Context lock_context;
 
   _Thread_Disable_dispatch();
 
@@ -41,9 +41,9 @@ void _TOD_Set_with_timestamp(
   else
     _Watchdog_Adjust_seconds( WATCHDOG_FORWARD, seconds_next - seconds_now );
 
-  _TOD_Acquire( tod, level );
+  _TOD_Acquire( tod, &lock_context );
   tod->now = *tod_as_timestamp;
-  _TOD_Release( tod, level );
+  _TOD_Release( tod, &lock_context );
 
   tod->seconds_trigger = nanoseconds;
   tod->is_set = true;

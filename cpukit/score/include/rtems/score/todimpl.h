@@ -176,11 +176,11 @@ typedef struct {
 
 SCORE_EXTERN TOD_Control _TOD;
 
-#define _TOD_Acquire( _tod, _isr_cookie ) \
-  _ISR_lock_ISR_disable_and_acquire( &( _tod )->lock, _isr_cookie )
+#define _TOD_Acquire( _tod, lock_context ) \
+  _ISR_lock_ISR_disable_and_acquire( &( _tod )->lock, lock_context )
 
-#define _TOD_Release( _tod, _isr_cookie ) \
-  _ISR_lock_Release_and_ISR_enable( &( _tod )->lock, _isr_cookie )
+#define _TOD_Release( _tod, lock_context ) \
+  _ISR_lock_Release_and_ISR_enable( &( _tod )->lock, lock_context )
 
 /**
  *  @brief Initializes the time of day handler.

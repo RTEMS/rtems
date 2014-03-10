@@ -38,8 +38,8 @@ CPU_STRUCTURE_ALIGNMENT static int data[1024];
 static void test_data_flush_and_invalidate(void)
 {
   if (rtems_cache_get_data_line_size() > 0) {
-    rtems_interrupt_level level;
-    rtems_interrupt_lock lock = RTEMS_INTERRUPT_LOCK_INITIALIZER;
+    rtems_interrupt_lock lock;
+    rtems_interrupt_lock_context lock_context;
     volatile int *vdata = &data[0];
     int n = 32;
     int i;
@@ -48,7 +48,8 @@ static void test_data_flush_and_invalidate(void)
 
     printf("data cache flush and invalidate test\n");
 
-    rtems_interrupt_lock_acquire(&lock, level);
+    rtems_interrupt_lock_initialize(&lock);
+    rtems_interrupt_lock_acquire(&lock, &lock_context);
 
     for (i = 0; i < n; ++i) {
       vdata[i] = i;
@@ -88,7 +89,7 @@ static void test_data_flush_and_invalidate(void)
       rtems_test_assert(vdata[i] == ~i);
     }
 
-    rtems_interrupt_lock_release(&lock, level);
+    rtems_interrupt_lock_release(&lock, &lock_context);
 
     printf(
       "data cache operations by line passed the test (%s cache detected)\n",
@@ -159,12 +160,14 @@ static uint64_t store(void)
 
 static void test_timing(void)
 {
-  rtems_interrupt_level level;
-  rtems_interrupt_lock lock = RTEMS_INTERRUPT_LOCK_INITIALIZER;
+  rtems_interrupt_lock lock;
+  rtems_interrupt_lock_context lock_context;
   size_t data_size = sizeof(data);
   uint64_t d[3];
   uint32_t cache_level;
   size_t cache_size;
+
+  rtems_interrupt_lock_initialize(&lock);
 
   printf(
     "data cache line size %zi bytes\n"
@@ -185,14 +188,14 @@ static void test_timing(void)
     cache_size = rtems_cache_get_data_cache_size(cache_level);
   }
 
-  rtems_interrupt_lock_acquire(&lock, level);
+  rtems_interrupt_lock_acquire(&lock, &lock_context);
 
   d[0] = load();
   d[1] = load();
   rtems_cache_flush_entire_data();
   d[2] = load();
 
-  rtems_interrupt_lock_release(&lock, level);
+  rtems_interrupt_lock_release(&lock, &lock_context);
 
   printf(
     "load %zi bytes with flush entire data\n"
@@ -205,14 +208,14 @@ static void test_timing(void)
     d[2]
   );
 
-  rtems_interrupt_lock_acquire(&lock, level);
+  rtems_interrupt_lock_acquire(&lock, &lock_context);
 
   d[0] = load();
   d[1] = load();
   rtems_cache_flush_multiple_data_lines(&data[0], sizeof(data));
   d[2] = load();
 
-  rtems_interrupt_lock_release(&lock, level);
+  rtems_interrupt_lock_release(&lock, &lock_context);
 
   printf(
     "load %zi bytes with flush multiple data\n"
@@ -225,14 +228,14 @@ static void test_timing(void)
     d[2]
   );
 
-  rtems_interrupt_lock_acquire(&lock, level);
+  rtems_interrupt_lock_acquire(&lock, &lock_context);
 
   d[0] = load();
   d[1] = load();
   rtems_cache_invalidate_multiple_data_lines(&data[0], sizeof(data));
   d[2] = load();
 
-  rtems_interrupt_lock_release(&lock, level);
+  rtems_interrupt_lock_release(&lock, &lock_context);
 
   printf(
     "load %zi bytes with invalidate multiple data\n"
@@ -245,14 +248,14 @@ static void test_timing(void)
     d[2]
   );
 
-  rtems_interrupt_lock_acquire(&lock, level);
+  rtems_interrupt_lock_acquire(&lock, &lock_context);
 
   d[0] = store();
   d[1] = store();
   rtems_cache_flush_entire_data();
   d[2] = store();
 
-  rtems_interrupt_lock_release(&lock, level);
+  rtems_interrupt_lock_release(&lock, &lock_context);
 
   printf(
     "store %zi bytes with flush entire data\n"
@@ -265,14 +268,14 @@ static void test_timing(void)
     d[2]
   );
 
-  rtems_interrupt_lock_acquire(&lock, level);
+  rtems_interrupt_lock_acquire(&lock, &lock_context);
 
   d[0] = store();
   d[1] = store();
   rtems_cache_flush_multiple_data_lines(&data[0], sizeof(data));
   d[2] = store();
 
-  rtems_interrupt_lock_release(&lock, level);
+  rtems_interrupt_lock_release(&lock, &lock_context);
 
   printf(
     "store %zi bytes with flush multiple data\n"
@@ -285,14 +288,14 @@ static void test_timing(void)
     d[2]
   );
 
-  rtems_interrupt_lock_acquire(&lock, level);
+  rtems_interrupt_lock_acquire(&lock, &lock_context);
 
   d[0] = store();
   d[1] = store();
   rtems_cache_invalidate_multiple_data_lines(&data[0], sizeof(data));
   d[2] = store();
 
-  rtems_interrupt_lock_release(&lock, level);
+  rtems_interrupt_lock_release(&lock, &lock_context);
 
   printf(
     "store %zi bytes with invalidate multiple data\n"
@@ -324,14 +327,14 @@ static void test_timing(void)
     cache_size = rtems_cache_get_instruction_cache_size(cache_level);
   }
 
-  rtems_interrupt_lock_acquire(&lock, level);
+  rtems_interrupt_lock_acquire(&lock, &lock_context);
 
   d[0] = do_some_work();
   d[1] = do_some_work();
   rtems_cache_invalidate_entire_instruction();
   d[2] = do_some_work();
 
-  rtems_interrupt_lock_release(&lock, level);
+  rtems_interrupt_lock_release(&lock, &lock_context);
 
   printf(
     "invalidate entire instruction\n"
@@ -343,14 +346,14 @@ static void test_timing(void)
     d[2]
   );
 
-  rtems_interrupt_lock_acquire(&lock, level);
+  rtems_interrupt_lock_acquire(&lock, &lock_context);
 
   d[0] = do_some_work();
   d[1] = do_some_work();
   rtems_cache_invalidate_multiple_instruction_lines(do_some_work, 4096);
   d[2] = do_some_work();
 
-  rtems_interrupt_lock_release(&lock, level);
+  rtems_interrupt_lock_release(&lock, &lock_context);
 
   printf(
     "invalidate multiple instruction\n"

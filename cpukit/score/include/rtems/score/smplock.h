@@ -42,54 +42,50 @@ extern "C" {
  * The SMP lock is implemented as a ticket lock.  This provides fairness in
  * case of concurrent lock attempts.
  *
- * This SMP lock API has a flaw.  It does not provide the ability to use a
- * local context for acquire and release pairs.  Such a context is necessary to
- * implement for example the Mellor-Crummey and Scott (MCS) locks.  The SMP
- * lock is currently used in _Thread_Disable_dispatch() and
- * _Thread_Enable_dispatch() and makes them to a giant lock acquire and
- * release.  Since these functions do not pass state information via a local
- * context there is currently no use case for such a feature.
+ * This SMP lock API uses a local context for acquire and release pairs.  Such
+ * a context may be used to implement for example the Mellor-Crummey and Scott
+ * (MCS) locks in the future.
  *
  * @{
  */
 
 /**
- * @brief SMP lock control.
+ * @brief SMP ticket lock control.
  */
 typedef struct {
   Atomic_Uint next_ticket;
   Atomic_Uint now_serving;
-} SMP_lock_Control;
+} SMP_ticket_lock_Control;
 
 /**
- * @brief SMP lock control initializer for static initialization.
+ * @brief SMP ticket lock control initializer for static initialization.
  */
-#define SMP_LOCK_INITIALIZER \
+#define SMP_TICKET_LOCK_INITIALIZER \
   { ATOMIC_INITIALIZER_UINT( 0U ), ATOMIC_INITIALIZER_UINT( 0U ) }
 
 /**
- * @brief Initializes a SMP lock control.
+ * @brief Initializes an SMP ticket lock control.
  *
  * Concurrent initialization leads to unpredictable results.
  *
- * @param[out] lock The SMP lock control.
+ * @param[out] lock The SMP ticket lock control.
  */
-static inline void _SMP_lock_Initialize( SMP_lock_Control *lock )
+static inline void _SMP_ticket_lock_Initialize( SMP_ticket_lock_Control *lock )
 {
   _Atomic_Init_uint( &lock->next_ticket, 0U );
   _Atomic_Init_uint( &lock->now_serving, 0U );
 }
 
 /**
- * @brief Acquires a SMP lock.
+ * @brief Acquires an SMP ticket lock.
  *
  * This function will not disable interrupts.  The caller must ensure that the
  * current thread of execution is not interrupted indefinite once it obtained
- * the SMP lock.
+ * the SMP ticket lock.
  *
- * @param[in,out] lock The SMP lock control.
+ * @param[in,out] lock The SMP ticket lock control.
  */
-static inline void _SMP_lock_Acquire( SMP_lock_Control *lock )
+static inline void _SMP_ticket_lock_Acquire( SMP_ticket_lock_Control *lock )
 {
   unsigned int my_ticket =
     _Atomic_Fetch_add_uint( &lock->next_ticket, 1U, ATOMIC_ORDER_RELAXED );
@@ -102,11 +98,11 @@ static inline void _SMP_lock_Acquire( SMP_lock_Control *lock )
 }
 
 /**
- * @brief Releases a SMP lock.
+ * @brief Releases an SMP ticket lock.
  *
- * @param[in,out] lock The SMP lock control.
+ * @param[in,out] lock The SMP ticket lock control.
  */
-static inline void _SMP_lock_Release( SMP_lock_Control *lock )
+static inline void _SMP_ticket_lock_Release( SMP_ticket_lock_Control *lock )
 {
   unsigned int current_ticket =
     _Atomic_Load_uint( &lock->now_serving, ATOMIC_ORDER_RELAXED );
@@ -116,28 +112,103 @@ static inline void _SMP_lock_Release( SMP_lock_Control *lock )
 }
 
 /**
+ * @brief SMP lock control.
+ */
+typedef struct {
+  SMP_ticket_lock_Control ticket_lock;
+} SMP_lock_Control;
+
+/**
+ * @brief Local SMP lock context for acquire and release pairs.
+ */
+typedef struct {
+  ISR_Level isr_level;
+} SMP_lock_Context;
+
+/**
+ * @brief SMP lock control initializer for static initialization.
+ */
+#define SMP_LOCK_INITIALIZER { SMP_TICKET_LOCK_INITIALIZER }
+
+/**
+ * @brief Initializes an SMP lock control.
+ *
+ * Concurrent initialization leads to unpredictable results.
+ *
+ * @param[out] lock The SMP lock control.
+ */
+static inline void _SMP_lock_Initialize( SMP_lock_Control *lock )
+{
+  _SMP_ticket_lock_Initialize( &lock->ticket_lock );
+}
+
+/**
+ * @brief Acquires an SMP lock.
+ *
+ * This function will not disable interrupts.  The caller must ensure that the
+ * current thread of execution is not interrupted indefinite once it obtained
+ * the SMP lock.
+ *
+ * @param[in,out] lock The SMP lock control.
+ * @param[in,out] context The local SMP lock context for an acquire and release
+ * pair.
+ */
+static inline void _SMP_lock_Acquire(
+  SMP_lock_Control *lock,
+  SMP_lock_Context *context
+)
+{
+  (void) context;
+  _SMP_ticket_lock_Acquire( &lock->ticket_lock );
+}
+
+/**
+ * @brief Releases an SMP lock.
+ *
+ * @param[in,out] lock The SMP lock control.
+ * @param[in,out] context The local SMP lock context for an acquire and release
+ * pair.
+ */
+static inline void _SMP_lock_Release(
+  SMP_lock_Control *lock,
+  SMP_lock_Context *context
+)
+{
+  (void) context;
+  _SMP_ticket_lock_Release( &lock->ticket_lock );
+}
+
+/**
  * @brief Disables interrupts and acquires the SMP lock.
  *
  * @param[in,out] lock The SMP lock control.
- * @param[out] isr_cookie The ISR cookie.
+ * @param[in,out] context The local SMP lock context for an acquire and release
+ * pair.
  */
-#define _SMP_lock_ISR_disable_and_acquire( lock, isr_cookie ) \
-  do { \
-    _ISR_Disable_without_giant( isr_cookie ); \
-    _SMP_lock_Acquire( lock ); \
-  } while (0)
+static inline void _SMP_lock_ISR_disable_and_acquire(
+  SMP_lock_Control *lock,
+  SMP_lock_Context *context
+)
+{
+  _ISR_Disable_without_giant( context->isr_level );
+  _SMP_lock_Acquire( lock, context );
+}
 
 /**
  * @brief Releases the SMP lock and enables interrupts.
  *
  * @param[in,out] lock The SMP lock control.
- * @param[in] isr_cookie The ISR cookie.
+ * @param[in,out] context The local SMP lock context for an acquire and release
+ * pair.
  */
-#define _SMP_lock_Release_and_ISR_enable( lock, isr_cookie ) \
-  do { \
-    _SMP_lock_Release( lock ); \
-    _ISR_Enable_without_giant( isr_cookie ); \
-  } while (0)
+static inline void _SMP_lock_Release_and_ISR_enable(
+  SMP_lock_Control *lock,
+  SMP_lock_Context *context
+)
+{
+  _SMP_lock_Release( lock, context );
+  _ISR_Enable_without_giant( context->isr_level );
+}
 
 /**@}*/
 

@@ -129,8 +129,8 @@ static void sort_t(void)
 
 static void test_by_function_level(int fl, bool dirty)
 {
-  rtems_interrupt_level level;
   rtems_interrupt_lock lock = RTEMS_INTERRUPT_LOCK_INITIALIZER;
+  rtems_interrupt_lock_context lock_context;
   int s;
   uint64_t min;
   uint64_t q1;
@@ -138,13 +138,13 @@ static void test_by_function_level(int fl, bool dirty)
   uint64_t q3;
   uint64_t max;
 
-  rtems_interrupt_lock_acquire(&lock, level);
+  rtems_interrupt_lock_acquire(&lock, &lock_context);
 
   for (s = 0; s < SAMPLES; ++s) {
     call_at_level(fl, fl, s, dirty);
   }
 
-  rtems_interrupt_lock_release(&lock, level);
+  rtems_interrupt_lock_release(&lock, &lock_context);
 
   sort_t();
 

@@ -48,7 +48,7 @@ bool _POSIX_signals_Clear_signals(
 {
   sigset_t                    mask;
   sigset_t                    signals_blocked;
-  ISR_Level                   level;
+  ISR_lock_Context            lock_context;
   bool                        do_callout;
   POSIX_signals_Siginfo_node *psiginfo;
 
@@ -69,7 +69,7 @@ bool _POSIX_signals_Clear_signals(
   /* XXX are we sure they can be cleared the same way? */
 
   if ( do_signals_acquire_release ) {
-    _POSIX_signals_Acquire( level );
+    _POSIX_signals_Acquire( &lock_context );
   }
 
     if ( is_global ) {
@@ -103,7 +103,7 @@ bool _POSIX_signals_Clear_signals(
     }
 
   if ( do_signals_acquire_release ) {
-    _POSIX_signals_Release( level );
+    _POSIX_signals_Release( &lock_context );
   }
 
   return do_callout;

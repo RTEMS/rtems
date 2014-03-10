@@ -435,15 +435,15 @@ rtems_disk_obtain(dev_t dev)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_disk_device *dd = NULL;
-  rtems_interrupt_level level;
+  rtems_interrupt_lock_context lock_context;
 
-  rtems_interrupt_lock_acquire(&diskdevs_lock, level);
+  rtems_interrupt_lock_acquire(&diskdevs_lock, &lock_context);
   if (!diskdevs_protected) {
     /* Frequent and quickest case */
     dd = get_disk_entry(dev, false);
-    rtems_interrupt_lock_release(&diskdevs_lock, level);
+    rtems_interrupt_lock_release(&diskdevs_lock, &lock_context);
   } else {
-    rtems_interrupt_lock_release(&diskdevs_lock, level);
+    rtems_interrupt_lock_release(&diskdevs_lock, &lock_context);
 
     sc = disk_lock();
     if (sc == RTEMS_SUCCESSFUL) {
@@ -458,15 +458,15 @@ rtems_disk_obtain(dev_t dev)
 rtems_status_code
 rtems_disk_release(rtems_disk_device *dd)
 {
-  rtems_interrupt_level level;
+  rtems_interrupt_lock_context lock_context;
   dev_t dev = dd->dev;
   unsigned uses = 0;
   bool deleted = false;
 
-  rtems_interrupt_lock_acquire(&diskdevs_lock, level);
+  rtems_interrupt_lock_acquire(&diskdevs_lock, &lock_context);
   uses = --dd->uses;
   deleted = dd->deleted;
-  rtems_interrupt_lock_release(&diskdevs_lock, level);
+  rtems_interrupt_lock_release(&diskdevs_lock, &lock_context);
 
   if (uses == 0 && deleted) {
     rtems_disk_delete(dev);

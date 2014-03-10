@@ -160,6 +160,11 @@ rtems_status_code rtems_interrupt_catch(
 typedef ISR_lock_Control rtems_interrupt_lock;
 
 /**
+ * @brief Local interrupt lock context for acquire and release pairs.
+ */
+typedef ISR_lock_Context rtems_interrupt_lock_context;
+
+/**
  * @brief Initializer for static initialization of interrupt locks.
  */
 #define RTEMS_INTERRUPT_LOCK_INITIALIZER ISR_LOCK_INITIALIZER
@@ -183,12 +188,13 @@ typedef ISR_lock_Control rtems_interrupt_lock;
  * This function can be used in thread and interrupt context.
  *
  * @param[in,out] _lock The interrupt lock.
- * @param[out] _isr_cookie The interrupt status to restore will be returned.
+ * @param[in,out] _lock_context The local interrupt lock context for an acquire
+ * and release pair.
  *
  * @see rtems_interrupt_lock_release().
  */
-#define rtems_interrupt_lock_acquire( _lock, _isr_cookie ) \
-  _ISR_lock_ISR_disable_and_acquire( _lock, _isr_cookie )
+#define rtems_interrupt_lock_acquire( _lock, _lock_context ) \
+  _ISR_lock_ISR_disable_and_acquire( _lock, _lock_context )
 
 /**
  * @brief Releases an interrupt lock.
@@ -199,12 +205,13 @@ typedef ISR_lock_Control rtems_interrupt_lock;
  * This function can be used in thread and interrupt context.
  *
  * @param[in,out] _lock The interrupt lock.
- * @param[in] _isr_cookie The interrupt status to restore.
+ * @param[in,out] _lock_context The local interrupt lock context for an acquire
+ * and release pair.
  *
  * @see rtems_interrupt_lock_acquire().
  */
-#define rtems_interrupt_lock_release( _lock, _isr_cookie ) \
-  _ISR_lock_Release_and_ISR_enable( _lock, _isr_cookie )
+#define rtems_interrupt_lock_release( _lock, _lock_context ) \
+  _ISR_lock_Release_and_ISR_enable( _lock, _lock_context )
 
 /**
  * @brief Acquires an interrupt lock in the corresponding interrupt service
@@ -218,11 +225,13 @@ typedef ISR_lock_Control rtems_interrupt_lock;
  * protected by this lock, then the result is unpredictable.
  *
  * @param[in,out] _lock The interrupt lock.
+ * @param[in,out] _lock_context The local interrupt lock context for an acquire
+ * and release pair.
  *
  * @see rtems_interrupt_lock_release_isr().
  */
-#define rtems_interrupt_lock_acquire_isr( _lock ) \
-  _ISR_lock_Acquire( _lock )
+#define rtems_interrupt_lock_acquire_isr( _lock, _lock_context ) \
+  _ISR_lock_Acquire( _lock, _lock_context )
 
 /**
  * @brief Releases an interrupt lock in the corresponding interrupt service
@@ -232,11 +241,13 @@ typedef ISR_lock_Control rtems_interrupt_lock;
  * function releases an SMP lock.
  *
  * @param[in,out] _lock The interrupt lock.
+ * @param[in,out] _lock_context The local interrupt lock context for an acquire
+ * and release pair.
  *
  * @see rtems_interrupt_lock_acquire_isr().
  */
-#define rtems_interrupt_lock_release_isr( _lock ) \
-  _ISR_lock_Release( _lock )
+#define rtems_interrupt_lock_release_isr( _lock, _lock_context ) \
+  _ISR_lock_Release( _lock, _lock_context )
 
 /** @} */
 

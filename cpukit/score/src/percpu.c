@@ -28,20 +28,6 @@
 
 static SMP_lock_Control _Per_CPU_State_lock = SMP_LOCK_INITIALIZER;
 
-static ISR_Level _Per_CPU_State_acquire( void )
-{
-  ISR_Level level;
-
-  _SMP_lock_ISR_disable_and_acquire( &_Per_CPU_State_lock, level );
-
-  return level;
-}
-
-static void _Per_CPU_State_release( ISR_Level level )
-{
-  _SMP_lock_Release_and_ISR_enable( &_Per_CPU_State_lock, level );
-}
-
 static void _Per_CPU_State_busy_wait(
   const Per_CPU_Control *per_cpu,
   Per_CPU_State new_state
@@ -126,12 +112,14 @@ void _Per_CPU_State_change(
   Per_CPU_State new_state
 )
 {
-  ISR_Level level;
+  SMP_lock_Control *lock = &_Per_CPU_State_lock;
+  SMP_lock_Context lock_context;
   Per_CPU_State next_state;
 
   _Per_CPU_State_busy_wait( per_cpu, new_state );
 
-  level = _Per_CPU_State_acquire();
+  _SMP_lock_ISR_disable_and_acquire( lock, &lock_context );
+
   next_state = _Per_CPU_State_get_next( per_cpu->state, new_state );
   per_cpu->state = next_state;
 
@@ -159,7 +147,7 @@ void _Per_CPU_State_change(
 
   _CPU_SMP_Processor_event_broadcast();
 
-  _Per_CPU_State_release( level );
+  _SMP_lock_Release_and_ISR_enable( lock, &lock_context );
 
   if (
     next_state == PER_CPU_STATE_SHUTDOWN

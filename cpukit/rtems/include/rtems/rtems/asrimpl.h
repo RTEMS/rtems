@@ -61,13 +61,13 @@ RTEMS_INLINE_ROUTINE void _ASR_Swap_signals (
 )
 {
   rtems_signal_set _signals;
-  ISR_Level        _level;
+  ISR_lock_Context lock_context;
 
-  _ISR_lock_ISR_disable_and_acquire( &asr->Lock, _level );
+  _ISR_lock_ISR_disable_and_acquire( &asr->Lock, &lock_context );
     _signals             = asr->signals_pending;
     asr->signals_pending = asr->signals_posted;
     asr->signals_posted  = _signals;
-  _ISR_lock_Release_and_ISR_enable( &asr->Lock, _level );
+  _ISR_lock_Release_and_ISR_enable( &asr->Lock, &lock_context );
 }
 
 /**
@@ -110,11 +110,11 @@ RTEMS_INLINE_ROUTINE void _ASR_Post_signals(
   rtems_signal_set *signal_set
 )
 {
-  ISR_Level              _level;
+  ISR_lock_Context lock_context;
 
-  _ISR_lock_ISR_disable_and_acquire( &asr->Lock, _level );
+  _ISR_lock_ISR_disable_and_acquire( &asr->Lock, &lock_context );
     *signal_set |= signals;
-  _ISR_lock_Release_and_ISR_enable( &asr->Lock, _level );
+  _ISR_lock_Release_and_ISR_enable( &asr->Lock, &lock_context );
 }
 
 RTEMS_INLINE_ROUTINE rtems_signal_set _ASR_Get_posted_signals(
@@ -122,12 +122,12 @@ RTEMS_INLINE_ROUTINE rtems_signal_set _ASR_Get_posted_signals(
 )
 {
   rtems_signal_set signal_set;
-  ISR_Level        _level;
+  ISR_lock_Context lock_context;
 
-  _ISR_lock_ISR_disable_and_acquire( &asr->Lock, _level );
+  _ISR_lock_ISR_disable_and_acquire( &asr->Lock, &lock_context );
     signal_set = asr->signals_posted;
     asr->signals_posted = 0;
-  _ISR_lock_Release_and_ISR_enable( &asr->Lock, _level );
+  _ISR_lock_Release_and_ISR_enable( &asr->Lock, &lock_context );
 
   return signal_set;
 }

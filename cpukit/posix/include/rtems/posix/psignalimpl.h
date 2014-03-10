@@ -80,11 +80,11 @@ extern API_extensions_Post_switch_control _POSIX_signals_Post_switch;
  */
 void _POSIX_signals_Manager_Initialization(void);
 
-#define _POSIX_signals_Acquire( level ) \
-  _ISR_lock_ISR_disable_and_acquire( &_POSIX_signals_Lock, level )
+#define _POSIX_signals_Acquire( lock_context ) \
+  _ISR_lock_ISR_disable_and_acquire( &_POSIX_signals_Lock, lock_context )
 
-#define _POSIX_signals_Release( level ) \
-  _ISR_lock_Release_and_ISR_enable( &_POSIX_signals_Lock, level )
+#define _POSIX_signals_Release( lock_context ) \
+  _ISR_lock_Release_and_ISR_enable( &_POSIX_signals_Lock, lock_context )
 
 static inline void _POSIX_signals_Add_post_switch_extension(void)
 {

@@ -58,8 +58,10 @@
     #if defined(RTEMS_SMP)
       static SMP_lock_Control constructor_lock = SMP_LOCK_INITIALIZER;
 
+      SMP_lock_Context lock_context;
+
       if ( !doneConstructors ) {
-        _SMP_lock_Acquire( &constructor_lock );
+        _SMP_lock_Acquire( &constructor_lock, &lock_context );
     #endif
 
     #if defined(RTEMS_MULTIPROCESSING)
@@ -74,7 +76,7 @@
     #endif
 
     #if defined(RTEMS_SMP)
-        _SMP_lock_Release( &constructor_lock );
+        _SMP_lock_Release( &constructor_lock, &lock_context );
       }
     #endif
 

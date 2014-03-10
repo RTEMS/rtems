@@ -23,9 +23,10 @@
   #include <rtems/asm.h>
 #else
   #include <rtems/score/assert.h>
-  #include <rtems/score/isrlock.h>
-  #include <rtems/score/timestamp.h>
+  #include <rtems/score/isrlevel.h>
   #include <rtems/score/smp.h>
+  #include <rtems/score/smplock.h>
+  #include <rtems/score/timestamp.h>
 #endif
 
 #ifdef __cplusplus
@@ -203,13 +204,22 @@ typedef struct {
   /** This is the time of the last context switch on this CPU. */
   Timestamp_Control time_of_last_context_switch;
 
-  /**
-   * @brief This lock protects the dispatch_necessary, executing, heir and
-   * message fields.
-   */
-  ISR_lock_Control lock;
-
   #if defined( RTEMS_SMP )
+    /**
+     * @brief This lock protects the dispatch_necessary, executing, heir and
+     * message fields.
+     *
+     * We must use a ticket lock here since we cannot transport a local context
+     * through the context switch.
+     */
+    SMP_ticket_lock_Control Lock;
+
+    /**
+     * @brief Context for the Giant lock acquire and release pair of this
+     * processor.
+     */
+    SMP_lock_Context Giant_lock_context;
+
     /**
      *  This is the request for the interrupt.
      *
@@ -247,17 +257,53 @@ typedef struct {
  */
 extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 
-#define _Per_CPU_ISR_disable_and_acquire( per_cpu, isr_cookie ) \
-  _ISR_lock_ISR_disable_and_acquire( &( per_cpu )->lock, isr_cookie )
-
-#define _Per_CPU_Release_and_ISR_enable( per_cpu, isr_cookie ) \
-  _ISR_lock_Release_and_ISR_enable( &( per_cpu )->lock, isr_cookie )
-
+#if defined( RTEMS_SMP )
 #define _Per_CPU_Acquire( per_cpu ) \
-  _ISR_lock_Acquire( &( per_cpu )->lock )
+  _SMP_ticket_lock_Acquire( &( per_cpu )->Lock )
+#else
+#define _Per_CPU_Acquire( per_cpu ) \
+  do { \
+    (void) ( per_cpu ); \
+  } while ( 0 )
+#endif
 
+#if defined( RTEMS_SMP )
 #define _Per_CPU_Release( per_cpu ) \
-  _ISR_lock_Release( &( per_cpu )->lock )
+  _SMP_ticket_lock_Release( &( per_cpu )->Lock )
+#else
+#define _Per_CPU_Release( per_cpu ) \
+  do { \
+    (void) ( per_cpu ); \
+  } while ( 0 )
+#endif
+
+#if defined( RTEMS_SMP )
+#define _Per_CPU_ISR_disable_and_acquire( per_cpu, isr_cookie ) \
+  do { \
+    _ISR_Disable_without_giant( isr_cookie ); \
+    _Per_CPU_Acquire( per_cpu ); \
+  } while ( 0 )
+#else
+#define _Per_CPU_ISR_disable_and_acquire( per_cpu, isr_cookie ) \
+  do { \
+    _ISR_Disable( isr_cookie ); \
+    (void) ( per_cpu ); \
+  } while ( 0 )
+#endif
+
+#if defined( RTEMS_SMP )
+#define _Per_CPU_Release_and_ISR_enable( per_cpu, isr_cookie ) \
+  do { \
+    _Per_CPU_Release( per_cpu ); \
+    _ISR_Enable_without_giant( isr_cookie ); \
+  } while ( 0 )
+#else
+#define _Per_CPU_Release_and_ISR_enable( per_cpu, isr_cookie ) \
+  do { \
+    (void) ( per_cpu ); \
+    _ISR_Enable( isr_cookie ); \
+  } while ( 0 )
+#endif
 
 #if defined( RTEMS_SMP )
 #define _Per_CPU_Acquire_all( isr_cookie ) \

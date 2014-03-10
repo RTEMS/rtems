@@ -113,12 +113,11 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
    *
    * The thread dispatch disable level is not altered by this function.
    *
-   * The only use case for this operation is in
-   * _SMP_Request_shutdown().
+   * The only use case for this operation is in _SMP_Request_shutdown().
    *
-   * @param[in] self_cpu The current processor index.
+   * @param[in] self_cpu The current processor.
    */
-  void _Giant_Drop( uint32_t self_cpu );
+  void _Giant_Drop( Per_CPU_Control *self_cpu );
 
   /**
    *  @brief Increments the thread dispatch level.

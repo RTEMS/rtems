@@ -31,11 +31,11 @@ time_t rtems_clock_get_uptime_seconds( void )
   TOD_Control       *tod = &_TOD;
   Timestamp_Control  snapshot_as_timestamp;
   struct timespec    snapshot_as_timespec;
-  ISR_Level          level;
+  ISR_lock_Context   lock_context;
 
-  _TOD_Acquire( tod, level );
+  _TOD_Acquire( tod, &lock_context );
   snapshot_as_timestamp = tod->uptime;
-  _TOD_Release( tod, level );
+  _TOD_Release( tod, &lock_context );
 
   _Timestamp_To_timespec( &snapshot_as_timestamp, &snapshot_as_timespec );
 

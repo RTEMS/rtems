@@ -162,20 +162,20 @@ static void test_isr_locks( void )
   ISR_Level normal_interrupt_level = _ISR_Get_level();
   ISR_lock_Control initialized = ISR_LOCK_INITIALIZER;
   ISR_lock_Control lock;
-  ISR_Level level;
+  ISR_lock_Context lock_context;
 
   _ISR_lock_Initialize( &lock );
   rtems_test_assert( memcmp( &lock, &initialized, sizeof( lock ) ) == 0 );
 
-  _ISR_lock_ISR_disable_and_acquire( &lock, level );
+  _ISR_lock_ISR_disable_and_acquire( &lock, &lock_context );
   rtems_test_assert( normal_interrupt_level != _ISR_Get_level() );
-  _ISR_lock_Release_and_ISR_enable( &lock, level );
+  _ISR_lock_Release_and_ISR_enable( &lock, &lock_context );
 
   rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
 
-  _ISR_lock_Acquire( &lock );
+  _ISR_lock_Acquire( &lock, &lock_context );
   rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
-  _ISR_lock_Release( &lock );
+  _ISR_lock_Release( &lock, &lock_context );
 
   rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
 }
@@ -196,20 +196,20 @@ static void test_interrupt_locks( void )
   rtems_mode normal_interrupt_level = get_interrupt_level();
   rtems_interrupt_lock initialized = RTEMS_INTERRUPT_LOCK_INITIALIZER;
   rtems_interrupt_lock lock;
-  rtems_interrupt_level level;
+  rtems_interrupt_lock_context lock_context;
 
   rtems_interrupt_lock_initialize( &lock );
   rtems_test_assert( memcmp( &lock, &initialized, sizeof( lock ) ) == 0 );
 
-  rtems_interrupt_lock_acquire( &lock, level );
+  rtems_interrupt_lock_acquire( &lock, &lock_context );
   rtems_test_assert( normal_interrupt_level != get_interrupt_level() );
-  rtems_interrupt_lock_release( &lock, level );
+  rtems_interrupt_lock_release( &lock, &lock_context );
 
   rtems_test_assert( normal_interrupt_level == get_interrupt_level() );
 
-  rtems_interrupt_lock_acquire_isr( &lock );
+  rtems_interrupt_lock_acquire_isr( &lock, &lock_context );
   rtems_test_assert( normal_interrupt_level == get_interrupt_level() );
-  rtems_interrupt_lock_release_isr( &lock );
+  rtems_interrupt_lock_release_isr( &lock, &lock_context );
 
   rtems_test_assert( normal_interrupt_level == get_interrupt_level() );
 }

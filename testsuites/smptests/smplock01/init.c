@@ -97,10 +97,11 @@ static void test_0_body(
 )
 {
   unsigned long counter = 0;
+  SMP_lock_Context lock_context;
 
   while (assert_state(ctx, START_TEST)) {
-    _SMP_lock_Acquire(&ctx->lock);
-    _SMP_lock_Release(&ctx->lock);
+    _SMP_lock_Acquire(&ctx->lock, &lock_context);
+    _SMP_lock_Release(&ctx->lock, &lock_context);
     ++counter;
   }
 
@@ -116,11 +117,12 @@ static void test_1_body(
 )
 {
   unsigned long counter = 0;
+  SMP_lock_Context lock_context;
 
   while (assert_state(ctx, START_TEST)) {
-    _SMP_lock_Acquire(&ctx->lock);
+    _SMP_lock_Acquire(&ctx->lock, &lock_context);
     ++ctx->counter[test];
-    _SMP_lock_Release(&ctx->lock);
+    _SMP_lock_Release(&ctx->lock, &lock_context);
     ++counter;
   }
 
@@ -137,10 +139,11 @@ static void test_2_body(
 {
   unsigned long counter = 0;
   SMP_lock_Control lock = SMP_LOCK_INITIALIZER;
+  SMP_lock_Context lock_context;
 
   while (assert_state(ctx, START_TEST)) {
-    _SMP_lock_Acquire(&lock);
-    _SMP_lock_Release(&lock);
+    _SMP_lock_Acquire(&lock, &lock_context);
+    _SMP_lock_Release(&lock, &lock_context);
     ++counter;
   }
 
@@ -157,14 +160,15 @@ static void test_3_body(
 {
   unsigned long counter = 0;
   SMP_lock_Control lock = SMP_LOCK_INITIALIZER;
+  SMP_lock_Context lock_context;
 
   while (assert_state(ctx, START_TEST)) {
-    _SMP_lock_Acquire(&lock);
+    _SMP_lock_Acquire(&lock, &lock_context);
 
     /* The counter value is not interesting, only the access to it */
     ++ctx->counter[test];
 
-    _SMP_lock_Release(&lock);
+    _SMP_lock_Release(&lock, &lock_context);
     ++counter;
   }
 
@@ -189,11 +193,12 @@ static void test_4_body(
 )
 {
   unsigned long counter = 0;
+  SMP_lock_Context lock_context;
 
   while (assert_state(ctx, START_TEST)) {
-    _SMP_lock_Acquire(&ctx->lock);
+    _SMP_lock_Acquire(&ctx->lock, &lock_context);
     busy_section();
-    _SMP_lock_Release(&ctx->lock);
+    _SMP_lock_Release(&ctx->lock, &lock_context);
     ++counter;
   }
 

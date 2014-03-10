@@ -169,11 +169,11 @@ static __inline__ int bsp_irq_fixup(int irq)
 
 extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 
-#define LEON3_IRQCTRL_ACQUIRE(_level ) \
-  rtems_interrupt_lock_acquire( &LEON3_IrqCtrl_Lock, _level )
+#define LEON3_IRQCTRL_ACQUIRE( _lock_context ) \
+  rtems_interrupt_lock_acquire( &LEON3_IrqCtrl_Lock, _lock_context )
 
-#define LEON3_IRQCTRL_RELEASE(_level ) \
-  rtems_interrupt_lock_release( &LEON3_IrqCtrl_Lock, _level )
+#define LEON3_IRQCTRL_RELEASE( _lock_context ) \
+  rtems_interrupt_lock_release( &LEON3_IrqCtrl_Lock, _lock_context )
 
 #define LEON_Clear_interrupt( _source ) \
   do { \
@@ -195,39 +195,39 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 
 #define LEON_Mask_interrupt( _source ) \
   do { \
-    rtems_interrupt_level _level; \
-    LEON3_IRQCTRL_ACQUIRE( _level ); \
+    rtems_interrupt_lock_context _lock_context; \
+    LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
      LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index]  &= ~(1 << (_source)); \
-    LEON3_IRQCTRL_RELEASE( _level ); \
+    LEON3_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
 #define LEON_Unmask_interrupt( _source ) \
   do { \
-    rtems_interrupt_level _level; \
-    LEON3_IRQCTRL_ACQUIRE( _level ); \
+    rtems_interrupt_lock_context _lock_context; \
+    LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
     LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index]  |= (1 << (_source)); \
-    LEON3_IRQCTRL_RELEASE( _level ); \
+    LEON3_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
 #define LEON_Disable_interrupt( _source, _previous ) \
   do { \
-    rtems_interrupt_level _level; \
+    rtems_interrupt_lock_context _lock_context; \
     uint32_t _mask = 1 << (_source); \
-    LEON3_IRQCTRL_ACQUIRE( _level ); \
+    LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
      (_previous) = LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index]; \
      LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] = _previous & ~_mask; \
-    LEON3_IRQCTRL_RELEASE( _level ); \
+    LEON3_IRQCTRL_RELEASE( &_lock_context ); \
     (_previous) &= _mask; \
   } while (0)
 
 #define LEON_Restore_interrupt( _source, _previous ) \
   do { \
-    rtems_interrupt_level _level; \
+    rtems_interrupt_lock_context _lock_context; \
     uint32_t _mask = 1 << (_source); \
-    LEON3_IRQCTRL_ACQUIRE( _level ); \
+    LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
       LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] = \
         (LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] & ~_mask) | (_previous); \
-    LEON3_IRQCTRL_RELEASE( _level ); \
+    LEON3_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
 /* Make all SPARC BSPs have common macros for interrupt handling */

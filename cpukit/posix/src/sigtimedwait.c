@@ -78,7 +78,7 @@ int sigtimedwait(
   siginfo_t          signal_information;
   siginfo_t         *the_info;
   int                signo;
-  ISR_Level          level;
+  ISR_lock_Context   lock_context;
 
   /*
    *  Error check parameters before disabling interrupts.
@@ -117,7 +117,7 @@ int sigtimedwait(
 
   /* API signals pending? */
 
-  _POSIX_signals_Acquire( level );
+  _POSIX_signals_Acquire( &lock_context );
   if ( *set & api->signals_pending ) {
     /* XXX real info later */
     the_info->si_signo = _POSIX_signals_Get_lowest( api->signals_pending );
@@ -129,7 +129,7 @@ int sigtimedwait(
       false,
       false
     );
-    _POSIX_signals_Release( level );
+    _POSIX_signals_Release( &lock_context );
 
     the_info->si_code = SI_USER;
     the_info->si_value.sival_int = 0;
@@ -141,7 +141,7 @@ int sigtimedwait(
   if ( *set & _POSIX_signals_Pending ) {
     signo = _POSIX_signals_Get_lowest( _POSIX_signals_Pending );
     _POSIX_signals_Clear_signals( api, signo, the_info, true, false, false );
-    _POSIX_signals_Release( level );
+    _POSIX_signals_Release( &lock_context );
 
     the_info->si_signo = signo;
     the_info->si_code = SI_USER;
@@ -157,7 +157,7 @@ int sigtimedwait(
     executing->Wait.option          = *set;
     executing->Wait.return_argument = the_info;
     _Thread_queue_Enter_critical_section( &_POSIX_signals_Wait_queue );
-    _POSIX_signals_Release( level );
+    _POSIX_signals_Release( &lock_context );
     _Thread_queue_Enqueue( &_POSIX_signals_Wait_queue, executing, interval );
   _Thread_Enable_dispatch();
 

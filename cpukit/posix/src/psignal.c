@@ -118,7 +118,7 @@ static void _POSIX_signals_Post_switch_hook(
 {
   POSIX_API_Control  *api;
   int                 signo;
-  ISR_Level           level;
+  ISR_lock_Context    lock_context;
   int                 hold_errno;
   Thread_Control     *executing;
 
@@ -146,13 +146,13 @@ static void _POSIX_signals_Post_switch_hook(
    *  processed at all.  No point in doing this loop otherwise.
    */
   while (1) {
-    _POSIX_signals_Acquire( level );
+    _POSIX_signals_Acquire( &lock_context );
       if ( !(~api->signals_blocked &
             (api->signals_pending | _POSIX_signals_Pending)) ) {
-       _POSIX_signals_Release( level );
+       _POSIX_signals_Release( &lock_context );
        break;
      }
-    _POSIX_signals_Release( level );
+    _POSIX_signals_Release( &lock_context );
 
     for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
       _POSIX_signals_Check_signal( api, signo, false );
