@@ -1,5 +1,13 @@
 *** TEST SPPROFILING 1 ***
   <ProfilingReport name="X">
+    <PerCPUProfilingReport processorIndex="0">
+      <MaxInterruptDelay unit="ns">0</MaxInterruptDelay>
+      <MaxThreadDispatchDisabledTime unit="ns">0</MaxThreadDispatchDisabledTime>
+      <ThreadDispatchDisabledCount>0</ThreadDispatchDisabledCount>
+      <TotalThreadDispatchDisabledTime unit="ns">0</TotalThreadDispatchDisabledTime>
+      <InterruptCount>0</InterruptCount>
+      <TotalInterruptTime unit="ns">0</TotalInterruptTime>
+    </PerCPUProfilingReport>
   </ProfilingReport>
-characters produced by rtems_profiling_report_xml(): 50
+characters produced by rtems_profiling_report_xml(): 516
 *** END OF TEST SPPROFILING 1 ***

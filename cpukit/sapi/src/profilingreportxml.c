@@ -20,6 +20,8 @@
 
 #ifdef RTEMS_PROFILING
 
+#include <inttypes.h>
+
 typedef struct {
   rtems_profiling_printf printf_func;
   void *printf_arg;
@@ -47,9 +49,96 @@ static void indent(context *ctx, uint32_t indentation_level)
   }
 }
 
+static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
+{
+  rtems_profiling_printf printf_func = ctx->printf_func;
+  void *printf_arg = ctx->printf_arg;
+  int rv;
+
+  indent(ctx, 1);
+  rv = (*printf_func)(
+    printf_arg,
+    "<PerCPUProfilingReport processorIndex=\"%" PRIu32 "\">\n",
+    per_cpu->processor_index
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<MaxThreadDispatchDisabledTime unit=\"ns\">%" PRIu32
+      "</MaxThreadDispatchDisabledTime>\n",
+    per_cpu->max_thread_dispatch_disabled_time
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<ThreadDispatchDisabledCount>%" PRIu64 "</ThreadDispatchDisabledCount>\n",
+    per_cpu->thread_dispatch_disabled_count
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<TotalThreadDispatchDisabledTime unit=\"ns\">%" PRIu64
+      "</TotalThreadDispatchDisabledTime>\n",
+    per_cpu->total_thread_dispatch_disabled_time
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<MaxInterruptTime unit=\"ns\">%" PRIu32
+      "</MaxInterruptTime>\n",
+    per_cpu->max_interrupt_time
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<MaxInterruptDelay unit=\"ns\">%" PRIu32 "</MaxInterruptDelay>\n",
+    per_cpu->max_interrupt_delay
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<InterruptCount>%" PRIu64 "</InterruptCount>\n",
+    per_cpu->interrupt_count
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<TotalInterruptTime unit=\"ns\">%" PRIu64 "</TotalInterruptTime>\n",
+    per_cpu->total_interrupt_time
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 1);
+  rv = (*printf_func)(
+    printf_arg,
+    "</PerCPUProfilingReport>\n"
+  );
+  update_retval(ctx, rv);
+}
+
 static void report(void *arg, const rtems_profiling_data *data)
 {
   context *ctx = arg;
+
+  switch (data->header.type) {
+    case RTEMS_PROFILING_PER_CPU:
+      report_per_cpu(ctx, &data->per_cpu);
+      break;
+  }
 }
 
 #endif /* RTEMS_PROFILING */

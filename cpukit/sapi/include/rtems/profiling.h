@@ -61,6 +61,12 @@ extern "C" {
  * @brief Type of profiling data.
  */
 typedef enum {
+  /**
+   * @brief Type of per-CPU profiling data.
+   *
+   * @see rtems_profiling_per_cpu.
+   */
+  RTEMS_PROFILING_PER_CPU
 } rtems_profiling_type;
 
 /**
@@ -74,6 +80,96 @@ typedef struct {
 } rtems_profiling_header;
 
 /**
+ * @brief Per-CPU profiling data.
+ *
+ * Theoretically all values in this structure can overflow, but the integer
+ * types are chosen so that they cannot overflow in practice.  On systems with
+ * a 1GHz CPU counter, the 64-bit integers can overflow in about 58 years.
+ * Since the system should not spend most of the time in critical sections the
+ * actual system run-time is much longer.  Several other counters in the system
+ * will overflow before we get a problem in the profiling area.
+ */
+typedef struct {
+  /**
+   * @brief The profiling data header.
+   */
+  rtems_profiling_header header;
+
+  /**
+   * @brief The processor index of this profiling data.
+   */
+  uint32_t processor_index;
+
+  /**
+   * @brief The maximum time of disabled thread dispatching in nanoseconds.
+   */
+  uint32_t max_thread_dispatch_disabled_time;
+
+  /**
+   * @brief Count of times when the thread dispatch disable level changes from
+   * zero to one in thread context.
+   *
+   * This value may overflow.
+   */
+  uint64_t thread_dispatch_disabled_count;
+
+  /**
+   * @brief Total time of disabled thread dispatching in nanoseconds.
+   *
+   * The average time of disabled thread dispatching is the total time of
+   * disabled thread dispatching divided by the thread dispatch disabled
+   * count.
+   *
+   * This value may overflow.
+   */
+  uint64_t total_thread_dispatch_disabled_time;
+
+  /**
+   * @brief The maximum interrupt delay in nanoseconds if supported by the
+   * hardware.
+   *
+   * The interrupt delay is the time interval from the recognition of an
+   * interrupt signal by the hardware up to the execution start of the
+   * corresponding high-level handler.  The interrupt delay is the main
+   * contributor to the interrupt latency.  To measure this time hardware
+   * support is required.  A time stamp unit must capture the interrupt signal
+   * recognition time.  If no hardware support is available, then this field
+   * will have a constant value of zero.
+   */
+  uint32_t max_interrupt_delay;
+
+  /**
+   * @brief The maximum time spent to process a single sequence of nested
+   * interrupts in nanoseconds.
+   *
+   * This is the time interval between the change of the interrupt nest level
+   * from zero to one and the change back from one to zero.  It is the measured
+   * worst-case execution time of interrupt service routines.  Please note that
+   * in case of nested interrupts this time includes the combined execution
+   * time and not the maximum time of an individual interrupt service routine.
+   */
+  uint32_t max_interrupt_time;
+
+  /**
+   * @brief Count of times when the interrupt nest level changes from zero to
+   * one.
+   *
+   * This value may overflow.
+   */
+  uint64_t interrupt_count;
+
+  /**
+   * @brief Total time of interrupt processing in nanoseconds.
+   *
+   * The average time of interrupt processing is the total time of interrupt
+   * processing divided by the interrupt count.
+   *
+   * This value may overflow.
+   */
+  uint64_t total_interrupt_time;
+} rtems_profiling_per_cpu;
+
+/**
  * @brief Collection of profiling data.
  */
 typedef union {
@@ -81,6 +177,11 @@ typedef union {
    * @brief Header to specify the actual profiling data.
    */
   rtems_profiling_header header;
+
+  /**
+   * @brief Per-CPU profiling data if indicated by the header.
+   */
+  rtems_profiling_per_cpu per_cpu;
 } rtems_profiling_data;
 
 /**
