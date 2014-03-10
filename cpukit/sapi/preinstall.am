@@ -88,6 +88,10 @@ $(PROJECT_INCLUDE)/rtems/sptables.h: include/rtems/sptables.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sptables.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sptables.h
 
+$(PROJECT_INCLUDE)/rtems/test.h: include/rtems/test.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/test.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/test.h
+
 $(PROJECT_INCLUDE)/rtems/timespec.h: include/rtems/timespec.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/timespec.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/timespec.h

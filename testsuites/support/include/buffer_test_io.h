@@ -5,6 +5,8 @@
 #ifndef __BUFFER_TEST_IO_h
 #define __BUFFER_TEST_IO_h
 
+#include <rtems/test.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -53,6 +55,10 @@ extern "C" {
   #define FLUSH_OUTPUT() \
     do { \
     } while (0)
+
+  #define TEST_BEGIN() rtems_test_begink()
+
+  #define TEST_END() rtems_test_endk()
 
 /*
  *  BUFFER TEST OUTPUT
@@ -152,6 +158,10 @@ extern "C" {
       fflush(stdout); \
     } while (0)
 
+  #define TEST_BEGIN() rtems_test_begin()
+
+  #define TEST_END() rtems_test_end()
+
 /*
  *  USE IPRINT
  */
@@ -196,6 +206,12 @@ extern "C" {
     do { \
       fflush(stdout); \
     } while (0)
+
+  #define TEST_BEGIN() \
+    rtems_test_begin_with_plugin((rtems_printk_plugin_t) fiprintf, stderr)
+
+  #define TEST_END() \
+    rtems_test_end_with_plugin((rtems_printk_plugin_t) fiprintf, stderr)
 
 #endif
 

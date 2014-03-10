@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <rtems/error.h>
+#include <rtems/test.h>
 #include <rtems/score/threaddispatch.h>
 
 #ifdef __cplusplus

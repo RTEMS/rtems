@@ -18,6 +18,7 @@ include_rtems_HEADERS += include/rtems/profiling.h
 include_rtems_HEADERS += include/rtems/rbheap.h
 include_rtems_HEADERS += include/rtems/rbtree.h
 include_rtems_HEADERS += include/rtems/sptables.h
+include_rtems_HEADERS += include/rtems/test.h
 include_rtems_HEADERS += include/rtems/timespec.h
 
 EXTRA_DIST = include/rtems/README
@@ -39,6 +40,8 @@ libsapi_a_SOURCES += src/delayticks.c
 libsapi_a_SOURCES += src/delaynano.c
 libsapi_a_SOURCES += src/profilingiterate.c
 libsapi_a_SOURCES += src/profilingreportxml.c
+libsapi_a_SOURCES += src/testbeginend.c
+libsapi_a_SOURCES += src/testextension.c
 libsapi_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include $(srcdir)/preinstall.am
