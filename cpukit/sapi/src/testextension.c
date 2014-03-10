@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/test.h>
+#include <rtems/profiling.h>
 
 void rtems_test_fatal_extension(
   rtems_fatal_source source,
@@ -27,4 +28,14 @@ void rtems_test_fatal_extension(
   (void) source;
   (void) is_internal;
   (void) code;
+
+  if (rtems_smp_get_current_processor() == 0) {
+    rtems_profiling_report_xml(
+      rtems_test_name,
+      printk_plugin,
+      NULL,
+      1,
+      "  "
+    );
+  }
 }
