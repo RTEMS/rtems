@@ -1,0 +1,5 @@
+*** TEST SPPROFILING 1 ***
+  <ProfilingReport name="X">
+  </ProfilingReport>
+characters produced by rtems_profiling_report_xml(): 50
+*** END OF TEST SPPROFILING 1 ***

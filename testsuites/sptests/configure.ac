@@ -36,6 +36,7 @@ AM_CONDITIONAL(HAS_CPUSET,test x"${ac_cv_header_sys_cpuset_h}" = x"yes")
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+spprofiling01/Makefile
 spcache01/Makefile
 sptls03/Makefile
 spcpucounter01/Makefile

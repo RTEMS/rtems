@@ -14,6 +14,7 @@ include_rtems_HEADERS += include/rtems/init.h
 include_rtems_HEADERS += include/rtems/io.h
 include_rtems_HEADERS += include/rtems/mptables.h
 include_rtems_HEADERS += include/rtems/cbs.h
+include_rtems_HEADERS += include/rtems/profiling.h
 include_rtems_HEADERS += include/rtems/rbheap.h
 include_rtems_HEADERS += include/rtems/rbtree.h
 include_rtems_HEADERS += include/rtems/sptables.h
@@ -36,6 +37,8 @@ libsapi_a_SOURCES += src/chainsmp.c
 libsapi_a_SOURCES += src/cpucounterconverter.c
 libsapi_a_SOURCES += src/delayticks.c
 libsapi_a_SOURCES += src/delaynano.c
+libsapi_a_SOURCES += src/profilingiterate.c
+libsapi_a_SOURCES += src/profilingreportxml.c
 libsapi_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include $(srcdir)/preinstall.am

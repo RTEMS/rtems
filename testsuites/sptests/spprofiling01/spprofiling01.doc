@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spprofiling01
+
+directives:
+
+  - rtems_profiling_report_xml()
+
+concepts:
+
+  - Ensure that rtems_profiling_report_xml() yields the expected output.
