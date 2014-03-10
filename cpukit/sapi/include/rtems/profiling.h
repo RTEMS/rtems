@@ -66,7 +66,14 @@ typedef enum {
    *
    * @see rtems_profiling_per_cpu.
    */
-  RTEMS_PROFILING_PER_CPU
+  RTEMS_PROFILING_PER_CPU,
+
+  /**
+   * @brief Type of SMP lock profiling data.
+   *
+   * @see rtems_profiling_smp_lock.
+   */
+  RTEMS_PROFILING_SMP_LOCK
 } rtems_profiling_type;
 
 /**
@@ -170,6 +177,91 @@ typedef struct {
 } rtems_profiling_per_cpu;
 
 /**
+ * @brief Count of lock contention counters for SMP lock profiling.
+ */
+#define RTEMS_PROFILING_SMP_LOCK_CONTENTION_COUNTS 4
+
+/**
+ * @brief SMP lock profiling data.
+ *
+ * The lock acquire attempt instant is the point in time right after the
+ * interrupt disable action in the lock acquire sequence.
+ *
+ * The lock acquire instant is the point in time right after the lock
+ * acquisition.  This is the begin of the critical section code execution.
+ *
+ * The lock acquire time is the time elapsed between the lock acquire attempt
+ * instant and the lock acquire instant.
+ *
+ * The lock release instant is the point in time right before the interrupt
+ * enable action in the lock release sequence.
+ *
+ * The lock section time is the time elapsed between the lock acquire instant
+ * and the lock release instant.
+ */
+typedef struct {
+  /**
+   * @brief The profiling data header.
+   */
+  rtems_profiling_header header;
+
+  /**
+   * @brief The lock name.
+   */
+  const char *name;
+
+  /**
+   * @brief The maximum lock acquire time in nanoseconds.
+   */
+  uint32_t max_acquire_time;
+
+  /**
+   * @brief The maximum lock section time in nanoseconds.
+   */
+  uint32_t max_section_time;
+
+  /**
+   * @brief The count of lock uses.
+   *
+   * This value may overflow.
+   */
+  uint64_t usage_count;
+
+  /**
+   * @brief Total lock acquire time in nanoseconds.
+   *
+   * The average lock acquire time is the total acquire time divided by the
+   * lock usage count.  The ration of the total section and total acquire times
+   * gives a measure for the lock contention.
+   *
+   * This value may overflow.
+   */
+  uint64_t total_acquire_time;
+
+  /**
+   * @brief Total lock section time in nanoseconds.
+   *
+   * The average lock section time is the total section time divided by the
+   * lock usage count.
+   *
+   * This value may overflow.
+   */
+  uint64_t total_section_time;
+
+  /**
+   * @brief The counts of lock acquire operations by contention.
+   *
+   * The contention count for index N corresponds to a lock acquire attempt
+   * with an initial queue length of N.  The last index corresponds to all
+   * lock acquire attempts with an initial queue length greater than or equal
+   * to RTEMS_PROFILING_SMP_LOCK_CONTENTION_COUNTS minus one.
+   *
+   * The values may overflow.
+   */
+  uint64_t contention_counts[RTEMS_PROFILING_SMP_LOCK_CONTENTION_COUNTS];
+} rtems_profiling_smp_lock;
+
+/**
  * @brief Collection of profiling data.
  */
 typedef union {
@@ -182,6 +274,11 @@ typedef union {
    * @brief Per-CPU profiling data if indicated by the header.
    */
   rtems_profiling_per_cpu per_cpu;
+
+  /**
+   * @brief SMP lock profiling data if indicated by the header.
+   */
+  rtems_profiling_smp_lock smp_lock;
 } rtems_profiling_data;
 
 /**

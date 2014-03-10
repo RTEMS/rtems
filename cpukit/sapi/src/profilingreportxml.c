@@ -130,6 +130,81 @@ static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
   update_retval(ctx, rv);
 }
 
+static void report_smp_lock(context *ctx, const rtems_profiling_smp_lock *smp_lock)
+{
+  rtems_profiling_printf printf_func = ctx->printf_func;
+  void *printf_arg = ctx->printf_arg;
+  int rv;
+  uint32_t i;
+
+  indent(ctx, 1);
+  rv = (*printf_func)(
+    printf_arg,
+    "<SMPLockProfilingReport name=\"%s\">\n",
+    smp_lock->name
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<MaxAcquireTime unit=\"ns\">%" PRIu32 "</MaxAcquireTime>\n",
+    smp_lock->max_acquire_time
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<MaxSectionTime unit=\"ns\">%" PRIu32 "</MaxSectionTime>\n",
+    smp_lock->max_section_time
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<UsageCount>%" PRIu64 "</UsageCount>\n",
+    smp_lock->usage_count
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<TotalAcquireTime unit=\"ns\">%" PRIu64 "</TotalAcquireTime>\n",
+    smp_lock->total_acquire_time
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<TotalSectionTime unit=\"ns\">%" PRIu64 "</TotalSectionTime>\n",
+    smp_lock->total_section_time
+  );
+  update_retval(ctx, rv);
+
+  for (i = 0; i < RTEMS_PROFILING_SMP_LOCK_CONTENTION_COUNTS; ++i) {
+    indent(ctx, 2);
+    rv = (*printf_func)(
+      printf_arg,
+      "<ContentionCount initialQueueLength=\"%" PRIu32 "\">%"
+        PRIu64 "</ContentionCount>\n",
+      i,
+      smp_lock->contention_counts[i]
+    );
+    update_retval(ctx, rv);
+  }
+
+  indent(ctx, 1);
+  rv = (*printf_func)(
+    printf_arg,
+    "</SMPLockProfilingReport>\n"
+  );
+  update_retval(ctx, rv);
+}
+
 static void report(void *arg, const rtems_profiling_data *data)
 {
   context *ctx = arg;
@@ -137,6 +212,9 @@ static void report(void *arg, const rtems_profiling_data *data)
   switch (data->header.type) {
     case RTEMS_PROFILING_PER_CPU:
       report_per_cpu(ctx, &data->per_cpu);
+      break;
+    case RTEMS_PROFILING_SMP_LOCK:
+      report_smp_lock(ctx, &data->smp_lock);
       break;
   }
 }
