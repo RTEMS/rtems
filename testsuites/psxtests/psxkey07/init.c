@@ -103,6 +103,7 @@ rtems_task Init(rtems_task_argument argument)
     );
     rtems_test_assert(
       ( rc == RTEMS_SUCCESSFUL ) || ( rc == RTEMS_UNSATISFIED )
+        || ( rc == RTEMS_TOO_MANY )
     );
 
     if ( rc == RTEMS_SUCCESSFUL ) {
@@ -111,10 +112,10 @@ rtems_task Init(rtems_task_argument argument)
     }
 
     /**
-     * check if return is EAGAIN, it means RTEMS Workspace RAM
+     * check if return is not successful, it means RTEMS Workspace RAM
      * have been exhausted.
      */
-    if ( rc == RTEMS_UNSATISFIED ) {
+    if ( rc != RTEMS_SUCCESSFUL ) {
       pthread_mutex_unlock( &mutex1 );
       break;
     }
