@@ -89,8 +89,7 @@ rtems_task Init(rtems_task_argument arg)
   rtems_test_assert( !sc );
 
   for ( ; ; ) {
-    task_id_p = malloc( sizeof( rtems_id ) );
-    rtems_test_assert( task_id_p );
+    rtems_id task_id;
 
     sc = rtems_task_create(
       rtems_build_name('T','A',created_task_count, ' '),
@@ -98,7 +97,7 @@ rtems_task Init(rtems_task_argument arg)
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
-      task_id_p
+      &task_id
     );
     rtems_test_assert(
       (sc == RTEMS_UNSATISFIED) ||
@@ -115,7 +114,7 @@ rtems_task Init(rtems_task_argument arg)
     }
     ++created_task_count;
 
-    sc = rtems_task_start( *task_id_p,  test_task, 0 );
+    sc = rtems_task_start( task_id,  test_task, 0 );
     rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
     sc = rtems_semaphore_obtain( sema1, RTEMS_WAIT, 0 );
