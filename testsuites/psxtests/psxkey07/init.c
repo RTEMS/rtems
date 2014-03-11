@@ -59,7 +59,6 @@ rtems_task Test_Thread(rtems_task_argument argument)
 
 rtems_task Init(rtems_task_argument argument)
 {
-  rtems_id          *thread_p;
   rtems_status_code  rc;
   int                sc;
   struct timespec    delay_request;
@@ -94,8 +93,8 @@ rtems_task Init(rtems_task_argument argument)
   greedy = rtems_workspace_greedy_allocate( &max_free_size, 1 );
 
   for ( ; ; ) {
-    thread_p = malloc( sizeof( rtems_id ) );
-    rtems_test_assert( thread_p );
+    rtems_id task_id;
+
     pthread_mutex_lock( &mutex1 );
 
     rc = rtems_task_create(
@@ -104,7 +103,7 @@ rtems_task Init(rtems_task_argument argument)
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
-      thread_p
+      &task_id
     );
     rtems_test_assert(
       ( rc == RTEMS_SUCCESSFUL ) || ( rc == RTEMS_UNSATISFIED )
@@ -112,7 +111,7 @@ rtems_task Init(rtems_task_argument argument)
     );
 
     if ( rc == RTEMS_SUCCESSFUL ) {
-      rc = rtems_task_start( *thread_p, Test_Thread, 0 );
+      rc = rtems_task_start( task_id, Test_Thread, 0 );
       rtems_test_assert( rc == RTEMS_SUCCESSFUL );
     }
 
