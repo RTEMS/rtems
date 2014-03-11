@@ -196,8 +196,8 @@ int pthread_create(
 
 #if defined(RTEMS_SMP)
 #if __RTEMS_HAVE_SYS_CPUSET_H__
-   the_thread->affinity.setsize   = attr->affinitysetsize;
-   *the_thread->affinity.set      = *attr->affinityset;
+   the_thread->affinity.setsize   = the_attr->affinitysetsize;
+   *the_thread->affinity.set      = *the_attr->affinityset;
 #endif
 #endif
 
