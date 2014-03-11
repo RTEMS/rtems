@@ -318,7 +318,7 @@ variable's value each time a task switch occurs to or from the calling task.
 
 The value seen by other tasks, including those which have not added the
 variable to their set and are thus accessing the variable as a common
-location shared among tasks, can not be affected by a task once it has
+location shared among tasks, cannot be affected by a task once it has
 added a variable to its local set.  Changes made to the variable by
 other tasks will not affect the value seen by a task which has added the
 variable to its private set.

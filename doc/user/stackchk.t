@@ -130,7 +130,7 @@ This is not actually a task, it is the interrupt stack.
 When the stack bounds checker determines that a stack overflow has occurred,
 it will attempt to print a message using @code{printk} identifying the
 task and then shut the system down.  If the stack overflow has caused
-corruption, then it is possible that the message can not be printed.
+corruption, then it is possible that the message cannot be printed.
 
 The following is an example of the output generated:
 
