@@ -55,9 +55,10 @@ rtems_task test_task(rtems_task_argument arg)
 
 rtems_task Init(rtems_task_argument arg)
 {
-  rtems_status_code status;
-  int              sc;
-  rtems_id        *task_id_p;
+  rtems_status_code  status;
+  int                sc;
+  uintptr_t          max_free_size = 13 * RTEMS_MINIMUM_STACK_SIZE;
+  void              *greedy;
 
   all_thread_created = 0;
 
@@ -87,6 +88,9 @@ rtems_task Init(rtems_task_argument arg)
   puts( "Init - pthread Key create - OK" );
   sc = pthread_key_create( &Key, NULL );
   rtems_test_assert( !sc );
+
+  /* Reduce workspace size if necessary to shorten test time */
+  greedy = rtems_workspace_greedy_allocate( &max_free_size, 1 );
 
   for ( ; ; ) {
     rtems_id task_id;
@@ -120,6 +124,8 @@ rtems_task Init(rtems_task_argument arg)
     sc = rtems_semaphore_obtain( sema1, RTEMS_WAIT, 0 );
     rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   }
+
+  rtems_workspace_greedy_free( greedy );
 
   printf(
     "Init - %d tasks have been created - OK\n"
