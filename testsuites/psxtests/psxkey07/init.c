@@ -63,6 +63,8 @@ rtems_task Init(rtems_task_argument argument)
   rtems_status_code  rc;
   int                sc;
   struct timespec    delay_request;
+  uintptr_t          max_free_size = 13 * RTEMS_MINIMUM_STACK_SIZE;
+  void              *greedy;
 
   all_thread_created = 0;
 
@@ -87,6 +89,9 @@ rtems_task Init(rtems_task_argument argument)
   puts( "Init - pthread Key create - OK" );
   sc = pthread_key_create( &Key, NULL );
   rtems_test_assert( !sc );
+
+  /* Reduce workspace size if necessary to shorten test time */
+  greedy = rtems_workspace_greedy_allocate( &max_free_size, 1 );
 
   for ( ; ; ) {
     thread_p = malloc( sizeof( rtems_id ) );
@@ -129,6 +134,9 @@ rtems_task Init(rtems_task_argument argument)
       pthread_cond_wait( &set_condition_var, &mutex1 );
     pthread_mutex_unlock( &mutex1 );
   }
+
+  rtems_workspace_greedy_free( greedy );
+
   printf(
     "Init - %d pthreads have been created - OK\n"
     "Init - %d pthreads have been setted key data - OK\n",
