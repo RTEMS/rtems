@@ -362,6 +362,18 @@ provide the following two functions
 counter values.
 @end itemize
 
+@section Interrupt Profiling
+
+The RTEMS profiling needs support by the CPU port for the interrupt entry and
+exit times.  In case profiling is enabled via the RTEMS build configuration
+option @code{--enable-profiling} (in this case the pre-processor symbol
+@code{RTEMS_PROFILING} is defined) the CPU port may provide data for the
+interrupt entry and exit times of the outer-most interrupt.  The CPU port can
+feed interrupt entry and exit times with the
+@code{_Profiling_Outer_most_interrupt_entry_and_exit()} function
+(@code{#include <rtems/score/profiling.h>}).  For an example please have a look
+at @code{cpukit/score/cpu/arm/arm_exc_interrupt.S}.
+
 @c
 @c
 @c

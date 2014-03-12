@@ -283,6 +283,17 @@ Interrupt Controller model which does not require the BSP to implement
 @code{set_vector}.  BSPs for these architectures must provide a different
 set of support routines.
 
+@section Interrupt Delay Profiling
+
+The RTEMS profiling needs support by the BSP for the interrupt delay times.  In
+case profiling is enabled via the RTEMS build configuration option
+@code{--enable-profiling} (in this case the pre-processor symbol
+@code{RTEMS_PROFILING} is defined) a BSP may provide data for the interrupt
+delay times.  The BSP can feed interrupt delay times with the
+@code{_Profiling_Update_max_interrupt_delay()} function
+(@code{#include <rtems/score/profiling.h>}).  For an example please have a look
+at @code{c/src/lib/libbsp/sparc/leon3/clock/ckinit.c}.
+
 @section Programmable Interrupt Controller API
 
 A BSP can use the PIC API to install Interrupt Service Routines through
