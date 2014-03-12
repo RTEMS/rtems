@@ -873,7 +873,8 @@ void ppc_code_copy(void *dest, const void *src, size_t n);
  * Obtain interrupt mask
  */
 .macro GET_INTERRUPT_MASK mask
-	mfspr	\mask, sprg0
+	lis	\mask, _PPC_INTERRUPT_DISABLE_MASK@h
+	ori	\mask, \mask, _PPC_INTERRUPT_DISABLE_MASK@l
 .endm
 
 /*
