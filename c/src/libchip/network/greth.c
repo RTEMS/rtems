@@ -88,7 +88,7 @@ extern void ipalign(struct mbuf *m);
 #endif
 const struct timespec greth_tan = {
    GRETH_AUTONEGO_TIMEOUT_MS/1000,
-   GRETH_AUTONEGO_TIMEOUT_MS*1000000
+   (GRETH_AUTONEGO_TIMEOUT_MS % 1000) *1000000
 };
 
 /* For optimizing the autonegotiation time */
@@ -178,7 +178,7 @@ static char *almalloc(int sz)
 
 /* GRETH interrupt handler */
 
-void greth_interrupt_handler (void *arg)
+static void greth_interrupt_handler (void *arg)
 {
         uint32_t status;
         uint32_t ctrl;
@@ -258,7 +258,7 @@ static void print_init_info(struct greth_softc *sc)
         }
 #ifdef GRETH_AUTONEGO_PRINT_TIME
         if ( sc->auto_neg ) {
-          printf("Autonegotiation Time: %dms\n", sc->auto_neg_time.tv_sec*1000 +
+          printf("Autonegotiation Time: %ldms\n", sc->auto_neg_time.tv_sec*1000 +
                  sc->auto_neg_time.tv_nsec/1000000);
         }
 #endif
@@ -533,7 +533,7 @@ void ipalign(struct mbuf *m)
 }
 #endif
 
-void
+static void
 greth_Daemon (void *arg)
 {
     struct ether_header *eh;
@@ -544,7 +544,9 @@ greth_Daemon (void *arg)
     rtems_event_set events;
     rtems_interrupt_level level;
     int first;
+#ifdef CPU_U32_FIX
     unsigned int tmp;
+#endif
 
     for (;;)
       {
@@ -627,7 +629,7 @@ again:
                                     tmp = GRETH_MEM_LOAD(4+(uintptr_t)eh);
                                     tmp = GRETH_MEM_LOAD(8+(uintptr_t)eh);
                                     tmp = GRETH_MEM_LOAD(12+(uintptr_t)eh);
-
+				    (void)tmp;
                                     ipalign(m);	/* Align packet on 32-bit boundary */
                             }
 #endif
@@ -738,7 +740,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 }
 
 
-int
+static int
 sendpacket_gbit (struct ifnet *ifp, struct mbuf *m)
 {
         struct greth_softc *dp = ifp->if_softc;

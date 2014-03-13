@@ -47,7 +47,7 @@ int rtems_leon_greth_driver_attach(
     *(volatile int *) base_addr = 0;
     *(volatile int *) base_addr = GRETH_CTRL_RST;
     *(volatile int *) base_addr = 0;
-    leon_greth_configuration.base_address = base_addr;
+    leon_greth_configuration.base_address = (void*)base_addr;
     leon_greth_configuration.vector = eth_irq; /* on LEON vector is IRQ no. */
     leon_greth_configuration.txd_count = TDA_COUNT;
     leon_greth_configuration.rxd_count = RDA_COUNT;
