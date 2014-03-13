@@ -291,7 +291,7 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 static inline unsigned int leon_r32_no_cache(uintptr_t addr)
 {
 	unsigned int tmp;
-	asm volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(addr));
+	__asm__ volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(addr));
 	return tmp;
 }
 

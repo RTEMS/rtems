@@ -395,7 +395,7 @@ static __inline__ int bsp_irq_fixup(int irq)
 static inline unsigned int leon_r32_no_cache(uintptr_t addr)
 {
 	unsigned int tmp;
-	asm volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(addr));
+	__asm__ volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(addr));
 	return tmp;
 }
 
