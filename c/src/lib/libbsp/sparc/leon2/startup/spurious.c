@@ -105,7 +105,7 @@ void _BSP_Exception_frame_print( const CPU_Exception_frame *frame )
   }
 }
 
-rtems_isr bsp_spurious_handler(
+static rtems_isr bsp_spurious_handler(
    rtems_vector_number trap,
    CPU_Interrupt_frame *isf
 )
