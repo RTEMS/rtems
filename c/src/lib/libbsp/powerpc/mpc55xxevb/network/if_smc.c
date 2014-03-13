@@ -64,11 +64,6 @@ scmv91111_configuration_t mpc5554_scmv91111_configuration = {
   (void *)0
 };
 
-int _rtems_smc91111_driver_attach(
-  struct rtems_bsdnet_ifconfig *config,
-  scmv91111_configuration_t    *scm_config
-);
-
 /*
  * Attach an SMC91111 driver to the system
  */

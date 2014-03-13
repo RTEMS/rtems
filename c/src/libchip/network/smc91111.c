@@ -82,7 +82,7 @@ static void lan91cxx_phy_configure(struct lan91cxx_priv_data *cpd);
 #define max(l,r) ((l) > (r) ? (l) : (r))
 
 /* \ ------------- Interrupt ------------- \ */
-void lan91cxx_interrupt_handler(void *arg)
+static void lan91cxx_interrupt_handler(void *arg)
 {
 	struct lan91cxx_priv_data *cpd = arg;
 	unsigned short irq, event;
@@ -153,6 +153,9 @@ static void lan91cxx_recv(struct lan91cxx_priv_data *cpd, struct mbuf *m)
 	rxd_t *data = NULL, val;
 #if DEBUG & 64
 	rxd_t lp = 0;
+#else
+	/* start is only read with debug enabled */
+	(void)start;
 #endif
 	struct mbuf *n;
 	dbg_prefix = "<";
@@ -247,7 +250,6 @@ static void lan91cxx_recv(struct lan91cxx_priv_data *cpd, struct mbuf *m)
 			}
 		}
 		db64_printf(" \n");
-
 #endif
 	}
 	val = get_data(cpd);	/* Read control word (and potential data) unconditionally */
@@ -657,7 +659,7 @@ static void sendpacket(struct ifnet *ifp, struct mbuf *m)
 	dbg_prefix = "";
 }
 
-void smc91111_txDaemon(void *arg)
+static void smc91111_txDaemon(void *arg)
 {
 	struct lan91cxx_priv_data *cpd = arg;
 	struct ifnet *ifp = &cpd->arpcom.ac_if;

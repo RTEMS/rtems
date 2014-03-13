@@ -18,6 +18,9 @@ typedef struct scmv91111_configuration {
 #endif
 } scmv91111_configuration_t;
 
+int _rtems_smc91111_driver_attach (struct rtems_bsdnet_ifconfig *config,
+				   scmv91111_configuration_t * scm_config);
+
 #endif  /* _SMC_91111_EXP_H_ */
 
 
