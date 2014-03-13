@@ -43,4 +43,8 @@ void _API_Mutex_Lock(
     0,
     level
   );
+
+  #if defined(RTEMS_SMP)
+    _Thread_Enable_dispatch();
+  #endif
 }

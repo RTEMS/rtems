@@ -27,10 +27,7 @@ void _API_Mutex_Unlock(
   API_Mutex_Control *the_mutex
 )
 {
-   /* Dispatch is already disabled in SMP while lock is held. */
-   #if !defined(RTEMS_SMP)
-     _Thread_Disable_dispatch();
-   #endif
+   _Thread_Disable_dispatch();
     _CORE_mutex_Surrender(
       &the_mutex->Mutex,
       the_mutex->Object.id,

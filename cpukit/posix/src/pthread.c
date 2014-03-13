@@ -227,7 +227,7 @@ static bool _POSIX_Threads_Create_extension(
          && _Objects_Get_class( created->Object.id ) == 1
        #endif
   ) {
-    executing_api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+    executing_api = _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ];
     api->signals_blocked = executing_api->signals_blocked;
   } else {
     api->signals_blocked = SIGNAL_ALL_MASK;
