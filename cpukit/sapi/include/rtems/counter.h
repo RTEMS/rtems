@@ -92,7 +92,7 @@ static inline rtems_counter_ticks rtems_counter_difference(
 }
 
 /**
- * brief Converts counter ticks into nanoseconds.
+ * @brief Converts counter ticks into nanoseconds.
  *
  * @param[in] ticks Some counter ticks.
  *
@@ -104,7 +104,7 @@ uint64_t rtems_counter_ticks_to_nanoseconds(
 );
 
 /**
- * brief Converts nanoseconds into counter ticks.
+ * @brief Converts nanoseconds into counter ticks.
  *
  * @param[in] nanoseconds Some nanoseconds.
  *
@@ -116,7 +116,7 @@ rtems_counter_ticks rtems_counter_nanoseconds_to_ticks(
 );
 
 /**
- * brief Initializes the counter ticks to/from nanoseconds converter functions.
+ * @brief Initializes the counter ticks to/from nanoseconds converter functions.
  *
  * This function must be used to initialize the
  * rtems_counter_ticks_to_nanoseconds() and
