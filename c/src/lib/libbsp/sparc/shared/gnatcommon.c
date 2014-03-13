@@ -11,6 +11,7 @@
 #include <rtems/bspIo.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <bsp/gnatcommon.h>
 
 /*
  * Synchronous trap handler. Map the trap number of SIGFPE, SIGSEGV

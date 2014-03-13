@@ -85,6 +85,10 @@ $(PROJECT_LIB)/linkcmds.ngmp: startup/linkcmds.ngmp $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.ngmp
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.ngmp
 
+$(PROJECT_INCLUDE)/bsp/gnatcommon.h: ../shared/include/gnatcommon.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/gnatcommon.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/gnatcommon.h
+
 $(PROJECT_INCLUDE)/amba.h: include/amba.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/amba.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/amba.h

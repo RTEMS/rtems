@@ -10,7 +10,7 @@
  * Jiri Gaisler, ESA/ESTEC, 17-02-1999.
  */
 
-void __gnat_install_handler_common (int t1, int t2);
+#include <bsp/gnatcommon.h>
 
 /*
  *  Avoid trap 0x18 which is used by the clock tick, and

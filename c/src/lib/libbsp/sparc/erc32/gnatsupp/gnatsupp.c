@@ -4,7 +4,7 @@
  * Jiri Gaisler, ESA/ESTEC, 17-02-1999.
  */
 
-void __gnat_install_handler_common( int, int );
+#include <bsp/gnatcommon.h>
 
 void
 __gnat_install_handler (void)

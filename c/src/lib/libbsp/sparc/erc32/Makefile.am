@@ -39,6 +39,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
 libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
+include_bsp_HEADERS = ../shared/include/gnatcommon.h
 # console
 libbsp_a_SOURCES += console/erc32_console.c ../../shared/console.c \
     ../../shared/console_select.c  ../../shared/console_control.c \
@@ -52,7 +53,7 @@ libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 libbsp_a_SOURCES += timer/timer.c
 
 # IRQ
-include_bsp_HEADERS = \
+include_bsp_HEADERS += \
     ../../shared/include/irq-generic.h \
     ../../shared/include/irq-info.h \
     include/bsp/irq.h

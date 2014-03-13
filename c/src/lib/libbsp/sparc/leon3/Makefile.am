@@ -45,6 +45,7 @@ libbsp_a_SOURCES += startup/cpucounter.c
 libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
+include_bsp_HEADERS = ../shared/include/gnatcommon.h
 # AMBA bus
 include_HEADERS += include/amba.h
 include_HEADERS += ../../sparc/shared/include/ambapp.h
@@ -69,7 +70,7 @@ libbsp_a_SOURCES += console/printk_support.c
 libbsp_a_SOURCES += clock/ckinit.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # IRQ
-include_bsp_HEADERS = \
+include_bsp_HEADERS += \
     ../../shared/include/irq-generic.h \
     ../../shared/include/irq-info.h \
     include/bsp/irq.h
