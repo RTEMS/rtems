@@ -30,7 +30,10 @@
 #include <rtems/endian.h>
 #include "dwmac-common.h"
 #include "dwmac-core.h"
+
+#ifdef BSP_FEATURE_IRQ_EXTENSION
 #include <bsp/irq.h>
+#endif
 
 /* PHY events which can be combined to an event set.
  * The PHY can create an event for a corresponding status change */
@@ -1789,6 +1792,7 @@ static int dwmac_if_up_or_down(
       /* Set up mmc counters */
       dwmac_mmc_setup( self );
 
+#ifdef BSP_FEATURE_IRQ_EXTENSION
       /* Install interrupt handler */
       sc = rtems_interrupt_handler_install(
         self->CFG->IRQ_EMAC,
@@ -1797,6 +1801,9 @@ static int dwmac_if_up_or_down(
         dwmac_core_dma_interrupt,
         self
         );
+#else
+      sc = RTEMS_NOT_IMPLEMENTED;
+#endif
       eno = rtems_status_code_to_errno( sc );
     }
 
@@ -1828,11 +1835,13 @@ static int dwmac_if_up_or_down(
         self, self->task_id_tx, DWMAC_COMMON_EVENT_TASK_STOP );
       (void) dwmac_control_request(
         self, self->task_id_rx, DWMAC_COMMON_EVENT_TASK_STOP );
+#ifdef BSP_FEATURE_IRQ_EXTENSION
       (void) rtems_interrupt_handler_remove(
         self->CFG->IRQ_EMAC,
         dwmac_core_dma_interrupt,
         self
         );
+#endif
       (void) ( CALLBACK->phy_stop )( self->arg );
       (void) ( CALLBACK->phy_disable )( self->arg );
 
@@ -1855,11 +1864,15 @@ static int dwmac_if_up_or_down(
     }
 
     if ( eno == 0 ) {
+#ifdef BSP_FEATURE_IRQ_EXTENSION
       sc = rtems_interrupt_handler_remove(
         self->CFG->IRQ_EMAC,
         dwmac_core_dma_interrupt,
         self
         );
+#else
+      sc = RTEMS_NOT_IMPLEMENTED;
+#endif
       eno = rtems_status_code_to_errno( sc );
     }
 
