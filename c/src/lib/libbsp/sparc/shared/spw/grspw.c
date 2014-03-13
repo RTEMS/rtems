@@ -58,6 +58,8 @@
 
 #ifndef GRSPW_PREFIX
  #define GRSPW_PREFIX(name) grspw##name
+#else
+ #define GRSPW_REGISTER_STATIC
 #endif
 
 /* default to no translation */
@@ -373,6 +375,9 @@ static rtems_device_driver grspw_control(
 static rtems_driver_address_table grspw_driver = GRSPW_DRIVER_TABLE_ENTRY;
 static struct ambapp_bus *amba_bus;
 
+#ifdef GRSPW_REGISTER_STATIC
+static
+#endif
 int GRSPW_PREFIX(_register)(struct ambapp_bus *bus)
 {
         rtems_status_code r;

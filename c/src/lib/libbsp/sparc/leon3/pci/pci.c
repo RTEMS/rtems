@@ -223,7 +223,7 @@ rtems_pci_config_t BSP_pci_configuration = {
 };
 
 
-int init_grpci(void) {
+static int init_grpci(void) {
 
     volatile unsigned int *page0 =  (unsigned volatile int *) PCI_MEM_START;
     uint32_t data;
@@ -333,7 +333,7 @@ static inline void swap_res(struct pci_res **p1, struct pci_res **p2) {
  *
  *
 */
-void pci_allocate_resources(void) {
+static void pci_allocate_resources(void) {
 
     unsigned int slot, numfuncs, func, pos, i, swapped, addr, dev, fn;
     uint32_t id, tmp, size;

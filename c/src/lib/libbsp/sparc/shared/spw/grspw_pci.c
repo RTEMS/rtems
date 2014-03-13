@@ -1,3 +1,7 @@
+#include <ambapp.h>
+#include <rtems/libio.h>
+#include <grspw_pci.h>
+
 /* Select PCI driver */
 #define GRSPW_PCI
 
@@ -70,6 +74,7 @@ static inline unsigned int hw_to_cpu(unsigned int addr) {
 #endif
 
 int grspwpci_interrupt_handler(int irq, void *arg);
+
 #include "grspw.c"
 
 /*

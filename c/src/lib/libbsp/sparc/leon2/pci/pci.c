@@ -231,7 +231,7 @@ rtems_pci_config_t BSP_pci_configuration = {
 };
 
 
-void init_at697_pci(void) {
+static void init_at697_pci(void) {
 
     /* Reset */
     pcic->pciic = 0xffffffff;
@@ -418,7 +418,7 @@ static inline void swap_res(struct pci_res **p1, struct pci_res **p2) {
  *
  *
 */
-void pci_allocate_resources(void) {
+static void pci_allocate_resources(void) {
 
     unsigned int slot, numfuncs, func, id, pos, size, tmp, i, swapped, addr, dev, fn;
     unsigned char header;

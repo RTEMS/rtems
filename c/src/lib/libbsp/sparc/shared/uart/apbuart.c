@@ -34,6 +34,8 @@
 
 #ifndef APBUART_PREFIX
  #define APBUART_PREFIX(name) apbuart##name
+#else
+ #define APBUART_REGISTER_STATIC
 #endif
 
 #if !defined(APBUART_DEVNAME) || !defined(APBUART_DEVNAME_NO)
@@ -323,6 +325,9 @@ static void apbuart_interrupt(apbuart_priv *uart){
 	}
 }
 
+#ifdef APBUART_REGISTER_STATIC
+static
+#endif
 int APBUART_PREFIX(_register)(struct ambapp_bus *bus) {
 	rtems_status_code r;
 	rtems_device_major_number m;

@@ -1,3 +1,6 @@
+#include <ambapp.h>
+#include <b1553brm_pci.h>
+
 /* Select PCI driver */
 #define B1553BRM_NO_AMBA
 #define B1553BRM_PCI

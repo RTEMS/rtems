@@ -3,6 +3,8 @@
  */
 #define OCCAN_WORD_REGS
 
+#include <occan_pci.h>
+
 /* Set registered device name */
 #define OCCAN_DEVNAME "/dev/occanpci0"
 #define OCCAN_DEVNAME_NO(devstr,no) ((devstr)[13]='0'+(no))

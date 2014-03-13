@@ -1,3 +1,6 @@
+#include <ambapp.h>
+#include <apbuart_pci.h>
+
 #undef DEBUG
 
 /* Set registered device name */
