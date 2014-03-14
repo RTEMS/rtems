@@ -47,6 +47,8 @@ bool _POSIX_signals_Unblock_thread(
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
+  _Thread_Add_post_switch_action( the_thread, &api->Signal_action );
+
   mask = signo_to_mask( signo );
 
   /*

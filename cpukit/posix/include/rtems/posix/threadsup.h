@@ -68,6 +68,11 @@ typedef struct {
   /** This is the set of signals which are currently pending. */
   sigset_t                signals_pending;
 
+  /**
+   * @brief Signal post-switch action in case signals are pending.
+   */
+  Thread_Action           Signal_action;
+
   /*******************************************************************/
   /*******************************************************************/
   /***************         POSIX Cancelability         ***************/

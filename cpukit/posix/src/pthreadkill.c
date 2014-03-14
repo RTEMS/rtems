@@ -53,8 +53,6 @@ int pthread_kill(
        *  If sig == 0 then just validate arguments
        */
 
-      _POSIX_signals_Add_post_switch_extension();
-
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
       if ( sig ) {

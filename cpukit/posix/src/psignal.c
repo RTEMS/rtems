@@ -25,6 +25,7 @@
 
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/statesimpl.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
@@ -108,22 +109,22 @@ Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
     (STATES_WAITING_FOR_SIGNAL|STATES_INTERRUPTIBLE_BY_SIGNAL)) == \
       (STATES_WAITING_FOR_SIGNAL|STATES_INTERRUPTIBLE_BY_SIGNAL))
 
-/*
- *  _POSIX_signals_Post_switch_extension
- */
-
-static void _POSIX_signals_Post_switch_hook(
-  Thread_Control  *the_thread
+void _POSIX_signals_Action_handler(
+  Thread_Control  *executing,
+  Thread_Action   *action,
+  Per_CPU_Control *cpu,
+  ISR_Level        level
 )
 {
   POSIX_API_Control  *api;
   int                 signo;
   ISR_lock_Context    lock_context;
   int                 hold_errno;
-  Thread_Control     *executing;
 
-  executing = _Thread_Get_executing();
-  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+  (void) action;
+  _Thread_Action_release_and_ISR_enable( cpu, level );
+
+  api = executing->API_Extensions[ THREAD_API_POSIX ];
 
   /*
    *  We need to ensure that if the signal handler executes a call
@@ -168,10 +169,6 @@ static void _POSIX_signals_Post_switch_hook(
 
   executing->Wait.return_code = hold_errno;
 }
-
-API_extensions_Post_switch_control _POSIX_signals_Post_switch = {
-  .hook = _POSIX_signals_Post_switch_hook
-};
 
 void _POSIX_signals_Manager_Initialization(void)
 {

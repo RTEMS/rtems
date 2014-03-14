@@ -233,6 +233,11 @@ static bool _POSIX_Threads_Create_extension(
     api->signals_blocked = SIGNAL_ALL_MASK;
   }
 
+  _Thread_Action_initialize(
+    &api->Signal_action,
+    _POSIX_signals_Action_handler
+  );
+
   _Thread_queue_Initialize(
     &api->Join_List,
     THREAD_QUEUE_DISCIPLINE_FIFO,

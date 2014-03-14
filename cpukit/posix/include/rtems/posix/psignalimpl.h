@@ -69,8 +69,6 @@ extern Chain_Control _POSIX_signals_Inactive_siginfo;
 
 extern Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
 
-extern API_extensions_Post_switch_control _POSIX_signals_Post_switch;
-
 /*
  *  Internal routines
  */
@@ -86,10 +84,12 @@ void _POSIX_signals_Manager_Initialization(void);
 #define _POSIX_signals_Release( lock_context ) \
   _ISR_lock_Release_and_ISR_enable( &_POSIX_signals_Lock, lock_context )
 
-static inline void _POSIX_signals_Add_post_switch_extension(void)
-{
-  _API_extensions_Add_post_switch( &_POSIX_signals_Post_switch );
-}
+void _POSIX_signals_Action_handler(
+  Thread_Control  *executing,
+  Thread_Action   *action,
+  Per_CPU_Control *cpu,
+  ISR_Level        level
+);
 
 /**
  * @brief Unlock POSIX signals thread.
