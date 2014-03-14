@@ -27,6 +27,7 @@
 #include <string.h>
 #include <errno.h>
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <rtems/endian.h>
 #include "dwmac-common.h"
 #include "dwmac-core.h"
@@ -47,9 +48,9 @@ const dwmac_phy_event PHY_EVENT_REMOTE_FAULT          = 0x02;
 const dwmac_phy_event PHY_EVENT_LINK_UP               = 0x01;
 
 /* Default values for the number of DMA descriptors and mbufs to be used */
-#define DWMAC_CONFIG_RX_UNIT_COUNT_DEFAULT 256
+#define DWMAC_CONFIG_RX_UNIT_COUNT_DEFAULT 64
 #define DWMAC_CONFIG_RX_UNIT_COUNT_MAX INT_MAX
-#define DWMAC_CONFIG_TX_UNIT_COUNT_DEFAULT 256
+#define DWMAC_CONFIG_TX_UNIT_COUNT_DEFAULT 64
 #define DWMAC_CONFIG_TX_UNIT_COUNT_MAX INT_MAX
 
 /* Default values for the DMA configuration */
@@ -95,6 +96,9 @@ const dwmac_phy_event PHY_EVENT_LINK_UP               = 0x01;
 #endif
 
 #define DWMAC_DMA_THRESHOLD_CONTROL_DEFAULT 64
+
+#define DWMAC_GLOBAL_MBUF_CNT (rtems_bsdnet_config.mbuf_bytecount / sizeof(struct  mbuf))
+#define DWMAG_GLOBAL_MCLUST_CNT (rtems_bsdnet_config.mbuf_cluster_bytecount / MCLBYTES)
 
 static int dwmac_if_mdio_busy_wait( const volatile uint32_t *gmii_address )
 {
@@ -2167,6 +2171,13 @@ static int dwmac_if_attach(
         DWMAC_CONFIG_TX_UNIT_COUNT_DEFAULT,
         DWMAC_CONFIG_TX_UNIT_COUNT_MAX
         );
+
+      if (
+        DWMAC_GLOBAL_MBUF_CNT / 4 < bsd_config->rbuf_count
+          || DWMAG_GLOBAL_MCLUST_CNT / 4 < bsd_config->rbuf_count
+      ) {
+        bsp_fatal( DWMAC_FATAL_TOO_MANY_RBUFS_CONFIGURED );
+      }
 
       /* Copy MAC address */
       memcpy(
