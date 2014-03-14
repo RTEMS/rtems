@@ -340,6 +340,62 @@ typedef enum {
 /** This macro defines the last API which has threads. */
 #define THREAD_API_LAST  THREAD_API_POSIX
 
+typedef struct Thread_Action Thread_Action;
+
+/**
+ * @brief Thread action handler.
+ *
+ * The thread action handler will be called with interrupts disabled and the
+ * thread action lock acquired.  The handler must release the thread action
+ * lock with _Thread_Action_release_and_ISR_enable().  So the thread action
+ * lock can be used to protect private data fields of the particular action.
+ *
+ * Since the action is passed to the handler private data fields can be added
+ * below the common thread action fields.
+ *
+ * @param[in] thread The thread performing the action.
+ * @param[in] action The thread action.
+ * @param[in] cpu The processor of the thread.
+ * @param[in] level The ISR level for _Thread_Action_release_and_ISR_enable().
+ */
+typedef void ( *Thread_Action_handler )(
+  Thread_Control  *thread,
+  Thread_Action   *action,
+  Per_CPU_Control *cpu,
+  ISR_Level        level
+);
+
+/**
+ * @brief Thread action.
+ *
+ * Thread actions can be chained together to trigger a set of actions on
+ * particular events like for example a thread post-switch.  Use
+ * _Thread_Action_initialize() to initialize this structure.
+ *
+ * Thread actions are the building block for efficient implementation of
+ * - Classic signals delivery,
+ * - POSIX signals delivery,
+ * - thread restart notification,
+ * - thread delete notification,
+ * - forced thread migration on SMP configurations, and
+ * - the Multiprocessor Resource Sharing Protocol (MrsP).
+ *
+ * @see _Thread_Run_post_switch_actions().
+ */
+struct Thread_Action {
+  Chain_Node            Node;
+  Thread_Action_handler handler;
+};
+
+/**
+ * @brief Control block to manage thread actions.
+ *
+ * Use _Thread_Action_control_initialize() to initialize this structure.
+ */
+typedef struct {
+  Chain_Control Chain;
+} Thread_Action_control;
+
 /**
  *  This structure defines the Thread Control Block (TCB).
  */
@@ -457,6 +513,9 @@ struct Thread_Control_struct {
    *  this thread.
    */
   Thread_Start_information              Start;
+
+  Thread_Action_control                 Post_switch_actions;
+
   /** This field contains the context of this thread. */
   Context_Control                       Registers;
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )

@@ -9,6 +9,8 @@
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2014 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -26,6 +28,36 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
+
+static Thread_Action *_Thread_Get_post_switch_action(
+  Thread_Control *executing
+)
+{
+  Chain_Control *chain = &executing->Post_switch_actions.Chain;
+
+  return (Thread_Action *) _Chain_Get_unprotected( chain );
+}
+
+static void _Thread_Run_post_switch_actions( Thread_Control *executing )
+{
+  ISR_Level        level;
+  Per_CPU_Control *cpu;
+  Thread_Action   *action;
+
+  cpu = _Thread_Action_ISR_disable_and_acquire( executing, &level );
+  action = _Thread_Get_post_switch_action( executing );
+
+  while ( action != NULL ) {
+    _Chain_Set_off_chain( &action->Node );
+
+    ( *action->handler )( executing, action, cpu, level );
+
+    cpu = _Thread_Action_ISR_disable_and_acquire( executing, &level );
+    action = _Thread_Get_post_switch_action( executing );
+  }
+
+  _Thread_Action_release_and_ISR_enable( cpu, level );
+}
 
 void _Thread_Dispatch( void )
 {
@@ -176,4 +208,5 @@ post_switch:
   _Per_CPU_Release_and_ISR_enable( per_cpu, level );
 
   _API_extensions_Run_post_switch( executing );
+  _Thread_Run_post_switch_actions( executing );
 }

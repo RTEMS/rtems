@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_THREADIMPL_H
 
 #include <rtems/score/thread.h>
+#include <rtems/score/chainimpl.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/objectimpl.h>
@@ -637,6 +638,72 @@ RTEMS_INLINE_ROUTINE void _Thread_Update_cpu_time_used(
   );
   *time_of_last_context_switch = uptime;
   _Timestamp_Add_to( &executing->cpu_time_used, &ran );
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Action_control_initialize(
+  Thread_Action_control *action_control
+)
+{
+  _Chain_Initialize_empty( &action_control->Chain );
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Action_initialize(
+  Thread_Action         *action,
+  Thread_Action_handler  handler
+)
+{
+  action->handler = handler;
+  _Chain_Set_off_chain( &action->Node );
+}
+
+RTEMS_INLINE_ROUTINE Per_CPU_Control *
+  _Thread_Action_ISR_disable_and_acquire_for_executing( ISR_Level *level )
+{
+  Per_CPU_Control *cpu;
+
+  _ISR_Disable_without_giant( *level );
+  cpu = _Per_CPU_Get();
+  _Per_CPU_Acquire( cpu );
+
+  return cpu;
+}
+
+RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Action_ISR_disable_and_acquire(
+  Thread_Control *thread,
+  ISR_Level      *level
+)
+{
+  Per_CPU_Control *cpu;
+
+  _ISR_Disable_without_giant( *level );
+  cpu = _Thread_Get_CPU( thread );
+  _Per_CPU_Acquire( cpu );
+
+  return cpu;
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Action_release_and_ISR_enable(
+  Per_CPU_Control *cpu,
+  ISR_Level level
+)
+{
+  _Per_CPU_Release_and_ISR_enable( cpu, level );
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Add_post_switch_action(
+  Thread_Control *thread,
+  Thread_Action  *action
+)
+{
+  Per_CPU_Control *cpu;
+  ISR_Level        level;
+
+  cpu = _Thread_Action_ISR_disable_and_acquire( thread, &level );
+  _Chain_Append_if_is_off_chain_unprotected(
+    &thread->Post_switch_actions.Chain,
+    &action->Node
+  );
+  _Thread_Action_release_and_ISR_enable( cpu, level );
 }
 
 #if !defined(__DYNAMIC_REENT__)

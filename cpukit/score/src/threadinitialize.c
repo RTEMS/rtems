@@ -238,6 +238,8 @@ bool _Thread_Initialize(
    */
   _Chain_Initialize_empty( &the_thread->Key_Chain );
 
+  _Thread_Action_control_initialize( &the_thread->Post_switch_actions );
+
   /*
    *  Open the object
    */
