@@ -35,6 +35,6 @@ void _Scheduler_SMP_Start_idle(
   Scheduler_SMP_Control *self = _Scheduler_SMP_Instance();
 
   thread->is_scheduled = true;
-  thread->cpu = cpu;
+  _Thread_Set_CPU( thread, cpu );
   _Chain_Append_unprotected( &self->scheduled, &thread->Object.Node );
 }

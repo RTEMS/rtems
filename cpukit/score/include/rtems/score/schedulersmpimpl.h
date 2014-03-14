@@ -67,8 +67,8 @@ static inline void _Scheduler_SMP_Allocate_processor(
   Thread_Control *victim
 )
 {
-  Per_CPU_Control *cpu_of_scheduled = scheduled->cpu;
-  Per_CPU_Control *cpu_of_victim = victim->cpu;
+  Per_CPU_Control *cpu_of_scheduled = _Thread_Get_CPU( scheduled );
+  Per_CPU_Control *cpu_of_victim = _Thread_Get_CPU( victim );
   Thread_Control *heir;
 
   scheduled->is_scheduled = true;
@@ -88,7 +88,7 @@ static inline void _Scheduler_SMP_Allocate_processor(
   if ( heir != victim ) {
     const Per_CPU_Control *cpu_of_executing = _Per_CPU_Get();
 
-    heir->cpu = cpu_of_victim;
+    _Thread_Set_CPU( heir, cpu_of_victim );
 
     /*
      * FIXME: Here we need atomic store operations with a relaxed memory order.

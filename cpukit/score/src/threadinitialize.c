@@ -205,14 +205,14 @@ bool _Thread_Initialize(
   the_thread->is_scheduled            = false;
   the_thread->is_in_the_air           = false;
   the_thread->is_executing            = false;
-
-  /* Initialize the cpu field for the non-SMP schedulers */
-  the_thread->cpu                     = _Per_CPU_Get_by_index( 0 );
 #if __RTEMS_HAVE_SYS_CPUSET_H__
    the_thread->affinity               = *(_CPU_set_Default());
    the_thread->affinity.set           = &the_thread->affinity.preallocated;
 #endif
 #endif
+
+  /* Initialize the CPU for the non-SMP schedulers */
+  _Thread_Set_CPU( the_thread, _Per_CPU_Get_by_index( 0 ) );
 
   the_thread->current_state           = STATES_DORMANT;
   the_thread->Wait.queue              = NULL;

@@ -432,6 +432,32 @@ void _Thread_blocking_operation_Cancel(
   ISR_Level                         level
 );
 
+RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Get_CPU(
+  const Thread_Control *thread
+)
+{
+#if defined(RTEMS_SMP)
+  return thread->cpu;
+#else
+  (void) thread;
+
+  return _Per_CPU_Get();
+#endif
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Set_CPU(
+  Thread_Control *thread,
+  Per_CPU_Control *cpu
+)
+{
+#if defined(RTEMS_SMP)
+  thread->cpu = cpu;
+#else
+  (void) thread;
+  (void) cpu;
+#endif
+}
+
 /**
  * This function returns true if the_thread is the currently executing
  * thread, and false otherwise.
@@ -584,7 +610,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Signal_notification( Thread_Control *thread )
 #if defined(RTEMS_SMP)
     if ( thread->is_executing ) {
       const Per_CPU_Control *cpu_of_executing = _Per_CPU_Get();
-      Per_CPU_Control *cpu_of_thread = thread->cpu;
+      Per_CPU_Control *cpu_of_thread = _Thread_Get_CPU( thread );
 
       if ( cpu_of_executing != cpu_of_thread ) {
         cpu_of_thread->dispatch_necessary = true;

@@ -26,6 +26,7 @@
 
 #include <rtems/cpuuse.h>
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
@@ -43,7 +44,8 @@
     #else
       /* FIXME: Locking */
       if ( the_thread->is_executing ) {
-        *time_of_context_switch = the_thread->cpu->time_of_last_context_switch;
+        *time_of_context_switch =
+          _Thread_Get_CPU( the_thread )->time_of_last_context_switch;
         return true;
       }
     #endif
