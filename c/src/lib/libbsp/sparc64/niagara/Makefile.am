@@ -32,13 +32,14 @@ nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 
 EXTRA_DIST = ../shared/start/start.S
-start.$(OBJEXT): ../shared/start/start.S
+%.$(OBJEXT):%.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += ../shared/startup/linkcmds
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+startup_SOURCES = startup/bspclean.c startup/m5op_sparc.S \
+    ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppost.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
