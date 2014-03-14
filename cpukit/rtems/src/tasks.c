@@ -22,13 +22,14 @@
 #include <rtems/config.h>
 #include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/eventimpl.h>
+#include <rtems/rtems/signalimpl.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/modes.h>
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/posix/keyimpl.h>
 #include <rtems/score/stack.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
@@ -70,6 +71,7 @@ static bool _RTEMS_tasks_Create_extension(
   _Event_Initialize( &api->Event );
   _Event_Initialize( &api->System_event );
   _ASR_Initialize( &api->Signal );
+  _Thread_Action_initialize( &api->Signal_action, _Signal_Action_handler );
   created->task_variables = NULL;
 
   if ( rtems_configuration_get_notepads_enabled() ) {

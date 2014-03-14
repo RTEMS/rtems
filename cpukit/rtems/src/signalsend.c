@@ -47,6 +47,10 @@ rtems_status_code rtems_signal_send(
       if ( ! _ASR_Is_null_handler( asr->handler ) ) {
         if ( asr->is_enabled ) {
           _ASR_Post_signals( asr, signal_set, &asr->signals_posted );
+          _Thread_Add_post_switch_action(
+            the_thread,
+            &api->Signal_action
+          );
           _Thread_Signal_notification( the_thread );
         } else {
           _ASR_Post_signals( asr, signal_set, &asr->signals_pending );

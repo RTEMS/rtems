@@ -18,19 +18,28 @@
 #include "config.h"
 #endif
 
-#include <rtems/rtems/signal.h>
+#include <rtems/rtems/signalimpl.h>
 #include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/threaddispatch.h>
+#include <rtems/score/threadimpl.h>
 
-static void _RTEMS_signal_Post_switch_hook( Thread_Control *executing )
+void _Signal_Action_handler(
+  Thread_Control  *executing,
+  Thread_Action   *action,
+  Per_CPU_Control *cpu,
+  ISR_Level        level
+)
 {
   RTEMS_API_Control *api;
   ASR_Information   *asr;
   rtems_signal_set   signal_set;
   Modes_Control      prev_mode;
+
+  (void) action;
+  _Thread_Action_release_and_ISR_enable( cpu, level );
 
   api = executing->API_Extensions[ THREAD_API_RTEMS ];
   if ( !api )
@@ -53,12 +62,7 @@ static void _RTEMS_signal_Post_switch_hook( Thread_Control *executing )
 
   asr->nest_level -= 1;
   rtems_task_mode( prev_mode, RTEMS_ALL_MODE_MASKS, &prev_mode );
-
 }
-
-static API_extensions_Post_switch_control _RTEMS_signal_Post_switch = {
-  .hook = _RTEMS_signal_Post_switch_hook
-};
 
 rtems_status_code rtems_signal_catch(
   rtems_asr_entry   asr_handler,
@@ -75,8 +79,6 @@ rtems_status_code rtems_signal_catch(
 
   _Thread_Disable_dispatch(); /* cannot reschedule while */
                               /*   the thread is inconsistent */
-
-  _API_extensions_Add_post_switch( &_RTEMS_signal_Post_switch );
 
   if ( !_ASR_Is_null_handler( asr_handler ) ) {
     asr->mode_set = mode_set;

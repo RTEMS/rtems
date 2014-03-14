@@ -18,6 +18,7 @@
 #define _RTEMS_RTEMS_SIGNALIMPL_H
 
 #include <rtems/rtems/signal.h>
+#include <rtems/score/thread.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,6 +39,13 @@ extern "C" {
  *  This routine performs the initialization necessary for this manager.
  */
 void _Signal_Manager_initialization( void );
+
+void _Signal_Action_handler(
+  Thread_Control *thread,
+  Thread_Action *action,
+  Per_CPU_Control *cpu,
+  ISR_Level level
+);
 
 /**@}*/
 

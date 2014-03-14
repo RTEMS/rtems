@@ -559,6 +559,12 @@ typedef struct {
   Event_Control            System_event;
   /** This field contains the Classic API Signal information for this task. */
   ASR_Information          Signal;
+
+  /**
+   * @brief Signal post-switch action in case signals are pending.
+   */
+  Thread_Action            Signal_action;
+
   /**
    *  This field contains the notepads for this task.
    *
