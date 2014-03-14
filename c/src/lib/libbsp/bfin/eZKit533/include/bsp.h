@@ -101,15 +101,6 @@ extern "C" {
 #define FIFOLENGTH 0x100
 
 /**
- * @brief Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- */
-
-#define rtems_bsp_delay( microseconds ) \
-  { \
-  }
-
-/**
  * @name Constants
  * @{
  */
