@@ -8,7 +8,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include <rtems.h>
+#include <bsp.h>
 #include <rtems/endian.h>
 #include "dwmac-common.h"
 #include "dwmac-core.h"
