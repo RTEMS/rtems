@@ -221,8 +221,8 @@ size_t _Chain_Node_count_unprotected( const Chain_Control *chain );
 /**
  * @brief Set off chain.
  *
- * This function sets the next and previous fields of the @a node to NULL
- * indicating the @a node is not part of a chain.
+ * This function sets the next field of the @a node to NULL indicating the @a
+ * node is not part of a chain.
  *
  * @param[in] node the node set to off chain.
  */
@@ -230,14 +230,14 @@ RTEMS_INLINE_ROUTINE void _Chain_Set_off_chain(
   Chain_Node *node
 )
 {
-  node->next = node->previous = NULL;
+  node->next = NULL;
 }
 
 /**
  * @brief Is the node off chain.
  *
- * This function returns true if the @a node is not on a chain. A @a node is
- * off chain if the next and previous fields are set to NULL.
+ * This function returns true if the @a node is not on a chain.  A @a node is
+ * off chain if the next field is set to NULL.
  *
  * @param[in] node is the node off chain.
  *
@@ -248,7 +248,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Is_node_off_chain(
   const Chain_Node *node
 )
 {
-  return (node->next == NULL) && (node->previous == NULL);
+  return node->next == NULL;
 }
 
 /**
