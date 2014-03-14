@@ -207,6 +207,5 @@ post_switch:
 
   _Per_CPU_Release_and_ISR_enable( per_cpu, level );
 
-  _API_extensions_Run_post_switch( executing );
   _Thread_Run_post_switch_actions( executing );
 }
