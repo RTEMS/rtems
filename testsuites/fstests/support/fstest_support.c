@@ -56,7 +56,8 @@ rtems_task Init(
     rtems_task_argument ignored)
 {
   int rc=0;
-  puts( "\n\n*** FILE SYSTEM TEST ( " FILESYSTEM " ) ***" );
+
+  TEST_BEGIN();
 
   puts( "Initializing filesystem " FILESYSTEM );
   test_initialize_filesystem();
@@ -71,6 +72,6 @@ rtems_task Init(
   puts( "\n\nShutting down filesystem " FILESYSTEM );
   test_shutdown_filesystem();
 
-  puts( "*** END OF FILE SYSTEM TEST ( " FILESYSTEM " ) ***" );
+  TEST_END();
   rtems_test_exit(0);
 }

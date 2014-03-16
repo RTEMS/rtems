@@ -22,7 +22,10 @@
 #include <unistd.h>
 
 #include "fstest.h"
+#include "fs_config.h"
 #include "pmacros.h"
+
+const char rtems_test_name[] = "FSERROR " FILESYSTEM;
 
 static void open_mkdir_error (void)
 {

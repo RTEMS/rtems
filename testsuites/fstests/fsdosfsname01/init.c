@@ -36,6 +36,8 @@
 
 #include <errno.h>
 
+const char rtems_test_name[] = "FSDOSFSNAME 1";
+
 #define PRINT_DISK_IMAGE 0
 
 #define MOUNT_DIR "/mnt"
@@ -1287,12 +1289,11 @@ static void test( void )
 
 static void Init( rtems_task_argument arg )
 {
-  puts( "\n\n*** TEST fsdosfsname01 ***" );
+  TEST_BEGIN();
 
   test();
 
-  puts( "*** END OF TEST fsdosfsname01 ***" );
-
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -1322,6 +1323,8 @@ size_t rtems_ramdisk_configuration_size = RTEMS_ARRAY_SIZE(rtems_ramdisk_configu
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS ( 7 + 2 + ( 4 * 2 ) )
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

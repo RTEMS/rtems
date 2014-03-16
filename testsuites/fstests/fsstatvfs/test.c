@@ -15,7 +15,10 @@
 #include <fcntl.h>
 
 #include "fstest.h"
+#include "fs_config.h"
 #include "pmacros.h"
+
+const char rtems_test_name[] = "FSSTATVFS " FILESYSTEM;
 
 static void statvfs_validate(struct statvfs *stat)
 {

@@ -23,7 +23,10 @@
 #include <errno.h>
 
 #include "fstest.h"
+#include "fs_config.h"
 #include "pmacros.h"
+
+const char rtems_test_name[] = "FSRDWR " FILESYSTEM;
 
 static const mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
 

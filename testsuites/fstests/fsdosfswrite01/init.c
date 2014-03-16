@@ -23,6 +23,8 @@
 #include <rtems/blkdev.h>
 #include <bsp.h>
 
+const char rtems_test_name[] = "FSDOSFSWRITE 1";
+
 #define MAX_PATH_LENGTH 100 /* Maximum number of characters per path */
 #define SECTOR_SIZE 512 /* sector size (bytes) */
 #define FAT16_MAX_CLN 65525 /* maximum + 1 number of clusters for FAT16 */
@@ -262,12 +264,11 @@ static void test( void )
 
 static void Init( rtems_task_argument arg )
 {
-  puts( "\n\n*** TEST FSDOSFSWRITE 1 ***" );
+  TEST_BEGIN();
 
   test();
 
-  puts( "*** END OF TEST FSDOSFSWRITE 1 ***" );
-
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -286,6 +287,8 @@ static void Init( rtems_task_argument arg )
 #define CONFIGURE_UNIFIED_WORK_AREAS
 
 #define CONFIGURE_INIT_TASK_STACK_SIZE ( 32 * 1024 )
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

@@ -30,6 +30,8 @@
 #include <rtems/dosfs.h>
 #include <rtems/ramdisk.h>
 
+const char rtems_test_name[] = "FSDOSFSSYNC 1";
+
 static void create_file(const char *file)
 {
   int fd;
@@ -139,12 +141,11 @@ static void test(const char *rda, const char *mnt, const char *file)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST FSDOSFSSYNC 1 ***");
+  TEST_BEGIN();
 
   test("/dev/rda", "/mnt", "/mnt/file");
 
-  puts("*** END OF TEST FSDOSFSSYNC 1 ***");
-
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -168,6 +169,8 @@ size_t rtems_ramdisk_configuration_size = 1;
 #define CONFIGURE_MAXIMUM_TASKS 2
 
 #define CONFIGURE_EXTRA_TASK_STACKS (8 * 1024)
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

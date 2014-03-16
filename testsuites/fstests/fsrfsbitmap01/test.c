@@ -25,8 +25,11 @@
 #include <rtems/rfs/rtems-rfs-file-system.h>
 
 #include "fstest.h"
+#include "fs_config.h"
 #include "tmacros.h"
 #include <rtems/malloc.h>
+
+const char rtems_test_name[] = "FSRFSBITMAP 1";
 
 #define rtems_rfs_exit_on_error(_rc, _r, _c, _b)                         \
   if ((_rc > 0) || _r) { free (_b); rtems_rfs_bitmap_close (_c); return; }

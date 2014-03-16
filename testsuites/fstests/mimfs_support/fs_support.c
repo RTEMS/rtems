@@ -47,8 +47,8 @@ test_shutdown_filesystem (void)
 /**
  * Configure base RTEMS resources.
  */
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

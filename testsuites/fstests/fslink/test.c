@@ -23,7 +23,10 @@
 #include <math.h>
 
 #include "fstest.h"
+#include "fs_config.h"
 #include "pmacros.h"
+
+const char rtems_test_name[] = "FSLINK " FILESYSTEM;
 
 /*
  * Test if the successful call works as expect

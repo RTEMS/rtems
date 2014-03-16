@@ -23,7 +23,10 @@
 #include <dirent.h>
 
 #include "fstest.h"
+#include "fs_config.h"
 #include "pmacros.h"
+
+const char rtems_test_name[] = "FSSYMLINK " FILESYSTEM;
 
 /*
  * Test the function of symlink

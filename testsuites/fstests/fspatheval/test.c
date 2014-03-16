@@ -21,9 +21,12 @@
 #include <unistd.h>
 
 #include "fstest.h"
+#include "fs_config.h"
 #include "pmacros.h"
 
 #define BUF_SIZE 100
+
+const char rtems_test_name[] = "FSPATHEVAL " FILESYSTEM;
 
 static void make_multiple_files (char **files,int is_directory)
 {

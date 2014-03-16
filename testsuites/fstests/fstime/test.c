@@ -24,7 +24,10 @@
 
 #ifdef __rtems__
 #include "fstest.h"
+#include "fs_config.h"
 #include "pmacros.h"
+
+const char rtems_test_name[] = "FSTIME " FILESYSTEM;
 #else
 #include <assert.h>
 #define rtems_test_assert(x) assert(x)
