@@ -56,22 +56,6 @@ extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"scc1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_scc1_driver_attach
 
-/*
- *  Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- */
-
-#define rtems_bsp_delay( microseconds ) \
-  { register uint32_t         _delay=(microseconds); \
-    register uint32_t         _tmp=123; \
-    __asm__ volatile( "0: \
-                     nbcd      %0 ; \
-                     nbcd      %0 ; \
-                     dbf       %1,0b" \
-                  : "=d" (_tmp), "=d" (_delay) \
-                  : "0"  (_tmp), "1"  (_delay) ); \
-  }
-
 extern rtems_isr_entry M68Kvec[];   /* vector table address */
 
 /* functions */
