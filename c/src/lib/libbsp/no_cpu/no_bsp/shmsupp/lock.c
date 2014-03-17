@@ -57,10 +57,12 @@ void Shm_Lock(
                   );
       /*
        *  If not available, then may want to delay to reduce load on lock.
+       *
+       *  NOTE: BSP must initialize the counter facility. Delay value is BSP
+       *        dependent.
        */
-
       if ( lock_value )
-        rtems_bsp_delay( 10 );   /* approximately 10 microseconds */
+        rtems_counter_delay_nanoseconds( 100 );
    }
 }
 
