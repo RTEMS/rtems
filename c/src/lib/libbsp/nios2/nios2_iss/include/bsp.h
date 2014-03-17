@@ -27,16 +27,6 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
-
-/*
- *  Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- */
-
-#define rtems_bsp_delay( microseconds ) \
-  { \
-  }
-
 /* ============================================ */
 
 /* SOPC-specific Constants */
