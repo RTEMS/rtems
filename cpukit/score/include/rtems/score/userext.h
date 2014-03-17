@@ -119,11 +119,12 @@ typedef void( *User_extensions_thread_start_extension )(
  * which restarted the thread.  The second parameter points to the restarted
  * thread.
  *
- * It is invoked after the environment of the thread has been loaded and the
- * thread has been made ready.
+ * It is invoked in the context of the restarted thread right before the
+ * execution context is restarted.  The executing and restarted arguments are
+ * equal.  The thread stack reflects the previous execution context.
  *
- * Thread dispatching is disabled.  The executing thread is not the holder of
- * the allocator mutex.
+ * Thread dispatching is enabled.  The thread is not the holder of the
+ * allocator mutex.
  */
 typedef void( *User_extensions_thread_restart_extension )(
   Thread_Control *,

@@ -33,6 +33,8 @@ void _Thread_Life_action_handler(
   (void) action;
   _Thread_Action_release_and_ISR_enable( cpu, level );
 
+  _User_extensions_Thread_restart( the_thread );
+
   _Thread_Disable_dispatch();
 
   _Thread_Load_environment( executing );
@@ -82,8 +84,6 @@ bool _Thread_Restart(
     the_thread->Start.numeric_argument = numeric_argument;
 
     _Thread_Request_life_change( the_thread );
-
-    _User_extensions_Thread_restart( the_thread );
 
     return true;
   }

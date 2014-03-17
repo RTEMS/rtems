@@ -255,6 +255,15 @@ static bool _POSIX_Threads_Create_extension(
   return true;
 }
 
+static void _POSIX_Threads_Restart_extension(
+  Thread_Control *executing,
+  Thread_Control *restarted
+)
+{
+  (void) executing;
+  _POSIX_Threads_cancel_run( restarted );
+}
+
 /*
  *  _POSIX_Threads_Delete_extension
  *
@@ -336,7 +345,7 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
   { { NULL, NULL }, NULL },
   { _POSIX_Threads_Create_extension,          /* create */
     NULL,                                     /* start */
-    NULL,                                     /* restart */
+    _POSIX_Threads_Restart_extension,         /* restart */
     _POSIX_Threads_Delete_extension,          /* delete */
     NULL,                                     /* switch */
     NULL,                                     /* begin */
