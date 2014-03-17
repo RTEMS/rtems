@@ -396,6 +396,10 @@ typedef struct {
   Chain_Control Chain;
 } Thread_Action_control;
 
+typedef struct {
+  Thread_Action      Action;
+} Thread_Life_control;
+
 /**
  *  This structure defines the Thread Control Block (TCB).
  */
@@ -543,6 +547,7 @@ struct Thread_Control_struct {
    */
   Chain_Control           Key_Chain;
 
+  Thread_Life_control                   Life;
 };
 
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)

@@ -78,6 +78,7 @@ smppsxsignal01/Makefile
 smpschedule01/Makefile
 smpsignal01/Makefile
 smpswitchextension01/Makefile
+smpthreadlife01/Makefile
 smpunsupported01/Makefile
 ])
 AC_OUTPUT

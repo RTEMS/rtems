@@ -21,6 +21,7 @@ SUBDIRS += smpmigration01
 SUBDIRS += smpschedule01
 SUBDIRS += smpsignal01
 SUBDIRS += smpswitchextension01
+SUBDIRS += smpthreadlife01
 SUBDIRS += smpunsupported01
 if HAS_POSIX
 SUBDIRS += smppsxaffinity01

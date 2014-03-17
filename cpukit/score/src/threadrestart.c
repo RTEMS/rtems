@@ -20,7 +20,39 @@
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/userextimpl.h>
-#include <rtems/config.h>
+
+void _Thread_Life_action_handler(
+  Thread_Control  *executing,
+  Thread_Action   *action,
+  Per_CPU_Control *cpu,
+  ISR_Level        level
+)
+{
+  (void) action;
+  _Thread_Action_release_and_ISR_enable( cpu, level );
+
+  _Thread_Disable_dispatch();
+
+  _Thread_Load_environment( executing );
+  _Thread_Restart_self( executing );
+}
+
+static void _Thread_Request_life_change(
+  Thread_Control            *the_thread,
+  void                      *pointer_argument,
+  Thread_Entry_numeric_type  numeric_argument
+)
+{
+  _Thread_Set_transient( the_thread );
+
+  _Thread_Reset( the_thread, pointer_argument, numeric_argument );
+
+  _Thread_Add_post_switch_action( the_thread, &the_thread->Life.Action );
+
+  _Thread_Ready( the_thread );
+
+  _Thread_Request_dispatch_if_executing( the_thread );
+}
 
 bool _Thread_Restart(
   Thread_Control            *the_thread,
@@ -28,24 +60,12 @@ bool _Thread_Restart(
   Thread_Entry_numeric_type  numeric_argument
 )
 {
-#if defined( RTEMS_SMP )
-  if (
-    rtems_configuration_is_smp_enabled()
-      && !_Thread_Is_executing( the_thread )
-  ) {
-    return false;
-  }
-#endif
-
   if ( !_States_Is_dormant( the_thread->current_state ) ) {
-
-    _Thread_Set_transient( the_thread );
-
-    _Thread_Reset( the_thread, pointer_argument, numeric_argument );
-
-    _Thread_Load_environment( the_thread );
-
-    _Thread_Ready( the_thread );
+    _Thread_Request_life_change(
+      the_thread,
+      pointer_argument,
+      numeric_argument
+    );
 
     _User_extensions_Thread_restart( the_thread );
 

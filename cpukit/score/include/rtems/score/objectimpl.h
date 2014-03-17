@@ -880,23 +880,6 @@ RTEMS_INLINE_ROUTINE void _Objects_Put_without_thread_dispatch(
 }
 
 /**
- * @brief Puts back an object obtained with _Objects_Get().
- *
- * The thread dispatch disable level will remain unchanged.
- *
- * On SMP configurations the Giant lock will be released.
- */
-RTEMS_INLINE_ROUTINE void _Objects_Put_and_keep_thread_dispatch_disabled(
-  Objects_Control *the_object
-)
-{
-  (void) the_object;
-#if defined(RTEMS_SMP)
-  _Giant_Release();
-#endif
-}
-
-/**
  * @brief Puts back an object obtained with _Objects_Get_isr_disable().
  */
 RTEMS_INLINE_ROUTINE void _Objects_Put_for_get_isr_disable(

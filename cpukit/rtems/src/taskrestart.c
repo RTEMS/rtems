@@ -34,15 +34,7 @@ rtems_status_code rtems_task_restart(
 
     case OBJECTS_LOCAL:
       if ( _Thread_Restart( the_thread, NULL, argument ) ) {
-        if ( _Thread_Is_executing( the_thread ) ) {
-          _Objects_Put_and_keep_thread_dispatch_disabled(
-            &the_thread->Object
-          );
-          _Thread_Restart_self();
-        } else {
-          _Objects_Put( &the_thread->Object );
-        }
-
+        _Objects_Put( &the_thread->Object );
         return RTEMS_SUCCESSFUL;
       }
       _Objects_Put( &the_thread->Object );

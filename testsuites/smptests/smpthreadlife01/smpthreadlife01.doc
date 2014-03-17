@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smprestart01
+
+directives:
+
+  - rtems_task_restart()
+
+concepts:
+
+  - Ensure that a restart of a task executing on another processor works.

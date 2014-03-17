@@ -219,6 +219,13 @@ void _Thread_Reset(
   Thread_Entry_numeric_type  numeric_argument
 );
 
+void _Thread_Life_action_handler(
+  Thread_Control  *executing,
+  Thread_Action   *action,
+  Per_CPU_Control *cpu,
+  ISR_Level        level
+);
+
 /**
  *  @brief Frees all memory associated with the specified thread.
  *
@@ -501,21 +508,23 @@ RTEMS_INLINE_ROUTINE void _Thread_Unblock (
  * to that of its initial state.
  */
 
-RTEMS_INLINE_ROUTINE void _Thread_Restart_self( void )
+RTEMS_INLINE_ROUTINE void _Thread_Restart_self( Thread_Control *executing )
 {
 #if defined(RTEMS_SMP)
   ISR_Level level;
+
+  _Giant_Release();
 
   _Per_CPU_ISR_disable_and_acquire( _Per_CPU_Get(), level );
   ( void ) level;
 #endif
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-  if ( _Thread_Executing->fp_context != NULL )
-    _Context_Restore_fp( &_Thread_Executing->fp_context );
+  if ( executing->fp_context != NULL )
+    _Context_Restore_fp( &executing->fp_context );
 #endif
 
-  _CPU_Context_Restart_self( &_Thread_Executing->Registers );
+  _CPU_Context_Restart_self( &executing->Registers );
 }
 
 /**
@@ -601,6 +610,26 @@ RTEMS_INLINE_ROUTINE uint32_t _Thread_Get_maximum_internal_threads(void)
 RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Internal_allocate( void )
 {
   return (Thread_Control *) _Objects_Allocate( &_Thread_Internal_information );
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Request_dispatch_if_executing(
+  Thread_Control *thread
+)
+{
+#if defined(RTEMS_SMP)
+  if ( thread->is_executing ) {
+    const Per_CPU_Control *cpu_of_executing = _Per_CPU_Get();
+    Per_CPU_Control *cpu_of_thread = _Thread_Get_CPU( thread );
+
+    cpu_of_thread->dispatch_necessary = true;
+
+    if ( cpu_of_executing != cpu_of_thread ) {
+      _Per_CPU_Send_interrupt( cpu_of_thread );
+    }
+  }
+#else
+  (void) thread;
+#endif
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_Signal_notification( Thread_Control *thread )

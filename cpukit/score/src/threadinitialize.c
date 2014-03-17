@@ -240,6 +240,11 @@ bool _Thread_Initialize(
 
   _Thread_Action_control_initialize( &the_thread->Post_switch_actions );
 
+  _Thread_Action_initialize(
+    &the_thread->Life.Action,
+    _Thread_Life_action_handler
+  );
+
   /*
    *  Open the object
    */
