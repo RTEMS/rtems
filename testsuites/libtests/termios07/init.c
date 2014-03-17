@@ -23,6 +23,8 @@
 #include <rtems/dumpbuf.h>
 #include <rtems/libio.h>
 
+const char rtems_test_name[] = "TERMIOS 7";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void write_helper(int fd, const char *c);
@@ -128,7 +130,7 @@ rtems_task Init(
 {
   rtems_status_code sc;
 
-  puts( "\n\n*** TEST TERMIOS07 ***" );
+  TEST_BEGIN();
 
   puts( "rtems_termios_bufsize( 64, 64, 64 ) - OK" );
   sc = rtems_termios_bufsize ( 64, 64, 64 );
@@ -154,7 +156,7 @@ rtems_task Init(
 
   close_it();
 
-  puts( "*** END OF TEST TERMIOS07 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -176,6 +178,8 @@ rtems_task Init(
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 #define CONFIGURE_MAXIMUM_TASKS                  1
 #define CONFIGURE_MAXIMUM_TIMERS                 2
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

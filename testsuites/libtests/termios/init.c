@@ -36,6 +36,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "TERMIOS";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void print_32bits(unsigned long bits, unsigned char size, char * names[]);
@@ -683,7 +685,7 @@ out:
   if( tcsetattr( fileno( stdin ), TCSADRAIN, &old) < 0 )
     perror("do_raw_input(): tcsetattr() failed: %s\n" );
 
-  printf ("*** End of Raw input  VMIN=%d  VTIME=%d ***\n", vmin, vtime);
+  TEST_BEGIN();
 }
 
 
@@ -731,7 +733,7 @@ Init (rtems_task_argument ignored)
   char c ;
   struct termios orig_termios, test_termios;
 
-  puts( "\n\n*** TEST TERMIOS INPUT CAPABILITIES ***" );
+  TEST_BEGIN();
 
   status = rtems_shell_wait_for_input(
     STDIN_FILENO,
@@ -793,7 +795,7 @@ Init (rtems_task_argument ignored)
       }
     }
   } else {
-    puts( "*** END OF TEST TERMIOS INPUT CAPABILITIES ***" );
+    TEST_END();
 
     rtems_test_exit( 0 );
   }
@@ -804,6 +806,8 @@ Init (rtems_task_argument ignored)
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS       1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

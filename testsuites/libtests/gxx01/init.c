@@ -15,6 +15,8 @@
 #include "test_support.h"
 #include <rtems/gxx_wrappers.h>
 
+const char rtems_test_name[] = "GXX 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void test_recursive_mutex(void);
@@ -176,7 +178,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** TEST GXX 01 ***" );
+  TEST_BEGIN();
 
   test_mutex();
   puts( "" );
@@ -190,7 +192,7 @@ rtems_task Init(
   test_key();
   puts( "" );
 
-  puts( "*** END OF TEST GXX 01 ***" );
+  TEST_END();
 
   rtems_test_exit( 0 );
 }
@@ -202,6 +204,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS        1
 #define CONFIGURE_MAXIMUM_SEMAPHORES   2
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

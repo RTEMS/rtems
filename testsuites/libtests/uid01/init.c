@@ -24,6 +24,8 @@
 #include "termios_testdriver_intr.h"
 #include "tmacros.h"
 
+const char rtems_test_name[] = "UID 1";
+
 #define UID_MESSAGE_COUNT 10
 
 /* forward declarations to avoid warnings */
@@ -101,7 +103,7 @@ rtems_task Init(
 )
 {
 
-  printf( "\n\n*** UID01 TEST ***\n" );
+  TEST_BEGIN();
 
   open_it();
   register_it();
@@ -115,7 +117,7 @@ rtems_task Init(
   receive_uid_message();
 
   close_it(); 
-  printf( "*** END OF UID01 TEST ***\n" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -145,6 +147,8 @@ rtems_task Init(
     UID_MESSAGE_COUNT, \
     sizeof(struct MW_UID_MESSAGE) \
   )
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_INIT

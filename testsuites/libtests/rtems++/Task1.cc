@@ -694,7 +694,7 @@ EndTask::EndTask(const char* name,
 
 void EndTask::body(rtems_task_argument)
 {
- printf("*** END OF RTEMS++ TEST ***\n");
+ TEST_END();
  exit(0);
 }
 

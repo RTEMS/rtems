@@ -27,6 +27,8 @@
 #include <rtems/libio.h>
 #include <rtems/rtems_bsdnet.h>
 
+const char rtems_test_name[] = "SYSCALL 1";
+
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
 
@@ -78,14 +80,14 @@ static void Init(rtems_task_argument arg)
 {
   int rv;
 
-  puts("\n\n*** TEST SYSCALL 1 ***");
+  TEST_BEGIN();
 
   rv = rtems_bsdnet_initialize_network();
   rtems_test_assert(rv == 0);
 
   test();
 
-  puts("*** END OF TEST SYSCALL 1 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -130,6 +132,8 @@ static rtems_device_driver open_driver_open(
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 
 #define CONFIGURE_MAXIMUM_TASKS 2
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

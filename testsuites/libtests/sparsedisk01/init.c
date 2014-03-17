@@ -22,6 +22,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SPARSEDISK 1";
+
 /* Number of bytes for test pattern within a sparse disk container */
 #define STATIC_PATTERN_SIZE 4096
 
@@ -415,11 +417,11 @@ void test( void )
 static void Init( rtems_task_argument arg )
 {
   (void) arg;
-  puts( "\n\n*** TEST SPARSEDISK 1 ***" );
+  TEST_BEGIN();
 
   test();
 
-  puts( "*** END OF TEST SPARSEDISK 1 ***" );
+  TEST_END();
 
   rtems_test_exit( 0 );
 }
@@ -435,6 +437,8 @@ static void Init( rtems_task_argument arg )
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
 #define CONFIGURE_INIT_TASK_STACK_SIZE ( 16 * 1024 )
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

@@ -23,6 +23,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+const char rtems_test_name[] = "DEVFS 3";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -37,7 +39,7 @@ rtems_task Init(
     .count = 1
   };
 
-  puts( "\n\n*** TEST DEVFS03 ***" );
+  TEST_BEGIN();
 
   memset(nodes, 0, sizeof(nodes));
 
@@ -74,7 +76,7 @@ rtems_task Init(
   status = rmdir( "/dir01" );
   rtems_test_assert( status == 0 );
 
-  puts( "*** END OF TEST DEVFS03 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -86,6 +88,8 @@ rtems_task Init(
 
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 #define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM

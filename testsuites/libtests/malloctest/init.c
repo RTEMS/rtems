@@ -35,6 +35,8 @@
 #include <rtems/score/protectedheap.h>
 #include <rtems/malloc.h>
 
+const char rtems_test_name[] = "MALLOCTEST";
+
 /*
  *  A simple test of realloc
  */
@@ -1249,7 +1251,7 @@ rtems_task Init(
   rtems_time_of_day time;
   rtems_status_code status;
 
-  puts( "\n\n*** MALLOC TEST ***" );
+  TEST_BEGIN();
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   status = rtems_clock_set( &time );

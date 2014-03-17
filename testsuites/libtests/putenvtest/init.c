@@ -28,6 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+const char rtems_test_name[] = "PUTENVTEST";
+
 rtems_task Init(
   rtems_task_argument argument
 );
@@ -41,6 +43,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS               1
 
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>
@@ -49,12 +53,12 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** PUTENV/GETENV TEST ***" );
+  TEST_BEGIN();
 
   puts( "putenv(\"FOO=BAR\") - expected to work" );
   putenv ("FOO=BAR");
   printf ("getenv(\"FOO\") ==> \"%s\"\n", getenv ("FOO"));
 
-  puts( "*** END OF PUTENV/GETENV TEST ***" );
+  TEST_END();
   rtems_test_exit(0);
 }

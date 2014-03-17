@@ -31,6 +31,8 @@
 #include <rtems/bdbuf.h>
 #include <rtems/diskdevs.h>
 
+const char rtems_test_name[] = "BLOCK 4";
+
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
 
@@ -99,7 +101,7 @@ static void task_high(rtems_task_argument arg)
 
   printk("H: release done: 0\n");
 
-  printk("*** END OF TEST BLOCK 4 ***\n");
+  rtems_test_endk();
 
   exit(0);
 }
@@ -109,7 +111,7 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   dev_t dev = 0;
 
-  printk("\n\n*** TEST BLOCK 4 ***\n");
+  rtems_test_begink();
 
   sc = rtems_disk_io_initialize();
   ASSERT_SC(sc);
@@ -160,6 +162,8 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_MAXIMUM_TASKS 3
 #define CONFIGURE_MAXIMUM_DRIVERS 2
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

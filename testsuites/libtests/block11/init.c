@@ -37,6 +37,8 @@
 #include <rtems/diskdevs.h>
 #include <rtems/malloc.h>
 
+const char rtems_test_name[] = "BLOCK 11";
+
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
 
@@ -401,7 +403,7 @@ static rtems_task Init(rtems_task_argument argument)
 {
   rtems_status_code sc;
 
-  puts("\n\n*** TEST BLOCK 11 ***");
+  TEST_BEGIN();
 
   sc = rtems_disk_io_initialize();
   ASSERT_SC(sc);
@@ -413,7 +415,7 @@ static rtems_task Init(rtems_task_argument argument)
   sc = rtems_disk_io_done();
   ASSERT_SC(sc);
 
-  puts("*** END OF TEST BLOCK 11 ***");
+  TEST_END();
 
   exit(0);
 }
@@ -433,6 +435,8 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 #define CONFIGURE_MAXIMUM_DRIVERS 2
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

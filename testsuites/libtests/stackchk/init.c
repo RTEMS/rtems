@@ -26,6 +26,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "STACKCHK";
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -33,7 +35,7 @@ rtems_task Init(
   rtems_time_of_day time;
   rtems_status_code status;
 
-  puts( "\n\n*** TEST STACK CHECKER ***" );
+  TEST_BEGIN();
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   status = rtems_clock_set( &time );
@@ -99,6 +101,6 @@ void Fatal_extension(
   } else if ( error != rtems_build_name( 'T', 'A', '1', ' ' ) ) {
     printk( "unexpected fatal error\n" );
   } else {
-    printk( "*** END OF TEST STACK CHECKER ***\n" );
+    rtems_test_endk();
   }
 }

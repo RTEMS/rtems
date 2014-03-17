@@ -14,6 +14,8 @@
 #include <tmacros.h>
 #include <rtems/bspcmdline.h>
 
+const char rtems_test_name[] = "BSPCMDLINE 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void test_errors(void);
@@ -140,7 +142,7 @@ rtems_task Init(
 {
   const char *bspcmdline;
 
-  puts( "\n\n*** TEST OF PARSING BOOT COMMAND STRING ***" );
+  TEST_BEGIN();
 
   bspcmdline = rtems_bsp_cmdline_get();
   if ( bspcmdline ) {
@@ -166,7 +168,7 @@ rtems_task Init(
     "-name"
     );
 
-  puts( "*** END OF OF PARSING BOOT COMMAND STRING ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -176,6 +178,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS         1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

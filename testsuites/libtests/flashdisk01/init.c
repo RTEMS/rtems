@@ -34,6 +34,8 @@
 
 #include "test-file-system.h"
 
+const char rtems_test_name[] = "FLASHDISK 1";
+
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
 
@@ -149,11 +151,11 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST FLASHDISK 1 ***");
+  TEST_BEGIN();
 
   test();
 
-  puts("*** END OF TEST FLASHDISK 1 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -351,6 +353,8 @@ uint32_t rtems_flashdisk_configuration_size = FLASHDISK_CONFIG_COUNT;
 
 #define CONFIGURE_EXTRA_TASK_STACKS (8 * 1024)
 
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT
@@ -361,7 +365,7 @@ uint32_t rtems_flashdisk_configuration_size = FLASHDISK_CONFIG_COUNT;
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST FLASHDISK 1 ***");
+  TEST_BEGIN();
   puts("NOT ENOUGH MEMORY TO RUN TEST");
 
   rtems_test_exit(0);

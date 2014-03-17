@@ -42,7 +42,7 @@ rtems_task Task_1_through_5(
     bool malloc_walk_ok;
 
     if ( passes++ > NUM_PASSES ) {
-	puts("*** END OF MALLOC TEST ***");
+	TEST_END();
         rtems_test_exit(0);
     }
 

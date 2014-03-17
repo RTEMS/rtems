@@ -24,11 +24,13 @@
 
 #include "bdbuf_tests.h"
 
+const char rtems_test_name[] = "BLOCK 8";
+
 rtems_task Init(rtems_task_argument argument)
 {
-  puts( "\n\n*** TEST BLOCK 8 ***" );
+  rtems_test_begin();
   run_bdbuf_tests();
-  puts( "*** END OF TEST BLOCK 8 ***" );
+  rtems_test_end();
 
   exit(0);
 }

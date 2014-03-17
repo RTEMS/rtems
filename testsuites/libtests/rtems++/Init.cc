@@ -26,12 +26,14 @@
 #define CONFIGURE_INIT
 #include "System.h"
 
+const char rtems_test_name[] = "RTEMS++";
+
 // make global so it lasts past the Init task's stack's life time
 Task1 task_1;
 
 rtems_task Init(rtems_task_argument )
 {
-  puts( "\n\n*** RTEMS++ TEST ***" );
+  TEST_BEGIN();
 
   printf( "INIT - Task.create() - " );
   task_1.create("TA1 ", 0, RTEMS_MINIMUM_STACK_SIZE);

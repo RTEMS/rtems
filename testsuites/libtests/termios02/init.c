@@ -16,6 +16,8 @@
 #include <errno.h>
 #include <unistd.h>
 
+const char rtems_test_name[] = "TERMIOS 2";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -28,7 +30,7 @@ rtems_task Init(
   char *term_name_p;
   char term_name[32];
 
-  puts( "\n\n*** TERMIOS 02 TEST ***" );
+  TEST_BEGIN();
 
   puts( "tcdrain(12) - EBADF" );
   sc = tcdrain(12);
@@ -136,7 +138,7 @@ rtems_task Init(
   rtems_test_assert( term_name_p == term_name );
   printf( "ctermid ==> %s\n", term_name_p );
 
-  puts( "*** END OF TERMIOS 02 TEST ***" );
+  TEST_END();
   exit( 0 );
 }
 
@@ -147,6 +149,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS            1
 #define CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

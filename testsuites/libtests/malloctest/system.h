@@ -39,6 +39,8 @@ void blow_stack( void );
 
 #define CONFIGURE_MALLOC_STATISTICS
 
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>

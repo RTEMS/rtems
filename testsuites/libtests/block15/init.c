@@ -25,6 +25,8 @@
 #include <rtems/blkdev.h>
 #include <rtems/bdbuf.h>
 
+const char rtems_test_name[] = "BLOCK 15";
+
 #define BLOCK_COUNT 20
 
 #define ACTION_COUNT 8
@@ -154,11 +156,11 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST BLOCK 15 ***");
+  TEST_BEGIN();
 
   test();
 
-  puts("*** END OF TEST BLOCK 15 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -175,6 +177,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

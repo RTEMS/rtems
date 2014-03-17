@@ -124,7 +124,7 @@ rtems_task Task_1_through_5(
           rtems_rate_monotonic_report_statistics();
 
           puts( "" );
-          puts( "*** END OF RATE MONOTONIC PERIOD STATISTICS TEST ***" );
+          TEST_END();
 
           rtems_test_exit( 0 );
         }

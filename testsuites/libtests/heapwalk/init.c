@@ -26,6 +26,8 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/dumpbuf.h>
 
+const char rtems_test_name[] = "HEAPWALK";
+
 #define TEST_HEAP_SIZE 1024
 #define TEST_DEFAULT_PAGESIZE 128
 #define DUMP false
@@ -316,7 +318,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** HEAP WALK TEST ***" );
+  TEST_BEGIN();
 
   test_system_not_up();
   test_check_control();
@@ -326,6 +328,6 @@ rtems_task Init(
   test_check_free_block();
   test_output();
 
-  puts( "*** END OF HEAP WALK TEST ***" );
+  TEST_END();
   rtems_test_exit(0);
 }

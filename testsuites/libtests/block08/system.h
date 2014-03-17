@@ -12,7 +12,8 @@
  */
 
 #include <rtems.h>
-#include "rtems/blkdev.h"
+#include <rtems/blkdev.h>
+#include <rtems/test.h>
 
 #include <bsp.h>
 
@@ -45,6 +46,8 @@ rtems_task Init(
  * (on test start-up).
  */
 #define CONFIGURE_MAXIMUM_DRIVERS 5
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_INIT_TASK_STACK_SIZE      (4 * RTEMS_MINIMUM_STACK_SIZE)

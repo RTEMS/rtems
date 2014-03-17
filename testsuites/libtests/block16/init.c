@@ -28,6 +28,8 @@
 #include <rtems/ramdisk.h>
 #include <rtems/bdbuf.h>
 
+const char rtems_test_name[] = "BLOCK 16";
+
 #define ASSERT_SC(sc) rtems_test_assert((sc) == RTEMS_SUCCESSFUL)
 
 static void test(void)
@@ -123,11 +125,11 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST BLOCK 16 ***");
+  TEST_BEGIN();
 
   test();
 
-  puts("*** END OF TEST BLOCK 16 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -145,6 +147,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

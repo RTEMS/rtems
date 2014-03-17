@@ -48,7 +48,8 @@ void Fatal_extension(
 );
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { NULL, NULL, NULL, NULL, NULL, NULL, NULL, Fatal_extension }
+  { NULL, NULL, NULL, NULL, NULL, NULL, NULL, Fatal_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #include <rtems/confdefs.h>
 

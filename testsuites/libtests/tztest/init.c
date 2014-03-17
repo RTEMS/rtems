@@ -23,6 +23,8 @@
 #include <tmacros.h>
 #include <time.h>
 #include <stdlib.h>
+
+const char rtems_test_name[] = "TZTEST";
  
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
@@ -54,7 +56,7 @@ rtems_task Init(
   rtems_time_of_day time;
   rtems_status_code status;
 
-  puts( "\n\n*** TIMEZONE TEST ***" );
+  TEST_BEGIN();
 
   build_time( &time, 3, 14, 2007, 15, 9, 26, 5 );
   status = rtems_clock_set( &time );
@@ -66,13 +68,15 @@ rtems_task Init(
 
   tztester();
 
-  puts( "*** END OF TIMEZONE TEST ***" );
+  TEST_END();
   exit(0);
 }
 
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS 1

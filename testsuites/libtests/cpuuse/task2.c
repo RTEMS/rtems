@@ -51,6 +51,6 @@ rtems_task Task_2(
   puts( "" );
   rtems_cpu_usage_report();
   puts( "" );
-  puts( "*** END OF CPU USAGE LIBRARY TEST ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

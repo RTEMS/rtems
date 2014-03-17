@@ -32,6 +32,10 @@
 
 #include <bsp.h>
 
+#include <tmacros.h>
+
+const char rtems_test_name[] = "BLOCK 6";
+
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
 
@@ -1831,11 +1835,11 @@ bdbuf_tester (void)
 
 static rtems_task Init(rtems_task_argument argument)
 {
-  printf ("\n\n*** TEST BLOCK 6 ***\n");
+  TEST_BEGIN();
 
   bdbuf_tester ();
 
-  printf ("*** END OF TEST BLOCK 6 ***\n");
+  TEST_END();
 
   exit (0);
 }
@@ -1858,6 +1862,8 @@ static rtems_task Init(rtems_task_argument argument)
   (BDBUF_TEST_TASKS * BDBUF_TEST_STACK_SIZE)
 
 #define CONFIGURE_INIT_TASK_STACK_SIZE BDBUF_TEST_STACK_SIZE
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>

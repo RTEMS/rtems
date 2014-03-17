@@ -22,6 +22,9 @@
 #include <assert.h>
 
 #include <rtems.h>
+#include <rtems/test.h>
+
+const char rtems_test_name[] = "EXIT 2";
 
 #define EXIT_STATUS 123
 
@@ -41,7 +44,7 @@ static void fatal_extension(
       && !is_internal
       && error == EXIT_STATUS
   ) {
-    printk("*** END OF TEST EXIT 2 ***\n");
+    rtems_test_endk();
   }
 }
 
@@ -60,7 +63,7 @@ static void Init(rtems_task_argument arg)
   rtems_status_code sc;
   rtems_id id;
 
-  printk("\n\n*** TEST EXIT 2 ***\n");
+  rtems_test_begink();
 
   sc = rtems_task_create(
     rtems_build_name('E', 'X', 'I', 'T'),
@@ -84,7 +87,9 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 
-#define CONFIGURE_INITIAL_EXTENSIONS { .fatal = fatal_extension }
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .fatal = fatal_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 

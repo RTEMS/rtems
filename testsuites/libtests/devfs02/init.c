@@ -26,6 +26,8 @@
 #include <rtems/devfs.h>
 #include <rtems/malloc.h>
 
+const char rtems_test_name[] = "DEVFS 2";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -42,7 +44,7 @@ rtems_task Init(
   };
   void *opaque;
 
-  puts( "\n\n*** TEST DEVFS02 ***" );
+  TEST_BEGIN();
 
   puts( "Init - attempt to create a fifo - expect ENOTSUP" );
   status = mkfifo( "/fifo01", 0 );
@@ -80,7 +82,7 @@ rtems_task Init(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EEXIST );
 
-  puts( "*** END OF TEST DEVFS02 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -91,6 +93,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5

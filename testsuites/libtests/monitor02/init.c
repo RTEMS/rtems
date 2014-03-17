@@ -21,6 +21,9 @@
 
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
+
+const char rtems_test_name[] = "MONITOR 2";
+
 #define MAX_ARGS 128
 
 char        *Commands[] = {
@@ -38,7 +41,7 @@ rtems_task Init(
   char               *argv[MAX_ARGS];
   char               tmp[256];
 
-  puts( "\n*** START OF MONITOR02 ***\n");
+  TEST_BEGIN();
 
   for (i=0; i < MAX_ARGS && Commands[i] ; i++) {
     strcpy( tmp, Commands[i] );
@@ -47,7 +50,7 @@ rtems_task Init(
       rtems_shell_main_monitor(argc, argv);
     }
   }
-  puts( "\n*** END OF MONITOR02 ***\n");
+  TEST_END();
 #else
   puts( "TARGET MEMORY TOO SMALL TO RUN\n\n");
 #endif

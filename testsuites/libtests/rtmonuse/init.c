@@ -26,6 +26,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "RTMONUSE";
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -35,7 +37,7 @@ rtems_task Init(
   rtems_id          rmid;
   rtems_name        period;
 
-  puts( "\n\n*** RATE MONOTONIC PERIOD STATISTICS TEST ***" );
+  TEST_BEGIN();
 
   period =  rtems_build_name( 'I', 'G', 'N', 'R' );
   status = rtems_rate_monotonic_create( period, &rmid );

@@ -17,6 +17,8 @@
 #include <rtems/malloc.h>
 #include <errno.h>
 
+const char rtems_test_name[] = "MALLOC 4";
+
 /* configuration information */
 /* At top of file to have access to configuration variables */
 
@@ -24,6 +26,8 @@
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT
@@ -77,7 +81,7 @@ rtems_task Init(
   Heap_Area area;
   void *p;
 
-  puts( "\n\n*** TEST MALLOC 04 ***" );
+  TEST_BEGIN();
 
   /* Safe information on real heap */
   real_heap = malloc_get_heap_pointer();
@@ -164,7 +168,7 @@ rtems_task Init(
   /* Restore information on real heap */
   malloc_set_heap_pointer( real_heap );
 
-  puts( "*** END OF TEST MALLOC 04 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }

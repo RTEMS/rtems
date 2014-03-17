@@ -18,6 +18,8 @@
 #include <limits.h>
 #include <sys/errno.h>
 
+const char rtems_test_name[] = "TERMIOS 1";
+
 /* rtems_termios_baud_t is a typedefs to int32_t */
 #define PRIdrtems_termios_baud_t PRId32
 
@@ -524,7 +526,7 @@ static rtems_task Init(
   struct termios            t;
   int index = 0;
 
-  puts( "\n\n*** TEST TERMIOS 01 ***" );
+  TEST_BEGIN();
 
   test_termios_baud2index();
   test_termios_baud2number();
@@ -666,7 +668,7 @@ static rtems_task Init(
   }
   puts( "" );
 
-  puts( "*** END OF TEST TERMIOS 01 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -685,6 +687,8 @@ static rtems_task Init(
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 
 #define CONFIGURE_MAXIMUM_TASKS         1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

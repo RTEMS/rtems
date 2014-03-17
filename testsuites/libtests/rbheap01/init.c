@@ -23,6 +23,8 @@
 #include <rtems/malloc.h>
 #include <rtems/score/rbtreeimpl.h>
 
+const char rtems_test_name[] = "RBHEAP 1";
+
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
 
@@ -593,7 +595,7 @@ static void test_free_merge_left_or_right(bool left)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST RBHEAP 1 ***");
+  TEST_BEGIN();
 
   test_init_chunk_alignment();
   test_init_begin_greater_than_end();
@@ -613,7 +615,7 @@ static void Init(rtems_task_argument arg)
   test_free_merge_left_or_right(true);
   test_free_merge_left_or_right(false);
 
-  puts("*** END OF TEST RBHEAP 1 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -622,6 +624,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

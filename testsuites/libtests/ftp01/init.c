@@ -27,6 +27,8 @@
 #include <rtems/ftpd.h>
 #include <rtems/ftpfs.h>
 
+const char rtems_test_name[] = "FTP 1";
+
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
 
@@ -216,9 +218,9 @@ static void test(void)
 
 static rtems_task Init(rtems_task_argument argument)
 {
-  puts("\n\n*** TEST FTP 1 ***");
+  TEST_BEGIN();
   test();
-  puts("*** END OF TEST FTP 1 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -241,6 +243,8 @@ static rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_MAXIMUM_SEMAPHORES 2
 
 #define CONFIGURE_EXTRA_TASK_STACKS FTP_WORKER_TASK_EXTRA_STACK
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

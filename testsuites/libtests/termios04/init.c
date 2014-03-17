@@ -22,6 +22,8 @@
 #include <termios.h>
 #include <rtems/dumpbuf.h>
 
+const char rtems_test_name[] = "TERMIOS 4";
+
 /* forward declarations to avoid warnings */
 void write_helper(int fd, const char *c);
 void read_helper(int fd, const char *expected);
@@ -115,7 +117,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** TEST TERMIOS04 ***" );
+  TEST_BEGIN();
 
   open_it();
 
@@ -127,7 +129,7 @@ rtems_task Init(
 
   close_it();
 
-  puts( "*** END OF TEST TERMIOS04 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -149,6 +151,8 @@ rtems_task Init(
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 #define CONFIGURE_MAXIMUM_TASKS             1
 #define CONFIGURE_MAXIMUM_TIMERS            2
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

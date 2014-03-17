@@ -31,6 +31,8 @@
 
 #include "test-http-client.h"
 
+const char rtems_test_name[] = "MGHTTPD 1";
+
 #define TARFILE_START init_fs_tar
 #define TARFILE_SIZE  init_fs_tar_size
 
@@ -199,7 +201,7 @@ static void Init(rtems_task_argument arg)
 {
   int rv = 0;
 
-  puts("\n\n*** TEST MGHTTPD 01 ***");
+  TEST_BEGIN();
 
   rv = rtems_bsdnet_initialize_network();
   rtems_test_assert(rv == 0);
@@ -208,7 +210,7 @@ static void Init(rtems_task_argument arg)
 
   test_mongoose();
 
-  puts("*** END OF TEST MGHTTPD 01 ***");
+  TEST_END();
 
   rtems_test_exit(0); 
 }
@@ -225,6 +227,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_UNLIMITED_OBJECTS
 
 #define CONFIGURE_UNIFIED_WORK_AREAS
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

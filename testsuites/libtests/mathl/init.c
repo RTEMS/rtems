@@ -24,6 +24,9 @@
 
 #if __rtems__
 #include <bsp.h> /* for device driver prototypes */
+#include <rtems/test.h>
+
+const char rtems_test_name[] = "MATHL";
 #endif
 
 #include <stdio.h>
@@ -40,6 +43,8 @@ extern void domathl(void);
 #define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_FLOATING_POINT
 #define CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
 
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT
@@ -52,10 +57,14 @@ rtems_task Init(
 int main( void )
 #endif
 {
-  fprintf( stdout, "*** LONG DOUBLE MATH TEST ***\n" );
+#if __rtems__
+  rtems_test_begin();
+#endif
 
   domathl();  
 
-  fprintf( stdout, "*** END OF LONG DOUBLE MATH TEST ***\n" );
+#if __rtems__
+  rtems_test_end();
+#endif
   exit( 0 );
 }
