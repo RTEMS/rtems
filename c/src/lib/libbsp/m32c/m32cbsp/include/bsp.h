@@ -45,23 +45,6 @@ extern "C" {
 Thread clock_driver_sim_idle_body(uintptr_t);
 #define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
 
-/*
- *  Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- */
-
-#define rtems_bsp_delay( microseconds ) \
-  { register uint32_t         _delay=(microseconds); \
-    register uint32_t         _tmp = 0; /* initialized to avoid warning */ \
-    __asm__ volatile( "0: \
-                     remo      3,31,%0 ; \
-                     cmpo      0,%0 ; \
-                     subo      1,%1,%1 ; \
-                     cmpobne.t 0,%1,0b " \
-                  : "=d" (_tmp), "=d" (_delay) \
-                  : "0"  (_tmp), "1"  (_delay) ); \
-  }
-
 #ifdef __cplusplus
 }
 #endif
