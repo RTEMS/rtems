@@ -15,6 +15,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SMPAFFINITY 1";
+
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
 
 rtems_id           Init_id;
@@ -209,7 +211,7 @@ static void Init(rtems_task_argument arg)
 {
   int                  sc;
 
-  puts( "\n\n*** SMP AFFINITY 1 ***" );
+  TEST_BEGIN();
 
   /* Initialize thread id */
   sc = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &Init_id );
@@ -219,16 +221,16 @@ static void Init(rtems_task_argument arg)
   Validate_getaffinity_errors();
   Validate_affinity();
 
-  puts( "*** END OF SMP AFFINITY TEST 1 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
 #else
 static void Init(rtems_task_argument arg)
 {
-  puts( "\n\n*** SMP AFFINITY TEST 1 ***" );
+  TEST_BEGIN();
   puts( " Affinity NOT Supported");
-  puts( "*** END OF SMP AFFINITY TEST 1 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -241,6 +243,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_SMP_MAXIMUM_PROCESSORS NUM_CPUS
 
 #define CONFIGURE_MAXIMUM_TASKS         (NUM_CPUS*2)
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

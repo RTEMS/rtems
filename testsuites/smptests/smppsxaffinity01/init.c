@@ -18,6 +18,8 @@
 #include <pthread.h>
 #include <sched.h>
 
+const char rtems_test_name[] = "SMPPSXAFFINITY 1";
+
 #if HAVE_DECL_PTHREAD_GETAFFINITY_NP
 
 #define CPU_COUNT 4
@@ -129,7 +131,7 @@ void *POSIX_Init(
   void *ignored
 )
 {
-  puts( "\n\n*** SMP POSIX AFFINITY ATTRIBUTE TEST 1 ***" );
+  TEST_BEGIN();
 
   /* Initialize thread id */
   Init_id = pthread_self();
@@ -138,7 +140,7 @@ void *POSIX_Init(
   Validate_attrgetaffinity_errors();
   Validate_attr();
 
-  puts( "*** END OF SMP POSIX AFFINITY ATTRIBUTE TEST 1 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -147,9 +149,9 @@ void *POSIX_Init(
   void *ignored
 )
 {
-  puts( "\n\n*** SMP POSIX AFFINITY ATTRIBUTE TEST 1 ***" );
+  TEST_BEGIN();
   puts( " POSIX Affinity Methods NOT Supported");
-  puts( "*** END OF SMP POSIX AFFINITY ATTRIBUTE TEST 1 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -165,6 +167,8 @@ void *POSIX_Init(
 
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS  1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 

@@ -21,6 +21,8 @@
 #include <pthread.h>
 #include <signal.h>
 
+const char rtems_test_name[] = "SMPPSXSIGNAL 1";
+
 #define TEST_SIGNAL SIGUSR1
 
 typedef enum {
@@ -161,14 +163,13 @@ static void test(void)
 
 static void *POSIX_Init(void *arg)
 {
-  puts("\n\n*** TEST SMPPSXSIGNAL 1 ***");
+  TEST_BEGIN();
 
   if (rtems_smp_get_processor_count() >= 2) {
     test();
   }
 
-  puts("*** END OF TEST SMPPSXSIGNAL 1 ***");
-
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -178,6 +179,8 @@ static void *POSIX_Init(void *arg)
 #define CONFIGURE_SMP_APPLICATION
 
 #define CONFIGURE_SMP_MAXIMUM_PROCESSORS 2
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 2
 

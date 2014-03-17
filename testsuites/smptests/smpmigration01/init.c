@@ -23,6 +23,8 @@
 #include <math.h>
 #include <inttypes.h>
 
+const char rtems_test_name[] = "SMPMIGRATION 1";
+
 #define CPU_COUNT 2
 
 #define RUNNER_COUNT (CPU_COUNT + 1)
@@ -220,14 +222,13 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SMPMIGRATION 1 ***");
+  TEST_BEGIN();
 
   if (rtems_smp_get_processor_count() >= 2) {
     test();
   }
 
-  puts("*** END OF TEST SMPMIGRATION 1 ***");
-
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -241,6 +242,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_TASKS (2 + RUNNER_COUNT)
 
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

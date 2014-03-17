@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "SMP 8";
+
 void PrintTaskInfo(
   const char         *task_name,
   rtems_time_of_day  *_tb 
@@ -44,9 +46,10 @@ rtems_task Init(
   int               i;
   char              ch[4];
   rtems_id          id;
+
+  TEST_BEGIN();
  
   locked_print_initialize();
-  locked_printf( "\n\n*** SMP08 TEST ***\n" );
 
   time.year   = 1988;
   time.month  = 12;

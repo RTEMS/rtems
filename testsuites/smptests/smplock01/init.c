@@ -23,6 +23,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SMPLOCK 1";
+
 #define TASK_PRIORITY 1
 
 #define CPU_COUNT 32
@@ -331,12 +333,11 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SMPLOCK 1 ***");
+  TEST_BEGIN();
 
   test();
 
-  puts("*** END OF TEST SMPLOCK 1 ***");
-
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -356,6 +357,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_INIT_TASK_PRIORITY TASK_PRIORITY
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

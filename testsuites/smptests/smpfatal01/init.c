@@ -17,11 +17,14 @@
 #endif
 
 #include <rtems.h>
+#include <rtems/test.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/smpimpl.h>
 
 #include <assert.h>
 #include <stdlib.h>
+
+const char rtems_test_name[] = "SMPFATAL 1";
 
 #define MAX_CPUS 32
 
@@ -30,11 +33,6 @@ static uint32_t main_cpu;
 static void Init(rtems_task_argument arg)
 {
   assert(0);
-}
-
-static void end_of_test(void)
-{
-  printk( "*** END OF TEST SMPFATAL 1 ***\n" );
 }
 
 static void fatal_extension(
@@ -59,7 +57,7 @@ static void fatal_extension(
         assert(state == PER_CPU_STATE_SHUTDOWN);
       }
 
-      end_of_test();
+      rtems_test_endk();
     }
   }
 }
@@ -74,7 +72,7 @@ static rtems_status_code test_driver_init(
   uint32_t cpu_count = rtems_smp_get_processor_count();
   uint32_t cpu;
 
-  printk("\n\n*** TEST SMPFATAL 1 ***\n");
+  rtems_test_begink();
 
   assert(rtems_configuration_get_maximum_processors() == MAX_CPUS);
 
@@ -102,7 +100,7 @@ static rtems_status_code test_driver_init(
 
     per_cpu->state = PER_CPU_STATE_SHUTDOWN;
   } else {
-    end_of_test();
+    rtems_test_endk();
     exit(0);
   }
 
@@ -115,7 +113,9 @@ static rtems_status_code test_driver_init(
 #define CONFIGURE_APPLICATION_EXTRA_DRIVERS \
   { .initialization_entry = test_driver_init }
 
-#define CONFIGURE_INITIAL_EXTENSIONS { .fatal = fatal_extension }
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .fatal = fatal_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_SMP_APPLICATION
 

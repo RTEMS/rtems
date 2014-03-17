@@ -20,6 +20,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SMPSCHEDULE 1";
+
 #define CPU_COUNT 2
 
 #define TASK_COUNT 4
@@ -180,12 +182,11 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SMPSCHEDULE 1 ***");
+  TEST_BEGIN();
 
   test();
 
-  puts("*** END OF TEST SMPSCHEDULE 1 ***");
-
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -201,6 +202,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_INIT_TASK_PRIORITY FIRST_TASK_PRIORITY
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

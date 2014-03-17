@@ -20,6 +20,8 @@
 #include <pthread.h>
 #include <sched.h>
 
+const char rtems_test_name[] = "SMPPSXAFFINITY 2";
+
 #if HAVE_DECL_PTHREAD_GETAFFINITY_NP
 
 pthread_t           Init_id;
@@ -196,7 +198,7 @@ void *POSIX_Init(
   void *ignored
 )
 {
-  puts( "\n\n*** SMP POSIX AFFINITY ATTRIBUTE TEST 2 ***" );
+  TEST_BEGIN();
 
   /* Initialize thread id */
   Init_id = pthread_self();
@@ -205,7 +207,7 @@ void *POSIX_Init(
   Validate_getaffinity_errors();
   Validate_affinity();
 
-  puts( "*** END OF SMP POSIX AFFINITY ATTRIBUTE TEST 2 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -214,9 +216,9 @@ void *POSIX_Init(
   void *ignored
 )
 {
-  puts( "\n\n*** SMP POSIX AFFINITY ATTRIBUTE TEST 2 ***" );
+  TEST_BEGIN();
   puts( " Affinity NOT Supported");
-  puts( "*** END OF SMP POSIX AFFINITY ATTRIBUTE TEST 2 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 

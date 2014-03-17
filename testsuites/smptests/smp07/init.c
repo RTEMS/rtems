@@ -14,13 +14,15 @@
 #include <tmacros.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "SMP 7";
+
 volatile bool TaskRan = false;
 volatile bool TSRFired = false;
 rtems_id      Semaphore; 
 
 static void success(void)
 {
-  locked_printf( "*** END OF TEST SMP07 ***\n" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -87,8 +89,9 @@ rtems_task Init(
   rtems_interval     then;
   rtems_id           Timer;
 
+  TEST_BEGIN();
+
   locked_print_initialize();
-  locked_printf( "\n\n*** TEST SMP07 ***\n" );
 
   if ( rtems_smp_get_processor_count() == 1 ) {
     success();
@@ -171,6 +174,8 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TIMERS           1
 
 #define CONFIGURE_MAXIMUM_TASKS            2
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_SEMAPHORES       2
 

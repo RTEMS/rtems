@@ -18,6 +18,7 @@
 
 #include <rtems.h>
 #include <rtems/counter.h>
+#include <rtems/test.h>
 #include <rtems/score/smpbarrier.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/threaddispatch.h>
@@ -25,16 +26,13 @@
 #include <assert.h>
 #include <stdlib.h>
 
+const char rtems_test_name[] = "SMPFATAL 3";
+
 #define CPU_COUNT 2
 
 static uint32_t main_cpu;
 
 static SMP_barrier_Control barrier = SMP_BARRIER_CONTROL_INITIALIZER;
-
-static void end_of_test(void)
-{
-  printk( "*** END OF TEST SMPFATAL 3 ***\n" );
-}
 
 static void acquire_giant_and_fatal_task(rtems_task_argument arg)
 {
@@ -70,7 +68,7 @@ static void Init(rtems_task_argument arg)
   uint32_t self = rtems_smp_get_current_processor();
   uint32_t cpu_count = rtems_smp_get_processor_count();
 
-  printk("\n\n*** TEST SMPFATAL 3 ***\n");
+  rtems_test_begink();
 
   main_cpu = self;
 
@@ -93,7 +91,7 @@ static void Init(rtems_task_argument arg)
 
     wait_for_giant();
   } else {
-    end_of_test();
+    rtems_test_endk();
     exit(0);
   }
 }
@@ -116,7 +114,7 @@ static void fatal_extension(
       assert(source == RTEMS_FATAL_SOURCE_SMP);
       assert(code == SMP_FATAL_SHUTDOWN);
 
-      end_of_test();
+      rtems_test_endk();
     } else {
       assert(source == RTEMS_FATAL_SOURCE_APPLICATION);
       assert(code == 0xdeadbeef);
@@ -127,7 +125,9 @@ static void fatal_extension(
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
-#define CONFIGURE_INITIAL_EXTENSIONS { .fatal = fatal_extension }
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .fatal = fatal_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_SMP_APPLICATION
 

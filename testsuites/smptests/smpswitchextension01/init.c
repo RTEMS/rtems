@@ -21,6 +21,8 @@
 #include <stdio.h>
 #include <inttypes.h>
 
+const char rtems_test_name[] = "SMPSWITCHEXTENSION 1";
+
 #define CPU_COUNT 2
 
 #define TOGGLER_COUNT 2
@@ -221,14 +223,13 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SMPSWITCHEXTENSION 1 ***");
+  TEST_BEGIN();
 
   if (rtems_smp_get_processor_count() >= 2) {
     test();
   }
 
-  puts("*** END OF TEST SMPSWITCHEXTENSION 1 ***");
-
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -242,6 +243,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_TASKS (3 + TOGGLER_COUNT)
 
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS EXTENSION_COUNT
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

@@ -26,6 +26,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SMPATOMIC 1";
+
 #define MASTER_PRIORITY 1
 
 #define WORKER_PRIORITY 2
@@ -621,14 +623,13 @@ static void simple_tests(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SMPATOMIC 1 ***");
+  TEST_BEGIN();
 
   simple_tests();
 
   test();
 
-  puts("*** END OF TEST SMPATOMIC 1 ***");
-
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -646,6 +647,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_INIT_TASK_PRIORITY MASTER_PRIORITY
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

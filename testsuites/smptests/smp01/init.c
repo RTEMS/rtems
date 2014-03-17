@@ -16,6 +16,8 @@
 
 #include <inttypes.h>
 
+const char rtems_test_name[] = "SMP 1";
+
 void Loop() {
   volatile int i;
 
@@ -40,10 +42,10 @@ rtems_task Init(
    * debug messages go away.
    */ 
   Loop();
-  locked_print_initialize();
 
-  /* Put start of test message */
-  locked_printf( "\n\n***  SMP01 TEST ***\n" );
+  TEST_BEGIN();
+
+  locked_print_initialize();
 
   /* Initialize the TaskRan array */
   for ( i=0; i<rtems_smp_get_processor_count() ; i++ ) {
@@ -81,7 +83,7 @@ rtems_task Init(
         allDone = false;
     }
     if (allDone) {
-      locked_printf( "*** END OF TEST SMP01 ***\n" );
+      TEST_END();
       rtems_test_exit( 0 );
     }
   }

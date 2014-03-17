@@ -14,9 +14,11 @@
 #include <tmacros.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "SMP 6";
+
 static void success(void)
 {
-  locked_printf( "*** END OF TEST SMP05 ***\n" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -38,8 +40,9 @@ rtems_task Init(
   rtems_id           id;
   rtems_status_code  status;
 
+  TEST_BEGIN();
+
   locked_print_initialize();
-  locked_printf( "\n\n*** TEST SMP05 ***\n" );
 
   if ( rtems_smp_get_processor_count() == 1 ) {
     success();
@@ -79,6 +82,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS            \
     (1 + CONFIGURE_SMP_MAXIMUM_PROCESSORS)
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1

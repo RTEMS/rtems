@@ -21,6 +21,8 @@
 #include <rtems.h>
 #include <rtems/profiling.h>
 
+const char rtems_test_name[] = "SMPLOAD 1";
+
 #define CPU_COUNT 32
 
 #define WORKER_COUNT (3 * CPU_COUNT)
@@ -112,12 +114,11 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SMPLOAD 1 ***");
+  TEST_BEGIN();
 
   test();
 
-  puts("*** END OF TEST SMPLOAD 1 ***");
-
+  TEST_END();
   rtems_test_exit(0);
 }
 

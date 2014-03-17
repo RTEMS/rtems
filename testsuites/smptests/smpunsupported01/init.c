@@ -18,6 +18,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SMPUNSUPPORTED 1";
+
 static void some_task(rtems_task_argument arg)
 {
   (void) arg;
@@ -77,12 +79,11 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SMPUNSUPPORTED 1 ***");
+  TEST_BEGIN();
 
   test();
 
-  puts("*** END OF TEST SMPUNSUPPORTED 1 ***");
-
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -94,6 +95,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_SMP_MAXIMUM_PROCESSORS 1
 
 #define CONFIGURE_MAXIMUM_TASKS 2
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

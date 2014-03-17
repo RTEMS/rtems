@@ -17,9 +17,11 @@
 #include <stdio.h>
 #include <inttypes.h>
 
+const char rtems_test_name[] = "SMP 2";
+
 static void success(void)
 {
-  locked_printf( "*** END OF TEST SMP02 ***\n" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -34,8 +36,9 @@ rtems_task Init(
   rtems_status_code status;
   char              str[80];
 
+  TEST_BEGIN();
+
   locked_print_initialize();
-  locked_printf( "\n\n***  SMP02 TEST ***\n" );
 
   if ( rtems_smp_get_processor_count() == 1 ) {
     success();
