@@ -46,22 +46,6 @@ extern "C" {
  * @brief Motorola MC68340 support.
  */
 
-/*
- *  Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- */
-
-#define rtems_bsp_delay( microseconds ) \
-  { register uint32_t         _delay=(microseconds); \
-    register uint32_t         _tmp=123; \
-    __asm__ volatile( "0: \
-                     nbcd      %0 ; \
-                     nbcd      %0 ; \
-                     dbf       %1,0b" \
-                  : "=d" (_tmp), "=d" (_delay) \
-                  : "0"  (_tmp), "1"  (_delay) ); \
-  }
-
 /* Constants */
 
 /* Structures */
