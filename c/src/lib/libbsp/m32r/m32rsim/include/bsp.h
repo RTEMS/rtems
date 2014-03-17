@@ -62,23 +62,6 @@ int __trap0 (int function, int p1, int p2, int p3, struct _reent *r);
 #define TRAP0(f, p1, p2, p3) \
   __trap0 (f, (int) (p1), (int) (p2), (int) (p3), _REENT)
 
-/*
- *  Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- */
-
-#define rtems_bsp_delay( microseconds ) \
-  { register uint32_t         _delay=(microseconds); \
-    register uint32_t         _tmp = 0; /* initialized to avoid warning */ \
-    __asm__ volatile( "0: \
-                     remo      3,31,%0 ; \
-                     cmpo      0,%0 ; \
-                     subo      1,%1,%1 ; \
-                     cmpobne.t 0,%1,0b " \
-                  : "=d" (_tmp), "=d" (_delay) \
-                  : "0"  (_tmp), "1"  (_delay) ); \
-  }
-
 #ifdef __cplusplus
 }
 #endif
