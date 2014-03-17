@@ -46,21 +46,11 @@ Thread clock_driver_sim_idle_body(uintptr_t);
 #define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
 
 /*
- *  Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- *
- * FIXME: Not applicable with gdb's simulator
- * Kept for sourcecode compatibility with other sh-BSPs
- */
-#define rtems_bsp_delay( microseconds ) CPU_delay(microseconds)
-#define sh_delay( microseconds ) CPU_delay(microseconds)
-
-/*
  * Defined in the linker script 'linkcmds'
  */
 
-extern void *CPU_Interrupt_stack_low ;
-extern void *CPU_Interrupt_stack_high ;
+extern void *CPU_Interrupt_stack_low;
+extern void *CPU_Interrupt_stack_high;
 
 #ifdef __cplusplus
 }
