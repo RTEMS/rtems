@@ -6,12 +6,7 @@
  * @brief Global BSP definitions.
  */
 
-/*  bsp.h
- *
- *  This include file contains all board IO definitions.
- *
- *  XXX : put yours in here
- *
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -73,15 +68,6 @@ extern int rtems_tsmac_driver_attach(struct rtems_bsdnet_ifconfig *config,
 
 #define TSMAC_FORCE_10BASET
 #endif
-
-  /*
-   *  Simple spin delay in microsecond units for device drivers.
-   *  This is very dependent on the clock speed of the target.
-   */
-
-#define rtems_bsp_delay( microseconds ) \
-  { \
-  }
 
 /* functions */
 #if 0
