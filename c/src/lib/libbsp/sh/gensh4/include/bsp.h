@@ -53,19 +53,11 @@ extern "C" {
 /* Constants */
 
 /*
- *  Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- */
-
-#define delay( microseconds ) CPU_delay(microseconds)
-#define sh_delay( microseconds ) CPU_delay( microseconds )
-
-/*
  * Defined in the linker script 'linkcmds'
  */
 
-extern void *CPU_Interrupt_stack_low ;
-extern void *CPU_Interrupt_stack_high ;
+extern void *CPU_Interrupt_stack_low;
+extern void *CPU_Interrupt_stack_high;
 
 /*
  * Defined in start.S
