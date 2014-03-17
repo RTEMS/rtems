@@ -162,22 +162,6 @@ extern int rtems_3c509_driver_attach(struct rtems_bsdnet_ifconfig *config);
 #define    BSP_CONSOLE_COM2           2
 
 /*-------------------------------------------------------------------------+
-| Macros
-+--------------------------------------------------------------------------*/
-/* does anyone need this? if so, report it so we can rename this macro */
-#if 0
-/*-------------------------------------------------------------------------+
-| Simple spin delay in microsecond units for device drivers.
-| This is very dependent on the clock speed of the target.
-+--------------------------------------------------------------------------*/
-#define rtems_bsp_delay(_microseconds) \
-{ \
-  uint32_t         _cnt = _microseconds; \
-  __asm__ volatile ("0: nop; mov %0,%0; loop 0b" : "=c"(_cnt) : "0"(_cnt)); \
-}
-#endif
-
-/*-------------------------------------------------------------------------+
 | Convert microseconds to ticks and ticks to microseconds.
 +--------------------------------------------------------------------------*/
 #define US_TO_TICK(us) (((us)*105+44)/88)
