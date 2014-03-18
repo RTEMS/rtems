@@ -39,19 +39,12 @@ void _Thread_Life_action_handler(
   _Thread_Restart_self( executing );
 }
 
-static void _Thread_Reset(
-  Thread_Control            *the_thread,
-  void                      *pointer_argument,
-  Thread_Entry_numeric_type  numeric_argument
-)
+static void _Thread_Reset( Thread_Control *the_thread )
 {
   the_thread->resource_count   = 0;
   the_thread->is_preemptible   = the_thread->Start.is_preemptible;
   the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
   the_thread->budget_callout   = the_thread->Start.budget_callout;
-
-  the_thread->Start.pointer_argument = pointer_argument;
-  the_thread->Start.numeric_argument = numeric_argument;
 
   if ( !_Thread_queue_Extract_with_proxy( the_thread ) ) {
 
@@ -65,15 +58,11 @@ static void _Thread_Reset(
   }
 }
 
-static void _Thread_Request_life_change(
-  Thread_Control            *the_thread,
-  void                      *pointer_argument,
-  Thread_Entry_numeric_type  numeric_argument
-)
+static void _Thread_Request_life_change( Thread_Control *the_thread )
 {
   _Thread_Set_transient( the_thread );
 
-  _Thread_Reset( the_thread, pointer_argument, numeric_argument );
+  _Thread_Reset( the_thread );
 
   _Thread_Add_post_switch_action( the_thread, &the_thread->Life.Action );
 
@@ -89,11 +78,10 @@ bool _Thread_Restart(
 )
 {
   if ( !_States_Is_dormant( the_thread->current_state ) ) {
-    _Thread_Request_life_change(
-      the_thread,
-      pointer_argument,
-      numeric_argument
-    );
+    the_thread->Start.pointer_argument = pointer_argument;
+    the_thread->Start.numeric_argument = numeric_argument;
+
+    _Thread_Request_life_change( the_thread );
 
     _User_extensions_Thread_restart( the_thread );
 
