@@ -205,10 +205,6 @@ bool _Thread_Initialize(
   the_thread->is_scheduled            = false;
   the_thread->is_in_the_air           = false;
   the_thread->is_executing            = false;
-#if __RTEMS_HAVE_SYS_CPUSET_H__
-   the_thread->affinity               = *(_CPU_set_Default());
-   the_thread->affinity.set           = &the_thread->affinity.preallocated;
-#endif
 #endif
 
   /* Initialize the CPU for the non-SMP schedulers */
