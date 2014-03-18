@@ -331,7 +331,7 @@ libscore_a_SOURCES += src/apiext.c src/chain.c src/chainappend.c \
     src/chainextract.c src/chainget.c src/chaininsert.c \
     src/chainappendempty.c src/chainprependempty.c src/chaingetempty.c \
     src/chainnodecount.c \
-    src/assertthreaddispatchingrepressed.c \
+    src/debugisthreaddispatchingallowed.c \
     src/interr.c src/isr.c src/wkspace.c src/wkstringduplicate.c
 libscore_a_SOURCES += src/profilingisrentryexit.c
 

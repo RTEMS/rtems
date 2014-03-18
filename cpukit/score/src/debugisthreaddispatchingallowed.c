@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -21,17 +21,17 @@
 #include <rtems/score/threaddispatch.h>
 
 #if defined( RTEMS_DEBUG )
-  void _Assert_Thread_dispatching_repressed( void )
+  bool _Debug_Is_thread_dispatching_allowed( void )
   {
-    bool dispatch_is_disabled;
+    bool dispatch_allowed;
     ISR_Level level;
     Per_CPU_Control *per_cpu;
 
-    _ISR_Disable( level );
+    _ISR_Disable_without_giant( level );
     per_cpu = _Per_CPU_Get_by_index( _SMP_Get_current_processor() );
-    dispatch_is_disabled = per_cpu->thread_dispatch_disable_level != 0;
-    _ISR_Enable( level );
+    dispatch_allowed = per_cpu->thread_dispatch_disable_level == 0;
+    _ISR_Enable_without_giant( level );
 
-    _Assert( dispatch_is_disabled || _ISR_Get_level() != 0 );
+    return dispatch_allowed && _ISR_Get_level() == 0;
   }
 #endif

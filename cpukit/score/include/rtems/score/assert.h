@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -39,15 +39,13 @@ extern "C" {
 #endif
 
 /**
- * @brief Asserts that thread dispatching is repressed.
+ * @brief Returns true if thread dispatching is allowed.
  *
  * Thread dispatching can be repressed via _Thread_Disable_dispatch() or
  * _ISR_Disable().
  */
 #if defined( RTEMS_DEBUG )
-  void _Assert_Thread_dispatching_repressed( void );
-#else
-  #define _Assert_Thread_dispatching_repressed() ( ( void ) 0 )
+  bool _Debug_Is_thread_dispatching_allowed( void );
 #endif
 
 /**

@@ -100,7 +100,7 @@ void _SMP_Broadcast_message( uint32_t message )
   uint32_t ncpus = _SMP_Get_processor_count();
   uint32_t cpu;
 
-  _Assert_Thread_dispatching_repressed();
+  _Assert( _Debug_Is_thread_dispatching_allowed() );
 
   for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
     if ( cpu != self ) {
