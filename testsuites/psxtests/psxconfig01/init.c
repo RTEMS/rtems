@@ -482,8 +482,7 @@ static rtems_task Init(rtems_task_argument argument)
   }
   rtems_resource_snapshot_take(&snapshot);
   rtems_test_assert(
-    snapshot.posix_api.active_mutexes ==
-    (CONFIGURE_MAXIMUM_POSIX_MUTEXES + CONFIGURE_MAXIMUM_POSIX_INTERNAL_MUTEXES)
+    snapshot.posix_api.active_mutexes == CONFIGURE_MAXIMUM_POSIX_MUTEXES
   );
 #endif
 

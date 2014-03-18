@@ -120,6 +120,18 @@ SCORE_EXTERN API_Mutex_Control *_RTEMS_Allocator_Mutex;
 #define _RTEMS_Unlock_allocator() \
   _API_Mutex_Unlock( _RTEMS_Allocator_Mutex )
 
+SCORE_EXTERN API_Mutex_Control *_Once_Mutex;
+
+static inline void _Once_Lock( void )
+{
+  _API_Mutex_Lock( _Once_Mutex );
+}
+
+static inline void _Once_Unlock( void )
+{
+  _API_Mutex_Unlock( _Once_Mutex );
+}
+
 /** @} */
 
 #ifdef __cplusplus

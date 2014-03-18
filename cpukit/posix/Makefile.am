@@ -36,7 +36,6 @@ include_rtems_posix_HEADERS += include/rtems/posix/mqueue.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueueimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/mutex.h
 include_rtems_posix_HEADERS += include/rtems/posix/muteximpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/onceimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/priorityimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/psignal.h
 include_rtems_posix_HEADERS += include/rtems/posix/psignalimpl.h
@@ -113,9 +112,6 @@ libposix_a_SOURCES += src/mutexattrdestroy.c src/mutexattrgetprioceiling.c \
     src/mutexlocksupp.c src/mutexsetprioceiling.c src/mutextimedlock.c \
     src/mutextranslatereturncode.c src/mutextrylock.c src/mutexunlock.c
 
-## ONCE_C_FILES
-libposix_a_SOURCES += src/once.c src/pthreadonce.c
-
 ## PTHREAD_C_FILES
 libposix_a_SOURCES += src/pthreadatfork.c src/pthreadattrdestroy.c \
     src/pthreadattrgetdetachstate.c src/pthreadattrgetinheritsched.c \
@@ -159,6 +155,9 @@ endif
 libposix_a_SOURCES += src/key.c src/keycreate.c src/keydelete.c \
     src/keygetspecific.c src/keyfreememory.c src/keyrundestructors.c \
     src/keysetspecific.c
+
+## ONCE_C_FILES
+libposix_a_SOURCES += src/pthreadonce.c
 
 libposix_a_SOURCES += src/sigaddset.c src/sigdelset.c src/sigfillset.c \
    src/sigemptyset.c src/sigismember.c

@@ -36,7 +36,6 @@
 #include <rtems/posix/condimpl.h>
 #include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/muteximpl.h>
-#include <rtems/posix/onceimpl.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthreadimpl.h>
@@ -79,7 +78,6 @@ void _POSIX_API_Initialize(void)
     _POSIX_Condition_variables_Manager_initialization();
     _POSIX_Mutex_Manager_initialization();
     _POSIX_Message_queue_Manager_initialization();
-    _POSIX_Once_Manager_initialization();
     _POSIX_Semaphore_Manager_initialization();
     _POSIX_Timer_Manager_initialization();
     _POSIX_Barrier_Manager_initialization();

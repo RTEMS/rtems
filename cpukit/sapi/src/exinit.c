@@ -116,8 +116,9 @@ void rtems_initialize_data_structures(void)
    */
   _Objects_Information_table[OBJECTS_INTERNAL_API] = _Internal_Objects;
 
-  _API_Mutex_Initialization( 1 );
+  _API_Mutex_Initialization( 2 );
   _API_Mutex_Allocate( &_RTEMS_Allocator_Mutex );
+  _API_Mutex_Allocate( &_Once_Mutex );
 
   _Watchdog_Handler_initialization();
   _TOD_Handler_initialization();
