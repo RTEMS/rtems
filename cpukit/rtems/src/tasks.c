@@ -25,8 +25,9 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/modes.h>
-#include <rtems/score/stack.h>
 #include <rtems/rtems/tasksimpl.h>
+#include <rtems/posix/keyimpl.h>
+#include <rtems/score/stack.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
