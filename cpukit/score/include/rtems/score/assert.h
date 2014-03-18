@@ -49,12 +49,14 @@ extern "C" {
 #endif
 
 /**
- * @brief Asserts that current thread of execution owns the giant lock.
+ * @brief Returns true if the current thread of execution owns the giant lock.
  */
-#if defined( RTEMS_DEBUG ) && defined( RTEMS_SMP )
-  void _Assert_Owner_of_giant( void );
-#else
-  #define _Assert_Owner_of_giant() ( ( void ) 0 )
+#if defined( RTEMS_DEBUG )
+  #if defined( RTEMS_SMP )
+    bool _Debug_Is_owner_of_giant( void );
+  #else
+    #define _Debug_Is_owner_of_giant() (true)
+  #endif
 #endif
 
 #ifdef __cplusplus

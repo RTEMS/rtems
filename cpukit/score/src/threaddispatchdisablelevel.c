@@ -142,13 +142,11 @@ void _Giant_Release( void )
 }
 
 #if defined( RTEMS_DEBUG )
-void _Assert_Owner_of_giant( void )
+bool _Debug_Is_owner_of_giant( void )
 {
   Giant_Control *giant = &_Giant;
 
-  _Assert(
-    giant->owner_cpu == _SMP_Get_current_processor()
-      || !_System_state_Is_up( _System_state_Get() )
-  );
+  return giant->owner_cpu == _SMP_Get_current_processor()
+    || !_System_state_Is_up( _System_state_Get() );
 }
 #endif

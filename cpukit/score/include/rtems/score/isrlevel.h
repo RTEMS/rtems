@@ -58,7 +58,7 @@ typedef uint32_t   ISR_Level;
 #define _ISR_Disable( _level ) \
   do { \
     _CPU_ISR_Disable( _level ); \
-    _Assert_Owner_of_giant(); \
+    _Assert( _Debug_Is_owner_of_giant() ); \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
   } while (0)
 
@@ -76,7 +76,7 @@ typedef uint32_t   ISR_Level;
 #define _ISR_Enable( _level ) \
   do { \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
-    _Assert_Owner_of_giant(); \
+    _Assert( _Debug_Is_owner_of_giant() ); \
     _CPU_ISR_Enable( _level ); \
   } while (0)
 
@@ -102,7 +102,7 @@ typedef uint32_t   ISR_Level;
 #define _ISR_Flash( _level ) \
   do { \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
-    _Assert_Owner_of_giant(); \
+    _Assert( _Debug_Is_owner_of_giant() ); \
     _CPU_ISR_Flash( _level ); \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
   } while (0)
