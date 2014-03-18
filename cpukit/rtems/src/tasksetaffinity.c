@@ -23,6 +23,7 @@
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/cpusetimpl.h>
+#include <rtems/score/schedulerimpl.h>
 
 rtems_status_code rtems_task_set_affinity(
   rtems_id             id,
@@ -32,21 +33,20 @@ rtems_status_code rtems_task_set_affinity(
 {
   Thread_Control        *the_thread;
   Objects_Locations      location;
-  int                    error;
+  int                    ok;
 
   if ( !cpuset )
     return RTEMS_INVALID_ADDRESS;
-
-  error = _CPU_set_Is_valid( cpuset, cpusetsize );
-  if ( error != 0 )
-    return RTEMS_INVALID_NUMBER;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      CPU_COPY( the_thread->affinity.set, cpuset );
+      ok = _Scheduler_Set_affinity( the_thread, cpusetsize, cpuset );
       _Objects_Put( &the_thread->Object );
+      if (! ok) {
+        return RTEMS_INVALID_NUMBER;
+      }
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

@@ -23,6 +23,8 @@
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/cpusetimpl.h>
+#include <rtems/score/schedulerimpl.h>
+
 
 rtems_status_code rtems_task_get_affinity(
   rtems_id             id,
@@ -42,10 +44,8 @@ rtems_status_code rtems_task_get_affinity(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      if ( cpusetsize != the_thread->affinity.setsize ) {
+      if ( ! _Scheduler_Get_affinity( the_thread, cpusetsize, cpuset )) {
         status = RTEMS_INVALID_NUMBER;
-      } else {
-        CPU_COPY( cpuset, the_thread->affinity.set );
       }
       _Objects_Put( &the_thread->Object );
       return status;
