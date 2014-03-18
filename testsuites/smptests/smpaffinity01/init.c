@@ -104,7 +104,6 @@ void Validate_affinity(void )
   rtems_task_priority  priority;
   char                 ch[2];
 
-
   puts( "Init - Set Init priority to high");
   sc = rtems_task_set_priority( Init_id, 1, &priority );
   directive_failed( sc, "Set Init Priority" );
@@ -239,6 +238,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_SMP_APPLICATION
+
+#define CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
 
 #define CONFIGURE_SMP_MAXIMUM_PROCESSORS NUM_CPUS
 
