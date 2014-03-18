@@ -14,7 +14,6 @@ test set name: psx01
 directives:
   pthread_create
   pthread_equal
-  pthread_once
   sched_get_priority_min
   sched_get_priority_max
   sched_rr_get_interval
@@ -32,5 +31,3 @@ concepts:
 + Verify that thread yielding is operational
 + Verify that pthread_equal works as expected for different combinations of
   legitimate and illegitimate thread id’s
-+ Verify that pthread_once works as expected for different combinations of
-  legitimate and illegitimate thread initiations

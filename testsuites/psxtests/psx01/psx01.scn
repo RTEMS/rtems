@@ -27,9 +27,4 @@ Task_1: pthread_equal - match case passed
 Task_1: pthread_equal - different case passed
 Task_1: pthread_equal - first id bad
 Task_1: pthread_equal - second id bad
-Task_1: pthread_once - EINVAL (NULL once_control)
-Task_1: pthread_once - EINVAL (NULL init_routine)
-Task_1: pthread_once - SUCCESSFUL (init_routine executes)
-Test_init_routine: invoked
-Task_1: pthread_once - SUCCESSFUL (init_routine does not execute)
 *** END OF POSIX TEST 1 ***

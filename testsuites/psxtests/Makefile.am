@@ -30,6 +30,9 @@ if HAS_POSIX
 SUBDIRS += psxkey07
 endif
 
+## POSIX Once is always available
+SUBDIRS += psxonce01
+
 SUBDIRS += psxrdwrv
 
 include $(top_srcdir)/../automake/subdirs.am

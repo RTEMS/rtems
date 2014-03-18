@@ -168,6 +168,7 @@ psxmsgq03/Makefile
 psxmsgq04/Makefile
 psxmutexattr01/Makefile
 psxobj01/Makefile
+psxonce01/Makefile
 psxpasswd01/Makefile
 psxpasswd02/Makefile
 psxpipe01/Makefile

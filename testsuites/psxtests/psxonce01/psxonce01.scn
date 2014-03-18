@@ -1,0 +1,11 @@
+
+
+*** TEST POSIX ONCE 01 ***
+Init: pthread_once - SUCCESSFUL (init_routine_nesting executes)
+Test_init_routine_nesting: invoked
+Init: pthread_once - EINVAL (NULL once_control)
+Init: pthread_once - EINVAL (NULL init_routine)
+Init: pthread_once - SUCCESSFUL (init_routine executes)
+Test_init_routine: invoked
+Init: pthread_once - SUCCESSFUL (init_routine does not execute)
+*** END OF TEST POSIX ONCE 01 ***

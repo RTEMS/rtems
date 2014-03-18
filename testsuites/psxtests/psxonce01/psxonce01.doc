@@ -1,0 +1,19 @@
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#  Copyright (c) 2013 Annelies Odermann <annelies.odermann@gmail.com>
+#  Copyright (c) 2014 embedded brains GmbH.
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: psxonce01
+
+directives:
+  pthread_once
+
+concepts:
++ Verify that pthread_once works as expected for different combinations of
+  legitimate and illegitimate thread initiations

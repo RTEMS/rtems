@@ -35,7 +35,6 @@ void *Task_1_through_3(
 )
 {
   int            status;
-  pthread_once_t once = PTHREAD_ONCE_INIT;
 
   puts( "Task_1: sched_yield to Init" );
   status = sched_yield();
@@ -70,24 +69,6 @@ void *Task_1_through_3(
 
   puts( "Task_1: pthread_equal - second id bad" );
   status = pthread_equal( Init_id, (pthread_t) -1 );
-  rtems_test_assert( !status );
-
-  /* exercise pthread_once */
-
-  puts( "Task_1: pthread_once - EINVAL (NULL once_control)" );
-  status = pthread_once( NULL, Test_init_routine );
-  rtems_test_assert( status == EINVAL );
-
-  puts( "Task_1: pthread_once - EINVAL (NULL init_routine)" );
-  status = pthread_once( &once, NULL );
-  rtems_test_assert( status == EINVAL );
-
-  puts( "Task_1: pthread_once - SUCCESSFUL (init_routine executes)" );
-  status = pthread_once( &once, Test_init_routine );
-  rtems_test_assert( !status );
-
-  puts( "Task_1: pthread_once - SUCCESSFUL (init_routine does not execute)" );
-  status = pthread_once( &once, Test_init_routine );
   rtems_test_assert( !status );
 
   puts( "*** END OF POSIX TEST 1 ***" );
