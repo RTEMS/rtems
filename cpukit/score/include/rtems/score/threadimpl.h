@@ -202,23 +202,6 @@ bool _Thread_Restart(
   Thread_Entry_numeric_type  numeric_argument
 );
 
-/**
- *  @brief Resets a thread to its initial state.
- *
- *  This routine resets a thread to its initial state but does
- *  not restart it. Some APIs do this in separate
- *  operations and this division helps support this.
- *
- *  @param[in] the_thread is the thread to resets
- *  @param[in] pointer_argument
- *  @param[in] numeric_argument
- */
-void _Thread_Reset(
-  Thread_Control            *the_thread,
-  void                      *pointer_argument,
-  Thread_Entry_numeric_type  numeric_argument
-);
-
 void _Thread_Life_action_handler(
   Thread_Control  *executing,
   Thread_Action   *action,
