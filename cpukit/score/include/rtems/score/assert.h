@@ -59,6 +59,14 @@ extern "C" {
   #endif
 #endif
 
+/**
+ * @brief Returns true if the current thread of execution owns the allocator
+ * mutex.
+ */
+#if defined( RTEMS_DEBUG )
+  bool _Debug_Is_owner_of_allocator( void );
+#endif
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
