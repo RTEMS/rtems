@@ -629,6 +629,7 @@ const rtems_libio_helper rtems_fs_init_helper =
  *  CONFIGURE_SCHEDULER_USER       - user provided scheduler
  *  CONFIGURE_SCHEDULER_PRIORITY   - Deterministic Priority Scheduler
  *  CONFIGURE_SCHEDULER_PRIORITY_SMP - Deterministic Priority SMP Scheduler
+ *  CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP - Deterministic Priority SMP Affinity Scheduler
  *  CONFIGURE_SCHEDULER_SIMPLE     - Light-weight Priority Scheduler
  *  CONFIGURE_SCHEDULER_SIMPLE_SMP - Simple SMP Priority Scheduler
  *  CONFIGURE_SCHEDULER_EDF        - EDF Scheduler
@@ -653,6 +654,7 @@ const rtems_libio_helper rtems_fs_init_helper =
 #if !defined(CONFIGURE_SCHEDULER_USER) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY_SMP) && \
+    !defined(CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP) && \
     !defined(CONFIGURE_SCHEDULER_SIMPLE) && \
     !defined(CONFIGURE_SCHEDULER_SIMPLE_SMP) && \
     !defined(CONFIGURE_SCHEDULER_EDF) && \
@@ -697,6 +699,26 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
     _Configure_From_workspace( \
       sizeof(Scheduler_priority_SMP_Control) +  \
+      ((CONFIGURE_MAXIMUM_PRIORITY) * sizeof(Chain_Control)) ) \
+  )
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
+    _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
+#endif
+
+/*
+ * If the Deterministic Priority Affinity SMP Scheduler is selected, then configure for
+ * it.
+ */
+#if defined(CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP)
+  #include <rtems/score/schedulerpriorityaffinitysmp.h>
+  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_PRIORITY_AFFINITY_SMP_ENTRY_POINTS
+
+  /**
+   * This defines the memory used by the priority scheduler.
+   */
+  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
+    _Configure_From_workspace( \
+      sizeof(Scheduler_SMP_Control) +  \
       ((CONFIGURE_MAXIMUM_PRIORITY) * sizeof(Chain_Control)) ) \
   )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
