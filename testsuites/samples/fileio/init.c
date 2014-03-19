@@ -708,10 +708,11 @@ static void fileio_start_shell(void)
     "SHLL",                          /* task_name */
     RTEMS_MINIMUM_STACK_SIZE * 4,    /* task_stacksize */
     100,                             /* task_priority */
-    "/dev/console",                  /* devname */
+    "/dev/foobar",                   /* devname */
+    /* device is currently ignored by the shell if it is not a pty */
     false,                           /* forever */
     true,                            /* wait */
-    NULL                             /* login */
+    rtems_shell_login_check          /* login */
   );
 }
 #endif /* USE_SHELL */

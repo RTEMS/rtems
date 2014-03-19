@@ -37,8 +37,10 @@
 #include <unistd.h>
 #include <errno.h>
 #include <pwd.h>
+#include <pthread.h>
+#include <assert.h>
 
-rtems_shell_env_t rtems_global_shell_env = {
+static rtems_shell_env_t rtems_global_shell_env = {
   .magic         = rtems_build_name('S', 'E', 'N', 'V'),
   .devname       = CONSOLE_DEVICE_NAME,
   .taskname      = "SHGL",
@@ -54,7 +56,8 @@ rtems_shell_env_t rtems_global_shell_env = {
   .login_check   = NULL
 };
 
-rtems_shell_env_t *rtems_current_shell_env = &rtems_global_shell_env;
+static pthread_once_t rtems_shell_current_env_once = PTHREAD_ONCE_INIT;
+static pthread_key_t rtems_shell_current_env_key;
 
 /*
  *  Initialize the shell user/process environment information
@@ -96,6 +99,24 @@ static void rtems_shell_env_free(
   if ( shell_env->output )
     free((void *)shell_env->output);
   free( ptr );
+}
+
+/*
+ *  Create the posix key.
+ */
+static void rtems_shell_current_env_make_key(void)
+{
+  (void) pthread_key_create(&rtems_shell_current_env_key, rtems_shell_env_free);
+}
+
+/*
+ *  Return the current shell environment
+ */
+rtems_shell_env_t *rtems_shell_get_current_env(void)
+{
+  void *ptr = pthread_getspecific(rtems_shell_current_env_key);
+  assert (ptr != NULL);
+  return (rtems_shell_env_t *) ptr;
 }
 
 /*
@@ -650,6 +671,7 @@ bool rtems_shell_main_loop(
   rtems_shell_env_t *shell_env;
   rtems_shell_cmd_t *shell_cmd;
   rtems_status_code  sc;
+  int                eno;
   struct termios     term;
   struct termios     previous_term;
   char              *prompt = NULL;
@@ -667,23 +689,21 @@ bool rtems_shell_main_loop(
 
   rtems_shell_initialize_command_set();
 
-  shell_env =
-  rtems_current_shell_env = rtems_shell_init_env( shell_env_arg );
-
-  /*
-   * @todo chrisj
-   * Remove the use of task variables. Change to have a single
-   * allocation per shell and then set into a notepad register
-   * in the TCB. Provide a function to return the pointer.
-   * Task variables are a virus to embedded systems software.
-   */
-  sc = rtems_task_variable_add(
-    RTEMS_SELF,
-    (void*)&rtems_current_shell_env,
-    rtems_shell_env_free
+  eno = pthread_once(
+    &rtems_shell_current_env_once,
+    rtems_shell_current_env_make_key
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    rtems_error(sc,"rtems_task_variable_add(current_shell_env):");
+  assert(eno == 0);
+
+  shell_env = rtems_shell_init_env(shell_env_arg);
+  if (shell_env == NULL) {
+    rtems_error(0, "rtems_shell_init_env");
+    return false;
+  }
+
+  eno = pthread_setspecific(rtems_shell_current_env_key, shell_env);
+  if (eno != 0) {
+    rtems_error(0, "pthread_setspecific(shell_current_env_key)");
     return false;
   }
 

@@ -252,3 +252,6 @@ This method invokes the @code{rtems_task_create} and @code{rtems_task_start}
 directives and as such may return any status code that those directives
 may return.
 
+There is one POSIX key necessary for all shell instances together and one POSIX
+key value pair per instance. You should make sure that your RTEMS configuration
+accounts for these resources.
