@@ -32,6 +32,8 @@
 #include <rtems/score/apimutex.h>
 #include <rtems/score/stackimpl.h>
 #include <rtems/score/watchdogimpl.h>
+#include <rtems/score/schedulerimpl.h>
+
 
 static inline size_t _POSIX_Threads_Ensure_minimum_stack (
   size_t size
@@ -139,8 +141,8 @@ int pthread_create(
 
 #if defined(RTEMS_SMP)
 #if __RTEMS_HAVE_SYS_CPUSET_H__
-  rc = _CPU_set_Is_valid( the_attr->affinityset, the_attr->affinitysetsize );
-  if ( rc != 0 )
+  status = _CPU_set_Is_valid( the_attr->affinityset, the_attr->affinitysetsize );
+  if (!status )
     return EINVAL;
 #endif
 #endif
@@ -191,8 +193,16 @@ int pthread_create(
 
 #if defined(RTEMS_SMP)
 #if __RTEMS_HAVE_SYS_CPUSET_H__
-   the_thread->affinity.setsize   = the_attr->affinitysetsize;
-   *the_thread->affinity.set      = *the_attr->affinityset;
+   status = _Scheduler_Set_affinity( 
+     the_thread,  
+     attr->affinitysetsize, 
+     attr->affinityset 
+   );
+  if ( !status ) {
+    _POSIX_Threads_Free( the_thread );
+    _RTEMS_Unlock_allocator();
+    return EINVAL;
+  }
 #endif
 #endif
 

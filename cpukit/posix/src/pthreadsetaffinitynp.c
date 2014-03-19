@@ -28,6 +28,7 @@
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/cpusetimpl.h>
+#include <rtems/score/schedulerimpl.h>
 
 int pthread_setaffinity_np(
   pthread_t          id,
@@ -37,23 +38,22 @@ int pthread_setaffinity_np(
   Objects_Locations        location;
   POSIX_API_Control       *api;
   Thread_Control          *the_thread;
-  int                      error;
+  bool                     ok;
 
   if ( !cpuset )
     return EFAULT;
-
-  error = _CPU_set_Is_valid( cpuset, cpusetsize );
-  if ( error != 0 )
-    return EINVAL;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-      CPU_COPY( the_thread->affinity.set, cpuset );
-      CPU_COPY( api->Attributes.affinityset, cpuset );
+      ok = _Scheduler_Set_affinity( the_thread, cpusetsize, cpuset );
+      if (ok)
+        CPU_COPY( api->Attributes.affinityset, cpuset );
       _Objects_Put( &the_thread->Object );
+      if (!ok)
+        return EINVAL;
       return 0;
       break;
 

@@ -28,6 +28,7 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/schedulerimpl.h>
 
 int pthread_getaffinity_np(
   const pthread_t       id,
@@ -37,7 +38,7 @@ int pthread_getaffinity_np(
 {
   Objects_Locations        location;
   Thread_Control          *the_thread;
-  int                      error;
+  bool                     ok;
 
   if ( !cpuset )
     return EFAULT;
@@ -46,14 +47,11 @@ int pthread_getaffinity_np(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      error = 0;
-      if ( cpusetsize != the_thread->affinity.setsize )
-        error = EINVAL;
-      else
-        CPU_COPY( cpuset, the_thread->affinity.set );
-
+      ok = _Scheduler_Get_affinity( the_thread, cpusetsize, cpuset );
       _Objects_Put( &the_thread->Object );
-      return error;
+      if (!ok)
+        return EINVAL;
+      return 0;
       break;
 
 #if defined(RTEMS_MULTIPROCESSING)
