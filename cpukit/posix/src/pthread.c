@@ -41,6 +41,8 @@
 #include <rtems/posix/keyimpl.h>
 #include <rtems/posix/time.h>
 #include <rtems/score/timespec.h>
+#include <rtems/score/cpusetimpl.h>
+#include <rtems/score/assert.h>
 
 /*
  *  The default pthreads attributes structure.
@@ -370,24 +372,18 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
 void _POSIX_Threads_Manager_initialization(void)
 {
   #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
+    const CPU_set_Control *affinity;
     pthread_attr_t *attr;
-    int i;
-    int max_cpus = 1;
 
     /* Initialize default attribute. */
     attr = &_POSIX_Threads_Default_attributes;
 
-    /* We do not support a cpu count over CPU_SETSIZE  */
-    max_cpus = _SMP_Get_processor_count();
-    assert( max_cpus <= CPU_SETSIZE );
-
-    /*  Initialize the affinity to be the set of all available CPU's   */
+    /*  Initialize the affinity to be the default cpu set for the system */
+    affinity = _CPU_set_Default();
+    _Assert( affinity->setsize == sizeof( attr->affinitysetpreallocated ) );
     attr->affinityset             = &attr->affinitysetpreallocated;
-    attr->affinitysetsize         = sizeof( *attr->affinityset );
-    CPU_ZERO_S( attr->affinitysetsize, &attr->affinitysetpreallocated );
-
-    for (i=0; i<max_cpus; i++)
-      CPU_SET_S(i, attr->affinitysetsize, attr->affinityset );
+    attr->affinitysetsize         = affinity->setsize;
+    CPU_COPY( attr->affinityset, affinity->set );
   #endif
 
   _Objects_Initialize_information(
