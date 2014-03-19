@@ -791,13 +791,13 @@ RTEMS_INLINE_ROUTINE void _Objects_Open(
   Objects_Name         name
 )
 {
+  the_object->name = name;
+
   _Objects_Set_local_object(
     information,
     _Objects_Get_index( the_object->id ),
     the_object
   );
-
-  the_object->name = name;
 }
 
 /**
@@ -814,14 +814,14 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
   uint32_t             name
 )
 {
+  /* ASSERT: information->is_string == false */
+  the_object->name.name_u32 = name;
+
   _Objects_Set_local_object(
     information,
     _Objects_Get_index( the_object->id ),
     the_object
   );
-
-  /* ASSERT: information->is_string == false */
-  the_object->name.name_u32 = name;
 }
 
 /**
@@ -838,16 +838,16 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_string(
   const char          *name
 )
 {
+  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
+    /* ASSERT: information->is_string */
+    the_object->name.name_p = name;
+  #endif
+
   _Objects_Set_local_object(
     information,
     _Objects_Get_index( the_object->id ),
     the_object
   );
-
-  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
-    /* ASSERT: information->is_string */
-    the_object->name.name_p = name;
-  #endif
 }
 
 /**
