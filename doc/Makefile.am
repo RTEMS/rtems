@@ -11,7 +11,7 @@ if USE_HTML
 html_DATA = index.html
 endif
 
-EXTRA_DIST += common/cpright.texi common/setup.texi \
+EXTRA_DIST = common/cpright.texi common/setup.texi \
     common/treedef.tex common/rtems.texi.in
 
 if USE_HTML

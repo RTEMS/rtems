@@ -97,7 +97,7 @@ following processors and target boards:
 
 @end itemize
 
-Support for the Cygnus NEWLIB Standard C Library is
+Support for the NEWLIB Standard C Library is
 provided with this release which may be used on any of the RTEMS
 supported targets.  The BSPs only provide support for console
 I/O only using this library.  Support for the reentrancy

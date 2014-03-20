@@ -137,8 +137,9 @@ command has numerous command line arguments. These arguments are
 discussed in detail in documentation that comes with the RTEMS
 distribution. A full list of these arguments can be obtained by running
 @code{../rtems-@value{RTEMSAPI}.<VERSION>/configure --help} If you
-followed the procedure described in the section @ref{Unarchive the
-RTEMS Source} or @ref{Obtaining the RTEMS Source from CVS}, these configuration options can be found in the file
+followed the procedure described in the section @ref{Unarchive
+the RTEMS Source} or @ref{Obtaining the RTEMS Source from Git},
+these configuration options can be found in the file
 rtems-@value{RTEMSAPI}.<VERSION>/README.configure.
 
 @b{NOTE}: The GNAT/RTEMS run-time implementation is based on the POSIX

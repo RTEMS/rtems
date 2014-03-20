@@ -140,8 +140,8 @@ and installed, it will be necessary to modify the environment of
 each RTEMS application developer to reflect at least the path of
 the newly installed cross development toolset.
 
-The documentation for the FSF GNU and Cygnus tools is
-formatted using TeX.  The RTEMS developers use TeX 3.14t3 to
+The documentation for the FSF GNU and open source tools is
+formatted using TeX.  The RTEMS developers use TeX to
 format the manuals for their own use.  This document does not
 contain instructions on the acquisition or installation of TeX
 and supporting tools.

@@ -48,10 +48,10 @@ In addition, the following manuals from the GNU Cross Compilation Toolset
 include information on run-time services available.
 
 @itemize @bullet
-@item @b{Cygnus C Support Library} describes the Standard C Library
+@item @b{C Support Library} describes the Standard C Library
 functionality provided by Newlib's libc.
 
-@item @b{Cygnus C Math Library} describes the Standard C Math Library
+@item @b{C Math Library} describes the Standard C Math Library
 functionality provided by Newlib's libm.
 
 @end itemize

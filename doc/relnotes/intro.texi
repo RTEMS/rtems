@@ -15,7 +15,7 @@ procedure, and current status of Release @value{VERSION} of the RTEMS
 executive.  An installation procedure is provided which
 describes the steps necessary to load and configure the RTEMS
 environment, including the GNU Development Environment and the
-Cygnus NEWLIB ANSI C Library, on a host computer.  The status of
+NEWLIB ANSI C Library, on a host computer.  The status of
 the RTEMS environment is given, which includes supported
 processors and target boards, versions of the GNU utilities
 which were used by the RTEMS developers for this release,
@@ -45,7 +45,7 @@ Each list may be subscribed to, archives view, etc. by visiting
 * GNU Development Tools::
 * ANSI C Libraries::
 * GNU C Library::
-* Cygnus NEWLIB C Library::
+* NEWLIB C Library::
 @end menu
 
 This section discusses the freely available tools and
@@ -95,11 +95,6 @@ The primary ftp site for the FSF GNU tools is
 prep.ai.mit.edu (18.71.0.38) in the /pub/gnu directory.  These
 tools are mirrored on numerous ftp sites.
 
-Cygnus maintains an ftp site -- ftp.cygnus.com
-(205.180.83.42) -- which contains a source code which appeals to
-embedded developers.  Of especial interest on this site are the
-directories /pub/newlib and /pub/embedded.
-
 @node ANSI C Libraries, GNU C Library, GNU Development Tools, Introduction Supporting Tools
 @subsection ANSI C Libraries
 
@@ -109,14 +104,14 @@ distributable ANSI C Libraries:
 @itemize @bullet
 @item GNU C Library, and
 
-@item Cygnus NEWLIB
+@item NEWLIB
 @end itemize
 
 No C Library is included in the standard RTEMS
 distribution.  It is the responsibility of the user to obtain
 and install a C Library separately.
 
-@node GNU C Library, Cygnus NEWLIB C Library, ANSI C Libraries, Introduction Supporting Tools
+@node GNU C Library, NEWLIB C Library, ANSI C Libraries, Introduction Supporting Tools
 @subsection GNU C Library
 
 The GNU C Library is a robust and well-documented C
@@ -142,7 +137,7 @@ for reentrancy.  This library is a collection of freely distributable
 and public domain source code and is freely distributable with as few
 restrictions as possible placed on the end user.
 
-@node Introduction Documentation, Installation Procedure, Cygnus NEWLIB C Library, Introduction
+@node Introduction Documentation, Installation Procedure, NEWLIB C Library, Introduction
 @section Documentation
 
 The RTEMS Documentation Set is provided online at 
