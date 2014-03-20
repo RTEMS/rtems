@@ -10,8 +10,6 @@
 #ifndef __MIMFS_SUPPORT_h
 #define __MIMFS_SUPPORT_h
 
-#define MIMFS_TEST
-
 #define FILESYSTEM "MOUNTED IMFS"
 
 #endif

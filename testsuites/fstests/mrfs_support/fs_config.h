@@ -7,11 +7,9 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef __MIMFS_SUPPORT_h
-#define __MIMFS_SUPPORT_h
+#ifndef __RFS_SUPPORT_h
+#define __RFS_SUPPORT_h
 
-#define MRFS_TEST
-
-#define FILESYSTEM "MOUNTED RFS"
+#define FILESYSTEM "RFS"
 
 #endif

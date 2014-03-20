@@ -187,8 +187,6 @@ static void path_eval_test02(void )
 
 void test (void )
 {
-  puts( "\n\n*** PATH EVALUATION TEST ***" );
   path_eval_test01();
   path_eval_test02();
-  puts( "*** END OF PATH EVALUATION TEST ***" );
 }

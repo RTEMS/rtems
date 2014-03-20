@@ -158,7 +158,5 @@ static void link_test01 (void)
 
 void test (void)
 {
-  puts ("\n\n*** LINK TEST ***");
   link_test01 ();
-  puts ("*** END OF LINK TEST ***");
 }

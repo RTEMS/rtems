@@ -389,11 +389,9 @@ static void rdwr_error (void)
 void test (void)
 {
 
-  puts ("\n\n*** ERROR TEST ***");
   open_mkdir_error ();
   rename_error ();
   truncate_error ();
   rmdir_unlink_error ();
   rdwr_error ();
-  puts ("*** END OF ERROR TEST ***");
 }

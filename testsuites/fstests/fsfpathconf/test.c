@@ -87,9 +87,7 @@ static void fpathconf_test(void){
 
 void test(void){
 
-  puts("\n\n*** FPATHCONF TEST ***" );
   fpathconf_test();
-  puts( "\n*** END OF FPATHCONF TEST ***" );
 }
 
 /* end of file */

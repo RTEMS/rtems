@@ -479,10 +479,8 @@ static void root_test(void )
 
 void test(void )
 {
-  puts( "\n\n*** PERMISSION TEST ***" );
   umask_test01();
   test_premission01();
   test_premission02();
   root_test();
-  puts( "*** END OF PERMISSION TEST ***" );
 }

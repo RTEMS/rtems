@@ -9,8 +9,6 @@
 #ifndef __IMFS_SUPPORT_h
 #define __IMFS_SUPPORT_h
 
-#define IMFS_TEST
-
-#define FILESYSTEM "IMFS"
+#define FILESYSTEM "ROOT IMFS"
 
 #endif

@@ -160,10 +160,8 @@ static void symlink_loop_error_test(void )
 void test(void )
 {
 
-  puts( "\n\n*** SYMLINK TEST ***" );
   symlink_test01();
   symlink_loop_error_test();
-  puts( "*** END OF SYMLINK TEST ***" );
 
 }
 

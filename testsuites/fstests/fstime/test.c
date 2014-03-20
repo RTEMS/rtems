@@ -327,9 +327,7 @@ int main(int argc, char **argv)
 #endif
 {
 
-  puts( "\n\n*** TIME TEST ***" );
   time_test01();
-  puts( "*** END OF TIME TEST ***" );
 
 #ifndef __rtems__
   return 0;
