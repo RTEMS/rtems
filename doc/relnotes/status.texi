@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1989-2011.
+@c  COPYRIGHT (c) 1989-2014.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
@@ -147,6 +147,6 @@ development environment.
 @node RTEMS Problem Reporting, RTEMS PROBLEM REPORT, Development Environment Problems, Development Environment Status Known Problems
 @subsection RTEMS Problem Reporting
 
-The RTEMS Project uses the GNATS Problem Reporting and Tracking System.
+The RTEMS Project uses the Bugzilla Problem Reporting and Tracking System.
 Instructions for reporting a problem are located at
-@uref{http://www.rtems.org/bugs.html}.
+@uref{http://rtems.org/wiki/index.php/RTEMSBugReporting}.
