@@ -29,6 +29,7 @@
 #endif
 
 #include <rtems/gxx_wrappers.h>
+#include <rtems/score/onceimpl.h>
 
 #include <stdlib.h>
 
@@ -43,19 +44,7 @@ int rtems_gxx_once(__gthread_once_t *once, void (*func) (void))
     printk( "gxx_wrappers: once=%x, func=%x\n", *once, func );
   #endif
 
-  if ( *(volatile __gthread_once_t *)once == 0 ) {
-    rtems_mode saveMode;
-    __gthread_once_t o;
-
-    rtems_task_mode(RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &saveMode);
-    if ( (o = *(volatile __gthread_once_t *)once) == 0 ) {
-      *(volatile __gthread_once_t *)once = 1;
-    }
-    rtems_task_mode(saveMode, RTEMS_PREEMPT_MASK, &saveMode);
-    if ( o == 0 )
-      (*func)();
-  }
-  return 0;
+  return _Once( once, func );
 }
 
 int rtems_gxx_key_create (__gthread_key_t *key, void (*dtor) (void *))

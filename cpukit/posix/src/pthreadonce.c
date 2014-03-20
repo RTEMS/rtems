@@ -23,51 +23,18 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/score/apimutex.h>
-
-#define PTHREAD_ONCE_INIT_NOT_RUN  0
-#define PTHREAD_ONCE_INIT_RUNNING  1
-#define PTHREAD_ONCE_INIT_COMPLETE 2
+#include <rtems/score/onceimpl.h>
 
 int pthread_once(
   pthread_once_t  *once_control,
   void           (*init_routine)(void)
 )
 {
-  int r = 0;
-
   if ( !once_control || !init_routine )
     return EINVAL;
 
   if ( once_control->is_initialized != 1 )
     return EINVAL;
 
-  if ( once_control->init_executed != PTHREAD_ONCE_INIT_COMPLETE ) {
-    _Once_Lock();
-
-    /*
-     * Getting to here means the once_control is locked so we have:
-     *  1. The init has not run and the state is PTHREAD_ONCE_INIT_NOT_RUN.
-     *  2. The init has finished and the state is PTHREAD_ONCE_INIT_RUN.
-     *  3. The init is being run by this thread and the state
-     *     PTHREAD_ONCE_INIT_RUNNING so we are nesting. This is an error.
-     */
-
-    switch ( once_control->init_executed ) {
-      case PTHREAD_ONCE_INIT_NOT_RUN:
-        once_control->init_executed = PTHREAD_ONCE_INIT_RUNNING;
-        (*init_routine)();
-        once_control->init_executed = PTHREAD_ONCE_INIT_COMPLETE;
-        break;
-      case PTHREAD_ONCE_INIT_RUNNING:
-        r = EINVAL;
-        break;
-      default:
-        break;
-    }
-
-    _Once_Unlock();
-  }
-
-  return r;
+  return _Once( &once_control->init_executed, init_routine );
 }

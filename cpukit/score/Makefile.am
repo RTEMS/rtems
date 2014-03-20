@@ -41,6 +41,7 @@ include_rtems_score_HEADERS += include/rtems/score/isrlock.h
 include_rtems_score_HEADERS += include/rtems/score/freechain.h
 include_rtems_score_HEADERS += include/rtems/score/object.h
 include_rtems_score_HEADERS += include/rtems/score/objectimpl.h
+include_rtems_score_HEADERS += include/rtems/score/onceimpl.h
 include_rtems_score_HEADERS += include/rtems/score/percpu.h
 include_rtems_score_HEADERS += include/rtems/score/priority.h
 include_rtems_score_HEADERS += include/rtems/score/prioritybitmap.h
@@ -335,6 +336,7 @@ libscore_a_SOURCES += src/apiext.c src/chain.c src/chainappend.c \
     src/interr.c src/isr.c src/wkspace.c src/wkstringduplicate.c
 libscore_a_SOURCES += src/debugisownerofallocator.c
 libscore_a_SOURCES += src/profilingisrentryexit.c
+libscore_a_SOURCES += src/once.c
 
 EXTRA_DIST = src/Unlimited.txt
 

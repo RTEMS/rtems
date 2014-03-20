@@ -147,6 +147,10 @@ $(PROJECT_INCLUDE)/rtems/score/objectimpl.h: include/rtems/score/objectimpl.h $(
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/objectimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/objectimpl.h
 
+$(PROJECT_INCLUDE)/rtems/score/onceimpl.h: include/rtems/score/onceimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/onceimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/onceimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/percpu.h: include/rtems/score/percpu.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/percpu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/percpu.h
