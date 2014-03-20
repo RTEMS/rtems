@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2013.
+@c  COPYRIGHT (c) 1988-2014.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
@@ -47,17 +47,13 @@ determine the current versions and, if a patch is required, what version.
 This section describes how to locate the appropriate tool versions and
 patches for a particular target architecture.
 
-All patches and RPM specification files are kept in CVS.  They are
-not included in release tarballs.  You will have to access the
-CVS branch for RTEMS @value{RTEMSAPI}.  For details on this,
-visit @uref{http://www.rtems.org/wiki/index.php/RTEMS_CVS_Repository, http://www.rtems.org/wiki/index.php/RTEMS_CVS_Repository} and look for
-instructions on accessing the RTEMS Source Code Repository in read-only mode.
-You can either do a complete checkout of the source tree or use a web
-interface.  A typical checkout command would look like this:
-@c TODO: pointing the user to the wiki entry might be enough.
-@example
-cvs -d :pserver:anoncvs@@www.rtems.org:/usr1/CVS -z 9 co -P rtems
-@end example
+All patches and RPM specification files are kept under source code
+control.  They are not included in release tarballs.  You will have to
+access the CVS branch for RTEMS @value{RTEMSAPI}.  For details on this,
+visit @uref{http://wiki.rtems.org/wiki/index.php/RTEMS_GIT_Repository,
+http://wiki.rtems.org/wiki/index.php/RTEMS_GIT_Repository} and look for
+instructions on accessing the RTEMS Source Code Repository in read-only
+mode.
 
 In the checked out source code, you will need to look in the subdirectory
 @code{contrib/crossrpms/autotools} to determine the versions of AUTOCONF
