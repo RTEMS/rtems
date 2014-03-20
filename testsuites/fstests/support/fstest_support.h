@@ -9,6 +9,7 @@
 #ifndef __FSTEST_SUPPORT_H
 #define __FSTEST_SUPPORT_H
 
+#include <rtems.h>
 
 #ifdef __cplusplus
 extern "C" {

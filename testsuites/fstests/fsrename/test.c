@@ -13,6 +13,7 @@
 
 #include "fstest.h"
 #include "fs_config.h"
+#include "fstest_support.h"
 #include "pmacros.h"
 
 #include <sys/stat.h>
@@ -25,13 +26,11 @@
 
 const char rtems_test_name[] = "FSRENAME " FILESYSTEM;
 
-void test_initialize_filesystem (void);
-void test_shutdown_filesystem (void);
-
 static void symbolic_link_test (void)
 {
   int fd;
   int status;
+  int rv;
 
   const char *name01 = "name01";
   const char *name02 = "name02";
@@ -145,10 +144,12 @@ static void symbolic_link_test (void)
   status = symlink (symlink02, symlink01);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "%s/test", symlink01);
+  rv = snprintf (path01, sizeof(path01), "%s/test", symlink01);
+  rtems_test_assert (rv < sizeof(path01));
   EXPECT_ERROR (ELOOP, rename, path01, name01);
 
-  sprintf (path01, "%s/test", symlink02);
+  rv = snprintf (path01, sizeof(path01), "%s/test", symlink02);
+  rtems_test_assert (rv < sizeof(path01));
   EXPECT_ERROR (ELOOP, rename, path01, name01);
 
   /*
@@ -176,10 +177,12 @@ static void symbolic_link_test (void)
   status = symlink (symlink02, symlink01);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "%s/test", symlink01);
+  rv = snprintf (path01, sizeof(path01), "%s/test", symlink01);
+  rtems_test_assert (rv < sizeof(path01));
   EXPECT_ERROR (ELOOP, rename, name01, path01);
 
-  sprintf (path01, "%s/test", symlink02);
+  rv = snprintf (path01, sizeof(path01), "%s/test", symlink02);
+  rtems_test_assert (rv < sizeof(path01));
   EXPECT_ERROR (ELOOP, rename, name01, path01);
 
   /*
@@ -209,6 +212,7 @@ static void same_file_test (void)
 {
   int fd;
   int status;
+  int rv;
 
   const char *name01 = "name01";
   const char *name02 = "name02";
@@ -264,7 +268,8 @@ static void same_file_test (void)
   status = mkdir (dir01, mode);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "%s/%s", dir01, name02);
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name02);
+  rtems_test_assert (rv < sizeof(path01));
   status = link (name01, path01);
   rtems_test_assert (status == 0);
 
@@ -297,6 +302,7 @@ static void directory_test (void)
 {
   int fd;
   int status;
+  int rv;
   int i;
 
   const char *name01 = "name01";
@@ -383,7 +389,8 @@ static void directory_test (void)
   status = mkdir (dir02, mode);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "%s/%s", dir02, dir01);
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir02, dir01);
+  rtems_test_assert (rv < sizeof(path01));
   status = mkdir (path01, mode);
   rtems_test_assert (status == 0);
 
@@ -409,7 +416,8 @@ static void directory_test (void)
   status = mkdir (dir02, mode);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "%s/%s", dir02, name02);
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir02, name02);
+  rtems_test_assert (rv < sizeof(path01));
   fd = creat (path01, mode);
   rtems_test_assert (fd >= 0);
   status = close (fd);
@@ -470,7 +478,8 @@ static void directory_test (void)
 
   for(i = statbuf.st_nlink; i < LINK_MAX_val; i++)
   {
-    sprintf (link_name, "%s/%d", dir01, i);
+    rv = snprintf (link_name, sizeof(link_name), "%s/%d", dir01, i);
+    rtems_test_assert (rv < sizeof(link_name));
 
     status = mkdir (link_name, mode);
     rtems_test_assert (status == 0);
@@ -479,7 +488,8 @@ static void directory_test (void)
   status = mkdir (dir02, mode);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "%s/%s", dir01, dir01);
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, dir01);
+  rtems_test_assert (rv < sizeof(path01));
   EXPECT_ERROR (EMLINK, rename, dir02, path01);
 
   /*
@@ -488,7 +498,8 @@ static void directory_test (void)
 
   for(i = statbuf.st_nlink; i < LINK_MAX_val; i++)
   {
-    sprintf (link_name, "%s/%d", dir01, i);
+    rv = snprintf (link_name, sizeof(link_name), "%s/%d", dir01, i);
+    rtems_test_assert (rv < sizeof(link_name));
 
     status = rmdir (link_name);
     rtems_test_assert (status == 0);
@@ -508,7 +519,8 @@ static void directory_test (void)
   status = mkdir (dir01, mode | S_ISVTX);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "%s/%s", dir01, name01);
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
+  rtems_test_assert (rv < sizeof(path01));
   fd = creat (path01, mode);
   rtems_test_assert (fd >= 0);
   status = close (fd);
@@ -550,7 +562,8 @@ static void directory_test (void)
   status = mkdir (dir01, mode | S_ISVTX);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "%s/%s", dir01, name01);
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
+  rtems_test_assert (rv < sizeof(path01));
   fd = creat (path01, mode);
   rtems_test_assert (fd >= 0);
   status = close (fd);
@@ -603,7 +616,7 @@ static void arg_test (void)
 {
   int fd;
   int status;
-  int i;
+  int rv;
 
   const char *name01 = "name01";
   const char *name02 = "name02";
@@ -614,7 +627,7 @@ static void arg_test (void)
   mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
   const char *wd = __func__;
 
-  char filename[NAME_MAX + 1];
+  char filename[NAME_MAX + 2];
   char path01[20];
 
   /*
@@ -677,7 +690,8 @@ static void arg_test (void)
   status = mkdir (dir01, mode);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "%s/%s/%s", dir01, name01, name02);
+  rv = snprintf (path01, sizeof(path01), "%s/%s/%s", dir01, name01, name02);
+  rtems_test_assert (rv < sizeof(path01));
   EXPECT_ERROR (ENOENT, rename, path01, name01);
 
   /*
@@ -719,9 +733,8 @@ static void arg_test (void)
   rtems_test_assert (status == 0);
 
   /* Generate string with NAME_MAX + 1 length */
-
-  for(i = 0; i < NAME_MAX + 1; i++)
-    strcat(filename, "a");
+  memset(filename, 'a', NAME_MAX + 1);
+  filename[NAME_MAX + 1] = '\0';
 
   EXPECT_ERROR (ENAMETOOLONG, rename, name01, filename);
 
@@ -893,6 +906,7 @@ static void write_permission_test (void)
 {
   int fd;
   int status;
+  int rv;
 
   const char *name01 = "name01";
   const char *name02 = "name02";
@@ -967,7 +981,8 @@ static void write_permission_test (void)
   status = close (fd);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "../%s/%s", dir01, name02);
+  rv = snprintf (path01, sizeof(path01), "../%s/%s", dir01, name02);
+  rtems_test_assert (rv < sizeof(path01));
   EXPECT_ERROR (EACCES, rename, name01, path01);
 
   /*
@@ -983,14 +998,17 @@ static void write_permission_test (void)
 
   EXPECT_EQUAL (0, unlink, name01);
 
-  sprintf (path01, "../%s", dir01);
+  rv = snprintf (path01, sizeof(path01), "../%s", dir01);
+  rtems_test_assert (rv < sizeof(path01));
   status = chmod (path01, mode);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "../%s/%s", dir01, name01);
+  rv = snprintf (path01, sizeof(path01), "../%s/%s", dir01, name01);
+  rtems_test_assert (rv < sizeof(path01));
   EXPECT_EQUAL (0, unlink, path01);
 
-  sprintf (path01, "../%s/%s", dir01, name02);
+  rv = snprintf (path01, sizeof(path01), "../%s/%s", dir01, name02);
+  rtems_test_assert (rv < sizeof(path01));
   EXPECT_EQUAL (0, unlink, path01);
 
   status = chdir ("..");
@@ -1018,6 +1036,7 @@ static void search_permission_test (void)
 {
   int fd;
   int status;
+  int rv;
 
   const char *name01 = "name01";
   const char *name02 = "name02";
@@ -1054,13 +1073,15 @@ static void search_permission_test (void)
   status = mkdir (dir01, mode);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "%s/%s", dir01, name01);
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
+  rtems_test_assert (rv < sizeof(path01));
   fd = creat (path01, mode);
   rtems_test_assert (fd >= 0);
   status = close (fd);
   rtems_test_assert (status == 0);
 
-  sprintf (path02, "%s/%s", dir01, name02);
+  rv = snprintf (path02, sizeof(path02), "%s/%s", dir01, name02);
+  rtems_test_assert (rv < sizeof(path02));
   fd = creat (path02, mode);
   rtems_test_assert (fd >= 0);
   status = close (fd);
@@ -1092,7 +1113,8 @@ static void search_permission_test (void)
   status = chdir ("..");
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "%s/%s", dir02, name01);
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir02, name01);
+  rtems_test_assert (rv < sizeof(path01));
   EXPECT_ERROR (EACCES, rename, path01, path02);
 
   /*
@@ -1111,7 +1133,8 @@ static void search_permission_test (void)
   status = chmod (dir01, mode);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "%s/%s", dir01, name01);
+  rv = snprintf (path01, sizeof(path01), "%s/%s", dir01, name01);
+  rtems_test_assert (rv < sizeof(path01));
   EXPECT_EQUAL (0, unlink, path01);
   EXPECT_EQUAL (0, unlink, path02);
   EXPECT_EQUAL (0, rmdir, dir01);
@@ -1136,6 +1159,7 @@ static void filesystem_test (void)
 {
   int fd;
   int status;
+  int rv;
 
   const char *name01 = "name01";
   const char *name02 = "name02";
@@ -1168,7 +1192,8 @@ static void filesystem_test (void)
   status = close (fd);
   rtems_test_assert (status == 0);
 
-  sprintf (path01, "%s/%s", BASE_FOR_TEST, name02);
+  rv = snprintf (path01, sizeof(path01), "%s/%s", BASE_FOR_TEST, name02);
+  rtems_test_assert (rv < sizeof(path01));
   EXPECT_ERROR (EXDEV, rename, name01, path01);
 
   /*
