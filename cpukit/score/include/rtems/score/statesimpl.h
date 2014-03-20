@@ -36,8 +36,6 @@ extern "C" {
  *  be used to compose and manipulate a thread's state.
  */
 
-/** This macro corresponds to all states being set. */
-#define STATES_ALL_SET                         0xfffff
 /** This macro corresponds to a task being ready. */
 #define STATES_READY                           0x00000
 /** This macro corresponds to a task being created but not yet started. */
