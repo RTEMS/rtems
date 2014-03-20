@@ -11,7 +11,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/rtems/license.html.
+ *  http://www.rtems.org/rtems/license.html.
  *
  *  Copyright 2004, 2008 Brookhaven National Laboratory and
  *                  Shuchen K. Feng, <feng1@bnl.gov>

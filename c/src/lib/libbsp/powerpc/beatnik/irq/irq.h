@@ -13,7 +13,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  *
  * Modified by T. Straumann for the beatnik BSP, 2005-2007
  * Some information may be based on mvme5500/irq/irq.h by K. Feng.

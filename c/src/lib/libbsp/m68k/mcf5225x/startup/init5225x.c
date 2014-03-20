@@ -1,7 +1,7 @@
 /*
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  *
  *  This is where the real hardware setup is done. A minimal stack
  *  has been provided by the start.S code. No normal C or RTEMS

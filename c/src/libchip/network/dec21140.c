@@ -5,7 +5,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  *
  * ------------------------------------------------------------------------
  * [22.05.2000,StWi/CWA] added support for the DEC/Intel 21143 chip

@@ -3,7 +3,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  */
 
 #include <stdio.h>
@@ -79,7 +79,7 @@ fprintf(f,
   "\n"
   "  The license and distribution terms for this file may be\n"
   "  found in the file LICENSE in this distribution or at\n"
-  "  http://www.rtems.com/license/LICENSE.\n"
+  "  http://www.rtems.org/license/LICENSE.\n"
   , VERSION
 );
 }

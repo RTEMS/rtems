@@ -4,7 +4,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  *
  *  Both the ne2000 and the wd80x3 are based on the National Semiconductor
  *  8390 chip, so there is a fair amount of overlap between the two

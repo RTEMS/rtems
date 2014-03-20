@@ -20,7 +20,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  *
  *	Modified to reflect isp entries for sh7045 processor:
  *	John M. Mills (jmills@tga.com)

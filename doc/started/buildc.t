@@ -56,7 +56,7 @@ You can either do a complete checkout of the source tree or use a web
 interface.  A typical checkout command would look like this:
 @c TODO: pointing the user to the wiki entry might be enough.
 @example
-cvs -d :pserver:anoncvs@@www.rtems.com:/usr1/CVS -z 9 co -P rtems
+cvs -d :pserver:anoncvs@@www.rtems.org:/usr1/CVS -z 9 co -P rtems
 @end example
 
 In the checked out source code, you will need to look in the subdirectory

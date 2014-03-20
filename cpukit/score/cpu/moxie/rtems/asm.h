@@ -27,7 +27,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  *
  *  $Id: asm.h,v 1.9 2010/06/29 00:31:09 joel Exp $
  */

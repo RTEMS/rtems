@@ -6,7 +6,7 @@
  * Copyright (c)  2006 by Ray<rayx.cn@gmail.com>  to support LPC ARM
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems/score/armv4.h>

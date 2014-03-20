@@ -28,10 +28,10 @@ assumed.  The authors reserve the right to revise this material
 and to make changes from time to time in the content hereof
 without obligation to notify anyone of such revision or changes.
 
-The RTEMS Project is hosted at @uref{http://www.rtems.com}.
+The RTEMS Project is hosted at @uref{http://www.rtems.org}.
 Any inquiries concerning RTEMS, its related support
 components, its documentation, or any custom services
 for RTEMS should be directed to the contacts listed on
 that site.  A current list of RTEMS Support Providers
-is at @uref{http://www.rtems.com/oarsupport}.
+is at @uref{http://www.rtems.org/oarsupport}.
 

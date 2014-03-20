@@ -9,7 +9,7 @@
  *
  *  The license and distribution terms for this file may in
  *  the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  *
  * Based on the `gen68302' board support package, and covered by the
  * original distribution terms.

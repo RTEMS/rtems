@@ -162,7 +162,7 @@ The primary ftp site for this library is ftp.cygnus.com (205.180.83.42).
 @section Documentation
 
 The RTEMS Documentation Set is provided online at 
-@uref{http://www.rtems.com/onlinedocs.html}
+@uref{http://www.rtems.org/onlinedocs.html}
 as reference information for all levels of RTEMS users.  
 
 The RTEMS documentation set is available in HTML, PostScript, PDF, and DVI.

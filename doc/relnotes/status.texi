@@ -149,4 +149,4 @@ development environment.
 
 The RTEMS Project uses the GNATS Problem Reporting and Tracking System.
 Instructions for reporting a problem are located at
-@uref{http://www.rtems.com/bugs.html}.
+@uref{http://www.rtems.org/bugs.html}.

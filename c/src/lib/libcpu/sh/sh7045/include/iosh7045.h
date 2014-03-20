@@ -22,7 +22,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  *
  *	Modified to reflect on-chip registers for sh7045 processor, based on
  *	"Register.h" distributed with Hitachi's EVB7045F tutorials, and which

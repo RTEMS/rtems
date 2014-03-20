@@ -48,11 +48,11 @@ RTEMS source from CVS. For details on accessing RTEMS CVS repository consult
 @uref{http://www.rtems.org/wiki/index.php/RTEMS_CVS_Repository, http://www.rtems.org/wiki/index.php/RTEMS_CVS_Repository}.  The steps required
 to obtain the source code from CVS are usually like the following:
 @example
-$ cvs -d :pserver:anoncvs@@www.rtems.com:/usr1/CVS login
-Logging in to :pserver:anoncvs@@www.rtems.com:2401/usr1/CVS
+$ cvs -d :pserver:anoncvs@@www.rtems.org:/usr1/CVS login
+Logging in to :pserver:anoncvs@@www.rtems.org:2401/usr1/CVS
 CVS password:
-$ cvs -d :pserver:anoncvs@@www.rtems.com:/usr1/CVS -z 9 co -P rtems  # for the main RTEMS source
-$ cvs -d :pserver:anoncvs@@www.rtems.com:/usr1/CVS -z 9 co -P examples-v2  # for examples
+$ cvs -d :pserver:anoncvs@@www.rtems.org:/usr1/CVS -z 9 co -P rtems  # for the main RTEMS source
+$ cvs -d :pserver:anoncvs@@www.rtems.org:/usr1/CVS -z 9 co -P examples-v2  # for examples
 @end example
 
 @section Add <INSTALL_POINT>/bin to Executable PATH

@@ -8,7 +8,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  *
  * Till Straumann <strauman@slac.stanford.edu>, 2003/9:
  *  - added handling of basic escape sequences (cursor movement

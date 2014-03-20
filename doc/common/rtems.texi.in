@@ -1,9 +1,9 @@
-@set RTEMSHTTPSITE		www.rtems.com
+@set RTEMSHTTPSITE		www.rtems.org
 @set RTEMSUSERS			rtems-users@@rtems.com
 @set RTEMSUSERSSUBSCRIBE	rtems-users-subscribe@@rtems.com
 @set RTEMSBUGS			http://www.rtems.org/bugzilla
-@set RTEMSFTPURL		ftp://www.rtems.com
-@set RTEMSHTTPURL		http://www.rtems.com
+@set RTEMSFTPURL		ftp://www.rtems.org
+@set RTEMSHTTPURL		http://www.rtems.org
 @set RTEMSPREFIX		@RTEMSPREFIX@
 @set RTEMSAPI			@RTEMSAPI@
 @set RTEMSRPMPREFIX		@RTEMSRPMPREFIX@

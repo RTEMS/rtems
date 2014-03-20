@@ -36,7 +36,7 @@ within the RTEMS distribution.  For persons using the ftp
 distribution found on the primary ftp site for RTEMS,
 <RTEMS_distribution> are found under this directory
 @uref{ftp://ftp.rtems.com/pub/rtems/}.  HTTP access to the
-ftp site is available via @uref{http://www.rtems.com/ftp/pub/rtems}.
+ftp site is available via @uref{http://www.rtems.org/ftp/pub/rtems}.
 
 The archive files for RTEMS Release @value{VERSION} are found
 under the directory <RTEMS_distribution>.  This directory
