@@ -8,10 +8,8 @@ SUBDIRS = tools started user bsp_howto porting develenv posix_users \
     new_chapters relnotes cpu_supplement shell
 
 if USE_HTML
-html_DATA = index.html HELP.html
+html_DATA = index.html
 endif
-
-EXTRA_DIST = HELP.html
 
 EXTRA_DIST += common/cpright.texi common/setup.texi \
     common/treedef.tex common/rtems.texi.in
