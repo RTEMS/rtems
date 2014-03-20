@@ -17,7 +17,6 @@
 #endif
 
 #include <rtems/score/assert.h>
-#include <rtems/score/isr.h>
 #include <rtems/score/threaddispatch.h>
 
 #if defined( RTEMS_DEBUG )
@@ -32,6 +31,6 @@
     dispatch_allowed = per_cpu->thread_dispatch_disable_level == 0;
     _ISR_Enable_without_giant( level );
 
-    return dispatch_allowed && _ISR_Get_level() == 0;
+    return dispatch_allowed;
   }
 #endif
