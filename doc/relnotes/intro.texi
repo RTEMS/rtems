@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1989-2011.
+@c  COPYRIGHT (c) 1989-2014.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
@@ -35,17 +35,9 @@ This RTEMS release package contains the following general components:
 
 @end itemize
 
-There is a mailing list dedicated to RTEMS.  This is
-a Majordomo style mailing list and may be subscribed to
-by sending a message to rtems-list-request@@rtems.com with
-the following line as the body:
-
-@example
-subscribe rtems_user@@your_email_goes_here.com
-@end example
-
-Please replace rtems_user@@your_email_goes_here.com with your
-email address.
+There are multiple mailing lists dedicated to RTEMS.  
+Each list may be subscribed to, archives view, etc. by visiting
+@uref{http://www.rtems.org/mailman/listinfo}.
 
 @node Introduction Supporting Tools, GNU Development Tools, Introduction, Introduction
 @section Supporting Tools
@@ -141,22 +133,14 @@ very complete and is compliant with as many standards as
 possible.  Because of this, it may be the only choice for many
 developers.
 
-There is currently no RTEMS support for the GNU C Library.
+@node NEWLIB C Library, Introduction Documentation, GNU C Library, Introduction Supporting Tools
+@subsection NEWLIB C Library
 
-The primary ftp site for this library is
-prep.ai.mit.edu (18.71.0.38).
-
-@node Cygnus NEWLIB C Library, Introduction Documentation, GNU C Library, Introduction Supporting Tools
-@subsection Cygnus NEWLIB C Library
-
-The Cygnus NEWLIB C Library was specifically designed
-for real-time embedded systems.  It is a small, reasonably
-documented Library with support for reentrancy.  This library is
-a collection of freely distributable and public domain source
-code and is freely distributable with as few restrictions as
-possible placed on the end user.
-
-The primary ftp site for this library is ftp.cygnus.com (205.180.83.42).
+The NEWLIB C Library was specifically designed for real-time embedded
+systems.  It is a small, reasonably documented Library with support
+for reentrancy.  This library is a collection of freely distributable
+and public domain source code and is freely distributable with as few
+restrictions as possible placed on the end user.
 
 @node Introduction Documentation, Installation Procedure, Cygnus NEWLIB C Library, Introduction
 @section Documentation
