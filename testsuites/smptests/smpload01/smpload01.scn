@@ -1,168 +1,280 @@
-*** TEST SMPLOAD 1 ***
+*** BEGIN OF TEST SMPLOAD 1 ***
+semaphore worker count  0: 14986
+semaphore worker count  1: 14876
+semaphore worker count  2: 9943
+semaphore worker count  3: 6954
+semaphore worker count  4: 3780
+semaphore worker count  5: 2084
+semaphore worker count  6: 1293
+semaphore worker count  7: 886
+semaphore worker count  8: 706
+semaphore worker count  9: 487
+semaphore worker count 10: 391
+semaphore worker count 11: 305
+semaphore worker count 12: 254
+semaphore worker count 13: 218
+semaphore worker count 14: 181
+semaphore worker count 15: 140
+semaphore worker count 16: 124
+semaphore worker count 17: 107
+semaphore worker count 18: 114
+semaphore worker count 19: 80
+semaphore worker count 20: 104
+semaphore worker count 21: 66
+semaphore worker count 22: 69
+semaphore worker count 23: 64
+semaphore worker count 24: 50
+semaphore worker count 25: 47
+semaphore worker count 26: 44
+semaphore worker count 27: 34
+semaphore worker count 28: 36
+semaphore worker count 29: 33
+semaphore worker count 30: 33
+semaphore worker count 31: 30
+semaphore worker count 32: 33
+semaphore worker count 33: 29
+semaphore worker count 34: 23
+semaphore worker count 35: 25
+semaphore worker count 36: 26
+semaphore worker count 37: 15
+semaphore worker count 38: 11
+semaphore worker count 39: 14
+semaphore worker count 40: 16
+semaphore worker count 41: 11
+semaphore worker count 42: 17
+semaphore worker count 43: 19
+semaphore worker count 44: 10
+semaphore worker count 45: 16
+semaphore worker count 46: 12
+semaphore worker count 47: 16
+semaphore worker count 48: 10
+semaphore worker count 49: 23
+semaphore worker count 50: 6
+semaphore worker count 51: 9
+semaphore worker count 52: 5
+semaphore worker count 53: 16
+semaphore worker count 54: 8
+semaphore worker count 55: 9
+semaphore worker count 56: 7
+semaphore worker count 57: 6
+semaphore worker count 58: 5
+semaphore worker count 59: 3
+semaphore worker count 60: 7
+semaphore worker count 61: 6
+semaphore worker count 62: 3
+semaphore worker count 63: 5
+semaphore worker count 64: 6
+semaphore worker count 65: 8
+semaphore worker count 66: 10
+semaphore worker count 67: 5
+semaphore worker count 68: 6
+semaphore worker count 69: 7
+semaphore worker count 70: 5
+semaphore worker count 71: 4
+semaphore worker count 72: 7
+semaphore worker count 73: 6
+semaphore worker count 74: 4
+semaphore worker count 75: 8
+semaphore worker count 76: 7
+semaphore worker count 77: 6
+semaphore worker count 78: 5
+semaphore worker count 79: 5
+semaphore worker count 80: 5
+semaphore worker count 81: 2
+semaphore worker count 82: 4
+semaphore worker count 83: 6
+semaphore worker count 84: 0
+semaphore worker count 85: 0
+semaphore worker count 86: 0
+semaphore worker count 87: 0
+semaphore worker count 88: 0
+semaphore worker count 89: 0
+semaphore worker count 90: 0
+semaphore worker count 91: 0
+semaphore worker count 92: 0
+semaphore worker count 93: 0
+semaphore worker count 94: 0
+semaphore worker count 95: 0
+priority inheritance release count: 298
+priority inheritance obtain count  0: 298
+priority inheritance obtain count  1: 298
+priority inheritance obtain count  2: 298
+priority inheritance obtain count  3: 298
   <ProfilingReport name="SMPLOAD 1">
     <PerCPUProfilingReport processorIndex="0">
-      <MaxThreadDispatchDisabledTime unit="ns">110405</MaxThreadDispatchDisabledTime>
-      <ThreadDispatchDisabledCount>5165</ThreadDispatchDisabledCount>
-      <TotalThreadDispatchDisabledTime unit="ns">170810415</TotalThreadDispatchDisabledTime>
-      <MaxInterruptTime unit="ns">215600</MaxInterruptTime>
-      <MaxInterruptDelay unit="ns">78390</MaxInterruptDelay>
-      <InterruptCount>1061</InterruptCount>
-      <TotalInterruptTime unit="ns">89412555</TotalInterruptTime>
+      <MaxThreadDispatchDisabledTime unit="ns">439505</MaxThreadDispatchDisabledTime>
+      <ThreadDispatchDisabledCount>107380</ThreadDispatchDisabledCount>
+      <TotalThreadDispatchDisabledTime unit="ns">2828036354</TotalThreadDispatchDisabledTime>
+      <MaxInterruptTime unit="ns">449825</MaxInterruptTime>
+      <MaxInterruptDelay unit="ns">209910</MaxInterruptDelay>
+      <InterruptCount>45379</InterruptCount>
+      <TotalInterruptTime unit="ns">468103979</TotalInterruptTime>
     </PerCPUProfilingReport>
     <PerCPUProfilingReport processorIndex="1">
-      <MaxThreadDispatchDisabledTime unit="ns">132930</MaxThreadDispatchDisabledTime>
-      <ThreadDispatchDisabledCount>4105</ThreadDispatchDisabledCount>
-      <TotalThreadDispatchDisabledTime unit="ns">142276895</TotalThreadDispatchDisabledTime>
-      <MaxInterruptTime unit="ns">8030</MaxInterruptTime>
+      <MaxThreadDispatchDisabledTime unit="ns">192520</MaxThreadDispatchDisabledTime>
+      <ThreadDispatchDisabledCount>107354</ThreadDispatchDisabledCount>
+      <TotalThreadDispatchDisabledTime unit="ns">2951472564</TotalThreadDispatchDisabledTime>
+      <MaxInterruptTime unit="ns">12310</MaxInterruptTime>
       <MaxInterruptDelay unit="ns">0</MaxInterruptDelay>
-      <InterruptCount>1029</InterruptCount>
-      <TotalInterruptTime unit="ns">3350735</TotalInterruptTime>
+      <InterruptCount>24014</InterruptCount>
+      <TotalInterruptTime unit="ns">55580995</TotalInterruptTime>
     </PerCPUProfilingReport>
     <PerCPUProfilingReport processorIndex="2">
-      <MaxThreadDispatchDisabledTime unit="ns">96015</MaxThreadDispatchDisabledTime>
-      <ThreadDispatchDisabledCount>4086</ThreadDispatchDisabledCount>
-      <TotalThreadDispatchDisabledTime unit="ns">138497785</TotalThreadDispatchDisabledTime>
-      <MaxInterruptTime unit="ns">8645</MaxInterruptTime>
+      <MaxThreadDispatchDisabledTime unit="ns">180210</MaxThreadDispatchDisabledTime>
+      <ThreadDispatchDisabledCount>111122</ThreadDispatchDisabledCount>
+      <TotalThreadDispatchDisabledTime unit="ns">3083151549</TotalThreadDispatchDisabledTime>
+      <MaxInterruptTime unit="ns">10800</MaxInterruptTime>
       <MaxInterruptDelay unit="ns">0</MaxInterruptDelay>
-      <InterruptCount>1025</InterruptCount>
-      <TotalInterruptTime unit="ns">3154355</TotalInterruptTime>
+      <InterruptCount>24595</InterruptCount>
+      <TotalInterruptTime unit="ns">56849370</TotalInterruptTime>
     </PerCPUProfilingReport>
     <PerCPUProfilingReport processorIndex="3">
-      <MaxThreadDispatchDisabledTime unit="ns">207895</MaxThreadDispatchDisabledTime>
-      <ThreadDispatchDisabledCount>4143</ThreadDispatchDisabledCount>
-      <TotalThreadDispatchDisabledTime unit="ns">151584650</TotalThreadDispatchDisabledTime>
-      <MaxInterruptTime unit="ns">11145</MaxInterruptTime>
+      <MaxThreadDispatchDisabledTime unit="ns">192305</MaxThreadDispatchDisabledTime>
+      <ThreadDispatchDisabledCount>129066</ThreadDispatchDisabledCount>
+      <TotalThreadDispatchDisabledTime unit="ns">160126153</TotalThreadDispatchDisabledTime>
+      <MaxInterruptTime unit="ns">12715</MaxInterruptTime>
       <MaxInterruptDelay unit="ns">0</MaxInterruptDelay>
-      <InterruptCount>1122</InterruptCount>
-      <TotalInterruptTime unit="ns">2717540</TotalInterruptTime>
+      <InterruptCount>28961</InterruptCount>
+      <TotalInterruptTime unit="ns">66604305</TotalInterruptTime>
     </PerCPUProfilingReport>
     <SMPLockProfilingReport name="SMP lock stats">
-      <MaxAcquireTime unit="ns">7415</MaxAcquireTime>
-      <MaxSectionTime unit="ns">19980</MaxSectionTime>
-      <UsageCount>13</UsageCount>
-      <TotalAcquireTime unit="ns">29500</TotalAcquireTime>
-      <TotalSectionTime unit="ns">63445</TotalSectionTime>
-      <ContentionCount initialQueueLength="0">13</ContentionCount>
+      <MaxAcquireTime unit="ns">8305</MaxAcquireTime>
+      <MaxSectionTime unit="ns">21735</MaxSectionTime>
+      <UsageCount>16</UsageCount>
+      <TotalAcquireTime unit="ns">37930</TotalAcquireTime>
+      <TotalSectionTime unit="ns">76770</TotalSectionTime>
+      <ContentionCount initialQueueLength="0">16</ContentionCount>
       <ContentionCount initialQueueLength="1">0</ContentionCount>
       <ContentionCount initialQueueLength="2">0</ContentionCount>
       <ContentionCount initialQueueLength="3">0</ContentionCount>
     </SMPLockProfilingReport>
+    <SMPLockProfilingReport name="Giant">
+      <MaxAcquireTime unit="ns">430280</MaxAcquireTime>
+      <MaxSectionTime unit="ns">445580</MaxSectionTime>
+      <UsageCount>215584</UsageCount>
+      <TotalAcquireTime unit="ns">2553573107</TotalAcquireTime>
+      <TotalSectionTime unit="ns">742278475</TotalSectionTime>
+      <ContentionCount initialQueueLength="0">56087</ContentionCount>
+      <ContentionCount initialQueueLength="1">107063</ContentionCount>
+      <ContentionCount initialQueueLength="2">51715</ContentionCount>
+      <ContentionCount initialQueueLength="3">719</ContentionCount>
+    </SMPLockProfilingReport>
     <SMPLockProfilingReport name="LEON3 IrqCtrl">
-      <MaxAcquireTime unit="ns">2080</MaxAcquireTime>
-      <MaxSectionTime unit="ns">5300</MaxSectionTime>
+      <MaxAcquireTime unit="ns">2340</MaxAcquireTime>
+      <MaxSectionTime unit="ns">5045</MaxSectionTime>
       <UsageCount>3</UsageCount>
-      <TotalAcquireTime unit="ns">5810</TotalAcquireTime>
-      <TotalSectionTime unit="ns">14905</TotalSectionTime>
+      <TotalAcquireTime unit="ns">6355</TotalAcquireTime>
+      <TotalSectionTime unit="ns">13795</TotalSectionTime>
       <ContentionCount initialQueueLength="0">3</ContentionCount>
       <ContentionCount initialQueueLength="1">0</ContentionCount>
       <ContentionCount initialQueueLength="2">0</ContentionCount>
       <ContentionCount initialQueueLength="3">0</ContentionCount>
     </SMPLockProfilingReport>
     <SMPLockProfilingReport name="per-CPU state">
-      <MaxAcquireTime unit="ns">66395</MaxAcquireTime>
-      <MaxSectionTime unit="ns">16045</MaxSectionTime>
+      <MaxAcquireTime unit="ns">69505</MaxAcquireTime>
+      <MaxSectionTime unit="ns">17495</MaxSectionTime>
       <UsageCount>12</UsageCount>
-      <TotalAcquireTime unit="ns">169185</TotalAcquireTime>
-      <TotalSectionTime unit="ns">84470</TotalSectionTime>
+      <TotalAcquireTime unit="ns">170575</TotalAcquireTime>
+      <TotalSectionTime unit="ns">92800</TotalSectionTime>
       <ContentionCount initialQueueLength="0">7</ContentionCount>
       <ContentionCount initialQueueLength="1">4</ContentionCount>
       <ContentionCount initialQueueLength="2">1</ContentionCount>
       <ContentionCount initialQueueLength="3">0</ContentionCount>
     </SMPLockProfilingReport>
     <SMPLockProfilingReport name="per-CPU">
-      <MaxAcquireTime unit="ns">27355</MaxAcquireTime>
-      <MaxSectionTime unit="ns">81595</MaxSectionTime>
-      <UsageCount>6526</UsageCount>
-      <TotalAcquireTime unit="ns">16099290</TotalAcquireTime>
-      <TotalSectionTime unit="ns">89849335</TotalSectionTime>
-      <ContentionCount initialQueueLength="0">5922</ContentionCount>
-      <ContentionCount initialQueueLength="1">604</ContentionCount>
+      <MaxAcquireTime unit="ns">45820</MaxAcquireTime>
+      <MaxSectionTime unit="ns">80520</MaxSectionTime>
+      <UsageCount>191623</UsageCount>
+      <TotalAcquireTime unit="ns">725817290</TotalAcquireTime>
+      <TotalSectionTime unit="ns">3761923355</TotalSectionTime>
+      <ContentionCount initialQueueLength="0">183684</ContentionCount>
+      <ContentionCount initialQueueLength="1">7939</ContentionCount>
       <ContentionCount initialQueueLength="2">0</ContentionCount>
       <ContentionCount initialQueueLength="3">0</ContentionCount>
     </SMPLockProfilingReport>
     <SMPLockProfilingReport name="per-CPU">
-      <MaxAcquireTime unit="ns">36025</MaxAcquireTime>
-      <MaxSectionTime unit="ns">146465</MaxSectionTime>
-      <UsageCount>5552</UsageCount>
-      <TotalAcquireTime unit="ns">22070045</TotalAcquireTime>
-      <TotalSectionTime unit="ns">74385305</TotalSectionTime>
-      <ContentionCount initialQueueLength="0">4629</ContentionCount>
-      <ContentionCount initialQueueLength="1">923</ContentionCount>
+      <MaxAcquireTime unit="ns">57105</MaxAcquireTime>
+      <MaxSectionTime unit="ns">143510</MaxSectionTime>
+      <UsageCount>178463</UsageCount>
+      <TotalAcquireTime unit="ns">839695710</TotalAcquireTime>
+      <TotalSectionTime unit="ns">3300422075</TotalSectionTime>
+      <ContentionCount initialQueueLength="0">164040</ContentionCount>
+      <ContentionCount initialQueueLength="1">14423</ContentionCount>
       <ContentionCount initialQueueLength="2">0</ContentionCount>
       <ContentionCount initialQueueLength="3">0</ContentionCount>
     </SMPLockProfilingReport>
     <SMPLockProfilingReport name="per-CPU">
-      <MaxAcquireTime unit="ns">16895</MaxAcquireTime>
-      <MaxSectionTime unit="ns">83280</MaxSectionTime>
-      <UsageCount>4728</UsageCount>
-      <TotalAcquireTime unit="ns">18585920</TotalAcquireTime>
-      <TotalSectionTime unit="ns">59083815</TotalSectionTime>
-      <ContentionCount initialQueueLength="0">3868</ContentionCount>
-      <ContentionCount initialQueueLength="1">860</ContentionCount>
+      <MaxAcquireTime unit="ns">53715</MaxAcquireTime>
+      <MaxSectionTime unit="ns">86980</MaxSectionTime>
+      <UsageCount>183928</UsageCount>
+      <TotalAcquireTime unit="ns">911318930</TotalAcquireTime>
+      <TotalSectionTime unit="ns">3376328605</TotalSectionTime>
+      <ContentionCount initialQueueLength="0">168809</ContentionCount>
+      <ContentionCount initialQueueLength="1">15119</ContentionCount>
       <ContentionCount initialQueueLength="2">0</ContentionCount>
       <ContentionCount initialQueueLength="3">0</ContentionCount>
     </SMPLockProfilingReport>
     <SMPLockProfilingReport name="per-CPU">
-      <MaxAcquireTime unit="ns">26365</MaxAcquireTime>
-      <MaxSectionTime unit="ns">94130</MaxSectionTime>
-      <UsageCount>6506</UsageCount>
-      <TotalAcquireTime unit="ns">17592735</TotalAcquireTime>
-      <TotalSectionTime unit="ns">92991200</TotalSectionTime>
-      <ContentionCount initialQueueLength="0">6170</ContentionCount>
-      <ContentionCount initialQueueLength="1">336</ContentionCount>
+      <MaxAcquireTime unit="ns">54975</MaxAcquireTime>
+      <MaxSectionTime unit="ns">115400</MaxSectionTime>
+      <UsageCount>214576</UsageCount>
+      <TotalAcquireTime unit="ns">1114797360</TotalAcquireTime>
+      <TotalSectionTime unit="ns">3997196165</TotalSectionTime>
+      <ContentionCount initialQueueLength="0">196216</ContentionCount>
+      <ContentionCount initialQueueLength="1">18360</ContentionCount>
       <ContentionCount initialQueueLength="2">0</ContentionCount>
       <ContentionCount initialQueueLength="3">0</ContentionCount>
-    </SMPLockProfilingReport>
-    <SMPLockProfilingReport name="Giant">
-      <MaxAcquireTime unit="ns">245180</MaxAcquireTime>
-      <MaxSectionTime unit="ns">232130</MaxSectionTime>
-      <UsageCount>10102</UsageCount>
-      <TotalAcquireTime unit="ns">416556635</TotalAcquireTime>
-      <TotalSectionTime unit="ns">529718895</TotalSectionTime>
-      <ContentionCount initialQueueLength="0">1950</ContentionCount>
-      <ContentionCount initialQueueLength="1">4735</ContentionCount>
-      <ContentionCount initialQueueLength="2">2441</ContentionCount>
-      <ContentionCount initialQueueLength="3">976</ContentionCount>
     </SMPLockProfilingReport>
     <SMPLockProfilingReport name="chains">
-      <MaxAcquireTime unit="ns">7555</MaxAcquireTime>
-      <MaxSectionTime unit="ns">8805</MaxSectionTime>
-      <UsageCount>12</UsageCount>
-      <TotalAcquireTime unit="ns">24785</TotalAcquireTime>
-      <TotalSectionTime unit="ns">28550</TotalSectionTime>
-      <ContentionCount initialQueueLength="0">12</ContentionCount>
+      <MaxAcquireTime unit="ns">5175</MaxAcquireTime>
+      <MaxSectionTime unit="ns">12355</MaxSectionTime>
+      <UsageCount>13</UsageCount>
+      <TotalAcquireTime unit="ns">25275</TotalAcquireTime>
+      <TotalSectionTime unit="ns">37815</TotalSectionTime>
+      <ContentionCount initialQueueLength="0">13</ContentionCount>
       <ContentionCount initialQueueLength="1">0</ContentionCount>
       <ContentionCount initialQueueLength="2">0</ContentionCount>
       <ContentionCount initialQueueLength="3">0</ContentionCount>
     </SMPLockProfilingReport>
     <SMPLockProfilingReport name="TOD">
-      <MaxAcquireTime unit="ns">8400</MaxAcquireTime>
-      <MaxSectionTime unit="ns">18135</MaxSectionTime>
-      <UsageCount>12736</UsageCount>
-      <TotalAcquireTime unit="ns">36411665</TotalAcquireTime>
-      <TotalSectionTime unit="ns">51414560</TotalSectionTime>
-      <ContentionCount initialQueueLength="0">12728</ContentionCount>
-      <ContentionCount initialQueueLength="1">8</ContentionCount>
+      <MaxAcquireTime unit="ns">17910</MaxAcquireTime>
+      <MaxSectionTime unit="ns">24835</MaxSectionTime>
+      <UsageCount>255282</UsageCount>
+      <TotalAcquireTime unit="ns">1081011595</TotalAcquireTime>
+      <TotalSectionTime unit="ns">1868447965</TotalSectionTime>
+      <ContentionCount initialQueueLength="0">254784</ContentionCount>
+      <ContentionCount initialQueueLength="1">498</ContentionCount>
       <ContentionCount initialQueueLength="2">0</ContentionCount>
       <ContentionCount initialQueueLength="3">0</ContentionCount>
     </SMPLockProfilingReport>
     <SMPLockProfilingReport name="mount table entry">
-      <MaxAcquireTime unit="ns">2940</MaxAcquireTime>
-      <MaxSectionTime unit="ns">4835</MaxSectionTime>
+      <MaxAcquireTime unit="ns">2740</MaxAcquireTime>
+      <MaxSectionTime unit="ns">4520</MaxSectionTime>
       <UsageCount>43</UsageCount>
-      <TotalAcquireTime unit="ns">74160</TotalAcquireTime>
-      <TotalSectionTime unit="ns">86065</TotalSectionTime>
+      <TotalAcquireTime unit="ns">67340</TotalAcquireTime>
+      <TotalSectionTime unit="ns">103785</TotalSectionTime>
       <ContentionCount initialQueueLength="0">43</ContentionCount>
       <ContentionCount initialQueueLength="1">0</ContentionCount>
       <ContentionCount initialQueueLength="2">0</ContentionCount>
       <ContentionCount initialQueueLength="3">0</ContentionCount>
     </SMPLockProfilingReport>
+    <SMPLockProfilingReport name="thread zombies">
+      <MaxAcquireTime unit="ns">8490</MaxAcquireTime>
+      <MaxSectionTime unit="ns">12865</MaxSectionTime>
+      <UsageCount>103</UsageCount>
+      <TotalAcquireTime unit="ns">289735</TotalAcquireTime>
+      <TotalSectionTime unit="ns">537645</TotalSectionTime>
+      <ContentionCount initialQueueLength="0">103</ContentionCount>
+      <ContentionCount initialQueueLength="1">0</ContentionCount>
+      <ContentionCount initialQueueLength="2">0</ContentionCount>
+      <ContentionCount initialQueueLength="3">0</ContentionCount>
+    </SMPLockProfilingReport>
     <SMPLockProfilingReport name="constructor">
-      <MaxAcquireTime unit="ns">9740</MaxAcquireTime>
-      <MaxSectionTime unit="ns">15735</MaxSectionTime>
+      <MaxAcquireTime unit="ns">6525</MaxAcquireTime>
+      <MaxSectionTime unit="ns">15660</MaxSectionTime>
       <UsageCount>1</UsageCount>
-      <TotalAcquireTime unit="ns">9740</TotalAcquireTime>
-      <TotalSectionTime unit="ns">15735</TotalSectionTime>
+      <TotalAcquireTime unit="ns">6525</TotalAcquireTime>
+      <TotalSectionTime unit="ns">15660</TotalSectionTime>
       <ContentionCount initialQueueLength="0">1</ContentionCount>
       <ContentionCount initialQueueLength="1">0</ContentionCount>
       <ContentionCount initialQueueLength="2">0</ContentionCount>
