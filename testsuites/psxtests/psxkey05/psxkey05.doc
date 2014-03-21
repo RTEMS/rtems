@@ -20,3 +20,4 @@ directives:
 concepts:
 
 + Ensure that key data's operation(create, set, get and delete) under multikeys work.
++ Ensure that key can be set to a new value.

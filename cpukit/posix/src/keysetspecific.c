@@ -37,36 +37,47 @@ int pthread_setspecific(
   POSIX_Keys_Control          *the_key;
   Objects_Locations            location;
   POSIX_Keys_Key_value_pair   *value_pair_ptr;
+  RBTree_Node                 *p;
+  POSIX_Keys_Key_value_pair    search_node;
 
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      value_pair_ptr = _POSIX_Keys_Key_value_pair_allocate();
+      search_node.key = key;
+      search_node.thread_id = _Thread_Executing->Object.id;
+      p = _RBTree_Find( &_POSIX_Keys_Key_value_lookup_tree,
+                                    &search_node.Key_value_lookup_node );
 
-      if ( !value_pair_ptr ) {
-        _Objects_Put( &the_key->Object );
+      if ( p ) {
+        value_pair_ptr = _RBTree_Container_of( p,
+                                          POSIX_Keys_Key_value_pair,
+                                          Key_value_lookup_node );
 
-        return ENOMEM;
+        value_pair_ptr->value = value;
+      } else {
+        value_pair_ptr = _POSIX_Keys_Key_value_pair_allocate();
+
+        if ( !value_pair_ptr ) {
+          _Objects_Put( &the_key->Object );
+
+          return ENOMEM;
+        }
+
+        value_pair_ptr->key = key;
+        value_pair_ptr->thread_id = _Thread_Executing->Object.id;
+        value_pair_ptr->value = value;
+        /* The insert can only go wrong if the same node is already in a unique
+         * tree. This has been already checked with the _RBTree_Find() */
+        (void) _RBTree_Insert( &_POSIX_Keys_Key_value_lookup_tree,
+                             &(value_pair_ptr->Key_value_lookup_node) );
+
+        /** append rb_node to the thread API extension's chain */
+        _Chain_Append_unprotected(
+          &_Thread_Executing->Key_Chain,
+          &value_pair_ptr->Key_values_per_thread_node
+        );
       }
-
-      value_pair_ptr->key = key;
-      value_pair_ptr->thread_id = _Thread_Executing->Object.id;
-      value_pair_ptr->value = value;
-      if ( _RBTree_Insert( &_POSIX_Keys_Key_value_lookup_tree,
-                           &(value_pair_ptr->Key_value_lookup_node) ) ) {
-        _Freechain_Put( (Freechain_Control *)&_POSIX_Keys_Keypool,
-                        (void *) value_pair_ptr );
-        _Objects_Put( &the_key->Object );
-
-        return EAGAIN;
-      }
-
-      /** append rb_node to the thread API extension's chain */
-      _Chain_Append_unprotected(
-        &_Thread_Executing->Key_Chain,
-        &value_pair_ptr->Key_values_per_thread_node
-      );
 
       _Objects_Put( &the_key->Object );
 

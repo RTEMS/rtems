@@ -52,6 +52,14 @@ rtems_task Init( rtems_task_argument ignored )
   value = pthread_getspecific( key2 );
   rtems_test_assert( *value == Data_array[1] );
 
+  puts( "Init - key1 pthread_setspecific - OK" );
+  sc = pthread_setspecific( key1, &Data_array[1] );
+  rtems_test_assert( !sc );
+
+  puts( "Init - key1 pthread_getspecific - OK" );
+  value = pthread_getspecific( key1 );
+  rtems_test_assert( *value == Data_array[1] );
+
   puts( "Init - pthread key1 delete - OK" );
   sc = pthread_key_delete( key1 );
   rtems_test_assert( sc == 0 );
