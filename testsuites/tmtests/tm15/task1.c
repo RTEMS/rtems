@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 15";
+
 bool     time_set;
 uint32_t eventout;
 
@@ -35,7 +37,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 15 ***" );
+  TEST_BEGIN();
 
   test_init();
 
@@ -193,7 +195,7 @@ rtems_task Low_task(
     CALLING_OVERHEAD_EVENT_SEND
   );
 
-  puts( "*** END OF TEST 15 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 

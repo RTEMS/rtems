@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 8";
+
 rtems_id Test_task_id;
 
 rtems_task test_task(
@@ -32,7 +34,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 8 ***" );
+  TEST_BEGIN();
 
   test_init();
 
@@ -238,7 +240,7 @@ rtems_task test_task(
     CALLING_OVERHEAD_CLOCK_GET
   );
 
-  puts( "*** END OF TEST 8 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 

@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 10";
+
 rtems_id Queue_id;
 long Buffer[4];
 
@@ -41,7 +43,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 10 ***" );
+  TEST_BEGIN();
 
   test_init();
 
@@ -165,6 +167,6 @@ rtems_task Low_task(
     CALLING_OVERHEAD_MESSAGE_QUEUE_RECEIVE
   );
 
-  puts( "*** END OF TEST 10 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

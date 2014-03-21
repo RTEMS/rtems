@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 20";
+
 rtems_device_major_number _STUB_major = 1;
 
 rtems_id         Region_id;
@@ -54,7 +56,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 20 ***" );
+  TEST_BEGIN();
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', '1' ),
@@ -432,7 +434,7 @@ rtems_task Task_1(
     CALLING_OVERHEAD_IO_CONTROL
   );
 
-  puts( "*** END OF TEST 20 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 

@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 18";
+
 uint32_t   taskcount;
 rtems_task_priority taskpri;
 
@@ -40,7 +42,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 18 ***" );
+  TEST_BEGIN();
 
   test_init();
 
@@ -107,6 +109,6 @@ rtems_task Last_task(
     CALLING_OVERHEAD_TASK_DELETE
   );
 
-  puts( "*** END OF TEST 18 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

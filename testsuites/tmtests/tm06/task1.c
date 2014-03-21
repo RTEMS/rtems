@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 6";
+
 rtems_id Task_id[ OPERATION_COUNT + 1 ];
 
 uint32_t   Task_restarted;
@@ -36,7 +38,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 6 ***" );
+  TEST_BEGIN();
 
   test_init();
 
@@ -149,7 +151,7 @@ rtems_task Task_1(
     CALLING_OVERHEAD_TASK_RESUME
   );
 
-  puts( "*** END OF TEST 6 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 

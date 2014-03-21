@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 29";
+
 rtems_name Period_name;
 
 rtems_task Tasks(
@@ -36,7 +38,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 29 ***" );
+  TEST_BEGIN();
 
   Period_name = rtems_build_name( 'P', 'R', 'D', ' ' );
 
@@ -204,6 +206,6 @@ rtems_task Low_task(
     CALLING_OVERHEAD_RATE_MONOTONIC_PERIOD
   );
 
-  puts( "*** END OF TEST 29 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

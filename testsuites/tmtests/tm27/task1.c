@@ -25,6 +25,8 @@
 #define _RTEMS_TMTEST27
 #include <tm27.h>
 
+const char rtems_test_name[] = "TIME TEST 27";
+
 rtems_task Task_1(
   rtems_task_argument argument
 );
@@ -51,11 +53,11 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 27 ***" );
+  TEST_BEGIN();
   if (_Scheduler.Operations.initialize != _Scheduler_priority_Initialize) {
     puts("  Error ==> " );
     puts("Test only supported for deterministic priority scheduler\n" );
-    puts( "*** END OF TEST 26 ***" );
+    TEST_END();
     rtems_test_exit( 0 );
   }
 
@@ -201,7 +203,7 @@ rtems_task Task_1(
    *  goes to Isr_handler and then returns
    */
 
-  puts( "*** END OF TEST 27 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 

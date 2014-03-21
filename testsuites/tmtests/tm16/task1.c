@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 16";
+
 uint32_t   Task_count;
 
 rtems_task test_init(
@@ -39,7 +41,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 16 ***" );
+  TEST_BEGIN();
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'E', 'S', 'T' ),
@@ -147,6 +149,6 @@ rtems_task High_task(
     CALLING_OVERHEAD_EVENT_SEND
   );
 
-  puts( "*** END OF TEST 16 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

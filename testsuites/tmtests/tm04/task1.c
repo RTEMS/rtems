@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 4";
+
 rtems_id         Semaphore_id;
 rtems_id         Task_id[OPERATION_COUNT+1];
 uint32_t         task_count;
@@ -45,7 +47,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 4 ***" );
+  TEST_BEGIN();
 
   test_init();
 
@@ -331,7 +333,7 @@ rtems_task High_task(
     CALLING_OVERHEAD_TASK_DELETE
   );
 
-  puts( "*** END OF TEST 4 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 

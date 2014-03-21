@@ -17,6 +17,8 @@
 #include <timesys.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "TIME TEST 30";
+
 rtems_id barrier[ OPERATION_COUNT ];
 
 rtems_task Init(
@@ -66,7 +68,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** TIME TEST 30 ***" );
+  TEST_BEGIN();
 
   rtems_time_test_measure_operation(
     "rtems_barrier_create: only case",
@@ -92,7 +94,7 @@ rtems_task Init(
     0
   );
   
-  puts( "*** END OF TIME TEST 30 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }

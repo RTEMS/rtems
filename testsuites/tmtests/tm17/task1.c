@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 17";
+
 uint32_t   Task_count;
 rtems_task_priority Task_priority;
 
@@ -41,7 +43,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 17 ***" );
+  TEST_BEGIN();
 
   Task_priority = RTEMS_MAXIMUM_PRIORITY - 1u;
   if ( OPERATION_COUNT > RTEMS_MAXIMUM_PRIORITY - 2u )
@@ -126,6 +128,6 @@ rtems_task Last_task(
     CALLING_OVERHEAD_TASK_SET_PRIORITY
   );
 
-  puts( "*** END OF TEST 17 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 3";
+
 rtems_id Semaphore_id;
 rtems_task test_init(
   rtems_task_argument argument
@@ -38,7 +40,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 3 ***" );
+  TEST_BEGIN();
   status = rtems_task_create(
     rtems_build_name( 'T', 'A', '1', ' ' ),
     RTEMS_MAXIMUM_PRIORITY - 1u,
@@ -145,6 +147,6 @@ rtems_task High_task(
     CALLING_OVERHEAD_SEMAPHORE_RELEASE
   );
 
-  puts( "*** END OF TEST 3 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

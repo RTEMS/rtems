@@ -25,6 +25,8 @@
   #define PREVENT_SMP_ASSERT_FAILURES
 #endif
 
+const char rtems_test_name[] = "TIME TEST 26";
+
 /* TEST DATA */
 rtems_id Semaphore_id;
 
@@ -218,12 +220,12 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 26 ***" );
+  TEST_BEGIN();
 
   if (_Scheduler.Operations.initialize != _Scheduler_priority_Initialize) {
     puts("  Error ==> " );
     puts("Test only supported for deterministic priority scheduler\n" );
-    puts( "*** END OF TEST 26 ***" );
+    TEST_END();
     rtems_test_exit( 0 );
   }
 
@@ -762,6 +764,6 @@ void complete_test( void )
     0
   );
 
-  puts( "*** END OF TEST 26 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

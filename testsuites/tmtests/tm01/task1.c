@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST";
+
 rtems_task Test_task(
   rtems_task_argument argument
 );
@@ -26,7 +28,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 1 ***" );
+  TEST_BEGIN();
 
   Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
@@ -185,6 +187,6 @@ rtems_task Test_task(
     CALLING_OVERHEAD_SEMAPHORE_RELEASE
   );
 
-  puts( "*** END OF TEST 1 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 2";
+
 rtems_id High_id;
 rtems_id Low_id;
 rtems_id Semaphore_id;
@@ -42,7 +44,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 2 ***" );
+  TEST_BEGIN();
 
   test_init();
 
@@ -154,6 +156,6 @@ rtems_task Low_task(
     CALLING_OVERHEAD_SEMAPHORE_OBTAIN
   );
 
-  puts( "*** END OF TEST 2 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

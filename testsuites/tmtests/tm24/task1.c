@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 24";
+
 uint32_t   Task_count;
 
 rtems_task Tasks(
@@ -34,7 +36,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 24 ***" );
+  TEST_BEGIN();
 
   status = rtems_task_create(
     rtems_build_name( 'H', 'I', 'G', 'H' ),
@@ -117,7 +119,7 @@ rtems_task Tasks(
       CALLING_OVERHEAD_TASK_WAKE_AFTER
     );
 
-  puts( "*** END OF TEST 24 ***" );
+  TEST_END();
     rtems_test_exit( 0 );
   }
   (void) rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );

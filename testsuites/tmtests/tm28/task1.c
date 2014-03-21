@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 28";
+
 rtems_id Port_id;
 
 uint8_t   Internal_area[ 256 ] CPU_STRUCTURE_ALIGNMENT;
@@ -31,7 +33,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 28 ***" );
+  TEST_BEGIN();
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', 'E' ),
@@ -129,6 +131,6 @@ rtems_task Test_task (
     CALLING_OVERHEAD_PORT_DELETE
   );
 
-  puts( "*** END OF TEST 28 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

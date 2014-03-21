@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "TIME TEST 19";
+
 rtems_asr Process_asr_for_pass_1(
   rtems_signal_set signals
 );
@@ -42,7 +44,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "\n\n*** TIME TEST 19 ***" );
+  TEST_BEGIN();
 
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', 'E' ),
@@ -208,6 +210,6 @@ rtems_task Task_3(
     0
   );
 
-  puts( "*** END OF TEST 19 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

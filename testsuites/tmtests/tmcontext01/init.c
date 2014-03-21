@@ -32,6 +32,8 @@
 
 #define CPU_COUNT 32
 
+const char rtems_test_name[] = "TMCONTEXT 1";
+
 static rtems_counter_ticks t[SAMPLES];
 
 static volatile bool always_true = true;
