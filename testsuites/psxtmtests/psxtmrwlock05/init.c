@@ -19,6 +19,8 @@
 #include <rtems/timerdrv.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "PSXTMRWLOCK 05";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void *Middle(void *argument);
@@ -51,7 +53,7 @@ void *Low(
     0
   );
 
-  puts( "*** END OF POSIX TIME PSXTMRWLOCK 05 TEST ***" );
+  TEST_END();
 
   rtems_test_exit( 0 );
   return NULL;
@@ -88,7 +90,7 @@ void *POSIX_Init(
   pthread_t  threadId;
   pthread_rwlockattr_t attr;
 
-  puts( "\n\n*** POSIX TIME PSXTMRWLOCK 05 TEST ***" );
+  TEST_BEGIN();
 
   for ( i=0 ; i < OPERATION_COUNT - 1 ; i++ ) {
     status = pthread_create( &threadId, NULL, Middle, NULL );

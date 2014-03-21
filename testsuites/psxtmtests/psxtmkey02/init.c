@@ -17,6 +17,8 @@
 #include <pthread.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "PSXTMKEY 02";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void benchmark_pthread_setspecific(void *value_p);
@@ -70,7 +72,7 @@ void *POSIX_Init(
 {
   int  status;
 
-  puts( "\n\n*** POSIX TIME TEST PSXTMKEY02 ***" );
+  TEST_BEGIN();
 
   /* create the key */
   status = pthread_key_create( &Key, NULL );
@@ -84,7 +86,7 @@ void *POSIX_Init(
   status = pthread_key_delete( Key );
   rtems_test_assert( status == 0 );
 
-  puts( "*** END OF POSIX TIME TEST PSXTMKEY02 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 

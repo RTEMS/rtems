@@ -19,6 +19,8 @@
 #include <sched.h>
 #include <rtems/timerdrv.h>
 
+const char rtems_test_name[] = "PSXTMCOND 01";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void benchmark_create_cond_var(void);
@@ -68,12 +70,12 @@ void *POSIX_Init(
   void *argument
 )
 {
-  puts( "\n\n*** POSIX TIME TEST PSXTMCOND01 ***" );
+  TEST_BEGIN();
 
   benchmark_create_cond_var();
   benchmark_destroy_cond_var();
 
-  puts( "*** END OF POSIX TIME TEST PSXTMCOND01 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 

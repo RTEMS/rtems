@@ -17,6 +17,8 @@
 #include <pthread.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "PSXTMMUTEX 07";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void test_mutex_setprioceiling(void);
@@ -70,7 +72,7 @@ void *POSIX_Init(
 {
   int  status;
 
-  puts( "\n\n*** POSIX TIME TEST PSXTMMUTEX07 ***" );
+  TEST_BEGIN();
   /* create mutex*/
   status = pthread_mutex_init( &MutexId, NULL );
   rtems_test_assert( status == 0 );
@@ -83,7 +85,7 @@ void *POSIX_Init(
   status = pthread_mutex_destroy( &MutexId );
   rtems_test_assert( status == 0 );
   
-  puts( "*** END OF POSIX TIME TEST PSXTMMUTEX07 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }

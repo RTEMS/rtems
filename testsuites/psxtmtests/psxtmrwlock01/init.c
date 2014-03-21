@@ -16,6 +16,8 @@
 #include <pthread.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "PSXTMRWLOCK 01";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
@@ -223,7 +225,7 @@ void *POSIX_Init(
 )
 {
 
-  puts( "\n\n*** POSIX TIME PSXTMRWLOCK 01  ***" );
+  TEST_BEGIN();
 
   /* initializing rwlock */
   benchmark_pthread_rwlock_init();
@@ -258,7 +260,7 @@ void *POSIX_Init(
   /* destroying rwlock */
   benchmark_pthread_rwlock_destroy();
 
-  puts( "*** END OF POSIX TIME PSXTMRWLOCK 01 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }

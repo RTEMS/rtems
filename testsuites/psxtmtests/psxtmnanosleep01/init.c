@@ -15,6 +15,8 @@
 #include <rtems/timerdrv.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "PSXTMNANOSLEEP 01";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
@@ -28,7 +30,7 @@ void *POSIX_Init(
   sleepTime.tv_sec = 0;
   sleepTime.tv_nsec = 0;
 
-  puts( "\n\n*** POSIX TIME TEST PSXTMNANOSLEEP01 ***" );
+  TEST_BEGIN();
 
   benchmark_timer_initialize();    
     nanosleep( &sleepTime, (struct  timespec *) NULL );
@@ -36,7 +38,7 @@ void *POSIX_Init(
 
   put_time( "nanosleep: yield", end_time, 1, 0, 0 );
 
-  puts( "*** END OF POSIX TIME TEST PSXTMNANOSLEEP01 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }

@@ -16,6 +16,8 @@
 #include "test_support.h"
 #include <pthread.h>
 
+const char rtems_test_name[] = "PSXTMBARRIER 01";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 static void benchmark_pthread_barrier_init(void);
@@ -71,14 +73,14 @@ void *POSIX_Init(
   void *argument
 )
 {
-  puts( "\n\n*** POSIX TIME TEST PSXTMBARRIER 01 ***" );
+  TEST_BEGIN();
 
   /* creating barrier with default properties */
   benchmark_pthread_barrier_init();
   /* destroying barrier */
   benchmark_pthread_barrier_destroy();
   
-  puts( "*** END OF POSIX TIME TEST PSXTMBARRIER 01  ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }

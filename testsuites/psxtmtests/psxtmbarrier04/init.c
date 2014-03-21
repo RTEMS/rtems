@@ -17,6 +17,8 @@
 #include <sched.h>
 #include <rtems/timerdrv.h>
 
+const char rtems_test_name[] = "PSXTMBARRIER 04";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void *Blocker(void *argument);
@@ -43,7 +45,7 @@ void *Blocker(
     0,
     0
   );
-  puts( "*** END OF POSIX TIME TEST PSXTMBARRIER 04 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
 }
@@ -57,7 +59,7 @@ void *POSIX_Init(
   int policy;
   struct sched_param param;
 
-  puts( "\n\n*** POSIX TIME TEST PSXTMBARRIER 04 ***" );
+  TEST_BEGIN();
 
   status = pthread_create( &threadId, NULL, Blocker, NULL );
   rtems_test_assert( status == 0 );

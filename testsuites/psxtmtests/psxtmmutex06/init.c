@@ -19,6 +19,8 @@
 #include <sched.h>
 #include <rtems/timerdrv.h>
 
+const char rtems_test_name[] = "PSXTMMUTEX 06";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void *Middle(void *argument);
@@ -46,7 +48,7 @@ void *Low(
     0
   );
 
-  puts( "*** END OF POSIX TIME TEST PSXTMMUTEX07 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
   return NULL;
 }
@@ -80,7 +82,7 @@ void *POSIX_Init(
   pthread_attr_t      attr;
   struct sched_param  param;
 
-  puts( "\n\n*** POSIX TIME TEST PSXTMMUTEX02 ***" );
+  TEST_BEGIN();
 
   /*
    * Deliberately create the mutex BEFORE the threads.  This way the

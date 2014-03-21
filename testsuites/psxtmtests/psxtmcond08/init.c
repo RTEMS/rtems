@@ -35,6 +35,8 @@
 
 #include <pthread.h>
 
+const char rtems_test_name[] = "PSXTMCOND 08";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void *Middle(void *argument);
@@ -60,7 +62,7 @@ void *Low(
     0
   );
 
-  puts( "*** END OF POSIX TIME TEST PSXTMCOND" TEST_NUMBER " ***" );
+  TEST_END();
 
   rtems_test_exit( 0 );
   return NULL;
@@ -123,7 +125,7 @@ void *POSIX_Init(
   int             rc;
   struct timeval  tp;
 
-  puts( "\n\n*** POSIX TIME TEST PSXTMCOND" TEST_NUMBER " ***" );
+  TEST_BEGIN();
 
   rc =  gettimeofday(&tp, NULL);
   rtems_test_assert( rc == 0 );

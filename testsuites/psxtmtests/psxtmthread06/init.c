@@ -19,6 +19,8 @@
 #include <rtems/timerdrv.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "PSXTMTHREAD 06";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void benchmark_pthread_create(void);
@@ -66,7 +68,7 @@ void *test_thread(
     0
   );
 
-  puts( "*** END OF POSIX TIME TEST PSXTMTHREAD06 ***" );
+  TEST_END();
   rtems_test_exit(0);
   //Empty thread used in pthread_create().
   return NULL;
@@ -77,7 +79,7 @@ void *POSIX_Init(
 )
 {
 
-  puts( "\n\n*** POSIX TIME TEST PSXTMTHREAD06 ***" );
+  TEST_BEGIN();
   benchmark_pthread_setschedparam();
 
   rtems_test_assert( 1 );

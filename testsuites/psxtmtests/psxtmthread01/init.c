@@ -18,6 +18,8 @@
 
 #include <pthread.h>
 
+const char rtems_test_name[] = "PSXTMTHREAD 01";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void *TestThread(void *argument);
@@ -47,7 +49,7 @@ void *POSIX_Init(
   void *argument
 )
 {
-  puts( "\n\n*** POSIX TIME TEST PSXTMTHREAD01 ***" );
+  TEST_BEGIN();
 
   rtems_time_test_measure_operation(
     "pthread_create: no preempt",
@@ -58,7 +60,7 @@ void *POSIX_Init(
   );
 
   
-  puts( "*** END OF POSIX TIME TEST PSXTMTHREAD01 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }

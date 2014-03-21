@@ -21,6 +21,8 @@
 
 #define N 5
 
+const char rtems_test_name[] = "PSXTMCOND 06";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void *Blocker(void *argument);
@@ -58,7 +60,7 @@ void *POSIX_Init(
   struct sched_param  param;
   int                 policy;
 
-  puts( "\n\n*** POSIX TIME TEST PSXTMCOND06 ***" );
+  TEST_BEGIN();
 
   /* Setup variables */
   status = pthread_create( &threadId, NULL, Blocker, NULL );
@@ -109,7 +111,7 @@ void *POSIX_Init(
     0
   );
 
-  puts( "*** END OF POSIX TIME TEST PSXTMCOND06 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL;

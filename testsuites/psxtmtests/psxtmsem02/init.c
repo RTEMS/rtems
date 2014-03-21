@@ -19,6 +19,8 @@
 #include <rtems/timerdrv.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "PSXTMSEM 02";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
@@ -125,7 +127,7 @@ static void benchmark_sem_trywait_not_available(void)
 void *POSIX_Init(void *argument)
 {
   int status;
-  puts( "\n\n*** POSIX TIME TEST PSXTMSEM02 ***" );
+  TEST_BEGIN();
 
   /* create the semaphore */
   status = sem_init( &sem1, 0, 1 );
@@ -142,7 +144,7 @@ void *POSIX_Init(void *argument)
   /* try to lock the semaphore, not available */
   benchmark_sem_trywait_not_available();
 
-  puts( "*** END OF POSIX TIME TEST PSXTMSEM02 ***" );
+  TEST_END();
 
   /*Destroying the semaphore*/
   status = sem_destroy(&sem1);
