@@ -104,7 +104,9 @@ struct _rtems_rpc_task_variables {
 
 	struct authsvc *svc_auths_Auths;
 };
-extern struct _rtems_rpc_task_variables *rtems_rpc_task_variables;
+
+struct _rtems_rpc_task_variables *rtems_rpc_task_variables_get(void);
+#define rtems_rpc_task_variables rtems_rpc_task_variables_get()
 
 #define svc_maxfd (rtems_rpc_task_variables->svc_svc_maxfd)
 #define svc_fdset (rtems_rpc_task_variables->svc_svc_fdset)

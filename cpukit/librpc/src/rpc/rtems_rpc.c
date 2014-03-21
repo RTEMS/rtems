@@ -9,6 +9,8 @@
 #include <rpc/rpc.h>
 #include <rtems.h>
 #include <stdlib.h>
+#include <pthread.h>
+#include <assert.h>
 
 /*
  * RPC variables for single-thread
@@ -61,35 +63,63 @@ static const struct _rtems_rpc_task_variables rpc_init = {
 /*
  * Per-task pointer to RPC data
  */
-struct _rtems_rpc_task_variables *rtems_rpc_task_variables = &rpc_default;
+static pthread_once_t rtems_rpc_task_variable_once = PTHREAD_ONCE_INIT;
+static pthread_key_t rtems_rpc_task_variable_key;
+
+/*
+ * Return the current task variable pointer.
+ */
+struct _rtems_rpc_task_variables *rtems_rpc_task_variables_get (void)
+{
+	void *ptr = pthread_getspecific(rtems_rpc_task_variable_key);
+	if (ptr == NULL) {
+		ptr = &rpc_default;
+	}
+	return (struct _rtems_rpc_task_variables *) ptr;
+}
+
+/*
+ * Key create function for task_variable_key.
+ */
+static void rtems_rpc_task_variable_make_key (void)
+{
+	int eno = pthread_key_create(&rtems_rpc_task_variable_key, NULL);
+	assert (eno == 0);
+	/*
+	 * FIXME: Should have destructor which cleans up
+	 * all RPC stuff:
+	 *  - Close all files
+	 *  - Go through and free linked list elements
+	 *  - Free other allocated memory (e.g. clnt_perror_buf)
+	 */
+}
 
 /*
  * Set up per-task RPC variables
  */
 int rtems_rpc_task_init (void)
 {
-	rtems_status_code sc;
 	struct _rtems_rpc_task_variables *tvp;
+	int eno = 0;
 
-	if (rtems_rpc_task_variables == &rpc_default) {
+	eno = pthread_once(
+		&rtems_rpc_task_variable_once,
+		rtems_rpc_task_variable_make_key
+	);
+	assert (eno == 0);
+
+	tvp = pthread_getspecific (rtems_rpc_task_variable_key);
+	if (tvp == NULL) {
 		tvp = malloc (sizeof *tvp);
 		if (tvp == NULL)
 			return RTEMS_NO_MEMORY;
-		/*
-		 * FIXME: Should have destructor which cleans up
-		 * all RPC stuff:
-		 *	- Close all files
-		 *	- Go through and free linked list elements
-		 *	- Free other allocated memory (e.g. clnt_perror_buf)
-		 */
-		sc = rtems_task_variable_add (
-			RTEMS_SELF, (void *)&rtems_rpc_task_variables, NULL);
-		if (sc != RTEMS_SUCCESSFUL) {
+
+		eno = pthread_setspecific (rtems_rpc_task_variable_key, (void *) tvp);
+		if (eno != 0) {
 			free (tvp);
-			return sc;
+			return RTEMS_INTERNAL_ERROR;
 		}
 		*tvp = rpc_init;
-		rtems_rpc_task_variables = tvp;
 	}
 	return RTEMS_SUCCESSFUL;
 }
