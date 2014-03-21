@@ -14,7 +14,6 @@ directives:
 
   rtems_gxx_once
   rtems_gxx_key_create 
-  rtems_gxx_key_dtor 
   rtems_gxx_key_delete 
   rtems_gxx_getspecific
   rtems_gxx_setspecific

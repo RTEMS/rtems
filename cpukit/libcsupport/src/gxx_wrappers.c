@@ -77,16 +77,6 @@ int rtems_gxx_key_create (__gthread_key_t *key, void (*dtor) (void *))
   return -1;
 }
 
-int rtems_gxx_key_dtor (__gthread_key_t key, void *ptr)
-{
-  #ifdef DEBUG_GXX_WRAPPERS
-    printk( "gxx_wrappers: dtor key=%x, ptr=%x\n", key, ptr );
-  #endif
-
-  key->val  = 0;
-  return 0;
-}
-
 int rtems_gxx_key_delete (__gthread_key_t key)
 {
   rtems_status_code status;

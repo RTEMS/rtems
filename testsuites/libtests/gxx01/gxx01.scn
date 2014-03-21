@@ -27,6 +27,5 @@ rtems_gxx_getspecific(key) already existing - OK
 rtems_gxx_key_delete(key) - OK
 rtems_gxx_getspecific(key) non-existent - OK
 rtems_gxx_key_delete(key) - OK
-rtems_gxx_key_dtor(&key_obj) - OK
 
 *** END OF TEST GXX 01 ***

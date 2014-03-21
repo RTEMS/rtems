@@ -52,8 +52,6 @@ int rtems_gxx_once(__gthread_once_t *once, void (*func) (void));
 
 int rtems_gxx_key_create (__gthread_key_t *key, void (*dtor) (void *));
 
-int rtems_gxx_key_dtor (__gthread_key_t key, void *ptr);
-
 int rtems_gxx_key_delete (__gthread_key_t key);
 
 void *rtems_gxx_getspecific(__gthread_key_t key);

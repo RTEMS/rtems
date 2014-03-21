@@ -129,7 +129,6 @@ void test_key(void)
   int              sc;
   __gthread_key_t  key;
   void            *p;
-  __gthread_key    key_obj;
 
   puts( "rtems_gxx_key_create(&key, NULL) - OK" );
   sc = rtems_gxx_key_create(&key, NULL);
@@ -166,12 +165,6 @@ void test_key(void)
   puts( "rtems_gxx_key_delete(key) - OK" );
   sc = rtems_gxx_key_delete( key );
   rtems_test_assert( sc == 0 );
-
-  memset( &key_obj, 0xff, sizeof( key_obj ) );
-  puts( "rtems_gxx_key_dtor(&key_obj) - OK" );
-  sc = rtems_gxx_key_dtor( &key_obj, key_dtor );
-  rtems_test_assert( sc == 0 );
-  rtems_test_assert( key_obj.val == 0 );
 }
 
 rtems_task Init(
