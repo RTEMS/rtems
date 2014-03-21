@@ -251,6 +251,9 @@ extern "C" void Init(rtems_task_argument arg)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 2
+#define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 2
+
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>

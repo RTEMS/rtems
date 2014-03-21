@@ -18,9 +18,7 @@
 
 void force_error()
 {
-  __gthread_key key;
+  pthread_key_t key = -1;
 
-  rtems_workspace_greedy_allocate( NULL, 0 );
-
-  rtems_gxx_getspecific( &key );
+  rtems_gxx_setspecific( &key, NULL );
 }

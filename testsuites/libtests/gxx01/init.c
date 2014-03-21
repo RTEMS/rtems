@@ -11,6 +11,7 @@
 #include "config.h"
 #endif
 
+#include <errno.h>
 #include <tmacros.h>
 #include "test_support.h"
 #include <rtems/gxx_wrappers.h>
@@ -142,7 +143,11 @@ void test_key(void)
   sc = rtems_gxx_key_create(&key, key_dtor);
   rtems_test_assert( sc == 0 );
 
-  puts( "rtems_gxx_setspecific() - OK" );
+  puts( "rtems_gxx_getspecific(key) not set - OK" );
+  p = rtems_gxx_getspecific(key);
+  rtems_test_assert( p == NULL );
+
+  puts( "rtems_gxx_setspecific(key, 0x1234) - OK" );
   sc = rtems_gxx_setspecific(key, (void *)0x1234);
   rtems_test_assert( sc == 0 );
 
@@ -153,7 +158,8 @@ void test_key(void)
   puts( "rtems_gxx_key_delete(key) - OK" );
   sc = rtems_gxx_key_delete(key);
   rtems_test_assert( sc == 0 );
-  rtems_test_assert( key_dtor_ran == true );
+  /* pthread_key man-page: the dtor should _not_ be called */
+  rtems_test_assert( key_dtor_ran != true );
 
   key = calloc( 1, sizeof( *key ) );
   rtems_test_assert( key != NULL );
@@ -162,9 +168,21 @@ void test_key(void)
   p = rtems_gxx_getspecific( key );
   rtems_test_assert( p == NULL );
 
-  puts( "rtems_gxx_key_delete(key) - OK" );
+  puts( "rtems_gxx_key_delete(key) - NOT OK" );
   sc = rtems_gxx_key_delete( key );
-  rtems_test_assert( sc == 0 );
+  rtems_test_assert( sc != 0 );
+
+  puts( "rtems_gxx_setspecific(NULL, 0x1234) - NOT OK" );
+  sc = rtems_gxx_setspecific( NULL, (void *)0x1234 );
+  rtems_test_assert( sc == EINVAL );
+
+  puts( "rtems_gxx_getspecific(NULL) - OK" );
+  p = rtems_gxx_getspecific( NULL );
+  rtems_test_assert( p == NULL );
+
+  puts( "rtems_gxx_key_delete(NULL) - NOT OK" );
+  sc = rtems_gxx_key_delete( NULL );
+  rtems_test_assert( sc == EINVAL );
 }
 
 rtems_task Init(
@@ -194,6 +212,9 @@ rtems_task Init(
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_MAXIMUM_POSIX_KEYS            1
+#define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 1
 
 #define CONFIGURE_MAXIMUM_TASKS        1
 #define CONFIGURE_MAXIMUM_SEMAPHORES   2

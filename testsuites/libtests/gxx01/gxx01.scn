@@ -22,10 +22,14 @@ Call once method the second time
 rtems_gxx_key_create(&key, NULL) - OK
 rtems_gxx_key_delete(key) - OK
 rtems_gxx_key_create(&key, key_dtor) - OK
-rtems_gxx_setspecific() - OK
+rtems_gxx_getspecific(key) not set - OK
+rtems_gxx_setspecific(key, 0x1234) - OK
 rtems_gxx_getspecific(key) already existing - OK
 rtems_gxx_key_delete(key) - OK
 rtems_gxx_getspecific(key) non-existent - OK
-rtems_gxx_key_delete(key) - OK
+rtems_gxx_key_delete(key) - NOT OK
+rtems_gxx_setspecific(NULL, 0x1234) - NOT OK
+rtems_gxx_getspecific(NULL) - OK
+rtems_gxx_key_delete(NULL) - NOT OK
 
 *** END OF TEST GXX 01 ***

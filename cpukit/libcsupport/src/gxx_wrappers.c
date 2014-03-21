@@ -31,7 +31,9 @@
 #include <rtems/gxx_wrappers.h>
 #include <rtems/score/onceimpl.h>
 
+#include <errno.h>
 #include <stdlib.h>
+#include <pthread.h>
 
 #include <rtems.h>
 
@@ -49,82 +51,64 @@ int rtems_gxx_once(__gthread_once_t *once, void (*func) (void))
 
 int rtems_gxx_key_create (__gthread_key_t *key, void (*dtor) (void *))
 {
-  rtems_status_code status;
+  int eno;
+  pthread_key_t *pkey;
 
-  /* Ok, this can be a bit tricky. We are going to return a "key" as a
-   * pointer to the buffer that will hold the value of the key itself.
-   * We have to to this, because the others functions on this interface
-   * deal with the value of the key, as used with the POSIX API.
-   */
-   /* Do not pull your hair, trust me this works. :-) */
-  __gthread_key_t new_key = (__gthread_key_t) malloc( sizeof( *new_key ) );
-  *key = new_key;
-  new_key->val  = NULL;
-  new_key->dtor = dtor;
+  pkey = malloc( sizeof( *pkey ) );
+  *key = pkey;
+  if ( pkey == NULL )
+  {
+    return ENOMEM;
+  }
 
   #ifdef DEBUG_GXX_WRAPPERS
     printk(
-      "gxx_wrappers: create key=%x, dtor=%x, new_key=%x\n", key, dtor, new_key
+      "gxx_wrappers: create key=%x, dtor=%x, pkey=%x\n", key, dtor, pkey
     );
   #endif
 
-  /* register with RTEMS the buffer that will hold the key values */
-  status = rtems_task_variable_add( RTEMS_SELF, (void **)new_key, dtor );
-  if ( status == RTEMS_SUCCESSFUL )
-    return 0;
+  eno = pthread_key_create(pkey, dtor);
+  if ( eno != 0 ) {
+    free( pkey );
+    *key = NULL;
+  }
 
-  free( new_key );
-  return -1;
+  return eno;
 }
 
 int rtems_gxx_key_delete (__gthread_key_t key)
 {
-  rtems_status_code status;
+  int eno = 0;
+  pthread_key_t *pkey = key;
 
   #ifdef DEBUG_GXX_WRAPPERS
-    printk( "gxx_wrappers: delete key=%x\n", key );
+    printk( "gxx_wrappers: delete key=%x\n", pkey );
   #endif
 
-  /* register with RTEMS the buffer that will hold the key values */
-  status = rtems_task_variable_delete( RTEMS_SELF, (void **)key );
-  if ( status == RTEMS_SUCCESSFUL ) {
-    /* Hmm - hopefully all tasks using this key have gone away... */
-    if ( key ) free( *(void **)key );
-    return 0;
+  if ( pkey == NULL ) {
+    return EINVAL;
   }
-  key = NULL;
-  return 0;
+
+  eno = pthread_key_delete(*pkey);
+  if ( eno == 0 ) {
+    free( pkey );
+  }
+  return eno;
 }
 
 void *rtems_gxx_getspecific(__gthread_key_t key)
 {
-  rtems_status_code  status;
-  void              *p= 0;
+  pthread_key_t *pkey = key;
+  void *p = NULL;
 
-  /* register with RTEMS the buffer that will hold the key values */
-  status = rtems_task_variable_get( RTEMS_SELF, (void **)key, &p );
-  if ( status == RTEMS_SUCCESSFUL ) {
-    /* We do not have to do this, but what the heck ! */
-     p= key->val;
-  } else {
-    /* fisrt time, always set to zero, it is unknown the value that the others
-     * threads are using at the moment of this call
-     */
-    status = rtems_task_variable_add( RTEMS_SELF, (void **)key, key->dtor );
-    if ( status != RTEMS_SUCCESSFUL ) {
-      _Terminate(
-        INTERNAL_ERROR_CORE,
-        true,
-        INTERNAL_ERROR_GXX_KEY_ADD_FAILED
-      );
-    }
-    key->val = (void *)0;
+  if ( pkey != NULL ) {
+    p = pthread_getspecific( *pkey );
   }
 
   #ifdef DEBUG_GXX_WRAPPERS
     printk(
       "gxx_wrappers: getspecific key=%x, ptr=%x, id=%x\n",
-       key,
+       pkey,
        p,
        rtems_task_self()
     );
@@ -134,25 +118,33 @@ void *rtems_gxx_getspecific(__gthread_key_t key)
 
 int rtems_gxx_setspecific(__gthread_key_t key, const void *ptr)
 {
-  rtems_status_code status;
+  pthread_key_t *pkey = key;
+  int eno;
+
+  if ( pkey == NULL ) {
+    return EINVAL;
+  }
+
+  eno = pthread_setspecific( *pkey, ptr );
 
   #ifdef DEBUG_GXX_WRAPPERS
     printk(
       "gxx_wrappers: setspecific key=%x, ptr=%x, id=%x\n",
-      key,
+      pkey,
       ptr,
       rtems_task_self()
       );
   #endif
 
-  /* register with RTEMS the buffer that will hold the key values */
-  status = rtems_task_variable_add( RTEMS_SELF, (void **)key, key->dtor );
-  if ( status == RTEMS_SUCCESSFUL ) {
-    /* now let's set the proper value */
-    key->val =  (void *)ptr;
-    return 0;
+  if ( eno != 0 ) {
+    _Terminate(
+      INTERNAL_ERROR_CORE,
+      true,
+      INTERNAL_ERROR_GXX_KEY_ADD_FAILED
+    );
   }
-  return -1;
+
+  return 0;
 }
 
 

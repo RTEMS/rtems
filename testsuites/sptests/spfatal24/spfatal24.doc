@@ -12,7 +12,7 @@ test set name:  spfatal24
 
 directives:
 
-  rtems_gxx_getspecific();
+  rtems_gxx_setspecific();
 
 concepts:
 
