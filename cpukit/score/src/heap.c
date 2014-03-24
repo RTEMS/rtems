@@ -285,6 +285,8 @@ uintptr_t _Heap_Initialize(
   stats->max_free_blocks = 1;
   stats->instance = instance++;
 
+  _Heap_Protection_set_delayed_free_fraction( heap, 2 );
+
   _HAssert( _Heap_Is_aligned( heap->page_size, CPU_ALIGNMENT ) );
   _HAssert( _Heap_Is_aligned( heap->min_block_size, page_size ) );
   _HAssert(

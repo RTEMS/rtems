@@ -34,7 +34,9 @@
   {
     bool search_again = false;
     uintptr_t const blocks_to_free_count =
-      (heap->Protection.delayed_free_block_count + 1) / 2;
+      (heap->Protection.delayed_free_block_count
+         + heap->Protection.delayed_free_fraction - 1)
+      / heap->Protection.delayed_free_fraction;
 
     if ( alloc_begin == 0 && blocks_to_free_count > 0 ) {
       Heap_Block *block_to_free = heap->Protection.first_delayed_free_block;

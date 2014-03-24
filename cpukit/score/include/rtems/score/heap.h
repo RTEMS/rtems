@@ -161,6 +161,7 @@ typedef struct Heap_Block Heap_Block;
     Heap_Block *first_delayed_free_block;
     Heap_Block *last_delayed_free_block;
     uintptr_t delayed_free_block_count;
+    uintptr_t delayed_free_fraction;
   } Heap_Protection;
 
   typedef struct {
