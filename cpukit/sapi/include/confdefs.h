@@ -781,6 +781,12 @@ const rtems_libio_helper rtems_fs_init_helper =
     NULL,                             /* Scheduler Specific Data Pointer */
     CONFIGURE_SCHEDULER_ENTRY_POINTS  /* Scheduler Operations */
   };
+
+  #if defined(CONFIGURE_SCHEDULER_EDF)
+    const bool _Scheduler_FIXME_thread_priority_queues_are_broken = true;
+  #else
+    const bool _Scheduler_FIXME_thread_priority_queues_are_broken = false;
+  #endif
 #endif
 
 /*
