@@ -42,7 +42,7 @@ extern char _copy_start[];
 extern char _edata[];
 extern char _clear_start[];
 extern char end[];
-extern char _copy_data_from_rom[];
+extern bool _copy_data_from_rom;
 
 /* constants */
 

@@ -22,7 +22,7 @@ noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds startup/linkcmds_ROM
+dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
@@ -33,8 +33,7 @@ libbsp_a_SOURCES += startup/start_c.c ../../shared/bsplibc.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/bspclean.c \
     ../../shared/setvec.c ../../shared/bsppretaskinghook.c \
-    ../../shared/bspgetworkarea.c ../../shared/gnatinstallhandler.c \
-    startup/except_vect_332_ROM.S
+    ../../shared/bspgetworkarea.c ../../shared/gnatinstallhandler.c 
 # clock
 libbsp_a_SOURCES += clock/ckinit.c
 # console

@@ -42,7 +42,7 @@ rtems_device_driver console_open(
 
     /* SCI internal uart */
 
-    status = rtems_termios_open( major, minor, arg, SciGetTermiosHandlers( TRUE ) );
+    status = rtems_termios_open( major, minor, arg, SciGetTermiosHandlers( FALSE ) );
 
     return status;
 }

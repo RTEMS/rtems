@@ -27,6 +27,8 @@
 /* System Clock definitions */
 #define XTAL 32768.0		/* crystal frequency in Hz */
 
+/* Specify the CPU frequency. Do not specify a faster clock than your */
+/* CPU is rated for! */
 #if 0
 /* Default MRM clock rate (8.388688 MHz) set by CPU32: */
 #define MRM_W 0			/* system clock parameters */
@@ -34,18 +36,19 @@
 #define MRM_Y 0x3f
 #endif
 
-#if 1
+#if 0
 /* 16.77722 MHz: */
 #define MRM_W 1			/* system clock parameters */
 #define MRM_X 1
 #define MRM_Y 0x0f
 #endif
 
-#if 0
+#if 1
 /* 25.16582 MHz: */
 #define MRM_W 1			/* system clock parameters */
 #define MRM_X 1
 #define MRM_Y 0x17
+#define SET_EDIV
 #endif
 
 #define SYS_CLOCK (XTAL*4.0*(MRM_Y+1)*(1 << (2*MRM_W+MRM_X)))

@@ -351,8 +351,8 @@ rtems_isr SciIsr( rtems_vector_number vector )
     if ( (*SCSR) & SCI_ERROR_OVERRUN )   SciErrorsOverrun ++;
 
     /* see if it was a transmit interrupt */
-
-    if ( (*SCSR) & SCI_XMTR_AVAILABLE )         /* data reg empty, xmt complete */
+    /* data reg empty, xmt complete */
+    if ( ( *SCCR1 & SCI_ENABLE_INT_TX ) && ( (*SCSR) & SCI_XMTR_AVAILABLE ) )
     {
         SciDisableTransmitInterrupts();
 
@@ -554,12 +554,17 @@ int   SciInterruptOpen(
 
     SciSetDataBits(SCI_8_DATA_BITS);            /* set data bits to 8 */
 
-    /* Install our interrupt handler into RTEMS, where does 66 come from? */
+    /* Install our interrupt handler into RTEMS. */
+    /* 68 is an unused user-defined vector.  Note that the vector must be */
+    /* even - it sets the low bit for SPI interrupts, and clears it for */
+    /* SCI interrupts.  Also note that vector 66 is used by CPU32bug on */
+    /* the mrm332. */
 
-    rtems_interrupt_catch( SciIsr, 66, &old_vector );
+    rtems_interrupt_catch( SciIsr, 68, &old_vector );
 
-    *QIVR  = 66;
-    *QIVR &= 0xf8;
+    *QSMCR = (*QSMCR & ~IARB) | 1; // Is 1 a good value for qsm iarb?
+    *QIVR  = 68;
+    *QILR &= 0xf8;
     *QILR |= 0x06 & 0x07;
 
     SciEnableTransmitter();                     /* enable the transmitter */
@@ -1382,7 +1387,7 @@ void SciWriteCharWait(uint8_t   c)
 {
     /* poll the fifo, waiting for room for another character */
 
-    while ( ( *SCSR & SCI_XMTR_AVAILABLE ) == 0 )
+    while ( ( *SCSR & SCI_XMTR_AVAILABLE ) != SCI_XMTR_AVAILABLE )
     {
         /* Either we are writing to the fifo faster than
          * the uart can clock bytes out onto the cable,

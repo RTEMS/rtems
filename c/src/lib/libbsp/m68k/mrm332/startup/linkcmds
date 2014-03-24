@@ -5,20 +5,26 @@ OUTPUT_ARCH(m68k)
 __DYNAMIC  =  0;
 
 /*
- * The memory map looks like this:
+ * ROM:
  * +--------------------+ <- low memory
  * | .text              |
  * |        etext       |
  * |        ctor list   | the ctor and dtor lists are for
  * |        dtor list   | C++ support
  * |        _endtext    |
- * +--------------------+
+ * | temporary .data    | .data is moved to RAM by crt0
+ * |                    |
+ * +--------------------+ <- high memory
+ *
+ *
+ * RAM:
+ * +--------------------+ <- low memory
  * | .data              | initialized data goes here
  * |        _sdata      |
  * |        _edata      |
  * +--------------------+
  * | .bss               |
- * |        _clear_start| start of bss, cleared by crt0
+ * |        __bss_start | start of bss, cleared by crt0
  * |        _end        | start of heap, used by sbrk()
  * +--------------------+
  * |    heap space      |
@@ -31,150 +37,170 @@ __DYNAMIC  =  0;
 /*
  * Declare some sizes.
  */
-RamBase = DEFINED(RamBase) ? RamBase : 0x10000;
-RamSize = DEFINED(RamSize) ? RamSize : 0x70000;
+RomBase = DEFINED(RomBase) ? RomBase : 0x90000;
+RamBase = DEFINED(RamBase) ? RamBase : 0x03000;
+RamSize = DEFINED(RamSize) ? RamSize : 0x7d000;
 _RamEnd = RamBase + RamSize;
-HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
-_StackSize = DEFINED(_StackSize) ? _StackSize : 0x2000;
 
 MEMORY
 {
-  ram     : ORIGIN = 0x10000, LENGTH = 0x70000
+  rom     : ORIGIN = 0x90000, LENGTH = 0x70000
+  ram     : ORIGIN = 0x03000, LENGTH = 0x7d000
 }
 
-_copy_data_from_rom = 0;
+_copy_data_from_rom = 1;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
+_StackSize = DEFINED(_StackSize) ? _StackSize : 0x2000;
+
 
 /*
- * stick everything in ram (of course)
+ * 
  */
 SECTIONS
 {
-	ram : {
-		. = .;
-	} >ram
+  .text :
+  {
+    . = .;
+    text_start = .;
+    _text_start = .;
+    *(.text*)
+    . = ALIGN (16);
 
-        /*
-         * Text, data and bss segments
-         */
-        .text : {
-                *(.text*)
+	/*
+	 * C++ constructors/destructors
+	 */
+	*(.gnu.linkonce.t.*)
 
-		/*
-		 * C++ constructors/destructors
-		 */
-		*(.gnu.linkonce.t.*)
+    /*
+     * Initialization and finalization code.
+     *
+     * Various files can provide initialization and finalization
+     * functions.  crtbegin.o and crtend.o are two instances. The
+     * body of these functions are in .init and .fini sections. We
+     * accumulate the bodies here, and prepend function prologues
+     * from crti.o and function epilogues from crtn.o. crti.o must
+     * be linked first; crtn.o must be linked last.  Because these
+     * are wildcards, it doesn't matter if the user does not
+     * actually link against crti.o and crtn.o; the linker won't
+     * look for a file to match a wildcard.  The wildcard also
+     * means that it doesn't matter which directory crti.o and
+     * crtn.o are in. 
+     */
+    PROVIDE (_init = .);
+    *crti.o(.init)
+    *(.init)
+    *crtn.o(.init)
+    PROVIDE (_fini = .);
+    *crti.o(.fini)
+    *(.fini)
+    *crtn.o(.fini)
 
-		/*
-		 * Initialization and finalization code.
-     		 *
-     		 * Various files can provide initialization and finalization
-		 * functions.  crtbegin.o and crtend.o are two instances. The
-		 * body of these functions are in .init and .fini sections. We
-		 * accumulate the bodies here, and prepend function prologues
-		 * from crti.o and function epilogues from crtn.o. crti.o must
-		 * be linked first; crtn.o must be linked last.  Because these
-		 * are wildcards, it doesn't matter if the user does not
-		 * actually link against crti.o and crtn.o; the linker won't
-		 * look for a file to match a wildcard.  The wildcard also
-		 * means that it doesn't matter which directory crti.o and
-		 * crtn.o are in. 
-		 */
-		PROVIDE (_init = .);
-		*crti.o(.init)
-		*(.init)
-		*crtn.o(.init)
-		PROVIDE (_fini = .);
-		*crti.o(.fini)
-		*(.fini)
-		*crtn.o(.fini)
+    /*
+     * Special FreeBSD sysctl sections.
+     */
+    . = ALIGN (16);
+    __start_set_sysctl_set = .;
+    *(set_sysctl_*);
+    __stop_set_sysctl_set = ABSOLUTE(.);
+    *(set_domain_*);
+    *(set_pseudo_*);
 
-		/*
-		 * Special FreeBSD sysctl sections.
-		 */
-		. = ALIGN (16);
-		__start_set_sysctl_set = .;
-		*(set_sysctl_*);
-		__stop_set_sysctl_set = ABSOLUTE(.);
-		*(set_domain_*);
-		*(set_pseudo_*);
+    /*
+     * C++ constructors/destructors
+     *
+     * gcc uses crtbegin.o to find the start of the constructors
+     * and destructors so we make sure it is first.  Because this
+     * is a wildcard, it doesn't matter if the user does not
+     * actually link against crtbegin.o; the linker won't look for
+     * a file to match a wildcard.  The wildcard also means that
+     * it doesn't matter which directory crtbegin.o is in. The
+     * constructor and destructor list are terminated in
+     * crtend.o.  The same comments apply to it.
+     */
+    . = ALIGN (16);
+    *crtbegin.o(.ctors)
+    *(.ctors)
+    *crtend.o(.ctors)
+    *crtbegin.o(.dtors)
+    *(.dtors)
+    *crtend.o(.dtors)
 
-		/*
-		 * C++ constructors/destructors
-     		 *
-     		 * gcc uses crtbegin.o to find the start of the constructors
-		 * and destructors so we make sure it is first.  Because this
-		 * is a wildcard, it doesn't matter if the user does not
-		 * actually link against crtbegin.o; the linker won't look for
-		 * a file to match a wildcard.  The wildcard also means that
-		 * it doesn't matter which directory crtbegin.o is in. The
-		 * constructor and destructor list are terminated in
-		 * crtend.o.  The same comments apply to it.
-		 */
-		. = ALIGN (16);
-		*crtbegin.o(.ctors)
-		*(.ctors)
-		*crtend.o(.ctors)
-		*crtbegin.o(.dtors)
-		*(.dtors)
-		*crtend.o(.dtors)
+	/*
+	 * Exception frame info
+	 */
+	. = ALIGN (16);
+	*(.eh_frame)
 
-		/*
-		 * Exception frame info
-		 */
-		. = ALIGN (16);
-		*(.eh_frame)
+    /*
+     * Read-only data
+     */
+    . = ALIGN (16);
+    _rodata_start = . ;
+    *(.rodata*)
+    *(.gnu.linkonce.r*)
 
-		/*
-		 * Read-only data
-		 */
-		. = ALIGN (16);
-		_rodata_start = .;
-		*(.rodata*)
-		*(.gnu.linkonce.r*)
+    . = ALIGN (16);
+    PROVIDE (_etext = .);
+    _endtext = .;
+    __data_start_rom = .;
+  } > rom
+  .tdata : {
+    _TLS_Data_begin = .;
+    *(.tdata .tdata.* .gnu.linkonce.td.*)
+    _TLS_Data_end = .;
+  } > rom
+  .tbss : {
+    _TLS_BSS_begin = .;
+    *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+    _TLS_BSS_end = .;
+  } > rom
+  _TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+  _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
+  _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
+  _TLS_Alignment = ALIGNOF (.tdata);
+  .gcc_exc :
+  AT ( ADDR(.tdata) + SIZEOF( .tdata ) )
+  {
+    *(.gcc_exc)
+  } > ram
+  .data : AT(__data_start_rom) 
+  {
+	PROVIDE (_copy_start = .);
+    *(.data*)
+	*(.gnu.linkonce.d*)
+	*(.gcc_except_table*)
+	*(.jcr)
+    . = ALIGN (16);
+    PROVIDE (_edata = .);
+    PROVIDE (_copy_end = .);
+  } > ram
+  .shbss : 
+  {
+    *(.shbss)
+  } > ram
+  .bss : 
+  {
+    M68Kvec = .;
+    . += (256 * 4);
+    _clear_start = .;
+    *(.dynbss)
+    *(.bss* .gnu.linkonce.b.*)
+    *(COMMON)
+    . = ALIGN (16);
+    PROVIDE (end = .);
+    . += _StackSize;
+    . = ALIGN (16);
+    _stack_init = .;
+    _clear_end = .;
 
-                 . = ALIGN (16);
-                PROVIDE (_etext = .);
-        } >ram
-
-	.tdata : {
-		_TLS_Data_begin = .;
-		*(.tdata .tdata.* .gnu.linkonce.td.*)
-		_TLS_Data_end = .;
-	} >ram
-
-	.tbss : {
-		_TLS_BSS_begin = .;
-		*(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
-		_TLS_BSS_end = .;
-	} >ram
-
-	_TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
-	_TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
-	_TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
-	_TLS_Alignment = ALIGNOF (.tdata);
-
-        .data : {
-                PROVIDE (_copy_start = .);
-                *(.data*)
-		*(.gnu.linkonce.d*)
-		*(.gcc_except_table*)
-		*(.jcr)
-                . = ALIGN (16);
-                PROVIDE (_edata = .);
-                PROVIDE (_copy_end = .);
-        } >ram
-        .bss : {
-                _clear_start = .;
-                *(.dynbss)
-                *(.bss* .gnu.linkonce.b.*)
-                *(COMMON)
-                . = ALIGN (16);
-                PROVIDE (end = .);
-                . += _StackSize;
-                . = ALIGN (16);
-                _stack_init = .;
-                _clear_end = .;
-
-                WorkAreaBase = .;
-        } >ram
+    WorkAreaBase = .;
+  } > ram
+  .stab . (NOLOAD) :
+  {
+    [ .stab ]
+  }
+  .stabstr . (NOLOAD) :
+  {
+    [ .stabstr ]
+  }
 }
