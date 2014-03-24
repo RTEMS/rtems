@@ -576,17 +576,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Internal_allocate( void )
   return (Thread_Control *) _Objects_Allocate( &_Thread_Internal_information );
 }
 
-/**
- * This routine frees an internal thread.
- */
-
-RTEMS_INLINE_ROUTINE void _Thread_Internal_free (
-  Thread_Control *the_task
-)
-{
-  _Objects_Free( &_Thread_Internal_information, &the_task->Object );
-}
-
 RTEMS_INLINE_ROUTINE void _Thread_Signal_notification( Thread_Control *thread )
 {
   if ( _ISR_Is_in_progress() && _Thread_Is_executing( thread ) ) {
