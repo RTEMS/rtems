@@ -21,7 +21,7 @@
  * If a unsupported bridge is found the invalid frequncy of 0Hz is
  * returned.
  */
-unsigned int ambapp_freq_calc(
+static unsigned int ambapp_freq_calc(
   struct ambapp_bus *abus,
   int ahbidx,
   unsigned int freq_hz,

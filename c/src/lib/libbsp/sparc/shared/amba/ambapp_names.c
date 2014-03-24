@@ -12,6 +12,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <ambapp.h>
 #include <ambapp_ids.h>
 #include <string.h>
 

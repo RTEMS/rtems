@@ -21,7 +21,7 @@
 #define AMBA_APB_SLAVES 16
 
 /* Allocate one AMBA device */
-struct ambapp_dev *ambapp_alloc_dev_struct(int dev_type)
+static struct ambapp_dev *ambapp_alloc_dev_struct(int dev_type)
 {
   int size = sizeof(struct ambapp_dev);
   struct ambapp_dev *dev;
@@ -38,7 +38,7 @@ struct ambapp_dev *ambapp_alloc_dev_struct(int dev_type)
   return dev;
 }
 
-unsigned int
+static unsigned int
 ambapp_addr_from (struct ambapp_mmap *mmaps, unsigned int address)
 {
   /* no translation? */
@@ -55,7 +55,7 @@ ambapp_addr_from (struct ambapp_mmap *mmaps, unsigned int address)
   return 1;
 }
 
-void ambapp_ahb_dev_init(
+static void ambapp_ahb_dev_init(
   unsigned int ioarea,
   struct ambapp_mmap *mmaps,
   struct ambapp_pnp_ahb *ahb,
@@ -102,7 +102,7 @@ void ambapp_ahb_dev_init(
   }
 }
 
-void ambapp_apb_dev_init(
+static void ambapp_apb_dev_init(
   unsigned int base,
   struct ambapp_mmap *mmaps,
   struct ambapp_pnp_apb *apb,
@@ -123,7 +123,7 @@ void ambapp_apb_dev_init(
   apb_info->mask = ambapp_pnp_apb_mask(apb->iobar);
 }
 
-int ambapp_add_ahbbus(
+static int ambapp_add_ahbbus(
   struct ambapp_bus *abus,
   unsigned int ioarea
   )
@@ -298,7 +298,7 @@ int ambapp_scan(
 }
 
 /* Match search options againt device */
-int ambapp_dev_match_options(struct ambapp_dev *dev, unsigned int options, int vendor, int device)
+static int ambapp_dev_match_options(struct ambapp_dev *dev, unsigned int options, int vendor, int device)
 {
   if ((((options & (OPTIONS_ALL_DEVS)) == OPTIONS_ALL_DEVS) || /* TYPE */
       ((options & OPTIONS_AHB_MSTS) && (dev->dev_type == DEV_AHB_MST)) ||

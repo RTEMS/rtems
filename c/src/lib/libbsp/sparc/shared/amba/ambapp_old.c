@@ -19,7 +19,7 @@ struct ambapp_dev_find_match_arg {
 };
 
 /* AMBA PP find routines */
-int ambapp_dev_find_match(struct ambapp_dev *dev, int index, void *arg)
+static int ambapp_dev_find_match(struct ambapp_dev *dev, int index, void *arg)
 {
   struct ambapp_dev_find_match_arg *p = arg;
 
