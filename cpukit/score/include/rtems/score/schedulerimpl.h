@@ -269,18 +269,40 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(
 }
 
 /**
- * Macro testing whether @a p1 has lower priority than @a p2
- * in the intuitive sense of priority.
+ * @brief Returns true if @p1 encodes a lower priority than @a p2 in the
+ * intuitive sense of priority.
  */
-#define _Scheduler_Is_priority_lower_than( _p1, _p2 ) \
-  (_Scheduler_Priority_compare(_p1,_p2) < 0)
+RTEMS_INLINE_ROUTINE bool _Scheduler_Is_priority_lower_than(
+  Priority_Control p1,
+  Priority_Control p2
+)
+{
+  return _Scheduler_Priority_compare( p1,  p2 ) < 0;
+}
 
 /**
- * Macro testing whether @a p1 has higher priority than @a p2
+ * @brief Returns true if @p1 encodes a higher priority than @a p2 in the
+ * intuitive sense of priority.
+ */
+RTEMS_INLINE_ROUTINE bool _Scheduler_Is_priority_higher_than(
+  Priority_Control p1,
+  Priority_Control p2
+)
+{
+  return _Scheduler_Priority_compare( p1,  p2 ) > 0;
+}
+
+/**
+ * @brief Returns the priority encoding @a p1 or @a p2 with the higher priority
  * in the intuitive sense of priority.
  */
-#define _Scheduler_Is_priority_higher_than( _p1, _p2 ) \
-  (_Scheduler_Priority_compare(_p1,_p2) > 0)
+RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Highest_priority_of_two(
+  Priority_Control p1,
+  Priority_Control p2
+)
+{
+  return _Scheduler_Is_priority_higher_than( p1, p2 ) ? p1 : p2;
+}
 
 /** @} */
 
