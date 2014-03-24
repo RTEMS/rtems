@@ -53,16 +53,10 @@ rtems_task Init(
 {
   rtems_time_of_day  time;
   rtems_status_code  status;
-  Chain_Control      empty;
 
   TEST_BEGIN();
 
-  puts( "INIT - report on empty watchdog chain" );
-
   test_watchdog_static_init();
-
-  _Chain_Initialize_empty( &empty );
-  _Watchdog_Report_chain( "Empty Chain", &empty );
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
 

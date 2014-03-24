@@ -1,7 +1,4 @@
 *** RTEMS WATCHDOG ***
-INIT - report on empty watchdog chain
-Watchdog Chain: Empty Chain 203753
-Chain is empt
 INIT - rtems_timer_create - creating timer 1
 INIT - timer 1 has id (0x12010001)
 TA1 - rtems_timer_ident - identing timer 1
@@ -14,17 +11,5 @@ TA1 - rtems_timer_fire_after - timer 1 in 3 seconds
 TA1 - rtems_task_wake_after - 1 second
 TA1 - rtems_clock_get_tod - 09:00:04   12/31/1988
 TA1 - rtems_timer_reset - timer 1
-TA1 - _Watchdog_Report_chain - with name
-Watchdog Chain: _Watchdog_Ticks_chain 2030F1
- 300   300 2033B40 201391C 0x12010001 
-== end of _Watchdog_Ticks_chain
-TA1 - _Watchdog_Report_chain - no name
-Watchdog Chain:  2030F1
- 300   300 2033B40 201391C 0x12010001 
-== end of 
-TA1 - _Watchdog_Report - with name
-first  300   300 2033B40 201391C 0x12010001 
-TA1 - _Watchdog_Report - no name
- 299   300 2033B40 201391C 0x12010001 
 TA1 - timer_deleting - timer 1
 *** END OF RTEMS WATCHDOG PROGRAM ***
