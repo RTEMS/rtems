@@ -34,7 +34,6 @@ void _Thread_Start_multitasking( void )
    * _Per_CPU_Release().
    */
   _Per_CPU_Acquire( self_cpu );
-  _Profiling_Thread_dispatch_disable( self_cpu, 0 );
   self_cpu->thread_dispatch_disable_level = 1;
 #endif
 
@@ -70,9 +69,11 @@ void _Thread_Start_multitasking( void )
      _Context_Restore_fp( &heir->fp_context );
 #endif
 
+  _Profiling_Thread_dispatch_disable( self_cpu, 0 );
+
 #if defined(_CPU_Start_multitasking)
-    _CPU_Start_multitasking( &heir->Registers );
+  _CPU_Start_multitasking( &heir->Registers );
 #else
-    _CPU_Context_Restart_self( &heir->Registers );
+  _CPU_Context_Restart_self( &heir->Registers );
 #endif
 }
