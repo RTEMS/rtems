@@ -1,0 +1,28 @@
+*** TEST RATE MONOTONIC ERROR 01 ***
+TA1 - rtems_task_create - 4 created - RTEMS_SUCCESSFUL
+TA1 - rtems_rate_monotonic_create - RTEMS_INVALID_ADDRESS
+TA1 - rtems_rate_monotonic_create - RTEMS_INVALID_NAME
+TA1 - rtems_rate_monotonic_create - RTEMS_SUCCESSFUL
+TA1 - rtems_rate_monotonic_create - RTEMS_TOO_MANY
+TA1 - rtems_rate_monotonic_ident - RTEMS_INVALID_NAME
+TA1 - rtems_rate_monotonic_period - RTEMS_INVALID_ID
+TA1 - rtems_rate_monotonic_period - local RTEMS_INVALID_ID
+TA1 - rtems_rate_monotonic_period(RTEMS_PERIOD_STATUS) - RTEMS_NOT_DEFINED
+TA1 - rtems_rate_monotonic_period - 100 ticks - RTEMS_SUCCESSFUL
+TA1 - rtems_rate_monotonic_period(RTEMS_PERIOD_STATUS) - RTEMS_SUCCESSFUL
+TA1 - rtems_rate_monotonic_period(RTEMS_PERIOD_STATUS) - RTEMS_TIMEOUT
+TA1 - rtems_rate_monotonic_get_statistics - RTEMS_INVALID_ADDRESS
+TA1 - rtems_rate_monotonic_get_status - RTEMS_INVALID_ADDRESS
+TA1 - rtems_rate_monotonic_get_status - RTEMS_INVALID_ID
+TA1 - rtems_rate_monotonic_cancel - RTEMS_INVALID_ID
+TA1 - rtems_rate_monotonic_cancel - local RTEMS_INVALID_ID
+TA1 - rtems_rate_monotonic_cancel - RTEMS_SUCCESSFUL
+TA1 - rtems_rate_monotonic_period - 5 ticks - RTEMS_TIMEOUT
+TA1 - yielding to TA4
+TA4 - rtems_rate_monotonic_cancel - RTEMS_NOT_OWNER_OF_RESOURCE
+TA4 - rtems_rate_monotonic_period - RTEMS_NOT_OWNER_OF_RESOURCE
+TA4 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL
+TA1 - rtems_rate_monotonic_delete - RTEMS_INVALID_ID
+TA1 - rtems_rate_monotonic_delete - local RTEMS_INVALID_ID
+TA1 - rtems_rate_monotonic_delete - RTEMS_SUCCESSFUL
+*** END TEST RATE MONOTONIC ERROR 01 ***

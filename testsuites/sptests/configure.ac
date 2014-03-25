@@ -200,6 +200,7 @@ sppagesize/Makefile
 spprintk/Makefile
 spprivenv01/Makefile
 spqreslib/Makefile
+spratemon_err01/Makefile
 sprbtree01/Makefile
 spsem01/Makefile
 spsem02/Makefile

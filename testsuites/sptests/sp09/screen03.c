@@ -134,17 +134,6 @@ void Screen3()
   puts( "TA1 - rtems_task_create - TA3 created - RTEMS_SUCCESSFUL" );
 
   status = rtems_task_create(
-    Task_name[ 4 ],
-    4,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &Task_id[ 4 ]
-  );
-  directive_failed( status, "rtems_task_create of TA4" );
-  puts( "TA1 - rtems_task_create - 4 created - RTEMS_SUCCESSFUL" );
-
-  status = rtems_task_create(
     Task_name[ 5 ],
     4,
     RTEMS_MINIMUM_STACK_SIZE,

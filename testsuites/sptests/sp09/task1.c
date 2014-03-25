@@ -50,10 +50,8 @@ rtems_task Task_1(
   rtems_test_pause_and_screen_number( 9 );
 
   Screen9();
-  rtems_test_pause_and_screen_number( 10 );
-
-  Screen10();
 
   TEST_END();
+
   rtems_test_exit( 0 );
 }
