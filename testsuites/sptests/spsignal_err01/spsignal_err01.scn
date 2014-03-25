@@ -1,0 +1,5 @@
+*** TEST SIGNAL SEND ERROR 01 ***
+TA1 - rtems_signal_send - RTEMS_INVALID_ID
+TA1 - rtems_signal_send - RTEMS_INVALID_NUMBER
+TA1 - rtems_signal_send - RTEMS_NOT_DEFINED
+*** END TEST SIGNAL SEND ERROR 01 ***

@@ -205,6 +205,7 @@ spratemon_err01/Makefile
 sprbtree01/Makefile
 spsem01/Makefile
 spsem02/Makefile
+spsignal_err01/Makefile
 spsimplesched01/Makefile
 spsimplesched02/Makefile
 spsimplesched03/Makefile

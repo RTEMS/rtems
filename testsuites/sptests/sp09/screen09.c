@@ -25,33 +25,6 @@ void Screen9()
   void              *converted;
   rtems_status_code status;
 
-  /* send invalid id */
-  status = rtems_signal_send( 100, RTEMS_SIGNAL_1 );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_ID,
-    "rtems_signal_send with illegal id"
-  );
-  puts( "TA1 - rtems_signal_send - RTEMS_INVALID_ID" );
-
-  /* no signal in set */
-  status = rtems_signal_send( RTEMS_SELF, 0 );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_NUMBER,
-    "rtems_signal_send with no signals"
-  );
-  puts( "TA1 - rtems_signal_send - RTEMS_INVALID_NUMBER" );
-
-  /* no signal handler */
-  status = rtems_signal_send( RTEMS_SELF, RTEMS_SIGNAL_16 );
-  fatal_directive_status(
-    status,
-    RTEMS_NOT_DEFINED,
-    "rtems_signal_send with no handler"
-  );
-  puts( "TA1 - rtems_signal_send - RTEMS_NOT_DEFINED" );
-
   status = rtems_port_create(
      0,
      Internal_port_area,

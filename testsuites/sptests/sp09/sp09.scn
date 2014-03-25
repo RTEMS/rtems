@@ -176,9 +176,6 @@ TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL
 TA3 - rtems_message_queue_receive - woke up with RTEMS_OBJECT_WAS_DELETED
 TA3 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL
 <pause - screen 9>
-TA1 - rtems_signal_send - RTEMS_INVALID_ID
-TA1 - rtems_signal_send - RTEMS_INVALID_NUMBER
-TA1 - rtems_signal_send - RTEMS_NOT_DEFINED
 TA1 - rtems_port_create - RTEMS_INVALID_NAME
 TA1 - rtems_port_create - bad range - RTEMS_INVALID_ADDRESS
 TA1 - rtems_port_create - null id - RTEMS_INVALID_ADDRESS
