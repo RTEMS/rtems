@@ -41,39 +41,33 @@ void _Thread_Life_action_handler(
   _Thread_Restart_self( executing );
 }
 
-static void _Thread_Reset( Thread_Control *the_thread )
+static void _Thread_Start_life_change(
+  Thread_Control   *the_thread,
+  Priority_Control  priority
+)
 {
   the_thread->resource_count   = 0;
   the_thread->is_preemptible   = the_thread->Start.is_preemptible;
   the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
   the_thread->budget_callout   = the_thread->Start.budget_callout;
+  the_thread->real_priority    = priority;
 
-  if ( !_Thread_queue_Extract_with_proxy( the_thread ) ) {
-
-    if ( _Watchdog_Is_active( &the_thread->Timer ) )
-      (void) _Watchdog_Remove( &the_thread->Timer );
-  }
-
-  if ( the_thread->current_priority != the_thread->Start.initial_priority ) {
-    the_thread->real_priority = the_thread->Start.initial_priority;
-    _Thread_Set_priority( the_thread, the_thread->Start.initial_priority );
-  }
+  _Thread_Set_transient( the_thread );
+  _Thread_queue_Extract_with_proxy( the_thread );
+  _Watchdog_Remove( &the_thread->Timer );
+  _Thread_Set_priority( the_thread, priority );
+  _Thread_Add_post_switch_action( the_thread, &the_thread->Life.Action );
+  _Thread_Ready( the_thread );
+  _Thread_Request_dispatch_if_executing( the_thread );
 }
 
 static void _Thread_Request_life_change(
-  Thread_Control *the_thread,
-  Thread_Control *executing
+  Thread_Control    *the_thread,
+  Thread_Control    *executing,
+  Priority_Control   priority
 )
 {
-  _Thread_Set_transient( the_thread );
-
-  _Thread_Reset( the_thread );
-
-  _Thread_Add_post_switch_action( the_thread, &the_thread->Life.Action );
-
-  _Thread_Ready( the_thread );
-
-  _Thread_Request_dispatch_if_executing( the_thread );
+  _Thread_Start_life_change( the_thread, priority );
 }
 
 bool _Thread_Restart(
@@ -89,7 +83,8 @@ bool _Thread_Restart(
 
     _Thread_Request_life_change(
       the_thread,
-      executing
+      executing,
+      the_thread->Start.initial_priority
     );
 
     return true;
