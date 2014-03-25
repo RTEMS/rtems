@@ -34,34 +34,6 @@ rtems_task Init(
   rtems_test_exit(0);
 }
 
-char *Errors_Rtems[] = {
-  "RTEMS_SUCCESSFUL",               /* successful completion */
-  "RTEMS_TASK_EXITTED",             /* returned from a task */
-  "RTEMS_MP_NOT_CONFIGURED",        /* multiprocessing not configured */
-  "RTEMS_INVALID_NAME",             /* invalid object name */
-  "RTEMS_INVALID_ID",               /* invalid object id */
-  "RTEMS_TOO_MANY",                 /* too many */
-  "RTEMS_TIMEOUT",                  /* timed out waiting */
-  "RTEMS_OBJECT_WAS_DELETED",       /* object was deleted while waiting */
-  "RTEMS_INVALID_SIZE",             /* specified size was invalid */
-  "RTEMS_INVALID_ADDRESS",          /* address specified is invalid */
-  "RTEMS_INVALID_NUMBER",           /* number was invalid */
-  "RTEMS_NOT_DEFINED",              /* item has not been initialized */
-  "RTEMS_RESOURCE_IN_USE",          /* resources still outstanding */
-  "RTEMS_UNSATISFIED",              /* request not satisfied */
-  "RTEMS_INCORRECT_STATE",          /* task is in wrong state */
-  "RTEMS_ALREADY_SUSPENDED",        /* task already in state */
-  "RTEMS_ILLEGAL_ON_SELF",          /* illegal operation on calling task */
-  "RTEMS_ILLEGAL_ON_REMOTE_OBJECT", /* illegal operation for remote object */
-  "RTEMS_CALLED_FROM_ISR",          /* called from ISR */
-  "RTEMS_INVALID_PRIORITY",         /* invalid task priority */
-  "RTEMS_INVALID_CLOCK",            /* invalid date/time */
-  "RTEMS_INVALID_NODE",             /* invalid node id */
-  "RTEMS_NOT_OWNER_OF_RESOURCE",    /* not owner of resource */
-  "RTEMS_NOT_CONFIGURED",           /* directive not configured */
-  "RTEMS_NOT_IMPLEMENTED"           /* directive not implemented */
-};
-
 void Put_Error( uint32_t source, uint32_t error )
 {
   if ( source == INTERNAL_ERROR_CORE ) {
@@ -71,7 +43,7 @@ void Put_Error( uint32_t source, uint32_t error )
     if (error >  RTEMS_NOT_IMPLEMENTED )
       printk("Unknown Internal Rtems Error (0x%08x)", error);
     else
-      printk( Errors_Rtems[ error ] );
+      printk( "%s", rtems_status_text( error ) );
   }
 }
 
