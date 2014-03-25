@@ -1,27 +1,35 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#define CONFIGURE_INIT
 #include "system.h"
-
 #define MESSAGE_SIZE (sizeof(long) * 4)
 
-void Screen7()
+const char rtems_test_name[] = "SP MESSAGE QUEUE ERROR 1";
+
+rtems_task Init(
+  rtems_task_argument argument
+)
 {
   long              buffer[ 4 ];
   uint32_t          count;
   size_t            size;
   rtems_status_code status;
-
+  
+  TEST_BEGIN();
+  Queue_name[ 1 ]      =  rtems_build_name( 'M', 'Q', '1', ' ' );
+  Queue_name[ 2 ]      =  rtems_build_name( 'M', 'Q', '2', ' ' );
+  
   status = rtems_message_queue_broadcast( 100, buffer, MESSAGE_SIZE, &count );
   fatal_directive_status(
     status,
@@ -394,4 +402,5 @@ void Screen7()
     "TA1 - rtems_message_queue_broadcast - NULL count - RTEMS_INVALID_ADDRESS"
   );
 
+  TEST_END();
 }

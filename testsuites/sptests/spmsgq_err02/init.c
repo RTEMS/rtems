@@ -1,33 +1,56 @@
-/*  Screen8
- *
- *  This routine generates error screen 8 for test 9.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1999.
+/*
+ *  COPYRIGHT (c) 2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#define CONFIGURE_INIT
 #include "system.h"
 
 #define MESSAGE_SIZE (sizeof(long) * 4)
 
-void Screen8()
+const char rtems_test_name[] = "SP MESSAGE QUEUE ERROR 2";
+
+rtems_task Init(
+  rtems_task_argument argument
+)
 {
   long              buffer[ 4 ];
   rtems_status_code status;
-
-  status = rtems_message_queue_delete( Queue_id[ 1 ] );
+  
+  TEST_BEGIN();
+  Queue_name[ 1 ]      =  rtems_build_name( 'M', 'Q', '1', ' ' );
+  Task_name[ 3 ]       =  rtems_build_name( 'T', 'A', '3', ' ' );
+ 
+  status = rtems_task_create(
+    Task_name[ 3 ],
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Task_id[ 3 ]
+  );
+  directive_failed( status, "rtems_task_create of TA3" );
+  puts( "TA1 - rtems_task_create - TA3 created - RTEMS_SUCCESSFUL" );
+  
+  status = rtems_message_queue_create(
+    Queue_name[ 1 ],
+    2,
+    MESSAGE_SIZE,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Queue_id[ 1 ]
+  );
+  directive_failed( status, "rtems_message_queue_create successful" );
+  puts( "TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL" );
+   
+    status = rtems_message_queue_delete( Queue_id[ 1 ] );
   directive_failed( status, "rtems_message_queue_delete successful" );
   puts( "TA1 - rtems_message_queue_delete - Q 1 - RTEMS_SUCCESSFUL" );
 
@@ -128,4 +151,6 @@ void Screen8()
   puts( "TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL" );
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
   directive_failed( status, "rtems_task_wake_after (yield)" );
+
+  TEST_END();
 }

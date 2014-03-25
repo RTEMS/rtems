@@ -1,0 +1,35 @@
+*** TEST MESSAGE QUEUE ERROR 01 ***
+TA1 - rtems_message_queue_broadcast - RTEMS_INVALID_ID
+TA1 - rtems_message_queue_create - NULL Id - RTEMS_INVALID_ADDRESS
+TA1 - rtems_message_queue_create - count = 0 - RTEMS_INVALID_NUMBER
+TA1 - rtems_message_queue_create - size = 0 - RTEMS_INVALID_SIZE
+TA1 - rtems_message_queue_create - Q 1 - RTEMS_INVALID_NAME
+TA1 - rtems_message_queue_create - Q 1 - RTEMS_MP_NOT_CONFIGURED
+TA1 - rtems_message_queue_create - Q 2 - RTEMS_UNSATISFIED
+TA1 - rtems_message_queue_create - Q 2 - RTEMS_UNSATISFIED #2
+TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_create - Q 2 - RTEMS_TOO_MANY
+TA1 - rtems_message_queue_delete - unknown RTEMS_INVALID_ID
+TA1 - rtems_message_queue_delete - local RTEMS_INVALID_ID
+TA1 - rtems_message_queue_ident - RTEMS_INVALID_NAME
+TA1 - rtems_message_queue_get_number_pending - RTEMS_INVALID_ADDRESS
+TA1 - rtems_message_queue_get_number_pending - RTEMS_INVALID_ID
+TA1 - rtems_message_queue_flush - RTEMS_INVALID_ADDRESS
+TA1 - rtems_message_queue_flush - RTEMS_INVALID_ID
+TA1 - rtems_message_queue_receive - RTEMS_INVALID_ID
+TA1 - rtems_message_queue_receive - Q 1 - RTEMS_INVALID_ADDRESS NULL buffer
+TA1 - rtems_message_queue_receive - Q 1 - RTEMS_INVALID_ADDRESS NULL size
+TA1 - rtems_message_queue_receive - Q 1 - RTEMS_UNSATISFIED
+TA1 - rtems_message_queue_receive - Q 1 - timeout in 3 seconds
+TA1 - rtems_message_queue_receive - Q 1 - woke up with RTEMS_TIMEOUT
+TA1 - rtems_message_queue_send - NULL buffer - RTEMS_INVALID_ADDRESS
+TA1 - rtems_message_queue_send - RTEMS_INVALID_ID
+TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_send - BUFFER 3 TO Q 1 - RTEMS_TOO_MANY
+TA1 - rtems_message_queue_urgent - NULL buffer - RTEMS_INVALID_ADDRESS
+TA1 - rtems_message_queue_urgent - RTEMS_INVALID_ID
+TA1 - rtems_message_queue_broadcast - NULL buffer - RTEMS_INVALID_ADDRESS
+TA1 - rtems_message_queue_broadcast - too large - RTEMS_INVALID_SIZE
+TA1 - rtems_message_queue_broadcast - NULL count - RTEMS_INVALID_ADDRESS
+*** END TEST MESSAGE QUEUE ERROR 01 ***

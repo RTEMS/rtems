@@ -1,0 +1,24 @@
+*** TEST MESSAGE QUEUE ERROR 02 ***
+TA1 - rtems_task_create - TA3 created - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_delete - Q 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_create - Q 1 - 2 DEEP - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_send - BUFFER 3 TO Q 1 - RTEMS_TOO_MANY
+TA1 - rtems_message_queue_delete - Q 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_create - Q 1 - 3 DEEP - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_send - BUFFER 3 TO Q 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_send - BUFFER 4 TO Q 1 - RTEMS_TOO_MANY
+TA1 - rtems_message_queue_delete - Q 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_message_queue_create - Q 1 - 3 DEEP - RTEMS_SUCCESSFUL
+TA1 - rtems_task_start - start TA3 - RTEMS_SUCCESSFUL
+TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL
+TA3 - rtems_message_queue_receive - Q 1 - RTEMS_WAIT FOREVER
+TA1 - rtems_message_queue_delete - delete Q 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL
+TA3 - rtems_message_queue_receive - woke up with RTEMS_OBJECT_WAS_DELETED
+TA3 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL
+*** END TEST MESSAGE QUEUE ERROR 02 ***

@@ -194,6 +194,8 @@ spintrcritical17/Makefile
 spheapprot/Makefile
 spmkdir/Makefile
 spmountmgr01/Makefile
+spmsgq_err01/Makefile
+spmsgq_err02/Makefile
 spnotepad01/Makefile
 spnsext01/Makefile
 spobjgetnext/Makefile
