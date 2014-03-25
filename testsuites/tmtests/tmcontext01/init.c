@@ -201,13 +201,9 @@ static void Init(rtems_task_argument arg)
 {
   uint32_t load = 0;
 
-  printf(
-    "\n"
-    "\n"
-    "<?xml version=\"1.0\"?>\n"
-    "<!-- *** TEST TMCONTEXT 1 *** -->\n"
-    "<Test>\n"
-  );
+  TEST_BEGIN();
+
+  printf("<Test>\n");
 
   data_size = rtems_cache_get_data_cache_size(0);
   if (data_size > 0) {
@@ -246,11 +242,9 @@ static void Init(rtems_task_argument arg)
     test(true, load);
   }
 
-  printf(
-    "</Test>\n"
-    "<!-- *** END OF TEST TMCONTEXT 1 *** -->\n"
-  );
+  printf("</Test>\n");
 
+  TEST_END();
   rtems_test_exit(0);
 }
 
