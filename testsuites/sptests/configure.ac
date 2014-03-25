@@ -198,6 +198,7 @@ spnotepad01/Makefile
 spnsext01/Makefile
 spobjgetnext/Makefile
 sppagesize/Makefile
+spport_err01/Makefile
 spprintk/Makefile
 spprivenv01/Makefile
 spqreslib/Makefile

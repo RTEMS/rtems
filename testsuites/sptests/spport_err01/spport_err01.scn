@@ -1,0 +1,11 @@
+*** TEST PORT ERROR 01 ***
+TA1 - rtems_port_create - RTEMS_INVALID_NAME
+TA1 - rtems_port_create - bad range - RTEMS_INVALID_ADDRESS
+TA1 - rtems_port_create - null id - RTEMS_INVALID_ADDRESS
+TA1 - rtems_port_create - RTEMS_TOO_MANY
+TA1 - rtems_port_delete - RTEMS_INVALID_ID
+TA1 - rtems_port_ident - RTEMS_INVALID_NAME
+TA1 - rtems_port_external_to_internal - RTEMS_INVALID_ADDRESS
+TA1 - rtems_port_internal_to_external - RTEMS_INVALID_ID
+TA1 - rtems_port_external_to_internal - RTEMS_INVALID_ADDRESS
+*** END TEST PORT ERROR 01 ***

@@ -1,30 +1,30 @@
-/*  Screen9
- *
- *  This routine generates error screen 9 for test 9.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#define CONFIGURE_INIT
 #include "system.h"
 
-void Screen9()
+const char rtems_test_name[] = "SP PORT ERROR 01";
+
+rtems_task Init(
+  rtems_task_argument argument
+)
 {
   void              *converted;
   rtems_status_code status;
-
+  
+  TEST_BEGIN();
+  Port_name[ 1 ]       =  rtems_build_name( 'D', 'P', '1', ' ' );
   status = rtems_port_create(
      0,
      Internal_port_area,
@@ -147,4 +147,6 @@ void Screen9()
     "rtems_port_internal_to_external with NULL param"
   );
   puts( "TA1 - rtems_port_external_to_internal - RTEMS_INVALID_ADDRESS" );
+ 
+ TEST_END();
 }

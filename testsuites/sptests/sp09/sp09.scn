@@ -175,14 +175,4 @@ TA1 - rtems_message_queue_delete - delete Q 1 - RTEMS_SUCCESSFUL
 TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL
 TA3 - rtems_message_queue_receive - woke up with RTEMS_OBJECT_WAS_DELETED
 TA3 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL
-<pause - screen 9>
-TA1 - rtems_port_create - RTEMS_INVALID_NAME
-TA1 - rtems_port_create - bad range - RTEMS_INVALID_ADDRESS
-TA1 - rtems_port_create - null id - RTEMS_INVALID_ADDRESS
-TA1 - rtems_port_create - RTEMS_TOO_MANY
-TA1 - rtems_port_delete - RTEMS_INVALID_ID
-TA1 - rtems_port_ident - RTEMS_INVALID_NAME
-TA1 - rtems_port_external_to_internal - RTEMS_INVALID_ADDRESS
-TA1 - rtems_port_internal_to_external - RTEMS_INVALID_ID
-TA1 - rtems_port_external_to_internal - RTEMS_INVALID_ADDRESS
 *** END OF TEST 9 ***

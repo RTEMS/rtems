@@ -9,7 +9,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #include <tmacros.h>
@@ -20,61 +20,18 @@ rtems_task Init(
   rtems_task_argument argument
 );
 
-rtems_timer_service_routine Delayed_routine(
-  rtems_id  ignored_id,
-  void     *ignored_address
-);
-
-rtems_task Task_1(
-  rtems_task_argument argument
-);
-
-rtems_task Task_2(
-  rtems_task_argument argument
-);
-
-rtems_task Task_3(
-  rtems_task_argument argument
-);
-
-rtems_isr Service_routine(
-  rtems_vector_number ignored
-);
-
-rtems_timer_service_routine Io_during_interrupt(
-  rtems_id ignored
-);
-
-void Screen1( void );
-
-void Screen2( void );
-
-void Screen3( void );
-
-void Screen4( void );
-
-void Screen5( void );
-
-void Screen6( void );
-
-void Screen7( void );
-
-void Screen8( void );
-
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS               9
+#define CONFIGURE_MAXIMUM_TASKS              10
 #define CONFIGURE_MAXIMUM_TIMERS              1
 #define CONFIGURE_MAXIMUM_SEMAPHORES          2
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1
 #define CONFIGURE_MAXIMUM_PERIODS             1
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS     0
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
-
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
