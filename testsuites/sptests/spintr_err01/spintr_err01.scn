@@ -1,0 +1,5 @@
+*** TEST INTERRUPT CATCH ERROR 01 ***
+TA1 - rtems_interrupt_catch - RTEMS_INVALID_NUMBER
+TA1 - rtems_interrupt_catch - bad handler RTEMS_INVALID_ADDRESS
+TA1 - rtems_interrupt_catch - old isr RTEMS_INVALID_ADDRESS
+*** END TEST INTERRUPT CATCH ERROR 01 ***

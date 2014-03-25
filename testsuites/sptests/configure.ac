@@ -173,6 +173,7 @@ spfifo03/Makefile
 spfifo04/Makefile
 spfifo05/Makefile
 spfreechain01/Makefile
+spintr_err01/Makefile
 spintrcritical01/Makefile
 spintrcritical02/Makefile
 spintrcritical03/Makefile
