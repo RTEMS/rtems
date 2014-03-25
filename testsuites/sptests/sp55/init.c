@@ -19,6 +19,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SP 55";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -31,7 +33,7 @@ rtems_task Init(
   int                  msg = 1;
   uint32_t             count = 20;
 
-  puts( "\n\n*** TEST 55 ***" );
+  TEST_BEGIN();
 
   puts( "Init - rtems_message_queue_create - OK" );
   status = rtems_message_queue_create(
@@ -59,7 +61,7 @@ rtems_task Init(
   status = rtems_message_queue_delete( id );
   directive_failed( status, "rtems_message_queue_delete" );
 
-  puts( "*** END OF TEST 55 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -70,6 +72,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS              1
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES     1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY \

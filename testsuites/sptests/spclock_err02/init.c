@@ -14,6 +14,8 @@
 #include <tmacros.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "SPCLOCK_ERR 2";
+
 /* forward declaration to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -21,7 +23,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** TEST SPCLOCK_ERR02 ***" );
+  TEST_BEGIN();
 
   rtems_time_of_day time;
   rtems_status_code status;
@@ -114,13 +116,15 @@ rtems_task Init(
   directive_failed( status, "rtems_clock_set" );
   print_time( "TA1 - rtems_clock_get_tod - ", &time, " - RTEMS_SUCCESSFUL\n" );
 
-  puts( "*** END OF TEST SPCLOCK_ERR02 ***" );
+  TEST_END();
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

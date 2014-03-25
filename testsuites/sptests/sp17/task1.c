@@ -44,6 +44,6 @@ rtems_task Task_1(
 
   puts("TA1 - Got Back!!!");
 
-  puts( "*** END OF TEST 17 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

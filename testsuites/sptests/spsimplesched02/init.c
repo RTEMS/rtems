@@ -15,6 +15,8 @@
 
 #include <rtems/score/threadimpl.h>
 
+const char rtems_test_name[] = "SPSIMPLESCHED 2";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_task Test_task(rtems_task_argument argument);
@@ -76,7 +78,7 @@ rtems_task Init(
 {
   rtems_status_code   status;
 
-  puts( "\n\n*** SIMPLE SCHEDULER 02 TEST ***" );
+  TEST_BEGIN();
 
   status = _Objects_Name_to_id_u32(
     &_Thread_Internal_information,
@@ -134,7 +136,7 @@ rtems_task Init(
   ObtainRelease( true );
 
   /*  End the Test */
-  puts( "*** END OF SIMPLE SCHEDULER 02 TEST ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -146,6 +148,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS             3
 #define CONFIGURE_MAXIMUM_SEMAPHORES        2
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

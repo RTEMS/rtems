@@ -14,6 +14,8 @@
 #include <tmacros.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "SP 75";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -24,7 +26,7 @@ rtems_task Init(
   rtems_status_code sc;
   rtems_id          mutex;
 
-  puts( "\n\n*** TEST SP75 ***" );
+  TEST_BEGIN();
 
   sc = rtems_semaphore_create(
     rtems_build_name('M', 'U', 'T', 'X'),
@@ -46,7 +48,7 @@ rtems_task Init(
   _Thread_Enable_dispatch();
   directive_failed(sc, "rtems_semaphore_obtain");
 
-  puts( "*** END OF TEST SP75 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -57,6 +59,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS             1
 #define CONFIGURE_MAXIMUM_SEMAPHORES        1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

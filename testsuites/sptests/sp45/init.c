@@ -13,6 +13,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SP 45";
+
 rtems_task Init(
   rtems_task_argument argument
 );
@@ -52,7 +54,7 @@ rtems_task Init(
 {
   rtems_status_code  status;
 
-  puts( "\n\n*** TEST 45 ***" );
+  TEST_BEGIN();
 
   status = rtems_timer_initiate_server(
     RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
@@ -113,7 +115,7 @@ rtems_task Init(
   directive_failed( status, "rtems_timer_delete" );
 
 
-  puts( "*** END OF TEST 45 *** " );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -127,6 +129,8 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS           2
 #define CONFIGURE_MAXIMUM_TIMERS          2
 #define CONFIGURE_INIT_TASK_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

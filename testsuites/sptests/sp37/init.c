@@ -21,6 +21,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "SP 37";
+
 /* prototypes */
 void test_interrupt_inline(void);
 void check_isr_in_progress_inline(void);
@@ -380,7 +382,7 @@ rtems_task Init(
   rtems_id              timer;
   int                   i;
 
-  puts( "\n\n*** TEST 37 ***" );
+  TEST_BEGIN();
 
   test_isr_level();
   test_isr_locks();
@@ -517,6 +519,6 @@ rtems_task Init(
 
   check_isr_worked( "body", isr_in_progress_body );
 
-  puts( "*** END OF TEST 37 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

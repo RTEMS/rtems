@@ -28,6 +28,8 @@
   #error "Test Mode not defined"
 #endif
 
+const char rtems_test_name[] = "SPINTRCRITICAL " TEST_NAME;
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_timer_service_routine test_release_from_isr(rtems_id  timer, void *arg);
@@ -58,7 +60,7 @@ rtems_task Init(
   rtems_status_code     sc;
   int                   resets;
 
-  puts( "\n\n*** TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
+  TEST_BEGIN();
 
   puts( "Init - Trying to generate timer fire from ISR while firing" );
   puts( "Init - Variation is: " TEST_STRING );
@@ -91,7 +93,7 @@ rtems_task Init(
     directive_failed( sc, "rtems_timer_fire_after");
   }
 
-  puts( "*** END OF TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -107,6 +109,8 @@ rtems_task Init(
 #endif
 #define CONFIGURE_MAXIMUM_TIMERS      2
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

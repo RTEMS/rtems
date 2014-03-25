@@ -17,6 +17,8 @@
 #include <rtems/error.h>
 #include <stdio.h>
 
+const char rtems_test_name[] = "SP 28";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_task subtask(rtems_task_argument arg);
@@ -103,7 +105,7 @@ subtask (rtems_task_argument arg)
   while (nRunning)
     rtems_task_wake_after(0);
 
-  puts("*** END OF TEST 28 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -402,7 +404,7 @@ void test_delete_as_side_effect(void)
 
 rtems_task Init (rtems_task_argument ignored)
 {
-  puts("*** START OF TEST 28 ***" );
+  TEST_BEGIN();
 
   test_errors();
 
@@ -427,6 +429,8 @@ rtems_task Init (rtems_task_argument ignored)
 
 #define CONFIGURE_MAXIMUM_TASKS              4
 #define CONFIGURE_MAXIMUM_TASK_VARIABLES     (4)
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MICROSECONDS_PER_TICK      10000
 

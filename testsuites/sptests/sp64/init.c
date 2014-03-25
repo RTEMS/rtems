@@ -15,6 +15,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SP 64";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -34,7 +36,7 @@ rtems_task Init(
   rtems_resource_snapshot snapshot;
   void                   *greedy;
 
-  puts( "\n\n*** TEST 64 ***" );
+  TEST_BEGIN();
 
   puts( "Allocate one region -- so second auto extends" );
   sc = rtems_region_create(
@@ -94,7 +96,7 @@ rtems_task Init(
   rtems_test_assert( ok );
   rtems_workspace_greedy_free( greedy );
 
-  puts( "*** END OF TEST 64 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -105,6 +107,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS         1
 #define CONFIGURE_MAXIMUM_REGIONS       rtems_resource_unlimited( 2 )
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_MEMORY_OVERHEAD 1

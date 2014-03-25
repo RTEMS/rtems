@@ -14,6 +14,8 @@
 #include <tmacros.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "SPTIMER_ERR 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_timer_service_routine Delayed_routine(
@@ -25,7 +27,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** TEST SPTIMER_ERR01 ***" );
+  TEST_BEGIN();
 
   rtems_status_code        status;
   rtems_time_of_day        time;
@@ -226,7 +228,7 @@ rtems_task Init(
   puts( "TA1 - rtems_timer_get_information - RTEMS_INVALID_ID" );
 
 
-  puts( "*** END OF TEST SPTIMER_ERR01 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -245,6 +247,8 @@ rtems_timer_service_routine Delayed_routine(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TIMERS              1
 

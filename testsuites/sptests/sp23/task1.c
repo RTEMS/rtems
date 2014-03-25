@@ -92,6 +92,6 @@ rtems_task Task_1(
   directive_failed( status, "rtems_port_delete" );
   puts( "TA1 - rtems_port_delete - DP1" );
 
-  puts( "*** END OF TEST 23 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

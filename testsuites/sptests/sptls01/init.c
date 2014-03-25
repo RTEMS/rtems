@@ -20,6 +20,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SPTLS 1";
+
 static rtems_id master_task;
 
 static __thread volatile char tls_item = 123;
@@ -84,11 +86,11 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SPTLS 1 ***");
+  TEST_BEGIN();
 
   test();
 
-  puts("*** END OF TEST SPTLS 1 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -97,6 +99,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 2
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

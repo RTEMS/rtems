@@ -31,6 +31,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SPMKDIR";
+
 static void test_mkdir(const char *path, mode_t omode, int expected_rv)
 {
   struct stat st;
@@ -54,7 +56,7 @@ static rtems_task Init(rtems_task_argument argument)
   mode_t omode = S_IRWXU | S_IRWXG | S_IRWXO;
   int rv = 0;
 
-  puts("\n\n*** TEST SPMKDIR ***");
+  TEST_BEGIN();
 
   puts( "rtems_mkdir a - OK" );
   test_mkdir("a", omode, 0);
@@ -97,7 +99,7 @@ static rtems_task Init(rtems_task_argument argument)
   test_mkdir("b", omode, -1);
   rtems_test_assert(errno == EEXIST);
 
-  puts("*** END OF TEST SPMKDIR ***");
+  TEST_END();
 
   exit(0);
 }
@@ -113,6 +115,8 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 #define CONFIGURE_MAXIMUM_DRIVERS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

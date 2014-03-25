@@ -19,6 +19,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "SPQRESLIB";
+
 rtems_id   Task_id;
 rtems_task_priority Priority;
 time_t  Period;
@@ -48,7 +50,7 @@ rtems_task Init(
   params3.P = -1;
   params4.P = SCHEDULER_EDF_PRIO_MSB + 1;
 
-  puts( "\n\n*** TEST QRES LIBRARY ***" );
+  TEST_BEGIN();
 
 
   status = rtems_task_create(

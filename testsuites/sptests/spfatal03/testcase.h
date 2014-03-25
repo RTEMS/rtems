@@ -9,8 +9,6 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
 #define CONFIGURE_MAXIMUM_SEMAPHORES 10
 
 #define FATAL_ERROR_TEST_NAME            "3"

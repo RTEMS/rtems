@@ -16,6 +16,8 @@
 #include <sys/types.h>
 #include <rtems/score/threadqimpl.h>
 
+const char rtems_test_name[] = "SPTHREADQ 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void threadq_first_empty(
@@ -46,12 +48,12 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  puts( "\n\n*** TEST THREAD QUEUE TEST 01 ***" );
+  TEST_BEGIN();
 
   threadq_first_empty( "FIFO", THREAD_QUEUE_DISCIPLINE_FIFO );
   threadq_first_empty( "Priority", THREAD_QUEUE_DISCIPLINE_PRIORITY );
 
-  puts( "*** END OF TEST THREAD QUEUE TEST 01 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -61,6 +63,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS  1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

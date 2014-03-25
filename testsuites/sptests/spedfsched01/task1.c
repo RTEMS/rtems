@@ -41,7 +41,7 @@ rtems_task Task_1_through_3(
     directive_failed( status, "rtems_clock_get_tod" );
 
     if ( time.second >= 35 ) {
-      puts( "*** END OF EDF SCHEDULER TEST 1 ***" );
+      TEST_END();
       rtems_test_exit( 0 );
     }
 

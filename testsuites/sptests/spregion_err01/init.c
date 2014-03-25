@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "SPREGION_ERR 1";
+
 rtems_name Region_name[ 2 ];    /* array of region names */
 rtems_id   Region_id[ 2 ];      /* array of region ids */
 
@@ -435,10 +437,10 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** TEST SPREGION_ERR01 ***" );
+  TEST_BEGIN();
 
   region_error_tests();
 
-  puts( "*** END OF TEST SPREGION_ERR01 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

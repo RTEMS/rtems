@@ -22,7 +22,10 @@
 #include <rtems.h>
 #include <rtems/libcsupport.h>
 
+#define TESTS_USE_PRINTF
 #include "tmacros.h"
+
+const char rtems_test_name[] = "SPTLS 2";
 
 static thread_local long i123 = 123;
 
@@ -219,7 +222,7 @@ static void testTask()
 
 extern "C" void Init(rtems_task_argument arg)
 {
-	puts("\n\n*** TEST SPTLS 2 ***");
+	TEST_BEGIN();
 
 	printf("A::globalCounter() = %li\n", A::globalCounter());
 
@@ -238,7 +241,7 @@ extern "C" void Init(rtems_task_argument arg)
 
 	rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
 
-	puts("*** END OF TEST SPTLS 2 ***");
+	TEST_END();
 
 	exit(0);
 }
@@ -248,6 +251,8 @@ extern "C" void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 #define CONFIGURE_MAXIMUM_SEMAPHORES 3
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

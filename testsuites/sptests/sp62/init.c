@@ -14,6 +14,8 @@
 #include <tmacros.h>
 #include <unistd.h>
 
+const char rtems_test_name[] = "SP 62";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_task Blocker(rtems_task_argument ignored);
@@ -61,7 +63,7 @@ rtems_task Init(
   uintptr_t          old_size;
   size_t             first_alloc_size;
 
-  puts( "\n\n*** TEST 62 ***" );
+  TEST_BEGIN();
 
   puts( "Init - rtems_task_create Blocker - OK" );
   sc = rtems_task_create(
@@ -136,7 +138,7 @@ rtems_task Init(
   );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  puts( "*** END OF TEST 62 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -147,6 +149,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS         2
 #define CONFIGURE_MAXIMUM_REGIONS       1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

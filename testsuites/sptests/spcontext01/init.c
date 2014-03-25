@@ -18,6 +18,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SPCONTEXT 1";
+
 #define ITERATION_COUNT 2000
 
 #define PRIORITY_HIGH 2
@@ -162,11 +164,11 @@ static void Init(rtems_task_argument arg)
 {
   test_context *self = &test_instance;
 
-  puts("\n\n*** TEST SPCONTEXT 1 ***");
+  TEST_BEGIN();
 
   test(self);
 
-  puts("*** END OF TEST SPCONTEXT 1 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -180,6 +182,8 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TASKS 3
 #define CONFIGURE_MAXIMUM_TIMERS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

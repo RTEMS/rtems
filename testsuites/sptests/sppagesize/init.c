@@ -15,6 +15,8 @@
 #include <limits.h>
 #include <sys/param.h>
 
+const char rtems_test_name[] = "SPPAGESIZE";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -22,12 +24,12 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-    puts("\n\n*** TEST SPPAGESIZE ***");
+    TEST_BEGIN();
 
     rtems_test_assert(PAGESIZE == PAGE_SIZE);
     rtems_test_assert(getpagesize() == PAGE_SIZE);
 
-    puts("*** END OF TEST SPPAGESIZE ***");
+    TEST_END();
 
     rtems_test_exit(0);
 }
@@ -36,6 +38,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

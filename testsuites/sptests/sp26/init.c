@@ -26,12 +26,13 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "SP 26";
 
 rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** TEST 26 ***" );
+  TEST_BEGIN();
 
   task1();
   /* does not return */

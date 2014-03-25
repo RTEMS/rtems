@@ -23,6 +23,8 @@
 
 #include <rtems.h>
 
+const char rtems_test_name[] = "SP 2038";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -284,13 +286,13 @@ static void test_leap_year(void)
 
 rtems_task Init(rtems_task_argument argument)
 {
-  puts("\n\n*** TEST 2038 ***");
+  TEST_BEGIN();
 
   test_tod_to_seconds();
   test_problem_year();
   test_leap_year();
 
-  puts("*** END OF TEST 2038 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -299,6 +301,8 @@ rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

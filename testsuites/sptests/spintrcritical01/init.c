@@ -22,31 +22,31 @@ rtems_timer_service_routine test_release_from_isr(rtems_id  timer, void *arg);
 Thread_blocking_operation_States getState(void);
 
 #if defined(FIFO_NO_TIMEOUT)
-  #define TEST_NAME                "01"
+  #define TEST_NAME                "1"
   #define TEST_STRING              "FIFO/Without Timeout"
   #define SEMAPHORE_OBTAIN_TIMEOUT 0
   #define SEMAPHORE_ATTRIBUTES     RTEMS_DEFAULT_ATTRIBUTES
 
 #elif defined(FIFO_WITH_TIMEOUT)
-  #define TEST_NAME                "02"
+  #define TEST_NAME                "2"
   #define TEST_STRING              "FIFO/With Timeout"
   #define SEMAPHORE_OBTAIN_TIMEOUT 10
   #define SEMAPHORE_ATTRIBUTES     RTEMS_DEFAULT_ATTRIBUTES
 
 #elif defined(PRIORITY_NO_TIMEOUT)
-  #define TEST_NAME                "03"
+  #define TEST_NAME                "3"
   #define TEST_STRING              "Priority/Without Timeout"
   #define SEMAPHORE_OBTAIN_TIMEOUT 0
   #define SEMAPHORE_ATTRIBUTES     RTEMS_PRIORITY
 
 #elif defined(PRIORITY_WITH_TIMEOUT)
-  #define TEST_NAME                "04"
+  #define TEST_NAME                "4"
   #define TEST_STRING              "Priority/With Timeout"
   #define SEMAPHORE_OBTAIN_TIMEOUT 10
   #define SEMAPHORE_ATTRIBUTES     RTEMS_PRIORITY
 
 #elif defined(PRIORITY_NO_TIMEOUT_REVERSE)
-  #define TEST_NAME                "05"
+  #define TEST_NAME                "5"
   #define TEST_STRING              "Priority/Without Timeout (Reverse)"
   #define SEMAPHORE_OBTAIN_TIMEOUT 0
   #define SEMAPHORE_ATTRIBUTES     RTEMS_PRIORITY
@@ -55,6 +55,8 @@ Thread_blocking_operation_States getState(void);
 
   #error "Test Mode not defined"
 #endif
+
+const char rtems_test_name[] = "SPINTRCRITICAL " TEST_NAME;
 
 rtems_id Main_task;
 rtems_id Semaphore;
@@ -99,7 +101,7 @@ rtems_task Init(
 {
   rtems_status_code     status;
 
-  puts( "\n\n*** TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
+  TEST_BEGIN();
 
   puts( "Init - Trying to generate semaphore release from ISR while blocking" );
   puts( "Init - Variation is: " TEST_STRING );
@@ -131,7 +133,7 @@ rtems_task Init(
 
   if ( case_hit ) {
     puts( "Init - Case hit" );
-    puts( "*** END OF TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
+    TEST_END();
   } else
     puts( "Init - Case not hit - ran too long" );
 
@@ -151,6 +153,8 @@ rtems_task Init(
   #define CONFIGURE_INIT_TASK_PRIORITY   250
 #endif
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

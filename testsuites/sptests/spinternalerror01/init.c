@@ -19,6 +19,10 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
+#include <rtems/test.h>
+
+const char rtems_test_name[] = "SPINTERNALERROR 1";
+
 #define FATAL_SOURCE 0xdeadbeef
 
 #define FATAL_IS_INTERNAL false
@@ -36,14 +40,14 @@ static void fatal_extension(
   Internal_errors_t error
 )
 {
-  printk( "\n\n*** TEST SPINTERNALERROR 1 ***\n" );
+  rtems_test_begink();
 
   if (
     source == FATAL_SOURCE
       && is_internal == FATAL_IS_INTERNAL
       && error == FATAL_ERROR
   ) {
-    printk( "*** END OF TEST SPINTERNALERROR 1 ***\n" );
+    rtems_test_endk();
   }
 }
 
@@ -56,7 +60,9 @@ static void *idle_body(uintptr_t ignored)
   return NULL;
 }
 
-#define CONFIGURE_INITIAL_EXTENSIONS { .fatal = fatal_extension }
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .fatal = fatal_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 

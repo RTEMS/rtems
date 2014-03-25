@@ -37,6 +37,8 @@ rtems_id Main_task;
 
 #endif
 
+const char rtems_test_name[] = "SPINTRCRITICAL " TEST_NAME;
+
 rtems_timer_service_routine test_release_from_isr(
   rtems_id  timer,
   void     *arg
@@ -52,7 +54,7 @@ rtems_task Init(
   rtems_event_set       out;
   int                   resets;
 
-  puts( "\n\n*** TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
+  TEST_BEGIN();
 
   puts( "Init - Test may not be able to detect case is hit reliably" );
   puts( "Init - Trying to generate event send from ISR while blocking" );
@@ -69,7 +71,7 @@ rtems_task Init(
     (void) rtems_event_receive( EVENTS_TO_RECEIVE, RTEMS_EVENT_ANY, 1, &out );
   }
 
-  puts( "*** END OF TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -81,6 +83,8 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS       2
 #define CONFIGURE_MAXIMUM_TIMERS      1
 #define CONFIGURE_MAXIMUM_SEMAPHORES  1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
 

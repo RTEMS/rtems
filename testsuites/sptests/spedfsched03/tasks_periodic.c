@@ -79,6 +79,6 @@ rtems_task Tasks_Periodic(
     rtems_test_exit( 0 );
   }
   fflush(stdout);
-  puts( "*** END OF TEST EDF SCHEDULER 3 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

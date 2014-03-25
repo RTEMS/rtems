@@ -29,6 +29,6 @@ void Task_exit_extension(
     put_name( Task_name[ task_number( running_task->Object.id ) ], TRUE );
   }
 
-  puts("*** END OF TEST 7 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

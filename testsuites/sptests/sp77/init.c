@@ -10,6 +10,8 @@
 #include <tmacros.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "SP 77";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -17,7 +19,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** TEST sp77 ***" );
+  TEST_BEGIN();
 
   rtems_status_code status;
   rtems_id id;
@@ -32,7 +34,7 @@ rtems_task Init(
   
   fatal_directive_check_status_only(status , RTEMS_UNSATISFIED ,
 				    "attempt to create message queue return: ");  
-  puts( "*** END OF TEST sp77 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -43,6 +45,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

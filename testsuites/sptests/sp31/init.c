@@ -26,6 +26,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "SP 31";
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -33,7 +35,7 @@ rtems_task Init(
   rtems_time_of_day  time;
   rtems_status_code  status;
 
-  puts( "\n\n*** TEST 31 ***" );
+  TEST_BEGIN();
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
 

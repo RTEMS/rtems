@@ -82,7 +82,7 @@ subTask2 (rtems_task_argument arg)
   printf ("subTask2 - Task 1 suspended? - should be 1: %d\n",
      isSuspended (taskId1));
 
-  puts( "*** END OF TEST 26 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 

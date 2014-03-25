@@ -15,6 +15,8 @@
 #include <rtems/timespec.h>
 #include <rtems/score/todimpl.h>
 
+const char rtems_test_name[] = "SPTIMESPEC 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void test_add(void);
@@ -40,7 +42,7 @@ rtems_task Init(
   timespec1=&ts1;
   timespec2=&ts2;
 
-  puts( "\n\n*** TEST sptimespec01 ***" );
+  TEST_BEGIN();
 
   test_add();
   test_divide();
@@ -50,7 +52,7 @@ rtems_task Init(
   test_subtract();
   test_convert();
 
-  puts( "\n*** END OF TEST sptimespec01 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -242,6 +244,8 @@ void test_convert(){
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

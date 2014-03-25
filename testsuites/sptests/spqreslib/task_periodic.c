@@ -131,6 +131,6 @@ rtems_task Task_Periodic(
     printf( "ERROR: QRES CLEANUP\n" );
 
   fflush(stdout);
-  puts( "*** END OF TEST QRES LIBRARY ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

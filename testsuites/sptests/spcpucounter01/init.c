@@ -25,6 +25,8 @@
 #define TESTS_USE_PRINTF
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SPCPUCOUNTER 1";
+
 #define NS_PER_TICK 1000000
 
 static rtems_interval sync_with_clock_tick(void)
@@ -96,12 +98,12 @@ static void test_delay_nanoseconds(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SPCPUCOUNTER 1 ***");
+  TEST_BEGIN();
 
   test_converter();
   test_delay_nanoseconds();
 
-  puts("*** END OF TEST SPCPUCOUNTER 1 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -114,6 +116,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

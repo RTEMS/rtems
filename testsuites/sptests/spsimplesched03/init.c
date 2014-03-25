@@ -13,6 +13,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SPSIMPLESCHED 3";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -22,7 +24,7 @@ rtems_task Init(
 {
   rtems_status_code   status;
 
-  puts( "\n\n*** SIMPLE SCHEDULER 03 TEST ***" );
+  TEST_BEGIN();
 
   puts( "INIT - rtems timer initiate server");
   status = rtems_timer_initiate_server( 
@@ -33,7 +35,7 @@ rtems_task Init(
   directive_failed( status, "Timer Initiate Server" );
 
   /*  End the Test */
-  puts( "*** END OF SIMPLE SCHEDULER 03 TEST ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -43,6 +45,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             2
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_INIT_TASK_PRIORITY        2
 

@@ -19,6 +19,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SPFIFO 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -29,7 +31,7 @@ static void test_main(void)
   mode_t rwx = S_IRWXU | S_IRWXG | S_IRWXO;
   int status;
 
-  puts("\n\n*** FIFO / PIPE OPEN TEST - 1 ***");
+  TEST_BEGIN();
 
   puts(
     "\nConfiguration: Pipes disabled.\n"
@@ -47,7 +49,7 @@ static void test_main(void)
   rtems_test_assert(status == -1);
   rtems_test_assert(errno == ENOSYS);
 
-  puts("*** END OF FIFO / PIPE OPEN TEST - 1 ***");
+  TEST_END();
 }
 
 rtems_task Init(rtems_task_argument not_used)
@@ -64,6 +66,8 @@ rtems_task Init(rtems_task_argument not_used)
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

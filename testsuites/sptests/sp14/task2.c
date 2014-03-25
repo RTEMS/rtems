@@ -51,6 +51,6 @@ rtems_task Task_2(
   status = rtems_task_wake_after(2 * rtems_clock_get_ticks_per_second());
   directive_failed( status, "rtems_task_wake_after" );
 
-  puts( "*** END OF TEST 14 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

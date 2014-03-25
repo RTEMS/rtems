@@ -16,6 +16,8 @@
 #include <rtems/devzero.h>
 #include <rtems/libio.h>
 
+const char rtems_test_name[] = "SP 21";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void do_test_io_manager(void);
@@ -253,7 +255,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** TEST 21 ***" );
+  TEST_BEGIN();
 
   do_test_io_manager();
 
@@ -261,7 +263,7 @@ rtems_task Init(
 
   do_test_zero_driver();
 
-  puts( "*** END OF TEST 21 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -274,6 +276,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

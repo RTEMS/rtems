@@ -14,8 +14,12 @@
 #define CONFIGURE_INIT
 #include <tmacros.h>  /* includes bsp.h, stdio, etc... */
 
+const char rtems_test_name[] = "SP 33";
+
 /* prototype */
 rtems_task Init (rtems_task_argument ignored);
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -72,7 +76,7 @@ rtems_task Init(
   rtems_id          Tasks[CONFIGURE_MAXIMUM_TASKS-1];
   uint32_t          i;
 
-  puts("\n\n*** TEST 33 ***");
+  TEST_BEGIN();
 
   /* Check bad argument cases */
   puts( "rtems_barrier_delete - bad id - INVALID_ID" );
@@ -281,6 +285,6 @@ rtems_task Init(
   directive_failed(status, "rtems_task_wake_after");
 
   /* the end */
-  puts("*** END OF TEST 33 ***");
+  TEST_END();
   rtems_test_exit(0);
 }

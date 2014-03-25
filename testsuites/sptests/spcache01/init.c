@@ -25,6 +25,8 @@
 #define TESTS_USE_PRINTF
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SPCACHE 1";
+
 #define I() __asm__ volatile ("nop")
 
 #define I8() I(); I(); I(); I(); I(); I(); I(); I()
@@ -371,12 +373,12 @@ static void test_timing(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SPCACHE 1 ***");
+  TEST_BEGIN();
 
   test_data_flush_and_invalidate();
   test_timing();
 
-  puts("*** END OF TEST SPCACHE 1 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -387,6 +389,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

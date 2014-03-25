@@ -358,6 +358,6 @@ rtems_task Task_1(
   status = rtems_timer_delete( tmid );
   directive_failed( status, "rtems_timer_delete" );
 
-  puts( "*** END OF TEST 31 *** " );
+  TEST_END();
   rtems_test_exit( 0 );
 }

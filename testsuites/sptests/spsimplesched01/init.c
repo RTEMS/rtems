@@ -13,6 +13,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SPSIMPLESCHED 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_task Test_task(rtems_task_argument unused);
@@ -40,7 +42,7 @@ rtems_task Test_task(
     status = rtems_clock_get_tod( &time );
     directive_failed( status, "clock get tod" );
     if ( time.second >= 35 ) {
-      puts( "*** END OF SIMPLE01 TEST ***" );
+      TEST_END();
       rtems_test_exit( 0 );
     }
     put_name( Task_name[ task_index ], FALSE );
@@ -60,7 +62,7 @@ rtems_task Init(
   rtems_time_of_day   time;
   rtems_task_priority old;
 
-  puts( "\n\n*** SIMPLE01 TEST ***" );
+  TEST_BEGIN();
 
   time.year   = 1988;
   time.month  = 12;
@@ -127,6 +129,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             4
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

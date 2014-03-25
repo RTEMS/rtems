@@ -14,6 +14,8 @@
 #include <tmacros.h>
 #include "pritime.h"
 
+const char rtems_test_name[] = "SP 50";
+
 /* forward declarations to avoid warnings */
 rtems_timer_service_routine Timer_Routine(rtems_id id, void *ignored);
 rtems_task Init(rtems_task_argument argument);
@@ -46,7 +48,7 @@ rtems_task Init(
   rtems_id          timer1;
   struct timespec   uptime;
 
-  puts( "\n\n*** TEST 50 ***" );
+  TEST_BEGIN();
 
   sc = rtems_timer_initiate_server(
     1,
@@ -77,7 +79,7 @@ rtems_task Init(
     }
 
     if ( Fired >= 10 ) {
-      puts( "*** END OF TEST 50 ***" );
+      TEST_END();
       rtems_test_exit( 0 );
     }
     /* technically the following is a critical section */
@@ -93,6 +95,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS         2
 #define CONFIGURE_MAXIMUM_TIMERS        1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

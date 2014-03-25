@@ -14,6 +14,8 @@
 #include <tmacros.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "SP 70";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void create_helper(int task);
@@ -50,7 +52,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** TEST 70 ***" );
+  TEST_BEGIN();
 
   create_helper( 1 );
   create_helper( 2 );
@@ -69,7 +71,7 @@ rtems_task Init(
   create_helper( 4 );
   create_helper( 5 );
 
-  puts( "*** END OF TEST 70 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -81,6 +83,8 @@ rtems_task Init(
 
 #define CONFIGURE_UNIFIED_WORK_AREAS
 #define CONFIGURE_MAXIMUM_TASKS rtems_resource_unlimited(1)
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

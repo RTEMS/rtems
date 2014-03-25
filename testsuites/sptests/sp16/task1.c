@@ -291,6 +291,6 @@ rtems_test_pause();
   status = rtems_region_delete( Region_id[ 4 ] );
   directive_failed( status, "rtems_region_delete" );
 
-  puts( "*** END OF TEST 16 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

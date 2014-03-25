@@ -23,6 +23,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "SPCBSSCHED 2";
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -46,7 +48,7 @@ rtems_task Init(
   params3.deadline = -1;
   params4.deadline = SCHEDULER_EDF_PRIO_MSB + 1;
 
-  puts( "\n\n*** TEST CBS SCHEDULER 2 ***" );
+  TEST_BEGIN();
 
   Task_name = rtems_build_name( 'P', 'T', '1', ' ' );
   Task_name2 = rtems_build_name( 'P', 'T', '2', ' ' );
@@ -251,6 +253,6 @@ rtems_task Init(
     printf( "ERROR: CBS CLEANUP\n" );
 
   fflush(stdout);
-  puts( "*** END OF TEST CBS SCHEDULER 2 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

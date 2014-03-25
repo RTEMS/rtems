@@ -26,6 +26,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SPSTKALLOC 2";
+
 #if !BSP_SMALL_MEMORY
 
 #include <stdio.h>
@@ -74,7 +76,7 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_id id = RTEMS_ID_NONE;
   int i = 0;
 
-  puts("\n\n*** TEST STKALLOC 02 ***");
+  TEST_BEGIN();
 
   print_info();
 
@@ -112,7 +114,7 @@ static rtems_task Init(rtems_task_argument argument)
 
   print_info();
 
-  puts("*** END OF TEST STKALLOC 02 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -128,6 +130,8 @@ static rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
 #define CONFIGURE_TASK_STACK_FROM_ALLOCATOR(stack_size) \
   ((stack_size) + HEAP_BLOCK_HEADER_SIZE + PAGE_SIZE - 1)
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -165,7 +169,7 @@ static void task_stack_free(void *addr)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST STKALLOC 02 ***");
+  TEST_BEGIN();
   puts("NOT ENOUGH MEMORY TO RUN TEST");
 
   rtems_test_exit(0);

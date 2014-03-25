@@ -8,6 +8,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SP 47";
+
 #define PRIXModes_Control 	PRIX32
 #define PRIXrtems_mode		PRIXModes_Control
 
@@ -29,7 +31,7 @@ rtems_task test_asr(rtems_task_argument unused)
   } else
     puts( "Creating task with ASR disable mode honored" );
 
-  puts( "*** END OF TEST 47 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -38,7 +40,7 @@ rtems_task Init(rtems_task_argument ignored)
   rtems_status_code sc;
   rtems_id ti;
 
-  puts( "\n\n*** TEST 47 ***" );
+  TEST_BEGIN();
   sc = rtems_task_create(
     rtems_build_name('t', 's', 't', '0'),
     100,
@@ -67,6 +69,8 @@ rtems_task Init(rtems_task_argument ignored)
 
 #define CONFIGURE_MAXIMUM_TASKS            64
 #define CONFIGURE_MAXIMUM_PERIODS		  10
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

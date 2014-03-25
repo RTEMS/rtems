@@ -20,6 +20,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SPTLS 3";
+
 static volatile int read_write_small = 0xdeadbeef;
 
 static const volatile int read_only_small = 0x601dc0fe;
@@ -36,11 +38,11 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SPTLS 3 ***");
+  TEST_BEGIN();
 
   test();
 
-  puts("*** END OF TEST SPTLS 3 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -49,6 +51,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

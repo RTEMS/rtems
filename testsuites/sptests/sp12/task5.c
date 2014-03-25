@@ -51,6 +51,6 @@ rtems_task Task5(
   );
   puts( "TA5 - SM1 deleted by TA1" );
 
-  puts( "*** END OF TEST 12 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

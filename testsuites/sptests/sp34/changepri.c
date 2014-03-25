@@ -29,6 +29,8 @@
 #include <stdio.h>
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SP 34";
+
 rtems_task BlockingTasks(rtems_task_argument arg);
 rtems_task Init(rtems_task_argument ignored);
 const char *CallerName(void);
@@ -111,7 +113,7 @@ rtems_task Init(rtems_task_argument ignored)
   rtems_status_code   status;
   int                 i;
 
-  puts( "\n\n*** TEST 34 ***" );
+  TEST_BEGIN();
 
   /* Create synchronisation semaphore for LocalHwIsr -> Test Tasks */
   status = rtems_semaphore_create(
@@ -169,7 +171,7 @@ rtems_task Init(rtems_task_argument ignored)
   }
 
   /* exit the test */
-  puts( "*** END OF TEST 34 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -177,6 +179,8 @@ rtems_task Init(rtems_task_argument ignored)
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

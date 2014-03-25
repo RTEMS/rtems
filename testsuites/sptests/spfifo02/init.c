@@ -21,6 +21,8 @@
 #include <errno.h>
 #include <rtems/libcsupport.h>
 
+const char rtems_test_name[] = "SPFIFO 2";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void create_all_barriers(void);
@@ -142,7 +144,7 @@ rtems_task Init(
   int num_opens = 0;
   int index = 0;
 
-  puts( "\n\n*** TEST FIFO 02 ***" );
+  TEST_BEGIN();
 
   puts( "Creating all barriers" );
   create_all_barriers();
@@ -196,7 +198,7 @@ rtems_task Init(
     ++index;
   } while ( index < NUM_OPEN_REQ - num_opens );
 
-  puts( "*** END OF TEST FIFO 08 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -207,6 +209,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM

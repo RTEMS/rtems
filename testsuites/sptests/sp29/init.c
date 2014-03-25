@@ -11,9 +11,13 @@
 #include <tmacros.h>
 #include <bsp.h>
 
+const char rtems_test_name[] = "SP 29";
+
 rtems_task Init (rtems_task_argument argument);
 
 #define CONFIGURE_EXTRA_TASK_STACKS RTEMS_MINIMUM_STACK_SIZE
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -86,7 +90,7 @@ rtems_task Init (rtems_task_argument ignored)
   rtems_status_code sc;
   rtems_interval then, now;
 
-  puts( "*** SP29 - SIMPLE SEMAPHORE TEST ***" );
+  TEST_BEGIN();
   puts( "This test only prints on errors." );
 
   ticksPerSecond = rtems_clock_get_ticks_per_second();
@@ -225,6 +229,6 @@ rtems_task Init (rtems_task_argument ignored)
     }
   }
 
-  puts( "*** END OF TEST 29 ***" );
+  TEST_END();
   rtems_test_exit (0);
 }

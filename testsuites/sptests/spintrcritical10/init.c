@@ -18,6 +18,8 @@
 
 #include <rtems/rtems/eventimpl.h>
 
+const char rtems_test_name[] = "SPINTRCRITICAL 10";
+
 #define GREEN RTEMS_EVENT_0
 
 #define RED RTEMS_EVENT_1
@@ -304,7 +306,7 @@ static rtems_task Init(
     .thread = _Thread_Get_executing()
   };
 
-  puts( "\n\n*** TEST INTERRUPT CRITICAL SECTION 10 ***" );
+  TEST_BEGIN();
 
   sc = rtems_timer_create(rtems_build_name('T', 'I', 'M', 'R'), &ctx.timer);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -313,7 +315,7 @@ static rtems_task Init(
   test_all_satisfy_before_timeout(&ctx);
   test_timeout_before_all_satisfy(&ctx);
 
-  puts( "*** END OF TEST INTERRUPT CRITICAL SECTION 10 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -324,6 +326,8 @@ static rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS       1
 #define CONFIGURE_MAXIMUM_TIMERS      1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
 

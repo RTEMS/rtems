@@ -32,7 +32,7 @@ rtems_task Task_2(
     directive_failed( status, "rtems_clock_get_tod" );
 
     if ( time.second >= 17 ) {
-      puts( "*** END OF TEST 3 *** " );
+      TEST_END();
       rtems_test_exit( 0 );
     }
 

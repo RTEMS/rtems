@@ -14,11 +14,15 @@
 /* configuration information */
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS 4
 #define CONFIGURE_MAXIMUM_SEMAPHORES 2
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
+
+const char rtems_test_name[] = "SPSEM 2";
 
 rtems_task Task01(rtems_task_argument ignored);
 rtems_task Task02(rtems_task_argument ignored);
@@ -46,7 +50,7 @@ rtems_task Init(rtems_task_argument ignored)
   rtems_status_code status;
   rtems_attribute sem_attr;
 
-  printf("\n*** TEST SEM02 ***\n");
+  TEST_BEGIN();
 
   sem_attr = RTEMS_INHERIT_PRIORITY | RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY;
 
@@ -147,7 +151,7 @@ rtems_task Task01(rtems_task_argument ignored)
   printf("TA01: priority %d\n", getprio());
 
   printf("TA01: exiting\n");
-  printf("*** END OF SEM02 ***\n");
+  TEST_END();
 
   rtems_test_exit(0);
 }

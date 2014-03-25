@@ -16,6 +16,8 @@
 #include <tmacros.h>
 #include <rtems/libcsupport.h>
 
+const char rtems_test_name[] = "SP 48";
+
 rtems_task Init(rtems_task_argument ignored);
 
 #define MAX 5000
@@ -27,7 +29,7 @@ rtems_task Init(rtems_task_argument ignored)
   int               i;
   int               created;
 
-  puts( "\n\n*** TEST 48 ***" );
+  TEST_BEGIN();
 
   printf(
     "Largest C program heap block available: %zu\n",
@@ -79,7 +81,7 @@ rtems_task Init(rtems_task_argument ignored)
     malloc_free_space()
   );
 
-  puts( "*** END OF TEST 48 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -95,6 +97,8 @@ rtems_task Init(rtems_task_argument ignored)
 #else
   #define CONFIGURE_MEMORY_OVERHEAD    1024
 #endif
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

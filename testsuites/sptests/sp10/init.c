@@ -13,6 +13,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SP 10";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -22,7 +24,7 @@ rtems_task Init(
 {
   bool                  is_set;
 
-  puts( "\n\n*** TEST 10 ***" );
+  TEST_BEGIN();
 
   puts( "Init - clear debug level" );
   _Debug_Level = 0;
@@ -47,7 +49,7 @@ rtems_task Init(
   is_set = rtems_debug_is_enabled( 0x1 );
   rtems_test_assert(is_set == false);
 
-  puts( "*** END OF TEST 10 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -57,6 +59,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS         1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

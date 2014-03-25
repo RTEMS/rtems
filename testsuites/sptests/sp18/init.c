@@ -15,6 +15,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SP 18";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -29,7 +31,7 @@ rtems_task Init(
   rtems_resource_snapshot snapshot;
   void                   *greedy;
 
-  puts( "\n\n*** TEST 18 ***" );
+  TEST_BEGIN();
 
   greedy = rtems_workspace_greedy_allocate_all_except_largest( &stack_size );
   rtems_resource_snapshot_take( &snapshot );
@@ -81,7 +83,7 @@ rtems_task Init(
 
   rtems_workspace_greedy_free( greedy );
 
-  puts( "*** END OF TEST 18 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -92,6 +94,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS            2
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS  20
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

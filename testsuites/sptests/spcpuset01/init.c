@@ -13,6 +13,7 @@
 #include <assert.h>
 #include "system.h"
 
+const char rtems_test_name[] = "SPCPUSET 1";
 
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
 static void test_cpu_zero_case_1(void)
@@ -136,7 +137,7 @@ rtems_task Init(
 {
   size_t    i;
 
-  puts( "*** CPUSET01 Test ***" );
+  TEST_BEGIN();
 
   test_cpu_zero_case_1();
   test_cpu_fill_case_1();
@@ -150,7 +151,7 @@ rtems_task Init(
 
   cpuset_logic_test();
 
-  puts( "*** END OF CPUSET01 Test ***" );
+  TEST_END();
   exit( 0 );
 }
 #else
@@ -159,9 +160,9 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  puts( "*** CPUSET01 Test ***" );
+  TEST_BEGIN();
   puts( "  cpuset not supported\n" );
-  puts( "*** END OF CPUSET01 Test ***" );
+  TEST_END();
   exit( 0 );
 }
 #endif

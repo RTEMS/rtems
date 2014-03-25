@@ -14,6 +14,8 @@
 #include <tmacros.h>
 #include <rtems/cpuuse.h>
 
+const char rtems_test_name[] = "SP 46";
+
 rtems_task Periodic_Task(
   rtems_task_argument argument
 );
@@ -66,7 +68,7 @@ rtems_task Init(
   rtems_status_code  status;
   rtems_id           task_id;
 
-  puts( "\n\n*** TEST 46 ***" );
+  TEST_BEGIN();
 
   /*
    * Initialize Tasks
@@ -101,7 +103,7 @@ rtems_task Init(
   /*
    *  Exit test
    */
-  puts( "*** END OF TEST 46 *** " );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -117,6 +119,8 @@ rtems_task Init(
 #define CONFIGURE_INIT_TASK_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
 #define CONFIGURE_INIT_TASK_PRIORITY      10
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

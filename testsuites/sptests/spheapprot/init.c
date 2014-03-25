@@ -22,7 +22,12 @@
 
 #include <bsp.h>
 
+#include <rtems/test.h>
 #include <rtems/score/heapimpl.h>
+
+#include <tmacros.h>
+
+const char rtems_test_name[] = "SPHEAPPROT";
 
 #ifdef HEAP_PROTECTION
   static void test_heap_block_error(Heap_Control *heap, Heap_Block *block)
@@ -121,11 +126,11 @@
 
 static rtems_task Init(rtems_task_argument argument)
 {
-  puts( "\n\n*** TEST HEAP PROTECTION ***" );
+  TEST_BEGIN();
 
   test_heap_protection();
 
-  puts( "*** END OF TEST HEAP PROTECTION ***" );
+  TEST_END();
 
   exit(0);
 }
@@ -139,6 +144,8 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 #define CONFIGURE_MAXIMUM_DRIVERS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

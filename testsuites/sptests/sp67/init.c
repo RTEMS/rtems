@@ -18,6 +18,8 @@
 
 #include <rtems/score/watchdogimpl.h>
 
+const char rtems_test_name[] = "SP 67";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_timer_service_routine TIMER_service_routine(
@@ -46,7 +48,7 @@ rtems_task Init(
   rtems_id          timer1;
   rtems_id          timer2;
 
-  puts( "\n\n*** TEST 67 ***" );
+  TEST_BEGIN();
 
   /* build timer name*/
 
@@ -105,7 +107,7 @@ rtems_task Init(
     rtems_test_exit(0);
   }
 
-  puts( "*** END OF TEST 67 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -116,6 +118,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS              2
 #define CONFIGURE_MAXIMUM_TIMERS             2
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

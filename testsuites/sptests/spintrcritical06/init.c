@@ -23,7 +23,7 @@ rtems_task Secondary_task(rtems_task_argument arg);
 #define SEMAPHORE_ATTRIBUTES     RTEMS_PRIORITY
 
 #if defined(PRIORITY_NO_TIMEOUT_FORWARD)
-  #define TEST_NAME          "06"
+  #define TEST_NAME          "6"
   #define TEST_STRING        "Priority/Restart Search Task (Forward)"
 
   #define INIT_PRIORITY      2
@@ -31,7 +31,7 @@ rtems_task Secondary_task(rtems_task_argument arg);
   #define SEMAPHORE_OBTAIN_TIMEOUT 2
 
 #elif defined(PRIORITY_NO_TIMEOUT_REVERSE)
-  #define TEST_NAME          "07"
+  #define TEST_NAME          "7"
   #define TEST_STRING        "Priority/Restart Search Task (Backward)"
   #define INIT_PRIORITY      126
   #define BLOCKER_PRIORITY   127
@@ -41,6 +41,8 @@ rtems_task Secondary_task(rtems_task_argument arg);
 
   #error "Test Mode not defined"
 #endif
+
+const char rtems_test_name[] = "SPINTRCRITICAL " TEST_NAME;
 
 rtems_id Secondary_task_id;
 rtems_id Semaphore;
@@ -76,7 +78,7 @@ rtems_task Init(
   rtems_status_code     status;
   int                   resets;
 
-  puts( "\n\n*** TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
+  TEST_BEGIN();
 
   puts( "Init - Trying to generate semaphore release from ISR while blocking" );
   puts( "Init - There is no way for the test to know if it hits the case" );
@@ -116,7 +118,7 @@ rtems_task Init(
     );
   }
 
-  puts( "*** END OF TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -131,6 +133,8 @@ rtems_task Init(
 #define CONFIGURE_INIT_TASK_PRIORITY  INIT_PRIORITY
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_PREEMPT
 #define CONFIGURE_MICROSECONDS_PER_TICK  2000
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

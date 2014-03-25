@@ -15,6 +15,8 @@
 #include <intrcritical.h>
 #include <rtems/rtems/ratemonimpl.h>
 
+const char rtems_test_name[] = "SPINTRCRITICAL 8";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_timer_service_routine test_release_from_isr(rtems_id  timer, void *arg);
@@ -56,7 +58,7 @@ rtems_task Init(
   rtems_status_code     sc;
   int                   resets;
 
-  puts( "\n\n*** TEST INTERRUPT CRITICAL SECTION 08 ***" );
+  TEST_BEGIN();
 
   puts( "Init - Trying to generate period ending while blocking" );
 
@@ -85,7 +87,7 @@ rtems_task Init(
 
   if ( case_hit ) {
     puts( "Init - It appears the case has been hit" );
-    puts( "*** END OF TEST INTERRUPT CRITICAL SECTION 08 ***" );
+    TEST_END();
   } else
     puts( "Init - Case not hit - ran too long" );
   rtems_test_exit(0);
@@ -100,6 +102,8 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TIMERS      1
 #define CONFIGURE_MAXIMUM_PERIODS     1
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

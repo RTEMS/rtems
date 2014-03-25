@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "SP 7";
+
 static void Task_harmless_extension_one(
   rtems_tcb *unused_one
 )
@@ -66,7 +68,7 @@ rtems_task Init(
   rtems_status_code status;
   rtems_id          id;
 
-  puts( "\n\n*** TEST 7 ***" );
+  TEST_BEGIN();
 
   buffered_io_initialize();
 

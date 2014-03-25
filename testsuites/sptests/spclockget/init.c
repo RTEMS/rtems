@@ -14,6 +14,8 @@
 #include <tmacros.h>
 #include "pritime.h"
 
+const char rtems_test_name[] = "SPCLOCKGET";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -26,7 +28,7 @@ rtems_task Init(
   rtems_interval      interval;
   struct timeval      timev;
 
-  puts( "\n\n*** TEST LEGACY RTEMS_CLOCK_GET ***" );
+  TEST_BEGIN();
 
   puts( "Init - clock_set_time" );
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
@@ -75,7 +77,7 @@ rtems_task Init(
      timev.tv_sec
   );
 
-  puts( "*** END OF TEST LEGACY RTEMS_CLOCK_GET ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -85,6 +87,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS         1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

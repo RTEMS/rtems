@@ -14,13 +14,15 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "SP 9";
+
 rtems_task Init(
   rtems_task_argument argument
 )
 {
   rtems_status_code status;
 
-  puts( "\n\n*** TEST 9 ***" );
+  TEST_BEGIN();
 
   Task_name[ 1 ]       =  rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ]       =  rtems_build_name( 'T', 'A', '2', ' ' );

@@ -11,6 +11,8 @@
  *    rtems_semaphore_create( rtems_build_name ('T', 'R', 'r', c),...);
  */
 
+#include <rtems/test.h>
+
 #define FATAL_ERROR_TEST_NAME            "16"
 #define FATAL_ERROR_DESCRIPTION          "termios sem create #1"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_RTEMS_API
@@ -23,6 +25,6 @@
 void force_error()
 {
   /* This fatal error depends on the Termios device configuration */
-  printk( "*** END OF TEST FATAL " FATAL_ERROR_TEST_NAME " ***\n" );
+  rtems_test_endk();
   rtems_test_exit(0);
 }

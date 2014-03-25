@@ -442,6 +442,6 @@ rtems_test_pause();
   fatal_directive_status( status, RTEMS_UNSATISFIED, "rtems_event_receive" );
   /***** *****/
 
-  puts( "*** END OF TEST 11 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

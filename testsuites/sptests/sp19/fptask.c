@@ -64,7 +64,7 @@ rtems_task FP_task(
       status = rtems_task_delete( Task_id[ 3 ] );
       directive_failed( status, "rtems_task_delete of TA3" );
 
-      puts( "*** END OF TEST 19 *** " );
+      TEST_END();
       rtems_test_exit( 0 );
     }
 

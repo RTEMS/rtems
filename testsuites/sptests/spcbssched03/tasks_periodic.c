@@ -154,6 +154,6 @@ rtems_task Tasks_Periodic(
   if ( rtems_cbs_cleanup() )
     printf( "ERROR: CBS CLEANUP\n" );
   fflush(stdout);
-  puts( "*** END OF TEST CBS SCHEDULER 3 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

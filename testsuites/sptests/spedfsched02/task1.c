@@ -118,7 +118,7 @@ rtems_task Task_1_through_6(
         fflush( stdout );
 
         if ( pass == 10 ) {
-          puts( "*** END OF TEST EDF SCHEDULER 2 ***" );
+          TEST_END();
           rtems_test_exit( 0 );
         }
 

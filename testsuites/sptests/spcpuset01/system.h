@@ -36,6 +36,8 @@ void cpuset_logic_test(void);
 #define CONFIGURE_MAXIMUM_TASKS            1
 #define CONFIGURE_MAXIMUM_SEMAPHORES       1
 
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>

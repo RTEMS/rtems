@@ -18,6 +18,8 @@
 
 #include <rtems/rtems/eventimpl.h>
 
+const char rtems_test_name[] = "SP 39";
+
 /*
  *  ERROR CHECKING NOTE:
  *
@@ -97,7 +99,7 @@ rtems_task Init(
   int                   max;
   uint32_t              iterations = 0;
 
-  puts( "\n\n*** TEST 39 ***" );
+  TEST_BEGIN();
 
   main_task = rtems_task_self();
 
@@ -185,6 +187,6 @@ rtems_task Init(
     (( case_hit == TRUE ) ? "" : "NOT ")
   );
 
-  puts( "*** END OF TEST 39 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

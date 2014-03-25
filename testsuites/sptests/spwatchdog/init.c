@@ -24,6 +24,8 @@
 
 #include <rtems/score/watchdogimpl.h>
 
+const char rtems_test_name[] = "SPWATCHDOG";
+
 static void test_watchdog_routine( Objects_Id id, void *arg )
 {
   (void) id;
@@ -53,7 +55,7 @@ rtems_task Init(
   rtems_status_code  status;
   Chain_Control      empty;
 
-   puts( "\n*** RTEMS WATCHDOG ***" );
+  TEST_BEGIN();
 
   puts( "INIT - report on empty watchdog chain" );
 

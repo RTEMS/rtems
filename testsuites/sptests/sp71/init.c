@@ -14,6 +14,8 @@
 #include <tmacros.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "SP 71";
+
 #define PER_ALLOCATION 8000
 
 /* forward declarations to avoid warnings */
@@ -27,7 +29,7 @@ rtems_task Init(
   rtems_id          id;
   long              created;
 
-  puts( "\n\n*** TEST 71 ***" );
+  TEST_BEGIN();
 
   created = 0;
   do {
@@ -53,7 +55,7 @@ rtems_task Init(
 
   if ( (created + PER_ALLOCATION) > OBJECTS_ID_FINAL_INDEX ) {
     puts( "Test case hit" );
-    puts( "*** END OF TEST 71 ***" );
+    TEST_END();
   } else {
     puts( "Test case NOT hit" );
   }
@@ -68,6 +70,8 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS             1
 #define CONFIGURE_MAXIMUM_PORTS rtems_resource_unlimited(PER_ALLOCATION)
 #define CONFIGURE_UNIFIED_WORK_AREAS
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

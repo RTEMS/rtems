@@ -281,6 +281,6 @@ rtems_test_pause();
   puts( "TA1 - rtems_region_delete - walks heap if debug enabled" );
   rtems_region_delete(Region_id[ 1 ]);
 
-  puts( "*** END OF TEST 25 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

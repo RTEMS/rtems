@@ -13,6 +13,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SP 59";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_task Blocking_task(rtems_task_argument ignored);
@@ -53,7 +55,7 @@ rtems_task Init(
   void                 *address_1;
   rtems_task_priority   priority;
 
-  puts( "\n\n*** TEST 59 ***" );
+  TEST_BEGIN();
 
   priority = RTEMS_MAXIMUM_PRIORITY / 4;
   priority = (priority * 3) + (priority / 2);
@@ -110,7 +112,7 @@ rtems_task Init(
   status = rtems_task_wake_after( RTEMS_MILLISECONDS_TO_TICKS(1000) );
   directive_failed( status, "rtems_task_wake_after" );
 
-  puts( "*** END OF TEST 59 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -121,6 +123,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS         2
 #define CONFIGURE_MAXIMUM_REGIONS       1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

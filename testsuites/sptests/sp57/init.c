@@ -19,6 +19,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SP 57";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_task Delay_task(rtems_task_argument ignored);
@@ -44,7 +46,7 @@ rtems_task Init(
   rtems_status_code    status;
   rtems_id             task_id;
 
-  puts( "\n\n*** TEST 57 ***" );
+  TEST_BEGIN();
 
   puts( "Init - rtems_task_create - delay task - OK" );
   status = rtems_task_create(
@@ -69,7 +71,7 @@ rtems_task Init(
   status = rtems_task_restart( task_id, 0 );
   directive_failed( status, "rtems_task_restart" );
 
-  puts( "*** END OF TEST 57 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -79,6 +81,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             2
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

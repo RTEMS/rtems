@@ -14,6 +14,8 @@
 #include <tmacros.h>
 #include <unistd.h>
 
+const char rtems_test_name[] = "SP 65";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_task Task_1(rtems_task_argument arg);
@@ -33,7 +35,7 @@ rtems_task Init(
   int                  status;
   rtems_id             Mutex_id, Task_id;
 
-  puts( "\n\n*** TEST " TEST_NAME " ***" );
+  TEST_BEGIN();
 
   /*
    *  Create binary semaphore (a.k.a. Mutex) with Priority Ceiling
@@ -74,7 +76,7 @@ rtems_task Init(
   status = rtems_semaphore_release( Mutex_id );
   directive_failed( status, "rtems_semaphore_release" );
 
-  puts( "*** END OF TEST 65 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -104,6 +106,8 @@ rtems_task Task_1(
 #define CONFIGURE_MAXIMUM_TASKS         2
 #define CONFIGURE_MAXIMUM_SEMAPHORES    1
 #define CONFIGURE_INIT_TASK_PRIORITY    TASK_PRIORITY
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

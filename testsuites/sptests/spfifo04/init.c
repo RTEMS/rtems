@@ -23,6 +23,8 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 
+const char rtems_test_name[] = "SPFIFO 4";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -38,7 +40,7 @@ rtems_task Init(
   int pipe_length = -1;
   int flag = 1;
 
-  puts( "\n\n*** TEST PIPE/FIFO - 04 ***" );
+  TEST_BEGIN();
 
   puts( "Init - Creating /fifo" );
   status = mkfifo( "/fifo", 0777 );
@@ -90,7 +92,7 @@ rtems_task Init(
   status = unlink( "/fifo" );
   rtems_test_assert( status == 0 );
 
-  puts( "*** END OF TEST PIPE/FIFO - 04 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -103,6 +105,8 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS 3
 #define CONFIGURE_MAXIMUM_BARRIERS 1
 #define CONFIGURE_MAXIMUM_FIFOS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

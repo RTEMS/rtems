@@ -17,6 +17,8 @@
 #include <rtems/malloc.h>
 #include <rtems/libcsupport.h>
 
+const char rtems_test_name[] = "SPPRIVENV 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_task task_routine(rtems_task_argument not_used);
@@ -44,7 +46,7 @@ rtems_task Init(
   rtems_id                task_id;
   rtems_name              another_task_name;
 
-  puts( "\n\n*** TEST USER ENVIRONMENT ROUTINE - 01 ***" );
+  TEST_BEGIN();
 
   puts( "Init - allocating most of heap -- OK" );
   opaque = rtems_heap_greedy_allocate( NULL, 0 );
@@ -111,7 +113,7 @@ rtems_task Init(
   sc = rtems_libio_share_private_env( task_id );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  puts( "*** END OF TEST USER ENVIRONMENT ROUTINE - 01 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -122,6 +124,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             3
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

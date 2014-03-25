@@ -14,6 +14,8 @@
 #include <tmacros.h>
 #include <rtems/chain.h>
 
+const char rtems_test_name[] = "SPCHAIN";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -298,7 +300,7 @@ rtems_task Init(
   test_node            node1, node2;
   int                  id;
 
-  puts( "\n\n*** TEST OF RTEMS CHAIN API ***" );
+  TEST_BEGIN();
 
   puts( "Init - Initialize chain empty" );
   rtems_chain_initialize_empty( &chain1 );
@@ -333,7 +335,7 @@ rtems_task Init(
   test_chain_node_count();
   test_chain_insert_ordered();
 
-  puts( "*** END OF RTEMS CHAIN API TEST ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -341,6 +343,8 @@ rtems_task Init(
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS 1

@@ -22,6 +22,8 @@
 
 #include <rtems.h>
 
+const char rtems_test_name[] = "SPFATAL 26";
+
 static void provoke_aligment_or_data_access_exception( void )
 {
   uintptr_t one = 1;
@@ -49,7 +51,7 @@ static void provoke_aligment_or_data_access_exception( void )
 
 static void Init( rtems_task_argument arg )
 {
-  printk( "\n\n*** TEST SPFATAL 26 ***\n" );
+  rtems_test_begink();
 
   provoke_aligment_or_data_access_exception();
 
@@ -67,10 +69,12 @@ static void fatal_extension(
 
   rtems_exception_frame_print( (const rtems_exception_frame *) code );
 
-  printk( "*** END OF TEST SPFATAL 26 ***\n" );
+  rtems_test_endk();
 }
 
-#define CONFIGURE_INITIAL_EXTENSIONS { .fatal = fatal_extension }
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .fatal = fatal_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 

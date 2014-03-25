@@ -15,6 +15,8 @@
 #include <tmacros.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "SP 69";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -31,7 +33,7 @@ rtems_task Init(
 
   period_name = rtems_build_name('P','E','R','1');
 
-  puts( "\n\n*** TEST 69 ***" );
+  TEST_BEGIN();
 
   /* create period */
   status = rtems_rate_monotonic_create(
@@ -181,7 +183,7 @@ rtems_task Init(
     rtems_test_assert( statistics.missed_count == i );
   }
   
-  puts( "*** END OF TEST 69 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -195,6 +197,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS             1
 #define CONFIGURE_MAXIMUM_PERIODS           1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

@@ -18,6 +18,8 @@
 
 #include <rtems/rtems/tasksimpl.h>
 
+const char rtems_test_name[] = "SPOBJGETNEXT";
+
 /* prototypes */
 int scan_objects(
   Objects_Information *information,
@@ -71,7 +73,7 @@ rtems_task Init(
   Objects_Information  *info;
   Objects_Maximum       active_count;
 
-  puts( "\n\n*** TEST OBJECT GET NEXT ***" );
+  TEST_BEGIN();
 
   info      = &_RTEMS_tasks_Information;
   main_task = rtems_task_self();
@@ -109,6 +111,6 @@ rtems_task Init(
   active_count = _Objects_Active_count( info );
   rtems_test_assert( active_count == 1 );
 
-  puts( "*** END OF TEST OBJECT GET NEXT ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

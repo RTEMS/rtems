@@ -26,6 +26,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "SP 6";
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -33,7 +35,7 @@ rtems_task Init(
   rtems_status_code   status;
   rtems_task_priority previous_priority;
 
-  puts( "\n\n*** TEST 6 ***" );
+  TEST_BEGIN();
 
   Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );

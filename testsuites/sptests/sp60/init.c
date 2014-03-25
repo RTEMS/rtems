@@ -13,6 +13,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SP 60";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -24,7 +26,7 @@ rtems_task Init(
   rtems_id              period1;
   rtems_id              period2;
 
-  puts( "\n\n*** TEST 60 ***" );
+  TEST_BEGIN();
 
   puts( "Init - rtems_rate_monotonic_create - first period" );
   sc = rtems_rate_monotonic_create(
@@ -56,7 +58,7 @@ rtems_task Init(
   sc = rtems_rate_monotonic_period(period1, RTEMS_PERIOD_STATUS );
   fatal_directive_status(sc, RTEMS_TIMEOUT, "rtems_task_period status");
 
-  puts( "*** END OF TEST 60 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -67,6 +69,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS         1
 #define CONFIGURE_MAXIMUM_PERIODS       2
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

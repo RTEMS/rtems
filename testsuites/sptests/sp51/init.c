@@ -13,6 +13,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SP 51";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -23,7 +25,7 @@ rtems_task Init(
   rtems_status_code sc;
   rtems_id          mutex;
 
-  puts( "\n\n*** TEST 51 ***" );
+  TEST_BEGIN();
 
   puts( "Create semaphore - priority ceiling locked - violate ceiling" );
   sc = rtems_semaphore_create(
@@ -55,7 +57,7 @@ rtems_task Init(
   sc = rtems_semaphore_release( mutex );
   directive_failed( sc, "rtems_semaphore_release" );
 
-  puts( "*** END OF TEST 51 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -68,6 +70,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS         1
 #define CONFIGURE_MAXIMUM_SEMAPHORES    1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

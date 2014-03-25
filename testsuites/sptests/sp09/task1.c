@@ -54,6 +54,6 @@ rtems_task Task_1(
 
   Screen10();
 
-  puts( "*** END OF TEST 9 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

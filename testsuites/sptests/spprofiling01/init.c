@@ -25,6 +25,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SPPROFILING 1";
+
 typedef struct {
   rtems_interrupt_lock a;
   rtems_interrupt_lock b;
@@ -125,12 +127,12 @@ static void test_report_xml(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SPPROFILING 1 ***");
+  TEST_BEGIN();
 
   test_iterate();
   test_report_xml();
 
-  puts("*** END OF TEST SPPROFILING 1 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }

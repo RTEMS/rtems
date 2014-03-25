@@ -13,6 +13,8 @@
 
 #include <tmacros.h>  /* includes bsp.h, stdio, etc... */
 
+const char rtems_test_name[] = "SP 32";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -26,7 +28,7 @@ rtems_task Init(
   rtems_id           period_id;
   int                loopy;
 
-  printf("\n\n*** TEST 32 ***\n");
+  TEST_BEGIN();
 
   /* create period */
   status = rtems_rate_monotonic_create(
@@ -77,9 +79,11 @@ rtems_task Init(
     );
   }
 
-  puts("*** END OF TEST 32 ***");
+  TEST_END();
   rtems_test_exit(0);
 }
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

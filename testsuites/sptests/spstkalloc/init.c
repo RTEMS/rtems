@@ -13,6 +13,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SPSTKALLOC";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -46,7 +48,7 @@ rtems_task Init(
   rtems_id          taskId;
   rtems_id          taskId1;
 
-  puts( "\n\n*** TEST OF STACK ALLOCATOR PLUGIN ***" );
+  TEST_BEGIN();
 
   puts( "Init - create task TA1 to use custom stack allocator - OK" );
   rc = rtems_task_create(
@@ -74,7 +76,7 @@ rtems_task Init(
   rc = rtems_task_delete( taskId );
   directive_failed( rc, "rtems_task_delete of TA1" );
 
-  puts( "*** END OF OF STACK ALLOCATOR PLUGIN TEST ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -85,6 +87,8 @@ rtems_task Init(
 
 #define CONFIGURE_TASK_STACK_ALLOCATOR    StackAllocator
 #define CONFIGURE_TASK_STACK_DEALLOCATOR  StackDeallocator
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS 3

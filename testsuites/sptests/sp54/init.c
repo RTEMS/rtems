@@ -20,6 +20,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SP 54";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -35,7 +37,7 @@ rtems_task Init(
    *  It is possible that since this thread prints and there is no idle
    *  task, that the system could fail miserably. :(
    */
-  puts( "\n\n*** TEST 54 ***" );
+  TEST_BEGIN();
 
   puts( "Init - use valid id of API class with no objects" );
   status = rtems_task_set_priority(
@@ -53,7 +55,7 @@ rtems_task Init(
   );
   fatal_directive_status( status, RTEMS_INVALID_NAME, "rtems_task_ident" );
 
-  puts( "*** END OF TEST 54 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 

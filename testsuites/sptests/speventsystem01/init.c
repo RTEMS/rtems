@@ -20,6 +20,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SPEVENTSYSTEM 1";
+
 #define EVENT RTEMS_EVENT_0
 
 static void test_with_normal_and_system_event(void)
@@ -110,7 +112,7 @@ static void test_get_pending_events(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SPEVENTSYSTEM 1 ***");
+  TEST_BEGIN();
 
   test_with_normal_and_system_event();
   test_with_timeout();
@@ -118,7 +120,7 @@ static void Init(rtems_task_argument arg)
   test_with_invalid_address();
   test_get_pending_events();
 
-  puts("*** END OF TEST SPEVENTSYSTEM 1 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -127,6 +129,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 2
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

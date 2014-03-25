@@ -21,7 +21,7 @@
 #include <rtems/score/threadqimpl.h>
 #include <rtems/rtems/semimpl.h>
 
-#define TEST_NAME "20"
+const char rtems_test_name[] = "SPINTRCRITICAL 20";
 
 #define PRIORITY_MASTER 2
 
@@ -69,7 +69,7 @@ static void Init(rtems_task_argument ignored)
   int resets = 0;
   rtems_status_code sc;
 
-  puts("\n\n*** TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***\n");
+  TEST_BEGIN();
 
   ctx->master_task = rtems_task_self();
 
@@ -140,7 +140,7 @@ static void Init(rtems_task_argument ignored)
   rtems_test_assert(ctx->status_was_successful);
   rtems_test_assert(ctx->status_was_timeout);
 
-  puts("*** END OF TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -157,6 +157,8 @@ static void Init(rtems_task_argument ignored)
 #define CONFIGURE_INIT_TASK_PRIORITY PRIORITY_MASTER
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

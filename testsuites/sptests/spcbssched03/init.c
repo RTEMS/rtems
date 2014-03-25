@@ -25,6 +25,8 @@
 
 #include "cbsparams.h"
 
+const char rtems_test_name[] = "SPCBSSCHED 3";
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -32,7 +34,7 @@ rtems_task Init(
   uint32_t    index;
   rtems_status_code status;
 
-  puts( "\n\n*** TEST CBS SCHEDULER 3 ***" );
+  TEST_BEGIN();
 
   build_task_name();
 

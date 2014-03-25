@@ -13,6 +13,8 @@
 
 #include <tmacros.h>
 
+const char rtems_test_name[] = "SP 74";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_task Test_task(rtems_task_argument argument);
@@ -23,7 +25,7 @@ rtems_task Test_task(
 {
   puts( "Successfully yielded it to higher priority task" );
 
-  puts( "*** END OF SP74 TEST ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -34,7 +36,7 @@ rtems_task Init(
   rtems_status_code  status;
   rtems_id           id;
 
-  puts( "\n\n*** SP74 (YIELD) TEST ***" );
+  TEST_BEGIN();
 
   puts( "Create TA1 at higher priority task" );
   status = rtems_task_create(
@@ -65,6 +67,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS           3
 #define CONFIGURE_INIT_TASK_PRIORITY      2
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

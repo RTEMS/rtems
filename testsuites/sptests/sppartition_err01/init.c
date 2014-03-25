@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "SPPARTITION_ERR 1";
+
 uint32_t Other_Memory;
 
 TEST_EXTERN rtems_name Partition_name[ 2 ]; /* array of partition names */
@@ -331,10 +333,10 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** TEST PARTITION ERROR 01 ***" );
+  TEST_BEGIN();
 
   test_partition_errors();
 
-  puts( "*** END OF TEST PARTITION ERROR 01 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

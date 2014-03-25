@@ -26,6 +26,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "SPEDFSCHED 2";
+
 rtems_task_priority Prio[7] = { 0,   2,   2,   2,   2,  100, 1 };
 
 rtems_task Init(
@@ -37,7 +39,7 @@ rtems_task Init(
 
   Priorities = Prio;
 
-  puts( "\n\n*** TEST EDF Scheduler 2 ***" );
+  TEST_BEGIN();
 
   Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );

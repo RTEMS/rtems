@@ -20,7 +20,7 @@
 #include <intrcritical.h>
 #include <rtems/score/statesimpl.h>
 
-#define TEST_NAME "19"
+const char rtems_test_name[] = "SPINTRCRITICAL 19";
 
 #define PRIORITY_RED 1
 
@@ -68,7 +68,7 @@ static void Init(rtems_task_argument ignored)
   int resets = 0;
   rtems_status_code sc;
 
-  puts("\n\n*** TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***\n");
+  TEST_BEGIN();
 
   ctx->master_task = rtems_task_self();
   ctx->master_task_tcb = _Thread_Get_executing();
@@ -110,7 +110,7 @@ static void Init(rtems_task_argument ignored)
   sc = rtems_task_delete(ctx->resumer_task);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  puts("*** END OF TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -126,6 +126,8 @@ static void Init(rtems_task_argument ignored)
 #define CONFIGURE_INIT_TASK_PRIORITY PRIORITY_GREEN
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

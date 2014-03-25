@@ -20,6 +20,8 @@
 
 #include <rtems.h>
 
+const char rtems_test_name[] = "SPINTERNALERROR 2";
+
 static void test_internal_error_text(void)
 {
   rtems_fatal_code error = 0;
@@ -70,13 +72,13 @@ static void test_status_text(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SPINTERNALERROR 2 ***");
+  TEST_BEGIN();
 
   test_internal_error_text();
   test_fatal_source_text();
   test_status_text();
 
-  puts("*** END OF TEST SPINTERNALERROR 2 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -87,6 +89,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

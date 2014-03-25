@@ -34,7 +34,7 @@ rtems_task Task_1(
   pass = argument + 1;
 
   if ( pass == 5 ) {
-    puts( "*** END OF TEST 6 ***" );
+    TEST_END();
     rtems_test_exit( 0 );
   }
 

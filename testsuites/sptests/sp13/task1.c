@@ -362,6 +362,6 @@ rtems_test_pause();
     directive_failed( status, "rtems_message_queue_delete" );
   }
 
-  puts( "*** END OF TEST 13 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

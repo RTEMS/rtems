@@ -19,7 +19,7 @@
 #include <tmacros.h>
 #include <intrcritical.h>
 
-#define TEST_NAME "18"
+const char rtems_test_name[] = "SPINTRCRITICAL 18";
 
 #define WAKE_UP RTEMS_EVENT_0
 
@@ -101,7 +101,7 @@ static void Init( rtems_task_argument ignored )
   rtems_status_code sc;
   int resets = 0;
 
-  puts( "\n\n*** TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***\n" );
+  TEST_BEGIN();
 
   sc = rtems_task_create(
     rtems_build_name( 'H', 'I', 'G', 'H' ),
@@ -149,7 +149,7 @@ static void Init( rtems_task_argument ignored )
     wake_up( ctx->middle_priority_task );
   }
 
-  puts( "*** END OF TEST INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
+  TEST_END();
 
   rtems_test_exit( 0 );
 }
@@ -165,6 +165,8 @@ static void Init( rtems_task_argument ignored )
 #define CONFIGURE_INIT_TASK_PRIORITY PRIORITY_LOW
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

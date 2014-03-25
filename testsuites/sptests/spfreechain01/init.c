@@ -16,6 +16,8 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/malloc.h>
 
+const char rtems_test_name[] = "SPFREECHAIN 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 bool my_freechain_extend_with_nothing( Freechain_Control *freechain );
@@ -120,7 +122,7 @@ rtems_task Init(
   rtems_task_argument ignored
                 )
 {
-    puts( "*** START OF RTEMS FREECHAIN API TEST ***" );
+    TEST_BEGIN();
 
     test_node *test_node_p;
     MyFreechain myfc;
@@ -177,7 +179,7 @@ rtems_task Init(
         }
     }
 
-    puts( "*** END OF RTEMS FREECHAIN API TEST ***" );
+    TEST_END();
     rtems_test_exit(0);
 }
 
@@ -187,6 +189,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
 #define CONFIGURE_MEMORY_OVERHEAD sizeof(test_node)
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS 1
 

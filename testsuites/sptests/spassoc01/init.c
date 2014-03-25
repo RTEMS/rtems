@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <rtems/assoc.h>
 
+const char rtems_test_name[] = "SPASSOC 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -64,7 +66,7 @@ rtems_task Init(
 )
 {
   name = malloc(40);
-  puts( "\n\n*** TEST ASSOC ROUTINES - 1 ***" );
+  TEST_BEGIN();
 
   puts( "Init - get local by name -- OK" );
   local = rtems_assoc_local_by_name( assoc_table, "zero" );
@@ -215,7 +217,7 @@ rtems_task Init(
 
   free( name );
 
-  puts( "*** END OF TEST ASSOC ROUTINES - 1 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -226,6 +228,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

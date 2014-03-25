@@ -20,6 +20,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SPEVENTTRANSIENT 1";
+
 typedef struct {
   rtems_id client;
   bool complete;
@@ -105,13 +107,13 @@ static void test_with_timeout(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SPEVENTTRANSIENT 1 ***");
+  TEST_BEGIN();
 
   test_with_request_server();
   test_with_request_self();
   test_with_timeout();
 
-  puts("*** END OF TEST SPEVENTTRANSIENT 1 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -120,6 +122,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 2
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

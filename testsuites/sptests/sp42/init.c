@@ -20,6 +20,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "SP 42";
+
 #define MAX_TASKS 20
 
 rtems_task Init(rtems_task_argument argument);
@@ -150,7 +152,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** START OF TEST 42 ***" );
+  TEST_BEGIN();
 
   if (RTEMS_MAXIMUM_PRIORITY == 255)
     Priorities = Priorities_High;
@@ -185,7 +187,7 @@ rtems_task Init(
   puts( "Exercising blocking discipline w/unblock in priority order" );
   do_test( RTEMS_PRIORITY, FALSE );
 
-  puts( "*** END OF TEST 42 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -198,6 +200,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS             MAX_TASKS+1
 #define CONFIGURE_MAXIMUM_SEMAPHORES        1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

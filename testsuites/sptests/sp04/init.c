@@ -26,6 +26,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "SP 4";
+
 rtems_extensions_table Extensions = {
   NULL,                      /* task create user extension */
   NULL,                      /* task start user extension */
@@ -44,7 +46,7 @@ rtems_task Init(
   rtems_status_code status;
   rtems_time_of_day time;
 
-  puts( "\n\n*** TEST 4 ***" );
+  TEST_BEGIN();
   build_time( &time, 12, 31, 1988, 9, 15, 0, 0 );
 
   status = rtems_clock_set( &time );
