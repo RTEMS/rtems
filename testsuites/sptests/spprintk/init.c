@@ -16,6 +16,8 @@
 #include <tmacros.h>
 #include <rtems/bspIo.h>
 
+const char rtems_test_name[] = "SPPRINTK";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 int test_getchar(void);
@@ -122,7 +124,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  printk( "\n\n*** TEST PRINTK ***\n" );
+  rtems_test_begink();
 
   do_putk();
   putk("");
@@ -132,7 +134,7 @@ rtems_task Init(
 
   do_getchark();
 
-  printk( "*** END OF TEST PRINTK ***\n" );
+  rtems_test_endk();
   rtems_test_exit( 0 );
 }
 
