@@ -274,21 +274,30 @@ static void _POSIX_Threads_Delete_extension(
   Thread_Control *deleted
 )
 {
+  _Workspace_Free( deleted->API_Extensions[ THREAD_API_POSIX ] );
+}
+
+static void _POSIX_Threads_Terminate_extension(
+  Thread_Control *executing
+)
+{
   Thread_Control     *the_thread;
   POSIX_API_Control  *api;
   void              **value_ptr;
 
-  api = deleted->API_Extensions[ THREAD_API_POSIX ];
+  api = executing->API_Extensions[ THREAD_API_POSIX ];
 
   /*
    *  Run the POSIX cancellation handlers
    */
-  _POSIX_Threads_cancel_run( deleted );
+  _POSIX_Threads_cancel_run( executing );
+
+  _Thread_Disable_dispatch();
 
   /*
    *  Wakeup all the tasks which joined with this one
    */
-  value_ptr = (void **) deleted->Wait.return_argument;
+  value_ptr = (void **) executing->Wait.return_argument;
 
   while ( (the_thread = _Thread_queue_Dequeue( &api->Join_List )) )
       *(void **)the_thread->Wait.return_argument = value_ptr;
@@ -296,9 +305,7 @@ static void _POSIX_Threads_Delete_extension(
   if ( api->schedpolicy == SCHED_SPORADIC )
     (void) _Watchdog_Remove( &api->Sporadic_timer );
 
-  deleted->API_Extensions[ THREAD_API_POSIX ] = NULL;
-
-  _Workspace_Free( api );
+  _Thread_Enable_dispatch();
 }
 
 /*
@@ -350,7 +357,8 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
     NULL,                                     /* switch */
     NULL,                                     /* begin */
     _POSIX_Threads_Exitted_extension,         /* exitted */
-    NULL                                      /* fatal */
+    NULL,                                     /* fatal */
+    _POSIX_Threads_Terminate_extension        /* terminate */
   }
 };
 

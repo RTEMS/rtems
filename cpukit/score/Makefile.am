@@ -272,7 +272,7 @@ libscore_a_SOURCES += src/rbtree.c \
 
 ## THREAD_C_FILES
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
-    src/threadclearstate.c src/threadclose.c src/threadcreateidle.c \
+    src/threadclearstate.c src/threadcreateidle.c \
     src/threaddelayended.c src/threaddispatch.c \
     src/threadenabledispatch.c src/threaddisabledispatch.c \
     src/threadget.c src/threadhandler.c src/threadinitialize.c \

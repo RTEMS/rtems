@@ -66,13 +66,16 @@ void newlib_delete_hook(
   rtems_tcb *deleted_task
 )
 {
-  struct _reent *ptr;
+  (void) current_task;
 
-  ptr = deleted_task->libc_reent;
-  deleted_task->libc_reent = NULL;
+  _Workspace_Free(deleted_task->libc_reent);
+}
 
-  _reclaim_reent(ptr);
-  _Workspace_Free(ptr);
+void newlib_terminate_hook(
+  rtems_tcb *current_task
+)
+{
+  _reclaim_reent(current_task->libc_reent);
 }
 
 #endif

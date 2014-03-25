@@ -142,6 +142,12 @@ void _User_extensions_Fatal_visitor(
   const User_extensions_Table *callouts
 );
 
+void _User_extensions_Thread_terminate_visitor(
+  Thread_Control              *executing,
+  void                        *arg,
+  const User_extensions_Table *callouts
+);
+
 /**
  * @brief Iterates through all user extensions and calls the visitor for each.
  *
@@ -237,6 +243,16 @@ static inline void _User_extensions_Fatal(
   User_extensions_Fatal_context ctx = { source, is_internal, error };
 
   _User_extensions_Iterate( &ctx, _User_extensions_Fatal_visitor );
+}
+
+static inline void _User_extensions_Thread_terminate(
+  Thread_Control *executing
+)
+{
+  _User_extensions_Iterate(
+    executing,
+    _User_extensions_Thread_terminate_visitor
+  );
 }
 
 /** @} */

@@ -21,6 +21,7 @@
 #include <pthread.h>
 
 #include <rtems/posix/pthreadimpl.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
@@ -30,65 +31,46 @@ void _POSIX_Thread_Exit(
   void           *value_ptr
 )
 {
-  Objects_Information  *the_information;
-  Thread_Control       *unblocked;
-  POSIX_API_Control    *api;
-
-  the_information = _Objects_Get_information_id( the_thread->Object.id );
+  Thread_Control    *unblocked;
+  POSIX_API_Control *api;
+  bool               previous_life_protection;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
+  _Assert( _Debug_Is_thread_dispatching_allowed() );
+
+  previous_life_protection = _Thread_Set_life_protection( true );
+  _Thread_Disable_dispatch();
+
+  the_thread->Wait.return_argument = value_ptr;
 
   /*
-   * The_information has to be non-NULL.  Otherwise, we couldn't be
-   * running in a thread of this API and class.
-   *
-   * NOTE: Lock and unlock in different order so we do not throw a
-   *       fatal error when locking the allocator mutex.  And after
-   *       we unlock, we want to defer the context switch until we
-   *       are ready to be switched out.  Otherwise, an ISR could
-   *       occur and preempt us out while we still hold the
-   *       allocator mutex.
+   * Process join
    */
+  if ( api->detachstate == PTHREAD_CREATE_JOINABLE ) {
+    unblocked = _Thread_queue_Dequeue( &api->Join_List );
+    if ( unblocked ) {
+      do {
+        *(void **)unblocked->Wait.return_argument = value_ptr;
+      } while ( (unblocked = _Thread_queue_Dequeue( &api->Join_List )) );
+    } else {
+      _Thread_Set_state(
+        the_thread,
+        STATES_WAITING_FOR_JOIN_AT_EXIT | STATES_TRANSIENT
+      );
+      _Thread_Enable_dispatch();
+      /* now waiting for thread to arrive */
+      _Thread_Disable_dispatch();
+    }
+  }
 
-  _RTEMS_Lock_allocator();
-    _Thread_Disable_dispatch();
+  /*
+   *  Now shut down the thread
+   */
+  _Thread_Close( the_thread, _Thread_Executing );
 
-      the_thread->Wait.return_argument = value_ptr;
-
-      /*
-       * Process join
-       */
-      if ( api->detachstate == PTHREAD_CREATE_JOINABLE ) {
-        unblocked = _Thread_queue_Dequeue( &api->Join_List );
-        if ( unblocked ) {
-          do {
-            *(void **)unblocked->Wait.return_argument = value_ptr;
-          } while ( (unblocked = _Thread_queue_Dequeue( &api->Join_List )) );
-        } else {
-          _Thread_Set_state(
-            the_thread,
-            STATES_WAITING_FOR_JOIN_AT_EXIT | STATES_TRANSIENT
-          );
-           /* FIXME: Lock order reversal */
-           _RTEMS_Unlock_allocator();
-          _Thread_Enable_dispatch();
-          /* now waiting for thread to arrive */
-          _RTEMS_Lock_allocator();
-          _Thread_Disable_dispatch();
-        }
-      }
-
-      /*
-       *  Now shut down the thread
-       */
-      _Thread_Close( the_information, the_thread );
-
-      _POSIX_Threads_Free( the_thread );
-
-     /* FIXME: Lock order reversal */
-    _RTEMS_Unlock_allocator();
   _Thread_Enable_dispatch();
+  _Thread_Set_life_protection( previous_life_protection );
 }
 
 void pthread_exit(

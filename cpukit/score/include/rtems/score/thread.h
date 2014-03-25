@@ -11,6 +11,8 @@
  *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2014 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -396,8 +398,47 @@ typedef struct {
   Chain_Control Chain;
 } Thread_Action_control;
 
+/**
+ * @brief Thread life states.
+ *
+ * The thread life states are orthogonal to the thread states used for
+ * synchronization primitives and blocking operations.  They reflect the state
+ * changes triggered with thread restart and delete requests.
+ */
+typedef enum {
+  THREAD_LIFE_NORMAL = 0x0,
+  THREAD_LIFE_PROTECTED = 0x1,
+  THREAD_LIFE_RESTARTING = 0x2,
+  THREAD_LIFE_PROTECTED_RESTARTING = 0x3,
+  THREAD_LIFE_TERMINATING = 0x4,
+  THREAD_LIFE_PROTECTED_TERMINATING = 0x5,
+  THREAD_LIFE_RESTARTING_TERMINTING = 0x6,
+  THREAD_LIFE_PROTECTED_RESTARTING_TERMINTING = 0x7
+} Thread_Life_state;
+
+/**
+ * @brief Thread life control.
+ */
 typedef struct {
+  /**
+   * @brief Thread life action used to react upon thread restart and delete
+   * requests.
+   */
   Thread_Action      Action;
+
+  /**
+   * @brief The current thread life state.
+   */
+  Thread_Life_state  state;
+
+  /**
+   * @brief The terminator thread of this thread.
+   *
+   * In case the thread is terminated and another thread (the terminator) waits
+   * for the actual termination completion, then this field references the
+   * terminator thread.
+   */
+  Thread_Control    *terminator;
 } Thread_Life_control;
 
 /**
@@ -470,9 +511,10 @@ struct Thread_Control_struct {
    * thread and thread dispatching is necessary.  On SMP a thread dispatch on a
    * remote processor needs help from an inter-processor interrupt, thus it
    * will take some time to complete the state change.  A lot of things can
-   * happen in the meantime.
+   * happen in the meantime.  This field is volatile since it is polled in
+   * _Thread_Kill_zombies().
    */
-  bool                                  is_executing;
+  volatile bool                         is_executing;
 
 #if __RTEMS_HAVE_SYS_CPUSET_H__
   /**

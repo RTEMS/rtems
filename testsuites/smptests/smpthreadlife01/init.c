@@ -19,6 +19,7 @@
 #include "tmacros.h"
 
 #include <rtems.h>
+#include <rtems/libcsupport.h>
 #include <rtems/score/smpbarrier.h>
 
 const char rtems_test_name[] = "SMPTHREADLIFE 1";
@@ -28,6 +29,7 @@ const char rtems_test_name[] = "SMPTHREADLIFE 1";
 typedef struct {
   volatile rtems_task_argument main_arg;
   volatile rtems_task_argument worker_arg;
+  volatile bool terminated;
   SMP_barrier_Control barrier;
   SMP_barrier_State worker_barrier_state;
 } test_context;
@@ -36,6 +38,29 @@ static test_context test_instance = {
   .barrier = SMP_BARRIER_CONTROL_INITIALIZER,
   .worker_barrier_state = SMP_BARRIER_STATE_INITIALIZER
 };
+
+static void restart_extension(
+  Thread_Control *executing,
+  Thread_Control *restarted
+)
+{
+  rtems_test_assert(executing == restarted);
+}
+
+static void delete_extension(
+  Thread_Control *executing,
+  Thread_Control *deleted
+)
+{
+  rtems_test_assert(executing != deleted);
+}
+
+static void terminate_extension(Thread_Control *executing)
+{
+  test_context *ctx = &test_instance;
+
+  ctx->terminated = true;
+}
 
 static void worker_task(rtems_task_argument arg)
 {
@@ -59,6 +84,9 @@ static void test(void)
   rtems_status_code sc;
   rtems_id id;
   rtems_task_argument arg;
+  rtems_resource_snapshot snapshot;
+
+  rtems_resource_snapshot_take(&snapshot);
 
   sc = rtems_task_create(
     rtems_build_name('W', 'O', 'R', 'K'),
@@ -90,6 +118,42 @@ static void test(void)
 
     rtems_test_assert(ctx->worker_arg == arg);
   }
+
+  sc = rtems_task_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+
+  for (arg = 31; arg < 57; ++arg) {
+    ctx->main_arg = arg;
+    ctx->worker_arg = 0;
+    ctx->terminated = false;
+
+    sc = rtems_task_create(
+      rtems_build_name('W', 'O', 'R', 'K'),
+      1,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_MODES,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &id
+    );
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_task_start(id, worker_task, arg);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    _SMP_barrier_Wait(&ctx->barrier, &barrier_state, CPU_COUNT);
+
+    rtems_test_assert(ctx->worker_arg == arg);
+    rtems_test_assert(!ctx->terminated);
+
+    sc = rtems_task_delete(id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    rtems_test_assert(ctx->terminated);
+
+    rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+  }
 }
 
 static void Init(rtems_task_argument arg)
@@ -113,7 +177,13 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TASKS CPU_COUNT
 
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { \
+    .thread_restart = restart_extension, \
+    .thread_delete = delete_extension, \
+    .thread_terminate = terminate_extension \
+  }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

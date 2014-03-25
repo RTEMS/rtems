@@ -43,9 +43,7 @@ typedef void User_extensions_routine RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
  * @brief Task create extension.
  *
  * It corresponds to _Thread_Initialize() (used by the rtems_task_create()
- * directive).  The first parameter points to the currently executing thread
- * which created the new thread.  The second parameter points to the created
- * thread.
+ * directive and pthread_create()).
  *
  * It is invoked after the new thread has been completely initialized, but
  * before it is placed on a ready chain.
@@ -59,140 +57,173 @@ typedef void User_extensions_routine RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
  *
  * It can be assumed that the executing thread locked the allocator mutex.
  * The only exception is the creation of the idle thread.  In this case the
- * allocator mutex is not locked.  Since the allocator mutex is non-recursive,
- * it is prohibited to call the normal memory allocation routines.  It is
- * possible to use internal rountines like _Workspace_Allocate() or
- * _Heap_Allocate() for heaps which are protected by the allocator mutex.
+ * allocator mutex is not locked.  Since the allocator mutex allows nesting the
+ * normal memory allocation routines can be used.
  *
- * @retval true The thread create extension was successful.
+ * @param[in] executing The executing thread.
+ * @param[in] created The created thread.
+ *
+ * @retval true Successful operation.
  * @retval false A thread create user extension will frequently attempt to
  * allocate resources.  If this allocation fails, then the extension should
  * return @a false and the entire thread create operation will fail.
  */
 typedef bool ( *User_extensions_thread_create_extension )(
-  Thread_Control *,
-  Thread_Control *
+  Thread_Control *executing,
+  Thread_Control *created
 );
 
 /**
  * @brief Task delete extension.
  *
  * It corresponds to _Thread_Close() (used by the rtems_task_delete()
- * directive).  The first parameter points to the currently executing thread
- * which deleted the thread.  The second parameter points to the deleted
- * thread.
+ * directive, pthread_exit() and pthread_cancel()).
  *
- * It is invoked before all resources of the thread are deleted.
+ * It is invoked before all resources of the thread are deleted.  The executing
+ * and deleted arguments are never equal.
  *
  * Thread dispatching is enabled.  The executing thread locked the allocator
  * mutex.
+ *
+ * @param[in] executing The executing thread.
+ * @param[in] deleted The deleted thread.
  */
 typedef void( *User_extensions_thread_delete_extension )(
-  Thread_Control *,
-  Thread_Control *
+  Thread_Control *executing,
+  Thread_Control *deleted
 );
 
 /**
  * @brief Task start extension.
  *
  * It corresponds to _Thread_Start() (used by the rtems_task_start()
- * directive).  The first parameter points to the currently executing thread
- * which started the thread.  The second parameter points to the started
- * thread.
+ * directive).
  *
  * It is invoked after the environment of the thread has been loaded and the
  * thread has been made ready.
  *
  * Thread dispatching is disabled.  The executing thread is not the holder of
  * the allocator mutex.
+ *
+ * @param[in] executing The executing thread.
+ * @param[in] started The started thread.
  */
 typedef void( *User_extensions_thread_start_extension )(
-  Thread_Control *,
-  Thread_Control *
+  Thread_Control *executing,
+  Thread_Control *started
 );
 
 /**
  * @brief Task restart extension.
  *
  * It corresponds to _Thread_Restart() (used by the rtems_task_restart()
- * directive).  The first parameter points to the currently executing thread
- * which restarted the thread.  The second parameter points to the restarted
- * thread.
+ * directive).
  *
  * It is invoked in the context of the restarted thread right before the
- * execution context is restarted.  The executing and restarted arguments are
- * equal.  The thread stack reflects the previous execution context.
+ * execution context is reloaded.  The executing and restarted arguments are
+ * always equal.  The thread stack reflects the previous execution context.
  *
  * Thread dispatching is enabled.  The thread is not the holder of the
- * allocator mutex.
+ * allocator mutex.  The thread life is protected.  Thread restart and delete
+ * requests issued by restart extensions lead to recursion.
+ *
+ * @param[in] executing The executing thread.
+ * @param[in] restarted The executing thread.  Yes, the executing thread.
  */
 typedef void( *User_extensions_thread_restart_extension )(
-  Thread_Control *,
-  Thread_Control *
+  Thread_Control *executing,
+  Thread_Control *restarted
 );
 
 /**
  * @brief Task switch extension.
  *
- * It corresponds to _Thread_Dispatch().  The first parameter points to the
- * currently executing thread.  The second parameter points to the heir thread.
+ * It corresponds to _Thread_Dispatch().
  *
  * It is invoked before the context switch from the executing to the heir
  * thread.
  *
  * Thread dispatching is disabled.  The state of the allocator mutex is
- * arbitrary.
+ * arbitrary.  Interrupts are disabled and the per-CPU lock is acquired on SMP
+ * configurations.
  *
- * The context switches initiated through _Thread_Start_multitasking() and
- * _Thread_Stop_multitasking() are not covered by this extension.  The
- * executing thread may run with a minimal setup, for example with a freed task
- * stack.
+ * The context switches initiated through _Thread_Start_multitasking() are not
+ * covered by this extension.
+ *
+ * @param[in] executing The executing thread.
+ * @param[in] heir The heir thread.
  */
 typedef void( *User_extensions_thread_switch_extension )(
-  Thread_Control *,
-  Thread_Control *
+  Thread_Control *executing,
+  Thread_Control *heir
 );
 
 /**
  * @brief Task begin extension.
  *
- * It corresponds to _Thread_Handler().  The first parameter points to the
- * currently executing thread which begins now execution.
+ * It corresponds to _Thread_Handler().
  *
  * Thread dispatching is disabled.  The executing thread is not the holder of
  * the allocator mutex.
+ *
+ * @param[in] executing The executing thread.
  */
 typedef void( *User_extensions_thread_begin_extension )(
-  Thread_Control *
+  Thread_Control *executing
 );
 
 /**
  * @brief Task exitted extension.
  *
- * It corresponds to _Thread_Handler().  The first parameter points to the
- * currently executing thread which exitted before.
+ * It corresponds to _Thread_Handler() after a return of the entry function.
  *
  * Thread dispatching is disabled.  The state of the allocator mutex is
  * arbitrary.
+ *
+ * @param[in] executing The executing thread.
  */
 typedef void( *User_extensions_thread_exitted_extension )(
-  Thread_Control *
+  Thread_Control *executing
 );
 
 /**
  * @brief Fatal error extension.
  *
- * It corresponds to _Terminate() (used by the
- * rtems_fatal_error_occurred() directive).  The first parameter contains the
- * error source.  The second parameter indicates if it was an internal error.
- * The third parameter contains the error code.
+ * It corresponds to _Terminate() (used by the rtems_fatal() directive).
  *
  * This extension should not call any RTEMS directives.
+ *
+ * @param[in] source The fatal source indicating the subsystem the fatal
+ * condition originated in.
+ * @param[in] is_internal Indicates if the fatal condition was generated
+ * internally to the executive.
+ * @param[in] code The fatal error code.  This value must be interpreted with
+ * respect to the source.
  */
 typedef void( *User_extensions_fatal_extension )(
-  Internal_errors_Source,
-  bool,
-  Internal_errors_t
+  Internal_errors_Source source,
+  bool                   is_internal,
+  Internal_errors_t      code
+);
+
+/**
+ * @brief Task termination extension.
+ *
+ * This extension is invoked by _Thread_Life_action_handler() in case a
+ * termination request is recognized.
+ *
+ * It is invoked in the context of the terminated thread right before the
+ * thread dispatch to the heir thread.  The POSIX cleanup and key destructors
+ * execute in this context.
+ *
+ * Thread dispatching is enabled.  The thread is not the holder of the
+ * allocator mutex.  The thread life is protected.  Thread restart and delete
+ * requests issued by terminate extensions lead to recursion.
+ *
+ * @param[in] terminated The terminated thread.
+ */
+typedef void( *User_extensions_thread_terminate_extension )(
+  Thread_Control *terminated
 );
 
 /**
@@ -207,6 +238,7 @@ typedef struct {
   User_extensions_thread_begin_extension   thread_begin;
   User_extensions_thread_exitted_extension thread_exitted;
   User_extensions_fatal_extension          fatal;
+  User_extensions_thread_terminate_extension thread_terminate;
 }   User_extensions_Table;
 
 /**

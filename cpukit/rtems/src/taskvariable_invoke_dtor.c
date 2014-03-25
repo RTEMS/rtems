@@ -31,7 +31,7 @@ void _RTEMS_Tasks_Invoke_task_variable_dtor(
   void *value;
 
   dtor = tvp->dtor;
-  if (_Thread_Is_executing(the_thread)) {
+  if (_Thread_Get_executing() == the_thread) {
     value = *tvp->ptr;
     *tvp->ptr = tvp->gval;
   } else {

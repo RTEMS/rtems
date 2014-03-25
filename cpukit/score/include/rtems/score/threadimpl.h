@@ -11,6 +11,8 @@
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2014 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -194,6 +196,8 @@ bool _Thread_Restart(
   Thread_Entry_numeric_type  numeric_argument
 );
 
+bool _Thread_Set_life_protection( bool protect );
+
 void _Thread_Life_action_handler(
   Thread_Control  *executing,
   Thread_Action   *action,
@@ -202,16 +206,24 @@ void _Thread_Life_action_handler(
 );
 
 /**
- *  @brief Frees all memory associated with the specified thread.
+ * @brief Kills all zombie threads in the system.
  *
- *  This routine frees all memory associated with the specified
- *  thread and removes it from the local object table so no further
- *  operations on this thread are allowed.
+ * Threads change into the zombie state as the last step in the thread
+ * termination sequence right before a context switch to the heir thread is
+ * initiated.  Since the thread stack is still in use during this phase we have
+ * to postpone the thread stack reclamation until this point.  On SMP
+ * configurations we may have to busy wait for context switch completion here.
  */
-void _Thread_Close(
-  Objects_Information  *information,
-  Thread_Control       *the_thread
-);
+void _Thread_Kill_zombies( void );
+
+/**
+ * @brief Closes the thread.
+ *
+ * Closes the thread object and starts the thread termination sequence.  In
+ * case the executing thread is not terminated, then this function waits until
+ * the terminating thread reached the zombie state.
+ */
+void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing );
 
 /**
  *  @brief Removes any set states for @a the_thread.
@@ -708,6 +720,34 @@ RTEMS_INLINE_ROUTINE void _Thread_Add_post_switch_action(
     &action->Node
   );
   _Thread_Action_release_and_ISR_enable( cpu, level );
+}
+
+RTEMS_INLINE_ROUTINE bool _Thread_Is_life_restarting(
+  Thread_Life_state life_state
+)
+{
+  return ( life_state & THREAD_LIFE_RESTARTING ) != 0;
+}
+
+RTEMS_INLINE_ROUTINE bool _Thread_Is_life_terminating(
+  Thread_Life_state life_state
+)
+{
+  return ( life_state & THREAD_LIFE_TERMINATING ) != 0;
+}
+
+RTEMS_INLINE_ROUTINE bool _Thread_Is_life_protected(
+  Thread_Life_state life_state
+)
+{
+  return ( life_state & THREAD_LIFE_PROTECTED ) != 0;
+}
+
+RTEMS_INLINE_ROUTINE bool _Thread_Is_life_changing(
+  Thread_Life_state life_state
+)
+{
+  return ( life_state & THREAD_LIFE_RESTARTING_TERMINTING ) != 0;
 }
 
 #if !defined(__DYNAMIC_REENT__)

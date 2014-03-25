@@ -27,32 +27,15 @@ rtems_status_code rtems_task_delete(
   rtems_id id
 )
 {
-  Thread_Control          *the_thread;
-  Objects_Locations        location;
-  Objects_Information     *the_information;
+  Thread_Control    *the_thread;
+  Objects_Locations  location;
+  bool               previous_life_protection;
 
-#if defined( RTEMS_SMP )
-  if ( rtems_configuration_is_smp_enabled() ) {
-    return RTEMS_NOT_IMPLEMENTED;
-  }
-#endif
-
-  _RTEMS_Lock_allocator();
-
+  previous_life_protection = _Thread_Set_life_protection( true );
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      the_information = _Objects_Get_information_id( the_thread->Object.id );
-
-      #if defined(RTEMS_DEBUG)
-        if ( !the_information ) {
-          _Objects_Put( &the_thread->Object );
-          return RTEMS_INVALID_ID;
-          /* This should never happen if _Thread_Get() works right */
-        }
-      #endif
-
       #if defined(RTEMS_MULTIPROCESSING)
         if ( the_thread->is_global ) {
           _Objects_MP_Close( &_RTEMS_tasks_Information, the_thread->Object.id );
@@ -64,19 +47,16 @@ rtems_status_code rtems_task_delete(
         }
       #endif
 
-      _Thread_Close( the_information, the_thread );
+      _Thread_Close( the_thread, _Thread_Executing );
 
-      _RTEMS_tasks_Free( the_thread );
-
-      /* FIXME: Lock order reversal */
-      _RTEMS_Unlock_allocator();
       _Objects_Put( &the_thread->Object );
+      _Thread_Set_life_protection( previous_life_protection );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
-      _RTEMS_Unlock_allocator();
       _Thread_Dispatch();
+      _Thread_Set_life_protection( previous_life_protection );
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
 #endif
 
@@ -84,6 +64,7 @@ rtems_status_code rtems_task_delete(
       break;
   }
 
-  _RTEMS_Unlock_allocator();
+  _Thread_Set_life_protection( previous_life_protection );
+
   return RTEMS_INVALID_ID;
 }

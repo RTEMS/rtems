@@ -135,6 +135,8 @@ static const rtems_assoc_t rtems_monitor_state_assoc[] = {
     { "Wrwlk",  STATES_WAITING_FOR_RWLOCK, 0 },
     { "Wisig",  STATES_INTERRUPTIBLE_BY_SIGNAL, 0 },
     { "Wwkup",  STATES_WAITING_FOR_BSD_WAKEUP, 0 },
+    { "Wterm",  STATES_WAITING_FOR_TERMINATION, 0 },
+    { "ZOMBI",  STATES_ZOMBIE, 0 },
     { 0, 0, 0 },
 };
 

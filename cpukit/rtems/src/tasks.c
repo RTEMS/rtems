@@ -113,31 +113,35 @@ static void _RTEMS_tasks_Delete_extension(
   Thread_Control *deleted
 )
 {
+  /*
+   *  Free API specific memory
+   */
+
+  (void) _Workspace_Free( deleted->API_Extensions[ THREAD_API_RTEMS ] );
+}
+
+static void _RTEMS_tasks_Terminate_extension(
+  Thread_Control *executing
+)
+{
   rtems_task_variable_t *tvp, *next;
 
   /*
    *  Free per task variable memory
    */
 
-  tvp = deleted->task_variables;
-  deleted->task_variables = NULL;
+  tvp = executing->task_variables;
+  executing->task_variables = NULL;
   while (tvp) {
     next = (rtems_task_variable_t *)tvp->next;
-    _RTEMS_Tasks_Invoke_task_variable_dtor( deleted, tvp );
+    _RTEMS_Tasks_Invoke_task_variable_dtor( executing, tvp );
     tvp = next;
   }
 
   /*
    *  Run all the key destructors
    */
-  _POSIX_Keys_Run_destructors( deleted );
-
-  /*
-   *  Free API specific memory
-   */
-
-  (void) _Workspace_Free( deleted->API_Extensions[ THREAD_API_RTEMS ] );
-  deleted->API_Extensions[ THREAD_API_RTEMS ] = NULL;
+  _POSIX_Keys_Run_destructors( executing );
 }
 
 /*
@@ -189,7 +193,8 @@ User_extensions_Control _RTEMS_tasks_User_extensions = {
     _RTEMS_tasks_Switch_extension,            /* switch */
     NULL,                                     /* begin */
     NULL,                                     /* exitted */
-    NULL                                      /* fatal */
+    NULL,                                     /* fatal */
+    _RTEMS_tasks_Terminate_extension          /* terminate */
   }
 };
 

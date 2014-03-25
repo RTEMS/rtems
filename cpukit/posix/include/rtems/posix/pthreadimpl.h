@@ -23,7 +23,7 @@
 #include <rtems/posix/config.h>
 #include <rtems/posix/threadsup.h>
 #include <rtems/score/objectimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/assert.h>
 
 #ifdef __cplusplus
@@ -217,6 +217,8 @@ int rtems_pthread_attribute_compare(
 
 RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate( void )
 {
+  _Thread_Kill_zombies();
+
   return (Thread_Control *) _Objects_Allocate( &_POSIX_Threads_Information );
 }
 

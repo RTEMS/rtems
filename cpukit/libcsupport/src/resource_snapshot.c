@@ -22,8 +22,9 @@
 
 #include <rtems/libio_.h>
 #include <rtems/malloc.h>
-#include <rtems/score/wkspace.h>
 #include <rtems/score/protectedheap.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/wkspace.h>
 
 #include <rtems/extensionimpl.h>
 
@@ -115,6 +116,8 @@ void rtems_resource_snapshot_take(rtems_resource_snapshot *snapshot)
   size_t i;
 
   free_all_delayed_blocks();
+
+  _Thread_Kill_zombies();
 
   _Protected_heap_Get_information(RTEMS_Malloc_Heap, &snapshot->heap_info);
 

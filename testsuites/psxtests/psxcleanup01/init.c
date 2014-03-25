@@ -96,6 +96,15 @@ static void test_restart_with_cleanup(void)
   wait_for_restart_task();
 
   rtems_test_assert(restart_cleanup_arg == 1);
+
+  wait_for_restart_task();
+
+  sc = rtems_task_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  wait_for_restart_task();
+
+  rtems_test_assert(restart_cleanup_arg == 2);
 }
 
 static void cleaner(void *arg)

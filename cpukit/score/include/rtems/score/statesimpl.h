@@ -78,6 +78,10 @@ extern "C" {
 #define STATES_WAITING_FOR_SYSTEM_EVENT        0x40000
 /** This macro corresponds to a task waiting for BSD wakeup. */
 #define STATES_WAITING_FOR_BSD_WAKEUP          0x80000
+/** This macro corresponds to a task waiting for a task termination. */
+#define STATES_WAITING_FOR_TERMINATION         0x100000
+/** This macro corresponds to a task being a zombie. */
+#define STATES_ZOMBIE                          0x200000
 
 /** This macro corresponds to a task which is in an interruptible
  *  blocking state.

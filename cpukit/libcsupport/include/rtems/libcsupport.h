@@ -90,6 +90,10 @@ void newlib_delete_hook(
   rtems_tcb *deleted_task
 );
 
+void newlib_terminate_hook(
+  rtems_tcb *current_task
+);
+
 #define RTEMS_NEWLIB_EXTENSION \
 { \
   newlib_create_hook,     /* rtems_task_create  */ \
@@ -99,7 +103,8 @@ void newlib_delete_hook(
   0,                      /* task_switch  */ \
   __RTEMS_NEWLIB_BEGIN,   /* task_begin   */ \
   0,                      /* task_exitted */ \
-  0                       /* fatal        */ \
+  0,                      /* fatal        */ \
+  newlib_terminate_hook   /* thread terminate */ \
 }
 
 typedef struct {

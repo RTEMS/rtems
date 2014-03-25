@@ -244,6 +244,8 @@ bool _Thread_Initialize(
     &the_thread->Life.Action,
     _Thread_Life_action_handler
   );
+  the_thread->Life.state = THREAD_LIFE_NORMAL;
+  the_thread->Life.terminator = NULL;
 
   /*
    *  Open the object

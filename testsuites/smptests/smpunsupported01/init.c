@@ -28,9 +28,6 @@ static void test(void)
 
   rtems_test_assert(rtems_configuration_is_smp_enabled());
 
-  sc = rtems_task_delete(RTEMS_SELF);
-  rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
-
   sc = rtems_task_variable_add(RTEMS_SELF, NULL, NULL);
   rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
 

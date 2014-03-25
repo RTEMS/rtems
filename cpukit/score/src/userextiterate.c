@@ -124,6 +124,20 @@ void _User_extensions_Fatal_visitor(
   }
 }
 
+void _User_extensions_Thread_terminate_visitor(
+  Thread_Control              *executing,
+  void                        *arg,
+  const User_extensions_Table *callouts
+)
+{
+  User_extensions_thread_terminate_extension callout =
+    callouts->thread_terminate;
+
+  if ( callout != NULL ) {
+    (*callout)( executing );
+  }
+}
+
 void _User_extensions_Iterate(
   void                    *arg,
   User_extensions_Visitor  visitor

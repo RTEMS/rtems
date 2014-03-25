@@ -19,6 +19,7 @@
 
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/threadimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -84,6 +85,8 @@ void _RTEMS_Tasks_Invoke_task_variable_dtor(
  */
 RTEMS_INLINE_ROUTINE Thread_Control *_RTEMS_tasks_Allocate( void )
 {
+  _Thread_Kill_zombies();
+
   return (Thread_Control *) _Objects_Allocate( &_RTEMS_tasks_Information );
 }
 
