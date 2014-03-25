@@ -60,7 +60,10 @@ static void _Thread_Reset( Thread_Control *the_thread )
   }
 }
 
-static void _Thread_Request_life_change( Thread_Control *the_thread )
+static void _Thread_Request_life_change(
+  Thread_Control *the_thread,
+  Thread_Control *executing
+)
 {
   _Thread_Set_transient( the_thread );
 
@@ -75,6 +78,7 @@ static void _Thread_Request_life_change( Thread_Control *the_thread )
 
 bool _Thread_Restart(
   Thread_Control            *the_thread,
+  Thread_Control            *executing,
   void                      *pointer_argument,
   Thread_Entry_numeric_type  numeric_argument
 )
@@ -83,7 +87,10 @@ bool _Thread_Restart(
     the_thread->Start.pointer_argument = pointer_argument;
     the_thread->Start.numeric_argument = numeric_argument;
 
-    _Thread_Request_life_change( the_thread );
+    _Thread_Request_life_change(
+      the_thread,
+      executing
+    );
 
     return true;
   }

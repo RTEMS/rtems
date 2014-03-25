@@ -33,7 +33,7 @@ rtems_status_code rtems_task_restart(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      if ( _Thread_Restart( the_thread, NULL, argument ) ) {
+      if ( _Thread_Restart( the_thread, _Thread_Executing, NULL, argument ) ) {
         _Objects_Put( &the_thread->Object );
         return RTEMS_SUCCESSFUL;
       }

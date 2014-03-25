@@ -187,17 +187,9 @@ bool _Thread_Start(
   Per_CPU_Control           *processor
 );
 
-/**
- *  @brief Restarts the specified thread.
- *
- *  This support routine restarts the specified task in a way that the
- *  next time this thread executes, it will begin execution at its
- *  original starting point.
- *
- *  TODO:  multiple task arg profiles
- */
 bool _Thread_Restart(
   Thread_Control            *the_thread,
+  Thread_Control            *executing,
   void                      *pointer_argument,
   Thread_Entry_numeric_type  numeric_argument
 );
