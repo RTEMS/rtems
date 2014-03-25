@@ -716,10 +716,10 @@ int main(
 
     printf ("Testing sync()...... ");
     sync();
-  }
-  else
-    TEST_BEGIN();
+    printf ("Done.\n");
 
-  TEST_END();
+    TEST_END();
+  }
+
   rtems_test_exit(0);
 }

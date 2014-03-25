@@ -57,7 +57,6 @@ void test_tarfs_load(void)
   test_cat( "/home/test_file", 0, 0 );
   
   /******************/
-  TEST_BEGIN();
 #if 0
   printf( "========= /symlink =========\n" );
   test_cat( "/symlink", 0, 0 );

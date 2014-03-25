@@ -29,7 +29,7 @@
 
 #include <stdlib.h>
 
-const char rtems_test_name[] = "HELLO WORLD";
+const char rtems_test_name[] = "IOSTREAM";
 
 rtems_task Init(
   rtems_task_argument ignored
@@ -38,7 +38,8 @@ rtems_task Init(
 #if BSP_SMALL_MEMORY
   printf ("NO STDC++. MEMORY TOO SMALL");
 #else
-  std::cout << "\n\n*** " << rtems_test_name << " TEST ***" << std::endl;
+  std::cout << std::endl << std::endl
+    << "*** BEGIN OF " << rtems_test_name << " TEST ***" << std::endl;
   std::cout << "Hello World" << std::endl;
   std::cout << "*** END OF " << rtems_test_name << " TEST ***" << std::endl;
 #endif
