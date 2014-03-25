@@ -12,7 +12,7 @@
 #endif
 
 #if defined(USE_USER_SIGNALS_PROCESS)
-  #define TEST_NAME                "03"
+  #define TEST_NAME                "PSXSIGNAL 3"
   #define TEST_STRING              "User Signals to Process"
   #define SIGNAL_ONE               SIGUSR1
   #define SIGNAL_TWO               SIGUSR2
@@ -20,7 +20,7 @@
   #define TO_PROCESS
 
 #elif defined(USE_REAL_TIME_SIGNALS_PROCESS)
-  #define TEST_NAME                "04"
+  #define TEST_NAME                "PSXSIGNAL 4"
   #define TEST_STRING              "Real-Time Signals to Process"
   #define SIGNAL_ONE               SIGRTMIN
   #define SIGNAL_TWO               SIGRTMAX
@@ -28,7 +28,7 @@
   #define TO_PROCESS
 
 #elif defined(USE_USER_SIGNALS_THREAD)
-  #define TEST_NAME                "05"
+  #define TEST_NAME                "PSXSIGNAL 5"
   #define TEST_STRING              "User Signals to Thread"
   #define SIGNAL_ONE               SIGUSR1
   #define SIGNAL_TWO               SIGUSR2
@@ -36,7 +36,7 @@
   #define TO_THREAD
 
 #elif defined(USE_REAL_TIME_SIGNALS_THREAD)
-  #define TEST_NAME                "05"
+  #define TEST_NAME                "PSXSIGNAL 5"
   #define TEST_STRING              "Real-Time Signals to Thread"
   #define SIGNAL_ONE               SIGRTMIN
   #define SIGNAL_TWO               SIGRTMAX
@@ -52,6 +52,8 @@
 #include <errno.h>
 #include <pthread.h>
 #include <sched.h>
+
+const char rtems_test_name[] = TEST_NAME;
 
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
@@ -157,7 +159,7 @@ void *POSIX_Init(
   bool                falseArg = false;
   struct timespec     delay_request;
 
-  puts( "\n\n*** POSIX TEST SIGNAL " TEST_NAME " ***" );
+  TEST_BEGIN();
   puts( "Init - Variation is: " TEST_STRING );
 
   Signal_occurred = false;
@@ -208,7 +210,7 @@ void *POSIX_Init(
   /* we are just sigwait'ing the signal, not delivering it */
   rtems_test_assert( Signal_occurred == true );
 
-  puts( "*** END OF POSIX TEST SIGNAL " TEST_NAME " ***" );
+  TEST_END();
   rtems_test_exit(0);
 
   return NULL; /* just so the compiler thinks we returned something */
@@ -218,6 +220,8 @@ void *POSIX_Init(
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS        3
 #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 1

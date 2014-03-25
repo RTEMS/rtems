@@ -14,6 +14,8 @@
 #include <pmacros.h>
 #include <errno.h>
 
+const char rtems_test_name[] = "PSXCANCEL 1";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 rtems_timer_service_routine Cancel_duringISR_TSR(
@@ -109,7 +111,7 @@ void *POSIX_Init(
 {
   rtems_status_code status;
 
-  puts( "\n\n*** POSIX TEST CANCEL 01 ***" );
+  TEST_BEGIN();
 
   status = rtems_timer_create(
     rtems_build_name( 'T', 'M', '1', ' ' ),
@@ -121,7 +123,7 @@ void *POSIX_Init(
   doit( SetState_duringISR_TSR, "pthread_setcancelstate" );
   doit( SetType_duringISR_TSR, "pthread_setcanceltype" );
 
-  puts( "*** END OF POSIX TEST CANCEL 01 ***" );
+  TEST_END();
   rtems_test_exit(0);
   return NULL; /* just so the compiler thinks we returned something */
 }
@@ -132,6 +134,8 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TIMERS        1
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS        1
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE

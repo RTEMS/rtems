@@ -39,6 +39,8 @@
 
 #include <pmacros.h>
 
+const char rtems_test_name[] = "PSX 13";
+
 int InitFiles(void);
 int DeviceLSeekTest(void);
 int DupTest(void);
@@ -647,7 +649,7 @@ int main(
 )
 #endif
 {
-  puts( "*** POSIX TEST 13 ***" );
+  TEST_BEGIN();
 
   if (InitFiles() == TRUE) {
     printf ("\nFiles initialized successfully.\n");
@@ -716,8 +718,8 @@ int main(
     sync();
   }
   else
-    printf ("\n\nError opening files for write!!!!\n");
+    TEST_BEGIN();
 
-  printf( "\n\n*** END OF TEST PSX13 ***\n" );
+  TEST_END();
   rtems_test_exit(0);
 }

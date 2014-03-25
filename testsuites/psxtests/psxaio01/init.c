@@ -22,6 +22,8 @@
 #include <sched.h>
 #include <fcntl.h>
 
+const char rtems_test_name[] = "PSXAIO 1";
+
 #define BUFSIZE 512
 #define WRONG_FD 404
 
@@ -67,7 +69,7 @@ POSIX_Init (void *argument)
   fd = open ("/tmp/aio_fildes", O_RDWR|O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO);
   rtems_test_assert ( fd != -1);
 
-  puts ("\n\n*** POSIX AIO TEST 01 ***");
+  TEST_BEGIN();
 
   puts (" Init: EBADF TESTS ");
 
@@ -191,7 +193,7 @@ POSIX_Init (void *argument)
 
   free_aiocb (aiocbp);
 
-  puts ("*** END OF POSIX AIO TEST 01 ***");
+  TEST_END();
 
   close (fd);
   rtems_test_exit (0);

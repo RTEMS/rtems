@@ -18,6 +18,8 @@
 #include <errno.h>
 #include "pritime.h"
 
+const char rtems_test_name[] = "PSX 9";
+
 void print_schedparam(
   char               *prefix,
   struct sched_param *schedparam
@@ -61,7 +63,7 @@ void *POSIX_Init(
   time_t               start;
   time_t               now;
 
-  puts( "\n\n*** POSIX TEST 9 ***" );
+  TEST_BEGIN();
 
   /* set the time of day, and print our buffer in multiple ways */
 
@@ -225,7 +227,7 @@ void *POSIX_Init(
   sprintf( buffer, " - new priority = %d", priority );
   print_current_time( "Init: ", buffer );
 
-  puts( "*** END OF POSIX TEST 9 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */

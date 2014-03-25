@@ -15,6 +15,8 @@
 #include <intrcritical.h>
 #include <time.h>
 
+const char rtems_test_name[] = "PSXINTRCRITICAL 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument ignored);
 rtems_timer_service_routine test_release_from_isr(rtems_id timer, void *arg);
@@ -43,7 +45,7 @@ rtems_task Init(
   int    sc;
   int    resets;
 
-  puts( "\n\n*** TEST POSIX INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
+  TEST_BEGIN();
 
   puts( "Init - Trying to generate timer fire from ISR while firing" );
   puts( "Init - Variation is: " TEST_STRING );
@@ -79,7 +81,7 @@ rtems_task Init(
 
   }
 
-  puts( "*** END OF TEST POSIX INTERRUPT CRITICAL SECTION " TEST_NAME " ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -92,6 +94,8 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TIMERS         1
 #define CONFIGURE_MAXIMUM_POSIX_TIMERS   1
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

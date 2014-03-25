@@ -22,6 +22,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "PSXBARRIER 1";
+
 #define NUMBER_THREADS 2
 pthread_t ThreadIds[NUMBER_THREADS];
 pthread_barrier_t Barrier;
@@ -62,7 +64,7 @@ int main(
   int                   p;
   int                   i;
 
-  puts( "\n\n*** POSIX BARRIER TEST 01 ***" );
+  TEST_BEGIN();
 
   /*************** NULL POINTER CHECKS *****************/
   puts( "pthread_barrierattr_init( NULL ) -- EINVAL" );
@@ -235,6 +237,6 @@ int main(
   }
 
   /*************** END OF TEST *****************/
-  puts( "*** END OF POSIX BARRIER TEST 01 ***" );
+  TEST_END();
   exit(0);
 }

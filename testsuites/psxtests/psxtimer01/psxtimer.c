@@ -36,6 +36,8 @@
 #include <rtems/score/timespec.h>
 #include "pritime.h"
 
+const char rtems_test_name[] = "PSXTIMER 1";
+
 void StopTimer(
   timer_t  timer_id,
   struct   itimerspec *timerdata
@@ -341,7 +343,7 @@ void *POSIX_Init (
    struct sched_param sch_param;     /* schedule parameters */
    struct periodic_params params_a, params_b, params_c, params_c1;
 
-   puts( "\n\n*** POSIX Timers Test 01 ***" );
+   TEST_BEGIN();
 
    data.updated = FALSE;
 
@@ -455,6 +457,6 @@ void *POSIX_Init (
 
    sleep(5);
 
-   puts( "*** END OF POSIX Timers Test 01 ***" );
+   TEST_END();
    rtems_test_exit (0);
  }

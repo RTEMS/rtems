@@ -17,6 +17,8 @@
 #include <pwd.h>
 #include <grp.h>
 
+const char rtems_test_name[] = "PSXPASSWD 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument ignored);
 void print_passwd(struct passwd *pw);
@@ -67,7 +69,7 @@ rtems_task Init(
   struct passwd *pw;
   struct group  *gr;
 
-  puts( "*** PASSWORD/GROUP TEST - 01 ***" );
+  TEST_BEGIN();
 
   /* getpwent */
   puts( "Init - getpwent() -- OK, result should be NULL" );
@@ -195,7 +197,7 @@ rtems_task Init(
   puts( "Init - endgrent() -- OK" );
   endgrent();
 
-  puts( "*** END OF PASSWORD/GROUP TEST - 01 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -208,6 +210,8 @@ rtems_task Init(
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 6
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

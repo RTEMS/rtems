@@ -19,6 +19,8 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/score/stackimpl.h>
 
+const char rtems_test_name[] = "PSXSTACK 1";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void *Test_Thread(void *argument);
@@ -57,7 +59,7 @@ void *POSIX_Init(
   pthread_attr_t      attr;
   struct timespec     delay_request;
 
-  puts( "\n\n*** POSIX STACK ATTRIBUTE TEST 01 ***" );
+  TEST_BEGIN();
 
   puts( "Init - Allocate stack from heap" );
   Stack_Low = malloc(PTHREAD_MINIMUM_STACK_SIZE);
@@ -84,7 +86,7 @@ void *POSIX_Init(
   sc = nanosleep( &delay_request, NULL );
   rtems_test_assert( !sc );
 
-  puts( "*** END OF POSIX STACK ATTRIBUTE TEST 01 ***" );
+  TEST_END();
   rtems_test_exit(0);
 
   return NULL; /* just so the compiler thinks we returned something */
@@ -94,6 +96,8 @@ void *POSIX_Init(
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS        2
 

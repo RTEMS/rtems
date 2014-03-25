@@ -23,6 +23,8 @@
 #include <signal.h>   /* signal facilities */
 #include "test_support.h"
 
+const char rtems_test_name[] = "PSXMSGQ 2";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
@@ -35,7 +37,7 @@ void *POSIX_Init(
   struct mq_attr         attr;
   mqd_t                  mq;
 
-  puts( "\n\n*** POSIX MESSAGE QUEUE 02 TEST ***" );
+  TEST_BEGIN();
 
 
   /* set the time of day, and print our buffer in multiple ways */
@@ -55,7 +57,7 @@ void *POSIX_Init(
   mq = mq_open( Get_Longest_Name(), O_CREAT, 0x777, &attr );
   fatal_posix_service_status_errno(mq, ENOMEM, "no workspace available");
 
-  puts( "*** END OF POSIX MESSAGE QUEUE 02 TEST ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */

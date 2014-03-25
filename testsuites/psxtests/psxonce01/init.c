@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = "PSXONCE 1";
+
 static pthread_once_t nesting_once = PTHREAD_ONCE_INIT;
 
 static void Test_init_routine_nesting( void )
@@ -38,7 +40,7 @@ rtems_task Init(rtems_task_argument argument)
   int status;
   pthread_once_t once = PTHREAD_ONCE_INIT;
 
-  puts( "\n\n*** TEST POSIX ONCE 01 ***" );
+  TEST_BEGIN();
 
   puts( "Init: pthread_once - EINVAL (NULL once_control)" );
   status = pthread_once( NULL, Test_init_routine );
@@ -64,6 +66,6 @@ rtems_task Init(rtems_task_argument argument)
   status = pthread_once( &nesting_once, Test_init_routine_nesting );
   rtems_test_assert( !status );
 
-  puts( "*** END OF TEST POSIX ONCE 01 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

@@ -15,6 +15,8 @@
 #include <time.h>
 #include <errno.h>
 
+const char rtems_test_name[] = "PSXUSLEEP";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -27,7 +29,7 @@ rtems_task Init(
   useconds_t      remaining;
   int             sc;
 
-  puts( "\n\n*** POSIX USLEEP TEST ***" );
+  TEST_BEGIN();
 
   tm_build_time( &tm, TM_FRIDAY, TM_MAY, 24, 96, 11, 5, 0 );
 
@@ -57,7 +59,7 @@ rtems_task Init(
 
   printf( ctime( &tv.tv_sec ) );
 
-  puts( "*** END OF POSIX USLEEP TEST ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -65,6 +67,8 @@ rtems_task Init(
 /* configuration information */
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS             1

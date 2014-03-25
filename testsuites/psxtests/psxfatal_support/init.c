@@ -14,13 +14,15 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+const char rtems_test_name[] = FATAL_ERROR_TEST_NAME;
+
 static void print_test_begin_message(void)
 {
   static bool done = false;
 
   if (!done) {
     done = true;
-    printk( "\n\n\n*** TEST POSIX FATAL " FATAL_ERROR_TEST_NAME " ***\n" );
+    rtems_test_begink();
   }
 }
 
@@ -93,7 +95,7 @@ void Fatal_extension(
       && is_internal == FATAL_ERROR_EXPECTED_IS_INTERNAL
       && error == FATAL_ERROR_EXPECTED_ERROR
   ) {
-    printk( "*** END OF TEST POSIX FATAL " FATAL_ERROR_TEST_NAME " ***\n" );
+    rtems_test_endk();
   }
 }
 

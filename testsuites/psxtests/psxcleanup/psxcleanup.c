@@ -23,6 +23,8 @@
 #include <stdio.h>    /* console facilities */
 #include "tmacros.h"
 
+const char rtems_test_name[] = "PSXCLEANUP";
+
 #define NUMBER_THREADS 2
 pthread_t ThreadIds[NUMBER_THREADS];
 
@@ -230,7 +232,7 @@ void *POSIX_Init(
   int            status;
   lock_t         l;
 
-  puts( "\n\n*** POSIX CLEANUP TEST ***" );
+  TEST_BEGIN();
 
   /*************** INITIALIZE  ***************/
   initialize_lock_t(&l);
@@ -251,7 +253,7 @@ void *POSIX_Init(
   sleep(1);
 
   /*************** END OF TEST *****************/
-  puts( "*** END OF POSIX CLEANUP TEST ***\n" );
+  TEST_END();
   rtems_test_exit(0);
 }
 

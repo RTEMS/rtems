@@ -16,6 +16,8 @@
 #include <signal.h>
 #include <errno.h>
 
+const char rtems_test_name[] = "PSX 4";
+
 volatile int Signal_occurred;
 volatile int Signal_count;
 void Signal_handler( int signo );
@@ -71,7 +73,7 @@ void *POSIX_Init(
   struct timespec   timeout;
   siginfo_t         info;
 
-  puts( "\n\n*** POSIX TEST 4 ***" );
+  TEST_BEGIN();
 
   /* set the time of day, and print our buffer in multiple ways */
 
@@ -579,7 +581,7 @@ void *POSIX_Init(
 
   /* exit this thread */
 
-  puts( "*** END OF POSIX TEST 4 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */

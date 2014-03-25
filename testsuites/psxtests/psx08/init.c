@@ -15,6 +15,8 @@
 #include "system.h"
 #include <errno.h>
 
+const char rtems_test_name[] = "PSX 8";
+
 void *POSIX_Init(
   void *argument
 )
@@ -22,7 +24,7 @@ void *POSIX_Init(
   int    status;
   void  *return_pointer;
 
-  puts( "\n\n*** POSIX TEST 8 ***" );
+  TEST_BEGIN();
 
   /* set the time of day, and print our buffer in multiple ways */
 

@@ -16,6 +16,8 @@
 #include <sys/times.h>
 #include <errno.h>
 
+const char rtems_test_name[] = "PSXTIMES 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 clock_t _times_r(struct _reent *ptr, struct tms  *ptms);
@@ -34,7 +36,7 @@ rtems_task Init(
   struct tms end_tm;
   int        interval = 5;
 
-  puts( "\n\n*** TEST TIMES 01 ***" );
+  TEST_BEGIN();
 
   puts( "times( NULL ) -- EFAULT" );
   sc = times( NULL );
@@ -69,7 +71,7 @@ rtems_task Init(
   rtems_test_assert( end_tm.tms_cutime == 0 );
   rtems_test_assert( end_tm.tms_cstime == 0 );
   
-  puts( "*** END OF TEST TIMES 01 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -80,6 +82,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

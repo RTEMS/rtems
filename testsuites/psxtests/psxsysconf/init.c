@@ -19,13 +19,15 @@
 #include <stdint.h>
 #include <errno.h>
 
+const char rtems_test_name[] = "PSXSYSCONF";
+
 void *POSIX_Init(
   void *argument
 )
 {
   long  sc;
 
-  puts( "\n\n*** POSIX TEST -- SYSCONF ***" );
+  TEST_BEGIN();
 
   puts( "sysconf -- bad configuration parameter - negative" );
   sc = sysconf( -1 );
@@ -79,7 +81,7 @@ void *POSIX_Init(
    rtems_test_exit(0);
 #endif
 
-  puts( "*** END OF POSIX TEST SYSCONF ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */

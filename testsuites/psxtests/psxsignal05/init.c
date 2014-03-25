@@ -11,7 +11,7 @@
 #include "config.h"
 #endif
 
-#define TEST_NAME                "05"
+#define TEST_NAME                "PSXSIGNAL 5"
 #define TEST_STRING              "User Signals"
 #define SIGNAL_ONE               SIGUSR1
 #define SIGNAL_TWO               SIGUSR2
@@ -21,6 +21,8 @@
 #include <errno.h>
 #include <errno.h>
 #include <rtems/posix/psignalimpl.h>
+
+const char rtems_test_name[] = TEST_NAME;
 
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
@@ -58,7 +60,7 @@ void *POSIX_Init(
   siginfo_t           info;
   bool                bc;
 
-  puts( "\n\n*** POSIX TEST SIGNAL " TEST_NAME " ***" );
+  TEST_BEGIN();
 
   act.sa_handler = NULL;
   act.sa_sigaction = Signal_handler;
@@ -84,7 +86,7 @@ void *POSIX_Init(
   );
   rtems_test_assert( bc );
 
-  puts( "*** END OF POSIX TEST SIGNAL " TEST_NAME " ***" );
+  TEST_END();
   rtems_test_exit(0);
 
   return NULL; /* just so the compiler thinks we returned something */
@@ -94,6 +96,8 @@ void *POSIX_Init(
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS        1
 

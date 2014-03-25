@@ -29,6 +29,8 @@
 #include <tmacros.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "PSXFILE 2";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void do_with_fd(int fd, const char *description);
@@ -111,7 +113,7 @@ rtems_task Init(
   int   status;
   int   fd;
 
-  puts( "\n\n*** PSXFILE02 TEST  ***" );
+  TEST_BEGIN();
 
   /*
    *  Simple open case where the file is created.
@@ -133,7 +135,7 @@ rtems_task Init(
   puts("");
   do_with_fd( 1000, "a too large file descriptor" );
 
-  puts( "*** END OF PSXFILE02 TEST  ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -145,6 +147,8 @@ rtems_task Init(
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 #define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

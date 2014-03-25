@@ -19,6 +19,8 @@
 #include <limits.h>
 #include <sys/types.h>
 
+const char rtems_test_name[] = "PSXID 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void test_gid(void);
@@ -139,7 +141,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** TEST ID 01 ***" );
+  TEST_BEGIN();
 
   test_gid();
   puts( "" );
@@ -152,7 +154,7 @@ rtems_task Init(
 
   test_getlogin();
 
-  puts( "*** END OF TEST ID 01 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }
@@ -165,6 +167,8 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS                  1
 /* so we can write /etc/passwd and /etc/group */
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

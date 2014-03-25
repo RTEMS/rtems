@@ -23,6 +23,8 @@
 #include <fcntl.h>
 #include <rtems/chain.h>
 
+const char rtems_test_name[] = "PSXAIO 2";
+
 /* forward declarations to avoid warnings */
 struct aiocb *create_aiocb(int fd);
 void free_aiocb(struct aiocb *aiocbp);
@@ -73,7 +75,7 @@ POSIX_Init (void *argument)
   status = mkdir ("/tmp", S_IRWXU);
   rtems_test_assert (!status);
   
-  puts ("\n\n*** POSIX AIO TEST 02 ***");
+  TEST_BEGIN();
   
   puts ("Init: Open files");
 
@@ -171,7 +173,7 @@ POSIX_Init (void *argument)
   status = aio_cancel (fd[5], aiocbp[6]);
   rtems_test_assert (status == AIO_ALLDONE);
 
-  puts ("*** END OF POSIX AIO TEST 02 ***");
+  TEST_END();
 
   for (i = 0; i < MAX; i++)
     {

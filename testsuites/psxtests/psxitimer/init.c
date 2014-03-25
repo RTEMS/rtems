@@ -15,6 +15,8 @@
 #include <sys/time.h>
 #include <errno.h>
 
+const char rtems_test_name[] = "PSXITIMER";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
@@ -26,7 +28,7 @@ void *POSIX_Init(
   struct itimerval itimer;
   struct itimerval otimer;
 
-  puts( "\n\n*** POSIX TEST ITIMER ***" );
+  TEST_BEGIN();
 
   /* test getitimer stub */
   puts( "getitimer -- bad which - EINVAL " );
@@ -74,7 +76,7 @@ void *POSIX_Init(
   status = setitimer( ITIMER_PROF, &itimer, &otimer );
   rtems_test_assert( status == -1 && errno == ENOSYS );
 
-  puts( "*** END OF POSIX TEST ITIMER ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -82,6 +84,8 @@ void *POSIX_Init(
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS     1
 

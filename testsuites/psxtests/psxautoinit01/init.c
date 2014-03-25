@@ -15,6 +15,8 @@
 #include <pthread.h>
 #include <errno.h>
 
+const char rtems_test_name[] = "PSXAUTOINIT 1";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
@@ -27,7 +29,7 @@ void *POSIX_Init(
   pthread_mutex_t mutex2;
   int             prioceiling;
 
-  puts( "\n\n*** POSIX TEST -- AUTOMATIC INITIALIZAITON 01 ***" );
+  TEST_BEGIN();
 
   /* path using mutex get with interrupts disabled */
   mutex1 = PTHREAD_MUTEX_INITIALIZER;
@@ -63,7 +65,7 @@ void *POSIX_Init(
   sc = pthread_mutex_destroy( &mutex1 );
   fatal_posix_service_status( sc, 0, "mutex destroy OK" );
 
-  puts( "*** END OF POSIX TEST AUTOMATIC INITIALIZATION 01 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
@@ -71,6 +73,8 @@ void *POSIX_Init(
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 1

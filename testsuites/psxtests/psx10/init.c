@@ -15,6 +15,7 @@
 #include "system.h"
 #include <sched.h>
 
+const char rtems_test_name[] = "PSX 10";
 
 void *POSIX_Init(
   void *argument
@@ -27,7 +28,7 @@ void *POSIX_Init(
   pthread_cond_t      cond;
   struct timespec     timeout;
 
-  puts( "\n\n*** POSIX TEST 10 ***" );
+  TEST_BEGIN();
 
   puts( "Init: pthread_condattr_init" );
   status = pthread_condattr_init( &attr );
@@ -311,7 +312,7 @@ void *POSIX_Init(
   puts( "Init: sleep - switch to Task_3" );
   sleep( 1 );
 
-  puts( "*** END OF POSIX TEST 10 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */

@@ -23,6 +23,8 @@
 #include <rtems/malloc.h>
 #include <rtems/libcsupport.h>
 
+const char rtems_test_name[] = "PSXIMFS 2";
+
 #if !HAVE_DECL_SETEUID
 extern int seteuid(uid_t euid);
 #endif
@@ -54,7 +56,7 @@ rtems_task Init(
   int i;
   struct stat stat_buf;
 
-  puts( "\n\n*** TEST IMFS 02 ***" );
+  TEST_BEGIN();
 
   puts( "Creating directory /dir00" );
   status = mkdir( "/dir00", S_IRWXU );
@@ -200,7 +202,7 @@ rtems_task Init(
   status = chown( "/fifo", 0, 0 );
   rtems_test_assert( status == 0 );
 
-  puts( "*** END OF TEST IMFS 02 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -212,6 +214,8 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS                  1
 #define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK   15
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

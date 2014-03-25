@@ -22,6 +22,8 @@
 
 #include "test_support.h"
 
+const char rtems_test_name[] = "PSXMSGQ 4";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
@@ -38,7 +40,7 @@ void *POSIX_Init(
   bool                    sb;
   const char             *name;
 
-  puts( "\n\n*** POSIX MESSAGE QUEUE TEST 4 ***" );
+  TEST_BEGIN();
 
   attr.mq_maxmsg = 1;
   attr.mq_msgsize = sizeof(int);
@@ -114,7 +116,7 @@ void *POSIX_Init(
       perror( "mq_close failed" );
     rtems_test_assert( sc == 0 );
 
-  puts( "*** END OF POSIX MESSAGE QUEUE TEST 4 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
@@ -130,6 +132,8 @@ void *POSIX_Init(
 /* account for message buffers and string names */
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
     (2 * CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(1, sizeof(int)))
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS                   1
 #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES            1

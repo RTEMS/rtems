@@ -16,6 +16,8 @@
 #include <errno.h>
 #include "tmacros.h"
 
+const char rtems_test_name[] = "PSXKEY 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void Key_destructor(void *key_data);
@@ -28,7 +30,7 @@ rtems_task Init(rtems_task_argument argument)
 {
   int    status;
 
-  puts( "\n\n*** POSIX KEY 01 TEST ***" );
+  TEST_BEGIN();
 
   /* get id of this thread */
 
@@ -41,6 +43,6 @@ rtems_task Init(rtems_task_argument argument)
   status = pthread_key_create( &Key_id[0], Key_destructor );
   fatal_directive_check_status_only( status, 0, "OK" );
 
-  puts( "*** END OF POSIX KEY 01 TEST ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }

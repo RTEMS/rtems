@@ -18,6 +18,8 @@
 #include <pthread.h>
 #include <rtems/posix/pthreadimpl.h>
 
+const char rtems_test_name[] = "PSXGETATTRNP 1";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
@@ -87,7 +89,7 @@ void *POSIX_Init(
   size_t              guardsize;
   struct sched_param  param;
 
-  puts( "\n\n*** POSIX ATTRIBUTE TEST 1 ***" );
+  TEST_BEGIN();
 
   /* Initialize thread id */
   Init_id = pthread_self();
@@ -159,7 +161,7 @@ void *POSIX_Init(
   rtems_test_assert( !sc );
 #endif
 
-  puts( "*** END OF POSIX ATTRIBUTE TEST 1 ***" );
+  TEST_END();
   rtems_test_exit(0);
   return NULL; /* just so the compiler thinks we returned something */
 }
@@ -168,9 +170,9 @@ void *POSIX_Init(
   void *ignored
 )
 {
-  puts( "\n\n*** POSIX ATTRIBUTE TEST 1 ***" );
+  TEST_BEGIN();
   puts( "  pthread_getattr_np NOT supported" );
-  puts( "*** END OF POSIX ATTRIBUTE TEST 1 ***" );
+  TEST_END();
   rtems_test_exit(0);
   return NULL; /* just so the compiler thinks we returned something */
 }

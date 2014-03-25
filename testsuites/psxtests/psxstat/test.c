@@ -37,6 +37,8 @@
 
 #include "primode.h"
 
+const char rtems_test_name[] = "PSXSTAT";
+
 /* forward declarations to avoid warnings */
 int test_main(void);
 void stat_a_file_helper(const char *file, int follow_link);
@@ -556,7 +558,6 @@ void Cause_faults(void)
    */
 
 #if 0
-  printf("\n\nPass an invalid mode to chmod should fail with EPERM \n" );
   status = chmod( Files[0], S_IFREG );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EPERM );
@@ -609,7 +610,6 @@ void Cause_faults(void)
    * Verify it works properly.
    */
 
-  printf( "\n\nchmod of %s to Read/Write\n", Directories[0] );
   status = chmod( Directories[0], (S_IXGRP | S_IXOTH) );
   rtems_test_assert( status == 0 );
 
@@ -820,7 +820,7 @@ int main(
   rtems_time_of_day time;
   int status;
 
-  puts( "\n\n*** STAT TEST 01 ***" );
+  TEST_BEGIN();
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   sc = rtems_clock_set( &time );
@@ -941,6 +941,6 @@ int main(
 
   test_statvfs();
 
-  puts( "\n\n*** END OF STAT TEST 01 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }

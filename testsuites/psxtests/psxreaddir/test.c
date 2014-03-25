@@ -40,6 +40,8 @@
 #include <errno.h>
 #include <rtems/imfs.h>
 
+const char rtems_test_name[] = "PSXREADDIR";
+
 /* forward declarations to avoid warnings */
 int test_main(void);
 void printdir(DIR *directory);
@@ -253,7 +255,7 @@ int main(
   struct stat s;
 
 
-  printf( "\n\n*** READDIR TEST ***\n" );
+  TEST_BEGIN();
 
   printf( "\nchdir to the root directory\n" );
   status = chdir( "/" );
@@ -531,6 +533,6 @@ int main(
   rtems_test_assert ( status == 0 );
 
   test_across_mount();
-  printf( "\n\n*** END OF READDIR TEST ***\n" );
+  TEST_END();
   rtems_test_exit(0);
 }

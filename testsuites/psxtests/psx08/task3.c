@@ -46,7 +46,7 @@ void *Task_3(
       &Task2_id
     );
 
-  puts( "*** END OF POSIX TEST 8 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */

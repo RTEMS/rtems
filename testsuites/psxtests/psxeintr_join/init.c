@@ -20,6 +20,8 @@
 #include <tmacros.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "PSXEINTR_JOIN";
+
 #define SIG_SUSPEND SIGUSR1
 #define SIG_THR_RESTART SIGUSR2
 
@@ -85,7 +87,7 @@ void *POSIX_Init( void *arg )
   pthread_t        mainThread;
   int              status;
 
-  puts( "*** POSIX TEST PSXEINTR_JOIN ***" );
+  TEST_BEGIN();
   status = sem_init( &GC_suspend_ack_sem, 0, 0);
   rtems_test_assert( status == 0 );
 
@@ -114,7 +116,7 @@ void *POSIX_Init( void *arg )
   pthread_join( newThread, NULL );
   puts( "Back from pthread_join" );
 
-  puts( "*** END OF POSIX TEST PSXEINTR_JOIN ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL;
@@ -125,6 +127,8 @@ void *POSIX_Init( void *arg )
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 2
 #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 1
 

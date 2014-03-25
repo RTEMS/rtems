@@ -22,6 +22,8 @@
   #include <pmacros.h>
 #endif
 
+const char rtems_test_name[] = "PSXCANCEL";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void countTask_cancel_handler(void *ignored);
@@ -80,7 +82,7 @@ void *countTaskAsync(void *ignored)
   int       sc;
   int       old;
 
-  puts( "\n\n*** POSIX CANCEL TEST ***" );
+  TEST_BEGIN();
 
   /* generate some error conditions */
   puts( "Init - pthread_setcancelstate - NULL oldstate - EINVAL" );
@@ -130,7 +132,7 @@ void *countTaskAsync(void *ignored)
   }
 
 
-  puts( "*** END OF POSIX CANCEL TEST ***" );
+  TEST_END();
 
   #if defined(__rtems__)
     rtems_test_exit(EXIT_SUCCESS);
@@ -145,6 +147,8 @@ void *countTaskAsync(void *ignored)
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 2
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE

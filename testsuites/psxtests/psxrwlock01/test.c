@@ -25,6 +25,8 @@
 /* #define __USE_XOPEN2K XXX already defined on GNU/Linux */
 #include <pthread.h>
 
+const char rtems_test_name[] = "PSXRWLOCK 1";
+
 /* forward declarations to avoid warnings */
 void *ReadLockThread(void *arg);
 void *WriteLockThread(void *arg);
@@ -108,7 +110,7 @@ int main(
   int                  i;
   struct timespec      abstime;
 
-  puts( "\n\n*** POSIX RWLOCK TEST 01 ***" );
+  TEST_BEGIN();
 
   /*************** NULL POINTER CHECKS *****************/
   puts( "pthread_rwlockattr_init( NULL ) -- EINVAL" );
@@ -483,6 +485,6 @@ int main(
   rtems_test_assert( status == 0 );
 
   /*************** END OF TEST *****************/
-  puts( "*** END OF POSIX RWLOCK TEST 01 ***" );
+  TEST_END();
   exit(0);
 }

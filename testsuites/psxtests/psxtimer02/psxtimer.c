@@ -32,6 +32,8 @@
 #include <time.h>     /* time facilities */
 #include <stdio.h>    /* console facilities */
 
+const char rtems_test_name[] = "PSXTIMER 2";
+
 void *POSIX_Init (
   void *argument
 )
@@ -50,7 +52,7 @@ void *POSIX_Init (
   event.sigev_notify = SIGEV_SIGNAL;
   event.sigev_signo = SIGUSR1;
 
-  puts( "\n\n*** POSIX Timers Test 02 ***" );
+  TEST_BEGIN();
 
   puts( "timer_create - bad clock id - EINVAL" );
   status = timer_create( (timer_t) -1, &event, &timer );
@@ -125,6 +127,6 @@ void *POSIX_Init (
   status = timer_delete( timer );
   fatal_posix_service_status_errno( status, EINVAL, "bad id" );
 
-  puts( "*** END OF POSIX Timers Test 02 ***" );
+  TEST_END();
   rtems_test_exit (0);
 }

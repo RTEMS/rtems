@@ -26,6 +26,8 @@
 #include <pmacros.h>
 #include <rtems/libcsupport.h>
 
+const char rtems_test_name[] = "PSXCHROOT 1";
+
 /* forward declarations to avoid warnings */
 int test_main(void);
 
@@ -87,7 +89,7 @@ int main(
 #if !fileexists(/two/two.test) echo "SUCCESSFUL"
 */
 
-  printf( "\n\n*** CHROOT01 TEST ***\n" );
+  TEST_BEGIN();
 
   status = mkdir( "/one", 0777);
   rtems_test_assert( status == 0 );
@@ -139,6 +141,6 @@ int main(
   status = fileexists( "/two/two.test" );
   printf( "%s on /two/two.test\n", (!status) ? "SUCCESS" : "FAILURE" );
 
-  printf( "*** END OF CHROOT01 TEST ***\n" );
+  TEST_END();
   rtems_test_exit(0);
 }

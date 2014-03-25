@@ -26,6 +26,8 @@
 #include <rtems/libio.h>
 #include <pmacros.h>
 
+const char rtems_test_name[] = "PSXMOUNT";
+
 /* forward declarations to avoid warnings */
 int test_main(void);
 
@@ -90,7 +92,7 @@ int main(
   static const char my_link [] = "/c/y/my_link";
   static const char mount_point [] = "/c/y/my_mount_point";
 
-  printf( "\n\n*** MOUNT/UNMOUNT TEST ***\n" );
+  TEST_BEGIN();
 
   /*
    * Change directory to the root and create files under
@@ -466,6 +468,6 @@ int main(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOENT );
 
-  printf( "\n\n*** END OF MOUNT/UNMOUNT TEST ***\n" );
+  TEST_END();
   rtems_test_exit(0);
 }

@@ -17,6 +17,8 @@
 #include "tmacros.h"
 #include "pmacros.h"
 
+const char rtems_test_name[] = "PSXKEY 2";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument ignored);
 
@@ -30,7 +32,7 @@ rtems_task Init(rtems_task_argument ignored)
   rtems_resource_snapshot snapshot;
   void                   *greedy;
 
-  puts( "\n\n*** TEST KEY 02 ***" );
+  TEST_BEGIN();
 
   greedy = rtems_workspace_greedy_allocate_all_except_largest( &to_alloc );
   rtems_resource_snapshot_take( &snapshot );
@@ -73,7 +75,7 @@ rtems_task Init(rtems_task_argument ignored)
 
   rtems_workspace_greedy_free( greedy );
 
-  puts( "*** END OF TEST KEY 02 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -81,6 +83,8 @@ rtems_task Init(rtems_task_argument ignored)
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_TASKS          1
 #define CONFIGURE_MAXIMUM_POSIX_KEYS     1

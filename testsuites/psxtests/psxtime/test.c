@@ -25,6 +25,8 @@
 #include <rtems/libio.h>
 #include <sys/time.h>
 
+const char rtems_test_name[] = "PSXTIME";
+
 #if !HAVE_DECL_ADJTIME
 extern int adjtime(const struct timeval *delta, struct timeval *olddelta);
 #endif
@@ -199,7 +201,7 @@ int main(
   int i;
   int sc;
 
-  puts( "\n\n*** POSIX TIME OF DAY TEST ***" );
+  TEST_BEGIN();
 
   puts( "gettimeofday( NULL, NULL ) - EFAULT" );
   sc = gettimeofday( NULL, NULL );
@@ -223,6 +225,6 @@ int main(
     i++;
   }
 
-  puts( "\n\n*** END OF TIME OF DAY TEST 01 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }

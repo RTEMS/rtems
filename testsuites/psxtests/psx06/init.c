@@ -15,6 +15,8 @@
 #include "system.h"
 #include <errno.h>
 
+const char rtems_test_name[] = "PSX 6";
+
 extern void Key_destructor( void *key_data );
 
 void Key_destructor(
@@ -40,7 +42,7 @@ void *POSIX_Init(
   unsigned int      remaining;
   uint32_t   *key_data;
 
-  puts( "\n\n*** POSIX TEST 6 ***" );
+  TEST_BEGIN();
 
   /* set the time of day, and print our buffer in multiple ways */
 
@@ -117,7 +119,7 @@ void *POSIX_Init(
 
   printf( "Destructor invoked %d times\n", Destructor_invoked );
 
-  puts( "*** END OF POSIX TEST 6 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */

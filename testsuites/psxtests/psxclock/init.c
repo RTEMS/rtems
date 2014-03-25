@@ -19,6 +19,8 @@
 
 #include <rtems/score/todimpl.h>
 
+const char rtems_test_name[] = "PSXCLOCK";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void check_enosys(int status);
@@ -44,7 +46,7 @@ rtems_task Init(
   struct tm       tm;
   struct timespec delay_request;
 
-  puts( "\n\n*** POSIX CLOCK TEST ***" );
+  TEST_BEGIN();
 
   tm_build_time( &tm, TM_FRIDAY, TM_MAY, 24, 96, 11, 5, 0 );
 
@@ -253,7 +255,7 @@ rtems_task Init(
     }
   #endif
 
-  puts( "*** END OF POSIX CLOCK TEST ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -261,6 +263,8 @@ rtems_task Init(
 /* configuration information */
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_MAXIMUM_TASKS             1

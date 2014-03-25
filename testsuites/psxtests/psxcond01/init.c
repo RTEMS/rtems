@@ -15,6 +15,8 @@
 #include <pthread.h>
 #include <errno.h>
 
+const char rtems_test_name[] = "PSXCOND 1";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void *BlockingThread(void *argument);
@@ -56,7 +58,7 @@ void *POSIX_Init(
   int        sc;
   pthread_t  Thread;
 
-  puts( "\n\n*** POSIX TEST -- CONDITION VARIABLE 01 ***" );
+  TEST_BEGIN();
 
   puts( "Init - pthread_mutex_init - Mutex1 - OK" );
   sc = pthread_mutex_init( &Mutex1, NULL );
@@ -81,7 +83,7 @@ void *POSIX_Init(
   sc = pthread_cond_wait( &Condition, &Mutex2 );
   fatal_posix_service_status( sc, EINVAL, "cond_wait EINVAL" );
 
-  puts( "*** END OF POSIX TEST CONDITION VARIABLE 01 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
@@ -89,6 +91,8 @@ void *POSIX_Init(
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 2
 #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 2

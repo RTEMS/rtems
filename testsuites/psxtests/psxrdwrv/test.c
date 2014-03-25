@@ -37,6 +37,8 @@
   #include <rtems.h>
   #include <rtems/libio.h>
   #include <pmacros.h>
+
+  const char rtems_test_name[] = "PSXRDWRV";
 #else
   #define TRUE  1
   #define FALSE 0
@@ -424,7 +426,7 @@ int main(
 )
 #endif
 {
-  puts( "*** POSIX TEST READV/WRITEV ***" );
+  TEST_BEGIN();
 
   if ( fillPatternBuffer() != TRUE ) {
     puts("Error filling pattern buffer" );
@@ -441,6 +443,6 @@ int main(
   }
 
   unlink(TESTFILE);
-  puts( "*** END OF TEST PSXRDWRV ***" );
+  TEST_END();
   rtems_test_exit(0);
 }

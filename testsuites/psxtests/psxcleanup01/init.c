@@ -15,6 +15,8 @@
 #include "pmacros.h"
 #include <pthread.h>  /* thread facilities */
 
+const char rtems_test_name[] = "PSXCLEANUP 1";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void cleaner(void *arg);
@@ -29,7 +31,7 @@ void *POSIX_Init(
   void *argument
 )
 {
-  puts( "\n\n*** POSIX CLEANUP TEST 01 ***" );
+  TEST_BEGIN();
 
   puts( "Init - pthread_cleanup_push - a routine we will not execute" );
   pthread_cleanup_push(cleaner, NULL);
@@ -37,7 +39,7 @@ void *POSIX_Init(
   puts( "Init - pthread_cleanup_pop - do not execute" );
   pthread_cleanup_pop(0);
 
-  puts( "*** END OF POSIX CLEANUP TEST 01 ***\n" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -48,6 +50,8 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 

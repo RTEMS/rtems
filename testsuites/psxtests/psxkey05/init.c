@@ -17,6 +17,8 @@
 #include "tmacros.h"
 #include "pmacros.h"
 
+const char rtems_test_name[] = "PSXKEY 5";
+
 /* forward declarations to avoid warnings */
 rtems_task Init( rtems_task_argument ignored );
 
@@ -26,7 +28,7 @@ rtems_task Init( rtems_task_argument ignored )
   int              sc, *value;
   int Data_array[2] = {1, 2};
 
-  puts( "\n\n*** TEST KEY 05 ***" );
+  TEST_BEGIN();
 
   puts( "Init - pthread key1 create - OK" );
   sc = pthread_key_create( &key1, NULL );
@@ -68,7 +70,7 @@ rtems_task Init( rtems_task_argument ignored )
   sc = pthread_key_delete( key2 );
   rtems_test_assert( sc == 0 );
 
-  puts( "*** END OF TEST KEY 05 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -76,6 +78,8 @@ rtems_task Init( rtems_task_argument ignored )
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_TASKS          1
 #define CONFIGURE_MAXIMUM_POSIX_KEYS     2

@@ -22,12 +22,16 @@ extern int getrusage(int who, struct rusage *usage);
 #include <tmacros.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "PSXGETRUSAGE 1";
+
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT
@@ -41,7 +45,7 @@ rtems_task Init(
   int           sc;
   struct rusage usage;
 
-  puts( "\n\n*** TEST GETRUSAGE 01 ***" );
+  TEST_BEGIN();
 
   puts( "getrusage( RUSAGE_SELF, NULL ) -- EFAULT" );
   sc = getrusage( RUSAGE_SELF, NULL );
@@ -73,7 +77,7 @@ rtems_task Init(
   rtems_test_assert( usage.ru_utime.tv_sec == usage.ru_stime.tv_sec );
   rtems_test_assert( usage.ru_utime.tv_usec == usage.ru_stime.tv_usec );
   
-  puts( "*** END OF TEST GETRUSAGE 01 ***" );
+  TEST_END();
 
   rtems_test_exit(0);
 }

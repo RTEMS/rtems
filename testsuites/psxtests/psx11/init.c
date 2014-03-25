@@ -17,6 +17,8 @@
 #include "system.h"
 #include <errno.h>
 
+const char rtems_test_name[] = "PSX 11";
+
 void *POSIX_Init(
   void *argument
 )
@@ -29,7 +31,7 @@ void *POSIX_Init(
   int                  priority_3;
   int                  priority_4;
 
-  puts( "\n\n*** POSIX TEST 11 ***" );
+  TEST_BEGIN();
 
   /* set the time of day, and print our buffer in multiple ways */
 
@@ -126,7 +128,7 @@ void *POSIX_Init(
   status = pthread_join( Task_id, NULL );
   rtems_test_assert( !status );
 
-  puts( "*** END OF POSIX TEST 11 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */

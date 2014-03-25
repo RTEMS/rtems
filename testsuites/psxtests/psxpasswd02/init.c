@@ -21,6 +21,8 @@
 #include <errno.h>
 #include <limits.h>
 
+const char rtems_test_name[] = "PSXPASSWD 2";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument ignored);
 void print_passwd(struct passwd *pw);
@@ -76,7 +78,7 @@ rtems_task Init(
 
   FILE *fp = NULL;
 
-  puts( "*** PASSWORD/GROUP TEST - 02 ***" );
+  TEST_BEGIN();
 
   puts( "Init - Creating /etc" );
   status = mkdir( "/etc", 0777 );
@@ -211,7 +213,7 @@ rtems_task Init(
   rtems_test_assert( !gr );
   rtems_test_assert( errno == EINVAL );
   
-  puts( "*** END OF PASSWORD/GROUP TEST - 02 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -224,6 +226,8 @@ rtems_task Init(
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 6
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

@@ -28,6 +28,8 @@
 #include <unistd.h>
 #include <sched.h>
 
+const char rtems_test_name[] = "PSXENOSYS";
+
 #if !HAVE_DECL_MPROTECT
 extern int mprotect(const void *addr, size_t len, int prot);
 #endif
@@ -51,7 +53,7 @@ void *POSIX_Init(
 {
   int             sc;
 
-  puts( "\n\n*** POSIX TEST -- ENOSYS ***" );
+  TEST_BEGIN();
 
   puts( "lio_listio -- ENOSYS" );
   sc = lio_listio( 0, NULL, 0, NULL );
@@ -144,7 +146,7 @@ void *POSIX_Init(
     rtems_test_exit( 0 );
   }
 
-  puts( "*** END OF POSIX TEST ENOSYS ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */

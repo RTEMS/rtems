@@ -16,6 +16,8 @@
 #include <signal.h>
 #include <errno.h>
 
+const char rtems_test_name[] = "PSXALARM 1";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
@@ -70,7 +72,7 @@ void *POSIX_Init(
   struct sigaction  act;
   sigset_t          mask;
 
-  puts( "\n\n*** POSIX ALARM TEST 01 ***" );
+  TEST_BEGIN();
 
   /* install a signal handler for SIGALRM and unblock it */
 
@@ -107,7 +109,7 @@ void *POSIX_Init(
   printf( "Init: %d seconds left on previous alarm\n", remaining );
   rtems_test_assert( remaining == 0 );
 
-  puts( "*** END OF POSIX ALARM TEST 01***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
@@ -115,6 +117,8 @@ void *POSIX_Init(
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS        1
 

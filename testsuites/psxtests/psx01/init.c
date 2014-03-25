@@ -20,6 +20,8 @@
 
 #include <rtems/score/todimpl.h>
 
+const char rtems_test_name[] = "PSX 1";
+
 void *POSIX_Init(
   void *argument
 )
@@ -30,7 +32,7 @@ void *POSIX_Init(
   pthread_t       thread_id;
   struct utsname  uts;
 
-  puts( "\n\n*** POSIX TEST 1 ***" );
+  TEST_BEGIN();
 
   /* print some system information */
 

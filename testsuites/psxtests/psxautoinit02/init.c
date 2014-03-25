@@ -15,6 +15,8 @@
 #include <pthread.h>
 #include <errno.h>
 
+const char rtems_test_name[] = "PSXAUTOINIT 2";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
@@ -26,7 +28,7 @@ void *POSIX_Init(
   pthread_cond_t cond1;
   pthread_cond_t cond2;
 
-  puts( "\n\n*** POSIX TEST -- AUTOMATIC INITIALIZAITON 02 ***" );
+  TEST_BEGIN();
 
   cond1 = PTHREAD_COND_INITIALIZER;
   cond2 = PTHREAD_COND_INITIALIZER;
@@ -42,7 +44,7 @@ void *POSIX_Init(
   sc = pthread_cond_destroy( &cond1 );
   fatal_posix_service_status( sc, 0, "cond destroy OK" );
 
-  puts( "*** END OF POSIX TEST AUTOMATIC INITIALIZATION 02 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
@@ -50,6 +52,8 @@ void *POSIX_Init(
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES 1

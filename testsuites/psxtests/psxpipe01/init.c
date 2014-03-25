@@ -21,6 +21,8 @@
 #include <rtems/libcsupport.h>
 #include <rtems/malloc.h>
 
+const char rtems_test_name[] = "PSXPIPE 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument ignored);
 
@@ -33,7 +35,7 @@ rtems_task Init(
   int status = 0;
   void *opaque = NULL;
 
-  puts( "*** TEST POSIX PIPE CREATION - 01 ***" );
+  TEST_BEGIN();
 
   puts( "Init - attempt to create pipe -- expect EFAULT" );
   status = pipe( NULL );
@@ -91,7 +93,7 @@ rtems_task Init(
   status |= unlink( "/file01" );
   rtems_test_assert( status == 0 );
 
-  puts( "*** END OF TEST POSIX PIPE CREATION - 01 ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -104,6 +106,8 @@ rtems_task Init(
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_PIPES_ENABLED

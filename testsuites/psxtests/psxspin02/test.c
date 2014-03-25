@@ -26,6 +26,8 @@
 
 #include <rtems.h>  /* for task creation */
 
+const char rtems_test_name[] = "PSXSPIN 2";
+
 /* forward declarations to avoid warnings */
 int test_main(void);
 rtems_task SpinlockThread(rtems_task_argument arg);
@@ -64,7 +66,7 @@ int main(
   rtems_status_code     rstatus;
   rtems_id              taskid;
 
-  puts( "\n\n*** POSIX SPINLOCK TEST 02 ***" );
+  TEST_BEGIN();
 
   /* This successfully creates one */
   puts( "pthread_spin_init( &Spinlock, PTHREAD_PROCESS_PRIVATE ) -- OK" );
@@ -101,6 +103,6 @@ int main(
   rtems_test_assert( status == 0 );
 
   /*************** END OF TEST *****************/
-  puts( "*** END OF POSIX SPINLOCK TEST 02 ***" );
+  TEST_END();
   exit(0);
 }

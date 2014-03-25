@@ -20,6 +20,8 @@
 
 #include <rtems/score/objectimpl.h>
 
+const char rtems_test_name[] = "PSXOBJ 1";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument ignored);
 
@@ -33,7 +35,7 @@ rtems_task Init(
   char                             name[64];
   bool                             bc;
 
-  puts( "\n\n*** POSIX OBJECT TEST 1 ***" );
+  TEST_BEGIN();
 
   /* very fake object class to test with */
   _Objects_Initialize_information(
@@ -80,7 +82,7 @@ rtems_task Init(
   bc = _Objects_Set_name( &TestClass, &_Thread_Get_executing()->Object, name );
   rtems_test_assert( bc == false );
 
-  puts( "*** END OF POSIX OBJECT TEST 1 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -90,6 +92,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS  1
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

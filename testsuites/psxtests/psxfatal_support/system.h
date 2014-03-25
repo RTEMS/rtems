@@ -58,7 +58,8 @@ extern rtems_extensions_table initial_extensions;
     NULL,                    /* begin   */ \
     NULL,                    /* exitted */ \
     Fatal_extension          /* fatal   */ \
-  }
+  }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 /* extra parameters may be in testcase.h */
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
@@ -68,6 +69,7 @@ extern rtems_extensions_table initial_extensions;
 #ifndef SPFATAL_TEST_CASE_EXTRA_THREADS
 #define SPFATAL_TEST_CASE_EXTRA_THREADS 0
 #endif
+
 #define CONFIGURE_MAXIMUM_POSIX_THREADS \
   (SPFATAL_TEST_CASE_EXTRA_THREADS + 1)
 

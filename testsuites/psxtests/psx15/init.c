@@ -23,6 +23,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "PSX 15";
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -64,7 +66,7 @@ void Init(rtems_task_argument arg)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  puts("\n\n*** POSIX TEST 15 ***");
+  TEST_BEGIN();
 
   sc = rtems_task_create(
     rtems_build_name('T', 'S', 'K', '1'),
@@ -92,7 +94,7 @@ void Init(rtems_task_argument arg)
   sc = rtems_task_start(task_0, suicide_task, 0);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  puts("*** END OF POSIX TEST 15 ***");
+  TEST_END();
 
   rtems_test_exit(0);
   rtems_test_assert(false);
@@ -106,11 +108,13 @@ void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_TASKS 3
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .thread_delete = thread_delete_hook }, \
+  RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_PREEMPT
 #define CONFIGURE_INIT_TASK_PRIORITY 4
-
-#define CONFIGURE_INITIAL_EXTENSIONS { .thread_delete = thread_delete_hook }
 
 #include <rtems/confdefs.h>

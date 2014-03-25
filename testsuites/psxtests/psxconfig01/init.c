@@ -24,6 +24,7 @@
   #include "config.h"
 #endif
 
+#include <rtems/test.h>
 #include <tmacros.h>
 
 #include <sys/stat.h>
@@ -38,6 +39,8 @@
 #include <limits.h>
 
 #include <rtems/libcsupport.h>
+
+const char rtems_test_name[] = "PSXCONFIG 1";
 
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
@@ -61,6 +64,8 @@
 #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 31
 #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 41
 #define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS 17
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 3
 #define CONFIGURE_MAXIMUM_POSIX_TIMERS 47
 
@@ -167,6 +172,8 @@
 
 #define CONFIGURE_MAXIMUM_DRIVERS 2
 
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT
@@ -249,7 +256,7 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_resource_snapshot snapshot;
   int i = 0;
 
-  puts("\n\n*** POSIX TEST CONFIG 01 ***");
+  TEST_BEGIN();
 
   memset(posix_name, 'P', sizeof(posix_name) - 1);
 
@@ -552,7 +559,7 @@ static rtems_task Init(rtems_task_argument argument)
   printf("object creation done\n");
   print_info();
 
-  puts("*** END OF POSIX TEST CONFIG 01 ***");
+  TEST_END();
 
   rtems_test_exit(0);
 }

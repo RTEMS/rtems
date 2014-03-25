@@ -15,6 +15,8 @@
 #include <errno.h>
 #include <pthread.h>
 
+const char rtems_test_name[] = "PSXMUTEXATTR 1";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
@@ -45,7 +47,7 @@ void *POSIX_Init(
   int                 type;
   int                 i;
 
-  puts( "\n\n*** POSIX MUTEX ATTRIBUTE TEST 1 ***" );
+  TEST_BEGIN();
 
 #if defined(_UNIX98_THREAD_MUTEX_ATTRIBUTES)
   puts( "Init - pthread_mutexattr_gettype - attr NULL - EINVAL" );
@@ -103,7 +105,7 @@ void *POSIX_Init(
   puts( "POSIX Mutex Attribute Type Not Supported in Tools" );
 #endif
 
-  puts( "*** END OF POSIX MUTEX ATTRIBUTE TEST 1 ***" );
+  TEST_END();
   rtems_test_exit(0);
 }
 
@@ -111,6 +113,8 @@ void *POSIX_Init(
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS  1
 

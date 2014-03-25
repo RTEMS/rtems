@@ -20,6 +20,8 @@
 #include <pmacros.h>
 #include "test_support.h"
 
+const char rtems_test_name[] = "PSXSEM 1";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
@@ -49,7 +51,7 @@ void *POSIX_Init(
   struct timespec waittime;
   char            failure_msg[80];
 
-  puts( "\n\n*** POSIX SEMAPHORE MANAGER TEST 1 ***" );
+  TEST_BEGIN();
 
   puts( "Init: sem_init - UNSUCCESSFUL (EINVAL)" );
   status = sem_init(NULL, 0, 1);
@@ -306,7 +308,7 @@ void *POSIX_Init(
 
   /* Try adding in unlinking before closing... (can we still open?) */
 
-  puts( "*** END OF POSIX SEMAPHORE MANAGER TEST 1 ***" );
+  TEST_END();
   rtems_test_exit(0);
 
   return NULL; /* just so the compiler thinks we returned something */
@@ -317,6 +319,8 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS     1
 #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES  MAX_SEMS

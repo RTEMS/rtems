@@ -45,6 +45,8 @@
 
 #include "primode.h"
 
+const char rtems_test_name[] = "PSXFILE 1";
+
 /* forward declarations to avoid warnings */
 void test_case_reopen_append(void);
 void dump_statbuf(struct stat *buf);
@@ -158,7 +160,7 @@ int main(
   rtems_status_code rtems_status;
   rtems_time_of_day time;
 
-  printf( "\n\n*** FILE TEST 1 ***\n" );
+  TEST_BEGIN();
 
   /*
    *  Grab the maximum size of an in-memory file.
@@ -655,7 +657,7 @@ since new path is not valid");
 
   test_case_reopen_append();
 
-  printf( "*** END OF FILE TEST 1 ***\n" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 

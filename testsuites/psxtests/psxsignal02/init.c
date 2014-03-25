@@ -17,6 +17,8 @@
 #include <pthread.h>
 #include <sched.h>
 
+const char rtems_test_name[] = "PSXSIGNAL 2";
+
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void *Test_Thread(void *arg);
@@ -134,7 +136,7 @@ void *POSIX_Init(
   struct sigaction    act;
   struct timespec     delay_request;
 
-  puts( "\n\n*** POSIX TEST SIGNAL 02 ***" );
+  TEST_BEGIN();
 
   Signal_occurred = false;
 
@@ -182,7 +184,7 @@ void *POSIX_Init(
   /* we are just scheduling the signal, not delivering it */
   rtems_test_assert( Signal_occurred == false );
 
-  puts( "*** END OF POSIX TEST SIGNAL 02 ***" );
+  TEST_END();
   rtems_test_exit(0);
 
   return NULL; /* just so the compiler thinks we returned something */
@@ -194,6 +196,8 @@ void *POSIX_Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MICROSECONDS_PER_TICK        1000
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_MAXIMUM_POSIX_THREADS        9
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE

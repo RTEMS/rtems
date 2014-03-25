@@ -20,6 +20,8 @@
 #include <unistd.h>
 #include <errno.h>
 
+const char rtems_test_name[] = "PSXKEY 8";
+
 pthread_key_t Key;
 int created_task_count, setted_task_count, got_task_count;
 int all_thread_created;
@@ -62,7 +64,7 @@ rtems_task Init(rtems_task_argument arg)
 
   all_thread_created = 0;
 
-  puts( "\n\n*** TEST KEY 08 ***" );
+  TEST_BEGIN();
 
   puts( "Init - Semaphore 1 create - OK" );
   name1 = rtems_build_name('S', 'E', 'M', '1');
@@ -158,7 +160,7 @@ rtems_task Init(rtems_task_argument arg)
   sc = rtems_semaphore_delete( sema2 );
   rtems_test_assert( !sc );
 
-  puts( "*** END OF TEST KEY 08***" );
+  TEST_END();
   exit(0);
 }
 
@@ -174,6 +176,8 @@ rtems_task Init(rtems_task_argument arg)
   (RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_ASR | RTEMS_INTERRUPT_LEVEL(0))
 
 #define CONFIGURE_INIT_TASK_PRIORITY 4
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_UNIFIED_WORK_AREAS
