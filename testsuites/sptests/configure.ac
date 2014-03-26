@@ -143,6 +143,7 @@ spedfsched03/Makefile
 sperror01/Makefile
 sperror02/Makefile
 sperror03/Makefile
+spevent_err03/Makefile
 spfatal01/Makefile
 spfatal02/Makefile
 spfatal03/Makefile

@@ -1,0 +1,12 @@
+*** TEST EVENT ERROR 03 ***
+TA1 - rtems_event_receive - NULL param - RTEMS_INVALID_ADDRESS
+TA1 - rtems_event_receive - RTEMS_UNSATISFIED ( all conditions )
+TA1 - rtems_event_receive - RTEMS_UNSATISFIED ( any condition )
+TA1 - rtems_event_receive - timeout in 3 seconds
+TA1 - rtems_event_receive - woke up with RTEMS_TIMEOUT
+TA1 - rtems_event_send - RTEMS_INVALID_ID
+TA1 - rtems_task_wake_after - sleep 1 second - RTEMS_SUCCESSFUL
+TA1 - rtems_clock_set - 08:30:45   02/05/1988 - RTEMS_SUCCESSFUL
+TA1 - current time - Fri Feb  5 08:30:45 1988
+
+*** END TEST EVENT ERROR 03 ***

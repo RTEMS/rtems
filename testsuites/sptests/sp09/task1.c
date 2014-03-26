@@ -32,9 +32,6 @@ rtems_task Task_1(
   rtems_test_pause_and_screen_number( 3 );
 
   Screen3();
-  rtems_test_pause_and_screen_number( 4 );
-
-  Screen4();
 
   TEST_END();
 

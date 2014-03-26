@@ -1,33 +1,33 @@
-/*  Screen4
- *
- *  This routine generates error screen 4 for test 9.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#define CONFIGURE_INIT
 #include "system.h"
 
-void Screen4()
+const char rtems_test_name[] = "SP EVENT ERROR 3";
+
+rtems_task Init(
+  rtems_task_argument argument
+)
 {
   rtems_event_set   event_out;
   rtems_time_of_day time;
   struct timeval    tv;
   time_t            seconds;
   rtems_status_code status;
-
+  
+  TEST_BEGIN();
+  
   status = rtems_event_receive(
     RTEMS_EVENT_16,
     RTEMS_NO_WAIT,
@@ -105,4 +105,5 @@ void Screen4()
   seconds = tv.tv_sec;
   printf( "TA1 - current time - %s\n", ctime(&seconds) );
 
+  TEST_END();
 }
