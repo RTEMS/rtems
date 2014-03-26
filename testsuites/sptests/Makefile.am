@@ -30,7 +30,8 @@ SUBDIRS = \
     spsimplesched03 spnsext01 spedfsched01 spedfsched02 spedfsched03 \
     spcbssched01 spcbssched02 spcbssched03 spqreslib sptimespec01 \
     spregion_err01 sppartition_err01 spratemon_err01 spintr_err01 \
-    spsignal_err01 spport_err01 spmsgq_err01 spmsgq_err02
+    spsignal_err01 spport_err01 spmsgq_err01 spmsgq_err02 spsem_err01 \
+    spsem_err02 sptask_err01
 SUBDIRS += spprofiling01
 SUBDIRS += spcache01
 SUBDIRS += sptls03

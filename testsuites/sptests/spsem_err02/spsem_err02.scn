@@ -1,0 +1,20 @@
+*** TEST SEMAPHORE ERROR 02 ***
+TA1 - rtems_task_create - TA2 created - RTEMS_SUCCESSFUL
+TA1 - rtems_task_start - start TA2 - RTEMS_SUCCESSFUL
+TA1 - rtems_semaphore_create - 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_semaphore_create - 2 - RTEMS_SUCCESSFUL
+TA1 - rtems_semaphore_obtain - RTEMS_INVALID_ID
+TA1 - rtems_semaphore_obtain - got sem 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_semaphore_obtain - RTEMS_UNSATISFIED
+TA1 - rtems_semaphore_obtain - timeout in 3 seconds
+TA2 - rtems_semaphore_obtain - sem 1 - RTEMS_WAIT FOREVER
+TA1 - rtems_semaphore_obtain - woke up with RTEMS_TIMEOUT
+TA1 - rtems_semaphore_release - RTEMS_NOT_OWNER_OF_RESOURCE
+TA1 - rtems_semaphore_release - RTEMS_INVALID_ID
+TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL
+TA1 - rtems_semaphore_delete - delete sem 1 - RTEMS_SUCCESSFUL
+TA1 - rtems_semaphore_obtain - binary semaphore
+TA1 - rtems_semaphore_delete - delete sem 2 - RTEMS_RESOURCE_IN_USE
+TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL
+TA2 - rtems_semaphore_obtain - woke up with RTEMS_OBJECT_WAS_DELETED
+*** END TEST SEMAPHORE ERROR 02 ***

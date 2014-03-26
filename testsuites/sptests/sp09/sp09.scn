@@ -84,40 +84,4 @@ TA1 - rtems_task_wake_after - sleep 1 second - RTEMS_SUCCESSFUL
 TA1 - rtems_clock_set - 08:30:45   02/05/1988 - RTEMS_SUCCESSFUL
 TA1 - current time - Fri Feb  5 08:30:45 1988
 
-<pause - screen 5>
-TA1 - rtems_semaphore_create - RTEMS_INVALID_NAME
-TA1 - rtems_semaphore_create - RTEMS_INVALID_ADDRESS
-TA1 - rtems_semaphore_create - 1 - RTEMS_SUCCESSFUL
-TA1 - rtems_semaphore_create - 2 - RTEMS_SUCCESSFUL
-TA1 - rtems_semaphore_create - 3 - RTEMS_TOO_MANY
-TA1 - rtems_semaphore_create - FIFO and inherit - RTEMS_NOT_DEFINED
-TA1 - rtems_semaphore_create - FIFO and ceiling - RTEMS_NOT_DEFINED
-TA1 - rtems_semaphore_create - ceiling and inherit - RTEMS_NOT_DEFINED
-TA1 - rtems_semaphore_create - RTEMS_NOT_DEFINED
-TA1 - rtems_semaphore_create - RTEMS_INVALID_NUMBER
-TA1 - rtems_semaphore_create - RTEMS_MP_NOT_CONFIGURED
-TA1 - rtems_semaphore_delete - RTEMS_INVALID_ID
-TA1 - rtems_semaphore_delete - local RTEMS_INVALID_ID
-TA1 - rtems_semaphore_ident - global RTEMS_INVALID_NAME
-TA1 - rtems_semaphore_ident - local RTEMS_INVALID_NAME
-TA1 - rtems_semaphore_release - RTEMS_INVALID_ID
-TA1 - rtems_semaphore_flush - RTEMS_INVALID_ID
-<pause - screen 6>
-TA1 - rtems_semaphore_obtain - RTEMS_INVALID_ID
-TA1 - rtems_semaphore_obtain - got sem 1 - RTEMS_SUCCESSFUL
-TA1 - rtems_semaphore_obtain - RTEMS_UNSATISFIED
-TA1 - rtems_semaphore_obtain - timeout in 3 seconds
-TA1 - rtems_semaphore_obtain - woke up with RTEMS_TIMEOUT
-TA1 - rtems_semaphore_release - RTEMS_NOT_OWNER_OF_RESOURCE
-TA1 - rtems_semaphore_release - RTEMS_INVALID_ID
-TA1 - rtems_task_start - start TA2 - RTEMS_SUCCESSFUL
-TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL
-TA2 - rtems_semaphore_obtain - sem 1 - RTEMS_WAIT FOREVER
-TA1 - rtems_semaphore_delete - delete sem 1 - RTEMS_SUCCESSFUL
-TA1 - rtems_semaphore_obtain - binary semaphore
-TA1 - rtems_semaphore_delete - delete sem 2 - RTEMS_RESOURCE_IN_USE
-TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL
-TA2 - rtems_semaphore_obtain - woke up with RTEMS_OBJECT_WAS_DELETED
-TA2 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL
-TA1 - rtems_task_delete TA2 - already deleted RTEMS_INVALID_ID
 *** END OF TEST 9 ***

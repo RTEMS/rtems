@@ -206,6 +206,8 @@ spprivenv01/Makefile
 spqreslib/Makefile
 spratemon_err01/Makefile
 sprbtree01/Makefile
+spsem_err01/Makefile
+spsem_err02/Makefile
 spsem01/Makefile
 spsem02/Makefile
 spsignal_err01/Makefile
@@ -219,6 +221,7 @@ spthreadq01/Makefile
 sptimespec01/Makefile
 spwatchdog/Makefile
 spwkspace/Makefile
+sptask_err01/Makefile
 sptimer_err01/Makefile
 sptimer_err02/Makefile
 spcpuset01/Makefile

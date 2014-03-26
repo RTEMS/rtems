@@ -1,28 +1,34 @@
-/*  Screen5
- *
- *  This routine generates error screen 5 for test 9.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#define CONFIGURE_INIT
 #include "system.h"
 
-void Screen5()
+#define MESSAGE_SIZE (sizeof(long) * 4)
+
+const char rtems_test_name[] = "SP SEMAPHORE ERROR 01";
+
+rtems_task Init(
+  rtems_task_argument argument
+)
 {
   rtems_status_code status;
+
+  TEST_BEGIN();
+  
+  Semaphore_name[ 1 ]  =  rtems_build_name( 'S', 'M', '1', ' ' );
+  Semaphore_name[ 2 ]  =  rtems_build_name( 'S', 'M', '2', ' ' );
+  Semaphore_name[ 3 ]  =  rtems_build_name( 'S', 'M', '3', ' ' );
 
   /* invalid name */
   status = rtems_semaphore_create(
@@ -232,4 +238,6 @@ void Screen5()
     "rtems_semaphore_flush with illegal id"
   );
   puts( "TA1 - rtems_semaphore_flush - RTEMS_INVALID_ID" );
+
+  TEST_END();
 }
