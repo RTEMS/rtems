@@ -315,18 +315,6 @@ static void test_user_env(void)
   rtems_test_assert(node_count(loc_chain) == 1);
   rtems_test_assert(null_loc->reference_count == 4);
 
-  sc = rtems_libio_share_private_env(RTEMS_SELF);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(null_loc->reference_count == 4);
-
-  sc = rtems_libio_share_private_env(rtems_task_self());
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  rtems_test_assert(node_count(loc_chain) == 1);
-  rtems_test_assert(null_loc->reference_count == 4);
-
   rtems_libio_use_global_env();
 
   rtems_test_assert(node_count(loc_chain) == 1);

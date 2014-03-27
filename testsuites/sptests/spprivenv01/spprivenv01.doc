@@ -13,10 +13,9 @@ test set name:  spprivenv01
 directives:
 
   + rtems_libio_set_private_env
-  + rtems_libio_share_private_env
 
 concepts:
 
-+ Exercise the routines at privateenv.c, which reset/share a task's
-private environment
++ Exercise the routines at privateenv.c, which reset a task's private
+environment
 

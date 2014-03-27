@@ -64,9 +64,6 @@ typedef struct {
   gid_t                            egid;
   char      login_buffer[LOGIN_NAME_MAX];
   pid_t                            pgrp; /* process group id */
-  /* User environment maintenance */
-  rtems_id                         task_id;
-  int                              reference_count;
 } rtems_user_env_t;
 
 extern rtems_user_env_t * rtems_current_user_env;
@@ -95,23 +92,6 @@ extern rtems_user_env_t   rtems_global_user_env;
  * @retval RTEMS_TOO_MANY Cannot register the private environment.
  */
 rtems_status_code rtems_libio_set_private_env(void);
-
-/**
- * @brief Creates a private environment shared with another task.
- *
- * An attempt to share the environment with itself has no effect.  This
- * function must be called from normal thread context and may block on a mutex.
- * Thread dispatching is disabled to protect some critical sections.
- *
- * @param[in] task_id The private environment is shared with the task specified
- * by this identifier.
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_UNSATISFIED No shared environment is available for this task
- * @retval RTEMS_TOO_MANY Cannot register the shared environment.
- * identifier.
- */
-rtems_status_code rtems_libio_share_private_env(rtems_id task_id) ;
 
 /**
  * @brief Use the global environment.

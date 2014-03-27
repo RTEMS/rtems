@@ -35,7 +35,6 @@ directives:
   + rtems_filesystem_location_free
   + rtems_filesystem_global_location_obtain_null
   + rtems_libio_set_private_env
-  + rtems_libio_share_private_env
   + rtems_libio_use_global_env
   + rmdir
   + stat

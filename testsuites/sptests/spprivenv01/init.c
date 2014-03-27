@@ -31,6 +31,9 @@ rtems_task task_routine(rtems_task_argument not_used)
 
   sc = rtems_libio_set_private_env();
   directive_failed( sc, "set private env" );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( rtems_current_user_env != &rtems_global_user_env );
+
   sleep( 1 );
 
   rtems_task_delete( RTEMS_SELF );
@@ -42,9 +45,9 @@ rtems_task Init(
 {
   rtems_status_code       sc;
   void                   *opaque;
-  rtems_id                current_task_id;
   rtems_id                task_id;
   rtems_name              another_task_name;
+  rtems_user_env_t       *current_env;
 
   TEST_BEGIN();
 
@@ -68,6 +71,12 @@ rtems_task Init(
   puts( "Init - freeing the workspace memory" );
   rtems_workspace_greedy_free( opaque );
 
+  puts( "Init - Attempt to get a private environment" );
+  sc = rtems_libio_set_private_env();
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  current_env = rtems_current_user_env;
+  rtems_test_assert( current_env != &rtems_global_user_env );
+
   puts( "Init - creating a task name and a task -- OK" );
 
   another_task_name = 
@@ -85,33 +94,14 @@ rtems_task Init(
   sc = rtems_task_start( task_id, task_routine, 0);
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  puts( "Init - attempt to share the env with another task -- Expect error" );
-  sc = rtems_libio_share_private_env( task_id );
-  rtems_test_assert( sc == RTEMS_UNSATISFIED );
-
   sleep( 1 );
 
-  puts( "Init - attempt to share the env with another task -- OK" );
-  sc = rtems_libio_share_private_env( task_id );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-  rtems_test_assert( rtems_current_user_env->task_id == task_id );
+  puts( "Init - Check current private environment. Should be same as before." );
+  rtems_test_assert( rtems_current_user_env == current_env );
 
-  puts( "Init - Get current task id" );
-  current_task_id = rtems_task_self();
-
-  puts( "Init - Attempt to reset current task's environment" );
-  sc = rtems_libio_set_private_env();
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-  rtems_test_assert( rtems_current_user_env->task_id == current_task_id );
-  
-  puts( "Init - attempt to share the env with another task -- OK" );
-  sc = rtems_libio_share_private_env( task_id );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-  rtems_test_assert( rtems_current_user_env->task_id == task_id );
-
-  puts( "Init - attempt to share with self -- OK" );
-  sc = rtems_libio_share_private_env( task_id );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  puts( "Init - Reset to global environment" );
+  rtems_libio_use_global_env();
+  rtems_test_assert( rtems_current_user_env == &rtems_global_user_env );
 
   TEST_END();
 
