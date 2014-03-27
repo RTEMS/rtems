@@ -51,8 +51,6 @@ void _Thread_queue_Process_timeout(
       }
       _ISR_Enable( level );
     } else {
-      bool we_did_it;
-
       _ISR_Enable( level );
 
       /*
@@ -70,10 +68,11 @@ void _Thread_queue_Process_timeout(
        * right extract operation.  The timeout status is set during thread
        * queue initialization.
        */
-      we_did_it = _Thread_queue_Extract( the_thread_queue, the_thread );
-      if ( we_did_it ) {
-        the_thread->Wait.return_code = the_thread_queue->timeout_status;
-      }
+      _Thread_queue_Extract_with_return_code(
+        the_thread_queue,
+        the_thread,
+        the_thread_queue->timeout_status
+      );
     }
   } else {
     _ISR_Enable( level );
