@@ -162,8 +162,6 @@ typedef struct {
    *  nested.  This must be zero (0) before the mutex is actually unlocked.
    */
   uint32_t                nest_count;
-  /** This is the number of waiting threads. */
-  uint32_t                blocked_count;
   /** This element points to the thread which is currently holding this mutex.
    *  The holder is the last thread to successfully lock the mutex and which
    *  has not unlocked it.  If the thread is not locked, there is no holder.

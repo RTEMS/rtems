@@ -38,7 +38,6 @@ CORE_mutex_Status _CORE_mutex_Initialize(
 
   the_mutex->Attributes    = *the_mutex_attributes;
   the_mutex->lock          = initial_lock;
-  the_mutex->blocked_count = 0;
 
   if ( initial_lock == CORE_MUTEX_LOCKED ) {
     the_mutex->nest_count = 1;
