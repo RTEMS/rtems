@@ -27,7 +27,7 @@
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/statesimpl.h>
 
-bool _Thread_queue_Extract_with_proxy(
+void _Thread_queue_Extract_with_proxy(
   Thread_Control       *the_thread
 )
 {
@@ -52,8 +52,6 @@ bool _Thread_queue_Extract_with_proxy(
 
   the_thread_queue = the_thread->Wait.queue;
   if ( the_thread_queue != NULL ) {
-    return _Thread_queue_Extract( the_thread_queue, the_thread );
-  } else {
-    return false;
+    _Thread_queue_Extract( the_thread_queue, the_thread );
   }
 }

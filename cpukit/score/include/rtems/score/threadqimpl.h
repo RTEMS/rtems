@@ -151,7 +151,7 @@ bool _Thread_queue_Extract(
  *  and ensures that if there is a proxy for this task on
  *  another node, it is also dealt with.
  */
-bool _Thread_queue_Extract_with_proxy(
+void _Thread_queue_Extract_with_proxy(
   Thread_Control       *the_thread
 );
 
