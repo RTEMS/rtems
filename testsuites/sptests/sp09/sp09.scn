@@ -56,21 +56,4 @@ TA1 - rtems_task_wake_when - 08:30:48   02/05/1961 - RTEMS_INVALID_CLOCK
 TA1 - rtems_task_wake_when - 25:30:48   02/05/1988 - RTEMS_INVALID_CLOCK
 TA1 - current time - 08:30:51   02/05/1988
 TA1 - rtems_task_wake_when - 08:30:51   01/05/1988 - RTEMS_INVALID_CLOCK
-<pause - screen 3>
-TA1 - rtems_task_create - RTEMS_INVALID_NAME
-TA1 - rtems_task_create - RTEMS_INVALID_ADDRESS
-TA1 - rtems_task_create - stack size - RTEMS_UNSATISFIED  -- SKIPPED
-TA1 - rtems_task_create - TA2 created - RTEMS_SUCCESSFUL
-TA1 - rtems_task_suspend - suspend TA2 - RTEMS_SUCCESSFUL
-TA1 - rtems_task_suspend - suspend TA2 - RTEMS_ALREADY_SUSPENDED
-TA1 - rtems_task_resume - TA2 resumed - RTEMS_SUCCESSFUL
-TA1 - rtems_task_create - TA3 created - RTEMS_SUCCESSFUL
-TA1 - rtems_task_create - 5 created - RTEMS_SUCCESSFUL
-TA1 - rtems_task_create - 6 created - RTEMS_SUCCESSFUL
-TA1 - rtems_task_create - 7 created - RTEMS_SUCCESSFUL
-TA1 - rtems_task_create - 8 created - RTEMS_SUCCESSFUL
-TA1 - rtems_task_create - 9 created - RTEMS_SUCCESSFUL
-TA1 - rtems_task_create - 10 created - RTEMS_SUCCESSFUL
-TA1 - rtems_task_create - 11 - RTEMS_TOO_MANY
-TA1 - rtems_task_create - RTEMS_MP_NOT_CONFIGURED
 *** END OF TEST 9 ***

@@ -29,9 +29,6 @@ rtems_task Task_1(
   rtems_test_pause_and_screen_number( 2 );
 
   Screen2();
-  rtems_test_pause_and_screen_number( 3 );
-
-  Screen3();
 
   TEST_END();
 

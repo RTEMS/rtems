@@ -1,30 +1,41 @@
-/*  Screen3
- *
- *  This routine generates error screen 3 for test 9.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1999.
+/*
+ *  COPYRIGHT (c) 2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#define CONFIGURE_INIT
 #include "system.h"
 
-void Screen3()
+const char rtems_test_name[] = "SP TASK ERROR 03";
+
+rtems_task Init(
+  rtems_task_argument argument
+)
 {
   rtems_name        task_name;
   rtems_status_code status;
-  bool              skipUnsatisfied;
+  bool              skipUnsatisfied; 
+  
+  TEST_BEGIN();
+  
+  Task_name[ 1 ]       =  rtems_build_name( 'T', 'A', '1', ' ' );
+  Task_name[ 2 ]       =  rtems_build_name( 'T', 'A', '2', ' ' );
+  Task_name[ 3 ]       =  rtems_build_name( 'T', 'A', '3', ' ' );
+  Task_name[ 4 ]       =  rtems_build_name( 'T', 'A', '4', ' ' );
+  Task_name[ 5 ]       =  rtems_build_name( 'T', 'A', '5', ' ' );
+  Task_name[ 6 ]       =  rtems_build_name( 'T', 'A', '6', ' ' );
+  Task_name[ 7 ]       =  rtems_build_name( 'T', 'A', '7', ' ' );
+  Task_name[ 8 ]       =  rtems_build_name( 'T', 'A', '8', ' ' );
+  Task_name[ 9 ]       =  rtems_build_name( 'T', 'A', '9', ' ' );
+  Task_name[ 10 ]      =  rtems_build_name( 'T', 'A', 'A', ' ' );
 
   /* task create bad name */
   task_name = 1;
@@ -94,6 +105,15 @@ void Screen3()
       );
       puts( "TA1 - rtems_task_create - stack size - RTEMS_UNSATISFIED" );
   }
+   status = rtems_task_create(
+    Task_name[ 1 ],
+    4,
+    RTEMS_MINIMUM_STACK_SIZE * 3,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Task_id[ 1 ]
+  );
+  directive_failed( status, "rtems_task_create of TA1" );
 
   status = rtems_task_create(
     Task_name[ 2 ],
@@ -235,4 +255,6 @@ void Screen3()
   );
 #endif
   puts( "TA1 - rtems_task_create - RTEMS_MP_NOT_CONFIGURED" );
+ 
+  TEST_END();
 }
