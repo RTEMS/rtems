@@ -29,7 +29,16 @@
  *  Instantiate a private user environment for the calling thread.
  */
 
-static void free_user_env(void *arg)
+rtems_user_env_t * rtems_current_user_env_get(void)
+{
+  void *ptr = pthread_getspecific(rtems_current_user_env_key);
+  if (ptr == NULL) {
+    ptr = &rtems_global_user_env;
+  }
+  return (rtems_user_env_t *) ptr;
+}
+
+void rtems_libio_free_user_env(void *arg)
 {
   rtems_user_env_t *env = arg;
   bool uses_global_env = env == &rtems_global_user_env;
@@ -44,7 +53,7 @@ static void free_user_env(void *arg)
 static void free_user_env_protected(rtems_user_env_t *env)
 {
   _Thread_Disable_dispatch();
-  free_user_env(env);
+  rtems_libio_free_user_env(env);
   _Thread_Enable_dispatch();
 }
 
@@ -68,14 +77,13 @@ rtems_status_code rtems_libio_set_private_env(void)
         !rtems_filesystem_global_location_is_null(new_env->root_directory)
           && !rtems_filesystem_global_location_is_null(new_env->current_directory)
       ) {
-        sc = rtems_task_variable_add(
-          RTEMS_SELF,
-          (void **) &rtems_current_user_env,
-          free_user_env
+        int eno = pthread_setspecific(
+          rtems_current_user_env_key,
+          new_env
         );
-        if (sc == RTEMS_SUCCESSFUL) {
+
+        if (eno == 0) {
           free_user_env_protected(old_env);
-          rtems_current_user_env = new_env;
         } else {
           sc = RTEMS_TOO_MANY;
         }
@@ -84,7 +92,7 @@ rtems_status_code rtems_libio_set_private_env(void)
       }
 
       if (sc != RTEMS_SUCCESSFUL) {
-        free_user_env(new_env);
+        rtems_libio_free_user_env(new_env);
       }
     } else {
       sc = RTEMS_NO_MEMORY;
@@ -101,14 +109,7 @@ void rtems_libio_use_global_env(void)
   bool uses_private_env = env != &rtems_global_user_env;
 
   if (uses_private_env) {
-    sc = rtems_task_variable_delete(
-      RTEMS_SELF,
-      (void **) &rtems_current_user_env
-    );
-    if (sc != RTEMS_SUCCESSFUL) {
-      rtems_fatal_error_occurred(0xdeadbeef);
-    }
-
-    rtems_current_user_env = &rtems_global_user_env;
+    free_user_env_protected(env);
+    pthread_setspecific(rtems_current_user_env_key, NULL);
   }
 }

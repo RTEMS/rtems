@@ -66,8 +66,17 @@ typedef struct {
   pid_t                            pgrp; /* process group id */
 } rtems_user_env_t;
 
-extern rtems_user_env_t * rtems_current_user_env;
-extern rtems_user_env_t   rtems_global_user_env;
+extern rtems_user_env_t rtems_global_user_env;
+
+/**
+ * @brief Fetch the pointer to the current user environment.
+ *
+ * If the task has a private user environment the pointer to it will be
+ * returned. Otherwise the pointer to rtems_global_user_env will be returned.
+ */
+rtems_user_env_t * rtems_current_user_env_get(void);
+
+#define rtems_current_user_env rtems_current_user_env_get()
 
 #define rtems_filesystem_current     (rtems_current_user_env->current_directory)
 #define rtems_filesystem_root        (rtems_current_user_env->root_directory)
@@ -85,6 +94,11 @@ extern rtems_user_env_t   rtems_global_user_env;
  * If the task has already a private environment nothing will be changed.  This
  * function must be called from normal thread context and may block on a mutex.
  * Thread dispatching is disabled to protect some critical sections.
+ *
+ * The private environment internally uses a POSIX key. The key is added to the
+ * configuration implicitly. But for each thread that uses a private environment
+ * a key value pair has to be configured by the application. If only the global
+ * environment is used there is no need to configure a key value pair.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_NO_MEMORY Not enough memory.

@@ -46,6 +46,7 @@ void rtems_libio_init( void )
     rtems_status_code rc;
     uint32_t i;
     rtems_libio_t *iop;
+    int eno;
 
     if (rtems_libio_number_iops > 0)
     {
@@ -59,6 +60,17 @@ void rtems_libio_init( void )
           iop->data1 = iop + 1;
         iop->data1 = NULL;
     }
+
+  /*
+   *  Create the posix key for user environment.
+   */
+  eno = pthread_key_create(
+    &rtems_current_user_env_key,
+    rtems_libio_free_user_env
+  );
+  if (eno != 0) {
+    rtems_fatal_error_occurred( RTEMS_UNSATISFIED );
+  }
 
   /*
    *  Create the binary semaphore used to provide mutual exclusion

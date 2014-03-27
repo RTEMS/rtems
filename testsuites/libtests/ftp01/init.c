@@ -246,6 +246,8 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
+#define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 2
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>

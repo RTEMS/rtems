@@ -148,6 +148,11 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #define CONFIGURE_LIBIO_SEMAPHORES 1
 
+/**
+ * POSIX key count used by the IO library.
+ */
+#define CONFIGURE_LIBIO_POSIX_KEYS 1
+
 #ifdef CONFIGURE_INIT
   /**
    * When instantiating the configuration tables, this variable is
@@ -1734,15 +1739,17 @@ const rtems_libio_helper rtems_fs_init_helper =
 #include <rtems/posix/key.h>
 
 #ifndef CONFIGURE_MAXIMUM_POSIX_KEYS
-  #define CONFIGURE_MAXIMUM_POSIX_KEYS            0
-  #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 0
-#else
-  #ifndef CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
-    #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
-      (CONFIGURE_MAXIMUM_POSIX_KEYS * \
-       (CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS))
-  #endif
+  #define CONFIGURE_MAXIMUM_POSIX_KEYS 0
 #endif
+
+#ifndef CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
+  #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
+    (CONFIGURE_MAXIMUM_POSIX_KEYS * \
+     (CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS))
+#endif
+
+#define CONFIGURE_POSIX_KEYS \
+  (CONFIGURE_MAXIMUM_POSIX_KEYS + CONFIGURE_LIBIO_POSIX_KEYS)
 
 #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys, _key_value_pairs) \
    (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
@@ -2222,7 +2229,7 @@ const rtems_libio_helper rtems_fs_init_helper =
      CONFIGURE_TOTAL_TASKS_AND_THREADS, CONFIGURE_TOTAL_TASKS_AND_THREADS) + \
    CONFIGURE_MEMORY_FOR_CLASSIC + \
    CONFIGURE_MEMORY_FOR_POSIX_KEYS( \
-      CONFIGURE_MAXIMUM_POSIX_KEYS, \
+      CONFIGURE_POSIX_KEYS, \
       CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS ) + \
    CONFIGURE_MEMORY_FOR_POSIX + \
    CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS + \
@@ -2397,7 +2404,7 @@ const rtems_libio_helper rtems_fs_init_helper =
     CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
     CONFIGURE_STACK_SPACE_SIZE,               /* required stack space */
     CONFIGURE_MAXIMUM_USER_EXTENSIONS,        /* maximum dynamic extensions */
-    CONFIGURE_MAXIMUM_POSIX_KEYS,             /* POSIX keys are always */
+    CONFIGURE_POSIX_KEYS,                     /* POSIX keys are always */
     CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS,  /*   enabled */
     CONFIGURE_MICROSECONDS_PER_TICK,          /* microseconds per clock tick */
     1000 * CONFIGURE_MICROSECONDS_PER_TICK,   /* nanoseconds per clock tick */
@@ -2592,7 +2599,7 @@ const rtems_libio_helper rtems_fs_init_helper =
     CONFIGURE_MEMORY_FOR_PERIODS(CONFIGURE_MAXIMUM_PERIODS),
     CONFIGURE_MEMORY_FOR_BARRIERS(CONFIGURE_BARRIERS),
     CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(CONFIGURE_MAXIMUM_USER_EXTENSIONS),
-    CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS, \
+    CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_POSIX_KEYS, \
                                      CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS ),
 
 #ifdef RTEMS_POSIX_API

@@ -1148,7 +1148,9 @@ cat: /etc/passwd: No such file or directory
 This command is included in the default shell command set.  
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_CHROOT} to have this
-command included.
+command included. Additional to that you have to add one
+POSIX key value pair for each thread where you want to use
+the command.
 
 This command can be excluded from the shell command set by
 defining @code{CONFIGURE_SHELL_NO_COMMAND_CHROOT} when all

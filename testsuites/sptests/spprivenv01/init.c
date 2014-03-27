@@ -63,13 +63,18 @@ rtems_task Init(
 
   puts( "Init - allocating most of workspace memory" );
   opaque = rtems_workspace_greedy_allocate( NULL, 0 );
-  
-  puts( "Init - attempt to reset env - expect RTEMS_TOO_MANY" );
+
+  puts( "Init - attempt to reset env - expect RTEMS_SUCCESSFUL" );
   sc = rtems_libio_set_private_env();
-  rtems_test_assert( sc == RTEMS_TOO_MANY );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( rtems_current_user_env != &rtems_global_user_env );
 
   puts( "Init - freeing the workspace memory" );
   rtems_workspace_greedy_free( opaque );
+
+  puts( "Init - Reset to global environment" );
+  rtems_libio_use_global_env();
+  rtems_test_assert( rtems_current_user_env == &rtems_global_user_env );
 
   puts( "Init - Attempt to get a private environment" );
   sc = rtems_libio_set_private_env();
@@ -117,6 +122,9 @@ rtems_task Init(
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
+#define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 2
 
 #define CONFIGURE_INIT
 

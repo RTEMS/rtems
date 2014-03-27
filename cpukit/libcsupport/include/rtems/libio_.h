@@ -24,6 +24,7 @@
 #include <sys/uio.h>
 #include <errno.h>
 #include <limits.h>
+#include <pthread.h>
 
 #include <rtems.h>
 #include <rtems/libio.h>
@@ -237,6 +238,10 @@ void rtems_filesystem_location_free( rtems_filesystem_location_info_t *loc );
  *  External structures
  */
 #include <rtems/userenv.h>
+
+void rtems_libio_free_user_env( void *env );
+
+extern pthread_key_t rtems_current_user_env_key;
 
 static inline void rtems_libio_lock( void )
 {

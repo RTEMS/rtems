@@ -257,4 +257,4 @@ rtems_user_env_t rtems_global_user_env = {
   .umask = S_IWGRP | S_IWOTH
 };
 
-rtems_user_env_t *rtems_current_user_env = &rtems_global_user_env;
+pthread_key_t rtems_current_user_env_key;
