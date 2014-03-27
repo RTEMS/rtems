@@ -98,38 +98,28 @@ static int open_files(void)
   return (int) rtems_libio_number_iops - free_count;
 }
 
-static void free_all_delayed_blocks(void)
-{
-  #ifdef HEAP_PROTECTION
-    _RTEMS_Lock_allocator();
-    _Thread_Disable_dispatch();
-    _Heap_Protection_free_all_delayed_blocks( RTEMS_Malloc_Heap );
-    _Heap_Protection_free_all_delayed_blocks( &_Workspace_Area );
-    _Thread_Enable_dispatch();
-    _RTEMS_Unlock_allocator();
-  #endif
-}
-
 void rtems_resource_snapshot_take(rtems_resource_snapshot *snapshot)
 {
   uint32_t *active = &snapshot->rtems_api.active_barriers;
   size_t i;
 
-  free_all_delayed_blocks();
+  _RTEMS_Lock_allocator();
 
   _Thread_Kill_zombies();
 
-  _Protected_heap_Get_information(RTEMS_Malloc_Heap, &snapshot->heap_info);
+  #ifdef HEAP_PROTECTION
+    _Heap_Protection_free_all_delayed_blocks(RTEMS_Malloc_Heap);
+    _Heap_Protection_free_all_delayed_blocks(&_Workspace_Area);
+  #endif
 
-  _Thread_Disable_dispatch();
-
+  _Heap_Get_information(RTEMS_Malloc_Heap, &snapshot->heap_info);
   _Heap_Get_information(&_Workspace_Area, &snapshot->workspace_info);
 
   for (i = 0; i < RTEMS_ARRAY_SIZE(objects_info_table); ++i) {
     active [i] = _Objects_Active_count(objects_info_table[i]);
   }
 
-  _Thread_Enable_dispatch();
+  _RTEMS_Unlock_allocator();
 
   #ifndef RTEMS_POSIX_API
     memset(&snapshot->posix_api, 0, sizeof(snapshot->posix_api));

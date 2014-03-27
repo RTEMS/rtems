@@ -30,6 +30,7 @@ rtems_status_code rtems_rate_monotonic_delete(
   Rate_monotonic_Control *the_period;
   Objects_Locations       location;
 
+  _Objects_Allocator_lock();
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
 
@@ -38,8 +39,9 @@ rtems_status_code rtems_rate_monotonic_delete(
       _Objects_Close( &_Rate_monotonic_Information, &the_period->Object );
       (void) _Watchdog_Remove( &the_period->Timer );
       the_period->state = RATE_MONOTONIC_INACTIVE;
-      _Rate_monotonic_Free( the_period );
       _Objects_Put( &the_period->Object );
+      _Rate_monotonic_Free( the_period );
+      _Objects_Allocator_unlock();
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -48,6 +50,8 @@ rtems_status_code rtems_rate_monotonic_delete(
     case OBJECTS_ERROR:
       break;
   }
+
+  _Objects_Allocator_unlock();
 
   return RTEMS_INVALID_ID;
 }

@@ -48,19 +48,12 @@ extern const int
  */
 void _POSIX_Semaphore_Manager_initialization(void);
 
-/**
- *  @brief POSIX Semaphore Allocate
- *
- *  This function allocates a semaphore control block from
- *  the inactive chain of free semaphore control blocks.
- */
-
-RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Allocate( void )
+RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *
+  _POSIX_Semaphore_Allocate_unprotected( void )
 {
   return (POSIX_Semaphore_Control *)
-    _Objects_Allocate( &_POSIX_Semaphore_Information );
+    _Objects_Allocate_unprotected( &_POSIX_Semaphore_Information );
 }
-
 
 /**
  *  @brief POSIX Semaphore Free

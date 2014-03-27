@@ -33,7 +33,7 @@ rtems_status_code rtems_port_create(
   rtems_id     *id
 )
 {
-  Dual_ported_memory_Control          *the_port;
+  Dual_ported_memory_Control *the_port;
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
@@ -45,12 +45,10 @@ rtems_status_code rtems_port_create(
        !_Addresses_Is_aligned( external_start ) )
     return RTEMS_INVALID_ADDRESS;
 
-  _Thread_Disable_dispatch();             /* to prevent deletion */
-
   the_port = _Dual_ported_memory_Allocate();
 
   if ( !the_port ) {
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return RTEMS_TOO_MANY;
   }
 
@@ -65,6 +63,6 @@ rtems_status_code rtems_port_create(
   );
 
   *id = the_port->Object.id;
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }

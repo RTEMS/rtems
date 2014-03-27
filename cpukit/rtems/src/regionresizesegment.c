@@ -64,7 +64,8 @@ rtems_status_code rtems_region_resize_segment(
         _Region_Debug_Walk( the_region, 8 );
 
         if ( status == HEAP_RESIZE_SUCCESSFUL )
-          _Region_Process_queue( the_region );    /* unlocks allocator */
+          /* unlocks allocator */
+          _Region_Process_queue( the_region );
         else
           _RTEMS_Unlock_allocator();
 

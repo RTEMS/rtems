@@ -35,11 +35,12 @@ int sem_unlink(
   const char *name
 )
 {
-  int  status;
-  POSIX_Semaphore_Control          *the_semaphore;
-  Objects_Id the_semaphore_id;
-  size_t name_len;
+  int                      status;
+  POSIX_Semaphore_Control *the_semaphore;
+  Objects_Id               the_semaphore_id;
+  size_t                   name_len;
 
+  _Objects_Allocator_lock();
   _Thread_Disable_dispatch();
 
   status = _POSIX_Semaphore_Name_to_id( name, &the_semaphore_id, &name_len );
@@ -58,5 +59,7 @@ int sem_unlink(
   _POSIX_Semaphore_Delete( the_semaphore );
 
   _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
+
   return 0;
 }

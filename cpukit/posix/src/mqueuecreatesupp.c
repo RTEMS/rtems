@@ -62,8 +62,6 @@ int _POSIX_Message_queue_Create_support(
 
   /* length of name has already been validated */
 
-  _Thread_Disable_dispatch();
-
   /*
    *  There is no real basis for the default values.  They will work
    *  but were not compared against any existing implementation for
@@ -75,12 +73,10 @@ int _POSIX_Message_queue_Create_support(
     attr.mq_msgsize = 16;
   } else {
     if ( attr_ptr->mq_maxmsg <= 0 ){
-      _Thread_Enable_dispatch();
       rtems_set_errno_and_return_minus_one( EINVAL );
     }
 
     if ( attr_ptr->mq_msgsize <= 0 ){
-      _Thread_Enable_dispatch();
       rtems_set_errno_and_return_minus_one( EINVAL );
     }
 
@@ -89,7 +85,7 @@ int _POSIX_Message_queue_Create_support(
 
   the_mq = _POSIX_Message_queue_Allocate();
   if ( !the_mq ) {
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     rtems_set_errno_and_return_minus_one( ENFILE );
   }
 
@@ -100,7 +96,7 @@ int _POSIX_Message_queue_Create_support(
   name = _Workspace_String_duplicate( name_arg, name_len );
   if ( !name ) {
     _POSIX_Message_queue_Free( the_mq );
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     rtems_set_errno_and_return_minus_one( ENOMEM );
   }
 
@@ -128,7 +124,7 @@ int _POSIX_Message_queue_Create_support(
 
     _POSIX_Message_queue_Free( the_mq );
     _Workspace_Free(name);
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     rtems_set_errno_and_return_minus_one( ENOSPC );
   }
 
@@ -140,6 +136,6 @@ int _POSIX_Message_queue_Create_support(
 
   *message_queue = the_mq;
 
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
   return 0;
 }

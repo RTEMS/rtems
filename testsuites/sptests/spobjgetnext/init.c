@@ -108,7 +108,9 @@ rtems_task Init(
   /* XXX try with a manager with no objects created */
 
   puts( "Init - _Objects_Active_count" );
+  _Objects_Allocator_lock();
   active_count = _Objects_Active_count( info );
+  _Objects_Allocator_unlock();
   rtems_test_assert( active_count == 1 );
 
   TEST_END();

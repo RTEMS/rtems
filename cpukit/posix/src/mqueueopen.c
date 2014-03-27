@@ -72,8 +72,6 @@ mqd_t mq_open(
   Objects_Locations               location;
   size_t                          name_len;
 
-  _Thread_Disable_dispatch();
-
   if ( oflag & O_CREAT ) {
     va_start(arg, oflag);
     mode = va_arg( arg, mode_t );
@@ -83,7 +81,7 @@ mqd_t mq_open(
 
   the_mq_fd = _POSIX_Message_queue_Allocate_fd();
   if ( !the_mq_fd ) {
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     rtems_set_errno_and_return_minus_one( ENFILE );
   }
   the_mq_fd->oflag = oflag;
@@ -103,7 +101,7 @@ mqd_t mq_open(
      */
     if ( !( status == ENOENT && (oflag & O_CREAT) ) ) {
       _POSIX_Message_queue_Free_fd( the_mq_fd );
-      _Thread_Enable_dispatch();
+      _Objects_Allocator_unlock();
       rtems_set_errno_and_return_minus_one_cast( status, mqd_t );
     }
 
@@ -113,7 +111,7 @@ mqd_t mq_open(
      */
     if ( (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL) ) {
       _POSIX_Message_queue_Free_fd( the_mq_fd );
-      _Thread_Enable_dispatch();
+      _Objects_Allocator_unlock();
       rtems_set_errno_and_return_minus_one_cast( EEXIST, mqd_t );
     }
 
@@ -130,7 +128,7 @@ mqd_t mq_open(
       NULL
     );
     _Thread_Enable_dispatch();
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return (mqd_t)the_mq_fd->Object.id;
 
   }
@@ -152,7 +150,7 @@ mqd_t mq_open(
    */
   if ( status == -1 ) {
     _POSIX_Message_queue_Free_fd( the_mq_fd );
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return (mqd_t) -1;
   }
 
@@ -163,7 +161,7 @@ mqd_t mq_open(
     NULL
   );
 
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
 
   return (mqd_t) the_mq_fd->Object.id;
 }

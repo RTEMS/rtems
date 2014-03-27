@@ -175,7 +175,6 @@ librtems_a_SOURCES += src/rtemstimerdata.c
 
 ## MESSAGE_QUEUE_C_FILES
 librtems_a_SOURCES += src/msg.c
-librtems_a_SOURCES += src/msgqallocate.c
 librtems_a_SOURCES += src/msgqbroadcast.c
 librtems_a_SOURCES += src/msgqcreate.c
 librtems_a_SOURCES += src/msgqdelete.c

@@ -100,12 +100,10 @@ rtems_status_code rtems_semaphore_create(
   if ( !_Attributes_Is_counting_semaphore( attribute_set ) && ( count > 1 ) )
     return RTEMS_INVALID_NUMBER;
 
-  _Thread_Disable_dispatch();             /* prevents deletion */
-
   the_semaphore = _Semaphore_Allocate();
 
   if ( !the_semaphore ) {
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return RTEMS_TOO_MANY;
   }
 
@@ -114,7 +112,7 @@ rtems_status_code rtems_semaphore_create(
        ! ( _Objects_MP_Allocate_and_open( &_Semaphore_Information, name,
                             the_semaphore->Object.id, false ) ) ) {
     _Semaphore_Free( the_semaphore );
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return RTEMS_TOO_MANY;
   }
 #endif
@@ -179,14 +177,14 @@ rtems_status_code rtems_semaphore_create(
 
     mutex_status = _CORE_mutex_Initialize(
       &the_semaphore->Core_control.mutex,
-      _Thread_Executing,
+      _Thread_Get_executing(),
       &the_mutex_attr,
       (count == 1) ? CORE_MUTEX_UNLOCKED : CORE_MUTEX_LOCKED
     );
 
     if ( mutex_status == CORE_MUTEX_STATUS_CEILING_VIOLATED ) {
       _Semaphore_Free( the_semaphore );
-      _Thread_Enable_dispatch();
+      _Objects_Allocator_unlock();
       return RTEMS_INVALID_PRIORITY;
     }
   }
@@ -212,6 +210,6 @@ rtems_status_code rtems_semaphore_create(
       0                          /* Not used */
     );
 #endif
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }

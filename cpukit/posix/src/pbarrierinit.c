@@ -92,15 +92,10 @@ int pthread_barrier_init(
   the_attributes.discipline    = CORE_BARRIER_AUTOMATIC_RELEASE;
   the_attributes.maximum_count = count;
 
-  /*
-   * Enter dispatching critical section to allocate and initialize barrier
-   */
-  _Thread_Disable_dispatch();             /* prevents deletion */
-
   the_barrier = _POSIX_Barrier_Allocate();
 
   if ( !the_barrier ) {
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return EAGAIN;
   }
 
@@ -112,10 +107,7 @@ int pthread_barrier_init(
     0
   );
 
-  /*
-   * Exit the critical section and return the user an operational barrier
-   */
   *barrier = the_barrier->Object.id;
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
   return 0;
 }

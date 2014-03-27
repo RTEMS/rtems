@@ -66,9 +66,7 @@ rtems_status_code rtems_region_create(
   if ( !id )
     return RTEMS_INVALID_ADDRESS;
 
-  _RTEMS_Lock_allocator();                      /* to prevent deletion */
-
-    the_region = _Region_Allocate();
+  the_region = _Region_Allocate();
 
     if ( !the_region )
       return_status = RTEMS_TOO_MANY;
@@ -111,6 +109,7 @@ rtems_status_code rtems_region_create(
       }
     }
 
-  _RTEMS_Unlock_allocator();
+  _Objects_Allocator_unlock();
+
   return return_status;
 }

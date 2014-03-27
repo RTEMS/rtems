@@ -20,8 +20,10 @@
 
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/address.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/isrlevel.h>
+#include <rtems/score/sysstate.h>
 #include <rtems/score/wkspace.h>
 
 #include <string.h>  /* for memcpy() */
@@ -42,16 +44,21 @@ void _Objects_Extend_information(
 )
 {
   Objects_Control  *the_object;
-  Chain_Control     Inactive;
   uint32_t          block_count;
   uint32_t          block;
   uint32_t          index_base;
+  uint32_t          index_end;
   uint32_t          minimum_index;
   uint32_t          index;
   uint32_t          maximum;
   size_t            block_size;
   void             *new_object_block;
   bool              do_extend;
+
+  _Assert(
+    _Debug_Is_owner_of_allocator()
+      || !_System_state_Is_up( _System_state_Get() )
+  );
 
   /*
    *  Search for a free block of indexes. If we do NOT need to allocate or
@@ -76,6 +83,7 @@ void _Objects_Extend_information(
         index_base += information->allocation_size;
     }
   }
+  index_end = index_base + information->allocation_size;
 
   maximum = (uint32_t) information->maximum + information->allocation_size;
 
@@ -213,12 +221,11 @@ void _Objects_Extend_information(
     object_blocks[block_count] = NULL;
     inactive_per_block[block_count] = 0;
 
-    for ( index=index_base ;
-          index < ( information->allocation_size + index_base );
-          index++ ) {
+    for ( index = index_base ; index < index_end ; ++index ) {
       local_table[ index ] = NULL;
     }
 
+    _Thread_Disable_dispatch();
     _ISR_Disable( level );
 
     old_tables = information->object_blocks;
@@ -235,6 +242,7 @@ void _Objects_Extend_information(
       );
 
     _ISR_Enable( level );
+    _Thread_Enable_dispatch();
 
     _Workspace_Free( old_tables );
 
@@ -247,32 +255,21 @@ void _Objects_Extend_information(
   information->object_blocks[ block ] = new_object_block;
 
   /*
-   *  Initialize objects .. add to a local chain first.
+   *  Append to inactive chain.
    */
-  _Chain_Initialize(
-    &Inactive,
-    information->object_blocks[ block ],
-    information->allocation_size,
-    information->size
-  );
-
-  /*
-   *  Move from the local chain, initialise, then append to the inactive chain
-   */
-  index = index_base;
-
-  while ((the_object = (Objects_Control *) _Chain_Get( &Inactive )) != NULL ) {
-
+  the_object = information->object_blocks[ block ];
+  for ( index = index_base ; index < index_end ; ++index ) {
     the_object->id = _Objects_Build_id(
-        information->the_api,
-        information->the_class,
-        _Objects_Local_node,
-        index
-      );
+      information->the_api,
+      information->the_class,
+      _Objects_Local_node,
+      index
+    );
 
-    _Chain_Append( &information->Inactive, &the_object->Node );
+    _Chain_Append_unprotected( &information->Inactive, &the_object->Node );
 
-    index++;
+    the_object = (Objects_Control *)
+      ( (char *) the_object + information->size );
   }
 
   information->inactive_per_block[ block ] = information->allocation_size;

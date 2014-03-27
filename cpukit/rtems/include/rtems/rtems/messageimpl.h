@@ -90,16 +90,6 @@ rtems_status_code _Message_queue_Submit(
 );
 
 /**
- * @brief Message Queue Allocate
- *
- * This function allocates a message queue control block from
- * the inactive chain of free message queue control blocks.
- *
- * @retval the_message_queue filled in if successful, NULL otherwise
- */
-Message_queue_Control *_Message_queue_Allocate (void);
-
-/**
  * @brief Message queue Translate Core Message Queue Return Code
  *
  * This function returns a RTEMS status code based on
@@ -160,6 +150,12 @@ RTEMS_INLINE_ROUTINE Message_queue_Control *_Message_queue_Get (
 {
   return (Message_queue_Control *)
      _Objects_Get( &_Message_queue_Information, id, location );
+}
+
+RTEMS_INLINE_ROUTINE Message_queue_Control *_Message_queue_Allocate( void )
+{
+  return (Message_queue_Control *)
+    _Objects_Allocate( &_Message_queue_Information );
 }
 
 /**@}*/

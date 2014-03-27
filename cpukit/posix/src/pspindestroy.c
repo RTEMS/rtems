@@ -45,6 +45,7 @@ int pthread_spin_destroy(
   if ( !spinlock )
     return EINVAL;
 
+  _Objects_Allocator_lock();
   the_spinlock = _POSIX_Spinlock_Get( spinlock, &location );
   switch ( location ) {
 
@@ -55,10 +56,10 @@ int pthread_spin_destroy(
       }
 
       _Objects_Close( &_POSIX_Spinlock_Information, &the_spinlock->Object );
-
-      _POSIX_Spinlock_Free( the_spinlock );
-
       _Objects_Put( &the_spinlock->Object );
+      _POSIX_Spinlock_Free( the_spinlock );
+      _Objects_Allocator_unlock();
+
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -67,6 +68,8 @@ int pthread_spin_destroy(
     case OBJECTS_ERROR:
       break;
   }
+
+  _Objects_Allocator_unlock();
 
   return EINVAL;
 }

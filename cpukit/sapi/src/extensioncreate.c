@@ -39,16 +39,16 @@ rtems_status_code rtems_extension_create(
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
 
-  _Thread_Disable_dispatch();         /* to prevent deletion */
-
   the_extension = _Extension_Allocate();
 
   if ( !the_extension ) {
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return RTEMS_TOO_MANY;
   }
 
+  _Thread_Disable_dispatch();
   _User_extensions_Add_set_with_table( &the_extension->Extension, extension_table );
+  _Thread_Enable_dispatch();
 
   _Objects_Open(
     &_Extension_Information,
@@ -57,6 +57,6 @@ rtems_status_code rtems_extension_create(
   );
 
   *id = the_extension->Object.id;
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }

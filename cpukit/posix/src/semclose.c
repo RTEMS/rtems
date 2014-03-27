@@ -38,6 +38,7 @@ int sem_close(
   POSIX_Semaphore_Control          *the_semaphore;
   Objects_Locations                 location;
 
+  _Objects_Allocator_lock();
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
 
@@ -45,6 +46,7 @@ int sem_close(
       the_semaphore->open_count -= 1;
       _POSIX_Semaphore_Delete( the_semaphore );
       _Objects_Put( &the_semaphore->Object );
+      _Objects_Allocator_unlock();
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -53,6 +55,8 @@ int sem_close(
     case OBJECTS_ERROR:
       break;
   }
+
+  _Objects_Allocator_unlock();
 
   rtems_set_errno_and_return_minus_one( EINVAL );
 }

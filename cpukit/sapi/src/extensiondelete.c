@@ -30,13 +30,15 @@ rtems_status_code rtems_extension_delete(
   Extension_Control   *the_extension;
   Objects_Locations    location;
 
+  _Objects_Allocator_lock();
   the_extension = _Extension_Get( id, &location );
   switch ( location ) {
     case OBJECTS_LOCAL:
       _User_extensions_Remove_set( &the_extension->Extension );
       _Objects_Close( &_Extension_Information, &the_extension->Object );
-      _Extension_Free( the_extension );
       _Objects_Put( &the_extension->Object );
+      _Extension_Free( the_extension );
+      _Objects_Allocator_unlock();
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -45,6 +47,8 @@ rtems_status_code rtems_extension_delete(
     case OBJECTS_ERROR:
       break;
   }
+
+  _Objects_Allocator_unlock();
 
   return RTEMS_INVALID_ID;
 }

@@ -68,16 +68,6 @@ extern void (*_POSIX_Threads_Initialize_user_threads_p)(void);
 void _POSIX_Threads_Manager_initialization(void);
 
 /**
- * @brief Allocate POSIX thread control block.
- *
- * This function allocates a pthread control block from
- * the inactive chain of free pthread control blocks.
- *
- * @return This method returns a newly allocated thread.
- */
-RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate( void );
-
-/**
  * @brief Copy POSIX Thread attribute structure.
  *
  * This routine copies the attr2 thread attribute structure
@@ -211,15 +201,14 @@ int rtems_pthread_attribute_compare(
   const pthread_attr_t *attr2
 );
 
-/*
- *  _POSIX_Threads_Allocate
- */
-
-RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate( void )
+RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate(void)
 {
+  _Objects_Allocator_lock();
+
   _Thread_Kill_zombies();
 
-  return (Thread_Control *) _Objects_Allocate( &_POSIX_Threads_Information );
+  return (Thread_Control *)
+    _Objects_Allocate_unprotected( &_POSIX_Threads_Information );
 }
 
 /*

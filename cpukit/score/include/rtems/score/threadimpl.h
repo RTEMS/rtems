@@ -590,13 +590,10 @@ RTEMS_INLINE_ROUTINE uint32_t _Thread_Get_maximum_internal_threads(void)
   return maximum_internal_threads;
 }
 
-/**
- * This routine allocates an internal thread.
- */
-
 RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Internal_allocate( void )
 {
-  return (Thread_Control *) _Objects_Allocate( &_Thread_Internal_information );
+  return (Thread_Control *)
+    _Objects_Allocate_unprotected( &_Thread_Internal_information );
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_Request_dispatch_if_executing(

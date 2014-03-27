@@ -58,7 +58,8 @@ void _API_Mutex_Allocate(
     0
   };
 
-  mutex = (API_Mutex_Control *) _Objects_Allocate( &_API_Mutex_Information );
+  mutex = (API_Mutex_Control *)
+    _Objects_Allocate_unprotected( &_API_Mutex_Information );
 
   _CORE_mutex_Initialize( &mutex->Mutex, NULL, &attr, CORE_MUTEX_UNLOCKED );
 

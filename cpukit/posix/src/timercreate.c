@@ -66,21 +66,19 @@ int timer_create(
        rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  _Thread_Disable_dispatch();         /* to prevent deletion */
-
   /*
    *  Allocate a timer
    */
   ptimer = _POSIX_Timer_Allocate();
   if ( !ptimer ) {
-    _Objects_Put( &ptimer->Object );
+    _Objects_Allocator_unlock();
     rtems_set_errno_and_return_minus_one( EAGAIN );
   }
 
   /* The data of the created timer are stored to use them later */
 
   ptimer->state     = POSIX_TIMER_STATE_CREATE_NEW;
-  ptimer->thread_id = _Thread_Executing->Object.id;
+  ptimer->thread_id = _Thread_Get_executing()->Object.id;
 
   if ( evp != NULL ) {
     ptimer->inf.sigev_notify = evp->sigev_notify;
@@ -98,6 +96,6 @@ int timer_create(
   _Objects_Open_u32(&_POSIX_Timer_Information, &ptimer->Object, 0);
 
   *timerid  = ptimer->Object.id;
-  _Objects_Put( &ptimer->Object );
+  _Objects_Allocator_unlock();
   return 0;
 }

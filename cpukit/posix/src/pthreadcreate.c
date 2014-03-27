@@ -156,18 +156,13 @@ int pthread_create(
   #endif
 
   /*
-   *  Lock the allocator mutex for protection
-   */
-  _RTEMS_Lock_allocator();
-
-  /*
    *  Allocate the thread control block.
    *
    *  NOTE:  Global threads are not currently supported.
    */
   the_thread = _POSIX_Threads_Allocate();
   if ( !the_thread ) {
-    _RTEMS_Unlock_allocator();
+    _Objects_Allocator_unlock();
     return EAGAIN;
   }
 
@@ -190,7 +185,7 @@ int pthread_create(
   );
   if ( !status ) {
     _POSIX_Threads_Free( the_thread );
-    _RTEMS_Unlock_allocator();
+    _Objects_Allocator_unlock();
     return EAGAIN;
   }
 
@@ -235,7 +230,7 @@ int pthread_create(
     if ( !status ) {
       _Thread_Enable_dispatch();
       _POSIX_Threads_Free( the_thread );
-      _RTEMS_Unlock_allocator();
+      _Objects_Allocator_unlock();
       return EINVAL;
     }
   #endif
@@ -254,6 +249,6 @@ int pthread_create(
    */
   *thread = the_thread->Object.id;
 
-  _RTEMS_Unlock_allocator();
+  _Objects_Allocator_unlock();
   return 0;
 }

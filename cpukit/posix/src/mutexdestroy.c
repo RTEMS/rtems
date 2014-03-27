@@ -39,6 +39,7 @@ int pthread_mutex_destroy(
   register POSIX_Mutex_Control *the_mutex;
   Objects_Locations             location;
 
+  _Objects_Allocator_lock();
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
 
@@ -50,15 +51,16 @@ int pthread_mutex_destroy(
 
       if ( _CORE_mutex_Is_locked( &the_mutex->Mutex ) ) {
         _Objects_Put( &the_mutex->Object );
+        _Objects_Allocator_unlock();
         return EBUSY;
       }
 
       _Objects_Close( &_POSIX_Mutex_Information, &the_mutex->Object );
-
       _CORE_mutex_Flush( &the_mutex->Mutex, NULL, EINVAL );
-
-      _POSIX_Mutex_Free( the_mutex );
       _Objects_Put( &the_mutex->Object );
+      _POSIX_Mutex_Free( the_mutex );
+      _Objects_Allocator_unlock();
+
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -67,6 +69,8 @@ int pthread_mutex_destroy(
     case OBJECTS_ERROR:
       break;
   }
+
+  _Objects_Allocator_unlock();
 
   return EINVAL;
 }

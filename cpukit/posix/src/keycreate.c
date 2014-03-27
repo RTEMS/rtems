@@ -38,18 +38,16 @@ int pthread_key_create(
 {
   POSIX_Keys_Control  *the_key;
 
-  _Thread_Disable_dispatch();
-
   the_key = _POSIX_Keys_Allocate();
 
   if ( !the_key ) {
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return EAGAIN;
   }
 
   the_key->destructor = destructor;
   _Objects_Open_u32( &_POSIX_Keys_Information, &the_key->Object, 0 );
   *key = the_key->Object.id;
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
   return 0;
 }

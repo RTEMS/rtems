@@ -51,12 +51,10 @@ int pthread_cond_init(
   if ( !the_attr->is_initialized )
     return EINVAL;
 
-  _Thread_Disable_dispatch();
-
   the_cond = _POSIX_Condition_variables_Allocate();
 
   if ( !the_cond ) {
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return ENOMEM;
   }
 
@@ -79,7 +77,7 @@ int pthread_cond_init(
 
   *cond = the_cond->Object.id;
 
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
 
   return 0;
 }

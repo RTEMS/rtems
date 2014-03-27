@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
 
 void _Objects_Free(
@@ -28,7 +29,9 @@ void _Objects_Free(
 {
   uint32_t    allocation_size = information->allocation_size;
 
-  _Chain_Append( &information->Inactive, &the_object->Node );
+  _Assert( _Debug_Is_owner_of_allocator() );
+
+  _Chain_Append_unprotected( &information->Inactive, &the_object->Node );
 
   if ( information->auto_extend ) {
     uint32_t    block;

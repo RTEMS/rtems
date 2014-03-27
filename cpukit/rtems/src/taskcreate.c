@@ -105,11 +105,6 @@ rtems_status_code rtems_task_create(
    */
 
   /*
-   *  Lock the allocator mutex for protection
-   */
-  _RTEMS_Lock_allocator();
-
-  /*
    *  Allocate the thread control block and -- if the task is global --
    *  allocate a global object control block.
    *
@@ -122,7 +117,7 @@ rtems_status_code rtems_task_create(
   the_thread = _RTEMS_tasks_Allocate();
 
   if ( !the_thread ) {
-    _RTEMS_Unlock_allocator();
+    _Objects_Allocator_unlock();
     return RTEMS_TOO_MANY;
   }
 
@@ -132,7 +127,7 @@ rtems_status_code rtems_task_create(
 
     if ( _Objects_MP_Is_null_global_object( the_global_object ) ) {
       _RTEMS_tasks_Free( the_thread );
-      _RTEMS_Unlock_allocator();
+      _Objects_Allocator_unlock();
       return RTEMS_TOO_MANY;
     }
   }
@@ -164,7 +159,7 @@ rtems_status_code rtems_task_create(
       _Objects_MP_Free_global_object( the_global_object );
 #endif
     _RTEMS_tasks_Free( the_thread );
-    _RTEMS_Unlock_allocator();
+    _Objects_Allocator_unlock();
     return RTEMS_UNSATISFIED;
   }
 
@@ -195,6 +190,6 @@ rtems_status_code rtems_task_create(
    }
 #endif
 
-  _RTEMS_Unlock_allocator();
+  _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }

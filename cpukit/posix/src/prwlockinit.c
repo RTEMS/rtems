@@ -88,15 +88,10 @@ int pthread_rwlock_init(
    */
   _CORE_RWLock_Initialize_attributes( &the_attributes );
 
-  /*
-   * Enter dispatching critical section to allocate and initialize RWLock
-   */
-  _Thread_Disable_dispatch();             /* prevents deletion */
-
   the_rwlock = _POSIX_RWLock_Allocate();
 
   if ( !the_rwlock ) {
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return EAGAIN;
   }
 
@@ -110,6 +105,6 @@ int pthread_rwlock_init(
 
   *rwlock = the_rwlock->Object.id;
 
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
   return 0;
 }

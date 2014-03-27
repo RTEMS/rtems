@@ -66,8 +66,6 @@ sem_t *sem_open(
   Objects_Locations          location;
   size_t                     name_len;
 
-  _Thread_Disable_dispatch();
-
   if ( oflag & O_CREAT ) {
     va_start(arg, oflag);
     mode = va_arg( arg, mode_t );
@@ -75,6 +73,7 @@ sem_t *sem_open(
     va_end(arg);
   }
 
+  _Objects_Allocator_lock();
   status = _POSIX_Semaphore_Name_to_id( name, &the_semaphore_id, &name_len );
 
   /*
@@ -92,7 +91,7 @@ sem_t *sem_open(
      */
 
     if ( !( status == ENOENT && (oflag & O_CREAT) ) ) {
-      _Thread_Enable_dispatch();
+      _Objects_Allocator_unlock();
       rtems_set_errno_and_return_minus_one_cast( status, sem_t * );
     }
   } else {
@@ -102,14 +101,14 @@ sem_t *sem_open(
      */
 
     if ( (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL) ) {
-      _Thread_Enable_dispatch();
+      _Objects_Allocator_unlock();
       rtems_set_errno_and_return_minus_one_cast( EEXIST, sem_t * );
     }
 
     the_semaphore = _POSIX_Semaphore_Get( (sem_t *) &the_semaphore_id, &location );
     the_semaphore->open_count += 1;
     _Thread_Enable_dispatch();
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     goto return_id;
   }
 
@@ -130,7 +129,7 @@ sem_t *sem_open(
    * errno was set by Create_support, so don't set it again.
    */
 
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
 
   if ( status == -1 )
     return SEM_FAILED;

@@ -46,11 +46,13 @@ int mq_unlink(
   Objects_Id                            the_mq_id;
   size_t                                name_len;
 
+  _Objects_Allocator_lock();
   _Thread_Disable_dispatch();
 
   status = _POSIX_Message_queue_Name_to_id( name, &the_mq_id, &name_len );
    if ( status != 0 ) {
     _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     rtems_set_errno_and_return_minus_one( status );
    }
 
@@ -64,5 +66,6 @@ int mq_unlink(
   _POSIX_Message_queue_Delete( the_mq );
 
   _Thread_Enable_dispatch();
+   _Objects_Allocator_unlock();
   return 0;
 }

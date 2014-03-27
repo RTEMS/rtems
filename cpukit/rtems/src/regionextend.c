@@ -40,7 +40,7 @@ rtems_status_code rtems_region_extend(
   if ( !starting_address )
     return RTEMS_INVALID_ADDRESS;
 
-  _RTEMS_Lock_allocator();                      /* to prevent deletion */
+  _RTEMS_Lock_allocator(); /* to prevent deletion */
 
     the_region = _Region_Get( id, &location );
     switch ( location ) {
@@ -75,5 +75,6 @@ rtems_status_code rtems_region_extend(
     }
 
   _RTEMS_Unlock_allocator();
+
   return return_status;
 }

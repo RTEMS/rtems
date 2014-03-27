@@ -49,7 +49,6 @@ int pthread_spin_init(
   POSIX_Spinlock_Control   *the_spinlock;
   CORE_spinlock_Attributes  attributes;
 
-
   if ( !spinlock )
     return EINVAL;
 
@@ -61,12 +60,10 @@ int pthread_spin_init(
       return EINVAL;
   }
 
-  _Thread_Disable_dispatch();             /* prevents deletion */
-
   the_spinlock = _POSIX_Spinlock_Allocate();
 
   if ( !the_spinlock ) {
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return EAGAIN;
   }
 
@@ -78,6 +75,6 @@ int pthread_spin_init(
 
   *spinlock = the_spinlock->Object.id;
 
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
   return 0;
 }

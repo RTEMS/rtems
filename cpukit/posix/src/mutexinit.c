@@ -149,15 +149,10 @@ int pthread_mutex_init(
   }
 #endif
 
-  /*
-   *  Enter a dispatching critical section and begin to do the real work.
-   */
-  _Thread_Disable_dispatch();
-
   the_mutex = _POSIX_Mutex_Allocate();
 
   if ( !the_mutex ) {
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return EAGAIN;
   }
 
@@ -188,6 +183,6 @@ int pthread_mutex_init(
 
   *mutex = the_mutex->Object.id;
 
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
   return 0;
 }

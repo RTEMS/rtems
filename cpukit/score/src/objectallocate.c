@@ -19,7 +19,9 @@
 #endif
 
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/sysstate.h>
 
 /* #define RTEMS_DEBUG_OBJECT_ALLOCATION */
 
@@ -27,11 +29,23 @@
 #include <rtems/bspIo.h>
 #endif
 
-Objects_Control *_Objects_Allocate(
+static Objects_Control *_Objects_Get_inactive(
+  Objects_Information *information
+)
+{
+  return (Objects_Control *) _Chain_Get_unprotected( &information->Inactive );
+}
+
+Objects_Control *_Objects_Allocate_unprotected(
   Objects_Information *information
 )
 {
   Objects_Control *the_object;
+
+  _Assert(
+    _Debug_Is_owner_of_allocator()
+      || !_System_state_Is_up( _System_state_Get() )
+  );
 
   /*
    *  If the application is using the optional manager stubs and
@@ -46,7 +60,7 @@ Objects_Control *_Objects_Allocate(
    *  OK.  The manager should be initialized and configured to have objects.
    *  With any luck, it is safe to attempt to allocate an object.
    */
-  the_object = (Objects_Control *) _Chain_Get( &information->Inactive );
+  the_object = _Objects_Get_inactive( information );
 
   if ( information->auto_extend ) {
     /*
@@ -56,7 +70,7 @@ Objects_Control *_Objects_Allocate(
 
     if ( !the_object ) {
       _Objects_Extend_information( information );
-      the_object =  (Objects_Control *) _Chain_Get( &information->Inactive );
+      the_object = _Objects_Get_inactive( information );
     }
 
     if ( the_object ) {
@@ -82,4 +96,11 @@ Objects_Control *_Objects_Allocate(
 #endif
 
   return the_object;
+}
+
+Objects_Control *_Objects_Allocate( Objects_Information *information )
+{
+  _RTEMS_Lock_allocator();
+
+  return _Objects_Allocate_unprotected( information );
 }

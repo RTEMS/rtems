@@ -68,12 +68,10 @@ rtems_status_code rtems_barrier_create(
     the_attributes.discipline = CORE_BARRIER_MANUAL_RELEASE;
   the_attributes.maximum_count = maximum_waiters;
 
-  _Thread_Disable_dispatch();             /* prevents deletion */
-
   the_barrier = _Barrier_Allocate();
 
   if ( !the_barrier ) {
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return RTEMS_TOO_MANY;
   }
 
@@ -89,6 +87,6 @@ rtems_status_code rtems_barrier_create(
 
   *id = the_barrier->Object.id;
 
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }

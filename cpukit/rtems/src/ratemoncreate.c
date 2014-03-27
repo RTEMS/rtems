@@ -55,16 +55,14 @@ rtems_status_code rtems_rate_monotonic_create(
   if ( !id )
     return RTEMS_INVALID_ADDRESS;
 
-  _Thread_Disable_dispatch();            /* to prevent deletion */
-
   the_period = _Rate_monotonic_Allocate();
 
   if ( !the_period ) {
-    _Thread_Enable_dispatch();
+    _Objects_Allocator_unlock();
     return RTEMS_TOO_MANY;
   }
 
-  the_period->owner = _Thread_Executing;
+  the_period->owner = _Thread_Get_executing();
   the_period->state = RATE_MONOTONIC_INACTIVE;
 
   _Watchdog_Initialize( &the_period->Timer, NULL, 0, NULL );
@@ -78,6 +76,6 @@ rtems_status_code rtems_rate_monotonic_create(
   );
 
   *id = the_period->Object.id;
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }

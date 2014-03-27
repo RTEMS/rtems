@@ -77,17 +77,14 @@ void _RTEMS_Tasks_Invoke_task_variable_dtor(
   rtems_task_variable_t *tvp
 );
 
-/**
- *  @brief Allocates a task control block.
- *
- *  This function allocates a task control block from
- *  the inactive chain of free task control blocks.
- */
-RTEMS_INLINE_ROUTINE Thread_Control *_RTEMS_tasks_Allocate( void )
+RTEMS_INLINE_ROUTINE Thread_Control *_RTEMS_tasks_Allocate(void)
 {
+  _Objects_Allocator_lock();
+
   _Thread_Kill_zombies();
 
-  return (Thread_Control *) _Objects_Allocate( &_RTEMS_tasks_Information );
+  return (Thread_Control *)
+    _Objects_Allocate_unprotected( &_RTEMS_tasks_Information );
 }
 
 /**
