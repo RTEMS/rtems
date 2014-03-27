@@ -15,6 +15,8 @@
 #include "system.h"
 #include <stdio.h>
 
+#include "tmacros.h"
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
