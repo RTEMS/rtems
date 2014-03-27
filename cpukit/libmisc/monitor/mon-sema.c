@@ -24,8 +24,7 @@ rtems_monitor_sema_canonical(
     canonical_sema->priority_ceiling =
       rtems_sema->Core_control.mutex.Attributes.priority_ceiling;
 
-    canonical_sema->holder_id        =
-      rtems_sema->Core_control.mutex.holder_id;
+    canonical_sema->holder_id = 0;
 
     if (_Attributes_Is_counting_semaphore(canonical_sema->attribute)) {
       /* we have a counting semaphore */
@@ -36,6 +35,12 @@ rtems_monitor_sema_canonical(
 	rtems_sema->Core_control.semaphore.Attributes.maximum_count;
     }
     else {
+      Thread_Control *holder = rtems_sema->Core_control.mutex.holder;
+
+      if (holder != NULL) {
+        canonical_sema->holder_id = holder->Object.id;
+      }
+
       /* we have a binary semaphore (mutex) */
       canonical_sema->cur_count        = rtems_sema->Core_control.mutex.lock;
       canonical_sema->max_count        = 1; /* mutex is either 0 or 1 */

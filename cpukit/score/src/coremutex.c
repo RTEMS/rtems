@@ -42,7 +42,6 @@ CORE_mutex_Status _CORE_mutex_Initialize(
   if ( initial_lock == CORE_MUTEX_LOCKED ) {
     the_mutex->nest_count = 1;
     the_mutex->holder     = executing;
-    the_mutex->holder_id  = executing->Object.id;
     if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
          _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
 
@@ -60,7 +59,6 @@ CORE_mutex_Status _CORE_mutex_Initialize(
   } else {
     the_mutex->nest_count = 0;
     the_mutex->holder     = NULL;
-    the_mutex->holder_id  = 0;
   }
 
   _Thread_queue_Initialize(

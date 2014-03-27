@@ -454,7 +454,6 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
   if ( !_CORE_mutex_Is_locked( the_mutex ) ) {
     the_mutex->lock       = CORE_MUTEX_LOCKED;
     the_mutex->holder     = executing;
-    the_mutex->holder_id  = executing->Object.id;
     the_mutex->nest_count = 1;
     if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
          _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ){

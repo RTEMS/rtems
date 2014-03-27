@@ -167,8 +167,6 @@ typedef struct {
    *  has not unlocked it.  If the thread is not locked, there is no holder.
    */
   Thread_Control         *holder;
-  /** This element contains the object Id of the holding thread.  */
-  Objects_Id              holder_id;
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
   /** This field is used to manipulate the priority inheritance mutex queue*/
   CORE_mutex_order_list   queue;

@@ -172,8 +172,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
       _Thread_Change_priority( holder, holder->real_priority, true );
     }
   }
-  the_mutex->holder    = NULL;
-  the_mutex->holder_id = 0;
+  the_mutex->holder = NULL;
 
   /*
    *  Now we check if another thread was waiting for this mutex.  If so,
@@ -185,7 +184,6 @@ CORE_mutex_Status _CORE_mutex_Surrender(
     if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
 
       the_mutex->holder     = NULL;
-      the_mutex->holder_id  = the_thread->Object.id;
       the_mutex->nest_count = 1;
 
       ( *api_mutex_mp_support)( the_thread, id );
@@ -195,7 +193,6 @@ CORE_mutex_Status _CORE_mutex_Surrender(
     {
 
       the_mutex->holder     = the_thread;
-      the_mutex->holder_id  = the_thread->Object.id;
       the_mutex->nest_count = 1;
 
       switch ( the_mutex->Attributes.discipline ) {
