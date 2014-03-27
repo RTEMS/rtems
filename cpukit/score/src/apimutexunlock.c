@@ -19,19 +19,25 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/coremuteximpl.h>
 
-void _API_Mutex_Unlock(
-  API_Mutex_Control *the_mutex
-)
+void _API_Mutex_Unlock( API_Mutex_Control *the_mutex )
 {
-   _Thread_Disable_dispatch();
-    _CORE_mutex_Surrender(
-      &the_mutex->Mutex,
-      the_mutex->Object.id,
-      NULL
-   );
+  bool previous_thread_life_protection;
+  bool restore_thread_life_protection;
+
+  _Thread_Disable_dispatch();
+
+  previous_thread_life_protection =
+    the_mutex->previous_thread_life_protection;
+  restore_thread_life_protection = the_mutex->Mutex.nest_count == 1;
+
+  _CORE_mutex_Surrender( &the_mutex->Mutex, the_mutex->Object.id, NULL );
+
   _Thread_Enable_dispatch();
+
+  if ( restore_thread_life_protection ) {
+    _Thread_Set_life_protection( previous_thread_life_protection );
+  }
 }

@@ -47,6 +47,12 @@ typedef struct {
    * Contains the SuperCore mutex information.
    */
   CORE_mutex_Control Mutex;
+
+  /**
+   * @brief The thread life protection state before the outer-most mutex
+   * obtain.
+   */
+  bool previous_thread_life_protection;
 } API_Mutex_Control;
 
 /**
@@ -66,18 +72,16 @@ void _API_Mutex_Initialization( uint32_t maximum_mutexes );
 void _API_Mutex_Allocate( API_Mutex_Control **mutex );
 
 /**
- *  @brief Acquires the specified API mutex.
+ * @brief Acquires the specified API mutex.
+ *
+ * @param[in] mutex The API mutex.
  */
-void _API_Mutex_Lock(
-   API_Mutex_Control *mutex
-   );
+void _API_Mutex_Lock( API_Mutex_Control *mutex );
 
 /**
- *  @brief Releases the specified API mutex.
+ * @brief Releases the specified API mutex.
  *
- *  Releases the specified @a mutex.
- *
- *  @param[in] mutex is the mutex to be removed.
+ * @param[in] mutex The API mutex.
  */
 void _API_Mutex_Unlock( API_Mutex_Control *mutex );
 
@@ -104,21 +108,15 @@ void _API_Mutex_Unlock( API_Mutex_Control *mutex );
  */
 SCORE_EXTERN API_Mutex_Control *_RTEMS_Allocator_Mutex;
 
-/**
- *  @brief Macro to ease locking the allocator mutex.
- *
- *  This macro makes it explicit that one is locking the allocator mutex.
- */
-#define _RTEMS_Lock_allocator() \
-  _API_Mutex_Lock( _RTEMS_Allocator_Mutex )
+static inline void _RTEMS_Lock_allocator( void )
+{
+  _API_Mutex_Lock( _RTEMS_Allocator_Mutex );
+}
 
-/**
- *  @brief Macro to ease unlocking the allocator mutex.
- *
- *  This macro makes it explicit that one is unlocking the allocator mutex.
- */
-#define _RTEMS_Unlock_allocator() \
-  _API_Mutex_Unlock( _RTEMS_Allocator_Mutex )
+static inline void _RTEMS_Unlock_allocator( void )
+{
+  _API_Mutex_Unlock( _RTEMS_Allocator_Mutex );
+}
 
 SCORE_EXTERN API_Mutex_Control *_Once_Mutex;
 
