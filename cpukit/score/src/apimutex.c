@@ -61,7 +61,7 @@ void _API_Mutex_Allocate(
   mutex = (API_Mutex_Control *)
     _Objects_Allocate_unprotected( &_API_Mutex_Information );
 
-  _CORE_mutex_Initialize( &mutex->Mutex, NULL, &attr, CORE_MUTEX_UNLOCKED );
+  _CORE_mutex_Initialize( &mutex->Mutex, NULL, &attr, false );
 
   _Objects_Open_u32( &_API_Mutex_Information, &mutex->Object, 1 );
 

@@ -217,8 +217,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
           break;
       }
     }
-  } else
-    the_mutex->lock = CORE_MUTEX_UNLOCKED;
+  }
 
   return CORE_MUTEX_STATUS_SUCCESSFUL;
 }

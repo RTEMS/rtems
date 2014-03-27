@@ -172,12 +172,7 @@ int pthread_mutex_init(
   /*
    *  Must be initialized to unlocked.
    */
-  _CORE_mutex_Initialize(
-    &the_mutex->Mutex,
-    NULL,
-    the_mutex_attr,
-    CORE_MUTEX_UNLOCKED
-  );
+  _CORE_mutex_Initialize( &the_mutex->Mutex, NULL, the_mutex_attr, false );
 
   _Objects_Open_u32( &_POSIX_Mutex_Information, &the_mutex->Object, 0 );
 

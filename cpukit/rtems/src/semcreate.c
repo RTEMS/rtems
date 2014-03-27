@@ -179,7 +179,7 @@ rtems_status_code rtems_semaphore_create(
       &the_semaphore->Core_control.mutex,
       _Thread_Get_executing(),
       &the_mutex_attr,
-      (count == 1) ? CORE_MUTEX_UNLOCKED : CORE_MUTEX_LOCKED
+      count != 1
     );
 
     if ( mutex_status == CORE_MUTEX_STATUS_CEILING_VIOLATED ) {

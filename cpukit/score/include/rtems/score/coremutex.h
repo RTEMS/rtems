@@ -155,9 +155,6 @@ typedef struct {
    *  behavior.
    */
   CORE_mutex_Attributes   Attributes;
-  /** This element contains the current state of the mutex.
-   */
-  uint32_t                lock;
   /** This element contains the number of times the mutex has been acquired
    *  nested.  This must be zero (0) before the mutex is actually unlocked.
    */

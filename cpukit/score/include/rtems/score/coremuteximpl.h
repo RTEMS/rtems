@@ -99,16 +99,6 @@ typedef enum {
 #define CORE_MUTEX_STATUS_LAST CORE_MUTEX_STATUS_CEILING_VIOLATED
 
 /**
- *  This is the value of a mutex when it is unlocked.
- */
-#define CORE_MUTEX_UNLOCKED 1
-
-/**
- *  This is the value of a mutex when it is locked.
- */
-#define CORE_MUTEX_LOCKED   0
-
-/**
  *  @brief Initializes the mutex based on the parameters passed.
  *
  *  This routine initializes the mutex based on the parameters passed.
@@ -117,7 +107,8 @@ typedef enum {
  *  @param[in,out] executing The currently executing thread.
  *  @param[in] the_mutex_attributes is the attributes associated with this
  *         mutex instance
- *  @param[in] initial_lock is the initial value of the mutex
+ *  @param[in] initially_locked If true, then the mutex is initially locked by
+ *  the executing thread.
  *
  *  @retval This method returns CORE_MUTEX_STATUS_SUCCESSFUL if successful.
  */
@@ -125,7 +116,7 @@ CORE_mutex_Status _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,
   Thread_Control               *executing,
   const CORE_mutex_Attributes  *the_mutex_attributes,
-  uint32_t                      initial_lock
+  bool                          initially_locked
 );
 
 /**
@@ -357,7 +348,7 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_locked(
   CORE_mutex_Control  *the_mutex
 )
 {
-  return the_mutex->lock == CORE_MUTEX_LOCKED;
+  return the_mutex->holder != NULL;
 }
 
 /**
@@ -452,7 +443,6 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
 
   executing->Wait.return_code = CORE_MUTEX_STATUS_SUCCESSFUL;
   if ( !_CORE_mutex_Is_locked( the_mutex ) ) {
-    the_mutex->lock       = CORE_MUTEX_LOCKED;
     the_mutex->holder     = executing;
     the_mutex->nest_count = 1;
     if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
@@ -499,7 +489,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
       }
       /* if ( current < ceiling ) */ {
         executing->Wait.return_code = CORE_MUTEX_STATUS_CEILING_VIOLATED;
-        the_mutex->lock       = CORE_MUTEX_UNLOCKED;
+        the_mutex->holder = NULL;
         the_mutex->nest_count = 0;     /* undo locking above */
         executing->resource_count--;   /* undo locking above */
         _ISR_Enable( level );

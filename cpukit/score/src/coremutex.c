@@ -27,7 +27,7 @@ CORE_mutex_Status _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,
   Thread_Control               *executing,
   const CORE_mutex_Attributes  *the_mutex_attributes,
-  uint32_t                      initial_lock
+  bool                          initially_locked
 )
 {
 
@@ -37,9 +37,8 @@ CORE_mutex_Status _CORE_mutex_Initialize(
  */
 
   the_mutex->Attributes    = *the_mutex_attributes;
-  the_mutex->lock          = initial_lock;
 
-  if ( initial_lock == CORE_MUTEX_LOCKED ) {
+  if ( initially_locked ) {
     the_mutex->nest_count = 1;
     the_mutex->holder     = executing;
     if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||

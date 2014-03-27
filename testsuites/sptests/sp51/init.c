@@ -52,10 +52,10 @@ rtems_task Init(
   fatal_directive_status(
     sc, RTEMS_INVALID_PRIORITY, "rtems_semaphore_obtain" );
 
-  /* This returns successful because RTEMS eats the unneeded unlock */
   puts( "Release semaphore we did not obtain" );
   sc = rtems_semaphore_release( mutex );
-  directive_failed( sc, "rtems_semaphore_release" );
+  fatal_directive_status(
+    sc, RTEMS_NOT_OWNER_OF_RESOURCE, "rtems_semaphore_release" );
 
   TEST_END();
   rtems_test_exit( 0 );

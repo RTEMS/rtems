@@ -35,15 +35,17 @@ rtems_monitor_sema_canonical(
 	rtems_sema->Core_control.semaphore.Attributes.maximum_count;
     }
     else {
+      /* we have a binary semaphore (mutex) */
       Thread_Control *holder = rtems_sema->Core_control.mutex.holder;
 
       if (holder != NULL) {
         canonical_sema->holder_id = holder->Object.id;
+        canonical_sema->cur_count = 0;
+      } else {
+        canonical_sema->cur_count = 1;
       }
 
-      /* we have a binary semaphore (mutex) */
-      canonical_sema->cur_count        = rtems_sema->Core_control.mutex.lock;
-      canonical_sema->max_count        = 1; /* mutex is either 0 or 1 */
+      canonical_sema->max_count = 1; /* mutex is either 0 or 1 */
     }
 }
 
