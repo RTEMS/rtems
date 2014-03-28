@@ -7,7 +7,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#define FATAL_ERROR_TEST_NAME            "/DEV/NULL FATAL 01"
+#define FATAL_ERROR_TEST_NAME            "/DEV/NULL 1"
 #define FATAL_ERROR_DESCRIPTION          "/dev/null already registered"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_RTEMS_API
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE

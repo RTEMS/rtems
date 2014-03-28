@@ -14,7 +14,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-const char rtems_test_name[] = FATAL_ERROR_TEST_NAME;
+const char rtems_test_name[] = "PSXFATAL " FATAL_ERROR_TEST_NAME;
 
 static void print_test_begin_message(void)
 {

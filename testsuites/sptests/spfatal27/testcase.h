@@ -12,7 +12,7 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#define FATAL_ERROR_TEST_NAME            "FATAL 27"
+#define FATAL_ERROR_TEST_NAME            "27"
 #define FATAL_ERROR_DESCRIPTION          "libio init no posix key left"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_RTEMS_API
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
