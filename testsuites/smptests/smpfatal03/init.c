@@ -32,7 +32,9 @@ const char rtems_test_name[] = "SMPFATAL 3";
 
 static uint32_t main_cpu;
 
-static SMP_barrier_Control barrier = SMP_BARRIER_CONTROL_INITIALIZER;
+static SMP_barrier_Control giant_barrier = SMP_BARRIER_CONTROL_INITIALIZER;
+
+static SMP_barrier_Control fatal_barrier = SMP_BARRIER_CONTROL_INITIALIZER;
 
 static void acquire_giant_and_fatal_task(rtems_task_argument arg)
 {
@@ -43,7 +45,7 @@ static void acquire_giant_and_fatal_task(rtems_task_argument arg)
     _Giant_Acquire();
   }
 
-  _SMP_barrier_Wait(&barrier, &state, CPU_COUNT);
+  _SMP_barrier_Wait(&giant_barrier, &state, CPU_COUNT);
 
   /*
    * Now we have to wait some time so that the other thread can actually start
@@ -58,7 +60,7 @@ static void wait_for_giant(void)
 {
   SMP_barrier_State state = SMP_BARRIER_STATE_INITIALIZER;
 
-  _SMP_barrier_Wait(&barrier, &state, CPU_COUNT);
+  _SMP_barrier_Wait(&giant_barrier, &state, CPU_COUNT);
 
   _Giant_Acquire();
 }
@@ -107,17 +109,22 @@ static void fatal_extension(
       || source == RTEMS_FATAL_SOURCE_SMP
   ) {
     uint32_t self = rtems_smp_get_current_processor();
+    SMP_barrier_State state = SMP_BARRIER_STATE_INITIALIZER;
 
     assert(!is_internal);
 
     if (self == main_cpu) {
       assert(source == RTEMS_FATAL_SOURCE_SMP);
       assert(code == SMP_FATAL_SHUTDOWN);
-
-      rtems_test_endk();
     } else {
       assert(source == RTEMS_FATAL_SOURCE_APPLICATION);
       assert(code == 0xdeadbeef);
+    }
+
+    _SMP_barrier_Wait(&fatal_barrier, &state, CPU_COUNT);
+
+    if (self == 0) {
+      rtems_test_endk();
     }
   }
 }
