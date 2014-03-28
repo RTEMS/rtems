@@ -62,12 +62,13 @@ rtems_task TaskAB_entry(rtems_task_argument me)
           me,
           1 - me
       );
-      turn = 1 - me;
 
       if ( ++iterations == 10 ) {
         TEST_END();
         exit( 0 );
       }
+
+      turn = 1 - me;
     }
   }
 }
