@@ -454,7 +454,7 @@ static rtems_task Init(rtems_task_argument argument)
   }
   rtems_resource_snapshot_take(&snapshot);
   rtems_test_assert(
-    snapshot.posix_api.active_keys == CONFIGURE_MAXIMUM_POSIX_KEYS
+    snapshot.posix_api.active_keys == CONFIGURE_POSIX_KEYS
   );
 #endif
 
