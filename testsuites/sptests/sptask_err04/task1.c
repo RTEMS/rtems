@@ -1,8 +1,13 @@
-/*  Screen1
+/*  Task_1
  *
- *  This routine generates error screen 1 for test 9.
+ *  This task generates all possible errors for the RTEMS executive.
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  Input parameters:
+ *    argument - task argument
+ *
+ *  Output parameters:  NONE
+ *
+ *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -15,10 +20,12 @@
 #endif
 
 #include "system.h"
-
 #include <rtems/rtems/tasksimpl.h>
 
-void Screen1()
+
+rtems_task Task_1(
+  rtems_task_argument argument
+)
 {
   uint32_t            notepad_value;
   rtems_id            self_id;
@@ -263,4 +270,8 @@ void Screen1()
     "rtems_task_mode with NULL param"
   );
   puts( "TA1 - rtems_task_mode - RTEMS_INVALID_ADDRESS" );
+ 
+  TEST_END();
+
+  rtems_test_exit( 0 );
 }

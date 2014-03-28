@@ -9,7 +9,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #include <tmacros.h>
@@ -25,44 +25,12 @@ rtems_timer_service_routine Delayed_routine(
   void     *ignored_address
 );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
-
-rtems_task Task_2(
-  rtems_task_argument argument
-);
-
-rtems_task Task_3(
-  rtems_task_argument argument
-);
-
-rtems_isr Service_routine(
-  rtems_vector_number ignored
-);
-
-rtems_timer_service_routine Io_during_interrupt(
-  rtems_id ignored
-);
-
-void Screen1( void );
-
-void Screen2( void );
-
-void Screen3( void );
-
-void Screen4( void );
-
-void Screen5( void );
-
-void Screen6( void );
-
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS               9
+#define CONFIGURE_MAXIMUM_TASKS              10
 #define CONFIGURE_MAXIMUM_TIMERS              1
 #define CONFIGURE_MAXIMUM_SEMAPHORES          2
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1

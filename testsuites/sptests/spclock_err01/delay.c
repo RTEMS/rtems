@@ -1,6 +1,6 @@
-/*  Service_routine
+/*  Delayed_routine
  *
- *  This routine is used as the timer routine for Interrupt Manager tests.
+ *  This routine is used as the timer routine for Timer Manager tests.
  *
  *  Input parameters:
  *    ignored - this parameter is ignored
@@ -12,7 +12,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -21,8 +21,9 @@
 
 #include "system.h"
 
-rtems_isr Service_routine(
-  rtems_vector_number ignored
+rtems_timer_service_routine Delayed_routine(
+  rtems_id  ignored_id,
+  void     *ignored_address
 )
 {
 }

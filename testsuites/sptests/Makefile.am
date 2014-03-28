@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../aclocal
 ## Test names are spaced to indicate gaps in numbering from tests being
 ## deleted over the years.
 SUBDIRS = \
-         sp01 sp02 sp03 sp04 sp05 sp06 sp07 sp08 sp09 \
+         sp01 sp02 sp03 sp04 sp05 sp06 sp07 sp08 \
     sp10 sp11 sp12 sp13 sp14 sp15 sp16 sp17 sp18 sp19 \
     sp20 sp21 sp22 sp23 sp24 sp25 sp26 sp27 sp27a sp28 sp29 \
     sp30 sp31 sp32 sp33 sp34 sp35      sp37 sp38 sp39 \
@@ -31,7 +31,8 @@ SUBDIRS = \
     spcbssched01 spcbssched02 spcbssched03 spqreslib sptimespec01 \
     spregion_err01 sppartition_err01 spratemon_err01 spintr_err01 \
     spsignal_err01 spport_err01 spmsgq_err01 spmsgq_err02 spsem_err01 \
-    spsem_err02 sptask_err01 spevent_err03 sptask_err03 
+    spsem_err02 sptask_err01 spevent_err03 sptask_err03 sptask_err02 \
+    sptask_err04 spclock_err01 
 SUBDIRS += spprofiling01
 SUBDIRS += spcache01
 SUBDIRS += sptls03

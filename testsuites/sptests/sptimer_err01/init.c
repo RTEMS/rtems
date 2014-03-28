@@ -38,6 +38,21 @@ rtems_task Init(
 
   timer_name =  rtems_build_name( 'T', 'M', '1', ' ' );
 
+  /* before time set */
+  status = rtems_timer_fire_when( 0, &time, Delayed_routine, NULL );
+  if ( status == RTEMS_SUCCESSFUL ) {
+    puts(
+    "TA1 - timer_wake_when - RTEMS_NOT_DEFINED -- DID BSP SET THE TIME OF DAY?"
+    );
+  } else {
+    fatal_directive_status(
+      status,
+      RTEMS_NOT_DEFINED,
+      "task_fire_when before clock is set"
+    );
+    puts( "TA1 - rtems_timer_fire_when - RTEMS_NOT_DEFINED" );
+  }
+
   /* Set System time */
   build_time( &time, 12, 31, 1992, 9, 0, 0, 0 );
   status = rtems_clock_set( &time );

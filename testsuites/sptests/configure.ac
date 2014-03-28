@@ -59,7 +59,6 @@ sp05/Makefile
 sp06/Makefile
 sp07/Makefile
 sp08/Makefile
-sp09/Makefile
 sp10/Makefile
 sp11/Makefile
 sp12/Makefile
@@ -135,6 +134,7 @@ spcbssched02/Makefile
 spcbssched03/Makefile
 spchain/Makefile
 spclockget/Makefile
+spclock_err01/Makefile
 spclock_err02/Makefile
 spcoverage/Makefile
 spedfsched01/Makefile
@@ -223,7 +223,9 @@ sptimespec01/Makefile
 spwatchdog/Makefile
 spwkspace/Makefile
 sptask_err01/Makefile
+sptask_err02/Makefile
 sptask_err03/Makefile
+sptask_err04/Makefile
 sptimer_err01/Makefile
 sptimer_err02/Makefile
 spcpuset01/Makefile

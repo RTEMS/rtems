@@ -1,0 +1,12 @@
+*** TEST TASK ERROR 02 ***
+TA1 - rtems_task_wake_when - RTEMS_INVALID_ADDRESS
+TA1 - rtems_task_wake_when - RTEMS_NOT_DEFINED
+TA1 - rtems_clock_set - 08:30:45   02/05/1988 - RTEMS_SUCCESSFUL
+TA1 - rtems_task_wake_when - TICKINVALID - sleep about 3 seconds
+TA1 - rtems_task_wake_when - RTEMS_INVALID_ADDRESS
+TA1 - rtems_task_wake_when - TICKINVALID - woke up RTEMS_SUCCESSFUL
+TA1 - rtems_task_wake_when - 08:30:48   02/05/1961 - RTEMS_INVALID_CLOCK
+TA1 - rtems_task_wake_when - 25:30:48   02/05/1988 - RTEMS_INVALID_CLOCK
+TA1 - current time - 08:30:51   02/05/1988
+TA1 - rtems_task_wake_when - 08:30:51   01/05/1988 - RTEMS_INVALID_CLOCK
+*** END TEST TASK ERROR 02 ***

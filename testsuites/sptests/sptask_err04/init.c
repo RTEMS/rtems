@@ -1,10 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2014.
+ *  COPYRIGHT (c) 2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -14,37 +14,19 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-const char rtems_test_name[] = "SP 9";
+#include <rtems/rtems/tasksimpl.h>
+
+const char rtems_test_name[] = "TASK ERROR 04";
 
 rtems_task Init(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
-
+  rtems_status_code   status;
+  
   TEST_BEGIN();
 
   Task_name[ 1 ]       =  rtems_build_name( 'T', 'A', '1', ' ' );
-  Task_name[ 2 ]       =  rtems_build_name( 'T', 'A', '2', ' ' );
-  Task_name[ 3 ]       =  rtems_build_name( 'T', 'A', '3', ' ' );
-  Task_name[ 4 ]       =  rtems_build_name( 'T', 'A', '4', ' ' );
-  Task_name[ 5 ]       =  rtems_build_name( 'T', 'A', '5', ' ' );
-  Task_name[ 6 ]       =  rtems_build_name( 'T', 'A', '6', ' ' );
-  Task_name[ 7 ]       =  rtems_build_name( 'T', 'A', '7', ' ' );
-  Task_name[ 8 ]       =  rtems_build_name( 'T', 'A', '8', ' ' );
-  Task_name[ 9 ]       =  rtems_build_name( 'T', 'A', '9', ' ' );
-  Task_name[ 10 ]      =  rtems_build_name( 'T', 'A', 'A', ' ' );
-
-  Semaphore_name[ 1 ]  =  rtems_build_name( 'S', 'M', '1', ' ' );
-  Semaphore_name[ 2 ]  =  rtems_build_name( 'S', 'M', '2', ' ' );
-  Semaphore_name[ 3 ]  =  rtems_build_name( 'S', 'M', '3', ' ' );
-
-  Queue_name[ 1 ]      =  rtems_build_name( 'M', 'Q', '1', ' ' );
-  Queue_name[ 2 ]      =  rtems_build_name( 'M', 'Q', '2', ' ' );
-
-  Port_name[ 1 ]       =  rtems_build_name( 'D', 'P', '1', ' ' );
-
-  Period_name[ 1 ]     =  rtems_build_name( 'T', 'M', '1', ' ' );
 
   /* priority of 0 error */
   status = rtems_task_create(
@@ -102,5 +84,5 @@ rtems_task Init(
   directive_failed( status, "rtems_task_start of TA1" );
 
   status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );  
 }

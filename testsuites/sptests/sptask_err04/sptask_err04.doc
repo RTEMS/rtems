@@ -3,20 +3,18 @@
 #
 #  The license and distribution terms for this file may be
 #  found in the file LICENSE in this distribution or at
-#  http://www.rtems.org/license/LICENSE.
+#  http://www.rtems.com/license/LICENSE.
 #
 
 
 This file describes the directives and concepts tested by this test set.
 
-test set name:  test9
+test set name:  sptask_err04
 
 directives:
-  tm_tick, t_resume, t_setpri, t_setreg, t_start, t_suspend, tm_wkafter,
-  tm_wkwhen, ev_receive, ev_send, sm_create, sm_delete, sm_ident,
-  sm_p, sm_v, q_broadcast, q_create, q_delete, q_ident, q_receive,
-  q_send, q_urgent, as_catch, as_send, as_return
-  de_init, de_open,  de_read, de_write, de_close, de_cntrl
+  t_delete, t_getnote, t_ident, t_restart, t_resume, t_setpriority, 
+  t_mode, t_start, t_suspend,
+ 
 
 concepts:
 

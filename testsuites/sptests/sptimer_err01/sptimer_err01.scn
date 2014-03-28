@@ -1,4 +1,5 @@
 *** TEST SPTIMER_ERR01 ***
+TA1 - rtems_timer_fire_when - RTEMS_NOT_DEFINED
 TA1 - rtems_timer_create - RTEMS_INVALID_ADDRESS
 TA1 - rtems_timer_create - RTEMS_INVALID_NAME
 TA1 - rtems_timer_create - 1 - RTEMS_SUCCESSFUL
@@ -20,4 +21,3 @@ TA1 - rtems_timer_fire_when - 08:30:45   02/05/1990 - before RTEMS_INVALID_CLOCK
 TA1 - rtems_timer_get_information - RTEMS_INVALID_ADDRESS
 TA1 - rtems_timer_get_information - RTEMS_INVALID_ID
 *** END OF TEST SPTIMER_ERR01 ***
-

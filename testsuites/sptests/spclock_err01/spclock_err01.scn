@@ -1,0 +1,23 @@
+*** TEST CLOCK ERROR 01 ***
+TA1 - rtems_clock_get_tod - RTEMS_INVALID_ADDRESS
+TA1 - rtems_clock_get_tod - RTEMS_NOT_DEFINED
+TA1 - rtems_clock_get_seconds_since_epoch - RTEMS_INVALID_ADDRESS
+TA1 - rtems_clock_get_seconds_since_epoch - RTEMS_NOT_DEFINED
+TA1 - rtems_clock_get_uptime - RTEMS_INVALID_ADDRESS
+TA1 - rtems_clock_get_uptime_timeval
+TA1 - rtems_clock_get_uptime_seconds
+TA1 - rtems_clock_get_uptime_nanoseconds
+TA1 - rtems_clock_get_tod_timeval - RTEMS_INVALID_ADDRESS
+TA1 - rtems_clock_get_tod_timeval - RTEMS_NOT_DEFINED
+TA1 - rtems_clock_set_nanoseconds_extension - RTEMS_INVALID_ADDRESS
+TA1 - rtems_clock_set - RTEMS_INVALID_ADDRESS
+TA1 - rtems_clock_set - 08:30:45   02/05/1987 - RTEMS_INVALID_CLOCK
+TA1 - rtems_clock_set - 08:30:45   15/05/1988 - RTEMS_INVALID_CLOCK
+TA1 - rtems_clock_set - 08:30:45   02/32/1988 - RTEMS_INVALID_CLOCK
+TA1 - rtems_clock_set - 25:30:45   02/05/1988 - RTEMS_INVALID_CLOCK
+TA1 - rtems_clock_set - 08:61:45   02/05/1988 - RTEMS_INVALID_CLOCK
+TA1 - rtems_clock_set - 08:30:61   02/05/1988 - RTEMS_INVALID_CLOCK
+TA1 - rtems_clock_set - 08:30:45   02/05/1988 - RTEMS_INVALID_CLOCK
+TA1 - rtems_clock_set - 08:30:45   02/05/1988 - RTEMS_SUCCESSFUL
+TA1 - current time - 08:30:45   02/05/1988
+*** END TEST CLOCK ERROR 01 ***

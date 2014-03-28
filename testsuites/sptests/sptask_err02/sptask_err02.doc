@@ -1,0 +1,25 @@
+#  COPYRIGHT (c) 1989-2014.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sptask_err02
+
+directives:
+  t_wkwhen, c_set, c_getticksps, c_gettod 
+
+concepts:
+
+  a.  Verifies all error codes returned by the executive in single
+      processor configurations.
+
+  b.  Verifies error conditions in the following kernel routines or macros:
+        _Ck_date_time, _Expired, _Q_submit, _Get_mnodes, _Get_node,
+        _Free_mem, _Get_mem, _Valid_block, _Set_tcb, _Set_resource,
+        _In_range, _On_boundary
