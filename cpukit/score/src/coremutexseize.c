@@ -53,15 +53,11 @@ void _CORE_mutex_Seize_interrupt_blocking(
 {
 
   if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ) {
-    if ( _Scheduler_Is_priority_higher_than(
-         executing->current_priority,
-         the_mutex->holder->current_priority)) {
-      _Thread_Change_priority(
-        the_mutex->holder,
-        executing->current_priority,
-        false
-      );
-    }
+    _Scheduler_Change_priority_if_higher(
+      the_mutex->holder,
+      executing->current_priority,
+      false
+    );
   }
 
   the_mutex->blocked_count++;

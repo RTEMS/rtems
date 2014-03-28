@@ -304,6 +304,39 @@ RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Highest_priority_of_two(
   return _Scheduler_Is_priority_higher_than( p1, p2 ) ? p1 : p2;
 }
 
+/**
+ * @brief Sets the thread priority to @a priority if it is higher than the
+ * current priority of the thread in the intuitive sense of priority.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Set_priority_if_higher(
+  Thread_Control   *the_thread,
+  Priority_Control  priority
+)
+{
+  Priority_Control current = the_thread->current_priority;
+
+  if ( _Scheduler_Is_priority_higher_than( priority, current ) ) {
+    _Thread_Set_priority( the_thread, priority );
+  }
+}
+
+/**
+ * @brief Changes the thread priority to @a priority if it is higher than the
+ * current priority of the thread in the intuitive sense of priority.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority_if_higher(
+  Thread_Control   *the_thread,
+  Priority_Control  priority,
+  bool              prepend_it
+)
+{
+  Priority_Control current = the_thread->current_priority;
+
+  if ( _Scheduler_Is_priority_higher_than( priority, current ) ) {
+    _Thread_Change_priority( the_thread, priority, prepend_it );
+  }
+}
+
 /** @} */
 
 #ifdef __cplusplus
