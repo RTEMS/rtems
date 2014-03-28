@@ -212,7 +212,6 @@ static void _Thread_Start_life_change(
   Priority_Control  priority
 )
 {
-  the_thread->resource_count   = 0;
   the_thread->is_preemptible   = the_thread->Start.is_preemptible;
   the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
   the_thread->budget_callout   = the_thread->Start.budget_callout;

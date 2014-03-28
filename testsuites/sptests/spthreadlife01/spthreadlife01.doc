@@ -1,0 +1,14 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spthreadlife01
+
+directives:
+
+  - rtems_task_restart()
+  - rtems_task_delete()
+
+concepts:
+
+  - Ensure that semaphores owned by a restarted thread can be deleted.
+  - Ensure that the task priority is adjusted properly across task restarts.
+  - Ensure that the task priority is adjusted properly across task deletes.
