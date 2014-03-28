@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spfatal28
+
+directives:
+
+  - rtems_task_delete()
+
+concepts:
+
+  - Ensure that deletion of a task with a semaphore in use leads to a fatal
+    error.

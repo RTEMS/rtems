@@ -35,7 +35,7 @@ static void test_internal_error_text(void)
     puts( text );
   } while ( text != text_last );
 
-  rtems_test_assert( error - 3 == INTERNAL_ERROR_CPU_ISR_INSTALL_VECTOR );
+  rtems_test_assert( error - 3 == INTERNAL_ERROR_RESOURCE_IN_USE );
 }
 
 static void test_fatal_source_text(void)

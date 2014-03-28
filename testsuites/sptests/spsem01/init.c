@@ -150,8 +150,8 @@ rtems_task Task02(rtems_task_argument ignored)
   directive_failed( status, " rtems_semaphore_obtain S1");
   printf("TA02: priority %d, holding S1\n", getprio());
 
-  printf("TA02: exiting\n");
-  status = rtems_task_delete( RTEMS_SELF);
-  directive_failed( status, "rtems_task_delete TA02");
+  printf("TA02: suspending\n");
+  status = rtems_task_suspend( RTEMS_SELF);
+  directive_failed( status, "rtems_task_suspend TA02");
 }
 

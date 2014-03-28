@@ -51,7 +51,8 @@ static const char *const internal_error_text[] = {
   "INTERNAL_ERROR_GXX_KEY_ADD_FAILED",
   "INTERNAL_ERROR_GXX_MUTEX_INIT_FAILED",
   "INTERNAL_ERROR_NO_MEMORY_FOR_HEAP",
-  "INTERNAL_ERROR_CPU_ISR_INSTALL_VECTOR"
+  "INTERNAL_ERROR_CPU_ISR_INSTALL_VECTOR",
+  "INTERNAL_ERROR_RESOURCE_IN_USE"
 };
 
 const char *rtems_internal_error_text( rtems_fatal_code error )

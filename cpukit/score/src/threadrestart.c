@@ -47,6 +47,14 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
   ISR_lock_Context lock_context;
   Thread_Zombie_control *zombies = &_Thread_Zombies;
 
+  if ( the_thread->resource_count != 0 ) {
+    _Terminate(
+      INTERNAL_ERROR_CORE,
+      false,
+      INTERNAL_ERROR_RESOURCE_IN_USE
+    );
+  }
+
   _Thread_Set_state( the_thread, STATES_ZOMBIE );
   _Thread_queue_Extract_with_proxy( the_thread );
   _Watchdog_Remove( &the_thread->Timer );
