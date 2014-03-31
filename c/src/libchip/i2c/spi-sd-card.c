@@ -1238,7 +1238,8 @@ sd_card_disk_block_write_cleanup:
 
 static int sd_card_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *arg)
 {
-	RTEMS_DEBUG_PRINT( "dev = %u, req = %u, arg = 0x08%x\n", dev, req, arg);
+	RTEMS_DEBUG_PRINT( "sd_card_disk_ioctl minor = %u, req = 0x%08x, arg = %p\n",
+	                (unsigned)rtems_filesystem_dev_minor_t(dd->dev), (unsigned)req, arg);
 	if (req == RTEMS_BLKIO_REQUEST) {
 		rtems_device_minor_number minor = rtems_disk_get_minor_number( dd);
 		sd_card_driver_entry *e = &sd_card_driver_table [minor];
@@ -1267,8 +1268,7 @@ static int sd_card_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *arg)
 		*(uint32_t *) arg = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
 		return 0;
 	} else {
-		errno = EINVAL;
-		return -1;
+		return rtems_blkdev_ioctl( dd, req, arg );
 	}
 }
 
