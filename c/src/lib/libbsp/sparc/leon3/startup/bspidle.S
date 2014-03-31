@@ -23,8 +23,6 @@
 SYM(bsp_idle_thread):
 SYM(leon3_power_down_loop):
 pwdloop:  mov   %g0, %asr19
-          ba    pwdloop
-          nop
-          retl
-          nop
-
+          lda   [%sp] 1, %g0            ! Needed for UT699 and GR712
+          ba,a    pwdloop
+           nop
