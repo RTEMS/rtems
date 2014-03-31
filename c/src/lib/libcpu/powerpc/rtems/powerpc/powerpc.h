@@ -416,6 +416,7 @@ extern "C" {
 #define PPC_IRQ_LAST      PPC_IRQ_NMEXT_BP
 
 #elif defined(ppc601)
+#undef PPC_IRQ_TRACE
 #define PPC_IRQ_TRACE    (PPC_STD_IRQ_LAST+1) /*0x02000-Run/Trace Exception*/
 #define PPC_IRQ_LAST     PPC_IRQ_TRACE
 
