@@ -79,7 +79,7 @@ rtems_task Task_1(
 
   /* unused Id so invalid now */
   status = rtems_task_get_note(
-    _RTEMS_tasks_Information.maximum_id,
+    Task_id[ 0 ],
     RTEMS_NOTEPAD_LAST,
     &notepad_value
   );
