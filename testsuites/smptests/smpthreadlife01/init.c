@@ -78,11 +78,6 @@ static void switch_extension(Thread_Control *executing, Thread_Control *heir)
   }
 }
 
-typedef void( *User_extensions_thread_switch_extension )(
-  Thread_Control *executing,
-  Thread_Control *heir
-);
-
 static void worker_task(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
