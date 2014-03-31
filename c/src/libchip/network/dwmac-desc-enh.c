@@ -705,8 +705,8 @@ static void dwmac_desc_enh_init_rx_desc(
 
 static int dwmac_desc_enh_destroy_rx_desc( dwmac_common_context *self )
 {
-  int   eno      = 0;
-  void *desc_mem = __DEVOLATILE( void *, self->dma_rx );
+  int                  eno    = 0;
+  volatile dwmac_desc *dma_rx = self->dma_rx;
 
 
   if ( self->mbuf_addr_rx != NULL ) {
@@ -714,10 +714,9 @@ static int dwmac_desc_enh_destroy_rx_desc( dwmac_common_context *self )
     self->mbuf_addr_rx = NULL;
   }
 
-  if ( desc_mem != NULL ) {
-    eno          = self->CFG->CALLBACK.mem_free_nocache( self->arg, desc_mem );
-    desc_mem     = NULL;
-    self->dma_rx = (volatile dwmac_desc *) desc_mem;
+  if ( dma_rx != NULL ) {
+    eno          = self->CFG->CALLBACK.mem_free_nocache( self->arg, dma_rx );
+    self->dma_rx = NULL;
   }
 
   DWMAC_COMMON_DSB();
@@ -742,8 +741,7 @@ static void dwmac_desc_enh_release_rx_bufs( dwmac_common_context *self )
 
       MFREE( self->mbuf_addr_rx[i], dummy );
       (void) dummy;
-      memset( __DEVOLATILE( void *,
-                            &p_enh[i].erx ), 0, sizeof( dwmac_desc_ext ) );
+      memset(&p_enh[i].erx, 0, sizeof( dwmac_desc_ext ) );
     }
   }
 
@@ -754,12 +752,12 @@ static void dwmac_desc_enh_release_rx_bufs( dwmac_common_context *self )
 static int dwmac_desc_enh_create_tx_desc( dwmac_common_context *self )
 {
   int          eno        = 0;
-  void        *mem_desc   = __DEVOLATILE( void *, self->dma_tx );
+  void        *mem_desc   = NULL;
   const size_t NUM_DESCS  = (size_t) self->bsd_config->xbuf_count;
   const size_t SIZE_DESCS = NUM_DESCS * sizeof( dwmac_desc_ext );
 
 
-  assert( mem_desc == NULL );
+  assert( self->dma_tx == NULL );
 
   /* Allocate an array of mbuf pointers */
   self->mbuf_addr_tx = calloc( NUM_DESCS, sizeof( struct mbuf * ) );
@@ -786,7 +784,7 @@ static int dwmac_desc_enh_create_tx_desc( dwmac_common_context *self )
   }
 
   if ( eno == 0 ) {
-    self->dma_tx = (volatile dwmac_desc *) mem_desc;
+    self->dma_tx = mem_desc;
     DWMAC_COMMON_DSB();
   }
 
