@@ -5,7 +5,12 @@ test set name: smprestart01
 directives:
 
   - rtems_task_restart()
+  - _Thread_Set_life_protection()
+  - _Thread_Wait_for_execution_stop()
 
 concepts:
 
   - Ensure that a restart of a task executing on another processor works.
+  - Ensure that a _Thread_Set_life_protection() works on SMP in case interrupt
+    processing is delayed.
+  - Ensure that _Thread_Wait_for_execution_stop() works on SMP.

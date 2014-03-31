@@ -19,8 +19,10 @@
 #include "tmacros.h"
 
 #include <rtems.h>
+#include <rtems/counter.h>
 #include <rtems/libcsupport.h>
 #include <rtems/score/smpbarrier.h>
+#include <rtems/score/threadimpl.h>
 
 const char rtems_test_name[] = "SMPTHREADLIFE 1";
 
@@ -31,11 +33,14 @@ typedef struct {
   volatile rtems_task_argument worker_arg;
   volatile bool terminated;
   SMP_barrier_Control barrier;
+  SMP_barrier_State main_barrier_state;
   SMP_barrier_State worker_barrier_state;
+  Thread_Control *delay_switch_for_executing;
 } test_context;
 
 static test_context test_instance = {
   .barrier = SMP_BARRIER_CONTROL_INITIALIZER,
+  .main_barrier_state = SMP_BARRIER_STATE_INITIALIZER,
   .worker_barrier_state = SMP_BARRIER_STATE_INITIALIZER
 };
 
@@ -62,6 +67,22 @@ static void terminate_extension(Thread_Control *executing)
   ctx->terminated = true;
 }
 
+static void switch_extension(Thread_Control *executing, Thread_Control *heir)
+{
+  test_context *ctx = &test_instance;
+
+  if (ctx->delay_switch_for_executing == executing) {
+    ctx->delay_switch_for_executing = NULL;
+    _SMP_barrier_Wait(&ctx->barrier, &ctx->worker_barrier_state, CPU_COUNT);
+    rtems_counter_delay_nanoseconds(100000000);
+  }
+}
+
+typedef void( *User_extensions_thread_switch_extension )(
+  Thread_Control *executing,
+  Thread_Control *heir
+);
+
 static void worker_task(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
@@ -77,10 +98,9 @@ static void worker_task(rtems_task_argument arg)
   }
 }
 
-static void test(void)
+static void test_restart(void)
 {
   test_context *ctx = &test_instance;
-  SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
   rtems_status_code sc;
   rtems_id id;
   rtems_task_argument arg;
@@ -101,11 +121,7 @@ static void test(void)
   sc = rtems_task_start(id, worker_task, 0);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  _SMP_barrier_Wait(
-    &ctx->barrier,
-    &barrier_state,
-    CPU_COUNT
-  );
+  _SMP_barrier_Wait(&ctx->barrier, &ctx->main_barrier_state, CPU_COUNT);
 
   for (arg = 1; arg < 23; ++arg) {
     ctx->main_arg = arg;
@@ -114,7 +130,7 @@ static void test(void)
     sc = rtems_task_restart(id, arg);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    _SMP_barrier_Wait(&ctx->barrier, &barrier_state, CPU_COUNT);
+    _SMP_barrier_Wait(&ctx->barrier, &ctx->main_barrier_state, CPU_COUNT);
 
     rtems_test_assert(ctx->worker_arg == arg);
   }
@@ -123,6 +139,17 @@ static void test(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+}
+
+static void test_delete(void)
+{
+  test_context *ctx = &test_instance;
+  rtems_status_code sc;
+  rtems_id id;
+  rtems_task_argument arg;
+  rtems_resource_snapshot snapshot;
+
+  rtems_resource_snapshot_take(&snapshot);
 
   for (arg = 31; arg < 57; ++arg) {
     ctx->main_arg = arg;
@@ -142,7 +169,7 @@ static void test(void)
     sc = rtems_task_start(id, worker_task, arg);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    _SMP_barrier_Wait(&ctx->barrier, &barrier_state, CPU_COUNT);
+    _SMP_barrier_Wait(&ctx->barrier, &ctx->main_barrier_state, CPU_COUNT);
 
     rtems_test_assert(ctx->worker_arg == arg);
     rtems_test_assert(!ctx->terminated);
@@ -156,12 +183,127 @@ static void test(void)
   }
 }
 
+static void delay_ipi_task(rtems_task_argument arg)
+{
+  test_context *ctx = &test_instance;
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable(level);
+  (void) level;
+
+  _SMP_barrier_Wait(&ctx->barrier, &ctx->worker_barrier_state, CPU_COUNT);
+
+  /*
+   * Interrupts are disabled, so the inter-processor interrupt deleting us will
+   * be delayed a bit.
+   */
+  rtems_counter_delay_nanoseconds(100000000);
+
+  /* We get deleted as a side effect of enabling the thread life protection */
+  _Thread_Set_life_protection(true);
+  rtems_test_assert(0);
+}
+
+static void test_set_life_protection(void)
+{
+  test_context *ctx = &test_instance;
+  rtems_status_code sc;
+  rtems_id id;
+  rtems_resource_snapshot snapshot;
+
+  rtems_resource_snapshot_take(&snapshot);
+
+  sc = rtems_task_create(
+    rtems_build_name('D', 'E', 'L', 'Y'),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(id, delay_ipi_task, 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  _SMP_barrier_Wait(&ctx->barrier, &ctx->main_barrier_state, CPU_COUNT);
+
+  sc = rtems_task_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+}
+
+static void delay_switch_task(rtems_task_argument arg)
+{
+  test_context *ctx = &test_instance;
+  rtems_status_code sc;
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable(level);
+  (void) level;
+
+  ctx->delay_switch_for_executing = _Thread_Get_executing();
+
+  _SMP_barrier_Wait(&ctx->barrier, &ctx->worker_barrier_state, CPU_COUNT);
+
+  sc = rtems_task_delete(RTEMS_SELF);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void test_wait_for_execution_stop(void)
+{
+  test_context *ctx = &test_instance;
+  rtems_status_code sc;
+  rtems_id id;
+  rtems_resource_snapshot snapshot;
+
+  rtems_resource_snapshot_take(&snapshot);
+
+  sc = rtems_task_create(
+    rtems_build_name('S', 'W', 'I', 'T'),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(id, delay_switch_task, 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  /* Wait for delay switch task */
+  _SMP_barrier_Wait(&ctx->barrier, &ctx->main_barrier_state, CPU_COUNT);
+
+  /* Wait for delay switch extension */
+  _SMP_barrier_Wait(&ctx->barrier, &ctx->main_barrier_state, CPU_COUNT);
+
+  sc = rtems_task_create(
+    rtems_build_name('W', 'A', 'I', 'T'),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+}
+
 static void Init(rtems_task_argument arg)
 {
   TEST_BEGIN();
 
   if (rtems_smp_get_processor_count() >= CPU_COUNT) {
-    test();
+    test_restart();
+    test_delete();
+    test_set_life_protection();
+    test_wait_for_execution_stop();
   }
 
   TEST_END();
@@ -181,7 +323,8 @@ static void Init(rtems_task_argument arg)
   { \
     .thread_restart = restart_extension, \
     .thread_delete = delete_extension, \
-    .thread_terminate = terminate_extension \
+    .thread_terminate = terminate_extension, \
+    .thread_switch = switch_extension \
   }, \
   RTEMS_TEST_INITIAL_EXTENSION
 
