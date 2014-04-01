@@ -21,6 +21,7 @@
 #include <rtems.h>
 #include <rtems/counter.h>
 #include <rtems/libcsupport.h>
+#include <rtems/score/profiling.h>
 #include <rtems/score/smpbarrier.h>
 #include <rtems/score/threadimpl.h>
 
@@ -75,6 +76,9 @@ static void switch_extension(Thread_Control *executing, Thread_Control *heir)
     ctx->delay_switch_for_executing = NULL;
     _SMP_barrier_Wait(&ctx->barrier, &ctx->worker_barrier_state, CPU_COUNT);
     rtems_counter_delay_nanoseconds(100000000);
+
+    /* Avoid bad profiling statisitics */
+    _Profiling_Thread_dispatch_disable( _Per_CPU_Get(), 0 );
   }
 }
 
@@ -305,7 +309,7 @@ static void Init(rtems_task_argument arg)
   rtems_test_exit(0);
 }
 
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_SMP_APPLICATION
