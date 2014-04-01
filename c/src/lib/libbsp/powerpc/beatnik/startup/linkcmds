@@ -109,8 +109,7 @@ SECTIONS
   _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
   _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
   _TLS_Alignment = ALIGNOF (.tdata);
-_SDA2_BASE_ = __SDATA2_START__ + 0x8000;
-  .sdata2         : { *(.sdata2) *(.gnu.linkonce.s2.*)  }	> CODE
+  .sdata2         : { PROVIDE (_SDA2_BASE_ = 32768); *(.sdata2) *(.gnu.linkonce.s2.*)  }	> CODE
   .sbss2          : { 
     				PROVIDE (__sbss2_start = .);
 					  *(.sbss2*) *(.gnu.linkonce.sb2.*)
@@ -193,8 +192,7 @@ _SDA2_BASE_ = __SDATA2_START__ + 0x8000;
   /* We want the small data sections together, so single-instruction offsets
      can access them all, and initialized data all before uninitialized, so
      we can shorten the on-disk segment size.  */
-_SDA_BASE_ = __SDATA_START__ + 0x8000;
-  .sdata          : { *(.sdata*) *(.gnu.linkonce.s.*) }	> CODE
+  .sdata          : { PROVIDE (_SDA_BASE_ = 32768); *(.sdata*) *(.gnu.linkonce.s.*) }	> CODE
   _edata  =  .;
   PROVIDE (edata = .);
 /* END OF THE LOADED IMAGE (parts moved by the preloader) */

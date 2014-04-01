@@ -112,8 +112,7 @@ SECTIONS
   _TLS_Alignment = ALIGNOF (.tdata);
 
   /* Initialised small data addressed as offsets from r2 */
-_SDA2_BASE_ = __SDATA2_START__ + 0x8000;
-  .sdata2         : { *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)          } > RAM
+  .sdata2         : { PROVIDE (_SDA2_BASE_ = 32768); *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)          } > RAM
 
   /* Zeroed small data addressed as offsets from r2 */
   .sbss2          : { *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
@@ -206,8 +205,7 @@ _SDA2_BASE_ = __SDATA2_START__ + 0x8000;
    * we can shorten the on-disk segment size.
    */
   /* Initialised small data addressed as offsets from r13 */
-_SDA_BASE_ = __SDATA_START__ + 0x8000;
-  .sdata          : { *(.sdata* .gnu.linkonce.s.*)                     } > RAM
+  .sdata          : { PROVIDE (_SDA_BASE_ = 32768); *(.sdata* .gnu.linkonce.s.*)                     } > RAM
 
   _edata          = .;
   PROVIDE (edata  = .);
