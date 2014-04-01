@@ -937,7 +937,7 @@ extern void mips_break( int error );
 
 /*
  *  This routine sets _output to the bit number of the first bit
- *  set in _value.  _value is of CPU dependent type Priority_bit_map_Control.
+ *  set in _value.  _value is of CPU dependent type Priority_bit_map_Word.
  *  This type may be either 16 or 32 bits wide although only the 16
  *  least significant bits will be used.
  *

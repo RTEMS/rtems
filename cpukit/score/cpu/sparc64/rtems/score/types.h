@@ -31,7 +31,7 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
-typedef uint16_t         Priority_bit_map_Control;
+typedef uint16_t         Priority_bit_map_Word;
 typedef void sparc_isr;
 typedef void ( *sparc_isr_entry )( void );
 

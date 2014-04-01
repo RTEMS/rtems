@@ -33,7 +33,7 @@ extern "C" {
 /**@{*/
 
 /*
- *  The definition of the Priority_bit_map_Control type is CPU dependent.
+ *  The definition of the Priority_bit_map_Word type is CPU dependent.
  *
  */
 
@@ -43,15 +43,15 @@ extern "C" {
  */
 typedef struct {
   /** This is the address of minor bit map slot. */
-  Priority_bit_map_Control *minor;
+  Priority_bit_map_Word *minor;
   /** This is the priority bit map ready mask. */
-  Priority_bit_map_Control  ready_major;
+  Priority_bit_map_Word  ready_major;
   /** This is the priority bit map ready mask. */
-  Priority_bit_map_Control  ready_minor;
+  Priority_bit_map_Word  ready_minor;
   /** This is the priority bit map block mask. */
-  Priority_bit_map_Control  block_major;
+  Priority_bit_map_Word  block_major;
   /** This is the priority bit map block mask. */
-  Priority_bit_map_Control  block_minor;
+  Priority_bit_map_Word  block_minor;
 } Priority_bit_map_Information;
 
 /**@}*/

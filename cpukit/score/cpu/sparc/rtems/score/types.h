@@ -34,7 +34,7 @@ extern "C" {
  * for using 16-bit variables.  With no overriding architectural factors,
  * just using a uint16_t.
  */
-typedef uint16_t Priority_bit_map_Control;
+typedef uint16_t Priority_bit_map_Word;
 
 /**
  * @brief SPARC ISR handler return type.

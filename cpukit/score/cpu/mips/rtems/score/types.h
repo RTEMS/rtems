@@ -40,7 +40,7 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
-typedef uint16_t     Priority_bit_map_Control;
+typedef uint16_t     Priority_bit_map_Word;
 typedef void mips_isr;
 typedef void ( *mips_isr_entry )( void );
 

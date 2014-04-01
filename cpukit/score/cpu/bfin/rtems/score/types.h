@@ -32,7 +32,7 @@ extern "C" {
  */
 
 /** This defines the type for a priority bit map entry. */
-typedef uint16_t Priority_bit_map_Control;
+typedef uint16_t Priority_bit_map_Word;
 
 /** This defines the return type for an ISR entry point. */
 typedef void blackfin_isr;

@@ -21,7 +21,7 @@
 
 #include <rtems/score/prioritybitmapimpl.h>
 
-Priority_bit_map_Control          _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
+Priority_bit_map_Word          _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
 
 /* Instantiate any global variables needed by the priority scheduler */
-volatile Priority_bit_map_Control _Priority_Major_bit_map;
+volatile Priority_bit_map_Word _Priority_Major_bit_map;
