@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: newlib01
+
+directives:
+
+  - newlib_create_hook()
+  - newlib_delete_hook()
+  - newlib_terminate_hook()
+
+concepts:
+
+  - Ensure that the Newlib hooks works as expected.

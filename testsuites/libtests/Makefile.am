@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = POSIX
+SUBDIRS += newlib01
 SUBDIRS += block17
 SUBDIRS += exit02
 SUBDIRS += exit01
