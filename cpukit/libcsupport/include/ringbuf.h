@@ -26,6 +26,12 @@ typedef struct {
 #define Ring_buffer_Initialize( _buffer ) \
   do { \
     (_buffer)->head = (_buffer)->tail = 0; \
+    rtems_interrupt_lock_initialize(&(_buffer)->lock, "ring buffer"); \
+  } while ( 0 )
+
+#define Ring_buffer_Destory( _buffer ) \
+  do { \
+    rtems_interrupt_lock_destroy(&(_buffer)->lock); \
   } while ( 0 )
 
 #define Ring_buffer_Is_empty( _buffer ) \
