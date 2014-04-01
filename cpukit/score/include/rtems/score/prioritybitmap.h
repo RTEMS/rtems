@@ -37,6 +37,24 @@ extern "C" {
  *
  */
 
+typedef struct {
+  /**
+   * @brief Each sixteen bit entry in this word is associated with one of the
+   * sixteen entries in the bit map.
+   */
+  Priority_bit_map_Word major_bit_map;
+
+  /**
+   * @brief Each bit in the bit map indicates whether or not there are threads
+   * ready at a particular priority.
+   *
+   * The mapping of individual priority levels to particular bits is processor
+   * dependent as is the value of each bit used to indicate that threads are
+   * ready at that priority.
+   */
+  Priority_bit_map_Word bit_map[ 16 ];
+} Priority_bit_map_Control;
+
 /**
  *  The following record defines the information associated with
  *  each thread to manage its interaction with the priority bit maps.

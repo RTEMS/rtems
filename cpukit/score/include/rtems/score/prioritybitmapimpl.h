@@ -22,6 +22,8 @@
 #include <rtems/score/prioritybitmap.h>
 #include <rtems/score/priority.h>
 
+#include <string.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -30,26 +32,6 @@ extern "C" {
  * @addtogroup ScorePriority
  */
 /**@{**/
-
-/*
- * The Priority_bit_map_Word variables are instantiated only
- * if using the bit map handler.
- */
-
-/**
- *  Each sixteen bit entry in this array is associated with one of
- *  the sixteen entries in the Priority Bit map.
- */
-extern volatile Priority_bit_map_Word _Priority_Major_bit_map;
-
-/** Each bit in the Priority Bitmap indicates whether or not there are
- *  threads ready at a particular priority.  The mapping of
- *  individual priority levels to particular bits is processor
- *  dependent as is the value of each bit used to indicate that
- *  threads are ready at that priority.
- */
-extern Priority_bit_map_Word
-               _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
 
 #if ( CPU_USE_GENERIC_BITFIELD_DATA == TRUE )
 
@@ -188,74 +170,67 @@ RTEMS_INLINE_ROUTINE uint32_t   _Priority_Bits_index (
 
 #endif
 
+RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize(
+  Priority_bit_map_Control *bit_map
+)
+{
+  memset( bit_map, 0, sizeof( *bit_map ) );
+}
+
 /**
  * Priority Queue implemented by bit map
  */
 
-/**
- *  This is the minor bit map.
- */
-extern Priority_bit_map_Word _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
-
-/**
- * This routine uses the_priority_map to update the priority
- * bit maps to indicate that a thread has been readied.
- */
-
 RTEMS_INLINE_ROUTINE void _Priority_bit_map_Add (
-  Priority_bit_map_Information *the_priority_map
+  Priority_bit_map_Control     *bit_map,
+  Priority_bit_map_Information *bit_map_info
 )
 {
-  *the_priority_map->minor |= the_priority_map->ready_minor;
-  _Priority_Major_bit_map  |= the_priority_map->ready_major;
+  *bit_map_info->minor |= bit_map_info->ready_minor;
+  bit_map->major_bit_map |= bit_map_info->ready_major;
 }
-
-/**
- * This routine uses the_priority_map to update the priority
- * bit maps to indicate that a thread has been removed from the
- * ready state.
- */
 
 RTEMS_INLINE_ROUTINE void _Priority_bit_map_Remove (
-  Priority_bit_map_Information *the_priority_map
+  Priority_bit_map_Control     *bit_map,
+  Priority_bit_map_Information *bit_map_info
 )
 {
-  *the_priority_map->minor &= the_priority_map->block_minor;
-  if ( *the_priority_map->minor == 0 )
-    _Priority_Major_bit_map &= the_priority_map->block_major;
+  *bit_map_info->minor &= bit_map_info->block_minor;
+  if ( *bit_map_info->minor == 0 )
+    bit_map->major_bit_map &= bit_map_info->block_major;
 }
 
-/**
- * This function returns the priority of the highest priority
- * ready thread.
- */
-
-RTEMS_INLINE_ROUTINE Priority_Control _Priority_bit_map_Get_highest( void )
+RTEMS_INLINE_ROUTINE Priority_Control _Priority_bit_map_Get_highest(
+  const Priority_bit_map_Control *bit_map
+)
 {
   Priority_bit_map_Word minor;
   Priority_bit_map_Word major;
 
-  _Bitfield_Find_first_bit( _Priority_Major_bit_map, major );
-  _Bitfield_Find_first_bit( _Priority_Bit_map[major], minor );
+  /* Avoid problems with some inline ASM statements */
+  Priority_bit_map_Word tmp;
+
+  tmp = bit_map->major_bit_map;
+  _Bitfield_Find_first_bit( tmp, major );
+
+  tmp = bit_map->bit_map[ major ];
+  _Bitfield_Find_first_bit( tmp, minor );
 
   return (_Priority_Bits_index( major ) << 4) +
           _Priority_Bits_index( minor );
 }
 
-RTEMS_INLINE_ROUTINE bool _Priority_bit_map_Is_empty( void )
+RTEMS_INLINE_ROUTINE bool _Priority_bit_map_Is_empty(
+  const Priority_bit_map_Control *bit_map
+)
 {
-  return _Priority_Major_bit_map == 0;
+  return bit_map->major_bit_map == 0;
 }
 
-/**
- * This routine initializes the_priority_map so that it
- * contains the information necessary to manage a thread
- * at new_priority.
- */
-
 RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize_information(
-  Priority_bit_map_Information *the_priority_map,
-  Priority_Control      new_priority
+  Priority_bit_map_Control     *bit_map,
+  Priority_bit_map_Information *bit_map_info,
+  Priority_Control              new_priority
 )
 {
   Priority_bit_map_Word major;
@@ -265,18 +240,17 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize_information(
   major = _Priority_Major( new_priority );
   minor = _Priority_Minor( new_priority );
 
-  the_priority_map->minor =
-    &_Priority_Bit_map[ _Priority_Bits_index(major) ];
+  bit_map_info->minor = &bit_map->bit_map[ _Priority_Bits_index( major ) ];
 
   mask = _Priority_Mask( major );
-  the_priority_map->ready_major = mask;
+  bit_map_info->ready_major = mask;
   /* Add _Priority_Mask_invert to non-generic bitfield then change this code. */
-  the_priority_map->block_major = (Priority_bit_map_Word)(~((uint32_t)mask));
+  bit_map_info->block_major = (Priority_bit_map_Word)(~((uint32_t)mask));
 
   mask = _Priority_Mask( minor );
-  the_priority_map->ready_minor = mask;
+  bit_map_info->ready_minor = mask;
   /* Add _Priority_Mask_invert to non-generic bitfield then change this code. */
-  the_priority_map->block_minor = (Priority_bit_map_Word)(~((uint32_t)mask));
+  bit_map_info->block_minor = (Priority_bit_map_Word)(~((uint32_t)mask));
 }
 
 /** @} */

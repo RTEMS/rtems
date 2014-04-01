@@ -21,9 +21,7 @@
 
 #include <rtems/score/schedulerpriorityimpl.h>
 
-void _Scheduler_priority_Extract(
-  Thread_Control      *the_thread
-)
+void _Scheduler_priority_Extract( Thread_Control *the_thread )
 {
-  _Scheduler_priority_Ready_queue_extract( the_thread );
+  _Scheduler_priority_Extract_body( the_thread );
 }

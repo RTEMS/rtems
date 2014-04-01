@@ -19,6 +19,7 @@
 #include <tmacros.h>
 #include <timesys.h>
 
+#include <rtems/score/schedulerpriorityimpl.h>
 #include <rtems/rtems/semimpl.h>
 
 #if defined( RTEMS_SMP ) && defined( RTEMS_DEBUG )
@@ -370,7 +371,7 @@ rtems_task Middle_task(
   rtems_task_argument argument
 )
 {
-  Chain_Control   *ready_queues;
+  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
 
   thread_dispatch_no_fp_time = benchmark_timer_read();
 
@@ -378,9 +379,8 @@ rtems_task Middle_task(
 
   Middle_tcb   = _Thread_Get_executing();
 
-  ready_queues      = (Chain_Control *) _Scheduler.information;
   set_thread_executing(
-    (Thread_Control *) _Chain_First(&ready_queues[LOW_PRIORITY])
+    (Thread_Control *) _Chain_First(&scheduler->Ready[LOW_PRIORITY])
   );
 
   /* do not force context switch */
@@ -403,10 +403,8 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
-  Thread_Control *executing;
-  Chain_Control  *ready_queues;
-
-  ready_queues      = (Chain_Control *) _Scheduler.information;
+  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+  Thread_Control             *executing;
 
   context_switch_no_fp_time = benchmark_timer_read();
 
@@ -424,7 +422,7 @@ rtems_task Low_task(
   context_switch_another_task_time = benchmark_timer_read();
 
   set_thread_executing(
-    (Thread_Control *) _Chain_First(&ready_queues[FP1_PRIORITY])
+    (Thread_Control *) _Chain_First(&scheduler->Ready[FP1_PRIORITY])
   );
 
   /* do not force context switch */
@@ -447,17 +445,16 @@ rtems_task Floating_point_task_1(
   rtems_task_argument argument
 )
 {
-  Chain_Control   *ready_queues;
-  Thread_Control  *executing;
+  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+  Thread_Control             *executing;
   FP_DECLARE;
 
   context_switch_restore_1st_fp_time = benchmark_timer_read();
 
   executing = _Thread_Get_executing();
 
-  ready_queues      = (Chain_Control *) _Scheduler.information;
   set_thread_executing(
-    (Thread_Control *) _Chain_First(&ready_queues[FP2_PRIORITY])
+    (Thread_Control *) _Chain_First(&scheduler->Ready[FP2_PRIORITY])
   );
 
   /* do not force context switch */
@@ -483,9 +480,8 @@ rtems_task Floating_point_task_1(
 
   executing = _Thread_Get_executing();
 
-  ready_queues      = (Chain_Control *) _Scheduler.information;
   set_thread_executing(
-    (Thread_Control *) _Chain_First(&ready_queues[FP2_PRIORITY])
+    (Thread_Control *) _Chain_First(&scheduler->Ready[FP2_PRIORITY])
   );
 
   benchmark_timer_initialize();
@@ -504,17 +500,16 @@ rtems_task Floating_point_task_2(
   rtems_task_argument argument
 )
 {
-  Chain_Control  *ready_queues;
-  Thread_Control *executing;
+  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+  Thread_Control             *executing;
   FP_DECLARE;
 
   context_switch_save_restore_idle_time = benchmark_timer_read();
 
   executing = _Thread_Get_executing();
 
-  ready_queues      = (Chain_Control *) _Scheduler.information;
   set_thread_executing(
-    (Thread_Control *) _Chain_First(&ready_queues[FP1_PRIORITY])
+    (Thread_Control *) _Chain_First(&scheduler->Ready[FP1_PRIORITY])
   );
 
   FP_LOAD( 1.0 );

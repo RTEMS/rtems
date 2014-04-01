@@ -56,6 +56,18 @@ extern "C" {
     _Scheduler_default_Start_idle         /* start idle entry point */ \
   }
 
+typedef struct {
+  /**
+   * @brief Bit map to indicate non-empty ready queues.
+   */
+  Priority_bit_map_Control Bit_map;
+
+  /**
+   * @brief One ready queue per priority level.
+   */
+  Chain_Control Ready[ 1 ];
+} Scheduler_priority_Control;
+
 /**
  * Per-thread data related to the _Scheduler_PRIORITY scheduling policy.
  */

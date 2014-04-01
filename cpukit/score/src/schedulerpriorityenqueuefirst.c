@@ -24,6 +24,11 @@ void _Scheduler_priority_Enqueue_first(
   Thread_Control      *the_thread
 )
 {
-  _Scheduler_priority_Ready_queue_enqueue_first( the_thread );
+  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+
+  _Scheduler_priority_Ready_queue_enqueue_first(
+    the_thread,
+    &scheduler->Bit_map
+  );
 }
 

@@ -66,7 +66,7 @@ extern "C" {
     _Scheduler_priority_Priority_compare, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \
-    _Scheduler_SMP_Start_idle \
+    _Scheduler_priority_SMP_Start_idle \
   }
 
 void _Scheduler_priority_SMP_Initialize( void );
@@ -84,6 +84,11 @@ void _Scheduler_priority_SMP_Enqueue_lifo( Thread_Control *thread );
 void _Scheduler_priority_SMP_Extract( Thread_Control *thread );
 
 void _Scheduler_priority_SMP_Yield( Thread_Control *thread );
+
+void _Scheduler_priority_SMP_Start_idle(
+  Thread_Control *thread,
+  Per_CPU_Control *cpu
+);
 
 /** @} */
 

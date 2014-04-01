@@ -127,7 +127,6 @@ if HAS_SMP
 libscore_a_SOURCES += src/profilingsmplock.c
 libscore_a_SOURCES += src/schedulerprioritysmp.c
 libscore_a_SOURCES += src/schedulersimplesmp.c
-libscore_a_SOURCES += src/schedulersmpstartidle.c
 libscore_a_SOURCES += src/smp.c
 libscore_a_SOURCES += src/cpuset.c
 libscore_a_SOURCES += src/cpusetprintsupport.c
@@ -191,7 +190,6 @@ libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
 
 ## SCHEDULER_C_FILES
 libscore_a_SOURCES += src/log2table.c
-libscore_a_SOURCES += src/prioritybitmap.c
 libscore_a_SOURCES += src/scheduler.c
 libscore_a_SOURCES += src/schedulerdefaultallocatefree.c
 libscore_a_SOURCES += src/schedulerdefaultreleasejob.c

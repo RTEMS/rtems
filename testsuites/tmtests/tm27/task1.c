@@ -20,6 +20,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#include <rtems/score/schedulerpriorityimpl.h>
 #include <bsp.h>
 
 #define _RTEMS_TMTEST27
@@ -101,10 +102,10 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
 #if defined(RTEMS_SMP)
   rtems_interrupt_level level;
 #endif
-  Chain_Control   *ready_queues;
 
   Install_tm27_vector( Isr_handler );
 
@@ -185,9 +186,8 @@ rtems_task Task_1(
   _ISR_Disable_without_giant(level);
 #endif
 
-  ready_queues      = (Chain_Control *) _Scheduler.information;
   _Thread_Executing =
-        (Thread_Control *) _Chain_First(&ready_queues[LOW_PRIORITY]);
+        (Thread_Control *) _Chain_First(&scheduler->Ready[LOW_PRIORITY]);
 
   _Thread_Dispatch_necessary = 1;
 
@@ -219,10 +219,10 @@ rtems_task Task_2(
   rtems_task_argument argument
 )
 {
+  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
 #if defined(RTEMS_SMP)
   rtems_interrupt_level level;
 #endif
-  Chain_Control   *ready_queues;
 
 #if (MUST_WAIT_FOR_INTERRUPT == 1)
   while ( Interrupt_occurred == 0 );
@@ -255,9 +255,8 @@ rtems_task Task_2(
   rtems_interrupt_disable(level);
 #endif
 
-  ready_queues      = (Chain_Control *) _Scheduler.information;
   _Thread_Executing =
-        (Thread_Control *) _Chain_First(&ready_queues[LOW_PRIORITY]);
+        (Thread_Control *) _Chain_First(&scheduler->Ready[LOW_PRIORITY]);
 
   _Thread_Dispatch_necessary = 1;
 

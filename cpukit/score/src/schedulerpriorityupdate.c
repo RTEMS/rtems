@@ -25,7 +25,11 @@ void _Scheduler_priority_Update(
   Thread_Control    *the_thread
 )
 {
-  Chain_Control *ready_queues = _Scheduler_priority_Get_ready_queues();
+  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
 
-  _Scheduler_priority_Update_body( the_thread, ready_queues );
+  _Scheduler_priority_Update_body(
+    the_thread,
+    &scheduler->Bit_map,
+    &scheduler->Ready[ 0 ]
+  );
 }

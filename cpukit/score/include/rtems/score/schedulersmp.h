@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -25,6 +25,7 @@
 
 #include <rtems/score/chain.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/prioritybitmap.h>
 #include <rtems/score/thread.h>
 
 #ifdef __cplusplus
@@ -40,14 +41,19 @@ extern "C" {
  */
 
 typedef struct {
-  Chain_Control scheduled;
-  Chain_Control ready[ 1 ];
+  Chain_Control Scheduled;
 } Scheduler_SMP_Control;
 
-void _Scheduler_SMP_Start_idle(
-  Thread_Control *thread,
-  Per_CPU_Control *cpu
-);
+typedef struct {
+  Scheduler_SMP_Control Base;
+  Chain_Control         Ready;
+} Scheduler_simple_SMP_Control;
+
+typedef struct {
+  Scheduler_SMP_Control    Base;
+  Priority_bit_map_Control Bit_map;
+  Chain_Control            Ready[ 1 ];
+} Scheduler_priority_SMP_Control;
 
 /** @} */
 

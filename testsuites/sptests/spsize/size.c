@@ -85,9 +85,7 @@ void print_formula(void);
 #include <rtems/score/schedulerpriority.h>
 
 /* Priority scheduling uninitialized (globals) consumption */
-#define SCHEDULER_OVHD     ((sizeof _Scheduler)              + \
-                           (sizeof _Priority_Major_bit_map) + \
-                           (sizeof _Priority_Bit_map))
+#define SCHEDULER_OVHD      (sizeof _Scheduler)
 
 /* Priority scheduling per-thread consumption. Gets 
  * included in the PER_TASK consumption.
@@ -100,7 +98,8 @@ void print_formula(void);
  * including _Scheduler in SCHEDULER_OVHD.
  */
 #define SCHEDULER_WKSP_SIZE  \
-    ((RTEMS_MAXIMUM_PRIORITY + 1) * sizeof(Chain_Control ))
+    (sizeof(Scheduler_priority_Control) + \
+     RTEMS_MAXIMUM_PRIORITY * sizeof(Chain_Control ))
 /****** END OF MEMORY USAGE OF DEFAULT PRIORITY SCHEDULER ******/
 
 #define PER_TASK      \

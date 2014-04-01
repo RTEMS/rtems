@@ -23,12 +23,12 @@
 
 void _Scheduler_priority_Initialize(void)
 {
-  /* allocate ready queue structures */
-  Chain_Control *ready_queues = _Workspace_Allocate_or_fatal_error(
-    ((size_t) PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
+  Scheduler_priority_Control *self = _Workspace_Allocate_or_fatal_error(
+    sizeof( *self ) + PRIORITY_MAXIMUM * sizeof( Chain_Control )
   );
 
-  _Scheduler_priority_Ready_queue_initialize( ready_queues );
+  _Priority_bit_map_Initialize( &self->Bit_map );
+  _Scheduler_priority_Ready_queue_initialize( &self->Ready[ 0 ] );
 
-  _Scheduler.information = ready_queues;
+  _Scheduler.information = self;
 }

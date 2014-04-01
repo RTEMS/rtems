@@ -676,7 +676,8 @@ const rtems_libio_helper rtems_fs_init_helper =
    */
   #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
     _Configure_From_workspace( \
-      ((CONFIGURE_MAXIMUM_PRIORITY+1) * sizeof(Chain_Control)) ) \
+      sizeof(Scheduler_priority_Control) +  \
+      ((CONFIGURE_MAXIMUM_PRIORITY) * sizeof(Chain_Control)) ) \
   )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
@@ -695,7 +696,7 @@ const rtems_libio_helper rtems_fs_init_helper =
    */
   #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
     _Configure_From_workspace( \
-      sizeof(Scheduler_SMP_Control) +  \
+      sizeof(Scheduler_priority_SMP_Control) +  \
       ((CONFIGURE_MAXIMUM_PRIORITY) * sizeof(Chain_Control)) ) \
   )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
@@ -731,7 +732,7 @@ const rtems_libio_helper rtems_fs_init_helper =
    * NOTE: This is the same as the Simple Scheduler
    */
   #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
-    _Configure_From_workspace( sizeof( Scheduler_SMP_Control ) ) \
+    _Configure_From_workspace( sizeof( Scheduler_simple_SMP_Control ) ) \
   )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER (0)
 #endif

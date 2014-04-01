@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -57,9 +57,11 @@ typedef void ( *Scheduler_SMP_Move )(
   Thread_Control *thread_to_move
 );
 
-static inline Scheduler_SMP_Control *_Scheduler_SMP_Instance( void )
+static inline void _Scheduler_SMP_Initialize(
+  Scheduler_SMP_Control *self
+)
 {
-  return _Scheduler.information;
+  _Chain_Initialize_empty( &self->Scheduled );
 }
 
 static inline void _Scheduler_SMP_Allocate_processor(
@@ -109,7 +111,7 @@ static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
 )
 {
   Thread_Control *lowest_ready = NULL;
-  Chain_Control *scheduled = &self->scheduled;
+  Chain_Control *scheduled = &self->Scheduled;
 
   if ( !_Chain_Is_empty( scheduled ) ) {
     lowest_ready = (Thread_Control *) _Chain_Last( scheduled );
@@ -244,7 +246,7 @@ static inline void _Scheduler_SMP_Insert_scheduled_lifo(
 )
 {
   _Chain_Insert_ordered_unprotected(
-    &self->scheduled,
+    &self->Scheduled,
     &thread->Object.Node,
     _Scheduler_simple_Insert_priority_lifo_order
   );
@@ -256,10 +258,21 @@ static inline void _Scheduler_SMP_Insert_scheduled_fifo(
 )
 {
   _Chain_Insert_ordered_unprotected(
-    &self->scheduled,
+    &self->Scheduled,
     &thread->Object.Node,
     _Scheduler_simple_Insert_priority_fifo_order
   );
+}
+
+static inline void _Scheduler_SMP_Start_idle(
+  Scheduler_SMP_Control *self,
+  Thread_Control *thread,
+  Per_CPU_Control *cpu
+)
+{
+  thread->is_scheduled = true;
+  _Thread_Set_CPU( thread, cpu );
+  _Chain_Append_unprotected( &self->Scheduled, &thread->Object.Node );
 }
 
 /** @} */
