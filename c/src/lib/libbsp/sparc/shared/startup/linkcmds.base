@@ -63,7 +63,7 @@ SECTIONS
     *(.text*)
     . = ALIGN (16);
 
-    *(.eh_frame)
+    KEEP(*(.eh_frame*))
     . = ALIGN (16);
 
     *(.gnu.linkonce.t*)
@@ -87,13 +87,11 @@ SECTIONS
        The .ctor section from the crtend file contains the
        end of ctors marker and it must be last */
     KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
-    KEEP (*(SORT(.ctors.*)))
-    KEEP (*(.ctors))
+    KEEP (*(SORT(.ctors*)))
     KEEP (*crtbegin.o(.dtors))
     KEEP (*crtbegin?.o(.dtors))
     KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
-    KEEP (*(SORT(.dtors.*)))
-    KEEP (*(.dtors))
+    KEEP (*(SORT(.dtors*)))
 
     _rodata_start = . ;
     *(.rodata*)
@@ -102,8 +100,8 @@ SECTIONS
 
     etext = ALIGN(0x10);
     _etext = .;
-    KEEP(*(.init))
-    KEEP(*(.fini))
+    KEEP(*(.init*))
+    KEEP(*(.fini*))
     *(.lit)
     *(.shdata)
     . = ALIGN (16);
@@ -159,6 +157,7 @@ SECTIONS
     _sdata = . ;
     *(.data*)
     *(.gnu.linkonce.d*)
+    . = ALIGN(0x10);
     *(.gcc_except_table*)
     . = ALIGN(0x10);
     edata = .;
