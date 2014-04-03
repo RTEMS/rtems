@@ -25,16 +25,10 @@
 
 void _Scheduler_simple_Initialize ( void )
 {
-  void *f;
+  Scheduler_simple_Control *scheduler =
+    _Workspace_Allocate_or_fatal_error( sizeof( *scheduler ) );
 
-  /*
-   * Initialize Ready Queue
-   */
+  _Chain_Initialize_empty( &scheduler->Ready );
 
-  /* allocate ready queue structures */
-  f = _Workspace_Allocate_or_fatal_error( sizeof(Chain_Control) );
-  _Scheduler.information = f;
-
-  /* initialize ready queue structure */
-  _Chain_Initialize_empty( (Chain_Control *)f );
+  _Scheduler.information = scheduler;
 }

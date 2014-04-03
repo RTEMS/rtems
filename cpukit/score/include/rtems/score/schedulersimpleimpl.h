@@ -32,6 +32,11 @@ extern "C" {
  */
 /**@{**/
 
+RTEMS_INLINE_ROUTINE Scheduler_simple_Control *_Scheduler_simple_Instance( void )
+{
+  return _Scheduler.information;
+}
+
 /**
  * This routine puts @a the_thread on to the ready queue.
  *
@@ -101,9 +106,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_simple_Schedule_body(
   bool force_dispatch
 )
 {
-  Thread_Control *heir = (Thread_Control *) _Chain_First(
-    (Chain_Control *) _Scheduler.information
-  );
+  Scheduler_simple_Control *scheduler = _Scheduler_simple_Instance();
+  Thread_Control *heir = (Thread_Control *) _Chain_First( &scheduler->Ready );
 
   ( void ) thread;
 

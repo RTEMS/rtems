@@ -24,7 +24,8 @@ void _Scheduler_simple_Ready_queue_enqueue(
   Thread_Control    *the_thread
 )
 {
-  Chain_Control *ready = (Chain_Control *) _Scheduler.information;
+  Scheduler_simple_Control *scheduler =
+    _Scheduler_simple_Instance();
 
-  _Scheduler_simple_Insert_priority_fifo( ready, the_thread );
+  _Scheduler_simple_Insert_priority_fifo( &scheduler->Ready, the_thread );
 }

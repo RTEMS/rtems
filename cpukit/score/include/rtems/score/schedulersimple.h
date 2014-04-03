@@ -55,6 +55,16 @@ extern "C" {
   }
 
 /**
+ * @brief Simple scheduler control.
+ */
+typedef struct {
+  /**
+   * @brief One ready queue for all ready threads.
+   */
+  Chain_Control Ready;
+} Scheduler_simple_Control;
+
+/**
  *  @brief Initialize simple scheduler.
  *
  *  This routine initializes the simple scheduler.
