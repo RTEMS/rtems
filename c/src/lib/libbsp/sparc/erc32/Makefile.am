@@ -28,13 +28,23 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
-    startup/bsppredriver.c ../../sparc/shared/startup/bspgetworkarea.c \
-    ../../sparc/shared/bsppretaskinghook.c ../../shared/bsppost.c \
-    ../../shared/bspstart.c ../../shared/bootcard.c ../../shared/bspinit.c \
-    ../../shared/sbrk.c startup/setvec.c startup/spurious.c \
-    startup/erc32mec.c startup/boardinit.S startup/bspidle.c \
-    startup/bspdelay.c ../../sparc/shared/startup/early_malloc.c
+libbsp_a_SOURCES += ../../shared/bspclean.c
+libbsp_a_SOURCES += ../../shared/bsplibc.c
+libbsp_a_SOURCES += startup/bsppredriver.c
+libbsp_a_SOURCES += ../../sparc/shared/startup/bspgetworkarea.c
+libbsp_a_SOURCES += ../../sparc/shared/bsppretaskinghook.c
+libbsp_a_SOURCES += ../../shared/bsppost.c
+libbsp_a_SOURCES += ../../shared/bspstart.c
+libbsp_a_SOURCES += ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/bspinit.c
+libbsp_a_SOURCES += ../../shared/sbrk.c
+libbsp_a_SOURCES += startup/setvec.c
+libbsp_a_SOURCES += startup/spurious.c
+libbsp_a_SOURCES += startup/erc32mec.c
+libbsp_a_SOURCES += startup/boardinit.S
+libbsp_a_SOURCES += startup/bspidle.c
+libbsp_a_SOURCES += startup/bspdelay.c
+libbsp_a_SOURCES += ../../sparc/shared/startup/early_malloc.c
 # ISR Handler
 libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
