@@ -1,7 +1,9 @@
 /*
  *  This file contains the hardware specific portions of the TTY driver
  *  for the serial ports on the erc32.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
