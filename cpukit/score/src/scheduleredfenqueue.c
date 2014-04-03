@@ -18,19 +18,18 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/scheduleredf.h>
+#include <rtems/score/scheduleredfimpl.h>
 
 void _Scheduler_EDF_Enqueue(
   Thread_Control    *the_thread
 )
 {
+  Scheduler_EDF_Control *scheduler =
+    _Scheduler_EDF_Instance();
   Scheduler_EDF_Per_thread *sched_info =
     (Scheduler_EDF_Per_thread*) the_thread->scheduler_info;
   RBTree_Node *node = &(sched_info->Node);
 
-  _RBTree_Insert( &_Scheduler_EDF_Ready_queue, node );
+  _RBTree_Insert( &scheduler->Ready, node );
   sched_info->queue_state = SCHEDULER_EDF_QUEUE_STATE_YES;
 }

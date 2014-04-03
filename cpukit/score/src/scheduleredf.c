@@ -21,6 +21,7 @@
 #include <rtems/score/scheduleredf.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/wkspace.h>
 
 static int _Scheduler_EDF_RBTree_compare_function
 (
@@ -42,12 +43,14 @@ static int _Scheduler_EDF_RBTree_compare_function
 
 void _Scheduler_EDF_Initialize(void)
 {
-  _RBTree_Initialize_empty(
-      &_Scheduler_EDF_Ready_queue,
-      &_Scheduler_EDF_RBTree_compare_function,
-      0
-  );
-}
+  Scheduler_EDF_Control *scheduler =
+    _Workspace_Allocate_or_fatal_error( sizeof( *scheduler ) );
 
-/* Instantiate any global variables needed by the EDF scheduler */
-RBTree_Control _Scheduler_EDF_Ready_queue;
+  _RBTree_Initialize_empty(
+    &scheduler->Ready,
+    _Scheduler_EDF_RBTree_compare_function,
+    0
+  );
+
+  _Scheduler.information = scheduler;
+}

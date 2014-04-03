@@ -23,7 +23,9 @@
 
 void _Scheduler_EDF_Yield( Thread_Control *thread )
 {
-  ISR_Level                 level;
+  Scheduler_EDF_Control *scheduler =
+    _Scheduler_EDF_Instance();
+  ISR_Level              level;
 
   Scheduler_EDF_Per_thread *thread_info =
     (Scheduler_EDF_Per_thread *) thread->scheduler_info;
@@ -35,8 +37,8 @@ void _Scheduler_EDF_Yield( Thread_Control *thread )
    * The RBTree has more than one node, enqueue behind the tasks
    * with the same priority in case there are such ones.
    */
-  _RBTree_Extract( &_Scheduler_EDF_Ready_queue, thread_node );
-  _RBTree_Insert( &_Scheduler_EDF_Ready_queue, thread_node );
+  _RBTree_Extract( &scheduler->Ready, thread_node );
+  _RBTree_Insert( &scheduler->Ready, thread_node );
 
   _ISR_Flash( level );
 

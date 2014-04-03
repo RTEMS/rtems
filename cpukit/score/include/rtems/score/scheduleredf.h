@@ -66,6 +66,13 @@ extern "C" {
  */
 #define SCHEDULER_EDF_PRIO_MSB 0x80000000
 
+typedef struct {
+  /**
+   * Top of the ready queue.
+   */
+  RBTree_Control Ready;
+} Scheduler_EDF_Control;
+
 /**
  * @typedef Scheduler_EDF_Queue_state
  *
@@ -95,11 +102,6 @@ typedef struct {
    */
   Scheduler_EDF_Queue_state queue_state;
 } Scheduler_EDF_Per_thread;
-
-/**
- * Top of the ready queue.
- */
-extern RBTree_Control _Scheduler_EDF_Ready_queue;
 
 /**
  * @brief Initialize EDF scheduler.

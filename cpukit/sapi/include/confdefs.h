@@ -770,7 +770,7 @@ const rtems_libio_helper rtems_fs_init_helper =
    * define the memory used by the EDF scheduler
    */
   #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
-    _Configure_From_workspace(0))
+    _Configure_From_workspace(sizeof(Scheduler_EDF_Control)))
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_EDF_Per_thread)))
 #endif
@@ -794,8 +794,11 @@ const rtems_libio_helper rtems_fs_init_helper =
    * define the memory used by the CBS scheduler
    */
   #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
-    _Configure_From_workspace((sizeof(Scheduler_CBS_Server) + \
-        sizeof(Scheduler_CBS_Server*)) * CONFIGURE_CBS_MAXIMUM_SERVERS))
+    _Configure_From_workspace(sizeof(Scheduler_EDF_Control)) + \
+      _Configure_From_workspace(CONFIGURE_CBS_MAXIMUM_SERVERS * \
+        sizeof(Scheduler_CBS_Server *)) + \
+      CONFIGURE_CBS_MAXIMUM_SERVERS * \
+        _Configure_From_workspace(sizeof(Scheduler_CBS_Server)))
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_CBS_Per_thread)))
 #endif

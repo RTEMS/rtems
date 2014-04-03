@@ -31,12 +31,19 @@ extern "C" {
  * @{
  */
 
+RTEMS_INLINE_ROUTINE Scheduler_EDF_Control *_Scheduler_EDF_Instance( void )
+{
+  return _Scheduler.information;
+}
+
 RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Schedule_body(
-  Thread_Control *thread,
-  bool force_dispatch
+  Thread_Control    *the_thread
+  bool               force_dispatch
 )
 {
-  RBTree_Node *first = _RBTree_First(&_Scheduler_EDF_Ready_queue, RBT_LEFT);
+  Scheduler_EDF_Control *scheduler =
+    _Scheduler_EDF_Instance();
+  RBTree_Node *first = _RBTree_First(&scheduler->Ready, RBT_LEFT);
   Scheduler_EDF_Per_thread *sched_info =
     _RBTree_Container_of(first, Scheduler_EDF_Per_thread, Node);
   Thread_Control *heir = (Thread_Control *) sched_info->thread;
