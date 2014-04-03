@@ -371,7 +371,7 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
  */
 void _POSIX_Threads_Manager_initialization(void)
 {
-  #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
+  #if defined(RTEMS_SMP) && defined(__RTEMS_HAVE_SYS_CPUSET_H__)
     const CPU_set_Control *affinity;
     pthread_attr_t *attr;
 
