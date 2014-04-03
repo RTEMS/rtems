@@ -9,7 +9,8 @@
  *  16.1.2 Thread Creation, P1003.1c/Draft 10, p. 144
  */
 
-/*  COPYRIGHT (c) 1989-2008.
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -142,7 +143,7 @@ int pthread_create(
 #if defined(RTEMS_SMP)
 #if __RTEMS_HAVE_SYS_CPUSET_H__
   status = _CPU_set_Is_valid( the_attr->affinityset, the_attr->affinitysetsize );
-  if (!status )
+  if ( !status )
     return EINVAL;
 #endif
 #endif
@@ -191,19 +192,17 @@ int pthread_create(
     return EAGAIN;
   }
 
-#if defined(RTEMS_SMP)
-#if __RTEMS_HAVE_SYS_CPUSET_H__
-   status = _Scheduler_Set_affinity( 
-     the_thread,  
-     attr->affinitysetsize, 
-     attr->affinityset 
+#if defined(RTEMS_SMP) && __RTEMS_HAVE_SYS_CPUSET_H__
+   status = _Scheduler_Set_affinity(
+     the_thread,
+     the_attr->affinitysetsize,
+     the_attr->affinityset
    );
-  if ( !status ) {
-    _POSIX_Threads_Free( the_thread );
-    _RTEMS_Unlock_allocator();
-    return EINVAL;
-  }
-#endif
+   if ( !status ) {
+     _POSIX_Threads_Free( the_thread );
+     _RTEMS_Unlock_allocator();
+     return EINVAL;
+   }
 #endif
 
   /*
