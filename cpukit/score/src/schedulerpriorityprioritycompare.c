@@ -21,8 +21,8 @@
 #include <rtems/score/schedulerpriorityimpl.h>
 
 int _Scheduler_priority_Priority_compare(
-  Priority_Control      p1,
-  Priority_Control      p2
+  Priority_Control   p1,
+  Priority_Control   p2
 )
 {
   return _Scheduler_priority_Priority_compare_body( p1, p2 );

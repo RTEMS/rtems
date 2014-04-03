@@ -21,14 +21,16 @@
 #include <rtems/score/schedulerpriorityimpl.h>
 
 void _Scheduler_priority_Enqueue_first(
-  Thread_Control      *the_thread
+  Scheduler_Control *base,
+  Thread_Control    *the_thread
 )
 {
-  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+  Scheduler_priority_Control *self =
+    _Scheduler_priority_Self_from_base( base );
 
   _Scheduler_priority_Ready_queue_enqueue_first(
     the_thread,
-    &scheduler->Bit_map
+    &self->Bit_map
   );
 }
 

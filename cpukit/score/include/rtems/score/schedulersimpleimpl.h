@@ -32,9 +32,10 @@ extern "C" {
  */
 /**@{**/
 
-RTEMS_INLINE_ROUTINE Scheduler_simple_Control *_Scheduler_simple_Instance( void )
+RTEMS_INLINE_ROUTINE Scheduler_simple_Control *
+  _Scheduler_simple_Self_from_base( Scheduler_Control *scheduler_base )
 {
-  return _Scheduler.information;
+  return (Scheduler_simple_Control *) scheduler_base->information;
 }
 
 /**
@@ -44,7 +45,7 @@ RTEMS_INLINE_ROUTINE Scheduler_simple_Control *_Scheduler_simple_Instance( void 
  * @param[in] the_thread is the thread to be blocked
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_simple_Ready_queue_requeue(
-  Scheduler_Control *the_ready_queue,
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 )
 {
@@ -52,7 +53,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_simple_Ready_queue_requeue(
   _Chain_Extract_unprotected( &the_thread->Object.Node );
 
   /* enqueue */
-  _Scheduler_simple_Ready_queue_enqueue( the_thread );
+  _Scheduler_simple_Ready_queue_enqueue( scheduler, the_thread );
 }
 
 RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Insert_priority_lifo_order(
@@ -102,14 +103,16 @@ RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert_priority_fifo(
 }
 
 RTEMS_INLINE_ROUTINE void _Scheduler_simple_Schedule_body(
-  Thread_Control *thread,
-  bool force_dispatch
+  Scheduler_Control *scheduler_base,
+  Thread_Control    *the_thread,
+  bool               force_dispatch
 )
 {
-  Scheduler_simple_Control *scheduler = _Scheduler_simple_Instance();
+  Scheduler_simple_Control *scheduler =
+    _Scheduler_simple_Self_from_base( scheduler_base );
   Thread_Control *heir = (Thread_Control *) _Chain_First( &scheduler->Ready );
 
-  ( void ) thread;
+  ( void ) the_thread;
 
   _Scheduler_Update_heir( heir, force_dispatch );
 }

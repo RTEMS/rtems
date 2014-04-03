@@ -29,8 +29,9 @@ void _Thread_Change_priority(
   bool              prepend_it
 )
 {
-  ISR_Level      level;
-  States_Control state, original_state;
+  Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+  ISR_Level          level;
+  States_Control     state, original_state;
 
   /*
    * Save original state
@@ -69,7 +70,7 @@ void _Thread_Change_priority(
      * result in a _Scheduler_Block() operation.  Make sure we select an heir
      * now.
      */
-    _Scheduler_Schedule( the_thread );
+    _Scheduler_Schedule( scheduler, the_thread );
 
     _ISR_Enable( level );
     if ( _States_Is_waiting_on_thread_queue( state ) ) {
@@ -89,9 +90,9 @@ void _Thread_Change_priority(
     the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
 
     if ( prepend_it )
-      _Scheduler_Enqueue_first( the_thread );
+      _Scheduler_Enqueue_first( scheduler, the_thread );
     else
-      _Scheduler_Enqueue( the_thread );
+      _Scheduler_Enqueue( scheduler, the_thread );
   }
 
   _ISR_Flash( level );
@@ -100,7 +101,7 @@ void _Thread_Change_priority(
    *  We altered the set of thread priorities.  So let's figure out
    *  who is the heir and if we need to switch to them.
    */
-  _Scheduler_Schedule( the_thread );
+  _Scheduler_Schedule( scheduler, the_thread );
 
   _ISR_Enable( level );
 }

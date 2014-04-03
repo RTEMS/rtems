@@ -26,8 +26,11 @@
 
 int sched_yield( void )
 {
+  Thread_Control *executing;
+
   _Thread_Disable_dispatch();
-    _Scheduler_Yield( _Thread_Executing );
+    executing = _Thread_Executing;
+    _Scheduler_Yield( _Scheduler_Get( executing ), executing );
   _Thread_Enable_dispatch();
   return 0;
 }

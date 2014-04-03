@@ -31,7 +31,10 @@ _Scheduler_priority_affinity_Get_scheduler_info( Thread_Control *thread )
   return ( Scheduler_priority_affinity_SMP_Per_thread * ) thread->scheduler_info;
 }
 
-void * _Scheduler_priority_affinity_SMP_Allocate( Thread_Control *the_thread )
+void * _Scheduler_priority_affinity_SMP_Allocate(
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
+)
 {
   Scheduler_priority_affinity_SMP_Per_thread *info =
     _Workspace_Allocate( sizeof( *info ) );
@@ -45,13 +48,16 @@ void * _Scheduler_priority_affinity_SMP_Allocate( Thread_Control *the_thread )
 }
 
 bool _Scheduler_priority_affinity_SMP_Get_affinity(
-  Thread_Control *thread,
-  size_t          cpusetsize,
-  cpu_set_t      *cpuset
+  Scheduler_Control *scheduler,
+  Thread_Control    *thread,
+  size_t             cpusetsize,
+  cpu_set_t         *cpuset
 )
 {
   Scheduler_priority_affinity_SMP_Per_thread *info =
     _Scheduler_priority_affinity_Get_scheduler_info(thread);
+
+  (void) scheduler;
 
   if ( info->Affinity.setsize != cpusetsize ) {
     return false;
@@ -62,13 +68,16 @@ bool _Scheduler_priority_affinity_SMP_Get_affinity(
 }
 
 bool _Scheduler_priority_affinity_SMP_Set_affinity(
-  Thread_Control *thread,
-  size_t          cpusetsize,
-  cpu_set_t      *cpuset
+  Scheduler_Control *scheduler,
+  Thread_Control    *thread,
+  size_t             cpusetsize,
+  cpu_set_t         *cpuset
 )
 {
   Scheduler_priority_affinity_SMP_Per_thread *info =
     _Scheduler_priority_affinity_Get_scheduler_info(thread);
+
+  (void) scheduler;
   
   if ( ! _CPU_set_Is_valid( cpuset, cpusetsize ) ) {
     return false;

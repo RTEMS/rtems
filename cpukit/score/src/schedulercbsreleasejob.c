@@ -24,6 +24,7 @@
 #include <rtems/score/watchdogimpl.h>
 
 void _Scheduler_CBS_Release_job(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread,
   uint32_t           deadline
 )

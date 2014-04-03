@@ -23,12 +23,16 @@
 #include <rtems/score/cpusetimpl.h>
 
 bool _Scheduler_default_Get_affinity(
-  Thread_Control *thread,
-  size_t          cpusetsize,
-  cpu_set_t      *cpuset
+  Scheduler_Control *scheduler,
+  Thread_Control    *thread,
+  size_t             cpusetsize,
+  cpu_set_t         *cpuset
 )
 {
   const CPU_set_Control *ctl;
+
+  (void) scheduler;
+  (void) thread;
 
   ctl = _CPU_set_Default();
   if ( cpusetsize != ctl->setsize ) {
@@ -36,6 +40,6 @@ bool _Scheduler_default_Get_affinity(
   }
 
   CPU_COPY( cpuset, ctl->set );
-  
-  return true; 
+
+  return true;
 }

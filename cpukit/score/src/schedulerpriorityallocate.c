@@ -23,11 +23,14 @@
 #include <rtems/score/wkspace.h>
 
 void *_Scheduler_priority_Allocate (
-  Thread_Control        *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 )
 {
   Scheduler_priority_Per_thread *sched_info_of_thread =
     _Workspace_Allocate( sizeof( *sched_info_of_thread ) );
+
+  (void) scheduler;
 
   the_thread->scheduler_info = sched_info_of_thread;
 

@@ -71,7 +71,7 @@ static void _Thread_Free( Thread_Control *the_thread )
   /*
    * Free the per-thread scheduling information.
    */
-  _Scheduler_Free( the_thread );
+  _Scheduler_Free( _Scheduler_Get( the_thread ), the_thread );
 
   /*
    *  The thread might have been FP.  So deal with that.
@@ -216,8 +216,9 @@ void _Thread_Life_action_handler(
 }
 
 static void _Thread_Start_life_change(
-  Thread_Control   *the_thread,
-  Priority_Control  priority
+  Thread_Control    *the_thread,
+  Scheduler_Control *scheduler,
+  Priority_Control   priority
 )
 {
   the_thread->is_preemptible   = the_thread->Start.is_preemptible;
@@ -228,7 +229,7 @@ static void _Thread_Start_life_change(
   _Thread_Set_transient( the_thread );
   _Thread_queue_Extract_with_proxy( the_thread );
   _Watchdog_Remove( &the_thread->Timer );
-  _Scheduler_Set_priority_if_higher( the_thread, priority );
+  _Scheduler_Set_priority_if_higher( scheduler, the_thread, priority );
   _Thread_Add_post_switch_action( the_thread, &the_thread->Life.Action );
   _Thread_Ready( the_thread );
   _Thread_Request_dispatch_if_executing( the_thread );
@@ -244,29 +245,37 @@ static void _Thread_Request_life_change(
   Thread_Life_state previous_life_state;
   Per_CPU_Control *cpu;
   ISR_Level level;
+  Scheduler_Control *scheduler;
 
   cpu = _Thread_Action_ISR_disable_and_acquire( the_thread, &level );
   previous_life_state = the_thread->Life.state;
   the_thread->Life.state = previous_life_state | additional_life_state;
   _Thread_Action_release_and_ISR_enable( cpu, level );
 
+  scheduler = _Scheduler_Get( the_thread );
   if ( the_thread == executing ) {
     executing->real_priority = priority;
 
-    _Scheduler_Set_priority_if_higher( the_thread, priority );
+    _Scheduler_Set_priority_if_higher( scheduler, the_thread, priority );
     _Thread_Start_life_change_for_executing( executing );
   } else if ( previous_life_state == THREAD_LIFE_NORMAL ) {
-    _Thread_Start_life_change( the_thread, priority );
+    _Thread_Start_life_change( the_thread, scheduler, priority );
   } else {
     _Thread_Clear_state( the_thread, STATES_SUSPENDED );
 
     if ( _Thread_Is_life_terminating( additional_life_state ) ) {
       the_thread->real_priority = _Scheduler_Highest_priority_of_two(
+        scheduler,
         the_thread->real_priority,
         priority
       );
 
-      _Scheduler_Change_priority_if_higher( the_thread, priority, false );
+      _Scheduler_Change_priority_if_higher(
+        scheduler,
+        the_thread,
+        priority,
+        false
+      );
     }
   }
 }

@@ -105,6 +105,7 @@ void _Scheduler_priority_Initialize(void);
  *  @param[in] the_thread is the thread to be blocked
  */
 void _Scheduler_priority_Block(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 );
 
@@ -114,7 +115,10 @@ void _Scheduler_priority_Block(
  *  This kernel routine sets the heir thread to be the next ready thread
  *  by invoking the_scheduler->ready_queue->operations->first().
  */
-void _Scheduler_priority_Schedule( Thread_Control *thread );
+void _Scheduler_priority_Schedule(
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
+);
 
 /**
  *  @brief Allocates @a the_thread->scheduler.
@@ -125,7 +129,8 @@ void _Scheduler_priority_Schedule( Thread_Control *thread );
  *             management memory for
  */
 void * _Scheduler_priority_Allocate(
-  Thread_Control      *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
@@ -137,7 +142,8 @@ void * _Scheduler_priority_Allocate(
  *             will be deallocated.
  */
 void _Scheduler_priority_Free(
-  Thread_Control      *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
@@ -149,7 +155,8 @@ void _Scheduler_priority_Free(
  *             structure updated.
  */
 void _Scheduler_priority_Update(
-  Thread_Control      *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
@@ -162,6 +169,7 @@ void _Scheduler_priority_Update(
  *  @param[in] the_thread will be unblocked
  */
 void _Scheduler_priority_Unblock(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 );
 
@@ -184,7 +192,10 @@ void _Scheduler_priority_Unblock(
  *
  *  @param[in,out] thread The yielding thread.
  */
-void _Scheduler_priority_Yield( Thread_Control *thread );
+void _Scheduler_priority_Yield(
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
+);
 
 /**
  *  @brief Puts @a the_thread on to the priority-based ready queue.
@@ -194,6 +205,7 @@ void _Scheduler_priority_Yield( Thread_Control *thread );
  *  @param[in] the_thread will be enqueued at the TAIL of its priority.
  */
 void _Scheduler_priority_Enqueue(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 );
 
@@ -207,6 +219,7 @@ void _Scheduler_priority_Enqueue(
  *  @param[in] the_thread will be enqueued at the HEAD of its priority.
  */
 void _Scheduler_priority_Enqueue_first(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 );
 
@@ -219,7 +232,8 @@ void _Scheduler_priority_Enqueue_first(
  *  @param[in] the_thread will be extracted from the ready set.
  */
 void _Scheduler_priority_Extract(
-  Thread_Control     *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
@@ -228,8 +242,8 @@ void _Scheduler_priority_Extract(
  *  This routine compares two priorities.
  */
 int _Scheduler_priority_Priority_compare(
-  Priority_Control      p1,
-  Priority_Control      p2
+  Priority_Control   p1,
+  Priority_Control   p2
 );
 
 /**@}*/

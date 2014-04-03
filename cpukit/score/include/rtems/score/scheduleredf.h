@@ -121,6 +121,7 @@ void _Scheduler_EDF_Initialize( void );
  *  @param[in] the_thread is the thread to be blocked.
  */
 void _Scheduler_EDF_Block(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 );
 
@@ -131,7 +132,10 @@ void _Scheduler_EDF_Block(
  *  This kernel routine sets the heir thread to be the next ready thread
  *  in the rbtree ready queue.
  */
-void _Scheduler_EDF_Schedule( Thread_Control *thread );
+void _Scheduler_EDF_Schedule(
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
+);
 
 /**
  *  @brief Allocates EDF specific information of @a the_thread.
@@ -142,7 +146,8 @@ void _Scheduler_EDF_Schedule( Thread_Control *thread );
  *             management memory for.
  */
 void *_Scheduler_EDF_Allocate(
-  Thread_Control      *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
@@ -154,7 +159,8 @@ void *_Scheduler_EDF_Allocate(
  *             will be deallocated.
  */
 void _Scheduler_EDF_Free(
-  Thread_Control      *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
@@ -166,7 +172,8 @@ void _Scheduler_EDF_Free(
  *             structure updated.
  */
 void _Scheduler_EDF_Update(
-  Thread_Control      *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
@@ -179,6 +186,7 @@ void _Scheduler_EDF_Update(
  *  @param[in] the_thread will be unblocked.
  */
 void _Scheduler_EDF_Unblock(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 );
 
@@ -197,7 +205,10 @@ void _Scheduler_EDF_Unblock(
  *
  *  @param[in,out] thread The yielding thread.
  */
-void _Scheduler_EDF_Yield( Thread_Control *thread );
+void _Scheduler_EDF_Yield(
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
+);
 
 /**
  *  @brief Put @a the_thread to the rbtree ready queue.
@@ -207,6 +218,7 @@ void _Scheduler_EDF_Yield( Thread_Control *thread );
  *  @param[in] the_thread will be enqueued to the ready queue.
  */
 void _Scheduler_EDF_Enqueue(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 );
 
@@ -219,6 +231,7 @@ void _Scheduler_EDF_Enqueue(
  *  @param[in] the_thread will be enqueued to the ready queue.
  */
 void _Scheduler_EDF_Enqueue_first(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 );
 
@@ -232,7 +245,8 @@ void _Scheduler_EDF_Enqueue_first(
  *  @param[in] the_thread will be extracted from the ready set.
  */
 void _Scheduler_EDF_Extract(
-  Thread_Control     *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
@@ -261,8 +275,9 @@ int _Scheduler_EDF_Priority_compare (
  *             has to be suspended.
  */
 void _Scheduler_EDF_Release_job (
-  Thread_Control  *the_thread,
-  uint32_t         deadline
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread,
+  uint32_t           deadline
 );
 
 #ifdef __cplusplus

@@ -24,8 +24,9 @@
 #include <rtems/score/scheduleredf.h>
 
 void _Scheduler_EDF_Enqueue_first(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 )
 {
-  _Scheduler_EDF_Enqueue(the_thread);
+  _Scheduler_EDF_Enqueue( scheduler, the_thread );
 }

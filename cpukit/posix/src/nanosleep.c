@@ -65,7 +65,7 @@ int nanosleep(
   if ( !ticks ) {
     _Thread_Disable_dispatch();
       executing = _Thread_Executing;
-      _Scheduler_Yield( executing );
+      _Scheduler_Yield( _Scheduler_Get( executing ), executing );
     _Thread_Enable_dispatch();
     if ( rmtp ) {
        rmtp->tv_sec = 0;

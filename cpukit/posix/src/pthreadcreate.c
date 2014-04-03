@@ -194,6 +194,7 @@ int pthread_create(
 
 #if defined(RTEMS_SMP) && __RTEMS_HAVE_SYS_CPUSET_H__
    status = _Scheduler_Set_affinity(
+     _Scheduler_Get( the_thread ),
      the_thread,
      the_attr->affinitysetsize,
      the_attr->affinityset

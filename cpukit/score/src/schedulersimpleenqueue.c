@@ -26,8 +26,9 @@
 #include <rtems/score/schedulersimple.h>
 
 void _Scheduler_simple_Enqueue(
-  Thread_Control            *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 )
 {
-  _Scheduler_simple_Ready_queue_enqueue( the_thread );
+  _Scheduler_simple_Ready_queue_enqueue( scheduler, the_thread );
 }

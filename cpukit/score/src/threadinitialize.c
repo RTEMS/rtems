@@ -215,7 +215,7 @@ bool _Thread_Initialize(
   the_thread->resource_count          = 0;
   the_thread->real_priority           = priority;
   the_thread->Start.initial_priority  = priority;
-  sched =_Scheduler_Allocate( the_thread );
+  sched =_Scheduler_Allocate( _Scheduler_Get( the_thread ), the_thread );
   if ( !sched )
     goto failed;
   _Thread_Set_priority( the_thread, priority );

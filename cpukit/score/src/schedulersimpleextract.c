@@ -24,8 +24,11 @@
 #include <rtems/score/thread.h>
 
 void _Scheduler_simple_Extract(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 )
 {
+  (void) scheduler;
+
   _Chain_Extract_unprotected( &the_thread->Object.Node );
 }

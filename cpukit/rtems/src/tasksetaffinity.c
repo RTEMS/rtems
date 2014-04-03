@@ -42,12 +42,14 @@ rtems_status_code rtems_task_set_affinity(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      ok = _Scheduler_Set_affinity( the_thread, cpusetsize, cpuset );
+      ok = _Scheduler_Set_affinity(
+        _Scheduler_Get( the_thread ),
+        the_thread,
+        cpusetsize,
+        cpuset
+      );
       _Objects_Put( &the_thread->Object );
-      if (! ok) {
-        return RTEMS_INVALID_NUMBER;
-      }
-      return RTEMS_SUCCESSFUL;
+      return ok ? RTEMS_SUCCESSFUL : RTEMS_INVALID_NUMBER;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:

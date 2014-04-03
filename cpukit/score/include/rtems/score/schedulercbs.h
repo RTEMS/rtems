@@ -148,6 +148,7 @@ extern Scheduler_CBS_Server **_Scheduler_CBS_Server_list;
  *  @note This has to be asessed as missed deadline of the current job.
  */
 void _Scheduler_CBS_Unblock(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 );
 
@@ -164,8 +165,9 @@ void _Scheduler_CBS_Unblock(
  */
 
 void _Scheduler_CBS_Release_job (
-  Thread_Control  *the_thread,
-  uint32_t         length
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread,
+  uint32_t           length
 );
 
 /**
@@ -336,7 +338,8 @@ void _Scheduler_CBS_Budget_callout(
  *             management memory for.
  */
 void *_Scheduler_CBS_Allocate(
-  Thread_Control      *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 #ifdef __cplusplus
 }

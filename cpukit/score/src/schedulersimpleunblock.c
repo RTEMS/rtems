@@ -24,10 +24,11 @@
 #include <rtems/score/thread.h>
 
 void _Scheduler_simple_Unblock(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 )
 {
-  _Scheduler_simple_Ready_queue_enqueue(the_thread);
+  _Scheduler_simple_Ready_queue_enqueue( scheduler, the_thread );
 
   /*
    *  If the thread that was unblocked is more important than the heir,

@@ -371,7 +371,8 @@ rtems_task Middle_task(
   rtems_task_argument argument
 )
 {
-  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+  Scheduler_priority_Control *scheduler =
+    _Scheduler_priority_Self_from_base( _Scheduler_Get( NULL ) );
 
   thread_dispatch_no_fp_time = benchmark_timer_read();
 
@@ -403,7 +404,8 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
-  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+  Scheduler_priority_Control *scheduler =
+    _Scheduler_priority_Self_from_base( _Scheduler_Get( NULL ) );
   Thread_Control             *executing;
 
   context_switch_no_fp_time = benchmark_timer_read();
@@ -445,7 +447,8 @@ rtems_task Floating_point_task_1(
   rtems_task_argument argument
 )
 {
-  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+  Scheduler_priority_Control *scheduler =
+    _Scheduler_priority_Self_from_base( _Scheduler_Get( NULL ) );
   Thread_Control             *executing;
   FP_DECLARE;
 
@@ -500,7 +503,8 @@ rtems_task Floating_point_task_2(
   rtems_task_argument argument
 )
 {
-  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+  Scheduler_priority_Control *scheduler =
+    _Scheduler_priority_Self_from_base( _Scheduler_Get( NULL ) );
   Thread_Control             *executing;
   FP_DECLARE;
 

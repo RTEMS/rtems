@@ -76,7 +76,10 @@ void _Scheduler_simple_Initialize( void );
  *  on the ready queue by getting the first node in the scheduler
  *  information.
  */
-void _Scheduler_simple_Schedule( Thread_Control *thread );
+void _Scheduler_simple_Schedule(
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
+);
 
 /**
  *  @brief Invoked when a thread wishes to voluntarily
@@ -94,7 +97,10 @@ void _Scheduler_simple_Schedule( Thread_Control *thread );
  *
  *  @param[in,out] thread The yielding thread.
  */
-void _Scheduler_simple_Yield( Thread_Control *thread );
+void _Scheduler_simple_Yield(
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
+);
 
 /**
  *  @brief Remove a simple-priority-based thread from the queue.
@@ -107,7 +113,8 @@ void _Scheduler_simple_Yield( Thread_Control *thread );
  *  @param[in] the_thread is the thread that is to be blocked
  */
 void _Scheduler_simple_Block(
-  Thread_Control *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
@@ -120,7 +127,8 @@ void _Scheduler_simple_Block(
  *  @param[in] the_thread is the thread that is to be unblocked
  */
 void _Scheduler_simple_Unblock(
-  Thread_Control *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
@@ -132,7 +140,8 @@ void _Scheduler_simple_Unblock(
  *  @param[in] the_thread is the thread to be blocked
  */
 void _Scheduler_simple_Extract(
-  Thread_Control *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
@@ -143,7 +152,8 @@ void _Scheduler_simple_Extract(
  *  @param[in] the_thread is the thread to be enqueued
  */
 void _Scheduler_simple_Enqueue(
-  Thread_Control *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
@@ -156,7 +166,8 @@ void _Scheduler_simple_Enqueue(
  *  @param[in] the_thread is the thread to be blocked
  */
 void _Scheduler_simple_Enqueue_first(
-  Thread_Control *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
@@ -168,6 +179,7 @@ void _Scheduler_simple_Enqueue_first(
  *  @param[in] the_thread - pointer to a thread control block
  */
 void _Scheduler_simple_Ready_queue_enqueue(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 );
 
@@ -181,6 +193,7 @@ void _Scheduler_simple_Ready_queue_enqueue(
  *  @param[in] the_thread - pointer to a thread control block
  */
 void _Scheduler_simple_Ready_queue_enqueue_first(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 );
 

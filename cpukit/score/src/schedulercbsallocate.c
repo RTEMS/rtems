@@ -26,11 +26,14 @@
 #include <rtems/score/wkspace.h>
 
 void *_Scheduler_CBS_Allocate(
-  Thread_Control      *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 )
 {
   void *sched;
   Scheduler_CBS_Per_thread *schinfo;
+
+  (void) scheduler;
 
   sched = _Workspace_Allocate(sizeof(Scheduler_CBS_Per_thread));
   if ( sched ) {

@@ -22,10 +22,12 @@
 #include <rtems/score/scheduler.h>
 
 void _Scheduler_default_Release_job(
-  Thread_Control *thread,
-  uint32_t        deadline
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread,
+  uint32_t           deadline
 )
 {
-  ( void ) thread;
+  ( void ) scheduler;
+  ( void ) the_thread;
   ( void ) deadline;
 }

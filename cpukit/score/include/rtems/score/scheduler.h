@@ -40,6 +40,8 @@ extern "C" {
  */
 /**@{*/
 
+typedef struct Scheduler_Control Scheduler_Control;
+
 /**
  * function jump table that holds pointers to the functions that
  * implement specific schedulers.
@@ -49,58 +51,65 @@ typedef struct {
   void ( *initialize )(void);
 
   /** Implements the scheduling decision logic (policy). */
-  void ( *schedule )( Thread_Control *thread );
+  void ( *schedule )( Scheduler_Control *, Thread_Control *);
 
   /**
    * @brief Voluntarily yields the processor per the scheduling policy.
    *
    * @see _Scheduler_Yield().
    */
-  void ( *yield )( Thread_Control *thread );
+  void ( *yield )( Scheduler_Control *, Thread_Control *);
 
   /** Removes the given thread from scheduling decisions. */
-  void ( *block )(Thread_Control *);
+  void ( *block )( Scheduler_Control *, Thread_Control * );
 
   /** Adds the given thread to scheduling decisions. */
-  void ( *unblock )(Thread_Control *);
+  void ( *unblock )( Scheduler_Control *, Thread_Control * );
 
   /** allocates the scheduler field of the given thread */
-  void * ( *allocate )(Thread_Control *);
+  void * ( *allocate )( Scheduler_Control *, Thread_Control * );
 
   /** frees the scheduler field of the given thread */
-  void ( *free )(Thread_Control *);
+  void ( *free )( Scheduler_Control *, Thread_Control * );
 
   /** updates the scheduler field of the given thread -- primarily used
    * when changing the thread's priority. */
-  void ( *update )(Thread_Control *);
+  void ( *update )( Scheduler_Control *, Thread_Control * );
 
   /** enqueue a thread as the last of its priority group */
-  void ( *enqueue )(Thread_Control *);
+  void ( *enqueue )( Scheduler_Control *, Thread_Control * );
 
   /** enqueue a thread as the first of its priority group */
-  void ( *enqueue_first )(Thread_Control *);
+  void ( *enqueue_first )( Scheduler_Control *, Thread_Control * );
 
   /** extract a thread from the ready set */
-  void ( *extract )(Thread_Control *);
+  void ( *extract )( Scheduler_Control *, Thread_Control * );
 
   /**
    * Compares two priorities (returns >0 for higher priority, 0 for equal
    * and <0 for lower priority).
    */
-  int ( *priority_compare )(Priority_Control, Priority_Control);
+  int ( *priority_compare )(
+    Priority_Control,
+    Priority_Control
+  );
 
   /** This routine is called upon release of a new job. */
-  void ( *release_job ) (Thread_Control *, uint32_t);
+  void ( *release_job ) ( Scheduler_Control *, Thread_Control *, uint32_t );
 
   /** perform scheduler update actions required at each clock tick */
-  void ( *tick )(void);
+  void ( *tick )( Scheduler_Control * );
 
   /**
    * @brief Starts the idle thread for a particular processor.
    *
    * @see _Scheduler_Start_idle().
    */
-  void ( *start_idle )( Thread_Control *thread, Per_CPU_Control *processor );
+  void ( *start_idle )(
+    Scheduler_Control *,
+    Thread_Control *,
+    Per_CPU_Control *
+  );
 
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
   /**
@@ -108,7 +117,12 @@ typedef struct {
    *
    * @see _Scheduler_Get_affinity().
    */
-  bool ( *get_affinity )( Thread_Control *thread, size_t cpusetsize, cpu_set_t *cpuset );
+  bool ( *get_affinity )(
+    Scheduler_Control *,
+    Thread_Control *,
+    size_t,
+    cpu_set_t *
+  );
   
   /**
    * @brief Set the processor affinity for a thread.
@@ -116,18 +130,18 @@ typedef struct {
    * @see _Scheduler_Set_affinity().
    */
   bool ( *set_affinity )(
-    Thread_Control  *thread,
-    size_t           cpusetsize,
-    const cpu_set_t *cpuset
+    Scheduler_Control *,
+    Thread_Control *,
+    size_t,
+    const cpu_set_t *
   );
 #endif
-
 } Scheduler_Operations;
 
 /**
  * This is the structure used to manage the scheduler.
  */
-typedef struct {
+struct Scheduler_Control {
   /**
    *  This points to the data structure used to manage the ready set of
    *  tasks. The pointer varies based upon the type of
@@ -137,7 +151,7 @@ typedef struct {
 
   /** The jump table for scheduler-specific functions */
   Scheduler_Operations    Operations;
-} Scheduler_Control;
+};
 
 /**
  *  The _Scheduler holds the structures used to manage the
@@ -152,41 +166,49 @@ extern Scheduler_Control  _Scheduler;
 /**
  * @brief Returns an arbitrary non-NULL value.
  *
- * @param[in] thread Unused.
+ * @param[in] scheduler Unused.
+ * @param[in] the_thread Unused.
  *
  * @return An arbitrary non-NULL value.
  */
 void *_Scheduler_default_Allocate(
-  Thread_Control *thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
  * @brief Does nothing.
  *
- * @param[in] thread Unused.
+ * @param[in] scheduler Unused.
+ * @param[in] the_thread Unused.
  */
 void _Scheduler_default_Free(
-  Thread_Control *thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
  * @brief Does nothing.
  *
- * @param[in] thread Unused.
+ * @param[in] scheduler Unused.
+ * @param[in] the_thread Unused.
  */
 void _Scheduler_default_Update(
-  Thread_Control *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 );
 
 /**
  * @brief Does nothing.
  *
- * @param[in] thread Unused.
+ * @param[in] scheduler Unused.
+ * @param[in] the_thread Unused.
  * @param[in] deadline Unused.
  */
 void _Scheduler_default_Release_job(
-  Thread_Control *thread,
-  uint32_t        deadline
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread,
+  uint32_t           deadline
 );
 
 /**
@@ -194,18 +216,22 @@ void _Scheduler_default_Release_job(
  * each executing thread.
  *
  * This routine is invoked as part of processing each clock tick.
+ *
+ * @param[in] scheduler The scheduler.
  */
-void _Scheduler_default_Tick( void );
+void _Scheduler_default_Tick( Scheduler_Control *scheduler );
 
 /**
- * @brief Unblocks the thread.
+ * @brief Starts an idle thread.
  *
- * @param[in,out] thread An idle thread.
- * @param[in] processor This parameter is unused.
+ * @param[in] scheduler The scheduler.
+ * @param[in] the_thread An idle thread.
+ * @param[in] cpu This parameter is unused.
  */
 void _Scheduler_default_Start_idle(
-  Thread_Control  *thread,
-  Per_CPU_Control *processor
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread,
+  Per_CPU_Control   *cpu
 );
 
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
@@ -220,9 +246,10 @@ void _Scheduler_default_Start_idle(
    * @retval -1 The cpusetsize is invalid for the system
    */
   bool _Scheduler_default_Get_affinity(
-    Thread_Control *thread,
-    size_t          cpusetsize,
-    cpu_set_t      *cpuset
+    Scheduler_Control *scheduler,
+    Thread_Control    *thread,
+    size_t             cpusetsize,
+    cpu_set_t         *cpuset
   );
 
   /** 
@@ -238,9 +265,10 @@ void _Scheduler_default_Start_idle(
    *  the cpuset.
    */
   bool _Scheduler_default_Set_affinity(
-    Thread_Control  *thread,
-    size_t           cpusetsize,
-    const cpu_set_t *cpuset
+    Scheduler_Control *scheduler,
+    Thread_Control    *thread,
+    size_t             cpusetsize,
+    const cpu_set_t   *cpuset
   );
 #endif
 

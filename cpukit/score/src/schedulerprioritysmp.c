@@ -29,16 +29,17 @@
 #include <rtems/score/schedulersmpimpl.h>
 #include <rtems/score/wkspace.h>
 
-static Scheduler_priority_SMP_Control *_Scheduler_priority_SMP_Instance( void )
+static Scheduler_priority_SMP_Control *
+_Scheduler_priority_SMP_Self_from_base( Scheduler_Control *base )
 {
-  return _Scheduler.information;
+  return (Scheduler_priority_SMP_Control *) base->information;
 }
 
 static Scheduler_priority_SMP_Control *
-_Scheduler_priority_SMP_Self_from_SMP_base( Scheduler_SMP_Control *base )
+_Scheduler_priority_SMP_Self_from_SMP_base( Scheduler_SMP_Control *smp_base )
 {
   return (Scheduler_priority_SMP_Control *)
-    ( (char *) base
+    ( (char *) smp_base
       - offsetof( Scheduler_priority_SMP_Control, Base ) );
 }
 
@@ -55,9 +56,13 @@ void _Scheduler_priority_SMP_Initialize( void )
   _Scheduler.information = self;
 }
 
-void _Scheduler_priority_SMP_Update( Thread_Control *thread )
+void _Scheduler_priority_SMP_Update(
+  Scheduler_Control *base,
+  Thread_Control *thread
+)
 {
-  Scheduler_priority_SMP_Control *self = _Scheduler_priority_SMP_Instance();
+  Scheduler_priority_SMP_Control *self =
+    _Scheduler_priority_SMP_Self_from_base( base );
 
   _Scheduler_priority_Update_body(
     thread,
@@ -67,11 +72,11 @@ void _Scheduler_priority_SMP_Update( Thread_Control *thread )
 }
 
 static Thread_Control *_Scheduler_priority_SMP_Get_highest_ready(
-  Scheduler_SMP_Control *base
+  Scheduler_SMP_Control *smp_base
 )
 {
   Scheduler_priority_SMP_Control *self =
-    _Scheduler_priority_SMP_Self_from_SMP_base( base );
+    _Scheduler_priority_SMP_Self_from_SMP_base( smp_base );
   Thread_Control *highest_ready = NULL;
 
   if ( !_Priority_bit_map_Is_empty( &self->Bit_map ) ) {
@@ -85,12 +90,12 @@ static Thread_Control *_Scheduler_priority_SMP_Get_highest_ready(
 }
 
 static void _Scheduler_priority_SMP_Move_from_scheduled_to_ready(
-  Scheduler_SMP_Control *base,
+  Scheduler_SMP_Control *smp_base,
   Thread_Control *scheduled_to_ready
 )
 {
   Scheduler_priority_SMP_Control *self =
-    _Scheduler_priority_SMP_Self_from_SMP_base( base );
+    _Scheduler_priority_SMP_Self_from_SMP_base( smp_base );
 
   _Chain_Extract_unprotected( &scheduled_to_ready->Object.Node );
   _Scheduler_priority_Ready_queue_enqueue_first(
@@ -100,12 +105,12 @@ static void _Scheduler_priority_SMP_Move_from_scheduled_to_ready(
 }
 
 static void _Scheduler_priority_SMP_Move_from_ready_to_scheduled(
-  Scheduler_SMP_Control *base,
+  Scheduler_SMP_Control *smp_base,
   Thread_Control *ready_to_scheduled
 )
 {
   Scheduler_priority_SMP_Control *self =
-    _Scheduler_priority_SMP_Self_from_SMP_base( base );
+    _Scheduler_priority_SMP_Self_from_SMP_base( smp_base );
 
   _Scheduler_priority_Ready_queue_extract(
     ready_to_scheduled,
@@ -118,34 +123,34 @@ static void _Scheduler_priority_SMP_Move_from_ready_to_scheduled(
 }
 
 static void _Scheduler_priority_SMP_Insert_ready_lifo(
-  Scheduler_SMP_Control *base,
+  Scheduler_SMP_Control *smp_base,
   Thread_Control *thread
 )
 {
   Scheduler_priority_SMP_Control *self =
-    _Scheduler_priority_SMP_Self_from_SMP_base( base );
+    _Scheduler_priority_SMP_Self_from_SMP_base( smp_base );
 
   _Scheduler_priority_Ready_queue_enqueue( thread, &self->Bit_map );
 }
 
 static void _Scheduler_priority_SMP_Insert_ready_fifo(
-  Scheduler_SMP_Control *base,
+  Scheduler_SMP_Control *smp_base,
   Thread_Control *thread
 )
 {
   Scheduler_priority_SMP_Control *self =
-    _Scheduler_priority_SMP_Self_from_SMP_base( base );
+    _Scheduler_priority_SMP_Self_from_SMP_base( smp_base );
 
   _Scheduler_priority_Ready_queue_enqueue_first( thread, &self->Bit_map );
 }
 
 static void _Scheduler_priority_SMP_Do_extract(
-  Scheduler_SMP_Control *base,
+  Scheduler_SMP_Control *smp_base,
   Thread_Control *thread
 )
 {
   Scheduler_priority_SMP_Control *self =
-    _Scheduler_priority_SMP_Self_from_SMP_base( base );
+    _Scheduler_priority_SMP_Self_from_SMP_base( smp_base );
   bool is_scheduled = thread->is_scheduled;
 
   thread->is_in_the_air = is_scheduled;
@@ -158,9 +163,13 @@ static void _Scheduler_priority_SMP_Do_extract(
   }
 }
 
-void _Scheduler_priority_SMP_Block( Thread_Control *thread )
+void _Scheduler_priority_SMP_Block(
+  Scheduler_Control *base,
+  Thread_Control *thread
+)
 {
-  Scheduler_priority_SMP_Control *self = _Scheduler_priority_SMP_Instance();
+  Scheduler_priority_SMP_Control *self =
+    _Scheduler_priority_SMP_Self_from_base( base );
 
   _Scheduler_SMP_Block(
     &self->Base,
@@ -191,9 +200,13 @@ static void _Scheduler_priority_SMP_Enqueue_ordered(
   );
 }
 
-void _Scheduler_priority_SMP_Enqueue_lifo( Thread_Control *thread )
+void _Scheduler_priority_SMP_Enqueue_lifo(
+  Scheduler_Control *base,
+  Thread_Control *thread
+)
 {
-  Scheduler_priority_SMP_Control *self = _Scheduler_priority_SMP_Instance();
+  Scheduler_priority_SMP_Control *self =
+    _Scheduler_priority_SMP_Self_from_base( base );
 
   _Scheduler_priority_SMP_Enqueue_ordered(
     &self->Base,
@@ -204,9 +217,13 @@ void _Scheduler_priority_SMP_Enqueue_lifo( Thread_Control *thread )
   );
 }
 
-void _Scheduler_priority_SMP_Enqueue_fifo( Thread_Control *thread )
+void _Scheduler_priority_SMP_Enqueue_fifo(
+  Scheduler_Control *base,
+  Thread_Control *thread
+)
 {
-  Scheduler_priority_SMP_Control *self = _Scheduler_priority_SMP_Instance();
+  Scheduler_priority_SMP_Control *self =
+    _Scheduler_priority_SMP_Self_from_base( base );
 
   _Scheduler_priority_SMP_Enqueue_ordered(
     &self->Base,
@@ -217,9 +234,13 @@ void _Scheduler_priority_SMP_Enqueue_fifo( Thread_Control *thread )
   );
 }
 
-void _Scheduler_priority_SMP_Extract( Thread_Control *thread )
+void _Scheduler_priority_SMP_Extract(
+  Scheduler_Control *base,
+  Thread_Control *thread
+)
 {
-  Scheduler_priority_SMP_Control *self = _Scheduler_priority_SMP_Instance();
+  Scheduler_priority_SMP_Control *self =
+    _Scheduler_priority_SMP_Self_from_base( base );
 
   _Scheduler_SMP_Extract(
     &self->Base,
@@ -228,21 +249,28 @@ void _Scheduler_priority_SMP_Extract( Thread_Control *thread )
   );
 }
 
-void _Scheduler_priority_SMP_Yield( Thread_Control *thread )
+void _Scheduler_priority_SMP_Yield(
+  Scheduler_Control *base,
+  Thread_Control *thread
+)
 {
   ISR_Level level;
 
   _ISR_Disable( level );
 
-  _Scheduler_priority_SMP_Extract( thread );
-  _Scheduler_priority_SMP_Enqueue_fifo( thread );
+  _Scheduler_priority_SMP_Extract( base, thread );
+  _Scheduler_priority_SMP_Enqueue_fifo( base, thread );
 
   _ISR_Enable( level );
 }
 
-void _Scheduler_priority_SMP_Schedule( Thread_Control *thread )
+void _Scheduler_priority_SMP_Schedule(
+  Scheduler_Control *base,
+  Thread_Control *thread
+)
 {
-  Scheduler_priority_SMP_Control *self = _Scheduler_priority_SMP_Instance();
+  Scheduler_priority_SMP_Control *self =
+    _Scheduler_priority_SMP_Self_from_base( base );
 
   _Scheduler_SMP_Schedule(
     &self->Base,
@@ -253,11 +281,13 @@ void _Scheduler_priority_SMP_Schedule( Thread_Control *thread )
 }
 
 void _Scheduler_priority_SMP_Start_idle(
+  Scheduler_Control *base,
   Thread_Control *thread,
   Per_CPU_Control *cpu
 )
 {
-  Scheduler_priority_SMP_Control *self = _Scheduler_priority_SMP_Instance();
+  Scheduler_priority_SMP_Control *self =
+    _Scheduler_priority_SMP_Self_from_base( base );
 
   _Scheduler_SMP_Start_idle( &self->Base, thread, cpu );
 }

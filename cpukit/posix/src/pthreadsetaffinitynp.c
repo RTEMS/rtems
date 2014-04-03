@@ -47,15 +47,18 @@ int pthread_setaffinity_np(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-      ok = _Scheduler_Set_affinity( the_thread, cpusetsize, cpuset );
-      if (ok)
+      ok = _Scheduler_Set_affinity(
+        _Scheduler_Get( the_thread ),
+        the_thread,
+        cpusetsize,
+        cpuset
+      );
+      if ( ok ) {
+        api = the_thread->API_Extensions[ THREAD_API_POSIX ];
         CPU_COPY( api->Attributes.affinityset, cpuset );
+      }
       _Objects_Put( &the_thread->Object );
-      if (!ok)
-        return EINVAL;
-      return 0;
-      break;
+      return ok ? 0 : EINVAL;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:

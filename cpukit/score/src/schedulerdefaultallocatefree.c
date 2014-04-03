@@ -22,17 +22,21 @@
 #include <rtems/score/scheduler.h>
 
 void *_Scheduler_default_Allocate(
-  Thread_Control *thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 )
 {
-  ( void ) thread;
+  ( void ) scheduler;
+  ( void ) the_thread;
 
   return ( void * )-1; /* maybe pick an appropriate poison value */
 }
 
 void _Scheduler_default_Free(
-  Thread_Control *thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 )
 {
-  ( void ) thread;
+  ( void ) scheduler;
+  ( void ) the_thread;
 }

@@ -75,19 +75,38 @@ extern "C" {
 
 void _Scheduler_simple_smp_Initialize( void );
 
-void _Scheduler_simple_smp_Block( Thread_Control *thread );
+void _Scheduler_simple_smp_Block(
+  Scheduler_Control *base,
+  Thread_Control *thread
+);
 
-void _Scheduler_simple_smp_Enqueue_priority_fifo( Thread_Control *thread );
+void _Scheduler_simple_smp_Enqueue_priority_fifo(
+  Scheduler_Control *base,
+  Thread_Control *thread
+);
 
-void _Scheduler_simple_smp_Enqueue_priority_lifo( Thread_Control *thread );
+void _Scheduler_simple_smp_Enqueue_priority_lifo(
+  Scheduler_Control *base,
+  Thread_Control *thread
+);
 
-void _Scheduler_simple_smp_Extract( Thread_Control *thread );
+void _Scheduler_simple_smp_Extract(
+  Scheduler_Control *base,
+  Thread_Control *thread
+);
 
-void _Scheduler_simple_smp_Yield( Thread_Control *thread );
+void _Scheduler_simple_smp_Yield(
+  Scheduler_Control *base,
+  Thread_Control *thread
+);
 
-void _Scheduler_simple_smp_Schedule( Thread_Control *thread );
+void _Scheduler_simple_smp_Schedule(
+  Scheduler_Control *base,
+  Thread_Control *thread
+);
 
 void _Scheduler_simple_smp_Start_idle(
+  Scheduler_Control *base,
   Thread_Control *thread,
   Per_CPU_Control *cpu
 );

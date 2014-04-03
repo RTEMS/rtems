@@ -22,11 +22,15 @@
 
 #include <rtems/score/schedulerpriorityimpl.h>
 
-void _Scheduler_priority_Block( Thread_Control *the_thread )
+void _Scheduler_priority_Block(
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
+)
 {
   _Scheduler_Generic_block(
+    scheduler,
+    the_thread,
     _Scheduler_priority_Extract_body,
-    _Scheduler_priority_Schedule_body,
-    the_thread
+    _Scheduler_priority_Schedule_body
   );
 }

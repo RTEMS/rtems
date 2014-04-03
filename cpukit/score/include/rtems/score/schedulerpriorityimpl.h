@@ -36,9 +36,9 @@ extern "C" {
 /**@{**/
 
 RTEMS_INLINE_ROUTINE Scheduler_priority_Control *
-  _Scheduler_priority_Instance( void )
+  _Scheduler_priority_Self_from_base( Scheduler_Control *scheduler_base )
 {
-  return _Scheduler.information;
+  return (Scheduler_priority_Control *) scheduler_base->information;
 }
 
 /**
@@ -134,10 +134,12 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
 }
 
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Extract_body(
-  Thread_Control *the_thread
+  Scheduler_Control *scheduler_base,
+  Thread_Control    *the_thread
 )
 {
-  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+  Scheduler_priority_Control *scheduler =
+    _Scheduler_priority_Self_from_base( scheduler_base );
 
   _Scheduler_priority_Ready_queue_extract( the_thread, &scheduler->Bit_map );
 }
@@ -191,17 +193,19 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_requeue(
  * for priority-based scheduling.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(
-  Thread_Control *thread,
-  bool force_dispatch
+  Scheduler_Control *scheduler_base,
+  Thread_Control    *the_thread,
+  bool               force_dispatch
 )
 {
-  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+  Scheduler_priority_Control *scheduler =
+    _Scheduler_priority_Self_from_base( scheduler_base );
   Thread_Control *heir = _Scheduler_priority_Ready_queue_first(
     &scheduler->Bit_map,
     &scheduler->Ready[ 0 ]
   );
 
-  ( void ) thread;
+  ( void ) the_thread;
 
   _Scheduler_Update_heir( heir, force_dispatch );
 }

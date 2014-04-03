@@ -25,6 +25,7 @@
 #include <rtems/score/watchdogimpl.h>
 
 void _Scheduler_CBS_Unblock(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 )
 {
@@ -32,7 +33,7 @@ void _Scheduler_CBS_Unblock(
   Scheduler_CBS_Server *serv_info;
   Priority_Control new_priority;
 
-  _Scheduler_EDF_Enqueue(the_thread);
+  _Scheduler_EDF_Enqueue( scheduler, the_thread );
   /* TODO: flash critical section? */
 
   sched_info = (Scheduler_CBS_Per_thread *) the_thread->scheduler_info;
@@ -73,8 +74,13 @@ void _Scheduler_CBS_Unblock(
    *    Even if the thread isn't preemptible, if the new heir is
    *    a pseudo-ISR system task, we need to do a context switch.
    */
-  if ( _Scheduler_Is_priority_higher_than( the_thread->current_priority,
-       _Thread_Heir->current_priority)) {
+  if (
+    _Scheduler_Is_priority_higher_than(
+       scheduler,
+       the_thread->current_priority,
+       _Thread_Heir->current_priority
+    )
+  ) {
     _Thread_Heir = the_thread;
     if ( _Thread_Executing->is_preemptible ||
          the_thread->current_priority == 0 )

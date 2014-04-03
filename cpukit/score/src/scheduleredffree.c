@@ -26,8 +26,11 @@
 #include <rtems/score/wkspace.h>
 
 void _Scheduler_EDF_Free(
-  Thread_Control      *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 )
 {
+  (void) scheduler;
+
   _Workspace_Free( the_thread->scheduler_info );
 }

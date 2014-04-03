@@ -25,8 +25,11 @@
 #include <rtems/score/wkspace.h>
 
 void _Scheduler_priority_Free (
+  Scheduler_Control *base,
   Thread_Control    *the_thread
 )
 {
+  (void) base;
+
   _Workspace_Free( the_thread->scheduler_info );
 }

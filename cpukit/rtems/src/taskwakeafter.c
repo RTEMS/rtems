@@ -37,7 +37,7 @@ rtems_status_code rtems_task_wake_after(
     executing = _Thread_Executing;
 
     if ( ticks == 0 ) {
-      _Scheduler_Yield( executing );
+      _Scheduler_Yield( _Scheduler_Get( executing ), executing );
     } else {
       _Thread_Set_state( executing, STATES_DELAYING );
       _Watchdog_Initialize(

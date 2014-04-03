@@ -47,12 +47,14 @@ int pthread_getaffinity_np(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      ok = _Scheduler_Get_affinity( the_thread, cpusetsize, cpuset );
+      ok = _Scheduler_Get_affinity(
+        _Scheduler_Get( the_thread ),
+        the_thread,
+        cpusetsize,
+        cpuset
+      );
       _Objects_Put( &the_thread->Object );
-      if (!ok)
-        return EINVAL;
-      return 0;
-      break;
+      return ok ? 0 : EINVAL;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:

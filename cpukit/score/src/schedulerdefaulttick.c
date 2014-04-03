@@ -23,7 +23,10 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/smp.h>
 
-static void _Scheduler_default_Tick_for_executing( Thread_Control *executing )
+static void _Scheduler_default_Tick_for_executing(
+  Scheduler_Control *scheduler,
+  Thread_Control *executing
+)
 {
   #ifdef __RTEMS_USE_TICKS_FOR_STATISTICS__
     /*
@@ -65,7 +68,7 @@ static void _Scheduler_default_Tick_for_executing( Thread_Control *executing )
          *  currently executing thread is placed at the rear of the
          *  FIFO for this priority and a new heir is selected.
          */
-        _Scheduler_Yield( executing );
+        _Scheduler_Yield( scheduler, executing );
         executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
       }
       break;
@@ -79,7 +82,7 @@ static void _Scheduler_default_Tick_for_executing( Thread_Control *executing )
   }
 }
 
-void _Scheduler_default_Tick( void )
+void _Scheduler_default_Tick( Scheduler_Control *scheduler )
 {
   uint32_t processor_count = _SMP_Get_processor_count();
   uint32_t processor;
@@ -87,6 +90,6 @@ void _Scheduler_default_Tick( void )
   for ( processor = 0 ; processor < processor_count ; ++processor ) {
     const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( processor );
 
-    _Scheduler_default_Tick_for_executing( per_cpu->executing );
+    _Scheduler_default_Tick_for_executing( scheduler, per_cpu->executing );
   }
 }

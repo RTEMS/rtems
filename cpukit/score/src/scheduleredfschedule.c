@@ -20,7 +20,10 @@
 
 #include <rtems/score/scheduleredfimpl.h>
 
-void _Scheduler_EDF_Schedule( Thread_Control *thread )
+void _Scheduler_EDF_Schedule(
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
+)
 {
-  _Scheduler_EDF_Schedule_body( thread, false );
+  _Scheduler_EDF_Schedule_body( scheduler, the_thread, false );
 }

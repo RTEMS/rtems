@@ -34,7 +34,7 @@ rtems_status_code rtems_task_get_affinity(
 {
   Thread_Control        *the_thread;
   Objects_Locations      location;
-  rtems_status_code      status = RTEMS_SUCCESSFUL;
+  bool                   ok;
 
   if ( !cpuset )
     return RTEMS_INVALID_ADDRESS;
@@ -44,11 +44,14 @@ rtems_status_code rtems_task_get_affinity(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      if ( ! _Scheduler_Get_affinity( the_thread, cpusetsize, cpuset )) {
-        status = RTEMS_INVALID_NUMBER;
-      }
+      ok = _Scheduler_Get_affinity(
+        _Scheduler_Get( the_thread ),
+        the_thread,
+        cpusetsize,
+        cpuset
+      );
       _Objects_Put( &the_thread->Object );
-      return status;
+      return ok ? RTEMS_SUCCESSFUL : RTEMS_INVALID_NUMBER;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:

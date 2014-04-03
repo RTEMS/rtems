@@ -21,11 +21,12 @@
 #include <rtems/score/scheduleredfimpl.h>
 
 void _Scheduler_EDF_Extract(
-  Thread_Control     *the_thread
+  Scheduler_Control *scheduler_base,
+  Thread_Control    *the_thread
 )
 {
   Scheduler_EDF_Control *scheduler =
-    _Scheduler_EDF_Instance();
+    _Scheduler_EDF_Self_from_base( scheduler_base );
   Scheduler_EDF_Per_thread *sched_info =
     (Scheduler_EDF_Per_thread*) the_thread->scheduler_info;
   RBTree_Node *node = &(sched_info->Node);

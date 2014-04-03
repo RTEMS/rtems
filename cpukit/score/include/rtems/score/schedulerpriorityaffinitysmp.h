@@ -81,6 +81,7 @@ void * _Scheduler_priority_affinity_SMP_Allocate( Thread_Control *the_thread );
 /**
  * @brief Get affinity for the priority affinity smp scheduler.
  *
+ * @param[in] scheduler The scheduler of the thread.
  * @param[in] thread The associated thread.
  * @param[in] cpusetsize The size of the cpuset.
  * @param[in,out] cpuset The associated affinity set.
@@ -89,14 +90,16 @@ void * _Scheduler_priority_affinity_SMP_Allocate( Thread_Control *the_thread );
  * @retval -1 The cpusetsize is invalid for the system
  */
 bool _Scheduler_priority_affinity_SMP_Get_affinity(
-  Thread_Control *thread,
-  size_t          cpusetsize,
-  cpu_set_t      *cpuset
+  Scheduler_Control *scheduler,
+  Thread_Control    *thread,
+  size_t             cpusetsize,
+  cpu_set_t         *cpuset
 );
 
 /** 
  * @brief Set affinity for the priority affinity smp scheduler.
  *
+ * @param[in] scheduler The scheduler of the thread.
  * @param[in] thread The associated thread.
  * @param[in] cpusetsize The size of the cpuset.
  * @param[in] cpuset Affinity new affinity set.
@@ -104,9 +107,10 @@ bool _Scheduler_priority_affinity_SMP_Get_affinity(
  * @retval 0 Successful
  */
 bool _Scheduler_priority_affinity_SMP_Set_affinity(
-  Thread_Control *thread,
-  size_t          cpusetsize,
-  cpu_set_t      *cpuset
+  Scheduler_Control *scheduler,
+  Thread_Control    *thread,
+  size_t             cpusetsize,
+  cpu_set_t         *cpuset
 );
 
 /**

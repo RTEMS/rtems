@@ -19,17 +19,18 @@
 #endif
 
 #include <rtems/score/schedulerpriorityimpl.h>
-#include <rtems/score/thread.h>
 
 void _Scheduler_priority_Update(
+  Scheduler_Control *base,
   Thread_Control    *the_thread
 )
 {
-  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+  Scheduler_priority_Control *self =
+    _Scheduler_priority_Self_from_base( base );
 
   _Scheduler_priority_Update_body(
     the_thread,
-    &scheduler->Bit_map,
-    &scheduler->Ready[ 0 ]
+    &self->Bit_map,
+    &self->Ready[ 0 ]
   );
 }

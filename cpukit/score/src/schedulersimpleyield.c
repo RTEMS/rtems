@@ -22,17 +22,20 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/threadimpl.h>
 
-void _Scheduler_simple_Yield( Thread_Control *thread )
+void _Scheduler_simple_Yield(
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
+)
 {
   ISR_Level       level;
 
   _ISR_Disable( level );
 
-    _Scheduler_simple_Ready_queue_requeue( &_Scheduler, thread );
+    _Scheduler_simple_Ready_queue_requeue( scheduler, the_thread );
 
     _ISR_Flash( level );
 
-    _Scheduler_simple_Schedule_body( thread, false );
+    _Scheduler_simple_Schedule_body( scheduler, the_thread, false );
 
   _ISR_Enable( level );
 }

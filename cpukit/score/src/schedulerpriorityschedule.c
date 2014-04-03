@@ -20,7 +20,10 @@
 
 #include <rtems/score/schedulerpriorityimpl.h>
 
-void _Scheduler_priority_Schedule( Thread_Control *thread )
+void _Scheduler_priority_Schedule(
+  Scheduler_Control *base,
+  Thread_Control    *the_thread
+)
 {
-  _Scheduler_priority_Schedule_body( thread, false );
+  _Scheduler_priority_Schedule_body( base, the_thread, false );
 }

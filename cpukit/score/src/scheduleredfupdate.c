@@ -26,11 +26,14 @@
 #include <rtems/score/thread.h>
 
 void _Scheduler_EDF_Update(
-  Thread_Control      *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 )
 {
   Scheduler_EDF_Per_thread *sched_info =
     (Scheduler_EDF_Per_thread*)the_thread->scheduler_info;
+
+  (void) scheduler;
 
   if (sched_info->queue_state == SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN) {
     /* Shifts the priority to the region of background tasks. */

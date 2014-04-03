@@ -34,7 +34,7 @@ rtems_status_code rtems_clock_tick( void )
 
   _Watchdog_Tickle_ticks();
 
-  _Scheduler_Tick();
+  _Scheduler_Tick( _Scheduler_Get( NULL ) );
 
 #if defined( RTEMS_SMP )
   _Thread_Enable_dispatch();

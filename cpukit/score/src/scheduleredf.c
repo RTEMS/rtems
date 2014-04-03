@@ -38,7 +38,7 @@ static int _Scheduler_EDF_RBTree_compare_function
    * This function compares only numbers for the red-black tree,
    * but priorities have an opposite sense.
    */
-  return (-1)*_Scheduler_Priority_compare(value1, value2);
+  return (-1)*_Scheduler_EDF_Priority_compare(value1, value2);
 }
 
 void _Scheduler_EDF_Initialize(void)

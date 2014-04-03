@@ -102,7 +102,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
-  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+  Scheduler_priority_Control *scheduler =
+    _Scheduler_priority_Self_from_base( _Scheduler_Get( NULL ) );
 #if defined(RTEMS_SMP)
   rtems_interrupt_level level;
 #endif
@@ -219,7 +220,8 @@ rtems_task Task_2(
   rtems_task_argument argument
 )
 {
-  Scheduler_priority_Control *scheduler = _Scheduler_priority_Instance();
+  Scheduler_priority_Control *scheduler =
+    _Scheduler_priority_Self_from_base( _Scheduler_Get( NULL ) );
 #if defined(RTEMS_SMP)
   rtems_interrupt_level level;
 #endif

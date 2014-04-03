@@ -23,10 +23,11 @@
 #include <rtems/score/thread.h>
 
 void _Scheduler_EDF_Unblock(
+  Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 )
 {
-  _Scheduler_EDF_Enqueue(the_thread);
+  _Scheduler_EDF_Enqueue( scheduler, the_thread);
   /* TODO: flash critical section? */
 
   /*
@@ -42,6 +43,7 @@ void _Scheduler_EDF_Unblock(
    *    a pseudo-ISR system task, we need to do a context switch.
    */
   if ( _Scheduler_Is_priority_lower_than(
+         scheduler,
          _Thread_Heir->current_priority,
          the_thread->current_priority )) {
     _Thread_Heir = the_thread;

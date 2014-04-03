@@ -22,12 +22,14 @@
 #include <rtems/score/schedulersimpleimpl.h>
 
 void _Scheduler_simple_Block(
-  Thread_Control   *the_thread
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
 )
 {
   _Scheduler_Generic_block(
+    scheduler,
+    the_thread,
     _Scheduler_simple_Extract,
-    _Scheduler_simple_Schedule_body,
-    the_thread
+    _Scheduler_simple_Schedule_body
   );
 }
