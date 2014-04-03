@@ -106,10 +106,13 @@ librtems_a_SOURCES += src/taskstart.c
 librtems_a_SOURCES += src/tasksuspend.c
 librtems_a_SOURCES += src/taskwakeafter.c
 librtems_a_SOURCES += src/taskwakewhen.c
+if HAS_SMP
+else
 librtems_a_SOURCES += src/taskvariableadd.c
 librtems_a_SOURCES += src/taskvariabledelete.c
 librtems_a_SOURCES += src/taskvariableget.c
 librtems_a_SOURCES += src/taskvariable_invoke_dtor.c
+endif
 librtems_a_SOURCES += src/taskdata.c
 
 ## RATEMON_C_FILES

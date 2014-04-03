@@ -28,7 +28,7 @@
  */
 
 /*
- * COPYRIGHT (c) 1989-2011.
+ * COPYRIGHT (c) 1989-2014.
  * On-Line Applications Research Corporation (OAR).
  *
  * The license and distribution terms for this file may be
@@ -449,17 +449,18 @@ rtems_status_code rtems_task_wake_after(
  *
  *  This directive returns a status indicating whether or not
  *  the specified task is suspended.
- *
- *  RTEMS Task Manager
  */
 rtems_status_code rtems_task_is_suspended(
   rtems_id   id
 );
 
+#if !defined(RTEMS_SMP)
 /**
  *  @brief RTEMS Add Task Variable
  *
  *  This directive adds a per task variable.
+ *
+ *  @note This service is not available in SMP configurations.
  */
 rtems_status_code rtems_task_variable_add(
   rtems_id  tid,
@@ -470,9 +471,9 @@ rtems_status_code rtems_task_variable_add(
 /**
  *  @brief Get a per-task variable
  *
- *  RTEMS Task Variable Get
- *
  *  This directive gets the value of a task variable.
+ *
+ *  @note This service is not available in SMP configurations.
  */
 rtems_status_code rtems_task_variable_get(
   rtems_id tid,
@@ -484,11 +485,14 @@ rtems_status_code rtems_task_variable_get(
  *  @brief RTEMS Delete Task Variable
  *
  *  This directive removes a per task variable.
+ *
+ *  @note This service is not available in SMP configurations.
  */
 rtems_status_code rtems_task_variable_delete(
   rtems_id  tid,
   void    **ptr
 );
+#endif
 
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
 /**

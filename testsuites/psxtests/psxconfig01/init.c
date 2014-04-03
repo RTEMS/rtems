@@ -7,6 +7,7 @@
  */
 
 /*
+ * Copyright (c) 2014. On-Line Applications Research Corporation (OAR).
  * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
@@ -51,7 +52,9 @@ const char rtems_test_name[] = "PSXCONFIG 1";
 #define CONFIGURE_MAXIMUM_REGIONS 43
 #define CONFIGURE_MAXIMUM_SEMAPHORES 47
 #define CONFIGURE_MAXIMUM_TASKS 11
-#define CONFIGURE_MAXIMUM_TASK_VARIABLES 13
+#if !defined(RTEMS_SMP)
+  #define CONFIGURE_MAXIMUM_TASK_VARIABLES 13
+#endif
 #define CONFIGURE_MAXIMUM_TIMERS 59
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 17
 
@@ -196,7 +199,9 @@ typedef struct {
 
 static char posix_name [NAME_MAX];
 
-static void *task_var;
+#if !defined(RTEMS_SMP)
+  static void *task_var;
+#endif
 
 static char *get_posix_name(char a, char b, char c, int i)
 {
@@ -208,10 +213,12 @@ static char *get_posix_name(char a, char b, char c, int i)
   return posix_name;
 }
 
+#if !defined(RTEMS_SMP)
 static void task_var_dtor(void *var __attribute__((unused)))
 {
   /* Do nothing */
 }
+#endif
 
 static void *posix_thread(void *arg __attribute__((unused)))
 {
@@ -403,11 +410,13 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
+#if !defined(RTEMS_SMP)
 #ifdef CONFIGURE_MAXIMUM_TASK_VARIABLES
   for (i = 0; i < CONFIGURE_MAXIMUM_TASK_VARIABLES; ++i) {
     sc = rtems_task_variable_add(RTEMS_SELF, &task_var, task_var_dtor);
     directive_failed(sc, "rtems_task_variable_add");
   }
+#endif
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_TIMERS

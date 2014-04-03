@@ -6,7 +6,7 @@
  * @brief Classic Tasks Manager Implementation
  */
 
-/*  COPYRIGHT (c) 1989-2008.
+/*  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -66,6 +66,7 @@ void _RTEMS_tasks_Manager_initialization(void);
  */
 void _RTEMS_tasks_Initialize_user_tasks( void );
 
+#if !defined(RTEMS_SMP)
 /**
  *  @brief RTEMS Tasks Invoke Task Variable Destructor
  *
@@ -76,6 +77,7 @@ void _RTEMS_Tasks_Invoke_task_variable_dtor(
   Thread_Control        *the_thread,
   rtems_task_variable_t *tvp
 );
+#endif
 
 RTEMS_INLINE_ROUTINE Thread_Control *_RTEMS_tasks_Allocate(void)
 {

@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,6 +18,7 @@
 #include "config.h"
 #endif
 
+#if !defined(RTEMS_SMP)
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
@@ -43,3 +44,4 @@ void _RTEMS_Tasks_Invoke_task_variable_dtor(
 
   _Workspace_Free(tvp);
 }
+#endif

@@ -171,6 +171,7 @@ typedef enum {
  */
 typedef void (*Thread_CPU_budget_algorithm_callout )( Thread_Control * );
 
+#if !defined(RTEMS_SMP)
 /**
  *  @brief Forward reference to the per task variable structure..
  *
@@ -197,6 +198,7 @@ typedef struct {
   /** This field points to the destructor for this per task variable. */
   void                          (*dtor)(void *);
 } rtems_task_variable_t;
+#endif
 
 /**
  *  The following structure contains the information which defines
@@ -567,8 +569,10 @@ struct Thread_Control_struct {
   /** This field points to the user extension pointers. */
   void                                **extensions;
 
+#if !defined(RTEMS_SMP)
   /** This field points to the set of per task variables. */
   rtems_task_variable_t                *task_variables;
+#endif
 
   /**
    * This is the thread key value chain's control, which is used

@@ -1591,12 +1591,21 @@ const rtems_libio_helper rtems_fs_init_helper =
         (RTEMS_NUMBER_NOTEPADS * sizeof(uint32_t)))
   #endif
 
-  /**
-   * This macro calculates the memory required for task variables.
-   *
-   * NOTE: Each task variable is individually allocated from the Workspace.
-   *       Hence, we do the multiplication on the configured size.
-   */
+/**
+ * This macro calculates the memory required for task variables.
+ *
+ * Each task variable is individually allocated from the Workspace.
+ * Hence, we do the multiplication on the configured size.
+ *
+ * @note Per-task variables are disabled for SMP configurations.
+ */
+#if defined(RTEMS_SMP)
+  #ifdef CONFIGURE_MAXIMUM_TASK_VARIABLES
+    #error "Per-Task Variables are not safe for SMP systems and disabled"
+  #endif
+  #define CONFIGURE_MAXIMUM_TASK_VARIABLES                     0
+  #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) 0
+#else
   #ifndef CONFIGURE_MAXIMUM_TASK_VARIABLES
     #define CONFIGURE_MAXIMUM_TASK_VARIABLES                     0
     #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) 0
@@ -1605,6 +1614,7 @@ const rtems_libio_helper rtems_fs_init_helper =
       (_task_variables) * \
          _Configure_From_workspace(sizeof(rtems_task_variable_t))
   #endif
+#endif
 
   #ifndef CONFIGURE_MAXIMUM_TIMERS
     #define CONFIGURE_MAXIMUM_TIMERS             0

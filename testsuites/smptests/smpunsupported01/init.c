@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2014 On-Line Applications Research Corporation (OAR).
  * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
@@ -27,15 +28,6 @@ static void test(void)
   rtems_id id;
 
   rtems_test_assert(rtems_configuration_is_smp_enabled());
-
-  sc = rtems_task_variable_add(RTEMS_SELF, NULL, NULL);
-  rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
-
-  sc = rtems_task_variable_delete(RTEMS_SELF, NULL);
-  rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
-
-  sc = rtems_task_variable_get(RTEMS_SELF, NULL, NULL);
-  rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
 
   sc = rtems_task_mode(RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &mode);
   rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);

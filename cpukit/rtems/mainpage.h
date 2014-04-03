@@ -5,7 +5,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -886,6 +886,10 @@
  *
  * A critical point with per-task variables is that each task must separately
  * request that the same global variable is per-task private.
+ *
+ * @b{WARNING}: Per-task variables are fundamentally incorrect in SMP
+ *              systems and should not be used in SMP applications. They
+ *              are disabled.
  *
  * @section ClassicTasksSecBuildingTaskAttributeSet Building a Task Attribute Set
  *

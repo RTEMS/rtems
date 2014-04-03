@@ -72,7 +72,9 @@ static bool _RTEMS_tasks_Create_extension(
   _Event_Initialize( &api->System_event );
   _ASR_Initialize( &api->Signal );
   _Thread_Action_initialize( &api->Signal_action, _Signal_Action_handler );
+#if !defined(RTEMS_SMP)
   created->task_variables = NULL;
+#endif
 
   if ( rtems_configuration_get_notepads_enabled() ) {
     for (i=0; i < RTEMS_NUMBER_NOTEPADS; i++)
@@ -124,19 +126,25 @@ static void _RTEMS_tasks_Terminate_extension(
   Thread_Control *executing
 )
 {
-  rtems_task_variable_t *tvp, *next;
 
   /*
    *  Free per task variable memory
+   *
+   *  Per Task Variables are only enabled in uniprocessor configurations
    */
+  #if !defined(RTEMS_SMP)
+    do { 
+      rtems_task_variable_t *tvp, *next;
 
-  tvp = executing->task_variables;
-  executing->task_variables = NULL;
-  while (tvp) {
-    next = (rtems_task_variable_t *)tvp->next;
-    _RTEMS_Tasks_Invoke_task_variable_dtor( executing, tvp );
-    tvp = next;
-  }
+      tvp = executing->task_variables;
+      executing->task_variables = NULL;
+      while (tvp) {
+	next = (rtems_task_variable_t *)tvp->next;
+	_RTEMS_Tasks_Invoke_task_variable_dtor( executing, tvp );
+	tvp = next;
+      }
+    } while (0);
+  #endif
 
   /*
    *  Run all the key destructors
@@ -144,12 +152,15 @@ static void _RTEMS_tasks_Terminate_extension(
   _POSIX_Keys_Run_destructors( executing );
 }
 
+#if !defined(RTEMS_SMP)
 /*
  *  _RTEMS_tasks_Switch_extension
  *
  *  This extension routine is invoked at each context switch.
+ *
+ *  @note Since this only needs to address per-task variables, it is
+ *        disabled entirely for SMP configurations.
  */
-
 static void _RTEMS_tasks_Switch_extension(
   Thread_Control *executing,
   Thread_Control *heir
@@ -158,7 +169,7 @@ static void _RTEMS_tasks_Switch_extension(
   rtems_task_variable_t *tvp;
 
   /*
-   *  Per Task Variables
+   *  Per Task Variables are only enabled in uniprocessor configurations
    */
 
   tvp = executing->task_variables;
@@ -175,6 +186,10 @@ static void _RTEMS_tasks_Switch_extension(
     tvp = (rtems_task_variable_t *)tvp->next;
   }
 }
+#define RTEMS_TASKS_SWITCH_EXTENSION _RTEMS_tasks_Switch_extension
+#else 
+#define RTEMS_TASKS_SWITCH_EXTENSION NULL
+#endif
 
 API_extensions_Control _RTEMS_tasks_API_extensions = {
   #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
@@ -185,12 +200,12 @@ API_extensions_Control _RTEMS_tasks_API_extensions = {
 
 User_extensions_Control _RTEMS_tasks_User_extensions = {
   { NULL, NULL },
-  { { NULL, NULL }, _RTEMS_tasks_Switch_extension },
+  { { NULL, NULL }, RTEMS_TASKS_SWITCH_EXTENSION },
   { _RTEMS_tasks_Create_extension,            /* create */
     _RTEMS_tasks_Start_extension,             /* start */
     _RTEMS_tasks_Start_extension,             /* restart */
     _RTEMS_tasks_Delete_extension,            /* delete */
-    _RTEMS_tasks_Switch_extension,            /* switch */
+    RTEMS_TASKS_SWITCH_EXTENSION,             /* switch */
     NULL,                                     /* begin */
     NULL,                                     /* exitted */
     NULL,                                     /* fatal */

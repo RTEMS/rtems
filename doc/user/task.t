@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2008.
+@c  COPYRIGHT (c) 1988-2014.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
@@ -339,6 +339,13 @@ containing the task's private "global" data.
 
 A critical point with per-task variables is that each task must separately
 request that the same global variable is per-task private.
+
+@b{WARNING}: Per-Task variables are inherently broken on SMP systems. They
+only work correctly when there is one task executing in the system and
+that task is the logical owner of the value in the per-task variable's
+location. There is no way for a single memory image to contain the
+correct value for each task executing on each core. Consequently,
+per-task variables are disabled in SMP configurations of RTEMS.
 
 @subsection Building a Task Attribute Set
 
@@ -1779,6 +1786,9 @@ is to have a single task variable that is a pointer to a dynamically
 allocated structure containing the task's private `global' data.
 In this case the destructor function could be `free'.
 
+Per-task variables are disabled in SMP configurations and this service
+is not available.
+
 @page
 
 @subsection TASK_VARIABLE_GET - Obtain value of a per task variable
@@ -1832,6 +1842,9 @@ will optimize it correctly.  In this case both the pointer
 @code{task_variable_value} and data referenced by @code{task_variable_value}
 should be considered volatile.
 
+Per-task variables are disabled in SMP configurations and this service
+is not available.
+
 @page
 
 @subsection TASK_VARIABLE_DELETE - Remove per task variable
@@ -1874,4 +1887,6 @@ This directive removes the given location from a task's context.
 
 @subheading NOTES:
 
-NONE
+Per-task variables are disabled in SMP configurations and this service
+is not available.
+

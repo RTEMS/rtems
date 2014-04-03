@@ -34,6 +34,10 @@ AC_CHECK_SIZEOF([time_t])
 AC_CHECK_HEADERS([sys/cpuset.h])
 AM_CONDITIONAL(HAS_CPUSET,test x"${ac_cv_header_sys_cpuset_h}" = x"yes")
 
+# Some tests should not be built/run in SMP configurations
+RTEMS_CHECK_CPUOPTS([RTEMS_SMP])
+AM_CONDITIONAL(HAS_SMP,test "$rtems_cv_RTEMS_SMP" = "yes")
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 spfatal28/Makefile
