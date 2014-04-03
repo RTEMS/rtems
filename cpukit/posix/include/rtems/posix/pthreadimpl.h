@@ -221,7 +221,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Copy_attributes(
 )
 {
   *dst_attr = *src_attr;
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
+#if defined(RTEMS_SMP) && defined(__RTEMS_HAVE_SYS_CPUSET_H__)
   _Assert(
     dst_attr->affinitysetsize == sizeof(dst_attr->affinitysetpreallocated)
   );
