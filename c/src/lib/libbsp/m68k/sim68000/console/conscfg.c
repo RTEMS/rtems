@@ -1,6 +1,4 @@
 /*
- *  This file contains the TTY driver table.
- *
  *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
  *
