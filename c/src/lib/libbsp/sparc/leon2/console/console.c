@@ -2,13 +2,11 @@
  * @file
  * @ingroup sparc_leon2
  * @brief TTY driver driver for the serial ports on the LEON console
+ *
+ *  This file contains the TTY driver for the serial ports on the LEON.
  */
 
 /*
- *  This file contains the TTY driver for the serial ports on the LEON.
- *
- *  This driver uses the termios pseudo driver.
- *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,23 +20,6 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <rtems/bspIo.h>
-
-/*
- *  Should we use a polled or interrupt drived console?
- *
- *  NOTE: This is defined in the custom/leon.cfg file.
- *
- *  WARNING:  In sis 1.6, it did not appear that the UART interrupts
- *            worked in a desirable fashion.  Immediately upon writing
- *            a character into the TX buffer, an interrupt was generated.
- *            This did not allow enough time for the program to put more
- *            characters in the buffer.  So every character resulted in
- *            "priming" the transmitter.   This effectively results in
- *            in a polled console with a useless interrupt per character
- *            on output.  It is reasonable to assume that input does not
- *            share this problem although it was not investigated.
- *
- */
 
 /*
  *  console_outbyte_polled
