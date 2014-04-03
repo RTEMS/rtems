@@ -1,7 +1,9 @@
 /*
  *  This file contains the hardware specific portions of the TTY driver
  *  for the simulated serial port on the PowerPC simulator.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
