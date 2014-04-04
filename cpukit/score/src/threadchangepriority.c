@@ -29,9 +29,9 @@ void _Thread_Change_priority(
   bool              prepend_it
 )
 {
-  Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
-  ISR_Level          level;
-  States_Control     state, original_state;
+  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+  ISR_Level                level;
+  States_Control           state, original_state;
 
   /*
    * Save original state

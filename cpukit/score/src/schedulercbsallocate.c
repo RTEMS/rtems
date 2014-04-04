@@ -26,8 +26,8 @@
 #include <rtems/score/wkspace.h>
 
 void *_Scheduler_CBS_Allocate(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   void *sched;

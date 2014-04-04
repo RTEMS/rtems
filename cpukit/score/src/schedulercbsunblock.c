@@ -25,8 +25,8 @@
 #include <rtems/score/watchdogimpl.h>
 
 void _Scheduler_CBS_Unblock(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   Scheduler_CBS_Per_thread *sched_info;

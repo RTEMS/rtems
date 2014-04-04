@@ -26,8 +26,8 @@
 #include <rtems/score/thread.h>
 
 void _Scheduler_EDF_Update(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   Scheduler_EDF_Per_thread *sched_info =

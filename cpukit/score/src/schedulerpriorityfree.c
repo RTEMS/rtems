@@ -25,11 +25,11 @@
 #include <rtems/score/wkspace.h>
 
 void _Scheduler_priority_Free (
-  Scheduler_Control *base,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
-  (void) base;
+  (void) scheduler;
 
   _Workspace_Free( the_thread->scheduler_info );
 }

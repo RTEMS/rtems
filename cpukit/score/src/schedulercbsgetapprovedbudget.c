@@ -30,9 +30,9 @@ int _Scheduler_CBS_Get_approved_budget (
 {
   if ( server_id >= _Scheduler_CBS_Maximum_servers )
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
-  if ( !_Scheduler_CBS_Server_list[server_id] )
+  if ( !_Scheduler_CBS_Server_list[server_id].initialized )
     return SCHEDULER_CBS_ERROR_NOSERVER;
 
-  *approved_budget = _Scheduler_CBS_Server_list[server_id]->parameters.budget;
+  *approved_budget = _Scheduler_CBS_Server_list[server_id].parameters.budget;
   return SCHEDULER_CBS_OK;
 }

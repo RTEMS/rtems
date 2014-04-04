@@ -26,9 +26,8 @@ int _Scheduler_CBS_Cleanup (void)
   unsigned int i;
 
   for ( i = 0; i<_Scheduler_CBS_Maximum_servers; i++ ) {
-    if ( _Scheduler_CBS_Server_list[ i ] )
+    if ( _Scheduler_CBS_Server_list[ i ].initialized )
       _Scheduler_CBS_Destroy_server( i );
   }
-  _Workspace_Free( _Scheduler_CBS_Server_list );
   return SCHEDULER_CBS_OK;
 }

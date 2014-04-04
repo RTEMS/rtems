@@ -639,15 +639,10 @@ const rtems_libio_helper rtems_fs_init_helper =
  *
  * An application can define its own scheduling policy by defining
  * CONFIGURE_SCHEDULER_USER and the following:
- *    - CONFIGURE_SCHEDULER_ENTRY_POINTS
- *    - CONFIGURE_MEMORY_FOR_SCHEDULER - base memory
+ *    - CONFIGURE_SCHEDULER_CONTEXT
+ *    - CONFIGURE_SCHEDULER_CONTROLS
  *    - CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER - per task memory
  */
-#include <rtems/score/scheduler.h>
-
-#if !defined(RTEMS_SMP)
-  #undef CONFIGURE_SCHEDULER_SIMPLE_SMP
-#endif
 
 /* If no scheduler is specified, the priority scheduler is default. */
 #if !defined(CONFIGURE_SCHEDULER_USER) && \
@@ -665,21 +660,26 @@ const rtems_libio_helper rtems_fs_init_helper =
   #endif
 #endif
 
+#include <rtems/scheduler.h>
+
 /*
  * If the Priority Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY)
-  #include <rtems/score/schedulerpriority.h>
-  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_PRIORITY_ENTRY_POINTS
+  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    #define CONFIGURE_SCHEDULER_CONTEXT \
+      RTEMS_SCHEDULER_CONTEXT_PRIORITY( \
+        dflt, \
+        CONFIGURE_MAXIMUM_PRIORITY + 1 \
+      )
+
+    #define CONFIGURE_SCHEDULER_CONTROLS \
+      RTEMS_SCHEDULER_CONTROL_PRIORITY(dflt)
+  #endif
 
   /**
    * This defines the memory used by the priority scheduler.
    */
-  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
-    _Configure_From_workspace( \
-      sizeof(Scheduler_priority_Control) +  \
-      ((CONFIGURE_MAXIMUM_PRIORITY) * sizeof(Chain_Control)) ) \
-  )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
 #endif
@@ -689,17 +689,20 @@ const rtems_libio_helper rtems_fs_init_helper =
  * it.
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY_SMP)
-  #include <rtems/score/schedulerprioritysmp.h>
-  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_PRIORITY_SMP_ENTRY_POINTS
+  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    #define CONFIGURE_SCHEDULER_CONTEXT \
+      RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP( \
+        dflt, \
+        CONFIGURE_MAXIMUM_PRIORITY + 1 \
+      )
+
+    #define CONFIGURE_SCHEDULER_CONTROLS \
+      RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP(dflt)
+  #endif
 
   /**
    * This defines the memory used by the priority scheduler.
    */
-  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
-    _Configure_From_workspace( \
-      sizeof(Scheduler_priority_SMP_Control) +  \
-      ((CONFIGURE_MAXIMUM_PRIORITY) * sizeof(Chain_Control)) ) \
-  )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
 #endif
@@ -709,17 +712,20 @@ const rtems_libio_helper rtems_fs_init_helper =
  * it.
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP)
-  #include <rtems/score/schedulerpriorityaffinitysmp.h>
-  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_PRIORITY_AFFINITY_SMP_ENTRY_POINTS
+  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    #define CONFIGURE_SCHEDULER_CONTEXT \
+      RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP( \
+        dflt, \
+        CONFIGURE_MAXIMUM_PRIORITY + 1 \
+      )
+
+    #define CONFIGURE_SCHEDULER_CONTROLS \
+      RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP(dflt)
+  #endif
 
   /**
    * This defines the memory used by the priority scheduler.
    */
-  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
-    _Configure_From_workspace( \
-      sizeof(Scheduler_SMP_Control) +  \
-      ((CONFIGURE_MAXIMUM_PRIORITY) * sizeof(Chain_Control)) ) \
-  )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
 #endif
@@ -728,15 +734,15 @@ const rtems_libio_helper rtems_fs_init_helper =
  * If the Simple Priority Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_SIMPLE)
-  #include <rtems/score/schedulersimple.h>
-  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_SIMPLE_ENTRY_POINTS
+  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    #define CONFIGURE_SCHEDULER_CONTEXT RTEMS_SCHEDULER_CONTEXT_SIMPLE(dflt)
+
+    #define CONFIGURE_SCHEDULER_CONTROLS RTEMS_SCHEDULER_CONTROL_SIMPLE(dflt)
+  #endif
 
   /**
    * define the memory used by the simple scheduler
    */
-  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
-    _Configure_From_workspace( sizeof( Scheduler_simple_Control ) ) \
-  )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER (0)
 #endif
 
@@ -744,17 +750,19 @@ const rtems_libio_helper rtems_fs_init_helper =
  * If the Simple SMP Priority Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_SIMPLE_SMP)
-  #include <rtems/score/schedulersimplesmp.h>
-  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_SIMPLE_SMP_ENTRY_POINTS
+  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    #define CONFIGURE_SCHEDULER_CONTEXT \
+      RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(dflt)
+
+    #define CONFIGURE_SCHEDULER_CONTROLS \
+      RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP(dflt)
+  #endif
 
   /**
    * Define the memory used by the Simple SMP Scheduler
    *
    * NOTE: This is the same as the Simple Scheduler
    */
-  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
-    _Configure_From_workspace( sizeof( Scheduler_simple_SMP_Control ) ) \
-  )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER (0)
 #endif
 
@@ -762,14 +770,15 @@ const rtems_libio_helper rtems_fs_init_helper =
  * If the EDF Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_EDF)
-  #include <rtems/score/scheduleredf.h>
-  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_EDF_ENTRY_POINTS
+  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    #define CONFIGURE_SCHEDULER_CONTEXT RTEMS_SCHEDULER_CONTEXT_EDF(dflt)
+
+    #define CONFIGURE_SCHEDULER_CONTROLS RTEMS_SCHEDULER_CONTROL_EDF(dflt)
+  #endif
 
   /**
    * define the memory used by the EDF scheduler
    */
-  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
-    _Configure_From_workspace(sizeof(Scheduler_EDF_Control)))
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_EDF_Per_thread)))
 #endif
@@ -778,26 +787,27 @@ const rtems_libio_helper rtems_fs_init_helper =
  * If the CBS Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_CBS)
-  #include <rtems/score/schedulercbs.h>
-  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_CBS_ENTRY_POINTS
+  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    #define CONFIGURE_SCHEDULER_CONTEXT RTEMS_SCHEDULER_CONTEXT_CBS(dflt)
+
+    #define CONFIGURE_SCHEDULER_CONTROLS RTEMS_SCHEDULER_CONTROL_CBS(dflt)
+  #endif
 
   #ifndef CONFIGURE_CBS_MAXIMUM_SERVERS
     #define CONFIGURE_CBS_MAXIMUM_SERVERS CONFIGURE_MAXIMUM_TASKS
   #endif
 
   #ifdef CONFIGURE_INIT
-    uint32_t _Scheduler_CBS_Maximum_servers = CONFIGURE_CBS_MAXIMUM_SERVERS;
+    const uint32_t _Scheduler_CBS_Maximum_servers =
+      CONFIGURE_CBS_MAXIMUM_SERVERS;
+
+    Scheduler_CBS_Server
+      _Scheduler_CBS_Server_list[ CONFIGURE_CBS_MAXIMUM_SERVERS ];
   #endif
 
   /**
    * define the memory used by the CBS scheduler
    */
-  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
-    _Configure_From_workspace(sizeof(Scheduler_EDF_Control)) + \
-      _Configure_From_workspace(CONFIGURE_CBS_MAXIMUM_SERVERS * \
-        sizeof(Scheduler_CBS_Server *)) + \
-      CONFIGURE_CBS_MAXIMUM_SERVERS * \
-        _Configure_From_workspace(sizeof(Scheduler_CBS_Server)))
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_CBS_Per_thread)))
 #endif
@@ -807,10 +817,16 @@ const rtems_libio_helper rtems_fs_init_helper =
  * this code to know which scheduler is configured by the user.
  */
 #ifdef CONFIGURE_INIT
-  Scheduler_Control  _Scheduler = {
-    NULL,                             /* Scheduler Specific Data Pointer */
-    CONFIGURE_SCHEDULER_ENTRY_POINTS  /* Scheduler Operations */
+  CONFIGURE_SCHEDULER_CONTEXT;
+
+  const Scheduler_Control _Scheduler_Table[] = {
+    CONFIGURE_SCHEDULER_CONTROLS
   };
+
+  #if defined(RTEMS_SMP)
+    const size_t _Scheduler_Count =
+      RTEMS_ARRAY_SIZE( _Scheduler_Table );
+  #endif
 
   #if defined(CONFIGURE_SCHEDULER_EDF)
     const bool _Scheduler_FIXME_thread_priority_queues_are_broken = true;
@@ -2207,7 +2223,6 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #define CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD \
   ( CONFIGURE_MEMORY_FOR_IDLE_TASK +                /* IDLE and stack */ \
-    CONFIGURE_MEMORY_FOR_SCHEDULER +                /* Scheduler */ \
     CONFIGURE_INTERRUPT_VECTOR_TABLE +             /* interrupt vectors */ \
     CONFIGURE_INTERRUPT_STACK_MEMORY +             /* interrupt stack */ \
     CONFIGURE_API_MUTEX_MEMORY                     /* allocation mutex */ \
@@ -2475,7 +2490,7 @@ const rtems_libio_helper rtems_fs_init_helper =
       CONFIGURE_MULTIPROCESSING_TABLE,        /* pointer to MP config table */
     #endif
     #ifdef RTEMS_SMP
-      CONFIGURE_SMP_MAXIMUM_PROCESSORS
+      CONFIGURE_SMP_MAXIMUM_PROCESSORS,
     #endif
   };
 #endif
@@ -2557,7 +2572,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     uint32_t INTERRUPT_VECTOR_TABLE;
     uint32_t INTERRUPT_STACK_MEMORY;
     uint32_t MEMORY_FOR_IDLE_TASK;
-    uint32_t MEMORY_FOR_SCHEDULER;
     uint32_t MEMORY_PER_TASK_FOR_SCHEDULER;
 
     /* Classic API Pieces */
@@ -2614,7 +2628,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     CONFIGURE_INTERRUPT_VECTOR_TABLE,
     CONFIGURE_INTERRUPT_STACK_MEMORY,
     CONFIGURE_MEMORY_FOR_IDLE_TASK,
-    CONFIGURE_MEMORY_FOR_SCHEDULER,
     CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER,
 
     /* Classic API Pieces */

@@ -216,9 +216,9 @@ void _Thread_Life_action_handler(
 }
 
 static void _Thread_Start_life_change(
-  Thread_Control    *the_thread,
-  Scheduler_Control *scheduler,
-  Priority_Control   priority
+  Thread_Control          *the_thread,
+  const Scheduler_Control *scheduler,
+  Priority_Control         priority
 )
 {
   the_thread->is_preemptible   = the_thread->Start.is_preemptible;
@@ -245,7 +245,7 @@ static void _Thread_Request_life_change(
   Thread_Life_state previous_life_state;
   Per_CPU_Control *cpu;
   ISR_Level level;
-  Scheduler_Control *scheduler;
+  const Scheduler_Control *scheduler;
 
   cpu = _Thread_Action_ISR_disable_and_acquire( the_thread, &level );
   previous_life_state = the_thread->Life.state;

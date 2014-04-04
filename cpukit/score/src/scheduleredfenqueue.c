@@ -21,16 +21,16 @@
 #include <rtems/score/scheduleredfimpl.h>
 
 void _Scheduler_EDF_Enqueue(
-  Scheduler_Control *scheduler_base,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
-  Scheduler_EDF_Control *scheduler =
-    _Scheduler_EDF_Self_from_base( scheduler_base );
+  Scheduler_EDF_Context *context =
+    _Scheduler_EDF_Get_context( scheduler );
   Scheduler_EDF_Per_thread *sched_info =
     (Scheduler_EDF_Per_thread*) the_thread->scheduler_info;
   RBTree_Node *node = &(sched_info->Node);
 
-  _RBTree_Insert( &scheduler->Ready, node );
+  _RBTree_Insert( &context->Ready, node );
   sched_info->queue_state = SCHEDULER_EDF_QUEUE_STATE_YES;
 }

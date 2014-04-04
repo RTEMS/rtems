@@ -34,16 +34,16 @@ int _Scheduler_CBS_Detach_thread (
   if ( server_id >= _Scheduler_CBS_Maximum_servers )
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
   /* Server is not valid. */
-  if ( !_Scheduler_CBS_Server_list[server_id] )
+  if ( !_Scheduler_CBS_Server_list[server_id].initialized )
     return SCHEDULER_CBS_ERROR_NOSERVER;
   /* Thread and server are not attached. */
-  if ( _Scheduler_CBS_Server_list[server_id]->task_id != task_id )
+  if ( _Scheduler_CBS_Server_list[server_id].task_id != task_id )
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
 
   the_thread = _Thread_Get(task_id, &location);
   /* The routine _Thread_Get may disable dispatch and not enable again. */
   if ( the_thread ) {
-    _Scheduler_CBS_Server_list[server_id]->task_id = -1;
+    _Scheduler_CBS_Server_list[server_id].task_id = -1;
     sched_info = (Scheduler_CBS_Per_thread *) the_thread->scheduler_info;
     sched_info->cbs_server = NULL;
 

@@ -25,8 +25,8 @@
 #include <rtems/config.h>
 
 static void _Scheduler_default_Tick_for_executing(
-  Scheduler_Control *scheduler,
-  Thread_Control *executing
+  const Scheduler_Control *scheduler,
+  Thread_Control          *executing
 )
 {
   #ifdef __RTEMS_USE_TICKS_FOR_STATISTICS__
@@ -84,7 +84,7 @@ static void _Scheduler_default_Tick_for_executing(
   }
 }
 
-void _Scheduler_default_Tick( Scheduler_Control *scheduler )
+void _Scheduler_default_Tick( const Scheduler_Control *scheduler )
 {
   uint32_t processor_count = _SMP_Get_processor_count();
   uint32_t processor;

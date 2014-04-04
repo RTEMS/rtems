@@ -41,19 +41,13 @@ extern "C" {
  */
 
 typedef struct {
+  /**
+   * @brief Basic scheduler context.
+   */
+  Scheduler_Context Base;
+
   Chain_Control Scheduled;
-} Scheduler_SMP_Control;
-
-typedef struct {
-  Scheduler_SMP_Control Base;
-  Chain_Control         Ready;
-} Scheduler_simple_SMP_Control;
-
-typedef struct {
-  Scheduler_SMP_Control    Base;
-  Priority_bit_map_Control Bit_map;
-  Chain_Control            Ready[ 1 ];
-} Scheduler_priority_SMP_Control;
+} Scheduler_SMP_Context;
 
 /** @} */
 

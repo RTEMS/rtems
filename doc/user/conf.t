@@ -3716,10 +3716,10 @@ support enabled.
 @code{CONFIGURE_SCHEDULER_USER}
 
 @item DATA TYPE:
-Entry points for scheduler
+Boolean feature macro.
 
 @item RANGE:
-Undefined or scheduler entry set
+Defined or undefined.
 
 @item DEFAULT VALUE:
 This is not defined by default.
@@ -3734,12 +3734,14 @@ own scheduling algorithm. If @code{CONFIGURE_SCHEDULER_USER} is defined
 then the following additional macros must be defined:
 
 @itemize @bullet
-@item @code{CONFIGURE_MEMORY_FOR_SCHEDULER} must be defined with the
-amount of memory required as a base amount for the scheduler.
+@item @code{CONFIGURE_SCHEDULER_CONTEXT} must be defined to a static definition
+of the scheduler context of the user scheduler.
 
-@item @code{CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER(_tasks)} must be
-defined as a formula which computes the amount of memory required based
-upon the number of tasks configured.
+@item @code{CONFIGURE_SCHEDULER_CONTROLS} must be defined to a scheduler
+control initializer for the user scheduler.
+
+@item @code{CONFIGURE_SCHEDULER_USER_PER_THREAD} must be defined to the type of
+the per-thread information of the user scheduler.
 
 @end itemize
 

@@ -23,8 +23,8 @@
 #include <rtems/score/thread.h>
 
 void _Scheduler_EDF_Unblock(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   _Scheduler_EDF_Enqueue( scheduler, the_thread);

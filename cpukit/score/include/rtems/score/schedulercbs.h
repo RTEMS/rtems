@@ -81,7 +81,7 @@ extern "C" {
 #define SCHEDULER_CBS_ERROR_NOSERVER           SCHEDULER_CBS_ERROR_NOT_FOUND
 
 /** Maximum number of simultaneous servers. */
-extern uint32_t _Scheduler_CBS_Maximum_servers;
+extern const uint32_t _Scheduler_CBS_Maximum_servers;
 
 /** Server id. */
 typedef uint32_t Scheduler_CBS_Server_id;
@@ -115,6 +115,13 @@ typedef struct {
   Scheduler_CBS_Parameters parameters;
   /** Callback function invoked when a budget overrun occurs. */
   Scheduler_CBS_Budget_overrun  cbs_budget_overrun;
+
+  /**
+   * @brief Indicates if this CBS server is initialized.
+   *
+   * @see _Scheduler_CBS_Create_server() and _Scheduler_CBS_Destroy_server().
+   */
+  bool initialized;
 } Scheduler_CBS_Server;
 
 /**
@@ -132,7 +139,7 @@ typedef struct {
  * List of servers. The @a Scheduler_CBS_Server is the index to the array
  * of pointers to @a _Scheduler_CBS_Server_list.
  */
-extern Scheduler_CBS_Server **_Scheduler_CBS_Server_list;
+extern Scheduler_CBS_Server _Scheduler_CBS_Server_list[];
 
 /**
  *  @brief Unblocks a thread from the queue.
@@ -148,8 +155,8 @@ extern Scheduler_CBS_Server **_Scheduler_CBS_Server_list;
  *  @note This has to be asessed as missed deadline of the current job.
  */
 void _Scheduler_CBS_Unblock(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -165,9 +172,9 @@ void _Scheduler_CBS_Unblock(
  */
 
 void _Scheduler_CBS_Release_job (
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread,
-  uint32_t           length
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  uint32_t                 length
 );
 
 /**
@@ -338,9 +345,10 @@ void _Scheduler_CBS_Budget_callout(
  *             management memory for.
  */
 void *_Scheduler_CBS_Allocate(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
+
 #ifdef __cplusplus
 }
 #endif

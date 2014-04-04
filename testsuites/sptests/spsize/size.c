@@ -84,9 +84,6 @@ void print_formula(void);
 #include <rtems/score/prioritybitmapimpl.h>
 #include <rtems/score/schedulerpriority.h>
 
-/* Priority scheduling uninitialized (globals) consumption */
-#define SCHEDULER_OVHD      (sizeof _Scheduler)
-
 /* Priority scheduling per-thread consumption. Gets 
  * included in the PER_TASK consumption.
  */
@@ -94,11 +91,10 @@ void print_formula(void);
 
 /* Priority scheduling workspace consumption 
  *
- * Include allocation of ready queue.  Pointers are already counted by 
- * including _Scheduler in SCHEDULER_OVHD.
+ * Include allocation of ready queue.
  */
 #define SCHEDULER_WKSP_SIZE  \
-    (sizeof(Scheduler_priority_Control) + \
+    (sizeof(Scheduler_priority_Context) + \
      RTEMS_MAXIMUM_PRIORITY * sizeof(Chain_Control ))
 /****** END OF MEMORY USAGE OF DEFAULT PRIORITY SCHEDULER ******/
 
@@ -351,8 +347,6 @@ uninitialized =
 #endif
 
 /*rtems.h*/     /* Not applicable */
-
-/*scheduler.h*/ SCHEDULER_OVHD                            + 
 
 /*semimpl.h*/   (sizeof _Semaphore_Information)           +
 

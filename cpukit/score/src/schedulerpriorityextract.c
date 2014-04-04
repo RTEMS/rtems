@@ -22,9 +22,9 @@
 #include <rtems/score/schedulerpriorityimpl.h>
 
 void _Scheduler_priority_Extract(
-  Scheduler_Control *base,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
-  _Scheduler_priority_Extract_body( base, the_thread );
+  _Scheduler_priority_Extract_body( scheduler, the_thread );
 }

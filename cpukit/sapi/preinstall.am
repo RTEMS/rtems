@@ -84,6 +84,10 @@ $(PROJECT_INCLUDE)/rtems/rbtree.h: include/rtems/rbtree.h $(PROJECT_INCLUDE)/rte
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbtree.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbtree.h
 
+$(PROJECT_INCLUDE)/rtems/scheduler.h: include/rtems/scheduler.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/scheduler.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/scheduler.h
+
 $(PROJECT_INCLUDE)/rtems/sptables.h: include/rtems/sptables.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sptables.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sptables.h

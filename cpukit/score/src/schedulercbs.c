@@ -22,8 +22,6 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
 
-Scheduler_CBS_Server **_Scheduler_CBS_Server_list;
-
 void _Scheduler_CBS_Budget_callout(
   Thread_Control *the_thread
 )
@@ -52,13 +50,5 @@ void _Scheduler_CBS_Budget_callout(
 
 int _Scheduler_CBS_Initialize(void)
 {
-  unsigned int i;
-  _Scheduler_CBS_Server_list = (Scheduler_CBS_Server **) _Workspace_Allocate(
-      _Scheduler_CBS_Maximum_servers * sizeof(Scheduler_CBS_Server*) );
-  if ( !_Scheduler_CBS_Server_list )
-    return SCHEDULER_CBS_ERROR_NO_MEMORY;
-  for (i = 0; i<_Scheduler_CBS_Maximum_servers; i++) {
-    _Scheduler_CBS_Server_list[i] = NULL;
-  }
   return SCHEDULER_CBS_OK;
 }

@@ -18,14 +18,12 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/schedulersimple.h>
+#include <rtems/score/schedulersimpleimpl.h>
 #include <rtems/score/thread.h>
 
 void _Scheduler_simple_Unblock(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   _Scheduler_simple_Ready_queue_enqueue( scheduler, the_thread );

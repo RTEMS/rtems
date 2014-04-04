@@ -55,21 +55,26 @@ extern "C" {
   }
 
 /**
- * @brief Simple scheduler control.
+ * @brief Simple scheduler context.
  */
 typedef struct {
+  /**
+   * @brief Basic scheduler context.
+   */
+  Scheduler_Context Base;
+
   /**
    * @brief One ready queue for all ready threads.
    */
   Chain_Control Ready;
-} Scheduler_simple_Control;
+} Scheduler_simple_Context;
 
 /**
  *  @brief Initialize simple scheduler.
  *
  *  This routine initializes the simple scheduler.
  */
-void _Scheduler_simple_Initialize( void );
+void _Scheduler_simple_Initialize( const Scheduler_Control *scheduler );
 
 /**
  *  This routine sets the heir thread to be the next ready thread
@@ -77,8 +82,8 @@ void _Scheduler_simple_Initialize( void );
  *  information.
  */
 void _Scheduler_simple_Schedule(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -98,8 +103,8 @@ void _Scheduler_simple_Schedule(
  *  @param[in,out] thread The yielding thread.
  */
 void _Scheduler_simple_Yield(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -113,8 +118,8 @@ void _Scheduler_simple_Yield(
  *  @param[in] the_thread is the thread that is to be blocked
  */
 void _Scheduler_simple_Block(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -127,8 +132,8 @@ void _Scheduler_simple_Block(
  *  @param[in] the_thread is the thread that is to be unblocked
  */
 void _Scheduler_simple_Unblock(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -140,8 +145,8 @@ void _Scheduler_simple_Unblock(
  *  @param[in] the_thread is the thread to be blocked
  */
 void _Scheduler_simple_Extract(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -152,8 +157,8 @@ void _Scheduler_simple_Extract(
  *  @param[in] the_thread is the thread to be enqueued
  */
 void _Scheduler_simple_Enqueue(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -166,8 +171,8 @@ void _Scheduler_simple_Enqueue(
  *  @param[in] the_thread is the thread to be blocked
  */
 void _Scheduler_simple_Enqueue_first(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -179,8 +184,8 @@ void _Scheduler_simple_Enqueue_first(
  *  @param[in] the_thread - pointer to a thread control block
  */
 void _Scheduler_simple_Ready_queue_enqueue(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -193,8 +198,8 @@ void _Scheduler_simple_Ready_queue_enqueue(
  *  @param[in] the_thread - pointer to a thread control block
  */
 void _Scheduler_simple_Ready_queue_enqueue_first(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**@}*/

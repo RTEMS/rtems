@@ -67,6 +67,11 @@ extern "C" {
 
 typedef struct {
   /**
+   * @brief Basic scheduler context.
+   */
+  Scheduler_Context Base;
+
+  /**
    * @brief Bit map to indicate non-empty ready queues.
    */
   Priority_bit_map_Control Bit_map;
@@ -74,8 +79,8 @@ typedef struct {
   /**
    * @brief One ready queue per priority level.
    */
-  Chain_Control Ready[ 1 ];
-} Scheduler_priority_Control;
+  Chain_Control Ready[ 0 ];
+} Scheduler_priority_Context;
 
 /**
  * Per-thread data related to the _Scheduler_PRIORITY scheduling policy.
@@ -92,7 +97,7 @@ typedef struct {
  * @brief Initializes the priority scheduler.
  * This routine initializes the priority scheduler.
  */
-void _Scheduler_priority_Initialize(void);
+void _Scheduler_priority_Initialize( const Scheduler_Control *scheduler );
 
 /**
  *  @brief Removes @a the_thread from the scheduling decision.
@@ -105,8 +110,8 @@ void _Scheduler_priority_Initialize(void);
  *  @param[in] the_thread is the thread to be blocked
  */
 void _Scheduler_priority_Block(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -116,8 +121,8 @@ void _Scheduler_priority_Block(
  *  by invoking the_scheduler->ready_queue->operations->first().
  */
 void _Scheduler_priority_Schedule(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -129,8 +134,8 @@ void _Scheduler_priority_Schedule(
  *             management memory for
  */
 void * _Scheduler_priority_Allocate(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -142,8 +147,8 @@ void * _Scheduler_priority_Allocate(
  *             will be deallocated.
  */
 void _Scheduler_priority_Free(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -155,8 +160,8 @@ void _Scheduler_priority_Free(
  *             structure updated.
  */
 void _Scheduler_priority_Update(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -169,8 +174,8 @@ void _Scheduler_priority_Update(
  *  @param[in] the_thread will be unblocked
  */
 void _Scheduler_priority_Unblock(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -193,8 +198,8 @@ void _Scheduler_priority_Unblock(
  *  @param[in,out] thread The yielding thread.
  */
 void _Scheduler_priority_Yield(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -205,8 +210,8 @@ void _Scheduler_priority_Yield(
  *  @param[in] the_thread will be enqueued at the TAIL of its priority.
  */
 void _Scheduler_priority_Enqueue(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -219,8 +224,8 @@ void _Scheduler_priority_Enqueue(
  *  @param[in] the_thread will be enqueued at the HEAD of its priority.
  */
 void _Scheduler_priority_Enqueue_first(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -232,8 +237,8 @@ void _Scheduler_priority_Enqueue_first(
  *  @param[in] the_thread will be extracted from the ready set.
  */
 void _Scheduler_priority_Extract(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**

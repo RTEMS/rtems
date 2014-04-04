@@ -39,26 +39,26 @@ extern "C" {
  */
 
 typedef Thread_Control *( *Scheduler_SMP_Get_highest_ready )(
-  Scheduler_SMP_Control *self
+  Scheduler_SMP_Context *self
 );
 
 typedef void ( *Scheduler_SMP_Extract )(
-  Scheduler_SMP_Control *self,
+  Scheduler_SMP_Context *self,
   Thread_Control *thread
 );
 
 typedef void ( *Scheduler_SMP_Insert )(
-  Scheduler_SMP_Control *self,
+  Scheduler_SMP_Context *self,
   Thread_Control *thread_to_insert
 );
 
 typedef void ( *Scheduler_SMP_Move )(
-  Scheduler_SMP_Control *self,
+  Scheduler_SMP_Context *self,
   Thread_Control *thread_to_move
 );
 
 static inline void _Scheduler_SMP_Initialize(
-  Scheduler_SMP_Control *self
+  Scheduler_SMP_Context *self
 )
 {
   _Chain_Initialize_empty( &self->Scheduled );
@@ -107,7 +107,7 @@ static inline void _Scheduler_SMP_Allocate_processor(
 }
 
 static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
-  Scheduler_SMP_Control *self
+  Scheduler_SMP_Context *self
 )
 {
   Thread_Control *lowest_ready = NULL;
@@ -121,7 +121,7 @@ static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
 }
 
 static inline void _Scheduler_SMP_Enqueue_ordered(
-  Scheduler_SMP_Control *self,
+  Scheduler_SMP_Context *self,
   Thread_Control *thread,
   Chain_Node_order order,
   Scheduler_SMP_Get_highest_ready get_highest_ready,
@@ -177,7 +177,7 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
 }
 
 static inline void _Scheduler_SMP_Schedule_highest_ready(
-  Scheduler_SMP_Control *self,
+  Scheduler_SMP_Context *self,
   Thread_Control *victim,
   Scheduler_SMP_Get_highest_ready get_highest_ready,
   Scheduler_SMP_Move move_from_ready_to_scheduled
@@ -191,7 +191,7 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
 }
 
 static inline void _Scheduler_SMP_Block(
-  Scheduler_SMP_Control *self,
+  Scheduler_SMP_Context *self,
   Thread_Control *thread,
   Scheduler_SMP_Extract extract,
   Scheduler_SMP_Get_highest_ready get_highest_ready,
@@ -213,7 +213,7 @@ static inline void _Scheduler_SMP_Block(
 }
 
 static inline void _Scheduler_SMP_Extract(
-  Scheduler_SMP_Control *self,
+  Scheduler_SMP_Context *self,
   Thread_Control *thread,
   Scheduler_SMP_Extract extract
 )
@@ -222,7 +222,7 @@ static inline void _Scheduler_SMP_Extract(
 }
 
 static inline void _Scheduler_SMP_Schedule(
-  Scheduler_SMP_Control *self,
+  Scheduler_SMP_Context *self,
   Thread_Control *thread,
   Scheduler_SMP_Get_highest_ready get_highest_ready,
   Scheduler_SMP_Move move_from_ready_to_scheduled
@@ -241,7 +241,7 @@ static inline void _Scheduler_SMP_Schedule(
 }
 
 static inline void _Scheduler_SMP_Insert_scheduled_lifo(
-  Scheduler_SMP_Control *self,
+  Scheduler_SMP_Context *self,
   Thread_Control *thread
 )
 {
@@ -253,7 +253,7 @@ static inline void _Scheduler_SMP_Insert_scheduled_lifo(
 }
 
 static inline void _Scheduler_SMP_Insert_scheduled_fifo(
-  Scheduler_SMP_Control *self,
+  Scheduler_SMP_Context *self,
   Thread_Control *thread
 )
 {
@@ -265,7 +265,7 @@ static inline void _Scheduler_SMP_Insert_scheduled_fifo(
 }
 
 static inline void _Scheduler_SMP_Start_idle(
-  Scheduler_SMP_Control *self,
+  Scheduler_SMP_Context *self,
   Thread_Control *thread,
   Per_CPU_Control *cpu
 )

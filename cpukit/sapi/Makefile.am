@@ -17,6 +17,7 @@ include_rtems_HEADERS += include/rtems/cbs.h
 include_rtems_HEADERS += include/rtems/profiling.h
 include_rtems_HEADERS += include/rtems/rbheap.h
 include_rtems_HEADERS += include/rtems/rbtree.h
+include_rtems_HEADERS += include/rtems/scheduler.h
 include_rtems_HEADERS += include/rtems/sptables.h
 include_rtems_HEADERS += include/rtems/test.h
 include_rtems_HEADERS += include/rtems/timespec.h

@@ -21,14 +21,11 @@
 #include <rtems/score/schedulerpriorityimpl.h>
 #include <rtems/score/wkspace.h>
 
-void _Scheduler_priority_Initialize(void)
+void _Scheduler_priority_Initialize( const Scheduler_Control *scheduler )
 {
-  Scheduler_priority_Control *self = _Workspace_Allocate_or_fatal_error(
-    sizeof( *self ) + PRIORITY_MAXIMUM * sizeof( Chain_Control )
-  );
+  Scheduler_priority_Context *context =
+    _Scheduler_priority_Get_context( scheduler );
 
-  _Priority_bit_map_Initialize( &self->Bit_map );
-  _Scheduler_priority_Ready_queue_initialize( &self->Ready[ 0 ] );
-
-  _Scheduler.information = self;
+  _Priority_bit_map_Initialize( &context->Bit_map );
+  _Scheduler_priority_Ready_queue_initialize( &context->Ready[ 0 ] );
 }

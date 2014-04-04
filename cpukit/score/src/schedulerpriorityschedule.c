@@ -21,9 +21,9 @@
 #include <rtems/score/schedulerpriorityimpl.h>
 
 void _Scheduler_priority_Schedule(
-  Scheduler_Control *base,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
-  _Scheduler_priority_Schedule_body( base, the_thread, false );
+  _Scheduler_priority_Schedule_body( scheduler, the_thread, false );
 }

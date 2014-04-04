@@ -19,16 +19,13 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/schedulersimple.h>
+#include <rtems/score/schedulersimpleimpl.h>
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/wkspace.h>
 
-void _Scheduler_simple_Initialize ( void )
+void _Scheduler_simple_Initialize( const Scheduler_Control *scheduler )
 {
-  Scheduler_simple_Control *scheduler =
-    _Workspace_Allocate_or_fatal_error( sizeof( *scheduler ) );
+  Scheduler_simple_Context *context =
+    _Scheduler_simple_Get_context( scheduler );
 
-  _Chain_Initialize_empty( &scheduler->Ready );
-
-  _Scheduler.information = scheduler;
+  _Chain_Initialize_empty( &context->Ready );
 }

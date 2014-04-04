@@ -31,15 +31,15 @@ int _Scheduler_CBS_Get_remaining_budget (
 
   if ( server_id >= _Scheduler_CBS_Maximum_servers )
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
-  if ( !_Scheduler_CBS_Server_list[server_id] )
+  if ( !_Scheduler_CBS_Server_list[server_id].initialized )
     return SCHEDULER_CBS_ERROR_NOSERVER;
-  if ( _Scheduler_CBS_Server_list[server_id]->task_id == -1 ) {
-    *remaining_budget = _Scheduler_CBS_Server_list[server_id]->parameters.budget;
+  if ( _Scheduler_CBS_Server_list[server_id].task_id == -1 ) {
+    *remaining_budget = _Scheduler_CBS_Server_list[server_id].parameters.budget;
     return SCHEDULER_CBS_OK;
   }
 
   the_thread = _Thread_Get(
-                 _Scheduler_CBS_Server_list[server_id]->task_id,
+                 _Scheduler_CBS_Server_list[server_id].task_id,
                  &location
                );
   /* The routine _Thread_Get may disable dispatch and not enable again. */

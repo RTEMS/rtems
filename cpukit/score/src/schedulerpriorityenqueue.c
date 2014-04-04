@@ -21,12 +21,12 @@
 #include <rtems/score/schedulerpriorityimpl.h>
 
 void _Scheduler_priority_Enqueue(
-  Scheduler_Control *base,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
-  Scheduler_priority_Control *scheduler =
-    _Scheduler_priority_Self_from_base( base );
+  Scheduler_priority_Context *context =
+    _Scheduler_priority_Get_context( scheduler );
 
-  _Scheduler_priority_Ready_queue_enqueue( the_thread, &scheduler->Bit_map );
+  _Scheduler_priority_Ready_queue_enqueue( the_thread, &context->Bit_map );
 }

@@ -18,14 +18,11 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/schedulersimple.h>
 
 void _Scheduler_simple_Enqueue_first(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   _Scheduler_simple_Ready_queue_enqueue_first( scheduler, the_thread );

@@ -13,9 +13,9 @@
 #include <rtems/score/schedulerimpl.h>
 
 void _Scheduler_default_Start_idle(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread,
-  Per_CPU_Control   *cpu
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Per_CPU_Control         *cpu
 )
 {
   (void) cpu;

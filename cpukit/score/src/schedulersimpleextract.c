@@ -19,13 +19,11 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/schedulersimple.h>
-#include <rtems/score/chainimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/schedulersimpleimpl.h>
 
 void _Scheduler_simple_Extract(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   (void) scheduler;

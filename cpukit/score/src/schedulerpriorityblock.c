@@ -23,8 +23,8 @@
 #include <rtems/score/schedulerpriorityimpl.h>
 
 void _Scheduler_priority_Block(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   _Scheduler_Generic_block(

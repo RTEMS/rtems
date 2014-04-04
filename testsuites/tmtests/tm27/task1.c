@@ -20,8 +20,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-#include <rtems/score/schedulerpriorityimpl.h>
 #include <bsp.h>
+#include <rtems/score/schedulerpriorityimpl.h>
 
 #define _RTEMS_TMTEST27
 #include <tm27.h>
@@ -55,7 +55,11 @@ rtems_task Init(
   Print_Warning();
 
   TEST_BEGIN();
-  if (_Scheduler.Operations.initialize != _Scheduler_priority_Initialize) {
+
+  if (
+    _Scheduler_Table[ 0 ].Operations.initialize
+      != _Scheduler_priority_Initialize
+  ) {
     puts("  Error ==> " );
     puts("Test only supported for deterministic priority scheduler\n" );
     TEST_END();
@@ -102,8 +106,8 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
-  Scheduler_priority_Control *scheduler =
-    _Scheduler_priority_Self_from_base( _Scheduler_Get( NULL ) );
+  Scheduler_priority_Context *scheduler_context =
+    _Scheduler_priority_Get_context( _Scheduler_Get( _Thread_Get_executing() ) );
 #if defined(RTEMS_SMP)
   rtems_interrupt_level level;
 #endif
@@ -188,7 +192,7 @@ rtems_task Task_1(
 #endif
 
   _Thread_Executing =
-        (Thread_Control *) _Chain_First(&scheduler->Ready[LOW_PRIORITY]);
+        (Thread_Control *) _Chain_First(&scheduler_context->Ready[LOW_PRIORITY]);
 
   _Thread_Dispatch_necessary = 1;
 
@@ -220,8 +224,8 @@ rtems_task Task_2(
   rtems_task_argument argument
 )
 {
-  Scheduler_priority_Control *scheduler =
-    _Scheduler_priority_Self_from_base( _Scheduler_Get( NULL ) );
+  Scheduler_priority_Context *scheduler_context =
+    _Scheduler_priority_Get_context( _Scheduler_Get( _Thread_Get_executing() ) );
 #if defined(RTEMS_SMP)
   rtems_interrupt_level level;
 #endif
@@ -258,7 +262,7 @@ rtems_task Task_2(
 #endif
 
   _Thread_Executing =
-        (Thread_Control *) _Chain_First(&scheduler->Ready[LOW_PRIORITY]);
+        (Thread_Control *) _Chain_First(&scheduler_context->Ready[LOW_PRIORITY]);
 
   _Thread_Dispatch_necessary = 1;
 

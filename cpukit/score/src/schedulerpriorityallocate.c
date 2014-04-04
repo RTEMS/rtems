@@ -23,8 +23,8 @@
 #include <rtems/score/wkspace.h>
 
 void *_Scheduler_priority_Allocate (
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   Scheduler_priority_Per_thread *sched_info_of_thread =

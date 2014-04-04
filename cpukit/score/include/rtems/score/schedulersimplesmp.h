@@ -49,6 +49,11 @@ extern "C" {
  * @{
  */
 
+typedef struct {
+  Scheduler_SMP_Context Base;
+  Chain_Control         Ready;
+} Scheduler_simple_SMP_Context;
+
 /**
  * @brief Entry points for the Simple SMP Scheduler.
  */
@@ -73,40 +78,40 @@ extern "C" {
     _Scheduler_default_Set_affinity \
   }
 
-void _Scheduler_simple_smp_Initialize( void );
+void _Scheduler_simple_smp_Initialize( const Scheduler_Control *scheduler );
 
 void _Scheduler_simple_smp_Block(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
 void _Scheduler_simple_smp_Enqueue_priority_fifo(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
 void _Scheduler_simple_smp_Enqueue_priority_lifo(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
 void _Scheduler_simple_smp_Extract(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
 void _Scheduler_simple_smp_Yield(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
 void _Scheduler_simple_smp_Schedule(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
 void _Scheduler_simple_smp_Start_idle(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread,
   Per_CPU_Control *cpu
 );

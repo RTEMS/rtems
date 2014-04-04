@@ -64,8 +64,8 @@ void _Scheduler_Handler_initialization( void );
  * @param[in] the_thread The thread which state changed previously.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Schedule(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   ( *scheduler->Operations.schedule )( scheduler, the_thread );
@@ -80,8 +80,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Schedule(
  * @param[in] the_thread The yielding thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Yield(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   ( *scheduler->Operations.yield )( scheduler, the_thread );
@@ -96,8 +96,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Yield(
  * including the selection of a new heir thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Block(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control               *the_thread
 )
 {
   ( *scheduler->Operations.block )( scheduler, the_thread );
@@ -112,8 +112,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Block(
  * scheduling variables, for example the heir thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Unblock(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   ( *scheduler->Operations.unblock )( scheduler, the_thread );
@@ -125,8 +125,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock(
  * This routine allocates @a the_thread->scheduler
  */
 RTEMS_INLINE_ROUTINE void* _Scheduler_Allocate(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   return ( *scheduler->Operations.allocate )( scheduler, the_thread );
@@ -138,8 +138,8 @@ RTEMS_INLINE_ROUTINE void* _Scheduler_Allocate(
  * This routine frees @a the_thread->scheduler
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Free(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   ( *scheduler->Operations.free )( scheduler, the_thread );
@@ -151,8 +151,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Free(
  * This routine updates @a the_thread->scheduler
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Update(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   ( *scheduler->Operations.update )( scheduler, the_thread );
@@ -164,8 +164,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update(
  * This routine enqueue @a the_thread->scheduler
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Enqueue(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   ( *scheduler->Operations.enqueue )( scheduler, the_thread );
@@ -177,8 +177,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Enqueue(
  * This routine enqueue_first @a the_thread->scheduler
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Enqueue_first(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   ( *scheduler->Operations.enqueue_first )( scheduler, the_thread );
@@ -190,8 +190,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Enqueue_first(
  * This routine extract @a the_thread->scheduler
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Extract(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   ( *scheduler->Operations.extract )( scheduler, the_thread );
@@ -203,9 +203,9 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Extract(
  * This routine compares two priorities.
  */
 RTEMS_INLINE_ROUTINE int _Scheduler_Priority_compare(
-  Scheduler_Control *scheduler,
-  Priority_Control p1,
-  Priority_Control p2
+  const Scheduler_Control *scheduler,
+  Priority_Control         p1,
+  Priority_Control         p2
 )
 {
   return ( *scheduler->Operations.priority_compare )( p1, p2 );
@@ -217,9 +217,9 @@ RTEMS_INLINE_ROUTINE int _Scheduler_Priority_compare(
  * This routine is called when a new period of task is issued.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Release_job(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread,
-  uint32_t           length
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  uint32_t                 length
 )
 {
   ( *scheduler->Operations.release_job )( scheduler, the_thread, length );
@@ -233,7 +233,9 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Release_job(
  * scheduler which support standard RTEMS features, this includes
  * time-slicing management.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Tick( Scheduler_Control *scheduler )
+RTEMS_INLINE_ROUTINE void _Scheduler_Tick(
+  const Scheduler_Control *scheduler
+)
 {
   ( *scheduler->Operations.tick )( scheduler );
 }
@@ -247,9 +249,9 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Tick( Scheduler_Control *scheduler )
  * @see _Thread_Create_idle().
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Start_idle(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread,
-  Per_CPU_Control   *cpu
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Per_CPU_Control         *cpu
 )
 {
   ( *scheduler->Operations.start_idle )( scheduler, the_thread, cpu );
@@ -263,15 +265,15 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Start_idle(
    * @parma[out] cpuset The processor affinity for this thread
    */
   RTEMS_INLINE_ROUTINE int _Scheduler_Get_affinity(
-    Scheduler_Control *scheduler,
-    Thread_Control    *thread,
-    size_t             cpusetsize,
-    cpu_set_t         *cpuset
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    size_t                   cpusetsize,
+    cpu_set_t               *cpuset
   )
   {
     return ( *scheduler->Operations.get_affinity )(
       scheduler,
-      thread,
+      the_thread,
       cpusetsize,
       cpuset
     );
@@ -284,15 +286,15 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Start_idle(
    * @parma[in] cpuset The processor affinity for this thread
    */
   RTEMS_INLINE_ROUTINE int _Scheduler_Set_affinity(
-    Scheduler_Control *scheduler,
-    Thread_Control    *thread,
-    size_t             cpusetsize,
-    const cpu_set_t   *cpuset
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    size_t                   cpusetsize,
+    const cpu_set_t         *cpuset
   )
   {
     return ( *scheduler->Operations.set_affinity )(
       scheduler,
-      thread,
+      the_thread,
       cpusetsize,
       cpuset
     );
@@ -313,10 +315,15 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update_heir(
 }
 
 RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread,
-  void            ( *extract )( Scheduler_Control *, Thread_Control * ),
-  void            ( *schedule )( Scheduler_Control *, Thread_Control *, bool )
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  void                  ( *extract )(
+                             const Scheduler_Control *,
+                             Thread_Control * ),
+  void                  ( *schedule )(
+                             const Scheduler_Control *,
+                             Thread_Control *,
+                             bool )
 )
 {
   ( *extract )( scheduler, the_thread );
@@ -333,9 +340,9 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(
  * intuitive sense of priority.
  */
 RTEMS_INLINE_ROUTINE bool _Scheduler_Is_priority_lower_than(
-  Scheduler_Control *scheduler,
-  Priority_Control   p1,
-  Priority_Control   p2
+  const Scheduler_Control *scheduler,
+  Priority_Control         p1,
+  Priority_Control         p2
 )
 {
   return _Scheduler_Priority_compare( scheduler, p1,  p2 ) < 0;
@@ -346,9 +353,9 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Is_priority_lower_than(
  * intuitive sense of priority.
  */
 RTEMS_INLINE_ROUTINE bool _Scheduler_Is_priority_higher_than(
-  Scheduler_Control *scheduler,
-  Priority_Control   p1,
-  Priority_Control   p2
+  const Scheduler_Control *scheduler,
+  Priority_Control         p1,
+  Priority_Control         p2
 )
 {
   return _Scheduler_Priority_compare( scheduler, p1,  p2 ) > 0;
@@ -359,9 +366,9 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Is_priority_higher_than(
  * in the intuitive sense of priority.
  */
 RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Highest_priority_of_two(
-  Scheduler_Control *scheduler,
-  Priority_Control   p1,
-  Priority_Control   p2
+  const Scheduler_Control *scheduler,
+  Priority_Control         p1,
+  Priority_Control         p2
 )
 {
   return _Scheduler_Is_priority_higher_than( scheduler, p1, p2 ) ? p1 : p2;
@@ -372,9 +379,9 @@ RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Highest_priority_of_two(
  * current priority of the thread in the intuitive sense of priority.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Set_priority_if_higher(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread,
-  Priority_Control   priority
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Priority_Control         priority
 )
 {
   Priority_Control current = the_thread->current_priority;
@@ -389,10 +396,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Set_priority_if_higher(
  * current priority of the thread in the intuitive sense of priority.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority_if_higher(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread,
-  Priority_Control   priority,
-  bool               prepend_it
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Priority_Control         priority,
+  bool                     prepend_it
 )
 {
   Priority_Control current = the_thread->current_priority;
@@ -402,13 +409,13 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority_if_higher(
   }
 }
 
-RTEMS_INLINE_ROUTINE Scheduler_Control *_Scheduler_Get(
+RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get(
   Thread_Control *the_thread
 )
 {
   (void) the_thread;
 
-  return &_Scheduler;
+  return &_Scheduler_Table[ 0 ];
 }
 
 /** @} */

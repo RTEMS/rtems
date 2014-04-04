@@ -18,10 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/scheduleredf.h>
-#include <rtems/score/schedulerimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/score/scheduleredfimpl.h>
 
 static int _Scheduler_EDF_RBTree_compare_function
 (
@@ -41,16 +38,14 @@ static int _Scheduler_EDF_RBTree_compare_function
   return (-1)*_Scheduler_EDF_Priority_compare(value1, value2);
 }
 
-void _Scheduler_EDF_Initialize(void)
+void _Scheduler_EDF_Initialize( const Scheduler_Control *scheduler )
 {
-  Scheduler_EDF_Control *scheduler =
-    _Workspace_Allocate_or_fatal_error( sizeof( *scheduler ) );
+  Scheduler_EDF_Context *context =
+    _Scheduler_EDF_Get_context( scheduler );
 
   _RBTree_Initialize_empty(
-    &scheduler->Ready,
+    &context->Ready,
     _Scheduler_EDF_RBTree_compare_function,
     0
   );
-
-  _Scheduler.information = scheduler;
 }

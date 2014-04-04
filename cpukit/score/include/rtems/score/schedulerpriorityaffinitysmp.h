@@ -78,8 +78,8 @@ extern "C" {
  *             management memory for.
  */
 void * _Scheduler_priority_affinity_SMP_Allocate(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**
@@ -94,10 +94,10 @@ void * _Scheduler_priority_affinity_SMP_Allocate(
  * @retval -1 The cpusetsize is invalid for the system
  */
 bool _Scheduler_priority_affinity_SMP_Get_affinity(
-  Scheduler_Control *scheduler,
-  Thread_Control    *thread,
-  size_t             cpusetsize,
-  cpu_set_t         *cpuset
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  size_t                   cpusetsize,
+  cpu_set_t               *cpuset
 );
 
 /** 
@@ -111,10 +111,10 @@ bool _Scheduler_priority_affinity_SMP_Get_affinity(
  * @retval 0 Successful
  */
 bool _Scheduler_priority_affinity_SMP_Set_affinity(
-  Scheduler_Control *scheduler,
-  Thread_Control    *thread,
-  size_t             cpusetsize,
-  cpu_set_t         *cpuset
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  size_t                   cpusetsize,
+  cpu_set_t               *cpuset
 );
 
 /**

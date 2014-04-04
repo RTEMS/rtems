@@ -23,9 +23,9 @@
 #include <rtems/score/watchdogimpl.h>
 
 void _Scheduler_EDF_Release_job(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread,
-  uint32_t           deadline
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  uint32_t                 deadline
 )
 {
   Priority_Control new_priority;

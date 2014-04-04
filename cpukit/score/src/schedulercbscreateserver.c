@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/score/schedulercbs.h>
-#include <rtems/score/wkspace.h>
 
 int _Scheduler_CBS_Create_server (
   Scheduler_CBS_Parameters     *params,
@@ -37,7 +36,7 @@ int _Scheduler_CBS_Create_server (
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
 
   for ( i = 0; i<_Scheduler_CBS_Maximum_servers; i++ ) {
-    if ( !_Scheduler_CBS_Server_list[i] )
+    if ( !_Scheduler_CBS_Server_list[i].initialized )
       break;
   }
 
@@ -45,14 +44,10 @@ int _Scheduler_CBS_Create_server (
     return SCHEDULER_CBS_ERROR_FULL;
 
   *server_id = i;
-  _Scheduler_CBS_Server_list[*server_id] = (Scheduler_CBS_Server *)
-    _Workspace_Allocate( sizeof(Scheduler_CBS_Server) );
-  the_server = _Scheduler_CBS_Server_list[*server_id];
-  if ( !the_server )
-    return SCHEDULER_CBS_ERROR_NO_MEMORY;
-
+  the_server = &_Scheduler_CBS_Server_list[*server_id];
   the_server->parameters = *params;
   the_server->task_id = -1;
   the_server->cbs_budget_overrun = budget_overrun_callback;
+  the_server->initialized = true;
   return SCHEDULER_CBS_OK;
 }

@@ -30,8 +30,8 @@ int _Scheduler_CBS_Get_server_id (
 {
   unsigned int i;
   for ( i = 0; i<_Scheduler_CBS_Maximum_servers; i++ ) {
-    if ( _Scheduler_CBS_Server_list[i] &&
-         _Scheduler_CBS_Server_list[i]->task_id == task_id ) {
+    if ( _Scheduler_CBS_Server_list[i].initialized &&
+         _Scheduler_CBS_Server_list[i].task_id == task_id ) {
       *server_id = i;
       return SCHEDULER_CBS_OK;
     }

@@ -33,11 +33,11 @@ int _Scheduler_CBS_Attach_thread (
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
 
   /* Server is not valid. */
-  if ( !_Scheduler_CBS_Server_list[server_id] )
+  if ( !_Scheduler_CBS_Server_list[server_id].initialized )
     return SCHEDULER_CBS_ERROR_NOSERVER;
 
   /* Server is already attached to a thread. */
-  if ( _Scheduler_CBS_Server_list[server_id]->task_id != -1 )
+  if ( _Scheduler_CBS_Server_list[server_id].task_id != -1 )
     return SCHEDULER_CBS_ERROR_FULL;
 
   the_thread = _Thread_Get(task_id, &location);
@@ -53,8 +53,8 @@ int _Scheduler_CBS_Attach_thread (
       return SCHEDULER_CBS_ERROR_FULL;
     }
 
-    _Scheduler_CBS_Server_list[server_id]->task_id = task_id;
-    sched_info->cbs_server = (void *) _Scheduler_CBS_Server_list[server_id];
+    _Scheduler_CBS_Server_list[server_id].task_id = task_id;
+    sched_info->cbs_server = &_Scheduler_CBS_Server_list[server_id];
 
     the_thread->budget_callout   = _Scheduler_CBS_Budget_callout;
     the_thread->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;

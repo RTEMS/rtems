@@ -15,6 +15,7 @@
 
 #define CONFIGURE_INIT
 #include <timesys.h>
+#include <rtems/score/schedulerpriorityimpl.h>
 #include <rtems/timerdrv.h>
 #include <coverhd.h>
 
@@ -58,7 +59,10 @@ rtems_task Init(
 
   puts( "*** START OF RHILATENCY ***" );
 
-  if (_Scheduler.Operations.initialize != _Scheduler_priority_Initialize) {
+  if (
+    _Scheduler_Table[ 0 ].Operations.initialize
+      != _Scheduler_priority_Initialize
+  ) {
     puts( "  Error ==> " );
     puts( "Test only supported for deterministic priority scheduler\n" );
     rtems_test_exit( 0 );

@@ -20,11 +20,10 @@
 
 #include <rtems/score/schedulersimpleimpl.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/threadimpl.h>
 
 void _Scheduler_simple_Yield(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   ISR_Level       level;

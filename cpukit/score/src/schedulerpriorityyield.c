@@ -23,8 +23,8 @@
 #include <rtems/score/threadimpl.h>
 
 void _Scheduler_priority_Yield(
-  Scheduler_Control *base,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   Scheduler_priority_Per_thread *sched_info_of_thread =
@@ -32,7 +32,7 @@ void _Scheduler_priority_Yield(
   Chain_Control *ready_chain = sched_info_of_thread->ready_chain;
   ISR_Level level;
 
-  (void) base;
+  (void) scheduler;
 
   _ISR_Disable( level );
     if ( !_Chain_Has_only_one_node( ready_chain ) ) {

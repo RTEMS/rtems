@@ -32,13 +32,12 @@ int _Scheduler_CBS_Destroy_server (
   if ( server_id >= _Scheduler_CBS_Maximum_servers )
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
 
-  if ( !_Scheduler_CBS_Server_list[server_id] )
+  if ( !_Scheduler_CBS_Server_list[server_id].initialized )
     return SCHEDULER_CBS_ERROR_NOSERVER;
 
-  if ( (tid = _Scheduler_CBS_Server_list[server_id]->task_id) != -1 )
+  if ( (tid = _Scheduler_CBS_Server_list[server_id].task_id) != -1 )
     ret = _Scheduler_CBS_Detach_thread ( server_id, tid );
 
-  _Workspace_Free( _Scheduler_CBS_Server_list[server_id] );
-  _Scheduler_CBS_Server_list[server_id] = NULL;
+  _Scheduler_CBS_Server_list[server_id].initialized = false;
   return ret;
 }

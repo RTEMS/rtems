@@ -32,10 +32,10 @@ extern "C" {
  */
 /**@{**/
 
-RTEMS_INLINE_ROUTINE Scheduler_simple_Control *
-  _Scheduler_simple_Self_from_base( Scheduler_Control *scheduler_base )
+RTEMS_INLINE_ROUTINE Scheduler_simple_Context *
+  _Scheduler_simple_Get_context( const Scheduler_Control *scheduler )
 {
-  return (Scheduler_simple_Control *) scheduler_base->information;
+  return (Scheduler_simple_Context *) scheduler->context;
 }
 
 /**
@@ -45,8 +45,8 @@ RTEMS_INLINE_ROUTINE Scheduler_simple_Control *
  * @param[in] the_thread is the thread to be blocked
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_simple_Ready_queue_requeue(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   /* extract */
@@ -103,14 +103,14 @@ RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert_priority_fifo(
 }
 
 RTEMS_INLINE_ROUTINE void _Scheduler_simple_Schedule_body(
-  Scheduler_Control *scheduler_base,
-  Thread_Control    *the_thread,
-  bool               force_dispatch
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  bool                     force_dispatch
 )
 {
-  Scheduler_simple_Control *scheduler =
-    _Scheduler_simple_Self_from_base( scheduler_base );
-  Thread_Control *heir = (Thread_Control *) _Chain_First( &scheduler->Ready );
+  Scheduler_simple_Context *context =
+    _Scheduler_simple_Get_context( scheduler );
+  Thread_Control *heir = (Thread_Control *) _Chain_First( &context->Ready );
 
   ( void ) the_thread;
 

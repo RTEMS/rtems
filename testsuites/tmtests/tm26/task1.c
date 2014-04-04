@@ -223,7 +223,10 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  if (_Scheduler.Operations.initialize != _Scheduler_priority_Initialize) {
+  if (
+    _Scheduler_Table[ 0 ].Operations.initialize
+      != _Scheduler_priority_Initialize
+  ) {
     puts("  Error ==> " );
     puts("Test only supported for deterministic priority scheduler\n" );
     TEST_END();
@@ -371,8 +374,8 @@ rtems_task Middle_task(
   rtems_task_argument argument
 )
 {
-  Scheduler_priority_Control *scheduler =
-    _Scheduler_priority_Self_from_base( _Scheduler_Get( NULL ) );
+  Scheduler_priority_Context *scheduler_context =
+    _Scheduler_priority_Get_context( _Scheduler_Get( _Thread_Get_executing() ) );
 
   thread_dispatch_no_fp_time = benchmark_timer_read();
 
@@ -381,7 +384,7 @@ rtems_task Middle_task(
   Middle_tcb   = _Thread_Get_executing();
 
   set_thread_executing(
-    (Thread_Control *) _Chain_First(&scheduler->Ready[LOW_PRIORITY])
+    (Thread_Control *) _Chain_First(&scheduler_context->Ready[LOW_PRIORITY])
   );
 
   /* do not force context switch */
@@ -404,8 +407,8 @@ rtems_task Low_task(
   rtems_task_argument argument
 )
 {
-  Scheduler_priority_Control *scheduler =
-    _Scheduler_priority_Self_from_base( _Scheduler_Get( NULL ) );
+  Scheduler_priority_Context *scheduler_context =
+    _Scheduler_priority_Get_context( _Scheduler_Get( _Thread_Get_executing() ) );
   Thread_Control             *executing;
 
   context_switch_no_fp_time = benchmark_timer_read();
@@ -424,7 +427,7 @@ rtems_task Low_task(
   context_switch_another_task_time = benchmark_timer_read();
 
   set_thread_executing(
-    (Thread_Control *) _Chain_First(&scheduler->Ready[FP1_PRIORITY])
+    (Thread_Control *) _Chain_First(&scheduler_context->Ready[FP1_PRIORITY])
   );
 
   /* do not force context switch */
@@ -447,8 +450,8 @@ rtems_task Floating_point_task_1(
   rtems_task_argument argument
 )
 {
-  Scheduler_priority_Control *scheduler =
-    _Scheduler_priority_Self_from_base( _Scheduler_Get( NULL ) );
+  Scheduler_priority_Context *scheduler_context =
+    _Scheduler_priority_Get_context( _Scheduler_Get( _Thread_Get_executing() ) );
   Thread_Control             *executing;
   FP_DECLARE;
 
@@ -457,7 +460,7 @@ rtems_task Floating_point_task_1(
   executing = _Thread_Get_executing();
 
   set_thread_executing(
-    (Thread_Control *) _Chain_First(&scheduler->Ready[FP2_PRIORITY])
+    (Thread_Control *) _Chain_First(&scheduler_context->Ready[FP2_PRIORITY])
   );
 
   /* do not force context switch */
@@ -484,7 +487,7 @@ rtems_task Floating_point_task_1(
   executing = _Thread_Get_executing();
 
   set_thread_executing(
-    (Thread_Control *) _Chain_First(&scheduler->Ready[FP2_PRIORITY])
+    (Thread_Control *) _Chain_First(&scheduler_context->Ready[FP2_PRIORITY])
   );
 
   benchmark_timer_initialize();
@@ -503,8 +506,8 @@ rtems_task Floating_point_task_2(
   rtems_task_argument argument
 )
 {
-  Scheduler_priority_Control *scheduler =
-    _Scheduler_priority_Self_from_base( _Scheduler_Get( NULL ) );
+  Scheduler_priority_Context *scheduler_context =
+    _Scheduler_priority_Get_context( _Scheduler_Get( _Thread_Get_executing() ) );
   Thread_Control             *executing;
   FP_DECLARE;
 
@@ -513,7 +516,7 @@ rtems_task Floating_point_task_2(
   executing = _Thread_Get_executing();
 
   set_thread_executing(
-    (Thread_Control *) _Chain_First(&scheduler->Ready[FP1_PRIORITY])
+    (Thread_Control *) _Chain_First(&scheduler_context->Ready[FP1_PRIORITY])
   );
 
   FP_LOAD( 1.0 );

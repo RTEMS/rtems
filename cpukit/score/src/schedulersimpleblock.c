@@ -22,8 +22,8 @@
 #include <rtems/score/schedulersimpleimpl.h>
 
 void _Scheduler_simple_Block(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   _Scheduler_Generic_block(

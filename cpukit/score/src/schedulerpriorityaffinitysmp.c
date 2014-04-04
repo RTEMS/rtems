@@ -32,8 +32,8 @@ _Scheduler_priority_affinity_Get_scheduler_info( Thread_Control *thread )
 }
 
 void * _Scheduler_priority_affinity_SMP_Allocate(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   Scheduler_priority_affinity_SMP_Per_thread *info =
@@ -48,10 +48,10 @@ void * _Scheduler_priority_affinity_SMP_Allocate(
 }
 
 bool _Scheduler_priority_affinity_SMP_Get_affinity(
-  Scheduler_Control *scheduler,
-  Thread_Control    *thread,
-  size_t             cpusetsize,
-  cpu_set_t         *cpuset
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  size_t                   cpusetsize,
+  cpu_set_t               *cpuset
 )
 {
   Scheduler_priority_affinity_SMP_Per_thread *info =
@@ -68,10 +68,10 @@ bool _Scheduler_priority_affinity_SMP_Get_affinity(
 }
 
 bool _Scheduler_priority_affinity_SMP_Set_affinity(
-  Scheduler_Control *scheduler,
-  Thread_Control    *thread,
-  size_t             cpusetsize,
-  cpu_set_t         *cpuset
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  size_t                   cpusetsize,
+  cpu_set_t               *cpuset
 )
 {
   Scheduler_priority_affinity_SMP_Per_thread *info =

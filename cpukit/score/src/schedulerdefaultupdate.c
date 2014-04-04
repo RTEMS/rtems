@@ -22,8 +22,8 @@
 #include <rtems/score/scheduler.h>
 
 void _Scheduler_default_Update(
-  Scheduler_Control *scheduler,
-  Thread_Control    *the_thread
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 )
 {
   ( void ) scheduler;

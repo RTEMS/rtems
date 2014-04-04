@@ -47,6 +47,12 @@ extern "C" {
  * @{
  */
 
+typedef struct {
+  Scheduler_SMP_Context    Base;
+  Priority_bit_map_Control Bit_map;
+  Chain_Control            Ready[ 0 ];
+} Scheduler_priority_SMP_Context;
+
 /**
  * @brief Entry points for the Priority SMP Scheduler.
  */
@@ -71,45 +77,45 @@ extern "C" {
     _Scheduler_default_Set_affinity \
   }
 
-void _Scheduler_priority_SMP_Initialize( void );
+void _Scheduler_priority_SMP_Initialize( const Scheduler_Control *scheduler );
 
 void _Scheduler_priority_SMP_Schedule(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
 void _Scheduler_priority_SMP_Block(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
 void _Scheduler_priority_SMP_Update(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
 void _Scheduler_priority_SMP_Enqueue_fifo(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
 void _Scheduler_priority_SMP_Enqueue_lifo(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
 void _Scheduler_priority_SMP_Extract(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
 void _Scheduler_priority_SMP_Yield(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
 void _Scheduler_priority_SMP_Start_idle(
-  Scheduler_Control *base,
+  const Scheduler_Control *scheduler,
   Thread_Control *thread,
   Per_CPU_Control *cpu
 );
