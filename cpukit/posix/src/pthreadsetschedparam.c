@@ -30,6 +30,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
+#include <rtems/config.h>
 
 int pthread_setschedparam(
   pthread_t           thread,
@@ -83,7 +84,8 @@ int pthread_setschedparam(
         case SCHED_OTHER:
         case SCHED_FIFO:
         case SCHED_RR:
-          the_thread->cpu_time_budget = _Thread_Ticks_per_timeslice;
+          the_thread->cpu_time_budget =
+            rtems_configuration_get_ticks_per_timeslice();
 
           the_thread->real_priority =
             _POSIX_Priority_To_core( api->schedparam.sched_priority );

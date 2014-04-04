@@ -22,6 +22,7 @@
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/smp.h>
+#include <rtems/config.h>
 
 static void _Scheduler_default_Tick_for_executing(
   Scheduler_Control *scheduler,
@@ -69,7 +70,8 @@ static void _Scheduler_default_Tick_for_executing(
          *  FIFO for this priority and a new heir is selected.
          */
         _Scheduler_Yield( scheduler, executing );
-        executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
+        executing->cpu_time_budget =
+          rtems_configuration_get_ticks_per_timeslice();
       }
       break;
 

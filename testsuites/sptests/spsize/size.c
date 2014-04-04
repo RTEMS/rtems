@@ -385,7 +385,6 @@ uninitialized =
 /*tasksimpl.h*/ (sizeof _RTEMS_tasks_Information)         +
 
 /*thread.h*/    (sizeof _Thread_Dispatch_disable_level)   +
-                (sizeof _Thread_Ticks_per_timeslice)      +
                 (sizeof _Thread_Executing)                +
                 (sizeof _Thread_Heir)                     +
 #if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)

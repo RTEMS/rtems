@@ -58,11 +58,6 @@ SCORE_EXTERN void *rtems_ada_self;
 SCORE_EXTERN Objects_Information _Thread_Internal_information;
 
 /**
- *  The following is used to manage the length of a timeslice quantum.
- */
-SCORE_EXTERN uint32_t   _Thread_Ticks_per_timeslice;
-
-/**
  *  The following points to the thread whose floating point
  *  context is currently loaded.
  */

@@ -189,7 +189,8 @@ bool _Thread_Initialize(
       break;
     #if defined(RTEMS_SCORE_THREAD_ENABLE_EXHAUST_TIMESLICE)
       case THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE:
-        the_thread->cpu_time_budget = _Thread_Ticks_per_timeslice;
+        the_thread->cpu_time_budget =
+          rtems_configuration_get_ticks_per_timeslice();
         break;
     #endif
     #if defined(RTEMS_SCORE_THREAD_ENABLE_SCHEDULER_CALLOUT)

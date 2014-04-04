@@ -28,6 +28,7 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/config.h>
 
 static Thread_Action *_Thread_Get_post_switch_action(
   Thread_Control *executing
@@ -121,7 +122,7 @@ void _Thread_Dispatch( void )
     rtems_ada_self = heir->rtems_ada_self;
 #endif
     if ( heir->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE )
-      heir->cpu_time_budget = _Thread_Ticks_per_timeslice;
+      heir->cpu_time_budget = rtems_configuration_get_ticks_per_timeslice();
 
 #if !defined( RTEMS_SMP )
     _ISR_Enable( level );
