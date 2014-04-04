@@ -104,7 +104,6 @@ rtems_status_code rtems_libio_set_private_env(void)
 
 void rtems_libio_use_global_env(void)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_user_env_t *env = rtems_current_user_env;
   bool uses_private_env = env != &rtems_global_user_env;
 
