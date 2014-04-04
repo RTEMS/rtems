@@ -25,8 +25,6 @@ void _Thread_Handler_initialization(void)
 {
   uint32_t ticks_per_timeslice =
     rtems_configuration_get_ticks_per_timeslice();
-  uint32_t maximum_extensions =
-    rtems_configuration_get_maximum_extensions();
   rtems_stack_allocate_init_hook stack_allocate_init_hook =
     rtems_configuration_get_stack_allocate_init_hook();
   #if defined(RTEMS_MULTIPROCESSING)
@@ -51,8 +49,6 @@ void _Thread_Handler_initialization(void)
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   _Thread_Allocated_fp      = NULL;
 #endif
-
-  _Thread_Maximum_extensions = maximum_extensions;
 
   _Thread_Ticks_per_timeslice  = ticks_per_timeslice;
 

@@ -155,9 +155,9 @@ bool _Thread_Initialize(
   /*
    *  Allocate the extensions area for this thread
    */
-  if ( _Thread_Maximum_extensions ) {
+  if ( rtems_configuration_get_maximum_extensions() ) {
     extensions_area = _Workspace_Allocate(
-      (_Thread_Maximum_extensions + 1) * sizeof( void * )
+      (rtems_configuration_get_maximum_extensions() + 1) * sizeof( void * )
     );
     if ( !extensions_area )
       goto failed;
@@ -169,12 +169,11 @@ bool _Thread_Initialize(
    * if they are linked to the thread. An extension user may
    * create the extension long after tasks have been created
    * so they cannot rely on the thread create user extension
-   * call.
+   * call.  The object index starts with one, so the first extension context is
+   * unused.
    */
-  if ( the_thread->extensions ) {
-    for ( i = 0; i <= _Thread_Maximum_extensions ; i++ )
-      the_thread->extensions[i] = NULL;
-  }
+  for ( i = 1 ; i <= rtems_configuration_get_maximum_extensions() ; ++i )
+    the_thread->extensions[ i ] = NULL;
 
   /*
    *  General initialization

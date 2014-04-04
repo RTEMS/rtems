@@ -58,13 +58,6 @@ SCORE_EXTERN void *rtems_ada_self;
 SCORE_EXTERN Objects_Information _Thread_Internal_information;
 
 /**
- *  The following holds how many user extensions are in the system.  This
- *  is used to determine how many user extension data areas to allocate
- *  per thread.
- */
-SCORE_EXTERN uint32_t   _Thread_Maximum_extensions;
-
-/**
  *  The following is used to manage the length of a timeslice quantum.
  */
 SCORE_EXTERN uint32_t   _Thread_Ticks_per_timeslice;
