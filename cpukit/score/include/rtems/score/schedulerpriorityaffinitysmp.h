@@ -73,10 +73,14 @@ extern "C" {
  *
  *  This routine allocates @a the_thread->scheduler.
  *
+ *  @param[in] scheduler points to the scheduler specific information.
  *  @param[in] the_thread is the thread the scheduler is allocating
- *             management memory for
+ *             management memory for.
  */
-void * _Scheduler_priority_affinity_SMP_Allocate( Thread_Control *the_thread );
+void * _Scheduler_priority_affinity_SMP_Allocate(
+  Scheduler_Control *scheduler,
+  Thread_Control    *the_thread
+);
 
 /**
  * @brief Get affinity for the priority affinity smp scheduler.
