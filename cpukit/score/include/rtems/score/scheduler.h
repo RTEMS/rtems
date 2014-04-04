@@ -208,14 +208,7 @@ void _Scheduler_default_Start_idle(
   Per_CPU_Control *processor
 );
 
-/*
- * See also PR2174: Memory corruption with EDF scheduler and thread priority
- * queues.
- */
-extern const bool _Scheduler_FIXME_thread_priority_queues_are_broken;
-
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
-
   /**
    * @brief Get affinity for the default scheduler.
    *
@@ -250,6 +243,12 @@ extern const bool _Scheduler_FIXME_thread_priority_queues_are_broken;
     const cpu_set_t *cpuset
   );
 #endif
+
+/*
+ * See also PR2174: Memory corruption with EDF scheduler and thread priority
+ * queues.
+ */
+extern const bool _Scheduler_FIXME_thread_priority_queues_are_broken;
 
 /**@}*/
 
