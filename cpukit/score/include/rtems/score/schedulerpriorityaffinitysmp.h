@@ -125,11 +125,6 @@ typedef struct {
   Scheduler_priority_Per_thread  Priority_sched_info;
 
   /**
-   * Pointer to corresponding Thread Control Block.
-   */
-  Thread_Control *thread;
-
-  /**
    * Structure containing affinity set data and size
    */
   CPU_set_Control Affinity;
