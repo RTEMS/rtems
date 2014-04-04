@@ -21,11 +21,13 @@
 
 #include <rtems/score/basedefs.h>
 
+#ifdef __RTEMS_HAVE_SYS_CPUSET_H__
+
+#include <sys/cpuset.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#ifdef __RTEMS_HAVE_SYS_CPUSET_H__
 
 /**
  *  @defgroup ScoreCpuset
@@ -53,12 +55,13 @@ typedef struct {
   cpu_set_t               *set;
 }   CPU_set_Control;
 
-#endif
-
 /**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-#endif
+
+#endif /* __RTEMS_HAVE_SYS_CPUSET_H__ */
+
+#endif /* _RTEMS_SCORE_CPUSET_H */
 /* end of include file */
