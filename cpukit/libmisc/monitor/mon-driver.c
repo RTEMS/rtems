@@ -63,10 +63,9 @@ rtems_monitor_driver_next(
     rtems_id              *next_id
 )
 {
-    const rtems_configuration_table *c = &Configuration;
     uint32_t   n = rtems_object_id_get_index(*next_id);
 
-    if (n >= c->number_of_device_drivers)
+    if (n >= _IO_Number_of_drivers)
         goto failed;
 
     _Thread_Disable_dispatch();
@@ -79,7 +78,7 @@ rtems_monitor_driver_next(
     canonical_driver->name = rtems_build_name('-', '-', '-', '-');
 
     *next_id += 1;
-    return (const void *) (c->Device_driver_table + n);
+    return (const void *) (&_IO_Driver_address_table[n]);
 
 failed:
     *next_id = RTEMS_OBJECT_ID_FINAL;

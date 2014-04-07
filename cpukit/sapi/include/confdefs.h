@@ -70,7 +70,6 @@ extern "C" {
 #endif
 
 extern rtems_initialization_tasks_table Initialization_tasks[];
-extern rtems_driver_address_table       Device_drivers[];
 #if defined(RTEMS_MULTIPROCESSING)
   extern rtems_multiprocessing_table      Multiprocessing_configuration;
 #endif
@@ -1202,8 +1201,18 @@ const rtems_libio_helper rtems_fs_init_helper =
 
 #ifndef CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE
 
+/**
+ * This specifies the maximum number of device drivers that
+ * can be installed in the system at one time.  It must account
+ * for both the statically and dynamically installed drivers.
+ */
+#ifndef CONFIGURE_MAXIMUM_DRIVERS
+  #define CONFIGURE_MAXIMUM_DRIVERS
+#endif
+
 #ifdef CONFIGURE_INIT
-  rtems_driver_address_table Device_drivers[] = {
+  rtems_driver_address_table
+    _IO_Driver_address_table[ CONFIGURE_MAXIMUM_DRIVERS ] = {
     #ifdef CONFIGURE_BSP_PREREQUISITE_DRIVERS
       CONFIGURE_BSP_PREREQUISITE_DRIVERS,
     #endif
@@ -1254,27 +1263,12 @@ const rtems_libio_helper rtems_fs_init_helper =
       NULL_DRIVER_TABLE_ENTRY
     #endif
   };
+
+  const size_t _IO_Number_of_drivers =
+    RTEMS_ARRAY_SIZE( _IO_Driver_address_table );
 #endif
 
 #endif  /* CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE */
-
-/*
- *  Default the number of drivers per node.  This value may be
- *  overridden by the user.
- */
-
-#define CONFIGURE_NUMBER_OF_DRIVERS \
-  RTEMS_ARRAY_SIZE(Device_drivers)
-
-/**
- * This specifies the maximum number of device drivers that
- * can be installed in the system at one time.  It must account
- * for both the statically and dynamically installed drivers.
- */
-#ifndef CONFIGURE_MAXIMUM_DRIVERS
-  #define CONFIGURE_MAXIMUM_DRIVERS CONFIGURE_NUMBER_OF_DRIVERS
-#endif
-
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
   /*
@@ -2475,9 +2469,6 @@ const rtems_libio_helper rtems_fs_init_helper =
         false,
       #endif
     #endif
-    CONFIGURE_MAXIMUM_DRIVERS,                /* maximum device drivers */
-    CONFIGURE_NUMBER_OF_DRIVERS,              /* static device drivers */
-    Device_drivers,                           /* pointer to driver table */
     CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS,   /* number of static extensions */
     CONFIGURE_INITIAL_EXTENSION_TABLE,        /* pointer to static extensions */
     #if defined(RTEMS_MULTIPROCESSING)

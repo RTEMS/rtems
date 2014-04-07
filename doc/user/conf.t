@@ -3836,39 +3836,6 @@ custom device drivers.
 Note that network device drivers are not configured in the Device Driver Table.
 
 @c
-@c === CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE ===
-@c
-@subsection Specifying Application Defined Device Driver Table
-
-@findex CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE
-
-@table @b
-@item CONSTANT:
-@code{CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE}
-
-@item DATA TYPE:
-List of device driver initializers (@code{rtems_driver_address_table}).
-
-@item RANGE:
-Undefined or array of device drivers.
-
-@item DEFAULT VALUE:
-This is not defined by default, indicating the @code{<rtems/confdefs.h>}
-is providing the device driver table.
-
-@end table
-
-@subheading DESCRIPTION:
-@code{CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE} is defined if the application
-wishes to provide their own Device Driver Table.
-
-The table must be an array of @code{rtems_driver_address_table} entries
-named @code{Device_drivers}.
-
-@subheading NOTES:
-It is expected that there the application would only rarely need to do this.
-
-@c
 @c === CONFIGURE_MAXIMUM_DRIVERS ===
 @c
 @subsection Specifying the Maximum Number of Device Drivers
@@ -4295,6 +4262,41 @@ device driver.
 
 @subheading NOTES:
 This device driver is supported by all BSPs.
+
+@c
+@c === CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE ===
+@c
+@subsection Specifying Application Defined Device Driver Table
+
+@findex CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE}
+
+@item DATA TYPE:
+Boolean feature macro.
+
+@item RANGE:
+Defined or undefined.
+
+@item DEFAULT VALUE:
+This is not defined by default, indicating the @code{<rtems/confdefs.h>}
+is providing the device driver table.
+
+@end table
+
+@subheading DESCRIPTION:
+@code{CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE} is defined if the application
+wishes to provide their own Device Driver Table.
+
+The table must be an array of @code{rtems_driver_address_table} entries named
+@code{_IO_Driver_address_table}.  The application must also provide a const
+variable @code{_IO_Number_of_drivers} of type @code{size_t} indicating the
+number of entries in the @code{_IO_Driver_address_table}.
+
+@subheading NOTES:
+It is expected that there the application would only rarely need to do this.
 
 @c
 @c === Multiprocessing Configuration ===

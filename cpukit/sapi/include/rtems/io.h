@@ -250,18 +250,9 @@ rtems_status_code rtems_io_lookup_name(
     rtems_driver_name_t  *device_info
 ) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 
-SAPI_IO_EXTERN uint32_t _IO_Number_of_drivers;
+extern const size_t _IO_Number_of_drivers;
 
-SAPI_IO_EXTERN rtems_driver_address_table *_IO_Driver_address_table;
-
-/**
- * @brief Initialization of device drivers.
- *
- * NOTE: The IO manager has been extended to support runtime driver
- * registration. The driver table is now allocated in the
- * workspace.
- */
-void _IO_Manager_initialization( void );
+extern rtems_driver_address_table _IO_Driver_address_table[];
 
 /**
  * @brief Initialization of all device drivers.

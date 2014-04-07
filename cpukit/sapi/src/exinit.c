@@ -32,7 +32,6 @@
 #include <rtems/debug.h>
 #include <rtems/extensionimpl.h>
 #include <rtems/init.h>
-#include <rtems/io.h>
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/apiext.h>
@@ -141,8 +140,6 @@ void rtems_initialize_data_structures(void)
   _RTEMS_API_Initialize();
 
   _Extension_Manager_initialization();
-
-  _IO_Manager_initialization();
 
   _POSIX_API_Initialize();
 

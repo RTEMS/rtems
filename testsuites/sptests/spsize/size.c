@@ -290,9 +290,6 @@ uninitialized =
 
 /*intr.h*/      0                                         +
 
-/*io.h*/        (sizeof _IO_Number_of_drivers)            +
-                (sizeof _IO_Driver_address_table)         +
-
 /*isr.h*/       (sizeof _ISR_Nest_level)                  +
 #if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
                 (sizeof _ISR_Vector_table)                +
