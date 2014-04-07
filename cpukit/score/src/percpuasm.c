@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -20,6 +20,37 @@
 
 #define _RTEMS_PERCPU_DEFINE_OFFSETS
 #include <rtems/score/percpu.h>
+
+/*
+ * In case a CPU port needs another alignment, then add this here and make sure
+ * it is a power of two greater than or equal to two.
+ */
+RTEMS_STATIC_ASSERT(
+  CPU_ALIGNMENT == 2
+    || CPU_ALIGNMENT == 4
+    || CPU_ALIGNMENT == 8
+    || CPU_ALIGNMENT == 16
+    || CPU_ALIGNMENT == 32,
+  CPU_ALIGNMENT
+);
+
+/*
+ * In case a CPU port needs another heap alignment, then add this here and make
+ * sure it is a power of two greater than or equal to two.
+ */
+RTEMS_STATIC_ASSERT(
+  CPU_HEAP_ALIGNMENT == 2
+    || CPU_HEAP_ALIGNMENT == 4
+    || CPU_HEAP_ALIGNMENT == 8
+    || CPU_HEAP_ALIGNMENT == 16
+    || CPU_HEAP_ALIGNMENT == 32,
+  CPU_HEAP_ALIGNMENT_0
+);
+
+RTEMS_STATIC_ASSERT(
+  CPU_HEAP_ALIGNMENT >= CPU_ALIGNMENT,
+  CPU_HEAP_ALIGNMENT_1
+);
 
 RTEMS_STATIC_ASSERT(
   sizeof(void *) == CPU_SIZEOF_POINTER,

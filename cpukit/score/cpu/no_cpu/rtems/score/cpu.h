@@ -733,7 +733,10 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 /**
  * CPU's worst alignment requirement for data types on a byte boundary.  This
- * alignment does not take into account the requirements for the stack.
+ * alignment does not take into account the requirements for the stack.  It
+ * must be a power of two greater than or equal to two.  The power of two
+ * requirement makes it possible to align values easily using simple bit
+ * operations.
  *
  * Port Specific Information:
  *
@@ -749,12 +752,11 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  * @ref CPU_ALIGNMENT.  If the @ref CPU_ALIGNMENT is strict enough for
  * the heap, then this should be set to @ref CPU_ALIGNMENT.
  *
- * NOTE:  This does not have to be a power of 2 although it should be
- *        a multiple of 2 greater than or equal to 2.  The requirement
- *        to be a multiple of 2 is because the heap uses the least
- *        significant field of the front and back flags to indicate
- *        that a block is in use or free.  So you do not want any odd
- *        length blocks really putting length data in that bit.
+ * NOTE:  It must be a power of two greater than or equal to two.  The
+ *        requirement to be a multiple of two is because the heap uses the
+ *        least significant field of the front and back flags to indicate that
+ *        a block is in use or free.  So you do not want any odd length blocks
+ *        really putting length data in that bit.
  *
  *        On byte oriented architectures, @ref CPU_HEAP_ALIGNMENT normally will
  *        have to be greater or equal to than @ref CPU_ALIGNMENT to ensure that
