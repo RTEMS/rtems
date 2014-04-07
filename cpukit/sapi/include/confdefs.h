@@ -2071,6 +2071,14 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_EXTRA_TASK_STACKS 0
 #endif
 
+/**
+ * This macro provides a summation of the various POSIX thread requirements.
+ */
+#define CONFIGURE_POSIX_THREADS \
+   (CONFIGURE_MAXIMUM_POSIX_THREADS + \
+     CONFIGURE_MAXIMUM_ADA_TASKS + \
+     CONFIGURE_MAXIMUM_GOROUTINES)
+
 /*
  *  Calculate the RAM size based on the maximum number of objects configured.
  */
@@ -2212,15 +2220,6 @@ const rtems_libio_helper rtems_fs_init_helper =
   )
 
 /**
- * This macro provides a summation of the various task and thread
- * requirements.
- */
-#define CONFIGURE_TOTAL_TASKS_AND_THREADS \
-   (CONFIGURE_TASKS + \
-    CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS + \
-    CONFIGURE_MAXIMUM_GOROUTINES)
-
-/**
  * This macro reserves the memory required by the statically configured
  * user extensions.
  */
@@ -2266,7 +2265,9 @@ const rtems_libio_helper rtems_fs_init_helper =
 (( \
    CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD + \
    CONFIGURE_MEMORY_FOR_TASKS( \
-     CONFIGURE_TOTAL_TASKS_AND_THREADS, CONFIGURE_TOTAL_TASKS_AND_THREADS) + \
+     CONFIGURE_TASKS, CONFIGURE_TASKS) + \
+   CONFIGURE_MEMORY_FOR_TASKS( \
+     CONFIGURE_POSIX_THREADS, CONFIGURE_POSIX_THREADS) + \
    CONFIGURE_MEMORY_FOR_CLASSIC + \
    CONFIGURE_MEMORY_FOR_POSIX_KEYS( \
       CONFIGURE_POSIX_KEYS, \
@@ -2393,8 +2394,7 @@ const rtems_libio_helper rtems_fs_init_helper =
      * This is the POSIX API Configuration Table.
      */
     posix_api_configuration_table Configuration_POSIX_API = {
-      CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS +
-        CONFIGURE_MAXIMUM_GOROUTINES,
+      CONFIGURE_POSIX_THREADS,
       CONFIGURE_MAXIMUM_POSIX_MUTEXES + CONFIGURE_GNAT_MUTEXES +
         CONFIGURE_MAXIMUM_ADA_TASKS + CONFIGURE_MAXIMUM_FAKE_ADA_TASKS +
         CONFIGURE_GO_INIT_MUTEXES + CONFIGURE_MAXIMUM_GO_CHANNELS,
