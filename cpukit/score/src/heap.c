@@ -228,7 +228,8 @@ uintptr_t _Heap_Initialize(
       return 0;
     }
   }
-  min_block_size = _Heap_Align_up( sizeof( Heap_Block ), page_size );
+
+  min_block_size = _Heap_Min_block_size( page_size );
 
   area_ok = _Heap_Get_first_and_last_block(
     heap_area_begin,

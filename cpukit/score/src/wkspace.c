@@ -67,11 +67,18 @@ void _Workspace_Handler_initialization(
   size_t i;
 
   if ( tls_size > 0 ) {
-    uintptr_t tls_alignment = (uintptr_t) _TLS_Alignment;
-    uintptr_t tls_alloc = _TLS_Get_allocation_size( tls_size, tls_alignment );
+    uintptr_t tls_align = _TLS_Heap_align_up( (uintptr_t) _TLS_Alignment );
+    uintptr_t tls_alloc = _TLS_Get_allocation_size( tls_size, tls_align );
+
+    /*
+     * Memory allocated with an alignment constraint is allocated from the end
+     * of a free block.  The last allocation may need one free block of minimum
+     * size.
+     */
+    remaining += _Heap_Min_block_size( page_size );
 
     remaining += _Get_maximum_thread_count()
-      * _Heap_Size_with_overhead( page_size, tls_alloc, tls_alignment );
+      * _Heap_Size_with_overhead( page_size, tls_alloc, tls_align );
   }
 
   for (i = 0; i < area_count; ++i) {

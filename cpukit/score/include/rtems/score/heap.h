@@ -449,6 +449,11 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Align_up(
   }
 }
 
+RTEMS_INLINE_ROUTINE uintptr_t _Heap_Min_block_size( uintptr_t page_size )
+{
+  return _Heap_Align_up( sizeof( Heap_Block ), page_size );
+}
+
 /**
  * @brief Returns the worst case overhead to manage a memory area.
  */
