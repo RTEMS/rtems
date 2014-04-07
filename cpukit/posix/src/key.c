@@ -112,19 +112,23 @@ static bool _POSIX_Keys_Keypool_extend( Freechain_Control *keypool )
 
 static void _POSIX_Keys_Initialize_keypool( void )
 {
-  Freechain_Control *keypool = &_POSIX_Keys_Keypool;
   size_t initial_count = _POSIX_Keys_Get_initial_keypool_size();
   size_t size = initial_count * sizeof( POSIX_Keys_Key_value_pair );
-  POSIX_Keys_Key_value_pair *nodes = _Workspace_Allocate_or_fatal_error( size );
 
-  _Freechain_Initialize( keypool, _POSIX_Keys_Keypool_extend );
+  if ( size > 0 ) {
+    Freechain_Control *keypool = &_POSIX_Keys_Keypool;
+    POSIX_Keys_Key_value_pair *nodes =
+      _Workspace_Allocate_or_fatal_error( size );
 
-  _Chain_Initialize(
-    &keypool->Freechain,
-    nodes,
-    initial_count,
-    sizeof( *nodes )
-  );
+    _Freechain_Initialize( keypool, _POSIX_Keys_Keypool_extend );
+
+    _Chain_Initialize(
+      &keypool->Freechain,
+      nodes,
+      initial_count,
+      sizeof( *nodes )
+    );
+  }
 }
 
 /**
