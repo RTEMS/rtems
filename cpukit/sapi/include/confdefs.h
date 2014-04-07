@@ -1012,6 +1012,9 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #define _Configure_Zero_or_One(_number) ((_number) ? 1 : 0)
 
+#define _Configure_Align_up(_val, _align) \
+  (((_val) + (_align) - 1) & ~((_align) - 1))
+
 /**
  * This is a helper macro used in calculations in this file.  It is used
  * to noted when an element is allocated from the RTEMS Workspace and adds
@@ -1020,7 +1023,7 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #define _Configure_From_workspace(_size) \
    (ssize_t) (_Configure_Zero_or_One(_size) * \
-     ((_size) + HEAP_BLOCK_HEADER_SIZE + CPU_HEAP_ALIGNMENT - 1))
+     _Configure_Align_up((_size) + HEAP_BLOCK_HEADER_SIZE, CPU_HEAP_ALIGNMENT))
 
 /**
  * This is a helper macro used in stack space calculations in this file.  It
@@ -1049,13 +1052,14 @@ const rtems_libio_helper rtems_fs_init_helper =
  * NOTE: It does NOT attempt to address the more complex case of unlimited
  *       objects.
  */
-#define _Configure_Object_RAM(_number, _size) \
-  ( _Configure_From_workspace(_Configure_Max_Objects(_number) * (_size)) + \
+#define _Configure_Object_RAM(_number, _size) ( \
+    _Configure_From_workspace(_Configure_Max_Objects(_number) * (_size)) + \
     _Configure_From_workspace( \
-      (_Configure_Zero_or_One(_number) * \
-       (_Configure_Max_Objects(_number) + 1) * sizeof(Objects_Control *)) + \
-      (_Configure_Zero_or_One(_number) * \
-       (sizeof(void *) + sizeof(uint32_t) + sizeof(Objects_Name *))) \
+      _Configure_Zero_or_One(_number) * ( \
+        (_Configure_Max_Objects(_number) + 1) * sizeof(Objects_Control *) + \
+        _Configure_Align_up(sizeof(void *), CPU_ALIGNMENT) + \
+        _Configure_Align_up(sizeof(uint32_t), CPU_ALIGNMENT) \
+      ) \
     ) \
   )
 
