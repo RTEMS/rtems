@@ -36,13 +36,20 @@ static void test_watchdog_routine( Objects_Id id, void *arg )
 
 static void test_watchdog_static_init( void )
 {
-  Objects_Id id = 0x12345678;
-  void *arg = (void *) 0xdeadbeef;
-  Watchdog_Control a = WATCHDOG_INITIALIZER( test_watchdog_routine, id, arg );
+  static Watchdog_Control a = WATCHDOG_INITIALIZER(
+    test_watchdog_routine,
+    0x12345678,
+    (void *) 0xdeadbeef
+  );
   Watchdog_Control b;
 
   memset( &b, 0, sizeof( b ) );
-  _Watchdog_Initialize( &b, test_watchdog_routine, id, arg );
+  _Watchdog_Initialize(
+    &b,
+    test_watchdog_routine,
+    0x12345678,
+    (void *) 0xdeadbeef
+  );
 
   rtems_test_assert( memcmp( &a, &b, sizeof( a ) ) == 0 );
 }
