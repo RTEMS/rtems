@@ -24,6 +24,7 @@
 #endif
 
 #include <rtems/rtems/support.h>
+#include <rtems/score/apimutex.h>
 #include <rtems/score/heapimpl.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/wkspace.h>
@@ -35,9 +36,9 @@ void *rtems_workspace_greedy_allocate(
 {
   void *opaque;
 
-  _Thread_Disable_dispatch();
+  _RTEMS_Lock_allocator();
   opaque = _Heap_Greedy_allocate( &_Workspace_Area, block_sizes, block_count );
-  _Thread_Enable_dispatch();
+  _RTEMS_Unlock_allocator();
 
   return opaque;
 }
@@ -48,19 +49,19 @@ void *rtems_workspace_greedy_allocate_all_except_largest(
 {
   void *opaque;
 
-  _Thread_Disable_dispatch();
+  _RTEMS_Lock_allocator();
   opaque = _Heap_Greedy_allocate_all_except_largest(
     &_Workspace_Area,
     allocatable_size
   );
-  _Thread_Enable_dispatch();
+  _RTEMS_Unlock_allocator();
 
   return opaque;
 }
 
 void rtems_workspace_greedy_free( void *opaque )
 {
-  _Thread_Disable_dispatch();
+  _RTEMS_Lock_allocator();
   _Heap_Greedy_free( &_Workspace_Area, opaque );
-  _Thread_Enable_dispatch();
+  _RTEMS_Unlock_allocator();
 }
