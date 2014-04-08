@@ -92,6 +92,7 @@ librtems_a_SOURCES += src/rtemsobjectgetclassicname.c
 librtems_a_SOURCES += src/tasks.c
 librtems_a_SOURCES += src/taskcreate.c
 librtems_a_SOURCES += src/taskdelete.c
+librtems_a_SOURCES += src/taskgetaffinity.c
 librtems_a_SOURCES += src/taskgetnote.c
 librtems_a_SOURCES += src/taskident.c
 librtems_a_SOURCES += src/taskinitusers.c
@@ -100,6 +101,7 @@ librtems_a_SOURCES += src/taskmode.c
 librtems_a_SOURCES += src/taskrestart.c
 librtems_a_SOURCES += src/taskresume.c
 librtems_a_SOURCES += src/taskself.c
+librtems_a_SOURCES += src/tasksetaffinity.c
 librtems_a_SOURCES += src/tasksetnote.c
 librtems_a_SOURCES += src/tasksetpriority.c
 librtems_a_SOURCES += src/taskstart.c
@@ -273,13 +275,6 @@ librtems_a_SOURCES += src/semmp.c
 librtems_a_SOURCES += src/signalmp.c
 librtems_a_SOURCES += src/taskmp.c
 endif
-
-## SMP Files
-if HAS_SMP
-librtems_a_SOURCES += src/tasksetaffinity.c
-librtems_a_SOURCES += src/taskgetaffinity.c
-endif
-
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

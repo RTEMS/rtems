@@ -37,7 +37,8 @@ if HAS_SMP
 else
 SUBDIRS += sp29
 endif
- SUBDIRS += spprofiling01
+SUBDIRS += spscheduler01
+SUBDIRS += spprofiling01
 SUBDIRS += spfatal28
 SUBDIRS += spthreadlife01
 SUBDIRS += spprofiling01

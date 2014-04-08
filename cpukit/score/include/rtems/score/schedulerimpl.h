@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_SCHEDULERIMPL_H
 
 #include <rtems/score/scheduler.h>
+#include <rtems/score/cpusetimpl.h>
 #include <rtems/score/threadimpl.h>
 
 #ifdef __cplusplus
@@ -257,49 +258,81 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Start_idle(
   ( *scheduler->Operations.start_idle )( scheduler, the_thread, cpu );
 }
 
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
-  /**
-   * @brief Obtain the processor affinity for a thread.
-   *
-   * @param[in,out] thread The thread.
-   * @parma[out] cpuset The processor affinity for this thread
-   */
-  RTEMS_INLINE_ROUTINE int _Scheduler_Get_affinity(
-    const Scheduler_Control *scheduler,
-    Thread_Control          *the_thread,
-    size_t                   cpusetsize,
-    cpu_set_t               *cpuset
-  )
-  {
-    return ( *scheduler->Operations.get_affinity )(
-      scheduler,
-      the_thread,
-      cpusetsize,
-      cpuset
-    );
+#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
+
+RTEMS_INLINE_ROUTINE void _Scheduler_Get_processor_set(
+  const Scheduler_Control *scheduler,
+  size_t                   cpusetsize,
+  cpu_set_t               *cpuset
+)
+{
+  uint32_t cpu_count = _SMP_Get_processor_count();
+  uint32_t cpu_index;
+
+  (void) scheduler;
+
+  CPU_ZERO_S( cpusetsize, cpuset );
+
+  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+    CPU_SET_S( (int) cpu_index, cpusetsize, cpuset );
+  }
+}
+
+RTEMS_INLINE_ROUTINE bool _Scheduler_default_Get_affinity_body(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  size_t                   cpusetsize,
+  cpu_set_t               *cpuset
+)
+{
+  (void) the_thread;
+
+  _Scheduler_Get_processor_set( scheduler, cpusetsize, cpuset );
+
+  return true;
+}
+
+bool _Scheduler_Get_affinity(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  size_t                   cpusetsize,
+  cpu_set_t               *cpuset
+);
+
+RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  size_t                   cpusetsize,
+  const cpu_set_t         *cpuset
+)
+{
+  size_t   cpu_max   = _CPU_set_Maximum_CPU_count( cpusetsize );
+  uint32_t cpu_count = _SMP_Get_processor_count();
+  uint32_t cpu_index;
+  bool     ok = true;
+
+  (void) scheduler;
+  (void) the_thread;
+
+  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+    ok = ok && CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset );
   }
 
-  /**
-   * @brief Set the processor affinity for a thread.
-   *
-   * @param[in,out] thread The thread.
-   * @parma[in] cpuset The processor affinity for this thread
-   */
-  RTEMS_INLINE_ROUTINE int _Scheduler_Set_affinity(
-    const Scheduler_Control *scheduler,
-    Thread_Control          *the_thread,
-    size_t                   cpusetsize,
-    const cpu_set_t         *cpuset
-  )
-  {
-    return ( *scheduler->Operations.set_affinity )(
-      scheduler,
-      the_thread,
-      cpusetsize,
-      cpuset
-    );
+  for ( ; cpu_index < cpu_max ; ++cpu_index ) {
+    ok = ok && !CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset );
   }
-#endif
+
+  return ok;
+}
+
+bool _Scheduler_Set_affinity(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  size_t                   cpusetsize,
+  const cpu_set_t         *cpuset
+);
+
+#endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
 
 RTEMS_INLINE_ROUTINE void _Scheduler_Update_heir(
   Thread_Control *heir,

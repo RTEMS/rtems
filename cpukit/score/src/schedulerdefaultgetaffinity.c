@@ -20,7 +20,6 @@
 #endif
 
 #include <rtems/score/schedulerimpl.h>
-#include <rtems/score/cpusetimpl.h>
 
 bool _Scheduler_default_Get_affinity(
   const Scheduler_Control *scheduler,
@@ -29,17 +28,10 @@ bool _Scheduler_default_Get_affinity(
   cpu_set_t               *cpuset
 )
 {
-  const CPU_set_Control *ctl;
-
-  (void) scheduler;
-  (void) thread;
-
-  ctl = _CPU_set_Default();
-  if ( cpusetsize != ctl->setsize ) {
-    return false;
-  }
-
-  CPU_COPY( cpuset, ctl->set );
-
-  return true;
+  return _Scheduler_default_Get_affinity_body(
+    scheduler,
+    thread,
+    cpusetsize,
+    cpuset
+  );
 }

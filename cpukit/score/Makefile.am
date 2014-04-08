@@ -195,6 +195,8 @@ libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
 ## SCHEDULER_C_FILES
 libscore_a_SOURCES += src/log2table.c
 libscore_a_SOURCES += src/scheduler.c
+libscore_a_SOURCES += src/schedulergetaffinity.c
+libscore_a_SOURCES += src/schedulersetaffinity.c
 libscore_a_SOURCES += src/schedulerdefaultallocatefree.c
 libscore_a_SOURCES += src/schedulerdefaultreleasejob.c
 libscore_a_SOURCES += src/schedulerdefaultstartidle.c

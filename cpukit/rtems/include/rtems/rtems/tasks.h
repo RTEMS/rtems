@@ -494,22 +494,23 @@ rtems_status_code rtems_task_variable_delete(
 );
 #endif
 
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
+#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
 /**
- *  @brief RTEMS Get Task Affinity
+ * @brief Gets the processor affinity set of a task.
  *
- *  This directive returns the cpuset for the
- *  given task.  The cpuset size must be the
- *  same size as the task affinity set size.
+ * @param[in] id Identifier of the task.  Use @ref RTEMS_SELF to select the
+ * executing task.
+ * @param[in] cpusetsize Size of the specified affinity set buffer in
+ * bytes.  This value must be positive.
+ * @param[out] cpuset The current processor affinity set of the task.  A set
+ * bit in the affinity set means that the task can execute on this processor
+ * and a cleared bit means the opposite.
  *
- * @param[in] id is the thread to extract
- * @param[in] cpusetsize is the size of the cpuset
- * @param[out] cpuset is the tasks affinity cpuset
- *
- * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
- * @retval RTEMS_INVALID_ADDRESS if cpuset is NULL
- * @retval RTEMS_INVALID_NUMBER if cpusetsize is incorrect
- * @retval RTEMS_INVALID_ID if id not valid
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ADDRESS The @a cpuset parameter is @c NULL.
+ * @retval RTEMS_INVALID_ID Invalid task identifier.
+ * @retval RTEMS_INVALID_NUMBER The affinity set buffer is too small for the
+ * current processor affinity set of the task.
  */
 rtems_status_code rtems_task_get_affinity(
   rtems_id             id,
@@ -518,19 +519,20 @@ rtems_status_code rtems_task_get_affinity(
 );
 
 /**
- *  @brief RTEMS Set Task Affinity
+ * @brief Sets the processor affinity set of a task.
  *
- *  This directive sets the given tasks
- *  affinity cpuset.
+ * @param[in] id Identifier of the task.  Use @ref RTEMS_SELF to select the
+ * executing task.
+ * @param[in] cpusetsize Size of the specified affinity set buffer in
+ * bytes.  This value must be positive.
+ * @param[in] cpuset The new processor affinity set for the task.  A set bit in
+ * the affinity set means that the task can execute on this processor and a
+ * cleared bit means the opposite.
  *
- * @param[in] id is the thread to extract
- * @param[in] cpusetsize is the size of the cpuset
- * @param[in] cpuset is affinity set to assign to the task
- *
- * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
- * @retval RTEMS_INVALID_ADDRESS if cpuset is NULL
- * @retval RTEMS_INVALID_NUMBER if cpuset or cpusetsize is incorrect
- * @retval RTEMS_INVALID_ID if id not valid
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ADDRESS The @a cpuset parameter is @c NULL.
+ * @retval RTEMS_INVALID_ID Invalid task identifier.
+ * @retval RTEMS_INVALID_NUMBER Invalid processor affinity set.
  */
 rtems_status_code rtems_task_set_affinity(
   rtems_id             id,

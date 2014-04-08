@@ -20,7 +20,6 @@
 #endif
 
 #include <rtems/score/schedulerimpl.h>
-#include <rtems/score/cpusetimpl.h>
 
 bool _Scheduler_default_Set_affinity(
   const Scheduler_Control *scheduler,
@@ -29,8 +28,10 @@ bool _Scheduler_default_Set_affinity(
   const cpu_set_t         *cpuset
 )
 {
-  (void) scheduler;
-  (void) thread;
-
-  return _CPU_set_Is_valid( cpuset, cpusetsize );
+  return _Scheduler_default_Set_affinity_body(
+    scheduler,
+    thread,
+    cpusetsize,
+    cpuset
+  );
 }

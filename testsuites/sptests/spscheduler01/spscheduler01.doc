@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spscheduler01
+
+directives:
+
+  - rtems_task_get_affinity()
+  - rtems_task_set_affinity()
+
+concepts:
+
+  - Ensure that the task set/get affinity functions work on non-SMP
+    configurations.

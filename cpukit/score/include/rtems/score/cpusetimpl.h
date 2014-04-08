@@ -20,6 +20,9 @@
 #define _RTEMS_SCORE_CPUSETIMPL_H
 
 #include <rtems/score/cpuset.h>
+#include <rtems/score/smp.h>
+
+#include <limits.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,6 +60,21 @@ void _CPU_set_Show_default( const char *description );
  * this system.
  */
 const CPU_set_Control *_CPU_set_Default(void);
+
+RTEMS_INLINE_ROUTINE size_t _CPU_set_Maximum_CPU_count(
+  size_t cpusetsize
+)
+{
+  return cpusetsize * CHAR_BIT;
+}
+
+RTEMS_INLINE_ROUTINE bool _CPU_set_Is_large_enough(
+  size_t cpusetsize
+)
+{
+  return _CPU_set_Maximum_CPU_count( cpusetsize )
+    >= _SMP_Get_processor_count();
+}
 
 #endif
 
