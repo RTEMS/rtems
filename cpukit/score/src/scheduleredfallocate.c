@@ -24,24 +24,18 @@
 #include <rtems/score/scheduleredf.h>
 #include <rtems/score/wkspace.h>
 
-void *_Scheduler_EDF_Allocate(
+bool _Scheduler_EDF_Allocate(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
 {
-  void *sched;
-  Scheduler_EDF_Per_thread *schinfo;
+  Scheduler_EDF_Per_thread *schinfo = the_thread->scheduler_info;
 
   (void) scheduler;
 
-  sched = _Workspace_Allocate( sizeof(Scheduler_EDF_Per_thread) );
+  schinfo = (Scheduler_EDF_Per_thread *)(the_thread->scheduler_info);
+  schinfo->thread = the_thread;
+  schinfo->queue_state = SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN;
 
-  if ( sched ) {
-    the_thread->scheduler_info = sched;
-    schinfo = (Scheduler_EDF_Per_thread *)(the_thread->scheduler_info);
-    schinfo->thread = the_thread;
-    schinfo->queue_state = SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN;
-  }
-
-  return sched;
+  return true;
 }

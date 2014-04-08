@@ -53,7 +53,7 @@ extern "C" {
     _Scheduler_EDF_Block,            /* block entry point */ \
     _Scheduler_CBS_Unblock,          /* unblock entry point */ \
     _Scheduler_CBS_Allocate,         /* allocate entry point */ \
-    _Scheduler_EDF_Free,             /* free entry point */ \
+    _Scheduler_default_Free,         /* free entry point */ \
     _Scheduler_EDF_Update,           /* update entry point */ \
     _Scheduler_EDF_Enqueue,          /* enqueue entry point */ \
     _Scheduler_EDF_Enqueue_first,    /* enqueue_first entry point */ \
@@ -344,7 +344,7 @@ void _Scheduler_CBS_Budget_callout(
  *  @param[in] the_thread is the thread the scheduler is allocating
  *             management memory for.
  */
-void *_Scheduler_CBS_Allocate(
+bool _Scheduler_CBS_Allocate(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );

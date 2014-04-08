@@ -64,8 +64,7 @@ void _Thread_Handler_initialization(void)
     OBJECTS_INTERNAL_API,
     OBJECTS_INTERNAL_THREADS,
     _Thread_Get_maximum_internal_threads(),
-    sizeof( Thread_Control ),
-                                /* size of this object's control block */
+    _Thread_Control_size,       /* size of this object's control block */
     false,                      /* true if names for this object are strings */
     8                           /* maximum length of each object's name */
     #if defined(RTEMS_MULTIPROCESSING)

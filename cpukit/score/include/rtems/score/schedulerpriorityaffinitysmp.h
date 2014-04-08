@@ -55,7 +55,7 @@ extern "C" {
     _Scheduler_priority_SMP_Block, \
     _Scheduler_priority_SMP_Enqueue_fifo, \
     _Scheduler_priority_affinity_SMP_Allocate, \
-    _Scheduler_priority_Free, \
+    _Scheduler_default_Free, \
     _Scheduler_priority_SMP_Update, \
     _Scheduler_priority_SMP_Enqueue_fifo, \
     _Scheduler_priority_SMP_Enqueue_lifo, \
@@ -77,7 +77,7 @@ extern "C" {
  *  @param[in] the_thread is the thread the scheduler is allocating
  *             management memory for.
  */
-void * _Scheduler_priority_affinity_SMP_Allocate(
+bool _Scheduler_priority_affinity_SMP_Allocate(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );

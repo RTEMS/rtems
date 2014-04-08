@@ -63,8 +63,8 @@ typedef struct {
     _Scheduler_priority_SMP_Yield, \
     _Scheduler_priority_SMP_Block, \
     _Scheduler_priority_SMP_Enqueue_fifo, \
-    _Scheduler_priority_Allocate, \
-    _Scheduler_priority_Free, \
+    _Scheduler_default_Allocate, \
+    _Scheduler_default_Free, \
     _Scheduler_priority_SMP_Update, \
     _Scheduler_priority_SMP_Enqueue_fifo, \
     _Scheduler_priority_SMP_Enqueue_lifo, \

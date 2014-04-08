@@ -52,8 +52,8 @@ extern "C" {
     _Scheduler_priority_Yield,            /* yield entry point */ \
     _Scheduler_priority_Block,            /* block entry point */ \
     _Scheduler_priority_Unblock,          /* unblock entry point */ \
-    _Scheduler_priority_Allocate,         /* allocate entry point */ \
-    _Scheduler_priority_Free,             /* free entry point */ \
+    _Scheduler_default_Allocate,         /* allocate entry point */ \
+    _Scheduler_default_Free,             /* free entry point */ \
     _Scheduler_priority_Update,           /* update entry point */ \
     _Scheduler_priority_Enqueue,          /* enqueue entry point */ \
     _Scheduler_priority_Enqueue_first,    /* enqueue_first entry point */ \
@@ -121,32 +121,6 @@ void _Scheduler_priority_Block(
  *  by invoking the_scheduler->ready_queue->operations->first().
  */
 void _Scheduler_priority_Schedule(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-);
-
-/**
- *  @brief Allocates @a the_thread->scheduler.
- *
- *  This routine allocates @a the_thread->scheduler.
- *
- *  @param[in] the_thread is the thread the scheduler is allocating
- *             management memory for
- */
-void * _Scheduler_priority_Allocate(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-);
-
-/**
- *  @brief Frees @a the_thread->scheduler.
- *
- *  This routine frees @a the_thread->scheduler.
- *
- *  @param[in] the_thread is the thread whose scheduler specific information
- *             will be deallocated.
- */
-void _Scheduler_priority_Free(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );

@@ -31,20 +31,18 @@ _Scheduler_priority_affinity_Get_scheduler_info( Thread_Control *thread )
   return ( Scheduler_priority_affinity_SMP_Per_thread * ) thread->scheduler_info;
 }
 
-void * _Scheduler_priority_affinity_SMP_Allocate(
+bool _Scheduler_priority_affinity_SMP_Allocate(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
 {
   Scheduler_priority_affinity_SMP_Per_thread *info =
-    _Workspace_Allocate( sizeof( *info ) );
+    the_thread->scheduler_info;
 
   info->Affinity = *_CPU_set_Default();
   info->Affinity.set = &info->Affinity.preallocated;
- 
-  the_thread->scheduler_info = info;
 
-  return info;
+  return true;
 }
 
 bool _Scheduler_priority_affinity_SMP_Get_affinity(

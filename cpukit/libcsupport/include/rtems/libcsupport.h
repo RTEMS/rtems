@@ -85,11 +85,6 @@ bool newlib_create_hook(
 
 #define __RTEMS_NEWLIB_BEGIN 0
 
-void newlib_delete_hook(
-  rtems_tcb *current_task,
-  rtems_tcb *deleted_task
-);
-
 void newlib_terminate_hook(
   rtems_tcb *current_task
 );
@@ -99,7 +94,7 @@ void newlib_terminate_hook(
   newlib_create_hook,     /* rtems_task_create  */ \
   0,                      /* rtems_task_start   */ \
   0,                      /* rtems_task_restart */ \
-  newlib_delete_hook,     /* rtems_task_delete  */ \
+  0,                      /* rtems_task_delete  */ \
   0,                      /* task_switch  */ \
   __RTEMS_NEWLIB_BEGIN,   /* task_begin   */ \
   0,                      /* task_exitted */ \

@@ -91,8 +91,6 @@ static void _Thread_Free( Thread_Control *the_thread )
    */
   _Thread_Stack_Free( the_thread );
 
-  _Workspace_Free( the_thread->extensions );
-
   _Workspace_Free( the_thread->Start.tls_area );
 
   _Objects_Free(

@@ -574,7 +574,7 @@ typedef struct {
    *
    *  @note MUST BE LAST ENTRY.
    */
-  uint32_t                 Notepads[ RTEMS_NUMBER_NOTEPADS ];
+  uint32_t                 Notepads[ RTEMS_ZERO_LENGTH_ARRAY ];
 }  RTEMS_API_Control;
 
 /**

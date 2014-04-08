@@ -67,7 +67,7 @@ typedef struct {
   void ( *unblock )( const Scheduler_Control *, Thread_Control * );
 
   /** allocates the scheduler field of the given thread */
-  void * ( *allocate )( const Scheduler_Control *, Thread_Control * );
+  bool ( *allocate )( const Scheduler_Control *, Thread_Control * );
 
   /** frees the scheduler field of the given thread */
   void ( *free )( const Scheduler_Control *, Thread_Control * );
@@ -199,9 +199,9 @@ extern const Scheduler_Control _Scheduler_Table[];
  * @param[in] scheduler Unused.
  * @param[in] the_thread Unused.
  *
- * @return An arbitrary non-NULL value.
+ * @retval true Always.
  */
-void *_Scheduler_default_Allocate(
+bool _Scheduler_default_Allocate(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );

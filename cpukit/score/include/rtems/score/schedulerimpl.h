@@ -124,7 +124,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock(
  *
  * This routine allocates @a the_thread->scheduler
  */
-RTEMS_INLINE_ROUTINE void* _Scheduler_Allocate(
+RTEMS_INLINE_ROUTINE bool _Scheduler_Allocate(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )

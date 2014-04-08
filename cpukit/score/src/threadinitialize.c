@@ -42,15 +42,15 @@ bool _Thread_Initialize(
   Objects_Name                          name
 )
 {
-  size_t     actual_stack_size = 0;
-  void      *stack = NULL;
+  size_t                   actual_stack_size = 0;
+  void                    *stack = NULL;
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-    void    *fp_area;
+    void                  *fp_area = NULL;
   #endif
-  void      *sched = NULL;
-  void      *extensions_area;
-  bool       extension_status;
-  int        i;
+  bool                     extension_status;
+  size_t                   i;
+  bool                     scheduler_allocated = false;
+  const Scheduler_Control *scheduler;
 
   /*
    * Do not use _TLS_Size here since this will lead GCC to assume that this
@@ -64,6 +64,13 @@ bool _Thread_Initialize(
   }
 #endif
 
+  for ( i = 0 ; i < _Thread_Control_add_on_count ; ++i ) {
+    const Thread_Control_add_on *add_on = &_Thread_Control_add_ons[ i ];
+
+    *(void **) ( (char *) the_thread + add_on->destination_offset ) =
+      (char *) the_thread + add_on->source_offset;
+  }
+
   /*
    *  Initialize the Ada self pointer
    */
@@ -71,19 +78,7 @@ bool _Thread_Initialize(
     the_thread->rtems_ada_self = NULL;
   #endif
 
-  /*
-   *  Zero out all the allocated memory fields
-   */
-  for ( i=0 ; i <= THREAD_API_LAST ; i++ )
-    the_thread->API_Extensions[i] = NULL;
-
-  extensions_area = NULL;
-  the_thread->libc_reent = NULL;
   the_thread->Start.tls_area = NULL;
-
-  #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-    fp_area = NULL;
-  #endif
 
   /*
    *  Allocate and Initialize the stack for this thread.
@@ -153,18 +148,6 @@ bool _Thread_Initialize(
   #endif
 
   /*
-   *  Allocate the extensions area for this thread
-   */
-  if ( rtems_configuration_get_maximum_extensions() ) {
-    extensions_area = _Workspace_Allocate(
-      (rtems_configuration_get_maximum_extensions() + 1) * sizeof( void * )
-    );
-    if ( !extensions_area )
-      goto failed;
-  }
-  the_thread->extensions = (void **) extensions_area;
-
-  /*
    * Clear the extensions area so extension users can determine
    * if they are linked to the thread. An extension user may
    * create the extension long after tasks have been created
@@ -215,9 +198,13 @@ bool _Thread_Initialize(
   the_thread->resource_count          = 0;
   the_thread->real_priority           = priority;
   the_thread->Start.initial_priority  = priority;
-  sched =_Scheduler_Allocate( _Scheduler_Get( the_thread ), the_thread );
-  if ( !sched )
+
+  scheduler = _Scheduler_Get( _Thread_Get_executing() );
+  scheduler_allocated = _Scheduler_Allocate( scheduler, the_thread );
+  if ( !scheduler_allocated ) {
     goto failed;
+  }
+
   _Thread_Set_priority( the_thread, priority );
 
   /*
@@ -260,20 +247,16 @@ bool _Thread_Initialize(
     return true;
 
 failed:
+
+  if ( scheduler_allocated ) {
+    _Scheduler_Free( scheduler, the_thread );
+  }
+
   _Workspace_Free( the_thread->Start.tls_area );
-
-  _Workspace_Free( the_thread->libc_reent );
-
-  for ( i=0 ; i <= THREAD_API_LAST ; i++ )
-    _Workspace_Free( the_thread->API_Extensions[i] );
-
-  _Workspace_Free( extensions_area );
 
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
     _Workspace_Free( fp_area );
   #endif
-
-   _Workspace_Free( sched );
 
    _Thread_Stack_Free( the_thread );
   return false;

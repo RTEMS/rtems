@@ -566,8 +566,6 @@ struct Thread_Control_struct {
   struct _reent                        *libc_reent;
   /** This array contains the API extension area pointers. */
   void                                 *API_Extensions[ THREAD_API_LAST + 1 ];
-  /** This field points to the user extension pointers. */
-  void                                **extensions;
 
 #if !defined(RTEMS_SMP)
   /** This field points to the set of per task variables. */
@@ -584,6 +582,13 @@ struct Thread_Control_struct {
   Chain_Control           Key_Chain;
 
   Thread_Life_control                   Life;
+
+  /**
+   * @brief Variable length array of user extension pointers.
+   *
+   * The length is defined by the application via <rtems/confdefs.h>.
+   */
+  void                                 *extensions[ RTEMS_ZERO_LENGTH_ARRAY ];
 };
 
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
@@ -637,6 +642,57 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get_executing( void )
 
   return executing;
 }
+
+/**
+ * @brief Thread control add-on.
+ */
+typedef struct {
+  /**
+   * @brief Offset of the pointer field in Thread_Control referencing an
+   * application configuration dependent memory area in the thread control
+   * block.
+   */
+  size_t destination_offset;
+
+  /**
+   * @brief Offset relative to the thread control block begin to an application
+   * configuration dependent memory area.
+   */
+  size_t source_offset;
+} Thread_Control_add_on;
+
+/**
+ * @brief Thread control add-ons.
+ *
+ * The thread control block contains fields that point to application
+ * configuration dependent memory areas, like the scheduler information, the
+ * API control blocks, the user extension context table, the RTEMS notepads and
+ * the Newlib re-entrancy support.  Account for these areas in the
+ * configuration and avoid extra workspace allocations for these areas.
+ *
+ * This array is provided via <rtems/confdefs.h>.
+ *
+ * @see _Thread_Control_add_on_count and _Thread_Control_size.
+ */
+extern const Thread_Control_add_on _Thread_Control_add_ons[];
+
+/**
+ * @brief Thread control add-on count.
+ *
+ * Count of entries in _Thread_Control_add_ons.
+ *
+ * This value is provided via <rtems/confdefs.h>.
+ */
+extern const size_t _Thread_Control_add_on_count;
+
+/**
+ * @brief Size of the thread control block of a particular application.
+ *
+ * This value is provided via <rtems/confdefs.h>.
+ *
+ * @see _Thread_Control_add_ons.
+ */
+extern const size_t _Thread_Control_size;
 
 /**@}*/
 

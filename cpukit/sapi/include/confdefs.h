@@ -641,7 +641,7 @@ const rtems_libio_helper rtems_fs_init_helper =
  * CONFIGURE_SCHEDULER_USER and the following:
  *    - CONFIGURE_SCHEDULER_CONTEXT
  *    - CONFIGURE_SCHEDULER_CONTROLS
- *    - CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER - per task memory
+ *    - CONFIGURE_SCHEDULER_USER_PER_THREAD
  */
 
 /* If no scheduler is specified, the priority scheduler is default. */
@@ -676,12 +676,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     #define CONFIGURE_SCHEDULER_CONTROLS \
       RTEMS_SCHEDULER_CONTROL_PRIORITY(dflt)
   #endif
-
-  /**
-   * This defines the memory used by the priority scheduler.
-   */
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
-    _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
 #endif
 
 /*
@@ -699,12 +693,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     #define CONFIGURE_SCHEDULER_CONTROLS \
       RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP(dflt)
   #endif
-
-  /**
-   * This defines the memory used by the priority scheduler.
-   */
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
-    _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
 #endif
 
 /*
@@ -722,12 +710,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     #define CONFIGURE_SCHEDULER_CONTROLS \
       RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP(dflt)
   #endif
-
-  /**
-   * This defines the memory used by the priority scheduler.
-   */
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
-    _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
 #endif
 
 /*
@@ -739,11 +721,6 @@ const rtems_libio_helper rtems_fs_init_helper =
 
     #define CONFIGURE_SCHEDULER_CONTROLS RTEMS_SCHEDULER_CONTROL_SIMPLE(dflt)
   #endif
-
-  /**
-   * define the memory used by the simple scheduler
-   */
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER (0)
 #endif
 
 /*
@@ -757,13 +734,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     #define CONFIGURE_SCHEDULER_CONTROLS \
       RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP(dflt)
   #endif
-
-  /**
-   * Define the memory used by the Simple SMP Scheduler
-   *
-   * NOTE: This is the same as the Simple Scheduler
-   */
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER (0)
 #endif
 
 /*
@@ -775,12 +745,6 @@ const rtems_libio_helper rtems_fs_init_helper =
 
     #define CONFIGURE_SCHEDULER_CONTROLS RTEMS_SCHEDULER_CONTROL_EDF(dflt)
   #endif
-
-  /**
-   * define the memory used by the EDF scheduler
-   */
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
-    _Configure_From_workspace(sizeof(Scheduler_EDF_Per_thread)))
 #endif
 
 /*
@@ -804,12 +768,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     Scheduler_CBS_Server
       _Scheduler_CBS_Server_list[ CONFIGURE_CBS_MAXIMUM_SERVERS ];
   #endif
-
-  /**
-   * define the memory used by the CBS scheduler
-   */
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
-    _Configure_From_workspace(sizeof(Scheduler_CBS_Per_thread)))
 #endif
 
 /*
@@ -1596,15 +1554,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     #define CONFIGURE_NOTEPADS_ENABLED           FALSE
   #endif
 
-  #ifndef CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS
-    #define CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API \
-      _Configure_From_workspace( sizeof(RTEMS_API_Control) )
-  #else
-    #define CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API \
-      _Configure_From_workspace( sizeof(RTEMS_API_Control) - \
-        (RTEMS_NUMBER_NOTEPADS * sizeof(uint32_t)))
-  #endif
-
 /**
  * This macro calculates the memory required for task variables.
  *
@@ -1840,9 +1789,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     #define CONFIGURE_MAXIMUM_POSIX_THREADS 0
   #endif
 
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
-    _Configure_From_workspace(sizeof(POSIX_API_Control))
-
   #ifndef CONFIGURE_MAXIMUM_POSIX_MUTEXES
     #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 0
   #endif
@@ -1979,7 +1925,6 @@ const rtems_libio_helper rtems_fs_init_helper =
 #else
 
   #define CONFIGURE_MAXIMUM_POSIX_THREADS         0
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API 0
   #define CONFIGURE_MEMORY_FOR_POSIX              0
 
 #endif    /* RTEMS_POSIX_API */
@@ -2056,23 +2001,6 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_MAXIMUM_GO_CHANNELS         0
 #endif
 
-#ifndef RTEMS_SCHEDSIM
-/**
- * This macro specifies the amount of memory to be reserved for the
- * Newlib C Library reentrancy structure -- if we are using newlib.
- */
-
-#if (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB \
-    _Configure_From_workspace(sizeof(struct _reent))
-#else
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB 0
-#endif
-
-#else
-  #define CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB 0
-#endif
-
 /**
  * This is so we can account for tasks with stacks greater than minimum
  * size.  This is in bytes.
@@ -2104,17 +2032,7 @@ const rtems_libio_helper rtems_fs_init_helper =
 
 #define CONFIGURE_MEMORY_FOR_TASKS(_tasks, _number_FP_tasks) \
   ( \
-    _Configure_Object_RAM(_tasks, sizeof(Thread_Control)) \
-      + _Configure_Max_Objects(_tasks) \
-        * ( \
-            CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API \
-              + CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB \
-              + CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
-              + CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER \
-              + _Configure_From_workspace( \
-                (CONFIGURE_MAXIMUM_USER_EXTENSIONS + 1) * sizeof(void *) \
-              ) \
-          ) \
+    _Configure_Object_RAM(_tasks, sizeof(Configuration_Thread_control)) \
       + _Configure_Max_Objects(_number_FP_tasks) \
         * _Configure_From_workspace(CONTEXT_FP_SIZE) \
         * (CONTEXT_FP_SIZE != 0) \
@@ -2380,6 +2298,78 @@ const rtems_libio_helper rtems_fs_init_helper =
   )
 
 #ifdef CONFIGURE_INIT
+  typedef struct {
+    Thread_Control Control;
+    #if CONFIGURE_MAXIMUM_USER_EXTENSIONS > 0
+      void *extensions[ CONFIGURE_MAXIMUM_USER_EXTENSIONS + 1 ];
+    #endif
+    union {
+      #ifdef CONFIGURE_SCHEDULER_CBS
+        Scheduler_CBS_Per_thread CBS;
+      #endif
+      #ifdef CONFIGURE_SCHEDULER_EDF
+        Scheduler_EDF_Per_thread EDF;
+      #endif
+      #if defined(CONFIGURE_SCHEDULER_PRIORITY) \
+        || defined(CONFIGURE_SCHEDULER_PRIORITY_SMP)
+        Scheduler_priority_Per_thread Priority;
+      #endif
+      #ifdef CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
+        Scheduler_priority_affinity_SMP_Per_thread Priority_affinity;
+      #endif
+      #ifdef CONFIGURE_SCHEDULER_USER_PER_THREAD
+        CONFIGURE_SCHEDULER_USER_PER_THREAD User;
+      #endif
+    } Scheduler;
+    RTEMS_API_Control API_RTEMS;
+    #ifndef CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS
+      uint32_t Notepads[ RTEMS_NUMBER_NOTEPADS ];
+    #endif
+    #ifdef RTEMS_POSIX_API
+      POSIX_API_Control API_POSIX;
+    #endif
+    #if !defined(RTEMS_SCHEDSIM) \
+      && defined(RTEMS_NEWLIB) \
+      && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY)
+      struct _reent Newlib;
+    #else
+      struct { /* Empty */ } Newlib;
+    #endif
+  } Configuration_Thread_control;
+
+  const size_t _Thread_Control_size = sizeof( Configuration_Thread_control );
+
+  const Thread_Control_add_on _Thread_Control_add_ons[] = {
+    {
+      offsetof( Configuration_Thread_control, Control.scheduler_info ),
+      offsetof( Configuration_Thread_control, Scheduler )
+    }, {
+      offsetof(
+        Configuration_Thread_control,
+        Control.API_Extensions[ THREAD_API_RTEMS ]
+      ),
+      offsetof( Configuration_Thread_control, API_RTEMS )
+    }, {
+      offsetof(
+        Configuration_Thread_control,
+        Control.libc_reent
+      ),
+      offsetof( Configuration_Thread_control, Newlib )
+    }
+    #ifdef RTEMS_POSIX_API
+      , {
+        offsetof(
+          Configuration_Thread_control,
+          Control.API_Extensions[ THREAD_API_POSIX ]
+        ),
+        offsetof( Configuration_Thread_control, API_POSIX )
+      }
+    #endif
+  };
+
+  const size_t _Thread_Control_add_on_count =
+    RTEMS_ARRAY_SIZE( _Thread_Control_add_ons );
+
   /**
    * This is the Classic API Configuration Table.
    */
@@ -2572,7 +2562,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     uint32_t INTERRUPT_VECTOR_TABLE;
     uint32_t INTERRUPT_STACK_MEMORY;
     uint32_t MEMORY_FOR_IDLE_TASK;
-    uint32_t MEMORY_PER_TASK_FOR_SCHEDULER;
 
     /* Classic API Pieces */
     uint32_t CLASSIC_TASKS;
@@ -2628,7 +2617,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     CONFIGURE_INTERRUPT_VECTOR_TABLE,
     CONFIGURE_INTERRUPT_STACK_MEMORY,
     CONFIGURE_MEMORY_FOR_IDLE_TASK,
-    CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER,
 
     /* Classic API Pieces */
     CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS, 0),

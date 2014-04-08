@@ -190,12 +190,7 @@ static bool _POSIX_Threads_Create_extension(
   POSIX_API_Control *api;
   POSIX_API_Control *executing_api;
 
-  api = _Workspace_Allocate( sizeof( POSIX_API_Control ) );
-
-  if ( !api )
-    return false;
-
-  created->API_Extensions[ THREAD_API_POSIX ] = api;
+  api = created->API_Extensions[ THREAD_API_POSIX ];
 
   /* XXX check all fields are touched */
   _POSIX_Threads_Initialize_attributes( &api->Attributes );
@@ -264,19 +259,6 @@ static void _POSIX_Threads_Restart_extension(
 {
   (void) executing;
   _POSIX_Threads_cancel_run( restarted );
-}
-
-/*
- *  _POSIX_Threads_Delete_extension
- *
- *  This method is invoked for each thread deleted.
- */
-static void _POSIX_Threads_Delete_extension(
-  Thread_Control *executing __attribute__((unused)),
-  Thread_Control *deleted
-)
-{
-  _Workspace_Free( deleted->API_Extensions[ THREAD_API_POSIX ] );
 }
 
 static void _POSIX_Threads_Terminate_extension(
@@ -355,7 +337,7 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
   { _POSIX_Threads_Create_extension,          /* create */
     NULL,                                     /* start */
     _POSIX_Threads_Restart_extension,         /* restart */
-    _POSIX_Threads_Delete_extension,          /* delete */
+    NULL,                                     /* delete */
     NULL,                                     /* switch */
     NULL,                                     /* begin */
     _POSIX_Threads_Exitted_extension,         /* exitted */
@@ -392,8 +374,7 @@ void _POSIX_Threads_Manager_initialization(void)
     OBJECTS_POSIX_THREADS,       /* object class */
     Configuration_POSIX_API.maximum_threads,
                                  /* maximum objects of this class */
-    sizeof( Thread_Control ),
-                                 /* size of this object's control block */
+    _Thread_Control_size,        /* size of this object's control block */
     true,                        /* true if names for this object are strings */
     _POSIX_PATH_MAX              /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)

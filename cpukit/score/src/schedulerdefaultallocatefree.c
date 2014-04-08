@@ -21,7 +21,7 @@
 
 #include <rtems/score/scheduler.h>
 
-void *_Scheduler_default_Allocate(
+bool _Scheduler_default_Allocate(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
@@ -29,7 +29,7 @@ void *_Scheduler_default_Allocate(
   ( void ) scheduler;
   ( void ) the_thread;
 
-  return ( void * )-1; /* maybe pick an appropriate poison value */
+  return true;
 }
 
 void _Scheduler_default_Free(

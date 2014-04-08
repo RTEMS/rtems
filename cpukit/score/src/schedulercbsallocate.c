@@ -25,24 +25,18 @@
 #include <rtems/score/schedulercbs.h>
 #include <rtems/score/wkspace.h>
 
-void *_Scheduler_CBS_Allocate(
+bool _Scheduler_CBS_Allocate(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control    *the_thread
 )
 {
-  void *sched;
-  Scheduler_CBS_Per_thread *schinfo;
+  Scheduler_CBS_Per_thread *schinfo = the_thread->scheduler_info;
 
   (void) scheduler;
 
-  sched = _Workspace_Allocate(sizeof(Scheduler_CBS_Per_thread));
-  if ( sched ) {
-    the_thread->scheduler_info = sched;
-    schinfo = (Scheduler_CBS_Per_thread *)(the_thread->scheduler_info);
-    schinfo->edf_per_thread.thread = the_thread;
-    schinfo->edf_per_thread.queue_state = SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN;
-    schinfo->cbs_server = NULL;
-  }
+  schinfo->edf_per_thread.thread = the_thread;
+  schinfo->edf_per_thread.queue_state = SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN;
+  schinfo->cbs_server = NULL;
 
-  return sched;
+  return true;
 }

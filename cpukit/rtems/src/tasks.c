@@ -50,23 +50,9 @@ static bool _RTEMS_tasks_Create_extension(
 )
 {
   RTEMS_API_Control *api;
-  int                i;
-  size_t             to_allocate;
+  size_t             i;
 
-  /*
-   *  Notepads must be the last entry in the structure and they
-   *  can be left off if disabled in the configuration.
-   */
-  to_allocate = sizeof( RTEMS_API_Control );
-  if ( !rtems_configuration_get_notepads_enabled() )
-    to_allocate -= (RTEMS_NUMBER_NOTEPADS * sizeof(uint32_t));
-
-  api = _Workspace_Allocate( to_allocate );
-
-  if ( !api )
-    return false;
-
-  created->API_Extensions[ THREAD_API_RTEMS ] = api;
+  api = created->API_Extensions[ THREAD_API_RTEMS ];
 
   _Event_Initialize( &api->Event );
   _Event_Initialize( &api->System_event );
@@ -102,24 +88,6 @@ static void _RTEMS_tasks_Start_extension(
 
   _Event_Initialize( &api->Event );
   _Event_Initialize( &api->System_event );
-}
-
-/*
- *  _RTEMS_tasks_Delete_extension
- *
- *  This extension routine is invoked when a task is deleted.
- */
-
-static void _RTEMS_tasks_Delete_extension(
-  Thread_Control *executing,
-  Thread_Control *deleted
-)
-{
-  /*
-   *  Free API specific memory
-   */
-
-  (void) _Workspace_Free( deleted->API_Extensions[ THREAD_API_RTEMS ] );
 }
 
 static void _RTEMS_tasks_Terminate_extension(
@@ -204,7 +172,7 @@ User_extensions_Control _RTEMS_tasks_User_extensions = {
   { _RTEMS_tasks_Create_extension,            /* create */
     _RTEMS_tasks_Start_extension,             /* start */
     _RTEMS_tasks_Start_extension,             /* restart */
-    _RTEMS_tasks_Delete_extension,            /* delete */
+    NULL,                                     /* delete */
     RTEMS_TASKS_SWITCH_EXTENSION,             /* switch */
     NULL,                                     /* begin */
     NULL,                                     /* exitted */
@@ -221,7 +189,7 @@ void _RTEMS_tasks_Manager_initialization(void)
     OBJECTS_RTEMS_TASKS,       /* object class */
     Configuration_RTEMS_API.maximum_tasks,
                                /* maximum objects of this class */
-    sizeof( Thread_Control ),  /* size of this object's control block */
+    _Thread_Control_size,      /* size of this object's control block */
     false,                     /* true if the name is a string */
     RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
 #if defined(RTEMS_MULTIPROCESSING)
