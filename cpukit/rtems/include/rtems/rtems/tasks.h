@@ -542,6 +542,41 @@ rtems_status_code rtems_task_set_affinity(
 #endif
 
 /**
+ * @brief Gets the scheduler of a task.
+ *
+ * @param[in] id Identifier of the task.  Use @ref RTEMS_SELF to select the
+ * executing task.
+ * @param[out] scheduler_id Identifier of the scheduler.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ADDRESS The @a scheduler_id parameter is @c NULL.
+ * @retval RTEMS_INVALID_ID Invalid task identifier.
+ */
+rtems_status_code rtems_task_get_scheduler(
+  rtems_id  id,
+  rtems_id *scheduler_id
+);
+
+/**
+ * @brief Sets the scheduler of a task.
+ *
+ * @param[in] id Identifier of the task.  Use @ref RTEMS_SELF to select the
+ * executing task.
+ * @param[in] scheduler_id Identifier of the scheduler.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID Invalid task or scheduler identifier.
+ * @retval RTEMS_INCORRECT_STATE The task is in the wrong state to perform a
+ * scheduler change.
+ *
+ * @see rtems_scheduler_ident().
+ */
+rtems_status_code rtems_task_set_scheduler(
+  rtems_id id,
+  rtems_id scheduler_id
+);
+
+/**
  *  @brief RTEMS Get Self Task Id
  *
  *  This directive returns the ID of the currently executing task.

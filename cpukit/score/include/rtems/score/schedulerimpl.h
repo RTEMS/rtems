@@ -451,6 +451,24 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get(
   return &_Scheduler_Table[ 0 ];
 }
 
+RTEMS_INLINE_ROUTINE bool _Scheduler_Set(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
+)
+{
+  bool ok;
+
+  (void) scheduler;
+
+  if ( _States_Is_dormant( the_thread->current_state ) ) {
+    ok = true;
+  } else {
+    ok = false;
+  }
+
+  return ok;
+}
+
 RTEMS_INLINE_ROUTINE Objects_Id _Scheduler_Build_id( uint32_t scheduler_index )
 {
   return _Objects_Build_id(
@@ -472,6 +490,13 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Get_by_id(
   *scheduler = &_Scheduler_Table[ index ];
 
   return index < _Scheduler_Count;
+}
+
+RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_index(
+  const Scheduler_Control *scheduler
+)
+{
+  return (uint32_t) (scheduler - &_Scheduler_Table[ 0 ]);
 }
 
 /** @} */

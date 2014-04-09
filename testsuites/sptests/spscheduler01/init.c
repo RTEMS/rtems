@@ -102,6 +102,81 @@ static void test_task_get_set_affinity(void)
 #endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
 }
 
+static void task(rtems_task_argument arg)
+{
+  (void) arg;
+
+  rtems_test_assert(0);
+}
+
+static void test_task_get_set_scheduler(void)
+{
+  rtems_status_code sc;
+  rtems_id self_id = rtems_task_self();
+  rtems_name name = BLUE;
+  rtems_id scheduler_id;
+  rtems_id scheduler_by_name;
+  rtems_id task_id;
+
+  sc = rtems_scheduler_ident(name, &scheduler_by_name);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_get_scheduler(RTEMS_SELF, NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
+
+  sc = rtems_task_get_scheduler(invalid_id, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  scheduler_id = 0;
+  sc = rtems_task_get_scheduler(RTEMS_SELF, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(scheduler_id == scheduler_by_name);
+
+  scheduler_id = 0;
+  sc = rtems_task_get_scheduler(self_id, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(scheduler_id == scheduler_by_name);
+
+  sc = rtems_task_set_scheduler(invalid_id, scheduler_id);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  sc = rtems_task_set_scheduler(self_id, invalid_id);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  sc = rtems_task_set_scheduler(self_id, scheduler_id);
+  rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
+
+  sc = rtems_task_create(
+    rtems_build_name('T', 'A', 'S', 'K'),
+    2,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &task_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  scheduler_id = 0;
+  sc = rtems_task_get_scheduler(task_id, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(scheduler_id == scheduler_by_name);
+
+  sc = rtems_task_set_scheduler(task_id, scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(task_id, task, 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_set_scheduler(task_id, scheduler_id);
+  rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
+
+  sc = rtems_task_delete(task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
 static void test_scheduler_ident(void)
 {
   rtems_status_code sc;
@@ -184,6 +259,7 @@ static void Init(rtems_task_argument arg)
   rtems_resource_snapshot_take(&snapshot);
 
   test_task_get_set_affinity();
+  test_task_get_set_scheduler();
   test_scheduler_ident();
   test_scheduler_get_processors();
 
@@ -198,7 +274,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 
-#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_TASKS 2
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
