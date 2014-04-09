@@ -20,7 +20,7 @@
 
 #include "tmacros.h"
 
-const char rtems_test_name[] = "SMPSCHEDULE 1";
+const char rtems_test_name[] = "SMPSCHEDULER 1";
 
 #define CPU_COUNT 2
 

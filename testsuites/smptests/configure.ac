@@ -75,7 +75,7 @@ smpmigration01/Makefile
 smppsxaffinity01/Makefile
 smppsxaffinity02/Makefile
 smppsxsignal01/Makefile
-smpschedule01/Makefile
+smpscheduler01/Makefile
 smpsignal01/Makefile
 smpswitchextension01/Makefile
 smpthreadlife01/Makefile
