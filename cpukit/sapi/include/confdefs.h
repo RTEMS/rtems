@@ -666,6 +666,10 @@ const rtems_libio_helper rtems_fs_init_helper =
  * If the Priority Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY)
+  #if !defined(CONFIGURE_SCHEDULER_NAME)
+    #define CONFIGURE_SCHEDULER_NAME rtems_build_name('U', 'P', 'D', ' ')
+  #endif
+
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
     #define CONFIGURE_SCHEDULER_CONTEXT \
       RTEMS_SCHEDULER_CONTEXT_PRIORITY( \
@@ -674,7 +678,7 @@ const rtems_libio_helper rtems_fs_init_helper =
       )
 
     #define CONFIGURE_SCHEDULER_CONTROLS \
-      RTEMS_SCHEDULER_CONTROL_PRIORITY(dflt)
+      RTEMS_SCHEDULER_CONTROL_PRIORITY(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
 
@@ -683,6 +687,10 @@ const rtems_libio_helper rtems_fs_init_helper =
  * it.
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY_SMP)
+  #if !defined(CONFIGURE_SCHEDULER_NAME)
+    #define CONFIGURE_SCHEDULER_NAME rtems_build_name('M', 'P', 'D', ' ')
+  #endif
+
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
     #define CONFIGURE_SCHEDULER_CONTEXT \
       RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP( \
@@ -691,7 +699,7 @@ const rtems_libio_helper rtems_fs_init_helper =
       )
 
     #define CONFIGURE_SCHEDULER_CONTROLS \
-      RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP(dflt)
+      RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
 
@@ -700,6 +708,10 @@ const rtems_libio_helper rtems_fs_init_helper =
  * it.
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP)
+  #if !defined(CONFIGURE_SCHEDULER_NAME)
+    #define CONFIGURE_SCHEDULER_NAME rtems_build_name('M', 'P', 'A', ' ')
+  #endif
+
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
     #define CONFIGURE_SCHEDULER_CONTEXT \
       RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP( \
@@ -708,7 +720,10 @@ const rtems_libio_helper rtems_fs_init_helper =
       )
 
     #define CONFIGURE_SCHEDULER_CONTROLS \
-      RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP(dflt)
+      RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP( \
+        dflt, \
+        CONFIGURE_SCHEDULER_NAME \
+      )
   #endif
 #endif
 
@@ -716,10 +731,15 @@ const rtems_libio_helper rtems_fs_init_helper =
  * If the Simple Priority Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_SIMPLE)
+  #if !defined(CONFIGURE_SCHEDULER_NAME)
+    #define CONFIGURE_SCHEDULER_NAME rtems_build_name('U', 'P', 'S', ' ')
+  #endif
+
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
     #define CONFIGURE_SCHEDULER_CONTEXT RTEMS_SCHEDULER_CONTEXT_SIMPLE(dflt)
 
-    #define CONFIGURE_SCHEDULER_CONTROLS RTEMS_SCHEDULER_CONTROL_SIMPLE(dflt)
+    #define CONFIGURE_SCHEDULER_CONTROLS \
+      RTEMS_SCHEDULER_CONTROL_SIMPLE(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
 
@@ -727,12 +747,16 @@ const rtems_libio_helper rtems_fs_init_helper =
  * If the Simple SMP Priority Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_SIMPLE_SMP)
+  #if !defined(CONFIGURE_SCHEDULER_NAME)
+    #define CONFIGURE_SCHEDULER_NAME rtems_build_name('M', 'P', 'S', ' ')
+  #endif
+
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
     #define CONFIGURE_SCHEDULER_CONTEXT \
       RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(dflt)
 
     #define CONFIGURE_SCHEDULER_CONTROLS \
-      RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP(dflt)
+      RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
 
@@ -740,10 +764,15 @@ const rtems_libio_helper rtems_fs_init_helper =
  * If the EDF Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_EDF)
+  #if !defined(CONFIGURE_SCHEDULER_NAME)
+    #define CONFIGURE_SCHEDULER_NAME rtems_build_name('U', 'E', 'D', 'F')
+  #endif
+
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
     #define CONFIGURE_SCHEDULER_CONTEXT RTEMS_SCHEDULER_CONTEXT_EDF(dflt)
 
-    #define CONFIGURE_SCHEDULER_CONTROLS RTEMS_SCHEDULER_CONTROL_EDF(dflt)
+    #define CONFIGURE_SCHEDULER_CONTROLS \
+      RTEMS_SCHEDULER_CONTROL_EDF(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
 
@@ -751,10 +780,15 @@ const rtems_libio_helper rtems_fs_init_helper =
  * If the CBS Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_CBS)
+  #if !defined(CONFIGURE_SCHEDULER_NAME)
+    #define CONFIGURE_SCHEDULER_NAME rtems_build_name('U', 'C', 'B', 'S')
+  #endif
+
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
     #define CONFIGURE_SCHEDULER_CONTEXT RTEMS_SCHEDULER_CONTEXT_CBS(dflt)
 
-    #define CONFIGURE_SCHEDULER_CONTROLS RTEMS_SCHEDULER_CONTROL_CBS(dflt)
+    #define CONFIGURE_SCHEDULER_CONTROLS \
+      RTEMS_SCHEDULER_CONTROL_CBS(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 
   #ifndef CONFIGURE_CBS_MAXIMUM_SERVERS
@@ -775,7 +809,9 @@ const rtems_libio_helper rtems_fs_init_helper =
  * this code to know which scheduler is configured by the user.
  */
 #ifdef CONFIGURE_INIT
-  CONFIGURE_SCHEDULER_CONTEXT;
+  #if defined(CONFIGURE_SCHEDULER_CONTEXT)
+    CONFIGURE_SCHEDULER_CONTEXT;
+  #endif
 
   const Scheduler_Control _Scheduler_Table[] = {
     CONFIGURE_SCHEDULER_CONTROLS

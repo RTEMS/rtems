@@ -165,6 +165,11 @@ struct Scheduler_Control {
    * @brief The scheduler operations.
    */
   Scheduler_Operations Operations;
+
+  /**
+   * @brief The scheduler name.
+   */
+  uint32_t name;
 };
 
 /**

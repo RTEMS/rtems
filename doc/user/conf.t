@@ -3705,6 +3705,43 @@ This scheduler is only available when RTEMS is configured with SMP
 support enabled.
 
 @c
+@c === Configuring a Scheduler Name ===
+@c
+@subsection Configuring a Scheduler Name
+
+@findex CONFIGURE_SCHEDULER_NAME
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_SCHEDULER_NAME}
+
+@item DATA TYPE:
+RTEMS Name (@code{rtems_name}).
+
+@item RANGE:
+Any value.
+
+@item DEFAULT VALUE:
+The default name is
+@itemize @bullet
+@item @code{"UCBS"} for the Uni-Processor CBS scheduler,
+@item @code{"UEDF"} for the Uni-Processor EDF scheduler,
+@item @code{"UPD "} for the Uni-Processor Deterministic Priority scheduler,
+@item @code{"UPS "} for the Uni-Processor Simple Priority scheduler,
+@item @code{"MPA "} for the Multi-Processor Priority Affinity scheduler, and
+@item @code{"MPD "} for the Multi-Processor Deterministic Priority scheduler, and
+@item @code{"MPS "} for the Multi-Processor Simple Priority scheduler.
+@end itemize
+
+@end table
+
+@subheading DESCRIPTION:
+Schedulers can be identified via @code{rtems_scheduler_ident}.  The name of the scheduler is determined by the configuration.
+
+@subheading NOTES:
+None.
+
+@c
 @c === Configuring a User Scheduler ===
 @c
 @subsection Configuring a User Provided Scheduler

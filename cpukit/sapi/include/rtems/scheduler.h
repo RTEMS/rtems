@@ -43,10 +43,11 @@
   #define RTEMS_SCHEDULER_CONTEXT_CBS( name ) \
     static Scheduler_EDF_Context RTEMS_SCHEDULER_CONTEXT_CBS_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_CBS( name ) \
+  #define RTEMS_SCHEDULER_CONTROL_CBS( name, obj_name ) \
     { \
       &RTEMS_SCHEDULER_CONTEXT_CBS_NAME( name ).Base, \
-      SCHEDULER_CBS_ENTRY_POINTS \
+      SCHEDULER_CBS_ENTRY_POINTS, \
+      ( obj_name ) \
     }
 #endif
 
@@ -59,10 +60,11 @@
   #define RTEMS_SCHEDULER_CONTEXT_EDF( name ) \
     static Scheduler_EDF_Context RTEMS_SCHEDULER_CONTEXT_EDF_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_EDF( name ) \
+  #define RTEMS_SCHEDULER_CONTROL_EDF( name, obj_name ) \
     { \
       &RTEMS_SCHEDULER_CONTEXT_EDF_NAME( name ).Base, \
-      SCHEDULER_EDF_ENTRY_POINTS \
+      SCHEDULER_EDF_ENTRY_POINTS, \
+      ( obj_name ) \
     }
 #endif
 
@@ -78,10 +80,11 @@
       Chain_Control              Ready[ ( prio_count ) ]; \
     } RTEMS_SCHEDULER_CONTEXT_PRIORITY_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_PRIORITY( name ) \
+  #define RTEMS_SCHEDULER_CONTROL_PRIORITY( name, obj_name ) \
     { \
       &RTEMS_SCHEDULER_CONTEXT_PRIORITY_NAME( name ).Base.Base, \
-      SCHEDULER_PRIORITY_ENTRY_POINTS \
+      SCHEDULER_PRIORITY_ENTRY_POINTS, \
+      ( obj_name ) \
     }
 #endif
 
@@ -97,10 +100,11 @@
       Chain_Control                  Ready[ ( prio_count ) ]; \
     } RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP( name ) \
+  #define RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP( name, obj_name ) \
     { \
       &RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP_NAME( name ).Base.Base, \
-      SCHEDULER_PRIORITY_AFFINITY_SMP_ENTRY_POINTS \
+      SCHEDULER_PRIORITY_AFFINITY_SMP_ENTRY_POINTS, \
+      ( obj_name ) \
     }
 #endif
 
@@ -116,10 +120,11 @@
       Chain_Control                  Ready[ ( prio_count ) ]; \
     } RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP( name ) \
+  #define RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP( name, obj_name ) \
     { \
       &RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP_NAME( name ).Base.Base, \
-      SCHEDULER_PRIORITY_SMP_ENTRY_POINTS \
+      SCHEDULER_PRIORITY_SMP_ENTRY_POINTS, \
+      ( obj_name ) \
     }
 #endif
 
@@ -133,10 +138,11 @@
     static Scheduler_simple_Context \
       RTEMS_SCHEDULER_CONTEXT_SIMPLE_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_SIMPLE( name ) \
+  #define RTEMS_SCHEDULER_CONTROL_SIMPLE( name, obj_name ) \
     { \
       &RTEMS_SCHEDULER_CONTEXT_SIMPLE_NAME( name ).Base, \
-      SCHEDULER_SIMPLE_ENTRY_POINTS \
+      SCHEDULER_SIMPLE_ENTRY_POINTS, \
+      ( obj_name ) \
     }
 #endif
 
@@ -150,10 +156,11 @@
     static Scheduler_simple_SMP_Context \
       RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP( name ) \
+  #define RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP( name, obj_name ) \
     { \
       &RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP_NAME( name ).Base, \
-      SCHEDULER_SIMPLE_SMP_ENTRY_POINTS \
+      SCHEDULER_SIMPLE_SMP_ENTRY_POINTS, \
+      ( obj_name ) \
     }
 #endif
 
