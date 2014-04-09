@@ -26,6 +26,29 @@
 #define RTEMS_SCHEDULER_CONTEXT_NAME( name ) \
   _Configuration_Scheduler_ ## name
 
+#if defined(RTEMS_SMP)
+  /* This object doesn't exist and indicates a configuration error */
+  extern const Scheduler_Control RTEMS_SCHEDULER_INVALID_INDEX;
+
+  #define RTEMS_SCHEDULER_ASSIGN_DEFAULT \
+    SCHEDULER_ASSIGN_DEFAULT
+
+  #define RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL \
+    SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL
+
+  #define RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY \
+    SCHEDULER_ASSIGN_PROCESSOR_MANDATORY
+
+  #define RTEMS_SCHEDULER_ASSIGN( index, attr ) \
+    { \
+      ( index ) < RTEMS_ARRAY_SIZE( _Scheduler_Table ) ? \
+        &_Scheduler_Table[ ( index ) ] : &RTEMS_SCHEDULER_INVALID_INDEX, \
+      ( attr ) \
+    }
+
+  #define RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER { NULL, 0 }
+#endif
+
 /*
  * This file should be only included in the context of <rtems/confdefs.h>.
  * Define the scheduler configuration macros only in case the corresponding

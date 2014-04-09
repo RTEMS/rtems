@@ -46,8 +46,12 @@ bool _Thread_Start(
     if ( cpu == NULL ) {
       _Thread_Ready( the_thread );
     } else {
-      the_thread->current_state = STATES_READY;
-      _Scheduler_Start_idle( _Scheduler_Get( the_thread ), the_thread, cpu );
+      const Scheduler_Control *scheduler = _Scheduler_Get_by_CPU( cpu );
+
+      if ( scheduler != NULL ) {
+        the_thread->current_state = STATES_READY;
+        _Scheduler_Start_idle( scheduler, the_thread, cpu );
+      }
     }
 
     _User_extensions_Thread_start( the_thread );

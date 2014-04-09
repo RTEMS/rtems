@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpfatal07
+
+directives:
+
+  - _SMP_Start_multitasking_on_secondary_processor()
+
+concepts:
+
+  - Ensure that a multitasking start on an unassigned processor leads to a
+    fatal error.

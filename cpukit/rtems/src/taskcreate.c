@@ -23,6 +23,7 @@
 #include <rtems/rtems/modesimpl.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/threadimpl.h>
 
@@ -140,6 +141,7 @@ rtems_status_code rtems_task_create(
   status = _Thread_Initialize(
     &_RTEMS_tasks_Information,
     the_thread,
+    _Scheduler_Get_by_CPU_index( _SMP_Get_current_processor() ),
     NULL,
     stack_size,
     is_fp,

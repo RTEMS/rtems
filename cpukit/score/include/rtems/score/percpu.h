@@ -316,6 +316,12 @@ typedef struct {
      * @see _Per_CPU_State_change().
      */
     Per_CPU_State state;
+
+    /**
+     * @brief Indicates if the processor has been successfully started via
+     * _CPU_SMP_Start_processor().
+     */
+    bool started;
   #endif
 
   Per_CPU_Stats Stats;
@@ -460,6 +466,19 @@ static inline uint32_t _Per_CPU_Get_index( const Per_CPU_Control *per_cpu )
     ( const Per_CPU_Control_envelope * ) per_cpu;
 
   return ( uint32_t ) ( per_cpu_envelope - &_Per_CPU_Information[ 0 ] );
+}
+
+static inline bool _Per_CPU_Is_processor_started(
+  const Per_CPU_Control *per_cpu
+)
+{
+#if defined( RTEMS_SMP )
+  return per_cpu->started;
+#else
+  (void) per_cpu;
+
+  return true;
+#endif
 }
 
 #if defined( RTEMS_SMP )

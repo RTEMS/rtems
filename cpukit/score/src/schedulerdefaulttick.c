@@ -24,7 +24,7 @@
 #include <rtems/score/smp.h>
 #include <rtems/config.h>
 
-static void _Scheduler_default_Tick_for_executing(
+void _Scheduler_default_Tick(
   const Scheduler_Control *scheduler,
   Thread_Control          *executing
 )
@@ -81,17 +81,5 @@ static void _Scheduler_default_Tick_for_executing(
 	  (*executing->budget_callout)( executing );
 	break;
     #endif
-  }
-}
-
-void _Scheduler_default_Tick( const Scheduler_Control *scheduler )
-{
-  uint32_t processor_count = _SMP_Get_processor_count();
-  uint32_t processor;
-
-  for ( processor = 0 ; processor < processor_count ; ++processor ) {
-    const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( processor );
-
-    _Scheduler_default_Tick_for_executing( scheduler, per_cpu->executing );
   }
 }

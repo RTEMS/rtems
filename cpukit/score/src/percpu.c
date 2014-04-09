@@ -22,7 +22,6 @@
 #include <rtems/score/assert.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/config.h>
-#include <rtems/fatal.h>
 
 #if defined(RTEMS_SMP)
 
@@ -154,7 +153,7 @@ void _Per_CPU_State_change(
     next_state == PER_CPU_STATE_SHUTDOWN
       && new_state != PER_CPU_STATE_SHUTDOWN
   ) {
-    rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );
+    _SMP_Fatal( SMP_FATAL_SHUTDOWN );
   }
 }
 

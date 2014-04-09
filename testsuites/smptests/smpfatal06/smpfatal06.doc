@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpfatal06
+
+directives:
+
+  - _SMP_Handler_initialize()
+
+concepts:
+
+  - Ensure that a scheduler without processor leads to a fatal error.

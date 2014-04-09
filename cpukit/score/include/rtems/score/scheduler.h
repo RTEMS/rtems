@@ -102,7 +102,7 @@ typedef struct {
   );
 
   /** perform scheduler update actions required at each clock tick */
-  void ( *tick )( const Scheduler_Control * );
+  void ( *tick )( const Scheduler_Control *, Thread_Control * );
 
   /**
    * @brief Starts the idle thread for a particular processor.
@@ -149,7 +149,12 @@ typedef struct {
  * this structure at the begin of its context structure.
  */
 typedef struct {
-  /* No fields yet */
+#if defined(RTEMS_SMP)
+  /**
+   * @brief Count of processors owned by this scheduler instance.
+   */
+  uint32_t processor_count;
+#endif
 } Scheduler_Context;
 
 /**
@@ -196,6 +201,55 @@ extern const Scheduler_Control _Scheduler_Table[];
   extern const size_t _Scheduler_Count;
 #else
   #define _Scheduler_Count ( (size_t) 1 )
+#endif
+
+#if defined(RTEMS_SMP)
+  /**
+   * @brief The scheduler assignment default attributes.
+   */
+  #define SCHEDULER_ASSIGN_DEFAULT UINT32_C(0x0)
+
+  /**
+   * @brief The presence of this processor is optional.
+   */
+  #define SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL SCHEDULER_ASSIGN_DEFAULT
+
+  /**
+   * @brief The presence of this processor is mandatory.
+   */
+  #define SCHEDULER_ASSIGN_PROCESSOR_MANDATORY UINT32_C(0x1)
+
+  /**
+   * @brief Scheduler assignment.
+   */
+  typedef struct {
+    /**
+     * @brief The scheduler for this processor.
+     */
+    const Scheduler_Control *scheduler;
+
+    /**
+     * @brief The scheduler assignment attributes.
+     *
+     * Use @ref SCHEDULER_ASSIGN_DEFAULT to select default attributes.
+     *
+     * The presence of a processor can be
+     * - @ref SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL, or
+     * - @ref SCHEDULER_ASSIGN_PROCESSOR_MANDATORY.
+     */
+    uint32_t attributes;
+  } Scheduler_Assignment;
+
+  /**
+   * @brief The scheduler assignments.
+   *
+   * The length of this array must be equal to the maximum processors.
+   *
+   * Application provided via <rtems/confdefs.h>.
+   *
+   * @see _Scheduler_Table and rtems_configuration_get_maximum_processors().
+   */
+  extern const Scheduler_Assignment _Scheduler_Assignments[];
 #endif
 
 /**
@@ -253,8 +307,12 @@ void _Scheduler_default_Release_job(
  * This routine is invoked as part of processing each clock tick.
  *
  * @param[in] scheduler The scheduler.
+ * @param[in] execution An executing thread.
  */
-void _Scheduler_default_Tick( const Scheduler_Control *scheduler );
+void _Scheduler_default_Tick(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *executing
+);
 
 /**
  * @brief Starts an idle thread.

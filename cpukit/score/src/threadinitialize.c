@@ -31,6 +31,7 @@
 bool _Thread_Initialize(
   Objects_Information                  *information,
   Thread_Control                       *the_thread,
+  const Scheduler_Control              *scheduler,
   void                                 *stack_area,
   size_t                                stack_size,
   bool                                  is_fp,
@@ -50,7 +51,6 @@ bool _Thread_Initialize(
   bool                     extension_status;
   size_t                   i;
   bool                     scheduler_allocated = false;
-  const Scheduler_Control *scheduler;
 
   /*
    * Do not use _TLS_Size here since this will lead GCC to assume that this
@@ -188,6 +188,7 @@ bool _Thread_Initialize(
   the_thread->is_scheduled            = false;
   the_thread->is_in_the_air           = false;
   the_thread->is_executing            = false;
+  the_thread->scheduler               = scheduler;
 #endif
 
   /* Initialize the CPU for the non-SMP schedulers */
@@ -199,7 +200,6 @@ bool _Thread_Initialize(
   the_thread->real_priority           = priority;
   the_thread->Start.initial_priority  = priority;
 
-  scheduler = _Scheduler_Get( _Thread_Get_executing() );
   scheduler_allocated = _Scheduler_Allocate( scheduler, the_thread );
   if ( !scheduler_allocated ) {
     goto failed;

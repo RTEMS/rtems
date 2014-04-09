@@ -21,6 +21,7 @@
 
 #include <rtems/score/scheduler.h>
 #include <rtems/score/cpusetimpl.h>
+#include <rtems/score/smpimpl.h>
 #include <rtems/score/threadimpl.h>
 
 #ifdef __cplusplus
@@ -40,6 +41,28 @@ extern "C" {
  *  default.
  */
 void _Scheduler_Handler_initialization( void );
+
+RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_CPU_index(
+  uint32_t cpu_index
+)
+{
+#if defined(RTEMS_SMP)
+  return _Scheduler_Assignments[ cpu_index ].scheduler;
+#else
+  (void) cpu_index;
+
+  return &_Scheduler_Table[ 0 ];
+#endif
+}
+
+RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_CPU(
+  const Per_CPU_Control *cpu
+)
+{
+  uint32_t cpu_index = _Per_CPU_Get_index( cpu );
+
+  return _Scheduler_Get_by_CPU_index( cpu_index );
+}
 
 /**
  * The preferred method to add a new scheduler is to define the jump table
@@ -234,11 +257,19 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Release_job(
  * scheduler which support standard RTEMS features, this includes
  * time-slicing management.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Tick(
-  const Scheduler_Control *scheduler
-)
+RTEMS_INLINE_ROUTINE void _Scheduler_Tick( void )
 {
-  ( *scheduler->Operations.tick )( scheduler );
+  uint32_t cpu_count = _SMP_Get_processor_count();
+  uint32_t cpu_index;
+
+  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+    const Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
+    const Scheduler_Control *scheduler = _Scheduler_Get_by_CPU( cpu );
+
+    if ( scheduler != NULL ) {
+      ( *scheduler->Operations.tick )( scheduler, cpu->executing );
+    }
+  }
 }
 
 /**
@@ -258,6 +289,47 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Start_idle(
   ( *scheduler->Operations.start_idle )( scheduler, the_thread, cpu );
 }
 
+#if defined(RTEMS_SMP)
+RTEMS_INLINE_ROUTINE const Scheduler_Assignment *_Scheduler_Get_assignment(
+  uint32_t cpu_index
+)
+{
+  return &_Scheduler_Assignments[ cpu_index ];
+}
+
+RTEMS_INLINE_ROUTINE bool _Scheduler_Is_mandatory_processor(
+  const Scheduler_Assignment *assignment
+)
+{
+  return (assignment->attributes & SCHEDULER_ASSIGN_PROCESSOR_MANDATORY) != 0;
+}
+
+RTEMS_INLINE_ROUTINE bool _Scheduler_Should_start_processor(
+  const Scheduler_Assignment *assignment
+)
+{
+  return assignment->scheduler != NULL;
+}
+#endif /* defined(RTEMS_SMP) */
+
+RTEMS_INLINE_ROUTINE bool _Scheduler_Has_processor_ownership(
+  const Scheduler_Control *scheduler,
+  uint32_t cpu_index
+)
+{
+#if defined(RTEMS_SMP)
+  const Scheduler_Assignment *assignment =
+    _Scheduler_Get_assignment( cpu_index );
+
+  return assignment->scheduler == scheduler;
+#else
+  (void) scheduler;
+  (void) cpu_index;
+
+  return true;
+#endif
+}
+
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
 
 RTEMS_INLINE_ROUTINE void _Scheduler_Get_processor_set(
@@ -269,12 +341,18 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Get_processor_set(
   uint32_t cpu_count = _SMP_Get_processor_count();
   uint32_t cpu_index;
 
-  (void) scheduler;
-
   CPU_ZERO_S( cpusetsize, cpuset );
 
   for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+#if defined(RTEMS_SMP)
+    if ( _Scheduler_Has_processor_ownership( scheduler, cpu_index ) ) {
+      CPU_SET_S( (int) cpu_index, cpusetsize, cpuset );
+    }
+#else
+    (void) scheduler;
+
     CPU_SET_S( (int) cpu_index, cpusetsize, cpuset );
+#endif
   }
 }
 
@@ -299,6 +377,44 @@ bool _Scheduler_Get_affinity(
   cpu_set_t               *cpuset
 );
 
+RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get(
+  Thread_Control *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  return the_thread->scheduler;
+#else
+  (void) the_thread;
+
+  return &_Scheduler_Table[ 0 ];
+#endif
+}
+
+RTEMS_INLINE_ROUTINE bool _Scheduler_Set(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
+)
+{
+  bool ok;
+
+  if ( _States_Is_dormant( the_thread->current_state ) ) {
+#if defined(RTEMS_SMP)
+    _Scheduler_Free( _Scheduler_Get( the_thread ), the_thread );
+    the_thread->scheduler = scheduler;
+    _Scheduler_Allocate( scheduler, the_thread );
+    _Scheduler_Update( scheduler, the_thread );
+#else
+    (void) scheduler;
+#endif
+
+    ok = true;
+  } else {
+    ok = false;
+  }
+
+  return ok;
+}
+
 RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -311,22 +427,35 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
   uint32_t cpu_index;
   bool     ok = true;
 
-  (void) scheduler;
-  (void) the_thread;
-
   for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+#if defined(RTEMS_SMP)
+    const Scheduler_Control *scheduler_of_cpu =
+      _Scheduler_Get_by_CPU_index( cpu_index );
+
+    ok = ok
+      && ( ( CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset )
+          && scheduler == scheduler_of_cpu )
+        || ( !CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset )
+          && scheduler != scheduler_of_cpu ) );
+#else
+    (void) scheduler;
+
     ok = ok && CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset );
+#endif
   }
 
   for ( ; cpu_index < cpu_max ; ++cpu_index ) {
     ok = ok && !CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset );
   }
 
+  if ( ok ) {
+    ok = _Scheduler_Set( scheduler, the_thread );
+  }
+
   return ok;
 }
 
 bool _Scheduler_Set_affinity(
-  const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   size_t                   cpusetsize,
   const cpu_set_t         *cpuset
@@ -440,33 +569,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority_if_higher(
   if ( _Scheduler_Is_priority_higher_than( scheduler, priority, current ) ) {
     _Thread_Change_priority( the_thread, priority, prepend_it );
   }
-}
-
-RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get(
-  Thread_Control *the_thread
-)
-{
-  (void) the_thread;
-
-  return &_Scheduler_Table[ 0 ];
-}
-
-RTEMS_INLINE_ROUTINE bool _Scheduler_Set(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-)
-{
-  bool ok;
-
-  (void) scheduler;
-
-  if ( _States_Is_dormant( the_thread->current_state ) ) {
-    ok = true;
-  } else {
-    ok = false;
-  }
-
-  return ok;
 }
 
 RTEMS_INLINE_ROUTINE Objects_Id _Scheduler_Build_id( uint32_t scheduler_index )

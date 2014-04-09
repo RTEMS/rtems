@@ -33,12 +33,11 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/watchdog.h>
 
-#ifdef RTEMS_SMP
-#if __RTEMS_HAVE_SYS_CPUSET_H__
-#include <sys/cpuset.h>
-#include <rtems/score/cpuset.h>
+#if defined(RTEMS_SMP)
+  #include <rtems/score/cpuset.h>
 #endif
-#endif
+
+struct Scheduler_Control;
 
 #ifdef __cplusplus
 extern "C" {
@@ -517,6 +516,11 @@ struct Thread_Control_struct {
    * _Thread_Kill_zombies().
    */
   volatile bool                         is_executing;
+
+  /**
+   * @brief The scheduler of this thread.
+   */
+  const struct Scheduler_Control       *scheduler;
 #endif
 
 #if __RTEMS_ADA__

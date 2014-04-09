@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpfatal04
+
+directives:
+
+  - _SMP_Handler_initialize()
+
+concepts:
+
+  - Ensure that the boot processor has a scheduler assigned.

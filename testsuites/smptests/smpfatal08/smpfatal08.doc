@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpfatal08
+
+directives:
+
+  - _SMP_Handler_initialize()
+
+concepts:
+
+  - Ensure that a failed start of a mandatory processor leads to a fatal error.

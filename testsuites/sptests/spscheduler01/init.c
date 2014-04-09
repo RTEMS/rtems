@@ -35,6 +35,7 @@ static void test_task_get_set_affinity(void)
 {
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
   rtems_id self_id = rtems_task_self();
+  rtems_id task_id;
   rtems_status_code sc;
   cpu_set_t cpusetone;
   cpu_set_t cpuset;
@@ -45,6 +46,16 @@ static void test_task_get_set_affinity(void)
 
   CPU_ZERO(&cpusetone);
   CPU_SET(0, &cpusetone);
+
+  sc = rtems_task_create(
+    rtems_build_name('T', 'A', 'S', 'K'),
+    2,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &task_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_get_affinity(RTEMS_SELF, sizeof(cpuset), NULL);
   rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
@@ -70,15 +81,18 @@ static void test_task_get_set_affinity(void)
   rtems_test_assert(CPU_EQUAL(&cpuset, &cpusetone));
 
   sc = rtems_task_set_affinity(RTEMS_SELF, sizeof(cpuset), &cpuset);
+  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+
+  sc = rtems_task_set_affinity(self_id, sizeof(cpuset), &cpuset);
+  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+
+  sc = rtems_task_set_affinity(task_id, sizeof(cpuset), &cpuset);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_get_affinity(self_id, sizeof(cpuset), &cpuset);
+  sc = rtems_task_get_affinity(task_id, sizeof(cpuset), &cpuset);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   rtems_test_assert(CPU_EQUAL(&cpuset, &cpusetone));
-
-  sc = rtems_task_set_affinity(self_id, sizeof(cpuset), &cpuset);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   cpusetbigone = CPU_ALLOC(big);
   rtems_test_assert(cpusetbigone != NULL);
@@ -89,12 +103,15 @@ static void test_task_get_set_affinity(void)
   CPU_ZERO_S(cpusetbigsize, cpusetbigone);
   CPU_SET_S(0, cpusetbigsize, cpusetbigone);
 
-  sc = rtems_task_get_affinity(RTEMS_SELF, cpusetbigsize, cpusetbig);
+  sc = rtems_task_get_affinity(task_id, cpusetbigsize, cpusetbig);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   rtems_test_assert(CPU_EQUAL_S(cpusetbigsize, cpusetbig, cpusetbigone));
 
-  sc = rtems_task_set_affinity(RTEMS_SELF, cpusetbigsize, cpusetbig);
+  sc = rtems_task_set_affinity(task_id, cpusetbigsize, cpusetbig);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   CPU_FREE(cpusetbig);

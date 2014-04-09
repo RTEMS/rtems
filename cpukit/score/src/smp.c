@@ -20,14 +20,68 @@
 
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/config.h>
 
+static void _SMP_Check_scheduler_configuration( void )
+{
+  size_t n = _Scheduler_Count;
+  size_t i;
+
+  for ( i = 0 ; i < n ; ++i ) {
+    const Scheduler_Control *scheduler = &_Scheduler_Table[ i ];
+
+    if ( scheduler->context->processor_count == 0 ) {
+      _SMP_Fatal( SMP_FATAL_SCHEDULER_WITHOUT_PROCESSORS );
+    }
+  }
+}
+
+static void _SMP_Start_processors( uint32_t cpu_count )
+{
+  uint32_t cpu_self = _SMP_Get_current_processor();
+  uint32_t cpu_index;
+
+
+  for ( cpu_index = 0 ; cpu_index < cpu_count; ++cpu_index ) {
+    const Scheduler_Assignment *assignment =
+      _Scheduler_Get_assignment( cpu_index );
+    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu_index );
+    bool started;
+
+    if ( cpu_index != cpu_self ) {
+      if ( _Scheduler_Should_start_processor( assignment ) ) {
+        started = _CPU_SMP_Start_processor( cpu_index );
+
+        if ( !started && _Scheduler_Is_mandatory_processor( assignment ) ) {
+          _SMP_Fatal( SMP_FATAL_START_OF_MANDATORY_PROCESSOR_FAILED );
+        }
+      } else {
+        started = false;
+      }
+    } else {
+      started = true;
+
+      if ( !_Scheduler_Should_start_processor( assignment ) ) {
+        _SMP_Fatal( SMP_FATAL_BOOT_PROCESSOR_NOT_ASSIGNED_TO_SCHEDULER );
+      }
+    }
+
+    per_cpu->started = started;
+
+    if ( started ) {
+      ++assignment->scheduler->context->processor_count;
+    }
+  }
+
+  _SMP_Check_scheduler_configuration();
+}
+
 void _SMP_Handler_initialize( void )
 {
   uint32_t cpu_max = rtems_configuration_get_maximum_processors();
-  uint32_t cpu_self;
   uint32_t cpu_count;
   uint32_t cpu_index;
 
@@ -45,21 +99,16 @@ void _SMP_Handler_initialize( void )
   cpu_count = cpu_count < cpu_max ? cpu_count : cpu_max;
   _SMP_Processor_count = cpu_count;
 
-  cpu_self = _SMP_Get_current_processor();
+  for ( cpu_index = cpu_count ; cpu_index < cpu_max; ++cpu_index ) {
+    const Scheduler_Assignment *assignment =
+      _Scheduler_Get_assignment( cpu_index );
 
-  for ( cpu_index = 0 ; cpu_index < cpu_count; ++cpu_index ) {
-    if ( cpu_index != cpu_self ) {
-      bool ok = _CPU_SMP_Start_processor( cpu_index );
-
-      if ( !ok ) {
-        _Terminate(
-          RTEMS_FATAL_SOURCE_SMP,
-          false,
-          SMP_FATAL_START_OF_MANDATORY_PROCESSOR_FAILED
-        );
-      }
+    if ( _Scheduler_Is_mandatory_processor( assignment ) ) {
+      _SMP_Fatal( SMP_FATAL_MANDATORY_PROCESSOR_NOT_PRESENT );
     }
   }
+
+  _SMP_Start_processors( cpu_count );
 
   _CPU_SMP_Finalize_initialization( cpu_count );
 }
@@ -82,6 +131,10 @@ void _SMP_Request_start_multitasking( void )
 void _SMP_Start_multitasking_on_secondary_processor( void )
 {
   Per_CPU_Control *self_cpu = _Per_CPU_Get();
+
+  if ( !_Per_CPU_Is_processor_started( self_cpu ) ) {
+    _SMP_Fatal( SMP_FATAL_MULTITASKING_START_ON_UNASSIGNED_PROCESSOR );
+  }
 
   _Per_CPU_State_change( self_cpu, PER_CPU_STATE_READY_TO_START_MULTITASKING );
 

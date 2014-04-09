@@ -57,6 +57,7 @@
 #include <bsp/smp-imps.h>
 #include <bsp/irq.h>
 #include <rtems/score/smpimpl.h>
+#include <rtems/score/schedulerimpl.h>
 
 /*
  *  XXXXX  The following absolutely must be defined!!!
@@ -386,7 +387,12 @@ imps_read_config_table(unsigned start, int count)
     switch (*((unsigned char *)start)) {
     case IMPS_BCT_PROCESSOR:
       if ( imps_num_cpus < rtems_configuration_get_maximum_processors() ) {
-	add_processor((imps_processor *)start);
+        const Scheduler_Assignment *assignment =
+          _Scheduler_Get_assignment((uint32_t) imps_num_cpus);
+
+        if (_Scheduler_Should_start_processor(assignment)) {
+          add_processor((imps_processor *)start);
+        }
       } else
         imps_num_cpus++;
       start += 12;  /* 20 total */

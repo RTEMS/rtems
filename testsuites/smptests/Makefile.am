@@ -1,8 +1,6 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS =
-SUBDIRS += smpload01
-
 if SMPTESTS
 SUBDIRS += smp01
 SUBDIRS += smp02
@@ -16,9 +14,16 @@ SUBDIRS += smpatomic01
 SUBDIRS += smpfatal01
 SUBDIRS += smpfatal02
 SUBDIRS += smpfatal03
+SUBDIRS += smpfatal04
+SUBDIRS += smpfatal05
+SUBDIRS += smpfatal06
+SUBDIRS += smpfatal07
+SUBDIRS += smpfatal08
+SUBDIRS += smpload01
 SUBDIRS += smplock01
 SUBDIRS += smpmigration01
 SUBDIRS += smpscheduler01
+SUBDIRS += smpscheduler02
 SUBDIRS += smpsignal01
 SUBDIRS += smpswitchextension01
 SUBDIRS += smpthreadlife01

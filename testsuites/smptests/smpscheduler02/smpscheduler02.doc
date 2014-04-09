@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpscheduler02
+
+directives:
+
+  - rtems_task_set_scheduler()
+  - rtems_task_start()
+
+concepts:
+
+  - Ensure that start of a thread for another partition works.

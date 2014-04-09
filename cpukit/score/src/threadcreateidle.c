@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/stackimpl.h>
 #include <rtems/config.h>
 
@@ -39,6 +40,7 @@ static void _Thread_Create_idle_for_cpu( Per_CPU_Control *per_cpu )
   _Thread_Initialize(
     &_Thread_Internal_information,
     idle,
+    _Scheduler_Get_by_CPU( per_cpu ),
     NULL,        /* allocate the stack */
     _Stack_Ensure_minimum( rtems_configuration_get_idle_task_stack_size() ),
     CPU_IDLE_TASK_IS_FP,
@@ -75,6 +77,8 @@ void _Thread_Create_idle( void )
   for ( processor = 0 ; processor < processor_count ; ++processor ) {
     Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( processor );
 
-    _Thread_Create_idle_for_cpu( per_cpu );
+    if ( _Per_CPU_Is_processor_started( per_cpu ) ) {
+      _Thread_Create_idle_for_cpu( per_cpu );
+    }
   }
 }

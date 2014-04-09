@@ -60,6 +60,7 @@ int pthread_create(
   bool                                is_fp;
   bool                                status;
   Thread_Control                     *the_thread;
+  Thread_Control                     *executing;
   POSIX_API_Control                  *api;
   int                                 schedpolicy = SCHED_RR;
   struct sched_param                  schedparam;
@@ -89,6 +90,8 @@ int pthread_create(
     rtems_set_errno_and_return_minus_one( ENOSYS );
   #endif
 
+  executing = _Thread_Get_executing();
+
   /*
    *  P1003.1c/Draft 10, p. 121.
    *
@@ -99,7 +102,7 @@ int pthread_create(
    */
   switch ( the_attr->inheritsched ) {
     case PTHREAD_INHERIT_SCHED:
-      api = _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ];
+      api = executing->API_Extensions[ THREAD_API_POSIX ];
       schedpolicy = api->schedpolicy;
       schedparam  = api->schedparam;
       break;
@@ -176,6 +179,7 @@ int pthread_create(
   status = _Thread_Initialize(
     &_POSIX_Threads_Information,
     the_thread,
+    _Scheduler_Get( executing ),
     the_attr->stackaddr,
     _POSIX_Threads_Ensure_minimum_stack(the_attr->stacksize),
     is_fp,
@@ -194,7 +198,6 @@ int pthread_create(
 
 #if defined(RTEMS_SMP) && __RTEMS_HAVE_SYS_CPUSET_H__
    status = _Scheduler_Set_affinity(
-     _Scheduler_Get( the_thread ),
      the_thread,
      the_attr->affinitysetsize,
      the_attr->affinityset

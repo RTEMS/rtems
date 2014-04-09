@@ -820,6 +820,119 @@ const rtems_libio_helper rtems_fs_init_helper =
   #if defined(RTEMS_SMP)
     const size_t _Scheduler_Count =
       RTEMS_ARRAY_SIZE( _Scheduler_Table );
+
+    const Scheduler_Assignment _Scheduler_Assignments[] = {
+      #if defined(CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS)
+        CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS
+      #else
+        #define CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT \
+          RTEMS_SCHEDULER_ASSIGN( \
+            0, \
+            RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL \
+          )
+        CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 2
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 3
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 4
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 5
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 6
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 7
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 8
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 9
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 10
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 11
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 12
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 13
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 14
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 15
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 16
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 17
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 18
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 19
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 20
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 21
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 22
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 23
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 24
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 25
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 26
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 27
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 28
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 29
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 30
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 31
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 32
+          , CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #endif
+        #undef CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+      #endif
+    };
+
+    RTEMS_STATIC_ASSERT(
+      CONFIGURE_SMP_MAXIMUM_PROCESSORS
+        == RTEMS_ARRAY_SIZE( _Scheduler_Assignments ),
+      _Scheduler_Assignments
+    );
   #endif
 
   #if defined(CONFIGURE_SCHEDULER_EDF)

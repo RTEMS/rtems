@@ -3501,7 +3501,7 @@ configuration parameter is redundant.
 
 @subheading DESCRIPTION:
 The Deterministic Priority Scheduler is the default scheduler in RTEMS
-for single core applications and is designed for predictable performance
+for uni-processor applications and is designed for predictable performance
 under the highest loads.  It can block or unblock a thread in a constant
 amount of time.  This scheduler requires a variable amount of memory
 based upon the number of priorities configured in the system.
@@ -3572,7 +3572,7 @@ This is not defined by default.
 
 @subheading DESCRIPTION:
 The Earliest Deadline First Scheduler (EDF) is an alternative scheduler in
-RTEMS for single core applications. The EDF schedules tasks with dynamic
+RTEMS for uni-processor applications. The EDF schedules tasks with dynamic
 priorities equal to deadlines. The deadlines are declared using only
 Rate Monotonic manager which handles periodic behavior.  Period is always
 equal to deadline. If a task does not have any deadline declared or the
@@ -3612,7 +3612,7 @@ This is not defined by default.
 
 @subheading DESCRIPTION:
 The Constant Bandwidth Server Scheduler (CBS) is an alternative scheduler
-in RTEMS for single core applications. The CBS is a budget aware extension
+in RTEMS for uni-processor applications. The CBS is a budget aware extension
 of EDF scheduler. The goal of this scheduler is to ensure temporal
 isolation of tasks. The CBS is equipped with a set of additional rules
 and provides with an extensive API.
@@ -3685,14 +3685,14 @@ This is not defined by default.
 
 @subheading DESCRIPTION:
 The Simple SMP Priority Scheduler is derived from the Simple Priority
-Scheduler but is capable of scheduling threads across multiple cores.
+Scheduler but is capable of scheduling threads across multiple processors.
 It is designed to provide the same task scheduling behaviour as the
 Deterministic Priority Scheduler while distributing threads across
-multiple cores.  Being based upon the Simple Priority Scheduler, it also
+multiple processors.  Being based upon the Simple Priority Scheduler, it also
 maintains a single sorted list of all ready threads.  Thus blocking or
 unblocking a thread is not a constant time operation with this scheduler.
 
-In addition, when allocating threads to cores, the algorithm is not
+In addition, when allocating threads to processors, the algorithm is not
 constant time. This algorithm was not designed with efficiency as a
 primary design goal.  Its primary design goal was to provide an SMP-aware
 scheduling algorithm that is simple to understand.
@@ -3792,6 +3792,187 @@ guidance.  For guidance on the configuration macros, please examine
 Deterministic Priority Scheduler.
 
 @c
+@c === Configuring Clustered/Partitioned Schedulers ===
+@c
+@subsection Configuring Clustered/Partitioned Schedulers
+
+Clustered/partitioned scheduling helps to control the worst-case latencies in
+the system.  The goal is to reduce the amount of shared state in the system and
+thus prevention of lock contention.  Modern multi-processor systems tend to
+have several layers of data and instruction caches.  With clustered/partitioned
+scheduling it is possible to honour the cache topology of a system and thus
+avoid expensive cache synchronization traffic.
+
+We have clustered scheduling in case the set of processors of a system is
+partitioned into non-empty pairwise-disjoint subsets.  These subsets are called
+clusters.  Clusters with a cardinality of one are partitions.  Each cluster is
+owned by exactly one scheduler instance.  In order to use clustered/partitioned
+scheduling the application designer has to answer two questions.
+
+@enumerate
+@item How is the set of processors partitioned into clusters/partitions?
+@item Which scheduler is used for which cluster/partition?
+@end enumerate
+
+@subheading CONFIGURATION:
+
+The schedulers in an SMP system are statically configured on RTEMS.  Firstly
+the application must select which scheduling algorithms are available with the
+following defines
+
+@itemize @bullet
+@item @code{CONFIGURE_SCHEDULER_PRIORITY_SMP},
+@item @code{CONFIGURE_SCHEDULER_SIMPLE_SMP}, and
+@item @code{CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP}.
+@end itemize
+
+This is necessary to calculate the per-thread overhead introduced by the
+schedulers.  After these definitions the configuration file must @code{#include
+<rtems/scheduler.h>} to have access to scheduler specific configuration macros.
+Each scheduler needs a context to store state information at run-time.  To
+provide a context for each scheduler is the next step.  Use the following
+macros to create scheduler contexts
+
+@itemize @bullet
+@item @code{RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP(name, prio_count)},
+@item @code{RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(name)}, and
+@item @code{RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP(name, prio_count)}.
+@end itemize
+
+The @code{name} parameter is used as part of a designator for a global
+variable, so the usual C/C++ designator rules apply.  Additional parameters are
+scheduler specific.  The schedulers are registered in the system via the
+scheduler table.  To create the scheduler table define
+@code{CONFIGURE_SCHEDULER_CONTROLS} to a list of the following scheduler
+control initializers
+
+@itemize @bullet
+@item @code{RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP(name, obj_name)},
+@item @code{RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP(name, obj_name)}, and
+@item @code{RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP(name, obj_name)}.
+@end itemize
+
+The @code{name} parameter must correspond to the parameter defining the
+scheduler context.  The @code{obj_name} determines the scheduler object name
+and can be used in @code{rtems_scheduler_ident()} to get the scheduler object
+identifier.
+
+The last step is to define which processor uses which scheduler.
+For this purpose a scheduler assignment table must be defined.  The entry count
+of this table must be equal to the configured maximum processors
+(@code{CONFIGURE_SMP_MAXIMUM_PROCESSORS}).  A processor assignment to a
+scheduler can be optional or mandatory.  The boot processor must have a
+scheduler assigned.  In case the system needs more mandatory processors than
+available then a fatal run-time error will occur.  To specify the scheduler
+assignments define @code{CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS} to a list of
+@code{RTEMS_SCHEDULER_ASSIGN(index, attr)} and
+@code{RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER} macros.  The @code{index} parameter
+must be a valid index into the scheduler table.  The @code{attr} parameter
+defines the scheduler assignment attributes.  By default a scheduler assignment
+to a processor is optional.  For the scheduler assignment attribute use one of
+the mutually exclusive variants
+
+@itemize @bullet
+@item @code{RTEMS_SCHEDULER_ASSIGN_DEFAULT},
+@item @code{RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY}, and
+@item @code{RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL}.
+@end itemize
+
+@subheading ERRORS:
+
+In case one of the scheduler indices in
+@code{CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS} is invalid a link-time error will
+occur with an undefined reference to @code{RTEMS_SCHEDULER_INVALID_INDEX}.
+
+Some fatal errors may occur in case of scheduler configuration inconsistencies or a lack
+of processors on the system.  The fatal source is
+@code{RTEMS_FATAL_SOURCE_SMP}.  None of the errors is internal.
+
+@itemize @bullet
+@item @code{SMP_FATAL_BOOT_PROCESSOR_NOT_ASSIGNED_TO_SCHEDULER} - the boot
+processor must have a scheduler assigned.
+@item @code{SMP_FATAL_MANDATORY_PROCESSOR_NOT_PRESENT} - there exists a
+mandatory processor beyond the range of physically or virtually available
+processors.  The processor demand must be reduced for this system.
+@item @code{SMP_FATAL_START_OF_MANDATORY_PROCESSOR_FAILED} - the start of a
+mandatory processor failed during system initialization.  The system may not
+have this processor at all or it could be a problem with a boot loader for
+example.
+the @code{CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS} definition.
+@item @code{SMP_FATAL_SCHEDULER_WITHOUT_PROCESSORS} - it is prohibited to have
+a scheduler managing the empty processor set.
+@item @code{SMP_FATAL_MULTITASKING_START_ON_UNASSIGNED_PROCESSOR} - it is not
+allowed to start multitasking on a processor with no scheduler assigned.
+@end itemize
+
+@subheading EXAMPLE:
+
+The following example shows a scheduler configuration for a hypothetical
+product using two chip variants.  One variant has four processors which is used
+for the normal product line and another provides eight processors for the
+high-performance product line.  The first processor performs hard-real time
+control of actuators and sensors.  The second processor is not used by RTEMS at
+all and runs a Linux instance to provide a graphical user interface.  The
+additional processors are used for a worker thread pool to perform data
+processing operations.
+
+The processors managed by RTEMS use two Deterministic Priority scheduler
+instances capable of dealing with 256 priority levels.  The scheduler with
+index zero has the name @code{"IO  "}.  The scheduler with index one has the
+name @code{"WORK"}.  The scheduler assignments of the first, third and fourth
+processor are mandatory, so the system must have at least four processors,
+otherwise a fatal run-time error will occur during system startup.  The
+processor assignments for the fifth up to the eighth processor are optional so
+that the same application can be used for the normal and high-performance
+product lines.  The second processor has no scheduler assigned and runs Linux.
+A hypervisor will ensure that the two systems cannot interfere in an
+undesirable way.
+
+@example
+@group
+#define CONFIGURE_SMP_MAXIMUM_PROCESSORS 8
+
+#define CONFIGURE_MAXIMUM_PRIORITY 255
+
+/* Make the scheduler algorithm available */
+
+#define CONFIGURE_SCHEDULER_PRIORITY_SMP
+
+#include <rtems/scheduler.h>
+
+/* Create contexts for the two scheduler instances */
+
+RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP(io, CONFIGURE_MAXIMUM_PRIORITY + 1);
+
+RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP(work, CONFIGURE_MAXIMUM_PRIORITY + 1);
+
+/* Define the scheduler table */
+
+#define CONFIGURE_SCHEDULER_CONTROLS \
+  RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP( \
+    io, \
+    rtems_build_name('I', 'O', ' ', ' ') \
+  ), \
+  RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP( \
+    work, \
+    rtems_build_name('W', 'O', 'R', 'K') \
+  )
+
+/* Define the processor to scheduler assignments */
+
+#define CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS \
+  RTEMS_SCHEDULER_ASSIGN(0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY), \
+  RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER, \
+  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY), \
+  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY), \
+  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL), \
+  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL), \
+  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL), \
+  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL)
+@end group
+@end example
+
+@c
 @c === SMP Specific Configuration Parameters ===
 @c
 @section SMP Specific Configuration Parameters
@@ -3804,7 +3985,7 @@ configuration parameters which apply.
 @c
 @c === CONFIGURE_SMP_APPLICATION ===
 @c
-@subsection Specify Application Uses Multiple Cores (is SMP)
+@subsection Enable SMP Support for Applications
 
 @findex CONFIGURE_SMP_APPLICATION
 
@@ -3819,16 +4000,16 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-The default value is 1, (if CONFIGURE_SMP_APPLICATION is defined).
+This is not defined by default.
 
 @end table
 
 @subheading DESCRIPTION:
-@code{CONFIGURE_SMP_APPLICATION} must be defined if the application is
-to make use of multiple CPU cores in an SMP target system.
+@code{CONFIGURE_SMP_APPLICATION} must be defined to enable SMP support for the
+application.
 
 @subheading NOTES:
-None.
+This define may go away in the future in case all RTEMS components are SMP ready.
 
 @c
 @c === CONFIGURE_SMP_MAXIMUM_PROCESSORS ===
@@ -3854,10 +4035,10 @@ The default value is 1, (if CONFIGURE_SMP_APPLICATION is defined).
 
 @subheading DESCRIPTION:
 @code{CONFIGURE_SMP_MAXIMUM_PROCESSORS} must be set to the number of
-CPU cores in the SMP configuration.
+processors in the SMP configuration.
 
 @subheading NOTES:
-If there are more cores available than configured, the rest will be
+If there are more processors available than configured, the rest will be
 ignored.
 
 @c
