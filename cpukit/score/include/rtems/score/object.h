@@ -217,7 +217,8 @@ typedef enum {
   OBJECTS_NO_API       = 0,
   OBJECTS_INTERNAL_API = 1,
   OBJECTS_CLASSIC_API  = 2,
-  OBJECTS_POSIX_API    = 3
+  OBJECTS_POSIX_API    = 3,
+  OBJECTS_FAKE_OBJECTS_API = 7
 } Objects_APIs;
 
 /** This macro is used to generically specify the last API index. */

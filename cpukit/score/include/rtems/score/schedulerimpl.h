@@ -451,6 +451,16 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get(
   return &_Scheduler_Table[ 0 ];
 }
 
+RTEMS_INLINE_ROUTINE Objects_Id _Scheduler_Build_id( uint32_t scheduler_index )
+{
+  return _Objects_Build_id(
+    OBJECTS_FAKE_OBJECTS_API,
+    OBJECTS_FAKE_OBJECTS_SCHEDULERS,
+    _Objects_Local_node,
+    scheduler_index + 1
+  );
+}
+
 /** @} */
 
 #ifdef __cplusplus

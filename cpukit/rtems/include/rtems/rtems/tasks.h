@@ -548,6 +548,23 @@ rtems_status_code rtems_task_set_affinity(
  */
 rtems_id rtems_task_self(void);
 
+/**
+ * @brief Identifies a scheduler by its name.
+ *
+ * The scheduler name is determined by the scheduler configuration.
+ *
+ * @param[in] name The scheduler name.
+ * @param[out] id The scheduler identifier associated with the name.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ADDRESS The @a id parameter is @c NULL.
+ * @retval RTEMS_INVALID_NAME Invalid scheduler name.
+ */
+rtems_status_code rtems_scheduler_ident(
+  rtems_name  name,
+  rtems_id   *id
+);
+
 /**@}*/
 
 /**

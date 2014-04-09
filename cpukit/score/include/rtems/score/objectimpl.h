@@ -100,6 +100,15 @@ typedef enum {
 /** This macro is used to generically specify the last API index. */
 #define OBJECTS_POSIX_CLASSES_LAST OBJECTS_POSIX_RWLOCKS
 
+/*
+ * For fake objects, which have an object identifier, but no objects
+ * information block.
+ */
+typedef enum {
+  OBJECTS_FAKE_OBJECTS_NO_CLASS   = 0,
+  OBJECTS_FAKE_OBJECTS_SCHEDULERS = 1
+} Objects_Fake_objects_API;
+
 /**
  *  This enumerated type lists the locations which may be returned
  *  by _Objects_Get.  These codes indicate the success of locating

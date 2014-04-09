@@ -25,7 +25,11 @@
 
 const char rtems_test_name[] = "SPSCHEDULER 1";
 
-static rtems_id invalid_id = 1;
+#define BLUE rtems_build_name('b', 'l', 'u', 'e')
+
+#define RED rtems_build_name('r', 'e', 'd', ' ')
+
+static const rtems_id invalid_id = 1;
 
 static void test_task_get_set_affinity(void)
 {
@@ -98,6 +102,27 @@ static void test_task_get_set_affinity(void)
 #endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
 }
 
+static void test_scheduler_ident(void)
+{
+  rtems_status_code sc;
+  rtems_id expected_id = rtems_build_id(7, 1, 1, 1);
+  rtems_id scheduler_id;
+  rtems_name name = BLUE;
+  rtems_name invalid_name = RED;
+
+  sc = rtems_scheduler_ident(name, NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
+
+  sc = rtems_scheduler_ident(invalid_name, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_INVALID_NAME);
+
+  scheduler_id = 0;
+  sc = rtems_scheduler_ident(name, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(scheduler_id == expected_id);
+}
+
 static void Init(rtems_task_argument arg)
 {
   rtems_resource_snapshot snapshot;
@@ -107,6 +132,7 @@ static void Init(rtems_task_argument arg)
   rtems_resource_snapshot_take(&snapshot);
 
   test_task_get_set_affinity();
+  test_scheduler_ident();
 
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
 
@@ -124,6 +150,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_SCHEDULER_NAME BLUE
 
 #define CONFIGURE_INIT
 
