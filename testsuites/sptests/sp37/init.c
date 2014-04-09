@@ -159,6 +159,14 @@ static void test_isr_level( void )
   test_isr_level_for_new_threads( last_proper_level );
 }
 
+#if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
+static const size_t lock_size =
+  offsetof( ISR_lock_Control, lock.ticket_lock.Stats.name )
+    + sizeof( ((ISR_lock_Control *) 0)->lock.ticket_lock.Stats.name );
+#else
+static const size_t lock_size = sizeof( ISR_lock_Control );
+#endif
+
 static void test_isr_locks( void )
 {
   ISR_Level normal_interrupt_level = _ISR_Get_level();
@@ -167,7 +175,7 @@ static void test_isr_locks( void )
   ISR_lock_Context lock_context;
 
   _ISR_lock_Initialize( &lock, "test" );
-  rtems_test_assert( memcmp( &lock, &initialized, sizeof( lock ) ) == 0 );
+  rtems_test_assert( memcmp( &lock, &initialized, lock_size ) == 0 );
 
   _ISR_lock_ISR_disable_and_acquire( &lock, &lock_context );
   rtems_test_assert( normal_interrupt_level != _ISR_Get_level() );
@@ -204,7 +212,7 @@ static void test_interrupt_locks( void )
   rtems_interrupt_lock_context lock_context;
 
   rtems_interrupt_lock_initialize( &lock, "test" );
-  rtems_test_assert( memcmp( &lock, &initialized, sizeof( lock ) ) == 0 );
+  rtems_test_assert( memcmp( &lock, &initialized, lock_size ) == 0 );
 
   rtems_interrupt_lock_acquire( &lock, &lock_context );
   rtems_test_assert( normal_interrupt_level != get_interrupt_level() );
