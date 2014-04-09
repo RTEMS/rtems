@@ -123,6 +123,58 @@ static void test_scheduler_ident(void)
   rtems_test_assert(scheduler_id == expected_id);
 }
 
+static void test_scheduler_get_processors(void)
+{
+#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
+  rtems_status_code sc;
+  rtems_name name = BLUE;
+  rtems_id scheduler_id;
+  cpu_set_t cpusetone;
+  cpu_set_t cpuset;
+  size_t big = 2 * CHAR_BIT * sizeof(cpu_set_t);
+  size_t cpusetbigsize = CPU_ALLOC_SIZE(big);
+  cpu_set_t *cpusetbigone;
+  cpu_set_t *cpusetbig;
+
+  CPU_ZERO(&cpusetone);
+  CPU_SET(0, &cpusetone);
+
+  sc = rtems_scheduler_ident(name, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_scheduler_get_processor_set(scheduler_id, sizeof(cpuset), NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
+
+  sc = rtems_scheduler_get_processor_set(invalid_id, sizeof(cpuset), &cpuset);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  sc = rtems_scheduler_get_processor_set(scheduler_id, 0, &cpuset);
+  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+
+  sc = rtems_scheduler_get_processor_set(scheduler_id, sizeof(cpuset), &cpuset);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(CPU_EQUAL(&cpuset, &cpusetone));
+
+  cpusetbigone = CPU_ALLOC(big);
+  rtems_test_assert(cpusetbigone != NULL);
+
+  cpusetbig = CPU_ALLOC(big);
+  rtems_test_assert(cpusetbig != NULL);
+
+  CPU_ZERO_S(cpusetbigsize, cpusetbigone);
+  CPU_SET_S(0, cpusetbigsize, cpusetbigone);
+
+  sc = rtems_scheduler_get_processor_set(scheduler_id, cpusetbigsize, cpusetbig);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(CPU_EQUAL_S(cpusetbigsize, cpusetbig, cpusetbigone));
+
+  CPU_FREE(cpusetbig);
+  CPU_FREE(cpusetbigone);
+#endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
+}
+
 static void Init(rtems_task_argument arg)
 {
   rtems_resource_snapshot snapshot;
@@ -133,6 +185,7 @@ static void Init(rtems_task_argument arg)
 
   test_task_get_set_affinity();
   test_scheduler_ident();
+  test_scheduler_get_processors();
 
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
 

@@ -565,6 +565,30 @@ rtems_status_code rtems_scheduler_ident(
   rtems_id   *id
 );
 
+#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
+/**
+ * @brief Gets the set of processors owned by the scheduler.
+ *
+ * @param[in] scheduler_id Identifier of the scheduler.
+ * @param[in] cpusetsize Size of the specified processor set buffer in
+ * bytes.  This value must be positive.
+ * @param[out] cpuset The processor set owned by the scheduler.  A set bit in
+ * the processor set means that this processor is owned by the scheduler and a
+ * cleared bit means the opposite.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ADDRESS The @a cpuset parameter is @c NULL.
+ * @retval RTEMS_INVALID_ID Invalid scheduler identifier.
+ * @retval RTEMS_INVALID_NUMBER The processor set buffer is too small for the
+ * set of processors owned by the scheduler.
+ */
+rtems_status_code rtems_scheduler_get_processor_set(
+  rtems_id   scheduler_id,
+  size_t     cpusetsize,
+  cpu_set_t *cpuset
+);
+#endif
+
 /**@}*/
 
 /**

@@ -461,6 +461,19 @@ RTEMS_INLINE_ROUTINE Objects_Id _Scheduler_Build_id( uint32_t scheduler_index )
   );
 }
 
+RTEMS_INLINE_ROUTINE bool _Scheduler_Get_by_id(
+  Objects_Id                id,
+  const Scheduler_Control **scheduler
+)
+{
+  uint32_t minimum_id = _Scheduler_Build_id( 0 );
+  uint32_t index = id - minimum_id;
+
+  *scheduler = &_Scheduler_Table[ index ];
+
+  return index < _Scheduler_Count;
+}
+
 /** @} */
 
 #ifdef __cplusplus
