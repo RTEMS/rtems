@@ -2612,6 +2612,39 @@ The devFS is comparable in functionality to the pseudo-filesystem name
 space provided before RTEMS release 4.5.0.
 
 @c
+@c === CONFIGURE_MAXIMUM_DEVICES ===
+@c
+@subsection Specifying Maximum Devices
+
+@findex CONFIGURE_MAXIMUM_DEVICES
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_MAXIMUM_DEVICES}
+
+@item DATA TYPE:
+Unsigned integer (@code{uint32_t}).
+
+@item RANGE:
+Positive.
+
+@item DEFAULT VALUE:
+If @code{BSP_MAXIMUM_DEVICES} is defined, then the
+default value is @code{BSP_MAXIMUM_DEVICES}, otherwise the default value is 4.
+
+@end table
+
+@subheading DESCRIPTION:
+@code{CONFIGURE_MAXIMUM_DEVICES} is defined to the number of
+individual devices that may be registered in the device file system (devFS).
+
+@subheading NOTES:
+This option is specific to the device file system (devFS) and should not be
+confused with the @code{CONFIGURE_MAXIMUM_DRIVERS} option.  This parameter only
+impacts the devFS and thus is only used by @code{<rtems/confdefs.h>} when
+@code{CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM} is specified.
+
+@c
 @c === CONFIGURE_APPLICATION_DISABLE_FILESYSTEM ===
 @c
 @subsection Disable File System Support
@@ -3869,39 +3902,6 @@ configuration parameter must be larger than the number of statically
 configured device drivers. Drivers configured using the
 @code{CONFIGURE_APPLICATIONS_NEEDS_XXX_DRIVER} configuration parameters
 are statically installed.
-
-@c
-@c === CONFIGURE_MAXIMUM_DEVICES ===
-@c
-@subsection Specifying Maximum Devices
-
-@findex CONFIGURE_MAXIMUM_DEVICES
-
-@table @b
-@item CONSTANT:
-@code{CONFIGURE_MAXIMUM_DEVICES}
-
-@item DATA TYPE:
-Unsigned integer (@code{uint32_t}).
-
-@item RANGE:
-Positive.
-
-@item DEFAULT VALUE:
-If @code{BSP_MAXIMUM_DEVICES} is defined, then the
-default value is @code{BSP_MAXIMUM_DEVICES}, otherwise the default value is 4.
-
-@end table
-
-@subheading DESCRIPTION:
-@code{CONFIGURE_MAXIMUM_DEVICES} is defined to the number of
-individual devices that may be registered in the device file system (devFS).
-
-@subheading NOTES:
-This option is specific to the device file system (devFS) and should not be
-confused with the @code{CONFIGURE_MAXIMUM_DRIVERS} option.  This parameter only
-impacts the devFS and thus is only used by @code{<rtems/confdefs.h>} when
-@code{CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM} is specified.
 
 @c
 @c === CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER ===
