@@ -2614,7 +2614,7 @@ space provided before RTEMS release 4.5.0.
 @c
 @c === CONFIGURE_MAXIMUM_DEVICES ===
 @c
-@subsection Specifying Maximum Devices
+@subsection Specifying Maximum Devices for devFS
 
 @findex CONFIGURE_MAXIMUM_DEVICES
 
