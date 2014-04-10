@@ -1162,6 +1162,7 @@ static void dwmac_task_rx( void *arg )
             idx
             );
           ++counts->dma_suspended;
+          self->dmagrp->status = DMAGRP_STATUS_RU;
         }
 
         idx = idx_next;
