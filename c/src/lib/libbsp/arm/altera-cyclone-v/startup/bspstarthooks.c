@@ -23,8 +23,6 @@
 #include "socal/hps.h"
 #include "../include/arm-cache-l1.h"
 
-/*#define DEBUG_ECC_ERROR*/ /* TODO: Delete DEBUG_ECC_ERROR after the implementation phase */
-
 #ifdef RTEMS_SMP
   #define MMU_DATA_READ_WRITE ARMV7_MMU_DATA_READ_WRITE_SHAREABLE
 #else
