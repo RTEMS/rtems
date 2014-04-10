@@ -42,7 +42,7 @@ static void fatal_extension(
 )
 {
   if (source == RTEMS_FATAL_SOURCE_SMP) {
-    uint32_t self = rtems_smp_get_current_processor();
+    uint32_t self = rtems_get_current_processor();
 
     assert(!is_internal);
     assert(code == SMP_FATAL_SHUTDOWN);
@@ -68,7 +68,7 @@ static rtems_status_code test_driver_init(
   void *arg
 )
 {
-  uint32_t self = rtems_smp_get_current_processor();
+  uint32_t self = rtems_get_current_processor();
   uint32_t cpu_count = rtems_get_processor_count();
   uint32_t cpu;
 

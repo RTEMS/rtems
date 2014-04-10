@@ -67,7 +67,7 @@ static void wait_for_giant(void)
 
 static void Init(rtems_task_argument arg)
 {
-  uint32_t self = rtems_smp_get_current_processor();
+  uint32_t self = rtems_get_current_processor();
   uint32_t cpu_count = rtems_get_processor_count();
 
   rtems_test_begink();
@@ -108,7 +108,7 @@ static void fatal_extension(
     source == RTEMS_FATAL_SOURCE_APPLICATION
       || source == RTEMS_FATAL_SOURCE_SMP
   ) {
-    uint32_t self = rtems_smp_get_current_processor();
+    uint32_t self = rtems_get_current_processor();
     SMP_barrier_State state = SMP_BARRIER_STATE_INITIALIZER;
 
     assert(!is_internal);

@@ -29,7 +29,7 @@ void rtems_test_fatal_extension(
   (void) is_internal;
   (void) code;
 
-  if (rtems_smp_get_current_processor() == 0) {
+  if (rtems_get_current_processor() == 0) {
     rtems_profiling_report_xml(
       rtems_test_name,
       printk_plugin,

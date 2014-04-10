@@ -23,7 +23,7 @@ void PrintTaskInfo(
 {
   uint32_t cpu_num;
 
-  cpu_num = rtems_smp_get_current_processor();
+  cpu_num = rtems_get_current_processor();
 
   /* Print the cpu number and task name */
   locked_printf(

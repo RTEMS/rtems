@@ -73,7 +73,7 @@ rtems_task Init(
       &id
     );
 
-    cpu_num = rtems_smp_get_current_processor();
+    cpu_num = rtems_get_current_processor();
     locked_printf(" CPU %" PRIu32 " start task TA%c\n", cpu_num, ch);
     status = rtems_task_start( id, Test_task, i+1 );
     directive_failed( status, str );

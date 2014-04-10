@@ -86,14 +86,14 @@ static void signal_send(test_context *ctx, test_state new_state)
 static void check_consumer_processor(const test_context *ctx)
 {
   rtems_test_assert(
-    ctx->consumer_processor == rtems_smp_get_current_processor()
+    ctx->consumer_processor == rtems_get_current_processor()
   );
 }
 
 static void check_producer_processor(const test_context *ctx)
 {
   rtems_test_assert(
-    ctx->producer_processor == rtems_smp_get_current_processor()
+    ctx->producer_processor == rtems_get_current_processor()
   );
 }
 
@@ -101,7 +101,7 @@ static void producer(rtems_task_argument arg)
 {
   test_context *ctx = (test_context *) arg;
 
-  ctx->producer_processor = rtems_smp_get_current_processor();
+  ctx->producer_processor = rtems_get_current_processor();
 
   rtems_test_assert(ctx->consumer_processor != ctx->producer_processor);
 
@@ -126,7 +126,7 @@ static void test(void)
   rtems_mode mode;
 
   ctx->consumer = rtems_task_self();
-  ctx->consumer_processor = rtems_smp_get_current_processor();
+  ctx->consumer_processor = rtems_get_current_processor();
 
   sc = rtems_signal_catch(signal_handler, RTEMS_DEFAULT_MODES);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);

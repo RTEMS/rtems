@@ -82,14 +82,14 @@ static void signal_send(test_context *ctx, test_state new_state)
 static void check_consumer_processor(const test_context *ctx)
 {
   rtems_test_assert(
-    ctx->consumer_processor == rtems_smp_get_current_processor()
+    ctx->consumer_processor == rtems_get_current_processor()
   );
 }
 
 static void check_producer_processor(const test_context *ctx)
 {
   rtems_test_assert(
-    ctx->producer_processor == rtems_smp_get_current_processor()
+    ctx->producer_processor == rtems_get_current_processor()
   );
 }
 
@@ -97,7 +97,7 @@ static void *producer(void *arg)
 {
   test_context *ctx = arg;
 
-  ctx->producer_processor = rtems_smp_get_current_processor();
+  ctx->producer_processor = rtems_get_current_processor();
 
   rtems_test_assert(ctx->consumer_processor != ctx->producer_processor);
 
@@ -120,7 +120,7 @@ static void test(void)
   void *producer_status;
 
   ctx->consumer = pthread_self();
-  ctx->consumer_processor = rtems_smp_get_current_processor();
+  ctx->consumer_processor = rtems_get_current_processor();
 
   memset(&new_action, 0, sizeof(new_action));
   new_action.sa_handler = signal_handler;

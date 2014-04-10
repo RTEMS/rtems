@@ -34,7 +34,7 @@ rtems_task Test_task(
   for ( ; ; ) {
 
     /* Get the CPU Number */
-    cpu_num = rtems_smp_get_current_processor();
+    cpu_num = rtems_get_current_processor();
 
     status = rtems_clock_get_tod( &time );
     if ( time.second >= 35 ) {

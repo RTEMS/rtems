@@ -73,7 +73,7 @@ static void runner(rtems_task_argument self)
   test_counters *next_counters = &ctx->counters[next];
 
   while (true) {
-    uint32_t current_cpu = rtems_smp_get_current_processor();
+    uint32_t current_cpu = rtems_get_current_processor();
 
     ++counters->cycles_per_cpu[current_cpu].counter;
 

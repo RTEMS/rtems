@@ -19,7 +19,7 @@
 
 void bsp_reset(void)
 {
-  uint32_t           self_cpu  = rtems_smp_get_current_processor();
+  uint32_t           self_cpu  = rtems_get_current_processor();
   volatile uint32_t *mpumodrst = ALT_RSTMGR_MPUMODRST_ADDR;
   
   if( self_cpu == 0 ) {

@@ -37,7 +37,7 @@ void PrintTaskInfo(
 {
   uint32_t cpu_num;
 
-  cpu_num = rtems_smp_get_current_processor();
+  cpu_num = rtems_get_current_processor();
 
   locked_printf("  CPU %" PRIu32 " running task %s\n", cpu_num, task_name );
 }

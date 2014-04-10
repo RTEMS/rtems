@@ -260,7 +260,7 @@ static void task(rtems_task_argument arg)
 {
   global_context *ctx = (global_context *) arg;
   uint32_t cpu_count = rtems_get_processor_count();
-  uint32_t cpu_self = rtems_smp_get_current_processor();
+  uint32_t cpu_self = rtems_get_current_processor();
   rtems_status_code sc;
   SMP_barrier_State bs = SMP_BARRIER_STATE_INITIALIZER;
 
@@ -274,7 +274,7 @@ static void test(void)
 {
   global_context *ctx = &context;
   uint32_t cpu_count = rtems_get_processor_count();
-  uint32_t cpu_self = rtems_smp_get_current_processor();
+  uint32_t cpu_self = rtems_get_current_processor();
   uint32_t cpu;
   int test;
   rtems_status_code sc;

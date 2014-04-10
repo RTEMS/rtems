@@ -40,7 +40,7 @@ rtems_task Test_task(
   uint32_t          cpu_num;
   rtems_status_code sc;
 
-  cpu_num = rtems_smp_get_current_processor();
+  cpu_num = rtems_get_current_processor();
 
   do {
 

@@ -28,7 +28,7 @@ rtems_task Test_task(
   rtems_test_assert( p != NULL );
 
    /* Get the CPU Number */
-  cpu_num = rtems_smp_get_current_processor();
+  cpu_num = rtems_get_current_processor();
 
   /* Print that the task is up and running. */
   Loop();

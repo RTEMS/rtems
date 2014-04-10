@@ -18,11 +18,11 @@
 #ifndef _RTEMS_RTEMS_SMP_H
 #define _RTEMS_RTEMS_SMP_H
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/score/smp.h>
 
 /**
  * @defgroup ClassicSMP SMP Services
@@ -55,8 +55,7 @@ uint32_t rtems_get_processor_count(void);
 /**
  * @brief Returns the index of the current processor.
  *
- * On uni-processor configurations this is a compile time constant and defined
- * to be zero.
+ * On uni-processor configurations a value of zero will be returned.
  *
  * On SMP configurations an architecture specific method is used to obtain the
  * index of the current processor in the system.  The set of processor indices
@@ -70,8 +69,7 @@ uint32_t rtems_get_processor_count(void);
  *
  * @return The index of the current processor.
  */
-#define rtems_smp_get_current_processor() \
-  _SMP_Get_current_processor()
+uint32_t rtems_get_current_processor(void);
 
 /** @} */
 

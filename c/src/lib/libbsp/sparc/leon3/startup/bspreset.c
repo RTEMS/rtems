@@ -20,7 +20,7 @@
 
 void bsp_reset(void)
 {
-  uint32_t self_cpu = rtems_smp_get_current_processor();
+  uint32_t self_cpu = rtems_get_current_processor();
 
   if (self_cpu == 0) {
     volatile struct irqmp_regs *irqmp = LEON3_IrqCtrl_Regs;
