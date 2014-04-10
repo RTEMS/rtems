@@ -26,11 +26,13 @@
 
 void _SMP_Handler_initialize( void )
 {
-  uint32_t max_cpus = rtems_configuration_get_maximum_processors();
-  uint32_t cpu;
+  uint32_t cpu_max = rtems_configuration_get_maximum_processors();
+  uint32_t cpu_self;
+  uint32_t cpu_count;
+  uint32_t cpu_index;
 
-  for ( cpu = 0 ; cpu < max_cpus; ++cpu ) {
-    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+  for ( cpu_index = 0 ; cpu_index < cpu_max; ++cpu_index ) {
+    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu_index );
 
     _SMP_ticket_lock_Initialize( &per_cpu->Lock, "per-CPU" );
   }
@@ -38,9 +40,28 @@ void _SMP_Handler_initialize( void )
   /*
    * Discover and initialize the secondary cores in an SMP system.
    */
-  max_cpus = _CPU_SMP_Initialize( max_cpus );
 
-  _SMP_Processor_count = max_cpus;
+  cpu_count = _CPU_SMP_Initialize();
+  cpu_count = cpu_count < cpu_max ? cpu_count : cpu_max;
+  _SMP_Processor_count = cpu_count;
+
+  cpu_self = _SMP_Get_current_processor();
+
+  for ( cpu_index = 0 ; cpu_index < cpu_count; ++cpu_index ) {
+    if ( cpu_index != cpu_self ) {
+      bool ok = _CPU_SMP_Start_processor( cpu_index );
+
+      if ( !ok ) {
+        _Terminate(
+          RTEMS_FATAL_SOURCE_SMP,
+          false,
+          SMP_FATAL_START_OF_MANDATORY_PROCESSOR_FAILED
+        );
+      }
+    }
+  }
+
+  _CPU_SMP_Finalize_initialization( cpu_count );
 }
 
 void _SMP_Request_start_multitasking( void )

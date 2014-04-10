@@ -26,53 +26,43 @@ static rtems_isr bsp_inter_processor_interrupt(
   _SMP_Inter_processor_interrupt_handler();
 }
 
-void leon3_secondary_cpu_initialize(uint32_t cpu)
+void leon3_secondary_cpu_initialize(uint32_t cpu_index)
 {
   leon3_set_cache_control_register(0x80000F);
   /* Unmask IPI interrupts at Interrupt controller for this CPU */
-  LEON3_IrqCtrl_Regs->mask[cpu] |= 1 << LEON3_MP_IRQ;
+  LEON3_IrqCtrl_Regs->mask[cpu_index] |= 1U << LEON3_MP_IRQ;
 
   _SMP_Start_multitasking_on_secondary_processor();
 }
 
-uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count )
+uint32_t _CPU_SMP_Initialize( void )
 {
-  uint32_t max_cpu_count;
-  uint32_t used_cpu_count;
-  uint32_t cpu;
-
   leon3_set_cache_control_register(0x80000F);
 
-  max_cpu_count = leon3_get_cpu_count(LEON3_IrqCtrl_Regs);
-  used_cpu_count = configured_cpu_count < max_cpu_count ?
-    configured_cpu_count : max_cpu_count;
-
-  #if defined(RTEMS_DEBUG)
-    printk( "Found %d CPUs\n", max_cpu_count );
-
-    if ( max_cpu_count > configured_cpu_count ) {
-      printk(
-        "%d CPUs IS MORE THAN CONFIGURED -- ONLY USING %d\n",
-        max_cpu_count,
-        configured_cpu_count
-      );
-    }
-  #endif
-
-  if ( used_cpu_count > 1 ) {
+  if ( rtems_configuration_get_maximum_processors() > 1 ) {
     LEON_Unmask_interrupt(LEON3_MP_IRQ);
     set_vector(bsp_inter_processor_interrupt, LEON_TRAP_TYPE(LEON3_MP_IRQ), 1);
   }
 
-  for ( cpu = 1 ; cpu < used_cpu_count ; ++cpu ) {
-    #if defined(RTEMS_DEBUG)
-      printk( "Waking CPU %d\n", cpu );
-    #endif
+  return leon3_get_cpu_count(LEON3_IrqCtrl_Regs);
+}
 
-    LEON3_IrqCtrl_Regs->mpstat = 1 << cpu;
-  }
+bool _CPU_SMP_Start_processor( uint32_t cpu_index )
+{
+  #if defined(RTEMS_DEBUG)
+    printk( "Waking CPU %d\n", cpu_index );
+  #endif
 
-  return used_cpu_count;
+  LEON3_IrqCtrl_Regs->mpstat = 1U << cpu_index;
+
+  return true;
+}
+
+void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
+{
+  (void) cpu_count;
+
+  /* Nothing to do */
 }
 
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)

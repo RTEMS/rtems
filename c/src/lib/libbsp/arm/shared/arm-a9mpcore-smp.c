@@ -25,28 +25,39 @@ static void bsp_inter_processor_interrupt(void *arg)
   _SMP_Inter_processor_interrupt_handler();
 }
 
-uint32_t _CPU_SMP_Initialize(uint32_t configured_cpu_count)
+uint32_t _CPU_SMP_Initialize(void)
 {
-  rtems_status_code sc;
-  uint32_t max_cpu_count = arm_gic_irq_processor_count();
-  uint32_t used_cpu_count = configured_cpu_count < max_cpu_count ?
-    configured_cpu_count : max_cpu_count;
+  return arm_gic_irq_processor_count();
+}
 
-  sc = rtems_interrupt_handler_install(
-    ARM_GIC_IRQ_SGI_0,
-    "IPI",
-    RTEMS_INTERRUPT_UNIQUE,
-    bsp_inter_processor_interrupt,
-    NULL
-  );
-  assert(sc == RTEMS_SUCCESSFUL);
+bool _CPU_SMP_Start_processor(uint32_t cpu_index)
+{
+  (void) cpu_index;
 
-  return used_cpu_count;
+  /* Nothing to do */
+
+  return true;
+}
+
+void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
+{
+  if (cpu_count > 0) {
+    rtems_status_code sc;
+
+    sc = rtems_interrupt_handler_install(
+      ARM_GIC_IRQ_SGI_0,
+      "IPI",
+      RTEMS_INTERRUPT_UNIQUE,
+      bsp_inter_processor_interrupt,
+      NULL
+    );
+    assert(sc == RTEMS_SUCCESSFUL);
+  }
 }
 
 void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
 {
-  rtems_status_code sc = arm_gic_irq_generate_software_irq(
+  arm_gic_irq_generate_software_irq(
     ARM_GIC_IRQ_SGI_0,
     ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_IN_LIST,
     (uint8_t) (1U << target_processor_index)

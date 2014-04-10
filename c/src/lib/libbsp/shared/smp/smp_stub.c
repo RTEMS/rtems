@@ -11,10 +11,19 @@
 
 #include <rtems/score/cpu.h>
 
-uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count )
+uint32_t _CPU_SMP_Initialize( void )
 {
   /* return the number of CPUs */
   return 1;
+}
+
+bool _CPU_SMP_Start_processor( uint32_t cpu_index )
+{
+  return true;
+}
+
+void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
+{
 }
 
 void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )

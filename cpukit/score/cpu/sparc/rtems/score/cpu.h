@@ -1161,7 +1161,11 @@ void _CPU_Context_restore(
 ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 #if defined(RTEMS_SMP)
-  uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count );
+  uint32_t _CPU_SMP_Initialize( void );
+
+  bool _CPU_SMP_Start_processor( uint32_t cpu_index );
+
+  void _CPU_SMP_Finalize_initialization( uint32_t cpu_count );
 
   #if defined(__leon__)
     static inline uint32_t _CPU_SMP_Get_current_processor( void )

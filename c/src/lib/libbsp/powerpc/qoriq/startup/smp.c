@@ -141,26 +141,34 @@ static void bsp_inter_processor_interrupt(void *arg)
   _SMP_Inter_processor_interrupt_handler();
 }
 
-uint32_t _CPU_SMP_Initialize(uint32_t configured_cpu_count)
+uint32_t _CPU_SMP_Initialize(void)
 {
-  rtems_status_code sc;
-  uint32_t cores = configured_cpu_count < CORE_COUNT ?
-    configured_cpu_count : CORE_COUNT;
+  return CORE_COUNT;
+}
 
-  sc = rtems_interrupt_handler_install(
-    QORIQ_IRQ_IPI_0,
-    "IPI",
-    RTEMS_INTERRUPT_UNIQUE,
-    bsp_inter_processor_interrupt,
-    NULL
-  );
-  assert(sc == RTEMS_SUCCESSFUL);
+bool _CPU_SMP_Start_processor(uint32_t cpu_index)
+{
+  (void) cpu_index;
 
-  if (cores > 1) {
-    release_core_1();
+  release_core_1();
+
+  return true;
+}
+
+void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
+{
+  if (cpu_count > 1) {
+    rtems_status_code sc;
+
+    sc = rtems_interrupt_handler_install(
+      QORIQ_IRQ_IPI_0,
+      "IPI",
+      RTEMS_INTERRUPT_UNIQUE,
+      bsp_inter_processor_interrupt,
+      NULL
+    );
+    assert(sc == RTEMS_SUCCESSFUL);
   }
-
-  return cores;
 }
 
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)

@@ -1467,19 +1467,47 @@ CPU_Counter_ticks _CPU_Counter_difference(
    * @brief Performs CPU specific SMP initialization in the context of the boot
    * processor.
    *
-   * This function is invoked on the boot processor by RTEMS during
+   * This function is invoked on the boot processor during system
    * initialization.  All interrupt stacks are allocated at this point in case
-   * the CPU port allocates the interrupt stacks.
+   * the CPU port allocates the interrupt stacks.  This function is called
+   * before _CPU_SMP_Start_processor() or _CPU_SMP_Finalize_initialization() is
+   * used.
    *
-   * The CPU port should start secondary processors now.
-   *
-   * @param[in] configured_cpu_count The count of processors requested by the
-   * application configuration.
-   *
-   * @return The count of processors available for the application in the system.
-   * This value is less than or equal to the configured count of processors.
+   * @return The count of physically or virtually available processors.
+   * Depending on the configuration the application may use not all processors.
    */
-  uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count );
+  uint32_t _CPU_SMP_Initialize( void );
+
+  /**
+   * @brief Starts a processor specified by its index.
+   *
+   * This function is invoked on the boot processor during system
+   * initialization.
+   *
+   * This function will be called after _CPU_SMP_Initialize().
+   *
+   * @param[in] cpu_index The processor index.
+   *
+   * @retval true Successful operation.
+   * @retval false Unable to start this processor.
+   */
+  bool _CPU_SMP_Start_processor( uint32_t cpu_index );
+
+  /**
+   * @brief Performs final steps of CPU specific SMP initialization in the
+   * context of the boot processor.
+   *
+   * This function is invoked on the boot processor during system
+   * initialization.
+   *
+   * This function will be called after all processors requested by the
+   * application have been started.
+   *
+   * @param[in] cpu_count The minimum value of the count of processors
+   * requested by the application configuration and the count of physically or
+   * virtually available processors.
+   */
+  void _CPU_SMP_Finalize_initialization( uint32_t cpu_count );
 
   /**
    * @brief Returns the index of the current processor.

@@ -786,16 +786,24 @@ static void secondary_cpu_initialize(void)
   _SMP_Start_multitasking_on_secondary_processor();
 }
 
-uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count )
+uint32_t _CPU_SMP_Initialize( void )
 {
-  int cores;
   /* XXX need to deal with finding too many cores */
 
-  cores = imps_probe();
+  return (uint32_t) imps_probe();
+}
 
-  if ( cores > 1 )
+bool _CPU_SMP_Start_processor( uint32_t cpu_index )
+{
+  (void) cpu_index;
+
+  return true;
+}
+
+void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
+{
+  if ( cpu_count > 1 )
     ipi_install_irq();
-  return cores;
 }
 
 void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
