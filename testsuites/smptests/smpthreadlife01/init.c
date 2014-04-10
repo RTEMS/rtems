@@ -298,7 +298,7 @@ static void Init(rtems_task_argument arg)
 {
   TEST_BEGIN();
 
-  if (rtems_smp_get_processor_count() >= CPU_COUNT) {
+  if (rtems_get_processor_count() >= CPU_COUNT) {
     test_restart();
     test_delete();
     test_set_life_protection();

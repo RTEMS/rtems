@@ -446,7 +446,7 @@ static void test(void)
 
   test_static_and_dynamic_initialization();
 
-  ctx->worker_count = rtems_smp_get_processor_count();
+  ctx->worker_count = rtems_get_processor_count();
 
   sc = rtems_timer_create(
     rtems_build_name('S', 'T', 'O', 'P'),

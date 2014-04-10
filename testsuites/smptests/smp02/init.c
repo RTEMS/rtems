@@ -40,7 +40,7 @@ rtems_task Init(
 
   locked_print_initialize();
 
-  if ( rtems_smp_get_processor_count() == 1 ) {
+  if ( rtems_get_processor_count() == 1 ) {
     success();
   }
 
@@ -59,7 +59,7 @@ rtems_task Init(
   status = rtems_semaphore_obtain( Semaphore, RTEMS_WAIT, 0);
   directive_failed( status,"rtems_semaphore_obtain of SEM1\n");
 
-  for ( i=1; i < rtems_smp_get_processor_count(); i++ ){
+  for ( i=1; i < rtems_get_processor_count(); i++ ){
 
     /* Create and start tasks for each CPU */
     ch = '0' + i;

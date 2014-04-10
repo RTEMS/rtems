@@ -68,7 +68,7 @@ static void wait_for_giant(void)
 static void Init(rtems_task_argument arg)
 {
   uint32_t self = rtems_smp_get_current_processor();
-  uint32_t cpu_count = rtems_smp_get_processor_count();
+  uint32_t cpu_count = rtems_get_processor_count();
 
   rtems_test_begink();
 

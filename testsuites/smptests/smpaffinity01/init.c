@@ -112,7 +112,7 @@ void Validate_affinity(void )
   directive_failed( sc, "Get Affinity of Init Task" );
 
   /* Get the number of processors that we are using. */
-  cpu_count = rtems_smp_get_processor_count();
+  cpu_count = rtems_get_processor_count();
 
   /* Fill the remaining cpus with med priority tasks */
   puts( "Init - Create Medium priority tasks");

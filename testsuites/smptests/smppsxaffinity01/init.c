@@ -106,7 +106,7 @@ void Validate_attr(void )
   rtems_test_assert( priority != -1 );
 
 
-  cpus = rtems_smp_get_processor_count();
+  cpus = rtems_get_processor_count();
   puts(
     "Init - Validate pthread_attr_setaffinity_np and "
     "pthread_attr_getaffinity_np"

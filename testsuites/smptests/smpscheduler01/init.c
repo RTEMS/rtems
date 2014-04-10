@@ -69,7 +69,7 @@ static void task(rtems_task_argument arg)
 static bool is_per_cpu_state_ok(void)
 {
   bool ok = true;
-  uint32_t n = rtems_smp_get_processor_count();
+  uint32_t n = rtems_get_processor_count();
   uint32_t i;
 
   for (i = 0; i < n; ++i) {

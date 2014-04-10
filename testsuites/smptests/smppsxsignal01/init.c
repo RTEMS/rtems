@@ -165,7 +165,7 @@ static void *POSIX_Init(void *arg)
 {
   TEST_BEGIN();
 
-  if (rtems_smp_get_processor_count() >= 2) {
+  if (rtems_get_processor_count() >= 2) {
     test();
   }
 

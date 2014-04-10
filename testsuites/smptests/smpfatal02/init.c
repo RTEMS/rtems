@@ -77,7 +77,7 @@ static rtems_status_code test_driver_init(
 )
 {
   uint32_t self = rtems_smp_get_current_processor();
-  uint32_t cpu_count = rtems_smp_get_processor_count();
+  uint32_t cpu_count = rtems_get_processor_count();
   uint32_t cpu;
 
   rtems_test_begink();

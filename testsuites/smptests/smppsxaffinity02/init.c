@@ -121,7 +121,7 @@ void Validate_affinity(void )
   rtems_test_assert( !sc );
 
   /* Get the number of processors that we are using. */
-  cpu_count = rtems_smp_get_processor_count();
+  cpu_count = rtems_get_processor_count();
 
   /* Fill the remaining cpus with med priority tasks */
   puts( "Init - Create Medium priority tasks");

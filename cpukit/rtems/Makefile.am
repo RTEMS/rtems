@@ -259,6 +259,8 @@ librtems_a_SOURCES += src/modes.c
 librtems_a_SOURCES += src/status.c
 librtems_a_SOURCES += src/statustext.c
 
+librtems_a_SOURCES += src/getprocessorcount.c
+
 if HAS_MP
 # We only build multiprocessing related files if HAS_MP was defined
 librtems_a_SOURCES += src/eventmp.c

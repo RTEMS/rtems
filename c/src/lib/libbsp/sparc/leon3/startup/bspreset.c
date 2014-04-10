@@ -32,7 +32,7 @@ void bsp_reset(void)
        */
       uint32_t max_wait = 1234567;
 
-      uint32_t cpu_count = rtems_smp_get_processor_count();
+      uint32_t cpu_count = rtems_get_processor_count();
       uint32_t halt_mask = 0;
       uint32_t i;
 

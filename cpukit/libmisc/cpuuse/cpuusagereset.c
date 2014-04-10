@@ -45,7 +45,7 @@ void rtems_cpu_usage_reset( void )
 
     _TOD_Get_uptime( &CPU_usage_Uptime_at_last_reset );
 
-    processor_count = rtems_smp_get_processor_count();
+    processor_count = rtems_get_processor_count();
     for ( processor = 0 ; processor < processor_count ; ++processor ) {
       Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( processor );
 

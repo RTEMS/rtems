@@ -225,7 +225,7 @@ static void Init(rtems_task_argument arg)
 {
   TEST_BEGIN();
 
-  if (rtems_smp_get_processor_count() >= 2) {
+  if (rtems_get_processor_count() >= 2) {
     test();
   }
 

@@ -40,8 +40,7 @@ extern "C" {
 /**
  * @brief Returns the count of processors in the system.
  *
- * On uni-processor configurations this is a compile time constant and defined
- * to be one.
+ * On uni-processor configurations a value of one will be returned.
  *
  * On SMP configurations this returns the value of a global variable set during
  * system initialization to indicate the count of processors.  The processor
@@ -51,8 +50,7 @@ extern "C" {
  *
  * @return The count of processors in the system.
  */
-#define rtems_smp_get_processor_count() \
-  _SMP_Get_processor_count()
+uint32_t rtems_get_processor_count(void);
 
 /**
  * @brief Returns the index of the current processor.

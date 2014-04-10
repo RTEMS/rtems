@@ -214,7 +214,7 @@ static void Init(rtems_task_argument arg)
   test(false, load);
   test(true, load);
 
-  for (load = 1; load < rtems_smp_get_processor_count(); ++load) {
+  for (load = 1; load < rtems_get_processor_count(); ++load) {
     rtems_status_code sc;
     rtems_id id;
     volatile int *load_data = NULL;
