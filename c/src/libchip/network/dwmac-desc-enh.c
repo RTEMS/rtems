@@ -964,10 +964,10 @@ static void dwmac_desc_enh_prepare_tx_desc(
 
 static void dwmac_desc_enh_close_tx_desc(
   dwmac_common_context *self,
-  const unsigned int    idx_tx )
+  const unsigned int    idx_tx
+)
 {
   volatile dwmac_desc_ext *p_enh = (volatile dwmac_desc_ext *) self->dma_tx;
-
 
   p_enh[idx_tx].etx.des0_3.des0 |= DWMAC_DESC_ETX_DES0_LAST_SEGMENT;
   p_enh[idx_tx].etx.des0_3.des0 |= DWMAC_DESC_ETX_DES0_IRQ_ON_COMPLETION;
