@@ -41,10 +41,15 @@
 #define DWMAC_CORE_INTR_ENABLE_DEFAULT_MASK_TX \
   ( \
     DMAGRP_INTERRUPT_ENABLE_NIE \
-    | DMAGRP_INTERRUPT_ENABLE_TIE \
     | DMAGRP_INTERRUPT_ENABLE_FBE \
     | DMAGRP_INTERRUPT_ENABLE_UNE \
     | DMAGRP_INTERRUPT_ENABLE_AIE \
+  )
+
+#define DWMAC_CORE_INTR_ENABLE_ALL_MASK_TX \
+  ( \
+    DWMAC_CORE_INTR_ENABLE_DEFAULT_MASK_TX \
+    | DMAGRP_INTERRUPT_ENABLE_TIE \
   )
 
 #define DWMAC_CORE_INTR_STATUS_DEFAULT_MASK_RX \
@@ -67,9 +72,14 @@ void dwmac_core_dma_restart_tx( dwmac_common_context *self )
   self->dmagrp->transmit_poll_demand = 1;
 }
 
-void dwmac_core_enable_dma_irq_tx( dwmac_common_context *self )
+void dwmac_core_enable_dma_irq_tx_default( dwmac_common_context *self )
 {
   self->dmagrp->interrupt_enable |= DWMAC_CORE_INTR_ENABLE_DEFAULT_MASK_TX;
+}
+
+void dwmac_core_enable_dma_irq_tx_transmitted( dwmac_common_context *self )
+{
+  self->dmagrp->interrupt_enable |= DMAGRP_INTERRUPT_ENABLE_TIE;
 }
 
 void dwmac_core_enable_dma_irq_rx( dwmac_common_context *self )
@@ -77,9 +87,14 @@ void dwmac_core_enable_dma_irq_rx( dwmac_common_context *self )
   self->dmagrp->interrupt_enable |= DWMAC_CORE_INTR_ENABLE_DEFAULT_MASK_RX;
 }
 
-void dwmac_core_disable_dma_irq_tx( dwmac_common_context *self )
+void dwmac_core_disable_dma_irq_tx_all( dwmac_common_context *self )
 {
-  self->dmagrp->interrupt_enable &= ~DWMAC_CORE_INTR_ENABLE_DEFAULT_MASK_TX;
+  self->dmagrp->interrupt_enable &= ~DWMAC_CORE_INTR_ENABLE_ALL_MASK_TX;
+}
+
+void dwmac_core_disable_dma_irq_tx_transmitted( dwmac_common_context *self )
+{
+  self->dmagrp->interrupt_enable &= ~DMAGRP_INTERRUPT_ENABLE_TIE;
 }
 
 void dwmac_core_reset_dma_irq_status_tx( dwmac_common_context *self )

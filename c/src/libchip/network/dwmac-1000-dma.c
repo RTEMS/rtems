@@ -147,7 +147,7 @@ static int dwmac1000_dma_init(
 
     /* Mask interrupts by writing to CSR7 */
     dwmac_core_enable_dma_irq_rx( self );
-    dwmac_core_enable_dma_irq_tx( self );
+    dwmac_core_enable_dma_irq_tx_default( self );
 
     /* The base address of the RX/TX descriptor lists must be written into
      * DMA CSR3 and CSR4, respectively. */

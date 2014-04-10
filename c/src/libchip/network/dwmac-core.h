@@ -55,9 +55,13 @@ void dwmac_core_dma_restart_tx( dwmac_common_context *self );
 
 void dwmac_core_enable_dma_irq_rx( dwmac_common_context *self );
 
-void dwmac_core_enable_dma_irq_tx( dwmac_common_context *self );
+void dwmac_core_enable_dma_irq_tx_default( dwmac_common_context *self );
 
-void dwmac_core_disable_dma_irq_tx( dwmac_common_context *self );
+void dwmac_core_enable_dma_irq_tx_transmitted( dwmac_common_context *self );
+
+void dwmac_core_disable_dma_irq_tx_all( dwmac_common_context *self );
+
+void dwmac_core_disable_dma_irq_tx_transmitted( dwmac_common_context *self );
 
 void dwmac_core_disable_dma_irq_rx( dwmac_common_context *self );
 

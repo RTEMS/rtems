@@ -262,9 +262,14 @@ static inline void dwmac_enable_irq_rx( dwmac_common_context *self )
   dwmac_core_enable_dma_irq_rx( self );
 }
 
-static inline void dwmac_enable_irq_tx( dwmac_common_context *self )
+static inline void dwmac_enable_irq_tx_default( dwmac_common_context *self )
 {
-  dwmac_core_enable_dma_irq_tx( self );
+  dwmac_core_enable_dma_irq_tx_default( self );
+}
+
+static inline void dwmac_enable_irq_tx_transmitted( dwmac_common_context *self )
+{
+  dwmac_core_enable_dma_irq_tx_transmitted( self );
 }
 
 static inline void dwmac_disable_irq_rx( dwmac_common_context *self )
@@ -272,15 +277,19 @@ static inline void dwmac_disable_irq_rx( dwmac_common_context *self )
   dwmac_core_disable_dma_irq_rx( self );
 }
 
-static inline void dwmac_diable_irq_tx( dwmac_common_context *self )
+static inline void dwmac_disable_irq_tx_all( dwmac_common_context *self )
 {
-  dwmac_core_disable_dma_irq_tx( self );
+  dwmac_core_disable_dma_irq_tx_all( self );
+}
+
+static inline void dwmac_disable_irq_tx_transmitted ( dwmac_common_context *self )
+{
+  dwmac_core_disable_dma_irq_tx_transmitted( self );
 }
 
 static void dwmac_control_request_complete( const dwmac_common_context *self )
 {
   rtems_status_code sc = rtems_event_transient_send( self->task_id_control );
-
 
   assert( sc == RTEMS_SUCCESSFUL );
 }
@@ -1342,263 +1351,275 @@ static void dwmac_task_tx( void *arg )
       );
     assert( sc == RTEMS_SUCCESSFUL );
 
-    /* Handle a status change of the ethernet PHY */
-    if ( ( events & DWMAC_COMMON_EVENT_TX_PHY_STATUS_CHANGE ) != 0 ) {
-      dwmac_common_phy_status_counts *counts     =
-        &self->stats.phy_status_counts;
-      dwmac_phy_event                 phy_events = 0;
-      int                             eno;
+    while( events != 0 ) {
+      /* Handle a status change of the ethernet PHY */
+      if ( ( events & DWMAC_COMMON_EVENT_TX_PHY_STATUS_CHANGE ) != 0 ) {
+        events &= ~DWMAC_COMMON_EVENT_TX_PHY_STATUS_CHANGE;
+        dwmac_common_phy_status_counts *counts     =
+          &self->stats.phy_status_counts;
+        dwmac_phy_event                 phy_events = 0;
+        int                             eno;
 
-      /* Get tripped PHY events */
-      eno = CALLBACK->phy_events_get(
-        self->arg,
-        &phy_events
-        );
-
-      if ( eno == 0 ) {
-        /* Clear the PHY events */
-        eno = CALLBACK->phy_event_clear( self->arg );
-      }
-
-      if ( eno == 0 ) {
-        if ( ( phy_events & PHY_EVENT_LINK_DOWN ) != 0 ) {
-          ++counts->link_down;
-        }
-
-        if ( ( phy_events & PHY_EVENT_LINK_UP ) != 0 ) {
-          ++counts->link_up;
-
-          /* A link up events means that we have a new connection.
-           * Thus the autonegotiation paremeters must get updated */
-          (void) dwmac_update_autonegotiation_params( self );
-        }
-      }
-
-      assert( eno == 0 );
-    }
-
-    /* Stop the task */
-    if ( ( events & DWMAC_COMMON_EVENT_TASK_STOP ) != 0 ) {
-      dwmac_core_dma_stop_tx( self );
-      dwmac_diable_irq_tx( self );
-
-      /* Release all tx mbufs at the risk of data loss */
-      ( DESC_OPS->release_tx_bufs )( self );
-
-      dwmac_control_request_complete( self );
-
-      /* Return to events reception without re-enabling the interrupts
-       * The task needs a re-initialization to to resume work */
-      continue;
-    }
-
-    /* Ininitialize / Re-initialize transmission handling */
-    if ( ( events & DWMAC_COMMON_EVENT_TASK_INIT ) != 0 ) {
-      (void) dwmac_update_autonegotiation_params( self );
-      dwmac_core_dma_stop_tx( self );
-      ( DESC_OPS->release_tx_bufs )( self );
-      idx_transmit       = 0;
-      idx_transmit_first = 0;
-      idx_transmitted    = 0;
-      idx_release        = 0;
-      p_m                = NULL;
-      is_first           = false;
-      is_last            = false;
-      size               = 0;
-      ( DESC_OPS->init_tx_desc )( self );
-      dwmac_core_dma_start_tx( self );
-      dwmac_core_dma_restart_tx( self );
-
-      /* Clear our interrupt statuses */
-      dwmac_core_reset_dma_irq_status_tx( self );
-
-      dwmac_control_request_complete( self );
-    }
-
-    /* Try to bump up the dma threshold due to a failure */
-    if ( ( events & DWMAC_COMMON_EVENT_TX_BUMP_UP_DMA_THRESHOLD ) != 0 ) {
-      if ( self->dma_threshold_control
-           != DWMAC_COMMON_DMA_MODE_STORE_AND_FORWARD
-           && self->dma_threshold_control <= 256 ) {
-        self->dma_threshold_control += 64;
-        ( DMA_OPS->dma_mode )(
-          self,
-          self->dma_threshold_control,
-          DWMAC_COMMON_DMA_MODE_STORE_AND_FORWARD
+        /* Get tripped PHY events */
+        eno = CALLBACK->phy_events_get(
+          self->arg,
+          &phy_events
           );
-      }
-    }
 
-    /* Handle one or more transmitted frames */
-    if ( ( events & DWMAC_COMMON_EVENT_TX_FRAME_TRANSMITTED ) != 0 ) {
-      dwmac_common_tx_frame_counts *counts = &self->stats.frame_counts_tx;
+        if ( eno == 0 ) {
+          /* Clear the PHY events */
+          eno = CALLBACK->phy_event_clear( self->arg );
+        }
 
-      /* Next index to be transmitted */
-      unsigned int idx_transmitted_next = dwmac_increment(
-        idx_transmitted, INDEX_MAX );
+        if ( eno == 0 ) {
+          if ( ( phy_events & PHY_EVENT_LINK_DOWN ) != 0 ) {
+            ++counts->link_down;
+          }
 
-      /* Free consumed fragments */
-      while ( idx_release != idx_transmitted_next
-              && ( DESC_OPS->am_i_tx_owner )( self, idx_release ) ) {
-        /* Status handling per packet */
-        if ( ( DESC_OPS->get_tx_ls )( self, idx_release ) ) {
-          int status = ( DESC_OPS->tx_status )(
-            self, idx_release
-            );
+          if ( ( phy_events & PHY_EVENT_LINK_UP ) != 0 ) {
+            ++counts->link_up;
 
-          if ( status == 0 ) {
-            ++counts->packets_tranmitted_by_DMA;
-          } else {
-            ++counts->packet_errors;
+            /* A link up events means that we have a new connection.
+            * Thus the autonegotiation paremeters must get updated */
+            (void) dwmac_update_autonegotiation_params( self );
           }
         }
 
-        DWMAC_PRINT_DBG(
-          "tx: release %u\n",
-          idx_release
-          );
-
-        /* Release the DMA descriptor */
-        ( DESC_OPS->release_tx_desc )( self, idx_release );
-
-        /* Release mbuf */
-        m_free( self->mbuf_addr_tx[idx_release] );
-        self->mbuf_addr_tx[idx_release] = NULL;
-
-        /* Next release index */
-        idx_release = dwmac_increment(
-          idx_release, INDEX_MAX );
+        assert( eno == 0 );
       }
 
-      /* Clear transmit interrupt status */
-      self->dmagrp->status = DMAGRP_STATUS_TI;
+      /* Stop the task */
+      if ( ( events & DWMAC_COMMON_EVENT_TASK_STOP ) != 0 ) {
+        dwmac_core_dma_stop_tx( self );
+        dwmac_disable_irq_tx_all( self );
 
-      if ( ( self->arpcom.ac_if.if_flags & IFF_OACTIVE ) != 0 ) {
-        /* The last tranmission has been incomplete
-         * (for example due to lack of DMA descriptors).
-         * Continue it now! */
-        events |= DWMAC_COMMON_EVENT_TX_TRANSMIT_FRAME;
-      }
-    }
+        /* Release all tx mbufs at the risk of data loss */
+        ( DESC_OPS->release_tx_bufs )( self );
 
-    /* There are one or more frames to be transmitted. */
-    if ( ( events & DWMAC_COMMON_EVENT_TX_TRANSMIT_FRAME ) != 0 ) {
-      dwmac_common_tx_frame_counts *counts = &self->stats.frame_counts_tx;
+        dwmac_control_request_complete( self );
 
-      if ( p_m != NULL ) {
-        /* This frame will get re-counted */
-        --counts->frames_from_stack;
+        /* Return to events reception without re-enabling the interrupts
+        * The task needs a re-initialization to to resume work */
+        events = 0;
+        continue;
       }
 
-      while ( true ) {
-        unsigned int idx = dwmac_increment(
-          idx_transmit, INDEX_MAX );
+      /* Ininitialize / Re-initialize transmission handling */
+      if ( ( events & DWMAC_COMMON_EVENT_TASK_INIT ) != 0 ) {
+        events &= ~DWMAC_COMMON_EVENT_TASK_INIT;
+        (void) dwmac_update_autonegotiation_params( self );
+        dwmac_core_dma_stop_tx( self );
+        ( DESC_OPS->release_tx_bufs )( self );
+        idx_transmit       = 0;
+        idx_transmit_first = 0;
+        idx_transmitted    = 0;
+        idx_release        = 0;
+        p_m                = NULL;
+        is_first           = false;
+        is_last            = false;
+        size               = 0;
+        ( DESC_OPS->init_tx_desc )( self );
+        dwmac_core_dma_start_tx( self );
+        dwmac_core_dma_restart_tx( self );
 
-        p_m = dwmac_next_fragment(
-          &self->arpcom.ac_if,
-          p_m,
-          &is_first,
-          &is_last,
-          &size
-          );
+        /* Clear our interrupt statuses */
+        dwmac_core_reset_dma_irq_status_tx( self );
+        dwmac_enable_irq_tx_default( self );
 
-        /* New fragment? */
+        dwmac_control_request_complete( self );
+      }
+
+      /* Try to bump up the dma threshold due to a failure */
+      if ( ( events & DWMAC_COMMON_EVENT_TX_BUMP_UP_DMA_THRESHOLD ) != 0 ) {
+        events &= ~DWMAC_COMMON_EVENT_TX_BUMP_UP_DMA_THRESHOLD;
+        if ( self->dma_threshold_control
+            != DWMAC_COMMON_DMA_MODE_STORE_AND_FORWARD
+            && self->dma_threshold_control <= 256 ) {
+          self->dma_threshold_control += 64;
+          ( DMA_OPS->dma_mode )(
+            self,
+            self->dma_threshold_control,
+            DWMAC_COMMON_DMA_MODE_STORE_AND_FORWARD
+            );
+        }
+      }
+
+      /* Handle one or more transmitted frames */
+      if ( ( events & DWMAC_COMMON_EVENT_TX_FRAME_TRANSMITTED ) != 0 ) {
+        events &= ~DWMAC_COMMON_EVENT_TX_FRAME_TRANSMITTED;
+        dwmac_common_tx_frame_counts *counts = &self->stats.frame_counts_tx;
+        dwmac_disable_irq_tx_transmitted( self );
+
+        /* Next index to be transmitted */
+        unsigned int idx_transmitted_next = dwmac_increment(
+          idx_transmitted, INDEX_MAX );
+
+        /* Free consumed fragments */
+        if( idx_release != idx_transmitted_next
+            && ( DESC_OPS->am_i_tx_owner )( self, idx_release ) ) {
+          while ( idx_release != idx_transmitted_next
+                  && ( DESC_OPS->am_i_tx_owner )( self, idx_release ) ) {
+            /* Status handling per packet */
+            if ( ( DESC_OPS->get_tx_ls )( self, idx_release ) ) {
+              int status = ( DESC_OPS->tx_status )(
+                self, idx_release
+                );
+
+              if ( status == 0 ) {
+                ++counts->packets_tranmitted_by_DMA;
+              } else {
+                ++counts->packet_errors;
+              }
+            }
+
+            DWMAC_PRINT_DBG(
+              "tx: release %u\n",
+              idx_release
+              );
+
+            /* Release the DMA descriptor */
+            ( DESC_OPS->release_tx_desc )( self, idx_release );
+
+            /* Release mbuf */
+            m_free( self->mbuf_addr_tx[idx_release] );
+            self->mbuf_addr_tx[idx_release] = NULL;
+
+            /* Next release index */
+            idx_release = dwmac_increment(
+              idx_release, INDEX_MAX );
+          }
+          if ( ( self->arpcom.ac_if.if_flags & IFF_OACTIVE ) != 0 ) {
+            /* The last tranmission has been incomplete
+            * (for example due to lack of DMA descriptors).
+            * Continue it now! */
+            events |= DWMAC_COMMON_EVENT_TX_TRANSMIT_FRAME;
+          }
+        } else {
+          /* Clear transmit interrupt status */
+          self->dmagrp->status = DMAGRP_STATUS_TI;
+          /* Get re-activated by the next interrupt */
+          dwmac_enable_irq_tx_transmitted( self );
+        }
+      }
+
+      /* There are one or more frames to be transmitted. */
+      if ( ( events & DWMAC_COMMON_EVENT_TX_TRANSMIT_FRAME ) != 0 ) {
+        events &= ~DWMAC_COMMON_EVENT_TX_TRANSMIT_FRAME;
+        dwmac_common_tx_frame_counts *counts = &self->stats.frame_counts_tx;
+
         if ( p_m != NULL ) {
-          ++counts->frames_from_stack;
+          /* This frame will get re-counted */
+          --counts->frames_from_stack;
+        }
 
-          /* Queue full? */
-          if ( idx == idx_release ) {
-            DWMAC_PRINT_DBG( "tx: full queue: 0x%08x\n", p_m );
+        while ( true ) {
+          unsigned int idx = dwmac_increment(
+            idx_transmit, INDEX_MAX );
 
-            /* The queue is full, wait for transmitted interrupt */
+          p_m = dwmac_next_fragment(
+            &self->arpcom.ac_if,
+            p_m,
+            &is_first,
+            &is_last,
+            &size
+            );
+
+          /* New fragment? */
+          if ( p_m != NULL ) {
+            ++counts->frames_from_stack;
+
+            /* Queue full? */
+            if ( idx == idx_release ) {
+              DWMAC_PRINT_DBG( "tx: full queue: 0x%08x\n", p_m );
+
+              /* The queue is full, wait for transmitted interrupt */
+              break;
+            }
+
+            /* Set the transfer data */
+            rtems_cache_flush_multiple_data_lines(
+              mtod( p_m, const void * ),
+              size
+              );
+
+            ( DESC_OPS->prepare_tx_desc )(
+              self,
+              idx_transmit,
+              is_first,
+              size,
+              mtod( p_m, const void * )
+              );
+            self->mbuf_addr_tx[idx_transmit] = p_m;
+
+            ++counts->frames_to_dma;
+            counts->bytes_to_dma += size;
+            DWMAC_PRINT_DBG(
+              "tx: %02" PRIu32 ": %u %s%s\n",
+              idx_transmit, size,
+              ( is_first != false ) ? ( "F" ) : ( "" ),
+              ( is_last != false ) ? ( "L" ) : ( "" )
+
+              );
+
+            if ( is_first ) {
+              idx_transmit_first = idx_transmit;
+              is_first           = false;
+            } else {
+              /* To avoid race condition */
+              ( DESC_OPS->release_tx_ownership )( self, idx_transmit );
+            }
+
+            if ( is_last ) {
+              /* Interrupt on completition only for the latest fragment */
+              ( DESC_OPS->close_tx_desc )( self, idx_transmit );
+
+              /* To avoid race condition */
+              ( DESC_OPS->release_tx_ownership )( self, idx_transmit_first );
+              idx_transmitted = idx_transmit;
+
+              if ( ( self->dmagrp->status & DMAGRP_STATUS_TU ) != 0 ) {
+                /* Re-enable the tranmit DMA */
+                dwmac_core_dma_restart_tx( self );
+                DWMAC_PRINT_DBG(
+                  "tx DMA restart: %02u\n",
+                  idx_transmit_first
+                  );
+              }
+            }
+
+            /* Next transmit index */
+            idx_transmit = idx;
+
+            if ( is_last ) {
+              ++counts->packets_to_dma;
+            }
+
+            /* Next fragment of the frame */
+            p_m = p_m->m_next;
+          } else {
+            /* Nothing to transmit */
             break;
           }
-
-          /* Set the transfer data */
-          rtems_cache_flush_multiple_data_lines(
-            mtod( p_m, const void * ),
-            size
-            );
-
-          ( DESC_OPS->prepare_tx_desc )(
-            self,
-            idx_transmit,
-            is_first,
-            size,
-            mtod( p_m, const void * )
-            );
-          self->mbuf_addr_tx[idx_transmit] = p_m;
-
-          ++counts->frames_to_dma;
-          counts->bytes_to_dma += size;
-          DWMAC_PRINT_DBG(
-            "tx: %02" PRIu32 ": %u %s%s\n",
-            idx_transmit, size,
-            ( is_first != false ) ? ( "F" ) : ( "" ),
-            ( is_last != false ) ? ( "L" ) : ( "" )
-
-            );
-
-          if ( is_first ) {
-            idx_transmit_first = idx_transmit;
-            is_first           = false;
-          } else {
-            /* To avoid race condition */
-            ( DESC_OPS->release_tx_ownership )( self, idx_transmit );
-          }
-
-          if ( is_last ) {
-            /* Interrupt on completition only for the latest fragment */
-            ( DESC_OPS->close_tx_desc )( self, idx_transmit );
-
-            /* To avoid race condition */
-            ( DESC_OPS->release_tx_ownership )( self, idx_transmit_first );
-            idx_transmitted = idx_transmit;
-
-            if ( ( self->dmagrp->status & DMAGRP_STATUS_TU ) != 0 ) {
-              /* Re-enable the tranmit DMA */
-              dwmac_core_dma_restart_tx( self );
-              DWMAC_PRINT_DBG(
-                "tx DMA restart: %02u\n",
-                idx_transmit_first
-                );
-            }
-          }
-
-          /* Next transmit index */
-          idx_transmit = idx;
-
-          if ( is_last ) {
-            ++counts->packets_to_dma;
-          }
-
-          /* Next fragment of the frame */
-          p_m = p_m->m_next;
-        } else {
-          /* Nothing to transmit */
-          break;
         }
+
+        /* No more packets and fragments? */
+        if ( p_m == NULL ) {
+          /* Interface is now inactive */
+          self->arpcom.ac_if.if_flags &= ~IFF_OACTIVE;
+        } else {
+          /* There are more packets pending to be sent,
+          * but we have run out of DMA descriptors.
+          * We will continue sending once descriptors
+          * have been freed due to a transmitted interupt */
+          DWMAC_PRINT_DBG( "tx: transmission incomplete\n" );
+          events |= DWMAC_COMMON_EVENT_TX_FRAME_TRANSMITTED;
+        }
+
+        /* TODO: Add handling */
       }
 
-      /* No more packets and fragments? */
-      if ( p_m == NULL ) {
-        /* Interface is now inactive */
-        self->arpcom.ac_if.if_flags &= ~IFF_OACTIVE;
-      } else {
-        /* There are more packets pending to be sent,
-         * but we have run out of DMA descriptors.
-         * We will continue sending once descriptors
-         * have been freed due to a transmitted interupt */
-        DWMAC_PRINT_DBG( "tx: transmission incomplete\n" );
-      }
-
-      /* TODO: Add handling */
+      DWMAC_PRINT_DBG( "tx: enable transmit interrupts\n" );
     }
-
-    DWMAC_PRINT_DBG( "tx: enable transmit interrupts\n" );
-
-    /* Re-enable transmit interrupts */
-    dwmac_enable_irq_tx( self );
   }
 }
 
