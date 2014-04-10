@@ -424,11 +424,20 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
   _ISR_Enable( isr_cookie )
 #endif
 
+/*
+ * If we get the current processor index in a context which allows thread
+ * dispatching, then we may already run on another processor right after the
+ * read instruction.  There are very few cases in which this makes sense (here
+ * we can use _Per_CPU_Get_snapshot()).  All other places must use
+ * _Per_CPU_Get() so that we can add checks for RTEMS_DEBUG.
+ */
+#define _Per_CPU_Get_snapshot() \
+  ( &_Per_CPU_Information[ _SMP_Get_current_processor() ].per_cpu )
+
 #if defined( RTEMS_SMP )
 static inline Per_CPU_Control *_Per_CPU_Get( void )
 {
-  Per_CPU_Control *per_cpu =
-    &_Per_CPU_Information[ _SMP_Get_current_processor() ].per_cpu;
+  Per_CPU_Control *per_cpu = _Per_CPU_Get_snapshot();
 
   _Assert(
     per_cpu->thread_dispatch_disable_level != 0 || _ISR_Get_level() != 0
@@ -437,7 +446,7 @@ static inline Per_CPU_Control *_Per_CPU_Get( void )
   return per_cpu;
 }
 #else
-#define _Per_CPU_Get() ( &_Per_CPU_Information[ 0 ].per_cpu )
+#define _Per_CPU_Get() _Per_CPU_Get_snapshot()
 #endif
 
 static inline Per_CPU_Control *_Per_CPU_Get_by_index( uint32_t index )
