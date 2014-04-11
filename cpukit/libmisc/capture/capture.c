@@ -85,6 +85,8 @@ static rtems_capture_timestamp  capture_timestamp;
 static rtems_task_priority      capture_ceiling;
 static rtems_task_priority      capture_floor;
 static rtems_id                 capture_reader;
+static rtems_interrupt_lock     capture_lock =
+  RTEMS_INTERRUPT_LOCK_INITIALIZER("capture");
 
 /*
  * RTEMS Event text.
@@ -335,9 +337,9 @@ rtems_capture_find_control (rtems_name name, rtems_id id)
 static inline rtems_capture_control_t*
 rtems_capture_create_control (rtems_name name, rtems_id id)
 {
-  rtems_interrupt_level    level;
-  rtems_capture_control_t* control;
-  rtems_capture_task_t*    task;
+  rtems_interrupt_lock_context lock_context;
+  rtems_capture_control_t*     control;
+  rtems_capture_task_t*        task;
 
   if ((name == 0) && (id == 0))
     return NULL;
@@ -363,7 +365,7 @@ rtems_capture_create_control (rtems_name name, rtems_id id)
 
     memset (control->by, 0, sizeof (control->by));
 
-    rtems_interrupt_disable (level);
+    rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
     control->next    = capture_controls;
     capture_controls = control;
@@ -376,7 +378,7 @@ rtems_capture_create_control (rtems_name name, rtems_id id)
       if (rtems_capture_match_name_id (name, id, task->name, task->id))
         task->control = control;
 
-    rtems_interrupt_enable (level);
+    rtems_interrupt_lock_release (&capture_lock, &lock_context);
   }
 
   return control;
@@ -393,12 +395,12 @@ rtems_capture_create_control (rtems_name name, rtems_id id)
 static inline rtems_capture_task_t*
 rtems_capture_create_capture_task (rtems_tcb* new_task)
 {
-  rtems_interrupt_level    level;
-  rtems_capture_task_t*    task;
-  rtems_capture_control_t* control;
-  rtems_name               name;
-  rtems_capture_time_t     time;
-  bool                     ok;
+  rtems_interrupt_lock_context lock_context;
+  rtems_capture_task_t*        task;
+  rtems_capture_control_t*     control;
+  rtems_name                   name;
+  rtems_capture_time_t         time;
+  bool                         ok;
 
   ok = rtems_workspace_allocate (sizeof (*task), (void **) &task);
 
@@ -440,7 +442,7 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
   task->stack_size     = new_task->Start.Initial_stack.size;
   task->stack_clean    = task->stack_size;
 
-  rtems_interrupt_disable (level);
+  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
   task->forw    = capture_tasks;
   if (task->forw)
@@ -448,7 +450,7 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
   task->back    = NULL;
   capture_tasks = task;
 
-  rtems_interrupt_enable (level);
+  rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
   /*
    * We need to scan the default control list to initialise
@@ -478,9 +480,9 @@ rtems_capture_destroy_capture_task (rtems_capture_task_t* task)
 {
   if (task)
   {
-    rtems_interrupt_level level;
+    rtems_interrupt_lock_context lock_context;
 
-    rtems_interrupt_disable (level);
+    rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
     if (task->tcb || task->refcount)
       task = 0;
@@ -495,7 +497,7 @@ rtems_capture_destroy_capture_task (rtems_capture_task_t* task)
         capture_tasks = task->forw;
     }
 
-    rtems_interrupt_enable (level);
+    rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
     rtems_workspace_free (task);
   }
@@ -538,9 +540,9 @@ rtems_capture_record (rtems_capture_task_t* task,
          ((capture_flags & RTEMS_CAPTURE_GLOBAL_WATCH) ||
           (control && (control->flags & RTEMS_CAPTURE_WATCH)))))
     {
-      rtems_interrupt_level level;
+      rtems_interrupt_lock_context lock_context;
 
-      rtems_interrupt_disable (level);
+      rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
       if (capture_count < capture_size)
       {
@@ -564,7 +566,7 @@ rtems_capture_record (rtems_capture_task_t* task,
       }
       else
         capture_flags |= RTEMS_CAPTURE_OVERFLOW;
-      rtems_interrupt_enable (level);
+      rtems_interrupt_lock_release (&capture_lock, &lock_context);
     }
   }
 }
@@ -1050,16 +1052,16 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribu
 rtems_status_code
 rtems_capture_close (void)
 {
-  rtems_interrupt_level    level;
-  rtems_capture_task_t*    task;
-  rtems_capture_control_t* control;
-  rtems_status_code        sc;
+  rtems_interrupt_lock_context lock_context;
+  rtems_capture_task_t*        task;
+  rtems_capture_control_t*     control;
+  rtems_status_code            sc;
 
-  rtems_interrupt_disable (level);
+  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
   if (!capture_records)
   {
-    rtems_interrupt_enable (level);
+    rtems_interrupt_lock_release (&capture_lock, &lock_context);
     return RTEMS_SUCCESSFUL;
   }
 
@@ -1067,7 +1069,7 @@ rtems_capture_close (void)
 
   capture_records = NULL;
 
-  rtems_interrupt_enable (level);
+  rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
   /*
    * Delete the extension first. This means we are now able to
@@ -1126,13 +1128,13 @@ rtems_capture_task_setup (Thread_Control *tcb)
 rtems_status_code
 rtems_capture_control (bool enable)
 {
-  rtems_interrupt_level level;
+  rtems_interrupt_lock_context lock_context;
 
-  rtems_interrupt_disable (level);
+  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
   if (!capture_records)
   {
-    rtems_interrupt_enable (level);
+    rtems_interrupt_lock_release (&capture_lock, &lock_context);
     return RTEMS_UNSATISFIED;
   }
 
@@ -1143,7 +1145,7 @@ rtems_capture_control (bool enable)
 
   rtems_iterate_over_all_threads (rtems_capture_task_setup);
 
-  rtems_interrupt_enable (level);
+  rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -1160,13 +1162,13 @@ rtems_capture_control (bool enable)
 rtems_status_code
 rtems_capture_monitor (bool enable)
 {
-  rtems_interrupt_level level;
+  rtems_interrupt_lock_context lock_context;
 
-  rtems_interrupt_disable (level);
+  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
   if (!capture_records)
   {
-    rtems_interrupt_enable (level);
+    rtems_interrupt_lock_release (&capture_lock, &lock_context);
     return RTEMS_UNSATISFIED;
   }
 
@@ -1175,7 +1177,7 @@ rtems_capture_monitor (bool enable)
   else
     capture_flags &= ~RTEMS_CAPTURE_ONLY_MONITOR;
 
-  rtems_interrupt_enable (level);
+  rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -1191,10 +1193,10 @@ rtems_capture_monitor (bool enable)
 rtems_status_code
 rtems_capture_flush (bool prime)
 {
-  rtems_interrupt_level level;
-  rtems_capture_task_t* task;
+  rtems_interrupt_lock_context lock_context;
+  rtems_capture_task_t*        task;
 
-  rtems_interrupt_disable (level);
+  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
   for (task = capture_tasks; task != NULL; task = task->forw)
   {
@@ -1211,7 +1213,7 @@ rtems_capture_flush (bool prime)
   capture_in    = capture_records;
   capture_out   = 0;
 
-  rtems_interrupt_enable (level);
+  rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
   task = capture_tasks;
 
@@ -1269,11 +1271,11 @@ rtems_capture_watch_add (rtems_name name, rtems_id id)
 rtems_status_code
 rtems_capture_watch_del (rtems_name name, rtems_id id)
 {
-  rtems_interrupt_level     level;
-  rtems_capture_control_t*  control;
-  rtems_capture_control_t** prev_control;
-  rtems_capture_task_t*     task;
-  bool                      found = false;
+  rtems_interrupt_lock_context lock_context;
+  rtems_capture_control_t*     control;
+  rtems_capture_control_t**    prev_control;
+  rtems_capture_task_t*        task;
+  bool                         found = false;
 
   /*
    * Should this test be for wildcards ?
@@ -1284,7 +1286,7 @@ rtems_capture_watch_del (rtems_name name, rtems_id id)
   {
     if (rtems_capture_match_name_id (control->name, control->id, name, id))
     {
-      rtems_interrupt_disable (level);
+      rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
       for (task = capture_tasks; task != NULL; task = task->forw)
         if (task->control == control)
@@ -1292,7 +1294,7 @@ rtems_capture_watch_del (rtems_name name, rtems_id id)
 
       *prev_control = control->next;
 
-      rtems_interrupt_enable (level);
+      rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
       rtems_workspace_free (control);
 
@@ -1324,9 +1326,9 @@ rtems_capture_watch_del (rtems_name name, rtems_id id)
 rtems_status_code
 rtems_capture_watch_ctrl (rtems_name name, rtems_id id, bool enable)
 {
-  rtems_interrupt_level    level;
-  rtems_capture_control_t* control;
-  bool                     found = false;
+  rtems_interrupt_lock_context lock_context;
+  rtems_capture_control_t*     control;
+  bool                         found = false;
 
   /*
    * Find the control and then set the watch. It must exist before it can
@@ -1336,14 +1338,14 @@ rtems_capture_watch_ctrl (rtems_name name, rtems_id id, bool enable)
   {
     if (rtems_capture_match_name_id (control->name, control->id, name, id))
     {
-      rtems_interrupt_disable (level);
+      rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
       if (enable)
         control->flags |= RTEMS_CAPTURE_WATCH;
       else
         control->flags &= ~RTEMS_CAPTURE_WATCH;
 
-      rtems_interrupt_enable (level);
+      rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
       found = true;
     }
@@ -1367,9 +1369,9 @@ rtems_capture_watch_ctrl (rtems_name name, rtems_id id, bool enable)
 rtems_status_code
 rtems_capture_watch_global (bool enable)
 {
-  rtems_interrupt_level level;
+  rtems_interrupt_lock_context lock_context;
 
-  rtems_interrupt_disable (level);
+  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
   /*
    * We need to keep specific and global watches separate so
@@ -1380,7 +1382,7 @@ rtems_capture_watch_global (bool enable)
   else
     capture_flags &= ~RTEMS_CAPTURE_GLOBAL_WATCH;
 
-  rtems_interrupt_enable (level);
+  rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -1695,14 +1697,14 @@ rtems_capture_read (uint32_t                 threshold,
                     uint32_t*                read,
                     rtems_capture_record_t** recs)
 {
-  rtems_interrupt_level level;
-  rtems_status_code     sc = RTEMS_SUCCESSFUL;
-  uint32_t              count;
+  rtems_interrupt_lock_context lock_context;
+  rtems_status_code            sc = RTEMS_SUCCESSFUL;
+  uint32_t                     count;
 
   *read = 0;
   *recs = NULL;
 
-  rtems_interrupt_disable (level);
+  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
   /*
    * Only one reader is allowed.
@@ -1710,14 +1712,14 @@ rtems_capture_read (uint32_t                 threshold,
 
   if (capture_flags & RTEMS_CAPTURE_READER_ACTIVE)
   {
-    rtems_interrupt_enable (level);
+    rtems_interrupt_lock_release (&capture_lock, &lock_context);
     return RTEMS_RESOURCE_IN_USE;
   }
 
   capture_flags |= RTEMS_CAPTURE_READER_ACTIVE;
   *read = count = capture_count;
 
-  rtems_interrupt_enable (level);
+  rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
   *recs = &capture_records[capture_out];
 
@@ -1744,11 +1746,11 @@ rtems_capture_read (uint32_t                 threshold,
 
         rtems_task_ident (RTEMS_SELF, RTEMS_LOCAL, &capture_reader);
 
-        rtems_interrupt_disable (level);
+        rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
         capture_flags |= RTEMS_CAPTURE_READER_WAITING;
 
-        rtems_interrupt_enable (level);
+        rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
         sc = rtems_event_receive (RTEMS_EVENT_0,
                                   RTEMS_WAIT | RTEMS_EVENT_ANY,
@@ -1763,11 +1765,11 @@ rtems_capture_read (uint32_t                 threshold,
         if ((sc != RTEMS_SUCCESSFUL) && (sc != RTEMS_TIMEOUT))
           break;
 
-        rtems_interrupt_disable (level);
+        rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
         *read = count = capture_count;
 
-        rtems_interrupt_enable (level);
+        rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
         continue;
       }
@@ -1793,17 +1795,16 @@ rtems_capture_read (uint32_t                 threshold,
 rtems_status_code
 rtems_capture_release (uint32_t count)
 {
-  rtems_capture_record_t* rec;
-  uint32_t                counted;
+  rtems_interrupt_lock_context lock_context;
+  rtems_capture_record_t*      rec;
+  uint32_t                     counted;
 
-  rtems_interrupt_level level;
-
-  rtems_interrupt_disable (level);
+  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
   if (count > capture_count)
     count = capture_count;
 
-  rtems_interrupt_enable (level);
+  rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
   counted = count;
 
@@ -1816,7 +1817,7 @@ rtems_capture_release (uint32_t count)
     rec++;
   }
 
-  rtems_interrupt_disable (level);
+  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
   capture_count -= count;
 
@@ -1824,7 +1825,7 @@ rtems_capture_release (uint32_t count)
 
   capture_flags &= ~RTEMS_CAPTURE_READER_ACTIVE;
 
-  rtems_interrupt_enable (level);
+  rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
   return RTEMS_SUCCESSFUL;
 }
