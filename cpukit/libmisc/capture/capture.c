@@ -109,10 +109,6 @@ static const char* capture_event_text[] =
 };
 
 /*
- * rtems_capture_get_time
- *
- *  DESCRIPTION:
- *
  * This function returns the current time. If a handler is provided
  * by the user get the time from that.
  */
@@ -128,14 +124,9 @@ rtems_capture_get_time (rtems_capture_time_t* time)
 }
 
 /*
- * rtems_capture_match_names
- *
- *  DESCRIPTION:
- *
  * This function compares rtems_names. It protects the
  * capture engine from a change to the way names are supported
  * in RTEMS.
- *
  */
 static inline bool
 rtems_capture_match_names (rtems_name lhs, rtems_name rhs)
@@ -144,14 +135,9 @@ rtems_capture_match_names (rtems_name lhs, rtems_name rhs)
 }
 
 /*
- * rtems_capture_match_id
- *
- *  DESCRIPTION:
- *
  * This function compares rtems_ids. It protects the
  * capture engine from a change to the way id are supported
  * in RTEMS.
- *
  */
 static inline bool
 rtems_capture_match_ids (rtems_id lhs, rtems_id rhs)
@@ -160,10 +146,6 @@ rtems_capture_match_ids (rtems_id lhs, rtems_id rhs)
 }
 
 /*
- * rtems_capture_match_name_id
- *
- *  DESCRIPTION:
- *
  * This function matches a name and/or id.
  */
 static inline bool
@@ -186,14 +168,9 @@ rtems_capture_match_name_id (rtems_name lhs_name,
 }
 
 /*
- * rtems_capture_dup_name
- *
- *  DESCRIPTION:
- *
  * This function duplicates an rtems_names. It protects the
  * capture engine from a change to the way names are supported
  * in RTEMS.
- *
  */
 static inline void
 rtems_capture_dup_name (rtems_name* dst, rtems_name src)
@@ -202,14 +179,9 @@ rtems_capture_dup_name (rtems_name* dst, rtems_name src)
 }
 
 /*
- * rtems_capture_by_in_to
- *
- *  DESCRIPTION:
- *
  * This function sees if a BY control is in the BY names. The use
  * of the valid_mask in this way assumes the number of trigger
  * tasks is the number of bits in uint32_t.
- *
  */
 static inline bool
 rtems_capture_by_in_to (uint32_t                 events,
@@ -253,12 +225,7 @@ rtems_capture_by_in_to (uint32_t                 events,
 }
 
 /*
- * rtems_capture_refcount_up
- *
- *  DESCRIPTION:
- *
  * This function raises the reference count.
- *
  */
 static inline void
 rtems_capture_refcount_up (rtems_capture_task_t* task)
@@ -267,13 +234,8 @@ rtems_capture_refcount_up (rtems_capture_task_t* task)
 }
 
 /*
- * rtems_capture_refcount_down
- *
- *  DESCRIPTION:
- *
  * This function lowers the reference count and if the count
  * reaches 0 the task control block is returned to the heap.
- *
  */
 static inline void
 rtems_capture_refcount_down (rtems_capture_task_t* task)
@@ -283,10 +245,6 @@ rtems_capture_refcount_down (rtems_capture_task_t* task)
 }
 
 /*
- * rtems_capture_init_stack_usage
- *
- *  DESCRIPTION:
- *
  * This function setups a stack so its usage can be monitored.
  */
 static inline void
@@ -308,12 +266,7 @@ rtems_capture_init_stack_usage (rtems_capture_task_t* task)
 }
 
 /*
- * rtems_capture_find_control
- *
- *  DESCRIPTION:
- *
  * This function searches for a trigger given a name.
- *
  */
 static inline rtems_capture_control_t*
 rtems_capture_find_control (rtems_name name, rtems_id id)
@@ -327,12 +280,7 @@ rtems_capture_find_control (rtems_name name, rtems_id id)
 }
 
 /*
- * rtems_capture_create_control
- *
- *  DESCRIPTION:
- *
  * This function creates a capture control for the capture engine.
- *
  */
 static inline rtems_capture_control_t*
 rtems_capture_create_control (rtems_name name, rtems_id id)
@@ -385,12 +333,7 @@ rtems_capture_create_control (rtems_name name, rtems_id id)
 }
 
 /*
- * rtems_capture_create_capture_task
- *
- *  DESCRIPTION:
- *
  * This function create the task control.
- *
  */
 static inline rtems_capture_task_t*
 rtems_capture_create_capture_task (rtems_tcb* new_task)
@@ -466,14 +409,9 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
 }
 
 /*
- * rtems_capture_destroy_capture_task
- *
- *  DESCRIPTION:
- *
  * This function destroy the task structure if the reference count
  * is 0 and the tcb has been cleared signalling the task has been
  * deleted.
- *
  */
 static inline void
 rtems_capture_destroy_capture_task (rtems_capture_task_t* task)
@@ -504,12 +442,7 @@ rtems_capture_destroy_capture_task (rtems_capture_task_t* task)
 }
 
 /*
- * rtems_capture_record
- *
- *  DESCRIPTION:
- *
  * This function records a capture record into the capture buffer.
- *
  */
 static inline void
 rtems_capture_record (rtems_capture_task_t* task,
@@ -529,11 +462,10 @@ rtems_capture_record (rtems_capture_task_t* task,
     control = task->control;
 
     /*
-     * Capure the record if we have an event that is always
+     * Capture the record if we have an event that is always
      * captured, or the task's real priority is greater than the
      * watch ceiling, and the global watch or task watch is enabled.
      */
-
     if ((events & RTEMS_CAPTURE_RECORD_EVENTS) ||
         ((task->tcb->real_priority >= capture_ceiling) &&
          (task->tcb->real_priority <= capture_floor) &&
@@ -572,10 +504,6 @@ rtems_capture_record (rtems_capture_task_t* task,
 }
 
 /*
- * rtems_capture_trigger
- *
- *  DESCRIPTION:
- *
  * See if we have triggered and if not see if this event is a
  * cause of a trigger.
  */
@@ -645,12 +573,7 @@ rtems_capture_trigger (rtems_capture_task_t* ft,
 }
 
 /*
- * rtems_capture_create_task
- *
- *  DESCRIPTION:
- *
  * This function is called when a task is created.
- *
  */
 static bool
 rtems_capture_create_task (rtems_tcb* current_task,
@@ -684,12 +607,7 @@ rtems_capture_create_task (rtems_tcb* current_task,
 }
 
 /*
- * rtems_capture_start_task
- *
- *  DESCRIPTION:
- *
  * This function is called when a task is started.
- *
  */
 static void
 rtems_capture_start_task (rtems_tcb* current_task,
@@ -726,12 +644,7 @@ rtems_capture_start_task (rtems_tcb* current_task,
 }
 
 /*
- * rtems_capture_restart_task
- *
- *  DESCRIPTION:
- *
  * This function is called when a task is restarted.
- *
  */
 static void
 rtems_capture_restart_task (rtems_tcb* current_task,
@@ -769,12 +682,7 @@ rtems_capture_restart_task (rtems_tcb* current_task,
 }
 
 /*
- * rtems_capture_delete_task
- *
- *  DESCRIPTION:
- *
  * This function is called when a task is deleted.
- *
  */
 static void
 rtems_capture_delete_task (rtems_tcb* current_task,
@@ -819,12 +727,7 @@ rtems_capture_delete_task (rtems_tcb* current_task,
 }
 
 /*
- * rtems_capture_begin_task
- *
- *  DESCRIPTION:
- *
  * This function is called when a task is begun.
- *
  */
 static void
 rtems_capture_begin_task (rtems_tcb* begin_task)
@@ -850,13 +753,8 @@ rtems_capture_begin_task (rtems_tcb* begin_task)
 }
 
 /*
- * rtems_capture_exitted_task
- *
- *  DESCRIPTION:
- *
  * This function is called when a task is exitted. That is
  * returned rather than was deleted.
- *
  */
 static void
 rtems_capture_exitted_task (rtems_tcb* exitted_task)
@@ -884,12 +782,28 @@ rtems_capture_exitted_task (rtems_tcb* exitted_task)
 }
 
 /*
- * rtems_capture_switch_task
- *
- *  DESCRIPTION:
- *
+ * This function is called when a termination request is identified.
+ */
+static void
+rtems_capture_terminated_task (rtems_tcb* terminated_task)
+{
+  rtems_capture_delete_task (terminated_task, terminated_task);
+}
+
+/*
+ * This function is called when a fatal error occurs.
+ */
+static void
+rtems_capture_fatal(
+  Internal_errors_Source source,
+  bool                   is_internal,
+  Internal_errors_t      code
+)
+{
+}
+  
+/*
  * This function is called when a context is switched.
- *
  */
 static void
 rtems_capture_switch_task (rtems_tcb* current_task,
@@ -967,13 +881,8 @@ rtems_capture_switch_task (rtems_tcb* current_task,
 }
 
 /*
- * rtems_capture_open
- *
- *  DESCRIPTION:
- *
  * This function initialises the realtime capture engine allocating the trace
  * buffer. It is assumed we have a working heap at stage of initialisation.
- *
  */
 rtems_status_code
 rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribute__((unused)))
@@ -1041,10 +950,6 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribu
 }
 
 /*
- * rtems_capture_close
- *
- *  DESCRIPTION:
- *
  * This function shutdowns the capture engine and release any claimed
  * resources.
  */
@@ -1112,10 +1017,6 @@ rtems_capture_close (void)
 }
 
 /*
- * rtems_capture_control
- *
- *  DESCRIPTION:
- *
  * This function allows control of tracing at a global level.
  */
 static void
@@ -1150,10 +1051,6 @@ rtems_capture_control (bool enable)
 }
 
 /*
- * rtems_capture_monitor
- *
- *  DESCRIPTION:
- *
  * This function enable the monitor mode. When in the monitor mode
  * the tasks are monitored but no data is saved. This can be used
  * to profile the load on a system.
@@ -1182,10 +1079,6 @@ rtems_capture_monitor (bool enable)
 }
 
 /*
- * rtems_capture_flush
- *
- *  DESCRIPTION:
- *
  * This function flushes the capture buffer. The prime parameter allows the
  * capture engine to also be primed again.
  */
@@ -1227,10 +1120,6 @@ rtems_capture_flush (bool prime)
 }
 
 /*
- * rtems_capture_watch_add
- *
- *  DESCRIPTION:
- *
  * This function defines a watch for a specific task given a name. A watch
  * causes it to be traced either in or out of context. The watch can be
  * optionally enabled or disabled with the set routine. It is disabled by
@@ -1259,10 +1148,6 @@ rtems_capture_watch_add (rtems_name name, rtems_id id)
 }
 
 /*
- * rtems_capture_watch_del
- *
- *  DESCRIPTION:
- *
  * This function removes a watch for a specific task given a name. The task
  * description will still exist if referenced by a trace record in the trace
  * buffer or a global watch is defined.
@@ -1315,10 +1200,6 @@ rtems_capture_watch_del (rtems_name name, rtems_id id)
 }
 
 /*
- * rtems_capture_watch_set
- *
- *  DESCRIPTION:
- *
  * This function allows control of a watch. The watch can be enabled or
  * disabled.
  */
@@ -1357,10 +1238,6 @@ rtems_capture_watch_ctrl (rtems_name name, rtems_id id, bool enable)
 }
 
 /*
- * rtems_capture_watch_global
- *
- *  DESCRIPTION:
- *
  * This function allows control of a global watch. The watch can be enabled or
  * disabled. A global watch configures all tasks below the ceiling and above
  * the floor to be traced.
@@ -1387,10 +1264,6 @@ rtems_capture_watch_global (bool enable)
 }
 
 /*
- * rtems_capture_watch_global_on
- *
- *  DESCRIPTION:
- *
  * This function returns the global watch state.
  */
 bool
@@ -1400,10 +1273,6 @@ rtems_capture_watch_global_on (void)
 }
 
 /*
- * rtems_capture_watch_ceiling
- *
- *  DESCRIPTION:
- *
  * This function sets a watch ceiling. Tasks at or greating that the
  * ceiling priority are not watched. This is a simple way to monitor
  * an application and exclude system tasks running at a higher
@@ -1417,10 +1286,6 @@ rtems_capture_watch_ceiling (rtems_task_priority ceiling)
 }
 
 /*
- * rtems_capture_watch_get_ceiling
- *
- *  DESCRIPTION:
- *
  * This function gets the watch ceiling.
  */
 rtems_task_priority
@@ -1430,10 +1295,6 @@ rtems_capture_watch_get_ceiling (void)
 }
 
 /*
- * rtems_capture_watch_floor
- *
- *  DESCRIPTION:
- *
  * This function sets a watch floor. Tasks at or less that the
  * floor priority are not watched. This is a simple way to monitor
  * an application and exclude system tasks running at a lower
@@ -1447,10 +1308,6 @@ rtems_capture_watch_floor (rtems_task_priority floor)
 }
 
 /*
- * rtems_capture_watch_get_floor
- *
- *  DESCRIPTION:
- *
  * This function gets the watch floor.
  */
 rtems_task_priority
@@ -1460,12 +1317,7 @@ rtems_capture_watch_get_floor (void)
 }
 
 /*
- * rtems_capture_map_trigger
- *
- *  DESCRIPTION:
- *
  * Map the trigger to a bit mask.
- *
  */
 static uint32_t
 rtems_capture_map_trigger (rtems_capture_trigger_t trigger)
@@ -1496,10 +1348,6 @@ rtems_capture_map_trigger (rtems_capture_trigger_t trigger)
 }
 
 /*
- * rtems_capture_set_trigger
- *
- *  DESCRIPTION:
- *
  * This function sets a trigger.
  *
  * This set trigger routine will create a capture control for the
@@ -1586,10 +1434,6 @@ rtems_capture_set_trigger (rtems_name                   from_name,
 }
 
 /*
- * rtems_capture_clear_trigger
- *
- *  DESCRIPTION:
- *
  * This function clear a trigger.
  */
 rtems_status_code
@@ -1660,10 +1504,6 @@ rtems_capture_clear_trigger (rtems_name                   from_name,
 }
 
 /*
- * rtems_capture_read
- *
- *  DESCRIPTION:
- *
  * This function reads a number of records from the capture buffer.
  * The user can optionally block and wait until the buffer as a
  * specific number of records available or a specific time has
@@ -1688,7 +1528,6 @@ rtems_capture_clear_trigger (rtems_name                   from_name,
  *
  * The 'timeout' parameter is in micro-seconds. A value of 0 will disable
  * the timeout.
- *
  */
 rtems_status_code
 rtems_capture_read (uint32_t                 threshold,
@@ -1784,10 +1623,6 @@ rtems_capture_read (uint32_t                 threshold,
 }
 
 /*
- * rtems_capture_release
- *
- *  DESCRIPTION:
- *
  * This function releases the requested number of record slots back
  * to the capture engine. The count must match the number read.
  */
@@ -1830,10 +1665,6 @@ rtems_capture_release (uint32_t count)
 }
 
 /*
- * rtems_capture_time
- *
- *  DESCRIPTION:
- *
  * This function returns the current time. If a handler is provided
  * by the user get the time from that.
  */
@@ -1844,10 +1675,6 @@ rtems_capture_time (rtems_capture_time_t* uptime)
 }
 
 /*
- * rtems_capture_event_text
- *
- *  DESCRIPTION:
- *
  * This function returns a string for an event based on the bit in the
  * event. The functions takes the bit offset as a number not the bit
  * set in a bit map.
@@ -1861,10 +1688,6 @@ rtems_capture_event_text (int event)
 }
 
 /*
- * rtems_capture_get_task_list
- *
- *  DESCRIPTION:
- *
  * This function returns the head of the list of tasks that the
  * capture engine has detected.
  */
@@ -1875,10 +1698,6 @@ rtems_capture_get_task_list (void)
 }
 
 /*
- * rtems_capture_task_stack_usage
- *
- *  DESCRIPTION:
- *
  * This function updates the stack usage. The task control block
  * is updated.
  */
@@ -1911,10 +1730,6 @@ rtems_capture_task_stack_usage (rtems_capture_task_t* task)
 }
 
 /*
- * rtems_capture_get_control_list
- *
- *  DESCRIPTION:
- *
  * This function returns the head of the list of control in the
  * capture engine.
  */
