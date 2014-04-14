@@ -142,7 +142,7 @@ typedef struct rtems_blkdev_request {
   /**
    * List of scatter or gather buffers.
    */
-  rtems_blkdev_sg_buffer bufs[0];
+  rtems_blkdev_sg_buffer bufs[RTEMS_ZERO_LENGTH_ARRAY];
 } rtems_blkdev_request;
 
 /**

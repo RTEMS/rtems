@@ -78,7 +78,7 @@
 typedef struct rtems_sector_data_s
 {
     uint32_t   sector_num; /* sector number on the device */
-    uint8_t    data[0]; /* raw sector data */
+    uint8_t    data[RTEMS_ZERO_LENGTH_ARRAY]; /* raw sector data */
 } rtems_sector_data_t;
 
 

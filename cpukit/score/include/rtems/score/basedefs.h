@@ -208,6 +208,13 @@
 
 #define RTEMS_ARRAY_SIZE(array) (sizeof(array) / sizeof((array)[0]))
 
+/*
+ * Zero-length arrays are valid in C99 as flexible array members.  C++11
+ * doesn't allow flexible array members.  Use the GNU extension which is also
+ * supported by other compilers.
+ */
+#define RTEMS_ZERO_LENGTH_ARRAY 0
+
 #ifndef ASM
   #ifdef RTEMS_DEPRECATED_TYPES
     typedef bool boolean;
