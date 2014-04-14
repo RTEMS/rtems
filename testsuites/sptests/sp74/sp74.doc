@@ -1,4 +1,4 @@
-#  COPYRIGHT (c) 2011.
+#  COPYRIGHT (c) 2011, 2014.
 #  On-Line Applications Research Corporation (OAR).
 #
 #  The license and distribution terms for this file may be
@@ -16,6 +16,8 @@ directives:
 concepts:
 
 + This test is specifically designed to exercise the yield case when
-  a task is non-preemptive and a higher priority task is ready
+  a task is non-preemptive and a higher priority task is ready.
 
-+ test where there is one thread at a priority with the executing thread being non-preemptive. Create a higher priority thread and then yield from Init task.
++ Test where there is one thread at a priority with the executing thread
+  being non-preemptive. Create a higher priority thread and then yield from
+  the Init task.
