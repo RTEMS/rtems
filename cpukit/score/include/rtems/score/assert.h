@@ -30,10 +30,24 @@ extern "C" {
  * NDEBUG.
  */
 #if defined( RTEMS_DEBUG )
-  #define _Assert( _e ) \
-    ( ( _e ) ? \
-      ( void ) 0 : \
-        __assert_func( __FILE__, __LINE__, __ASSERT_FUNC, #_e ) )
+  #if !defined( RTEMS_SCHEDSIM )
+    /* __ASSERT_FUNC is newlib. */
+    #define _Assert( _e ) \
+      ( ( _e ) ? \
+        ( void ) 0 : \
+          __assert_func( __FILE__, __LINE__, __ASSERT_FUNC, #_e ) )
+  #else
+    /* __ASSERT_FUNCTION is glibc. */
+    #if defined(__ASSERT_FUNCTION)
+      #define _Assert( _e ) \
+	( ( _e ) ? \
+	  ( void ) 0 : \
+	    __assert_fail( #_e, __FILE__, __LINE__, __ASSERT_FUNCTION ) )
+    #else
+       #error "What does assert.h use?"
+    #endif
+  #endif
+
 #else
   #define _Assert( _e ) ( ( void ) 0 )
 #endif
@@ -70,7 +84,11 @@ extern "C" {
 /**
  * @brief Asserts that this point is not reached during run-time.
  */
+#if RTEMS_SCHEDSIM
+#define _Assert_Not_reached()
+#else
 #define _Assert_Not_reached() _Assert( 0 )
+#endif
 
 #ifdef __cplusplus
 }

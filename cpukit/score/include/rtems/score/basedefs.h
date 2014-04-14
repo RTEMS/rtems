@@ -153,7 +153,9 @@
  *  can impact the code generated following calls to
  *  rtems_fatal_error_occurred and _Terminate.
  */
-#ifdef __GNUC__
+#if defined(RTEMS_SCHEDSIM)
+  #define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE
+#elif defined(__GNUC__)
   #define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE \
       __attribute__ ((noreturn))
 #else
