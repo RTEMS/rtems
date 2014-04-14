@@ -63,6 +63,8 @@ struct tsec_struct {
   rtems_irq_number irq_num_rx;
   rtems_irq_number irq_num_err;
 
+  rtems_interrupt_lock lock;
+
   /*
    * BD management
    */
@@ -140,13 +142,14 @@ static struct tsec_struct tsec_driver[TSEC_COUNT];
 			    | TSEC_IEVENT_CRL_XDA		\
 			    | TSEC_IEVENT_XFUN   )
 
-#define TSEC_IMASK_SET(reg,mask,val) {	\
-  rtems_interrupt_level level;			\
-  						\
-  rtems_interrupt_disable(level);		\
-  (reg) = (((reg) & ~(mask)) |			\
-	   ((val) &  (mask)));			\
-  rtems_interrupt_enable(level);		\
+static void TSEC_IMASK_SET(struct tsec_struct *sc, uint32_t mask, uint32_t val)
+{
+  volatile uint32_t *reg = &sc->reg_ptr->imask;
+  rtems_interrupt_lock_context lock_context;
+
+  rtems_interrupt_lock_acquire(&sc->lock, &lock_context);
+  *reg = (*reg & ~mask) | (val & mask);
+  rtems_interrupt_lock_release(&sc->lock, &lock_context);
 }
 
 #define TSEC_ALIGN_BUFFER(buf,align)		\
@@ -505,7 +508,7 @@ static rtems_event_set tsec_rx_wait_for_events
  /*
   * enable Rx interrupts, make sure this is not interrupted :-)
   */
- TSEC_IMASK_SET(sc->reg_ptr->imask,IEVENT_RXALL,~0);
+ TSEC_IMASK_SET(sc,IEVENT_RXALL,~0);
 
  /*
   * wait for events to come in
@@ -876,7 +879,7 @@ static rtems_event_set tsec_tx_wait_for_events
  /*
   * enable Tx interrupts, make sure this is not interrupted :-)
   */
- TSEC_IMASK_SET(sc->reg_ptr->imask,IEVENT_TXALL,~0);
+ TSEC_IMASK_SET(sc,IEVENT_TXALL,~0);
 
  /*
   * wait for events to come in
@@ -1156,7 +1159,7 @@ static void tsec_tx_irq_handler
   /*
    * disable tx interrupts
    */
-  TSEC_IMASK_SET(sc->reg_ptr->imask,IEVENT_TXALL,0);
+  TSEC_IMASK_SET(sc,IEVENT_TXALL,0);
 
 #if defined(CLREVENT_IN_IRQ)
   /*
@@ -1200,7 +1203,7 @@ static void tsec_rx_irq_handler
   /*
    * disable rx interrupts
    */
-  TSEC_IMASK_SET(sc->reg_ptr->imask,IEVENT_RXALL,0);
+  TSEC_IMASK_SET(sc,IEVENT_RXALL,0);
 #if defined(CLREVENT_IN_IRQ)
   /*
    * clear any pending RX events
@@ -1306,7 +1309,7 @@ static void tsec_irq_on
   struct tsec_struct *sc =
     (struct tsec_struct *)(irq_conn_data->handle);
 
-  TSEC_IMASK_SET(sc->reg_ptr->imask,
+  TSEC_IMASK_SET(sc,
 		       tsec_irq_mask(irq_conn_data->name,sc),
 		       ~0);
 }
@@ -1333,7 +1336,7 @@ static void tsec_irq_off
   struct tsec_struct *sc =
     (struct tsec_struct *)irq_conn_data->handle;
 
-  TSEC_IMASK_SET(sc->reg_ptr->imask,
+  TSEC_IMASK_SET(sc,
 		       tsec_irq_mask(irq_conn_data->name,sc),
 		       0);
 }
