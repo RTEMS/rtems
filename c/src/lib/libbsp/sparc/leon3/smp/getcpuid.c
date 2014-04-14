@@ -15,8 +15,9 @@
 
 #include <rtems/score/cpu.h>
 
+#if !defined(__leon__)
 uint32_t _CPU_SMP_Get_current_processor( void )
 {
   return _LEON3_Get_current_processor();
 }
-
+#endif

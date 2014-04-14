@@ -1163,7 +1163,14 @@ void _CPU_Context_restore(
 #if defined(RTEMS_SMP)
   uint32_t _CPU_SMP_Initialize( uint32_t configured_cpu_count );
 
-  uint32_t _CPU_SMP_Get_current_processor( void );
+  #if defined(__leon__)
+    static inline uint32_t _CPU_SMP_Get_current_processor( void )
+    {
+      return _LEON3_Get_current_processor();
+    }
+  #else
+    uint32_t _CPU_SMP_Get_current_processor( void );
+  #endif
 
   void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
 
