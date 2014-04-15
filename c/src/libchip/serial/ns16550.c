@@ -58,6 +58,9 @@
   #endif
 #endif
 
+static rtems_interrupt_lock ns16550_lock =
+  RTEMS_INTERRUPT_LOCK_INITIALIZER("NS16550");
+
 /*
  * Flow control is only supported when using interrupts
  */
@@ -271,7 +274,7 @@ void ns16550_outch_polled(console_tbl *c, char out)
   getRegister_f get = c->getRegister;
   setRegister_f set = c->setRegister;
   uint32_t status = 0;
-  rtems_interrupt_level level;
+  rtems_interrupt_lock_context lock_context;
 
   /* Save port interrupt mask */
   uint32_t interrupt_mask = get( port, NS16550_INTERRUPT_ENABLE);
@@ -281,7 +284,7 @@ void ns16550_outch_polled(console_tbl *c, char out)
 
   while (true) {
     /* Try to transmit the character in a critical section */
-    rtems_interrupt_disable( level);
+    rtems_interrupt_lock_acquire(&ns16550_lock, &lock_context);
 
     /* Read the transmitter holding register and check it */
     status = get( port, NS16550_LINE_STATUS);
@@ -290,10 +293,10 @@ void ns16550_outch_polled(console_tbl *c, char out)
       set( port, NS16550_TRANSMIT_BUFFER, out);
 
       /* Finished */
-      rtems_interrupt_enable( level);
+      rtems_interrupt_lock_release(&ns16550_lock, &lock_context);
       break;
     } else {
-      rtems_interrupt_enable( level);
+      rtems_interrupt_lock_release(&ns16550_lock, &lock_context);
     }
 
     /* Wait for transmitter holding register to be empty */
@@ -324,7 +327,7 @@ void ns16550_write_polled(int minor, char out)
 NS16550_STATIC int ns16550_assert_RTS(int minor)
 {
   uint32_t                pNS16550;
-  uint32_t                Irql;
+  rtems_interrupt_lock_context lock_context;
   ns16550_context        *pns16550Context;
   setRegister_f           setReg;
 
@@ -336,10 +339,10 @@ NS16550_STATIC int ns16550_assert_RTS(int minor)
   /*
    * Assert RTS
    */
-  rtems_interrupt_disable(Irql);
+  rtems_interrupt_lock_acquire(&ns16550_lock, &lock_context);
   pns16550Context->ucModemCtrl|=SP_MODEM_RTS;
   (*setReg)(pNS16550, NS16550_MODEM_CONTROL, pns16550Context->ucModemCtrl);
-  rtems_interrupt_enable(Irql);
+  rtems_interrupt_lock_release(&ns16550_lock, &lock_context);
   return 0;
 }
 
@@ -350,7 +353,7 @@ NS16550_STATIC int ns16550_assert_RTS(int minor)
 NS16550_STATIC int ns16550_negate_RTS(int minor)
 {
   uint32_t                pNS16550;
-  uint32_t                Irql;
+  rtems_interrupt_lock_context lock_context;
   ns16550_context        *pns16550Context;
   setRegister_f           setReg;
 
@@ -362,10 +365,10 @@ NS16550_STATIC int ns16550_negate_RTS(int minor)
   /*
    * Negate RTS
    */
-  rtems_interrupt_disable(Irql);
+  rtems_interrupt_lock_acquire(&ns16550_lock, &lock_context);
   pns16550Context->ucModemCtrl&=~SP_MODEM_RTS;
   (*setReg)(pNS16550, NS16550_MODEM_CONTROL, pns16550Context->ucModemCtrl);
-  rtems_interrupt_enable(Irql);
+  rtems_interrupt_lock_release(&ns16550_lock, &lock_context);
   return 0;
 }
 
@@ -381,7 +384,7 @@ NS16550_STATIC int ns16550_negate_RTS(int minor)
 NS16550_STATIC int ns16550_assert_DTR(int minor)
 {
   uint32_t                pNS16550;
-  uint32_t                Irql;
+  rtems_interrupt_lock_context lock_context;
   ns16550_context        *pns16550Context;
   setRegister_f           setReg;
 
@@ -393,10 +396,10 @@ NS16550_STATIC int ns16550_assert_DTR(int minor)
   /*
    * Assert DTR
    */
-  rtems_interrupt_disable(Irql);
+  rtems_interrupt_lock_acquire(&ns16550_lock, &lock_context);
   pns16550Context->ucModemCtrl|=SP_MODEM_DTR;
   (*setReg)(pNS16550, NS16550_MODEM_CONTROL, pns16550Context->ucModemCtrl);
-  rtems_interrupt_enable(Irql);
+  rtems_interrupt_lock_release(&ns16550_lock, &lock_context);
   return 0;
 }
 
@@ -407,7 +410,7 @@ NS16550_STATIC int ns16550_assert_DTR(int minor)
 NS16550_STATIC int ns16550_negate_DTR(int minor)
 {
   uint32_t                pNS16550;
-  uint32_t                Irql;
+  rtems_interrupt_lock_context lock_context;
   ns16550_context        *pns16550Context;
   setRegister_f           setReg;
 
@@ -419,10 +422,10 @@ NS16550_STATIC int ns16550_negate_DTR(int minor)
   /*
    * Negate DTR
    */
-  rtems_interrupt_disable(Irql);
+  rtems_interrupt_lock_acquire(&ns16550_lock, &lock_context);
   pns16550Context->ucModemCtrl&=~SP_MODEM_DTR;
   (*setReg)(pNS16550, NS16550_MODEM_CONTROL,pns16550Context->ucModemCtrl);
-  rtems_interrupt_enable(Irql);
+  rtems_interrupt_lock_release(&ns16550_lock, &lock_context);
   return 0;
 }
 
@@ -443,7 +446,7 @@ int ns16550_set_attributes(
   uint8_t                 ucLineControl;
   uint32_t                baud_requested;
   setRegister_f           setReg;
-  uint32_t                Irql;
+  rtems_interrupt_lock_context lock_context;
   const console_tbl      *c = Console_Port_Tbl [minor];
 
   pNS16550 = c->ulCtrlPort1;
@@ -497,7 +500,7 @@ int ns16550_set_attributes(
    *  Now actually set the chip
    */
 
-  rtems_interrupt_disable(Irql);
+  rtems_interrupt_lock_acquire(&ns16550_lock, &lock_context);
 
     /*
      *  Set the baud rate
@@ -516,7 +519,7 @@ int ns16550_set_attributes(
      */
     (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucLineControl );
 
-  rtems_interrupt_enable(Irql);
+  rtems_interrupt_lock_release(&ns16550_lock, &lock_context);
 
   return 0;
 }
