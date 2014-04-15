@@ -1583,6 +1583,12 @@ const rtems_libio_helper rtems_fs_init_helper =
  * classic or posix objects that have not already been given resource limits.
  */
 #if defined(CONFIGURE_UNLIMITED_OBJECTS)
+  #if !defined(CONFIGURE_UNIFIED_WORK_AREAS) && \
+     !defined(CONFIGURE_EXECUTIVE_RAM_SIZE) && \
+     !defined(CONFIGURE_MEMORY_OVERHEAD)
+     #error "CONFIGURE_UNLIMITED_OBJECTS requires a unified work area, an executive RAM size, or a defined workspace memory overhead"
+  #endif
+
   #if !defined(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
   /**
    * This macro specifies a default allocation size for when auto-extending
