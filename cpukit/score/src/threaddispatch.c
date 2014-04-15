@@ -97,9 +97,20 @@ void _Thread_Dispatch( void )
 #else
   while ( per_cpu->dispatch_necessary ) {
 #endif
-    heir = per_cpu->heir;
     per_cpu->dispatch_necessary = false;
+
+#if defined( RTEMS_SMP )
+    /*
+     * It is critical that we first update the dispatch necessary and then the
+     * read the heir so that we don't miss an update by
+     * _Scheduler_SMP_Allocate_processor().
+     */
+    _Atomic_Fence( ATOMIC_ORDER_SEQ_CST );
+#endif
+
+    heir = per_cpu->heir;
     per_cpu->executing = heir;
+
 #if defined( RTEMS_SMP )
     executing->is_executing = false;
     heir->is_executing = true;

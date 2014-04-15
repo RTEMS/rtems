@@ -92,12 +92,14 @@ static inline void _Scheduler_SMP_Allocate_processor(
 
     _Thread_Set_CPU( heir, cpu_of_victim );
 
-    /*
-     * FIXME: Here we need atomic store operations with a relaxed memory order.
-     * The _CPU_SMP_Send_interrupt() will ensure that the change can be
-     * observed consistently.
-     */
     cpu_of_victim->heir = heir;
+
+    /*
+     * It is critical that we first update the heir and then the dispatch
+     * necessary so that _Thread_Dispatch() cannot miss an update.
+     */
+    _Atomic_Fence( ATOMIC_ORDER_RELEASE );
+
     cpu_of_victim->dispatch_necessary = true;
 
     if ( cpu_of_victim != cpu_of_executing ) {

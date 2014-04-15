@@ -54,23 +54,13 @@ typedef atomic_uintptr_t Atomic_Pointer;
 typedef atomic_flag Atomic_Flag;
 
 /**
- * @brief the enumeration Atomic_Memory_barrier specifies the detailed regular
- * memory synchronization operations used in the atomic operation API
- * definitions.
+ * @brief Memory order according to ISO/IEC 9899:2011.
  */
 typedef enum {
-  /** no operation orders memory. */
   ATOMIC_ORDER_RELAXED = memory_order_relaxed,
-  /** a load operation performs an acquire operation on the affected memory
-  * location. This flag guarantees that the effects of load operation are
-  * completed before the effects of any later data accesses.
-  */
   ATOMIC_ORDER_ACQUIRE = memory_order_acquire,
-  /** a store operation performs a release operation on the affected memory
-  * location. This flag guarantee that all effects of all previous data
-  * accesses are completed before the store operation takes place.
-  */
-  ATOMIC_ORDER_RELEASE = memory_order_release
+  ATOMIC_ORDER_RELEASE = memory_order_release,
+  ATOMIC_ORDER_SEQ_CST = memory_order_seq_cst
 } Atomic_Order;
 
 
