@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2010, 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -46,6 +46,9 @@
 #define GCR_M BSP_BBIT32(2)
 
 #define SPURIOUS 0xffff
+
+static rtems_interrupt_lock lock =
+ RTEMS_INTERRUPT_LOCK_INITIALIZER("QorIQ IRQ");
 
 static const uint16_t vpr_and_dr_offsets [] = {
 	[0] = 0x10200 >> 4,
@@ -168,12 +171,12 @@ rtems_status_code qoriq_pic_set_priority(
 		volatile uint32_t *vpr = (volatile uint32_t *) &qoriq.pic + offs;
 
 		if (QORIQ_PIC_PRIORITY_IS_VALID(new_priority)) {
-			rtems_interrupt_level level;
+			rtems_interrupt_lock_context lock_context;
 
-			rtems_interrupt_disable(level);
+			rtems_interrupt_lock_acquire(&lock, &lock_context);
 			old_vpr = *vpr;
 			*vpr = VPR_PRIORITY_SET(old_vpr, (uint32_t) new_priority);
-			rtems_interrupt_enable(level);
+			rtems_interrupt_lock_release(&lock, &lock_context);
 		} else if (new_priority < 0) {
 			old_vpr = *vpr;
 		} else {
@@ -220,11 +223,11 @@ static rtems_status_code pic_vector_enable(rtems_vector_number vector, uint32_t 
 	if (bsp_interrupt_is_valid_vector(vector)) {
 		int offs = vpr_and_dr_offsets [vector] << 2;
 		volatile uint32_t *vpr = (volatile uint32_t *) &qoriq.pic + offs;
-		rtems_interrupt_level level;
+		rtems_interrupt_lock_context lock_context;
 
-		rtems_interrupt_disable(level);
+		rtems_interrupt_lock_acquire(&lock, &lock_context);
 		*vpr = (*vpr & ~VPR_MSK) | msk;
-		rtems_interrupt_enable(level);
+		rtems_interrupt_lock_release(&lock, &lock_context);
 	}
 
 	return sc;
