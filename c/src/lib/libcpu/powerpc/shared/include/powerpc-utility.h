@@ -8,7 +8,7 @@
  */
 
 /*
- * Copyright (c) 2008-2013 embedded brains GmbH.
+ * Copyright (c) 2008-2014 embedded brains GmbH.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -578,14 +578,14 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
  */
 #define PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(spr, bits) \
   do { \
-    rtems_interrupt_level level; \
+    ISR_Level level; \
     uint32_t val; \
     uint32_t mybits = bits; \
-    rtems_interrupt_disable(level); \
+    _ISR_Disable_without_giant(level); \
     val = PPC_SPECIAL_PURPOSE_REGISTER(spr); \
     val |= mybits; \
     PPC_SET_SPECIAL_PURPOSE_REGISTER(spr, val); \
-    rtems_interrupt_enable(level); \
+    _ISR_Enable_without_giant(level); \
   } while (0)
 
 /**
@@ -597,16 +597,16 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
  */
 #define PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS_MASKED(spr, bits, mask) \
   do { \
-    rtems_interrupt_level level; \
+    ISR_Level level; \
     uint32_t val; \
     uint32_t mybits = bits; \
     uint32_t mymask = mask; \
-    rtems_interrupt_disable(level); \
+    _ISR_Disable_without_giant(level); \
     val = PPC_SPECIAL_PURPOSE_REGISTER(spr); \
     val &= ~mymask; \
     val |= mybits; \
     PPC_SET_SPECIAL_PURPOSE_REGISTER(spr, val); \
-    rtems_interrupt_enable(level); \
+    _ISR_Enable_without_giant(level); \
   } while (0)
 
 /**
@@ -617,14 +617,14 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
  */
 #define PPC_CLEAR_SPECIAL_PURPOSE_REGISTER_BITS(spr, bits) \
   do { \
-    rtems_interrupt_level level; \
+    ISR_Level level; \
     uint32_t val; \
     uint32_t mybits = bits; \
-    rtems_interrupt_disable(level); \
+    _ISR_Disable_without_giant(level); \
     val = PPC_SPECIAL_PURPOSE_REGISTER(spr); \
     val &= ~mybits; \
     PPC_SET_SPECIAL_PURPOSE_REGISTER(spr, val); \
-    rtems_interrupt_enable(level); \
+    _ISR_Enable_without_giant(level); \
   } while (0)
 
 /**
@@ -667,14 +667,14 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
  */
 #define PPC_SET_DEVICE_CONTROL_REGISTER_BITS(dcr, bits) \
   do { \
-    rtems_interrupt_level level; \
+    ISR_Level level; \
     uint32_t val; \
     uint32_t mybits = bits; \
-    rtems_interrupt_disable(level); \
+    _ISR_Disable_without_giant(level); \
     val = PPC_DEVICE_CONTROL_REGISTER(dcr); \
     val |= mybits; \
     PPC_SET_DEVICE_CONTROL_REGISTER(dcr, val); \
-    rtems_interrupt_enable(level); \
+    _ISR_Enable_without_giant(level); \
   } while (0)
 
 /**
@@ -686,16 +686,16 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
  */
 #define PPC_SET_DEVICE_CONTROL_REGISTER_BITS_MASKED(dcr, bits, mask) \
   do { \
-    rtems_interrupt_level level; \
+    ISR_Level level; \
     uint32_t val; \
     uint32_t mybits = bits; \
     uint32_t mymask = mask; \
-    rtems_interrupt_disable(level); \
+    _ISR_Disable_without_giant(level); \
     val = PPC_DEVICE_CONTROL_REGISTER(dcr); \
     val &= ~mymask; \
     val |= mybits; \
     PPC_SET_DEVICE_CONTROL_REGISTER(dcr, val); \
-    rtems_interrupt_enable(level); \
+    _ISR_Enable_without_giant(level); \
   } while (0)
 
 /**
@@ -706,14 +706,14 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
  */
 #define PPC_CLEAR_DEVICE_CONTROL_REGISTER_BITS(dcr, bits) \
   do { \
-    rtems_interrupt_level level; \
+    ISR_Level level; \
     uint32_t val; \
     uint32_t mybits = bits; \
-    rtems_interrupt_disable(level); \
+    _ISR_Disable_without_giant(level); \
     val = PPC_DEVICE_CONTROL_REGISTER(dcr); \
     val &= ~mybits; \
     PPC_SET_DEVICE_CONTROL_REGISTER(dcr, val); \
-    rtems_interrupt_enable(level); \
+    _ISR_Enable_without_giant(level); \
   } while (0)
 
 static inline uint32_t ppc_time_base(void)
