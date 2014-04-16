@@ -76,6 +76,7 @@ static bool arm_errata_is_applicable_processor_errata_764369(
     case ARM_RELEASE_ID_R2_P2:
     case ARM_RELEASE_ID_R2_P0:
       is_applicable = true;
+    break;
     default:
       is_applicable = false;
     break;
