@@ -15,6 +15,7 @@ The application level services currently provided are:
 
 @itemize @bullet
 @item @code{rtems_get_processor_count} - Get processor count
+@item @code{rtems_get_current_processor} - Get current processor index
 @item @code{rtems_task_get_affinity} - Obtain Task Affinity
 @item @code{rtems_task_set_affinity} - Set Task Affinity
 @end itemize
@@ -252,6 +253,44 @@ system initialization to indicate the count of utilized processors.  The
 processor count depends on the physically or virtually available processors and
 application configuration.  The value will always be less than or equal to the
 maximum count of application configured processors.
+
+@subheading NOTES:
+
+None.
+
+@c
+@c rtems_get_current_processor
+@c
+@page
+@subsection GET_CURRENT_PROCESSOR - Get current processor index
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+uint32_t rtems_get_current_processor(void);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+The index of the current processor.
+
+@subheading DESCRIPTION:
+
+On uni-processor configurations a value of zero will be returned.
+
+On SMP configurations an architecture specific method is used to obtain the
+index of the current processor in the system.  The set of processor indices is
+the range of integers starting with zero up to the processor count minus one.
+
+Outside of sections with disabled thread dispatching the current processor
+index may change after every instruction since the thread may migrate from one
+processor to another.  Sections with disabled interrupts are sections with
+thread dispatching disabled.
 
 @subheading NOTES:
 
