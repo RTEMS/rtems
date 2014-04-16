@@ -120,6 +120,7 @@ typedef struct rtems_capture_control_s
 #define RTEMS_CAPTURE_DELETE        (1 << 4)
 #define RTEMS_CAPTURE_BEGIN         (1 << 5)
 #define RTEMS_CAPTURE_EXITTED       (1 << 6)
+#define RTEMS_CAPTURE_TERMINATED    (1 << 7)
 
 #define RTEMS_CAPTURE_FROM_TRIGS    (RTEMS_CAPTURE_SWITCH  | \
                                      RTEMS_CAPTURE_CREATE | \
@@ -208,12 +209,13 @@ typedef struct rtems_capture_record_s
 #define RTEMS_CAPTURE_RESTARTED_EVENT     UINT32_C (0x00200000)
 #define RTEMS_CAPTURE_DELETED_BY_EVENT    UINT32_C (0x00400000)
 #define RTEMS_CAPTURE_DELETED_EVENT       UINT32_C (0x00800000)
-#define RTEMS_CAPTURE_BEGIN_EVENT         UINT32_C (0x01000000)
-#define RTEMS_CAPTURE_EXITTED_EVENT       UINT32_C (0x02000000)
-#define RTEMS_CAPTURE_SWITCHED_OUT_EVENT  UINT32_C (0x04000000)
-#define RTEMS_CAPTURE_SWITCHED_IN_EVENT   UINT32_C (0x08000000)
-#define RTEMS_CAPTURE_TIMESTAMP           UINT32_C (0x10000000)
-#define RTEMS_CAPTURE_EVENT_END           (28)
+#define RTEMS_CAPTURE_TERMINATED_EVENT    UINT32_C (0x01000000)
+#define RTEMS_CAPTURE_BEGIN_EVENT         UINT32_C (0x02000000)
+#define RTEMS_CAPTURE_EXITTED_EVENT       UINT32_C (0x04000000)
+#define RTEMS_CAPTURE_SWITCHED_OUT_EVENT  UINT32_C (0x08000000)
+#define RTEMS_CAPTURE_SWITCHED_IN_EVENT   UINT32_C (0x10000000)
+#define RTEMS_CAPTURE_TIMESTAMP           UINT32_C (0x20000000)
+#define RTEMS_CAPTURE_EVENT_END           (29)
 
 /**
  * @brief Capture trigger modes
@@ -240,7 +242,8 @@ typedef enum rtems_capture_trigger_e
   rtems_capture_restart,
   rtems_capture_delete,
   rtems_capture_begin,
-  rtems_capture_exitted
+  rtems_capture_exitted,
+  rtems_capture_terminated
 } rtems_capture_trigger_t;
 
 /**

@@ -51,10 +51,40 @@
                                       RTEMS_CAPTURE_DELETED_BY_EVENT | \
                                       RTEMS_CAPTURE_DELETED_EVENT | \
                                       RTEMS_CAPTURE_BEGIN_EVENT | \
-                                      RTEMS_CAPTURE_EXITTED_EVENT)
+                                      RTEMS_CAPTURE_EXITTED_EVENT | \
+                                      RTEMS_CAPTURE_TERMINATED_EVENT)
 #else
 #define RTEMS_CAPTURE_RECORD_EVENTS  (0)
 #endif
+
+static bool 
+rtems_capture_create_task (rtems_tcb* current_task, 
+                           rtems_tcb* new_task);
+
+static void
+rtems_capture_start_task (rtems_tcb* current_task,
+                          rtems_tcb* started_task);
+
+static void
+rtems_capture_restart_task (rtems_tcb* current_task,
+                            rtems_tcb* restarted_task);
+
+static void
+rtems_capture_delete_task (rtems_tcb* current_task,
+                           rtems_tcb* deleted_task);
+
+static void
+rtems_capture_switch_task (rtems_tcb* current_task,
+                           rtems_tcb* heir_task);
+
+static void
+rtems_capture_begin_task (rtems_tcb* begin_task);
+
+static void
+rtems_capture_exitted_task (rtems_tcb* exitted_task);
+
+static void
+rtems_capture_terminated_task (rtems_tcb* terminated_task);
 
 /*
  * Global capture flags.
@@ -88,6 +118,18 @@ static rtems_id                 capture_reader;
 static rtems_interrupt_lock     capture_lock =
   RTEMS_INTERRUPT_LOCK_INITIALIZER("capture");
 
+static const rtems_extensions_table capture_extensions = {
+  .thread_create    = rtems_capture_create_task,
+  .thread_start     = rtems_capture_start_task,
+  .thread_restart   = rtems_capture_restart_task,
+  .thread_delete    = rtems_capture_delete_task,
+  .thread_switch    = rtems_capture_switch_task,
+  .thread_begin     = rtems_capture_begin_task,
+  .thread_exitted   = rtems_capture_exitted_task,
+  .fatal            = NULL,
+  .thread_terminate = rtems_capture_terminated_task
+};
+
 /*
  * RTEMS Event text.
  */
@@ -101,6 +143,7 @@ static const char* capture_event_text[] =
   "RESTARTED",
   "DELETED_BY",
   "DELETED",
+  "TERMINATED",
   "BEGIN",
   "EXITTED",
   "SWITCHED_OUT",
@@ -787,21 +830,28 @@ rtems_capture_exitted_task (rtems_tcb* exitted_task)
 static void
 rtems_capture_terminated_task (rtems_tcb* terminated_task)
 {
-  rtems_capture_delete_task (terminated_task, terminated_task);
+  /*
+   * Get the capture task control block so we can trace this
+   * event.
+   */
+  rtems_capture_task_t* tt;
+
+  tt = terminated_task->extensions[capture_extension_index];
+
+  /*
+   * The task pointers may not be known as the task may have
+   * been created before the capture engine was open. Add them.
+   */
+
+  if (tt == NULL)
+    tt = rtems_capture_create_capture_task (terminated_task);
+
+  if (rtems_capture_trigger (NULL, tt, RTEMS_CAPTURE_TERMINATED))
+    rtems_capture_record (tt, RTEMS_CAPTURE_TERMINATED_EVENT);
+
+  rtems_capture_task_stack_usage (tt);
 }
 
-/*
- * This function is called when a fatal error occurs.
- */
-static void
-rtems_capture_fatal(
-  Internal_errors_Source source,
-  bool                   is_internal,
-  Internal_errors_t      code
-)
-{
-}
-  
 /*
  * This function is called when a context is switched.
  */
@@ -887,7 +937,6 @@ rtems_capture_switch_task (rtems_tcb* current_task,
 rtems_status_code
 rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribute__((unused)))
 {
-  rtems_extensions_table capture_extensions;
   rtems_name             name;
   rtems_status_code      sc;
 
@@ -911,19 +960,6 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribu
   capture_tasks   = NULL;
   capture_ceiling = 0;
   capture_floor   = 255;
-
-  /*
-   * Create the extension table. This is copied so we
-   * can create it as a local.
-   */
-  capture_extensions.thread_create  = rtems_capture_create_task;
-  capture_extensions.thread_start   = rtems_capture_start_task;
-  capture_extensions.thread_restart = rtems_capture_restart_task;
-  capture_extensions.thread_delete  = rtems_capture_delete_task;
-  capture_extensions.thread_switch  = rtems_capture_switch_task;
-  capture_extensions.thread_begin   = rtems_capture_begin_task;
-  capture_extensions.thread_exitted = rtems_capture_exitted_task;
-  capture_extensions.fatal          = NULL;
 
   /*
    * Register the user extension handlers for the CAPture Engine.
@@ -1341,6 +1377,8 @@ rtems_capture_map_trigger (rtems_capture_trigger_t trigger)
       return RTEMS_CAPTURE_BEGIN;
     case rtems_capture_exitted:
       return RTEMS_CAPTURE_EXITTED;
+    case rtems_capture_terminated:
+      return RTEMS_CAPTURE_TERMINATED;
     default:
       break;
   }
