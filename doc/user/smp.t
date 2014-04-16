@@ -18,6 +18,7 @@ The application level services currently provided are:
 @item @code{rtems_get_current_processor} - Get current processor index
 @item @code{rtems_scheduler_ident} - Get ID of a scheduler
 @item @code{rtems_scheduler_get_processor_set} - Get processor set of a scheduler
+@item @code{rtems_task_get_scheduler} - Get scheduler of a task
 @item @code{rtems_task_get_affinity} - Get task processor affinity
 @item @code{rtems_task_set_affinity} - Set task processor affinity
 @end itemize
@@ -368,6 +369,40 @@ set of processors owned by the scheduler
 Returns the processor set owned by the scheduler in @code{cpuset}.  A set bit
 in the processor set means that this processor is owned by the scheduler and a
 cleared bit means the opposite.
+
+@subheading NOTES:
+
+None.
+
+@c
+@c rtems_task_get_scheduler
+@c
+@page
+@subsection TASK_GET_SCHEDULER - Get scheduler of a task
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+rtems_status_code rtems_task_get_scheduler(
+  rtems_id  id,
+  rtems_id *scheduler_id
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+@code{@value{RPREFIX}SUCCESSFUL} - successful operation@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{scheduler_id} is NULL@*
+@code{@value{RPREFIX}INVALID_ID} - invalid task id
+
+@subheading DESCRIPTION:
+
+Returns the scheduler identifier of a task in @code{scheduler_id}.
 
 @subheading NOTES:
 
