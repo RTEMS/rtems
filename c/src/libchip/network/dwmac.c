@@ -314,9 +314,6 @@ static int dwmac_control_request(
     nest_count = rtems_bsdnet_semaphore_release_recursive();
     sc         = rtems_event_transient_receive( RTEMS_WAIT, RTEMS_NO_TIMEOUT );
     eno        = rtems_status_code_to_errno( sc );
-  }
-
-  if ( eno == 0 ) {
     rtems_bsdnet_semaphore_obtain_recursive( nest_count );
     self->task_id_control = 0;
   }
@@ -1835,15 +1832,13 @@ static int dwmac_if_up_or_down(
 
     if ( eno == 0 ) {
       /* Start the ball rolling ... */
-      sc  = dwmac_control_request(
+      eno = dwmac_control_request(
         self, self->task_id_tx, DWMAC_COMMON_EVENT_TASK_INIT );
-      eno = rtems_status_code_to_errno( sc );
     }
 
     if ( eno == 0 ) {
-      sc  = dwmac_control_request(
+      eno = dwmac_control_request(
         self, self->task_id_rx, DWMAC_COMMON_EVENT_TASK_INIT );
-      eno = rtems_status_code_to_errno( sc );
     }
 
     if ( eno == 0 ) {
@@ -1878,15 +1873,13 @@ static int dwmac_if_up_or_down(
     }
   } else if ( !up && self->state == DWMAC_COMMON_STATE_UP ) {
     if ( eno == 0 ) {
-      sc  = dwmac_control_request(
+      eno = dwmac_control_request(
         self, self->task_id_tx, DWMAC_COMMON_EVENT_TASK_STOP );
-      eno = rtems_status_code_to_errno( sc );
     }
 
     if ( eno == 0 ) {
-      sc  = dwmac_control_request(
+      eno = dwmac_control_request(
         self, self->task_id_rx, DWMAC_COMMON_EVENT_TASK_STOP );
-      eno = rtems_status_code_to_errno( sc );
     }
 
     if ( eno == 0 ) {
