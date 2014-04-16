@@ -16,7 +16,7 @@ The application level services currently provided are:
 @itemize @bullet
 @item @code{rtems_get_processor_count} - Get processor count
 @item @code{rtems_get_current_processor} - Get current processor index
-@item @code{rtems_task_get_affinity} - Obtain Task Affinity
+@item @code{rtems_task_get_affinity} - Get task processor affinity
 @item @code{rtems_task_set_affinity} - Set Task Affinity
 @end itemize
 
@@ -300,18 +300,16 @@ None.
 @c rtems_task_get_affinity
 @c
 @page
-@subsection rtems_task_get_affinity - Obtain Task Affinity
+@subsection TASK_GET_AFFINITY - Get task processor affinity
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-#include <rtems.h>
-
 rtems_status_code rtems_task_get_affinity(
-  rtems_id             id,
-  size_t               cpusetsize,
-  cpu_set_t           *cpuset
+  rtems_id   id,
+  size_t     cpusetsize,
+  cpu_set_t *cpuset
 );
 @end example
 @end ifset
@@ -319,30 +317,23 @@ rtems_status_code rtems_task_get_affinity(
 @ifset is-Ada
 @end ifset
 
-@subheading STATUS CODES:
+@subheading DIRECTIVE STATUS CODES:
 
-@table @b
-@item RTEMS_UNSATISFIED
-The @code{cpuset} pointer argument is invalid.
-
-@item RTEMS_UNSATISFIED
-The @code{cpusetsize} does not match the value of @code{affinitysetsize}
-field in the thread attribute object.
-
-@item RTEMS_INVALID_ID
-The @code{id} is invalid.
-
-@end table
+@code{@value{RPREFIX}SUCCESSFUL} - successful operation@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{cpuset} is NULL@*
+@code{@value{RPREFIX}INVALID_ID} - invalid task id@*
+@code{@value{RPREFIX}INVALID_NUMBER} - the affinity set buffer is too small for
+the current processor affinity set of the task
 
 @subheading DESCRIPTION:
 
-The @code{rtems_task_get_affinity} routine is used to obtain the
-@code{affinityset} field from the thread object @code{id}.
-The value of this field is returned in @code{cpuset}
+Returns the current processor affinity set of the task in @code{cpuset}.  A set
+bit in the affinity set means that the task can execute on this processor and a
+cleared bit means the opposite.
 
 @subheading NOTES:
 
-NONE
+None.
 
 @c
 @c rtems_task_set_affinity
