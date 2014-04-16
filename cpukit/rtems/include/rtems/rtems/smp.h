@@ -31,9 +31,6 @@ extern "C" {
  *
  * This encapsulates functionality which is useful for SMP applications.
  *
- * This API is also available on uni-processor configurations.  Here compile
- * time constants are used whenever possible.
- *
  * @{
  */
 
@@ -43,12 +40,12 @@ extern "C" {
  * On uni-processor configurations a value of one will be returned.
  *
  * On SMP configurations this returns the value of a global variable set during
- * system initialization to indicate the count of processors.  The processor
- * count depends on the hardware and application configuration.  The value will
- * always be less than or equal to the maximum count of application configured
- * processors.
+ * system initialization to indicate the count of utilized processors.  The
+ * processor count depends on the physically or virtually available processors
+ * and application configuration.  The value will always be less than or equal
+ * to the maximum count of application configured processors.
  *
- * @return The count of processors in the system.
+ * @return The count of processors being utilized.
  */
 uint32_t rtems_get_processor_count(void);
 

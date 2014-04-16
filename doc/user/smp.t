@@ -14,7 +14,7 @@ provided by RTEMS.
 The application level services currently provided are:
 
 @itemize @bullet
-@item @code{rtems_smp_get_processor_count} - Obtain Number of CPUs
+@item @code{rtems_get_processor_count} - Get processor count
 @item @code{rtems_task_get_affinity} - Obtain Task Affinity
 @item @code{rtems_task_set_affinity} - Set Task Affinity
 @end itemize
@@ -223,36 +223,39 @@ is dedicated to each of these services and describes the calling sequence,
 related constants, usage, and status codes.
 
 @c
-@c rtems_smp_get_processor_count
+@c rtems_get_processor_count
 @c
 @page
-@subsection rtems_smp_get_processor_count - Obtain Number of CPUs
+@subsection GET_PROCESSOR_COUNT - Get processor count
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-#include <rtems.h>
-
-int rtems_smp_get_processor_count(void);
+uint32_t rtems_get_processor_count(void);
 @end example
 @end ifset
 
 @ifset is-Ada
 @end ifset
 
-@subheading STATUS CODES:
+@subheading DIRECTIVE STATUS CODES:
 
-Returns the number of processors being utilized.
+The count of processors in the system.
 
 @subheading DESCRIPTION:
 
-The @code{rtems_smp_get_processor_count} routine is used to obtain the
-number of processor cores being utilized.
+On uni-processor configurations a value of one will be returned.
+
+On SMP configurations this returns the value of a global variable set during
+system initialization to indicate the count of utilized processors.  The
+processor count depends on the physically or virtually available processors and
+application configuration.  The value will always be less than or equal to the
+maximum count of application configured processors.
 
 @subheading NOTES:
 
-NONE
+None.
 
 @c
 @c rtems_task_get_affinity
