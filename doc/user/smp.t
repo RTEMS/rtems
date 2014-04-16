@@ -16,6 +16,7 @@ The application level services currently provided are:
 @itemize @bullet
 @item @code{rtems_get_processor_count} - Get processor count
 @item @code{rtems_get_current_processor} - Get current processor index
+@item @code{rtems_scheduler_ident} - Get ID of a scheduler
 @item @code{rtems_task_get_affinity} - Get task processor affinity
 @item @code{rtems_task_set_affinity} - Set task processor affinity
 @end itemize
@@ -291,6 +292,42 @@ Outside of sections with disabled thread dispatching the current processor
 index may change after every instruction since the thread may migrate from one
 processor to another.  Sections with disabled interrupts are sections with
 thread dispatching disabled.
+
+@subheading NOTES:
+
+None.
+
+@c
+@c rtems_scheduler_ident
+@c
+@page
+@subsection SCHEDULER_IDENT - Get ID of a scheduler
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+rtems_status_code rtems_scheduler_ident(
+  rtems_name  name,
+  rtems_id   *id
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+@code{@value{RPREFIX}SUCCESSFUL} - successful operation@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
+@code{@value{RPREFIX}INVALID_NAME} - invalid scheduler name
+
+@subheading DESCRIPTION:
+
+Identifies a scheduler by its name.  The scheduler name is determined by the
+scheduler configuration.  @xref{Configuring a System Configuring
+Clustered/Partitioned Schedulers}.
 
 @subheading NOTES:
 
