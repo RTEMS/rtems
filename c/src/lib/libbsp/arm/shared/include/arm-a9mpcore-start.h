@@ -83,11 +83,9 @@ BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_scu_invalidate(
 BSP_START_TEXT_SECTION static void inline
 arm_a9mpcore_start_errata_764369_handler(volatile a9mpcore_scu *scu)
 {
-#ifdef RTEMS_SMP
   if (arm_errata_is_applicable_processor_errata_764369()) {
     scu->diagn_ctrl |= A9MPCORE_SCU_DIAGN_CTRL_MIGRATORY_BIT_DISABLE;
   }
-#endif
 }
 
 BSP_START_TEXT_SECTION static inline

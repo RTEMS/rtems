@@ -47,6 +47,7 @@ static arm_release_id arm_errata_get_processor_release(
 #endif /* #if defined( __ARM_ARCH_7A__ ) */
 
 #if defined( __ARM_ARCH_7A__ )
+#if ( defined( RTEMS_SMP ) )
 static bool arm_errata_is_applicable_processor_errata_764369(
   void
 )
@@ -84,6 +85,9 @@ static bool arm_errata_is_applicable_processor_errata_764369(
   
   return is_applicable;
 }
+#else
+  #define arm_errata_is_applicable_processor_errata_764369() false
+#endif /*  ( defined( RTEMS_SMP ) ) */
 #endif /* #if defined( __ARM_ARCH_7A__ ) */
 
 #if defined( __ARM_ARCH_7A__ )

@@ -46,14 +46,10 @@ extern "C" {
     - 1 )
 
 /* Errata Handlers */
-#if ( defined( RTEMS_SMP ) )
-  #define ARM_CACHE_L1_ERRATA_764369_HANDLER()                 \
-    if( arm_errata_is_applicable_processor_errata_764369() ) { \
-      _ARM_Data_synchronization_barrier();                     \
-    }                                           
-#else /* #if ( defined( RTEMS_SMP ) ) */
-  #define ARM_CACHE_L1_ERRATA_764369_HANDLER()
-#endif /* #if ( defined( RTEMS_SMP ) ) */
+#define ARM_CACHE_L1_ERRATA_764369_HANDLER()                 \
+  if( arm_errata_is_applicable_processor_errata_764369() ) { \
+    _ARM_Data_synchronization_barrier();                     \
+  }
 
     
 static void arm_cache_l1_select( const uint32_t selection )
