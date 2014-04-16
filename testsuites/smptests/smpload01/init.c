@@ -89,11 +89,7 @@ static void inherit_obtain_task(rtems_task_argument arg)
 
     rtems_counter_delay_ticks(delay);
 
-    /*
-     * FIXME: Using a smaller value for the timeout triggers bug leading to
-     * system corruption.
-     */
-    sc = rtems_semaphore_obtain(ctx->inherit_sem, RTEMS_WAIT, 100);
+    sc = rtems_semaphore_obtain(ctx->inherit_sem, RTEMS_WAIT, 1);
     rtems_test_assert(sc == RTEMS_TIMEOUT);
 
     _SMP_barrier_Wait(&ctx->inherit_barrier, &barrier_state, cpu_count);
@@ -106,7 +102,7 @@ static void inherit_obtain_task(rtems_task_argument arg)
       sc = rtems_task_set_priority(ctx->inherit_release_task_id, prio, &prio);
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-      sc = rtems_task_resume(ctx->inherit_release_task_id);
+      sc = rtems_event_transient_send(ctx->inherit_release_task_id);
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
       sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
@@ -133,7 +129,7 @@ static void inherit_release_task(rtems_task_argument arg)
   while (true) {
     rtems_task_priority prio = INHERIT_RELEASE_PRIO_LOW;
 
-    sc = rtems_task_suspend(RTEMS_SELF);
+    sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
     sc = rtems_semaphore_release(ctx->inherit_sem);
