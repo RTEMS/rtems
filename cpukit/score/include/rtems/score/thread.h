@@ -585,6 +585,11 @@ struct Thread_Control_struct {
    */
   Chain_Control           Key_Chain;
 
+  /**
+   * @brief Thread life-cycle control.
+   *
+   * Control state changes triggered by thread restart and delete requests.
+   */
   Thread_Life_control                   Life;
 
   /**
