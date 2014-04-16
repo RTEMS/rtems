@@ -535,9 +535,9 @@ rtems_status_code rtems_task_get_affinity(
  * @retval RTEMS_INVALID_NUMBER Invalid processor affinity set.
  */
 rtems_status_code rtems_task_set_affinity(
-  rtems_id             id,
-  size_t               cpusetsize,
-  cpu_set_t           *cpuset
+  rtems_id         id,
+  size_t           cpusetsize,
+  const cpu_set_t *cpuset
 );
 #endif
 

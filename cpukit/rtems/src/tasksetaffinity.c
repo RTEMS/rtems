@@ -26,9 +26,9 @@
 #include <rtems/score/schedulerimpl.h>
 
 rtems_status_code rtems_task_set_affinity(
-  rtems_id             id,
-  size_t               cpusetsize,
-  cpu_set_t           *cpuset
+  rtems_id         id,
+  size_t           cpusetsize,
+  const cpu_set_t *cpuset
 )
 {
   Thread_Control        *the_thread;
