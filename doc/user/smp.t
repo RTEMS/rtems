@@ -17,6 +17,7 @@ The application level services currently provided are:
 @item @code{rtems_get_processor_count} - Get processor count
 @item @code{rtems_get_current_processor} - Get current processor index
 @item @code{rtems_scheduler_ident} - Get ID of a scheduler
+@item @code{rtems_scheduler_get_processor_set} - Get processor set of a scheduler
 @item @code{rtems_task_get_affinity} - Get task processor affinity
 @item @code{rtems_task_set_affinity} - Set task processor affinity
 @end itemize
@@ -328,6 +329,45 @@ rtems_status_code rtems_scheduler_ident(
 Identifies a scheduler by its name.  The scheduler name is determined by the
 scheduler configuration.  @xref{Configuring a System Configuring
 Clustered/Partitioned Schedulers}.
+
+@subheading NOTES:
+
+None.
+
+@c
+@c rtems_scheduler_get_processor_set
+@c
+@page
+@subsection SCHEDULER_GET_PROCESSOR_SET - Get processor set of a scheduler
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+rtems_status_code rtems_scheduler_get_processor_set(
+  rtems_id   scheduler_id,
+  size_t     cpusetsize,
+  cpu_set_t *cpuset
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+@code{@value{RPREFIX}SUCCESSFUL} - successful operation@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{cpuset} is NULL@*
+@code{@value{RPREFIX}INVALID_ID} - invalid scheduler id@*
+@code{@value{RPREFIX}INVALID_NUMBER} - the affinity set buffer is too small for
+set of processors owned by the scheduler
+
+@subheading DESCRIPTION:
+
+Returns the processor set owned by the scheduler in @code{cpuset}.  A set bit
+in the processor set means that this processor is owned by the scheduler and a
+cleared bit means the opposite.
 
 @subheading NOTES:
 
