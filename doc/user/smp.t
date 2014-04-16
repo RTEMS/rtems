@@ -19,6 +19,7 @@ The application level services currently provided are:
 @item @code{rtems_scheduler_ident} - Get ID of a scheduler
 @item @code{rtems_scheduler_get_processor_set} - Get processor set of a scheduler
 @item @code{rtems_task_get_scheduler} - Get scheduler of a task
+@item @code{rtems_task_set_scheduler} - Set scheduler of a task
 @item @code{rtems_task_get_affinity} - Get task processor affinity
 @item @code{rtems_task_set_affinity} - Set task processor affinity
 @end itemize
@@ -407,6 +408,82 @@ Returns the scheduler identifier of a task in @code{scheduler_id}.
 @subheading NOTES:
 
 None.
+
+@c
+@c rtems_task_set_scheduler
+@c
+@page
+@subsection TASK_SET_SCHEDULER - Set scheduler of a task
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+rtems_status_code rtems_task_set_scheduler(
+  rtems_id id,
+  rtems_id scheduler_id
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+@code{@value{RPREFIX}SUCCESSFUL} - successful operation@*
+@code{@value{RPREFIX}INVALID_ID} - invalid task or scheduler id@*
+@code{@value{RPREFIX}INCORRECT_STATE} - the task is in the wrong state to
+perform a scheduler change
+
+@subheading DESCRIPTION:
+
+Sets the scheduler of a task specified by @code{scheduler_id}.  The scheduler
+of a task is initialized to the scheduler of the task that created it.
+
+@subheading NOTES:
+
+None.
+
+@subheading EXAMPLE:
+
+@example
+@group
+#include <rtems.h>
+#include <assert.h>
+
+void task(rtems_task_argument arg);
+
+void example(void)
+@{
+  rtems_status_code sc;
+  rtems_id          task_id;
+  rtems_id          scheduler_id;
+  rtems_name        scheduler_name;
+
+  scheduler_name = rtems_build_name('W', 'O', 'R', 'K');
+
+  sc = rtems_scheduler_ident(scheduler_name, &scheduler_id);
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_create(
+    rtems_build_name('T', 'A', 'S', 'K'),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &task_id
+  );
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_set_scheduler(task_id, scheduler_id);
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(task_id, task, 0);
+  assert(sc == RTEMS_SUCCESSFUL);
+@}
+@end group
+@end example
 
 @c
 @c rtems_task_get_affinity

@@ -560,6 +560,9 @@ rtems_status_code rtems_task_get_scheduler(
 /**
  * @brief Sets the scheduler of a task.
  *
+ * The scheduler of a task is initialized to the scheduler of the task that
+ * created it.
+ *
  * @param[in] id Identifier of the task.  Use @ref RTEMS_SELF to select the
  * executing task.
  * @param[in] scheduler_id Identifier of the scheduler.
