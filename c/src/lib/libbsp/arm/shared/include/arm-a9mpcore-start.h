@@ -93,8 +93,8 @@ arm_a9mpcore_start_errata_764369_handler(volatile a9mpcore_scu *scu)
 BSP_START_TEXT_SECTION static inline
 arm_a9mpcore_start_scu_enable(volatile a9mpcore_scu *scu)
 {
-  arm_a9mpcore_start_errata_764369_handler(scu);
   scu->ctrl |= A9MPCORE_SCU_CTRL_SCU_EN;
+  arm_a9mpcore_start_errata_764369_handler(scu);
 }
 
 BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_0(void)
