@@ -29,6 +29,116 @@ The application level services currently provided are:
 @c
 @section Background
 
+@subsection Glossary
+
+@table @dfn
+
+@item scheduler
+
+A @dfn{scheduler} or @dfn{scheduling algorithm} allocates processors to a
+subset of its set of ready tasks.  So it manages access to the processor
+resource.  Various algorithms exist to choose the tasks allowed to use a
+processor out of the set of ready tasks.  One method is to assign each task a
+priority number and assign the tasks with the lowest priority number to one
+processor of the set of processors owned by a scheduler instance.
+
+@item scheduler instance
+
+A @dfn{scheduler instance} is a scheduling algorithm with a corresponding
+context to store its internal state.  Each processor in the system is owned by
+at most one scheduler instance.  The processor to scheduler instance assignment
+is determined at application configuration time.  @xref{Configuring a System
+Configuring Clustered/Partitioned Schedulers}.
+
+@item cluster
+
+We have clustered scheduling in case the set of processors of a system is
+partitioned into non-empty pairwise disjoint subsets.  These subsets are called
+@dfn{clusters}.  Each cluster is owned by exactly one scheduler instance.
+
+@item partition
+
+Clusters with a cardinality of one are @dfn{partitions}.
+
+@item task
+
+A @dfn{task} or @dfn{thread} is a context which can execute on a processor.  It
+consists normally of a set of registers and a stack.  The terms @dfn{task} and
+@dfn{thread} are synonym in RTEMS
+
+@item task processor affinity
+
+The set of processors on which a task is allowed to execute.
+
+@item task migration
+
+@dfn{Task migration} happens in case a task stops execution on one processor
+and resumes execution on another processor.
+
+@item blocked task
+
+A task is @dfn{blocked} if it is not allowed to execute.  There are several
+reasons why a task is blocked, for example
+
+@itemize @bullet
+
+@item it has to wait for a resource, currently owned by another task,
+
+@item some time must elapse, for example the next period start or some time
+out,
+
+@item it is explicitly suspended, or
+
+@item it is not yet started.
+
+@end itemize
+
+Blocked tasks are not an element of the set of ready tasks of a scheduler
+instance.
+
+@item ready task
+
+A task is @dfn{ready} if it is allowed to execute, but has no processor
+assigned.  The scheduler decided that other tasks are currently more important.
+
+@item scheduled task
+
+A task is @dfn{scheduled} if it is allowed to execute and has a processor
+assigned.  Such a task executes currently on a processor or is about to start
+execution.  A task about to start execution it is an heir task on exactly one
+processor in the system.
+
+@item in the air task
+
+A task is @dfn{in the air} if it is in a transient state and has a processor
+assigned.  The next scheduler operation will turn it into a blocked, ready or
+scheduled task.
+
+@item atomic operations
+
+Atomic operations are defined in terms of @cite{ISO/IEC 9899:2011}.
+
+@item SMP locks
+
+The @dfn{SMP locks} ensure mutual exclusion on the lowest level and are a
+replacement for the sections of disabled interrupts.  Interrupts are usually
+disabled while holding an SMP lock.  They are implemented using atomic
+operations.  Currently a ticket lock is used in RTEMS.
+
+@item SMP barriers
+
+The @dfn{SMP locks} ensure that a set of processors reaches a common
+synchronization point in time.  They are implemented using atomic operations.
+Currently a sense barrier is used in RTEMS.
+
+@item Giant lock
+
+The @dfn{Giant lock} is a recursive SMP lock protecting most parts of the
+operating system state.  Virtually every operating system service must acquire
+and release the Giant lock during its operation.
+
+@end table
+
 @subsection Uniprocessor versus SMP Parallelism
 
 Uniprocessor systems have long been used in embedded systems. In this hardware
