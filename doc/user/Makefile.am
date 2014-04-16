@@ -169,7 +169,7 @@ smp.texi: smp.t
 	    -n "Stack Bounds Checker" < $< > $@
 
 stackchk.texi: stackchk.t
-	$(BMENU2) -p "Symmetric Multiprocessing Services rtems_task_set_affinity - Set Task Affinity" \
+	$(BMENU2) -p "Symmetric Multiprocessing Services TASK_SET_AFFINITY - Set task processor affinity" \
 	    -u "Top" \
 	    -n "CPU Usage Statistics" < $< > $@
 

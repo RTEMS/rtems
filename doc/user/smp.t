@@ -17,7 +17,7 @@ The application level services currently provided are:
 @item @code{rtems_get_processor_count} - Get processor count
 @item @code{rtems_get_current_processor} - Get current processor index
 @item @code{rtems_task_get_affinity} - Get task processor affinity
-@item @code{rtems_task_set_affinity} - Set Task Affinity
+@item @code{rtems_task_set_affinity} - Set task processor affinity
 @end itemize
 
 @c
@@ -339,18 +339,16 @@ None.
 @c rtems_task_set_affinity
 @c
 @page
-@subsection rtems_task_set_affinity - Set Task Affinity
+@subsection TASK_SET_AFFINITY - Set task processor affinity
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-#include <rtems.h>
-
 rtems_status_code rtems_task_set_affinity(
-  rtems_id             id,
-  size_t               cpusetsize,
-  cpu_set_t           *cpuset
+  rtems_id         id,
+  size_t           cpusetsize,
+  const cpu_set_t *cpuset
 );
 @end example
 @end ifset
@@ -358,34 +356,19 @@ rtems_status_code rtems_task_set_affinity(
 @ifset is-Ada
 @end ifset
 
-@subheading STATUS CODES:
+@subheading DIRECTIVE STATUS CODES:
 
-@table @b
-@item RTEMS_UNSATISFIED
-The @code{cpuset} pointer argument is invalid.
-
-@item RTEMS_UNSATISFIED
-The @code{cpusetsize} does not match the value of @code{affinitysetsize}
-field in the thread attribute object.
-
-@item RTEMS_UNSATISFIED
-The @code{cpuset} did not select a valid cpu.
-
-@item RTEMS_UNSATISFIED
-The @code{cpuset} selected a cpu that was invalid.
-
-@item RTEMS_INVALID_ID
-The @code{id} is invalid.
-
-@end table
+@code{@value{RPREFIX}SUCCESSFUL} - successful operation@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{cpuset} is NULL@*
+@code{@value{RPREFIX}INVALID_ID} - invalid task id@*
+@code{@value{RPREFIX}INVALID_NUMBER} - invalid processor affinity set
 
 @subheading DESCRIPTION:
 
-The @code{rtems_task_set_affinity} routine is used to set the
-@code{affinity.set} field of the thread control object associated
-with @code{id}.  This value controls the @code{cpuset} that the task can
-execute on.
+Sets the processor affinity set for the task specified by @code{cpuset}.  A set
+bit in the affinity set means that the task can execute on this processor and a
+cleared bit means the opposite.
 
 @subheading NOTES:
 
-NONE
+None.
