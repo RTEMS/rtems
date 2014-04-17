@@ -201,20 +201,32 @@ building RTEMS in SMP configuration.
 
 @subsection Setting Affinity to a Single Processor
 
-In many embedded applications targeting SMP systems, it is common to lock individual tasks to specific cores. In this way, one can designate a core for I/O tasks, another for computation, etc.. The following illustrates the code sequence necessary to assign a task an affinity for processor zero (0).
+On some embedded applications targeting SMP systems, it may be beneficial to
+lock individual tasks to specific processors.  In this way, one can designate a
+processor for I/O tasks, another for computation, etc..  The following
+illustrates the code sequence necessary to assign a task an affinity for
+processor with index @code{processor_index}.
 
 @example
-rtems_status_code sc;
-cpu_set_t         set;
+@group
+#include <rtems.h>
+#include <assert.h>
 
-CPU_EMPTY( &set );
-CPU_SET( 0, &set );
+void pin_to_processor(rtems_id task_id, int processor_index)
+@{
+  rtems_status_code sc;
+  cpu_set_t         cpuset;
 
-sc = rtems_task_set_affinity(rtems_task_self(), sizeof(set), &set);
-assert(sc == RTEMS_SUCCESSFUL);
+  CPU_ZERO(&cpuset);
+  CPU_SET(processor_index, &cpuset);
+
+  sc = rtems_task_set_affinity(task_id, sizeof(cpuset), &cpuset);
+  assert(sc == RTEMS_SUCCESSFUL);
+@}
+@end group
 @end example
 
-It is important to note that the @code{cpu_set_t} is not validated until the
+It is important to note that the @code{cpuset} is not validated until the
 @code{@value{DIRPREFIX}task_set_affinity} call is made. At that point,
 it is validated against the current system configuration.
 
