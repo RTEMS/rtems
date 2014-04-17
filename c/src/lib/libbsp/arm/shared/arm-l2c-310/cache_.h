@@ -80,6 +80,9 @@ extern "C" {
 #define CACHE_l2C_310_NUM_WAYS 8
 #define CACHE_l2C_310_WAY_MASK ( ( 1 << CACHE_l2C_310_NUM_WAYS ) - 1 )
 
+#define CACHE_MIN( a, b ) \
+  ((a < b) ? (a) : (b))
+
 
 /* RTL release number as can be read from cache_id register */
 typedef enum {
@@ -1032,15 +1035,17 @@ cache_l2c_310_sync( void )
 }
 
 static inline void
-cache_l2c_310_flush_1_line( const void *d_addr )
+cache_l2c_310_flush_1_line(
+  const void *d_addr,
+  const bool  is_errata_588369applicable
+)
 {
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
 
-
-  if( l2c_310_cache_errata_is_applicable_588369() ) {
+  if( is_errata_588369applicable ) {
     /*
     * Errata 588369 says that clean + inv may keep the
-    * cache line if it was clean, the recommanded
+    * cache line if it was clean, the recommended
     * workaround is to clean then invalidate the cache
     * line, with write-back and cache linefill disabled.
     */
@@ -1050,25 +1055,34 @@ cache_l2c_310_flush_1_line( const void *d_addr )
   } else {
     l2cc->clean_inv_pa = (uint32_t) d_addr;
   }
-
-  cache_l2c_310_sync();
 }
 
 static inline void
-cache_l2c_310_flush_range( const void *addr, size_t n_bytes )
+cache_l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
 {
-  if ( n_bytes != 0 ) {
-    uint32_t       adx       = (uint32_t) addr
-                               & ~CACHE_L2C_310_DATA_LINE_MASK;
-    const uint32_t ADDR_LAST =
-      ( (uint32_t) addr + n_bytes - 1 ) & ~CACHE_L2C_310_DATA_LINE_MASK;
-    volatile L2CC *l2cc      = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  /* Back starting address up to start of a line and invalidate until ADDR_LAST */
+  uint32_t       adx               = (uint32_t)d_addr
+    & ~CACHE_L2C_310_DATA_LINE_MASK;
+  const uint32_t ADDR_LAST         =
+    (uint32_t)( (size_t)d_addr + n_bytes - 1 );
+  uint32_t       block_end         =
+    CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES );
+  bool is_errata_588369_applicable =
+    l2c_310_cache_errata_is_applicable_588369();
 
-    for (; adx <= ADDR_LAST; adx += CPU_DATA_CACHE_ALIGNMENT ) {
-      l2cc->clean_pa = adx;
+  for (;
+       adx      <= ADDR_LAST;
+       adx       = block_end + 1,
+       block_end = CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES )) {
+    for (; adx <= block_end; adx += CPU_DATA_CACHE_ALIGNMENT ) {
+      cache_l2c_310_flush_1_line( (void*)adx, is_errata_588369_applicable );
     }
-    cache_l2c_310_sync();
+    if( block_end < ADDR_LAST ) {
+      rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
+      rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
+    }
   }
+  cache_l2c_310_sync();
 }
 
 static inline void
