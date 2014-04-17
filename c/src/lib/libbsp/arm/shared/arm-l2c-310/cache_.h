@@ -1274,62 +1274,59 @@ static void cache_l2c_310_unlock( void )
 static inline void
 cache_l2c_310_enable( void )
 {
-  volatile L2CC *l2cc     = (volatile L2CC *) BSP_ARM_L2CC_BASE;
-  uint32_t       cache_id = l2cc->cache_id & CACHE_L2C_310_L2CC_ID_PART_MASK;
-  int            ways     = 0;
+  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  
+  /* Only enable if L2CC is currently disabled */
+  if( ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) == 0 ) {
+    uint32_t                     cache_id =
+      l2cc->cache_id & CACHE_L2C_310_L2CC_ID_PART_MASK;
+    int                          ways     = 0;
 
+    /* Do we actually have an L2C-310 cache controller?
+    * Has BSP_ARM_L2CC_BASE been configured correctly? */
+    switch ( cache_id ) {
+      case CACHE_L2C_310_L2CC_ID_PART_L310:
+      {
+        const cache_l2c_310_rtl_release RTL_RELEASE =
+          l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
+        /* If this assertion fails, you have a release of the
+        * L2C-310 cache for which the l2c_310_cache_errata_is_applicable_ ...
+        * methods are not yet implemented. This means you will get incorrect
+        * errata handling */
+        assert(    RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
+                || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
+                || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
+                || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
+                || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
+                || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
+                || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
+        if ( l2cc->aux_ctrl & ( 1 << 16 ) ) {
+          ways = 16;
+        } else {
+          ways = 8;
+        }
 
-  /* Do we actually have an L2C-310 cache controller?
-   * Has BSP_ARM_L2CC_BASE been configured correctly? */
-  switch ( cache_id ) {
-    case CACHE_L2C_310_L2CC_ID_PART_L310:
-    {
-      const cache_l2c_310_rtl_release RTL_RELEASE = 
-        l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
-      /* If this assertion fails, you have a release of the
-       * L2C-310 cache for which the l2c_310_cache_errata_is_applicable_ ...
-       * methods are not yet implemented. This means you will get incorrect
-       * errata handling */
-      assert(    RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-      if ( l2cc->aux_ctrl & ( 1 << 16 ) ) {
-        ways = 16;
-      } else {
-        ways = 8;
+        assert( ways == CACHE_l2C_310_NUM_WAYS );
       }
+      break;
+      case CACHE_L2C_310_L2CC_ID_PART_L210:
 
-      assert( ways == CACHE_l2C_310_NUM_WAYS );
+        /* Invalid case */
+
+        /* Support for this type is not implemented in this driver.
+        * Either support needs to get added or a seperate driver needs to get
+        * implemented */
+        assert( cache_id != CACHE_L2C_310_L2CC_ID_PART_L210 );
+        break;
+      default:
+
+        /* Unknown case */
+        assert( cache_id == CACHE_L2C_310_L2CC_ID_PART_L310 );
+        break;
     }
-    break;
-    case CACHE_L2C_310_L2CC_ID_PART_L210:
 
-      /* Invalid case */
-
-      /* Support for this type is not implemented in this driver.
-       * Either support needs to get added or a seperate driver needs to get
-       * implemented */
-      assert( cache_id != CACHE_L2C_310_L2CC_ID_PART_L210 );
-      break;
-    default:
-
-      /* Unknown case */
-      assert( cache_id == CACHE_L2C_310_L2CC_ID_PART_L310 );
-      break;
-  }
-
-  if ( ways > 0 ) {
-    /* Only enable if L2CC is currently disabled */    
-    if ( ways != 0
-         && ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) == 0 ) {
-      rtems_interrupt_level level;
+    if ( ways > 0 ) {
       uint32_t              aux;
-
-      rtems_interrupt_disable( level );
 
       /* Set up the way size */
       aux  = l2cc->aux_ctrl;
@@ -1340,7 +1337,7 @@ cache_l2c_310_enable( void )
       cache_l2c_310_unlock();
 
       /* Level 2 configuration and control registers must not get written while
-       * background operations are pending */
+      * background operations are pending */
       while ( l2cc->inv_way & CACHE_l2C_310_WAY_MASK ) ;
 
       while ( l2cc->clean_way & CACHE_l2C_310_WAY_MASK ) ;
@@ -1362,8 +1359,6 @@ cache_l2c_310_enable( void )
 
       /* Enable the L2CC */
       l2cc->ctrl |= CACHE_L2C_310_L2CC_ENABLE_MASK;
-
-      rtems_interrupt_enable( level );
     }
   }
 }
