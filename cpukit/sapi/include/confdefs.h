@@ -1632,6 +1632,14 @@ const rtems_libio_helper rtems_fs_init_helper =
     #define CONFIGURE_MAXIMUM_BARRIERS \
       rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
   #endif
+  #if !defined(CONFIGURE_MAXIMUM_POSIX_KEYS)
+    #define CONFIGURE_MAXIMUM_POSIX_KEYS \
+      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  #endif
+  #if !defined(CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS)
+    #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
+      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  #endif
 
   #ifdef RTEMS_POSIX_API
     #if !defined(CONFIGURE_MAXIMUM_POSIX_THREADS)
@@ -1646,12 +1654,6 @@ const rtems_libio_helper rtems_fs_init_helper =
       #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES \
         rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
     #endif
-/*
-    #if !defined(CONFIGURE_MAXIMUM_POSIX_KEYS)
-      #define CONFIGURE_MAXIMUM_POSIX_KEYS \
-        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-    #endif
-*/
     #if !defined(CONFIGURE_MAXIMUM_POSIX_TIMERS)
       #define CONFIGURE_MAXIMUM_POSIX_TIMERS \
         rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
