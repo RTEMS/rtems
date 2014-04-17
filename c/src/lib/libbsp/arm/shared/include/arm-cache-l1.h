@@ -332,9 +332,9 @@ static inline void arm_cache_l1_invalidate_instruction_range(
       ( adx + n_bytes ) & ~ARM_CACHE_L1_INSTRUCTION_LINE_MASK;
 
     arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_INSTRUCTION );
-    
+
     ARM_CACHE_L1_ERRATA_764369_HANDLER();
-    
+
     /* Back starting address up to start of a line and invalidate until end */
     for (;
          adx < end;
