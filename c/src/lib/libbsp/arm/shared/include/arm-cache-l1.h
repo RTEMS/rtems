@@ -463,6 +463,39 @@ static inline void arm_cache_l1_enable_instruction( void )
   arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_DATA );
 }
 
+static inline size_t arm_cache_l1_get_data_cache_size( void )
+{
+  size_t   size;
+  uint32_t line_size     = 0;
+  uint32_t associativity = 0;
+  uint32_t num_sets      = 0;
+  arm_cache_l1_properties( &line_size, &associativity,
+                           &num_sets );
+
+  size = (1 << line_size) * associativity * num_sets;
+
+  return size;
+}
+
+static inline size_t arm_cache_l1_get_instruction_cache_size( void )
+{
+  size_t   size;
+  uint32_t line_size     = 0;
+  uint32_t associativity = 0;
+  uint32_t num_sets      = 0;
+
+  arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_INSTRUCTION );
+  
+  arm_cache_l1_properties( &line_size, &associativity,
+                           &num_sets );
+  
+  arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_DATA );
+
+  size = (1 << line_size) * associativity * num_sets;
+  
+  return size;
+}
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

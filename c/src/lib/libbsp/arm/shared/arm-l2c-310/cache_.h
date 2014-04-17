@@ -73,6 +73,7 @@ extern "C" {
 #define CPU_INSTRUCTION_CACHE_ALIGNMENT ARM_CACHE_L1_CPU_INSTRUCTION_ALIGNMENT
 #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS \
   ARM_CACHE_L1_CPU_SUPPORT_PROVIDES_RANGE_FUNCTIONS
+#define CPU_CACHE_SUPPORT_PROVIDES_CACHE_SIZE_FUNCTIONS
 
 #define CACHE_L2C_310_DATA_LINE_MASK ( CPU_DATA_CACHE_ALIGNMENT - 1 )
 #define CACHE_L2C_310_INSTRUCTION_LINE_MASK \
@@ -1207,6 +1208,46 @@ cache_l2c_310_unfreeze( void )
    by hardware at all */
 }
 
+static inline size_t
+cache_l2c_310_get_cache_size( void )
+{
+  size_t         size       = 0;
+  volatile L2CC *l2cc       = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  uint32_t       cache_type = l2cc->cache_type;
+  uint32_t       way_size;
+  uint32_t       num_ways;
+  
+  way_size = (cache_type & CACHE_L2C_310_L2CC_TYPE_SIZE_D_WAYS_MASK)
+    >> CACHE_L2C_310_L2CC_TYPE_SIZE_D_WAYS_SHIFT;
+  num_ways = (cache_type & CACHE_L2C_310_L2CC_TYPE_NUM_D_WAYS_MASK)
+    >> CACHE_L2C_310_L2CC_TYPE_NUM_D_WAYS_SHIFT;
+
+  assert( way_size <= 0x07 );
+  assert( num_ways <= 0x01 );
+  if(  way_size <= 0x07 && num_ways <= 0x01 ) {
+    if( way_size == 0x00 ) {
+      way_size = 16 * 1024;
+    } else if( way_size == 0x07 ) {
+      way_size = 512 * 1024;
+    } else {
+      way_size = (1 << (way_size - 1)) * 16 * 1024;
+    }
+    switch( num_ways ) {
+      case 0:
+        num_ways = 8;
+        break;
+      case 1:
+        num_ways = 16;
+        break;
+      default:
+        num_ways = 0;
+        break;
+    }
+    size = way_size * num_ways;
+  }
+  return size;
+}
+
 static void cache_l2c_310_unlock( void )
 {
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
@@ -1537,6 +1578,47 @@ _CPU_cache_unfreeze_instruction( void )
   arm_cache_l1_unfreeze_instruction();
   cache_l2c_310_unfreeze();
 }
+
+static inline size_t
+_CPU_cache_get_data_cache_size( const uint32_t level )
+{
+  size_t size = 0;
+  
+  switch( level )
+  {
+    case 0:
+      size = arm_cache_l1_get_data_cache_size();
+    break;
+    case 1:
+      size = cache_l2c_310_get_cache_size();
+    break;
+    default:
+      size = 0;
+    break;
+  }
+  return size;
+}
+
+static inline size_t
+_CPU_cache_get_instruction_cache_size( const uint32_t level )
+{
+  size_t size = 0;
+  
+  switch( level )
+  {
+    case 0:
+      size = arm_cache_l1_get_instruction_cache_size();
+      break;
+    case 1:
+      size = cache_l2c_310_get_cache_size();
+      break;
+    default:
+      size = 0;
+      break;
+  }
+  return size;
+}
+
 
 /** @} */
 
