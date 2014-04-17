@@ -247,8 +247,8 @@ static inline void arm_cache_l1_flush_data_range(
     uint32_t       adx       = (uint32_t) d_addr
                                & ~ARM_CACHE_L1_DATA_LINE_MASK;
     const uint32_t ADDR_LAST =
-      ( (uint32_t) d_addr + n_bytes - 1 ) & ~ARM_CACHE_L1_DATA_LINE_MASK;
-      
+      (uint32_t)( (size_t) d_addr + n_bytes - 1 );
+
     ARM_CACHE_L1_ERRATA_764369_HANDLER();
 
     for (; adx <= ADDR_LAST; adx += ARM_CACHE_L1_CPU_DATA_ALIGNMENT ) {
@@ -300,13 +300,13 @@ static inline void arm_cache_l1_invalidate_data_range(
     uint32_t       adx = (uint32_t) d_addr
                          & ~ARM_CACHE_L1_DATA_LINE_MASK;
     const uint32_t end =
-      ( adx + n_bytes ) & ~ARM_CACHE_L1_DATA_LINE_MASK;
+      (uint32_t)( (size_t)d_addr + n_bytes -1);
 
     ARM_CACHE_L1_ERRATA_764369_HANDLER();
     
     /* Back starting address up to start of a line and invalidate until end */
     for (;
-         adx < end;
+         adx <= end;
          adx += ARM_CACHE_L1_CPU_DATA_ALIGNMENT ) {
         /* Invalidate the Instruction cache line */
         arm_cp15_data_cache_invalidate_line( (void*)adx );
@@ -325,7 +325,7 @@ static inline void arm_cache_l1_invalidate_instruction_range(
     uint32_t       adx = (uint32_t) i_addr
                          & ~ARM_CACHE_L1_INSTRUCTION_LINE_MASK;
     const uint32_t end =
-      ( adx + n_bytes ) & ~ARM_CACHE_L1_INSTRUCTION_LINE_MASK;
+      (uint32_t)( (size_t)i_addr + n_bytes -1);
 
     arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_INSTRUCTION );
 
@@ -333,7 +333,7 @@ static inline void arm_cache_l1_invalidate_instruction_range(
 
     /* Back starting address up to start of a line and invalidate until end */
     for (;
-         adx < end;
+         adx <= end;
          adx += ARM_CACHE_L1_CPU_INSTRUCTION_ALIGNMENT ) {
         /* Invalidate the Instruction cache line */
         arm_cp15_instruction_cache_invalidate_line( (void*)adx );

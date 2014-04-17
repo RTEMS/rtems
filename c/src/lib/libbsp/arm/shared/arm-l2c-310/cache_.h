@@ -1120,22 +1120,17 @@ cache_l2c_310_invalidate_1_line( const void *d_addr )
 }
 
 static inline void
-cache_l2c_310_invalidate_range( const void *addr, size_t n_bytes )
+cache_l2c_310_invalidate_range( uint32_t adx, const uint32_t ADDR_LAST )
 {
-  if ( n_bytes != 0 ) {
-    uint32_t       adx  = (uint32_t) addr
-                         & ~CACHE_L2C_310_INSTRUCTION_LINE_MASK;
-    const uint32_t end  =
-      ( adx + n_bytes ) & ~CACHE_L2C_310_INSTRUCTION_LINE_MASK;
     volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
 
     /* Back starting address up to start of a line and invalidate until end */
-    for (;
-         adx < end;
-         adx += CPU_INSTRUCTION_CACHE_ALIGNMENT ) {
-      /* Invalidate L2 cache line */
-      l2cc->inv_pa = adx;
-    }
+  for (;
+       adx <= ADDR_LAST;
+       adx += CPU_INSTRUCTION_CACHE_ALIGNMENT ) {
+    /* Invalidate L2 cache line */
+    l2cc->inv_pa = adx;
+  }
     cache_l2c_310_sync();
   }
 }
@@ -1407,19 +1402,41 @@ _CPU_cache_invalidate_data_range(
 )
 {
   if ( n_bytes > 0 ) {
+    /* Back starting address up to start of a line and invalidate until ADDR_LAST */
+    uint32_t       adx       = (uint32_t) addr_first
+      & ~CACHE_L2C_310_DATA_LINE_MASK;
+    const uint32_t ADDR_LAST =
+      (uint32_t)( (size_t)addr_first + n_bytes - 1 );
+    uint32_t       block_end =
+      CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES );
     
-    cache_l2c_310_invalidate_range(
-      addr_first,
-      n_bytes
-    );
+    /* We have to apply a lock. Thus we will operate only CACHE_MAX_LOCKING_BYTES
+     * at a time */
+    for (;
+         adx      <= ADDR_LAST;
+         adx       = block_end + 1,
+         block_end = CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES )) {
+      cache_l2c_310_invalidate_range(
+        adx,
+        block_end
+      );
+    }
     arm_cache_l1_invalidate_data_range(
       addr_first,
       n_bytes
     );
-    cache_l2c_310_invalidate_range(
-      addr_first,
-      n_bytes
-    );
+
+    adx       = (uint32_t)addr_first & ~CACHE_L2C_310_DATA_LINE_MASK;
+    block_end = CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES );
+    for (;
+         adx      <= ADDR_LAST;
+         adx       = block_end + 1,
+         block_end = CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES )) {
+      cache_l2c_310_invalidate_range(
+        adx,
+        block_end
+      );
+    }
     arm_cache_l1_invalidate_data_range(
       addr_first,
       n_bytes
@@ -1471,13 +1488,24 @@ _CPU_cache_invalidate_instruction_range(
 )
 {
   if ( n_bytes != 0 ) {
-    
+    uint32_t       adx       = (uint32_t) i_addr
+      & ~CACHE_L2C_310_DATA_LINE_MASK;
+    const uint32_t ADDR_LAST =
+    (uint32_t)( (size_t)i_addr + n_bytes - 1 );
+    uint32_t       block_end =
+      CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES );
+
     /* Invalidate L2 cache lines */
-    cache_l2c_310_invalidate_range(
-      i_addr,
-      n_bytes
-    );
-    
+    for (;
+         adx      <= ADDR_LAST;
+         adx       = block_end + 1,
+         block_end = CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES )) {
+      cache_l2c_310_invalidate_range(
+        adx,
+        block_end
+      );
+    }
+
     arm_cache_l1_invalidate_instruction_range(
       i_addr,
       n_bytes
