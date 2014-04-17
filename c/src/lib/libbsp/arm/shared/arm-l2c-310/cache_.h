@@ -472,18 +472,18 @@ rtems_interrupt_lock l2c_310_cache_lock = RTEMS_INTERRUPT_LOCK_INITIALIZER(
 * - L2C-310 Level 2 Cache Controller
 * - Revision r3p3
 * - Software Developer Errata Notice
-* - ARM CoreLink Level 2 Cache Controller (L2C-310 or PL310), 
+* - ARM CoreLink Level 2 Cache Controller (L2C-310 or PL310),
 *   r3 releases Software Developers Errata Notice"
-* The corresponding link is: 
+* The corresponding link is:
 * http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0360f/BABJFIBA.html
 * Please see this document for more information on these erratas */
 static bool l2c_310_cache_errata_is_applicable_753970(
   void
 )
 {
-  volatile L2CC                  *l2cc          = 
+  volatile L2CC                  *l2cc          =
     (volatile L2CC *) BSP_ARM_L2CC_BASE;
-  const cache_l2c_310_rtl_release RTL_RELEASE   = 
+  const cache_l2c_310_rtl_release RTL_RELEASE   =
     l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool                            is_applicable = false;
   
@@ -507,13 +507,11 @@ static bool l2c_310_cache_errata_is_applicable_753970(
               || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
               || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
               || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-     break;
+      break;
   }
-  
+
   return is_applicable;
 }
-
-
 
 static bool l2c_310_cache_errata_is_applicable_727913(
   void
@@ -973,31 +971,6 @@ static void l2c_310_cache_check_errata( void )
    * corruption */
   assert( ! l2c_310_cache_errata_is_applicable_752271() );
 
-  /* This erratum gets handled with a workaround: 753970 The Cache Sync 
-   * operation prevents further bufferable writes from merging in the store.
-     Search for 753970 in cache_.h for detailed information */
-
-  /* Conditions
-     This problem occurs when the following conditions are met:
-     1. PL310 receives a Cache Sync operation.
-     Workaround
-     The proposed workaround to avoid this erratum is to replace the normal 
-     offset of Cache Sync operation (0x730) by another offset targeting an 
-     unmapped PL310 register: 0x740.
-     More specifically, find below a pseudo code sequence illustrating the 
-     workaround:
-     Replace
-     // PL310 Cache Sync operation
-     LDR r1,=PL310_BASE
-     STR r2,[r1,#0x730]
-     by
-     // Workaround for PL310 Cache Sync operation
-     LDR r1,=PL310_BASE
-     STR r2,[r1,#0x740] ; write to an unmapped register
-     This write has the same effect as the Cache Sync operation: store buffer 
-     drained and waiting for all buffers empty.*/
-  /* assert( ! l2c_310_cache_errata_is_applicable_753970() ); */
-
   /* This erratum can not be worked around: 754670 A continuous write flow can 
    * stall a read targeting the same memory area
    * But this erratum does not lead to any data corruption */
@@ -1112,10 +1085,7 @@ cache_l2c_310_flush_entire( void )
     rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
     l2cc->clean_inv_way = CACHE_l2C_310_WAY_MASK;
 
-    while ( l2cc->clean_inv_way & CACHE_l2C_310_WAY_MASK ) {
-    }
-
-    ;
+    while ( l2cc->clean_inv_way & CACHE_l2C_310_WAY_MASK ) {};
 
     /* Wait for the flush to complete */
     cache_l2c_310_sync();
@@ -1131,7 +1101,6 @@ cache_l2c_310_invalidate_1_line( const void *d_addr )
 
 
   l2cc->inv_pa = (uint32_t) d_addr;
-
   cache_l2c_310_sync();
 }
 
