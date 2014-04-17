@@ -59,6 +59,7 @@
 #include <assert.h>
 #include <bsp.h>
 #include <libcpu/arm-cp15.h>
+#include <rtems/rtems/intr.h>
 #include <bsp/arm-release-id.h>
 #include <bsp/arm-errata.h>
 #include "../include/arm-cache-l1.h"
@@ -82,6 +83,8 @@ extern "C" {
 
 #define CACHE_MIN( a, b ) \
   ((a < b) ? (a) : (b))
+
+#define CACHE_MAX_LOCKING_BYTES (4 * 1024)
 
 
 /* RTL release number as can be read from cache_id register */
@@ -456,6 +459,10 @@ typedef struct {
   /** @brief Purpose power controls */
   uint32_t power_ctrl;
 } L2CC;
+
+rtems_interrupt_lock l2c_310_cache_lock = RTEMS_INTERRUPT_LOCK_INITIALIZER(
+  "cache"
+);
 
 /* Errata table for the LC2 310 Level 2 cache from ARM.
 * Information taken from ARMs
@@ -1060,6 +1067,7 @@ cache_l2c_310_flush_1_line(
 static inline void
 cache_l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
 {
+  rtems_interrupt_lock_context lock_context;
   /* Back starting address up to start of a line and invalidate until ADDR_LAST */
   uint32_t       adx               = (uint32_t)d_addr
     & ~CACHE_L2C_310_DATA_LINE_MASK;
@@ -1069,6 +1077,8 @@ cache_l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
     CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES );
   bool is_errata_588369_applicable =
     l2c_310_cache_errata_is_applicable_588369();
+
+  rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
 
   for (;
        adx      <= ADDR_LAST;
@@ -1083,12 +1093,14 @@ cache_l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
     }
   }
   cache_l2c_310_sync();
+  rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
 }
 
 static inline void
 cache_l2c_310_flush_entire( void )
 {
-  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  rtems_interrupt_lock_context lock_context;
 
   /* Only flush if level 2 cache is active */
   if( ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) != 0 ) {
@@ -1096,6 +1108,7 @@ cache_l2c_310_flush_entire( void )
     /* ensure ordering with previous memory accesses */
     _ARM_Data_memory_barrier();
 
+    rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
     l2cc->clean_inv_way = CACHE_l2C_310_WAY_MASK;
 
     while ( l2cc->clean_inv_way & CACHE_l2C_310_WAY_MASK ) {
@@ -1105,6 +1118,8 @@ cache_l2c_310_flush_entire( void )
 
     /* Wait for the flush to complete */
     cache_l2c_310_sync();
+
+    rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
   }
 }
 
@@ -1122,17 +1137,18 @@ cache_l2c_310_invalidate_1_line( const void *d_addr )
 static inline void
 cache_l2c_310_invalidate_range( uint32_t adx, const uint32_t ADDR_LAST )
 {
-    volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  rtems_interrupt_lock_context lock_context;
 
-    /* Back starting address up to start of a line and invalidate until end */
+  rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
   for (;
        adx <= ADDR_LAST;
        adx += CPU_INSTRUCTION_CACHE_ALIGNMENT ) {
     /* Invalidate L2 cache line */
     l2cc->inv_pa = adx;
   }
-    cache_l2c_310_sync();
-  }
+  cache_l2c_310_sync();
+  rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
 }
 
 static inline void
@@ -1156,8 +1172,8 @@ cache_l2c_310_invalidate_entire( void )
 static inline void
 cache_l2c_310_clean_and_invalidate_entire( void )
 {
-  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
-
+  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  rtems_interrupt_lock_context lock_context;
 
   if( ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) != 0 ) {
     /* Invalidate the caches */
@@ -1165,12 +1181,15 @@ cache_l2c_310_clean_and_invalidate_entire( void )
     /* ensure ordering with previous memory accesses */
     _ARM_Data_memory_barrier();
 
+    rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
     l2cc->clean_inv_way = CACHE_l2C_310_WAY_MASK;
 
     while ( l2cc->clean_inv_way & CACHE_l2C_310_WAY_MASK ) ;
 
     /* Wait for the invalidate to complete */
     cache_l2c_310_sync();
+
+    rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
   }
 }
 
@@ -1311,12 +1330,13 @@ cache_l2c_310_enable( void )
 static inline void 
 cache_l2c_310_disable( void )
 {
-  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
-
+  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  rtems_interrupt_lock_context lock_context;
 
   if ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) {
     /* Clean and Invalidate L2 Cache */
     cache_l2c_310_flush_entire();
+    rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
 
     /* Level 2 configuration and control registers must not get written while
      * background operations are pending */
@@ -1328,6 +1348,7 @@ cache_l2c_310_disable( void )
 
     /* Disable the L2 cache */
     l2cc->ctrl &= ~CACHE_L2C_310_L2CC_ENABLE_MASK;
+    rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
   }
 }
 
@@ -1495,7 +1516,11 @@ _CPU_cache_invalidate_instruction_range(
 static inline void 
 _CPU_cache_invalidate_entire_instruction( void )
 {
+  rtems_interrupt_lock_context lock_context;
+
+  rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
   cache_l2c_310_invalidate_entire();
+  rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
   arm_cache_l1_invalidate_entire_instruction();
 }
 
