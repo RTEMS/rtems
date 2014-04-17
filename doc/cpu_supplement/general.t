@@ -319,7 +319,26 @@ operations of the default CPU specific fatal error handler.
 In order to support thread-local storage (TLS) the CPU port must implement the
 facilities mandated by the application binary interface (ABI) of the CPU
 architecture.  The CPU port must initialize the TLS area in the
-@code{_CPU_Context_Initialize} function.
+@code{_CPU_Context_Initialize()} function.  There are support functions available
+via @code{#include <rtems/score/tls.h>} which implement Variants I and II
+according to Ulrich Drepper, @cite{ELF Handling For Thread-Local Storage}.
+
+@table @code
+
+@item _TLS_TCB_at_area_begin_initialize()
+Uses Variant I, TLS offsets emitted by linker takes the TCB into account.  For
+a reference implementation see @file{cpukit/score/cpu/arm/cpu.c}.
+
+@item _TLS_TCB_before_TLS_block_initialize()
+Uses Variant I, TLS offsets emitted by linker neglects the TCB.  For a
+reference implementation see
+@file{c/src/lib/libcpu/powerpc/new-exceptions/cpu.c}.
+
+@item _TLS_TCB_after_TLS_block_initialize()
+Uses Variant II.  For a reference implementation see
+@file{cpukit/score/cpu/sparc/cpu.c}.
+
+@end table
 
 The board support package (BSP) must provide the following sections and symbols
 in its linker command file:

@@ -146,7 +146,7 @@ static inline void *_TLS_TCB_at_area_begin_initialize( void *tls_area )
 }
 
 /* Use Variant I, TLS offsets emitted by linker neglects the TCB */
-static inline void *_TLS_TCB_before_tls_block_initialize( void *tls_area )
+static inline void *_TLS_TCB_before_TLS_block_initialize( void *tls_area )
 {
   void *tls_block = (char *) tls_area
     + _TLS_Get_thread_control_block_area_size( (uintptr_t) _TLS_Alignment );
@@ -160,7 +160,7 @@ static inline void *_TLS_TCB_before_tls_block_initialize( void *tls_area )
 }
 
 /* Use Variant II */
-static inline void *_TLS_TCB_after_tls_block_initialize( void *tls_area )
+static inline void *_TLS_TCB_after_TLS_block_initialize( void *tls_area )
 {
   uintptr_t size = (uintptr_t) _TLS_Size;
   uintptr_t tls_align = (uintptr_t) _TLS_Alignment;

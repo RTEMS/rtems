@@ -205,6 +205,6 @@ void _CPU_Context_Initialize(
 #endif
 
   if ( tls_area != NULL ) {
-    _TLS_TCB_before_tls_block_initialize( tls_area );
+    _TLS_TCB_before_TLS_block_initialize( tls_area );
   }
 }
