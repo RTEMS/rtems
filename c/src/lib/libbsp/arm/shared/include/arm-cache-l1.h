@@ -229,15 +229,6 @@ static inline void arm_cache_l1_clean_and_invalidate_entire_data( void )
   _ARM_Data_synchronization_barrier();
 }
 
-static inline void arm_cache_l1_store_data( const void *d_addr )
-{
-  /* Store the Data cache line */
-  arm_cp15_data_cache_clean_line( d_addr );
-
-  /* Wait for L1 store to complete */
-  _ARM_Data_synchronization_barrier();
-}
-
 static inline void arm_cache_l1_flush_data_range( 
   const void *d_addr,
   size_t      n_bytes

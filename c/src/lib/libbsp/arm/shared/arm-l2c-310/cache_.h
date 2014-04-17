@@ -1175,17 +1175,6 @@ cache_l2c_310_clean_and_invalidate_entire( void )
 }
 
 static inline void
-cache_l2c_310_store( const void *d_addr )
-{
-  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
-
-
-  l2cc->clean_pa = (uint32_t) d_addr;
-
-  cache_l2c_310_sync();
-}
-
-static inline void
 cache_l2c_310_freeze( void )
 {
   /* To be implemented as needed, if supported
@@ -1455,16 +1444,6 @@ _CPU_cache_invalidate_entire_data( void )
 
   /*This is broadcast within the cluster */
   arm_cache_l1_clean_and_invalidate_entire_data();
-}
-
-static inline void 
-_CPU_cache_store_data_line( const void *d_addr )
-{
-  const void *ADX =
-    (const void *) ( (uint32_t) d_addr & ~CACHE_L2C_310_DATA_LINE_MASK );
-
-  arm_cache_l1_store_data( ADX );
-  cache_l2c_310_store( ADX );
 }
 
 static inline void 
