@@ -252,8 +252,8 @@ static inline void arm_cache_l1_flush_data_range(
     ARM_CACHE_L1_ERRATA_764369_HANDLER();
 
     for (; adx <= ADDR_LAST; adx += ARM_CACHE_L1_CPU_DATA_ALIGNMENT ) {
-      /* Store the Data cache line */
-      arm_cp15_data_cache_clean_line( (void*)adx );
+      /* Store and invalidate the Data cache line */
+      arm_cp15_data_cache_clean_and_invalidate_line( (void*)adx );
     }
     /* Wait for L1 store to complete */
     _ARM_Data_synchronization_barrier();
