@@ -898,16 +898,6 @@ static bool l2c_310_cache_errata_is_applicable_754670(
 }
 #endif /* CACHE_ERRATA_CHECKS_FOR_IMPLEMENTED_ERRATAS */
 
-/* Errata Handlers */
-#if ( defined( RTEMS_SMP ) )
-  #define CACHE_ARM_ERRATA_764369_HANDLER()                    \
-    if( arm_errata_is_applicable_processor_errata_764369() ) { \
-      _ARM_Data_synchronization_barrier();                     \
-    }                                           
-#else /* #if ( defined( RTEMS_SMP ) ) */
-  #define CACHE_ARM_ERRATA_764369_HANDLER()
-#endif /* #if ( defined( RTEMS_SMP ) ) */
-
 /* The common workaround for this erratum would be to add a 
  * data synchronization barrier to the beginning of the abort handler.
  * But for RTEMS a call of the abort handler means a fatal condition anyway. 
@@ -1073,8 +1063,6 @@ cache_l2c_310_flush_range( const void *addr, size_t n_bytes )
     const uint32_t ADDR_LAST =
       ( (uint32_t) addr + n_bytes - 1 ) & ~CACHE_L2C_310_DATA_LINE_MASK;
     volatile L2CC *l2cc      = (volatile L2CC *) BSP_ARM_L2CC_BASE;
-
-    CACHE_ARM_ERRATA_764369_HANDLER();
 
     for (; adx <= ADDR_LAST; adx += CPU_DATA_CACHE_ALIGNMENT ) {
       l2cc->clean_pa = adx;
@@ -1405,7 +1393,6 @@ _CPU_cache_invalidate_data_range(
 )
 {
   if ( n_bytes > 0 ) {
-    CACHE_ARM_ERRATA_764369_HANDLER();
     
     cache_l2c_310_invalidate_range(
       addr_first,
@@ -1470,7 +1457,6 @@ _CPU_cache_invalidate_instruction_range(
 )
 {
   if ( n_bytes != 0 ) {
-   CACHE_ARM_ERRATA_764369_HANDLER();
     
     /* Invalidate L2 cache lines */
     cache_l2c_310_invalidate_range(
