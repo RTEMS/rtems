@@ -20,30 +20,39 @@ noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds startup/linkcmds.sim
+dist_project_lib_DATA += startup/linkcmds
+dist_project_lib_DATA += startup/linkcmds.sim
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/bsppredriverhook.c ../shared/startup/bspstart.c \
-    ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
-    ../../shared/bspclean.c ../../shared/sbrk.c ../../shared/bootcard.c \
-    ../../shared/gnatinstallhandler.c ../shared/bsphwinit.c
+libbsp_a_SOURCES += ../../shared/bsplibc.c
+libbsp_a_SOURCES += ../../shared/bsppost.c
+libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+libbsp_a_SOURCES += ../shared/startup/bspstart.c
+libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
+libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+libbsp_a_SOURCES += ../../shared/bspclean.c
+libbsp_a_SOURCES += ../../shared/sbrk.c ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../shared/bsphwinit.c
+
 # clock
 libbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
 
-# trap34
-libbsp_a_SOURCES += trap34/console-io.c trap34/console-support.S \
-    ../../shared/dummy_printk_support.c
 # console
 libbsp_a_SOURCES += ../../shared/console-polled.c
+libbsp_a_SOURCES += console/console-io.c
+libbsp_a_SOURCES += console/console-support.S
+libbsp_a_SOURCES += console/console-debugio.c
+
 # timer
 libbsp_a_SOURCES += ../../shared/timerstub.c
 
 libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel
+    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel \
+    ../../../libcpu/@RTEMS_CPU@/cache.rel
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
