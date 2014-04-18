@@ -1,10 +1,13 @@
-/*
- *  This file contains a stub for the required printk support.
+/**
+ *  @file
+ *  @brief Stub printk() support
+ *
+ *  This file contains a stub for the required printk() support.
  *  It is NOT functional!!!
- *
- *  This driver uses the termios pseudo driver.
- *
- *  COPYRIGHT (c) 1989-2007.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
