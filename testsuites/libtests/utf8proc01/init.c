@@ -23,6 +23,7 @@
 
 const char rtems_test_name[] = "UTF8PROC 1";
 
+#if !defined(BSP_SMALL_MEMORY)
 static void
 test_utf8proc_errmsg ( void )
 {
@@ -247,12 +248,17 @@ static void test ( void )
   test_utf8proc_normalize      ( utf8proc_NFKD );
   test_utf8proc_normalize      ( utf8proc_NFKC );
 }
+#endif
 
 static void Init ( rtems_task_argument arg )
 {
   TEST_BEGIN();
 
-  test ( );
+#if defined(BSP_SMALL_MEMORY)
+  puts( "Does not run on small memory targets" );
+#else
+  test();
+#endif
 
   TEST_END();
 
