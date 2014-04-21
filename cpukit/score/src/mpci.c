@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,6 +23,7 @@
 #include <rtems/score/interr.h>
 #include <rtems/score/stackimpl.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/config.h>
@@ -105,6 +106,7 @@ void _MPCI_Create_server( void )
   _Thread_Initialize(
     &_Thread_Internal_information,
     _MPCI_Receive_server_tcb,
+    _Scheduler_Get_by_CPU_index( _SMP_Get_current_processor() ),
     NULL,        /* allocate the stack */
     _Stack_Minimum() +
       CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK +
