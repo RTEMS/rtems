@@ -18,6 +18,8 @@
 
 #include "tmacros.h"
 
+const char rtems_test_name[] = "FLASHDISK 1";
+
 #if !BSP_SMALL_MEMORY
 
 #include <sys/stat.h>
@@ -33,8 +35,6 @@
 #include <rtems/rtems-rfs-format.h>
 
 #include "test-file-system.h"
-
-const char rtems_test_name[] = "FLASHDISK 1";
 
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
