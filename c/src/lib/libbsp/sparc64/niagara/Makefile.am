@@ -32,7 +32,7 @@ nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 
 EXTRA_DIST = ../shared/start/start.S
-%.$(OBJEXT):%.S
+start.$(OBJEXT): ../shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
