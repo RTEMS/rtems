@@ -4,14 +4,26 @@ include $(top_srcdir)/../../../automake/compile.am
 
 noinst_PROGRAMS =
 
+include_libcpudir = $(includedir)/libcpu
+include_libcpu_HEADERS = ../shared/include/cache.h
+
+noinst_PROGRAMS += cache.rel
+cache_rel_SOURCES = ../shared/src/cache_aligned_malloc.c
+cache_rel_SOURCES += ../shared/src/cache_manager.c
+cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/cache
+cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 if sh7032
 # NOTE: Unlike other CPUS, we install into a subdirectory to avoid
 #       file name conflicts
 include_shdir = $(includedir)/sh
 include_rtems_scoredir = $(includedir)/rtems/score
 
-include_sh_HEADERS = sh7032/include/sci.h sh7032/include/sh7_pfc.h sh7032/include/sh7_sci.h
-include_rtems_score_HEADERS = sh7032/include/ispsh7032.h sh7032/include/iosh7032.h
+include_sh_HEADERS = sh7032/include/sci.h
+include_sh_HEADERS += sh7032/include/sh7_pfc.h
+include_sh_HEADERS += sh7032/include/sh7_sci.h
+include_rtems_score_HEADERS = sh7032/include/ispsh7032.h
+include_rtems_score_HEADERS += sh7032/include/iosh7032.h
 
 ## sh7032/clock
 noinst_PROGRAMS += sh7032/clock.rel
@@ -50,9 +62,13 @@ if sh7045
 include_shdir = $(includedir)/sh
 include_rtems_scoredir = $(includedir)/rtems/score
 
-include_sh_HEADERS = sh7045/include/io_types.h sh7045/include/sci.h sh7045/include/sh7_pfc.h \
-    sh7045/include/sh7_sci.h sh7045/include/sci_termios.h
-include_rtems_score_HEADERS = sh7045/include/ispsh7045.h sh7045/include/iosh7045.h
+include_sh_HEADERS = sh7045/include/io_types.h
+include_sh_HEADERS += sh7045/include/sci.h
+include_sh_HEADERS += sh7045/include/sh7_pfc.h
+include_sh_HEADERS += sh7045/include/sh7_sci.h
+include_sh_HEADERS += sh7045/include/sci_termios.h
+include_rtems_score_HEADERS = sh7045/include/ispsh7045.h
+include_rtems_score_HEADERS += sh7045/include/iosh7045.h
 
 ## sh7045/clock
 noinst_PROGRAMS += sh7045/clock.rel
@@ -86,9 +102,11 @@ include_shdir = $(includedir)/sh
 include_rtems_scoredir = $(includedir)/rtems/score
 
 include_sh_HEADERS = sh7750/include/sh/sh4uart.h
-include_rtems_score_HEADERS = sh7750/include/rtems/score/sh7750_regs.h \
-    sh7750/include/rtems/score/ipl.h sh7750/include/rtems/score/iosh7750.h \
-    sh7750/include/rtems/score/ispsh7750.h sh7750/include/rtems/score/sh4_regs.h
+include_rtems_score_HEADERS = sh7750/include/rtems/score/sh7750_regs.h
+include_rtems_score_HEADERS += sh7750/include/rtems/score/ipl.h
+include_rtems_score_HEADERS += sh7750/include/rtems/score/iosh7750.h
+include_rtems_score_HEADERS += sh7750/include/rtems/score/ispsh7750.h
+include_rtems_score_HEADERS += sh7750/include/rtems/score/sh4_regs.h
 
 ## sh7750/clock
 noinst_PROGRAMS += sh7750/clock.rel
