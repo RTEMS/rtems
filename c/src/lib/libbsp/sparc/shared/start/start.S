@@ -222,6 +222,9 @@ SYM(hard_reset):
         nop
         nop
 
+	sethi	%hi(_Per_CPU_Information), %g6 ! get per-CPU control
+	add	%g6, %lo(_Per_CPU_Information), %g6
+
 #if defined(START_LEON3_ENABLE_SMP)
 	rd	%asr17, %o0		! get CPU identifier
 	srl	%o0, LEON3_ASR17_PROCESSOR_INDEX_SHIFT, %o0
@@ -230,12 +233,10 @@ SYM(hard_reset):
 	beq	cpu0
 	 nop
 
-	sethi	%hi(_Per_CPU_Information), %o1 ! get per-CPU control
-	add	%o1, %lo(_Per_CPU_Information), %o1
-	sll	%o0, PER_CPU_CONTROL_SIZE_LOG2, %o2
-	add	%o1, %o2, %o1
+	sll	%o0, PER_CPU_CONTROL_SIZE_LOG2, %l0
+	add	%g6, %l0, %g6
 
-	ld	[%o1 + PER_CPU_INTERRUPT_STACK_HIGH], %sp ! set stack pointer
+	ld	[%g6 + PER_CPU_INTERRUPT_STACK_HIGH], %sp ! set stack pointer
 	sub	%sp, 4, %sp		! stack starts at end of area - 4
 	andn	%sp, 0x0f, %sp		! align stack on 16-byte boundary
 	mov	%sp, %fp		! set frame pointer
@@ -247,8 +248,8 @@ SYM(hard_reset):
 cpu0:
 #endif
 
-	set	(SYM(rdb_start)), %g6	! End of RAM
-	st	%sp, [%g6]
+	set	(SYM(rdb_start)), %g5	! End of RAM
+	st	%sp, [%g5]
 	sub	%sp, 4, %sp		! stack starts at end of RAM - 4
 	andn	%sp, 0x0f, %sp		! align stack on 16-byte boundary
         mov     %sp, %fp                ! Set frame pointer
@@ -300,12 +301,12 @@ cpu0:
  	set	SYM(RAM_START), %l1  ! Cannot use RAM_END due to bug in linker
  	set	SYM(RAM_SIZE), %l2
  	add	%l1, %l2, %sp
- 	st	%sp, [%g6]
+ 	st	%sp, [%g5]
 
 
-	set	SYM(CLOCK_SPEED), %g6	! Use 14 MHz in simulator
+	set	SYM(CLOCK_SPEED), %g5	! Use 14 MHz in simulator
 	set	14, %g1
-	st	%g1, [%g6]
+	st	%g1, [%g5]
 
 2:
 #endif
@@ -332,8 +333,8 @@ cpu0:
 	nop
 
 copy_data:
-        ldd   [ %g2 ], %g6
-        std   %g6 , [ %g3 ]             ! copy this double word
+        ldd   [ %g2 ], %g5
+        std   %g5 , [ %g3 ]             ! copy this double word
         add   %g3, 8, %g3               ! bump the destination pointer
         add   %g2, 8, %g2               ! bump the source pointer
         cmp   %g3, %g4                  ! Is the pointer past the end of dest?

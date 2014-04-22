@@ -23,23 +23,6 @@
 #include <rtems/score/percpu.h>
 #include <bspopts.h>
 
-.macro GET_SELF_CPU_CONTROL REG, TMP
-        sethi    %hi(_Per_CPU_Information), \REG
-        add      \REG, %lo(_Per_CPU_Information), \REG
-
-#if defined( RTEMS_SMP )
-#if BSP_LEON3_SMP
-        /* LEON3 SMP support */
-        rd       %asr17, \TMP
-        srl      \TMP, LEON3_ASR17_PROCESSOR_INDEX_SHIFT, \TMP
-#else
-        mov      0, \TMP
-#endif
-        sll      \TMP, PER_CPU_CONTROL_SIZE_LOG2, \TMP
-        add      \REG, \TMP, \REG
-#endif /* defined( RTEMS_SMP ) */
-.endm
-
 /*
  *  void _CPU_Context_switch(
  *    Context_Control  *run,
@@ -53,7 +36,7 @@
         PUBLIC(_CPU_Context_switch)
 SYM(_CPU_Context_switch):
         st      %g5, [%o0 + G5_OFFSET]       ! save the global registers
-        std     %g6, [%o0 + G6_OFFSET]
+        st      %g7, [%o0 + G7_OFFSET]
 
         std     %l0, [%o0 + L0_OFFSET]       ! save the local registers
         std     %l2, [%o0 + L2_OFFSET]
@@ -67,11 +50,8 @@ SYM(_CPU_Context_switch):
 
         std     %o6, [%o0 + O6_SP_OFFSET]    ! save the output registers
 
-        ! o3 = self per-CPU control
-        GET_SELF_CPU_CONTROL %o3, %o4
-
         ! load the ISR stack nesting prevention flag
-        ld      [%o3 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE], %o4
+        ld      [%g6 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE], %o4
         ! save it a bit later so we do not waste a couple of cycles
 
         rd      %psr, %o2
@@ -84,7 +64,6 @@ SYM(_CPU_Context_switch):
          *  This is entered from _CPU_Context_restore with:
          *    o1 = context to restore
          *    o2 = psr
-         *    o3 = self per-CPU control
          */
 
         PUBLIC(_CPU_Context_restore_heir)
@@ -185,7 +164,7 @@ done_flushing:
         nop
 
         ld      [%o1 + G5_OFFSET], %g5        ! restore the global registers
-        ldd     [%o1 + G6_OFFSET], %g6
+        ld      [%o1 + G7_OFFSET], %g7
 
         ! Load thread specific ISR dispatch prevention flag
         ld      [%o1 + ISR_DISPATCH_DISABLE_STACK_OFFSET], %o2
@@ -197,7 +176,7 @@ done_flushing:
         ldd     [%o1 + L6_OFFSET], %l6
 
         ! Now restore thread specific ISR dispatch prevention flag
-        st      %o2, [%o3 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
+        st      %o2, [%g6 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
 
         ldd     [%o1 + I0_OFFSET], %i0        ! restore the input registers
         ldd     [%o1 + I2_OFFSET], %i2
@@ -223,7 +202,6 @@ done_flushing:
 SYM(_CPU_Context_restore):
         save    %sp, -CPU_MINIMUM_STACK_FRAME_SIZE, %sp
         rd      %psr, %o2
-        GET_SELF_CPU_CONTROL %o3, %o4
         ba      SYM(_CPU_Context_restore_heir)
         mov     %i0, %o1                      ! in the delay slot
 
@@ -352,7 +330,7 @@ save_isf:
         st      %g1, [%sp + ISF_G1_OFFSET]     ! save g1
         std     %g2, [%sp + ISF_G2_OFFSET]     ! save g2, g3
         std     %l4, [%sp + ISF_G4_OFFSET]     ! save g4, g5 -- see above
-        std     %g6, [%sp + ISF_G6_OFFSET]     ! save g6, g7
+        st      %g7, [%sp + ISF_G7_OFFSET]     ! save g7
 
         std     %i0, [%sp + ISF_I0_OFFSET]     ! save i0, i1
         std     %i2, [%sp + ISF_I2_OFFSET]     ! save i2, i3
@@ -370,24 +348,21 @@ save_isf:
          *
          *  Register usage for this section:
          *
-         *    l5 = per cpu info pointer
          *    l6 = _Thread_Dispatch_disable_level value
          *    l7 = _ISR_Nest_level value
          *
-         *  NOTE: It is assumed that l5 - l7 will be preserved until the ISR
+         *  NOTE: It is assumed that l6 - l7 will be preserved until the ISR
          *        nest and thread dispatch disable levels are unnested.
          */
 
-	GET_SELF_CPU_CONTROL %l5, %l7
-
-        ld       [%l5 + PER_CPU_ISR_NEST_LEVEL], %l7
-        ld       [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL], %l6
+        ld       [%g6 + PER_CPU_ISR_NEST_LEVEL], %l7
+        ld       [%g6 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL], %l6
 
         add      %l7, 1, %l7
-        st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
+        st       %l7, [%g6 + PER_CPU_ISR_NEST_LEVEL]
 
         add      %l6, 1, %l6
-        st       %l6, [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+        st       %l6, [%g6 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
         /*
          *  If ISR nest level was zero (now 1), then switch stack.
@@ -405,7 +380,7 @@ save_isf:
          nop
 #endif
 
-	ld       [%l5 + PER_CPU_INTERRUPT_STACK_HIGH], %sp
+	ld       [%g6 + PER_CPU_INTERRUPT_STACK_HIGH], %sp
 
 dont_switch_stacks:
         /*
@@ -468,7 +443,7 @@ dont_fix_pil2:
         ld       [%l4], %o2             ! o2 = 3rd arg = interrupt exit instant
         mov      %l3, %o1               ! o1 = 2nd arg = interrupt entry instant
         call     SYM(_Profiling_Outer_most_interrupt_entry_and_exit), 0
-         mov     %l5, %o0               ! o0 = 1st arg = per-CPU control
+         mov     %g6, %o0               ! o0 = 1st arg = per-CPU control
 profiling_not_outer_most_exit:
 #else
          nop                            ! delay slot
@@ -489,15 +464,14 @@ profiling_not_outer_most_exit:
          *
          *  Register usage for this section:
          *
-         *    l5 = per cpu info pointer
          *    l6 = _Thread_Dispatch_disable_level value
          *    l7 = _ISR_Nest_level value
          */
 
-        st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
+        st       %l7, [%g6 + PER_CPU_ISR_NEST_LEVEL]
 
         sub      %l6, 1, %l6
-        st       %l6, [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+        st       %l6, [%g6 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
         /*
          *  If dispatching is disabled (includes nested interrupt case),
@@ -509,7 +483,7 @@ profiling_not_outer_most_exit:
         nop
 
         ! Are we dispatching from a previous ISR in the interrupted thread?
-        ld       [%l5 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE], %l7
+        ld       [%g6 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE], %l7
         orcc     %l7, %g0, %g0   ! Is this thread already doing an ISR?
         bnz      simple_return   ! Yes, then do a "simple" exit
         nop
@@ -520,7 +494,7 @@ profiling_not_outer_most_exit:
          *  return to the interrupt dispatcher.
          */
 
-        ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l6
+        ldub     [%g6 + PER_CPU_DISPATCH_NEEDED], %l6
 
         orcc     %l6, %g0, %g0   ! Is thread switch necessary?
         bz       simple_return   ! no, then do a simple return
@@ -532,7 +506,7 @@ profiling_not_outer_most_exit:
 
         ! Set ISR dispatch nesting prevention flag
         mov      1,%l6
-        st       %l6, [%l5 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
+        st       %l6, [%g6 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
 
         /*
          *  The following subtract should get us back on the interrupted
@@ -569,9 +543,7 @@ isr_dispatch:
          *  _Thread_Dispatch before leaving this ISR Dispatch context.
          */
 
-	GET_SELF_CPU_CONTROL %l5, %l7
-
-        ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l7
+        ldub     [%g6 + PER_CPU_DISPATCH_NEEDED], %l7
 
         orcc     %l7, %g0, %g0    ! Is thread switch necesary?
         bz       allow_nest_again ! No, then clear out and return
@@ -587,7 +559,7 @@ dispatchAgain:
 allow_nest_again:
 
         ! Zero out ISR stack nesting prevention flag
-        st       %g0, [%l5 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
+        st       %g0, [%g6 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
 
         /*
          *  The CWP in place at this point may be different from
@@ -619,7 +591,7 @@ simple_return:
                                               ! g1 is restored later
         ldd     [%fp + ISF_G2_OFFSET], %g2    ! restore g2, g3
         ldd     [%fp + ISF_G4_OFFSET], %g4    ! restore g4, g5
-        ldd     [%fp + ISF_G6_OFFSET], %g6    ! restore g6, g7
+        ld      [%fp + ISF_G7_OFFSET], %g7    ! restore g7
 
         ldd     [%fp + ISF_I0_OFFSET], %i0    ! restore i0, i1
         ldd     [%fp + ISF_I2_OFFSET], %i2    ! restore i2, i3

@@ -408,14 +408,14 @@ typedef struct {
  * The registers g2 through g4 are reserved for applications.  GCC uses them as
  * volatile registers by default.  So they are treated like volatile registers
  * in RTEMS as well.
+ *
+ * The register g6 contains the per-CPU control of the current processor.  It
+ * is an invariant of the processor context.  This register must not be saved
+ * and restored during context switches or interrupt services.
  */
 typedef struct {
-  /** This will contain reserved space for alignment. */
-  uint32_t   reserved_for_alignment;
   /** This will contain the contents of the g5 register. */
   uint32_t   g5;
-  /** This will contain the contents of the g6 register. */
-  uint32_t   g6;
   /** This will contain the contents of the g7 register. */
   uint32_t   g7;
 
@@ -490,55 +490,53 @@ typedef struct {
  */
 
 /** This macro defines an offset into the context for use in assembly. */
-#define G5_OFFSET    0x04
+#define G5_OFFSET    0x00
 /** This macro defines an offset into the context for use in assembly. */
-#define G6_OFFSET    0x08
-/** This macro defines an offset into the context for use in assembly. */
-#define G7_OFFSET    0x0C
+#define G7_OFFSET    0x04
 
 /** This macro defines an offset into the context for use in assembly. */
-#define L0_OFFSET    0x10
+#define L0_OFFSET    0x08
 /** This macro defines an offset into the context for use in assembly. */
-#define L1_OFFSET    0x14
+#define L1_OFFSET    0x0C
 /** This macro defines an offset into the context for use in assembly. */
-#define L2_OFFSET    0x18
+#define L2_OFFSET    0x10
 /** This macro defines an offset into the context for use in assembly. */
-#define L3_OFFSET    0x1C
+#define L3_OFFSET    0x14
 /** This macro defines an offset into the context for use in assembly. */
-#define L4_OFFSET    0x20
+#define L4_OFFSET    0x18
 /** This macro defines an offset into the context for use in assembly. */
-#define L5_OFFSET    0x24
+#define L5_OFFSET    0x1C
 /** This macro defines an offset into the context for use in assembly. */
-#define L6_OFFSET    0x28
+#define L6_OFFSET    0x20
 /** This macro defines an offset into the context for use in assembly. */
-#define L7_OFFSET    0x2C
+#define L7_OFFSET    0x24
 
 /** This macro defines an offset into the context for use in assembly. */
-#define I0_OFFSET    0x30
+#define I0_OFFSET    0x28
 /** This macro defines an offset into the context for use in assembly. */
-#define I1_OFFSET    0x34
+#define I1_OFFSET    0x2C
 /** This macro defines an offset into the context for use in assembly. */
-#define I2_OFFSET    0x38
+#define I2_OFFSET    0x30
 /** This macro defines an offset into the context for use in assembly. */
-#define I3_OFFSET    0x3C
+#define I3_OFFSET    0x34
 /** This macro defines an offset into the context for use in assembly. */
-#define I4_OFFSET    0x40
+#define I4_OFFSET    0x38
 /** This macro defines an offset into the context for use in assembly. */
-#define I5_OFFSET    0x44
+#define I5_OFFSET    0x3C
 /** This macro defines an offset into the context for use in assembly. */
-#define I6_FP_OFFSET 0x48
+#define I6_FP_OFFSET 0x40
 /** This macro defines an offset into the context for use in assembly. */
-#define I7_OFFSET    0x4C
+#define I7_OFFSET    0x44
 
 /** This macro defines an offset into the context for use in assembly. */
-#define O6_SP_OFFSET 0x50
+#define O6_SP_OFFSET 0x48
 /** This macro defines an offset into the context for use in assembly. */
-#define O7_OFFSET    0x54
+#define O7_OFFSET    0x4C
 
 /** This macro defines an offset into the context for use in assembly. */
-#define PSR_OFFSET   0x58
+#define PSR_OFFSET   0x50
 /** This macro defines an offset into the context for use in assembly. */
-#define ISR_DISPATCH_DISABLE_STACK_OFFSET 0x5C
+#define ISR_DISPATCH_DISABLE_STACK_OFFSET 0x54
 
 /** This defines the size of the context area for use in assembly. */
 #define CONTEXT_CONTROL_SIZE 0x68
@@ -661,8 +659,8 @@ typedef struct {
   uint32_t                 g4;
   /** This is the offset of the g5 register on an ISF. */
   uint32_t                 g5;
-  /** This is the offset of the g6 register on an ISF. */
-  uint32_t                 g6;
+  /** This is the offset is reserved for alignment on an ISF. */
+  uint32_t                 reserved_for_alignment;
   /** This is the offset of the g7 register on an ISF. */
   uint32_t                 g7;
   /** This is the offset of the i0 register on an ISF. */
@@ -711,8 +709,6 @@ typedef struct {
 #define ISF_G4_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x18
 /** This macro defines an offset into the ISF for use in assembly. */
 #define ISF_G5_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x1c
-/** This macro defines an offset into the ISF for use in assembly. */
-#define ISF_G6_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x20
 /** This macro defines an offset into the ISF for use in assembly. */
 #define ISF_G7_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x24
 /** This macro defines an offset into the ISF for use in assembly. */
@@ -1155,6 +1151,14 @@ void _CPU_Context_switch(
 void _CPU_Context_restore(
   Context_Control *new_context
 ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+
+/**
+ * @brief The pointer to the current per-CPU control is available via register
+ * g6.
+ */
+register struct Per_CPU_Control *_SPARC_Per_CPU_current asm( "g6" );
+
+#define _CPU_Get_current_per_CPU_control() ( _SPARC_Per_CPU_current )
 
 #if defined(RTEMS_SMP)
   uint32_t _CPU_SMP_Initialize( void );
