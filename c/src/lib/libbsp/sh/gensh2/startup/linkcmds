@@ -115,7 +115,6 @@ SECTIONS
   .rel.fini      : { *(.rel.fini)	}
   .rel.bss       : { *(.rel.bss)		}
   .rel.plt       : { *(.rel.plt)		}
-  .init          : { *(.init)	} =0
   .plt      	 : { *(.plt)	}
   .text   .   	 :
   {
@@ -139,7 +138,10 @@ SECTIONS
   } > ram
   _etext = .;
   PROVIDE (etext = .);
-  .fini    .  : { *(.fini)    } > ram =0
+  .init    .  : { KEEP(*(.init))    } > ram =0
+  .fini    .  : { KEEP(*(.fini))    } > ram =0
+  .ctors   .  : { KEEP(*(.ctors))    } > ram =0
+  .dtors   .  : { KEEP(*(.dtors))    } > ram =0
   .rodata  .  : { *(.rodata*) *(.gnu.linkonce.r*) } > ram
   .rodata1 .  : { *(.rodata1) } > ram
   .tdata : {
@@ -174,18 +176,6 @@ SECTIONS
     CONSTRUCTORS
   } > ram
   .data1  . : { *(.data1) }
-  .ctors  .       :
-  {
-    ___ctors = .;
-    *(.ctors)
-    ___ctors_end = .;
-  }
-  .dtors  .       :
-  {
-    ___dtors = .;
-    *(.dtors)
-    ___dtors_end = .;
-  }
   .got     .      : { *(.got.plt) *(.got) }
   .dynamic .      : { *(.dynamic) }
   /* We want the small data sections together, so single-instruction offsets
