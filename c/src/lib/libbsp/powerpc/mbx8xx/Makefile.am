@@ -25,7 +25,14 @@ EXTRA_DIST = times-mbx821 times-mbx860
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES = libbsp.a
+noinst_LIBRARIES = libbspstart.a
+libbspstart_a_SOURCES = start/start.S
+project_lib_DATA = start.$(OBJEXT)
+
+libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
+project_lib_DATA += rtems_crti.$(OBJEXT)
+
+noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # pclock
@@ -48,7 +55,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     startup/bspstart.c ../../shared/bootcard.c \
     startup/imbx8xx.c startup/mmutlbtab.c \
-    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c start/start.S
+    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__

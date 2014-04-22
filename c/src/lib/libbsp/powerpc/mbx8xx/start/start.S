@@ -205,8 +205,8 @@ SYM(__atexit):
  */
         .section .entry
 
-        PUBLIC_VAR (start)
-SYM(start):
+        PUBLIC_VAR (_start)
+SYM(_start):
         bl      .startup	/* or bl .spin */
 base_addr:
 
