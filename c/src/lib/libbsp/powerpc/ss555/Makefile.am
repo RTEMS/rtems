@@ -20,6 +20,11 @@ EXTRA_DIST = times
 
 dist_project_lib_DATA += startup/linkcmds
 
+EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
+	$(CPPASCOMPILE) -o $@ -c $<
+project_lib_DATA = rtems_crti.$(OBJEXT)
+
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
