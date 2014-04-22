@@ -37,5 +37,11 @@ void rtems_test_fatal_extension(
       1,
       "  "
     );
+
+    /* Add some stuff to help broken debuggers */
+    printk(
+      "*** PROFILING DONE %s ***\n",
+      rtems_test_name
+    );
   }
 }
