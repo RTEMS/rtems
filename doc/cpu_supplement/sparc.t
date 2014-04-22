@@ -401,6 +401,9 @@ The registers g2 through g4 are reserved for applications.  GCC uses them as
 volatile registers by default.  So they are treated like volatile registers in
 RTEMS as well.
 
+The register g7 is reserved for the operating system and contains the thread
+pointer used for thread-local storage (TLS) as mandated by the SPARC ABI.
+
 @subsubsection Floating Point Registers
 
 The SPARC V7 architecture includes thirty-two,
