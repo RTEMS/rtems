@@ -99,7 +99,6 @@ SECTIONS
   .rel.fini      : { *(.rel.fini)	}
   .rel.bss       : { *(.rel.bss)		}
   .rel.plt       : { *(.rel.plt)		}
-  .init          : { *(.init)	} =0
   .plt      	 : { *(.plt)	}
   .text   .   	 :
   {
@@ -121,10 +120,14 @@ SECTIONS
     *(.gnu.warning)
     *(.gnu.linkonce.t*)
   } > ram
+  .init           :
+  {
+    KEEP (*(.init))
+  } >ram
   .fini           :
   {
     KEEP (*(.fini))
-  } =0
+  } >ram
   _etext = .;
   PROVIDE (etext = .);
   .rodata  .  : { *(.rodata*) .rodata.* *(.gnu.linkonce.r*) } > ram
@@ -139,6 +142,10 @@ SECTIONS
     *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
     __TLS_BSS_end = .;
   } > ram
+  .init    .  : { KEEP(*(.init))    } > ram =0
+  .fini    .  : { KEEP(*(.fini))    } > ram =0
+  .ctors   .  : { KEEP(*(.ctors))    } > ram =0
+  .dtors   .  : { KEEP(*(.dtors))    } > ram =0
   __TLS_Data_size = __TLS_Data_end - __TLS_Data_begin;
   __TLS_Data_begin = __TLS_Data_size != 0 ? __TLS_Data_begin : __TLS_BSS_begin;
   __TLS_Data_end = __TLS_Data_size != 0 ? __TLS_Data_end : __TLS_BSS_begin;
@@ -161,18 +168,6 @@ SECTIONS
     CONSTRUCTORS
   } > ram
   .data1  . : { *(.data1) }
-  .ctors  .       :
-  {
-    ___ctors = .;
-    *(.ctors)
-    ___ctors_end = .;
-  }
-  .dtors  .       :
-  {
-    ___dtors = .;
-    *(.dtors)
-    ___dtors_end = .;
-  }
   .rtemsroset : {
     /* for pre rtems-libbsd FreeBSD code */
     __start_set_sysctl_set = .;
