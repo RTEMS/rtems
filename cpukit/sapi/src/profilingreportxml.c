@@ -49,6 +49,11 @@ static void indent(context *ctx, uint32_t indentation_level)
   }
 }
 
+static uint64_t arithmetic_mean(uint64_t total, uint64_t count)
+{
+  return count != 0 ? total / count : 0;
+}
+
 static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
 {
   rtems_profiling_printf printf_func = ctx->printf_func;
@@ -75,8 +80,12 @@ static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
   indent(ctx, 2);
   rv = (*printf_func)(
     printf_arg,
-    "<ThreadDispatchDisabledCount>%" PRIu64 "</ThreadDispatchDisabledCount>\n",
-    per_cpu->thread_dispatch_disabled_count
+    "<MeanThreadDispatchDisabledTime unit=\"ns\">%" PRIu64
+      "</MeanThreadDispatchDisabledTime>\n",
+    arithmetic_mean(
+      per_cpu->total_thread_dispatch_disabled_time,
+      per_cpu->thread_dispatch_disabled_count
+    )
   );
   update_retval(ctx, rv);
 
@@ -92,9 +101,8 @@ static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
   indent(ctx, 2);
   rv = (*printf_func)(
     printf_arg,
-    "<MaxInterruptTime unit=\"ns\">%" PRIu32
-      "</MaxInterruptTime>\n",
-    per_cpu->max_interrupt_time
+    "<ThreadDispatchDisabledCount>%" PRIu64 "</ThreadDispatchDisabledCount>\n",
+    per_cpu->thread_dispatch_disabled_count
   );
   update_retval(ctx, rv);
 
@@ -109,8 +117,21 @@ static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
   indent(ctx, 2);
   rv = (*printf_func)(
     printf_arg,
-    "<InterruptCount>%" PRIu64 "</InterruptCount>\n",
-    per_cpu->interrupt_count
+    "<MaxInterruptTime unit=\"ns\">%" PRIu32
+      "</MaxInterruptTime>\n",
+    per_cpu->max_interrupt_time
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<MeanInterruptTime unit=\"ns\">%" PRIu64
+      "</MeanInterruptTime>\n",
+    arithmetic_mean(
+      per_cpu->total_interrupt_time,
+      per_cpu->interrupt_count
+    )
   );
   update_retval(ctx, rv);
 
@@ -119,6 +140,14 @@ static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
     printf_arg,
     "<TotalInterruptTime unit=\"ns\">%" PRIu64 "</TotalInterruptTime>\n",
     per_cpu->total_interrupt_time
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<InterruptCount>%" PRIu64 "</InterruptCount>\n",
+    per_cpu->interrupt_count
   );
   update_retval(ctx, rv);
 
@@ -164,8 +193,24 @@ static void report_smp_lock(context *ctx, const rtems_profiling_smp_lock *smp_lo
   indent(ctx, 2);
   rv = (*printf_func)(
     printf_arg,
-    "<UsageCount>%" PRIu64 "</UsageCount>\n",
-    smp_lock->usage_count
+    "<MeanAcquireTime unit=\"ns\">%" PRIu64
+      "</MeanAcquireTime>\n",
+    arithmetic_mean(
+      smp_lock->total_acquire_time,
+      smp_lock->usage_count
+    )
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<MeanSectionTime unit=\"ns\">%" PRIu64
+      "</MeanSectionTime>\n",
+    arithmetic_mean(
+      smp_lock->total_section_time,
+      smp_lock->usage_count
+    )
   );
   update_retval(ctx, rv);
 
@@ -182,6 +227,14 @@ static void report_smp_lock(context *ctx, const rtems_profiling_smp_lock *smp_lo
     printf_arg,
     "<TotalSectionTime unit=\"ns\">%" PRIu64 "</TotalSectionTime>\n",
     smp_lock->total_section_time
+  );
+  update_retval(ctx, rv);
+
+  indent(ctx, 2);
+  rv = (*printf_func)(
+    printf_arg,
+    "<UsageCount>%" PRIu64 "</UsageCount>\n",
+    smp_lock->usage_count
   );
   update_retval(ctx, rv);
 
