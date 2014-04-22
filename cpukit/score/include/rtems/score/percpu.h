@@ -235,7 +235,7 @@ typedef struct {
  *
  *  This structure is used to hold per core state information.
  */
-typedef struct {
+typedef struct Per_CPU_Control {
   /**
    * @brief CPU port specific control.
    */
@@ -437,8 +437,12 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
  * we can use _Per_CPU_Get_snapshot()).  All other places must use
  * _Per_CPU_Get() so that we can add checks for RTEMS_DEBUG.
  */
-#define _Per_CPU_Get_snapshot() \
-  ( &_Per_CPU_Information[ _SMP_Get_current_processor() ].per_cpu )
+#if defined( _CPU_Get_current_per_CPU_control )
+  #define _Per_CPU_Get_snapshot() _CPU_Get_current_per_CPU_control()
+#else
+  #define _Per_CPU_Get_snapshot() \
+    ( &_Per_CPU_Information[ _SMP_Get_current_processor() ].per_cpu )
+#endif
 
 #if defined( RTEMS_SMP )
 static inline Per_CPU_Control *_Per_CPU_Get( void )

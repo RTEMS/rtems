@@ -1462,6 +1462,24 @@ CPU_Counter_ticks _CPU_Counter_difference(
   CPU_Counter_ticks first
 );
 
+/**
+ * @brief Special register pointing to the per-CPU control of the current
+ * processor.
+ *
+ * This is optional.  Not every CPU port needs this.  It is only an optional
+ * optimization variant.
+ */
+register struct Per_CPU_Control *_CPU_Per_CPU_current asm( "rX" );
+
+/**
+ * @brief Optional method to obtain the per-CPU control of the current processor.
+ *
+ * This is optional.  Not every CPU port needs this.  It is only an optional
+ * optimization variant.  In case this macro is undefined, the default
+ * implementation using the current processor index will be used.
+ */
+#define _CPU_Get_current_per_CPU_control() ( _CPU_Per_CPU_current )
+
 #ifdef RTEMS_SMP
   /**
    * @brief Performs CPU specific SMP initialization in the context of the boot
