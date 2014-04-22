@@ -20,11 +20,11 @@
 #include <rtems/score/profiling.h>
 #include <rtems/score/sysstate.h>
 
-#define NO_OWNER_CPU 0xffffffffU
+#define NO_OWNER_CPU NULL
 
 typedef struct {
   SMP_lock_Control lock;
-  uint32_t owner_cpu;
+  Per_CPU_Control *owner_cpu;
   uint32_t nest_level;
 } Giant_Control;
 
@@ -37,11 +37,10 @@ static Giant_Control _Giant = {
 static void _Giant_Do_acquire( Per_CPU_Control *self_cpu )
 {
   Giant_Control *giant = &_Giant;
-  uint32_t self_cpu_index = _Per_CPU_Get_index( self_cpu );
 
-  if ( giant->owner_cpu != self_cpu_index ) {
+  if ( giant->owner_cpu != self_cpu ) {
     _SMP_lock_Acquire( &giant->lock, &self_cpu->Giant_lock_context );
-    giant->owner_cpu = self_cpu_index;
+    giant->owner_cpu = self_cpu;
     giant->nest_level = 1;
   } else {
     ++giant->nest_level;
@@ -62,11 +61,10 @@ static void _Giant_Do_release( Per_CPU_Control *self_cpu )
 void _Giant_Drop( Per_CPU_Control *self_cpu )
 {
   Giant_Control *giant = &_Giant;
-  uint32_t self_cpu_index = _Per_CPU_Get_index( self_cpu );
 
   _Assert( _ISR_Get_level() != 0 );
 
-  if ( giant->owner_cpu == self_cpu_index ) {
+  if ( giant->owner_cpu == self_cpu ) {
     giant->nest_level = 0;
     giant->owner_cpu = NO_OWNER_CPU;
     _SMP_lock_Release( &giant->lock, &self_cpu->Giant_lock_context );
@@ -113,7 +111,7 @@ uint32_t _Thread_Dispatch_decrement_disable_level( void )
   self_cpu->thread_dispatch_disable_level = disable_level;
 
   _Giant_Do_release( self_cpu );
-  _Assert( disable_level != 0 || _Giant.owner_cpu == NO_OWNER_CPU );
+  _Assert( disable_level != 0 || _Giant.owner_cpu != self_cpu );
 
   _Profiling_Thread_dispatch_enable( self_cpu, disable_level );
   _ISR_Enable_without_giant( isr_level );
@@ -146,7 +144,7 @@ bool _Debug_Is_owner_of_giant( void )
 {
   Giant_Control *giant = &_Giant;
 
-  return giant->owner_cpu == _SMP_Get_current_processor()
+  return giant->owner_cpu == _Per_CPU_Get_snapshot()
     || !_System_state_Is_up( _System_state_Get() );
 }
 #endif
