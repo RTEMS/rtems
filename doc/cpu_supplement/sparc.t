@@ -397,6 +397,9 @@ describes the role of each of these registers:
 @end html
 @end ifset
 
+The registers g2 through g4 are reserved for applications.  GCC uses them as
+volatile registers by default.  So they are treated like volatile registers in
+RTEMS as well.
 
 @subsubsection Floating Point Registers
 

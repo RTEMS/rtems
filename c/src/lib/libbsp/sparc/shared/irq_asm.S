@@ -52,8 +52,7 @@
         .align 4
         PUBLIC(_CPU_Context_switch)
 SYM(_CPU_Context_switch):
-        std     %g2, [%o0 + G2_OFFSET]       ! save the global registers
-        std     %g4, [%o0 + G4_OFFSET]
+        st      %g5, [%o0 + G5_OFFSET]       ! save the global registers
         std     %g6, [%o0 + G6_OFFSET]
 
         std     %l0, [%o0 + L0_OFFSET]       ! save the local registers
@@ -185,8 +184,7 @@ done_flushing:
         nop
         nop
 
-        ldd     [%o1 + G2_OFFSET], %g2        ! restore the global registers
-        ldd     [%o1 + G4_OFFSET], %g4
+        ld      [%o1 + G5_OFFSET], %g5        ! restore the global registers
         ldd     [%o1 + G6_OFFSET], %g6
 
         ! Load thread specific ISR dispatch prevention flag

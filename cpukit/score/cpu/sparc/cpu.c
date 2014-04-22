@@ -35,13 +35,20 @@ RTEMS_STATIC_ASSERT(
     Context_Control_offset_ ## field \
   )
 
-SPARC_ASSERT_OFFSET(g2_g3, G2);
-SPARC_ASSERT_OFFSET(g4, G4);
 SPARC_ASSERT_OFFSET(g5, G5);
 SPARC_ASSERT_OFFSET(g6, G6);
 SPARC_ASSERT_OFFSET(g7, G7);
-SPARC_ASSERT_OFFSET(l0, L0);
-SPARC_ASSERT_OFFSET(l1, L1);
+
+RTEMS_STATIC_ASSERT(
+  offsetof(Context_Control, l0_and_l1) == L0_OFFSET,
+  Context_Control_offset_L0
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof(Context_Control, l0_and_l1) + 4 == L1_OFFSET,
+  Context_Control_offset_L1
+);
+
 SPARC_ASSERT_OFFSET(l2, L2);
 SPARC_ASSERT_OFFSET(l3, L3);
 SPARC_ASSERT_OFFSET(l4, L4);
@@ -60,12 +67,6 @@ SPARC_ASSERT_OFFSET(o6_sp, O6_SP);
 SPARC_ASSERT_OFFSET(o7, O7);
 SPARC_ASSERT_OFFSET(psr, PSR);
 SPARC_ASSERT_OFFSET(isr_dispatch_disable, ISR_DISPATCH_DISABLE_STACK);
-
-RTEMS_STATIC_ASSERT(
-  (offsetof(Context_Control, g2_g3)
-     + offsetof(Context_Control, g4)) / 2 == G3_OFFSET,
-  Context_Control_offset_G3
-);
 
 /*
  *  This initializes the set of opcodes placed in each trap
