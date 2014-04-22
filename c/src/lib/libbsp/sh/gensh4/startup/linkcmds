@@ -40,10 +40,6 @@ MEMORY
 SECTIONS
 {
   /* Read-only sections, merged into text segment: */
-  .init          : 
-  { 
-    KEEP (*(.init))
-  } =0
   .text      :
   {
     _start = .;
@@ -83,10 +79,10 @@ SECTIONS
     } >ram
   _etext = .;
   PROVIDE (etext = .);
-  .fini      :
-  {
-    KEEP (*(.fini))
-  } =0
+  .init    .  : { KEEP(*(.init))    } > ram =0
+  .fini    .  : { KEEP(*(.fini))    } > ram =0
+  .ctors   .  : { KEEP(*(.ctors))    } > ram =0
+  .dtors   .  : { KEEP(*(.dtors))    } > ram =0
   .rodata   : 
   { 
     *(.rodata) 
@@ -109,38 +105,6 @@ SECTIONS
   __TLS_BSS_size = __TLS_BSS_end - __TLS_BSS_begin;
   __TLS_Size = __TLS_BSS_end - __TLS_Data_begin;
   __TLS_Alignment = MAX (ALIGNOF (.tdata), ALIGNOF (.tbss));
-  .ctors   : 
-  {
-    ___ctors = .;
-    /* gcc uses crtbegin.o to find the start of
-       the constructors, so we make sure it is
-       first.  Because this is a wildcard, it
-       doesn't matter if the user does not
-       actually link against crtbegin.o; the
-       linker won't look for a file to match a
-       wildcard.  The wildcard also means that it
-       doesn't matter which directory crtbegin.o
-       is in.  */
-    KEEP (*crtbegin.o(.ctors))
-    /* We don't want to include the .ctor section from
-       from the crtend.o file until after the sorted ctors.
-       The .ctor section from the crtend file contains the
-       end of ctors marker and it must be last */
-    KEEP (*(EXCLUDE_FILE (*crtend.o ) .ctors))
-    KEEP (*(SORT(.ctors.*)))
-    KEEP (*(.ctors))
-    ___ctors_end = .;
-  } > ram
-   .dtors         :
-  {
-    ___dtors = .;
-    KEEP (*crtbegin.o(.dtors))
-    KEEP (*(EXCLUDE_FILE (*crtend.o ) .dtors))
-    KEEP (*(SORT(.dtors.*)))
-    KEEP (*(.dtors))
-    ___dtors_end = .;
-    copy_start_in_rom = .;
-  } > ram
 
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  */
