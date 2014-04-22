@@ -142,9 +142,11 @@ SECTIONS
     __TLS_BSS_end = .;
   } > ram
   __TLS_Data_size = __TLS_Data_end - __TLS_Data_begin;
+  __TLS_Data_begin = __TLS_Data_size != 0 ? __TLS_Data_begin : __TLS_BSS_begin;
+  __TLS_Data_end = __TLS_Data_size != 0 ? __TLS_Data_end : __TLS_BSS_begin;
   __TLS_BSS_size = __TLS_BSS_end - __TLS_BSS_begin;
   __TLS_Size = __TLS_BSS_end - __TLS_Data_begin;
-  __TLS_Alignment = ALIGNOF (.tdata);
+  __TLS_Alignment = MAX (ALIGNOF (.tdata), ALIGNOF (.tbss));
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  */
   . = ALIGN(128) + (. & (128 - 1));

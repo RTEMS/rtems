@@ -90,9 +90,11 @@ SECTIONS
     _TLS_BSS_end = .;
   } > sdram
   _TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+  _TLS_Data_begin = _TLS_Data_size != 0 ? _TLS_Data_begin : _TLS_BSS_begin;
+  _TLS_Data_end = _TLS_Data_size != 0 ? _TLS_Data_end : _TLS_BSS_begin;
   _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
   _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
-  _TLS_Alignment = ALIGNOF (.tdata);
+  _TLS_Alignment = MAX (ALIGNOF (.tdata), ALIGNOF (.tbss));
 
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  */

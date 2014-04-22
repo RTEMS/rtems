@@ -119,9 +119,11 @@ SECTIONS {
 		_TLS_BSS_end = .;
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	_TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+	_TLS_Data_begin = _TLS_Data_size != 0 ? _TLS_Data_begin : _TLS_BSS_begin;
+	_TLS_Data_end = _TLS_Data_size != 0 ? _TLS_Data_end : _TLS_BSS_begin;
 	_TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
 	_TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
-	_TLS_Alignment = ALIGNOF (.tdata);
+	_TLS_Alignment = MAX (ALIGNOF (.tdata), ALIGNOF (.tbss));
 	.preinit_array : ALIGN_WITH_INPUT {
 		PROVIDE_HIDDEN (__preinit_array_start = .);
 		KEEP (*(.preinit_array))
