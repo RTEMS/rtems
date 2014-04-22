@@ -172,9 +172,7 @@ SECTIONS
     *(.data1)
     
     PROVIDE (__SDATA_START__ = .);
-    *(.sdata*)
-    *(.gnu.linkonce.d*)
-    *(.gnu.linkonce.s.*)
+    *(.sdata .sdata.* .gnu.linkonce.s.*)
     PROVIDE (__SDATA_END__ = .);
     
     PROVIDE (__EXCEPT_START__ = .);
@@ -204,8 +202,8 @@ SECTIONS
      *   offsets can access them all.
      */
     PROVIDE (__SDATA2_START__ = .);
-    *(.sdata2)
-    *(.gnu.linkonce.s2.*)
+    *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
+    *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
     PROVIDE (__SDATA2_END__ = .);
 
     data.end = .;

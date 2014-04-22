@@ -121,8 +121,8 @@ SECTIONS
   _etext = .;
   PROVIDE (_etext = .);
   PROVIDE (__SDATA2_START__ = .);
-  .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >RAM
-  .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >RAM
+  .sdata2   	  : { *(.sdata2 .sdata2.* .gnu.linkonce.s2.*) } >RAM
+  .sbss2   	  : { *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*) } >RAM
   PROVIDE (__SBSS2_END__ = .);
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  It would
@@ -184,8 +184,7 @@ SECTIONS
      we can shorten the on-disk segment size.  */
   PROVIDE (__SDATA_START__ = .);
   .sdata	  : {
-     *(.sdata*)
-     *(.gnu.linkonce.s.*)
+     *(.sdata .sdata.* .gnu.linkonce.s.*)
      _edata  =  .;
   } >RAM
   PROVIDE (_edata = .);
