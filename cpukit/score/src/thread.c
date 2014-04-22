@@ -43,13 +43,6 @@ void _Thread_Handler_initialization(void)
   if ( stack_allocate_init_hook != NULL )
     (*stack_allocate_init_hook)( rtems_configuration_get_stack_space_size() );
 
-  _Thread_Dispatch_necessary = false;
-  _Thread_Executing         = NULL;
-  _Thread_Heir              = NULL;
-#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-  _Thread_Allocated_fp      = NULL;
-#endif
-
   #if defined(RTEMS_MULTIPROCESSING)
     _Thread_MP_Handler_initialization( maximum_proxies );
   #endif
