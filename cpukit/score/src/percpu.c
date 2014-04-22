@@ -29,11 +29,11 @@ static SMP_lock_Control _Per_CPU_State_lock =
   SMP_LOCK_INITIALIZER("per-CPU state");
 
 static void _Per_CPU_State_busy_wait(
-  const Per_CPU_Control *per_cpu,
+  const Per_CPU_Control *cpu,
   Per_CPU_State new_state
 )
 {
-  Per_CPU_State state = per_cpu->state;
+  Per_CPU_State state = cpu->state;
 
   switch ( new_state ) {
     case PER_CPU_STATE_REQUEST_START_MULTITASKING:
@@ -42,7 +42,7 @@ static void _Per_CPU_State_busy_wait(
           && state != PER_CPU_STATE_SHUTDOWN
       ) {
         _CPU_SMP_Processor_event_receive();
-        state = per_cpu->state;
+        state = cpu->state;
       }
       break;
     case PER_CPU_STATE_UP:
@@ -51,7 +51,7 @@ static void _Per_CPU_State_busy_wait(
           && state != PER_CPU_STATE_SHUTDOWN
       ) {
         _CPU_SMP_Processor_event_receive();
-        state = per_cpu->state;
+        state = cpu->state;
       }
       break;
     default:
@@ -108,7 +108,7 @@ static Per_CPU_State _Per_CPU_State_get_next(
 }
 
 void _Per_CPU_State_change(
-  Per_CPU_Control *per_cpu,
+  Per_CPU_Control *cpu,
   Per_CPU_State new_state
 )
 {
@@ -116,31 +116,31 @@ void _Per_CPU_State_change(
   SMP_lock_Context lock_context;
   Per_CPU_State next_state;
 
-  _Per_CPU_State_busy_wait( per_cpu, new_state );
+  _Per_CPU_State_busy_wait( cpu, new_state );
 
   _SMP_lock_ISR_disable_and_acquire( lock, &lock_context );
 
-  next_state = _Per_CPU_State_get_next( per_cpu->state, new_state );
-  per_cpu->state = next_state;
+  next_state = _Per_CPU_State_get_next( cpu->state, new_state );
+  cpu->state = next_state;
 
   if ( next_state == PER_CPU_STATE_SHUTDOWN ) {
-    uint32_t ncpus = rtems_configuration_get_maximum_processors();
-    uint32_t cpu;
+    uint32_t cpu_max = rtems_configuration_get_maximum_processors();
+    uint32_t cpu_index;
 
-    for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
-      Per_CPU_Control *other_cpu = _Per_CPU_Get_by_index( cpu );
+    for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
+      Per_CPU_Control *cpu_other = _Per_CPU_Get_by_index( cpu_index );
 
-      if ( per_cpu != other_cpu ) {
-        switch ( other_cpu->state ) {
+      if ( cpu_other != cpu ) {
+        switch ( cpu_other->state ) {
           case PER_CPU_STATE_UP:
-            _SMP_Send_message( cpu, SMP_MESSAGE_SHUTDOWN );
+            _SMP_Send_message( cpu_index, SMP_MESSAGE_SHUTDOWN );
             break;
           default:
             /* Nothing to do */
             break;
         }
 
-        other_cpu->state = PER_CPU_STATE_SHUTDOWN;
+        cpu_other->state = PER_CPU_STATE_SHUTDOWN;
       }
     }
   }

@@ -24,11 +24,11 @@
   {
     bool dispatch_allowed;
     ISR_Level level;
-    Per_CPU_Control *per_cpu;
+    Per_CPU_Control *cpu_self;
 
     _ISR_Disable_without_giant( level );
-    per_cpu = _Per_CPU_Get_snapshot();
-    dispatch_allowed = per_cpu->thread_dispatch_disable_level == 0;
+    cpu_self = _Per_CPU_Get_snapshot();
+    dispatch_allowed = cpu_self->thread_dispatch_disable_level == 0;
     _ISR_Enable_without_giant( level );
 
     return dispatch_allowed;

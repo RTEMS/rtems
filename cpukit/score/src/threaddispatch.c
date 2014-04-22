@@ -42,27 +42,27 @@ static Thread_Action *_Thread_Get_post_switch_action(
 static void _Thread_Run_post_switch_actions( Thread_Control *executing )
 {
   ISR_Level        level;
-  Per_CPU_Control *cpu;
+  Per_CPU_Control *cpu_self;
   Thread_Action   *action;
 
-  cpu = _Thread_Action_ISR_disable_and_acquire( executing, &level );
+  cpu_self = _Thread_Action_ISR_disable_and_acquire( executing, &level );
   action = _Thread_Get_post_switch_action( executing );
 
   while ( action != NULL ) {
     _Chain_Set_off_chain( &action->Node );
 
-    ( *action->handler )( executing, action, cpu, level );
+    ( *action->handler )( executing, action, cpu_self, level );
 
-    cpu = _Thread_Action_ISR_disable_and_acquire( executing, &level );
+    cpu_self = _Thread_Action_ISR_disable_and_acquire( executing, &level );
     action = _Thread_Get_post_switch_action( executing );
   }
 
-  _Thread_Action_release_and_ISR_enable( cpu, level );
+  _Thread_Action_release_and_ISR_enable( cpu_self, level );
 }
 
 void _Thread_Dispatch( void )
 {
-  Per_CPU_Control  *per_cpu;
+  Per_CPU_Control  *cpu_self;
   Thread_Control   *executing;
   Thread_Control   *heir;
   ISR_Level         level;
@@ -71,10 +71,10 @@ void _Thread_Dispatch( void )
   _ISR_Disable_without_giant( level );
 #endif
 
-  per_cpu = _Per_CPU_Get();
-  _Assert( per_cpu->thread_dispatch_disable_level == 0 );
-  _Profiling_Thread_dispatch_disable( per_cpu, 0 );
-  per_cpu->thread_dispatch_disable_level = 1;
+  cpu_self = _Per_CPU_Get();
+  _Assert( cpu_self->thread_dispatch_disable_level == 0 );
+  _Profiling_Thread_dispatch_disable( cpu_self, 0 );
+  cpu_self->thread_dispatch_disable_level = 1;
 
 #if defined( RTEMS_SMP )
   _ISR_Enable_without_giant( level );
@@ -83,8 +83,8 @@ void _Thread_Dispatch( void )
   /*
    *  Now determine if we need to perform a dispatch on the current CPU.
    */
-  executing = per_cpu->executing;
-  _Per_CPU_ISR_disable_and_acquire( per_cpu, level );
+  executing = cpu_self->executing;
+  _Per_CPU_ISR_disable_and_acquire( cpu_self, level );
 #if defined( RTEMS_SMP )
   /*
    * On SMP the complete context switch must be atomic with respect to one
@@ -93,11 +93,11 @@ void _Thread_Dispatch( void )
    * cannot execute on more than one processor at a time.  See also
    * _Thread_Handler() since _Context_switch() may branch to this function.
    */
-  if ( per_cpu->dispatch_necessary ) {
+  if ( cpu_self->dispatch_necessary ) {
 #else
-  while ( per_cpu->dispatch_necessary ) {
+  while ( cpu_self->dispatch_necessary ) {
 #endif
-    per_cpu->dispatch_necessary = false;
+    cpu_self->dispatch_necessary = false;
 
 #if defined( RTEMS_SMP )
     /*
@@ -108,8 +108,8 @@ void _Thread_Dispatch( void )
     _Atomic_Fence( ATOMIC_ORDER_SEQ_CST );
 #endif
 
-    heir = per_cpu->heir;
-    per_cpu->executing = heir;
+    heir = cpu_self->heir;
+    cpu_self->executing = heir;
 
 #if defined( RTEMS_SMP )
     executing->is_executing = false;
@@ -142,11 +142,11 @@ void _Thread_Dispatch( void )
     #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
       _Thread_Update_cpu_time_used(
         executing,
-        &per_cpu->time_of_last_context_switch
+        &cpu_self->time_of_last_context_switch
       );
     #else
       {
-        _TOD_Get_uptime( &per_cpu->time_of_last_context_switch );
+        _TOD_Get_uptime( &cpu_self->time_of_last_context_switch );
         heir->cpu_time_used++;
       }
     #endif
@@ -205,7 +205,7 @@ void _Thread_Dispatch( void )
      * heir thread may have migrated from another processor.  Values from the
      * stack or non-volatile registers reflect the old execution environment.
      */
-    per_cpu = _Per_CPU_Get();
+    cpu_self = _Per_CPU_Get();
 
 #if !defined( RTEMS_SMP )
     _ISR_Disable( level );
@@ -213,11 +213,11 @@ void _Thread_Dispatch( void )
   }
 
 post_switch:
-  _Assert( per_cpu->thread_dispatch_disable_level == 1 );
-  per_cpu->thread_dispatch_disable_level = 0;
-  _Profiling_Thread_dispatch_enable( per_cpu, 0 );
+  _Assert( cpu_self->thread_dispatch_disable_level == 1 );
+  cpu_self->thread_dispatch_disable_level = 0;
+  _Profiling_Thread_dispatch_enable( cpu_self, 0 );
 
-  _Per_CPU_Release_and_ISR_enable( per_cpu, level );
+  _Per_CPU_Release_and_ISR_enable( cpu_self, level );
 
   _Thread_Run_post_switch_actions( executing );
 }

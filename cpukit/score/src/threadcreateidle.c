@@ -23,7 +23,7 @@
 #include <rtems/score/stackimpl.h>
 #include <rtems/config.h>
 
-static void _Thread_Create_idle_for_cpu( Per_CPU_Control *per_cpu )
+static void _Thread_Create_idle_for_cpu( Per_CPU_Control *cpu )
 {
   Objects_Name    name;
   Thread_Control *idle;
@@ -40,7 +40,7 @@ static void _Thread_Create_idle_for_cpu( Per_CPU_Control *per_cpu )
   _Thread_Initialize(
     &_Thread_Internal_information,
     idle,
-    _Scheduler_Get_by_CPU( per_cpu ),
+    _Scheduler_Get_by_CPU( cpu ),
     NULL,        /* allocate the stack */
     _Stack_Ensure_minimum( rtems_configuration_get_idle_task_stack_size() ),
     CPU_IDLE_TASK_IS_FP,
@@ -56,8 +56,8 @@ static void _Thread_Create_idle_for_cpu( Per_CPU_Control *per_cpu )
    *  WARNING!!! This is necessary to "kick" start the system and
    *             MUST be done before _Thread_Start is invoked.
    */
-  per_cpu->heir      =
-  per_cpu->executing = idle;
+  cpu->heir      =
+  cpu->executing = idle;
 
   _Thread_Start(
     idle,
@@ -65,20 +65,20 @@ static void _Thread_Create_idle_for_cpu( Per_CPU_Control *per_cpu )
     rtems_configuration_get_idle_task(),
     NULL,
     0,
-    per_cpu
+    cpu
   );
 }
 
 void _Thread_Create_idle( void )
 {
-  uint32_t processor_count = _SMP_Get_processor_count();
-  uint32_t processor;
+  uint32_t cpu_count = _SMP_Get_processor_count();
+  uint32_t cpu_index;
 
-  for ( processor = 0 ; processor < processor_count ; ++processor ) {
-    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( processor );
+  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+    Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
-    if ( _Per_CPU_Is_processor_started( per_cpu ) ) {
-      _Thread_Create_idle_for_cpu( per_cpu );
+    if ( _Per_CPU_Is_processor_started( cpu ) ) {
+      _Thread_Create_idle_for_cpu( cpu );
     }
   }
 }

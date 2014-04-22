@@ -38,31 +38,31 @@ extern "C" {
  */
 
 static inline void _Profiling_Thread_dispatch_disable(
-  Per_CPU_Control *per_cpu,
+  Per_CPU_Control *cpu,
   uint32_t previous_thread_dispatch_disable_level
 )
 {
 #if defined( RTEMS_PROFILING )
   if ( previous_thread_dispatch_disable_level == 0 ) {
-    Per_CPU_Stats *stats = &per_cpu->Stats;
+    Per_CPU_Stats *stats = &cpu->Stats;
 
     stats->thread_dispatch_disabled_instant = _CPU_Counter_read();
     ++stats->thread_dispatch_disabled_count;
   }
 #else
-  (void) per_cpu;
+  (void) cpu;
   (void) previous_thread_dispatch_disable_level;
 #endif
 }
 
 static inline void _Profiling_Thread_dispatch_enable(
-  Per_CPU_Control *per_cpu,
+  Per_CPU_Control *cpu,
   uint32_t new_thread_dispatch_disable_level
 )
 {
 #if defined( RTEMS_PROFILING )
   if ( new_thread_dispatch_disable_level == 0 ) {
-    Per_CPU_Stats *stats = &per_cpu->Stats;
+    Per_CPU_Stats *stats = &cpu->Stats;
     CPU_Counter_ticks now = _CPU_Counter_read();
     CPU_Counter_ticks delta = _CPU_Counter_difference(
       now,
@@ -76,30 +76,30 @@ static inline void _Profiling_Thread_dispatch_enable(
     }
   }
 #else
-  (void) per_cpu;
+  (void) cpu;
   (void) new_thread_dispatch_disable_level;
 #endif
 }
 
 static inline void _Profiling_Update_max_interrupt_delay(
-  Per_CPU_Control *per_cpu,
+  Per_CPU_Control *cpu,
   CPU_Counter_ticks interrupt_delay
 )
 {
 #if defined( RTEMS_PROFILING )
-  Per_CPU_Stats *stats = &per_cpu->Stats;
+  Per_CPU_Stats *stats = &cpu->Stats;
 
   if ( stats->max_interrupt_delay < interrupt_delay ) {
     stats->max_interrupt_delay = interrupt_delay;
   }
 #else
-  (void) per_cpu;
+  (void) cpu;
   (void) interrupt_delay;
 #endif
 }
 
 void _Profiling_Outer_most_interrupt_entry_and_exit(
-  Per_CPU_Control *per_cpu,
+  Per_CPU_Control *cpu,
   CPU_Counter_ticks interrupt_entry_instant,
   CPU_Counter_ticks interrupt_exit_instant
 );

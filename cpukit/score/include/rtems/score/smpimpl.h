@@ -107,16 +107,16 @@ void _SMP_Start_multitasking_on_secondary_processor( void )
  */
 static inline void _SMP_Inter_processor_interrupt_handler( void )
 {
-  Per_CPU_Control *self_cpu = _Per_CPU_Get();
+  Per_CPU_Control *cpu_self = _Per_CPU_Get();
 
-  if ( self_cpu->message != 0 ) {
+  if ( cpu_self->message != 0 ) {
     uint32_t  message;
     ISR_Level level;
 
-    _Per_CPU_ISR_disable_and_acquire( self_cpu, level );
-    message = self_cpu->message;
-    self_cpu->message = 0;
-    _Per_CPU_Release_and_ISR_enable( self_cpu, level );
+    _Per_CPU_ISR_disable_and_acquire( cpu_self, level );
+    message = cpu_self->message;
+    cpu_self->message = 0;
+    _Per_CPU_Release_and_ISR_enable( cpu_self, level );
 
     if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
       rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );
@@ -130,10 +130,10 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
  *
  *  The target processor may be the sending processor.
  *
- *  @param[in] cpu The target processor of the message.
+ *  @param[in] cpu_index The target processor of the message.
  *  @param[in] message The message.
  */
-void _SMP_Send_message( uint32_t cpu, uint32_t message );
+void _SMP_Send_message( uint32_t cpu_index, uint32_t message );
 
 /**
  *  @brief Request of others CPUs.

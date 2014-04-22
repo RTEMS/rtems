@@ -32,22 +32,22 @@ static CPU_set_Control cpuset_default;
  */
 void _CPU_set_Handler_initialization()
 {
-  int i;
-  int max_cpus;
+  uint32_t cpu_count;
+  uint32_t cpu_index;
 
   /* We do not support a cpu count over CPU_SETSIZE  */
-  max_cpus = _SMP_Get_processor_count();
+  cpu_count = _SMP_Get_processor_count();
 
   /* This should never happen */
-  _Assert( max_cpus <= CPU_SETSIZE );
+  _Assert( cpu_count <= CPU_SETSIZE );
 
   /*  Initialize the affinity to be the set of all available CPU's   */
   cpuset_default.set     = &cpuset_default.preallocated;
   cpuset_default.setsize = sizeof( *cpuset_default.set );
   CPU_ZERO_S( cpuset_default.setsize, &cpuset_default.preallocated );
 
-  for (i=0; i<max_cpus; i++)
-    CPU_SET_S(i, cpuset_default.setsize, cpuset_default.set );
+  for (cpu_index=0; cpu_index<cpu_count; cpu_index++)
+    CPU_SET_S((int) cpu_index, cpuset_default.setsize, cpuset_default.set );
 }
 
 /**

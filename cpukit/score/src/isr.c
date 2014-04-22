@@ -41,8 +41,8 @@ void _ISR_Handler_initialization( void )
 #if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
   {
     size_t stack_size = rtems_configuration_get_interrupt_stack_size();
-    uint32_t max_cpus = rtems_configuration_get_maximum_processors();
-    uint32_t cpu;
+    uint32_t cpu_max = rtems_configuration_get_maximum_processors();
+    uint32_t cpu_index;
 
     if ( !_Stack_Is_enough( stack_size ) )
       _Terminate(
@@ -51,8 +51,8 @@ void _ISR_Handler_initialization( void )
         INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL
       );
 
-    for ( cpu = 0 ; cpu < max_cpus; ++cpu ) {
-      Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+    for ( cpu_index = 0 ; cpu_index < cpu_max; ++cpu_index ) {
+      Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
       void *low = _Workspace_Allocate_or_fatal_error( stack_size );
       void *high = _Addresses_Add_offset( low, stack_size );
 
@@ -60,8 +60,8 @@ void _ISR_Handler_initialization( void )
       high = _Addresses_Align_down( high, CPU_STACK_ALIGNMENT );
 #endif
 
-      per_cpu->interrupt_stack_low = low;
-      per_cpu->interrupt_stack_high = high;
+      cpu->interrupt_stack_low = low;
+      cpu->interrupt_stack_high = high;
 
       /*
        * Interrupt stack might have to be aligned and/or setup in a specific
@@ -71,8 +71,8 @@ void _ISR_Handler_initialization( void )
        */
 #if defined(_CPU_Interrupt_stack_setup)
       _CPU_Interrupt_stack_setup(
-        per_cpu->interrupt_stack_low,
-        per_cpu->interrupt_stack_high
+        cpu->interrupt_stack_low,
+        cpu->interrupt_stack_high
       );
 #endif
     }

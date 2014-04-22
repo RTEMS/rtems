@@ -19,13 +19,13 @@
 #include <rtems/score/profiling.h>
 
 void _Profiling_Outer_most_interrupt_entry_and_exit(
-  Per_CPU_Control *per_cpu,
+  Per_CPU_Control *cpu,
   CPU_Counter_ticks interrupt_entry_instant,
   CPU_Counter_ticks interrupt_exit_instant
 )
 {
 #if defined( RTEMS_PROFILING )
-  Per_CPU_Stats *stats = &per_cpu->Stats;
+  Per_CPU_Stats *stats = &cpu->Stats;
   CPU_Counter_ticks delta = _CPU_Counter_difference(
     interrupt_exit_instant,
     interrupt_entry_instant
@@ -38,7 +38,7 @@ void _Profiling_Outer_most_interrupt_entry_and_exit(
     stats->max_interrupt_time = delta;
   }
 #else
-  (void) per_cpu;
+  (void) cpu;
   (void) interrupt_entry_instant;
   (void) interrupt_exit_instant;
 #endif

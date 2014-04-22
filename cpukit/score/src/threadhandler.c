@@ -148,15 +148,15 @@ void _Thread_Handler( void )
        * _Thread_Dispatch() obtained the per-CPU lock for us.  We have to
        * release it here and set the desired interrupt level of the thread.
        */
-      Per_CPU_Control *per_cpu = _Per_CPU_Get();
+      Per_CPU_Control *cpu_self = _Per_CPU_Get();
 
-      _Assert( per_cpu->thread_dispatch_disable_level == 1 );
+      _Assert( cpu_self->thread_dispatch_disable_level == 1 );
       _Assert( _ISR_Get_level() != 0 );
 
-      per_cpu->thread_dispatch_disable_level = 0;
-      _Profiling_Thread_dispatch_enable( per_cpu, 0 );
+      cpu_self->thread_dispatch_disable_level = 0;
+      _Profiling_Thread_dispatch_enable( cpu_self, 0 );
 
-      _Per_CPU_Release( per_cpu );
+      _Per_CPU_Release( cpu_self );
 
       level = executing->Start.isr_level;
       _ISR_Set_level( level);

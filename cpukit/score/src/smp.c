@@ -41,17 +41,17 @@ static void _SMP_Check_scheduler_configuration( void )
 
 static void _SMP_Start_processors( uint32_t cpu_count )
 {
-  uint32_t cpu_self = _SMP_Get_current_processor();
+  uint32_t cpu_index_self = _SMP_Get_current_processor();
   uint32_t cpu_index;
 
 
   for ( cpu_index = 0 ; cpu_index < cpu_count; ++cpu_index ) {
     const Scheduler_Assignment *assignment =
       _Scheduler_Get_assignment( cpu_index );
-    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu_index );
+    Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
     bool started;
 
-    if ( cpu_index != cpu_self ) {
+    if ( cpu_index != cpu_index_self ) {
       if ( _Scheduler_Should_start_processor( assignment ) ) {
         started = _CPU_SMP_Start_processor( cpu_index );
 
@@ -69,7 +69,7 @@ static void _SMP_Start_processors( uint32_t cpu_count )
       }
     }
 
-    per_cpu->started = started;
+    cpu->started = started;
 
     if ( started ) {
       ++assignment->scheduler->context->processor_count;
@@ -86,9 +86,9 @@ void _SMP_Handler_initialize( void )
   uint32_t cpu_index;
 
   for ( cpu_index = 0 ; cpu_index < cpu_max; ++cpu_index ) {
-    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu_index );
+    Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
-    _SMP_ticket_lock_Initialize( &per_cpu->Lock, "per-CPU" );
+    _SMP_ticket_lock_Initialize( &cpu->Lock, "per-CPU" );
   }
 
   /*
@@ -116,15 +116,15 @@ void _SMP_Handler_initialize( void )
 void _SMP_Request_start_multitasking( void )
 {
   Per_CPU_Control *self_cpu = _Per_CPU_Get();
-  uint32_t ncpus = _SMP_Get_processor_count();
-  uint32_t cpu;
+  uint32_t cpu_count = _SMP_Get_processor_count();
+  uint32_t cpu_index;
 
   _Per_CPU_State_change( self_cpu, PER_CPU_STATE_READY_TO_START_MULTITASKING );
 
-  for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
-    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+    Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
-    _Per_CPU_State_change( per_cpu, PER_CPU_STATE_REQUEST_START_MULTITASKING );
+    _Per_CPU_State_change( cpu, PER_CPU_STATE_REQUEST_START_MULTITASKING );
   }
 }
 
@@ -156,29 +156,29 @@ void _SMP_Request_shutdown( void )
   _Giant_Drop( self_cpu );
 }
 
-void _SMP_Send_message( uint32_t cpu, uint32_t message )
+void _SMP_Send_message( uint32_t cpu_index, uint32_t message )
 {
-  Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+  Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
   ISR_Level level;
 
-  _Per_CPU_ISR_disable_and_acquire( per_cpu, level );
-  per_cpu->message |= message;
-  _Per_CPU_Release_and_ISR_enable( per_cpu, level );
+  _Per_CPU_ISR_disable_and_acquire( cpu, level );
+  cpu->message |= message;
+  _Per_CPU_Release_and_ISR_enable( cpu, level );
 
-  _CPU_SMP_Send_interrupt( cpu );
+  _CPU_SMP_Send_interrupt( cpu_index );
 }
 
 void _SMP_Broadcast_message( uint32_t message )
 {
-  uint32_t self = _SMP_Get_current_processor();
-  uint32_t ncpus = _SMP_Get_processor_count();
-  uint32_t cpu;
+  uint32_t cpu_count = _SMP_Get_processor_count();
+  uint32_t cpu_index_self = _SMP_Get_current_processor();
+  uint32_t cpu_index;
 
   _Assert( _Debug_Is_thread_dispatching_allowed() );
 
-  for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
-    if ( cpu != self ) {
-      _SMP_Send_message( cpu, message );
+  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+    if ( cpu_index != cpu_index_self ) {
+      _SMP_Send_message( cpu_index, message );
     }
   }
 }

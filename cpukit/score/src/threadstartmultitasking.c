@@ -22,30 +22,30 @@
 
 void _Thread_Start_multitasking( void )
 {
-  Per_CPU_Control *self_cpu = _Per_CPU_Get();
+  Per_CPU_Control *cpu_self = _Per_CPU_Get();
   Thread_Control  *heir;
 
 #if defined(RTEMS_SMP)
-  _Per_CPU_State_change( self_cpu, PER_CPU_STATE_UP );
+  _Per_CPU_State_change( cpu_self, PER_CPU_STATE_UP );
 
   /*
    * Threads begin execution in the _Thread_Handler() function.   This
    * function will set the thread dispatch disable level to zero and calls
    * _Per_CPU_Release().
    */
-  _Per_CPU_Acquire( self_cpu );
-  self_cpu->thread_dispatch_disable_level = 1;
+  _Per_CPU_Acquire( cpu_self );
+  cpu_self->thread_dispatch_disable_level = 1;
 #endif
 
-  heir = self_cpu->heir;
+  heir = cpu_self->heir;
 
 #if defined(RTEMS_SMP)
-  self_cpu->executing->is_executing = false;
+  cpu_self->executing->is_executing = false;
   heir->is_executing = true;
 #endif
 
-  self_cpu->dispatch_necessary = false;
-  self_cpu->executing = heir;
+  cpu_self->dispatch_necessary = false;
+  cpu_self->executing = heir;
 
    /*
     * Get the init task(s) running.
@@ -69,7 +69,7 @@ void _Thread_Start_multitasking( void )
      _Context_Restore_fp( &heir->fp_context );
 #endif
 
-  _Profiling_Thread_dispatch_disable( self_cpu, 0 );
+  _Profiling_Thread_dispatch_disable( cpu_self, 0 );
 
 #if defined(_CPU_Start_multitasking)
   _CPU_Start_multitasking( &heir->Registers );

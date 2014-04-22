@@ -347,55 +347,55 @@ typedef struct {
 extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 
 #if defined( RTEMS_SMP )
-#define _Per_CPU_Acquire( per_cpu ) \
+#define _Per_CPU_Acquire( cpu ) \
   _SMP_ticket_lock_Acquire( \
-    &( per_cpu )->Lock, \
-    &( per_cpu )->Lock_stats_context \
+    &( cpu )->Lock, \
+    &( cpu )->Lock_stats_context \
   )
 #else
-#define _Per_CPU_Acquire( per_cpu ) \
+#define _Per_CPU_Acquire( cpu ) \
   do { \
-    (void) ( per_cpu ); \
+    (void) ( cpu ); \
   } while ( 0 )
 #endif
 
 #if defined( RTEMS_SMP )
-#define _Per_CPU_Release( per_cpu ) \
+#define _Per_CPU_Release( cpu ) \
   _SMP_ticket_lock_Release( \
-    &( per_cpu )->Lock, \
-    &( per_cpu )->Lock_stats_context \
+    &( cpu )->Lock, \
+    &( cpu )->Lock_stats_context \
   )
 #else
-#define _Per_CPU_Release( per_cpu ) \
+#define _Per_CPU_Release( cpu ) \
   do { \
-    (void) ( per_cpu ); \
+    (void) ( cpu ); \
   } while ( 0 )
 #endif
 
 #if defined( RTEMS_SMP )
-#define _Per_CPU_ISR_disable_and_acquire( per_cpu, isr_cookie ) \
+#define _Per_CPU_ISR_disable_and_acquire( cpu, isr_cookie ) \
   do { \
     _ISR_Disable_without_giant( isr_cookie ); \
-    _Per_CPU_Acquire( per_cpu ); \
+    _Per_CPU_Acquire( cpu ); \
   } while ( 0 )
 #else
-#define _Per_CPU_ISR_disable_and_acquire( per_cpu, isr_cookie ) \
+#define _Per_CPU_ISR_disable_and_acquire( cpu, isr_cookie ) \
   do { \
     _ISR_Disable( isr_cookie ); \
-    (void) ( per_cpu ); \
+    (void) ( cpu ); \
   } while ( 0 )
 #endif
 
 #if defined( RTEMS_SMP )
-#define _Per_CPU_Release_and_ISR_enable( per_cpu, isr_cookie ) \
+#define _Per_CPU_Release_and_ISR_enable( cpu, isr_cookie ) \
   do { \
-    _Per_CPU_Release( per_cpu ); \
+    _Per_CPU_Release( cpu ); \
     _ISR_Enable_without_giant( isr_cookie ); \
   } while ( 0 )
 #else
-#define _Per_CPU_Release_and_ISR_enable( per_cpu, isr_cookie ) \
+#define _Per_CPU_Release_and_ISR_enable( cpu, isr_cookie ) \
   do { \
-    (void) ( per_cpu ); \
+    (void) ( cpu ); \
     _ISR_Enable( isr_cookie ); \
   } while ( 0 )
 #endif
@@ -443,13 +443,13 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 #if defined( RTEMS_SMP )
 static inline Per_CPU_Control *_Per_CPU_Get( void )
 {
-  Per_CPU_Control *per_cpu = _Per_CPU_Get_snapshot();
+  Per_CPU_Control *cpu_self = _Per_CPU_Get_snapshot();
 
   _Assert(
-    per_cpu->thread_dispatch_disable_level != 0 || _ISR_Get_level() != 0
+    cpu_self->thread_dispatch_disable_level != 0 || _ISR_Get_level() != 0
   );
 
-  return per_cpu;
+  return cpu_self;
 }
 #else
 #define _Per_CPU_Get() _Per_CPU_Get_snapshot()
@@ -460,22 +460,22 @@ static inline Per_CPU_Control *_Per_CPU_Get_by_index( uint32_t index )
   return &_Per_CPU_Information[ index ].per_cpu;
 }
 
-static inline uint32_t _Per_CPU_Get_index( const Per_CPU_Control *per_cpu )
+static inline uint32_t _Per_CPU_Get_index( const Per_CPU_Control *cpu )
 {
   const Per_CPU_Control_envelope *per_cpu_envelope =
-    ( const Per_CPU_Control_envelope * ) per_cpu;
+    ( const Per_CPU_Control_envelope * ) cpu;
 
   return ( uint32_t ) ( per_cpu_envelope - &_Per_CPU_Information[ 0 ] );
 }
 
 static inline bool _Per_CPU_Is_processor_started(
-  const Per_CPU_Control *per_cpu
+  const Per_CPU_Control *cpu
 )
 {
 #if defined( RTEMS_SMP )
-  return per_cpu->started;
+  return cpu->started;
 #else
-  (void) per_cpu;
+  (void) cpu;
 
   return true;
 #endif
@@ -483,9 +483,9 @@ static inline bool _Per_CPU_Is_processor_started(
 
 #if defined( RTEMS_SMP )
 
-static inline void _Per_CPU_Send_interrupt( const Per_CPU_Control *per_cpu )
+static inline void _Per_CPU_Send_interrupt( const Per_CPU_Control *cpu )
 {
-  _CPU_SMP_Send_interrupt( _Per_CPU_Get_index( per_cpu ) );
+  _CPU_SMP_Send_interrupt( _Per_CPU_Get_index( cpu ) );
 }
 
 /**
@@ -496,7 +496,7 @@ static inline void _Per_CPU_Send_interrupt( const Per_CPU_Control *per_cpu )
 void _Per_CPU_Initialize(void);
 
 void _Per_CPU_State_change(
-  Per_CPU_Control *per_cpu,
+  Per_CPU_Control *cpu,
   Per_CPU_State new_state
 );
 
