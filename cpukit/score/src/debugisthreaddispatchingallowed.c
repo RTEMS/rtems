@@ -27,7 +27,7 @@
     Per_CPU_Control *per_cpu;
 
     _ISR_Disable_without_giant( level );
-    per_cpu = _Per_CPU_Get_by_index( _SMP_Get_current_processor() );
+    per_cpu = _Per_CPU_Get_snapshot();
     dispatch_allowed = per_cpu->thread_dispatch_disable_level == 0;
     _ISR_Enable_without_giant( level );
 
