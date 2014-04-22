@@ -23,8 +23,6 @@
 
 void _Thread_Handler_initialization(void)
 {
-  uint32_t ticks_per_timeslice =
-    rtems_configuration_get_ticks_per_timeslice();
   rtems_stack_allocate_init_hook stack_allocate_init_hook =
     rtems_configuration_get_stack_allocate_init_hook();
   #if defined(RTEMS_MULTIPROCESSING)
