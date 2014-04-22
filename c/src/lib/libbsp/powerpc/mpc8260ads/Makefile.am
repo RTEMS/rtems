@@ -17,11 +17,14 @@ noinst_PROGRAMS =
 
 include_HEADERS += ../../shared/include/coverhd.h
 
+dist_project_lib_DATA += startup/linkcmds
+
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds
+libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
+project_lib_DATA += rtems_crti.$(OBJEXT)
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
