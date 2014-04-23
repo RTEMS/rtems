@@ -14,6 +14,7 @@ _SUBDIRS += block14
 _SUBDIRS += block13
 _SUBDIRS += rbheap01
 _SUBDIRS += flashdisk01
+_SUBDIRS += capture01 
 
 _SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \
     deviceio01 devnullfatal01 dumpbuf01 gxx01 \

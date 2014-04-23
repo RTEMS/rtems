@@ -1,0 +1,19 @@
+#  COPYRIGHT (c) 1989-1999.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.org/license/LICENSE.
+#
+
+This is a non-ineractive test of the capture engine.  This test is based
+on the methods that would be called through the monitor capture commands:
+
+  copen 10000
+  cwceil 98
+  cwfloor 105
+  cwglob on
+  ctset RMON
+  cwlist
+  cenable
+  ctrace
