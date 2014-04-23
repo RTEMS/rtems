@@ -20,8 +20,6 @@ extern "C" {
 #include <rtems/iosupp.h>
 #include <rtems/bspIo.h>
 
-#define BSP_SMALL_MEMORY 1
-
 /***************************************************************************/
 /**  Hardware data structure headers                                      **/
 #include <mcf5225x/mcf5225x.h>

@@ -34,8 +34,6 @@ extern "C" {
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
-#define BSP_SMALL_MEMORY 1
-
 /* EDIT: To activate the sci driver, change the define below */
 #if 1
 #include <rtems/devnull.h>

@@ -30,8 +30,6 @@ extern "C" {
  * @{
  */
 
-#define BSP_SMALL_MEMORY 1
-
 #include <rtems.h>
 #include <rtems/iosupp.h>
 #include <rtems/console.h>

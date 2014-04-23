@@ -25,8 +25,6 @@
 
 #include <bspopts.h>
 
-#define BSP_SMALL_MEMORY 1
-
 #define BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN
 
 #define BSP_FEATURE_IRQ_EXTENSION
