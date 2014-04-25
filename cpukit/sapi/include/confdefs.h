@@ -431,6 +431,8 @@ const rtems_libio_helper rtems_fs_init_helper =
   #else
     #define CONFIGURE_SEMAPHORES_FOR_NFS 0
   #endif
+#else
+    #define CONFIGURE_SEMAPHORES_FOR_NFS 0
 #endif
 
 /**
