@@ -422,8 +422,14 @@ const rtems_libio_helper rtems_fs_init_helper =
   #if !defined(CONFIGURE_FILESYSTEM_ENTRY_NFS) && \
       defined(CONFIGURE_FILESYSTEM_NFS)
     #include <librtemsNfs.h>
+    #if !defined(CONFIGURE_MAXIMUM_NFS_MOUNTS)
+      #define CONFIGURE_MAXIMUM_NFS_MOUNTS 1
+    #endif
     #define CONFIGURE_FILESYSTEM_ENTRY_NFS \
       { RTEMS_FILESYSTEM_TYPE_NFS, rtems_nfs_initialize }
+    #define CONFIGURE_SEMAPHORES_FOR_NFS ((CONFIGURE_MAXIMUM_NFS_MOUNTS * 2) + 1)
+  #else
+    #define CONFIGURE_SEMAPHORES_FOR_NFS 0
   #endif
 #endif
 
@@ -433,8 +439,14 @@ const rtems_libio_helper rtems_fs_init_helper =
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_DOSFS) && \
     defined(CONFIGURE_FILESYSTEM_DOSFS)
   #include <rtems/dosfs.h>
+  #if !defined(CONFIGURE_MAXIMUM_DOSFS_MOUNTS)
+    #define CONFIGURE_MAXIMUM_DOSFS_MOUNTS 1
+  #endif
   #define CONFIGURE_FILESYSTEM_ENTRY_DOSFS \
     { RTEMS_FILESYSTEM_TYPE_DOSFS, rtems_dosfs_initialize }
+  #define CONFIGURE_SEMAPHORES_FOR_DOSFS CONFIGURE_MAXIMUM_DOSFS_MOUNTS
+#else
+  #define CONFIGURE_SEMAPHORES_FOR_DOSFS 0
 #endif
 
 /**
@@ -443,8 +455,14 @@ const rtems_libio_helper rtems_fs_init_helper =
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_RFS) && \
     defined(CONFIGURE_FILESYSTEM_RFS)
   #include <rtems/rtems-rfs.h>
+  #if !defined(CONFIGURE_MAXIMUM_RFS_MOUNTS)
+    #define CONFIGURE_MAXIMUM_RFS_MOUNTS 1
+  #endif
   #define CONFIGURE_FILESYSTEM_ENTRY_RFS \
     { RTEMS_FILESYSTEM_TYPE_RFS, rtems_rfs_rtems_initialise }
+  #define CONFIGURE_SEMAPHORES_FOR_RFS CONFIGURE_MAXIMUM_RFS_MOUNTS
+#else
+  #define CONFIGURE_SEMAPHORES_FOR_RFS 0
 #endif
 
 /**
@@ -453,9 +471,21 @@ const rtems_libio_helper rtems_fs_init_helper =
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_JFFS2) && \
     defined(CONFIGURE_FILESYSTEM_JFFS2)
   #include <rtems/jffs2.h>
+  #if !defined(CONFIGURE_MAXIMUM_JFFS2_MOUNTS)
+    #define CONFIGURE_MAXIMUM_JFFS2_MOUNTS 1
+  #endif
   #define CONFIGURE_FILESYSTEM_ENTRY_JFFS2 \
     { RTEMS_FILESYSTEM_TYPE_JFFS2, rtems_jffs2_initialize }
+  #define CONFIGURE_SEMAPHORES_FOR_JFFS2 CONFIGURE_MAXIMUM_JFFS2_MOUNTS
+#else
+  #define CONFIGURE_SEMAPHORES_FOR_JFFS2 0
 #endif
+
+#define CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS (CONFIGURE_SEMAPHORES_FOR_FIFOS + \
+                                               CONFIGURE_SEMAPHORES_FOR_NFS + \
+                                               CONFIGURE_SEMAPHORES_FOR_DOSFS + \
+                                               CONFIGURE_SEMAPHORES_FOR_RFS + \
+                                               CONFIGURE_SEMAPHORES_FOR_JFFS2)
 
 #ifdef CONFIGURE_INIT
 
@@ -1751,7 +1781,7 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_SEMAPHORES \
     (CONFIGURE_MAXIMUM_SEMAPHORES + CONFIGURE_LIBIO_SEMAPHORES + \
       CONFIGURE_TERMIOS_SEMAPHORES + CONFIGURE_LIBBLOCK_SEMAPHORES + \
-      CONFIGURE_SEMAPHORES_FOR_FIFOS)
+      CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS)
 
   /*
    * If there are no user or support semaphores defined, then we can assume
@@ -2863,7 +2893,7 @@ const rtems_libio_helper rtems_fs_init_helper =
  *  If an attempt was made to configure POSIX objects and
  *  the POSIX API was not configured into RTEMS, error out.
  *
- *  @note POSIX Keys are always available so the parameters 
+ *  @note POSIX Keys are always available so the parameters
  *        CONFIGURE_MAXIMUM_POSIX_KEYS and
  *        CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS  are not in this list.
  */
