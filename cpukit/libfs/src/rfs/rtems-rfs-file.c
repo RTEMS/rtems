@@ -352,7 +352,7 @@ rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
   }
 
   length = false;
-  mtime = false;
+  mtime = !read;
 
   if (!read &&
       rtems_rfs_block_map_past_end (rtems_rfs_file_map (handle),
@@ -361,7 +361,6 @@ rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
     rtems_rfs_block_map_set_size_offset (rtems_rfs_file_map (handle),
                                          handle->bpos.boff);
     length = true;
-    mtime = true;
   }
 
   atime  = rtems_rfs_file_update_atime (handle);
@@ -425,7 +424,7 @@ rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
                                             handle->shared))
   {
     rtems_rfs_file_set_bpos (handle, pos);
-    
+
     /*
      * If the file has a block check if it maps to the current position and it
      * does not release it. That will force us to get the block at the new
@@ -435,7 +434,7 @@ rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
     {
       rtems_rfs_buffer_block block;
       int                    rc;
-      
+
       rc = rtems_rfs_block_map_find (rtems_rfs_file_fs (handle),
                                      rtems_rfs_file_map (handle),
                                      rtems_rfs_file_bpos (handle),
@@ -443,7 +442,7 @@ rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
       if (rc > 0)
         return rc;
       if (rtems_rfs_buffer_bnum (&handle->buffer) != block)
-      {        
+      {
         rc = rtems_rfs_buffer_handle_release (rtems_rfs_file_fs (handle),
                                               rtems_rfs_file_buffer (handle));
         if (rc > 0)
@@ -461,7 +460,7 @@ rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
     if (rc > 0)
       return rc;
   }
-  
+
   *new_pos = pos;
   return 0;
 }
@@ -478,7 +477,7 @@ rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
     printf ("rtems-rfs: file-set-size: size=%" PRIu64 "\n", new_size);
 
   size = rtems_rfs_file_size (handle);
-  
+
   /*
    * If the file is same size do nothing else grow or shrink it ?
    *
@@ -608,11 +607,11 @@ rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
 
     handle->shared->size.count  = rtems_rfs_block_map_count (map);
     handle->shared->size.offset = rtems_rfs_block_map_size_offset (map);
-
-    if (rtems_rfs_file_update_mtime (handle))
-      handle->shared->mtime = time (NULL);
   }
-  
+
+  if (rtems_rfs_file_update_mtime (handle))
+    handle->shared->mtime = time (NULL);
+
   return 0;
 }
 

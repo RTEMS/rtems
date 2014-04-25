@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File Systems Inode Routines
  * @ingroup rtems_rfs
- * 
+ *
  * These functions manage inodes in the RFS file system. An inode is part of a
  * block that reside after the bitmaps in the group.
  */
@@ -285,6 +285,17 @@ rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
   if (RTEMS_RFS_S_ISDIR (mode))
     rtems_rfs_inode_set_links (&parent_inode,
                                rtems_rfs_inode_get_links (&parent_inode) + 1);
+
+  /*
+   * Update the parent's mtime.
+   */
+  rc = rtems_rfs_inode_time_stamp_now (&parent_inode, true, true);
+  if (rc > 0)
+  {
+    rtems_rfs_inode_delete (fs, &inode);
+    rtems_rfs_inode_close (fs, &inode);
+    return rc;
+  }
 
   rc = rtems_rfs_inode_close (fs, &parent_inode);
   if (rc > 0)
