@@ -1780,10 +1780,17 @@ const rtems_libio_helper rtems_fs_init_helper =
     #define CONFIGURE_MAXIMUM_SEMAPHORES                 0
   #endif
 
+  #ifdef RTEMS_NETWORKING
+    #define CONFIGURE_NETWORKING_SEMAPHORES 1
+  #else
+    #define CONFIGURE_NETWORKING_SEMAPHORES 0
+  #endif
+
   #define CONFIGURE_SEMAPHORES \
     (CONFIGURE_MAXIMUM_SEMAPHORES + CONFIGURE_LIBIO_SEMAPHORES + \
       CONFIGURE_TERMIOS_SEMAPHORES + CONFIGURE_LIBBLOCK_SEMAPHORES + \
-      CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS)
+      CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS + \
+      CONFIGURE_NETWORKING_SEMAPHORES)
 
   /*
    * If there are no user or support semaphores defined, then we can assume
