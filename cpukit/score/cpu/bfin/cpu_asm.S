@@ -359,9 +359,8 @@ vectorIDLoop:
 	if !cc jump vectorIDLoop;
 
 	[--sp] = r2;
-	p0.h = SYM(_ISR_Vector_table);
-	p0.l = SYM(_ISR_Vector_table);
-	r2 = [p0];
+	r2.h = SYM(_ISR_Vector_table);
+	r2.l = SYM(_ISR_Vector_table);
 	r1 = r0 << 2;
 	r1 = r1 + r2;
 	p0 = r1;

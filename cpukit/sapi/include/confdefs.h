@@ -2284,31 +2284,6 @@ const rtems_libio_helper rtems_fs_init_helper =
 #endif
 
 /**
- * On architectures that use Simple Vectored Interrupts, it is RTEMS
- * responsibility to allocate the vector table.  This avoids reserving
- * the memory on architectures that use the Programmable Interrupt
- * Controller Vectored Interrupts.
- */
-#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
-  /*
-   *  This is a (hopefully) temporary hack.  On the mips, the number of
-   *  vectors is NOT statically defined.  But it has to be statically
-   *  defined for this to work.  This is an issue looking for a nice
-   *  solution.
-   */
-  #if defined(__mips__)
-    #define CONFIGURE_INTERRUPT_VECTOR_TABLE \
-      _Configure_From_workspace( (sizeof(ISR_Handler_entry) * 256))
-  #else
-    #define CONFIGURE_INTERRUPT_VECTOR_TABLE \
-      _Configure_From_workspace( \
-        (sizeof(ISR_Handler_entry) * ISR_NUMBER_OF_VECTORS))
-  #endif
-#else
-  #define CONFIGURE_INTERRUPT_VECTOR_TABLE 0
-#endif
-
-/**
  * RTEMS uses two instance of an internal mutex class.  This accounts
  * for these mutexes.
  */
@@ -2337,7 +2312,6 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #define CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD \
   ( CONFIGURE_MEMORY_FOR_IDLE_TASK +                /* IDLE and stack */ \
-    CONFIGURE_INTERRUPT_VECTOR_TABLE +             /* interrupt vectors */ \
     CONFIGURE_INTERRUPT_STACK_MEMORY +             /* interrupt stack */ \
     CONFIGURE_API_MUTEX_MEMORY                     /* allocation mutex */ \
   )
@@ -2755,7 +2729,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     uint32_t POSIX;
 
     /* System overhead pieces */
-    uint32_t INTERRUPT_VECTOR_TABLE;
     uint32_t INTERRUPT_STACK_MEMORY;
     uint32_t MEMORY_FOR_IDLE_TASK;
 
@@ -2810,7 +2783,6 @@ const rtems_libio_helper rtems_fs_init_helper =
     CONFIGURE_MEMORY_FOR_POSIX,
 
     /* System overhead pieces */
-    CONFIGURE_INTERRUPT_VECTOR_TABLE,
     CONFIGURE_INTERRUPT_STACK_MEMORY,
     CONFIGURE_MEMORY_FOR_IDLE_TASK,
 

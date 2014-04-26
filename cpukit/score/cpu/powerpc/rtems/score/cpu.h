@@ -599,16 +599,6 @@ SCORE_EXTERN struct {
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 
 /*
- *  This defines the number of entries in the ISR_Vector_table managed
- *  by RTEMS.
- *
- *  NOTE: CPU_INTERRUPT_NUMBER_OF_VECTORS and 
- *        CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER are only used on
- *        Simple Vectored Architectures and thus are not defined
- *        for this architecture.
- */
-
-/*
  *  This is defined if the port has a special way to report the ISR nesting
  *  level.  Most ports maintain the variable _ISR_Nest_level. Note that
  *  this is not an option - RTEMS/score _relies_ on _ISR_Nest_level

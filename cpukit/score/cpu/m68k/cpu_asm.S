@@ -276,13 +276,8 @@ SYM (_ISR_Handler):
 
         addql   #1,ISR_NEST_LEVEL        | one nest level deeper
 
-        movel   SYM (_ISR_Vector_table),a0 | a0= base of RTEMS table
-#if ( M68K_HAS_PREINDEXING == 1 )
-        movel   (a0,d0:w:1),a0           | a0 = address of user routine
-#else
-        addal   d0,a0                    | a0 = address of vector
-        movel   (a0),a0                  | a0 = address of user routine
-#endif
+        lea     SYM(_ISR_Vector_table),a0
+        movel   (a0,d0),a0               | a0 = address of user routine
 
         lsrl    #2,d0                    | d0 = vector number
         movel   d0,a7@-                  | push vector number

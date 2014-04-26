@@ -583,7 +583,6 @@ FRAME(_CPU_Context_restore,sp,0,ra)
 ENDFRAME(_CPU_Context_restore)
 
 .extern _Thread_Dispatch
-.extern _ISR_Vector_table
 
 /*  void _DBG_Handler()
  *

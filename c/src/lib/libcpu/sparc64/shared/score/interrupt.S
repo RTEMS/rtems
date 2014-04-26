@@ -249,7 +249,6 @@ PUBLIC(_ISR_Handler)
      *        we just enabled traps.  It is definitely in g2.
      */
     setx  SYM(_ISR_Vector_table), %o5, %g1
-    ldx      [%g1], %g1
     and      %g2, 0x1FF, %o5        ! remove synchronous trap indicator
     sll      %o5, 3, %o5            ! o5 = offset into table
     ldx      [%g1 + %o5], %g1       ! g1 = _ISR_Vector_table[ vector ]

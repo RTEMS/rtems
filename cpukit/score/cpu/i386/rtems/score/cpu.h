@@ -316,13 +316,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 1024
 
 /*
- *  i386 family supports 256 distinct vectors.
- */
-
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS      256
-#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
-
-/*
  *  This is defined if the port has a special way to report the ISR nesting
  *  level.  Most ports maintain the variable _ISR_Nest_level.
  */

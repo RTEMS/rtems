@@ -660,15 +660,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 
 /*
- *  This defines the number of entries in the ISR_Vector_table managed
- *  by RTEMS.
- */
-
-extern unsigned int mips_interrupt_number_of_vectors;
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS      (mips_interrupt_number_of_vectors)
-#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
-
-/*
  *  Should be large enough to run all RTEMS tests.  This ensures
  *  that a "reasonable" small application should not have any problems.
  */

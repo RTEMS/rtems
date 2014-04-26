@@ -33,7 +33,6 @@ libscorecpu_a_SOURCES += nios2-fatal-halt.c
 libscorecpu_a_SOURCES += nios2-iic-low-level.S
 libscorecpu_a_SOURCES += nios2-iic-irq.c
 libscorecpu_a_SOURCES += nios2-initialize.c
-libscorecpu_a_SOURCES += nios2-initialize-vectors.c
 libscorecpu_a_SOURCES += nios2-isr-get-level.c
 libscorecpu_a_SOURCES += nios2-isr-install-raw-handler.c
 libscorecpu_a_SOURCES += nios2-isr-install-vector.c

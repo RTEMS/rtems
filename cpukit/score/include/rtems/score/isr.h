@@ -71,22 +71,10 @@ typedef ISR_Handler ( *ISR_Handler_entry )(
 #endif
 
 /**
- *  This constant promotes out the number of vectors truly supported by
- *  the current CPU being used.  This is usually the number of distinct vectors
- *  the cpu can vector.
- */
-#define ISR_NUMBER_OF_VECTORS                CPU_INTERRUPT_NUMBER_OF_VECTORS
-
-/**
- *  This constant promotes out the highest valid interrupt vector number.
- */
-#define ISR_INTERRUPT_MAXIMUM_VECTOR_NUMBER  CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER
-
-/**
  *  The following declares the Vector Table.  Application
  *  interrupt service routines are vectored by the ISR Handler via this table.
  */
-SCORE_EXTERN ISR_Handler_entry *_ISR_Vector_table;
+extern ISR_Handler_entry _ISR_Vector_table[ CPU_INTERRUPT_NUMBER_OF_VECTORS ];
 #endif
 
 /**

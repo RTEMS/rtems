@@ -549,25 +549,6 @@ typedef struct {
  */
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 
-/* XXX this should not be needed on PIC architectures */
-/* XXX evaluate removing it */
-#if 0
-/**
- * This defines the number of entries in the @ref _ISR_Vector_table managed
- * by RTEMS.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS      32
-#endif
-
-/**
- * This defines the highest interrupt vector number for this port.
- */
-#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
-
 /**
  * This is defined if the port has a special way to report the ISR nesting
  * level.  Most ports maintain the variable @a _ISR_Nest_level.

@@ -88,7 +88,6 @@
 
 
 .extern _Thread_Dispatch
-.extern _ISR_Vector_table
 
 /*  void __ISR_Handler()
  *
