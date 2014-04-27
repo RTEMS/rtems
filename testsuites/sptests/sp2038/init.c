@@ -283,12 +283,49 @@ static void test_leap_year(void)
     rtems_test_assert(test_status == false);
 }
 
+static bool test_year_is_leap_year(uint32_t year)
+{
+    return (((year % 4) == 0) && ((year % 100) != 0)) || ((year % 400) == 0);
+}
+
+static void test_every_day(void)
+{
+    rtems_time_of_day every_day = {
+        .year = 1970,
+        .month = 1,
+        .day = 1,
+        .hour = 0,
+        .minute = 1,
+        .second = 2
+    };
+    const int days_per_month[2][12] = {
+        { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
+        { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+    };
+    rtems_status_code sc = RTEMS_SUCCESSFUL;
+    rtems_time_of_day now;
+
+    for (every_day.year = 1988; every_day.year <= 2100; ++every_day.year) {
+        int leap_year = test_year_is_leap_year(every_day.year) ? 1 : 0;
+        for (every_day.month = 1; every_day.month <= 12; ++every_day.month) {
+            int days = days_per_month[leap_year][every_day.month - 1];
+            for (every_day.day = 1; every_day.day <= days; ++every_day.day) {
+                sc = rtems_clock_set(&every_day);
+                ASSERT_SC(sc);
+                sc = rtems_clock_get_tod(&now);
+                ASSERT_SC(sc);
+                rtems_test_assert(memcmp(&now, &every_day, sizeof(now)) == 0);
+            }
+        }
+    }
+}
 
 rtems_task Init(rtems_task_argument argument)
 {
   TEST_BEGIN();
 
   test_tod_to_seconds();
+  test_every_day();
   test_problem_year();
   test_leap_year();
 
