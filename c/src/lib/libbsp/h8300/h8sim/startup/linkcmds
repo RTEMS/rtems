@@ -37,6 +37,8 @@ SECTIONS
     {
 	*(.text*)
 	*(.gnu.linkonce.t*)
+	KEEP (*(.init))
+	KEEP (*(.fini))
 	
         /*
          * Special FreeBSD sysctl sections.
