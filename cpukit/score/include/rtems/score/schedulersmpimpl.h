@@ -192,37 +192,6 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
   ( *move_from_ready_to_scheduled )( self, highest_ready );
 }
 
-static inline void _Scheduler_SMP_Block(
-  Scheduler_SMP_Context *self,
-  Thread_Control *thread,
-  Scheduler_SMP_Extract extract,
-  Scheduler_SMP_Get_highest_ready get_highest_ready,
-  Scheduler_SMP_Move move_from_ready_to_scheduled
-)
-{
-  ( *extract )( self, thread );
-
-  if ( thread->is_in_the_air ) {
-    thread->is_in_the_air = false;
-
-    _Scheduler_SMP_Schedule_highest_ready(
-      self,
-      thread,
-      get_highest_ready,
-      move_from_ready_to_scheduled
-    );
-  }
-}
-
-static inline void _Scheduler_SMP_Extract(
-  Scheduler_SMP_Context *self,
-  Thread_Control *thread,
-  Scheduler_SMP_Extract extract
-)
-{
-  ( *extract )( self, thread );
-}
-
 static inline void _Scheduler_SMP_Schedule(
   Scheduler_SMP_Context *self,
   Thread_Control *thread,
@@ -240,6 +209,33 @@ static inline void _Scheduler_SMP_Schedule(
       move_from_ready_to_scheduled
     );
   }
+}
+
+static inline void _Scheduler_SMP_Block(
+  Scheduler_SMP_Context *self,
+  Thread_Control *thread,
+  Scheduler_SMP_Extract extract,
+  Scheduler_SMP_Get_highest_ready get_highest_ready,
+  Scheduler_SMP_Move move_from_ready_to_scheduled
+)
+{
+  ( *extract )( self, thread );
+
+  _Scheduler_SMP_Schedule(
+    self,
+    thread,
+    get_highest_ready,
+    move_from_ready_to_scheduled
+  );
+}
+
+static inline void _Scheduler_SMP_Extract(
+  Scheduler_SMP_Context *self,
+  Thread_Control *thread,
+  Scheduler_SMP_Extract extract
+)
+{
+  ( *extract )( self, thread );
 }
 
 static inline void _Scheduler_SMP_Insert_scheduled_lifo(
