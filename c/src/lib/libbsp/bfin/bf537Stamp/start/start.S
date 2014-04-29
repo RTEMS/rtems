@@ -11,17 +11,6 @@
 #define HI(con32) (((con32) >> 16) & 0xFFFF)
 #endif
 
-
-	.section .init
-	.globl	__init
-	.type	__init,@function
-__init:
-	.section .fini
-	.globl	__fini
-	.type	__fini,@function
-__fini:
-
-
 	.section .start
 	.align  4
 

@@ -4,7 +4,10 @@
 
 *startfile:
 %{!qrtems: %(old_startfile)} \
-%{!nostdlib: %{qrtems: start.o%s -e __start}}
+%{!nostdlib: %{qrtems: start.o%s crti.o%s crtbegin.o%s -e __start}}
 
 *link:
 %{!qrtems: %(old_link)} %{qrtems: -dc -dp -N}
+
+*endfile:
+%{!qrtems: *(old_endfiles)} %{qrtems: crtend.o%s crtn.o%s }
