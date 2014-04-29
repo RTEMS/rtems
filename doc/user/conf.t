@@ -355,6 +355,14 @@ software is unknown. In these situations users do not need to control
 the size of the workspace very tightly because they just want to get
 the new software to run; later they can tune the workspace size as needed.
 
+The following API-independent object classes can be configured in
+unlimited mode:
+
+@itemize @bullet
+@item POSIX Keys
+@item POSIX Key Value Pairs
+@end itemize
+
 The following object classes in the Classic API can be configured in
 unlimited mode:
 
@@ -377,7 +385,6 @@ configured in unlimited mode:
 @item Threads
 @item Mutexes
 @item Condition Variables
-@item Keys
 @item Timers
 @item Message Queues
 @item Message Queue Descriptors
@@ -387,9 +394,35 @@ configured in unlimited mode:
 @item Spinlocks
 @end itemize
 
-Due to how the POSIX object memory requirements are configured the
-unlimited object support does not provide unlimited size declarations
-for POSIX keys or queued signals.
+The following object classes can @strong{not} be configured in unlimited mode:
+@itemize @bullet
+@item Drivers
+@item File Descriptors
+@item User Extensions
+@item POSIX Queued Signals
+@end itemize
+
+Due to the memory requirements of unlimited objects it is strongly recommended
+to use them only in combination with the unified work areas. See
+@ref{Configuring a System Separate or Unified Work Areas} for more information
+on unified work areas.
+
+The following example demonstrates how the two simple configuration defines for
+unlimited objects and unified works areas can replace many seperate
+configuration defines for supported object classes:
+@example
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+
+#define CONFIGURE_UNIFIED_WORK_AREAS
+#define CONFIGURE_UNLIMITED_OBJECTS
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>
+@end example
 
 Users are cautioned that using unlimited objects is not recommended for
 production software unless the dynamic growth is absolutely required. It
