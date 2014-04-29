@@ -29,6 +29,7 @@ void rtems_test_fatal_extension(
   (void) is_internal;
   (void) code;
 
+#if defined(RTEMS_PROFILING)
   if (rtems_get_current_processor() == 0) {
     rtems_profiling_report_xml(
       rtems_test_name,
@@ -44,4 +45,5 @@ void rtems_test_fatal_extension(
       rtems_test_name
     );
   }
+#endif
 }
