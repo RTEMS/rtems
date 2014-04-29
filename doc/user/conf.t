@@ -3931,8 +3931,6 @@ processors.  The processor demand must be reduced for this system.
 mandatory processor failed during system initialization.  The system may not
 have this processor at all or it could be a problem with a boot loader for
 example.  Check the @code{CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS} definition.
-@item @code{SMP_FATAL_SCHEDULER_WITHOUT_PROCESSORS} - it is prohibited to have
-a scheduler managing the empty processor set.
 @item @code{SMP_FATAL_MULTITASKING_START_ON_UNASSIGNED_PROCESSOR} - it is not
 allowed to start multitasking on a processor with no scheduler assigned.
 @end itemize

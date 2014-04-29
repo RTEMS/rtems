@@ -25,20 +25,6 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/config.h>
 
-static void _SMP_Check_scheduler_configuration( void )
-{
-  size_t n = _Scheduler_Count;
-  size_t i;
-
-  for ( i = 0 ; i < n ; ++i ) {
-    const Scheduler_Control *scheduler = &_Scheduler_Table[ i ];
-
-    if ( scheduler->context->processor_count == 0 ) {
-      _SMP_Fatal( SMP_FATAL_SCHEDULER_WITHOUT_PROCESSORS );
-    }
-  }
-}
-
 static void _SMP_Start_processors( uint32_t cpu_count )
 {
   uint32_t cpu_index_self = _SMP_Get_current_processor();
@@ -75,8 +61,6 @@ static void _SMP_Start_processors( uint32_t cpu_count )
       ++assignment->scheduler->context->processor_count;
     }
   }
-
-  _SMP_Check_scheduler_configuration();
 }
 
 void _SMP_Handler_initialize( void )

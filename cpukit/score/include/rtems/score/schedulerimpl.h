@@ -571,6 +571,19 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority_if_higher(
   }
 }
 
+RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_processor_count(
+  const Scheduler_Control *scheduler
+)
+{
+#if defined(RTEMS_SMP)
+  return scheduler->context->processor_count;
+#else
+  (void) scheduler;
+
+  return 1;
+#endif
+}
+
 RTEMS_INLINE_ROUTINE Objects_Id _Scheduler_Build_id( uint32_t scheduler_index )
 {
   return _Objects_Build_id(
@@ -583,15 +596,17 @@ RTEMS_INLINE_ROUTINE Objects_Id _Scheduler_Build_id( uint32_t scheduler_index )
 
 RTEMS_INLINE_ROUTINE bool _Scheduler_Get_by_id(
   Objects_Id                id,
-  const Scheduler_Control **scheduler
+  const Scheduler_Control **scheduler_p
 )
 {
   uint32_t minimum_id = _Scheduler_Build_id( 0 );
   uint32_t index = id - minimum_id;
+  const Scheduler_Control *scheduler = &_Scheduler_Table[ index ];
 
-  *scheduler = &_Scheduler_Table[ index ];
+  *scheduler_p = scheduler;
 
-  return index < _Scheduler_Count;
+  return index < _Scheduler_Count
+    && _Scheduler_Get_processor_count( scheduler ) > 0;
 }
 
 RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_index(

@@ -446,7 +446,9 @@ rtems_status_code rtems_scheduler_ident(
 
 @code{@value{RPREFIX}SUCCESSFUL} - successful operation@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{id} is NULL@*
-@code{@value{RPREFIX}INVALID_NAME} - invalid scheduler name
+@code{@value{RPREFIX}INVALID_NAME} - invalid scheduler name@*
+@code{@value{RPREFIX}UNSATISFIED} - - a scheduler with this name exists, but
+the processor set of this scheduler is empty
 
 @subheading DESCRIPTION:
 

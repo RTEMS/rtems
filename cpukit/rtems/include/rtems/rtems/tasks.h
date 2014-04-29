@@ -597,6 +597,8 @@ rtems_id rtems_task_self(void);
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ADDRESS The @a id parameter is @c NULL.
  * @retval RTEMS_INVALID_NAME Invalid scheduler name.
+ * @retval RTEMS_UNSATISFIED A scheduler with this name exists, but the
+ * processor set of this scheduler is empty.
  */
 rtems_status_code rtems_scheduler_ident(
   rtems_name  name,
