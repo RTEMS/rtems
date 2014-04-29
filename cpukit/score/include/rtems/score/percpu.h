@@ -311,7 +311,7 @@ typedef struct Per_CPU_Control {
     /**
      * @brief Indicates the current state of the CPU.
      *
-     * This field is not protected by the _Per_CPU_State_lock lock.
+     * This field is protected by the _Per_CPU_State_lock lock.
      *
      * @see _Per_CPU_State_change().
      */
