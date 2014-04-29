@@ -82,7 +82,6 @@ libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 libbsp_a_SOURCES += ../../shared/src/irq-server.c
 libbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
 libbsp_a_SOURCES += ../shared/irq/irq.c
-libbsp_a_SOURCES += irq/maxvectors.c
 libbsp_a_SOURCES += irq/vectorisrs.c
 libbsp_a_SOURCES += irq/interruptmask.c
 libbsp_a_SOURCES += ../shared/irq/i8259.c
