@@ -2024,6 +2024,7 @@ static int dwmac_if_clk_csr_set(
               && ( gmii_clk_rate < DWCGNAC3504_CSR_F_300M ) ) {
     self->csr_clock = DWCGNAC3504_CSR_250_300M;
   } else {
+    assert( gmii_clk_rate < DWCGNAC3504_CSR_F_300M );
     eno = EINVAL;
   }
 
@@ -2111,9 +2112,11 @@ static int dwmac_if_attach(
   if ( eno == 0 ) {
     self->dma_threshold_control = DWMAC_DMA_THRESHOLD_CONTROL_DEFAULT;
 
+    assert( driver_config->addr_gmac_regs != NULL );
     if ( driver_config->addr_gmac_regs != NULL ) {
       self->macgrp = driver_config->addr_gmac_regs;
 
+      assert( driver_config->addr_dma_regs != NULL );
       if ( driver_config->addr_dma_regs != NULL ) {
         self->dmagrp = driver_config->addr_dma_regs;
       } else {
