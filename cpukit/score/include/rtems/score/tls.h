@@ -80,6 +80,15 @@ typedef struct {
   uintptr_t offset;
 } TLS_Index;
 
+static inline uintptr_t _TLS_Get_size( void )
+{
+  /*
+   * Do not use _TLS_Size here since this will lead GCC to assume that this
+   * symbol is not 0 and the tests for 0 will be optimized away.
+   */
+  return (uintptr_t) _TLS_BSS_end - (uintptr_t) _TLS_Data_begin;
+}
+
 static inline uintptr_t _TLS_Heap_align_up( uintptr_t val )
 {
   uintptr_t msk = CPU_HEAP_ALIGNMENT - 1;

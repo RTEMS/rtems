@@ -63,7 +63,7 @@ void _Workspace_Handler_initialization(
   bool unified = rtems_configuration_get_unified_work_area();
   uintptr_t page_size = CPU_HEAP_ALIGNMENT;
   uintptr_t overhead = _Heap_Area_overhead( page_size );
-  uintptr_t tls_size = (uintptr_t) _TLS_Size;
+  uintptr_t tls_size = _TLS_Get_size();
   size_t i;
 
   if ( tls_size > 0 ) {
