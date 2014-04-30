@@ -27,7 +27,7 @@
 /** @brief Uncached RAM pool
  *
  * Allocate the whole bsp_nocache for the nocache heap */
-static char nocache_pool[1024
+static char nocache_pool[3 * 1024
                          * 1024] __attribute__( ( section( ".bsp_nocache" ) ) );
 
 /** @brief Nocache heap
