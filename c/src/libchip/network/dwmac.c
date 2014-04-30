@@ -933,7 +933,7 @@ static int dwmac_if_interface_stats( void *arg )
     DWMAC_PRINT_COUNTER( "%" PRIu32 " bytes tranmitted to DMA\n",
                          self->stats.frame_counts_tx.bytes_to_dma
                          );
-    DWMAC_PRINT_COUNTER( "%" PRIu32 " packets tranmitted by DMA\n",
+    DWMAC_PRINT_COUNTER( "%" PRIu32 " packet buffers regained from DMA\n",
                          self->stats.frame_counts_tx.packets_tranmitted_by_DMA
                          );
     DWMAC_PRINT_COUNTER( "%" PRIu32 " packet errors\n",
