@@ -390,29 +390,25 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get(
 #endif
 }
 
-RTEMS_INLINE_ROUTINE bool _Scheduler_Set(
+RTEMS_INLINE_ROUTINE void _Scheduler_Set(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
 {
-  bool ok;
-
-  if ( _States_Is_dormant( the_thread->current_state ) ) {
 #if defined(RTEMS_SMP)
+  const Scheduler_Control *current_scheduler = _Scheduler_Get( the_thread );
+
+  if ( current_scheduler != scheduler ) {
+    _Thread_Set_state( the_thread, STATES_MIGRATING );
     _Scheduler_Free( _Scheduler_Get( the_thread ), the_thread );
     the_thread->scheduler = scheduler;
     _Scheduler_Allocate( scheduler, the_thread );
     _Scheduler_Update( scheduler, the_thread );
-#else
-    (void) scheduler;
-#endif
-
-    ok = true;
-  } else {
-    ok = false;
+    _Thread_Clear_state( the_thread, STATES_MIGRATING );
   }
-
-  return ok;
+#else
+  (void) scheduler;
+#endif
 }
 
 RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
@@ -448,9 +444,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
     ok = ok && !CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset );
   }
 
-  if ( ok ) {
-    ok = _Scheduler_Set( scheduler, the_thread );
-  }
+  _Scheduler_Set( scheduler, the_thread );
 
   return ok;
 }

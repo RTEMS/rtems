@@ -50,6 +50,14 @@
   );
 #endif
 
+#ifdef RTEMS_SMP
+  RTEMS_STATIC_ASSERT(
+    offsetof( Context_Control, is_executing )
+      == ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET,
+    ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET
+  );
+#endif
+
 RTEMS_STATIC_ASSERT(
   sizeof( CPU_Exception_frame ) == ARM_EXCEPTION_FRAME_SIZE,
   ARM_EXCEPTION_FRAME_SIZE
@@ -91,6 +99,10 @@ void _CPU_Context_Initialize(
 
 #ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
   the_context->thread_id = (uint32_t) tls_area;
+#endif
+
+#ifdef RTEMS_SMP
+  the_context->is_executing = false;
 #endif
 
   if ( tls_area != NULL ) {

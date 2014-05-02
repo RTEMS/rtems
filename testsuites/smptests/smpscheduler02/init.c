@@ -158,8 +158,8 @@ static void test(void)
   sc = rtems_task_start(task_id, task, 0);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_scheduler(task_id, scheduler_a_id);
-  rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
+  sc = rtems_task_set_scheduler(task_id, scheduler_b_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);

@@ -146,8 +146,6 @@ static void thread_disable_dispatch( void )
 
   self_cpu = _Per_CPU_Get();
   self_cpu->thread_dispatch_disable_level = 1;
-
-  _Per_CPU_Acquire( self_cpu );
 #else
   _Thread_Disable_dispatch();
 #endif

@@ -504,20 +504,6 @@ struct Thread_Control_struct {
   bool                                  is_in_the_air;
 
   /**
-   * @brief This field is true if the thread is executing.
-   *
-   * A thread is executing if it executes on a processor.  An executing thread
-   * executes on exactly one processor.  There are exactly processor count
-   * executing threads in the system.  An executing thread may have a heir
-   * thread and thread dispatching is necessary.  On SMP a thread dispatch on a
-   * remote processor needs help from an inter-processor interrupt, thus it
-   * will take some time to complete the state change.  A lot of things can
-   * happen in the meantime.  This field is volatile since it is polled in
-   * _Thread_Kill_zombies().
-   */
-  volatile bool                         is_executing;
-
-  /**
    * @brief The scheduler of this thread.
    */
   const struct Scheduler_Control       *scheduler;
@@ -548,7 +534,18 @@ struct Thread_Control_struct {
   void                                 *scheduler_info;
 
 #ifdef RTEMS_SMP
+  /**
+   * @brief The processor assigned by the scheduler.
+   */
   Per_CPU_Control                      *cpu;
+
+#ifdef RTEMS_DEBUG
+  /**
+   * @brief The processor on which this thread executed the last time or is
+   * executing.
+   */
+  Per_CPU_Control                      *debug_real_cpu;
+#endif
 #endif
 
   /** This field contains information about the starting state of

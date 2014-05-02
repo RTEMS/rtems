@@ -107,7 +107,7 @@ static void _Thread_Wait_for_execution_stop( Thread_Control *the_thread )
    * in case the thread termination sequence is interrupted by a slow interrupt
    * service on a remote processor.
    */
-  while (the_thread->is_executing) {
+  while ( _Thread_Is_executing_on_a_processor( the_thread ) ) {
     /* Wait */
   }
 #else

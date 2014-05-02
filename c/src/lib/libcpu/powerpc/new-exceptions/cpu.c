@@ -130,6 +130,10 @@ void _CPU_Context_Initialize(
   the_ppc_context->msr = msr_value;
   the_ppc_context->lr = (uint32_t) entry_point;
 
+#ifdef RTEMS_SMP
+  the_ppc_context->is_executing = false;
+#endif
+
 #ifdef __ALTIVEC__
   _CPU_Context_initialize_altivec( the_ppc_context );
 #endif

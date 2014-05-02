@@ -574,6 +574,18 @@ typedef struct {
      * is the stack pointer.
      */
     uint32_t   stack_pointer;
+
+#ifdef RTEMS_SMP
+    /**
+     * @brief On SMP configurations the thread context must contain a boolean
+     * indicator if this context is executing on a processor.
+     *
+     * This field must be updated during a context switch.  The context switch
+     * to the heir must wait until the heir context indicates that it is no
+     * longer executing on a processor.
+     */
+    volatile bool is_executing;
+#endif
 } Context_Control;
 
 /**
@@ -1582,6 +1594,12 @@ register struct Per_CPU_Control *_CPU_Per_CPU_current asm( "rX" );
   {
     __asm__ volatile ( "" : : : "memory" );
   }
+
+  /**
+   * @brief Macro to return the is executing field of the thread context.
+   */
+  #define _CPU_Context_Get_is_executing( _context ) \
+    ( ( _context )->is_executing )
 #endif
 
 #ifdef __cplusplus

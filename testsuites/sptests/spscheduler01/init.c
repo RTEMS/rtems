@@ -81,10 +81,10 @@ static void test_task_get_set_affinity(void)
   rtems_test_assert(CPU_EQUAL(&cpuset, &cpusetone));
 
   sc = rtems_task_set_affinity(RTEMS_SELF, sizeof(cpuset), &cpuset);
-  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_set_affinity(self_id, sizeof(cpuset), &cpuset);
-  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_set_affinity(task_id, sizeof(cpuset), &cpuset);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -163,7 +163,7 @@ static void test_task_get_set_scheduler(void)
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 
   sc = rtems_task_set_scheduler(self_id, scheduler_id);
-  rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_create(
     rtems_build_name('T', 'A', 'S', 'K'),
@@ -188,7 +188,7 @@ static void test_task_get_set_scheduler(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_set_scheduler(task_id, scheduler_id);
-  rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_delete(task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);

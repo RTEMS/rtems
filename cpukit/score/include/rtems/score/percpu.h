@@ -56,6 +56,8 @@ extern "C" {
 typedef struct Thread_Control_struct Thread_Control;
 #endif
 
+struct Scheduler_Context;
+
 /**
  *  @defgroup PerCPU RTEMS Per CPU Information
  *
@@ -268,13 +270,46 @@ typedef struct Per_CPU_Control {
    */
   volatile uint32_t thread_dispatch_disable_level;
 
-  /** This is set to true when this CPU needs to run the dispatcher. */
+  /**
+   * @brief This is set to true when this processor needs to run the
+   * dispatcher.
+   *
+   * It is volatile since interrupts may alter this flag.
+   *
+   * This field is not protected by a lock.  There are two writers after
+   * multitasking start.  The scheduler owning this processor sets this
+   * indicator to true, after it updated the heir field.  This processor sets
+   * this indicator to false, before it reads the heir.  This field is used in
+   * combination with the heir field.
+   *
+   * @see _Thread_Get_heir_and_make_it_executing().
+   */
   volatile bool dispatch_necessary;
 
-  /** This is the thread executing on this CPU. */
+  /**
+   * @brief This is the thread executing on this processor.
+   *
+   * This field is not protected by a lock.  The only writer is this processor.
+   *
+   * On SMP configurations a thread may be registered as executing on more than
+   * one processor in case a thread migration is in progress.  On SMP
+   * configurations use _Thread_Is_executing_on_a_processor() to figure out if
+   * a thread context is executing on a processor.
+   */
   Thread_Control *executing;
 
-  /** This is the heir thread for this this CPU. */
+  /**
+   * @brief This is the heir thread for this processor.
+   *
+   * This field is not protected by a lock.  The only writer after multitasking
+   * start is the scheduler owning this processor.  This processor will set the
+   * dispatch necessary indicator to false, before it reads the heir.  This
+   * field is used in combination with the dispatch necessary indicator.
+   *
+   * A thread can be a heir on at most one processor in the system.
+   *
+   * @see _Thread_Get_heir_and_make_it_executing().
+   */
   Thread_Control *heir;
 
   /** This is the time of the last context switch on this CPU. */
@@ -282,11 +317,12 @@ typedef struct Per_CPU_Control {
 
   #if defined( RTEMS_SMP )
     /**
-     * @brief This lock protects the dispatch_necessary, executing, heir and
-     * message fields.
+     * @brief This lock protects some parts of the low-level thread dispatching.
      *
      * We must use a ticket lock here since we cannot transport a local context
      * through the context switch.
+     *
+     * @see _Thread_Dispatch().
      */
     SMP_ticket_lock_Control Lock;
 
@@ -308,6 +344,11 @@ typedef struct Per_CPU_Control {
      * set and get the message bits.
      */
     Atomic_Ulong message;
+
+    /**
+     * @brief The scheduler context of the scheduler owning this processor.
+     */
+    const struct Scheduler_Context *scheduler_context;
 
     /**
      * @brief Indicates the current state of the CPU.

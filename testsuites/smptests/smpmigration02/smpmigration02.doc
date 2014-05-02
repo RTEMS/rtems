@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpmigration02
+
+directives:
+
+  - _Scheduler_SMP_Allocate_processor()
+  - _CPU_Context_switch()
+
+concepts:
+
+  - Ensure that forced thread migration works.

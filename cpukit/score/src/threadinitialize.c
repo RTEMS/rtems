@@ -52,6 +52,7 @@ bool _Thread_Initialize(
   bool                     extension_status;
   size_t                   i;
   bool                     scheduler_allocated = false;
+  Per_CPU_Control         *cpu = _Per_CPU_Get_by_index( 0 );
 
 #if defined( RTEMS_SMP )
   if ( rtems_configuration_is_smp_enabled() && !is_preemptible ) {
@@ -182,12 +183,13 @@ bool _Thread_Initialize(
 #if defined(RTEMS_SMP)
   the_thread->is_scheduled            = false;
   the_thread->is_in_the_air           = false;
-  the_thread->is_executing            = false;
   the_thread->scheduler               = scheduler;
 #endif
 
+  _Thread_Debug_set_real_processor( the_thread, cpu );
+
   /* Initialize the CPU for the non-SMP schedulers */
-  _Thread_Set_CPU( the_thread, _Per_CPU_Get_by_index( 0 ) );
+  _Thread_Set_CPU( the_thread, cpu );
 
   the_thread->current_state           = STATES_DORMANT;
   the_thread->Wait.queue              = NULL;

@@ -67,6 +67,10 @@ SPARC_ASSERT_OFFSET(o7, O7);
 SPARC_ASSERT_OFFSET(psr, PSR);
 SPARC_ASSERT_OFFSET(isr_dispatch_disable, ISR_DISPATCH_DISABLE_STACK);
 
+#if defined(RTEMS_SMP)
+SPARC_ASSERT_OFFSET(is_executing, SPARC_CONTEXT_CONTROL_IS_EXECUTING);
+#endif
+
 /*
  *  This initializes the set of opcodes placed in each trap
  *  table entry.  The routine which installs a handler is responsible
@@ -325,6 +329,10 @@ void _CPU_Context_Initialize(
    *  thread can have an _ISR_Dispatch stack frame on its stack.
    */
     the_context->isr_dispatch_disable = 0;
+
+#if defined(RTEMS_SMP)
+  the_context->is_executing = false;
+#endif
 
   if ( tls_area != NULL ) {
     void *tcb = _TLS_TCB_after_TLS_block_initialize( tls_area );

@@ -64,10 +64,14 @@ void _Thread_Dispatch( void )
 {
   Per_CPU_Control  *cpu_self;
   Thread_Control   *executing;
-  Thread_Control   *heir;
   ISR_Level         level;
 
 #if defined( RTEMS_SMP )
+  /*
+   * On SMP the complete context switch must be atomic with respect to one
+   * processor.  See also _Thread_Handler() since _Context_switch() may branch
+   * to this function.
+   */
   _ISR_Disable_without_giant( level );
 #endif
 
@@ -76,45 +80,21 @@ void _Thread_Dispatch( void )
   _Profiling_Thread_dispatch_disable( cpu_self, 0 );
   cpu_self->thread_dispatch_disable_level = 1;
 
-#if defined( RTEMS_SMP )
-  _ISR_Enable_without_giant( level );
-#endif
-
   /*
    *  Now determine if we need to perform a dispatch on the current CPU.
    */
   executing = cpu_self->executing;
-  _Per_CPU_ISR_disable_and_acquire( cpu_self, level );
+
+#if !defined( RTEMS_SMP )
+  _ISR_Disable( level );
+#endif
+
 #if defined( RTEMS_SMP )
-  /*
-   * On SMP the complete context switch must be atomic with respect to one
-   * processor.  The scheduler must obtain the per-CPU lock to check if a
-   * thread is executing and to update the heir.  This ensures that a thread
-   * cannot execute on more than one processor at a time.  See also
-   * _Thread_Handler() since _Context_switch() may branch to this function.
-   */
   if ( cpu_self->dispatch_necessary ) {
 #else
   while ( cpu_self->dispatch_necessary ) {
 #endif
-    cpu_self->dispatch_necessary = false;
-
-#if defined( RTEMS_SMP )
-    /*
-     * It is critical that we first update the dispatch necessary and then the
-     * read the heir so that we don't miss an update by
-     * _Scheduler_SMP_Allocate_processor().
-     */
-    _Atomic_Fence( ATOMIC_ORDER_SEQ_CST );
-#endif
-
-    heir = cpu_self->heir;
-    cpu_self->executing = heir;
-
-#if defined( RTEMS_SMP )
-    executing->is_executing = false;
-    heir->is_executing = true;
-#endif
+    Thread_Control *heir = _Thread_Get_heir_and_make_it_executing( cpu_self );
 
     /*
      *  When the heir and executing are the same, then we are being
@@ -207,6 +187,8 @@ void _Thread_Dispatch( void )
      */
     cpu_self = _Per_CPU_Get();
 
+    _Thread_Debug_set_real_processor( executing, cpu_self );
+
 #if !defined( RTEMS_SMP )
     _ISR_Disable( level );
 #endif
@@ -217,7 +199,7 @@ post_switch:
   cpu_self->thread_dispatch_disable_level = 0;
   _Profiling_Thread_dispatch_enable( cpu_self, 0 );
 
-  _Per_CPU_Release_and_ISR_enable( cpu_self, level );
+  _ISR_Enable_without_giant( level );
 
   _Thread_Run_post_switch_actions( executing );
 }

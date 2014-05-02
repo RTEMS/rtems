@@ -26,6 +26,24 @@
 #include <rtems/bspIo.h>
 #include <rtems/score/thread.h>
 
+#define I386_ASSERT_OFFSET(field, off) \
+  RTEMS_STATIC_ASSERT( \
+    offsetof(Context_Control, field) \
+      == I386_CONTEXT_CONTROL_ ## off ## _OFFSET, \
+    Context_Control_ ## field \
+  )
+
+I386_ASSERT_OFFSET(eflags, EFLAGS);
+I386_ASSERT_OFFSET(esp, ESP);
+I386_ASSERT_OFFSET(ebp, EBP);
+I386_ASSERT_OFFSET(ebx, EBX);
+I386_ASSERT_OFFSET(esi, ESI);
+I386_ASSERT_OFFSET(edi, EDI);
+
+#ifdef RTEMS_SMP
+  I386_ASSERT_OFFSET(is_executing, IS_EXECUTING);
+#endif
+
 void _CPU_Initialize(void)
 {
 #if CPU_HARDWARE_FP

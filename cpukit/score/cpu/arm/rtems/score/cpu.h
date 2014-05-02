@@ -216,6 +216,14 @@
   #define ARM_CONTEXT_CONTROL_D8_OFFSET 48
 #endif
 
+#ifdef RTEMS_SMP
+  #ifdef ARM_MULTILIB_VFP_D32
+    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 112
+  #else
+    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 48
+  #endif
+#endif
+
 #define ARM_EXCEPTION_FRAME_SIZE 76
 
 #define ARM_EXCEPTION_FRAME_REGISTER_SP_OFFSET 52
@@ -279,6 +287,9 @@ typedef struct {
   uint64_t register_d13;
   uint64_t register_d14;
   uint64_t register_d15;
+#endif
+#ifdef RTEMS_SMP
+  volatile bool is_executing;
 #endif
 } Context_Control;
 
@@ -409,6 +420,11 @@ void _CPU_Context_Initialize(
 
 #define _CPU_Context_Get_SP( _context ) \
   (_context)->register_sp
+
+#ifdef RTEMS_SMP
+  #define _CPU_Context_Get_is_executing( _context ) \
+    (_context)->is_executing
+#endif
 
 #define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( (_the_context) );

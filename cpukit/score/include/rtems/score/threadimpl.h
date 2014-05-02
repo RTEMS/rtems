@@ -454,6 +454,22 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_executing (
   return ( the_thread == _Thread_Executing );
 }
 
+#if defined(RTEMS_SMP)
+/**
+ * @brief Returns @true in case the thread executes currently on some processor
+ * in the system, otherwise @a false.
+ *
+ * Do not confuse this with _Thread_Is_executing() which checks only the
+ * current processor.
+ */
+RTEMS_INLINE_ROUTINE bool _Thread_Is_executing_on_a_processor(
+  const Thread_Control *the_thread
+)
+{
+  return _CPU_Context_Get_is_executing( &the_thread->Registers );
+}
+#endif
+
 /**
  * This function returns true if the_thread is the heir
  * thread, and false otherwise.
@@ -491,7 +507,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Restart_self( Thread_Control *executing )
 
   _Giant_Release();
 
-  _Per_CPU_ISR_disable_and_acquire( _Per_CPU_Get(), level );
+  _ISR_Disable_without_giant( level );
   ( void ) level;
 #endif
 
@@ -590,7 +606,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Request_dispatch_if_executing(
 )
 {
 #if defined(RTEMS_SMP)
-  if ( thread->is_executing ) {
+  if ( _Thread_Is_executing_on_a_processor( thread ) ) {
     const Per_CPU_Control *cpu_of_executing = _Per_CPU_Get();
     Per_CPU_Control *cpu_of_thread = _Thread_Get_CPU( thread );
 
@@ -611,7 +627,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Signal_notification( Thread_Control *thread )
     _Thread_Dispatch_necessary = true;
   } else {
 #if defined(RTEMS_SMP)
-    if ( thread->is_executing ) {
+    if ( _Thread_Is_executing_on_a_processor( thread ) ) {
       const Per_CPU_Control *cpu_of_executing = _Per_CPU_Get();
       Per_CPU_Control *cpu_of_thread = _Thread_Get_CPU( thread );
 
@@ -622,6 +638,39 @@ RTEMS_INLINE_ROUTINE void _Thread_Signal_notification( Thread_Control *thread )
     }
 #endif
   }
+}
+
+/**
+ * @brief Gets the heir of the processor and makes it executing.
+ *
+ * The thread dispatch necessary indicator is cleared as a side-effect.
+ *
+ * @return The heir thread.
+ *
+ * @see _Thread_Dispatch(), _Thread_Start_multitasking() and
+ * _Scheduler_SMP_Update_heir().
+ */
+RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get_heir_and_make_it_executing(
+  Per_CPU_Control *cpu_self
+)
+{
+  Thread_Control *heir;
+
+  cpu_self->dispatch_necessary = false;
+
+#if defined( RTEMS_SMP )
+  /*
+   * It is critical that we first update the dispatch necessary and then the
+   * read the heir so that we don't miss an update by
+   * _Scheduler_SMP_Update_heir().
+   */
+  _Atomic_Fence( ATOMIC_ORDER_SEQ_CST );
+#endif
+
+  heir = cpu_self->heir;
+  cpu_self->executing = heir;
+
+  return heir;
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_Update_cpu_time_used(
@@ -734,6 +783,19 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_life_changing(
 )
 {
   return ( life_state & THREAD_LIFE_RESTARTING_TERMINTING ) != 0;
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Debug_set_real_processor(
+  Thread_Control  *the_thread,
+  Per_CPU_Control *cpu
+)
+{
+#if defined(RTEMS_SMP) && defined(RTEMS_DEBUG)
+  the_thread->debug_real_cpu = cpu;
+#else
+  (void) the_thread;
+  (void) cpu;
+#endif
 }
 
 #if !defined(__DYNAMIC_REENT__)

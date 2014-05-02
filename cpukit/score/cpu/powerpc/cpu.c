@@ -53,6 +53,10 @@ PPC_ASSERT_OFFSET(gpr30, GPR30);
 PPC_ASSERT_OFFSET(gpr31, GPR31);
 PPC_ASSERT_OFFSET(gpr2, GPR2);
 
+#ifdef RTEMS_SMP
+  PPC_ASSERT_OFFSET(is_executing, IS_EXECUTING);
+#endif
+
 RTEMS_STATIC_ASSERT(
   sizeof(Context_Control) % PPC_DEFAULT_CACHE_LINE_SIZE == 0,
   ppc_context_size

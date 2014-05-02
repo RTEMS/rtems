@@ -30,22 +30,12 @@ void _Thread_Start_multitasking( void )
 
   /*
    * Threads begin execution in the _Thread_Handler() function.   This
-   * function will set the thread dispatch disable level to zero and calls
-   * _Per_CPU_Release().
+   * function will set the thread dispatch disable level to zero.
    */
-  _Per_CPU_Acquire( cpu_self );
   cpu_self->thread_dispatch_disable_level = 1;
 #endif
 
-  heir = cpu_self->heir;
-
-#if defined(RTEMS_SMP)
-  cpu_self->executing->is_executing = false;
-  heir->is_executing = true;
-#endif
-
-  cpu_self->dispatch_necessary = false;
-  cpu_self->executing = heir;
+  heir = _Thread_Get_heir_and_make_it_executing( cpu_self );
 
    /*
     * Get the init task(s) running.

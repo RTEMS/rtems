@@ -58,7 +58,10 @@ static void _SMP_Start_processors( uint32_t cpu_count )
     cpu->started = started;
 
     if ( started ) {
-      ++assignment->scheduler->context->processor_count;
+      Scheduler_Context *scheduler_context = assignment->scheduler->context;
+
+      ++scheduler_context->processor_count;
+      cpu->scheduler_context = scheduler_context;
     }
   }
 }

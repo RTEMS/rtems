@@ -216,13 +216,21 @@ static inline void _User_extensions_Thread_switch(
   const Chain_Node    *tail = _Chain_Immutable_tail( chain );
   const Chain_Node    *node = _Chain_Immutable_first( chain );
 
-  while ( node != tail ) {
-    const User_extensions_Switch_control *extension =
-      (const User_extensions_Switch_control *) node;
+  if ( node != tail ) {
+    Per_CPU_Control *cpu_self = _Per_CPU_Get();
 
-    (*extension->thread_switch)( executing, heir );
+    _Per_CPU_Acquire( cpu_self );
 
-    node = _Chain_Immutable_next( node );
+    while ( node != tail ) {
+      const User_extensions_Switch_control *extension =
+        (const User_extensions_Switch_control *) node;
+
+      (*extension->thread_switch)( executing, heir );
+
+      node = _Chain_Immutable_next( node );
+    }
+
+    _Per_CPU_Release( cpu_self );
   }
 }
 

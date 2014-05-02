@@ -302,6 +302,9 @@ typedef struct {
   PPC_GPR_TYPE gpr30;
   PPC_GPR_TYPE gpr31;
   uint32_t gpr2;
+  #ifdef RTEMS_SMP
+    volatile bool is_executing;
+  #endif
   #ifdef __ALTIVEC__
     /*
      * 12 non-volatile vector registers, cache-aligned area for vscr/vrsave
@@ -327,7 +330,7 @@ typedef struct {
   ];
 } Context_Control;
 
-static inline ppc_context *ppc_get_context( Context_Control *context )
+static inline ppc_context *ppc_get_context( const Context_Control *context )
 {
   uintptr_t clsz = PPC_DEFAULT_CACHE_LINE_SIZE;
   uintptr_t mask = clsz - 1;
@@ -338,6 +341,11 @@ static inline ppc_context *ppc_get_context( Context_Control *context )
 
 #define _CPU_Context_Get_SP( _context ) \
   ppc_get_context(_context)->gpr1
+
+#ifdef RTEMS_SMP
+  #define _CPU_Context_Get_is_executing( _context ) \
+    ppc_get_context(_context)->is_executing
+#endif
 #endif /* ASM */
 
 #define PPC_CONTEXT_OFFSET_GPR1 32
@@ -367,6 +375,10 @@ static inline ppc_context *ppc_get_context( Context_Control *context )
 #define PPC_CONTEXT_OFFSET_GPR30 PPC_CONTEXT_GPR_OFFSET( 30 )
 #define PPC_CONTEXT_OFFSET_GPR31 PPC_CONTEXT_GPR_OFFSET( 31 )
 #define PPC_CONTEXT_OFFSET_GPR2 PPC_CONTEXT_GPR_OFFSET( 32 )
+
+#ifdef RTEMS_SMP
+  #define PPC_CONTEXT_OFFSET_IS_EXECUTING (PPC_CONTEXT_GPR_OFFSET( 32 ) + 4)
+#endif
 
 #ifndef ASM
 typedef struct {

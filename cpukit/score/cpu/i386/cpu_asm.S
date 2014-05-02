@@ -26,13 +26,12 @@
  * Format of i386 Register structure
  */
 
-.set REG_EFLAGS,  0
-.set REG_ESP,     REG_EFLAGS + 4
-.set REG_EBP,     REG_ESP + 4
-.set REG_EBX,     REG_EBP + 4
-.set REG_ESI,     REG_EBX + 4
-.set REG_EDI,     REG_ESI + 4
-.set SIZE_REGS,   REG_EDI + 4
+.set REG_EFLAGS,  I386_CONTEXT_CONTROL_EFLAGS_OFFSET
+.set REG_ESP,     I386_CONTEXT_CONTROL_ESP_OFFSET
+.set REG_EBP,     I386_CONTEXT_CONTROL_EBP_OFFSET
+.set REG_EBX,     I386_CONTEXT_CONTROL_EBX_OFFSET
+.set REG_ESI,     I386_CONTEXT_CONTROL_ESI_OFFSET
+.set REG_EDI,     I386_CONTEXT_CONTROL_EDI_OFFSET
 
         BEGIN_CODE
 
@@ -58,9 +57,25 @@ SYM (_CPU_Context_switch):
         movl      esi,REG_ESI(eax)         /* save source register */
         movl      edi,REG_EDI(eax)         /* save destination register */
 
+#ifdef RTEMS_SMP
+        /* Indicate that this context is no longer executing */
+        movb      $0, I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET(eax)
+#endif
+
         movl      HEIRCONTEXT_ARG(esp),eax /* eax = heir threads context */
 
 restore:
+#ifdef RTEMS_SMP
+        /* Wait for context to stop execution if necessary */
+1:
+        movb      I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET(eax), bl
+        testb     bl, bl
+        jne       1b
+
+        /* Indicate that this context is executing */
+        movb      $1, I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET(eax)
+#endif
+
         pushl     REG_EFLAGS(eax)          /* push eflags */
         popf                               /* restore eflags */
         movl      REG_ESP(eax),esp         /* restore stack pointer */

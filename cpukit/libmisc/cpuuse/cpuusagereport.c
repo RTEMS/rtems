@@ -43,7 +43,7 @@
       }
     #else
       /* FIXME: Locking */
-      if ( the_thread->is_executing ) {
+      if ( _Thread_Is_executing_on_a_processor( the_thread ) ) {
         *time_of_context_switch =
           _Thread_Get_CPU( the_thread )->time_of_last_context_switch;
         return true;

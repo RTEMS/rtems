@@ -77,6 +77,7 @@ smpipi01/Makefile
 smpload01/Makefile
 smplock01/Makefile
 smpmigration01/Makefile
+smpmigration02/Makefile
 smppsxaffinity01/Makefile
 smppsxaffinity02/Makefile
 smppsxsignal01/Makefile

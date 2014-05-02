@@ -24,9 +24,7 @@
 #define _RTEMS_SCORE_SCHEDULERSMP_H
 
 #include <rtems/score/chain.h>
-#include <rtems/score/percpu.h>
-#include <rtems/score/prioritybitmap.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/scheduler.h>
 
 #ifdef __cplusplus
 extern "C" {

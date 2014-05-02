@@ -569,8 +569,6 @@ rtems_status_code rtems_task_get_scheduler(
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ID Invalid task or scheduler identifier.
- * @retval RTEMS_INCORRECT_STATE The task is in the wrong state to perform a
- * scheduler change.
  *
  * @see rtems_scheduler_ident().
  */

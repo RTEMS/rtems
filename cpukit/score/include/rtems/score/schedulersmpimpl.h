@@ -24,9 +24,9 @@
 #define _RTEMS_SCORE_SCHEDULERSMPIMPL_H
 
 #include <rtems/score/schedulersmp.h>
-#include <rtems/score/schedulersimpleimpl.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/scheduler.h>
+#include <rtems/score/schedulersimpleimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,47 +64,74 @@ static inline void _Scheduler_SMP_Initialize(
   _Chain_Initialize_empty( &self->Scheduled );
 }
 
+static inline bool _Scheduler_SMP_Is_processor_owned_by_us(
+  const Scheduler_SMP_Context *self,
+  const Per_CPU_Control *cpu
+)
+{
+  return cpu->scheduler_context == &self->Base;
+}
+
+static inline void _Scheduler_SMP_Update_heir(
+  Per_CPU_Control *cpu_self,
+  Per_CPU_Control *cpu_for_heir,
+  Thread_Control *heir
+)
+{
+  cpu_for_heir->heir = heir;
+
+  /*
+   * It is critical that we first update the heir and then the dispatch
+   * necessary so that _Thread_Get_heir_and_make_it_executing() cannot miss an
+   * update.
+   */
+  _Atomic_Fence( ATOMIC_ORDER_SEQ_CST );
+
+  /*
+   * Only update the dispatch necessary indicator if not already set to
+   * avoid superfluous inter-processor interrupts.
+   */
+  if ( !cpu_for_heir->dispatch_necessary ) {
+    cpu_for_heir->dispatch_necessary = true;
+
+    if ( cpu_for_heir != cpu_self ) {
+      _Per_CPU_Send_interrupt( cpu_for_heir );
+    }
+  }
+}
+
 static inline void _Scheduler_SMP_Allocate_processor(
+  Scheduler_SMP_Context *self,
   Thread_Control *scheduled,
   Thread_Control *victim
 )
 {
   Per_CPU_Control *cpu_of_scheduled = _Thread_Get_CPU( scheduled );
   Per_CPU_Control *cpu_of_victim = _Thread_Get_CPU( victim );
+  Per_CPU_Control *cpu_self = _Per_CPU_Get();
   Thread_Control *heir;
 
   scheduled->is_scheduled = true;
   victim->is_scheduled = false;
 
-  _Per_CPU_Acquire( cpu_of_scheduled );
+  _Assert( _ISR_Get_level() != 0 );
 
-  if ( scheduled->is_executing ) {
-    heir = cpu_of_scheduled->heir;
-    cpu_of_scheduled->heir = scheduled;
+  if ( _Thread_Is_executing_on_a_processor( scheduled ) ) {
+    if ( _Scheduler_SMP_Is_processor_owned_by_us( self, cpu_of_scheduled ) ) {
+      heir = cpu_of_scheduled->heir;
+      _Scheduler_SMP_Update_heir( cpu_self, cpu_of_scheduled, scheduled );
+    } else {
+      /* We have to force a migration to our processor set */
+      _Assert( scheduled->debug_real_cpu->heir != scheduled );
+      heir = scheduled;
+    }
   } else {
     heir = scheduled;
   }
 
-  _Per_CPU_Release( cpu_of_scheduled );
-
   if ( heir != victim ) {
-    const Per_CPU_Control *cpu_of_executing = _Per_CPU_Get();
-
     _Thread_Set_CPU( heir, cpu_of_victim );
-
-    cpu_of_victim->heir = heir;
-
-    /*
-     * It is critical that we first update the heir and then the dispatch
-     * necessary so that _Thread_Dispatch() cannot miss an update.
-     */
-    _Atomic_Fence( ATOMIC_ORDER_RELEASE );
-
-    cpu_of_victim->dispatch_necessary = true;
-
-    if ( cpu_of_victim != cpu_of_executing ) {
-      _Per_CPU_Send_interrupt( cpu_of_victim );
-    }
+    _Scheduler_SMP_Update_heir( cpu_self, cpu_of_victim, heir );
   }
 }
 
@@ -148,7 +175,7 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
       highest_ready != NULL
         && !( *order )( &thread->Object.Node, &highest_ready->Object.Node )
     ) {
-      _Scheduler_SMP_Allocate_processor( highest_ready, thread );
+      _Scheduler_SMP_Allocate_processor( self, highest_ready, thread );
 
       ( *insert_ready )( self, thread );
       ( *move_from_ready_to_scheduled )( self, highest_ready );
@@ -168,7 +195,7 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
       lowest_scheduled != NULL
         && ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node )
     ) {
-      _Scheduler_SMP_Allocate_processor( thread, lowest_scheduled );
+      _Scheduler_SMP_Allocate_processor( self, thread, lowest_scheduled );
 
       ( *insert_scheduled )( self, thread );
       ( *move_from_scheduled_to_ready )( self, lowest_scheduled );
@@ -187,7 +214,7 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
 {
   Thread_Control *highest_ready = ( *get_highest_ready )( self );
 
-  _Scheduler_SMP_Allocate_processor( highest_ready, victim );
+  _Scheduler_SMP_Allocate_processor( self, highest_ready, victim );
 
   ( *move_from_ready_to_scheduled )( self, highest_ready );
 }

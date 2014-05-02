@@ -148,7 +148,7 @@ typedef struct {
  * The scheduler context of a particular scheduler implementation must place
  * this structure at the begin of its context structure.
  */
-typedef struct {
+typedef struct Scheduler_Context {
 #if defined(RTEMS_SMP)
   /**
    * @brief Count of processors owned by this scheduler instance.

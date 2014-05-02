@@ -163,6 +163,21 @@ done_flushing:
         nop
         nop
 
+#if defined(RTEMS_SMP)
+        ! Indicate that this context is no longer executing
+        stb     %g0, [%o0 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
+
+        ! Wait for context to stop execution if necessary
+1:
+        ldub    [%o1 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET], %g1
+        cmp     %g1, 0
+        bne     1b
+         mov    1, %g1
+
+        ! Indicate that this context is executing
+        stb     %g1, [%o1 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
+#endif
+
         ld      [%o1 + G5_OFFSET], %g5        ! restore the global registers
         ld      [%o1 + G7_OFFSET], %g7
 
@@ -202,6 +217,11 @@ done_flushing:
 SYM(_CPU_Context_restore):
         save    %sp, -CPU_MINIMUM_STACK_FRAME_SIZE, %sp
         rd      %psr, %o2
+#if defined(RTEMS_SMP)
+	! On SPARC the restore path needs also a valid executing context on SMP
+	! to update the is executing indicator.
+        mov     %i0, %o0
+#endif
         ba      SYM(_CPU_Context_restore_heir)
         mov     %i0, %o1                      ! in the delay slot
 

@@ -153,10 +153,10 @@ void _Thread_Handler( void )
       _Assert( cpu_self->thread_dispatch_disable_level == 1 );
       _Assert( _ISR_Get_level() != 0 );
 
+      _Thread_Debug_set_real_processor( executing, cpu_self );
+
       cpu_self->thread_dispatch_disable_level = 0;
       _Profiling_Thread_dispatch_enable( cpu_self, 0 );
-
-      _Per_CPU_Release( cpu_self );
 
       level = executing->Start.isr_level;
       _ISR_Set_level( level);

@@ -473,6 +473,10 @@ typedef struct {
    * SPARC CPU models at high interrupt rates.
    */
   uint32_t   isr_dispatch_disable;
+
+#if defined(RTEMS_SMP)
+  volatile bool is_executing;
+#endif
 } Context_Control;
 
 /**
@@ -482,6 +486,11 @@ typedef struct {
  */
 #define _CPU_Context_Get_SP( _context ) \
   (_context)->o6_sp
+
+#ifdef RTEMS_SMP
+  #define _CPU_Context_Get_is_executing( _context ) \
+    (_context)->is_executing
+#endif
 
 #endif /* ASM */
 
@@ -537,6 +546,10 @@ typedef struct {
 #define PSR_OFFSET   0x50
 /** This macro defines an offset into the context for use in assembly. */
 #define ISR_DISPATCH_DISABLE_STACK_OFFSET 0x54
+
+#if defined(RTEMS_SMP)
+  #define SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 0x58
+#endif
 
 /** This defines the size of the context area for use in assembly. */
 #define CONTEXT_CONTROL_SIZE 0x68

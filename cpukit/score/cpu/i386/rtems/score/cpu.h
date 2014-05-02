@@ -128,6 +128,17 @@ extern "C" {
 
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
+#define I386_CONTEXT_CONTROL_EFLAGS_OFFSET 0
+#define I386_CONTEXT_CONTROL_ESP_OFFSET 4
+#define I386_CONTEXT_CONTROL_EBP_OFFSET 8
+#define I386_CONTEXT_CONTROL_EBX_OFFSET 12
+#define I386_CONTEXT_CONTROL_ESI_OFFSET 16
+#define I386_CONTEXT_CONTROL_EDI_OFFSET 20
+
+#ifdef RTEMS_SMP
+  #define I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 24
+#endif
+
 /* structures */
 
 #ifndef ASM
@@ -147,10 +158,18 @@ typedef struct {
   uint32_t    ebx;      /* extended bx register                      */
   uint32_t    esi;      /* extended source index register            */
   uint32_t    edi;      /* extended destination index flags register */
+#ifdef RTEMS_SMP
+  volatile bool is_executing;
+#endif
 }   Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
   (_context)->esp
+
+#ifdef RTEMS_SMP
+  #define _CPU_Context_Get_is_executing( _context ) \
+    (_context)->is_executing
+#endif
 
 /*
  *  FP context save area for the i387 numeric coprocessors.
@@ -435,6 +454,13 @@ uint32_t   _CPU_ISR_Get_level( void );
  */
 
 
+#ifdef RTEMS_SMP
+  #define _I386_Context_Initialize_is_executing( _the_context ) \
+    (_the_context)->is_executing = false
+#else
+  #define _I386_Context_Initialize_is_executing( _the_context )
+#endif
+
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
                                    _isr, _entry_point, _is_fp, _tls_area ) \
   do { \
@@ -449,6 +475,7 @@ uint32_t   _CPU_ISR_Get_level( void );
     *((proc_ptr *)(_stack)) = (_entry_point); \
     (_the_context)->ebp     = (void *) 0; \
     (_the_context)->esp     = (void *) _stack; \
+    _I386_Context_Initialize_is_executing( _the_context ); \
   } while (0)
 
 #define _CPU_Context_Restart_self( _the_context ) \

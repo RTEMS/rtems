@@ -30,15 +30,14 @@ rtems_status_code rtems_task_set_scheduler(
   if ( _Scheduler_Get_by_id( scheduler_id, &scheduler ) ) {
     Thread_Control    *the_thread;
     Objects_Locations  location;
-    bool               ok;
 
     the_thread = _Thread_Get( id, &location );
 
     switch ( location ) {
       case OBJECTS_LOCAL:
-        ok = _Scheduler_Set( scheduler, the_thread );
+        _Scheduler_Set( scheduler, the_thread );
         _Objects_Put( &the_thread->Object );
-        sc = ok ? RTEMS_SUCCESSFUL : RTEMS_INCORRECT_STATE;
+        sc = RTEMS_SUCCESSFUL;
         break;
 #if defined(RTEMS_MULTIPROCESSING)
       case OBJECTS_REMOTE:

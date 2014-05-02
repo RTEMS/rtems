@@ -22,6 +22,7 @@ SUBDIRS += smpipi01
 SUBDIRS += smpload01
 SUBDIRS += smplock01
 SUBDIRS += smpmigration01
+SUBDIRS += smpmigration02
 SUBDIRS += smpscheduler01
 SUBDIRS += smpscheduler02
 SUBDIRS += smpsignal01

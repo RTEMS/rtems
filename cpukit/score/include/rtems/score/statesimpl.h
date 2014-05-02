@@ -82,6 +82,8 @@ extern "C" {
 #define STATES_WAITING_FOR_TERMINATION         0x100000
 /** This macro corresponds to a task being a zombie. */
 #define STATES_ZOMBIE                          0x200000
+/** This macro corresponds to a task migration to another scheduler. */
+#define STATES_MIGRATING                       0x400000
 
 /** This macro corresponds to a task which is in an interruptible
  *  blocking state.
