@@ -140,14 +140,11 @@ void _SMP_Request_shutdown( void )
   _Giant_Drop( self_cpu );
 }
 
-void _SMP_Send_message( uint32_t cpu_index, uint32_t message )
+void _SMP_Send_message( uint32_t cpu_index, unsigned long message )
 {
   Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
-  ISR_Level level;
 
-  _Per_CPU_ISR_disable_and_acquire( cpu, level );
-  cpu->message |= message;
-  _Per_CPU_Release_and_ISR_enable( cpu, level );
+  _Atomic_Fetch_or_ulong( &cpu->message, message, ATOMIC_ORDER_RELAXED );
 
   _CPU_SMP_Send_interrupt( cpu_index );
 }

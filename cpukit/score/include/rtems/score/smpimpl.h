@@ -41,14 +41,14 @@ extern "C" {
  *
  * @see _SMP_Send_message().
  */
-#define SMP_MESSAGE_SHUTDOWN UINT32_C(0x1)
+#define SMP_MESSAGE_SHUTDOWN 0x1UL
 
 /**
  * @brief SMP message to request a test handler invocation.
  *
  * @see _SMP_Send_message().
  */
-#define SMP_MESSAGE_TEST UINT32_C(0x2)
+#define SMP_MESSAGE_TEST 0x2UL
 
 /**
  * @brief SMP fatal codes.
@@ -132,14 +132,12 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
 {
   Per_CPU_Control *cpu_self = _Per_CPU_Get();
 
-  if ( cpu_self->message != 0 ) {
-    uint32_t  message;
-    ISR_Level level;
-
-    _Per_CPU_ISR_disable_and_acquire( cpu_self, level );
-    message = cpu_self->message;
-    cpu_self->message = 0;
-    _Per_CPU_Release_and_ISR_enable( cpu_self, level );
+  if ( _Atomic_Load_ulong( &cpu_self->message, ATOMIC_ORDER_RELAXED ) != 0 ) {
+    unsigned long message = _Atomic_Exchange_ulong(
+      &cpu_self->message,
+      0UL,
+      ATOMIC_ORDER_RELAXED
+    );
 
     if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
       rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );
@@ -160,7 +158,7 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
  *  @param[in] cpu_index The target processor of the message.
  *  @param[in] message The message.
  */
-void _SMP_Send_message( uint32_t cpu_index, uint32_t message );
+void _SMP_Send_message( uint32_t cpu_index, unsigned long message );
 
 /**
  *  @brief Request of others CPUs.

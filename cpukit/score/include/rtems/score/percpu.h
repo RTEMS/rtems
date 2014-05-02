@@ -302,11 +302,12 @@ typedef struct Per_CPU_Control {
     SMP_lock_Context Giant_lock_context;
 
     /**
-     *  This is the request for the interrupt.
+     * @brief Bit field for SMP messages.
      *
-     *  @note This may become a chain protected by atomic instructions.
+     * This bit field is not protected locks.  Atomic operations are used to
+     * set and get the message bits.
      */
-    uint32_t message;
+    Atomic_Ulong message;
 
     /**
      * @brief Indicates the current state of the CPU.
