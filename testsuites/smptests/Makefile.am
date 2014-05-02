@@ -18,6 +18,7 @@ SUBDIRS += smpfatal04
 SUBDIRS += smpfatal05
 SUBDIRS += smpfatal07
 SUBDIRS += smpfatal08
+SUBDIRS += smpipi01
 SUBDIRS += smpload01
 SUBDIRS += smplock01
 SUBDIRS += smpmigration01

@@ -44,6 +44,13 @@ extern "C" {
 #define SMP_MESSAGE_SHUTDOWN UINT32_C(0x1)
 
 /**
+ * @brief SMP message to request a test handler invocation.
+ *
+ * @see _SMP_Send_message().
+ */
+#define SMP_MESSAGE_TEST UINT32_C(0x2)
+
+/**
  * @brief SMP fatal codes.
  */
 typedef enum {
@@ -101,6 +108,23 @@ static inline void _SMP_Fatal( SMP_Fatal_code code )
 void _SMP_Start_multitasking_on_secondary_processor( void )
   RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
+typedef void ( *SMP_Test_message_handler )( Per_CPU_Control *cpu_self );
+
+extern SMP_Test_message_handler _SMP_Test_message_handler;
+
+/**
+ * @brief Sets the handler for test messages.
+ *
+ * This handler can be used to test the inter-processor interrupt
+ * implementation.
+ */
+static inline void _SMP_Set_test_message_handler(
+  SMP_Test_message_handler handler
+)
+{
+  _SMP_Test_message_handler = handler;
+}
+
 /**
  * @brief Interrupt handler for inter-processor interrupts.
  */
@@ -120,6 +144,10 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
     if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
       rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );
       /* does not continue past here */
+    }
+
+    if ( ( message & SMP_MESSAGE_TEST ) != 0 ) {
+      ( *_SMP_Test_message_handler )( cpu_self );
     }
   }
 }

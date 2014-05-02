@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpipi01
+
+directives:
+
+  - _SMP_Send_message()
+
+concepts:
+
+  - Ensure that inter-processor interrupts work as expected.

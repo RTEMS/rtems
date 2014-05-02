@@ -73,6 +73,7 @@ smpfatal04/Makefile
 smpfatal05/Makefile
 smpfatal07/Makefile
 smpfatal08/Makefile
+smpipi01/Makefile
 smpload01/Makefile
 smplock01/Makefile
 smpmigration01/Makefile

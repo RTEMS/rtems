@@ -1,0 +1,6 @@
+*** BEGIN OF TEST SMPIPI 1 ***
+inter-processor interrupts for processor 0: 12502
+inter-processor interrupts for processor 1: 12502
+inter-processor interrupts for processor 2: 12502
+inter-processor interrupts for processor 3 (main): 99987
+*** END OF TEST SMPIPI 1 ***
