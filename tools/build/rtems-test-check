@@ -1,0 +1,52 @@
+#! /bin/sh
+#
+# Copyright 2014 Chris Johns <chrisj@rtems.org>
+# All rights reserved
+#
+
+#
+# usage: rtems-test-check <bsp-test-database> <bsp> <tests..>
+#
+
+if test $# -lt 3; then
+  echo "error: invalid command line" >&2
+  exit 2
+fi
+
+testdata="$1"
+shift
+bsp="$1"
+shift
+tests="$*"
+bsp_tests=${tests}
+
+#
+# If there is no testdata all tests are valid.
+#
+if test -f $testdata; then
+  disabled_tests=""
+  for t in $(cat $testdata | sed -e 's/#.*$//' -e '/^$/d');
+  do
+   disabled_tests="${disabled_tests} ${t}"
+  done
+
+  bsp_tests=""
+  for t in ${tests};
+  do
+    allow="yes"
+    for dt in ${disabled_tests};
+    do
+      if test ${t} = ${dt}; then
+        allow="no"
+      fi
+    done
+    if test ${allow} = yes; then
+      bsp_tests="${bsp_tests} ${t}"
+    fi
+  done
+fi
+
+echo ${bsp_tests}
+
+exit 0
+

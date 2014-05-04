@@ -1,21 +1,21 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-SUBDIRS = POSIX
-SUBDIRS += newlib01
-SUBDIRS += block17
-SUBDIRS += exit02
-SUBDIRS += exit01
-SUBDIRS += utf8proc01
-SUBDIRS += md501
-SUBDIRS += sparsedisk01
-SUBDIRS += block16
-SUBDIRS += block15
-SUBDIRS += block14
-SUBDIRS += block13
-SUBDIRS += rbheap01
-SUBDIRS += flashdisk01
+_SUBDIRS = POSIX
+_SUBDIRS += newlib01
+_SUBDIRS += block17
+_SUBDIRS += exit02
+_SUBDIRS += exit01
+_SUBDIRS += utf8proc01
+_SUBDIRS += md501
+_SUBDIRS += sparsedisk01
+_SUBDIRS += block16
+_SUBDIRS += block15
+_SUBDIRS += block14
+_SUBDIRS += block13
+_SUBDIRS += rbheap01
+_SUBDIRS += flashdisk01
 
-SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \
+_SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \
     deviceio01 devnullfatal01 dumpbuf01 gxx01 \
     malloctest malloc02 malloc03 malloc04 malloc05 heapwalk \
     putenvtest monitor monitor02 rtmonuse stackchk stackchk01 \
@@ -29,11 +29,11 @@ SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \
 
 if NETTESTS
 if HAS_POSIX
-SUBDIRS += mghttpd01
+_SUBDIRS += mghttpd01
 endif
-SUBDIRS += ftp01
-SUBDIRS += syscall01
+_SUBDIRS += ftp01
+_SUBDIRS += syscall01
 endif
 
-include $(top_srcdir)/../automake/subdirs.am
+include $(top_srcdir)/../automake/test-subdirs.am
 include $(top_srcdir)/../automake/local.am

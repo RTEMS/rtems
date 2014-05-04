@@ -2,7 +2,7 @@ ACLOCAL_AMFLAGS = -I ../aclocal
 
 ## Test names are spaced to indicate gaps in numbering from tests being
 ## deleted over the years.
-SUBDIRS = \
+_SUBDIRS = \
          sp01 sp02 sp03 sp04 sp05 sp06 sp07 sp08 \
     sp10 sp11 sp12 sp13 sp14 sp15 sp16 sp17 sp18 sp19 \
     sp20 sp21 sp22 sp23 sp24 sp25 sp26 sp27 sp27a           \
@@ -32,37 +32,37 @@ SUBDIRS = \
     spregion_err01 sppartition_err01 spratemon_err01 spintr_err01 \
     spsignal_err01 spport_err01 spmsgq_err01 spmsgq_err02 spsem_err01 \
     spsem_err02 sptask_err01 spevent_err03 sptask_err03 sptask_err02 \
-    sptask_err04 spclock_err01 
+    sptask_err04 spclock_err01
 if HAS_SMP
 else
-SUBDIRS += sp29
+_SUBDIRS += sp29
 endif
-SUBDIRS += spscheduler01
-SUBDIRS += spprofiling01
-SUBDIRS += spfatal28
-SUBDIRS += spthreadlife01
-SUBDIRS += spprofiling01
-SUBDIRS += spcache01
-SUBDIRS += sptls03
-SUBDIRS += spcpucounter01
+_SUBDIRS += spscheduler01
+_SUBDIRS += spprofiling01
+_SUBDIRS += spfatal28
+_SUBDIRS += spthreadlife01
+_SUBDIRS += spprofiling01
+_SUBDIRS += spcache01
+_SUBDIRS += sptls03
+_SUBDIRS += spcpucounter01
 if HAS_CPLUSPLUS
-SUBDIRS += sptls02
+_SUBDIRS += sptls02
 endif
-SUBDIRS += sptls01
-SUBDIRS += spintrcritical20
-SUBDIRS += spintrcritical19
-SUBDIRS += spcontext01
-SUBDIRS += spfatal26
-SUBDIRS += speventtransient01
-SUBDIRS += speventsystem01
-SUBDIRS += spinternalerror01
-SUBDIRS += spinternalerror02
-SUBDIRS += sptimer_err01 sptimer_err02
-SUBDIRS += spclock_err02
+_SUBDIRS += sptls01
+_SUBDIRS += spintrcritical20
+_SUBDIRS += spintrcritical19
+_SUBDIRS += spcontext01
+_SUBDIRS += spfatal26
+_SUBDIRS += speventtransient01
+_SUBDIRS += speventsystem01
+_SUBDIRS += spinternalerror01
+_SUBDIRS += spinternalerror02
+_SUBDIRS += sptimer_err01 sptimer_err02
+_SUBDIRS += spclock_err02
 
 if HAS_CPUSET
-SUBDIRS += spcpuset01
+_SUBDIRS += spcpuset01
 endif
 
-include $(top_srcdir)/../automake/subdirs.am
+include $(top_srcdir)/../automake/test-subdirs.am
 include $(top_srcdir)/../automake/local.am

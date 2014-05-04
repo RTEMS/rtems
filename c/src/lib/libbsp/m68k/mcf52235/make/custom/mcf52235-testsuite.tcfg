@@ -1,0 +1,27 @@
+#
+# MCF52235 RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+capture
+fileio
+flashdisk01
+fsdosfsformat01
+fsdosfsname01
+ftp01
+iostream
+jffs2_fserror
+jffs2_fslink
+jffs2_fspatheval
+jffs2_fspermission
+jffs2_fsrdwr
+jffs2_fssymlink
+jffs2_fstime
+loopback
+mghttpd01
+monitor02
+paranoia
+pppd
+spstkalloc02
+utf8proc01

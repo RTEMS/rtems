@@ -1,0 +1,9 @@
+#
+# mrm332 RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+fsdosfsname01
+sptls01
+utf8proc01

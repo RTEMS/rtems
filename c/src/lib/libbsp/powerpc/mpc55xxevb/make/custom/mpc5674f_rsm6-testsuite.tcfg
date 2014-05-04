@@ -1,0 +1,7 @@
+#
+# mpc5674f_rsm6 RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+fsdosfsname01

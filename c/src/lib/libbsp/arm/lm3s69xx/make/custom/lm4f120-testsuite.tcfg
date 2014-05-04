@@ -1,0 +1,22 @@
+#
+# lm4f120 RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+fileio
+flashdisk01
+fsdosfsname01
+jffs2_fserror
+jffs2_fslink
+jffs2_fspatheval
+jffs2_fspermission
+jffs2_fsrdwr
+jffs2_fssymlink
+jffs2_fstime
+monitor02
+sp16
+sp25
+sp48
+spstkalloc02
+utf8proc01

@@ -1,0 +1,16 @@
+#
+# mpc5643l_evb RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+flashdisk01
+fsdosfsname01
+jffs2_fserror
+jffs2_fslink
+jffs2_fspatheval
+jffs2_fspermission
+jffs2_fsrdwr
+jffs2_fssymlink
+jffs2_fstime
+spstkalloc02

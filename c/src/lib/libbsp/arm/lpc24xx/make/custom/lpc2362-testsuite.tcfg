@@ -1,0 +1,30 @@
+#
+# lpc2362 RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+capture
+fileio
+flashdisk01
+fsdosfsname01
+fsrfsbitmap01
+jffs2_fserror
+jffs2_fslink
+jffs2_fspatheval
+jffs2_fspermission
+jffs2_fsrdwr
+jffs2_fssymlink
+jffs2_fstime
+mdosfs_fserror
+monitor02
+mrfs_fserror
+mrfs_fsfpathconf
+mrfs_fslink
+mrfs_fspatheval
+mrfs_fspermission
+mrfs_fsrdwr
+mrfs_fssymlink
+mrfs_fstime
+spstkalloc02
+utf8proc01

@@ -1,0 +1,17 @@
+#
+# lpc32xx_mzx_stage_1 RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+fileio
+fsdosfsname01
+jffs2_fserror
+jffs2_fslink
+jffs2_fspatheval
+jffs2_fspermission
+jffs2_fsrdwr
+jffs2_fssymlink
+jffs2_fstime
+monitor02
+utf8proc01
