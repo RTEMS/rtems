@@ -26,7 +26,6 @@
 #include <rtems.h>
 #include <rtems/monitor.h>
 
-#if !BSP_SMALL_MEMORY
 static volatile int capture_CT1a_deleted;
 static volatile int capture_CT1b_deleted;
 static volatile int capture_CT1c_deleted;
@@ -271,4 +270,3 @@ void setup_tasks_to_watch (void)
        cmd++)
       rtems_monitor_insert_cmd (&capture_cmds[cmd]);
 }
-#endif /* BSP_SMALL_MEMORY */

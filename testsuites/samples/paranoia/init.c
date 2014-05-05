@@ -31,10 +31,6 @@ rtems_task Init(
    *  is required by this CPU.
    */
 
-#if BSP_SMALL_MEMORY
-  printf("NO Paranoia Test. MEMORY TOO SMALL");
-#else
-
 #if (defined (m68040))
   M68KFPSPInstallExceptionHandlers ();
 #endif
@@ -42,6 +38,5 @@ rtems_task Init(
   rtems_test_begin();
   paranoia(1, args);
   rtems_test_end();
-#endif /* BSP_SMALL_MEMORY */
   exit( 0 );
 }

@@ -18,11 +18,6 @@
 
 #include "tmacros.h"
 
-#include <bsp.h>
-
-const char rtems_test_name[] = "FSDOSFSFORMAT 1";
-
-#if !defined(BSP_SMALL_MEMORY)
 #include <fcntl.h>
 #include <inttypes.h>
 #include <sys/statvfs.h>
@@ -30,6 +25,10 @@ const char rtems_test_name[] = "FSDOSFSFORMAT 1";
 #include <rtems/blkdev.h>
 #include <rtems/dosfs.h>
 #include <rtems/sparse-disk.h>
+
+#include <bsp.h>
+
+const char rtems_test_name[] = "FSDOSFSFORMAT 1";
 
 #define MAX_PATH_LENGTH 100 /* Maximum number of characters per path */
 #define SECTOR_SIZE 512 /* sector size (bytes) */
@@ -471,17 +470,12 @@ static void test( void )
   rv = unlink( dev_name );
   rtems_test_assert( rv == 0 );
 }
-#endif
 
 static void Init( rtems_task_argument arg )
 {
   TEST_BEGIN();
 
-#if defined(BSP_SMALL_MEMORY)
-  puts( "Test is too large for small memory BSPs" );
-#else
   test();
-#endif
 
   TEST_END();
   rtems_test_exit( 0 );

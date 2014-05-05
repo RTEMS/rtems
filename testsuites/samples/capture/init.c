@@ -24,15 +24,12 @@
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
-#if !BSP_SMALL_MEMORY
-  static void notification(int fd, int seconds_remaining, void *arg);
-#endif
+static void notification(int fd, int seconds_remaining, void *arg);
 
 const char rtems_test_name[] = "CAPTURE ENGINE";
 
 volatile int can_proceed = 1;
 
-#if !BSP_SMALL_MEMORY
 static void notification(int fd, int seconds_remaining, void *arg)
 {
   printf(
@@ -40,15 +37,11 @@ static void notification(int fd, int seconds_remaining, void *arg)
     seconds_remaining
   );
 }
-#endif
 
 rtems_task Init(
   rtems_task_argument ignored
 )
 {
-#if BSP_SMALL_MEMORY
-  printf("NO Capture Engine. MEMORY TOO SMALL");
-#else
   rtems_status_code   status;
   rtems_task_priority old_priority;
   rtems_mode          old_mode;
@@ -84,5 +77,4 @@ rtems_task Init(
 
     exit( 0 );
   }
-#endif
 }

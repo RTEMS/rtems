@@ -16,8 +16,6 @@
 
 #include <bsp.h>
 
-#if !BSP_SMALL_MEMORY
-
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/stat.h>
@@ -835,5 +833,3 @@ void test_file_system_with_handler(
 
   free(fs);
 }
-
-#endif /* !BSP_SMALL_MEMORY */

@@ -3,7 +3,6 @@
 #endif
 
 #include <bsp.h>
-#if !BSP_SMALL_MEMORY
 /*
  *      A C version of Kahan's Floating Point Test "Paranoia"
  *
@@ -2308,4 +2307,3 @@ History ()
 
     msglist (hist);
 }
-#endif /* BSP_SMALL_MEMORY */

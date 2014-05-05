@@ -5,8 +5,6 @@
 
 #include <bsp.h>
 
-#if !BSP_SMALL_MEMORY
-
 #include <stdio.h>
 #include <rtems/rtemspppd.h>
 #include "system.h"
@@ -152,5 +150,3 @@ int pppdapp_initialize(void)
 
   return ( iReturn );
 }
-
-#endif

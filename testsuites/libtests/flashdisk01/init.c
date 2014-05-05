@@ -18,10 +18,6 @@
 
 #include "tmacros.h"
 
-const char rtems_test_name[] = "FLASHDISK 1";
-
-#if !BSP_SMALL_MEMORY
-
 #include <sys/stat.h>
 #include <errno.h>
 #include <string.h>
@@ -35,6 +31,8 @@ const char rtems_test_name[] = "FLASHDISK 1";
 #include <rtems/rtems-rfs-format.h>
 
 #include "test-file-system.h"
+
+const char rtems_test_name[] = "FLASHDISK 1";
 
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
@@ -360,26 +358,3 @@ uint32_t rtems_flashdisk_configuration_size = FLASHDISK_CONFIG_COUNT;
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-
-#else /* BSP_SMALL_MEMORY */
-
-static void Init(rtems_task_argument arg)
-{
-  TEST_BEGIN();
-  puts("NOT ENOUGH MEMORY TO RUN TEST");
-
-  rtems_test_exit(0);
-}
-
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-
-#define CONFIGURE_MAXIMUM_TASKS 1
-
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-#define CONFIGURE_INIT
-
-#include <rtems/confdefs.h>
-
-#endif /* BSP_SMALL_MEMORY */

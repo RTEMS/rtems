@@ -35,7 +35,6 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-#if !BSP_SMALL_MEMORY
   int                i;
   int                argc;
   char               *argv[MAX_ARGS];
@@ -51,8 +50,5 @@ rtems_task Init(
     }
   }
   TEST_END();
-#else
-  puts( "TARGET MEMORY TOO SMALL TO RUN\n\n");
-#endif
   rtems_test_exit(0);
 }

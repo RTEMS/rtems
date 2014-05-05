@@ -18,25 +18,19 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-#if !BSP_SMALL_MEMORY
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/rtemspppd.h>
 #include "netconfig.h"
-#endif
 
 const char rtems_test_name[] = "PPPD";
 
 rtems_task Init(rtems_task_argument argument)
 {
-#if BSP_SMALL_MEMORY
-  printf("NO NETWORKING. MEMORY TOO SMALL");
-#else
   rtems_test_begin();
 
   /* initialize network */
   rtems_bsdnet_initialize_network();
   rtems_pppd_initialize();
   pppdapp_initialize();
-#endif
   rtems_task_delete(RTEMS_SELF);
 }

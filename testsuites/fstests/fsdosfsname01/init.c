@@ -16,11 +16,9 @@
   #include "config.h"
 #endif
 
+
 #include "tmacros.h"
 
-const char rtems_test_name[] = "FSDOSFSNAME 1";
-
-#if !defined(BSP_SMALL_MEMORY)
 #include <errno.h>
 #include <fcntl.h>
 #include <dirent.h>
@@ -37,6 +35,8 @@ const char rtems_test_name[] = "FSDOSFSNAME 1";
 #include "files.h"
 
 #include <errno.h>
+
+const char rtems_test_name[] = "FSDOSFSNAME 1";
 
 #define PRINT_DISK_IMAGE 0
 
@@ -1286,26 +1286,17 @@ static void test( void )
 
   test_compatibility();
 }
-#endif
 
 static void Init( rtems_task_argument arg )
 {
   TEST_BEGIN();
 
-#if defined(BSP_SMALL_MEMORY)
-  puts( "Test is too large for small memory BSPs" );
-#else
   test();
-#endif
 
   TEST_END();
   rtems_test_exit( 0 );
 }
 
-/*
- * Disable the "large" part of the configuration for this test
- */
-#if !defined(BSP_SMALL_MEMORY)
 rtems_ramdisk_config rtems_ramdisk_configuration [] = {
   { .block_size = BLOCK_SIZE, .block_num = BLOCK_NUM },
   { .block_size = BLOCK_SIZE, .block_num = BLOCK_NUM, .location = &IMAGE_BIN_LE_SINGLEBYTE[0] },
@@ -1315,10 +1306,13 @@ rtems_ramdisk_config rtems_ramdisk_configuration [] = {
 size_t rtems_ramdisk_configuration_size = RTEMS_ARRAY_SIZE(rtems_ramdisk_configuration);
 
 #define CONFIGURE_INIT_TASK_STACK_SIZE ( 1024 * 64 )
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_MAXIMUM_DRIVERS 4
 #define CONFIGURE_MAXIMUM_SEMAPHORES (2 * RTEMS_DOSFS_SEMAPHORES_PER_INSTANCE)
-
 #define CONFIGURE_APPLICATION_EXTRA_DRIVERS RAMDISK_DRIVER_TABLE_ENTRY
+
+#define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 
@@ -1328,18 +1322,10 @@ size_t rtems_ramdisk_configuration_size = RTEMS_ARRAY_SIZE(rtems_ramdisk_configu
  * 2 for open directories/files  + 4 * 2 for recursive tree compares*/
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS ( 7 + 2 + ( 4 * 2 ) )
 
-#endif
-
-/*
- * Even when in BSP_SMALL_MEMORY mode, we need this much to build and
- * link the test.  Hopefully this reduces the footprint sufficiently.
- */
-#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-
-#define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 #define CONFIGURE_MAXIMUM_TASKS 1
+
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT
