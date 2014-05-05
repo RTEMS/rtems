@@ -6,7 +6,7 @@
 @node Glossary, Command and Variable Index, Example Application, Top
 @chapter Glossary
 
-@table @b
+@table @dfn
 @item active
 A term used to describe an object
 which has been created by an application.
