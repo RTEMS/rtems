@@ -32,6 +32,9 @@ interrupt except that it is associated with a task and is run in
 the context of a task.  The directives provided by the signal
 manager are used to service signals.
 
+@item atomic operations
+Atomic operations are defined in terms of @cite{ISO/IEC 9899:2011}.
+
 @item awakened
 A term used to describe a task that has
 been unblocked and may be scheduled to the CPU.
@@ -49,10 +52,10 @@ makes for compact data representation.
 @item block
 A physically contiguous area of memory.
 
-@item blocked
-The task state entered by a task which has
-been previously started and cannot continue execution until the
-reason for waiting has been satisfied.
+@item blocked task
+The task state entered by a task which has been previously started and cannot
+continue execution until the reason for waiting has been satisfied.  Blocked
+tasks are not an element of the set of ready tasks of a scheduler instance.
 
 @item broadcast
 To simultaneously send a message to a
@@ -85,6 +88,11 @@ the terms processor and microprocessor.
 A data structure which allows for efficient
 dynamic addition and removal of elements.  It differs from an
 array in that it is not limited to a predefined size.
+
+@item cluster
+We have clustered scheduling in case the set of processors of a system is
+partitioned into non-empty pairwise disjoint subsets.  These subsets are called
+@dfn{clusters}.  Each cluster is owned by exactly one scheduler instance.
 
 @item coalesce
 The process of merging adjacent holes into
@@ -185,9 +193,11 @@ are used to service events.
 @item exception
 A synonym for interrupt.
 
-@item executing
-The task state entered by a task after it
-has been given control of the CPU.
+@item executing task
+The task state entered by a task after it has been given control of the
+processor.  On SMP configurations a task may be registered as executing on more
+than one processor for short time frames during task migration.  Blocked tasks
+can be executing until they issue a thread dispatch.
 
 @item executive
 In this document, this term is used to
@@ -220,6 +230,11 @@ extension of the primary processor.
 A resource that has been released by the
 application to RTEMS.
 
+@item Giant lock
+The @dfn{Giant lock} is a recursive SMP lock protecting most parts of the
+operating system state.  Virtually every operating system service must acquire
+and release the Giant lock during its operation.
+
 @item global
 An object that has been created with the
 GLOBAL attribute and exported to all nodes in a multiprocessor
@@ -242,6 +257,13 @@ system.
 A data structure used to dynamically allocate
 and deallocate variable sized blocks of memory.
 
+@item heir task
+A task is an @dfn{heir} if it is registered as an heir in a processor of the
+system.  A task can be the heir on at most one processor in the system.  In
+case the executing and heir tasks differ on a processor and a thread dispatch
+is marked as necessary, then the next thread dispatch will make the heir task
+the executing task.
+
 @item heterogeneous
 A multiprocessor computer system composed of dissimilar processors.
 
@@ -255,6 +277,11 @@ access an active object.
 @item IDLE task
 A special low priority task which assumes
 control of the CPU when no other task is able to execute.
+
+@item in the air task
+A task is @dfn{in the air} if it is in a transient state and has a processor
+assigned.  The next scheduler operation will turn it into a blocked, ready or
+scheduled task.  This state is specific to SMP configurations.
 
 @item interface
 A specification of the methodology used
@@ -436,6 +463,9 @@ An RTEMS object which is used to allocate
 and deallocate fixed size blocks of memory from an dynamically
 specified area of memory.
 
+@item partition
+Clusters with a cardinality of one are @dfn{partitions}.
+
 @item Partition Control Block
 A data structure associated
 with each partition used by RTEMS to manage that partition.
@@ -522,9 +552,11 @@ Alternate term for message queue.
 @item QCB
 An acronym for Message Queue Control Block.
 
-@item ready
-A task occupies this state when it is
-available to be given control of the CPU.
+@item ready task
+A task occupies this state when it is available to be given control of a
+processor.  A ready task has no processor assigned.  The scheduler decided that
+other tasks are currently more important.  A task that is ready to execute and
+has a processor assigned is called scheduled.
 
 @item real-time
 A term used to describe systems which are
@@ -592,14 +624,35 @@ The state of a rate monotonic timer while
 it is being used to delineate a period.  The timer exits this
 state by either expiring or being canceled.
 
-@item schedule
-The process of choosing which task should
-next enter the executing state.
-
 @item schedulable
 A set of tasks which can be guaranteed
 to meet their deadlines based upon a specific scheduling
 algorithm.
+
+@item schedule
+The process of choosing which task should
+next enter the executing state.
+
+@item scheduled task
+A task is @dfn{scheduled} if it is allowed to execute and has a processor
+assigned.  Such a task executes currently on a processor or is about to start
+execution.  A task about to start execution it is an heir task on exactly one
+processor in the system.
+
+@item scheduler
+A @dfn{scheduler} or @dfn{scheduling algorithm} allocates processors to a
+subset of its set of ready tasks.  So it manages access to the processor
+resource.  Various algorithms exist to choose the tasks allowed to use a
+processor out of the set of ready tasks.  One method is to assign each task a
+priority number and assign the tasks with the lowest priority number to one
+processor of the set of processors owned by a scheduler instance.
+
+@item scheduler instance
+A @dfn{scheduler instance} is a scheduling algorithm with a corresponding
+context to store its internal state.  Each processor in the system is owned by
+at most one scheduler instance.  The processor to scheduler instance assignment
+is determined at application configuration time.  @xref{Configuring a System
+Configuring Clustered/Partitioned Schedulers}.
 
 @item segments
 Variable sized memory blocks allocated
@@ -630,6 +683,18 @@ sent to a task.
 
 @item SMCB
 An acronym for Semaphore Control Block.
+
+@item SMP locks
+The @dfn{SMP locks} ensure mutual exclusion on the lowest level and are a
+replacement for the sections of disabled interrupts.  Interrupts are usually
+disabled while holding an SMP lock.  They are implemented using atomic
+operations.  Currently a ticket lock is used in RTEMS.
+
+@item SMP barriers
+The @dfn{SMP barriers} ensure that a defined set of independent threads of
+execution on a set of processors reaches a common synchronization point in
+time.  They are implemented using atomic operations.  Currently a sense barrier
+is used in RTEMS.
 
 @item soft real-time system
 A real-time system in which a
@@ -669,12 +734,20 @@ The system on which the application will
 ultimately execute.
 
 @item task
-A logically complete thread of execution.  The
-CPU is allocated among the ready tasks.
+A logically complete thread of execution.  It consists normally of a set of
+registers and a stack.  The terms @dfn{task} and @dfn{thread} are synonym in
+RTEMS.  The scheduler assigns processors to a subset of the ready tasks.
 
 @item Task Control Block
 A data structure associated with
 each task used by RTEMS to manage that task.
+
+@item task migration
+@dfn{Task migration} happens in case a task stops execution on one processor
+and resumes execution on another processor.
+
+@item task processor affinity
+The set of processors on which a task is allowed to execute.
 
 @item task switch
 Alternate terminology for context
@@ -683,6 +756,10 @@ to another.
 
 @item TCB
 An acronym for Task Control Block.
+
+@item thread dispatch
+The @dfn{thread dispatch} transfers control of the processor from the currently
+executing thread to the heir thread of the processor.
 
 @item tick
 The basic unit of time used by RTEMS.  It is a
