@@ -164,10 +164,4 @@ void _SMP_Broadcast_message( uint32_t message )
   }
 }
 
-static void _SMP_Test_message_default_handler( Per_CPU_Control *cpu_self )
-{
-  (void) cpu_self;
-}
-
-SMP_Test_message_handler _SMP_Test_message_handler =
-  _SMP_Test_message_default_handler;
+SMP_Test_message_handler _SMP_Test_message_handler;
