@@ -44,7 +44,7 @@ void bsp_fatal_extension(
 );
 
 #define BSP_INITIAL_EXTENSION \
-  { NULL, NULL, NULL, NULL, NULL, NULL, NULL, bsp_fatal_extension }
+  { NULL, NULL, NULL, NULL, NULL, NULL, NULL, bsp_fatal_extension, NULL }
 
 #ifdef __cplusplus
 }
