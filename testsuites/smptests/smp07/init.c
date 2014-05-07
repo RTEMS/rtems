@@ -22,7 +22,7 @@ rtems_id      Semaphore;
 
 static void success(void)
 {
-  TEST_END();
+  rtems_test_end_with_plugin(locked_printf_plugin, NULL);
   rtems_test_exit( 0 );
 }
 
@@ -89,9 +89,8 @@ rtems_task Init(
   rtems_interval     then;
   rtems_id           Timer;
 
-  TEST_BEGIN();
-
   locked_print_initialize();
+  rtems_test_begin_with_plugin(locked_printf_plugin, NULL);
 
   if ( rtems_get_processor_count() == 1 ) {
     success();
