@@ -56,7 +56,7 @@ static bool _RTEMS_tasks_Create_extension(
 
   _Event_Initialize( &api->Event );
   _Event_Initialize( &api->System_event );
-  _ASR_Initialize( &api->Signal );
+  _ASR_Create( &api->Signal );
   _Thread_Action_initialize( &api->Signal_action, _Signal_Action_handler );
 #if !defined(RTEMS_SMP)
   created->task_variables = NULL;
@@ -90,11 +90,22 @@ static void _RTEMS_tasks_Start_extension(
   _Event_Initialize( &api->System_event );
 }
 
+static void _RTEMS_tasks_Delete_extension(
+  Thread_Control *executing,
+  Thread_Control *deleted
+)
+{
+  RTEMS_API_Control *api;
+
+  api = deleted->API_Extensions[ THREAD_API_RTEMS ];
+
+  _ASR_Destroy( &api->Signal );
+}
+
 static void _RTEMS_tasks_Terminate_extension(
   Thread_Control *executing
 )
 {
-
   /*
    *  Free per task variable memory
    *
@@ -172,7 +183,7 @@ User_extensions_Control _RTEMS_tasks_User_extensions = {
   { _RTEMS_tasks_Create_extension,            /* create */
     _RTEMS_tasks_Start_extension,             /* start */
     _RTEMS_tasks_Start_extension,             /* restart */
-    NULL,                                     /* delete */
+    _RTEMS_tasks_Delete_extension,            /* delete */
     RTEMS_TASKS_SWITCH_EXTENSION,             /* switch */
     NULL,                                     /* begin */
     NULL,                                     /* exitted */
