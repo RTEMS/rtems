@@ -1,10 +1,9 @@
 /**
- * @file  rtems/score/atomic.h
- * 
- * This include file defines the interface for all the atomic
- * operations which can be used in the synchronization primitives
- * or in the lock-less algorithms. You should not use these API
- * in the other components directly. 
+ * @file
+ *
+ * @ingroup ScoreAtomic
+ *
+ * @brief Atomic Operations API
  */
 
 /*
@@ -20,400 +19,134 @@
 
 #include <rtems/score/cpuatomic.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**
- * @defgroup RTEMS atomic interface
+ * @defgroup ScoreAtomic Atomic Operations
  *
+ * @ingroup Score
+ *
+ * @brief Support for atomic operations.
+ *
+ * Atomic operations can be used to implement low-level synchronization
+ * primitives on SMP systems, like spin locks.  All atomic operations are
+ * defined in terms of C11 (ISO/IEC 9899:2011) or C++11 (ISO/IEC 14882:2011).
+ * For documentation use the standard documents.
+ *
+ * @{
  */
 
-/**@{*/
+typedef CPU_atomic_Uint Atomic_Uint;
 
-/**
- * @brief atomic data initializer for static initialization.
- */
-#define ATOMIC_INITIALIZER_UINT(value) CPU_ATOMIC_INITIALIZER_UINT(value)
-#define ATOMIC_INITIALIZER_ULONG(value) CPU_ATOMIC_INITIALIZER_ULONG(value)
-#define ATOMIC_INITIALIZER_PTR(value) CPU_ATOMIC_INITIALIZER_PTR(value)
+typedef CPU_atomic_Ulong Atomic_Ulong;
 
-/**
- * @brief Initializes an atomic flag object to the cleared state.
- */
+typedef CPU_atomic_Pointer Atomic_Pointer;
+
+typedef CPU_atomic_Flag Atomic_Flag;
+
+#define ATOMIC_ORDER_RELAXED CPU_ATOMIC_ORDER_RELAXED
+
+#define ATOMIC_ORDER_ACQUIRE CPU_ATOMIC_ORDER_ACQUIRE
+
+#define ATOMIC_ORDER_RELEASE CPU_ATOMIC_ORDER_RELEASE
+
+#define ATOMIC_ORDER_SEQ_CST CPU_ATOMIC_ORDER_SEQ_CST
+
+#define ATOMIC_INITIALIZER_UINT( value ) CPU_ATOMIC_INITIALIZER_UINT( value )
+
+#define ATOMIC_INITIALIZER_ULONG( value ) CPU_ATOMIC_INITIALIZER_ULONG( value )
+
+#define ATOMIC_INITIALIZER_PTR( value ) CPU_ATOMIC_INITIALIZER_PTR( value )
+
 #define ATOMIC_INITIALIZER_FLAG CPU_ATOMIC_INITIALIZER_FLAG
 
-static inline void _Atomic_Fence(
-  Atomic_Order order
-)
-{
-  _CPU_atomic_Fence( order );
-}
+#define _Atomic_Fence( order ) _CPU_atomic_Fence( order )
 
-/**
- * @brief Initializes an atomic type value into a atomic object.
- *
- * @param object an atomic type pointer of object.
- * @param pointer a pointer to be stored into object.
- */
-static inline void _Atomic_Init_uint(
-  volatile Atomic_Uint *object,
-  unsigned int value
-)
-{
-  _CPU_atomic_Init_uint(object, value);
-}
+#define _Atomic_Init_uint( obj, desired ) \
+  _CPU_atomic_Init_uint( obj, desired )
 
-static inline void _Atomic_Init_ulong(
-  volatile Atomic_Ulong *object,
-  unsigned long value
-)
-{
-  _CPU_atomic_Init_ulong(object, value);
-}
+#define _Atomic_Init_ulong( obj, desired ) \
+  _CPU_atomic_Init_ulong( obj, desired )
 
-static inline void _Atomic_Init_ptr(
-  volatile Atomic_Pointer *object,
-  void *pointer
-)
-{
-  _CPU_atomic_Init_ptr(object, pointer);
-}
+#define _Atomic_Init_ptr( obj, desired ) \
+  _CPU_atomic_Init_ptr( obj, desired )
 
-/**
- * @brief Atomically load an atomic type value from atomic object.
- *
- * @param object an atomic type pointer of object.
- * @param order a type of Atomic_Order. 
- * 
- * The order shall not be ATOMIC_ORDER_RELEASE.
- */
-static inline unsigned int _Atomic_Load_uint(
-  volatile Atomic_Uint *object,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Load_uint( object, order );
-}
+#define _Atomic_Load_uint( obj, order ) \
+  _CPU_atomic_Load_uint( obj, order )
 
-static inline unsigned long _Atomic_Load_ulong(
-  volatile Atomic_Ulong *object,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Load_ulong( object, order );
-}
+#define _Atomic_Load_ulong( obj, order ) \
+  _CPU_atomic_Load_ulong( obj, order )
 
-static inline void *_Atomic_Load_ptr(
-  volatile Atomic_Pointer *object,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Load_ptr( object, order );
-}
+#define _Atomic_Load_ptr( obj, order ) \
+  _CPU_atomic_Load_ptr( obj, order )
 
-/**
- * @brief Atomically store an atomic type value into a atomic object.
- *
- * @param object an atomic type pointer of object.
- * @param value a value to be stored into object.
- * @param order a type of Atomic_Order. 
- * 
- * The order shall not be ATOMIC_ORDER_ACQUIRE.
- */
-static inline void _Atomic_Store_uint(
-  volatile Atomic_Uint *object,
-  unsigned int value,
-  Atomic_Order order
-)
-{
-  _CPU_atomic_Store_uint( object, value, order );
-}
+#define _Atomic_Store_uint( obj, desr, order ) \
+  _CPU_atomic_Store_uint( obj, desr, order )
 
-static inline void _Atomic_Store_ulong(
-  volatile Atomic_Ulong *object,
-  unsigned long value,
-  Atomic_Order order
-)
-{
-  _CPU_atomic_Store_ulong( object, value, order );
-}
+#define _Atomic_Store_ulong( obj, desr, order ) \
+  _CPU_atomic_Store_ulong( obj, desr, order )
 
-static inline void _Atomic_Store_ptr(
-  volatile Atomic_Pointer *object,
-  void *pointer,
-  Atomic_Order order
-)
-{
-  _CPU_atomic_Store_ptr( object, pointer, order );
-}
+#define _Atomic_Store_ptr( obj, desr, order ) \
+  _CPU_atomic_Store_ptr( obj, desr, order )
 
-/**
- * @brief Atomically load-add-store an atomic type value into object
- *
- * @param object a atomic type pointer of object.
- * @param value a value to be add and store into object.
- * @param order a type of Atomic_Order. 
- * 
- * @retval a result value before add ops.
- */
-static inline unsigned int _Atomic_Fetch_add_uint(
-  volatile Atomic_Uint *object,
-  unsigned int value,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Fetch_add_uint( object, value, order );
-}
+#define _Atomic_Fetch_add_uint( obj, arg, order ) \
+  _CPU_atomic_Fetch_add_uint( obj, arg, order )
 
-static inline unsigned long _Atomic_Fetch_add_ulong(
-  volatile Atomic_Ulong *object,
-  unsigned long value,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Fetch_add_ulong( object, value, order );
-}
+#define _Atomic_Fetch_add_ulong( obj, arg, order ) \
+  _CPU_atomic_Fetch_add_ulong( obj, arg, order )
 
-static inline uintptr_t _Atomic_Fetch_add_ptr(
-  volatile Atomic_Pointer *object,
-  uintptr_t value,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Fetch_add_ptr( object, value, order );
-}
+#define _Atomic_Fetch_add_ptr( obj, arg, order ) \
+  _CPU_atomic_Fetch_add_ptr( obj, arg, order )
 
-/**
- * @brief Atomically load-sub-store an atomic type value into object
- *
- * @param object a atomic type pointer of object.
- * @param value a value to be sub and store into object.
- * @param order a type of Atomic_Order. 
- * 
- * @retval a result value before sub ops.
- */
-static inline unsigned int _Atomic_Fetch_sub_uint(
-  volatile Atomic_Uint *object,
-  unsigned int value,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Fetch_sub_uint( object, value, order );
-}
+#define _Atomic_Fetch_sub_uint( obj, arg, order ) \
+  _CPU_atomic_Fetch_sub_uint( obj, arg, order )
 
-static inline unsigned long _Atomic_Fetch_sub_ulong(
-  volatile Atomic_Ulong *object,
-  unsigned long value,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Fetch_sub_ulong( object, value, order );
-}
+#define _Atomic_Fetch_sub_ulong( obj, arg, order ) \
+  _CPU_atomic_Fetch_sub_ulong( obj, arg, order )
 
-static inline uintptr_t _Atomic_Fetch_sub_ptr(
-  volatile Atomic_Pointer *object,
-  uintptr_t value,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Fetch_sub_ptr( object, value, order );
-}
+#define _Atomic_Fetch_sub_ptr( obj, arg, order ) \
+  _CPU_atomic_Fetch_sub_ptr( obj, arg, order )
 
-/**
- * @brief Atomically load-or-store an atomic type value into object
- *
- * @param object a atomic type pointer of object.
- * @param value a value to be or and store into object.
- * @param order a type of Atomic_Order. 
- * 
- * @retval a result value before or ops.
- */
-static inline unsigned int _Atomic_Fetch_or_uint(
-  volatile Atomic_Uint *object,
-  unsigned int value,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Fetch_or_uint( object, value, order );
-}
+#define _Atomic_Fetch_or_uint( obj, arg, order ) \
+  _CPU_atomic_Fetch_or_uint( obj, arg, order )
 
-static inline unsigned long _Atomic_Fetch_or_ulong(
-  volatile Atomic_Ulong *object,
-  unsigned long value,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Fetch_or_ulong( object, value, order );
-}
+#define _Atomic_Fetch_or_ulong( obj, arg, order ) \
+  _CPU_atomic_Fetch_or_ulong( obj, arg, order )
 
-static inline uintptr_t _Atomic_Fetch_or_ptr(
-  volatile Atomic_Pointer *object,
-  uintptr_t value,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Fetch_or_ptr( object, value, order );
-}
+#define _Atomic_Fetch_or_ptr( obj, arg, order ) \
+  _CPU_atomic_Fetch_or_ptr( obj, arg, order )
 
-/**
- * @brief Atomically load-and-store an atomic type value into object
- *
- * @param object a atomic type pointer of object.
- * @param value a value to be and and store into object.
- * @param order a type of Atomic_Order. 
- * 
- * @retval a result value before and ops.
- */
-static inline unsigned int _Atomic_Fetch_and_uint(
-  volatile Atomic_Uint *object,
-  unsigned int value,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Fetch_and_uint( object, value, order );
-}
+#define _Atomic_Fetch_and_uint( obj, arg, order ) \
+  _CPU_atomic_Fetch_and_uint( obj, arg, order )
 
-static inline unsigned long _Atomic_Fetch_and_ulong(
-  volatile Atomic_Ulong *object,
-  unsigned long value,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Fetch_and_ulong( object, value, order );
-}
+#define _Atomic_Fetch_and_ulong( obj, arg, order ) \
+  _CPU_atomic_Fetch_and_ulong( obj, arg, order )
 
-static inline uintptr_t _Atomic_Fetch_and_ptr(
-  volatile Atomic_Pointer *object,
-  uintptr_t value,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Fetch_and_ptr( object, value, order );
-}
+#define _Atomic_Fetch_and_ptr( obj, arg, order ) \
+  _CPU_atomic_Fetch_and_ptr( obj, arg, order )
 
-/**
- * @brief Atomically exchange an atomic type value into object
- *
- * @param object a atomic type pointer of object.
- * @param value a value to exchange and and store into object.
- * @param order a type of Atomic_Order. 
- * 
- * @retval a result value before exchange ops.
- */
-static inline unsigned int _Atomic_Exchange_uint(
- volatile Atomic_Uint *object,
- unsigned int value,
- Atomic_Order order
-)
-{
-  return _CPU_atomic_Exchange_uint( object, value, order );
-}
+#define _Atomic_Exchange_uint( obj, desr, order ) \
+  _CPU_atomic_Exchange_uint( obj, desr, order )
 
-static inline unsigned long _Atomic_Exchange_ulong(
- volatile Atomic_Ulong *object,
- unsigned long value,
- Atomic_Order order
-)
-{
-  return _CPU_atomic_Exchange_ulong( object, value, order );
-}
+#define _Atomic_Exchange_ulong( obj, desr, order ) \
+  _CPU_atomic_Exchange_ulong( obj, desr, order )
 
-static inline void *_Atomic_Exchange_ptr(
- volatile Atomic_Pointer *object,
- void *pointer,
- Atomic_Order order
-)
-{
-  return _CPU_atomic_Exchange_ptr( object, pointer, order );
-}
+#define _Atomic_Exchange_ptr( obj, desr, order ) \
+  _CPU_atomic_Exchange_ptr( obj, desr, order )
 
-/**
- * @brief Atomically compare the value stored at object with a
- * old_value and if the two values are equal, update the value of a
- * address with a new_value
- *
- * @param object a atomic type pointer of object.
- * @param old_value pointer of a value.
- * @param new_value a atomic type value.
- * @param order_succ a type of Atomic_Order for successful exchange. 
- * @param order_fail a type of Atomic_Order for failed exchange.
- * 
- * @retval true if the compare exchange successully.
- * @retval false if the compare exchange failed.
- */
-static inline bool _Atomic_Compare_exchange_uint(
-  volatile Atomic_Uint *object,
-  unsigned int *old_value,
-  unsigned int new_value,
-  Atomic_Order order_succ,
-  Atomic_Order order_fail
-)
-{
-  return _CPU_atomic_Compare_exchange_uint( object, old_value, new_value,
-    order_succ, order_fail );
-}
+#define _Atomic_Compare_exchange_uint( obj, expected, desired, succ, fail ) \
+  _CPU_atomic_Compare_exchange_uint( obj, expected, desired, succ, fail )
 
-static inline bool _Atomic_Compare_exchange_ulong(
-  volatile Atomic_Ulong *object,
-  unsigned long *old_value,
-  unsigned long new_value,
-  Atomic_Order order_succ,
-  Atomic_Order order_fail
-)
-{
-  return _CPU_atomic_Compare_exchange_ulong( object, old_value, new_value,
-    order_succ, order_fail );
-}
+#define _Atomic_Compare_exchange_ulong( obj, expected, desired, succ, fail ) \
+  _CPU_atomic_Compare_exchange_ulong( obj, expected, desired, succ, fail )
 
-static inline bool _Atomic_Compare_exchange_ptr(
-  volatile Atomic_Pointer *object,
-  void **old_pointer,
-  void *new_pointer,
-  Atomic_Order order_succ,
-  Atomic_Order order_fail
-)
-{
-  return _CPU_atomic_Compare_exchange_ptr( object, old_pointer, new_pointer,
-    order_succ, order_fail );
-}
+#define _Atomic_Compare_exchange_ptr( obj, expected, desired, succ, fail ) \
+  _CPU_atomic_Compare_exchange_ptr( obj, expected, desired, succ, fail )
 
-/**
- * @brief Atomically clears an atomic flag.
- *
- * @param[in, out] object Pointer to the atomic flag object.
- * @param[in] order The atomic memory order.
- * 
- */
-static inline void _Atomic_Flag_clear(
-  volatile Atomic_Flag *object,
-  Atomic_Order order
-)
-{
-  _CPU_atomic_Flag_clear( object, order );
-}
+#define _Atomic_Flag_clear( obj, order ) \
+  _CPU_atomic_Flag_clear( obj, order )
 
-/**
- * @brief Atomically tests and sets an atomic flag.
- *
- * @param[in, out] object Pointer to the atomic flag object.
- * @param[in] order The atomic memory order.
- * 
- * @retval true The atomic flag was already set.
- * @retval false Otherwise.
- */
-static inline bool _Atomic_Flag_test_and_set(
-  volatile Atomic_Flag *object,
-  Atomic_Order order
-)
-{
-  return _CPU_atomic_Flag_test_and_set( object, order );
-}
+#define _Atomic_Flag_test_and_set( obj, order ) \
+  _CPU_atomic_Flag_test_and_set( obj, order )
 
-#ifdef __cplusplus
-}
-#endif
+/** @} */
 
-/**@}*/
-#endif
-/*  end of include file */
+#endif /* _RTEMS_SCORE_ATOMIC_H */
