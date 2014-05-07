@@ -14,11 +14,11 @@
 #include <tmacros.h>
 #include "test_support.h"
 
-const char rtems_test_name[] = "SMP 6";
+const char rtems_test_name[] = "SMP 5";
 
 static void success(void)
 {
-  TEST_END();
+  rtems_test_end_with_plugin(locked_printf_plugin, NULL);
   rtems_test_exit( 0 );
 }
 
@@ -40,9 +40,8 @@ rtems_task Init(
   rtems_id           id;
   rtems_status_code  status;
 
-  TEST_BEGIN();
-
   locked_print_initialize();
+  rtems_test_begin_with_plugin(locked_printf_plugin, NULL);
 
   if ( rtems_get_processor_count() == 1 ) {
     success();
