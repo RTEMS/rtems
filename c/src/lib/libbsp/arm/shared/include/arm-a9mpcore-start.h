@@ -51,7 +51,8 @@ arm_cp15_set_auxiliary_control(uint32_t val);
 BSP_START_TEXT_SECTION static inline void
 arm_cp15_set_vector_base_address(void *base);
 
-BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_set_vector_base(void)
+BSP_START_TEXT_SECTION static inline void
+arm_a9mpcore_start_set_vector_base(void)
 {
   /*
    * Do not use bsp_vector_table_begin == 0, since this will get optimized away.
@@ -71,7 +72,7 @@ BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_set_vector_base(void)
   }
 }
 
-BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_scu_invalidate(
+BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_scu_invalidate(
   volatile a9mpcore_scu *scu,
   uint32_t cpu_id,
   uint32_t ways
@@ -80,7 +81,7 @@ BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_scu_invalidate(
   scu->invss = (ways & 0xf) << ((cpu_id & 0x3) * 4);
 }
 
-BSP_START_TEXT_SECTION static void inline
+BSP_START_TEXT_SECTION static inline void
 arm_a9mpcore_start_errata_764369_handler(volatile a9mpcore_scu *scu)
 {
   if (arm_errata_is_applicable_processor_errata_764369()) {
@@ -88,14 +89,14 @@ arm_a9mpcore_start_errata_764369_handler(volatile a9mpcore_scu *scu)
   }
 }
 
-BSP_START_TEXT_SECTION static inline
+BSP_START_TEXT_SECTION static inline void
 arm_a9mpcore_start_scu_enable(volatile a9mpcore_scu *scu)
 {
   scu->ctrl |= A9MPCORE_SCU_CTRL_SCU_EN;
   arm_a9mpcore_start_errata_764369_handler(scu);
 }
 
-BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_0(void)
+BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_hook_0(void)
 {
   volatile a9mpcore_scu *scu =
     (volatile a9mpcore_scu *) BSP_ARM_A9MPCORE_SCU_BASE;
@@ -153,7 +154,7 @@ BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_0(void)
 #endif
 }
 
-BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_global_timer(void)
+BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_global_timer(void)
 {
   volatile a9mpcore_gt *gt = (volatile a9mpcore_gt *) BSP_ARM_A9MPCORE_GT_BASE;
 
@@ -163,7 +164,7 @@ BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_global_timer(void)
   gt->ctrl = A9MPCORE_GT_CTRL_TMR_EN;
 }
 
-BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_1(void)
+BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_hook_1(void)
 {
   arm_a9mpcore_start_global_timer();
   arm_a9mpcore_start_set_vector_base();
