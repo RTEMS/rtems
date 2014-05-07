@@ -69,6 +69,9 @@ typedef struct {
 
 /**
  * @brief Initializer for static initialization of ISR locks.
+ *
+ * @param _name The name for the interrupt lock.  It must be a string.  The
+ * name is only used if profiling is enabled.
  */
 #if defined( RTEMS_SMP )
   #define ISR_LOCK_INITIALIZER( name ) \
@@ -84,8 +87,9 @@ typedef struct {
  * Concurrent initialization leads to unpredictable results.
  *
  * @param[in,out] lock The ISR lock control.
- * @param[in] name The name for the ISR lock.  This name must be persistent
- * throughout the life time of this lock.
+ * @param[in] _name The name for the ISR lock.  This name must be a
+ * string persistent throughout the life time of this lock.  The name is only
+ * used if profiling is enabled.
  */
 static inline void _ISR_lock_Initialize(
   ISR_lock_Control *lock,

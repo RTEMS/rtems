@@ -166,6 +166,9 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
 
 /**
  * @brief Initializer for static initialization of interrupt locks.
+ *
+ * @param _name The name for the interrupt lock.  It must be a string.  The
+ * name is only used if profiling is enabled.
  */
 #define RTEMS_INTERRUPT_LOCK_INITIALIZER( _name ) ISR_LOCK_INITIALIZER( _name )
 
@@ -175,8 +178,9 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  * Concurrent initialization leads to unpredictable results.
  *
  * @param[in,out] _lock The interrupt lock.
- * @param[in] _name The name for the interrupt lock.  This name must be
- * persistent throughout the life time of this lock.
+ * @param[in] _name The name for the interrupt lock.  This name must be a
+ * string persistent throughout the life time of this lock.  The name is only
+ * used if profiling is enabled.
  */
 #define rtems_interrupt_lock_initialize( _lock, _name ) \
   _ISR_lock_Initialize( _lock, _name )
