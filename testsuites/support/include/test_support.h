@@ -10,6 +10,8 @@
 #ifndef __TEST_SUPPORT_h
 #define __TEST_SUPPORT_h
 
+#include <stdarg.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -65,9 +67,16 @@ void rtems_time_test_measure_operation(
 /**************              TEST SUPPORT               **************/
 /*********************************************************************/
 /*********************************************************************/
-extern void locked_print_initialize(void);
-extern void locked_printf(const char *fmt, ...);
-extern void locked_printk(const char *fmt, ...);
+
+void locked_print_initialize(void);
+
+int locked_printf(const char *fmt, ...);
+
+int locked_vprintf(const char *fmt, va_list ap);
+
+int locked_printf_plugin(void *context, const char *fmt, ...);
+
+void locked_printk(const char *fmt, ...);
 
 #ifdef __cplusplus
 };

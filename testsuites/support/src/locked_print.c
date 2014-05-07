@@ -11,12 +11,7 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
-#include <rtems/system.h>
-#include <sys/types.h>
-#include <string.h>
-#include <stdarg.h>
-
+#include "test_support.h"
 #include "tmacros.h"
 
 static rtems_id locked_print_semaphore;      /* synchronisation semaphore */ 
@@ -45,8 +40,9 @@ void locked_print_initialize(void)
   directive_failed( sc, "rtems_semaphore_create" );
 }
 
-void locked_printf(const char *fmt, ...) {
-  va_list           ap;       /* points to each unnamed argument in turn */
+int locked_vprintf(const char *fmt, va_list ap)
+{
+  int rv;
   rtems_status_code sc;
 
   locked_print_initialize();
@@ -56,16 +52,42 @@ void locked_printf(const char *fmt, ...) {
     sc = rtems_semaphore_obtain( locked_print_semaphore, RTEMS_NO_WAIT, 0 );
   } while (sc != RTEMS_SUCCESSFUL );
 
-
-  va_start(ap, fmt); /* make ap point to 1st unnamed arg */
-  vprintf(fmt, ap);
-  va_end(ap);        /* clean up when done */
+  rv = vprintf(fmt, ap);
 
   /* Release the semaphore  */
-  sc = rtems_semaphore_release( locked_print_semaphore );
-} 
+  rtems_semaphore_release( locked_print_semaphore );
 
-void locked_printk(const char *fmt, ...) {
+  return rv;
+}
+
+int locked_printf_plugin(void *context, const char *fmt, ...)
+{
+  int rv;
+  va_list ap;
+
+  (void) context;
+
+  va_start(ap, fmt);
+  rv = locked_vprintf(fmt, ap);
+  va_end(ap);
+
+  return rv;
+}
+
+int locked_printf(const char *fmt, ...)
+{
+  int               rv;
+  va_list           ap;       /* points to each unnamed argument in turn */
+
+  va_start(ap, fmt); /* make ap point to 1st unnamed arg */
+  rv = locked_vprintf(fmt, ap);
+  va_end(ap);        /* clean up when done */
+
+  return rv;
+}
+
+void locked_printk(const char *fmt, ...)
+{
   va_list           ap;       /* points to each unnamed argument in turn */
   rtems_status_code sc;
 
@@ -82,5 +104,5 @@ void locked_printk(const char *fmt, ...) {
   va_end(ap);        /* clean up when done */
 
   /* Release the semaphore  */
-  sc = rtems_semaphore_release( locked_print_semaphore );
-} 
+  rtems_semaphore_release( locked_print_semaphore );
+}
