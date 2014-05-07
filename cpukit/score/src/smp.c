@@ -111,7 +111,9 @@ void _SMP_Request_start_multitasking( void )
   for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
     Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
-    _Per_CPU_State_change( cpu, PER_CPU_STATE_REQUEST_START_MULTITASKING );
+    if ( _Per_CPU_Is_processor_started( cpu ) ) {
+      _Per_CPU_State_change( cpu, PER_CPU_STATE_REQUEST_START_MULTITASKING );
+    }
   }
 }
 
