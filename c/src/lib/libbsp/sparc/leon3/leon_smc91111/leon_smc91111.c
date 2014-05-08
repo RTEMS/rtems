@@ -1,8 +1,16 @@
-/*  LEON3 BSP SMC91111 registration and low-level initialization
+/**
+ * @file
+ * @ingroup sparc_leon3
+ * @brief LEON3 BSP SMC91111 registration and low-level initialization
+ */
+
+/*
+ * Copyright (c) 2006.
+ * Aeroflex Gaisler AB.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <bsp.h>

@@ -2,11 +2,13 @@
  * @file
  * @ingroup sparc_leon2
  * @brief Interrupts definitions
- */
-
-/* LEON2 generic shared IRQ setup
  *
  * Based on libbsp/shared/include/irq.h.
+ */
+
+/*
+ * Copyright (c) 2012.
+ * Aeroflex Gaisler AB.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

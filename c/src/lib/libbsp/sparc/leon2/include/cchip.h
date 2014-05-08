@@ -1,8 +1,21 @@
 /**
- * @file
  * @defgroup cchip Companion Chip handler
  * @ingroup sparc_leon2
+ *
+ * @file
+ *
+ * @ingroup cchip
+ *
  * @brief Register all drivers supported by the Companion Chip board
+ */
+
+/*
+ *  COPYRIGHT (c) 2007.
+ *  Aeroflex Gaisler AB.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.org/license/LICENSE.
  */
 
 #ifndef __CCHIP_H__

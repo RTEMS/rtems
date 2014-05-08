@@ -5,9 +5,13 @@
  */
 
 /*
- *  LEON2 Opencores Ethernet MAC Configuration Information
+ * Copyright (c) 2004.
+ * Aeroflex Gaisler AB.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
-
 
 #include <bsp.h>
 #include <libchip/open_eth.h>

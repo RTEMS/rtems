@@ -4,12 +4,13 @@
  * @brief LEON3 Opencores Ethernet MAC Configuration Information
  */
 
-/*  COPYRIGHT (c) 2004.
- *  Gaisler Research
+/*
+ * Copyright (c) 2004.
+ * Aeroflex Gaisler AB.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 

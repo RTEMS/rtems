@@ -1,11 +1,14 @@
 /** 
  * @file
+ *
  * @ingroup cchip
- * @brief Companion Chip PCI board driver
+ *
+ * @brief GR-701 (Companion Chip) PCI board driver
  */
 
 /*
- *  GR-701 (Companion Chip) PCI board driver
+ *  COPYRIGHT (c) 2007.
+ *  Aeroflex Gaisler AB.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

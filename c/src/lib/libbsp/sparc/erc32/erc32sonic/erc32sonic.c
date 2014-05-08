@@ -1,10 +1,23 @@
-/*
- *  THARSYS VME SPARC RT board SONIC Configuration Information
+/**
+ * @file
+ *
+ * @ingroup sparc_erc32
+ *
+ * @brief THARSYS VME SPARC RT board SONIC Configuration Information
  *
  *  References:
  *
  *  1) SVME/DMV-171 Single Board Computer Documentation Package, #805905,
  *     DY 4 Systems Inc., Kanata, Ontario, September, 1996.
+ */
+
+/*
+ *  COPYRIGHT (c) 2000.
+ *  European Space Agency.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.org/license/LICENSE.
  */
 
 #include <bsp.h>

@@ -1,6 +1,14 @@
-/* LEON3 generic shared IRQ setup
+/**
+ * @file
+ * @ingroup sparc_leon3
+ * @brief LEON3 generic shared IRQ setup
  *
  * Based on libbsp/shared/include/irq.h.
+ */
+
+/*
+ * Copyright (c) 2012.
+ * Aeroflex Gaisler AB.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

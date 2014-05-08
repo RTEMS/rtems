@@ -1,8 +1,20 @@
 /**
- * @file
  * @defgroup leon2_rasta Rasta Handler
  * @ingroup sparc_leon2
+ *
+ * @file
+ * @ingroup leon2_rasta
  * @brief Handles Rasta
+ */
+
+/*
+ * COPYRIGHT (c) 2007.
+ * Aeroflex Gaisler AB.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ *
  */
 
 #ifndef __RASTA_H__

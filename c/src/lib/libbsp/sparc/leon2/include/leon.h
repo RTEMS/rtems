@@ -1,11 +1,10 @@
 /**
- * @file
  * @defgroup leon1 Leon-1 Handler
  * @ingroup sparc_leon2
+ *
+ * @file
+ * @ingroup leon1
  * @brief Handlers Leon-1
- */
-
-/*  erc32.h
  *
  *  This include file contains information pertaining to the LEON-1.
  *  The LEON-1 is a custom SPARC V7 implementation.
@@ -22,6 +21,9 @@
  *           + Memory Control Register
  *           + Interrupt Control
  *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *

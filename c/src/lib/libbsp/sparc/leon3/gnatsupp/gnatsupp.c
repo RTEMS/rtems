@@ -1,11 +1,19 @@
 /**
  * @file
+ *
  * @ingroup sparc_leon3
+ *
  * @brief Support for gnat/rtems interrupts and exception handling
  */
 
 /*
- * Jiri Gaisler, ESA/ESTEC, 17-02-1999.
+ * COPYRIGHT (c) 1999.
+ * European Space Agency.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ *
  */
 
 #include <bsp/gnatcommon.h>

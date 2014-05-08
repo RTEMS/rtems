@@ -1,7 +1,18 @@
-/*
- *  boardinit.s
+/**
+ * @file
  *
- *  Initialise various ERC32 registers
+ * @ingroup sparc_erc32
+ *
+ * @brief Initialise various ERC32 registers
+ */
+
+/*
+ *  COPYRIGHT (c) 2000.
+ *  European Space Agency.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems/asm.h>
