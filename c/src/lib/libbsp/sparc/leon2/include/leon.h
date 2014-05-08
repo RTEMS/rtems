@@ -224,11 +224,11 @@ typedef struct {
  */
 
 #define LEON_REG_TIMER_CONTROL_EN    0x00000001  /* 1 = enable counting */
-                                                 /* 0 = hold scalar and counter */
+                                              /* 0 = hold scalar and counter */
 #define LEON_REG_TIMER_CONTROL_RL    0x00000002  /* 1 = reload at 0 */
-                                                 /* 0 = stop at 0 */
+                                              /* 0 = stop at 0 */
 #define LEON_REG_TIMER_CONTROL_LD    0x00000004  /* 1 = load counter */
-                                                 /* 0 = no function */
+                                              /* 0 = no function */
 
 /*
  *  The following defines the bits in the UART Control Registers.

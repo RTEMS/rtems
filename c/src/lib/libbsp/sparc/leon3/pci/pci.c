@@ -49,27 +49,27 @@
 
 /* allow for overriding these definitions */
 #ifndef PCI_CONFIG_ADDR
-#define PCI_CONFIG_ADDR			0xcf8
+#define PCI_CONFIG_ADDR      0xcf8
 #endif
 #ifndef PCI_CONFIG_DATA
-#define PCI_CONFIG_DATA			0xcfc
+#define PCI_CONFIG_DATA      0xcfc
 #endif
 
 /* define a shortcut */
-#define pci	BSP_pci_configuration
+#define pci  BSP_pci_configuration
 
 /*
  * Bit encode for PCI_CONFIG_HEADER_TYPE register
  */
 unsigned char ucMaxPCIBus;
 typedef struct {
-	volatile unsigned int cfg_stat;
-	volatile unsigned int bar0;
-	volatile unsigned int page0;
-	volatile unsigned int bar1;
-	volatile unsigned int page1;
-	volatile unsigned int iomap;
-	volatile unsigned int stat_cmd;
+  volatile unsigned int cfg_stat;
+  volatile unsigned int bar0;
+  volatile unsigned int page0;
+  volatile unsigned int bar1;
+  volatile unsigned int page1;
+  volatile unsigned int iomap;
+  volatile unsigned int stat_cmd;
 } LEON3_GRPCI_Regs_Map;
 
 LEON3_GRPCI_Regs_Map *pcic = (LEON3_GRPCI_Regs_Map *) PCI_ADDR;
@@ -83,7 +83,8 @@ struct pci_res {
 
 static inline unsigned int flip_dword (unsigned int l)
 {
-        return ((l&0xff)<<24) | (((l>>8)&0xff)<<16) | (((l>>16)&0xff)<<8)| ((l>>24)&0xff);
+        return ((l&0xff)<<24) | (((l>>8)&0xff)<<16) |
+                (((l>>16)&0xff)<<8)| ((l>>24)&0xff);
 }
 
 
@@ -123,14 +124,17 @@ BSP_pci_read_config_dword(
         *val = 0xffffffff;
     }
 
-   DBG("pci_read - bus: %d, dev: %d, fn: %d, off: %d => addr: %x, val: %x\n", bus, slot, function, offset,  (1<<(11+slot) ) | ((function & 7)<<8) |  (offset&0x3f), *val);
+   DBG("pci_read - bus: %d, dev: %d, fn: %d, off: %d => addr: %x, val: %x\n",
+       bus, slot, function, offset,
+       (1<<(11+slot) ) | ((function & 7)<<8) |  (offset&0x3f), *val);
 
     return PCIBIOS_SUCCESSFUL;
 }
 
 
 static int
-BSP_pci_read_config_word(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned short *val) {
+BSP_pci_read_config_word(unsigned char bus, unsigned char slot,
+    unsigned char function, unsigned char offset, unsigned short *val) {
     uint32_t v;
 
     if (offset & 1) return PCIBIOS_BAD_REGISTER_NUMBER;
@@ -143,7 +147,8 @@ BSP_pci_read_config_word(unsigned char bus, unsigned char slot, unsigned char fu
 
 
 static int
-BSP_pci_read_config_byte(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned char *val) {
+BSP_pci_read_config_byte(unsigned char bus, unsigned char slot,
+    unsigned char function, unsigned char offset, unsigned char *val) {
     uint32_t v;
 
     pci_read_config_dword(bus, slot, function, offset&~3, &v);
@@ -155,7 +160,8 @@ BSP_pci_read_config_byte(unsigned char bus, unsigned char slot, unsigned char fu
 
 
 static int
-BSP_pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, uint32_t val) {
+BSP_pci_write_config_dword(unsigned char bus, unsigned char slot,
+    unsigned char function, unsigned char offset, uint32_t val) {
 
     volatile unsigned int *pci_conf;
     unsigned int value;
@@ -174,14 +180,17 @@ BSP_pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char 
 
     *pci_conf = value;
 
-    DBG("pci write - bus: %d, dev: %d, fn: %d, off: %d => addr: %x, val: %x\n", bus, slot, function, offset, (1<<(11+slot) ) | ((function & 7)<<8) |  (offset&0x3f), value);
+    DBG("pci write - bus: %d, dev: %d, fn: %d, off: %d => addr: %x, val: %x\n",
+        bus, slot, function, offset,
+        (1<<(11+slot) ) | ((function & 7)<<8) |  (offset&0x3f), value);
 
     return PCIBIOS_SUCCESSFUL;
 }
 
 
 static int
-BSP_pci_write_config_word(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned short val) {
+BSP_pci_write_config_word(unsigned char bus, unsigned char slot,
+    unsigned char function, unsigned char offset, unsigned short val) {
     uint32_t v;
 
     if (offset & 1) return PCIBIOS_BAD_REGISTER_NUMBER;
@@ -195,7 +204,8 @@ BSP_pci_write_config_word(unsigned char bus, unsigned char slot, unsigned char f
 
 
 static int
-BSP_pci_write_config_byte(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned char val) {
+BSP_pci_write_config_byte(unsigned char bus, unsigned char slot,
+    unsigned char function, unsigned char offset, unsigned char val) {
     uint32_t v;
 
     pci_read_config_dword(bus, slot, function, offset&~3, &v);
@@ -234,10 +244,14 @@ static int init_grpci(void) {
 #ifndef BT_ENABLED
     pci_write_config_dword(0,0,0,0x10, 0xffffffff);
     pci_read_config_dword(0,0,0,0x10, &addr);
-    pci_write_config_dword(0,0,0,0x10, flip_dword(0x10000000));    /* Setup bar0 to nonzero value (grpci considers BAR==0 as invalid) */
-    addr = (~flip_dword(addr)+1)>>1;                               /* page0 is accessed through upper half of bar0 */
-    pcic->cfg_stat |= 0x10000000;                                  /* Setup mmap reg so we can reach bar0 */
-    page0[addr/4] = 0;                                             /* Disable bytetwisting ... */
+    /* Setup bar0 to nonzero value (grpci considers BAR==0 as invalid) */
+    pci_write_config_dword(0,0,0,0x10, flip_dword(0x10000000));
+    /* page0 is accessed through upper half of bar0 */
+    addr = (~flip_dword(addr)+1)>>1;
+    /* Setup mmap reg so we can reach bar0 */
+    pcic->cfg_stat |= 0x10000000;
+    /* Disable bytetwisting ... */
+    page0[addr/4] = 0;
 #endif
 
     /* set 1:1 mapping between AHB -> PCI memory */
@@ -255,7 +269,8 @@ static int init_grpci(void) {
 }
 
 /* DMA functions which uses GRPCIs optional DMA controller (len in words) */
-int dma_to_pci(unsigned int ahb_addr, unsigned int pci_addr, unsigned int len) {
+int dma_to_pci(unsigned int ahb_addr, unsigned int pci_addr,
+    unsigned int len) {
     int ret = 0;
 
     pcidma[0] = 0x82;
@@ -276,7 +291,8 @@ int dma_to_pci(unsigned int ahb_addr, unsigned int pci_addr, unsigned int len) {
 
 }
 
-int dma_from_pci(unsigned int ahb_addr, unsigned int pci_addr, unsigned int len) {
+int dma_from_pci(unsigned int ahb_addr, unsigned int pci_addr,
+    unsigned int len) {
     int ret = 0;
 
     pcidma[0] = 0x80;
@@ -298,19 +314,23 @@ int dma_from_pci(unsigned int ahb_addr, unsigned int pci_addr, unsigned int len)
 }
 
 
-void pci_mem_enable(unsigned char bus, unsigned char slot, unsigned char function) {
+void pci_mem_enable(unsigned char bus, unsigned char slot,
+    unsigned char function) {
     uint32_t data;
 
     pci_read_config_dword(0, slot, function, PCI_COMMAND, &data);
-    pci_write_config_dword(0, slot, function, PCI_COMMAND, data | PCI_COMMAND_MEMORY);
+    pci_write_config_dword(0, slot, function, PCI_COMMAND,
+        data | PCI_COMMAND_MEMORY);
 
 }
 
-void pci_master_enable(unsigned char bus, unsigned char slot, unsigned char function) {
+void pci_master_enable(unsigned char bus, unsigned char slot,
+    unsigned char function) {
     uint32_t data;
 
     pci_read_config_dword(0, slot, function, PCI_COMMAND, &data);
-    pci_write_config_dword(0, slot, function, PCI_COMMAND, data | PCI_COMMAND_MASTER);
+    pci_write_config_dword(0, slot, function, PCI_COMMAND,
+        data | PCI_COMMAND_MASTER);
 
 }
 
@@ -324,13 +344,13 @@ static inline void swap_res(struct pci_res **p1, struct pci_res **p2) {
 
 /* pci_allocate_resources
  *
- * This function scans the bus and assigns PCI addresses to all devices. It handles both
- * single function and multi function devices. All allocated devices are enabled and
- * latency timers are set to 40.
+ * This function scans the bus and assigns PCI addresses to all devices.
+ * It handles both single function and multi function devices. All
+ * allocated devices are enabled and latency timers are set to 40.
  *
- * NOTE that it only allocates PCI memory space devices (that are at least 1 KB).
- * IO spaces are not enabled. Also, it does not handle pci-pci bridges. They are left disabled.
- *
+ * NOTE that it only allocates PCI memory space devices (that are at
+ * least 1 KB). IO spaces are not enabled. Also, it does not handle
+ * pci-pci bridges. They are left disabled.
  *
 */
 static void pci_allocate_resources(void) {
@@ -361,7 +381,7 @@ static void pci_allocate_resources(void) {
 
         pci_read_config_byte(0, slot, 0, PCI_HEADER_TYPE, &header);
 
-        if(header & PCI_HEADER_TYPE_MULTI_FUNCTION)	{
+        if(header & PCI_HEADER_TYPE_MULTI_FUNCTION)  {
             numfuncs = PCI_MAX_FUNCTIONS;
         }
         else {
@@ -382,11 +402,14 @@ static void pci_allocate_resources(void) {
             }
 
             for (pos = 0; pos < 6; pos++) {
-                pci_write_config_dword(0, slot, func, PCI_BASE_ADDRESS_0 + (pos<<2), 0xffffffff);
-                pci_read_config_dword(0, slot, func, PCI_BASE_ADDRESS_0 + (pos<<2), &size);
+                pci_write_config_dword(0, slot, func,
+                    PCI_BASE_ADDRESS_0 + (pos<<2), 0xffffffff);
+                pci_read_config_dword(0, slot, func,
+                    PCI_BASE_ADDRESS_0 + (pos<<2), &size);
 
                 if (size == 0 || size == 0xffffffff || (size & 0x3f1) != 0){
-                    pci_write_config_dword(0, slot, func, PCI_BASE_ADDRESS_0 + (pos<<2), 0);
+                    pci_write_config_dword(0, slot, func,
+                        PCI_BASE_ADDRESS_0 + (pos<<2), 0);
                     continue;
 
                 }else {
@@ -395,7 +418,8 @@ static void pci_allocate_resources(void) {
                     res[slot*8*6+func*6+pos]->devfn = slot*8 + func;
                     res[slot*8*6+func*6+pos]->bar   = pos;
 
-                    DBG("Slot: %d, function: %d, bar%d size: %x\n", slot, func, pos, ~size+1);
+                    DBG("Slot: %d, function: %d, bar%d size: %x\n",
+                        slot, func, pos, ~size+1);
                 }
             }
         }
@@ -430,8 +454,10 @@ static void pci_allocate_resources(void) {
         dev = res[i]->devfn >> 3;
         fn  = res[i]->devfn & 7;
 
-        DBG("Assigning PCI addr %x to device %d, function %d, bar %d\n", addr, dev, fn, res[i]->bar);
-        pci_write_config_dword(0, dev, fn, PCI_BASE_ADDRESS_0+res[i]->bar*4, addr);
+        DBG("Assigning PCI addr %x to device %d, function %d, bar %d\n",
+            addr, dev, fn, res[i]->bar);
+        pci_write_config_dword(0, dev, fn,
+            PCI_BASE_ADDRESS_0+res[i]->bar*4, addr);
         addr += res[i]->size;
 
         /* Set latency timer to 64 */
@@ -452,7 +478,7 @@ done:
 
         pci_read_config_byte(0, slot, 0, PCI_HEADER_TYPE, &header);
 
-        if(header & PCI_HEADER_TYPE_MULTI_FUNCTION)	{
+        if(header & PCI_HEADER_TYPE_MULTI_FUNCTION)  {
             numfuncs = PCI_MAX_FUNCTIONS;
         }
         else {
@@ -469,10 +495,12 @@ done:
 
                 if (id == PCI_INVALID_VENDORDEVICEID || id == 0) continue;
 
-                printk("\nSlot %d function: %d\nVendor id: 0x%x, device id: 0x%x\n", slot, func, id & 0xffff, id>>16);
+                printk("\nSlot %d function: %d\nVendor id: 0x%x, "
+                    "device id: 0x%x\n", slot, func, id & 0xffff, id>>16);
 
                 for (pos = 0; pos < 6; pos++) {
-                    pci_read_config_dword(0, slot, func, PCI_BASE_ADDRESS_0 + pos*4, &tmp);
+                    pci_read_config_dword(0, slot, func,
+                        PCI_BASE_ADDRESS_0 + pos*4, &tmp);
 
                     if (tmp != 0 && tmp != 0xffffffff && (tmp & 0x3f1) == 0) {
 
@@ -530,7 +558,7 @@ int init_pci(void)
                                    0,
                                    PCI_HEADER_TYPE,
                                    &ucHeader);
-        if(ucHeader&PCI_HEADER_TYPE_MULTI_FUNCTION)	{
+        if(ucHeader&PCI_HEADER_TYPE_MULTI_FUNCTION)  {
             ucNumFuncs=PCI_MAX_FUNCTIONS;
         }
         else {

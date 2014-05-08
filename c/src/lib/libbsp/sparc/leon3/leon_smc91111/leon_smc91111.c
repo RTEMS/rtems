@@ -74,7 +74,8 @@ rtems_smc91111_driver_attach_leon3 (struct rtems_bsdnet_ifconfig *config,
   io->dir &= ~(1 << leon_scmv91111_configuration.pio);
 
   /* Setup memory controller I/O waitstates */
-  *((volatile unsigned int *) addr_mctrl) |= 0x10f80000;	/* enable I/O area access */
+  *((volatile unsigned int *) addr_mctrl) |=
+		  0x10f80000;	/* enable I/O area access */
 
   return _rtems_smc91111_driver_attach(config, &leon_scmv91111_configuration);
 };

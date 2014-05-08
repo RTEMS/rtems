@@ -166,7 +166,8 @@ int init_pcif(void){
 	printk("AMBA: PCIBAR[%d]: 0x%x, 0x%x\n\r",1,ambab->bar1,pcib->bar1);
 	printk("AMBA: PCIBAR[%d]: 0x%x, 0x%x\n\r",2,ambab->bar2,pcib->bar2);
 #endif
-	ambab->ambabars[0] = 0x40000000; /* 0xe0000000(AMBA) ==> 0x40000000(PCI) ==> 0x40000000(AT697 AMBA) */
+	/* 0xe0000000(AMBA) ==> 0x40000000(PCI) ==> 0x40000000(AT697 AMBA) */
+	ambab->ambabars[0] = 0x40000000;
 
 	/* Scan bus for AMBA devices */
 	abus = &cc1.amba_bus;
@@ -328,7 +329,8 @@ void cchip1_set_isr(void *handler, int irqno, void *arg){
 	int_handlers[irqno].handler = handler;
 	int_handlers[irqno].arg = arg;
 #ifdef DEBUG
-	printk("Registering IRQ %d to 0x%lx(%d,0x%lx)\n\r",irqno,(unsigned int)handler,irqno,(unsigned int)arg);
+	printk("Registering IRQ %d to 0x%lx(%d,0x%lx)\n\r",
+			irqno,(unsigned int)handler,irqno,(unsigned int)arg);
 #endif
 	cc1.pcib->imask |= 1<<irqno; /* Enable the registered IRQ */
 }

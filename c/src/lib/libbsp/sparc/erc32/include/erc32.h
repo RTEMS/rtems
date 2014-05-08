@@ -257,23 +257,23 @@ typedef struct {
  *  The following defines the bits in the Timer Control Register.
  */
 
-#define ERC32_MEC_TIMER_CONTROL_GCR    0x00000001  /* 1 = reload at 0 */
-                                               /* 0 = stop at 0 */
-#define ERC32_MEC_TIMER_CONTROL_GCL    0x00000002  /* 1 = load and start */
-                                               /* 0 = no function */
-#define ERC32_MEC_TIMER_CONTROL_GSE    0x00000004  /* 1 = enable counting */
-                                               /* 0 = hold scalar and counter */
-#define ERC32_MEC_TIMER_CONTROL_GSL    0x00000008  /* 1 = load scalar and start */
-                                               /* 0 = no function */
+#define ERC32_MEC_TIMER_CONTROL_GCR   0x00000001 /* 1 = reload at 0 */
+                                              /* 0 = stop at 0 */
+#define ERC32_MEC_TIMER_CONTROL_GCL   0x00000002 /* 1 = load and start */
+                                              /* 0 = no function */
+#define ERC32_MEC_TIMER_CONTROL_GSE   0x00000004 /* 1 = enable counting */
+                                              /* 0 = hold scalar and counter */
+#define ERC32_MEC_TIMER_CONTROL_GSL   0x00000008 /* 1 = load scalar and start*/
+                                              /* 0 = no function */
 
-#define ERC32_MEC_TIMER_CONTROL_RTCCR  0x00000100  /* 1 = reload at 0 */
-                                               /* 0 = stop at 0 */
-#define ERC32_MEC_TIMER_CONTROL_RTCCL  0x00000200  /* 1 = load and start */
-                                               /* 0 = no function */
-#define ERC32_MEC_TIMER_CONTROL_RTCSE  0x00000400  /* 1 = enable counting */
-                                               /* 0 = hold scalar and counter */
-#define ERC32_MEC_TIMER_CONTROL_RTCSL  0x00000800  /* 1 = load scalar and start */
-                                               /* 0 = no function */
+#define ERC32_MEC_TIMER_CONTROL_RTCCR 0x00000100 /* 1 = reload at 0 */
+                                              /* 0 = stop at 0 */
+#define ERC32_MEC_TIMER_CONTROL_RTCCL 0x00000200 /* 1 = load and start */
+                                              /* 0 = no function */
+#define ERC32_MEC_TIMER_CONTROL_RTCSE 0x00000400 /* 1 = enable counting */
+                                              /* 0 = hold scalar and counter */
+#define ERC32_MEC_TIMER_CONTROL_RTCSL 0x00000800 /* 1 = load scalar and start*/
+                                              /* 0 = no function */
 
 /*
  *  The following defines the bits in the UART Control Registers.

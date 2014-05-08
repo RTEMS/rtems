@@ -72,6 +72,7 @@ void Shm_Get_configuration(
 {
   int i;
   unsigned int tmp;
+  rtems_multiprocessing_table *mptable;
 
   BSP_shm_cfgtbl.format       = SHM_BIG;
 
@@ -97,8 +98,8 @@ void Shm_Get_configuration(
 
   if (LEON3_Cpu_Index == 0) {
     tmp = 0;
-    for (i = 1;
-         i < (rtems_configuration_get_user_multiprocessing_table())->maximum_nodes; i++)
+    mptable = rtems_configuration_get_user_multiprocessing_table();
+    for (i = 1; i < mptable->maximum_nodes; i++)
       tmp |= (1 << i);
     LEON3_IrqCtrl_Regs->mpstat = tmp;
   }

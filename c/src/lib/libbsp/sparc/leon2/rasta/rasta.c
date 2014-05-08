@@ -57,8 +57,8 @@ struct gpio_reg *gpio0, *gpio1;
 
 /* static rtems_isr pci_interrupt_handler (rtems_vector_number v) { */
 
-/*     volatile unsigned int *pci_int = (volatile unsigned int *) 0x80000168; */
-/*     volatile unsigned int *pci_mem = (volatile unsigned int *) 0xb0400000; */
+/*     volatile unsigned int *pci_int = (volatile unsigned int *) 0x80000168;*/
+/*     volatile unsigned int *pci_mem = (volatile unsigned int *) 0xb0400000;*/
 
 /*     if (*pci_int & 0x20) { */
 
@@ -243,7 +243,8 @@ int rasta_register(void)
     }
 
     /* Search old PCI vendor/device id. */
-    if ( (!found) && (BSP_pciFindDevice(0x16E3, 0x0210, 0, &bus, &dev, &fun) == 0) ) {
+    if ( (!found) &&
+            (BSP_pciFindDevice(0x16E3, 0x0210, 0, &bus, &dev, &fun) == 0) ) {
       found = 1;
     }
 
@@ -257,7 +258,7 @@ int rasta_register(void)
     pci_read_config_dword(bus, dev, fun, 0x14, &bar1);
 
     page0 = (unsigned int *)(bar0 + 0x400000);
-    *page0 = 0x80000000;                  /* Point PAGE0 to start of APB       */
+    *page0 = 0x80000000;                  /* Point PAGE0 to start of APB     */
 
     apb_base = (unsigned int *)(bar0+APB2_OFFSET);
 
@@ -279,7 +280,8 @@ int rasta_register(void)
     irq = (struct irqmp_regs *) (bar0+IRQ_OFFSET);
     irq->iclear = 0xffff;
     irq->ilevel = 0;
-    irq->mask[0] = 0xffff & ~(UART0_IRQ|UART1_IRQ|SPW0_IRQ|SPW1_IRQ|SPW2_IRQ|GRCAN_IRQ|BRM_IRQ);
+    irq->mask[0] = 0xffff &
+           ~(UART0_IRQ|UART1_IRQ|SPW0_IRQ|SPW1_IRQ|SPW2_IRQ|GRCAN_IRQ|BRM_IRQ);
 
     /* Configure AT697 ioport bit 7 to input pci irq */
     regs->PIO_Direction &= ~(1<<7);

@@ -80,11 +80,14 @@ extern int rtems_leon_greth_driver_attach(
 );
 
 #define RTEMS_BSP_NETWORK_DRIVER_NAME_OPENETH	"open_eth1"
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_OPENETH	 rtems_leon_open_eth_driver_attach
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_OPENETH	 \
+    rtems_leon_open_eth_driver_attach
 #define RTEMS_BSP_NETWORK_DRIVER_NAME_SMC91111	"smc_eth1"
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_SMC91111 rtems_smc91111_driver_attach_leon3
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_SMC91111 \
+    rtems_smc91111_driver_attach_leon3
 #define RTEMS_BSP_NETWORK_DRIVER_NAME_GRETH	 "gr_eth1"
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_GRETH    rtems_leon_greth_driver_attach
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_GRETH \
+    rtems_leon_greth_driver_attach
 
 #ifndef RTEMS_BSP_NETWORK_DRIVER_NAME
 #define RTEMS_BSP_NETWORK_DRIVER_NAME   RTEMS_BSP_NETWORK_DRIVER_NAME_GRETH
@@ -131,8 +134,8 @@ void bsp_spurious_initialize( void );
 
 /* Allocate 8-byte aligned non-freeable pre-malloc() memory. The function
  * can be called at any time. The work-area will shrink when called before
- * bsp_work_area_initialize(). malloc() is called to get memory when this function
- * is called after bsp_work_area_initialize().
+ * bsp_work_area_initialize(). malloc() is called to get memory when this
+ * function is called after bsp_work_area_initialize().
  */
 void *bsp_early_malloc(int size);
 

@@ -80,11 +80,11 @@ extern "C" {
  */
 
 #define LEON_REG_TIMER_CONTROL_EN    0x00000001  /* 1 = enable counting */
-                                                 /* 0 = hold scalar and counter */
+                                              /* 0 = hold scalar and counter */
 #define LEON_REG_TIMER_CONTROL_RL    0x00000002  /* 1 = reload at 0 */
-                                                 /* 0 = stop at 0 */
+                                              /* 0 = stop at 0 */
 #define LEON_REG_TIMER_CONTROL_LD    0x00000004  /* 1 = load counter */
-                                                 /* 0 = no function */
+                                              /* 0 = no function */
 
 /*
  *  The following defines the bits in the UART Control Registers.
@@ -119,8 +119,10 @@ extern "C" {
 #define LEON_REG_UART_CTRL_FL     0x00000040 /* Flow control enable */
 #define LEON_REG_UART_CTRL_LB     0x00000080 /* Loop Back enable */
 
-extern volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;  /* LEON3 Interrupt Controller */
-extern volatile struct gptimer_regs *LEON3_Timer_Regs; /* LEON3 GP Timer */
+/* LEON3 Interrupt Controller */
+extern volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
+/* LEON3 GP Timer */
+extern volatile struct gptimer_regs *LEON3_Timer_Regs;
 
 /* LEON3 CPU Index of boot CPU */
 extern uint32_t LEON3_Cpu_Index;
@@ -270,7 +272,7 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 
 #if defined(RTEMS_MULTIPROCESSING)
   #define LEON3_CLOCK_INDEX \
-    (rtems_configuration_get_user_multiprocessing_table() ? LEON3_Cpu_Index : 0)
+   (rtems_configuration_get_user_multiprocessing_table() ? LEON3_Cpu_Index : 0)
 #else
   #define LEON3_CLOCK_INDEX 0
 #endif

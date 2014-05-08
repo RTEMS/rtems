@@ -46,7 +46,8 @@ extern int CLOCK_SPEED;
 
 #define Clock_driver_support_initialize_hardware() \
   do { \
-    LEON_REG.Timer_Reload_1 = rtems_configuration_get_microseconds_per_tick() - 1; \
+    LEON_REG.Timer_Reload_1 = \
+		rtems_configuration_get_microseconds_per_tick() - 1; \
     \
     LEON_REG.Timer_Control_1 = ( \
       LEON_REG_TIMER_COUNTER_ENABLE_COUNTING |  \
@@ -77,6 +78,7 @@ static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
   return usecs * 1000;
 }
 
-#define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
+#define Clock_driver_nanoseconds_since_last_tick \
+    bsp_clock_nanoseconds_since_last_tick
 
 #include "../../../shared/clockdrv_shell.h"
