@@ -74,9 +74,10 @@ RTEMS_BSPOPTS_SET([HAS_UBOOT],[mpc8313erdb],[1])
 RTEMS_BSPOPTS_SET([HAS_UBOOT],[mpc8349eamds],[1])
 RTEMS_BSPOPTS_HELP([HAS_UBOOT],[if defined, enables U-Boot support])
 
-# Disable interrupt nesting for the MPC8313ERDB since the interrupt server
-# support requires that.  The interrupt server is necessary for the USB stack.
+# Disable interrupt nesting for the interrupt server support.  The interrupt
+# server is necessary for the USB stack.
 RTEMS_BSPOPTS_SET([GEN83XX_ENABLE_INTERRUPT_NESTING],[mpc8313erdb],[])
+RTEMS_BSPOPTS_SET([GEN83XX_ENABLE_INTERRUPT_NESTING],[br_uid],[])
 RTEMS_BSPOPTS_SET([GEN83XX_ENABLE_INTERRUPT_NESTING],[*],[1])
 RTEMS_BSPOPTS_HELP([GEN83XX_ENABLE_INTERRUPT_NESTING],[enable interrupt nesting])
 
