@@ -167,8 +167,20 @@ typedef struct {
   (_context)->esp
 
 #ifdef RTEMS_SMP
-  #define _CPU_Context_Get_is_executing( _context ) \
-    (_context)->is_executing
+  static inline bool _CPU_Context_Get_is_executing(
+    const Context_Control *context
+  )
+  {
+    return context->is_executing;
+  }
+
+  static inline void _CPU_Context_Set_is_executing(
+    Context_Control *context,
+    bool is_executing
+  )
+  {
+    context->is_executing = is_executing;
+  }
 #endif
 
 /*
@@ -454,12 +466,6 @@ uint32_t   _CPU_ISR_Get_level( void );
  */
 
 
-#ifdef RTEMS_SMP
-  #define _I386_Context_Initialize_is_executing( _the_context ) \
-    (_the_context)->is_executing = false
-#else
-  #define _I386_Context_Initialize_is_executing( _the_context )
-#endif
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
                                    _isr, _entry_point, _is_fp, _tls_area ) \
@@ -475,7 +481,6 @@ uint32_t   _CPU_ISR_Get_level( void );
     *((proc_ptr *)(_stack)) = (_entry_point); \
     (_the_context)->ebp     = (void *) 0; \
     (_the_context)->esp     = (void *) _stack; \
-    _I386_Context_Initialize_is_executing( _the_context ); \
   } while (0)
 
 #define _CPU_Context_Restart_self( _the_context ) \

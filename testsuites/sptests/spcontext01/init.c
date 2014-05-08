@@ -160,12 +160,39 @@ static void test(test_context *self)
   wait_for_finish();
 }
 
+static void test_context_is_executing(void)
+{
+#if defined(RTEMS_SMP)
+  Context_Control context;
+  bool is_executing;
+
+  memset(&context, 0, sizeof(context));
+
+  is_executing = _CPU_Context_Get_is_executing(&context);
+  rtems_test_assert(!is_executing);
+
+  _CPU_Context_Set_is_executing(&context, true);
+  is_executing = _CPU_Context_Get_is_executing(&context);
+  rtems_test_assert(is_executing);
+
+  _CPU_Context_Set_is_executing(&context, false);
+  is_executing = _CPU_Context_Get_is_executing(&context);
+  rtems_test_assert(!is_executing);
+
+  _CPU_Context_Set_is_executing(&context, true);
+  _CPU_Context_Initialize(&context, NULL, 0, 0, NULL, false, NULL);
+  is_executing = _CPU_Context_Get_is_executing(&context);
+  rtems_test_assert(is_executing);
+#endif
+}
+
 static void Init(rtems_task_argument arg)
 {
   test_context *self = &test_instance;
 
   TEST_BEGIN();
 
+  test_context_is_executing();
   test(self);
 
   TEST_END();

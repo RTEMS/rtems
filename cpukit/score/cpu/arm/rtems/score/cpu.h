@@ -422,8 +422,20 @@ void _CPU_Context_Initialize(
   (_context)->register_sp
 
 #ifdef RTEMS_SMP
-  #define _CPU_Context_Get_is_executing( _context ) \
-    (_context)->is_executing
+  static inline bool _CPU_Context_Get_is_executing(
+    const Context_Control *context
+  )
+  {
+    return context->is_executing;
+  }
+
+  static inline void _CPU_Context_Set_is_executing(
+    Context_Control *context,
+    bool is_executing
+  )
+  {
+    context->is_executing = is_executing;
+  }
 #endif
 
 #define _CPU_Context_Restart_self( _the_context ) \

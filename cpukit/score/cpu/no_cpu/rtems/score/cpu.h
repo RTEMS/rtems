@@ -1596,10 +1596,30 @@ register struct Per_CPU_Control *_CPU_Per_CPU_current asm( "rX" );
   }
 
   /**
-   * @brief Macro to return the is executing field of the thread context.
+   * @brief Gets the is executing indicator of the thread context.
+   *
+   * @param[in] context The context.
    */
-  #define _CPU_Context_Get_is_executing( _context ) \
-    ( ( _context )->is_executing )
+  static inline bool _CPU_Context_Get_is_executing(
+    const Context_Control *context
+  )
+  {
+    return context->is_executing;
+  }
+
+  /**
+   * @brief Sets the is executing indicator of the thread context.
+   *
+   * @param[in] context The context.
+   * @param[in] is_executing The new value for the is executing indicator.
+   */
+  static inline void _CPU_Context_Set_is_executing(
+    Context_Control *context,
+    bool is_executing
+  )
+  {
+    context->is_executing = is_executing;
+  }
 #endif
 
 #ifdef __cplusplus

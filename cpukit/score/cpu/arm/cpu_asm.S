@@ -68,29 +68,27 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 #endif
 
 #ifdef RTEMS_SMP
-	/* Indicate that this context is no longer executing */
+	/* The executing context no longer executes on this processor */
 	dmb
 	mov	r3, #0
 	strb	r3, [r0, #ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
+
+	/* Wait for heir context to stop execution */
+1:
+	ldrb	r3, [r1, #ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
+	cmp	r3, #0
+	bne	1b
+
+	/* The heir context executes now on this processor */
+	dmb
+	mov	r3, #1
+	strb	r3, [r1, #ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
 #endif
 
 /* Start restoring context */
 _restore:
 #ifdef ARM_MULTILIB_HAS_LOAD_STORE_EXCLUSIVE
 	clrex
-#endif
-
-#ifdef RTEMS_SMP
-	/* Wait for context to stop execution if necessary */
-1:
-	ldrb	r3, [r1, #ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
-	cmp	r3, #0
-	bne	1b
-
-	/* Indicate that this context is executing */
-	dmb
-	mov	r3, #1
-	strb	r3, [r1, #ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
 #endif
 
 #ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER

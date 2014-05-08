@@ -184,6 +184,7 @@ bool _Thread_Initialize(
   the_thread->is_scheduled            = false;
   the_thread->is_in_the_air           = false;
   the_thread->scheduler               = scheduler;
+  _CPU_Context_Set_is_executing( &the_thread->Registers, false );
 #endif
 
   _Thread_Debug_set_real_processor( the_thread, cpu );

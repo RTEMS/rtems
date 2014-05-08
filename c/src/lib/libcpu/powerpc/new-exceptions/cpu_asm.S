@@ -327,27 +327,25 @@ PROC (_CPU_Context_switch):
 	stw	r2, PPC_CONTEXT_OFFSET_GPR2(r3)
 
 #ifdef RTEMS_SMP
-	/* Indicate that this context is no longer executing */
+	/* The executing context no longer executes on this processor */
 	msync
 	li	r5, 0
 	stb	r5, PPC_CONTEXT_OFFSET_IS_EXECUTING(r3)
-#endif
 
-	/* Restore context from r4 */
-restore_context:
-
-#ifdef RTEMS_SMP
-	/* Wait for context to stop execution if necessary */
+	/* Wait for heir context to stop execution */
 1:
 	lbz	r5, PPC_CONTEXT_OFFSET_IS_EXECUTING(r4)
 	cmpwi	r5, 0
 	bne	1b
 
-	/* Indicate that this context is executing */
+	/* The heir context executes now on this processor */
 	li	r5, 1
 	stb	r5, PPC_CONTEXT_OFFSET_IS_EXECUTING(r4)
 	isync
 #endif
+
+	/* Restore context from r4 */
+restore_context:
 
 #ifdef __ALTIVEC__
 	mr	r14, r4 

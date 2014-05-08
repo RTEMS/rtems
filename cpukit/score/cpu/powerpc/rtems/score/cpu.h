@@ -343,8 +343,20 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
   ppc_get_context(_context)->gpr1
 
 #ifdef RTEMS_SMP
-  #define _CPU_Context_Get_is_executing( _context ) \
-    ppc_get_context(_context)->is_executing
+  static inline bool _CPU_Context_Get_is_executing(
+    const Context_Control *context
+  )
+  {
+    return ppc_get_context(context)->is_executing;
+  }
+
+  static inline void _CPU_Context_Set_is_executing(
+    Context_Control *context,
+    bool is_executing
+  )
+  {
+    ppc_get_context(context)->is_executing = is_executing;
+  }
 #endif
 #endif /* ASM */
 

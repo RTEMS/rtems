@@ -58,24 +58,24 @@ SYM (_CPU_Context_switch):
         movl      edi,REG_EDI(eax)         /* save destination register */
 
 #ifdef RTEMS_SMP
-        /* Indicate that this context is no longer executing */
+        /* The executing context no longer executes on this processor */
         movb      $0, I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET(eax)
 #endif
 
         movl      HEIRCONTEXT_ARG(esp),eax /* eax = heir threads context */
 
-restore:
 #ifdef RTEMS_SMP
-        /* Wait for context to stop execution if necessary */
+        /* Wait for heir context to stop execution */
 1:
         movb      I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET(eax), bl
         testb     bl, bl
         jne       1b
 
-        /* Indicate that this context is executing */
+        /* The heir context executes now on this processor */
         movb      $1, I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET(eax)
 #endif
 
+restore:
         pushl     REG_EFLAGS(eax)          /* push eflags */
         popf                               /* restore eflags */
         movl      REG_ESP(eax),esp         /* restore stack pointer */

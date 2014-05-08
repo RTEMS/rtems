@@ -101,10 +101,6 @@ void _CPU_Context_Initialize(
   the_context->thread_id = (uint32_t) tls_area;
 #endif
 
-#ifdef RTEMS_SMP
-  the_context->is_executing = false;
-#endif
-
   if ( tls_area != NULL ) {
     _TLS_TCB_at_area_begin_initialize( tls_area );
   }

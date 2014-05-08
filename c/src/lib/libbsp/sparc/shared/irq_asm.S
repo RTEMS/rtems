@@ -164,17 +164,17 @@ done_flushing:
         nop
 
 #if defined(RTEMS_SMP)
-        ! Indicate that this context is no longer executing
+        ! The executing context no longer executes on this processor
         stb     %g0, [%o0 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
 
-        ! Wait for context to stop execution if necessary
+        ! Wait for heir context to stop execution
 1:
         ldub    [%o1 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET], %g1
         cmp     %g1, 0
         bne     1b
          mov    1, %g1
 
-        ! Indicate that this context is executing
+        ! The heir context executes now on this processor
         stb     %g1, [%o1 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
 #endif
 
