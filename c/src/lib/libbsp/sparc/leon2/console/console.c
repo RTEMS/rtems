@@ -322,7 +322,7 @@ rtems_device_driver console_initialize(
 
   LEON_REG.UART_Control_1 |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
   LEON_REG.UART_Control_2 |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE |
-  	LEON_REG_UART_CTRL_RI;	/* rx irq default enable for remote debugger */
+      LEON_REG_UART_CTRL_RI;  /* rx irq default enable for remote debugger */
   LEON_REG.UART_Status_1 = 0;
   LEON_REG.UART_Status_2 = 0;
 #if (CONSOLE_USE_INTERRUPTS)

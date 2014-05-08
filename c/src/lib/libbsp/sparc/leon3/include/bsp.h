@@ -79,13 +79,13 @@ extern int rtems_leon_greth_driver_attach(
   int attach
 );
 
-#define RTEMS_BSP_NETWORK_DRIVER_NAME_OPENETH	"open_eth1"
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_OPENETH	 \
+#define RTEMS_BSP_NETWORK_DRIVER_NAME_OPENETH "open_eth1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH_OPENETH   \
     rtems_leon_open_eth_driver_attach
-#define RTEMS_BSP_NETWORK_DRIVER_NAME_SMC91111	"smc_eth1"
+#define RTEMS_BSP_NETWORK_DRIVER_NAME_SMC91111 "smc_eth1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH_SMC91111 \
     rtems_smc91111_driver_attach_leon3
-#define RTEMS_BSP_NETWORK_DRIVER_NAME_GRETH	 "gr_eth1"
+#define RTEMS_BSP_NETWORK_DRIVER_NAME_GRETH "gr_eth1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH_GRETH \
     rtems_leon_greth_driver_attach
 

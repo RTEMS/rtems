@@ -100,18 +100,18 @@ struct uart_reg {
 
 
 void uart_register(unsigned int baseaddr);
-rtems_device_driver uart_initialize(rtems_device_major_number  major,
-		rtems_device_minor_number  minor, void *arg);
+rtems_device_driver uart_initialize(rtems_device_major_number major,
+    rtems_device_minor_number  minor, void *arg);
 rtems_device_driver uart_open(rtems_device_major_number major,
-		rtems_device_minor_number minor, void *arg);
+    rtems_device_minor_number minor, void *arg);
 rtems_device_driver uart_close(rtems_device_major_number major,
-		rtems_device_minor_number minor, void *arg);
+    rtems_device_minor_number minor, void *arg);
 rtems_device_driver uart_read(rtems_device_major_number major,
-		rtems_device_minor_number minor, void *arg);
+    rtems_device_minor_number minor, void *arg);
 rtems_device_driver uart_write(rtems_device_major_number major,
-		rtems_device_minor_number minor, void *arg);
+    rtems_device_minor_number minor, void *arg);
 rtems_device_driver uart_control(rtems_device_major_number major,
-		rtems_device_minor_number minor, void *arg);
+    rtems_device_minor_number minor, void *arg);
 
 
 struct gpio_reg {

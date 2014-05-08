@@ -69,7 +69,7 @@ extern int rtems_leon_open_eth_driver_attach(
 extern int rtems_smc91111_driver_attach_leon2(
   struct rtems_bsdnet_ifconfig *config
 );
-#define RTEMS_BSP_NETWORK_DRIVER_NAME	"open_eth1"
+#define RTEMS_BSP_NETWORK_DRIVER_NAME "open_eth1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH_OPENETH \
           rtems_leon_open_eth_driver_attach
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH_SMC91111 \

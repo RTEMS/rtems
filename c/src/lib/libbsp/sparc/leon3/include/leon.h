@@ -287,9 +287,9 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 /* Load 32-bit word by forcing a cache-miss */
 static inline unsigned int leon_r32_no_cache(uintptr_t addr)
 {
-	unsigned int tmp;
-	__asm__ volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(addr));
-	return tmp;
+  unsigned int tmp;
+  __asm__ volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(addr));
+  return tmp;
 }
 
 /* Let user override which on-chip APBUART will be debug UART

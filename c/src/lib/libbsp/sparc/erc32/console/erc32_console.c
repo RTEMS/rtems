@@ -148,7 +148,7 @@ static int erc32_console_first_open(int major, int minor, void *arg)
 
 #if (CONSOLE_USE_INTERRUPTS)
 static ssize_t erc32_console_write_support_int(
-		int minor, const char *buf, size_t len)
+    int minor, const char *buf, size_t len)
 {
   if (len > 0) {
     console_data *cd = &Console_Port_Data[minor];
@@ -264,7 +264,7 @@ static void erc32_console_isr_b(
       buf[i] = ERC32_MEC.UART_Channel_B;
       ++i;
     }
-    if ( i ) 
+    if ( i )
       rtems_termios_enqueue_raw_characters(cd->termios_data, buf, i);
 
     /* dequeue transmitted chars */

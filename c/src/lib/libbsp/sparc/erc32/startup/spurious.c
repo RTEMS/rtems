@@ -160,9 +160,9 @@ void bsp_spurious_initialize()
      *  paramaters to the program.
      */
 
-     if (( trap == 5 || trap == 6 ) ||
-     	(( trap >= 0x11 ) && ( trap <= 0x1f )) ||
-     	(( trap >= 0x70 ) && ( trap <= 0x83 )))
+    if (( trap == 5 || trap == 6 ) ||
+        (( trap >= 0x11 ) && ( trap <= 0x1f )) ||
+        (( trap >= 0x70 ) && ( trap <= 0x83 )))
       continue;
 
     set_vector( (rtems_isr_entry) bsp_spurious_handler,

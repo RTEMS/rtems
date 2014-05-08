@@ -345,7 +345,7 @@ int rasta_register(void)
     /*brm_register(bar0   +  BRM_OFFSET, bar1);*/
     /* register the BRM RASTA driver, use 128k on RASTA SRAM... */
     b1553brm_rasta_int_reg=rasta_interrrupt_register;
-	  if ( b1553brm_rasta_register(&abus,2,0,3,bar1,0x40000000) ){
+    if ( b1553brm_rasta_register(&abus,2,0,3,bar1,0x40000000) ){
       printk("Failed to register BRM RASTA driver\n");
       return -1;
     }

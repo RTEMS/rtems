@@ -82,14 +82,14 @@ static CPU_Counter_ticks erc32_counter_difference(
       rtems_configuration_get_microseconds_per_tick(); \
     \
     ERC32_MEC_Set_Real_Time_Clock_Timer_Control( \
-      ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING | \
-    	ERC32_MEC_TIMER_COUNTER_LOAD_SCALER | \
-	    ERC32_MEC_TIMER_COUNTER_LOAD_COUNTER \
+        ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING | \
+        ERC32_MEC_TIMER_COUNTER_LOAD_SCALER | \
+        ERC32_MEC_TIMER_COUNTER_LOAD_COUNTER \
     ); \
     \
     ERC32_MEC_Set_Real_Time_Clock_Timer_Control( \
-      ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING | \
-	    ERC32_MEC_TIMER_COUNTER_RELOAD_AT_ZERO \
+        ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING | \
+        ERC32_MEC_TIMER_COUNTER_RELOAD_AT_ZERO \
     ); \
     _SPARC_Counter_initialize( \
       &ERC32_MEC.Real_Time_Clock_Counter, \

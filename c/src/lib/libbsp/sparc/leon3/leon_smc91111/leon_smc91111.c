@@ -36,7 +36,7 @@ scmv91111_configuration_t leon_scmv91111_configuration = {
  */
 int
 rtems_smc91111_driver_attach_leon3 (struct rtems_bsdnet_ifconfig *config,
-				    int attach)
+    int attach)
 {
   unsigned long addr_mctrl = 0;
   struct grgpio_regs *io;
@@ -70,10 +70,8 @@ rtems_smc91111_driver_attach_leon3 (struct rtems_bsdnet_ifconfig *config,
   addr_mctrl = (unsigned long) apbmctrl.start;
   io = (struct grgpio_regs *) apbpio.start;
 
-  printk(
-        "Activating Leon3 io port for smsc_lan91cxx (pio:%x mctrl:%x)\n",
-        (unsigned int)io,
-        (unsigned int)addr_mctrl);
+  printk("Activating Leon3 io port for smsc_lan91cxx (pio:%x mctrl:%x)\n",
+      (unsigned int)io, (unsigned int)addr_mctrl);
 
   /* Setup PIO IRQ */
   io->imask |= (1 << leon_scmv91111_configuration.pio);
@@ -83,7 +81,7 @@ rtems_smc91111_driver_attach_leon3 (struct rtems_bsdnet_ifconfig *config,
 
   /* Setup memory controller I/O waitstates */
   *((volatile unsigned int *) addr_mctrl) |=
-		  0x10f80000;	/* enable I/O area access */
+      0x10f80000; /* enable I/O area access */
 
   return _rtems_smc91111_driver_attach(config, &leon_scmv91111_configuration);
 };

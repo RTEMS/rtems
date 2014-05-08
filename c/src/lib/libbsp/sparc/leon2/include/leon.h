@@ -102,49 +102,49 @@ extern "C" {
  */
 
 typedef struct {
-	volatile unsigned int Memory_Config_1;
-	volatile unsigned int Memory_Config_2;
-	volatile unsigned int Edac_Control;
-	volatile unsigned int Failed_Address;
-	volatile unsigned int Memory_Status;
-	volatile unsigned int Cache_Control;
-	volatile unsigned int Power_Down;
-	volatile unsigned int Write_Protection_1;
-	volatile unsigned int Write_Protection_2;
-	volatile unsigned int Leon_Configuration;
-	volatile unsigned int dummy2;
-	volatile unsigned int dummy3;
-	volatile unsigned int dummy4;
-	volatile unsigned int dummy5;
-	volatile unsigned int dummy6;
-	volatile unsigned int dummy7;
-	volatile unsigned int Timer_Counter_1;
-	volatile unsigned int Timer_Reload_1;
-	volatile unsigned int Timer_Control_1;
-	volatile unsigned int Watchdog;
-	volatile unsigned int Timer_Counter_2;
-	volatile unsigned int Timer_Reload_2;
-	volatile unsigned int Timer_Control_2;
-	volatile unsigned int dummy8;
-	volatile unsigned int Scaler_Counter;
-	volatile unsigned int Scaler_Reload;
-	volatile unsigned int dummy9;
-	volatile unsigned int dummy10;
-	volatile unsigned int UART_Channel_1;
-	volatile unsigned int UART_Status_1;
-	volatile unsigned int UART_Control_1;
-	volatile unsigned int UART_Scaler_1;
-	volatile unsigned int UART_Channel_2;
-	volatile unsigned int UART_Status_2;
-	volatile unsigned int UART_Control_2;
-	volatile unsigned int UART_Scaler_2;
-	volatile unsigned int Interrupt_Mask;
-	volatile unsigned int Interrupt_Pending;
-	volatile unsigned int Interrupt_Force;
-	volatile unsigned int Interrupt_Clear;
-	volatile unsigned int PIO_Data;
-	volatile unsigned int PIO_Direction;
-	volatile unsigned int PIO_Interrupt;
+  volatile unsigned int Memory_Config_1;
+  volatile unsigned int Memory_Config_2;
+  volatile unsigned int Edac_Control;
+  volatile unsigned int Failed_Address;
+  volatile unsigned int Memory_Status;
+  volatile unsigned int Cache_Control;
+  volatile unsigned int Power_Down;
+  volatile unsigned int Write_Protection_1;
+  volatile unsigned int Write_Protection_2;
+  volatile unsigned int Leon_Configuration;
+  volatile unsigned int dummy2;
+  volatile unsigned int dummy3;
+  volatile unsigned int dummy4;
+  volatile unsigned int dummy5;
+  volatile unsigned int dummy6;
+  volatile unsigned int dummy7;
+  volatile unsigned int Timer_Counter_1;
+  volatile unsigned int Timer_Reload_1;
+  volatile unsigned int Timer_Control_1;
+  volatile unsigned int Watchdog;
+  volatile unsigned int Timer_Counter_2;
+  volatile unsigned int Timer_Reload_2;
+  volatile unsigned int Timer_Control_2;
+  volatile unsigned int dummy8;
+  volatile unsigned int Scaler_Counter;
+  volatile unsigned int Scaler_Reload;
+  volatile unsigned int dummy9;
+  volatile unsigned int dummy10;
+  volatile unsigned int UART_Channel_1;
+  volatile unsigned int UART_Status_1;
+  volatile unsigned int UART_Control_1;
+  volatile unsigned int UART_Scaler_1;
+  volatile unsigned int UART_Channel_2;
+  volatile unsigned int UART_Status_2;
+  volatile unsigned int UART_Control_2;
+  volatile unsigned int UART_Scaler_2;
+  volatile unsigned int Interrupt_Mask;
+  volatile unsigned int Interrupt_Pending;
+  volatile unsigned int Interrupt_Force;
+  volatile unsigned int Interrupt_Clear;
+  volatile unsigned int PIO_Data;
+  volatile unsigned int PIO_Direction;
+  volatile unsigned int PIO_Interrupt;
 } LEON_Register_Map;
 
 #endif
@@ -396,9 +396,9 @@ static __inline__ int bsp_irq_fixup(int irq)
 /* Load 32-bit word by forcing a cache-miss */
 static inline unsigned int leon_r32_no_cache(uintptr_t addr)
 {
-	unsigned int tmp;
-	__asm__ volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(addr));
-	return tmp;
+  unsigned int tmp;
+  __asm__ volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(addr));
+  return tmp;
 }
 
 #endif /* !ASM */
