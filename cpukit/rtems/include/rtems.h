@@ -26,10 +26,6 @@
  */
 /**@{*/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
@@ -63,6 +59,10 @@ extern "C" {
 #include <rtems/rtems/smp.h>
 
 #include <rtems/rtems/support.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief Returns the pointer to the RTEMS version string.
