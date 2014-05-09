@@ -113,8 +113,8 @@ static void leon3_clock_profiling_interrupt_delay(void)
       rtems_configuration_get_microseconds_per_tick() - 1; \
     \
     LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].ctrl = \
-      LEON3_GPTIMER_EN | LEON3_GPTIMER_RL | \
-        LEON3_GPTIMER_LD | LEON3_GPTIMER_IRQEN; \
+      GPTIMER_TIMER_CTRL_EN | GPTIMER_TIMER_CTRL_RS | \
+        GPTIMER_TIMER_CTRL_LD | GPTIMER_TIMER_CTRL_IE; \
   } while (0)
 
 #define Clock_driver_support_shutdown_hardware() \

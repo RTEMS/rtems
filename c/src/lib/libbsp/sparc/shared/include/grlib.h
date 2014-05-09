@@ -78,6 +78,14 @@ struct gptimer_timer_regs {
   volatile unsigned int notused;
 };
 
+#define GPTIMER_TIMER_CTRL_EN 0x00000001U
+#define GPTIMER_TIMER_CTRL_RS 0x00000002U
+#define GPTIMER_TIMER_CTRL_LD 0x00000004U
+#define GPTIMER_TIMER_CTRL_IE 0x00000008U
+#define GPTIMER_TIMER_CTRL_IP 0x00000010U
+#define GPTIMER_TIMER_CTRL_CH 0x00000020U
+#define GPTIMER_TIMER_CTRL_DH 0x00000040U
+
 /* GPTIMER common registers */
 struct gptimer_regs {
   volatile unsigned int scaler_value;   /* common timer registers */

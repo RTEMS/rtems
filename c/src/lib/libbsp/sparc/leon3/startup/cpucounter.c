@@ -113,8 +113,8 @@ void leon3_cpu_counter_initialize(void)
 
       gpt->scaler_reload = min_prescaler - 1;
       gpt->timer[0].reload = 0xffffffff;
-      gpt->timer[0].ctrl = LEON3_GPTIMER_EN | LEON3_GPTIMER_RL
-        | LEON3_GPTIMER_LD;
+      gpt->timer[0].ctrl = GPTIMER_TIMER_CTRL_EN | GPTIMER_TIMER_CTRL_RS
+        | GPTIMER_TIMER_CTRL_LD;
 
       gpt_counter_initialize(gpt, 0, frequency, free_counter_difference);
     } else if (LEON3_Timer_Regs != NULL) {
