@@ -20,6 +20,8 @@
 #include <rtems/test.h>
 #include <rtems/score/smpimpl.h>
 
+#include <bsp/bootcard.h>
+
 #include <assert.h>
 #include <stdlib.h>
 
@@ -30,21 +32,10 @@ const char rtems_test_name[] = "SMPFATAL 8";
  * without BSP support.
  */
 
-#if defined(__PPC__)
-void qoriq_secondary_cpu_initialize(void)
+void bsp_start_on_secondary_processor(void)
 {
   /* Provided to avoid multiple definitions of the CPU SMP support functions */
 }
-#endif
-
-#if defined(__sparc__)
-void leon3_secondary_cpu_initialize(uint32_t cpu_index)
-{
-  (void) cpu_index;
-
-  /* Provided to avoid multiple definitions of the CPU SMP support functions */
-}
-#endif
 
 uint32_t _CPU_SMP_Initialize(void)
 {

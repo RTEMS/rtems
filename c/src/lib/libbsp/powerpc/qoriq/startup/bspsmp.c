@@ -22,6 +22,7 @@
 #include <bsp/mmu.h>
 #include <bsp/qoriq.h>
 #include <bsp/vectors.h>
+#include <bsp/bootcard.h>
 #include <bsp/irq-generic.h>
 #include <bsp/linker-symbols.h>
 
@@ -107,7 +108,7 @@ static void release_core_1(void)
   mmu_config_undo();
 }
 
-void qoriq_secondary_cpu_initialize(void)
+void bsp_start_on_secondary_processor(void)
 {
   const Per_CPU_Control *second_cpu = _Per_CPU_Get_by_index(1);
 

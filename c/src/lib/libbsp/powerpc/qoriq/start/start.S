@@ -208,7 +208,7 @@ _start_core_1:
 	LA	r2, _SDA2_BASE_
 	LA	r13, _SDA_BASE_
 
-	b	qoriq_secondary_cpu_initialize
+	b	bsp_start_on_secondary_processor
 
 	b	twiddle
 #endif /* RTEMS_SMP */

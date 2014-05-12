@@ -241,7 +241,7 @@ SYM(hard_reset):
 	andn	%sp, 0x0f, %sp		! align stack on 16-byte boundary
 	mov	%sp, %fp		! set frame pointer
 
-	call	SYM(leon3_secondary_cpu_initialize) ! does not return
+	call	SYM(bsp_start_on_secondary_processor) ! does not return
 	 sub	%sp, CPU_MINIMUM_STACK_FRAME_SIZE, %sp
 	ba	SYM(bsp_reset)		! just in case
 	 nop

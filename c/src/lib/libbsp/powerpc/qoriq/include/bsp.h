@@ -59,8 +59,6 @@ int qoriq_if_intercom_attach_detach(
 #define RTEMS_BSP_NETWORK_DRIVER_NAME3 "tsec3"
 #define RTEMS_BSP_NETWORK_DRIVER_NAME4 "intercom1"
 
-void qoriq_secondary_cpu_initialize(void);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -14,6 +14,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <leon.h>
 #include <rtems/bspIo.h>
 #include <rtems/score/smpimpl.h>
@@ -33,11 +34,13 @@ static rtems_isr bsp_inter_processor_interrupt(
   _SMP_Inter_processor_interrupt_handler();
 }
 
-void leon3_secondary_cpu_initialize(uint32_t cpu_index)
+void bsp_start_on_secondary_processor()
 {
+  uint32_t cpu_index_self = _CPU_SMP_Get_current_processor();
+
   leon3_set_cache_control_register(0x80000F);
   /* Unmask IPI interrupts at Interrupt controller for this CPU */
-  LEON3_IrqCtrl_Regs->mask[cpu_index] |= 1U << LEON3_MP_IRQ;
+  LEON3_IrqCtrl_Regs->mask[cpu_index_self] |= 1U << LEON3_MP_IRQ;
 
   _SMP_Start_multitasking_on_secondary_processor();
 }
