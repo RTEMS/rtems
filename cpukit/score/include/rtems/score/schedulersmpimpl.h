@@ -35,6 +35,281 @@ extern "C" {
 /**
  * @addtogroup ScoreSchedulerSMP
  *
+ * The scheduler nodes can be in four states
+ * - @ref SCHEDULER_SMP_NODE_BLOCKED,
+ * - @ref SCHEDULER_SMP_NODE_SCHEDULED,
+ * - @ref SCHEDULER_SMP_NODE_READY, and
+ * - @ref SCHEDULER_SMP_NODE_IN_THE_AIR.
+ *
+ * State transitions are triggered via basic three operations
+ * - _Scheduler_SMP_Enqueue_ordered(),
+ * - _Scheduler_SMP_Extract(), and
+ * - _Scheduler_SMP_Schedule().
+ *
+ * @dot
+ * digraph {
+ *   node [style="filled"];
+ *
+ *   bs [label="BLOCKED"];
+ *   ss [label="SCHEDULED", fillcolor="green"];
+ *   rs [label="READY", fillcolor="red"];
+ *   as [label="IN THE AIR", fillcolor="orange"];
+ *
+ *   edge [label="enqueue"];
+ *   edge [fontcolor="darkgreen", color="darkgreen"];
+ *
+ *   bs -> ss;
+ *   as -> ss;
+ *
+ *   edge [label="enqueue"];
+ *   edge [fontcolor="red", color="red"];
+ *
+ *   bs -> rs;
+ *   as -> rs;
+ *
+ *   edge [label="enqueue other"];
+ *
+ *   ss -> rs;
+ *
+ *   edge [label="schedule"];
+ *   edge [fontcolor="black", color="black"];
+ *
+ *   as -> bs;
+ *
+ *   edge [label="extract"];
+ *   edge [fontcolor="brown", color="brown"];
+ *
+ *   ss -> as;
+ *
+ *   edge [fontcolor="black", color="black"];
+ *
+ *   rs -> bs;
+ *
+ *   edge [label="enqueue other\nschedule other"];
+ *   edge [fontcolor="darkgreen", color="darkgreen"];
+ *
+ *   rs -> ss;
+ * }
+ * @enddot
+ *
+ * During system initialization each processor of the scheduler instance starts
+ * with an idle thread assigned to it.  Lets have a look at an example with two
+ * idle threads I and J with priority 5.  We also have blocked threads A, B and
+ * C with priorities 1, 2 and 3 respectively.
+ *
+ * @dot
+ * digraph {
+ *   node [style="filled"];
+ *   edge [dir="none"];
+ *   subgraph {
+ *     rank = same;
+ *
+ *     i [label="I (5)", fillcolor="green"];
+ *     j [label="J (5)", fillcolor="green"];
+ *     a [label="A (1)"];
+ *     b [label="B (2)"];
+ *     c [label="C (3)"];
+ *     i -> j;
+ *   }
+ *
+ *   subgraph {
+ *     rank = same;
+ *
+ *     p0 [label="PROCESSOR 0", shape="box"];
+ *     p1 [label="PROCESSOR 1", shape="box"];
+ *   }
+ *
+ *   i -> p0;
+ *   j -> p1;
+ * }
+ * @enddot
+ *
+ * Lets start A.  For this an enqueue operation is performed.
+ *
+ * @dot
+ * digraph {
+ *   node [style="filled"];
+ *   edge [dir="none"];
+ *
+ *   subgraph {
+ *     rank = same;
+ *
+ *     i [label="I (5)", fillcolor="green"];
+ *     j [label="J (5)", fillcolor="red"];
+ *     a [label="A (1)", fillcolor="green"];
+ *     b [label="B (2)"];
+ *     c [label="C (3)"];
+ *     a -> i;
+ *   }
+ *
+ *   subgraph {
+ *     rank = same;
+ *
+ *     p0 [label="PROCESSOR 0", shape="box"];
+ *     p1 [label="PROCESSOR 1", shape="box"];
+ *   }
+ *
+ *   i -> p0;
+ *   a -> p1;
+ * }
+ * @enddot
+ *
+ * Lets start C.
+ *
+ * @dot
+ * digraph {
+ *   node [style="filled"];
+ *   edge [dir="none"];
+ *
+ *   subgraph {
+ *     rank = same;
+ *
+ *     a [label="A (1)", fillcolor="green"];
+ *     c [label="C (3)", fillcolor="green"];
+ *     i [label="I (5)", fillcolor="red"];
+ *     j [label="J (5)", fillcolor="red"];
+ *     b [label="B (2)"];
+ *     a -> c;
+ *     i -> j;
+ *   }
+ *
+ *   subgraph {
+ *     rank = same;
+ *
+ *     p0 [label="PROCESSOR 0", shape="box"];
+ *     p1 [label="PROCESSOR 1", shape="box"];
+ *   }
+ *
+ *   c -> p0;
+ *   a -> p1;
+ * }
+ * @enddot
+ *
+ * Lets start B.
+ *
+ * @dot
+ * digraph {
+ *   node [style="filled"];
+ *   edge [dir="none"];
+ *
+ *   subgraph {
+ *     rank = same;
+ *
+ *     a [label="A (1)", fillcolor="green"];
+ *     b [label="B (2)", fillcolor="green"];
+ *     c [label="C (3)", fillcolor="red"];
+ *     i [label="I (5)", fillcolor="red"];
+ *     j [label="J (5)", fillcolor="red"];
+ *     a -> b;
+ *     c -> i -> j;
+ *   }
+ *
+ *   subgraph {
+ *     rank = same;
+ *
+ *     p0 [label="PROCESSOR 0", shape="box"];
+ *     p1 [label="PROCESSOR 1", shape="box"];
+ *   }
+ *
+ *   b -> p0;
+ *   a -> p1;
+ * }
+ * @enddot
+ *
+ * Lets do something with A.  This can be a blocking operation or a priority
+ * change.  For this an extract operation is performed first.
+ *
+ * @dot
+ * digraph {
+ *   node [style="filled"];
+ *   edge [dir="none"];
+ *
+ *   subgraph {
+ *     rank = same;
+ *
+ *     b [label="B (2)", fillcolor="green"];
+ *     a [label="A (1)", fillcolor="orange"];
+ *     c [label="C (3)", fillcolor="red"];
+ *     i [label="I (5)", fillcolor="red"];
+ *     j [label="J (5)", fillcolor="red"];
+ *     c -> i -> j;
+ *   }
+ *
+ *   subgraph {
+ *     rank = same;
+ *
+ *     p0 [label="PROCESSOR 0", shape="box"];
+ *     p1 [label="PROCESSOR 1", shape="box"];
+ *   }
+ *
+ *   b -> p0;
+ *   a -> p1;
+ * }
+ * @enddot
+ *
+ * Lets change the priority of thread A to 4 and enqueue it.
+ *
+ * @dot
+ * digraph {
+ *   node [style="filled"];
+ *   edge [dir="none"];
+ *
+ *   subgraph {
+ *     rank = same;
+ *
+ *     b [label="B (2)", fillcolor="green"];
+ *     c [label="C (3)", fillcolor="green"];
+ *     a [label="A (4)", fillcolor="red"];
+ *     i [label="I (5)", fillcolor="red"];
+ *     j [label="J (5)", fillcolor="red"];
+ *     b -> c;
+ *     a -> i -> j;
+ *   }
+ *
+ *   subgraph {
+ *     rank = same;
+ *
+ *     p0 [label="PROCESSOR 0", shape="box"];
+ *     p1 [label="PROCESSOR 1", shape="box"];
+ *   }
+ *
+ *   b -> p0;
+ *   c -> p1;
+ * }
+ * @enddot
+ *
+ * Alternatively we can also do a blocking operation with thread A.  In this
+ * case schedule will be called.
+ *
+ * @dot
+ * digraph {
+ *   node [style="filled"];
+ *   edge [dir="none"];
+ *
+ *   subgraph {
+ *     rank = same;
+ *
+ *     b [label="B (2)", fillcolor="green"];
+ *     c [label="C (3)", fillcolor="green"];
+ *     i [label="I (5)", fillcolor="red"];
+ *     j [label="J (5)", fillcolor="red"];
+ *     a [label="A (1)"];
+ *     b -> c;
+ *     i -> j;
+ *   }
+ *
+ *   subgraph {
+ *     rank = same;
+ *
+ *     p0 [label="PROCESSOR 0", shape="box"];
+ *     p1 [label="PROCESSOR 1", shape="box"];
+ *   }
+ *
+ *   b -> p0;
+ *   c -> p1;
+ * }
+ * @enddot
+ *
  * @{
  */
 
@@ -180,6 +455,22 @@ static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
   return lowest_ready;
 }
 
+/**
+ * @brief Enqueues a thread according to the specified order function.
+ *
+ * @param[in] context The scheduler instance context.
+ * @param[in] thread The thread to enqueue.
+ * @param[in] order The order function.
+ * @param[in] get_highest_ready Function to get the highest ready node.
+ * @param[in] insert_ready Function to insert a node into the set of ready
+ * nodes.
+ * @param[in] insert_scheduled Function to insert a node into the set of
+ * scheduled nodes.
+ * @param[in] move_from_ready_to_scheduled Function to move a node from the set
+ * of ready nodes to the set of scheduled nodes.
+ * @param[in] move_from_scheduled_to_ready Function to move a node from the set
+ * of scheduled nodes to the set of ready nodes.
+ */
 static inline void _Scheduler_SMP_Enqueue_ordered(
   Scheduler_SMP_Context *self,
   Thread_Control *thread,
@@ -256,6 +547,15 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
   ( *move_from_ready_to_scheduled )( self, highest_ready );
 }
 
+/**
+ * @brief Finalize a scheduling operation.
+ *
+ * @param[in] context The scheduler instance context.
+ * @param[in] thread The thread of the scheduling operation.
+ * @param[in] get_highest_ready Function to get the highest ready node.
+ * @param[in] move_from_ready_to_scheduled Function to move a node from the set
+ * of ready nodes to the set of scheduled nodes.
+ */
 static inline void _Scheduler_SMP_Schedule(
   Scheduler_SMP_Context *self,
   Thread_Control *thread,
@@ -295,6 +595,14 @@ static inline void _Scheduler_SMP_Block(
   );
 }
 
+/**
+ * @brief Extracts a thread from the set of scheduled or ready nodes.
+ *
+ * @param[in] context The scheduler instance context.
+ * @param[in] thread The thread to extract.
+ * @param[in] extract Function to extract a node from the set of scheduled or
+ * ready nodes.
+ */
 static inline void _Scheduler_SMP_Extract(
   Scheduler_SMP_Context *self,
   Thread_Control *thread,
