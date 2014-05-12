@@ -330,6 +330,40 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Has_processor_ownership(
 #endif
 }
 
+RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get(
+  Thread_Control *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  return the_thread->scheduler;
+#else
+  (void) the_thread;
+
+  return &_Scheduler_Table[ 0 ];
+#endif
+}
+
+RTEMS_INLINE_ROUTINE void _Scheduler_Set(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  const Scheduler_Control *current_scheduler = _Scheduler_Get( the_thread );
+
+  if ( current_scheduler != scheduler ) {
+    _Thread_Set_state( the_thread, STATES_MIGRATING );
+    _Scheduler_Free( _Scheduler_Get( the_thread ), the_thread );
+    the_thread->scheduler = scheduler;
+    _Scheduler_Allocate( scheduler, the_thread );
+    _Scheduler_Update( scheduler, the_thread );
+    _Thread_Clear_state( the_thread, STATES_MIGRATING );
+  }
+#else
+  (void) scheduler;
+#endif
+}
+
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
 
 RTEMS_INLINE_ROUTINE void _Scheduler_Get_processor_set(
@@ -376,40 +410,6 @@ bool _Scheduler_Get_affinity(
   size_t                   cpusetsize,
   cpu_set_t               *cpuset
 );
-
-RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get(
-  Thread_Control *the_thread
-)
-{
-#if defined(RTEMS_SMP)
-  return the_thread->scheduler;
-#else
-  (void) the_thread;
-
-  return &_Scheduler_Table[ 0 ];
-#endif
-}
-
-RTEMS_INLINE_ROUTINE void _Scheduler_Set(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-)
-{
-#if defined(RTEMS_SMP)
-  const Scheduler_Control *current_scheduler = _Scheduler_Get( the_thread );
-
-  if ( current_scheduler != scheduler ) {
-    _Thread_Set_state( the_thread, STATES_MIGRATING );
-    _Scheduler_Free( _Scheduler_Get( the_thread ), the_thread );
-    the_thread->scheduler = scheduler;
-    _Scheduler_Allocate( scheduler, the_thread );
-    _Scheduler_Update( scheduler, the_thread );
-    _Thread_Clear_state( the_thread, STATES_MIGRATING );
-  }
-#else
-  (void) scheduler;
-#endif
-}
 
 RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
   const Scheduler_Control *scheduler,
