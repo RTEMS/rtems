@@ -129,7 +129,8 @@ libbsp_a_SOURCES += ../../sparc/shared/i2c/i2cmst.c
 libbsp_a_SOURCES += timer/timer.c
 
 if HAS_SMP
-libbsp_a_SOURCES += ../../shared/smp/getcpuid.c ../../shared/smp/smp_stub.c
+libbsp_a_SOURCES += ../../shared/bspsmp.c
+libbsp_a_SOURCES += ../../shared/bspsmpgetcurrentprocessor.c
 endif
 
 if HAS_NETWORKING

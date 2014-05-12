@@ -124,8 +124,7 @@ libbsp_a_SOURCES += include/cache_.h
 libbsp_a_CPPFLAGS = -I$(srcdir)/include
 
 if HAS_SMP
-libbsp_a_SOURCES += smp/getcpuid.c
-libbsp_a_SOURCES += smp/smp_leon3.c
+libbsp_a_SOURCES += startup/bspsmp.c
 endif
 
 if HAS_NETWORKING

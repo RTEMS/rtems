@@ -77,7 +77,8 @@ libbsp_a_SOURCES += \
     ../../shared/src/irq-shell.c
 
 if HAS_SMP
-libbsp_a_SOURCES += ../../shared/smp/getcpuid.c ../../shared/smp/smp_stub.c
+libbsp_a_SOURCES += ../../shared/bspsmp.c
+libbsp_a_SOURCES += ../../shared/bspsmpgetcurrentprocessor.c
 endif
 
 if HAS_NETWORKING

@@ -19,6 +19,13 @@
 #include <rtems/score/smpimpl.h>
 #include <stdlib.h>
 
+#if !defined(__leon__)
+uint32_t _CPU_SMP_Get_current_processor( void )
+{
+  return _LEON3_Get_current_processor();
+}
+#endif
+
 static rtems_isr bsp_inter_processor_interrupt(
   rtems_vector_number vector
 )
