@@ -62,11 +62,6 @@ static void gpt_counter_initialize(
   rtems_counter_initialize_converter(frequency);
 }
 
-static unsigned int get_tstamp(volatile struct irqmp_timestamp_regs *irqmp_ts)
-{
-  return irqmp_ts->control >> 27;
-}
-
 void leon3_cpu_counter_initialize(void)
 {
   volatile struct irqmp_timestamp_regs *irqmp_ts =
