@@ -35,7 +35,7 @@ _Scheduler_simple_SMP_Self_from_SMP_base( Scheduler_SMP_Context *smp_base )
     ( (char *) smp_base - offsetof( Scheduler_simple_SMP_Context, Base ) );
 }
 
-void _Scheduler_simple_smp_Initialize( const Scheduler_Control *scheduler )
+void _Scheduler_simple_SMP_Initialize( const Scheduler_Control *scheduler )
 {
   Scheduler_simple_SMP_Context *self =
     _Scheduler_simple_SMP_Get_context( scheduler );
@@ -44,7 +44,7 @@ void _Scheduler_simple_smp_Initialize( const Scheduler_Control *scheduler )
   _Chain_Initialize_empty( &self->Ready );
 }
 
-bool _Scheduler_simple_smp_Allocate(
+bool _Scheduler_simple_SMP_Allocate(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
@@ -56,7 +56,7 @@ bool _Scheduler_simple_smp_Allocate(
   return true;
 }
 
-static Thread_Control *_Scheduler_simple_smp_Get_highest_ready(
+static Thread_Control *_Scheduler_simple_SMP_Get_highest_ready(
   Scheduler_SMP_Context *smp_base
 )
 {
@@ -72,7 +72,7 @@ static Thread_Control *_Scheduler_simple_smp_Get_highest_ready(
   return highest_ready;
 }
 
-static void _Scheduler_simple_smp_Move_from_scheduled_to_ready(
+static void _Scheduler_simple_SMP_Move_from_scheduled_to_ready(
   Scheduler_SMP_Context *smp_base,
   Thread_Control *scheduled_to_ready
 )
@@ -87,7 +87,7 @@ static void _Scheduler_simple_smp_Move_from_scheduled_to_ready(
   );
 }
 
-static void _Scheduler_simple_smp_Move_from_ready_to_scheduled(
+static void _Scheduler_simple_SMP_Move_from_ready_to_scheduled(
   Scheduler_SMP_Context *smp_base,
   Thread_Control *ready_to_scheduled
 )
@@ -99,7 +99,7 @@ static void _Scheduler_simple_smp_Move_from_ready_to_scheduled(
   );
 }
 
-static void _Scheduler_simple_smp_Insert_ready_lifo(
+static void _Scheduler_simple_SMP_Insert_ready_lifo(
   Scheduler_SMP_Context *smp_base,
   Thread_Control *thread
 )
@@ -114,7 +114,7 @@ static void _Scheduler_simple_smp_Insert_ready_lifo(
   );
 }
 
-static void _Scheduler_simple_smp_Insert_ready_fifo(
+static void _Scheduler_simple_SMP_Insert_ready_fifo(
   Scheduler_SMP_Context *smp_base,
   Thread_Control *thread
 )
@@ -129,7 +129,7 @@ static void _Scheduler_simple_smp_Insert_ready_fifo(
   );
 }
 
-static void _Scheduler_simple_smp_Do_extract(
+static void _Scheduler_simple_SMP_Do_extract(
   Scheduler_SMP_Context *smp_base,
   Thread_Control *thread
 )
@@ -147,7 +147,7 @@ static void _Scheduler_simple_smp_Do_extract(
   _Chain_Extract_unprotected( &thread->Object.Node );
 }
 
-void _Scheduler_simple_smp_Block(
+void _Scheduler_simple_SMP_Block(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 )
@@ -158,13 +158,13 @@ void _Scheduler_simple_smp_Block(
   _Scheduler_SMP_Block(
     &self->Base,
     thread,
-    _Scheduler_simple_smp_Do_extract,
-    _Scheduler_simple_smp_Get_highest_ready,
-    _Scheduler_simple_smp_Move_from_ready_to_scheduled
+    _Scheduler_simple_SMP_Do_extract,
+    _Scheduler_simple_SMP_Get_highest_ready,
+    _Scheduler_simple_SMP_Move_from_ready_to_scheduled
   );
 }
 
-static void _Scheduler_simple_smp_Enqueue_ordered(
+static void _Scheduler_simple_SMP_Enqueue_ordered(
   Scheduler_SMP_Context *smp_base,
   Thread_Control *thread,
   Chain_Node_order order,
@@ -176,15 +176,15 @@ static void _Scheduler_simple_smp_Enqueue_ordered(
     smp_base,
     thread,
     order,
-    _Scheduler_simple_smp_Get_highest_ready,
+    _Scheduler_simple_SMP_Get_highest_ready,
     insert_ready,
     insert_scheduled,
-    _Scheduler_simple_smp_Move_from_ready_to_scheduled,
-    _Scheduler_simple_smp_Move_from_scheduled_to_ready
+    _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
+    _Scheduler_simple_SMP_Move_from_scheduled_to_ready
   );
 }
 
-void _Scheduler_simple_smp_Enqueue_priority_lifo(
+void _Scheduler_simple_SMP_Enqueue_priority_lifo(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 )
@@ -192,16 +192,16 @@ void _Scheduler_simple_smp_Enqueue_priority_lifo(
   Scheduler_simple_SMP_Context *self =
     _Scheduler_simple_SMP_Get_context( scheduler );
 
-  _Scheduler_simple_smp_Enqueue_ordered(
+  _Scheduler_simple_SMP_Enqueue_ordered(
     &self->Base,
     thread,
     _Scheduler_simple_Insert_priority_lifo_order,
-    _Scheduler_simple_smp_Insert_ready_lifo,
+    _Scheduler_simple_SMP_Insert_ready_lifo,
     _Scheduler_SMP_Insert_scheduled_lifo
   );
 }
 
-void _Scheduler_simple_smp_Enqueue_priority_fifo(
+void _Scheduler_simple_SMP_Enqueue_priority_fifo(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 )
@@ -209,16 +209,16 @@ void _Scheduler_simple_smp_Enqueue_priority_fifo(
   Scheduler_simple_SMP_Context *self =
     _Scheduler_simple_SMP_Get_context( scheduler );
 
-  _Scheduler_simple_smp_Enqueue_ordered(
+  _Scheduler_simple_SMP_Enqueue_ordered(
     &self->Base,
     thread,
     _Scheduler_simple_Insert_priority_fifo_order,
-    _Scheduler_simple_smp_Insert_ready_fifo,
+    _Scheduler_simple_SMP_Insert_ready_fifo,
     _Scheduler_SMP_Insert_scheduled_fifo
   );
 }
 
-void _Scheduler_simple_smp_Extract(
+void _Scheduler_simple_SMP_Extract(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 )
@@ -229,11 +229,11 @@ void _Scheduler_simple_smp_Extract(
   _Scheduler_SMP_Extract(
     &self->Base,
     thread,
-    _Scheduler_simple_smp_Do_extract
+    _Scheduler_simple_SMP_Do_extract
   );
 }
 
-void _Scheduler_simple_smp_Yield(
+void _Scheduler_simple_SMP_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 )
@@ -242,13 +242,13 @@ void _Scheduler_simple_smp_Yield(
 
   _ISR_Disable( level );
 
-  _Scheduler_simple_smp_Extract( scheduler, thread );
-  _Scheduler_simple_smp_Enqueue_priority_fifo( scheduler, thread );
+  _Scheduler_simple_SMP_Extract( scheduler, thread );
+  _Scheduler_simple_SMP_Enqueue_priority_fifo( scheduler, thread );
 
   _ISR_Enable( level );
 }
 
-void _Scheduler_simple_smp_Schedule(
+void _Scheduler_simple_SMP_Schedule(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 )
@@ -259,12 +259,12 @@ void _Scheduler_simple_smp_Schedule(
   _Scheduler_SMP_Schedule(
     &self->Base,
     thread,
-    _Scheduler_simple_smp_Get_highest_ready,
-    _Scheduler_simple_smp_Move_from_ready_to_scheduled
+    _Scheduler_simple_SMP_Get_highest_ready,
+    _Scheduler_simple_SMP_Move_from_ready_to_scheduled
   );
 }
 
-void _Scheduler_simple_smp_Start_idle(
+void _Scheduler_simple_SMP_Start_idle(
   const Scheduler_Control *scheduler,
   Thread_Control *thread,
   Per_CPU_Control *cpu

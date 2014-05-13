@@ -59,63 +59,63 @@ typedef struct {
  */
 #define SCHEDULER_SIMPLE_SMP_ENTRY_POINTS \
   { \
-    _Scheduler_simple_smp_Initialize, \
-    _Scheduler_simple_smp_Schedule, \
-    _Scheduler_simple_smp_Yield, \
-    _Scheduler_simple_smp_Block, \
-    _Scheduler_simple_smp_Enqueue_priority_fifo, \
-    _Scheduler_simple_smp_Allocate, \
+    _Scheduler_simple_SMP_Initialize, \
+    _Scheduler_simple_SMP_Schedule, \
+    _Scheduler_simple_SMP_Yield, \
+    _Scheduler_simple_SMP_Block, \
+    _Scheduler_simple_SMP_Enqueue_priority_fifo, \
+    _Scheduler_simple_SMP_Allocate, \
     _Scheduler_default_Free, \
     _Scheduler_default_Update, \
-    _Scheduler_simple_smp_Enqueue_priority_fifo, \
-    _Scheduler_simple_smp_Enqueue_priority_lifo, \
-    _Scheduler_simple_smp_Extract, \
+    _Scheduler_simple_SMP_Enqueue_priority_fifo, \
+    _Scheduler_simple_SMP_Enqueue_priority_lifo, \
+    _Scheduler_simple_SMP_Extract, \
     _Scheduler_priority_Priority_compare, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \
-    _Scheduler_simple_smp_Start_idle, \
+    _Scheduler_simple_SMP_Start_idle, \
     _Scheduler_default_Get_affinity, \
     _Scheduler_default_Set_affinity \
   }
 
-void _Scheduler_simple_smp_Initialize( const Scheduler_Control *scheduler );
+void _Scheduler_simple_SMP_Initialize( const Scheduler_Control *scheduler );
 
-bool _Scheduler_simple_smp_Allocate(
+bool _Scheduler_simple_SMP_Allocate(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );
 
-void _Scheduler_simple_smp_Block(
+void _Scheduler_simple_SMP_Block(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
-void _Scheduler_simple_smp_Enqueue_priority_fifo(
+void _Scheduler_simple_SMP_Enqueue_priority_fifo(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
-void _Scheduler_simple_smp_Enqueue_priority_lifo(
+void _Scheduler_simple_SMP_Enqueue_priority_lifo(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
-void _Scheduler_simple_smp_Extract(
+void _Scheduler_simple_SMP_Extract(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
-void _Scheduler_simple_smp_Yield(
+void _Scheduler_simple_SMP_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
-void _Scheduler_simple_smp_Schedule(
+void _Scheduler_simple_SMP_Schedule(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
-void _Scheduler_simple_smp_Start_idle(
+void _Scheduler_simple_SMP_Start_idle(
   const Scheduler_Control *scheduler,
   Thread_Control *thread,
   Per_CPU_Control *cpu
