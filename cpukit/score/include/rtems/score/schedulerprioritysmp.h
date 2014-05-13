@@ -34,7 +34,7 @@ extern "C" {
 /**
  * @defgroup ScoreSchedulerPrioritySMP Deterministic Priority SMP Scheduler
  *
- * @ingroup ScoreScheduler
+ * @ingroup ScoreSchedulerSMP
  *
  * This is an implementation of the global fixed priority scheduler (G-FP).  It
  * uses one ready chain per priority to ensure constant time insert operations.

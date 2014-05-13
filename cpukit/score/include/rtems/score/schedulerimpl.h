@@ -183,9 +183,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update(
 }
 
 /**
- * @brief Scheduler enqueue.
+ * @brief Enqueues a thread as the last of its priority group.
  *
- * This routine enqueue @a the_thread->scheduler
+ * @param[in] scheduler The scheduler instance.
+ * @param[in] the_thread The thread to enqueue.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Enqueue(
   const Scheduler_Control *scheduler,
@@ -196,9 +197,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Enqueue(
 }
 
 /**
- * @brief Scheduler enqueue first.
+ * @brief Enqueues a thread as the first of its priority group.
  *
- * This routine enqueue_first @a the_thread->scheduler
+ * @param[in] scheduler The scheduler instance.
+ * @param[in] the_thread The thread to enqueue.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Enqueue_first(
   const Scheduler_Control *scheduler,
@@ -222,9 +224,20 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Extract(
 }
 
 /**
- * @brief Scheduler priority compare.
+ * @brief Compares two priority values.
  *
- * This routine compares two priorities.
+ * @param[in] scheduler The scheduler instance.
+ * @param[in] p1 The first priority value.
+ * @param[in] p2 The second priority value.
+ *
+ * @retval negative The value @a p1 encodes a lower priority than @a p2 in the
+ * intuitive sense of priority.
+ * @retval 0 The priorities @a p1 and @a p2 are equal.
+ * @retval positive The value @a p1 encodes a higher priority than @a p2 in the
+ * intuitive sense of priority.
+ *
+ * @see _Scheduler_Is_priority_lower_than() and
+ * _Scheduler_Is_priority_higher_than().
  */
 RTEMS_INLINE_ROUTINE int _Scheduler_Priority_compare(
   const Scheduler_Control *scheduler,
@@ -492,7 +505,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(
 }
 
 /**
- * @brief Returns true if @p1 encodes a lower priority than @a p2 in the
+ * @brief Returns true if @a p1 encodes a lower priority than @a p2 in the
  * intuitive sense of priority.
  */
 RTEMS_INLINE_ROUTINE bool _Scheduler_Is_priority_lower_than(
@@ -505,7 +518,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Is_priority_lower_than(
 }
 
 /**
- * @brief Returns true if @p1 encodes a higher priority than @a p2 in the
+ * @brief Returns true if @a p1 encodes a higher priority than @a p2 in the
  * intuitive sense of priority.
  */
 RTEMS_INLINE_ROUTINE bool _Scheduler_Is_priority_higher_than(

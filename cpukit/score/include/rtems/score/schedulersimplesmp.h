@@ -3,7 +3,7 @@
  *
  * @brief Simple SMP Scheduler API
  *
- * @ingroup ScoreSchedulerSMP
+ * @ingroup ScoreSchedulerSMPSimple
  */
 
 /*
@@ -28,16 +28,16 @@ extern "C" {
 #include <rtems/score/schedulersmp.h>
 
 /**
- * @defgroup ScoreSchedulerSMP Simple SMP Scheduler
+ * @defgroup ScoreSchedulerSMPSimple Simple Priority SMP Scheduler
  *
- * @ingroup ScoreScheduler
+ * @ingroup ScoreSchedulerSMP
  *
- * The Simple SMP Scheduler allocates a processor for the processor count
- * highest priority ready threads.  The thread priority and position in the
- * ready chain are the only information to determine the scheduling decision.
- * Threads with an allocated processor are in the scheduled chain.  After
- * initialization the scheduled chain has exactly processor count nodes.  Each
- * processor has exactly one allocated thread after initialization.  All
+ * The Simple Priority SMP Scheduler allocates a processor for the processor
+ * count highest priority ready threads.  The thread priority and position in
+ * the ready chain are the only information to determine the scheduling
+ * decision.  Threads with an allocated processor are in the scheduled chain.
+ * After initialization the scheduled chain has exactly processor count nodes.
+ * Each processor has exactly one allocated thread after initialization.  All
  * enqueue and extract operations may exchange threads with the scheduled
  * chain.  One thread will be added and another will be removed.  The scheduled
  * and ready chain is ordered according to the thread priority order.  The

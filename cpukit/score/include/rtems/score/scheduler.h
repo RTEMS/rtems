@@ -43,72 +43,59 @@ extern "C" {
 typedef struct Scheduler_Control Scheduler_Control;
 
 /**
- * function jump table that holds pointers to the functions that
- * implement specific schedulers.
+ * @brief The scheduler operations.
  */
 typedef struct {
-  /** Implements the scheduling decision logic (policy). */
+  /** @see _Scheduler_Handler_initialization() */
   void ( *initialize )( const Scheduler_Control * );
 
-  /** Implements the scheduling decision logic (policy). */
+  /** @see _Scheduler_Schedule() */
   void ( *schedule )( const Scheduler_Control *, Thread_Control *);
 
-  /**
-   * @brief Voluntarily yields the processor per the scheduling policy.
-   *
-   * @see _Scheduler_Yield().
-   */
+  /** @see _Scheduler_Yield() */
   void ( *yield )( const Scheduler_Control *, Thread_Control *);
 
-  /** Removes the given thread from scheduling decisions. */
+  /** @see _Scheduler_Block() */
   void ( *block )( const Scheduler_Control *, Thread_Control * );
 
-  /** Adds the given thread to scheduling decisions. */
+  /** @see _Scheduler_Unblock() */
   void ( *unblock )( const Scheduler_Control *, Thread_Control * );
 
-  /** allocates the scheduler field of the given thread */
+  /** @see _Scheduler_Allocate() */
   bool ( *allocate )( const Scheduler_Control *, Thread_Control * );
 
-  /** frees the scheduler field of the given thread */
+  /** @see _Scheduler_Free() */
   void ( *free )( const Scheduler_Control *, Thread_Control * );
 
-  /** updates the scheduler field of the given thread -- primarily used
-   * when changing the thread's priority. */
+  /** @see _Scheduler_Update() */
   void ( *update )( const Scheduler_Control *, Thread_Control * );
 
-  /** enqueue a thread as the last of its priority group */
+  /** @see _Scheduler_Enqueue() */
   void ( *enqueue )( const Scheduler_Control *, Thread_Control * );
 
-  /** enqueue a thread as the first of its priority group */
+  /** @see _Scheduler_Enqueue_first() */
   void ( *enqueue_first )( const Scheduler_Control *, Thread_Control * );
 
-  /** extract a thread from the ready set */
+  /** @see _Scheduler_Extract() */
   void ( *extract )( const Scheduler_Control *, Thread_Control * );
 
-  /**
-   * Compares two priorities (returns >0 for higher priority, 0 for equal
-   * and <0 for lower priority).
-   */
+  /** @see _Scheduler_Priority_compare() */
   int ( *priority_compare )(
     Priority_Control,
     Priority_Control
   );
 
-  /** This routine is called upon release of a new job. */
+  /** @see _Scheduler_Release_job() */
   void ( *release_job ) (
     const Scheduler_Control *,
     Thread_Control *,
     uint32_t
   );
 
-  /** perform scheduler update actions required at each clock tick */
+  /** @see _Scheduler_Tick() */
   void ( *tick )( const Scheduler_Control *, Thread_Control * );
 
-  /**
-   * @brief Starts the idle thread for a particular processor.
-   *
-   * @see _Scheduler_Start_idle().
-   */
+  /** @see _Scheduler_Start_idle() */
   void ( *start_idle )(
     const Scheduler_Control *,
     Thread_Control *,
@@ -116,11 +103,7 @@ typedef struct {
   );
 
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
-  /**
-   * @brief Obtain the processor affinity for a thread.
-   *
-   * @see _Scheduler_Get_affinity().
-   */
+  /** @see _Scheduler_Get_affinity() */
   bool ( *get_affinity )(
     const Scheduler_Control *,
     Thread_Control *,
@@ -128,11 +111,7 @@ typedef struct {
     cpu_set_t *
   );
   
-  /**
-   * @brief Set the processor affinity for a thread.
-   *
-   * @see _Scheduler_Set_affinity().
-   */
+  /** @see _Scheduler_Set_affinity() */
   bool ( *set_affinity )(
     const Scheduler_Control *,
     Thread_Control *,
@@ -365,7 +344,10 @@ void _Scheduler_default_Start_idle(
   );
 #endif
 
-/*
+/**
+ * @brief Indicates if thread priority queues are broken with the configured
+ * scheduler or not.
+ *
  * See also PR2174: Memory corruption with EDF scheduler and thread priority
  * queues.
  */

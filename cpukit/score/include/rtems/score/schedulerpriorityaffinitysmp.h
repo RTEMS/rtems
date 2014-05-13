@@ -31,7 +31,7 @@ extern "C" {
 /**
  * @defgroup ScoreSchedulerPriorityAffinitySMP Deterministic Priority Affinity SMP Scheduler
  *
- * @ingroup ScoreScheduler
+ * @ingroup ScoreSchedulerPrioritySMP
  *
  * This is an extension of the Deterministic Priority SMP Scheduler. which
  * is an implementation of the global fixed priority scheduler (G-FP). 
