@@ -29,8 +29,13 @@ void _Scheduler_priority_Unblock (
 {
   Scheduler_priority_Context *context =
     _Scheduler_priority_Get_context( scheduler );
+  Scheduler_priority_Node *node = _Scheduler_priority_Node_get( the_thread );
 
-  _Scheduler_priority_Ready_queue_enqueue( the_thread, &context->Bit_map );
+  _Scheduler_priority_Ready_queue_enqueue(
+    the_thread,
+    &node->Ready_queue,
+    &context->Bit_map
+  );
 
   /* TODO: flash critical section? */
 

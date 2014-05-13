@@ -87,7 +87,7 @@ void print_formula(void);
 /* Priority scheduling per-thread consumption. Gets 
  * included in the PER_TASK consumption.
  */
-#define SCHEDULER_TASK_WKSP     (sizeof(Scheduler_priority_Per_thread))
+#define SCHEDULER_TASK_WKSP     (sizeof(Scheduler_priority_Node))
 
 /* Priority scheduling workspace consumption 
  *

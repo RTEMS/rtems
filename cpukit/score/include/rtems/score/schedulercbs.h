@@ -129,10 +129,10 @@ typedef struct {
  */
 typedef struct {
   /** EDF scheduler specific data of a task. */
-  Scheduler_EDF_Per_thread      edf_per_thread;
+  Scheduler_EDF_Node            Base;
   /** CBS server specific data of a task. */
   Scheduler_CBS_Server         *cbs_server;
-} Scheduler_CBS_Per_thread;
+} Scheduler_CBS_Node;
 
 
 /**

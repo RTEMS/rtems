@@ -39,6 +39,8 @@
 
 struct Scheduler_Control;
 
+struct Scheduler_Node;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -479,31 +481,6 @@ struct Thread_Control_struct {
   bool                                  is_preemptible;
 #if defined(RTEMS_SMP)
   /**
-   * @brief This field is true if the thread is scheduled.
-   *
-   * A thread is scheduled if it is ready and the scheduler allocated a
-   * processor for it.  A scheduled thread is assigned to exactly one
-   * processor.  There are exactly processor count scheduled threads in the
-   * system.
-   */
-  bool                                  is_scheduled;
-
-  /**
-   * @brief This field is true if the thread is in the air.
-   *
-   * A thread is in the air if it has an allocated processor (it is an
-   * executing or heir thread on exactly one processor) and it is not a member
-   * of the scheduled chain.  The extract operation on a scheduled thread will
-   * produce threads in the air (see also _Thread_Set_transient()).  The next
-   * enqueue or schedule operation will decide what to do based on this state
-   * indication.  It can either place the thread back on the scheduled chain
-   * and the thread can keep its allocated processor, or it can take the
-   * processor away from the thread and give the processor to another thread of
-   * higher priority.
-   */
-  bool                                  is_in_the_air;
-
-  /**
    * @brief The scheduler of this thread.
    */
   const struct Scheduler_Control       *scheduler;
@@ -530,8 +507,10 @@ struct Thread_Control_struct {
    */
   Thread_CPU_usage_t                    cpu_time_used;
 
-  /** This pointer holds per-thread data for the scheduler and ready queue. */
-  void                                 *scheduler_info;
+  /**
+   * @brief The scheduler node of this thread for the real scheduler.
+   */
+  struct Scheduler_Node                *scheduler_node;
 
 #ifdef RTEMS_SMP
   /**

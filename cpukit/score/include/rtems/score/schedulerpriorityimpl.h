@@ -41,6 +41,13 @@ RTEMS_INLINE_ROUTINE Scheduler_priority_Context *
   return (Scheduler_priority_Context *) scheduler->context;
 }
 
+RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Node_get(
+  Thread_Control *the_thread
+)
+{
+  return (Scheduler_priority_Node *) _Scheduler_Node_get( the_thread );
+}
+
 /**
  * @brief Ready queue initialization.
  *
@@ -57,77 +64,72 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(
     _Chain_Initialize_empty( &ready_queues[index] );
 }
 
-RTEMS_INLINE_ROUTINE Scheduler_priority_Per_thread *
+RTEMS_INLINE_ROUTINE Scheduler_priority_Node *
 _Scheduler_priority_Get_scheduler_info( Thread_Control *thread )
 {
-  return ( Scheduler_priority_Per_thread * ) thread->scheduler_info;
+  return ( Scheduler_priority_Node * ) thread->scheduler_node;
 }
 
 /**
- * @brief Put a thread to the ready queue.
+ * @brief Enqueues a thread on the specified ready queue.
  *
- * This routine puts @a the_thread on to the priority-based ready queue.
+ * The thread is placed as the last element of its priority group.
  *
  * @param[in] the_thread The thread to enqueue.
+ * @param[in] ready_queue The ready queue.
  * @param[in] bit_map The priority bit map of the scheduler instance.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue(
-  Thread_Control           *the_thread,
-  Priority_bit_map_Control *bit_map
+  Thread_Control                 *the_thread,
+  Scheduler_priority_Ready_queue *ready_queue,
+  Priority_bit_map_Control       *bit_map
 )
 {
-  Scheduler_priority_Per_thread *sched_info_of_thread =
-    _Scheduler_priority_Get_scheduler_info( the_thread );
-  Chain_Control *ready_chain = sched_info_of_thread->ready_chain;
+  Chain_Control *ready_chain = ready_queue->ready_chain;
 
   _Chain_Append_unprotected( ready_chain, &the_thread->Object.Node );
-  _Priority_bit_map_Add( bit_map, &sched_info_of_thread->Priority_map );
+  _Priority_bit_map_Add( bit_map, &ready_queue->Priority_map );
 }
 
 /**
- * @brief Put a thread to the head of the ready queue.
+ * @brief Enqueues a thread on the specified ready queue as first.
  *
- * This routine puts @a the_thread to the head of the ready queue.
- * For priority-based ready queues, the thread will be the first thread
- * at its priority level.
+ * The thread is placed as the first element of its priority group.
  *
- * @param[in] the_thread The thread to enqueue.
+ * @param[in] the_thread The thread to enqueue as first.
+ * @param[in] ready_queue The ready queue.
  * @param[in] bit_map The priority bit map of the scheduler instance.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue_first(
-  Thread_Control           *the_thread,
-  Priority_bit_map_Control *bit_map
+  Thread_Control                 *the_thread,
+  Scheduler_priority_Ready_queue *ready_queue,
+  Priority_bit_map_Control       *bit_map
 )
 {
-  Scheduler_priority_Per_thread *sched_info_of_thread =
-    _Scheduler_priority_Get_scheduler_info( the_thread );
-  Chain_Control *ready_chain = sched_info_of_thread->ready_chain;
+  Chain_Control *ready_chain = ready_queue->ready_chain;
 
   _Chain_Prepend_unprotected( ready_chain, &the_thread->Object.Node );
-  _Priority_bit_map_Add( bit_map, &sched_info_of_thread->Priority_map );
+  _Priority_bit_map_Add( bit_map, &ready_queue->Priority_map );
 }
 
 /**
- * @brief Remove a specific thread from the ready queue.
- *
- * This routine removes a specific thread from the specified
- * priority-based ready queue.
+ * @brief Extracts a thread from the specified ready queue.
  *
  * @param[in] the_thread The thread to extract.
+ * @param[in] ready_queue The ready queue.
  * @param[in] bit_map The priority bit map of the scheduler instance.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
-  Thread_Control           *the_thread,
-  Priority_bit_map_Control *bit_map
+  Thread_Control                 *the_thread,
+  Scheduler_priority_Ready_queue *ready_queue,
+  Priority_bit_map_Control       *bit_map
 )
 {
-  Scheduler_priority_Per_thread *sched_info_of_thread =
-    _Scheduler_priority_Get_scheduler_info( the_thread );
-  Chain_Control *ready_chain = sched_info_of_thread->ready_chain;
+  Chain_Control *ready_chain = ready_queue->ready_chain;
 
   if ( _Chain_Has_only_one_node( ready_chain ) ) {
     _Chain_Initialize_empty( ready_chain );
-    _Priority_bit_map_Remove( bit_map, &sched_info_of_thread->Priority_map );
+    _Priority_bit_map_Remove( bit_map, &ready_queue->Priority_map );
   } else {
     _Chain_Extract_unprotected( &the_thread->Object.Node );
   }
@@ -140,8 +142,13 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Extract_body(
 {
   Scheduler_priority_Context *context =
     _Scheduler_priority_Get_context( scheduler );
+  Scheduler_priority_Node *node = _Scheduler_priority_Node_get( the_thread );
 
-  _Scheduler_priority_Ready_queue_extract( the_thread, &context->Bit_map );
+  _Scheduler_priority_Ready_queue_extract(
+    the_thread,
+    &node->Ready_queue,
+    &context->Bit_map
+  );
 }
 
 /**
@@ -165,20 +172,20 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_priority_Ready_queue_first(
 }
 
 /**
- * @brief Requeue a thread on the ready queue.
+ * @brief Requeues a thread on the specified ready queue.
  *
  * This routine is invoked when a thread changes priority and should be
  * moved to a different position on the ready queue.
  *
- * @param[in] the_thread is a pointer to the thread
+ * @param[in] the_thread The thread to requeue.
+ * @param[in] ready_queue The ready queue.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_requeue(
-  Thread_Control            *the_thread
+  Thread_Control                 *the_thread,
+  Scheduler_priority_Ready_queue *ready_queue
 )
 {
-  Scheduler_priority_Per_thread *sched_info_of_thread =
-    _Scheduler_priority_Get_scheduler_info( the_thread );
-  Chain_Control *ready_chain = sched_info_of_thread->ready_chain;
+  Chain_Control *ready_chain = ready_queue->ready_chain;
 
   if ( !_Chain_Has_only_one_node( ready_chain ) ) {
     _Chain_Extract_unprotected( &the_thread->Object.Node );
@@ -210,22 +217,29 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(
   _Scheduler_Update_heir( heir, force_dispatch );
 }
 
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Update_body(
-  Thread_Control           *thread,
-  Priority_bit_map_Control *bit_map,
-  Chain_Control            *ready_queues
+/**
+ * @brief Updates the specified ready queue data according to the current
+ * priority of the thread.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] ready_queue The ready queue.
+ * @param[in] bit_map The priority bit map of the scheduler instance.
+ * @param[in] ready_queues The ready queues of the scheduler instance.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_update(
+  Thread_Control                 *the_thread,
+  Scheduler_priority_Ready_queue *ready_queue,
+  Priority_bit_map_Control       *bit_map,
+  Chain_Control                  *ready_queues
 )
 {
-  Scheduler_priority_Per_thread *sched_info_of_thread =
-    _Scheduler_priority_Get_scheduler_info( thread );
-
-  sched_info_of_thread->ready_chain =
-    &ready_queues[ thread->current_priority ];
+  Priority_Control priority = the_thread->current_priority;
+  ready_queue->ready_chain = &ready_queues[ priority ];
 
   _Priority_bit_map_Initialize_information(
     bit_map,
-    &sched_info_of_thread->Priority_map,
-    thread->current_priority
+    &ready_queue->Priority_map,
+    priority
   );
 }
 

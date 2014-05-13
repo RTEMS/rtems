@@ -18,7 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/schedulercbs.h>
+#include <rtems/score/schedulercbsimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
 
@@ -27,7 +27,7 @@ void _Scheduler_CBS_Budget_callout(
 )
 {
   Priority_Control          new_priority;
-  Scheduler_CBS_Per_thread *sched_info;
+  Scheduler_CBS_Node       *node;
   Scheduler_CBS_Server_id   server_id;
 
   /* Put violating task to background until the end of period. */
@@ -38,13 +38,13 @@ void _Scheduler_CBS_Budget_callout(
     _Thread_Change_priority(the_thread, new_priority, true);
 
   /* Invoke callback function if any. */
-  sched_info = (Scheduler_CBS_Per_thread *) the_thread->scheduler_info;
-  if ( sched_info->cbs_server->cbs_budget_overrun ) {
+  node = _Scheduler_CBS_Node_get( the_thread );
+  if ( node->cbs_server->cbs_budget_overrun ) {
     _Scheduler_CBS_Get_server_id(
-        sched_info->cbs_server->task_id,
+        node->cbs_server->task_id,
         &server_id
     );
-    sched_info->cbs_server->cbs_budget_overrun( server_id );
+    node->cbs_server->cbs_budget_overrun( server_id );
   }
 }
 

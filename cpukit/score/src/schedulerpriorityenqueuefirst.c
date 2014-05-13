@@ -27,9 +27,11 @@ void _Scheduler_priority_Enqueue_first(
 {
   Scheduler_priority_Context *context =
     _Scheduler_priority_Get_context( scheduler );
+  Scheduler_priority_Node *node = _Scheduler_priority_Node_get( the_thread );
 
   _Scheduler_priority_Ready_queue_enqueue_first(
     the_thread,
+    &node->Ready_queue,
     &context->Bit_map
   );
 }

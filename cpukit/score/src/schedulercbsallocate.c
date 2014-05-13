@@ -18,25 +18,20 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/scheduleredf.h>
-#include <rtems/score/schedulercbs.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/score/schedulercbsimpl.h>
 
 bool _Scheduler_CBS_Allocate(
   const Scheduler_Control *scheduler,
   Thread_Control    *the_thread
 )
 {
-  Scheduler_CBS_Per_thread *schinfo = the_thread->scheduler_info;
+  Scheduler_CBS_Node *node = _Scheduler_CBS_Node_get( the_thread );
 
   (void) scheduler;
 
-  schinfo->edf_per_thread.thread = the_thread;
-  schinfo->edf_per_thread.queue_state = SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN;
-  schinfo->cbs_server = NULL;
+  node->Base.thread = the_thread;
+  node->Base.queue_state = SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN;
+  node->cbs_server = NULL;
 
   return true;
 }

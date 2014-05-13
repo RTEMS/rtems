@@ -27,9 +27,9 @@ static int _Scheduler_EDF_RBTree_compare_function
 )
 {
   Priority_Control value1 = _RBTree_Container_of
-    (n1,Scheduler_EDF_Per_thread,Node)->thread->current_priority;
+    (n1,Scheduler_EDF_Node,Node)->thread->current_priority;
   Priority_Control value2 = _RBTree_Container_of
-    (n2,Scheduler_EDF_Per_thread,Node)->thread->current_priority;
+    (n2,Scheduler_EDF_Node,Node)->thread->current_priority;
 
   /*
    * This function compares only numbers for the red-black tree,

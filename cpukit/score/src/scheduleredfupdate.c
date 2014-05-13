@@ -18,28 +18,22 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/scheduleredf.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/scheduleredfimpl.h>
 
 void _Scheduler_EDF_Update(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
 {
-  Scheduler_EDF_Per_thread *sched_info =
-    (Scheduler_EDF_Per_thread*)the_thread->scheduler_info;
+  Scheduler_EDF_Node *node = _Scheduler_EDF_Node_get( the_thread );
 
   (void) scheduler;
 
-  if (sched_info->queue_state == SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN) {
+  if (node->queue_state == SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN) {
     /* Shifts the priority to the region of background tasks. */
     the_thread->Start.initial_priority |= (SCHEDULER_EDF_PRIO_MSB);
     the_thread->real_priority    = the_thread->Start.initial_priority;
     the_thread->current_priority = the_thread->Start.initial_priority;
-    sched_info->queue_state = SCHEDULER_EDF_QUEUE_STATE_NOT_PRESENTLY;
+    node->queue_state = SCHEDULER_EDF_QUEUE_STATE_NOT_PRESENTLY;
   }
 }

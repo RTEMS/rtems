@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @brief Deterministic Priority SMP Scheduler Implementation
+ * @ingroup ScoreSchedulerPrioritySMP
  *
- * @ingroup ScoreSchedulerSMP
+ * @brief Deterministic Priority SMP Scheduler Implementation
  */
 
 /*
@@ -43,6 +43,13 @@ _Scheduler_priority_SMP_Self_from_SMP_base( Scheduler_SMP_Context *smp_base )
       - offsetof( Scheduler_priority_SMP_Context, Base ) );
 }
 
+static Scheduler_priority_SMP_Node *_Scheduler_priority_SMP_Node_get(
+  Thread_Control *thread
+)
+{
+  return (Scheduler_priority_SMP_Node *) _Scheduler_Node_get( thread );
+}
+
 void _Scheduler_priority_SMP_Initialize( const Scheduler_Control *scheduler )
 {
   Scheduler_priority_SMP_Context *self =
@@ -53,6 +60,18 @@ void _Scheduler_priority_SMP_Initialize( const Scheduler_Control *scheduler )
   _Scheduler_priority_Ready_queue_initialize( &self->Ready[ 0 ] );
 }
 
+bool _Scheduler_priority_SMP_Allocate(
+  const Scheduler_Control *scheduler,
+  Thread_Control *thread
+)
+{
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+
+  _Scheduler_SMP_Node_initialize( node );
+
+  return true;
+}
+
 void _Scheduler_priority_SMP_Update(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
@@ -60,9 +79,12 @@ void _Scheduler_priority_SMP_Update(
 {
   Scheduler_priority_SMP_Context *self =
     _Scheduler_priority_SMP_Get_context( scheduler );
+  Scheduler_priority_SMP_Node *node =
+    _Scheduler_priority_SMP_Node_get( thread );
 
-  _Scheduler_priority_Update_body(
+  _Scheduler_priority_Ready_queue_update(
     thread,
+    &node->Ready_queue,
     &self->Bit_map,
     &self->Ready[ 0 ]
   );
@@ -93,10 +115,13 @@ static void _Scheduler_priority_SMP_Move_from_scheduled_to_ready(
 {
   Scheduler_priority_SMP_Context *self =
     _Scheduler_priority_SMP_Self_from_SMP_base( smp_base );
+  Scheduler_priority_SMP_Node *node =
+    _Scheduler_priority_SMP_Node_get( scheduled_to_ready );
 
   _Chain_Extract_unprotected( &scheduled_to_ready->Object.Node );
   _Scheduler_priority_Ready_queue_enqueue_first(
     scheduled_to_ready,
+    &node->Ready_queue,
     &self->Bit_map
   );
 }
@@ -108,9 +133,12 @@ static void _Scheduler_priority_SMP_Move_from_ready_to_scheduled(
 {
   Scheduler_priority_SMP_Context *self =
     _Scheduler_priority_SMP_Self_from_SMP_base( smp_base );
+  Scheduler_priority_SMP_Node *node =
+    _Scheduler_priority_SMP_Node_get( ready_to_scheduled );
 
   _Scheduler_priority_Ready_queue_extract(
     ready_to_scheduled,
+    &node->Ready_queue,
     &self->Bit_map
   );
   _Scheduler_simple_Insert_priority_fifo(
@@ -126,8 +154,14 @@ static void _Scheduler_priority_SMP_Insert_ready_lifo(
 {
   Scheduler_priority_SMP_Context *self =
     _Scheduler_priority_SMP_Self_from_SMP_base( smp_base );
+  Scheduler_priority_SMP_Node *node =
+    _Scheduler_priority_SMP_Node_get( thread );
 
-  _Scheduler_priority_Ready_queue_enqueue( thread, &self->Bit_map );
+  _Scheduler_priority_Ready_queue_enqueue(
+    thread,
+    &node->Ready_queue,
+    &self->Bit_map
+  );
 }
 
 static void _Scheduler_priority_SMP_Insert_ready_fifo(
@@ -137,8 +171,14 @@ static void _Scheduler_priority_SMP_Insert_ready_fifo(
 {
   Scheduler_priority_SMP_Context *self =
     _Scheduler_priority_SMP_Self_from_SMP_base( smp_base );
+  Scheduler_priority_SMP_Node *node =
+    _Scheduler_priority_SMP_Node_get( thread );
 
-  _Scheduler_priority_Ready_queue_enqueue_first( thread, &self->Bit_map );
+  _Scheduler_priority_Ready_queue_enqueue_first(
+    thread,
+    &node->Ready_queue,
+    &self->Bit_map
+  );
 }
 
 static void _Scheduler_priority_SMP_Do_extract(
@@ -148,15 +188,25 @@ static void _Scheduler_priority_SMP_Do_extract(
 {
   Scheduler_priority_SMP_Context *self =
     _Scheduler_priority_SMP_Self_from_SMP_base( smp_base );
-  bool is_scheduled = thread->is_scheduled;
+  Scheduler_priority_SMP_Node *node =
+    _Scheduler_priority_SMP_Node_get( thread );
 
-  thread->is_in_the_air = is_scheduled;
-  thread->is_scheduled = false;
-
-  if ( is_scheduled ) {
+  if ( node->Base.state == SCHEDULER_SMP_NODE_SCHEDULED ) {
+    _Scheduler_SMP_Node_change_state(
+      &node->Base,
+      SCHEDULER_SMP_NODE_IN_THE_AIR
+    );
     _Chain_Extract_unprotected( &thread->Object.Node );
   } else {
-    _Scheduler_priority_Ready_queue_extract( thread, &self->Bit_map );
+    _Scheduler_SMP_Node_change_state(
+      &node->Base,
+      SCHEDULER_SMP_NODE_BLOCKED
+    );
+    _Scheduler_priority_Ready_queue_extract(
+      thread,
+      &node->Ready_queue,
+      &self->Bit_map
+    );
   }
 }
 

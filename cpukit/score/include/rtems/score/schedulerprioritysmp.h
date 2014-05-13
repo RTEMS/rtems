@@ -47,11 +47,31 @@ extern "C" {
  * @{
  */
 
+/**
+ * @brief Scheduler context specialization for Deterministic Priority SMP
+ * schedulers.
+ */
 typedef struct {
   Scheduler_SMP_Context    Base;
   Priority_bit_map_Control Bit_map;
-  Chain_Control            Ready[ 0 ];
+  Chain_Control            Ready[ RTEMS_ZERO_LENGTH_ARRAY ];
 } Scheduler_priority_SMP_Context;
+
+/**
+ * @brief Scheduler node specialization for Deterministic Priority SMP
+ * schedulers.
+ */
+typedef struct {
+  /**
+   * @brief SMP scheduler node.
+   */
+  Scheduler_SMP_Node Base;
+
+  /**
+   * @brief The associated ready queue of this node.
+   */
+  Scheduler_priority_Ready_queue Ready_queue;
+} Scheduler_priority_SMP_Node;
 
 /**
  * @brief Entry points for the Priority SMP Scheduler.
@@ -63,7 +83,7 @@ typedef struct {
     _Scheduler_priority_SMP_Yield, \
     _Scheduler_priority_SMP_Block, \
     _Scheduler_priority_SMP_Enqueue_fifo, \
-    _Scheduler_default_Allocate, \
+    _Scheduler_priority_SMP_Allocate, \
     _Scheduler_default_Free, \
     _Scheduler_priority_SMP_Update, \
     _Scheduler_priority_SMP_Enqueue_fifo, \
@@ -78,6 +98,11 @@ typedef struct {
   }
 
 void _Scheduler_priority_SMP_Initialize( const Scheduler_Control *scheduler );
+
+bool _Scheduler_priority_SMP_Allocate(
+  const Scheduler_Control *scheduler,
+  Thread_Control *thread
+);
 
 void _Scheduler_priority_SMP_Schedule(
   const Scheduler_Control *scheduler,

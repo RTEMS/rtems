@@ -83,7 +83,7 @@ typedef struct {
 } Scheduler_priority_Context;
 
 /**
- * Per-thread data related to the _Scheduler_PRIORITY scheduling policy.
+ * @brief Data for ready queue operations.
  */
 typedef struct {
   /** This field points to the Ready FIFO for this thread's priority. */
@@ -91,7 +91,22 @@ typedef struct {
 
   /** This field contains precalculated priority map indices. */
   Priority_bit_map_Information          Priority_map;
-} Scheduler_priority_Per_thread;
+} Scheduler_priority_Ready_queue;
+
+/**
+ * @brief Scheduler node specialization for Deterministic Priority schedulers.
+ */
+typedef struct {
+  /**
+   * @brief Basic scheduler node.
+   */
+  Scheduler_Node Base;
+
+  /**
+   * @brief The associated ready queue of this node.
+   */
+  Scheduler_priority_Ready_queue Ready_queue;
+} Scheduler_priority_Node;
 
 /**
  * @brief Initializes the priority scheduler.

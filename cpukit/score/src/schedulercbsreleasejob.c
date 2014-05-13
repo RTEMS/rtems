@@ -19,7 +19,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/schedulercbs.h>
+#include <rtems/score/schedulercbsimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
@@ -29,11 +29,9 @@ void _Scheduler_CBS_Release_job(
   uint32_t                 deadline
 )
 {
-  Priority_Control new_priority;
-  Scheduler_CBS_Per_thread *sched_info =
-    (Scheduler_CBS_Per_thread *) the_thread->scheduler_info;
-  Scheduler_CBS_Server *serv_info =
-    (Scheduler_CBS_Server *) sched_info->cbs_server;
+  Scheduler_CBS_Node   *node = _Scheduler_CBS_Node_get( the_thread );
+  Scheduler_CBS_Server *serv_info = node->cbs_server;
+  Priority_Control      new_priority;
 
   if (deadline) {
     /* Initializing or shifting deadline. */

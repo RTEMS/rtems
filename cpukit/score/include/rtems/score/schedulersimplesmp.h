@@ -64,7 +64,7 @@ typedef struct {
     _Scheduler_simple_smp_Yield, \
     _Scheduler_simple_smp_Block, \
     _Scheduler_simple_smp_Enqueue_priority_fifo, \
-    _Scheduler_default_Allocate, \
+    _Scheduler_simple_smp_Allocate, \
     _Scheduler_default_Free, \
     _Scheduler_default_Update, \
     _Scheduler_simple_smp_Enqueue_priority_fifo, \
@@ -79,6 +79,11 @@ typedef struct {
   }
 
 void _Scheduler_simple_smp_Initialize( const Scheduler_Control *scheduler );
+
+bool _Scheduler_simple_smp_Allocate(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
+);
 
 void _Scheduler_simple_smp_Block(
   const Scheduler_Control *scheduler,

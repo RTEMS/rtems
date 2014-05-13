@@ -27,9 +27,8 @@ void _Scheduler_priority_Yield(
   Thread_Control          *the_thread
 )
 {
-  Scheduler_priority_Per_thread *sched_info_of_thread =
-    _Scheduler_priority_Get_scheduler_info( the_thread );
-  Chain_Control *ready_chain = sched_info_of_thread->ready_chain;
+  Scheduler_priority_Node *node = _Scheduler_priority_Node_get( the_thread );
+  Chain_Control *ready_chain = node->Ready_queue.ready_chain;
   ISR_Level level;
 
   (void) scheduler;

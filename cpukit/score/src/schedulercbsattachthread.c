@@ -18,7 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/schedulercbs.h>
+#include <rtems/score/schedulercbsimpl.h>
 #include <rtems/score/threadimpl.h>
 
 int _Scheduler_CBS_Attach_thread (
@@ -43,18 +43,16 @@ int _Scheduler_CBS_Attach_thread (
   the_thread = _Thread_Get(task_id, &location);
   /* The routine _Thread_Get may disable dispatch and not enable again. */
   if ( the_thread ) {
-    Scheduler_CBS_Per_thread *sched_info;
-
-    sched_info = (Scheduler_CBS_Per_thread *) the_thread->scheduler_info;
+    Scheduler_CBS_Node *node = _Scheduler_CBS_Node_get( the_thread );
 
     /* Thread is already attached to a server. */
-    if ( sched_info->cbs_server ) {
+    if ( node->cbs_server ) {
       _Objects_Put( &the_thread->Object );
       return SCHEDULER_CBS_ERROR_FULL;
     }
 
     _Scheduler_CBS_Server_list[server_id].task_id = task_id;
-    sched_info->cbs_server = &_Scheduler_CBS_Server_list[server_id];
+    node->cbs_server = &_Scheduler_CBS_Server_list[server_id];
 
     the_thread->budget_callout   = _Scheduler_CBS_Budget_callout;
     the_thread->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;

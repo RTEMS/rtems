@@ -42,6 +42,8 @@ extern "C" {
 
 typedef struct Scheduler_Control Scheduler_Control;
 
+typedef struct Scheduler_Node Scheduler_Node;
+
 /**
  * @brief The scheduler operations.
  */
@@ -154,6 +156,13 @@ struct Scheduler_Control {
    * @brief The scheduler name.
    */
   uint32_t name;
+};
+
+/**
+ * @brief Scheduler node for per-thread data.
+ */
+struct Scheduler_Node {
+  /* No fields yet */
 };
 
 /**

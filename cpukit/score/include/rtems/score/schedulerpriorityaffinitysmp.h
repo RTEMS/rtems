@@ -118,25 +118,20 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
 );
 
 /**
- * This structure handles affinity specific data of a thread.
- *
- * @note The attribute priority_sched_info must remain
- *       the first element in the structure so that the 
- *       Scheduler_priority_XXX methods will continue to 
- *       function.
+ * @brief Scheduler node specialization for Deterministic Priority Affinity SMP
+ * schedulers.
  */
 typedef struct {
-
   /**
-   * Data for the Priority Scheduler.
+   * @brief SMP priority scheduler node.
    */
-  Scheduler_priority_Per_thread  Priority_sched_info;
+  Scheduler_priority_SMP_Node Base;
 
   /**
    * Structure containing affinity set data and size
    */
   CPU_set_Control Affinity;
-} Scheduler_priority_affinity_SMP_Per_thread;
+} Scheduler_priority_affinity_SMP_Node;
 
 /** @} */
 

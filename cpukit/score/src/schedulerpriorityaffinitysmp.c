@@ -25,10 +25,11 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/cpusetimpl.h>
 
-RTEMS_INLINE_ROUTINE Scheduler_priority_affinity_SMP_Per_thread *
-_Scheduler_priority_affinity_Get_scheduler_info( Thread_Control *thread )
+static Scheduler_priority_affinity_SMP_Node *
+_Scheduler_priority_affinity_Node_get( Thread_Control *thread )
 {
-  return ( Scheduler_priority_affinity_SMP_Per_thread * ) thread->scheduler_info;
+  return ( Scheduler_priority_affinity_SMP_Node * )
+    _Scheduler_Node_get( thread );
 }
 
 bool _Scheduler_priority_affinity_SMP_Allocate(
@@ -36,11 +37,13 @@ bool _Scheduler_priority_affinity_SMP_Allocate(
   Thread_Control          *the_thread
 )
 {
-  Scheduler_priority_affinity_SMP_Per_thread *info =
-    the_thread->scheduler_info;
+  Scheduler_priority_affinity_SMP_Node *node =
+    _Scheduler_priority_affinity_Node_get( the_thread );
 
-  info->Affinity = *_CPU_set_Default();
-  info->Affinity.set = &info->Affinity.preallocated;
+  _Scheduler_SMP_Node_initialize( &node->Base.Base );
+
+  node->Affinity = *_CPU_set_Default();
+  node->Affinity.set = &node->Affinity.preallocated;
 
   return true;
 }
@@ -52,16 +55,16 @@ bool _Scheduler_priority_affinity_SMP_Get_affinity(
   cpu_set_t               *cpuset
 )
 {
-  Scheduler_priority_affinity_SMP_Per_thread *info =
-    _Scheduler_priority_affinity_Get_scheduler_info(thread);
+  Scheduler_priority_affinity_SMP_Node *node =
+    _Scheduler_priority_affinity_Node_get(thread);
 
   (void) scheduler;
 
-  if ( info->Affinity.setsize != cpusetsize ) {
+  if ( node->Affinity.setsize != cpusetsize ) {
     return false;
   }
 
-  CPU_COPY( cpuset, info->Affinity.set );
+  CPU_COPY( cpuset, node->Affinity.set );
   return true; 
 }
 
@@ -72,8 +75,8 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
   cpu_set_t               *cpuset
 )
 {
-  Scheduler_priority_affinity_SMP_Per_thread *info =
-    _Scheduler_priority_affinity_Get_scheduler_info(thread);
+  Scheduler_priority_affinity_SMP_Node *node =
+    _Scheduler_priority_affinity_Node_get(thread);
 
   (void) scheduler;
   
@@ -81,7 +84,7 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
     return false;
   }
 
-  CPU_COPY( info->Affinity.set, cpuset );
+  CPU_COPY( node->Affinity.set, cpuset );
   
   return true;
 }

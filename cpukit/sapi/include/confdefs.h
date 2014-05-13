@@ -2474,18 +2474,24 @@ const rtems_libio_helper rtems_fs_init_helper =
       void *extensions[ CONFIGURE_MAXIMUM_USER_EXTENSIONS + 1 ];
     #endif
     union {
+      Scheduler_Node Base;
       #ifdef CONFIGURE_SCHEDULER_CBS
-        Scheduler_CBS_Per_thread CBS;
+        Scheduler_CBS_Node CBS;
       #endif
       #ifdef CONFIGURE_SCHEDULER_EDF
-        Scheduler_EDF_Per_thread EDF;
+        Scheduler_EDF_Node EDF;
       #endif
-      #if defined(CONFIGURE_SCHEDULER_PRIORITY) \
-        || defined(CONFIGURE_SCHEDULER_PRIORITY_SMP)
-        Scheduler_priority_Per_thread Priority;
+      #ifdef CONFIGURE_SCHEDULER_PRIORITY
+        Scheduler_priority_Node Priority;
+      #endif
+      #ifdef CONFIGURE_SCHEDULER_SIMPLE_SMP
+        Scheduler_SMP_Node Simple_SMP;
+      #endif
+      #ifdef CONFIGURE_SCHEDULER_PRIORITY_SMP
+        Scheduler_priority_SMP_Node Priority_SMP;
       #endif
       #ifdef CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
-        Scheduler_priority_affinity_SMP_Per_thread Priority_affinity;
+        Scheduler_priority_affinity_SMP_Node Priority_affinity_SMP;
       #endif
       #ifdef CONFIGURE_SCHEDULER_USER_PER_THREAD
         CONFIGURE_SCHEDULER_USER_PER_THREAD User;
@@ -2511,7 +2517,7 @@ const rtems_libio_helper rtems_fs_init_helper =
 
   const Thread_Control_add_on _Thread_Control_add_ons[] = {
     {
-      offsetof( Configuration_Thread_control, Control.scheduler_info ),
+      offsetof( Configuration_Thread_control, Control.scheduler_node ),
       offsetof( Configuration_Thread_control, Scheduler )
     }, {
       offsetof(

@@ -3,7 +3,7 @@
  *
  * @brief Simple SMP Scheduler Implementation
  *
- * @ingroup ScoreSchedulerSMP
+ * @ingroup ScoreSchedulerSMPSimple
  */
 
 /*
@@ -42,6 +42,18 @@ void _Scheduler_simple_smp_Initialize( const Scheduler_Control *scheduler )
 
   _Scheduler_SMP_Initialize( &self->Base );
   _Chain_Initialize_empty( &self->Ready );
+}
+
+bool _Scheduler_simple_smp_Allocate(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
+)
+{
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( the_thread );
+
+  _Scheduler_SMP_Node_initialize( node );
+
+  return true;
 }
 
 static Thread_Control *_Scheduler_simple_smp_Get_highest_ready(
@@ -122,10 +134,15 @@ static void _Scheduler_simple_smp_Do_extract(
   Thread_Control *thread
 )
 {
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+
   (void) smp_base;
 
-  thread->is_in_the_air = thread->is_scheduled;
-  thread->is_scheduled = false;
+  if ( node->state == SCHEDULER_SMP_NODE_SCHEDULED ) {
+    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_IN_THE_AIR );
+  } else {
+    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
+  }
 
   _Chain_Extract_unprotected( &thread->Object.Node );
 }

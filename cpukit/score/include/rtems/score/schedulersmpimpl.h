@@ -64,6 +64,34 @@ static inline void _Scheduler_SMP_Initialize(
   _Chain_Initialize_empty( &self->Scheduled );
 }
 
+static inline Scheduler_SMP_Node *_Scheduler_SMP_Node_get(
+  Thread_Control *thread
+)
+{
+  return (Scheduler_SMP_Node *) _Scheduler_Node_get( thread );
+}
+
+static inline void _Scheduler_SMP_Node_initialize(
+  Scheduler_SMP_Node *node
+)
+{
+  node->state = SCHEDULER_SMP_NODE_BLOCKED;
+}
+
+extern const bool _Scheduler_SMP_Node_valid_state_changes[ 4 ][ 4 ];
+
+static inline void _Scheduler_SMP_Node_change_state(
+  Scheduler_SMP_Node *node,
+  Scheduler_SMP_Node_state new_state
+)
+{
+  _Assert(
+    _Scheduler_SMP_Node_valid_state_changes[ node->state ][ new_state ]
+  );
+
+  node->state = new_state;
+}
+
 static inline bool _Scheduler_SMP_Is_processor_owned_by_us(
   const Scheduler_SMP_Context *self,
   const Per_CPU_Control *cpu
@@ -106,13 +134,16 @@ static inline void _Scheduler_SMP_Allocate_processor(
   Thread_Control *victim
 )
 {
+  Scheduler_SMP_Node *scheduled_node = _Scheduler_SMP_Node_get( scheduled );
   Per_CPU_Control *cpu_of_scheduled = _Thread_Get_CPU( scheduled );
   Per_CPU_Control *cpu_of_victim = _Thread_Get_CPU( victim );
   Per_CPU_Control *cpu_self = _Per_CPU_Get();
   Thread_Control *heir;
 
-  scheduled->is_scheduled = true;
-  victim->is_scheduled = false;
+  _Scheduler_SMP_Node_change_state(
+    scheduled_node,
+    SCHEDULER_SMP_NODE_SCHEDULED
+  );
 
   _Assert( _ISR_Get_level() != 0 );
 
@@ -160,10 +191,10 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
   Scheduler_SMP_Move move_from_scheduled_to_ready
 )
 {
-  if ( thread->is_in_the_air ) {
-    Thread_Control *highest_ready = ( *get_highest_ready )( self );
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
 
-    thread->is_in_the_air = false;
+  if ( node->state == SCHEDULER_SMP_NODE_IN_THE_AIR ) {
+    Thread_Control *highest_ready = ( *get_highest_ready )( self );
 
     /*
      * The thread has been extracted from the scheduled chain.  We have to
@@ -175,13 +206,12 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
       highest_ready != NULL
         && !( *order )( &thread->Object.Node, &highest_ready->Object.Node )
     ) {
+      _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
       _Scheduler_SMP_Allocate_processor( self, highest_ready, thread );
-
       ( *insert_ready )( self, thread );
       ( *move_from_ready_to_scheduled )( self, highest_ready );
     } else {
-      thread->is_scheduled = true;
-
+      _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_SCHEDULED );
       ( *insert_scheduled )( self, thread );
     }
   } else {
@@ -195,11 +225,18 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
       lowest_scheduled != NULL
         && ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node )
     ) {
-      _Scheduler_SMP_Allocate_processor( self, thread, lowest_scheduled );
+      Scheduler_SMP_Node *lowest_scheduled_node =
+        _Scheduler_SMP_Node_get( lowest_scheduled );
 
+      _Scheduler_SMP_Node_change_state(
+        lowest_scheduled_node,
+        SCHEDULER_SMP_NODE_READY
+      );
+      _Scheduler_SMP_Allocate_processor( self, thread, lowest_scheduled );
       ( *insert_scheduled )( self, thread );
       ( *move_from_scheduled_to_ready )( self, lowest_scheduled );
     } else {
+      _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
       ( *insert_ready )( self, thread );
     }
   }
@@ -226,8 +263,10 @@ static inline void _Scheduler_SMP_Schedule(
   Scheduler_SMP_Move move_from_ready_to_scheduled
 )
 {
-  if ( thread->is_in_the_air ) {
-    thread->is_in_the_air = false;
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+
+  if ( node->state == SCHEDULER_SMP_NODE_IN_THE_AIR ) {
+    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
 
     _Scheduler_SMP_Schedule_highest_ready(
       self,
@@ -295,7 +334,10 @@ static inline void _Scheduler_SMP_Start_idle(
   Per_CPU_Control *cpu
 )
 {
-  thread->is_scheduled = true;
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+
+  node->state = SCHEDULER_SMP_NODE_SCHEDULED;
+
   _Thread_Set_CPU( thread, cpu );
   _Chain_Append_unprotected( &self->Scheduled, &thread->Object.Node );
 }

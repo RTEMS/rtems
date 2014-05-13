@@ -37,6 +37,13 @@ RTEMS_INLINE_ROUTINE Scheduler_EDF_Context *
   return (Scheduler_EDF_Context *) scheduler->context;
 }
 
+RTEMS_INLINE_ROUTINE Scheduler_EDF_Node *_Scheduler_EDF_Node_get(
+  Thread_Control *the_thread
+)
+{
+  return (Scheduler_EDF_Node *) _Scheduler_Node_get( the_thread );
+}
+
 RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Schedule_body(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -46,9 +53,9 @@ RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Schedule_body(
   Scheduler_EDF_Context *context =
     _Scheduler_EDF_Get_context( scheduler );
   RBTree_Node *first = _RBTree_First( &context->Ready, RBT_LEFT );
-  Scheduler_EDF_Per_thread *sched_info =
-    _RBTree_Container_of(first, Scheduler_EDF_Per_thread, Node);
-  Thread_Control *heir = (Thread_Control *) sched_info->thread;
+  Scheduler_EDF_Node *node =
+    _RBTree_Container_of(first, Scheduler_EDF_Node, Node);
+  Thread_Control *heir = node->thread;
 
   ( void ) the_thread;
 

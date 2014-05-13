@@ -91,9 +91,14 @@ typedef enum {
 } Scheduler_EDF_Queue_state;
 
 /**
- * This structure handles EDF specific data of a thread.
+ * @brief Scheduler node specialization for EDF schedulers.
  */
 typedef struct {
+  /**
+   * @brief Basic scheduler node.
+   */
+  Scheduler_Node Base;
+
   /**
    * Pointer to corresponding Thread Control Block.
    */
@@ -106,7 +111,7 @@ typedef struct {
    * State of the thread with respect to ready queue.
    */
   Scheduler_EDF_Queue_state queue_state;
-} Scheduler_EDF_Per_thread;
+} Scheduler_EDF_Node;
 
 /**
  * @brief Initialize EDF scheduler.

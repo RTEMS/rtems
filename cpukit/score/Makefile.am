@@ -52,6 +52,7 @@ include_rtems_score_HEADERS += include/rtems/score/rbtreeimpl.h
 include_rtems_score_HEADERS += include/rtems/score/scheduler.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerimpl.h
 include_rtems_score_HEADERS += include/rtems/score/schedulercbs.h
+include_rtems_score_HEADERS += include/rtems/score/schedulercbsimpl.h
 include_rtems_score_HEADERS += include/rtems/score/scheduleredf.h
 include_rtems_score_HEADERS += include/rtems/score/scheduleredfimpl.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerpriority.h
@@ -126,6 +127,7 @@ endif
 
 if HAS_SMP
 libscore_a_SOURCES += src/profilingsmplock.c
+libscore_a_SOURCES += src/schedulersmpvalidstatechanges.c
 libscore_a_SOURCES += src/schedulerpriorityaffinitysmp.c
 libscore_a_SOURCES += src/schedulerprioritysmp.c
 libscore_a_SOURCES += src/schedulersimplesmp.c

@@ -181,8 +181,6 @@ bool _Thread_Initialize(
   the_thread->Start.isr_level         = isr_level;
 
 #if defined(RTEMS_SMP)
-  the_thread->is_scheduled            = false;
-  the_thread->is_in_the_air           = false;
   the_thread->scheduler               = scheduler;
   _CPU_Context_Set_is_executing( &the_thread->Registers, false );
 #endif
