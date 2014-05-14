@@ -45,12 +45,10 @@ extern "C" {
     _Scheduler_EDF_Yield,            /* yield entry point */ \
     _Scheduler_EDF_Block,            /* block entry point */ \
     _Scheduler_EDF_Unblock,          /* unblock entry point */ \
+    _Scheduler_EDF_Change_priority,  /* change priority entry point */ \
     _Scheduler_EDF_Allocate,         /* allocate entry point */ \
     _Scheduler_default_Free,         /* free entry point */ \
     _Scheduler_EDF_Update,           /* update entry point */ \
-    _Scheduler_EDF_Enqueue,          /* enqueue entry point */ \
-    _Scheduler_EDF_Enqueue_first,    /* enqueue_first entry point */ \
-    _Scheduler_EDF_Extract,          /* extract entry point */ \
     _Scheduler_EDF_Priority_compare, /* compares two priorities */ \
     _Scheduler_EDF_Release_job,      /* new period of task */ \
     _Scheduler_default_Tick,         /* tick entry point */ \
@@ -187,6 +185,13 @@ void _Scheduler_EDF_Unblock(
   Thread_Control          *the_thread
 );
 
+void _Scheduler_EDF_Change_priority(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Priority_Control         new_priority,
+  bool                     prepend_it
+);
+
 /**
  *  @brief invoked when a thread wishes to voluntarily
  *  transfer control of the processor to another thread
@@ -203,45 +208,6 @@ void _Scheduler_EDF_Unblock(
  *  @param[in,out] thread The yielding thread.
  */
 void _Scheduler_EDF_Yield(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-);
-
-/**
- *  @brief Put @a the_thread to the rbtree ready queue.
- *
- *  This routine puts @a the_thread to the rbtree ready queue.
- *
- *  @param[in] the_thread will be enqueued to the ready queue.
- */
-void _Scheduler_EDF_Enqueue(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-);
-
-/**
- *  @brief Enqueue a thread to the ready queue.
- *
- *  This routine puts @a the_thread to the rbtree ready queue.
- *  For the EDF scheduler this is the same as @a _Scheduler_EDF_Enqueue.
- *
- *  @param[in] the_thread will be enqueued to the ready queue.
- */
-void _Scheduler_EDF_Enqueue_first(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-);
-
-/**
- *  @brief Remove a specific thread from the scheduler's set
- *  of ready threads.
- *
- *  This routine removes a specific thread from the scheduler's set
- *  of ready threads.
- *
- *  @param[in] the_thread will be extracted from the ready set.
- */
-void _Scheduler_EDF_Extract(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );

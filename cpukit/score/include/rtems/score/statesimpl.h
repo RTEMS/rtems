@@ -42,8 +42,6 @@ extern "C" {
 #define STATES_DORMANT                         0x00001
 /** This macro corresponds to a task being suspended. */
 #define STATES_SUSPENDED                       0x00002
-/** This macro corresponds to a task being in an internal state transition. */
-#define STATES_TRANSIENT                       0x00004
 /** This macro corresponds to a task which is waiting for a timeout. */
 #define STATES_DELAYING                        0x00008
 /** This macro corresponds to a task waiting until a specific TOD. */
@@ -212,21 +210,6 @@ RTEMS_INLINE_ROUTINE bool _States_Is_suspended (
 )
 {
    return (the_states & STATES_SUSPENDED);
-}
-
-/**
- * This function returns true if the TRANSIENT state is set in
- * the_states, and false otherwise.
- *
- * @param[in] the_states is the task state set to test
- *
- * @return This method returns true if the desired state condition is set.
- */
-RTEMS_INLINE_ROUTINE bool _States_Is_transient (
-  States_Control the_states
-)
-{
-   return (the_states & STATES_TRANSIENT);
 }
 
 /**

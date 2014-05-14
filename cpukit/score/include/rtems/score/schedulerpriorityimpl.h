@@ -196,28 +196,27 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(
 }
 
 /**
- * @brief Updates the specified ready queue data according to the current
- * priority of the thread.
+ * @brief Updates the specified ready queue data according to the new priority
+ * value.
  *
- * @param[in] the_thread The thread.
  * @param[in] ready_queue The ready queue.
+ * @param[in] new_priority The new priority.
  * @param[in] bit_map The priority bit map of the scheduler instance.
  * @param[in] ready_queues The ready queues of the scheduler instance.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_update(
-  Thread_Control                 *the_thread,
   Scheduler_priority_Ready_queue *ready_queue,
+  Priority_Control                new_priority,
   Priority_bit_map_Control       *bit_map,
   Chain_Control                  *ready_queues
 )
 {
-  Priority_Control priority = the_thread->current_priority;
-  ready_queue->ready_chain = &ready_queues[ priority ];
+  ready_queue->ready_chain = &ready_queues[ new_priority ];
 
   _Priority_bit_map_Initialize_information(
     bit_map,
     &ready_queue->Priority_map,
-    priority
+    new_priority
   );
 }
 

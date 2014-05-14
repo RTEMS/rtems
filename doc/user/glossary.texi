@@ -278,11 +278,6 @@ access an active object.
 A special low priority task which assumes
 control of the CPU when no other task is able to execute.
 
-@item in the air task
-A task is @dfn{in the air} if it is in a transient state and has a processor
-assigned.  The next scheduler operation will turn it into a blocked, ready or
-scheduled task.  This state is specific to SMP configurations.
-
 @item interface
 A specification of the methodology used
 to connect multiple independent subsystems.

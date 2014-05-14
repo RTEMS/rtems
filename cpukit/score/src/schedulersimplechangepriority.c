@@ -1,7 +1,8 @@
 /**
  * @file
  *
- * @brief Scheduler Simple Priority Enqueue Ready Thread
+ * @brief Removes a Thread from the Simple Queue
+ *
  * @ingroup ScoreScheduler
  */
 
@@ -20,13 +21,21 @@
 
 #include <rtems/score/schedulersimpleimpl.h>
 
-void _Scheduler_simple_Ready_queue_enqueue(
+void _Scheduler_simple_Change_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Control         new_priority,
+  bool                     prepend_it
 )
 {
   Scheduler_simple_Context *context =
     _Scheduler_simple_Get_context( scheduler );
 
-  _Scheduler_simple_Insert_priority_fifo( &context->Ready, the_thread );
+  _Scheduler_simple_Extract( scheduler, the_thread );
+
+  if ( prepend_it ) {
+    _Scheduler_simple_Insert_priority_lifo( &context->Ready, the_thread );
+  } else {
+    _Scheduler_simple_Insert_priority_fifo( &context->Ready, the_thread );
+  }
 }

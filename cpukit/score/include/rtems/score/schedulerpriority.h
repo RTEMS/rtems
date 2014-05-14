@@ -52,12 +52,10 @@ extern "C" {
     _Scheduler_priority_Yield,            /* yield entry point */ \
     _Scheduler_priority_Block,            /* block entry point */ \
     _Scheduler_priority_Unblock,          /* unblock entry point */ \
-    _Scheduler_default_Allocate,         /* allocate entry point */ \
-    _Scheduler_default_Free,             /* free entry point */ \
+    _Scheduler_priority_Change_priority,  /* change priority entry point */ \
+    _Scheduler_default_Allocate,          /* allocate entry point */ \
+    _Scheduler_default_Free,              /* free entry point */ \
     _Scheduler_priority_Update,           /* update entry point */ \
-    _Scheduler_priority_Enqueue,          /* enqueue entry point */ \
-    _Scheduler_priority_Enqueue_first,    /* enqueue_first entry point */ \
-    _Scheduler_priority_Extract,          /* extract entry point */ \
     _Scheduler_priority_Priority_compare, /* compares two priorities */ \
     _Scheduler_default_Release_job,       /* new period of task */ \
     _Scheduler_default_Tick,              /* tick entry point */ \
@@ -167,6 +165,13 @@ void _Scheduler_priority_Unblock(
   Thread_Control          *the_thread
 );
 
+void _Scheduler_priority_Change_priority(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Priority_Control         new_priority,
+  bool                     prepend_it
+);
+
 /**
  *  @brief The specified THREAD yields.
  *
@@ -187,45 +192,6 @@ void _Scheduler_priority_Unblock(
  *  @param[in,out] thread The yielding thread.
  */
 void _Scheduler_priority_Yield(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-);
-
-/**
- *  @brief Puts @a the_thread on to the priority-based ready queue.
- *
- *  This routine puts @a the_thread on to the priority-based ready queue.
- *
- *  @param[in] the_thread will be enqueued at the TAIL of its priority.
- */
-void _Scheduler_priority_Enqueue(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-);
-
-/**
- *  @brief Puts @a the_thread to the head of the ready queue.
- *
- *  This routine puts @a the_thread to the head of the ready queue.
- *  For priority-based ready queues, the thread will be the first thread
- *  at its priority level.
- *
- *  @param[in] the_thread will be enqueued at the HEAD of its priority.
- */
-void _Scheduler_priority_Enqueue_first(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-);
-
-/**
- *  @brief Remove a specific thread from scheduler.
- *
- *  This routine removes a specific thread from the scheduler's set
- *  of ready threads.
- *
- *  @param[in] the_thread will be extracted from the ready set.
- */
-void _Scheduler_priority_Extract(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );

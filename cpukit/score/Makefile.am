@@ -208,9 +208,7 @@ libscore_a_SOURCES += src/schedulerdefaultupdate.c
 ## SCHEDULERPRIORITY_C_FILES
 libscore_a_SOURCES += src/schedulerpriority.c \
     src/schedulerpriorityblock.c \
-    src/schedulerpriorityenqueue.c \
-    src/schedulerpriorityenqueuefirst.c \
-    src/schedulerpriorityextract.c \
+    src/schedulerprioritychangepriority.c \
     src/schedulerpriorityprioritycompare.c \
     src/schedulerpriorityschedule.c \
     src/schedulerpriorityunblock.c \
@@ -220,11 +218,7 @@ libscore_a_SOURCES += src/schedulerpriority.c \
 ## SCHEDULERSIMPLE_C_FILES
 libscore_a_SOURCES += src/schedulersimple.c \
     src/schedulersimpleblock.c \
-    src/schedulersimpleenqueue.c \
-    src/schedulersimpleenqueuefirst.c \
-    src/schedulersimpleextract.c \
-    src/schedulersimplereadyqueueenqueue.c \
-    src/schedulersimplereadyqueueenqueuefirst.c \
+    src/schedulersimplechangepriority.c \
     src/schedulersimpleschedule.c \
     src/schedulersimpleunblock.c \
     src/schedulersimpleyield.c
@@ -233,9 +227,7 @@ libscore_a_SOURCES += src/schedulersimple.c \
 libscore_a_SOURCES += src/scheduleredf.c \
     src/scheduleredfallocate.c \
     src/scheduleredfblock.c \
-    src/scheduleredfenqueue.c \
-    src/scheduleredfenqueuefirst.c \
-    src/scheduleredfextract.c \
+    src/scheduleredfchangepriority.c \
     src/scheduleredfprioritycompare.c \
     src/scheduleredfreleasejob.c \
     src/scheduleredfschedule.c \
@@ -282,7 +274,7 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadget.c src/threadhandler.c src/threadinitialize.c \
     src/threadloadenv.c src/threadready.c \
     src/threadrestart.c src/threadsetpriority.c \
-    src/threadsetstate.c src/threadsettransient.c \
+    src/threadsetstate.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
     src/threadstartmultitasking.c src/iterateoverthreads.c \
     src/threadblockingoperationcancel.c

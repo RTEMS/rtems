@@ -144,6 +144,35 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock(
 }
 
 /**
+ * @brief Propagates a priority change of a thread to the scheduler.
+ *
+ * The caller must ensure that the thread is in the ready state.  The caller
+ * must ensure that the priority value actually changed and is not equal to the
+ * current priority value.
+ *
+ * @param[in] scheduler The scheduler instance.
+ * @param[in] the_thread The thread changing its priority.
+ * @param[in] new_priority The new thread priority.
+ * @param[in] prepend_it In case this is true, then enqueue the thread as the
+ * first of its priority group, otherwise enqueue the thread as the last of its
+ * priority group.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Priority_Control         new_priority,
+  bool                     prepend_it
+)
+{
+  ( *scheduler->Operations.change_priority )(
+    scheduler,
+    the_thread,
+    new_priority,
+    prepend_it
+  );
+}
+
+/**
  * @brief Scheduler allocate.
  *
  * This routine allocates @a the_thread->scheduler
@@ -180,47 +209,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update(
 )
 {
   ( *scheduler->Operations.update )( scheduler, the_thread );
-}
-
-/**
- * @brief Enqueues a thread as the last of its priority group.
- *
- * @param[in] scheduler The scheduler instance.
- * @param[in] the_thread The thread to enqueue.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Enqueue(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-)
-{
-  ( *scheduler->Operations.enqueue )( scheduler, the_thread );
-}
-
-/**
- * @brief Enqueues a thread as the first of its priority group.
- *
- * @param[in] scheduler The scheduler instance.
- * @param[in] the_thread The thread to enqueue.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Enqueue_first(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-)
-{
-  ( *scheduler->Operations.enqueue_first )( scheduler, the_thread );
-}
-
-/**
- * @brief Scheduler extract.
- *
- * This routine extract @a the_thread->scheduler
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Extract(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-)
-{
-  ( *scheduler->Operations.extract )( scheduler, the_thread );
 }
 
 /**

@@ -52,12 +52,10 @@ extern "C" {
     _Scheduler_EDF_Yield,            /* yield entry point */ \
     _Scheduler_EDF_Block,            /* block entry point */ \
     _Scheduler_CBS_Unblock,          /* unblock entry point */ \
+    _Scheduler_EDF_Change_priority,  /* change priority entry point */ \
     _Scheduler_CBS_Allocate,         /* allocate entry point */ \
     _Scheduler_default_Free,         /* free entry point */ \
     _Scheduler_EDF_Update,           /* update entry point */ \
-    _Scheduler_EDF_Enqueue,          /* enqueue entry point */ \
-    _Scheduler_EDF_Enqueue_first,    /* enqueue_first entry point */ \
-    _Scheduler_EDF_Extract,          /* extract entry point */ \
     _Scheduler_EDF_Priority_compare, /* compares two priorities */ \
     _Scheduler_CBS_Release_job,      /* new period of task */ \
     _Scheduler_default_Tick,         /* tick entry point */ \

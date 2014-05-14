@@ -53,13 +53,11 @@ extern "C" {
     _Scheduler_priority_SMP_Schedule, \
     _Scheduler_priority_SMP_Yield, \
     _Scheduler_priority_SMP_Block, \
-    _Scheduler_priority_SMP_Enqueue_fifo, \
+    _Scheduler_priority_SMP_Unblock, \
+    _Scheduler_priority_SMP_Change_priority, \
     _Scheduler_priority_affinity_SMP_Allocate, \
     _Scheduler_default_Free, \
     _Scheduler_priority_SMP_Update, \
-    _Scheduler_priority_SMP_Enqueue_fifo, \
-    _Scheduler_priority_SMP_Enqueue_lifo, \
-    _Scheduler_priority_SMP_Extract, \
     _Scheduler_priority_Priority_compare, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \

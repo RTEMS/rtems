@@ -20,7 +20,6 @@
 
 #include <rtems/score/schedulersimplesmp.h>
 #include <rtems/score/schedulersmpimpl.h>
-#include <rtems/score/wkspace.h>
 
 static Scheduler_simple_SMP_Context *
 _Scheduler_simple_SMP_Get_context( const Scheduler_Control *scheduler )
@@ -55,20 +54,25 @@ bool _Scheduler_simple_SMP_Allocate(
   return true;
 }
 
+static void _Scheduler_simple_SMP_Do_update(
+  Scheduler_Context *context,
+  Scheduler_Node *node,
+  Priority_Control new_priority
+)
+{
+  (void) context;
+  (void) node;
+  (void) new_priority;
+}
+
 static Thread_Control *_Scheduler_simple_SMP_Get_highest_ready(
   Scheduler_Context *context
 )
 {
   Scheduler_simple_SMP_Context *self =
     _Scheduler_simple_SMP_Get_self( context );
-  Thread_Control *highest_ready = NULL;
-  Chain_Control *ready = &self->Ready;
 
-  if ( !_Chain_Is_empty( ready ) ) {
-    highest_ready = (Thread_Control *) _Chain_First( ready );
-  }
-
-  return highest_ready;
+  return (Thread_Control *) _Chain_First( &self->Ready );
 }
 
 static void _Scheduler_simple_SMP_Move_from_scheduled_to_ready(
@@ -131,20 +135,12 @@ static void _Scheduler_simple_SMP_Insert_ready_fifo(
   );
 }
 
-static void _Scheduler_simple_SMP_Do_extract(
+static void _Scheduler_simple_SMP_Extract_from_ready(
   Scheduler_Context *context,
   Thread_Control *thread
 )
 {
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
-
   (void) context;
-
-  if ( node->state == SCHEDULER_SMP_NODE_SCHEDULED ) {
-    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_IN_THE_AIR );
-  } else {
-    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
-  }
 
   _Chain_Extract_unprotected( &thread->Object.Node );
 }
@@ -154,13 +150,12 @@ void _Scheduler_simple_SMP_Block(
   Thread_Control *thread
 )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_context( scheduler );
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
 
   _Scheduler_SMP_Block(
-    &self->Base.Base,
+    context,
     thread,
-    _Scheduler_simple_SMP_Do_extract,
+    _Scheduler_simple_SMP_Extract_from_ready,
     _Scheduler_simple_SMP_Get_highest_ready,
     _Scheduler_simple_SMP_Move_from_ready_to_scheduled
   );
@@ -169,6 +164,7 @@ void _Scheduler_simple_SMP_Block(
 static void _Scheduler_simple_SMP_Enqueue_ordered(
   Scheduler_Context *context,
   Thread_Control *thread,
+  bool has_processor_allocated,
   Chain_Node_order order,
   Scheduler_SMP_Insert insert_ready,
   Scheduler_SMP_Insert insert_scheduled
@@ -177,6 +173,7 @@ static void _Scheduler_simple_SMP_Enqueue_ordered(
   _Scheduler_SMP_Enqueue_ordered(
     context,
     thread,
+    has_processor_allocated,
     order,
     _Scheduler_simple_SMP_Get_highest_ready,
     insert_ready,
@@ -186,52 +183,66 @@ static void _Scheduler_simple_SMP_Enqueue_ordered(
   );
 }
 
-void _Scheduler_simple_SMP_Enqueue_priority_lifo(
-  const Scheduler_Control *scheduler,
-  Thread_Control *thread
+static void _Scheduler_simple_SMP_Enqueue_lifo(
+  Scheduler_Context *context,
+  Thread_Control *thread,
+  bool has_processor_allocated
 )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_context( scheduler );
-
   _Scheduler_simple_SMP_Enqueue_ordered(
-    &self->Base.Base,
+    context,
     thread,
+    has_processor_allocated,
     _Scheduler_simple_Insert_priority_lifo_order,
     _Scheduler_simple_SMP_Insert_ready_lifo,
     _Scheduler_SMP_Insert_scheduled_lifo
   );
 }
 
-void _Scheduler_simple_SMP_Enqueue_priority_fifo(
-  const Scheduler_Control *scheduler,
-  Thread_Control *thread
+static void _Scheduler_simple_SMP_Enqueue_fifo(
+  Scheduler_Context *context,
+  Thread_Control *thread,
+  bool has_processor_allocated
 )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_context( scheduler );
-
   _Scheduler_simple_SMP_Enqueue_ordered(
-    &self->Base.Base,
+    context,
     thread,
+    has_processor_allocated,
     _Scheduler_simple_Insert_priority_fifo_order,
     _Scheduler_simple_SMP_Insert_ready_fifo,
     _Scheduler_SMP_Insert_scheduled_fifo
   );
 }
 
-void _Scheduler_simple_SMP_Extract(
+void _Scheduler_simple_SMP_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_context( scheduler );
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
 
-  _Scheduler_SMP_Extract(
-    &self->Base.Base,
+  _Scheduler_simple_SMP_Enqueue_fifo( context, thread, false );
+}
+
+void _Scheduler_simple_SMP_Change_priority(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  Priority_Control         new_priority,
+  bool                     prepend_it
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  _Scheduler_SMP_Change_priority(
+    context,
     thread,
-    _Scheduler_simple_SMP_Do_extract
+    new_priority,
+    prepend_it,
+    _Scheduler_simple_SMP_Extract_from_ready,
+    _Scheduler_simple_SMP_Do_update,
+    _Scheduler_simple_SMP_Enqueue_fifo,
+    _Scheduler_simple_SMP_Enqueue_lifo
   );
 }
 
@@ -240,12 +251,13 @@ void _Scheduler_simple_SMP_Yield(
   Thread_Control *thread
 )
 {
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
   ISR_Level level;
 
   _ISR_Disable( level );
 
-  _Scheduler_simple_SMP_Extract( scheduler, thread );
-  _Scheduler_simple_SMP_Enqueue_priority_fifo( scheduler, thread );
+  _Scheduler_SMP_Extract_from_scheduled( thread );
+  _Scheduler_simple_SMP_Enqueue_fifo( context, thread, true );
 
   _ISR_Enable( level );
 }
@@ -255,15 +267,8 @@ void _Scheduler_simple_SMP_Schedule(
   Thread_Control *thread
 )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_context( scheduler );
-
-  _Scheduler_SMP_Schedule(
-    &self->Base.Base,
-    thread,
-    _Scheduler_simple_SMP_Get_highest_ready,
-    _Scheduler_simple_SMP_Move_from_ready_to_scheduled
-  );
+  (void) scheduler;
+  (void) thread;
 }
 
 void _Scheduler_simple_SMP_Start_idle(
@@ -272,8 +277,7 @@ void _Scheduler_simple_SMP_Start_idle(
   Per_CPU_Control *cpu
 )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_context( scheduler );
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
 
-  _Scheduler_SMP_Start_idle( &self->Base.Base, thread, cpu );
+  _Scheduler_SMP_Start_idle( context, thread, cpu );
 }

@@ -26,11 +26,14 @@ void _Scheduler_simple_Yield(
   Thread_Control          *the_thread
 )
 {
+  Scheduler_simple_Context *context =
+    _Scheduler_simple_Get_context( scheduler );
   ISR_Level       level;
 
   _ISR_Disable( level );
 
-    _Scheduler_simple_Ready_queue_requeue( scheduler, the_thread );
+    _Chain_Extract_unprotected( &the_thread->Object.Node );
+    _Scheduler_simple_Insert_priority_fifo( &context->Ready, the_thread );
 
     _ISR_Flash( level );
 

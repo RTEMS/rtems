@@ -30,8 +30,8 @@ void _Scheduler_priority_Update(
   Scheduler_priority_Node *node = _Scheduler_priority_Node_get( the_thread );
 
   _Scheduler_priority_Ready_queue_update(
-    the_thread,
     &node->Ready_queue,
+    the_thread->current_priority,
     &context->Bit_map,
     &context->Ready[ 0 ]
   );

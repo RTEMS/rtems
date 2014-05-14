@@ -38,24 +38,6 @@ RTEMS_INLINE_ROUTINE Scheduler_simple_Context *
   return (Scheduler_simple_Context *) _Scheduler_Get_context( scheduler );
 }
 
-/**
- * This routine puts @a the_thread on to the ready queue.
- *
- * @param[in] the_ready_queue is a pointer to the ready queue head
- * @param[in] the_thread is the thread to be blocked
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_simple_Ready_queue_requeue(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-)
-{
-  /* extract */
-  _Chain_Extract_unprotected( &the_thread->Object.Node );
-
-  /* enqueue */
-  _Scheduler_simple_Ready_queue_enqueue( scheduler, the_thread );
-}
-
 RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Insert_priority_lifo_order(
   const Chain_Node *to_insert,
   const Chain_Node *next
@@ -100,6 +82,16 @@ RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert_priority_fifo(
     &to_insert->Object.Node,
     _Scheduler_simple_Insert_priority_fifo_order
   );
+}
+
+RTEMS_INLINE_ROUTINE void _Scheduler_simple_Extract(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
+)
+{
+  (void) scheduler;
+
+  _Chain_Extract_unprotected( &the_thread->Object.Node );
 }
 
 RTEMS_INLINE_ROUTINE void _Scheduler_simple_Schedule_body(

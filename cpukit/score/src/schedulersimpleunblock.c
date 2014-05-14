@@ -26,7 +26,10 @@ void _Scheduler_simple_Unblock(
   Thread_Control          *the_thread
 )
 {
-  _Scheduler_simple_Ready_queue_enqueue( scheduler, the_thread );
+  Scheduler_simple_Context *context =
+    _Scheduler_simple_Get_context( scheduler );
+
+  _Scheduler_simple_Insert_priority_fifo( &context->Ready, the_thread );
 
   /*
    *  If the thread that was unblocked is more important than the heir,

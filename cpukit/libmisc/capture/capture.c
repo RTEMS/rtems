@@ -913,8 +913,7 @@ rtems_capture_switch_task (rtems_tcb* current_task,
     rtems_capture_task_t* ht;
 
 
-    if (_States_Is_transient (current_task->current_state)
-     || _States_Is_dormant (current_task->current_state))
+    if (_States_Is_dormant (current_task->current_state))
     {
       rtems_id ct_id = current_task->Object.id;
 

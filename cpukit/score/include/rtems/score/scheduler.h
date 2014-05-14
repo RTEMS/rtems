@@ -63,6 +63,14 @@ typedef struct {
   /** @see _Scheduler_Unblock() */
   void ( *unblock )( const Scheduler_Control *, Thread_Control * );
 
+  /** @see _Scheduler_Change_priority() */
+  void ( *change_priority )(
+    const Scheduler_Control *,
+    Thread_Control *,
+    Priority_Control,
+    bool
+  );
+
   /** @see _Scheduler_Allocate() */
   bool ( *allocate )( const Scheduler_Control *, Thread_Control * );
 
@@ -71,15 +79,6 @@ typedef struct {
 
   /** @see _Scheduler_Update() */
   void ( *update )( const Scheduler_Control *, Thread_Control * );
-
-  /** @see _Scheduler_Enqueue() */
-  void ( *enqueue )( const Scheduler_Control *, Thread_Control * );
-
-  /** @see _Scheduler_Enqueue_first() */
-  void ( *enqueue_first )( const Scheduler_Control *, Thread_Control * );
-
-  /** @see _Scheduler_Extract() */
-  void ( *extract )( const Scheduler_Control *, Thread_Control * );
 
   /** @see _Scheduler_Priority_compare() */
   int ( *priority_compare )(

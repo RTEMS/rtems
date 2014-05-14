@@ -18,7 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/scheduleredf.h>
+#include <rtems/score/scheduleredfimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/thread.h>
 

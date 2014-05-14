@@ -116,7 +116,6 @@ rtems_monitor_dump_priority(rtems_task_priority priority)
 static const rtems_assoc_t rtems_monitor_state_assoc[] = {
     { "DORM",   STATES_DORMANT, 0 },
     { "SUSP",   STATES_SUSPENDED, 0 },
-    { "TRANS",  STATES_TRANSIENT, 0 },
     { "DELAY",  STATES_DELAYING, 0 },
     { "Wtime",  STATES_WAITING_FOR_TIME, 0 },
     { "Wbuf",   STATES_WAITING_FOR_BUFFER, 0 },

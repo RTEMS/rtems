@@ -42,12 +42,10 @@ extern "C" {
     _Scheduler_simple_Yield,              /* yield entry point */ \
     _Scheduler_simple_Block,              /* block entry point */ \
     _Scheduler_simple_Unblock,            /* unblock entry point */ \
+    _Scheduler_simple_Change_priority,    /* change priority entry point */ \
     _Scheduler_default_Allocate,          /* allocate entry point */ \
     _Scheduler_default_Free,              /* free entry point */ \
     _Scheduler_default_Update,            /* update entry point */ \
-    _Scheduler_simple_Enqueue,            /* enqueue entry point */ \
-    _Scheduler_simple_Enqueue_first,      /* enqueue_first entry point */ \
-    _Scheduler_simple_Extract,            /* extract entry point */ \
     _Scheduler_priority_Priority_compare, /* compares two priorities */ \
     _Scheduler_default_Release_job,       /* new period of task */ \
     _Scheduler_default_Tick,              /* tick entry point */ \
@@ -136,70 +134,11 @@ void _Scheduler_simple_Unblock(
   Thread_Control          *the_thread
 );
 
-/**
- *  @brief Removes a simple-priority-based thread from a simple queue.
- *
- *  This routine removes a specific thread from the specified
- *  simple-based ready queue.
- *
- *  @param[in] the_thread is the thread to be blocked
- */
-void _Scheduler_simple_Extract(
+void _Scheduler_simple_Change_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-);
-
-/**
- *  @brief Puts simple-priority-based thread onto the ready queue.
- *
- *  This routine puts @a the_thread on to the ready queue.
- *
- *  @param[in] the_thread is the thread to be enqueued
- */
-void _Scheduler_simple_Enqueue(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-);
-
-/**
- *  @brief Put simple-priority-based @a the_thread to
- *  the head of the ready queue.
- *
- *  This routine puts @a the_thread to the head of the ready queue.
- *  The thread will be the first thread at its priority level.
- *
- *  @param[in] the_thread is the thread to be blocked
- */
-void _Scheduler_simple_Enqueue_first(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-);
-
-/**
- *  _Scheduler_simple_Ready_queue_enqueue
- *
- *  This routine puts @a the_thread on the ready queue
- *  at the end of its priority group.
- *
- *  @param[in] the_thread - pointer to a thread control block
- */
-void _Scheduler_simple_Ready_queue_enqueue(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-);
-
-/**
- *  @brief Puts simple-priority-based @a the_thread on to the ready queue
- *  at the beginning of its priority group.
- *
- *  This routine puts @a the_thread on to the ready queue
- *  at the beginning of its priority group.
- *
- *  @param[in] the_thread - pointer to a thread control block
- */
-void _Scheduler_simple_Ready_queue_enqueue_first(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Control         new_priority,
+  bool                     prepend_it
 );
 
 /**@}*/

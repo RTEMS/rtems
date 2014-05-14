@@ -50,7 +50,6 @@ spcpucounter01/Makefile
 sptls02/Makefile
 sptls01/Makefile
 spintrcritical20/Makefile
-spintrcritical19/Makefile
 spcontext01/Makefile
 spfatal26/Makefile
 spinternalerror02/Makefile

@@ -20,6 +20,7 @@
 #endif
 
 #include <rtems/score/schedulercbsimpl.h>
+#include <rtems/score/scheduleredfimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>

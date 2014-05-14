@@ -1,8 +1,8 @@
 /**
- * @file
+ *  @file
  *
- * @brief Scheduler EDF Enqueue
- * @ingroup ScoreScheduler
+ *  @brief Scheduler EDF Extract
+ *  @ingroup ScoreScheduler
  */
 
 /*
@@ -20,15 +20,17 @@
 
 #include <rtems/score/scheduleredfimpl.h>
 
-void _Scheduler_EDF_Enqueue(
+void _Scheduler_EDF_Change_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Control         new_priority,
+  bool                     prepend_it
 )
 {
   Scheduler_EDF_Context *context =
     _Scheduler_EDF_Get_context( scheduler );
   Scheduler_EDF_Node *node = _Scheduler_EDF_Node_get( the_thread );
 
+  _RBTree_Extract( &context->Ready, &node->Node );
   _RBTree_Insert( &context->Ready, &node->Node );
-  node->queue_state = SCHEDULER_EDF_QUEUE_STATE_YES;
 }

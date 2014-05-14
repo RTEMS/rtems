@@ -37,14 +37,12 @@ extern "C" {
  *
  * The scheduler nodes can be in four states
  * - @ref SCHEDULER_SMP_NODE_BLOCKED,
- * - @ref SCHEDULER_SMP_NODE_SCHEDULED,
- * - @ref SCHEDULER_SMP_NODE_READY, and
- * - @ref SCHEDULER_SMP_NODE_IN_THE_AIR.
+ * - @ref SCHEDULER_SMP_NODE_SCHEDULED, and
+ * - @ref SCHEDULER_SMP_NODE_READY.
  *
- * State transitions are triggered via basic three operations
- * - _Scheduler_SMP_Enqueue_ordered(),
- * - _Scheduler_SMP_Extract(), and
- * - _Scheduler_SMP_Schedule().
+ * State transitions are triggered via basic operations
+ * - _Scheduler_SMP_Enqueue_ordered(), and
+ * - _Scheduler_SMP_Block().
  *
  * @dot
  * digraph {
@@ -53,39 +51,26 @@ extern "C" {
  *   bs [label="BLOCKED"];
  *   ss [label="SCHEDULED", fillcolor="green"];
  *   rs [label="READY", fillcolor="red"];
- *   as [label="IN THE AIR", fillcolor="orange"];
  *
  *   edge [label="enqueue"];
  *   edge [fontcolor="darkgreen", color="darkgreen"];
  *
  *   bs -> ss;
- *   as -> ss;
  *
- *   edge [label="enqueue"];
  *   edge [fontcolor="red", color="red"];
  *
  *   bs -> rs;
- *   as -> rs;
  *
  *   edge [label="enqueue other"];
  *
  *   ss -> rs;
  *
- *   edge [label="schedule"];
- *   edge [fontcolor="black", color="black"];
- *
- *   as -> bs;
- *
- *   edge [label="extract"];
- *   edge [fontcolor="brown", color="brown"];
- *
- *   ss -> as;
- *
+ *   edge [label="block"];
  *   edge [fontcolor="black", color="black"];
  *
  *   rs -> bs;
  *
- *   edge [label="enqueue other\nschedule other"];
+ *   edge [label="block other"];
  *   edge [fontcolor="darkgreen", color="darkgreen"];
  *
  *   rs -> ss;
@@ -216,38 +201,7 @@ extern "C" {
  * }
  * @enddot
  *
- * Lets do something with A.  This can be a blocking operation or a priority
- * change.  For this an extract operation is performed first.
- *
- * @dot
- * digraph {
- *   node [style="filled"];
- *   edge [dir="none"];
- *
- *   subgraph {
- *     rank = same;
- *
- *     b [label="B (2)", fillcolor="green"];
- *     a [label="A (1)", fillcolor="orange"];
- *     c [label="C (3)", fillcolor="red"];
- *     i [label="I (5)", fillcolor="red"];
- *     j [label="J (5)", fillcolor="red"];
- *     c -> i -> j;
- *   }
- *
- *   subgraph {
- *     rank = same;
- *
- *     p0 [label="PROCESSOR 0", shape="box"];
- *     p1 [label="PROCESSOR 1", shape="box"];
- *   }
- *
- *   b -> p0;
- *   a -> p1;
- * }
- * @enddot
- *
- * Lets change the priority of thread A to 4 and enqueue it.
+ * Lets change the priority of thread A to 4.
  *
  * @dot
  * digraph {
@@ -278,8 +232,9 @@ extern "C" {
  * }
  * @enddot
  *
- * Alternatively we can also do a blocking operation with thread A.  In this
- * case schedule will be called.
+ * Now perform a blocking operation with thread B.  Please note that thread A
+ * migrated now from processor 0 to processor 1 and thread C still executes on
+ * processor 1.
  *
  * @dot
  * digraph {
@@ -289,12 +244,12 @@ extern "C" {
  *   subgraph {
  *     rank = same;
  *
- *     b [label="B (2)", fillcolor="green"];
  *     c [label="C (3)", fillcolor="green"];
+ *     a [label="A (4)", fillcolor="green"];
  *     i [label="I (5)", fillcolor="red"];
  *     j [label="J (5)", fillcolor="red"];
- *     a [label="A (1)"];
- *     b -> c;
+ *     b [label="B (2)"];
+ *     c -> a;
  *     i -> j;
  *   }
  *
@@ -305,7 +260,7 @@ extern "C" {
  *     p1 [label="PROCESSOR 1", shape="box"];
  *   }
  *
- *   b -> p0;
+ *   a -> p0;
  *   c -> p1;
  * }
  * @enddot
@@ -330,6 +285,18 @@ typedef void ( *Scheduler_SMP_Insert )(
 typedef void ( *Scheduler_SMP_Move )(
   Scheduler_Context *context,
   Thread_Control *thread_to_move
+);
+
+typedef void ( *Scheduler_SMP_Update )(
+  Scheduler_Context *context,
+  Scheduler_Node *node,
+  Priority_Control new_priority
+);
+
+typedef void ( *Scheduler_SMP_Enqueue )(
+  Scheduler_Context *context,
+  Thread_Control *thread_to_enqueue,
+  bool has_processor_allocated
 );
 
 static inline Scheduler_SMP_Context *_Scheduler_SMP_Get_self(
@@ -360,7 +327,7 @@ static inline void _Scheduler_SMP_Node_initialize(
   node->state = SCHEDULER_SMP_NODE_BLOCKED;
 }
 
-extern const bool _Scheduler_SMP_Node_valid_state_changes[ 4 ][ 4 ];
+extern const bool _Scheduler_SMP_Node_valid_state_changes[ 3 ][ 3 ];
 
 static inline void _Scheduler_SMP_Node_change_state(
   Scheduler_SMP_Node *node,
@@ -467,6 +434,7 @@ static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
  *
  * @param[in] context The scheduler instance context.
  * @param[in] thread The thread to enqueue.
+ * @param[in] has_processor_allocated The thread has a processor allocated.
  * @param[in] order The order function.
  * @param[in] get_highest_ready Function to get the highest ready node.
  * @param[in] insert_ready Function to insert a node into the set of ready
@@ -481,6 +449,7 @@ static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
 static inline void _Scheduler_SMP_Enqueue_ordered(
   Scheduler_Context *context,
   Thread_Control *thread,
+  bool has_processor_allocated,
   Chain_Node_order order,
   Scheduler_SMP_Get_highest_ready get_highest_ready,
   Scheduler_SMP_Insert insert_ready,
@@ -492,8 +461,10 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
   Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
 
-  if ( node->state == SCHEDULER_SMP_NODE_IN_THE_AIR ) {
+  if ( has_processor_allocated) {
     Thread_Control *highest_ready = ( *get_highest_ready )( &self->Base );
+
+    _Assert( highest_ready != NULL);
 
     /*
      * The thread has been extracted from the scheduled chain.  We have to
@@ -501,10 +472,7 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
      *
      * NOTE: Do not exchange parameters to do the negation of the order check.
      */
-    if (
-      highest_ready != NULL
-        && !( *order )( &thread->Object.Node, &highest_ready->Object.Node )
-    ) {
+    if ( !( *order )( &thread->Object.Node, &highest_ready->Object.Node ) ) {
       _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
       _Scheduler_SMP_Allocate_processor( self, highest_ready, thread );
       ( *insert_ready )( &self->Base, thread );
@@ -517,14 +485,9 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
     Thread_Control *lowest_scheduled =
       _Scheduler_SMP_Get_lowest_scheduled( self );
 
-    /*
-     * The scheduled chain is empty if nested interrupts change the priority of
-     * all scheduled threads.  These threads are in the air.
-     */
-    if (
-      lowest_scheduled != NULL
-        && ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node )
-    ) {
+    _Assert( lowest_scheduled != NULL);
+
+    if ( ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node ) ) {
       Scheduler_SMP_Node *lowest_scheduled_node =
         _Scheduler_SMP_Node_get( lowest_scheduled );
 
@@ -540,6 +503,11 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
       ( *insert_ready )( &self->Base, thread );
     }
   }
+}
+
+static inline void _Scheduler_SMP_Extract_from_scheduled( Thread_Control *thread )
+{
+  _Chain_Extract_unprotected( &thread->Object.Node );
 }
 
 static inline void _Scheduler_SMP_Schedule_highest_ready(
@@ -558,25 +526,31 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
 }
 
 /**
- * @brief Finalize a scheduling operation.
+ * @brief Blocks a thread.
  *
  * @param[in] context The scheduler instance context.
  * @param[in] thread The thread of the scheduling operation.
+ * @param[in] extract_from_ready Function to extract a node from the set of
+ * ready nodes.
  * @param[in] get_highest_ready Function to get the highest ready node.
  * @param[in] move_from_ready_to_scheduled Function to move a node from the set
  * of ready nodes to the set of scheduled nodes.
  */
-static inline void _Scheduler_SMP_Schedule(
+static inline void _Scheduler_SMP_Block(
   Scheduler_Context *context,
   Thread_Control *thread,
+  Scheduler_SMP_Extract extract_from_ready,
   Scheduler_SMP_Get_highest_ready get_highest_ready,
   Scheduler_SMP_Move move_from_ready_to_scheduled
 )
 {
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+  bool is_scheduled = node->state == SCHEDULER_SMP_NODE_SCHEDULED;
 
-  if ( node->state == SCHEDULER_SMP_NODE_IN_THE_AIR ) {
-    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
+  _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
+
+  if ( is_scheduled ) {
+    _Scheduler_SMP_Extract_from_scheduled( thread );
 
     _Scheduler_SMP_Schedule_highest_ready(
       context,
@@ -584,42 +558,38 @@ static inline void _Scheduler_SMP_Schedule(
       get_highest_ready,
       move_from_ready_to_scheduled
     );
+  } else {
+    ( *extract_from_ready )( context, thread );
   }
 }
 
-static inline void _Scheduler_SMP_Block(
+static inline void _Scheduler_SMP_Change_priority(
   Scheduler_Context *context,
   Thread_Control *thread,
-  Scheduler_SMP_Extract extract,
-  Scheduler_SMP_Get_highest_ready get_highest_ready,
-  Scheduler_SMP_Move move_from_ready_to_scheduled
+  Priority_Control new_priority,
+  bool prepend_it,
+  Scheduler_SMP_Extract extract_from_ready,
+  Scheduler_SMP_Update update,
+  Scheduler_SMP_Enqueue enqueue_fifo,
+  Scheduler_SMP_Enqueue enqueue_lifo
 )
 {
-  ( *extract )( context, thread );
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+  bool has_processor_allocated = node->state == SCHEDULER_SMP_NODE_SCHEDULED;
 
-  _Scheduler_SMP_Schedule(
-    context,
-    thread,
-    get_highest_ready,
-    move_from_ready_to_scheduled
-  );
-}
+  if ( has_processor_allocated ) {
+    _Scheduler_SMP_Extract_from_scheduled( thread );
+  } else {
+    ( *extract_from_ready )( context, thread );
+  }
 
-/**
- * @brief Extracts a thread from the set of scheduled or ready nodes.
- *
- * @param[in] context The scheduler instance context.
- * @param[in] thread The thread to extract.
- * @param[in] extract Function to extract a node from the set of scheduled or
- * ready nodes.
- */
-static inline void _Scheduler_SMP_Extract(
-  Scheduler_Context *context,
-  Thread_Control *thread,
-  Scheduler_SMP_Extract extract
-)
-{
-  ( *extract )( context, thread );
+  ( *update )( context, &node->Base, new_priority );
+
+  if ( prepend_it ) {
+    ( *enqueue_lifo )( context, thread, has_processor_allocated );
+  } else {
+    ( *enqueue_fifo )( context, thread, has_processor_allocated );
+  }
 }
 
 static inline void _Scheduler_SMP_Insert_scheduled_lifo(

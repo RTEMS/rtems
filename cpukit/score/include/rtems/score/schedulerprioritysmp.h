@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -82,13 +82,11 @@ typedef struct {
     _Scheduler_priority_SMP_Schedule, \
     _Scheduler_priority_SMP_Yield, \
     _Scheduler_priority_SMP_Block, \
-    _Scheduler_priority_SMP_Enqueue_fifo, \
+    _Scheduler_priority_SMP_Unblock, \
+    _Scheduler_priority_SMP_Change_priority, \
     _Scheduler_priority_SMP_Allocate, \
     _Scheduler_default_Free, \
     _Scheduler_priority_SMP_Update, \
-    _Scheduler_priority_SMP_Enqueue_fifo, \
-    _Scheduler_priority_SMP_Enqueue_lifo, \
-    _Scheduler_priority_SMP_Extract, \
     _Scheduler_priority_Priority_compare, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \
@@ -114,22 +112,19 @@ void _Scheduler_priority_SMP_Block(
   Thread_Control *thread
 );
 
+void _Scheduler_priority_SMP_Unblock(
+  const Scheduler_Control *scheduler,
+  Thread_Control *thread
+);
+
+void _Scheduler_priority_SMP_Change_priority(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Priority_Control         new_priority,
+  bool                     prepend_it
+);
+
 void _Scheduler_priority_SMP_Update(
-  const Scheduler_Control *scheduler,
-  Thread_Control *thread
-);
-
-void _Scheduler_priority_SMP_Enqueue_fifo(
-  const Scheduler_Control *scheduler,
-  Thread_Control *thread
-);
-
-void _Scheduler_priority_SMP_Enqueue_lifo(
-  const Scheduler_Control *scheduler,
-  Thread_Control *thread
-);
-
-void _Scheduler_priority_SMP_Extract(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 );

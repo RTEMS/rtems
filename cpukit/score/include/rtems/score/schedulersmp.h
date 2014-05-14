@@ -69,8 +69,8 @@ typedef enum {
    *
    * A scheduler node is scheduled if the corresponding thread is ready and the
    * scheduler allocated a processor for it.  A scheduled node is assigned to
-   * exactly one processor.  The sum of scheduled and in the air nodes equals
-   * the processor count owned by a scheduler instance.
+   * exactly one processor.  The count of scheduled nodes in this scheduler
+   * instance equals the processor count owned by the scheduler instance.
    */
   SCHEDULER_SMP_NODE_SCHEDULED,
 
@@ -80,22 +80,7 @@ typedef enum {
    * A scheduler node is ready if the corresponding thread is ready and the
    * scheduler did not allocate a processor for it.
    */
-  SCHEDULER_SMP_NODE_READY,
-
-  /**
-   * @brief This scheduler node is in the air.
-   *
-   * A scheduled node is in the air if it has an allocated processor and the
-   * corresponding thread is in a transient state.  Such a node is not an
-   * element of the set of scheduled nodes.  The extract operation on a
-   * scheduled node will produce a scheduler node in the air (see also
-   * _Thread_Set_transient()).  The next enqueue or schedule operation will
-   * decide what to do based on this state indication.  It can either place the
-   * scheduler node back on the set of scheduled nodes and the thread can keep
-   * its allocated processor, or it can take the processor away from the thread
-   * and give the processor to another thread of higher priority.
-   */
-  SCHEDULER_SMP_NODE_IN_THE_AIR
+  SCHEDULER_SMP_NODE_READY
 } Scheduler_SMP_Node_state;
 
 /**

@@ -54,10 +54,7 @@ void _POSIX_Thread_Exit(
         *(void **)unblocked->Wait.return_argument = value_ptr;
       } while ( (unblocked = _Thread_queue_Dequeue( &api->Join_List )) );
     } else {
-      _Thread_Set_state(
-        the_thread,
-        STATES_WAITING_FOR_JOIN_AT_EXIT | STATES_TRANSIENT
-      );
+      _Thread_Set_state( the_thread, STATES_WAITING_FOR_JOIN_AT_EXIT );
       _Thread_Enable_dispatch();
       /* now waiting for thread to arrive */
       _Thread_Disable_dispatch();

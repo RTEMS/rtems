@@ -50,7 +50,6 @@ _SUBDIRS += sptls02
 endif
 _SUBDIRS += sptls01
 _SUBDIRS += spintrcritical20
-_SUBDIRS += spintrcritical19
 _SUBDIRS += spcontext01
 _SUBDIRS += spfatal26
 _SUBDIRS += speventtransient01

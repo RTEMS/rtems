@@ -63,13 +63,11 @@ typedef struct {
     _Scheduler_simple_SMP_Schedule, \
     _Scheduler_simple_SMP_Yield, \
     _Scheduler_simple_SMP_Block, \
-    _Scheduler_simple_SMP_Enqueue_priority_fifo, \
+    _Scheduler_simple_SMP_Unblock, \
+    _Scheduler_simple_SMP_Change_priority, \
     _Scheduler_simple_SMP_Allocate, \
     _Scheduler_default_Free, \
     _Scheduler_default_Update, \
-    _Scheduler_simple_SMP_Enqueue_priority_fifo, \
-    _Scheduler_simple_SMP_Enqueue_priority_lifo, \
-    _Scheduler_simple_SMP_Extract, \
     _Scheduler_priority_Priority_compare, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \
@@ -90,19 +88,16 @@ void _Scheduler_simple_SMP_Block(
   Thread_Control *thread
 );
 
-void _Scheduler_simple_SMP_Enqueue_priority_fifo(
+void _Scheduler_simple_SMP_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
-void _Scheduler_simple_SMP_Enqueue_priority_lifo(
+void _Scheduler_simple_SMP_Change_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control *thread
-);
-
-void _Scheduler_simple_SMP_Extract(
-  const Scheduler_Control *scheduler,
-  Thread_Control *thread
+  Thread_Control          *the_thread,
+  Priority_Control         new_priority,
+  bool                     prepend_it
 );
 
 void _Scheduler_simple_SMP_Yield(

@@ -30,10 +30,9 @@
  * Table with all valid state transitions.  It is used in
  * _Scheduler_SMP_Node_change_state() in case RTEMS_DEBUG is defined.
  */
-const bool _Scheduler_SMP_Node_valid_state_changes[ 4 ][ 4 ] = {
-  /*                 BLOCKED SCHEDULED READY  IN THE AIR */
-  /* BLOCKED    */ { false,  true,     true,  false },
-  /* SCHEDULED  */ { false,  false,    true,  true },
-  /* READY      */ { true,   true,     false, false },
-  /* IN THE AIR */ { true,   true,     true,  false }
+const bool _Scheduler_SMP_Node_valid_state_changes[ 3 ][ 3 ] = {
+  /* FROM / TO       BLOCKED SCHEDULED READY */
+  /* BLOCKED    */ { false,  true,     true },
+  /* SCHEDULED  */ { true,   false,    true },
+  /* READY      */ { true,   true,     false }
 };
