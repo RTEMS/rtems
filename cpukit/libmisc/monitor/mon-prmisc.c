@@ -138,6 +138,7 @@ static const rtems_assoc_t rtems_monitor_state_assoc[] = {
     { "Wterm",  STATES_WAITING_FOR_TERMINATION, 0 },
     { "ZOMBI",  STATES_ZOMBIE, 0 },
     { "MIGRA",  STATES_MIGRATING, 0 },
+    { "RESTA",  STATES_RESTARTING, 0 },
     { 0, 0, 0 },
 };
 

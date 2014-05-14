@@ -224,7 +224,7 @@ static void _Thread_Start_life_change(
   the_thread->budget_callout   = the_thread->Start.budget_callout;
   the_thread->real_priority    = priority;
 
-  _Thread_Set_transient( the_thread );
+  _Thread_Set_state( the_thread, STATES_RESTARTING );
   _Thread_queue_Extract_with_proxy( the_thread );
   _Watchdog_Remove( &the_thread->Timer );
   _Scheduler_Set_priority_if_higher( scheduler, the_thread, priority );
