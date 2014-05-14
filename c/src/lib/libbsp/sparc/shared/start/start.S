@@ -344,8 +344,6 @@ copy_data:
         /* clear the bss */
 1:
 
-        sethi %hi(_edata),%g2
-        or    %g2,%lo(_edata),%g2       ! g2 = start of bss
         sethi %hi(_end),%g3
         or    %g3,%lo(_end),%g3         ! g3 = end of bss
         mov   %g0,%g1                   ! so std has two zeros
