@@ -38,7 +38,7 @@ extern "C" {
 RTEMS_INLINE_ROUTINE Scheduler_priority_Context *
   _Scheduler_priority_Get_context( const Scheduler_Control *scheduler )
 {
-  return (Scheduler_priority_Context *) scheduler->context;
+  return (Scheduler_priority_Context *) _Scheduler_Get_context( scheduler );
 }
 
 RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Node_get(

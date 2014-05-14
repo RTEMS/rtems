@@ -32,7 +32,7 @@
 static Scheduler_priority_SMP_Context *
 _Scheduler_priority_SMP_Get_context( const Scheduler_Control *scheduler )
 {
-  return (Scheduler_priority_SMP_Context *) scheduler->context;
+  return (Scheduler_priority_SMP_Context *) _Scheduler_Get_context( scheduler );
 }
 
 static Scheduler_priority_SMP_Context *

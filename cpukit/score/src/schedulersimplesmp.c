@@ -25,7 +25,7 @@
 static Scheduler_simple_SMP_Context *
 _Scheduler_simple_SMP_Get_context( const Scheduler_Control *scheduler )
 {
-  return (Scheduler_simple_SMP_Context *) scheduler->context;
+  return (Scheduler_simple_SMP_Context *) _Scheduler_Get_context( scheduler );
 }
 
 static Scheduler_simple_SMP_Context *

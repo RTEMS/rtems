@@ -35,7 +35,7 @@ extern "C" {
 RTEMS_INLINE_ROUTINE Scheduler_simple_Context *
   _Scheduler_simple_Get_context( const Scheduler_Control *scheduler )
 {
-  return (Scheduler_simple_Context *) scheduler->context;
+  return (Scheduler_simple_Context *) _Scheduler_Get_context( scheduler );
 }
 
 /**

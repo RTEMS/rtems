@@ -578,12 +578,19 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority_if_higher(
   }
 }
 
+RTEMS_INLINE_ROUTINE Scheduler_Context *_Scheduler_Get_context(
+  const Scheduler_Control *scheduler
+)
+{
+  return scheduler->context;
+}
+
 RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_processor_count(
   const Scheduler_Control *scheduler
 )
 {
 #if defined(RTEMS_SMP)
-  return scheduler->context->processor_count;
+  return _Scheduler_Get_context( scheduler )->processor_count;
 #else
   (void) scheduler;
 

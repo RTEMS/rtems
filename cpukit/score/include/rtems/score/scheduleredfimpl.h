@@ -34,7 +34,7 @@ extern "C" {
 RTEMS_INLINE_ROUTINE Scheduler_EDF_Context *
   _Scheduler_EDF_Get_context( const Scheduler_Control *scheduler )
 {
-  return (Scheduler_EDF_Context *) scheduler->context;
+  return (Scheduler_EDF_Context *) _Scheduler_Get_context( scheduler );
 }
 
 RTEMS_INLINE_ROUTINE Scheduler_EDF_Node *_Scheduler_EDF_Node_get(
