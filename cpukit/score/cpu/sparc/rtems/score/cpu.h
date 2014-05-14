@@ -1181,7 +1181,7 @@ void _CPU_Context_restore(
  * @brief The pointer to the current per-CPU control is available via register
  * g6.
  */
-register struct Per_CPU_Control *_SPARC_Per_CPU_current asm( "g6" );
+register struct Per_CPU_Control *_SPARC_Per_CPU_current __asm__( "g6" );
 
 #define _CPU_Get_current_per_CPU_control() ( _SPARC_Per_CPU_current )
 
