@@ -137,6 +137,7 @@ static const rtems_assoc_t rtems_monitor_state_assoc[] = {
     { "Wwkup",  STATES_WAITING_FOR_BSD_WAKEUP, 0 },
     { "Wterm",  STATES_WAITING_FOR_TERMINATION, 0 },
     { "ZOMBI",  STATES_ZOMBIE, 0 },
+    { "MIGRA",  STATES_MIGRATING, 0 },
     { 0, 0, 0 },
 };
 
