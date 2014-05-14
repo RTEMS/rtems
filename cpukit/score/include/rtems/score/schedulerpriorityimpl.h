@@ -172,28 +172,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_priority_Ready_queue_first(
 }
 
 /**
- * @brief Requeues a thread on the specified ready queue.
- *
- * This routine is invoked when a thread changes priority and should be
- * moved to a different position on the ready queue.
- *
- * @param[in] the_thread The thread to requeue.
- * @param[in] ready_queue The ready queue.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_requeue(
-  Thread_Control                 *the_thread,
-  Scheduler_priority_Ready_queue *ready_queue
-)
-{
-  Chain_Control *ready_chain = ready_queue->ready_chain;
-
-  if ( !_Chain_Has_only_one_node( ready_chain ) ) {
-    _Chain_Extract_unprotected( &the_thread->Object.Node );
-    _Chain_Append_unprotected( ready_chain, &the_thread->Object.Node );
-  }
-}
-
-/**
  * @brief Scheduling decision logic.
  *
  * This kernel routine implements scheduling decision logic
