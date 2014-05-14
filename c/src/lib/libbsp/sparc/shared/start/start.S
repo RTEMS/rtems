@@ -319,25 +319,25 @@ cpu0:
          *  LENGTH: (__bss_start - _data_start) bytes
          */
 
-        sethi %hi(_endtext),%g2
-        or    %g2,%lo(_endtext),%g2     ! g2 = start of initialized data in ROM
+        sethi %hi(_endtext),%g1
+        or    %g1,%lo(_endtext),%g1     ! g1 = start of initialized data in ROM
 
         sethi %hi(_data_start),%g3
         or    %g3,%lo(_data_start),%g3  ! g3 = start of initialized data in RAM
 
-        sethi %hi(__bss_start),%g4
-        or    %g4,%lo(__bss_start),%g4  ! g4 = end of initialized data in RAM
+        sethi %hi(__bss_start), %g2
+        or    %g2,%lo(__bss_start),%g2  ! g2 = end of initialized data in RAM
 
-	cmp   %g2, %g3
+	cmp   %g1, %g3
 	be    1f
 	nop
 
 copy_data:
-        ldd   [ %g2 ], %g5
-        std   %g5 , [ %g3 ]             ! copy this double word
+        ldd   [%g1], %g4
+        std   %g4 , [%g3]               ! copy this double word
         add   %g3, 8, %g3               ! bump the destination pointer
-        add   %g2, 8, %g2               ! bump the source pointer
-        cmp   %g3, %g4                  ! Is the pointer past the end of dest?
+        add   %g1, 8, %g1               ! bump the source pointer
+        cmp   %g3, %g2                  ! Is the pointer past the end of dest?
         bl    copy_data
         nop
 
