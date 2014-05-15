@@ -79,7 +79,7 @@ typedef struct {
 #define SCHEDULER_PRIORITY_SMP_ENTRY_POINTS \
   { \
     _Scheduler_priority_SMP_Initialize, \
-    _Scheduler_priority_SMP_Schedule, \
+    _Scheduler_default_Schedule, \
     _Scheduler_priority_SMP_Yield, \
     _Scheduler_priority_SMP_Block, \
     _Scheduler_priority_SMP_Unblock, \
@@ -98,11 +98,6 @@ typedef struct {
 void _Scheduler_priority_SMP_Initialize( const Scheduler_Control *scheduler );
 
 bool _Scheduler_priority_SMP_Allocate(
-  const Scheduler_Control *scheduler,
-  Thread_Control *thread
-);
-
-void _Scheduler_priority_SMP_Schedule(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 );

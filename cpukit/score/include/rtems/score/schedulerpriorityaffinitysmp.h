@@ -50,7 +50,7 @@ extern "C" {
 #define SCHEDULER_PRIORITY_AFFINITY_SMP_ENTRY_POINTS \
   { \
     _Scheduler_priority_SMP_Initialize, \
-    _Scheduler_priority_SMP_Schedule, \
+    _Scheduler_default_Schedule, \
     _Scheduler_priority_SMP_Yield, \
     _Scheduler_priority_SMP_Block, \
     _Scheduler_priority_SMP_Unblock, \

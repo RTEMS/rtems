@@ -240,7 +240,18 @@ extern const Scheduler_Control _Scheduler_Table[];
 #endif
 
 /**
- * @brief Returns an arbitrary non-NULL value.
+ * @brief Does nothing.
+ *
+ * @param[in] scheduler Unused.
+ * @param[in] the_thread Unused.
+ */
+void _Scheduler_default_Schedule(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
+);
+
+/**
+ * @brief Returns true.
  *
  * @param[in] scheduler Unused.
  * @param[in] the_thread Unused.

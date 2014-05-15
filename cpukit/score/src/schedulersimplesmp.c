@@ -262,15 +262,6 @@ void _Scheduler_simple_SMP_Yield(
   _ISR_Enable( level );
 }
 
-void _Scheduler_simple_SMP_Schedule(
-  const Scheduler_Control *scheduler,
-  Thread_Control *thread
-)
-{
-  (void) scheduler;
-  (void) thread;
-}
-
 void _Scheduler_simple_SMP_Start_idle(
   const Scheduler_Control *scheduler,
   Thread_Control *thread,

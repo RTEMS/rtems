@@ -60,7 +60,7 @@ typedef struct {
 #define SCHEDULER_SIMPLE_SMP_ENTRY_POINTS \
   { \
     _Scheduler_simple_SMP_Initialize, \
-    _Scheduler_simple_SMP_Schedule, \
+    _Scheduler_default_Schedule, \
     _Scheduler_simple_SMP_Yield, \
     _Scheduler_simple_SMP_Block, \
     _Scheduler_simple_SMP_Unblock, \
@@ -101,11 +101,6 @@ void _Scheduler_simple_SMP_Change_priority(
 );
 
 void _Scheduler_simple_SMP_Yield(
-  const Scheduler_Control *scheduler,
-  Thread_Control *thread
-);
-
-void _Scheduler_simple_SMP_Schedule(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 );

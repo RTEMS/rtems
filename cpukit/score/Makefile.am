@@ -201,6 +201,7 @@ libscore_a_SOURCES += src/schedulergetaffinity.c
 libscore_a_SOURCES += src/schedulersetaffinity.c
 libscore_a_SOURCES += src/schedulerdefaultallocatefree.c
 libscore_a_SOURCES += src/schedulerdefaultreleasejob.c
+libscore_a_SOURCES += src/schedulerdefaultschedule.c
 libscore_a_SOURCES += src/schedulerdefaultstartidle.c
 libscore_a_SOURCES += src/schedulerdefaulttick.c
 libscore_a_SOURCES += src/schedulerdefaultupdate.c
