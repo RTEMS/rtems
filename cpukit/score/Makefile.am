@@ -136,6 +136,7 @@ libscore_a_SOURCES += src/cpuset.c
 libscore_a_SOURCES += src/cpusetprintsupport.c
 libscore_a_SOURCES += src/schedulerdefaultgetaffinity.c
 libscore_a_SOURCES += src/schedulerdefaultsetaffinity.c
+libscore_a_SOURCES += src/schedulersmpstartidle.c
 endif
 
 ## CORE_APIMUTEX_C_FILES

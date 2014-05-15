@@ -620,21 +620,6 @@ static inline void _Scheduler_SMP_Insert_scheduled_fifo(
   );
 }
 
-static inline void _Scheduler_SMP_Start_idle(
-  Scheduler_Context *context,
-  Thread_Control *thread,
-  Per_CPU_Control *cpu
-)
-{
-  Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
-
-  node->state = SCHEDULER_SMP_NODE_SCHEDULED;
-
-  _Thread_Set_CPU( thread, cpu );
-  _Chain_Append_unprotected( &self->Scheduled, &thread->Object.Node );
-}
-
 /** @} */
 
 #ifdef __cplusplus

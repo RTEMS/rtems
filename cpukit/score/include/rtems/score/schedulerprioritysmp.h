@@ -90,7 +90,7 @@ typedef struct {
     _Scheduler_priority_Priority_compare, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \
-    _Scheduler_priority_SMP_Start_idle, \
+    _Scheduler_SMP_Start_idle, \
     _Scheduler_default_Get_affinity, \
     _Scheduler_default_Set_affinity \
   }
@@ -127,12 +127,6 @@ void _Scheduler_priority_SMP_Update(
 void _Scheduler_priority_SMP_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
-);
-
-void _Scheduler_priority_SMP_Start_idle(
-  const Scheduler_Control *scheduler,
-  Thread_Control *thread,
-  Per_CPU_Control *cpu
 );
 
 /** @} */

@@ -325,14 +325,3 @@ void _Scheduler_priority_SMP_Yield(
 
   _ISR_Enable( level );
 }
-
-void _Scheduler_priority_SMP_Start_idle(
-  const Scheduler_Control *scheduler,
-  Thread_Control *thread,
-  Per_CPU_Control *cpu
-)
-{
-  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
-
-  _Scheduler_SMP_Start_idle( context, thread, cpu );
-}
