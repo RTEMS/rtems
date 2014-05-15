@@ -111,23 +111,6 @@ void _Thread_queue_Enqueue_with_handler(
 );
 
 /**
- *  @brief Invoked when a thread changes priority and is blocked.
- *
- *  This routine is invoked when a thread changes priority and is
- *  blocked on a thread queue.  If the queue is priority ordered,
- *  the_thread is removed from the_thread_queue and reinserted using
- *  its new priority.  This method has no impact on the state of the_thread
- *  or of any timeouts associated with this blocking.
- *
- *  @param[in] the_thread_queue pointer to a threadq header
- *  @param[in] the_thread pointer to a thread control block
- */
-void _Thread_queue_Requeue(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
-);
-
-/**
  *  @brief Extracts thread from thread queue.
  *
  *  This routine removes @a the_thread from @a the_thread_queue

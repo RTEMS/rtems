@@ -293,7 +293,7 @@ libscore_a_SOURCES += src/threadq.c src/threadqdequeue.c \
     src/threadqenqueuepriority.c src/threadqextract.c \
     src/threadqextractfifo.c src/threadqextractpriority.c \
     src/threadqextractwithproxy.c src/threadqfirst.c src/threadqfirstfifo.c \
-    src/threadqfirstpriority.c src/threadqflush.c src/threadqrequeue.c \
+    src/threadqfirstpriority.c src/threadqflush.c \
     src/threadqprocesstimeout.c src/threadqtimeout.c
 
 ## TIMESPEC_C_FILES
