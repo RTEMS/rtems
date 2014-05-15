@@ -41,7 +41,8 @@ extern "C" {
  * - @ref SCHEDULER_SMP_NODE_READY.
  *
  * State transitions are triggered via basic operations
- * - _Scheduler_SMP_Enqueue_ordered(), and
+ * - _Scheduler_SMP_Enqueue_ordered(),
+ * - _Scheduler_SMP_Enqueue_scheduled_ordered(), and
  * - _Scheduler_SMP_Block().
  *
  * @dot
@@ -295,8 +296,7 @@ typedef void ( *Scheduler_SMP_Update )(
 
 typedef void ( *Scheduler_SMP_Enqueue )(
   Scheduler_Context *context,
-  Thread_Control *thread_to_enqueue,
-  bool has_processor_allocated
+  Thread_Control *thread_to_enqueue
 );
 
 static inline Scheduler_SMP_Context *_Scheduler_SMP_Get_self(
@@ -432,9 +432,58 @@ static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
 /**
  * @brief Enqueues a thread according to the specified order function.
  *
+ * The thread must not be in the scheduled state.
+ *
  * @param[in] context The scheduler instance context.
  * @param[in] thread The thread to enqueue.
- * @param[in] has_processor_allocated The thread has a processor allocated.
+ * @param[in] order The order function.
+ * @param[in] insert_ready Function to insert a node into the set of ready
+ * nodes.
+ * @param[in] insert_scheduled Function to insert a node into the set of
+ * scheduled nodes.
+ * @param[in] move_from_scheduled_to_ready Function to move a node from the set
+ * of scheduled nodes to the set of ready nodes.
+ */
+static inline void _Scheduler_SMP_Enqueue_ordered(
+  Scheduler_Context *context,
+  Thread_Control *thread,
+  Chain_Node_order order,
+  Scheduler_SMP_Insert insert_ready,
+  Scheduler_SMP_Insert insert_scheduled,
+  Scheduler_SMP_Move move_from_scheduled_to_ready
+)
+{
+  Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
+  Thread_Control *lowest_scheduled =
+    _Scheduler_SMP_Get_lowest_scheduled( self );
+
+  _Assert( lowest_scheduled != NULL);
+
+  /*
+   * NOTE: Do not exchange parameters to do the negation of the order check.
+   */
+  if ( ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node ) ) {
+    Scheduler_SMP_Node *lowest_scheduled_node =
+      _Scheduler_SMP_Node_get( lowest_scheduled );
+
+    _Scheduler_SMP_Node_change_state(
+      lowest_scheduled_node,
+      SCHEDULER_SMP_NODE_READY
+    );
+    _Scheduler_SMP_Allocate_processor( self, thread, lowest_scheduled );
+    ( *insert_scheduled )( &self->Base, thread );
+    ( *move_from_scheduled_to_ready )( &self->Base, lowest_scheduled );
+  } else {
+    ( *insert_ready )( &self->Base, thread );
+  }
+}
+
+/**
+ * @brief Enqueues a scheduled thread according to the specified order
+ * function.
+ *
+ * @param[in] context The scheduler instance context.
+ * @param[in] thread The thread to enqueue.
  * @param[in] order The order function.
  * @param[in] get_highest_ready Function to get the highest ready node.
  * @param[in] insert_ready Function to insert a node into the set of ready
@@ -443,69 +492,42 @@ static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
  * scheduled nodes.
  * @param[in] move_from_ready_to_scheduled Function to move a node from the set
  * of ready nodes to the set of scheduled nodes.
- * @param[in] move_from_scheduled_to_ready Function to move a node from the set
- * of scheduled nodes to the set of ready nodes.
  */
-static inline void _Scheduler_SMP_Enqueue_ordered(
+static inline void _Scheduler_SMP_Enqueue_scheduled_ordered(
   Scheduler_Context *context,
   Thread_Control *thread,
-  bool has_processor_allocated,
   Chain_Node_order order,
   Scheduler_SMP_Get_highest_ready get_highest_ready,
   Scheduler_SMP_Insert insert_ready,
   Scheduler_SMP_Insert insert_scheduled,
-  Scheduler_SMP_Move move_from_ready_to_scheduled,
-  Scheduler_SMP_Move move_from_scheduled_to_ready
+  Scheduler_SMP_Move move_from_ready_to_scheduled
 )
 {
   Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+  Thread_Control *highest_ready = ( *get_highest_ready )( &self->Base );
 
-  if ( has_processor_allocated) {
-    Thread_Control *highest_ready = ( *get_highest_ready )( &self->Base );
+  _Assert( highest_ready != NULL);
 
-    _Assert( highest_ready != NULL);
-
-    /*
-     * The thread has been extracted from the scheduled chain.  We have to
-     * place it now on the scheduled or ready chain.
-     *
-     * NOTE: Do not exchange parameters to do the negation of the order check.
-     */
-    if ( !( *order )( &thread->Object.Node, &highest_ready->Object.Node ) ) {
-      _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
-      _Scheduler_SMP_Allocate_processor( self, highest_ready, thread );
-      ( *insert_ready )( &self->Base, thread );
-      ( *move_from_ready_to_scheduled )( &self->Base, highest_ready );
-    } else {
-      _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_SCHEDULED );
-      ( *insert_scheduled )( &self->Base, thread );
-    }
+  /*
+   * The thread has been extracted from the scheduled chain.  We have to place
+   * it now on the scheduled or ready set.
+   *
+   * NOTE: Do not exchange parameters to do the negation of the order check.
+   */
+  if ( !( *order )( &thread->Object.Node, &highest_ready->Object.Node ) ) {
+    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
+    _Scheduler_SMP_Allocate_processor( self, highest_ready, thread );
+    ( *insert_ready )( &self->Base, thread );
+    ( *move_from_ready_to_scheduled )( &self->Base, highest_ready );
   } else {
-    Thread_Control *lowest_scheduled =
-      _Scheduler_SMP_Get_lowest_scheduled( self );
-
-    _Assert( lowest_scheduled != NULL);
-
-    if ( ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node ) ) {
-      Scheduler_SMP_Node *lowest_scheduled_node =
-        _Scheduler_SMP_Node_get( lowest_scheduled );
-
-      _Scheduler_SMP_Node_change_state(
-        lowest_scheduled_node,
-        SCHEDULER_SMP_NODE_READY
-      );
-      _Scheduler_SMP_Allocate_processor( self, thread, lowest_scheduled );
-      ( *insert_scheduled )( &self->Base, thread );
-      ( *move_from_scheduled_to_ready )( &self->Base, lowest_scheduled );
-    } else {
-      _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
-      ( *insert_ready )( &self->Base, thread );
-    }
+    ( *insert_scheduled )( &self->Base, thread );
   }
 }
 
-static inline void _Scheduler_SMP_Extract_from_scheduled( Thread_Control *thread )
+static inline void _Scheduler_SMP_Extract_from_scheduled(
+  Thread_Control *thread
+)
 {
   _Chain_Extract_unprotected( &thread->Object.Node );
 }
@@ -563,6 +585,19 @@ static inline void _Scheduler_SMP_Block(
   }
 }
 
+static inline void _Scheduler_SMP_Unblock(
+  Scheduler_Context *context,
+  Thread_Control *thread,
+  Scheduler_SMP_Enqueue enqueue_fifo
+)
+{
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+
+  _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
+
+  ( *enqueue_fifo )( context, thread );
+}
+
 static inline void _Scheduler_SMP_Change_priority(
   Scheduler_Context *context,
   Thread_Control *thread,
@@ -571,24 +606,33 @@ static inline void _Scheduler_SMP_Change_priority(
   Scheduler_SMP_Extract extract_from_ready,
   Scheduler_SMP_Update update,
   Scheduler_SMP_Enqueue enqueue_fifo,
-  Scheduler_SMP_Enqueue enqueue_lifo
+  Scheduler_SMP_Enqueue enqueue_lifo,
+  Scheduler_SMP_Enqueue enqueue_scheduled_fifo,
+  Scheduler_SMP_Enqueue enqueue_scheduled_lifo
 )
 {
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
-  bool has_processor_allocated = node->state == SCHEDULER_SMP_NODE_SCHEDULED;
 
-  if ( has_processor_allocated ) {
+  if ( node->state == SCHEDULER_SMP_NODE_SCHEDULED ) {
     _Scheduler_SMP_Extract_from_scheduled( thread );
+
+    ( *update )( context, &node->Base, new_priority );
+
+    if ( prepend_it ) {
+      ( *enqueue_scheduled_lifo )( context, thread );
+    } else {
+      ( *enqueue_scheduled_fifo )( context, thread );
+    }
   } else {
     ( *extract_from_ready )( context, thread );
-  }
 
-  ( *update )( context, &node->Base, new_priority );
+    ( *update )( context, &node->Base, new_priority );
 
-  if ( prepend_it ) {
-    ( *enqueue_lifo )( context, thread, has_processor_allocated );
-  } else {
-    ( *enqueue_fifo )( context, thread, has_processor_allocated );
+    if ( prepend_it ) {
+      ( *enqueue_lifo )( context, thread );
+    } else {
+      ( *enqueue_fifo )( context, thread );
+    }
   }
 }
 

@@ -164,7 +164,6 @@ void _Scheduler_simple_SMP_Block(
 static void _Scheduler_simple_SMP_Enqueue_ordered(
   Scheduler_Context *context,
   Thread_Control *thread,
-  bool has_processor_allocated,
   Chain_Node_order order,
   Scheduler_SMP_Insert insert_ready,
   Scheduler_SMP_Insert insert_scheduled
@@ -173,26 +172,21 @@ static void _Scheduler_simple_SMP_Enqueue_ordered(
   _Scheduler_SMP_Enqueue_ordered(
     context,
     thread,
-    has_processor_allocated,
     order,
-    _Scheduler_simple_SMP_Get_highest_ready,
     insert_ready,
     insert_scheduled,
-    _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
     _Scheduler_simple_SMP_Move_from_scheduled_to_ready
   );
 }
 
 static void _Scheduler_simple_SMP_Enqueue_lifo(
   Scheduler_Context *context,
-  Thread_Control *thread,
-  bool has_processor_allocated
+  Thread_Control *thread
 )
 {
   _Scheduler_simple_SMP_Enqueue_ordered(
     context,
     thread,
-    has_processor_allocated,
     _Scheduler_simple_Insert_priority_lifo_order,
     _Scheduler_simple_SMP_Insert_ready_lifo,
     _Scheduler_SMP_Insert_scheduled_lifo
@@ -201,14 +195,59 @@ static void _Scheduler_simple_SMP_Enqueue_lifo(
 
 static void _Scheduler_simple_SMP_Enqueue_fifo(
   Scheduler_Context *context,
-  Thread_Control *thread,
-  bool has_processor_allocated
+  Thread_Control *thread
 )
 {
   _Scheduler_simple_SMP_Enqueue_ordered(
     context,
     thread,
-    has_processor_allocated,
+    _Scheduler_simple_Insert_priority_fifo_order,
+    _Scheduler_simple_SMP_Insert_ready_fifo,
+    _Scheduler_SMP_Insert_scheduled_fifo
+  );
+}
+
+static void _Scheduler_simple_SMP_Enqueue_scheduled_ordered(
+  Scheduler_Context *context,
+  Thread_Control *thread,
+  Chain_Node_order order,
+  Scheduler_SMP_Insert insert_ready,
+  Scheduler_SMP_Insert insert_scheduled
+)
+{
+  _Scheduler_SMP_Enqueue_scheduled_ordered(
+    context,
+    thread,
+    order,
+    _Scheduler_simple_SMP_Get_highest_ready,
+    insert_ready,
+    insert_scheduled,
+    _Scheduler_simple_SMP_Move_from_ready_to_scheduled
+  );
+}
+
+static void _Scheduler_simple_SMP_Enqueue_scheduled_lifo(
+  Scheduler_Context *context,
+  Thread_Control *thread
+)
+{
+  _Scheduler_simple_SMP_Enqueue_scheduled_ordered(
+    context,
+    thread,
+    _Scheduler_simple_Insert_priority_lifo_order,
+    _Scheduler_simple_SMP_Insert_ready_lifo,
+    _Scheduler_SMP_Insert_scheduled_lifo
+  );
+}
+
+static void _Scheduler_simple_SMP_Enqueue_scheduled_fifo(
+  Scheduler_Context *context,
+  Thread_Control *thread
+)
+{
+  _Scheduler_simple_SMP_Enqueue_scheduled_ordered(
+    context,
+    thread,
     _Scheduler_simple_Insert_priority_fifo_order,
     _Scheduler_simple_SMP_Insert_ready_fifo,
     _Scheduler_SMP_Insert_scheduled_fifo
@@ -222,7 +261,11 @@ void _Scheduler_simple_SMP_Unblock(
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
 
-  _Scheduler_simple_SMP_Enqueue_fifo( context, thread, false );
+  _Scheduler_SMP_Unblock(
+    context,
+    thread,
+    _Scheduler_simple_SMP_Enqueue_fifo
+  );
 }
 
 void _Scheduler_simple_SMP_Change_priority(
@@ -242,7 +285,9 @@ void _Scheduler_simple_SMP_Change_priority(
     _Scheduler_simple_SMP_Extract_from_ready,
     _Scheduler_simple_SMP_Do_update,
     _Scheduler_simple_SMP_Enqueue_fifo,
-    _Scheduler_simple_SMP_Enqueue_lifo
+    _Scheduler_simple_SMP_Enqueue_lifo,
+    _Scheduler_simple_SMP_Enqueue_scheduled_fifo,
+    _Scheduler_simple_SMP_Enqueue_scheduled_lifo
   );
 }
 
@@ -257,7 +302,7 @@ void _Scheduler_simple_SMP_Yield(
   _ISR_Disable( level );
 
   _Scheduler_SMP_Extract_from_scheduled( thread );
-  _Scheduler_simple_SMP_Enqueue_fifo( context, thread, true );
+  _Scheduler_simple_SMP_Enqueue_scheduled_fifo( context, thread );
 
   _ISR_Enable( level );
 }

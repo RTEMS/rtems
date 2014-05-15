@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpscheduler03
+
+directives:
+
+  - _Scheduler_SMP_Change_priority()
+
+concepts:
+
+  - Ensure that priority changes work.

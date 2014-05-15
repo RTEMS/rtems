@@ -83,6 +83,7 @@ smppsxaffinity02/Makefile
 smppsxsignal01/Makefile
 smpscheduler01/Makefile
 smpscheduler02/Makefile
+smpscheduler03/Makefile
 smpsignal01/Makefile
 smpswitchextension01/Makefile
 smpthreadlife01/Makefile
