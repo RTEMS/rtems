@@ -69,6 +69,7 @@ extern "C" {
  *   edge [label="block"];
  *   edge [fontcolor="black", color="black"];
  *
+ *   ss -> bs;
  *   rs -> bs;
  *
  *   edge [label="block other"];
