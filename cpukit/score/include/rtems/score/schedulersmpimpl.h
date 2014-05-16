@@ -460,9 +460,6 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
 
   _Assert( lowest_scheduled != NULL);
 
-  /*
-   * NOTE: Do not exchange parameters to do the negation of the order check.
-   */
   if ( ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node ) ) {
     Scheduler_SMP_Node *lowest_scheduled_node =
       _Scheduler_SMP_Node_get( lowest_scheduled );
@@ -513,16 +510,14 @@ static inline void _Scheduler_SMP_Enqueue_scheduled_ordered(
   /*
    * The thread has been extracted from the scheduled chain.  We have to place
    * it now on the scheduled or ready set.
-   *
-   * NOTE: Do not exchange parameters to do the negation of the order check.
    */
-  if ( !( *order )( &thread->Object.Node, &highest_ready->Object.Node ) ) {
+  if ( ( *order )( &thread->Object.Node, &highest_ready->Object.Node ) ) {
+    ( *insert_scheduled )( &self->Base, thread );
+  } else {
     _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
     _Scheduler_SMP_Allocate_processor( self, highest_ready, thread );
     ( *insert_ready )( &self->Base, thread );
     ( *move_from_ready_to_scheduled )( &self->Base, highest_ready );
-  } else {
-    ( *insert_scheduled )( &self->Base, thread );
   }
 }
 
