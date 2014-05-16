@@ -631,7 +631,7 @@ msdos_filename_utf8_to_short_name_for_save (
          * Strip any further characters up to a '.' or the end of the
          * string.
          */
-        if ( *name_ptr == '.' ) {
+        if ( name_size > 0 && *name_ptr == '.' ) {
           ++name_ptr;
           --name_size;
         }
