@@ -132,11 +132,12 @@ extern int LEON3_IrqCtrl_EIrq;
 
 static __inline__ int bsp_irq_fixup(int irq)
 {
-       int eirq;
+       int eirq, cpu;
 
        if (LEON3_IrqCtrl_EIrq != 0 && irq == LEON3_IrqCtrl_EIrq) {
                /* Get interrupt number from IRQ controller */
-               eirq = LEON3_IrqCtrl_Regs->intid[LEON3_Cpu_Index] & 0x1f;
+               cpu = _LEON3_Get_current_processor();
+               eirq = LEON3_IrqCtrl_Regs->intid[cpu] & 0x1f;
                if (eirq & 0x10)
                        irq = eirq;
        }
