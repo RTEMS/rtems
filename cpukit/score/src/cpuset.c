@@ -46,8 +46,8 @@ void _CPU_set_Handler_initialization()
   cpuset_default.setsize = sizeof( *cpuset_default.set );
   CPU_ZERO_S( cpuset_default.setsize, &cpuset_default.preallocated );
 
-  for (cpu_index=0; cpu_index<cpu_count; cpu_index++)
-    CPU_SET_S((int) cpu_index, cpuset_default.setsize, cpuset_default.set );
+  for ( cpu_index=0; cpu_index<cpu_count; cpu_index++ )
+    CPU_SET_S( (int) cpu_index, cpuset_default.setsize, cpuset_default.set );
 }
 
 /**
@@ -64,7 +64,7 @@ bool _CPU_set_Is_valid( const cpu_set_t *cpuset, size_t setsize )
   if ( !cpuset )
     false;
 
-  if (setsize != cpuset_default.setsize )
+  if ( setsize != cpuset_default.setsize )
     return false;
 
   /* Validate at least 1 valid cpu is set in cpuset */
