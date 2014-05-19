@@ -368,9 +368,8 @@ zerobss:
 #if !defined(START_LEON3_ENABLE_SMP)
         PUBLIC(bsp_reset)
 SYM(bsp_reset):
-	mov	1, %g1
-        ta      0                       ! Halt if _main returns ...
-        nop
+        call    SYM(BSP_fatal_exit)
+         clr     %o0
 #endif
 
 /* end of file */

@@ -60,6 +60,7 @@ libbsp_a_SOURCES += startup/bspidle.c
 libbsp_a_SOURCES += ../../shared/bspinit.c
 libbsp_a_SOURCES += startup/bspdelay.c
 libbsp_a_SOURCES += ../../sparc/shared/startup/early_malloc.c
+libbsp_a_SOURCES += ../../sparc/shared/startup/bsp_fatal_exit.c
 
 # ISR Handler
 libbsp_a_SOURCES += ../../sparc/shared/cpu.c

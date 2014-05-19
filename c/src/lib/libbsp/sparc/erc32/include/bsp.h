@@ -92,6 +92,8 @@ rtems_isr_entry set_vector(                     /* returns old vector */
     int                 type                    /* RTEMS or RAW intr  */
 );
 
+void BSP_fatal_exit(uint32_t error);
+
 void bsp_spurious_initialize( void );
 
 /* Allocate 8-byte aligned non-freeable pre-malloc() memory. The function

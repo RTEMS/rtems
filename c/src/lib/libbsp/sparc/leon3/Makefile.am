@@ -41,6 +41,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bspinit.c ../../sparc/shared/startup/early_malloc.c
 libbsp_a_SOURCES += startup/bspreset.c
 libbsp_a_SOURCES += startup/cpucounter.c
+libbsp_a_SOURCES += ../../sparc/shared/startup/bsp_fatal_exit.c
 
 # ISR Handler
 libbsp_a_SOURCES += ../../sparc/shared/cpu.c
