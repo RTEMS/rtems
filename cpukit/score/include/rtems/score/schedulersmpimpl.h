@@ -275,7 +275,14 @@ extern "C" {
  */
 
 typedef Thread_Control *( *Scheduler_SMP_Get_highest_ready )(
-  Scheduler_Context *context
+  Scheduler_Context *context,
+  Thread_Control    *blocking
+);
+
+typedef Thread_Control *( *Scheduler_SMP_Get_lowest_scheduled )(
+  Scheduler_Context *context,
+  Thread_Control    *thread,
+  Chain_Node_order   order
 );
 
 typedef void ( *Scheduler_SMP_Extract )(
@@ -302,6 +309,12 @@ typedef void ( *Scheduler_SMP_Update )(
 typedef void ( *Scheduler_SMP_Enqueue )(
   Scheduler_Context *context,
   Thread_Control *thread_to_enqueue
+);
+
+typedef void ( *Scheduler_SMP_Allocate_processor )(
+  Scheduler_SMP_Context *self,
+  Thread_Control *scheduled,
+  Thread_Control *victim
 );
 
 static inline Scheduler_SMP_Context *_Scheduler_SMP_Get_self(
@@ -382,7 +395,7 @@ static inline void _Scheduler_SMP_Update_heir(
   }
 }
 
-static inline void _Scheduler_SMP_Allocate_processor(
+static void _Scheduler_SMP_Allocate_processor(
   Scheduler_SMP_Context *self,
   Thread_Control *scheduled,
   Thread_Control *victim
@@ -420,16 +433,25 @@ static inline void _Scheduler_SMP_Allocate_processor(
   }
 }
 
-static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
-  Scheduler_SMP_Context *self
+static Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
+  Scheduler_Context *context,
+  Thread_Control    *filter,
+  Chain_Node_order   order
 )
 {
+  Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
   Thread_Control *lowest_ready = NULL;
   Chain_Control *scheduled = &self->Scheduled;
 
   if ( !_Chain_Is_empty( scheduled ) ) {
     lowest_ready = (Thread_Control *) _Chain_Last( scheduled );
   }
+
+  /*
+   * _Scheduler_SMP_Enqueue_ordered() assumes that get_lowest_scheduled
+   * helpers may return NULL. But this method never should.
+   */
+  _Assert( lowest_ready != NULL );
 
   return lowest_ready;
 }
@@ -443,28 +465,45 @@ static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
  * @param[in] thread The thread to enqueue.
  * @param[in] order The order function.
  * @param[in] insert_ready Function to insert a node into the set of ready
- * nodes.
+ *   nodes.
  * @param[in] insert_scheduled Function to insert a node into the set of
- * scheduled nodes.
+ *   scheduled nodes.
  * @param[in] move_from_scheduled_to_ready Function to move a node from the set
- * of scheduled nodes to the set of ready nodes.
+ *   of scheduled nodes to the set of ready nodes.
+ * @param[in] get_lowest_scheduled Function to select the thread from the
+ *   scheduled nodes to replace. It may not be possible to find one.
+ * @param[in] allocate_processor Function to allocate a processor to a thread
+ *   based on the rules of the scheduler.
  */
 static inline void _Scheduler_SMP_Enqueue_ordered(
-  Scheduler_Context *context,
-  Thread_Control *thread,
-  Chain_Node_order order,
-  Scheduler_SMP_Insert insert_ready,
-  Scheduler_SMP_Insert insert_scheduled,
-  Scheduler_SMP_Move move_from_scheduled_to_ready
+  Scheduler_Context                 *context,
+  Thread_Control                    *thread,
+  Chain_Node_order                   order,
+  Scheduler_SMP_Insert                insert_ready,
+  Scheduler_SMP_Insert                insert_scheduled,
+  Scheduler_SMP_Move                  move_from_scheduled_to_ready,
+  Scheduler_SMP_Get_lowest_scheduled  get_lowest_scheduled,
+  Scheduler_SMP_Allocate_processor    allocate_processor
 )
 {
   Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
   Thread_Control *lowest_scheduled =
-    _Scheduler_SMP_Get_lowest_scheduled( self );
+    ( *get_lowest_scheduled )( context, thread, order );
 
-  _Assert( lowest_scheduled != NULL );
+  /*
+   *  get_lowest_scheduled can return a NULL if no scheduled threads
+   *  should be removed from their processor based on the selection
+   *  criteria. For example, this can occur when the affinity of the
+   *  thread being enqueued schedules it against higher priority threads.
+   *  A low priority thread with affinity can only consider the threads
+   *  which are on the cores if has affinity for.
+   *
+   *  The get_lowest_scheduled helper should assert on not returning NULL
+   *  if that is not possible for that scheduler.
+   */
 
-  if ( ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node ) ) {
+  if ( lowest_scheduled &&
+       ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node ) ) {
     Scheduler_SMP_Node *lowest_scheduled_node =
       _Scheduler_SMP_Node_get( lowest_scheduled );
 
@@ -472,7 +511,7 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
       lowest_scheduled_node,
       SCHEDULER_SMP_NODE_READY
     );
-    _Scheduler_SMP_Allocate_processor( self, thread, lowest_scheduled );
+    ( *allocate_processor )( self, thread, lowest_scheduled );
     ( *insert_scheduled )( &self->Base, thread );
     ( *move_from_scheduled_to_ready )( &self->Base, lowest_scheduled );
   } else {
@@ -489,25 +528,29 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
  * @param[in] order The order function.
  * @param[in] get_highest_ready Function to get the highest ready node.
  * @param[in] insert_ready Function to insert a node into the set of ready
- * nodes.
+ *   nodes.
  * @param[in] insert_scheduled Function to insert a node into the set of
- * scheduled nodes.
+ *   scheduled nodes.
  * @param[in] move_from_ready_to_scheduled Function to move a node from the set
- * of ready nodes to the set of scheduled nodes.
+ *   of ready nodes to the set of scheduled nodes.
+ * @param[in] allocate_processor Function to allocate a processor to a thread
+ *   based on the rules of the scheduler.
  */
 static inline void _Scheduler_SMP_Enqueue_scheduled_ordered(
   Scheduler_Context *context,
-  Thread_Control *thread,
-  Chain_Node_order order,
-  Scheduler_SMP_Get_highest_ready get_highest_ready,
-  Scheduler_SMP_Insert insert_ready,
-  Scheduler_SMP_Insert insert_scheduled,
-  Scheduler_SMP_Move move_from_ready_to_scheduled
+  Thread_Control                   *thread,
+  Chain_Node_order                  order,
+  Scheduler_SMP_Get_highest_ready   get_highest_ready,
+  Scheduler_SMP_Insert              insert_ready,
+  Scheduler_SMP_Insert              insert_scheduled,
+  Scheduler_SMP_Move                move_from_ready_to_scheduled,
+  Scheduler_SMP_Allocate_processor  allocate_processor
 )
 {
   Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
-  Thread_Control *highest_ready = ( *get_highest_ready )( &self->Base );
+  Thread_Control *highest_ready =
+    ( *get_highest_ready )( &self->Base, thread );
 
   _Assert( highest_ready != NULL );
 
@@ -519,7 +562,7 @@ static inline void _Scheduler_SMP_Enqueue_scheduled_ordered(
     ( *insert_scheduled )( &self->Base, thread );
   } else {
     _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
-    _Scheduler_SMP_Allocate_processor( self, highest_ready, thread );
+    ( *allocate_processor) ( self, highest_ready, thread );
     ( *insert_ready )( &self->Base, thread );
     ( *move_from_ready_to_scheduled )( &self->Base, highest_ready );
   }
@@ -536,13 +579,15 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
   Scheduler_Context *context,
   Thread_Control *victim,
   Scheduler_SMP_Get_highest_ready get_highest_ready,
-  Scheduler_SMP_Move move_from_ready_to_scheduled
+  Scheduler_SMP_Move move_from_ready_to_scheduled,
+  Scheduler_SMP_Allocate_processor allocate_processor
 )
 {
   Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
-  Thread_Control *highest_ready = ( *get_highest_ready )( &self->Base );
+  Thread_Control *highest_ready =
+    ( *get_highest_ready )( &self->Base, victim );
 
-  _Scheduler_SMP_Allocate_processor( self, highest_ready, victim );
+  ( *allocate_processor )( self, highest_ready, victim );
 
   ( *move_from_ready_to_scheduled )( &self->Base, highest_ready );
 }
@@ -563,7 +608,8 @@ static inline void _Scheduler_SMP_Block(
   Thread_Control *thread,
   Scheduler_SMP_Extract extract_from_ready,
   Scheduler_SMP_Get_highest_ready get_highest_ready,
-  Scheduler_SMP_Move move_from_ready_to_scheduled
+  Scheduler_SMP_Move move_from_ready_to_scheduled,
+  Scheduler_SMP_Allocate_processor allocate_processor
 )
 {
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
@@ -578,7 +624,8 @@ static inline void _Scheduler_SMP_Block(
       context,
       thread,
       get_highest_ready,
-      move_from_ready_to_scheduled
+      move_from_ready_to_scheduled,
+      allocate_processor
     );
   } else {
     ( *extract_from_ready )( context, thread );

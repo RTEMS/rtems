@@ -406,6 +406,10 @@ $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h: include/rtems/score/cpustdatomic.
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h
 
+$(PROJECT_INCLUDE)/rtems/score/schedulerprioritysmpimpl.h: include/rtems/score/schedulerprioritysmpimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerprioritysmpimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerprioritysmpimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/schedulerpriorityaffinitysmp.h: include/rtems/score/schedulerpriorityaffinitysmp.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerpriorityaffinitysmp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerpriorityaffinitysmp.h

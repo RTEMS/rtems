@@ -64,11 +64,14 @@ static void _Scheduler_simple_SMP_Do_update(
 }
 
 static Thread_Control *_Scheduler_simple_SMP_Get_highest_ready(
-  Scheduler_Context *context
+  Scheduler_Context *context,
+  Thread_Control    *thread
 )
 {
   Scheduler_simple_SMP_Context *self =
     _Scheduler_simple_SMP_Get_self( context );
+
+  (void) thread;
 
   return (Thread_Control *) _Chain_First( &self->Ready );
 }
@@ -155,7 +158,8 @@ void _Scheduler_simple_SMP_Block(
     thread,
     _Scheduler_simple_SMP_Extract_from_ready,
     _Scheduler_simple_SMP_Get_highest_ready,
-    _Scheduler_simple_SMP_Move_from_ready_to_scheduled
+    _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
+    _Scheduler_SMP_Allocate_processor
   );
 }
 
@@ -173,7 +177,9 @@ static void _Scheduler_simple_SMP_Enqueue_ordered(
     order,
     insert_ready,
     insert_scheduled,
-    _Scheduler_simple_SMP_Move_from_scheduled_to_ready
+    _Scheduler_simple_SMP_Move_from_scheduled_to_ready,
+    _Scheduler_SMP_Get_lowest_scheduled,
+    _Scheduler_SMP_Allocate_processor
   );
 }
 
@@ -220,7 +226,8 @@ static void _Scheduler_simple_SMP_Enqueue_scheduled_ordered(
     _Scheduler_simple_SMP_Get_highest_ready,
     insert_ready,
     insert_scheduled,
-    _Scheduler_simple_SMP_Move_from_ready_to_scheduled
+    _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
+    _Scheduler_SMP_Allocate_processor
   );
 }
 

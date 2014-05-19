@@ -26,6 +26,7 @@
 
 #include <rtems/score/schedulerprioritysmp.h>
 #include <rtems/score/schedulerpriorityimpl.h>
+#include <rtems/score/schedulerprioritysmpimpl.h>
 #include <rtems/score/schedulersmpimpl.h>
 
 static Scheduler_priority_SMP_Context *
@@ -34,13 +35,14 @@ _Scheduler_priority_SMP_Get_context( const Scheduler_Control *scheduler )
   return (Scheduler_priority_SMP_Context *) _Scheduler_Get_context( scheduler );
 }
 
-static Scheduler_priority_SMP_Context *
-_Scheduler_priority_SMP_Get_self( Scheduler_Context *context )
+Scheduler_priority_SMP_Context *_Scheduler_priority_SMP_Get_self(
+  Scheduler_Context *context
+)
 {
   return (Scheduler_priority_SMP_Context *) context;
 }
 
-static Scheduler_priority_SMP_Node *_Scheduler_priority_SMP_Node_get(
+Scheduler_priority_SMP_Node *_Scheduler_priority_SMP_Node_get(
   Thread_Control *thread
 )
 {
@@ -74,7 +76,7 @@ void _Scheduler_priority_SMP_Node_initialize(
   _Scheduler_SMP_Node_initialize( node );
 }
 
-static void _Scheduler_priority_SMP_Do_update(
+void _Scheduler_priority_SMP_Do_update(
   Scheduler_Context *context,
   Scheduler_Node *base_node,
   Priority_Control new_priority
@@ -106,11 +108,14 @@ void _Scheduler_priority_SMP_Update_priority(
 }
 
 static Thread_Control *_Scheduler_priority_SMP_Get_highest_ready(
-  Scheduler_Context *context
+  Scheduler_Context *context,
+  Thread_Control    *thread
 )
 {
   Scheduler_priority_SMP_Context *self =
     _Scheduler_priority_SMP_Get_self( context );
+
+  (void) thread;
 
   return _Scheduler_priority_Ready_queue_first(
     &self->Bit_map,
@@ -118,7 +123,7 @@ static Thread_Control *_Scheduler_priority_SMP_Get_highest_ready(
   );
 }
 
-static void _Scheduler_priority_SMP_Move_from_scheduled_to_ready(
+void _Scheduler_priority_SMP_Move_from_scheduled_to_ready(
   Scheduler_Context *context,
   Thread_Control *scheduled_to_ready
 )
@@ -136,7 +141,7 @@ static void _Scheduler_priority_SMP_Move_from_scheduled_to_ready(
   );
 }
 
-static void _Scheduler_priority_SMP_Move_from_ready_to_scheduled(
+void _Scheduler_priority_SMP_Move_from_ready_to_scheduled(
   Scheduler_Context *context,
   Thread_Control *ready_to_scheduled
 )
@@ -157,7 +162,7 @@ static void _Scheduler_priority_SMP_Move_from_ready_to_scheduled(
   );
 }
 
-static void _Scheduler_priority_SMP_Insert_ready_lifo(
+void _Scheduler_priority_SMP_Insert_ready_lifo(
   Scheduler_Context *context,
   Thread_Control *thread
 )
@@ -174,7 +179,7 @@ static void _Scheduler_priority_SMP_Insert_ready_lifo(
   );
 }
 
-static void _Scheduler_priority_SMP_Insert_ready_fifo(
+void _Scheduler_priority_SMP_Insert_ready_fifo(
   Scheduler_Context *context,
   Thread_Control *thread
 )
@@ -191,7 +196,7 @@ static void _Scheduler_priority_SMP_Insert_ready_fifo(
   );
 }
 
-static void _Scheduler_priority_SMP_Extract_from_ready(
+void _Scheduler_priority_SMP_Extract_from_ready(
   Scheduler_Context *context,
   Thread_Control *thread
 )
@@ -220,7 +225,8 @@ void _Scheduler_priority_SMP_Block(
     thread,
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_SMP_Get_highest_ready,
-    _Scheduler_priority_SMP_Move_from_ready_to_scheduled
+    _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
+    _Scheduler_SMP_Allocate_processor
   );
 }
 
@@ -238,7 +244,9 @@ static void _Scheduler_priority_SMP_Enqueue_ordered(
     order,
     insert_ready,
     insert_scheduled,
-    _Scheduler_priority_SMP_Move_from_scheduled_to_ready
+    _Scheduler_priority_SMP_Move_from_scheduled_to_ready,
+    _Scheduler_SMP_Get_lowest_scheduled,
+    _Scheduler_SMP_Allocate_processor
   );
 }
 
@@ -285,7 +293,8 @@ static void _Scheduler_priority_SMP_Enqueue_scheduled_ordered(
     _Scheduler_priority_SMP_Get_highest_ready,
     insert_ready,
     insert_scheduled,
-    _Scheduler_priority_SMP_Move_from_ready_to_scheduled
+    _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
+    _Scheduler_SMP_Allocate_processor
   );
 }
 
