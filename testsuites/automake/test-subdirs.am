@@ -22,7 +22,7 @@ all-local:
 	fi; \
 	echo "BSP Testsuite Data: $$vtdata"; \
 	list=`$(top_srcdir)/../../tools/build/rtems-test-check \
-		 $$tdata $(RTEMS_BSP) $(_SUBDIRS)`; \
+		 $$tdata $(top_srcdir)/.. $(RTEMS_BSP) $(_SUBDIRS)`; \
 	for subdir in $$list; do \
 	  echo "Making $$target in $$subdir"; \
 	  if test "$$subdir" != "."; then \

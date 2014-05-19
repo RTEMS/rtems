@@ -5,7 +5,7 @@
 #
 
 #
-# usage: rtems-test-check <bsp-test-database> <bsp> <tests..>
+# usage: rtems-test-check <bsp-test-database> <includes> <bsp> <tests..>
 #
 
 if test $# -lt 3; then
@@ -15,6 +15,8 @@ fi
 
 testdata="$1"
 shift
+includepath="$1"
+shift
 bsp="$1"
 shift
 tests="$*"
@@ -23,11 +25,33 @@ bsp_tests=${tests}
 #
 # If there is no testdata all tests are valid.
 #
+
 if test -f $testdata; then
   disabled_tests=""
-  for t in $(cat $testdata | sed -e 's/#.*$//' -e '/^$/d');
+  while [ ! -z $testdata ];
   do
-   disabled_tests="${disabled_tests} ${t}"
+    for td in $testdata;
+    do
+      ntd=""
+      exec 3<& 0
+      exec 0<$td
+      while read line
+      do
+        line=$(echo $line | sed -e 's/#.*$//' -e '/^$/d')
+        if [ ! -z "$line" ]; then
+          include=$(echo $line | sed -e "s/include:.*/yes/g")
+          if [ "$include" = "yes" ]; then
+            inf=$(echo $line | sed -e "s/include://g" -e 's/^[ \t]//;s/[ \t]$//')
+	    if test -f $includepath/$inf; then
+              ntd="$includepath/$inf $ntd"
+            fi
+          else
+            disabled_tests="${disabled_tests} $line"
+          fi
+        fi
+      done
+    done
+    testdata=$ntd
   done
 
   bsp_tests=""
