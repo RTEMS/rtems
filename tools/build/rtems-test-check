@@ -1,0 +1,76 @@
+#! /bin/sh
+#
+# Copyright 2014 Chris Johns <chrisj@rtems.org>
+# All rights reserved
+#
+
+#
+# usage: rtems-test-check <bsp-test-database> <includes> <bsp> <tests..>
+#
+
+if test $# -lt 3; then
+  echo "error: invalid command line" >&2
+  exit 2
+fi
+
+testdata="$1"
+shift
+includepath="$1"
+shift
+bsp="$1"
+shift
+tests="$*"
+bsp_tests=${tests}
+
+#
+# If there is no testdata all tests are valid.
+#
+
+if test -f $testdata; then
+  disabled_tests=""
+  while [ ! -z $testdata ];
+  do
+    for td in $testdata;
+    do
+      ntd=""
+      exec 3<& 0
+      exec 0<$td
+      while read line
+      do
+        line=$(echo $line | sed -e 's/#.*$//' -e '/^$/d')
+        if [ ! -z "$line" ]; then
+          include=$(echo $line | sed -e "s/include:.*/yes/g")
+          if [ "$include" = "yes" ]; then
+            inf=$(echo $line | sed -e "s/include://g" -e 's/^[ \t]//;s/[ \t]$//')
+	    if test -f $includepath/$inf; then
+              ntd="$includepath/$inf $ntd"
+            fi
+          else
+            disabled_tests="${disabled_tests} $line"
+          fi
+        fi
+      done
+    done
+    testdata=$ntd
+  done
+
+  bsp_tests=""
+  for t in ${tests};
+  do
+    allow="yes"
+    for dt in ${disabled_tests};
+    do
+      if test ${t} = ${dt}; then
+        allow="no"
+      fi
+    done
+    if test ${allow} = yes; then
+      bsp_tests="${bsp_tests} ${t}"
+    fi
+  done
+fi
+
+echo ${bsp_tests}
+
+exit 0
+
