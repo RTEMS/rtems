@@ -1080,14 +1080,8 @@ void _CPU_Context_Initialize(
  * location or a register, optionally disables interrupts, and
  * halts/stops the CPU.
  */
-#define _CPU_Fatal_halt( _source, _error ) \
-  do { \
-    uint32_t   level; \
-    \
-    level = sparc_disable_interrupts(); \
-    __asm__ volatile ( "mov  %0, %%g1 " : "=r" (level) : "0" (level) ); \
-    while (1); /* loop forever */ \
-  } while (0)
+extern void _CPU_Fatal_halt(uint32_t source, uint32_t error)
+  RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /* end of Fatal Error manager macros */
 

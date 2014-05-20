@@ -36,6 +36,11 @@ RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
  time spent in the idle task is minimized.  This significantly reduces
  the wall time required to execute the RTEMS test suites.])
 
+RTEMS_BSPOPTS_SET([BSP_POWER_DOWN_AT_FATAL_HALT],[*],[])
+RTEMS_BSPOPTS_HELP([BSP_POWER_DOWN_AT_FATAL_HALT],
+[If defined, CPU is spinning on fatal exit. Otherwise generate system
+ error which will hand over to debugger, simulator, etc.])
+
 RTEMS_BSP_CLEANUP_OPTIONS(0, 1, 1)
 
 # Explicitly list all Makefiles here
