@@ -20,7 +20,7 @@
 #include <rtems/score/schedulerimpl.h>
 
 rtems_status_code rtems_task_set_scheduler(
-  rtems_id id,
+  rtems_id task_id,
   rtems_id scheduler_id
 )
 {
@@ -31,7 +31,7 @@ rtems_status_code rtems_task_set_scheduler(
     Thread_Control    *the_thread;
     Objects_Locations  location;
 
-    the_thread = _Thread_Get( id, &location );
+    the_thread = _Thread_Get( task_id, &location );
 
     switch ( location ) {
       case OBJECTS_LOCAL:

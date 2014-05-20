@@ -544,8 +544,8 @@ rtems_status_code rtems_task_set_affinity(
 /**
  * @brief Gets the scheduler of a task.
  *
- * @param[in] id Identifier of the task.  Use @ref RTEMS_SELF to select the
- * executing task.
+ * @param[in] task_id Identifier of the task.  Use @ref RTEMS_SELF to select
+ * the executing task.
  * @param[out] scheduler_id Identifier of the scheduler.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
@@ -553,7 +553,7 @@ rtems_status_code rtems_task_set_affinity(
  * @retval RTEMS_INVALID_ID Invalid task identifier.
  */
 rtems_status_code rtems_task_get_scheduler(
-  rtems_id  id,
+  rtems_id  task_id,
   rtems_id *scheduler_id
 );
 
@@ -563,8 +563,8 @@ rtems_status_code rtems_task_get_scheduler(
  * The scheduler of a task is initialized to the scheduler of the task that
  * created it.
  *
- * @param[in] id Identifier of the task.  Use @ref RTEMS_SELF to select the
- * executing task.
+ * @param[in] task_id Identifier of the task.  Use @ref RTEMS_SELF to select
+ * the executing task.
  * @param[in] scheduler_id Identifier of the scheduler.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
@@ -573,7 +573,7 @@ rtems_status_code rtems_task_get_scheduler(
  * @see rtems_scheduler_ident().
  */
 rtems_status_code rtems_task_set_scheduler(
-  rtems_id id,
+  rtems_id task_id,
   rtems_id scheduler_id
 );
 

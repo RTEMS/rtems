@@ -446,7 +446,7 @@ None.
 @ifset is-C
 @example
 rtems_status_code rtems_task_get_scheduler(
-  rtems_id  id,
+  rtems_id  task_id,
   rtems_id *scheduler_id
 );
 @end example
@@ -463,7 +463,8 @@ rtems_status_code rtems_task_get_scheduler(
 
 @subheading DESCRIPTION:
 
-Returns the scheduler identifier of a task in @code{scheduler_id}.
+Returns the scheduler identifier of a task identified by @code{task_id} in
+@code{scheduler_id}.
 
 @subheading NOTES:
 
@@ -480,7 +481,7 @@ None.
 @ifset is-C
 @example
 rtems_status_code rtems_task_set_scheduler(
-  rtems_id id,
+  rtems_id task_id,
   rtems_id scheduler_id
 );
 @end example
@@ -498,8 +499,9 @@ perform a scheduler change
 
 @subheading DESCRIPTION:
 
-Sets the scheduler of a task specified by @code{scheduler_id}.  The scheduler
-of a task is initialized to the scheduler of the task that created it.
+Sets the scheduler of a task identified by @code{task_id} to the scheduler
+identified by @code{scheduler_id}.  The scheduler of a task is initialized to
+the scheduler of the task that created it.
 
 @subheading NOTES:
 
