@@ -82,7 +82,11 @@ extern "C" {
  * During system initialization each processor of the scheduler instance starts
  * with an idle thread assigned to it.  Lets have a look at an example with two
  * idle threads I and J with priority 5.  We also have blocked threads A, B and
- * C with priorities 1, 2 and 3 respectively.
+ * C with priorities 1, 2 and 3 respectively.  The scheduler nodes are ordered
+ * with respect to the thread priority from left to right in the below
+ * diagrams.  The highest priority node (lowest priority number) is the
+ * leftmost node.  Since the processor assignment is independent of the thread
+ * priority the processor indices may move from one state to the other.
  *
  * @dot
  * digraph {
