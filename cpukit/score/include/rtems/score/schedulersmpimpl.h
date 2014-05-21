@@ -462,7 +462,7 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
   Thread_Control *lowest_scheduled =
     _Scheduler_SMP_Get_lowest_scheduled( self );
 
-  _Assert( lowest_scheduled != NULL);
+  _Assert( lowest_scheduled != NULL );
 
   if ( ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node ) ) {
     Scheduler_SMP_Node *lowest_scheduled_node =
@@ -509,7 +509,7 @@ static inline void _Scheduler_SMP_Enqueue_scheduled_ordered(
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
   Thread_Control *highest_ready = ( *get_highest_ready )( &self->Base );
 
-  _Assert( highest_ready != NULL);
+  _Assert( highest_ready != NULL );
 
   /*
    * The thread has been extracted from the scheduled chain.  We have to place
