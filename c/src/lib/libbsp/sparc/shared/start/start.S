@@ -252,8 +252,6 @@ SYM(hard_reset):
 
 	call	SYM(bsp_start_on_secondary_processor) ! does not return
 	 sub	%sp, CPU_MINIMUM_STACK_FRAME_SIZE, %sp
-	ba	SYM(bsp_reset)		! just in case
-	 nop
 cpu0:
 #endif
 
@@ -364,14 +362,11 @@ zerobss:
         nop
 
         mov     %0, %o0                 ! command line
-        call    SYM(boot_card)
-        sub     %sp, 0x60, %sp          ! room for boot_card to save args
-        nop
+        call    SYM(boot_card)          ! does not return
+         sub     %sp, 0x60, %sp         ! room for boot_card to save args
 
 #if !defined(START_LEON3_ENABLE_SMP)
-        PUBLIC(BSP_fatal_return)
         PUBLIC(bsp_reset)
-SYM(BSP_fatal_return):
 SYM(bsp_reset):
 	mov	1, %g1
         ta      0                       ! Halt if _main returns ...
