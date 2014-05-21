@@ -41,18 +41,20 @@ rtems_status_code rtems_semaphore_obtain(
   Objects_Locations               location;
   ISR_Level                       level;
   Thread_Control                 *executing;
+  bool                            wait;
 
   the_semaphore = _Semaphore_Get_interrupt_disable( id, &location, &level );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
       executing = _Thread_Executing;
+      wait = !_Options_Is_no_wait( option_set );
       if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) {
         _CORE_mutex_Seize(
           &the_semaphore->Core_control.mutex,
           executing,
           id,
-          ((_Options_Is_no_wait( option_set )) ? false : true),
+          wait,
           timeout,
           level
         );
@@ -66,7 +68,7 @@ rtems_status_code rtems_semaphore_obtain(
         &the_semaphore->Core_control.semaphore,
         executing,
         id,
-        ((_Options_Is_no_wait( option_set )) ? false : true),
+        wait,
         timeout,
         level
       );
