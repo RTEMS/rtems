@@ -43,12 +43,20 @@ rtems_status_code rtems_semaphore_flush(
 {
   Semaphore_Control          *the_semaphore;
   Objects_Locations           location;
+  rtems_attribute             attribute_set;
 
   the_semaphore = _Semaphore_Get( id, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) {
+      attribute_set = the_semaphore->attribute_set;
+#if defined(RTEMS_SMP)
+      if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
+        _Objects_Put( &the_semaphore->Object );
+        return RTEMS_NOT_DEFINED;
+      } else
+#endif
+      if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
         _CORE_mutex_Flush(
           &the_semaphore->Core_control.mutex,
           SEND_OBJECT_WAS_DELETED,

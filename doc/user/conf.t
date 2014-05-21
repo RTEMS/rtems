@@ -686,6 +686,38 @@ API Semaphores that can be concurrently active.
 This object class can be configured in unlimited allocation mode.
 
 @c
+@c === CONFIGURE_MAXIMUM_MRSP_SEMAPHORES ===
+@c
+@subsection Specify Maximum Classic API Semaphores usable with MrsP
+
+@findex CONFIGURE_MAXIMUM_MRSP_SEMAPHORES
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_MAXIMUM_MRSP_SEMAPHORES}
+
+@item DATA TYPE:
+Unsigned integer (@code{uint32_t}).
+
+@item RANGE:
+Zero or positive.
+
+@item DEFAULT VALUE:
+The default value is 0.
+
+@end table
+
+@subheading DESCRIPTION:
+@code{CONFIGURE_MAXIMUM_MRSP_SEMAPHORES} is the
+maximum number of Classic API Semaphores using the Multiprocessor Resource
+Sharing Protocol (MrsP) that can be concurrently active.
+
+@subheading NOTES:
+This configuration option is only used on SMP configurations.  On uni-processor
+configurations the Priority Ceiling Protocol is used for MrsP semaphores and
+thus no extra memory is necessary.
+
+@c
 @c === CONFIGURE_MAXIMUM_MESSAGE_QUEUES ===
 @c
 @subsection Specify Maximum Classic API Message Queues

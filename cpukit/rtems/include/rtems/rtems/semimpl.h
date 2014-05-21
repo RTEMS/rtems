@@ -20,6 +20,7 @@
 #include <rtems/rtems/sem.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/coresemimpl.h>
+#include <rtems/score/mrspimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -91,6 +92,14 @@ _Semaphore_Translate_core_mutex_return_code(
   #endif
   return _Semaphore_Translate_core_mutex_return_code_[status];
 }
+
+#if defined(RTEMS_SMP)
+RTEMS_INLINE_ROUTINE rtems_status_code
+_Semaphore_Translate_MRSP_status_code( MRSP_Status mrsp_status )
+{
+  return (rtems_status_code) mrsp_status;
+}
+#endif
 
 /**
  * @brief Semaphore Translate Core Semaphore Return Code

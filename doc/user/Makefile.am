@@ -96,7 +96,7 @@ sem.texi: sem.t
 	    -n "Barrier Manager" < $< > $@
 
 barrier.texi: barrier.t
-	$(BMENU2) -p "Semaphore Manager SEMAPHORE_FLUSH - Unblock all tasks waiting on a semaphore" \
+	$(BMENU2) -p "Semaphore Manager SEMAPHORE_SET_PRIORITY - Set priority by scheduler for a semaphore" \
 	    -u "Top" \
 	    -n "Message Manager" < $< > $@
 

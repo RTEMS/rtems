@@ -1,0 +1,7 @@
+*** BEGIN OF TEST SPMRSP 1 ***
+test MRSP create errors
+test MRSP obtain and release
+test MRSP set priority errors
+test MRSP set priority
+test MRSP timeout and not owner of resource
+*** END OF TEST SPMRSP 1 ***

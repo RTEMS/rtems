@@ -24,6 +24,8 @@ semaphore manager are:
 @item @code{@value{DIRPREFIX}semaphore_obtain} - Acquire a semaphore
 @item @code{@value{DIRPREFIX}semaphore_release} - Release a semaphore
 @item @code{@value{DIRPREFIX}semaphore_flush} - Unblock all tasks waiting on a semaphore
+@item @code{@value{DIRPREFIX}semaphore_set_priority} - Set priority by
+scheduler for a semaphore
 @end itemize
 
 @section Background
@@ -173,6 +175,22 @@ any of the semaphores the task holds.  Only when the task
 releases ALL of the binary semaphores it holds will its priority
 be restored to the normal value.
 
+@subsection Multiprocessor Resource Sharing Protocol
+
+The Multiprocessor Resource Sharing Protocol (MrsP) is defined in @cite{A.
+Burns and A.J.  Wellings, A Schedulability Compatible Multiprocessor Resource
+Sharing Protocol - MrsP, Proceedings of the 25th Euromicro Conference on
+Real-Time Systems (ECRTS 2013), July 2013}.  It is a generalization of the
+Priority Ceiling Protocol to SMP systems.  Each MrsP semaphore uses a ceiling
+priority per scheduler instance.  These ceiling priorities can be specified
+with @code{rtems_semaphore_set_priority()}.  A task obtaining or owning a MrsP
+semaphore will execute with the ceiling priority for its scheduler instance as
+specified by the MrsP semaphore object.  Tasks waiting to get ownership of a
+MrsP semaphore will not relinquish the processor voluntarily.  In case the
+owner of a MrsP semaphore gets preempted it can ask all tasks waiting for this
+semaphore to help out and temporarily borrow the right to execute on one of
+their assigned processors.
+
 @subsection Building a Semaphore Attribute Set
 
 In general, an attribute set is built by a bitwise OR
@@ -198,10 +216,16 @@ inheritance (default)
 
 @item @code{@value{RPREFIX}INHERIT_PRIORITY} - use priority inheritance
 
-@item @code{@value{RPREFIX}PRIORITY_CEILING} - use priority ceiling
-
 @item @code{@value{RPREFIX}NO_PRIORITY_CEILING} - do not use priority
 ceiling (default)
+
+@item @code{@value{RPREFIX}PRIORITY_CEILING} - use priority ceiling
+
+@item @code{@value{RPREFIX}NO_MULTIPROCESSOR_RESOURCE_SHARING} - do not use
+Multiprocessor Resource Sharing Protocol (default)
+
+@item @code{@value{RPREFIX}MULTIPROCESSOR_RESOURCE_SHARING} - use
+Multiprocessor Resource Sharing Protocol
 
 @item @code{@value{RPREFIX}LOCAL} - local semaphore (default)
 
@@ -489,10 +513,16 @@ inheritance (default)
 
 @item @code{@value{RPREFIX}INHERIT_PRIORITY} - use priority inheritance
 
-@item @code{@value{RPREFIX}PRIORITY_CEILING} - use priority ceiling
-
 @item @code{@value{RPREFIX}NO_PRIORITY_CEILING} - do not use priority
 ceiling (default)
+
+@item @code{@value{RPREFIX}PRIORITY_CEILING} - use priority ceiling
+
+@item @code{@value{RPREFIX}NO_MULTIPROCESSOR_RESOURCE_SHARING} - do not use
+Multiprocessor Resource Sharing Protocol (default)
+
+@item @code{@value{RPREFIX}MULTIPROCESSOR_RESOURCE_SHARING} - use
+Multiprocessor Resource Sharing Protocol
 
 @item @code{@value{RPREFIX}LOCAL} - local semaphore (default)
 
@@ -511,6 +541,11 @@ earlier discussion on this.
 
 The total number of global objects, including semaphores, is limited by
 the maximum_global_objects field in the Configuration Table.
+
+It is not allowed to create an initially locked MrsP semaphore and the
+@code{@value{RPREFIX}INVALID_NUMBER} status code will be returned on SMP
+configurations in this case.  This prevents lock order reversal problems with
+the allocator mutex.
 
 @c
 @c
@@ -735,6 +770,10 @@ until the semaphore is released.
 A clock tick is required to support the timeout functionality of
 this directive.
 
+It is not allowed to obtain a MrsP semaphore more than once by one task at a
+time (nested access) and the @code{@value{RPREFIX}UNSATISFIED} status code will
+be returned on SMP configurations in this case.
+
 @c
 @c
 @c
@@ -831,6 +870,8 @@ procedure Semaphore_Flush (
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - semaphore released successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid semaphore id@*
+@code{@value{RPREFIX}NOT_DEFINED} - operation not defined for the protocol of
+the semaphore@*
 @code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported for remote semaphores
 
 @subheading DESCRIPTION:
@@ -858,4 +899,168 @@ If the task to be unblocked resides on a different
 node from the semaphore, then the waiting task is
 unblocked, and the proxy used to represent the task is reclaimed.
 
+It is not allowed to flush a MrsP semaphore and the
+@code{@value{RPREFIX}NOT_DEFINED} status code will be returned on SMP
+configurations in this case.
 
+@c
+@c
+@c
+@page
+@subsection SEMAPHORE_SET_PRIORITY - Set priority by scheduler for a semaphore
+
+@cindex set priority by scheduler for a semaphore
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_semaphore_set_priority
+@example
+rtems_status_code rtems_semaphore_set_priority(
+  rtems_id             semaphore_id,
+  rtems_id             scheduler_id,
+  rtems_task_priority  new_priority,
+  rtems_task_priority *old_priority
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - successful operation@*
+@code{@value{RPREFIX}INVALID_ID} - invalid semaphore or scheduler id@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - @code{old_priority} is NULL@*
+@code{@value{RPREFIX}INVALID_PRIORITY} - invalid new priority value@*
+@code{@value{RPREFIX}NOT_DEFINED} - operation not defined for the protocol of
+the semaphore@*
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported for remote semaphores
+
+@subheading DESCRIPTION:
+
+This directive sets the priority value with respect to the specified scheduler
+of a semaphore.
+
+The special priority value @code{RTEMS_CURRENT_PRIORITY} can be used to get the
+current priority value without changing it.
+
+The interpretation of the priority value depends on the protocol of the
+semaphore object.
+
+@itemize @bullet
+@item The Multiprocessor Resource Sharing Protocol needs a ceiling priority per
+scheduler instance.  This operation can be used to specify these priority
+values.
+@item For the Priority Ceiling Protocol the ceiling priority is used with this
+operation.
+@item For other protocols this operation is not defined.
+@end itemize
+
+@subheading EXAMPLE:
+
+@example
+@group
+#include <assert.h>
+#include <stdlib.h>
+
+#include <rtems.h>
+
+#define SCHED_A rtems_build_name(' ', ' ', ' ', 'A')
+
+#define SCHED_B rtems_build_name(' ', ' ', ' ', 'B')
+
+static void Init(rtems_task_argument arg)
+@{
+  rtems_status_code   sc;
+  rtems_id            semaphore_id;
+  rtems_id            scheduler_a_id;
+  rtems_id            scheduler_b_id;
+  rtems_task_priority prio;
+
+  /* Get the scheduler identifiers */
+
+  sc = rtems_scheduler_ident(SCHED_A, &scheduler_a_id);
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_scheduler_ident(SCHED_B, &scheduler_b_id);
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  /* Create a MrsP semaphore object */
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('M', 'R', 'S', 'P'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    1,
+    &semaphore_id
+  );
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  /*
+   * The ceiling priority values per scheduler are equal to the value specified
+   * for object creation.
+   */
+
+  prio = RTEMS_CURRENT_PRIORITY;
+  sc = rtems_semaphore_set_priority(semaphore_id, scheduler_a_id, prio, &prio);
+  assert(sc == RTEMS_SUCCESSFUL);
+  assert(prio == 1);
+
+  /* Check the old value and set a new ceiling priority for scheduler B */
+
+  prio = 2;
+  sc = rtems_semaphore_set_priority(semaphore_id, scheduler_b_id, prio, &prio);
+  assert(sc == RTEMS_SUCCESSFUL);
+  assert(prio == 1);
+
+  /* Check the ceiling priority values */
+
+  prio = RTEMS_CURRENT_PRIORITY;
+  sc = rtems_semaphore_set_priority(semaphore_id, scheduler_a_id, prio, &prio);
+  assert(sc == RTEMS_SUCCESSFUL);
+  assert(prio == 1);
+
+  prio = RTEMS_CURRENT_PRIORITY;
+  sc = rtems_semaphore_set_priority(semaphore_id, scheduler_b_id, prio, &prio);
+  assert(sc == RTEMS_SUCCESSFUL);
+  assert(prio == 2);
+
+  sc = rtems_semaphore_delete(semaphore_id);
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  exit(0);
+@}
+
+#define CONFIGURE_SMP_APPLICATION
+
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_SEMAPHORES 1
+#define CONFIGURE_MAXIMUM_MRSP_SEMAPHORES 1
+
+#define CONFIGURE_SMP_MAXIMUM_PROCESSORS 2
+
+#define CONFIGURE_SCHEDULER_SIMPLE_SMP
+
+#include <rtems/scheduler.h>
+
+RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(a);
+
+RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(b);
+
+#define CONFIGURE_SCHEDULER_CONTROLS \
+  RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP(a, SCHED_A), \
+  RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP(b, SCHED_B)
+
+#define CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS \
+  RTEMS_SCHEDULER_ASSIGN(0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY), \
+  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY)
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>
+@end group
+@end example

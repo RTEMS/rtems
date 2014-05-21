@@ -206,6 +206,7 @@ librtems_a_SOURCES += src/semrelease.c
 librtems_a_SOURCES += src/semflush.c
 librtems_a_SOURCES += src/semtranslatereturncode.c
 librtems_a_SOURCES += src/semdata.c
+librtems_a_SOURCES += src/semsetpriority.c
 
 ## EVENT_C_FILES
 librtems_a_SOURCES += src/event.c

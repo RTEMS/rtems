@@ -1792,6 +1792,17 @@ const rtems_libio_helper rtems_fs_init_helper =
       CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS + \
       CONFIGURE_NETWORKING_SEMAPHORES)
 
+  #if !defined(RTEMS_SMP) || \
+    !defined(CONFIGURE_MAXIMUM_MRSP_SEMAPHORES)
+    #define CONFIGURE_MEMORY_FOR_MRSP_SEMAPHORES 0
+  #else
+    #define CONFIGURE_MEMORY_FOR_MRSP_SEMAPHORES \
+      CONFIGURE_MAXIMUM_MRSP_SEMAPHORES * \
+        _Configure_From_workspace( \
+          RTEMS_ARRAY_SIZE(_Scheduler_Table) * sizeof(Priority_Control) \
+        )
+  #endif
+
   /*
    * If there are no user or support semaphores defined, then we can assume
    * that no memory need be allocated at all for semaphores.
@@ -1800,7 +1811,8 @@ const rtems_libio_helper rtems_fs_init_helper =
     #define CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) 0
   #else
     #define CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) \
-      _Configure_Object_RAM(_semaphores, sizeof(Semaphore_Control) )
+      _Configure_Object_RAM(_semaphores, sizeof(Semaphore_Control) ) + \
+        CONFIGURE_MEMORY_FOR_MRSP_SEMAPHORES
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_MESSAGE_QUEUES

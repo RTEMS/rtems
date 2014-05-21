@@ -139,6 +139,14 @@ $(PROJECT_INCLUDE)/rtems/score/freechain.h: include/rtems/score/freechain.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/freechain.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/freechain.h
 
+$(PROJECT_INCLUDE)/rtems/score/mrsp.h: include/rtems/score/mrsp.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/mrsp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/mrsp.h
+
+$(PROJECT_INCLUDE)/rtems/score/mrspimpl.h: include/rtems/score/mrspimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/mrspimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/mrspimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/object.h: include/rtems/score/object.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/object.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.h

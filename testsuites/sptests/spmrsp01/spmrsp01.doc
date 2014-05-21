@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spmrsp01
+
+directives:
+
+  - rtems_semaphore_create()
+  - rtems_semaphore_set_priority()
+
+concepts:
+
+  - Ensure that the RTEMS_MULTIPROCESSOR_RESOURCE_SHARING attribute and
+    semaphores work on uni-processor configurations.

@@ -617,6 +617,16 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Get_by_id(
     && _Scheduler_Get_processor_count( scheduler ) > 0;
 }
 
+RTEMS_INLINE_ROUTINE bool _Scheduler_Is_id_valid( Objects_Id id )
+{
+  const Scheduler_Control *scheduler;
+  bool ok = _Scheduler_Get_by_id( id, &scheduler );
+
+  (void) scheduler;
+
+  return ok;
+}
+
 RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_index(
   const Scheduler_Control *scheduler
 )

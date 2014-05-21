@@ -38,6 +38,7 @@
 #include <rtems/score/coremutex.h>
 #include <rtems/score/object.h>
 #include <rtems/score/coresem.h>
+#include <rtems/score/mrsp.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -88,6 +89,10 @@ typedef struct {
      *  API Semaphore instance.
      */
     CORE_semaphore_Control semaphore;
+
+#if defined(RTEMS_SMP)
+    MRSP_Control mrsp;
+#endif
   } Core_control;
 }   Semaphore_Control;
 
@@ -206,6 +211,47 @@ rtems_status_code rtems_semaphore_release(
  */
 rtems_status_code rtems_semaphore_flush(
   rtems_id	   id
+);
+
+/**
+ * @brief Sets the priority value with respect to the specified scheduler of a
+ * semaphore.
+ *
+ * The special priority value @ref RTEMS_CURRENT_PRIORITY can be used to get
+ * the current priority value without changing it.
+ *
+ * The interpretation of the priority value depends on the protocol of the
+ * semaphore object.
+ *
+ * - The Multiprocessor Resource Sharing Protocol needs a ceiling priority per
+ *   scheduler instance.  This operation can be used to specify these priority
+ *   values.
+ * - For the Priority Ceiling Protocol the ceiling priority is used with this
+ *   operation.
+ * - For other protocols this operation is not defined.
+ *
+ * @param[in] semaphore_id Identifier of the semaphore.
+ * @param[in] scheduler_id Identifier of the scheduler.
+ * @param[in] new_priority The new priority value.  Use
+ * @ref RTEMS_CURRENT_PRIORITY to not set a new priority and only get the
+ * current priority.
+ * @param[out] old_priority Reference to store the old priority value.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID Invalid semaphore or scheduler identifier.
+ * @retval RTEMS_INVALID_ADDRESS The old priority reference is @c NULL.
+ * @retval RTEMS_INVALID_PRIORITY The new priority value is invalid.
+ * @retval RTEMS_NOT_DEFINED The set priority operation is not defined for the
+ * protocol of this semaphore object.
+ * @retval RTEMS_ILLEGAL_ON_REMOTE_OBJECT Not supported for remote semaphores.
+ *
+ * @see rtems_scheduler_ident() and rtems_task_set_priority().
+ */
+rtems_status_code rtems_semaphore_set_priority(
+  rtems_id             semaphore_id,
+  rtems_id             scheduler_id,
+  rtems_task_priority  new_priority,
+  rtems_task_priority *old_priority
 );
 
 /**@}*/

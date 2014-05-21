@@ -185,6 +185,23 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_inherit_priority(
 }
 
 /**
+ * @brief Returns true if the attribute set has at most one protocol, and false
+ * otherwise.
+ *
+ * The protocols are RTEMS_INHERIT_PRIORITY, RTEMS_PRIORITY_CEILING and
+ * RTEMS_MULTIPROCESSOR_RESOURCE_SHARING.
+ */
+RTEMS_INLINE_ROUTINE bool _Attributes_Has_at_most_one_protocol(
+  rtems_attribute attribute_set
+)
+{
+  attribute_set &= RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY_CEILING
+    | RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+
+  return ( attribute_set & ( attribute_set - 1 ) ) == 0;
+}
+
+/**
  *  @brief Checks if the priority ceiling attribute
  *  is enabled in the attribute_set
  *
@@ -196,6 +213,20 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_priority_ceiling(
 )
 {
    return ( attribute_set & RTEMS_PRIORITY_CEILING ) ? true : false;
+}
+
+/**
+ *  @brief Checks if the Multiprocessor Resource Sharing Protocol attribute
+ *  is enabled in the attribute_set
+ *
+ *  This function returns TRUE if the Multiprocessor Resource Sharing Protocol
+ *  attribute is enabled in the attribute_set and FALSE otherwise.
+ */
+RTEMS_INLINE_ROUTINE bool _Attributes_Is_multiprocessor_resource_sharing(
+  rtems_attribute attribute_set
+)
+{
+  return ( attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0;
 }
 
 /**

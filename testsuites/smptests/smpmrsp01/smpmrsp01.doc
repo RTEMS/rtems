@@ -1,0 +1,15 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpmrsp01
+
+directives:
+
+  - _MRSP_Initialize()
+  - _MRSP_Obtain()
+  - _MRSP_Release()
+  - _MRSP_Get_ceiling_priority()
+  - _MRSP_Set_ceiling_priority()
+
+concepts:
+
+  - Ensure that MrsP semaphores work.
