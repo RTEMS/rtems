@@ -182,7 +182,7 @@ static void test_delete(void)
   }
 }
 
-static void delay_ipi_task(rtems_task_argument arg)
+static void delay_ipi_task(rtems_task_argument variant)
 {
   test_context *ctx = &test_instance;
   rtems_interrupt_level level;
@@ -198,12 +198,24 @@ static void delay_ipi_task(rtems_task_argument arg)
    */
   rtems_counter_delay_nanoseconds(100000000);
 
-  /* We get deleted as a side effect of enabling the thread life protection */
+  if (variant != 0) {
+    _Thread_Disable_dispatch();
+  }
+
+  /*
+   * We get deleted as a side effect of enabling the thread life protection or
+   * later if we enable the thread dispatching.
+   */
   _Thread_Set_life_protection(true);
+
+  if (variant != 0) {
+    _Thread_Enable_dispatch();
+  }
+
   rtems_test_assert(0);
 }
 
-static void test_set_life_protection(void)
+static void test_set_life_protection(rtems_task_argument variant)
 {
   test_context *ctx = &test_instance;
   rtems_status_code sc;
@@ -222,7 +234,7 @@ static void test_set_life_protection(void)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_start(id, delay_ipi_task, 0);
+  sc = rtems_task_start(id, delay_ipi_task, variant);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   _SMP_barrier_Wait(&ctx->barrier, &ctx->main_barrier_state, CPU_COUNT);
@@ -301,7 +313,8 @@ static void Init(rtems_task_argument arg)
   if (rtems_get_processor_count() >= CPU_COUNT) {
     test_restart();
     test_delete();
-    test_set_life_protection();
+    test_set_life_protection(0);
+    test_set_life_protection(1);
     test_wait_for_execution_stop();
   }
 

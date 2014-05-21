@@ -373,8 +373,6 @@ bool _Thread_Set_life_protection( bool protect )
   ) {
     _Thread_Disable_dispatch();
     _Thread_Enable_dispatch();
-
-    _Assert_Not_reached();
   }
 #endif
 
@@ -385,8 +383,6 @@ bool _Thread_Set_life_protection( bool protect )
     _Thread_Disable_dispatch();
     _Thread_Start_life_change_for_executing( executing );
     _Thread_Enable_dispatch();
-
-    _Assert_Not_reached();
   }
 
   return previous_life_protection;

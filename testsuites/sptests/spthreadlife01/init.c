@@ -19,6 +19,8 @@
 #include <rtems.h>
 #include <rtems/libcsupport.h>
 
+#include <rtems/score/threadimpl.h>
+
 #include "tmacros.h"
 
 #define PRIO_INIT 1
@@ -48,6 +50,12 @@ typedef enum {
   DELETE_1,
   DELETE_2,
   DELETE_3,
+  SET_PROTECTION,
+  SET_PROTECTION_DONE,
+  CLEAR_PROTECTION,
+  DELETE_4,
+  DELETE_5,
+  DELETE_6,
   INVALID
 } test_state;
 
@@ -157,8 +165,17 @@ static void delete_extension(
 
   assert_priority(PRIO_INIT);
 
-  rtems_test_assert(ctx->current == DELETE_2);
-  ctx->current = DELETE_3;
+  switch (ctx->current) {
+    case DELETE_2:
+      ctx->current = DELETE_3;
+      break;
+    case DELETE_5:
+      ctx->current = DELETE_6;
+      break;
+    default:
+      rtems_test_assert(0);
+      break;
+  }
 }
 
 static void terminate_extension(Thread_Control *executing)
@@ -179,6 +196,9 @@ static void terminate_extension(Thread_Control *executing)
     case DELETE_1:
       ctx->current = DELETE_2;
       break;
+    case DELETE_4:
+      ctx->current = DELETE_5;
+      break;
     default:
       rtems_test_assert(0);
       break;
@@ -192,6 +212,7 @@ static void worker_task(rtems_task_argument arg)
   while (true) {
     test_state state = ctx->current;
     rtems_status_code sc;
+    bool previous_thread_life_protection;
 
     switch (state) {
       case SET_PRIO:
@@ -231,6 +252,19 @@ static void worker_task(rtems_task_argument arg)
       case RESTART_2:
         assert_priority(PRIO_HIGH);
         break;
+      case SET_PROTECTION:
+        _Thread_Disable_dispatch();
+        previous_thread_life_protection = _Thread_Set_life_protection(true);
+        rtems_test_assert(!previous_thread_life_protection);
+        _Thread_Enable_dispatch();
+        break;
+      case CLEAR_PROTECTION:
+        _Thread_Disable_dispatch();
+        previous_thread_life_protection = _Thread_Set_life_protection(false);
+        rtems_test_assert(previous_thread_life_protection);
+        ctx->current = DELETE_4;
+        _Thread_Enable_dispatch();
+        break;
       default:
         rtems_test_assert(0);
         break;
@@ -255,17 +289,9 @@ static void create_sema(test_context *ctx)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
-static void test(void)
+static void create_and_start_worker(test_context *ctx)
 {
-  test_context *ctx = &test_instance;
   rtems_status_code sc;
-  rtems_resource_snapshot snapshot;
-
-  ctx->main_task_id = rtems_task_self();
-
-  rtems_resource_snapshot_take(&snapshot);
-
-  create_sema(ctx);
 
   sc = rtems_task_create(
     rtems_build_name('W', 'O', 'R', 'K'),
@@ -279,6 +305,20 @@ static void test(void)
 
   sc = rtems_task_start(ctx->worker_task_id, worker_task, 0);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void test(void)
+{
+  test_context *ctx = &test_instance;
+  rtems_status_code sc;
+  rtems_resource_snapshot snapshot;
+
+  ctx->main_task_id = rtems_task_self();
+
+  rtems_resource_snapshot_take(&snapshot);
+
+  create_sema(ctx);
+  create_and_start_worker(ctx);
 
   change_state_and_wait(ctx, INIT, SET_PRIO, SET_PRIO_DONE);
   change_state_and_wait(ctx, SET_PRIO_DONE, DO_OBTAIN_0, OBTAIN_DONE_0);
@@ -316,7 +356,17 @@ static void test(void)
 
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
 
-  rtems_test_assert(ctx->current == DELETE_3);
+  create_and_start_worker(ctx);
+
+  change_state_and_wait(ctx, DELETE_3, SET_PROTECTION, SET_PROTECTION_DONE);
+  change_state(ctx, SET_PROTECTION_DONE, CLEAR_PROTECTION, INVALID);
+
+  sc = rtems_task_delete(ctx->worker_task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+
+  rtems_test_assert(ctx->current == DELETE_6);
 }
 
 static void Init(rtems_task_argument arg)
