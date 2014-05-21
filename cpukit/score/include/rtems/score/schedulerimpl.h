@@ -332,7 +332,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Has_processor_ownership(
 }
 
 RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get(
-  Thread_Control *the_thread
+  const Thread_Control *the_thread
 )
 {
 #if defined(RTEMS_SMP)
