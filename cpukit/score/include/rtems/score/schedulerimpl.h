@@ -354,7 +354,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Set(
 
   if ( current_scheduler != scheduler ) {
     _Thread_Set_state( the_thread, STATES_MIGRATING );
-    _Scheduler_Free( _Scheduler_Get( the_thread ), the_thread );
+    _Scheduler_Free( current_scheduler, the_thread );
     the_thread->scheduler = scheduler;
     _Scheduler_Allocate( scheduler, the_thread );
     _Scheduler_Update( scheduler, the_thread );
