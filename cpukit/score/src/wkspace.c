@@ -66,6 +66,14 @@ void _Workspace_Handler_initialization(
   uintptr_t tls_size = _TLS_Get_size();
   size_t i;
 
+  /*
+   * In case we have a non-zero TLS size, then we need a TLS area for each
+   * thread.  These areas are allocated from the workspace.  Ensure that the
+   * workspace is large enough to fulfill all requests known at configuration
+   * time (so excluding the unlimited option).  It is not possible to estimate
+   * the TLS size in the configuration at compile-time.  The TLS size is
+   * determined at application link-time.
+   */
   if ( tls_size > 0 ) {
     uintptr_t tls_align = _TLS_Heap_align_up( (uintptr_t) _TLS_Alignment );
     uintptr_t tls_alloc = _TLS_Get_allocation_size( tls_size, tls_align );
