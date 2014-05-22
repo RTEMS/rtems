@@ -55,15 +55,21 @@ AS_IF([test "$rtems_cv_HAS_SMP" = "yes"],
 #
 # Zynq Memory map can be controlled from the configure command line. Use ...
 #
-#   ..../configure --target=arm-rtems4.11 ... ZYNQ_RAM_LENGTH=256M
+#   ..../configure --target=arm-rtems4.11 ... BSP_ZYNQ_RAM_LENGTH=256M
 #
+RTEMS_BSPOPTS_SET([BSP_ZYNQ_RAM_LENGTH],[xilinx_zynq_a9_qemu],[256M])
+RTEMS_BSPOPTS_SET([BSP_ZYNQ_RAM_LENGTH],[xilinx_zynq_zc702],[1024M])
+RTEMS_BSPOPTS_SET([BSP_ZYNQ_RAM_LENGTH],[xilinx_zynq_zc706],[1024M])
+RTEMS_BSPOPTS_SET([BSP_ZYNQ_RAM_LENGTH],[xilinx_zynq_zedboard],[512M])
+RTEMS_BSPOPTS_SET([BSP_ZYNQ_RAM_LENGTH],[*],[256M])
+RTEMS_BSPOPTS_HELP([BSP_ZYNQ_RAM_LENGTH],[override a BSP's default RAM length])
+
 AS_IF([test "x${RTEMS_BSP}" == xxilinx_zynq_a9_qemu],
       [ZYNQ_RAM_ORIGIN="0x00000000"
-       ZYNQ_RAM_LENGTH="256M"
        ZYNQ_RAM_MMU="0x0fffc000"
        ZYNQ_RAM_MMU_LENGTH="16k"
        ZYNQ_RAM_ORIGIN_AVAILABLE="${ZYNQ_RAM_ORIGIN}"
-       ZYNQ_RAM_LENGTH_AVAILABLE="${ZYNQ_RAM_LENGTH} - 16k"
+       ZYNQ_RAM_LENGTH_AVAILABLE="${BSP_ZYNQ_RAM_LENGTH} - 16k"
        ZYNQ_RAM_INT_0_ORIGIN="0x00000000"
        ZYNQ_RAM_INT_0_LENGTH="64k + 64k + 64k"
        ZYNQ_RAM_INT_1_ORIGIN="0xFFFF0000"
@@ -71,11 +77,10 @@ AS_IF([test "x${RTEMS_BSP}" == xxilinx_zynq_a9_qemu],
 
 AS_IF([test "x${RTEMS_BSP}" == xxilinx_zynq_zc702],
       [ZYNQ_RAM_ORIGIN="0x00100000"
-       ZYNQ_RAM_LENGTH="1024M"
        ZYNQ_RAM_MMU="${ZYNQ_RAM_ORIGIN}"
        ZYNQ_RAM_MMU_LENGTH="16k"
        ZYNQ_RAM_ORIGIN_AVAILABLE="${ZYNQ_RAM_ORIGIN} + 0x00004000"
-       ZYNQ_RAM_LENGTH_AVAILABLE="${ZYNQ_RAM_LENGTH} - 1M - 16k"
+       ZYNQ_RAM_LENGTH_AVAILABLE="${BSP_ZYNQ_RAM_LENGTH} - 1M - 16k"
        ZYNQ_RAM_INT_0_ORIGIN="0x00000000"
        ZYNQ_RAM_INT_0_LENGTH="64k + 64k + 64k"
        ZYNQ_RAM_INT_1_ORIGIN="0xFFFF0000"
@@ -83,11 +88,10 @@ AS_IF([test "x${RTEMS_BSP}" == xxilinx_zynq_zc702],
 
 AS_IF([test "x${RTEMS_BSP}" == xxilinx_zynq_zc706],
       [ZYNQ_RAM_ORIGIN="0x00400000"
-       ZYNQ_RAM_LENGTH="1024M"
        ZYNQ_RAM_MMU="${ZYNQ_RAM_ORIGIN}"
        ZYNQ_RAM_MMU_LENGTH="16k"
        ZYNQ_RAM_ORIGIN_AVAILABLE="${ZYNQ_RAM_ORIGIN} + 0x00004000"
-       ZYNQ_RAM_LENGTH_AVAILABLE="${ZYNQ_RAM_LENGTH} - 4M - 16k"
+       ZYNQ_RAM_LENGTH_AVAILABLE="${BSP_ZYNQ_RAM_LENGTH} - 4M - 16k"
        ZYNQ_RAM_INT_0_ORIGIN="0x00000000"
        ZYNQ_RAM_INT_0_LENGTH="64k + 64k + 64k"
        ZYNQ_RAM_INT_1_ORIGIN="0xFFFF0000"
@@ -95,11 +99,10 @@ AS_IF([test "x${RTEMS_BSP}" == xxilinx_zynq_zc706],
 
 AS_IF([test "x${RTEMS_BSP}" == xxilinx_zynq_zedboard],
       [ZYNQ_RAM_ORIGIN="0x00100000"
-       ZYNQ_RAM_LENGTH="512M"
        ZYNQ_RAM_MMU="${ZYNQ_RAM_ORIGIN}"
        ZYNQ_RAM_MMU_LENGTH="16k"
        ZYNQ_RAM_ORIGIN_AVAILABLE="${ZYNQ_RAM_ORIGIN} + 0x00004000"
-       ZYNQ_RAM_LENGTH_AVAILABLE="${ZYNQ_RAM_LENGTH} - 1M - 16k"
+       ZYNQ_RAM_LENGTH_AVAILABLE="${BSP_ZYNQ_RAM_LENGTH} - 1M - 16k"
        ZYNQ_RAM_INT_0_ORIGIN="0x00000000"
        ZYNQ_RAM_INT_0_LENGTH="64k + 64k + 64k"
        ZYNQ_RAM_INT_1_ORIGIN="0xFFFF0000"
@@ -112,7 +115,7 @@ AC_ARG_VAR([$1],[$2; default $3])dnl
 
 ZYNQ_LINKCMD([ZYNQ_CPUS],[Number of active cores],[${ZYNQ_CPUS}])
 ZYNQ_LINKCMD([ZYNQ_RAM_ORIGIN],[normal RAM region origin],[${ZYNQ_RAM_ORIGIN}])
-ZYNQ_LINKCMD([ZYNQ_RAM_LENGTH],[normal RAM region length],[${ZYNQ_RAM_LENGTH}])
+ZYNQ_LINKCMD([ZYNQ_RAM_LENGTH],[normal RAM region length],[${BSP_ZYNQ_RAM_LENGTH}])
 ZYNQ_LINKCMD([ZYNQ_RAM_MMU],[MMU region origin],[${ZYNQ_RAM_MMU}])
 ZYNQ_LINKCMD([ZYNQ_RAM_MMU_LENGTH],[MMU region length],[${ZYNQ_RAM_MMU_LENGTH}])
 ZYNQ_LINKCMD([ZYNQ_RAM_ORIGIN_AVAILABLE],[origin of available RAM],[${ZYNQ_RAM_ORIGIN_AVAILABLE}])
