@@ -64,9 +64,9 @@ CORE_mutex_Status _CORE_mutex_Initialize(
     the_mutex->holder_id  = _Thread_Executing->Object.id;
     if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
          _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
+      Priority_Control ceiling = the_mutex->Attributes.priority_ceiling;
 
-      if ( _Thread_Executing->current_priority <
-             the_mutex->Attributes.priority_ceiling )
+      if ( _Thread_Executing->current_priority < ceiling )
        return CORE_MUTEX_STATUS_CEILING_VIOLATED;
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
        _Chain_Prepend_unprotected( &_Thread_Executing->lock_mutex,
@@ -75,6 +75,7 @@ CORE_mutex_Status _CORE_mutex_Initialize(
 #endif
 
       _Thread_Executing->resource_count++;
+      _Thread_Change_priority( _Thread_Executing, ceiling, false );
     }
   } else {
     the_mutex->nest_count = 0;
