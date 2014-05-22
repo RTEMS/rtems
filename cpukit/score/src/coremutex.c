@@ -43,10 +43,20 @@ CORE_mutex_Status _CORE_mutex_Initialize(
     the_mutex->holder     = executing;
     if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
          _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
+      Priority_Control ceiling = the_mutex->Attributes.priority_ceiling;
 
-      if ( executing->current_priority <
-             the_mutex->Attributes.priority_ceiling )
-       return CORE_MUTEX_STATUS_CEILING_VIOLATED;
+      /*
+       * The mutex initialization is only protected by the allocator lock in
+       * general.  Disable thread dispatching before the priority check to
+       * prevent interference with priority inheritance.
+       */
+      _Thread_Disable_dispatch();
+
+      if ( executing->current_priority < ceiling ) {
+        _Thread_Enable_dispatch();
+        return CORE_MUTEX_STATUS_CEILING_VIOLATED;
+      }
+
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
        _Chain_Prepend_unprotected( &executing->lock_mutex,
                                    &the_mutex->queue.lock_queue );
@@ -54,6 +64,9 @@ CORE_mutex_Status _CORE_mutex_Initialize(
 #endif
 
       executing->resource_count++;
+
+      _Thread_Change_priority( executing, ceiling, false );
+      _Thread_Enable_dispatch();
     }
   } else {
     the_mutex->nest_count = 0;

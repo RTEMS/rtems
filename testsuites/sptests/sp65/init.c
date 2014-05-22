@@ -28,6 +28,17 @@ rtems_task Task_1(rtems_task_argument arg);
   #define TASK_PRIORITY            1
 #endif
 
+static void assert_priority(rtems_task_priority expected)
+{
+  rtems_status_code sc;
+  rtems_task_priority prio;
+
+  sc = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(prio == expected);
+}
+
 rtems_task Init(
   rtems_task_argument ignored
 )
@@ -36,6 +47,30 @@ rtems_task Init(
   rtems_id             Mutex_id, Task_id;
 
   TEST_BEGIN();
+
+  /*
+   * Verify that an initially locked priority ceiling mutex elevates the
+   * priority of the creating task.
+   */
+
+  status = rtems_semaphore_create(
+    rtems_build_name( 's','e','m','1' ),
+    0,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_PRIORITY_CEILING,
+    1,
+    &Mutex_id
+  );
+  rtems_test_assert(status == RTEMS_SUCCESSFUL);
+
+  assert_priority(1);
+
+  status = rtems_semaphore_release(Mutex_id);
+  rtems_test_assert(status == RTEMS_SUCCESSFUL);
+
+  assert_priority(TASK_PRIORITY);
+
+  status = rtems_semaphore_delete(Mutex_id);
+  rtems_test_assert(status == RTEMS_SUCCESSFUL);
 
   /*
    *  Create binary semaphore (a.k.a. Mutex) with Priority Ceiling

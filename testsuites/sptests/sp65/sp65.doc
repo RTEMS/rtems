@@ -23,3 +23,5 @@ concepts:
 + Verify the priority ceiling mutex getting released which results in a thread
   being unblocked and the unblocked thread's priority being elevated.
 
++ Verify that an initially locked priority ceiling mutex elevates the priority
+  of the creating task.
