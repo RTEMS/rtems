@@ -20,13 +20,35 @@
 
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/rtemspppd.h>
+#include <rtems/shell.h>
 #include "netconfig.h"
 
 const char rtems_test_name[] = "PPPD";
 
+static void notification(int fd, int seconds_remaining, void *arg)
+{
+  printf(
+    "Press any key to start pppd (%is remaining)\n",
+    seconds_remaining
+  );
+}
+
 rtems_task Init(rtems_task_argument argument)
 {
+  rtems_status_code status;
+
   rtems_test_begin();
+
+  status = rtems_shell_wait_for_input(
+    STDIN_FILENO,
+    10,
+    notification,
+    NULL
+  );
+  if (status != RTEMS_SUCCESSFUL) {
+    rtems_test_end();
+    exit( 0 );
+  }
 
   /* initialize network */
   rtems_bsdnet_initialize_network();
