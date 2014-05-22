@@ -81,6 +81,7 @@ smpmrsp01/Makefile
 smppsxaffinity01/Makefile
 smppsxaffinity02/Makefile
 smppsxsignal01/Makefile
+smpschedaffinity01/Makefile
 smpscheduler01/Makefile
 smpscheduler02/Makefile
 smpscheduler03/Makefile

@@ -23,6 +23,7 @@ SUBDIRS += smplock01
 SUBDIRS += smpmigration01
 SUBDIRS += smpmigration02
 SUBDIRS += smpmrsp01
+SUBDIRS += smpschedaffinity01
 SUBDIRS += smpscheduler01
 SUBDIRS += smpscheduler02
 SUBDIRS += smpscheduler03

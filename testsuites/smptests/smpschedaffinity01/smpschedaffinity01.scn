@@ -1,0 +1,15 @@
+*** BEGIN OF TEST SMPSCHEDAFFINITY 1 ***
+Set TA0 affinity to cpu 2
+Start TA0 on cpu 2
+Set TA1 affinity to cpu 0
+Start TA1 on cpu 0
+Set TA2 affinity to cpu 3
+Start TA2 on cpu 3
+Set TA3 affinity to cpu 1
+Start TA3 on cpu 1
+Verify Tasks Ran
+TA00: ran=1 expected=2 actual=2
+TA01: ran=1 expected=0 actual=0
+TA02: ran=1 expected=3 actual=3
+TA03: ran=1 expected=1 actual=1
+*** END OF TEST SMPSCHEDAFFINITY 1 ***

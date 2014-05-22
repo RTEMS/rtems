@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpschedaffinity01
+
+directives:
+
+  - _Scheduler_priority_affinity_xxx 
+
+concepts:
+
+  - Ensure that affinity is honored when set prior to task start.
