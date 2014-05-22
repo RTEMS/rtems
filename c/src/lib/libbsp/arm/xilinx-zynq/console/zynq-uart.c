@@ -15,6 +15,8 @@
 #include <bsp/zynq-uart.h>
 #include <bsp/zynq-uart-regs.h>
 
+#include <bspopts.h>
+
 #include <libchip/sersupp.h>
 
 static volatile zynq_uart *zynq_uart_get_regs(int minor)
@@ -32,7 +34,7 @@ uint32_t zynq_uart_input_clock(void) __attribute__ ((weak));
 
 uint32_t zynq_uart_input_clock(void)
 {
-  return 100000000UL;
+  return BSP_ARM_A9MPCORE_UARTCLK;
 }
 
 static int zynq_cal_baud_rate(uint32_t  baudrate,
