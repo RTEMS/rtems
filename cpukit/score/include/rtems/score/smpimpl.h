@@ -59,7 +59,8 @@ typedef enum {
   SMP_FATAL_BOOT_PROCESSOR_NOT_ASSIGNED_TO_SCHEDULER,
   SMP_FATAL_MANDATORY_PROCESSOR_NOT_PRESENT,
   SMP_FATAL_MULTITASKING_START_ON_UNASSIGNED_PROCESSOR,
-  SMP_FATAL_START_OF_MANDATORY_PROCESSOR_FAILED
+  SMP_FATAL_START_OF_MANDATORY_PROCESSOR_FAILED,
+  SMP_FATAL_SHUTDOWN_RESPONSE
 } SMP_Fatal_code;
 
 static inline void _SMP_Fatal( SMP_Fatal_code code )
@@ -140,7 +141,7 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
     );
 
     if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
-      rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN );
+      rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN_RESPONSE );
       /* does not continue past here */
     }
 
