@@ -35,6 +35,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <inttypes.h>
+#include <pthread.h>
 
 #include <rtems.h>
 #include <rtems/error.h>
@@ -137,8 +138,7 @@ typedef struct rtems_bdbuf_cache
   rtems_id            read_ahead_task;   /**< Read-ahead task */
   rtems_chain_control read_ahead_chain;  /**< Read-ahead request chain */
   bool                read_ahead_enabled; /**< Read-ahead enabled */
-
-  bool                initialised;       /**< Initialised state. */
+  rtems_status_code   init_status;       /**< The initialization status */
 } rtems_bdbuf_cache;
 
 typedef enum {
@@ -168,7 +168,8 @@ typedef enum {
   RTEMS_BDBUF_FATAL_SYNC_UNLOCK,
   RTEMS_BDBUF_FATAL_TREE_RM,
   RTEMS_BDBUF_FATAL_WAIT_EVNT,
-  RTEMS_BDBUF_FATAL_WAIT_TRANS_EVNT
+  RTEMS_BDBUF_FATAL_WAIT_TRANS_EVNT,
+  RTEMS_BDBUF_FATAL_ONCE
 } rtems_bdbuf_fatal_code;
 
 /**
@@ -217,6 +218,8 @@ static rtems_task rtems_bdbuf_read_ahead_task(rtems_task_argument arg);
  * The Buffer Descriptor cache.
  */
 static rtems_bdbuf_cache bdbuf_cache;
+
+static pthread_once_t rtems_bdbuf_once_state = PTHREAD_ONCE_INIT;
 
 #if RTEMS_BDBUF_TRACE
 /**
@@ -1385,13 +1388,8 @@ rtems_bdbuf_read_request_size (uint32_t transfer_count)
     + sizeof (rtems_blkdev_sg_buffer) * transfer_count;
 }
 
-/**
- * Initialise the cache.
- *
- * @return rtems_status_code The initialisation status.
- */
-rtems_status_code
-rtems_bdbuf_init (void)
+static rtems_status_code
+rtems_bdbuf_do_init (void)
 {
   rtems_bdbuf_group*  group;
   rtems_bdbuf_buffer* bd;
@@ -1399,7 +1397,6 @@ rtems_bdbuf_init (void)
   size_t              b;
   size_t              cache_aligment;
   rtems_status_code   sc;
-  rtems_mode          prev_mode;
 
   if (rtems_bdbuf_tracer)
     printf ("bdbuf:init\n");
@@ -1417,22 +1414,6 @@ rtems_bdbuf_init (void)
   if (rtems_bdbuf_read_request_size (bdbuf_config.max_read_ahead_blocks)
       > RTEMS_MINIMUM_STACK_SIZE / 8U)
     return RTEMS_INVALID_NUMBER;
-
-  /*
-   * We use a special variable to manage the initialisation incase we have
-   * completing threads doing this. You may get errors if the another thread
-   * makes a call and we have not finished initialisation.
-   */
-  prev_mode = rtems_bdbuf_disable_preemption ();
-  if (bdbuf_cache.initialised)
-  {
-    rtems_bdbuf_restore_preemption (prev_mode);
-    return RTEMS_RESOURCE_IN_USE;
-  }
-
-  memset(&bdbuf_cache, 0, sizeof(bdbuf_cache));
-  bdbuf_cache.initialised = true;
-  rtems_bdbuf_restore_preemption (prev_mode);
 
   /*
    * For unspecified cache alignments we use the CPU alignment.
@@ -1650,9 +1631,24 @@ error:
     rtems_semaphore_delete (bdbuf_cache.lock);
   }
 
-  bdbuf_cache.initialised = false;
-
   return RTEMS_UNSATISFIED;
+}
+
+static void
+rtems_bdbuf_init_once (void)
+{
+  bdbuf_cache.init_status = rtems_bdbuf_do_init();
+}
+
+rtems_status_code
+rtems_bdbuf_init (void)
+{
+  int eno = pthread_once (&rtems_bdbuf_once_state, rtems_bdbuf_init_once);
+
+  if (eno != 0)
+    rtems_bdbuf_fatal (RTEMS_BDBUF_FATAL_ONCE);
+
+  return bdbuf_cache.init_status;
 }
 
 static void
