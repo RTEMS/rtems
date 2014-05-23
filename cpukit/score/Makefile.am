@@ -51,6 +51,8 @@ include_rtems_score_HEADERS += include/rtems/score/prioritybitmapimpl.h
 include_rtems_score_HEADERS += include/rtems/score/profiling.h
 include_rtems_score_HEADERS += include/rtems/score/rbtree.h
 include_rtems_score_HEADERS += include/rtems/score/rbtreeimpl.h
+include_rtems_score_HEADERS += include/rtems/score/resource.h
+include_rtems_score_HEADERS += include/rtems/score/resourceimpl.h
 include_rtems_score_HEADERS += include/rtems/score/scheduler.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerimpl.h
 include_rtems_score_HEADERS += include/rtems/score/schedulercbs.h
@@ -337,6 +339,7 @@ libscore_a_SOURCES += src/apiext.c src/chain.c src/chainappend.c \
 libscore_a_SOURCES += src/debugisownerofallocator.c
 libscore_a_SOURCES += src/profilingisrentryexit.c
 libscore_a_SOURCES += src/once.c
+libscore_a_SOURCES += src/resourceiterate.c
 
 EXTRA_DIST = src/Unlimited.txt
 

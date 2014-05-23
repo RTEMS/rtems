@@ -187,6 +187,14 @@ $(PROJECT_INCLUDE)/rtems/score/rbtreeimpl.h: include/rtems/score/rbtreeimpl.h $(
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rbtreeimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rbtreeimpl.h
 
+$(PROJECT_INCLUDE)/rtems/score/resource.h: include/rtems/score/resource.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/resource.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/resource.h
+
+$(PROJECT_INCLUDE)/rtems/score/resourceimpl.h: include/rtems/score/resourceimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/resourceimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/resourceimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/scheduler.h: include/rtems/score/scheduler.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.h

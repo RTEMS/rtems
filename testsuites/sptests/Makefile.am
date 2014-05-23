@@ -37,6 +37,7 @@ if HAS_SMP
 else
 _SUBDIRS += sp29
 endif
+_SUBDIRS += spresource01
 _SUBDIRS += spmrsp01
 _SUBDIRS += spscheduler01
 _SUBDIRS += spprofiling01
