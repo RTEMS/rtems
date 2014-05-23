@@ -29,6 +29,10 @@
          *    l1 = pc
          *    l2 = npc
          *    g1 = system call id
+         *
+         *  System Call 1 (exit):
+         *    g2 = additional exit code 1
+         *    g3 = additional exit code 2
          */
 
         PUBLIC(syscall)
@@ -69,5 +73,14 @@ SYM(sparc_enable_interrupts):
 	mov	SYS_irqen, %g1
 	retl
 	 ta	0
+
+        PUBLIC(sparc_syscall_exit)
+
+SYM(sparc_syscall_exit):
+
+	mov	SYS_exit, %g1
+	mov	%o0, %g2	! Additional exit code 1
+	mov	%o1, %g3	! Additional exit code 2
+	ta	0
 
 /* end of file */

@@ -266,6 +266,31 @@ uint32_t sparc_disable_interrupts(void);
 void sparc_enable_interrupts(uint32_t psr);
 
 /**
+ * @brief SPARC exit through system call 1
+ *
+ * This method is invoked to go into system error halt. The optional
+ * arguments can be given to hypervisor, hardware debugger, simulator or
+ * similar.
+ *
+ * System error mode is entered when taking a trap when traps have been
+ * disabled. What happens when error mode is entered depends on the motherboard.
+ * In a typical development systems the CPU relingish control to the debugger,
+ * simulator, hypervisor or similar. The following steps are taken:
+ *
+ * 1. Going into system error mode by Software Trap 0
+ * 2. %g1=1 (syscall 1 - Exit)
+ * 3. %g2=Primary exit code
+ * 4. %g3=Secondary exit code. Dependends on %g2 exit type.
+ *
+ * This function never returns.
+ *
+ * @param[in] exitcode1 Primary exit code stored in CPU g2 register after exit
+ * @param[in] exitcode2 Primary exit code stored in CPU g3 register after exit
+ */
+void sparc_syscall_exit(uint32_t exitcode1, uint32_t exitcode2)
+  RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+
+/**
  * @brief SPARC flash processor interrupts.
  *
  * This method is invoked to temporarily enable all maskable interrupts.
