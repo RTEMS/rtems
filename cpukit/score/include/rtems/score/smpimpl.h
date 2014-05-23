@@ -141,7 +141,7 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
     );
 
     if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
-      rtems_fatal( RTEMS_FATAL_SOURCE_SMP, SMP_FATAL_SHUTDOWN_RESPONSE );
+      _SMP_Fatal( SMP_FATAL_SHUTDOWN_RESPONSE );
       /* does not continue past here */
     }
 
