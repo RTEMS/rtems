@@ -121,8 +121,15 @@ void _SMP_Request_start_multitasking( void )
 void _SMP_Start_multitasking_on_secondary_processor( void )
 {
   Per_CPU_Control *self_cpu = _Per_CPU_Get();
+  uint32_t cpu_index_self = _Per_CPU_Get_index( self_cpu );
+  const Scheduler_Assignment *assignment =
+    _Scheduler_Get_assignment( cpu_index_self );
 
-  if ( !_Per_CPU_Is_processor_started( self_cpu ) ) {
+  if ( cpu_index_self >= rtems_configuration_get_maximum_processors() ) {
+    _SMP_Fatal( SMP_FATAL_MULTITASKING_START_ON_INVALID_PROCESSOR );
+  }
+
+  if ( !_Scheduler_Should_start_processor( assignment ) ) {
     _SMP_Fatal( SMP_FATAL_MULTITASKING_START_ON_UNASSIGNED_PROCESSOR );
   }
 
