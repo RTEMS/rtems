@@ -1,0 +1,5 @@
+#
+# The GDB H8300 Simulator does not have a tick interrupt.
+#
+
+include: testdata/require-tick-isr.tcfg
