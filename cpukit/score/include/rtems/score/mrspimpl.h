@@ -21,6 +21,7 @@
 
 #include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/resourceimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
@@ -41,15 +42,66 @@ extern "C" {
 
 #define MRSP_RIVAL_STATE_TIMEOUT 0x2U
 
-RTEMS_INLINE_ROUTINE void _MRSP_Claim_ownership(
+RTEMS_INLINE_ROUTINE bool _MRSP_Set_root_visitor(
+  Resource_Node *node,
+  void *arg
+)
+{
+  _Resource_Node_set_root( node, arg );
+
+  return false;
+}
+
+RTEMS_INLINE_ROUTINE void _MRSP_Set_root(
+  Resource_Node *top,
+  Resource_Node *root
+)
+{
+  _Resource_Node_set_root( top, root );
+  _Resource_Iterate( top, _MRSP_Set_root_visitor, root );
+}
+
+RTEMS_INLINE_ROUTINE void _MRSP_Elevate_priority(
   MRSP_Control     *mrsp,
   Thread_Control   *new_owner,
   Priority_Control  ceiling_priority
 )
 {
-  ++new_owner->resource_count;
-  mrsp->owner = new_owner;
   _Thread_Change_priority( new_owner, ceiling_priority, false );
+}
+
+RTEMS_INLINE_ROUTINE void _MRSP_Restore_priority(
+  const MRSP_Control *mrsp,
+  Thread_Control     *thread,
+  Priority_Control    initial_priority
+)
+{
+  /*
+   * The Thread_Control::resource_count is used by the normal priority ceiling
+   * or priority inheritance semaphores.
+   */
+  if ( thread->resource_count == 0 ) {
+    Priority_Control new_priority = _Scheduler_Highest_priority_of_two(
+      _Scheduler_Get( thread ),
+      initial_priority,
+      thread->real_priority
+    );
+
+    _Thread_Change_priority( thread, new_priority, true );
+  }
+}
+
+RTEMS_INLINE_ROUTINE void _MRSP_Claim_ownership(
+  MRSP_Control     *mrsp,
+  Thread_Control   *new_owner,
+  Priority_Control  initial_priority,
+  Priority_Control  ceiling_priority
+)
+{
+  _Resource_Node_add_resource( &new_owner->Resource_node, &mrsp->Resource );
+  _Resource_Set_owner( &mrsp->Resource, &new_owner->Resource_node );
+  mrsp->initial_priority_of_owner = initial_priority;
+  _MRSP_Elevate_priority( mrsp, new_owner, ceiling_priority );
 }
 
 RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Initialize(
@@ -77,7 +129,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Initialize(
     mrsp->ceiling_priorities[ i ] = ceiling_priority;
   }
 
-  mrsp->owner = NULL;
+  _Resource_Initialize( &mrsp->Resource );
   _Chain_Initialize_empty( &mrsp->Rivals );
 
   return MRSP_SUCCESSFUL;
@@ -98,11 +150,6 @@ RTEMS_INLINE_ROUTINE void _MRSP_Set_ceiling_priority(
 )
 {
   mrsp->ceiling_priorities[ scheduler_index ] = ceiling_priority;
-}
-
-RTEMS_INLINE_ROUTINE void _MRSP_Restore_priority( Thread_Control *thread )
-{
-  _Thread_Change_priority( thread, thread->real_priority, true );
 }
 
 RTEMS_INLINE_ROUTINE void _MRSP_Add_state(
@@ -127,7 +174,9 @@ RTEMS_INLINE_ROUTINE void _MRSP_Timeout(
 
 RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
   MRSP_Control      *mrsp,
+  Resource_Node     *owner,
   Thread_Control    *executing,
+  Priority_Control   initial_priority,
   Priority_Control   ceiling_priority,
   Watchdog_Interval  timeout
 )
@@ -137,11 +186,14 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
   bool previous_life_protection;
   unsigned int state;
 
-  _Thread_Change_priority( executing, ceiling_priority, false );
+  _MRSP_Elevate_priority( mrsp, executing, ceiling_priority );
 
   rival.thread = executing;
   _Atomic_Init_uint( &rival.state, MRSP_RIVAL_STATE_WAITING );
   _Chain_Append_unprotected( &mrsp->Rivals, &rival.Node );
+  _Resource_Add_rival( &mrsp->Resource, &executing->Resource_node );
+  _Resource_Node_set_dependency( &executing->Resource_node, &mrsp->Resource );
+  _MRSP_Set_root( &executing->Resource_node, owner );
 
   if ( timeout > 0 ) {
     _Watchdog_Initialize(
@@ -176,13 +228,15 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
   state = _Atomic_Load_uint( &rival.state, ATOMIC_ORDER_RELAXED );
 
   if ( ( state & MRSP_RIVAL_STATE_NEW_OWNER ) != 0 ) {
-    ++executing->resource_count;
-
+    mrsp->initial_priority_of_owner = initial_priority;
     status = MRSP_SUCCESSFUL;
   } else {
-    if ( executing->resource_count == 0 ) {
-      _MRSP_Restore_priority( executing );
-    }
+    Resource_Node *executing_node = &executing->Resource_node;
+
+    _Resource_Node_extract( executing_node );
+    _Resource_Node_set_dependency( executing_node, NULL );
+    _MRSP_Set_root( executing_node, executing_node );
+    _MRSP_Restore_priority( mrsp, executing, initial_priority );
 
     status = MRSP_TIMEOUT;
   }
@@ -200,27 +254,38 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Obtain(
   MRSP_Status status;
   const Scheduler_Control *scheduler = _Scheduler_Get( executing );
   uint32_t scheduler_index = _Scheduler_Get_index( scheduler );
+  Priority_Control initial_priority = executing->current_priority;
   Priority_Control ceiling_priority =
     _MRSP_Get_ceiling_priority( mrsp, scheduler_index );
   bool priority_ok = !_Scheduler_Is_priority_higher_than(
     scheduler,
-    executing->current_priority,
+    initial_priority,
     ceiling_priority
   );
+  Resource_Node *owner;
 
   if ( !priority_ok) {
     return MRSP_INVALID_PRIORITY;
   }
 
-  if ( mrsp->owner == NULL ) {
-    _MRSP_Claim_ownership( mrsp, executing, ceiling_priority );
+  owner = _Resource_Get_owner( &mrsp->Resource );
+  if ( owner == NULL ) {
+    _MRSP_Claim_ownership(
+      mrsp,
+      executing,
+      initial_priority,
+      ceiling_priority
+    );
     status = MRSP_SUCCESSFUL;
-  } else if ( mrsp->owner == executing ) {
+  } else if ( _Resource_Node_get_root( owner ) == &executing->Resource_node ) {
+    /* Nested access or deadlock */
     status = MRSP_UNSATISFIED;
   } else if ( wait ) {
     status = _MRSP_Wait_for_ownership(
       mrsp,
+      owner,
       executing,
+      initial_priority,
       ceiling_priority,
       timeout
     );
@@ -236,25 +301,33 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Release(
   Thread_Control *executing
 )
 {
-  uint32_t resource_count = executing->resource_count;
-
-  if ( mrsp->owner != executing ) {
+  if ( _Resource_Get_owner( &mrsp->Resource ) != &executing->Resource_node ) {
     return MRSP_NOT_OWNER_OF_RESOURCE;
   }
 
-  if ( resource_count == 1 ) {
-    executing->resource_count = 0;
-    _MRSP_Restore_priority( executing );
-  } else {
-    executing->resource_count = resource_count - 1;
+  if (
+    !_Resource_Is_most_recently_obtained(
+      &mrsp->Resource,
+      &executing->Resource_node
+    )
+  ) {
+    return MRSP_INCORRECT_STATE;
   }
 
+  _Resource_Extract( &mrsp->Resource );
+  _MRSP_Restore_priority( mrsp, executing, mrsp->initial_priority_of_owner );
+
   if ( _Chain_Is_empty( &mrsp->Rivals ) ) {
-    mrsp->owner = NULL;
+    _Resource_Set_owner( &mrsp->Resource, NULL );
   } else {
     MRSP_Rival *rival = (MRSP_Rival *) _Chain_First( &mrsp->Rivals );
+    Resource_Node *new_owner = &rival->thread->Resource_node;
 
-    mrsp->owner = rival->thread;
+    _Resource_Node_extract( new_owner );
+    _Resource_Node_set_dependency( new_owner, NULL );
+    _MRSP_Set_root( new_owner, new_owner );
+    _Resource_Node_add_resource( new_owner, &mrsp->Resource );
+    _Resource_Set_owner( &mrsp->Resource, new_owner );
     _MRSP_Add_state( rival, MRSP_RIVAL_STATE_NEW_OWNER );
   }
 
@@ -263,7 +336,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Release(
 
 RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Destroy( MRSP_Control *mrsp )
 {
-  if ( mrsp->owner != NULL ) {
+  if ( _Resource_Get_owner( &mrsp->Resource ) != NULL ) {
     return MRSP_RESOUCE_IN_USE;
   }
 

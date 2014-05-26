@@ -751,6 +751,10 @@ willing to be blocked waiting for the semaphore.  If it is set to
 If the semaphore is available or the @code{@value{RPREFIX}NO_WAIT} option
 component is set, then timeout is ignored.
 
+Deadlock situations are detected for MrsP semaphores and the
+@code{@value{RPREFIX}UNSATISFIED} status code will be returned on SMP
+configurations in this case.
+
 @subheading NOTES:
 The following semaphore acquisition option constants
 are defined by RTEMS:
@@ -806,7 +810,8 @@ procedure Semaphore_Release (
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - semaphore released successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid semaphore id@*
-@code{@value{RPREFIX}NOT_OWNER_OF_RESOURCE} - calling task does not own semaphore
+@code{@value{RPREFIX}NOT_OWNER_OF_RESOURCE} - calling task does not own semaphore@*
+@code{@value{RPREFIX}INCORRECT_STATE} - invalid unlock order
 
 @subheading DESCRIPTION:
 
@@ -837,6 +842,10 @@ inheritance or priority ceiling semaphore may result in the
 calling task having its priority lowered.  This will occur if
 the calling task holds no other binary semaphores and it has
 inherited a higher priority.
+
+The MrsP semaphores must be released in the reversed obtain order, otherwise
+the @code{@value{RPREFIX}INCORRECT_STATE} status code will be returned on SMP
+configurations in this case.
 
 @c
 @c

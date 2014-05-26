@@ -44,6 +44,7 @@ typedef struct {
   rtems_id mrsp_ids[MRSP_COUNT];
   rtems_id scheduler_ids[CPU_COUNT];
   rtems_id worker_ids[2 * CPU_COUNT];
+  rtems_id timer_id;
   volatile bool stop_worker[CPU_COUNT];
   counter counters[2 * CPU_COUNT];
   Thread_Control *worker_task;
@@ -357,6 +358,290 @@ static void test_mrsp_nested_obtain_error(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
+static void test_mrsp_unlock_order_error(void)
+{
+  rtems_status_code sc;
+  rtems_id id_a;
+  rtems_id id_b;
+
+  puts("test MrsP unlock order error");
+
+  sc = rtems_semaphore_create(
+    rtems_build_name(' ', ' ', ' ', 'A'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    1,
+    &id_a
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name(' ', ' ', ' ', 'B'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    1,
+    &id_b
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_obtain(id_a, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_obtain(id_b, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_release(id_a);
+  rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
+
+  sc = rtems_semaphore_release(id_b);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_release(id_a);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(id_a);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(id_b);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void deadlock_timer(rtems_id id, void *arg)
+{
+  test_context *ctx = &test_instance;
+  rtems_status_code sc;
+
+  sc = rtems_task_suspend(ctx->worker_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void deadlock_worker(rtems_task_argument arg)
+{
+  test_context *ctx = &test_instance;
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_obtain(ctx->mrsp_ids[1], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_timer_fire_after(ctx->timer_id, 2, deadlock_timer, NULL);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_release(ctx->mrsp_ids[1]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_event_transient_send(ctx->main_task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_task_suspend(RTEMS_SELF);
+  rtems_test_assert(0);
+}
+
+static void test_mrsp_deadlock_error(void)
+{
+  test_context *ctx = &test_instance;
+  rtems_status_code sc;
+  rtems_task_priority prio = 2;
+
+  puts("test MrsP deadlock error");
+
+  assert_prio(RTEMS_SELF, prio);
+
+  sc = rtems_timer_create(
+    rtems_build_name('M', 'R', 'S', 'P'),
+    &ctx->timer_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name(' ', ' ', ' ', 'A'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    prio,
+    &ctx->mrsp_ids[0]
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name(' ', ' ', ' ', 'B'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    prio,
+    &ctx->mrsp_ids[1]
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_create(
+    rtems_build_name('W', 'O', 'R', 'K'),
+    prio,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &ctx->worker_ids[0]
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(ctx->worker_ids[0], deadlock_worker, 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_obtain(ctx->mrsp_ids[1], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_UNSATISFIED);
+
+  sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_resume(ctx->worker_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(ctx->worker_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(ctx->mrsp_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(ctx->mrsp_ids[1]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_timer_delete(ctx->timer_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void test_mrsp_multiple_obtain(void)
+{
+  rtems_status_code sc;
+  rtems_id sem_a_id;
+  rtems_id sem_b_id;
+  rtems_id sem_c_id;
+
+  puts("test MrsP multiple obtain");
+
+  change_prio(RTEMS_SELF, 4);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name(' ', ' ', ' ', 'A'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    3,
+    &sem_a_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name(' ', ' ', ' ', 'B'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    2,
+    &sem_b_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name(' ', ' ', ' ', 'C'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    1,
+    &sem_c_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 4);
+
+  sc = rtems_semaphore_obtain(sem_a_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 3);
+
+  sc = rtems_semaphore_obtain(sem_b_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 2);
+
+  sc = rtems_semaphore_obtain(sem_c_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 1);
+
+  sc = rtems_semaphore_release(sem_c_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 2);
+
+  sc = rtems_semaphore_release(sem_b_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 3);
+
+  sc = rtems_semaphore_release(sem_a_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 4);
+
+  sc = rtems_semaphore_obtain(sem_a_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 3);
+
+  sc = rtems_semaphore_obtain(sem_b_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 2);
+
+  sc = rtems_semaphore_obtain(sem_c_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 1);
+  change_prio(RTEMS_SELF, 3);
+  assert_prio(RTEMS_SELF, 1);
+
+  sc = rtems_semaphore_release(sem_c_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 2);
+
+  sc = rtems_semaphore_release(sem_b_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 3);
+
+  sc = rtems_semaphore_release(sem_a_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 3);
+
+  sc = rtems_semaphore_delete(sem_a_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(sem_b_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(sem_c_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  change_prio(RTEMS_SELF, 2);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
 static uint32_t simple_random(uint32_t v)
 {
   v *= 1664525;
@@ -589,6 +874,9 @@ static void Init(rtems_task_argument arg)
   test_mrsp_flush_error();
   test_mrsp_initially_locked_error();
   test_mrsp_nested_obtain_error();
+  test_mrsp_unlock_order_error();
+  test_mrsp_deadlock_error();
+  test_mrsp_multiple_obtain();
   test_mrsp_obtain_and_release();
   test_mrsp_load();
 

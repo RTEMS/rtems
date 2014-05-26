@@ -63,6 +63,7 @@ typedef enum {
   MRSP_INVALID_NUMBER = 10,
   MRSP_RESOUCE_IN_USE = 12,
   MRSP_UNSATISFIED = 13,
+  MRSP_INCORRECT_STATE = 14,
   MRSP_INVALID_PRIORITY = 19,
   MRSP_NOT_OWNER_OF_RESOURCE = 23,
   MRSP_NO_MEMORY = 26
@@ -102,12 +103,9 @@ typedef struct {
  */
 typedef struct {
   /**
-   * @brief The owner of the MRSP resource.
-   *
-   * In case this field is @c NULL, then this MRSP resource has currently no
-   * owner.
+   * @brief Basic resource control.
    */
-  Thread_Control *owner;
+  Resource_Control Resource;
 
   /**
    * @brief A chain of MrsP rivals waiting for resource ownership.
@@ -115,6 +113,12 @@ typedef struct {
    * @see MRSP_Rival::Node.
    */
   Chain_Control Rivals;
+
+  /**
+   * @brief The initial priority of the owner before it was elevated to the
+   * ceiling priority.
+   */
+  Priority_Control initial_priority_of_owner;
 
   /**
    * @brief One ceiling priority per scheduler instance.
