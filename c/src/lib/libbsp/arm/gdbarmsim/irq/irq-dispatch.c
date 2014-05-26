@@ -1,0 +1,50 @@
+/**
+ * @file
+ *
+ * @ingroup bsp_interrupt
+ *
+ * @brief GDB ARM Simulator interrupt support.
+ */
+
+/*
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
+#include <rtems/score/armv4.h>
+
+#include <bsp.h>
+#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
+
+#ifdef ARM_MULTILIB_ARCH_V4
+
+void bsp_interrupt_dispatch(void)
+{
+  /* Read current vector number */
+  /* rtems_vector_number vector = VICVectAddr; */
+  rtems_vector_number vector = 0;
+
+  /* Enable interrupts in program status register */
+  uint32_t psr = _ARMV4_Status_irq_enable();
+
+  /* Dispatch interrupt handlers */
+  bsp_interrupt_handler_dispatch(vector);
+
+  /* Restore program status register */
+  _ARMV4_Status_restore(psr);
+
+  /* Acknowledge interrupt */
+  //VICVectAddr = 0;
+}
+
+#endif /* ARM_MULTILIB_ARCH_V4 */
