@@ -33,6 +33,15 @@
   nop;
 
 /*
+ * System call optimized trap table entry
+ */
+#define SYSCALL_TRAP(_vector, _handler)  \
+  mov   %psr, %l0 ; \
+  sethi %hi(_handler), %l4 ; \
+  jmp   %l4+%lo(_handler); \
+   subcc %g1, 3, %g0; ! prepare for syscall 3 check
+
+/*
  *  Software trap. Treat as BAD_TRAP for the time being...
  */
 
@@ -156,7 +165,7 @@ SYM(CLOCK_SPEED):
    *        installed before.
    */
 
-  TRAP( 0x80, SYM(syscall) ); 			! 80 syscall SW trap
+  SYSCALL_TRAP( 0x80, SYM(syscall) );		! 80 syscall SW trap
   SOFT_TRAP; SOFT_TRAP;  	            	! 81 - 82
   TRAP( 0x83, SYM(window_flush_trap_handler) ); ! 83 flush windows SW trap
 
