@@ -7,6 +7,11 @@
    Files in the C namespace (ie those that do not start with an
    underscore) go in .c.  */
 
+/*
+ * Rename all the functions present here to stop then clashing with RTEMS
+ * names.
+ */
+
 #include <_ansi.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -22,35 +27,12 @@
 #include <sys/wait.h>
 #include <bsp/swi.h>
 
-/* Forward prototypes.  */
-int     _system     _PARAMS ((const char *));
-int     _rename     _PARAMS ((const char *, const char *));
-int     __isatty		_PARAMS ((int));
-clock_t _times		_PARAMS ((struct tms *));
-int     _gettimeofday	_PARAMS ((struct timeval *, void *));
-int     _unlink		_PARAMS ((const char *));
-int     _link 		_PARAMS ((void));
-int     _stat 		_PARAMS ((const char *, struct stat *));
-int     _fstat 		_PARAMS ((int, struct stat *));
-int	_swistat	_PARAMS ((int fd, struct stat * st));
-caddr_t _sbrk		_PARAMS ((int));
-int     _getpid		_PARAMS ((int));
-int     _close		_PARAMS ((int));
-clock_t _clock		_PARAMS ((void));
-int     _swiclose	_PARAMS ((int));
-int     _open		_PARAMS ((const char *, int, ...));
-int     _swiopen	_PARAMS ((const char *, int));
-int     _write 		_PARAMS ((int, char *, int));
-int     _swiwrite	_PARAMS ((int, char *, int));
-int     _lseek		_PARAMS ((int, int, int));
-int     _swilseek	_PARAMS ((int, int, int));
-int     _read		_PARAMS ((int, char *, int));
-int     _swiread	_PARAMS ((int, char *, int));
-void    initialise_monitor_handles _PARAMS ((void));
+#include <bsp.h>
 
-static int	checkerror	_PARAMS ((int));
-static int	error		_PARAMS ((int));
-static int	get_errno	_PARAMS ((void));
+/* Forward prototypes.  */
+static int	checkerror(int);
+static int	error(int);
+static int	get_errno(void);
 
 /* Struct used to keep track of the file position, just so we
    can implement fseek(fh,x,SEEK_CUR).  */
@@ -79,8 +61,8 @@ struct fdent
 
 static struct fdent openfiles [MAX_OPEN_FILES];
 
-static struct fdent* 	findslot	_PARAMS ((int));
-static int		newslot		_PARAMS ((void));
+static struct fdent* 	findslot (int);
+static int		newslot	(void);
 
 /* Register name faking - works in collusion with the linker.  */
 register char * stack_ptr __asm__ ("sp");
@@ -243,9 +225,9 @@ checkerror (int result)
    len, is the length in bytes to read.
    Returns the number of bytes *not* written. */
 int
-_swiread (int fh,
-	  char * ptr,
-	  int len)
+gdbarmsim_swiread (int fh,
+                   char * ptr,
+                   int len)
 {
 #ifdef ARM_RDI_MONITOR
   int block[3];
@@ -273,9 +255,9 @@ _swiread (int fh,
    Translates the return of _swiread into
    bytes read. */
 int
-_read (int fd,
-       char * ptr,
-       int len)
+gdbarmsim_read (int fd,
+                char * ptr,
+                int len)
 {
   int res;
   struct fdent *pfd;
@@ -287,7 +269,7 @@ _read (int fd,
       return -1;
     }
 
-  res = _swiread (pfd->handle, ptr, len);
+  res = gdbarmsim_swiread (pfd->handle, ptr, len);
 
   if (res == -1)
     return res;
@@ -301,9 +283,9 @@ _read (int fd,
 
 /* fd, is a user file descriptor. */
 int
-_swilseek (int fd,
-	int ptr,
-	int dir)
+gdbarmsim_swilseek (int fd,
+                    int ptr,
+                    int dir)
 {
   int res;
   struct fdent *pfd;
@@ -386,20 +368,39 @@ _swilseek (int fd,
 }
 
 int
-_lseek (int fd,
-	int ptr,
-	int dir)
+gdbarmsim_lseek (int fd,
+                 int ptr,
+                 int dir)
 {
-  return _swilseek (fd, ptr, dir);
+  return gdbarmsim_swilseek (fd, ptr, dir);
+}
+
+/* write a single character out the hosts stdout */
+int
+gdbarmsim_writec (const char c)
+{
+#ifdef ARM_RDI_MONITOR
+  int block[1];
+
+  block[0] = ((int) c) & 0xff;;
+
+  return checkerror (do_AngelSWI (AngelSWI_Reason_WriteC, block));
+#else
+  register int r0 __asm__ ("r0");
+  r0 = ((int) c) & 0xff;
+  __asm__ ("swi %a2"
+       : "=r" (r0)
+       : "0"(r0), "i"(SWI_WriteC));
+  return checkerror (r0);
+#endif
 }
 
 /* fh, is a valid internal file handle.
    Returns the number of bytes *not* written. */
 int
-_swiwrite (
-	   int    fh,
-	   char * ptr,
-	   int    len)
+gdbarmsim_swiwrite (int    fh,
+                    char * ptr,
+                    int    len)
 {
 #ifdef ARM_RDI_MONITOR
   int block[3];
@@ -425,9 +426,9 @@ _swiwrite (
 
 /* fd, is a user file descriptor. */
 int
-_write (int    fd,
-	char * ptr,
-	int    len)
+gdbarmsim_write (int    fd,
+                 char * ptr,
+                 int    len)
 {
   int res;
   struct fdent *pfd;
@@ -439,7 +440,7 @@ _write (int    fd,
       return -1;
     }
 
-  res = _swiwrite (pfd->handle, ptr,len);
+  res = gdbarmsim_swiwrite (pfd->handle, ptr,len);
 
   /* Clearly an error. */
   if (res < 0)
@@ -456,7 +457,7 @@ _write (int    fd,
 }
 
 int
-_swiopen (const char * path, int flags)
+gdbarmsim_swiopen (const char * path, int flags)
 {
   int aflags = 0, fh;
 #ifdef ARM_RDI_MONITOR
@@ -477,7 +478,7 @@ _swiopen (const char * path, int flags)
     {
       struct stat st;
       int res;
-      res = _stat (path, &st);
+      res = gdbarmsim_stat (path, &st);
       if (res != -1)
         {
 	  errno = EEXIST;
@@ -534,14 +535,14 @@ _swiopen (const char * path, int flags)
 }
 
 int
-_open (const char * path, int flags, ...)
+gdbarmsim_open (const char * path, int flags, ...)
 {
-  return _swiopen (path, flags);
+  return gdbarmsim_swiopen (path, flags);
 }
 
 /* fh, is a valid internal file handle. */
 int
-_swiclose (int fh)
+gdbarmsim_swiclose (int fh)
 {
 #ifdef ARM_RDI_MONITOR
   return checkerror (do_AngelSWI (AngelSWI_Reason_Close, &fh));
@@ -557,7 +558,7 @@ _swiclose (int fh)
 
 /* fd, is a user file descriptor. */
 int
-_close (int fd)
+gdbarmsim_close (int fd)
 {
   int res;
   struct fdent *pfd;
@@ -578,7 +579,7 @@ _close (int fd)
     }
 
   /* Attempt to close the handle. */
-  res = _swiclose (pfd->handle);
+  res = gdbarmsim_swiclose (pfd->handle);
 
   /* Reclaim handle? */
   if (res == 0)
@@ -587,49 +588,8 @@ _close (int fd)
   return res;
 }
 
-int __attribute__((weak))
-_getpid (int n __attribute__ ((unused)))
-{
-  return 1;
-}
-
-#if !defined(__rtems__)
-caddr_t
-_sbrk (int incr)
-{
-  extern char end __asm__ ("end"); /* Defined by the linker.  */
-  static char * heap_end;
-  char * prev_heap_end;
-
-  if (heap_end == NULL)
-    heap_end = & end;
-
-  prev_heap_end = heap_end;
-
-  if (heap_end + incr > stack_ptr)
-    {
-      /* Some of the libstdc++-v3 tests rely upon detecting
-	 out of memory errors, so do not abort here.  */
-#if 0
-      extern void abort (void);
-
-      _write (1, "_sbrk: Heap and stack collision\n", 32);
-
-      abort ();
-#else
-      errno = ENOMEM;
-      return (caddr_t) -1;
-#endif
-    }
-
-  heap_end += incr;
-
-  return (caddr_t) prev_heap_end;
-}
-#endif
-
 int
-_swistat (int fd, struct stat * st)
+gdbarmsim_swistat (int fd, struct stat * st)
 {
   struct fdent *pfd;
   int res;
@@ -661,38 +621,31 @@ _swistat (int fd, struct stat * st)
   return 0;
 }
 
-int __attribute__((weak))
-_fstat (int fd, struct stat * st)
+int
+gdbarmsim_fstat (int fd, struct stat * st)
 {
   memset (st, 0, sizeof (* st));
-  return _swistat (fd, st);
+  return gdbarmsim_swistat (fd, st);
 }
 
-int __attribute__((weak))
-_stat (const char *fname, struct stat *st)
+int
+gdbarmsim_stat (const char *fname, struct stat *st)
 {
   int fd, res;
   memset (st, 0, sizeof (* st));
   /* The best we can do is try to open the file readonly.
      If it exists, then we can guess a few things about it. */
-  if ((fd = _open (fname, O_RDONLY)) == -1)
+  if ((fd = gdbarmsim_open (fname, O_RDONLY)) == -1)
     return -1;
   st->st_mode |= S_IFREG | S_IREAD;
-  res = _swistat (fd, st);
+  res = gdbarmsim_swistat (fd, st);
   /* Not interested in the error. */
-  _close (fd);
+  gdbarmsim_close (fd);
   return res;
 }
 
-int __attribute__((weak))
-_link (void)
-{
-  errno = ENOSYS;
-  return -1;
-}
-
 int
-_unlink (const char *path)
+gdbarmsim_unlink (const char *path)
 {
   int res;
 #ifdef ARM_RDI_MONITOR
@@ -713,40 +666,9 @@ _unlink (const char *path)
   return 0;
 }
 
-#if !defined(__rtems__)
-int
-_gettimeofday (struct timeval * tp, void * tzvp)
-{
-  struct timezone *tzp = tzvp;
-  if (tp)
-    {
-    /* Ask the host for the seconds since the Unix epoch.  */
-#ifdef ARM_RDI_MONITOR
-      tp->tv_sec = do_AngelSWI (AngelSWI_Reason_Time,NULL);
-#else
-      {
-        int value;
-        __asm__ ("swi %a1; mov %0, r0" : "=r" (value): "i" (SWI_Time) : "r0");
-        tp->tv_sec = value;
-      }
-#endif
-      tp->tv_usec = 0;
-    }
-
-  /* Return fixed data for the timezone.  */
-  if (tzp)
-    {
-      tzp->tz_minuteswest = 0;
-      tzp->tz_dsttime = 0;
-    }
-
-  return 0;
-}
-#endif
-
 /* Return a clock that ticks at 100Hz.  */
 clock_t
-_clock (void)
+gdbarmsim_clock (void)
 {
   clock_t timeval;
 
@@ -758,28 +680,8 @@ _clock (void)
   return timeval;
 }
 
-#if !defined(__rtems__)
-/* Return a clock that ticks at 100Hz.  */
-clock_t
-_times (struct tms * tp)
-{
-  clock_t timeval = _clock();
-
-  if (tp)
-    {
-      tp->tms_utime  = timeval;	/* user time */
-      tp->tms_stime  = 0;	/* system time */
-      tp->tms_cutime = 0;	/* user time, children */
-      tp->tms_cstime = 0;	/* system time, children */
-    }
-
-  return timeval;
-};
-#endif
-
-
 int
-__isatty (int fd)
+gdbarmsim__isatty (int fd)
 {
   struct fdent *pfd;
 
@@ -803,7 +705,7 @@ __isatty (int fd)
 }
 
 int
-_system (const char *s)
+gdbarmsim_system (const char *s)
 {
 #ifdef ARM_RDI_MONITOR
   int block[2];
@@ -839,7 +741,7 @@ _system (const char *s)
 }
 
 int
-_rename (const char * oldpath, const char * newpath)
+gdbarmsim_rename (const char * oldpath, const char * newpath)
 {
 #ifdef ARM_RDI_MONITOR
   int block[4];

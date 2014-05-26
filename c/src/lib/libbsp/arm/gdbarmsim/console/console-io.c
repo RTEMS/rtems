@@ -23,8 +23,6 @@ void console_initialize_hardware(void)
   return;
 }
 
-int _write(int fd, char *ptr, int len);
-
 /*
  *  console_outbyte_polled
  *
@@ -35,7 +33,7 @@ void console_outbyte_polled(
   char ch
 )
 {
-  _write(2, &ch, 1);
+  gdbarmsim_writec(ch);
 }
 
 /*
