@@ -42,6 +42,15 @@
    subcc %g1, 3, %g0; ! prepare for syscall 3 check
 
 /*
+ * Window Overflow optimized trap table entry
+ */
+#define WOTRAP(_vector, _handler)  \
+  sethi %hi(_handler), %l4; \
+  jmp   %l4+%lo(_handler); \
+    save; \
+  nop
+
+/*
  *  Software trap. Treat as BAD_TRAP for the time being...
  */
 
@@ -72,7 +81,7 @@ SYM(trap_table):
   BAD_TRAP;                                     ! 02 illegal instruction
   BAD_TRAP;                                     ! 03 privileged instruction
   BAD_TRAP;                                     ! 04 fp disabled
-  TRAP( 5, SYM(window_overflow_trap_handler) ); ! 05 window overflow
+  WOTRAP(5, SYM(window_overflow_trap_handler)); ! 05 window overflow
   TRAP( 6, SYM(window_underflow_trap_handler) );! 06 window underflow
   BAD_TRAP;                                     ! 07 memory address not aligned
   BAD_TRAP;                                     ! 08 fp exception
