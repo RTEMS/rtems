@@ -36,7 +36,7 @@ RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
  time spent in the idle task is minimized.  This significantly reduces
  the wall time required to execute the RTEMS test suites.])
 
-RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
+RTEMS_BSP_CLEANUP_OPTIONS(0, 1, 1)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
