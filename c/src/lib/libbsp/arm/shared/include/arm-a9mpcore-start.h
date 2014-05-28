@@ -108,7 +108,7 @@ BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_hook_0(void)
   /* Enable cache coherency support for this processor */
   {
     uint32_t actlr = arm_cp15_get_auxiliary_control();
-    actlr |= ARM_CORTEX_A9_ACTL_SMP;
+    actlr |= ARM_CORTEX_A9_ACTL_SMP | ARM_CORTEX_A9_ACTL_FW;
     arm_cp15_set_auxiliary_control(actlr);
   }
 #endif
