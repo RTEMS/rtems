@@ -205,6 +205,8 @@ bool rtems_shell_main_loop(
   rtems_shell_env_t *rtems_shell_env
 );
 
+extern const rtems_shell_env_t rtems_global_shell_env;
+
 rtems_shell_env_t *rtems_shell_get_current_env(void);
 #define rtems_current_shell_env rtems_shell_get_current_env()
 

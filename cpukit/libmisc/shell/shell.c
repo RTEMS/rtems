@@ -40,7 +40,7 @@
 #include <pthread.h>
 #include <assert.h>
 
-static rtems_shell_env_t rtems_global_shell_env = {
+const rtems_shell_env_t rtems_global_shell_env = {
   .magic         = rtems_build_name('S', 'E', 'N', 'V'),
   .devname       = CONSOLE_DEVICE_NAME,
   .taskname      = "SHGL",
