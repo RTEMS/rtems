@@ -45,7 +45,6 @@ rtems_status_code rtems_task_get_affinity(
 
     case OBJECTS_LOCAL:
       ok = _Scheduler_Get_affinity(
-        _Scheduler_Get( the_thread ),
         the_thread,
         cpusetsize,
         cpuset

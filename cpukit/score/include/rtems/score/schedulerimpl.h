@@ -406,10 +406,9 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_default_Get_affinity_body(
 }
 
 bool _Scheduler_Get_affinity(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  size_t                   cpusetsize,
-  cpu_set_t               *cpuset
+  Thread_Control *the_thread,
+  size_t          cpusetsize,
+  cpu_set_t      *cpuset
 );
 
 RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(

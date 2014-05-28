@@ -21,35 +21,33 @@
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
 
 bool _Scheduler_Get_affinity(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  size_t                   cpusetsize,
-  cpu_set_t               *cpuset
+  Thread_Control *the_thread,
+  size_t          cpusetsize,
+  cpu_set_t      *cpuset
 )
 {
-  bool ok;
+  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
 
-  if ( _CPU_set_Is_large_enough( cpusetsize ) ) {
-#if defined(RTEMS_SMP)
-    ok = ( *scheduler->Operations.get_affinity )(
-      scheduler,
-      the_thread,
-      cpusetsize,
-      cpuset
-    );
-#else
-    ok = _Scheduler_default_Get_affinity_body(
-      scheduler,
-      the_thread,
-      cpusetsize,
-      cpuset
-    );
-#endif
-  } else {
-    ok = false;
+  if ( !_CPU_set_Is_large_enough( cpusetsize ) ) {
+    return false;
   }
 
-  return ok;
+
+#if defined(RTEMS_SMP)
+  return ( *scheduler->Operations.get_affinity )(
+    scheduler,
+    the_thread,
+    cpusetsize,
+    cpuset
+  );
+#else
+  return _Scheduler_default_Get_affinity_body(
+    scheduler,
+    the_thread,
+    cpusetsize,
+    cpuset
+  );
+#endif
 }
 
 #endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
