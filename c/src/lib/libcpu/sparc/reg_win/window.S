@@ -60,6 +60,7 @@ SYM(window_overflow_trap_handler):
         srl  %l3, 1, %l3                 ! l3  = WIM >> 1
         wr   %l3, %l2, %wim              ! WIM = (WIM >> 1) ^
                                          !       (WIM << (Number Windows - 1))
+                                         ! 3 instruction delay not needed here
         std  %i0, [%sp + 0x20]           ! save input register set
         std  %i2, [%sp + 0x28]
         std  %i4, [%sp + 0x30]
