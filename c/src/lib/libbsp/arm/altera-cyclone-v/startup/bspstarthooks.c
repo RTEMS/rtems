@@ -115,16 +115,16 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
   const uint32_t         CORES  = BSPSTARTHOOKS_MIN(
     (uintptr_t) bsp_processor_count,
     rtems_configuration_get_maximum_processors() );
-  
+
   assert( cpu_id < CORES );
-  
+
   if( cpu_id < CORES ) {
     if( cpu_id == 0 ) {
       ctrl = arm_cp15_mmu_disable( 32 );
 
       ctrl &= ~( ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_Z );
       arm_cp15_set_control( ctrl );
-      
+
       /* Enable Snoop Control Unit (SCU) */
       arm_a9mpcore_start_scu_enable( scu );
     }
