@@ -31,18 +31,6 @@
 
 #define BSPSTART_MAX_CORES_PER_CONTROLLER 2
 
-#ifdef RTEMS_NETWORKING
-/* FIXME: This is a workaround for the broken cache manager support */
-
-#include <rtems/rtems_bsdnet.h>
-
-void* rtems_bsdnet_malloc_mbuf(size_t size, int type)
-{
-  (void)type;
-  return altera_cyclone_v_nocache_malloc(size);
-}
-#endif
-
 static void bsp_start_secondary_cores( void )
 {
 #ifdef RTEMS_SMP
