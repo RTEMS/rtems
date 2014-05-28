@@ -167,7 +167,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
      *  inherited priority must be lowered if this is the last
      *  mutex (i.e. resource) this task has.
      */
-    if ( holder->resource_count == 0 &&
+    if ( !_Thread_Owns_resources( holder ) &&
          holder->real_priority != holder->current_priority ) {
       _Thread_Change_priority( holder, holder->real_priority, true );
     }

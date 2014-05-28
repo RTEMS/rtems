@@ -115,7 +115,7 @@ void _POSIX_Threads_Sporadic_budget_TSR(
     printk( "TSR %d %d %d\n", the_thread->resource_count,
         the_thread->current_priority, new_priority );
   #endif
-  if ( the_thread->resource_count == 0 ) {
+  if ( !_Thread_Owns_resources( the_thread ) ) {
     /*
      *  If this would make them less important, then do not change it.
      */
@@ -161,7 +161,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
     printk( "callout %d %d %d\n", the_thread->resource_count,
 	the_thread->current_priority, new_priority );
   #endif
-  if ( the_thread->resource_count == 0 ) {
+  if ( !_Thread_Owns_resources( the_thread ) ) {
     /*
      *  Make sure we are actually lowering it. If they have lowered it
      *  to logically lower than sched_ss_low_priority, then we do not want to

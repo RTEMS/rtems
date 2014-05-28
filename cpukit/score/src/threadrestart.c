@@ -47,7 +47,7 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
   ISR_lock_Context lock_context;
   Thread_Zombie_control *zombies = &_Thread_Zombies;
 
-  if ( the_thread->resource_count != 0 ) {
+  if ( _Thread_Owns_resources( the_thread ) ) {
     _Terminate(
       INTERNAL_ERROR_CORE,
       false,

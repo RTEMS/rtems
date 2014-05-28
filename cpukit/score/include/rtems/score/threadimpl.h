@@ -785,6 +785,23 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_life_changing(
   return ( life_state & THREAD_LIFE_RESTARTING_TERMINATING ) != 0;
 }
 
+/**
+ * @brief Returns true if the thread owns resources, and false otherwise.
+ *
+ * Resources are accounted with the Thread_Control::resource_count resource
+ * counter.  This counter is used by semaphore objects for example.
+ *
+ * @param[in] the_thread The thread.
+ */
+RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
+  const Thread_Control *the_thread
+)
+{
+  bool owns_resources = the_thread->resource_count != 0;
+
+  return owns_resources;
+}
+
 RTEMS_INLINE_ROUTINE void _Thread_Debug_set_real_processor(
   Thread_Control  *the_thread,
   Per_CPU_Control *cpu

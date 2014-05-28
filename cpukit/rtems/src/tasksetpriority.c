@@ -48,7 +48,7 @@ rtems_status_code rtems_task_set_priority(
         the_thread->real_priority = _RTEMS_tasks_Priority_to_Core(
                                       new_priority
                                     );
-        if ( the_thread->resource_count == 0 ||
+        if ( !_Thread_Owns_resources( the_thread ) ||
              the_thread->current_priority > new_priority )
           _Thread_Change_priority( the_thread, new_priority, false );
       }
