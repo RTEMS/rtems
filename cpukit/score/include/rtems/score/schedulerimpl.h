@@ -418,7 +418,6 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
   const cpu_set_t         *cpuset
 )
 {
-  size_t   cpu_max   = _CPU_set_Maximum_CPU_count( cpusetsize );
   uint32_t cpu_count = _SMP_Get_processor_count();
   uint32_t cpu_index;
   bool     ok = true;
@@ -429,8 +428,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
       _Scheduler_Get_by_CPU_index( cpu_index );
 
     ok = ok
-      && ( ( CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset )
-          && scheduler == scheduler_of_cpu )
+      && ( CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset )
         || ( !CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset )
           && scheduler != scheduler_of_cpu ) );
 #else
@@ -439,12 +437,6 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
     ok = ok && CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset );
 #endif
   }
-
-  for ( ; cpu_index < cpu_max ; ++cpu_index ) {
-    ok = ok && !CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset );
-  }
-
-  _Scheduler_Set( scheduler, the_thread );
 
   return ok;
 }

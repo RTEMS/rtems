@@ -139,14 +139,14 @@ static void test(void)
   rtems_test_assert(CPU_EQUAL(&cpuset, &second_cpu));
 
   sc = rtems_task_set_affinity(task_id, sizeof(all_cpus), &all_cpus);
-  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_set_affinity(task_id, sizeof(first_cpu), &first_cpu);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
 
   sc = rtems_task_get_scheduler(task_id, &scheduler_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(scheduler_id == scheduler_a_id);
+  rtems_test_assert(scheduler_id == scheduler_b_id);
 
   sc = rtems_task_set_affinity(task_id, sizeof(second_cpu), &second_cpu);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);

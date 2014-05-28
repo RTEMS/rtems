@@ -622,4 +622,12 @@ cleared bit means the opposite.
 
 @subheading NOTES:
 
-None.
+This function will not change the scheduler of the task.  The intersection of
+the processor affinity set and the set of processors owned by the scheduler of
+the task must be non-empty.  It is not an error if the processor affinity set
+contains processors that are not part of the set of processors owned by the
+scheduler instance of the task.  A task will simply not run under normal
+circumstances on these processors since the scheduler ignores them.  Some
+locking protocols may temporarily use processors that are not included in the
+processor affinity set of the task.  It is also not an error if the processor
+affinity set contains processors that are not part of the system.

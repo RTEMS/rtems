@@ -26,45 +26,27 @@ bool _Scheduler_Set_affinity(
   const cpu_set_t         *cpuset
 )
 {
-  bool ok;
+  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
 
-  if ( _CPU_set_Is_large_enough( cpusetsize ) ) {
-#if defined(RTEMS_SMP)
-    uint32_t cpu_count = _SMP_Get_processor_count();
-    uint32_t cpu_index;
-
-    ok = false;
-
-    for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
-      if ( CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset ) ) {
-        const Scheduler_Control *scheduler_of_cpu =
-          _Scheduler_Get_by_CPU_index( cpu_index );
-
-        if ( scheduler_of_cpu != NULL ) {
-          ok = ( *scheduler_of_cpu->Operations.set_affinity )(
-            scheduler_of_cpu,
-            the_thread,
-            cpusetsize,
-            cpuset
-          );
-        }
-
-        break;
-      }
-    }
-#else
-    ok = _Scheduler_default_Set_affinity_body(
-      _Scheduler_Get( the_thread ),
-      the_thread,
-      cpusetsize,
-      cpuset
-    );
-#endif
-  } else {
-    ok = false;
+  if ( !_CPU_set_Is_large_enough( cpusetsize ) ) {
+    return false;
   }
 
-  return ok;
+#if defined(RTEMS_SMP)
+  return ( *scheduler->Operations.set_affinity )(
+    scheduler,
+    the_thread,
+    cpusetsize,
+    cpuset
+  );
+#else
+  return _Scheduler_default_Set_affinity_body(
+    scheduler,
+    the_thread,
+    cpusetsize,
+    cpuset
+  );
+#endif
 }
 
 #endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
