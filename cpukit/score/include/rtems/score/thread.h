@@ -28,6 +28,7 @@
 #include <rtems/score/object.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/resource.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
 #include <rtems/score/threadq.h>
@@ -471,6 +472,13 @@ struct Thread_Control_struct {
    *  held by the thread.
    */
   Chain_Control            lock_mutex;
+#endif
+#if defined(RTEMS_SMP)
+  /**
+   * @brief Resource node to build a dependency tree in case this thread owns
+   * resources or depends on a resource.
+   */
+  Resource_Node            Resource_node;
 #endif
      /*================= end of common block =================*/
 #if defined(RTEMS_MULTIPROCESSING)

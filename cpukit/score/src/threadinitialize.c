@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/resourceimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/stackimpl.h>
 #include <rtems/score/tls.h>
@@ -182,6 +183,7 @@ bool _Thread_Initialize(
 
 #if defined(RTEMS_SMP)
   the_thread->scheduler               = scheduler;
+  _Resource_Node_initialize( &the_thread->Resource_node );
   _CPU_Context_Set_is_executing( &the_thread->Registers, false );
 #endif
 
