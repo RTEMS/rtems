@@ -782,7 +782,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_life_changing(
   Thread_Life_state life_state
 )
 {
-  return ( life_state & THREAD_LIFE_RESTARTING_TERMINAING ) != 0;
+  return ( life_state & THREAD_LIFE_RESTARTING_TERMINATING ) != 0;
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_Debug_set_real_processor(
