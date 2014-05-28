@@ -132,16 +132,16 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
 #ifdef RTEMS_SMP
     /* Enable cache coherency support for this processor */
     uint32_t actlr = arm_cp15_get_auxiliary_control();
-    actlr |= ARM_CORTEX_A9_ACTL_SMP;
+    actlr |= ARM_CORTEX_A9_ACTL_SMP | ARM_CORTEX_A9_ACTL_FW;
     arm_cp15_set_auxiliary_control(actlr);
 #endif
 
     if (cpu_id == 0) {
       arm_a9mpcore_start_scu_invalidate(scu, cpu_id, 0xF);
     }
-    
+
     setup_mmu_and_cache( cpu_id );
-    
+
 #ifdef RTEMS_SMP
     if (cpu_id != 0) {
       arm_a9mpcore_start_set_vector_base();
