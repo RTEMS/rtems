@@ -40,6 +40,7 @@
 #include <bsp/alt_generalpurpose_io.h>
 #include <bsp/nocache-heap.h>
 #include "socal/alt_rstmgr.h"
+#include "socal/alt_sysmgr.h"
 #include "socal/hps.h"
 #include "socal/socal.h"
 #include <libchip/dwmac.h>
@@ -1080,9 +1081,21 @@ static int network_if_mem_free_nocache(
  */
 static int network_if_bus_setup( void *arg )
 {
+  volatile uint32_t reg = alt_read_word( ALT_SYSMGR_EMAC_L3MST_ADDR );
+
   (void) arg;
 
-  /* Nothing to be done */
+  reg &= ALT_SYSMGR_EMAC_L3MST_AWCACHE_1_CLR_MSK;
+  reg &= ALT_SYSMGR_EMAC_L3MST_ARCACHE_1_CLR_MSK;
+  reg |= ALT_SYSMGR_EMAC_L3MST_AWCACHE_1_SET(
+    ALT_SYSMGR_EMAC_L3MST_AWCACHE_1_E_CACHE_WRBACK_ALLOC
+  );
+  reg |= ALT_SYSMGR_EMAC_L3MST_ARCACHE_1_SET(
+    ALT_SYSMGR_EMAC_L3MST_ARCACHE_1_E_CACHE_WRBACK_ALLOC
+  );
+
+  alt_write_word( ALT_SYSMGR_EMAC_L3MST_ADDR, reg );
+
   return 0;
 }
 
