@@ -114,9 +114,25 @@ static void rtems_shell_current_env_make_key(void)
  */
 rtems_shell_env_t *rtems_shell_get_current_env(void)
 {
-  void *ptr = pthread_getspecific(rtems_shell_current_env_key);
-  assert (ptr != NULL);
-  return (rtems_shell_env_t *) ptr;
+  return (rtems_shell_env_t *) pthread_getspecific(rtems_shell_current_env_key);
+}
+
+/*
+ *  Duplication the current shell environment and if none is set
+ *  clear it.
+ */
+void rtems_shell_dup_current_env(rtems_shell_env_t *copy)
+{
+  rtems_shell_env_t *env = rtems_shell_get_current_env();
+  if (env) {
+    *copy = *env;
+  }
+  else {
+    memset(copy, 0, sizeof(rtems_shell_env_t));
+    copy->magic    = rtems_build_name('S', 'E', 'N', 'V');
+    copy->devname  = CONSOLE_DEVICE_NAME;
+    copy->taskname = "RTSH";
+  }
 }
 
 /*
@@ -511,9 +527,13 @@ static void rtems_shell_init_issue(void)
 }
 
 static bool rtems_shell_login(FILE * in,FILE * out) {
-  FILE          *fd;
-  int            c;
-  time_t         t;
+  rtems_shell_env_t *env;
+  FILE              *fd;
+  int               c;
+  time_t            t;
+
+  env = rtems_shell_get_current_env();
+  assert(env != NULL);
 
   rtems_shell_init_issue();
   setuid(0);
@@ -522,16 +542,16 @@ static bool rtems_shell_login(FILE * in,FILE * out) {
   rtems_current_user_env->egid =0;
 
   if (out) {
-    if ((rtems_current_shell_env->devname[5]!='p')||
-        (rtems_current_shell_env->devname[6]!='t')||
-        (rtems_current_shell_env->devname[7]!='y')) {
+    if ((env->devname[5]!='p')||
+        (env->devname[6]!='t')||
+        (env->devname[7]!='y')) {
       fd = fopen("/etc/issue","r");
       if (fd) {
         while ((c=fgetc(fd))!=EOF) {
           if (c=='@')  {
             switch(c=fgetc(fd)) {
               case 'L':
-                fprintf(out,"%s",rtems_current_shell_env->devname);
+                fprintf(out,"%s", env->devname);
                 break;
               case 'B':
                 fprintf(out,"0");
@@ -578,7 +598,7 @@ static bool rtems_shell_login(FILE * in,FILE * out) {
           if (c=='%')  {
             switch(c=fgetc(fd)) {
               case 't':
-                fprintf(out,"%s",rtems_current_shell_env->devname);
+                fprintf(out,"%s", env->devname);
                 break;
               case 'h':
                 fprintf(out,"0");
@@ -617,12 +637,7 @@ static bool rtems_shell_login(FILE * in,FILE * out) {
     }
   }
 
-  return rtems_shell_login_prompt(
-    in,
-    out,
-    rtems_current_shell_env->devname,
-    rtems_current_shell_env->login_check
-  );
+  return rtems_shell_login_prompt(in, out, env->devname, env->login_check);
 }
 
 #if defined(SHELL_DEBUG)

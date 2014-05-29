@@ -43,11 +43,13 @@ bool rtems_shell_login_check(
 
   /* Valid user? */
   if (pw != NULL && strcmp( pw->pw_passwd, "!") != 0) {
+    rtems_shell_env_t *env = rtems_shell_get_current_env();
     setuid( pw->pw_uid);
     setgid( pw->pw_gid);
     rtems_current_user_env->euid = 0;
     rtems_current_user_env->egid = 0;
-    chown( rtems_current_shell_env->devname, pw->pw_uid, 0);
+    if (env)
+      chown( env->devname, pw->pw_uid, 0);
     rtems_current_user_env->euid = pw->pw_uid;
     rtems_current_user_env->egid = pw->pw_gid;
     if (strcmp( pw->pw_passwd, "*") == 0) {

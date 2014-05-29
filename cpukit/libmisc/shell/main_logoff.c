@@ -25,9 +25,12 @@ static int rtems_shell_main_logoff(
   char *argv[] __attribute__((unused))
 )
 {
+  rtems_shell_env_t *env = rtems_shell_get_current_env();
+
   printf("logoff from the system...");
 
-  rtems_current_shell_env->exit_shell = true;
+  if (env)
+    env->exit_shell = true;
 
   return 0;
 }
