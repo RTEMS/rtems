@@ -24,7 +24,7 @@
 /* Irq used by shared memory driver and for inter-processor interrupts.
  * Can be overridden by being defined in the application.
  */
-unsigned char LEON3_mp_irq __attribute__((weak)) = 14;
+const unsigned char LEON3_mp_irq __attribute__((weak)) = 14;
 
 #if !defined(__leon__) || defined(RTEMS_PARAVIRT)
 uint32_t _CPU_SMP_Get_current_processor( void )
