@@ -156,47 +156,63 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 #define LEON_Is_interrupt_pending( _source ) \
   (LEON3_IrqCtrl_Regs->ipend & (1 << (_source)))
 
-#define LEON_Is_interrupt_masked( _source ) \
+#define LEON_Cpu_Is_interrupt_masked( _source, _cpu ) \
   do {\
-     (LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] & (1 << (_source))); \
+     (LEON3_IrqCtrl_Regs->mask[_cpu] & (1 << (_source))); \
    } while (0)
 
-#define LEON_Mask_interrupt( _source ) \
+#define LEON_Cpu_Mask_interrupt( _source, _cpu ) \
   do { \
     rtems_interrupt_lock_context _lock_context; \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
-     LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index]  &= ~(1 << (_source)); \
+     LEON3_IrqCtrl_Regs->mask[_cpu]  &= ~(1 << (_source)); \
     LEON3_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
-#define LEON_Unmask_interrupt( _source ) \
+#define LEON_Cpu_Unmask_interrupt( _source, _cpu ) \
   do { \
     rtems_interrupt_lock_context _lock_context; \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
-    LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index]  |= (1 << (_source)); \
+    LEON3_IrqCtrl_Regs->mask[_cpu]  |= (1 << (_source)); \
     LEON3_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
-#define LEON_Disable_interrupt( _source, _previous ) \
+#define LEON_Cpu_Disable_interrupt( _source, _previous, _cpu ) \
   do { \
     rtems_interrupt_lock_context _lock_context; \
     uint32_t _mask = 1 << (_source); \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
-     (_previous) = LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index]; \
-     LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] = _previous & ~_mask; \
+     (_previous) = LEON3_IrqCtrl_Regs->mask[_cpu]; \
+     LEON3_IrqCtrl_Regs->mask[_cpu] = _previous & ~_mask; \
     LEON3_IRQCTRL_RELEASE( &_lock_context ); \
     (_previous) &= _mask; \
   } while (0)
 
-#define LEON_Restore_interrupt( _source, _previous ) \
+#define LEON_Cpu_Restore_interrupt( _source, _previous, _cpu ) \
   do { \
     rtems_interrupt_lock_context _lock_context; \
     uint32_t _mask = 1 << (_source); \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
-      LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] = \
-        (LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] & ~_mask) | (_previous); \
+      LEON3_IrqCtrl_Regs->mask[_cpu] = \
+        (LEON3_IrqCtrl_Regs->mask[_cpu] & ~_mask) | (_previous); \
     LEON3_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
+
+/* Map single-cpu operations to local CPU */
+#define LEON_Is_interrupt_masked( _source ) \
+  LEON_Cpu_Is_interrupt_masked(_source, _LEON3_Get_current_processor())
+
+#define LEON_Mask_interrupt(_source) \
+  LEON_Cpu_Mask_interrupt(_source, _LEON3_Get_current_processor())
+
+#define LEON_Unmask_interrupt(_source) \
+  LEON_Cpu_Unmask_interrupt(_source, _LEON3_Get_current_processor())
+
+#define LEON_Disable_interrupt(_source, _previous) \
+  LEON_Cpu_Disable_interrupt(_source, _previous, _LEON3_Get_current_processor())
+
+#define LEON_Restore_interrupt(_source, _previous) \
+  LEON_Cpu_Restore_interrupt(_source, _previous, _LEON3_Get_current_processor())
 
 /* Make all SPARC BSPs have common macros for interrupt handling */
 #define BSP_Clear_interrupt(_source) LEON_Clear_interrupt(_source)
@@ -209,6 +225,18 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
         LEON_Disable_interrupt(_source, _prev)
 #define BSP_Restore_interrupt(_source, _previous) \
         LEON_Restore_interrupt(_source, _previous)
+
+/* Make all SPARC BSPs have common macros for interrupt handling on any CPU */
+#define BSP_Cpu_Is_interrupt_masked(_source, _cpu) \
+        LEON_Cpu_Is_interrupt_masked(_source, _cpu)
+#define BSP_Cpu_Unmask_interrupt(_source, _cpu) \
+        LEON_Cpu_Unmask_interrupt(_source, _cpu)
+#define BSP_Cpu_Mask_interrupt(_source, _cpu) \
+        LEON_Cpu_Mask_interrupt(_source, _cpu)
+#define BSP_Cpu_Disable_interrupt(_source, _previous, _cpu) \
+        LEON_Cpu_Disable_interrupt(_source, _prev, _cpu)
+#define BSP_Cpu_Restore_interrupt(_source, _previous, _cpu) \
+        LEON_Cpu_Restore_interrupt(_source, _previous, _cpu)
 
 /*
  *  Each timer control register is organized as follows:

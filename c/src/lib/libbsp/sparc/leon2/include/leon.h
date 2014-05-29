@@ -362,6 +362,18 @@ static __inline__ int bsp_irq_fixup(int irq)
 #define BSP_Restore_interrupt(_source, _previous) \
         LEON_Restore_interrupt(_source, _previous)
 
+/* Make all SPARC BSPs have common macros for interrupt handling on any CPU */
+#define BSP_Cpu_Is_interrupt_masked(_source, _cpu) \
+        BSP_Is_interrupt_masked(_source)
+#define BSP_Cpu_Unmask_interrupt(_source, _cpu) \
+        BSP_Unmask_interrupt(_source)
+#define BSP_Cpu_Mask_interrupt(_source, _cpu) \
+        BSP_Mask_interrupt(_source)
+#define BSP_Cpu_Disable_interrupt(_source, _previous, _cpu) \
+        BSP_Disable_interrupt(_source, _prev)
+#define BSP_Cpu_Restore_interrupt(_source, _previous, _cpu) \
+        BSP_Cpu_Restore_interrupt(_source, _previous)
+
 /*
  *  Each timer control register is organized as follows:
  *

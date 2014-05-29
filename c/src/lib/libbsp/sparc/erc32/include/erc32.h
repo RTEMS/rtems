@@ -405,7 +405,7 @@ static __inline__ int bsp_irq_fixup(int irq)
     sparc_enable_interrupts( _level ); \
   } while (0)
 
-/* Make all SPARC BSPs have common macros for interrupt handling */
+/* Make all SPARC BSPs have common macros for interrupt handling on local CPU */
 #define BSP_Clear_interrupt(_source) ERC32_Clear_interrupt(_source)
 #define BSP_Force_interrupt(_source) ERC32_Force_interrupt(_source)
 #define BSP_Is_interrupt_pending(_source) ERC32_Is_interrupt_pending(_source)
@@ -416,6 +416,18 @@ static __inline__ int bsp_irq_fixup(int irq)
         ERC32_Disable_interrupt(_source, _prev)
 #define BSP_Restore_interrupt(_source, _previous) \
         ERC32_Restore_interrupt(_source, _previous)
+
+/* Make all SPARC BSPs have common macros for interrupt handling on any CPU */
+#define BSP_Cpu_Is_interrupt_masked(_source, _cpu) \
+        BSP_Is_interrupt_masked(_source)
+#define BSP_Cpu_Unmask_interrupt(_source, _cpu) \
+        BSP_Unmask_interrupt(_source)
+#define BSP_Cpu_Mask_interrupt(_source, _cpu) \
+        BSP_Mask_interrupt(_source)
+#define BSP_Cpu_Disable_interrupt(_source, _previous, _cpu) \
+        BSP_Disable_interrupt(_source, _prev)
+#define BSP_Cpu_Restore_interrupt(_source, _previous, _cpu) \
+        BSP_Cpu_Restore_interrupt(_source, _previous)
 
 /*
  *  The following macros attempt to hide the fact that the General Purpose
