@@ -4,6 +4,7 @@
 
 #include <bsp.h>
 #include <string.h>
+#include <rtems/m68k/sim.h>
 
 #if (M68K_COLDFIRE_ARCH == 1)
 # define EXCEPTION_FRAME_PC_OFFSET "4"
@@ -16,6 +17,7 @@ int memProbeByte(void *from, void *to);
 int memProbeShort(void *from, void *to);
 int memProbeLong(void *from, void *to);
 int memProbeCatcher(void);
+rtems_status_code bspExtMemProbe(void *addr, int write, int size, void *pval);
 
 __asm__(
     ".text\n"
