@@ -35,6 +35,9 @@ void Clock_exit( void );
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
+rtems_isr Clock_isr(rtems_vector_number vector);
+void Install_clock(rtems_isr_entry clock_isr);
+
 rtems_isr Clock_isr(rtems_vector_number vector)
 {
   Clock_driver_ticks += 1;
@@ -47,9 +50,7 @@ rtems_isr Clock_isr(rtems_vector_number vector)
     Clock_isrs -= 1;
 }
 
-void Install_clock(
-  rtems_isr_entry clock_isr
-)
+void Install_clock(rtems_isr_entry clock_isr)
 {
   Clock_driver_ticks = 0;
   Clock_isrs = rtems_configuration_get_microseconds_per_tick() / 1000;

@@ -29,7 +29,6 @@ extern "C" {
 #include <rtems/iosupp.h>
 #include <mrm332.h>
 #include <rtems/m68k/sim.h>
-#include <rtems/m68k/qsm.h>
 
 #define CONSOLE_SCI
 

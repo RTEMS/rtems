@@ -86,8 +86,8 @@
 #include <libchip/serial.h>
 #include <libchip/sersupp.h>
 #include "sci.h"
+#include <rtems/m68k/qsm.h>
 /*#include "../misc/include/cpu332.h" */
-
 
 /*****************************************************************************
   Section B - Manifest Constants
@@ -151,6 +151,8 @@ rtems_device_driver SciControl(                        /* device driver api */
     rtems_device_major_number, rtems_device_minor_number, void *);
 rtems_device_driver SciRead (
     rtems_device_major_number, rtems_device_minor_number, void *);
+
+rtems_isr SciIsr( rtems_vector_number vector );
 
 int     SciInterruptOpen(int, int, void *);               /* termios api */
 int     SciInterruptClose(int, int, void *);              /* termios api */
@@ -1096,7 +1098,7 @@ rtems_device_driver SciWrite (
 {
     rtems_libio_rw_args_t *rw_args;             /* ptr to argument struct */
     uint8_t   *buffer;
-    uint16_t   length;
+    size_t     length;
 
     rw_args = (rtems_libio_rw_args_t *) arg;
 

@@ -1,10 +1,5 @@
 /*
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -13,6 +8,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 extern void Spurious_Initialize(void);
 
