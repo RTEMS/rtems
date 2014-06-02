@@ -83,4 +83,40 @@ SYM(sparc_syscall_exit):
 	mov	%o1, %g3	! Additional exit code 2
 	ta	0
 
+#if defined(RTEMS_PARAVIRT)
+
+        PUBLIC(_SPARC_Get_PSR)
+
+SYM(_SPARC_Get_PSR):
+
+	retl
+	 rd     %psr, %o0
+
+        PUBLIC(_SPARC_Set_PSR)
+
+SYM(_SPARC_Set_PSR):
+
+	mov     %o0, %psr
+	nop
+	nop
+	nop
+	retl
+	 nop
+
+        PUBLIC(_SPARC_Get_TBR)
+
+SYM(_SPARC_Get_TBR):
+
+	retl
+	 rd    %tbr, %o0
+
+        PUBLIC(_SPARC_Set_TBR)
+
+SYM(_SPARC_Set_TBR):
+
+	retl
+	 wr    %o0, 0, %tbr
+
+#endif /* defined(RTEMS_PARAVIRT) */
+
 /* end of file */

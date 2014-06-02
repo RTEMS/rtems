@@ -164,17 +164,37 @@ extern "C" {
  *
  * This macro returns the current contents of the PSR register in @a _psr.
  */
+#if defined(RTEMS_PARAVIRT)
+
+uint32_t _SPARC_Get_PSR( void );
+
+#define sparc_get_psr( _psr ) \
+  (_psr) = _SPARC_Get_PSR()
+
+#else /* RTEMS_PARAVIRT */
+
 #define sparc_get_psr( _psr ) \
   do { \
      (_psr) = 0; \
      __asm__ volatile( "rd %%psr, %0" :  "=r" (_psr) : "0" (_psr) ); \
   } while ( 0 )
 
+#endif /* RTEMS_PARAVIRT */
+
 /**
  * @brief Macro to set the PSR.
  *
  * This macro sets the PSR register to the value in @a _psr.
  */
+#if defined(RTEMS_PARAVIRT)
+
+void _SPARC_Set_PSR( uint32_t new_psr );
+
+#define sparc_set_psr( _psr ) \
+  _SPARC_Set_PSR( _psr )
+
+#else /* RTEMS_PARAVIRT */
+
 #define sparc_set_psr( _psr ) \
   do { \
     __asm__ volatile ( "mov  %0, %%psr " : "=r" ((_psr)) : "0" ((_psr)) ); \
@@ -183,26 +203,50 @@ extern "C" {
     nop(); \
   } while ( 0 )
 
+#endif /* RTEMS_PARAVIRT */
+
 /**
  * @brief Macro to obtain the TBR.
  *
  * This macro returns the current contents of the TBR register in @a _tbr.
  */
+#if defined(RTEMS_PARAVIRT)
+
+uint32_t _SPARC_Get_TBR( void );
+
+#define sparc_get_tbr( _tbr ) \
+  (_tbr) = _SPARC_Get_TBR()
+
+#else /* RTEMS_PARAVIRT */
+
 #define sparc_get_tbr( _tbr ) \
   do { \
      (_tbr) = 0; /* to avoid unitialized warnings */ \
      __asm__ volatile( "rd %%tbr, %0" :  "=r" (_tbr) : "0" (_tbr) ); \
   } while ( 0 )
 
+#endif /* RTEMS_PARAVIRT */
+
 /**
  * @brief Macro to set the TBR.
  *
  * This macro sets the TBR register to the value in @a _tbr.
  */
+#if defined(RTEMS_PARAVIRT)
+
+void _SPARC_Set_TBR( uint32_t new_tbr );
+
+#define sparc_set_tbr( _tbr ) \
+  _SPARC_Set_TBR((_tbr))
+
+#else /* RTEMS_PARAVIRT */
+
 #define sparc_set_tbr( _tbr ) \
   do { \
      __asm__ volatile( "wr %0, 0, %%tbr" :  "=r" (_tbr) : "0" (_tbr) ); \
   } while ( 0 )
+
+#endif /* RTEMS_PARAVIRT */
 
 /**
  * @brief Macro to obtain the WIM.

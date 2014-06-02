@@ -43,6 +43,7 @@ libbsp_a_SOURCES += startup/bspreset.c
 libbsp_a_SOURCES += startup/cpucounter.c
 
 # ISR Handler
+libbsp_a_SOURCES += ../../sparc/shared/cpu.c
 libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c

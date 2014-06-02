@@ -20,7 +20,7 @@
 #include <rtems/score/smpimpl.h>
 #include <stdlib.h>
 
-#if !defined(__leon__)
+#if !defined(__leon__) || defined(RTEMS_PARAVIRT)
 uint32_t _CPU_SMP_Get_current_processor( void )
 {
   return _LEON3_Get_current_processor();

@@ -72,23 +72,6 @@ SPARC_ASSERT_OFFSET(is_executing, SPARC_CONTEXT_CONTROL_IS_EXECUTING);
 #endif
 
 /*
- *  This initializes the set of opcodes placed in each trap
- *  table entry.  The routine which installs a handler is responsible
- *  for filling in the fields for the _handler address and the _vector
- *  trap type.
- *
- *  The constants following this structure are masks for the fields which
- *  must be filled in when the handler is installed.
- */
-
-const CPU_Trap_table_entry _CPU_Trap_slot_template = {
-  0xa1480000,      /* mov   %psr, %l0           */
-  0x29000000,      /* sethi %hi(_handler), %l4  */
-  0x81c52000,      /* jmp   %l4 + %lo(_handler) */
-  0xa6102000       /* mov   _vector, %l3        */
-};
-
-/*
  *  _CPU_Initialize
  *
  *  This routine performs processor dependent initialization.

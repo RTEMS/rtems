@@ -46,6 +46,7 @@ libbsp_a_SOURCES += startup/bspidle.c
 libbsp_a_SOURCES += startup/bspdelay.c
 libbsp_a_SOURCES += ../../sparc/shared/startup/early_malloc.c
 # ISR Handler
+libbsp_a_SOURCES += ../../sparc/shared/cpu.c
 libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c

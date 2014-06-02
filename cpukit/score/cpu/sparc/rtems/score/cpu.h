@@ -1192,7 +1192,7 @@ register struct Per_CPU_Control *_SPARC_Per_CPU_current __asm__( "g6" );
 
   void _CPU_SMP_Finalize_initialization( uint32_t cpu_count );
 
-  #if defined(__leon__)
+  #if defined(__leon__) && !defined(RTEMS_PARAVIRT)
     static inline uint32_t _CPU_SMP_Get_current_processor( void )
     {
       return _LEON3_Get_current_processor();
