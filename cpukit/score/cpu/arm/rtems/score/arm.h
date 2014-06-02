@@ -42,6 +42,7 @@ extern "C" {
   || defined(__ARM_ARCH_7M__)
   #define ARM_MULTILIB_HAS_WFI
   #define ARM_MULTILIB_HAS_LOAD_STORE_EXCLUSIVE
+  #define ARM_MULTILIB_HAS_BARRIER_INSTRUCTIONS
 #endif
 
 #if defined(__ARM_ARCH_7A__) \

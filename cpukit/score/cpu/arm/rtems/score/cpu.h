@@ -301,17 +301,23 @@ extern uint32_t arm_cpu_mode;
 
 static inline void _ARM_Data_memory_barrier( void )
 {
+#ifdef ARM_MULTILIB_HAS_BARRIER_INSTRUCTIONS
   __asm__ volatile ( "dmb" : : : "memory" );
+#endif
 }
 
 static inline void _ARM_Data_synchronization_barrier( void )
 {
+#ifdef ARM_MULTILIB_HAS_BARRIER_INSTRUCTIONS
   __asm__ volatile ( "dsb" : : : "memory" );
+#endif
 }
 
 static inline void _ARM_Instruction_synchronization_barrier( void )
 {
+#ifdef ARM_MULTILIB_HAS_BARRIER_INSTRUCTIONS
   __asm__ volatile ( "isb" : : : "memory" );
+#endif
 }
 
 static inline uint32_t arm_interrupt_disable( void )
