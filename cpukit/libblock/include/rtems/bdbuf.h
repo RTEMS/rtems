@@ -174,6 +174,15 @@ extern "C" {
  */
 /**@{**/
 
+#if defined(RTEMS_POSIX_API)
+  /*
+   * Use the PTHREAD mutexes and condition variables if available.  This helps
+   * on SMP configurations to avoid the home grown condition variables via
+   * disabled preemption.
+   */
+  #define RTEMS_BDBUF_USE_PTHREAD
+#endif
+
 /**
  * @brief State of a buffer of the cache.
  *

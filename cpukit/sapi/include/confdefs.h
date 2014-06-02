@@ -1520,16 +1520,42 @@ const rtems_libio_helper rtems_fs_init_helper =
     (CONFIGURE_BDBUF_TASK_STACK_SIZE <= CONFIGURE_MINIMUM_TASK_STACK_SIZE ? \
     0 : CONFIGURE_BDBUF_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE))
 
-  /*
-   *  Semaphores:
-   *    o disk lock
-   *    o bdbuf lock
-   *    o bdbuf sync lock
-   *    o bdbuf access condition
-   *    o bdbuf transfer condition
-   *    o bdbuf buffer condition
-   */
-  #define CONFIGURE_LIBBLOCK_SEMAPHORES 6
+  #ifdef RTEMS_BDBUF_USE_PTHREAD
+    /*
+     * Semaphores:
+     *   o disk lock
+     */
+    #define CONFIGURE_LIBBLOCK_SEMAPHORES 1
+
+    /*
+     * POSIX Mutexes:
+     *  o bdbuf lock
+     *  o bdbuf sync lock
+     */
+    #define CONFIGURE_LIBBLOCK_POSIX_MUTEXES 2
+
+    /*
+     * POSIX Condition Variables:
+     *  o bdbuf access condition
+     *  o bdbuf transfer condition
+     *  o bdbuf buffer condition
+     */
+    #define CONFIGURE_LIBBLOCK_POSIX_CONDITION_VARIABLES 3
+  #else
+    /*
+     * Semaphores:
+     *   o disk lock
+     *   o bdbuf lock
+     *   o bdbuf sync lock
+     *   o bdbuf access condition
+     *   o bdbuf transfer condition
+     *   o bdbuf buffer condition
+     */
+    #define CONFIGURE_LIBBLOCK_SEMAPHORES 6
+
+    #define CONFIGURE_LIBBLOCK_POSIX_MUTEXES 0
+    #define CONFIGURE_LIBBLOCK_POSIX_CONDITION_VARIABLES 0
+  #endif
 
   #if defined(CONFIGURE_HAS_OWN_BDBUF_TABLE) || \
       defined(CONFIGURE_BDBUF_BUFFER_SIZE) || \
@@ -1540,6 +1566,8 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_LIBBLOCK_TASKS 0
   #define CONFIGURE_LIBBLOCK_TASK_EXTRA_STACKS 0
   #define CONFIGURE_LIBBLOCK_SEMAPHORES 0
+  #define CONFIGURE_LIBBLOCK_POSIX_MUTEXES 0
+  #define CONFIGURE_LIBBLOCK_POSIX_CONDITION_VARIABLES 0
 #endif /* CONFIGURE_APPLICATION_NEEDS_LIBBLOCK */
 
 #ifndef CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
@@ -2209,6 +2237,7 @@ const rtems_libio_helper rtems_fs_init_helper =
    */
   #define CONFIGURE_POSIX_MUTEXES \
     (CONFIGURE_MAXIMUM_POSIX_MUTEXES + \
+      CONFIGURE_LIBBLOCK_POSIX_MUTEXES + \
       CONFIGURE_GNAT_MUTEXES + \
       CONFIGURE_MAXIMUM_ADA_TASKS + \
       CONFIGURE_MAXIMUM_FAKE_ADA_TASKS + \
@@ -2220,6 +2249,7 @@ const rtems_libio_helper rtems_fs_init_helper =
    */
   #define CONFIGURE_POSIX_CONDITION_VARIABLES \
     (CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES + \
+      CONFIGURE_LIBBLOCK_POSIX_CONDITION_VARIABLES + \
       CONFIGURE_MAXIMUM_ADA_TASKS + \
       CONFIGURE_MAXIMUM_FAKE_ADA_TASKS + \
       CONFIGURE_GO_INIT_CONDITION_VARIABLES + \
