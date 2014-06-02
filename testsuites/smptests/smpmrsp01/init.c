@@ -866,8 +866,16 @@ static void Init(rtems_task_argument arg)
 
   ctx->main_task_id = rtems_task_self();
 
-  for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
+  for (cpu_index = 0; cpu_index < 2; ++cpu_index) {
     sc = rtems_scheduler_ident(cpu_index, &ctx->scheduler_ids[cpu_index]);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  }
+
+  for (cpu_index = 2; cpu_index < cpu_count; ++cpu_index) {
+    sc = rtems_scheduler_ident(
+      cpu_index / 2 + 1,
+      &ctx->scheduler_ids[cpu_index]
+    );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
 
