@@ -185,9 +185,9 @@ static void test_delete(void)
 static void delay_ipi_task(rtems_task_argument variant)
 {
   test_context *ctx = &test_instance;
-  rtems_interrupt_level level;
+  ISR_Level level;
 
-  rtems_interrupt_disable(level);
+  _ISR_Disable_without_giant(level);
   (void) level;
 
   _SMP_barrier_Wait(&ctx->barrier, &ctx->worker_barrier_state, CPU_COUNT);
@@ -249,9 +249,9 @@ static void delay_switch_task(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
   rtems_status_code sc;
-  rtems_interrupt_level level;
+  ISR_Level level;
 
-  rtems_interrupt_disable(level);
+  _ISR_Disable_without_giant(level);
   (void) level;
 
   ctx->delay_switch_for_executing = _Thread_Get_executing();
