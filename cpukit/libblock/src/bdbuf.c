@@ -182,7 +182,6 @@ typedef enum {
   RTEMS_BDBUF_FATAL_ONCE,
   RTEMS_BDBUF_FATAL_MTX_ATTR_INIT,
   RTEMS_BDBUF_FATAL_MTX_ATTR_SETPROTO,
-  RTEMS_BDBUF_FATAL_MTX_ATTR_SETTYPE,
   RTEMS_BDBUF_FATAL_CV_WAIT,
   RTEMS_BDBUF_FATAL_CV_BROADCAST
 } rtems_bdbuf_fatal_code;
@@ -350,10 +349,6 @@ rtems_bdbuf_lock_create (rtems_name name, rtems_bdbuf_lock_type *lock)
   eno = pthread_mutexattr_setprotocol (&attr, PTHREAD_PRIO_INHERIT);
   if (eno != 0)
     rtems_bdbuf_fatal (RTEMS_BDBUF_FATAL_MTX_ATTR_SETPROTO);
-
-  eno = pthread_mutexattr_settype (&attr, PTHREAD_MUTEX_RECURSIVE);
-  if (eno != 0)
-    rtems_bdbuf_fatal (RTEMS_BDBUF_FATAL_MTX_ATTR_SETTYPE);
 
   eno = pthread_mutex_init (lock, &attr);
 
@@ -3093,16 +3088,22 @@ rtems_bdbuf_gather_for_purge (rtems_chain_control *purge_list,
   }
 }
 
-void
-rtems_bdbuf_purge_dev (rtems_disk_device *dd)
+static void
+rtems_bdbuf_do_purge_dev (rtems_disk_device *dd)
 {
   rtems_chain_control purge_list;
 
   rtems_chain_initialize_empty (&purge_list);
-  rtems_bdbuf_lock_cache ();
   rtems_bdbuf_read_ahead_reset (dd);
   rtems_bdbuf_gather_for_purge (&purge_list, dd);
   rtems_bdbuf_purge_list (&purge_list);
+}
+
+void
+rtems_bdbuf_purge_dev (rtems_disk_device *dd)
+{
+  rtems_bdbuf_lock_cache ();
+  rtems_bdbuf_do_purge_dev (dd);
   rtems_bdbuf_unlock_cache ();
 }
 
@@ -3146,7 +3147,7 @@ rtems_bdbuf_set_block_size (rtems_disk_device *dd,
       dd->block_to_media_block_shift = block_to_media_block_shift;
       dd->bds_per_group = bds_per_group;
 
-      rtems_bdbuf_purge_dev (dd);
+      rtems_bdbuf_do_purge_dev (dd);
     }
     else
     {
