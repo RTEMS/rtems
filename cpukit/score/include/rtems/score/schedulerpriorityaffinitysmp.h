@@ -57,7 +57,7 @@ extern "C" {
     _Scheduler_priority_SMP_Change_priority, \
     _Scheduler_priority_affinity_SMP_Node_initialize, \
     _Scheduler_default_Node_destroy, \
-    _Scheduler_priority_SMP_Update, \
+    _Scheduler_priority_SMP_Update_priority, \
     _Scheduler_priority_Priority_compare, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \

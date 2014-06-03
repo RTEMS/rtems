@@ -48,7 +48,7 @@ extern "C" {
     _Scheduler_EDF_Change_priority,  /* change priority entry point */ \
     _Scheduler_EDF_Node_initialize,  /* node initialize entry point */ \
     _Scheduler_default_Node_destroy, /* node destroy entry point */ \
-    _Scheduler_EDF_Update,           /* update entry point */ \
+    _Scheduler_EDF_Update_priority,  /* update priority entry point */ \
     _Scheduler_EDF_Priority_compare, /* compares two priorities */ \
     _Scheduler_EDF_Release_job,      /* new period of task */ \
     _Scheduler_default_Tick,         /* tick entry point */ \
@@ -161,9 +161,10 @@ void _Scheduler_EDF_Node_initialize(
  *  @param[in] the_thread will have its scheduler specific information
  *             structure updated.
  */
-void _Scheduler_EDF_Update(
+void _Scheduler_EDF_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Control         new_priority
 );
 
 /**

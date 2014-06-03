@@ -20,14 +20,16 @@
 
 #include <rtems/score/scheduleredfimpl.h>
 
-void _Scheduler_EDF_Update(
+void _Scheduler_EDF_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Control         new_priority
 )
 {
   Scheduler_EDF_Node *node = _Scheduler_EDF_Node_get( the_thread );
 
   (void) scheduler;
+  (void) new_priority;
 
   if (node->queue_state == SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN) {
     /* Shifts the priority to the region of background tasks. */

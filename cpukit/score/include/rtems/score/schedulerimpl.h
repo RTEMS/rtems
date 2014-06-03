@@ -209,16 +209,22 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_destroy(
 }
 
 /**
- * @brief Scheduler update.
+ * @brief Updates the scheduler about a priority change of a not ready thread.
  *
- * This routine updates @a the_thread->scheduler
+ * @param[in] the_thread The thread.
+ * @param[in] new_priority The new priority of the thread.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Update(
+RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Control         new_priority
 )
 {
-  ( *scheduler->Operations.update )( scheduler, the_thread );
+  ( *scheduler->Operations.update_priority )(
+    scheduler,
+    the_thread,
+    new_priority
+  );
 }
 
 /**
@@ -367,7 +373,11 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Set(
     _Scheduler_Node_destroy( current_scheduler, the_thread );
     the_thread->scheduler = scheduler;
     _Scheduler_Node_initialize( scheduler, the_thread );
-    _Scheduler_Update( scheduler, the_thread );
+    _Scheduler_Update_priority(
+      scheduler,
+      the_thread,
+      the_thread->current_priority
+    );
     _Thread_Clear_state( the_thread, STATES_MIGRATING );
   }
 #else

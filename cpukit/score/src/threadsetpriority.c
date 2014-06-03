@@ -28,5 +28,9 @@ void _Thread_Set_priority(
 {
   the_thread->current_priority = new_priority;
 
-  _Scheduler_Update( _Scheduler_Get( the_thread ), the_thread );
+  _Scheduler_Update_priority(
+    _Scheduler_Get( the_thread),
+    the_thread,
+    new_priority
+  );
 }

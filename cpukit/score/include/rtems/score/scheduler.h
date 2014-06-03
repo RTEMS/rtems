@@ -77,8 +77,12 @@ typedef struct {
   /** @see _Scheduler_Node_destroy() */
   void ( *node_destroy )( const Scheduler_Control *, Thread_Control * );
 
-  /** @see _Scheduler_Update() */
-  void ( *update )( const Scheduler_Control *, Thread_Control * );
+  /** @see _Scheduler_Update_priority() */
+  void ( *update_priority )(
+    const Scheduler_Control *,
+    Thread_Control *,
+    Priority_Control
+  );
 
   /** @see _Scheduler_Priority_compare() */
   int ( *priority_compare )(
@@ -277,10 +281,12 @@ void _Scheduler_default_Node_destroy(
  *
  * @param[in] scheduler Unused.
  * @param[in] the_thread Unused.
+ * @param[in] new_priority Unused.
  */
-void _Scheduler_default_Update(
+void _Scheduler_default_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Control         new_priority
 );
 
 /**

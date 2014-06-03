@@ -93,15 +93,16 @@ static void _Scheduler_priority_SMP_Do_update(
   );
 }
 
-void _Scheduler_priority_SMP_Update(
+void _Scheduler_priority_SMP_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control *thread
+  Thread_Control *thread,
+  Priority_Control new_priority
 )
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
   Scheduler_Node *node = _Scheduler_Node_get( thread );
 
-  _Scheduler_priority_SMP_Do_update( context, node, thread->current_priority );
+  _Scheduler_priority_SMP_Do_update( context, node, new_priority );
 }
 
 static Thread_Control *_Scheduler_priority_SMP_Get_highest_ready(

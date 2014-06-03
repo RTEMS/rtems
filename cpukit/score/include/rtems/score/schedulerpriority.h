@@ -55,7 +55,7 @@ extern "C" {
     _Scheduler_priority_Change_priority,  /* change priority entry point */ \
     _Scheduler_default_Node_initialize,   /* node initialize entry point */ \
     _Scheduler_default_Node_destroy,      /* node destroy entry point */ \
-    _Scheduler_priority_Update,           /* update entry point */ \
+    _Scheduler_priority_Update_priority,  /* update priority entry point */ \
     _Scheduler_priority_Priority_compare, /* compares two priorities */ \
     _Scheduler_default_Release_job,       /* new period of task */ \
     _Scheduler_default_Tick,              /* tick entry point */ \
@@ -139,16 +139,13 @@ void _Scheduler_priority_Schedule(
 );
 
 /**
- *  @brief Update the scheduler priority.
- *  This routine updates @a the_thread->scheduler based on @a the_scheduler
- *  structures and thread state.
- *
- *  @param[in] the_thread will have its scheduler specific information
- *             structure updated.
+ *  @brief Updates the scheduler node to reflect the new priority of the
+ *  thread.
  */
-void _Scheduler_priority_Update(
+void _Scheduler_priority_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Control         new_priority
 );
 
 /**

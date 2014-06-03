@@ -106,7 +106,7 @@ void _Thread_Change_priority(
       scheduler = _Scheduler_Get( the_thread );
       _Scheduler_Schedule( scheduler, the_thread );
     } else {
-      _Scheduler_Update( scheduler, the_thread );
+      _Scheduler_Update_priority( scheduler, the_thread, new_priority );
     }
     _ISR_Enable( level );
 

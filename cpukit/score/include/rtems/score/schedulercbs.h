@@ -55,7 +55,7 @@ extern "C" {
     _Scheduler_EDF_Change_priority,  /* change priority entry point */ \
     _Scheduler_CBS_Node_initialize,  /* node initialize entry point */ \
     _Scheduler_default_Node_destroy, /* node destroy entry point */ \
-    _Scheduler_EDF_Update,           /* update entry point */ \
+    _Scheduler_EDF_Update_priority,  /* update priority entry point */ \
     _Scheduler_EDF_Priority_compare, /* compares two priorities */ \
     _Scheduler_CBS_Release_job,      /* new period of task */ \
     _Scheduler_default_Tick,         /* tick entry point */ \
