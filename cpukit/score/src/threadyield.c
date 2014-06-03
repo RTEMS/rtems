@@ -34,7 +34,7 @@ void _Thread_Yield( Thread_Control *executing )
   _ISR_Disable( level );
 
   if ( _States_Is_ready( executing->current_state ) ) {
-    _Scheduler_Yield( _Scheduler_Get( executing ), executing );
+    _Scheduler_Yield( executing );
   }
 
   _ISR_Enable( level );

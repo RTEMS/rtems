@@ -37,7 +37,7 @@ void _Thread_Clear_state(
       the_thread->current_state = _States_Clear( state, current_state );
 
       if ( _States_Is_ready( current_state ) ) {
-        _Scheduler_Unblock( _Scheduler_Get( the_thread ), the_thread );
+        _Scheduler_Unblock( the_thread );
       }
   }
   _ISR_Enable( level );

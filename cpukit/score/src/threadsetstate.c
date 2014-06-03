@@ -39,7 +39,7 @@ void _Thread_Set_state(
   if ( _States_Is_ready( current_state ) ) {
     the_thread->current_state = state;
 
-    _Scheduler_Block( _Scheduler_Get( the_thread ), the_thread );
+    _Scheduler_Block( the_thread );
   } else {
     the_thread->current_state = _States_Set( state, current_state);
   }

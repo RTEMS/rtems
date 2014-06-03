@@ -40,11 +40,7 @@ rtems_status_code rtems_rate_monotonic_cancel(
       }
       (void) _Watchdog_Remove( &the_period->Timer );
       the_period->state = RATE_MONOTONIC_INACTIVE;
-      _Scheduler_Release_job(
-        _Scheduler_Get( the_period->owner ),
-        the_period->owner,
-        0
-      );
+      _Scheduler_Release_job( the_period->owner, 0 );
       _Objects_Put( &the_period->Object );
       return RTEMS_SUCCESSFUL;
 

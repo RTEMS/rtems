@@ -18,6 +18,7 @@ void _Scheduler_default_Start_idle(
   Per_CPU_Control         *cpu
 )
 {
+  (void) scheduler;
   (void) cpu;
-  _Scheduler_Unblock( scheduler, the_thread );
+  _Scheduler_Unblock( the_thread );
 }

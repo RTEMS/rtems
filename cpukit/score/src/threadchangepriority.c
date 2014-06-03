@@ -81,17 +81,14 @@ void _Thread_Change_priority(
    *  we are not REALLY changing priority.
    */
   if ( the_thread->current_priority != new_priority ) {
-    ISR_Level                level;
-    const Scheduler_Control *scheduler;
+    ISR_Level level;
 
     _ISR_Disable( level );
 
-    scheduler = _Scheduler_Get( the_thread );
     the_thread->current_priority = new_priority;
 
     if ( _States_Is_ready( the_thread->current_state ) ) {
       _Scheduler_Change_priority(
-        scheduler,
         the_thread,
         new_priority,
         prepend_it
@@ -103,10 +100,9 @@ void _Thread_Change_priority(
        *  We altered the set of thread priorities.  So let's figure out
        *  who is the heir and if we need to switch to them.
        */
-      scheduler = _Scheduler_Get( the_thread );
-      _Scheduler_Schedule( scheduler, the_thread );
+      _Scheduler_Schedule( the_thread );
     } else {
-      _Scheduler_Update_priority( scheduler, the_thread, new_priority );
+      _Scheduler_Update_priority( the_thread, new_priority );
     }
     _ISR_Enable( level );
 

@@ -42,6 +42,19 @@ extern "C" {
  */
 void _Scheduler_Handler_initialization( void );
 
+RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get(
+  const Thread_Control *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  return the_thread->scheduler;
+#else
+  (void) the_thread;
+
+  return &_Scheduler_Table[ 0 ];
+#endif
+}
+
 RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_CPU_index(
   uint32_t cpu_index
 )
@@ -80,18 +93,17 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_CPU(
  */
 
 /**
- * @brief Scheduler schedule.
+ * @brief General scheduling decision.
  *
  * This kernel routine implements the scheduling decision logic for
  * the scheduler. It does NOT dispatch.
  *
  * @param[in] the_thread The thread which state changed previously.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Schedule(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-)
+RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( Thread_Control *the_thread )
 {
+  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+
   ( *scheduler->Operations.schedule )( scheduler, the_thread );
 }
 
@@ -103,43 +115,44 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Schedule(
  *
  * @param[in] the_thread The yielding thread.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Yield(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-)
+RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
 {
+  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+
   ( *scheduler->Operations.yield )( scheduler, the_thread );
 }
 
 /**
- * @brief Scheduler block.
+ * @brief Blocks a thread with respect to the scheduler.
  *
  * This routine removes @a the_thread from the scheduling decision for
  * the scheduler. The primary task is to remove the thread from the
  * ready queue.  It performs any necessary schedulering operations
  * including the selection of a new heir thread.
+ *
+ * @param[in] the_thread The thread.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Block(
-  const Scheduler_Control *scheduler,
-  Thread_Control               *the_thread
-)
+RTEMS_INLINE_ROUTINE void _Scheduler_Block( Thread_Control *the_thread )
 {
+  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+
   ( *scheduler->Operations.block )( scheduler, the_thread );
 }
 
 /**
- * @brief Scheduler unblock.
+ * @brief Unblocks a thread with respect to the scheduler.
  *
  * This routine adds @a the_thread to the scheduling decision for
  * the scheduler.  The primary task is to add the thread to the
  * ready queue per the schedulering policy and update any appropriate
  * scheduling variables, for example the heir thread.
+ *
+ * @param[in] the_thread The thread.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Unblock(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-)
+RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
 {
+  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+
   ( *scheduler->Operations.unblock )( scheduler, the_thread );
 }
 
@@ -150,7 +163,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock(
  * must ensure that the priority value actually changed and is not equal to the
  * current priority value.
  *
- * @param[in] scheduler The scheduler instance.
  * @param[in] the_thread The thread changing its priority.
  * @param[in] new_priority The new thread priority.
  * @param[in] prepend_it In case this is true, then enqueue the thread as the
@@ -158,12 +170,13 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock(
  * priority group.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority(
-  const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Priority_Control         new_priority,
   bool                     prepend_it
 )
 {
+  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+
   ( *scheduler->Operations.change_priority )(
     scheduler,
     the_thread,
@@ -215,11 +228,12 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_destroy(
  * @param[in] new_priority The new priority of the thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  Priority_Control         new_priority
+  Thread_Control   *the_thread,
+  Priority_Control  new_priority
 )
 {
+  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+
   ( *scheduler->Operations.update_priority )(
     scheduler,
     the_thread,
@@ -253,16 +267,18 @@ RTEMS_INLINE_ROUTINE int _Scheduler_Priority_compare(
 }
 
 /**
- * @brief Scheduler release job.
+ * @brief Releases a job of a thread with respect to the scheduler.
  *
- * This routine is called when a new period of task is issued.
+ * @param[in] the_thread The thread.
+ * @param[in] length The period length.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Release_job(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  uint32_t                 length
+  Thread_Control *the_thread,
+  uint32_t        length
 )
 {
+  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+
   ( *scheduler->Operations.release_job )( scheduler, the_thread, length );
 }
 
@@ -348,19 +364,6 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Has_processor_ownership(
 #endif
 }
 
-RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get(
-  const Thread_Control *the_thread
-)
-{
-#if defined(RTEMS_SMP)
-  return the_thread->scheduler;
-#else
-  (void) the_thread;
-
-  return &_Scheduler_Table[ 0 ];
-#endif
-}
-
 RTEMS_INLINE_ROUTINE void _Scheduler_Set(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
@@ -374,11 +377,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Set(
     _Scheduler_Node_destroy( current_scheduler, the_thread );
     the_thread->scheduler = scheduler;
     _Scheduler_Node_initialize( scheduler, the_thread );
-    _Scheduler_Update_priority(
-      scheduler,
-      the_thread,
-      the_thread->current_priority
-    );
+    _Scheduler_Update_priority( the_thread, the_thread->current_priority );
     _Thread_Clear_state( the_thread, STATES_MIGRATING );
   }
 #else
