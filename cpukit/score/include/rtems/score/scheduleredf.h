@@ -46,8 +46,8 @@ extern "C" {
     _Scheduler_EDF_Block,            /* block entry point */ \
     _Scheduler_EDF_Unblock,          /* unblock entry point */ \
     _Scheduler_EDF_Change_priority,  /* change priority entry point */ \
-    _Scheduler_EDF_Allocate,         /* allocate entry point */ \
-    _Scheduler_default_Free,         /* free entry point */ \
+    _Scheduler_EDF_Node_initialize,  /* node initialize entry point */ \
+    _Scheduler_default_Node_destroy, /* node destroy entry point */ \
     _Scheduler_EDF_Update,           /* update entry point */ \
     _Scheduler_EDF_Priority_compare, /* compares two priorities */ \
     _Scheduler_EDF_Release_job,      /* new period of task */ \
@@ -146,14 +146,9 @@ void _Scheduler_EDF_Schedule(
 );
 
 /**
- *  @brief Allocates EDF specific information of @a the_thread.
- *
- *  This routine allocates EDF specific information of @a the_thread.
- *
- *  @param[in] the_thread is the thread the scheduler is allocating
- *             management memory for.
+ *  @brief Initializes an EDF specific scheduler node of @a the_thread.
  */
-bool _Scheduler_EDF_Allocate(
+void _Scheduler_EDF_Node_initialize(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );

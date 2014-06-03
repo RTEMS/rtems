@@ -64,7 +64,7 @@ void _Scheduler_priority_SMP_Initialize( const Scheduler_Control *scheduler )
   _Scheduler_priority_Ready_queue_initialize( &self->Ready[ 0 ] );
 }
 
-bool _Scheduler_priority_SMP_Allocate(
+void _Scheduler_priority_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 )
@@ -72,8 +72,6 @@ bool _Scheduler_priority_SMP_Allocate(
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
 
   _Scheduler_SMP_Node_initialize( node );
-
-  return true;
 }
 
 static void _Scheduler_priority_SMP_Do_update(

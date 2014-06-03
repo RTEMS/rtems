@@ -42,7 +42,7 @@ void _Scheduler_simple_SMP_Initialize( const Scheduler_Control *scheduler )
   _Chain_Initialize_empty( &self->Ready );
 }
 
-bool _Scheduler_simple_SMP_Allocate(
+void _Scheduler_simple_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
@@ -50,8 +50,6 @@ bool _Scheduler_simple_SMP_Allocate(
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( the_thread );
 
   _Scheduler_SMP_Node_initialize( node );
-
-  return true;
 }
 
 static void _Scheduler_simple_SMP_Do_update(

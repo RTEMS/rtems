@@ -204,7 +204,8 @@ libscore_a_SOURCES += src/log2table.c
 libscore_a_SOURCES += src/scheduler.c
 libscore_a_SOURCES += src/schedulergetaffinity.c
 libscore_a_SOURCES += src/schedulersetaffinity.c
-libscore_a_SOURCES += src/schedulerdefaultallocatefree.c
+libscore_a_SOURCES += src/schedulerdefaultnodedestroy.c
+libscore_a_SOURCES += src/schedulerdefaultnodeinit.c
 libscore_a_SOURCES += src/schedulerdefaultreleasejob.c
 libscore_a_SOURCES += src/schedulerdefaultschedule.c
 libscore_a_SOURCES += src/schedulerdefaultstartidle.c
@@ -231,7 +232,7 @@ libscore_a_SOURCES += src/schedulersimple.c \
 
 ## SCHEDULEREDF_C_FILES
 libscore_a_SOURCES += src/scheduleredf.c \
-    src/scheduleredfallocate.c \
+    src/scheduleredfnodeinit.c \
     src/scheduleredfblock.c \
     src/scheduleredfchangepriority.c \
     src/scheduleredfprioritycompare.c \
@@ -243,7 +244,7 @@ libscore_a_SOURCES += src/scheduleredf.c \
 
 ## SCHEDULERCBS_C_FILES
 libscore_a_SOURCES += src/schedulercbs.c \
-    src/schedulercbsallocate.c \
+    src/schedulercbsnodeinit.c \
     src/schedulercbsattachthread.c \
     src/schedulercbscleanup.c \
     src/schedulercbscreateserver.c \

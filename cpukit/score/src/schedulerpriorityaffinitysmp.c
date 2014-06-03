@@ -32,7 +32,7 @@ _Scheduler_priority_affinity_Node_get( Thread_Control *thread )
     _Scheduler_Node_get( thread );
 }
 
-bool _Scheduler_priority_affinity_SMP_Allocate(
+void _Scheduler_priority_affinity_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
@@ -44,8 +44,6 @@ bool _Scheduler_priority_affinity_SMP_Allocate(
 
   node->Affinity = *_CPU_set_Default();
   node->Affinity.set = &node->Affinity.preallocated;
-
-  return true;
 }
 
 bool _Scheduler_priority_affinity_SMP_Get_affinity(

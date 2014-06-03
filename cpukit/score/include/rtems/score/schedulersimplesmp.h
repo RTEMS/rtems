@@ -65,8 +65,8 @@ typedef struct {
     _Scheduler_simple_SMP_Block, \
     _Scheduler_simple_SMP_Unblock, \
     _Scheduler_simple_SMP_Change_priority, \
-    _Scheduler_simple_SMP_Allocate, \
-    _Scheduler_default_Free, \
+    _Scheduler_simple_SMP_Node_initialize, \
+    _Scheduler_default_Node_destroy, \
     _Scheduler_default_Update, \
     _Scheduler_priority_Priority_compare, \
     _Scheduler_default_Release_job, \
@@ -78,7 +78,7 @@ typedef struct {
 
 void _Scheduler_simple_SMP_Initialize( const Scheduler_Control *scheduler );
 
-bool _Scheduler_simple_SMP_Allocate(
+void _Scheduler_simple_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );

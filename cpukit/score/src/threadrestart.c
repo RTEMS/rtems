@@ -71,7 +71,7 @@ static void _Thread_Free( Thread_Control *the_thread )
   /*
    * Free the per-thread scheduling information.
    */
-  _Scheduler_Free( _Scheduler_Get( the_thread ), the_thread );
+  _Scheduler_Node_destroy( _Scheduler_Get( the_thread ), the_thread );
 
   /*
    *  The thread might have been FP.  So deal with that.

@@ -173,29 +173,39 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority(
 }
 
 /**
- * @brief Scheduler allocate.
+ * @brief Initializes a scheduler node.
  *
- * This routine allocates @a the_thread->scheduler
+ * The scheduler node contains arbitrary data on function entry.  The caller
+ * must ensure that _Scheduler_Node_destroy() will be called after a
+ * _Scheduler_Node_initialize() before the memory of the scheduler node is
+ * destroyed.
+ *
+ * @param[in] scheduler The scheduler instance.
+ * @param[in] the_thread The thread containing the scheduler node.
  */
-RTEMS_INLINE_ROUTINE bool _Scheduler_Allocate(
+RTEMS_INLINE_ROUTINE void _Scheduler_Node_initialize(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
 {
-  return ( *scheduler->Operations.allocate )( scheduler, the_thread );
+  return ( *scheduler->Operations.node_initialize )( scheduler, the_thread );
 }
 
 /**
- * @brief Scheduler free.
+ * @brief Destroys a scheduler node.
  *
- * This routine frees @a the_thread->scheduler
+ * The caller must ensure that _Scheduler_Node_destroy() will be called only
+ * after a corresponding _Scheduler_Node_initialize().
+ *
+ * @param[in] scheduler The scheduler instance.
+ * @param[in] the_thread The thread containing the scheduler node.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Free(
+RTEMS_INLINE_ROUTINE void _Scheduler_Node_destroy(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
 {
-  ( *scheduler->Operations.free )( scheduler, the_thread );
+  ( *scheduler->Operations.node_destroy )( scheduler, the_thread );
 }
 
 /**
@@ -354,9 +364,9 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Set(
 
   if ( current_scheduler != scheduler ) {
     _Thread_Set_state( the_thread, STATES_MIGRATING );
-    _Scheduler_Free( current_scheduler, the_thread );
+    _Scheduler_Node_destroy( current_scheduler, the_thread );
     the_thread->scheduler = scheduler;
-    _Scheduler_Allocate( scheduler, the_thread );
+    _Scheduler_Node_initialize( scheduler, the_thread );
     _Scheduler_Update( scheduler, the_thread );
     _Thread_Clear_state( the_thread, STATES_MIGRATING );
   }

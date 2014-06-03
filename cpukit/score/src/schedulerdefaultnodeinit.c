@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @brief Scheduler Default Allocate and Release Operation
+ * @brief Scheduler Default Node Initialization Operation
  *
  * @ingroup ScoreScheduler
  */
@@ -21,22 +21,11 @@
 
 #include <rtems/score/scheduler.h>
 
-bool _Scheduler_default_Allocate(
+void _Scheduler_default_Node_initialize(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
 {
-  ( void ) scheduler;
-  ( void ) the_thread;
-
-  return true;
-}
-
-void _Scheduler_default_Free(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-)
-{
-  ( void ) scheduler;
-  ( void ) the_thread;
+  (void) scheduler;
+  (void) the_thread;
 }

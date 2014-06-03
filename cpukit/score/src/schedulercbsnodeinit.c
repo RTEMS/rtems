@@ -1,7 +1,7 @@
-/**
+/*
  *  @file
  *
- *  @brief Scheduler EDF Allocate
+ *  @brief Scheduler CBS Allocate
  *  @ingroup ScoreScheduler
  */
 
@@ -18,19 +18,18 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/scheduleredfimpl.h>
+#include <rtems/score/schedulercbsimpl.h>
 
-bool _Scheduler_EDF_Allocate(
+void _Scheduler_CBS_Node_initialize(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
 {
-  Scheduler_EDF_Node *node = _Scheduler_EDF_Node_get( the_thread );
+  Scheduler_CBS_Node *node = _Scheduler_CBS_Node_get( the_thread );
 
   (void) scheduler;
 
-  node->thread = the_thread;
-  node->queue_state = SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN;
-
-  return true;
+  node->Base.thread = the_thread;
+  node->Base.queue_state = SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN;
+  node->cbs_server = NULL;
 }

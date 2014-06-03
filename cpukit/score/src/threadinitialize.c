@@ -52,7 +52,7 @@ bool _Thread_Initialize(
   #endif
   bool                     extension_status;
   size_t                   i;
-  bool                     scheduler_allocated = false;
+  bool                     scheduler_node_initialized = false;
   Per_CPU_Control         *cpu = _Per_CPU_Get_by_index( 0 );
 
 #if defined( RTEMS_SMP )
@@ -198,10 +198,8 @@ bool _Thread_Initialize(
   the_thread->real_priority           = priority;
   the_thread->Start.initial_priority  = priority;
 
-  scheduler_allocated = _Scheduler_Allocate( scheduler, the_thread );
-  if ( !scheduler_allocated ) {
-    goto failed;
-  }
+  _Scheduler_Node_initialize( scheduler, the_thread );
+  scheduler_node_initialized = true;
 
   _Thread_Set_priority( the_thread, priority );
 
@@ -246,8 +244,8 @@ bool _Thread_Initialize(
 
 failed:
 
-  if ( scheduler_allocated ) {
-    _Scheduler_Free( scheduler, the_thread );
+  if ( scheduler_node_initialized ) {
+    _Scheduler_Node_destroy( scheduler, the_thread );
   }
 
   _Workspace_Free( the_thread->Start.tls_area );

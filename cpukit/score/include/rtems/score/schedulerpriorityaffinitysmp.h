@@ -55,8 +55,8 @@ extern "C" {
     _Scheduler_priority_SMP_Block, \
     _Scheduler_priority_SMP_Unblock, \
     _Scheduler_priority_SMP_Change_priority, \
-    _Scheduler_priority_affinity_SMP_Allocate, \
-    _Scheduler_default_Free, \
+    _Scheduler_priority_affinity_SMP_Node_initialize, \
+    _Scheduler_default_Node_destroy, \
     _Scheduler_priority_SMP_Update, \
     _Scheduler_priority_Priority_compare, \
     _Scheduler_default_Release_job, \
@@ -75,7 +75,7 @@ extern "C" {
  *  @param[in] the_thread is the thread the scheduler is allocating
  *             management memory for.
  */
-bool _Scheduler_priority_affinity_SMP_Allocate(
+void _Scheduler_priority_affinity_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );

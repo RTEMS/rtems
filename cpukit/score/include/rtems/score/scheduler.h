@@ -71,11 +71,11 @@ typedef struct {
     bool
   );
 
-  /** @see _Scheduler_Allocate() */
-  bool ( *allocate )( const Scheduler_Control *, Thread_Control * );
+  /** @see _Scheduler_Node_initialize() */
+  void ( *node_initialize )( const Scheduler_Control *, Thread_Control * );
 
-  /** @see _Scheduler_Free() */
-  void ( *free )( const Scheduler_Control *, Thread_Control * );
+  /** @see _Scheduler_Node_destroy() */
+  void ( *node_destroy )( const Scheduler_Control *, Thread_Control * );
 
   /** @see _Scheduler_Update() */
   void ( *update )( const Scheduler_Control *, Thread_Control * );
@@ -251,14 +251,12 @@ void _Scheduler_default_Schedule(
 );
 
 /**
- * @brief Returns true.
+ * @brief Does nothing.
  *
  * @param[in] scheduler Unused.
  * @param[in] the_thread Unused.
- *
- * @retval true Always.
  */
-bool _Scheduler_default_Allocate(
+void _Scheduler_default_Node_initialize(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );
@@ -269,7 +267,7 @@ bool _Scheduler_default_Allocate(
  * @param[in] scheduler Unused.
  * @param[in] the_thread Unused.
  */
-void _Scheduler_default_Free(
+void _Scheduler_default_Node_destroy(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );
