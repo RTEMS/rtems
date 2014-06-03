@@ -34,6 +34,8 @@
 #define _RTEMS_TMTEST27
 #include <tm27.h>
 
+const char rtems_test_name[] = "RHILATENCY";
+
 #define BENCHMARKS 50000
 
 rtems_task Task_1(
@@ -57,7 +59,7 @@ rtems_task Init(
 
   Print_Warning();
 
-  puts( "*** START OF RHILATENCY ***" );
+  TEST_BEGIN();
 
   if (
     _Scheduler_Table[ 0 ].Operations.initialize
@@ -111,7 +113,7 @@ rtems_task Task_1(
     0
   );
 
-  puts( "*** END OF RHILATENCY ***" );
+  TEST_END();
   rtems_test_exit( 0 );
 }
 

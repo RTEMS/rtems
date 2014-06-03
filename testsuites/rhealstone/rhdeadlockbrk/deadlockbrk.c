@@ -7,6 +7,8 @@
 #include <rtems/timerdrv.h>
 #include <timesys.h>
 
+const char rtems_test_name[] = "RHDEADLOCKBRK";
+
 #define BENCHMARKS 20000
 
 rtems_task Task01( rtems_task_argument ignored );
@@ -34,7 +36,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   Print_Warning();
 
-  puts( "*** START OF RHDEADLOCKBRK ***" );
+  TEST_BEGIN();
 
   sem_attr = RTEMS_INHERIT_PRIORITY | RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY;
 
@@ -141,7 +143,7 @@ rtems_task Task01( rtems_task_argument ignored )
        tswitch_overhead,        /* Overhead of loop and task switches */
        tobtain_overhead
     );
-    puts( "*** END OF RHDEADLOCKBRK ***" );
+    TEST_END();
     rtems_test_exit( 0 );
   }
 
