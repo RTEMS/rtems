@@ -84,7 +84,7 @@ rtems_task Init(
 
 /* include an extra slot for registering the termios one dynamically */
 #define CONFIGURE_MAXIMUM_DRIVERS 3
-#define CONFIGURE_MAXIMUM_DEVICES 6
+#define CONFIGURE_MAXIMUM_DEVICES 10
 
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
