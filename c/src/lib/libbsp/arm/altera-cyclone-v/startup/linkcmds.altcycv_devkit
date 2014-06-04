@@ -5,7 +5,7 @@ MEMORY {
 }
 
 SECTIONS {
-  .nocache : {
+  .nocache (NOLOAD) : {
     bsp_section_nocache_begin = .;
     *(SORT(.bsp_nocache*))
     bsp_section_nocache_end = .;
