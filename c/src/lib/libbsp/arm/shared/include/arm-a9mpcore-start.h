@@ -96,6 +96,37 @@ arm_a9mpcore_start_scu_enable(volatile a9mpcore_scu *scu)
   arm_a9mpcore_start_errata_764369_handler(scu);
 }
 
+#ifdef RTEMS_SMP
+BSP_START_TEXT_SECTION static inline void
+arm_a9mpcore_start_on_secondary_processor(void)
+{
+  uint32_t ctrl;
+
+  arm_a9mpcore_start_set_vector_base();
+
+  arm_gic_irq_initialize_secondary_cpu();
+
+  ctrl = arm_cp15_start_setup_mmu_and_cache(
+    0,
+    ARM_CP15_CTRL_AFE | ARM_CP15_CTRL_Z
+  );
+
+  arm_cp15_set_domain_access_control(
+    ARM_CP15_DAC_DOMAIN(ARM_MMU_DEFAULT_CLIENT_DOMAIN, ARM_CP15_DAC_CLIENT)
+  );
+
+  /* FIXME: Sharing the translation table between processors is brittle */
+  arm_cp15_set_translation_table_base(
+    (uint32_t *) bsp_translation_table_base
+  );
+
+  ctrl |= ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M;
+  arm_cp15_set_control(ctrl);
+
+  _SMP_Start_multitasking_on_secondary_processor();
+}
+#endif
+
 BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_hook_0(void)
 {
   volatile a9mpcore_scu *scu =
@@ -119,37 +150,7 @@ BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_hook_0(void)
 
 #ifdef RTEMS_SMP
   if (cpu_id != 0) {
-    arm_a9mpcore_start_set_vector_base();
-
-    if (cpu_id < rtems_configuration_get_maximum_processors()) {
-      uint32_t ctrl;
-
-      arm_gic_irq_initialize_secondary_cpu();
-
-      ctrl = arm_cp15_start_setup_mmu_and_cache(
-        0,
-        ARM_CP15_CTRL_AFE | ARM_CP15_CTRL_Z
-      );
-
-      arm_cp15_set_domain_access_control(
-        ARM_CP15_DAC_DOMAIN(ARM_MMU_DEFAULT_CLIENT_DOMAIN, ARM_CP15_DAC_CLIENT)
-      );
-
-      /* FIXME: Sharing the translation table between processors is brittle */
-      arm_cp15_set_translation_table_base(
-        (uint32_t *) bsp_translation_table_base
-      );
-
-      ctrl |= ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M;
-      arm_cp15_set_control(ctrl);
-
-      _SMP_Start_multitasking_on_secondary_processor();
-    } else {
-      /* FIXME: Shutdown processor */
-      while (1) {
-        __asm__ volatile ("wfi");
-      }
-    }
+    arm_a9mpcore_start_on_secondary_processor();
   }
 #endif
 }
