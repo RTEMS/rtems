@@ -143,15 +143,15 @@ BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_hook_0(void)
 {
   volatile a9mpcore_scu *scu =
     (volatile a9mpcore_scu *) BSP_ARM_A9MPCORE_SCU_BASE;
-  uint32_t cpu_id;
+  uint32_t cpu_id = arm_cortex_a9_get_multiprocessor_cpu_id();
 
-  arm_a9mpcore_start_scu_enable(scu);
+  if (cpu_id == 0) {
+    arm_a9mpcore_start_scu_enable(scu);
+  }
 
 #ifdef RTEMS_SMP
   arm_a9mpcore_start_enable_smp_in_auxiliary_control();
 #endif
-
-  cpu_id = arm_cortex_a9_get_multiprocessor_cpu_id();
 
   arm_a9mpcore_start_scu_invalidate(scu, cpu_id, 0xf);
 
