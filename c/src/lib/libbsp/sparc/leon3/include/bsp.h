@@ -62,6 +62,9 @@ void *bsp_idle_thread( uintptr_t ignored );
 /* Maximum supported APBUARTs by BSP */
 #define BSP_NUMBER_OF_TERMIOS_PORTS 8
 
+/* Make sure maximum number of consoles fit in filesystem */
+#define BSP_MAXIMUM_DEVICES 8
+
 /*
  * Network driver configuration
  */
