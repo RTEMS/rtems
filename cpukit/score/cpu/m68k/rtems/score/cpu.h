@@ -479,7 +479,7 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored );
  */
 
 #if ( defined(__mcoldfire__) )
-#define _CPU_Fatal_halt( _error ) \
+#define _CPU_Fatal_halt( _source, _error ) \
   { __asm__ volatile( "move.w %%sr,%%d0\n\t" \
 		  "or.l %2,%%d0\n\t" \
 		  "move.w %%d0,%%sr\n\t" \
@@ -491,7 +491,7 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored );
 		  : "d0", "d1" ); \
   }
 #else
-#define _CPU_Fatal_halt( _error ) \
+#define _CPU_Fatal_halt( _source, _error ) \
   { __asm__ volatile( "movl  %0,%%d0; " \
                   "orw   #0x0700,%%sr; " \
                   "stop  #0x2700" : "=d" ((_error)) : "0" ((_error)) ); \

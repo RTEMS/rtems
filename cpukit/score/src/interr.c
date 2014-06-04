@@ -49,7 +49,7 @@ void _Terminate(
 
   _System_state_Set( SYSTEM_STATE_TERMINATED );
 
-  _CPU_Fatal_halt( the_error );
+  _CPU_Fatal_halt( the_source, the_error );
 
   /* will not return from this routine */
   while (true);

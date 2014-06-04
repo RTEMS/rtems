@@ -913,7 +913,7 @@ void _CPU_Context_Initialize(
  *  halts/stops the CPU.
  */
 
-#define _CPU_Fatal_halt( _error ) \
+#define _CPU_Fatal_halt( _source, _error ) \
   do { \
     unsigned int _level; \
     _CPU_ISR_Disable(_level); \

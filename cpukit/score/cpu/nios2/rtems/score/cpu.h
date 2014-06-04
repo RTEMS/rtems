@@ -310,7 +310,8 @@ void _CPU_Context_Initialize(
 #define _CPU_Context_Restart_self( _the_context ) \
   _CPU_Context_restore( (_the_context) );
 
-void _CPU_Fatal_halt( uint32_t _error ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+void _CPU_Fatal_halt( uint32_t _source, uint32_t _error )
+  RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /**
  * @brief CPU initialization.

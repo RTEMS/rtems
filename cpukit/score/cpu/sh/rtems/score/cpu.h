@@ -675,9 +675,9 @@ SCORE_EXTERN void _CPU_Context_Initialize(
 #ifdef BSP_FATAL_HALT
   /* we manage the fatal error in the board support package */
   void bsp_fatal_halt( uint32_t   _error);
-#define _CPU_Fatal_halt( _error ) bsp_fatal_halt( _error)
+#define _CPU_Fatal_halt( _source, _error ) bsp_fatal_halt( _error)
 #else
-#define _CPU_Fatal_halt( _error)\
+#define _CPU_Fatal_halt( _source, _error)\
 { \
   __asm__ volatile("mov.l %0,r0"::"m" (_error)); \
   __asm__ volatile("mov #1, r4"); \

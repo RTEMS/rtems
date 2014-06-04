@@ -814,7 +814,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  XXX document implementation including references if appropriate
  */
 
-#define _CPU_Fatal_halt( _error ) \
+#define _CPU_Fatal_halt( _source, _error ) \
   { \
   }
 

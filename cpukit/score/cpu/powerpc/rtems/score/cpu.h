@@ -677,7 +677,7 @@ void _BSP_Fatal_error(unsigned int);
 
 #endif /* ASM */
 
-#define _CPU_Fatal_halt( _error ) \
+#define _CPU_Fatal_halt( _source, _error ) \
   _BSP_Fatal_error(_error)
 
 /* end of Fatal Error manager macros */

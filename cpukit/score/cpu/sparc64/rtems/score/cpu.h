@@ -905,7 +905,7 @@ void _CPU_Context_Initialize(
  *  halts/stops the CPU.
  */
 
-#define _CPU_Fatal_halt( _error ) \
+#define _CPU_Fatal_halt( _source, _error ) \
   do { \
     uint32_t   level; \
     \

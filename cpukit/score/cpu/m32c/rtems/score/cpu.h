@@ -906,7 +906,7 @@ void _CPU_Context_Restart_self(
  *
  * XXX document implementation including references if appropriate
  */
-#define _CPU_Fatal_halt( _error ) \
+#define _CPU_Fatal_halt( _source, _error ) \
   { \
   }
 

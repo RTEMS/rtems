@@ -455,7 +455,7 @@ void _CPU_Context_Initialize(
     *(*(_destination)) = _CPU_Null_fp_context; \
   } while (0)
 
-#define _CPU_Fatal_halt( _err )             \
+#define _CPU_Fatal_halt( _source, _err )    \
    do {                                     \
      uint32_t _level;                       \
      uint32_t _error = _err;                \

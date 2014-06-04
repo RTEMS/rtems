@@ -871,7 +871,7 @@ void _CPU_Context_Initialize(
  *
  * Move the error code into r10, disable interrupts and halt.
  */
-#define _CPU_Fatal_halt( _error ) \
+#define _CPU_Fatal_halt( _source, _error ) \
   do { \
     __asm__ __volatile__ ( "di" ); \
     __asm__ __volatile__ ( "mov %0, r10; " : "=r" ((_error)) ); \

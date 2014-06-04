@@ -912,7 +912,7 @@ void _CPU_Context_Initialize(
  *
  * XXX document implementation including references if appropriate
  */
-#define _CPU_Fatal_halt( _error ) \
+#define _CPU_Fatal_halt( _source, _error ) \
   { \
     __asm__ volatile ( "cli R1; \
                     R1 = %0; \

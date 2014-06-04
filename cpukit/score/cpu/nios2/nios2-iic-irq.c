@@ -133,5 +133,5 @@ void __ISR_Handler(void)
 
 void __Exception_Handler(CPU_Exception_frame *efr)
 {
-  _CPU_Fatal_halt(0xECC0);
+  _CPU_Fatal_halt(RTEMS_FATAL_SOURCE_EXCEPTION, 0xECC0); /* source ignored */
 }
