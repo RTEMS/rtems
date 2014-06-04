@@ -125,6 +125,18 @@ arm_a9mpcore_start_on_secondary_processor(void)
 
   _SMP_Start_multitasking_on_secondary_processor();
 }
+
+BSP_START_TEXT_SECTION static inline void
+arm_a9mpcore_start_enable_smp_in_auxiliary_control(void)
+{
+  /*
+   * Enable cache coherency support and cache/MMU maintenance broadcasts for
+   * this processor.
+   */
+  uint32_t actlr = arm_cp15_get_auxiliary_control();
+  actlr |= ARM_CORTEX_A9_ACTL_SMP | ARM_CORTEX_A9_ACTL_FW;
+  arm_cp15_set_auxiliary_control(actlr);
+}
 #endif
 
 BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_hook_0(void)
@@ -136,12 +148,7 @@ BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_hook_0(void)
   arm_a9mpcore_start_scu_enable(scu);
 
 #ifdef RTEMS_SMP
-  /* Enable cache coherency support for this processor */
-  {
-    uint32_t actlr = arm_cp15_get_auxiliary_control();
-    actlr |= ARM_CORTEX_A9_ACTL_SMP | ARM_CORTEX_A9_ACTL_FW;
-    arm_cp15_set_auxiliary_control(actlr);
-  }
+  arm_a9mpcore_start_enable_smp_in_auxiliary_control();
 #endif
 
   cpu_id = arm_cortex_a9_get_multiprocessor_cpu_id();
