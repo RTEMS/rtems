@@ -122,22 +122,16 @@ static inline void arm_cache_l1_flush_1_data_line( const void *d_addr )
 
 static inline void arm_cache_l1_flush_entire_data( void )
 {
-  uint32_t              l1LineSize, l1Associativity, l1NumSets;
-  uint32_t              s, w;
-  uint32_t              set_way_param;
-  rtems_interrupt_level level;
-
+  uint32_t l1LineSize, l1Associativity, l1NumSets;
+  uint32_t s, w;
+  uint32_t set_way_param;
 
   /* ensure ordering with previous memory accesses */
   _ARM_Data_memory_barrier();
 
-  /* make cssr&csidr read atomic */
-  rtems_interrupt_disable( level );
-
   /* Get the L1 cache properties */
   arm_cache_l1_properties( &l1LineSize, &l1Associativity,
                                      &l1NumSets );
-  rtems_interrupt_enable( level );
 
   for ( w = 0; w < l1Associativity; ++w ) {
     for ( s = 0; s < l1NumSets; ++s ) {
@@ -158,22 +152,16 @@ static inline void arm_cache_l1_flush_entire_data( void )
 
 static inline void arm_cache_l1_invalidate_entire_data( void )
 {
-  uint32_t              l1LineSize, l1Associativity, l1NumSets;
-  uint32_t              s, w;
-  uint32_t              set_way_param;
-  rtems_interrupt_level level;
-
+  uint32_t l1LineSize, l1Associativity, l1NumSets;
+  uint32_t s, w;
+  uint32_t set_way_param;
 
   /* ensure ordering with previous memory accesses */
   _ARM_Data_memory_barrier();
 
-  /* make cssr&csidr read atomic */
-  rtems_interrupt_disable( level );
-
   /* Get the L1 cache properties */
   arm_cache_l1_properties( &l1LineSize, &l1Associativity,
                                      &l1NumSets );
-  rtems_interrupt_enable( level );
 
   for ( w = 0; w < l1Associativity; ++w ) {
     for ( s = 0; s < l1NumSets; ++s ) {
@@ -194,22 +182,17 @@ static inline void arm_cache_l1_invalidate_entire_data( void )
 
 static inline void arm_cache_l1_clean_and_invalidate_entire_data( void )
 {
-  uint32_t              l1LineSize, l1Associativity, l1NumSets;
-  uint32_t              s, w;
-  uint32_t              set_way_param;
-  rtems_interrupt_level level;
-
+  uint32_t l1LineSize, l1Associativity, l1NumSets;
+  uint32_t s, w;
+  uint32_t set_way_param;
 
   /* ensure ordering with previous memory accesses */
   _ARM_Data_memory_barrier();
 
-  /* make cssr&csidr read atomic */
-  rtems_interrupt_disable( level );
 
   /* Get the L1 cache properties */
   arm_cache_l1_properties( &l1LineSize, &l1Associativity,
                                      &l1NumSets );
-  rtems_interrupt_enable( level );
 
   for ( w = 0; w < l1Associativity; ++w ) {
     for ( s = 0; s < l1NumSets; ++s ) {
@@ -371,17 +354,13 @@ static inline void arm_cache_l1_unfreeze_instruction( void )
 
 static inline void arm_cache_l1_enable_data( void )
 {
-  rtems_interrupt_level level;
-  uint32_t              ctrl;
-
+  uint32_t ctrl;
 
   arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_DATA );
 
   assert( ARM_CACHE_L1_CPU_DATA_ALIGNMENT == arm_cp15_get_data_cache_line_size() );
 
-  rtems_interrupt_disable( level );
   ctrl = arm_cp15_get_control();
-  rtems_interrupt_enable( level );
 
   /* Only enable the cache if it is disabled */
   if ( !( ctrl & ARM_CP15_CTRL_C ) ) {
@@ -391,35 +370,21 @@ static inline void arm_cache_l1_enable_data( void )
     /* Enable the Data cache */
     ctrl |= ARM_CP15_CTRL_C;
 
-    rtems_interrupt_disable( level );
     arm_cp15_set_control( ctrl );
-    rtems_interrupt_enable( level );
   }
 }
 
 static inline void arm_cache_l1_disable_data( void )
 {
-  rtems_interrupt_level level;
-
-
   /* Clean and invalidate the Data cache */
   arm_cache_l1_flush_entire_data();
 
-  rtems_interrupt_disable( level );
-
   /* Disable the Data cache */
   arm_cp15_set_control( arm_cp15_get_control() & ~ARM_CP15_CTRL_C );
-
-  rtems_interrupt_enable( level );
 }
 
 static inline void arm_cache_l1_disable_instruction( void )
 {
-  rtems_interrupt_level level;
-
-
-  rtems_interrupt_disable( level );
-
   /* Synchronize the processor */
   _ARM_Data_synchronization_barrier();
 
@@ -428,22 +393,16 @@ static inline void arm_cache_l1_disable_instruction( void )
 
   /* Disable the Instruction cache */
   arm_cp15_set_control( arm_cp15_get_control() & ~ARM_CP15_CTRL_I );
-
-  rtems_interrupt_enable( level );
 }
 
 static inline void arm_cache_l1_enable_instruction( void )
 {
-  rtems_interrupt_level level;
-  uint32_t              ctrl;
-
+  uint32_t ctrl;
 
   arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_INSTRUCTION );
 
   assert( ARM_CACHE_L1_CPU_INSTRUCTION_ALIGNMENT
           == arm_cp15_get_data_cache_line_size() );
-
-  rtems_interrupt_disable( level );
 
   /* Enable Instruction cache only if it is disabled */
   ctrl = arm_cp15_get_control();
@@ -457,8 +416,6 @@ static inline void arm_cache_l1_enable_instruction( void )
 
     arm_cp15_set_control( ctrl );
   }
-
-  rtems_interrupt_enable( level );
 
   arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_DATA );
 }
