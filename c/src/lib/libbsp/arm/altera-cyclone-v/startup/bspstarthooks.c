@@ -48,8 +48,7 @@ BSP_START_DATA_SECTION static const arm_cp15_start_section_config
   {
     .begin = (uint32_t) bsp_section_nocache_begin,
     .end   = (uint32_t) bsp_section_nocache_end,
-
-    .flags = ARMV7_MMU_DATA_READ_WRITE | ARM_MMU_SECT_TEX_0
+    .flags = ARMV7_MMU_DATA_READ_WRITE
   }, { /* Periphery area */
     .begin = 0xFC000000U,
     .end   = 0x00000000U,
