@@ -282,9 +282,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Tick( void )
   for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
     const Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
     const Scheduler_Control *scheduler = _Scheduler_Get_by_CPU( cpu );
+    Thread_Control *executing = cpu->executing;
 
-    if ( scheduler != NULL ) {
-      ( *scheduler->Operations.tick )( scheduler, cpu->executing );
+    if ( scheduler != NULL && executing != NULL ) {
+      ( *scheduler->Operations.tick )( scheduler, executing );
     }
   }
 }
