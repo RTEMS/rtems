@@ -24,6 +24,10 @@
 
 static uint64_t a9mpcore_clock_last_tick_k;
 
+static uint32_t a9mpcore_clock_last_tick_cmpvallower;
+
+static uint32_t a9mpcore_clock_autoinc;
+
 /* This is defined in clockdrv_shell.h */
 void Clock_isr(rtems_irq_hdl_param arg);
 
@@ -36,6 +40,13 @@ __attribute__ ((weak)) uint32_t a9mpcore_clock_periphclk(void)
 static void a9mpcore_clock_at_tick(void)
 {
   volatile a9mpcore_gt *gt = A9MPCORE_GT;
+
+  /*
+   * FIXME: Now the _TOD_Get_with_nanoseconds() yields wrong values until
+   * _TOD_Tickle_ticks() managed to update the uptime.  See also PR2180.
+   */
+  a9mpcore_clock_last_tick_cmpvallower =
+    gt->cmpvallower - a9mpcore_clock_autoinc;
 
   gt->irqst = A9MPCORE_GT_IRQST_EFLG;
 }
@@ -79,8 +90,6 @@ static void a9mpcore_clock_initialize(void)
   uint32_t interval = (uint32_t) ((periphclk * us_per_tick) / 1000000);
   uint64_t cmpval;
 
-  a9mpcore_clock_last_tick_k = (UINT64_C(1000000000) << 32) / periphclk;
-
   gt->ctrl &= A9MPCORE_GT_CTRL_TMR_EN;
   gt->irqst = A9MPCORE_GT_IRQST_EFLG;
 
@@ -90,6 +99,11 @@ static void a9mpcore_clock_initialize(void)
   gt->cmpvallower = (uint32_t) cmpval;
   gt->cmpvalupper = (uint32_t) (cmpval >> 32);
   gt->autoinc = interval;
+
+  a9mpcore_clock_last_tick_k = (UINT64_C(1000000000) << 32) / periphclk;
+  a9mpcore_clock_last_tick_cmpvallower = (uint32_t) cmpval - interval;
+  a9mpcore_clock_autoinc = interval;
+
   gt->ctrl = A9MPCORE_GT_CTRL_AUTOINC_EN
     | A9MPCORE_GT_CTRL_IRQ_EN
     | A9MPCORE_GT_CTRL_COMP_EN
@@ -141,15 +155,10 @@ static uint32_t a9mpcore_clock_nanoseconds_since_last_tick(void)
 {
   volatile a9mpcore_gt *gt = A9MPCORE_GT;
   uint64_t k = a9mpcore_clock_last_tick_k;
+  uint32_t n = a9mpcore_clock_last_tick_cmpvallower;
   uint32_t c = gt->cntrlower;
-  uint32_t n = gt->cmpvallower;
-  uint32_t i = gt->autoinc;
 
-  if ((gt->irqst & A9MPCORE_GT_IRQST_EFLG) != 0) {
-    n = gt->cmpvallower - i;
-  }
-
-  return (uint32_t) (((c - n + i) * k) >> 32);
+  return (uint32_t) (((c - n) * k) >> 32);
 }
 
 #define Clock_driver_support_at_tick() \
