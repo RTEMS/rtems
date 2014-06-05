@@ -491,6 +491,13 @@ arm_cp15_tlb_invalidate(void)
     : ARM_SWITCH_OUTPUT
     : [sbz] "r" (sbz)
   );
+
+  /*
+   * ARM Architecture Reference Manual, ARMv7-A and ARMv7-R edition, Issue C,
+   * B3.10.1 General TLB maintenance requirements.
+   */
+  _ARM_Data_synchronization_barrier();
+  _ARM_Instruction_synchronization_barrier();
 }
 
 ARM_CP15_TEXT_SECTION static inline void
