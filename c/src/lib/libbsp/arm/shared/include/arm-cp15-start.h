@@ -83,31 +83,8 @@ typedef struct {
   }
 
 extern const arm_cp15_start_section_config bsp_mm_config_table[];
+
 extern const size_t bsp_mm_config_table_size;
-
-BSP_START_TEXT_SECTION static inline void
-arm_cp15_set_domain_access_control(uint32_t val);
-
-BSP_START_TEXT_SECTION static inline void
-arm_cp15_set_translation_table_base(uint32_t *base);
-
-BSP_START_TEXT_SECTION static inline void
-arm_cp15_set_control(uint32_t val);
-
-BSP_START_TEXT_SECTION static inline uint32_t
-arm_cp15_get_control(void);
-
-BSP_START_TEXT_SECTION static inline void
-arm_cp15_cache_invalidate(void);
-
-BSP_START_TEXT_SECTION static inline void
-arm_cp15_tlb_invalidate(void);
-
-BSP_START_TEXT_SECTION static inline uint32_t
-arm_cp15_get_multiprocessor_affinity(void);
-
-BSP_START_TEXT_SECTION static inline uint32_t
-arm_cortex_a9_get_multiprocessor_cpu_id(void);
 
 BSP_START_TEXT_SECTION static inline void
 arm_cp15_start_set_translation_table_entries(

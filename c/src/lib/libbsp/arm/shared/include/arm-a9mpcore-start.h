@@ -36,24 +36,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-BSP_START_TEXT_SECTION static inline uint32_t
-arm_cp15_get_control(void);
-
-BSP_START_TEXT_SECTION static inline void
-arm_cp15_set_control(uint32_t val);
-
-BSP_START_TEXT_SECTION static inline uint32_t
-arm_cp15_get_auxiliary_control(void);
-
-BSP_START_TEXT_SECTION static inline void
-arm_cp15_set_auxiliary_control(uint32_t val);
-
-BSP_START_TEXT_SECTION static inline void
-arm_cp15_set_vector_base_address(void *base);
-
-BSP_START_TEXT_SECTION static inline void
-arm_cp15_branch_predictor_invalidate_all(void);
-
 BSP_START_TEXT_SECTION static inline void
 arm_a9mpcore_start_set_vector_base(void)
 {

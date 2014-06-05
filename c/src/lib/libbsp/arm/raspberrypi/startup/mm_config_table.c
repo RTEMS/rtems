@@ -20,6 +20,8 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#define ARM_CP15_TEXT_SECTION BSP_START_TEXT_SECTION
+
 #include <bsp/start.h>
 #include <bsp/arm-cp15-start.h>
 
