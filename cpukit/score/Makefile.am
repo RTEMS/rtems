@@ -130,6 +130,7 @@ libscore_a_SOURCES += src/mpci.c src/objectmp.c src/threadmp.c
 endif
 
 if HAS_SMP
+libscore_a_SOURCES += src/percpustatewait.c
 libscore_a_SOURCES += src/profilingsmplock.c
 libscore_a_SOURCES += src/schedulersmpvalidstatechanges.c
 libscore_a_SOURCES += src/schedulerpriorityaffinitysmp.c
