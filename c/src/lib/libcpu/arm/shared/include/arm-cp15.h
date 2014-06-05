@@ -630,7 +630,7 @@ static inline uint32_t arm_cp15_get_data_cache_line_size(void)
 }
 
 /* Read size of smallest instruction cache lines */
-static inline uint32_t arm_cp15_get_instruction_cche_line_size(void)
+static inline uint32_t arm_cp15_get_instruction_cache_line_size(void)
 {
   uint32_t mcls = 0;
   uint32_t ct = arm_cp15_get_cache_type();
