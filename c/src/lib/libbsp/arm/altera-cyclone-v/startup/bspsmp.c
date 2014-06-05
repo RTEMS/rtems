@@ -55,7 +55,11 @@ bool _CPU_SMP_Start_processor(uint32_t cpu_index)
       ALT_RSTMGR_MPUMODRST_CPU1_SET_MSK
     );
 
-    started = true;
+    /*
+     * Wait for secondary processor to complete its basic initialization so
+     * that we can enable the unified L2 cache.
+     */
+    started = _Per_CPU_State_wait_for_non_initial_state(cpu_index, 0);
   } else {
     started = false;
   }
@@ -76,6 +80,9 @@ void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
       NULL
     );
     assert(sc == RTEMS_SUCCESSFUL);
+
+    /* Enable unified L2 cache */
+    rtems_cache_enable_data();
   }
 }
 
