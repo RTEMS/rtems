@@ -352,28 +352,6 @@ static inline void arm_cache_l1_unfreeze_instruction( void )
   /* To be implemented as needed, if supported by hardware at all */
 }
 
-static inline void arm_cache_l1_enable_data( void )
-{
-  uint32_t ctrl;
-
-  arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_DATA );
-
-  assert( ARM_CACHE_L1_CPU_DATA_ALIGNMENT == arm_cp15_get_data_cache_line_size() );
-
-  ctrl = arm_cp15_get_control();
-
-  /* Only enable the cache if it is disabled */
-  if ( !( ctrl & ARM_CP15_CTRL_C ) ) {
-    /* Clean and invalidate the Data cache */
-    arm_cache_l1_invalidate_entire_data();
-
-    /* Enable the Data cache */
-    ctrl |= ARM_CP15_CTRL_C;
-
-    arm_cp15_set_control( ctrl );
-  }
-}
-
 static inline void arm_cache_l1_disable_data( void )
 {
   /* Clean and invalidate the Data cache */
@@ -393,31 +371,6 @@ static inline void arm_cache_l1_disable_instruction( void )
 
   /* Disable the Instruction cache */
   arm_cp15_set_control( arm_cp15_get_control() & ~ARM_CP15_CTRL_I );
-}
-
-static inline void arm_cache_l1_enable_instruction( void )
-{
-  uint32_t ctrl;
-
-  arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_INSTRUCTION );
-
-  assert( ARM_CACHE_L1_CPU_INSTRUCTION_ALIGNMENT
-          == arm_cp15_get_data_cache_line_size() );
-
-  /* Enable Instruction cache only if it is disabled */
-  ctrl = arm_cp15_get_control();
-
-  if ( !( ctrl & ARM_CP15_CTRL_I ) ) {
-    /* Invalidate the Instruction cache */
-    arm_cache_l1_invalidate_entire_instruction();
-
-    /* Enable the Instruction cache */
-    ctrl |= ARM_CP15_CTRL_I;
-
-    arm_cp15_set_control( ctrl );
-  }
-
-  arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_DATA );
 }
 
 static inline size_t arm_cache_l1_get_data_cache_size( void )

@@ -1361,7 +1361,6 @@ static inline void
 _CPU_cache_enable_data( void )
 {
   cache_l2c_310_enable();
-  arm_cache_l1_enable_data();
 }
 
 static inline void 
@@ -1375,7 +1374,6 @@ static inline void
 _CPU_cache_enable_instruction( void )
 {
   cache_l2c_310_enable();
-  arm_cache_l1_enable_instruction();
 }
 
 static inline void 
