@@ -30,6 +30,14 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/*
+ * Allow users of this header file to optionally place the inline functions
+ * into a non-standard section.
+ */
+#ifndef ARM_CP15_TEXT_SECTION
+  #define ARM_CP15_TEXT_SECTION
+#endif
+
 #define ARM_CP15_CACHE_PREPARE_MVA(mva) \
   ((const void *) (((uint32_t) (mva)) & ~0x1fU))
 
@@ -202,7 +210,8 @@ extern "C" {
 
 /** @} */
 
-static inline uint32_t arm_cp15_get_id_code(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_id_code(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t val;
@@ -217,7 +226,8 @@ static inline uint32_t arm_cp15_get_id_code(void)
   return val;
 }
 
-static inline uint32_t arm_cp15_get_tcm_status(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_tcm_status(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t val;
@@ -232,7 +242,8 @@ static inline uint32_t arm_cp15_get_tcm_status(void)
   return val;
 }
 
-static inline uint32_t arm_cp15_get_control(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_control(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t val;
@@ -247,7 +258,8 @@ static inline uint32_t arm_cp15_get_control(void)
   return val;
 }
 
-static inline void arm_cp15_set_control(uint32_t val)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_control(uint32_t val)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -279,7 +291,8 @@ static inline void arm_cp15_set_control(uint32_t val)
  *
  * @return The current control register value.
  */
-static inline uint32_t arm_cp15_mmu_disable(uint32_t cls)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_mmu_disable(uint32_t cls)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t ctrl;
@@ -315,7 +328,8 @@ static inline uint32_t arm_cp15_mmu_disable(uint32_t cls)
   return ctrl;
 }
 
-static inline uint32_t *arm_cp15_get_translation_table_base(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+*arm_cp15_get_translation_table_base(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t *base;
@@ -330,7 +344,8 @@ static inline uint32_t *arm_cp15_get_translation_table_base(void)
   return base;
 }
 
-static inline void arm_cp15_set_translation_table_base(uint32_t *base)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_translation_table_base(uint32_t *base)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -343,7 +358,8 @@ static inline void arm_cp15_set_translation_table_base(uint32_t *base)
   );
 }
 
-static inline uint32_t arm_cp15_get_domain_access_control(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_domain_access_control(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t val;
@@ -358,7 +374,8 @@ static inline uint32_t arm_cp15_get_domain_access_control(void)
   return val;
 }
 
-static inline void arm_cp15_set_domain_access_control(uint32_t val)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_domain_access_control(uint32_t val)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -371,7 +388,8 @@ static inline void arm_cp15_set_domain_access_control(uint32_t val)
   );
 }
 
-static inline uint32_t arm_cp15_get_data_fault_status(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_data_fault_status(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t val;
@@ -386,7 +404,8 @@ static inline uint32_t arm_cp15_get_data_fault_status(void)
   return val;
 }
 
-static inline void arm_cp15_set_data_fault_status(uint32_t val)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_data_fault_status(uint32_t val)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -399,7 +418,8 @@ static inline void arm_cp15_set_data_fault_status(uint32_t val)
   );
 }
 
-static inline uint32_t arm_cp15_get_instruction_fault_status(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_instruction_fault_status(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t val;
@@ -414,7 +434,8 @@ static inline uint32_t arm_cp15_get_instruction_fault_status(void)
   return val;
 }
 
-static inline void arm_cp15_set_instruction_fault_status(uint32_t val)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_instruction_fault_status(uint32_t val)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -427,7 +448,8 @@ static inline void arm_cp15_set_instruction_fault_status(uint32_t val)
   );
 }
 
-static inline void *arm_cp15_get_fault_address(void)
+ARM_CP15_TEXT_SECTION static inline void
+*arm_cp15_get_fault_address(void)
 {
   ARM_SWITCH_REGISTERS;
   void *mva;
@@ -442,7 +464,8 @@ static inline void *arm_cp15_get_fault_address(void)
   return mva;
 }
 
-static inline void arm_cp15_set_fault_address(const void *mva)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_fault_address(const void *mva)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -455,7 +478,8 @@ static inline void arm_cp15_set_fault_address(const void *mva)
   );
 }
 
-static inline void arm_cp15_tlb_invalidate(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_tlb_invalidate(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
@@ -469,7 +493,8 @@ static inline void arm_cp15_tlb_invalidate(void)
   );
 }
 
-static inline void arm_cp15_tlb_invalidate_entry(const void *mva)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_tlb_invalidate_entry(const void *mva)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -484,7 +509,8 @@ static inline void arm_cp15_tlb_invalidate_entry(const void *mva)
   );
 }
 
-static inline void arm_cp15_tlb_instruction_invalidate(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_tlb_instruction_invalidate(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
@@ -498,7 +524,8 @@ static inline void arm_cp15_tlb_instruction_invalidate(void)
   );
 }
 
-static inline void arm_cp15_tlb_instruction_invalidate_entry(const void *mva)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_tlb_instruction_invalidate_entry(const void *mva)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -513,7 +540,8 @@ static inline void arm_cp15_tlb_instruction_invalidate_entry(const void *mva)
   );
 }
 
-static inline void arm_cp15_tlb_data_invalidate(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_tlb_data_invalidate(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
@@ -527,7 +555,8 @@ static inline void arm_cp15_tlb_data_invalidate(void)
   );
 }
 
-static inline void arm_cp15_tlb_data_invalidate_entry(const void *mva)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_tlb_data_invalidate_entry(const void *mva)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -542,7 +571,8 @@ static inline void arm_cp15_tlb_data_invalidate_entry(const void *mva)
   );
 }
 
-static inline void arm_cp15_tlb_lockdown_entry(const void *mva)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_tlb_lockdown_entry(const void *mva)
 {
   uint32_t arm_switch_reg;
 
@@ -573,7 +603,8 @@ static inline void arm_cp15_tlb_lockdown_entry(const void *mva)
  */
 
 /* Read cache type register CTR */
-static inline uint32_t arm_cp15_get_cache_type(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_cache_type(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t val;
@@ -589,7 +620,8 @@ static inline uint32_t arm_cp15_get_cache_type(void)
 }
 
 /* Read size of smallest cache line of all instruction/data caches controlled by the processor */
-static inline uint32_t arm_cp15_get_min_cache_line_size(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_min_cache_line_size(void)
 {
   uint32_t mcls = 0;
   uint32_t ct = arm_cp15_get_cache_type();
@@ -611,7 +643,8 @@ static inline uint32_t arm_cp15_get_min_cache_line_size(void)
 }
 
 /* Read size of smallest data cache lines */
-static inline uint32_t arm_cp15_get_data_cache_line_size(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_data_cache_line_size(void)
 {
   uint32_t mcls = 0;
   uint32_t ct = arm_cp15_get_cache_type();
@@ -630,7 +663,8 @@ static inline uint32_t arm_cp15_get_data_cache_line_size(void)
 }
 
 /* Read size of smallest instruction cache lines */
-static inline uint32_t arm_cp15_get_instruction_cache_line_size(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_instruction_cache_line_size(void)
 {
   uint32_t mcls = 0;
   uint32_t ct = arm_cp15_get_cache_type();
@@ -650,7 +684,8 @@ static inline uint32_t arm_cp15_get_instruction_cache_line_size(void)
 
 /* CCSIDR, Cache Size ID Register */
 
-static inline uint32_t arm_cp15_get_cache_size_id(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_cache_size_id(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t val;
@@ -665,24 +700,28 @@ static inline uint32_t arm_cp15_get_cache_size_id(void)
   return val;
 }
 
-static inline uint32_t arm_ccsidr_get_line_power(uint32_t ccsidr)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_ccsidr_get_line_power(uint32_t ccsidr)
 {
   return (ccsidr & 0x7) + 4;
 }
 
-static inline uint32_t arm_ccsidr_get_associativity(uint32_t ccsidr)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_ccsidr_get_associativity(uint32_t ccsidr)
 {
   return ((ccsidr >> 3) & 0x3ff) + 1;
 }
 
-static inline uint32_t arm_ccsidr_get_num_sets(uint32_t ccsidr)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_ccsidr_get_num_sets(uint32_t ccsidr)
 {
   return ((ccsidr >> 13) & 0x7fff) + 1;
 }
 
 /* CLIDR, Cache Level ID Register */
 
-static inline uint32_t arm_cp15_get_cache_level_id(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_cache_level_id(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t val;
@@ -697,19 +736,22 @@ static inline uint32_t arm_cp15_get_cache_level_id(void)
   return val;
 }
 
-static inline uint32_t arm_clidr_get_level_of_coherency(uint32_t clidr)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_clidr_get_level_of_coherency(uint32_t clidr)
 {
   return (clidr >> 24) & 0x7;
 }
 
-static inline uint32_t arm_clidr_get_cache_type(uint32_t clidr, uint32_t level)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_clidr_get_cache_type(uint32_t clidr, uint32_t level)
 {
   return (clidr >> (3 * level)) & 0x7;
 }
 
 /* CSSELR, Cache Size Selection Register */
 
-static inline uint32_t arm_cp15_get_cache_size_selection(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_cache_size_selection(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t val;
@@ -724,7 +766,8 @@ static inline uint32_t arm_cp15_get_cache_size_selection(void)
   return val;
 }
 
-static inline void arm_cp15_set_cache_size_selection(uint32_t val)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_cache_size_selection(uint32_t val)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -738,7 +781,8 @@ static inline void arm_cp15_set_cache_size_selection(uint32_t val)
   );
 }
 
-static inline void arm_cp15_cache_invalidate(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_cache_invalidate(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
@@ -755,7 +799,8 @@ static inline void arm_cp15_cache_invalidate(void)
 
 /* ICIALLUIS, Instruction Cache Invalidate All to PoU, Inner Shareable */
 
-static inline void arm_cp15_instruction_cache_inner_shareable_invalidate_all(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_instruction_cache_inner_shareable_invalidate_all(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
@@ -772,7 +817,8 @@ static inline void arm_cp15_instruction_cache_inner_shareable_invalidate_all(voi
 
 /* BPIALLIS, Branch Predictor Invalidate All, Inner Shareable */
 
-static inline void arm_cp15_branch_predictor_inner_shareable_invalidate_all(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_branch_predictor_inner_shareable_invalidate_all(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
@@ -789,7 +835,8 @@ static inline void arm_cp15_branch_predictor_inner_shareable_invalidate_all(void
 
 /* BPIALL, Branch Predictor Invalidate All */
 
-static inline void arm_cp15_branch_predictor_invalidate_all(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_branch_predictor_invalidate_all(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
@@ -804,7 +851,8 @@ static inline void arm_cp15_branch_predictor_invalidate_all(void)
   );
 }
 
-static inline void arm_cp15_instruction_cache_invalidate(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_instruction_cache_invalidate(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
@@ -819,7 +867,8 @@ static inline void arm_cp15_instruction_cache_invalidate(void)
   );
 }
 
-static inline void arm_cp15_instruction_cache_invalidate_line(const void *mva)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_instruction_cache_invalidate_line(const void *mva)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -835,7 +884,8 @@ static inline void arm_cp15_instruction_cache_invalidate_line(const void *mva)
   );
 }
 
-static inline void arm_cp15_instruction_cache_invalidate_line_by_set_and_way(uint32_t set_and_way)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_instruction_cache_invalidate_line_by_set_and_way(uint32_t set_and_way)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -849,7 +899,8 @@ static inline void arm_cp15_instruction_cache_invalidate_line_by_set_and_way(uin
   );
 }
 
-static inline void arm_cp15_instruction_cache_prefetch_line(const void *mva)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_instruction_cache_prefetch_line(const void *mva)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -864,7 +915,8 @@ static inline void arm_cp15_instruction_cache_prefetch_line(const void *mva)
   );
 }
 
-static inline void arm_cp15_data_cache_invalidate(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_data_cache_invalidate(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
@@ -879,7 +931,8 @@ static inline void arm_cp15_data_cache_invalidate(void)
   );
 }
 
-static inline void arm_cp15_data_cache_invalidate_line(const void *mva)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_data_cache_invalidate_line(const void *mva)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -895,7 +948,8 @@ static inline void arm_cp15_data_cache_invalidate_line(const void *mva)
   );
 }
 
-static inline void arm_cp15_data_cache_invalidate_line_by_set_and_way(uint32_t set_and_way)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_data_cache_invalidate_line_by_set_and_way(uint32_t set_and_way)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -909,7 +963,8 @@ static inline void arm_cp15_data_cache_invalidate_line_by_set_and_way(uint32_t s
   );
 }
 
-static inline void arm_cp15_data_cache_invalidate_all_levels(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_data_cache_invalidate_all_levels(void)
 {
   uint32_t clidr = arm_cp15_get_cache_level_id();
   uint32_t loc = arm_clidr_get_level_of_coherency(clidr);
@@ -950,7 +1005,8 @@ static inline void arm_cp15_data_cache_invalidate_all_levels(void)
   }
 }
 
-static inline void arm_cp15_data_cache_clean_line(const void *mva)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_data_cache_clean_line(const void *mva)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -966,7 +1022,8 @@ static inline void arm_cp15_data_cache_clean_line(const void *mva)
   );
 }
 
-static inline void arm_cp15_data_cache_clean_line_by_set_and_way(uint32_t set_and_way)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_data_cache_clean_line_by_set_and_way(uint32_t set_and_way)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -980,7 +1037,8 @@ static inline void arm_cp15_data_cache_clean_line_by_set_and_way(uint32_t set_an
   );
 }
 
-static inline void arm_cp15_data_cache_test_and_clean(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_data_cache_test_and_clean(void)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -1000,7 +1058,8 @@ static inline void arm_cp15_data_cache_test_and_clean(void)
  * 	'MCR p15, 0, <Rd>, c7, c14, 0' means
  * 	Clean and Invalidate Entire Data Cache
  */
-static inline void arm_cp15_data_cache_clean_and_invalidate(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_data_cache_clean_and_invalidate(void)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -1016,7 +1075,8 @@ static inline void arm_cp15_data_cache_clean_and_invalidate(void)
   );
 }
 
-static inline void arm_cp15_data_cache_clean_and_invalidate_line(const void *mva)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_data_cache_clean_and_invalidate_line(const void *mva)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -1032,7 +1092,8 @@ static inline void arm_cp15_data_cache_clean_and_invalidate_line(const void *mva
   );
 }
 
-static inline void arm_cp15_data_cache_clean_and_invalidate_line_by_set_and_way(uint32_t set_and_way)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_data_cache_clean_and_invalidate_line_by_set_and_way(uint32_t set_and_way)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -1046,7 +1107,8 @@ static inline void arm_cp15_data_cache_clean_and_invalidate_line_by_set_and_way(
   );
 }
 
-static inline void arm_cp15_data_cache_test_and_clean_and_invalidate(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_data_cache_test_and_clean_and_invalidate(void)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -1064,7 +1126,8 @@ static inline void arm_cp15_data_cache_test_and_clean_and_invalidate(void)
 
 /** @} */
 
-static inline void arm_cp15_drain_write_buffer(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_drain_write_buffer(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
@@ -1079,7 +1142,8 @@ static inline void arm_cp15_drain_write_buffer(void)
   );
 }
 
-static inline void arm_cp15_wait_for_interrupt(void)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_wait_for_interrupt(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t sbz = 0;
@@ -1094,7 +1158,8 @@ static inline void arm_cp15_wait_for_interrupt(void)
   );
 }
 
-static inline uint32_t arm_cp15_get_multiprocessor_affinity(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_multiprocessor_affinity(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t mpidr;
@@ -1109,7 +1174,8 @@ static inline uint32_t arm_cp15_get_multiprocessor_affinity(void)
   return mpidr & 0xff;
 }
 
-static inline uint32_t arm_cortex_a9_get_multiprocessor_cpu_id(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cortex_a9_get_multiprocessor_cpu_id(void)
 {
   return arm_cp15_get_multiprocessor_affinity() & 0xff;
 }
@@ -1123,7 +1189,8 @@ static inline uint32_t arm_cortex_a9_get_multiprocessor_cpu_id(void)
 #define ARM_CORTEX_A9_ACTL_ALLOC_IN_ONE_WAY (1U << 8)
 #define ARM_CORTEX_A9_ACTL_PARITY_ON (1U << 9)
 
-static inline uint32_t arm_cp15_get_auxiliary_control(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_auxiliary_control(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t val;
@@ -1138,7 +1205,8 @@ static inline uint32_t arm_cp15_get_auxiliary_control(void)
   return val;
 }
 
-static inline void arm_cp15_set_auxiliary_control(uint32_t val)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_auxiliary_control(uint32_t val)
 {
   ARM_SWITCH_REGISTERS;
 
@@ -1153,7 +1221,8 @@ static inline void arm_cp15_set_auxiliary_control(uint32_t val)
 
 /* ID_PFR1, Processor Feature Register 1 */
 
-static inline uint32_t arm_cp15_get_processor_feature_1(void)
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_processor_feature_1(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t val;
@@ -1170,7 +1239,8 @@ static inline uint32_t arm_cp15_get_processor_feature_1(void)
 
 /* VBAR, Vector Base Address Register, Security Extensions */
 
-static inline void *arm_cp15_get_vector_base_address(void)
+ARM_CP15_TEXT_SECTION static inline void
+*arm_cp15_get_vector_base_address(void)
 {
   ARM_SWITCH_REGISTERS;
   void *base;
@@ -1185,7 +1255,8 @@ static inline void *arm_cp15_get_vector_base_address(void)
   return base;
 }
 
-static inline void arm_cp15_set_vector_base_address(void *base)
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_vector_base_address(void *base)
 {
   ARM_SWITCH_REGISTERS;
 
