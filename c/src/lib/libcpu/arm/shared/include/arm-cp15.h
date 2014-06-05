@@ -665,6 +665,21 @@ static inline uint32_t arm_cp15_get_cache_size_id(void)
   return val;
 }
 
+static inline uint32_t arm_ccsidr_get_line_power(uint32_t ccsidr)
+{
+  return (ccsidr & 0x7) + 4;
+}
+
+static inline uint32_t arm_ccsidr_get_associativity(uint32_t ccsidr)
+{
+  return ((ccsidr >> 3) & 0x3ff) + 1;
+}
+
+static inline uint32_t arm_ccsidr_get_num_sets(uint32_t ccsidr)
+{
+  return ((ccsidr >> 13) & 0x7fff) + 1;
+}
+
 /* CLIDR, Cache Level ID Register */
 
 static inline uint32_t arm_cp15_get_cache_level_id(void)
@@ -682,9 +697,14 @@ static inline uint32_t arm_cp15_get_cache_level_id(void)
   return val;
 }
 
-static inline uint32_t arm_cp15_get_level_of_cache_coherency(const uint32_t clidr)
+static inline uint32_t arm_clidr_get_level_of_coherency(uint32_t clidr)
 {
-  return( (clidr & 0x7000000) >> 23 );
+  return (clidr >> 24) & 0x7;
+}
+
+static inline uint32_t arm_clidr_get_cache_type(uint32_t clidr, uint32_t level)
+{
+  return (clidr >> (3 * level)) & 0x7;
 }
 
 /* CSSELR, Cache Size Selection Register */
@@ -887,6 +907,47 @@ static inline void arm_cp15_data_cache_invalidate_line_by_set_and_way(uint32_t s
     : [set_and_way] "r" (set_and_way)
     : "memory"
   );
+}
+
+static inline void arm_cp15_data_cache_invalidate_all_levels(void)
+{
+  uint32_t clidr = arm_cp15_get_cache_level_id();
+  uint32_t loc = arm_clidr_get_level_of_coherency(clidr);
+  uint32_t level = 0;
+
+  for (level = 0; level < loc; ++level) {
+    uint32_t ctype = arm_clidr_get_cache_type(clidr, level);
+
+    /* Check if this level has a data cache */
+    if ((ctype & 0x2) != 0) {
+      uint32_t ccsidr;
+      uint32_t line_power;
+      uint32_t associativity;
+      uint32_t way;
+      uint32_t way_shift;
+
+      arm_cp15_set_cache_size_selection(level << 1);
+      _ARM_Instruction_synchronization_barrier();
+
+      ccsidr = arm_cp15_get_cache_size_id();
+      line_power = arm_ccsidr_get_line_power(ccsidr);
+      associativity = arm_ccsidr_get_associativity(ccsidr);
+      way_shift = __builtin_clz(associativity - 1);
+
+      for (way = 0; way < associativity; ++way) {
+        uint32_t num_sets = arm_ccsidr_get_num_sets(ccsidr);
+        uint32_t set;
+
+        for (set = 0; set < num_sets; ++set) {
+          uint32_t set_way = (way << way_shift)
+            | (set << line_power)
+            | (level << 1);
+
+          arm_cp15_data_cache_invalidate_line_by_set_and_way(set_way);
+        }
+      }
+    }
+  }
 }
 
 static inline void arm_cp15_data_cache_clean_line(const void *mva)
