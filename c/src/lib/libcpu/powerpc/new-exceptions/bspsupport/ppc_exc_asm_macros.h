@@ -168,7 +168,7 @@ ppc_exc_min_prolog_sync_\_NAME:
 	 * if what's left compares against the 'ppc_exc_lock_std@sdarel'
 	 * address offset then we have a match...
 	 */
-	cmplwi	cr0, \_REG, ppc_exc_lock_std@sdarel@l
+	cmplwi	cr0, \_REG, ppc_exc_lock_std@sdarel
 
 	.endm
 
