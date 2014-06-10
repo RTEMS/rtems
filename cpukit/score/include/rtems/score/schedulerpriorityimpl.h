@@ -64,12 +64,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(
     _Chain_Initialize_empty( &ready_queues[index] );
 }
 
-RTEMS_INLINE_ROUTINE Scheduler_priority_Node *
-_Scheduler_priority_Get_scheduler_info( Thread_Control *thread )
-{
-  return ( Scheduler_priority_Node * ) thread->scheduler_node;
-}
-
 /**
  * @brief Enqueues a thread on the specified ready queue.
  *
