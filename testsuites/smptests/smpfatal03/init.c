@@ -115,7 +115,7 @@ static void fatal_extension(
 
     if (self == main_cpu) {
       assert(source == RTEMS_FATAL_SOURCE_SMP);
-      assert(code == SMP_FATAL_SHUTDOWN);
+      assert(code == SMP_FATAL_SHUTDOWN_RESPONSE);
     } else {
       assert(source == RTEMS_FATAL_SOURCE_APPLICATION);
       assert(code == 0xdeadbeef);
