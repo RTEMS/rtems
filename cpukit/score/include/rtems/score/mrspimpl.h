@@ -325,9 +325,9 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Release(
 
     _Resource_Node_extract( new_owner );
     _Resource_Node_set_dependency( new_owner, NULL );
-    _MRSP_Set_root( new_owner, new_owner );
     _Resource_Node_add_resource( new_owner, &mrsp->Resource );
     _Resource_Set_owner( &mrsp->Resource, new_owner );
+    _MRSP_Set_root( new_owner, new_owner );
     _MRSP_Add_state( rival, MRSP_RIVAL_STATE_NEW_OWNER );
   }
 
