@@ -96,6 +96,11 @@ typedef struct {
    * @brief The state of this node.
    */
   Scheduler_SMP_Node_state state;
+
+  /**
+   * @brief The current priority of thread owning this node.
+   */
+  Priority_Control priority;
 } Scheduler_SMP_Node;
 
 void _Scheduler_SMP_Start_idle(

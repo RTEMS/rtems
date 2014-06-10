@@ -49,66 +49,82 @@ void _Scheduler_simple_SMP_Node_initialize(
 {
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( the_thread );
 
-  _Scheduler_SMP_Node_initialize( node );
+  _Scheduler_SMP_Node_initialize( node, the_thread );
 }
 
 static void _Scheduler_simple_SMP_Do_update(
   Scheduler_Context *context,
-  Scheduler_Node *node,
-  Priority_Control new_priority
+  Scheduler_Node    *node_to_update,
+  Priority_Control   new_priority
 )
 {
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_downcast( node_to_update );
+
   (void) context;
-  (void) node;
-  (void) new_priority;
+
+  _Scheduler_SMP_Node_update_priority( node, new_priority );
 }
 
-static Thread_Control *_Scheduler_simple_SMP_Get_highest_ready(
+void _Scheduler_simple_SMP_Update_priority(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  Priority_Control         new_priority
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+  Scheduler_Node *node = _Scheduler_Node_get( thread );
+
+  _Scheduler_simple_SMP_Do_update( context, node, new_priority );
+}
+
+static Scheduler_Node *_Scheduler_simple_SMP_Get_highest_ready(
   Scheduler_Context *context,
-  Thread_Control    *thread
+  Scheduler_Node    *node
 )
 {
   Scheduler_simple_SMP_Context *self =
     _Scheduler_simple_SMP_Get_self( context );
 
-  (void) thread;
+  (void) node;
 
-  return (Thread_Control *) _Chain_First( &self->Ready );
+  return (Scheduler_Node *) _Chain_First( &self->Ready );
 }
 
 static void _Scheduler_simple_SMP_Move_from_scheduled_to_ready(
   Scheduler_Context *context,
-  Thread_Control *scheduled_to_ready
+  Scheduler_Node    *scheduled_to_ready
 )
 {
   Scheduler_simple_SMP_Context *self =
     _Scheduler_simple_SMP_Get_self( context );
 
-  _Chain_Extract_unprotected( &scheduled_to_ready->Object.Node );
-  _Scheduler_simple_Insert_priority_lifo(
+  _Chain_Extract_unprotected( &scheduled_to_ready->Node );
+  _Chain_Insert_ordered_unprotected(
     &self->Ready,
-    scheduled_to_ready
+    &scheduled_to_ready->Node,
+    _Scheduler_SMP_Insert_priority_lifo_order
   );
 }
 
 static void _Scheduler_simple_SMP_Move_from_ready_to_scheduled(
   Scheduler_Context *context,
-  Thread_Control *ready_to_scheduled
+  Scheduler_Node    *ready_to_scheduled
 )
 {
   Scheduler_simple_SMP_Context *self =
     _Scheduler_simple_SMP_Get_self( context );
 
-  _Chain_Extract_unprotected( &ready_to_scheduled->Object.Node );
-  _Scheduler_simple_Insert_priority_fifo(
+  _Chain_Extract_unprotected( &ready_to_scheduled->Node );
+  _Chain_Insert_ordered_unprotected(
     &self->Base.Scheduled,
-    ready_to_scheduled
+    &ready_to_scheduled->Node,
+    _Scheduler_SMP_Insert_priority_fifo_order
   );
 }
 
 static void _Scheduler_simple_SMP_Insert_ready_lifo(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Scheduler_Node    *node_to_insert
 )
 {
   Scheduler_simple_SMP_Context *self =
@@ -116,14 +132,14 @@ static void _Scheduler_simple_SMP_Insert_ready_lifo(
 
   _Chain_Insert_ordered_unprotected(
     &self->Ready,
-    &thread->Object.Node,
-    _Scheduler_simple_Insert_priority_lifo_order
+    &node_to_insert->Node,
+    _Scheduler_SMP_Insert_priority_lifo_order
   );
 }
 
 static void _Scheduler_simple_SMP_Insert_ready_fifo(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Scheduler_Node    *node_to_insert
 )
 {
   Scheduler_simple_SMP_Context *self =
@@ -131,19 +147,19 @@ static void _Scheduler_simple_SMP_Insert_ready_fifo(
 
   _Chain_Insert_ordered_unprotected(
     &self->Ready,
-    &thread->Object.Node,
-    _Scheduler_simple_Insert_priority_fifo_order
+    &node_to_insert->Node,
+    _Scheduler_SMP_Insert_priority_fifo_order
   );
 }
 
 static void _Scheduler_simple_SMP_Extract_from_ready(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Scheduler_Node    *node_to_extract
 )
 {
   (void) context;
 
-  _Chain_Extract_unprotected( &thread->Object.Node );
+  _Chain_Extract_unprotected( &node_to_extract->Node );
 }
 
 void _Scheduler_simple_SMP_Block(
@@ -165,7 +181,7 @@ void _Scheduler_simple_SMP_Block(
 
 static void _Scheduler_simple_SMP_Enqueue_ordered(
   Scheduler_Context *context,
-  Thread_Control *thread,
+  Scheduler_Node *node,
   Chain_Node_order order,
   Scheduler_SMP_Insert insert_ready,
   Scheduler_SMP_Insert insert_scheduled
@@ -173,7 +189,7 @@ static void _Scheduler_simple_SMP_Enqueue_ordered(
 {
   _Scheduler_SMP_Enqueue_ordered(
     context,
-    thread,
+    node,
     order,
     insert_ready,
     insert_scheduled,
@@ -185,13 +201,13 @@ static void _Scheduler_simple_SMP_Enqueue_ordered(
 
 static void _Scheduler_simple_SMP_Enqueue_lifo(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Scheduler_Node *node
 )
 {
   _Scheduler_simple_SMP_Enqueue_ordered(
     context,
-    thread,
-    _Scheduler_simple_Insert_priority_lifo_order,
+    node,
+    _Scheduler_SMP_Insert_priority_lifo_order,
     _Scheduler_simple_SMP_Insert_ready_lifo,
     _Scheduler_SMP_Insert_scheduled_lifo
   );
@@ -199,13 +215,13 @@ static void _Scheduler_simple_SMP_Enqueue_lifo(
 
 static void _Scheduler_simple_SMP_Enqueue_fifo(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Scheduler_Node *node
 )
 {
   _Scheduler_simple_SMP_Enqueue_ordered(
     context,
-    thread,
-    _Scheduler_simple_Insert_priority_fifo_order,
+    node,
+    _Scheduler_SMP_Insert_priority_fifo_order,
     _Scheduler_simple_SMP_Insert_ready_fifo,
     _Scheduler_SMP_Insert_scheduled_fifo
   );
@@ -213,7 +229,7 @@ static void _Scheduler_simple_SMP_Enqueue_fifo(
 
 static void _Scheduler_simple_SMP_Enqueue_scheduled_ordered(
   Scheduler_Context *context,
-  Thread_Control *thread,
+  Scheduler_Node *node,
   Chain_Node_order order,
   Scheduler_SMP_Insert insert_ready,
   Scheduler_SMP_Insert insert_scheduled
@@ -221,7 +237,7 @@ static void _Scheduler_simple_SMP_Enqueue_scheduled_ordered(
 {
   _Scheduler_SMP_Enqueue_scheduled_ordered(
     context,
-    thread,
+    node,
     order,
     _Scheduler_simple_SMP_Get_highest_ready,
     insert_ready,
@@ -233,13 +249,13 @@ static void _Scheduler_simple_SMP_Enqueue_scheduled_ordered(
 
 static void _Scheduler_simple_SMP_Enqueue_scheduled_lifo(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Scheduler_Node *node
 )
 {
   _Scheduler_simple_SMP_Enqueue_scheduled_ordered(
     context,
-    thread,
-    _Scheduler_simple_Insert_priority_lifo_order,
+    node,
+    _Scheduler_SMP_Insert_priority_lifo_order,
     _Scheduler_simple_SMP_Insert_ready_lifo,
     _Scheduler_SMP_Insert_scheduled_lifo
   );
@@ -247,13 +263,13 @@ static void _Scheduler_simple_SMP_Enqueue_scheduled_lifo(
 
 static void _Scheduler_simple_SMP_Enqueue_scheduled_fifo(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Scheduler_Node *node
 )
 {
   _Scheduler_simple_SMP_Enqueue_scheduled_ordered(
     context,
-    thread,
-    _Scheduler_simple_Insert_priority_fifo_order,
+    node,
+    _Scheduler_SMP_Insert_priority_fifo_order,
     _Scheduler_simple_SMP_Insert_ready_fifo,
     _Scheduler_SMP_Insert_scheduled_fifo
   );

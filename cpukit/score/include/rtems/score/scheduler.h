@@ -165,7 +165,24 @@ struct Scheduler_Control {
  * @brief Scheduler node for per-thread data.
  */
 struct Scheduler_Node {
-  /* No fields yet */
+#if defined(RTEMS_SMP)
+  /**
+   * @brief Chain node for usage in various scheduler data structures.
+   *
+   * Strictly this is the wrong place for this field since the data structures
+   * to manage scheduler nodes belong to the particular scheduler
+   * implementation.  Currently all SMP scheduler implementations use chains.
+   * The node is here to simplify things, just like the object node in the
+   * thread control block.  It may be replaced with a union to add a red-black
+   * tree node in the future.
+   */
+  Chain_Node Node;
+
+  /**
+   * @brief The thread owning this node.
+   */
+  Thread_Control *owner;
+#endif
 };
 
 /**

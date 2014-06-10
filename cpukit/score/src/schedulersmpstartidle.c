@@ -25,5 +25,5 @@ void _Scheduler_SMP_Start_idle(
   node->state = SCHEDULER_SMP_NODE_SCHEDULED;
 
   _Thread_Set_CPU( thread, cpu );
-  _Chain_Append_unprotected( &self->Scheduled, &thread->Object.Node );
+  _Chain_Append_unprotected( &self->Scheduled, &node->Base.Node );
 }

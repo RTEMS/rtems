@@ -25,7 +25,6 @@
 #endif
 
 #include <rtems/score/schedulerprioritysmpimpl.h>
-#include <rtems/score/schedulersmpimpl.h>
 
 static Scheduler_priority_SMP_Context *
 _Scheduler_priority_SMP_Get_context( const Scheduler_Control *scheduler )
@@ -50,7 +49,7 @@ void _Scheduler_priority_SMP_Node_initialize(
 {
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
 
-  _Scheduler_SMP_Node_initialize( node );
+  _Scheduler_SMP_Node_initialize( node, thread );
 }
 
 void _Scheduler_priority_SMP_Update_priority(
@@ -65,17 +64,17 @@ void _Scheduler_priority_SMP_Update_priority(
   _Scheduler_priority_SMP_Do_update( context, node, new_priority );
 }
 
-static Thread_Control *_Scheduler_priority_SMP_Get_highest_ready(
+static Scheduler_Node *_Scheduler_priority_SMP_Get_highest_ready(
   Scheduler_Context *context,
-  Thread_Control    *thread
+  Scheduler_Node    *node
 )
 {
   Scheduler_priority_SMP_Context *self =
     _Scheduler_priority_SMP_Get_self( context );
 
-  (void) thread;
+  (void) node;
 
-  return (Thread_Control *) _Scheduler_priority_Ready_queue_first(
+  return (Scheduler_Node *) _Scheduler_priority_Ready_queue_first(
     &self->Bit_map,
     &self->Ready[ 0 ]
   );
@@ -100,7 +99,7 @@ void _Scheduler_priority_SMP_Block(
 
 static void _Scheduler_priority_SMP_Enqueue_ordered(
   Scheduler_Context *context,
-  Thread_Control *thread,
+  Scheduler_Node *node,
   Chain_Node_order order,
   Scheduler_SMP_Insert insert_ready,
   Scheduler_SMP_Insert insert_scheduled
@@ -108,7 +107,7 @@ static void _Scheduler_priority_SMP_Enqueue_ordered(
 {
   _Scheduler_SMP_Enqueue_ordered(
     context,
-    thread,
+    node,
     order,
     insert_ready,
     insert_scheduled,
@@ -120,13 +119,13 @@ static void _Scheduler_priority_SMP_Enqueue_ordered(
 
 static void _Scheduler_priority_SMP_Enqueue_lifo(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Scheduler_Node *node
 )
 {
   _Scheduler_priority_SMP_Enqueue_ordered(
     context,
-    thread,
-    _Scheduler_simple_Insert_priority_lifo_order,
+    node,
+    _Scheduler_SMP_Insert_priority_lifo_order,
     _Scheduler_priority_SMP_Insert_ready_lifo,
     _Scheduler_SMP_Insert_scheduled_lifo
   );
@@ -134,13 +133,13 @@ static void _Scheduler_priority_SMP_Enqueue_lifo(
 
 static void _Scheduler_priority_SMP_Enqueue_fifo(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Scheduler_Node *node
 )
 {
   _Scheduler_priority_SMP_Enqueue_ordered(
     context,
-    thread,
-    _Scheduler_simple_Insert_priority_fifo_order,
+    node,
+    _Scheduler_SMP_Insert_priority_fifo_order,
     _Scheduler_priority_SMP_Insert_ready_fifo,
     _Scheduler_SMP_Insert_scheduled_fifo
   );
@@ -148,7 +147,7 @@ static void _Scheduler_priority_SMP_Enqueue_fifo(
 
 static void _Scheduler_priority_SMP_Enqueue_scheduled_ordered(
   Scheduler_Context *context,
-  Thread_Control *thread,
+  Scheduler_Node *node,
   Chain_Node_order order,
   Scheduler_SMP_Insert insert_ready,
   Scheduler_SMP_Insert insert_scheduled
@@ -156,7 +155,7 @@ static void _Scheduler_priority_SMP_Enqueue_scheduled_ordered(
 {
   _Scheduler_SMP_Enqueue_scheduled_ordered(
     context,
-    thread,
+    node,
     order,
     _Scheduler_priority_SMP_Get_highest_ready,
     insert_ready,
@@ -168,13 +167,13 @@ static void _Scheduler_priority_SMP_Enqueue_scheduled_ordered(
 
 static void _Scheduler_priority_SMP_Enqueue_scheduled_lifo(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Scheduler_Node *node
 )
 {
   _Scheduler_priority_SMP_Enqueue_scheduled_ordered(
     context,
-    thread,
-    _Scheduler_simple_Insert_priority_lifo_order,
+    node,
+    _Scheduler_SMP_Insert_priority_lifo_order,
     _Scheduler_priority_SMP_Insert_ready_lifo,
     _Scheduler_SMP_Insert_scheduled_lifo
   );
@@ -182,13 +181,13 @@ static void _Scheduler_priority_SMP_Enqueue_scheduled_lifo(
 
 static void _Scheduler_priority_SMP_Enqueue_scheduled_fifo(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Scheduler_Node *node
 )
 {
   _Scheduler_priority_SMP_Enqueue_scheduled_ordered(
     context,
-    thread,
-    _Scheduler_simple_Insert_priority_fifo_order,
+    node,
+    _Scheduler_SMP_Insert_priority_fifo_order,
     _Scheduler_priority_SMP_Insert_ready_fifo,
     _Scheduler_SMP_Insert_scheduled_fifo
   );

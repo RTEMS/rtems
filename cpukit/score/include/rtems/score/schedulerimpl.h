@@ -652,6 +652,28 @@ RTEMS_INLINE_ROUTINE Scheduler_Node *_Scheduler_Node_get(
   return the_thread->Scheduler.node;
 }
 
+RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
+  Scheduler_Node *node,
+  Thread_Control *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  node->owner = the_thread;
+#else
+  (void) node;
+  (void) the_thread;
+#endif
+}
+
+#if defined(RTEMS_SMP)
+RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_owner(
+  const Scheduler_Node *node
+)
+{
+  return node->owner;
+}
+#endif
+
 /** @} */
 
 #ifdef __cplusplus

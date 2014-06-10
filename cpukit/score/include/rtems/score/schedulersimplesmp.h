@@ -67,7 +67,7 @@ typedef struct {
     _Scheduler_simple_SMP_Change_priority, \
     _Scheduler_simple_SMP_Node_initialize, \
     _Scheduler_default_Node_destroy, \
-    _Scheduler_default_Update_priority, \
+    _Scheduler_simple_SMP_Update_priority, \
     _Scheduler_priority_Priority_compare, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \
@@ -97,6 +97,12 @@ void _Scheduler_simple_SMP_Change_priority(
   Thread_Control          *the_thread,
   Priority_Control         new_priority,
   bool                     prepend_it
+);
+
+void _Scheduler_simple_SMP_Update_priority(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  Priority_Control         new_priority
 );
 
 void _Scheduler_simple_SMP_Yield(
