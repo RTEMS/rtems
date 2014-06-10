@@ -118,7 +118,8 @@ typedef struct rtems_jffs2_flash_control rtems_jffs2_flash_control;
  *     .flash_size = FLASH_SIZE,
  *     .read = flash_read,
  *     .write = flash_write,
- *     .erase = flash_erase
+ *     .erase = flash_erase,
+ *     .device_identifier = 0xc01dc0fe
  *   }
  * };
  *
@@ -265,6 +266,14 @@ struct rtems_jffs2_flash_control {
    * This operation is optional and the pointer may be @c NULL.
    */
   rtems_jffs2_flash_destroy destroy;
+
+  /**
+   * @brief The device identifier of the flash device.
+   *
+   * It is used in combination with the inode number to uniquely identify a
+   * file system node in the system.
+   */
+  dev_t device_identifier;
 };
 
 typedef struct rtems_jffs2_compressor_control rtems_jffs2_compressor_control;

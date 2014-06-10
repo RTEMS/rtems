@@ -405,9 +405,12 @@ static int rtems_jffs2_fstat(
 )
 {
 	struct _inode *inode = rtems_jffs2_get_inode_by_location(loc);
+	struct super_block *sb = inode->i_sb;
+	rtems_jffs2_flash_control *fc = sb->s_flash_control;
 
-	rtems_jffs2_do_lock(inode->i_sb);
+	rtems_jffs2_do_lock(sb);
 
+	buf->st_dev = fc->device_identifier;
 	buf->st_blksize = PAGE_SIZE;
 	buf->st_mode = inode->i_mode;
 	buf->st_ino = inode->i_ino;
@@ -419,7 +422,7 @@ static int rtems_jffs2_fstat(
 	buf->st_mtime = inode->i_mtime;
 	buf->st_ctime = inode->i_ctime;
 
-	rtems_jffs2_do_unlock(inode->i_sb);
+	rtems_jffs2_do_unlock(sb);
 
 	return 0;
 }
