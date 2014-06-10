@@ -75,7 +75,7 @@ static Thread_Control *_Scheduler_priority_SMP_Get_highest_ready(
 
   (void) thread;
 
-  return _Scheduler_priority_Ready_queue_first(
+  return (Thread_Control *) _Scheduler_priority_Ready_queue_first(
     &self->Bit_map,
     &self->Ready[ 0 ]
   );

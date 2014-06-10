@@ -32,7 +32,7 @@ void _Scheduler_priority_Unblock (
   Scheduler_priority_Node *node = _Scheduler_priority_Node_get( the_thread );
 
   _Scheduler_priority_Ready_queue_enqueue(
-    the_thread,
+    &the_thread->Object.Node,
     &node->Ready_queue,
     &context->Bit_map
   );

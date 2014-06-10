@@ -69,7 +69,7 @@ static inline void _Scheduler_priority_SMP_Move_from_scheduled_to_ready(
 
   _Chain_Extract_unprotected( &scheduled_to_ready->Object.Node );
   _Scheduler_priority_Ready_queue_enqueue_first(
-    scheduled_to_ready,
+    &scheduled_to_ready->Object.Node,
     &node->Ready_queue,
     &self->Bit_map
   );
@@ -86,13 +86,13 @@ static inline void _Scheduler_priority_SMP_Move_from_ready_to_scheduled(
     _Scheduler_priority_SMP_Node_get( ready_to_scheduled );
 
   _Scheduler_priority_Ready_queue_extract(
-    ready_to_scheduled,
+    &ready_to_scheduled->Object.Node,
     &node->Ready_queue,
     &self->Bit_map
   );
   _Scheduler_simple_Insert_priority_fifo(
     &self->Base.Scheduled,
-    ready_to_scheduled
+    &ready_to_scheduled->Object.Node
   );
 }
 
@@ -107,7 +107,7 @@ static inline void _Scheduler_priority_SMP_Insert_ready_lifo(
     _Scheduler_priority_SMP_Node_get( thread );
 
   _Scheduler_priority_Ready_queue_enqueue(
-    thread,
+    &thread->Object.Node,
     &node->Ready_queue,
     &self->Bit_map
   );
@@ -124,7 +124,7 @@ static inline void _Scheduler_priority_SMP_Insert_ready_fifo(
     _Scheduler_priority_SMP_Node_get( thread );
 
   _Scheduler_priority_Ready_queue_enqueue_first(
-    thread,
+    &thread->Object.Node,
     &node->Ready_queue,
     &self->Bit_map
   );
@@ -141,7 +141,7 @@ static inline void _Scheduler_priority_SMP_Extract_from_ready(
     _Scheduler_priority_SMP_Node_get( thread );
 
   _Scheduler_priority_Ready_queue_extract(
-    thread,
+    &thread->Object.Node,
     &node->Ready_queue,
     &self->Bit_map
   );

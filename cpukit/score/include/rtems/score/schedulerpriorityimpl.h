@@ -65,56 +65,56 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(
 }
 
 /**
- * @brief Enqueues a thread on the specified ready queue.
+ * @brief Enqueues a node on the specified ready queue.
  *
- * The thread is placed as the last element of its priority group.
+ * The node is placed as the last element of its priority group.
  *
- * @param[in] the_thread The thread to enqueue.
+ * @param[in] node The node to enqueue.
  * @param[in] ready_queue The ready queue.
  * @param[in] bit_map The priority bit map of the scheduler instance.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue(
-  Thread_Control                 *the_thread,
+  Chain_Node                     *node,
   Scheduler_priority_Ready_queue *ready_queue,
   Priority_bit_map_Control       *bit_map
 )
 {
   Chain_Control *ready_chain = ready_queue->ready_chain;
 
-  _Chain_Append_unprotected( ready_chain, &the_thread->Object.Node );
+  _Chain_Append_unprotected( ready_chain, node );
   _Priority_bit_map_Add( bit_map, &ready_queue->Priority_map );
 }
 
 /**
- * @brief Enqueues a thread on the specified ready queue as first.
+ * @brief Enqueues a node on the specified ready queue as first.
  *
- * The thread is placed as the first element of its priority group.
+ * The node is placed as the first element of its priority group.
  *
- * @param[in] the_thread The thread to enqueue as first.
+ * @param[in] node The node to enqueue as first.
  * @param[in] ready_queue The ready queue.
  * @param[in] bit_map The priority bit map of the scheduler instance.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue_first(
-  Thread_Control                 *the_thread,
+  Chain_Node                     *node,
   Scheduler_priority_Ready_queue *ready_queue,
   Priority_bit_map_Control       *bit_map
 )
 {
   Chain_Control *ready_chain = ready_queue->ready_chain;
 
-  _Chain_Prepend_unprotected( ready_chain, &the_thread->Object.Node );
+  _Chain_Prepend_unprotected( ready_chain, node );
   _Priority_bit_map_Add( bit_map, &ready_queue->Priority_map );
 }
 
 /**
- * @brief Extracts a thread from the specified ready queue.
+ * @brief Extracts a node from the specified ready queue.
  *
- * @param[in] the_thread The thread to extract.
+ * @param[in] node The node to extract.
  * @param[in] ready_queue The ready queue.
  * @param[in] bit_map The priority bit map of the scheduler instance.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
-  Thread_Control                 *the_thread,
+  Chain_Node                     *node,
   Scheduler_priority_Ready_queue *ready_queue,
   Priority_bit_map_Control       *bit_map
 )
@@ -125,7 +125,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
     _Chain_Initialize_empty( ready_chain );
     _Priority_bit_map_Remove( bit_map, &ready_queue->Priority_map );
   } else {
-    _Chain_Extract_unprotected( &the_thread->Object.Node );
+    _Chain_Extract_unprotected( node );
   }
 }
 
@@ -139,30 +139,30 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Extract_body(
   Scheduler_priority_Node *node = _Scheduler_priority_Node_get( the_thread );
 
   _Scheduler_priority_Ready_queue_extract(
-    the_thread,
+    &the_thread->Object.Node,
     &node->Ready_queue,
     &context->Bit_map
   );
 }
 
 /**
- * @brief Return a pointer to the first thread.
+ * @brief Return a pointer to the first node.
  *
- * This routines returns a pointer to the first thread on @a ready_queues.
+ * This routines returns a pointer to the first node on @a ready_queues.
  *
  * @param[in] bit_map The priority bit map of the scheduler instance.
  * @param[in] ready_queues The ready queues of the scheduler instance.
  *
- * @return This method returns the first thread or NULL
+ * @return This method returns the first node.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_priority_Ready_queue_first(
+RTEMS_INLINE_ROUTINE Chain_Node *_Scheduler_priority_Ready_queue_first(
   Priority_bit_map_Control *bit_map,
   Chain_Control            *ready_queues
 )
 {
   Priority_Control index = _Priority_bit_map_Get_highest( bit_map );
 
-  return (Thread_Control *) _Chain_First( &ready_queues[ index ] );
+  return _Chain_First( &ready_queues[ index ] );
 }
 
 /**
@@ -179,10 +179,11 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(
 {
   Scheduler_priority_Context *context =
     _Scheduler_priority_Get_context( scheduler );
-  Thread_Control *heir = _Scheduler_priority_Ready_queue_first(
-    &context->Bit_map,
-    &context->Ready[ 0 ]
-  );
+  Thread_Control *heir = (Thread_Control *)
+    _Scheduler_priority_Ready_queue_first(
+      &context->Bit_map,
+      &context->Ready[ 0 ]
+    );
 
   ( void ) the_thread;
 

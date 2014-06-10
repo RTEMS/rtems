@@ -33,7 +33,7 @@ void _Scheduler_priority_Change_priority(
   Scheduler_priority_Node *node = _Scheduler_priority_Node_get( the_thread );
 
   _Scheduler_priority_Ready_queue_extract(
-    the_thread,
+    &the_thread->Object.Node,
     &node->Ready_queue,
     &context->Bit_map
   );
@@ -47,13 +47,13 @@ void _Scheduler_priority_Change_priority(
 
   if ( prepend_it ) {
     _Scheduler_priority_Ready_queue_enqueue_first(
-      the_thread,
+      &the_thread->Object.Node,
       &node->Ready_queue,
       &context->Bit_map
     );
   } else {
     _Scheduler_priority_Ready_queue_enqueue(
-      the_thread,
+      &the_thread->Object.Node,
       &node->Ready_queue,
       &context->Bit_map
     );
