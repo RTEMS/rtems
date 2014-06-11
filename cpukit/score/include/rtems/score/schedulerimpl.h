@@ -47,7 +47,7 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get(
 )
 {
 #if defined(RTEMS_SMP)
-  return the_thread->scheduler;
+  return the_thread->Scheduler.control;
 #else
   (void) the_thread;
 
@@ -375,7 +375,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Set(
   if ( current_scheduler != scheduler ) {
     _Thread_Set_state( the_thread, STATES_MIGRATING );
     _Scheduler_Node_destroy( current_scheduler, the_thread );
-    the_thread->scheduler = scheduler;
+    the_thread->Scheduler.control = scheduler;
     _Scheduler_Node_initialize( scheduler, the_thread );
     _Scheduler_Update_priority( the_thread, the_thread->current_priority );
     _Thread_Clear_state( the_thread, STATES_MIGRATING );
@@ -649,7 +649,7 @@ RTEMS_INLINE_ROUTINE Scheduler_Node *_Scheduler_Node_get(
   Thread_Control *the_thread
 )
 {
-  return the_thread->scheduler_node;
+  return the_thread->Scheduler.node;
 }
 
 /** @} */

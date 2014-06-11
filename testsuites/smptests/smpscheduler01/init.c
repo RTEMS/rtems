@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems.h>
+#include <rtems/score/threadimpl.h>
 
 #include "tmacros.h"
 
@@ -89,8 +90,8 @@ static bool is_per_cpu_state_ok(void)
         ++count;
       }
 
-      ok = ok && executing->cpu == cpu;
-      ok = ok && heir->cpu == cpu;
+      ok = ok && _Thread_Get_CPU( executing ) == cpu;
+      ok = ok && _Thread_Get_CPU( heir ) == cpu;
     }
 
     ok = ok && (count == 1);

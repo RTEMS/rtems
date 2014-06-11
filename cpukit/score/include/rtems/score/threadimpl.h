@@ -408,7 +408,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Get_CPU(
 )
 {
 #if defined(RTEMS_SMP)
-  return thread->cpu;
+  return thread->Scheduler.cpu;
 #else
   (void) thread;
 
@@ -422,7 +422,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Set_CPU(
 )
 {
 #if defined(RTEMS_SMP)
-  thread->cpu = cpu;
+  thread->Scheduler.cpu = cpu;
 #else
   (void) thread;
   (void) cpu;
@@ -804,7 +804,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Debug_set_real_processor(
 )
 {
 #if defined(RTEMS_SMP) && defined(RTEMS_DEBUG)
-  the_thread->debug_real_cpu = cpu;
+  the_thread->Scheduler.debug_real_cpu = cpu;
 #else
   (void) the_thread;
   (void) cpu;

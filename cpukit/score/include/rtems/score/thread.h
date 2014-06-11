@@ -446,6 +446,38 @@ typedef struct {
 } Thread_Life_control;
 
 /**
+ * @brief Thread scheduler control.
+ */
+typedef struct {
+#if defined(RTEMS_SMP)
+  /**
+   * @brief The current scheduler control of this thread.
+   */
+  const struct Scheduler_Control *control;
+#endif
+
+  /**
+   * @brief The current scheduler node of this thread.
+   */
+  struct Scheduler_Node *node;
+
+#if defined(RTEMS_SMP)
+  /**
+   * @brief The processor assigned by the current scheduler.
+   */
+  Per_CPU_Control *cpu;
+
+#if defined(RTEMS_DEBUG)
+  /**
+   * @brief The processor on which this thread executed the last time or is
+   * executing.
+   */
+  Per_CPU_Control *debug_real_cpu;
+#endif
+#endif
+} Thread_Scheduler_control;
+
+/**
  *  This structure defines the Thread Control Block (TCB).
  */
 struct Thread_Control_struct {
@@ -487,12 +519,11 @@ struct Thread_Control_struct {
 #endif
   /** This field is true if the thread is preemptible. */
   bool                                  is_preemptible;
-#if defined(RTEMS_SMP)
+
   /**
-   * @brief The scheduler of this thread.
+   * @brief Scheduler related control.
    */
-  const struct Scheduler_Control       *scheduler;
-#endif
+  Thread_Scheduler_control              Scheduler;
 
 #if __RTEMS_ADA__
   /** This field is the GNAT self context pointer. */
@@ -514,26 +545,6 @@ struct Thread_Control_struct {
    *  since it was created.
    */
   Thread_CPU_usage_t                    cpu_time_used;
-
-  /**
-   * @brief The scheduler node of this thread for the real scheduler.
-   */
-  struct Scheduler_Node                *scheduler_node;
-
-#ifdef RTEMS_SMP
-  /**
-   * @brief The processor assigned by the scheduler.
-   */
-  Per_CPU_Control                      *cpu;
-
-#ifdef RTEMS_DEBUG
-  /**
-   * @brief The processor on which this thread executed the last time or is
-   * executing.
-   */
-  Per_CPU_Control                      *debug_real_cpu;
-#endif
-#endif
 
   /** This field contains information about the starting state of
    *  this thread.

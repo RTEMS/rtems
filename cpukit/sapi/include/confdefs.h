@@ -2581,7 +2581,7 @@ const rtems_libio_helper rtems_fs_init_helper =
 
   const Thread_Control_add_on _Thread_Control_add_ons[] = {
     {
-      offsetof( Configuration_Thread_control, Control.scheduler_node ),
+      offsetof( Configuration_Thread_control, Control.Scheduler.node ),
       offsetof( Configuration_Thread_control, Scheduler )
     }, {
       offsetof(

@@ -420,7 +420,7 @@ static inline void _Scheduler_SMP_Allocate_processor(
       _Scheduler_SMP_Update_heir( cpu_self, cpu_of_scheduled, scheduled );
     } else {
       /* We have to force a migration to our processor set */
-      _Assert( scheduled->debug_real_cpu->heir != scheduled );
+      _Assert( scheduled->Scheduler.debug_real_cpu->heir != scheduled );
       heir = scheduled;
     }
   } else {

@@ -159,6 +159,7 @@ bool _Thread_Initialize(
    *  General initialization
    */
 
+  the_thread->Start.isr_level        = isr_level;
   the_thread->Start.is_preemptible   = is_preemptible;
   the_thread->Start.budget_algorithm = budget_algorithm;
   the_thread->Start.budget_callout   = budget_callout;
@@ -179,10 +180,8 @@ bool _Thread_Initialize(
     #endif
   }
 
-  the_thread->Start.isr_level         = isr_level;
-
 #if defined(RTEMS_SMP)
-  the_thread->scheduler               = scheduler;
+  the_thread->Scheduler.control = scheduler;
   _Resource_Node_initialize( &the_thread->Resource_node );
   _CPU_Context_Set_is_executing( &the_thread->Registers, false );
 #endif
