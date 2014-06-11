@@ -44,6 +44,16 @@ typedef struct Scheduler_Control Scheduler_Control;
 
 typedef struct Scheduler_Node Scheduler_Node;
 
+#if defined(RTEMS_SMP)
+  typedef Thread_Control * Scheduler_Void_or_thread;
+
+  #define SCHEDULER_RETURN_VOID_OR_NULL return NULL
+#else
+  typedef void Scheduler_Void_or_thread;
+
+  #define SCHEDULER_RETURN_VOID_OR_NULL return
+#endif
+
 /**
  * @brief The scheduler operations.
  */
@@ -55,16 +65,25 @@ typedef struct {
   void ( *schedule )( const Scheduler_Control *, Thread_Control *);
 
   /** @see _Scheduler_Yield() */
-  void ( *yield )( const Scheduler_Control *, Thread_Control *);
+  Scheduler_Void_or_thread ( *yield )(
+    const Scheduler_Control *,
+    Thread_Control *
+  );
 
   /** @see _Scheduler_Block() */
-  void ( *block )( const Scheduler_Control *, Thread_Control * );
+  void ( *block )(
+    const Scheduler_Control *,
+    Thread_Control *
+  );
 
   /** @see _Scheduler_Unblock() */
-  void ( *unblock )( const Scheduler_Control *, Thread_Control * );
+  Scheduler_Void_or_thread ( *unblock )(
+    const Scheduler_Control *,
+    Thread_Control *
+  );
 
   /** @see _Scheduler_Change_priority() */
-  void ( *change_priority )(
+  Scheduler_Void_or_thread ( *change_priority )(
     const Scheduler_Control *,
     Thread_Control *,
     Priority_Control,

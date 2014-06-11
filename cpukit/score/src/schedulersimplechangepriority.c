@@ -21,7 +21,7 @@
 
 #include <rtems/score/schedulersimpleimpl.h>
 
-void _Scheduler_simple_Change_priority(
+Scheduler_Void_or_thread _Scheduler_simple_Change_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Priority_Control         new_priority,
@@ -38,4 +38,6 @@ void _Scheduler_simple_Change_priority(
   } else {
     _Scheduler_simple_Insert_priority_fifo( &context->Ready, the_thread );
   }
+
+  SCHEDULER_RETURN_VOID_OR_NULL;
 }

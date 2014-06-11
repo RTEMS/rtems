@@ -21,7 +21,7 @@
 
 #include <rtems/score/schedulerpriorityimpl.h>
 
-void _Scheduler_priority_Change_priority(
+Scheduler_Void_or_thread _Scheduler_priority_Change_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Priority_Control         new_priority,
@@ -58,4 +58,6 @@ void _Scheduler_priority_Change_priority(
       &context->Bit_map
     );
   }
+
+  SCHEDULER_RETURN_VOID_OR_NULL;
 }

@@ -21,7 +21,7 @@
 
 #include <rtems/score/scheduleredfimpl.h>
 
-void _Scheduler_EDF_Yield(
+Scheduler_Void_or_thread _Scheduler_EDF_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
@@ -38,4 +38,6 @@ void _Scheduler_EDF_Yield(
   _RBTree_Insert( &context->Ready, &node->Node );
 
   _Scheduler_EDF_Schedule_body( scheduler, the_thread, false );
+
+  SCHEDULER_RETURN_VOID_OR_NULL;
 }

@@ -116,6 +116,24 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( Thread_Control *the_thread )
   ( *scheduler->Operations.schedule )( scheduler, the_thread );
 }
 
+#if defined(RTEMS_SMP)
+/**
+ * @brief Ask threads depending on resources owned by the thread for help.
+ *
+ * A thread is in need for help if it lost its assigned processor due to
+ * pre-emption by a higher priority thread or it was not possible to assign it
+ * a processor since its priority is to low on its current scheduler instance.
+ *
+ * @param[in] needs_help The thread needing help.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help_if_necessary(
+  Thread_Control *needs_help
+)
+{
+  (void) needs_help;
+}
+#endif
+
 /**
  * @brief Scheduler yield with a particular thread.
  *
@@ -127,8 +145,16 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( Thread_Control *the_thread )
 RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
 {
   const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+#if defined(RTEMS_SMP)
+  Thread_Control *needs_help;
 
+  needs_help =
+#endif
   ( *scheduler->Operations.yield )( scheduler, the_thread );
+
+#if defined(RTEMS_SMP)
+  _Scheduler_Ask_for_help_if_necessary( needs_help );
+#endif
 }
 
 /**
@@ -161,8 +187,16 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Block( Thread_Control *the_thread )
 RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
 {
   const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+#if defined(RTEMS_SMP)
+  Thread_Control *needs_help;
 
+  needs_help =
+#endif
   ( *scheduler->Operations.unblock )( scheduler, the_thread );
+
+#if defined(RTEMS_SMP)
+  _Scheduler_Ask_for_help_if_necessary( needs_help );
+#endif
 }
 
 /**
@@ -185,13 +219,21 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority(
 )
 {
   const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+#if defined(RTEMS_SMP)
+  Thread_Control *needs_help;
 
+  needs_help =
+#endif
   ( *scheduler->Operations.change_priority )(
     scheduler,
     the_thread,
     new_priority,
     prepend_it
   );
+
+#if defined(RTEMS_SMP)
+  _Scheduler_Ask_for_help_if_necessary( needs_help );
+#endif
 }
 
 /**

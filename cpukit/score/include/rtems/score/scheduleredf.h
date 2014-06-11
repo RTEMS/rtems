@@ -177,12 +177,12 @@ void _Scheduler_EDF_Update_priority(
  *
  *  @param[in] the_thread will be unblocked.
  */
-void _Scheduler_EDF_Unblock(
+Scheduler_Void_or_thread _Scheduler_EDF_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );
 
-void _Scheduler_EDF_Change_priority(
+Scheduler_Void_or_thread _Scheduler_EDF_Change_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Priority_Control         new_priority,
@@ -204,7 +204,7 @@ void _Scheduler_EDF_Change_priority(
  *
  *  @param[in,out] thread The yielding thread.
  */
-void _Scheduler_EDF_Yield(
+Scheduler_Void_or_thread _Scheduler_EDF_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );

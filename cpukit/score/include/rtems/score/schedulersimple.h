@@ -101,7 +101,7 @@ void _Scheduler_simple_Schedule(
  *
  *  @param[in,out] thread The yielding thread.
  */
-void _Scheduler_simple_Yield(
+Scheduler_Void_or_thread _Scheduler_simple_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );
@@ -130,12 +130,12 @@ void _Scheduler_simple_Block(
  *
  *  @param[in] the_thread is the thread that is to be unblocked
  */
-void _Scheduler_simple_Unblock(
+Scheduler_Void_or_thread _Scheduler_simple_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );
 
-void _Scheduler_simple_Change_priority(
+Scheduler_Void_or_thread _Scheduler_simple_Change_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Priority_Control         new_priority,

@@ -20,7 +20,7 @@
 
 #include <rtems/score/schedulersimpleimpl.h>
 
-void _Scheduler_simple_Yield(
+Scheduler_Void_or_thread _Scheduler_simple_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
@@ -31,4 +31,6 @@ void _Scheduler_simple_Yield(
   _Chain_Extract_unprotected( &the_thread->Object.Node );
   _Scheduler_simple_Insert_priority_fifo( &context->Ready, the_thread );
   _Scheduler_simple_Schedule_body( scheduler, the_thread, false );
+
+  SCHEDULER_RETURN_VOID_OR_NULL;
 }

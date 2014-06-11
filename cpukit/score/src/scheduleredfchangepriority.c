@@ -20,7 +20,7 @@
 
 #include <rtems/score/scheduleredfimpl.h>
 
-void _Scheduler_EDF_Change_priority(
+Scheduler_Void_or_thread _Scheduler_EDF_Change_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Priority_Control         new_priority,
@@ -33,4 +33,6 @@ void _Scheduler_EDF_Change_priority(
 
   _RBTree_Extract( &context->Ready, &node->Node );
   _RBTree_Insert( &context->Ready, &node->Node );
+
+  SCHEDULER_RETURN_VOID_OR_NULL;
 }

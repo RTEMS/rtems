@@ -53,7 +53,40 @@ static void task(rtems_task_argument arg)
   rtems_test_assert(0);
 }
 
-static void test_case(
+static rtems_id start_task(rtems_task_priority prio)
+{
+  rtems_status_code sc;
+  rtems_id task_id;
+
+  sc = rtems_task_create(
+    rtems_build_name('T', 'A', 'S', 'K'),
+    prio,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &task_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(task_id, task, 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  return task_id;
+}
+
+static Thread_Control *get_thread_by_id(rtems_id task_id)
+{
+  Objects_Locations location;
+  Thread_Control *thread;
+
+  thread = _Thread_Get(task_id, &location);
+  rtems_test_assert(location == OBJECTS_LOCAL);
+  _Thread_Enable_dispatch();
+
+  return thread;
+}
+
+static void test_case_change_priority(
   Thread_Control *executing,
   Scheduler_SMP_Node *node,
   Scheduler_SMP_Node_state start_state,
@@ -98,18 +131,7 @@ static void test_change_priority(void)
   size_t j;
   size_t k;
 
-  sc = rtems_task_create(
-    rtems_build_name('T', 'A', 'S', 'K'),
-    3,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &task_id
-  );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  sc = rtems_task_start(task_id, task, 0);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  task_id = start_task(3);
 
   _Thread_Disable_dispatch();
 
@@ -119,7 +141,7 @@ static void test_change_priority(void)
   for (i = 0; i < RTEMS_ARRAY_SIZE(states); ++i) {
     for (j = 0; j < RTEMS_ARRAY_SIZE(priorities); ++j) {
       for (k = 0; k < RTEMS_ARRAY_SIZE(prepend_it); ++k) {
-        test_case(
+        test_case_change_priority(
           executing,
           node,
           states[i],
@@ -140,11 +162,360 @@ static void test_change_priority(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
+static Thread_Control *change_priority_op(
+  Thread_Control *thread,
+  Priority_Control new_priority,
+  bool prepend_it
+)
+{
+  const Scheduler_Control *scheduler = _Scheduler_Get(thread);
+  Thread_Control *needs_help;
+  ISR_Level level;
+
+  _ISR_Disable( level );
+  thread->current_priority = new_priority;
+  needs_help = (*scheduler->Operations.change_priority)(
+    scheduler,
+    thread,
+    new_priority,
+    prepend_it
+  );
+  _ISR_Enable( level );
+
+  return needs_help;
+}
+
+static void test_case_change_priority_op(
+  Thread_Control *executing,
+  Scheduler_SMP_Node *executing_node,
+  Thread_Control *other,
+  Scheduler_SMP_Node_state start_state,
+  Priority_Control prio,
+  bool prepend_it,
+  Scheduler_SMP_Node_state new_state
+)
+{
+  Thread_Control *needs_help;
+
+  switch (start_state) {
+    case SCHEDULER_SMP_NODE_SCHEDULED:
+      _Thread_Change_priority(executing, 1, true);
+      break;
+    case SCHEDULER_SMP_NODE_READY:
+      _Thread_Change_priority(executing, 4, true);
+      break;
+    default:
+      rtems_test_assert(0);
+      break;
+  }
+  rtems_test_assert(executing_node->state == start_state);
+
+  needs_help = change_priority_op(executing, prio, prepend_it);
+  rtems_test_assert(executing_node->state == new_state);
+
+  if (start_state != new_state) {
+    switch (start_state) {
+      case SCHEDULER_SMP_NODE_SCHEDULED:
+        rtems_test_assert(needs_help == executing);
+        break;
+      case SCHEDULER_SMP_NODE_READY:
+        rtems_test_assert(needs_help == other);
+        break;
+      default:
+        rtems_test_assert(0);
+        break;
+    }
+  } else {
+    rtems_test_assert(needs_help == NULL);
+  }
+}
+
+static void test_change_priority_op(void)
+{
+  rtems_status_code sc;
+  rtems_id task_id;
+  Thread_Control *executing;
+  Scheduler_SMP_Node *executing_node;
+  Thread_Control *other;
+  size_t i;
+  size_t j;
+  size_t k;
+
+  task_id = start_task(3);
+
+  _Thread_Disable_dispatch();
+
+  executing = _Thread_Executing;
+  executing_node = _Scheduler_SMP_Thread_get_node(executing);
+
+  other = get_thread_by_id(task_id);
+
+  for (i = 0; i < RTEMS_ARRAY_SIZE(states); ++i) {
+    for (j = 0; j < RTEMS_ARRAY_SIZE(priorities); ++j) {
+      for (k = 0; k < RTEMS_ARRAY_SIZE(prepend_it); ++k) {
+        test_case_change_priority_op(
+          executing,
+          executing_node,
+          other,
+          states[i],
+          priorities[j],
+          prepend_it[k],
+          states[j]
+        );
+      }
+    }
+  }
+
+  _Thread_Change_priority(executing, 1, true);
+  rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
+
+  _Thread_Enable_dispatch();
+
+  sc = rtems_task_delete(task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static Thread_Control *yield_op(Thread_Control *thread)
+{
+  const Scheduler_Control *scheduler = _Scheduler_Get(thread);
+  Thread_Control *needs_help;
+  ISR_Level level;
+
+  _ISR_Disable( level );
+  needs_help = (*scheduler->Operations.yield)(scheduler, thread);
+  _ISR_Enable( level );
+
+  return needs_help;
+}
+
+static void test_case_yield_op(
+  Thread_Control *executing,
+  Scheduler_SMP_Node *executing_node,
+  Thread_Control *other,
+  Scheduler_SMP_Node_state start_state,
+  Scheduler_SMP_Node_state new_state
+)
+{
+  Thread_Control *needs_help;
+
+  _Thread_Change_priority(executing, 4, false);
+  _Thread_Change_priority(other, 4, false);
+
+  switch (start_state) {
+    case SCHEDULER_SMP_NODE_SCHEDULED:
+      switch (new_state) {
+        case SCHEDULER_SMP_NODE_SCHEDULED:
+          _Thread_Change_priority(executing, 2, false);
+          _Thread_Change_priority(other, 3, false);
+          break;
+        case SCHEDULER_SMP_NODE_READY:
+          _Thread_Change_priority(executing, 2, false);
+          _Thread_Change_priority(other, 2, false);
+          break;
+        default:
+          rtems_test_assert(0);
+          break;
+      }
+      break;
+    case SCHEDULER_SMP_NODE_READY:
+      switch (new_state) {
+        case SCHEDULER_SMP_NODE_SCHEDULED:
+          rtems_test_assert(0);
+          break;
+        case SCHEDULER_SMP_NODE_READY:
+          _Thread_Change_priority(executing, 3, false);
+          _Thread_Change_priority(other, 2, false);
+          break;
+        default:
+          rtems_test_assert(0);
+          break;
+      }
+      break;
+    default:
+      rtems_test_assert(0);
+      break;
+  }
+  rtems_test_assert(executing_node->state == start_state);
+
+  needs_help = yield_op(executing);
+  rtems_test_assert(executing_node->state == new_state);
+
+  if (start_state != new_state) {
+    switch (start_state) {
+      case SCHEDULER_SMP_NODE_SCHEDULED:
+        rtems_test_assert(needs_help == executing);
+        break;
+      case SCHEDULER_SMP_NODE_READY:
+        rtems_test_assert(needs_help == other);
+        break;
+      default:
+        rtems_test_assert(0);
+        break;
+    }
+  } else {
+    rtems_test_assert(needs_help == NULL);
+  }
+}
+
+static void test_yield_op(void)
+{
+  rtems_status_code sc;
+  rtems_id task_id;
+  Thread_Control *executing;
+  Scheduler_SMP_Node *executing_node;
+  Thread_Control *other;
+  size_t i;
+  size_t j;
+
+  task_id = start_task(2);
+
+  _Thread_Disable_dispatch();
+
+  executing = _Thread_Executing;
+  executing_node = _Scheduler_SMP_Thread_get_node(executing);
+
+  other = get_thread_by_id(task_id);
+
+  for (i = 0; i < RTEMS_ARRAY_SIZE(states); ++i) {
+    for (j = 0; j < RTEMS_ARRAY_SIZE(states); ++j) {
+      if (
+        states[i] != SCHEDULER_SMP_NODE_READY
+          || states[j] != SCHEDULER_SMP_NODE_SCHEDULED
+      ) {
+        test_case_yield_op(
+          executing,
+          executing_node,
+          other,
+          states[i],
+          states[j]
+        );
+      }
+    }
+  }
+
+  _Thread_Change_priority(executing, 1, true);
+  rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
+
+  _Thread_Enable_dispatch();
+
+  sc = rtems_task_delete(task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void block_op(Thread_Control *thread)
+{
+  const Scheduler_Control *scheduler = _Scheduler_Get(thread);
+  ISR_Level level;
+
+  _ISR_Disable( level );
+  (*scheduler->Operations.block)(scheduler, thread);
+  _ISR_Enable( level );
+}
+
+static Thread_Control *unblock_op(Thread_Control *thread)
+{
+  const Scheduler_Control *scheduler = _Scheduler_Get(thread);
+  Thread_Control *needs_help;
+  ISR_Level level;
+
+  _ISR_Disable( level );
+  needs_help = (*scheduler->Operations.unblock)(scheduler, thread);
+  _ISR_Enable( level );
+
+  return needs_help;
+}
+
+static void test_case_unblock_op(
+  Thread_Control *executing,
+  Scheduler_SMP_Node *executing_node,
+  Thread_Control *other,
+  Scheduler_SMP_Node_state new_state
+)
+{
+  Thread_Control *needs_help;
+
+  switch (new_state) {
+    case SCHEDULER_SMP_NODE_SCHEDULED:
+      _Thread_Change_priority(executing, 2, false);
+      rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
+      break;
+    case SCHEDULER_SMP_NODE_READY:
+      _Thread_Change_priority(executing, 4, false);
+      rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_READY);
+      break;
+    default:
+      rtems_test_assert(0);
+      break;
+  }
+
+  block_op(executing);
+  rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_BLOCKED);
+
+  needs_help = unblock_op(executing);
+  rtems_test_assert(executing_node->state == new_state);
+
+  switch (new_state) {
+    case SCHEDULER_SMP_NODE_SCHEDULED:
+      rtems_test_assert(needs_help == other);
+      break;
+    case SCHEDULER_SMP_NODE_READY:
+      rtems_test_assert(needs_help == executing);
+      break;
+    default:
+      rtems_test_assert(0);
+      break;
+  }
+}
+
+static void test_unblock_op(void)
+{
+  rtems_status_code sc;
+  rtems_id task_id;
+  Thread_Control *executing;
+  Scheduler_SMP_Node *executing_node;
+  Thread_Control *other;
+  size_t i;
+
+  task_id = start_task(3);
+
+  _Thread_Disable_dispatch();
+
+  executing = _Thread_Executing;
+  executing_node = _Scheduler_SMP_Thread_get_node(executing);
+
+  other = get_thread_by_id(task_id);
+
+  for (i = 0; i < RTEMS_ARRAY_SIZE(states); ++i) {
+    test_case_unblock_op(
+      executing,
+      executing_node,
+      other,
+      states[i]
+    );
+  }
+
+  _Thread_Change_priority(executing, 1, true);
+  rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
+
+  _Thread_Enable_dispatch();
+
+  sc = rtems_task_delete(task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void tests(void)
+{
+  test_change_priority();
+  test_change_priority_op();
+  test_yield_op();
+  test_unblock_op();
+}
+
 static void test_task(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
 
-  test_change_priority();
+  tests();
 
   ctx->cpu_index[arg] = rtems_get_current_processor();
 
@@ -202,7 +573,7 @@ static void Init(rtems_task_argument arg)
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
 
-  test_change_priority();
+  tests();
 
   barrier_wait(ctx);
 

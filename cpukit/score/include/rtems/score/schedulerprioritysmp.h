@@ -106,12 +106,12 @@ void _Scheduler_priority_SMP_Block(
   Thread_Control *thread
 );
 
-void _Scheduler_priority_SMP_Unblock(
+Thread_Control *_Scheduler_priority_SMP_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 );
 
-void _Scheduler_priority_SMP_Change_priority(
+Thread_Control *_Scheduler_priority_SMP_Change_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Priority_Control         new_priority,
@@ -124,7 +124,7 @@ void _Scheduler_priority_SMP_Update_priority(
   Priority_Control new_priority
 );
 
-void _Scheduler_priority_SMP_Yield(
+Thread_Control *_Scheduler_priority_SMP_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
 );

@@ -21,7 +21,7 @@
 #include <rtems/score/schedulerpriorityimpl.h>
 #include <rtems/score/threadimpl.h>
 
-void _Scheduler_priority_Yield(
+Scheduler_Void_or_thread _Scheduler_priority_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
@@ -43,4 +43,6 @@ void _Scheduler_priority_Yield(
   } else if ( !_Thread_Is_heir( the_thread ) ) {
     _Thread_Dispatch_necessary = true;
   }
+
+  SCHEDULER_RETURN_VOID_OR_NULL;
 }

@@ -22,7 +22,7 @@
 
 #include <rtems/score/schedulerpriorityimpl.h>
 
-void _Scheduler_priority_Unblock (
+Scheduler_Void_or_thread _Scheduler_priority_Unblock (
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
@@ -57,4 +57,6 @@ void _Scheduler_priority_Unblock (
         the_thread->current_priority == 0 )
       _Thread_Dispatch_necessary = true;
   }
+
+  SCHEDULER_RETURN_VOID_OR_NULL;
 }

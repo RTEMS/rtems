@@ -153,7 +153,7 @@ extern Scheduler_CBS_Server _Scheduler_CBS_Server_list[];
  *
  *  @note This has to be asessed as missed deadline of the current job.
  */
-void _Scheduler_CBS_Unblock(
+Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );

@@ -25,7 +25,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
-void _Scheduler_CBS_Unblock(
+Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
@@ -84,4 +84,6 @@ void _Scheduler_CBS_Unblock(
          the_thread->current_priority == 0 )
       _Thread_Dispatch_necessary = true;
   }
+
+  SCHEDULER_RETURN_VOID_OR_NULL;
 }

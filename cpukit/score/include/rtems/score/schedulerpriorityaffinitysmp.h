@@ -101,7 +101,7 @@ void _Scheduler_priority_affinity_SMP_Block(
  * @param[in] scheduler is the scheduler instance information
  * @param[in] thread is the thread to unblock
  */
-void _Scheduler_priority_affinity_SMP_Unblock(
+Thread_Control *_Scheduler_priority_affinity_SMP_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread
 );
@@ -132,7 +132,7 @@ bool _Scheduler_priority_affinity_SMP_Get_affinity(
  * @param[in] new_priority The new priority for the thread.
  * @param[in] prepend_it Append or prepend the thread to its priority FIFO.
  */
-void _Scheduler_priority_affinity_SMP_Change_priority(
+Thread_Control *_Scheduler_priority_affinity_SMP_Change_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Priority_Control         new_priority,
