@@ -125,7 +125,7 @@
 
   #define RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP( name, obj_name ) \
     { \
-      &RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP_NAME( name ).Base.Base, \
+      &RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP_NAME( name ).Base.Base.Base, \
       SCHEDULER_PRIORITY_AFFINITY_SMP_ENTRY_POINTS, \
       ( obj_name ) \
     }
@@ -145,7 +145,7 @@
 
   #define RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP( name, obj_name ) \
     { \
-      &RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP_NAME( name ).Base.Base, \
+      &RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP_NAME( name ).Base.Base.Base, \
       SCHEDULER_PRIORITY_SMP_ENTRY_POINTS, \
       ( obj_name ) \
     }
@@ -181,7 +181,7 @@
 
   #define RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP( name, obj_name ) \
     { \
-      &RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP_NAME( name ).Base, \
+      &RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP_NAME( name ).Base.Base, \
       SCHEDULER_SIMPLE_SMP_ENTRY_POINTS, \
       ( obj_name ) \
     }
