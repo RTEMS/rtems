@@ -16,13 +16,37 @@
   #include "config.h"
 #endif
 
+#include <stdio.h>
+#include <inttypes.h>
+
 #include <rtems.h>
+#include <rtems/libcsupport.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulersmpimpl.h>
 
 #include "tmacros.h"
 
 const char rtems_test_name[] = "SMPSCHEDULER 3";
+
+#define CPU_MAX 3
+
+#define SCHED_NAME(i) rtems_build_name(' ', ' ', ' ', (char) ('A' + (i)))
+
+typedef struct {
+  rtems_id barrier_id;
+  rtems_id task_id[CPU_MAX];
+  uint32_t cpu_index[CPU_MAX];
+} test_context;
+
+static test_context test_instance;
+
+static void barrier_wait(test_context *ctx)
+{
+  rtems_status_code sc;
+
+  sc = rtems_barrier_wait(ctx->barrier_id, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
 
 static void task(rtems_task_argument arg)
 {
@@ -64,7 +88,7 @@ static const Priority_Control priorities[2] = { 2, 5 };
 
 static const bool prepend_it[2] = { true, false };
 
-static void test(void)
+static void test_change_priority(void)
 {
   rtems_status_code sc;
   rtems_id task_id;
@@ -116,11 +140,87 @@ static void test(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
+static void test_task(rtems_task_argument arg)
+{
+  test_context *ctx = &test_instance;
+
+  test_change_priority();
+
+  ctx->cpu_index[arg] = rtems_get_current_processor();
+
+  barrier_wait(ctx);
+
+  rtems_task_suspend(RTEMS_SELF);
+  rtems_test_assert(0);
+}
+
+static void done(uint32_t cpu_index)
+{
+  printf("test done on processor %" PRIu32 "\n", cpu_index);
+}
+
 static void Init(rtems_task_argument arg)
 {
+  test_context *ctx = &test_instance;
+  rtems_status_code sc;
+  rtems_resource_snapshot snapshot;
+  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_index;
+
   TEST_BEGIN();
 
-  test();
+  rtems_resource_snapshot_take(&snapshot);
+
+  sc = rtems_barrier_create(
+    rtems_build_name('B', 'A', 'R', 'I'),
+    RTEMS_BARRIER_AUTOMATIC_RELEASE,
+    cpu_count,
+    &ctx->barrier_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  for (cpu_index = 1; cpu_index < cpu_count; ++cpu_index) {
+    rtems_id scheduler_id;
+
+    sc = rtems_task_create(
+      rtems_build_name('T', 'A', 'S', 'K'),
+      1,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_MODES,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &ctx->task_id[cpu_index]
+    );
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_scheduler_ident(SCHED_NAME(cpu_index), &scheduler_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_task_set_scheduler(ctx->task_id[cpu_index], scheduler_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_task_start(ctx->task_id[cpu_index], test_task, cpu_index);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  }
+
+  test_change_priority();
+
+  barrier_wait(ctx);
+
+  sc = rtems_barrier_delete(ctx->barrier_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  done(0);
+
+  for (cpu_index = 1; cpu_index < cpu_count; ++cpu_index) {
+    sc = rtems_task_delete(ctx->task_id[cpu_index]);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    rtems_test_assert(ctx->cpu_index[cpu_index] == cpu_index);
+
+    done(cpu_index);
+  }
+
+  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
 
   TEST_END();
   rtems_test_exit(0);
@@ -131,9 +231,37 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_SMP_APPLICATION
 
-#define CONFIGURE_SMP_MAXIMUM_PROCESSORS 1
+#define CONFIGURE_SMP_MAXIMUM_PROCESSORS CPU_MAX
 
-#define CONFIGURE_MAXIMUM_TASKS 2
+#define CONFIGURE_MAXIMUM_PRIORITY 255
+
+#define CONFIGURE_SCHEDULER_PRIORITY_SMP
+#define CONFIGURE_SCHEDULER_SIMPLE_SMP
+#define CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
+
+#include <rtems/scheduler.h>
+
+RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP(a, CONFIGURE_MAXIMUM_PRIORITY + 1);
+
+RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(b);
+
+RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP(
+  c,
+  CONFIGURE_MAXIMUM_PRIORITY + 1
+);
+
+#define CONFIGURE_SCHEDULER_CONTROLS \
+  RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP(a, SCHED_NAME(0)), \
+  RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP(b, SCHED_NAME(1)), \
+  RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP(c, SCHED_NAME(2))
+
+#define CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS \
+  RTEMS_SCHEDULER_ASSIGN(0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY), \
+  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL), \
+  RTEMS_SCHEDULER_ASSIGN(2, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL)
+
+#define CONFIGURE_MAXIMUM_TASKS 6
+#define CONFIGURE_MAXIMUM_BARRIERS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
