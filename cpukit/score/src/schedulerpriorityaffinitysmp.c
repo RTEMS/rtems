@@ -68,7 +68,7 @@ void _Scheduler_priority_affinity_SMP_Node_initialize(
   Scheduler_priority_affinity_SMP_Node *node =
     _Scheduler_priority_affinity_SMP_Node_get( thread );
 
-  (scheduler);
+  (void) scheduler;
 
   /*
    *  All we add is affinity information to the basic SMP node.
@@ -91,7 +91,6 @@ static inline void _Scheduler_SMP_Allocate_processor_exact(
 )
 {
    Scheduler_SMP_Node *scheduled_node = _Scheduler_SMP_Node_get( scheduled );
-   Per_CPU_Control    *cpu_of_scheduled = _Thread_Get_CPU( scheduled );
    Per_CPU_Control    *cpu_of_victim = _Thread_Get_CPU( victim );
    Per_CPU_Control    *cpu_self = _Per_CPU_Get();
 
