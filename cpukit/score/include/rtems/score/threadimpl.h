@@ -268,22 +268,6 @@ void _Thread_Set_state(
 );
 
 /**
- *  @brief Sets the transient state for a thread.
- *
- *  This routine sets the Transient state for @a the_thread.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
- *
- *  @param[in] the_thread is the thread to preform the action upon.
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-void _Thread_Set_transient(
-  Thread_Control *the_thread
-);
-
-/**
  *  @brief Initializes enviroment for a thread.
  *
  *  This routine initializes the context of @a the_thread to its
