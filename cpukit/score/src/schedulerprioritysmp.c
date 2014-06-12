@@ -237,12 +237,12 @@ void _Scheduler_priority_SMP_Yield(
 )
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
-  ISR_Level level;
 
-  _ISR_Disable( level );
-
-  _Scheduler_SMP_Extract_from_scheduled( thread );
-  _Scheduler_priority_SMP_Enqueue_scheduled_fifo( context, thread );
-
-  _ISR_Enable( level );
+  return _Scheduler_SMP_Yield(
+    context,
+    thread,
+    _Scheduler_priority_SMP_Extract_from_ready,
+    _Scheduler_priority_SMP_Enqueue_fifo,
+    _Scheduler_priority_SMP_Enqueue_scheduled_fifo
+  );
 }

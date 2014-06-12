@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/score/schedulersimpleimpl.h>
-#include <rtems/score/isr.h>
 
 void _Scheduler_simple_Yield(
   const Scheduler_Control *scheduler,
@@ -28,16 +27,8 @@ void _Scheduler_simple_Yield(
 {
   Scheduler_simple_Context *context =
     _Scheduler_simple_Get_context( scheduler );
-  ISR_Level       level;
 
-  _ISR_Disable( level );
-
-    _Chain_Extract_unprotected( &the_thread->Object.Node );
-    _Scheduler_simple_Insert_priority_fifo( &context->Ready, the_thread );
-
-    _ISR_Flash( level );
-
-    _Scheduler_simple_Schedule_body( scheduler, the_thread, false );
-
-  _ISR_Enable( level );
+  _Chain_Extract_unprotected( &the_thread->Object.Node );
+  _Scheduler_simple_Insert_priority_fifo( &context->Ready, the_thread );
+  _Scheduler_simple_Schedule_body( scheduler, the_thread, false );
 }

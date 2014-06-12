@@ -672,6 +672,27 @@ static inline void _Scheduler_SMP_Change_priority(
   }
 }
 
+static inline void _Scheduler_SMP_Yield(
+  Scheduler_Context     *context,
+  Thread_Control        *thread,
+  Scheduler_SMP_Extract  extract_from_ready,
+  Scheduler_SMP_Enqueue  enqueue_fifo,
+  Scheduler_SMP_Enqueue  enqueue_scheduled_fifo
+)
+{
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+
+  if ( node->state == SCHEDULER_SMP_NODE_SCHEDULED ) {
+    _Scheduler_SMP_Extract_from_scheduled( thread );
+
+    ( *enqueue_scheduled_fifo )( context, thread );
+  } else {
+    ( *extract_from_ready )( context, thread );
+
+    ( *enqueue_fifo )( context, thread );
+  }
+}
+
 static inline void _Scheduler_SMP_Insert_scheduled_lifo(
   Scheduler_Context *context,
   Thread_Control    *thread

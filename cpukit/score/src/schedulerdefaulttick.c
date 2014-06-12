@@ -29,6 +29,8 @@ void _Scheduler_default_Tick(
   Thread_Control          *executing
 )
 {
+  (void) scheduler;
+
   #ifdef __RTEMS_USE_TICKS_FOR_STATISTICS__
     /*
      *  Increment the number of ticks this thread has been executing
@@ -69,7 +71,7 @@ void _Scheduler_default_Tick(
          *  currently executing thread is placed at the rear of the
          *  FIFO for this priority and a new heir is selected.
          */
-        _Scheduler_Yield( scheduler, executing );
+        _Thread_Yield( executing );
         executing->cpu_time_budget =
           rtems_configuration_get_ticks_per_timeslice();
       }

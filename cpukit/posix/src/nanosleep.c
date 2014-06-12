@@ -22,7 +22,6 @@
 #include <errno.h>
 
 #include <rtems/seterr.h>
-#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/timespec.h>
 #include <rtems/score/watchdogimpl.h>
@@ -65,7 +64,7 @@ int nanosleep(
   if ( !ticks ) {
     _Thread_Disable_dispatch();
       executing = _Thread_Executing;
-      _Scheduler_Yield( _Scheduler_Get( executing ), executing );
+      _Thread_Yield( executing );
     _Thread_Enable_dispatch();
     if ( rmtp ) {
        rmtp->tv_sec = 0;

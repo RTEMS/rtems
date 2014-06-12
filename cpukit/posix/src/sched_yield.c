@@ -21,16 +21,13 @@
 #include <sched.h>
 
 #include <rtems/score/percpu.h>
-#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threaddispatch.h>
+#include <rtems/score/threadimpl.h>
 
 int sched_yield( void )
 {
-  Thread_Control *executing;
-
   _Thread_Disable_dispatch();
-    executing = _Thread_Executing;
-    _Scheduler_Yield( _Scheduler_Get( executing ), executing );
+    _Thread_Yield( _Thread_Executing );
   _Thread_Enable_dispatch();
   return 0;
 }

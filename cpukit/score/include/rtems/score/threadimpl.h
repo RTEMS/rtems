@@ -186,6 +186,8 @@ bool _Thread_Restart(
   Thread_Entry_numeric_type  numeric_argument
 );
 
+void _Thread_Yield( Thread_Control *executing );
+
 bool _Thread_Set_life_protection( bool protect );
 
 void _Thread_Life_action_handler(

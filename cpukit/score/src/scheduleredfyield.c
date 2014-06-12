@@ -29,9 +29,6 @@ void _Scheduler_EDF_Yield(
   Scheduler_EDF_Context *context =
     _Scheduler_EDF_Get_context( scheduler );
   Scheduler_EDF_Node    *node = _Scheduler_EDF_Node_get( the_thread );
-  ISR_Level              level;
-
-  _ISR_Disable( level );
 
   /*
    * The RBTree has more than one node, enqueue behind the tasks
@@ -40,9 +37,5 @@ void _Scheduler_EDF_Yield(
   _RBTree_Extract( &context->Ready, &node->Node );
   _RBTree_Insert( &context->Ready, &node->Node );
 
-  _ISR_Flash( level );
-
   _Scheduler_EDF_Schedule_body( scheduler, the_thread, false );
-
-  _ISR_Enable( level );
 }
