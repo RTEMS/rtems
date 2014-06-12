@@ -395,7 +395,7 @@ static inline void _Scheduler_SMP_Update_heir(
   }
 }
 
-static void _Scheduler_SMP_Allocate_processor(
+static inline void _Scheduler_SMP_Allocate_processor(
   Scheduler_SMP_Context *self,
   Thread_Control *scheduled,
   Thread_Control *victim
@@ -433,7 +433,7 @@ static void _Scheduler_SMP_Allocate_processor(
   }
 }
 
-static Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
+static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
   Scheduler_Context *context,
   Thread_Control    *filter,
   Chain_Node_order   order
