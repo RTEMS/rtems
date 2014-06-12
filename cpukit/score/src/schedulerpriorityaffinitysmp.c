@@ -42,6 +42,30 @@
  *  + _Scheduler_priority_SMP_Do_update
  */
 
+static bool _Scheduler_priority_affinity_SMP_Insert_priority_lifo_order(
+  const Chain_Node *to_insert,
+  const Chain_Node *next
+)
+{
+  const Thread_Control *thread_to_insert = (const Thread_Control *) to_insert;
+  const Thread_Control *thread_next = (const Thread_Control *) next;
+
+  return next != NULL
+    && thread_to_insert->current_priority <= thread_next->current_priority;
+}
+
+static bool _Scheduler_priority_affinity_SMP_Insert_priority_fifo_order(
+  const Chain_Node *to_insert,
+  const Chain_Node *next
+)
+{
+  const Thread_Control *thread_to_insert = (const Thread_Control *) to_insert;
+  const Thread_Control *thread_next = (const Thread_Control *) next;
+
+  return next != NULL
+    && thread_to_insert->current_priority < thread_next->current_priority;
+}
+
 /*
  * This method returns the scheduler node for the specified thread
  * as a scheduler specific type.
@@ -268,7 +292,7 @@ static void _Scheduler_priority_affinity_SMP_Enqueue_fifo(
   _Scheduler_SMP_Enqueue_ordered(
     context,
     thread,
-    _Scheduler_simple_Insert_priority_fifo_order,
+    _Scheduler_priority_affinity_SMP_Insert_priority_fifo_order,
     _Scheduler_priority_SMP_Insert_ready_fifo,
     _Scheduler_SMP_Insert_scheduled_fifo,
     _Scheduler_priority_SMP_Move_from_scheduled_to_ready,
@@ -402,7 +426,7 @@ static void _Scheduler_priority_affinity_SMP_Enqueue_lifo(
   _Scheduler_priority_affinity_SMP_Enqueue_ordered(
     context,
     thread,
-    _Scheduler_simple_Insert_priority_lifo_order,
+    _Scheduler_priority_affinity_SMP_Insert_priority_lifo_order,
     _Scheduler_priority_SMP_Insert_ready_lifo,
     _Scheduler_SMP_Insert_scheduled_lifo
   );

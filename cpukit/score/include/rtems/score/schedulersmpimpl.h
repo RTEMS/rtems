@@ -471,7 +471,9 @@ static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
  * @param[in] move_from_scheduled_to_ready Function to move a node from the set
  *   of scheduled nodes to the set of ready nodes.
  * @param[in] get_lowest_scheduled Function to select the thread from the
- *   scheduled nodes to replace. It may not be possible to find one.
+ *   scheduled nodes to replace.  It may not be possible to find one, in this
+ *   case a pointer must be returned so that the order functions returns false
+ *   if this pointer is passed as the second argument to the order function.
  * @param[in] allocate_processor Function to allocate a processor to a thread
  *   based on the rules of the scheduler.
  */
@@ -490,20 +492,7 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
   Thread_Control *lowest_scheduled =
     ( *get_lowest_scheduled )( context, thread, order );
 
-  /*
-   *  get_lowest_scheduled can return a NULL if no scheduled threads
-   *  should be removed from their processor based on the selection
-   *  criteria. For example, this can occur when the affinity of the
-   *  thread being enqueued schedules it against higher priority threads.
-   *  A low priority thread with affinity can only consider the threads
-   *  which are on the cores if has affinity for.
-   *
-   *  The get_lowest_scheduled helper should assert on not returning NULL
-   *  if that is not possible for that scheduler.
-   */
-
-  if ( lowest_scheduled &&
-       ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node ) ) {
+  if ( ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node ) ) {
     Scheduler_SMP_Node *lowest_scheduled_node =
       _Scheduler_SMP_Node_get( lowest_scheduled );
 
