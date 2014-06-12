@@ -287,34 +287,34 @@ typedef Thread_Control *( *Scheduler_SMP_Get_lowest_scheduled )(
 
 typedef void ( *Scheduler_SMP_Extract )(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Thread_Control    *thread
 );
 
 typedef void ( *Scheduler_SMP_Insert )(
   Scheduler_Context *context,
-  Thread_Control *thread_to_insert
+  Thread_Control    *thread_to_insert
 );
 
 typedef void ( *Scheduler_SMP_Move )(
   Scheduler_Context *context,
-  Thread_Control *thread_to_move
+  Thread_Control    *thread_to_move
 );
 
 typedef void ( *Scheduler_SMP_Update )(
   Scheduler_Context *context,
-  Scheduler_Node *node,
-  Priority_Control new_priority
+  Scheduler_Node    *node,
+  Priority_Control   new_priority
 );
 
 typedef void ( *Scheduler_SMP_Enqueue )(
   Scheduler_Context *context,
-  Thread_Control *thread_to_enqueue
+  Thread_Control    *thread_to_enqueue
 );
 
 typedef void ( *Scheduler_SMP_Allocate_processor )(
   Scheduler_SMP_Context *self,
-  Thread_Control *scheduled,
-  Thread_Control *victim
+  Thread_Control        *scheduled,
+  Thread_Control        *victim
 );
 
 static inline Scheduler_SMP_Context *_Scheduler_SMP_Get_self(
@@ -348,7 +348,7 @@ static inline void _Scheduler_SMP_Node_initialize(
 extern const bool _Scheduler_SMP_Node_valid_state_changes[ 3 ][ 3 ];
 
 static inline void _Scheduler_SMP_Node_change_state(
-  Scheduler_SMP_Node *node,
+  Scheduler_SMP_Node      *node,
   Scheduler_SMP_Node_state new_state
 )
 {
@@ -361,7 +361,7 @@ static inline void _Scheduler_SMP_Node_change_state(
 
 static inline bool _Scheduler_SMP_Is_processor_owned_by_us(
   const Scheduler_SMP_Context *self,
-  const Per_CPU_Control *cpu
+  const Per_CPU_Control       *cpu
 )
 {
   return cpu->scheduler_context == &self->Base;
@@ -370,7 +370,7 @@ static inline bool _Scheduler_SMP_Is_processor_owned_by_us(
 static inline void _Scheduler_SMP_Update_heir(
   Per_CPU_Control *cpu_self,
   Per_CPU_Control *cpu_for_heir,
-  Thread_Control *heir
+  Thread_Control  *heir
 )
 {
   cpu_for_heir->heir = heir;
@@ -397,8 +397,8 @@ static inline void _Scheduler_SMP_Update_heir(
 
 static inline void _Scheduler_SMP_Allocate_processor(
   Scheduler_SMP_Context *self,
-  Thread_Control *scheduled,
-  Thread_Control *victim
+  Thread_Control        *scheduled,
+  Thread_Control        *victim
 )
 {
   Scheduler_SMP_Node *scheduled_node = _Scheduler_SMP_Node_get( scheduled );
@@ -476,9 +476,9 @@ static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
  *   based on the rules of the scheduler.
  */
 static inline void _Scheduler_SMP_Enqueue_ordered(
-  Scheduler_Context                 *context,
-  Thread_Control                    *thread,
-  Chain_Node_order                   order,
+  Scheduler_Context                  *context,
+  Thread_Control                     *thread,
+  Chain_Node_order                    order,
   Scheduler_SMP_Insert                insert_ready,
   Scheduler_SMP_Insert                insert_scheduled,
   Scheduler_SMP_Move                  move_from_scheduled_to_ready,
@@ -537,7 +537,7 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
  *   based on the rules of the scheduler.
  */
 static inline void _Scheduler_SMP_Enqueue_scheduled_ordered(
-  Scheduler_Context *context,
+  Scheduler_Context                *context,
   Thread_Control                   *thread,
   Chain_Node_order                  order,
   Scheduler_SMP_Get_highest_ready   get_highest_ready,
@@ -576,11 +576,11 @@ static inline void _Scheduler_SMP_Extract_from_scheduled(
 }
 
 static inline void _Scheduler_SMP_Schedule_highest_ready(
-  Scheduler_Context *context,
-  Thread_Control *victim,
-  Scheduler_SMP_Get_highest_ready get_highest_ready,
-  Scheduler_SMP_Move move_from_ready_to_scheduled,
-  Scheduler_SMP_Allocate_processor allocate_processor
+  Scheduler_Context                *context,
+  Thread_Control                   *victim,
+  Scheduler_SMP_Get_highest_ready   get_highest_ready,
+  Scheduler_SMP_Move                move_from_ready_to_scheduled,
+  Scheduler_SMP_Allocate_processor  allocate_processor
 )
 {
   Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
@@ -604,12 +604,12 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
  * of ready nodes to the set of scheduled nodes.
  */
 static inline void _Scheduler_SMP_Block(
-  Scheduler_Context *context,
-  Thread_Control *thread,
-  Scheduler_SMP_Extract extract_from_ready,
-  Scheduler_SMP_Get_highest_ready get_highest_ready,
-  Scheduler_SMP_Move move_from_ready_to_scheduled,
-  Scheduler_SMP_Allocate_processor allocate_processor
+  Scheduler_Context                *context,
+  Thread_Control                   *thread,
+  Scheduler_SMP_Extract             extract_from_ready,
+  Scheduler_SMP_Get_highest_ready   get_highest_ready,
+  Scheduler_SMP_Move                move_from_ready_to_scheduled,
+  Scheduler_SMP_Allocate_processor  allocate_processor
 )
 {
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
@@ -633,9 +633,9 @@ static inline void _Scheduler_SMP_Block(
 }
 
 static inline void _Scheduler_SMP_Unblock(
-  Scheduler_Context *context,
-  Thread_Control *thread,
-  Scheduler_SMP_Enqueue enqueue_fifo
+  Scheduler_Context     *context,
+  Thread_Control        *thread,
+  Scheduler_SMP_Enqueue  enqueue_fifo
 )
 {
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
@@ -646,16 +646,16 @@ static inline void _Scheduler_SMP_Unblock(
 }
 
 static inline void _Scheduler_SMP_Change_priority(
-  Scheduler_Context *context,
-  Thread_Control *thread,
-  Priority_Control new_priority,
-  bool prepend_it,
-  Scheduler_SMP_Extract extract_from_ready,
-  Scheduler_SMP_Update update,
-  Scheduler_SMP_Enqueue enqueue_fifo,
-  Scheduler_SMP_Enqueue enqueue_lifo,
-  Scheduler_SMP_Enqueue enqueue_scheduled_fifo,
-  Scheduler_SMP_Enqueue enqueue_scheduled_lifo
+  Scheduler_Context     *context,
+  Thread_Control        *thread,
+  Priority_Control       new_priority,
+  bool                   prepend_it,
+  Scheduler_SMP_Extract  extract_from_ready,
+  Scheduler_SMP_Update   update,
+  Scheduler_SMP_Enqueue  enqueue_fifo,
+  Scheduler_SMP_Enqueue  enqueue_lifo,
+  Scheduler_SMP_Enqueue  enqueue_scheduled_fifo,
+  Scheduler_SMP_Enqueue  enqueue_scheduled_lifo
 )
 {
   Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
@@ -685,7 +685,7 @@ static inline void _Scheduler_SMP_Change_priority(
 
 static inline void _Scheduler_SMP_Insert_scheduled_lifo(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Thread_Control    *thread
 )
 {
   Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
@@ -699,7 +699,7 @@ static inline void _Scheduler_SMP_Insert_scheduled_lifo(
 
 static inline void _Scheduler_SMP_Insert_scheduled_fifo(
   Scheduler_Context *context,
-  Thread_Control *thread
+  Thread_Control    *thread
 )
 {
   Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
