@@ -53,6 +53,7 @@ void Validate_setaffinity_errors(void)
   rtems_test_assert( sc == RTEMS_INVALID_NUMBER );
 
   /* Verify rtems_task_set_affinity checks that at thread id is valid */
+  CPU_ZERO(&cpuset);
   CPU_SET(0, &cpuset);
   puts( "Init - rtems_task_set_affinity - Invalid thread - RTEMS_INVALID_ID" );
   sc = rtems_task_set_affinity( 999, sizeof(cpu_set_t), &cpuset );
@@ -75,6 +76,7 @@ void Validate_getaffinity_errors(void)
   cpu_set_t           cpuset;
 
   /* Verify rtems_task_get_affinity checks that at thread id is valid */
+  CPU_ZERO(&cpuset);
   CPU_SET(0, &cpuset);
   puts( "Init - rtems_task_get_affinity - Invalid thread - RTEMS_INVALID_ID" );
   sc = rtems_task_get_affinity( 999, sizeof(cpu_set_t), &cpuset );

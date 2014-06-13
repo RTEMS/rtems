@@ -58,6 +58,7 @@ void Validate_setaffinity_errors(void)
   rtems_test_assert( sc == EINVAL );
 
   /* Verify pthread_setaffinity_np checks that at thread id is valid */
+  CPU_ZERO(&cpuset);
   CPU_SET(0, &cpuset);
   puts( "Init - pthread_setaffinity_np - Invalid thread - ESRCH" );
   sc = pthread_setaffinity_np( 999, sizeof(cpu_set_t), &cpuset );
@@ -80,6 +81,7 @@ void Validate_getaffinity_errors(void)
   cpu_set_t           cpuset;
 
   /* Verify pthread_getaffinity_np checks that at thread id is valid */
+  CPU_ZERO(&cpuset);
   CPU_SET(0, &cpuset);
   puts( "Init - pthread_getaffinity_np - Invalid thread - ESRCH" );
   sc = pthread_getaffinity_np( 999, sizeof(cpu_set_t), &cpuset );
