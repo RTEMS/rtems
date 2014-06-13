@@ -20,6 +20,8 @@
 
 #include <bsp.h>
 #include <bspopts.h>
+#include <bsp/fatal.h>
+#include <rtems/rtems/intr.h>
 #include <ambapp.h>
 #include <rtems/score/profiling.h>
 
@@ -33,8 +35,6 @@
 
 volatile struct gptimer_regs *LEON3_Timer_Regs = 0;
 static int clkirq;
-
-#define CLOCK_VECTOR LEON_TRAP_TYPE( clkirq )
 
 static void leon3_clock_profiling_interrupt_delay(void)
 {
@@ -104,8 +104,25 @@ static void leon3_clock_profiling_interrupt_delay(void)
 
 #define Clock_driver_support_install_isr( _new, _old ) \
   do { \
-    _old = set_vector( _new, CLOCK_VECTOR, 1 ); \
+    (_old) = NULL; \
+    bsp_clock_handler_install(_new); \
   } while(0)
+
+static void bsp_clock_handler_install(rtems_isr *new)
+{
+  rtems_status_code sc;
+
+  sc = rtems_interrupt_handler_install(
+    clkirq,
+    "Clock",
+    RTEMS_INTERRUPT_UNIQUE,
+    new,
+    NULL
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    rtems_fatal(RTEMS_FATAL_SOURCE_BSP, LEON3_FATAL_CLOCK_INITIALIZATION);
+  }
+}
 
 #define Clock_driver_support_initialize_hardware() \
   do { \
