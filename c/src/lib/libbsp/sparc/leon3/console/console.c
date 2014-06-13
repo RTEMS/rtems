@@ -355,12 +355,12 @@ static int leon3_console_last_close(int major, int minor, void *arg)
 {
   struct rtems_termios_tty *tty = leon3_console_get_tty(arg);
   struct apbuart_priv *uart = leon3_console_get_uart(minor);
-  rtems_interrupt_level level;
+  rtems_interrupt_lock_context lock_ctx;
 
   /* Turn off RX interrupts */
-  rtems_termios_interrupt_lock_acquire(tty, level);
+  rtems_termios_interrupt_lock_acquire(tty, &lock_ctx);
   uart->regs->ctrl &= ~(LEON_REG_UART_CTRL_RI);
-  rtems_termios_interrupt_lock_release(tty, level);
+  rtems_termios_interrupt_lock_release(tty, &lock_ctx);
 
   /**** Flush device ****/
   while (uart->sending) {
