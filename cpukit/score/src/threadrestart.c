@@ -55,6 +55,11 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
     );
   }
 
+  _Objects_Close(
+    _Objects_Get_information_id( the_thread->Object.id ),
+    &the_thread->Object
+  );
+
   _Thread_Set_state( the_thread, STATES_ZOMBIE );
   _Thread_queue_Extract_with_proxy( the_thread );
   _Watchdog_Remove( &the_thread->Timer );
@@ -281,11 +286,6 @@ static void _Thread_Request_life_change(
 void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
 {
   _Assert( _Thread_Is_life_protected( executing->Life.state ) );
-
-  _Objects_Close(
-    _Objects_Get_information_id( the_thread->Object.id ),
-    &the_thread->Object
-  );
 
   if ( _States_Is_dormant( the_thread->current_state ) ) {
     _Thread_Make_zombie( the_thread );

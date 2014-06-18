@@ -7,6 +7,9 @@ directives:
   - rtems_task_restart()
   - _Thread_Set_life_protection()
   - _Thread_Wait_for_execution_stop()
+  - rtems_task_suspend()
+  - rtems_event_receive()
+  - rtems_event_system_receive()
 
 concepts:
 
@@ -14,3 +17,6 @@ concepts:
   - Ensure that a _Thread_Set_life_protection() works on SMP in case interrupt
     processing is delayed.
   - Ensure that _Thread_Wait_for_execution_stop() works on SMP.
+  - Ensure that rtems_task_suspend(), rtems_event_receive() and
+    rtems_event_system_receive() operations can be completed in case a thread
+    deletion is in progress on SMP.
