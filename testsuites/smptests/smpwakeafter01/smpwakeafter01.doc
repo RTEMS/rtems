@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpwakeafter01
+
+directives:
+
+  - rtems_task_wake_after()
+
+concepts:
+
+  - Ensure that rtems_task_wake_after() works on multiple processors with some
+    tasks using different intervals.

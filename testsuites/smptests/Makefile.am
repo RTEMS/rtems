@@ -30,6 +30,7 @@ SUBDIRS += smpsignal01
 SUBDIRS += smpswitchextension01
 SUBDIRS += smpthreadlife01
 SUBDIRS += smpunsupported01
+SUBDIRS += smpwakeafter01
 if HAS_POSIX
 SUBDIRS += smppsxaffinity01
 SUBDIRS += smppsxaffinity02
