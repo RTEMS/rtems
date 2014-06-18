@@ -85,8 +85,8 @@ int nanosleep(
     _Watchdog_Initialize(
       &executing->Timer,
       _Thread_Delay_ended,
-      executing->Object.id,
-      NULL
+      0,
+      executing
     );
     _Watchdog_Insert_ticks( &executing->Timer, ticks );
   _Thread_Enable_dispatch();

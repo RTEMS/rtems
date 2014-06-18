@@ -551,14 +551,14 @@ rtems_status_code rtems_timer_initiate_server(
   _Watchdog_Initialize(
     &ts->Interval_watchdogs.System_watchdog,
     _Thread_Delay_ended,
-    id,
-    NULL
+    0,
+    ts->thread
   );
   _Watchdog_Initialize(
     &ts->TOD_watchdogs.System_watchdog,
     _Thread_Delay_ended,
-    id,
-    NULL
+    0,
+    ts->thread
   );
 
   /*

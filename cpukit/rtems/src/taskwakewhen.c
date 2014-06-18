@@ -29,6 +29,7 @@ rtems_status_code rtems_task_wake_when(
 )
 {
   Watchdog_Interval   seconds;
+  Thread_Control     *executing;
 
   if ( !_TOD_Is_set() )
     return RTEMS_NOT_DEFINED;
@@ -47,15 +48,16 @@ rtems_status_code rtems_task_wake_when(
     return RTEMS_INVALID_CLOCK;
 
   _Thread_Disable_dispatch();
-    _Thread_Set_state( _Thread_Executing, STATES_WAITING_FOR_TIME );
+    executing = _Thread_Executing;
+    _Thread_Set_state( executing, STATES_WAITING_FOR_TIME );
     _Watchdog_Initialize(
-      &_Thread_Executing->Timer,
+      &executing->Timer,
       _Thread_Delay_ended,
-      _Thread_Executing->Object.id,
-      NULL
+      0,
+      executing
     );
     _Watchdog_Insert_seconds(
-      &_Thread_Executing->Timer,
+      &executing->Timer,
       seconds - _TOD_Seconds_since_epoch()
     );
   _Thread_Enable_dispatch();
