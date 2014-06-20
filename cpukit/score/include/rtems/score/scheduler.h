@@ -365,6 +365,12 @@ void _Scheduler_default_Start_idle(
     size_t                   cpusetsize,
     const cpu_set_t         *cpuset
   );
+
+  #define SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY \
+    , _Scheduler_default_Get_affinity \
+    , _Scheduler_default_Set_affinity
+#else
+  #define SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY
 #endif
 
 /**
