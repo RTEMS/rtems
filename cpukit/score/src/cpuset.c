@@ -62,7 +62,7 @@ bool _CPU_set_Is_valid( const cpu_set_t *cpuset, size_t setsize )
   cpu_set_t             temp;
 
   if ( !cpuset )
-    false;
+    return false;
 
   if ( setsize != cpuset_default.setsize )
     return false;
