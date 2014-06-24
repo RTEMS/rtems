@@ -18,6 +18,8 @@
 
 #include <rtems.h>
 #include <rtems/libcsupport.h>
+#include <rtems/score/objectimpl.h>
+#include <rtems/score/threadimpl.h>
 
 #include "tmacros.h"
 
@@ -44,7 +46,7 @@ typedef struct {
 
 static test_context test_instance;
 
-static void task(rtems_task_argument arg)
+static void migration_task(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
   rtems_status_code sc;
@@ -63,19 +65,12 @@ static void task(rtems_task_argument arg)
   }
 }
 
-static void test(void)
+static void test_migrations(test_context *ctx)
 {
-  test_context *ctx = &test_instance;
   rtems_status_code sc;
   uint32_t cpu_count = rtems_get_processor_count();
-  uint32_t cpu_index;
   uint32_t task_count = cpu_count + 1;
   uint32_t task_index;
-
-  for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
-    sc = rtems_scheduler_ident(cpu_index, &ctx->scheduler_ids[cpu_index]);
-    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  }
 
   for (task_index = 0; task_index < task_count; ++task_index) {
     rtems_id task_id;
@@ -93,7 +88,7 @@ static void test(void)
     sc = rtems_task_set_scheduler(task_id, ctx->scheduler_ids[task_index % cpu_count]);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    sc = rtems_task_start(task_id, task, task_index);
+    sc = rtems_task_start(task_id, migration_task, task_index);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
     ctx->task_ids[task_index] = task_id;
@@ -114,15 +109,147 @@ static void test(void)
   }
 }
 
+static void busy_loop_task(rtems_task_argument arg)
+{
+  while (true) {
+    /* Do nothing */
+  }
+}
+
+static Thread_Control *get_thread_by_id(rtems_id task_id)
+{
+  Objects_Locations location;
+  Thread_Control *thread;
+
+  thread = _Thread_Get(task_id, &location);
+  rtems_test_assert(location == OBJECTS_LOCAL);
+  _Thread_Enable_dispatch();
+
+  return thread;
+}
+
+static void test_double_migration(test_context *ctx)
+{
+  uint32_t cpu_count = rtems_get_processor_count();
+
+  if (cpu_count >= 2) {
+    rtems_status_code sc;
+    rtems_id task_id;
+    rtems_id scheduler_id;
+    uint32_t cpu_self_index = 0;
+    uint32_t cpu_other_index = 1;
+    Per_CPU_Control *cpu_self = _Per_CPU_Get_by_index(cpu_self_index);
+    Per_CPU_Control *cpu_other = _Per_CPU_Get_by_index(cpu_other_index);
+    Thread_Control *self;
+    Thread_Control *other;
+
+    sc = rtems_task_get_scheduler(RTEMS_SELF, &scheduler_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    rtems_test_assert(scheduler_id == ctx->scheduler_ids[cpu_self_index]);
+
+    sc = rtems_task_create(
+      rtems_build_name('T', 'A', 'S', 'K'),
+      2,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_MODES,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &task_id
+    );
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    other = get_thread_by_id(task_id);
+
+    sc = rtems_task_set_scheduler(
+      task_id,
+      ctx->scheduler_ids[cpu_other_index]
+    );
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_task_start(task_id, busy_loop_task, 0);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    while (!_Thread_Is_executing_on_a_processor(other)) {
+      /* Wait */
+    }
+
+    _Thread_Disable_dispatch();
+
+    self = _Thread_Executing;
+
+    rtems_test_assert(cpu_self->executing == self);
+    rtems_test_assert(cpu_self->heir == self);
+    rtems_test_assert(!cpu_self->dispatch_necessary);
+
+    rtems_test_assert(cpu_other->executing == other);
+    rtems_test_assert(cpu_other->heir == other);
+    rtems_test_assert(!cpu_other->dispatch_necessary);
+
+    sc = rtems_task_set_scheduler(
+      RTEMS_SELF,
+      ctx->scheduler_ids[cpu_other_index]
+    );
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    rtems_test_assert(cpu_self->executing == self);
+    rtems_test_assert(cpu_self->heir != self);
+    rtems_test_assert(cpu_self->dispatch_necessary);
+
+    while (_Thread_Is_executing_on_a_processor(other)) {
+      /* Wait */
+    }
+
+    rtems_test_assert(cpu_other->executing == self);
+    rtems_test_assert(cpu_other->heir == self);
+    rtems_test_assert(!cpu_other->dispatch_necessary);
+
+    sc = rtems_task_set_scheduler(
+      RTEMS_SELF,
+      ctx->scheduler_ids[cpu_self_index]
+    );
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    rtems_test_assert(cpu_self->executing == self);
+    rtems_test_assert(cpu_self->heir == self);
+    rtems_test_assert(cpu_self->dispatch_necessary);
+
+    rtems_test_assert(cpu_other->heir == other);
+
+    _Thread_Enable_dispatch();
+
+    while (!_Thread_Is_executing_on_a_processor(other)) {
+      /* Wait */
+    }
+
+    sc = rtems_task_delete(task_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  }
+}
+
+static void init_scheduler_ids(test_context *ctx)
+{
+  rtems_status_code sc;
+  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_index;
+
+  for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
+    sc = rtems_scheduler_ident(cpu_index, &ctx->scheduler_ids[cpu_index]);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  }
+}
+
 static void Init(rtems_task_argument arg)
 {
+  test_context *ctx = &test_instance;
   rtems_resource_snapshot snapshot;
 
   TEST_BEGIN();
 
   rtems_resource_snapshot_take(&snapshot);
 
-  test();
+  init_scheduler_ids(ctx);
+  test_double_migration(ctx);
+  test_migrations(ctx);
 
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
 
