@@ -61,6 +61,19 @@ void _Thread_Start_multitasking( void )
 
   _Profiling_Thread_dispatch_disable( cpu_self, 0 );
 
+#if defined(RTEMS_SMP)
+  /*
+   * The _CPU_Context_Restart_self() implementations usually assume that self
+   * context is executing.
+   *
+   * FIXME: We have a race condition here in case another thread already
+   * performed scheduler operations and moved our heir thread to another
+   * processor.  The time frame for this is likely too small to be practically
+   * relevant.
+   */
+  _CPU_Context_Set_is_executing( &heir->Registers, true );
+#endif
+
 #if defined(_CPU_Start_multitasking)
   _CPU_Start_multitasking( &heir->Registers );
 #else
