@@ -21,7 +21,9 @@
 
 #include <rtems.h>
 #include <rtems/libcsupport.h>
+#include <rtems/score/schedulersmpimpl.h>
 #include <rtems/score/smpbarrier.h>
+#include <rtems/score/smplock.h>
 
 #define TESTS_USE_PRINTK
 #include "tmacros.h"
@@ -32,27 +34,43 @@ const char rtems_test_name[] = "SMPMRSP 1";
 
 #define MRSP_COUNT 32
 
+#define SWITCH_EVENT_COUNT 32
+
 typedef struct {
   uint32_t sleep;
   uint32_t timeout;
   uint32_t obtain[MRSP_COUNT];
+  uint32_t cpu[CPU_COUNT];
 } counter;
 
 typedef struct {
+  uint32_t cpu_index;
+  const Thread_Control *executing;
+  const Thread_Control *heir;
+  const Thread_Control *heir_node;
+  Priority_Control heir_priority;
+} switch_event;
+
+typedef struct {
   rtems_id main_task_id;
+  rtems_id migration_task_id;
   rtems_id counting_sem_id;
   rtems_id mrsp_ids[MRSP_COUNT];
   rtems_id scheduler_ids[CPU_COUNT];
   rtems_id worker_ids[2 * CPU_COUNT];
-  rtems_id timer_id;
   volatile bool stop_worker[CPU_COUNT];
   counter counters[2 * CPU_COUNT];
+  uint32_t migration_counters[CPU_COUNT];
   Thread_Control *worker_task;
   SMP_barrier_Control barrier;
+  SMP_lock_Control switch_lock;
+  size_t switch_index;
+  switch_event switch_events[32];
 } test_context;
 
 static test_context test_instance = {
-  .barrier = SMP_BARRIER_CONTROL_INITIALIZER
+  .barrier = SMP_BARRIER_CONTROL_INITIALIZER,
+  .switch_lock = SMP_LOCK_INITIALIZER("test instance switch lock")
 };
 
 static void barrier(test_context *ctx, SMP_barrier_State *bs)
@@ -60,14 +78,27 @@ static void barrier(test_context *ctx, SMP_barrier_State *bs)
   _SMP_barrier_Wait(&ctx->barrier, bs, 2);
 }
 
-static void assert_prio(rtems_id task_id, rtems_task_priority expected_prio)
+static rtems_task_priority get_prio(rtems_id task_id)
 {
   rtems_status_code sc;
   rtems_task_priority prio;
 
   sc = rtems_task_set_priority(task_id, RTEMS_CURRENT_PRIORITY, &prio);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(prio == expected_prio);
+
+  return prio;
+}
+
+static void wait_for_prio(rtems_id task_id, rtems_task_priority prio)
+{
+  while (get_prio(task_id) != prio) {
+    /* Wait */
+  }
+}
+
+static void assert_prio(rtems_id task_id, rtems_task_priority expected_prio)
+{
+  rtems_test_assert(get_prio(task_id) == expected_prio);
 }
 
 static void change_prio(rtems_id task_id, rtems_task_priority prio)
@@ -83,6 +114,78 @@ static void assert_executing_worker(test_context *ctx)
   rtems_test_assert(
     _CPU_Context_Get_is_executing(&ctx->worker_task->Registers)
   );
+}
+
+static void switch_extension(Thread_Control *executing, Thread_Control *heir)
+{
+  test_context *ctx = &test_instance;
+  SMP_lock_Context lock_context;
+  size_t i;
+
+  _SMP_lock_ISR_disable_and_acquire(&ctx->switch_lock, &lock_context);
+
+  i = ctx->switch_index;
+  if (i < SWITCH_EVENT_COUNT) {
+    switch_event *e = &ctx->switch_events[i];
+    Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node(heir);
+
+    e->cpu_index = rtems_get_current_processor();
+    e->executing = executing;
+    e->heir = heir;
+    e->heir_node = _Scheduler_Node_get_owner(&node->Base);
+    e->heir_priority = node->priority;
+
+    ctx->switch_index = i + 1;
+  }
+
+  _SMP_lock_Release_and_ISR_enable(&ctx->switch_lock, &lock_context);
+}
+
+static void reset_switch_events(test_context *ctx)
+{
+  SMP_lock_Context lock_context;
+
+  _SMP_lock_ISR_disable_and_acquire(&ctx->switch_lock, &lock_context);
+  ctx->switch_index = 0;
+  _SMP_lock_Release_and_ISR_enable(&ctx->switch_lock, &lock_context);
+}
+
+static size_t get_switch_events(test_context *ctx)
+{
+  SMP_lock_Context lock_context;
+  size_t events;
+
+  _SMP_lock_ISR_disable_and_acquire(&ctx->switch_lock, &lock_context);
+  events = ctx->switch_index;
+  _SMP_lock_Release_and_ISR_enable(&ctx->switch_lock, &lock_context);
+
+  return events;
+}
+
+static void print_switch_events(test_context *ctx)
+{
+  size_t n = get_switch_events(ctx);
+  size_t i;
+
+  for (i = 0; i < n; ++i) {
+    switch_event *e = &ctx->switch_events[i];
+    char ex[5];
+    char hr[5];
+    char hn[5];
+
+    rtems_object_get_name(e->executing->Object.id, sizeof(ex), &ex[0]);
+    rtems_object_get_name(e->heir->Object.id, sizeof(hr), &hr[0]);
+    rtems_object_get_name(e->heir_node->Object.id, sizeof(hn), &hn[0]);
+
+    printf(
+      "[%" PRIu32 "] %4s -> %4s (prio %3" PRIu32 ", node %4s)\n",
+      e->cpu_index,
+      &ex[0],
+      &hr[0],
+      e->heir_priority,
+      &hn[0]
+    );
+  }
 }
 
 static void obtain_and_release_worker(rtems_task_argument arg)
@@ -134,9 +237,8 @@ static void obtain_and_release_worker(rtems_task_argument arg)
   rtems_test_assert(0);
 }
 
-static void test_mrsp_obtain_and_release(void)
+static void test_mrsp_obtain_and_release(test_context *ctx)
 {
-  test_context *ctx = &test_instance;
   rtems_status_code sc;
   rtems_task_priority prio;
   rtems_id scheduler_id;
@@ -144,14 +246,14 @@ static void test_mrsp_obtain_and_release(void)
 
   puts("test MrsP obtain and release");
 
+  change_prio(RTEMS_SELF, 2);
+
   /* Check executing task parameters */
 
   sc = rtems_task_get_scheduler(RTEMS_SELF, &scheduler_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   rtems_test_assert(ctx->scheduler_ids[0] == scheduler_id);
-
-  assert_prio(RTEMS_SELF, 2);
 
   /* Create a MrsP semaphore object and lock it */
 
@@ -408,24 +510,12 @@ static void test_mrsp_unlock_order_error(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
-static void deadlock_timer(rtems_id id, void *arg)
-{
-  test_context *ctx = &test_instance;
-  rtems_status_code sc;
-
-  sc = rtems_task_suspend(ctx->worker_ids[0]);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-}
-
 static void deadlock_worker(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
   rtems_status_code sc;
 
   sc = rtems_semaphore_obtain(ctx->mrsp_ids[1], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  sc = rtems_timer_fire_after(ctx->timer_id, 2, deadlock_timer, NULL);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
@@ -444,21 +534,14 @@ static void deadlock_worker(rtems_task_argument arg)
   rtems_test_assert(0);
 }
 
-static void test_mrsp_deadlock_error(void)
+static void test_mrsp_deadlock_error(test_context *ctx)
 {
-  test_context *ctx = &test_instance;
   rtems_status_code sc;
   rtems_task_priority prio = 2;
 
   puts("test MrsP deadlock error");
 
-  assert_prio(RTEMS_SELF, prio);
-
-  sc = rtems_timer_create(
-    rtems_build_name('M', 'R', 'S', 'P'),
-    &ctx->timer_id
-  );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  change_prio(RTEMS_SELF, prio);
 
   sc = rtems_semaphore_create(
     rtems_build_name(' ', ' ', ' ', 'A'),
@@ -505,9 +588,6 @@ static void test_mrsp_deadlock_error(void)
   sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_resume(ctx->worker_ids[0]);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
   sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
@@ -518,9 +598,6 @@ static void test_mrsp_deadlock_error(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_semaphore_delete(ctx->mrsp_ids[1]);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  sc = rtems_timer_delete(ctx->timer_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
@@ -642,6 +719,206 @@ static void test_mrsp_multiple_obtain(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
+static void run_task(rtems_task_argument arg)
+{
+  volatile bool *run = (volatile bool *) arg;
+
+  while (true) {
+    *run = true;
+  }
+}
+
+static void test_mrsp_obtain_and_sleep_and_release(test_context *ctx)
+{
+  rtems_status_code sc;
+  rtems_id sem_id;
+  rtems_id run_task_id;
+  volatile bool run = false;
+
+  puts("test MrsP obtain and sleep and release");
+
+  change_prio(RTEMS_SELF, 1);
+
+  reset_switch_events(ctx);
+
+  sc = rtems_task_create(
+    rtems_build_name(' ', 'R', 'U', 'N'),
+    2,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &run_task_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(run_task_id, run_task, (rtems_task_argument) &run);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('S', 'E', 'M', 'A'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    1,
+    &sem_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(!run);
+
+  sc = rtems_task_wake_after(2);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(run);
+  run = false;
+
+  sc = rtems_semaphore_obtain(sem_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(!run);
+
+  sc = rtems_task_wake_after(2);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(!run);
+
+  sc = rtems_semaphore_release(sem_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  print_switch_events(ctx);
+
+  sc = rtems_semaphore_delete(sem_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(run_task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void help_task(rtems_task_argument arg)
+{
+  test_context *ctx = &test_instance;
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  while (true) {
+    /* Do nothing */
+  }
+}
+
+static void test_mrsp_obtain_and_release_with_help(test_context *ctx)
+{
+  rtems_status_code sc;
+  rtems_id help_task_id;
+  rtems_id run_task_id;
+  volatile bool run = false;
+
+  puts("test MrsP obtain and release with help");
+
+  change_prio(RTEMS_SELF, 3);
+
+  reset_switch_events(ctx);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('S', 'E', 'M', 'A'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    2,
+    &ctx->mrsp_ids[0]
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 2);
+
+  sc = rtems_task_create(
+    rtems_build_name('H', 'E', 'L', 'P'),
+    3,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &help_task_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_set_scheduler(
+    help_task_id,
+    ctx->scheduler_ids[1]
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(help_task_id, help_task, 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_create(
+    rtems_build_name(' ', 'R', 'U', 'N'),
+    4,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &run_task_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(run_task_id, run_task, (rtems_task_argument) &run);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  wait_for_prio(help_task_id, 2);
+
+  sc = rtems_task_wake_after(2);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(!run);
+
+  change_prio(run_task_id, 1);
+
+  rtems_test_assert(rtems_get_current_processor() == 1);
+
+  while (!run) {
+    /* Wait */
+  }
+
+  sc = rtems_task_wake_after(2);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(rtems_get_current_processor() == 1);
+
+  change_prio(run_task_id, 4);
+
+  rtems_test_assert(rtems_get_current_processor() == 1);
+
+  sc = rtems_task_wake_after(2);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(rtems_get_current_processor() == 1);
+
+  sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 3);
+
+  wait_for_prio(help_task_id, 3);
+
+  print_switch_events(ctx);
+
+  sc = rtems_semaphore_delete(ctx->mrsp_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(help_task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(run_task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
 static uint32_t simple_random(uint32_t v)
 {
   v *= 1664525;
@@ -673,6 +950,8 @@ static void load_worker(rtems_task_argument index)
 
       sc = rtems_task_wake_after(1);
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+      ++ctx->counters[index].cpu[rtems_get_current_processor()];
     } else {
       uint32_t n = (v >> 17) % (i + 1);
       uint32_t s;
@@ -695,6 +974,8 @@ static void load_worker(rtems_task_argument index)
           break;
         }
 
+        ++ctx->counters[index].cpu[rtems_get_current_processor()];
+
         v = simple_random(v);
       }
 
@@ -704,6 +985,8 @@ static void load_worker(rtems_task_argument index)
 
         sc = rtems_semaphore_release(ctx->mrsp_ids[k]);
         rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+        ++ctx->counters[index].cpu[rtems_get_current_processor()];
       }
     }
 
@@ -717,16 +1000,47 @@ static void load_worker(rtems_task_argument index)
   rtems_test_assert(0);
 }
 
-static void test_mrsp_load(void)
+static void migration_task(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
+  rtems_status_code sc;
+  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t v = 0xdeadbeef;
+
+  while (true) {
+    uint32_t cpu_index = (v >> 5) % cpu_count;
+
+    sc = rtems_task_set_scheduler(RTEMS_SELF, ctx->scheduler_ids[cpu_index]);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    ++ctx->migration_counters[rtems_get_current_processor()];
+
+    v = simple_random(v);
+  }
+}
+
+static void test_mrsp_load(test_context *ctx)
+{
   rtems_status_code sc;
   uint32_t cpu_count = rtems_get_processor_count();
   uint32_t index;
 
   puts("test MrsP load");
 
-  assert_prio(RTEMS_SELF, 2);
+  change_prio(RTEMS_SELF, 2);
+
+  sc = rtems_task_create(
+    rtems_build_name('M', 'I', 'G', 'R'),
+    2,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &ctx->migration_task_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(ctx->migration_task_id, migration_task, 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_semaphore_create(
     rtems_build_name('S', 'Y', 'N', 'C'),
@@ -829,15 +1143,18 @@ static void test_mrsp_load(void)
   sc = rtems_semaphore_delete(ctx->counting_sem_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
+  sc = rtems_task_delete(ctx->migration_task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
   for (index = 0; index < 2 * cpu_count; ++index) {
     uint32_t nest_level;
+    uint32_t cpu_index;
 
     printf(
-      "worker[%" PRIu32 "][%" PRIu32 "]\n"
+      "worker[%" PRIu32 "]\n"
         "  sleep = %" PRIu32 "\n"
         "  timeout = %" PRIu32 "\n",
-      index / 2,
-      index % 2,
+      index,
       ctx->counters[index].sleep,
       ctx->counters[index].timeout
     );
@@ -849,6 +1166,22 @@ static void test_mrsp_load(void)
         ctx->counters[index].obtain[nest_level]
       );
     }
+
+    for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
+      printf(
+        "  cpu[%" PRIu32 "] = %" PRIu32 "\n",
+        cpu_index,
+        ctx->counters[index].cpu[cpu_index]
+      );
+    }
+  }
+
+  for (index = 0; index < cpu_count; ++index) {
+    printf(
+      "migrations[%" PRIu32 "] = %" PRIu32 "\n",
+      index,
+      ctx->migration_counters[index]
+    );
   }
 }
 
@@ -883,10 +1216,12 @@ static void Init(rtems_task_argument arg)
   test_mrsp_initially_locked_error();
   test_mrsp_nested_obtain_error();
   test_mrsp_unlock_order_error();
-  test_mrsp_deadlock_error();
+  test_mrsp_deadlock_error(ctx);
   test_mrsp_multiple_obtain();
-  test_mrsp_obtain_and_release();
-  test_mrsp_load();
+  test_mrsp_obtain_and_sleep_and_release(ctx);
+  test_mrsp_obtain_and_release_with_help(ctx);
+  test_mrsp_obtain_and_release(ctx);
+  test_mrsp_load(ctx);
 
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
 
@@ -901,7 +1236,7 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS (2 * CPU_COUNT + 1)
+#define CONFIGURE_MAXIMUM_TASKS (2 * CPU_COUNT + 2)
 #define CONFIGURE_MAXIMUM_SEMAPHORES (MRSP_COUNT + 1)
 #define CONFIGURE_MAXIMUM_MRSP_SEMAPHORES MRSP_COUNT
 #define CONFIGURE_MAXIMUM_TIMERS 1
@@ -983,8 +1318,11 @@ RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(16);
   RTEMS_SCHEDULER_ASSIGN(16, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL), \
   RTEMS_SCHEDULER_ASSIGN(16, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL)
 
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .thread_switch = switch_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
+#define CONFIGURE_INIT_TASK_NAME rtems_build_name('M', 'A', 'I', 'N')
 #define CONFIGURE_INIT_TASK_PRIORITY 2
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
