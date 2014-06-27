@@ -32,8 +32,6 @@
 #include <termios.h>
 #include <unistd.h>
 
-struct rtems_termios_tty *rtems_termios_ttyHead;
-struct rtems_termios_tty *rtems_termios_ttyTail;
 rtems_id rtems_termios_ttyMutex;
 
 void

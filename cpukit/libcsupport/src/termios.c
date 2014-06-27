@@ -76,13 +76,14 @@ struct  rtems_termios_linesw rtems_termios_linesw[MAXLDISC] =
 int  rtems_termios_nlinesw =
        sizeof (rtems_termios_linesw) / sizeof (rtems_termios_linesw[0]);
 
-extern struct rtems_termios_tty *rtems_termios_ttyHead;
-extern struct rtems_termios_tty *rtems_termios_ttyTail;
 extern rtems_id rtems_termios_ttyMutex;
 
 static size_t rtems_termios_cbufsize = 256;
 static size_t rtems_termios_raw_input_size = 128;
 static size_t rtems_termios_raw_output_size = 64;
+
+static struct rtems_termios_tty *rtems_termios_ttyHead;
+static struct rtems_termios_tty *rtems_termios_ttyTail;
 
 static rtems_task rtems_termios_rxdaemon(rtems_task_argument argument);
 static rtems_task rtems_termios_txdaemon(rtems_task_argument argument);
