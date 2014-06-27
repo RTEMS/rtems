@@ -24,8 +24,13 @@ directives:
   cfsetspeed
   cfsetispeed
   cfsetospeed
+  rtems_termios_device_install
+  rtems_termios_device_remove
+  rtems_termios_device_open
+  rtems_termios_device_close
 
 concepts:
 
 + Exercise termios ioctl for all baud, character size, parity and
   bits per character options.
++ Ensure that Termios device install/remove works.

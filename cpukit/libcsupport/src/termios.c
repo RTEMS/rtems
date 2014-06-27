@@ -85,6 +85,8 @@ static size_t rtems_termios_raw_output_size = 64;
 static struct rtems_termios_tty *rtems_termios_ttyHead;
 static struct rtems_termios_tty *rtems_termios_ttyTail;
 
+static RTEMS_CHAIN_DEFINE_EMPTY(rtems_termios_devices);
+
 static rtems_task rtems_termios_rxdaemon(rtems_task_argument argument);
 static rtems_task rtems_termios_txdaemon(rtems_task_argument argument);
 /*
@@ -103,33 +105,196 @@ static rtems_task rtems_termios_txdaemon(rtems_task_argument argument);
 #define TERMIOS_RX_PROC_EVENT      RTEMS_EVENT_1
 #define TERMIOS_RX_TERMINATE_EVENT RTEMS_EVENT_0
 
-/*
- * Open a termios device
- */
-rtems_status_code
-rtems_termios_open (
+static rtems_termios_device_node *
+rtems_termios_find_device_node(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor
+)
+{
+  rtems_chain_node *tail = rtems_chain_tail(&rtems_termios_devices);
+  rtems_chain_node *current = rtems_chain_first(&rtems_termios_devices);
+
+  while (current != tail) {
+    rtems_termios_device_node *device_node =
+      (rtems_termios_device_node *) current;
+
+    if (device_node->major == major && device_node->minor == minor) {
+      return device_node;
+    }
+
+    current = rtems_chain_next(current);
+  }
+
+  return NULL;
+}
+
+rtems_status_code rtems_termios_device_install(
+  const char                         *device_file,
+  rtems_device_major_number           major,
+  rtems_device_minor_number           minor,
+  const rtems_termios_device_handler *handler,
+  void                               *context
+)
+{
+  rtems_status_code          sc;
+  rtems_termios_device_node *new_device_node;
+  rtems_termios_device_node *existing_device_node;
+
+  new_device_node = malloc(sizeof(*new_device_node));
+  if (new_device_node == NULL) {
+    return RTEMS_NO_MEMORY;
+  }
+
+  new_device_node->major = major;
+  new_device_node->minor = minor;
+  new_device_node->handler = handler;
+  new_device_node->context = context;
+  new_device_node->tty = NULL;
+
+  sc = rtems_semaphore_obtain(
+    rtems_termios_ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  if (sc != RTEMS_SUCCESSFUL) {
+    free(new_device_node);
+    return RTEMS_INCORRECT_STATE;
+  }
+
+  existing_device_node = rtems_termios_find_device_node (major, minor);
+  if (existing_device_node != NULL) {
+    free(new_device_node);
+    rtems_semaphore_release (rtems_termios_ttyMutex);
+    return RTEMS_RESOURCE_IN_USE;
+  }
+
+  if (device_file != NULL) {
+    sc = rtems_io_register_name (device_file, major, minor);
+    if (sc != RTEMS_SUCCESSFUL) {
+      free(new_device_node);
+      rtems_semaphore_release (rtems_termios_ttyMutex);
+      return RTEMS_UNSATISFIED;
+    }
+  }
+
+  rtems_chain_append_unprotected(
+    &rtems_termios_devices, &new_device_node->node);
+
+  rtems_semaphore_release (rtems_termios_ttyMutex);
+
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code rtems_termios_device_remove(
+  const char                *device_file,
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor
+)
+{
+  rtems_status_code          sc;
+  rtems_termios_device_node *device_node;
+
+  sc = rtems_semaphore_obtain(
+    rtems_termios_ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  if (sc != RTEMS_SUCCESSFUL) {
+    return RTEMS_INCORRECT_STATE;
+  }
+
+  device_node = rtems_termios_find_device_node (major, minor);
+  if (device_node == NULL) {
+    rtems_semaphore_release (rtems_termios_ttyMutex);
+    return RTEMS_INVALID_ID;
+  }
+
+  if (device_node->tty != NULL) {
+    rtems_semaphore_release (rtems_termios_ttyMutex);
+    return RTEMS_RESOURCE_IN_USE;
+  }
+
+  if (device_file != NULL) {
+    int rv = unlink (device_file);
+
+    if (rv != 0) {
+      rtems_semaphore_release (rtems_termios_ttyMutex);
+      return RTEMS_UNSATISFIED;
+    }
+  }
+
+  rtems_chain_extract_unprotected (&device_node->node);
+  free (device_node);
+
+  rtems_semaphore_release (rtems_termios_ttyMutex);
+
+  return RTEMS_SUCCESSFUL;
+}
+
+static bool
+rtems_termios_callback_firstOpen(
+  rtems_termios_tty             *tty,
+  rtems_libio_open_close_args_t *args
+)
+{
+  (*tty->device.firstOpen) (tty->major, tty->minor, args);
+
+  return true;
+}
+
+static void
+rtems_termios_callback_lastClose(
+  rtems_termios_tty             *tty,
+  rtems_libio_open_close_args_t *args
+)
+{
+  (*tty->device.lastClose) (tty->major, tty->minor, args);
+}
+
+static int
+rtems_termios_callback_pollRead (struct rtems_termios_tty *tty)
+{
+  return (*tty->device.pollRead) (tty->minor);
+}
+
+static void
+rtems_termios_callback_write(
+  rtems_termios_tty *tty,
+  const char        *buf,
+  size_t             len
+)
+{
+  (*tty->device.write) (tty->minor, buf, len);
+}
+
+static bool
+rtems_termios_callback_setAttributes(
+  rtems_termios_tty    *tty,
+  const struct termios *term
+)
+{
+  (*tty->device.setAttributes) (tty->minor, term);
+
+  return true;
+}
+
+static void
+rtems_termios_callback_stopRemoteTx (rtems_termios_tty *tty)
+{
+  (*tty->device.stopRemoteTx) (tty->minor);
+}
+
+static void
+rtems_termios_callback_startRemoteTx (rtems_termios_tty *tty)
+{
+  (*tty->device.startRemoteTx) (tty->minor);
+}
+
+static rtems_termios_tty *
+rtems_termios_open_tty(
   rtems_device_major_number      major,
   rtems_device_minor_number      minor,
-  void                          *arg,
+  rtems_libio_open_close_args_t *args,
+  rtems_termios_tty             *tty,
+  rtems_termios_device_node     *device_node,
   const rtems_termios_callbacks *callbacks
 )
 {
   rtems_status_code sc;
-  rtems_libio_open_close_args_t *args = arg;
-  struct rtems_termios_tty *tty;
-
-  /*
-   * See if the device has already been opened
-   */
-  sc = rtems_semaphore_obtain(
-    rtems_termios_ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  if (sc != RTEMS_SUCCESSFUL)
-    return sc;
-
-  for (tty = rtems_termios_ttyHead ; tty != NULL ; tty = tty->forw) {
-    if ((tty->major == major) && (tty->minor == minor))
-      break;
-  }
 
   if (tty == NULL) {
     static char c = 'a';
@@ -139,8 +304,7 @@ rtems_termios_open (
      */
     tty = calloc (1, sizeof (struct rtems_termios_tty));
     if (tty == NULL) {
-      rtems_semaphore_release (rtems_termios_ttyMutex);
-      return RTEMS_NO_MEMORY;
+      return NULL;
     }
     /*
      * allocate raw input buffer
@@ -149,8 +313,7 @@ rtems_termios_open (
     tty->rawInBuf.theBuf = malloc (tty->rawInBuf.Size);
     if (tty->rawInBuf.theBuf == NULL) {
             free(tty);
-      rtems_semaphore_release (rtems_termios_ttyMutex);
-      return RTEMS_NO_MEMORY;
+      return NULL;
     }
     /*
      * allocate raw output buffer
@@ -160,8 +323,7 @@ rtems_termios_open (
     if (tty->rawOutBuf.theBuf == NULL) {
             free((void *)(tty->rawInBuf.theBuf));
             free(tty);
-      rtems_semaphore_release (rtems_termios_ttyMutex);
-      return RTEMS_NO_MEMORY;
+      return NULL;
     }
     /*
      * allocate cooked buffer
@@ -171,8 +333,7 @@ rtems_termios_open (
             free((void *)(tty->rawOutBuf.theBuf));
             free((void *)(tty->rawInBuf.theBuf));
             free(tty);
-      rtems_semaphore_release (rtems_termios_ttyMutex);
-      return RTEMS_NO_MEMORY;
+      return NULL;
     }
     /*
      * Initialize wakeup callbacks
@@ -182,17 +343,6 @@ rtems_termios_open (
     tty->tty_rcv.sw_pfn = NULL;
     tty->tty_rcv.sw_arg = NULL;
     tty->tty_rcvwakeup  = 0;
-
-    /*
-     * link tty
-     */
-    tty->forw = rtems_termios_ttyHead;
-    tty->back = NULL;
-    if (rtems_termios_ttyHead != NULL)
-      rtems_termios_ttyHead->back = tty;
-    rtems_termios_ttyHead = tty;
-    if (rtems_termios_ttyTail == NULL)
-      rtems_termios_ttyTail = tty;
 
     tty->minor = minor;
     tty->major = major;
@@ -229,14 +379,39 @@ rtems_termios_open (
     /*
      * Set callbacks
      */
-    tty->device = *callbacks;
+    if (device_node != NULL) {
+      device_node->tty = tty;
+      tty->handler = *device_node->handler;
+      tty->device_node = device_node;
+      tty->device_context = device_node->context;
+      memset(&tty->device, 0, sizeof(tty->device));
+    } else {
+      tty->handler.first_open = callbacks->firstOpen != NULL ?
+        rtems_termios_callback_firstOpen : NULL;
+      tty->handler.last_close = callbacks->lastClose != NULL ?
+        rtems_termios_callback_lastClose : NULL;
+      tty->handler.poll_read = callbacks->pollRead != NULL ?
+        rtems_termios_callback_pollRead : NULL;
+      tty->handler.write = callbacks->write != NULL ?
+        rtems_termios_callback_write : NULL;
+      tty->handler.set_attributes = callbacks->setAttributes != NULL ?
+        rtems_termios_callback_setAttributes : NULL;
+      tty->handler.stop_remote_tx = callbacks->stopRemoteTx != NULL ?
+        rtems_termios_callback_stopRemoteTx : NULL;
+      tty->handler.start_remote_tx = callbacks->startRemoteTx != NULL ?
+        rtems_termios_callback_startRemoteTx : NULL;
+      tty->handler.mode = callbacks->outputUsesInterrupts;
+      tty->device_context = NULL;
+      tty->device_node = NULL;
+      tty->device = *callbacks;
+    }
 
     rtems_interrupt_lock_initialize (&tty->interrupt_lock, "Termios");
 
     /*
      * Create I/O tasks
      */
-    if (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN) {
+    if (tty->handler.mode == TERMIOS_TASK_DRIVEN) {
       sc = rtems_task_create (
                                    rtems_build_name ('T', 'x', 'T', c),
            TERMIOS_TXTASK_PRIO,
@@ -259,8 +434,8 @@ rtems_termios_open (
         rtems_fatal_error_occurred (sc);
 
     }
-    if ((tty->device.pollRead == NULL) ||
-        (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN)){
+    if ((tty->handler.poll_read == NULL) ||
+        (tty->handler.mode == TERMIOS_TASK_DRIVEN)){
       sc = rtems_semaphore_create (
         rtems_build_name ('T', 'R', 'r', c),
         0,
@@ -311,13 +486,13 @@ rtems_termios_open (
   }
   args->iop->data1 = tty;
   if (!tty->refcount++) {
-    if (tty->device.firstOpen)
-      (*tty->device.firstOpen)(major, minor, arg);
+    if (tty->handler.first_open)
+      (*tty->handler.first_open)(tty, args);
 
     /*
      * start I/O tasks, if needed
      */
-    if (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN) {
+    if (tty->handler.mode == TERMIOS_TASK_DRIVEN) {
       sc = rtems_task_start(
         tty->rxTaskId, rtems_termios_rxdaemon, (rtems_task_argument)tty);
       if (sc != RTEMS_SUCCESSFUL)
@@ -329,7 +504,93 @@ rtems_termios_open (
         rtems_fatal_error_occurred (sc);
     }
   }
+
+  return tty;
+}
+
+rtems_status_code
+rtems_termios_device_open(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+)
+{
+  rtems_status_code          sc;
+  rtems_termios_device_node *device_node;
+  struct rtems_termios_tty  *tty;
+
+  sc = rtems_semaphore_obtain(
+    rtems_termios_ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  if (sc != RTEMS_SUCCESSFUL)
+    return sc;
+
+  device_node = rtems_termios_find_device_node (major, minor);
+  if (device_node == NULL) {
+    rtems_semaphore_release (rtems_termios_ttyMutex);
+    return RTEMS_INVALID_ID;
+  }
+
+  tty = rtems_termios_open_tty(
+    major, minor, arg, device_node->tty, device_node, NULL);
+  if (tty == NULL) {
+    rtems_semaphore_release (rtems_termios_ttyMutex);
+    return RTEMS_NO_MEMORY;
+  }
+
   rtems_semaphore_release (rtems_termios_ttyMutex);
+
+  return RTEMS_SUCCESSFUL;
+}
+
+/*
+ * Open a termios device
+ */
+rtems_status_code
+rtems_termios_open (
+  rtems_device_major_number      major,
+  rtems_device_minor_number      minor,
+  void                          *arg,
+  const rtems_termios_callbacks *callbacks
+)
+{
+  rtems_status_code sc;
+  struct rtems_termios_tty *tty;
+
+  /*
+   * See if the device has already been opened
+   */
+  sc = rtems_semaphore_obtain(
+    rtems_termios_ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  if (sc != RTEMS_SUCCESSFUL)
+    return sc;
+
+  for (tty = rtems_termios_ttyHead ; tty != NULL ; tty = tty->forw) {
+    if ((tty->major == major) && (tty->minor == minor))
+      break;
+  }
+
+  tty = rtems_termios_open_tty(
+    major, minor, arg, tty, NULL, callbacks);
+  if (tty == NULL) {
+    rtems_semaphore_release (rtems_termios_ttyMutex);
+    return RTEMS_NO_MEMORY;
+  }
+
+  if (tty->refcount == 1) {
+    /*
+     * link tty
+     */
+    tty->forw = rtems_termios_ttyHead;
+    tty->back = NULL;
+    if (rtems_termios_ttyHead != NULL)
+      rtems_termios_ttyHead->back = tty;
+    rtems_termios_ttyHead = tty;
+    if (rtems_termios_ttyTail == NULL)
+      rtems_termios_ttyTail = tty;
+  }
+
+  rtems_semaphore_release (rtems_termios_ttyMutex);
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -342,7 +603,7 @@ drainOutput (struct rtems_termios_tty *tty)
   rtems_interrupt_lock_context lock_context;
   rtems_status_code sc;
 
-  if (tty->device.outputUsesInterrupts != TERMIOS_POLLED) {
+  if (tty->handler.mode != TERMIOS_POLLED) {
     rtems_termios_interrupt_lock_acquire (tty, &lock_context);
     while (tty->rawOutBuf.Tail != tty->rawOutBuf.Head) {
       tty->rawOutBufState = rob_wait;
@@ -380,17 +641,11 @@ flushInput (struct rtems_termios_tty *tty)
   rtems_termios_interrupt_lock_release (tty, &lock_context);
 }
 
-rtems_status_code
-rtems_termios_close (void *arg)
+static void
+rtems_termios_close_tty (rtems_termios_tty *tty, void *arg)
 {
-  rtems_libio_open_close_args_t *args = arg;
-  struct rtems_termios_tty *tty = args->iop->data1;
   rtems_status_code sc;
 
-  sc = rtems_semaphore_obtain(
-    rtems_termios_ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  if (sc != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred (sc);
   if (--tty->refcount == 0) {
     if (rtems_termios_linesw[tty->t_line].l_close != NULL) {
       /*
@@ -409,7 +664,7 @@ rtems_termios_close (void *arg)
       rtems_semaphore_release (tty->osem);
     }
 
-    if (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN) {
+    if (tty->handler.mode == TERMIOS_TASK_DRIVEN) {
       /*
        * send "terminate" to I/O tasks
        */
@@ -420,8 +675,39 @@ rtems_termios_close (void *arg)
       if (sc != RTEMS_SUCCESSFUL)
         rtems_fatal_error_occurred (sc);
     }
-    if (tty->device.lastClose)
-       (*tty->device.lastClose)(tty->major, tty->minor, arg);
+    if (tty->handler.last_close)
+       (*tty->handler.last_close)(tty, arg);
+
+    if (tty->device_node != NULL)
+      tty->device_node->tty = NULL;
+
+    rtems_semaphore_delete (tty->isem);
+    rtems_semaphore_delete (tty->osem);
+    rtems_semaphore_delete (tty->rawOutBuf.Semaphore);
+    if ((tty->handler.poll_read == NULL) ||
+        (tty->handler.mode == TERMIOS_TASK_DRIVEN))
+      rtems_semaphore_delete (tty->rawInBuf.Semaphore);
+    rtems_interrupt_lock_destroy (&tty->interrupt_lock);
+    free (tty->rawInBuf.theBuf);
+    free (tty->rawOutBuf.theBuf);
+    free (tty->cbuf);
+    free (tty);
+  }
+}
+
+rtems_status_code
+rtems_termios_close (void *arg)
+{
+  rtems_status_code sc;
+  rtems_libio_open_close_args_t *args = arg;
+  struct rtems_termios_tty *tty = args->iop->data1;
+
+  sc = rtems_semaphore_obtain(
+    rtems_termios_ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (sc);
+
+  if (tty->refcount == 1) {
     if (tty->forw == NULL) {
       rtems_termios_ttyTail = tty->back;
       if ( rtems_termios_ttyTail != NULL ) {
@@ -439,20 +725,31 @@ rtems_termios_close (void *arg)
     } else {
       tty->back->forw = tty->forw;
     }
-
-    rtems_semaphore_delete (tty->isem);
-    rtems_semaphore_delete (tty->osem);
-    rtems_semaphore_delete (tty->rawOutBuf.Semaphore);
-    if ((tty->device.pollRead == NULL) ||
-        (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN))
-      rtems_semaphore_delete (tty->rawInBuf.Semaphore);
-    rtems_interrupt_lock_destroy (&tty->interrupt_lock);
-    free (tty->rawInBuf.theBuf);
-    free (tty->rawOutBuf.theBuf);
-    free (tty->cbuf);
-    free (tty);
   }
+
+  rtems_termios_close_tty (tty, arg);
+
   rtems_semaphore_release (rtems_termios_ttyMutex);
+
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code
+rtems_termios_device_close (void *arg)
+{
+  rtems_status_code sc;
+  rtems_libio_open_close_args_t *args = arg;
+  struct rtems_termios_tty *tty = args->iop->data1;
+
+  sc = rtems_semaphore_obtain(
+    rtems_termios_ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (sc);
+
+  rtems_termios_close_tty (tty, arg);
+
+  rtems_semaphore_release (rtems_termios_ttyMutex);
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -490,8 +787,8 @@ termios_set_flowctrl(struct rtems_termios_tty *tty)
       /* check for chars in output buffer (or rob_state?) */
       if (tty->rawOutBufState != rob_idle) {
         /* if chars available, call write function... */
-        (*tty->device.write)(
-          tty->minor, &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail],1);
+        (*tty->handler.write)(
+          tty, &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail],1);
       }
       /* reenable interrupts */
       rtems_termios_interrupt_lock_release (tty, &lock_context);
@@ -511,8 +808,9 @@ termios_set_flowctrl(struct rtems_termios_tty *tty)
     tty->flow_ctrl &= ~(FL_MDRTS);
 
     /* restart remote Tx, if it was stopped */
-    if ((tty->flow_ctrl & FL_IRTSOFF) && (tty->device.startRemoteTx != NULL)) {
-      tty->device.startRemoteTx(tty->minor);
+    if ((tty->flow_ctrl & FL_IRTSOFF) &&
+        (tty->handler.start_remote_tx != NULL)) {
+      tty->handler.start_remote_tx(tty);
     }
     tty->flow_ctrl &= ~(FL_IRTSOFF);
   }
@@ -591,8 +889,8 @@ rtems_termios_ioctl (void *arg)
         }
       }
     }
-    if (tty->device.setAttributes)
-      (*tty->device.setAttributes)(tty->minor, &tty->termios);
+    if (tty->handler.set_attributes)
+      (*tty->handler.set_attributes)(tty, &tty->termios);
     break;
 
   case RTEMS_IO_TCDRAIN:
@@ -676,8 +974,8 @@ rtems_termios_puts (
   rtems_interrupt_lock_context lock_context;
   rtems_status_code sc;
 
-  if (tty->device.outputUsesInterrupts == TERMIOS_POLLED) {
-    (*tty->device.write)(tty->minor, buf, len);
+  if (tty->handler.mode == TERMIOS_POLLED) {
+    (*tty->handler.write)(tty, buf, len);
     return;
   }
   newHead = tty->rawOutBuf.Head;
@@ -710,8 +1008,8 @@ rtems_termios_puts (
     if (tty->rawOutBufState == rob_idle) {
       /* check, whether XOFF has been received */
       if (!(tty->flow_ctrl & FL_ORCVXOF)) {
-        (*tty->device.write)(
-          tty->minor, &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail],1);
+        (*tty->handler.write)(
+          tty, &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail],1);
       } else {
         /* remember that output has been stopped due to flow ctrl*/
         tty->flow_ctrl |= FL_OSTOP;
@@ -997,7 +1295,7 @@ fillBufferPoll (struct rtems_termios_tty *tty)
 
   if (tty->termios.c_lflag & ICANON) {
     for (;;) {
-      n = (*tty->device.pollRead)(tty->minor);
+      n = (*tty->handler.poll_read)(tty);
       if (n < 0) {
         rtems_task_wake_after (1);
       } else {
@@ -1010,7 +1308,7 @@ fillBufferPoll (struct rtems_termios_tty *tty)
 
     then = rtems_clock_get_ticks_since_boot();
     for (;;) {
-      n = (*tty->device.pollRead)(tty->minor);
+      n = (*tty->handler.poll_read)(tty);
       if (n < 0) {
         if (tty->termios.c_cc[VMIN]) {
           if (tty->termios.c_cc[VTIME] && tty->ccount) {
@@ -1072,13 +1370,13 @@ fillBufferQueue (struct rtems_termios_tty *tty)
             && ((tty->rawOutBufState == rob_idle)
           || (tty->flow_ctrl & FL_OSTOP))) {
           /* XON should be sent now... */
-          (*tty->device.write)(
-            tty->minor, (void *)&(tty->termios.c_cc[VSTART]), 1);
+          (*tty->handler.write)(
+            tty, (void *)&(tty->termios.c_cc[VSTART]), 1);
         } else if (tty->flow_ctrl & FL_MDRTS) {
           tty->flow_ctrl &= ~FL_IRTSOFF;
           /* activate RTS line */
-          if (tty->device.startRemoteTx != NULL) {
-            tty->device.startRemoteTx(tty->minor);
+          if (tty->handler.start_remote_tx != NULL) {
+            tty->handler.start_remote_tx(tty);
           }
         }
       }
@@ -1131,8 +1429,7 @@ rtems_termios_read (void *arg)
   if (tty->cindex == tty->ccount) {
     tty->cindex = tty->ccount = 0;
     tty->read_start_column = tty->column;
-    if (tty->device.pollRead != NULL &&
-        tty->device.outputUsesInterrupts == TERMIOS_POLLED)
+    if (tty->handler.poll_read != NULL && tty->handler.mode == TERMIOS_POLLED)
       sc = fillBufferPoll (tty);
     else
       sc = fillBufferQueue (tty);
@@ -1230,8 +1527,8 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
         /* check for chars in output buffer (or rob_state?) */
         if (tty->rawOutBufState != rob_idle) {
           /* if chars available, call write function... */
-          (*tty->device.write)(
-            tty->minor, &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail], 1);
+          (*tty->handler.write)(
+            tty, &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail], 1);
         }
         /* reenable interrupts */
         rtems_termios_interrupt_lock_release (tty, &lock_context);
@@ -1252,14 +1549,14 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
             /* if tx is stopped due to XOFF or out of data */
             /*    call write function here                 */
             tty->flow_ctrl |= FL_ISNTXOF;
-            (*tty->device.write)(tty->minor,
+            (*tty->handler.write)(tty,
                 (void *)&(tty->termios.c_cc[VSTOP]), 1);
           }
         } else if ((tty->flow_ctrl & (FL_MDRTS | FL_IRTSOFF)) == (FL_MDRTS) ) {
           tty->flow_ctrl |= FL_IRTSOFF;
           /* deactivate RTS line */
-          if (tty->device.stopRemoteTx != NULL) {
-            tty->device.stopRemoteTx(tty->minor);
+          if (tty->handler.stop_remote_tx != NULL) {
+            tty->handler.stop_remote_tx(tty);
           }
         }
       }
@@ -1308,7 +1605,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
   if ((tty->flow_ctrl & (FL_MDXOF | FL_IREQXOF | FL_ISNTXOF))
       == (FL_MDXOF | FL_IREQXOF)) {
     /* XOFF should be sent now... */
-    (*tty->device.write)(tty->minor, (void *)&(tty->termios.c_cc[VSTOP]), 1);
+    (*tty->handler.write)(tty, (void *)&(tty->termios.c_cc[VSTOP]), 1);
 
     tty->t_dqlen--;
     tty->flow_ctrl |= FL_ISNTXOF;
@@ -1324,7 +1621,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
      * buffer, although the corresponding data is not yet out!
      * Therefore the dequeue "length" should be reduced by 1
      */
-    (*tty->device.write)(tty->minor, (void *)&(tty->termios.c_cc[VSTART]), 1);
+    (*tty->handler.write)(tty, (void *)&(tty->termios.c_cc[VSTART]), 1);
 
     tty->t_dqlen--;
     tty->flow_ctrl &= ~FL_ISNTXOF;
@@ -1341,7 +1638,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
       wakeUpWriterTask = true;
     }
 
-    (*tty->device.write) (tty->minor, NULL, 0);
+    (*tty->handler.write) (tty, NULL, 0);
     nToSend = 0;
   } else {
     len = tty->t_dqlen;
@@ -1361,7 +1658,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
        * Buffer has become empty
        */
       tty->rawOutBufState = rob_idle;
-      (*tty->device.write) (tty->minor, NULL, 0);
+      (*tty->handler.write) (tty, NULL, 0);
       nToSend = 0;
 
       /*
@@ -1378,7 +1675,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
       /* set flag, that output has been stopped */
       tty->flow_ctrl |= FL_OSTOP;
       tty->rawOutBufState = rob_busy; /*apm*/
-      (*tty->device.write) (tty->minor, NULL, 0);
+      (*tty->handler.write) (tty, NULL, 0);
       nToSend = 0;
     } else {
       /*
@@ -1395,8 +1692,8 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
         nToSend = 1;
       }
       tty->rawOutBufState = rob_busy; /*apm*/
-      (*tty->device.write)(
-        tty->minor, &tty->rawOutBuf.theBuf[newTail], nToSend);
+      (*tty->handler.write)(
+        tty, &tty->rawOutBuf.theBuf[newTail], nToSend);
     }
     tty->rawOutBuf.Tail = newTail; /*apm*/
   }
@@ -1430,7 +1727,7 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
    */
   tty->t_dqlen += len;
 
-  if (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN) {
+  if (tty->handler.mode == TERMIOS_TASK_DRIVEN) {
     /*
      * send wake up to transmitter task
      */
@@ -1518,10 +1815,10 @@ static rtems_task rtems_termios_rxdaemon(rtems_task_argument argument)
     /*
      * do something
      */
-    c = tty->device.pollRead(tty->minor);
+    c = tty->handler.poll_read(tty);
     if (c != EOF) {
       /*
-       * pollRead did call enqueue on its own
+       * poll_read did call enqueue on its own
        */
       c_buf = c;
       rtems_termios_enqueue_raw_characters ( tty,&c_buf,1);

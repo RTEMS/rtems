@@ -19,6 +19,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/assoc.h>
+#include <rtems/chain.h>
 #include <stdint.h>
 #include <termios.h>
 
@@ -52,11 +53,138 @@ struct rtems_termios_rawbuf {
   volatile unsigned int  Size;
   rtems_id    Semaphore;
 };
+
+typedef enum {
+  TERMIOS_POLLED,
+  TERMIOS_IRQ_DRIVEN,
+  TERMIOS_TASK_DRIVEN
+} rtems_termios_device_mode;
+
+struct rtems_termios_tty;
+
+/**
+ * @brief Termios device handler.
+ *
+ * @see rtems_termios_device_install().
+ */
+typedef struct {
+  /**
+   * @brief First open of this device.
+   *
+   * @param[in] tty The Termios control.
+   * @param[in] args The open/close arguments.  This is parameter provided to
+   *   support legacy drivers.  It must not be used by new drivers.
+   *
+   * @retval true Successful operation.
+   * @retval false Cannot open device.
+   *
+   * @see rtems_termios_get_device_context().
+   */
+  bool (*first_open)(
+    struct rtems_termios_tty      *tty,
+    rtems_libio_open_close_args_t *args
+  );
+
+  /**
+   * @brief Last close of this device.
+   *
+   * @param[in] tty The Termios control.
+   * @param[in] args The open/close arguments.  This is parameter provided to
+   *   support legacy drivers.  It must not be used by new drivers.
+   *
+   * @see rtems_termios_get_device_context().
+   */
+  void (*last_close)(
+    struct rtems_termios_tty      *tty,
+    rtems_libio_open_close_args_t *args
+  );
+
+  /**
+   * @brief Polled read.
+   *
+   * In case mode is TERMIOS_IRQ_DRIVEN or TERMIOS_TASK_DRIVEN, then data is
+   * received via rtems_termios_enqueue_raw_characters().
+   *
+   * @param[in] tty The Termios control.
+   *
+   * @retval char The received data encoded as unsigned char.
+   * @retval -1 No data currently available.
+   *
+   * @see rtems_termios_get_device_context().
+   */
+  int (*poll_read)(struct rtems_termios_tty *tty);
+
+  /**
+   * @brief Polled write in case mode is TERMIOS_POLLED or write support
+   * otherwise.
+   *
+   * @param[in] tty The Termios control.
+   * @param[in] buf The output buffer.
+   * @param[in] len The output buffer length in characters.
+   *
+   * @see rtems_termios_get_device_context().
+   */
+  void (*write)(struct rtems_termios_tty *tty, const char *buf, size_t len);
+
+  /**
+   * @brief Set attributes after a Termios settings change.
+   *
+   * @param[in] tty The Termios control.
+   * @param[in] term The new Termios attributes.
+   *
+   * @retval true Successful operation.
+   * @retval false Invalid attributes.
+   *
+   * @see rtems_termios_get_device_context().
+   */
+  bool (*set_attributes)(
+    struct rtems_termios_tty *tty,
+    const struct termios     *term
+  );
+
+  /**
+   * @brief Indicate to stop remote transmitter.
+   *
+   * @param[in] tty The Termios control.
+   *
+   * @see rtems_termios_get_device_context().
+   */
+  void (*stop_remote_tx)(struct rtems_termios_tty *tty);
+
+  /**
+   * @brief Indicate to start remote transmitter.
+   *
+   * @param[in] tty The Termios control.
+   *
+   * @see rtems_termios_get_device_context().
+   */
+  void (*start_remote_tx)(struct rtems_termios_tty *tty);
+
+  /**
+   * @brief Termios device mode.
+   */
+  rtems_termios_device_mode mode;
+} rtems_termios_device_handler;
+
+/**
+ * @brief Termios device node for installed devices.
+ *
+ * @see rtems_termios_device_install().
+ */
+typedef struct rtems_termios_device_node {
+  rtems_chain_node                    node;
+  rtems_device_major_number           major;
+  rtems_device_minor_number           minor;
+  const rtems_termios_device_handler *handler;
+  void                               *context;
+  struct rtems_termios_tty           *tty;
+} rtems_termios_device_node;
+
 /*
  * Variables associated with each termios instance.
  * One structure for each hardware I/O device.
  */
-struct rtems_termios_tty {
+typedef struct rtems_termios_tty {
   /*
    * Linked-list of active TERMIOS devices
    */
@@ -119,6 +247,12 @@ struct rtems_termios_tty {
    * Callbacks to device-specific routines
    */
   rtems_termios_callbacks  device;
+
+  /**
+   * @brief The device handler.
+   */
+  rtems_termios_device_handler handler;
+
   volatile unsigned int    flow_ctrl;
   unsigned int             lowwater,highwater;
 
@@ -142,7 +276,101 @@ struct rtems_termios_tty {
   int              tty_rcvwakeup;
 
   rtems_interrupt_lock interrupt_lock;
-};
+
+  /**
+   * @brief Corresponding device node.
+   */
+  rtems_termios_device_node *device_node;
+
+  /**
+   * @brief Context for device driver.
+   *
+   * @see rtems_termios_get_device_context().
+   */
+  void *device_context;
+} rtems_termios_tty;
+
+/**
+ * @brief Installes a Termios device.
+ *
+ * @param[in] device_file If not @c NULL, then a device file for the specified
+ * major and minor number will be created.
+ * @param[in] major The device major number of the corresponding device driver.
+ * @param[in] minor The device minor number of the corresponding device driver.
+ * @param[in] handler The device handler.  It must be persistent throughout the
+ *   installed time of the device.
+ * @param[in] context The device context.  It must be persistent throughout the
+ *   installed time of the device.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_NO_MEMORY Not enough memory to create a device node.
+ * @retval RTEMS_UNSATISFIED Creation of the device file failed.
+ * @retval RTEMS_RESOURCE_IN_USE There exists a device node for this major and
+ * minor number pair.
+ * @retval RTEMS_INCORRECT_STATE Termios is not initialized.
+ *
+ * @see rtems_termios_device_remove(), rtems_termios_device_open(),
+ * rtems_termios_device_close() and rtems_termios_get_device_context().
+ */
+rtems_status_code rtems_termios_device_install(
+  const char                         *device_file,
+  rtems_device_major_number           major,
+  rtems_device_minor_number           minor,
+  const rtems_termios_device_handler *handler,
+  void                               *context
+);
+
+/**
+ * @brief Removes a Termios device.
+ *
+ * @param[in] device_file If not @c NULL, then the device file to remove.
+ * @param[in] major The device major number of the corresponding device driver.
+ * @param[in] minor The device minor number of the corresponding device driver.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID There is no device installed with this major and
+ * minor number pair.
+ * @retval RTEMS_RESOURCE_IN_USE This device is currently in use.
+ * @retval RTEMS_UNSATISFIED Removal of the device file failed.
+ * @retval RTEMS_INCORRECT_STATE Termios is not initialized.
+ *
+ * @see rtems_termios_device_install().
+ */
+rtems_status_code rtems_termios_device_remove(
+  const char                *device_file,
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor
+);
+
+/**
+ * @brief Opens an installed Termios device.
+ *
+ * @see rtems_termios_device_install().
+ */
+rtems_status_code rtems_termios_device_open(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+);
+
+/**
+ * @brief Closes an installed Termios device.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ *
+ * @see rtems_termios_device_install().
+ */
+rtems_status_code rtems_termios_device_close(void *arg);
+
+/**
+ * @brief Returns the device context of an installed Termios device.
+ */
+RTEMS_INLINE_ROUTINE void *rtems_termios_get_device_context(
+  const rtems_termios_tty *tty
+)
+{
+  return tty->device_context;
+}
 
 struct rtems_termios_linesw {
   int (*l_open) (struct rtems_termios_tty *tp);
@@ -154,14 +382,6 @@ struct rtems_termios_linesw {
   int (*l_ioctl)(struct rtems_termios_tty *tp,rtems_libio_ioctl_args_t *args);
   int (*l_modem)(struct rtems_termios_tty *tp,int flags);
 };
-
-/*
- * FIXME: this should move to libio.h!
- * values for rtems_termios_callbacks.outputUsesInterrupts
- */
-#define TERMIOS_POLLED      0
-#define TERMIOS_IRQ_DRIVEN  1
-#define TERMIOS_TASK_DRIVEN 2
 
 /*
  * FIXME: this should move to termios.h!
