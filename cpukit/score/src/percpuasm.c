@@ -88,6 +88,16 @@ RTEMS_STATIC_ASSERT(
 );
 
 RTEMS_STATIC_ASSERT(
+  offsetof(Per_CPU_Control, executing) == PER_CPU_OFFSET_EXECUTING,
+  PER_CPU_OFFSET_EXECUTING
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof(Per_CPU_Control, heir) == PER_CPU_OFFSET_HEIR,
+  PER_CPU_OFFSET_HEIR
+);
+
+RTEMS_STATIC_ASSERT(
   offsetof(Per_CPU_Control, dispatch_necessary) == PER_CPU_DISPATCH_NEEDED,
   PER_CPU_DISPATCH_NEEDED
 );

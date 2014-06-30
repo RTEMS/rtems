@@ -271,22 +271,6 @@ typedef struct Per_CPU_Control {
   volatile uint32_t thread_dispatch_disable_level;
 
   /**
-   * @brief This is set to true when this processor needs to run the
-   * dispatcher.
-   *
-   * It is volatile since interrupts may alter this flag.
-   *
-   * This field is not protected by a lock.  There are two writers after
-   * multitasking start.  The scheduler owning this processor sets this
-   * indicator to true, after it updated the heir field.  This processor sets
-   * this indicator to false, before it reads the heir.  This field is used in
-   * combination with the heir field.
-   *
-   * @see _Thread_Get_heir_and_make_it_executing().
-   */
-  volatile bool dispatch_necessary;
-
-  /**
    * @brief This is the thread executing on this processor.
    *
    * This field is not protected by a lock.  The only writer is this processor.
@@ -311,6 +295,22 @@ typedef struct Per_CPU_Control {
    * @see _Thread_Get_heir_and_make_it_executing().
    */
   Thread_Control *heir;
+
+  /**
+   * @brief This is set to true when this processor needs to run the
+   * dispatcher.
+   *
+   * It is volatile since interrupts may alter this flag.
+   *
+   * This field is not protected by a lock.  There are two writers after
+   * multitasking start.  The scheduler owning this processor sets this
+   * indicator to true, after it updated the heir field.  This processor sets
+   * this indicator to false, before it reads the heir.  This field is used in
+   * combination with the heir field.
+   *
+   * @see _Thread_Get_heir_and_make_it_executing().
+   */
+  volatile bool dispatch_necessary;
 
   /** This is the time of the last context switch on this CPU. */
   Timestamp_Control time_of_last_context_switch;
@@ -634,8 +634,12 @@ bool _Per_CPU_State_wait_for_non_initial_state(
   PER_CPU_END_STACK
 #define PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL \
   PER_CPU_ISR_NEST_LEVEL + 4
-#define PER_CPU_DISPATCH_NEEDED \
+#define PER_CPU_OFFSET_EXECUTING \
   PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL + 4
+#define PER_CPU_OFFSET_HEIR \
+  PER_CPU_OFFSET_EXECUTING + CPU_SIZEOF_POINTER
+#define PER_CPU_DISPATCH_NEEDED \
+  PER_CPU_OFFSET_HEIR + CPU_SIZEOF_POINTER
 
 #define THREAD_DISPATCH_DISABLE_LEVEL \
   (SYM(_Per_CPU_Information) + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)
