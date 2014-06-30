@@ -56,7 +56,8 @@ void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
   assert(0);
 }
 
-#if !defined(__leon__) && !defined(__PPC__) && !defined(__arm__)
+#if defined(RTEMS_PARAVIRT) \
+  || (!defined(__leon__) && !defined(__PPC__) && !defined(__arm__))
 uint32_t _CPU_SMP_Get_current_processor(void)
 {
   return 0;
