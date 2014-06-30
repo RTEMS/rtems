@@ -158,7 +158,7 @@ static void apbuart_hw_open(apbuart_priv *uart);
 #if 0
 static int apbuart_outbyte_try(struct apbuart_regs *regs, unsigned char ch)
 {
-	if ( (READ_REG(&regs->status) & LEON_REG_UART_STATUS_THE) == 0 )
+	if ( (READ_REG(&regs->status) & APBUART_STATUS_TE) == 0 )
 		return -1; /* Failed */
 
 	/* There is room in fifo, put ch in it */
@@ -171,12 +171,12 @@ static int apbuart_inbyte_try(struct apbuart_regs *regs)
 {
 	unsigned int status;
 	/* Clear errors if any */
-	if ( (status=READ_REG(&regs->status)) & LEON_REG_UART_STATUS_ERR) {
-		regs->status = status & ~LEON_REG_UART_STATUS_ERR;
+	if ( (status=READ_REG(&regs->status)) & APBUART_STATUS_ERR) {
+		regs->status = status & ~APBUART_STATUS_ERR;
 	}
 
 	/* Is Data available? */
-	if ( (READ_REG(&regs->status) & LEON_REG_UART_STATUS_DR) == 0 )
+	if ( (READ_REG(&regs->status) & APBUART_STATUS_DR) == 0 )
 		return -1; /* No data avail */
 
 	/* Return Data */

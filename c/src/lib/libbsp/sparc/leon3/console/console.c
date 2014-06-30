@@ -34,6 +34,7 @@
 #include <rtems/bspIo.h>
 #include <leon.h>
 #include <rtems/termiostypes.h>
+#include <apbuart.h>
 
 int syscon_uart_index __attribute__((weak)) = 0;
 
@@ -74,7 +75,7 @@ static void leon3_console_isr(void *arg)
   char data;
 
   /* Get all received characters */
-  while ((status=uart->regs->status) & LEON_REG_UART_STATUS_DR) {
+  while ((status=uart->regs->status) & APBUART_STATUS_DR) {
     /* Data has arrived, get new data */
     data = uart->regs->data;
 
@@ -83,8 +84,8 @@ static void leon3_console_isr(void *arg)
   }
 
   if (
-    (status & LEON_REG_UART_STATUS_THE)
-      && (uart->regs->ctrl & LEON_REG_UART_CTRL_TI) != 0
+    (status & APBUART_STATUS_TE)
+      && (uart->regs->ctrl & APBUART_CTRL_TI) != 0
   ) {
     /* write_interrupt will get called from this function */
     rtems_termios_dequeue_characters(uart->cookie, 1);
@@ -102,7 +103,7 @@ static int leon3_console_write_support(int minor, const char *buf, size_t len)
 
   if (len > 0) {
     /* Enable TX interrupt (interrupt is edge-triggered) */
-    uart->regs->ctrl |= LEON_REG_UART_CTRL_TI;
+    uart->regs->ctrl |= APBUART_CTRL_TI;
 
     /* start UART TX, this will result in an interrupt when done */
     uart->regs->data = *buf;
@@ -110,7 +111,7 @@ static int leon3_console_write_support(int minor, const char *buf, size_t len)
     sending = 1;
   } else {
     /* No more to send, disable TX interrupts */
-    uart->regs->ctrl &= ~LEON_REG_UART_CTRL_TI;
+    uart->regs->ctrl &= ~APBUART_CTRL_TI;
 
     /* Tell close that we sent everything */
     sending = 0;
@@ -180,26 +181,26 @@ static int leon3_console_set_attributes(int minor, const struct termios *t)
   switch (t->c_cflag & (PARENB|PARODD)) {
     case (PARENB|PARODD):
       /* Odd parity */
-      ctrl |= LEON_REG_UART_CTRL_PE|LEON_REG_UART_CTRL_PS;
+      ctrl |= APBUART_CTRL_PE|APBUART_CTRL_PS;
       break;
 
     case PARENB:
       /* Even parity */
-      ctrl &= ~LEON_REG_UART_CTRL_PS;
-      ctrl |= LEON_REG_UART_CTRL_PE;
+      ctrl &= ~APBUART_CTRL_PS;
+      ctrl |= APBUART_CTRL_PE;
       break;
 
     default:
     case 0:
     case PARODD:
       /* No Parity */
-      ctrl &= ~(LEON_REG_UART_CTRL_PS|LEON_REG_UART_CTRL_PE);
+      ctrl &= ~(APBUART_CTRL_PS|APBUART_CTRL_PE);
   }
 
   if (!(t->c_cflag & CLOCAL)) {
-    ctrl |= LEON_REG_UART_CTRL_FL;
+    ctrl |= APBUART_CTRL_FL;
   } else {
-    ctrl &= ~LEON_REG_UART_CTRL_FL;
+    ctrl &= ~APBUART_CTRL_FL;
   }
 
   /* Update new settings */
@@ -339,11 +340,11 @@ static int leon3_console_first_open(int major, int minor, void *arg)
 
   uart->sending = 0;
   /* Enable Receiver and transmitter and Turn on RX interrupts */
-  uart->regs->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE |
-                      LEON_REG_UART_CTRL_RI;
+  uart->regs->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE |
+                      APBUART_CTRL_RI;
 #else
   /* Initialize UART on opening */
-  uart->regs->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
+  uart->regs->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
 #endif
   uart->regs->status = 0;
 
@@ -359,7 +360,7 @@ static int leon3_console_last_close(int major, int minor, void *arg)
 
   /* Turn off RX interrupts */
   rtems_termios_interrupt_lock_acquire(tty, &lock_ctx);
-  uart->regs->ctrl &= ~(LEON_REG_UART_CTRL_RI);
+  uart->regs->ctrl &= ~(APBUART_CTRL_RI);
   rtems_termios_interrupt_lock_release(tty, &lock_ctx);
 
   /**** Flush device ****/
