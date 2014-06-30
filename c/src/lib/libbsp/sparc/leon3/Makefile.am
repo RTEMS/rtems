@@ -65,6 +65,7 @@ libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_old.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_names.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_show.c
 # console
+libbsp_a_SOURCES += ../../shared/console-termios.c
 libbsp_a_SOURCES += console/console.c
 # debugio
 libbsp_a_SOURCES += console/printk_support.c
@@ -109,9 +110,11 @@ libbsp_a_SOURCES += ../../sparc/shared/spw/grspw.c \
 
 # UART
 include_HEADERS += ../../sparc/shared/include/apbuart.h \
-    ../../sparc/shared/include/apbuart_pci.h
+    ../../sparc/shared/include/apbuart_pci.h \
+    ../../sparc/shared/include/apbuart_termios.h
 libbsp_a_SOURCES += ../../sparc/shared/uart/apbuart.c \
-    ../../sparc/shared/uart/apbuart_pci.c
+    ../../sparc/shared/uart/apbuart_pci.c \
+    ../../sparc/shared/uart/apbuart_termios.c
 
 # I2CMST
 include_HEADERS += ../../sparc/shared/include/i2cmst.h
