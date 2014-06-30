@@ -86,7 +86,7 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 #endif
 
 /* Start restoring context */
-_restore:
+.L_restore:
 #ifdef ARM_MULTILIB_HAS_LOAD_STORE_EXCLUSIVE
 	clrex
 #endif
@@ -118,6 +118,6 @@ _restore:
  */
 DEFINE_FUNCTION_ARM(_CPU_Context_restore)
         mov     r1, r0
-        b       _restore
+        b       .L_restore
 
 #endif /* ARM_MULTILIB_ARCH_V4 */
