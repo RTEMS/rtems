@@ -23,7 +23,7 @@ BSP_START_TEXT_SECTION void bsp_memory_management_initialize(void)
     ctrl,
     (uint32_t *) bsp_translation_table_base,
     ARM_MMU_DEFAULT_CLIENT_DOMAIN,
-    &bsp_mm_config_table[0],
-    bsp_mm_config_table_size
+    &arm_cp15_start_mmu_config_table[0],
+    arm_cp15_start_mmu_config_table_size
   );
 }
