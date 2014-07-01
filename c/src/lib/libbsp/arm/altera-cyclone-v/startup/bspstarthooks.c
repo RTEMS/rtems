@@ -27,24 +27,6 @@
 /* 1 MB reset default value for address filtering start */
 #define BSPSTART_L2_CACHE_ADDR_FILTERING_START_RESET 0x100000
 
-LINKER_SYMBOL(bsp_section_nocache_size);
-LINKER_SYMBOL(bsp_section_nocache_end);
-LINKER_SYMBOL(bsp_section_nocache_begin);
-
-BSP_START_DATA_SECTION static const arm_cp15_start_section_config
-  altcycv_mmu_config_table[] = {
-  ARMV7_CP15_START_DEFAULT_SECTIONS,
-  {
-    .begin = (uint32_t) bsp_section_nocache_begin,
-    .end   = (uint32_t) bsp_section_nocache_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE
-  }, { /* Periphery area */
-    .begin = 0xFC000000U,
-    .end   = 0x00000000U,
-    .flags = ARMV7_MMU_DEVICE
-  }
-};
-
 BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
 {
   arm_cp15_instruction_cache_invalidate();
@@ -63,8 +45,8 @@ BSP_START_TEXT_SECTION static void setup_mmu_and_cache(void)
     ctrl,
     (uint32_t *) bsp_translation_table_base,
     ARM_MMU_DEFAULT_CLIENT_DOMAIN,
-    &altcycv_mmu_config_table[0],
-    RTEMS_ARRAY_SIZE(altcycv_mmu_config_table)
+    &arm_cp15_start_mmu_config_table[0],
+    arm_cp15_start_mmu_config_table_size
   );
 }
 

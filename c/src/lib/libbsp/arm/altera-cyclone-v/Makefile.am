@@ -151,6 +151,7 @@ libbsp_a_SOURCES += startup/bspreset.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/bspstarthooks.c
 libbsp_a_SOURCES += startup/nocache-heap.c
+libbsp_a_SOURCES += startup/mmu-config.c
 if HAS_SMP
 libbsp_a_SOURCES += startup/bspsmp.c
 endif
