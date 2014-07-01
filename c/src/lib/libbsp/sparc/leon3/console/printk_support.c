@@ -75,57 +75,6 @@ void bsp_debug_uart_init(void)
   }
 }
 
-/*
- *  apbuart_outbyte_polled
- *
- *  This routine transmits a character using polling.
- */
-void apbuart_outbyte_polled(
-  struct apbuart_regs *regs,
-  unsigned char ch,
-  int do_cr_on_newline,
-  int wait_sent
-)
-{
-send:
-  while ( (regs->status & APBUART_STATUS_TE) == 0 ) {
-    /* Lower bus utilization while waiting for UART */
-    __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
-    __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
-    __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
-    __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
-  }
-  regs->data = (unsigned int) ch;
-
-  if ((ch == '\n') && do_cr_on_newline) {
-    ch = '\r';
-    goto send;
-  }
-
-  /* Wait until the character has been sent? */
-  if (wait_sent) {
-    while ((regs->status & APBUART_STATUS_TE) == 0)
-      ;
-  }
-}
-
-/*
- *  apbuart_inbyte_nonblocking
- *
- *  This routine polls for a character.
- */
-int apbuart_inbyte_nonblocking(struct apbuart_regs *regs)
-{
-  /* Clear errors */
-  if (regs->status & APBUART_STATUS_ERR)
-    regs->status = ~APBUART_STATUS_ERR;
-
-  if ((regs->status & APBUART_STATUS_DR) == 0)
-    return EOF;
-  else
-    return (int) regs->data;
-}
-
 /* putchar/getchar for printk */
 static void bsp_out_char(char c)
 {

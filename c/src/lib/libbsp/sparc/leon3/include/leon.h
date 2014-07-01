@@ -278,25 +278,6 @@ extern int syscon_uart_index;
  */
 extern int debug_uart_index;
 
-/*
- *  apbuart_outbyte_polled
- *
- *  This routine transmits a character using polling.
- */
-void apbuart_outbyte_polled(
-  struct apbuart_regs *regs,
-  unsigned char ch,
-  int do_cr_on_newline,
-  int wait_sent
-);
-
-/*
- *  apbuart_inbyte_nonblocking
- *
- *  This routine polls for a character.
- */
-int apbuart_inbyte_nonblocking(struct apbuart_regs *regs);
-
 void leon3_cpu_counter_initialize(void);
 
 /* GRLIB extended IRQ controller register */
