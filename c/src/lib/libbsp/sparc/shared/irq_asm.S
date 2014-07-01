@@ -7,6 +7,8 @@
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2014 embedded brains GmbH
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -165,17 +167,18 @@ done_flushing:
 
 #if defined(RTEMS_SMP)
         ! The executing context no longer executes on this processor
-        stb     %g0, [%o0 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
+        st      %g0, [%o0 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
 
-        ! Wait for heir context to stop execution
-1:
-        ldub    [%o1 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET], %g1
+        ! Try to update the is executing indicator of the heir context
+        mov     1, %g1
+
+try_update_is_executing:
+
+        swap    [%o1 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET], %g1
         cmp     %g1, 0
-        bne     1b
-         mov    1, %g1
+        bne     check_is_executing
 
-        ! The heir context executes now on this processor
-        stb     %g1, [%o1 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
+        ! The next load is in a delay slot, which is all right
 #endif
 
         ld      [%o1 + G5_OFFSET], %g5        ! restore the global registers
@@ -202,6 +205,44 @@ done_flushing:
 
         jmp     %o7 + 8                       ! return
         nop                                   ! delay slot
+
+#if defined(RTEMS_SMP)
+check_is_executing:
+
+        ! Check the is executing indicator of the heir context
+        ld      [%o1 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET], %g1
+        cmp     %g1, 0
+        beq     try_update_is_executing
+         mov    1, %g1
+
+        ! Check if a thread dispatch is necessary
+        ldub    [%g6 + PER_CPU_DISPATCH_NEEDED], %g1
+        cmp     %g1, 0
+        beq     check_is_executing
+         nop
+
+        ! We have a new heir
+
+        ! Clear the thread dispatch necessary flag
+        stub    %g0, [%g6 + PER_CPU_DISPATCH_NEEDED]
+
+        ! Here we assume a strong memory order, otherwise a memory barrier must
+        ! be inserted here
+
+        ! Read the executing and heir
+        ld      [%g6 + PER_CPU_OFFSET_EXECUTING], %g1
+        ld      [%g6 + PER_CPU_OFFSET_HEIR], %g2
+
+        ! Calculate the heir context pointer
+        sub     %o1, %g1, %g1
+        add     %g1, %g2, %o1
+
+        ! Update the executing
+        st      %g2, [%g6 + PER_CPU_OFFSET_EXECUTING]
+
+        ba      try_update_is_executing
+         mov    1, %g1
+#endif
 
 /*
  *  void _CPU_Context_restore(

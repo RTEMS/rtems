@@ -23,7 +23,7 @@
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2011-2013 embedded brains GmbH.
+ *  Copyright (c) 2011-2014 embedded brains GmbH
  *
  *  The license and distribution terms for this file may in
  *  the file LICENSE in this distribution or at
@@ -32,7 +32,8 @@
 
 #include <rtems/asm.h>
 #include <rtems/powerpc/powerpc.h>
-#include <rtems/score/cpu.h>
+#include <rtems/score/percpu.h>
+#include <libcpu/powerpc-utility.h>
 #include <bspopts.h>
 
 #if PPC_DEFAULT_CACHE_LINE_SIZE != 32
@@ -257,33 +258,37 @@ PROC (_CPU_Context_switch):
 
 	/* Align to a cache line */
 	clrrwi	r3, r3, 5
-	clrrwi	r4, r4, 5
+	clrrwi	r5, r4, 5
 
 	DATA_CACHE_ZERO_AND_TOUCH(r10, PPC_CONTEXT_CACHE_LINE_0)
 	DATA_CACHE_ZERO_AND_TOUCH(r11, PPC_CONTEXT_CACHE_LINE_1)
 
 	/* Save context to r3 */
 
-	mfmsr	r5
-	mflr	r6
-	mfcr	r7
+	mfmsr	r6
+	mflr	r7
+	mfcr	r8
 
 	/*
 	 * We have to clear the reservation of the executing thread.  See also
 	 * Book E section 6.1.6.2 "Atomic Update Primitives".  Recent GCC
-	 * versions use atomic operations in the C++ library for example.
+	 * versions use atomic operations in the C++ library for example.  On
+	 * SMP configurations the reservation is cleared later during the
+	 * context switch.
 	 */
 #if PPC_CONTEXT_OFFSET_GPR1 != PPC_CONTEXT_CACHE_LINE_0 \
   || !BSP_DATA_CACHE_ENABLED \
   || PPC_CACHE_ALIGNMENT != 32
 	li	r10, PPC_CONTEXT_OFFSET_GPR1
 #endif
+#ifndef RTEMS_SMP
 	stwcx.	r1, r3, r10
+#endif
 
 	stw	r1, PPC_CONTEXT_OFFSET_GPR1(r3)
-	stw	r5, PPC_CONTEXT_OFFSET_MSR(r3)
-	stw	r6, PPC_CONTEXT_OFFSET_LR(r3)
-	stw	r7, PPC_CONTEXT_OFFSET_CR(r3)
+	stw	r6, PPC_CONTEXT_OFFSET_MSR(r3)
+	stw	r7, PPC_CONTEXT_OFFSET_LR(r3)
+	stw	r8, PPC_CONTEXT_OFFSET_CR(r3)
 	PPC_GPR_STORE	r14, PPC_CONTEXT_OFFSET_GPR14(r3)
 	PPC_GPR_STORE	r15, PPC_CONTEXT_OFFSET_GPR15(r3)
 
@@ -329,66 +334,69 @@ PROC (_CPU_Context_switch):
 #ifdef RTEMS_SMP
 	/* The executing context no longer executes on this processor */
 	msync
-	li	r5, 0
-	stb	r5, PPC_CONTEXT_OFFSET_IS_EXECUTING(r3)
+	li	r6, 0
+	stw	r6, PPC_CONTEXT_OFFSET_IS_EXECUTING(r3)
 
-	/* Wait for heir context to stop execution */
-1:
-	lbz	r5, PPC_CONTEXT_OFFSET_IS_EXECUTING(r4)
-	cmpwi	r5, 0
-	bne	1b
+check_is_executing:
 
-	/* The heir context executes now on this processor */
-	li	r5, 1
-	stb	r5, PPC_CONTEXT_OFFSET_IS_EXECUTING(r4)
+	/* Check the is executing indicator of the heir context */
+	addi	r6, r5, PPC_CONTEXT_OFFSET_IS_EXECUTING
+	lwarx	r7, r0, r6
+	cmpwi	r7, 0
+	bne	check_thread_dispatch_necessary
+
+	/* Try to update the is executing indicator of the heir context */
+	li	r7, 1
+	stwcx.	r7, r0, r6
+	bne	check_thread_dispatch_necessary
 	isync
 #endif
 
-	/* Restore context from r4 */
+	/* Restore context from r5 */
 restore_context:
 
 #ifdef __ALTIVEC__
-	mr	r14, r4 
+	mr	r14, r5
 	.extern	_CPU_Context_switch_altivec
 	bl	_CPU_Context_switch_altivec
-	mr	r4, r14
+	mr	r5, r14
 #endif
 
-	lwz	r1, PPC_CONTEXT_OFFSET_GPR1(r4)
-	lwz	r5, PPC_CONTEXT_OFFSET_MSR(r4)
-	lwz	r6, PPC_CONTEXT_OFFSET_LR(r4)
-	lwz	r7, PPC_CONTEXT_OFFSET_CR(r4)
+	lwz	r1, PPC_CONTEXT_OFFSET_GPR1(r5)
+	lwz	r6, PPC_CONTEXT_OFFSET_MSR(r5)
+	lwz	r7, PPC_CONTEXT_OFFSET_LR(r5)
+	lwz	r8, PPC_CONTEXT_OFFSET_CR(r5)
 
-	PPC_GPR_LOAD	r14, PPC_CONTEXT_OFFSET_GPR14(r4)
-	PPC_GPR_LOAD	r15, PPC_CONTEXT_OFFSET_GPR15(r4)
+	PPC_GPR_LOAD	r14, PPC_CONTEXT_OFFSET_GPR14(r5)
+	PPC_GPR_LOAD	r15, PPC_CONTEXT_OFFSET_GPR15(r5)
 
 	DATA_CACHE_TOUCH(r0, r1)
 
-	PPC_GPR_LOAD	r16, PPC_CONTEXT_OFFSET_GPR16(r4)
-	PPC_GPR_LOAD	r17, PPC_CONTEXT_OFFSET_GPR17(r4)
-	PPC_GPR_LOAD	r18, PPC_CONTEXT_OFFSET_GPR18(r4)
-	PPC_GPR_LOAD	r19, PPC_CONTEXT_OFFSET_GPR19(r4)
+	PPC_GPR_LOAD	r16, PPC_CONTEXT_OFFSET_GPR16(r5)
+	PPC_GPR_LOAD	r17, PPC_CONTEXT_OFFSET_GPR17(r5)
+	PPC_GPR_LOAD	r18, PPC_CONTEXT_OFFSET_GPR18(r5)
+	PPC_GPR_LOAD	r19, PPC_CONTEXT_OFFSET_GPR19(r5)
 
-	PPC_GPR_LOAD	r20, PPC_CONTEXT_OFFSET_GPR20(r4)
-	PPC_GPR_LOAD	r21, PPC_CONTEXT_OFFSET_GPR21(r4)
-	PPC_GPR_LOAD	r22, PPC_CONTEXT_OFFSET_GPR22(r4)
-	PPC_GPR_LOAD	r23, PPC_CONTEXT_OFFSET_GPR23(r4)
+	PPC_GPR_LOAD	r20, PPC_CONTEXT_OFFSET_GPR20(r5)
+	PPC_GPR_LOAD	r21, PPC_CONTEXT_OFFSET_GPR21(r5)
+	PPC_GPR_LOAD	r22, PPC_CONTEXT_OFFSET_GPR22(r5)
+	PPC_GPR_LOAD	r23, PPC_CONTEXT_OFFSET_GPR23(r5)
 
-	PPC_GPR_LOAD	r24, PPC_CONTEXT_OFFSET_GPR24(r4)
-	PPC_GPR_LOAD	r25, PPC_CONTEXT_OFFSET_GPR25(r4)
-	PPC_GPR_LOAD	r26, PPC_CONTEXT_OFFSET_GPR26(r4)
-	PPC_GPR_LOAD	r27, PPC_CONTEXT_OFFSET_GPR27(r4)
+	PPC_GPR_LOAD	r24, PPC_CONTEXT_OFFSET_GPR24(r5)
+	PPC_GPR_LOAD	r25, PPC_CONTEXT_OFFSET_GPR25(r5)
+	PPC_GPR_LOAD	r26, PPC_CONTEXT_OFFSET_GPR26(r5)
+	PPC_GPR_LOAD	r27, PPC_CONTEXT_OFFSET_GPR27(r5)
 
-	PPC_GPR_LOAD	r28, PPC_CONTEXT_OFFSET_GPR28(r4)
-	PPC_GPR_LOAD	r29, PPC_CONTEXT_OFFSET_GPR29(r4)
-	PPC_GPR_LOAD	r30, PPC_CONTEXT_OFFSET_GPR30(r4)
-	PPC_GPR_LOAD	r31, PPC_CONTEXT_OFFSET_GPR31(r4)
+	PPC_GPR_LOAD	r28, PPC_CONTEXT_OFFSET_GPR28(r5)
+	PPC_GPR_LOAD	r29, PPC_CONTEXT_OFFSET_GPR29(r5)
+	PPC_GPR_LOAD	r30, PPC_CONTEXT_OFFSET_GPR30(r5)
+	PPC_GPR_LOAD	r31, PPC_CONTEXT_OFFSET_GPR31(r5)
 
-	lwz	r2, PPC_CONTEXT_OFFSET_GPR2(r4)
+	lwz	r2, PPC_CONTEXT_OFFSET_GPR2(r5)
 
-	mtcr	r7
-	mtlr	r6
-	mtmsr	r5
+	mtcr	r8
+	mtlr	r7
+	mtmsr	r6
 
 #ifdef BSP_USE_SYNC_IN_CONTEXT_SWITCH
 	isync
@@ -399,10 +407,42 @@ restore_context:
 	PUBLIC_PROC (_CPU_Context_restore)
 PROC (_CPU_Context_restore):
 	/* Align to a cache line */
-	clrrwi	r4, r3, 5
+	clrrwi	r5, r3, 5
 
 #ifdef __ALTIVEC__
 	li	r3, 0
 #endif
 
 	b	restore_context
+
+#ifdef RTEMS_SMP
+check_thread_dispatch_necessary:
+
+	GET_SELF_CPU_CONTROL	r6
+
+	/* Check if a thread dispatch is necessary */
+	lbz	r7, PER_CPU_DISPATCH_NEEDED(r6)
+	cmpwi	r7, 0
+	beq	check_is_executing
+
+	/* We have a new heir */
+
+	/* Clear the thread dispatch necessary flag */
+	li	r7, 0
+	stb	r7, PER_CPU_DISPATCH_NEEDED(r6)
+	msync
+
+	/* Read the executing and heir */
+	lwz	r7, PER_CPU_OFFSET_EXECUTING(r6)
+	lwz	r8, PER_CPU_OFFSET_HEIR(r6)
+
+	/* Calculate the heir context pointer */
+	sub	r7, r4, r7
+	add	r4, r8, r7
+	clrrwi	r5, r4, 5
+
+	/* Update the executing */
+	stw	r8, PER_CPU_OFFSET_EXECUTING(r6)
+
+	b	check_is_executing
+#endif

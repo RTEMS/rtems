@@ -31,7 +31,6 @@
 #endif
 
 #include <rtems/asm.h>
-#include <rtems/score/percpu.h>
 
 #ifdef ARM_MULTILIB_ARCH_V4
 
@@ -48,17 +47,6 @@
 
 #define CONTEXT_LIST {r0, r1, r2, r3, EXCHANGE_LR, EXCHANGE_SPSR, SELF_CPU_CONTROL, r12}
 #define CONTEXT_SIZE 32
-
-.macro GET_SELF_CPU_CONTROL REG, TMP
-	ldr	\REG, =_Per_CPU_Information
-#ifdef RTEMS_SMP
-	/* Use ARMv7 Multiprocessor Affinity Register (MPIDR) */
-	mrc	p15, 0, \TMP, c0, c0, 5
-
-	and	\TMP, \TMP, #0xff
-	add	\REG, \REG, \TMP, asl #PER_CPU_CONTROL_SIZE_LOG2
-#endif
-.endm
 
 .arm
 .globl _ARMV4_Exception_interrupt

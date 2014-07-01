@@ -303,7 +303,7 @@ typedef struct {
   PPC_GPR_TYPE gpr31;
   uint32_t gpr2;
   #ifdef RTEMS_SMP
-    volatile bool is_executing;
+    volatile uint32_t is_executing;
   #endif
   #ifdef __ALTIVEC__
     /*

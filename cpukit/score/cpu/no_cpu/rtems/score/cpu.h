@@ -578,11 +578,40 @@ typedef struct {
 #ifdef RTEMS_SMP
     /**
      * @brief On SMP configurations the thread context must contain a boolean
-     * indicator if this context is executing on a processor.
+     * indicator to signal if this context is executing on a processor.
      *
      * This field must be updated during a context switch.  The context switch
      * to the heir must wait until the heir context indicates that it is no
-     * longer executing on a processor.
+     * longer executing on a processor.  The context switch must also check if
+     * a thread dispatch is necessary to honor updates of the heir thread for
+     * this processor.  This indicator must be updated using an atomic test and
+     * set operation to ensure that at most one processor uses the heir
+     * context at the same time.
+     *
+     * @code
+     * void _CPU_Context_switch(
+     *   Context_Control *executing,
+     *   Context_Control *heir
+     * )
+     * {
+     *   save( executing );
+     *
+     *   executing->is_executing = false;
+     *   memory_barrier();
+     *
+     *   if ( test_and_set( &heir->is_executing ) ) {
+     *     do {
+     *       Per_CPU_Control *cpu_self = _Per_CPU_Get_snapshot();
+     *
+     *       if ( cpu_self->dispatch_necessary ) {
+     *         heir = _Thread_Get_heir_and_make_it_executing( cpu_self );
+     *       }
+     *     } while ( test_and_set( &heir->is_executing ) );
+     *   }
+     *
+     *   restore( heir );
+     * }
+     * @endcode
      */
     volatile bool is_executing;
 #endif

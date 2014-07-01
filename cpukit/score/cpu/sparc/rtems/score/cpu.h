@@ -475,7 +475,7 @@ typedef struct {
   uint32_t   isr_dispatch_disable;
 
 #if defined(RTEMS_SMP)
-  volatile bool is_executing;
+  volatile uint32_t is_executing;
 #endif
 } Context_Control;
 
