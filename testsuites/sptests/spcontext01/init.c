@@ -163,6 +163,12 @@ static void test(test_context *self)
 static void test_context_is_executing(void)
 {
 #if defined(RTEMS_SMP)
+  /*
+   * Provide a stack area, since on some architectures the top/bottom of stack
+   * is initialized by _CPU_Context_Initialize().
+   */
+  static char stack[1024];
+
   Context_Control context;
   bool is_executing;
 
@@ -180,7 +186,15 @@ static void test_context_is_executing(void)
   rtems_test_assert(!is_executing);
 
   _CPU_Context_Set_is_executing(&context, true);
-  _CPU_Context_Initialize(&context, NULL, 0, 0, NULL, false, NULL);
+  _CPU_Context_Initialize(
+    &context,
+    &stack[0],
+    sizeof(stack),
+    0,
+    NULL,
+    false,
+    NULL
+  );
   is_executing = _CPU_Context_Get_is_executing(&context);
   rtems_test_assert(is_executing);
 #endif
