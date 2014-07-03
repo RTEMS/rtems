@@ -1,0 +1,14 @@
+*** BEGIN OF TEST SMPCACHE 1 ***
+Calling all standard SMP cache functions
+Done!
+Calling all standard SMP cache functions. With ISR disabled
+Done!
+Calling all standard SMP cache functions. With CPU0 holding the giant lock
+Done!
+Calling a test function using the SMP cache manager to verify that all CPUs receive the SMP message
+Done!
+Calling a test function using the SMP cache manager to verify that all CPUs receive the SMP message. With ISR disabled
+Done!
+Calling a test function using the SMP cache manager to verify that all CPUs receive the SMP message. With CPU0 holding the giant lock
+Done!
+*** END OF TEST SMPCACHE 1 ***

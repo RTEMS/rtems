@@ -1,0 +1,16 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpcache01
+
+directives:
+
+  - rtems_cache_flush_multiple_data_lines_processor_set
+  - rtems_cache_invalidate_multiple_data_lines_processor_set
+  - rtems_cache_flush_entire_data_processor_set
+  - rtems_cache_invalidate_entire_data_processor_set
+  - rtems_cache_invalidate_entire_instruction
+  - rtems_cache_invalidate_multiple_instruction_lines
+
+concepts:
+
+  - Ensure that cache related SMP messages are delivered properly.
