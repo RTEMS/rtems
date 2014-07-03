@@ -78,7 +78,7 @@ typedef struct {
    * @retval true Successful operation.
    * @retval false Cannot open device.
    *
-   * @see rtems_termios_get_device_context().
+   * @see rtems_termios_get_device_context() and rtems_termios_get_termios().
    */
   bool (*first_open)(
     struct rtems_termios_tty      *tty,
@@ -370,6 +370,19 @@ RTEMS_INLINE_ROUTINE void *rtems_termios_get_device_context(
 )
 {
   return tty->device_context;
+}
+
+/**
+ * @brief Returns the Termios structure.
+ *
+ * It can be used for example in the first open handler to adjust or obtain the
+ * initial attributes.
+ */
+RTEMS_INLINE_ROUTINE struct termios *rtems_termios_get_termios(
+  const rtems_termios_tty *tty
+)
+{
+  return &tty->termios;
 }
 
 struct rtems_termios_linesw {
