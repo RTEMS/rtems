@@ -15,6 +15,7 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#include <cache_.h>
 #include <leon.h>
 #include <rtems/bspIo.h>
 #include <rtems/score/smpimpl.h>
@@ -79,4 +80,12 @@ void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
 {
   /* send interrupt to destination CPU */
   LEON3_IrqCtrl_Regs->force[target_processor_index] = 1 << LEON3_MP_IRQ;
+}
+
+void _BSP_Start_multitasking(
+  Context_Control *heir
+)
+{
+  _CPU_cache_invalidate_entire_instruction();
+  _CPU_Context_Restart_self( heir );
 }
