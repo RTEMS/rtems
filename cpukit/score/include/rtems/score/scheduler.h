@@ -161,6 +161,75 @@ struct Scheduler_Control {
   uint32_t name;
 };
 
+#if defined(RTEMS_SMP)
+/**
+ * @brief State to indicate potential help for other threads.
+ *
+ * @dot
+ * digraph state {
+ *   y [label="HELP YOURSELF"];
+ *   ao [label="HELP ACTIVE OWNER"];
+ *   ar [label="HELP ACTIVE RIVAL"];
+ *
+ *   y -> ao [label="obtain"];
+ *   y -> ar [label="wait for obtain"];
+ *   ao -> y [label="last release"];
+ *   ao -> r [label="wait for obtain"];
+ *   ar -> r [label="timeout"];
+ *   ar -> ao [label="timeout"];
+ * }
+ * @enddot
+ */
+typedef enum {
+  /**
+   * @brief This scheduler node is solely used by the owner thread.
+   *
+   * This thread owns no resources using a helping protocol and thus does not
+   * take part in the scheduler helping protocol.  No help will be provided for
+   * other thread.
+   */
+  SCHEDULER_HELP_YOURSELF,
+
+  /**
+   * @brief This scheduler node is owned by a thread actively owning a resource.
+   *
+   * This scheduler node can be used to help out threads.
+   *
+   * In case this scheduler node changes its state from ready to scheduled and
+   * the thread executes using another node, then an idle thread will be
+   * provided as a user of this node to temporarily execute on behalf of the
+   * owner thread.  Thus lower priority threads are denied access to the
+   * processors of this scheduler instance.
+   *
+   * In case a thread actively owning a resource performs a blocking operation,
+   * then an idle thread will be used also in case this node is in the
+   * scheduled state.
+   */
+  SCHEDULER_HELP_ACTIVE_OWNER,
+
+  /**
+   * @brief This scheduler node is owned by a thread actively obtaining a
+   * resource currently owned by another thread.
+   *
+   * This scheduler node can be used to help out threads.
+   *
+   * The thread owning this node is ready and will give away its processor in
+   * case the thread owning the resource asks for help.
+   */
+  SCHEDULER_HELP_ACTIVE_RIVAL,
+
+  /**
+   * @brief This scheduler node is owned by a thread obtaining a
+   * resource currently owned by another thread.
+   *
+   * This scheduler node can be used to help out threads.
+   *
+   * The thread owning this node is blocked.
+   */
+  SCHEDULER_HELP_PASSIVE
+} Scheduler_Help_state;
+#endif
+
 /**
  * @brief Scheduler node for per-thread data.
  */
@@ -179,9 +248,36 @@ struct Scheduler_Node {
   Chain_Node Node;
 
   /**
+   * @brief The thread using this node.
+   */
+  Thread_Control *user;
+
+  /**
+   * @brief The help state of this node.
+   */
+  Scheduler_Help_state help_state;
+
+  /**
    * @brief The thread owning this node.
    */
   Thread_Control *owner;
+
+  /**
+   * @brief The idle thread claimed by this node in case the help state is
+   * SCHEDULER_HELP_ACTIVE_OWNER.
+   *
+   * Active owners will lend their own node to an idle thread in case they
+   * execute currently using another node or in case they perform a blocking
+   * operation.  This is necessary to ensure the priority ceiling protocols
+   * work across scheduler boundaries.
+   */
+  Thread_Control *idle;
+
+  /**
+   * @brief The thread accepting help by this node in case the help state is
+   * not SCHEDULER_HELP_YOURSELF.
+   */
+  Thread_Control *accepts_help;
 #endif
 };
 

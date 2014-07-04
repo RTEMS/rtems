@@ -77,6 +77,15 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_CPU(
   return _Scheduler_Get_by_CPU_index( cpu_index );
 }
 
+#if defined(RTEMS_SMP)
+RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_user(
+  const Scheduler_Node *node
+)
+{
+  return node->user;
+}
+#endif
+
 /**
  * The preferred method to add a new scheduler is to define the jump table
  * entries and add a case to the _Scheduler_Initialize routine.
@@ -658,7 +667,11 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
 )
 {
 #if defined(RTEMS_SMP)
+  node->user = the_thread;
+  node->help_state = SCHEDULER_HELP_YOURSELF;
   node->owner = the_thread;
+  node->idle = NULL;
+  node->accepts_help = the_thread;
 #else
   (void) node;
   (void) the_thread;
@@ -671,6 +684,34 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_owner(
 )
 {
   return node->owner;
+}
+
+RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_idle(
+  const Scheduler_Node *node
+)
+{
+  return node->idle;
+}
+
+/**
+ * @brief Changes the scheduler help state of a thread.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_help_state The new help state.
+ *
+ * @return The previous help state.
+ */
+RTEMS_INLINE_ROUTINE Scheduler_Help_state _Scheduler_Thread_change_help_state(
+  Thread_Control       *the_thread,
+  Scheduler_Help_state  new_help_state
+)
+{
+  Scheduler_Node *node = _Scheduler_Thread_get_node( the_thread );
+  Scheduler_Help_state previous_help_state = node->help_state;
+
+  node->help_state = new_help_state;
+
+  return previous_help_state;
 }
 #endif
 

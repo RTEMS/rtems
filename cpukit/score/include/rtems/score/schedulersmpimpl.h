@@ -455,8 +455,8 @@ static inline void _Scheduler_SMP_Allocate_processor(
   Scheduler_SMP_Allocate_processor  allocate_processor
 )
 {
-  Thread_Control *scheduled_thread = _Scheduler_Node_get_owner( scheduled );
-  Thread_Control *victim_thread = _Scheduler_Node_get_owner( victim );
+  Thread_Control *scheduled_thread = _Scheduler_Node_get_user( scheduled );
+  Thread_Control *victim_thread = _Scheduler_Node_get_user( victim );
 
   _Scheduler_SMP_Node_change_state(
     _Scheduler_SMP_Node_downcast( scheduled ),
