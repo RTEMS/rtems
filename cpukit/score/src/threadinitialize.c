@@ -181,7 +181,10 @@ bool _Thread_Initialize(
   }
 
 #if defined(RTEMS_SMP)
+  the_thread->Scheduler.state = THREAD_SCHEDULER_BLOCKED;
+  the_thread->Scheduler.own_control = scheduler;
   the_thread->Scheduler.control = scheduler;
+  the_thread->Scheduler.own_node = the_thread->Scheduler.node;
   _Resource_Node_initialize( &the_thread->Resource_node );
   _CPU_Context_Set_is_executing( &the_thread->Registers, false );
 #endif

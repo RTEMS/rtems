@@ -26,4 +26,5 @@ void _Scheduler_SMP_Start_idle(
 
   _Thread_Set_CPU( thread, cpu );
   _Chain_Append_unprotected( &self->Scheduled, &node->Base.Node );
+  _Chain_Prepend_unprotected( &self->Idle_threads, &thread->Object.Node );
 }

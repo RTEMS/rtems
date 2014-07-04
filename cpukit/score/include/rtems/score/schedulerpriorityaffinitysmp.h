@@ -55,6 +55,7 @@ extern "C" {
     _Scheduler_priority_affinity_SMP_Block, \
     _Scheduler_priority_affinity_SMP_Unblock, \
     _Scheduler_priority_affinity_SMP_Change_priority, \
+    _Scheduler_priority_affinity_SMP_Ask_for_help, \
     _Scheduler_priority_affinity_SMP_Node_initialize, \
     _Scheduler_default_Node_destroy, \
     _Scheduler_priority_SMP_Update_priority, \
@@ -137,6 +138,12 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Change_priority(
   Thread_Control          *the_thread,
   Priority_Control         new_priority,
   bool                     prepend_it
+);
+
+Thread_Control *_Scheduler_priority_affinity_SMP_Ask_for_help(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *offers_help,
+  Thread_Control          *needs_help
 );
 
 /** 

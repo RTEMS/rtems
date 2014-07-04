@@ -361,6 +361,7 @@ static inline void _Scheduler_SMP_Initialize(
 )
 {
   _Chain_Initialize_empty( &self->Scheduled );
+  _Chain_Initialize_empty( &self->Idle_threads );
 }
 
 static inline Scheduler_SMP_Node *_Scheduler_SMP_Thread_get_node(
@@ -368,6 +369,13 @@ static inline Scheduler_SMP_Node *_Scheduler_SMP_Thread_get_node(
 )
 {
   return (Scheduler_SMP_Node *) _Scheduler_Thread_get_node( thread );
+}
+
+static inline Scheduler_SMP_Node *_Scheduler_SMP_Thread_get_own_node(
+  Thread_Control *thread
+)
+{
+  return (Scheduler_SMP_Node *) _Scheduler_Thread_get_own_node( thread );
 }
 
 static inline Scheduler_SMP_Node *_Scheduler_SMP_Node_downcast(
@@ -414,6 +422,36 @@ static inline bool _Scheduler_SMP_Is_processor_owned_by_us(
 )
 {
   return cpu->scheduler_context == context;
+}
+
+static inline Thread_Control *_Scheduler_SMP_Get_idle_thread(
+  Scheduler_Context     *context,
+  Scheduler_SMP_Extract  extract_from_ready
+)
+{
+  Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
+  Thread_Control *idle = (Thread_Control *)
+    _Chain_Get_first_unprotected( &self->Idle_threads );
+  Scheduler_Node *own_node = _Scheduler_Thread_get_own_node( idle );
+
+  ( *extract_from_ready )( &self->Base, own_node );
+
+  _Assert( &idle->Object.Node != _Chain_Tail( &self->Idle_threads ) );
+
+  return idle;
+}
+
+static inline void _Scheduler_SMP_Release_idle_thread(
+  Scheduler_Context    *context,
+  Thread_Control       *idle,
+  Scheduler_SMP_Insert  insert_ready
+)
+{
+  Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
+  Scheduler_Node *own_node = _Scheduler_Thread_get_own_node( idle );
+
+  _Chain_Prepend_unprotected( &self->Idle_threads, &idle->Object.Node );
+  ( *insert_ready )( context, own_node );
 }
 
 static inline void _Scheduler_SMP_Allocate_processor_lazy(
@@ -468,6 +506,7 @@ static inline void _Scheduler_SMP_Allocate_processor(
     _Scheduler_SMP_Node_downcast( scheduled ),
     SCHEDULER_SMP_NODE_SCHEDULED
   );
+  _Scheduler_Thread_change_state( scheduled_thread, THREAD_SCHEDULER_SCHEDULED );
 
   ( *allocate_processor )( context, scheduled_thread, victim_thread );
 }
@@ -489,6 +528,57 @@ static inline Scheduler_Node *_Scheduler_SMP_Get_lowest_scheduled(
   _Assert( &lowest_scheduled->Node != _Chain_Tail( scheduled ) );
 
   return lowest_scheduled;
+}
+
+static inline Thread_Control *_Scheduler_SMP_Enqueue_to_scheduled(
+  Scheduler_Context                *context,
+  Scheduler_Node                   *node,
+  Scheduler_Node                   *lowest_scheduled,
+  Scheduler_SMP_Insert              insert_scheduled,
+  Scheduler_SMP_Move                move_from_scheduled_to_ready,
+  Scheduler_SMP_Allocate_processor  allocate_processor,
+  Scheduler_Release_idle_thread     release_idle_thread
+)
+{
+  Thread_Control *user = _Scheduler_Node_get_user( node );
+  Thread_Control *lowest_scheduled_user =
+    _Scheduler_Node_get_user( lowest_scheduled );
+  Thread_Control *needs_help;
+  Thread_Control *idle;
+
+  _Scheduler_SMP_Node_change_state(
+    _Scheduler_SMP_Node_downcast( lowest_scheduled ),
+    SCHEDULER_SMP_NODE_READY
+  );
+  _Scheduler_Thread_change_state(
+    lowest_scheduled_user,
+    THREAD_SCHEDULER_READY
+  );
+
+  _Scheduler_Thread_set_node( user, node );
+
+  _Scheduler_SMP_Allocate_processor(
+    context,
+    node,
+    lowest_scheduled,
+    allocate_processor
+  );
+
+  ( *insert_scheduled )( context, node );
+  ( *move_from_scheduled_to_ready )( context, lowest_scheduled );
+
+  idle = _Scheduler_Release_idle_thread(
+    context,
+    lowest_scheduled,
+    release_idle_thread
+  );
+  if ( idle == NULL ) {
+    needs_help = lowest_scheduled_user;
+  } else {
+    needs_help = NULL;
+  }
+
+  return needs_help;
 }
 
 /**
@@ -513,6 +603,7 @@ static inline Scheduler_Node *_Scheduler_SMP_Get_lowest_scheduled(
  *   if this pointer is passed as the second argument to the order function.
  * @param[in] allocate_processor Function to allocate a processor to a node
  *   based on the rules of the scheduler.
+ * @param[in] release_idle_thread Function to release an idle thread.
  */
 static inline Thread_Control *_Scheduler_SMP_Enqueue_ordered(
   Scheduler_Context                  *context,
@@ -523,29 +614,23 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_ordered(
   Scheduler_SMP_Insert                insert_scheduled,
   Scheduler_SMP_Move                  move_from_scheduled_to_ready,
   Scheduler_SMP_Get_lowest_scheduled  get_lowest_scheduled,
-  Scheduler_SMP_Allocate_processor    allocate_processor
+  Scheduler_SMP_Allocate_processor    allocate_processor,
+  Scheduler_Release_idle_thread       release_idle_thread
 )
 {
   Scheduler_Node *lowest_scheduled =
     ( *get_lowest_scheduled )( context, node, order );
 
   if ( ( *order )( &node->Node, &lowest_scheduled->Node ) ) {
-    _Scheduler_SMP_Node_change_state(
-      _Scheduler_SMP_Node_downcast( lowest_scheduled ),
-      SCHEDULER_SMP_NODE_READY
-    );
-
-    _Scheduler_SMP_Allocate_processor(
+    needs_help = _Scheduler_SMP_Enqueue_to_scheduled(
       context,
       node,
       lowest_scheduled,
-      allocate_processor
+      insert_scheduled,
+      move_from_scheduled_to_ready,
+      allocate_processor,
+      release_idle_thread
     );
-
-    ( *insert_scheduled )( context, node );
-    ( *move_from_scheduled_to_ready )( context, lowest_scheduled );
-
-    needs_help = _Scheduler_Node_get_user( lowest_scheduled );
   } else {
     ( *insert_ready )( context, node );
   }
@@ -560,6 +645,8 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_ordered(
  * @param[in] context The scheduler instance context.
  * @param[in] node The node to enqueue.
  * @param[in] order The order function.
+ * @param[in] extract_from_ready Function to extract a node from the set of
+ *   ready nodes.
  * @param[in] get_highest_ready Function to get the highest ready node.
  * @param[in] insert_ready Function to insert a node into the set of ready
  *   nodes.
@@ -569,48 +656,86 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_ordered(
  *   of ready nodes to the set of scheduled nodes.
  * @param[in] allocate_processor Function to allocate a processor to a node
  *   based on the rules of the scheduler.
+ * @param[in] get_idle_thread Function to get an idle thread.
+ * @param[in] release_idle_thread Function to release an idle thread.
  */
 static inline Thread_Control *_Scheduler_SMP_Enqueue_scheduled_ordered(
   Scheduler_Context                *context,
   Scheduler_Node                   *node,
   Chain_Node_order                  order,
+  Scheduler_SMP_Extract             extract_from_ready,
   Scheduler_SMP_Get_highest_ready   get_highest_ready,
   Scheduler_SMP_Insert              insert_ready,
   Scheduler_SMP_Insert              insert_scheduled,
   Scheduler_SMP_Move                move_from_ready_to_scheduled,
-  Scheduler_SMP_Allocate_processor  allocate_processor
+  Scheduler_SMP_Allocate_processor  allocate_processor,
+  Scheduler_Get_idle_thread         get_idle_thread,
+  Scheduler_Release_idle_thread     release_idle_thread
 )
 {
-  Scheduler_Node *highest_ready = ( *get_highest_ready )( context, node );
   Thread_Control *needs_help;
 
-  _Assert( highest_ready != NULL );
+  while ( true ) {
+    Scheduler_Node *highest_ready = ( *get_highest_ready )( context, node );
 
-  /*
-   * The node has been extracted from the scheduled chain.  We have to place
-   * it now on the scheduled or ready set.
-   */
-  if ( ( *order )( &node->Node, &highest_ready->Node ) ) {
-    ( *insert_scheduled )( context, node );
+    _Assert( highest_ready != NULL );
 
-    needs_help = NULL;
-  } else {
-    _Scheduler_SMP_Node_change_state(
-      _Scheduler_SMP_Node_downcast( node ),
-      SCHEDULER_SMP_NODE_READY
-    );
+    /*
+     * The node has been extracted from the scheduled chain.  We have to place
+     * it now on the scheduled or ready set.
+     */
+    if ( ( *order )( &node->Node, &highest_ready->Node ) ) {
+      ( *insert_scheduled )( context, node );
 
-    _Scheduler_SMP_Allocate_processor(
-      context,
-      highest_ready,
-      node,
-      allocate_processor
-    );
+      needs_help = NULL;
 
-    ( *insert_ready )( context, node );
-    ( *move_from_ready_to_scheduled )( context, highest_ready );
+      break;
+    } else if (
+      _Scheduler_Try_to_schedule_node(
+        context,
+        highest_ready,
+        get_idle_thread
+      )
+    ) {
+      Thread_Control *user = _Scheduler_Node_get_user( node );
+      Thread_Control *idle;
 
-    needs_help = _Scheduler_Node_get_user( node );
+      _Scheduler_SMP_Node_change_state(
+        _Scheduler_SMP_Node_downcast( node ),
+        SCHEDULER_SMP_NODE_READY
+      );
+      _Scheduler_Thread_change_state( user, THREAD_SCHEDULER_READY );
+
+      _Scheduler_SMP_Allocate_processor(
+        context,
+        highest_ready,
+        node,
+        allocate_processor
+      );
+
+      ( *insert_ready )( context, node );
+      ( *move_from_ready_to_scheduled )( context, highest_ready );
+
+      idle = _Scheduler_Release_idle_thread(
+        context,
+        node,
+        release_idle_thread
+      );
+      if ( idle == NULL ) {
+        needs_help = user;
+      } else {
+        needs_help = NULL;
+      }
+
+      break;
+    } else {
+      _Scheduler_SMP_Node_change_state(
+        _Scheduler_SMP_Node_downcast( highest_ready ),
+        SCHEDULER_SMP_NODE_BLOCKED
+      );
+
+      ( *extract_from_ready )( context, highest_ready );
+    }
   }
 
   return needs_help;
@@ -626,21 +751,44 @@ static inline void _Scheduler_SMP_Extract_from_scheduled(
 static inline void _Scheduler_SMP_Schedule_highest_ready(
   Scheduler_Context                *context,
   Scheduler_Node                   *victim,
+  Scheduler_SMP_Extract             extract_from_ready,
   Scheduler_SMP_Get_highest_ready   get_highest_ready,
   Scheduler_SMP_Move                move_from_ready_to_scheduled,
-  Scheduler_SMP_Allocate_processor  allocate_processor
+  Scheduler_SMP_Allocate_processor  allocate_processor,
+  Scheduler_Get_idle_thread         get_idle_thread
 )
 {
-  Scheduler_Node *highest_ready = ( *get_highest_ready )( context, victim );
+  while ( true ) {
+    Scheduler_Node *highest_ready = ( *get_highest_ready )( context, victim );
 
-  _Scheduler_SMP_Allocate_processor(
-    context,
-    highest_ready,
-    victim,
-    allocate_processor
-  );
+    _Assert( highest_ready != NULL );
 
-  ( *move_from_ready_to_scheduled )( context, highest_ready );
+    if (
+      _Scheduler_Try_to_schedule_node(
+        context,
+        highest_ready,
+        get_idle_thread
+      )
+    ) {
+      _Scheduler_SMP_Allocate_processor(
+        context,
+        highest_ready,
+        victim,
+        allocate_processor
+      );
+
+      ( *move_from_ready_to_scheduled )( context, highest_ready );
+
+      break;
+    } else {
+      _Scheduler_SMP_Node_change_state(
+        _Scheduler_SMP_Node_downcast( highest_ready ),
+        SCHEDULER_SMP_NODE_BLOCKED
+      );
+
+      ( *extract_from_ready )( context, highest_ready );
+    }
+  }
 }
 
 /**
@@ -649,10 +797,11 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
  * @param[in] context The scheduler instance context.
  * @param[in] thread The thread of the scheduling operation.
  * @param[in] extract_from_ready Function to extract a node from the set of
- * ready nodes.
+ *   ready nodes.
  * @param[in] get_highest_ready Function to get the highest ready node.
  * @param[in] move_from_ready_to_scheduled Function to move a node from the set
- * of ready nodes to the set of scheduled nodes.
+ *   of ready nodes to the set of scheduled nodes.
+ * @param[in] get_idle_thread Function to get an idle thread.
  */
 static inline void _Scheduler_SMP_Block(
   Scheduler_Context                *context,
@@ -660,40 +809,67 @@ static inline void _Scheduler_SMP_Block(
   Scheduler_SMP_Extract             extract_from_ready,
   Scheduler_SMP_Get_highest_ready   get_highest_ready,
   Scheduler_SMP_Move                move_from_ready_to_scheduled,
-  Scheduler_SMP_Allocate_processor  allocate_processor
+  Scheduler_SMP_Allocate_processor  allocate_processor,
+  Scheduler_Get_idle_thread         get_idle_thread
 )
 {
   Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node( thread );
   bool is_scheduled = node->state == SCHEDULER_SMP_NODE_SCHEDULED;
+  bool block = _Scheduler_Block_node(
+    context,
+    &node->Base,
+    is_scheduled,
+    get_idle_thread
+  );
 
-  _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
+  if ( block ) {
+    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
 
-  if ( is_scheduled ) {
-    _Scheduler_SMP_Extract_from_scheduled( &node->Base );
+    if ( is_scheduled ) {
+      _Scheduler_SMP_Extract_from_scheduled( &node->Base );
 
-    _Scheduler_SMP_Schedule_highest_ready(
-      context,
-      &node->Base,
-      get_highest_ready,
-      move_from_ready_to_scheduled,
-      allocate_processor
-    );
-  } else {
-    ( *extract_from_ready )( context, &node->Base );
+      _Scheduler_SMP_Schedule_highest_ready(
+        context,
+        &node->Base,
+        extract_from_ready,
+        get_highest_ready,
+        move_from_ready_to_scheduled,
+        allocate_processor,
+        get_idle_thread
+      );
+    } else {
+      ( *extract_from_ready )( context, &node->Base );
+    }
   }
 }
 
 static inline Thread_Control *_Scheduler_SMP_Unblock(
-  Scheduler_Context     *context,
-  Thread_Control        *thread,
-  Scheduler_SMP_Enqueue  enqueue_fifo
+  Scheduler_Context             *context,
+  Thread_Control                *thread,
+  Scheduler_SMP_Enqueue          enqueue_fifo,
+  Scheduler_Release_idle_thread  release_idle_thread
 )
 {
   Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node( thread );
+  bool is_scheduled = node->state == SCHEDULER_SMP_NODE_SCHEDULED;
+  bool unblock = _Scheduler_Unblock_node(
+    context,
+    thread,
+    &node->Base,
+    is_scheduled,
+    release_idle_thread
+  );
+  Thread_Control *needs_help;
 
-  _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
+  if ( unblock ) {
+    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
 
-  return ( *enqueue_fifo )( context, &node->Base, thread );
+    needs_help = ( *enqueue_fifo )( context, &node->Base, thread );
+  } else {
+    needs_help = NULL;
+  }
+
+  return needs_help;
 }
 
 static inline Thread_Control *_Scheduler_SMP_Change_priority(
@@ -709,7 +885,7 @@ static inline Thread_Control *_Scheduler_SMP_Change_priority(
   Scheduler_SMP_Enqueue_scheduled  enqueue_scheduled_lifo
 )
 {
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node( thread );
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_own_node( thread );
   Thread_Control *needs_help;
 
   if ( node->state == SCHEDULER_SMP_NODE_SCHEDULED ) {
@@ -722,7 +898,7 @@ static inline Thread_Control *_Scheduler_SMP_Change_priority(
     } else {
       needs_help = ( *enqueue_scheduled_fifo )( context, &node->Base );
     }
-  } else {
+  } else if ( node->state == SCHEDULER_SMP_NODE_READY ) {
     ( *extract_from_ready )( context, &node->Base );
 
     ( *update )( context, &node->Base, new_priority );
@@ -732,9 +908,66 @@ static inline Thread_Control *_Scheduler_SMP_Change_priority(
     } else {
       needs_help = ( *enqueue_fifo )( context, &node->Base, NULL );
     }
+  } else {
+    ( *update )( context, &node->Base, new_priority );
+
+    needs_help = NULL;
   }
 
   return needs_help;
+}
+
+static inline Thread_Control *_Scheduler_SMP_Ask_for_help(
+  Scheduler_Context                  *context,
+  Thread_Control                     *offers_help,
+  Thread_Control                     *needs_help,
+  Scheduler_SMP_Enqueue               enqueue_fifo,
+  Scheduler_Release_idle_thread       release_idle_thread
+)
+{
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_own_node( offers_help );
+  Thread_Control *next_needs_help = NULL;
+  Thread_Control *previous_accepts_help;
+
+  previous_accepts_help = node->Base.accepts_help;
+  node->Base.accepts_help = needs_help;
+
+  switch ( node->state ) {
+    case SCHEDULER_SMP_NODE_READY:
+      next_needs_help =
+        _Scheduler_Ask_ready_node_for_help( &node->Base, needs_help );
+      break;
+    case SCHEDULER_SMP_NODE_SCHEDULED:
+      next_needs_help = _Scheduler_Ask_scheduled_node_for_help(
+        context,
+        &node->Base,
+        offers_help,
+        needs_help,
+        previous_accepts_help,
+        release_idle_thread
+      );
+      break;
+    case SCHEDULER_SMP_NODE_BLOCKED:
+      if (
+        _Scheduler_Ask_blocked_node_for_help(
+          context,
+          &node->Base,
+          offers_help,
+          needs_help
+        )
+      ) {
+        _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
+
+        next_needs_help = ( *enqueue_fifo )(
+          context,
+          &node->Base,
+          needs_help
+        );
+      }
+      break;
+  }
+
+  return next_needs_help;
 }
 
 static inline Thread_Control *_Scheduler_SMP_Yield(

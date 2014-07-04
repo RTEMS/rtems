@@ -90,6 +90,31 @@ typedef struct {
     bool
   );
 
+#if defined(RTEMS_SMP)
+  /**
+   * Ask for help operation.
+   *
+   * @param[in] scheduler The scheduler of the thread offering help.
+   * @param[in] offers_help The thread offering help.
+   * @param[in] needs_help The thread needing help.
+   *
+   * @retval needs_help It was not possible to schedule the thread needing
+   *   help, so it is returned to continue the search for help.
+   * @retval next_needs_help It was possible to schedule the thread needing
+   *   help, but this displaced another thread eligible to ask for help.  So
+   *   this thread is returned to start a new search for help.
+   * @retval NULL It was possible to schedule the thread needing help, and no
+   *   other thread needs help as a result.
+   *
+   * @see _Scheduler_Ask_for_help().
+   */
+  Thread_Control *( *ask_for_help )(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *offers_help,
+    Thread_Control          *needs_help
+  );
+#endif
+
   /** @see _Scheduler_Node_initialize() */
   void ( *node_initialize )( const Scheduler_Control *, Thread_Control * );
 
@@ -373,6 +398,28 @@ extern const Scheduler_Control _Scheduler_Table[];
    * @see _Scheduler_Table and rtems_configuration_get_maximum_processors().
    */
   extern const Scheduler_Assignment _Scheduler_Assignments[];
+#endif
+
+#if defined(RTEMS_SMP)
+  /**
+   * @brief Does nothing.
+   *
+   * @param[in] scheduler Unused.
+   * @param[in] offers_help Unused.
+   * @param[in] needs_help Unused.
+   *
+   * @retval NULL Always.
+   */
+  Thread_Control *_Scheduler_default_Ask_for_help(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *offers_help,
+    Thread_Control          *needs_help
+  );
+
+  #define SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP \
+    _Scheduler_default_Ask_for_help,
+#else
+  #define SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP
 #endif
 
 /**

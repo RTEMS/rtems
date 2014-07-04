@@ -45,6 +45,7 @@ extern "C" {
     _Scheduler_priority_Block,            /* block entry point */ \
     _Scheduler_priority_Unblock,          /* unblock entry point */ \
     _Scheduler_priority_Change_priority,  /* change priority entry point */ \
+    SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP \
     _Scheduler_default_Node_initialize,   /* node initialize entry point */ \
     _Scheduler_default_Node_destroy,      /* node destroy entry point */ \
     _Scheduler_priority_Update_priority,  /* update priority entry point */ \

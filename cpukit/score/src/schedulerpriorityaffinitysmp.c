@@ -60,6 +60,15 @@ static bool _Scheduler_priority_affinity_SMP_Insert_priority_fifo_order(
     && _Scheduler_SMP_Insert_priority_fifo_order( to_insert, next );
 }
 
+static Scheduler_priority_affinity_SMP_Node *
+_Scheduler_priority_affinity_SMP_Thread_get_own_node(
+  Thread_Control *thread
+)
+{
+  return (Scheduler_priority_affinity_SMP_Node *)
+    _Scheduler_Thread_get_own_node( thread );
+}
+
 /*
  * This method returns the scheduler node for the specified thread
  * as a scheduler specific type.
@@ -69,7 +78,8 @@ _Scheduler_priority_affinity_SMP_Thread_get_node(
   Thread_Control *thread
 )
 {
-  return (Scheduler_priority_affinity_SMP_Node *) _Scheduler_Thread_get_node( thread );
+  return (Scheduler_priority_affinity_SMP_Node *)
+    _Scheduler_Thread_get_node( thread );
 }
 
 static Scheduler_priority_affinity_SMP_Node *
@@ -90,7 +100,7 @@ void _Scheduler_priority_affinity_SMP_Node_initialize(
 )
 {
   Scheduler_priority_affinity_SMP_Node *node =
-    _Scheduler_priority_affinity_SMP_Thread_get_node( thread );
+    _Scheduler_priority_affinity_SMP_Thread_get_own_node( thread );
 
   (void) scheduler;
 
@@ -221,7 +231,8 @@ void _Scheduler_priority_affinity_SMP_Block(
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_affinity_SMP_Get_highest_ready,
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_exact
+    _Scheduler_SMP_Allocate_processor_exact,
+    _Scheduler_priority_SMP_Get_idle_thread
   );
 
   /*
@@ -303,7 +314,8 @@ static Thread_Control *_Scheduler_priority_affinity_SMP_Enqueue_fifo(
     _Scheduler_SMP_Insert_scheduled_fifo,
     _Scheduler_priority_SMP_Move_from_scheduled_to_ready,
     _Scheduler_priority_affinity_SMP_Get_lowest_scheduled,
-    _Scheduler_SMP_Allocate_processor_exact
+    _Scheduler_SMP_Allocate_processor_exact,
+    _Scheduler_priority_SMP_Release_idle_thread
   );
 }
 
@@ -387,7 +399,8 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Unblock(
   needs_help = _Scheduler_SMP_Unblock(
     context,
     thread,
-    _Scheduler_priority_affinity_SMP_Enqueue_fifo
+    _Scheduler_priority_affinity_SMP_Enqueue_fifo,
+    _Scheduler_priority_SMP_Release_idle_thread
   );
 
   /*
@@ -420,7 +433,8 @@ static Thread_Control *_Scheduler_priority_affinity_SMP_Enqueue_ordered(
     insert_scheduled,
     _Scheduler_priority_SMP_Move_from_scheduled_to_ready,
     _Scheduler_priority_affinity_SMP_Get_lowest_scheduled,
-    _Scheduler_SMP_Allocate_processor_exact
+    _Scheduler_SMP_Allocate_processor_exact,
+    _Scheduler_priority_SMP_Release_idle_thread
   );
 }
 
@@ -463,11 +477,14 @@ _Scheduler_priority_affinity_SMP_Enqueue_scheduled_ordered(
     context,
     node,
     order,
+    _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_affinity_SMP_Get_highest_ready,
     insert_ready,
     insert_scheduled,
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_exact
+    _Scheduler_SMP_Allocate_processor_exact,
+    _Scheduler_priority_SMP_Get_idle_thread,
+    _Scheduler_priority_SMP_Release_idle_thread
   );
 }
 
@@ -541,6 +558,27 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Change_priority(
   _Scheduler_priority_affinity_SMP_Check_for_migrations( context );
 
   return displaced;
+}
+
+Thread_Control *_Scheduler_priority_affinity_SMP_Ask_for_help(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *offers_help,
+  Thread_Control          *needs_help
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  needs_help = _Scheduler_SMP_Ask_for_help(
+    context,
+    offers_help,
+    needs_help,
+    _Scheduler_priority_affinity_SMP_Enqueue_fifo,
+    _Scheduler_priority_SMP_Release_idle_thread
+  );
+
+  _Scheduler_priority_affinity_SMP_Check_for_migrations( context );
+
+  return needs_help;
 }
 
 /*

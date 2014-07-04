@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup ScoreSchedulerSMP
+ * @ingroup ScoreScheduler
  *
- * @brief SMP Scheduler Implementation
+ * @brief Scheduler SMP Debug Implementation
  */
 
 /*
@@ -24,10 +24,24 @@
   #include "config.h"
 #endif
 
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/schedulerpriorityimpl.h>
 
+#if defined(RTEMS_DEBUG)
+
 /*
- * Table with all valid state transitions.  It is used in
+ * Table with all valid state transitions for _Scheduler_Thread_change_state()
+ * in case RTEMS_DEBUG is defined.
+ */
+const bool _Scheduler_Thread_state_valid_state_changes[ 3 ][ 3 ] = {
+  /* FROM / TO       BLOCKED SCHEDULED READY */
+  /* BLOCKED    */ { false,  true,     true },
+  /* SCHEDULED  */ { true,   false,    true },
+  /* READY      */ { true,   true,     true }
+};
+
+/*
+ * Table with all valid state transitions for
  * _Scheduler_SMP_Node_change_state() in case RTEMS_DEBUG is defined.
  */
 const bool _Scheduler_SMP_Node_valid_state_changes[ 3 ][ 3 ] = {
@@ -36,3 +50,5 @@ const bool _Scheduler_SMP_Node_valid_state_changes[ 3 ][ 3 ] = {
   /* SCHEDULED  */ { true,   false,    true },
   /* READY      */ { true,   true,     false }
 };
+
+#endif

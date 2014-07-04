@@ -147,6 +147,84 @@ another processor.  So if we enable interrupts during this transition we have
 to provide an alternative task independent stack for this time frame.  This
 issue needs further investigation.
 
+@subsection Scheduler Helping Protocol
+
+The scheduler provides a helping protocol to support locking protocols like
+@cite{Migratory Priority Inheritance} or the @cite{Multiprocessor Resource
+Sharing Protocol}.  Each ready task can use at least one scheduler node at a
+time to gain access to a processor.  Each scheduler node has an owner, a user
+and an optional idle task.  The owner of a scheduler node is determined a task
+creation and never changes during the life time of a scheduler node.  The user
+of a scheduler node may change due to the scheduler helping protocol.  A
+scheduler node is in one of the four scheduler help states:
+
+@table @dfn
+
+@item help yourself
+
+This scheduler node is solely used by the owner task.  This task owns no
+resources using a helping protocol and thus does not take part in the scheduler
+helping protocol.  No help will be provided for other tasks.
+
+@item help active owner
+
+This scheduler node is owned by a task actively owning a resource and can be
+used to help out tasks.
+
+In case this scheduler node changes its state from ready to scheduled and the
+task executes using another node, then an idle task will be provided as a user
+of this node to temporarily execute on behalf of the owner task.  Thus lower
+priority tasks are denied access to the processors of this scheduler instance.
+
+In case a task actively owning a resource performs a blocking operation, then
+an idle task will be used also in case this node is in the scheduled state.
+
+@item help active rival
+
+This scheduler node is owned by a task actively obtaining a resource currently
+owned by another task and can be used to help out tasks.
+
+The task owning this node is ready and will give away its processor in case the
+task owning the resource asks for help.
+
+@item help passive
+
+This scheduler node is owned by a task obtaining a resource currently owned by
+another task and can be used to help out tasks.
+
+The task owning this node is blocked.
+
+@end table
+
+The following scheduler operations return a task in need for help
+
+@itemize @bullet
+@item unblock,
+@item change priority,
+@item yield, and
+@item ask for help.
+@end itemize
+
+A task in need for help is a task that encounters a scheduler state change from
+scheduled to ready (this is a pre-emption by a higher priority task) or a task
+that cannot be scheduled in an unblock operation.  Such a task can ask tasks
+which depend on resources owned by this task for help.
+
+In case it is not possible to schedule a task in need for help, then the
+scheduler nodes available for the task will be placed into the set of ready
+scheduler nodes of the corresponding scheduler instances.  Once a state change
+from ready to scheduled happens for one of scheduler nodes it will be used to
+schedule the task in need for help.
+
+The ask for help scheduler operation is used to help tasks in need for help
+returned by the operations mentioned above.  This operation is also used in
+case the root of a resource sub-tree owned by a task changes.
+
+The run-time of the ask for help procedures depend on the size of the resource
+tree of the task needing help and other resource trees in case tasks in need
+for help are produced during this operation.  Thus the worst-case latency in
+the system depends on the maximum resource tree size of the application.
+
 @subsection Critical Section Techniques and SMP
 
 As discussed earlier, SMP systems have opportunities for true parallelism

@@ -29,6 +29,8 @@ void _Scheduler_CBS_Node_initialize(
 
   (void) scheduler;
 
+  _Scheduler_Node_do_initialize( &node->Base.Base, the_thread );
+
   node->Base.thread = the_thread;
   node->Base.queue_state = SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN;
   node->cbs_server = NULL;

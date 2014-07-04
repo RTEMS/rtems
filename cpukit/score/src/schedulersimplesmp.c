@@ -47,7 +47,7 @@ void _Scheduler_simple_SMP_Node_initialize(
   Thread_Control          *the_thread
 )
 {
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node( the_thread );
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_own_node( the_thread );
 
   _Scheduler_SMP_Node_initialize( node, the_thread );
 }
@@ -162,6 +162,28 @@ static void _Scheduler_simple_SMP_Extract_from_ready(
   _Chain_Extract_unprotected( &node_to_extract->Node );
 }
 
+static Thread_Control *_Scheduler_simple_SMP_Get_idle_thread(
+  Scheduler_Context *context
+)
+{
+  return _Scheduler_SMP_Get_idle_thread(
+    context,
+    _Scheduler_simple_SMP_Extract_from_ready
+  );
+}
+
+static void _Scheduler_simple_SMP_Release_idle_thread(
+  Scheduler_Context *context,
+  Thread_Control    *idle
+)
+{
+  _Scheduler_SMP_Release_idle_thread(
+    context,
+    idle,
+    _Scheduler_simple_SMP_Insert_ready_fifo
+  );
+}
+
 void _Scheduler_simple_SMP_Block(
   const Scheduler_Control *scheduler,
   Thread_Control *thread
@@ -175,7 +197,8 @@ void _Scheduler_simple_SMP_Block(
     _Scheduler_simple_SMP_Extract_from_ready,
     _Scheduler_simple_SMP_Get_highest_ready,
     _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_lazy,
+    _Scheduler_simple_SMP_Get_idle_thread
   );
 }
 
@@ -197,7 +220,8 @@ static Thread_Control *_Scheduler_simple_SMP_Enqueue_ordered(
     insert_scheduled,
     _Scheduler_simple_SMP_Move_from_scheduled_to_ready,
     _Scheduler_SMP_Get_lowest_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_lazy,
+    _Scheduler_simple_SMP_Release_idle_thread
   );
 }
 
@@ -245,11 +269,14 @@ static Thread_Control *_Scheduler_simple_SMP_Enqueue_scheduled_ordered(
     context,
     node,
     order,
+    _Scheduler_simple_SMP_Extract_from_ready,
     _Scheduler_simple_SMP_Get_highest_ready,
     insert_ready,
     insert_scheduled,
     _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_lazy,
+    _Scheduler_simple_SMP_Get_idle_thread,
+    _Scheduler_simple_SMP_Release_idle_thread
   );
 }
 
@@ -291,7 +318,8 @@ Thread_Control *_Scheduler_simple_SMP_Unblock(
   return _Scheduler_SMP_Unblock(
     context,
     thread,
-    _Scheduler_simple_SMP_Enqueue_fifo
+    _Scheduler_simple_SMP_Enqueue_fifo,
+    _Scheduler_simple_SMP_Release_idle_thread
   );
 }
 
@@ -315,6 +343,23 @@ Thread_Control *_Scheduler_simple_SMP_Change_priority(
     _Scheduler_simple_SMP_Enqueue_lifo,
     _Scheduler_simple_SMP_Enqueue_scheduled_fifo,
     _Scheduler_simple_SMP_Enqueue_scheduled_lifo
+  );
+}
+
+Thread_Control *_Scheduler_simple_SMP_Ask_for_help(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *offers_help,
+  Thread_Control          *needs_help
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  return _Scheduler_SMP_Ask_for_help(
+    context,
+    offers_help,
+    needs_help,
+    _Scheduler_simple_SMP_Enqueue_fifo,
+    _Scheduler_simple_SMP_Release_idle_thread
   );
 }
 

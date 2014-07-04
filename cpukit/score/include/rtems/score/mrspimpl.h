@@ -42,25 +42,6 @@ extern "C" {
 
 #define MRSP_RIVAL_STATE_TIMEOUT 0x2U
 
-RTEMS_INLINE_ROUTINE bool _MRSP_Set_root_visitor(
-  Resource_Node *node,
-  void *arg
-)
-{
-  _Resource_Node_set_root( node, arg );
-
-  return false;
-}
-
-RTEMS_INLINE_ROUTINE void _MRSP_Set_root(
-  Resource_Node *top,
-  Resource_Node *root
-)
-{
-  _Resource_Node_set_root( top, root );
-  _Resource_Iterate( top, _MRSP_Set_root_visitor, root );
-}
-
 RTEMS_INLINE_ROUTINE void _MRSP_Elevate_priority(
   MRSP_Control     *mrsp,
   Thread_Control   *new_owner,
@@ -197,9 +178,10 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
   _Resource_Node_set_dependency( &executing->Resource_node, &mrsp->Resource );
   previous_help_state =
     _Scheduler_Thread_change_help_state( executing, SCHEDULER_HELP_ACTIVE_RIVAL );
-  _MRSP_Set_root(
-    &executing->Resource_node,
-    _Resource_Node_get_root( owner )
+
+  _Scheduler_Thread_change_resource_root(
+    executing,
+    _Thread_Resource_node_to_thread( _Resource_Node_get_root( owner ) )
   );
 
   if ( timeout > 0 ) {
@@ -241,7 +223,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
     _Resource_Node_extract( &executing->Resource_node );
     _Resource_Node_set_dependency( &executing->Resource_node, NULL );
     _Scheduler_Thread_change_help_state( executing, previous_help_state );
-    _MRSP_Set_root( &executing->Resource_node, &executing->Resource_node );
+    _Scheduler_Thread_change_resource_root( executing, executing );
     _MRSP_Restore_priority( mrsp, executing, initial_priority );
 
     status = MRSP_TIMEOUT;
@@ -334,7 +316,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Release(
     _Resource_Node_add_resource( &new_owner->Resource_node, &mrsp->Resource );
     _Resource_Set_owner( &mrsp->Resource, &new_owner->Resource_node );
     _Scheduler_Thread_change_help_state( new_owner, SCHEDULER_HELP_ACTIVE_OWNER );
-    _MRSP_Set_root( &new_owner->Resource_node, &new_owner->Resource_node );
+    _Scheduler_Thread_change_resource_root( new_owner, new_owner );
     _MRSP_Add_state( rival, MRSP_RIVAL_STATE_NEW_OWNER );
   }
 

@@ -29,6 +29,8 @@ void _Scheduler_EDF_Node_initialize(
 
   (void) scheduler;
 
+  _Scheduler_Node_do_initialize( &node->Base, the_thread );
+
   node->thread = the_thread;
   node->queue_state = SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN;
 }

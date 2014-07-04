@@ -51,6 +51,11 @@ typedef struct {
    * @brief The chain of scheduled nodes.
    */
   Chain_Control Scheduled;
+
+  /**
+   * @brief Chain of the available idle threads.
+   */
+  Chain_Control Idle_threads;
 } Scheduler_SMP_Context;
 
 /**

@@ -133,13 +133,15 @@ endif
 if HAS_SMP
 libscore_a_SOURCES += src/percpustatewait.c
 libscore_a_SOURCES += src/profilingsmplock.c
-libscore_a_SOURCES += src/schedulersmpvalidstatechanges.c
+libscore_a_SOURCES += src/schedulerchangeroot.c
 libscore_a_SOURCES += src/schedulerpriorityaffinitysmp.c
 libscore_a_SOURCES += src/schedulerprioritysmp.c
 libscore_a_SOURCES += src/schedulersimplesmp.c
+libscore_a_SOURCES += src/schedulersmpdebug.c
 libscore_a_SOURCES += src/smp.c
 libscore_a_SOURCES += src/cpuset.c
 libscore_a_SOURCES += src/cpusetprintsupport.c
+libscore_a_SOURCES += src/schedulerdefaultaskforhelp.c
 libscore_a_SOURCES += src/schedulerdefaultgetaffinity.c
 libscore_a_SOURCES += src/schedulerdefaultsetaffinity.c
 libscore_a_SOURCES += src/schedulersmpstartidle.c
