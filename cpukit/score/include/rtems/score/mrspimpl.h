@@ -193,7 +193,10 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
   _Chain_Append_unprotected( &mrsp->Rivals, &rival.Node );
   _Resource_Add_rival( &mrsp->Resource, &executing->Resource_node );
   _Resource_Node_set_dependency( &executing->Resource_node, &mrsp->Resource );
-  _MRSP_Set_root( &executing->Resource_node, owner );
+  _MRSP_Set_root(
+    &executing->Resource_node,
+    _Resource_Node_get_root( owner )
+  );
 
   if ( timeout > 0 ) {
     _Watchdog_Initialize(
