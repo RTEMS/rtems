@@ -82,7 +82,7 @@ rtems_status_code rtems_semaphore_delete(
           SEMAPHORE_MP_OBJECT_WAS_DELETED,
           CORE_SEMAPHORE_WAS_DELETED
         );
-     }
+      }
 
       _Objects_Close( &_Semaphore_Information, &the_semaphore->Object );
 
