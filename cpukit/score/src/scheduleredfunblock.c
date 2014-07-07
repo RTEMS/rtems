@@ -27,7 +27,7 @@ Scheduler_Void_or_thread _Scheduler_EDF_Unblock(
   Thread_Control          *the_thread
 )
 {
-  _Scheduler_EDF_Enqueue( scheduler, the_thread);
+  _Scheduler_EDF_Enqueue( scheduler, the_thread );
   /* TODO: flash critical section? */
 
   /*
