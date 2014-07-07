@@ -497,7 +497,7 @@ static inline Scheduler_Node *_Scheduler_SMP_Get_lowest_scheduled(
   (void) filter;
   (void) order;
 
-  _Assert( lowest_scheduled != _Chain_Tail( scheduled ) );
+  _Assert( &lowest_scheduled->Node != _Chain_Tail( scheduled ) );
 
   return lowest_scheduled;
 }
