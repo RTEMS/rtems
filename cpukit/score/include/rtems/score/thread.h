@@ -304,6 +304,8 @@ typedef struct {
 typedef struct {
   /** This field is the object management structure for each proxy. */
   Objects_Control          Object;
+  /** This field is used to enqueue the thread on RBTrees. */
+  RBTree_Node              RBNode;
   /** This field is the current execution state of this proxy. */
   States_Control           current_state;
   /** This field is the current priority state of this proxy. */
@@ -541,6 +543,8 @@ typedef struct {
 struct Thread_Control_struct {
   /** This field is the object management structure for each thread. */
   Objects_Control          Object;
+  /** This field is used to enqueue the thread on RBTrees. */
+  RBTree_Node              RBNode;
   /** This field is the current execution state of this thread. */
   States_Control           current_state;
   /** This field is the current priority state of this thread. */

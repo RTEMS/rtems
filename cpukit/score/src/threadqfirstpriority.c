@@ -2,15 +2,11 @@
  * @file
  *
  * @brief Returns Highest Priority Thread on Thread Queue
- *
  * @ingroup ScoreThreadQ
  */
 
 /*
- *  Thread Queue Handler
- *
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,21 +19,16 @@
 #endif
 
 #include <rtems/score/threadqimpl.h>
-#include <rtems/score/chainimpl.h>
+#include <rtems/score/rbtreeimpl.h>
 
 Thread_Control *_Thread_queue_First_priority (
   Thread_queue_Control *the_thread_queue
 )
 {
-  uint32_t   index;
+  RBTree_Node *first;
 
-  for( index=0 ;
-       index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;
-       index++ ) {
-    if ( !_Chain_Is_empty( &the_thread_queue->Queues.Priority[ index ] ) )
-      return (Thread_Control *) _Chain_First(
-        &the_thread_queue->Queues.Priority[ index ]
-      );
-  }
+  first = _RBTree_First( &the_thread_queue->Queues.Priority, RBT_LEFT );
+  if ( first )
+    return _RBTree_Container_of( first, Thread_Control, RBNode );
   return NULL;
 }

@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -35,18 +35,6 @@ extern "C" {
  *  Constant for indefinite wait.
  */
 #define THREAD_QUEUE_WAIT_FOREVER  WATCHDOG_NO_TIMEOUT
-
-/**
- *  This is one of the constants used to manage the priority queues.
- *  @ref TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS for more details.
- */
-#define TASK_QUEUE_DATA_PRIORITIES_PER_HEADER      64
-
-/**
- *  This is one of the constants used to manage the priority queues.
- *  @ref TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS for more details.
- */
-#define TASK_QUEUE_DATA_REVERSE_SEARCH_MASK        0x20
 
 /**
  *  The following type defines the callout used when a remote task
@@ -117,13 +105,25 @@ void _Thread_queue_Enqueue_with_handler(
  *  and cancels any timeouts associated with this blocking.
  *
  *  @param[in] the_thread_queue is the pointer to the ThreadQ header
- *  @param[in] the_thread is the pointer to a thread control block that is to be removed
+ *  @param[in] the_thread is the pointer to a thread control block that
+ *      is to be removed
  */
 void _Thread_queue_Extract(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread
 );
 
+/**
+ *  @brief Extracts thread from thread queue (w/return code).
+ *
+ *  This routine removes @a the_thread from @a the_thread_queue
+ *  and cancels any timeouts associated with this blocking.
+ *
+ *  @param[in] the_thread_queue is the pointer to the ThreadQ header
+ *  @param[in] the_thread is the pointer to a thread control block that
+ *      is to be removed
+ *  @param[in] return_code specifies the status to be returned.
+ */
 void _Thread_queue_Extract_with_return_code(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
@@ -227,8 +227,7 @@ Thread_Control *_Thread_queue_Dequeue_priority(
  *          well as filling in *@ level_p with the previous interrupt level.
  *
  *  - INTERRUPT LATENCY:
- *    + forward less than
- *    + forward equal
+ *    + single case
  */
 Thread_blocking_operation_States _Thread_queue_Enqueue_priority (
   Thread_queue_Control *the_thread_queue,
@@ -245,8 +244,9 @@ Thread_blocking_operation_States _Thread_queue_Enqueue_priority (
  *  @param[in] the_thread pointer to a thread control block
  *  @param[in] requeuing true if requeuing and should not alter
  *         timeout or state
+ *
  *  - INTERRUPT LATENCY:
- *    + EXTRACT_PRIORITY
+ *    + single case
  *
  *  @retval true The extract operation was performed by the executing context.
  *  @retval false Otherwise.
@@ -262,9 +262,9 @@ void _Thread_queue_Extract_priority_helper(
  *
  * This macro wraps the underlying call and hides the requeuing argument.
  */
-
 #define _Thread_queue_Extract_priority( _the_thread, _return_code ) \
   _Thread_queue_Extract_priority_helper( _the_thread, _return_code, false )
+
 /**
  *  @brief Get highest priority thread on the_thread_queue.
  *
@@ -377,35 +377,24 @@ void _Thread_queue_Process_timeout(
 );
 
 /**
- * This function returns the index of the priority chain on which
- * a thread of the_priority should be placed.
+ * @brief Compare two thread's priority for RBTree Insertion.
+ *
+ * @param[in] left points to the left thread's RBnode
+ * @param[in] right points to the right thread's RBnode
+ *
+ * @retval 1 The @left node is more important than @right node.
+ * @retval 0 The @left node is of equal importance with @right node.
+ * @retval 1 The @left node is less important than @right node.
  */
-
-RTEMS_INLINE_ROUTINE uint32_t   _Thread_queue_Header_number (
-  Priority_Control the_priority
-)
-{
-  return (the_priority / TASK_QUEUE_DATA_PRIORITIES_PER_HEADER);
-}
-
-/**
- * This function returns true if the_priority indicates that the
- * enqueue search should start at the front of this priority
- * group chain, and false if the search should start at the rear.
- */
-
-RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_reverse_search (
-  Priority_Control the_priority
-)
-{
-  return ( the_priority & TASK_QUEUE_DATA_REVERSE_SEARCH_MASK );
-}
+int _Thread_queue_Compare_priority(
+  const RBTree_Node *left,
+  const RBTree_Node *right
+);
 
 /**
  * This routine is invoked to indicate that the specified thread queue is
  * entering a critical section.
  */
-
 RTEMS_INLINE_ROUTINE void _Thread_queue_Enter_critical_section (
   Thread_queue_Control *the_thread_queue
 )

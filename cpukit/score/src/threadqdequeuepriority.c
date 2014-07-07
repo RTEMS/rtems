@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/score/threadqimpl.h>
-#include <rtems/score/chainimpl.h>
+#include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
@@ -28,67 +28,27 @@ Thread_Control *_Thread_queue_Dequeue_priority(
   Thread_queue_Control *the_thread_queue
 )
 {
-  uint32_t        index;
   ISR_Level       level;
   Thread_Control *the_thread = NULL;  /* just to remove warnings */
-  Thread_Control *new_first_thread;
-  Chain_Node     *head;
-  Chain_Node     *tail;
-  Chain_Node     *new_first_node;
-  Chain_Node     *new_second_node;
-  Chain_Node     *last_node;
-  Chain_Node     *next_node;
-  Chain_Node     *previous_node;
+  RBTree_Node    *first;
 
   _ISR_Disable( level );
-  for( index=0 ;
-       index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;
-       index++ ) {
-    if ( !_Chain_Is_empty( &the_thread_queue->Queues.Priority[ index ] ) ) {
-      the_thread = (Thread_Control *) _Chain_First(
-        &the_thread_queue->Queues.Priority[ index ]
-      );
-      goto dequeue;
-    }
+
+  first = _RBTree_Get( &the_thread_queue->Queues.Priority, RBT_LEFT );
+  if ( !first ) {
+    /*
+     * We did not find a thread to unblock.
+     */
+    _ISR_Enable( level );
+    return NULL;
   }
 
   /*
-   * We did not find a thread to unblock.
+   * We found a thread to unblock.
    */
-  _ISR_Enable( level );
-  return NULL;
 
-dequeue:
+  the_thread = _RBTree_Container_of( first, Thread_Control, RBNode );
   the_thread->Wait.queue = NULL;
-  new_first_node   = _Chain_First( &the_thread->Wait.Block2n );
-  new_first_thread = (Thread_Control *) new_first_node;
-  next_node        = the_thread->Object.Node.next;
-  previous_node    = the_thread->Object.Node.previous;
-
-  if ( !_Chain_Is_empty( &the_thread->Wait.Block2n ) ) {
-    last_node       = _Chain_Last( &the_thread->Wait.Block2n );
-    new_second_node = new_first_node->next;
-
-    previous_node->next      = new_first_node;
-    next_node->previous      = new_first_node;
-    new_first_node->next     = next_node;
-    new_first_node->previous = previous_node;
-
-    if ( !_Chain_Has_only_one_node( &the_thread->Wait.Block2n ) ) {
-                                                /* > two threads on 2-n */
-      head = _Chain_Head( &new_first_thread->Wait.Block2n );
-      tail = _Chain_Tail( &new_first_thread->Wait.Block2n );
-
-      new_second_node->previous = head;
-      head->next = new_second_node;
-      tail->previous = last_node;
-      last_node->next = tail;
-    }
-  } else {
-    previous_node->next = next_node;
-    next_node->previous = previous_node;
-  }
-
   if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
     _ISR_Enable( level );
   } else {
