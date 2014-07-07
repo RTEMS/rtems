@@ -127,7 +127,7 @@ static inline void _Scheduler_SMP_Allocate_processor_exact(
   );
 
   _Thread_Set_CPU( scheduled_thread, victim_cpu );
-  _Scheduler_SMP_Update_heir( cpu_self, victim_cpu, scheduled_thread );
+  _Thread_Dispatch_update_heir( cpu_self, victim_cpu, scheduled_thread );
 }
 
 /*

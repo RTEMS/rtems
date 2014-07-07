@@ -410,34 +410,6 @@ static inline bool _Scheduler_SMP_Is_processor_owned_by_us(
   return cpu->scheduler_context == context;
 }
 
-static inline void _Scheduler_SMP_Update_heir(
-  Per_CPU_Control *cpu_self,
-  Per_CPU_Control *cpu_for_heir,
-  Thread_Control  *heir
-)
-{
-  cpu_for_heir->heir = heir;
-
-  /*
-   * It is critical that we first update the heir and then the dispatch
-   * necessary so that _Thread_Get_heir_and_make_it_executing() cannot miss an
-   * update.
-   */
-  _Atomic_Fence( ATOMIC_ORDER_SEQ_CST );
-
-  /*
-   * Only update the dispatch necessary indicator if not already set to
-   * avoid superfluous inter-processor interrupts.
-   */
-  if ( !cpu_for_heir->dispatch_necessary ) {
-    cpu_for_heir->dispatch_necessary = true;
-
-    if ( cpu_for_heir != cpu_self ) {
-      _Per_CPU_Send_interrupt( cpu_for_heir );
-    }
-  }
-}
-
 static inline void _Scheduler_SMP_Allocate_processor(
   Scheduler_Context *context,
   Scheduler_Node    *scheduled,
@@ -461,7 +433,7 @@ static inline void _Scheduler_SMP_Allocate_processor(
   if ( _Thread_Is_executing_on_a_processor( scheduled_thread ) ) {
     if ( _Scheduler_SMP_Is_processor_owned_by_us( context, scheduled_cpu ) ) {
       heir = scheduled_cpu->heir;
-      _Scheduler_SMP_Update_heir(
+      _Thread_Dispatch_update_heir(
         cpu_self,
         scheduled_cpu,
         scheduled_thread
@@ -479,7 +451,7 @@ static inline void _Scheduler_SMP_Allocate_processor(
 
   if ( heir != victim_thread ) {
     _Thread_Set_CPU( heir, victim_cpu );
-    _Scheduler_SMP_Update_heir( cpu_self, victim_cpu, heir );
+    _Thread_Dispatch_update_heir( cpu_self, victim_cpu, heir );
   }
 }
 

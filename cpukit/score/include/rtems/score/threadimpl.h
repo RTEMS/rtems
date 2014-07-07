@@ -635,7 +635,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Signal_notification( Thread_Control *thread )
  * @return The heir thread.
  *
  * @see _Thread_Dispatch(), _Thread_Start_multitasking() and
- * _Scheduler_SMP_Update_heir().
+ * _Thread_Dispatch_update_heir().
  */
 RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get_heir_and_make_it_executing(
   Per_CPU_Control *cpu_self
@@ -649,7 +649,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get_heir_and_make_it_executing(
   /*
    * It is critical that we first update the dispatch necessary and then the
    * read the heir so that we don't miss an update by
-   * _Scheduler_SMP_Update_heir().
+   * _Thread_Dispatch_update_heir().
    */
   _Atomic_Fence( ATOMIC_ORDER_SEQ_CST );
 #endif
@@ -659,6 +659,36 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get_heir_and_make_it_executing(
 
   return heir;
 }
+
+#if defined( RTEMS_SMP )
+RTEMS_INLINE_ROUTINE void _Thread_Dispatch_update_heir(
+  Per_CPU_Control *cpu_self,
+  Per_CPU_Control *cpu_for_heir,
+  Thread_Control  *heir
+)
+{
+  cpu_for_heir->heir = heir;
+
+  /*
+   * It is critical that we first update the heir and then the dispatch
+   * necessary so that _Thread_Get_heir_and_make_it_executing() cannot miss an
+   * update.
+   */
+  _Atomic_Fence( ATOMIC_ORDER_SEQ_CST );
+
+  /*
+   * Only update the dispatch necessary indicator if not already set to
+   * avoid superfluous inter-processor interrupts.
+   */
+  if ( !cpu_for_heir->dispatch_necessary ) {
+    cpu_for_heir->dispatch_necessary = true;
+
+    if ( cpu_for_heir != cpu_self ) {
+      _Per_CPU_Send_interrupt( cpu_for_heir );
+    }
+  }
+}
+#endif
 
 RTEMS_INLINE_ROUTINE void _Thread_Update_cpu_time_used(
   Thread_Control *executing,
