@@ -175,6 +175,21 @@ void _SMP_Broadcast_message(
   uint32_t  message
 );
 
+/**
+ *  @brief Sends a SMP message to a set of processors.
+ *
+ *  The sending processor may be part of the set.
+ *
+ *  @param[in] setsize The size of the set of target processors of the message.
+ *  @param[in] cpus The set of target processors of the message.
+ *  @param[in] message The message.
+ */
+void _SMP_Send_message_multicast(
+  const size_t setsize,
+  const cpu_set_t *cpus,
+  unsigned long message
+);
+
 #endif /* defined( RTEMS_SMP ) */
 
 /**
