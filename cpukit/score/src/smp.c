@@ -162,7 +162,7 @@ void _SMP_Send_message( uint32_t cpu_index, unsigned long message )
   _CPU_SMP_Send_interrupt( cpu_index );
 }
 
-void _SMP_Broadcast_message( uint32_t message )
+void _SMP_Send_message_broadcast( unsigned long message )
 {
   uint32_t cpu_count = _SMP_Get_processor_count();
   uint32_t cpu_index_self = _SMP_Get_current_processor();

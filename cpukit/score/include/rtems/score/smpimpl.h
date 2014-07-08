@@ -171,8 +171,8 @@ void _SMP_Send_message( uint32_t cpu_index, unsigned long message );
  *
  *  @param [in] message is message to send
  */
-void _SMP_Broadcast_message(
-  uint32_t  message
+void _SMP_Send_message_broadcast(
+  unsigned long message
 );
 
 /**
