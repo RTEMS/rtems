@@ -107,7 +107,7 @@ void _Scheduler_priority_affinity_SMP_Node_initialize(
  * This method is slightly different from
  * _Scheduler_SMP_Allocate_processor_lazy() in that it does what it is asked to
  * do. _Scheduler_SMP_Allocate_processor_lazy() attempts to prevent migrations
- * but does not take into account affinity
+ * but does not take into account affinity.
  */
 static inline void _Scheduler_SMP_Allocate_processor_exact(
   Scheduler_Context *context,
