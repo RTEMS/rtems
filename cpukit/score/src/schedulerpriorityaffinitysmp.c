@@ -104,27 +104,21 @@ void _Scheduler_priority_affinity_SMP_Node_initialize(
 }
 
 /*
- * This method is slightly different from _Scheduler_SMP_Allocate_processor()
- * in that it does what it is asked to do. _Scheduler_SMP_Allocate_processor()
- * attempts to prevent migrations but does not take into account affinity
+ * This method is slightly different from
+ * _Scheduler_SMP_Allocate_processor_lazy() in that it does what it is asked to
+ * do. _Scheduler_SMP_Allocate_processor_lazy() attempts to prevent migrations
+ * but does not take into account affinity
  */
 static inline void _Scheduler_SMP_Allocate_processor_exact(
-   Scheduler_Context *context,
-   Scheduler_Node    *scheduled,
-   Scheduler_Node    *victim
+  Scheduler_Context *context,
+  Thread_Control    *scheduled_thread,
+  Thread_Control    *victim_thread
 )
 {
-  Thread_Control  *victim_thread = _Scheduler_Node_get_owner( victim );
-  Thread_Control  *scheduled_thread = _Scheduler_Node_get_owner( scheduled );
   Per_CPU_Control *victim_cpu = _Thread_Get_CPU( victim_thread );
   Per_CPU_Control *cpu_self = _Per_CPU_Get();
 
   (void) context;
-
-  _Scheduler_SMP_Node_change_state(
-    _Scheduler_SMP_Node_downcast( scheduled ),
-    SCHEDULER_SMP_NODE_SCHEDULED
-  );
 
   _Thread_Set_CPU( scheduled_thread, victim_cpu );
   _Thread_Dispatch_update_heir( cpu_self, victim_cpu, scheduled_thread );
@@ -358,10 +352,11 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
       SCHEDULER_SMP_NODE_READY
     );
 
-    _Scheduler_SMP_Allocate_processor_exact(
+    _Scheduler_SMP_Allocate_processor(
       context,
       highest_ready,
-      lowest_scheduled
+      lowest_scheduled,
+      _Scheduler_SMP_Allocate_processor_exact
     );
 
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled(

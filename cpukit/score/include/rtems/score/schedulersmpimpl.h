@@ -313,8 +313,8 @@ typedef void ( *Scheduler_SMP_Enqueue )(
 
 typedef void ( *Scheduler_SMP_Allocate_processor )(
   Scheduler_Context *context,
-  Scheduler_Node    *scheduled,
-  Scheduler_Node    *victim
+  Thread_Control    *scheduled,
+  Thread_Control    *victim
 );
 
 static inline bool _Scheduler_SMP_Insert_priority_lifo_order(
@@ -410,23 +410,16 @@ static inline bool _Scheduler_SMP_Is_processor_owned_by_us(
   return cpu->scheduler_context == context;
 }
 
-static inline void _Scheduler_SMP_Allocate_processor(
+static inline void _Scheduler_SMP_Allocate_processor_lazy(
   Scheduler_Context *context,
-  Scheduler_Node    *scheduled,
-  Scheduler_Node    *victim
+  Thread_Control    *scheduled_thread,
+  Thread_Control    *victim_thread
 )
 {
-  Thread_Control *scheduled_thread = _Scheduler_Node_get_owner( scheduled );
-  Thread_Control *victim_thread = _Scheduler_Node_get_owner( victim );
   Per_CPU_Control *scheduled_cpu = _Thread_Get_CPU( scheduled_thread );
   Per_CPU_Control *victim_cpu = _Thread_Get_CPU( victim_thread );
   Per_CPU_Control *cpu_self = _Per_CPU_Get();
   Thread_Control *heir;
-
-  _Scheduler_SMP_Node_change_state(
-    _Scheduler_SMP_Node_downcast( scheduled ),
-    SCHEDULER_SMP_NODE_SCHEDULED
-  );
 
   _Assert( _ISR_Get_level() != 0 );
 
@@ -453,6 +446,24 @@ static inline void _Scheduler_SMP_Allocate_processor(
     _Thread_Set_CPU( heir, victim_cpu );
     _Thread_Dispatch_update_heir( cpu_self, victim_cpu, heir );
   }
+}
+
+static inline void _Scheduler_SMP_Allocate_processor(
+  Scheduler_Context                *context,
+  Scheduler_Node                   *scheduled,
+  Scheduler_Node                   *victim,
+  Scheduler_SMP_Allocate_processor  allocate_processor
+)
+{
+  Thread_Control *scheduled_thread = _Scheduler_Node_get_owner( scheduled );
+  Thread_Control *victim_thread = _Scheduler_Node_get_owner( victim );
+
+  _Scheduler_SMP_Node_change_state(
+    _Scheduler_SMP_Node_downcast( scheduled ),
+    SCHEDULER_SMP_NODE_SCHEDULED
+  );
+
+  ( *allocate_processor )( context, scheduled_thread, victim_thread );
 }
 
 static inline Scheduler_Node *_Scheduler_SMP_Get_lowest_scheduled(
@@ -514,7 +525,14 @@ static inline void _Scheduler_SMP_Enqueue_ordered(
       _Scheduler_SMP_Node_downcast( lowest_scheduled ),
       SCHEDULER_SMP_NODE_READY
     );
-    ( *allocate_processor )( context, node, lowest_scheduled );
+
+    _Scheduler_SMP_Allocate_processor(
+      context,
+      node,
+      lowest_scheduled,
+      allocate_processor
+    );
+
     ( *insert_scheduled )( context, node );
     ( *move_from_scheduled_to_ready )( context, lowest_scheduled );
   } else {
@@ -565,7 +583,14 @@ static inline void _Scheduler_SMP_Enqueue_scheduled_ordered(
       _Scheduler_SMP_Node_downcast( node ),
       SCHEDULER_SMP_NODE_READY
     );
-    ( *allocate_processor) ( context, highest_ready, node );
+
+    _Scheduler_SMP_Allocate_processor(
+      context,
+      highest_ready,
+      node,
+      allocate_processor
+    );
+
     ( *insert_ready )( context, node );
     ( *move_from_ready_to_scheduled )( context, highest_ready );
   }
@@ -588,7 +613,13 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
 {
   Scheduler_Node *highest_ready = ( *get_highest_ready )( context, victim );
 
-  ( *allocate_processor )( context, highest_ready, victim );
+  _Scheduler_SMP_Allocate_processor(
+    context,
+    highest_ready,
+    victim,
+    allocate_processor
+  );
+
   ( *move_from_ready_to_scheduled )( context, highest_ready );
 }
 
