@@ -35,7 +35,7 @@
  *  + _Scheduler_priority_SMP_Get_self
  *  + _Scheduler_priority_SMP_Insert_ready_fifo
  *  + _Scheduler_priority_SMP_Insert_ready_lifo
- *  + _Scheduler_priority_SMP_Node_get
+ *  + _Scheduler_priority_SMP_Thread_get_node
  *  + _Scheduler_priority_SMP_Move_from_scheduled_to_ready
  *  + _Scheduler_priority_SMP_Move_from_ready_to_scheduled
  *  + _Scheduler_priority_SMP_Extract_from_ready
@@ -65,11 +65,11 @@ static bool _Scheduler_priority_affinity_SMP_Insert_priority_fifo_order(
  * as a scheduler specific type.
  */
 static Scheduler_priority_affinity_SMP_Node *
-_Scheduler_priority_affinity_SMP_Node_get(
+_Scheduler_priority_affinity_SMP_Thread_get_node(
   Thread_Control *thread
 )
 {
-  return (Scheduler_priority_affinity_SMP_Node *) _Scheduler_Node_get( thread );
+  return (Scheduler_priority_affinity_SMP_Node *) _Scheduler_Thread_get_node( thread );
 }
 
 static Scheduler_priority_affinity_SMP_Node *
@@ -90,7 +90,7 @@ void _Scheduler_priority_affinity_SMP_Node_initialize(
 )
 {
   Scheduler_priority_affinity_SMP_Node *node =
-    _Scheduler_priority_affinity_SMP_Node_get( thread );
+    _Scheduler_priority_affinity_SMP_Thread_get_node( thread );
 
   (void) scheduler;
 
@@ -541,7 +541,7 @@ bool _Scheduler_priority_affinity_SMP_Get_affinity(
 )
 {
   Scheduler_priority_affinity_SMP_Node *node =
-    _Scheduler_priority_affinity_SMP_Node_get(thread);
+    _Scheduler_priority_affinity_SMP_Thread_get_node(thread);
 
   (void) scheduler;
 
@@ -561,7 +561,7 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
 )
 {
   Scheduler_priority_affinity_SMP_Node *node =
-    _Scheduler_priority_affinity_SMP_Node_get(thread);
+    _Scheduler_priority_affinity_SMP_Thread_get_node(thread);
 
   (void) scheduler;
 

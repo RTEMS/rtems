@@ -29,7 +29,7 @@ void _Scheduler_CBS_Release_job(
   uint32_t                 deadline
 )
 {
-  Scheduler_CBS_Node   *node = _Scheduler_CBS_Node_get( the_thread );
+  Scheduler_CBS_Node   *node = _Scheduler_CBS_Thread_get_node( the_thread );
   Scheduler_CBS_Server *serv_info = node->cbs_server;
   Priority_Control      new_priority;
 

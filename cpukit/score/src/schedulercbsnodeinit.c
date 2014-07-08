@@ -25,7 +25,7 @@ void _Scheduler_CBS_Node_initialize(
   Thread_Control          *the_thread
 )
 {
-  Scheduler_CBS_Node *node = _Scheduler_CBS_Node_get( the_thread );
+  Scheduler_CBS_Node *node = _Scheduler_CBS_Thread_get_node( the_thread );
 
   (void) scheduler;
 

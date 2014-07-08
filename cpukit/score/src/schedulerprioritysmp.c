@@ -47,7 +47,7 @@ void _Scheduler_priority_SMP_Node_initialize(
   Thread_Control *thread
 )
 {
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node( thread );
 
   _Scheduler_SMP_Node_initialize( node, thread );
 }
@@ -59,7 +59,7 @@ void _Scheduler_priority_SMP_Update_priority(
 )
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
-  Scheduler_Node *node = _Scheduler_Node_get( thread );
+  Scheduler_Node *node = _Scheduler_Thread_get_node( thread );
 
   _Scheduler_priority_SMP_Do_update( context, node, new_priority );
 }

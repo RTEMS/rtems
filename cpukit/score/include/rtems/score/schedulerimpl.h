@@ -645,8 +645,8 @@ RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_index(
   return (uint32_t) (scheduler - &_Scheduler_Table[ 0 ]);
 }
 
-RTEMS_INLINE_ROUTINE Scheduler_Node *_Scheduler_Node_get(
-  Thread_Control *the_thread
+RTEMS_INLINE_ROUTINE Scheduler_Node *_Scheduler_Thread_get_node(
+  const Thread_Control *the_thread
 )
 {
   return the_thread->Scheduler.node;

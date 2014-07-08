@@ -26,7 +26,7 @@ void _Scheduler_EDF_Update_priority(
   Priority_Control         new_priority
 )
 {
-  Scheduler_EDF_Node *node = _Scheduler_EDF_Node_get( the_thread );
+  Scheduler_EDF_Node *node = _Scheduler_EDF_Thread_get_node( the_thread );
 
   (void) scheduler;
   (void) new_priority;

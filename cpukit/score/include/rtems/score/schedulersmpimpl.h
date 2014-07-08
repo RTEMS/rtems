@@ -357,11 +357,11 @@ static inline void _Scheduler_SMP_Initialize(
   _Chain_Initialize_empty( &self->Scheduled );
 }
 
-static inline Scheduler_SMP_Node *_Scheduler_SMP_Node_get(
+static inline Scheduler_SMP_Node *_Scheduler_SMP_Thread_get_node(
   Thread_Control *thread
 )
 {
-  return (Scheduler_SMP_Node *) _Scheduler_Node_get( thread );
+  return (Scheduler_SMP_Node *) _Scheduler_Thread_get_node( thread );
 }
 
 static inline Scheduler_SMP_Node *_Scheduler_SMP_Node_downcast(
@@ -643,7 +643,7 @@ static inline void _Scheduler_SMP_Block(
   Scheduler_SMP_Allocate_processor  allocate_processor
 )
 {
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node( thread );
   bool is_scheduled = node->state == SCHEDULER_SMP_NODE_SCHEDULED;
 
   _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
@@ -669,7 +669,7 @@ static inline void _Scheduler_SMP_Unblock(
   Scheduler_SMP_Enqueue  enqueue_fifo
 )
 {
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node( thread );
 
   _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
 
@@ -689,7 +689,7 @@ static inline void _Scheduler_SMP_Change_priority(
   Scheduler_SMP_Enqueue  enqueue_scheduled_lifo
 )
 {
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node( thread );
 
   if ( node->state == SCHEDULER_SMP_NODE_SCHEDULED ) {
     _Scheduler_SMP_Extract_from_scheduled( &node->Base );
@@ -722,7 +722,7 @@ static inline void _Scheduler_SMP_Yield(
   Scheduler_SMP_Enqueue  enqueue_scheduled_fifo
 )
 {
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Node_get( thread );
+  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node( thread );
 
   if ( node->state == SCHEDULER_SMP_NODE_SCHEDULED ) {
     _Scheduler_SMP_Extract_from_scheduled( &node->Base );

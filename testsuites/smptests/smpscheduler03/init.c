@@ -114,7 +114,7 @@ static void test_change_priority(void)
   _Thread_Disable_dispatch();
 
   executing = _Thread_Executing;
-  node = _Scheduler_SMP_Node_get( executing );
+  node = _Scheduler_SMP_Thread_get_node( executing );
 
   for (i = 0; i < RTEMS_ARRAY_SIZE(states); ++i) {
     for (j = 0; j < RTEMS_ARRAY_SIZE(priorities); ++j) {

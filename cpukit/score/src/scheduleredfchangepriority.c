@@ -29,7 +29,7 @@ void _Scheduler_EDF_Change_priority(
 {
   Scheduler_EDF_Context *context =
     _Scheduler_EDF_Get_context( scheduler );
-  Scheduler_EDF_Node *node = _Scheduler_EDF_Node_get( the_thread );
+  Scheduler_EDF_Node *node = _Scheduler_EDF_Thread_get_node( the_thread );
 
   _RBTree_Extract( &context->Ready, &node->Node );
   _RBTree_Insert( &context->Ready, &node->Node );

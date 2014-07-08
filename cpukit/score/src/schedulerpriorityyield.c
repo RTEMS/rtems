@@ -26,7 +26,7 @@ void _Scheduler_priority_Yield(
   Thread_Control          *the_thread
 )
 {
-  Scheduler_priority_Node *node = _Scheduler_priority_Node_get( the_thread );
+  Scheduler_priority_Node *node = _Scheduler_priority_Thread_get_node( the_thread );
   Chain_Control *ready_chain = node->Ready_queue.ready_chain;
 
   (void) scheduler;

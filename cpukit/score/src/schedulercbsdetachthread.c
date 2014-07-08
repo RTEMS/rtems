@@ -42,7 +42,7 @@ int _Scheduler_CBS_Detach_thread (
   the_thread = _Thread_Get(task_id, &location);
   /* The routine _Thread_Get may disable dispatch and not enable again. */
   if ( the_thread ) {
-    Scheduler_CBS_Node *node = _Scheduler_CBS_Node_get( the_thread );
+    Scheduler_CBS_Node *node = _Scheduler_CBS_Thread_get_node( the_thread );
 
     _Scheduler_CBS_Server_list[server_id].task_id = -1;
     node->cbs_server = NULL;

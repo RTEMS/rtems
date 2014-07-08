@@ -28,7 +28,7 @@ void _Scheduler_EDF_Yield(
 {
   Scheduler_EDF_Context *context =
     _Scheduler_EDF_Get_context( scheduler );
-  Scheduler_EDF_Node    *node = _Scheduler_EDF_Node_get( the_thread );
+  Scheduler_EDF_Node    *node = _Scheduler_EDF_Thread_get_node( the_thread );
 
   /*
    * The RBTree has more than one node, enqueue behind the tasks

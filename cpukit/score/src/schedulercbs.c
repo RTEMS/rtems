@@ -38,7 +38,7 @@ void _Scheduler_CBS_Budget_callout(
     _Thread_Change_priority(the_thread, new_priority, true);
 
   /* Invoke callback function if any. */
-  node = _Scheduler_CBS_Node_get( the_thread );
+  node = _Scheduler_CBS_Thread_get_node( the_thread );
   if ( node->cbs_server->cbs_budget_overrun ) {
     _Scheduler_CBS_Get_server_id(
         node->cbs_server->task_id,

@@ -41,11 +41,11 @@ RTEMS_INLINE_ROUTINE Scheduler_priority_Context *
   return (Scheduler_priority_Context *) _Scheduler_Get_context( scheduler );
 }
 
-RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Node_get(
+RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Thread_get_node(
   Thread_Control *the_thread
 )
 {
-  return (Scheduler_priority_Node *) _Scheduler_Node_get( the_thread );
+  return (Scheduler_priority_Node *) _Scheduler_Thread_get_node( the_thread );
 }
 
 /**
@@ -136,7 +136,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Extract_body(
 {
   Scheduler_priority_Context *context =
     _Scheduler_priority_Get_context( scheduler );
-  Scheduler_priority_Node *node = _Scheduler_priority_Node_get( the_thread );
+  Scheduler_priority_Node *node = _Scheduler_priority_Thread_get_node( the_thread );
 
   _Scheduler_priority_Ready_queue_extract(
     &the_thread->Object.Node,

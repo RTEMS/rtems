@@ -37,11 +37,11 @@ RTEMS_INLINE_ROUTINE Scheduler_EDF_Context *
   return (Scheduler_EDF_Context *) _Scheduler_Get_context( scheduler );
 }
 
-RTEMS_INLINE_ROUTINE Scheduler_EDF_Node *_Scheduler_EDF_Node_get(
+RTEMS_INLINE_ROUTINE Scheduler_EDF_Node *_Scheduler_EDF_Thread_get_node(
   Thread_Control *the_thread
 )
 {
-  return (Scheduler_EDF_Node *) _Scheduler_Node_get( the_thread );
+  return (Scheduler_EDF_Node *) _Scheduler_Thread_get_node( the_thread );
 }
 
 RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Enqueue(
@@ -51,7 +51,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Enqueue(
 {
   Scheduler_EDF_Context *context =
     _Scheduler_EDF_Get_context( scheduler );
-  Scheduler_EDF_Node *node = _Scheduler_EDF_Node_get( the_thread );
+  Scheduler_EDF_Node *node = _Scheduler_EDF_Thread_get_node( the_thread );
 
   _RBTree_Insert( &context->Ready, &node->Node );
   node->queue_state = SCHEDULER_EDF_QUEUE_STATE_YES;
@@ -64,7 +64,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Extract(
 {
   Scheduler_EDF_Context *context =
     _Scheduler_EDF_Get_context( scheduler );
-  Scheduler_EDF_Node *node = _Scheduler_EDF_Node_get( the_thread );
+  Scheduler_EDF_Node *node = _Scheduler_EDF_Thread_get_node( the_thread );
 
   _RBTree_Extract( &context->Ready, &node->Node );
 }

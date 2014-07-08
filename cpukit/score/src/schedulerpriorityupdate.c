@@ -28,7 +28,7 @@ void _Scheduler_priority_Update_priority(
 {
   Scheduler_priority_Context *context =
     _Scheduler_priority_Get_context( scheduler );
-  Scheduler_priority_Node *node = _Scheduler_priority_Node_get( the_thread );
+  Scheduler_priority_Node *node = _Scheduler_priority_Thread_get_node( the_thread );
 
   _Scheduler_priority_Ready_queue_update(
     &node->Ready_queue,

@@ -44,11 +44,11 @@ static inline Scheduler_priority_SMP_Context *_Scheduler_priority_SMP_Get_self(
   return (Scheduler_priority_SMP_Context *) context;
 }
 
-static inline Scheduler_priority_SMP_Node *_Scheduler_priority_SMP_Node_get(
+static inline Scheduler_priority_SMP_Node *_Scheduler_priority_SMP_Thread_get_node(
   Thread_Control *thread
 )
 {
-  return (Scheduler_priority_SMP_Node *) _Scheduler_Node_get( thread );
+  return (Scheduler_priority_SMP_Node *) _Scheduler_Thread_get_node( thread );
 }
 
 static inline Scheduler_priority_SMP_Node *
