@@ -889,8 +889,10 @@ rtems_termios_ioctl (void *arg)
         }
       }
     }
-    if (tty->handler.set_attributes)
-      (*tty->handler.set_attributes)(tty, &tty->termios);
+    if (tty->handler.set_attributes) {
+      sc = (*tty->handler.set_attributes)(tty, &tty->termios) ?
+        RTEMS_SUCCESSFUL : RTEMS_IO_ERROR;
+    }
     break;
 
   case RTEMS_IO_TCDRAIN:

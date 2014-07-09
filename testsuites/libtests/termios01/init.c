@@ -605,6 +605,68 @@ static void test_device_install_remove(void)
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 }
 
+static bool set_attributes_error(
+  rtems_termios_tty *tty,
+  const struct termios *term
+)
+{
+  bool *done = rtems_termios_get_device_context( tty );
+
+  (void) term;
+
+  *done = true;
+
+  return false;
+}
+
+static void test_set_attributes_error(void)
+{
+  static const rtems_termios_device_handler handler = {
+    .set_attributes = set_attributes_error
+  };
+  static const rtems_device_major_number major = 123456789;
+  static const rtems_device_minor_number minor = 0xdeadbeef;
+  static const char dev[] = "/foobar";
+
+  rtems_resource_snapshot snapshot;
+  rtems_status_code sc;
+  rtems_libio_t iop;
+  rtems_libio_open_close_args_t oc_args;
+  rtems_libio_ioctl_args_t io_args;
+  struct termios term;
+  bool done = false;
+
+  rtems_resource_snapshot_take( &snapshot );
+
+  sc = rtems_termios_device_install( &dev[0], major, minor, &handler, &done );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  memset( &iop, 0, sizeof( iop ) );
+  memset( &oc_args, 0, sizeof( oc_args ) );
+  oc_args.iop = &iop;
+
+  sc = rtems_termios_device_open( major, minor, &oc_args );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  memset( &io_args, 0, sizeof( io_args ) );
+  io_args.iop = &iop;
+  io_args.command = RTEMS_IO_SET_ATTRIBUTES;
+  io_args.buffer = &term;
+
+  rtems_test_assert( !done );
+  sc = rtems_termios_ioctl( &io_args );
+  rtems_test_assert( sc == RTEMS_IO_ERROR );
+  rtems_test_assert( done );
+
+  sc = rtems_termios_device_close( &oc_args );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_termios_device_remove( &dev[0], major, minor );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
+}
+
 static rtems_task Init(
   rtems_task_argument ignored
 )
@@ -759,6 +821,7 @@ static rtems_task Init(
   puts( "" );
 
   test_device_install_remove();
+  test_set_attributes_error();
 
   TEST_END();
   rtems_test_exit(0);
