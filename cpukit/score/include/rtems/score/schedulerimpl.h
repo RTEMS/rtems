@@ -98,14 +98,18 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_CPU(
   return _Scheduler_Get_by_CPU_index( cpu_index );
 }
 
-#if defined(RTEMS_SMP)
 RTEMS_INLINE_ROUTINE Scheduler_Node *_Scheduler_Thread_get_own_node(
   const Thread_Control *the_thread
 )
 {
+#if defined(RTEMS_SMP)
   return the_thread->Scheduler.own_node;
+#else
+  return the_thread->Scheduler.node;
+#endif
 }
 
+#if defined(RTEMS_SMP)
 RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_user(
   const Scheduler_Node *node
 )
