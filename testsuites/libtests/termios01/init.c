@@ -605,6 +605,55 @@ static void test_device_install_remove(void)
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 }
 
+static bool first_open_error(
+  rtems_termios_tty *tty,
+  rtems_libio_open_close_args_t *args
+)
+{
+  bool *done = rtems_termios_get_device_context( tty );
+
+  (void) args;
+
+  *done = true;
+
+  return false;
+}
+
+static void test_first_open_error(void)
+{
+  static const rtems_termios_device_handler handler = {
+    .first_open = first_open_error
+  };
+  static const rtems_device_major_number major = 123456789;
+  static const rtems_device_minor_number minor = 0xdeadbeef;
+  static const char dev[] = "/foobar";
+
+  rtems_resource_snapshot snapshot;
+  rtems_status_code sc;
+  rtems_libio_t iop;
+  rtems_libio_open_close_args_t args;
+  bool done = false;
+
+  rtems_resource_snapshot_take( &snapshot );
+
+  sc = rtems_termios_device_install( &dev[0], major, minor, &handler, &done );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  memset( &iop, 0, sizeof( iop ) );
+  memset( &args, 0, sizeof( args ) );
+  args.iop = &iop;
+
+  rtems_test_assert( !done );
+  sc = rtems_termios_device_open( major, minor, &args );
+  rtems_test_assert( sc == RTEMS_NO_MEMORY );
+  rtems_test_assert( done );
+
+  sc = rtems_termios_device_remove( &dev[0], major, minor );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
+}
+
 static bool set_attributes_error(
   rtems_termios_tty *tty,
   const struct termios *term
@@ -821,6 +870,7 @@ static rtems_task Init(
   puts( "" );
 
   test_device_install_remove();
+  test_first_open_error();
   test_set_attributes_error();
 
   TEST_END();

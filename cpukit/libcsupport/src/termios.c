@@ -284,6 +284,82 @@ rtems_termios_callback_startRemoteTx (rtems_termios_tty *tty)
   (*tty->device.startRemoteTx) (tty->minor);
 }
 
+/*
+ * Drain output queue
+ */
+static void
+drainOutput (struct rtems_termios_tty *tty)
+{
+  rtems_interrupt_lock_context lock_context;
+  rtems_status_code sc;
+
+  if (tty->handler.mode != TERMIOS_POLLED) {
+    rtems_termios_interrupt_lock_acquire (tty, &lock_context);
+    while (tty->rawOutBuf.Tail != tty->rawOutBuf.Head) {
+      tty->rawOutBufState = rob_wait;
+      rtems_termios_interrupt_lock_release (tty, &lock_context);
+      sc = rtems_semaphore_obtain(
+        tty->rawOutBuf.Semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+      if (sc != RTEMS_SUCCESSFUL)
+        rtems_fatal_error_occurred (sc);
+      rtems_termios_interrupt_lock_acquire (tty, &lock_context);
+    }
+    rtems_termios_interrupt_lock_release (tty, &lock_context);
+  }
+}
+
+static void
+rtems_termios_destroy_tty (rtems_termios_tty *tty, void *arg, bool last_close)
+{
+  rtems_status_code sc;
+
+  if (rtems_termios_linesw[tty->t_line].l_close != NULL) {
+    /*
+     * call discipline-specific close
+     */
+    sc = rtems_termios_linesw[tty->t_line].l_close(tty);
+  } else if (last_close) {
+    /*
+     * default: just flush output buffer
+     */
+    sc = rtems_semaphore_obtain(tty->osem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    if (sc != RTEMS_SUCCESSFUL) {
+      rtems_fatal_error_occurred (sc);
+    }
+    drainOutput (tty);
+    rtems_semaphore_release (tty->osem);
+  }
+
+  if (tty->handler.mode == TERMIOS_TASK_DRIVEN) {
+    /*
+     * send "terminate" to I/O tasks
+     */
+    sc = rtems_event_send( tty->rxTaskId, TERMIOS_RX_TERMINATE_EVENT );
+    if (sc != RTEMS_SUCCESSFUL)
+      rtems_fatal_error_occurred (sc);
+    sc = rtems_event_send( tty->txTaskId, TERMIOS_TX_TERMINATE_EVENT );
+    if (sc != RTEMS_SUCCESSFUL)
+      rtems_fatal_error_occurred (sc);
+  }
+  if (last_close && tty->handler.last_close)
+     (*tty->handler.last_close)(tty, arg);
+
+  if (tty->device_node != NULL)
+    tty->device_node->tty = NULL;
+
+  rtems_semaphore_delete (tty->isem);
+  rtems_semaphore_delete (tty->osem);
+  rtems_semaphore_delete (tty->rawOutBuf.Semaphore);
+  if ((tty->handler.poll_read == NULL) ||
+      (tty->handler.mode == TERMIOS_TASK_DRIVEN))
+    rtems_semaphore_delete (tty->rawInBuf.Semaphore);
+  rtems_interrupt_lock_destroy (&tty->interrupt_lock);
+  free (tty->rawInBuf.theBuf);
+  free (tty->rawOutBuf.theBuf);
+  free (tty->cbuf);
+  free (tty);
+}
+
 static rtems_termios_tty *
 rtems_termios_open_tty(
   rtems_device_major_number      major,
@@ -486,8 +562,11 @@ rtems_termios_open_tty(
   }
   args->iop->data1 = tty;
   if (!tty->refcount++) {
-    if (tty->handler.first_open)
-      (*tty->handler.first_open)(tty, args);
+    if (tty->handler.first_open &&
+        !(*tty->handler.first_open)(tty, args)) {
+      rtems_termios_destroy_tty(tty, args, false);
+      return NULL;
+    }
 
     /*
      * start I/O tasks, if needed
@@ -594,30 +673,6 @@ rtems_termios_open (
   return RTEMS_SUCCESSFUL;
 }
 
-/*
- * Drain output queue
- */
-static void
-drainOutput (struct rtems_termios_tty *tty)
-{
-  rtems_interrupt_lock_context lock_context;
-  rtems_status_code sc;
-
-  if (tty->handler.mode != TERMIOS_POLLED) {
-    rtems_termios_interrupt_lock_acquire (tty, &lock_context);
-    while (tty->rawOutBuf.Tail != tty->rawOutBuf.Head) {
-      tty->rawOutBufState = rob_wait;
-      rtems_termios_interrupt_lock_release (tty, &lock_context);
-      sc = rtems_semaphore_obtain(
-        tty->rawOutBuf.Semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-      if (sc != RTEMS_SUCCESSFUL)
-        rtems_fatal_error_occurred (sc);
-      rtems_termios_interrupt_lock_acquire (tty, &lock_context);
-    }
-    rtems_termios_interrupt_lock_release (tty, &lock_context);
-  }
-}
-
 static void
 flushOutput (struct rtems_termios_tty *tty)
 {
@@ -644,54 +699,8 @@ flushInput (struct rtems_termios_tty *tty)
 static void
 rtems_termios_close_tty (rtems_termios_tty *tty, void *arg)
 {
-  rtems_status_code sc;
-
   if (--tty->refcount == 0) {
-    if (rtems_termios_linesw[tty->t_line].l_close != NULL) {
-      /*
-       * call discipline-specific close
-       */
-      sc = rtems_termios_linesw[tty->t_line].l_close(tty);
-    } else {
-      /*
-       * default: just flush output buffer
-       */
-      sc = rtems_semaphore_obtain(tty->osem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-      if (sc != RTEMS_SUCCESSFUL) {
-        rtems_fatal_error_occurred (sc);
-      }
-      drainOutput (tty);
-      rtems_semaphore_release (tty->osem);
-    }
-
-    if (tty->handler.mode == TERMIOS_TASK_DRIVEN) {
-      /*
-       * send "terminate" to I/O tasks
-       */
-      sc = rtems_event_send( tty->rxTaskId, TERMIOS_RX_TERMINATE_EVENT );
-      if (sc != RTEMS_SUCCESSFUL)
-        rtems_fatal_error_occurred (sc);
-      sc = rtems_event_send( tty->txTaskId, TERMIOS_TX_TERMINATE_EVENT );
-      if (sc != RTEMS_SUCCESSFUL)
-        rtems_fatal_error_occurred (sc);
-    }
-    if (tty->handler.last_close)
-       (*tty->handler.last_close)(tty, arg);
-
-    if (tty->device_node != NULL)
-      tty->device_node->tty = NULL;
-
-    rtems_semaphore_delete (tty->isem);
-    rtems_semaphore_delete (tty->osem);
-    rtems_semaphore_delete (tty->rawOutBuf.Semaphore);
-    if ((tty->handler.poll_read == NULL) ||
-        (tty->handler.mode == TERMIOS_TASK_DRIVEN))
-      rtems_semaphore_delete (tty->rawInBuf.Semaphore);
-    rtems_interrupt_lock_destroy (&tty->interrupt_lock);
-    free (tty->rawInBuf.theBuf);
-    free (tty->rawOutBuf.theBuf);
-    free (tty->cbuf);
-    free (tty);
+    rtems_termios_destroy_tty (tty, arg, true);
   }
 }
 
