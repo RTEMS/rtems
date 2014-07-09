@@ -160,12 +160,24 @@ static bool apbuart_set_attributes(
   return true;
 }
 
+static void apbuart_set_best_baud(
+  rtems_termios_tty *tty,
+  const struct apbuart_context *uart
+)
+{
+  uint32_t baud = (uart->freq_hz * 10) / ((uart->regs->scaler * 10 + 5) * 8);
+
+  rtems_termios_set_best_baud(tty, baud);
+}
+
 static bool apbuart_first_open_polled(
   rtems_termios_tty *tty,
   rtems_libio_open_close_args_t *args
 )
 {
   struct apbuart_context *uart = rtems_termios_get_device_context(tty);
+
+  apbuart_set_best_baud(tty, uart);
 
   /* Initialize UART on opening */
   uart->regs->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
@@ -181,6 +193,8 @@ static bool apbuart_first_open_interrupt(
 {
   struct apbuart_context *uart = rtems_termios_get_device_context(tty);
   rtems_status_code sc;
+
+  apbuart_set_best_baud(tty, uart);
 
   /* Register Interrupt handler */
   sc = rtems_interrupt_handler_install(uart->irq, "console",
