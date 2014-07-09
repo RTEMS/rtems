@@ -78,7 +78,8 @@ typedef struct {
    * @retval true Successful operation.
    * @retval false Cannot open device.
    *
-   * @see rtems_termios_get_device_context() and rtems_termios_get_termios().
+   * @see rtems_termios_get_device_context(), rtems_termios_set_best_baud() and
+   *   rtems_termios_get_termios().
    */
   bool (*first_open)(
     struct rtems_termios_tty      *tty,
@@ -291,7 +292,7 @@ typedef struct rtems_termios_tty {
 } rtems_termios_tty;
 
 /**
- * @brief Installes a Termios device.
+ * @brief Installs a Termios device.
  *
  * @param[in] device_file If not @c NULL, then a device file for the specified
  * major and minor number will be created.
@@ -379,11 +380,25 @@ RTEMS_INLINE_ROUTINE void *rtems_termios_get_device_context(
  * initial attributes.
  */
 RTEMS_INLINE_ROUTINE struct termios *rtems_termios_get_termios(
-  const rtems_termios_tty *tty
+  rtems_termios_tty *tty
 )
 {
   return &tty->termios;
 }
+
+/**
+ * @brief Sets the best baud value in the Termios control.
+ *
+ * The valid Termios baud values are between 0 and 460800.  The Termios baud
+ * value is chosen which minimizes the difference to the value specified.
+ *
+ * @param[in] tty The Termios control.
+ * @param[in] baud The current baud setting of the device.
+ */
+void rtems_termios_set_best_baud(
+  rtems_termios_tty *tty,
+  uint32_t           baud
+);
 
 struct rtems_termios_linesw {
   int (*l_open) (struct rtems_termios_tty *tp);

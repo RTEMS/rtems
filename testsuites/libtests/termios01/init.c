@@ -517,7 +517,7 @@ static void test_termios_cfmakeraw(void)
   rtems_test_assert( term.c_cflag & CS8 );
 }
 
-static void test_early_device_install_remove(
+static rtems_status_code test_early_device_install_remove(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void *arg
@@ -535,6 +535,8 @@ static void test_early_device_install_remove(
   rtems_test_assert( sc == RTEMS_INCORRECT_STATE );
 
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
+
+  return RTEMS_SUCCESSFUL;
 }
 
 static void test_device_install_remove(void)
@@ -716,6 +718,56 @@ static void test_set_attributes_error(void)
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 }
 
+static void test_set_best_baud(void)
+{
+  static const struct {
+    uint32_t baud;
+    tcflag_t cflag;
+  } baud_to_cflag_table[] = {
+    { 0,          B0 },
+    { 25,         B0 },
+    { 26,         B50 },
+    { 50,         B50 },
+    { 62,         B50 },
+    { 63,         B75 },
+    { 75,         B75 },
+    { 110,        B110 },
+    { 134,        B134 },
+    { 150,        B150 },
+    { 200,        B200 },
+    { 300,        B300 },
+    { 600,        B600 },
+    { 1200,       B1200 },
+    { 1800,       B1800 },
+    { 2400,       B2400 },
+    { 4800,       B4800 },
+    { 9600,       B9600 },
+    { 19200,      B19200 },
+    { 38400,      B38400 },
+    { 57600,      B57600 },
+    { 115200,     B115200 },
+    { 230400,     B230400 },
+    { 460800,     B460800 },
+    { 0xffffffff, B460800 }
+  };
+
+  size_t n = RTEMS_ARRAY_SIZE(baud_to_cflag_table);
+  size_t i;
+
+  for ( i = 0; i < n; ++i ) {
+    rtems_termios_tty tty;
+    struct termios *term = rtems_termios_get_termios( &tty );
+    tcflag_t cbaud_mask = CBAUD;
+
+    memset( &tty, 0xff, sizeof( tty ) );
+    rtems_termios_set_best_baud( &tty, baud_to_cflag_table[ i ].baud );
+
+    rtems_test_assert(
+      (term->c_cflag & cbaud_mask) == baud_to_cflag_table[ i ].cflag
+    );
+  }
+}
+
 static rtems_task Init(
   rtems_task_argument ignored
 )
@@ -872,6 +924,7 @@ static rtems_task Init(
   test_device_install_remove();
   test_first_open_error();
   test_set_attributes_error();
+  test_set_best_baud();
 
   TEST_END();
   rtems_test_exit(0);

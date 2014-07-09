@@ -28,9 +28,13 @@ directives:
   rtems_termios_device_remove
   rtems_termios_device_open
   rtems_termios_device_close
+  rtems_termios_set_best_baud
 
 concepts:
 
 + Exercise termios ioctl for all baud, character size, parity and
   bits per character options.
 + Ensure that Termios device install/remove works.
++ Ensure that Termios first open works in the error case.
++ Ensure that Termios set attributes works in the error case.
++ Ensure that Termios set best baud works.
