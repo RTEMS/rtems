@@ -70,22 +70,10 @@ Thread_Control *_Thread_queue_Dequeue(
 
   /*
    * We found a thread to unblock.
+   *
+   * NOTE: This is invoked with interrupts still disabled.
    */
-  the_thread->Wait.queue = NULL;
-  if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
-    _ISR_Enable( level );
-  } else {
-    _Watchdog_Deactivate( &the_thread->Timer );
-    _ISR_Enable( level );
-    (void) _Watchdog_Remove( &the_thread->Timer );
-  }
-
-  _Thread_Unblock( the_thread );
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
-    _Thread_MP_Free_proxy( the_thread );
-#endif
+  _Thread_blocking_operation_Finalize( the_thread, level );
 
   return the_thread;
 }
