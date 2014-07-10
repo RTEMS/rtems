@@ -1,0 +1,17 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpschedaffinity02
+
+directives:
+
+  - _Scheduler_priority_affinity_xxx 
+
+concepts:
+
+  Test designed for 2 cores: Init task and TA1 task.
+  of equal priorities.  
+ 
+   - Set TA1 affinity to core 0 verify core
+   - Set TA1 affinity to core 1 verify it does not run because
+     the Init task never blocks
+   - Set Init affinity to core 0 verify both tasks are on the correct cores.

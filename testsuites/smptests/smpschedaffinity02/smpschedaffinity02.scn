@@ -1,0 +1,15 @@
+*** BEGIN OF TEST SMPSCHEDAFFINITY 2 ***
+Create Semaphore
+Create TA1
+Init: expected=1 actual=1
+TA01: expected=0 actual=0 ran=1
+Set TA01 to cpu 0
+Init: expected=1 actual=1
+TA01: expected=0 actual=0 ran=1
+Set TA01 to cpu 1
+Init: expected=1 actual=1
+TA01: expected=1 actual=0 ran=0
+Set Affinity of init task to cpu 0
+Init: expected=0 actual=0
+TA01: expected=1 actual=1 ran=1
+*** END OF TEST SMPSCHEDAFFINITY 2 ***
