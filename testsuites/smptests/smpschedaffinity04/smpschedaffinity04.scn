@@ -1,0 +1,13 @@
+*** BEGIN OF TEST SMPSCHEDAFFINITY 4 ***
+Create Semaphore
+Start TA1
+Verify Init task is on cpu 3
+Set Affinity TA1 to cpu 0
+TA1 expected cpu: 0 actual cpu 0
+Set Affinity TA1 to cpu 1
+TA1 expected cpu: 1 actual cpu 1
+Set Affinity TA1 to cpu 2
+TA1 expected cpu: 2 actual cpu 2
+Set Affinity TA1 to cpu 3
+TA1 expected cpu: 3 actual cpu 3
+*** END OF TEST SMPSCHEDAFFINITY 4 ***

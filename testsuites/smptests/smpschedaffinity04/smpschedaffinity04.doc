@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpschedaffinity04
+
+directives:
+
+  - _Scheduler_priority_affinity_xxx 
+
+concepts:
+
+ - Use the Init task to walk the higher priority TA1 across all the cores.
