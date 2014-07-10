@@ -8,7 +8,6 @@ last_arch=""
 cfg_list=$(LANG=C LC_COLLATE=C find ${base} -name \*.cfg | sort)
 
 max_bsp_len=0
-spaces="                             "
 
 for bsp in ${cfg_list};
 do
@@ -18,6 +17,7 @@ do
     max_bsp_len=$len
   fi
 done
+max_bsp_len=$(expr ${max_bsp_len} + 2)
 
 echo "RTEMS 4.11"
 for bsp_path in ${cfg_list};
@@ -29,7 +29,8 @@ do
    echo "${arch}:"
    last_arch=${arch}
  fi
- echo " ${bsp}${spaces:${#bsp}}${path}"
+ spaces=$(echo ${bsp} | awk '{ printf("%*s", '${max_bsp_len}' -length(), " "); }')
+ echo " ${bsp}${spaces}${path}"
 done
 
 exit 0
