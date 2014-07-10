@@ -85,6 +85,7 @@ smpschedaffinity01/Makefile
 smpschedaffinity02/Makefile
 smpschedaffinity03/Makefile
 smpschedaffinity04/Makefile
+smpschedaffinity05/Makefile
 smpscheduler01/Makefile
 smpscheduler02/Makefile
 smpscheduler03/Makefile

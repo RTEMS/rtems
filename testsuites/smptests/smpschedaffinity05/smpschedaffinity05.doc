@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpschedaffinity05
+
+directives:
+
+  - _Scheduler_priority_affinity_xxx 
+
+concepts:
+
+  - Ensure that worst case migration of tasks across 4 cores using
+    a combination of affinity and priority.  Ensure the highest
+    priority tasks are chosen to run on the correct cores.

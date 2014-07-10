@@ -27,6 +27,7 @@ SUBDIRS += smpschedaffinity01
 SUBDIRS += smpschedaffinity02
 SUBDIRS += smpschedaffinity03
 SUBDIRS += smpschedaffinity04
+SUBDIRS += smpschedaffinity05
 SUBDIRS += smpscheduler01
 SUBDIRS += smpscheduler02
 SUBDIRS += smpscheduler03

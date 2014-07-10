@@ -1,0 +1,18 @@
+*** BEGIN OF TEST SMPSCHEDAFFINITY 5 ***
+Create Semaphore
+Start TA1 at priority 8 on cpu 2
+Start TA2 at priority 5 on cpu 1
+Start TA3 at priority 6 on cpu 0
+Start TA4 at priority 9 on cpu -1
+Verify Tasks Ran
+Init(7): ran=1 expected=3 actual=3
+TA01(8): ran=1 expected=2 actual=2
+TA02(5): ran=1 expected=1 actual=1
+TA03(6): ran=1 expected=0 actual=0
+Set TA4 priority 4
+Verify Tasks Ran
+Init(7): ran=1 expected=2 actual=2
+TA01(8): ran=0 expected=-1 actual=-1
+TA02(5): ran=1 expected=0 actual=0
+TA03(6): ran=1 expected=3 actual=3
+*** END OF TEST SMPSCHEDAFFINITY 5 ***
