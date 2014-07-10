@@ -1,0 +1,10 @@
+*** BEGIN OF TEST SMPSCHEDAFFINITY 3 ***
+Set Affinity for cpu 3
+On cpu 3
+Set Affinity for cpu 2
+On cpu 2
+Set Affinity for cpu 1
+On cpu 1
+Set Affinity for cpu 0
+On cpu 0
+*** END OF TEST SMPSCHEDAFFINITY 3 ***

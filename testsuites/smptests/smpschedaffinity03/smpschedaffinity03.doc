@@ -1,0 +1,10 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpschedaffinity03
+
+directives:
+
+  - _Scheduler_priority_affinity_xxx 
+
+concepts:
+ - Test to walk the affinity of the init task across all the cores.
