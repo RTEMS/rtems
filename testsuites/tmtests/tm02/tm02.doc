@@ -8,7 +8,7 @@
 
 This test benchmarks the following operations:
 
-  + rtems_semaphore_obtain
+  + rtems_semaphore_obtain: counting/FIFO not available, caller blocks
 
 For more information
 1. tmtests/include/timesys.h

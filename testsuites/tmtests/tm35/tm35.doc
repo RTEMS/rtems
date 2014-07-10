@@ -7,7 +7,7 @@
 
 This test benchmarks the following operations:
 
-  + rtems_semaphore_release: counting/FIFO task readied preempts caller
+  + rtems_semaphore_obtain: binary/priority not available, caller blocks
 
 For more information
 1. tmtests/include/timesys.h

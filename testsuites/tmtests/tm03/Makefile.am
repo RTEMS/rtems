@@ -13,6 +13,7 @@ include $(top_srcdir)/../automake/leaf.am
 OPERATION_COUNT = @OPERATION_COUNT@
 AM_CPPFLAGS += -I$(top_srcdir)/include -DOPERATION_COUNT=$(OPERATION_COUNT)
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+AM_CPPFLAGS += -DTM03
 
 LINK_OBJS = $(tm03_OBJECTS)
 LINK_LIBS = $(tm03_LDLIBS)

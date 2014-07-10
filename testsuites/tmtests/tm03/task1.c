@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2013.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,7 +14,30 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#if defined(TM03)
 const char rtems_test_name[] = "TIME TEST 3";
+#define SEMAPHORE_ATTRIBUTES (RTEMS_COUNTING_SEMAPHORE | RTEMS_FIFO)
+#define ATTR_DESC "counting/FIFO"
+
+#elif defined(TM32)
+const char rtems_test_name[] = "TIME TEST 32";
+#define SEMAPHORE_ATTRIBUTES (RTEMS_COUNTING_SEMAPHORE | RTEMS_PRIORITY)
+#define ATTR_DESC "counting/priority"
+
+#elif defined(TM34)
+const char rtems_test_name[] = "TIME TEST 34";
+#define SEMAPHORE_ATTRIBUTES RTEMS_BINARY_SEMAPHORE
+#define ATTR_DESC "binary/FIFO"
+
+#elif defined(TM36)
+const char rtems_test_name[] = "TIME TEST 36";
+#define SEMAPHORE_ATTRIBUTES (RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY)
+#define ATTR_DESC "binary/priority"
+
+#else
+#error "Unknown test configuration"
+#endif
+
 
 rtems_id Semaphore_id;
 rtems_task test_init(
@@ -72,7 +95,7 @@ rtems_task test_init(
   status = rtems_semaphore_create(
     rtems_build_name( 'S', 'M', '1', '\0'),
     0,
-    RTEMS_DEFAULT_ATTRIBUTES,
+    SEMAPHORE_ATTRIBUTES,
     RTEMS_NO_PRIORITY,
     &Semaphore_id
   );
@@ -140,7 +163,7 @@ rtems_task High_task(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_semaphore_release: task readied preempts caller",
+    "rtems_semaphore_release: " ATTR_DESC " task readied preempts caller",
     end_time,
     operation_count - 1,
     0,

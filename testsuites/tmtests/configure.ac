@@ -11,7 +11,6 @@ RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define foreign 1.12.2])
 AM_MAINTAINER_MODE
 
-
 RTEMS_ENV_RTEMSBSP
 RTEMS_CHECK_RTEMS_TEST_NO_PAUSE
 
@@ -61,5 +60,11 @@ tm27/Makefile
 tm28/Makefile
 tm29/Makefile
 tm30/Makefile
+tm31/Makefile
+tm32/Makefile
+tm33/Makefile
+tm34/Makefile
+tm35/Makefile
+tm36/Makefile
 ])
 AC_OUTPUT

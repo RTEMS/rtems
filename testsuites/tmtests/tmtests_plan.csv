@@ -1,158 +1,164 @@
-"rtems_barrier_create: only case","tm30","NA","Yes"
-"rtems_barrier_delete: only case","tm30","NA","Yes"
-"rtems_barrier_ident: only case","tm30","NA","Yes"
-
-"rtems_clock_get_tod: only case","tm08","NA","Yes"
-"rtems_clock_set: only case","tm08","NA","Yes"
-"rtems_clock_tick: only case","tm25","NA","Yes"
-
-"rtems_event_receive: available","tm15","NA","Yes"
-"rtems_event_receive: not available caller blocks","tm15","NA","Yes"
-"rtems_event_receive: not available NO_WAIT","tm15","NA","Yes"
-"rtems_event_receive: obtain current events","tm15","NA","Yes"
-"rtems_event_send: no task readied","tm15","NA","Yes"
-"rtems_event_send: task readied preempts caller","tm16","NA","Yes"
-"rtems_event_send: task readied returns to caller","tm15","NA","Yes"
-
-"rtems internal: context switch: no floating point contexts","tm26","NA","Yes"
-"rtems internal: context switch: self","tm26","NA","Yes"
-"rtems internal: context switch to another task","tm26","NA","Yes"
-"rtems internal: fp context switch restore 1st FP task","tm26","NA","Yes"
-"rtems internal: fp context switch save idle and restore initialized","tm26","NA","Yes"
-"rtems internal: fp context switch save idle, restore idle","tm26","NA","Yes"
-"rtems internal: fp context switch save initialized, restore initialized","tm26","NA","Yes"
-"rtems internal: _Semaphore_Get","tm26","NA","Yes"
-"rtems internal: _Thread_Disable_dispatch","tm26","NA","Yes"
-"rtems internal: _Thread_Dispatch NO FP","tm26","NA","Yes"
-"rtems internal: _Thread_Enable_dispatch","tm26","NA","Yes"
-"rtems internal: _Thread_Get: invalid id","tm26","NA","Yes"
-"rtems internal: _Thread_Get","tm26","NA","Yes"
-"rtems internal: _Thread_Ready","tm26","NA","Yes"
-"rtems internal: _Thread_Resume","tm26","NA","Yes"
-"rtems internal: _Thread_Set_state","tm26","NA","Yes"
-"rtems internal: _Thread_Unblock","tm26","NA","Yes"
-
-"rtems interrupt: entry overhead returns to interrupted task","tm27","NA","Yes"
-"rtems interrupt: entry overhead returns to nested interrupt","tm27","NA","Yes"
-"rtems interrupt: exit overhead returns to interrupted task","tm27","NA","Yes"
-"rtems interrupt: exit overhead returns to nested interrupt","tm27","NA","Yes"
-"rtems interrupt: _ISR_Disable","tm26","NA","Yes"
-"rtems interrupt: _ISR_Enable","tm26","NA","Yes"
-"rtems interrupt: _ISR_Flash","tm26","NA","Yes"
-
-"rtems_io_close: only case","tm20","NA","Yes"
-"rtems_io_control: only case","tm20","NA","Yes"
-"rtems_io_initialize: only case","tm20","NA","Yes"
-"rtems_io_open: only case","tm20","NA","Yes"
-"rtems_io_read: only case","tm20","NA","Yes"
-"rtems_io_write: only case","tm20","NA","Yes"
-
-"rtems_message_queue_broadcast: no waiting tasks","tm22","NA","Yes"
-"rtems_message_queue_broadcast: task readied returns to caller","tm22","NA","Yes"
-"rtems_message_queue_broadcast: task readied","tm22","NA","Yes"
-"rtems_message_queue_create: only case","tm09","NA","Yes"
-"rtems_message_queue_delete: only case","tm09","NA","Yes"
-"rtems_message_queue_flush: messages flushed","tm09","NA","Yes"
-"rtems_message_queue_flush: no messages flushed","tm09","NA","Yes"
-"rtems_message_queue_ident: only case","tm21","NA","Yes"
-"rtems_message_queue_receive: available","tm09","NA","Yes"
-"rtems_message_queue_receive: not available caller blocks","tm10","NA","Yes"
-"rtems_message_queue_receive: not available NO_WAIT","tm10","NA","Yes"
-"rtems_message_queue_send: no waiting tasks","tm09","NA","Yes"
-"rtems_message_queue_send: task readied preempts caller","tm11","NA","Yes"
-"rtems_message_queue_send: task readied returns to caller","tm12","NA","Yes"
-"rtems_message_queue_urgent: no waiting tasks","tm09","NA","Yes"
-"rtems_message_queue_urgent: task readied preempts caller","tm13","NA","Yes"
-"rtems_message_queue_urgent: task readied returns to caller","tm14","NA","Yes"
-
-"rtems_partition_create: only case","tm20","NA","Yes"
-"rtems_partition_delete: only case","tm20","NA","Yes"
-"rtems_partition_get_buffer: available","tm20","NA","Yes"
-"rtems_partition_get_buffer: not available","tm20","NA","Yes"
-"rtems_partition_ident: only case","tm21","NA","Yes"
-"rtems_partition_return_buffer: only case","tm20","NA","Yes"
-
-"rtems_port_create: only case","tm28","NA","Yes"
-"rtems_port_delete: only case","tm28","NA","Yes"
-"rtems_port_external_to_internal: only case","tm28","NA","Yes"
-"rtems_port_ident: only case","tm21","NA","Yes"
-"rtems_port_internal_to_external: only case","tm28","NA","Yes"
-
-"rtems_rate_monotonic_cancel: only case","tm29","NA","Yes"
-"rtems_rate_monotonic_create: only case","tm29","NA","Yes"
-"rtems_rate_monotonic_delete: active","tm29","NA","Yes"
-"rtems_rate_monotonic_delete: inactive","tm29","NA","Yes"
-"rtems_rate_monotonic_ident: only case","tm21","NA","Yes"
-"rtems_rate_monotonic_period: conclude periods caller blocks","tm29","NA","Yes"
-"rtems_rate_monotonic_period: initiate period returns to caller","tm29","NA","Yes"
-"rtems_rate_monotonic_period: obtain status","tm29","NA","Yes"
-
-"rtems_region_create: only case","tm20","NA","Yes"
-"rtems_region_delete: only case","tm20","NA","Yes"
-"rtems_region_get_segment: available","tm20","NA","Yes"
-"rtems_region_get_segment: not available caller blocks","tm20","NA","Yes"
-"rtems_region_get_segment: not available NO_WAIT","tm20","NA","Yes"
-"rtems_region_ident: only case","tm21","NA","Yes"
-"rtems_region_return_segment: no waiting tasks","tm20","NA","Yes"
-"rtems_region_return_segment: task readied preempts caller","tm20","NA","Yes"
-"rtems_region_return_segment: task readied returns to caller","tm20","NA","Yes"
-
-"rtems_semaphore_create: only case","tm01","NA","Yes"
-"rtems_semaphore_delete: only case","tm01","NA","Yes"
-"rtems_semaphore_ident: only case","tm21","NA","Yes"
-"rtems_semaphore_obtain: available","tm01","NA","Yes"
-"rtems_semaphore_obtain: not available caller blocks","tm02","NA","Yes"
-"rtems_semaphore_obtain: not available NO_WAIT","tm01","NA","Yes"
-"rtems_semaphore_release: no waiting tasks","tm01","NA","Yes"
-"rtems_semaphore_release: task readied preempts caller","tm03","NA","Yes"
-"rtems_semaphore_release: task readied","tm04","NA","Yes"
-
-"rtems_signal_catch: only case","tm19","NA","Yes"
-"rtems_signal: exit ASR overhead returns to calling task","tm19","NA","Yes"
-"rtems_signal: exit ASR overhead returns to preempting task","tm19","NA","Yes"
-"rtems_signal_send: returns to caller","tm19","NA","Yes"
-"rtems_signal_send: signal to self","tm19","NA","Yes"
-
-"rtems_task_create: only case","tm04","NA","Yes"
-"rtems_task_delete: blocked task","tm04","NA","Yes"
-"rtems_task_delete: calling task","tm18","NA","Yes"
-"rtems_task_delete: ready task","tm06","NA","Yes"
-"rtems_task_delete: suspended task","tm04","NA","Yes"
-"rtems_task_get_note: only case","tm08","NA","Yes"
-"rtems_task_ident: only case","tm21","NA","Yes"
-"rtems_task_mode: no reschedule","tm08","NA","Yes"
-"rtems_task_mode: obtain current mode","tm08","NA","Yes"
-"rtems_task_mode: reschedule returns to caller","tm08","NA","Yes"
-"rtems_task_mode: reschedule","tm08","NA","Yes"
-"rtems_task_restart: blocked task preempts caller","tm04","NA","Yes"
-"rtems_task_restart: blocked task","tm04","NA","Yes"
-"rtems_task_restart: calling task","tm06","NA","Yes"
-"rtems_task_restart: ready task","tm04","NA","Yes"
-"rtems_task_restart: ready task","tm04","NA","Yes"
-"rtems_task_restart: suspended task preempts caller","tm07","NA","Yes"
-"rtems_task_restart: suspended task","tm04","NA","Yes"
-"rtems_task_resume: task readied preempts caller","tm05","NA","Yes"
-"rtems_task_resume: task readied returns to caller","tm06","NA","Yes"
-"rtems_task_set_note: only case","tm08","NA","Yes"
-"rtems_task_set_priority: obtain current priority","tm08","NA","Yes"
-"rtems_task_set_priority: preempts caller","tm17","NA","Yes"
-"rtems_task_set_priority: returns to caller","tm08","NA","Yes"
-"rtems_task_start: only case","tm04","NA","Yes"
-"rtems_task_suspend: calling task","tm05","NA","Yes"
-"rtems_task_suspend: returns to caller","tm06","NA","Yes"
-"rtems_task_wake_after: yield returns to caller","tm24","NA","Yes"
-"rtems_task_wake_after: yields preempts caller","tm24","NA","Yes"
-"rtems_task_wake_when: only case","tm23","NA","Yes"
-
-"rtems_timer_cancel: active","tm23","NA","Yes"
-"rtems_timer_cancel: inactive","tm23","NA","Yes"
-"rtems_timer_create: only case","tm23","NA","Yes"
-"rtems_timer_delete: active","tm23","NA","Yes"
-"rtems_timer_delete: inactive","tm23","NA","Yes"
-"rtems_timer_fire_after: active","tm23","NA","Yes"
-"rtems_timer_fire_after: inactive","tm23","NA","Yes"
-"rtems_timer_fire_when: active","tm23","NA","Yes"
-"rtems_timer_fire_when: inactive","tm23","NA","Yes"
-"rtems_timer_ident: only case","tm21","NA","Yes"
-"rtems_timer_reset: active","tm23","NA","Yes"
-"rtems_timer_reset: inactive","tm23","NA","Yes"
+"rtems_barrier_create: only case",tm30,NA,Yes
+"rtems_barrier_delete: only case",tm30,NA,Yes
+"rtems_barrier_ident: only case",tm30,NA,Yes
+,,,
+"rtems_clock_get_tod: only case",tm08,NA,Yes
+"rtems_clock_set: only case",tm08,NA,Yes
+"rtems_clock_tick: only case",tm25,NA,Yes
+,,,
+"rtems_event_receive: available",tm15,NA,Yes
+"rtems_event_receive: not available caller blocks",tm15,NA,Yes
+"rtems_event_receive: not available NO_WAIT",tm15,NA,Yes
+"rtems_event_receive: obtain current events",tm15,NA,Yes
+"rtems_event_send: no task readied",tm15,NA,Yes
+"rtems_event_send: task readied preempts caller",tm16,NA,Yes
+"rtems_event_send: task readied returns to caller",tm15,NA,Yes
+,,,
+"rtems internal: context switch: no floating point contexts",tm26,NA,Yes
+"rtems internal: context switch: self",tm26,NA,Yes
+"rtems internal: context switch to another task",tm26,NA,Yes
+"rtems internal: fp context switch restore 1st FP task",tm26,NA,Yes
+"rtems internal: fp context switch save idle and restore initialized",tm26,NA,Yes
+"rtems internal: fp context switch save idle, restore idle",tm26,NA,Yes
+"rtems internal: fp context switch save initialized, restore initialized",tm26,NA,Yes
+"rtems internal: _Semaphore_Get",tm26,NA,Yes
+"rtems internal: _Thread_Disable_dispatch",tm26,NA,Yes
+"rtems internal: _Thread_Dispatch NO FP",tm26,NA,Yes
+"rtems internal: _Thread_Enable_dispatch",tm26,NA,Yes
+"rtems internal: _Thread_Get: invalid id",tm26,NA,Yes
+"rtems internal: _Thread_Get",tm26,NA,Yes
+"rtems internal: _Thread_Ready",tm26,NA,Yes
+"rtems internal: _Thread_Resume",tm26,NA,Yes
+"rtems internal: _Thread_Set_state",tm26,NA,Yes
+"rtems internal: _Thread_Unblock",tm26,NA,Yes
+,,,
+"rtems interrupt: entry overhead returns to interrupted task",tm27,NA,Yes
+"rtems interrupt: entry overhead returns to nested interrupt",tm27,NA,Yes
+"rtems interrupt: exit overhead returns to interrupted task",tm27,NA,Yes
+"rtems interrupt: exit overhead returns to nested interrupt",tm27,NA,Yes
+"rtems interrupt: _ISR_Disable",tm26,NA,Yes
+"rtems interrupt: _ISR_Enable",tm26,NA,Yes
+"rtems interrupt: _ISR_Flash",tm26,NA,Yes
+,,,
+"rtems_io_close: only case",tm20,NA,Yes
+"rtems_io_control: only case",tm20,NA,Yes
+"rtems_io_initialize: only case",tm20,NA,Yes
+"rtems_io_open: only case",tm20,NA,Yes
+"rtems_io_read: only case",tm20,NA,Yes
+"rtems_io_write: only case",tm20,NA,Yes
+,,,
+"rtems_message_queue_broadcast: no waiting tasks",tm22,NA,Yes
+"rtems_message_queue_broadcast: task readied returns to caller",tm22,NA,Yes
+"rtems_message_queue_broadcast: task readied",tm22,NA,Yes
+"rtems_message_queue_create: only case",tm09,NA,Yes
+"rtems_message_queue_delete: only case",tm09,NA,Yes
+"rtems_message_queue_flush: messages flushed",tm09,NA,Yes
+"rtems_message_queue_flush: no messages flushed",tm09,NA,Yes
+"rtems_message_queue_ident: only case",tm21,NA,Yes
+"rtems_message_queue_receive: available",tm09,NA,Yes
+"rtems_message_queue_receive: not available caller blocks",tm10,NA,Yes
+"rtems_message_queue_receive: not available NO_WAIT",tm10,NA,Yes
+"rtems_message_queue_send: no waiting tasks",tm09,NA,Yes
+"rtems_message_queue_send: task readied preempts caller",tm11,NA,Yes
+"rtems_message_queue_send: task readied returns to caller",tm12,NA,Yes
+"rtems_message_queue_urgent: no waiting tasks",tm09,NA,Yes
+"rtems_message_queue_urgent: task readied preempts caller",tm13,NA,Yes
+"rtems_message_queue_urgent: task readied returns to caller",tm14,NA,Yes
+,,,
+"rtems_partition_create: only case",tm20,NA,Yes
+"rtems_partition_delete: only case",tm20,NA,Yes
+"rtems_partition_get_buffer: available",tm20,NA,Yes
+"rtems_partition_get_buffer: not available",tm20,NA,Yes
+"rtems_partition_ident: only case",tm21,NA,Yes
+"rtems_partition_return_buffer: only case",tm20,NA,Yes
+,,,
+"rtems_port_create: only case",tm28,NA,Yes
+"rtems_port_delete: only case",tm28,NA,Yes
+"rtems_port_external_to_internal: only case",tm28,NA,Yes
+"rtems_port_ident: only case",tm21,NA,Yes
+"rtems_port_internal_to_external: only case",tm28,NA,Yes
+,,,
+"rtems_rate_monotonic_cancel: only case",tm29,NA,Yes
+"rtems_rate_monotonic_create: only case",tm29,NA,Yes
+"rtems_rate_monotonic_delete: active",tm29,NA,Yes
+"rtems_rate_monotonic_delete: inactive",tm29,NA,Yes
+"rtems_rate_monotonic_ident: only case",tm21,NA,Yes
+"rtems_rate_monotonic_period: conclude periods caller blocks",tm29,NA,Yes
+"rtems_rate_monotonic_period: initiate period returns to caller",tm29,NA,Yes
+"rtems_rate_monotonic_period: obtain status",tm29,NA,Yes
+,,,
+"rtems_region_create: only case",tm20,NA,Yes
+"rtems_region_delete: only case",tm20,NA,Yes
+"rtems_region_get_segment: available",tm20,NA,Yes
+"rtems_region_get_segment: not available caller blocks",tm20,NA,Yes
+"rtems_region_get_segment: not available NO_WAIT",tm20,NA,Yes
+"rtems_region_ident: only case",tm21,NA,Yes
+"rtems_region_return_segment: no waiting tasks",tm20,NA,Yes
+"rtems_region_return_segment: task readied preempts caller",tm20,NA,Yes
+"rtems_region_return_segment: task readied returns to caller",tm20,NA,Yes
+,,,
+"rtems_semaphore_create: only case",tm01,NA,Yes
+"rtems_semaphore_delete: only case",tm01,NA,Yes
+"rtems_semaphore_ident: only case",tm21,NA,Yes
+"rtems_semaphore_obtain: available",tm01,NA,Yes
+"rtems_semaphore_obtain: Counting/FIFO not available caller blocks",tm02,NA,Yes
+"rtems_semaphore_obtain: not available NO_WAIT",tm01,NA,Yes
+"rtems_semaphore_release: no waiting tasks",tm01,NA,Yes
+"rtems_semaphore_release: Counting/FIFO task readied preempts caller",tm03,NA,Yes
+"rtems_semaphore_release: task readied",tm04,NA,Yes
+"rtems_semaphore_obtain: Counting/priority not available caller blocks",tm31,NA,Yes
+"rtems_semaphore_release: Counting/priority task readied preempts caller",tm32,NA,Yes
+"rtems_semaphore_obtain: Binary/FIFO not available caller blocks",tm33,NA,Yes
+"rtems_semaphore_release: Binary/FIFO task readied preempts caller",tm34,NA,Yes
+"rtems_semaphore_obtain: Binary/priority not available caller blocks",tm35,NA,Yes
+"rtems_semaphore_release: Binary/priority task readied preempts caller",tm36,NA,Yes
+,,,
+"rtems_signal_catch: only case",tm19,NA,Yes
+"rtems_signal: exit ASR overhead returns to calling task",tm19,NA,Yes
+"rtems_signal: exit ASR overhead returns to preempting task",tm19,NA,Yes
+"rtems_signal_send: returns to caller",tm19,NA,Yes
+"rtems_signal_send: signal to self",tm19,NA,Yes
+,,,
+"rtems_task_create: only case",tm04,NA,Yes
+"rtems_task_delete: blocked task",tm04,NA,Yes
+"rtems_task_delete: calling task",tm18,NA,Yes
+"rtems_task_delete: ready task",tm06,NA,Yes
+"rtems_task_delete: suspended task",tm04,NA,Yes
+"rtems_task_get_note: only case",tm08,NA,Yes
+"rtems_task_ident: only case",tm21,NA,Yes
+"rtems_task_mode: no reschedule",tm08,NA,Yes
+"rtems_task_mode: obtain current mode",tm08,NA,Yes
+"rtems_task_mode: reschedule returns to caller",tm08,NA,Yes
+"rtems_task_mode: reschedule",tm08,NA,Yes
+"rtems_task_restart: blocked task preempts caller",tm04,NA,Yes
+"rtems_task_restart: blocked task",tm04,NA,Yes
+"rtems_task_restart: calling task",tm06,NA,Yes
+"rtems_task_restart: ready task",tm04,NA,Yes
+"rtems_task_restart: ready task",tm04,NA,Yes
+"rtems_task_restart: suspended task preempts caller",tm07,NA,Yes
+"rtems_task_restart: suspended task",tm04,NA,Yes
+"rtems_task_resume: task readied preempts caller",tm05,NA,Yes
+"rtems_task_resume: task readied returns to caller",tm06,NA,Yes
+"rtems_task_set_note: only case",tm08,NA,Yes
+"rtems_task_set_priority: obtain current priority",tm08,NA,Yes
+"rtems_task_set_priority: preempts caller",tm17,NA,Yes
+"rtems_task_set_priority: returns to caller",tm08,NA,Yes
+"rtems_task_start: only case",tm04,NA,Yes
+"rtems_task_suspend: calling task",tm05,NA,Yes
+"rtems_task_suspend: returns to caller",tm06,NA,Yes
+"rtems_task_wake_after: yield returns to caller",tm24,NA,Yes
+"rtems_task_wake_after: yields preempts caller",tm24,NA,Yes
+"rtems_task_wake_when: only case",tm23,NA,Yes
+,,,
+"rtems_timer_cancel: active",tm23,NA,Yes
+"rtems_timer_cancel: inactive",tm23,NA,Yes
+"rtems_timer_create: only case",tm23,NA,Yes
+"rtems_timer_delete: active",tm23,NA,Yes
+"rtems_timer_delete: inactive",tm23,NA,Yes
+"rtems_timer_fire_after: active",tm23,NA,Yes
+"rtems_timer_fire_after: inactive",tm23,NA,Yes
+"rtems_timer_fire_when: active",tm23,NA,Yes
+"rtems_timer_fire_when: inactive",tm23,NA,Yes
+"rtems_timer_ident: only case",tm21,NA,Yes
+"rtems_timer_reset: active",tm23,NA,Yes
+"rtems_timer_reset: inactive",tm23,NA,Yes
