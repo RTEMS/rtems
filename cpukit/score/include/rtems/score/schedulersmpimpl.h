@@ -678,8 +678,6 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_scheduled_ordered(
   while ( true ) {
     Scheduler_Node *highest_ready = ( *get_highest_ready )( context, node );
 
-    _Assert( highest_ready != NULL );
-
     /*
      * The node has been extracted from the scheduled chain.  We have to place
      * it now on the scheduled or ready set.
@@ -760,8 +758,6 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
 {
   while ( true ) {
     Scheduler_Node *highest_ready = ( *get_highest_ready )( context, victim );
-
-    _Assert( highest_ready != NULL );
 
     if (
       _Scheduler_Try_to_schedule_node(

@@ -84,10 +84,13 @@ static Scheduler_Node *_Scheduler_simple_SMP_Get_highest_ready(
 {
   Scheduler_simple_SMP_Context *self =
     _Scheduler_simple_SMP_Get_self( context );
+  Scheduler_Node *first = (Scheduler_Node *) _Chain_First( &self->Ready );
 
   (void) node;
 
-  return (Scheduler_Node *) _Chain_First( &self->Ready );
+  _Assert( &first->Node != _Chain_Tail( &self->Ready ) );
+
+  return first;
 }
 
 static void _Scheduler_simple_SMP_Move_from_scheduled_to_ready(
