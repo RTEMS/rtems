@@ -93,8 +93,7 @@ void _Scheduler_priority_SMP_Block(
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_SMP_Get_highest_ready,
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy,
-    _Scheduler_priority_SMP_Get_idle_thread
+    _Scheduler_SMP_Allocate_processor_lazy
   );
 }
 
@@ -116,8 +115,7 @@ static Thread_Control *_Scheduler_priority_SMP_Enqueue_ordered(
     insert_scheduled,
     _Scheduler_priority_SMP_Move_from_scheduled_to_ready,
     _Scheduler_SMP_Get_lowest_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy,
-    _Scheduler_priority_SMP_Release_idle_thread
+    _Scheduler_SMP_Allocate_processor_lazy
   );
 }
 
@@ -170,9 +168,7 @@ static Thread_Control *_Scheduler_priority_SMP_Enqueue_scheduled_ordered(
     insert_ready,
     insert_scheduled,
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy,
-    _Scheduler_priority_SMP_Get_idle_thread,
-    _Scheduler_priority_SMP_Release_idle_thread
+    _Scheduler_SMP_Allocate_processor_lazy
   );
 }
 
@@ -214,8 +210,7 @@ Thread_Control *_Scheduler_priority_SMP_Unblock(
   return _Scheduler_SMP_Unblock(
     context,
     thread,
-    _Scheduler_priority_SMP_Enqueue_fifo,
-    _Scheduler_priority_SMP_Release_idle_thread
+    _Scheduler_priority_SMP_Enqueue_fifo
   );
 }
 
@@ -254,8 +249,7 @@ Thread_Control *_Scheduler_priority_SMP_Ask_for_help(
     context,
     offers_help,
     needs_help,
-    _Scheduler_priority_SMP_Enqueue_fifo,
-    _Scheduler_priority_SMP_Release_idle_thread
+    _Scheduler_priority_SMP_Enqueue_fifo
   );
 }
 

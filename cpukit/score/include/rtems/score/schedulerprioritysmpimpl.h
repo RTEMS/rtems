@@ -148,28 +148,6 @@ static inline void _Scheduler_priority_SMP_Extract_from_ready(
   );
 }
 
-static inline Thread_Control *_Scheduler_priority_SMP_Get_idle_thread(
-  Scheduler_Context *context
-)
-{
-  return _Scheduler_SMP_Get_idle_thread(
-    context,
-    _Scheduler_priority_SMP_Extract_from_ready
-  );
-}
-
-static void _Scheduler_priority_SMP_Release_idle_thread(
-  Scheduler_Context *context,
-  Thread_Control    *idle
-)
-{
-  _Scheduler_SMP_Release_idle_thread(
-    context,
-    idle,
-    _Scheduler_priority_SMP_Insert_ready_fifo
-  );
-}
-
 static inline void _Scheduler_priority_SMP_Do_update(
   Scheduler_Context *context,
   Scheduler_Node *node_to_update,

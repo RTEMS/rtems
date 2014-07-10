@@ -900,8 +900,22 @@ static void test_mrsp_obtain_and_release_with_help(test_context *ctx)
 
   rtems_test_assert(rtems_get_current_processor() == 1);
 
+  /*
+   * With this operation the scheduler instance 0 has now only the main and the
+   * idle threads in the ready set.
+   */
+  sc = rtems_task_suspend(run_task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(rtems_get_current_processor() == 1);
+
+  change_prio(RTEMS_SELF, 1);
+  change_prio(RTEMS_SELF, 3);
+
   sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(rtems_get_current_processor() == 0);
 
   assert_prio(RTEMS_SELF, 3);
 
