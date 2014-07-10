@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpschedsem01
+
+directives:
+
+  - _Scheduler_priority_affinity_xxx 
+
+concepts:
+
+  - Ensure priority is inherited from a high priority semaphore by a lower
+    priority task.

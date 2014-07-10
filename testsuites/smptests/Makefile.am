@@ -31,6 +31,7 @@ SUBDIRS += smpschedaffinity05
 SUBDIRS += smpscheduler01
 SUBDIRS += smpscheduler02
 SUBDIRS += smpscheduler03
+SUBDIRS += smpschedsem01
 SUBDIRS += smpsignal01
 SUBDIRS += smpswitchextension01
 SUBDIRS += smpthreadlife01

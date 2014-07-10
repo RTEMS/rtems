@@ -1,0 +1,7 @@
+*** BEGIN OF TEST SMPSCHEDSEM 01 ***
+Init: priority 8 expected 8
+Init: Obtain Semaphore
+Init: priority 5 expected 5
+Init: Release Semaphore
+Init: priority 8 expected 8
+*** END OF TEST SMPSCHEDSEM 01 ***
