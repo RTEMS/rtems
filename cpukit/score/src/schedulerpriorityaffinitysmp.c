@@ -355,6 +355,14 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
       break;
 
     /*
+     * FIXME: Do not consider threads using the scheduler helping protocol
+     * since this could produce more than one thread in need for help in one
+     * operation which is currently not possible.
+     */
+    if ( lowest_scheduled->help_state != SCHEDULER_HELP_YOURSELF )
+      break;
+
+    /*
      * But if we found a thread which is lower priority than one
      * in the ready set, then we need to swap them out.
      */
@@ -362,6 +370,10 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
     _Scheduler_SMP_Node_change_state(
       _Scheduler_SMP_Node_downcast( lowest_scheduled ),
       SCHEDULER_SMP_NODE_READY
+    );
+    _Scheduler_Thread_change_state(
+      _Scheduler_Node_get_user( lowest_scheduled ),
+      THREAD_SCHEDULER_READY
     );
 
     _Scheduler_SMP_Allocate_processor(
