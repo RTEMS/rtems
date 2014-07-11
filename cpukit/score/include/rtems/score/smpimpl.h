@@ -21,6 +21,7 @@
 #include <rtems/score/smp.h>
 #include <rtems/score/percpu.h>
 #include <rtems/fatal.h>
+#include <rtems/rtems/cache.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,6 +50,13 @@ extern "C" {
  * @see _SMP_Send_message().
  */
 #define SMP_MESSAGE_TEST 0x2UL
+
+/**
+ * @brief SMP message to request a cache manager invocation.
+ *
+ * @see _SMP_Send_message().
+ */
+#define SMP_MESSAGE_CACHE_MANAGER 0x4UL
 
 /**
  * @brief SMP fatal codes.
@@ -127,6 +135,12 @@ static inline void _SMP_Set_test_message_handler(
 }
 
 /**
+ * @brief Handles cache invalidation/flush requests from a remote processor.
+ *
+ */
+void _SMP_Cache_manager_message_handler( void );
+
+/**
  * @brief Interrupt handler for inter-processor interrupts.
  */
 static inline void _SMP_Inter_processor_interrupt_handler( void )
@@ -148,6 +162,11 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
     if ( ( message & SMP_MESSAGE_TEST ) != 0 ) {
       ( *_SMP_Test_message_handler )( cpu_self );
     }
+
+    if ( ( message & SMP_MESSAGE_CACHE_MANAGER ) != 0 ) {
+      _SMP_Cache_manager_message_handler();
+    }
+
   }
 }
 
