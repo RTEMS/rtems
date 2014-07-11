@@ -210,10 +210,21 @@ void _CPU_ISR_install_raw_handler(
     (u32_handler & HIGH_BITS_MASK) >> HIGH_BITS_SHIFT;
   slot->jmp_to_low_of_handler_plus_l4 |= (u32_handler & LOW_BITS_MASK);
 
-  /* need to flush icache after this !!! */
-
+  /*
+   * There is no instruction cache snooping, so we need to invalidate
+   * the instruction cache to make sure that the processor sees the
+   * changes to the trap table. This step is required on both single-
+   * and multiprocessor systems.
+   *
+   * In a SMP configuration a change to the trap table might be
+   * missed by other cores. If the system state is up, the other
+   * cores can be notified using SMP messages that they need to
+   * flush their icache. If the up state has not been reached
+   * there is no need to notify other cores. They will do an
+   * automatic flush of the icache just after entering the up
+   * state, but before enabling interrupts.
+   */
   rtems_cache_invalidate_entire_instruction();
-
 }
 
 void _CPU_ISR_install_vector(
