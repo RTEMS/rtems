@@ -290,38 +290,6 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_node_off_rbtree(
 }
 
 /**
- * @brief Are two Nodes equal.
- *
- * This function returns true if @a left and @a right are equal,
- * and false otherwise.
- *
- * @retval true @a left and @a right are equal.
- * @retval false @a left and @a right are not equal.
- */
-RTEMS_INLINE_ROUTINE bool _RBTree_Are_nodes_equal(
-    const RBTree_Node *left,
-    const RBTree_Node *right
-    )
-{
-  return left == right;
-}
-
-/**
- * @brief Is the RBTree node pointer NUL.
- *
- * This function returns true if @a the_node is NULL and false otherwise.
- *
- * @retval true @a the_node is @c NULL.
- * @retval false @a the_node is not @c NULL.
- */
-RTEMS_INLINE_ROUTINE bool _RBTree_Is_null_node(
-    const RBTree_Node *the_node
-    )
-{
-  return (the_node == NULL);
-}
-
-/**
  * @brief Return pointer to RBTree's root node.
  *
  * This function returns a pointer to the root node of @a the_rbtree.
@@ -428,24 +396,6 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_first(
 )
 {
   return (the_node == _RBTree_First(the_rbtree, dir));
-}
-
-/**
- * @brief Does this RBTree have only one node.
- *
- * This function returns true if there is only one node on @a the_rbtree and
- * false otherwise.
- *
- * @retval true @a the_rbtree has only one node.
- * @retval false @a the_rbtree has more than one nodes.
- */
-RTEMS_INLINE_ROUTINE bool _RBTree_Has_only_one_node(
-    const RBTree_Control *the_rbtree
-    )
-{
-  if(!the_rbtree) return false; /* TODO: expected behavior? */
-  return (the_rbtree->root->child[RBT_LEFT] == NULL &&
-          the_rbtree->root->child[RBT_RIGHT] == NULL);
 }
 
 /**
