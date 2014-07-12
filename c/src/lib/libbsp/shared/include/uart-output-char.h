@@ -34,6 +34,7 @@
 #define CONSOLE_IIR (*(volatile uint32_t *) (BSP_CONSOLE_UART_BASE + 0x08))
 #define CONSOLE_FCR (*(volatile uint32_t *) (BSP_CONSOLE_UART_BASE + 0x08))
 #define CONSOLE_LCR (*(volatile uint32_t *) (BSP_CONSOLE_UART_BASE + 0x0C))
+#define CONSOLE_MCR (*(volatile uint32_t *) (BSP_CONSOLE_UART_BASE + 0x10))
 #define CONSOLE_LSR (*(volatile uint32_t *) (BSP_CONSOLE_UART_BASE + 0x14))
 #define CONSOLE_SCR (*(volatile uint32_t *) (BSP_CONSOLE_UART_BASE + 0x1C))
 #define CONSOLE_ACR (*(volatile uint32_t *) (BSP_CONSOLE_UART_BASE + 0x20))
@@ -43,6 +44,7 @@
 
 #define CONSOLE_LSR_RDR 0x1
 #define CONSOLE_LSR_THRE 0x20
+#define CONSOLE_LSR_TEMT 0x40
 
 #define BSP_CONSOLE_UART_INIT(dll) \
   do { \
