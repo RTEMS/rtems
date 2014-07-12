@@ -35,7 +35,12 @@ Scheduler_Void_or_thread _Scheduler_EDF_Yield(
    * with the same priority in case there are such ones.
    */
   _RBTree_Extract( &context->Ready, &node->Node );
-  _RBTree_Insert( &context->Ready, &node->Node );
+  _RBTree_Insert(
+    &context->Ready,
+    &node->Node,
+    _Scheduler_EDF_Compare,
+    false
+  );
 
   _Scheduler_EDF_Schedule_body( scheduler, the_thread, false );
 

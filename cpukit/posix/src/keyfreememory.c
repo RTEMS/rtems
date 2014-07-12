@@ -32,9 +32,7 @@ void _POSIX_Keys_Free_memory(
   Objects_Id key_id;
 
   key_id = the_key->Object.id;
-  search_node.key = key_id;
-  search_node.thread_id = 0;
-  iter = _RBTree_Find( &_POSIX_Keys_Key_value_lookup_tree, &search_node.Key_value_lookup_node );
+  iter = _POSIX_Keys_Find( key_id, 0, &search_node );
   if ( !iter )
     return;
   /**

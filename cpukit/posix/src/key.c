@@ -26,6 +26,8 @@
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/wkspace.h>
 
+RBTREE_DEFINE_EMPTY( _POSIX_Keys_Key_value_lookup_tree );
+
 /**
  * @brief This routine compares the rbtree node by comparing POSIX key first
  * and comparing thread id second.
@@ -42,7 +44,7 @@
  * impossible
  */
 
-int _POSIX_Keys_Key_value_lookup_tree_compare_function(
+int _POSIX_Keys_Key_value_compare(
   const RBTree_Node *node1,
   const RBTree_Node *node2
 )
@@ -151,12 +153,6 @@ void _POSIX_Key_Manager_initialization(void)
     false,                      /* true if this is a global object class */
     NULL                        /* Proxy extraction support callout */
 #endif
-  );
-
-  _RBTree_Initialize_empty(
-      &_POSIX_Keys_Key_value_lookup_tree,
-      _POSIX_Keys_Key_value_lookup_tree_compare_function,
-      true
   );
 
   _POSIX_Keys_Initialize_keypool();

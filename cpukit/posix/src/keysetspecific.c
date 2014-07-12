@@ -44,12 +44,8 @@ int pthread_setspecific(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      search_node.key = key;
-      search_node.thread_id = _Thread_Executing->Object.id;
-      p = _RBTree_Find( &_POSIX_Keys_Key_value_lookup_tree,
-                                    &search_node.Key_value_lookup_node );
-
-      if ( p ) {
+      p = _POSIX_Keys_Find( key, _Thread_Executing->Object.id, &search_node );
+      if ( p != NULL ) {
         value_pair_ptr = _RBTree_Container_of( p,
                                           POSIX_Keys_Key_value_pair,
                                           Key_value_lookup_node );
@@ -69,8 +65,12 @@ int pthread_setspecific(
         value_pair_ptr->value = value;
         /* The insert can only go wrong if the same node is already in a unique
          * tree. This has been already checked with the _RBTree_Find() */
-        (void) _RBTree_Insert( &_POSIX_Keys_Key_value_lookup_tree,
-                             &(value_pair_ptr->Key_value_lookup_node) );
+        _RBTree_Insert(
+          &_POSIX_Keys_Key_value_lookup_tree,
+          &value_pair_ptr->Key_value_lookup_node,
+          _POSIX_Keys_Key_value_compare,
+          true
+        );
 
         /** append rb_node to the thread API extension's chain */
         _Chain_Append_unprotected(

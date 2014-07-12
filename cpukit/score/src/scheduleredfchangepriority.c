@@ -32,7 +32,12 @@ Scheduler_Void_or_thread _Scheduler_EDF_Change_priority(
   Scheduler_EDF_Node *node = _Scheduler_EDF_Thread_get_node( the_thread );
 
   _RBTree_Extract( &context->Ready, &node->Node );
-  _RBTree_Insert( &context->Ready, &node->Node );
+  _RBTree_Insert(
+    &context->Ready,
+    &node->Node,
+    _Scheduler_EDF_Compare,
+    false
+  );
 
   SCHEDULER_RETURN_VOID_OR_NULL;
 }

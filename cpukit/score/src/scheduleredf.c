@@ -20,8 +20,7 @@
 
 #include <rtems/score/scheduleredfimpl.h>
 
-static int _Scheduler_EDF_RBTree_compare_function
-(
+int _Scheduler_EDF_Compare(
   const RBTree_Node* n1,
   const RBTree_Node* n2
 )
@@ -43,9 +42,5 @@ void _Scheduler_EDF_Initialize( const Scheduler_Control *scheduler )
   Scheduler_EDF_Context *context =
     _Scheduler_EDF_Get_context( scheduler );
 
-  _RBTree_Initialize_empty(
-    &context->Ready,
-    _Scheduler_EDF_RBTree_compare_function,
-    0
-  );
+  _RBTree_Initialize_empty( &context->Ready );
 }

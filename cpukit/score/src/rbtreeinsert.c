@@ -59,24 +59,12 @@ static void _RBTree_Validate_insert(
   if(!the_node->parent->parent) the_node->color = RBT_BLACK;
 }
 
-
-
-/** @brief Insert a Node (unprotected)
- *
- *  This routine inserts @a the_node on the Red-Black Tree @a the_rbtree.
- *
- *  @retval 0 Successfully inserted.
- *  @retval -1 NULL @a the_node.
- *  @retval RBTree_Node* if one with equal key to the key of @a the_node exists
- *          in an unique @a the_rbtree.
- *
- *  @note It does NOT disable interrupts to ensure the atomicity
- *        of the extract operation.
- */
 RBTree_Node *_RBTree_Insert(
-    RBTree_Control *the_rbtree,
-    RBTree_Node *the_node
-    )
+  RBTree_Control *the_rbtree,
+  RBTree_Node    *the_node,
+  RBTree_Compare  compare,
+  bool            is_unique
+)
 {
   if(!the_node) return (RBTree_Node*)-1;
 
@@ -92,8 +80,8 @@ RBTree_Node *_RBTree_Insert(
   } else {
     /* typical binary search tree insert, descend tree to leaf and insert */
     while (iter_node) {
-      compare_result = the_rbtree->compare_function(the_node, iter_node);
-      if ( the_rbtree->is_unique && _RBTree_Is_equal( compare_result ) )
+      compare_result = ( *compare )( the_node, iter_node );
+      if ( is_unique && _RBTree_Is_equal( compare_result ) )
         return iter_node;
       RBTree_Direction dir = !_RBTree_Is_lesser( compare_result );
       if (!iter_node->child[dir]) {
@@ -102,9 +90,9 @@ RBTree_Node *_RBTree_Insert(
         iter_node->child[dir] = the_node;
         the_node->parent = iter_node;
         /* update min/max */
-        compare_result = the_rbtree->compare_function(
-            the_node,
-            _RBTree_First(the_rbtree, dir)
+        compare_result = ( *compare )(
+          the_node,
+          _RBTree_First( the_rbtree, dir )
         );
         if ( (!dir && _RBTree_Is_lesser(compare_result)) ||
               (dir && _RBTree_Is_greater(compare_result)) ) {

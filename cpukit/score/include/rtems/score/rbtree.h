@@ -104,13 +104,21 @@ typedef enum {
 } RBTree_Direction;
 
 /**
- * This type defines function pointers for user-provided comparison
- * function. The function compares two nodes in order to determine
- * the order in a red-black tree.
+ * @brief Compares two red-black tree nodes.
+ *
+ * @param[in] first The first node.
+ * @param[in] second The second node.
+ *
+ * @retval positive The key value of the first node is greater than the one of
+ *   the second node.
+ * @retval 0 The key value of the first node is equal to the one of the second
+ *   node.
+ * @retval negative The key value of the first node is less than the one of the
+ *   second node.
  */
-typedef int (*RBTree_Compare_function)(
-  const RBTree_Node *node1,
-  const RBTree_Node *node2
+typedef int ( *RBTree_Compare )(
+  const RBTree_Node *first,
+  const RBTree_Node *second
 );
 
 /**
@@ -139,51 +147,31 @@ typedef struct {
   RBTree_Node *root;
   /** This points to the min and max nodes of this RBT. */
   RBTree_Node *first[2];
-  /**
-   * Comparison function pointer. Keys to compare have to be found
-   * inside to maintain generality. It has to return 1 if first node
-   * has higher key than second, -1 if lower, 0 if equal.
-   */
-  RBTree_Compare_function compare_function;
-  /** Determines whether the tree accepts duplicate keys. */
-  bool is_unique;
 } RBTree_Control;
 
 /**
  *  @brief RBTree initializer for an empty rbtree with designator @a name.
  */
-#define RBTREE_INITIALIZER_EMPTY(name) \
-{ \
-  .permanent_null = NULL, \
-  .root = NULL, \
-  .first[0] = NULL, \
-  .first[1] = NULL, \
-  .compare_function = NULL, \
-  .is_unique = 0 \
-}
+#define RBTREE_INITIALIZER_EMPTY( name ) \
+  { NULL, NULL, { NULL, NULL } }
 
 /**
  *  @brief RBTree definition for an empty rbtree with designator @a name.
  */
-#define RBTREE_DEFINE_EMPTY(name) \
-RBTree_Control name = RBTREE_INITIALIZER_EMPTY(name)
+#define RBTREE_DEFINE_EMPTY( name ) \
+  RBTree_Control name = RBTREE_INITIALIZER_EMPTY( name )
 
 /**
  *  @brief RBTree_Node initializer for an empty node with designator @a name.
  */
-#define RBTREE_NODE_INITIALIZER_EMPTY(name) \
-{ \
-  .parent = NULL, \
-  .child[0] = NULL, \
-  .child[1] = NULL, \
-  RBT_RED \
-}
+#define RBTREE_NODE_INITIALIZER_EMPTY( name ) \
+  { NULL, { NULL, NULL }, RBT_RED }
 
 /**
  *  @brief RBTree definition for an empty rbtree with designator @a name.
  */
-#define RBTREE_NODE_DEFINE_EMPTY(name) \
-RBTree_Node name = RBTREE_NODE_INITIALIZER_EMPTY(name)
+#define RBTREE_NODE_DEFINE_EMPTY( name ) \
+  RBTree_Node name = RBTREE_NODE_INITIALIZER_EMPTY( name )
 
 /**
  *  @brief Initialize a RBTree Header.
@@ -193,17 +181,20 @@ RBTree_Node name = RBTREE_NODE_INITIALIZER_EMPTY(name)
  *  @a starting_address.  Each node is of @a node_size bytes.
  *
  *  @param[in] the_rbtree is the pointer to rbtree header
+ *  @param[in] compare The node compare function.
  *  @param[in] starting_address is the starting address of first node
  *  @param[in] number_nodes is the number of nodes in rbtree
  *  @param[in] node_size is the size of node in bytes
+ *  @param[in] is_unique If true, then reject nodes with a duplicate key, else
+ *    otherwise.
  */
 void _RBTree_Initialize(
-  RBTree_Control          *the_rbtree,
-  RBTree_Compare_function  compare_function,
-  void                    *starting_address,
-  size_t                   number_nodes,
-  size_t                   node_size,
-  bool                     is_unique
+  RBTree_Control *the_rbtree,
+  RBTree_Compare  compare,
+  void           *starting_address,
+  size_t          number_nodes,
+  size_t          node_size,
+  bool            is_unique
 );
 
 /**
@@ -211,6 +202,10 @@ void _RBTree_Initialize(
  *
  * @param[in] the_rbtree The red-black tree control.
  * @param[in] the_node A node specifying the key.
+ * @param[in] compare The node compare function.
+ * @param[in] is_unique If true, then return the first node with a key equal to
+ *   the one of the node specified if it exits, else return the last node if it
+ *   exists.
  *
  * @retval node A node corresponding to the key.  If the tree is not unique
  * and contains duplicate keys, the set of duplicate keys acts as FIFO.
@@ -218,13 +213,21 @@ void _RBTree_Initialize(
  */
 RBTree_Node *_RBTree_Find(
   const RBTree_Control *the_rbtree,
-  const RBTree_Node *the_node
+  const RBTree_Node    *the_node,
+  RBTree_Compare        compare,
+  bool                  is_unique
 );
 
 /**
  *  @brief Insert @a the_node on the Red-Black Tree @a the_rbtree.
  *
  *  This routine inserts @a the_node on the Red-Black Tree @a the_rbtree.
+ *
+ * @param[in] the_rbtree The red-black tree control.
+ * @param[in] the_node The node to insert.
+ * @param[in] compare The node compare function.
+ * @param[in] is_unique If true, then reject nodes with a duplicate key, else
+ *   otherwise.
  *
  *  @retval 0 Successfully inserted.
  *  @retval -1 NULL @a the_node.
@@ -233,7 +236,9 @@ RBTree_Node *_RBTree_Find(
  */
 RBTree_Node *_RBTree_Insert(
   RBTree_Control *the_rbtree,
-  RBTree_Node *the_node
+  RBTree_Node    *the_node,
+  RBTree_Compare  compare,
+  bool            is_unique
 );
 
 /**
@@ -437,17 +442,13 @@ RTEMS_INLINE_ROUTINE RBTree_Control *_RBTree_Find_header(
  * This routine initializes @a the_rbtree to contain zero nodes.
  */
 RTEMS_INLINE_ROUTINE void _RBTree_Initialize_empty(
-    RBTree_Control          *the_rbtree,
-    RBTree_Compare_function  compare_function,
-    bool                     is_unique
-    )
+  RBTree_Control *the_rbtree
+)
 {
   the_rbtree->permanent_null   = NULL;
   the_rbtree->root             = NULL;
-  the_rbtree->first[0]         = NULL;
-  the_rbtree->first[1]         = NULL;
-  the_rbtree->compare_function = compare_function;
-  the_rbtree->is_unique        = is_unique;
+  the_rbtree->first[RBT_LEFT]  = NULL;
+  the_rbtree->first[RBT_RIGHT] = NULL;
 }
 
 /**
@@ -500,16 +501,6 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Get(
   RBTree_Node *the_node = the_rbtree->first[dir];
   _RBTree_Extract(the_rbtree, the_node);
   return the_node;
-}
-
-/**
- * @brief Determines whether the tree is unique.
- */
-RTEMS_INLINE_ROUTINE bool _RBTree_Is_unique(
-  const RBTree_Control *the_rbtree
-)
-{
-  return( the_rbtree && the_rbtree->is_unique );
 }
 
 /**@}*/

@@ -42,7 +42,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
 /**
  * @brief The rbtree control block used to manage all key values
  */
-POSIX_EXTERN RBTree_Control _POSIX_Keys_Key_value_lookup_tree;
+extern RBTree_Control _POSIX_Keys_Key_value_lookup_tree;
 
 /**
  * @brief This freechain is used as a memory pool for POSIX_Keys_Key_value_pair.
@@ -61,7 +61,7 @@ void _POSIX_Key_Manager_initialization(void);
  *
  * This routine compares the rbtree node
  */
-int _POSIX_Keys_Key_value_lookup_tree_compare_function(
+int _POSIX_Keys_Key_value_compare(
   const RBTree_Node *node1,
   const RBTree_Node *node2
 );
@@ -163,6 +163,23 @@ RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_pair_free(
 )
 {
   _Freechain_Put( &_POSIX_Keys_Keypool, key_value_pair );
+}
+
+RTEMS_INLINE_ROUTINE RBTree_Node *_POSIX_Keys_Find(
+  pthread_key_t              key,
+  Objects_Id                 thread_id,
+  POSIX_Keys_Key_value_pair *search_node
+)
+{
+  search_node->key = key;
+  search_node->thread_id = thread_id;
+
+  return _RBTree_Find(
+    &_POSIX_Keys_Key_value_lookup_tree,
+    &search_node->Key_value_lookup_node,
+    _POSIX_Keys_Key_value_compare,
+    true
+  );
 }
 
 /** @} */

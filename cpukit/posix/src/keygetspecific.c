@@ -49,19 +49,14 @@ void *pthread_getspecific(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      search_node.key = key;
-      search_node.thread_id = _Thread_Executing->Object.id;
-      p = _RBTree_Find( &_POSIX_Keys_Key_value_lookup_tree,
-                                    &search_node.Key_value_lookup_node );
-      key_data = NULL;
-      if ( p ) {
+      p = _POSIX_Keys_Find( key, _Thread_Executing->Object.id, &search_node );
+      if ( p != NULL ) {
         value_pair_p = _RBTree_Container_of( p,
                                           POSIX_Keys_Key_value_pair,
                                           Key_value_lookup_node );
-        /* key_data = _RBTree_Container_of( p, */
-        /*                                  POSIX_Keys_Key_value_pair, */
-        /*                                  Key_value_lookup_node )->value; */
         key_data = value_pair_p->value;
+      } else {
+        key_data = NULL;
       }
 
       _Objects_Put( &the_key->Object );

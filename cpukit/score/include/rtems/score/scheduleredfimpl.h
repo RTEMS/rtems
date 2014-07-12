@@ -44,6 +44,11 @@ RTEMS_INLINE_ROUTINE Scheduler_EDF_Node *_Scheduler_EDF_Thread_get_node(
   return (Scheduler_EDF_Node *) _Scheduler_Thread_get_node( the_thread );
 }
 
+int _Scheduler_EDF_Compare(
+  const RBTree_Node* n1,
+  const RBTree_Node* n2
+);
+
 RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Enqueue(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
@@ -53,7 +58,12 @@ RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Enqueue(
     _Scheduler_EDF_Get_context( scheduler );
   Scheduler_EDF_Node *node = _Scheduler_EDF_Thread_get_node( the_thread );
 
-  _RBTree_Insert( &context->Ready, &node->Node );
+  _RBTree_Insert(
+    &context->Ready,
+    &node->Node,
+    _Scheduler_EDF_Compare,
+    false
+  );
   node->queue_state = SCHEDULER_EDF_QUEUE_STATE_YES;
 }
 
