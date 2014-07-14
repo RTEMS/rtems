@@ -24,6 +24,7 @@
 #include <rtems/capture-cli.h>
 #include <rtems/monitor.h>
 #include <rtems/shell.h>
+#include <assert.h>
 
 #define ASSERT_SC(sc) assert((sc) == RTEMS_SUCCESSFUL)
 
