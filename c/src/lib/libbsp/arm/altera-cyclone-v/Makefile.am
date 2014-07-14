@@ -56,6 +56,7 @@ include_bsp_HEADERS += hwlib/include/alt_clock_group.h
 include_bsp_HEADERS += hwlib/include/alt_clock_manager.h
 include_bsp_HEADERS += hwlib/include/alt_generalpurpose_io.h
 include_bsp_HEADERS += hwlib/include/alt_hwlibs_ver.h
+include_bsp_HEADERS += hwlib/include/alt_i2c.h
 include_bsp_HEADERS += hwlib/include/alt_interrupt_common.h
 include_bsp_HEADERS += hwlib/include/alt_mpu_registers.h
 include_bsp_HEADERS += hwlib/include/alt_reset_manager.h
@@ -125,6 +126,7 @@ CFLAGS += -Wno-missing-prototypes
 libbsp_a_SOURCES += hwlib/src/hwmgr/alt_address_space.c
 libbsp_a_SOURCES += hwlib/src/hwmgr/alt_clock_manager.c
 libbsp_a_SOURCES += hwlib/src/hwmgr/alt_generalpurpose_io.c
+libbsp_a_SOURCES += hwlib/src/hwmgr/alt_i2c.c
 libbsp_a_SOURCES += hwlib/src/hwmgr/alt_reset_manager.c
 #The following Altera hwlib source files have been left out because so far 
 #they are not required:
@@ -192,6 +194,11 @@ libbsp_a_SOURCES += console/console-config.c
 # Clock
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 libbsp_a_SOURCES += ../shared/arm-a9mpcore-clock-config.c
+
+# I2C
+libbsp_a_SOURCES += i2c/i2cdrv.c
+libbsp_a_SOURCES += i2c/i2cdrv-config.c
+include_bsp_HEADERS += include/i2cdrv.h
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c

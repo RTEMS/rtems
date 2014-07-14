@@ -46,6 +46,14 @@ RTEMS_BSPOPTS_HELP([CYCLONE_V_CONFIG_UART_1],[configuration for UART 1])
 RTEMS_BSPOPTS_SET([CYCLONE_V_UART_BAUD],[*],[115200U])
 RTEMS_BSPOPTS_HELP([CYCLONE_V_UART_BAUD],[baud for UARTs])
 
+RTEMS_BSPOPTS_SET([CYCLONE_V_NO_I2C],[*],[1])
+RTEMS_BSPOPTS_HELP([CYCLONE_V_NO_I2C],
+[Number of configured I2C buses. Note that each bus has to be configured in an
+apropriate i2cdrv_config array.])
+
+RTEMS_BSPOPTS_SET([CYCLONE_V_I2C0_SPEED],[*],[100000])
+RTEMS_BSPOPTS_HELP([CYCLONE_V_I2C0_SPEED],[speed for I2C0 in HZ])
+
 RTEMS_CHECK_SMP
 AM_CONDITIONAL(HAS_SMP,[test "$rtems_cv_HAS_SMP" = "yes"])
 
