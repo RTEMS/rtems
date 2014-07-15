@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,18 +18,33 @@
 #include "config.h"
 #endif
 
+#include <rtems/score/chainimpl.h>
+#include <rtems/score/isrlevel.h>
 #include <rtems/score/threadqimpl.h>
 
 Thread_Control *_Thread_queue_First(
   Thread_queue_Control *the_thread_queue
 )
 {
-  Thread_Control * (*first_p)(Thread_queue_Control *);
+  ISR_Level       level;
+  Thread_Control *thread;
 
-  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY )
-      first_p = _Thread_queue_First_priority;
-  else /* must be THREAD_QUEUE_DISCIPLINE_FIFO */
-      first_p = _Thread_queue_First_fifo;
+  thread = NULL;
 
-  return (*first_p)( the_thread_queue );
+  _ISR_Disable( level );
+
+  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_FIFO ) {
+    if ( !_Chain_Is_empty( &the_thread_queue->Queues.Fifo ) )
+      thread = (Thread_Control *) _Chain_First(&the_thread_queue->Queues.Fifo);
+  } else { /* must be THREAD_QUEUE_DISCIPLINE_PRIORITY */
+    RBTree_Node *first;
+
+    first = _RBTree_First( &the_thread_queue->Queues.Priority, RBT_LEFT );
+    if ( first )
+      thread = _RBTree_Container_of( first, Thread_Control, RBNode );
+  }
+
+  _ISR_Enable( level );
+
+  return thread;
 }

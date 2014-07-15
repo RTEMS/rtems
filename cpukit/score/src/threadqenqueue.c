@@ -32,11 +32,6 @@ void _Thread_queue_Enqueue_with_handler(
 {
   ISR_Level                         level;
   Thread_blocking_operation_States  sync_state;
-  Thread_blocking_operation_States (*enqueue_p)(
-    Thread_queue_Control *,
-    Thread_Control *,
-    ISR_Level *
-  );
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet )
@@ -63,14 +58,38 @@ void _Thread_queue_Enqueue_with_handler(
   }
 
   /*
-   *  Now enqueue the thread per the discipline for this thread queue.
+   * Now initiate the enqueuing and checking if the blocking operation
+   * should be completed or the thread has had its blocking condition
+   * satisfied before we got here.
    */
-  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY )
-    enqueue_p = _Thread_queue_Enqueue_priority;
-  else /* must be THREAD_QUEUE_DISCIPLINE_FIFO */
-    enqueue_p = _Thread_queue_Enqueue_fifo;
+  _ISR_Disable( level );
 
-  sync_state = (*enqueue_p)( the_thread_queue, the_thread, &level );
-  if ( sync_state != THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED )
+  sync_state = the_thread_queue->sync_state;
+  the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
+
+  if ( sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
+    /*
+     * Invoke the discipline specific enqueue method.
+     */
+    if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_FIFO ) {
+      _Chain_Append_unprotected(
+        &the_thread_queue->Queues.Fifo,
+        &the_thread->Object.Node
+      );
+    } else { /* must be THREAD_QUEUE_DISCIPLINE_PRIORITY */
+      _RBTree_Insert(
+        &the_thread_queue->Queues.Priority,
+        &the_thread->RBNode,
+        _Thread_queue_Compare_priority,
+        false
+      );
+    }
+
+    the_thread->Wait.queue = the_thread_queue;
+    the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
+    _ISR_Enable( level );
+    return;
+  } else { /* sync_state != THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) */
     _Thread_blocking_operation_Cancel( sync_state, the_thread, level );
+  }
 }

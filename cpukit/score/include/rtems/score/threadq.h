@@ -33,9 +33,9 @@ extern "C" {
  *
  *  @ingroup Score
  *
- *  This handler defines the data shared between the thread and thread
- *  queue handlers.  Having this handler define these data structure
- *  avoids potentially circular references.
+ *  This handler provides the capability to have threads block in
+ *  ordered sets. The sets may be ordered using the FIFO or priority
+ *  discipline.
  */
 /**@{*/
 
