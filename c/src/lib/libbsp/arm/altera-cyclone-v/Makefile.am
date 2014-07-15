@@ -200,6 +200,10 @@ libbsp_a_SOURCES += i2c/i2cdrv.c
 libbsp_a_SOURCES += i2c/i2cdrv-config.c
 include_bsp_HEADERS += include/i2cdrv.h
 
+# RTC
+libbsp_a_SOURCES += ../../shared/tod.c
+libbsp_a_SOURCES += rtc/rtc.c
+
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
 libbsp_a_SOURCES += ../shared/include/arm-cache-l1.h
