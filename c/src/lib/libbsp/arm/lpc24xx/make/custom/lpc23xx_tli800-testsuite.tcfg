@@ -10,6 +10,7 @@ flashdisk01
 fsdosfsformat01
 fsdosfsname01
 fsrfsbitmap01
+ftp01
 jffs2_fserror
 jffs2_fslink
 jffs2_fspatheval
@@ -17,7 +18,9 @@ jffs2_fspermission
 jffs2_fsrdwr
 jffs2_fssymlink
 jffs2_fstime
+loopback
 mdosfs_fserror
+mghttpd01
 monitor02
 mrfs_fserror
 mrfs_fsfpathconf
@@ -27,6 +30,9 @@ mrfs_fspermission
 mrfs_fsrdwr
 mrfs_fssymlink
 mrfs_fstime
+mdosfs_fsrdwr
 paranoia
+pppd
 spstkalloc02
+syscall01
 utf8proc01

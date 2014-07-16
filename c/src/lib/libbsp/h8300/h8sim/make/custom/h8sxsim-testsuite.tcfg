@@ -3,3 +3,5 @@
 #
 
 include: testdata/require-tick-isr.tcfg
+
+fsdosfsname01

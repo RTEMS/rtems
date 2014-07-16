@@ -5,6 +5,7 @@
 #
 
 fileio
+ftp01
 fsdosfsname01
 jffs2_fserror
 jffs2_fslink
@@ -13,5 +14,7 @@ jffs2_fspermission
 jffs2_fsrdwr
 jffs2_fssymlink
 jffs2_fstime
+mghttpd01
 monitor02
+pppd
 utf8proc01

@@ -5,6 +5,7 @@
 #
 
 capture
+ftp01
 fileio
 flashdisk01
 fsdosfsname01
@@ -16,6 +17,8 @@ jffs2_fspermission
 jffs2_fsrdwr
 jffs2_fssymlink
 jffs2_fstime
+loopback
+mghttpd01
 mdosfs_fserror
 monitor02
 mrfs_fserror
@@ -26,4 +29,6 @@ mrfs_fspermission
 mrfs_fsrdwr
 mrfs_fssymlink
 mrfs_fstime
+pppd
+syscall01
 utf8proc01
