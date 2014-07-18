@@ -10,6 +10,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 
 include_bspdir = $(includedir)/bsp
+include_bsp_socaldir = $(includedir)/bsp/socal
 include_libcpudir = $(includedir)/libcpu
 
 dist_project_lib_DATA = bsp_specs
@@ -27,6 +28,8 @@ nodist_include_HEADERS = ../../shared/include/coverhd.h \
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 
 include_bsp_HEADERS =
+include_bsp_socal_HEADERS =
+
 include_bsp_HEADERS += ../../shared/include/utility.h
 include_bsp_HEADERS += ../../shared/include/irq-generic.h
 include_bsp_HEADERS += ../../shared/include/irq-info.h
@@ -71,8 +74,18 @@ include_bsp_HEADERS += hwlib/include/hwlib.h
 #include_bsp_HEADERS += hwlib/include/alt_watchdog.h
 #The following Altera hwlib headers would be problematic with RTEMS:
 #include_bsp_HEADERS += hwlib/include/alt_interrupt.h
-#All header files from hwlib/include/socal are regarded as BSP
-#internal and thus not installed
+
+# Some of the headers from hwlib need the files from socal. Install them.
+include_bsp_socal_HEADERS += hwlib/include/socal/alt_clkmgr.h
+include_bsp_socal_HEADERS += hwlib/include/socal/alt_gpio.h
+include_bsp_socal_HEADERS += hwlib/include/socal/alt_i2c.h
+include_bsp_socal_HEADERS += hwlib/include/socal/alt_l3.h
+include_bsp_socal_HEADERS += hwlib/include/socal/alt_rstmgr.h
+include_bsp_socal_HEADERS += hwlib/include/socal/alt_sdr.h
+include_bsp_socal_HEADERS += hwlib/include/socal/alt_sysmgr.h
+include_bsp_socal_HEADERS += hwlib/include/socal/alt_uart.h
+include_bsp_socal_HEADERS += hwlib/include/socal/hps.h
+include_bsp_socal_HEADERS += hwlib/include/socal/socal.h
 
 include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/arm-cp15.h
 
