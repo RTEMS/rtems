@@ -1,12 +1,12 @@
 /**
  *  @file
  *
- *  @brief Correct the Time to Synchronize the System Clock
+ *  @brief Adjust the Time to Synchronize the System Clock
  *  @ingroup POSIXAPI
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,6 +18,7 @@
 #include "config.h"
 #endif
 
+#define _BSD_SOURCE
 #include <time.h>
 #include <sys/time.h>
 #include <errno.h>
@@ -30,20 +31,21 @@
 
 /**
  * This method was initially added as part of porting NTP to RTEMS.
- *  It is a BSD compatability function and now is available on
- *  GNU/Linux.
+ * It is a BSD compatability function and now is available on
+ * GNU/Linux.
  * 
- *  At one point there was a static variable named adjustment
- *  used by this implementation.  I don't see any reason for it
- *  to be here based upon the GNU/Linux documentation.
+ * At one point there was a static variable named adjustment
+ * used by this implementation.  I don't see any reason for it
+ * to be here based upon the GNU/Linux documentation.
  */
-int  adjtime(
+int adjtime(
   const struct timeval *delta,
-  struct timeval *olddelta
+  struct timeval       *olddelta
 )
 {
-  struct timespec ts;
-  long   adjustment;
+  Timestamp_Control  delta_as_timestamp;
+  Timestamp_Control  tod_as_timestamp;
+  Timestamp_Control *tod_as_timestamp_ptr;
 
   /*
    * Simple validations
@@ -51,21 +53,22 @@ int  adjtime(
   if ( !delta )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  if ( delta->tv_usec >= TOD_MICROSECONDS_PER_SECOND )
-    rtems_set_errno_and_return_minus_one( EINVAL );
-
+  /*
+   * Currently, RTEMS does the adjustment in one movement.
+   * Given interest, requirements, and sponsorship, a future
+   * enhancement would be to adjust the time in smaller increments
+   * at each clock tick. Until then, there is no outstanding
+   * adjustment.
+   */
   if ( olddelta ) {
     olddelta->tv_sec  = 0;
     olddelta->tv_usec = 0;
   }
 
-  /* convert delta to microseconds */
-  adjustment  = (delta->tv_sec * TOD_MICROSECONDS_PER_SECOND);
-  adjustment += delta->tv_usec;
-
-  /* too small to account for */
-  if ( adjustment < rtems_configuration_get_microseconds_per_tick() )
-    return 0;
+  /*
+   * convert delta timeval to internal timestamp
+   */
+  _Timestamp_Set( &delta_as_timestamp, delta->tv_sec, delta->tv_usec * 1000 );
 
   /*
    * This prevents context switches while we are adjusting the TOD
@@ -73,30 +76,15 @@ int  adjtime(
 
   _Thread_Disable_dispatch();
 
-    _TOD_Get( &ts );
+    tod_as_timestamp_ptr =
+      _TOD_Get_with_nanoseconds( &tod_as_timestamp, &_TOD.now );
 
-    ts.tv_sec  += delta->tv_sec;
-    ts.tv_nsec += delta->tv_usec * TOD_NANOSECONDS_PER_MICROSECOND;
 
-    /* if adjustment is too much positive */
-    while ( ts.tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) {
-      ts.tv_nsec -= TOD_NANOSECONDS_PER_SECOND;
-      ts.tv_sec++;
-    }
+    _Timestamp_Add_to( tod_as_timestamp_ptr, &delta_as_timestamp );
 
-    /* if adjustment is too much negative */
-    while ( ts.tv_nsec <= (-1 * TOD_NANOSECONDS_PER_SECOND) ) {
-      ts.tv_nsec += TOD_NANOSECONDS_PER_SECOND;
-      ts.tv_sec--;
-    }
-
-    _TOD_Set( &ts );
+    _TOD_Set_with_timestamp( tod_as_timestamp_ptr );
 
   _Thread_Enable_dispatch();
-
-  /* set the user's output */
-  if ( olddelta )
-    *olddelta = *delta;
 
   return 0;
 }
