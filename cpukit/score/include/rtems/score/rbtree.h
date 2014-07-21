@@ -229,10 +229,9 @@ RBTree_Node *_RBTree_Find(
  * @param[in] is_unique If true, then reject nodes with a duplicate key, else
  *   otherwise.
  *
- *  @retval 0 Successfully inserted.
- *  @retval -1 NULL @a the_node.
- *  @retval RBTree_Node* if one with equal value to @a the_node 's key exists
- *          in an unique @a the_rbtree.
+ * @retval NULL Successfully inserted.
+ * @retval existing_node This is a unique insert and there exists a node with
+ *   an equal key in the tree already.
  */
 RBTree_Node *_RBTree_Insert(
   RBTree_Control *the_rbtree,
@@ -481,25 +480,32 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor(
 }
 
 /**
- * @brief Get the first node.
+ * @brief Gets a node with an extremal key value.
  *
- * This function removes the minimum or maximum node from the_rbtree and
- * returns a pointer to that node.
+ * This function extracts a node with the minimum or maximum key value from
+ * tree and returns a pointer to that node if it exists.  In case multiple
+ * nodes with an extremal key value exist, then they are extracted in FIFO
+ * order.
  *
- * @param[in] the_rbtree is the rbtree to attempt to get the min node from.
- * @param[in] dir specifies whether to get minimum (0) or maximum (1)
+ * @param[in] the_rbtree The red-black tree control.
+ * @param[in] dir Specifies whether to get a node with the minimum (RBT_LEFT)
+ *   or maximum (RBT_RIGHT) key value.
  *
- * @return This method returns the min or max node on the rbtree, or NULL.
- *
- * @note This routine may return NULL if the RBTree is empty.
+ * @retval NULL The tree is empty.
+ * @retval extremal_node A node with the minimal or maximal key value on the
+ *   tree.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Get(
-    RBTree_Control *the_rbtree,
-    RBTree_Direction dir
-    )
+  RBTree_Control *the_rbtree,
+  RBTree_Direction dir
+)
 {
-  RBTree_Node *the_node = the_rbtree->first[dir];
-  _RBTree_Extract(the_rbtree, the_node);
+  RBTree_Node *the_node = the_rbtree->first[ dir ];
+
+  if ( the_node != NULL ) {
+    _RBTree_Extract( the_rbtree, the_node );
+  }
+
   return the_node;
 }
 

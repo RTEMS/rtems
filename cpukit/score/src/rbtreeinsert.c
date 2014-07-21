@@ -11,7 +11,6 @@
 #endif
 
 #include <rtems/score/rbtreeimpl.h>
-#include <rtems/score/isr.h>
 
 /** @brief Validate and fix-up tree properties for a new insert/colored node
  *
@@ -67,9 +66,6 @@ RBTree_Node *_RBTree_Insert(
   bool            is_unique
 )
 {
-  if ( !the_node )
-    return (RBTree_Node *) -1;
-
   RBTree_Node *iter_node = the_rbtree->root;
 
   if ( !iter_node ) { /* special case: first node inserted */

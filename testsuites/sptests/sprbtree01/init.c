@@ -149,9 +149,6 @@ rtems_task Init(
   rb_insert_unique( &rbtree1, &node1.Node );
   rb_insert_unique( &rbtree1, &node2.Node );
 
-  p = rb_insert_unique( &rbtree1, NULL );
-  if (p != (void *)(-1))
-    puts( "INIT - FAILED NULL NODE INSERT" );
 
   _RBTree_Rotate(NULL, RBT_LEFT);
   i = (node1.Node.parent == &node2.Node);

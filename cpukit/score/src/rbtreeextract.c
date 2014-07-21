@@ -11,7 +11,6 @@
 #endif
 
 #include <rtems/score/rbtreeimpl.h>
-#include <rtems/score/isr.h>
 
 /** @brief  Validate and fix-up tree properties after deleting a node
  *
@@ -91,13 +90,6 @@ static void _RBTree_Extract_validate( RBTree_Node *the_node )
     the_node->color = RBT_BLACK;
 }
 
-/** @brief Extract a Node (unprotected)
- *
- *  This routine extracts (removes) @a the_node from @a the_rbtree.
- *
- *  @note It does NOT disable interrupts to ensure the atomicity
- *        of the extract operation.
- */
 void _RBTree_Extract(
   RBTree_Control *the_rbtree,
   RBTree_Node    *the_node
@@ -106,9 +98,6 @@ void _RBTree_Extract(
   RBTree_Node     *leaf, *target;
   RBTree_Color     victim_color;
   RBTree_Direction dir;
-
-  if ( !the_node )
-    return;
 
   /* check if min needs to be updated */
   if ( the_node == the_rbtree->first[ RBT_LEFT ] ) {

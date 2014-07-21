@@ -34,10 +34,6 @@ void _RBTree_Initialize(
   size_t       count;
   RBTree_Node *next;
 
-  /* TODO: Error message? */
-  if ( !the_rbtree )
-    return;
-
   /* could do sanity checks here */
   _RBTree_Initialize_empty( the_rbtree );
 
