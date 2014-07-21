@@ -140,6 +140,9 @@ rtems_task Init(
   puts( "Init - Initialize rbtree empty" );
   rtems_rbtree_initialize_empty( &rbtree1 );
 
+  rtems_rbtree_set_off_rbtree( &node1.Node );
+  rtems_test_assert( rtems_rbtree_is_node_off_rbtree( &node1.Node ) );
+
   /* verify that the rbtree insert work */
   puts( "INIT - Verify rtems_rbtree_insert with two nodes" );
   node1.id = 1;
@@ -149,6 +152,7 @@ rtems_task Init(
   rb_insert_unique( &rbtree1, &node1.Node );
   rb_insert_unique( &rbtree1, &node2.Node );
 
+  rtems_test_assert( !rtems_rbtree_is_node_off_rbtree( &node1.Node ) );
 
   _RBTree_Rotate(NULL, RBT_LEFT);
   i = (node1.Node.parent == &node2.Node);
@@ -261,6 +265,7 @@ rtems_task Init(
     puts( "INIT - rtems_rbtree_extract failed");
     rtems_test_exit(0);
   }
+  rtems_test_assert( !rtems_rbtree_is_node_off_rbtree( p ) );
   rb_insert_unique(&rbtree1, p);
 
   for ( p = rtems_rbtree_get_min(&rbtree1), id = 1 ; p ;
@@ -520,10 +525,6 @@ rtems_task Init(
     rtems_test_exit(0);
   }
 
-  if (rtems_rbtree_find_header(&node_array[0].Node) != NULL) {
-    puts ("INIT - ERROR ON RBTREE HEADER MISMATCH");
-    rtems_test_exit(0);
-  }
   if (rtems_rbtree_find_header(NULL) != NULL) {
     puts ("INIT - ERROR ON RBTREE HEADER MISMATCH");
     rtems_test_exit(0);

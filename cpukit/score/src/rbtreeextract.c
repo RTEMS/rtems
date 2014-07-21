@@ -202,9 +202,6 @@ void _RBTree_Extract(
     }
   }
 
-  /* Wipe the_node */
-  _RBTree_Set_off_rbtree( the_node );
-
   /* set root to black, if it exists */
   if ( the_rbtree->root )
     the_rbtree->root->color = RBT_BLACK;

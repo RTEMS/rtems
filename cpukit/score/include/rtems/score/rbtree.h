@@ -241,9 +241,16 @@ RBTree_Node *_RBTree_Insert(
 );
 
 /**
- *  @brief Extracts (removes) @a the_node from @a the_rbtree.
+ * @brief Extracts (removes) the node from the red-black tree.
  *
- *  This routine extracts (removes) @a the_node from @a the_rbtree.
+ * This function does not set the node off-tree.  In case this is desired, then
+ * call _RBTree_Set_off_rbtree() after the extraction.
+ *
+ * In case the node to extract is not a node of the tree, then this function
+ * yields unpredictable results.
+ *
+ * @param[in] the_rbtree The red-black tree control.
+ * @param[in] the_node The node to extract.
  */
 void _RBTree_Extract(
   RBTree_Control *the_rbtree,
