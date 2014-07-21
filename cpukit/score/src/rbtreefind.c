@@ -26,15 +26,16 @@ RBTree_Node *_RBTree_Find(
   bool                  is_unique
 )
 {
-  RBTree_Node* iter_node = the_rbtree->root;
-  RBTree_Node* found = NULL;
+  RBTree_Node *iter_node = the_rbtree->root;
+  RBTree_Node *found = NULL;
 
   while ( iter_node != NULL ) {
-    int compare_result = ( *compare )( the_node, iter_node );
+    int              compare_result = ( *compare )( the_node, iter_node );
     RBTree_Direction dir;
 
     if ( _RBTree_Is_equal( compare_result ) ) {
       found = iter_node;
+
       if ( is_unique )
         break;
     }

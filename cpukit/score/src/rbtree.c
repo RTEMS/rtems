@@ -31,17 +31,19 @@ void _RBTree_Initialize(
   bool            is_unique
 )
 {
-  size_t      count;
+  size_t       count;
   RBTree_Node *next;
 
   /* TODO: Error message? */
-  if (!the_rbtree) return;
+  if ( !the_rbtree )
+    return;
 
   /* could do sanity checks here */
   _RBTree_Initialize_empty( the_rbtree );
 
   count = number_nodes;
-  next  = starting_address;
+  next = starting_address;
+
   while ( count-- ) {
     _RBTree_Insert( the_rbtree, next, compare, is_unique );
     next = (RBTree_Node *) _Addresses_Add_offset( next, node_size );

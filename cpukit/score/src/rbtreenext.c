@@ -29,25 +29,26 @@
 
 RBTree_Node *_RBTree_Next(
   const RBTree_Node *node,
-  RBTree_Direction dir
+  RBTree_Direction   dir
 )
 {
   RBTree_Direction opp_dir = _RBTree_Opposite_direction( dir );
-  RBTree_Node *current = node->child [dir];
-  RBTree_Node *next = NULL;
+  RBTree_Node     *current = node->child[ dir ];
+  RBTree_Node     *next = NULL;
 
   if ( current != NULL ) {
     next = current;
-    while ( (current = current->child [opp_dir]) != NULL ) {
+
+    while ( ( current = current->child[ opp_dir ] ) != NULL ) {
       next = current;
     }
   } else {
     RBTree_Node *parent = node->parent;
 
-    if ( parent->parent && node == parent->child [opp_dir] ) {
+    if ( parent->parent && node == parent->child[ opp_dir ] ) {
       next = parent;
     } else {
-      while ( parent->parent && node == parent->child [dir] ) {
+      while ( parent->parent && node == parent->child[ dir ] ) {
         node = parent;
         parent = parent->parent;
       }
