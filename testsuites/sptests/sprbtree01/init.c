@@ -19,11 +19,13 @@ const char rtems_test_name[] = "SPRBTREE 1";
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
-int numbers[20] = {
-52, 99, 0, 85, 43, 44, 10, 60, 50, 19, 8, 68, 48, 57, 17, 67, 90, 12, 77, 71};
+static const int numbers[20] = {
+  52, 99, 0, 85, 43, 44, 10, 60, 50, 19, 8, 68, 48, 57, 17, 67, 90, 12, 77, 71
+};
 
-int numbers_sorted[20] = {
-  0, 8, 10, 12, 17, 19, 43, 44, 48, 50, 52, 57, 60, 67, 68, 71, 77, 85, 90, 99};
+static const int numbers_sorted[20] = {
+  0, 8, 10, 12, 17, 19, 43, 44, 48, 50, 52, 57, 60, 67, 68, 71, 77, 85, 90, 99
+};
 
 typedef struct {
   int              id;
@@ -121,11 +123,104 @@ static int rb_assert ( rtems_rbtree_node *root )
   }
 }
 
+static test_node some_nodes[] = {
+  { .key = 1 },
+  { .key = 1 },
+  { .key = 1 },
+  { .key = 2 },
+  { .key = 2 },
+  { .key = 2 }
+};
 
+static void min_max_insert(
+  rtems_rbtree_control *tree,
+  rtems_rbtree_node    *node,
+  rtems_rbtree_node    *min,
+  rtems_rbtree_node    *max
+)
+{
+  rb_insert_multi( tree, node );
+  rtems_test_assert( rb_assert( tree->root ) != -1 );
+  rtems_test_assert( tree->first[ 0 ] == min );
+  rtems_test_assert( tree->first[ 1 ] == max );
+}
 
-rtems_task Init(
-    rtems_task_argument ignored
-    )
+static void min_max_extract(
+  rtems_rbtree_control *tree,
+  rtems_rbtree_node    *node,
+  rtems_rbtree_node    *min,
+  rtems_rbtree_node    *max
+)
+{
+  rtems_rbtree_extract( tree, node );
+  rtems_test_assert( rb_assert( tree->root ) != -1 );
+  rtems_test_assert( tree->first[ 0 ] == min );
+  rtems_test_assert( tree->first[ 1 ] == max );
+}
+
+static void test_rbtree_min_max(void)
+{
+  rtems_rbtree_control  tree;
+  rtems_rbtree_node    *node;
+  rtems_rbtree_node    *min;
+  rtems_rbtree_node    *max;
+
+  puts( "INIT - Verify min/max node updates" );
+
+  rtems_rbtree_initialize_empty( &tree );
+  rtems_test_assert( rb_assert( tree.root ) == 1 );
+
+  node = &some_nodes[ 0 ].Node;
+  min = node;
+  max = node;
+  min_max_insert( &tree, node, min, max );
+
+  node = &some_nodes[ 1 ].Node;
+  max = node;
+  min_max_insert( &tree, node, min, max );
+
+  node = &some_nodes[ 2 ].Node;
+  max = node;
+  min_max_insert( &tree, node, min, max );
+
+  node = &some_nodes[ 3 ].Node;
+  max = node;
+  min_max_insert( &tree, node, min, max );
+
+  node = &some_nodes[ 4 ].Node;
+  max = node;
+  min_max_insert( &tree, node, min, max );
+
+  node = &some_nodes[ 5 ].Node;
+  max = node;
+  min_max_insert( &tree, node, min, max );
+
+  node = &some_nodes[ 1 ].Node;
+  min_max_extract( &tree, node, min, max );
+
+  node = &some_nodes[ 4 ].Node;
+  min_max_extract( &tree, node, min, max );
+
+  node = &some_nodes[ 0 ].Node;
+  min = &some_nodes[ 2 ].Node;
+  min_max_extract( &tree, node, min, max );
+
+  node = &some_nodes[ 5 ].Node;
+  max = &some_nodes[ 3 ].Node;
+  min_max_extract( &tree, node, min, max );
+
+  node = &some_nodes[ 2 ].Node;
+  min = &some_nodes[ 3 ].Node;
+  min_max_extract( &tree, node, min, max );
+
+  node = &some_nodes[ 3 ].Node;
+  min = NULL;
+  max = NULL;
+  min_max_extract( &tree, node, min, max );
+  rtems_test_assert( rtems_rbtree_is_empty( &tree ) );
+}
+
+rtems_task Init( rtems_task_argument ignored )
 {
   rtems_rbtree_control  rbtree1;
   rtems_rbtree_node    *p;
@@ -681,6 +776,8 @@ rtems_task Init(
     puts( "INIT - TREE NOT EMPTY" );
     rtems_test_exit(0);
   }
+
+  test_rbtree_min_max();
 
   TEST_END();
   rtems_test_exit(0);

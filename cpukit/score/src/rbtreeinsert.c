@@ -96,8 +96,8 @@ RBTree_Node *_RBTree_Insert(
         );
 
         if (
-          ( !dir && _RBTree_Is_lesser( compare_result ) )
-            || ( dir && _RBTree_Is_greater( compare_result ) )
+          ( dir == RBT_LEFT && _RBTree_Is_lesser( compare_result ) )
+            || ( dir == RBT_RIGHT && !_RBTree_Is_lesser( compare_result ) )
         ) {
           the_rbtree->first[ dir ] = the_node;
         }

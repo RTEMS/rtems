@@ -1,4 +1,4 @@
-*** TEST OF RTEMS RBTREE API ***
+*** BEGIN OF TEST SPRBTREE 1 ***
 Init - Initialize rbtree empty
 INIT - Verify rtems_rbtree_insert with two nodes
 INIT - Verify rtems_rbtree_insert with the same value twice
@@ -31,4 +31,5 @@ INIT - Removing 100 nodes
 INIT - Verify rtems_rbtree_insert with 100 nodes value [99,0]
 INIT - Verify rtems_rbtree_find in a duplicate tree
 INIT - Removing 100 nodes
-*** END OF RTEMS RBTREE API TEST ***
+INIT - Verify min/max node updates
+*** END OF TEST SPRBTREE 1 ***
