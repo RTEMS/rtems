@@ -121,11 +121,11 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize_empty(
  * This function sets the next and previous fields of the @a node to NULL
  * indicating the @a node is not part of any rbtree.
  */
-RTEMS_INLINE_ROUTINE void rtems_rbtree_set_off_rbtree(
+RTEMS_INLINE_ROUTINE void rtems_rbtree_set_off_tree(
   rtems_rbtree_node *node
 )
 {
-  _RBTree_Set_off_rbtree( node );
+  _RBTree_Set_off_tree( node );
 }
 
 /**
@@ -134,11 +134,11 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_set_off_rbtree(
  * This function returns true if the @a node is not on a rbtree. A @a node is
  * off rbtree if the next and previous fields are set to NULL.
  */
-RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_node_off_rbtree(
+RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_node_off_tree(
   const rtems_rbtree_node *node
 )
 {
-  return _RBTree_Is_node_off_rbtree( node );
+  return _RBTree_Is_node_off_tree( node );
 }
 
 /**

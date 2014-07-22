@@ -245,7 +245,7 @@ RBTree_Node *_RBTree_Insert(
  * @brief Extracts (removes) the node from the red-black tree.
  *
  * This function does not set the node off-tree.  In case this is desired, then
- * call _RBTree_Set_off_rbtree() after the extraction.
+ * call _RBTree_Set_off_tree() after the extraction.
  *
  * In case the node to extract is not a node of the tree, then this function
  * yields unpredictable results.
@@ -273,32 +273,35 @@ RBTree_Node *_RBTree_Next(
 );
 
 /**
- * @brief Set off RBtree.
+ * @brief Sets a red-black tree node as off-tree.
  *
- * This function sets the parent and child fields of the @a node to NULL
- * indicating the @a node is not part of a rbtree.
+ * Do not use this function on nodes which are a part of a tree.
  *
+ * @param[in] the_node The node to set off-tree.
+ *
+ * @see _RBTree_Is_node_off_tree().
  */
-RTEMS_INLINE_ROUTINE void _RBTree_Set_off_rbtree(
-    RBTree_Node *node
-    )
+RTEMS_INLINE_ROUTINE void _RBTree_Set_off_tree( RBTree_Node *the_node )
 {
-  node->parent = node->child[RBT_LEFT] = node->child[RBT_RIGHT] = NULL;
+  the_node->parent = NULL;
 }
 
 /**
- * @brief Is the node off RBTree.
+ * @brief Returns true, if this red-black tree node is off-tree, and false
+ * otherwise.
  *
- * This function returns true if the @a node is not on a rbtree. A @a node is
- * off rbtree if the parent and child fields are set to NULL.
+ * @param[in] the_node The node to test.
+ *
+ * @retval true The node is not a part of a tree (off-tree).
+ * @retval false Otherwise.
+ *
+ * @see _RBTree_Set_off_tree().
  */
-RTEMS_INLINE_ROUTINE bool _RBTree_Is_node_off_rbtree(
-    const RBTree_Node *node
-    )
+RTEMS_INLINE_ROUTINE bool _RBTree_Is_node_off_tree(
+  const RBTree_Node *the_node
+)
 {
-  return (node->parent == NULL) &&
-         (node->child[RBT_LEFT] == NULL) &&
-         (node->child[RBT_RIGHT] == NULL);
+  return the_node->parent == NULL;
 }
 
 /**
