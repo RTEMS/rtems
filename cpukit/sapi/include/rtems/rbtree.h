@@ -369,13 +369,13 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_max(
 }
 
 /**
- * @copydoc _RBTree_Find_header()
+ * @copydoc _RBTree_Find_control()
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_control *rtems_rbtree_find_header(
-  rtems_rbtree_node *the_node
+RTEMS_INLINE_ROUTINE rtems_rbtree_control *rtems_rbtree_find_control(
+  const rtems_rbtree_node *the_node
 )
 {
-  return _RBTree_Find_header( the_node );
+  return _RBTree_Find_control( the_node );
 }
 
 /**

@@ -431,19 +431,28 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_root(
 }
 
 /**
- * @brief Find the RBTree_Control header given a node in the tree.
+ * @brief Finds the red-black tree control given a node in the tree.
  *
- * This function returns a pointer to the header of the Red Black
- * Tree containing @a the_node if it exists, and NULL if not.
+ * In case the node is not a node of a tree, then this function yields
+ * unpredictable results.
+ *
+ * @param[in] the_node The node of interest.
+ *
+ * @return The red-black tree control of the node.
  */
-RTEMS_INLINE_ROUTINE RBTree_Control *_RBTree_Find_header(
-    RBTree_Node *the_node
-    )
+RTEMS_INLINE_ROUTINE RBTree_Control *_RBTree_Find_control(
+  const RBTree_Node *the_node
+)
 {
-  if(!the_node) return NULL;
-  if(!(the_node->parent)) return NULL;
-  while(the_node->parent) the_node = the_node->parent;
-  return (RBTree_Control*)the_node;
+  RBTree_Node    *parent = the_node->parent;
+  RBTree_Control *rbtree;
+
+  do {
+    rbtree = (RBTree_Control *) parent;
+    parent = parent->parent;
+  } while ( parent != NULL );
+
+  return rbtree;
 }
 
 /**

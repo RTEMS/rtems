@@ -580,8 +580,8 @@ rtems_task Init( rtems_task_argument ignored )
   }
 
   p = rb_find_unique(&rbtree1, &search_node.Node);
-  puts( "INIT - Verify rtems_rbtree_find_header" );
-  if (rtems_rbtree_find_header(p) != &rbtree1) {
+  puts( "INIT - Verify rtems_rbtree_find_control" );
+  if (rtems_rbtree_find_control(p) != &rbtree1) {
     puts ("INIT - ERROR ON RBTREE HEADER MISMATCH");
     rtems_test_exit(0);
   }
@@ -617,11 +617,6 @@ rtems_task Init( rtems_task_argument ignored )
 
   if(!rtems_rbtree_is_empty(&rbtree1)) {
     puts( "INIT - TREE NOT EMPTY" );
-    rtems_test_exit(0);
-  }
-
-  if (rtems_rbtree_find_header(NULL) != NULL) {
-    puts ("INIT - ERROR ON RBTREE HEADER MISMATCH");
     rtems_test_exit(0);
   }
 
