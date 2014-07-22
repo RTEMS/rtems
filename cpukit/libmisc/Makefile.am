@@ -18,7 +18,8 @@ EXTRA_DIST += capture/README
 
 noinst_LIBRARIES += libcapture.a
 libcapture_a_SOURCES = capture/capture.c capture/capture-cli.c \
-    capture/capture.h capture/capture-cli.h
+    capture/capture_user_extension.c \
+    capture/capture.h capture/captureimpl.h capture/capture-cli.h 
 
 ## cpuuse
 EXTRA_DIST += cpuuse/README
