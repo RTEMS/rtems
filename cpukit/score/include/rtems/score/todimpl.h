@@ -334,6 +334,11 @@ void _TOD_Adjust(
   const Timestamp_Control timestamp
 );
 
+/**
+ * @brief Install the BSP's nanoseconds since clock tick handler
+ *
+ * @param[in] routine is the BSP's nanoseconds since clock tick method 
+ */
 RTEMS_INLINE_ROUTINE void _TOD_Set_nanoseconds_since_last_tick_handler(
   TOD_Nanoseconds_since_last_tick_routine routine
 )
@@ -341,6 +346,11 @@ RTEMS_INLINE_ROUTINE void _TOD_Set_nanoseconds_since_last_tick_handler(
   _TOD.nanoseconds_since_last_tick = routine;
 }
 
+/**
+ * @brief Check if the TOD is Set
+ *
+ * @return TRUE is the time is set. FALSE otherwise.
+ */
 RTEMS_INLINE_ROUTINE bool _TOD_Is_set( void )
 {
   return _TOD.is_set;
