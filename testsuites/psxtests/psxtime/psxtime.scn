@@ -5,6 +5,7 @@ _gettimeofday( NULL, NULL ) - EFAULT
 rtems_clock_set          12:45:00   01/01/1988
 adjtime - NULL delta - EINVAL
 adjtime - delta out of range - EINVAL
+adjtime - delta range of 0 - OK
 adjtime - delta too small - do nothing
 adjtime - delta too small - do nothing, olddelta=NULL
 adjtime - delta of one second forward, olddelta=NULL

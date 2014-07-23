@@ -1,8 +1,14 @@
-/*
- *  This test exercises the time of day services via the Classic
- *  and POSIX APIs to make sure they are consistent.
+/**
+ * @file
  *
- *  COPYRIGHT (c) 1989-2009.
+ * This test exercises the time of day services via the Classic
+ * and POSIX APIs to make sure they are consistent. It additionally
+ * exericses the adjtime() method.
+ * 
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -128,10 +134,17 @@ void test_adjtime(void)
   rtems_test_assert( errno == EINVAL );
 
   puts( "adjtime - delta out of range - EINVAL" );
+  delta.tv_sec = 0;
   delta.tv_usec = 1000000000; /* 100 seconds worth */
   sc = adjtime( &delta, &olddelta );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
+
+  puts( "adjtime - delta range of 0 - OK" );
+  delta.tv_sec = 0;
+  delta.tv_usec = 0;
+  sc = adjtime( &delta, &olddelta );
+  rtems_test_assert( sc == 0 );
 
   puts( "adjtime - delta too small - do nothing" );
   delta.tv_sec = 0;

@@ -322,6 +322,18 @@ RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
   _Timestamp_To_timeval( snapshot_as_timestamp_ptr, time );
 }
 
+/**
+ * @brief Adjust the Time of Time
+ *
+ * This method is used to adjust the current time of day by the
+ * specified amount.
+ *
+ * @param[in] delta is the amount to adjust
+ */
+void _TOD_Adjust(
+  const Timestamp_Control timestamp
+);
+
 RTEMS_INLINE_ROUTINE void _TOD_Set_nanoseconds_since_last_tick_handler(
   TOD_Nanoseconds_since_last_tick_routine routine
 )

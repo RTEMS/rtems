@@ -44,8 +44,6 @@ int adjtime(
 )
 {
   Timestamp_Control  delta_as_timestamp;
-  Timestamp_Control  tod_as_timestamp;
-  Timestamp_Control *tod_as_timestamp_ptr;
 
   /*
    * Simple validations
@@ -53,8 +51,19 @@ int adjtime(
   if ( !delta )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
+  if ( delta->tv_usec >= TOD_MICROSECONDS_PER_SECOND )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
   /*
-   * Currently, RTEMS does the adjustment in one movement.
+   * An adjustment of zero is pretty easy.
+   */
+  if ( delta->tv_sec == 0 && delta->tv_usec == 0 )
+    return 0;
+
+  /*
+   * Currently, RTEMS does the adjustment in one movement so there
+   * is no way an adjustment was currently underway.
+   *
    * Given interest, requirements, and sponsorship, a future
    * enhancement would be to adjust the time in smaller increments
    * at each clock tick. Until then, there is no outstanding
@@ -71,20 +80,9 @@ int adjtime(
   _Timestamp_Set( &delta_as_timestamp, delta->tv_sec, delta->tv_usec * 1000 );
 
   /*
-   * This prevents context switches while we are adjusting the TOD
+   * Now apply the adjustment
    */
-
-  _Thread_Disable_dispatch();
-
-    tod_as_timestamp_ptr =
-      _TOD_Get_with_nanoseconds( &tod_as_timestamp, &_TOD.now );
-
-
-    _Timestamp_Add_to( tod_as_timestamp_ptr, &delta_as_timestamp );
-
-    _TOD_Set_with_timestamp( tod_as_timestamp_ptr );
-
-  _Thread_Enable_dispatch();
+  _TOD_Adjust( delta_as_timestamp );
 
   return 0;
 }
