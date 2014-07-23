@@ -22,7 +22,7 @@
  */
 static void _RBTree_Extract_validate( RBTree_Node *the_node )
 {
-  RBTree_Node     *parent, *sibling;
+  RBTree_Node     *parent;
   RBTree_Direction dir;
 
   parent = the_node->parent;
@@ -30,10 +30,10 @@ static void _RBTree_Extract_validate( RBTree_Node *the_node )
   if ( !parent->parent )
     return;
 
-  sibling = _RBTree_Sibling( the_node );
-
   /* continue to correct tree as long as the_node is black and not the root */
   while ( !_RBTree_Is_red( the_node ) && parent->parent ) {
+    RBTree_Node *sibling = _RBTree_Sibling( the_node, parent );
+
     /* if sibling is red, switch parent (black) and sibling colors,
      * then rotate parent left, making the sibling be the_node's grandparent.
      * Now the_node has a black sibling and red parent. After rotation,
@@ -59,7 +59,6 @@ static void _RBTree_Extract_validate( RBTree_Node *the_node )
 
       the_node = parent;   /* done if parent is red */
       parent = the_node->parent;
-      sibling = _RBTree_Sibling( the_node );
     } else {
       /* at least one of sibling's children is red. we now proceed in two
        * cases, either the_node is to the left or the right of the parent.

@@ -195,9 +195,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_right(
 }
 
 /**
- * @brief Return pointer to the parent child node from this node.
- *
- * This function returns a pointer to the parent node of @a the_node.
+ * @copydoc _RBTree_Parent()
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_parent(
   const rtems_rbtree_node *the_node
@@ -248,17 +246,13 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_max(
 }
 
 /**
- * @brief Is this node the RBTree root.
- *
- * This function returns true if @a the_node is the root of @a the_rbtree and
- * false otherwise.
+ * @copydoc _RBTree_Is_root()
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_root(
-  const rtems_rbtree_control *the_rbtree,
   const rtems_rbtree_node *the_node
 )
 {
-  return _RBTree_Is_root( the_rbtree, the_node );
+  return _RBTree_Is_root( the_node );
 }
 
 /**

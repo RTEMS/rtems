@@ -816,13 +816,13 @@ static bool visit_nodes(
   rtems_test_assert( td->key == tn->key );
 
   if ( td->parent == NULL ) {
-    rtems_test_assert( td->parent == tn->Node.parent->parent );
+    rtems_test_assert( rtems_rbtree_is_root( &tn->Node ) );
   } else {
-    rtems_test_assert( td->parent == tn->Node.parent );
+    rtems_test_assert( td->parent == rtems_rbtree_parent( &tn->Node ) );
   }
 
-  rtems_test_assert( td->left == tn->Node.child[ RBT_LEFT ] );
-  rtems_test_assert( td->right == tn->Node.child[ RBT_RIGHT ] );
+  rtems_test_assert( td->left == rtems_rbtree_left( &tn->Node ) );
+  rtems_test_assert( td->right == rtems_rbtree_right( &tn->Node ) );
   rtems_test_assert( td->color == tn->Node.color );
 
   ++ctx->current;
@@ -1194,12 +1194,6 @@ rtems_task Init( rtems_task_argument ignored )
     rtems_test_exit(0);
   }
 
-  if ( _RBTree_Sibling( NULL ) != NULL )
-    puts ( "INIT - ERROR ON RBTREE NULL SIBLING MISMATCH" );
-  if ( _RBTree_Sibling( rbtree1.root ) != NULL )
-    puts ( "INIT - ERROR ON RBTREE NULL SIBLING MISMATCH" );
-  if ( _RBTree_Grandparent( NULL ) != NULL )
-    puts ( "INIT - ERROR ON RBTREE NULL GRANDPARENT MISMATCH" );
   if ( _RBTree_Is_red( NULL ) != 0 )
     puts ( "INIT - ERROR ON RBTREE NULL IS RED MISMATCH" );
   if ( _RBTree_Is_red( rbtree1.root ) != 0 )

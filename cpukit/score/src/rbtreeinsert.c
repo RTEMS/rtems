@@ -32,40 +32,55 @@ RTEMS_STATIC_ASSERT(
  */
 static void _RBTree_Validate_insert( RBTree_Node *the_node )
 {
-  RBTree_Node *u, *g;
+  RBTree_Node *parent = _RBTree_Parent( the_node );
+  RBTree_Node *grandparent = _RBTree_Parent( parent );
 
   /* note: the insert root case is handled already */
   /* if the parent is black, nothing needs to be done
    * otherwise may need to loop a few times */
-  while ( _RBTree_Is_red( _RBTree_Parent( the_node ) ) ) {
-    u = _RBTree_Parent_sibling( the_node );
-    g = the_node->parent->parent;
+  while ( parent->color == RBT_RED ) {
+    /* The root is black, so the grandparent must exist */
+    RBTree_Node *uncle = _RBTree_Sibling( parent, grandparent );
 
-    /* if uncle is red, repaint uncle/parent black and grandparent red */
-    if ( _RBTree_Is_red( u ) ) {
-      the_node->parent->color = RBT_BLACK;
-      u->color = RBT_BLACK;
-      g->color = RBT_RED;
-      the_node = g;
-    } else { /* if uncle is black */
-      RBTree_Direction dir = the_node != the_node->parent->child[ 0 ];
-      RBTree_Direction pdir = the_node->parent != g->child[ 0 ];
+    /*
+     * If uncle exists and is red, repaint uncle/parent black and grandparent
+     * red.
+     */
+    if ( uncle != NULL && uncle->color == RBT_RED ) {
+      parent->color = RBT_BLACK;
+      uncle->color = RBT_BLACK;
+      grandparent->color = RBT_RED;
+      the_node = grandparent;
+      parent = _RBTree_Parent( the_node );
+      grandparent = _RBTree_Parent( parent );
+
+      if ( grandparent == NULL )
+        break;
+    } else { /* If uncle does not exist or is black */
+      RBTree_Direction dir = _RBTree_Direction( the_node, parent );
+      RBTree_Direction parentdir = _RBTree_Direction( parent, grandparent );
 
       /* ensure node is on the same branch direction as parent */
-      if ( dir != pdir ) {
-        _RBTree_Rotate( the_node->parent, pdir );
-        the_node = the_node->child[ pdir ];
+      if ( dir != parentdir ) {
+        RBTree_Node *oldparent = parent;
+
+        parent = the_node;
+        the_node = oldparent;
+        _RBTree_Rotate( oldparent, parentdir );
       }
 
-      the_node->parent->color = RBT_BLACK;
-      g->color = RBT_RED;
+      parent->color = RBT_BLACK;
+      grandparent->color = RBT_RED;
 
       /* now rotate grandparent in the other branch direction (toward uncle) */
-      _RBTree_Rotate( g, ( 1 - pdir ) );
+      _RBTree_Rotate( grandparent, _RBTree_Opposite_direction( parentdir ) );
+
+      grandparent = _RBTree_Parent( parent );
+      break;
     }
   }
 
-  if ( !the_node->parent->parent )
+  if ( grandparent == NULL )
     the_node->color = RBT_BLACK;
 }
 

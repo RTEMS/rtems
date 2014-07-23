@@ -300,9 +300,16 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_node_off_tree(
 }
 
 /**
- * @brief Return pointer to RBTree's root node.
+ * @brief Returns a pointer to root node of the red-black tree.
  *
- * This function returns a pointer to the root node of @a the_rbtree.
+ * The root node may change after insert or extract operations.
+ *
+ * @param[in] the_rbtree The red-black tree control.
+ *
+ * @retval NULL The tree is empty.
+ * @retval root The root node.
+ *
+ * @see _RBTree_Is_root().
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Root(
   const RBTree_Control *the_rbtree
@@ -326,15 +333,21 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_First(
 }
 
 /**
- * @brief Return pointer to the parent of this node.
+ * @brief Returns a pointer to the parent of this node.
  *
- * This function returns a pointer to the parent node of @a the_node.
+ * The node must have a parent, thus it is invalid to use this function for the
+ * root node or a node that is not part of a tree.  To test for the root node
+ * compare with _RBTree_Root() or use _RBTree_Is_root().
+ *
+ * @param[in] the_node The node of interest.
+ *
+ * @retval parent The parent of this node.
+ * @retval undefined The node is the root node or not part of a tree.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Parent(
   const RBTree_Node *the_node
 )
 {
-  if (!the_node->parent->parent) return NULL;
   return the_node->parent;
 }
 
@@ -409,20 +422,25 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_first(
 }
 
 /**
- * @brief Is this node the RBTree root.
- *
- * This function returns true if @a the_node is the root of @a the_rbtree and
+ * @brief Returns true if this node is the root node of a red-black tree, and
  * false otherwise.
  *
- * @retval true @a the_node is the root of @a the_rbtree.
- * @retval false @a the_node is not the root of @a the_rbtree.
+ * The root node may change after insert or extract operations.  In case the
+ * node is not a node of a tree, then this function yields unpredictable
+ * results.
+ *
+ * @param[in] the_node The node of interest.
+ *
+ * @retval true The node is the root node.
+ * @retval false Otherwise.
+ *
+ * @see _RBTree_Root().
  */
 RTEMS_INLINE_ROUTINE bool _RBTree_Is_root(
-  const RBTree_Control *the_rbtree,
-  const RBTree_Node    *the_node
+  const RBTree_Node *the_node
 )
 {
-  return (the_node == _RBTree_Root(the_rbtree));
+  return _RBTree_Parent( _RBTree_Parent( the_node ) ) == NULL;
 }
 
 /**

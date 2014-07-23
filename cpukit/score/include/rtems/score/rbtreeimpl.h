@@ -107,56 +107,23 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_red(
 }
 
 /**
- * @brief Return a pointer to node's grandparent.
+ * @brief Returns the sibling of the node.
  *
- * This function returns a pointer to the grandparent of @a the_node if it
- * exists, and NULL if not.
- */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Grandparent(
-  const RBTree_Node *the_node
-)
-{
-  if(!the_node) return NULL;
-  if(!(the_node->parent)) return NULL;
-  if(!(the_node->parent->parent)) return NULL;
-  if(!(the_node->parent->parent->parent)) return NULL;
-  return(the_node->parent->parent);
-}
-
-/**
- * @brief Return a pointer to node's sibling.
+ * @param[in] the_node The node of interest.
+ * @param[in] parent The parent of the node.  The parent must exist, thus it is
+ * invalid to use this function for the root node.
  *
- * This function returns a pointer to the sibling of @a the_node if it
- * exists, and NULL if not.
+ * @retval NULL No sibling exists.
+ * @retval sibling The sibling of the node.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Sibling(
-  const RBTree_Node *the_node
+  const RBTree_Node *the_node,
+  const RBTree_Node *parent
 )
 {
-  if(!the_node) return NULL;
-  if(!(the_node->parent)) return NULL;
-  if(!(the_node->parent->parent)) return NULL;
+  RBTree_Node *left_child = parent->child[ RBT_LEFT ];
 
-  if(the_node == the_node->parent->child[RBT_LEFT])
-    return the_node->parent->child[RBT_RIGHT];
-  else
-    return the_node->parent->child[RBT_LEFT];
-}
-
-/**
- * @brief Return a pointer to node's parent's sibling.
- *
- * This function returns a pointer to the sibling of the parent of
- * @a the_node if it exists, and NULL if not.
- */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Parent_sibling(
-  const RBTree_Node *the_node
-)
-{
-  if(!the_node) return NULL;
-  if(_RBTree_Grandparent(the_node) == NULL) return NULL;
-
-  return _RBTree_Sibling(the_node->parent);
+  return the_node == left_child ? parent->child[ RBT_RIGHT ] : left_child;
 }
 
 RTEMS_INLINE_ROUTINE bool _RBTree_Is_equal(
