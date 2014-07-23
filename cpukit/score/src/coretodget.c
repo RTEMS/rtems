@@ -1,12 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Returns a Current TOD with Nanosecond Granularity
- *  @ingroup ScoreTODConstants
+ * @brief Returns a Current TOD with Nanosecond Granularity
+ * @ingroup ScoreTOD
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
