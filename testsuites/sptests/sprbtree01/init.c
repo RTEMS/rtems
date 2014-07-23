@@ -858,7 +858,6 @@ rtems_task Init( rtems_task_argument ignored )
 
   rtems_test_assert( !rtems_rbtree_is_node_off_tree( &node1.Node ) );
 
-  _RBTree_Rotate(NULL, RBT_LEFT);
   i = (node1.Node.parent == &node2.Node);
   _RBTree_Rotate( &node1.Node,
                   !node1.Node.child[RBT_LEFT] ? RBT_RIGHT : RBT_LEFT

@@ -77,6 +77,21 @@ RTEMS_INLINE_ROUTINE RBTree_Direction _RBTree_Opposite_direction(
 }
 
 /**
+ * @brief Returns the direction of the node.
+ *
+ * @param[in] the_node The node of interest.
+ * @param[in] parent The parent of the node.  The parent must exist, thus it is
+ * invalid to use this function for the root node.
+ */
+RTEMS_INLINE_ROUTINE RBTree_Direction _RBTree_Direction(
+  const RBTree_Node *the_node,
+  const RBTree_Node *parent
+)
+{
+  return (RBTree_Direction) ( the_node != parent->child[ 0 ] );
+}
+
+/**
  * @brief Is this node red.
  *
  * This function returns true if @a the_node is red and false otherwise.
@@ -166,32 +181,61 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_lesser(
 }
 
 /**
- * @brief Rotate the_node in the direction passed as second argument.
+ * @brief Rotates the node in the specified direction.
  *
- * This routine rotates @a the_node to the direction @a dir, swapping
- * @a the_node with its child\[@a dir\].
+ * The node is swapped with its child in the opposite direction if it exists.
+ *
+ * Sub-tree before rotation:
+ * @dot
+ * digraph state {
+ *   parent -> the_node;
+ *   the_node -> sibling [label="dir"];
+ *   the_node -> child [label="opp_dir"];
+ *   child -> grandchild [label="dir"];
+ *   child -> grandchildsibling [label="opp_dir"];
+ * }
+ * @enddot
+ *
+ * Sub-tree after rotation:
+ * @dot
+ * digraph state {
+ *   parent -> child;
+ *   the_node -> sibling [label="dir"];
+ *   the_node -> grandchild [label="opp_dir"];
+ *   child -> the_node [label="dir"];
+ *   child -> grandchildsibling [label="opp_dir"];
+ * }
+ * @enddot
+ *
+ * @param[in] the_node The node to rotate.
+ * @param[in] dir The rotation direction.
  */
 RTEMS_INLINE_ROUTINE void _RBTree_Rotate(
-    RBTree_Node *the_node,
-    RBTree_Direction dir
-    )
+  RBTree_Node      *the_node,
+  RBTree_Direction  dir
+)
 {
-  RBTree_Node *c;
-  if (the_node == NULL) return;
-  if (the_node->child[_RBTree_Opposite_direction(dir)] == NULL) return;
+  RBTree_Direction  opp_dir = _RBTree_Opposite_direction( dir );
+  RBTree_Node      *child = the_node->child[ opp_dir ];
+  RBTree_Node      *grandchild;
+  RBTree_Node      *parent;
 
-  c = the_node->child[_RBTree_Opposite_direction(dir)];
-  the_node->child[_RBTree_Opposite_direction(dir)] = c->child[dir];
+  if ( child == NULL)
+    return;
 
-  if (c->child[dir])
-    c->child[dir]->parent = the_node;
+  grandchild = child->child[ dir ];
+  the_node->child[ opp_dir ] = grandchild;
 
-  c->child[dir] = the_node;
+  if ( grandchild != NULL )
+    grandchild->parent = the_node;
 
-  the_node->parent->child[the_node != the_node->parent->child[0]] = c;
+  child->child[ dir ] = the_node;
 
-  c->parent = the_node->parent;
-  the_node->parent = c;
+  parent = _RBTree_Parent( the_node );
+  parent->child[ _RBTree_Direction( the_node, parent ) ] = child;
+
+  child->parent = parent;
+  the_node->parent = child;
 }
 
 /** @} */
