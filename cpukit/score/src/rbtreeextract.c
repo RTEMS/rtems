@@ -23,7 +23,6 @@
 static void _RBTree_Extract_validate( RBTree_Node *the_node )
 {
   RBTree_Node     *parent;
-  RBTree_Direction dir;
 
   parent = the_node->parent;
 
@@ -40,11 +39,13 @@ static void _RBTree_Extract_validate( RBTree_Node *the_node )
      * update sibling pointer.
      */
     if ( _RBTree_Is_red( sibling ) ) {
+      RBTree_Direction dir = _RBTree_Direction( the_node, parent );
+      RBTree_Direction opp_dir = _RBTree_Opposite_direction( dir );
+
       parent->color = RBT_RED;
       sibling->color = RBT_BLACK;
-      dir = the_node != parent->child[ 0 ];
       _RBTree_Rotate( parent, dir );
-      sibling = parent->child[ _RBTree_Opposite_direction( dir ) ];
+      sibling = parent->child[ opp_dir ];
     }
 
     /* sibling is black, see if both of its children are also black. */
@@ -66,20 +67,21 @@ static void _RBTree_Extract_validate( RBTree_Node *the_node )
        * and if so rotate in the proper direction and update sibling pointer.
        * Then switch the sibling and parent colors, and rotate through parent.
        */
-      dir = the_node != parent->child[ 0 ];
+      RBTree_Direction dir = _RBTree_Direction( the_node, parent );
+      RBTree_Direction opp_dir = _RBTree_Opposite_direction( dir );
 
       if (
-        !_RBTree_Is_red( sibling->child[ _RBTree_Opposite_direction( dir ) ] )
+        !_RBTree_Is_red( sibling->child[ opp_dir ] )
       ) {
         sibling->color = RBT_RED;
         sibling->child[ dir ]->color = RBT_BLACK;
-        _RBTree_Rotate( sibling, _RBTree_Opposite_direction( dir ) );
-        sibling = parent->child[ _RBTree_Opposite_direction( dir ) ];
+        _RBTree_Rotate( sibling, opp_dir );
+        sibling = parent->child[ opp_dir ];
       }
 
       sibling->color = parent->color;
       parent->color = RBT_BLACK;
-      sibling->child[ _RBTree_Opposite_direction( dir ) ]->color = RBT_BLACK;
+      sibling->child[ opp_dir ]->color = RBT_BLACK;
       _RBTree_Rotate( parent, dir );
       break; /* done */
     }
