@@ -134,18 +134,6 @@ RTEMS_INLINE_ROUTINE bool _Region_Free_segment (
 }
 
 /**
- *  @brief Region_Is_null
- *
- *  This function returns TRUE if the_region is NULL and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _Region_Is_null (
-  Region_Control *the_region
-)
-{
-  return ( the_region == NULL  );
-}
-
-/**
  *  @brief Process Region Queue
  *
  *  This is a helper routine which is invoked any time memory is

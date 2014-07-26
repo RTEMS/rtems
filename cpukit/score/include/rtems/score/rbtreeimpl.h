@@ -77,21 +77,6 @@ RTEMS_INLINE_ROUTINE RBTree_Direction _RBTree_Opposite_direction(
 }
 
 /**
- * @brief Is this RBTree control pointer NULL.
- *
- * This function returns true if @a the_rbtree is NULL and false otherwise.
- *
- * @retval true @a the_rbtree is @c NULL.
- * @retval false @a the_rbtree is not @c NULL.
- */
-RTEMS_INLINE_ROUTINE bool _RBTree_Is_null(
-    const RBTree_Control *the_rbtree
-    )
-{
-  return (the_rbtree == NULL);
-}
-
-/**
  * @brief Is this node red.
  *
  * This function returns true if @a the_node is red and false otherwise.

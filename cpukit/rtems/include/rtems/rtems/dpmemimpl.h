@@ -98,18 +98,6 @@ RTEMS_INLINE_ROUTINE Dual_ported_memory_Control *_Dual_ported_memory_Get (
      _Objects_Get( &_Dual_ported_memory_Information, id, location );
 }
 
-/**
- *  @brief Checks if the_port is NULL.
- *
- *  This function returns true if the_port is NULL and false otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _Dual_ported_memory_Is_null(
-  Dual_ported_memory_Control *the_port
-)
-{
-  return ( the_port == NULL );
-}
-
 /**@}*/
 
 #ifdef __cplusplus

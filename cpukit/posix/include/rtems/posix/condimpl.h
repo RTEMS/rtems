@@ -95,20 +95,6 @@ POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
 );
 
 /**
- *  @brief POSIX Condition Variable Is NULL
- *
- *  This function returns TRUE if @a the_condition variable is NULL
- *  and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _POSIX_Condition_variables_Is_null (
-  POSIX_Condition_variables_Control *the_condition_variable
-)
-{
-  return !the_condition_variable;
-}
-
-
-/**
  * @brief Implements wake up version of the "signal" operation.
  * 
  * A support routine which implements guts of the broadcast and single task

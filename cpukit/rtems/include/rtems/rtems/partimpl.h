@@ -189,19 +189,6 @@ RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Get (
     _Objects_Get( &_Partition_Information, id, location );
 }
 
-/**
- *  @brief Checks if the_partition is NULL.
- *
- *  This function returns TRUE if the_partition is NULL
- *  and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _Partition_Is_null (
-   Partition_Control *the_partition
-)
-{
-   return ( the_partition == NULL  );
-}
-
 /**@}*/
 
 #ifdef __cplusplus

@@ -59,13 +59,6 @@ RTEMS_INLINE_ROUTINE Extension_Control *_Extension_Get (
     _Objects_Get( &_Extension_Information, id, location );
 }
 
-RTEMS_INLINE_ROUTINE bool _Extension_Is_null (
-  Extension_Control *the_extension
-)
-{
-  return ( the_extension == NULL );
-}
-
 #ifdef __cplusplus
 }
 #endif

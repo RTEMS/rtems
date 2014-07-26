@@ -530,16 +530,6 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Prepend_unprotected (
   );
 }
 
-/**
- * This function returns true if the_message_queue is true and false otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _CORE_message_queue_Is_null (
-  CORE_message_queue_Control *the_message_queue
-)
-{
-  return ( the_message_queue == NULL  );
-}
-
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
   /**
    * This function returns true if notification is enabled on this message

@@ -115,25 +115,6 @@ RTEMS_INLINE_ROUTINE POSIX_RWLock_Control *_POSIX_RWLock_Get (
   );
 }
 
-/**
- * @brief Check if a RWLock control block is NULL.
- *
- * This function returns @c TRUE if the_RWLock is @c NULL and @c FALSE
- * otherwise.
- * 
- * @param[in] the_RWLock is the pointer to the RWLock control block
- * to be checked.
- * 
- * @retval TRUE The RWLock control block is @c NULL.
- * @retval FALSE The RWLock control block is not @c NULL.
- */
-RTEMS_INLINE_ROUTINE bool _POSIX_RWLock_Is_null (
-  POSIX_RWLock_Control *the_RWLock
-)
-{
-  return ( the_RWLock == NULL );
-}
-
 #ifdef __cplusplus
 }
 #endif

@@ -110,17 +110,6 @@ RTEMS_INLINE_ROUTINE Barrier_Control *_Barrier_Get (
 }
 
 /**
- *  @brief _Barrier_Is_null
- *
- *  This function returns TRUE if the_barrier is NULL and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _Barrier_Is_null (
-  Barrier_Control *the_barrier
-)
-{
-  return ( the_barrier == NULL );
-}
-/**
  * @brief Translate SuperCore Barrier Status Code to RTEMS Status Code
  *
  * This function returns a RTEMS status code based on the barrier

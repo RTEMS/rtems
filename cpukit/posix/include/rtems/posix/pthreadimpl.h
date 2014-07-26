@@ -127,22 +127,6 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes(
 );
 
 /**
- * @brief Check if a POSIX thread control block is NULL.
- *
- * This function returns @c TRUE if the_pthread is @c NULL and @c FALSE
- * otherwise.
- *
- * @param[in] the_pthread is a pointer to the POSIX thread control block
- * to check.
- *
- * @retval TRUE The thread control block is @c NULL.
- * @retval FALSE The thread control block is not @c NULL.
- */
-RTEMS_INLINE_ROUTINE bool _POSIX_Threads_Is_null(
-  Thread_Control *the_pthread
-);
-
-/**
  * @brief POSIX threads sporadic budget callout.
  *
  * This routine handles the sporadic scheduling algorithm.

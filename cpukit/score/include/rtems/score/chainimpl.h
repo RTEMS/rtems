@@ -272,23 +272,6 @@ RTEMS_INLINE_ROUTINE bool _Chain_Are_nodes_equal(
 }
 
 /**
- * @brief Is this chain control pointer NULL.
- *
- * This function returns true if the_chain is NULL and false otherwise.
- *
- * @param[in] the_chain is the chain to be checked for empty status.
- *
- * @retval true @a the_chain is @c NULL.
- * @retval false @a the_chain is not @c NULL.
- */
-RTEMS_INLINE_ROUTINE bool _Chain_Is_null(
-  const Chain_Control *the_chain
-)
-{
-  return (the_chain == NULL);
-}
-
-/**
  * @brief Is the chain node pointer NULL.
  *
  * This function returns true if the_node is NULL and false otherwise.

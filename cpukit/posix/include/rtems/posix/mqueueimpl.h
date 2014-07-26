@@ -168,19 +168,6 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
     _Objects_Get( &_POSIX_Message_queue_Information, id, location );
 }
 
-/**
- *  @brief POSIX Message Queue Is NULL
- *
- *  This function returns TRUE if the_message_queue is NULL and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _POSIX_Message_queue_Is_null (
-  POSIX_Message_queue_Control *the_mq
-)
-{
-  return !the_mq;
-}
-
-
 /*
  *  @brief POSIX Message Queue Convert Message Priority to Score
  *

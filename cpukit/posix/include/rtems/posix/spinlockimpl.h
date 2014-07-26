@@ -106,25 +106,6 @@ RTEMS_INLINE_ROUTINE POSIX_Spinlock_Control *_POSIX_Spinlock_Get (
   );
 }
 
-/**
- * @brief Check if a spinlock control block is NULL.
- *
- * This function returns @c TRUE if the_spinlock is @c NULL and @c FALSE
- * otherwise.
- * 
- * @param[in] the_spinlock is the pointer to the spinlock control block
- * to be checked.
- * 
- * @retval TRUE The spinlock control block is @c NULL.
- * @retval FALSE The spinlock control block is not @c NULL.
- */
-RTEMS_INLINE_ROUTINE bool _POSIX_Spinlock_Is_null (
-  POSIX_Spinlock_Control *the_spinlock
-)
-{
-  return ( the_spinlock == NULL );
-}
-
 #ifdef __cplusplus
 }
 #endif

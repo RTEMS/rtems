@@ -146,18 +146,6 @@ RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_expired (
 }
 
 /**
- *  @brief Checks if the_period is NULL.
- *
- *  This function returns TRUE if the_period is NULL and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_null (
-  Rate_monotonic_Control *the_period
-)
-{
-  return (the_period == NULL);
-}
-
-/**
  * @brief Rate Monotonic Timeout
  *
  * This routine is invoked when the period represented
