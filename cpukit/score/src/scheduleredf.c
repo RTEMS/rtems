@@ -25,10 +25,12 @@ int _Scheduler_EDF_Compare(
   const RBTree_Node* n2
 )
 {
-  Priority_Control value1 = _RBTree_Container_of
-    (n1,Scheduler_EDF_Node,Node)->thread->current_priority;
-  Priority_Control value2 = _RBTree_Container_of
-    (n2,Scheduler_EDF_Node,Node)->thread->current_priority;
+  Scheduler_EDF_Node *edf1 =
+    RTEMS_CONTAINER_OF( n1, Scheduler_EDF_Node, Node );
+  Scheduler_EDF_Node *edf2 =
+    RTEMS_CONTAINER_OF( n2, Scheduler_EDF_Node, Node );
+  Priority_Control value1 = edf1->thread->current_priority;
+  Priority_Control value2 = edf2->thread->current_priority;
 
   /*
    * This function compares only numbers for the red-black tree,

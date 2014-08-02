@@ -74,16 +74,6 @@ typedef RBTree_Compare rtems_rbtree_compare;
   RBTREE_DEFINE_EMPTY(name)
 
 /**
-  * @brief macro to return the structure containing the @a node.
-  *
-  * This macro returns a pointer of type @a object_type that points 
-  * to the structure containing @a node, where @a object_member is the 
-  * field name of the rtems_rbtree_node structure in objects of @a object_type.
-  */
-#define rtems_rbtree_container_of(node,object_type, object_member) \
-  _RBTree_Container_of(node,object_type,object_member)
-
-/**
  * @brief Initialize a RBTree header.
  *
  * This routine initializes @a the_rbtree structure to manage the

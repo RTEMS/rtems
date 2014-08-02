@@ -3178,8 +3178,8 @@ rtems_bdbuf_read_ahead_task (rtems_task_argument arg)
 
     while ((node = rtems_chain_get_unprotected (chain)) != NULL)
     {
-      rtems_disk_device *dd = (rtems_disk_device *)
-        ((char *) node - offsetof (rtems_disk_device, read_ahead.node));
+      rtems_disk_device *dd =
+        RTEMS_CONTAINER_OF (node, rtems_disk_device, read_ahead.node);
       rtems_blkdev_bnum block = dd->read_ahead.next;
       rtems_blkdev_bnum media_block = 0;
       rtems_status_code sc =

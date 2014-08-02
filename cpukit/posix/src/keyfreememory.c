@@ -39,17 +39,17 @@ void _POSIX_Keys_Free_memory(
    * find the smallest thread_id node in the rbtree.
    */
   next = _RBTree_Next( iter, RBT_LEFT );
-  p = _RBTree_Container_of( next, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
+  p = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( next );
   while ( next != NULL && p->key == key_id) {
     iter = next;
     next = _RBTree_Next( iter, RBT_LEFT );
-    p = _RBTree_Container_of( next, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
+    p = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( next );
   }
 
   /**
    * delete all nodes belongs to the_key from the rbtree and chain.
    */
-  p = _RBTree_Container_of( iter, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
+  p = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( iter );
   while ( iter != NULL && p->key == key_id ) {
     next = _RBTree_Next( iter, RBT_RIGHT );
     _RBTree_Extract( &_POSIX_Keys_Key_value_lookup_tree, iter );
@@ -57,6 +57,6 @@ void _POSIX_Keys_Free_memory(
     _POSIX_Keys_Key_value_pair_free( p );
 
     iter = next;
-    p = _RBTree_Container_of( iter, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
+    p = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( iter );
   }
 }

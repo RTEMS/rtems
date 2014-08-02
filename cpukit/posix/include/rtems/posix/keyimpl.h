@@ -49,6 +49,9 @@ extern RBTree_Control _POSIX_Keys_Key_value_lookup_tree;
  */
 POSIX_EXTERN Freechain_Control _POSIX_Keys_Keypool;
 
+#define POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node ) \
+  RTEMS_CONTAINER_OF( node, POSIX_Keys_Key_value_pair, Key_value_lookup_node )
+
 /**
  * @brief POSIX key manager initialization.
  *

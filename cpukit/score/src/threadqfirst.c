@@ -18,9 +18,10 @@
 #include "config.h"
 #endif
 
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/isrlevel.h>
-#include <rtems/score/threadqimpl.h>
+#include <rtems/score/threadimpl.h>
 
 Thread_Control *_Thread_queue_First(
   Thread_queue_Control *the_thread_queue
@@ -41,7 +42,7 @@ Thread_Control *_Thread_queue_First(
 
     first = _RBTree_First( &the_thread_queue->Queues.Priority, RBT_LEFT );
     if ( first )
-      thread = _RBTree_Container_of( first, Thread_Control, RBNode );
+      thread = THREAD_RBTREE_NODE_TO_THREAD( first );
   }
 
   _ISR_Enable( level );

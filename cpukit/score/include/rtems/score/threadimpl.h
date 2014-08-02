@@ -76,6 +76,14 @@ SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
 SCORE_EXTERN struct _reent **_Thread_libc_reent;
 #endif
 
+#define THREAD_RBTREE_NODE_TO_THREAD( node ) \
+  RTEMS_CONTAINER_OF( node, Thread_Control, RBNode )
+
+#if defined(RTEMS_SMP)
+#define THREAD_RESOURCE_NODE_TO_THREAD( node ) \
+  RTEMS_CONTAINER_OF( node, Thread_Control, Resource_node )
+#endif
+
 /**
  *  @brief Initialize thread handler.
  *
@@ -845,16 +853,6 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
 
   return owns_resources;
 }
-
-#if defined(RTEMS_SMP)
-RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Resource_node_to_thread(
-  Resource_Node *node
-)
-{
-  return (Thread_Control *)
-    ( (char *) node - offsetof( Thread_Control, Resource_node ) );
-}
-#endif
 
 RTEMS_INLINE_ROUTINE void _Thread_Debug_set_real_processor(
   Thread_Control  *the_thread,

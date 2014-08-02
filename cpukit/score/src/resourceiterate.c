@@ -16,14 +16,12 @@
 
 static Resource_Control *_Resource_Rival_head_to_resource( Chain_Node *head )
 {
-  return (Resource_Control *)
-    ( (char *) head - offsetof( Resource_Control, Rivals.Head.Node ) );
+  return RTEMS_CONTAINER_OF( head, Resource_Control, Rivals.Head.Node );
 }
 
 static Resource_Node *_Resource_Resource_tail_to_rival( Chain_Node *tail )
 {
-  return (Resource_Node *)
-    ( (char *) tail - offsetof( Resource_Node, Resources.Tail.Node ) );
+  return RTEMS_CONTAINER_OF( tail, Resource_Node, Resources.Tail.Node );
 }
 
 void _Resource_Iterate(

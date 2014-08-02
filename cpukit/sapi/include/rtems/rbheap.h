@@ -254,7 +254,7 @@ void rtems_rbheap_extend_descriptors_with_malloc(
 /* Private API */
 
 #define rtems_rbheap_chunk_of_node(node) \
-  rtems_rbtree_container_of(node, rtems_rbheap_chunk, tree_node)
+  RTEMS_CONTAINER_OF(node, rtems_rbheap_chunk, tree_node)
 
 static inline bool rtems_rbheap_is_chunk_free(const rtems_rbheap_chunk *chunk)
 {

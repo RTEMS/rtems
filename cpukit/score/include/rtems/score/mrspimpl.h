@@ -181,7 +181,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
 
   _Scheduler_Thread_change_resource_root(
     executing,
-    _Thread_Resource_node_to_thread( _Resource_Node_get_root( owner ) )
+    THREAD_RESOURCE_NODE_TO_THREAD( _Resource_Node_get_root( owner ) )
   );
 
   if ( timeout > 0 ) {

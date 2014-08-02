@@ -32,7 +32,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Set_root_visitor(
   Thread_Control *root = ctx->root;
   Thread_Control *needs_help = root;
   Thread_Control *offers_help =
-    _Thread_Resource_node_to_thread( resource_node );
+    THREAD_RESOURCE_NODE_TO_THREAD( resource_node );
   const Scheduler_Control *scheduler = _Scheduler_Get_own( offers_help );
   Thread_Control *needs_help_too;
 

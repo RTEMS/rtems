@@ -50,7 +50,7 @@ Thread_Control *_Thread_queue_Dequeue(
 
     first = _RBTree_Get( &the_thread_queue->Queues.Priority, RBT_LEFT );
     if ( first ) {
-      the_thread = _RBTree_Container_of( first, Thread_Control, RBNode );
+      the_thread = THREAD_RBTREE_NODE_TO_THREAD( first );
     }
   }
 

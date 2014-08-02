@@ -46,10 +46,7 @@ int pthread_setspecific(
     case OBJECTS_LOCAL:
       p = _POSIX_Keys_Find( key, _Thread_Executing->Object.id, &search_node );
       if ( p != NULL ) {
-        value_pair_ptr = _RBTree_Container_of( p,
-                                          POSIX_Keys_Key_value_pair,
-                                          Key_value_lookup_node );
-
+        value_pair_ptr = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( p );
         value_pair_ptr->value = value;
       } else {
         value_pair_ptr = _POSIX_Keys_Key_value_pair_allocate();

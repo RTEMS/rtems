@@ -164,7 +164,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Ask_for_help_visitor(
   Thread_Control *previous_needs_help = help_context->needs_help;
   Thread_Control *next_needs_help;
   Thread_Control *offers_help =
-    _Thread_Resource_node_to_thread( resource_node );
+    THREAD_RESOURCE_NODE_TO_THREAD( resource_node );
   const Scheduler_Control *scheduler = _Scheduler_Get_own( offers_help );
 
   next_needs_help = ( *scheduler->Operations.ask_for_help )(

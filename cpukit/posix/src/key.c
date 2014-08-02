@@ -54,8 +54,8 @@ int _POSIX_Keys_Key_value_compare(
   Objects_Id thread_id1, thread_id2;
   int diff;
 
-  n1 = _RBTree_Container_of( node1, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
-  n2 = _RBTree_Container_of( node2, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
+  n1 = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node1 );
+  n2 = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node2 );
 
   diff = n1->key - n2->key;
   if ( diff )

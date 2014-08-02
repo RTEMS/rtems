@@ -38,8 +38,8 @@ static int test_compare_function (
   const rtems_rbtree_node *n2
 )
 {
-  int key1 = rtems_rbtree_container_of( n1, test_node, Node )->key;
-  int key2 = rtems_rbtree_container_of( n2, test_node, Node )->key;
+  int key1 = RTEMS_CONTAINER_OF( n1, test_node, Node )->key;
+  int key2 = RTEMS_CONTAINER_OF( n2, test_node, Node )->key;
 
   return key1 - key2;
 }
@@ -262,7 +262,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   for ( p = rtems_rbtree_get_min(&rbtree1), id = 1 ; p ;
       p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
-    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    test_node *t = RTEMS_CONTAINER_OF(p,test_node,Node);
     if ( id > 2 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
       rtems_test_exit(0);
@@ -290,7 +290,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   for ( p = rtems_rbtree_get_min(&rbtree1), id = 1 ; p ;
       p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
-    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    test_node *t = RTEMS_CONTAINER_OF(p,test_node,Node);
     if ( id > 1 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
       rtems_test_exit(0);
@@ -345,9 +345,9 @@ rtems_task Init( rtems_task_argument ignored )
   rb_insert_unique( &rbtree1, &node2.Node );
 
   puts( "INIT - Verify rtems_rbtree_peek_max/min, rtems_rbtree_extract" );
-  test_node *t1 = rtems_rbtree_container_of(rtems_rbtree_peek_max(&rbtree1),
+  test_node *t1 = RTEMS_CONTAINER_OF(rtems_rbtree_peek_max(&rbtree1),
          test_node,Node);
-  test_node *t2 = rtems_rbtree_container_of(rtems_rbtree_peek_min(&rbtree1),
+  test_node *t2 = RTEMS_CONTAINER_OF(rtems_rbtree_peek_min(&rbtree1),
          test_node,Node);
   if (t1->key - t2->key != 1) {
     puts( "INIT - Peek Min - Max failed" );
@@ -355,7 +355,7 @@ rtems_task Init( rtems_task_argument ignored )
   }
   p = rtems_rbtree_peek_max(&rbtree1);
   rtems_rbtree_extract(&rbtree1, p);
-  t1 = rtems_rbtree_container_of(p,test_node,Node);
+  t1 = RTEMS_CONTAINER_OF(p,test_node,Node);
   if (t1->key != 2) {
     puts( "INIT - rtems_rbtree_extract failed");
     rtems_test_exit(0);
@@ -365,7 +365,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   for ( p = rtems_rbtree_get_min(&rbtree1), id = 1 ; p ;
       p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
-    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    test_node *t = RTEMS_CONTAINER_OF(p,test_node,Node);
     if ( id > 2 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
       rtems_test_exit(0);
@@ -390,7 +390,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
       p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
-    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    test_node *t = RTEMS_CONTAINER_OF(p,test_node,Node);
     if ( id > 99 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
       rtems_test_exit(0);
@@ -423,7 +423,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
       p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
-    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    test_node *t = RTEMS_CONTAINER_OF(p,test_node,Node);
     if ( id > 99 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
       rtems_test_exit(0);
@@ -467,7 +467,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   for ( p = rtems_rbtree_get_min(&rbtree1), id = 0, i = 0 ; p ;
       p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
-    test_node *t = rtems_rbtree_container_of(p, test_node, Node);
+    test_node *t = RTEMS_CONTAINER_OF(p, test_node, Node);
 
     while ( id == numbers_sorted[i] ) {
       /* skip if expected minimum (id) is in the set of extracted numbers */
@@ -529,7 +529,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   for ( p = rtems_rbtree_get_max(&rbtree1), id = 0 ; p ;
       p = rtems_rbtree_get_max(&rbtree1) , id++ ) {
-    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    test_node *t = RTEMS_CONTAINER_OF(p,test_node,Node);
     if ( id > 99 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
       rtems_test_exit(0);
@@ -561,20 +561,20 @@ rtems_task Init( rtems_task_argument ignored )
   puts( "INIT - Verify rtems_rbtree_find" );
   search_node.key = 30;
   p = rb_find_unique(&rbtree1, &search_node.Node);
-  if(rtems_rbtree_container_of(p,test_node,Node)->id != 30) {
+  if(RTEMS_CONTAINER_OF(p,test_node,Node)->id != 30) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
   }
 
   puts( "INIT - Verify rtems_rbtree_predecessor/successor");
   p = rtems_rbtree_predecessor(p);
-  if(p && rtems_rbtree_container_of(p,test_node,Node)->id != 29) {
+  if(p && RTEMS_CONTAINER_OF(p,test_node,Node)->id != 29) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
   }
   p = rb_find_unique(&rbtree1, &search_node.Node);
   p = rtems_rbtree_successor(p);
-  if(p && rtems_rbtree_container_of(p,test_node,Node)->id != 31) {
+  if(p && RTEMS_CONTAINER_OF(p,test_node,Node)->id != 31) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
   }
@@ -601,7 +601,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   for ( p = rtems_rbtree_get_max(&rbtree1), id = 99 ; p ;
       p = rtems_rbtree_get_max(&rbtree1) , id-- ) {
-    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    test_node *t = RTEMS_CONTAINER_OF(p,test_node,Node);
     if ( id < 0 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
       rtems_test_exit(0);
@@ -634,7 +634,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
       p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
-    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    test_node *t = RTEMS_CONTAINER_OF(p,test_node,Node);
     if ( id > 19 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
       rtems_test_exit(0);
@@ -666,7 +666,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
       p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
-    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    test_node *t = RTEMS_CONTAINER_OF(p,test_node,Node);
     if ( id > 99 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
       rtems_test_exit(0);
@@ -703,7 +703,7 @@ rtems_task Init( rtems_task_argument ignored )
   puts( "INIT - Verify rtems_rbtree_find in a duplicate tree" );
   search_node.key = 2;
   p = rb_find_multi(&rbtree1, &search_node.Node);
-  if(rtems_rbtree_container_of(p,test_node,Node)->id != 2) {
+  if(RTEMS_CONTAINER_OF(p,test_node,Node)->id != 2) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
   }
@@ -712,7 +712,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
       p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
-    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    test_node *t = RTEMS_CONTAINER_OF(p,test_node,Node);
     if ( id > 99 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
       rtems_test_exit(0);
@@ -744,7 +744,7 @@ rtems_task Init( rtems_task_argument ignored )
   puts( "INIT - Verify rtems_rbtree_find in a duplicate tree" );
   search_node.key = 2;
   p = rb_find_multi(&rbtree1, &search_node.Node);
-  if(rtems_rbtree_container_of(p,test_node,Node)->id != 97) {
+  if(RTEMS_CONTAINER_OF(p,test_node,Node)->id != 97) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
   }
@@ -753,7 +753,7 @@ rtems_task Init( rtems_task_argument ignored )
 
   for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
       p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
-    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    test_node *t = RTEMS_CONTAINER_OF(p,test_node,Node);
     if ( id > 99 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
       rtems_test_exit(0);

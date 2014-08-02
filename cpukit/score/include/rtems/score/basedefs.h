@@ -217,6 +217,16 @@
  */
 #define RTEMS_ZERO_LENGTH_ARRAY 0
 
+/**
+ * @brief Returns a pointer to the container of a specified member pointer.
+ *
+ * @param[in] _m The pointer to a member of the container.
+ * @param[in] _type The type of the container.
+ * @param[in] _member_name The designator name of the container member.
+ */
+#define RTEMS_CONTAINER_OF( _m, _type, _member_name ) \
+  ( (_type *) ( (uintptr_t) ( _m ) - offsetof( _type, _member_name ) ) )
+
 #ifndef ASM
   #ifdef RTEMS_DEPRECATED_TYPES
     typedef bool boolean;

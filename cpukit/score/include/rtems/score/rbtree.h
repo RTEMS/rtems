@@ -82,20 +82,6 @@ struct RBTree_Node_struct {
 };
 
 /**
- * @brief Macro to return the structure containing the @a node.
- *
- * This macro returns a pointer of type @a container_type that points
- * to the structure containing @a node, where @a node_field_name is the
- * field name of the RBTree_Node structure in @a container_type.
- *
- */
-#define _RBTree_Container_of(node, container_type, node_field_name) \
-( \
-  (container_type*) \
-    ( (uintptr_t)(node) - offsetof(container_type, node_field_name) ) \
-)
-
-/**
  *  This type indicates the direction.
  */
 typedef enum {

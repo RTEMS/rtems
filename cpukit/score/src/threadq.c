@@ -20,19 +20,19 @@
 
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/scheduler.h>
-
 #include <rtems/score/rbtreeimpl.h>
+#include <rtems/score/scheduler.h>
+#include <rtems/score/threadimpl.h>
 
 int _Thread_queue_Compare_priority(
   const RBTree_Node *left,
   const RBTree_Node *right
 )
 {
-  Priority_Control left_priority = _RBTree_Container_of
-    (left,Thread_Control,RBNode)->current_priority;
-  Priority_Control right_priority = _RBTree_Container_of
-    (right,Thread_Control,RBNode)->current_priority;
+  Priority_Control left_priority =
+    THREAD_RBTREE_NODE_TO_THREAD( left )->current_priority;
+  Priority_Control right_priority =
+    THREAD_RBTREE_NODE_TO_THREAD( right )->current_priority;
 
   /*
    * SuperCore priorities use lower numbers to indicate greater importance.
