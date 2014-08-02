@@ -170,12 +170,12 @@ RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_pair_free(
 
 RTEMS_INLINE_ROUTINE RBTree_Node *_POSIX_Keys_Find(
   pthread_key_t              key,
-  Objects_Id                 thread_id,
+  Thread_Control            *thread,
   POSIX_Keys_Key_value_pair *search_node
 )
 {
   search_node->key = key;
-  search_node->thread_id = thread_id;
+  search_node->thread = thread;
 
   return _RBTree_Find(
     &_POSIX_Keys_Key_value_lookup_tree,

@@ -51,7 +51,8 @@ RBTree_Compare_result _POSIX_Keys_Key_value_compare(
 {
   POSIX_Keys_Key_value_pair *n1;
   POSIX_Keys_Key_value_pair *n2;
-  Objects_Id thread_id1, thread_id2;
+  Thread_Control *thread1;
+  Thread_Control *thread2;
   RBTree_Compare_result diff;
 
   n1 = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node1 );
@@ -61,15 +62,18 @@ RBTree_Compare_result _POSIX_Keys_Key_value_compare(
   if ( diff )
     return diff;
 
-  thread_id1 = n1->thread_id;
-  thread_id2 = n2->thread_id;
+  thread1 = n1->thread;
+  thread2 = n2->thread;
 
-  /**
-   * if thread_id1 or thread_id2 equals to 0, only key1 and key2 is valued.
-   * it enables us search node only by pthread_key_t type key.
+  /*
+   * If thread1 or thread2 equals to NULL, only key1 and key2 is valued.  It
+   * enables us search node only by pthread_key_t type key.  Exploit that the
+   * thread control alignment is at least two to avoid integer overflows.
    */
-  if ( thread_id1 && thread_id2 )
-    return thread_id1 - thread_id2;
+  if ( thread1 != NULL && thread2 != NULL )
+    return (RBTree_Compare_result) ( (uintptr_t) thread1 >> 1 )
+      - (RBTree_Compare_result) ( (uintptr_t) thread2 >> 1 );
+
   return 0;
 }
 
