@@ -24,7 +24,7 @@
 #include <rtems/score/scheduler.h>
 #include <rtems/score/threadimpl.h>
 
-int _Thread_queue_Compare_priority(
+RBTree_Compare_result _Thread_queue_Compare_priority(
   const RBTree_Node *left,
   const RBTree_Node *right
 )

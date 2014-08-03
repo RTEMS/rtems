@@ -30,8 +30,8 @@ RBTree_Node *_RBTree_Find(
   RBTree_Node *found = NULL;
 
   while ( iter_node != NULL ) {
-    int              compare_result = ( *compare )( the_node, iter_node );
-    RBTree_Direction dir;
+    RBTree_Compare_result compare_result = ( *compare )( the_node, iter_node );
+    RBTree_Direction      dir;
 
     if ( _RBTree_Is_equal( compare_result ) ) {
       found = iter_node;

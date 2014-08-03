@@ -44,7 +44,7 @@ RBTREE_DEFINE_EMPTY( _POSIX_Keys_Key_value_lookup_tree );
  * impossible
  */
 
-int _POSIX_Keys_Key_value_compare(
+RBTree_Compare_result _POSIX_Keys_Key_value_compare(
   const RBTree_Node *node1,
   const RBTree_Node *node2
 )
@@ -52,7 +52,7 @@ int _POSIX_Keys_Key_value_compare(
   POSIX_Keys_Key_value_pair *n1;
   POSIX_Keys_Key_value_pair *n2;
   Objects_Id thread_id1, thread_id2;
-  int diff;
+  RBTree_Compare_result diff;
 
   n1 = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node1 );
   n2 = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node2 );

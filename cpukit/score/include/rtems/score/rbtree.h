@@ -90,6 +90,15 @@ typedef enum {
 } RBTree_Direction;
 
 /**
+ * @brief Integer type for compare results.
+ *
+ * The type is large enough to represent pointers and 32-bit signed integers.
+ *
+ * @see RBTree_Compare.
+ */
+typedef long RBTree_Compare_result;
+
+/**
  * @brief Compares two red-black tree nodes.
  *
  * @param[in] first The first node.
@@ -102,7 +111,7 @@ typedef enum {
  * @retval negative The key value of the first node is less than the one of the
  *   second node.
  */
-typedef int ( *RBTree_Compare )(
+typedef RBTree_Compare_result ( *RBTree_Compare )(
   const RBTree_Node *first,
   const RBTree_Node *second
 );

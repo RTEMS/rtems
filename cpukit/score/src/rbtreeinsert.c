@@ -12,6 +12,16 @@
 
 #include <rtems/score/rbtreeimpl.h>
 
+RTEMS_STATIC_ASSERT(
+  sizeof( RBTree_Compare_result ) >= sizeof( intptr_t ),
+  RBTree_Compare_result_intptr_t
+);
+
+RTEMS_STATIC_ASSERT(
+  sizeof( RBTree_Compare_result ) >= sizeof( int32_t ),
+  RBTree_Compare_result_int32_t
+);
+
 /** @brief Validate and fix-up tree properties for a new insert/colored node
  *
  *  This routine checks and fixes the Red-Black Tree properties based on
@@ -77,7 +87,8 @@ RBTree_Node *_RBTree_Insert(
   } else {
     /* typical binary search tree insert, descend tree to leaf and insert */
     while ( iter_node ) {
-      int compare_result = ( *compare )( the_node, iter_node );
+      RBTree_Compare_result compare_result =
+        ( *compare )( the_node, iter_node );
 
       if ( is_unique && _RBTree_Is_equal( compare_result ) )
         return iter_node;

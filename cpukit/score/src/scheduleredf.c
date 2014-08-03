@@ -20,7 +20,7 @@
 
 #include <rtems/score/scheduleredfimpl.h>
 
-int _Scheduler_EDF_Compare(
+RBTree_Compare_result _Scheduler_EDF_Compare(
   const RBTree_Node* n1,
   const RBTree_Node* n2
 )

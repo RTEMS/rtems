@@ -33,7 +33,7 @@ typedef struct {
   rtems_rbtree_node Node;
 } test_node;
 
-static int test_compare_function (
+static rtems_rbtree_compare_result test_compare_function (
   const rtems_rbtree_node *n1,
   const rtems_rbtree_node *n2
 )

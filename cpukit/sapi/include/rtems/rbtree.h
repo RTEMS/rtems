@@ -55,9 +55,12 @@ typedef RBTree_Node rtems_rbtree_node;
 typedef RBTree_Control rtems_rbtree_control;
 
 /**
- * This type defines function pointers for user-provided comparison
- * function. The function compares two nodes in order to determine
- * the order in a red-black tree.
+ * @copydoc RBTree_Compare_result
+ */
+typedef RBTree_Compare_result rtems_rbtree_compare_result;
+
+/**
+ * @copydoc RBTree_Compare
  */
 typedef RBTree_Compare rtems_rbtree_compare;
 

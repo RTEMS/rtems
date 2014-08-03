@@ -260,7 +260,7 @@ void _Thread_queue_Process_timeout(
  * @retval 0 The @left node is of equal importance with @right node.
  * @retval 1 The @left node is less important than @right node.
  */
-int _Thread_queue_Compare_priority(
+RBTree_Compare_result _Thread_queue_Compare_priority(
   const RBTree_Node *left,
   const RBTree_Node *right
 );

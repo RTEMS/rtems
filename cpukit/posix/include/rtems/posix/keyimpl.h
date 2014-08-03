@@ -64,7 +64,7 @@ void _POSIX_Key_Manager_initialization(void);
  *
  * This routine compares the rbtree node
  */
-int _POSIX_Keys_Key_value_compare(
+RBTree_Compare_result _POSIX_Keys_Key_value_compare(
   const RBTree_Node *node1,
   const RBTree_Node *node2
 );

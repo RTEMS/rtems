@@ -44,7 +44,7 @@ RTEMS_INLINE_ROUTINE Scheduler_EDF_Node *_Scheduler_EDF_Thread_get_node(
   return (Scheduler_EDF_Node *) _Scheduler_Thread_get_node( the_thread );
 }
 
-int _Scheduler_EDF_Compare(
+RBTree_Compare_result _Scheduler_EDF_Compare(
   const RBTree_Node* n1,
   const RBTree_Node* n2
 );

@@ -144,20 +144,22 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Parent_sibling(
   return _RBTree_Sibling(the_node->parent);
 }
 
-RTEMS_INLINE_ROUTINE bool _RBTree_Is_equal( int compare_result )
+RTEMS_INLINE_ROUTINE bool _RBTree_Is_equal(
+  RBTree_Compare_result compare_result
+)
 {
   return compare_result == 0;
 }
 
 RTEMS_INLINE_ROUTINE bool _RBTree_Is_greater(
-  int compare_result
+  RBTree_Compare_result compare_result
 )
 {
   return compare_result > 0;
 }
 
 RTEMS_INLINE_ROUTINE bool _RBTree_Is_lesser(
-  int compare_result
+  RBTree_Compare_result compare_result
 )
 {
   return compare_result < 0;

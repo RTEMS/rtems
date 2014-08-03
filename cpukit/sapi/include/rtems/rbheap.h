@@ -154,7 +154,6 @@ struct rtems_rbheap_control {
  * @param[in] handler_arg The handler argument.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INVALID_NUMBER The alignment is not positive.
  * @retval RTEMS_INVALID_ADDRESS The memory area is invalid.
  * @retval RTEMS_NO_MEMORY Not enough chunk descriptors.
  */

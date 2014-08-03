@@ -94,22 +94,6 @@ static bool chunk_visitor(
   return false;
 }
 
-static void test_init_chunk_alignment(void)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_rbheap_control control;
-
-  sc = rtems_rbheap_initialize(
-    &control,
-    area,
-    sizeof(area),
-    0,
-    extend_descriptors,
-    NULL
-  );
-  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
-}
-
 static void test_init_begin_greater_than_end(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -597,7 +581,6 @@ static void Init(rtems_task_argument arg)
 {
   TEST_BEGIN();
 
-  test_init_chunk_alignment();
   test_init_begin_greater_than_end();
   test_init_begin_greater_than_aligned_begin();
   test_init_aligned_begin_greater_than_aligned_end();
