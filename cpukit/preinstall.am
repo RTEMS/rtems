@@ -330,6 +330,10 @@ $(PROJECT_INCLUDE)/rtems/capture-cli.h: libmisc/capture/capture-cli.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/capture-cli.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/capture-cli.h
 
+$(PROJECT_INCLUDE)/rtems/captureimpl.h: libmisc/capture/captureimpl.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/captureimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/captureimpl.h
+
 $(PROJECT_INCLUDE)/rtems/cpuuse.h: libmisc/cpuuse/cpuuse.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/cpuuse.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cpuuse.h

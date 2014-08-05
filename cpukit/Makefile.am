@@ -149,6 +149,7 @@ include_rtems_HEADERS += libmisc/bspcmdline/bspcmdline.h
 ## capture
 include_rtems_HEADERS += libmisc/capture/capture.h
 include_rtems_HEADERS += libmisc/capture/capture-cli.h
+include_rtems_HEADERS += libmisc/capture/captureimpl.h
 
 ## cpuuse
 include_rtems_HEADERS += libmisc/cpuuse/cpuuse.h

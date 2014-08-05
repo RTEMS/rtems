@@ -30,6 +30,7 @@
 #include <rtems/rtems/tasksimpl.h>
 
 #include "captureimpl.h"
+#include "capture_buffer.h"
 
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/todimpl.h>
@@ -52,7 +53,9 @@
                                       RTEMS_CAPTURE_DELETED_EVENT | \
                                       RTEMS_CAPTURE_BEGIN_EVENT | \
                                       RTEMS_CAPTURE_EXITTED_EVENT | \
-                                      RTEMS_CAPTURE_TERMINATED_EVENT)
+                                      RTEMS_CAPTURE_TERMINATED_EVENT | \
+                                      RTEMS_CAPTURE_AUTOGEN_ENTRY_EVENT | \
+                                      RTEMS_CAPTURE_AUTOGEN_EXIT_EVENT)
 #else
 #define RTEMS_CAPTURE_RECORD_EVENTS  (0)
 #endif
@@ -61,11 +64,8 @@
 /*
  * RTEMS Capture Data.
  */
-static rtems_capture_record_t*  capture_records;
-static uint32_t                 capture_size;
+static rtems_capture_buffer_t         capture_records = {NULL, 0, 0, 0, 0, 0};
 static uint32_t                 capture_count;
-static rtems_capture_record_t*  capture_in;
-static uint32_t                 capture_out;
 static uint32_t                 capture_flags;
 static rtems_capture_task_t*    capture_tasks;
 static rtems_capture_control_t* capture_controls;
@@ -464,16 +464,12 @@ rtems_capture_destroy_capture_task (rtems_capture_task_t* task)
 }
 
 /*
- * This function records a capture record into the capture buffer.
+ * This function indicates if data should be filtered from the 
+ * log.
  */
-void
-rtems_capture_record (rtems_capture_task_t* task,
-                      uint32_t              events)
+bool rtems_capture_filter( rtems_capture_task_t* task,
+                           uint32_t              events)
 {
-  /*
-   * Check the watch state if we have a task control, and
-   * the task's real priority is lower or equal to the ceiling.
-   */
   if (task &&
       ((capture_flags &
         (RTEMS_CAPTURE_TRIGGERED | RTEMS_CAPTURE_ONLY_MONITOR)) ==
@@ -494,35 +490,55 @@ rtems_capture_record (rtems_capture_task_t* task,
          ((capture_flags & RTEMS_CAPTURE_GLOBAL_WATCH) ||
           (control && (control->flags & RTEMS_CAPTURE_WATCH)))))
     {
-      rtems_interrupt_lock_context lock_context;
-
-      rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
-
-      if (capture_count < capture_size)
-      {
-        capture_count++;
-        capture_in->task   = task;
-        capture_in->events = (events |
-                              (task->tcb->real_priority) |
-                              (task->tcb->current_priority << 8));
-
-        if ((events & RTEMS_CAPTURE_RECORD_EVENTS) == 0)
-          task->flags |= RTEMS_CAPTURE_TRACED;
-
-        rtems_capture_get_time (&capture_in->time);
-
-        if (capture_in == &capture_records[capture_size - 1])
-          capture_in = capture_records;
-        else
-          capture_in++;
-
-        rtems_capture_refcount_up (task);
-      }
-      else
-        capture_flags |= RTEMS_CAPTURE_OVERFLOW;
-      rtems_interrupt_lock_release (&capture_lock, &lock_context);
+      return false;
     }
   }
+
+  return true;
+}
+
+/*
+ * This function records a capture record into the capture buffer.
+ */
+void *
+rtems_capture_record_open (rtems_capture_task_t*         task,
+                           uint32_t                      events,
+                           size_t                        size,
+                           rtems_interrupt_lock_context* lock_context)
+{
+  uint8_t*                     ptr;
+  rtems_capture_record_t*      capture_in;
+
+  rtems_interrupt_lock_acquire (&capture_lock, lock_context);
+
+  ptr = rtems_capture_buffer_allocate(&capture_records, size);
+  capture_in = (rtems_capture_record_t *) ptr;
+  if ( capture_in )
+  {
+    capture_count++;
+    capture_in->size   = size;
+    capture_in->task   = task;
+    capture_in->events = (events |
+                          (task->tcb->real_priority) |
+                          (task->tcb->current_priority << 8));
+
+    if ((events & RTEMS_CAPTURE_RECORD_EVENTS) == 0)
+      task->flags |= RTEMS_CAPTURE_TRACED;
+
+    rtems_capture_get_time (&capture_in->time);
+
+    rtems_capture_refcount_up (task);
+    ptr = ptr + sizeof(*capture_in);
+  }
+  else
+    capture_flags |= RTEMS_CAPTURE_OVERFLOW;
+
+  return ptr;
+}
+
+void rtems_capture_record_close( void *rec, rtems_interrupt_lock_context* lock_context)
+{
+  rtems_interrupt_lock_release (&capture_lock, lock_context);
 }
 
 /*
@@ -607,18 +623,15 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribu
    * See if the capture engine is already open.
    */
 
-  if (capture_records)
+  if (capture_records.buffer)
     return RTEMS_RESOURCE_IN_USE;
 
-  capture_records = malloc (size * sizeof (rtems_capture_record_t));
+  rtems_capture_buffer_create( &capture_records, size );
 
-  if (capture_records == NULL)
+  if (capture_records.buffer == NULL)
     return RTEMS_NO_MEMORY;
 
-  capture_size    = size;
   capture_count   = 0;
-  capture_in      = capture_records;
-  capture_out     = 0;
   capture_flags   = 0;
   capture_tasks   = NULL;
   capture_ceiling = 0;
@@ -628,8 +641,7 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribu
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    free (capture_records);
-    capture_records = NULL;
+    rtems_capture_buffer_destroy( &capture_records);
   }
 
   /*
@@ -653,15 +665,13 @@ rtems_capture_close (void)
 
   rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
-  if (!capture_records)
+  if (!capture_records.buffer)
   {
     rtems_interrupt_lock_release (&capture_lock, &lock_context);
     return RTEMS_SUCCESSFUL;
   }
 
   capture_flags &= ~(RTEMS_CAPTURE_ON | RTEMS_CAPTURE_ONLY_MONITOR);
-
-  capture_records = NULL;
 
   rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
@@ -697,10 +707,9 @@ rtems_capture_close (void)
 
   capture_controls = NULL;
 
-  if (capture_records)
+  if (capture_records.buffer)
   {
-    free (capture_records);
-    capture_records = NULL;
+    rtems_capture_buffer_destroy( &capture_records);
   }
 
   return RTEMS_SUCCESSFUL;
@@ -722,7 +731,7 @@ rtems_capture_control (bool enable)
 
   rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
-  if (!capture_records)
+  if (!capture_records.buffer)
   {
     rtems_interrupt_lock_release (&capture_lock, &lock_context);
     return RTEMS_UNSATISFIED;
@@ -752,7 +761,7 @@ rtems_capture_monitor (bool enable)
 
   rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
-  if (!capture_records)
+  if (!capture_records.buffer)
   {
     rtems_interrupt_lock_release (&capture_lock, &lock_context);
     return RTEMS_UNSATISFIED;
@@ -791,9 +800,8 @@ rtems_capture_flush (bool prime)
   else
     capture_flags &= ~RTEMS_CAPTURE_OVERFLOW;
 
+  rtems_capture_buffer_flush( &capture_records );
   capture_count = 0;
-  capture_in    = capture_records;
-  capture_out   = 0;
 
   rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
@@ -1195,6 +1203,26 @@ rtems_capture_clear_trigger (rtems_name                   from_name,
   return RTEMS_SUCCESSFUL;
 }
 
+static inline uint32_t rtems_capture_count_records( void* recs, size_t size )
+{ 
+  rtems_capture_record_t* rec;
+  uint8_t*                ptr = recs;
+  uint32_t                rec_count = 0;
+  size_t                  byte_count = 0;
+  
+ 
+ while (byte_count < size) {
+    rec = (rtems_capture_record_t*) ptr;
+    rec_count++;
+    _Assert( rec->size >= sizeof(*rec) );
+    ptr += rec->size;
+    byte_count += rec->size;
+    _Assert( rec_count <= capture_count ); 
+ };
+   
+ return rec_count;
+}
+
 /*
  * This function reads a number of records from the capture buffer.
  * The user can optionally block and wait until the buffer as a
@@ -1229,7 +1257,8 @@ rtems_capture_read (uint32_t                 threshold,
 {
   rtems_interrupt_lock_context lock_context;
   rtems_status_code            sc = RTEMS_SUCCESSFUL;
-  uint32_t                     count;
+  size_t                       recs_size = 0;
+  bool                         wrapped;
 
   *read = 0;
   *recs = NULL;
@@ -1247,25 +1276,24 @@ rtems_capture_read (uint32_t                 threshold,
   }
 
   capture_flags |= RTEMS_CAPTURE_READER_ACTIVE;
-  *read = count = capture_count;
+
+  *recs = rtems_capture_buffer_peek( &capture_records, &recs_size );
+  *read = rtems_capture_count_records( *recs, recs_size );
 
   rtems_interrupt_lock_release (&capture_lock, &lock_context);
-
-  *recs = &capture_records[capture_out];
 
   for (;;)
   {
     /*
-     * See if the count wraps the end of the record buffer.
+     * See if the data wraps the end of the record buffer.
      */
-    if (count && ((capture_out + count) >= capture_size))
-      *read = capture_size - capture_out;
+    wrapped = rtems_capture_buffer_has_wrapped( &capture_records);
 
     /*
-     * Do we have a threshold and the current count has not wrapped
+     * Do we have a threshold and have not wrapped
      * around the end of the capture record buffer ?
      */
-    if ((*read == count) && threshold)
+    if ((!wrapped) && threshold)
     {
       /*
        * Do we have enough records ?
@@ -1297,7 +1325,8 @@ rtems_capture_read (uint32_t                 threshold,
 
         rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
-        *read = count = capture_count;
+        *recs = rtems_capture_buffer_peek( &capture_records, &recs_size );
+        *read = rtems_capture_count_records( *recs, recs_size );
 
         rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
@@ -1322,8 +1351,10 @@ rtems_status_code
 rtems_capture_release (uint32_t count)
 {
   rtems_interrupt_lock_context lock_context;
+  uint8_t*                     ptr;
   rtems_capture_record_t*      rec;
   uint32_t                     counted;
+  size_t                       ptr_size = 0;
 
   rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
@@ -1333,21 +1364,26 @@ rtems_capture_release (uint32_t count)
   rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
   counted = count;
+ 
+  ptr = rtems_capture_buffer_peek( &capture_records, &ptr_size );
+  _Assert(ptr_size >= (count * sizeof(*rec) ));
 
-  rec = &capture_records[capture_out];
-
+  ptr_size = 0;
   while (counted--)
-  {
+  { 
+    rec = (rtems_capture_record_t*) ptr;
+    ptr_size += rec->size;
     rtems_capture_refcount_down (rec->task);
     rtems_capture_destroy_capture_task (rec->task);
-    rec++;
+    ptr += rec->size;
   }
 
   rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
   capture_count -= count;
 
-  capture_out = (capture_out + count) % capture_size;
+  if (count) 
+    rtems_capture_buffer_free( &capture_records, ptr_size );
 
   capture_flags &= ~RTEMS_CAPTURE_READER_ACTIVE;
 
@@ -1430,3 +1466,5 @@ rtems_capture_get_control_list (void)
 {
   return capture_controls;
 }
+
+

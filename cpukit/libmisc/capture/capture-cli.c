@@ -1353,6 +1353,7 @@ rtems_capture_cli_trace_records (int                                argc,
   int                     count;
   uint32_t                read;
   rtems_capture_record_t* rec;
+  uint8_t*                ptr;
   int                     arg;
   rtems_capture_time_t    last_t = 0;
 
@@ -1408,9 +1409,11 @@ rtems_capture_cli_trace_records (int                                argc,
     }
 
     count = total < read ? total : read;
-
+    ptr = (uint8_t *) rec;
     while (count--)
     {
+      rec = (rtems_capture_record_t*) ptr;
+
       if (csv)
         fprintf (stdout, "%08" PRIxPTR ",%03" PRIu32
                    ",%03" PRIu32 ",%04" PRIx32 ",%" PRId64 "\n",
@@ -1450,7 +1453,7 @@ rtems_capture_cli_trace_records (int                                argc,
           event >>= 1;
         }
       }
-      rec++;
+      ptr += rec->size;
     }
 
     count = total < read ? total : read;

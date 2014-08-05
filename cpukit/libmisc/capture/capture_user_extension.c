@@ -84,6 +84,23 @@ static const rtems_extensions_table capture_extensions = {
   .thread_terminate = rtems_capture_terminated_task
 };
 
+
+static inline void rtems_capture_record (
+  rtems_capture_task_t* task,
+  uint32_t              events
+)
+{
+  rtems_capture_record_t*  rec;
+
+  if (rtems_capture_filter( task, events) )
+    return;
+  
+  rtems_capture_begin_add_record (task, events, sizeof(*rec), &rec);
+
+  rtems_capture_end_add_record ( rec );
+}
+
+
 rtems_status_code rtems_capture_user_extension_open(void)
 {
   rtems_status_code sc;

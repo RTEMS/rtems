@@ -154,6 +154,89 @@ rtems_capture_task_t* rtems_capture_create_capture_task (rtems_tcb* new_task);
 bool rtems_capture_trigger (rtems_capture_task_t* ft,
                        rtems_capture_task_t* tt,
                        uint32_t              events);
+
+/**
+ * @brief Capture append to record 
+ *
+ * This function Capture appends data to a capture record.  It should
+ * be called between rtems_capture_begin_add_record and
+ * rtems_capture_end_add_record.
+ *
+ * @param[in] rec specifies the next location to write in the record
+ * @param[in] data specifies the data to write
+ * @param[in] size specifies specifies the size of the data
+ *
+ * @retval This method returns a pointer which is used as a marker
+ * for the next location in the capture record. it should only be
+ * used as input into rtems_capture_append_to_record or 
+ * rtems_capture_end_add_record.
+ */
+static void *rtems_capture_append_to_record(void*  rec, 
+                                     void*  data,
+                                     size_t size );
+
+/**
+ * @brief Capture filter
+ *
+ * This function this function specifies if the given task
+ * and events should be logged.
+ *
+ * @param[in] task specifies the capture task control block
+ * @param[in] events specifies the events
+ *
+ * @retval This method returns true if this data should be
+ * filtered from the log.  It returns false if this data 
+ * should be logged.
+ */
+bool rtems_capture_filter( rtems_capture_task_t* task,
+                           uint32_t              events);
+/**
+ * @brief Capture begin add record.
+ *
+ * This function opens a record for writing and inserts
+ * the header information
+ *
+ * @param[in] _task specifies the capture task block
+ * @param[in] _events specifies the events
+ * @param[in] _size specifies the expected size of the capture record
+ * @param[out] _rec specifies the next write point in the capture record
+ */
+#define rtems_capture_begin_add_record( _task, _events, _size, _rec) \
+  do { \
+    rtems_interrupt_lock_context _lock_context; \
+    *_rec = rtems_capture_record_open( _task, _events, _size, &_lock_context );
+
+/**
+ * @brief Capture append to record.
+ *
+ * This function appends data of a specifed size into a capture record.
+ *
+ * @param[in] rec specifies the next write point in the capture record 
+ * @param[in] data specifies the data to write
+ * @param[in] size specifies the size of the data
+ *
+ * @retval This method returns the next write point in the capture record.
+ */
+static inline void *rtems_capture_append_to_record(void*  rec, 
+                                                   void*  data,
+                                                   size_t size )
+{
+  uint8_t *ptr = rec;
+  memcpy( ptr, data, size );
+  return (ptr + size);
+}
+
+/**
+ * @brief Capture end add record.
+ *
+ * This function completes the add capture record process
+ *
+ * @param[in] _rec specifies the end of the capture record
+ */
+#define rtems_capture_end_add_record( _rec ) \
+    rtems_capture_record_close( _rec, &_lock_context ); \
+  } while (0)
+
 /**
  * @brief Capture initialize stack usage
  *
@@ -186,6 +269,39 @@ void rtems_capture_destroy_capture_task (rtems_capture_task_t* task);
  * is provided.  Otherwise, it returns a resolution defined by the handler.
  */
 void rtems_capture_get_time (rtems_capture_time_t* time);
+
+/**
+ * @brief Capture record open.
+ *
+ * This function allocates a record and fills in the 
+ * header information.  It does a lock acquire
+ * which will remain in effect until 
+ * rtems_capture_record_close is called.  This method
+ * should only be used by rtems_capture_begin_add_record.
+ *
+ * @param[in] task specifies the caputre task block
+ * @param[in] events specifies the events
+ * @param[in] size specifies capture record size
+ * @param[out] lock_context specifies the lock context
+ *
+ * @retval This method returns a pointer to the next location in
+ * the capture record to store data.
+ */
+void* rtems_capture_record_open (rtems_capture_task_t*         task,
+                                 uint32_t                      events,
+                                 size_t                        size,
+                                 rtems_interrupt_lock_context* lock_context);
+/**
+ * @brief Capture record close.
+ *
+ * This function closes writing to capure record and 
+ * releases the lock that was held on the record. This
+ * method should only be used by rtems_capture_end_add_record.
+ *
+ * @param[in] rec specifies the record
+ * @param[out] lock_context specifies the lock context
+ */
+void rtems_capture_record_close( void *rec, rtems_interrupt_lock_context* lock_context);
 
 
 #ifdef __cplusplus
