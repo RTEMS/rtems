@@ -33,6 +33,8 @@ typedef struct {
   rtems_rbtree_node Node;
 } test_node;
 
+static test_node node_array[100];
+
 static rtems_rbtree_compare_result test_compare_function (
   const rtems_rbtree_node *n1,
   const rtems_rbtree_node *n2
@@ -225,7 +227,6 @@ rtems_task Init( rtems_task_argument ignored )
   rtems_rbtree_control  rbtree1;
   rtems_rbtree_node    *p;
   test_node            node1, node2;
-  test_node            node_array[100];
   test_node            search_node;
   int                  id;
   int i;
