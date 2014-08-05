@@ -222,6 +222,614 @@ static void test_rbtree_min_max(void)
   rtems_test_assert( rtems_rbtree_is_empty( &tree ) );
 }
 
+#define TN( i ) &node_array[ i ].Node
+
+typedef struct {
+  int key;
+  const rtems_rbtree_node *parent;
+  const rtems_rbtree_node *left;
+  const rtems_rbtree_node *right;
+  RBTree_Color color;
+} test_node_description;
+
+static const test_node_description test_insert_tree_0[] = {
+  { 52, NULL, NULL, NULL , RBT_BLACK }
+};
+
+static const test_node_description test_insert_tree_1[] = {
+  { 52, NULL, NULL, TN( 1 ) , RBT_BLACK },
+  { 99, TN( 0 ), NULL, NULL , RBT_RED }
+};
+
+static const test_node_description test_insert_tree_2[] = {
+  { 0, TN( 0 ), NULL, NULL , RBT_RED },
+  { 52, NULL, TN( 2 ), TN( 1 ) , RBT_BLACK },
+  { 99, TN( 0 ), NULL, NULL , RBT_RED }
+};
+
+static const test_node_description test_insert_tree_3[] = {
+  { 0, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 52, NULL, TN( 2 ), TN( 1 ) , RBT_BLACK },
+  { 85, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 0 ), TN( 3 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_insert_tree_4[] = {
+  { 0, TN( 0 ), NULL, TN( 4 ) , RBT_BLACK },
+  { 43, TN( 2 ), NULL, NULL , RBT_RED },
+  { 52, NULL, TN( 2 ), TN( 1 ) , RBT_BLACK },
+  { 85, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 0 ), TN( 3 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_insert_tree_5[] = {
+  { 0, TN( 4 ), NULL, NULL , RBT_RED },
+  { 43, TN( 0 ), TN( 2 ), TN( 5 ) , RBT_BLACK },
+  { 44, TN( 4 ), NULL, NULL , RBT_RED },
+  { 52, NULL, TN( 4 ), TN( 1 ) , RBT_BLACK },
+  { 85, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 0 ), TN( 3 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_insert_tree_6[] = {
+  { 0, TN( 4 ), NULL, TN( 6 ) , RBT_BLACK },
+  { 10, TN( 2 ), NULL, NULL , RBT_RED },
+  { 43, TN( 0 ), TN( 2 ), TN( 5 ) , RBT_RED },
+  { 44, TN( 4 ), NULL, NULL , RBT_BLACK },
+  { 52, NULL, TN( 4 ), TN( 1 ) , RBT_BLACK },
+  { 85, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 0 ), TN( 3 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_insert_tree_7[] = {
+  { 0, TN( 4 ), NULL, TN( 6 ) , RBT_BLACK },
+  { 10, TN( 2 ), NULL, NULL , RBT_RED },
+  { 43, TN( 0 ), TN( 2 ), TN( 5 ) , RBT_RED },
+  { 44, TN( 4 ), NULL, NULL , RBT_BLACK },
+  { 52, NULL, TN( 4 ), TN( 3 ) , RBT_BLACK },
+  { 60, TN( 3 ), NULL, NULL , RBT_RED },
+  { 85, TN( 0 ), TN( 7 ), TN( 1 ) , RBT_BLACK },
+  { 99, TN( 3 ), NULL, NULL , RBT_RED }
+};
+
+static const test_node_description test_insert_tree_8[] = {
+  { 0, TN( 4 ), NULL, TN( 6 ) , RBT_BLACK },
+  { 10, TN( 2 ), NULL, NULL , RBT_RED },
+  { 43, TN( 0 ), TN( 2 ), TN( 5 ) , RBT_RED },
+  { 44, TN( 4 ), NULL, TN( 8 ) , RBT_BLACK },
+  { 50, TN( 5 ), NULL, NULL , RBT_RED },
+  { 52, NULL, TN( 4 ), TN( 3 ) , RBT_BLACK },
+  { 60, TN( 3 ), NULL, NULL , RBT_RED },
+  { 85, TN( 0 ), TN( 7 ), TN( 1 ) , RBT_BLACK },
+  { 99, TN( 3 ), NULL, NULL , RBT_RED }
+};
+
+static const test_node_description test_insert_tree_9[] = {
+  { 0, TN( 6 ), NULL, NULL , RBT_RED },
+  { 10, TN( 4 ), TN( 2 ), TN( 9 ) , RBT_BLACK },
+  { 19, TN( 6 ), NULL, NULL , RBT_RED },
+  { 43, TN( 0 ), TN( 6 ), TN( 5 ) , RBT_RED },
+  { 44, TN( 4 ), NULL, TN( 8 ) , RBT_BLACK },
+  { 50, TN( 5 ), NULL, NULL , RBT_RED },
+  { 52, NULL, TN( 4 ), TN( 3 ) , RBT_BLACK },
+  { 60, TN( 3 ), NULL, NULL , RBT_RED },
+  { 85, TN( 0 ), TN( 7 ), TN( 1 ) , RBT_BLACK },
+  { 99, TN( 3 ), NULL, NULL , RBT_RED }
+};
+
+static const test_node_description test_insert_tree_10[] = {
+  { 0, TN( 6 ), NULL, TN( 10 ) , RBT_BLACK },
+  { 8, TN( 2 ), NULL, NULL , RBT_RED },
+  { 10, TN( 4 ), TN( 2 ), TN( 9 ) , RBT_RED },
+  { 19, TN( 6 ), NULL, NULL , RBT_BLACK },
+  { 43, NULL, TN( 6 ), TN( 0 ) , RBT_BLACK },
+  { 44, TN( 0 ), NULL, TN( 8 ) , RBT_BLACK },
+  { 50, TN( 5 ), NULL, NULL , RBT_RED },
+  { 52, TN( 4 ), TN( 5 ), TN( 3 ) , RBT_RED },
+  { 60, TN( 3 ), NULL, NULL , RBT_RED },
+  { 85, TN( 0 ), TN( 7 ), TN( 1 ) , RBT_BLACK },
+  { 99, TN( 3 ), NULL, NULL , RBT_RED }
+};
+
+static const test_node_description test_insert_tree_11[] = {
+  { 0, TN( 6 ), NULL, TN( 10 ) , RBT_BLACK },
+  { 8, TN( 2 ), NULL, NULL , RBT_RED },
+  { 10, TN( 4 ), TN( 2 ), TN( 9 ) , RBT_BLACK },
+  { 19, TN( 6 ), NULL, NULL , RBT_BLACK },
+  { 43, NULL, TN( 6 ), TN( 0 ) , RBT_BLACK },
+  { 44, TN( 0 ), NULL, TN( 8 ) , RBT_BLACK },
+  { 50, TN( 5 ), NULL, NULL , RBT_RED },
+  { 52, TN( 4 ), TN( 5 ), TN( 3 ) , RBT_BLACK },
+  { 60, TN( 3 ), NULL, TN( 11 ) , RBT_BLACK },
+  { 68, TN( 7 ), NULL, NULL , RBT_RED },
+  { 85, TN( 0 ), TN( 7 ), TN( 1 ) , RBT_RED },
+  { 99, TN( 3 ), NULL, NULL , RBT_BLACK }
+};
+
+static const test_node_description test_insert_tree_12[] = {
+  { 0, TN( 6 ), NULL, TN( 10 ) , RBT_BLACK },
+  { 8, TN( 2 ), NULL, NULL , RBT_RED },
+  { 10, TN( 4 ), TN( 2 ), TN( 9 ) , RBT_BLACK },
+  { 19, TN( 6 ), NULL, NULL , RBT_BLACK },
+  { 43, NULL, TN( 6 ), TN( 0 ) , RBT_BLACK },
+  { 44, TN( 12 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 4 ), TN( 12 ), TN( 3 ) , RBT_BLACK },
+  { 60, TN( 3 ), NULL, TN( 11 ) , RBT_BLACK },
+  { 68, TN( 7 ), NULL, NULL , RBT_RED },
+  { 85, TN( 0 ), TN( 7 ), TN( 1 ) , RBT_RED },
+  { 99, TN( 3 ), NULL, NULL , RBT_BLACK }
+};
+
+static const test_node_description test_insert_tree_13[] = {
+  { 0, TN( 6 ), NULL, TN( 10 ) , RBT_BLACK },
+  { 8, TN( 2 ), NULL, NULL , RBT_RED },
+  { 10, TN( 4 ), TN( 2 ), TN( 9 ) , RBT_BLACK },
+  { 19, TN( 6 ), NULL, NULL , RBT_BLACK },
+  { 43, NULL, TN( 6 ), TN( 0 ) , RBT_BLACK },
+  { 44, TN( 12 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 4 ), TN( 12 ), TN( 3 ) , RBT_BLACK },
+  { 57, TN( 7 ), NULL, NULL , RBT_RED },
+  { 60, TN( 3 ), TN( 13 ), TN( 11 ) , RBT_BLACK },
+  { 68, TN( 7 ), NULL, NULL , RBT_RED },
+  { 85, TN( 0 ), TN( 7 ), TN( 1 ) , RBT_RED },
+  { 99, TN( 3 ), NULL, NULL , RBT_BLACK }
+};
+
+static const test_node_description test_insert_tree_14[] = {
+  { 0, TN( 6 ), NULL, TN( 10 ) , RBT_BLACK },
+  { 8, TN( 2 ), NULL, NULL , RBT_RED },
+  { 10, TN( 4 ), TN( 2 ), TN( 9 ) , RBT_BLACK },
+  { 17, TN( 9 ), NULL, NULL , RBT_RED },
+  { 19, TN( 6 ), TN( 14 ), NULL , RBT_BLACK },
+  { 43, NULL, TN( 6 ), TN( 0 ) , RBT_BLACK },
+  { 44, TN( 12 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 4 ), TN( 12 ), TN( 3 ) , RBT_BLACK },
+  { 57, TN( 7 ), NULL, NULL , RBT_RED },
+  { 60, TN( 3 ), TN( 13 ), TN( 11 ) , RBT_BLACK },
+  { 68, TN( 7 ), NULL, NULL , RBT_RED },
+  { 85, TN( 0 ), TN( 7 ), TN( 1 ) , RBT_RED },
+  { 99, TN( 3 ), NULL, NULL , RBT_BLACK }
+};
+
+static const test_node_description test_insert_tree_15[] = {
+  { 0, TN( 6 ), NULL, TN( 10 ) , RBT_BLACK },
+  { 8, TN( 2 ), NULL, NULL , RBT_RED },
+  { 10, TN( 4 ), TN( 2 ), TN( 9 ) , RBT_BLACK },
+  { 17, TN( 9 ), NULL, NULL , RBT_RED },
+  { 19, TN( 6 ), TN( 14 ), NULL , RBT_BLACK },
+  { 43, NULL, TN( 6 ), TN( 7 ) , RBT_BLACK },
+  { 44, TN( 12 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 7 ), TN( 12 ), TN( 13 ) , RBT_RED },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, TN( 4 ), TN( 0 ), TN( 3 ) , RBT_BLACK },
+  { 67, TN( 11 ), NULL, NULL , RBT_RED },
+  { 68, TN( 3 ), TN( 15 ), NULL , RBT_BLACK },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_RED },
+  { 99, TN( 3 ), NULL, NULL , RBT_BLACK }
+};
+
+static const test_node_description test_insert_tree_16[] = {
+  { 0, TN( 6 ), NULL, TN( 10 ) , RBT_BLACK },
+  { 8, TN( 2 ), NULL, NULL , RBT_RED },
+  { 10, TN( 4 ), TN( 2 ), TN( 9 ) , RBT_BLACK },
+  { 17, TN( 9 ), NULL, NULL , RBT_RED },
+  { 19, TN( 6 ), TN( 14 ), NULL , RBT_BLACK },
+  { 43, NULL, TN( 6 ), TN( 7 ) , RBT_BLACK },
+  { 44, TN( 12 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 7 ), TN( 12 ), TN( 13 ) , RBT_RED },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, TN( 4 ), TN( 0 ), TN( 3 ) , RBT_BLACK },
+  { 67, TN( 11 ), NULL, NULL , RBT_RED },
+  { 68, TN( 3 ), TN( 15 ), NULL , RBT_BLACK },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_RED },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_insert_tree_17[] = {
+  { 0, TN( 6 ), NULL, TN( 10 ) , RBT_BLACK },
+  { 8, TN( 2 ), NULL, NULL , RBT_RED },
+  { 10, TN( 4 ), TN( 2 ), TN( 14 ) , RBT_BLACK },
+  { 12, TN( 14 ), NULL, NULL , RBT_RED },
+  { 17, TN( 6 ), TN( 17 ), TN( 9 ) , RBT_BLACK },
+  { 19, TN( 14 ), NULL, NULL , RBT_RED },
+  { 43, NULL, TN( 6 ), TN( 7 ) , RBT_BLACK },
+  { 44, TN( 12 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 7 ), TN( 12 ), TN( 13 ) , RBT_RED },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, TN( 4 ), TN( 0 ), TN( 3 ) , RBT_BLACK },
+  { 67, TN( 11 ), NULL, NULL , RBT_RED },
+  { 68, TN( 3 ), TN( 15 ), NULL , RBT_BLACK },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_RED },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_insert_tree_18[] = {
+  { 0, TN( 6 ), NULL, TN( 10 ) , RBT_BLACK },
+  { 8, TN( 2 ), NULL, NULL , RBT_RED },
+  { 10, TN( 4 ), TN( 2 ), TN( 14 ) , RBT_BLACK },
+  { 12, TN( 14 ), NULL, NULL , RBT_RED },
+  { 17, TN( 6 ), TN( 17 ), TN( 9 ) , RBT_BLACK },
+  { 19, TN( 14 ), NULL, NULL , RBT_RED },
+  { 43, NULL, TN( 6 ), TN( 7 ) , RBT_BLACK },
+  { 44, TN( 12 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 7 ), TN( 12 ), TN( 13 ) , RBT_RED },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, TN( 4 ), TN( 0 ), TN( 3 ) , RBT_BLACK },
+  { 67, TN( 11 ), NULL, NULL , RBT_RED },
+  { 68, TN( 3 ), TN( 15 ), TN( 18 ) , RBT_BLACK },
+  { 77, TN( 11 ), NULL, NULL , RBT_RED },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_RED },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_insert_tree_19[] = {
+  { 0, TN( 6 ), NULL, TN( 10 ) , RBT_BLACK },
+  { 8, TN( 2 ), NULL, NULL , RBT_RED },
+  { 10, TN( 4 ), TN( 2 ), TN( 14 ) , RBT_BLACK },
+  { 12, TN( 14 ), NULL, NULL , RBT_RED },
+  { 17, TN( 6 ), TN( 17 ), TN( 9 ) , RBT_BLACK },
+  { 19, TN( 14 ), NULL, NULL , RBT_RED },
+  { 43, NULL, TN( 6 ), TN( 7 ) , RBT_BLACK },
+  { 44, TN( 12 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 7 ), TN( 12 ), TN( 13 ) , RBT_BLACK },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, TN( 4 ), TN( 0 ), TN( 3 ) , RBT_RED },
+  { 67, TN( 11 ), NULL, NULL , RBT_BLACK },
+  { 68, TN( 3 ), TN( 15 ), TN( 18 ) , RBT_RED },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 11 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description *const test_insert_trees[] = {
+  &test_insert_tree_0[ 0 ],
+  &test_insert_tree_1[ 0 ],
+  &test_insert_tree_2[ 0 ],
+  &test_insert_tree_3[ 0 ],
+  &test_insert_tree_4[ 0 ],
+  &test_insert_tree_5[ 0 ],
+  &test_insert_tree_6[ 0 ],
+  &test_insert_tree_7[ 0 ],
+  &test_insert_tree_8[ 0 ],
+  &test_insert_tree_9[ 0 ],
+  &test_insert_tree_10[ 0 ],
+  &test_insert_tree_11[ 0 ],
+  &test_insert_tree_12[ 0 ],
+  &test_insert_tree_13[ 0 ],
+  &test_insert_tree_14[ 0 ],
+  &test_insert_tree_15[ 0 ],
+  &test_insert_tree_16[ 0 ],
+  &test_insert_tree_17[ 0 ],
+  &test_insert_tree_18[ 0 ],
+  &test_insert_tree_19[ 0 ]
+};
+
+static const test_node_description test_remove_tree_0[] = {
+  { 8, TN( 6 ), NULL, NULL , RBT_BLACK },
+  { 10, TN( 4 ), TN( 10 ), TN( 14 ) , RBT_BLACK },
+  { 12, TN( 14 ), NULL, NULL , RBT_RED },
+  { 17, TN( 6 ), TN( 17 ), TN( 9 ) , RBT_BLACK },
+  { 19, TN( 14 ), NULL, NULL , RBT_RED },
+  { 43, NULL, TN( 6 ), TN( 7 ) , RBT_BLACK },
+  { 44, TN( 12 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 7 ), TN( 12 ), TN( 13 ) , RBT_BLACK },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, TN( 4 ), TN( 0 ), TN( 3 ) , RBT_RED },
+  { 67, TN( 11 ), NULL, NULL , RBT_BLACK },
+  { 68, TN( 3 ), TN( 15 ), TN( 18 ) , RBT_RED },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 11 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_1[] = {
+  { 10, TN( 14 ), NULL, TN( 17 ) , RBT_BLACK },
+  { 12, TN( 6 ), NULL, NULL , RBT_RED },
+  { 17, TN( 4 ), TN( 6 ), TN( 9 ) , RBT_BLACK },
+  { 19, TN( 14 ), NULL, NULL , RBT_BLACK },
+  { 43, NULL, TN( 14 ), TN( 7 ) , RBT_BLACK },
+  { 44, TN( 12 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 7 ), TN( 12 ), TN( 13 ) , RBT_BLACK },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, TN( 4 ), TN( 0 ), TN( 3 ) , RBT_RED },
+  { 67, TN( 11 ), NULL, NULL , RBT_BLACK },
+  { 68, TN( 3 ), TN( 15 ), TN( 18 ) , RBT_RED },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 11 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_2[] = {
+  { 12, TN( 14 ), NULL, NULL , RBT_BLACK },
+  { 17, TN( 4 ), TN( 17 ), TN( 9 ) , RBT_BLACK },
+  { 19, TN( 14 ), NULL, NULL , RBT_BLACK },
+  { 43, NULL, TN( 14 ), TN( 7 ) , RBT_BLACK },
+  { 44, TN( 12 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 7 ), TN( 12 ), TN( 13 ) , RBT_BLACK },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, TN( 4 ), TN( 0 ), TN( 3 ) , RBT_RED },
+  { 67, TN( 11 ), NULL, NULL , RBT_BLACK },
+  { 68, TN( 3 ), TN( 15 ), TN( 18 ) , RBT_RED },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 11 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_3[] = {
+  { 17, TN( 4 ), NULL, TN( 9 ) , RBT_BLACK },
+  { 19, TN( 14 ), NULL, NULL , RBT_RED },
+  { 43, TN( 7 ), TN( 14 ), TN( 0 ) , RBT_BLACK },
+  { 44, TN( 12 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 4 ), TN( 12 ), TN( 13 ) , RBT_RED },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, NULL, TN( 4 ), TN( 3 ) , RBT_BLACK },
+  { 67, TN( 11 ), NULL, NULL , RBT_BLACK },
+  { 68, TN( 3 ), TN( 15 ), TN( 18 ) , RBT_RED },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 11 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_4[] = {
+  { 19, TN( 4 ), NULL, NULL , RBT_BLACK },
+  { 43, TN( 7 ), TN( 9 ), TN( 0 ) , RBT_BLACK },
+  { 44, TN( 12 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 4 ), TN( 12 ), TN( 13 ) , RBT_RED },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, NULL, TN( 4 ), TN( 3 ) , RBT_BLACK },
+  { 67, TN( 11 ), NULL, NULL , RBT_BLACK },
+  { 68, TN( 3 ), TN( 15 ), TN( 18 ) , RBT_RED },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 11 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_5[] = {
+  { 43, TN( 12 ), NULL, TN( 5 ) , RBT_BLACK },
+  { 44, TN( 4 ), NULL, NULL , RBT_RED },
+  { 48, TN( 0 ), TN( 4 ), TN( 8 ) , RBT_RED },
+  { 50, TN( 12 ), NULL, NULL , RBT_BLACK },
+  { 52, TN( 7 ), TN( 12 ), TN( 13 ) , RBT_BLACK },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, NULL, TN( 0 ), TN( 3 ) , RBT_BLACK },
+  { 67, TN( 11 ), NULL, NULL , RBT_BLACK },
+  { 68, TN( 3 ), TN( 15 ), TN( 18 ) , RBT_RED },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 11 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_6[] = {
+  { 44, TN( 12 ), NULL, NULL , RBT_BLACK },
+  { 48, TN( 0 ), TN( 5 ), TN( 8 ) , RBT_RED },
+  { 50, TN( 12 ), NULL, NULL , RBT_BLACK },
+  { 52, TN( 7 ), TN( 12 ), TN( 13 ) , RBT_BLACK },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, NULL, TN( 0 ), TN( 3 ) , RBT_BLACK },
+  { 67, TN( 11 ), NULL, NULL , RBT_BLACK },
+  { 68, TN( 3 ), TN( 15 ), TN( 18 ) , RBT_RED },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 11 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_7[] = {
+  { 48, TN( 0 ), NULL, TN( 8 ) , RBT_BLACK },
+  { 50, TN( 12 ), NULL, NULL , RBT_RED },
+  { 52, TN( 7 ), TN( 12 ), TN( 13 ) , RBT_BLACK },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, NULL, TN( 0 ), TN( 3 ) , RBT_BLACK },
+  { 67, TN( 11 ), NULL, NULL , RBT_BLACK },
+  { 68, TN( 3 ), TN( 15 ), TN( 18 ) , RBT_RED },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 11 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_8[] = {
+  { 50, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 52, TN( 7 ), TN( 8 ), TN( 13 ) , RBT_BLACK },
+  { 57, TN( 0 ), NULL, NULL , RBT_BLACK },
+  { 60, NULL, TN( 0 ), TN( 3 ) , RBT_BLACK },
+  { 67, TN( 11 ), NULL, NULL , RBT_BLACK },
+  { 68, TN( 3 ), TN( 15 ), TN( 18 ) , RBT_RED },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 11 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 7 ), TN( 11 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_9[] = {
+  { 52, TN( 7 ), NULL, TN( 13 ) , RBT_BLACK },
+  { 57, TN( 0 ), NULL, NULL , RBT_RED },
+  { 60, TN( 11 ), TN( 0 ), TN( 15 ) , RBT_BLACK },
+  { 67, TN( 7 ), NULL, NULL , RBT_BLACK },
+  { 68, NULL, TN( 7 ), TN( 3 ) , RBT_BLACK },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 3 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 11 ), TN( 18 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_10[] = {
+  { 57, TN( 7 ), NULL, NULL , RBT_BLACK },
+  { 60, TN( 11 ), TN( 13 ), TN( 15 ) , RBT_BLACK },
+  { 67, TN( 7 ), NULL, NULL , RBT_BLACK },
+  { 68, NULL, TN( 7 ), TN( 3 ) , RBT_BLACK },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 3 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 11 ), TN( 18 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_11[] = {
+  { 60, TN( 11 ), NULL, TN( 15 ) , RBT_BLACK },
+  { 67, TN( 7 ), NULL, NULL , RBT_RED },
+  { 68, NULL, TN( 7 ), TN( 3 ) , RBT_BLACK },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 3 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 11 ), TN( 18 ), TN( 1 ) , RBT_RED },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_12[] = {
+  { 67, TN( 11 ), NULL, NULL , RBT_BLACK },
+  { 68, NULL, TN( 15 ), TN( 3 ) , RBT_BLACK },
+  { 71, TN( 18 ), NULL, NULL , RBT_RED },
+  { 77, TN( 3 ), TN( 19 ), NULL , RBT_BLACK },
+  { 85, TN( 11 ), TN( 18 ), TN( 1 ) , RBT_RED },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_13[] = {
+  { 68, TN( 19 ), NULL, NULL , RBT_BLACK },
+  { 71, TN( 3 ), TN( 11 ), TN( 18 ) , RBT_RED },
+  { 77, TN( 19 ), NULL, NULL , RBT_BLACK },
+  { 85, NULL, TN( 19 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_14[] = {
+  { 71, TN( 3 ), NULL, TN( 18 ) , RBT_BLACK },
+  { 77, TN( 19 ), NULL, NULL , RBT_RED },
+  { 85, NULL, TN( 19 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_15[] = {
+  { 77, TN( 3 ), NULL, NULL , RBT_BLACK },
+  { 85, NULL, TN( 18 ), TN( 1 ) , RBT_BLACK },
+  { 90, TN( 1 ), NULL, NULL , RBT_RED },
+  { 99, TN( 3 ), TN( 16 ), NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_16[] = {
+  { 85, TN( 16 ), NULL, NULL , RBT_BLACK },
+  { 90, NULL, TN( 3 ), TN( 1 ) , RBT_BLACK },
+  { 99, TN( 16 ), NULL, NULL , RBT_BLACK }
+};
+
+static const test_node_description test_remove_tree_17[] = {
+  { 90, NULL, NULL, TN( 1 ) , RBT_BLACK },
+  { 99, TN( 16 ), NULL, NULL , RBT_RED }
+};
+
+static const test_node_description test_remove_tree_18[] = {
+  { 99, NULL, NULL, NULL , RBT_BLACK }
+};
+
+static const test_node_description *const test_remove_trees[] = {
+  &test_remove_tree_0[ 0 ],
+  &test_remove_tree_1[ 0 ],
+  &test_remove_tree_2[ 0 ],
+  &test_remove_tree_3[ 0 ],
+  &test_remove_tree_4[ 0 ],
+  &test_remove_tree_5[ 0 ],
+  &test_remove_tree_6[ 0 ],
+  &test_remove_tree_7[ 0 ],
+  &test_remove_tree_8[ 0 ],
+  &test_remove_tree_9[ 0 ],
+  &test_remove_tree_10[ 0 ],
+  &test_remove_tree_11[ 0 ],
+  &test_remove_tree_12[ 0 ],
+  &test_remove_tree_13[ 0 ],
+  &test_remove_tree_14[ 0 ],
+  &test_remove_tree_15[ 0 ],
+  &test_remove_tree_16[ 0 ],
+  &test_remove_tree_17[ 0 ],
+  &test_remove_tree_18[ 0 ]
+};
+
+typedef struct {
+  int current;
+  int count;
+  const test_node_description *tree;
+} visitor_context;
+
+static bool visit_nodes(
+  const RBTree_Node *node,
+  RBTree_Direction   dir,
+  void              *visitor_arg
+)
+{
+  visitor_context *ctx = visitor_arg;
+  const test_node_description *td = &ctx->tree[ ctx->current ];
+  const test_node *tn = RTEMS_CONTAINER_OF( node, test_node, Node );
+
+  rtems_test_assert( ctx->current < ctx->count );
+
+  rtems_test_assert( td->key == tn->id );
+  rtems_test_assert( td->key == tn->key );
+
+  if ( td->parent == NULL ) {
+    rtems_test_assert( td->parent == tn->Node.parent->parent );
+  } else {
+    rtems_test_assert( td->parent == tn->Node.parent );
+  }
+
+  rtems_test_assert( td->left == tn->Node.child[ RBT_LEFT ] );
+  rtems_test_assert( td->right == tn->Node.child[ RBT_RIGHT ] );
+  rtems_test_assert( td->color == tn->Node.color );
+
+  ++ctx->current;
+
+  return false;
+}
+
 rtems_task Init( rtems_task_argument ignored )
 {
   rtems_rbtree_control  rbtree1;
@@ -623,9 +1231,14 @@ rtems_task Init( rtems_task_argument ignored )
 
   puts("INIT - Insert 20 random numbers");
   for (i = 0; i < 20; i++) {
+    visitor_context ctx = { 0, i + 1, test_insert_trees[ i ] };
+
     node_array[i].id = numbers[i];
     node_array[i].key = numbers[i];
     rb_insert_unique( &rbtree1, &node_array[i].Node );
+
+    _RBTree_Iterate( &rbtree1, RBT_RIGHT, visit_nodes, &ctx );
+    rtems_test_assert( ctx.current == ctx.count );
 
     if (!rb_assert(rbtree1.root) )
       puts( "INIT - FAILED TREE CHECK" );
@@ -647,6 +1260,13 @@ rtems_task Init( rtems_task_argument ignored )
 
     if (!rb_assert(rbtree1.root) )
       puts( "INIT - FAILED TREE CHECK" );
+
+    if ( id < 19 ) {
+      visitor_context ctx = { 0, 20 - id - 1, test_remove_trees[ id ] };
+
+      _RBTree_Iterate( &rbtree1, RBT_RIGHT, visit_nodes, &ctx );
+      rtems_test_assert( ctx.current == ctx.count );
+    }
   }
 
   if(!rtems_rbtree_is_empty(&rbtree1)) {
