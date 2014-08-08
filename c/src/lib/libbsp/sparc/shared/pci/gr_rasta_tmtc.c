@@ -244,13 +244,77 @@ void gr_rasta_tmtc_isr (void *arg)
 	DBG("RASTA-TMTC-IRQ: 0x%x\n", tmp);
 }
 
+/* Init AMBA bus frequency, IRQ controller, GPIO register, bus maps and other
+ * common stuff between rev0 and rev1.
+ */
+int gr_rasta_tmtc_hw_init_common(struct gr_rasta_tmtc_priv *priv)
+{
+	struct ambapp_dev *tmp;
+	unsigned int pci_freq_hz;
+
+	/* Initialize Frequency of AMBA bus. The AMBA bus runs at same
+	 * frequency as PCI bus
+	 */
+	drvmgr_freq_get(priv->dev, 0, &pci_freq_hz);
+	ambapp_freq_init(&priv->abus, NULL, pci_freq_hz);
+
+	/* Find IRQ controller, Clear all current IRQs */
+	tmp = (void *)ambapp_for_each(&priv->abus,
+					(OPTIONS_ALL|OPTIONS_APB_SLVS),
+					VENDOR_GAISLER, GAISLER_IRQMP,
+					ambapp_find_by_idx, NULL);
+	if ( !tmp ) {
+		return -4;
+	}
+	priv->irq = (struct irqmp_regs *)DEV_TO_APB(tmp)->start;
+	/* Set up GR-RASTA-TMTC irq controller */
+	priv->irq->mask[0] = 0;
+	priv->irq->iclear = 0xffffffff;
+	priv->irq->ilevel = 0;
+
+	/* Find First GPIO controller */
+	tmp = (void *)ambapp_for_each(&priv->abus,
+					(OPTIONS_ALL|OPTIONS_APB_SLVS),
+					VENDOR_GAISLER, GAISLER_GPIO,
+					ambapp_find_by_idx, NULL);
+	if ( !tmp ) {
+		return -5;
+	}
+	priv->gpio = (struct grgpio_regs *) (((struct ambapp_apb_info *)tmp->devinfo)->start);
+	/* Clear GR-RASTA-TMTC GPIO controller */
+	priv->gpio->imask = 0;
+	priv->gpio->ipol = 0;
+	priv->gpio->iedge = 0;
+	priv->gpio->bypass = 0;
+	/* Set up GR-RASTA-TMTC GPIO controller to select GRTM and GRTC */
+	priv->gpio->output = (GR_TMTC_GPIO_GRTM_SEL|GR_TMTC_GPIO_TRANSP_CLK) | (GR_TMTC_GPIO_TC_BIT_LOCK|GR_TMTC_GPIO_TC_RF_AVAIL|GR_TMTC_GPIO_TC_ACTIVE_HIGH|GR_TMTC_GPIO_TC_RISING_CLK);
+	priv->gpio->dir = 0xffffffff;
+	DBG("GR-TMTC GPIO: 0x%x\n", (unsigned int)priv->gpio);
+
+	/* DOWN streams translation table */
+	priv->bus_maps_down[0].name = "PCI BAR0 -> AMBA";
+	priv->bus_maps_down[0].size = priv->amba_maps[0].size;
+	priv->bus_maps_down[0].from_adr = (void *)priv->amba_maps[0].local_adr;
+	priv->bus_maps_down[0].to_adr = (void *)priv->amba_maps[0].remote_adr;
+
+	priv->bus_maps_down[1].name = "PCI BAR1 -> AMBA";
+	priv->bus_maps_down[1].size = priv->amba_maps[1].size;
+	priv->bus_maps_down[1].from_adr = (void *)priv->amba_maps[1].local_adr;
+	priv->bus_maps_down[1].to_adr = (void *)priv->amba_maps[1].remote_adr;
+
+	/* Mark end of translation table */
+	priv->bus_maps_down[2].size = 0;
+
+	return 0;
+}
+
 /* PCI Hardware (Revision 0) initialization */
-int gr_rasta_tmtc_hw_init(struct gr_rasta_tmtc_priv *priv)
+int gr_rasta_tmtc0_hw_init(struct gr_rasta_tmtc_priv *priv)
 {
 	unsigned int *page0 = NULL;
 	struct ambapp_dev *tmp;
 	struct ambapp_ahb_info *ahb;
-	unsigned int pci_freq_hz;
+	int status;
 	pci_dev_t pcidev = priv->pcidev;
 	struct pci_dev_info *devinfo = priv->devinfo;
 	uint32_t bar0, bar0_size;
@@ -313,12 +377,6 @@ int gr_rasta_tmtc_hw_init(struct gr_rasta_tmtc_priv *priv)
 		bar0 + (priv->version->amba_ioarea & ~0xf0000000),
 		NULL, &priv->amba_maps[0]);
 
-	/* Frequency is the same as the PCI bus frequency */
-	drvmgr_freq_get(priv->dev, 0, &pci_freq_hz);
-
-	/* Initialize Frequency of AMBA bus */
-	ambapp_freq_init(&priv->abus, NULL, pci_freq_hz);
-
 	/* Point PAGE0 to start of APB area */
 	*page0 = AHB1_BASE_ADDR;
 
@@ -339,55 +397,10 @@ int gr_rasta_tmtc_hw_init(struct gr_rasta_tmtc_priv *priv)
 				(priv->ahbmst2pci_map & 0xf0000000);
 	priv->grpci->page1 = 0x40000000;
 
-	/* Find IRQ controller, Clear all current IRQs */
-	tmp = (void *)ambapp_for_each(&priv->abus,
-					(OPTIONS_ALL|OPTIONS_APB_SLVS),
-					VENDOR_GAISLER, GAISLER_IRQMP,
-					ambapp_find_by_idx, NULL);
-	if ( !tmp ) {
-		return -4;
-	}
-	priv->irq = (struct irqmp_regs *)DEV_TO_APB(tmp)->start;
-	/* Set up GR-RASTA-TMTC irq controller */
-	priv->irq->mask[0] = 0;
-	priv->irq->iclear = 0xffffffff;
-	priv->irq->ilevel = 0;
-
-	/* Find First GPIO controller */
-	tmp = (void *)ambapp_for_each(&priv->abus,
-					(OPTIONS_ALL|OPTIONS_APB_SLVS),
-					VENDOR_GAISLER, GAISLER_GPIO,
-					ambapp_find_by_idx, NULL);
-	if ( !tmp ) {
-		return -5;
-	}
-	priv->gpio = (struct grgpio_regs *) (((struct ambapp_apb_info *)tmp->devinfo)->start);
-	/* Clear GR-RASTA-TMTC GPIO controller */
-	priv->gpio->imask = 0;
-	priv->gpio->ipol = 0;
-	priv->gpio->iedge = 0;
-	priv->gpio->bypass = 0;
-	/* Set up GR-RASTA-TMTC GPIO controller to select GRTM and GRTC */
-	priv->gpio->output = (GR_TMTC_GPIO_GRTM_SEL|GR_TMTC_GPIO_TRANSP_CLK) | (GR_TMTC_GPIO_TC_BIT_LOCK|GR_TMTC_GPIO_TC_RF_AVAIL|GR_TMTC_GPIO_TC_ACTIVE_HIGH|GR_TMTC_GPIO_TC_RISING_CLK);
-	priv->gpio->dir = 0xffffffff;
-	DBG("GR-TMTC GPIO: 0x%x\n", (unsigned int)priv->gpio);
-
-	/* Enable DMA by enabling PCI target as master */
-	pci_master_enable(pcidev);
-
-	/* DOWN streams translation table */
-	priv->bus_maps_down[0].name = "PCI BAR0 -> AMBA";
-	priv->bus_maps_down[0].size = priv->amba_maps[0].size;
-	priv->bus_maps_down[0].from_adr = (void *)priv->amba_maps[0].local_adr;
-	priv->bus_maps_down[0].to_adr = (void *)priv->amba_maps[0].remote_adr;
-
-	priv->bus_maps_down[1].name = "PCI BAR1 -> AMBA";
-	priv->bus_maps_down[1].size = priv->amba_maps[1].size;
-	priv->bus_maps_down[1].from_adr = (void *)priv->amba_maps[1].local_adr;
-	priv->bus_maps_down[1].to_adr = (void *)priv->amba_maps[1].remote_adr;
-
-	/* Mark end of translation table */
-	priv->bus_maps_down[2].size = 0;
+	/* init AMBA bus, IRQCtrl, GPIO, bus down-maps */
+	status = gr_rasta_tmtc_hw_init_common(priv);
+	if (status)
+		return status;
 
 	/* Find GRPCI controller AHB Slave interface */
 	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
@@ -426,7 +439,6 @@ int gr_rasta_tmtc1_hw_init(struct gr_rasta_tmtc_priv *priv)
 	uint8_t cap_ptr;
 	pci_dev_t pcidev = priv->pcidev;
 	struct pci_dev_info *devinfo = priv->devinfo;
-	unsigned int pci_freq_hz;
 
 	/* Check capabilities list bit */
 	pci_cfg_r8(pcidev, PCI_STATUS, &tmp2);
@@ -489,35 +501,10 @@ int gr_rasta_tmtc1_hw_init(struct gr_rasta_tmtc_priv *priv)
 		NULL,
 		&priv->amba_maps[0]);
 
-	/* Initialize Frequency of AMBA bus. The AMBA bus runs at same
-	 * frequency as PCI bus
-	 */
-	drvmgr_freq_get(priv->dev, 0, &pci_freq_hz);
-	ambapp_freq_init(&priv->abus, NULL, pci_freq_hz);
-
-	/* Find IRQ controller, Clear all current IRQs */
-	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
-				(OPTIONS_ALL|OPTIONS_APB_SLVS),
-				VENDOR_GAISLER, GAISLER_IRQMP,
-				ambapp_find_by_idx, NULL);
-	if ( !tmp ) {
-		return -4;
-	}
-	priv->irq = (struct irqmp_regs *)DEV_TO_APB(tmp)->start;
-	/* Set up GR-RASTA-SPW-ROUTER irq controller */
-	priv->irq->mask[0] = 0;
-	priv->irq->iclear = 0xffff;
-	priv->irq->ilevel = 0;
-
-	priv->bus_maps_down[0].name = "PCI BAR0 -> AMBA";
-	priv->bus_maps_down[0].size = priv->amba_maps[0].size;
-	priv->bus_maps_down[0].from_adr = (void *)priv->amba_maps[0].local_adr;
-	priv->bus_maps_down[0].to_adr = (void *)priv->amba_maps[0].remote_adr;
-	priv->bus_maps_down[1].name = "PCI BAR1 -> AMBA";
-	priv->bus_maps_down[1].size = priv->amba_maps[1].size;
-	priv->bus_maps_down[1].from_adr = (void *)priv->amba_maps[1].local_adr;
-	priv->bus_maps_down[1].to_adr = (void *)priv->amba_maps[1].remote_adr;
-	priv->bus_maps_down[2].size = 0;
+	/* init AMBA bus, IRQCtrl, GPIO, bus down-maps */
+	status = gr_rasta_tmtc_hw_init_common(priv);
+	if (status)
+		return status;
 
 	/* Find GRPCI2 controller AHB Slave interface */
 	tmp = (void *)ambapp_for_each(&priv->abus,
@@ -525,7 +512,7 @@ int gr_rasta_tmtc1_hw_init(struct gr_rasta_tmtc_priv *priv)
 					VENDOR_GAISLER, GAISLER_GRPCI2,
 					ambapp_find_by_idx, NULL);
 	if ( !tmp ) {
-		return -5;
+		return -6;
 	}
 	ahb = (struct ambapp_ahb_info *)tmp->devinfo;
 	priv->bus_maps_up[0].name = "AMBA GRPCI2 Window";
@@ -541,7 +528,7 @@ int gr_rasta_tmtc1_hw_init(struct gr_rasta_tmtc_priv *priv)
 					VENDOR_GAISLER, GAISLER_GRPCI2,
 					ambapp_find_by_idx, NULL);
 	if ( !tmp ) {
-		return -6;
+		return -7;
 	}
 	priv->grpci2 = (struct grpci2_regs *)
 		((struct ambapp_apb_info *)tmp->devinfo)->start;
@@ -637,7 +624,7 @@ int gr_rasta_tmtc_init1(struct drvmgr_dev *dev)
 	switch (devinfo->rev) {
 		case 0:
 			puts("GR-RASTA-TMTC: REVISION 0");
-			status = gr_rasta_tmtc_hw_init(priv);
+			status = gr_rasta_tmtc0_hw_init(priv);
 			break;
 		case 1:
 			puts("GR-RASTA-TMTC: REVISION 1");
