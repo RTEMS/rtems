@@ -596,6 +596,25 @@ static void clr_int_logs(struct irq_log_list *logs){
 	}
 }
 
+unsigned short b1553brm_rt_cmd_legalize[16] = {
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0xffff,
+	0xffff,
+	0xffff,
+	0xfffd,
+	0xfe01,
+	0xfff2,
+	0xffff,
+	0xfffd,
+	0xfe05,
+	0xffff,
+};
+
 static rtems_device_driver rt_init(brm_priv *brm) {
 	unsigned int i;
 
@@ -633,9 +652,9 @@ static rtems_device_driver rt_init(brm_priv *brm) {
 		
 	clr_int_logs(brm->irq_log);
 
-	/* Legalize all commands */
+	/* Initialize the Legalize register with standard values */
 	for (i = 0; i < 16; i++) {
-		brm->regs->rt_cmd_leg[i] = 0;
+		brm->regs->rt_cmd_leg[i] = b1553brm_rt_cmd_legalize[i];
 	}
 
 	/* Init descriptor table 

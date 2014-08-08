@@ -154,6 +154,14 @@ struct bc_msg {
 
 void b1553brm_register_drv(void);
 
+/* Default initialization of the RT legalization registers. The values in this
+ * array are written to the registers on boot driver initialization and when
+ * the user set the mode to RT-mode by calling ioctl(BRM_SET_MODE). Thus,
+ * update the array first then call ioctl(BRM_SET_MODE) for the changes to have
+ * an affect. Note that this affects all B1553BRM RTs in the system.
+ */
+extern unsigned short b1553brm_rt_cmd_legalize[16];
+
 #ifdef __cplusplus
 }
 #endif
