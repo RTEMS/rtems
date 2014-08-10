@@ -66,19 +66,20 @@ libbspstart_a_SOURCES = ../shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += startup/linkcmds
-EXTRA_DIST = 
-EXTRA_DIST += startup/linkcmds.lpc17xx_ea_ram
-EXTRA_DIST += startup/linkcmds.lpc17xx_ea_rom_int
-EXTRA_DIST += startup/linkcmds.lpc17xx_plx800_ram
-EXTRA_DIST += startup/linkcmds.lpc17xx_plx800_rom_int
-EXTRA_DIST += startup/linkcmds.lpc2362
-EXTRA_DIST += startup/linkcmds.lpc23xx_tli800
-EXTRA_DIST += startup/linkcmds.lpc24xx_ea
-EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_ram
-EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_ext
-EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_int
-EXTRA_DIST += startup/linkcmds.lpc24xx_plx800_ram
-EXTRA_DIST += startup/linkcmds.lpc24xx_plx800_rom_int
+project_lib_DATA += startup/linkcmds.lpc17xx_ea_ram
+project_lib_DATA += startup/linkcmds.lpc17xx_ea_rom_int
+project_lib_DATA += startup/linkcmds.lpc17xx_plx800_ram
+project_lib_DATA += startup/linkcmds.lpc17xx_plx800_rom_int
+project_lib_DATA += startup/linkcmds.lpc2362
+project_lib_DATA += startup/linkcmds.lpc23xx_tli800
+project_lib_DATA += startup/linkcmds.lpc24xx_ea
+project_lib_DATA += startup/linkcmds.lpc24xx_ncs_ram
+project_lib_DATA += startup/linkcmds.lpc24xx_ncs_rom_ext
+project_lib_DATA += startup/linkcmds.lpc24xx_ncs_rom_int
+project_lib_DATA += startup/linkcmds.lpc24xx_plx800_ram
+project_lib_DATA += startup/linkcmds.lpc24xx_plx800_rom_int
+project_lib_DATA += startup/linkcmds.lpc40xx_ea_ram
+project_lib_DATA += startup/linkcmds.lpc40xx_ea_rom_int
 
 ###############################################################################
 #                  LibBSP                                                     #
