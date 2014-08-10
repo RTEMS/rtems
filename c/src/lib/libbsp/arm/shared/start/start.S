@@ -266,6 +266,8 @@ twiddle:
 
 #elif defined(ARM_MULTILIB_ARCH_V7M)
 
+#include <rtems/score/armv7m.h>
+
 	.syntax	unified
 
 	.extern	bsp_stack_main_end
@@ -299,6 +301,19 @@ bsp_start_vector_table_end:
 	.thumb_func
 
 _start:
+
+#ifdef ARM_MULTILIB_VFP
+	/*
+	 * Enable CP10 and CP11 coprocessors for privileged and user mode in
+	 * CPACR (bits 20-23).  Ensure that write to register completes.
+	 */
+	ldr	r0, =ARMV7M_CPACR
+	ldr	r1, [r0]
+	orr	r1, r1, #(0xf << 20)
+	str	r1, [r0]
+	dsb
+	isb
+#endif
 
 	ldr	sp, =bsp_stack_main_end
 	ldr	lr, =bsp_start_hook_0_done + 1

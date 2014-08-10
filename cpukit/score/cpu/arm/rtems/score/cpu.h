@@ -8,7 +8,7 @@
  *  This include file contains information pertaining to the ARM
  *  processor.
  *
- *  Copyright (c) 2009-2013 embedded brains GmbH.
+ *  Copyright (c) 2009-2014 embedded brains GmbH.
  *
  *  Copyright (c) 2007 Ray Xu <Rayx.cn@gmail.com>
  *
@@ -212,12 +212,12 @@
   #define ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET 44
 #endif
 
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
   #define ARM_CONTEXT_CONTROL_D8_OFFSET 48
 #endif
 
 #ifdef RTEMS_SMP
-  #ifdef ARM_MULTILIB_VFP_D32
+  #ifdef ARM_MULTILIB_VFP
     #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 112
   #else
     #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 48
@@ -278,7 +278,7 @@ typedef struct {
 #ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
   uint32_t thread_id;
 #endif
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
   uint64_t register_d8;
   uint64_t register_d9;
   uint64_t register_d10;

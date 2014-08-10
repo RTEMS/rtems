@@ -58,7 +58,7 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 	mrs	r2, CPSR
 	stmia	r0,  {r2, r4, r5, r6, r7, r8, r9, r10, r11, r13, r14}
 
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
 	add	r3, r0, #ARM_CONTEXT_CONTROL_D8_OFFSET
 	vstm	r3, {d8-d15}
 #endif
@@ -101,7 +101,7 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 	mcr	p15, 0, r3, c13, c0, 3
 #endif
 
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
 	add	r3, r1, #ARM_CONTEXT_CONTROL_D8_OFFSET
 	vldm	r3, {d8-d15}
 #endif

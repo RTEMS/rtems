@@ -75,13 +75,15 @@ _ARMV4_Exception_interrupt:
 	stmdb	sp!, CONTEXT_LIST
 	stmdb	sp!, {SP_OF_INTERRUPTED_CONTEXT, lr}
 
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
 	/* Save VFP context */
 	vmrs	r0, FPSCR
 	vstmdb	sp!, {d0-d7}
+#ifdef ARM_MULTILIB_VFP_D32
 	vstmdb	sp!, {d16-d31}
-	stmdb	sp!, {r0, r1}
 #endif
+	stmdb	sp!, {r0, r1}
+#endif /* ARM_MULTILIB_VFP */
 
 	/* Get per-CPU control of current processor */
 	GET_SELF_CPU_CONTROL	SELF_CPU_CONTROL, r1
@@ -166,13 +168,15 @@ thread_dispatch_done:
 	/* Switch to ARM instructions if necessary */
 	SWITCH_FROM_THUMB_TO_ARM
 
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
 	/* Restore VFP context */
 	ldmia	sp!, {r0, r1}
+#ifdef ARM_MULTILIB_VFP_D32
 	vldmia	sp!, {d16-d31}
+#endif
 	vldmia	sp!, {d0-d7}
 	vmsr	FPSCR, r0
-#endif
+#endif /* ARM_MULTILIB_VFP */
 
 	/* Restore SP_OF_INTERRUPTED_CONTEXT register and link register */
 	ldmia	sp!, {SP_OF_INTERRUPTED_CONTEXT, lr}

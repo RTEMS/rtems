@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -29,7 +29,7 @@
 #define FRAME_OFFSET_R11 28
 #define FRAME_OFFSET_LR 32
 
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
   #define FRAME_OFFSET_D8 40
   #define FRAME_OFFSET_D9 48
   #define FRAME_OFFSET_D10 56
@@ -71,7 +71,7 @@ FUNCTION_THUMB_ENTRY(_CPU_Context_validate)
 	mov	r1, lr
 	str	r1, [sp, #FRAME_OFFSET_LR]
 
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
 	vstr	d8, [sp, #FRAME_OFFSET_D8]
 	vstr	d9, [sp, #FRAME_OFFSET_D9]
 	vstr	d10, [sp, #FRAME_OFFSET_D10]
@@ -96,11 +96,15 @@ FUNCTION_THUMB_ENTRY(_CPU_Context_validate)
 .endm
 
 
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
 	/* R3 contains the FPSCR */
 	vmrs	r3, FPSCR
 	movs	r4, #0x001f
+#ifdef ARM_MULTILIB_ARCH_V7M
+	movt	r4, #0xf000
+#else
 	movt	r4, #0xf800
+#endif
 	bic	r3, r3, r4
 	and	r4, r4, r0
 	orr	r3, r3, r4
@@ -120,7 +124,7 @@ FUNCTION_THUMB_ENTRY(_CPU_Context_validate)
 	fill_register	r12
 	fill_register	lr
 
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
 .macro fill_vfp_register reg
 	add	r1, r1, #1
 	vmov	\reg, r1, r1
@@ -142,6 +146,7 @@ FUNCTION_THUMB_ENTRY(_CPU_Context_validate)
 	fill_vfp_register	d13
 	fill_vfp_register	d14
 	fill_vfp_register	d15
+#ifdef ARM_MULTILIB_VFP_D32
 	fill_vfp_register	d16
 	fill_vfp_register	d17
 	fill_vfp_register	d18
@@ -158,7 +163,8 @@ FUNCTION_THUMB_ENTRY(_CPU_Context_validate)
 	fill_vfp_register	d29
 	fill_vfp_register	d30
 	fill_vfp_register	d31
-#endif
+#endif /* ARM_MULTILIB_VFP_D32 */
+#endif /* ARM_MULTILIB_VFP */
 
 	/* Check */
 check:
@@ -174,7 +180,7 @@ check:
 
 	mov	r1, r0
 
-#ifndef ARM_MULTILIB_VFP_D32
+#ifndef ARM_MULTILIB_VFP
 	check_register	r3
 #endif
 
@@ -189,7 +195,7 @@ check:
 	check_register	r12
 	check_register	lr
 
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
 	b	check_vfp
 #endif
 
@@ -217,7 +223,7 @@ restore:
 	ldr	r1, [sp, #FRAME_OFFSET_LR]
 	mov	lr, r1
 
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
 	vldr	d8, [sp, #FRAME_OFFSET_D8]
 	vldr	d9, [sp, #FRAME_OFFSET_D9]
 	vldr	d10, [sp, #FRAME_OFFSET_D10]
@@ -234,7 +240,7 @@ restore:
 
 FUNCTION_END(_CPU_Context_validate)
 
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
 check_vfp:
 
 .macro check_vfp_register reg
@@ -270,6 +276,7 @@ check_vfp:
 	check_vfp_register	d13
 	check_vfp_register	d14
 	check_vfp_register	d15
+#ifdef ARM_MULTILIB_VFP_D32
 	check_vfp_register	d16
 	check_vfp_register	d17
 	check_vfp_register	d18
@@ -286,6 +293,7 @@ check_vfp:
 	check_vfp_register	d29
 	check_vfp_register	d30
 	check_vfp_register	d31
+#endif /* ARM_MULTILIB_VFP_D32 */
 
 	/* Restore r4 and r5 */
 	mov	r1, r0
@@ -293,5 +301,4 @@ check_vfp:
 	fill_register	r5
 
 	b	check
-
-#endif
+#endif /* ARM_MULTILIB_VFP */

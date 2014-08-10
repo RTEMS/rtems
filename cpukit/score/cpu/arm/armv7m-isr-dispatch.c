@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
+ * Copyright (c) 2011-2014 Sebastian Huber.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -37,13 +37,27 @@ static void __attribute__((naked)) _ARMV7M_Thread_dispatch( void )
   );
 }
 
+static void _ARMV7M_Trigger_lazy_floating_point_context_save( void )
+{
+#ifdef ARM_MULTILIB_VFP
+  __asm__ volatile (
+    "vmov.f32 s0, s0\n"
+  );
+#endif
+}
+
 void _ARMV7M_Pendable_service_call( void )
 {
+  ARMV7M_Exception_frame *ef;
+
   _ISR_Nest_level = 1;
+
   _ARMV7M_SCB->icsr = ARMV7M_SCB_ICSR_PENDSVCLR;
-  ARMV7M_Exception_frame *ef = (ARMV7M_Exception_frame *) _ARMV7M_Get_PSP();
+  _ARMV7M_Trigger_lazy_floating_point_context_save();
+
+  ef = (ARMV7M_Exception_frame *) _ARMV7M_Get_PSP();
   --ef;
-  _ARMV7M_Set_PSP((uint32_t) ef);
+  _ARMV7M_Set_PSP( (uint32_t) ef );
 
   /*
    * According to "ARMv7-M Architecture Reference Manual" section B1.5.6
@@ -57,11 +71,17 @@ void _ARMV7M_Pendable_service_call( void )
 
 void _ARMV7M_Supervisor_call( void )
 {
-  ARMV7M_Exception_frame *ef = (ARMV7M_Exception_frame *) _ARMV7M_Get_PSP();
+  ARMV7M_Exception_frame *ef;
+
+  _ARMV7M_Trigger_lazy_floating_point_context_save();
+
+  ef = (ARMV7M_Exception_frame *) _ARMV7M_Get_PSP();
   ++ef;
-  _ARMV7M_Set_PSP((uint32_t) ef);
+  _ARMV7M_Set_PSP( (uint32_t) ef );
+
   _ISR_Nest_level = 0;
   RTEMS_COMPILER_MEMORY_BARRIER();
+
   if ( _Thread_Dispatch_necessary ) {
     _ARMV7M_Pendable_service_call();
   }

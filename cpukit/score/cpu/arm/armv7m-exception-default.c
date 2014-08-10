@@ -38,15 +38,49 @@ void __attribute__((naked)) _ARMV7M_Exception_default( void )
     "stm r1, {r3-r5}\n"
     "mrs r1, ipsr\n"
     "str r1, [sp, %[cpuvecoff]]\n"
+
+    /* Argument for high level handler */
     "mov r0, sp\n"
+
+    /* Clear VFP context pointer */
+    "add r3, sp, %[cpuvfpoff]\n"
+    "mov r1, #0\n"
+    "str r1, [r3]\n"
+
+#ifdef ARM_MULTILIB_VFP
+    /* Ensure that the FPU is enabled */
+    "ldr r4, =%[cpacr]\n"
+    "tst r4, #(0xf << 20)\n"
+    "bne 1f\n"
+
+    /* Save VFP context */
+    "sub sp, %[vfpsz]\n"
+    "add r4, sp, #4\n"
+    "bic r4, r4, #7\n"
+    "str r4, [r3]\n"
+    "vmrs r2, FPSCR\n"
+    "stmia r4!, {r1-r2}\n"
+    "vstmia r4!, {d0-d15}\n"
+    "mov r1, #0\n"
+    "mov r2, #0\n"
+    "adds r3, r4, #128\n"
+    "2:\n"
+    "stmia r4!, {r1-r2}\n"
+    "cmp r4, r3\n"
+    "bne 2b\n"
+    "1:\n"
+#endif
+
     "b _ARM_Exception_default\n"
     :
     : [cpufsz] "i" (sizeof(CPU_Exception_frame)),
       [v7mfsz] "i" (sizeof(ARMV7M_Exception_frame)),
-      [cpuspoff] "J" (offsetof(CPU_Exception_frame, register_sp)),
       [cpulroff] "i" (offsetof(CPU_Exception_frame, register_lr)),
       [v7mlroff] "i" (offsetof(ARMV7M_Exception_frame, register_lr)),
-      [cpuvecoff] "J" (offsetof(CPU_Exception_frame, vector))
+      [cpuvecoff] "J" (offsetof(CPU_Exception_frame, vector)),
+      [cpuvfpoff] "i" (ARM_EXCEPTION_FRAME_VFP_CONTEXT_OFFSET),
+      [cpacr] "i" (ARMV7M_CPACR),
+      [vfpsz] "i" (ARM_VFP_CONTEXT_SIZE)
   );
 }
 

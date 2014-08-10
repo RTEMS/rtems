@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
+ * Copyright (c) 2011-2014 Sebastian Huber.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -29,6 +29,11 @@ extern "C" {
 
 #ifdef ARM_MULTILIB_ARCH_V7M
 
+/* Coprocessor Access Control Register, CPACR */
+#define ARMV7M_CPACR 0xe000ed88
+
+#ifndef ASM
+
 typedef struct {
   uint32_t reserved_0;
   uint32_t ictr;
@@ -47,6 +52,26 @@ typedef struct {
   void *register_lr;
   void *register_pc;
   uint32_t register_xpsr;
+#ifdef ARM_MULTILIB_VFP
+  uint32_t register_s0;
+  uint32_t register_s1;
+  uint32_t register_s2;
+  uint32_t register_s3;
+  uint32_t register_s4;
+  uint32_t register_s5;
+  uint32_t register_s6;
+  uint32_t register_s7;
+  uint32_t register_s8;
+  uint32_t register_s9;
+  uint32_t register_s10;
+  uint32_t register_s11;
+  uint32_t register_s12;
+  uint32_t register_s13;
+  uint32_t register_s14;
+  uint32_t register_s15;
+  uint32_t register_fpscr;
+  uint32_t reserved;
+#endif
 } ARMV7M_Exception_frame;
 
 typedef struct {
@@ -97,6 +122,14 @@ typedef struct {
   uint32_t mmfar;
   uint32_t bfar;
   uint32_t afsr;
+  uint32_t reserved_e000ed40[18];
+  uint32_t cpacr;
+  uint32_t reserved_e000ed8c[106];
+  uint32_t fpccr;
+  uint32_t fpcar;
+  uint32_t fpdscr;
+  uint32_t mvfr0;
+  uint32_t mvfr1;
 } ARMV7M_SCB;
 
 typedef struct {
@@ -503,6 +536,8 @@ void _ARMV7M_Interrupt_service_leave( void );
 void _ARMV7M_Pendable_service_call( void );
 
 void _ARMV7M_Supervisor_call( void );
+
+#endif /* ASM */
 
 #endif /* ARM_MULTILIB_ARCH_V7M */
 
