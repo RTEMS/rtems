@@ -86,6 +86,11 @@ extern "C" {
 #define LEON_REG_TIMER_CONTROL_LD    0x00000004  /* 1 = load counter */
                                               /* 0 = no function */
 
+/*
+ *  The following defines the bits in the LEON Cache Control Register.
+ */
+#define LEON3_REG_CACHE_CTRL_FI      0x00200000 /* Flush instruction cache */
+
 /* LEON3 Interrupt Controller */
 extern volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
 /* LEON3 GP Timer */
