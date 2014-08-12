@@ -14,6 +14,7 @@ DIST_SUBDIRS += mips
 DIST_SUBDIRS += moxie
 DIST_SUBDIRS += nios2
 DIST_SUBDIRS += no_cpu
+DIST_SUBDIRS += or1k
 DIST_SUBDIRS += powerpc
 DIST_SUBDIRS += sh
 DIST_SUBDIRS += sparc
