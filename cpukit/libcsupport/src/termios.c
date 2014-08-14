@@ -974,6 +974,49 @@ rtems_termios_ioctl (void *arg)
 }
 
 /*
+ * Send as many chars at once as possible to device-specific code.
+ * If transmitting==true then assume transmission is already running and
+ * an explicit write(0) is needed if output has to stop for flow control.
+ */
+static unsigned int
+startXmit (
+  struct rtems_termios_tty *tty,
+  unsigned int newTail,
+  bool transmitting
+)
+{
+  unsigned int nToSend;
+
+  tty->rawOutBufState = rob_busy;
+
+  /* if XOFF was received, do not (re)start output */
+  if (tty->flow_ctrl & FL_ORCVXOF) {
+    /* set flag, that output has been stopped */
+    tty->flow_ctrl |= FL_OSTOP;
+    nToSend = 0;
+    /* stop transmitter */
+    if (transmitting) {
+      (*tty->handler.write) (tty, NULL, 0);
+    }
+  } else {
+    /* when flow control XON or XOF, don't send blocks of data     */
+    /* to allow fast reaction on incoming flow ctrl and low latency*/
+    /* for outgoing flow control                                   */
+    if (tty->flow_ctrl & (FL_MDXON | FL_MDXOF))
+      nToSend = 1;
+    else if (newTail > tty->rawOutBuf.Head)
+      nToSend = tty->rawOutBuf.Size - newTail;
+    else
+      nToSend = tty->rawOutBuf.Head - newTail;
+
+    (*tty->handler.write)(
+        tty, &tty->rawOutBuf.theBuf[newTail], nToSend);
+  }
+
+  return nToSend;
+}
+
+/*
  * Send characters to device-specific code
  */
 void
@@ -989,21 +1032,16 @@ rtems_termios_puts (
     (*tty->handler.write)(tty, buf, len);
     return;
   }
-  newHead = tty->rawOutBuf.Head;
+
   while (len) {
-    /*
-     * Performance improvement could be made here.
-     * Copy multiple bytes to raw buffer:
-     * if (len > 1) && (space to buffer end, or tail > 1)
-     *  ncopy = MIN (len, space to buffer end or tail)
-     *  memcpy (raw buffer, buf, ncopy)
-     *  buf += ncopy
-     *  len -= ncopy
-     *
-     * To minimize latency, the memcpy should be done
-     * with interrupts enabled.
-     */
-    newHead = (newHead + 1) % tty->rawOutBuf.Size;
+    size_t nToCopy;
+    size_t nAvail;
+
+    /* Check space for at least one char */
+    newHead = tty->rawOutBuf.Head + 1;
+    if (newHead >= tty->rawOutBuf.Size)
+      newHead -= tty->rawOutBuf.Size;
+
     rtems_termios_interrupt_lock_acquire (tty, &lock_context);
     while (newHead == tty->rawOutBuf.Tail) {
       tty->rawOutBufState = rob_wait;
@@ -1014,21 +1052,41 @@ rtems_termios_puts (
         rtems_fatal_error_occurred (sc);
       rtems_termios_interrupt_lock_acquire (tty, &lock_context);
     }
-    tty->rawOutBuf.theBuf[tty->rawOutBuf.Head] = *buf++;
-    tty->rawOutBuf.Head = newHead;
-    if (tty->rawOutBufState == rob_idle) {
-      /* check, whether XOFF has been received */
-      if (!(tty->flow_ctrl & FL_ORCVXOF)) {
-        (*tty->handler.write)(
-          tty, &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail],1);
-      } else {
-        /* remember that output has been stopped due to flow ctrl*/
-        tty->flow_ctrl |= FL_OSTOP;
-      }
-      tty->rawOutBufState = rob_busy;
+
+    /* Determine free space up to current tail or end of ring buffer */
+    nToCopy = len;
+    if (tty->rawOutBuf.Tail > tty->rawOutBuf.Head) {
+      /* Available space is contiguous from Head to Tail */
+      nAvail = tty->rawOutBuf.Tail - tty->rawOutBuf.Head - 1;
+    } else {
+      /* Available space wraps at buffer end. To keep it simple, utilize
+         only the free space from Head to end during this iteration */
+      nAvail = tty->rawOutBuf.Size - tty->rawOutBuf.Head;
+      /* Head may not touch Tail after wraparound */
+      if (tty->rawOutBuf.Tail == 0)
+        nAvail--;
     }
+    if (nToCopy > nAvail)
+      nToCopy = nAvail;
+
+    /* To minimize latency, the memcpy could be done
+     * with interrupts enabled or with limit on nToCopy (TBD)
+     */
+    memcpy(&tty->rawOutBuf.theBuf[tty->rawOutBuf.Head], buf, nToCopy);
+
+    newHead = tty->rawOutBuf.Head + nToCopy;
+    if (newHead >= tty->rawOutBuf.Size)
+      newHead -= tty->rawOutBuf.Size;
+    tty->rawOutBuf.Head = newHead;
+
+    if (tty->rawOutBufState == rob_idle) {
+      startXmit (tty, tty->rawOutBuf.Tail, false);
+    }
+
     rtems_termios_interrupt_lock_release (tty, &lock_context);
-    len--;
+
+    buf += nToCopy;
+    len -= nToCopy;
   }
 }
 
@@ -1678,35 +1736,12 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
       if ( tty->tty_snd.sw_pfn != NULL) {
         (*tty->tty_snd.sw_pfn)(&tty->termios, tty->tty_snd.sw_arg);
       }
-    }
-    /* check, whether output should stop due to received XOFF */
-    else if ((tty->flow_ctrl & (FL_MDXON | FL_ORCVXOF))
-       ==                (FL_MDXON | FL_ORCVXOF)) {
-      /* Buffer not empty, but output stops due to XOFF */
-      /* set flag, that output has been stopped */
-      tty->flow_ctrl |= FL_OSTOP;
-      tty->rawOutBufState = rob_busy; /*apm*/
-      (*tty->handler.write) (tty, NULL, 0);
-      nToSend = 0;
     } else {
       /*
-       * Buffer not empty, start tranmitter
+       * Buffer not empty, check flow control, start transmitter
        */
-      if (newTail > tty->rawOutBuf.Head)
-        nToSend = tty->rawOutBuf.Size - newTail;
-      else
-        nToSend = tty->rawOutBuf.Head - newTail;
-      /* when flow control XON or XOF, don't send blocks of data     */
-      /* to allow fast reaction on incoming flow ctrl and low latency*/
-      /* for outgoing flow control                                   */
-      if (tty->flow_ctrl & (FL_MDXON | FL_MDXOF)) {
-        nToSend = 1;
-      }
-      tty->rawOutBufState = rob_busy; /*apm*/
-      (*tty->handler.write)(
-        tty, &tty->rawOutBuf.theBuf[newTail], nToSend);
+      nToSend = startXmit (tty, newTail, true);
     }
-    tty->rawOutBuf.Tail = newTail; /*apm*/
   }
 
   rtems_termios_interrupt_lock_release (tty, &lock_context);
