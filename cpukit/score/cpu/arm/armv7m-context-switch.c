@@ -54,9 +54,11 @@ void __attribute__((naked)) _CPU_Context_switch(
     "bx lr\n"
     :
     : [spctxoff] "J" (offsetof(Context_Control, register_sp)),
+#ifdef ARM_MULTILIB_VFP
+      [d8off] "J" (ARM_CONTEXT_CONTROL_D8_OFFSET),
+#endif
       [isrctxoff] "J" (offsetof(Context_Control, isr_nest_level)),
-      [isrpcpuoff] "J" (offsetof(Per_CPU_Control, isr_nest_level)),
-      [d8off] "J" (ARM_CONTEXT_CONTROL_D8_OFFSET)
+      [isrpcpuoff] "J" (offsetof(Per_CPU_Control, isr_nest_level))
   );
 }
 
