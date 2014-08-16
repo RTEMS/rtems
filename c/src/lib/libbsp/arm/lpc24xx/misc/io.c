@@ -395,9 +395,14 @@ lpc24xx_pin_set_function(
     rtems_interrupt_enable(level);
   #else
     uint32_t iocon_extra = 0;
+    uint32_t iocon_not_analog = IOCON_ADMODE;
 
     /* TODO */
     switch (pin_range.fields.type) {
+      case LPC17XX_PIN_TYPE_ADC:
+      case LPC17XX_PIN_TYPE_DAC:
+        iocon_not_analog = 0;
+        break;
       case LPC17XX_PIN_TYPE_I2C_FAST_PLUS:
         iocon_extra |= IOCON_HS;
         break;
@@ -408,7 +413,7 @@ lpc24xx_pin_set_function(
         break;
     }
 
-    *iocon = IOCON_FUNC(pin_range.fields.function) | iocon_extra;
+    *iocon = IOCON_FUNC(pin_range.fields.function) | iocon_extra | iocon_not_analog;
   #endif
 
   return RTEMS_SUCCESSFUL;
