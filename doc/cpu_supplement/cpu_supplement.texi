@@ -73,6 +73,7 @@
 * M68xxx and Coldfire Specific Information::
 * Xilinx MicroBlaze Specific Information::
 * MIPS Specific Information::
+* OpenRISC 1000 Specific Information::
 * Altera Nios II Specific Information::
 * PowerPC Specific Information::
 * SuperH Specific Information::
@@ -97,6 +98,7 @@
 @include microblaze.texi
 @include mips.texi
 @include nios2.texi
+@include or1k.texi
 @include powerpc.texi
 @include sh.texi
 @include sparc.texi
