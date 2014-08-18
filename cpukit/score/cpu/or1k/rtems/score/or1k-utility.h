@@ -258,7 +258,21 @@
 /*Context ID (Fast Context Switching) */
 #define CPU_OR1K_SPR_SR_CID   (F << CPU_OR1K_SPR_SR_SHAMT_CID)
 
+/* Tick timer configuration bits */
+#define CPU_OR1K_SPR_TTMR_SHAMT_IP    28
+#define CPU_OR1K_SPR_TTMR_SHAMT_IE    29
+#define CPU_OR1K_SPR_TTMR_SHAMT_MODE  30
+
+#define CPU_OR1K_SPR_TTMR_TP_MASK       (0x0FFFFFFF)
+#define CPU_OR1K_SPR_TTMR_IP            (1 << CPU_OR1K_SPR_TTMR_SHAMT_IP)
+#define CPU_OR1K_SPR_TTMR_IE            (1 << CPU_OR1K_SPR_TTMR_SHAMT_IE)
+#define CPU_OR1K_SPR_TTMR_MODE_RESTART  (1 << CPU_OR1K_SPR_TTMR_SHAMT_MODE)
+#define CPU_OR1K_SPR_TTMR_MODE_ONE_SHOT (2 << CPU_OR1K_SPR_TTMR_SHAMT_MODE)
+#define CPU_OR1K_SPR_TTMR_MODE_CONT     (3 << CPU_OR1K_SPR_TTMR_SHAMT_MODE)
+
 /* Power management register bits */
+
+/* Shift amount macros for bit positions in Power Management register */
 #define CPU_OR1K_SPR_PMR_SHAMT_SDF  0
 #define CPU_OR1K_SPR_PMR_SHAMT_DME  4
 #define CPU_OR1K_SPR_PMR_SHAMT_SME  5
@@ -270,8 +284,6 @@
 #define CPU_OR1K_SPR_PMR_SME  (1 << CPU_OR1K_SPR_PMR_SHAMT_SME)
 #define CPU_OR1K_SPR_PMR_DCGE (1 << CPU_OR1K_SPR_PMR_SHAMT_DCGE)
 #define CPU_OR1K_SPR_PMR_SUME (1 << CPU_OR1K_SPR_PMR_SHAMT_SUME)
-
-/* Shift amount macros for bit positions in Power Management register */
 
 #ifndef ASM
 
