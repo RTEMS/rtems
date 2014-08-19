@@ -11,6 +11,40 @@
 
 #include <tmacros.h>
 
+static void test_create_initially_locked_prio_inherit_sema(void)
+{
+  rtems_status_code   sc;
+  rtems_id            id;
+  rtems_task_priority prio_a;
+  rtems_task_priority prio_b;
+  rtems_task_priority prio_ceiling = 0;
+
+  sc = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio_a);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(prio_a != prio_ceiling);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name( 'S', 'E', 'M', 'A' ),
+    0,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY,
+    prio_ceiling,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio_b);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(prio_a == prio_b);
+
+  sc = rtems_semaphore_release(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -49,6 +83,8 @@ rtems_task Init(
   puts( "Release semaphore we did not obtain" );
   sc = rtems_semaphore_release( mutex );
   directive_failed( sc, "rtems_semaphore_release" );
+
+  test_create_initially_locked_prio_inherit_sema();
 
   puts( "*** END OF TEST 51 ***" );
   rtems_test_exit( 0 );
