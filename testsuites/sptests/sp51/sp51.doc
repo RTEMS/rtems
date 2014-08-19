@@ -23,3 +23,6 @@ concepts:
 
 + Ensure the when the binary semaphore lock fails to acquire the mutex,
   it is an error to release it since the lock failed.
+
++ Verify that creation of an initially locked priority inheritance mutex does
+  not change the priority of the executing thread.

@@ -39,10 +39,14 @@ CORE_mutex_Status _CORE_mutex_Initialize(
   the_mutex->Attributes    = *the_mutex_attributes;
 
   if ( initially_locked ) {
+    bool is_priority_ceiling =
+      _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes );
+
     the_mutex->nest_count = 1;
     the_mutex->holder     = executing;
-    if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
-         _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
+
+    if (  is_priority_ceiling ||
+         _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ) {
       Priority_Control ceiling = the_mutex->Attributes.priority_ceiling;
 
       /*
@@ -52,7 +56,7 @@ CORE_mutex_Status _CORE_mutex_Initialize(
        */
       _Thread_Disable_dispatch();
 
-      if ( executing->current_priority < ceiling ) {
+      if ( is_priority_ceiling && executing->current_priority < ceiling ) {
         _Thread_Enable_dispatch();
         return CORE_MUTEX_STATUS_CEILING_VIOLATED;
       }
@@ -65,7 +69,10 @@ CORE_mutex_Status _CORE_mutex_Initialize(
 
       executing->resource_count++;
 
-      _Thread_Change_priority( executing, ceiling, false );
+      if ( is_priority_ceiling ) {
+        _Thread_Change_priority( executing, ceiling, false );
+      }
+
       _Thread_Enable_dispatch();
     }
   } else {
