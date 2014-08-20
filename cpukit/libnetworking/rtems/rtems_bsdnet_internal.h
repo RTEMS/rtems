@@ -83,11 +83,13 @@ typedef	quad_t *	qaddr_t;
 typedef void __sighandler_t(int);
 typedef	__sighandler_t	*sig_t;	/* type of pointer to a signal function */
 #define NSIG    32
-struct	sigaltstack {
-	char	*ss_sp;			/* signal stack base */
-	int	ss_size;		/* signal stack length */
-	int	ss_flags;		/* SS_DISABLE and/or SS_ONSTACK */
+#if (__RTEMS_HAVE_DECL_SIGALTSTACK__ == 0)
+struct sigaltstack {
+       char    *ss_sp;                 /* signal stack base */
+       int     ss_size;                /* signal stack length */
+       int     ss_flags;               /* SS_DISABLE and/or SS_ONSTACK */
 };
+#endif
 
 #ifdef _KERNEL
 typedef	int		boolean_t;
