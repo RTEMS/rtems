@@ -135,8 +135,6 @@ range_set(
     *p_bits = bits;
 }
 
-#define N(ARG) (sizeof(ARG)/sizeof(ARG[0]))
-
 /** Return the size of the on-chip flash
  *  verifying that this is a device that we know about.
  * @return 0 for OK, non-zero for error:
@@ -207,7 +205,6 @@ unlock_once(int lsel, int msel, int hbsel, int *p_locked)
     union LMLR_tag lmlr;
     union SLMLR_tag slmlr;
     union HLR_tag hlr;
-    rtems_interrupt_level level;
 
     /* If we're already locked return.
      */
@@ -217,7 +214,6 @@ unlock_once(int lsel, int msel, int hbsel, int *p_locked)
 
     /* Do we have to lock something in the low or mid block?
      */
-    rtems_interrupt_disable(level);
     lmlr = FLASH.LMLR;
     if ((lsel || msel) && (lmlr.B.LME == 0)) {
         union LMLR_tag lmlr_unlock;
@@ -228,7 +224,6 @@ unlock_once(int lsel, int msel, int hbsel, int *p_locked)
         if (lmlr.B.LLOCK != lmlr_unlock.B.LLOCK ||
         lmlr.B.MLOCK != lmlr_unlock.B.MLOCK) {
             if (p_locked == 0) {
-                rtems_interrupt_enable(level);
                 return MPC55XX_FLASH_LOCK_ERR;
             } else {
                 *p_locked = 1;
@@ -237,9 +232,7 @@ unlock_once(int lsel, int msel, int hbsel, int *p_locked)
             FLASH.LMLR = lmlr_unlock;
         }
     }
-    rtems_interrupt_enable(level);
 
-    rtems_interrupt_disable(level);
     slmlr = FLASH.SLMLR;
     if ((lsel || msel) && (slmlr.B.SLE == 0)) {
         union SLMLR_tag slmlr_unlock;
@@ -250,7 +243,6 @@ unlock_once(int lsel, int msel, int hbsel, int *p_locked)
         if (slmlr.B.SLLOCK != slmlr_unlock.B.SLLOCK ||
         slmlr.B.SMLOCK != slmlr_unlock.B.SMLOCK) {
             if (p_locked == 0) {
-                rtems_interrupt_enable(level);
                 return MPC55XX_FLASH_LOCK_ERR;
             } else {
                 *p_locked = 1;
@@ -259,11 +251,9 @@ unlock_once(int lsel, int msel, int hbsel, int *p_locked)
             FLASH.SLMLR = slmlr_unlock;
         }
     }
-    rtems_interrupt_enable(level);
 
     /* Do we have to unlock something in the high block?
      */
-    rtems_interrupt_disable(level);
     hlr = FLASH.HLR;
     if (hbsel && (hlr.B.HBE == 0)) {
         union HLR_tag hlr_unlock;
@@ -272,7 +262,6 @@ unlock_once(int lsel, int msel, int hbsel, int *p_locked)
         if (hlr.B.HBLOCK != hlr_unlock.B.HBLOCK) {
             if (p_locked == 0) {
                 return MPC55XX_FLASH_LOCK_ERR;
-                rtems_interrupt_enable(level);
             } else {
                 *p_locked = 1;
             }
@@ -280,7 +269,6 @@ unlock_once(int lsel, int msel, int hbsel, int *p_locked)
             FLASH.HLR = hlr_unlock;
         }
     }
-    rtems_interrupt_enable(level);
 
     return 0;
 }
@@ -398,24 +386,25 @@ mpc55xx_flash_copy_op(
 {
     uint32_t udest, usrc, flash_size;
     int r;
-    int peg;            /* Program or Erase Good - Did it work? */
+    int peg;                        /* Program or Erase Good - Did it work? */
 
-    int lsel;           /* Low block select bits. */
-    int msel;           /* Mid block select bits. */
-    int hbsel;          /* High block select bits. */
+    int lsel;                       /* Low block select bits. */
+    int msel;                       /* Mid block select bits. */
+    int hbsel;                      /* High block select bits. */
 
-    int s_lsel;           /* Source Low block select bits. */
-    int s_msel;           /* Source Mid block select bits. */
-    int s_hbsel;          /* Source High block select bits. */
+    int s_lsel;                     /* Source Low block select bits. */
+    int s_msel;                     /* Source Mid block select bits. */
+    int s_hbsel;                    /* Source High block select bits. */
 
     int unlocked = 0;
     int *p_unlocked;
     int i;
-    int nwords;         /* The number of 32 bit words to write. */
-    volatile uint32_t *flash;    /* Where the flash is mapped in. */
-    volatile uint32_t *memory;   /* What to copy into flash. */
-    uint32_t offset;    /* Where the FLASH is mapped into memory. */
-    rtems_interrupt_level level;
+    int nwords;                     /* The number of 32 bit words to write. */
+    volatile uint32_t *flash;       /* Where the flash is mapped in. */
+    volatile uint32_t *memory;      /* What to copy into flash. */
+    const void *flashing_from;      /* Where we are flahsing from.
+                                     * "const" is to match invalidate cache function signature. */
+    uint32_t offset;                /* Where the FLASH is mapped into memory. */
 
     if ( (r = mpc55xx_flash_size(&flash_size))) {
         return r;
@@ -461,13 +450,13 @@ mpc55xx_flash_copy_op(
 
     /* Set up the bit masks for the blocks to program or erase.
      */
-    range_set(udest, udest + nbytes, &lsel,   lsel_ranges, N( lsel_ranges));
-    range_set(udest, udest + nbytes, &msel,   msel_ranges, N( msel_ranges));
-    range_set(udest, udest + nbytes, &hbsel, hbsel_ranges, N(hbsel_ranges));
+    range_set(udest, udest + nbytes, &lsel,   lsel_ranges, RTEMS_ARRAY_SIZE( lsel_ranges));
+    range_set(udest, udest + nbytes, &msel,   msel_ranges, RTEMS_ARRAY_SIZE( msel_ranges));
+    range_set(udest, udest + nbytes, &hbsel, hbsel_ranges, RTEMS_ARRAY_SIZE(hbsel_ranges));
 
-    range_set(usrc, usrc + nbytes, &s_lsel,   lsel_ranges, N( lsel_ranges));
-    range_set(usrc, usrc + nbytes, &s_msel,   msel_ranges, N( msel_ranges));
-    range_set(usrc, usrc + nbytes, &s_hbsel, hbsel_ranges, N(hbsel_ranges));
+    range_set(usrc, usrc + nbytes, &s_lsel,   lsel_ranges, RTEMS_ARRAY_SIZE( lsel_ranges));
+    range_set(usrc, usrc + nbytes, &s_msel,   msel_ranges, RTEMS_ARRAY_SIZE( msel_ranges));
+    range_set(usrc, usrc + nbytes, &s_hbsel, hbsel_ranges, RTEMS_ARRAY_SIZE(hbsel_ranges));
 
     /* Are we attempting overlapping flash?
      */
@@ -481,33 +470,39 @@ mpc55xx_flash_copy_op(
 
   /* In the following sections any "Step N" notes refer to
    * the steps in "13.4.2.3 Flash Programming" in the reference manual.
-   * XXX Do parts of this neeed to be protected by interrupt locks?
    */
 
     if (opmask & MPC55XX_FLASH_ERASE) {   /* Erase. */
+        uint32_t flash_biucr_r;
         if ( (r = unlock_once(lsel, msel, hbsel, p_unlocked)) ) {
             return r;
         }
 
-        rtems_interrupt_disable(level);
+        /* Per errata "e989: FLASH: Disable Prefetch during programming and erase" */
+        flash_biucr_r = FLASH.BIUCR.R;
+        FLASH.BIUCR.B.PFLIM = 0;
+
+        FLASH.MCR.B.ESUS = 0;       /* Be sure ESUS is clear. */
+
         FLASH.MCR.B.ERS = 1;        /* Step 1: Select erase. */
 
         FLASH.LMSR.B.LSEL = lsel;   /* Step 2: Select blocks to be erased. */
         FLASH.LMSR.B.MSEL = msel;
         FLASH.HSR.B.HBSEL = hbsel;
 
-        flash[0] = 1;               /* Step 3: Write to any address in the flash
+        flash[0] = 0xffffffff;      /* Step 3: Write to any address in the flash
                                      * (the "erase interlock write)".
                                      */
+        rtems_cache_flush_multiple_data_lines(flash, sizeof(flash[0]));
+
         FLASH.MCR.B.EHV = 1;         /* Step 4: Enable high V to start erase. */
-        rtems_interrupt_enable(level);
         while (FLASH.MCR.B.DONE == 0) { /* Step 5: Wait until done. */
         }
-        rtems_interrupt_disable(level);
         peg = FLASH.MCR.B.PEG;       /* Save result. */
         FLASH.MCR.B.EHV = 0;         /* Disable high voltage. */
         FLASH.MCR.B.ERS = 0;         /* De-select erase. */
-        rtems_interrupt_enable(level);
+        FLASH.BIUCR.R = flash_biucr_r;
+
         if (peg == 0) {
             return MPC55XX_FLASH_ERASE_ERR; /* Flash erase failed. */
         }
@@ -534,9 +529,7 @@ mpc55xx_flash_copy_op(
         }
         FLASH.MCR.B.PGM = 1;                /* Step 1 */
 
-       rtems_interrupt_disable(level);
-
-        for (i = 0; i < nwords; i += 2) {
+        for (flashing_from = (const void *)flash, i = 0; i < nwords; i += 2) {
            flash[i] = memory[i];            /* Step 2 */
            flash[i + 1] = memory[i + 1];    /* Always program in min 64 bits. */
 
@@ -548,45 +541,45 @@ mpc55xx_flash_copy_op(
            chunk++;
            if (chunk == 4) {
                 /* Collected 4 64-bits for a 256 bit chunk. */
+
+                rtems_cache_flush_multiple_data_lines(flashing_from, 32);    /* Flush cache. */
+
                 FLASH.MCR.B.EHV = 1;            /* Step 4: Enable high V. */
 
-                rtems_interrupt_enable(level);
                 while (FLASH.MCR.B.DONE == 0) { /* Step 5: Wait until done. */
                 }
-                rtems_interrupt_disable(level);
 
                 peg = FLASH.MCR.B.PEG;          /* Step 6: Save result. */
                 FLASH.MCR.B.EHV = 0;            /* Step 7: Disable high V. */
                 if (peg == 0) {
                     FLASH.MCR.B.PGM = 0;
-                    rtems_interrupt_enable(level);
                     if (p_fail) {
                         *p_fail = (uint32_t)(flash + i);
                     }
                     return MPC55XX_FLASH_PROGRAM_ERR; /* Programming failed. */
                 }
                 chunk = 0;                       /* Reset chunk counter. */
+                flashing_from = (const void *)(flash + i);
             }
                                                  /* Step 8: Back to step 2. */
         }
 
        if (!chunk) {
             FLASH.MCR.B.PGM = 0;
-            rtems_interrupt_enable(level);
        } else {
            /* If there is anything left in that last chunk flush it out:
             */
+
+            rtems_cache_flush_multiple_data_lines(flashing_from, chunk * 8);
+
             FLASH.MCR.B.EHV = 1;
 
-            rtems_interrupt_enable(level);
             while (FLASH.MCR.B.DONE == 0) {     /* Wait until done. */
             }
-            rtems_interrupt_disable(level);
 
             peg = FLASH.MCR.B.PEG;              /* Save result. */
             FLASH.MCR.B.EHV = 0;                /* Disable high voltage. */
             FLASH.MCR.B.PGM = 0;
-            rtems_interrupt_enable(level);
 
             if (peg == 0) {
                 if (p_fail) {
