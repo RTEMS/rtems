@@ -1,0 +1,67 @@
+Development Board: TMS570LS31x Hercules Development Kit from TI
+
+http://www.ti.com/tool/tmds570ls31hdk
+
+Drivers:
+
+	o Console
+	o Clock
+  o Ethernet - work in progress
+
+BSP variants:
+  tms570ls3137_hdk_intram - place code and data into internal SRAM
+  tms570ls3137_hdk_sdram - place code into external SDRAM and data to SRAM
+  tms570ls3137_hdk - variant prepared for stand-alone RTEMS application
+                      stored and running directly from flash. Not working yet.
+
+Tool-chain
+  GCC 4.9.0 + Newlib 2.1.0 + Binutils 2.24 configuration:
+
+  CFLAGS="-O2 -pipe" LDFLAGS=-s \
+  ../../../src/gcc-4.9/configure --target=arm-rtems4.11 --prefix=/usr \
+               --enable-languages=c,c++ \
+               --disable-libstdcxx-pch \
+               --with-gnu-ld \
+               --with-gnu-as \
+               --enable-threads \
+               --enable-target-optspace \
+               --with-system-zlib \
+               --verbose \
+               --disable-nls --without-included-gettext \
+               --disable-win32-registry \
+               --with-newlib \
+               --enable-plugin \
+               --enable-newlib-io-c99-formats \
+               --enable-version-specific-runtime-libs \
+               --enable-newlib-iconv \
+               --disable-lto \
+
+Patches required for Cortex-R and big-endian ARM support are already
+accepted by the mainline.
+
+Execution
+
+Currently, a bootloader is not used. For test and debug purposes, TI's
+HalCoGen generated application is used to set up the board and then
+the RTEMS application image is loaded using OpenOCD to internal
+EEC SRAM or external DRAM. The following features are
+not implemented in the BSP:
+
+ + Initial complex CPU and peripheral initialization
+ + Cores Self-test
+
+Setup application code is available there:
+          https://github.com/hornmich/tms570ls3137-hdk-sdram
+
+Howto setup TMDS570LS31HDK?
+
+	o Unpack board.	
+	o Verify that demo application runs.
+  o Upload bootloader specified above
+  o write BSP application either to sdram or intram and jump to RTEMS start code
+
+Additional information about the board can be found at
+  http://www.rtems.org/wiki/index.php/Tms570
+
+Additional information about the CPU can be found at
+  http://www.ti.com/product/tms570ls3137
