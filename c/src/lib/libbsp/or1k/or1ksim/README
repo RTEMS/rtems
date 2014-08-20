@@ -1,0 +1,17 @@
+This BSP should run only on or1ksim: the main simulator for or1k architecture.
+or1ksim should be used for testing purposes.
+
+svn co http://opencores.org/ocsvn/openrisc/openrisc/trunk/or1ksim
+cd or1ksim
+mkdir builddir_or1ksim
+cd builddir_or1ksim
+../configure --target=or32-elf --prefix=/opt/or1ksim
+make all
+make install
+export PATH=/opt/or1ksim/bin:$PATH
+
+Configuration file "sim.cfg" should be provided for complex board
+configurations at the current directory (which you run or1ksim from) or at
+~/.or1k/
+
+sim -f sim.cfg hello.exe

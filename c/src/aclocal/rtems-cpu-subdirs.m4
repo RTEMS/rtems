@@ -23,6 +23,7 @@ _RTEMS_CPU_SUBDIR([mips],[$1]);;
 _RTEMS_CPU_SUBDIR([moxie],[$1]);;
 _RTEMS_CPU_SUBDIR([nios2],[$1]);;
 _RTEMS_CPU_SUBDIR([no_cpu],[$1]);;
+_RTEMS_CPU_SUBDIR([or1k],[$1]);;
 _RTEMS_CPU_SUBDIR([powerpc],[$1]);;
 _RTEMS_CPU_SUBDIR([sh],[$1]);;
 _RTEMS_CPU_SUBDIR([sparc],[$1]);;

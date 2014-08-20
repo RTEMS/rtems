@@ -1,0 +1,310 @@
+/**
+ * @file
+ *
+ * @ingroup bsp_linker
+ *
+ * @brief Linker command base file.
+ */
+
+/*
+ * COPYRIGHT (c) 2014 Hesham ALMatary <heshamelmatary@gmail.com>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE
+ */
+
+OUTPUT_ARCH (or1k)
+
+ENTRY (_start)
+
+/*
+ * Global symbols that may be defined externally
+ */
+
+bsp_start_vector_table_begin = 0x1F00;
+bsp_vector_table_size = DEFINED (bsp_vector_table_size) ? bsp_vector_table_size
+: 8260;
+/* 8192 for raw vector table, and 17 * 4 for handlers vector. */
+
+bsp_section_xbarrier_align  = DEFINED (bsp_section_xbarrier_align) ? bsp_section_xbarrier_align : 1;
+bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 1;
+bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_section_rwbarrier_align : 1;
+
+bsp_stack_align = DEFINED (bsp_stack_align) ? bsp_stack_align : 8;
+
+bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 0;
+bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);
+
+bsp_processor_count = DEFINED (bsp_processor_count) ? bsp_processor_count : 1;
+
+SECTIONS {
+
+  .vector : ALIGN_WITH_INPUT {
+    *(.vector)
+    . = ALIGN(bsp_vector_table_size);
+    bsp_section_vector_end = .;
+  } > REGION_VECTOR AT > REGION_VECTOR
+  bsp_section_vector_size = bsp_section_vector_end - bsp_section_vector_begin;
+  bsp_vector_table_begin = bsp_section_vector_begin;
+  bsp_vector_table_end = bsp_vector_table_begin + bsp_vector_table_size;
+
+  .start : ALIGN_WITH_INPUT {
+    bsp_section_start_begin = .;
+    KEEP (*(.bsp_start_text))
+    KEEP (*(.bsp_start_data))
+    bsp_section_start_end = .;
+  } > REGION_START AT > REGION_START
+  bsp_section_start_size = bsp_section_start_end - bsp_section_start_begin;
+
+.xbarrier : ALIGN_WITH_INPUT {
+    . = ALIGN (bsp_section_xbarrier_align);
+  } > REGION_VECTOR AT > REGION_VECTOR
+
+.text : ALIGN_WITH_INPUT {
+    bsp_section_text_begin = .;
+    *(.text.unlikely .text.*_unlikely)
+    *(.text .stub .text.* .gnu.linkonce.t.*)
+    /* .gnu.warning sections are handled specially by elf32.em.  */
+    *(.gnu.warning)
+    *(.glue_7t) *(.glue_7) *(.vfp11_veneer) *(.v4_bx)
+  } > REGION_TEXT AT > REGION_TEXT_LOAD
+  .init : ALIGN_WITH_INPUT {
+    KEEP (*(.init))
+  } > REGION_TEXT AT > REGION_TEXT_LOAD
+  .fini : ALIGN_WITH_INPUT {
+    KEEP (*(.fini))
+    bsp_section_text_end = .;
+  } > REGION_TEXT AT > REGION_TEXT_LOAD
+  bsp_section_text_size = bsp_section_text_end - bsp_section_text_begin;
+  bsp_section_text_load_begin = LOADADDR (.text);
+  bsp_section_text_load_end = bsp_section_text_load_begin + bsp_section_text_size;
+
+.robarrier : ALIGN_WITH_INPUT {
+    . = ALIGN (bsp_section_robarrier_align);
+  } > REGION_RODATA AT > REGION_RODATA
+
+.rodata : ALIGN_WITH_INPUT {
+    bsp_section_rodata_begin = .;
+    *(.rodata .rodata.* .gnu.linkonce.r.*)
+  } > REGION_RODATA AT > REGION_RODATA_LOAD
+.eh_frame : ALIGN_WITH_INPUT {
+               KEEP (*(.eh_frame))
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .gcc_except_table : ALIGN_WITH_INPUT {
+               *(.gcc_except_table .gcc_except_table.*)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .tdata : ALIGN_WITH_INPUT {
+               _TLS_Data_begin = .;
+               *(.tdata .tdata.* .gnu.linkonce.td.*)
+               _TLS_Data_end = .;
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .tbss : ALIGN_WITH_INPUT {
+               _TLS_BSS_begin = .;
+               *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+               _TLS_BSS_end = .;
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       _TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+       _TLS_Data_begin = _TLS_Data_size != 0 ? _TLS_Data_begin : _TLS_BSS_begin;
+       _TLS_Data_end = _TLS_Data_size != 0 ? _TLS_Data_end : _TLS_BSS_begin;
+       _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
+       _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
+       _TLS_Alignment = MAX (ALIGNOF (.tdata), ALIGNOF (.tbss));
+       .preinit_array : ALIGN_WITH_INPUT {
+               PROVIDE_HIDDEN (__preinit_array_start = .);
+               KEEP (*(.preinit_array))
+               PROVIDE_HIDDEN (__preinit_array_end = .);
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .init_array : ALIGN_WITH_INPUT {
+               PROVIDE_HIDDEN (__init_array_start = .);
+               KEEP (*(SORT(.init_array.*)))
+               KEEP (*(.init_array))
+               PROVIDE_HIDDEN (__init_array_end = .);
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .fini_array : ALIGN_WITH_INPUT {
+               PROVIDE_HIDDEN (__fini_array_start = .);
+               KEEP (*(.fini_array))
+               KEEP (*(SORT(.fini_array.*)))
+               PROVIDE_HIDDEN (__fini_array_end = .);
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .ctors : ALIGN_WITH_INPUT {
+               /* gcc uses crtbegin.o to find the start of
+                  the constructors, so we make sure it is
+                  first.  Because this is a wildcard, it
+                  doesn't matter if the user does not
+                  actually link against crtbegin.o; the
+                  linker won't look for a file to match a
+                  wildcard.  The wildcard also means that it
+                  doesn't matter which directory crtbegin.o
+                  is in.  */
+               KEEP (*crtbegin.o(.ctors))
+               KEEP (*crtbegin?.o(.ctors))
+               /* We don't want to include the .ctor section from
+                  the crtend.o file until after the sorted ctors.
+                  The .ctor section from the crtend file contains the
+                  end of ctors marker and it must be last */
+               KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
+               KEEP (*(SORT(.ctors.*)))
+               KEEP (*(.ctors))
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .dtors : ALIGN_WITH_INPUT {
+               KEEP (*crtbegin.o(.dtors))
+               KEEP (*crtbegin?.o(.dtors))
+               KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
+               KEEP (*(SORT(.dtors.*)))
+               KEEP (*(.dtors))
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .data.rel.ro : ALIGN_WITH_INPUT {
+               *(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
+               *(.data.rel.ro* .gnu.linkonce.d.rel.ro.*)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .jcr : ALIGN_WITH_INPUT {
+               KEEP (*(.jcr))
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .interp : ALIGN_WITH_INPUT {
+               *(.interp)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .note.gnu.build-id : ALIGN_WITH_INPUT {
+               *(.note.gnu.build-id)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .hash : ALIGN_WITH_INPUT {
+               *(.hash)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .gnu.hash : ALIGN_WITH_INPUT {
+               *(.gnu.hash)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .dynsym : ALIGN_WITH_INPUT {
+               *(.dynsym)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .dynstr : ALIGN_WITH_INPUT {
+               *(.dynstr)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .gnu.version : ALIGN_WITH_INPUT {
+               *(.gnu.version)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .gnu.version_d : ALIGN_WITH_INPUT {
+               *(.gnu.version_d)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .gnu.version_r : ALIGN_WITH_INPUT {
+               *(.gnu.version_r)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .rel.dyn : ALIGN_WITH_INPUT {
+               *(.rel.init)
+               *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
+               *(.rel.fini)
+               *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
+               *(.rel.data.rel.ro* .rel.gnu.linkonce.d.rel.ro.*)
+               *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
+               *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
+               *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
+               *(.rel.ctors)
+               *(.rel.dtors)
+               *(.rel.got)
+               *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
+               PROVIDE_HIDDEN (__rel_iplt_start = .);
+               *(.rel.iplt)
+               PROVIDE_HIDDEN (__rel_iplt_end = .);
+               PROVIDE_HIDDEN (__rela_iplt_start = .);
+               PROVIDE_HIDDEN (__rela_iplt_end = .);
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .rela.dyn : ALIGN_WITH_INPUT {
+               *(.rela.init)
+               *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+               *(.rela.fini)
+               *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+               *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+               *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+               *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+               *(.rela.ctors)
+               *(.rela.dtors)
+               *(.rela.got)
+               *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+               PROVIDE_HIDDEN (__rel_iplt_start = .);
+               PROVIDE_HIDDEN (__rel_iplt_end = .);
+               PROVIDE_HIDDEN (__rela_iplt_start = .);
+               *(.rela.iplt)
+               PROVIDE_HIDDEN (__rela_iplt_end = .);
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .rel.plt : ALIGN_WITH_INPUT {
+               *(.rel.plt)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .rela.plt : ALIGN_WITH_INPUT {
+               *(.rela.plt)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .plt : ALIGN_WITH_INPUT {
+               *(.plt)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .iplt : ALIGN_WITH_INPUT {
+               *(.iplt)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .dynamic : ALIGN_WITH_INPUT {
+               *(.dynamic)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .got : ALIGN_WITH_INPUT {
+               *(.got.plt) *(.igot.plt) *(.got) *(.igot)
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+       .rtemsroset : ALIGN_WITH_INPUT {
+               /* Special FreeBSD linker set sections */
+               __start_set_sysctl_set = .;
+               *(set_sysctl_*);
+               __stop_set_sysctl_set = .;
+               *(set_domain_*);
+               *(set_pseudo_*);
+
+               KEEP (*(SORT(.rtemsroset.*)))
+               bsp_section_rodata_end = .;
+       } > REGION_RODATA AT > REGION_RODATA_LOAD
+  bsp_section_rodata_size = bsp_section_rodata_end - bsp_section_rodata_begin;
+  bsp_section_rodata_load_begin = LOADADDR (.rodata);
+  bsp_section_rodata_load_end = bsp_section_rodata_load_begin + bsp_section_rodata_size;
+
+.rwbarrier : ALIGN_WITH_INPUT {
+    . = ALIGN (bsp_section_rwbarrier_align);
+  } > REGION_DATA AT > REGION_DATA
+
+.data : ALIGN_WITH_INPUT {
+    bsp_section_data_begin = .;
+    *(.data .data.* .gnu.linkonce.d.*)
+    SORT(CONSTRUCTORS)
+  } > REGION_DATA AT > REGION_DATA_LOAD
+  .data1 : ALIGN_WITH_INPUT {
+    *(.data1)
+  } > REGION_DATA AT > REGION_DATA_LOAD
+  .rtemsrwset : ALIGN_WITH_INPUT {
+    KEEP (*(SORT(.rtemsrwset.*)))
+    bsp_section_data_end = .;
+  } > REGION_DATA AT > REGION_DATA_LOAD
+  bsp_section_data_size = bsp_section_data_end - bsp_section_data_begin;
+  bsp_section_data_load_begin = LOADADDR (.data);
+  bsp_section_data_load_end = bsp_section_data_load_begin + bsp_section_data_size;
+
+  .bss : ALIGN_WITH_INPUT {
+    bsp_section_bss_begin = .;
+    *(.dynbss)
+    *(.bss .bss.* .gnu.linkonce.b.*)
+    *(COMMON)
+    bsp_section_bss_end = .;
+  } > REGION_BSS AT > REGION_BSS
+  bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
+
+.work : ALIGN_WITH_INPUT {
+    /*
+     * The work section will occupy the remaining REGION_WORK region and
+     * contains the RTEMS work space and heap.
+     */
+    bsp_section_work_begin = .;
+    . += ORIGIN (REGION_WORK) + LENGTH (REGION_WORK) - ABSOLUTE (.);
+    bsp_section_work_end = .;
+  } > REGION_WORK AT > REGION_WORK
+  bsp_section_work_size = bsp_section_work_end - bsp_section_work_begin;
+
+  .stack : ALIGN_WITH_INPUT {
+    bsp_section_stack_end = .;
+  } > REGION_STACK AT > REGION_STACK
+  bsp_section_stack_size = bsp_section_stack_begin - bsp_section_stack_end;
+
+  RamBase = ORIGIN (REGION_WORK);
+  RamSize = LENGTH (REGION_WORK);
+  WorkAreaBase = bsp_section_work_begin;
+  HeapSize = 0;
+}
