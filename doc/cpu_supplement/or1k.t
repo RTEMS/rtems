@@ -59,10 +59,10 @@ There are only two levels: interrupts enabled and interrupts disabled.
 
 @subsection Interrupt Stack
 
-OpenRISC RTEMS port uses RTEMS SW interrupt stack.
-The stack for interrupts is allocated during interrupt driver initilization.
-When an  interrup entered, the _ISR_Handler routine is resposible for
-switching from the interrupted task stack to RTEMS SW interrupt stack.
+The OpenRISC RTEMS port uses a dedicated software interrupt stack.
+The stack for interrupts is allocated during interrupt driver initialization.
+When an  interrupt is entered, the _ISR_Handler routine is responsible for
+switching from the interrupted task stack to RTEMS software interrupt stack.
 
 @section Default Fatal Error Processing
 
