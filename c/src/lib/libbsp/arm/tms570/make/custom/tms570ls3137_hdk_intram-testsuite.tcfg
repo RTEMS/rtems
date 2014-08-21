@@ -1,0 +1,23 @@
+#
+# tms570ls3137 RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+fileio
+iostream
+pppd
+loopback
+syscall01
+utf8proc01
+monitor02
+mghttpd01
+ftp01
+fsdosfsname01
+jffs2_fserror
+jffs2_fslink
+jffs2_fspatheval
+jffs2_fspermission
+jffs2_fsrdwr
+jffs2_fssymlink
+jffs2_fstime

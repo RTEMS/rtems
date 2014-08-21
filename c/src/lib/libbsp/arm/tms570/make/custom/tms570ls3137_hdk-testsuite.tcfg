@@ -4,16 +4,3 @@
 # Format is one line per test that is _NOT_ built.
 #
 
-flashdisk01
-utf8proc01
-spstkalloc02
-fsdosfsname01
-jffs2_fserror
-jffs2_fslink
-jffs2_fspatheval
-jffs2_fspermission
-jffs2_fsrdwr
-jffs2_fssymlink
-jffs2_fstime
-pppd
-mghttpd01
