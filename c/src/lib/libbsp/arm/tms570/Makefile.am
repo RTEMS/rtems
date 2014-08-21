@@ -39,6 +39,7 @@ include_bsp_HEADERS += include/tms570-rti.h
 include_bsp_HEADERS += include/tms570-vim.h
 include_bsp_HEADERS += include/tms570-pom.h
 include_bsp_HEADERS += include/tms570-sci-driver.h
+include_bsp_HEADERS += include/system-clocks.h
 
 include_HEADERS += ../../shared/include/tm27.h
 
@@ -78,6 +79,7 @@ libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 libbsp_a_SOURCES += ../../shared/sbrk.c
 libbsp_a_SOURCES += ../../shared/src/stackalloc.c
+libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 
 # Startup
 libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
@@ -105,6 +107,7 @@ libbsp_a_SOURCES += console/tms570-sci.c
 # Clock
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 libbsp_a_SOURCES += clock/clock.c
+libbsp_a_SOURCES += clock/benchmark_timer.c
 
 # RTC
 
@@ -115,8 +118,14 @@ libbsp_a_SOURCES += clock/clock.c
 # Benchmark Timer
 
 # Misc
+libbsp_a_SOURCES += misc/cpucounterread.c
 
 # Watchdog
+
+# Cache
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += ../../../libcpu/arm/shared/include/cache_.h
+libbsp_a_CPPFLAGS += -I$(srcdir)/../../../libcpu/arm/shared/include
 
 # Start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c

@@ -29,6 +29,7 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/tms570-rti.h>
+#include <rtems/counter.h>
 
 /**
  *  holds HW counter value since last interrupt event
@@ -48,6 +49,8 @@ static void tms570_clock_driver_support_initialize_hardware( void )
 {
 
   uint32_t microsec_per_tick = rtems_configuration_get_microseconds_per_tick();
+
+  rtems_counter_initialize_converter(BSP_PLL_OUT_CLOCK);
 
   /* Hardware specific initialize */
   TMS570_RTI.RTIGCTRL = 0;
@@ -80,7 +83,6 @@ static void tms570_clock_driver_support_at_tick( void )
 {
   TMS570_RTI.RTIINTFLAG = 0x00000001;
   tms570_rti_last_tick_fcr0 = TMS570_RTI.RTICOMP0 - TMS570_RTI.RTIUDCP0;
-  /* TMS570_RTI.RTICOMP0 += 1000; */
 }
 
 /**

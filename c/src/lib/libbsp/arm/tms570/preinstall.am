@@ -109,6 +109,10 @@ $(PROJECT_INCLUDE)/bsp/tms570-sci-driver.h: include/tms570-sci-driver.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tms570-sci-driver.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tms570-sci-driver.h
 
+$(PROJECT_INCLUDE)/bsp/system-clocks.h: include/system-clocks.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/system-clocks.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/system-clocks.h
+
 $(PROJECT_INCLUDE)/tm27.h: ../../shared/include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
