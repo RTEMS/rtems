@@ -31,6 +31,16 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/** @brief DWMAC user configuration structure.
+ *
+ * Gives the user the possibility to overwrite some configuration data by
+ * setting the drv_ctrl pointer of the @ref rtems_bsdnet_ifconfig structure to a
+ * object with this type.
+ */
+typedef struct {
+  int phy_addr;
+} dwmac_ifconfig_drv_ctrl;
+
 /** @brief PHY event.
  *
  * Data type to be used for PHY events and event sets.

@@ -227,6 +227,7 @@ typedef struct {
   struct mbuf **mbuf_addr_rx;
   struct mbuf **mbuf_addr_tx;
   const dwmac_cfg *CFG;
+  int MDIO_BUS_ADDR;
 } dwmac_common_context;
 
 struct dwmac_common_core_ops {

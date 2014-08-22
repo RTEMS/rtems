@@ -131,7 +131,7 @@ static int dwmac_if_mdio_read(
   if ( phy == -1 ) {
     reg_value = MACGRP_GMII_ADDRESS_PHYSICAL_LAYER_ADDRESS_SET(
       reg_value,
-      self->CFG->MDIO_BUS_ADDR
+      self->MDIO_BUS_ADDR
       );
   } else {
     reg_value = MACGRP_GMII_ADDRESS_PHYSICAL_LAYER_ADDRESS_SET(
@@ -187,7 +187,7 @@ static int dwmac_if_mdio_write(
   if ( phy == -1 ) {
     reg_value = MACGRP_GMII_ADDRESS_PHYSICAL_LAYER_ADDRESS_SET(
       reg_value,
-      self->CFG->MDIO_BUS_ADDR
+      self->MDIO_BUS_ADDR
       );
   } else {
     reg_value = MACGRP_GMII_ADDRESS_PHYSICAL_LAYER_ADDRESS_SET(
@@ -347,7 +347,7 @@ static int dwmac_if_interface_stats( void *arg )
   volatile macgrp      *macgrp   = self->macgrp;
   int                   media    = 0;
   bool                  media_ok = dwmac_if_media_status(
-    self, &media, self->CFG->MDIO_BUS_ADDR );
+    self, &media, self->MDIO_BUS_ADDR );
   uint32_t              oui;
   uint8_t               model;
   uint8_t               revision;
@@ -364,7 +364,7 @@ static int dwmac_if_interface_stats( void *arg )
     printf( "\n" );
     eno = dwmac_get_phy_info(
       self,
-      self->CFG->MDIO_BUS_ADDR,
+      self->MDIO_BUS_ADDR,
       &oui,
       &model,
       &revision );
@@ -372,7 +372,7 @@ static int dwmac_if_interface_stats( void *arg )
     if ( eno == 0 ) {
       printf( "PHY 0x%02x: OUI = 0x%04" PRIX32 ", Model = 0x%02" PRIX8 ", Rev = "
               "0x%02" PRIX8 "\n",
-              self->CFG->MDIO_BUS_ADDR,
+              self->MDIO_BUS_ADDR,
               oui,
               model,
               revision );
@@ -387,7 +387,7 @@ static int dwmac_if_interface_stats( void *arg )
         );
     }
   } else {
-    printf( "PHY %d communication error\n", self->CFG->MDIO_BUS_ADDR );
+    printf( "PHY %d communication error\n", self->MDIO_BUS_ADDR );
   }
 
   printf( "\nHardware counters:\n" );
@@ -1250,7 +1250,7 @@ static int dwmac_update_autonegotiation_params( dwmac_common_context *self )
   uint32_t value    = self->macgrp->mac_configuration;
   int      media    = 0;
   bool     media_ok = dwmac_if_media_status(
-    self, &media, self->CFG->MDIO_BUS_ADDR );
+    self, &media, self->MDIO_BUS_ADDR );
 
 
   if ( media_ok ) {
@@ -2065,7 +2065,8 @@ static int dwmac_if_attach(
   const dwmac_callback_cfg    *CALLBACK = &driver_config->CALLBACK;
   const dwmac_common_desc_ops *DESC_OPS =
     (const dwmac_common_desc_ops *) driver_config->DESC_OPS->ops;
-
+  const dwmac_ifconfig_drv_ctrl *drv_ctrl =
+    (const dwmac_ifconfig_drv_ctrl *) bsd_config->drv_ctrl;
 
   assert( self != NULL );
   assert( bsd_config != NULL );
@@ -2135,9 +2136,15 @@ static int dwmac_if_attach(
   }
 
   if ( eno == 0 ) {
-    assert( 32 >= driver_config->MDIO_BUS_ADDR );
+    if ( drv_ctrl == NULL ) {
+      self->MDIO_BUS_ADDR = driver_config->MDIO_BUS_ADDR;
+    } else {
+      self->MDIO_BUS_ADDR = drv_ctrl->phy_addr;
+    }
 
-    if ( 32 < driver_config->MDIO_BUS_ADDR ) {
+    assert( 32 >= self->MDIO_BUS_ADDR );
+
+    if ( 32 < self->MDIO_BUS_ADDR ) {
       eno = EINVAL;
     }
   }
@@ -2317,7 +2324,7 @@ int dwmac_if_read_from_phy(
 
   if ( arg != NULL ) {
     eno = dwmac_if_mdio_read(
-      self->CFG->MDIO_BUS_ADDR,
+      self->MDIO_BUS_ADDR,
       self,
       phy_reg,
       &value );
@@ -2341,7 +2348,7 @@ int dwmac_if_write_to_phy(
 
   if ( arg != NULL ) {
     eno = dwmac_if_mdio_write(
-      self->CFG->MDIO_BUS_ADDR,
+      self->MDIO_BUS_ADDR,
       self,
       phy_reg,
       val );
