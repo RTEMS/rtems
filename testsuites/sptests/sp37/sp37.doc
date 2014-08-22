@@ -13,6 +13,9 @@ test set name:  sp37
 directives:
 
   rtems_clock_tick
+  rtems_clock_tick_later()
+  rtems_clock_tick_later_usec()
+  rtems_clock_tick_before()
   rtems_interrupt_disable (inline/body)
   rtems_interrupt_enable (inline/body)
   rtems_interrupt_flash (inline/body)
@@ -23,6 +26,8 @@ concepts:
 
 + Ensure that rtems_clock_tick operates properly when invoked from a task
   rather than an ISR.
+
++ Ensure that clock tick counter functions work properly.
 
 + Ensure that the interrupt disable, enable, and flash directives operate
   as expected.

@@ -21,6 +21,9 @@ the clock manager are:
 @item @code{@value{DIRPREFIX}clock_get_seconds_since_epoch} - Get seconds since epoch
 @item @code{@value{DIRPREFIX}clock_get_ticks_per_second} - Get ticks per second
 @item @code{@value{DIRPREFIX}clock_get_ticks_since_boot} - Get current ticks counter value
+@item @code{@value{DIRPREFIX}clock_tick_later} - Get tick value in the future
+@item @code{@value{DIRPREFIX}clock_tick_later_usec} - Get tick value in the future in microseconds
+@item @code{@value{DIRPREFIX}clock_tick_before} - Is tick value is before a point in time
 @item @code{@value{DIRPREFIX}clock_get_uptime} - Get time since boot
 @item @code{@value{DIRPREFIX}clock_get_uptime_timeval} - Get time since boot in timeval format
 @item @code{@value{DIRPREFIX}clock_get_uptime_seconds} - Get seconds since boot
@@ -612,6 +615,107 @@ accurate way of obtaining similar information.
 This directive is callable from an ISR.
 
 This directive will not cause the running task to be preempted.
+
+@c
+@c
+@c
+@page
+@subsection CLOCK_TICK_LATER - Get tick value in the future
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_clock_tick_later
+@example
+rtems_interval rtems_clock_tick_later(
+  rtems_interval delta
+);
+@end example
+@end ifset
+
+@subheading DESCRIPTION:
+
+Returns the ticks counter value delta ticks in the future.
+
+@subheading NOTES:
+
+This directive is callable from an ISR.
+
+This directive will not cause the running task to be preempted.
+
+@c
+@c
+@c
+@page
+@subsection CLOCK_TICK_LATER_USEC - Get tick value in the future in microseconds
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_clock_tick_later_usec
+@example
+rtems_interval rtems_clock_tick_later_usec(
+  rtems_interval delta_in_usec
+);
+@end example
+@end ifset
+
+@subheading DESCRIPTION:
+
+Returns the ticks counter value at least delta microseconds in the future.
+
+@subheading NOTES:
+
+This directive is callable from an ISR.
+
+This directive will not cause the running task to be preempted.
+
+@c
+@c
+@c
+@page
+@subsection CLOCK_TICK_BEFORE - Is tick value is before a point in time
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_clock_tick_before
+@example
+rtems_interval rtems_clock_tick_before(
+  rtems_interval tick
+);
+@end example
+@end ifset
+
+@subheading DESCRIPTION:
+
+Returns true if the current ticks counter value indicates a time before the
+time specified by the tick value and false otherwise.
+
+@subheading NOTES:
+
+This directive is callable from an ISR.
+
+This directive will not cause the running task to be preempted.
+
+@subheading EXAMPLE:
+
+@example
+@group
+status busy( void )
+@{
+  rtems_interval timeout = rtems_clock_tick_later_usec( 10000 );
+
+  do @{
+    if ( ok() ) @{
+      return success;
+    @}
+  @} while ( rtems_clock_tick_before( timeout ) );
+
+  return timeout;
+@}
+@end group
+@end example
 
 @c
 @c

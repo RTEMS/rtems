@@ -230,6 +230,59 @@ static void test_interrupt_locks( void )
   rtems_interrupt_lock_destroy( &initialized );
 }
 
+static void test_clock_tick_functions( void )
+{
+  rtems_interrupt_level level;
+  Watchdog_Interval saved_ticks;
+
+  _Thread_Disable_dispatch();
+  rtems_interrupt_disable( level );
+
+  saved_ticks = _Watchdog_Ticks_since_boot;
+
+  _Watchdog_Ticks_since_boot = 0xdeadbeef;
+  rtems_test_assert( rtems_clock_get_ticks_since_boot() == 0xdeadbeef );
+
+  rtems_test_assert( rtems_clock_tick_later( 0 ) == 0xdeadbeef );
+  rtems_test_assert( rtems_clock_tick_later( 0x8160311e ) == 0x600df00d );
+
+  _Watchdog_Ticks_since_boot = 0;
+  rtems_test_assert( rtems_clock_tick_later_usec( 0 ) == 1 );
+  rtems_test_assert( rtems_clock_tick_later_usec( 1 ) == 2 );
+  rtems_test_assert( rtems_clock_tick_later_usec( US_PER_TICK ) == 2 );
+  rtems_test_assert( rtems_clock_tick_later_usec( US_PER_TICK + 1 ) == 3 );
+
+  _Watchdog_Ticks_since_boot = 0;
+  rtems_test_assert( !rtems_clock_tick_before( 0xffffffff ) );
+  rtems_test_assert( !rtems_clock_tick_before( 0 ) );
+  rtems_test_assert( rtems_clock_tick_before( 1 ) );
+
+  _Watchdog_Ticks_since_boot = 1;
+  rtems_test_assert( !rtems_clock_tick_before( 0 ) );
+  rtems_test_assert( !rtems_clock_tick_before( 1 ) );
+  rtems_test_assert( rtems_clock_tick_before( 2 ) );
+
+  _Watchdog_Ticks_since_boot = 0x7fffffff;
+  rtems_test_assert( !rtems_clock_tick_before( 0x7ffffffe ) );
+  rtems_test_assert( !rtems_clock_tick_before( 0x7fffffff ) );
+  rtems_test_assert( rtems_clock_tick_before( 0x80000000 ) );
+
+  _Watchdog_Ticks_since_boot = 0x80000000;
+  rtems_test_assert( !rtems_clock_tick_before( 0x7fffffff ) );
+  rtems_test_assert( !rtems_clock_tick_before( 0x80000000 ) );
+  rtems_test_assert( rtems_clock_tick_before( 0x80000001 ) );
+
+  _Watchdog_Ticks_since_boot = 0xffffffff;
+  rtems_test_assert( !rtems_clock_tick_before( 0xfffffffe ) );
+  rtems_test_assert( !rtems_clock_tick_before( 0xffffffff ) );
+  rtems_test_assert( rtems_clock_tick_before( 0 ) );
+
+  _Watchdog_Ticks_since_boot = saved_ticks;
+
+  rtems_interrupt_enable( level );
+  _Thread_Enable_dispatch();
+}
+
 void test_interrupt_inline(void)
 {
   rtems_interrupt_level level;
@@ -412,6 +465,8 @@ rtems_task Init(
   status = rtems_clock_tick();
   directive_failed( status, "rtems_clock_tick" );
   puts( "clock_tick from task level" );
+
+  test_clock_tick_functions();
 
   /*
    *  Now do a dispatch directly out of a clock tick that is

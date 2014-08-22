@@ -34,6 +34,7 @@
 #include <rtems/score/tod.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+#include <rtems/config.h>
 
 #include <sys/time.h> /* struct timeval */
 
@@ -157,6 +158,76 @@ rtems_status_code rtems_clock_get_seconds_since_epoch(
 RTEMS_INLINE_ROUTINE rtems_interval rtems_clock_get_ticks_since_boot(void)
 {
   return _Watchdog_Ticks_since_boot;
+}
+
+/**
+ * @brief Returns the ticks counter value delta ticks in the future.
+ *
+ * @param[in] delta The ticks delta value.
+ *
+ * @return The tick counter value delta ticks in the future.
+ */
+RTEMS_INLINE_ROUTINE rtems_interval rtems_clock_tick_later(
+  rtems_interval delta
+)
+{
+  return _Watchdog_Ticks_since_boot + delta;
+}
+
+/**
+ * @brief Returns the ticks counter value at least delta microseconds in the
+ * future.
+ *
+ * @param[in] delta_in_usec The delta value in microseconds.
+ *
+ * @return The tick counter value at least delta microseconds in the future.
+ */
+RTEMS_INLINE_ROUTINE rtems_interval rtems_clock_tick_later_usec(
+  rtems_interval delta_in_usec
+)
+{
+  rtems_interval us_per_tick = rtems_configuration_get_microseconds_per_tick();
+
+  /*
+   * Add one additional tick, since we don't know the time to the clock next
+   * tick.
+   */
+  return _Watchdog_Ticks_since_boot
+    + (delta_in_usec + us_per_tick - 1) / us_per_tick + 1;
+}
+
+/**
+ * @brief Returns true if the current ticks counter value indicates a time
+ * before the time specified by the tick value and false otherwise.
+ *
+ * @param[in] tick The tick value.
+ *
+ * This can be used to write busy loops with a timeout.
+ *
+ * @code
+ * status busy( void )
+ * {
+ *   rtems_interval timeout = rtems_clock_tick_later_usec( 10000 );
+ *
+ *   do {
+ *     if ( ok() ) {
+ *       return success;
+ *     }
+ *   } while ( rtems_clock_tick_before( timeout ) );
+ *
+ *   return timeout;
+ * }
+ * @endcode
+ *
+ * @retval true The current ticks counter value indicates a time before the
+ * time specified by the tick value.
+ * @retval false Otherwise.
+ */
+RTEMS_INLINE_ROUTINE bool rtems_clock_tick_before(
+  rtems_interval tick
+)
+{
+  return (int32_t) ( tick - _Watchdog_Ticks_since_boot ) > 0;
 }
 
 /**
