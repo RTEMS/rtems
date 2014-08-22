@@ -27,7 +27,11 @@
 
 const char rtems_test_name[] = "SPCACHE 1";
 
-#define I() __asm__ volatile ("nop")
+#ifdef __or1k__
+  #define I() __asm__ volatile ("l.nop")
+#else
+  #define I() __asm__ volatile ("nop")
+#endif
 
 #define I8() I(); I(); I(); I(); I(); I(); I(); I()
 
