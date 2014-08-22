@@ -85,14 +85,6 @@ SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_level;
 SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_count;
 
 /**
- *  @brief The number of ticks since the system was booted.
- *
- *  This contains the number of ticks since the system was booted.
- */
-
-SCORE_EXTERN volatile Watchdog_Interval _Watchdog_Ticks_since_boot;
-
-/**
  *  @brief Watchdog chain which is managed at ticks.
  *
  *  This is the watchdog chain which is managed at ticks.

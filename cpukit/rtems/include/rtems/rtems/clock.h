@@ -149,15 +149,15 @@ rtems_status_code rtems_clock_get_seconds_since_epoch(
 );
 
 /**
- * @brief Obtain Ticks Since Boot
+ * @brief Gets the current ticks counter value.
  *
- * This routine implements the rtems_clock_get_ticks_since_boot
- * directive.
- *
- * @retval This method returns the number of ticks since boot. It cannot
- *         fail since RTEMS always keeps a running count of ticks since boot.
+ * @return The current tick counter value.  With a 1ms clock tick, this counter
+ * overflows after 50 days since boot.
  */
-rtems_interval rtems_clock_get_ticks_since_boot(void);
+RTEMS_INLINE_ROUTINE rtems_interval rtems_clock_get_ticks_since_boot(void)
+{
+  return _Watchdog_Ticks_since_boot;
+}
 
 /**
  * @brief Obtain Ticks Per Seconds

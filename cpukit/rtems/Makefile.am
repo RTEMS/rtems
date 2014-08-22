@@ -151,7 +151,6 @@ librtems_a_SOURCES += src/barrierdata.c
 librtems_a_SOURCES += src/clockget.c
 librtems_a_SOURCES += src/clockgetsecondssinceepoch.c
 librtems_a_SOURCES += src/clockgettickspersecond.c
-librtems_a_SOURCES += src/clockgettickssinceboot.c
 librtems_a_SOURCES += src/clockgettod.c
 librtems_a_SOURCES += src/clockgettodtimeval.c
 librtems_a_SOURCES += src/clockgetuptime.c

@@ -20,7 +20,7 @@ the clock manager are:
 @item @code{@value{DIRPREFIX}clock_get_tod_timeval} - Get date and time in timeval format
 @item @code{@value{DIRPREFIX}clock_get_seconds_since_epoch} - Get seconds since epoch
 @item @code{@value{DIRPREFIX}clock_get_ticks_per_second} - Get ticks per second
-@item @code{@value{DIRPREFIX}clock_get_ticks_since_boot} - Get ticks since boot
+@item @code{@value{DIRPREFIX}clock_get_ticks_since_boot} - Get current ticks counter value
 @item @code{@value{DIRPREFIX}clock_get_uptime} - Get time since boot
 @item @code{@value{DIRPREFIX}clock_get_uptime_timeval} - Get time since boot in timeval format
 @item @code{@value{DIRPREFIX}clock_get_uptime_seconds} - Get seconds since boot
@@ -569,19 +569,16 @@ application has configured.
 
 This directive is callable from an ISR.
 
-This directive will not cause the running task to be
-preempted.  Re-initializing RTEMS causes the system date and
-time to be reset to an uninitialized state.  Another call to
-@code{@value{DIRPREFIX}clock_set} is required to re-initialize the
-system date and time to application specific specifications.
+This directive will not cause the running task to be preempted.
 
 @c
 @c
 @c
 @page
-@subsection CLOCK_GET_TICKS_SINCE_BOOT - Get ticks since boot
+@subsection CLOCK_GET_TICKS_SINCE_BOOT - Get current ticks counter value
 
 @cindex obtain ticks since boot
+@cindex get current ticks counter value
 
 @subheading CALLING SEQUENCE:
 
@@ -604,25 +601,17 @@ NONE
 
 @subheading DESCRIPTION:
 
-This directive returns the number of clock ticks that have elapsed
-since the system was booted.  This is the historical measure of uptime
-in an RTEMS system.  The newer service
-@code{@value{DIRPREFIX}clock_get_uptime} is another and potentially
-more accurate way of obtaining similar information.
+This directive returns the current tick counter value.  With a 1ms clock tick,
+this counter overflows after 50 days since boot.  This is the historical
+measure of uptime in an RTEMS system.  The newer service
+@code{@value{DIRPREFIX}clock_get_uptime} is another and potentially more
+accurate way of obtaining similar information.
 
 @subheading NOTES:
 
 This directive is callable from an ISR.
 
-This directive will not cause the running task to be
-preempted.  Re-initializing RTEMS causes the system date and
-time to be reset to an uninitialized state.  Another call to
-@code{@value{DIRPREFIX}clock_set} is required to re-initialize the
-system date and time to application specific specifications.
-
-This directive simply returns the number of times the dirivective
-@code{@value{DIRPREFIX}clock_tick} has been invoked since the
-system was booted.
+This directive will not cause the running task to be preempted.
 
 @c
 @c
