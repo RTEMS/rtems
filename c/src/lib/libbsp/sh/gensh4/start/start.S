@@ -80,10 +80,10 @@ fake_func:
         bt      hw_init_end
         nop
 
-#if defined(START_HW_INIT)	/* from $RTEMS_BSP.cfg */
+#if START_HW_INIT	/* from $RTEMS_BSP.cfg */
         ! Initialize minimal hardware
         ! to run hw_init we need to calculate its address
-        ! as it is before data coping
+        ! as it is before data copying
         mov.l	hw_init_k, r0
         mov.l   copy_start_k, r1
         mov.l   copy_end_k, r2
@@ -102,6 +102,7 @@ fake_func:
 #endif /* START_HW_INIT */
 hw_init_end:
 
+#if COPY_DATA_FROM_ROM
         ! copy data from rom to ram
         mov.l   copy_start_k, r0
         mov.l   copy_end_k, r1
@@ -123,6 +124,7 @@ copy_data_cycle:
         nop
 
 end_of_copy_data_cycle:
+#endif
         ! go to 0x8....... adresses
         mov.l   real_address_k, r0
         lds     r0, pr
@@ -193,12 +195,16 @@ __stop:
         END_CODE
 
         .align 2
+#if START_HW_INIT
 copy_start_k:
         .long copy_start
 copy_end_k:
         .long copy_end
+#endif
+#if COPY_DATA_FROM_ROM
 copy_start_in_rom_k:
         .long copy_start_in_rom
+#endif
 
 real_address_k:
         .long real_address
@@ -219,7 +225,7 @@ main_k:
 exit_k:
         .long	SYM(_exit)
 
-#ifdef	START_HW_INIT	/* from $RTEMS_BSP.cfg */
+#if	START_HW_INIT	/* from $RTEMS_BSP.cfg */
 hw_init_k:
         .long	SYM(early_hw_init)
 #endif /* START_HW_INIT */
