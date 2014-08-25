@@ -1203,9 +1203,11 @@ register struct Per_CPU_Control *_SPARC_Per_CPU_current __asm__( "g6" );
 
   void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
 
-  void _BSP_Start_multitasking( Context_Control *heir )
+  #if defined(__leon__)
+  void _LEON3_Start_multitasking( Context_Control *heir )
     RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
-  #define _CPU_Start_multitasking _BSP_Start_multitasking
+  #define _CPU_Start_multitasking _LEON3_Start_multitasking
+  #endif
 
   static inline void _CPU_SMP_Processor_event_broadcast( void )
   {

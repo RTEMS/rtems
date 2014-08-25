@@ -82,7 +82,7 @@ void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
   LEON3_IrqCtrl_Regs->force[target_processor_index] = 1 << LEON3_MP_IRQ;
 }
 
-void _BSP_Start_multitasking(
+void _LEON3_Start_multitasking(
   Context_Control *heir
 )
 {
