@@ -223,6 +223,12 @@ extern "C" {
   #define MPC55XX_IRQ_PIT_CHANNEL(ch) \
     ((unsigned) (ch) < 9U ? 148U + (ch) : MPC55XX_IRQ_INVALID)
 
+  /* SIU external interrupts */
+  #define MPC55XX_IRQ_SIU_EXTERNAL_0 53U
+  #define MPC55XX_IRQ_SIU_EXTERNAL_1 54U
+  #define MPC55XX_IRQ_SIU_EXTERNAL_2 55U
+  #define MPC55XX_IRQ_SIU_EXTERNAL_3 56U
+
   /* eMIOS */
   #define MPC55XX_IRQ_EMIOS(ch) \
     ((unsigned) (ch) < 24U ? 58U + (ch) : \

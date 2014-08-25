@@ -5184,7 +5184,7 @@ extern "C" {
             } B;
         } EISR;                 /* External Interrupt Status Register */
 
-        union {
+        union SIU_DIRER_tag {
             uint32_t R;
             struct {
                 uint32_t:16;
@@ -5207,7 +5207,7 @@ extern "C" {
             } B;
         } DIRER;                /* DMA/Interrupt Request Enable Register */
 
-        union {
+        union SIU_DIRSR_tag {
             uint32_t R;
             struct {
                 uint32_t:30;
@@ -5239,7 +5239,7 @@ extern "C" {
             } B;
         } OSR;                  /* Overrun Status Register */
 
-        union {
+        union SIU_ORER_tag {
             uint32_t R;
             struct {
                 uint32_t:16;
@@ -5262,7 +5262,7 @@ extern "C" {
             } B;
         } ORER;                 /* Overrun Request Enable Register */
 
-        union {
+        union SIU_IREER_tag {
             uint32_t R;
             struct {
                 uint32_t NREE0:1;
@@ -5287,7 +5287,7 @@ extern "C" {
             } B;
         } IREER;                /* External IRQ Rising-Edge Event Enable Register */
 
-        union {
+        union SIU_IFEER_tag {
             uint32_t R;
             struct {
                 uint32_t NFEE0:1;
@@ -5312,7 +5312,7 @@ extern "C" {
             } B;
         } IFEER;                /* External IRQ Falling-Edge Event Enable Register */
 
-        union {
+        union SIU_IDFR_tag {
             uint32_t R;
             struct {
                 uint32_t:28;
@@ -5354,7 +5354,7 @@ extern "C" {
                 uint16_t PA:2;
                 uint16_t OBE:1;
                 uint16_t IBE:1;
-                  uint16_t:2;
+                uint16_t DSC:2;
                 uint16_t ODE:1;
                 uint16_t HYS:1;
                 uint16_t SRC:2;
