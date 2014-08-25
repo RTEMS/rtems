@@ -435,6 +435,7 @@ rtems_cache_disable_data( void )
  * and then perform the invalidations.
  */
 
+#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
 #if !defined(CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS)
 static void
 _invalidate_multiple_instruction_lines_no_range_functions(
@@ -461,6 +462,7 @@ _invalidate_multiple_instruction_lines_no_range_functions(
     i_addr = (void *)((size_t)i_addr + CPU_INSTRUCTION_CACHE_ALIGNMENT);
   }
 }
+#endif
 #endif
 
 void
