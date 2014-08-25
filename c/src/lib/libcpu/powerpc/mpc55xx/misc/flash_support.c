@@ -692,4 +692,4 @@ mpc55xx_flash_address(void)
     return mas2 & 0xFFFFF000;
 }
 
-#endif /* MPC55XX_CHIP_TYPE / 100 == 55 */
+#endif /* MPC55XX_CHIP_FAMILY == 555 || MPC55XX_CHIP_FAMILY == 556 */
