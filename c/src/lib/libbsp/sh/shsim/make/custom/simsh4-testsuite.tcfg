@@ -1,5 +1,9 @@
 #
-# The GDB SH Simulator does not have a tick interrupt.
+# The GDB SH Simulator does not have a tick interrupt
+# and the simsh4 configuration has limited memory.
 #
 
 include: testdata/require-tick-isr.tcfg
+
+fsdosfsname01
+utf8proc01
