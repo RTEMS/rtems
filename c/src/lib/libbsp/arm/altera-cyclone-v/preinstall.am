@@ -143,9 +143,17 @@ $(PROJECT_INCLUDE)/bsp/nocache-heap.h: include/nocache-heap.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/nocache-heap.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/nocache-heap.h
 
+$(PROJECT_INCLUDE)/bsp/alt_16550_uart.h: hwlib/include/alt_16550_uart.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/alt_16550_uart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/alt_16550_uart.h
+
 $(PROJECT_INCLUDE)/bsp/alt_address_space.h: hwlib/include/alt_address_space.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/alt_address_space.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/alt_address_space.h
+
+$(PROJECT_INCLUDE)/bsp/alt_cache.h: hwlib/include/alt_cache.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/alt_cache.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/alt_cache.h
 
 $(PROJECT_INCLUDE)/bsp/alt_clock_group.h: hwlib/include/alt_clock_group.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/alt_clock_group.h
@@ -154,6 +162,18 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/alt_clock_group.h
 $(PROJECT_INCLUDE)/bsp/alt_clock_manager.h: hwlib/include/alt_clock_manager.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/alt_clock_manager.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/alt_clock_manager.h
+
+$(PROJECT_INCLUDE)/bsp/alt_dma_common.h: hwlib/include/alt_dma_common.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/alt_dma_common.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/alt_dma_common.h
+
+$(PROJECT_INCLUDE)/bsp/alt_dma.h: hwlib/include/alt_dma.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/alt_dma.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/alt_dma.h
+
+$(PROJECT_INCLUDE)/bsp/alt_dma_program.h: hwlib/include/alt_dma_program.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/alt_dma_program.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/alt_dma_program.h
 
 $(PROJECT_INCLUDE)/bsp/alt_generalpurpose_io.h: hwlib/include/alt_generalpurpose_io.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/alt_generalpurpose_io.h
@@ -175,6 +195,10 @@ $(PROJECT_INCLUDE)/bsp/alt_mpu_registers.h: hwlib/include/alt_mpu_registers.h $(
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/alt_mpu_registers.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/alt_mpu_registers.h
 
+$(PROJECT_INCLUDE)/bsp/alt_qspi_private.h: hwlib/include/alt_qspi_private.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/alt_qspi_private.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/alt_qspi_private.h
+
 $(PROJECT_INCLUDE)/bsp/alt_reset_manager.h: hwlib/include/alt_reset_manager.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/alt_reset_manager.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/alt_reset_manager.h
@@ -191,6 +215,14 @@ $(PROJECT_INCLUDE)/bsp/socal/alt_clkmgr.h: hwlib/include/socal/alt_clkmgr.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/socal/alt_clkmgr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/socal/alt_clkmgr.h
 
+$(PROJECT_INCLUDE)/bsp/socal/alt_dmanonsecure.h: hwlib/include/socal/alt_dmanonsecure.h $(PROJECT_INCLUDE)/bsp/socal/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/socal/alt_dmanonsecure.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/socal/alt_dmanonsecure.h
+
+$(PROJECT_INCLUDE)/bsp/socal/alt_dmasecure.h: hwlib/include/socal/alt_dmasecure.h $(PROJECT_INCLUDE)/bsp/socal/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/socal/alt_dmasecure.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/socal/alt_dmasecure.h
+
 $(PROJECT_INCLUDE)/bsp/socal/alt_gpio.h: hwlib/include/socal/alt_gpio.h $(PROJECT_INCLUDE)/bsp/socal/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/socal/alt_gpio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/socal/alt_gpio.h
@@ -202,6 +234,14 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/socal/alt_i2c.h
 $(PROJECT_INCLUDE)/bsp/socal/alt_l3.h: hwlib/include/socal/alt_l3.h $(PROJECT_INCLUDE)/bsp/socal/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/socal/alt_l3.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/socal/alt_l3.h
+
+$(PROJECT_INCLUDE)/bsp/socal/alt_qspidata.h: hwlib/include/socal/alt_qspidata.h $(PROJECT_INCLUDE)/bsp/socal/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/socal/alt_qspidata.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/socal/alt_qspidata.h
+
+$(PROJECT_INCLUDE)/bsp/socal/alt_qspi.h: hwlib/include/socal/alt_qspi.h $(PROJECT_INCLUDE)/bsp/socal/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/socal/alt_qspi.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/socal/alt_qspi.h
 
 $(PROJECT_INCLUDE)/bsp/socal/alt_rstmgr.h: hwlib/include/socal/alt_rstmgr.h $(PROJECT_INCLUDE)/bsp/socal/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/socal/alt_rstmgr.h

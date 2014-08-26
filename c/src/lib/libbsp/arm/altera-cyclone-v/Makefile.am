@@ -51,23 +51,25 @@ include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/nocache-heap.h
 
 # Altera hwlib
+include_bsp_HEADERS += hwlib/include/alt_16550_uart.h
 include_bsp_HEADERS += hwlib/include/alt_address_space.h
+include_bsp_HEADERS += hwlib/include/alt_cache.h
 include_bsp_HEADERS += hwlib/include/alt_clock_group.h
 include_bsp_HEADERS += hwlib/include/alt_clock_manager.h
+include_bsp_HEADERS += hwlib/include/alt_dma_common.h
+include_bsp_HEADERS += hwlib/include/alt_dma.h
+include_bsp_HEADERS += hwlib/include/alt_dma_program.h
 include_bsp_HEADERS += hwlib/include/alt_generalpurpose_io.h
 include_bsp_HEADERS += hwlib/include/alt_hwlibs_ver.h
 include_bsp_HEADERS += hwlib/include/alt_i2c.h
 include_bsp_HEADERS += hwlib/include/alt_interrupt_common.h
 include_bsp_HEADERS += hwlib/include/alt_mpu_registers.h
+include_bsp_HEADERS += hwlib/include/alt_qspi_private.h
 include_bsp_HEADERS += hwlib/include/alt_reset_manager.h
 include_bsp_HEADERS += hwlib/include/hwlib.h
 #The following Altera hwlib header files have been left out because so far 
 #they are not required:
-#include_bsp_HEADERS += hwlib/include/alt_16550_uart.h
 #include_bsp_HEADERS += hwlib/include/alt_bridge_manager.h
-#include_bsp_HEADERS += hwlib/include/alt_dma_common.h
-#include_bsp_HEADERS += hwlib/include/alt_dma_program.h
-#include_bsp_HEADERS += hwlib/include/alt_dma.h
 #include_bsp_HEADERS += hwlib/include/alt_fpga_manager.h
 #include_bsp_HEADERS += hwlib/include/alt_globaltmr.h
 #include_bsp_HEADERS += hwlib/include/alt_system_manager.h
@@ -79,9 +81,13 @@ include_bsp_HEADERS += hwlib/include/hwlib.h
 # Some of the headers from hwlib need the files from socal. Install them.
 include_bsp_socal_HEADERS += hwlib/include/socal/alt_acpidmap.h
 include_bsp_socal_HEADERS += hwlib/include/socal/alt_clkmgr.h
+include_bsp_socal_HEADERS += hwlib/include/socal/alt_dmanonsecure.h
+include_bsp_socal_HEADERS += hwlib/include/socal/alt_dmasecure.h
 include_bsp_socal_HEADERS += hwlib/include/socal/alt_gpio.h
 include_bsp_socal_HEADERS += hwlib/include/socal/alt_i2c.h
 include_bsp_socal_HEADERS += hwlib/include/socal/alt_l3.h
+include_bsp_socal_HEADERS += hwlib/include/socal/alt_qspidata.h
+include_bsp_socal_HEADERS += hwlib/include/socal/alt_qspi.h
 include_bsp_socal_HEADERS += hwlib/include/socal/alt_rstmgr.h
 include_bsp_socal_HEADERS += hwlib/include/socal/alt_sdr.h
 include_bsp_socal_HEADERS += hwlib/include/socal/alt_sysmgr.h
@@ -124,17 +130,18 @@ libbsp_a_CPPFLAGS += -std=gnu99
 CFLAGS += -Wno-missing-prototypes
 
 # hwlib from Altera
+libbsp_a_SOURCES += hwlib/src/hwmgr/alt_16550_uart.c
 libbsp_a_SOURCES += hwlib/src/hwmgr/alt_address_space.c
 libbsp_a_SOURCES += hwlib/src/hwmgr/alt_clock_manager.c
+libbsp_a_SOURCES += hwlib/src/hwmgr/alt_dma.c
+libbsp_a_SOURCES += hwlib/src/hwmgr/alt_dma_program.c
 libbsp_a_SOURCES += hwlib/src/hwmgr/alt_generalpurpose_io.c
 libbsp_a_SOURCES += hwlib/src/hwmgr/alt_i2c.c
+libbsp_a_SOURCES += hwlib/src/hwmgr/alt_qspi.c
 libbsp_a_SOURCES += hwlib/src/hwmgr/alt_reset_manager.c
 #The following Altera hwlib source files have been left out because so far 
 #they are not required:
-#libbsp_a_SOURCES += hwlib/src/hwmgr/alt_16550_uart.c
 #libbsp_a_SOURCES += hwlib/src/hwmgr/alt_bridge_manager.c
-#libbsp_a_SOURCES += hwlib/src/hwmgr/alt_dma_program.c
-#libbsp_a_SOURCES += hwlib/src/hwmgr/alt_dma.c
 #libbsp_a_SOURCES += hwlib/src/hwmgr/alt_fpga_manager.c
 #libbsp_a_SOURCES += hwlib/src/hwmgr/alt_globaltmr.c
 #libbsp_a_SOURCES += hwlib/src/hwmgr/alt_system_manager.c
