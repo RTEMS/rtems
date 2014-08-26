@@ -1,0 +1,7 @@
+#
+# lpc40xx_ea_rom_int RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+fsdosfsname01
