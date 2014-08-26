@@ -5,13 +5,13 @@ $(srcdir)/preinstall.am: Makefile.am
 	$(AMPOLISH3) $(srcdir)/Makefile.am > $(srcdir)/preinstall.am
 endif
 
-PREINSTALL_DIRS =
-DISTCLEANFILES += $(PREINSTALL_DIRS)
-
 all-am: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
 CLEANFILES = $(PREINSTALL_FILES)
+
+PREINSTALL_DIRS =
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 
 all-local: $(TMPINSTALL_FILES)
 
@@ -182,6 +182,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/alt_reset_manager.h
 $(PROJECT_INCLUDE)/bsp/hwlib.h: hwlib/include/hwlib.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/hwlib.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/hwlib.h
+
+$(PROJECT_INCLUDE)/bsp/socal/alt_acpidmap.h: hwlib/include/socal/alt_acpidmap.h $(PROJECT_INCLUDE)/bsp/socal/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/socal/alt_acpidmap.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/socal/alt_acpidmap.h
 
 $(PROJECT_INCLUDE)/bsp/socal/alt_clkmgr.h: hwlib/include/socal/alt_clkmgr.h $(PROJECT_INCLUDE)/bsp/socal/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/socal/alt_clkmgr.h

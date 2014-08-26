@@ -36,17 +36,21 @@
  *
  ***********************************************************************/
 
-/* This is the major revision of the Altera ACDS Release    */
+/* This is the major revision of the Altera ACDS Release    	*/
 #define ALTERA_ACDS_MAJOR_REV           13
 
-/* This is the minor revision of the Altera ACDS Release    */
-#define ALTERA_ACDS_MINOR_REV            0
+/* This is the minor revision of the Altera ACDS Release    	*/
+#define ALTERA_ACDS_MINOR_REV            1
 
-/* This is an internal HwLibs revision control code.        */
-/* End-users should NOT depend upon the value of this field */
+/* This is an internal HwLibs revision/feature control code.	*/
+/* End-users should NOT depend upon the value of this field 	*/
 #define ALTERA_HWLIBS_REV                0
 
 /* This is a text string containing the current release and service pack IDs */
-#define ALTERA_ACDS_REV_STR             "13.0SP1"
+#define ALTERA_ACDS_REV_STR             "13.1"
+
+/* This is a text string containing the current SoC EDS ID 		*/
+#define ALTERA_SOCEDS_REV_STR           "Altera SoC Embedded Design Suite v13.1"
+
 
 #endif   /* __ALT_HWLIBS_VER_H__ */

@@ -77,6 +77,7 @@ include_bsp_HEADERS += hwlib/include/hwlib.h
 #include_bsp_HEADERS += hwlib/include/alt_interrupt.h
 
 # Some of the headers from hwlib need the files from socal. Install them.
+include_bsp_socal_HEADERS += hwlib/include/socal/alt_acpidmap.h
 include_bsp_socal_HEADERS += hwlib/include/socal/alt_clkmgr.h
 include_bsp_socal_HEADERS += hwlib/include/socal/alt_gpio.h
 include_bsp_socal_HEADERS += hwlib/include/socal/alt_i2c.h
@@ -118,7 +119,7 @@ libbsp_a_CPPFLAGS =
 libbsp_a_LIBADD =
 
 # for the Altera hwlib
-libbsp_a_CPPFLAGS += -I ${srcdir}/hwlib/include
+libbsp_a_CPPFLAGS += -I${srcdir}/hwlib/include
 libbsp_a_CPPFLAGS += -std=gnu99
 CFLAGS += -Wno-missing-prototypes
 

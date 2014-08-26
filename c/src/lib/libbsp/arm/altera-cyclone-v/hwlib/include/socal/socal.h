@@ -1,39 +1,50 @@
-/*******************************************************************************
-*                                                                              *
-* Copyright 2013 Altera Corporation. All Rights Reserved.                      *
-*                                                                              *
-* Redistribution and use in source and binary forms, with or without           *
-* modification, are permitted provided that the following conditions are met:  *
-*                                                                              *
-* 1. Redistributions of source code must retain the above copyright notice,    *
-*    this list of conditions and the following disclaimer.                     *
-*                                                                              *
-* 2. Redistributions in binary form must reproduce the above copyright notice, *
-*    this list of conditions and the following disclaimer in the documentation *
-*    and/or other materials provided with the distribution.                    *
-*                                                                              *
-* 3. The name of the author may not be used to endorse or promote products     *
-*    derived from this software without specific prior written permission.     *
-*                                                                              *
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER "AS IS" AND ANY EXPRESS OR *
-* IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF *
-* MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ARE DISCLAIMED. IN NO  *
-* EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,       *
-* SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, *
-* PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;  *
-* OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,     *
-* WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR      *
-* OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF       *
-* ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                                   *
-*                                                                              *
-*******************************************************************************/
+/******************************************************************************
+ *
+ * Copyright 2013 Altera Corporation. All Rights Reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. The name of the author may not be used to endorse or promote products
+ * derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ARE DISCLAIMED. IN NO
+ * EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+ * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+ * OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
+
 
 /*! \file Altera - ALT_SOCAL */
 
 #ifndef __ALTERA_SOCAL_H__
 #define __ALTERA_SOCAL_H__
 
-#include <rtems/score/basedefs.h>
+#ifndef __ASSEMBLY__
+#ifdef __cplusplus
+#include <cstddef>
+#include <cstdbool>
+#include <cstdint>
+#else   /* __cplusplus */
+#include <stddef.h>
+#include <stdbool.h>
+#include <stdint.h>
+#endif  /* __cplusplus */
+#endif  /* __ASSEMBLY__ */
 
 #ifdef __cplusplus
 extern "C"
@@ -60,7 +71,6 @@ extern "C"
  */
 #define ALT_CAST(type, ptr)  ((type) (ptr))
 #endif  /* __ASSEMBLY__ */
-
 
 /*!
  * \addtogroup ALT_SOCAL_UTIL_RW_FUNC SoCAL Memory Read/Write Utilities
@@ -239,117 +249,8 @@ extern "C"
  */
 #define     alt_replbits_dword(dest, msk, src)   (alt_write_dword(dest,(alt_read_dword(dest) & ~(msk)) | ((src) & (msk))))
 
-
-
 /*! @} */
 
-/*!
- * \addtogroup ALT_SOCAL_TYPE_IND_FUNC SoCAL Indirect (pointer-based) Utilities
- *
- * This section implements two other useful forms of the alt_write_*() macros above that
- * are preferable to use in some situations. These use an intermediate pointer (defined
- * in the containing compile unit) to move data in an indirect manner. These compile to very
- * tight ARM code, equivalent to the above versions.
- *
- * @{
- */
-
-/*! Write the 8 bit byte to the destination address in device memory.
- *  \param dest  - Write destination pointer address
- *  \param tmptr - Temporary pointer to byte data
- *  \param src   - 8 bit data value to write to memory
- */
-#define alt_indwrite_byte(dest, tmptr, src)  {(tmptr)=ALT_CAST(uint8_t*,(dest));(*ALT_CAST(volatile uint8_t*,(tmptr))=(src));}
-
-/*! Write the 8 bit byte to the destination address in device memory.
- *  \param dest  - Write destination pointer address
- *  \param tmptr - Temporary pointer to byte data
- *  \param src   - Read destination pointer address
- */
-#define alt_indread_byte(dest, tmptr, src)   {(tmptr)=ALT_CAST(uint8_t*,(src));(*ALT_CAST(volatile uint8_t*,(dest))=*(tmptr));}
-
-/*! Write the 16 bit halfword to the destination address in device memory.
- *  \param dest  - Write destination pointer address
- *  \param tmptr - Temporary pointer to halfword data
- *  \param src   - 16 bit data value to write to memory
- */
-#define alt_indwrite_hword(dest, tmptr, src) {(tmptr)=ALT_CAST(uint16_t*,(dest));(*ALT_CAST(volatile uint16_t*,(tmptr))=(src));}
-
-/*! Write the 16 bit halfword to the destination address in device memory.
- *  \param dest  - Write destination pointer address
- *  \param tmptr - Temporary pointer to halfword data
- *  \param src   - Read destination pointer address
- */
-#define alt_indread_hword(dest, tmptr, src)  {(tmptr)=ALT_CAST(uint16_t*,(src));(*ALT_CAST(volatile uint16_t*,(dest))=*(tmptr));}
-
-/*! Write the 32 bit word to the destination address in device memory.
- *  \param dest  - Write destination pointer address
- *  \param tmptr - Temporary pointer to word data
- *  \param src   - 32 bit data value to write to memory
- */
-#define alt_indwrite_word(dest, tmptr, src)  {(tmptr)=ALT_CAST(uint32_t*,(dest));(*ALT_CAST(volatile uint32_t*,(tmptr))=(src));}
-
-/*! Write the 32 bit word to the destination address in device memory.
- *  \param dest  - Write destination pointer address
- *  \param tmptr - Temporary pointer to word data
- *  \param src   - Read destination pointer address
- */
-#define alt_indread_word(dest, tmptr, src)   {(tmptr)=ALT_CAST(uint32_t*,(src));(*ALT_CAST(volatile uint32_t*,(dest))=*(tmptr));}
-
-/*! Write the 64 bit dword to the destination address in device memory.
- *  \param dest  - Write destination pointer address
- *  \param tmptr - Temporary pointer to double-word data
- *  \param src   - 64 bit data value to write to memory
- */
-#define alt_indwrite_dword(dest, tmptr, src) {(tmptr)=ALT_CAST(uint64_t*,(dest));(*ALT_CAST(volatile uint64_t*,(tmptr))=(src));}
-
-/*! Write the 64 bit dword to the destination address in device memory.
- *  \param dest  - Write destination pointer address
- *  \param tmptr - Temporary pointer to double-word data
- *  \param src   - Read destination pointer address
- */
-#define alt_indread_dword(dest, tmptr, src)  {(tmptr)=ALT_CAST(uint64_t*,(src));(*ALT_CAST(volatile uint64_t*,(dest))=*(tmptr));}
-
-
-/*! @} */
-
-/*!
- * \addtogroup ALT_SOCAL_CMPL_ASRT_FUNC SoCAL Compile Assert Utilities
- *
- * This section implements an assert-type functionality in the compiler rather than in the
- * debug run-time code. Additional macros can be built on the basic structure and defined
- * to test various conditions and throw a compile-time error if necessary.
- *
- * @{
- */
-
-/*! alt_cat_compile_assert_text() concatenates text.
- *  \param txta - The first text fragment to be joined
- *  \param txtb - The second text fragment to be joined
- */
-#define alt_cat_compile_assert_text(txta, txtb) txta##txtb
-
-/*! alt_form_compile_assert_line() is the basis of other functions that check various
- *  conditions and possibly throw a compile-time error in response, giving an
- *  assert equivalent that operates at compile time rather than at run-time.
- *  \param test - Any valid boolean expression
- *  \param file - The filename where this expression is located (ASCII string)
- *  \param line - The line number where this expression is located
- */
-#define alt_form_compile_assert_line(test, file, line) \
-typedef char alt_cat_compile_assert_text(assertion_at_##file##_line_, line)[2*!!(test)-1]
-
-/*! alt_check_struct_size() throws a compile-time error if the structure size (a) is
- *  larger than the size of the reference (b). \n
- *  alt_check_struct_size() works with groups of bitfields up to much larger
- *  structure sizes.
- *  \param a - Structure to be evaluated
- *  \param b - Reference size
- */
-#define alt_check_struct_size(a, b) RTEMS_STATIC_ASSERT((sizeof(a) <= sizeof(b)), Invalid_stuct_size)
-
-
-/*! @} */
 /*! @} */
 
 #ifdef __cplusplus

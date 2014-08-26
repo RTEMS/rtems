@@ -239,6 +239,48 @@ ALT_STATUS_CODE alt_reset_warm_reset(uint32_t warm_reset_delay,
                                      bool fpga_handshake,
                                      bool etr_stall);
 
+#if 0
+/*! \addtogroup RST_MGR_MPU 
+ *
+ * This functional group provides reset control for the Cortex-A9 MPU module.
+ *
+ * @{
+ */
+
+/*! @} */
+
+/*! \addtogroup RST_MGR_PERIPH
+ *
+ * This functional group provides inidividual reset control for the HPS
+ * peripheral modules.
+ *
+ * @{
+ */
+
+/*! @} */
+
+/*! \addtogroup RST_MGR_BRG
+ *
+ * This functional group provides inidividual reset control for the bridge
+ * interfaces between the HPS and FPGA.
+ *
+ * @{
+ */
+
+/*! @} */
+
+/*! \addtogroup RST_MGR_MISC
+ *
+ * This functional group provides inidividual reset control for miscellaneous
+ * HPS modules.
+ *
+ * @{
+ */
+
+/*! @} */
+
+#endif
+
 /*! @} */
 
 /*! @} */

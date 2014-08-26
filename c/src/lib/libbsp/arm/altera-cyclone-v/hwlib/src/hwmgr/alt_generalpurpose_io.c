@@ -35,6 +35,7 @@
 #include    "socal/hps.h"
 #include    "socal/socal.h"
 #include    "socal/alt_gpio.h"
+#include    "socal/alt_rstmgr.h"
 #include    "hwlib.h"
 #include    "alt_generalpurpose_io.h"
 
@@ -50,6 +51,37 @@
 
             // expands the zero or one bit to the 29-bit GPIO word
 #define     ALT_GPIO_ALLORNONE(tst)  ((uint32_t) ((tst == 0) ? 0 : ALT_GPIO_BITMASK))
+
+
+/****************************************************************************************/
+/* alt_gpio_init() initializes the GPIO modules 										*/
+/****************************************************************************************/
+
+ALT_STATUS_CODE alt_gpio_init(void)
+{
+		// put GPIO modules into system manager reset if not already there
+	alt_gpio_uninit();
+		// release GPIO modules from system reset (w/ two-instruction delay)
+	alt_replbits_word(ALT_RSTMGR_PERMODRST_ADDR, ALT_RSTMGR_PERMODRST_GPIO0_SET_MSK |
+			ALT_RSTMGR_PERMODRST_GPIO1_SET_MSK |
+			ALT_RSTMGR_PERMODRST_GPIO2_SET_MSK, 0);
+	return ALT_E_SUCCESS;
+}
+
+
+/****************************************************************************************/
+/* alt_gpio_uninit() uninitializes the GPIO modules			     				       	*/
+/****************************************************************************************/
+
+ALT_STATUS_CODE alt_gpio_uninit(void)
+{
+	// put all GPIO modules into system manager reset
+	alt_replbits_word(ALT_RSTMGR_PERMODRST_ADDR, ALT_RSTMGR_PERMODRST_GPIO0_SET_MSK |
+			ALT_RSTMGR_PERMODRST_GPIO1_SET_MSK |
+			ALT_RSTMGR_PERMODRST_GPIO2_SET_MSK,
+			ALT_GPIO_BITMASK);
+	return ALT_E_SUCCESS;
+}
 
 
 /****************************************************************************************/

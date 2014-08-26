@@ -32,8 +32,8 @@
 * 
 ******************************************************************************/
 
-#ifndef __ALT_ADDR_SPACE_H__
-#define __ALT_ADDR_SPACE_H__
+#ifndef __ALT_ADDRESS_SPACE_H__
+#define __ALT_ADDRESS_SPACE_H__
 
 #include <stdbool.h>
 #include "hwlib.h"
@@ -82,7 +82,7 @@ extern "C"
 #define L2_CACHE_ADDR_FILTERING_END_ADDR        (ALT_MPUL2_OFST + L2_CACHE_ADDR_FILTERING_END_OFST)
 // Address Filtering End Register - End Value Mask
 #define L2_CACHE_ADDR_FILTERING_END_ADDR_MASK   0xFFF00000
-// Address Filtering End Register - Reset End Address Value (3 GB)
+// Address Filtering End Register - Reset End Address Value (3 GiB)
 #define L2_CACHE_ADDR_FILTERING_END_RESET       0xC0000000
 
 #ifndef __ASSEMBLY__
@@ -192,10 +192,10 @@ typedef enum ALT_ADDR_SPACE_MPU_ATTR_e
  */
 typedef enum ALT_ADDR_SPACE_NONMPU_ATTR_e
 {
-    ALT_ADDR_SPACE_NONMPU_ZERO_AT_OCRAM,    /*!< Maps the SDRAM to address 0x0
+    ALT_ADDR_SPACE_NONMPU_ZERO_AT_SDRAM,    /*!< Maps the SDRAM to address 0x0
                                              *   for the non-MPU L3 masters.
                                              */
-    ALT_ADDR_SPACE_NONMPU_ZERO_AT_SDRAM     /*!< Maps the On-chip RAM to address
+    ALT_ADDR_SPACE_NONMPU_ZERO_AT_OCRAM     /*!< Maps the On-chip RAM to address
                                              *   0x0 for the non-MPU L3
                                              *   masters. Note that the On-chip
                                              *   RAM is also always mapped to
@@ -276,12 +276,12 @@ ALT_STATUS_CODE alt_addr_space_remap(ALT_ADDR_SPACE_MPU_ATTR_t mpu_attr,
  *
  * When address 0x0 is mapped to the Boot ROM or on-chip RAM, only the lowest
  * 64KB of the boot region are accessible because the size of the Boot ROM and
- * on-chip RAM are only 64KB.  Addresses in the range 0x100000 (1MB) to
- * 0xC0000000 (3GB) access SDRAM and addresses in the range 0xC0000000 (3GB) to
- * 0xFFFFFFFF access the L3 interconnect. Thus, the lowest 1MB of SDRAM is not
+ * on-chip RAM are only 64KB.  Addresses in the range 0x100000 (1MiB) to
+ * 0xC0000000 (3GiB) access SDRAM and addresses in the range 0xC0000000 (3GiB) to
+ * 0xFFFFFFFF access the L3 interconnect. Thus, the lowest 1MiB of SDRAM is not
  * accessible to the MPU unless address 0 is remapped to SDRAM after reset.
  *
- * This function remaps the addresses between 0x0 to 0x100000 (1MB) to access
+ * This function remaps the addresses between 0x0 to 0x100000 (1MiB) to access
  * SDRAM.
  *
  * \internal
@@ -332,13 +332,13 @@ ALT_STATUS_CODE alt_mpu_addr_space_remap_0_to_sdram(void);
  * \param       addr_filt_start
  *              [out] An output parameter variable for the address filtering
  *              start address for the range of physical addresses redirected to
- *              the SDRAM AXI master port. The value returned is always a 1 MB
+ *              the SDRAM AXI master port. The value returned is always a 1 MiB
  *              aligned address.
  *              
  * \param       addr_filt_end
  *              [out] An output parameter variable for the address filtering
  *              end address for the range of physical addresses redirected to
- *              the SDRAM AXI master port. The value returned is always a 1 MB
+ *              the SDRAM AXI master port. The value returned is always a 1 MiB
  *              aligned address.
  *
  * \retval      ALT_E_SUCCESS   The operation was successful.
@@ -353,7 +353,7 @@ ALT_STATUS_CODE alt_l2_addr_filter_cfg_get(uint32_t* addr_filt_start,
 /*!
  * Set the L2 cache address filtering configuration settings.
  *
- * Address filtering start and end values must be 1 MB aligned.
+ * Address filtering start and end values must be 1 MiB aligned.
  *
  * \param       addr_filt_start
  *              The address filtering start address for the range of physical
@@ -380,6 +380,441 @@ ALT_STATUS_CODE alt_l2_addr_filter_cfg_set(uint32_t addr_filt_start,
 
 /*! @} */
 
+/******************************************************************************/
+/*! \addtogroup ADDR_SPACE_MGR_MEM_COHERENCE ACP Memory Coherence and ID Mapping
+ *
+ * This API provides management of the ACP ID Mapper that enables data coherent
+ * access to the MPU address space by external masters. The set of external
+ * masters include L3 master peripherals and FPGA soft IP.
+ *
+ * The Accelerator Coherency Port (ACP) allows peripherals - including FPGA
+ * based soft IP - to maintain data coherency with the Cortex-A9 MPCore
+ * processors and the Snoop Control Unit (SCU).
+ *
+ * The ACP supports up to six masters. However, soft IP implemented in the FPGA
+ * fabric can have a larger number of masters that need to access the ACP. The
+ * ACP ID Mapper expands the number of masters able to access the ACP.  The ACP
+ * ID Mapper is situated between the interconnect and the ACP of the MPU
+ * subsystem. It has the following characteristics:
+ * * Support for up to six concurrent ID mappings.
+ * * 1 GiB coherent window into 4 GiB MPU address space
+ * * Remaps the 5-bit user sideband signals used by the Snoop Control Unit (SCU)
+ *   and L2 cache.
+ * 
+ * The function of the ACP ID Mapper is to map 12-bit Advanced Microcontroller
+ * Bus Architecture (AMBA) Advanced eXtensible Interface (AXI) IDs (input
+ * identifiers) from the Level 3 (L3) interconnect to 3-bit AXI IDs (output
+ * identifiers) required by the ACP slave port.
+ *
+ * The ACP ID Mapper supports the two ID mapping modes:
+ * * Dynamic Mapping - In this mode an input ID is automatically mapped to an
+ *   available output ID. The dynamic mode is more flexible because the hardware
+ *   handles the mapping. The hardware mapping allows an output ID to be used
+ *   for more than one input ID. Output IDs are assigned to input IDs on a
+ *   first-come, first-served basis.
+ * * Fixed Mapping - In this mode there is a one-to-one mapping from input IDs
+ *   to output IDs.
+ *
+ * Out of the total of eight ACP output ID values, only six are available to the
+ * ACP ID Mapper for remapping.  The first two output IDs (0 and 1) are
+ * dedicated to the Cortex-A9 processor cores in the MPU subsystem, leaving the
+ * last six output IDs (2-7) available to the ACP ID mapper. Output IDs 2-6
+ * support fixed and dynamic modes of operation while output ID 7 supports
+ * dynamic mode only.
+ *
+ * The following table summarizes the usage of the 3-bit ouput ID values by the
+ * ACP ID Mapper and their settings at reset.
+ *
+ *  Output ID  | Usage                                             | Reset State     
+ * :-----------|:--------------------------------------------------|:------------
+ *         0   | Reserved for Cortex-A9 cores.                     | -               
+ *         1   | Reserved for Cortex-A9 cores.                     | -               
+ *         2   | Assigned to Debug Access Port (DAP) input ID at   | Fixed           
+ * :           | reset. After reset, can be reconfigured to either | DAP Master
+ * :           | fixed or dynamic.                                 |:
+ *         3   | Configurable fixed or dynamic mode.               | Dynamic         
+ *         4   | Configurable fixed or dynamic mode.               | Dynamic         
+ *         5   | Configurable fixed or dynamic mode.               | Dynamic         
+ *         6   | Configurable fixed or dynamic mode.               | Dynamic         
+ *         7   | Dynamic mode only.                                | Dynamic         
+ *
+ * Where <em>Output ID</em> is the ACP ID Mapper output value that goes to the ACP.
+ *
+ * Additionally, for masters unable to drive the AXI user sideband signals of
+ * incoming transactions, the ACP ID Mapper allows control of the AXI user
+ * sideband signal values. Not all masters drive these signals, so the ACP ID
+ * Mapper makes it possible to drive the 5-bit user sideband signal with either
+ * a default value (in dynamic mode) or specific values (in fixed mode).
+ *
+ * The ACP ID Mapper can also control which 1 GiB coherent window into memory is
+ * accessed by masters of the L3 interconnect. Each fixed mapping can be
+ * assigned a different user sideband signal and memory window to allow specific
+ * settings for different masters. All dynamic mappings share a common user
+ * sideband signal and memory window setting.  One important exception, however,
+ * is that the ACP ID mapper always allows user sideband signals from the
+ * FPGA-to-HPS bridge to pass through to the ACP regardless of the configured
+ * user sideband value associated with the ID.
+ *
+ * The ACP ID Mapper has a 1 GiB address window into the MPU address space, which
+ * is by default a view into the bottom 1 GiB of SDRAM. The ACP ID Mapper allows
+ * transactions to be routed to different 1 GiB-sized memory views, called pages,
+ * in both dynamic and fixed modes.
+ *
+ * See: <em>Chapter 6: Cortex-A9 Microprocessor Unit Subsystem</em> in
+ * <em>Volume 3: Hard Processor System Technical Reference Manual</em> of the
+ * <em>Arria V or Cyclone V Device Handbook</em> for a complete discussion of
+ * the operation and restrictions on the ACP and the ACP ID Mapper.
+ *
+ * @{
+ */
+
+/******************************************************************************/
+/*!
+ * \name External Master ID Macros
+ *
+ * These macros define the HPS external master identifiers that are 12-bit input
+ * IDs to the ACP ID Mapper. Some of the masters have a range of identifier
+ * values assigned to them and are distinguished by taking a <em>(var)\</em>
+ * argument.
+ * @{
+ */
+
+/*! Bit mask for the relevant 12 bits of an external master ID */
+#define ALT_ACP_ID_MAP_MASTER_ID_MASK           0xfff
+
+/*! Master ID for L2M0 */
+#define ALT_ACP_ID_MAP_MASTER_ID_L2M0(var)      (0x00000002 | (0x000007f8 & (var)))
+/*! Master ID for DMA */
+#define ALT_ACP_ID_MAP_MASTER_ID_DMA(var)       (0x00000001 | (0x00000078 & (var)))
+/*! Master ID for EMAC0 */
+#define ALT_ACP_ID_MAP_MASTER_ID_EMAC0(var)     (0x00000801 | (0x00000878 & (var)))
+/*! Master ID for EMAC1 */
+#define ALT_ACP_ID_MAP_MASTER_ID_EMAC1(var)     (0x00000802 | (0x00000878 & (var)))
+/*! Master ID for USB0 */
+#define ALT_ACP_ID_MAP_MASTER_ID_USB0           0x00000803
+/*! Master ID for USB1 */
+#define ALT_ACP_ID_MAP_MASTER_ID_USB1           0x00000806
+/*! Master ID for NAND controller */
+#define ALT_ACP_ID_MAP_MASTER_ID_NAND(var)      (0x00000804 | (0x00000ff8 & (var)))
+/*! Master ID for Embedded Trace Router (ETR) */
+#define ALT_ACP_ID_MAP_MASTER_ID_TMC            0x00000800
+/*! Master ID for  Debug Access Port (DAP) */
+#define ALT_ACP_ID_MAP_MASTER_ID_DAP            0x00000004
+/*! Master ID for  SD/MMC controller */
+#define ALT_ACP_ID_MAP_MASTER_ID_SDMMC          0x00000805
+/*! Master ID for FPGA to HPS (F2H) bridge - conduit for soft IP masters in FPGA fabric */
+#define ALT_ACP_ID_MAP_MASTER_ID_F2H(var)       (0x00000000 | (0x000007f8 & (var)))
+/*! @} */
+
+/******************************************************************************/
+/*!
+  * This type defines the enumerations 3-bit output ids to ACP ID mapper.
+ */
+typedef enum ALT_ACP_ID_OUTPUT_ID_e
+{
+    ALT_ACP_ID_OUT_FIXED_ID_2 = 2,  /*!< Assigned to the input ID of the DAP at reset. 
+                                     *   After reset, can be either fixed or dynamic, 
+                                     *   programmed by software.
+                                     */
+    ALT_ACP_ID_OUT_DYNAM_ID_3 = 3,  /*!< Fixed or dynamic, programmed by software output id */
+    ALT_ACP_ID_OUT_DYNAM_ID_4 = 4,  /*!< Fixed or dynamic, programmed by software output id */
+    ALT_ACP_ID_OUT_DYNAM_ID_5 = 5,  /*!< Fixed or dynamic, programmed by software output id */
+    ALT_ACP_ID_OUT_DYNAM_ID_6 = 6,  /*!< Fixed or dynamic, programmed by software output id */
+    ALT_ACP_ID_OUT_DYNAM_ID_7 = 7   /*!< Dynamic mapping only */
+} ALT_ACP_ID_OUTPUT_ID_t;
+
+/*!
+ * This type defines the enumerations used to specify the 1 GiB page view of the
+ * MPU address space used by an ACP ID mapping configuration.
+ */
+typedef enum ALT_ACP_ID_MAP_PAGE_e
+{
+    ALT_ACP_ID_MAP_PAGE_0 = 0,  /*!< Page 0 - MPU address range 0x00000000 - 0x3FFFFFFF */
+    ALT_ACP_ID_MAP_PAGE_1 = 1,  /*!< Page 1 - MPU address range 0x40000000 - 0x7FFFFFFF */
+    ALT_ACP_ID_MAP_PAGE_2 = 2,  /*!< Page 2 - MPU address range 0x80000000 - 0xBFFFFFFF */
+    ALT_ACP_ID_MAP_PAGE_3 = 3   /*!< Page 3 - MPU address range 0xC0000000 - 0xFFFFFFFF */
+} ALT_ACP_ID_MAP_PAGE_t;
+
+/******************************************************************************/
+/*!
+ * Configure a fixed ACP ID mapping for read transactions originating from
+ * external masters identified by \e input_id. The \e input_id value is
+ * translated to the specified 3-bit \e output_id required by the ACP slave
+ * port.
+ *
+ * \param       input_id
+ *              The 12 bit external master ID originating read transactions
+ *              targeted for ID translation. Valid argument range must be 0 <=
+ *              \e output_id <= 4095.
+ *
+ * \param       output_id
+ *              The 3-bit output ID value the ACP ID Mapper translates read
+ *              transactions identified by \e input_id to. This is the value
+ *              propogated to the ACP slave port.  Valid argument values must be
+ *              0 <= \e output_id <= 7.
+ *
+ * \param       page
+ *              The MPU address space page view to use for the ACP window used
+ *              by the ID tranlation mapping.
+ *
+ * \param       aruser
+ *              The 5-bit AXI ARUSER read user sideband signal value to use for
+ *              masters unable to drive the AXI user sideband signals.  Valid
+ *              argument range is 0 <= \e aruser <= 31.
+ *
+ * \retval      ALT_E_SUCCESS   The operation was succesful.
+ * \retval      ALT_E_ERROR     The operation failed.
+ * \retval      ALT_E_RESERVED  The argument value is reserved or unavailable.
+ * \retval      ALT_E_ARG_RANGE An argument violates a range constraint. One or
+ *                              more of the \e input_id, and/or \e output_id
+ *                              arguments violates its range constraint.
+ * \retval      ALT_E_BAD_ARG   The \e page argument is invalid.
+ */
+ALT_STATUS_CODE alt_acp_id_map_fixed_read_set(const uint32_t input_id,
+                                              const uint32_t output_id,
+                                              const ALT_ACP_ID_MAP_PAGE_t page,
+                                              const uint32_t aruser);
+
+/******************************************************************************/
+/*!
+ * Configure a fixed ACP ID mapping for write transactions originating from
+ * external masters identified by \e input_id. The \e input_id value is
+ * translated to the specified 3-bit \e output_id required by the ACP slave
+ * port.
+ *
+ * \param       input_id
+ *              The 12 bit external master ID originating write transactions
+ *              targeted for ID translation. Valid argument range must be 0 <=
+ *              \e output_id <= 4095.
+ *
+ * \param       output_id
+ *              The 3-bit output ID value the ACP ID Mapper translates write
+ *              transactions identified by \e input_id to. This is the value
+ *              propogated to the ACP slave port.  Valid argument values must be
+ *              0 <= \e output_id <= 7.
+ *
+ * \param       page
+ *              The MPU address space page view to use for the ACP window used
+ *              by the ID tranlation mapping.
+ *
+ * \param       awuser
+ *              The 5-bit AXI AWUSER write user sideband signal value to use for
+ *              masters unable to drive the AXI user sideband signals.  Valid
+ *              argument range is 0 <= \e awuser <= 31.
+ *
+ * \retval      ALT_E_SUCCESS   The operation was succesful.
+ * \retval      ALT_E_ERROR     The operation failed.
+ * \retval      ALT_E_RESERVED  The argument value is reserved or unavailable.
+ * \retval      ALT_E_ARG_RANGE An argument violates a range constraint. One or
+ *                              more of the \e input_id, and/or \e output_id
+ *                              arguments violates its range constraint.
+ * \retval      ALT_E_BAD_ARG   The \e page argument is invalid.
+ */
+ALT_STATUS_CODE alt_acp_id_map_fixed_write_set(const uint32_t input_id,
+                                               const uint32_t output_id,
+                                               const ALT_ACP_ID_MAP_PAGE_t page,
+                                               const uint32_t awuser);
+
+/******************************************************************************/
+/*!
+ * Configure the designated 3-bit output ID as an available identifier resource
+ * for use by the dynamic ID mapping function of the ACP ID Mapper for read
+ * transactions. The \e output_id value is available for dynamic assignment to
+ * external master read transaction IDs that do not have an explicit fixed ID
+ * mapping.
+ *
+ * \param       output_id
+ *              The 3-bit output ID value designated as an available ID for use
+ *              by the dynamic mapping function of the ACP ID Mapper. The \e
+ *              ouput_id value is used exclusively for dynamic ID mapping until
+ *              reconfigured as a fixed ID mapping by a call to
+ *              alt_acp_id_map_fixed_read_set().  Valid argument values must be
+ *              0 <= \e output_id <= 7.
+ *
+ * \retval      ALT_E_SUCCESS   The operation was succesful.
+ * \retval      ALT_E_ERROR     The operation failed.
+ * \retval      ALT_E_RESERVED  The argument value is reserved or unavailable.
+ * \retval      ALT_E_ARG_RANGE An argument violates a range constraint.
+ */
+ALT_STATUS_CODE alt_acp_id_map_dynamic_read_set(const uint32_t output_id);
+
+/******************************************************************************/
+/*!
+ * Configure the designated 3-bit output ID as an available identifier resource
+ * for use by the dynamic ID mapping function of the ACP ID Mapper for write
+ * transactions. The \e output_id value is available for dynamic assignment to
+ * external master write transaction IDs that do not have an explicit fixed ID
+ * mapping.
+ *
+ * \param       output_id
+ *              The 3-bit output ID value designated as an available ID for use
+ *              by the dynamic mapping function of the ACP ID Mapper. The \e
+ *              ouput_id value is used exclusively for dynamic ID mapping until
+ *              reconfigured as a fixed ID mapping by a call to
+ *              alt_acp_id_map_fixed_write_set().  Valid argument values must be
+ *              0 <= \e output_id <= 7.
+ *
+ * \retval      ALT_E_SUCCESS   The operation was succesful.
+ * \retval      ALT_E_ERROR     The operation failed.
+ * \retval      ALT_E_RESERVED  The argument value is reserved or unavailable.
+ * \retval      ALT_E_ARG_RANGE An argument violates a range constraint.
+ */
+ALT_STATUS_CODE alt_acp_id_map_dynamic_write_set(const uint32_t output_id);
+
+/******************************************************************************/
+/*!
+ * Configure the page and user read sideband signal options that are applied to
+ * all read transactions that have their input IDs dynamically mapped.
+ *
+ * \param       page
+ *              The MPU address space page view to use for the ACP window used
+ *              by the dynamic ID tranlation mapping.
+ *
+ * \param       aruser
+ *              The 5-bit AXI ARUSER read user sideband signal value to use for
+ *              masters unable to drive the AXI user sideband signals.  Valid
+ *              argument range is 0 <= \e aruser <= 31.
+ *
+ * \retval      ALT_E_SUCCESS   The operation was succesful.
+ * \retval      ALT_E_ERROR     The operation failed.
+ * \retval      ALT_E_RESERVED  The argument value is reserved or unavailable.
+ * \retval      ALT_E_ARG_RANGE An argument violates a range constraint. One or
+ *                              more of the \e page and/or \e aruser
+ *                              arguments violates its range constraint.
+ * \retval      ALT_E_BAD_ARG   The \e mid argument is not a valid master 
+ *                              identifier.
+ */
+ALT_STATUS_CODE alt_acp_id_map_dynamic_read_options_set(const ALT_ACP_ID_MAP_PAGE_t page,
+                                                        const uint32_t aruser);
+
+/******************************************************************************/
+/*!
+ * Configure the page and user write sideband signal options that are applied to
+ * all write transactions that have their input IDs dynamically mapped.
+ *
+ * \param       page
+ *              The MPU address space page view to use for the ACP window used
+ *              by the dynamic ID tranlation mapping.
+ *
+ * \param       awuser
+ *              The 5-bit AXI AWUSER write user sideband signal value to use for
+ *              masters unable to drive the AXI user sideband signals.  Valid
+ *              argument range is 0 <= \e aruser <= 31.
+ *
+ * \retval      ALT_E_SUCCESS   The operation was succesful.
+ * \retval      ALT_E_ERROR     The operation failed.
+ * \retval      ALT_E_RESERVED  The argument value is reserved or unavailable.
+ * \retval      ALT_E_ARG_RANGE An argument violates a range constraint. One or
+ *                              more of the \e page and/or \e awuser
+ *                              arguments violates its range constraint.
+ * \retval      ALT_E_BAD_ARG   The \e mid argument is not a valid master 
+ *                              identifier.
+ */
+ALT_STATUS_CODE alt_acp_id_map_dynamic_write_options_set(const ALT_ACP_ID_MAP_PAGE_t page,
+                                                         const uint32_t awuser);
+
+/******************************************************************************/
+/*!
+ * Return the current read transaction mapping configuration used by the ACP ID
+ * Mapper for the specified output ID.
+ *
+ * If \e output_id is configured as a fixed mapping then \b true is returned in
+ * the \e fixed output parameter and the translation mapping options configured
+ * for that \e output_id are returned in the other output parameters.
+ *
+ * If \e output_id is configured as a dynamic mapping then \b false is returned
+ * in the \e fixed output parameter and the translation mapping options
+ * configured for all dynamically remapped output IDs are returned in the other
+ * output parameters.
+ *
+ * \param       output_id
+ *              The output ID to return the mapping configuration for. 0 <= \e
+ *              output_id <= 7.
+ *
+ * \param       fixed
+ *              [out] Set to \b true if the specified \e output_id is a fixed ID
+ *              mapping configuration. Set to \b false if the mapping
+ *              configuration is dynamic.
+ *
+ * \param       input_id
+ *              [out] The input ID of the external master that a fixed ID
+ *              mapping is applied to for the \e output_id. If \e fixed is \b
+ *              false then this output parameter is set to 0 and its value
+ *              should be considered as not applicable.
+ *
+ * \param       page
+ *              [out] The MPU address space page view used by the mapping
+ *              configuration.
+ *
+ * \param       aruser
+ *              [out] The 5-bit AXI ARUSER read user sideband signal value used
+ *              by the mapping configuration when masters are unable to drive
+ *              the AXI user sideband signals.
+ *
+ * \retval      ALT_E_SUCCESS   The operation was succesful.
+ * \retval      ALT_E_ERROR     The operation failed.
+ * \retval      ALT_E_RESERVED  The argument value is reserved or unavailable.
+ * \retval      ALT_E_ARG_RANGE An argument violates a range constraint. The \e 
+ *                              output_id argument violates its range constraint.
+ */
+ALT_STATUS_CODE alt_acp_id_map_read_options_get(const uint32_t output_id,
+                                                bool* fixed,
+                                                uint32_t* input_id,
+                                                ALT_ACP_ID_MAP_PAGE_t* page,
+                                                uint32_t* aruser);
+
+/******************************************************************************/
+/*!
+ * Return the current write transaction mapping configuration used by the ACP ID
+ * Mapper for the specified output ID.
+ *
+ * If \e output_id is configured as a fixed mapping then \b true is returned in
+ * the \e fixed output parameter and the translation mapping options configured
+ * for that \e output_id are returned in the other output parameters.
+ *
+ * If \e output_id is configured as a dynamic mapping then \b false is returned
+ * in the \e fixed output parameter and the translation mapping options
+ * configured for all dynamically remapped output IDs are returned in the other
+ * output parameters.
+ *
+ * \param       output_id
+ *              The output ID to return the mapping configuration for. 0 <= \e
+ *              output_id <= 7.
+ *
+ * \param       fixed
+ *              [out] Set to \b true if the specified \e output_id is a fixed ID
+ *              mapping configuration. Set to \b false if the mapping
+ *              configuration is dynamic.
+ *
+ * \param       input_id
+ *              [out] The input ID of the external master that a fixed ID
+ *              mapping is applied to for the \e output_id. If \e fixed is \b
+ *              false then this output parameter is set to 0 and its value
+ *              should be considered as not applicable.
+ *
+ * \param       page
+ *              [out] The MPU address space page view used by the mapping
+ *              configuration.
+ *
+ * \param       awuser
+ *              [out] The 5-bit AXI AWUSER write user sideband signal value used
+ *              by the mapping configuration when masters are unable to drive
+ *              the AXI user sideband signals.
+ *
+ * \retval      ALT_E_SUCCESS   The operation was succesful.
+ * \retval      ALT_E_ERROR     The operation failed.
+ * \retval      ALT_E_RESERVED  The argument value is reserved or unavailable.
+ * \retval      ALT_E_ARG_RANGE An argument violates a range constraint. The \e 
+ *                              output_id argument violates its range constraint.
+ */
+ALT_STATUS_CODE alt_acp_id_map_write_options_get(const uint32_t output_id,
+                                                 bool* fixed,
+                                                 uint32_t* input_id,
+                                                 ALT_ACP_ID_MAP_PAGE_t* page,
+                                                 uint32_t* awuser);
+
+/*! @} */
+
 /*! @} */
 
 #endif  /* __ASSEMBLY__ */
@@ -387,4 +822,4 @@ ALT_STATUS_CODE alt_l2_addr_filter_cfg_set(uint32_t addr_filt_start,
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
-#endif  /* __ALT_ADDR_SPACE_H__ */
+#endif  /* __ALT_ADDRESS_SPACE_H__ */

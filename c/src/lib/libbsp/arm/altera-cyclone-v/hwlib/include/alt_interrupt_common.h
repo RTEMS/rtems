@@ -343,6 +343,8 @@ typedef enum ALT_INT_INTERRUPT_e
     ALT_INT_INTERRUPT_SPI3_IRQ = 189,
     /*!<
      * Interrupts sourced from the SPI Controllers 0 - 3.
+     * SPI0_IRQ corresponds to SPIM0. SPI1_IRQ corresponds to SPIM1.
+     * SPI2_IRQ corresponds to SPIS0. SPI3_IRQ corresponds to SPIS1.
      *  * All interrupts in this group are level triggered.
      */
 

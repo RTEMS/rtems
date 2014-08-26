@@ -91,7 +91,6 @@ typedef int32_t             ALT_STATUS_CODE;
 /*! The buffer does not contain enough free space for the operation. */
 #define ALT_E_BUF_OVF               (-20)
 
-
 /*!
  * Indicates a FALSE condition.
  */

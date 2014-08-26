@@ -6,20 +6,20 @@
 /******************************************************************************
 *
 * Copyright 2013 Altera Corporation. All Rights Reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are met:
-* 
+*
 * 1. Redistributions of source code must retain the above copyright notice,
 * this list of conditions and the following disclaimer.
-* 
+*
 * 2. Redistributions in binary form must reproduce the above copyright notice,
 * this list of conditions and the following disclaimer in the documentation
 * and/or other materials provided with the distribution.
-* 
+*
 * 3. The name of the author may not be used to endorse or promote products
 * derived from this software without specific prior written permission.
-* 
+*
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER "AS IS" AND ANY EXPRESS OR
 * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ARE DISCLAIMED. IN NO
@@ -30,7 +30,7 @@
 * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 * OF SUCH DAMAGE.
-* 
+*
 ******************************************************************************/
 
 #ifndef __ALT_CLK_MGR_H__
@@ -82,7 +82,7 @@ typedef enum ALT_CLK_e
                                         /*!< \b OSC_CLK_2_HPS
                                          *   External Oscillator input:
                                          *   * Input Pin
-                                         *   * Optional clock source to SDRAM PLL 
+                                         *   * Optional clock source to SDRAM PLL
                                          *     and Peripheral PLL if selected
                                          *   * Typically used for Ethernet
                                          *     reference clock
@@ -132,7 +132,7 @@ typedef enum ALT_CLK_e
                                          *   * Input Pin
                                          */
 
-    
+
     /* PLLs */
     ALT_CLK_MAIN_PLL,
                                         /*!< \b main_pll_ref_clkin
@@ -142,7 +142,7 @@ typedef enum ALT_CLK_e
                                          */
 
     ALT_CLK_PERIPHERAL_PLL,
-                                        /*!< \b periph_pll_ref_clkin 
+                                        /*!< \b periph_pll_ref_clkin
                                          *   Peripheral PLL input reference
                                          *   clock, used to designate the
                                          *   Peripheral PLL in PLL clock
@@ -236,7 +236,7 @@ typedef enum ALT_CLK_e
 
     ALT_CLK_L4_SP,
                                         /*!< \b l4_sp_clk
-                                         *   Clock for L4 slave peripherals (SP) bus 
+                                         *   Clock for L4 slave peripherals (SP) bus
                                          */
 
     ALT_CLK_DBG_BASE,
@@ -279,14 +279,14 @@ typedef enum ALT_CLK_e
                                          */
 
     ALT_CLK_MAIN_NAND_SDMMC,
-                                        /*!< \b main_nand_sdmmc_clk 
+                                        /*!< \b main_nand_sdmmc_clk
                                          *   Main PLL C4 Output. Input clock to
                                          *   flash controller clocks block.
                                          *   * Alias for \e ALT_CLK_MAIN_PLL_C4
                                          */
 
     ALT_CLK_CFG,
-                                        /*!< \b cfg_clk 
+                                        /*!< \b cfg_clk
                                          *   FPGA manager configuration clock.
                                          */
 
@@ -295,7 +295,7 @@ typedef enum ALT_CLK_e
                                          *   Clock to FPGA fabric
                                          */
 
-    
+
     /* Peripherals Clock Group - The following clocks are derived from the Peripheral PLL */
     ALT_CLK_PERIPHERAL_PLL_C0,
                                         /*!< \b Peripheral PLL C0 Output */
@@ -556,7 +556,7 @@ typedef enum ALT_CLK_PLL_LOCK_STATUS_e
  * assertion conditions.
  *
  * \param       lock_stat_mask
- *              Specifies the PLL lock status conditions to clear. \e lock_stat_mask 
+ *              Specifies the PLL lock status conditions to clear. \e lock_stat_mask
  *              is a mask of logically OR'ed \ref ALT_CLK_PLL_LOCK_STATUS_t
  *              values designating the PLL lock conditions to clear.
  *
@@ -588,12 +588,12 @@ uint32_t alt_clk_lock_status_get(void);
  *
  * \retval      ALT_E_TRUE      The specified PLL is currently locked.
  * \retval      ALT_E_FALSE     The specified PLL is currently not locked.
- * \retval      ALT_E_BAD_ARG   The \e pll argument designates a non PLL clock 
+ * \retval      ALT_E_BAD_ARG   The \e pll argument designates a non PLL clock
  *                              value.
  * \internal
  * NOTE: This function uses the
  *       * \b hps::clkmgr::inter::mainplllocked
- *       * \b hps::clkmgr::inter::perplllocked, 
+ *       * \b hps::clkmgr::inter::perplllocked,
  *       * \b hps::clkmgr::inter::sdrplllocked
  *
  *       bits to determine if the PLL is locked or not.
@@ -612,30 +612,30 @@ ALT_STATUS_CODE alt_clk_pll_is_locked(ALT_CLK_t pll);
  * request from the reset manager sets the safe mode bit in the clock manager
  * control register. No other control register bits are affected by the safe
  * mode request from the reset manager.
- * 
+ *
  * While in safe mode, clock manager register settings which control clock
  * behavior are not changed. However, the output of the registers which control
  * the clock manager state are forced to the safe mode values such that the
  * following conditions occur:
  * * All PLLs are bypassed to the \b osc1_clk clock, including their counters.
  * * Clock dividers select their default reset values.
- * * The flash controllers source clock selections are set to the peripheral 
+ * * The flash controllers source clock selections are set to the peripheral
  *   PLL.
  * * All clocks are enabled.
  * * Safe mode is optionally applied to debug clocks.
- * 
+ *
  * A write by software is the only way to clear the safe mode bit. All registers
  * and clocks need to be configured correctly and all software-managed clocks
  * need to be gated off before clearing safe mode. Software can then gate clocks
  * on as required.
- * 
+ *
  * On cold reset, all clocks are put in safe mode.
- * 
+ *
  * On warm reset, safe mode is optionally and independently applied to debug
  * clocks and normal (i.e.non-debug) clocks based on clock manager register
  * settings. The default response for warm reset is to put all clocks in safe
  * mode.
- * 
+ *
  * The APIs in this group provide control of the Clock Manager safe mode warm
  * reset response behavior.
  * @{
@@ -651,12 +651,12 @@ typedef enum ALT_CLK_SAFE_DOMAIN_e
     /*!
      * This enumeration literal specifies the normal safe mode domain. The
      * normal domain consists of all clocks except debug clocks.
-     */ 
+     */
     ALT_CLK_DOMAIN_NORMAL,
     /*!
      * This enumeration literal specifies the debug safe mode domain. The debug
      * domain consists of all debug clocks.
-     */ 
+     */
     ALT_CLK_DOMAIN_DEBUG
 } ALT_CLK_SAFE_DOMAIN_t;
 
@@ -703,7 +703,7 @@ bool alt_clk_is_in_safe_mode(ALT_CLK_SAFE_DOMAIN_t clk_domain);
  *
  * In summary, the PLL bypass controls permit:
  * * Each PLL to be individually bypassed.
- * * Bypass of all PLL clock outputs to \b osc1_clk or alternatively the PLLs 
+ * * Bypass of all PLL clock outputs to \b osc1_clk or alternatively the PLLs
  *   reference clock input source reference clock selection.
  * * Isolation of a the PLL VCO frequency registers (multiplier and divider),
      phase shift registers (negative phase) , and post scale counters.
@@ -720,7 +720,7 @@ bool alt_clk_is_in_safe_mode(ALT_CLK_SAFE_DOMAIN_t clk_domain);
  *
  * \retval      ALT_E_SUCCESS   The operation was succesful.
  * \retval      ALT_E_ERROR     The operation failed.
- * \retval      ALT_E_BAD_ARG   The \e pll argument specified a non PLL clock 
+ * \retval      ALT_E_BAD_ARG   The \e pll argument specified a non PLL clock
  *                              value.
  */
 ALT_STATUS_CODE alt_clk_pll_bypass_disable(ALT_CLK_t pll);
@@ -751,7 +751,7 @@ ALT_STATUS_CODE alt_clk_pll_bypass_enable(ALT_CLK_t pll,
 /*!
  * Return whether the specified PLL is in bypass or not.
  *
- * \internal 
+ * \internal
  * This function must also test the \b clkmgr.ctrl.safemode bit in
  * addition to the PLLs bypass bit to tell whether the bypass mode is
  * effect or not.
@@ -762,7 +762,7 @@ ALT_STATUS_CODE alt_clk_pll_bypass_enable(ALT_CLK_t pll,
  *
  * \retval      ALT_E_TRUE      The PLL is in bypass mode.
  * \retval      ALT_E_FALSE     The PLL is not in bypass mode.
- * \retval      ALT_E_BAD_ARG   The \e pll argument designates a non PLL clock 
+ * \retval      ALT_E_BAD_ARG   The \e pll argument designates a non PLL clock
  *                              value.
  */
 ALT_STATUS_CODE alt_clk_pll_is_bypassed(ALT_CLK_t pll);
@@ -824,7 +824,7 @@ ALT_STATUS_CODE alt_clk_pll_is_bypassed(ALT_CLK_t pll);
  *
  * \retval      ALT_E_SUCCESS   The operation was succesful.
  * \retval      ALT_E_ERROR     The operation failed.
- * \retval      ALT_E_BAD_ARG   The \e clk argument designates a non gated clock 
+ * \retval      ALT_E_BAD_ARG   The \e clk argument designates a non gated clock
  *                              value.
  */
 ALT_STATUS_CODE alt_clk_clock_disable(ALT_CLK_t clk);
@@ -839,7 +839,7 @@ ALT_STATUS_CODE alt_clk_clock_disable(ALT_CLK_t clk);
  *
  * \retval      ALT_E_SUCCESS   The operation was succesful.
  * \retval      ALT_E_ERROR     The operation failed.
- * \retval      ALT_E_BAD_ARG   The \e clk argument designates a non gated clock 
+ * \retval      ALT_E_BAD_ARG   The \e clk argument designates a non gated clock
  *                              value.
  */
 ALT_STATUS_CODE alt_clk_clock_enable(ALT_CLK_t clk);
@@ -853,7 +853,7 @@ ALT_STATUS_CODE alt_clk_clock_enable(ALT_CLK_t clk);
  *
  * \retval      ALT_E_TRUE      The clock is enabled.
  * \retval      ALT_E_FALSE     The clock is not enabled.
- * \retval      ALT_E_BAD_ARG   The \e clk argument designates a non gated clock 
+ * \retval      ALT_E_BAD_ARG   The \e clk argument designates a non gated clock
  *                              value.
  */
 ALT_STATUS_CODE alt_clk_is_enabled(ALT_CLK_t clk);
@@ -912,12 +912,12 @@ ALT_STATUS_CODE alt_clk_is_enabled(ALT_CLK_t clk);
  * Get the input reference clock source selection value for the specified clock
  * or PLL.
  *
- * NOTE: This function returns a clock value even though \e clk may specify a 
- *       clock that does not have a selectable input reference clock source. In 
- *       this case, the clock value returned is the static clock source for the 
+ * NOTE: This function returns a clock value even though \e clk may specify a
+ *       clock that does not have a selectable input reference clock source. In
+ *       this case, the clock value returned is the static clock source for the
  *       specified clock. For example calling alt_clk_source_get() with \e clk
  *       set to \ref ALT_CLK_MAIN_PLL will return \ref ALT_CLK_OSC1.
- *       
+ *
  * \param       clk
  *              The clock or PLL to retrieve the input reference clock source
  *              selection value for.
@@ -939,14 +939,14 @@ ALT_CLK_t alt_clk_source_get(ALT_CLK_t clk);
  *
  * \retval      ALT_E_SUCCESS       The operation was succesful.
  * \retval      ALT_E_ERROR         The operation failed.
- * \retval      ALT_E_BAD_ARG       The \e clk argument designates a clock that 
- *                                  does not have a selectable input reference 
+ * \retval      ALT_E_BAD_ARG       The \e clk argument designates a clock that
+ *                                  does not have a selectable input reference
  *                                  clock source.
- * \retval      ALT_E_INV_OPTION    The \e ref_clk argument designates a clock that 
- *                                  is an invalid reference clock source for the 
+ * \retval      ALT_E_INV_OPTION    The \e ref_clk argument designates a clock that
+ *                                  is an invalid reference clock source for the
  *                                  specified clock.
  */
-ALT_STATUS_CODE alt_clk_source_set(ALT_CLK_t clk, 
+ALT_STATUS_CODE alt_clk_source_set(ALT_CLK_t clk,
                                    ALT_CLK_t ref_clk);
 
 /*! @} */
@@ -981,7 +981,7 @@ ALT_STATUS_CODE alt_clk_source_set(ALT_CLK_t clk,
  * \retval      ALT_E_SUCCESS   The operation was succesful.
  * \retval      ALT_E_ERROR     The operation failed.
  * \retval      ALT_E_BAD_ARG   A bad argument value was passed. Either the \e clk
- *                              argument is bad or not a valid external clock 
+ *                              argument is bad or not a valid external clock
  *                              source
  * \retval      ALT_E_ARG_RANGE The frequency value violates the range constraints
  *                              for the specified clock.
@@ -1018,17 +1018,17 @@ alt_freq_t alt_clk_ext_clk_freq_get(ALT_CLK_t clk);
 typedef struct ALT_CLK_PLL_CFG_s
 {
     ALT_CLK_t           ref_clk;        /*!< PLL Reference Clock Source */
-    uint32_t            mult;           /*!< VCO Frequency Configuration - 
+    uint32_t            mult;           /*!< VCO Frequency Configuration -
                                          *   Multiplier (M) value, range 1 to 4096
                                          */
-    uint32_t            div;            /*!< VCO Frequency Configuration - 
+    uint32_t            div;            /*!< VCO Frequency Configuration -
                                          *   Divider (N) value, range 1 to 64
                                          */
     uint32_t            cntrs[6];       /*!< Post-Scale Counters (C0 - C5) -
                                          *   range 1 to 512
                                          */
     uint32_t            pshift[6];      /*!< Phase Shift - 1/8 (45 degrees) of
-    									 *   negative phase shift per increment,
+                                         *   negative phase shift per increment,
                                          *   range 0 to 4096
                                          */
 } ALT_CLK_PLL_CFG_t;
@@ -1262,7 +1262,7 @@ ALT_STATUS_CODE alt_clk_freq_get(ALT_CLK_t clk,
  * The following interrupt request (IRQ) signals are sourced from the Clock
  * Manager:
  *
- * * \b clkmgr_IRQ - Clock Manager lock status interrupt output.  The PLL lock 
+ * * \b clkmgr_IRQ - Clock Manager lock status interrupt output.  The PLL lock
  *                   status interrupt is the logical \e OR of six interrupt
  *                   sources defining the loss or achievement of lock status for
  *                   each PLL. The six PLL lock status conditions are:
@@ -1275,7 +1275,7 @@ ALT_STATUS_CODE alt_clk_freq_get(ALT_CLK_t clk,
  *
  *                   They are enumeratated by the type \ref ALT_CLK_PLL_LOCK_STATUS_t.
  *
- *                   Each PLL lock condition may be individually disabled/enabled 
+ *                   Each PLL lock condition may be individually disabled/enabled
  *                   as a contributor to the determination of the \b clkmgr_IRQ
  *                   assertion status.
  *
@@ -1283,7 +1283,7 @@ ALT_STATUS_CODE alt_clk_freq_get(ALT_CLK_t clk,
  *                   the PLL lock conditions causing the \b clkmgr_IRQ
  *                   assertion.
  *
- * * \b mpuwakeup_IRQ - MPU wakeup interrupt output. This interrupt notifies the 
+ * * \b mpuwakeup_IRQ - MPU wakeup interrupt output. This interrupt notifies the
  *                      MPU to "wake up" after a transition of the Main PLL into
  *                      or out of bypass mode has been safely achieved. The need
  *                      for the "wake up" notification is because the PLL clocks
@@ -1368,14 +1368,14 @@ ALT_STATUS_CODE alt_clk_irq_enable(ALT_CLK_PLL_LOCK_STATUS_t lock_stat_mask);
  *
  * A known good clock group configuration may be generated by one of the
  * following methods:
- * 
- * * As static design information generated by an ACDS clock configuration tool 
+ *
+ * * As static design information generated by an ACDS clock configuration tool
  *   and passed to embedded software for dynamic loading.
- * 
+ *
  * * By calling alt_clk_group_cfg_raw_get() at run-time from an SoC FPGA that has
  *   programmatically established a known good clock group configuration using
  *   the clock manager API configuration functions.
- * 
+ *
  * @{
  */
 
@@ -1407,7 +1407,7 @@ ALT_STATUS_CODE alt_clk_group_cfg_raw_get(ALT_CLK_GRP_t clk_group,
  *
  * This function is used to safely set the configuration state of a clock
  * group from a raw clock group configuration specification.  The raw clock
- * group configuration specification may be a configuration previously 
+ * group configuration specification may be a configuration previously
  * captured with alt_clk_group_cfg_raw_get() or a group clock configuration
  * generated by an external utility.
  *
@@ -1422,10 +1422,13 @@ ALT_STATUS_CODE alt_clk_group_cfg_raw_get(ALT_CLK_GRP_t clk_group,
  */
 ALT_STATUS_CODE alt_clk_group_cfg_raw_set(const ALT_CLK_GROUP_RAW_CFG_t* clk_group_raw_cfg);
 
+ALT_STATUS_CODE alt_clk_clkmgr_init(void);
+
 /*! @} */
 
 /*! @} */
 #ifdef __cplusplus
 }
+
 #endif  /* __cplusplus */
 #endif  /* __ALT_CLK_MGR_H__ */
