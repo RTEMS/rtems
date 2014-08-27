@@ -1,7 +1,9 @@
-/*  bsp.h
+/*  @file
  *
  *  This include file contains all GEN405 board IO definitions.
- *
+ */
+
+/*
  * derived from helas403/include/bsp.h:
  *  Id: bsp.h,v 1.4 2001/06/18 17:01:48 joel Exp
  *  Author:	Thomas Doerfler <td@imd.m.isar.de>
@@ -67,7 +69,26 @@ extern "C" {
 /* miscellaneous stuff assumed to exist */
 extern bool bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 
-extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
+/*
+ * Bus Frequency
+ */
+extern unsigned int BSP_bus_frequency;
+/*
+ * Processor Clock Frequency
+ */
+extern unsigned int BSP_processor_frequency;
+/*
+ * Time base divisior (how many tick for 1 second).
+ */
+extern unsigned int BSP_time_base_divisor;
+
+/*
+ * Macro used by shared MPC6xx timer driver
+ */
+#define BSP_Convert_decrementer( _value ) \
+  ((unsigned long long) ((((unsigned long long)BSP_time_base_divisor) * 1000000ULL) /((unsigned long long) BSP_bus_frequency)) * ((unsigned long long) (_value)))
+
+
 #endif /* ASM */
 
 void BSP_ask_for_reset(void);
