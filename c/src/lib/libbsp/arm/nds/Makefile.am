@@ -30,72 +30,43 @@ libbsp_a_SOURCES =
 include_ndsdir = $(includedir)/nds
 include_nds_HEADERS = touchscreen/touchscreen.h sound/sound.h
 
-noinst_PROGRAMS += startup.rel
-startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
-    startup/bspstart.c ../../shared/bspclean.c startup/bspreset.c \
-    ../../shared/bspgetworkarea.c ../../shared/bsppredriverhook.c \
-    ../../shared/bsppretaskinghook.c ../../shared/bootcard.c
+libbsp_a_CPPFLAGS = -DARM9
+libbsp_a_CPPFLAGS += -I$(srcdir)/../../shared/include
+libbsp_a_CPPFLAGS += -I$(srcdir)/include
+libbsp_a_CPPFLAGS += -I$(srcdir)/libnds/include
+libbsp_a_CPPFLAGS += -I$(srcdir)/libfat/source/disc_io
+libbsp_a_SOURCES += ../../shared/bsplibc.c
+libbsp_a_SOURCES += ../../shared/bsppost.c
+libbsp_a_SOURCES += startup/bspstart.c
+libbsp_a_SOURCES += ../../shared/bspclean.c
+libbsp_a_SOURCES += startup/bspreset.c
+libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
+libbsp_a_SOURCES += ../../shared/bootcard.c
 libbsp_a_SOURCES += ../../shared/cpucounterread.c
 libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
-startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += gnatsupp.rel
-gnatsupp_rel_SOURCES = ../../shared/gnatinstallhandler.c
-gnatsupp_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
-gnatsupp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += clock.rel
-clock_rel_SOURCES = clock/clock.c
-clock_rel_SOURCES += ../../shared/clockdrv_shell.h
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
-clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += rtc.rel
-rtc_rel_SOURCES = rtc/rtc.c ../../shared/tod.c
-rtc_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
-rtc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += console.rel
-console_rel_SOURCES = console/console.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include -I$(srcdir)/include
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += fb.rel
-fb_rel_SOURCES = fb/fb.c
-fb_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
-fb_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += touchscreen.rel
-touchscreen_rel_SOURCES = touchscreen/touchscreen.c touchscreen/parser.c \
-			  touchscreen/reco.c
-touchscreen_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
-touchscreen_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += timer.rel
-timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
-timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += sound.rel
-sound_rel_SOURCES = sound/sound.c
-sound_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
-sound_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += block.rel
-block_rel_SOURCES = block/block.c
-block_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include -DNDS -I$(srcdir)/libfat/source/disc_io
-block_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += irq.rel
-irq_rel_SOURCES = irq/irq.c
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/libnds/include
-irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += clock/clock.c
+libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
+libbsp_a_SOURCES += rtc/rtc.c
+libbsp_a_SOURCES += ../../shared/tod.c
+libbsp_a_SOURCES += console/console.c
+libbsp_a_SOURCES += fb/fb.c
+libbsp_a_SOURCES += touchscreen/touchscreen.c
+libbsp_a_SOURCES += touchscreen/parser.c
+libbsp_a_SOURCES += touchscreen/reco.c
+libbsp_a_SOURCES += timer/timer.c
+libbsp_a_SOURCES += sound/sound.c
+libbsp_a_SOURCES += block/block.c
+libbsp_a_SOURCES += irq/irq.c
+# Cache
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += ../../shared/include/cache_.h
 
 if HAS_NETWORKING
 noinst_PROGRAMS += wifi.rel
-wifi_rel_SOURCES =	wifi/wifi.c					\
-			wifi/compat.c
+wifi_rel_SOURCES = wifi/wifi.c wifi/compat.c
 wifi_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/dswifi/include -I$(srcdir)/libnds/include -I$(srcdir)/dswifi/include -D_KERNEL -D__BSD_VISIBLE
 wifi_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -144,8 +115,8 @@ libnds9_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 if HAS_NETWORKING
 # dswifi, ARM9 side
 noinst_PROGRAMS += dswifi9.rel
-dswifi9_rel_SOURCES =  	dswifi/arm9/source/wifi_arm9.c			\
-			dswifi/common/source/spinlock.S
+dswifi9_rel_SOURCES = dswifi/arm9/source/wifi_arm9.c
+dswifi9_rel_SOURCES += dswifi/common/source/spinlock.S
 dswifi9_rel_CPPFLAGS = $(AM_CPPFLAGS) -DARM9 -I$(srcdir)/dswifi/include -I$(srcdir)/libnds/include -I$(srcdir)/dswifi/common/source -I$(srcdir)/wifi -D_KERNEL
 dswifi9_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -255,14 +226,7 @@ coproc.bin: coproc/coproc.S coproc/coproc.c libnds7.rel
 endif
 project_lib_DATA += coproc.bin
 
-# Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../../shared/include/cache_.h
-libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
-
-libbsp_a_LIBADD = clock.rel console.rel gnatsupp.rel startup.rel irq.rel \
-    timer.rel libnds9.rel rtc.rel fb.rel touchscreen.rel sound.rel \
-    block.rel libdldi.rel
+libbsp_a_LIBADD = libnds9.rel libdldi.rel
 
 if HAS_NETWORKING
     libbsp_a_LIBADD += wifi.rel dswifi9.rel
