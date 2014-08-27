@@ -5,6 +5,7 @@
 #
 
 capture
+iostream
 ftp01
 fileio
 flashdisk01
@@ -30,5 +31,7 @@ mrfs_fsrdwr
 mrfs_fssymlink
 mrfs_fstime
 pppd
+rtems++
+sptls02
 syscall01
 utf8proc01
