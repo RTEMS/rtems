@@ -513,7 +513,9 @@ rtems_status_code rtems_timer_initiate_server(
     _Objects_Build_name('T','I','M','E'),           /* "TIME" */
     _priority,            /* create with priority 1 since 0 is illegal */
     stack_size,           /* let user specify stack size */
-    RTEMS_NO_PREEMPT,     /* no preempt is like an interrupt */
+    rtems_configuration_is_smp_enabled() ?
+      RTEMS_DEFAULT_MODES : /* no preempt is not supported for SMP */
+      RTEMS_NO_PREEMPT,   /* no preempt is like an interrupt */
                           /* user may want floating point but we need */
                           /*   system task specified for 0 priority */
     attribute_set | RTEMS_SYSTEM_TASK,
