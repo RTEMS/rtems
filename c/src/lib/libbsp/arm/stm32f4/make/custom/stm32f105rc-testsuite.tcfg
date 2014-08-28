@@ -8,6 +8,7 @@ fileio
 flashdisk01
 fsdosfsname01
 ftp01
+iostream
 jffs2_fserror
 jffs2_fslink
 jffs2_fspatheval
@@ -18,4 +19,5 @@ jffs2_fstime
 mghttpd01
 monitor02
 pppd
+rtems++
 utf8proc01

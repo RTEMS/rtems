@@ -5,4 +5,6 @@
 #
 
 fsdosfsname01
+iostream
+rtems++
 utf8proc01

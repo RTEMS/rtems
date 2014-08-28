@@ -5,12 +5,14 @@
 #
 
 capture
+cdtest
 fileio
 flashdisk01
 fsdosfsformat01
 fsdosfsname01
 fsrfsbitmap01
 ftp01
+iostream
 jffs2_fserror
 jffs2_fslink
 jffs2_fspatheval
@@ -33,6 +35,8 @@ mrfs_fstime
 mdosfs_fsrdwr
 paranoia
 pppd
+rtems++
+sptls02
 spstkalloc02
 syscall01
 utf8proc01

@@ -5,6 +5,7 @@
 #
 
 fileio
+iostream
 flashdisk01
 fsdosfsname01
 ftp01
@@ -19,3 +20,4 @@ mghttpd01
 monitor02
 utf8proc01
 pppd
+rtems++

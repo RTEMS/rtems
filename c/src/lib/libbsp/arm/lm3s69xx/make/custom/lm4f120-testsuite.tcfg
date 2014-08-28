@@ -5,6 +5,8 @@
 #
 
 fileio
+cdtest
+iostream
 flashdisk01
 fsdosfsname01
 ftp01
@@ -22,4 +24,6 @@ sp16
 sp25
 sp48
 spstkalloc02
+sptls02
+rtems++
 utf8proc01

@@ -17,3 +17,5 @@ mghttpd01
 pppd
 spstkalloc02
 utf8proc01
+iostream
+rtems++
