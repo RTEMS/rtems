@@ -9,7 +9,7 @@
 #
 # Usage: ampolish3 Makefile.am > preinstall.am
 #
-# Reads a Makefile.am from stdin and writes corresponding 
+# Reads a Makefile.am from stdin and writes corresponding
 # pre/tmpinstall rules to stdout.
 
 sub replace($);
@@ -85,7 +85,7 @@ foreach my $l ( @buffer1 ) {
     push @buffer2, "$l";
     $dirmap{"\$\($1\)"} = replace($2);
   } elsif ( $l =~ /^\s*noinst_(.*)\s*[\+]?\=(.*)$/o )
-  { 
+  {
     #ignore: noinst_* are not relevant here.
   } elsif ( $l =~ /^\s*(nodist_|dist_|)(project_|)([a-zA-Z0-9_]+)_(HEADERS|LIBRARIES|DATA|SCRIPTS|PROGRAMS)\s*([\+]?\=)\s*(.*)/o )
   {
@@ -217,7 +217,7 @@ $output .=  "\$(srcdir)/preinstall.am: Makefile.am\n";
 $output .= "\t\$(AMPOLISH3) \$(srcdir)/Makefile.am > \$(srcdir)/preinstall.am\n";
 $output .= "endif\n\n";
 
-foreach my $k ( keys %seen )
+foreach my $k ( sort keys %seen )
 {
   if ( $k =~ /PREINSTALL_FILES/o ) {
     $output .= "all-am: \$(PREINSTALL_FILES)\n\n";
@@ -258,7 +258,7 @@ exit 0;
 sub replace($)
 {
   my ($v) = @_;
-  foreach my $i ( keys %dirmap )
+  foreach my $i ( sort keys %dirmap )
   {
     $v =~ s/\Q$i/$dirmap{$i}/g;
   }
