@@ -5,13 +5,13 @@ $(srcdir)/preinstall.am: Makefile.am
 	$(AMPOLISH3) $(srcdir)/Makefile.am > $(srcdir)/preinstall.am
 endif
 
+PREINSTALL_DIRS =
+DISTCLEANFILES += $(PREINSTALL_DIRS)
+
 all-am: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
 CLEANFILES = $(PREINSTALL_FILES)
-
-PREINSTALL_DIRS =
-DISTCLEANFILES += $(PREINSTALL_DIRS)
 
 all-local: $(TMPINSTALL_FILES)
 
