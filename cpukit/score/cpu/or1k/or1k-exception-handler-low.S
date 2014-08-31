@@ -207,6 +207,7 @@ jump_to_c_handler:
   l.lwz  r28, 112(r1)
   l.lwz  r29, 116(r1)
   l.lwz  r30, 120(r1)
+  l.lwz  r31, 124(r1)
 
   l.addi r1, r1, 140
 
