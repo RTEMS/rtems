@@ -6,8 +6,21 @@ directives:
 
   - rtems_semaphore_create()
   - rtems_semaphore_set_priority()
+  - rtems_semaphore_obtain()
+  - rtems_semaphore_release()
+  - rtems_semaphore_delete()
 
 concepts:
 
-  - Ensure that the RTEMS_MULTIPROCESSOR_RESOURCE_SHARING attribute and
-    semaphores work on uni-processor configurations.
+  - Ensure that invalid attribute combinations with
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING lead to an error status in
+    rtems_semaphore_create().
+  - Ensure that a MrsP semaphore behaves like a normal PCP semaphore on
+    uni-processor configurations.
+  - Ensure that invalid parameter values result in an error status in
+    rtems_semaphore_set_priority() using a counting semaphore.
+  - Ensure that rtems_semaphore_set_priority() works for valid parameters.
+  - Ensure that timeouts work for MrsP semaphores on uni-processor
+    configurations.
+  - Ensure that rtems_semaphore_release() fails for MrsP semaphores if the task
+    is not the resource owner on uni-processor configurations.

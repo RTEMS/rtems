@@ -4,9 +4,13 @@ test set name: smpmigration02
 
 directives:
 
-  - _Scheduler_SMP_Allocate_processor()
+  - rtems_task_set_scheduler()
   - _CPU_Context_switch()
+  - _Scheduler_SMP_Allocate_processor_lazy()
+  - _Thread_Dispatch()
 
 concepts:
 
-  - Ensure that forced thread migration works.
+  - Ensure that forced thread migration via rtems_task_set_scheduler() works.
+  - Ensure that thread migration is cancelled in case _Thread_Dispatch() is
+    delayed and the processor assignment changes.

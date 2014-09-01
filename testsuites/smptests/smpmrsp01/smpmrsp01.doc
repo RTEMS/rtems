@@ -6,10 +6,22 @@ directives:
 
   - _MRSP_Initialize()
   - _MRSP_Obtain()
+  - _MRSP_Timeout()
   - _MRSP_Release()
   - _MRSP_Get_ceiling_priority()
   - _MRSP_Set_ceiling_priority()
 
 concepts:
 
-  - Ensure that MrsP semaphores work.
+  - Ensure that rtems_semaphore_flush() returns an error status for MrsP
+    semaphores.
+  - Ensure that rtems_semaphore_create() for an initially locked semaphore
+    returns an error status for MrsP semaphores.
+  - Ensure that a nested obtain rtems_semaphore_obtain() returns an error
+    status for MrsP semaphores.
+  - Ensure that a rtems_semaphore_obtain() leading to a deadlock returns an
+    error status for MrsP semaphores.
+  - Ensure that it is possible to obtain multiple MrsP semaphores.
+  - Ensure that a timeout on MrsP semaphores works.
+  - Ensure that helping protocol for MrsP semaphores works.
+  - Ensure that heavy usage of multiple MrsP semaphores works.

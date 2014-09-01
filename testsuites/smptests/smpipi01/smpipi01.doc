@@ -8,4 +8,6 @@ directives:
 
 concepts:
 
-  - Ensure that inter-processor interrupts work as expected.
+  - Ensure that SMP message delivery works in the context of an SMP message
+    handler.
+  - Ensure that a flood of inter-processor interrupts works as expected.

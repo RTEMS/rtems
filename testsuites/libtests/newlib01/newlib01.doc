@@ -10,4 +10,9 @@ directives:
 
 concepts:
 
-  - Ensure that the Newlib hooks works as expected.
+  - Reopen the standard output stream and ensure that buffered content is
+    written to the open file during thread termination.
+  - Ensure that the open file is closed after the write during thread
+    termination.
+  - Ensure that all resources are returned to the system using resouce
+    snapshots.

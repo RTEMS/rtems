@@ -5,7 +5,14 @@ test set name: smpunsupported01
 directives:
 
   - rtems_configuration_is_smp_enabled()
+  - rtems_task_mode()
+  - rtems_task_create()
 
 concepts:
 
-  - Ensure that functions unsupported on SMP return an error status.
+  - Ensure that rtems_configuration_is_smp_enabled() return true on SMP
+    configurations.
+  - Ensure that rtems_task_mode() with RTEMS_NO_PREEMPT returns an error status
+    on SMP configurations.
+  - Ensure that rtems_task_create() with RTEMS_NO_PREEMPT returns an error
+    status on SMP configurations.

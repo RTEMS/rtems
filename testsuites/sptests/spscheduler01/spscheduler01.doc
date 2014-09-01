@@ -9,5 +9,5 @@ directives:
 
 concepts:
 
-  - Ensure that the task set/get affinity functions work on non-SMP
+  - Ensure that the task set/get affinity functions work on uni-processor
     configurations.

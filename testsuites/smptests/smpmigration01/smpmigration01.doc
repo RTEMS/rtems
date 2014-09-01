@@ -8,8 +8,9 @@ processor frequency of 800MHz.
 directives:
 
   - _Thread_Dispatch()
-  - _Scheduler_simple_smp_Allocate_processor()
+  - _Scheduler_SMP_Allocate_processor_lazy()
 
 concepts:
 
-  - Ensure that thread migration works.
+  - Ensure that thread migration due to thread priority changes work on a two
+    processor system.

@@ -4,9 +4,21 @@ test set name: smpscheduler02
 
 directives:
 
+  - rtems_scheduler_ident()
+  - rtems_scheduler_get_processor_set()
   - rtems_task_set_scheduler()
+  - rtems_task_get_scheduler()
+  - rtems_task_set_affinity()
+  - rtems_task_get_affinity()
   - rtems_task_start()
 
 concepts:
 
   - Ensure that start of a thread for another partition works.
+  - Ensure that rtems_scheduler_get_processor_set() returns the proper
+    processor set.
+  - Test rtems_task_set_scheduler(), rtems_task_get_scheduler(),
+    rtems_task_set_affinity() and rtems_task_get_affinity() with various
+    parameter sets.
+  - Ensure that rtems_scheduler_ident() returns an error status in case the
+    scheduler exists but its processor set is empty.
