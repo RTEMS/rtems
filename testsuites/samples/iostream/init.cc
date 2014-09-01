@@ -32,9 +32,9 @@ rtems_task Init(
 )
 {
   std::cout << std::endl << std::endl
-    << "*** BEGIN OF " << rtems_test_name << " TEST ***" << std::endl;
+    << "*** BEGIN OF TEST " << rtems_test_name << " ***" << std::endl;
   std::cout << "Hello World" << std::endl;
-  std::cout << "*** END OF " << rtems_test_name << " TEST ***" << std::endl;
+  std::cout << "*** END OF TEST " << rtems_test_name << " ***" << std::endl;
   exit( 0 );
 }
 
