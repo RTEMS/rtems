@@ -212,6 +212,11 @@ rtems_task Init(
 
   rtems_test_begin();
 
+#ifdef RTEMS_SMP
+  printf("Capture Engine is broken due to recursive interrupt lock usage\n");
+  assert(0);
+#endif
+
   rtems_task_set_priority(RTEMS_SELF, 20, &old_priority);
   rtems_task_mode(RTEMS_PREEMPT,  RTEMS_PREEMPT_MASK, &old_mode);
 
