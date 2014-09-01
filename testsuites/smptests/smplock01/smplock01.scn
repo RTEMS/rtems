@@ -1,4 +1,4 @@
-*** TEST SMPLOCK 1 ***
+*** BEGIN OF TEST SMPLOCK 1 ***
 aquire global lock with local counter
         processor 0, local counter 15964
         processor 1, local counter 99982377
