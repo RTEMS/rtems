@@ -31,7 +31,7 @@
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
-const char rtems_test_name[] = "CAPTURE ENGINE";
+const char rtems_test_name[] = "CAPTURE 1";
 
 static void cwlist(void);
 static void ctrace(void);
