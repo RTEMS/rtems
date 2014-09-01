@@ -64,6 +64,13 @@ uint32_t _CPU_SMP_Get_current_processor(void)
 }
 #endif
 
+#if defined(__leon__)
+void _LEON3_Start_multitasking(Context_Control *heir)
+{
+  assert(0);
+}
+#endif
+
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
 {
   (void) target_processor_index;
