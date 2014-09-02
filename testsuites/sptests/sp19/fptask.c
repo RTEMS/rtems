@@ -41,11 +41,7 @@ rtems_task FP_task(
     INTEGER_factors[ task_index ]
   );
   put_name( Task_name[ task_index ], FALSE );
-  #if ( RTEMS_HAS_HARDWARE_FP == 1 )
-    printf( " - float base = (%g)\n", FP_factors[ task_index ] );
-  #else
-    printf( " - float base = (NA)\n" );
-  #endif
+  printf( " - float base = (%g)\n", FP_factors[ task_index ] );
 
   previous_seconds = (uint32_t)-1;
 

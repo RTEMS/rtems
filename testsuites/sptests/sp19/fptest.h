@@ -1,20 +1,22 @@
-/*  fptest.h
+/**
+ * @file
+ * @brief Floating Point Register Pressure and Check
  *
- *  This include file contains the CPU dependent implementation
- *  of the following routines needed to test RTEMS floating
- *  point support:
- *           FP_load( &context )
- *           FP_check( &context )
+ * This include file contains the implementation of the following
+ * routines needed to test RTEMS floating point support:
  *
- *  FP_load   - loads the specified floating point context
- *  FP_check  - checks the specified floating point context
+ *    FP_load( &context )
+ *    FP_check( &context )
  *
- *  NOTE:  These routines are VERY CPU dependent and are thus
- *         located in in the CPU dependent include file
- *         fptest.h.  These routines form the core of the
- *         floating point context switch test.
+ * FP_load   - loads the specified floating point context
+ * FP_check  - checks the specified floating point context
  *
- *  COPYRIGHT (c) 1989-1999.
+ * Whether the CPU model has hardware or software floating point,
+ * these methods should put load on the floating point register set.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,25 +29,6 @@
 #define __FPTEST_h
 
 #include <stdio.h>
-
-#ifndef RTEMS_HAS_HARDWARE_FP
-#error "This CPU does not have RTEMS_HAS_HARDWARE_FP defined"
-#endif
-
-#if ( RTEMS_HAS_HARDWARE_FP == FALSE )
-
-/*
- *  The following is useless except to avoid some warnings.
- */
-
-#define FP_DECLARE unsigned int fp01 = 0;
-#define FP_LOAD( _factor ) fp01 = 2;
-#define FP_CHECK( _factor ) \
-   if ( fp01 != 2 ) \
-          printf("%" PRIu32 ": single integer is wrong -- (%d != 2) \n", \
-             task_index, fp01 );  \
-
-#else
 
 #define FP_DECLARE \
     double  fp01 = 1.0; \
@@ -163,7 +146,5 @@
       FP_CHECK_ONE( fp31, 31.0, (_factor) ); \
       FP_CHECK_ONE( fp32, 32.0, (_factor) ); \
     } while (0)
-
-#endif
 
 #endif
