@@ -31,6 +31,7 @@ BSP_START_TEXT_SECTION __attribute__((flatten)) void bsp_reset(void)
 {
   rtems_interrupt_level level;
 
+  (void) level;
   rtems_interrupt_disable(level);
 
   #if defined(ARM_MULTILIB_ARCH_V4)
