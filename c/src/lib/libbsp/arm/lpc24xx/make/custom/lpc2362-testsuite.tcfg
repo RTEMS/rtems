@@ -9,6 +9,7 @@ cdtest
 fileio
 flashdisk01
 fsdosfsname01
+fsdosfsformat01
 fsrfsbitmap01
 ftp01
 iostream
@@ -31,6 +32,8 @@ mrfs_fspermission
 mrfs_fsrdwr
 mrfs_fssymlink
 mrfs_fstime
+mdosfs_fsrdwr
+paranoia
 pppd
 rtems++
 spstkalloc02
