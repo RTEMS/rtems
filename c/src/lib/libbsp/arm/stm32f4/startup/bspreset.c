@@ -20,6 +20,7 @@ void bsp_reset(void)
 {
   rtems_interrupt_level level;
 
+  (void) level;
   rtems_interrupt_disable(level);
 
   while (1);
