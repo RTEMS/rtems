@@ -30,7 +30,12 @@ void rtems_test_fatal_extension(
   (void) code;
 
 #if defined(RTEMS_PROFILING)
-  if (rtems_get_current_processor() == 0) {
+  if ( rtems_get_current_processor() == 0 ) {
+    printk(
+      "\n*** PROFILING REPORT BEGIN %s ***\n",
+      rtems_test_name
+    );
+
     rtems_profiling_report_xml(
       rtems_test_name,
       printk_plugin,
@@ -39,9 +44,8 @@ void rtems_test_fatal_extension(
       "  "
     );
 
-    /* Add some stuff to help broken debuggers */
     printk(
-      "*** PROFILING DONE %s ***\n",
+      "*** PROFILING REPORT END %s ***\n",
       rtems_test_name
     );
   }
