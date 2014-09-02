@@ -40,7 +40,7 @@ _VBR = 0x0;
 ENTRY(start)
 MEMORY
 {
-    ram : ORIGIN = 0, LENGTH = 16M
+    dram : ORIGIN = 0, LENGTH = 16M
     sram : ORIGIN = 0x20000000, LENGTH = 64K
     flash : ORIGIN = 0xFFE00000, LENGTH = 2M
 }
@@ -139,7 +139,7 @@ SECTIONS
         . = ALIGN(16);
         _estuff = .;
     PROVIDE (_etext = .);
-    } >ram
+    } > dram
 
     .tdata : {
         _TLS_Data_begin = .;
@@ -171,7 +171,7 @@ SECTIONS
             PROVIDE (_edata = .);
         PROVIDE (_copy_end = .);
         PROVIDE (_data_dest_end = . );
-        } >ram
+        } > dram
 
         _data_src_start = _estuff;
         _data_src_end = _data_dest_start + SIZEOF(.data);        
@@ -185,7 +185,7 @@ SECTIONS
                 _clear_end = .;
 
                 WorkAreaBase = .;
-        } >ram
+        } > dram
   /* Stabs debugging sections.  */
   .stab 0 : { *(.stab) }
   .stabstr 0 : { *(.stabstr) }
