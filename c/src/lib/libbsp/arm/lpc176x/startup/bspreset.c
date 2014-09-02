@@ -31,6 +31,7 @@ BSP_START_TEXT_SECTION __attribute__( ( flatten ) ) void bsp_reset( void )
 {
   rtems_interrupt_level level;
 
+  (void) level;
   rtems_interrupt_disable( level );
 
   _ARMV7M_SCB->aircr = ARMV7M_SCB_AIRCR_VECTKEY |
