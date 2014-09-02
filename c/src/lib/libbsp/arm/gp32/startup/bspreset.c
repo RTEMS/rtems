@@ -9,6 +9,8 @@
 void bsp_reset(void)
 {
   rtems_interrupt_level level;
+
+  (void) level;
   rtems_interrupt_disable(level);
   /* disable mmu, invalide i-cache and call swi #4 */
   __asm__ volatile(""
