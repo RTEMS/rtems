@@ -51,8 +51,11 @@ FUNC_NAME(__atexit):			/* tell C's eabi-ctor's we have an atexit function */
 .Lptr:
 	.long .LCTOC1-.Laddr
 
+	.globl	start
 	.globl	_start
+	.type	start,@function
 	.type	_start,@function
+start:
 _start:
 	b	past_constants
 					/* Set MSR */
