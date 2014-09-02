@@ -17,6 +17,8 @@ void bsp_reset(void)
 #else
   /* XXX TODO this code is copied from gp32.. move it to a shared place */
   rtems_interrupt_level level;
+
+  (void) level;
   rtems_interrupt_disable(level);
   /* disable mmu, invalide i-cache and call swi #4 */
   __asm__ volatile(""
