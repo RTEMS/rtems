@@ -17,7 +17,6 @@ void bsp_reset(void)
 {
   rtems_interrupt_level level;
 
-  (void) level;
   rtems_interrupt_disable(level);
 
   /* Enable the watchdog timer, then wait for the world to end. */
