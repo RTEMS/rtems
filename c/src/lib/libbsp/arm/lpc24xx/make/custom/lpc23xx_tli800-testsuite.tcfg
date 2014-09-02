@@ -10,6 +10,7 @@ fileio
 flashdisk01
 fsdosfsformat01
 fsdosfsname01
+fsdosfswrite01
 fsrfsbitmap01
 ftp01
 iostream
@@ -23,6 +24,7 @@ jffs2_fstime
 loopback
 mdosfs_fserror
 mghttpd01
+monitor
 monitor02
 mrfs_fserror
 mrfs_fsfpathconf
@@ -33,8 +35,10 @@ mrfs_fsrdwr
 mrfs_fssymlink
 mrfs_fstime
 mdosfs_fsrdwr
+mdosfs_fspatheval
 paranoia
 pppd
+psxmsgq01
 rtems++
 sptls02
 spstkalloc02
