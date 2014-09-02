@@ -19,6 +19,7 @@ dist_project_lib_DATA = bsp_specs
 
 include_bsp_HEADERS =
 include_HEADERS = include/bsp.h
+include_HEADERS += ../../shared/include/tm27.h
 
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 include_bsp_HEADERS += ../shared/include/linker-symbols.h
@@ -29,7 +30,6 @@ include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += ../../shared/include/stackalloc.h
 include_bsp_HEADERS += ../../shared/include/uart-output-char.h
 include_bsp_HEADERS += ../../shared/tod.h
-include_bsp_HEADERS += ../../shared/include/tm27.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/uart.h
 include_bsp_HEADERS += include/or1ksim.h
