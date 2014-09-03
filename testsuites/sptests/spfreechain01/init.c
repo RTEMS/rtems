@@ -51,7 +51,7 @@ bool my_freechain_extend_heap( Freechain_Control *freechain )
   test_node *nodes = malloc(size);
 
   if (!nodes) {
-    printf( "INIT - Unable to allocate free chain of size: %d\n", size );
+    printf( "INIT - Unable to allocate free chain of size: %zd\n", size );
     return NULL;
   }
 
@@ -74,7 +74,7 @@ bool my_freechain_extend_workspace( Freechain_Control *freechain )
   test_node *nodes = _Workspace_Allocate(size);
 
   if (!nodes) {
-    printf( "INIT - Unable to allocate free chain of size: %d\n", size );
+    printf( "INIT - Unable to allocate free chain of size: %zd\n", size );
     return NULL;
   }
 
