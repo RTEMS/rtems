@@ -26,8 +26,8 @@ pthread_cond_t CondID;
 
 void benchmark_signal(void)
 {
-  long end_time;
-  int  status;
+  uint32_t end_time;
+  int      status;
 
   benchmark_timer_initialize();
 

@@ -33,10 +33,10 @@ void *Blocker(
 )
 {
 
-  long end_time;
-  struct sched_param param;
-  int policy;
-  int status;
+  uint32_t end_time;
+  struct   sched_param param;
+  int      policy;
+  int      status;
 
   status = pthread_mutex_lock(&MutexID);
   rtems_test_assert( status == 0 );

@@ -53,7 +53,7 @@ void *thread(
   void *argument
 )
 {
-  long end_time;
+  uint32_t end_time;
 
   end_time = benchmark_timer_read();
   put_time(

@@ -30,8 +30,8 @@ pthread_cond_t mycondvar;
 
 void benchmark_create_cond_var(void)
 {
-  long end_time;
-  int  status;
+  uint32_t end_time;
+  int      status;
 
   benchmark_timer_initialize();
   status = pthread_cond_init(&mycondvar, NULL);
@@ -49,8 +49,8 @@ void benchmark_create_cond_var(void)
 
 void benchmark_destroy_cond_var(void)
 {
-  long end_time;
-  int  status;
+  uint32_t end_time;
+  int      status;
 
   benchmark_timer_initialize();
   status = pthread_cond_destroy(&mycondvar);

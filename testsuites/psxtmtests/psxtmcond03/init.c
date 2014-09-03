@@ -52,7 +52,7 @@ void *POSIX_Init(
 {
   int        status;
   pthread_t  threadId;
-  long       end_time;
+  uint32_t   end_time;
   struct sched_param param;
   int policy;
 

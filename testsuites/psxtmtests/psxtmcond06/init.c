@@ -52,7 +52,7 @@ void *POSIX_Init(
   void *argument
 )
 {
-  long                end_time;
+  uint32_t            end_time;
   int                 status;
   int                 i;
   pthread_t           threadId;

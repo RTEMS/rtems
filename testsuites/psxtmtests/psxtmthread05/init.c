@@ -54,7 +54,8 @@ void *test_thread(
   void *argument
 )
 {
-  long end_time;
+  uint32_t end_time;
+
   sched_yield();
 
   end_time = benchmark_timer_read();

@@ -53,7 +53,7 @@ void *test_thread(
   void *argument
 )
 {
-  long end_time;
+  uint32_t end_time;
 
   /* switch to POSIX_Init */
   sched_yield();
