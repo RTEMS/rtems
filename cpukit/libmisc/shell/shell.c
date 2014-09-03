@@ -306,7 +306,12 @@ static int rtems_shell_line_editor(
 
         case 7:                         /* Control-G */
           if (output) {
-            fprintf(out,"\r%s%*c", prompt, strlen (line), ' ');
+            /*
+             * The (int) cast is needed because the width specifier (%*)
+             * must be an int, but strlen() returns a size_t. Without
+             * the case, the result is a printf() format warning.
+             */
+            fprintf(out,"\r%s%*c", prompt, (int) strlen (line), ' ');
             fprintf(out,"\r%s\x7", prompt);
           }
           memset (line, '\0', strlen(line));
