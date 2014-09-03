@@ -352,12 +352,17 @@ rtems_rfs_inode_delete (rtems_rfs_file_system*  fs,
       rtems_rfs_buffer_mark_dirty (&handle->buffer);
       /*
        * Do the release here to avoid the ctime field being set on a
-       * close. Also if there loads is greater then one then other loads
+       * close. Also if the loads is greater then one then other loads
        * active. Forcing the loads count to 0.
        */
       rc = rtems_rfs_buffer_handle_release (fs, &handle->buffer);
       handle->loads = 0;
       handle->node = NULL;
+      /*
+       * Return the first error and drop any that followed.
+       */
+      if (rrc > 0)
+        rc = rrc;
     }
   }
   return rc;
