@@ -77,7 +77,7 @@ static void test_cpu_set_case_1(size_t cpu)
   /*
    * Set to all zeros and verify
    */
-  printf( "Exercise CPU_ZERO, CPU_SET(%u), and CPU_ISET\n", cpu );
+  printf( "Exercise CPU_ZERO, CPU_SET(%zu), and CPU_ISET\n", cpu );
   CPU_ZERO(&set1);
   CPU_SET(cpu, &set1);
 
@@ -99,7 +99,7 @@ static void test_cpu_clr_case_1(size_t cpu)
   /*
    * Set to all zeros and verify
    */
-  printf( "Exercise CPU_FILL, CPU_CLR(%u), and CPU_ISET\n", cpu );
+  printf( "Exercise CPU_FILL, CPU_CLR(%zu), and CPU_ISET\n", cpu );
   CPU_FILL(&set1);
   CPU_CLR(cpu, &set1);
 
