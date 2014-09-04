@@ -116,29 +116,6 @@ rtems_status_code rtems_capture_user_extension_open(void);
 rtems_status_code rtems_capture_user_extension_close(void);
 
 /**
- * @brief Capture find capture task.
- *
- * This function finds the capture task control block
- *
- * @param[in] ct_id specifies the task_id
- *
- * @retval This method returns the capture task control block associated
- * with the given task id.
- */
-rtems_capture_task_t* rtems_capture_find_capture_task( rtems_id ct_id );
-
-/**
- * @brief Capture create capture task control block.
- *
- * This function create the capture task control block
- *
- * @param[in] new_task specifies the rtems thread control block
- *
- * @retval This method returns a capture task control block.
- */
-rtems_capture_task_t* rtems_capture_create_capture_task (rtems_tcb* new_task);
-
-/**
  * @brief Capture trigger.
  *
  * This function checks if we have triggered or if this event is a
@@ -151,9 +128,9 @@ rtems_capture_task_t* rtems_capture_create_capture_task (rtems_tcb* new_task);
  * @retval This method returns true if we have triggered or
  * if the event is a cause of a trigger.
  */
-bool rtems_capture_trigger (rtems_capture_task_t* ft,
-                       rtems_capture_task_t* tt,
-                       uint32_t              events);
+bool rtems_capture_trigger (rtems_tcb* ft,
+                            rtems_tcb* tt,
+                            uint32_t   events);
 
 /**
  * @brief Capture append to record 
@@ -188,7 +165,7 @@ static void *rtems_capture_append_to_record(void*  rec,
  * filtered from the log.  It returns false if this data 
  * should be logged.
  */
-bool rtems_capture_filter( rtems_capture_task_t* task,
+bool rtems_capture_filter( rtems_tcb*            task,
                            uint32_t              events);
 /**
  * @brief Capture begin add record.
@@ -238,26 +215,6 @@ static inline void *rtems_capture_append_to_record(void*  rec,
   } while (0)
 
 /**
- * @brief Capture initialize stack usage
- *
- * This function setups a stack so its usage can be monitored.
- *
- * @param[in] task specifies the capture task block
- */
-void rtems_capture_init_stack_usage (rtems_capture_task_t* task);
-
-/**
- * @brief Capture destroy task.
- *
- * This function destroy the task structure if the reference count
- * is 0 and the tcb has been cleared signalling the task has been
- * deleted.
- *
- * @param[in] task specifies the capture task block
- */
-void rtems_capture_destroy_capture_task (rtems_capture_task_t* task);
-
-/**
  * @brief .
  *
  * This function returns the current time. If a handler is provided
@@ -287,7 +244,7 @@ void rtems_capture_get_time (rtems_capture_time_t* time);
  * @retval This method returns a pointer to the next location in
  * the capture record to store data.
  */
-void* rtems_capture_record_open (rtems_capture_task_t*         task,
+void* rtems_capture_record_open (rtems_tcb*                    task,
                                  uint32_t                      events,
                                  size_t                        size,
                                  rtems_interrupt_lock_context* lock_context);

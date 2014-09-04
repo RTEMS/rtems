@@ -46,6 +46,7 @@ extern "C" {
 #endif
 
 #include <rtems.h>
+#include <rtems/rtems/tasksimpl.h>
 
 /**
  * The number of tasks in a trigger group.
@@ -137,47 +138,10 @@ typedef struct rtems_capture_control_s
                                      RTEMS_CAPTURE_EXITTED)
 
 /**
- * @brief Catpure task control
- *
- * RTEMS capture control provdes the information about a task, along
- * with its trigger state. The control is referenced by each
- * capture record. This is information neeed by the decoder. The
- * capture record cannot assume the task will exist when the record is
- * dumped via the target interface so task info needed for tracing is
- * copied and held here. Once the references in the trace buffer
- * have been removed and the task is deleted this structure is
- * released back to the heap.
- *
- * The inline helper functions provide more details about the info
- * contained in this structure.
- *
- * Note, the tracer code exploits the fact an rtems_name is a
- * 32bit value.
- */
-typedef struct rtems_capture_task_s
-{
-  rtems_name                   name;
-  rtems_id                     id;
-  uint32_t                     flags;
-  uint32_t                     refcount;
-  rtems_tcb*                   tcb;
-  uint32_t                     in;
-  uint32_t                     out;
-  rtems_task_priority          start_priority;
-  uint32_t                     stack_size;
-  uint32_t                     stack_clean;
-  rtems_capture_time_t         time;
-  rtems_capture_time_t         time_in;
-  rtems_capture_time_t         last_time;
-  rtems_capture_control_t*     control;
-  struct rtems_capture_task_s* forw;
-  struct rtems_capture_task_s* back;
-} rtems_capture_task_t;
-
-/**
  * Task flags.
  */
-#define RTEMS_CAPTURE_TRACED  (1U << 0)
+#define RTEMS_CAPTURE_TRACED      (1U << 0)
+#define RTEMS_CAPTURE_RECORD_TASK (1U << 1)
 
 /*
  * @brief Capture record.
@@ -188,11 +152,26 @@ typedef struct rtems_capture_task_s
  */
 typedef struct rtems_capture_record_s
 {
-  rtems_capture_task_t* task;
   uint32_t              events;
   rtems_capture_time_t  time;
   size_t                size;
+  rtems_id              task_id;
 } rtems_capture_record_t;
+
+/*
+ * @brief Capture task record.
+ *
+ * This is a record that is written into
+ * the buffer. The events includes the priority of the task
+ * at the time of the context switch.
+ */
+typedef struct rtems_capture_task_record_s
+{
+  rtems_capture_record_t rec;
+  rtems_name             name;
+  rtems_task_priority    start_priority;
+  uint32_t               stack_size;
+} rtems_capture_task_record_t;
 
 /**
  * The capture record event flags.
@@ -619,49 +598,24 @@ const char*
 rtems_capture_event_text (int event);
 
 /**
- * @brief Capture get task list.
+ * @brief Capture record task.
+ * 
+ * This function records a new capture task record.
  *
- * This function returns the head of the list of tasks that the
- * capture engine has detected.
- *
- * @retval  This function returns the head of the list of tasks that 
- *          the capture engine has detected.
+ * @param[in] tcb is the task control block for the task
  */
-rtems_capture_task_t*
-rtems_capture_get_task_list (void);
+void rtems_capture_record_task( rtems_tcb* tcb );
 
 /**
- * @brief Capture get next task in list.
+ * @brief Capture task recorded
  *
- * This function returns the pointer to the next task in the list. The
- * pointer NULL terminates the list.
+ * This function returns true if this task information has been
+ * recorded.
  *
- * @param[in] task The capture task to get the next entry from.
- * 
- * @retval This function returns the pointer to the next task in the list. The
- * pointer NULL terminates the list.
+ * @param[in] tcb is the task control block for the task
  */
-static inline rtems_capture_task_t*
-rtems_capture_next_task (rtems_capture_task_t* task)
-{
-  return task->forw;
-}
-
-/**
- * @brief Capture is valid task control block
- *
- * This function returns true if the task control block points to
- * a valid task.
- *
- * @param[in] task The capture task.
- * 
- * @retval This function returns true if the task control block points to
- * a valid task. Otherwise, it returns false.
- */
-static inline bool
-rtems_capture_task_valid (rtems_capture_task_t* task)
-{
-  return task->tcb != NULL;
+static inline bool rtems_capture_task_recorded( rtems_tcb* tcb ) {
+  return ( (tcb->Capture.flags & RTEMS_CAPTURE_RECORD_TASK) != 0 );
 }
 
 /**
@@ -674,9 +628,9 @@ rtems_capture_task_valid (rtems_capture_task_t* task)
  * @retval This function returns the task id.
  */
 static inline rtems_id
-rtems_capture_task_id (rtems_capture_task_t* task)
+rtems_capture_task_id (rtems_tcb* tcb)
 {
-  return task->id;
+  return tcb->Object.id;
 }
 
 /**
@@ -689,10 +643,10 @@ rtems_capture_task_id (rtems_capture_task_t* task)
  * @retval This function returns the task state.
  */
 static inline States_Control
-rtems_capture_task_state (rtems_capture_task_t* task)
+rtems_capture_task_state (rtems_tcb* tcb)
 {
-  if (rtems_capture_task_valid (task))
-    return task->tcb->current_state;
+  if (tcb)
+    return tcb->current_state;
   return 0;
 }
 
@@ -706,9 +660,11 @@ rtems_capture_task_state (rtems_capture_task_t* task)
  * @retval This function returns the task name.
  */
 static inline rtems_name
-rtems_capture_task_name (rtems_capture_task_t* task)
+rtems_capture_task_name (rtems_tcb* tcb)
 {
-  return task->name;
+  rtems_name  name;
+  rtems_object_get_classic_name( tcb->Object.id, &name );
+  return name;
 }
 
 /**
@@ -721,9 +677,9 @@ rtems_capture_task_name (rtems_capture_task_t* task)
  * @retval This function returns the task flags.
  */
 static inline uint32_t
-rtems_capture_task_flags (rtems_capture_task_t* task)
+rtems_capture_task_flags (rtems_tcb* tcb)
 {
-  return task->flags;
+  return tcb->Capture.flags;
 }
 
 /**
@@ -736,9 +692,9 @@ rtems_capture_task_flags (rtems_capture_task_t* task)
  * @retval This function returns the task control if present.
  */
 static inline rtems_capture_control_t*
-rtems_capture_task_control (rtems_capture_task_t* task)
+rtems_capture_task_control (rtems_tcb* tcb)
 {
-  return task->control;
+  return tcb->Capture.control;
 }
 
 /**
@@ -751,45 +707,12 @@ rtems_capture_task_control (rtems_capture_task_t* task)
  * @retval This function returns the task control flags if a control is present.
  */
 static inline uint32_t
-rtems_capture_task_control_flags (rtems_capture_task_t* task)
+rtems_capture_task_control_flags (rtems_tcb* tcb)
 {
-  if (!task->control)
+  rtems_capture_control_t*  control = tcb->Capture.control;
+  if (!control)
     return 0;
-  return task->control->flags;
-}
-
-/**
- * @brief Capture get number of times task switched in.
- * 
- * This function returns the number of times the task has
- * been switched into context.
- *
- * @param[in] task The capture task.
- * 
- * @retval This function returns the number of times the task has
- * been switched into context.
- */
-static inline uint32_t
-rtems_capture_task_switched_in (rtems_capture_task_t* task)
-{
-  return task->in;
-}
-
-/**
- * @brief Capture get number of times task switched out.
- * 
- * This function returns the number of times the task has
- * been switched out of context.
- *
- * @param[in] task The capture task.
- * 
- * @retval This function returns the number of times the task has
- * been switched out of context.
- */
-static inline uint32_t
-rtems_capture_task_switched_out (rtems_capture_task_t* task)
-{
-  return task->out;
+  return control->flags;
 }
 
 /**
@@ -804,9 +727,11 @@ rtems_capture_task_switched_out (rtems_capture_task_t* task)
  * to track where the task's priority goes.
  */
 static inline rtems_task_priority
-rtems_capture_task_start_priority (rtems_capture_task_t* task)
+rtems_capture_task_start_priority (rtems_tcb* tcb)
 {
-  return task->start_priority;
+  return _RTEMS_tasks_Priority_from_Core(
+    tcb->Start.initial_priority
+  );
 }
 
 /**
@@ -819,11 +744,9 @@ rtems_capture_task_start_priority (rtems_capture_task_t* task)
  * @retval This function returns the tasks real priority.
  */
 static inline rtems_task_priority
-rtems_capture_task_real_priority (rtems_capture_task_t* task)
+rtems_capture_task_real_priority (rtems_tcb* tcb)
 {
-  if (rtems_capture_task_valid (task))
-    return task->tcb->real_priority;
-  return 0;
+  return tcb->real_priority;
 }
 
 /**
@@ -836,113 +759,9 @@ rtems_capture_task_real_priority (rtems_capture_task_t* task)
  * @retval This function returns the tasks current priority.
  */
 static inline rtems_task_priority
-rtems_capture_task_curr_priority (rtems_capture_task_t* task)
+rtems_capture_task_curr_priority (rtems_tcb* tcb)
 {
-  if (rtems_capture_task_valid (task))
-    return task->tcb->current_priority;
-  return 0;
-}
-
-/**
- * @brief Capture update stack usage.
- * 
- * This function updates the stack usage. The task control block
- * is updated.
- *
- * @param[in] task The capture task.
- * 
- * @retval This function updates the stack usage. The task control block
- * is updated.
- */
-uint32_t
-rtems_capture_task_stack_usage (rtems_capture_task_t* task);
-
-/**
- * @brief Capture get stack size.
- * 
- * This function returns the task's stack size.
- *
- * @param[in] task The capture task.
- * 
- * @retval This function returns the task's stack size.
- */
-static inline uint32_t
-rtems_capture_task_stack_size (rtems_capture_task_t* task)
-{
-  return task->stack_size;
-}
-
-/**
- * @brief Capture get stack used.
- * 
- * This function returns the amount of stack used.
- * 
- * @param[in] task The capture task.
- * 
- * @retval This function returns the amount of stack used.
- */
-static inline uint32_t
-rtems_capture_task_stack_used (rtems_capture_task_t* task)
-{
-  return task->stack_size - task->stack_clean;
-}
-
-/**
- * @brief Capture get task execution time.
- * 
- * This function returns the current execution time.
- *
- * @param[in] task The capture task.
- * 
- * @retval This function returns the current execution time.
- */
-static inline uint64_t
-rtems_capture_task_time (rtems_capture_task_t* task)
-{
-  return task->time;
-}
-
-/**
- * @brief Capture get delta in execution time.
- * 
- * This function returns the execution time as a different between the
- * last time the detla time was and now.
- *
- * @param[in] task The capture task.
- * 
- * @retval This function returns the execution time as a different between the
- * last time the detla time was and now.
- */
-static inline uint64_t
-rtems_capture_task_delta_time (rtems_capture_task_t* task)
-{
-  uint64_t t = task->time - task->last_time;
-  task->last_time = task->time;
-  return t;
-}
-
-/**
- * @brief Capture get task count.
- *
- * This function returns the number of tasks the capture
- * engine knows about.
- *
- * @retval This function returns the number of tasks the capture
- * engine knows about.
- */
-static inline uint32_t
-rtems_capture_task_count (void)
-{
-  rtems_capture_task_t* task = rtems_capture_get_task_list ();
-  uint32_t              count = 0;
-
-  while (task)
-  {
-    count++;
-    task = rtems_capture_next_task (task);
-  }
-
-  return count;
+  return tcb->current_priority;
 }
 
 /**
@@ -1070,7 +889,7 @@ rtems_capture_control_all_by_triggers (rtems_capture_control_t* control)
  * This function returns the control valid BY flags.
  *
  * @param[in] control The capture control.
- * @param[in] slot The XXX.
+ * @param[in] slot The slot.
  *
  * @retval This function returns the control valid BY flags.
  */
@@ -1086,7 +905,7 @@ rtems_capture_control_by_valid (rtems_capture_control_t* control, int slot)
  * This function returns the control @a by task name.
  *
  * @param[in] control The capture control.
- * @param[in] by The XXX.
+ * @param[in] by The by index.
  *
  * @retval This function returns the control @a by task name.
  */

@@ -35,10 +35,26 @@
 #include <rtems.h>
 #include <rtems/capture-cli.h>
 #include <rtems/monitor.h>
-
+#include <rtems/cpuuse.h>
+#
 #define RC_UNUSED __attribute__((unused))
 
 #define RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS (20)
+
+/*
+ * Counter used to count the number of active tasks.
+ */
+static int                   rtems_capture_cli_task_count = 0;
+
+/*
+ * Array of tasks sorted by load.
+ */
+static rtems_tcb*            rtems_capture_cli_load_tasks[RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS + 1];
+
+/*
+ * The load for each tcb at the moment rtems_capture_cli_load_tasks was generated.
+ */
+static unsigned long long    rtems_capture_cli_load[RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS + 1];
 
 /*
  * The user capture timestamper.
@@ -233,6 +249,104 @@ rtems_capture_cli_print_timestamp (uint64_t uptime)
   fprintf (stdout, "%5lu:%02lu:%02lu.%09lu", hours, minutes, seconds, nanosecs);
 }
 
+static void
+rtems_capture_cli_print_task (rtems_tcb *tcb)
+{
+  rtems_task_priority   ceiling = rtems_capture_watch_get_ceiling ();
+  rtems_task_priority   floor = rtems_capture_watch_get_floor ();
+  rtems_task_priority   priority;
+  int                   length;
+
+  priority = rtems_capture_task_real_priority (tcb);
+
+  fprintf (stdout, " ");
+  rtems_monitor_dump_id (rtems_capture_task_id (tcb));
+  fprintf (stdout, " ");
+  rtems_monitor_dump_name (rtems_capture_task_id (tcb));
+  fprintf (stdout, " ");
+  rtems_monitor_dump_priority (rtems_capture_task_start_priority (tcb));
+  fprintf (stdout, " ");
+  rtems_monitor_dump_priority (rtems_capture_task_real_priority (tcb));
+  fprintf (stdout, " ");
+  rtems_monitor_dump_priority (rtems_capture_task_curr_priority (tcb));
+  fprintf (stdout, " ");
+  length = rtems_monitor_dump_state (rtems_capture_task_state (tcb));
+  fprintf (stdout, "%*c", 14 - length, ' ');
+  fprintf (stdout, " %c%c",
+           'a',
+           rtems_capture_task_flags (tcb) & RTEMS_CAPTURE_TRACED ? 't' : '-');
+
+  if ((floor > ceiling) && (ceiling > priority))
+    fprintf (stdout, "--");
+  else
+  {
+    uint32_t flags = rtems_capture_task_control_flags (tcb);
+    fprintf (stdout, "%c%c",
+             rtems_capture_task_control (tcb) ?
+             (flags & RTEMS_CAPTURE_WATCH ? 'w' : '+') : '-',
+             rtems_capture_watch_global_on () ? 'g' : '-');
+  }
+  fprintf (stdout, "\n");
+}
+static void
+rtems_caputure_cli_print_record_std(rtems_capture_record_t* rec, uint64_t diff)
+{
+  uint32_t                     event;
+  int                          e;
+
+  event = rec->events >> RTEMS_CAPTURE_EVENT_START;
+
+  for (e = RTEMS_CAPTURE_EVENT_START; e < RTEMS_CAPTURE_EVENT_END; e++)
+  {
+    if (event & 1)
+    {
+      rtems_capture_cli_print_timestamp (rec->time);
+      fprintf (stdout, " %9" PRId64 " ", diff);
+      rtems_monitor_dump_id (rec->task_id);
+      fprintf(stdout, "      %3" PRId32 " %3" PRId32 " %s\n",
+             (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
+             (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
+             rtems_capture_event_text (e));
+    }
+    event >>= 1;
+  }
+}
+
+static void
+rtems_caputre_cli_print_record_task(rtems_capture_record_t* rec)
+{
+  rtems_capture_task_record_t* task_rec = (rtems_capture_task_record_t*) rec;
+
+  rtems_capture_cli_print_timestamp (rec->time);
+  fprintf (stdout, "           ");
+  rtems_monitor_dump_id (rec->task_id);
+   fprintf (stdout, " %c%c%c%c",
+            (char) (task_rec->name >> 24) & 0xff,
+            (char) (task_rec->name >> 16) & 0xff,
+            (char) (task_rec->name >> 8) & 0xff,
+            (char) (task_rec->name >> 0) & 0xff);
+   fprintf (stdout, " %3" PRId32   " %3" PRId32 "\n",
+            task_rec->start_priority,
+            task_rec->stack_size);
+}
+
+/*
+ * rtems_capture_cli_count_tasks
+ *
+ *  DESCRIPTION:
+ *
+ * This function is called for each tcb and counts the
+ * number of tasks.
+ *
+ */
+
+static void
+rtems_capture_cli_count_tasks (rtems_tcb *tcb)
+{
+  rtems_capture_cli_task_count++;
+}
+
+
 /*
  * rtems_capture_cli_task_list
  *
@@ -248,71 +362,49 @@ rtems_capture_cli_task_list (int                                argc RC_UNUSED,
                              const rtems_monitor_command_arg_t* command_arg RC_UNUSED,
                              bool                               verbose RC_UNUSED)
 {
-  rtems_task_priority   ceiling = rtems_capture_watch_get_ceiling ();
-  rtems_task_priority   floor = rtems_capture_watch_get_floor ();
-  rtems_capture_task_t* task = rtems_capture_get_task_list ();
-  int                   count = rtems_capture_task_count ();
   rtems_capture_time_t  uptime;
 
   rtems_capture_time (&uptime);
 
+  rtems_capture_cli_task_count = 0;
+  rtems_iterate_over_all_threads (rtems_capture_cli_count_tasks);
+
   fprintf (stdout, "uptime: ");
   rtems_capture_cli_print_timestamp (uptime);
-  fprintf (stdout, "\ntotal %i\n", count);
+  fprintf (stdout, "\ntotal %i\n", rtems_capture_cli_task_count);
+  rtems_iterate_over_all_threads (rtems_capture_cli_print_task);
+}
 
-  while (task)
+static void
+rtems_capture_cli_task_sort (rtems_tcb* tcb)
+{
+  int                   i;
+  int                   j;
+
+  if (tcb)
   {
-    rtems_task_priority priority;
-    int32_t             stack_used;
-    int32_t             time_used;
-    int                 length;
+    rtems_capture_time_t l = tcb->cpu_time_used;
 
-    stack_used = rtems_capture_task_stack_usage (task);
-    if (stack_used)
-      stack_used = (stack_used * 100) / rtems_capture_task_stack_size (task);
+    rtems_capture_cli_task_count++;
 
-    if (stack_used > 100)
-      stack_used = 100;
-
-    time_used = (rtems_capture_task_time (task) * 100) / uptime;
-
-    if (time_used > 100)
-      time_used = 100;
-
-    priority = rtems_capture_task_real_priority (task);
-
-    fprintf (stdout, " ");
-    rtems_monitor_dump_id (rtems_capture_task_id (task));
-    fprintf (stdout, " ");
-    rtems_monitor_dump_name (rtems_capture_task_id (task));
-    fprintf (stdout, " ");
-    rtems_monitor_dump_priority (rtems_capture_task_start_priority (task));
-    fprintf (stdout, " ");
-    rtems_monitor_dump_priority (rtems_capture_task_real_priority (task));
-    fprintf (stdout, " ");
-    rtems_monitor_dump_priority (rtems_capture_task_curr_priority (task));
-    fprintf (stdout, " ");
-    length = rtems_monitor_dump_state (rtems_capture_task_state (task));
-    fprintf (stdout, "%*c", 14 - length, ' ');
-    fprintf (stdout, " %c%c",
-             rtems_capture_task_valid (task) ? 'a' : 'd',
-             rtems_capture_task_flags (task) & RTEMS_CAPTURE_TRACED ? 't' : '-');
-
-    if ((floor > ceiling) && (ceiling > priority))
-      fprintf (stdout, "--");
-    else
+    for (i = 0; i < RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS; i++)
     {
-      uint32_t flags = rtems_capture_task_control_flags (task);
-      fprintf (stdout, "%c%c",
-               rtems_capture_task_control (task) ?
-               (flags & RTEMS_CAPTURE_WATCH ? 'w' : '+') : '-',
-               rtems_capture_watch_global_on () ? 'g' : '-');
-    }
-    fprintf (stdout, " %3" PRId32 "%% %3" PRId32 "%% ", stack_used, time_used);
-    rtems_capture_cli_print_timestamp (rtems_capture_task_time (task));
-    fprintf (stdout, "\n");
+      if (rtems_capture_cli_load_tasks[i])
+      {
+        if ((l == 0) || (l < rtems_capture_cli_load[i]))
+          continue;
 
-    task = rtems_capture_next_task (task);
+        for (j = (RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS - 1); j >= i; j--)
+        {
+          rtems_capture_cli_load_tasks[j + 1] = rtems_capture_cli_load_tasks[j];
+          rtems_capture_cli_load[j + 1]  = rtems_capture_cli_load[j];
+        }
+      }
+
+      rtems_capture_cli_load_tasks[i] = tcb;
+      rtems_capture_cli_load[i]  = l;
+      break;
+    }
   }
 }
 
@@ -328,26 +420,22 @@ rtems_capture_cli_task_list (int                                argc RC_UNUSED,
 static void
 rtems_capture_cli_task_load_thread (rtems_task_argument arg)
 {
+  rtems_tcb*          tcb;
   rtems_task_priority ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority floor = rtems_capture_watch_get_floor ();
   int                 last_count = 0;
   FILE*               pstdout = (FILE*) arg;
+  int                 i;
+  int                 j;
 
   fileno(stdout);
   stdout = pstdout;
 
   while (true)
   {
-    rtems_capture_task_t* tasks[RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS + 1];
-    unsigned long long    load[RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS + 1];
-    rtems_capture_task_t* task;
-    rtems_capture_time_t  uptime;
-    rtems_capture_time_t  total_time;
-    int                   count = 0;
-    int                   i;
-    int                   j;
-
-    rtems_capture_time (&uptime);
+    Timestamp_Control  uptime, total, ran, uptime_at_last_reset;
+    uint32_t seconds, nanoseconds;
+    size_t                size;
 
     cli_load_thread_active = 1;
 
@@ -356,114 +444,98 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
      * into our local arrays. We only handle a limited number of
      * tasks.
      */
+    size = sizeof (rtems_capture_cli_load_tasks);
+    memset (rtems_capture_cli_load_tasks, 0, size);
+    memset (rtems_capture_cli_load, 0, sizeof (rtems_capture_cli_load));
 
-    memset (tasks, 0, sizeof (tasks));
-    memset (load, 0, sizeof (load));
+    _Timestamp_Set_to_zero( &total );
+    uptime_at_last_reset = CPU_usage_Uptime_at_last_reset;
+    _TOD_Get_uptime( &uptime );
+    seconds = _Timestamp_Get_seconds( &uptime );
+    nanoseconds = _Timestamp_Get_nanoseconds( &uptime ) /
+                  TOD_NANOSECONDS_PER_MICROSECOND;
 
-    task = rtems_capture_get_task_list ();
-
-    total_time = 0;
-
-    while (task)
-    {
-      if (rtems_capture_task_valid (task))
-      {
-        rtems_capture_time_t l = rtems_capture_task_delta_time (task);
-
-        count++;
-
-        total_time += l;
-
-        for (i = 0; i < RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS; i++)
-        {
-          if (tasks[i])
-          {
-            if ((l == 0) || (l < load[i]))
-              continue;
-
-            for (j = (RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS - 1); j >= i; j--)
-            {
-              tasks[j + 1] = tasks[j];
-              load[j + 1]  = load[j];
-            }
-          }
-
-          tasks[i] = task;
-          load[i]  = l;
-          break;
-        }
-      }
-      task = rtems_capture_next_task (task);
-    }
+    rtems_iterate_over_all_threads (rtems_capture_cli_task_sort);
 
     fprintf (stdout, "\x1b[H\x1b[J Press ENTER to exit.\n\n");
     fprintf (stdout, "uptime: ");
-    rtems_capture_cli_print_timestamp (uptime);
+    fprintf (stdout, "%7" PRIu32 ".%06" PRIu32 "\n",  seconds, nanoseconds);
     fprintf (stdout,
              "\n\n"
-             "     PID NAME RPRI CPRI STATE          %%CPU     %%STK FLGS    EXEC TIME\n");
+             "     PID NAME RPRI CPRI STATE      EXEC TIME   %%CPU\n");
 
-    if (count > last_count)
-      j = count;
+    if (rtems_capture_cli_task_count > last_count)
+      j = rtems_capture_cli_task_count;
     else
       j = last_count;
 
     for (i = 0; i < RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS; i++)
     {
       rtems_task_priority priority;
-      int                 stack_used;
-      int                 task_load;
-      int                 k;
+      Timestamp_Control   last;
+      uint32_t            ival, fval;
 
-      if (!tasks[i])
+      if (!rtems_capture_cli_load_tasks[i])
         break;
 
       j--;
 
-      stack_used = rtems_capture_task_stack_usage (tasks[i]);
-      if (stack_used)
-        stack_used = (stack_used * 100) / rtems_capture_task_stack_size (tasks[i]);
+      /*
+       * If this is the currently executing thread, account for time
+       * since the last context switch.
+       */
+      tcb = rtems_capture_cli_load_tasks[i];
+      ran = rtems_capture_cli_load[i];
+      if ( _Thread_Get_time_of_last_context_switch( tcb, &last ) ) {
+        Timestamp_Control used;
+        _TOD_Get_uptime( &uptime );
+        _Timestamp_Subtract( &last, &uptime, &used );
+        _Timestamp_Add_to( &ran, &used );
+      } else {
+        _TOD_Get_uptime( &uptime );
+      }
+      _Timestamp_Subtract( &uptime_at_last_reset, &uptime, &total );
+      _Timestamp_Divide( &ran, &total, &ival, &fval );
+      seconds = _Timestamp_Get_seconds( &ran );
+      nanoseconds = _Timestamp_Get_nanoseconds( &ran ) /
+             TOD_NANOSECONDS_PER_MICROSECOND;
 
-      if (stack_used > 100)
-        stack_used = 100;
-
-      task_load = (int) ((load[i] * 100000) / total_time);
-
-      priority = rtems_capture_task_real_priority (tasks[i]);
+      priority = rtems_capture_task_real_priority (tcb);
 
       fprintf (stdout, "\x1b[K");
-      rtems_monitor_dump_id (rtems_capture_task_id (tasks[i]));
+      rtems_monitor_dump_id (rtems_capture_task_id (tcb));
       fprintf (stdout, " ");
-      rtems_monitor_dump_name (rtems_capture_task_id (tasks[i]));
+      rtems_monitor_dump_name (rtems_capture_task_id (tcb));
       fprintf (stdout, "  ");
       rtems_monitor_dump_priority (priority);
       fprintf (stdout, "  ");
-      rtems_monitor_dump_priority (rtems_capture_task_curr_priority (tasks[i]));
+      rtems_monitor_dump_priority (rtems_capture_task_curr_priority (tcb));
       fprintf (stdout, " ");
-      k = rtems_monitor_dump_state (rtems_capture_task_state (tasks[i]));
-      fprintf (stdout, "%*c %3i.%03i%% ", 14 - k, ' ',
-               task_load / 1000, task_load % 1000);
-      fprintf (stdout, "%3i%% %c%c", stack_used,
-              rtems_capture_task_valid (tasks[i]) ? 'a' : 'd',
-              rtems_capture_task_flags (tasks[i]) & RTEMS_CAPTURE_TRACED ? 't' : '-');
+      rtems_monitor_dump_state (rtems_capture_task_state (tcb));
+      fprintf (stdout,
+            "%7" PRIu32 ".%06" PRIu32 " |%4" PRIu32 ".%03" PRIu32 ,
+            seconds, nanoseconds, ival, fval
+       );
+      fprintf (stdout, "    %c%c",
+              'a',
+              rtems_capture_task_flags (tcb) & RTEMS_CAPTURE_TRACED ? 't' : '-');
 
       if ((floor > ceiling) && (ceiling > priority))
         fprintf (stdout, "--");
       else
         fprintf (stdout, "%c%c",
-                rtems_capture_task_control (tasks[i]) ?
-                (rtems_capture_task_control_flags (tasks[i]) &
+                rtems_capture_task_control (tcb) ?
+                (rtems_capture_task_control_flags (tcb) &
                  RTEMS_CAPTURE_WATCH ? 'w' : '+') : '-',
                 rtems_capture_watch_global_on () ? 'g' : '-');
 
       fprintf (stdout, "   ");
-      rtems_capture_cli_print_timestamp (rtems_capture_task_time (tasks[i]));
       fprintf (stdout, "\n");
     }
 
-    if (count < RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS)
+    if (rtems_capture_cli_task_count < RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS)
     {
-      j = RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS - count;
+      j = RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS - rtems_capture_cli_task_count;
       while (j > 0)
       {
         fprintf (stdout, "\x1b[K\n");
@@ -471,7 +543,7 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
       }
     }
 
-    last_count = count;
+    last_count = rtems_capture_cli_task_count;
 
     cli_load_thread_active = 0;
 
@@ -1415,42 +1487,23 @@ rtems_capture_cli_trace_records (int                                argc,
       rec = (rtems_capture_record_t*) ptr;
 
       if (csv)
-        fprintf (stdout, "%08" PRIxPTR ",%03" PRIu32
+        fprintf (stdout, "%08" PRIu32 ",%03" PRIu32
                    ",%03" PRIu32 ",%04" PRIx32 ",%" PRId64 "\n",
-                 (uintptr_t) rec->task,
+                 rec->task_id,
                  (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
                  (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
                  (rec->events >> RTEMS_CAPTURE_EVENT_START),
                  (uint64_t) rec->time);
-      else
-      {
-        uint64_t diff = 0;
-        uint32_t event;
-        int      e;
+      else {
+        if ((rec->events >> RTEMS_CAPTURE_EVENT_START) == 0)
+          rtems_caputre_cli_print_record_task( rec );
+        else {
+          uint64_t diff = 0;
+          if (last_t)
+            diff = rec->time - last_t;
+          last_t = rec->time;
 
-        event = rec->events >> RTEMS_CAPTURE_EVENT_START;
-
-        for (e = RTEMS_CAPTURE_EVENT_START; e < RTEMS_CAPTURE_EVENT_END; e++)
-        {
-          if (event & 1)
-          {
-            rtems_capture_cli_print_timestamp (rec->time);
-            if (last_t)
-              diff = rec->time - last_t;
-            last_t = rec->time;
-            fprintf (stdout, " %9" PRId64 " ", diff);
-            rtems_monitor_dump_id (rtems_capture_task_id (rec->task));
-            fprintf (stdout, " %c%c%c%c",
-                     (char) (rec->task->name >> 24) & 0xff,
-                     (char) (rec->task->name >> 16) & 0xff,
-                     (char) (rec->task->name >> 8) & 0xff,
-                     (char) (rec->task->name >> 0) & 0xff);
-            fprintf (stdout, " %3" PRId32 " %3" PRId32 " %s\n",
-                    (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
-                    (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
-                    rtems_capture_event_text (e));
-          }
-          event >>= 1;
+          rtems_caputure_cli_print_record_std( rec, diff );
         }
       }
       ptr += rec->size;
