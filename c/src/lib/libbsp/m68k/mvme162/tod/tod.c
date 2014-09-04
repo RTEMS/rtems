@@ -16,7 +16,7 @@
  */
 
 #include <rtems.h>
-#include <tod.h>
+#include <rtems/tod.h>
 
 #define	tod	((volatile unsigned char *)0xfffc1ff8)
 

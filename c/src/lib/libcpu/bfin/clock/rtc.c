@@ -11,7 +11,7 @@
 
 
 #include <rtems.h>
-#include "tod.h"
+#include <rtems/tod.h>
 #include <rtems/rtc.h>
 #include <rtems/libio.h>
 #include <bsp.h>

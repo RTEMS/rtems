@@ -3,7 +3,7 @@
  *
  *  @ingroup shared_tod
  *
- *  @brief Real Time Clock (MK48T08) for RTEMS on Score603e
+ *  @brief Real Time Clock Time of Day API Definition
  */
 
 /*
@@ -32,7 +32,6 @@ extern "C" {
  *
  *  @brief Set the RTC
  */
-
 int setRealTime(
   const rtems_time_of_day *tod
 );
