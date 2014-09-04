@@ -1,4 +1,5 @@
-/*  timerisr.s
+/**
+ *  @file
  *
  *  If required this ISR is used to bump a count of interval "overflow"
  *  interrupts which have occurred since the timer was started.  The
@@ -9,10 +10,12 @@
  *  handler you can write.  This should be the only interrupt which can
  *  occur during the measured time period.
  *
- *  NOTE:  This file is USUALLY in assembly and is LEAN AND MEAN.
- *         Any code in this isr is pure overhead which can perturb
- *         the accuracy of the Timing Test Suite.
- *
+ *  @note This file is USUALLY in assembly and is LEAN AND MEAN.
+ *        Any code in this isr is pure overhead which can perturb
+ *        the accuracy of the Timing Test Suite.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,6 +25,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 
 extern uint32_t         _Timer_interrupts;
 

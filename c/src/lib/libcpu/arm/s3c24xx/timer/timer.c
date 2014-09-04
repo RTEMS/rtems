@@ -1,24 +1,19 @@
-/*
- * S3C2400 Timer driver
+/**
+ * @file
+ * @brief S3C2400 Timer driver
  *
  * This uses timer 1 for timing measurments.
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
- *
- * Notes:
- *  This file manages the benchmark timer used by the RTEMS Timing Test
- *  Suite.  Each measured time period is demarcated by calls to
- *  benchmark_timer_initialize() and benchmark_timer_read().  benchmark_timer_read() usually returns
- *  the number of microseconds since benchmark_timer_initialize() exitted.
- *
- *  It is important that the timer start/stop overhead be determined
- *  when porting or modifying this code.
-*/
+ */
 
-#include <rtems.h>
+/*
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 #include <bsp.h>
+#include <rtems.h>
+#include <rtems/btimer.h>
 #include <s3c24xx.h>
 
 uint32_t g_start;
@@ -69,7 +64,7 @@ void benchmark_timer_initialize( void )
                              /* This value is in microseconds. */
 #define LEAST_VALID       1  /* Don't trust a clicks value lower than this */
 
-int benchmark_timer_read( void )
+benchmark_timer_t benchmark_timer_read( void )
 {
     uint32_t t;
     unsigned long long total;

@@ -22,7 +22,6 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <rtems/btimer.h>
-#include <rtems/timerdrv.h>
 
 #include <bsp/system-clocks.h>
 
@@ -35,7 +34,7 @@ void benchmark_timer_initialize(void)
   benchmark_timer_base = lpc24xx_timer();
 }
 
-uint32_t benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
   uint32_t delta = lpc24xx_timer() - benchmark_timer_base;
 

@@ -1319,7 +1319,7 @@ const rtems_libio_helper rtems_fs_init_helper =
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
-  #include <rtems/timerdrv.h>
+  #include <rtems/btimer.h>
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER

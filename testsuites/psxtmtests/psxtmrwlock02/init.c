@@ -16,7 +16,7 @@
 #include <tmacros.h>
 #include <pthread.h>
 #include <sched.h>
-#include <rtems/timerdrv.h>
+#include <rtems/btimer.h>
 #include "test_support.h"
 
 const char rtems_test_name[] = "PSXTMRWLOCK 02";

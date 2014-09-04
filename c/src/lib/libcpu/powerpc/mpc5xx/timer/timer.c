@@ -1,16 +1,13 @@
-/*  timer.c
+/**
+ *  @file
+ *  @brief Timer Driver for the PowerPC MPC5xx.
  *
  *  This file manages the interval timer on the PowerPC MPC5xx.
- *  NOTE: This is not the PIT, but rather the RTEMS interval
- *        timer
+ *  @noe This is not the PIT, but rather the RTEMS interval timer.
  *  We shall use the bottom 32 bits of the timebase register,
- *
- *  The following was in the 403 version of this file. I don't
- *  know what it means. JTM 5/19/98
- *  NOTE: It is important that the timer start/stop overhead be
- *        determined when porting or modifying this code.
- *
- *
+ */
+
+/*
  *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
@@ -47,6 +44,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 #include <mpc5xx.h>
 
 static volatile uint32_t Timer_starting;
@@ -80,7 +78,7 @@ void benchmark_timer_initialize(void)
   Timer_starting = get_itimer();
 }
 
-int benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
   uint32_t clicks;
   uint32_t total;

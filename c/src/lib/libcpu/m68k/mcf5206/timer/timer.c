@@ -1,8 +1,11 @@
-/*
- *  Timer Init
+/**
+ *  @file
+ *  @brief Timer Init
  *
  *  This module initializes TIMER 2 for on the MCF5206E for benchmarks.
- *
+ */
+
+/*
  *  Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Victor V. Vengerov <vvv@oktet.ru>
  *
@@ -21,6 +24,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
+#include <rtems/btimer.h>
 #include "mcf5206/mcf5206e.h"
 
 #define TRR2_VAL 65530
@@ -99,7 +103,7 @@ benchmark_timer_initialize(void)
  * RETURNS:
  *     number of microseconds since timer has been started
  */
-int
+benchmark_timer_t
 benchmark_timer_read( void )
 {
     uint16_t   clicks;

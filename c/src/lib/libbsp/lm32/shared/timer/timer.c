@@ -76,7 +76,7 @@ void benchmark_timer_initialize( void )
                              /* This value is in microseconds. */
 #define LEAST_VALID       4  /* Don't trust a clicks value lower than this */
 
-uint32_t benchmark_timer_read( void )
+benchmark_timer_t benchmark_timer_read( void )
 {
   uint32_t ticks;
   uint32_t total;

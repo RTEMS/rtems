@@ -64,7 +64,7 @@ void benchmark_timer_initialize( void )
 /*
  * Return timer value in 1/2-microsecond units
  */
-uint32_t benchmark_timer_read( void )
+benchmark_timer_t benchmark_timer_read( void )
 {
   uint16_t         clicks;
   uint32_t         total;

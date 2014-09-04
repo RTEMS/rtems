@@ -1,14 +1,9 @@
+/**
+ *  @file
+ *  @brief Timer for the Hitachi SH 704X
+ */
+
 /*
- *  timer for the Hitachi SH 704X
- *
- *  This file manages the benchmark timer used by the RTEMS Timing Test
- *  Suite.  Each measured time period is demarcated by calls to
- *  benchmark_timer_initialize() and benchmark_timer_read().  benchmark_timer_read() usually returns
- *  the number of microseconds since benchmark_timer_initialize() exitted.
- *
- *  NOTE: It is important that the timer start/stop overhead be
- *        determined when porting or modifying this code.
- *
  *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de) and
  *           Bernd Becker (becker@faw.uni-ulm.de)
  *
@@ -27,6 +22,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 
 #include <rtems/score/sh_io.h>
 #include <rtems/score/iosh7045.h>
@@ -143,7 +139,7 @@ void benchmark_timer_initialize( void )
                              /* This value is in microseconds. */
 #define LEAST_VALID       0 /* 20 */ /* Don't trust a clicks value lower than this */
 
-int benchmark_timer_read( void )
+benchmark_timer_t benchmark_timer_read( void )
 {
   uint32_t   clicks;
   uint32_t   total ;

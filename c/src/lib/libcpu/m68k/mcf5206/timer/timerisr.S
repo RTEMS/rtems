@@ -1,5 +1,6 @@
-/*
- *  Handle MCF5206 TIMER2 interrupts.
+/**
+ *  @file
+ *  @brief Handle MCF5206 TIMER2 interrupts
  *
  * All code in this routine is pure overhead which can perturb the
  * accuracy of RTEMS' timing test suite.
@@ -11,7 +12,9 @@
  * occur during the measured time period.
  *
  * An external counter, Timer_interrupts, is incremented.
- *
+ */
+
+/*
  *  Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Victor V. Vengerov <vvv@oktet.ru>
  *
@@ -29,7 +32,7 @@
  */
 
 #include <rtems/asm.h>
-#include "bsp.h"
+#include <bsp.h>
 #include "mcf5206/mcf5206e.h"
 
 BEGIN_CODE

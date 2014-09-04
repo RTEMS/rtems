@@ -17,7 +17,7 @@
  */
 
 #include <rtems.h>
-#include <rtems/timerdrv.h>
+#include <rtems/btimer.h>
 #include <bsp/raspberrypi.h>
 
 static bool benchmark_timer_find_average_overhead = false;
@@ -29,7 +29,7 @@ void benchmark_timer_initialize(void)
   benchmark_timer_base = BCM2835_REG(BCM2835_GPU_TIMER_CLO);
 }
 
-uint32_t benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
   uint32_t delta = BCM2835_REG(BCM2835_GPU_TIMER_CLO) - benchmark_timer_base;
 

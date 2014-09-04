@@ -29,7 +29,7 @@ void benchmark_timer_initialize(void)
 /*
  * Return timer value in microsecond units
  */
-uint32_t benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
   return MCF_DTIM3_DTCN;
 }

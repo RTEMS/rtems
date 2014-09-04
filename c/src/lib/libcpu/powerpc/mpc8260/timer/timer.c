@@ -1,15 +1,13 @@
-/*  timer.c
+/**
+ *  @file 
+ *  @brief Timer for the PowerPC MPC860
  *
- *  This file manages the interval timer on the PowerPC MPC860.
- *  NOTE: This is not the PIT, but rather the RTEMS interval
- *        timer
  *  We shall use the bottom 32 bits of the timebase register,
  *
- *  The following was in the 403 version of this file. I don't
- *  know what it means. JTM 5/19/98
- *  NOTE: It is important that the timer start/stop overhead be
- *        determined when porting or modifying this code.
- *
+ *  @note This is not the PIT, but rather the RTEMS interval timer.
+ */
+
+/*
  *  Author: Andy Dachs <a.dachs@sstl.co.uk>
  *  Surrey Satellite Technlogy Limited
  *   Modified for MPC8260
@@ -46,6 +44,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 #include <mpc8260.h>
 
 static volatile uint32_t   Timer_starting;
@@ -78,7 +77,7 @@ void benchmark_timer_initialize(void)
 
 extern uint32_t bsp_timer_least_valid;
 extern uint32_t bsp_timer_average_overhead;
-int benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
   uint32_t   clicks;
   uint32_t   total;

@@ -1,8 +1,10 @@
-/*
- *  Timer Init
+/**
+ *  @file
  *
  *  This module initializes TIMER 2 for on the MCF5272 for benchmarks.
- *
+ */
+
+/*
  *  Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Victor V. Vengerov <vvv@oktet.ru>
  *
@@ -22,6 +24,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <mcf5272/mcf5272.h>
+#include <rtems/btimer.h>
 
 #define TRR2_VAL 65530
 
@@ -102,7 +105,7 @@ benchmark_timer_initialize(void)
  * RETURNS:
  *     number of microseconds since timer has been started
  */
-int
+benchmark_timer_t
 benchmark_timer_read( void )
 {
     uint16_t clicks;

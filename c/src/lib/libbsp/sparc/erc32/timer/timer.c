@@ -62,7 +62,7 @@ void benchmark_timer_initialize(void)
 #define LEAST_VALID      13  /* Don't trust a value lower than this */
 #endif
 
-uint32_t benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
   uint32_t          total;
 

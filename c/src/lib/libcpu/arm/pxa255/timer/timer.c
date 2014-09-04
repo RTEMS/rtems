@@ -1,23 +1,20 @@
+/**
+ * @file
+ * @brief PXA255 timer
+ */
+
 /*
  * PXA255 timer by Yang Xi <hiyangxi@gmail.com>
  * Copyright (c) 2004 by Jay Monkman <jtm@lopingdog.com>
  *
- * Notes:
- *  This file manages the benchmark timer used by the RTEMS Timing Test
- *  Suite.  Each measured time period is demarcated by calls to
- *  Timer_initialize() and Read_timer().  Read_timer() usually returns
- *  the number of microseconds since Timer_initialize() exitted.
- *
- *  It is important that the timer start/stop overhead be determined
- *  when porting or modifying this code.
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems.h>
 #include <bsp.h>
+#include <rtems.h>
+#include <rtems/btimer.h>
 #include <pxa255.h>
 
 uint32_t tstart;
@@ -51,7 +48,7 @@ void benchmark_timer_initialize(void)
                              /* This value is in microseconds. */
 #define LEAST_VALID       1  /* Don't trust a clicks value lower than this */
 
-int benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
 
   uint32_t total;

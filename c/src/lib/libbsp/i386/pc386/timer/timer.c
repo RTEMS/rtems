@@ -51,9 +51,9 @@ volatile uint32_t         Ttimer_val;
 bool                      benchmark_timer_find_average_overhead = true;
 volatile unsigned int     fastLoop1ms, slowLoop1ms;
 
-void     (*benchmark_timer_initialize_function)(void) = 0;
-uint32_t (*benchmark_timer_read_function)(void) = 0;
-void     (*Timer_exit_function)(void) = 0;
+void              (*benchmark_timer_initialize_function)(void) = 0;
+benchmark_timer_t (*benchmark_timer_read_function)(void) = 0;
+void              (*Timer_exit_function)(void) = 0;
 
 /* timer (int 08h) Interrupt Service Routine (defined in 'timerisr.s') */
 extern void timerisr(void);

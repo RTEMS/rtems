@@ -1,14 +1,9 @@
+/**
+ *  @file
+ *  @brief Timer driver for the Hitachi SH 7750
+ */
+
 /*
- *  timer driver for the Hitachi SH 7750
- *
- *  This file manages the benchmark timer used by the RTEMS Timing Test
- *  Suite.  Each measured time period is demarcated by calls to
- *  benchmark_timer_initialize() and benchmark_timer_read().  benchmark_timer_read() usually returns
- *  the number of microseconds since benchmark_timer_initialize() exitted.
- *
- *  NOTE: It is important that the timer start/stop overhead be
- *        determined when porting or modifying this code.
- *
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Victor V. Vengerov <vvv@oktet.ru>
  *
@@ -21,6 +16,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 
 #include <rtems/score/sh_io.h>
 #include <rtems/score/iosh7750.h>
@@ -198,7 +194,7 @@ benchmark_timer_initialize(void)
  * RETURNS:
  *     number of microseconds since timer has been started
  */
-int
+benchmark_timer_t
 benchmark_timer_read(void)
 {
     uint32_t              clicks;

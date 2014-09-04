@@ -1,7 +1,12 @@
-/*  timer.c
+/**
+ *  @file
+ *  @brief IDT 4650 Timer Driver.
  *
- *  This file contains the initialization code for the IDT 4650 timer driver.
- *
+ *  This file manages the benchmark timer used by the RTEMS Timing Test
+ *  Suite.
+ */
+
+/*
  *  Author:     Craig Lebakken <craigl@transition.com>
  *
  *  COPYRIGHT (c) 1996 by Transition Networks Inc.
@@ -19,14 +24,6 @@
  *
  *  derived from src/lib/libbsp/no_cpu/no_bsp/timer/timer.c
  *
- *  This file manages the benchmark timer used by the RTEMS Timing Test
- *  Suite.  Each measured time period is demarcated by calls to
- *  benchmark_timer_initialize() and benchmark_timer_read().  benchmark_timer_read() usually returns
- *  the number of microseconds since benchmark_timer_initialize() exitted.
- *
- *  NOTE: It is important that the timer start/stop overhead be
- *        determined when porting or modifying this code.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -35,15 +32,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-/*
- *  Rather than deleting this, it is commented out to (hopefully) help
- *  the submitter send updates.
- *
- *  static char _sccsid[] = "@(#)timer.c 08/20/96     1.5\n";
- */
-
-
 #include <rtems.h>
+#include <rtems/btimer.h>
 
 #define CLOCKS_PER_MICROSECOND ( CPU_CLOCK_RATE_MHZ )
 #define TIMER_MAX_VALUE 0xffffffff
@@ -78,7 +68,7 @@ void benchmark_timer_initialize( void )
                              /* This value is in cycles. */
 #define LEAST_VALID       1  /* Don't trust a clicks value lower than this */
 
-int benchmark_timer_read( void )
+benchmark_timer_t benchmark_timer_read( void )
 {
   uint64_t   clicks;
   uint32_t   total;

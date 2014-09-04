@@ -1,9 +1,11 @@
-/*  timer.c
+/**
+ *  @file
+ *  @brief
  *
  *  This file implements a benchmark timer using the PPC Timebase
- *
- *  Notes: NONE
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -12,10 +14,11 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems/system.h>
-#include <assert.h>
-#include <rtems.h>
 #include <bsp.h>
+#include <rtems.h>
+#include <rtems/system.h>
+#include <rtems/btimer.h>
+#include <assert.h>
 #include <libcpu/powerpc-utility.h>
 
 
@@ -58,7 +61,7 @@ void benchmark_timer_initialize(void)
  *  benchmark_timer_read
  */
 
-int benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
   uint64_t    total64;
   uint32_t    total;

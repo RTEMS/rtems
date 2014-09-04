@@ -44,7 +44,7 @@ time units (typically microseconds) that have elapsed since the last
 call to @code{benchmark_timer_initialize}.
 
 @example
-int benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 @{
   stop time = read the hardware timer
   if the subtract overhead feature is enabled

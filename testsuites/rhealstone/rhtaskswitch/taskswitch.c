@@ -4,8 +4,8 @@
  * This file's license is 2-clause BSD as in this distribution's LICENSE file.
  */
 
-#include <rtems/timerdrv.h>
 #include <timesys.h>
+#include <rtems/btimer.h>
 
 #define BENCHMARKS 50000
 

@@ -85,7 +85,7 @@ benchmark_timer_initialize (void)
 /*
  * Return timer value in microsecond units
  */
-uint32_t benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
   uint32_t retval;
   retval = *(uint32_t*)&m8xx.tcn1;

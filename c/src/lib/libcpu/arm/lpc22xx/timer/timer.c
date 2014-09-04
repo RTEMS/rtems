@@ -1,28 +1,24 @@
-/*
- * RTL22xx board Timer driver
+/**
+ * @file
+ * @brief RTL22xx board Timer driver
  *
  * This uses Timer1 for timing measurments.
- *
- *  By Ray xu<rayx.cn@gmail.com>, modify form Mc9328mxl	RTEMS DSP
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
- *
- * Notes:
- *  This file manages the benchmark timer used by the RTEMS Timing Test
- *  Suite.  Each measured time period is demarcated by calls to
- *  benchmark_timer_initialize() and benchmark_timer_read().  benchmark_timer_read() usually returns
- *  the number of microseconds since benchmark_timer_initialize() exitted.
- *
- *  It is important that the timer start/stop overhead be determined
- *  when porting or modifying this code.
-*/
+ */
 
-#include <rtems.h>
+/*
+ * By Ray Xu <rayx.cn@gmail.com>, modify form Mc9328mxl RTEMS DSP
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 #include <bsp.h>
+#include <rtems.h>
+#include <rtems/btimer.h>
 #include <lpc22xx.h>
 #include "lpc_timer.h"
+
 uint32_t g_start;
 uint32_t g_freq;
 
@@ -52,7 +48,7 @@ void benchmark_timer_initialize( void )
                              /* This value is in microseconds. */
 #define LEAST_VALID       1  /* Don't trust a clicks value lower than this */
 
-int benchmark_timer_read( void )
+benchmark_timer_t benchmark_timer_read( void )
 {
   return (T0TC/(LPC22xx_Fpclk/1000000));
   /*

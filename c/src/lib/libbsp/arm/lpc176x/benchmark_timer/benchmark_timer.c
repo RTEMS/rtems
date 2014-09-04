@@ -32,7 +32,7 @@ void benchmark_timer_initialize( void )
   benchmark_timer_base = lpc176x_timer_get_timer_value( LPC176X_TIMER_1 );
 }
 
-uint32_t benchmark_timer_read( void )
+benchmark_timer_t benchmark_timer_read( void )
 {
   uint32_t delta = lpc176x_timer_get_timer_value( LPC176X_TIMER_1 ) -
                    benchmark_timer_base;

@@ -16,7 +16,7 @@
 #include <semaphore.h>
 #include <tmacros.h>
 #include <timesys.h>
-#include <rtems/timerdrv.h>
+#include <rtems/btimer.h>
 #include "test_support.h"
 #include <pthread.h>
 #include <sched.h>

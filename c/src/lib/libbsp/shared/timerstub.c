@@ -15,7 +15,7 @@ void benchmark_timer_initialize(void)
 {
 }
 
-uint32_t benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
   if (benchmark_timer_find_average_overhead)
     return 1;

@@ -1,12 +1,13 @@
-/*  timer.c
+/**
+ *  @file
+ *  @brief Timer Driver for the PowerPC 405.
  *
  *  This file manages the interval timer on the PowerPC 405.
  *  We shall use the bottom 32 bits of the timebase register,
- *
- *  NOTE: It is important that the timer start/stop overhead be
- *        determined when porting or modifying this code.
- *
- *  Author:	Andrew Bray <andy@i-cubed.co.uk>
+ */
+
+/*
+ *  Author: Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -37,6 +38,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/btimer.h>
 #include <libcpu/powerpc-utility.h>
 
 extern uint32_t bsp_timer_least_valid;
@@ -51,7 +53,7 @@ void benchmark_timer_initialize(void)
   startedAt = ppc_time_base();
 }
 
-int benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
 	uint32_t   clicks, total;
 

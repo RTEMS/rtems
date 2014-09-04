@@ -12,7 +12,7 @@
 #endif
 #include <errno.h>
 #include <timesys.h>
-#include <rtems/timerdrv.h>
+#include <rtems/btimer.h>
 #include <pthread.h>
 #include "test_support.h"
 

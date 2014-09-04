@@ -1,22 +1,26 @@
-/*  timer.c
+/**
+ * @file
  *
- *  This file manages the benchmark timer used by the RTEMS Timing Test Suite.
- *  Each measured time period is demarcated by calls to benchmark_timer_initialize() and
- *  benchmark_timer_read().  benchmark_timer_read() usually returns the number of microseconds
- *  since benchmark_timer_initialize() exitted.
+ * This file manages the benchmark timer used by the RTEMS Timing Test Suite.
+ * Each measured time period is demarcated by calls to
+ * benchmark_timer_initialize() and benchmark_timer_read().
+ * benchmark_timer_read() usually returns the number of microseconds
+ * since benchmark_timer_initialize() exitted.
  *
- *  These functions are prototyped in rtems/c/src/lib/include/timerdrv.h and
- *  must be implemented as part of the BSP.
+ * These functions are prototyped in rtems/btimer.h and
+ * must be implemented as part of the BSP.
  *
- *  This port does not allow the application to select which timer on the
- *  MVME167 to use for the timer, nor does it allow the application to
- *  configure the timer. The timer uses the VMEchip2 Tick Timer #1. This timer
- *  is distinct from the clock, which uses Tick Timer #2 in the VMEchip2.
+ * This port does not allow the application to select which timer on the
+ * MVME167 to use for the timer, nor does it allow the application to
+ * configure the timer. The timer uses the VMEchip2 Tick Timer #1. This timer
+ * is distinct from the clock, which uses Tick Timer #2 in the VMEchip2.
  *
- *  All page references are to the MVME166/MVME167/MVME187 Single Board
- *  Computer Programmer's Reference Guide (MVME187PG/D2) with the April 1993
+ * All page references are to the MVME166/MVME167/MVME187 Single Board
+ * Computer Programmer's Reference Guide (MVME187PG/D2) with the April 1993
  *  supplements/addenda (MVME187PG/D2A1).
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -104,7 +108,7 @@ void benchmark_timer_initialize(void)
  *  LEAST_VALID is the lowest number this routine should trust.  Numbers
  *  below this are "noise" and zero is returned.
  */
-uint32_t benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
   uint32_t            total;
 

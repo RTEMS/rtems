@@ -42,7 +42,7 @@ void benchmark_timer_initialize()
  *  benchmark_timer_read
  */
 
-uint32_t benchmark_timer_read()
+benchmark_timer_t benchmark_timer_read()
 {
   uint64_t          clicks;
   uint64_t          total64;

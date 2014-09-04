@@ -94,7 +94,7 @@ void benchmark_timer_initialize( void )
  *  @param  None
  *  @return Timer value in microseconds
  */
-uint32_t benchmark_timer_read( void )
+benchmark_timer_t benchmark_timer_read( void )
 {
   uint32_t  ticks;
   uint32_t  total;

@@ -5,7 +5,7 @@
  */
 
 #include <timesys.h>
-#include <rtems/timerdrv.h>
+#include <rtems/btimer.h>
 
 const char rtems_test_name[] = "RHTASKPREEMPT";
 

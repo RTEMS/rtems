@@ -32,7 +32,7 @@ void benchmark_timer_initialize(void)
 #define AVG_OVERHEAD  0
 #define LEAST_VALID   1
 
-uint32_t benchmark_timer_read( void )
+benchmark_timer_t benchmark_timer_read( void )
 {
   uint64_t         clicks;
   uint64_t         total;

@@ -28,7 +28,6 @@
 #include <bsp.h>
 #include <bsp/system-clocks.h>
 #include <rtems/btimer.h>
-#include <rtems/timerdrv.h>
 
 bool benchmark_timer_find_average_overhead = false;
 
@@ -39,7 +38,7 @@ void benchmark_timer_initialize(void)
   benchmark_timer_base = _CPU_Counter_read();
 }
 
-uint32_t benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
   uint32_t delta = _CPU_Counter_read() - benchmark_timer_base;
 

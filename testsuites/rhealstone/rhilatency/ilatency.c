@@ -15,8 +15,8 @@
 
 #define CONFIGURE_INIT
 #include <timesys.h>
+#include <rtems/btimer.h>
 #include <rtems/score/schedulerpriorityimpl.h>
-#include <rtems/timerdrv.h>
 #include <coverhd.h>
 
 /* configuration information */

@@ -41,7 +41,7 @@ void benchmark_timer_initialize(void)
   TABSR = 0x55;
 }
 
-uint32_t benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
   uint32_t count;
 

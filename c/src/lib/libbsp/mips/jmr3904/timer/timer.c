@@ -44,7 +44,7 @@ void benchmark_timer_initialize(void)
 #define LEAST_VALID       1  /* Don't trust a value lower than this */
                              /* tx39 simulator can count instructions. :) */
 
-uint32_t benchmark_timer_read(void)
+benchmark_timer_t benchmark_timer_read(void)
 {
   uint32_t          total;
 

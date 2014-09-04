@@ -1,10 +1,15 @@
-/*  Timer for Blackfin
+/**
+ *  @file
+ *  @brief Timer for Blackfin
  *
  *  This file manages the benchmark timer used by the RTEMS Timing Test
  *  Suite.  Each measured time period is demarcated by calls to
- *  benchmark_timer_initialize() and benchmark_timer_read().  benchmark_timer_read() usually returns
- *  the number of microseconds since benchmark_timer_initialize() exitted.
- *
+ *  benchmark_timer_initialize() and benchmark_timer_read().
+ *  benchmark_timer_read() usually returns the number of microseconds
+ *  since benchmark_timer_initialize() exitted.
+ */
+
+/*
  *  Copyright (c) 2006 by Atos Automacao Industrial Ltda.
  *             written by Alain Schaefer <alain.schaefer@easc.ch>
  *                    and Antonio Giovanini <antonio@atos.com.br>
@@ -14,13 +19,12 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-
 #include <rtems.h>
 #include <bsp.h>
+#include <rtems/btimer.h>
 
-
-uint32_t         Timer_interrupts;
-bool benchmark_timer_find_average_overhead;
+uint32_t  Timer_interrupts;
+bool      benchmark_timer_find_average_overhead;
 
 /*
  * benchmark_timer_initialize
@@ -56,7 +60,7 @@ void benchmark_timer_initialize( void )
                              /* This value is in microseconds. */
 #define LEAST_VALID       1  /* Don't trust a clicks value lower than this */
 
-int benchmark_timer_read( void )
+benchmark_timer_t benchmark_timer_read( void )
 {
   uint32_t          clicks;
   uint32_t          total;

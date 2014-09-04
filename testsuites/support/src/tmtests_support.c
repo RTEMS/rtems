@@ -11,10 +11,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/btimer.h>
-
 #include <bsp.h>
-#include <rtems/timerdrv.h>
+#include <rtems/btimer.h>
 #include "test_support.h"
 #include "timesys.h"
 #include "tmtests_empty_function.h"
