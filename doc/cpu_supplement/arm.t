@@ -42,7 +42,15 @@ thread blocking.  This is currently not used.
 
 @subsection Floating Point Unit
 
-A floating point unit is currently not supported.
+The following floating point units are supported.
+
+@itemize @bullet
+
+@item VFPv3-D32/NEON (for example available on Cortex-A processors)
+@item VFPv3-D16 (for example available on Cortex-R processors)
+@item FPv4-SP-D16 (for example available on Cortex-M processors)
+
+@end itemize
 
 @section Calling Conventions
 
