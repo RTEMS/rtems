@@ -188,7 +188,7 @@ static void test_context_is_executing(void)
   _CPU_Context_Set_is_executing(&context, true);
   _CPU_Context_Initialize(
     &context,
-    &stack[0],
+    (void *) &stack[0],
     sizeof(stack),
     0,
     NULL,
