@@ -98,7 +98,7 @@ void process(const char *ifname, const char *ofname)
     fprintf(stderr, "cannot open %s for reading\n", ifname);
     exit(1);
   }
-  
+
   if ( createC ) {
   ocfile = fopen(ocname, "wb");
   if (ocfile == NULL) {
@@ -106,7 +106,7 @@ void process(const char *ifname, const char *ofname)
     exit(1);
   }
   }
-  
+
   if ( createH ) {
   ohfile = fopen(ohname, "wb");
   if (ohfile == NULL) {
@@ -114,11 +114,11 @@ void process(const char *ifname, const char *ofname)
     exit(1);
   }
   }
-  
+
   /* find basename */
   char *ifbasename = strdup(ifname);
   ifbasename = basename(ifbasename);
-  
+
   strcpy(buf, ifbasename);
   for (p = buf; *p != '\0'; ++p)
     if (!isalnum(*p))
@@ -170,13 +170,26 @@ void process(const char *ifname, const char *ofname)
     buf
   );
   } /* createC */
-  
+
   /*****************************************************************/
   /******                    END OF C FILE                     *****/
   /*****************************************************************/
 
   if ( createH ) {
   /* print H file header */
+  char hbasename[PATH_MAX];
+  char* p;
+  /* Clean up the file name if it is an abs path */
+  strcpy(
+    hbasename,
+    obasename
+  );
+  p = hbasename;
+  while (*p != '\0') {
+    if (*p < '0' || *p > 'z')
+      *p = '_';
+    ++p;
+  }
   fprintf(
     ohfile,
     "/*\n"
@@ -191,8 +204,8 @@ void process(const char *ifname, const char *ofname)
     "#include <sys/types.h>\n"
     "\n",
     ifbasename,  /* header */
-    obasename,  /* ifndef */
-    obasename   /* define */
+    hbasename,  /* ifndef */
+    hbasename   /* define */
   );
 
   /* print structure */
@@ -219,7 +232,7 @@ void process(const char *ifname, const char *ofname)
     "#endif\n"
   );
   } /* createH */
-  
+
   /*****************************************************************/
   /******                    END OF H FILE                     *****/
   /*****************************************************************/
