@@ -22,6 +22,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <apbuart.h>
+#include <apbuart_termios.h>
 
 int debug_uart_index __attribute__((weak)) = 0;
 static struct apbuart_regs *dbg_uart = NULL;
