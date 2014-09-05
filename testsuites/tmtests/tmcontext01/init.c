@@ -44,14 +44,16 @@ static volatile int *main_data;
 
 static Context_Control ctx;
 
-static void dirty_data_cache(volatile int *d)
+static int dirty_data_cache(volatile int *d, int j)
 {
   size_t n = data_size / sizeof(*d);
   size_t i;
 
   for (i = 0; i < n; ++i) {
-    d[i] = i;
+    d[i] = i + j;
   }
+
+  return i + j;
 }
 
 static int prevent_opt_func(int m, int n)
@@ -88,7 +90,7 @@ static int call_at_level(int start, int fl, int s, bool dirty)
     rtems_counter_ticks b;
 
     if (dirty) {
-      dirty_data_cache(main_data);
+      dirty_data_cache(main_data, fl);
       rtems_cache_invalidate_entire_instruction();
     }
 
@@ -110,9 +112,10 @@ static int call_at_level(int start, int fl, int s, bool dirty)
 static void load_task(rtems_task_argument arg)
 {
   volatile int *load_data = (volatile int *) arg;
+  int j = (int) rtems_get_current_processor();
 
   while (true) {
-    dirty_data_cache(load_data);
+    j = dirty_data_cache(load_data, j);
   }
 }
 
