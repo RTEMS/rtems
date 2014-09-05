@@ -227,6 +227,33 @@
 #define RTEMS_CONTAINER_OF( _m, _type, _member_name ) \
   ( (_type *) ( (uintptr_t) ( _m ) - offsetof( _type, _member_name ) ) )
 
+/**
+ * @brief Removes the const qualifier from a type of a variable.
+ *
+ * @param[in] _type The target type for the variable.
+ * @param[in] _var The variable.
+ */
+#define RTEMS_DECONST( _type, _var ) \
+  ((_type)(uintptr_t)(const void *) ( _var ))
+
+/**
+ * @brief Removes the volatile qualifier from a type of a variable.
+ *
+ * @param[in] _type The target type for the variable.
+ * @param[in] _var The variable.
+ */
+#define RTEMS_DEVOLATILE( _type, _var ) \
+  ((_type)(uintptr_t)(volatile void *) ( _var ))
+
+/**
+ * @brief Removes the all qualifiers from a type of a variable.
+ *
+ * @param[in] _type The target type for the variable.
+ * @param[in] _var The variable.
+ */
+#define RTEMS_DEQUALIFY( _type, _var ) \
+  ((_type)(uintptr_t)(const volatile void *) ( _var ))
+
 #ifndef ASM
   #ifdef RTEMS_DEPRECATED_TYPES
     typedef bool boolean;
