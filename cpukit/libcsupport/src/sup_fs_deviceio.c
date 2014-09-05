@@ -101,7 +101,7 @@ ssize_t rtems_deviceio_write(
 
   args.iop = iop;
   args.offset = iop->offset;
-  args.buffer = buf;
+  args.buffer = RTEMS_DECONST( void *, buf );
   args.count = nbyte;
   args.flags = iop->flags;
   args.bytes_moved = 0;
