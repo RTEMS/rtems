@@ -68,7 +68,7 @@ typedef struct {
   /**
    * @brief The thread specific POSIX key value.
    */
-  const void *value;
+  void *value;
 } POSIX_Keys_Key_value_pair;
 
 /**

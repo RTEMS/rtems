@@ -49,7 +49,7 @@ int pthread_setspecific(
       p = _POSIX_Keys_Find( key, executing, &search_node );
       if ( p != NULL ) {
         value_pair_ptr = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( p );
-        value_pair_ptr->value = value;
+        value_pair_ptr->value = RTEMS_DECONST( void *, value );
       } else {
         value_pair_ptr = _POSIX_Keys_Key_value_pair_allocate();
 
@@ -61,7 +61,7 @@ int pthread_setspecific(
 
         value_pair_ptr->key = key;
         value_pair_ptr->thread = executing;
-        value_pair_ptr->value = value;
+        value_pair_ptr->value = RTEMS_DECONST( void *, value );
         /* The insert can only go wrong if the same node is already in a unique
          * tree. This has been already checked with the _RBTree_Find() */
         _RBTree_Insert(
