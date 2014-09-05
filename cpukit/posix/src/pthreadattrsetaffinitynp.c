@@ -35,8 +35,6 @@ int pthread_attr_setaffinity_np(
   const cpu_set_t   *cpuset
 )
 {
-  int error;
-
   if ( !cpuset )
     return EFAULT;
   if ( !attr )
