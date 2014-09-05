@@ -715,7 +715,10 @@ static int dwmac_desc_enh_destroy_rx_desc( dwmac_common_context *self )
   }
 
   if ( dma_rx != NULL ) {
-    eno          = self->CFG->CALLBACK.mem_free_nocache( self->arg, dma_rx );
+    eno = self->CFG->CALLBACK.mem_free_nocache(
+      self->arg,
+      RTEMS_DEVOLATILE( void *, dma_rx )
+    );
     self->dma_rx = NULL;
   }
 
@@ -741,7 +744,11 @@ static void dwmac_desc_enh_release_rx_bufs( dwmac_common_context *self )
 
       MFREE( self->mbuf_addr_rx[i], dummy );
       (void) dummy;
-      memset(&p_enh[i].erx, 0, sizeof( dwmac_desc_ext ) );
+      memset(
+        RTEMS_DEVOLATILE( void *, &p_enh[i].erx ),
+        0,
+        sizeof( dwmac_desc_ext )
+      );
     }
   }
 
@@ -811,7 +818,7 @@ static void dwmac_desc_enh_init_tx_desc( dwmac_common_context *self )
 static int dwmac_desc_enh_destroy_tx_desc( dwmac_common_context *self )
 {
   int   eno      = 0;
-  void *mem_desc = __DEVOLATILE( void *, self->dma_tx );
+  void *mem_desc = RTEMS_DEVOLATILE( void *, self->dma_tx );
 
 
   if ( self->mbuf_addr_tx != NULL ) {
@@ -847,7 +854,7 @@ static void dwmac_desc_enh_release_tx_bufs( dwmac_common_context *self )
 
       MFREE( self->mbuf_addr_tx[i], dummy );
       (void) dummy;
-      memset( __DEVOLATILE( void *,
+      memset( RTEMS_DEVOLATILE( void *,
                             &p_enh[i].etx ), 0, sizeof( dwmac_desc_ext ) );
     }
   }
