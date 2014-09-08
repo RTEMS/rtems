@@ -228,6 +228,9 @@ bool _Thread_Initialize(
   the_thread->Life.state = THREAD_LIFE_NORMAL;
   the_thread->Life.terminator = NULL;
 
+  the_thread->Capture.flags = 0;
+  the_thread->Capture.control = NULL;
+
   /*
    *  Open the object
    */

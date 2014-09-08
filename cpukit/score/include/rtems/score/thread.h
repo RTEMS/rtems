@@ -533,6 +533,11 @@ typedef struct {
 #endif
 } Thread_Scheduler_control;
 
+typedef struct  {
+  uint32_t      flags;
+  void *        control;
+}Thread_Capture_control;
+
 /**
  *  This structure defines the Thread Control Block (TCB).
  */
@@ -644,6 +649,8 @@ struct Thread_Control_struct {
    * Control state changes triggered by thread restart and delete requests.
    */
   Thread_Life_control                   Life;
+
+  Thread_Capture_control                Capture;
 
   /**
    * @brief Variable length array of user extension pointers.
