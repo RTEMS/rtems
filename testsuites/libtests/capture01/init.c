@@ -113,6 +113,73 @@ static void cwlist ()
   }
 }
 
+/*
+ * rtems_catpure_cli_print_uptime
+ *
+ *  DESCRIPTION::148
+ *
+ *
+ * This function prints the nanosecond uptime to stdout.
+ */
+static void
+rtems_capture_cli_print_timestamp (uint64_t uptime)
+{
+  uint32_t hours;
+  uint32_t minutes;
+  uint32_t seconds;
+  uint32_t nanosecs;
+
+  seconds  = uptime / 1000000000LLU;
+  minutes  = seconds / 60;
+  hours    = minutes / 60;
+  minutes  = minutes % 60;
+  seconds  = seconds % 60;
+  nanosecs = uptime % 1000000000;
+
+  fprintf (stdout, "%5lu:%02lu:%02lu.%09lu", hours, minutes, seconds, nanosecs);
+}
+static void
+rtems_caputre_cli_print_record_task(rtems_capture_record_t* rec)
+{
+  rtems_capture_task_record_t* task_rec = (rtems_capture_task_record_t*) rec;
+
+  rtems_capture_cli_print_timestamp (rec->time);
+  fprintf (stdout, "           ");
+  rtems_monitor_dump_id (rec->task_id);
+   fprintf (stdout, " %c%c%c%c",
+            (char) (task_rec->name >> 24) & 0xff,
+            (char) (task_rec->name >> 16) & 0xff,
+            (char) (task_rec->name >> 8) & 0xff,
+            (char) (task_rec->name >> 0) & 0xff);
+   fprintf (stdout, " %3" PRId32   " %3" PRId32 "\n",
+            task_rec->start_priority,
+            task_rec->stack_size);
+}
+
+static void
+rtems_caputure_cli_print_record_std(rtems_capture_record_t* rec, uint64_t diff)
+{
+  uint32_t                     event;
+  int                          e;
+
+  event = rec->events >> RTEMS_CAPTURE_EVENT_START;
+
+  for (e = RTEMS_CAPTURE_EVENT_START; e < RTEMS_CAPTURE_EVENT_END; e++)
+  {
+    if (event & 1)
+    {
+      rtems_capture_cli_print_timestamp (rec->time);
+      fprintf (stdout, " %9" PRId64 " ", diff);
+      rtems_monitor_dump_id (rec->task_id);
+      fprintf(stdout, "      %3" PRId32 " %3" PRId32 " %s\n",
+             (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
+             (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
+             rtems_capture_event_text (e));
+    }
+    event >>= 1;
+  }
+}
+
 static void ctrace()
 {
   rtems_status_code       sc;
@@ -122,6 +189,8 @@ static void ctrace()
   int                     count;
   uint32_t                read;
   rtems_capture_record_t* rec;
+  uint8_t*                ptr;
+  rtems_capture_time_t    last_t = 0;
 
   total = dump_total;
 
@@ -148,43 +217,32 @@ static void ctrace()
     }
 
     count = total < read ? total : read;
-
+    ptr = (uint8_t *) rec;
     while (count--)
     {
+      rec = (rtems_capture_record_t*) ptr;
+
       if (csv)
-        fprintf (stdout, "%08" PRIxPTR ",%03" PRIu32
+        fprintf (stdout, "%08" PRIu32 ",%03" PRIu32
                    ",%03" PRIu32 ",%04" PRIx32 ",%" PRId64 "\n",
-                 (uintptr_t) rec->task,
+                 rec->task_id,
                  (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
                  (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
                  (rec->events >> RTEMS_CAPTURE_EVENT_START),
                  (uint64_t) rec->time);
-      else
-      {
-        uint32_t event;
-        int      e;
+      else {
+        if ((rec->events >> RTEMS_CAPTURE_EVENT_START) == 0)
+          rtems_caputre_cli_print_record_task( rec );
+        else {
+          uint64_t diff = 0;
+          if (last_t)
+            diff = rec->time - last_t;
+          last_t = rec->time;
 
-        event = rec->events >> RTEMS_CAPTURE_EVENT_START;
-
-        for (e = RTEMS_CAPTURE_EVENT_START; e <= RTEMS_CAPTURE_EVENT_END; e++)
-        {
-          if (event & 1)
-          {
-            rtems_monitor_dump_id (rtems_capture_task_id (rec->task));
-            fprintf (stdout, " %c%c%c%c",
-                     (char) (rec->task->name >> 24) & 0xff,
-                     (char) (rec->task->name >> 16) & 0xff,
-                     (char) (rec->task->name >> 8) & 0xff,
-                     (char) (rec->task->name >> 0) & 0xff);
-            fprintf (stdout, " %3" PRId32 " %3" PRId32 " %s\n",
-                    (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
-                    (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
-                    rtems_capture_event_text (e));
-          }
-          event >>= 1;
+          rtems_caputure_cli_print_record_std( rec, diff );
         }
       }
-      rec++;
+      ptr += rec->size;
     }
 
     count = total < read ? total : read;
