@@ -6,11 +6,18 @@ AC_DEFUN([RTEMS_PROG_CXX_FOR_TARGET],
 [
 AC_BEFORE([$0], [RTEMS_CANONICALIZE_TOOLS])dnl
 AC_REQUIRE([RTEMS_ENABLE_CXX])
+AC_REQUIRE([RTEMS_CHECK_SMP])
+
+# If CXXFLAGS is not set, default to CFLAGS
+if test x"$rtems_cv_HAS_SMP" = x"yes" ; then
+  CXXFLAGS=${CXXFLAGS-${CFLAGS} -std=gnu++11}
+else
+  CXXFLAGS=${CXXFLAGS-${CFLAGS}}
+fi
+
 RTEMS_CHECK_TOOL(CXX,g++)
 if test "$RTEMS_HAS_CPLUSPLUS" = "yes";
 then
-  CXXFLAGS=${CXXFLAGS-${CFLAGS}}
-
 dnl Only accept g++
 dnl NOTE: This might be too restrictive
 test -z "$CXX" \
