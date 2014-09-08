@@ -95,11 +95,19 @@ static void high_priority_task( rtems_task_argument arg )
   }
 }
 
+static bool test_body( void *arg )
+{
+  test_context *ctx = arg;
+
+  wake_up( ctx->middle_priority_task );
+
+  return false;
+}
+
 static void Init( rtems_task_argument ignored )
 {
   test_context *ctx = &global_ctx;
   rtems_status_code sc;
-  int resets = 0;
 
   TEST_BEGIN();
 
@@ -137,17 +145,7 @@ static void Init( rtems_task_argument ignored )
   );
   ASSERT_SC(sc);
 
-  interrupt_critical_section_test_support_initialize(
-    active_high_priority_task
-  );
-
-  while ( resets < 3 ) {
-    if ( interrupt_critical_section_test_support_delay() ) {
-      ++resets;
-    }
-
-    wake_up( ctx->middle_priority_task );
-  }
+  interrupt_critical_section_test( test_body, ctx, active_high_priority_task );
 
   TEST_END();
 
@@ -161,6 +159,7 @@ static void Init( rtems_task_argument ignored )
 
 #define CONFIGURE_MAXIMUM_TASKS 3
 #define CONFIGURE_MAXIMUM_TIMERS 1
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
 #define CONFIGURE_INIT_TASK_PRIORITY PRIORITY_LOW
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES

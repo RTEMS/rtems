@@ -47,13 +47,21 @@ rtems_timer_service_routine test_release_from_isr(
   (void) rtems_event_send( Main_task, EVENTS_TO_SEND );
 }
 
+static bool test_body( void *arg )
+{
+  rtems_event_set out;
+
+  (void) arg;
+
+  rtems_event_receive( EVENTS_TO_RECEIVE, RTEMS_EVENT_ANY, 1, &out );
+
+  return false;
+}
+
 rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  rtems_event_set       out;
-  int                   resets;
-
   TEST_BEGIN();
 
   puts( "Init - Test may not be able to detect case is hit reliably" );
@@ -62,14 +70,7 @@ rtems_task Init(
 
   Main_task = rtems_task_self();
 
-  interrupt_critical_section_test_support_initialize( test_release_from_isr );
-
-  for (resets=0 ; resets< 2 ;) {
-    if ( interrupt_critical_section_test_support_delay() )
-      resets++;
-
-    (void) rtems_event_receive( EVENTS_TO_RECEIVE, RTEMS_EVENT_ANY, 1, &out );
-  }
+  interrupt_critical_section_test( test_body, NULL, test_release_from_isr );
 
   TEST_END();
   rtems_test_exit(0);
@@ -83,6 +84,7 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS       2
 #define CONFIGURE_MAXIMUM_TIMERS      1
 #define CONFIGURE_MAXIMUM_SEMAPHORES  1
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

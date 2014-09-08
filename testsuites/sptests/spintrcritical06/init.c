@@ -71,12 +71,24 @@ rtems_task Secondary_task(
   rtems_test_assert(0);
 }
 
+static bool test_body( void *arg )
+{
+  (void) arg;
+
+  rtems_semaphore_obtain(
+    Semaphore,
+    RTEMS_DEFAULT_OPTIONS,
+    SEMAPHORE_OBTAIN_TIMEOUT
+  );
+
+  return false;
+}
+
 rtems_task Init(
   rtems_task_argument ignored
 )
 {
   rtems_status_code     status;
-  int                   resets;
 
   TEST_BEGIN();
 
@@ -105,18 +117,7 @@ rtems_task Init(
   status = rtems_task_start( Secondary_task_id, Secondary_task, 0 );
   directive_failed( status, "rtems_task_start" );
 
-  interrupt_critical_section_test_support_initialize( test_release_from_isr );
-
-  for (resets=0 ; resets< 2 ;) {
-    if ( interrupt_critical_section_test_support_delay() )
-      resets++;
-
-    status = rtems_semaphore_obtain(
-      Semaphore,
-      RTEMS_DEFAULT_OPTIONS,
-      SEMAPHORE_OBTAIN_TIMEOUT
-    );
-  }
+  interrupt_critical_section_test( test_body, NULL, test_release_from_isr );
 
   TEST_END();
   rtems_test_exit(0);
@@ -130,6 +131,7 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS       2
 #define CONFIGURE_MAXIMUM_TIMERS      1
 #define CONFIGURE_MAXIMUM_SEMAPHORES  1
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 #define CONFIGURE_INIT_TASK_PRIORITY  INIT_PRIORITY
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_PREEMPT
 #define CONFIGURE_MICROSECONDS_PER_TICK  2000

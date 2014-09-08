@@ -63,10 +63,52 @@ static void release_semaphore(rtems_id timer, void *arg)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
+static bool test_body(void *arg)
+{
+  test_context *ctx = arg;
+  int busy;
+
+  _Thread_Disable_dispatch();
+
+  rtems_test_assert(
+    ctx->semaphore_task_tcb->Wait.return_code
+      == CORE_SEMAPHORE_STATUS_SUCCESSFUL
+  );
+
+  /*
+   * Spend some time to make it more likely that we hit the test condition
+   * below.
+   */
+  for (busy = 0; busy < 1000; ++busy) {
+    __asm__ volatile ("");
+  }
+
+  if (ctx->semaphore_task_tcb->Wait.queue == NULL) {
+    ctx->thread_queue_was_null = true;
+  }
+
+  _Thread_queue_Process_timeout(ctx->semaphore_task_tcb);
+
+  switch (ctx->semaphore_task_tcb->Wait.return_code) {
+    case CORE_SEMAPHORE_STATUS_SUCCESSFUL:
+      ctx->status_was_successful = true;
+      break;
+    case CORE_SEMAPHORE_TIMEOUT:
+      ctx->status_was_timeout = true;
+      break;
+    default:
+      rtems_test_assert(0);
+      break;
+  }
+
+  _Thread_Enable_dispatch();
+
+  return false;
+}
+
 static void Init(rtems_task_argument ignored)
 {
   test_context *ctx = &ctx_instance;
-  int resets = 0;
   rtems_status_code sc;
 
   TEST_BEGIN();
@@ -99,42 +141,7 @@ static void Init(rtems_task_argument ignored)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  interrupt_critical_section_test_support_initialize(
-    release_semaphore
-  );
-
-  while (resets < 3) {
-    if (interrupt_critical_section_test_support_delay()) {
-      ++resets;
-    }
-
-    _Thread_Disable_dispatch();
-
-    rtems_test_assert(
-      ctx->semaphore_task_tcb->Wait.return_code
-        == CORE_SEMAPHORE_STATUS_SUCCESSFUL
-    );
-
-    if (ctx->semaphore_task_tcb->Wait.queue == NULL) {
-      ctx->thread_queue_was_null = true;
-    }
-
-    _Thread_queue_Process_timeout(ctx->semaphore_task_tcb);
-
-    switch (ctx->semaphore_task_tcb->Wait.return_code) {
-      case CORE_SEMAPHORE_STATUS_SUCCESSFUL:
-        ctx->status_was_successful = true;
-        break;
-      case CORE_SEMAPHORE_TIMEOUT:
-        ctx->status_was_timeout = true;
-        break;
-      default:
-        rtems_test_assert(0);
-        break;
-    }
-
-    _Thread_Enable_dispatch();
-  }
+  interrupt_critical_section_test(test_body, ctx, release_semaphore);
 
   rtems_test_assert(ctx->thread_queue_was_null);
   rtems_test_assert(ctx->status_was_successful);
@@ -153,6 +160,7 @@ static void Init(rtems_task_argument ignored)
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 #define CONFIGURE_MAXIMUM_TASKS 2
 #define CONFIGURE_MAXIMUM_TIMERS 1
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
 #define CONFIGURE_INIT_TASK_PRIORITY PRIORITY_MASTER
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES

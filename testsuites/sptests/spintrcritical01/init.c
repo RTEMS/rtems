@@ -58,9 +58,8 @@ Thread_blocking_operation_States getState(void);
 
 const char rtems_test_name[] = "SPINTRCRITICAL " TEST_NAME;
 
-rtems_id Main_task;
 rtems_id Semaphore;
-volatile bool case_hit;
+volatile bool case_hit = false;
 
 Thread_blocking_operation_States getState(void)
 {
@@ -94,6 +93,21 @@ rtems_timer_service_routine test_release_from_isr(
 }
 
 
+static bool test_body( void *arg )
+{
+  rtems_status_code status;
+
+  (void) arg;
+
+  status = rtems_semaphore_obtain(
+    Semaphore,
+    RTEMS_DEFAULT_OPTIONS,
+    SEMAPHORE_OBTAIN_TIMEOUT
+  );
+  directive_failed( status, "rtems_semaphore_obtain" );
+
+  return case_hit;
+}
 
 rtems_task Init(
   rtems_task_argument ignored
@@ -107,29 +121,14 @@ rtems_task Init(
   puts( "Init - Variation is: " TEST_STRING );
   status = rtems_semaphore_create(
     rtems_build_name( 'S', 'M', '1', ' ' ),
-    1,
+    0,
     SEMAPHORE_ATTRIBUTES,
     RTEMS_NO_PRIORITY,
     &Semaphore
   );
   directive_failed( status, "rtems_semaphore_create of SM1" );
 
-  Main_task = rtems_task_self();
-
-  interrupt_critical_section_test_support_initialize( test_release_from_isr );
-
-  case_hit = false;
-
-  while (!case_hit) {
-    interrupt_critical_section_test_support_delay();
-
-    status = rtems_semaphore_obtain(
-      Semaphore,
-      RTEMS_DEFAULT_OPTIONS,
-      SEMAPHORE_OBTAIN_TIMEOUT
-    );
-    directive_failed( status, "rtems_semaphore_obtain" );
-  }
+  interrupt_critical_section_test( test_body, NULL, test_release_from_isr );
 
   if ( case_hit ) {
     puts( "Init - Case hit" );
@@ -148,6 +147,7 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS       1
 #define CONFIGURE_MAXIMUM_TIMERS      1
 #define CONFIGURE_MAXIMUM_SEMAPHORES  1
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
 #if defined(PRIORITY_NO_TIMEOUT_REVERSE)
   #define CONFIGURE_INIT_TASK_PRIORITY   250

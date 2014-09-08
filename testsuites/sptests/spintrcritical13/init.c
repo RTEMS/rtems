@@ -35,7 +35,6 @@ rtems_task Init(rtems_task_argument argument);
 rtems_timer_service_routine test_release_from_isr(rtems_id  timer, void *arg);
 rtems_timer_service_routine TimerMethod(rtems_id  timer, void *arg);
 
-rtems_id Main_task;
 rtems_id Timer;
 
 rtems_timer_service_routine TimerMethod(
@@ -53,12 +52,23 @@ rtems_timer_service_routine test_release_from_isr(
   (void) rtems_timer_fire_after( Timer, 10, TimerMethod, NULL );
 }
 
+static bool test_body( void *arg )
+{
+  rtems_status_code sc;
+
+  (void) arg;
+
+  sc = TEST_DIRECTIVE( Timer, 10, TimerMethod, NULL );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  return false;
+}
+
 rtems_task Init(
   rtems_task_argument ignored
 )
 {
   rtems_status_code     sc;
-  int                   resets;
 
   TEST_BEGIN();
 
@@ -81,17 +91,7 @@ rtems_task Init(
   sc = rtems_timer_create( rtems_build_name( 'P', 'E', 'R', '1' ), &Timer);
   directive_failed( sc, "rtems_timer_create" );
 
-  Main_task = rtems_task_self();
-
-  interrupt_critical_section_test_support_initialize( test_release_from_isr );
-
-  for (resets=0 ; resets<10 ;) {
-    if ( interrupt_critical_section_test_support_delay() )
-      resets++;
-
-    sc = TEST_DIRECTIVE( Timer, 10, TimerMethod, NULL );
-    directive_failed( sc, "rtems_timer_fire_after");
-  }
+  interrupt_critical_section_test( test_body, NULL, test_release_from_isr );
 
   TEST_END();
   rtems_test_exit(0);
@@ -108,6 +108,7 @@ rtems_task Init(
   #define CONFIGURE_MAXIMUM_TASKS     2
 #endif
 #define CONFIGURE_MAXIMUM_TIMERS      2
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

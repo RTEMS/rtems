@@ -13,20 +13,19 @@
 
 #include <tmacros.h>
 #include <intrcritical.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/rtems/ratemonimpl.h>
 
 const char rtems_test_name[] = "SPINTRCRITICAL 8";
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
-rtems_timer_service_routine test_release_from_isr(rtems_id  timer, void *arg);
-rtems_rate_monotonic_period_states getState(void);
 
-rtems_id Main_task;
-rtems_id Period;
-volatile bool case_hit;
+static rtems_id Period;
 
-rtems_rate_monotonic_period_states getState(void)
+static volatile bool case_hit = false;
+
+static rtems_rate_monotonic_period_states getState(void)
 {
   Objects_Locations       location;
   Rate_monotonic_Control *period;
@@ -42,13 +41,48 @@ rtems_rate_monotonic_period_states getState(void)
   return period->state;
 }
 
-rtems_timer_service_routine test_release_from_isr(
+static rtems_timer_service_routine test_release_from_isr(
   rtems_id  timer,
   void     *arg
 )
 {
-  if ( getState() == RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING )
-    case_hit = true;
+  Chain_Control *chain = &_Watchdog_Ticks_chain;
+
+  if ( !_Chain_Is_empty( chain ) ) {
+    Watchdog_Control *watchdog = _Watchdog_First( chain );
+
+    if (
+      watchdog->delta_interval == 0
+        && watchdog->routine == _Rate_monotonic_Timeout
+    ) {
+      Watchdog_States state = _Watchdog_Remove( watchdog );
+
+      rtems_test_assert( state == WATCHDOG_ACTIVE );
+      (*watchdog->routine)( watchdog->id, watchdog->user_data );
+
+      if ( getState() == RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING ) {
+        case_hit = true;
+      }
+    }
+  }
+}
+
+static bool test_body( void *arg )
+{
+  rtems_status_code sc;
+
+  (void) arg;
+
+  sc = rtems_rate_monotonic_cancel( Period );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_rate_monotonic_period( Period, 1 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_rate_monotonic_period( Period, 1 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL || sc == RTEMS_TIMEOUT );
+
+  return case_hit;
 }
 
 rtems_task Init(
@@ -56,7 +90,6 @@ rtems_task Init(
 )
 {
   rtems_status_code     sc;
-  int                   resets;
 
   TEST_BEGIN();
 
@@ -69,21 +102,7 @@ rtems_task Init(
   );
   directive_failed( sc, "rtems_rate_monotonic_create" );
 
-  Main_task = rtems_task_self();
-
-  interrupt_critical_section_test_support_initialize( test_release_from_isr );
-
-  case_hit = false;
-
-  for (resets=0 ; case_hit == false && resets< 2 ;) {
-    if ( interrupt_critical_section_test_support_delay() )
-      resets++;
-
-    sc = rtems_rate_monotonic_period( Period, 1 );
-    if ( sc == RTEMS_TIMEOUT )
-      continue;
-    directive_failed( sc, "rtems_monotonic_period");
-  }
+  interrupt_critical_section_test( test_body, NULL, test_release_from_isr );
 
   if ( case_hit ) {
     puts( "Init - It appears the case has been hit" );
@@ -101,6 +120,7 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS       2
 #define CONFIGURE_MAXIMUM_TIMERS      1
 #define CONFIGURE_MAXIMUM_PERIODS     1
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

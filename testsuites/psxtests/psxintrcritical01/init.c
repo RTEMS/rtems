@@ -19,31 +19,40 @@ const char rtems_test_name[] = "PSXINTRCRITICAL 1";
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument ignored);
-rtems_timer_service_routine test_release_from_isr(rtems_id timer, void *arg);
 
 #define TEST_NAME          "01"
 #define TEST_STRING        "POSIX Timer"
 
-rtems_id          Main_task;
-timer_t           Timer;
-struct itimerspec TimerParams;
+static timer_t           Timer;
+static struct itimerspec TimerParams;
 
 #define POSIX_TIMER_RELATIVE 0
 
-rtems_timer_service_routine test_release_from_isr(
+static bool test_body( void *arg )
+{
+  int rv;
+
+  (void) arg;
+
+  rv = timer_settime(Timer, POSIX_TIMER_RELATIVE, &TimerParams, NULL);
+  rtems_test_assert( rv == 0 );
+
+  return false;
+}
+
+static rtems_timer_service_routine test_release_from_isr(
   rtems_id  timer,
   void     *arg
 )
 {
-  (void) timer_settime(Timer, POSIX_TIMER_RELATIVE, &TimerParams, NULL);
+  test_body( NULL );
 }
 
 rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  int    sc;
-  int    resets;
+  int sc;
 
   TEST_BEGIN();
 
@@ -59,27 +68,13 @@ rtems_task Init(
     rtems_test_exit(0);
   }
 
-  Main_task = rtems_task_self();
-
   /* we don't care if it ever fires */
   TimerParams.it_interval.tv_sec  = 10;
   TimerParams.it_interval.tv_nsec = 0;
   TimerParams.it_value.tv_sec     = 10;
   TimerParams.it_value.tv_nsec    = 0;
 
-  interrupt_critical_section_test_support_initialize( test_release_from_isr );
-
-  for (resets=0 ; resets<10 ;) {
-    if ( interrupt_critical_section_test_support_delay() )
-      resets++;
-
-    sc = timer_settime(Timer, POSIX_TIMER_RELATIVE, &TimerParams, NULL);
-    if ( sc == -1 ) {
-      perror ("Error in timer setting\n");
-      rtems_test_exit(0);
-    }
-
-  }
+  interrupt_critical_section_test( test_body, NULL, test_release_from_isr );
 
   TEST_END();
   rtems_test_exit(0);
@@ -93,6 +88,7 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS          1
 #define CONFIGURE_MAXIMUM_TIMERS         1
 #define CONFIGURE_MAXIMUM_POSIX_TIMERS   1
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
