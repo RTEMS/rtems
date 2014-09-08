@@ -191,7 +191,7 @@
  *  This can occur when reading volatile device memory or skipping arguments
  *  in a variable argument method.
  */
-#if defined(__GNUC__)        
+#if defined(__GNUC__)
   #define RTEMS_COMPILER_UNUSED_ATTRIBUTE __attribute__((unused))
 #else
   #define RTEMS_COMPILER_UNUSED_ATTRIBUTE
@@ -227,6 +227,39 @@
 #define RTEMS_CONTAINER_OF( _m, _type, _member_name ) \
   ( (_type *) ( (uintptr_t) ( _m ) - offsetof( _type, _member_name ) ) )
 
+#ifdef __cplusplus
+#define RTEMS_DEQUALIFY_DEPTHX( _ptr_level, _type, _var ) \
+            (const_cast<_type>( _var ))
+#else /* Standard C code */
+
+/* The reference type idea based on libHX by Jan Engelhardt */
+#define RTEMS_TYPEOF_REFX(_ptr_level, _ptr_type) \
+  typeof(_ptr_level(union { int z; typeof(_ptr_type) x; }){0}.x)
+
+#if defined(__GNUC__) && !defined(ASM)
+#if  ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4004)
+extern void* RTEMS_DEQUALIFY_types_not_compatible(void)
+  __attribute__((error ("RTEMS_DEQUALIFY types differ not only by volatile and const")));
+#else
+extern void RTEMS_DEQUALIFY_types_not_compatible(void);
+#endif
+#define RTEMS_DEQUALIFY_DEPTHX( _ptr_level, _type, _var ) ( \
+    __builtin_choose_expr( __builtin_types_compatible_p ( \
+        RTEMS_TYPEOF_REFX( _ptr_level, _var ), \
+        RTEMS_TYPEOF_REFX( _ptr_level, _type ) \
+      ) || __builtin_types_compatible_p ( _type, void * ), \
+    (_type)(_var), \
+    RTEMS_DEQUALIFY_types_not_compatible() \
+  ) \
+)
+#endif /*__GNUC__*/
+#endif /*__cplusplus*/
+
+#ifndef RTEMS_DECONST
+#ifdef RTEMS_DEQUALIFY_DEPTHX
+#define RTEMS_DECONST( _type, _var ) \
+  RTEMS_DEQUALIFY_DEPTHX( *, _type, _var )
+#else /*RTEMS_DEQUALIFY_DEPTHX*/
 /**
  * @brief Removes the const qualifier from a type of a variable.
  *
@@ -236,6 +269,14 @@
 #define RTEMS_DECONST( _type, _var ) \
   ((_type)(uintptr_t)(const void *) ( _var ))
 
+#endif /*RTEMS_DEQUALIFY_DEPTHX*/
+#endif /*RTEMS_DECONST*/
+
+#ifndef RTEMS_DEVOLATILE
+#ifdef RTEMS_DEQUALIFY_DEPTHX
+#define RTEMS_DEVOLATILE( _type, _var ) \
+  RTEMS_DEQUALIFY_DEPTHX( *, _type, _var )
+#else /*RTEMS_DEQUALIFY_DEPTHX*/
 /**
  * @brief Removes the volatile qualifier from a type of a variable.
  *
@@ -245,6 +286,14 @@
 #define RTEMS_DEVOLATILE( _type, _var ) \
   ((_type)(uintptr_t)(volatile void *) ( _var ))
 
+#endif /*RTEMS_DEQUALIFY_DEPTHX*/
+#endif /*RTEMS_DEVOLATILE*/
+
+#ifndef RTEMS_DEQUALIFY
+#ifdef RTEMS_DEQUALIFY_DEPTHX
+#define RTEMS_DEQUALIFY( _type, _var ) \
+  RTEMS_DEQUALIFY_DEPTHX( *, _type, _var )
+#else /*RTEMS_DEQUALIFY_DEPTHX*/
 /**
  * @brief Removes the all qualifiers from a type of a variable.
  *
@@ -253,6 +302,9 @@
  */
 #define RTEMS_DEQUALIFY( _type, _var ) \
   ((_type)(uintptr_t)(const volatile void *) ( _var ))
+
+#endif /*RTEMS_DEQUALIFY_DEPTHX*/
+#endif /*RTEMS_DEQUALIFY*/
 
 #ifndef ASM
   #ifdef RTEMS_DEPRECATED_TYPES
