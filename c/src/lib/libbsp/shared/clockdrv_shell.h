@@ -85,7 +85,7 @@ rtems_isr Clock_isr(
     } while (
       _Thread_Heir == _Thread_Executing
         && _Thread_Executing->Start.entry_point
-          == rtems_configuration_get_idle_task()
+          == (Thread_Entry) rtems_configuration_get_idle_task()
     );
 
     Clock_driver_support_at_tick();
