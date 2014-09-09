@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -27,39 +27,70 @@
 #ifndef TMTESTS_TM27_H
 #define TMTESTS_TM27_H
 
+#include <assert.h>
+
 #include <libcpu/powerpc-utility.h>
-#include <bsp/vectors.h>
+
+#include <bsp/irq.h>
+#include <bsp/qoriq.h>
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-static void (*tm27_interrupt_handler)(rtems_vector_number);
+#define IPI_INDEX_LOW 1
 
-static int tm27_exception_handler( BSP_Exception_frame *frame, unsigned number)
+#define IPI_INDEX_HIGH 2
+
+static void Install_tm27_vector(void (*handler)(rtems_vector_number))
 {
-	(*tm27_interrupt_handler)( 0);
+  rtems_status_code sc;
+  rtems_vector_number low = QORIQ_IRQ_IPI_0 + IPI_INDEX_LOW;
+  rtems_vector_number high = QORIQ_IRQ_IPI_0 + IPI_INDEX_HIGH;
 
-	return 0;
+  sc = rtems_interrupt_handler_install(
+    low,
+    "tm17 low",
+    RTEMS_INTERRUPT_UNIQUE,
+    (rtems_interrupt_handler) handler,
+    NULL
+  );
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = qoriq_pic_set_priority(low, 1, NULL);
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_interrupt_handler_install(
+    high,
+    "tm17 high",
+    RTEMS_INTERRUPT_UNIQUE,
+    (rtems_interrupt_handler) handler,
+    NULL
+  );
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = qoriq_pic_set_priority(high, 2, NULL);
+  assert(sc == RTEMS_SUCCESSFUL);
 }
 
-void Install_tm27_vector( void (*handler)(rtems_vector_number))
+static void qoriq_tm27_cause(uint32_t ipi_index)
 {
-  int rv = 0;
+  uint32_t self = ppc_processor_id();
 
-  tm27_interrupt_handler = handler;
-
-  rv = ppc_exc_set_handler( ASM_DEC_VECTOR, tm27_exception_handler);
-  if (rv < 0) {
-    printk( "Error installing clock interrupt handler!\n");
-  }
+  qoriq.pic.per_cpu[self].ipidr[ipi_index].reg = UINT32_C(1) << self;
 }
 
-#define Cause_tm27_intr() \
-  ppc_set_decrementer_register( 8)
+static void Cause_tm27_intr()
+{
+  qoriq_tm27_cause(IPI_INDEX_LOW);
+}
 
-#define Clear_tm27_intr() \
-  ppc_set_decrementer_register( UINT32_MAX)
+static void Clear_tm27_intr()
+{
+  /* Nothing to do */
+}
 
-#define Lower_tm27_intr() \
-  (void) ppc_external_exceptions_enable()
+static void Lower_tm27_intr(void)
+{
+  qoriq_tm27_cause(IPI_INDEX_HIGH);
+}
 
 #endif /* TMTESTS_TM27_H */
