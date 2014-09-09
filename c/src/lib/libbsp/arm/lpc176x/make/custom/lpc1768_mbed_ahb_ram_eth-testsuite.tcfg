@@ -1,0 +1,23 @@
+#
+# lpc1768_mbed_ahb_ram_eth RTEMS Test Database
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+fileio
+cdtest
+flashdisk01
+fsdosfsname01
+jffs2_fserror
+jffs2_fslink
+jffs2_fspatheval
+jffs2_fspermission
+jffs2_fsrdwr
+jffs2_fssymlink
+jffs2_fstime
+mghttpd01
+pppd
+spstkalloc02
+utf8proc01
+iostream
+rtems++

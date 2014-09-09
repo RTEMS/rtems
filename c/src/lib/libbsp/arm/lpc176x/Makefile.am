@@ -69,6 +69,7 @@ project_lib_DATA += startup/linkcmds
 EXTRA_DIST =
 EXTRA_DIST += startup/linkcmds.lpc1768_mbed
 EXTRA_DIST += startup/linkcmds.lpc1768_mbed_ahb_ram
+EXTRA_DIST += startup/linkcmds.lpc1768_mbed_ahb_ram_eth
 
 
 # ----------------------------

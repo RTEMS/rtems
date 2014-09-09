@@ -1,0 +1,39 @@
+/* LPC1768 OEM Board from Embedded Artists */
+
+MEMORY {
+	ROM_INT (RX)  : ORIGIN = 0x00000000, LENGTH = 512k
+	RAM_INT (AIW) : ORIGIN = 0x10000000, LENGTH = 32k
+	RAM_AHB1 (AIW) : ORIGIN = 0x2007C000, LENGTH = 16k
+	RAM_AHB2 (AIW) : ORIGIN = 0x20080000, LENGTH = 16k
+}
+
+REGION_ALIAS ("REGION_START", ROM_INT);
+REGION_ALIAS ("REGION_VECTOR", RAM_INT);
+REGION_ALIAS ("REGION_TEXT", ROM_INT);
+REGION_ALIAS ("REGION_TEXT_LOAD", ROM_INT);
+REGION_ALIAS ("REGION_RODATA", ROM_INT);
+REGION_ALIAS ("REGION_RODATA_LOAD", ROM_INT);
+REGION_ALIAS ("REGION_DATA", RAM_INT);
+REGION_ALIAS ("REGION_DATA_LOAD", ROM_INT);
+REGION_ALIAS ("REGION_FAST_TEXT", RAM_INT);
+REGION_ALIAS ("REGION_FAST_TEXT_LOAD", ROM_INT);
+REGION_ALIAS ("REGION_FAST_DATA", RAM_INT);
+REGION_ALIAS ("REGION_FAST_DATA_LOAD", ROM_INT);
+REGION_ALIAS ("REGION_BSS", RAM_AHB1);
+REGION_ALIAS ("REGION_WORK", RAM_INT);
+REGION_ALIAS ("REGION_STACK", RAM_INT);
+REGION_ALIAS ("REGION_ETH", RAM_AHB2);
+
+bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 1024;
+bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);
+
+SECTIONS {
+    .eth (NOLOAD) : ALIGN_WITH_INPUT {
+        bsp_section_eth_begin = .;
+        *(.eth)
+        bsp_section_eth_end = .;
+    } > REGION_ETH AT > REGION_ETH
+    bsp_section_eth_size = bsp_section_eth_end - bsp_section_eth_begin;
+}
+
+INCLUDE linkcmds.armv7m
