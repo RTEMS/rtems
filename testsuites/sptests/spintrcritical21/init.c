@@ -16,9 +16,11 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#include <intrcritical.h>
+
 #include <rtems/rtems/eventimpl.h>
 
-const char rtems_test_name[] = "SP 39";
+const char rtems_test_name[] = "SPINTRCRITICAL 21";
 
 /*
  *  ERROR CHECKING NOTE:
@@ -28,21 +30,13 @@ const char rtems_test_name[] = "SP 39";
  *  fatal_directive_check_status_only() not directive_failed().
  */
 
-rtems_timer_service_routine test_event_from_isr(
-  rtems_id  timer,
-  void     *arg
-);
-rtems_timer_service_routine test_event_with_timeout_from_isr(
-  rtems_id  timer,
-  void     *arg
-);
+static volatile bool case_hit;
 
-volatile bool case_hit;
+static rtems_id main_task;
 
-rtems_id main_task;
-rtems_id other_task;
+static rtems_id other_task;
 
-rtems_timer_service_routine test_event_from_isr(
+static rtems_timer_service_routine test_event_from_isr(
   rtems_id  timer,
   void     *arg
 )
@@ -64,13 +58,26 @@ rtems_timer_service_routine test_event_from_isr(
     status = rtems_event_send( main_task, 0x02 );
     fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL, "event send" );
 
-    case_hit = TRUE;
+    case_hit = true;
   }
   status = rtems_event_send( main_task, 0x01 );
   fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL, "event send" );
 }
 
-rtems_timer_service_routine test_event_with_timeout_from_isr(
+static bool test_body_event_from_isr( void *arg )
+{
+  rtems_status_code status;
+  rtems_event_set   out;
+
+  (void) arg;
+
+  status = rtems_event_receive( 0x01, RTEMS_DEFAULT_OPTIONS, 0, &out );
+  rtems_test_assert( status == RTEMS_SUCCESSFUL );
+
+  return case_hit;
+}
+
+static rtems_timer_service_routine test_event_with_timeout_from_isr(
   rtems_id  timer,
   void     *arg
 )
@@ -82,10 +89,23 @@ rtems_timer_service_routine test_event_with_timeout_from_isr(
      *  We want to catch the task while it is blocking.  Otherwise
      *  just send and make it happy.
      */
-    case_hit = TRUE;
+    case_hit = true;
   }
   status = rtems_event_send( main_task, 0x01 );
   fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL, "event send" );
+}
+
+static bool test_body_event_with_timeout_from_isr( void *arg )
+{
+  rtems_status_code status;
+  rtems_event_set   out;
+
+  (void) arg;
+
+  status = rtems_event_receive( 0x01, RTEMS_DEFAULT_OPTIONS, 1, &out );
+  rtems_test_assert( status == RTEMS_SUCCESSFUL || status == RTEMS_TIMEOUT );
+
+  return case_hit;
 }
 
 rtems_task Init(
@@ -93,21 +113,10 @@ rtems_task Init(
 )
 {
   rtems_status_code     status;
-  rtems_id              timer;
-  rtems_event_set       out;
-  int                   i;
-  int                   max;
-  uint32_t              iterations = 0;
 
   TEST_BEGIN();
 
   main_task = rtems_task_self();
-
-  /*
-   *  Timer used in multiple ways
-   */
-  status = rtems_timer_create( 1, &timer );
-  directive_failed( status, "rtems_timer_create" );
 
   status = rtems_task_create(
     0xa5a5a5a5,
@@ -122,70 +131,39 @@ rtems_task Init(
   /*
    * Test Event send successful from ISR -- receive is forever
    */
-  case_hit = FALSE;
-  iterations = 0;
-  max = 1;
 
-  while (1) {
-    if ( case_hit )
-      break;
-    status = rtems_timer_fire_after( timer, 1, test_event_from_isr, NULL );
-    directive_failed( status, "timer_fire_after failed" );
-
-    for (i=0 ; i<max ; i++ )
-      if ( _Event_Sync_state == THREAD_BLOCKING_OPERATION_SATISFIED )
-        break;
-
-    status = rtems_event_receive( 0x01, RTEMS_DEFAULT_OPTIONS, 0, &out );
-    directive_failed( status, "rtems_event_receive" );
-    if ( case_hit == TRUE )
-      break;
-    max += 2;
-
-    /* with our clock tick, this is about 30 seconds */
-    if ( ++iterations >= 4L * 1000L * 30L)
-      break;
-  }
+  case_hit = false;
+  interrupt_critical_section_test(
+    test_body_event_from_isr,
+    NULL,
+    test_event_from_isr
+  );
 
   printf(
     "Event sent from ISR hitting synchronization point has %soccurred\n",
-    (( case_hit == TRUE ) ? "" : "NOT ")
+    case_hit ? "" : "NOT "
   );
+
+  rtems_test_assert( case_hit );
 
   /*
    * Test Event send successful from ISR -- receive has timeout
    */
-  case_hit = FALSE;
-  iterations = 0;
-  max = 1;
 
-  while (1) {
-    if ( case_hit )
-      break;
-    status = rtems_timer_fire_after(
-      timer, 1, test_event_with_timeout_from_isr, NULL );
-    directive_failed( status, "timer_fire_after failed" );
-
-    for (i=0 ; i<max ; i++ )
-      if ( _Event_Sync_state == THREAD_BLOCKING_OPERATION_SATISFIED )
-        break;
-
-    status = rtems_event_receive( 0x01, RTEMS_DEFAULT_OPTIONS, 10, &out );
-    directive_failed( status, "rtems_event_receive" );
-    if ( case_hit == TRUE )
-      break;
-    max += 2;
-
-    /* with our clock tick, this is about 30 seconds */
-    if ( ++iterations >= 4L * 1000L * 30L)
-      break;
-  }
+  case_hit = false;
+  interrupt_critical_section_test(
+    test_body_event_with_timeout_from_isr,
+    NULL,
+    test_event_with_timeout_from_isr
+  );
 
   printf(
     "Event sent from ISR (with timeout) hitting synchronization "
       "point has %soccurred\n",
-    (( case_hit == TRUE ) ? "" : "NOT ")
+    case_hit ? "" : "NOT "
   );
+
+  rtems_test_assert( case_hit );
 
   TEST_END();
   rtems_test_exit( 0 );

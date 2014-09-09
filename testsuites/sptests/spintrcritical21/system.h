@@ -32,6 +32,7 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS             2
 #define CONFIGURE_MAXIMUM_TIMERS            1
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS   1
 
 #include <rtems/confdefs.h>
 
