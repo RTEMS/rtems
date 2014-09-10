@@ -1485,45 +1485,14 @@ _CPU_cache_unfreeze_data( void )
 }
 
 static inline void 
-_CPU_cache_invalidate_instruction_range(
-  const void *i_addr,
-  size_t      n_bytes
-)
+_CPU_cache_invalidate_instruction_range( const void *i_addr, size_t n_bytes)
 {
-  if ( n_bytes != 0 ) {
-    uint32_t       adx       = (uint32_t) i_addr
-      & ~CACHE_L2C_310_DATA_LINE_MASK;
-    const uint32_t ADDR_LAST =
-    (uint32_t)( (size_t)i_addr + n_bytes - 1 );
-    uint32_t       block_end =
-      CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES );
-
-    /* Invalidate L2 cache lines */
-    for (;
-         adx      <= ADDR_LAST;
-         adx       = block_end + 1,
-         block_end = CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES )) {
-      cache_l2c_310_invalidate_range(
-        adx,
-        block_end
-      );
-    }
-
-    arm_cache_l1_invalidate_instruction_range(
-      i_addr,
-      n_bytes
-    );
-  }
+  arm_cache_l1_invalidate_instruction_range( i_addr, n_bytes );
 }
 
 static inline void 
 _CPU_cache_invalidate_entire_instruction( void )
 {
-  rtems_interrupt_lock_context lock_context;
-
-  rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
-  cache_l2c_310_invalidate_entire();
-  rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
   arm_cache_l1_invalidate_entire_instruction();
 }
 
