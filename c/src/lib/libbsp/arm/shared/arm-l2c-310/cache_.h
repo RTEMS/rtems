@@ -1517,10 +1517,11 @@ _CPU_cache_get_data_cache_size( const uint32_t level )
   
   switch( level )
   {
-    case 0:
+    case 1:
       size = arm_cache_l1_get_data_cache_size();
     break;
-    case 1:
+    case 0:
+    case 2:
       size = cache_l2c_310_get_cache_size();
     break;
     default:
@@ -1537,10 +1538,11 @@ _CPU_cache_get_instruction_cache_size( const uint32_t level )
   
   switch( level )
   {
-    case 0:
+    case 1:
       size = arm_cache_l1_get_instruction_cache_size();
       break;
-    case 1:
+    case 0:
+    case 2:
       size = cache_l2c_310_get_cache_size();
       break;
     default:
