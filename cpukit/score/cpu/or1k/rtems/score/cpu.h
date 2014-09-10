@@ -721,8 +721,8 @@ void _CPU_Context_Initialize(
  *
  */
 
-#define _CPU_Fatal_halt( _error ) \
-        printk("Fatal Error %d Halted\n",_error); \
+#define _CPU_Fatal_halt(_source, _error ) \
+        printk("Fatal Error %d.%d Halted\n",_source, _error); \
         for(;;)
 
 /* end of Fatal Error manager macros */
