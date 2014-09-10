@@ -26,7 +26,13 @@
 #include "socal/alt_uart.h"
 #include "socal/hps.h"
 
-bool altera_cyclone_v_uart_probe( int minor );
+#ifdef BSP_USE_UART_INTERRUPTS
+  #define DEVICE_FNS &ns16550_fns
+#else
+  #define DEVICE_FNS &ns16550_fns_polled
+#endif
+
+static bool altera_cyclone_v_uart_probe( int minor );
 
 static uint8_t altera_cyclone_v_uart_get_register(uintptr_t addr, uint8_t i)
 {
@@ -47,7 +53,7 @@ console_tbl Console_Configuration_Ports[] = {
   {
     .sDeviceName   = "/dev/ttyS0",
     .deviceType    = SERIAL_NS16550,
-    .pDeviceFns    = &ns16550_fns,
+    .pDeviceFns    = DEVICE_FNS,
     .deviceProbe   = altera_cyclone_v_uart_probe,
     .pDeviceFlow   = NULL,
     .ulMargin      = 16,
@@ -68,7 +74,7 @@ console_tbl Console_Configuration_Ports[] = {
   {
     .sDeviceName   = "/dev/ttyS1",
     .deviceType    = SERIAL_NS16550,
-    .pDeviceFns    = &ns16550_fns,
+    .pDeviceFns    = DEVICE_FNS,
     .deviceProbe   = altera_cyclone_v_uart_probe,
     .pDeviceFlow   = NULL,
     .ulMargin      = 16,

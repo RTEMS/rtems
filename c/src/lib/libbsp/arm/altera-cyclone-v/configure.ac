@@ -46,6 +46,9 @@ RTEMS_BSPOPTS_HELP([CYCLONE_V_CONFIG_UART_1],[configuration for UART 1])
 RTEMS_BSPOPTS_SET([CYCLONE_V_UART_BAUD],[*],[115200U])
 RTEMS_BSPOPTS_HELP([CYCLONE_V_UART_BAUD],[baud for UARTs])
 
+RTEMS_BSPOPTS_SET([BSP_USE_UART_INTERRUPTS],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_USE_UART_INTERRUPTS],[enable usage of interrupts for the UART modules])
+
 RTEMS_BSPOPTS_SET([CYCLONE_V_NO_I2C],[*],[1])
 RTEMS_BSPOPTS_HELP([CYCLONE_V_NO_I2C],
 [Number of configured I2C buses. Note that each bus has to be configured in an
