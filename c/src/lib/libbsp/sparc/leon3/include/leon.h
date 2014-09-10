@@ -90,6 +90,7 @@ extern "C" {
  *  The following defines the bits in the LEON Cache Control Register.
  */
 #define LEON3_REG_CACHE_CTRL_FI      0x00200000 /* Flush instruction cache */
+#define LEON3_REG_CACHE_CTRL_DS      0x00800000 /* Data cache snooping */
 
 /* LEON3 Interrupt Controller */
 extern volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
@@ -357,6 +358,11 @@ static inline void leon3_set_cache_control_register(uint32_t val)
 static inline uint32_t leon3_get_cache_control_register(void)
 {
   return leon3_get_system_register(0x0);
+}
+
+static inline bool leon3_data_cache_snooping_enabled(void)
+{
+  return leon3_get_cache_control_register() & LEON3_REG_CACHE_CTRL_DS;
 }
 
 static inline uint32_t leon3_get_inst_cache_config_register(void)
