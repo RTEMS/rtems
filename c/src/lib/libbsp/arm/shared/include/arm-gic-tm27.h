@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -34,17 +34,19 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-#define ARM_GIC_TM27_IRQ ARM_GIC_IRQ_SGI_13
+#define ARM_GIC_TM27_IRQ_LOW ARM_GIC_IRQ_SGI_12
 
-#define ARM_GIC_TM27_PRIO_LOW 0xfe
+#define ARM_GIC_TM27_IRQ_HIGH ARM_GIC_IRQ_SGI_13
+
+#define ARM_GIC_TM27_PRIO_LOW 0x80
 
 #define ARM_GIC_TM27_PRIO_HIGH 0x00
 
 static inline void Install_tm27_vector(void (*handler)(rtems_vector_number))
 {
   rtems_status_code sc = rtems_interrupt_handler_install(
-    ARM_GIC_TM27_IRQ,
-    "TM27",
+    ARM_GIC_TM27_IRQ_LOW,
+    "tm27 low",
     RTEMS_INTERRUPT_UNIQUE,
     (rtems_interrupt_handler) handler,
     NULL
@@ -52,8 +54,23 @@ static inline void Install_tm27_vector(void (*handler)(rtems_vector_number))
   assert(sc == RTEMS_SUCCESSFUL);
 
   sc = arm_gic_irq_set_priority(
-    ARM_GIC_TM27_IRQ,
+    ARM_GIC_TM27_IRQ_LOW,
     ARM_GIC_TM27_PRIO_LOW
+  );
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_interrupt_handler_install(
+    ARM_GIC_TM27_IRQ_HIGH,
+    "tm27 high",
+    RTEMS_INTERRUPT_UNIQUE,
+    (rtems_interrupt_handler) handler,
+    NULL
+  );
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = arm_gic_irq_set_priority(
+    ARM_GIC_TM27_IRQ_HIGH,
+    ARM_GIC_TM27_PRIO_HIGH
   );
   assert(sc == RTEMS_SUCCESSFUL);
 }
@@ -61,7 +78,7 @@ static inline void Install_tm27_vector(void (*handler)(rtems_vector_number))
 static inline void Cause_tm27_intr(void)
 {
   rtems_status_code sc = arm_gic_irq_generate_software_irq(
-    ARM_GIC_TM27_IRQ,
+    ARM_GIC_TM27_IRQ_LOW,
     ARM_GIC_IRQ_SOFTWARE_IRQ_TO_SELF,
     0
   );
@@ -70,18 +87,15 @@ static inline void Cause_tm27_intr(void)
 
 static inline void Clear_tm27_intr(void)
 {
-  rtems_status_code sc = arm_gic_irq_set_priority(
-    ARM_GIC_TM27_IRQ,
-    ARM_GIC_TM27_PRIO_LOW
-  );
-  assert(sc == RTEMS_SUCCESSFUL);
+  /* Nothing to do */
 }
 
 static inline void Lower_tm27_intr(void)
 {
-  rtems_status_code sc = arm_gic_irq_set_priority(
-    ARM_GIC_TM27_IRQ,
-    ARM_GIC_TM27_PRIO_HIGH
+  rtems_status_code sc = arm_gic_irq_generate_software_irq(
+    ARM_GIC_TM27_IRQ_HIGH,
+    ARM_GIC_IRQ_SOFTWARE_IRQ_TO_SELF,
+    0
   );
   assert(sc == RTEMS_SUCCESSFUL);
 }
