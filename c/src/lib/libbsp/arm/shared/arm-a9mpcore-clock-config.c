@@ -12,8 +12,6 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems/counter.h>
-
 #include <bsp.h>
 #include <bsp/fatal.h>
 #include <bsp/irq.h>
@@ -108,8 +106,6 @@ static void a9mpcore_clock_initialize(void)
     | A9MPCORE_GT_CTRL_IRQ_EN
     | A9MPCORE_GT_CTRL_COMP_EN
     | A9MPCORE_GT_CTRL_TMR_EN;
-
-  rtems_counter_initialize_converter((uint32_t) periphclk);
 }
 
 CPU_Counter_ticks _CPU_Counter_read(void)
