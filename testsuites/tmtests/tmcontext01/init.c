@@ -38,19 +38,22 @@ static rtems_counter_ticks t[SAMPLES];
 
 static volatile bool always_true = true;
 
+static size_t cache_line_size;
+
 static size_t data_size;
 
 static volatile int *main_data;
 
 static Context_Control ctx;
 
-static int dirty_data_cache(volatile int *d, int j)
+static int dirty_data_cache(volatile int *data, size_t n, size_t clsz, int j)
 {
-  size_t n = data_size / sizeof(*d);
+  size_t m = n / sizeof(*data);
+  size_t k = clsz / sizeof(*data);
   size_t i;
 
-  for (i = 0; i < n; ++i) {
-    d[i] = i + j;
+  for (i = 0; i < m; i += k) {
+    data[i] = i + j;
   }
 
   return i + j;
@@ -90,7 +93,7 @@ static int call_at_level(int start, int fl, int s, bool dirty)
     rtems_counter_ticks b;
 
     if (dirty) {
-      dirty_data_cache(main_data, fl);
+      dirty_data_cache(main_data, data_size, cache_line_size, fl);
       rtems_cache_invalidate_entire_instruction();
     }
 
@@ -112,10 +115,12 @@ static int call_at_level(int start, int fl, int s, bool dirty)
 static void load_task(rtems_task_argument arg)
 {
   volatile int *load_data = (volatile int *) arg;
+  size_t n = data_size;
+  size_t clsz = cache_line_size;
   int j = (int) rtems_get_current_processor();
 
   while (true) {
-    j = dirty_data_cache(load_data, j);
+    j = dirty_data_cache(load_data, n, clsz, j);
   }
 }
 
@@ -208,11 +213,18 @@ static void Init(rtems_task_argument arg)
 
   printf("<Test>\n");
 
-  data_size = rtems_cache_get_data_cache_size(0);
-  if (data_size > 0) {
-    main_data = malloc(data_size);
-    rtems_test_assert(main_data != NULL);
+  cache_line_size = rtems_cache_get_data_line_size();
+  if (cache_line_size == 0) {
+    cache_line_size = 32;
   }
+
+  data_size = rtems_cache_get_data_cache_size(0);
+  if (data_size == 0) {
+    data_size = cache_line_size;
+  }
+
+  main_data = malloc(data_size);
+  rtems_test_assert(main_data != NULL);
 
   test(false, load);
   test(true, load);
@@ -222,11 +234,9 @@ static void Init(rtems_task_argument arg)
     rtems_id id;
     volatile int *load_data = NULL;
 
-    if (data_size > 0) {
-      load_data = malloc(data_size);
-      if (load_data == NULL) {
-        load_data = main_data;
-      }
+    load_data = malloc(data_size);
+    if (load_data == NULL) {
+      load_data = main_data;
     }
 
     sc = rtems_task_create(
