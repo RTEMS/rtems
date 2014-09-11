@@ -7,7 +7,6 @@ directives:
   - rtems_cache_flush_multiple_data_lines_processor_set
   - rtems_cache_invalidate_multiple_data_lines_processor_set
   - rtems_cache_flush_entire_data_processor_set
-  - rtems_cache_invalidate_entire_data_processor_set
   - rtems_cache_invalidate_entire_instruction
   - rtems_cache_invalidate_multiple_instruction_lines
 
