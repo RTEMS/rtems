@@ -2001,20 +2001,22 @@ msdos_find_name_in_fat_file (
               retval = -1;
           break;
         }
-        retval = msdos_add_file (
-            buffer,
-            name_type,
-            fs_info,
-            fat_fd,
-            bts2rd,
-            fat_entries,
-            name_dir_entry,
-            dir_pos,
-            dir_offset,
-            empty_space_offset,
-            empty_space_entry,
-            empty_space_count
-        );
+
+        if (retval == RC_OK)
+            retval = msdos_add_file (
+                buffer,
+                name_type,
+                fs_info,
+                fat_fd,
+                bts2rd,
+                fat_entries,
+                name_dir_entry,
+                dir_pos,
+                dir_offset,
+                empty_space_offset,
+                empty_space_entry,
+                empty_space_count
+            );
     }
 
     return retval;
