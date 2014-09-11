@@ -77,7 +77,7 @@ static const struct regdef dumpregs[]= {
   { R_EPC,"R_EPC"}, { -1, NULL }
 };
 
-void _BSP_Exception_frame_print( const CPU_Exception_frame *frame )
+void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 {
   uint32_t *frame_u32;
   int   i, j;

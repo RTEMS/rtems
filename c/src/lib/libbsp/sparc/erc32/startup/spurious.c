@@ -16,7 +16,7 @@
 #include <bsp.h>
 #include <rtems/bspIo.h>
 
-void _BSP_Exception_frame_print( const CPU_Exception_frame *frame )
+void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 {
   uint32_t                   trap;
   uint32_t                   real_trap;

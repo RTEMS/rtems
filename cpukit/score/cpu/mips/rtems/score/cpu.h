@@ -1137,14 +1137,7 @@ static inline void _CPU_Context_validate( uintptr_t pattern )
   }
 }
 
-void _BSP_Exception_frame_print( const CPU_Exception_frame *frame );
-
-static inline void _CPU_Exception_frame_print(
-  const CPU_Exception_frame *frame
-)
-{
-  _BSP_Exception_frame_print( frame );
-}
+void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
 /*  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.
