@@ -214,11 +214,9 @@ initialization time.
 
 @section Calling Conventions
 
-
-Each high-level language compiler generates
-subroutine entry and exit code based upon a set of rules known
-as the compiler's calling convention.   These rules address the
-following issues:
+Each high-level language compiler generates subroutine entry and exit code
+based upon a set of rules known as the application binary interface (ABI)
+calling convention.   These rules address the following issues:
 
 @itemize @bullet
 @item register preservation and usage
@@ -228,12 +226,13 @@ following issues:
 @item call and return mechanism
 @end itemize
 
-A compiler's calling convention is of importance when
-interfacing to subroutines written in another language either
-assembly or high-level.  Even when the high-level language and
-target processor are the same, different compilers may use
-different calling conventions.  As a result, calling conventions
-are both processor and compiler dependent.
+An ABI calling convention is of importance when interfacing to subroutines
+written in another language either assembly or high-level.  It determines also
+the set of registers to be saved or restored during a context switch and
+interrupt processing.
+
+The ABI relevant for RTEMS on SPARC is defined by SYSTEM V APPLICATION BINARY
+INTERFACE, SPARC Processor Supplement, Third Edition.
 
 @subsection Programming Model
 
@@ -566,6 +565,12 @@ It is important to note that the SPARC subroutine
 call and return mechanism does not automatically save and
 restore any registers.  This is accomplished via the save and
 restore instructions which manage the set of registers windows.
+
+In case a floating-point unit is supported, then floating-point return values
+appear in the floating-point registers.  Single-precision values occupy %f0;
+double-precision values occupy %f0 and %f1.  Otherwise, these are scratch
+registers.  Due to this the hardware and software floating-point ABIs are
+incompatible.
 
 @subsection Calling Mechanism
 
