@@ -59,11 +59,12 @@ static rtems_interval wait_for_tick_change( void )
  */
 static __attribute__( ( noinline ) ) void busy( rtems_interval max )
 {
-  rtems_interval i;
+  rtems_interval i = 0;
 
-  for ( i = 0; i < max; ++i ) {
+  do {
     __asm__ volatile ("");
-  }
+    ++i;
+  } while ( i < max );
 }
 
 static bool interrupt_critical_busy_wait( void )
