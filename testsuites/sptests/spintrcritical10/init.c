@@ -115,6 +115,7 @@ static void test_any_satisfy_before_timeout(test_context *ctx)
   );
 
   ctx->hit = false;
+  ctx->thread->Wait.count = 0;
 
   sc = rtems_timer_fire_after(ctx->timer, 1, any_satisfy_before_timeout, ctx);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -207,6 +208,7 @@ static void test_all_satisfy_before_timeout(test_context *ctx)
   );
 
   ctx->hit = false;
+  ctx->thread->Wait.count = 0;
 
   sc = rtems_timer_fire_after(ctx->timer, 1, all_satisfy_before_timeout, ctx);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -296,6 +298,7 @@ static void test_timeout_before_all_satisfy(test_context *ctx)
   );
 
   ctx->hit = false;
+  ctx->thread->Wait.count = 0;
 
   sc = rtems_timer_fire_after(ctx->timer, 1, timeout_before_satisfied, ctx);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
