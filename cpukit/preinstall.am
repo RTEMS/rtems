@@ -374,6 +374,10 @@ $(PROJECT_INCLUDE)/rtems/qreslib.h: libqos/qreslib.h $(PROJECT_INCLUDE)/rtems/$(
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/qreslib.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/qreslib.h
 
+$(PROJECT_INCLUDE)/rtems/stdio-redirect.h: libmisc/redirector/stdio-redirect.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/stdio-redirect.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/stdio-redirect.h
+
 if LIBSHELL
 $(PROJECT_INCLUDE)/rtems/shell.h: libmisc/shell/shell.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/shell.h

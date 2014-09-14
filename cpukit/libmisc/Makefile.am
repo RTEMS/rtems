@@ -71,6 +71,10 @@ noinst_LIBRARIES += libmouse.a
 libmouse_a_SOURCES = mouse/mouse_parser.c mouse/serial_mouse.c
 EXTRA_DIST += mouse/README
 
+## redirector
+noinst_LIBRARIES += libredirector.a
+libredirector_a_SOURCES = redirector/stdio-redirect.c redirector/stdio-redirect.h
+
 ## shell
 if LIBSHELL
 noinst_LIBRARIES += libshell.a

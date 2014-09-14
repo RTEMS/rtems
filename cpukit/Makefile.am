@@ -175,6 +175,8 @@ include_rtems_HEADERS += libmisc/mouse/serial_mouse.h
 ## libqos
 include_rtems_HEADERS += libqos/qreslib.h
 
+## redirector
+include_rtems_HEADERS += libmisc/redirector/stdio-redirect.h
 ## shell
 if LIBSHELL
 include_rtems_HEADERS += libmisc/shell/shell.h
