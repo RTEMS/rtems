@@ -36,6 +36,7 @@ The RTEMS shell has the following file and directory commands:
 @item @code{mkrfs} - format RFS file system
 @item @code{cd} - alias for chdir
 @item @code{df} - display file system disk space usage
+@item @code{md5} - display file system disk space usage
 
 @end itemize
 
@@ -91,7 +92,7 @@ SHLL [/] $ umask
 @findex CONFIGURE_SHELL_NO_COMMAND_UMASK
 @findex CONFIGURE_SHELL_COMMAND_UMASK
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_UMASK} to have this
 command included.
@@ -246,7 +247,7 @@ tty:!:2:2:tty owner::/:/bin/false
 SHLL [/] # ls
 drwxr-xr-x   1   root   root         536 Jan 01 00:00 dev/
 drwxr-xr-x   1   root   root        1072 Jan 01 00:00 etc/
--rw-r--r--   1   root   root         102 Jan 01 00:00 joel 
+-rw-r--r--   1   root   root         102 Jan 01 00:00 joel
 3 files 1710 bytes occupied
 @end example
 
@@ -256,18 +257,18 @@ use the same @code{basename} in the destination directory:
 
 @example
 SHLL [/] # mkdir tmp
-SHLL [/] # ls tmp         
+SHLL [/] # ls tmp
 0 files 0 bytes occupied
 SHLL [/] # cp /etc/passwd tmp
 SHLL [/] # ls /tmp
--rw-r--r--   1   root   root         102 Jan 01 00:01 passwd 
+-rw-r--r--   1   root   root         102 Jan 01 00:01 passwd
 1 files 102 bytes occupied
 SHLL [/] # cp /etc/passwd /etc/group /tmp
 SHLL [/] # ls /tmp
--rw-r--r--   1   root   root         102 Jan 01 00:01 passwd 
--rw-r--r--   1   root   root          42 Jan 01 00:01 group 
+-rw-r--r--   1   root   root         102 Jan 01 00:01 passwd
+-rw-r--r--   1   root   root          42 Jan 01 00:01 group
 2 files 144 bytes occupied
-SHLL [/] # 
+SHLL [/] #
 @end example
 
 @subheading CONFIGURATION:
@@ -275,7 +276,7 @@ SHLL [/] #
 @findex CONFIGURE_SHELL_NO_COMMAND_CP
 @findex CONFIGURE_SHELL_COMMAND_CP
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_CP} to have this
 command included.
@@ -448,7 +449,7 @@ pwd
 @subheading DESCRIPTION:
 
 This command prints the fully qualified filename of the current
-working directory. 
+working directory.
 
 @subheading EXIT STATUS:
 
@@ -475,7 +476,7 @@ SHLL [/dev] $ pwd
 @findex CONFIGURE_SHELL_NO_COMMAND_PWD
 @findex CONFIGURE_SHELL_COMMAND_PWD
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_PWD} to have this
 command included.
@@ -531,7 +532,7 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-This command currently does not display information on a set of 
+This command currently does not display information on a set of
 files like the POSIX ls(1).  It only displays the contents of
 entire directories.
 
@@ -545,14 +546,14 @@ drwxr-xr-x   1   root   root         536 Jan 01 00:00 dev/
 drwxr-xr-x   1   root   root        1072 Jan 01 00:00 etc/
 2 files 1608 bytes occupied
 SHLL [/] $ ls etc
--rw-r--r--   1   root   root         102 Jan 01 00:00 passwd 
--rw-r--r--   1   root   root          42 Jan 01 00:00 group 
--rw-r--r--   1   root   root          30 Jan 01 00:00 issue 
--rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net 
+-rw-r--r--   1   root   root         102 Jan 01 00:00 passwd
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
 4 files 202 bytes occupied
 SHLL [/] $ ls dev etc
--rwxr-xr-x   1  rtems   root           0 Jan 01 00:00 console 
--rwxr-xr-x   1   root   root           0 Jan 01 00:00 console_b 
+-rwxr-xr-x   1  rtems   root           0 Jan 01 00:00 console
+-rwxr-xr-x   1   root   root           0 Jan 01 00:00 console_b
 @end example
 
 @subheading CONFIGURATION:
@@ -560,7 +561,7 @@ SHLL [/] $ ls dev etc
 @findex CONFIGURE_SHELL_NO_COMMAND_LS
 @findex CONFIGURE_SHELL_COMMAND_LS
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_LS} to have this
 command included.
@@ -626,7 +627,7 @@ The following is an example of how to use @code{chdir}:
 SHLL [/] $ pwd
 /
 SHLL [/] $ chdir etc
-SHLL [/etc] $ pwd 
+SHLL [/etc] $ pwd
 /etc
 @end example
 
@@ -635,7 +636,7 @@ SHLL [/etc] $ pwd
 @findex CONFIGURE_SHELL_NO_COMMAND_CHDIR
 @findex CONFIGURE_SHELL_COMMAND_CHDIR
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_CHDIR} to have this
 command included.
@@ -683,7 +684,7 @@ mkdir  dir [dir1 .. dirN]
 
 This command creates the set of directories in the order they
 are specified on the command line.  If an error is encountered
-making one of the directories, the command will continue to 
+making one of the directories, the command will continue to
 attempt to create the remaining directories on the command line.
 
 @subheading EXIT STATUS:
@@ -712,7 +713,7 @@ SHLL [/] # ls joel
 0 files 0 bytes occupied
 SHLL [/] # cp etc/passwd joel
 SHLL [/] # ls joel
--rw-r--r--   1   root   root         102 Jan 01 00:02 passwd 
+-rw-r--r--   1   root   root         102 Jan 01 00:02 passwd
 1 files 102 bytes occupied
 @end example
 
@@ -721,7 +722,7 @@ SHLL [/] # ls joel
 @findex CONFIGURE_SHELL_NO_COMMAND_MKDIR
 @findex CONFIGURE_SHELL_COMMAND_MKDIR
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_MKDIR} to have this
 command included.
@@ -767,7 +768,7 @@ rmdir  [dir1 .. dirN]
 
 @subheading DESCRIPTION:
 
-This command removes the specified set of directories.  If no 
+This command removes the specified set of directories.  If no
 directories are provided on the command line, no actions are taken.
 
 @subheading EXIT STATUS:
@@ -795,7 +796,7 @@ joeldir: No such file or directory.
 @findex CONFIGURE_SHELL_NO_COMMAND_RMDIR
 @findex CONFIGURE_SHELL_COMMAND_RMDIR
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_RMDIR} to have this
 command included.
@@ -966,9 +967,9 @@ are from NetBSD 4.0.
 @subheading SYNOPSYS:
 
 @example
-mknod [-rR] [-F fmt] [-g gid] [-m mode] [-u uid] name [c | b] 
+mknod [-rR] [-F fmt] [-g gid] [-m mode] [-u uid] name [c | b]
       [driver | major] minor
-mknod [-rR] [-F fmt] [-g gid] [-m mode] [-u uid] name [c | b] 
+mknod [-rR] [-F fmt] [-g gid] [-m mode] [-u uid] name [c | b]
       major unit subunit
 mknod [-rR] [-g gid] [-m mode] [-u uid] name [c | b] number
 mknod [-rR] [-g gid] [-m mode] [-u uid] name p
@@ -1145,7 +1146,7 @@ cat: /etc/passwd: No such file or directory
 @findex CONFIGURE_SHELL_NO_COMMAND_CHROOT
 @findex CONFIGURE_SHELL_COMMAND_CHROOT
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_CHROOT} to have this
 command included. Additional to that you have to add one
@@ -1214,31 +1215,31 @@ The following is an example of how to use @code{chmod}:
 @example
 SHLL [/] # cd etc
 SHLL [/etc] # ls
--rw-r--r--   1   root   root         102 Jan 01 00:00 passwd 
--rw-r--r--   1   root   root          42 Jan 01 00:00 group 
--rw-r--r--   1   root   root          30 Jan 01 00:00 issue 
--rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net 
+-rw-r--r--   1   root   root         102 Jan 01 00:00 passwd
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
 4 files 202 bytes occupied
 SHLL [/etc] # chmod 0777 passwd
-SHLL [/etc] # ls 
--rwxrwxrwx   1   root   root         102 Jan 01 00:00 passwd 
--rw-r--r--   1   root   root          42 Jan 01 00:00 group 
--rw-r--r--   1   root   root          30 Jan 01 00:00 issue 
--rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net 
+SHLL [/etc] # ls
+-rwxrwxrwx   1   root   root         102 Jan 01 00:00 passwd
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
 4 files 202 bytes occupied
 SHLL [/etc] # chmod 0322 passwd
 SHLL [/etc] # ls
---wx-w--w-   1 nouser   root         102 Jan 01 00:00 passwd 
--rw-r--r--   1 nouser   root          42 Jan 01 00:00 group 
--rw-r--r--   1 nouser   root          30 Jan 01 00:00 issue 
--rw-r--r--   1 nouser   root          28 Jan 01 00:00 issue.net 
+--wx-w--w-   1 nouser   root         102 Jan 01 00:00 passwd
+-rw-r--r--   1 nouser   root          42 Jan 01 00:00 group
+-rw-r--r--   1 nouser   root          30 Jan 01 00:00 issue
+-rw-r--r--   1 nouser   root          28 Jan 01 00:00 issue.net
 4 files 202 bytes occupied
 SHLL [/etc] # chmod 0644 passwd
 SHLL [/etc] # ls
--rw-r--r--   1   root   root         102 Jan 01 00:00 passwd 
--rw-r--r--   1   root   root          42 Jan 01 00:00 group 
--rw-r--r--   1   root   root          30 Jan 01 00:00 issue 
--rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net 
+-rw-r--r--   1   root   root         102 Jan 01 00:00 passwd
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
 4 files 202 bytes occupied
 @end example
 
@@ -1247,7 +1248,7 @@ SHLL [/etc] # ls
 @findex CONFIGURE_SHELL_NO_COMMAND_CHMOD
 @findex CONFIGURE_SHELL_COMMAND_CHMOD
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_CHMOD} to have this
 command included.
@@ -1319,7 +1320,7 @@ tty:!:2:2:tty owner::/:/bin/false
 @findex CONFIGURE_SHELL_NO_COMMAND_CAT
 @findex CONFIGURE_SHELL_COMMAND_CAT
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_CAT} to have this
 command included.
@@ -1365,7 +1366,7 @@ rm file1 [file2 ... fileN]
 
 @subheading DESCRIPTION:
 
-This command deletes a name from the filesystem.  If the specified file name 
+This command deletes a name from the filesystem.  If the specified file name
 was the last link to a file and there are no @code{open} file descriptor
 references to that file, then it is deleted and the associated space in
 the file system is made available for subsequent use.
@@ -1403,7 +1404,7 @@ cat: tmpfile: No such file or directory
 @findex CONFIGURE_SHELL_NO_COMMAND_RM
 @findex CONFIGURE_SHELL_COMMAND_RM
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_RM} to have this
 command included.
@@ -1510,7 +1511,7 @@ $ cat /tftp/10.10.10.10/test.txt
 @findex CONFIGURE_SHELL_NO_COMMAND_MOUNT
 @findex CONFIGURE_SHELL_COMMAND_MOUNT
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_MOUNT} to have this
 command included.
@@ -1603,7 +1604,7 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_UNMOUNT
 @findex CONFIGURE_SHELL_COMMAND_UNMOUNT
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_UNMOUNT} to have this
 command included.
@@ -1672,7 +1673,7 @@ EXAMPLE_TBD
 @findex CONFIGURE_SHELL_NO_COMMAND_BLKSYNC
 @findex CONFIGURE_SHELL_COMMAND_BLKSYNC
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_BLKSYNC} to have this
 command included.
@@ -2069,7 +2070,7 @@ An asterisk (*) may not be used as a field width or precision.
 A byte count or field precision is required for each ``s'' con-
 version character (unlike the fprintf(3) default which prints the
 entire string if the precision is unspecified).
-@item 
+@item
 The conversion characters ``h'', ``l'', ``n'', ``p'' and ``q'' are not
 supported.
 @item
@@ -2243,7 +2244,7 @@ fdisk
 @findex CONFIGURE_SHELL_NO_COMMAND_FDISK
 @findex CONFIGURE_SHELL_COMMAND_FDISK
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_FDISK} to have this
 command included.
@@ -2268,7 +2269,7 @@ dir [dir]
 
 @subheading DESCRIPTION:
 
-This command is an alias or alternate name for the @code{ls}. 
+This command is an alias or alternate name for the @code{ls}.
 See @ref{File and Directory Commands ls - list files in the directory, ls}
 for more information.
 
@@ -2290,10 +2291,10 @@ drwxr-xr-x   1   root   root         536 Jan 01 00:00 dev/
 drwxr-xr-x   1   root   root        1072 Jan 01 00:00 etc/
 2 files 1608 bytes occupied
 SHLL [/] $ dir etc
--rw-r--r--   1   root   root         102 Jan 01 00:00 passwd 
--rw-r--r--   1   root   root          42 Jan 01 00:00 group 
--rw-r--r--   1   root   root          30 Jan 01 00:00 issue 
--rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net 
+-rw-r--r--   1   root   root         102 Jan 01 00:00 passwd
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
 4 files 202 bytes occupied
 @end example
 
@@ -2302,7 +2303,7 @@ SHLL [/] $ dir etc
 @findex CONFIGURE_SHELL_NO_COMMAND_DIR
 @findex CONFIGURE_SHELL_COMMAND_DIR
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_DIR} to have this
 command included.
@@ -2407,7 +2408,7 @@ SHLL [/] $ mkrfs /dev/fdda
 @findex CONFIGURE_SHELL_NO_COMMAND_MKRFS
 @findex CONFIGURE_SHELL_COMMAND_MKRFS
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_MKRFS} to have this
 command included.
@@ -2448,7 +2449,7 @@ extern rtems_shell_cmd_t rtems_shell_MKRFS_Command;
 @subheading SYNOPSYS:
 
 @example
-debugrfs [-hl] path command [options] 
+debugrfs [-hl] path command [options]
 @end example
 
 @subheading DESCRIPTION:
@@ -2476,7 +2477,7 @@ The commands are:
 Display the contents of the blocks from start to end.
 
 @item data
-Display the file system data and configuration. 
+Display the file system data and configuration.
 
 @item dir bno
 Process the block as a directory displaying the entries.
@@ -2519,7 +2520,7 @@ SHLL [/] $ debugrfs /c data
 @findex CONFIGURE_SHELL_NO_COMMAND_DEBUGRFS
 @findex CONFIGURE_SHELL_COMMAND_DEBUGRFS
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_DEBUGRFS} to have this
 command included.
@@ -2565,7 +2566,7 @@ cd directory
 
 @subheading DESCRIPTION:
 
-This command is an alias or alternate name for the @code{chdir}. 
+This command is an alias or alternate name for the @code{chdir}.
 See @ref{File and Directory Commands chdir - change the current directory, cd}
 for more information.
 
@@ -2601,7 +2602,7 @@ SHLL [/] $ pwd
 @findex CONFIGURE_SHELL_NO_COMMAND_CD
 @findex CONFIGURE_SHELL_COMMAND_CD
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_CD} to have this
 command included.
@@ -2678,7 +2679,7 @@ Filesystem     Size             Used   Available       Use%     Mounted on
 @findex CONFIGURE_SHELL_NO_COMMAND_DF
 @findex CONFIGURE_SHELL_COMMAND_DF
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_DF} to have this
 command included.
@@ -2708,3 +2709,74 @@ following prototype:
 extern rtems_shell_cmd_t rtems_shell_DF_Command;
 @end example
 
+@c
+@c
+@c
+@page
+@subsection md5 - compute the Md5 hash of a file or list of files
+
+@pgindex md5
+
+@subheading SYNOPSYS:
+
+@example
+md5 <files>
+@end example
+
+@subheading DESCRIPTION:
+
+This command prints the MD5 of a file. You can provide one or more
+files on the command line and a hash for each file is printed in a
+single line of output.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+NONE
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{md5}:
+
+@example
+SHLL [/] $ md5 shell-init
+MD5 (shell-init) = 43b4d2e71b47db79eae679a2efeacf31
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_MD5
+@findex CONFIGURE_SHELL_COMMAND_MD5
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_MD5} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_MD5} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_md5
+
+The @code{df} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_main_md5(
+  int argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{md5} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_MD5_Command;
+@end example
