@@ -84,6 +84,7 @@ extern rtems_shell_cmd_t rtems_shell_MALLOC_INFO_Command;
   extern rtems_shell_cmd_t rtems_shell_IFCONFIG_Command;
   extern rtems_shell_cmd_t rtems_shell_ROUTE_Command;
   extern rtems_shell_cmd_t rtems_shell_NETSTATS_Command;
+  extern rtems_shell_cmd_t rtems_shell_PING_Command;
 #endif
 
 extern rtems_shell_cmd_t *rtems_shell_Initial_commands[];
@@ -440,6 +441,12 @@ extern rtems_shell_alias_t *rtems_shell_Initial_aliases[];
            !defined(CONFIGURE_SHELL_NO_COMMAND_NETSTATS)) || \
           defined(CONFIGURE_SHELL_COMMAND_NETSTATS)
         &rtems_shell_NETSTATS_Command,
+      #endif
+
+      #if (defined(CONFIGURE_SHELL_COMMANDS_ALL_NETWORKING) && \
+           !defined(CONFIGURE_SHELL_NO_COMMAND_PING)) || \
+          defined(CONFIGURE_SHELL_COMMAND_PING)
+        &rtems_shell_PING_Command,
       #endif
     #endif
 
