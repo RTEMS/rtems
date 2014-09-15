@@ -149,6 +149,16 @@ jump_to_c_handler:
   l.sw    0(r6), r5
   l.sw    0(r8), r7
 
+  /* Check if _ISR_Nest_level > 0 */
+  l.sfgtui r5, 0
+  l.bf exception_frame_restore
+  l.nop
+
+  /* Check if _Thread_Dispatch_disable_level > 0 */
+  l.sfgtui r7, 0
+  l.bf exception_frame_restore
+  l.nop
+
   /* Check if dispatch needed */
   l.movhi r31, hi(DISPATCH_NEEDED)
   l.ori   r31, r31, lo(DISPATCH_NEEDED)
