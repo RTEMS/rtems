@@ -29,7 +29,8 @@ void _CPU_Context_Initialize(
   void *tls_area
 )
 {
-  uint32_t stack = (uint32_t) stack_area_begin;
+  /* Decrement 200 byte to account for red-zone */
+  uint32_t stack = ((uint32_t) stack_area_begin) - 200;
   uint32_t sr;
 
   sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);

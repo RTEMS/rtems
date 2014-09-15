@@ -16,7 +16,7 @@
  */
 #define EXCEPTION_SETUP(vector) \
   l.nop   ;\
-  l.addi  r1, r1, -4 ;\
+  l.addi  r1, r1, -200 ;\
   l.sw    0(r1), r3; \
   l.addi  r3, r0, vector; \
   l.j     _ISR_Handler; \

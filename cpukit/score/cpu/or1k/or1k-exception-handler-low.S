@@ -93,7 +93,7 @@ PUBLIC(_ISR_Handler)
   l.sw    0(r8), r7
 
   /* Save interrupted task stack pointer */
-  l.addi r4, r1, 144
+  l.addi r4, r1, 340
   l.sw   4(r1), r4
 
   /* Save interrupted task r3 (first arg) value */
@@ -118,7 +118,7 @@ PUBLIC(_ISR_Handler)
   /* Do not switch stacks if we are in a nested interrupt. At
    * this point r5 should be holding ISR_NEST_LEVEL value.
    */
-  l.sfgtui r5, 2
+  l.sfgtui r5, 1
   l.bf jump_to_c_handler
   l.nop
 
@@ -133,6 +133,21 @@ jump_to_c_handler:
 
   /* Switch back to the interrupted task stack */
   l.add r1, r14, r0
+
+  /* Decrement nesting level */
+  l.movhi r6, hi(ISR_NEST_LEVEL)
+  l.ori   r6, r6, lo(ISR_NEST_LEVEL)
+
+  /* Enable multitasking */
+  l.movhi r8, hi(THREAD_DISPATCH_DISABLE_LEVEL)
+  l.ori   r8, r8, lo(THREAD_DISPATCH_DISABLE_LEVEL)
+
+  l.lwz   r5, 0(r6)
+  l.lwz   r7, 0(r8)
+  l.addi  r5, r5, -1
+  l.addi  r7, r7, -1
+  l.sw    0(r6), r5
+  l.sw    0(r8), r7
 
   /* Check if dispatch needed */
   l.movhi r31, hi(DISPATCH_NEEDED)
@@ -162,21 +177,6 @@ jump_to_c_handler:
   /* ESR */
   l.lwz  r13,  136(r1)
   l.mtspr r0, r13, CPU_OR1K_SPR_ESR0
-
-  /* Increment nesting level */
-  l.movhi r6, hi(ISR_NEST_LEVEL)
-  l.ori   r6, r6, lo(ISR_NEST_LEVEL)
-
-  /* Disable multitasking */
-  l.movhi r8, hi(THREAD_DISPATCH_DISABLE_LEVEL)
-  l.ori   r8, r8, lo(THREAD_DISPATCH_DISABLE_LEVEL)
-
-  l.lwz   r5, 0(r6)
-  l.lwz   r7, 0(r8)
-  l.addi  r5, r5, -1
-  l.addi  r7, r7, -1
-  l.sw    0(r6), r5
-  l.sw    0(r8), r7
 
   l.lwz  r2,  8(r1)
   l.lwz  r3,  12(r1)
@@ -209,9 +209,11 @@ jump_to_c_handler:
   l.lwz  r30, 120(r1)
   l.lwz  r31, 124(r1)
 
+  /* Unwind exception frame */
   l.addi r1, r1, 140
 
-  l.addi r1, r1, 4
+  /* Red-zone */
+  l.addi r1, r1, 200
 
   l.rfe
   l.nop
