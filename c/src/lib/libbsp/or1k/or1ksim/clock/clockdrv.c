@@ -27,6 +27,9 @@
 #define TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT     0x09ED9
 #define OR1KSIM_CLOCK_CYCLE_TIME_NANOSECONDS  10
 
+/* CPU counter */
+static CPU_Counter_ticks cpu_counter_ticks;
+
 /* This prototype is added here to Avoid warnings */
 void Clock_isr(void *arg);
 
@@ -46,6 +49,8 @@ static void or1ksim_clock_at_tick(void)
 
   _OR1K_mtspr(CPU_OR1K_SPR_TTMR, TTMR);
   _OR1K_mtspr(CPU_OR1K_SPR_TTCR, 0);
+
+  cpu_counter_ticks += TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT;
 }
 
 static void or1ksim_clock_handler_install(proc_ptr new_isr, proc_ptr old_isr)
@@ -81,6 +86,9 @@ static void or1ksim_clock_initialize(void)
 
   _OR1K_mtspr(CPU_OR1K_SPR_TTMR, TTMR);
   _OR1K_mtspr(CPU_OR1K_SPR_TTCR, 0);
+
+  /* Initialize CPU Counter */
+  cpu_counter_ticks = 0;
 }
 
  static void or1ksim_clock_cleanup(void)
@@ -107,6 +115,22 @@ static uint32_t or1ksim_clock_nanoseconds_since_last_tick(void)
   TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT * OR1KSIM_CLOCK_CYCLE_TIME_NANOSECONDS;
 }
 
+CPU_Counter_ticks _CPU_Counter_read(void)
+{
+  uint32_t ticks_since_last_timer_interrupt;
+
+  ticks_since_last_timer_interrupt = _OR1K_mfspr(CPU_OR1K_SPR_TTCR);
+
+  return cpu_counter_ticks + ticks_since_last_timer_interrupt;
+}
+
+CPU_Counter_ticks _CPU_Counter_difference(
+  CPU_Counter_ticks second,
+  CPU_Counter_ticks first
+)
+{
+  return second - first;
+}
 #define Clock_driver_support_at_tick() or1ksim_clock_at_tick()
 
 #define Clock_driver_support_initialize_hardware() or1ksim_clock_initialize()
