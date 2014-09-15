@@ -11,32 +11,33 @@ The RTEMS shell has the following file and directory commands:
 
 @itemize @bullet
 
-@item @code{umask} - Set file mode creation mask
+@item @code{blksync} - sync the block driver
+@item @code{cat} - display file contents
+@item @code{cd} - alias for chdir
+@item @code{chdir} - change the current directory
+@item @code{chmod} - change permissions of a file
+@item @code{chroot} - change the root directory
 @item @code{cp} - copy files
+@item @code{dd} - format disks
+@item @code{debugrfs} - debug RFS file system
+@item @code{df} - display file system disk space usage
+@item @code{dir} - alias for ls
+@item @code{fdisk} - format disks
+@item @code{hexdump} - format disks
+@item @code{ln} - make links
+@item @code{ls} - list files in the directory
+@item @code{md5} - display file system disk space usage
+@item @code{mkdir} - create a directory
+@item @code{mkdos} - DOSFS disk format
+@item @code{mknod} - make device special file
+@item @code{mkrfs} - format RFS file system
+@item @code{mount} - mount disk
 @item @code{mv} - move files
 @item @code{pwd} - print work directory
-@item @code{ls} - list files in the directory
-@item @code{chdir} - change the current directory
-@item @code{mkdir} - create a directory
 @item @code{rmdir} - remove empty directories
-@item @code{ln} - make links
-@item @code{mknod} - make device special file
-@item @code{chroot} - change the root directory
-@item @code{chmod} - change permissions of a file
-@item @code{cat} - display file contents
-@item @code{msdosfmt} - format disk
 @item @code{rm} - remove files
-@item @code{mount} - mount disk
+@item @code{umask} - Set file mode creation mask
 @item @code{unmount} - unmount disk
-@item @code{blksync} - sync the block driver
-@item @code{dd} - format disks
-@item @code{hexdump} - format disks
-@item @code{fdisk} - format disks
-@item @code{dir} - alias for ls
-@item @code{mkrfs} - format RFS file system
-@item @code{cd} - alias for chdir
-@item @code{df} - display file system disk space usage
-@item @code{md5} - display file system disk space usage
 
 @end itemize
 
@@ -51,20 +52,19 @@ command as well as providing an example usage.
 @c
 @c
 @page
-@subsection umask - set file mode creation mask
+@subsection blksync - sync the block driver
 
-@pgindex umask
+@pgindex blksync
 
 @subheading SYNOPSYS:
 
 @example
-umask [new_umask]
+blksync driver
 @end example
 
 @subheading DESCRIPTION:
 
-This command sets the user file creation mask to @code{new_umask}.  The
-argument @code{new_umask} may be octal, hexadecimal, or decimal.
+This command XXX
 
 @subheading EXIT STATUS:
 
@@ -72,54 +72,462 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-This command does not currently support symbolic mode masks.
+NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use @code{umask}:
+The following is an example of how to use @code{blksync}:
 
 @example
-SHLL [/] $ umask
-022
-SHLL [/] $ umask 0666
-0666
-SHLL [/] $ umask
-0666
+EXAMPLE_TBD
 @end example
 
 @subheading CONFIGURATION:
 
-@findex CONFIGURE_SHELL_NO_COMMAND_UMASK
-@findex CONFIGURE_SHELL_COMMAND_UMASK
+@findex CONFIGURE_SHELL_NO_COMMAND_BLKSYNC
+@findex CONFIGURE_SHELL_COMMAND_BLKSYNC
 
 This command is included in the default shell command set.
 When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_UMASK} to have this
+@code{CONFIGURE_SHELL_COMMAND_BLKSYNC} to have this
 command included.
 
 This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_UMASK} when all
+defining @code{CONFIGURE_SHELL_NO_COMMAND_BLKSYNC} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
-@findex rtems_shell_rtems_main_umask
+@findex rtems_shell_rtems_main_blksync
 
-The @code{umask} is implemented by a C language function
+The @code{blksync} is implemented by a C language function
 which has the following prototype:
 
 @example
-int rtems_shell_rtems_main_umask(
+int rtems_shell_rtems_main_blksync(
   int    argc,
   char **argv
 );
 @end example
 
-The configuration structure for the @code{umask} has the
+The configuration structure for the @code{blksync} has the
 following prototype:
 
 @example
-extern rtems_shell_cmd_t rtems_shell_UMASK_Command;
+extern rtems_shell_cmd_t rtems_shell_BLKSYNC_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection cat - display file contents
+
+@pgindex cat
+
+@subheading SYNOPSYS:
+
+@example
+cat file1 [file2 .. fileN]
+@end example
+
+@subheading DESCRIPTION:
+
+This command displays the contents of the specified files.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+It is possible to read the input from a device file using @code{cat}.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{cat}:
+
+@example
+SHLL [/] # cat /etc/passwd
+root:*:0:0:root::/:/bin/sh
+rtems:*:1:1:RTEMS Application::/:/bin/sh
+tty:!:2:2:tty owner::/:/bin/false
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_CAT
+@findex CONFIGURE_SHELL_COMMAND_CAT
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_CAT} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_CAT} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_cat
+
+The @code{cat} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_cat(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{cat} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_CAT_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection cd - alias for chdir
+
+@pgindex cd
+
+@subheading SYNOPSYS:
+
+@example
+cd directory
+@end example
+
+@subheading DESCRIPTION:
+
+This command is an alias or alternate name for the @code{chdir}.
+See @ref{File and Directory Commands chdir - change the current directory, cd}
+for more information.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+NONE
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{cd}:
+
+@example
+SHLL [/] $ cd etc
+SHLL [/etc] $ cd /
+SHLL [/] $ cd /etc
+SHLL [/etc] $ pwd
+/etc
+SHLL [/etc] $ cd /
+SHLL [/] $ pwd
+/
+SHLL [/] $ cd etc
+SHLL [/etc] $ cd ..
+SHLL [/] $ pwd
+/
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_CD
+@findex CONFIGURE_SHELL_COMMAND_CD
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_CD} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_CD} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_cd
+
+The @code{cd} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_cd(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{cd} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_CD_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection chdir - change the current directory
+
+@pgindex chdir
+
+@subheading SYNOPSYS:
+
+@example
+chdir [dir]
+@end example
+
+@subheading DESCRIPTION:
+
+This command is used to change the current working directory to
+the specified directory.  If no arguments are given, the current
+working directory will be changed to @code{/}.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+NONE
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{chdir}:
+
+@example
+SHLL [/] $ pwd
+/
+SHLL [/] $ chdir etc
+SHLL [/etc] $ pwd
+/etc
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_CHDIR
+@findex CONFIGURE_SHELL_COMMAND_CHDIR
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_CHDIR} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_CHDIR} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_chdir
+
+The @code{chdir} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_chdir(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{chdir} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_CHDIR_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection chmod - change permissions of a file
+
+@pgindex chmod
+
+@subheading SYNOPSYS:
+
+@example
+chmod permissions file1 [file2...]
+@end example
+
+@subheading DESCRIPTION:
+
+This command changes the permissions on the files specified to the
+indicated @code{permissions}.  The permission values are POSIX based
+with owner, group, and world having individual read, write, and
+executive permission bits.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+The @code{chmod} command only takes numeric representations of
+the permissions.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{chmod}:
+
+@example
+SHLL [/] # cd etc
+SHLL [/etc] # ls
+-rw-r--r--   1   root   root         102 Jan 01 00:00 passwd
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
+4 files 202 bytes occupied
+SHLL [/etc] # chmod 0777 passwd
+SHLL [/etc] # ls
+-rwxrwxrwx   1   root   root         102 Jan 01 00:00 passwd
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
+4 files 202 bytes occupied
+SHLL [/etc] # chmod 0322 passwd
+SHLL [/etc] # ls
+--wx-w--w-   1 nouser   root         102 Jan 01 00:00 passwd
+-rw-r--r--   1 nouser   root          42 Jan 01 00:00 group
+-rw-r--r--   1 nouser   root          30 Jan 01 00:00 issue
+-rw-r--r--   1 nouser   root          28 Jan 01 00:00 issue.net
+4 files 202 bytes occupied
+SHLL [/etc] # chmod 0644 passwd
+SHLL [/etc] # ls
+-rw-r--r--   1   root   root         102 Jan 01 00:00 passwd
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
+4 files 202 bytes occupied
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_CHMOD
+@findex CONFIGURE_SHELL_COMMAND_CHMOD
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_CHMOD} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_CHMOD} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_chmod
+
+The @code{chmod} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_chmod(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{chmod} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_CHMOD_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection chroot - change the root directory
+
+@pgindex chroot
+
+@subheading SYNOPSYS:
+
+@example
+chroot [dir]
+@end example
+
+@subheading DESCRIPTION:
+
+This command changes the root directory to @code{dir} for subsequent
+commands.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+The destination directory @code{dir} must exist.
+
+@subheading NOTES:
+
+NONE
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{chroot}
+and the impact it has on the environment for subsequent
+command invocations:
+
+@example
+SHLL [/] $ cat passwd
+cat: passwd: No such file or directory
+SHLL [/] $ chroot etc
+SHLL [/] $ cat passwd
+root:*:0:0:root::/:/bin/sh
+rtems:*:1:1:RTEMS Application::/:/bin/sh
+tty:!:2:2:tty owner::/:/bin/false
+SHLL [/] $ cat /etc/passwd
+cat: /etc/passwd: No such file or directory
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_CHROOT
+@findex CONFIGURE_SHELL_COMMAND_CHROOT
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_CHROOT} to have this
+command included. Additional to that you have to add one
+POSIX key value pair for each thread where you want to use
+the command.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_CHROOT} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_chroot
+
+The @code{chroot} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_chroot(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{chroot} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_CHROOT_Command;
 @end example
 
 @c
@@ -310,1398 +718,6 @@ extern rtems_shell_cmd_t rtems_shell_CP_Command;
 
 The implementation and portions of the documentation for this
 command are from NetBSD 4.0.
-
-@c
-@c
-@c
-@page
-@subsection mv - move files
-
-@pgindex mv
-
-@subheading SYNOPSYS:
-
-@example
-mv [-fiv] source_file target_file
-mv [-fiv] source_file... target_file
-@end example
-
-@subheading DESCRIPTION:
-
-In its first form, the mv utility renames the file named by the source
-operand to the destination path named by the target operand.  This
-form is assumed when the last operand does not name an already
-existing directory.
-
-In its second form, mv moves each file named by a source operand to a
-destination file in the existing directory named by the directory
-operand.  The destination path for each operand is the pathname
-produced by the concatenation of the last operand, a slash, and the
-final pathname component of the named file.
-
-The following options are available:
-
-@table @b
-@item -f
-Do not prompt for confirmation before overwriting the destination
-path.
-
-@item -i
-Causes mv to write a prompt to standard error before moving a file
-that would overwrite an existing file.  If the response from the
-standard input begins with the character 'y', the move is attempted.
-
-@item -v
-Cause mv to be verbose, showing files as they are processed.
-
-@end table
-
-The last of any -f or -i options is the one which affects mv's
-behavior.
-
-It is an error for any of the source operands to specify a nonexistent
-file or directory.
-
-It is an error for the source operand to specify a directory if the
-target exists and is not a directory.
-
-If the destination path does not have a mode which permits writing, mv
-prompts the user for confirmation as specified for the -i option.
-
-Should the @b{rename} call fail because source and target are on
-different file systems, @code{mv} will remove the destination file,
-copy the source file to the destination, and then remove the source.
-The effect is roughly equivalent to:
-
-@example
-rm -f destination_path && \
-cp -PRp source_file destination_path && \
-rm -rf source_file
-@end example
-
-@subheading EXIT STATUS:
-
-The @code{mv} utility exits 0 on success, and >0 if an error occurs.
-
-@subheading NOTES:
-
-NONE
-
-@subheading EXAMPLES:
-
-@example
-SHLL [/] mv /dev/console /dev/con1
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_MV
-@findex CONFIGURE_SHELL_COMMAND_MV
-
-This command is included in the default shell command set.  When
-building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_MV} to have this command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_MV} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_mv
-
-The @code{mv} command is implemented by a C language function which
-has the following prototype:
-
-@example
-int rtems_shell_rtems_main_mv(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{mv} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_MV_Command;
-@end example
-
-@subheading ORIGIN:
-
-The implementation and portions of the documentation for this command
-are from NetBSD 4.0.
-
-@c
-@c
-@c
-@page
-@subsection pwd - print work directory
-
-@pgindex pwd
-
-@subheading SYNOPSYS:
-
-@example
-pwd
-@end example
-
-@subheading DESCRIPTION:
-
-This command prints the fully qualified filename of the current
-working directory.
-
-@subheading EXIT STATUS:
-
-This command returns 0 on success and non-zero if an error is encountered.
-
-@subheading NOTES:
-
-NONE
-
-@subheading EXAMPLES:
-
-The following is an example of how to use @code{pwd}:
-
-@example
-SHLL [/] $ pwd
-/
-SHLL [/] $ cd dev
-SHLL [/dev] $ pwd
-/dev
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_PWD
-@findex CONFIGURE_SHELL_COMMAND_PWD
-
-This command is included in the default shell command set.
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_PWD} to have this
-command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_PWD} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_pwd
-
-The @code{pwd} is implemented by a C language function
-which has the following prototype:
-
-@example
-int rtems_shell_rtems_main_pwd(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{pwd} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_PWD_Command;
-@end example
-
-@c
-@c
-@c
-@page
-@subsection ls - list files in the directory
-
-@pgindex ls
-
-@subheading SYNOPSYS:
-
-@example
-ls [dir]
-@end example
-
-@subheading DESCRIPTION:
-
-This command displays the contents of the specified directory.  If
-no arguments are given, then it displays the contents of the current
-working directory.
-
-@subheading EXIT STATUS:
-
-This command returns 0 on success and non-zero if an error is encountered.
-
-@subheading NOTES:
-
-This command currently does not display information on a set of
-files like the POSIX ls(1).  It only displays the contents of
-entire directories.
-
-@subheading EXAMPLES:
-
-The following is an example of how to use @code{ls}:
-
-@example
-SHLL [/] $ ls
-drwxr-xr-x   1   root   root         536 Jan 01 00:00 dev/
-drwxr-xr-x   1   root   root        1072 Jan 01 00:00 etc/
-2 files 1608 bytes occupied
-SHLL [/] $ ls etc
--rw-r--r--   1   root   root         102 Jan 01 00:00 passwd
--rw-r--r--   1   root   root          42 Jan 01 00:00 group
--rw-r--r--   1   root   root          30 Jan 01 00:00 issue
--rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
-4 files 202 bytes occupied
-SHLL [/] $ ls dev etc
--rwxr-xr-x   1  rtems   root           0 Jan 01 00:00 console
--rwxr-xr-x   1   root   root           0 Jan 01 00:00 console_b
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_LS
-@findex CONFIGURE_SHELL_COMMAND_LS
-
-This command is included in the default shell command set.
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_LS} to have this
-command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_LS} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_ls
-
-The @code{ls} is implemented by a C language function
-which has the following prototype:
-
-@example
-int rtems_shell_rtems_main_ls(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{ls} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_LS_Command;
-@end example
-
-@c
-@c
-@c
-@page
-@subsection chdir - change the current directory
-
-@pgindex chdir
-
-@subheading SYNOPSYS:
-
-@example
-chdir [dir]
-@end example
-
-@subheading DESCRIPTION:
-
-This command is used to change the current working directory to
-the specified directory.  If no arguments are given, the current
-working directory will be changed to @code{/}.
-
-@subheading EXIT STATUS:
-
-This command returns 0 on success and non-zero if an error is encountered.
-
-@subheading NOTES:
-
-NONE
-
-@subheading EXAMPLES:
-
-The following is an example of how to use @code{chdir}:
-
-@example
-SHLL [/] $ pwd
-/
-SHLL [/] $ chdir etc
-SHLL [/etc] $ pwd
-/etc
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_CHDIR
-@findex CONFIGURE_SHELL_COMMAND_CHDIR
-
-This command is included in the default shell command set.
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_CHDIR} to have this
-command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_CHDIR} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_chdir
-
-The @code{chdir} is implemented by a C language function
-which has the following prototype:
-
-@example
-int rtems_shell_rtems_main_chdir(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{chdir} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_CHDIR_Command;
-@end example
-
-@c
-@c
-@c
-@page
-@subsection mkdir - create a directory
-
-@pgindex mkdir
-
-@subheading SYNOPSYS:
-
-@example
-mkdir  dir [dir1 .. dirN]
-@end example
-
-@subheading DESCRIPTION:
-
-This command creates the set of directories in the order they
-are specified on the command line.  If an error is encountered
-making one of the directories, the command will continue to
-attempt to create the remaining directories on the command line.
-
-@subheading EXIT STATUS:
-
-This command returns 0 on success and non-zero if an error is encountered.
-
-@subheading NOTES:
-
-If this command is invoked with no arguments, nothing occurs.
-
-The user must have sufficient permissions to create the directory.
-For the @code{fileio} test provided with RTEMS, this means the user
-must login as @code{root} not @code{rtems}.
-
-@subheading EXAMPLES:
-
-The following is an example of how to use @code{mkdir}:
-
-@example
-SHLL [/] # ls
-drwxr-xr-x   1   root   root         536 Jan 01 00:00 dev/
-drwxr-xr-x   1   root   root        1072 Jan 01 00:00 etc/
-2 files 1608 bytes occupied
-SHLL [/] # mkdir joel
-SHLL [/] # ls joel
-0 files 0 bytes occupied
-SHLL [/] # cp etc/passwd joel
-SHLL [/] # ls joel
--rw-r--r--   1   root   root         102 Jan 01 00:02 passwd
-1 files 102 bytes occupied
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_MKDIR
-@findex CONFIGURE_SHELL_COMMAND_MKDIR
-
-This command is included in the default shell command set.
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_MKDIR} to have this
-command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_MKDIR} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_mkdir
-
-The @code{mkdir} is implemented by a C language function
-which has the following prototype:
-
-@example
-int rtems_shell_rtems_main_mkdir(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{mkdir} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_MKDIR_Command;
-@end example
-
-@c
-@c
-@c
-@page
-@subsection rmdir - remove empty directories
-
-@pgindex rmdir
-
-@subheading SYNOPSYS:
-
-@example
-rmdir  [dir1 .. dirN]
-@end example
-
-@subheading DESCRIPTION:
-
-This command removes the specified set of directories.  If no
-directories are provided on the command line, no actions are taken.
-
-@subheading EXIT STATUS:
-
-This command returns 0 on success and non-zero if an error is encountered.
-
-@subheading NOTES:
-
-This command is a implemented using the @code{rmdir(2)} system
-call and all reasons that call may fail apply to this command.
-
-@subheading EXAMPLES:
-
-The following is an example of how to use @code{rmdir}:
-
-@example
-SHLL [/] # mkdir joeldir
-SHLL [/] # rmdir joeldir
-SHLL [/] # ls joeldir
-joeldir: No such file or directory.
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_RMDIR
-@findex CONFIGURE_SHELL_COMMAND_RMDIR
-
-This command is included in the default shell command set.
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_RMDIR} to have this
-command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_RMDIR} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_rmdir
-
-The @code{rmdir} is implemented by a C language function
-which has the following prototype:
-
-@example
-int rtems_shell_rtems_main_rmdir(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{rmdir} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_RMDIR_Command;
-@end example
-
-@c
-@c
-@c
-@page
-@subsection ln - make links
-
-@pgindex ln
-
-@subheading SYNOPSYS:
-
-@example
-ln [-fhinsv] source_file [target_file]
-ln [-fhinsv] source_file ... target_dir
-@end example
-
-@subheading DESCRIPTION:
-
-The ln utility creates a new directory entry (linked file) which has
-the same modes as the original file.  It is useful for maintaining
-multiple copies of a file in many places at once without using up
-storage for the ``copies''; instead, a link ``points'' to the original
-copy.  There are two types of links; hard links and symbolic links.
-How a link ``points'' to a file is one of the differences between a
-hard or symbolic link.
-
-The options are as follows:
-@table @b
-@item -f
-Unlink any already existing file, permitting the link to occur.
-
-@item -h
-If the target_file or target_dir is a symbolic link, do not follow it.
-This is most useful with the -f option, to replace a symlink which may
-point to a directory.
-
-@item -i
-Cause ln to write a prompt to standard error if the target file
-exists.  If the response from the standard input begins with the
-character `y' or `Y', then unlink the target file so that the link may
-occur.  Otherwise, do not attempt the link.  (The -i option overrides
-any previous -f options.)
-
-@item -n
-Same as -h, for compatibility with other ln implementations.
-
-@item -s
-Create a symbolic link.
-
-@item -v
-Cause ln to be verbose, showing files as they are processed.
-@end table
-
-By default ln makes hard links.  A hard link to a file is
-indistinguishable from the original directory entry; any changes to a
-file are effective independent of the name used to reference the file.
-Hard links may not normally refer to directories and may not span file
-systems.
-
-A symbolic link contains the name of the file to which it is linked.
-The referenced file is used when an @i{open} operation is performed on
-the link.  A @i{stat} on a symbolic link will return the linked-to
-file; an @i{lstat} must be done to obtain information about the link.
-The @i{readlink} call may be used to read the contents of a symbolic
-link.  Symbolic links may span file systems and may refer to
-directories.
-
-Given one or two arguments, ln creates a link to an existing file
-source_file.  If target_file is given, the link has that name;
-target_file may also be a directory in which to place the link;
-otherwise it is placed in the current directory.  If only the
-directory is specified, the link will be made to the last component of
-source_file.
-
-Given more than two arguments, ln makes links in target_dir to all the
-named source files.  The links made will have the same name as the
-files being linked to.
-
-@subheading EXIT STATUS:
-
-The @code{ln} utility exits 0 on success, and >0 if an error occurs.
-
-@subheading NOTES:
-
-NONE
-
-@subheading EXAMPLES:
-
-@example
-SHLL [/] ln -s /dev/console /dev/con1
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_LN
-@findex CONFIGURE_SHELL_COMMAND_LN
-
-This command is included in the default shell command set.  When
-building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_LN} to have this command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_LN} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_ln
-
-The @code{ln} command is implemented by a C language function which
-has the following prototype:
-
-@example
-int rtems_shell_rtems_main_ln(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{ln} has the following
-prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_LN_Command;
-@end example
-
-@subheading ORIGIN:
-
-The implementation and portions of the documentation for this command
-are from NetBSD 4.0.
-
-@c
-@c
-@c
-@page
-@subsection mknod - make device special file
-
-@pgindex mknod
-
-@subheading SYNOPSYS:
-
-@example
-mknod [-rR] [-F fmt] [-g gid] [-m mode] [-u uid] name [c | b]
-      [driver | major] minor
-mknod [-rR] [-F fmt] [-g gid] [-m mode] [-u uid] name [c | b]
-      major unit subunit
-mknod [-rR] [-g gid] [-m mode] [-u uid] name [c | b] number
-mknod [-rR] [-g gid] [-m mode] [-u uid] name p
-@end example
-
-@subheading DESCRIPTION:
-
-The mknod command creates device special files, or fifos.  Normally
-the shell script /dev/MAKEDEV is used to create special files for
-commonly known devices; it executes mknod with the appropriate
-arguments and can make all the files required for the device.
-
-To make nodes manually, the arguments are:
-
-@table @b
-@item -r
-Replace an existing file if its type is incorrect.
-
-@item -R
-Replace an existing file if its type is incorrect.  Correct the
-mode, user and group.
-
-@item -g gid
-Specify the group for the device node.  The gid operand may be a
-numeric group ID or a group name.  If a group name is also a numeric
-group ID, the operand is used as a group name.  Precede a numeric
-group ID with a # to stop it being treated as a name.
-
-@item -m mode
-Specify the mode for the device node.  The mode may be absolute or
-symbolic, see @i{chmod}.
-
-@item -u uid
-Specify the user for the device node.  The uid operand may be a
-numeric user ID or a user name.  If a user name is also a numeric user
-ID, the operand is used as a user name.  Precede a numeric user ID
-with a # to stop it being treated as a name.
-
-@item name
-Device name, for example ``tty'' for a termios serial device or ``hd''
-for a disk.
-
-@item  b | c | p
-Type of device.  If the device is a block type device such as a tape
-or disk drive which needs both cooked and raw special files, the type
-is b.  All other devices are character type devices, such as terminal
-and pseudo devices, and are type c.  Specifying p creates fifo files.
-
-@item driver | major
-The major device number is an integer number which tells the kernel
-which device driver entry point to use.  If the device driver is
-configured into the current kernel it may be specified by driver name
-or major number.
-
-@item minor
-The minor device number tells the kernel which one of several similar
-devices the node corresponds to; for example, it may be a specific
-serial port or pty.
-
-@item unit and subunit
-The unit and subunit numbers select a subset of a device; for example,
-the unit may specify a particular disk, and the subunit a partition on
-that disk.  (Currently this form of specification is only supported
-by the bsdos format, for compatibility with the BSD/OS mknod).
-
-@item number
-A single opaque device number.  Useful for netbooted computers which
-require device numbers packed in a format that isn't supported by
--F.
-@end table
-
-@subheading EXIT STATUS:
-
-The @code{mknod} utility exits 0 on success, and >0 if an error occurs.
-
-@subheading NOTES:
-
-NONE
-
-@subheading EXAMPLES:
-
-@example
-SHLL [/] mknod c 3 0 /dev/ttyS10
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_MKNOD
-@findex CONFIGURE_SHELL_COMMAND_MKNOD
-
-This command is included in the default shell command set.  When
-building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_MKNOD} to have this command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_MKNOD} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_mknod
-
-The @code{mknod} command is implemented by a C language function which
-has the following prototype:
-
-@example
-int rtems_shell_rtems_main_mknod(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{mknod} has the following
-prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_MKNOD_Command;
-@end example
-
-@subheading ORIGIN:
-
-The implementation and portions of the documentation for this command
-are from NetBSD 4.0.
-
-@c
-@c
-@c
-@page
-@subsection chroot - change the root directory
-
-@pgindex chroot
-
-@subheading SYNOPSYS:
-
-@example
-chroot [dir]
-@end example
-
-@subheading DESCRIPTION:
-
-This command changes the root directory to @code{dir} for subsequent
-commands.
-
-@subheading EXIT STATUS:
-
-This command returns 0 on success and non-zero if an error is encountered.
-
-The destination directory @code{dir} must exist.
-
-@subheading NOTES:
-
-NONE
-
-@subheading EXAMPLES:
-
-The following is an example of how to use @code{chroot}
-and the impact it has on the environment for subsequent
-command invocations:
-
-@example
-SHLL [/] $ cat passwd
-cat: passwd: No such file or directory
-SHLL [/] $ chroot etc
-SHLL [/] $ cat passwd
-root:*:0:0:root::/:/bin/sh
-rtems:*:1:1:RTEMS Application::/:/bin/sh
-tty:!:2:2:tty owner::/:/bin/false
-SHLL [/] $ cat /etc/passwd
-cat: /etc/passwd: No such file or directory
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_CHROOT
-@findex CONFIGURE_SHELL_COMMAND_CHROOT
-
-This command is included in the default shell command set.
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_CHROOT} to have this
-command included. Additional to that you have to add one
-POSIX key value pair for each thread where you want to use
-the command.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_CHROOT} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_chroot
-
-The @code{chroot} is implemented by a C language function
-which has the following prototype:
-
-@example
-int rtems_shell_rtems_main_chroot(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{chroot} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_CHROOT_Command;
-@end example
-
-@c
-@c
-@c
-@page
-@subsection chmod - change permissions of a file
-
-@pgindex chmod
-
-@subheading SYNOPSYS:
-
-@example
-chmod permissions file1 [file2...]
-@end example
-
-@subheading DESCRIPTION:
-
-This command changes the permissions on the files specified to the
-indicated @code{permissions}.  The permission values are POSIX based
-with owner, group, and world having individual read, write, and
-executive permission bits.
-
-@subheading EXIT STATUS:
-
-This command returns 0 on success and non-zero if an error is encountered.
-
-@subheading NOTES:
-
-The @code{chmod} command only takes numeric representations of
-the permissions.
-
-@subheading EXAMPLES:
-
-The following is an example of how to use @code{chmod}:
-
-@example
-SHLL [/] # cd etc
-SHLL [/etc] # ls
--rw-r--r--   1   root   root         102 Jan 01 00:00 passwd
--rw-r--r--   1   root   root          42 Jan 01 00:00 group
--rw-r--r--   1   root   root          30 Jan 01 00:00 issue
--rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
-4 files 202 bytes occupied
-SHLL [/etc] # chmod 0777 passwd
-SHLL [/etc] # ls
--rwxrwxrwx   1   root   root         102 Jan 01 00:00 passwd
--rw-r--r--   1   root   root          42 Jan 01 00:00 group
--rw-r--r--   1   root   root          30 Jan 01 00:00 issue
--rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
-4 files 202 bytes occupied
-SHLL [/etc] # chmod 0322 passwd
-SHLL [/etc] # ls
---wx-w--w-   1 nouser   root         102 Jan 01 00:00 passwd
--rw-r--r--   1 nouser   root          42 Jan 01 00:00 group
--rw-r--r--   1 nouser   root          30 Jan 01 00:00 issue
--rw-r--r--   1 nouser   root          28 Jan 01 00:00 issue.net
-4 files 202 bytes occupied
-SHLL [/etc] # chmod 0644 passwd
-SHLL [/etc] # ls
--rw-r--r--   1   root   root         102 Jan 01 00:00 passwd
--rw-r--r--   1   root   root          42 Jan 01 00:00 group
--rw-r--r--   1   root   root          30 Jan 01 00:00 issue
--rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
-4 files 202 bytes occupied
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_CHMOD
-@findex CONFIGURE_SHELL_COMMAND_CHMOD
-
-This command is included in the default shell command set.
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_CHMOD} to have this
-command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_CHMOD} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_chmod
-
-The @code{chmod} is implemented by a C language function
-which has the following prototype:
-
-@example
-int rtems_shell_rtems_main_chmod(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{chmod} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_CHMOD_Command;
-@end example
-
-@c
-@c
-@c
-@page
-@subsection cat - display file contents
-
-@pgindex cat
-
-@subheading SYNOPSYS:
-
-@example
-cat file1 [file2 .. fileN]
-@end example
-
-@subheading DESCRIPTION:
-
-This command displays the contents of the specified files.
-
-@subheading EXIT STATUS:
-
-This command returns 0 on success and non-zero if an error is encountered.
-
-@subheading NOTES:
-
-It is possible to read the input from a device file using @code{cat}.
-
-@subheading EXAMPLES:
-
-The following is an example of how to use @code{cat}:
-
-@example
-SHLL [/] # cat /etc/passwd
-root:*:0:0:root::/:/bin/sh
-rtems:*:1:1:RTEMS Application::/:/bin/sh
-tty:!:2:2:tty owner::/:/bin/false
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_CAT
-@findex CONFIGURE_SHELL_COMMAND_CAT
-
-This command is included in the default shell command set.
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_CAT} to have this
-command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_CAT} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_cat
-
-The @code{cat} is implemented by a C language function
-which has the following prototype:
-
-@example
-int rtems_shell_rtems_main_cat(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{cat} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_CAT_Command;
-@end example
-
-@c
-@c
-@c
-@page
-@subsection rm - remove files
-
-@pgindex rm
-
-@subheading SYNOPSYS:
-
-@example
-rm file1 [file2 ... fileN]
-@end example
-
-@subheading DESCRIPTION:
-
-This command deletes a name from the filesystem.  If the specified file name
-was the last link to a file and there are no @code{open} file descriptor
-references to that file, then it is deleted and the associated space in
-the file system is made available for subsequent use.
-
-If the filename specified was the last link to a file but there
-are open file descriptor references to it, then the file will
-remain in existence until the last file descriptor referencing
-it is closed.
-
-@subheading EXIT STATUS:
-
-This command returns 0 on success and non-zero if an error is encountered.
-
-@subheading NOTES:
-
-NONE
-
-@subheading EXAMPLES:
-
-The following is an example of how to use @code{rm}:
-
-@example
-SHLL [/] # cp /etc/passwd tmpfile
-SHLL [/] # cat tmpfile
-root:*:0:0:root::/:/bin/sh
-rtems:*:1:1:RTEMS Application::/:/bin/sh
-tty:!:2:2:tty owner::/:/bin/false
-SHLL [/] # rm tmpfile
-SHLL [/] # cat tmpfile
-cat: tmpfile: No such file or directory
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_RM
-@findex CONFIGURE_SHELL_COMMAND_RM
-
-This command is included in the default shell command set.
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_RM} to have this
-command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_RM} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_rm
-
-The @code{rm} is implemented by a C language function
-which has the following prototype:
-
-@example
-int rtems_shell_rtems_main_rm(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{rm} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_RM_Command;
-@end example
-
-@c
-@c
-@c
-@page
-@subsection mount - mount disk
-
-@pgindex mount
-
-@subheading SYNOPSYS:
-
-@example
-mount [-t fstype] [-r] [-L] device path
-@end example
-
-@subheading DESCRIPTION:
-
-The @code{mount} command will mount a block device to a mount point
-using the specified file system. The files systems are:
-
-@itemize @bullet
-@item msdos - MSDOS File System
-@item tftp  - TFTP Network File System
-@item ftp   - FTP Network File System
-@item nfs   - Network File System
-@item rfs   - RTEMS File System
-@end itemize
-
-When the file system type is 'msdos' or 'rfs' the driver is a "block
-device driver" node present in the file system. The driver is ignored
-with the 'tftp' and 'ftp' file systems. For the 'nfs' file system the
-driver is the 'host:/path' string that described NFS host and the
-exported file system path.
-
-@subheading EXIT STATUS:
-
-This command returns 0 on success and non-zero if an error is encountered.
-
-@subheading NOTES:
-
-The mount point must exist.
-
-The services offered by each file-system vary. For example you cannot list the
-directory of a TFTP file-system as this server is not provided in the TFTP
-protocol. You need to check each file-system's documentation for the services
-provided.
-
-@subheading EXAMPLES:
-
-Mount the Flash Disk driver to the '/fd' mount point:
-
-@example
-SHLL [/] $ mount -t msdos /dev/flashdisk0 /fd
-@end example
-
-Mount the NFS file system exported path 'bar' by host 'foo':
-
-@example
-$ mount -t nfs foo:/bar /nfs
-@end example
-
-Mount the TFTP file system on '/tftp':
-
-@example
-$ mount -t tftp /tftp
-@end example
-
-To access the TFTP files on server '10.10.10.10':
-
-@example
-$ cat /tftp/10.10.10.10/test.txt
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_MOUNT
-@findex CONFIGURE_SHELL_COMMAND_MOUNT
-
-This command is included in the default shell command set.
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_MOUNT} to have this
-command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_MOUNT} when all
-shell commands have been configured.
-
-The mount command includes references to file-system code. If you do not wish
-to include file-system that you do not use do not define the mount command
-support for that file-system. The file-system mount command defines are:
-
-@itemize @bullet
-@item msdos - CONFIGURE_SHELL_MOUNT_MSDOS
-@item tftp - CONFIGURE_SHELL_MOUNT_TFTP
-@item ftp - CONFIGURE_SHELL_MOUNT_FTP
-@item nfs - CONFIGURE_SHELL_MOUNT_NFS
-@item rfs - CONFIGURE_SHELL_MOUNT_RFS
-@end itemize
-
-An example configuration is:
-
-@example
-#define CONFIGURE_SHELL_MOUNT_MSDOS
-#ifdef RTEMS_NETWORKING
-  #define CONFIGURE_SHELL_MOUNT_TFTP
-  #define CONFIGURE_SHELL_MOUNT_FTP
-  #define CONFIGURE_SHELL_MOUNT_NFS
-  #define CONFIGURE_SHELL_MOUNT_RFS
-#endif
-@end example
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_mount
-
-The @code{mount} is implemented by a C language function
-which has the following prototype:
-
-@example
-int rtems_shell_rtems_main_mount(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{mount} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_MOUNT_Command;
-@end example
-
-@c
-@c
-@c
-@page
-@subsection unmount - unmount disk
-
-@pgindex unmount
-
-@subheading SYNOPSYS:
-
-@example
-unmount path
-@end example
-
-@subheading DESCRIPTION:
-
-This command unmounts the device at the specified @code{path}.
-
-@subheading EXIT STATUS:
-
-This command returns 0 on success and non-zero if an error is encountered.
-
-@subheading NOTES:
-
-TBD - Surely there must be some warnings to go here.
-
-@subheading EXAMPLES:
-
-The following is an example of how to use @code{unmount}:
-
-@example
-EXAMPLE_TBD
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_UNMOUNT
-@findex CONFIGURE_SHELL_COMMAND_UNMOUNT
-
-This command is included in the default shell command set.
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_UNMOUNT} to have this
-command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_UNMOUNT} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_unmount
-
-The @code{unmount} is implemented by a C language function
-which has the following prototype:
-
-@example
-int rtems_shell_rtems_main_unmount(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{unmount} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_UNMOUNT_Command;
-@end example
-
-@c
-@c
-@c
-@page
-@subsection blksync - sync the block driver
-
-@pgindex blksync
-
-@subheading SYNOPSYS:
-
-@example
-blksync driver
-@end example
-
-@subheading DESCRIPTION:
-
-This command XXX
-
-@subheading EXIT STATUS:
-
-This command returns 0 on success and non-zero if an error is encountered.
-
-@subheading NOTES:
-
-NONE
-
-@subheading EXAMPLES:
-
-The following is an example of how to use @code{blksync}:
-
-@example
-EXAMPLE_TBD
-@end example
-
-@subheading CONFIGURATION:
-
-@findex CONFIGURE_SHELL_NO_COMMAND_BLKSYNC
-@findex CONFIGURE_SHELL_COMMAND_BLKSYNC
-
-This command is included in the default shell command set.
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_BLKSYNC} to have this
-command included.
-
-This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_BLKSYNC} when all
-shell commands have been configured.
-
-@subheading PROGRAMMING INFORMATION:
-
-@findex rtems_shell_rtems_main_blksync
-
-The @code{blksync} is implemented by a C language function
-which has the following prototype:
-
-@example
-int rtems_shell_rtems_main_blksync(
-  int    argc,
-  char **argv
-);
-@end example
-
-The configuration structure for the @code{blksync} has the
-following prototype:
-
-@example
-extern rtems_shell_cmd_t rtems_shell_BLKSYNC_Command;
-@end example
 
 @c
 @c
@@ -1952,6 +968,303 @@ prototype:
 @example
 extern rtems_shell_cmd_t rtems_shell_DD_Command;
 @end example
+
+@c
+@c
+@c
+@page
+@subsection debugrfs - debug RFS file system
+
+@pgindex debugrfs
+
+@subheading SYNOPSYS:
+
+@example
+debugrfs [-hl] path command [options]
+@end example
+
+@subheading DESCRIPTION:
+
+The command provides debugging information for the RFS file system.
+
+The options are:
+
+@table @b
+@item -h
+Print a help message.
+
+@item -l
+List the commands.
+
+@item path
+Path to the mounted RFS file system. The file system has to be mounted
+to view to use this command.
+@end table
+
+The commands are:
+
+@table @b
+@item block start [end]
+Display the contents of the blocks from start to end.
+
+@item data
+Display the file system data and configuration.
+
+@item dir bno
+Process the block as a directory displaying the entries.
+
+@item group start [end]
+Display the group data from the start group to the end group.
+
+@item inode [-aef] [start] [end]
+Display the inodes between start and end. If no start and end is
+provides all inodes are displayed.
+
+@table @b
+@item -a
+Display all inodes. That is allocated and unallocated inodes.
+@item -e
+Search and display on inodes that have an error.
+@item -f
+Force display of inodes, even when in error.
+@end table
+@end table
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+NONE
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{debugrfs}:
+
+@example
+SHLL [/] $ debugrfs /c data
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_DEBUGRFS
+@findex CONFIGURE_SHELL_COMMAND_DEBUGRFS
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_DEBUGRFS} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_DEBUGRFS} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_debugrfs
+
+The @code{debugrfs} command is implemented by a C language function which
+has the following prototype:
+
+@example
+int rtems_shell_rtems_main_debugrfs(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for @code{debugrfs} has the following
+prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_DEBUGRFS_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection df - display file system disk space usage
+
+@pgindex df
+
+@subheading SYNOPSYS:
+
+@example
+df [-h] [-B block_size]
+@end example
+
+@subheading DESCRIPTION:
+
+This command print disk space usage for mounted file systems.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+NONE
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{df}:
+
+@example
+SHLL [/] $ df -B 4K
+Filesystem     4K-blocks        Used   Available       Use%     Mounted on
+/dev/rda               124         1         124         0%   /mnt/ramdisk
+SHLL [/] $ df
+Filesystem     1K-blocks        Used   Available       Use%     Mounted on
+/dev/rda               495         1         494         0%   /mnt/ramdisk
+SHLL [/] $ df -h
+Filesystem     Size             Used   Available       Use%     Mounted on
+/dev/rda              495K        1K        494K         0%   /mnt/ramdisk
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_DF
+@findex CONFIGURE_SHELL_COMMAND_DF
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_DF} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_DF} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_df
+
+The @code{df} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_main_df(
+  int argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{df} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_DF_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection dir - alias for ls
+
+@pgindex dir
+
+@subheading SYNOPSYS:
+
+@example
+dir [dir]
+@end example
+
+@subheading DESCRIPTION:
+
+This command is an alias or alternate name for the @code{ls}.
+See @ref{File and Directory Commands ls - list files in the directory, ls}
+for more information.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+NONE
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{dir}:
+
+@example
+SHLL [/] $ dir
+drwxr-xr-x   1   root   root         536 Jan 01 00:00 dev/
+drwxr-xr-x   1   root   root        1072 Jan 01 00:00 etc/
+2 files 1608 bytes occupied
+SHLL [/] $ dir etc
+-rw-r--r--   1   root   root         102 Jan 01 00:00 passwd
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
+4 files 202 bytes occupied
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_DIR
+@findex CONFIGURE_SHELL_COMMAND_DIR
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_DIR} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_DIR} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_dir
+
+The @code{dir} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_dir(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{dir} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_DIR_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection fdisk - format disk
+
+@pgindex fdisk
+
+@subheading SYNOPSYS:
+
+@example
+fdisk
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_FDISK
+@findex CONFIGURE_SHELL_COMMAND_FDISK
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_FDISK} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_FDISK} when all
+shell commands have been configured.
 
 @c
 @c
@@ -2229,49 +1542,236 @@ extern rtems_shell_cmd_t rtems_shell_HEXDUMP_Command;
 @c
 @c
 @page
-@subsection fdisk - format disk
+@subsection ln - make links
 
-@pgindex fdisk
+@pgindex ln
 
 @subheading SYNOPSYS:
 
 @example
-fdisk
+ln [-fhinsv] source_file [target_file]
+ln [-fhinsv] source_file ... target_dir
+@end example
+
+@subheading DESCRIPTION:
+
+The ln utility creates a new directory entry (linked file) which has
+the same modes as the original file.  It is useful for maintaining
+multiple copies of a file in many places at once without using up
+storage for the ``copies''; instead, a link ``points'' to the original
+copy.  There are two types of links; hard links and symbolic links.
+How a link ``points'' to a file is one of the differences between a
+hard or symbolic link.
+
+The options are as follows:
+@table @b
+@item -f
+Unlink any already existing file, permitting the link to occur.
+
+@item -h
+If the target_file or target_dir is a symbolic link, do not follow it.
+This is most useful with the -f option, to replace a symlink which may
+point to a directory.
+
+@item -i
+Cause ln to write a prompt to standard error if the target file
+exists.  If the response from the standard input begins with the
+character `y' or `Y', then unlink the target file so that the link may
+occur.  Otherwise, do not attempt the link.  (The -i option overrides
+any previous -f options.)
+
+@item -n
+Same as -h, for compatibility with other ln implementations.
+
+@item -s
+Create a symbolic link.
+
+@item -v
+Cause ln to be verbose, showing files as they are processed.
+@end table
+
+By default ln makes hard links.  A hard link to a file is
+indistinguishable from the original directory entry; any changes to a
+file are effective independent of the name used to reference the file.
+Hard links may not normally refer to directories and may not span file
+systems.
+
+A symbolic link contains the name of the file to which it is linked.
+The referenced file is used when an @i{open} operation is performed on
+the link.  A @i{stat} on a symbolic link will return the linked-to
+file; an @i{lstat} must be done to obtain information about the link.
+The @i{readlink} call may be used to read the contents of a symbolic
+link.  Symbolic links may span file systems and may refer to
+directories.
+
+Given one or two arguments, ln creates a link to an existing file
+source_file.  If target_file is given, the link has that name;
+target_file may also be a directory in which to place the link;
+otherwise it is placed in the current directory.  If only the
+directory is specified, the link will be made to the last component of
+source_file.
+
+Given more than two arguments, ln makes links in target_dir to all the
+named source files.  The links made will have the same name as the
+files being linked to.
+
+@subheading EXIT STATUS:
+
+The @code{ln} utility exits 0 on success, and >0 if an error occurs.
+
+@subheading NOTES:
+
+NONE
+
+@subheading EXAMPLES:
+
+@example
+SHLL [/] ln -s /dev/console /dev/con1
 @end example
 
 @subheading CONFIGURATION:
 
-@findex CONFIGURE_SHELL_NO_COMMAND_FDISK
-@findex CONFIGURE_SHELL_COMMAND_FDISK
+@findex CONFIGURE_SHELL_NO_COMMAND_LN
+@findex CONFIGURE_SHELL_COMMAND_LN
 
-This command is included in the default shell command set.
-When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_FDISK} to have this
-command included.
+This command is included in the default shell command set.  When
+building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_LN} to have this command included.
 
 This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_FDISK} when all
+defining @code{CONFIGURE_SHELL_NO_COMMAND_LN} when all
 shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_ln
+
+The @code{ln} command is implemented by a C language function which
+has the following prototype:
+
+@example
+int rtems_shell_rtems_main_ln(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{ln} has the following
+prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_LN_Command;
+@end example
+
+@subheading ORIGIN:
+
+The implementation and portions of the documentation for this command
+are from NetBSD 4.0.
 
 @c
 @c
 @c
 @page
-@subsection dir - alias for ls
+@subsection ls - list files in the directory
 
-@pgindex dir
+@pgindex ls
 
 @subheading SYNOPSYS:
 
 @example
-dir [dir]
+ls [dir]
 @end example
 
 @subheading DESCRIPTION:
 
-This command is an alias or alternate name for the @code{ls}.
-See @ref{File and Directory Commands ls - list files in the directory, ls}
-for more information.
+This command displays the contents of the specified directory.  If
+no arguments are given, then it displays the contents of the current
+working directory.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+This command currently does not display information on a set of
+files like the POSIX ls(1).  It only displays the contents of
+entire directories.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{ls}:
+
+@example
+SHLL [/] $ ls
+drwxr-xr-x   1   root   root         536 Jan 01 00:00 dev/
+drwxr-xr-x   1   root   root        1072 Jan 01 00:00 etc/
+2 files 1608 bytes occupied
+SHLL [/] $ ls etc
+-rw-r--r--   1   root   root         102 Jan 01 00:00 passwd
+-rw-r--r--   1   root   root          42 Jan 01 00:00 group
+-rw-r--r--   1   root   root          30 Jan 01 00:00 issue
+-rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
+4 files 202 bytes occupied
+SHLL [/] $ ls dev etc
+-rwxr-xr-x   1  rtems   root           0 Jan 01 00:00 console
+-rwxr-xr-x   1   root   root           0 Jan 01 00:00 console_b
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_LS
+@findex CONFIGURE_SHELL_COMMAND_LS
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_LS} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_LS} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_ls
+
+The @code{ls} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_ls(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{ls} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_LS_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection md5 - compute the Md5 hash of a file or list of files
+
+@pgindex md5
+
+@subheading SYNOPSYS:
+
+@example
+md5 <files>
+@end example
+
+@subheading DESCRIPTION:
+
+This command prints the MD5 of a file. You can provide one or more
+files on the command line and a hash for each file is printed in a
+single line of output.
 
 @subheading EXIT STATUS:
 
@@ -2283,55 +1783,349 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use @code{dir}:
+The following is an example of how to use @code{md5}:
 
 @example
-SHLL [/] $ dir
-drwxr-xr-x   1   root   root         536 Jan 01 00:00 dev/
-drwxr-xr-x   1   root   root        1072 Jan 01 00:00 etc/
-2 files 1608 bytes occupied
-SHLL [/] $ dir etc
--rw-r--r--   1   root   root         102 Jan 01 00:00 passwd
--rw-r--r--   1   root   root          42 Jan 01 00:00 group
--rw-r--r--   1   root   root          30 Jan 01 00:00 issue
--rw-r--r--   1   root   root          28 Jan 01 00:00 issue.net
-4 files 202 bytes occupied
+SHLL [/] $ md5 shell-init
+MD5 (shell-init) = 43b4d2e71b47db79eae679a2efeacf31
 @end example
 
 @subheading CONFIGURATION:
 
-@findex CONFIGURE_SHELL_NO_COMMAND_DIR
-@findex CONFIGURE_SHELL_COMMAND_DIR
+@findex CONFIGURE_SHELL_NO_COMMAND_MD5
+@findex CONFIGURE_SHELL_COMMAND_MD5
 
 This command is included in the default shell command set.
 When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_DIR} to have this
+@code{CONFIGURE_SHELL_COMMAND_MD5} to have this
 command included.
 
 This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_DIR} when all
+defining @code{CONFIGURE_SHELL_NO_COMMAND_MD5} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
-@findex rtems_shell_rtems_main_dir
+@findex rtems_shell_rtems_main_md5
 
-The @code{dir} is implemented by a C language function
+The @code{df} is implemented by a C language function
 which has the following prototype:
 
 @example
-int rtems_shell_rtems_main_dir(
+int rtems_shell_main_md5(
+  int argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{md5} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_MD5_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection mkdir - create a directory
+
+@pgindex mkdir
+
+@subheading SYNOPSYS:
+
+@example
+mkdir  dir [dir1 .. dirN]
+@end example
+
+@subheading DESCRIPTION:
+
+This command creates the set of directories in the order they
+are specified on the command line.  If an error is encountered
+making one of the directories, the command will continue to
+attempt to create the remaining directories on the command line.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+If this command is invoked with no arguments, nothing occurs.
+
+The user must have sufficient permissions to create the directory.
+For the @code{fileio} test provided with RTEMS, this means the user
+must login as @code{root} not @code{rtems}.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{mkdir}:
+
+@example
+SHLL [/] # ls
+drwxr-xr-x   1   root   root         536 Jan 01 00:00 dev/
+drwxr-xr-x   1   root   root        1072 Jan 01 00:00 etc/
+2 files 1608 bytes occupied
+SHLL [/] # mkdir joel
+SHLL [/] # ls joel
+0 files 0 bytes occupied
+SHLL [/] # cp etc/passwd joel
+SHLL [/] # ls joel
+-rw-r--r--   1   root   root         102 Jan 01 00:02 passwd
+1 files 102 bytes occupied
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_MKDIR
+@findex CONFIGURE_SHELL_COMMAND_MKDIR
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_MKDIR} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_MKDIR} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_mkdir
+
+The @code{mkdir} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_mkdir(
   int    argc,
   char **argv
 );
 @end example
 
-The configuration structure for the @code{dir} has the
+The configuration structure for the @code{mkdir} has the
 following prototype:
 
 @example
-extern rtems_shell_cmd_t rtems_shell_DIR_Command;
+extern rtems_shell_cmd_t rtems_shell_MKDIR_Command;
 @end example
+
+@c
+@c
+@c
+@page
+@subsection mldos - DOSFS file system format
+
+@pgindex pwd
+
+@subheading SYNOPSYS:
+
+@example
+mkdir [-V label] [-s sectors/cluster] [-r size] [-v] path
+@end example
+
+@subheading DESCRIPTION:
+
+This command formats a block device entry with the DOSFS file system.
+
+@table @b
+@item -V label
+
+@item -s sectors/cluster
+
+@item -r size
+
+@end table
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+NONE
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{mkdos}:
+
+@example
+SHLL [/] $ mkdos /dev/rda1
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_MKDOS
+@findex CONFIGURE_SHELL_COMMAND_MKDOS
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_MKDOS} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_MKDOS} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_mkdos
+
+The @code{mkdos} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_mkdos(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{mkdos} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_MKDOS_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection mknod - make device special file
+
+@pgindex mknod
+
+@subheading SYNOPSYS:
+
+@example
+mknod [-rR] [-F fmt] [-g gid] [-m mode] [-u uid] name [c | b]
+      [driver | major] minor
+mknod [-rR] [-F fmt] [-g gid] [-m mode] [-u uid] name [c | b]
+      major unit subunit
+mknod [-rR] [-g gid] [-m mode] [-u uid] name [c | b] number
+mknod [-rR] [-g gid] [-m mode] [-u uid] name p
+@end example
+
+@subheading DESCRIPTION:
+
+The mknod command creates device special files, or fifos.  Normally
+the shell script /dev/MAKEDEV is used to create special files for
+commonly known devices; it executes mknod with the appropriate
+arguments and can make all the files required for the device.
+
+To make nodes manually, the arguments are:
+
+@table @b
+@item -r
+Replace an existing file if its type is incorrect.
+
+@item -R
+Replace an existing file if its type is incorrect.  Correct the
+mode, user and group.
+
+@item -g gid
+Specify the group for the device node.  The gid operand may be a
+numeric group ID or a group name.  If a group name is also a numeric
+group ID, the operand is used as a group name.  Precede a numeric
+group ID with a # to stop it being treated as a name.
+
+@item -m mode
+Specify the mode for the device node.  The mode may be absolute or
+symbolic, see @i{chmod}.
+
+@item -u uid
+Specify the user for the device node.  The uid operand may be a
+numeric user ID or a user name.  If a user name is also a numeric user
+ID, the operand is used as a user name.  Precede a numeric user ID
+with a # to stop it being treated as a name.
+
+@item name
+Device name, for example ``tty'' for a termios serial device or ``hd''
+for a disk.
+
+@item  b | c | p
+Type of device.  If the device is a block type device such as a tape
+or disk drive which needs both cooked and raw special files, the type
+is b.  All other devices are character type devices, such as terminal
+and pseudo devices, and are type c.  Specifying p creates fifo files.
+
+@item driver | major
+The major device number is an integer number which tells the kernel
+which device driver entry point to use.  If the device driver is
+configured into the current kernel it may be specified by driver name
+or major number.
+
+@item minor
+The minor device number tells the kernel which one of several similar
+devices the node corresponds to; for example, it may be a specific
+serial port or pty.
+
+@item unit and subunit
+The unit and subunit numbers select a subset of a device; for example,
+the unit may specify a particular disk, and the subunit a partition on
+that disk.  (Currently this form of specification is only supported
+by the bsdos format, for compatibility with the BSD/OS mknod).
+
+@item number
+A single opaque device number.  Useful for netbooted computers which
+require device numbers packed in a format that isn't supported by
+-F.
+@end table
+
+@subheading EXIT STATUS:
+
+The @code{mknod} utility exits 0 on success, and >0 if an error occurs.
+
+@subheading NOTES:
+
+NONE
+
+@subheading EXAMPLES:
+
+@example
+SHLL [/] mknod c 3 0 /dev/ttyS10
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_MKNOD
+@findex CONFIGURE_SHELL_COMMAND_MKNOD
+
+This command is included in the default shell command set.  When
+building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_MKNOD} to have this command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_MKNOD} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_mknod
+
+The @code{mknod} command is implemented by a C language function which
+has the following prototype:
+
+@example
+int rtems_shell_rtems_main_mknod(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{mknod} has the following
+prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_MKNOD_Command;
+@end example
+
+@subheading ORIGIN:
+
+The implementation and portions of the documentation for this command
+are from NetBSD 4.0.
 
 @c
 @c
@@ -2442,62 +2236,34 @@ extern rtems_shell_cmd_t rtems_shell_MKRFS_Command;
 @c
 @c
 @page
-@subsection debugrfs - debug RFS file system
+@subsection mount - mount disk
 
-@pgindex debugrfs
+@pgindex mount
 
 @subheading SYNOPSYS:
 
 @example
-debugrfs [-hl] path command [options]
+mount [-t fstype] [-r] [-L] device path
 @end example
 
 @subheading DESCRIPTION:
 
-The command provides debugging information for the RFS file system.
+The @code{mount} command will mount a block device to a mount point
+using the specified file system. The files systems are:
 
-The options are:
+@itemize @bullet
+@item msdos - MSDOS File System
+@item tftp  - TFTP Network File System
+@item ftp   - FTP Network File System
+@item nfs   - Network File System
+@item rfs   - RTEMS File System
+@end itemize
 
-@table @b
-@item -h
-Print a help message.
-
-@item -l
-List the commands.
-
-@item path
-Path to the mounted RFS file system. The file system has to be mounted
-to view to use this command.
-@end table
-
-The commands are:
-
-@table @b
-@item block start [end]
-Display the contents of the blocks from start to end.
-
-@item data
-Display the file system data and configuration.
-
-@item dir bno
-Process the block as a directory displaying the entries.
-
-@item group start [end]
-Display the group data from the start group to the end group.
-
-@item inode [-aef] [start] [end]
-Display the inodes between start and end. If no start and end is
-provides all inodes are displayed.
-
-@table @b
-@item -a
-Display all inodes. That is allocated and unallocated inodes.
-@item -e
-Search and display on inodes that have an error.
-@item -f
-Force display of inodes, even when in error.
-@end table
-@end table
+When the file system type is 'msdos' or 'rfs' the driver is a "block
+device driver" node present in the file system. The driver is ignored
+with the 'tftp' and 'ftp' file systems. For the 'nfs' file system the
+driver is the 'host:/path' string that described NFS host and the
+exported file system path.
 
 @subheading EXIT STATUS:
 
@@ -2505,70 +2271,237 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-NONE
+The mount point must exist.
+
+The services offered by each file-system vary. For example you cannot list the
+directory of a TFTP file-system as this server is not provided in the TFTP
+protocol. You need to check each file-system's documentation for the services
+provided.
 
 @subheading EXAMPLES:
 
-The following is an example of how to use @code{debugrfs}:
+Mount the Flash Disk driver to the '/fd' mount point:
 
 @example
-SHLL [/] $ debugrfs /c data
+SHLL [/] $ mount -t msdos /dev/flashdisk0 /fd
+@end example
+
+Mount the NFS file system exported path 'bar' by host 'foo':
+
+@example
+$ mount -t nfs foo:/bar /nfs
+@end example
+
+Mount the TFTP file system on '/tftp':
+
+@example
+$ mount -t tftp /tftp
+@end example
+
+To access the TFTP files on server '10.10.10.10':
+
+@example
+$ cat /tftp/10.10.10.10/test.txt
 @end example
 
 @subheading CONFIGURATION:
 
-@findex CONFIGURE_SHELL_NO_COMMAND_DEBUGRFS
-@findex CONFIGURE_SHELL_COMMAND_DEBUGRFS
+@findex CONFIGURE_SHELL_NO_COMMAND_MOUNT
+@findex CONFIGURE_SHELL_COMMAND_MOUNT
 
 This command is included in the default shell command set.
 When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_DEBUGRFS} to have this
+@code{CONFIGURE_SHELL_COMMAND_MOUNT} to have this
 command included.
 
 This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_DEBUGRFS} when all
+defining @code{CONFIGURE_SHELL_NO_COMMAND_MOUNT} when all
+shell commands have been configured.
+
+The mount command includes references to file-system code. If you do not wish
+to include file-system that you do not use do not define the mount command
+support for that file-system. The file-system mount command defines are:
+
+@itemize @bullet
+@item msdos - CONFIGURE_SHELL_MOUNT_MSDOS
+@item tftp - CONFIGURE_SHELL_MOUNT_TFTP
+@item ftp - CONFIGURE_SHELL_MOUNT_FTP
+@item nfs - CONFIGURE_SHELL_MOUNT_NFS
+@item rfs - CONFIGURE_SHELL_MOUNT_RFS
+@end itemize
+
+An example configuration is:
+
+@example
+#define CONFIGURE_SHELL_MOUNT_MSDOS
+#ifdef RTEMS_NETWORKING
+  #define CONFIGURE_SHELL_MOUNT_TFTP
+  #define CONFIGURE_SHELL_MOUNT_FTP
+  #define CONFIGURE_SHELL_MOUNT_NFS
+  #define CONFIGURE_SHELL_MOUNT_RFS
+#endif
+@end example
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_mount
+
+The @code{mount} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_mount(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{mount} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_MOUNT_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection mv - move files
+
+@pgindex mv
+
+@subheading SYNOPSYS:
+
+@example
+mv [-fiv] source_file target_file
+mv [-fiv] source_file... target_file
+@end example
+
+@subheading DESCRIPTION:
+
+In its first form, the mv utility renames the file named by the source
+operand to the destination path named by the target operand.  This
+form is assumed when the last operand does not name an already
+existing directory.
+
+In its second form, mv moves each file named by a source operand to a
+destination file in the existing directory named by the directory
+operand.  The destination path for each operand is the pathname
+produced by the concatenation of the last operand, a slash, and the
+final pathname component of the named file.
+
+The following options are available:
+
+@table @b
+@item -f
+Do not prompt for confirmation before overwriting the destination
+path.
+
+@item -i
+Causes mv to write a prompt to standard error before moving a file
+that would overwrite an existing file.  If the response from the
+standard input begins with the character 'y', the move is attempted.
+
+@item -v
+Cause mv to be verbose, showing files as they are processed.
+
+@end table
+
+The last of any -f or -i options is the one which affects mv's
+behavior.
+
+It is an error for any of the source operands to specify a nonexistent
+file or directory.
+
+It is an error for the source operand to specify a directory if the
+target exists and is not a directory.
+
+If the destination path does not have a mode which permits writing, mv
+prompts the user for confirmation as specified for the -i option.
+
+Should the @b{rename} call fail because source and target are on
+different file systems, @code{mv} will remove the destination file,
+copy the source file to the destination, and then remove the source.
+The effect is roughly equivalent to:
+
+@example
+rm -f destination_path && \
+cp -PRp source_file destination_path && \
+rm -rf source_file
+@end example
+
+@subheading EXIT STATUS:
+
+The @code{mv} utility exits 0 on success, and >0 if an error occurs.
+
+@subheading NOTES:
+
+NONE
+
+@subheading EXAMPLES:
+
+@example
+SHLL [/] mv /dev/console /dev/con1
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_MV
+@findex CONFIGURE_SHELL_COMMAND_MV
+
+This command is included in the default shell command set.  When
+building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_MV} to have this command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_MV} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
-@findex rtems_shell_rtems_main_debugrfs
+@findex rtems_shell_rtems_main_mv
 
-The @code{debugrfs} command is implemented by a C language function which
+The @code{mv} command is implemented by a C language function which
 has the following prototype:
 
 @example
-int rtems_shell_rtems_main_debugrfs(
+int rtems_shell_rtems_main_mv(
   int    argc,
   char **argv
 );
 @end example
 
-The configuration structure for @code{debugrfs} has the following
-prototype:
+The configuration structure for the @code{mv} has the
+following prototype:
 
 @example
-extern rtems_shell_cmd_t rtems_shell_DEBUGRFS_Command;
+extern rtems_shell_cmd_t rtems_shell_MV_Command;
 @end example
+
+@subheading ORIGIN:
+
+The implementation and portions of the documentation for this command
+are from NetBSD 4.0.
 
 @c
 @c
 @c
 @page
-@subsection cd - alias for chdir
+@subsection pwd - print work directory
 
-@pgindex cd
+@pgindex pwd
 
 @subheading SYNOPSYS:
 
 @example
-cd directory
+pwd
 @end example
 
 @subheading DESCRIPTION:
 
-This command is an alias or alternate name for the @code{chdir}.
-See @ref{File and Directory Commands chdir - change the current directory, cd}
-for more information.
+This command prints the fully qualified filename of the current
+working directory.
 
 @subheading EXIT STATUS:
 
@@ -2580,75 +2513,150 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use @code{cd}:
+The following is an example of how to use @code{pwd}:
 
 @example
-SHLL [/] $ cd etc
-SHLL [/etc] $ cd /
-SHLL [/] $ cd /etc
-SHLL [/etc] $ pwd
-/etc
-SHLL [/etc] $ cd /
 SHLL [/] $ pwd
 /
-SHLL [/] $ cd etc
-SHLL [/etc] $ cd ..
-SHLL [/] $ pwd
-/
+SHLL [/] $ cd dev
+SHLL [/dev] $ pwd
+/dev
 @end example
 
 @subheading CONFIGURATION:
 
-@findex CONFIGURE_SHELL_NO_COMMAND_CD
-@findex CONFIGURE_SHELL_COMMAND_CD
+@findex CONFIGURE_SHELL_NO_COMMAND_PWD
+@findex CONFIGURE_SHELL_COMMAND_PWD
 
 This command is included in the default shell command set.
 When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_CD} to have this
+@code{CONFIGURE_SHELL_COMMAND_PWD} to have this
 command included.
 
 This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_CD} when all
+defining @code{CONFIGURE_SHELL_NO_COMMAND_PWD} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
-@findex rtems_shell_rtems_main_cd
+@findex rtems_shell_rtems_main_pwd
 
-The @code{cd} is implemented by a C language function
+The @code{pwd} is implemented by a C language function
 which has the following prototype:
 
 @example
-int rtems_shell_rtems_main_cd(
+int rtems_shell_rtems_main_pwd(
   int    argc,
   char **argv
 );
 @end example
 
-The configuration structure for the @code{cd} has the
+The configuration structure for the @code{pwd} has the
 following prototype:
 
 @example
-extern rtems_shell_cmd_t rtems_shell_CD_Command;
+extern rtems_shell_cmd_t rtems_shell_PWD_Command;
 @end example
 
 @c
 @c
 @c
 @page
-@subsection df - display file system disk space usage
+@subsection rmdir - remove empty directories
 
-@pgindex df
+@pgindex rmdir
 
 @subheading SYNOPSYS:
 
 @example
-df [-h] [-B block_size]
+rmdir  [dir1 .. dirN]
 @end example
 
 @subheading DESCRIPTION:
 
-This command print disk space usage for mounted file systems.
+This command removes the specified set of directories.  If no
+directories are provided on the command line, no actions are taken.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+This command is a implemented using the @code{rmdir(2)} system
+call and all reasons that call may fail apply to this command.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{rmdir}:
+
+@example
+SHLL [/] # mkdir joeldir
+SHLL [/] # rmdir joeldir
+SHLL [/] # ls joeldir
+joeldir: No such file or directory.
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_RMDIR
+@findex CONFIGURE_SHELL_COMMAND_RMDIR
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_RMDIR} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_RMDIR} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_rmdir
+
+The @code{rmdir} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_rmdir(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{rmdir} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_RMDIR_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection rm - remove files
+
+@pgindex rm
+
+@subheading SYNOPSYS:
+
+@example
+rm file1 [file2 ... fileN]
+@end example
+
+@subheading DESCRIPTION:
+
+This command deletes a name from the filesystem.  If the specified file name
+was the last link to a file and there are no @code{open} file descriptor
+references to that file, then it is deleted and the associated space in
+the file system is made available for subsequent use.
+
+If the filename specified was the last link to a file but there
+are open file descriptor references to it, then the file will
+remain in existence until the last file descriptor referencing
+it is closed.
 
 @subheading EXIT STATUS:
 
@@ -2660,74 +2668,72 @@ NONE
 
 @subheading EXAMPLES:
 
-The following is an example of how to use @code{df}:
+The following is an example of how to use @code{rm}:
 
 @example
-SHLL [/] $ df -B 4K
-Filesystem     4K-blocks        Used   Available       Use%     Mounted on
-/dev/rda               124         1         124         0%   /mnt/ramdisk
-SHLL [/] $ df
-Filesystem     1K-blocks        Used   Available       Use%     Mounted on
-/dev/rda               495         1         494         0%   /mnt/ramdisk
-SHLL [/] $ df -h
-Filesystem     Size             Used   Available       Use%     Mounted on
-/dev/rda              495K        1K        494K         0%   /mnt/ramdisk
+SHLL [/] # cp /etc/passwd tmpfile
+SHLL [/] # cat tmpfile
+root:*:0:0:root::/:/bin/sh
+rtems:*:1:1:RTEMS Application::/:/bin/sh
+tty:!:2:2:tty owner::/:/bin/false
+SHLL [/] # rm tmpfile
+SHLL [/] # cat tmpfile
+cat: tmpfile: No such file or directory
 @end example
 
 @subheading CONFIGURATION:
 
-@findex CONFIGURE_SHELL_NO_COMMAND_DF
-@findex CONFIGURE_SHELL_COMMAND_DF
+@findex CONFIGURE_SHELL_NO_COMMAND_RM
+@findex CONFIGURE_SHELL_COMMAND_RM
 
 This command is included in the default shell command set.
 When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_DF} to have this
+@code{CONFIGURE_SHELL_COMMAND_RM} to have this
 command included.
 
 This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_DF} when all
+defining @code{CONFIGURE_SHELL_NO_COMMAND_RM} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
-@findex rtems_shell_rtems_main_df
+@findex rtems_shell_rtems_main_rm
 
-The @code{df} is implemented by a C language function
+The @code{rm} is implemented by a C language function
 which has the following prototype:
 
 @example
-int rtems_shell_main_df(
-  int argc,
+int rtems_shell_rtems_main_rm(
+  int    argc,
   char **argv
 );
 @end example
 
-The configuration structure for the @code{df} has the
+The configuration structure for the @code{rm} has the
 following prototype:
 
 @example
-extern rtems_shell_cmd_t rtems_shell_DF_Command;
+extern rtems_shell_cmd_t rtems_shell_RM_Command;
 @end example
 
 @c
 @c
 @c
 @page
-@subsection md5 - compute the Md5 hash of a file or list of files
+@subsection umask - set file mode creation mask
 
-@pgindex md5
+@pgindex umask
 
 @subheading SYNOPSYS:
 
 @example
-md5 <files>
+umask [new_umask]
 @end example
 
 @subheading DESCRIPTION:
 
-This command prints the MD5 of a file. You can provide one or more
-files on the command line and a hash for each file is printed in a
-single line of output.
+This command sets the user file creation mask to @code{new_umask}.  The
+argument @code{new_umask} may be octal, hexadecimal, or decimal.
 
 @subheading EXIT STATUS:
 
@@ -2735,48 +2741,121 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-NONE
+This command does not currently support symbolic mode masks.
 
 @subheading EXAMPLES:
 
-The following is an example of how to use @code{md5}:
+The following is an example of how to use @code{umask}:
 
 @example
-SHLL [/] $ md5 shell-init
-MD5 (shell-init) = 43b4d2e71b47db79eae679a2efeacf31
+SHLL [/] $ umask
+022
+SHLL [/] $ umask 0666
+0666
+SHLL [/] $ umask
+0666
 @end example
 
 @subheading CONFIGURATION:
 
-@findex CONFIGURE_SHELL_NO_COMMAND_MD5
-@findex CONFIGURE_SHELL_COMMAND_MD5
+@findex CONFIGURE_SHELL_NO_COMMAND_UMASK
+@findex CONFIGURE_SHELL_COMMAND_UMASK
 
 This command is included in the default shell command set.
 When building a custom command set, define
-@code{CONFIGURE_SHELL_COMMAND_MD5} to have this
+@code{CONFIGURE_SHELL_COMMAND_UMASK} to have this
 command included.
 
 This command can be excluded from the shell command set by
-defining @code{CONFIGURE_SHELL_NO_COMMAND_MD5} when all
+defining @code{CONFIGURE_SHELL_NO_COMMAND_UMASK} when all
 shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
-@findex rtems_shell_rtems_main_md5
+@findex rtems_shell_rtems_main_umask
 
-The @code{df} is implemented by a C language function
+The @code{umask} is implemented by a C language function
 which has the following prototype:
 
 @example
-int rtems_shell_main_md5(
-  int argc,
+int rtems_shell_rtems_main_umask(
+  int    argc,
   char **argv
 );
 @end example
 
-The configuration structure for the @code{md5} has the
+The configuration structure for the @code{umask} has the
 following prototype:
 
 @example
-extern rtems_shell_cmd_t rtems_shell_MD5_Command;
+extern rtems_shell_cmd_t rtems_shell_UMASK_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection unmount - unmount disk
+
+@pgindex unmount
+
+@subheading SYNOPSYS:
+
+@example
+unmount path
+@end example
+
+@subheading DESCRIPTION:
+
+This command unmounts the device at the specified @code{path}.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+TBD - Surely there must be some warnings to go here.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{unmount}:
+
+@example
+EXAMPLE_TBD
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_UNMOUNT
+@findex CONFIGURE_SHELL_COMMAND_UNMOUNT
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_UNMOUNT} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_UNMOUNT} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_unmount
+
+The @code{unmount} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_unmount(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{unmount} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_UNMOUNT_Command;
 @end example
