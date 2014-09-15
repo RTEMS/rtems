@@ -1,14 +1,14 @@
-This BSP should run only on or1ksim: the main simulator for or1k architecture.
-or1ksim should be used for testing purposes.
+This BSP should run on or1ksim: the main simulator for or1k architecture.
+or1ksim should be used for testing purposes. It also runs on QEMU.
 
-svn co http://opencores.org/ocsvn/openrisc/openrisc/trunk/or1ksim
-cd or1ksim
-mkdir builddir_or1ksim
-cd builddir_or1ksim
-../configure --target=or32-elf --prefix=/opt/or1ksim
-make all
-make install
-export PATH=/opt/or1ksim/bin:$PATH
+$ git clone git@github.com:openrisc/or1ksim.git
+$ cd or1ksim
+$ mkdir builddir_or1ksim
+$ cd builddir_or1ksim
+$ ../configure --target=or1k-elf --prefix=/opt/or1ksim
+$ make all
+$ make install
+$ export PATH=/opt/or1ksim/bin:$PATH
 
 Configuration file "sim.cfg" should be provided for complex board
 configurations at the current directory (which you run or1ksim from) or at
@@ -20,16 +20,18 @@ rtems-tools/sim-scripts.
 
 From command line type:
 
-sim -f sim.cfg $PATH_TO_RTEMS_EXE
+$ sim -f sim.cfg $PATH_TO_RTEMS_EXE (old or1ksim releases)
 
-or (if you use a stable or1ksim release)
+or (if you use a stable/gitgub or1ksim release)
 
-or32-elf-sim -f sim.cfg $PATH_TO_RTEMS_EXE
+$ or1k-elf-sim -f sim.cfg $PATH_TO_RTEMS_EXE
+
+From QEMU:
+
+$ qemu-system-or32 -serial mon:stdio -serial /dev/null -net none -nographic \
+  -m 128M -kernel $PATH_TO_RTEMS_EXE
 
 from sim-scripts:
 
-or1ksim $PATH_TO_RTEMS_EXE
-
-and then attach GDB to or1ksim from another terminal by running
-
-or1ksim-gdb $PATH_TO_RTEMS_EXE
+$ or1ksim $PATH_TO_RTEMS_EXE
+$ qemu-or1k $PATH_TO_RTEMS_EXE
