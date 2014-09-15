@@ -24,7 +24,7 @@
 #include <rtems/score/or1k-utility.h>
 
 /* The number of clock cycles before generating a tick timer interrupt. */
-#define TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT     0xFFED9
+#define TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT     0x09ED9
 #define OR1KSIM_CLOCK_CYCLE_TIME_NANOSECONDS  10
 
 /* This prototype is added here to Avoid warnings */
@@ -63,18 +63,39 @@ static void or1ksim_clock_handler_install(proc_ptr new_isr, proc_ptr old_isr)
 
 static void or1ksim_clock_initialize(void)
 {
-  uint32_t sr;
+  uint32_t TTMR;
 
-  or1ksim_clock_at_tick();
+ /* For TTMR register,
+  * The least significant 28 bits are the number of clock cycles
+  * before generating a tick timer interrupt. While the most
+  * significant 4 bits are used for mode configuration, tick timer
+  * interrupt enable and pending interrupts status.
+  */
 
-   /* Enable tick timer */
-  sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
-  sr |= CPU_OR1K_SPR_SR_TEE;
-  _OR1K_mtspr(CPU_OR1K_SPR_SR, sr);
+  /* FIXME: Long interval should pass since initializing the tick timer
+   * registers fires exceptions dispite interrupts has not been enabled yet.
+   */
+  TTMR = (CPU_OR1K_SPR_TTMR_MODE_RESTART | CPU_OR1K_SPR_TTMR_IE |
+           (0xFFED9 & CPU_OR1K_SPR_TTMR_TP_MASK)
+         ) & ~(CPU_OR1K_SPR_TTMR_IP);
+
+  _OR1K_mtspr(CPU_OR1K_SPR_TTMR, TTMR);
+  _OR1K_mtspr(CPU_OR1K_SPR_TTCR, 0);
 }
 
  static void or1ksim_clock_cleanup(void)
 {
+ uint32_t sr;
+
+  sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
+
+  /* Disable tick timer exceptions */
+  _OR1K_mtspr(CPU_OR1K_SPR_SR, (sr & ~CPU_OR1K_SPR_SR_IEE)
+  & ~CPU_OR1K_SPR_SR_TEE);
+
+  /* Invalidate tick timer config registers */
+  _OR1K_mtspr(CPU_OR1K_SPR_TTCR, 0);
+  _OR1K_mtspr(CPU_OR1K_SPR_TTMR, 0);
 }
 
 /*
