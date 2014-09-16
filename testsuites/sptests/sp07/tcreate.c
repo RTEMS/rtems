@@ -27,24 +27,11 @@ bool Task_create_extension(
   rtems_tcb *created_task
 )
 {
-  char line[80];
-  rtems_name name;
+  ssize_t task = task_number( created_task->Object.id );
 
-  if ( task_number( created_task->Object.id ) > 0 ) {
-    name = Task_name[ task_number( created_task->Object.id ) ];
-/*
- * FIXME: There should be a public function to
- * convert numeric rtems_names into char arrays
- * c.f. rtems_name_to_characters() in rtems/rtems/support.inl
- * but it's private.
- */
-    sprintf( line, "TASK_CREATE - %c%c%c%c - created\n",
-      (char)((name >> 24) & 0xff),
-      (char)((name >> 16) & 0xff),
-      (char)((name >> 8) & 0xff),
-      (char)(name & 0xff)
-    );
-    buffered_io_add_string( line );
+  if (task > 0) {
+    ++Task_created[ task ];
   }
-  return TRUE;
+
+  return true;
 }

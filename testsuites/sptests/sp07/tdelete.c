@@ -27,33 +27,11 @@ void Task_delete_extension(
   rtems_tcb *deleted_task
 )
 {
-  char line[80];
-  rtems_name name;
+  ssize_t task = task_number( deleted_task->Object.id );
 
-  if ( task_number( running_task->Object.id ) > 0 ) {
-    name = Task_name[ task_number( running_task->Object.id ) ];
-    sprintf( line, "TASK_DELETE - %c%c%c%c TASK_DELETE ",
-      (char)((name >> 24) & 0xff),
-      (char)((name >> 16) & 0xff),
-      (char)((name >> 8) & 0xff),
-      (char)(name & 0xff)
-    );
-    buffered_io_add_string( line );
+  if (task > 0) {
+    ++Task_deleted[ task ];
   }
-  if ( task_number( deleted_task->Object.id ) > 0 ) {
-    name = Task_name[ task_number( deleted_task->Object.id ) ];
-/*
- * FIXME: There should be a public function to
- * convert numeric rtems_names into char arrays
- * c.f. rtems_name_to_characters() in rtems/rtems/support.inl
- * but it's private.
- */
-    sprintf( line, "deleting - %c%c%c%c\n",
-      (char)((name >> 24) & 0xff),
-      (char)((name >> 16) & 0xff),
-      (char)((name >> 8) & 0xff),
-      (char)(name & 0xff)
-    );
-    buffered_io_add_string( line );
-  }
+
+  rtems_test_assert( running_task != deleted_task );
 }

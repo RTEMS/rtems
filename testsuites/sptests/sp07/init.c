@@ -70,8 +70,6 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  buffered_io_initialize();
-
   Extension_name[ 1 ] =  rtems_build_name( 'E', 'X', 'T', '1' );
   Extension_name[ 2 ] =  rtems_build_name( 'E', 'X', 'T', '2' );
 
@@ -155,6 +153,7 @@ rtems_task Init(
     &Task_id[ 1 ]
   );
   directive_failed( status, "rtems_task_create of TA1" );
+  assert_extension_counts( &Task_created[ 0 ], 0x2 );
 
   status = rtems_task_create(
     Task_name[ 2 ],
@@ -165,6 +164,7 @@ rtems_task Init(
     &Task_id[ 2 ]
   );
   directive_failed( status, "rtems_task_create of TA2" );
+  assert_extension_counts( &Task_created[ 0 ], 0x2 | 0x4 );
 
 #define TA3_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 4u)
   status = rtems_task_create(
@@ -176,6 +176,7 @@ rtems_task Init(
     &Task_id[ 3 ]
   );
   directive_failed( status, "rtems_task_create of TA3" );
+  assert_extension_counts( &Task_created[ 0 ], 0x2 | 0x4 | 0x8 );
 
 #define TA4_PRIORITY (RTEMS_MAXIMUM_PRIORITY - 1u)
   status = rtems_task_create(
@@ -187,23 +188,27 @@ rtems_task Init(
     &Task_id[ 4 ]
   );
   directive_failed( status, "rtems_task_create of TA4" );
+  assert_extension_counts( &Task_created[ 0 ], 0x2 | 0x4 | 0x8 | 0x10 );
 
   status = rtems_task_start( Task_id[ 1 ], Task_1, 0 );
   directive_failed( status, "rtems_task_start of TA1" );
+  assert_extension_counts( &Task_started[ 0 ], 0x2 );
 
   status = rtems_task_start( Task_id[ 2 ], Task_2, 0 );
   directive_failed( status, "rtems_task_start of TA2" );
+  assert_extension_counts( &Task_started[ 0 ], 0x2 | 0x4 );
 
   status = rtems_task_start( Task_id[ 3 ], Task_3, 0 );
   directive_failed( status, "rtems_task_start of TA3" );
+  assert_extension_counts( &Task_started[ 0 ], 0x2 | 0x4 | 0x8 );
 
   status = rtems_task_start( Task_id[ 4 ], Task_4, 0 );
   directive_failed( status, "rtems_task_start of TA4" );
+  assert_extension_counts( &Task_started[ 0 ], 0x2 | 0x4 | 0x8 | 0x10 );
 
-  status = rtems_task_restart( Task_id[ 3 ], 0 );
+  status = rtems_task_restart( Task_id[ 2 ], 0 );
   directive_failed( status, "rtems_task_restart of TA3" );
-
-  buffered_io_flush();
+  assert_extension_counts( &Task_restarted[ 0 ], 0x0 );
 
   status = rtems_task_set_note( rtems_task_self(), RTEMS_NOTEPAD_4, 32 );
   directive_failed( status, "task_set_node of Self id" );
