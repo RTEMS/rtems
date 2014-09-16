@@ -22,3 +22,7 @@ $(PROJECT_INCLUDE)/libcpu/cache.h: ../shared/include/cache.h $(PROJECT_INCLUDE)/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
 
+$(PROJECT_INCLUDE)/libcpu/cache_.h: shared/cache/cache_.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache_.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache_.h
+

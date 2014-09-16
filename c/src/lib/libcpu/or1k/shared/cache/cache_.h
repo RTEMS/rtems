@@ -5,7 +5,7 @@
 #ifndef __OR1K_CACHE_H
 #define __OR1K_CACHE_H
 
-#include <libcpu/cache.h>
+#include <bsp/cache_.h>
 
 #endif
 /* end of include file */

@@ -30,6 +30,7 @@ include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += ../../shared/include/stackalloc.h
 include_bsp_HEADERS += ../../shared/include/uart-output-char.h
 include_bsp_HEADERS += ../../shared/tod.h
+include_bsp_HEADERS += ../shared/include/cache_.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/uart.h
 include_bsp_HEADERS += include/or1ksim.h
@@ -61,8 +62,8 @@ libbsp_a_CPPFLAGS =
 libbsp_a_LIBADD =
 
 # Startup
-libbsp_a_SOURCES += ../../shared/bspstart.c
 libbsp_a_SOURCES += ../../shared/bspreset.c
+libbsp_a_SOURCES += startup/bspstart.c
 
 # Shared
 libbsp_a_SOURCES += ../../shared/bootcard.c
@@ -72,8 +73,6 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c
 libbsp_a_SOURCES += ../../shared/bsppost.c
 libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
-libbsp_a_SOURCES += ../../shared/cpucounterread.c
-libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 libbsp_a_SOURCES += ../../shared/sbrk.c
 libbsp_a_SOURCES += ../../shared/src/stackalloc.c
@@ -100,9 +99,7 @@ libbsp_a_SOURCES += ../../shared/src/irq-info.c
 libbsp_a_SOURCES += irq/irq.c
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../../shared/include/cache_.h
-libbsp_a_CPPFLAGS += -I$(srcdir)/../../shared/include
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel
 
 ###############################################################################
 #                  Special Rules                                              #
