@@ -31,7 +31,7 @@
 #define RTEMS_STDIO_REDIRECT_FINISHED (1 << 1)
 
 static bool
-rtems_stdio_redirect_lock(rtems_stdio_redirect_t* sr)
+rtems_stdio_redirect_lock(rtems_stdio_redirect* sr)
 {
   rtems_status_code sc = rtems_semaphore_obtain (sr->lock,
                                                  RTEMS_WAIT,
@@ -45,7 +45,7 @@ rtems_stdio_redirect_lock(rtems_stdio_redirect_t* sr)
 }
 
 static bool
-rtems_stdio_redirect_unlock(rtems_stdio_redirect_t* sr)
+rtems_stdio_redirect_unlock(rtems_stdio_redirect* sr)
 {
   rtems_status_code sc = rtems_semaphore_release (sr->lock);
   if (sc != RTEMS_SUCCESSFUL)
@@ -57,7 +57,7 @@ rtems_stdio_redirect_unlock(rtems_stdio_redirect_t* sr)
 }
 
 static bool
-rtems_stdio_redirect_write (rtems_stdio_redirect_t* sr, const char* buf, ssize_t len)
+rtems_stdio_redirect_write (rtems_stdio_redirect* sr, const char* buf, ssize_t len)
 {
   if (!rtems_stdio_redirect_lock(sr))
     return false;
@@ -99,7 +99,7 @@ rtems_stdio_redirect_write (rtems_stdio_redirect_t* sr, const char* buf, ssize_t
 static rtems_task
 rtems_stdio_redirect_reader(rtems_task_argument arg)
 {
-  rtems_stdio_redirect_t* sr = (rtems_stdio_redirect_t*) arg;
+  rtems_stdio_redirect* sr = (rtems_stdio_redirect*) arg;
 
   while (sr->state & RTEMS_STDIO_REDIRECT_RUNNING)
   {
@@ -120,7 +120,7 @@ rtems_stdio_redirect_reader(rtems_task_argument arg)
   rtems_task_delete(RTEMS_SELF);
 }
 
-rtems_stdio_redirect_t*
+rtems_stdio_redirect*
 rtems_stdio_redirect_open(int                          fd,
                           rtems_task_priority          priority,
                           size_t                       stack_size,
@@ -129,11 +129,11 @@ rtems_stdio_redirect_open(int                          fd,
                           bool                         echo,
                           rtems_stdio_redirect_handler handler)
 {
-  rtems_stdio_redirect_t* sr;
-  rtems_name              name;
-  rtems_status_code       sc;
+  rtems_stdio_redirect* sr;
+  rtems_name            name;
+  rtems_status_code     sc;
 
-  sr = malloc(sizeof(rtems_stdio_redirect_t));
+  sr = malloc(sizeof(*sr));
   if (!sr)
   {
     fprintf(stderr, "error: stdio-redirect: no memory\n");
@@ -248,7 +248,7 @@ rtems_stdio_redirect_open(int                          fd,
 }
 
 void
-rtems_stdio_redirect_close(rtems_stdio_redirect_t* sr)
+rtems_stdio_redirect_close(rtems_stdio_redirect* sr)
 {
   if (rtems_stdio_redirect_lock(sr))
   {
@@ -278,9 +278,9 @@ rtems_stdio_redirect_close(rtems_stdio_redirect_t* sr)
 }
 
 ssize_t
-rtems_stdio_redirect_read(rtems_stdio_redirect_t* sr,
-                          char*                   buffer,
-                          ssize_t                 length)
+rtems_stdio_redirect_read(rtems_stdio_redirect* sr,
+                          char*                 buffer,
+                          ssize_t               length)
 {
   ssize_t written = 0;
 

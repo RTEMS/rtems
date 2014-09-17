@@ -75,7 +75,7 @@ typedef struct
   bool                         full;        /**< The buffer is full. */
   bool                         echo;        /**< Echo the data out the existing path. */
   rtems_stdio_redirect_handler handler;     /**< Redirected data handler. */
-} rtems_stdio_redirect_t;
+} rtems_stdio_redirect;
 
 /*
  * Open a redirector returning the handle to it.
@@ -83,18 +83,18 @@ typedef struct
  * @param fd The file descriptor to redirect.
  * @param priority The priority of the reader thread.
  */
-rtems_stdio_redirect_t* rtems_stdio_redirect_open(int                          fd,
-                                                  rtems_task_priority          priority,
-                                                  size_t                       stack_size,
-                                                  ssize_t                      input_size,
-                                                  ssize_t                      buffer_size,
-                                                  bool                         echo,
-                                                  rtems_stdio_redirect_handler handler);
+rtems_stdio_redirect* rtems_stdio_redirect_open(int                          fd,
+                                                rtems_task_priority          priority,
+                                                size_t                       stack_size,
+                                                ssize_t                      input_size,
+                                                ssize_t                      buffer_size,
+                                                bool                         echo,
+                                                rtems_stdio_redirect_handler handler);
 
 /*
  * Close the redirector.
  */
-void rtems_stdio_redirect_close(rtems_stdio_redirect_t* sr);
+void rtems_stdio_redirect_close(rtems_stdio_redirect* sr);
 
 /*
  * Get data from the capture buffer. Data read is removed from the buffer.
@@ -104,9 +104,9 @@ void rtems_stdio_redirect_close(rtems_stdio_redirect_t* sr);
  * @param length The size of the buffer.
  * @return ssize_t The amount of data written and -1 or an error.
  */
-ssize_t rtems_stdio_redirect_read(rtems_stdio_redirect_t* sr,
-                                  char*                   buffer,
-                                  ssize_t                 length);
+ssize_t rtems_stdio_redirect_read(rtems_stdio_redirect* sr,
+                                  char*                 buffer,
+                                  ssize_t               length);
 
 #ifdef __cplusplus
 }
