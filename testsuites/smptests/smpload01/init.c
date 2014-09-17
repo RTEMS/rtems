@@ -24,7 +24,6 @@
 
 #include <rtems.h>
 #include <rtems/counter.h>
-#include <rtems/profiling.h>
 #include <rtems/score/smpbarrier.h>
 #include <rtems/score/smplock.h>
 
@@ -376,8 +375,6 @@ static void test(void)
       ctx->inherit_obtain_counter[i]
     );
   }
-
-  rtems_profiling_report_xml("SMPLOAD 1", rtems_printf_plugin, NULL, 1, "  ");
 }
 
 static void Init(rtems_task_argument arg)
