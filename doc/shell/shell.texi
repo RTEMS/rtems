@@ -88,7 +88,7 @@
 @include rtems.texi
 @include network.texi
 
-@node Function and Variable Index, Concept Index, Network Commands route - show or manipulate the ip routing table, Top
+@node Function and Variable Index, Concept Index, Network Commands ping - ping a host or IP address, Top
 @unnumbered Function and Variable Index
 @printindex fn
 

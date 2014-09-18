@@ -24,6 +24,7 @@ This section details the Network Commands available.  A
 subsection is dedicated to each of the commands and
 describes the behavior and configuration of that
 command as well as providing an example usage.
+
 @c
 @c
 @c
@@ -591,6 +592,8 @@ considered as replied when calculating statistics.
 
 @item -z tos
 Use the specified type of service.
+
+@end table
 
 @subheading EXIT STATUS:
 The ping utility exits with one of the following values:

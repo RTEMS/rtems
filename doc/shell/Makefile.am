@@ -34,7 +34,7 @@ file.texi: file.t
 	    -n "Memory Commands" < $< > $@
 
 memory.texi: memory.t
-	$(BMENU2) -p "File and Directory Commands df - display file system disk space usage" \
+	$(BMENU2) -p "File and Directory Commands unmount - unmount disk" \
 	    -u "Top" \
 	    -n "RTEMS Specific Commands" < $< > $@
 
