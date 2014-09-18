@@ -31,7 +31,6 @@ include_bsp_HEADERS += ../../shared/include/irq-generic.h
 include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += ../../shared/include/stackalloc.h
 include_bsp_HEADERS += ../../shared/include/uart-output-char.h
-include_bsp_HEADERS += ../../shared/tod.h
 include_bsp_HEADERS += ../shared/include/start.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-timer.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-i2s.h

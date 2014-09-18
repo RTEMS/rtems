@@ -186,7 +186,3 @@ $(PROJECT_INCLUDE)/bsp/if_em_pub.h: network/if_em/if_em_pub.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/if_em_pub.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/if_em_pub.h
 endif
-$(PROJECT_INCLUDE)/tod.h: ../../shared/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
-

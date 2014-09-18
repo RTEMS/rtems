@@ -17,7 +17,6 @@ DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
 include_HEADERS += ../../shared/include/coverhd.h
-include_HEADERS += ../../shared/tod.h
 
 project_lib_DATA =
 

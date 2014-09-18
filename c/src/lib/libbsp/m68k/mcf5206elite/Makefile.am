@@ -20,7 +20,6 @@ include_HEADERS += include/i2c.h
 include_HEADERS += include/i2cdrv.h
 include_HEADERS += include/ds1307.h
 include_HEADERS += include/nvram.h
-nodist_include_HEADERS += ../../shared/tod.h
 
 EXTRA_DIST = times
 

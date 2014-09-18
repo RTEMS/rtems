@@ -34,7 +34,6 @@ include_bsp_HEADERS += ../../shared/include/utility.h
 include_bsp_HEADERS += ../../shared/include/irq-generic.h
 include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += ../../shared/include/stackalloc.h
-include_bsp_HEADERS += ../../shared/tod.h
 include_bsp_HEADERS += ../shared/include/start.h
 include_bsp_HEADERS += ../shared/include/arm-a9mpcore-clock.h
 include_bsp_HEADERS += ../shared/include/arm-a9mpcore-irq.h

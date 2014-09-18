@@ -44,7 +44,7 @@ libbsp_a_SOURCES =
 include_HEADERS = include/bsp.h
 include_HEADERS += ../../shared/include/tm27.h
 
-nodist_include_HEADERS = include/bspopts.h ../../shared/tod.h \
+nodist_include_HEADERS = include/bspopts.h \
     ../../shared/include/coverhd.h
 include_bsp_HEADERS =
 include_bsp_HEADERS += ../../../libcpu/powerpc/mpc83xx/i2c/mpc83xx_i2cdrv.h

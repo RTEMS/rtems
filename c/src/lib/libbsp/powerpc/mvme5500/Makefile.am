@@ -57,7 +57,6 @@ include_bsp_HEADERS += irq/irq.h
 # irq
 libbsp_a_SOURCES += irq/irq_init.c irq/BSP_irq.c
 
-nodist_include_HEADERS += ../../shared/tod.h
 # tod
 libbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c
 

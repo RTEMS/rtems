@@ -23,7 +23,6 @@ noinst_PROGRAMS =
 
 include_HEADERS += ../../powerpc/shared/include/nvram.h
 include_HEADERS += ../../shared/include/coverhd.h
-include_HEADERS += ../../shared/tod.h
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = ../../powerpc/shared/start/start.S

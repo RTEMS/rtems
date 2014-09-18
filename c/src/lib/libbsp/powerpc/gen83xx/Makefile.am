@@ -31,8 +31,6 @@ noinst_PROGRAMS =
 
 include_HEADERS += ../../shared/include/coverhd.h
 
-nodist_include_HEADERS += ../../shared/tod.h
-
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)

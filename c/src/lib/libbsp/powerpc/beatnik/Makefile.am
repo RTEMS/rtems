@@ -209,8 +209,6 @@ network_if_em.rel: network_if_em_tmp.rel
 endif
 
 # tod
-nodist_include_HEADERS += ../../shared/tod.h
-
 libbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \

@@ -82,10 +82,6 @@ $(PROJECT_INCLUDE)/bsp/uart-output-char.h: ../../shared/include/uart-output-char
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/uart-output-char.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart-output-char.h
 
-$(PROJECT_INCLUDE)/bsp/tod.h: ../../shared/tod.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tod.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tod.h
-
 $(PROJECT_INCLUDE)/bsp/cache_.h: ../shared/include/cache_.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/cache_.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/cache_.h

@@ -57,10 +57,6 @@ $(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
-$(PROJECT_INCLUDE)/tod.h: ../../shared/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
-
 $(PROJECT_LIB)/motld_start.$(OBJEXT): motld_start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/motld_start.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/motld_start.$(OBJEXT)

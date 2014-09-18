@@ -29,7 +29,6 @@ include_bsp_HEADERS += ../../shared/include/irq-generic.h
 include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += ../../shared/include/stackalloc.h
 include_bsp_HEADERS += ../../shared/include/uart-output-char.h
-include_bsp_HEADERS += ../../shared/tod.h
 include_bsp_HEADERS += ../shared/include/cache_.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/uart.h

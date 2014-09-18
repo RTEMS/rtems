@@ -18,8 +18,6 @@ noinst_PROGRAMS =
 
 include_HEADERS += ../../shared/include/coverhd.h
 
-nodist_include_HEADERS += ../../shared/tod.h
-
 include_bsp_HEADERS = include/irq.h \
 	../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h \

@@ -81,10 +81,6 @@ $(PROJECT_INCLUDE)/bsp/stackalloc.h: ../../shared/include/stackalloc.h $(PROJECT
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stackalloc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stackalloc.h
 
-$(PROJECT_INCLUDE)/bsp/tod.h: ../../shared/tod.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tod.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tod.h
-
 $(PROJECT_INCLUDE)/bsp/start.h: ../shared/include/start.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/start.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/start.h
