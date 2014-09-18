@@ -105,12 +105,7 @@ static char *grab_a_Connection(
 )
 {
   char *rval = 0;
-#if 0
   socklen_t size_adr = sizeof(srv->sin);
-#else
-  /* 4.6 doesn't have socklen_t */
-  uint32_t size_adr = sizeof(srv->sin);
-#endif
   int acp_sock;
 
   acp_sock = accept(des_socket,&srv->sa,&size_adr);
@@ -161,12 +156,7 @@ static int sockpeername(int sock, char *buf, int bufsz)
 {
   uni_sa peer;
   int    rval = sock < 0;
-#if 0
   socklen_t len  = sizeof(peer.sin);
-#else
-  /* 4.6 doesn't have socklen_t */
-  uint32_t len  = sizeof(peer.sin);
-#endif
 
   if ( !rval )
     rval = getpeername(sock, &peer.sa, &len);
