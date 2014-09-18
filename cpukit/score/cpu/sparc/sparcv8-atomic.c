@@ -83,6 +83,11 @@ uint8_t __atomic_exchange_1( uint8_t *mem, uint8_t val, int model )
   return prev;
 }
 
+/*
+ * In order to get rid of the warning "conflicting types for built-in function
+ * '__atomic_compare_exchange_4' [enabled by default]", you must port libatomic
+ * to SPARC/RTEMS.  The libatomic is provided by GCC.
+ */
 uint32_t __atomic_exchange_4( uint32_t *mem, uint32_t val, int model )
 {
   uint32_t prev;
