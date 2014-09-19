@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spintrcritical22
+
+directives:
+
+  - _Thread_queue_Dequeue()
+
+concepts:
+
+  - Ensure that _Thread_queue_Dequeue() dequeues the executing thread if it is
+    about to enqueue.

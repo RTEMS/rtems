@@ -37,6 +37,7 @@ if HAS_SMP
 else
 _SUBDIRS += sp29
 endif
+_SUBDIRS += spintrcritical22
 _SUBDIRS += spsem03
 _SUBDIRS += spresource01
 _SUBDIRS += spmrsp01
