@@ -86,9 +86,18 @@ static int uart_last_close(int major, int minor, void *arg)
   return 0;
 }
 
-static int uart_read_polled(int minor)
+static char uart_read_polled(int minor)
 {
-   return -1;
+  unsigned char lsr;
+  char c;
+
+ /* Get a character when avaiable */
+  do {
+       lsr = OR1KSIM_REG(OR1KSIM_BSP_UART_REG_LINE_STATUS);
+  } while ((lsr & OR1KSIM_BSP_UART_REG_LINE_STATUS_DR)
+           != OR1KSIM_BSP_UART_REG_LINE_STATUS_DR);
+
+  return OR1KSIM_REG(OR1KSIM_BSP_UART_REG_RX);
 }
 
 static void uart_write_polled(int minor, char c)
