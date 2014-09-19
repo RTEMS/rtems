@@ -54,18 +54,20 @@ Thread_Control *_Thread_queue_Dequeue(
     }
   }
 
-  /*
-   * We did not find a thread to unblock.
-   */
-  if ( !the_thread ) {
+  if ( the_thread == NULL ) {
+    /*
+     * We did not find a thread to unblock in the queue.  Maybe the executing
+     * thread is about to block on this thread queue.
+     */
     sync_state = the_thread_queue->sync_state;
     if ( (sync_state == THREAD_BLOCKING_OPERATION_TIMEOUT) ||
          (sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED) ) {
       the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
       the_thread = _Thread_Executing;
+    } else {
+      _ISR_Enable( level );
+      return NULL;
     }
-    _ISR_Enable( level );
-    return NULL;
   }
 
   /*
