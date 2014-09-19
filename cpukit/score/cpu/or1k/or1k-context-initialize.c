@@ -32,13 +32,14 @@ void _CPU_Context_Initialize(
   /* Decrement 200 byte to account for red-zone */
   uint32_t stack = ((uint32_t) stack_area_begin) - 200;
   uint32_t sr;
+  uint32_t stack_high = stack + stack_area_size;
 
   sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
 
   memset(context, 0, sizeof(*context));
 
-  context->r1 = stack;
-  context->r2 = stack;
+  context->r1 = stack_high;
+  context->r2 = stack_high;
   context->r9 = (uint32_t) entry_point;
   context->sr = sr;
 }
