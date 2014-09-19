@@ -494,6 +494,36 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_executing_on_a_processor(
 #endif
 
 /**
+ * @brief Returns @true and sets time_of_context_switch to the the
+ * time of the last context switch when the thread is currently executing
+ * in the system, otherwise @a false.
+ */
+RTEMS_INLINE_ROUTINE bool _Thread_Get_time_of_last_context_switch(
+  Thread_Control    *the_thread,
+  Timestamp_Control *time_of_context_switch
+)
+{
+  bool retval = false;
+
+  _Thread_Disable_dispatch();
+  #ifndef RTEMS_SMP
+    if ( _Thread_Executing->Object.id == the_thread->Object.id ) {
+      *time_of_context_switch = _Thread_Time_of_last_context_switch;
+      retval = true;
+    }
+  #else
+    if ( _Thread_Is_executing_on_a_processor( the_thread ) ) {
+      *time_of_context_switch =
+        _Thread_Get_CPU( the_thread )->time_of_last_context_switch;
+      retval = true;
+    }
+  #endif
+  _Thread_Enable_dispatch();
+  return retval;
+}
+
+
+/**
  * This function returns true if the_thread is the heir
  * thread, and false otherwise.
  */
