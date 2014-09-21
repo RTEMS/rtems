@@ -55,6 +55,16 @@
 
 /** @} */
 
+/**
+ * @name STM32F4XXXX FLASH
+ * @{
+ */
+
+#include <bsp/stm32f4xxxx_flash.h>
+#define STM32F4_FLASH ((volatile stm32f4_flash *) (STM32F4_BASE + 0x40023C00))
+
+/** @} */
+
 #include <bsp/stm32_i2c.h>
 
 /**

@@ -51,6 +51,7 @@ include_bsp_HEADERS += include/stm32f10xxx_rcc.h
 include_bsp_HEADERS += include/stm32f10xxx_exti.h
 include_bsp_HEADERS += include/stm32f4xxxx_gpio.h
 include_bsp_HEADERS += include/stm32f4xxxx_rcc.h
+include_bsp_HEADERS += include/stm32f4xxxx_flash.h
 include_bsp_HEADERS += include/stm32_i2c.h
 include_bsp_HEADERS += include/i2c.h
 include_bsp_HEADERS += include/stm32_usart.h
