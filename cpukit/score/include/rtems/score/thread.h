@@ -286,10 +286,6 @@ typedef struct {
    */
   uint32_t              return_code;
 
-  /** This field is the chain header for the second through Nth tasks
-   *  of the same priority blocked waiting on the same object.
-   */
-  Chain_Control         Block2n;
   /** This field points to the thread queue on which this thread is blocked. */
   Thread_queue_Control *queue;
 }   Thread_Wait_information;
