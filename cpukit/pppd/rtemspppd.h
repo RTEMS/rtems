@@ -6,13 +6,14 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.org/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifndef RTEMSPPPD_H
 #define RTEMSPPPD_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /* define hook function identifiers */
 #define RTEMS_PPPD_LINKUP_HOOK      1
@@ -36,5 +37,13 @@ int rtems_pppd_set_dialer(rtems_pppd_dialerfunction dialerfp);
 int rtems_pppd_set_option(const char *pOption, const char *pValue);
 int rtems_pppd_connect(void);
 int rtems_pppd_disconnect(void);
+
+struct rtems_bsdnet_ifconfig;
+
+int rtems_ppp_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif

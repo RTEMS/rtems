@@ -89,6 +89,7 @@
 #include <termios.h>
 #include <rtems/termiostypes.h>
 #include <rtems/rtems_bsdnet.h>
+#include <rtems/rtemspppd.h>
 #include <sys/param.h>
 #include <sys/systm.h>
 #include <sys/proc.h>
@@ -257,7 +258,9 @@ static rtems_task ppp_txdaemon(rtems_task_argument arg)
   rtems_event_set             events;
   int                         iprocess = (int               )0;
   struct ppp_softc           *sc       = (struct ppp_softc *)arg;
+#ifdef LALL_X
   struct mbuf                *mp;
+#endif
   struct mbuf                *mf;
   struct mbuf                *m;
   struct rtems_termios_tty   *tp;
@@ -322,7 +325,9 @@ static rtems_task ppp_txdaemon(rtems_task_argument arg)
 
       /* loop over all mbufs in chain */
       mf     = NULL;
+#ifdef LALL_X
       mp     = NULL;
+#endif
       m      = sc->sc_outm;
 
       sc->sc_outmc  = m;
@@ -1421,7 +1426,10 @@ ppp_inproc(struct ppp_softc *sc, struct mbuf *m)
     struct ifnet *ifp = &sc->sc_if;
     struct ifqueue *inq;
     int s, ilen, proto, rv; 
-    u_char *cp, adrs, ctrl;
+    u_char *cp;
+#ifdef VJC
+    u_char adrs, ctrl;
+#endif
     struct mbuf *mp;
 #ifdef PPP_COMPRESS
     struct mbuf *dmp = NULL;
@@ -1443,8 +1451,10 @@ ppp_inproc(struct ppp_softc *sc, struct mbuf *m)
     }
 
     cp = mtod(m, u_char *);
+#ifdef VJC
     adrs = PPP_ADDRESS(cp);
     ctrl = PPP_CONTROL(cp);
+#endif
     proto = PPP_PROTOCOL(cp);
 
     if (m->m_flags & M_ERRMARK) {

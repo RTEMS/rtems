@@ -2,9 +2,7 @@
 #define NETCONFIG_H_
 
 #include <bsp.h>
-
-/* external function prototypes */
-extern int rtems_ppp_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching);
+#include <rtems/rtemspppd.h>
 
 /* Default network interface */
 static struct rtems_bsdnet_ifconfig netdriver_config = {
