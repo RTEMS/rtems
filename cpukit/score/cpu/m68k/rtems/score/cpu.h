@@ -102,7 +102,7 @@ extern "C" {
 #define CPU_STACK_GROWS_UP               FALSE
 #define CPU_STRUCTURE_ALIGNMENT          __attribute__ ((aligned (4)))
 
-#define CPU_TIMESTAMP_USE_INT64_INLINE TRUE
+#define CPU_TIMESTAMP_USE_STRUCT_TIMESPEC TRUE
 
 /*
  *  Define what is required to specify how the network to host conversion
