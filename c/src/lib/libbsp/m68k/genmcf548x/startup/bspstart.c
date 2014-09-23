@@ -44,6 +44,7 @@
 \*===============================================================*/
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 extern uint32_t _CPU_cacr_shadow;
 
@@ -120,101 +121,9 @@ void bsp_cacr_clear_flags( uint32_t flags)
 }
 
 /*
- * There is no complete cache lock (only 2 ways of 4 can be locked)
- */
-void _CPU_cache_freeze_data(void)
-{
-  /* Do nothing */
-}
-
-void _CPU_cache_unfreeze_data(void)
-{
-  /* Do nothing */
-}
-
-void _CPU_cache_freeze_instruction(void)
-{
-  /* Do nothing */
-}
-
-void _CPU_cache_unfreeze_instruction(void)
-{
-  /* Do nothing */
-}
-
-void _CPU_cache_enable_instruction(void)
-{
-  bsp_cacr_clear_flags( MCF548X_CACR_IDCM);
-}
-
-void _CPU_cache_disable_instruction(void)
-{
-  bsp_cacr_set_flags( MCF548X_CACR_IDCM);
-}
-
-void _CPU_cache_invalidate_entire_instruction(void)
-{
-  bsp_cacr_set_self_clear_flags( MCF548X_CACR_ICINVA);
-}
-
-void _CPU_cache_invalidate_1_instruction_line(const void *addr)
-{
-  uint32_t a = (uint32_t) addr & ~0x3;
-
-  __asm__ volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x0));
-  __asm__ volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x1));
-  __asm__ volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x2));
-  __asm__ volatile ("cpushl %%ic,(%0)" :: "a" (a | 0x3));
-}
-
-void _CPU_cache_enable_data(void)
-{
-  bsp_cacr_clear_flags( MCF548X_CACR_DDCM( DCACHE_OFF_IMPRECISE));
-}
-
-void _CPU_cache_disable_data(void)
-{
-  bsp_cacr_set_flags( MCF548X_CACR_DDCM( DCACHE_OFF_IMPRECISE));
-}
-
-void _CPU_cache_invalidate_entire_data(void)
-{
-  bsp_cacr_set_self_clear_flags( MCF548X_CACR_DCINVA);
-}
-
-void _CPU_cache_invalidate_1_data_line( const void *addr)
-{
-  uint32_t a = (uint32_t) addr & ~0x3;
-
-  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x0));
-  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x1));
-  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x2));
-  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x3));
-}
-
-void _CPU_cache_flush_1_data_line( const void *addr)
-{
-  uint32_t a = (uint32_t) addr & ~0x3;
-
-  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x0));
-  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x1));
-  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x2));
-  __asm__ volatile ("cpushl %%dc,(%0)" :: "a" (a | 0x3));
-}
-
-void _CPU_cache_flush_entire_data( void)
-{
-  uint32_t line = 0;
-
-  for (line = 0; line < 512; ++line) {
-    _CPU_cache_flush_1_data_line( (const void *) (line * 16));
-  }
-}
-
-/*
  * Coldfire acr and mmu settings
  */
- void acr_mmu_mapping(void)
+ static void acr_mmu_mapping(void)
    {
 
   /*

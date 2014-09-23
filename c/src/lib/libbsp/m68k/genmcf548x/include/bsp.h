@@ -123,6 +123,13 @@ extern int rtems_mcf548x_fec_driver_attach_detach(struct rtems_bsdnet_ifconfig *
   
 #define DBUG_SETTINGS (*(const dbug_settings_t *)0xFC020000)
 #endif /* HAS_DBUG */
+
+void bsp_cacr_set_flags(uint32_t flags);
+
+void bsp_cacr_set_self_clear_flags(uint32_t flags);
+
+void bsp_cacr_clear_flags(uint32_t flags);
+
 #ifdef __cplusplus
 }
 #endif

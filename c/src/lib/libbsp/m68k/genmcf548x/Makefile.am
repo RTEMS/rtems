@@ -33,6 +33,7 @@ project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
+libbsp_a_CPPFLAGS =
 
 # startup
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c  \
@@ -57,6 +58,11 @@ libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 libbsp_a_SOURCES += irq/irq.c
 libbsp_a_SOURCES += irq/intc-icr-init-values.c
 
+# Cache
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += ../include/cache_.h
+libbsp_a_CPPFLAGS += -I$(srcdir)/include
+
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += network.rel
@@ -66,8 +72,7 @@ network_rel_CPPFLAGS = $(AM_CPPFLAGS) \
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
-                  ../../../libcpu/@RTEMS_CPU@/shared/misc.rel  \
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/misc.rel \
                   ../../../libcpu/@RTEMS_CPU@/mcf548x/mcdma.rel
 
 if HAS_NETWORKING
