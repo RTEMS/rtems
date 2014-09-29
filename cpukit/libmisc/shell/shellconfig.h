@@ -78,6 +78,7 @@ extern rtems_shell_cmd_t rtems_shell_RTC_Command;
 
 extern rtems_shell_cmd_t rtems_shell_HALT_Command;
 extern rtems_shell_cmd_t rtems_shell_CPUUSE_Command;
+extern rtems_shell_cmd_t rtems_shell_TOP_Command;
 extern rtems_shell_cmd_t rtems_shell_STACKUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_PERIODUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_WKSPACE_INFO_Command;
@@ -409,6 +410,11 @@ extern rtems_shell_alias_t *rtems_shell_Initial_aliases[];
       &rtems_shell_CPUUSE_Command,
     #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_TOP)) || \
+        defined(CONFIGURE_SHELL_COMMAND_TOP)
+      &rtems_shell_TOP_Command,
+    #endif
+     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_STACKUSE)) || \
         defined(CONFIGURE_SHELL_COMMAND_STACKUSE)
       &rtems_shell_STACKUSE_Command,
