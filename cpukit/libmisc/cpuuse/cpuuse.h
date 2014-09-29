@@ -63,6 +63,25 @@ void rtems_cpu_usage_report_with_plugin(
 void rtems_cpu_usage_report( void );
 
 /**
+ *   @brief CPU usage Top plugin
+ *
+ *   Report CPU Usage in top format to
+ *   to a print plugin.
+ */
+void rtems_cpu_usage_top_with_plugin(
+  void                  *context,
+  rtems_printk_plugin_t  print
+);
+
+/**
+ *  @brief CPU usage top.
+ *
+ *  CPU Usage top
+ */
+
+void rtems_cpu_usage_top( void );
+
+/**
  *  @brief Reset CPU usage.
  *
  *  CPU Usage Reporter
