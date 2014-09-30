@@ -606,7 +606,7 @@ pppstart(struct rtems_termios_tty *tp)
         sc->sc_outflag |= SC_TX_LASTCHAR;
         sc->sc_outflag &=~(SC_TX_FCS);
 		sc->sc_outchar = (u_char)PPP_FLAG;
-        (*tp->device.write)(tp->minor, (char *)&sc->sc_outchar, 1);
+        (*tp->handler.write)(tp, (char *)&sc->sc_outchar, 1);
         return(0);
       }
     }
@@ -643,7 +643,7 @@ pppstart(struct rtems_termios_tty *tp)
       }
 
       /* write out the character(s) and update the stats */
-      (*tp->device.write)(tp->minor, (char *)sendBegin, (ioffset > 0) ? ioffset : 1);
+      (*tp->handler.write)(tp, (char *)sendBegin, (ioffset > 0) ? ioffset : 1);
       sc->sc_stats.ppp_obytes += (ioffset > 0) ? ioffset : 1;
       sc->sc_outoff += ioffset;
     }
