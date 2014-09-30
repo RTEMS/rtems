@@ -1294,7 +1294,7 @@ ip_check_options(void)
      * Default our local IP address based on our hostname.
      * If local IP address already given, don't bother.
      */
-    if (wo->ouraddr == 0) {
+    if (wo->ouraddr == 0 && !disable_defaultip) {
 	/*
 	 * Look up our hostname (possibly with domain name appended)
 	 * and take the first IP address as our local IP address.
