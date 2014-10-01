@@ -568,12 +568,12 @@ BSP_uart_termios_read_com2(int uart)
 ssize_t
 BSP_uart_termios_write_com1(int minor, const char *buf, size_t len)
 {
-  assert(buf != NULL);
-
   if(len <= 0)
     {
       return 0;
     }
+
+  assert(buf != NULL);
 
   /* If there TX buffer is busy - something is royally screwed up */
   assert((uread(BSP_UART_COM1, LSR) & THRE) != 0);
@@ -602,12 +602,12 @@ BSP_uart_termios_write_com1(int minor, const char *buf, size_t len)
 ssize_t
 BSP_uart_termios_write_com2(int minor, const char *buf, size_t len)
 {
-  assert(buf != NULL);
-
   if(len <= 0)
     {
       return 0;
     }
+
+  assert(buf != NULL);
 
   /* If there TX buffer is busy - something is royally screwed up */
   assert((uread(BSP_UART_COM2, LSR) & THRE) != 0);
