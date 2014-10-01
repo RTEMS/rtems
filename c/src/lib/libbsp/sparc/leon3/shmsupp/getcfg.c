@@ -60,7 +60,7 @@ shm_config_table BSP_shm_cfgtbl __attribute__((weak)) =
   Shm_Cause_interrupt,
   {
     NULL,
-    1 << LEON3_MP_IRQ,      /* USER OVERRIDABLE */
+    0,                      /* USER OVERRIDABLE - Uses default MP-IRQ if 0 */
     4,
   },
 };
@@ -93,7 +93,7 @@ void Shm_Get_configuration(
   BSP_shm_cfgtbl.Intr.address =
      (vol_u32 *) &(LEON3_IrqCtrl_Regs->force[LEON3_Cpu_Index]);
   if (BSP_shm_cfgtbl.Intr.value == 0)
-    BSP_shm_cfgtbl.Intr.value = 1 << LEON3_MP_IRQ; /* Use default MP-IRQ */
+    BSP_shm_cfgtbl.Intr.value = 1 << LEON3_mp_irq; /* Use default MP-IRQ */
   BSP_shm_cfgtbl.Intr.length  = 4;
 
   if (LEON3_Cpu_Index == 0) {

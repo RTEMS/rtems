@@ -119,8 +119,6 @@ static __inline__ int bsp_irq_fixup(int irq)
 
 /* Macros used for manipulating bits in LEON3 GP Timer Control Register */
 
-#define LEON3_MP_IRQ    14        /* Irq used by shared memory driver */
-
 #define LEON3_IRQMPSTATUS_CPUNR     28
 #define LEON3_IRQMPSTATUS_BROADCAST 27
 

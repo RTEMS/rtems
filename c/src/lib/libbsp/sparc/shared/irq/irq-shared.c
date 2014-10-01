@@ -32,10 +32,10 @@ void BSP_shared_interrupt_init(void)
        int i;
 
        for (i=0; i <= BSP_INTERRUPT_VECTOR_MAX_STD; i++) {
-#if defined(LEON3_MP_IRQ) && \
+#if defined(LEON3) && \
     (defined(RTEMS_SMP) || defined(RTEMS_MULTIPROCESSING))
                /* Don't install IRQ handler on IPI interrupt */
-               if (i == LEON3_MP_IRQ)
+               if (i == LEON3_mp_irq)
                        continue;
 #endif
                vector = SPARC_ASYNCHRONOUS_TRAP(i) + 0x10;
