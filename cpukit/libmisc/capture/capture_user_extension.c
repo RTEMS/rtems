@@ -95,6 +95,9 @@ static inline void rtems_capture_record (
 
   if (rtems_capture_filter( tcb, events) )
     return;
+  
+  if (!rtems_capture_task_recorded (tcb))
+    rtems_capture_record_task (tcb);
 
   rtems_capture_begin_add_record (tcb, events, size, &ptr);
   rtems_capture_end_add_record ( ptr );
@@ -141,13 +144,13 @@ rtems_capture_create_task (rtems_tcb* ct,
    * been created before the capture engine was open. Add them.
    */
 
-  if (!rtems_capture_task_recorded (ct))
-    rtems_capture_record_task (ct);
+  if (!rtems_capture_task_initialized (ct))
+    rtems_capture_initialize_task (ct);
 
   /*
    * Create the new task's capture control block.
    */
-  rtems_capture_record_task (nt);
+  rtems_capture_initialize_task (nt);
 
   if (rtems_capture_trigger (ct, nt, RTEMS_CAPTURE_CREATE))
   {
@@ -170,11 +173,11 @@ rtems_capture_start_task (rtems_tcb* ct,
    * been created before the capture engine was open. Add them.
    */
 
-  if (!rtems_capture_task_recorded (ct))
-    rtems_capture_record_task (ct);
+  if (!rtems_capture_task_initialized (ct))
+    rtems_capture_initialize_task (ct);
 
   if (st == NULL)
-    rtems_capture_record_task (st);
+    rtems_capture_initialize_task (st);
 
   if (rtems_capture_trigger (ct, st, RTEMS_CAPTURE_START))
   {
@@ -195,11 +198,11 @@ rtems_capture_restart_task (rtems_tcb* ct,
    * been created before the capture engine was open. Add them.
    */
 
-  if (!rtems_capture_task_recorded (ct))
-    rtems_capture_record_task (ct);
+  if (!rtems_capture_task_initialized (ct))
+    rtems_capture_initialize_task (ct);
 
-  if (!rtems_capture_task_recorded (rt))
-    rtems_capture_record_task (rt);
+  if (!rtems_capture_task_initialized (rt))
+    rtems_capture_initialize_task (rt);
 
   if (rtems_capture_trigger (ct, rt, RTEMS_CAPTURE_RESTART))
   {
@@ -215,11 +218,11 @@ static void
 rtems_capture_delete_task (rtems_tcb* ct,
                            rtems_tcb* dt)
 {
-  if (!rtems_capture_task_recorded (ct))
-    rtems_capture_record_task (ct);
+  if (!rtems_capture_task_initialized (ct))
+    rtems_capture_initialize_task (ct);
 
-  if (!rtems_capture_task_recorded (dt))
-    rtems_capture_record_task (dt);
+  if (!rtems_capture_task_initialized (dt))
+    rtems_capture_initialize_task (dt);
 
   if (rtems_capture_trigger (ct, dt, RTEMS_CAPTURE_DELETE))
   {
@@ -239,8 +242,8 @@ rtems_capture_begin_task (rtems_tcb* bt)
    * been created before the capture engine was open. Add them.
    */
 
-  if (!rtems_capture_task_recorded (bt))
-    rtems_capture_record_task (bt);
+  if (!rtems_capture_task_initialized (bt))
+    rtems_capture_initialize_task (bt);
 
   if (rtems_capture_trigger (NULL, bt, RTEMS_CAPTURE_BEGIN))
     rtems_capture_record (bt, RTEMS_CAPTURE_BEGIN_EVENT);
@@ -258,8 +261,8 @@ rtems_capture_exitted_task (rtems_tcb* et)
    * been created before the capture engine was open. Add them.
    */
 
-  if (!rtems_capture_task_recorded (et))
-    rtems_capture_record_task (et);
+  if (!rtems_capture_task_initialized (et))
+    rtems_capture_initialize_task (et);
 
   if (rtems_capture_trigger (NULL, et, RTEMS_CAPTURE_EXITTED))
     rtems_capture_record (et, RTEMS_CAPTURE_EXITTED_EVENT);
@@ -276,8 +279,8 @@ rtems_capture_terminated_task (rtems_tcb* tt)
    * been created before the capture engine was open. Add them.
    */
 
-  if (!rtems_capture_task_recorded (tt))
-    rtems_capture_record_task (tt);
+  if (!rtems_capture_task_initialized (tt))
+    rtems_capture_initialize_task (tt);
 
   if (rtems_capture_trigger (NULL, tt, RTEMS_CAPTURE_TERMINATED))
     rtems_capture_record (tt, RTEMS_CAPTURE_TERMINATED_EVENT);
@@ -300,11 +303,11 @@ rtems_capture_switch_task (rtems_tcb* ct,
   {
     rtems_capture_time_t time;
 
-    if (!rtems_capture_task_recorded (ct))
-      rtems_capture_record_task (ct);
+    if (!rtems_capture_task_initialized (ct))
+      rtems_capture_initialize_task (ct);
 
-    if (!rtems_capture_task_recorded (ht))
-      rtems_capture_record_task (ht);
+    if (!rtems_capture_task_initialized (ht))
+      rtems_capture_initialize_task (ht);
 
     /*
      * Update the execution time. Assume the time will not overflow

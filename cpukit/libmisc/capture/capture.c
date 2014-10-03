@@ -313,26 +313,35 @@ rtems_capture_create_control (rtems_name name, rtems_id id)
   return control;
 }
 
-void rtems_capture_record_task( rtems_tcb* tcb )
+void rtems_capture_initialize_task( rtems_tcb* tcb )
 {
   rtems_capture_control_t*    control;
-  rtems_capture_task_record_t rec;
-  void*                       ptr;
-
-  rtems_object_get_classic_name( tcb->Object.id, &rec.name );
+  rtems_name                  name;
 
   /*
    * We need to scan the default control list to initialise
    * this control if it is a new task.
    */
 
+  rtems_object_get_classic_name( tcb->Object.id, &name );
+
   if (tcb->Capture.control == NULL) {
     for (control = capture_controls; control != NULL; control = control->next)
       if (rtems_capture_match_name_id (control->name, control->id,
-                                       rec.name, tcb->Object.id))
+                                       name, tcb->Object.id))
         tcb->Capture.control = control;
   }
 
+  tcb->Capture.flags |= RTEMS_CAPTURE_INIT_TASK;
+}
+
+void rtems_capture_record_task( rtems_tcb* tcb )
+{
+  rtems_capture_task_record_t rec;
+  void*                       ptr;
+
+  rtems_object_get_classic_name( tcb->Object.id, &rec.name );
+   
   rec.stack_size = tcb->Start.Initial_stack.size;
   rec.start_priority = _RTEMS_tasks_Priority_from_Core(
     tcb->Start.initial_priority
@@ -1224,6 +1233,8 @@ rtems_capture_release (uint32_t count)
   rtems_capture_record_t*      rec;
   uint32_t                     counted;
   size_t                       ptr_size = 0;
+  size_t                       rel_size = 0;
+  rtems_status_code            ret_val = RTEMS_SUCCESSFUL;
 
   rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
@@ -1237,26 +1248,32 @@ rtems_capture_release (uint32_t count)
   ptr = rtems_capture_buffer_peek( &capture_records, &ptr_size );
   _Assert(ptr_size >= (count * sizeof(*rec) ));
 
-  ptr_size = 0;
+  rel_size = 0;
   while (counted--)
-  { 
+  {
     rec = (rtems_capture_record_t*) ptr;
-    ptr_size += rec->size;
+    rel_size += rec->size;
+    _Assert( rel_size <= ptr_size );
     ptr += rec->size;
   }
 
   rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
 
+  if (rel_size > ptr_size ) {
+    ret_val = RTEMS_INVALID_NUMBER;
+    rel_size = ptr_size;
+  }
+
   capture_count -= count;
 
   if (count) 
-    rtems_capture_buffer_free( &capture_records, ptr_size );
+    rtems_capture_buffer_free( &capture_records, rel_size );
 
   capture_flags &= ~RTEMS_CAPTURE_READER_ACTIVE;
 
   rtems_interrupt_lock_release (&capture_lock, &lock_context);
 
-  return RTEMS_SUCCESSFUL;
+  return ret_val;
 }
 
 /*

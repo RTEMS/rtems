@@ -141,7 +141,8 @@ typedef struct rtems_capture_control_s
  * Task flags.
  */
 #define RTEMS_CAPTURE_TRACED      (1U << 0)
-#define RTEMS_CAPTURE_RECORD_TASK (1U << 1)
+#define RTEMS_CAPTURE_INIT_TASK   (1U << 1)
+#define RTEMS_CAPTURE_RECORD_TASK (1U << 2)
 
 /*
  * @brief Capture record.
@@ -598,6 +599,15 @@ const char*
 rtems_capture_event_text (int event);
 
 /**
+ * @brief Capture initialize task
+ *
+ * This function initializes capture control in the tcb.
+ *
+ * @param[in] tcb is the task control block for the task
+ */
+void rtems_capture_initialize_task( rtems_tcb* tcb );
+
+/**
  * @brief Capture record task.
  * 
  * This function records a new capture task record.
@@ -616,6 +626,18 @@ void rtems_capture_record_task( rtems_tcb* tcb );
  */
 static inline bool rtems_capture_task_recorded( rtems_tcb* tcb ) {
   return ( (tcb->Capture.flags & RTEMS_CAPTURE_RECORD_TASK) != 0 );
+}
+
+/**
+ * @brief Capture task initialized
+ *
+ * This function returns true if this task information has been 
+ * initialized.
+ *
+ * @param[in] tcb is the task control block for the task
+ */
+static inline bool rtems_capture_task_initialized( rtems_tcb* tcb ) {
+  return ( (tcb->Capture.flags & RTEMS_CAPTURE_INIT_TASK) != 0 );
 }
 
 /**
