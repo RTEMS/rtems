@@ -86,7 +86,9 @@ __FBSDID("$FreeBSD$");
 #include <ctype.h>
 //#include <err.h>
 #include <errno.h>
+#if !defined(__rtems__)
 #include <math.h>
+#endif
 #include <netdb.h>
 #include <signal.h>
 #include <stdio.h>
@@ -333,7 +335,6 @@ static char *pr_ntime(n_time);
 static void pr_icmph(struct icmp *);
 static void pr_iph(struct ip *);
 static void pr_retip(struct ip *);
-static void status(int);
 static void stopit(int);
 static void tvsub(struct timeval *, struct timeval *);
 
@@ -358,7 +359,7 @@ static void g_pr_pack(char *, int, struct sockaddr_in *, struct timeval *, rtems
 #define usage() g_usage(globals)
 static void g_usage(rtems_shell_globals_t* globals) __dead2;
 
-void
+static void
 rtems_shell_ping_exit (rtems_shell_globals_t* globals, int code)
 {
   globals->exit_code = code;
@@ -1581,14 +1582,14 @@ tvsub(out, in)
  *	Print out statistics when SIGINFO is received.
  */
 
+#if !defined(__rtems__)
 static void
 status(sig)
 	int sig __unused;
 {
-#if !__rtems__
 	siginfo_p = 1;
-#endif
 }
+#endif
 
 static void
 g_check_status(globals)
@@ -1638,10 +1639,16 @@ g_finish(globals)
 	if (nreceived && timing) {
 		double n = nreceived + nrepeats;
 		double avg = tsum / n;
+#if defined(__rtems__)
+		(void) printf(
+		    "round-trip min/avg/max/stddev = %.3f/%.3f/%.3f ms\n",
+		    tmin, avg, tmax);
+#else
 		double vari = tsumsq / n - avg * avg;
 		(void)printf(
 		    "round-trip min/avg/max/stddev = %.3f/%.3f/%.3f/%.3f ms\n",
 		    tmin, avg, tmax, sqrt(vari));
+#endif
 	}
 	if (nreceived)
 		exit(0);
@@ -1917,7 +1924,7 @@ g_fill(bp, patp, globals)
 	u_int ii, jj, kk;
 
 	for (cp = patp; *cp; cp++) {
-		if (!isxdigit(*cp))
+		if (!isxdigit((int)*cp))
 			errx(&globals->exit_jmp, EX_USAGE,
 			    "patterns must be specified as hex digits");
 
