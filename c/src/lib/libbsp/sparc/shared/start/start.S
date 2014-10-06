@@ -365,11 +365,4 @@ zerobss:
         call    SYM(boot_card)          ! does not return
          sub     %sp, 0x60, %sp         ! room for boot_card to save args
 
-#if !defined(START_LEON3_ENABLE_SMP)
-        PUBLIC(bsp_reset)
-SYM(bsp_reset):
-        call    SYM(BSP_fatal_exit)
-         clr     %o0
-#endif
-
 /* end of file */

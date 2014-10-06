@@ -48,7 +48,7 @@ RTEMS_BSPOPTS_HELP([BSP_POWER_DOWN_AT_FATAL_HALT],
 [If defined, CPU is spinning on fatal exit. Otherwise generate system
  error which will hand over to debugger, simulator, etc.])
 
-RTEMS_BSP_CLEANUP_OPTIONS(0,1,1)
+RTEMS_BSP_CLEANUP_OPTIONS(0, 0, 1)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
