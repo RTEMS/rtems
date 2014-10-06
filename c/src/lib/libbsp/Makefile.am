@@ -34,6 +34,7 @@ include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS =
 include_bsp_HEADERS += shared/include/default-initial-extension.h
 include_bsp_HEADERS += shared/include/fatal.h
+include_bsp_HEADERS += shared/include/console-termios.h
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/subdirs.am
