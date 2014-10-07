@@ -387,7 +387,7 @@ static rtems_task ppp_txdaemon(rtems_task_argument arg)
   
         /* write out frame byte to start the transmission */
 		sc->sc_outchar = (u_char)PPP_FLAG;
-        (*tp->handler.write)(tp, (char *)&sc->sc_outchar, 1);
+        (*tp->handler.write)(tp->device_context, (char *)&sc->sc_outchar, 1);
       }
 
       /* check to see if we need to free some empty mbufs */

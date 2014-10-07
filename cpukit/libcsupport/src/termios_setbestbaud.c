@@ -19,8 +19,8 @@
 #include <rtems/termiostypes.h>
 
 void rtems_termios_set_best_baud(
-  rtems_termios_tty *tty,
-  uint32_t           baud
+  struct termios *term,
+  uint32_t        baud
 )
 {
   const rtems_assoc_t *current = &rtems_termios_baud_table[ 0 ];
@@ -41,5 +41,5 @@ void rtems_termios_set_best_baud(
     cbaud = B460800;
   }
 
-  tty->termios.c_cflag = (tty->termios.c_cflag & ~cbaud_mask) | cbaud;
+  term->c_cflag = (term->c_cflag & ~cbaud_mask) | cbaud;
 }

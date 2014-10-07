@@ -134,7 +134,7 @@ rtems_status_code rtems_termios_device_install(
   rtems_device_minor_number           minor,
   const rtems_termios_device_handler *handler,
   const rtems_termios_device_flow    *flow,
-  void                               *context
+  rtems_termios_device_context       *context
 )
 {
   rtems_status_code          sc;
@@ -227,12 +227,23 @@ rtems_status_code rtems_termios_device_remove(
   return RTEMS_SUCCESSFUL;
 }
 
+static rtems_termios_tty *
+legacyContextToTTY (rtems_termios_device_context *ctx)
+{
+  return RTEMS_CONTAINER_OF (ctx, rtems_termios_tty, legacy_device_context);
+}
+
 static bool
 rtems_termios_callback_firstOpen(
   rtems_termios_tty             *tty,
+  rtems_termios_device_context  *ctx,
+  struct termios                *term,
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) ctx;
+  (void) term;
+
   (*tty->device.firstOpen) (tty->major, tty->minor, args);
 
   return true;
@@ -241,48 +252,61 @@ rtems_termios_callback_firstOpen(
 static void
 rtems_termios_callback_lastClose(
   rtems_termios_tty             *tty,
+  rtems_termios_device_context  *ctx,
   rtems_libio_open_close_args_t *args
 )
 {
+  (void) ctx;
+
   (*tty->device.lastClose) (tty->major, tty->minor, args);
 }
 
 static int
-rtems_termios_callback_pollRead (struct rtems_termios_tty *tty)
+rtems_termios_callback_pollRead (rtems_termios_device_context *ctx)
 {
+  rtems_termios_tty *tty = legacyContextToTTY (ctx);
+
   return (*tty->device.pollRead) (tty->minor);
 }
 
 static void
 rtems_termios_callback_write(
-  rtems_termios_tty *tty,
-  const char        *buf,
-  size_t             len
+  rtems_termios_device_context *ctx,
+  const char                   *buf,
+  size_t                        len
 )
 {
+  rtems_termios_tty *tty = legacyContextToTTY (ctx);
+
   (*tty->device.write) (tty->minor, buf, len);
 }
 
 static bool
 rtems_termios_callback_setAttributes(
-  rtems_termios_tty    *tty,
-  const struct termios *term
+  rtems_termios_device_context *ctx,
+  const struct termios         *term
 )
 {
+  rtems_termios_tty *tty = legacyContextToTTY (ctx);
+
   (*tty->device.setAttributes) (tty->minor, term);
 
   return true;
 }
 
 static void
-rtems_termios_callback_stopRemoteTx (rtems_termios_tty *tty)
+rtems_termios_callback_stopRemoteTx (rtems_termios_device_context *ctx)
 {
+  rtems_termios_tty *tty = legacyContextToTTY (ctx);
+
   (*tty->device.stopRemoteTx) (tty->minor);
 }
 
 static void
-rtems_termios_callback_startRemoteTx (rtems_termios_tty *tty)
+rtems_termios_callback_startRemoteTx (rtems_termios_device_context *ctx)
 {
+  rtems_termios_tty *tty = legacyContextToTTY (ctx);
+
   (*tty->device.startRemoteTx) (tty->minor);
 }
 
@@ -292,21 +316,22 @@ rtems_termios_callback_startRemoteTx (rtems_termios_tty *tty)
 static void
 drainOutput (struct rtems_termios_tty *tty)
 {
+  rtems_termios_device_context *ctx = tty->device_context;
   rtems_interrupt_lock_context lock_context;
   rtems_status_code sc;
 
   if (tty->handler.mode != TERMIOS_POLLED) {
-    rtems_termios_interrupt_lock_acquire (tty, &lock_context);
+    rtems_termios_device_lock_acquire (ctx, &lock_context);
     while (tty->rawOutBuf.Tail != tty->rawOutBuf.Head) {
       tty->rawOutBufState = rob_wait;
-      rtems_termios_interrupt_lock_release (tty, &lock_context);
+      rtems_termios_device_lock_release (ctx, &lock_context);
       sc = rtems_semaphore_obtain(
         tty->rawOutBuf.Semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
       if (sc != RTEMS_SUCCESSFUL)
         rtems_fatal_error_occurred (sc);
-      rtems_termios_interrupt_lock_acquire (tty, &lock_context);
+      rtems_termios_device_lock_acquire (ctx, &lock_context);
     }
-    rtems_termios_interrupt_lock_release (tty, &lock_context);
+    rtems_termios_device_lock_release (ctx, &lock_context);
   }
 }
 
@@ -344,7 +369,7 @@ rtems_termios_destroy_tty (rtems_termios_tty *tty, void *arg, bool last_close)
       rtems_fatal_error_occurred (sc);
   }
   if (last_close && tty->handler.last_close)
-     (*tty->handler.last_close)(tty, arg);
+     (*tty->handler.last_close)(tty, tty->device_context, arg);
 
   if (tty->device_node != NULL)
     tty->device_node->tty = NULL;
@@ -355,7 +380,10 @@ rtems_termios_destroy_tty (rtems_termios_tty *tty, void *arg, bool last_close)
   if ((tty->handler.poll_read == NULL) ||
       (tty->handler.mode == TERMIOS_TASK_DRIVEN))
     rtems_semaphore_delete (tty->rawInBuf.Semaphore);
-  rtems_interrupt_lock_destroy (&tty->interrupt_lock);
+
+  if (tty->device_context == &tty->legacy_device_context)
+    rtems_interrupt_lock_destroy (&tty->legacy_device_context.interrupt_lock);
+
   free (tty->rawInBuf.theBuf);
   free (tty->rawOutBuf.theBuf);
   free (tty->cbuf);
@@ -489,7 +517,10 @@ rtems_termios_open_tty(
       tty->device = *callbacks;
     }
 
-    rtems_interrupt_lock_initialize (&tty->interrupt_lock, "Termios");
+    if (tty->device_context == NULL) {
+      tty->device_context = &tty->legacy_device_context;
+      rtems_termios_device_context_initialize (tty->device_context, "Termios");
+    }
 
     /*
      * Create I/O tasks
@@ -569,8 +600,8 @@ rtems_termios_open_tty(
   }
   args->iop->data1 = tty;
   if (!tty->refcount++) {
-    if (tty->handler.first_open &&
-        !(*tty->handler.first_open)(tty, args)) {
+    if (tty->handler.first_open && !(*tty->handler.first_open)(
+        tty, tty->device_context, &tty->termios, args)) {
       rtems_termios_destroy_tty(tty, args, false);
       return NULL;
     }
@@ -683,24 +714,26 @@ rtems_termios_open (
 static void
 flushOutput (struct rtems_termios_tty *tty)
 {
+  rtems_termios_device_context *ctx = tty->device_context;
   rtems_interrupt_lock_context lock_context;
 
-  rtems_termios_interrupt_lock_acquire (tty, &lock_context);
+  rtems_termios_device_lock_acquire (ctx, &lock_context);
   tty->rawOutBuf.Tail = 0;
   tty->rawOutBuf.Head = 0;
   tty->rawOutBufState = rob_idle;
-  rtems_termios_interrupt_lock_release (tty, &lock_context);
+  rtems_termios_device_lock_release (ctx, &lock_context);
 }
 
 static void
 flushInput (struct rtems_termios_tty *tty)
 {
+  rtems_termios_device_context *ctx = tty->device_context;
   rtems_interrupt_lock_context lock_context;
 
-  rtems_termios_interrupt_lock_acquire (tty, &lock_context);
+  rtems_termios_device_lock_acquire (ctx, &lock_context);
   tty->rawInBuf.Tail = 0;
   tty->rawInBuf.Head = 0;
-  rtems_termios_interrupt_lock_release (tty, &lock_context);
+  rtems_termios_device_lock_release (ctx, &lock_context);
 }
 
 static void
@@ -784,6 +817,7 @@ rtems_status_code rtems_termios_bufsize (
 static void
 termios_set_flowctrl(struct rtems_termios_tty *tty)
 {
+  rtems_termios_device_context *ctx = tty->device_context;
   rtems_interrupt_lock_context lock_context;
   /*
    * check for flow control options to be switched off
@@ -798,16 +832,16 @@ termios_set_flowctrl(struct rtems_termios_tty *tty)
     /* has output been stopped due to received XOFF? */
     if (tty->flow_ctrl & FL_OSTOP) {
       /* disable interrupts    */
-      rtems_termios_interrupt_lock_acquire (tty, &lock_context);
+      rtems_termios_device_lock_acquire (ctx, &lock_context);
       tty->flow_ctrl &= ~FL_OSTOP;
       /* check for chars in output buffer (or rob_state?) */
       if (tty->rawOutBufState != rob_idle) {
         /* if chars available, call write function... */
         (*tty->handler.write)(
-          tty, &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail],1);
+          ctx, &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail],1);
       }
       /* reenable interrupts */
-      rtems_termios_interrupt_lock_release (tty, &lock_context);
+      rtems_termios_device_lock_release (ctx, &lock_context);
     }
   }
   /* check for incoming XON/XOFF flow control switched off */
@@ -826,7 +860,7 @@ termios_set_flowctrl(struct rtems_termios_tty *tty)
     /* restart remote Tx, if it was stopped */
     if ((tty->flow_ctrl & FL_IRTSOFF) &&
         (tty->flow.start_remote_tx != NULL)) {
-      tty->flow.start_remote_tx(tty);
+      tty->flow.start_remote_tx(ctx);
     }
     tty->flow_ctrl &= ~(FL_IRTSOFF);
   }
@@ -906,7 +940,7 @@ rtems_termios_ioctl (void *arg)
       }
     }
     if (tty->handler.set_attributes) {
-      sc = (*tty->handler.set_attributes)(tty, &tty->termios) ?
+      sc = (*tty->handler.set_attributes)(tty->device_context, &tty->termios) ?
         RTEMS_SUCCESSFUL : RTEMS_IO_ERROR;
     }
     break;
@@ -1003,7 +1037,7 @@ startXmit (
     nToSend = 0;
     /* stop transmitter */
     if (transmitting) {
-      (*tty->handler.write) (tty, NULL, 0);
+      (*tty->handler.write) (tty->device_context, NULL, 0);
     }
   } else {
     /* when flow control XON or XOF, don't send blocks of data     */
@@ -1017,7 +1051,7 @@ startXmit (
       nToSend = tty->rawOutBuf.Head - newTail;
 
     (*tty->handler.write)(
-        tty, &tty->rawOutBuf.theBuf[newTail], nToSend);
+        tty->device_context, &tty->rawOutBuf.theBuf[newTail], nToSend);
   }
 
   return nToSend;
@@ -1032,11 +1066,12 @@ rtems_termios_puts (
 {
   const char *buf = _buf;
   unsigned int newHead;
+  rtems_termios_device_context *ctx = tty->device_context;
   rtems_interrupt_lock_context lock_context;
   rtems_status_code sc;
 
   if (tty->handler.mode == TERMIOS_POLLED) {
-    (*tty->handler.write)(tty, buf, len);
+    (*tty->handler.write)(ctx, buf, len);
     return;
   }
 
@@ -1049,15 +1084,15 @@ rtems_termios_puts (
     if (newHead >= tty->rawOutBuf.Size)
       newHead -= tty->rawOutBuf.Size;
 
-    rtems_termios_interrupt_lock_acquire (tty, &lock_context);
+    rtems_termios_device_lock_acquire (ctx, &lock_context);
     while (newHead == tty->rawOutBuf.Tail) {
       tty->rawOutBufState = rob_wait;
-      rtems_termios_interrupt_lock_release (tty, &lock_context);
+      rtems_termios_device_lock_release (ctx, &lock_context);
       sc = rtems_semaphore_obtain(
         tty->rawOutBuf.Semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
       if (sc != RTEMS_SUCCESSFUL)
         rtems_fatal_error_occurred (sc);
-      rtems_termios_interrupt_lock_acquire (tty, &lock_context);
+      rtems_termios_device_lock_acquire (ctx, &lock_context);
     }
 
     /* Determine free space up to current tail or end of ring buffer */
@@ -1090,7 +1125,7 @@ rtems_termios_puts (
       startXmit (tty, tty->rawOutBuf.Tail, false);
     }
 
-    rtems_termios_interrupt_lock_release (tty, &lock_context);
+    rtems_termios_device_lock_release (ctx, &lock_context);
 
     buf += nToCopy;
     len -= nToCopy;
@@ -1371,7 +1406,7 @@ fillBufferPoll (struct rtems_termios_tty *tty)
 
   if (tty->termios.c_lflag & ICANON) {
     for (;;) {
-      n = (*tty->handler.poll_read)(tty);
+      n = (*tty->handler.poll_read)(tty->device_context);
       if (n < 0) {
         rtems_task_wake_after (1);
       } else {
@@ -1384,7 +1419,7 @@ fillBufferPoll (struct rtems_termios_tty *tty)
 
     then = rtems_clock_get_ticks_since_boot();
     for (;;) {
-      n = (*tty->handler.poll_read)(tty);
+      n = (*tty->handler.poll_read)(tty->device_context);
       if (n < 0) {
         if (tty->termios.c_cc[VMIN]) {
           if (tty->termios.c_cc[VTIME] && tty->ccount) {
@@ -1447,12 +1482,12 @@ fillBufferQueue (struct rtems_termios_tty *tty)
           || (tty->flow_ctrl & FL_OSTOP))) {
           /* XON should be sent now... */
           (*tty->handler.write)(
-            tty, (void *)&(tty->termios.c_cc[VSTART]), 1);
+            tty->device_context, (void *)&(tty->termios.c_cc[VSTART]), 1);
         } else if (tty->flow_ctrl & FL_MDRTS) {
           tty->flow_ctrl &= ~FL_IRTSOFF;
           /* activate RTS line */
           if (tty->flow.start_remote_tx != NULL) {
-            tty->flow.start_remote_tx(tty);
+            tty->flow.start_remote_tx(tty->device_context);
           }
         }
       }
@@ -1550,6 +1585,7 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
   char c;
   int dropped = 0;
   bool flow_rcv = false; /* true, if flow control char received */
+  rtems_termios_device_context *ctx = tty->device_context;
   rtems_interrupt_lock_context lock_context;
 
   if (rtems_termios_linesw[tty->t_line].l_rint != NULL) {
@@ -1598,21 +1634,21 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
       /* restart output according to FL_ORCVXOF flag */
       if ((tty->flow_ctrl & (FL_ORCVXOF | FL_OSTOP)) == FL_OSTOP) {
         /* disable interrupts    */
-        rtems_termios_interrupt_lock_acquire (tty, &lock_context);
+        rtems_termios_device_lock_acquire (ctx, &lock_context);
         tty->flow_ctrl &= ~FL_OSTOP;
         /* check for chars in output buffer (or rob_state?) */
         if (tty->rawOutBufState != rob_idle) {
           /* if chars available, call write function... */
           (*tty->handler.write)(
-            tty, &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail], 1);
+            ctx, &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail], 1);
         }
         /* reenable interrupts */
-        rtems_termios_interrupt_lock_release (tty, &lock_context);
+        rtems_termios_device_lock_release (ctx, &lock_context);
       }
     } else {
       newTail = (tty->rawInBuf.Tail + 1) % tty->rawInBuf.Size;
       /* if chars_in_buffer > highwater                */
-      rtems_termios_interrupt_lock_acquire (tty, &lock_context);
+      rtems_termios_device_lock_acquire (ctx, &lock_context);
       if ((((newTail - tty->rawInBuf.Head + tty->rawInBuf.Size)
             % tty->rawInBuf.Size) > tty->highwater) &&
           !(tty->flow_ctrl & FL_IREQXOF)) {
@@ -1625,20 +1661,20 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
             /* if tx is stopped due to XOFF or out of data */
             /*    call write function here                 */
             tty->flow_ctrl |= FL_ISNTXOF;
-            (*tty->handler.write)(tty,
+            (*tty->handler.write)(ctx,
                 (void *)&(tty->termios.c_cc[VSTOP]), 1);
           }
         } else if ((tty->flow_ctrl & (FL_MDRTS | FL_IRTSOFF)) == (FL_MDRTS) ) {
           tty->flow_ctrl |= FL_IRTSOFF;
           /* deactivate RTS line */
           if (tty->flow.stop_remote_tx != NULL) {
-            tty->flow.stop_remote_tx(tty);
+            tty->flow.stop_remote_tx(ctx);
           }
         }
       }
 
       /* reenable interrupts */
-      rtems_termios_interrupt_lock_release (tty, &lock_context);
+      rtems_termios_device_lock_release (ctx, &lock_context);
 
       if (newTail == tty->rawInBuf.Head) {
         dropped++;
@@ -1672,16 +1708,17 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
   bool wakeUpWriterTask = false;
   unsigned int newTail;
   int nToSend;
+  rtems_termios_device_context *ctx = tty->device_context;
   rtems_interrupt_lock_context lock_context;
   int len;
 
-  rtems_termios_interrupt_lock_acquire (tty, &lock_context);
+  rtems_termios_device_lock_acquire (ctx, &lock_context);
 
   /* check for XOF/XON to send */
   if ((tty->flow_ctrl & (FL_MDXOF | FL_IREQXOF | FL_ISNTXOF))
       == (FL_MDXOF | FL_IREQXOF)) {
     /* XOFF should be sent now... */
-    (*tty->handler.write)(tty, (void *)&(tty->termios.c_cc[VSTOP]), 1);
+    (*tty->handler.write)(ctx, (void *)&(tty->termios.c_cc[VSTOP]), 1);
 
     tty->t_dqlen--;
     tty->flow_ctrl |= FL_ISNTXOF;
@@ -1697,7 +1734,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
      * buffer, although the corresponding data is not yet out!
      * Therefore the dequeue "length" should be reduced by 1
      */
-    (*tty->handler.write)(tty, (void *)&(tty->termios.c_cc[VSTART]), 1);
+    (*tty->handler.write)(ctx, (void *)&(tty->termios.c_cc[VSTART]), 1);
 
     tty->t_dqlen--;
     tty->flow_ctrl &= ~FL_ISNTXOF;
@@ -1714,7 +1751,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
       wakeUpWriterTask = true;
     }
 
-    (*tty->handler.write) (tty, NULL, 0);
+    (*tty->handler.write) (ctx, NULL, 0);
     nToSend = 0;
   } else {
     len = tty->t_dqlen;
@@ -1734,7 +1771,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
        * Buffer has become empty
        */
       tty->rawOutBufState = rob_idle;
-      (*tty->handler.write) (tty, NULL, 0);
+      (*tty->handler.write) (ctx, NULL, 0);
       nToSend = 0;
 
       /*
@@ -1751,7 +1788,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
     }
   }
 
-  rtems_termios_interrupt_lock_release (tty, &lock_context);
+  rtems_termios_device_lock_release (ctx, &lock_context);
 
   if (wakeUpWriterTask) {
     rtems_semaphore_release (tty->rawOutBuf.Semaphore);
@@ -1854,6 +1891,7 @@ static rtems_task rtems_termios_txdaemon(rtems_task_argument argument)
 static rtems_task rtems_termios_rxdaemon(rtems_task_argument argument)
 {
   struct rtems_termios_tty *tty = (struct rtems_termios_tty *)argument;
+  rtems_termios_device_context *ctx = tty->device_context;
   rtems_event_set the_event;
   int c;
   char c_buf;
@@ -1876,7 +1914,7 @@ static rtems_task rtems_termios_rxdaemon(rtems_task_argument argument)
     /*
      * do something
      */
-    c = tty->handler.poll_read(tty);
+    c = tty->handler.poll_read(ctx);
     if (c != EOF) {
       /*
        * poll_read did call enqueue on its own

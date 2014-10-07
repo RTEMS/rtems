@@ -517,6 +517,11 @@ static void test_termios_cfmakeraw(void)
   rtems_test_assert( term.c_cflag & CS8 );
 }
 
+typedef struct {
+  rtems_termios_device_context base;
+  bool done;
+} device_context;
+
 static rtems_status_code test_early_device_install_remove(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -528,7 +533,7 @@ static rtems_status_code test_early_device_install_remove(
 
   rtems_resource_snapshot_take( &snapshot );
 
-  sc = rtems_termios_device_install( "/", 0, 0, NULL, NULL );
+  sc = rtems_termios_device_install( "/", 0, 0, NULL, NULL, NULL );
   rtems_test_assert( sc == RTEMS_INCORRECT_STATE );
 
   sc = rtems_termios_device_remove( "/", 0, 0 );
@@ -630,14 +635,18 @@ static void test_device_install_remove(void)
 
 static bool first_open_error(
   rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
+  struct termios *term,
   rtems_libio_open_close_args_t *args
 )
 {
-  bool *done = rtems_termios_get_device_context( tty );
+  device_context *ctx = (device_context *) base;
 
+  (void) tty;
+  (void) term;
   (void) args;
 
-  *done = true;
+  ctx->done = true;
 
   return false;
 }
@@ -655,7 +664,10 @@ static void test_first_open_error(void)
   rtems_status_code sc;
   rtems_libio_t iop;
   rtems_libio_open_close_args_t args;
-  bool done = false;
+  device_context ctx = {
+    .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "abc" ),
+    .done = false
+  };
 
   rtems_resource_snapshot_take( &snapshot );
 
@@ -665,7 +677,7 @@ static void test_first_open_error(void)
     minor,
     &handler,
     NULL,
-    &done
+    &ctx.base
   );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
@@ -673,10 +685,10 @@ static void test_first_open_error(void)
   memset( &args, 0, sizeof( args ) );
   args.iop = &iop;
 
-  rtems_test_assert( !done );
+  rtems_test_assert( !ctx.done );
   sc = rtems_termios_device_open( major, minor, &args );
   rtems_test_assert( sc == RTEMS_NO_MEMORY );
-  rtems_test_assert( done );
+  rtems_test_assert( ctx.done );
 
   sc = rtems_termios_device_remove( &dev[0], major, minor );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
@@ -685,15 +697,15 @@ static void test_first_open_error(void)
 }
 
 static bool set_attributes_error(
-  rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
   const struct termios *term
 )
 {
-  bool *done = rtems_termios_get_device_context( tty );
+  device_context *ctx = (device_context *) base;
 
   (void) term;
 
-  *done = true;
+  ctx->done = true;
 
   return false;
 }
@@ -713,7 +725,10 @@ static void test_set_attributes_error(void)
   rtems_libio_open_close_args_t oc_args;
   rtems_libio_ioctl_args_t io_args;
   struct termios term;
-  bool done = false;
+  device_context ctx = {
+    .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "abc" ),
+    .done = false
+  };
 
   rtems_resource_snapshot_take( &snapshot );
 
@@ -723,7 +738,7 @@ static void test_set_attributes_error(void)
     minor,
     &handler,
     NULL,
-    &done
+    &ctx.base
   );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
@@ -739,10 +754,10 @@ static void test_set_attributes_error(void)
   io_args.command = RTEMS_IO_SET_ATTRIBUTES;
   io_args.buffer = &term;
 
-  rtems_test_assert( !done );
+  rtems_test_assert( !ctx.done );
   sc = rtems_termios_ioctl( &io_args );
   rtems_test_assert( sc == RTEMS_IO_ERROR );
-  rtems_test_assert( done );
+  rtems_test_assert( ctx.done );
 
   sc = rtems_termios_device_close( &oc_args );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
@@ -790,15 +805,14 @@ static void test_set_best_baud(void)
   size_t i;
 
   for ( i = 0; i < n; ++i ) {
-    rtems_termios_tty tty;
-    struct termios *term = rtems_termios_get_termios( &tty );
+    struct termios term;
     tcflag_t cbaud_mask = CBAUD;
 
-    memset( &tty, 0xff, sizeof( tty ) );
-    rtems_termios_set_best_baud( &tty, baud_to_cflag_table[ i ].baud );
+    memset( &term, 0xff, sizeof( term ) );
+    rtems_termios_set_best_baud( &term, baud_to_cflag_table[ i ].baud );
 
     rtems_test_assert(
-      (term->c_cflag & cbaud_mask) == baud_to_cflag_table[ i ].cflag
+      (term.c_cflag & cbaud_mask) == baud_to_cflag_table[ i ].cflag
     );
   }
 }

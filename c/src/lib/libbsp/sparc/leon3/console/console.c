@@ -36,7 +36,7 @@ int syscon_uart_index __attribute__((weak)) = 0;
 static struct apbuart_context apbuarts[BSP_NUMBER_OF_TERMIOS_PORTS];
 static int uarts = 0;
 
-static struct apbuart_context *leon3_console_get_uart(int minor)
+static rtems_termios_device_context *leon3_console_get_context(int minor)
 {
   struct apbuart_context *uart;
 
@@ -45,7 +45,9 @@ static struct apbuart_context *leon3_console_get_uart(int minor)
   else
     uart = &apbuarts[minor - 1];
 
-  return uart;
+  rtems_termios_device_context_initialize(&uart->base, "APBUART");
+
+  return &uart->base;
 }
 
 /* AMBA PP find routine. Extract AMBA PnP information into data structure. */
@@ -132,7 +134,7 @@ rtems_device_driver console_initialize(
       minor,
       handler,
       NULL,
-      leon3_console_get_uart(syscon_uart_index)
+      leon3_console_get_context(syscon_uart_index)
     );
     if (status != RTEMS_SUCCESSFUL)
       bsp_fatal(LEON3_FATAL_CONSOLE_REGISTER_DEV);
@@ -149,7 +151,7 @@ rtems_device_driver console_initialize(
       minor,
       handler,
       NULL,
-      leon3_console_get_uart(syscon_uart_index)
+      leon3_console_get_context(syscon_uart_index)
     );
   }
 

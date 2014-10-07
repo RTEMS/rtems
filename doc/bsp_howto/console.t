@@ -274,6 +274,7 @@ initialization example the device name is also present.  Her is an example heade
 
 /* Low-level driver specific data structure */
 typedef struct @{
+  rtems_termios_device_context base;
   const char *device_name;
   volatile module_register_block *regs;
   /* More stuff */
@@ -298,12 +299,12 @@ characters from @code{buf} to the serial device specified by @code{tty}.
 @example
 @group
 static void my_driver_poll_write(
-  rtems_termios_tty *tty,
-  const char        *buf,
-  size_t             n
+  rtems_termios_device_context *base,
+  const char                   *buf,
+  size_t                        n
 )
 @{
-  my_driver_context *ctx = rtems_termios_get_device_context(tty);
+  my_driver_context *ctx = (my_driver_context *) base;
   size_t i;
 
   /* Write */
@@ -320,9 +321,9 @@ available, then the routine should return minus one.
 
 @example
 @group
-static int my_driver_poll_read(rtems_termios_tty *tty)
+static int my_driver_poll_read(rtems_termios_device_context *base)
 @{
-  my_driver_context *ctx = rtems_termios_get_device_context(tty);
+  my_driver_context *ctx = (my_driver_context *) base;
 
   /* Check if a character is available */
   if (my_driver_can_read_char(ctx)) @{
@@ -409,12 +410,12 @@ character.
 @example
 @group
 static void my_driver_interrupt_write(
-  rtems_termios_tty *tty,
-  const char        *buf,
-  size_t             n
+  rtems_termios_device_context  *base,
+  const char                    *buf,
+  size_t                         n
 )
 @{
-  my_driver_context *ctx = rtems_termios_get_device_context(tty);
+  my_driver_context *ctx = (my_driver_context *) base;
 
   /*
    * Tell the device to transmit some characters from buf (less than
@@ -518,10 +519,12 @@ During the first open of the device Termios will call the
 @group
 static bool my_driver_first_open(
   rtems_termios_tty             *tty,
+  rtems_termios_device_context  *base,
+  struct termios                *term,
   rtems_libio_open_close_args_t *args
 )
 @{
-  my_driver_context *ctx = rtems_termios_get_device_context(tty);
+  my_driver_context *ctx = (my_driver_context *) base;
   rtems_status_code sc;
   bool ok;
 
@@ -542,13 +545,13 @@ static bool my_driver_first_open(
   /*
    * Alternatively you can set the best baud.
    */
-  rtems_termios_set_best_baud(tty, MY_DRIVER_BAUD_RATE);
+  rtems_termios_set_best_baud(term, MY_DRIVER_BAUD_RATE);
 
   /*
    * To propagate the initial Termios attributes to the device use
    * this.
    */
-  ok = my_driver_set_attributes(tty, rtems_termios_get_termios(tty));
+  ok = my_driver_set_attributes(base, term);
   if (!ok) @{
     /* This is bad */
   @}
@@ -574,10 +577,11 @@ happens on the device.
 @group
 static void my_driver_last_close(
   rtems_termios_tty             *tty,
+  rtems_termios_device_context  *base,
   rtems_libio_open_close_args_t *args
 )
 @{
-  my_driver_context *ctx = rtems_termios_get_device_context(tty);
+  my_driver_context *ctx = (my_driver_context *) base;
 
   /*
    * The driver may do some cleanup here.
@@ -618,11 +622,11 @@ handler.
 @example
 @group
 static bool my_driver_set_attributes(
-  rtems_termios_tty    *tty,
-  const struct termios *term
+  rtems_termios_device_context *base,
+  const struct termios         *term
 )
 @{
-  my_driver_context *ctx = rtems_termios_get_device_context(tty);
+  my_driver_context *ctx = (my_driver_context *) base;
 
   /*
    * Inspect the termios data structure and configure the device

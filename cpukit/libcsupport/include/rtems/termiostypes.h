@@ -63,6 +63,42 @@ typedef enum {
 struct rtems_termios_tty;
 
 /**
+ * @brief Termios device context.
+ *
+ * @see RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER(),
+ * rtems_termios_device_context_initialize() and
+ * rtems_termios_device_install().
+ */
+typedef struct rtems_termios_device_context {
+  rtems_interrupt_lock interrupt_lock;
+} rtems_termios_device_context;
+
+/**
+ * @brief Initializes a device context.
+ *
+ * @param[in] context The Termios device context.
+ * @param[in] name The name for the interrupt lock.  This name must be a
+ *   string persistent throughout the life time of this lock.  The name is only
+ *   used if profiling is enabled.
+ */
+RTEMS_INLINE_ROUTINE void rtems_termios_device_context_initialize(
+  rtems_termios_device_context *context,
+  const char                   *name
+)
+{
+  rtems_interrupt_lock_initialize( &context->interrupt_lock, name );
+}
+
+/**
+ * @brief Initializer for static initialization of Termios device contexts.
+ *
+ * @param name The name for the interrupt lock.  It must be a string.  The name
+ *   is only used if profiling is enabled.
+ */
+#define RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( name ) \
+  { RTEMS_INTERRUPT_LOCK_INITIALIZER( name ) }
+
+/**
  * @brief Termios device handler.
  *
  * @see rtems_termios_device_install().
@@ -71,18 +107,24 @@ typedef struct {
   /**
    * @brief First open of this device.
    *
-   * @param[in] tty The Termios control.
+   * @param[in] tty The Termios control.  This parameter may be passed to
+   *   interrupt service routines since it must be provided for the
+   *   rtems_termios_enqueue_raw_characters() and
+   *   rtems_termios_dequeue_characters() functions.
+   * @param[in] context The Termios device context.
+   * @param[in] term The current Termios attributes.
    * @param[in] args The open/close arguments.  This is parameter provided to
    *   support legacy drivers.  It must not be used by new drivers.
    *
    * @retval true Successful operation.
    * @retval false Cannot open device.
    *
-   * @see rtems_termios_get_device_context(), rtems_termios_set_best_baud() and
-   *   rtems_termios_get_termios().
+   * @see rtems_termios_get_device_context() and rtems_termios_set_best_baud().
    */
   bool (*first_open)(
     struct rtems_termios_tty      *tty,
+    rtems_termios_device_context  *context,
+    struct termios                *term,
     rtems_libio_open_close_args_t *args
   );
 
@@ -90,13 +132,13 @@ typedef struct {
    * @brief Last close of this device.
    *
    * @param[in] tty The Termios control.
+   * @param[in] context The Termios device context.
    * @param[in] args The open/close arguments.  This is parameter provided to
    *   support legacy drivers.  It must not be used by new drivers.
-   *
-   * @see rtems_termios_get_device_context().
    */
   void (*last_close)(
     struct rtems_termios_tty      *tty,
+    rtems_termios_device_context  *context,
     rtems_libio_open_close_args_t *args
   );
 
@@ -106,41 +148,39 @@ typedef struct {
    * In case mode is TERMIOS_IRQ_DRIVEN or TERMIOS_TASK_DRIVEN, then data is
    * received via rtems_termios_enqueue_raw_characters().
    *
-   * @param[in] tty The Termios control.
+   * @param[in] context The Termios device context.
    *
    * @retval char The received data encoded as unsigned char.
    * @retval -1 No data currently available.
-   *
-   * @see rtems_termios_get_device_context().
    */
-  int (*poll_read)(struct rtems_termios_tty *tty);
+  int (*poll_read)(rtems_termios_device_context *context);
 
   /**
    * @brief Polled write in case mode is TERMIOS_POLLED or write support
    * otherwise.
    *
-   * @param[in] tty The Termios control.
+   * @param[in] context The Termios device context.
    * @param[in] buf The output buffer.
    * @param[in] len The output buffer length in characters.
-   *
-   * @see rtems_termios_get_device_context().
    */
-  void (*write)(struct rtems_termios_tty *tty, const char *buf, size_t len);
+  void (*write)(
+    rtems_termios_device_context *context,
+    const char *buf,
+    size_t len
+  );
 
   /**
    * @brief Set attributes after a Termios settings change.
    *
-   * @param[in] tty The Termios control.
+   * @param[in] context The Termios device context.
    * @param[in] term The new Termios attributes.
    *
    * @retval true Successful operation.
    * @retval false Invalid attributes.
-   *
-   * @see rtems_termios_get_device_context().
    */
   bool (*set_attributes)(
-    struct rtems_termios_tty *tty,
-    const struct termios     *term
+    rtems_termios_device_context *context,
+    const struct termios         *term
   );
 
   /**
@@ -158,20 +198,16 @@ typedef struct {
   /**
    * @brief Indicate to stop remote transmitter.
    *
-   * @param[in] tty The Termios control.
-   *
-   * @see rtems_termios_get_device_context().
+   * @param[in] context The Termios device context.
    */
-  void (*stop_remote_tx)(struct rtems_termios_tty *tty);
+  void (*stop_remote_tx)(rtems_termios_device_context *context);
 
   /**
    * @brief Indicate to start remote transmitter.
    *
-   * @param[in] tty The Termios control.
-   *
-   * @see rtems_termios_get_device_context().
+   * @param[in] context The Termios device context.
    */
-  void (*start_remote_tx)(struct rtems_termios_tty *tty);
+  void (*start_remote_tx)(rtems_termios_device_context *context);
 } rtems_termios_device_flow;
 
 /**
@@ -185,7 +221,7 @@ typedef struct rtems_termios_device_node {
   rtems_device_minor_number           minor;
   const rtems_termios_device_handler *handler;
   const rtems_termios_device_flow    *flow;
-  void                               *context;
+  rtems_termios_device_context       *context;
   struct rtems_termios_tty           *tty;
 } rtems_termios_device_node;
 
@@ -258,6 +294,11 @@ typedef struct rtems_termios_tty {
   rtems_termios_callbacks  device;
 
   /**
+   * @brief Context for legacy devices using the callbacks.
+   */
+  rtems_termios_device_context legacy_device_context;
+
+  /**
    * @brief The device handler.
    */
   rtems_termios_device_handler handler;
@@ -289,8 +330,6 @@ typedef struct rtems_termios_tty {
   struct ttywakeup tty_rcv;
   int              tty_rcvwakeup;
 
-  rtems_interrupt_lock interrupt_lock;
-
   /**
    * @brief Corresponding device node.
    */
@@ -298,10 +337,8 @@ typedef struct rtems_termios_tty {
 
   /**
    * @brief Context for device driver.
-   *
-   * @see rtems_termios_get_device_context().
    */
-  void *device_context;
+  rtems_termios_device_context *device_context;
 } rtems_termios_tty;
 
 /**
@@ -335,7 +372,7 @@ rtems_status_code rtems_termios_device_install(
   rtems_device_minor_number           minor,
   const rtems_termios_device_handler *handler,
   const rtems_termios_device_flow    *flow,
-  void                               *context
+  rtems_termios_device_context       *context
 );
 
 /**
@@ -382,6 +419,8 @@ rtems_status_code rtems_termios_device_close(void *arg);
 
 /**
  * @brief Returns the device context of an installed Termios device.
+ *
+ * @param[in] tty The Termios control.
  */
 RTEMS_INLINE_ROUTINE void *rtems_termios_get_device_context(
   const rtems_termios_tty *tty
@@ -391,16 +430,33 @@ RTEMS_INLINE_ROUTINE void *rtems_termios_get_device_context(
 }
 
 /**
- * @brief Returns the Termios structure.
+ * @brief Acquires the device lock.
  *
- * It can be used for example in the first open handler to adjust or obtain the
- * initial attributes.
+ * @param[in] context The device context.
+ * @param[in] lock_context The local interrupt lock context for an acquire and
+ *   release pair.
  */
-RTEMS_INLINE_ROUTINE struct termios *rtems_termios_get_termios(
-  rtems_termios_tty *tty
+RTEMS_INLINE_ROUTINE void rtems_termios_device_lock_acquire(
+  rtems_termios_device_context *context,
+  rtems_interrupt_lock_context *lock_context
 )
 {
-  return &tty->termios;
+  rtems_interrupt_lock_acquire( &context->interrupt_lock, lock_context );
+}
+
+/**
+ * @brief Releases the device lock.
+ *
+ * @param[in] context The device context.
+ * @param[in] lock_context The local interrupt lock context for an acquire and
+ *   release pair.
+ */
+RTEMS_INLINE_ROUTINE void rtems_termios_device_lock_release(
+  rtems_termios_device_context *context,
+  rtems_interrupt_lock_context *lock_context
+)
+{
+  rtems_interrupt_lock_release( &context->interrupt_lock, lock_context );
 }
 
 /**
@@ -409,12 +465,12 @@ RTEMS_INLINE_ROUTINE struct termios *rtems_termios_get_termios(
  * The valid Termios baud values are between 0 and 460800.  The Termios baud
  * value is chosen which minimizes the difference to the value specified.
  *
- * @param[in] tty The Termios control.
+ * @param[in] term The Termios attributes.
  * @param[in] baud The current baud setting of the device.
  */
 void rtems_termios_set_best_baud(
-  rtems_termios_tty *tty,
-  uint32_t           baud
+  struct termios *term,
+  uint32_t        baud
 );
 
 struct rtems_termios_linesw {
@@ -497,12 +553,6 @@ int rtems_termios_set_initial_baud(
   struct rtems_termios_tty *tty,
   rtems_termios_baud_t baud
 );
-
-#define rtems_termios_interrupt_lock_acquire(tty, level) \
-  rtems_interrupt_lock_acquire(&tty->interrupt_lock, level)
-
-#define rtems_termios_interrupt_lock_release(tty, level) \
-  rtems_interrupt_lock_release(&tty->interrupt_lock, level)
 
 #ifdef __cplusplus
 }

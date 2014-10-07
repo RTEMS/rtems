@@ -568,6 +568,7 @@ pppstart(struct rtems_termios_tty *tp)
   u_long              ioffset = (u_long       )0;
   struct mbuf        *m       = (struct mbuf *)0;
   struct ppp_softc   *sc      = tp->t_sc;
+  rtems_termios_device_context *ctx = rtems_termios_get_device_context(tp);
 
   /* ensure input is valid and we are busy */
   if (( sc != NULL ) && ( sc->sc_outflag & SC_TX_BUSY )) {
@@ -606,7 +607,7 @@ pppstart(struct rtems_termios_tty *tp)
         sc->sc_outflag |= SC_TX_LASTCHAR;
         sc->sc_outflag &=~(SC_TX_FCS);
 		sc->sc_outchar = (u_char)PPP_FLAG;
-        (*tp->handler.write)(tp, (char *)&sc->sc_outchar, 1);
+        (*tp->handler.write)(ctx, (char *)&sc->sc_outchar, 1);
         return(0);
       }
     }
@@ -643,7 +644,7 @@ pppstart(struct rtems_termios_tty *tp)
       }
 
       /* write out the character(s) and update the stats */
-      (*tp->handler.write)(tp, (char *)sendBegin, (ioffset > 0) ? ioffset : 1);
+      (*tp->handler.write)(ctx, (char *)sendBegin, (ioffset > 0) ? ioffset : 1);
       sc->sc_stats.ppp_obytes += (ioffset > 0) ? ioffset : 1;
       sc->sc_outoff += ioffset;
     }

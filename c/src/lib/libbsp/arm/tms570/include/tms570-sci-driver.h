@@ -36,6 +36,7 @@ extern "C" {
 
 /* Low-level driver specific data structure */
 typedef struct {
+  rtems_termios_device_context base;
   const char *device_name;
   volatile tms570_sci_t *regs;
   int tx_chars_in_hw;

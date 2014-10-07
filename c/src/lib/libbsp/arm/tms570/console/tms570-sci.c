@@ -26,7 +26,6 @@
 #include <bspopts.h>
 #include <termios.h>
 #include <rtems/termiostypes.h>
-#include <libchip/sersupp.h>
 #include <bsp/tms570-sci.h>
 #include <bsp/tms570-sci-driver.h>
 #include <rtems/console.h>
@@ -43,11 +42,13 @@
  */
 const tms570_sci_context driver_context_table[] = {
   {
+    .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("TMS570 SCI1"),
     .device_name = "/dev/console",
     .regs = &TMS570_SCI,
     .irq = TMS570_IRQ_SCI_LEVEL_0,
   },
   {
+    .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("TMS570 SCI2"),
     .device_name = "/dev/ttyS1",
     .regs = &TMS570_SCI2,
     .irq = TMS570_IRQ_SCI2_LEVEL_0,
@@ -104,7 +105,7 @@ rtems_device_driver console_initialize(
         minor,
         handler,
 	NULL,
-        (void *) ctx
+        RTEMS_DECONST(rtems_termios_device_context *, &ctx->base)
     );
     if ( sc != RTEMS_SUCCESSFUL ) {
       bsp_fatal(BSP_FATAL_CONSOLE_NO_DEV);
@@ -196,21 +197,21 @@ static int tms570_sci_transmitted_chars(tms570_sci_context * ctx)
  *
  * Sets attributes of the HW peripheral (parity, baud rate, etc.)
  *
- * @param[in] tty rtems_termios_tty
+ * @param[in] base context of the driver
  * @param[in] t termios driver
  * @retval true peripheral setting is changed
  */
 static bool tms570_sci_set_attributes(
-  rtems_termios_tty    *tty,
+  rtems_termios_device_context *base,
   const struct termios *t
 )
 {
-  tms570_sci_context *ctx = rtems_termios_get_device_context(tty);
+  tms570_sci_context *ctx = (tms570_sci_context *) base;
   rtems_interrupt_lock_context lock_context;
   int32_t bauddiv;
   int32_t baudrate;
 
-  rtems_termios_interrupt_lock_acquire(tty, &lock_context);
+  rtems_termios_device_lock_acquire(base, &lock_context);
 
   ctx->regs->SCIGCR1 &= ~( (1<<7) | (1<<25) | (1<<24) );
 
@@ -245,7 +246,7 @@ static bool tms570_sci_set_attributes(
 
   ctx->regs->SCIGCR1 |= (1<<7) | (1<<25) | (1<<24);
 
-  rtems_termios_interrupt_lock_release(tty, &lock_context);
+  rtems_termios_device_lock_release(base, &lock_context);
 
   return true;
 }
@@ -300,18 +301,18 @@ static void tms570_sci_interrupt_handler(void * arg)
  * TMS570 does not have write data buffer asociated with SCI
  * so only one character can be written.
  *
- * @param[in] tty rtems_termios_tty
+ * @param[in] base context of the driver
  * @param[in] buf buffer of characters pending to send
  * @param[in] len size of the buffer
  * @retval Void
  */
 static void tms570_sci_interrupt_write(
-  rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
   const char *buf,
   size_t len
 )
 {
-  tms570_sci_context *ctx = rtems_termios_get_device_context(tty);
+  tms570_sci_context *ctx = (tms570_sci_context *) base;
 
   if ( len > 0 ) {
     /* start UART TX, this will result in an interrupt when done */
@@ -334,18 +335,18 @@ static void tms570_sci_interrupt_write(
  * Blocking write function. Waits until HW peripheral is ready and then writes
  * character to HW peripheral. Writes all characters in the buffer.
  *
- * @param[in] tty rtems_termios_tty
+ * @param[in] base context of the driver
  * @param[in] buf buffer of characters pending to send
  * @param[in] len size of the buffer
  * @retval Void
  */
 static void tms570_sci_poll_write(
-  rtems_termios_tty *tty,
-  const char        *buf,
-  size_t             n
+  rtems_termios_device_context *base,
+  const char *buf,
+  size_t n
 )
 {
-  tms570_sci_context *ctx = rtems_termios_get_device_context(tty);
+  tms570_sci_context *ctx = (tms570_sci_context *) base;
   size_t i;
 
   /* Write */
@@ -394,13 +395,13 @@ static char TMS570_sci_read_char(
  *
  * check if there is recieved character to be read and reads it.
  *
- * @param[in] tty rtems_termios_tty (context of the driver)
+ * @param[in] base context of the driver
  * @retval -1 No character to be read
  * @retval x Read character
  */
-static int tms570_sci_poll_read(rtems_termios_tty *tty)
+static int tms570_sci_poll_read(rtems_termios_device_context *base)
 {
-  tms570_sci_context *ctx = rtems_termios_get_device_context(tty);
+  tms570_sci_context *ctx = (tms570_sci_context *) base;
 
   /* Check if a character is available */
   if ( TMS570_sci_can_read_char(ctx) ) {
@@ -416,20 +417,24 @@ static int tms570_sci_poll_read(rtems_termios_tty *tty)
  * initialization of the HW peripheral specified in contex of the driver.
  * This function is called only once when opening the driver.
  *
- * @param[in] tty context of the driver
+ * @param[in] tty Termios control
+ * @param[in] ctx context of the driver
+ * @param[in] term Termios attributes
  * @param[in] args
  * @retval false Error occured during initialization
  * @retval true Driver is open and ready
  */
 static bool tms570_sci_poll_first_open(
   rtems_termios_tty             *tty,
+  rtems_termios_device_context  *ctx,
+  struct termios                *term,
   rtems_libio_open_close_args_t *args
 )
 {
   bool ok;
 
-  rtems_termios_set_best_baud(tty, TMS570_SCI_BAUD_RATE);
-  ok = tms570_sci_set_attributes(tty, rtems_termios_get_termios(tty));
+  rtems_termios_set_best_baud(term, TMS570_SCI_BAUD_RATE);
+  ok = tms570_sci_set_attributes(ctx, term);
   if ( !ok ) {
     return false;
   }
@@ -442,21 +447,24 @@ static bool tms570_sci_poll_first_open(
  * calls tms570_sci_poll_first_open function.
  * install and enables interrupts.
  *
- * @param[in] tty context of the driver
+ * @param[in] tty Termios control
+ * @param[in] base context of the driver
  * @param[in] args
  * @retval false Error occured during initialization
  * @retval true Driver is open and ready
  */
 static bool tms570_sci_interrupt_first_open(
   rtems_termios_tty             *tty,
+  rtems_termios_device_context  *base,
+  struct termios                *term,
   rtems_libio_open_close_args_t *args
 )
 {
-  tms570_sci_context *ctx = rtems_termios_get_device_context(tty);
+  tms570_sci_context *ctx = (tms570_sci_context *) base;
   rtems_status_code sc;
   bool ret;
 
-  ret = tms570_sci_poll_first_open(tty,args);
+  ret = tms570_sci_poll_first_open(tty, base, term, args);
   if ( ret == false ) {
     return false;
   }
@@ -471,20 +479,22 @@ static bool tms570_sci_interrupt_first_open(
   if ( sc != RTEMS_SUCCESSFUL ) {
     return false;
   }
-  tms570_sci_enable_interrupts(rtems_termios_get_device_context(tty));
+  tms570_sci_enable_interrupts(ctx);
   return true;
 }
 
 /**
  * @brief closes sci peripheral
  *
- * @param[in] tty context of the driver
+ * @param[in] tty Termios control
+ * @param[in] base context of the driver
  * @param[in] args
  * @retval false Error occured during initialization
  * @retval true Driver is open and ready
  */
 static void tms570_sci_poll_last_close(
   rtems_termios_tty             *tty,
+  rtems_termios_device_context  *base,
   rtems_libio_open_close_args_t *args
 )
 {
@@ -496,23 +506,25 @@ static void tms570_sci_poll_last_close(
  *
  * calls tms570_sci_poll_last_close and disables interrupts
  *
- * @param[in] tty context of the driver
+ * @param[in] tty Termios control
+ * @param[in] base context of the driver
  * @param[in] args
  * @retval false Error occured during initialization
  * @retval true Driver is open and ready
  */
 static void tms570_sci_interrupt_last_close(
   rtems_termios_tty             *tty,
+  rtems_termios_device_context  *base,
   rtems_libio_open_close_args_t *args
 )
 {
-  tms570_sci_context *ctx = rtems_termios_get_device_context(tty);
+  tms570_sci_context *ctx = (tms570_sci_context *) base;
   rtems_interrupt_lock_context lock_context;
 
   /* Turn off RX interrupts */
-  rtems_termios_interrupt_lock_acquire(tty, &lock_context);
+  rtems_termios_device_lock_acquire(base, &lock_context);
   tms570_sci_disable_interrupts(ctx);
-  rtems_termios_interrupt_lock_release(tty, &lock_context);
+  rtems_termios_device_lock_release(base, &lock_context);
 
   /* Flush device */
   while ( ( ctx->regs->SCIFLR & (1<<11) ) > 0 ) {
@@ -522,7 +534,7 @@ static void tms570_sci_interrupt_last_close(
   /* uninstall ISR */
   rtems_interrupt_handler_remove(ctx->irq, tms570_sci_interrupt_handler, tty);
 
-  tms570_sci_poll_last_close(tty,args);
+  tms570_sci_poll_last_close(tty, base, args);
 }
 
 /**

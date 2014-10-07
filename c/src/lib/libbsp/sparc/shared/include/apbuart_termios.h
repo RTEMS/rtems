@@ -22,6 +22,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 struct apbuart_context {
+  rtems_termios_device_context base;
   struct apbuart_regs *regs;
   unsigned int freq_hz;
   rtems_vector_number irq;

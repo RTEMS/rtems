@@ -41,12 +41,12 @@ static void apbuart_isr(void *arg)
 }
 
 static void apbuart_write_support(
-  rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
   const char *buf,
   size_t len
 )
 {
-  struct apbuart_context *uart = rtems_termios_get_device_context(tty);
+  struct apbuart_context *uart = (struct apbuart_context *) base;
   int sending;
 
   if (len > 0) {
@@ -69,12 +69,12 @@ static void apbuart_write_support(
 }
 
 static void apbuart_write_polled(
-  rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
   const char *buf,
   size_t len
 )
 {
-  struct apbuart_context *uart = rtems_termios_get_device_context(tty);
+  struct apbuart_context *uart = (struct apbuart_context *) base;
   size_t nwrite = 0;
 
   while (nwrite < len) {
@@ -83,19 +83,19 @@ static void apbuart_write_polled(
   }
 }
 
-static int apbuart_poll_read(rtems_termios_tty *tty)
+static int apbuart_poll_read(rtems_termios_device_context *base)
 {
-  struct apbuart_context *uart = rtems_termios_get_device_context(tty);
+  struct apbuart_context *uart = (struct apbuart_context *) base;
 
   return apbuart_inbyte_nonblocking(uart->regs);
 }
 
 static bool apbuart_set_attributes(
-  rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
   const struct termios *t
 )
 {
-  struct apbuart_context *uart = rtems_termios_get_device_context(tty);
+  struct apbuart_context *uart = (struct apbuart_context *) base;
   rtems_interrupt_lock_context lock_context;
   unsigned int scaler;
   unsigned int ctrl;
@@ -112,7 +112,7 @@ static bool apbuart_set_attributes(
       break;
   }
 
-  rtems_termios_interrupt_lock_acquire(tty, &lock_context);
+  rtems_termios_device_lock_acquire(base, &lock_context);
 
   /* Read out current value */
   ctrl = uart->regs->ctrl;
@@ -145,7 +145,7 @@ static bool apbuart_set_attributes(
   /* Update new settings */
   uart->regs->ctrl = ctrl;
 
-  rtems_termios_interrupt_lock_release(tty, &lock_context);
+  rtems_termios_device_lock_release(base, &lock_context);
 
   /* Baud rate */
   baud = rtems_termios_baud_to_number(t->c_cflag);
@@ -161,23 +161,25 @@ static bool apbuart_set_attributes(
 }
 
 static void apbuart_set_best_baud(
-  rtems_termios_tty *tty,
-  const struct apbuart_context *uart
+  const struct apbuart_context *uart,
+  struct termios *term
 )
 {
   uint32_t baud = (uart->freq_hz * 10) / ((uart->regs->scaler * 10 + 5) * 8);
 
-  rtems_termios_set_best_baud(tty, baud);
+  rtems_termios_set_best_baud(term, baud);
 }
 
 static bool apbuart_first_open_polled(
   rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
+  struct termios *term,
   rtems_libio_open_close_args_t *args
 )
 {
-  struct apbuart_context *uart = rtems_termios_get_device_context(tty);
+  struct apbuart_context *uart = (struct apbuart_context *) base;
 
-  apbuart_set_best_baud(tty, uart);
+  apbuart_set_best_baud(uart, term);
 
   /* Initialize UART on opening */
   uart->regs->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
@@ -188,13 +190,15 @@ static bool apbuart_first_open_polled(
 
 static bool apbuart_first_open_interrupt(
   rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
+  struct termios *term,
   rtems_libio_open_close_args_t *args
 )
 {
-  struct apbuart_context *uart = rtems_termios_get_device_context(tty);
+  struct apbuart_context *uart = (struct apbuart_context *) base;
   rtems_status_code sc;
 
-  apbuart_set_best_baud(tty, uart);
+  apbuart_set_best_baud(uart, term);
 
   /* Register Interrupt handler */
   sc = rtems_interrupt_handler_install(uart->irq, "console",
@@ -217,16 +221,17 @@ static bool apbuart_first_open_interrupt(
 
 static void apbuart_last_close_interrupt(
   rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
   rtems_libio_open_close_args_t *args
 )
 {
-  struct apbuart_context *uart = rtems_termios_get_device_context(tty);
+  struct apbuart_context *uart = (struct apbuart_context *) base;
   rtems_interrupt_lock_context lock_context;
 
   /* Turn off RX interrupts */
-  rtems_termios_interrupt_lock_acquire(tty, &lock_context);
+  rtems_termios_device_lock_acquire(base, &lock_context);
   uart->regs->ctrl &= ~(APBUART_CTRL_RI);
-  rtems_termios_interrupt_lock_release(tty, &lock_context);
+  rtems_termios_device_lock_release(base, &lock_context);
 
   /**** Flush device ****/
   while (uart->sending) {
