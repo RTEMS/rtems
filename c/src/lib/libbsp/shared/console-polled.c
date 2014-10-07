@@ -17,17 +17,10 @@
 #include <assert.h>
 
 /* external prototypes for monitor interface routines */
-
-void console_outbyte_polled(
-  int  port,
-  char ch
-);
-
-int console_inbyte_nonblocking(
-  int port
-);
-
+void console_outbyte_polled(int  port, char ch);
+int console_inbyte_nonblocking(int port);
 void console_initialize_hardware(void);
+ssize_t console_write_support(int, const char *, size_t);
 
 /*
  *  Console Termios Support Entry Points
