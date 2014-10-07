@@ -78,7 +78,7 @@ static void apbuart_write_polled(
   size_t nwrite = 0;
 
   while (nwrite < len) {
-    apbuart_outbyte_polled(uart->regs, *buf++, 1, 0);
+    apbuart_outbyte_polled(uart->regs, *buf++, 0, 0);
     nwrite++;
   }
 }
