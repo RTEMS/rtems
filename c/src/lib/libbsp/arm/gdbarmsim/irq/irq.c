@@ -28,6 +28,12 @@
 #include <bsp/irq-generic.h>
 #include <bsp/linker-symbols.h>
 
+/*
+ *  Prototypes
+ */
+void lpc24xx_irq_set_priority(rtems_vector_number, unsigned);
+unsigned lpc24xx_irq_get_priority(rtems_vector_number);
+
 static inline bool lpc24xx_irq_is_valid(rtems_vector_number vector)
 {
   return vector <= BSP_INTERRUPT_VECTOR_MAX;
@@ -39,6 +45,7 @@ void lpc24xx_irq_set_priority(rtems_vector_number vector, unsigned priority)
 
 unsigned lpc24xx_irq_get_priority(rtems_vector_number vector)
 {
+  return 0; /* bogus value to avoid warning */
 }
 
 #ifdef ARM_MULTILIB_ARCH_V4
