@@ -3,6 +3,7 @@
  *
  *  This file contains the implementation of the function described in irq.h.
  */
+
 /*
  *  RTEMS GBA BSP
  *
@@ -24,6 +25,11 @@
 #include <bsp/irq-generic.h>
 
 #include <gba_registers.h>
+
+/*
+ * Prototypes
+ */
+void bsp_interrupt_dispatch(void);
 
 void bsp_interrupt_dispatch(void)
 {
