@@ -1,9 +1,8 @@
 /*
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
+ *  This routine does the bulk of the system initialization.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -31,6 +30,7 @@
 
 #include <libcpu/spr.h>   /* registers.h is included here */
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <bsp/uart.h>
 #include <bsp/pci.h>
 #include <libcpu/bat.h>
@@ -179,12 +179,6 @@ save_boot_params(
   cmdline_buf[i]=0;
   return cmdline_buf;
 }
-
-/*
- *  bsp_start
- *
- *  This routine does the bulk of the system initialization.
- */
 
 void bsp_start( void )
 {
