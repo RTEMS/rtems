@@ -3,7 +3,9 @@
  *  This file provides a template for the clock device driver initialization.
  *
  *  Modified for sun4v - niagara
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -21,7 +23,7 @@
 #include <bspopts.h>
 #include <boot/ofw.h>
 
-/* this is default frequency for simics simulator of niagara. Use the 
+/* This is default frequency for simics simulator of niagara. Use the
  * get_Frequency function to determine the CPU clock frequency at runtime.
  */
 #define CPU_FREQ (5000000)
@@ -33,16 +35,16 @@ uint64_t sparc64_cycles_per_tick;
 
 static unsigned int get_Frequency(void)
 {
-	phandle root = ofw_find_device("/");
-	unsigned int freq;
-	if (ofw_get_property(root, "clock-frequency", &freq, sizeof(freq)) <= 0) {
-		printk("Unable to determine frequency, default: 0x%x\n",CPU_FREQ);
-		return CPU_FREQ;
-	}
+  phandle root = ofw_find_device("/");
+  unsigned int freq;
 
-	return freq;
-} 
+  if (ofw_get_property(root, "clock-frequency", &freq, sizeof(freq)) <= 0) {
+    printk("Unable to determine frequency, default: 0x%x\n",CPU_FREQ);
+    return CPU_FREQ;
+  }
 
+  return freq;
+}
 
 void Clock_driver_support_at_tick(void)
 {
@@ -85,13 +87,14 @@ void Clock_driver_support_at_tick(void)
 
 void Clock_driver_support_initialize_hardware(void)
 {
-  uint64_t tick_reg; 	
+  uint64_t tick_reg;
   int bit_mask;
 
   bit_mask = SPARC_SOFTINT_TM_MASK | SPARC_SOFTINT_SM_MASK | (1<<14);
   sparc64_clear_interrupt_bits(bit_mask);
 
-  sparc64_cycles_per_tick = rtems_configuration_get_microseconds_per_tick()*(get_Frequency()/1000000);
+  sparc64_cycles_per_tick =
+    rtems_configuration_get_microseconds_per_tick()*(get_Frequency()/1000000);
 
 #if defined (SUN4U)
   sparc64_read_tick(tick_reg);
@@ -109,12 +112,10 @@ void Clock_driver_support_initialize_hardware(void)
 #endif
 }
 
-
 #define Clock_driver_support_shutdown_hardware( ) \
   do { \
     \
   } while ( 0 )
-
 
 #include "../../../shared/clockdrv_shell.h"
 
