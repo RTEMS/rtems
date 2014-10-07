@@ -1785,7 +1785,7 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
 
   if (tty->t_line == PPPDISC ) {
     /*
-     * call any line discipline start function
+     * call PPP line discipline start function
      */
     if (rtems_termios_linesw[tty->t_line].l_start != NULL) {
       rtems_termios_linesw[tty->t_line].l_start(tty);
@@ -1824,6 +1824,14 @@ static rtems_task rtems_termios_txdaemon(rtems_task_argument argument)
      */
     if (rtems_termios_linesw[tty->t_line].l_start != NULL) {
       rtems_termios_linesw[tty->t_line].l_start(tty);
+
+      if (tty->t_line == PPPDISC) {
+        /*
+         * Do not call rtems_termios_refill_transmitter() in this case similar
+         * to rtems_termios_dequeue_characters().
+         */
+        continue;
+      }
     }
 
     /*
