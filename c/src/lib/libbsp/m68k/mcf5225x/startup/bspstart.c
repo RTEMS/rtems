@@ -1,11 +1,8 @@
 /*
- *  BSP startup
- *
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
+ *  This routine does the bulk of the system initialisation.
+ */
+
+/*
  *  Author:
  *    David Fiddes, D.J@fiddes.surfaid.org
  *    http://www.calm.hw.ac.uk/davidf/coldfire/
@@ -19,6 +16,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 /*
  * Cannot be frozen
@@ -44,11 +42,6 @@ void _CPU_cache_disable_data(void) {}
 void _CPU_cache_invalidate_entire_data(void) {}
 void _CPU_cache_invalidate_1_data_line(const void *addr) {}
 
-/*
- *  bsp_start
- *
- *  This routine does the bulk of the system initialisation.
- */
 void __attribute__((weak)) bsp_start(void)
 {
 }
