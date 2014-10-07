@@ -20,8 +20,8 @@
 #include <gba.h>
 #include <assert.h>
 
-
 void Clock_isr(void * arg);
+void Clock_driver_support_initialize_hardware(void);
 
 #define Clock_driver_support_at_tick()
 
@@ -81,9 +81,12 @@ void Clock_isr(void * arg);
  */
 void Clock_driver_support_initialize_hardware(void)
 {
-  int tmreload = ((rtems_configuration_get_microseconds_per_tick()*1000)/__TimTickTime_ns);
+  int tmreload;
 
-  if (tmreload>0xFFFF) tmreload = 0xFFFF;
+  tmreload = rtems_configuration_get_nanoseconds_per_tick() / __TimTickTime_ns;
+
+  if (tmreload>0xFFFF)
+    tmreload = 0xFFFF;
   GBA_REG_TM3CNT = (GBA_TMCNT_PS);
   GBA_REG_TM3D   = (0x0000-tmreload);
   GBA_REG_TM3CNT = (0x00c0|GBA_TMCNT_PS);
