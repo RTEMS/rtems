@@ -70,7 +70,10 @@ typedef struct {
   uint32_t initial_baud;
   bool has_fractional_divider_register;
   uint8_t modem_control;
-  size_t transmit_fifo_chars;
+  size_t out_total;
+  size_t out_remaining;
+  size_t out_current;
+  const char *out_buf;
 } ns16550_context;
 
 extern const rtems_termios_device_handler ns16550_handler_interrupt;

@@ -162,6 +162,24 @@ bool ns16550_probe(rtems_termios_device_context *base)
   return true;
 }
 
+static size_t ns16550_write_to_fifo(
+  const ns16550_context *ctx,
+  const char *buf,
+  size_t len
+)
+{
+  uint32_t port = ctx->port;
+  ns16550_set_reg set = ctx->set_reg;
+  size_t out = len > SP_FIFO_SIZE ? SP_FIFO_SIZE : len;
+  size_t i;
+
+  for (i = 0; i < out; ++i) {
+    (*set)(port, NS16550_TRANSMIT_BUFFER, buf[i]);
+  }
+
+  return out;
+}
+
 #if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
 
 /**
@@ -190,15 +208,20 @@ static void ns16550_isr(void *arg)
     /* Enqueue fetched characters */
     rtems_termios_enqueue_raw_characters(tty, buf, i);
 
-    /* Check if we can dequeue transmitted characters */
-    if (ctx->transmit_fifo_chars > 0
-        && (get( port, NS16550_LINE_STATUS) & SP_LSR_THOLD) != 0) {
+    /* Do transmit */
+    if (ctx->out_total > 0
+        && (get(port, NS16550_LINE_STATUS) & SP_LSR_THOLD) != 0) {
+      size_t current = ctx->out_current;
 
-      /* Dequeue transmitted characters */
-      rtems_termios_dequeue_characters(
-        tty,
-        ctx->transmit_fifo_chars
-      );
+      ctx->out_buf += current;
+      ctx->out_remaining -= current;
+
+      if (ctx->out_remaining > 0) {
+        ctx->out_current =
+          ns16550_write_to_fifo(ctx, ctx->out_buf, ctx->out_remaining);
+      } else {
+        rtems_termios_dequeue_characters(tty, ctx->out_total);
+      }
     }
   } while ((get( port, NS16550_INTERRUPT_ID) & SP_IID_0) == 0);
 }
@@ -577,18 +600,14 @@ static void ns16550_write_support_int(
 )
 {
   ns16550_context *ctx = (ns16550_context *) base;
-  uint32_t port = ctx->port;
-  ns16550_set_reg set = ctx->set_reg;
-  int i = 0;
-  int out = len > SP_FIFO_SIZE ? SP_FIFO_SIZE : len;
 
-  for (i = 0; i < out; ++i) {
-    set( port, NS16550_TRANSMIT_BUFFER, buf [i]);
-  }
+  ctx->out_total = len;
 
-  ctx->transmit_fifo_chars = out;
+  if (len > 0) {
+    ctx->out_remaining = len;
+    ctx->out_buf = buf;
+    ctx->out_current = ns16550_write_to_fifo(ctx, buf, len);
 
-  if (out > 0) {
     ns16550_enable_interrupts(ctx, NS16550_ENABLE_ALL_INTR);
   } else {
     ns16550_enable_interrupts(ctx, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
