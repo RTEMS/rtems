@@ -1,4 +1,8 @@
 /*
+ *  This routine does the bulk of the system initialization.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -8,6 +12,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 /*
  * Read/write copy of common cache
