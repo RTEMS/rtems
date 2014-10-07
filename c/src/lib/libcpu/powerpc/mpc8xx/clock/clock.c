@@ -2,7 +2,9 @@
  *
  *  This routine initializes the PIT on the MPC8xx.
  *  The tick frequency is specified by the bsp.
- *
+ */
+
+/*
  *  Author: Jay Monkman (jmonkman@frasca.com)
  *  Copyright (C) 1998 by Frasca International, Inc.
  *
@@ -49,14 +51,16 @@ extern int BSP_disconnect_clock_handler(void);
 extern uint32_t bsp_clicks_per_usec;
 extern uint32_t bsp_clock_speed;
 
-void Clock_exit( void );
-
 /*
- * These are set by clock driver during its init
+ *  Prototypes
  */
-
-rtems_device_major_number rtems_clock_major = ~0;
-rtems_device_minor_number rtems_clock_minor;
+rtems_isr Clock_isr(rtems_vector_number vector);
+void Clock_exit( void );
+void clockOn(void* unused);
+void clockOff(void* unused);
+int clockIsOn(void* unused);
+void Install_clock(rtems_isr_entry clock_isr);
+void ReInstall_clock(rtems_isr_entry new_clock_isr);
 
 /*
  *  ISR Handler
@@ -103,9 +107,9 @@ void clockOn(void* unused)
       mfi_value  = (plprcr_val & (0x000f0000)) >> (31-15);
       pdf_value  = (plprcr_val & (0x00000006)) >> (31-30);
       extclk = (((uint64_t)bsp_clock_speed)
-		* ((pdf_value + 1) * (mfd_value + 1))
-		/ (mfi_value * (mfd_value + 1) + mfn_value)
-		* (1 << s_value));
+          * ((pdf_value + 1) * (mfd_value + 1))
+          / (mfi_value * (mfd_value + 1) + mfn_value)
+          * (1 << s_value));
     }
     else {
       /*
@@ -116,20 +120,21 @@ void clockOn(void* unused)
       extclk    = bsp_clock_speed / (mf_value+1);
     }
     pit_value = (extclk
-		 / 1000
-		 / 4
-		 * rtems_configuration_get_microseconds_per_tick()
-		 / 1000);
+       / 1000
+       / 4
+       * rtems_configuration_get_microseconds_per_tick()
+       / 1000);
     m8xx.sccr |=  (1<<23);
     force_prescaler = true;
   }
   else {
     pit_value = (rtems_configuration_get_microseconds_per_tick() *
-		 bsp_clicks_per_usec);
+                    bsp_clicks_per_usec);
 
     m8xx.sccr &= ~(1<<23);
   }
-if ((pit_value > 0xffff) || force_prescaler){
+
+  if ((pit_value > 0xffff) || force_prescaler) {
     /*
      * try to activate prescaler
      * NOTE: divider generates odd values now...
@@ -152,12 +157,12 @@ if ((pit_value > 0xffff) || force_prescaler){
   m8xx.piscr = M8xx_PISCR_PIRQ(desiredLevel) |
     M8xx_PISCR_PTE | M8xx_PISCR_PS | M8xx_PISCR_PIE;
 }
+
 /*
  * Called via atexit()
  * Remove the clock interrupt handler by setting handler to NULL
  */
-void
-clockOff(void* unused)
+void clockOff(void* unused)
 {
   /* disable PIT and PIT interrupts */
   m8xx.piscr &= ~(M8xx_PISCR_PTE | M8xx_PISCR_PIE);
@@ -165,7 +170,8 @@ clockOff(void* unused)
 
 int clockIsOn(void* unused)
 {
-  if (m8xx.piscr & M8xx_PISCR_PIE) return 1;
+  if (m8xx.piscr & M8xx_PISCR_PIE)
+    return 1;
   return 0;
 }
 
@@ -173,8 +179,7 @@ int clockIsOn(void* unused)
  * Called via atexit()
  * Remove the clock interrupt handler by setting handler to NULL
  */
-void
-Clock_exit(void)
+void Clock_exit(void)
 {
   (void) BSP_disconnect_clock_handler ();
 }
@@ -187,12 +192,10 @@ void Install_clock(rtems_isr_entry clock_isr)
   atexit(Clock_exit);
 }
 
-void
-ReInstall_clock(rtems_isr_entry new_clock_isr)
+void ReInstall_clock(rtems_isr_entry new_clock_isr)
 {
   BSP_connect_clock_handler (new_clock_isr);
 }
-
 
 rtems_device_driver Clock_initialize(
   rtems_device_major_number major,
@@ -201,13 +204,6 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
-
-  /*
-   * make major/minor avail to others such as shared memory driver
-   */
-
-  rtems_clock_major = major;
-  rtems_clock_minor = minor;
 
   return RTEMS_SUCCESSFUL;
 }
