@@ -262,12 +262,13 @@ send:
     __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
     __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
   }
-  regs->data = (unsigned int) ch;
 
   if ((ch == '\n') && do_cr_on_newline) {
-    ch = '\r';
+    regs->data = (unsigned int) '\r';
+    do_cr_on_newline = 0;
     goto send;
   }
+  regs->data = (unsigned int) ch;
 
   /* Wait until the character has been sent? */
   if (wait_sent) {
