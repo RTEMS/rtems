@@ -1,9 +1,8 @@
 /*
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
+ *  This routine does the bulk of the system initialization.
+ */
+
+/*
  *  COPYRIGHT (c) 2001.
  *  Ralf Corsepius (corsepiu@faw.uni-ulm.de).
  *
@@ -20,6 +19,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 uint32_t bsp_clicks_per_second;
 
