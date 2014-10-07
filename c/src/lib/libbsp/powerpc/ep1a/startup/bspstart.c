@@ -1,9 +1,8 @@
 /*
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
+ *  This routine does the bulk of the system initialization.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -15,6 +14,7 @@
 #warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
 
 #include <bsp/consoleIo.h>
+#include <bsp/bootcard.h>
 #include <libcpu/spr.h>
 #include <bsp/residual.h>
 #include <bsp/pci.h>
