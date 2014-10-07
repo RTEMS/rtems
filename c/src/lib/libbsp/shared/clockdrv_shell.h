@@ -65,6 +65,7 @@ void Clock_exit( void );
  */
 #if defined(BSP_FEATURE_IRQ_EXTENSION) || \
     (CPU_SIMPLE_VECTORED_INTERRUPTS != TRUE)
+void Clock_isr(void *arg);
 void Clock_isr(void *arg)
 {
 #else
