@@ -82,7 +82,7 @@ void lpc24xx_micro_seconds_delay(unsigned us)
 }
 
 #ifdef ARM_MULTILIB_ARCH_V7M
-  unsigned lpc17xx_sysclk(unsigned clksrcsel)
+  static unsigned lpc17xx_sysclk(unsigned clksrcsel)
   {
     return (clksrcsel & LPC17XX_SCB_CLKSRCSEL_CLKSRC) != 0 ?
       LPC24XX_OSCILLATOR_MAIN
