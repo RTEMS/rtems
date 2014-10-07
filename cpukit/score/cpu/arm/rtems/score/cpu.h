@@ -488,7 +488,8 @@ void _CPU_Context_restore( Context_Control *new_context )
   RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 #if defined(ARM_MULTILIB_ARCH_V7M)
-  void _ARMV7M_Start_multitasking( Context_Control *heir );
+  void _ARMV7M_Start_multitasking( Context_Control *heir )
+    RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
   #define _CPU_Start_multitasking _ARMV7M_Start_multitasking
 #endif
 
