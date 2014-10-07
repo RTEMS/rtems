@@ -1,11 +1,8 @@
 /*
- *  BSP startup
- *
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
+ *  This routine does the bulk of the system initialisation.
+ */
+
+/*
  *  Author: W. Eric Norum <norume@aps.anl.gov>
  *
  *  COPYRIGHT (c) 2005.
@@ -17,6 +14,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <rtems/error.h>
 #include <errno.h>
 #include <stdio.h>
@@ -232,11 +230,6 @@ static void handler(int pc)
     rtems_panic("done");
 }
 
-/*
- *  bsp_start
- *
- *  This routine does the bulk of the system initialisation.
- */
 void bsp_start( void )
 {
   int   i;
