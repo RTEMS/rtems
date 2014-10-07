@@ -1,4 +1,8 @@
 /*
+ *  This routine does the bulk of the system initialization.
+ */
+
+/*
  * Copyright © 2013 Eugeniy Meshcheryakov <eugen@debian.org>
  *
  * The license and distribution terms for this file may be
@@ -8,6 +12,7 @@
 
 #include <bsp.h>
 #include <bspopts.h>
+#include <bsp/bootcard.h>
 #include <bsp/irq-generic.h>
 #include <bsp/lm3s69xx.h>
 #include <bsp/io.h>
