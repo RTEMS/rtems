@@ -1,10 +1,8 @@
-/*  bsp_start()
- *
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
+/*
+ *  This routine does the bulk of the system initialization.
+ */
+
+/*
  *  The MPC860 specific stuff was written by Jay Monkman (jmonkman@frasca.com)
  *
  *  Modified for the MPC8260ADS board by Andy Dachs <a.dachs@sstl.co.uk>
@@ -24,7 +22,6 @@
  *  conditions.
  *  The mmu is unused at this time.
  *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -34,6 +31,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 /*
 #include <mmu.h>
