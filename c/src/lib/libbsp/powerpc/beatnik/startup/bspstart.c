@@ -1,9 +1,8 @@
 /*
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
+ *  This routine does the bulk of the system initialization.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -36,6 +35,7 @@
 /*#include <bsp/consoleIo.h>*/
 #include <libcpu/spr.h>   /* registers.h is included here */
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <bsp/uart.h>
 #include <bsp/pci.h>
 #include <bsp/gtreg.h>
