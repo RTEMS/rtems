@@ -1,9 +1,8 @@
 /*
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
+ *  This routine does the bulk of the system initialization.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,12 +16,8 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
-/*
- *  bsp_start
- *
- *  This routine does the bulk of the system initialization.
- */
 void bsp_start( void )
 {
   rtems_isr_entry       *monitors_vector_table;
