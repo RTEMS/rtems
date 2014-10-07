@@ -32,13 +32,14 @@ rtems_task Application_task(
 {
   rtems_id          tid;
   rtems_status_code status;
+  unsigned int      a = (unsigned int) argument;
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
   directive_failed( status, "ident" );
 
   printf(
-    "Application task was invoked with argument (%" PRIdrtems_task_argument ") "
-    "and has id of 0x%" PRIxrtems_id "\n", argument, tid
+    "Application task was invoked with argument (%d) "
+    "and has id of 0x%" PRIxrtems_id "\n", a, tid
   );
 
   TEST_END();
