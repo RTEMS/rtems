@@ -1,10 +1,9 @@
 /*  bspstart.c for TLL6527M
  *
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *  
+ *  This routine does the bulk of the system initialisation.
+ */
+
+/*
  * COPYRIGHT (c) 2010 by ECE Northeastern University.
  *
  * The license and distribution terms for this file may be
@@ -14,6 +13,7 @@
 
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <cplb.h>
 #include <bsp/interrupt.h>
 #include <libcpu/ebiuRegs.h>
@@ -88,12 +88,6 @@ void bsp_pretasking_hook(void)
 {
   bfin_interrupt_init();
 }
-
-/*
- *  bsp_start
- *
- *  This routine does the bulk of the system initialization.
- */
 
 void bsp_start( void )
 {
