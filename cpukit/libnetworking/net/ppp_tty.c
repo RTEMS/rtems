@@ -577,6 +577,10 @@ pppstart(struct rtems_termios_tty *tp)
     /* Ready with PPP_FLAG Character ? */
     if(sc->sc_outflag & SC_TX_LASTCHAR){
         sc->sc_outflag &= ~(SC_TX_BUSY | SC_TX_FCS | SC_TX_LASTCHAR);
+
+        /* Notify driver that we have nothing to transmit */
+        (*tp->handler.write)(ctx, NULL, 0);
+
         rtems_event_send(sc->sc_txtask, TX_TRANSMIT);	/* Ready for the next Packet */
         return(0);
     }
@@ -647,10 +651,15 @@ pppstart(struct rtems_termios_tty *tp)
       (*tp->handler.write)(ctx, (char *)sendBegin, (ioffset > 0) ? ioffset : 1);
       sc->sc_stats.ppp_obytes += (ioffset > 0) ? ioffset : 1;
       sc->sc_outoff += ioffset;
+
+      return (0);
     }
   }
 
-  return ( 0 );
+  /* Notify driver that we have nothing to transmit */
+  (*tp->handler.write)(ctx, NULL, 0);
+
+  return (0);
 }
 
 #ifdef XXX_XXX
