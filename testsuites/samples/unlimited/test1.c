@@ -99,7 +99,7 @@ void test1()
     exit( 1 );
   }
 
-  destory_all_tasks("TEST1");
+  destroy_all_tasks("TEST1");
 
   the_information->auto_extend = auto_extend;
 

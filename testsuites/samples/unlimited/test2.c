@@ -95,7 +95,7 @@ void test2()
     printf( " FAIL2 : not enough tasks created -\n"
             "         task created = %" PRIi32 ", required number = %i\n",
             task_count, (TASK_ALLOCATION_SIZE * 5) - TASK_INDEX_OFFSET);
-    destory_all_tasks("TEST2");
+    destroy_all_tasks("TEST2");
     exit( 1 );
   }
 
@@ -112,7 +112,7 @@ void test2()
         printf( " FAIL2 : remove task has a 0 id -\n"
                 "         task number = %" PRIi32 "\n",
                 remove_task);
-        destory_all_tasks("TEST2");
+        destroy_all_tasks("TEST2");
         exit( 1 );
       }
 
@@ -122,7 +122,8 @@ void test2()
 
       removed_ids[task++] = task_id[remove_task];
 
-      printf(" TEST2 : block %" PRIi32 " remove, signal task %08" PRIxrtems_id ", ", block, task_id[remove_task]);
+      printf(" TEST2 : block %" PRIi32 " remove, signal task %08"
+               PRIxrtems_id ", ", block, task_id[remove_task]);
       rtems_event_send(task_id[remove_task], 1);
       task_id[remove_task] = 0;
     }
@@ -144,7 +145,7 @@ void test2()
     if (id_slot == MAX_TASKS)
     {
       printf( " FAIL2 : no free task id slot.\n");
-      destory_all_tasks("TEST2");
+      destroy_all_tasks("TEST2");
       exit( 1 );
     }
 
@@ -164,11 +165,12 @@ void test2()
       printf( " FAIL2 : re-creating a task -\n"
               "         task number = %" PRIi32 "\n",
               id_slot);
-      destory_all_tasks("TEST2");
+      destroy_all_tasks("TEST2");
       exit( 1 );
     }
 
-    printf("number = %3" PRIi32 ", id = %08" PRIxrtems_id ", starting, ", task_count, task_id[id_slot]);
+    printf("number = %3" PRIi32 ", id = %08" PRIxrtems_id ", starting, ",
+           task_count, task_id[id_slot]);
 
     result = rtems_task_start(task_id[id_slot],
                               test_task,
@@ -179,7 +181,7 @@ void test2()
       printf( " FAIL : re-starting a task -\n"
               "        task number = %" PRIi32 "\n",
               id_slot);
-      destory_all_tasks("TEST2");
+      destroy_all_tasks("TEST2");
       exit( 1 );
     }
 
@@ -190,7 +192,8 @@ void test2()
     NEXT_TASK_NAME(c1, c2, c3, c4);
 
     /*
-     *  Search the removed ids to see if it existed, clear the removed id when found
+     *  Search the removed ids to see if it existed, clear the removed id
+     *  when found
      */
 
     for (remove_task = 0; remove_task < (TASK_ALLOCATION_SIZE * 2); remove_task++)
@@ -212,9 +215,10 @@ void test2()
       for (allocated_id = 0; allocated_id < MAX_TASKS; allocated_id++)
         if ((task_id[id_slot] == task_id[allocated_id]) && (id_slot != allocated_id))
         {
-          printf( " FAIL2 : the new id is the same as an id already allocated -\n"
-                  "         task id = %08" PRIxrtems_id "\n",
-                  task_id[id_slot]);
+          printf(
+            " FAIL2 : the new id is the same as an id already allocated -\n"
+            "         task id = %08" PRIxrtems_id "\n",
+            task_id[id_slot]);
           exit( 1 );
         }
 
@@ -227,7 +231,7 @@ void test2()
     task_count++;
   }
 
-  destory_all_tasks("TEST2");
+  destroy_all_tasks("TEST2");
 
   printf( " TEST2 : completed\n" );
 }

@@ -24,7 +24,7 @@ rtems_task test_task(
 );
 
 void
-destory_all_tasks(
+destroy_all_tasks(
   const char *who
 );
 

@@ -144,7 +144,7 @@ void test3()
     }
   }
 
-  destory_all_tasks("TEST3");
+  destroy_all_tasks("TEST3");
 
   printf( " TEST3 : completed\n" );
 }
