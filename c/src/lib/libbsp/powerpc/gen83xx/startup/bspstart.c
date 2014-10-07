@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2014 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <info@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -21,7 +22,7 @@
 
 #include <rtems/counter.h>
 
-#include <libchip/serial.h>
+#include <libchip/ns16550.h>
 
 #include <libcpu/powerpc-utility.h>
 
@@ -31,6 +32,7 @@
 #include <bsp/irq-generic.h>
 #include <bsp/linker-symbols.h>
 #include <bsp/u-boot.h>
+#include <bsp/console-termios.h>
 
 /* Configuration parameters for console driver, ... */
 unsigned int BSP_bus_frequency;
@@ -54,6 +56,7 @@ void BSP_panic(char *s)
   rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
+  (void) level;
 
   printk("%s PANIC %s\n", rtems_get_version_string(), s);
 
@@ -67,6 +70,7 @@ void _BSP_Fatal_error(unsigned n)
   rtems_interrupt_level level;
 
   rtems_interrupt_disable( level);
+  (void) level;
 
   printk( "%s PANIC ERROR %u\n", rtems_get_version_string(), n);
 
@@ -80,15 +84,12 @@ void bsp_start( void)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   unsigned long i = 0;
 
-  ppc_cpu_id_t myCpu;
-  ppc_cpu_revision_t myCpuRevision;
-
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
    * store the result in global variables so that it can be used latter...
    */
-  myCpu = get_ppc_cpu_type();
-  myCpuRevision = get_ppc_cpu_revision();
+  get_ppc_cpu_type();
+  get_ppc_cpu_revision();
 
   /* Basic CPU initialization */
   cpu_init();
@@ -122,12 +123,13 @@ void bsp_start( void)
   rtems_counter_initialize_converter(bsp_time_base_frequency);
 
   /* Initialize some console parameters */
-  for (i = 0; i < Console_Configuration_Count; ++i) {
-    Console_Configuration_Ports [i].ulClock = BSP_bus_frequency;
+  for (i = 0; i < console_device_count; ++i) {
+    ns16550_context *ctx = (ns16550_context *) console_device_table[i].context;
+
+    ctx->clock = BSP_bus_frequency;
 
     #ifdef HAS_UBOOT
-      Console_Configuration_Ports [i].pDeviceParams =
-        (void *) bsp_uboot_board_info.bi_baudrate;
+      ctx->initial_baud = bsp_uboot_board_info.bi_baudrate;
     #endif
   }
 

@@ -110,6 +110,7 @@ libserialio_a_SOURCES = serial/mc68681.c serial/mc68681_baud.c \
     serial/mc68681_reg8.c serial/ns16550.c serial/z85c30.c \
     serial/z85c30_reg.c serial/serprobe.c serial/mc68681_p.h \
     serial/z85c30_p.h
+libserialio_a_SOURCES += serial/ns16550-context.c
 
 EXTRA_DIST += serial/README.mc68681 serial/README.ns16550 \
     serial/README.xr88681 serial/README.z85c30 serial/STATUS

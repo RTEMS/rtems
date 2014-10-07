@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2011-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -20,10 +20,12 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#include <libchip/ns16550.h>
+
 #include <bsp.h>
 #include <bsp/io.h>
 
-bool lpc24xx_uart_probe_3(int minor)
+bool lpc24xx_uart_probe_3(rtems_termios_device_context *context)
 {
   static const lpc24xx_pin_range pins [] = {
     LPC24XX_PIN_UART_3_TXD_P0_0,
@@ -34,5 +36,5 @@ bool lpc24xx_uart_probe_3(int minor)
   lpc24xx_module_enable(LPC24XX_MODULE_UART_3, LPC24XX_MODULE_PCLK_DEFAULT);
   lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
 
-  return true;
+  return ns16550_probe(context);
 }

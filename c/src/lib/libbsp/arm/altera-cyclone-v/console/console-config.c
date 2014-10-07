@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -12,27 +12,22 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <assert.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <libchip/serial.h>
 #include <libchip/ns16550.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/alt_clock_manager.h>
+#include <bsp/console-termios.h>
 #include "socal/alt_rstmgr.h"
 #include "socal/socal.h"
 #include "socal/alt_uart.h"
 #include "socal/hps.h"
 
 #ifdef BSP_USE_UART_INTERRUPTS
-  #define DEVICE_FNS &ns16550_fns
+  #define DEVICE_FNS &ns16550_handler_interrupt
 #else
-  #define DEVICE_FNS &ns16550_fns_polled
+  #define DEVICE_FNS &ns16550_handler_polled
 #endif
-
-static bool altera_cyclone_v_uart_probe( int minor );
 
 static uint8_t altera_cyclone_v_uart_get_register(uintptr_t addr, uint8_t i)
 {
@@ -48,92 +43,25 @@ static void altera_cyclone_v_uart_set_register(uintptr_t addr, uint8_t i, uint8_
   reg [i] = val;
 }
 
-console_tbl Console_Configuration_Ports[] = {
-#ifdef CYCLONE_V_CONFIG_CONSOLE
-  {
-    .sDeviceName   = "/dev/ttyS0",
-    .deviceType    = SERIAL_NS16550,
-    .pDeviceFns    = DEVICE_FNS,
-    .deviceProbe   = altera_cyclone_v_uart_probe,
-    .pDeviceFlow   = NULL,
-    .ulMargin      = 16,
-    .ulHysteresis  = 8,
-    .pDeviceParams = (void *)CYCLONE_V_UART_BAUD,
-    .ulCtrlPort1   = (uint32_t)ALT_UART0_ADDR,
-    .ulCtrlPort2   = 0,
-    .ulDataPort    = (uint32_t)ALT_UART0_ADDR,
-    .getRegister   = altera_cyclone_v_uart_get_register,
-    .setRegister   = altera_cyclone_v_uart_set_register,
-    .getData       = NULL,
-    .setData       = NULL,
-    .ulClock       = 0,
-    .ulIntVector   = ALT_INT_INTERRUPT_UART0
-  },
-#endif
-#ifdef CYCLONE_V_CONFIG_UART_1
-  {
-    .sDeviceName   = "/dev/ttyS1",
-    .deviceType    = SERIAL_NS16550,
-    .pDeviceFns    = DEVICE_FNS,
-    .deviceProbe   = altera_cyclone_v_uart_probe,
-    .pDeviceFlow   = NULL,
-    .ulMargin      = 16,
-    .ulHysteresis  = 8,
-    .pDeviceParams = (void *)CYCLONE_V_UART_BAUD,
-    .ulCtrlPort1   = (uint32_t)ALT_UART1_ADDR,
-    .ulCtrlPort2   = 0,
-    .ulDataPort    = (uint32_t)ALT_UART1_ADDR,
-    .getRegister   = altera_cyclone_v_uart_get_register,
-    .setRegister   = altera_cyclone_v_uart_set_register,
-    .getData       = NULL,
-    .setData       = NULL,
-    .ulClock       = 0,
-    .ulIntVector   = ALT_INT_INTERRUPT_UART1
-  }
-#endif
-};
-
-unsigned long Console_Configuration_Count =
-  RTEMS_ARRAY_SIZE(Console_Configuration_Ports);
-
-bool altera_cyclone_v_uart_probe(int minor)
+static bool altera_cyclone_v_uart_probe(
+  rtems_termios_device_context *base,
+  uint32_t uart_set_mask
+)
 {
+  ns16550_context *ctx = (ns16550_context *) base;
   bool            ret           = true;
-  uint32_t        uart_set_mask;
   uint32_t        ucr;
   ALT_STATUS_CODE sc;
-  void*           location;
+  void*           location = (void *) ctx->port;
 
   /* The ALT_CLK_L4_SP is required for all SoCFPGA UARTs. 
    * Check that it's enabled. */
-  assert( alt_clk_is_enabled(ALT_CLK_L4_SP) == ALT_E_TRUE );
   if ( alt_clk_is_enabled(ALT_CLK_L4_SP) != ALT_E_TRUE ) {
     ret = false;
   }
 
   if ( ret ) {
-    switch(minor)
-    {
-      case(0):
-        /* UART 0 */
-        uart_set_mask = ALT_RSTMGR_PERMODRST_UART0_SET_MSK;
-        location      = ALT_UART0_ADDR;
-      break;
-      case(1):
-        /* UART 1 */
-        uart_set_mask = ALT_RSTMGR_PERMODRST_UART1_SET_MSK;
-        location      = ALT_UART1_ADDR;
-      break;
-      default:
-        /* Unknown case */
-        assert( minor == 0 || minor == 1 );
-        ret = false;
-      break;
-    }
-  }
-  if ( ret ) {
-    sc = alt_clk_freq_get(ALT_CLK_L4_SP, &Console_Configuration_Ports[minor].ulClock);
-    assert( sc == ALT_E_SUCCESS );
+    sc = alt_clk_freq_get(ALT_CLK_L4_SP, &ctx->clock);
     if ( sc != ALT_E_SUCCESS ) {
       ret = false;
     }
@@ -145,8 +73,6 @@ bool altera_cyclone_v_uart_probe(int minor)
 
     // Verify the UCR (UART Component Version)
     ucr = alt_read_word( ALT_UART_UCV_ADDR( location ) );
-
-    assert( ucr == ALT_UART_UCV_UART_COMPONENT_VER_RESET );
     if ( ucr != ALT_UART_UCV_UART_COMPONENT_VER_RESET ) {
       ret = false;
     }
@@ -158,22 +84,75 @@ bool altera_cyclone_v_uart_probe(int minor)
 
     // Read the MSR to work around case:119085.
     (void)alt_read_word( ALT_UART_MSR_ADDR( location ) );
+
+    ret = ns16550_probe( base );
   }
 
   return ret;
 }
 
+#ifdef CYCLONE_V_CONFIG_CONSOLE
+static bool altera_cyclone_v_uart_probe_0(rtems_termios_device_context *base)
+{
+  return altera_cyclone_v_uart_probe(base, ALT_RSTMGR_PERMODRST_UART0_SET_MSK);
+}
+
+static ns16550_context altera_cyclone_v_uart_context_0 = {
+  .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("UART 0"),
+  .get_reg = altera_cyclone_v_uart_get_register,
+  .set_reg = altera_cyclone_v_uart_set_register,
+  .port = (uintptr_t) ALT_UART0_ADDR,
+  .irq = ALT_INT_INTERRUPT_UART0,
+  .initial_baud = CYCLONE_V_UART_BAUD
+};
+#endif
+
+#ifdef CYCLONE_V_CONFIG_CONSOLE
+static bool altera_cyclone_v_uart_probe_1(rtems_termios_device_context *base)
+{
+  return altera_cyclone_v_uart_probe(base, ALT_RSTMGR_PERMODRST_UART1_SET_MSK);
+}
+
+static ns16550_context altera_cyclone_v_uart_context_1 = {
+  .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("UART 1"),
+  .get_reg = altera_cyclone_v_uart_get_register,
+  .set_reg = altera_cyclone_v_uart_set_register,
+  .port = (uintptr_t) ALT_UART1_ADDR,
+  .irq = ALT_INT_INTERRUPT_UART1,
+  .initial_baud = CYCLONE_V_UART_BAUD
+};
+#endif
+
+const console_device console_device_table[] = {
+  #ifdef CYCLONE_V_CONFIG_CONSOLE
+    {
+      .device_file = "/dev/ttyS0",
+      .probe = altera_cyclone_v_uart_probe_0,
+      .handler = DEVICE_FNS,
+      .context = &altera_cyclone_v_uart_context_0.base
+    },
+  #endif
+  #ifdef CYCLONE_V_CONFIG_UART_1
+    {
+      .device_file = "/dev/ttyS1",
+      .probe = altera_cyclone_v_uart_probe_1,
+      .handler = DEVICE_FNS,
+      .context = &altera_cyclone_v_uart_context_1.base
+    },
+  #endif
+};
+
+const size_t console_device_count = RTEMS_ARRAY_SIZE(console_device_table);
+
 static void output_char(char c)
 {
-  int minor = (int) Console_Port_Minor;
-  console_tbl *ct = Console_Port_Tbl != NULL ?
-    Console_Port_Tbl[minor] : &Console_Configuration_Ports[minor];
+  rtems_termios_device_context *ctx = console_device_table[0].context;
 
   if (c == '\n') {
-    ns16550_outch_polled( ct, '\r' );
+    ns16550_polled_putchar( ctx, '\r' );
   }
 
-  ns16550_outch_polled( ct, c );
+  ns16550_polled_putchar( ctx, c );
 }
 
 BSP_output_char_function_type BSP_output_char = output_char;

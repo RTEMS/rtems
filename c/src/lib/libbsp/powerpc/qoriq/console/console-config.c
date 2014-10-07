@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -20,25 +20,16 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <assert.h>
-
 #include <rtems/bspIo.h>
 
-#include <libchip/serial.h>
 #include <libchip/ns16550.h>
-#include "../../../shared/console_private.h"
 
-#include <bspopts.h>
+#include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/qoriq.h>
 #include <bsp/intercom.h>
 #include <bsp/uart-bridge.h>
-
-#define CONSOLE_COUNT \
-  (QORIQ_UART_0_ENABLE \
-    + QORIQ_UART_1_ENABLE \
-    + QORIQ_UART_BRIDGE_0_ENABLE \
-    + QORIQ_UART_BRIDGE_1_ENABLE)
+#include <bsp/console-termios.h>
 
 #if (QORIQ_UART_0_ENABLE + QORIQ_UART_BRIDGE_0_ENABLE == 2) \
   || (QORIQ_UART_1_ENABLE + QORIQ_UART_BRIDGE_1_ENABLE == 2)
@@ -47,56 +38,10 @@
   #define BRIDGE_SLAVE
 #endif
 
-#ifdef BRIDGE_MASTER
-  #define BRIDGE_FNS &qoriq_uart_bridge_master
-  #if QORIQ_UART_BRIDGE_0_ENABLE
-    static uart_bridge_master_control bridge_0_control = {
-      .device_path = "/dev/ttyS0",
-      .type = INTERCOM_TYPE_UART_0,
-      .transmit_fifo = RTEMS_CHAIN_INITIALIZER_EMPTY(
-        bridge_0_control.transmit_fifo
-      )
-    };
-    #define BRIDGE_0_CONTROL &bridge_0_control
-  #endif
-  #if QORIQ_UART_BRIDGE_1_ENABLE
-    static uart_bridge_master_control bridge_1_control = {
-      .device_path = "/dev/ttyS1",
-      .type = INTERCOM_TYPE_UART_1,
-      .transmit_fifo = RTEMS_CHAIN_INITIALIZER_EMPTY(
-        bridge_1_control.transmit_fifo
-      )
-    };
-    #define BRIDGE_1_CONTROL &bridge_1_control
-  #endif
-#endif
-
-#ifdef BRIDGE_SLAVE
-  #define BRIDGE_FNS &qoriq_uart_bridge_slave
-  #if QORIQ_UART_BRIDGE_0_ENABLE
-    static uart_bridge_slave_control bridge_0_control = {
-      .type = INTERCOM_TYPE_UART_0,
-      .transmit_fifo = RTEMS_CHAIN_INITIALIZER_EMPTY(
-        bridge_0_control.transmit_fifo
-      )
-    };
-    #define BRIDGE_0_CONTROL &bridge_0_control
-  #endif
-  #if QORIQ_UART_BRIDGE_1_ENABLE
-    static uart_bridge_slave_control bridge_1_control = {
-      .type = INTERCOM_TYPE_UART_1,
-      .transmit_fifo = RTEMS_CHAIN_INITIALIZER_EMPTY(
-        bridge_1_control.transmit_fifo
-      )
-    };
-    #define BRIDGE_1_CONTROL &bridge_1_control
-  #endif
-#endif
-
 #ifdef BSP_USE_UART_INTERRUPTS
-  #define DEVICE_FNS &ns16550_fns
+  #define DEVICE_FNS &ns16550_handler_interrupt
 #else
-  #define DEVICE_FNS &ns16550_fns_polled
+  #define DEVICE_FNS &ns16550_handler_polled
 #endif
 
 #if QORIQ_UART_0_ENABLE || QORIQ_UART_1_ENABLE
@@ -111,94 +56,138 @@
   {
     volatile uint8_t *reg = (uint8_t *) addr;
 
-    reg [i] = val; 
+    reg [i] = val;
   }
 #endif
 
-unsigned long Console_Configuration_Count = CONSOLE_COUNT;
-console_tbl Console_Configuration_Ports [CONSOLE_COUNT] = {
+#if QORIQ_UART_0_ENABLE
+static ns16550_context qoriq_uart_context_0 = {
+  .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("UART 0"),
+  .get_reg = get_register,
+  .set_reg = set_register,
+  .port = (uintptr_t) &qoriq.uart_0,
+  .irq = QORIQ_IRQ_DUART,
+  .initial_baud = BSP_CONSOLE_BAUD
+};
+#endif
+
+#if QORIQ_UART_1_ENABLE
+static ns16550_context qoriq_uart_context_1 = {
+  .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("UART 1"),
+  .get_reg = get_register,
+  .set_reg = set_register,
+  .port = (uintptr_t) &qoriq.uart_1,
+  .irq = QORIQ_IRQ_DUART,
+  .initial_baud = BSP_CONSOLE_BAUD
+};
+#endif
+
+#ifdef BRIDGE_MASTER
+  #define BRIDGE_PROBE qoriq_uart_bridge_master_probe
+  #define BRIDGE_FNS &qoriq_uart_bridge_master
+  #if QORIQ_UART_BRIDGE_0_ENABLE
+    static uart_bridge_master_context bridge_0_context = {
+      .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("UART Bridge 0"),
+      .device_path = "/dev/ttyS0",
+      .type = INTERCOM_TYPE_UART_0,
+      .transmit_fifo = RTEMS_CHAIN_INITIALIZER_EMPTY(
+        bridge_0_context.transmit_fifo
+      )
+    };
+    #define BRIDGE_0_CONTEXT &bridge_0_context
+  #endif
+  #if QORIQ_UART_BRIDGE_1_ENABLE
+    static uart_bridge_master_context bridge_1_context = {
+      .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("UART Bridge 1"),
+      .device_path = "/dev/ttyS1",
+      .type = INTERCOM_TYPE_UART_1,
+      .transmit_fifo = RTEMS_CHAIN_INITIALIZER_EMPTY(
+        bridge_1_context.transmit_fifo
+      )
+    };
+    #define BRIDGE_1_CONTEXT &bridge_1_context
+  #endif
+#endif
+
+#ifdef BRIDGE_SLAVE
+  #define BRIDGE_PROBE console_device_probe_default
+  #define BRIDGE_FNS &qoriq_uart_bridge_slave
+  #if QORIQ_UART_BRIDGE_0_ENABLE
+    static uart_bridge_slave_context bridge_0_context = {
+      .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("UART Bridge 0"),
+      .type = INTERCOM_TYPE_UART_0,
+      .transmit_fifo = RTEMS_CHAIN_INITIALIZER_EMPTY(
+        bridge_0_context.transmit_fifo
+      )
+    };
+    #define BRIDGE_0_CONTEXT &bridge_0_context
+  #endif
+  #if QORIQ_UART_BRIDGE_1_ENABLE
+    static uart_bridge_slave_context bridge_1_context = {
+      .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("UART Bridge 1"),
+      .type = INTERCOM_TYPE_UART_1,
+      .transmit_fifo = RTEMS_CHAIN_INITIALIZER_EMPTY(
+        bridge_1_context.transmit_fifo
+      )
+    };
+    #define BRIDGE_1_CONTEXT &bridge_1_context
+  #endif
+#endif
+
+const console_device console_device_table[] = {
   #if QORIQ_UART_0_ENABLE
     {
-      .sDeviceName = "/dev/ttyS0",
-      .deviceType = SERIAL_NS16550,
-      .pDeviceFns = DEVICE_FNS,
-      .deviceProbe = NULL,
-      .pDeviceFlow = NULL,
-      .ulMargin = 16,
-      .ulHysteresis = 8,
-      .pDeviceParams = (void *) BSP_CONSOLE_BAUD,
-      .ulCtrlPort1 = (uintptr_t) &qoriq.uart_0,
-      .ulCtrlPort2 = 0,
-      .ulDataPort =  (uintptr_t) &qoriq.uart_0,
-      .getRegister = get_register,
-      .setRegister = set_register,
-      .getData = NULL,
-      .setData = NULL,
-      .ulClock = 0,
-      .ulIntVector = QORIQ_IRQ_DUART
+      .device_file = "/dev/ttyS0",
+      .probe = ns16550_probe,
+      .handler = DEVICE_FNS,
+      .context = &qoriq_uart_context_0.base
     },
   #endif
   #if QORIQ_UART_1_ENABLE
     {
-      .sDeviceName = "/dev/ttyS1",
-      .deviceType = SERIAL_NS16550,
-      .pDeviceFns = DEVICE_FNS,
-      .deviceProbe = NULL,
-      .pDeviceFlow = NULL,
-      .ulMargin = 16,
-      .ulHysteresis = 8,
-      .pDeviceParams = (void *) BSP_CONSOLE_BAUD,
-      .ulCtrlPort1 = (uintptr_t) &qoriq.uart_1,
-      .ulCtrlPort2 = 0,
-      .ulDataPort =  (uintptr_t) &qoriq.uart_1,
-      .getRegister = get_register,
-      .setRegister = set_register,
-      .getData = NULL,
-      .setData = NULL,
-      .ulClock = 0,
-      .ulIntVector = QORIQ_IRQ_DUART
+      .device_file = "/dev/ttyS1",
+      .probe = ns16550_probe,
+      .handler = DEVICE_FNS,
+      .context = &qoriq_uart_context_1.base
     },
   #endif
   #if QORIQ_UART_BRIDGE_0_ENABLE
     {
       #if QORIQ_UART_1_ENABLE
-        .sDeviceName = "/dev/ttyB0",
+        .device_file = "/dev/ttyB0",
       #else
-        .sDeviceName = "/dev/ttyS0",
+        .device_file = "/dev/ttyS0",
       #endif
-      .deviceType = SERIAL_CUSTOM,
-      .pDeviceFns = BRIDGE_FNS,
-      .pDeviceParams = BRIDGE_0_CONTROL
+      .probe = BRIDGE_PROBE,
+      .handler = BRIDGE_FNS,
+      .context = BRIDGE_0_CONTEXT
     },
   #endif
   #if QORIQ_UART_BRIDGE_1_ENABLE
     {
       #if QORIQ_UART_1_ENABLE
-        .sDeviceName = "/dev/ttyB1",
+        .device_file = "/dev/ttyB1",
       #else
-        .sDeviceName = "/dev/ttyS1",
+        .device_file = "/dev/ttyS1",
       #endif
-      .deviceType = SERIAL_CUSTOM,
-      .pDeviceFns = BRIDGE_FNS,
-      .pDeviceParams = BRIDGE_1_CONTROL
+      .probe = BRIDGE_PROBE,
+      .handler = BRIDGE_FNS,
+      .context = BRIDGE_1_CONTEXT
     }
   #endif
 };
 
+const size_t console_device_count = RTEMS_ARRAY_SIZE(console_device_table);
+
 static void output_char(char c)
 {
-  int minor = (int) Console_Port_Minor;
-  const console_tbl **ct_tbl = Console_Port_Tbl;
+  rtems_termios_device_context *ctx = console_device_table[0].context;
 
-  if (ct_tbl != NULL) {
-    const console_fns *cf = ct_tbl[minor]->pDeviceFns;
-
-    if (c == '\n') {
-      (*cf->deviceWritePolled)(minor, '\r');
-    }
-
-    (*cf->deviceWritePolled)(minor, c);
+  if (c == '\n') {
+    ns16550_polled_putchar(ctx, '\r');
   }
+
+  ns16550_polled_putchar(ctx, c);
 }
 
 BSP_output_char_function_type BSP_output_char = output_char;

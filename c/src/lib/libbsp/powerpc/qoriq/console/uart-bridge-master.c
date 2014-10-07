@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -25,8 +25,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <termios.h>
-
-#include <libchip/sersupp.h>
 
 #include <bspopts.h>
 #include <bsp/uart-bridge.h>
@@ -55,12 +53,12 @@ static void serial_settings(int fd)
 static void uart_bridge_master_service(intercom_packet *packet, void *arg)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  uart_bridge_master_control *control = arg;
+  uart_bridge_master_context *ctx = arg;
 
   sc = rtems_chain_append_with_notification(
-    &control->transmit_fifo,
+    &ctx->transmit_fifo,
     &packet->glue.node,
-    control->transmit_task,
+    ctx->transmit_task,
     TRANSMIT_EVENT
   );
   assert(sc == RTEMS_SUCCESSFUL);
@@ -68,10 +66,10 @@ static void uart_bridge_master_service(intercom_packet *packet, void *arg)
 
 static void receive_task(rtems_task_argument arg)
 {
-  uart_bridge_master_control *control = (uart_bridge_master_control *) arg;
-  intercom_type type = control->type;
+  uart_bridge_master_context *ctx = (uart_bridge_master_context *) arg;
+  intercom_type type = ctx->type;
 
-  int fd = open(control->device_path, O_RDONLY);
+  int fd = open(ctx->device_path, O_RDONLY);
   assert(fd >= 0);
 
   serial_settings(fd);
@@ -94,10 +92,10 @@ static void receive_task(rtems_task_argument arg)
 static void transmit_task(rtems_task_argument arg)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  uart_bridge_master_control *control = (uart_bridge_master_control *) arg;
-  rtems_chain_control *fifo = &control->transmit_fifo;
+  uart_bridge_master_context *ctx = (uart_bridge_master_context *) arg;
+  rtems_chain_control *fifo = &ctx->transmit_fifo;
 
-  int fd = open(control->device_path, O_WRONLY);
+  int fd = open(ctx->device_path, O_WRONLY);
   assert(fd >= 0);
 
   serial_settings(fd);
@@ -119,12 +117,12 @@ static void transmit_task(rtems_task_argument arg)
 static rtems_id create_task(
   char name,
   rtems_task_entry entry,
-  uart_bridge_master_control *control
+  uart_bridge_master_context *ctx
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_id task = RTEMS_ID_NONE;
-  char index = (char) ('0' + control->type - INTERCOM_TYPE_UART_0);
+  char index = (char) ('0' + ctx->type - INTERCOM_TYPE_UART_0);
 
   sc = rtems_task_create(
     rtems_build_name('U', 'B', name, index),
@@ -139,57 +137,45 @@ static rtems_id create_task(
   sc = rtems_task_start(
     task,
     entry,
-    (rtems_task_argument) control
+    (rtems_task_argument) ctx
   );
   assert(sc == RTEMS_SUCCESSFUL);
 
   return task;
 }
 
-static void initialize(int minor)
+bool qoriq_uart_bridge_master_probe(rtems_termios_device_context *base)
 {
-  console_tbl *ct = Console_Port_Tbl [minor];
-  uart_bridge_master_control *control = ct->pDeviceParams;
-  intercom_type type = control->type;
+  uart_bridge_master_context *ctx = (uart_bridge_master_context *) base;
+  intercom_type type = ctx->type;
 
-  qoriq_intercom_service_install(type, uart_bridge_master_service, control);
-  create_task('R', receive_task, control);
-  control->transmit_task = create_task('T', transmit_task, control);
+  qoriq_intercom_service_install(type, uart_bridge_master_service, ctx);
+  create_task('R', receive_task, ctx);
+  ctx->transmit_task = create_task('T', transmit_task, ctx);
+
+  return true;
 }
 
-static int first_open(int major, int minor, void *arg)
+static bool first_open(
+  struct rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
+  struct termios *term,
+  rtems_libio_open_close_args_t *args
+)
 {
-  return -1;
+  return false;
 }
 
-static int last_close(int major, int minor, void *arg)
+static bool set_attributes(
+  rtems_termios_device_context *base,
+  const struct termios *term
+)
 {
-  return -1;
+  return false;
 }
 
-static int read_polled(int minor)
-{
-  return -1;
-}
-
-static void write_polled(int minor, char c)
-{
-  /* Do nothing */
-}
-
-static int set_attributes(int minor, const struct termios *term)
-{
-  return -1;
-}
-
-const console_fns qoriq_uart_bridge_master = {
-  .deviceProbe = libchip_serial_default_probe,
-  .deviceFirstOpen = first_open,
-  .deviceLastClose = last_close,
-  .deviceRead = read_polled,
-  .deviceWrite = NULL,
-  .deviceInitialize = initialize,
-  .deviceWritePolled = write_polled,
-  .deviceSetAttributes = set_attributes,
-  .deviceOutputUsesInterrupts = false
+const rtems_termios_device_handler qoriq_uart_bridge_master = {
+  .first_open = first_open,
+  .set_attributes = set_attributes,
+  .mode = TERMIOS_POLLED
 };

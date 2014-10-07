@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -52,6 +52,8 @@ extern "C" {
 #endif /* __cplusplus */
 
 struct rtems_bsdnet_ifconfig;
+
+struct rtems_termios_device_context;
 
 /**
  * @defgroup lpc24xx LPC24XX Support
@@ -111,11 +113,11 @@ void *bsp_idle_thread(uintptr_t ignored);
 
 void bsp_restart(void *addr);
 
-bool lpc24xx_uart_probe_1(int minor);
+bool lpc24xx_uart_probe_1(struct rtems_termios_device_context *context);
 
-bool lpc24xx_uart_probe_2(int minor);
+bool lpc24xx_uart_probe_2(struct rtems_termios_device_context *context);
 
-bool lpc24xx_uart_probe_3(int minor);
+bool lpc24xx_uart_probe_3(struct rtems_termios_device_context *context);
 
 /** @} */
 

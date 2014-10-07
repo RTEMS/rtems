@@ -121,11 +121,8 @@ libbsp_a_SOURCES += irq/irq.c
 libbsp_a_SOURCES += irq/irq-dispatch.c
 
 # Console
-libbsp_a_SOURCES += ../../shared/console.c
-libbsp_a_SOURCES += ../../shared/console_control.c
-libbsp_a_SOURCES += ../../shared/console_read.c
-libbsp_a_SOURCES += ../../shared/console_select.c
-libbsp_a_SOURCES += ../../shared/console_write.c
+libbsp_a_SOURCES += ../../shared/console-termios-init.c
+libbsp_a_SOURCES += ../../shared/console-termios.c
 libbsp_a_SOURCES += console/console-config.c
 libbsp_a_SOURCES += console/uart-probe-1.c
 libbsp_a_SOURCES += console/uart-probe-2.c

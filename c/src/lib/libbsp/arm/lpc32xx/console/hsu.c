@@ -7,36 +7,23 @@
  */
 
 /*
- * Copyright (c) 2010
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2010-2014 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems.h>
-#include <rtems/libio.h>
-#include <rtems/termiostypes.h>
-
-#include <libchip/serial.h>
-#include <libchip/sersupp.h>
-
 #include <bsp.h>
 #include <bsp/lpc32xx.h>
 #include <bsp/irq.h>
-
-typedef struct {
-  uint32_t fifo;
-  uint32_t level;
-  uint32_t iir;
-  uint32_t ctrl;
-  uint32_t rate;
-} lpc32xx_hsu;
+#include <bsp/hsu.h>
 
 #define HSU_FIFO_SIZE 64
 
@@ -60,54 +47,29 @@ typedef struct {
 /* We are interested in RX timeout, RX trigger and TX trigger interrupts */
 #define HSU_IIR_MASK 0x7U
 
-static int lpc32xx_hsu_first_open(int major, int minor, void *arg)
+bool lpc32xx_hsu_probe(rtems_termios_device_context *base)
 {
-  rtems_libio_open_close_args_t *oca = arg;
-  struct rtems_termios_tty *tty = oca->iop->data1;
-  console_tbl *ct = Console_Port_Tbl [minor];
-  console_data *cd = &Console_Port_Data [minor];
-  volatile lpc32xx_hsu *hsu = (volatile lpc32xx_hsu *) ct->ulCtrlPort1;
+  lpc32xx_hsu_context *ctx = (lpc32xx_hsu_context *) base;
+  volatile lpc32xx_hsu *hsu = ctx->hsu;
 
-  cd->termios_data = tty;
-  rtems_termios_set_initial_baud(tty, (int32_t) ct->pDeviceParams);
-  hsu->ctrl = HSU_CTRL_RX_INTR_ENABLED;
+  hsu->ctrl = HSU_CTRL_INTR_DISABLED;
 
-  return 0;
-}
-
-static ssize_t lpc32xx_hsu_write(int minor, const char *buf, size_t len)
-{
-  console_tbl *ct = Console_Port_Tbl [minor];
-  console_data *cd = &Console_Port_Data [minor];
-  volatile lpc32xx_hsu *hsu = (volatile lpc32xx_hsu *) ct->ulCtrlPort1;
-  size_t tx_level = (hsu->level & HSU_LEVEL_TX_MASK) >> HSU_LEVEL_TX_SHIFT;
-  size_t tx_free = HSU_FIFO_SIZE - tx_level;
-  size_t i = 0;
-  size_t out = len > tx_free ? tx_free : len;
-
-  for (i = 0; i < out; ++i) {
-    hsu->fifo = buf [i];
+  /* Drain FIFOs */
+  while (hsu->level != 0) {
+    hsu->fifo;
   }
 
-  if (len > 0) {
-    cd->pDeviceContext = (void *) out;
-    cd->bActive = true;
-    hsu->ctrl = HSU_CTRL_RX_AND_TX_INTR_ENABLED;
-  }
-
-  return 0;
+  return true;
 }
 
 static void lpc32xx_hsu_interrupt_handler(void *arg)
 {
-  int minor = (int) arg;
-  console_tbl *ct = Console_Port_Tbl [minor];
-  console_data *cd = &Console_Port_Data [minor];
-  volatile lpc32xx_hsu *hsu = (volatile lpc32xx_hsu *) ct->ulCtrlPort1;
+  rtems_termios_tty *tty = arg;
+  lpc32xx_hsu_context *ctx = rtems_termios_get_device_context(tty);
+  volatile lpc32xx_hsu *hsu = ctx->hsu;
 
   /* Iterate until no more interrupts are pending */
   do {
-    int chars_to_dequeue = (int) cd->pDeviceContext;
     int rv = 0;
     int i = 0;
     char buf [HSU_FIFO_SIZE];
@@ -125,49 +87,97 @@ static void lpc32xx_hsu_interrupt_handler(void *arg)
         break;
       }
     }
-    rtems_termios_enqueue_raw_characters(cd->termios_data, buf, i);
+    rtems_termios_enqueue_raw_characters(tty, buf, i);
 
     /* Dequeue transmitted characters */
-    cd->pDeviceContext = 0;
-    rv = rtems_termios_dequeue_characters(cd->termios_data, chars_to_dequeue);
+    rv = rtems_termios_dequeue_characters(tty, (int) ctx->chars_in_transmission);
     if (rv == 0) {
       /* Nothing to transmit */
-      cd->bActive = false;
-      hsu->ctrl = HSU_CTRL_RX_INTR_ENABLED;
-      hsu->iir = HSU_IIR_TX;
     }
   } while ((hsu->iir & HSU_IIR_MASK) != 0);
 }
 
-static void lpc32xx_hsu_initialize(int minor)
+static bool lpc32xx_hsu_first_open(
+  struct rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
+  struct termios *term,
+  rtems_libio_open_close_args_t *args
+)
 {
-  console_tbl *ct = Console_Port_Tbl [minor];
-  console_data *cd = &Console_Port_Data [minor];
-  volatile lpc32xx_hsu *hsu = (volatile lpc32xx_hsu *) ct->ulCtrlPort1;
+  lpc32xx_hsu_context *ctx = (lpc32xx_hsu_context *) base;
+  volatile lpc32xx_hsu *hsu = ctx->hsu;
+  rtems_status_code sc;
+  bool ok;
 
-  hsu->ctrl = HSU_CTRL_INTR_DISABLED;
-
-  cd->bActive = false;
-  cd->pDeviceContext = 0;
-
-  /* Drain FIFOs */
-  while (hsu->level != 0) {
-    hsu->fifo;
-  }
-
-  rtems_interrupt_handler_install(
-    ct->ulIntVector,
+  sc = rtems_interrupt_handler_install(
+    ctx->irq,
     "HSU",
     RTEMS_INTERRUPT_UNIQUE,
     lpc32xx_hsu_interrupt_handler,
-    (void *) minor
+    tty
+  );
+  ok = sc == RTEMS_SUCCESSFUL;
+
+  if (ok) {
+    rtems_termios_set_initial_baud(tty, ctx->initial_baud);
+    hsu->ctrl = HSU_CTRL_RX_INTR_ENABLED;
+  }
+
+  return ok;
+}
+
+static void lpc32xx_hsu_last_close(
+  struct rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
+  rtems_libio_open_close_args_t *args
+)
+{
+  lpc32xx_hsu_context *ctx = (lpc32xx_hsu_context *) base;
+  volatile lpc32xx_hsu *hsu = ctx->hsu;
+
+  hsu->ctrl = HSU_CTRL_INTR_DISABLED;
+
+  rtems_interrupt_handler_remove(
+    ctx->irq,
+    lpc32xx_hsu_interrupt_handler,
+    tty
   );
 }
 
-static int lpc32xx_hsu_set_attributes(int minor, const struct termios *term)
+static void lpc32xx_hsu_write(
+  rtems_termios_device_context *base,
+  const char *buf,
+  size_t len
+)
 {
-  console_tbl *ct = Console_Port_Tbl [minor];
-  volatile lpc32xx_hsu *hsu = (volatile lpc32xx_hsu *) ct->ulCtrlPort1;
+  lpc32xx_hsu_context *ctx = (lpc32xx_hsu_context *) base;
+  volatile lpc32xx_hsu *hsu = ctx->hsu;
+  size_t tx_level = (hsu->level & HSU_LEVEL_TX_MASK) >> HSU_LEVEL_TX_SHIFT;
+  size_t tx_free = HSU_FIFO_SIZE - tx_level;
+  size_t i = 0;
+  size_t out = len > tx_free ? tx_free : len;
+
+  for (i = 0; i < out; ++i) {
+    hsu->fifo = buf [i];
+  }
+
+  ctx->chars_in_transmission = out;
+
+  if (len > 0) {
+    hsu->ctrl = HSU_CTRL_RX_AND_TX_INTR_ENABLED;
+  } else {
+    hsu->ctrl = HSU_CTRL_RX_INTR_ENABLED;
+    hsu->iir = HSU_IIR_TX;
+  }
+}
+
+static bool lpc32xx_hsu_set_attributes(
+  rtems_termios_device_context *base,
+  const struct termios *term
+)
+{
+  lpc32xx_hsu_context *ctx = (lpc32xx_hsu_context *) base;
+  volatile lpc32xx_hsu *hsu = ctx->hsu;
   int baud_flags = term->c_cflag & CBAUD;
 
   if (baud_flags != 0) {
@@ -186,17 +196,13 @@ static int lpc32xx_hsu_set_attributes(int minor, const struct termios *term)
     }
   }
 
-  return 0;
+  return true;
 }
 
-const console_fns lpc32xx_hsu_fns = {
-  .deviceProbe = libchip_serial_default_probe,
-  .deviceFirstOpen = lpc32xx_hsu_first_open,
-  .deviceLastClose = NULL,
-  .deviceRead = NULL,
-  .deviceWrite = lpc32xx_hsu_write,
-  .deviceInitialize = lpc32xx_hsu_initialize,
-  .deviceWritePolled = NULL,
-  .deviceSetAttributes = lpc32xx_hsu_set_attributes,
-  .deviceOutputUsesInterrupts = true
+const rtems_termios_device_handler lpc32xx_hsu_fns = {
+  .first_open = lpc32xx_hsu_first_open,
+  .last_close = lpc32xx_hsu_last_close,
+  .write = lpc32xx_hsu_write,
+  .set_attributes = lpc32xx_hsu_set_attributes,
+  .mode = TERMIOS_IRQ_DRIVEN
 };

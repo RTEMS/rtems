@@ -92,15 +92,11 @@ libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 libbsp_a_SOURCES += irq/irq.c
 
 # Console
-libbsp_a_SOURCES += ../../shared/console.c \
-        ../../shared/console_select.c \
-	console/uart-bridge-master.c \
-	console/uart-bridge-slave.c \
-	console/console-config.c \
-        ../../shared/console_read.c \
-        ../../shared/console_write.c \
-        ../../shared/console_control.c
-
+libbsp_a_SOURCES += ../../shared/console-termios-init.c
+libbsp_a_SOURCES += ../../shared/console-termios.c
+libbsp_a_SOURCES += console/uart-bridge-master.c
+libbsp_a_SOURCES += console/uart-bridge-slave.c
+libbsp_a_SOURCES += console/console-config.c
 
 # RTC
 libbsp_a_SOURCES += ../../shared/tod.c \

@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -23,7 +23,7 @@
 #ifndef LIBBSP_POWERPC_QORIQ_UART_BRIDGE_H
 #define LIBBSP_POWERPC_QORIQ_UART_BRIDGE_H
 
-#include <libchip/serial.h>
+#include <rtems/termiostypes.h>
 
 #include <bsp/intercom.h>
 
@@ -42,22 +42,26 @@ extern "C" {
  */
 
 typedef struct {
+  rtems_termios_device_context base;
   const char *device_path;
   intercom_type type;
   rtems_id transmit_task;
   rtems_chain_control transmit_fifo;
-} uart_bridge_master_control;
+} uart_bridge_master_context;
 
 typedef struct {
+  rtems_termios_device_context base;
   struct rtems_termios_tty *tty;
   intercom_type type;
   rtems_id transmit_task;
   rtems_chain_control transmit_fifo;
-} uart_bridge_slave_control;
+} uart_bridge_slave_context;
 
-extern const console_fns qoriq_uart_bridge_master;
+bool qoriq_uart_bridge_master_probe(rtems_termios_device_context *base);
 
-extern const console_fns qoriq_uart_bridge_slave;
+extern const rtems_termios_device_handler qoriq_uart_bridge_master;
+
+extern const rtems_termios_device_handler qoriq_uart_bridge_slave;
 
 /** @} */
 

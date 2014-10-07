@@ -24,7 +24,7 @@
 #include <rtems/config.h>
 #include <rtems/counter.h>
 
-#include <libchip/serial.h>
+#include <libchip/ns16550.h>
 
 #include <libcpu/powerpc-utility.h>
 
@@ -36,6 +36,7 @@
 #include <bsp/linker-symbols.h>
 #include <bsp/mmu.h>
 #include <bsp/qoriq.h>
+#include <bsp/console-termios.h>
 
 LINKER_SYMBOL(bsp_exc_vector_base);
 
@@ -50,6 +51,7 @@ void BSP_panic(char *s)
   rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
+  (void) level;
 
   printk("%s PANIC %s\n", rtems_get_version_string(), s);
 
@@ -63,6 +65,7 @@ void _BSP_Fatal_error(unsigned n)
   rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
+  (void) level;
 
   printk("%s PANIC ERROR %u\n", rtems_get_version_string(), n);
 
@@ -75,15 +78,12 @@ void bsp_start(void)
 {
   unsigned long i = 0;
 
-  ppc_cpu_id_t myCpu;
-  ppc_cpu_revision_t myCpuRevision;
-
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
    * store the result in global variables so that it can be used latter...
    */
-  myCpu = get_ppc_cpu_type();
-  myCpuRevision = get_ppc_cpu_revision();
+  get_ppc_cpu_type();
+  get_ppc_cpu_revision();
 
   /* Initialize some device driver parameters */
   #ifdef HAS_UBOOT
@@ -93,16 +93,24 @@ void bsp_start(void)
   rtems_counter_initialize_converter(BSP_bus_frequency / 8);
 
   /* Initialize some console parameters */
-  for (i = 0; i < Console_Configuration_Count; ++i) {
-    console_tbl *ct = &Console_Configuration_Ports[i];
+  for (i = 0; i < console_device_count; ++i) {
+    const console_device *dev = &console_device_table[i];
+    const rtems_termios_device_handler *ns16550 =
+      #ifdef BSP_USE_UART_INTERRUPTS
+        &ns16550_handler_interrupt;
+      #else
+        &ns16550_handler_polled;
+      #endif
 
-    ct->ulClock = BSP_bus_frequency;
+    if (dev->handler == ns16550) {
+      ns16550_context *ctx = (ns16550_context *) dev->context;
 
-    #ifdef HAS_UBOOT
-      if (ct->deviceType == SERIAL_NS16550) {
-        ct->pDeviceParams = (void *) bsp_uboot_board_info.bi_baudrate;
-      }
-    #endif
+      ctx->clock = BSP_bus_frequency;
+
+      #ifdef HAS_UBOOT
+        ctx->initial_baud = bsp_uboot_board_info.bi_baudrate;
+      #endif
+    }
   }
 
   /* Disable decrementer */

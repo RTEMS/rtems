@@ -146,6 +146,10 @@ $(PROJECT_INCLUDE)/bsp/boot.h: include/boot.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/boot.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/boot.h
 
+$(PROJECT_INCLUDE)/bsp/hsu.h: include/hsu.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/hsu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/hsu.h
+
 $(PROJECT_INCLUDE)/bsp/i2c.h: include/i2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/i2c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/i2c.h

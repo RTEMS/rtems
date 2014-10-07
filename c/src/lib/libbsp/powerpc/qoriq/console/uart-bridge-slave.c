@@ -50,8 +50,8 @@ static void restore_preemption(rtems_mode prev_mode)
 
 static void uart_bridge_slave_service(intercom_packet *packet, void *arg)
 {
-  uart_bridge_slave_control *control = arg;
-  struct rtems_termios_tty *tty = control->tty;
+  uart_bridge_slave_context *ctx = arg;
+  struct rtems_termios_tty *tty = ctx->tty;
 
   /* Workaround for https://www.rtems.org/bugzilla/show_bug.cgi?id=1736 */
   rtems_mode prev_mode = disable_preemption();
@@ -65,9 +65,9 @@ static void uart_bridge_slave_service(intercom_packet *packet, void *arg)
 static void transmit_task(rtems_task_argument arg)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  uart_bridge_slave_control *control = (uart_bridge_slave_control *) arg;
-  rtems_chain_control *fifo = &control->transmit_fifo;
-  struct rtems_termios_tty *tty = control->tty;
+  uart_bridge_slave_context *ctx = (uart_bridge_slave_context *) arg;
+  rtems_chain_control *fifo = &ctx->transmit_fifo;
+  struct rtems_termios_tty *tty = ctx->tty;
 
   while (true) {
     intercom_packet *packet = NULL;
@@ -91,12 +91,12 @@ static void transmit_task(rtems_task_argument arg)
 }
 
 static void create_transmit_task(
-  uart_bridge_slave_control *control
+  uart_bridge_slave_context *ctx
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_id task = RTEMS_ID_NONE;
-  char index = (char) ('0' + control->type - INTERCOM_TYPE_UART_0);
+  char index = (char) ('0' + ctx->type - INTERCOM_TYPE_UART_0);
 
   sc = rtems_task_create(
     rtems_build_name('U', 'B', 'T', index),
@@ -111,54 +111,53 @@ static void create_transmit_task(
   sc = rtems_task_start(
     task,
     transmit_task,
-    (rtems_task_argument) control
+    (rtems_task_argument) ctx
   );
   assert(sc == RTEMS_SUCCESSFUL);
 
-  control->transmit_task = task;
+  ctx->transmit_task = task;
 }
 
-static void initialize(int minor)
+static bool first_open(
+  struct rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
+  struct termios *term,
+  rtems_libio_open_close_args_t *args
+)
 {
-  /* Do nothing */
-}
+  uart_bridge_slave_context *ctx = (uart_bridge_slave_context *) base;
+  intercom_type type = ctx->type;
 
-static int first_open(int major, int minor, void *arg)
-{
-  rtems_libio_open_close_args_t *oc = (rtems_libio_open_close_args_t *) arg;
-  struct rtems_termios_tty *tty = (struct rtems_termios_tty *) oc->iop->data1;
-  console_tbl *ct = Console_Port_Tbl[minor];
-  console_data *cd = &Console_Port_Data [minor];
-  uart_bridge_slave_control *control = ct->pDeviceParams;
-  intercom_type type = control->type;
-
-  control->tty = tty;
-  cd->termios_data = tty;
+  ctx->tty = tty;
   rtems_termios_set_initial_baud(tty, 115200);
-  create_transmit_task(control);
-  qoriq_intercom_service_install(type, uart_bridge_slave_service, control);
+  create_transmit_task(ctx);
+  qoriq_intercom_service_install(type, uart_bridge_slave_service, ctx);
 
-  return 0;
+  return true;
 }
 
-static int last_close(int major, int minor, void *arg)
+static void last_close(
+  struct rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
+  rtems_libio_open_close_args_t *args
+)
 {
-  console_tbl *ct = Console_Port_Tbl[minor];
-  uart_bridge_slave_control *control = ct->pDeviceParams;
+  uart_bridge_slave_context *ctx = (uart_bridge_slave_context *) base;
 
-  qoriq_intercom_service_remove(control->type);
-
-  return 0;
+  qoriq_intercom_service_remove(ctx->type);
 }
 
-static ssize_t write_with_interrupts(int minor, const char *buf, size_t len)
+static void write_with_interrupts(
+  rtems_termios_device_context *base,
+  const char *buf,
+  size_t len
+)
 {
   if (len > 0) {
     rtems_status_code sc = RTEMS_SUCCESSFUL;
-    console_tbl *ct = Console_Port_Tbl[minor];
-    uart_bridge_slave_control *control = ct->pDeviceParams;
+    uart_bridge_slave_context *ctx = (uart_bridge_slave_context *) base;
     intercom_packet *packet = qoriq_intercom_allocate_packet(
-      control->type,
+      ctx->type,
       INTERCOM_SIZE_64
     );
 
@@ -170,44 +169,27 @@ static ssize_t write_with_interrupts(int minor, const char *buf, size_t len)
      * another context.
      */
     sc = rtems_chain_append_with_notification(
-      &control->transmit_fifo,
+      &ctx->transmit_fifo,
       &packet->glue.node,
-      control->transmit_task,
+      ctx->transmit_task,
       TRANSMIT_EVENT
     );
     assert(sc == RTEMS_SUCCESSFUL);
   }
-
-  return 0;
 }
 
-static void write_polled(int minor, char c)
+static bool set_attributes(
+  rtems_termios_device_context *base,
+  const struct termios *term
+)
 {
-  console_tbl *ct = Console_Port_Tbl[minor];
-  uart_bridge_slave_control *control = ct->pDeviceParams;
-  intercom_packet *packet = qoriq_intercom_allocate_packet(
-    control->type,
-    INTERCOM_SIZE_64
-  );
-  char *data = packet->data;
-  data [0] = c;
-  packet->size = 1;
-  qoriq_intercom_send_packet(QORIQ_UART_BRIDGE_MASTER_CORE, packet);
+  return false;
 }
 
-static int set_attribues(int minor, const struct termios *term)
-{
-  return -1;
-}
-
-const console_fns qoriq_uart_bridge_slave = {
-  .deviceProbe = libchip_serial_default_probe,
-  .deviceFirstOpen = first_open,
-  .deviceLastClose = last_close,
-  .deviceRead = NULL,
-  .deviceWrite = write_with_interrupts,
-  .deviceInitialize = initialize,
-  .deviceWritePolled = write_polled,
-  .deviceSetAttributes = set_attribues,
-  .deviceOutputUsesInterrupts = true
+const rtems_termios_device_handler qoriq_uart_bridge_slave = {
+  .first_open = first_open,
+  .last_close = last_close,
+  .write = write_with_interrupts,
+  .set_attributes = set_attributes,
+  .mode = TERMIOS_IRQ_DRIVEN
 };

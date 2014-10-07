@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -20,12 +20,12 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <libchip/serial.h>
 #include <libchip/ns16550.h>
 
 #include <bsp.h>
 #include <bsp/io.h>
 #include <bsp/irq.h>
+#include <bsp/console-termios.h>
 
 /**
  * @brief Gets the uart register according to the current address.
@@ -62,97 +62,91 @@ static inline void lpc176x_uart_set_register(
   reg[ i ] = val;
 }
 
-/**
- * @brief Represents the uart configuration ports.
- */
-console_tbl Console_Configuration_Ports[] = {
 #ifdef LPC176X_CONFIG_CONSOLE
-  {
-    .sDeviceName = "/dev/ttyS0",
-    .deviceType = SERIAL_NS16550_WITH_FDR,
-    .pDeviceFns = &ns16550_fns,
-    .deviceProbe = NULL,
-    .pDeviceFlow = NULL,
-    .ulMargin = 16,
-    .ulHysteresis = 8,
-    .pDeviceParams = (void *) LPC176X_UART_BAUD,
-    .ulCtrlPort1 = UART0_BASE_ADDR,
-    .ulCtrlPort2 = 0,
-    .ulDataPort = UART0_BASE_ADDR,
-    .getRegister = lpc176x_uart_get_register,
-    .setRegister = lpc176x_uart_set_register,
-    .getData = NULL,
-    .setData = NULL,
-    .ulClock = LPC176X_PCLK,
-    .ulIntVector = LPC176X_IRQ_UART_0
-  },
+static ns16550_context lpc176x_uart_context_0 = {
+  .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("UART 0"),
+  .get_reg = lpc176x_uart_get_register,
+  .set_reg = lpc176x_uart_set_register,
+  .port = UART0_BASE_ADDR,
+  .irq = LPC176X_IRQ_UART_0,
+  .clock = LPC176X_PCLK,
+  .initial_baud = LPC176X_UART_BAUD,
+  .has_fractional_divider_register = true
+};
 #endif
+
 #ifdef LPC176X_CONFIG_UART_1
-  {
-    .sDeviceName = "/dev/ttyS1",
-    .deviceType = SERIAL_NS16550_WITH_FDR,
-    .pDeviceFns = &ns16550_fns,
-    .deviceProbe = lpc176x_uart_probe_1,
-    .pDeviceFlow = NULL,
-    .ulMargin = 16,
-    .ulHysteresis = 8,
-    .pDeviceParams = (void *) LPC176X_UART_BAUD,
-    .ulCtrlPort1 = UART1_BASE_ADDR,
-    .ulCtrlPort2 = 0,
-    .ulDataPort = UART1_BASE_ADDR,
-    .getRegister = lpc176x_uart_get_register,
-    .setRegister = lpc176x_uart_set_register,
-    .getData = NULL,
-    .setData = NULL,
-    .ulClock = LPC176X_PCLK,
-    .ulIntVector = LPC176X_IRQ_UART_1
-  },
+static ns16550_context lpc176x_uart_context_1 = {
+  .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("UART 1"),
+  .get_reg = lpc176x_uart_get_register,
+  .set_reg = lpc176x_uart_set_register,
+  .port = UART1_BASE_ADDR,
+  .irq = LPC176X_IRQ_UART_1,
+  .clock = LPC176X_PCLK,
+  .initial_baud = LPC176X_UART_BAUD,
+  .has_fractional_divider_register = true
+};
 #endif
+
 #ifdef LPC176X_CONFIG_UART_2
-  {
-    .sDeviceName = "/dev/ttyS2",
-    .deviceType = SERIAL_NS16550_WITH_FDR,
-    .pDeviceFns = &ns16550_fns,
-    .deviceProbe = lpc176x_uart_probe_2,
-    .pDeviceFlow = NULL,
-    .ulMargin = 16,
-    .ulHysteresis = 8,
-    .pDeviceParams = (void *) LPC176X_UART_BAUD,
-    .ulCtrlPort1 = UART2_BASE_ADDR,
-    .ulCtrlPort2 = 0,
-    .ulDataPort = UART2_BASE_ADDR,
-    .getRegister = lpc176x_uart_get_register,
-    .setRegister = lpc176x_uart_set_register,
-    .getData = NULL,
-    .setData = NULL,
-    .ulClock = LPC176X_PCLK,
-    .ulIntVector = LPC176X_IRQ_UART_2
-  },
+static ns16550_context lpc176x_uart_context_2 = {
+  .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("UART 2"),
+  .get_reg = lpc176x_uart_get_register,
+  .set_reg = lpc176x_uart_set_register,
+  .port = UART2_BASE_ADDR,
+  .irq = LPC176X_IRQ_UART_2,
+  .clock = LPC176X_PCLK,
+  .initial_baud = LPC176X_UART_BAUD,
+  .has_fractional_divider_register = true
+};
 #endif
+
 #ifdef LPC176X_CONFIG_UART_3
-  {
-    .sDeviceName = "/dev/ttyS3",
-    .deviceType = SERIAL_NS16550_WITH_FDR,
-    .pDeviceFns = &ns16550_fns,
-    .deviceProbe = lpc176x_uart_probe_3,
-    .pDeviceFlow = NULL,
-    .ulMargin = 16,
-    .ulHysteresis = 8,
-    .pDeviceParams = (void *) LPC176X_UART_BAUD,
-    .ulCtrlPort1 = UART3_BASE_ADDR,
-    .ulCtrlPort2 = 0,
-    .ulDataPort = UART3_BASE_ADDR,
-    .getRegister = lpc176x_uart_get_register,
-    .setRegister = lpc176x_uart_set_register,
-    .getData = NULL,
-    .setData = NULL,
-    .ulClock = LPC176X_PCLK,
-    .ulIntVector = LPC176X_IRQ_UART_3
-  },
+static ns16550_context lpc176x_uart_context_3 = {
+  .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("UART 3"),
+  .get_reg = lpc176x_uart_get_register,
+  .set_reg = lpc176x_uart_set_register,
+  .port = UART3_BASE_ADDR,
+  .irq = LPC176X_IRQ_UART_3,
+  .clock = LPC176X_PCLK,
+  .initial_baud = LPC176X_UART_BAUD,
+  .has_fractional_divider_register = true
+};
 #endif
+
+const console_device console_device_table[] = {
+  #ifdef LPC176X_CONFIG_CONSOLE
+    {
+      .device_file = "/dev/ttyS0",
+      .probe = console_device_probe_default,
+      .handler = &ns16550_handler_interrupt,
+      .context = &lpc176x_uart_context_0.base
+    },
+  #endif
+  #ifdef LPC176X_CONFIG_UART_1
+    {
+      .device_file = "/dev/ttyS1",
+      .probe = ns16550_probe,
+      .handler = &ns16550_handler_interrupt,
+      .context = &lpc176x_uart_context_1.base
+    },
+  #endif
+  #ifdef LPC176X_CONFIG_UART_2
+    {
+      .device_file = "/dev/ttyS2",
+      .probe = ns16550_probe,
+      .handler = &ns16550_handler_interrupt,
+      .context = &lpc176x_uart_context_2.base
+    },
+  #endif
+  #ifdef LPC176X_CONFIG_UART_3
+    {
+      .device_file = "/dev/ttyS3",
+      .probe = ns16550_probe,
+      .handler = &ns16550_handler_interrupt,
+      .context = &lpc176x_uart_context_3.base
+    },
+  #endif
 };
 
-#define LPC176X_UART_COUNT ( sizeof( Console_Configuration_Ports ) \
-                             / sizeof( Console_Configuration_Ports[ 0 ] ) )
-
-unsigned long Console_Configuration_Count = LPC176X_UART_COUNT;
+const size_t console_device_count = RTEMS_ARRAY_SIZE(console_device_table);

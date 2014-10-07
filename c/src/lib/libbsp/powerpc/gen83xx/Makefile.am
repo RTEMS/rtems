@@ -82,12 +82,10 @@ libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 libbsp_a_SOURCES += irq/irq.c
 
 # console
-libbsp_a_SOURCES += ../../shared/console.c \
-        ../../shared/console_select.c \
-	console/console-config.c \
-        ../../shared/console_read.c \
-        ../../shared/console_write.c \
-        ../../shared/console_control.c
+libbsp_a_SOURCES += ../../shared/console-termios-init.c
+libbsp_a_SOURCES += ../../shared/console-termios.c
+libbsp_a_SOURCES += console/console-config.c
+
 # bsp_i2c
 libbsp_a_SOURCES += i2c/i2c_init.c
 # bsp_spi
