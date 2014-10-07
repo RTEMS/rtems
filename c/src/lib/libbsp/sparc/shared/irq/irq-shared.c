@@ -29,52 +29,52 @@ static inline int bsp_irq_cpu(int irq)
 
 static inline void bsp_dispatch_irq(int irq)
 {
-       bsp_interrupt_handler_entry *e =
-               &bsp_interrupt_handler_table[bsp_interrupt_handler_index(irq)];
+  bsp_interrupt_handler_entry *e =
+    &bsp_interrupt_handler_table[bsp_interrupt_handler_index(irq)];
 
-       while (e != NULL) {
-               (*e->handler)(e->arg);
-               e = e->next;
-       }
+  while (e != NULL) {
+    (*e->handler)(e->arg);
+    e = e->next;
+  }
 }
 
 /* Called directly from IRQ trap handler TRAP[0x10..0x1F] = IRQ[0..15] */
 static void BSP_ISR_handler(rtems_vector_number vector)
 {
-       int irq = vector - 0x10;
+  int irq = vector - 0x10;
 
-       /* Let BSP fixup and/or handle incomming IRQ */
-       irq = bsp_irq_fixup(irq);
+  /* Let BSP fixup and/or handle incomming IRQ */
+  irq = bsp_irq_fixup(irq);
 
-       bsp_dispatch_irq(irq);
+  bsp_dispatch_irq(irq);
 }
 
 /* Initialize interrupts */
 void BSP_shared_interrupt_init(void)
 {
-       rtems_vector_number vector;
-       rtems_isr_entry previous_isr;
-       int i;
+  rtems_vector_number vector;
+  rtems_isr_entry previous_isr;
+  int i;
 
-       for (i=0; i <= BSP_INTERRUPT_VECTOR_MAX_STD; i++) {
+  for (i=0; i <= BSP_INTERRUPT_VECTOR_MAX_STD; i++) {
 #if defined(LEON3) && \
     (defined(RTEMS_SMP) || defined(RTEMS_MULTIPROCESSING))
-               /* Don't install IRQ handler on IPI interrupt */
-               if (i == LEON3_mp_irq)
-                       continue;
+    /* Don't install IRQ handler on IPI interrupt */
+    if (i == LEON3_mp_irq)
+      continue;
 #endif
-               vector = SPARC_ASYNCHRONOUS_TRAP(i) + 0x10;
-               rtems_interrupt_catch(BSP_ISR_handler, vector, &previous_isr);
-       }
+    vector = SPARC_ASYNCHRONOUS_TRAP(i) + 0x10;
+    rtems_interrupt_catch(BSP_ISR_handler, vector, &previous_isr);
+  }
 
-       /* Initalize interrupt support */
-       bsp_interrupt_initialize();
+  /* Initalize interrupt support */
+  bsp_interrupt_initialize();
 }
 
 /* Callback from bsp_interrupt_initialize() */
 rtems_status_code bsp_interrupt_facility_initialize(void)
 {
-       return RTEMS_SUCCESSFUL;
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
@@ -105,8 +105,8 @@ void BSP_shared_interrupt_unmask(int irq)
 
 void BSP_shared_interrupt_clear(int irq)
 {
-       /* We don't have to interrupt lock here, because the register is only
-        * written and self clearing
-        */
-       BSP_Clear_interrupt(irq);
+  /* We don't have to interrupt lock here, because the register is only
+   * written and self clearing
+   */
+  BSP_Clear_interrupt(irq);
 }
