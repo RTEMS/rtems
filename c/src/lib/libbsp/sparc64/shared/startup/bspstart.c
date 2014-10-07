@@ -1,9 +1,8 @@
 /*
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
+ *  This routine does the bulk of the system initialization.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -12,20 +11,12 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <string.h>
-
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 extern void sparc64_install_isr_entries(void);
 
-/*
- *  bsp_start
- *
- *  This routine does the bulk of the system initialization.
- */
-
 void bsp_start( void )
 {
-/*	bootstrap(); */
-	sparc64_install_isr_entries();
+  sparc64_install_isr_entries();
 }
