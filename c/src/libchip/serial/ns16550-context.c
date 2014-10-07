@@ -98,6 +98,26 @@ static void ns16550_enable_interrupts(
   (*ctx->set_reg)(ctx->port, NS16550_INTERRUPT_ENABLE, mask);
 }
 
+static void ns16550_clear_and_set_interrupts(
+  ns16550_context *ctx,
+  uint8_t          clear,
+  uint8_t          set
+)
+{
+  rtems_interrupt_lock_context lock_context;
+  ns16550_get_reg get_reg = ctx->get_reg;
+  ns16550_set_reg set_reg = ctx->set_reg;
+  uintptr_t port = ctx->port;
+  uint8_t val;
+
+  rtems_termios_device_lock_acquire(&ctx->base, &lock_context);
+  val = (*get_reg)(port, NS16550_INTERRUPT_ENABLE);
+  val &= ~clear;
+  val |= set;
+  (*set_reg)(port, NS16550_INTERRUPT_ENABLE, val);
+  rtems_termios_device_lock_release(&ctx->base, &lock_context);
+}
+
 /*
  *  ns16550_probe
  */
@@ -180,8 +200,6 @@ static size_t ns16550_write_to_fifo(
   return out;
 }
 
-#if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
-
 /**
  * @brief Process interrupt.
  */
@@ -225,7 +243,58 @@ static void ns16550_isr(void *arg)
     }
   } while ((get( port, NS16550_INTERRUPT_ID) & SP_IID_0) == 0);
 }
-#endif
+
+static void ns16550_isr_task(void *arg)
+{
+  rtems_termios_tty *tty = arg;
+  ns16550_context *ctx = rtems_termios_get_device_context(tty);
+  uint8_t status = (*ctx->get_reg)(ctx->port, NS16550_LINE_STATUS);
+
+  if ((status & SP_LSR_RDY) != 0) {
+    ns16550_clear_and_set_interrupts(ctx, SP_INT_RX_ENABLE, 0);
+    rtems_termios_rxirq_occured(tty);
+  }
+
+  if (ctx->out_total > 0 && (status & SP_LSR_THOLD) != 0) {
+    size_t current = ctx->out_current;
+
+    ctx->out_buf += current;
+    ctx->out_remaining -= current;
+
+    if (ctx->out_remaining > 0) {
+      ctx->out_current =
+        ns16550_write_to_fifo(ctx, ctx->out_buf, ctx->out_remaining);
+    } else {
+      size_t done = ctx->out_total;
+
+      ctx->out_total = 0;
+      ns16550_clear_and_set_interrupts(ctx, SP_INT_TX_ENABLE, 0);
+      rtems_termios_dequeue_characters(tty, done);
+    }
+  }
+}
+
+static int ns16550_read_task(rtems_termios_device_context *base)
+{
+  ns16550_context *ctx = (ns16550_context *) base;
+  uint32_t port = ctx->port;
+  ns16550_get_reg get = ctx->get_reg;
+  char buf[SP_FIFO_SIZE];
+  int i;
+
+  for (i = 0; i < SP_FIFO_SIZE; ++i) {
+    if ((get(port, NS16550_LINE_STATUS) & SP_LSR_RDY) != 0) {
+      buf[i] = (char) get(port, NS16550_RECEIVE_BUFFER);
+    } else {
+      break;
+    }
+  }
+
+  rtems_termios_enqueue_raw_characters(ctx->tty, buf, i);
+  ns16550_clear_and_set_interrupts(ctx, 0, SP_INT_RX_ENABLE);
+
+  return -1;
+}
 
 /*
  *  ns16550_initialize_interrupts
@@ -234,7 +303,8 @@ static void ns16550_isr(void *arg)
  */
 static void ns16550_initialize_interrupts(
   struct rtems_termios_tty *tty,
-  ns16550_context          *ctx
+  ns16550_context          *ctx,
+  void                    (*isr)(void *)
 )
 {
   #ifdef BSP_FEATURE_IRQ_EXTENSION
@@ -244,7 +314,7 @@ static void ns16550_initialize_interrupts(
         ctx->irq,
         "NS16550",
         RTEMS_INTERRUPT_SHARED,
-        ns16550_isr,
+        isr,
         tty
       );
       if (sc != RTEMS_SUCCESSFUL) {
@@ -259,7 +329,7 @@ static void ns16550_initialize_interrupts(
       #ifdef BSP_FEATURE_IRQ_LEGACY_SHARED_HANDLER_SUPPORT
         rtems_irq_connect_data cd = {
           ctx->irq,
-          ns16550_isr,
+          isr,
           tty,
           NULL,
           NULL,
@@ -270,7 +340,7 @@ static void ns16550_initialize_interrupts(
       #else
         rtems_irq_connect_data cd = {
           ctx->irq,
-          ns16550_isr,
+          isr,
           tty,
           NULL,
           NULL,
@@ -300,11 +370,16 @@ static bool ns16550_open(
 {
   ns16550_context *ctx = (ns16550_context *) base;
 
+  ctx->tty = tty;
+
   /* Set initial baud */
   rtems_termios_set_initial_baud(tty, ctx->initial_baud);
 
   if (tty->handler.mode == TERMIOS_IRQ_DRIVEN) {
-    ns16550_initialize_interrupts(tty, ctx);
+    ns16550_initialize_interrupts(tty, ctx, ns16550_isr);
+    ns16550_enable_interrupts(ctx, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
+  } else if (tty->handler.mode == TERMIOS_TASK_DRIVEN) {
+    ns16550_initialize_interrupts(tty, ctx, ns16550_isr_task);
     ns16550_enable_interrupts(ctx, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
   }
 
@@ -313,14 +388,15 @@ static bool ns16550_open(
 
 static void ns16550_cleanup_interrupts(
   struct rtems_termios_tty *tty,
-  ns16550_context          *ctx
+  ns16550_context          *ctx,
+  void                    (*isr)(void *)
 )
 {
   #if defined(BSP_FEATURE_IRQ_EXTENSION)
     rtems_status_code sc = RTEMS_SUCCESSFUL;
     sc = rtems_interrupt_handler_remove(
       ctx->irq,
-      ns16550_isr,
+      isr,
       tty
     );
     if (sc != RTEMS_SUCCESSFUL) {
@@ -332,7 +408,7 @@ static void ns16550_cleanup_interrupts(
     int rv = 0;
     rtems_irq_connect_data cd = {
       .name = ctx->irq,
-      .hdl = ns16550_isr,
+      .hdl = isr,
       .handle = tty
     };
     rv = BSP_remove_rtems_irq_handler(&cd);
@@ -359,7 +435,9 @@ static void ns16550_close(
   ns16550_enable_interrupts(ctx, NS16550_DISABLE_ALL_INTR);
 
   if (tty->handler.mode == TERMIOS_IRQ_DRIVEN) {
-    ns16550_cleanup_interrupts(tty, ctx);
+    ns16550_cleanup_interrupts(tty, ctx, ns16550_isr);
+  } else if (tty->handler.mode == TERMIOS_TASK_DRIVEN) {
+    ns16550_cleanup_interrupts(tty, ctx, ns16550_isr_task);
   }
 }
 
@@ -614,6 +692,25 @@ static void ns16550_write_support_int(
   }
 }
 
+static void ns16550_write_support_task(
+  rtems_termios_device_context *base,
+  const char                   *buf,
+  size_t                        len
+)
+{
+  ns16550_context *ctx = (ns16550_context *) base;
+
+  ctx->out_total = len;
+
+  if (len > 0) {
+    ctx->out_remaining = len;
+    ctx->out_buf = buf;
+    ctx->out_current = ns16550_write_to_fifo(ctx, buf, len);
+
+    ns16550_clear_and_set_interrupts(ctx, 0, SP_INT_TX_ENABLE);
+  }
+}
+
 /*
  *  ns16550_write_support_polled
  *
@@ -693,4 +790,13 @@ const rtems_termios_device_handler ns16550_handler_polled = {
   .write = ns16550_write_support_polled,
   .set_attributes = ns16550_set_attributes,
   .mode = TERMIOS_POLLED
+};
+
+const rtems_termios_device_handler ns16550_handler_task = {
+  .first_open = ns16550_open,
+  .last_close = ns16550_close,
+  .poll_read = ns16550_read_task,
+  .write = ns16550_write_support_task,
+  .set_attributes = ns16550_set_attributes,
+  .mode = TERMIOS_TASK_DRIVEN
 };

@@ -74,10 +74,12 @@ typedef struct {
   size_t out_remaining;
   size_t out_current;
   const char *out_buf;
+  rtems_termios_tty *tty;
 } ns16550_context;
 
 extern const rtems_termios_device_handler ns16550_handler_interrupt;
 extern const rtems_termios_device_handler ns16550_handler_polled;
+extern const rtems_termios_device_handler ns16550_handler_task;
 
 extern const rtems_termios_device_flow ns16550_flow_rtscts;
 extern const rtems_termios_device_flow ns16550_flow_dtrcts;
