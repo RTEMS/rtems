@@ -1,9 +1,8 @@
 /*
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
+ *  This routine does the bulk of the system initialization.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,12 +16,7 @@
  */
 
 #include <bsp.h>
-
-/*
- *  bsp_start
- *
- *  This routine does the bulk of the system initialization.
- */
+#include <bsp/bootcard.h>
 
 void bsp_start( void )
 {
@@ -44,8 +38,7 @@ void bsp_start( void )
 
   pcc->int_base_vector = PCC_BASE_VECTOR; /* Set the PCC int vectors base */
 
-  (*(uint8_t*)0xfffe2001) = 0x08;
-      /* make VME access round-robin */
+  (*(uint8_t*)0xfffe2001) = 0x08;         /* make VME access round-robin */
 
   rtems_cache_enable_instruction();
   rtems_cache_enable_data();
