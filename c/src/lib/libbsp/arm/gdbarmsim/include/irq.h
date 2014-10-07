@@ -80,7 +80,7 @@
  */
 #define BSP_INTERRUPT_VECTOR_MAX DUMMY_IRQ_I2S
 
-void bsp_interrupt_dispatch( void);
+void bsp_interrupt_dispatch(void);
 
 #if 0
 void lpc24xx_irq_set_priority( rtems_vector_number vector, unsigned priority);
