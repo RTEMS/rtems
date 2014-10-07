@@ -131,6 +131,7 @@ rtems_device_driver console_initialize(
       major,
       minor,
       handler,
+      NULL,
       leon3_console_get_uart(syscon_uart_index)
     );
     if (status != RTEMS_SUCCESSFUL)
@@ -147,6 +148,7 @@ rtems_device_driver console_initialize(
       major,
       minor,
       handler,
+      NULL,
       leon3_console_get_uart(syscon_uart_index)
     );
   }

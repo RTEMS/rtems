@@ -133,6 +133,7 @@ rtems_status_code rtems_termios_device_install(
   rtems_device_major_number           major,
   rtems_device_minor_number           minor,
   const rtems_termios_device_handler *handler,
+  const rtems_termios_device_flow    *flow,
   void                               *context
 )
 {
@@ -148,6 +149,7 @@ rtems_status_code rtems_termios_device_install(
   new_device_node->major = major;
   new_device_node->minor = minor;
   new_device_node->handler = handler;
+  new_device_node->flow = flow;
   new_device_node->context = context;
   new_device_node->tty = NULL;
 
@@ -458,6 +460,11 @@ rtems_termios_open_tty(
     if (device_node != NULL) {
       device_node->tty = tty;
       tty->handler = *device_node->handler;
+
+      if (device_node->flow != NULL) {
+        tty->flow = *device_node->flow;
+      }
+
       tty->device_node = device_node;
       tty->device_context = device_node->context;
       memset(&tty->device, 0, sizeof(tty->device));
@@ -472,9 +479,9 @@ rtems_termios_open_tty(
         rtems_termios_callback_write : NULL;
       tty->handler.set_attributes = callbacks->setAttributes != NULL ?
         rtems_termios_callback_setAttributes : NULL;
-      tty->handler.stop_remote_tx = callbacks->stopRemoteTx != NULL ?
+      tty->flow.stop_remote_tx = callbacks->stopRemoteTx != NULL ?
         rtems_termios_callback_stopRemoteTx : NULL;
-      tty->handler.start_remote_tx = callbacks->startRemoteTx != NULL ?
+      tty->flow.start_remote_tx = callbacks->startRemoteTx != NULL ?
         rtems_termios_callback_startRemoteTx : NULL;
       tty->handler.mode = callbacks->outputUsesInterrupts;
       tty->device_context = NULL;
@@ -818,8 +825,8 @@ termios_set_flowctrl(struct rtems_termios_tty *tty)
 
     /* restart remote Tx, if it was stopped */
     if ((tty->flow_ctrl & FL_IRTSOFF) &&
-        (tty->handler.start_remote_tx != NULL)) {
-      tty->handler.start_remote_tx(tty);
+        (tty->flow.start_remote_tx != NULL)) {
+      tty->flow.start_remote_tx(tty);
     }
     tty->flow_ctrl &= ~(FL_IRTSOFF);
   }
@@ -1444,8 +1451,8 @@ fillBufferQueue (struct rtems_termios_tty *tty)
         } else if (tty->flow_ctrl & FL_MDRTS) {
           tty->flow_ctrl &= ~FL_IRTSOFF;
           /* activate RTS line */
-          if (tty->handler.start_remote_tx != NULL) {
-            tty->handler.start_remote_tx(tty);
+          if (tty->flow.start_remote_tx != NULL) {
+            tty->flow.start_remote_tx(tty);
           }
         }
       }
@@ -1624,8 +1631,8 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
         } else if ((tty->flow_ctrl & (FL_MDRTS | FL_IRTSOFF)) == (FL_MDRTS) ) {
           tty->flow_ctrl |= FL_IRTSOFF;
           /* deactivate RTS line */
-          if (tty->handler.stop_remote_tx != NULL) {
-            tty->handler.stop_remote_tx(tty);
+          if (tty->flow.stop_remote_tx != NULL) {
+            tty->flow.stop_remote_tx(tty);
           }
         }
       }

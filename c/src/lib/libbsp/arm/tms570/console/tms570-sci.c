@@ -103,6 +103,7 @@ rtems_device_driver console_initialize(
         major,
         minor,
         handler,
+	NULL,
         (void *) ctx
     );
     if ( sc != RTEMS_SUCCESSFUL ) {
@@ -536,8 +537,6 @@ const rtems_termios_device_handler tms570_sci_handler_polled = {
   .poll_read = tms570_sci_poll_read,
   .write = tms570_sci_poll_write,
   .set_attributes = tms570_sci_set_attributes,
-  .stop_remote_tx = NULL,
-  .start_remote_tx = NULL,
   .mode = TERMIOS_POLLED
 };
 
@@ -553,7 +552,5 @@ const rtems_termios_device_handler tms570_sci_handler_interrupt  = {
   .poll_read = NULL,
   .write = tms570_sci_interrupt_write,
   .set_attributes = tms570_sci_set_attributes,
-  .stop_remote_tx = NULL,
-  .start_remote_tx = NULL,
   .mode = TERMIOS_IRQ_DRIVEN
 };

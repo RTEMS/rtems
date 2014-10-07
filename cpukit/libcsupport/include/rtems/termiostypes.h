@@ -144,6 +144,18 @@ typedef struct {
   );
 
   /**
+   * @brief Termios device mode.
+   */
+  rtems_termios_device_mode mode;
+} rtems_termios_device_handler;
+
+/**
+ * @brief Termios device flow control handler.
+ *
+ * @see rtems_termios_device_install().
+ */
+typedef struct {
+  /**
    * @brief Indicate to stop remote transmitter.
    *
    * @param[in] tty The Termios control.
@@ -160,12 +172,7 @@ typedef struct {
    * @see rtems_termios_get_device_context().
    */
   void (*start_remote_tx)(struct rtems_termios_tty *tty);
-
-  /**
-   * @brief Termios device mode.
-   */
-  rtems_termios_device_mode mode;
-} rtems_termios_device_handler;
+} rtems_termios_device_flow;
 
 /**
  * @brief Termios device node for installed devices.
@@ -177,6 +184,7 @@ typedef struct rtems_termios_device_node {
   rtems_device_major_number           major;
   rtems_device_minor_number           minor;
   const rtems_termios_device_handler *handler;
+  const rtems_termios_device_flow    *flow;
   void                               *context;
   struct rtems_termios_tty           *tty;
 } rtems_termios_device_node;
@@ -254,6 +262,11 @@ typedef struct rtems_termios_tty {
    */
   rtems_termios_device_handler handler;
 
+  /**
+   * @brief The device flow control handler.
+   */
+  rtems_termios_device_flow flow;
+
   volatile unsigned int    flow_ctrl;
   unsigned int             lowwater,highwater;
 
@@ -295,11 +308,14 @@ typedef struct rtems_termios_tty {
  * @brief Installs a Termios device.
  *
  * @param[in] device_file If not @c NULL, then a device file for the specified
- * major and minor number will be created.
+ *   major and minor number will be created.
  * @param[in] major The device major number of the corresponding device driver.
  * @param[in] minor The device minor number of the corresponding device driver.
  * @param[in] handler The device handler.  It must be persistent throughout the
  *   installed time of the device.
+ * @param[in] flow The device flow control handler.  The device flow control
+ *   handler are optional and may be @c NULL.  If present must be persistent
+ *   throughout the installed time of the device.
  * @param[in] context The device context.  It must be persistent throughout the
  *   installed time of the device.
  *
@@ -307,17 +323,18 @@ typedef struct rtems_termios_tty {
  * @retval RTEMS_NO_MEMORY Not enough memory to create a device node.
  * @retval RTEMS_UNSATISFIED Creation of the device file failed.
  * @retval RTEMS_RESOURCE_IN_USE There exists a device node for this major and
- * minor number pair.
+ *   minor number pair.
  * @retval RTEMS_INCORRECT_STATE Termios is not initialized.
  *
  * @see rtems_termios_device_remove(), rtems_termios_device_open(),
- * rtems_termios_device_close() and rtems_termios_get_device_context().
+ *   rtems_termios_device_close() and rtems_termios_get_device_context().
  */
 rtems_status_code rtems_termios_device_install(
   const char                         *device_file,
   rtems_device_major_number           major,
   rtems_device_minor_number           minor,
   const rtems_termios_device_handler *handler,
+  const rtems_termios_device_flow    *flow,
   void                               *context
 );
 

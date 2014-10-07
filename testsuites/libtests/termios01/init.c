@@ -560,17 +560,31 @@ static void test_device_install_remove(void)
 
   greedy = rtems_heap_greedy_allocate( NULL, 0 );
 
-  sc = rtems_termios_device_install( "/", major, minor, &handler, NULL );
+  sc = rtems_termios_device_install( "/", major, minor, &handler, NULL, NULL );
   rtems_test_assert( sc == RTEMS_NO_MEMORY );
 
   rtems_heap_greedy_free( greedy );
 
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 
-  sc = rtems_termios_device_install( NULL, major, minor, &handler, NULL );
+  sc = rtems_termios_device_install(
+    NULL,
+    major,
+    minor,
+    &handler,
+    NULL,
+    NULL
+  );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_termios_device_install( NULL, major, minor, &handler, NULL );
+  sc = rtems_termios_device_install(
+    NULL,
+    major,
+    minor,
+    &handler,
+    NULL,
+    NULL
+  );
   rtems_test_assert( sc == RTEMS_RESOURCE_IN_USE );
 
   sc = rtems_termios_device_remove( NULL, major, minor );
@@ -578,7 +592,7 @@ static void test_device_install_remove(void)
 
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 
-  sc = rtems_termios_device_install( "/", major, minor, &handler, NULL );
+  sc = rtems_termios_device_install( "/", major, minor, &handler, NULL, NULL );
   rtems_test_assert( sc == RTEMS_UNSATISFIED );
 
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
@@ -586,7 +600,14 @@ static void test_device_install_remove(void)
   sc = rtems_termios_device_remove( NULL, major, minor );
   rtems_test_assert( sc == RTEMS_INVALID_ID );
 
-  sc = rtems_termios_device_install( &dev[0], major, minor, &handler, NULL );
+  sc = rtems_termios_device_install(
+    &dev[0],
+    major,
+    minor,
+    &handler,
+    NULL,
+    NULL
+  );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   sc = rtems_termios_device_remove( "/barfoo", major, minor );
@@ -638,7 +659,14 @@ static void test_first_open_error(void)
 
   rtems_resource_snapshot_take( &snapshot );
 
-  sc = rtems_termios_device_install( &dev[0], major, minor, &handler, &done );
+  sc = rtems_termios_device_install(
+    &dev[0],
+    major,
+    minor,
+    &handler,
+    NULL,
+    &done
+  );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   memset( &iop, 0, sizeof( iop ) );
@@ -689,7 +717,14 @@ static void test_set_attributes_error(void)
 
   rtems_resource_snapshot_take( &snapshot );
 
-  sc = rtems_termios_device_install( &dev[0], major, minor, &handler, &done );
+  sc = rtems_termios_device_install(
+    &dev[0],
+    major,
+    minor,
+    &handler,
+    NULL,
+    &done
+  );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   memset( &iop, 0, sizeof( iop ) );

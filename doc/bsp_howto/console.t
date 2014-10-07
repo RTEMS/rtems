@@ -489,6 +489,7 @@ rtems_device_driver console_initialize(
       major,
       minor,
       handler,
+      NULL,
       ctx
     );
     if (sc != RTEMS_SUCCESSFUL) @{
