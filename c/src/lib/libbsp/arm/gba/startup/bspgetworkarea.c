@@ -8,8 +8,8 @@
 #include <bsp/bootcard.h>
 #include <stdint.h>
 
-extern  void _end;
-extern  void __heap_limit;
+extern int _end;
+extern int __heap_limit;
 
 void bsp_work_area_initialize(void)
 {
