@@ -1,10 +1,8 @@
-/*  bspstart.c
- *
- *  This set of routines starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before any of these are invoked.
- *
+/*
+ *  This routine does the bulk of the system initialization.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -16,6 +14,7 @@
 #include <string.h>
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>
