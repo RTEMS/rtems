@@ -1,14 +1,8 @@
-/*  bsp_start()
- *
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
- *  INPUT:  NONE
- *
- *  OUTPUT: NONE
- *
+/*
+ *  This routine does the bulk of the system initialization.
+ */
+
+/*
  *  Author:     Thomas Doerfler <td@imd.m.isar.de>
  *              IMD Ingenieurbuero fuer Microcomputertechnik
  *
@@ -62,6 +56,7 @@
 #include <rtems/counter.h>
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <bsp/uart.h>
 #include <bsp/irq.h>
 #include <libcpu/powerpc-utility.h>
@@ -164,12 +159,6 @@ BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
 /*===================================================================*/
 
-
-/*
- *  bsp_start
- *
- *  This routine does the bulk of the system initialization.
- */
 void bsp_start( void )
 {
   ppc_cpu_id_t myCpu;
