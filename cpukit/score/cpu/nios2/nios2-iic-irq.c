@@ -24,6 +24,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/nios2-utility.h>
+#include <rtems/score/interr.h>
 
 /*
  *  This routine provides the RTEMS interrupt management.
