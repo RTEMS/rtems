@@ -195,6 +195,12 @@ static struct timeval    ppp_time;
 TEXT_SET(pseudo_set, ppp_rxdaemon);
 #endif
 
+static int
+ppp_unit(struct ppp_softc *sc)
+{
+  return sc->sc_if.if_unit;
+}
+
 static rtems_task ppp_rxdaemon(rtems_task_argument arg)
 {
   rtems_event_set             events;
@@ -414,7 +420,7 @@ static void ppp_init(struct ppp_softc *sc)
   /* check to see if we need to start up daemons */
   if ( sc->sc_rxtask == 0 ) {
     /* start rx daemon task */
-    status = rtems_task_create(rtems_build_name('R','x','P','0'+sc->sc_if.if_unit), priority, 2048,
+    status = rtems_task_create(rtems_build_name('R','x','P','0'+ppp_unit(sc)), priority, 2048,
                                RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
                                RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
                                &sc->sc_rxtask);
@@ -429,7 +435,7 @@ static void ppp_init(struct ppp_softc *sc)
     }
 
     /* start tx daemon task */
-    status = rtems_task_create(rtems_build_name('T','x','P','0'+sc->sc_if.if_unit), priority, 2048,
+    status = rtems_task_create(rtems_build_name('T','x','P','0'+ppp_unit(sc)), priority, 2048,
                                RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
                                RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
                                &sc->sc_txtask);
@@ -654,7 +660,7 @@ pppioctl(struct ppp_softc *sc, ioctl_command_t cmd, caddr_t data,
 	break;
 
     case PPPIOCGUNIT:
-	*(int *)data = sc->sc_if.if_unit;
+	*(int *)data = ppp_unit(sc);
 	break;
 
     case PPPIOCGFLAGS:
@@ -732,7 +738,7 @@ pppioctl(struct ppp_softc *sc, ioctl_command_t cmd, caddr_t data,
 		    if (sc->sc_xc_state == NULL) {
 			if (sc->sc_flags & SC_DEBUG)
 			    printf("ppp%d: comp_alloc failed\n",
-			       sc->sc_if.if_unit);
+			       ppp_unit(sc));
 			error = ENOBUFS;
 		    }
 		    splimp();
@@ -747,7 +753,7 @@ pppioctl(struct ppp_softc *sc, ioctl_command_t cmd, caddr_t data,
 		    if (sc->sc_rc_state == NULL) {
 			if (sc->sc_flags & SC_DEBUG)
 			    printf("ppp%d: decomp_alloc failed\n",
-			       sc->sc_if.if_unit);
+			       ppp_unit(sc));
 			error = ENOBUFS;
 		    }
 		    splimp();
@@ -758,7 +764,7 @@ pppioctl(struct ppp_softc *sc, ioctl_command_t cmd, caddr_t data,
 	    }
 	if (sc->sc_flags & SC_DEBUG)
 	    printf("ppp%d: no compressor for [%x %x %x], %x\n",
-		   sc->sc_if.if_unit, ccp_option[0], ccp_option[1],
+		   ppp_unit(sc), ccp_option[0], ccp_option[1],
 		   ccp_option[2], nb);
 	return (EINVAL);	/* no handler found */
 #endif /* PPP_COMPRESS */
@@ -992,7 +998,7 @@ pppoutput(struct ifnet *ifp, struct mbuf *m0, struct sockaddr *dst,
 	mode = NPMODE_PASS;
 	break;
     default:
-	printf("ppp%d: af%d not supported\n", ifp->if_unit, dst->sa_family);
+	printf("ppp%d: af%d not supported\n", ppp_unit(sc), dst->sa_family);
 	error = EAFNOSUPPORT;
 	goto bad;
     }
@@ -1035,7 +1041,7 @@ pppoutput(struct ifnet *ifp, struct mbuf *m0, struct sockaddr *dst,
 	len += m->m_len;
 
     if (sc->sc_flags & SC_LOG_OUTPKT) {
-	printf("ppp%d output: ", ifp->if_unit);
+	printf("ppp%d output: ", ppp_unit(sc));
 	pppdumpm(m0);
     }
 
@@ -1356,7 +1362,7 @@ ppp_ccp(struct ppp_softc *sc, struct mbuf *m, int rcvd)
 		if (sc->sc_xc_state != NULL
 		    && (*sc->sc_xcomp->comp_init)
 			(sc->sc_xc_state, dp + CCP_HDRLEN, slen - CCP_HDRLEN,
-			 sc->sc_if.if_unit, 0, sc->sc_flags & SC_DEBUG)) {
+			 ppp_unit(sc), 0, sc->sc_flags & SC_DEBUG)) {
 		    s = splimp();
 		    sc->sc_flags |= SC_COMP_RUN;
 		    splx(s);
@@ -1366,7 +1372,7 @@ ppp_ccp(struct ppp_softc *sc, struct mbuf *m, int rcvd)
 		if (sc->sc_rc_state != NULL
 		    && (*sc->sc_rcomp->decomp_init)
 			(sc->sc_rc_state, dp + CCP_HDRLEN, slen - CCP_HDRLEN,
-			 sc->sc_if.if_unit, 0, sc->sc_mru,
+			 ppp_unit(sc), 0, sc->sc_mru,
 			 sc->sc_flags & SC_DEBUG)) {
 		    s = splimp();
 		    sc->sc_flags |= SC_DECOMP_RUN;
@@ -1446,7 +1452,7 @@ ppp_inproc(struct ppp_softc *sc, struct mbuf *m)
 	ilen = 0;
 	for (mp = m; mp != NULL; mp = mp->m_next)
 	    ilen += mp->m_len;
-	printf("ppp%d: got %d bytes\n", ifp->if_unit, ilen);
+	printf("ppp%d: got %d bytes\n", ppp_unit(sc), ilen);
 	pppdumpm(m);
     }
 
@@ -1490,7 +1496,7 @@ ppp_inproc(struct ppp_softc *sc, struct mbuf *m)
 	     * CCP down or issue a Reset-Req.
 	     */
 	    if (sc->sc_flags & SC_DEBUG)
-		printf("ppp%d: decompress failed %d\n", ifp->if_unit, rv);
+		printf("ppp%d: decompress failed %d\n", ppp_unit(sc), rv);
 	    s = splimp();
 	    sc->sc_flags |= SC_VJ_RESET;
 	    if (rv == DECOMP_ERROR)
@@ -1541,7 +1547,7 @@ ppp_inproc(struct ppp_softc *sc, struct mbuf *m)
 	if (xlen <= 0) {
 	    if (sc->sc_flags & SC_DEBUG)
 		printf("ppp%d: VJ uncompress failed on type comp\n",
-			ifp->if_unit);
+			ppp_unit(sc));
 	    goto bad;
 	}
 
@@ -1596,7 +1602,7 @@ ppp_inproc(struct ppp_softc *sc, struct mbuf *m)
 	if (xlen < 0) {
 	    if (sc->sc_flags & SC_DEBUG)
 		printf("ppp%d: VJ uncompress failed on type uncomp\n",
-			ifp->if_unit);
+			ppp_unit(sc));
 	    goto bad;
 	}
 
@@ -1696,7 +1702,7 @@ ppp_inproc(struct ppp_softc *sc, struct mbuf *m)
 	IF_DROP(inq);
 	splx(s);
 	if (sc->sc_flags & SC_DEBUG)
-	    printf("ppp%d: input queue full\n", ifp->if_unit);
+	    printf("ppp%d: input queue full\n", ppp_unit(sc));
 	ifp->if_iqdrops++;
 	goto bad;
     }
