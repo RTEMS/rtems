@@ -12,8 +12,8 @@
 
 /* Forward function declaration */
 #if !defined(mvme2100)
-uint32_t mvmertc_get_register( uint32_t, uint8_t );
-void mvmertc_set_register( uint32_t, uint8_t, uint32_t );
+uint32_t mvmertc_get_register( uintptr_t, uint8_t );
+void mvmertc_set_register( uintptr_t, uint8_t, uint32_t );
 #endif
 
 /* The following table configures the RTC drivers used in this BSP */
@@ -49,17 +49,17 @@ rtems_device_minor_number RTC_Minor;
 #if !defined(mvme2100)
 #include <rtems/bspIo.h>
 void mvmertc_set_register(
-  uint32_t base,
-  uint8_t  reg,
-  uint32_t value
+  uintptr_t base,
+  uint8_t   reg,
+  uint32_t  value
 )
 {
   printk( "RTC SUPPORT NOT IMPLEMENTED ON THIS BOARD\n");
 }
 
 uint32_t mvmertc_get_register(
-  uint32_t base,
-  uint8_t  reg
+  uintptr_t base,
+  uint8_t   reg
 )
 {
   printk( "RTC SUPPORT NOT IMPLEMENTED ON THIS BOARD\n");
