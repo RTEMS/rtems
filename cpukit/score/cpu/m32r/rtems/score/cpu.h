@@ -724,12 +724,12 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  * Port Specific Information:
  *
- * XXX document implementation including references if appropriate
+ *  TODO: As of 8 October 2014, this method is not implemented.
  */
 #define _CPU_ISR_Disable( _isr_cookie ) \
-  { \
-    (_isr_cookie) = 0;   /* do something to prevent warnings */ \
-  }
+  do { \
+    (_isr_cookie) = 0; \
+  } while (0)
 
 /**
  * Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
@@ -740,12 +740,12 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  * Port Specific Information:
  *
- * XXX document implementation including references if appropriate
+ *  TODO: As of 8 October 2014, this method is not implemented.
  */
-#define _CPU_ISR_Enable( _isr_cookie )  \
-  { \
-    (_isr_cookie) = 0;   /* do something to prevent warnings */ \
-  }
+#define _CPU_ISR_Enable( _isr_cookie ) \
+  do { \
+    (_isr_cookie) = (_isr_cookie); \
+  } while (0)
 
 /**
  * This temporarily restores the interrupt to @a _isr_cookie before immediately
@@ -757,11 +757,13 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  * Port Specific Information:
  *
- * XXX document implementation including references if appropriate
+ *  TODO: As of 8 October 2014, this method is not implemented.
  */
 #define _CPU_ISR_Flash( _isr_cookie ) \
-  { \
-  }
+  do { \
+    _CPU_ISR_Enable( _isr_cookie ); \
+    _CPU_ISR_Disable( _isr_cookie ); \
+  } while (0)
 
 /**
  * This routine and @ref _CPU_ISR_Get_level
@@ -776,11 +778,11 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  * Port Specific Information:
  *
- * XXX document implementation including references if appropriate
+ *  TODO: As of 8 October 2014, this method is not implemented.
  */
-#define _CPU_ISR_Set_level( new_level ) \
-  { \
-  }
+static inline void _CPU_ISR_Set_level( unsigned int new_level )
+{
+}
 
 /**
  * Return the current interrupt disable level for this task in
@@ -790,7 +792,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  * Port Specific Information:
  *
- * XXX document implementation including references if appropriate
+ *  TODO: As of 8 October 2014, this method is not implemented.
  */
 uint32_t   _CPU_ISR_Get_level( void );
 
@@ -861,7 +863,7 @@ void _CPU_Context_Initialize(
  */
 void _CPU_Context_Restart_self(
   Context_Control  *the_context
-);
+) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /**
  * @ingroup CPUContext
