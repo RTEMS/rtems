@@ -112,7 +112,7 @@ static void calc_dbat_regvals(
   bat_ptr->batl.pp   = flg_bpp;
 }
 
-static inline enable_bat_4_to_7(void)
+static inline void enable_bat_4_to_7(void)
 {
   PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(HID2, BSP_BBIT32(13));
 }
