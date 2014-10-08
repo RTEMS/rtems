@@ -16,6 +16,7 @@ include_bsp_HEADERS += include/irq.h
 
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
+nodist_include_bsp_HEADERS += ../../shared/include/console-polled.h
 DISTCLEANFILES = include/bspopts.h
 
 nodist_include_HEADERS += ../../shared/include/coverhd.h

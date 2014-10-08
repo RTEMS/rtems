@@ -2,7 +2,9 @@
  *  This file contains the hardware independent portion of a polled
  *  console device driver.  If a BSP chooses to use this, then it
  *  only has to provide a few board dependent routines.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -16,10 +18,11 @@
 #include <stdlib.h>
 #include <assert.h>
 
-/* external prototypes for monitor interface routines */
-void console_outbyte_polled(int  port, char ch);
-int console_inbyte_nonblocking(int port);
-void console_initialize_hardware(void);
+#include <bsp/console-polled.h>
+
+/*
+ *  Prototypes
+ */
 ssize_t console_write_support(int, const char *, size_t);
 
 /*

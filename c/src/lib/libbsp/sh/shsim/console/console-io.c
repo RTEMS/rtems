@@ -1,9 +1,9 @@
 /*
  *  This file contains the hardware specific portions of the TTY driver
  *  for the simulators stdin/out.
- *
- *  Logic based on newlib-1.8.2/newlib/libc/sys/sh/syscalls.c
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -13,6 +13,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/console-polled.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
 #include <assert.h>

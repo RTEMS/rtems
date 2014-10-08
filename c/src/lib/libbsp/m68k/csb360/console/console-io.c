@@ -1,7 +1,9 @@
 /*
  *  This file contains the hardware specific portions of the TTY driver
  *  for the serial ports on the mcf5272
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -11,6 +13,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/console-polled.h>
 #include <rtems/libio.h>
 #include <mcf5272/mcf5272.h>
 
@@ -87,7 +90,7 @@ int console_inbyte_nonblocking(
 
 #include <rtems/bspIo.h>
 
-void mcf5272_output_char(char c) { console_outbyte_polled( 0, c ); }
+static void mcf5272_output_char(char c) { console_outbyte_polled( 0, c ); }
 
 BSP_output_char_function_type           BSP_output_char = mcf5272_output_char;
 BSP_polling_getchar_function_type       BSP_poll_char = NULL;

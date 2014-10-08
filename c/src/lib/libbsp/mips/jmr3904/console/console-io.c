@@ -3,7 +3,9 @@
  *  for the serial ports on the jmr3904.
  *
  *  Logic based on the jmr3904-io.c file in newlib 1.8.2
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -13,6 +15,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/console-polled.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -114,7 +117,7 @@ int console_inbyte_nonblocking(
 
 #include <rtems/bspIo.h>
 
-void JMR3904_output_char(char c) { console_outbyte_polled( 0, c ); }
+static void JMR3904_output_char(char c) { console_outbyte_polled( 0, c ); }
 
 BSP_output_char_function_type           BSP_output_char = JMR3904_output_char;
 BSP_polling_getchar_function_type       BSP_poll_char = NULL;

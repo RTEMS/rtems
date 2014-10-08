@@ -1,7 +1,8 @@
 /*
  *  This file implements simple console IO via JTAG UART.
- *
- *  Based on no_cpu/console.c
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -16,6 +17,7 @@
 #define NO_BSP_INIT
 
 #include <bsp.h>
+#include <bsp/console-polled.h>
 #include <rtems/libio.h>
 
 /* #define JTAG_UART_REGS ((altera_avalon_jtag_uart_regs*)NIOS2_IO_BASE(JTAG_UART_BASE)) */
@@ -113,7 +115,7 @@ void console_outbyte_polled(
 #include <rtems/bspIo.h>
 
 
-void ISS_output_char(char c) { console_outbyte_polled( 0, c ); }
+static void ISS_output_char(char c) { console_outbyte_polled( 0, c ); }
 
 BSP_output_char_function_type           BSP_output_char = ISS_output_char;
 BSP_polling_getchar_function_type       BSP_poll_char = NULL;

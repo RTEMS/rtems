@@ -8,6 +8,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/console-polled.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -53,7 +54,7 @@ int console_inbyte_nonblocking(
 
 #include <rtems/bspIo.h>
 
-void console_output_char(char c) { console_outbyte_polled( 0, c ); }
+static void console_output_char(char c) { console_outbyte_polled( 0, c ); }
 
 BSP_output_char_function_type           BSP_output_char = console_output_char;
 BSP_polling_getchar_function_type       BSP_poll_char = NULL;

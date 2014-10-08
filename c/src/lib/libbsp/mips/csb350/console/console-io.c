@@ -1,9 +1,9 @@
 /*
  *  This file contains the hardware specific portions of the TTY driver
  *  for the serial ports on the csb350.
- *
- *  Logic based on the jmr3904-io.c file in newlib 1.8.2
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -13,6 +13,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/console-polled.h>
 #include <rtems/libio.h>
 #include <libcpu/au1x00.h>
 
@@ -80,7 +81,7 @@ void csb250_output_char(char c)
     }
 }
 
-int csb250_get_char(void)
+static int csb250_get_char(void)
 {
   return console_inbyte_nonblocking(0);
 }
