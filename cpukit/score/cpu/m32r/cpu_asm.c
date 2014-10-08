@@ -28,6 +28,11 @@
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
 
+/*
+ * Prototypes
+ */
+void _ISR_Handler(void);
+
 /*  void __ISR_Handler()
  *
  *  This routine provides the RTEMS interrupt management.
