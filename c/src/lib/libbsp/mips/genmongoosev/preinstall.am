@@ -69,6 +69,26 @@ $(PROJECT_INCLUDE)/bsp/bootcard.h: ../../shared/include/bootcard.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bootcard.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bootcard.h
 
+$(PROJECT_INCLUDE)/bsp/lr33000.h: include/lr33000.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lr33000.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lr33000.h
+
+$(PROJECT_INCLUDE)/bsp/lr333x0.h: include/lr333x0.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lr333x0.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lr333x0.h
+
+$(PROJECT_INCLUDE)/bsp/mongoose-v.h: include/mongoose-v.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mongoose-v.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mongoose-v.h
+
+$(PROJECT_INCLUDE)/bsp/r3000.h: include/r3000.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/r3000.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/r3000.h
+
+$(PROJECT_INCLUDE)/bsp/mg5uart.h: console/mg5uart.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mg5uart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mg5uart.h
+
 $(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h

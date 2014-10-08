@@ -28,7 +28,7 @@ extern "C" {
 #include <rtems/iosupp.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
-#include <libcpu/mongoose-v.h>
+#include <bsp/mongoose-v.h>
 
 #define BSP_FEATURE_IRQ_EXTENSION
 #define BSP_SHARED_HANDLER_SUPPORT      1

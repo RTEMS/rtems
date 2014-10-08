@@ -26,20 +26,6 @@ $(PROJECT_INCLUDE)/libcpu/isr_entries.h: shared/interrupts/isr_entries.h $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/isr_entries.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/isr_entries.h
 
-if mongoosev
-$(PROJECT_INCLUDE)/libcpu/mongoose-v.h: mongoosev/include/mongoose-v.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mongoose-v.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mongoose-v.h
-
-$(PROJECT_INCLUDE)/libchip/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/libchip
-	@: > $(PROJECT_INCLUDE)/libchip/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libchip/$(dirstamp)
-
-$(PROJECT_INCLUDE)/libchip/mg5uart.h: mongoosev/duart/mg5uart.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/mg5uart.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/mg5uart.h
-endif
 if tx39
 $(PROJECT_INCLUDE)/libcpu/tx3904.h: tx39/include/tx3904.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/tx3904.h

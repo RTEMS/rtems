@@ -15,7 +15,7 @@
 
 #include <rtems.h>
 #include <stdlib.h>
-#include <libcpu/mongoose-v.h>
+#include <bsp/mongoose-v.h>
 
 #include <rtems/mips/iregdef.h>
 #include <rtems/mips/idtcpu.h>

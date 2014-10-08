@@ -23,7 +23,7 @@
 #include <string.h>
 
 #include <bsp.h>
-#include <libcpu/mongoose-v.h>
+#include <bsp/mongoose-v.h>
 #include <libcpu/isr_entries.h>
 #include <bsp/irq-generic.h>
 

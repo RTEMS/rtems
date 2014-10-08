@@ -11,7 +11,7 @@
 
 #include <rtems.h>
 #include <rtems/bspIo.h>
-#include <libcpu/mongoose-v.h>
+#include <bsp/mongoose-v.h>
 #include "gdb_if.h"
 
 #include <rtems/libio.h>

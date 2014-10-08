@@ -31,33 +31,12 @@ if tx49
 interrupts_CPPFLAGS = -DTX49
 endif
 
-if mongoosev
-interrupts_CPPFLAGS = -DMONGOOSEV
-endif
-
 noinst_PROGRAMS += shared/interrupts.rel
 shared_interrupts_rel_SOURCES = shared/interrupts/installisrentries.c \
     shared/interrupts/isr_entries.S shared/interrupts/isr_entries.h
 shared_interrupts_rel_CPPFLAGS = $(AM_CPPFLAGS) $(interrupts_CPPFLAGS)
 shared_interrupts_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 include_libcpu_HEADERS += shared/interrupts/isr_entries.h
-
-EXTRA_DIST += mongoosev/README
-EXTRA_DIST += mongoosev/duart/README.mguart
-if mongoosev
-include_libcpu_HEADERS += mongoosev/include/mongoose-v.h
-
-## mongoosev/duart
-include_libchipdir = $(includedir)/libchip
-include_libchip_HEADERS = mongoosev/duart/mg5uart.h
-
-noinst_PROGRAMS += mongoosev/duart.rel
-mongoosev_duart_rel_SOURCES = mongoosev/duart/mg5uart.c \
-    mongoosev/duart/mg5uart.h mongoosev/duart/mg5uart_reg.c
-mongoosev_duart_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mongoosev_duart_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-endif
 
 if tx39
 include_libcpu_HEADERS += tx39/include/tx3904.h

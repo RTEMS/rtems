@@ -16,6 +16,11 @@ include_bsp_HEADERS += include/irq.h
 
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
+nodist_include_bsp_HEADERS += include/lr33000.h
+nodist_include_bsp_HEADERS += include/lr333x0.h
+nodist_include_bsp_HEADERS += include/mongoose-v.h
+nodist_include_bsp_HEADERS += include/r3000.h
+nodist_include_bsp_HEADERS += console/mg5uart.h
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
@@ -47,6 +52,7 @@ libbsp_a_SOURCES += clock/clockdrv.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # console
 libbsp_a_SOURCES += console/conscfg.c
+libbsp_a_SOURCES += console/mg5uart.c
 libbsp_a_SOURCES += ../../shared/console.c
 libbsp_a_SOURCES += ../../shared/console_select.c
 libbsp_a_SOURCES += ../../shared/console_control.c
@@ -75,7 +81,6 @@ gdbstub_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 libbsp_a_LIBADD  = ../../../libcpu/@RTEMS_CPU@/shared/cache.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/mongoosev/duart.rel
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

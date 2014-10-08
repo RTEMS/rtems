@@ -21,7 +21,7 @@
 #include <bsp/irq.h>
 
 #include <libchip/serial.h>
-#include <libchip/mg5uart.h>
+#include <bsp/mg5uart.h>
 
 /* #define CONSOLE_USE_INTERRUPTS */
 
