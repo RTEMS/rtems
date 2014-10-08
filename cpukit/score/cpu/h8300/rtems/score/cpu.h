@@ -637,7 +637,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  H8300 Specific Information:
  *
- *  XXX
+ *  TODO: As of 8 October 2014, this method is not implemented for the SX.
  */
 
 #if defined(__H8300H__) || defined(__H8300S__)
@@ -649,7 +649,10 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
     (_isr_cookie) = __ccr; \
   } while (0)
 #else
-#define _CPU_ISR_Disable( _isr_cookie ) (_isr_cookie) = 0
+#define _CPU_ISR_Disable( _isr_cookie ) \
+  do { \
+    (_isr_cookie) = 0; \
+  } while (0)
 #endif
 
 
@@ -660,7 +663,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  H8300 Specific Information:
  *
- *  XXX
+ *  TODO: As of 8 October 2014, this method is not implemented for the SX.
  */
 
 #if defined(__H8300H__) || defined(__H8300S__)
@@ -670,7 +673,10 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
     __asm__ volatile( "ldc %0, ccr" :  : "m" (__ccr) ); \
   } while (0)
 #else
-#define _CPU_ISR_Enable( _isr_cookie )
+#define _CPU_ISR_Enable( _isr_cookie ) \
+  do { \
+    (_isr_cookie) = (_isr_cookie); \
+  } while (0)
 #endif
 
 /*
@@ -681,7 +687,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  H8300 Specific Information:
  *
- *  XXX
+ *  TODO: As of 8 October 2014, this method is not implemented for the SX.
  */
 
 #if defined(__H8300H__) || defined(__H8300S__)
@@ -691,7 +697,11 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
     __asm__ volatile( "ldc %0, ccr ; orc #0x80,ccr " :  : "m" (__ccr) ); \
   } while (0)
 #else
-#define _CPU_ISR_Flash( _isr_cookie )
+#define _CPU_ISR_Flash( _isr_cookie ) \
+  do { \
+    _CPU_ISR_Enable( _isr_cookie ); \
+    _CPU_ISR_Disable( _isr_cookie ); \
+  } while (0)
 #endif
 
 #endif /* end of old gcc */
@@ -764,6 +774,7 @@ uint32_t   _CPU_ISR_Get_level( void );
     if ( (_isr) ) (_the_context)->ccr = CPU_CCR_INTERRUPTS_OFF; \
     else          (_the_context)->ccr = CPU_CCR_INTERRUPTS_ON; \
     \
+    (void) _is_fp; /* to eliminate set but not used warning */ \
     _stack = ((uintptr_t)(_stack_base)) + (_size) - 4; \
     *((proc_ptr *)(_stack)) = (_entry_point); \
      (_the_context)->er7     = (void *) _stack; \
