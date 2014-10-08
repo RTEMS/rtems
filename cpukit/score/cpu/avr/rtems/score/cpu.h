@@ -685,14 +685,13 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  AVR Specific Information:
  *
- *  XXX document implementation including references if appropriate
+ *  TODO: As of 8 October 2014, this method is not implemented.
  */
-
-#define _CPU_ISR_Set_level( new_level ) \
-  { \
-  }
-
 #ifndef ASM
+static inline void _CPU_ISR_Set_level( unsigned int new_level )
+{
+}
+
 
 uint32_t   _CPU_ISR_Get_level( void );
 
