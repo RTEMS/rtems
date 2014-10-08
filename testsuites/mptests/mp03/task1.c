@@ -1,12 +1,4 @@
-/*  Test_task
- *
- *  This task suspends and resumes a remote task.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,12 +12,6 @@
 #endif
 
 #include "system.h"
-
-/*PAGE
- *
- *  Test_Task_Support
- *
- */
 
 void Test_Task_Support(
   uint32_t    node

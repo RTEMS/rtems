@@ -71,13 +71,11 @@ void _BSP_Fatal_error(unsigned int v)
   __asm__ __volatile ("sc");
 }
 
-/*PAGE
- *
+/*
  *  bsp_predriver_hook
  *
  *  Before drivers are setup initialize interupt vectors.
  */
-
 void init_RTC(void);
 void initialize_PMC(void);
 

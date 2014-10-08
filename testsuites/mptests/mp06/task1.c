@@ -1,14 +1,4 @@
-/*  Test_task
- *
- *  This task tests global event operations.  If running on node one, it
- *  continuously sends events.   If running on node two, it continuously
- *  receives events.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -25,11 +15,9 @@
 
 #define DOT_COUNT 25
 
-/*PAGE
- *
+/*
  *  Stop_Test_TSR
  */
-
 rtems_timer_service_routine Stop_Test_TSR(
   rtems_id  ignored_id,
   void     *ignored_address
@@ -38,11 +26,9 @@ rtems_timer_service_routine Stop_Test_TSR(
   Stop_Test = true;
 }
 
-/*PAGE
- *
+/*
  *  Event_set_table
  */
-
 rtems_event_set Event_set_table[] = {
   RTEMS_EVENT_0,
   RTEMS_EVENT_1,
@@ -78,11 +64,9 @@ rtems_event_set Event_set_table[] = {
   RTEMS_EVENT_31
 };
 
-/*PAGE
- *
+/*
  *  Test_task
  */
-
 rtems_task Test_task(
   rtems_task_argument argument
 )

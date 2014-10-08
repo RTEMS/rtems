@@ -5,5 +5,5 @@
 
 noinst_PROGRAMS = bmenu2
 
-bmenu2_SOURCES = address.h chain.c address.inl chain.h bmenu2.c base.h \
+bmenu2_SOURCES = address.h chain.c chain.h bmenu2.c base.h \
     chain.inl system.h

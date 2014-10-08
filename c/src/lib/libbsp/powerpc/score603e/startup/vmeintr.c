@@ -1,6 +1,8 @@
 /*
  *  VMEbus support routines for the Generation I board.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -13,13 +15,10 @@
 #include <bsp.h>
 #include <rtems/vmeintr.h>
 
-/*PAGE
- *
+/*
  *  VME_interrupt_Disable
- *
  */
-
-void VME_interrupt_Disable (
+void VME_interrupt_Disable(
   VME_interrupt_Mask                mask                        /* IN  */
 )
 {
@@ -32,13 +31,10 @@ void VME_interrupt_Disable (
   *VME_interrupt_enable = value;
 }
 
-/*PAGE
- *
+/*
  *  VME_interrupt_Enable
- *
  */
-
-void VME_interrupt_Enable (
+void VME_interrupt_Enable(
   VME_interrupt_Mask                mask                        /* IN  */
 )
 {

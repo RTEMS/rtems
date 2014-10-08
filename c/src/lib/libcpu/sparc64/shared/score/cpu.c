@@ -1,6 +1,8 @@
 /*
  *  SPARC-v9 Dependent Source
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -45,8 +47,7 @@ const CPU_Trap_table_entry _CPU_Trap_slot_template = {
 };
 
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_Get_level
  *
  *  Input Parameters: NONE
@@ -54,7 +55,6 @@ const CPU_Trap_table_entry _CPU_Trap_slot_template = {
  *  Output Parameters:
  *    returns the current interrupt level (PIL field of the PSR)
  */
-
 uint32_t   _CPU_ISR_Get_level( void )
 {
   uint32_t   level;
@@ -64,8 +64,7 @@ uint32_t   _CPU_ISR_Get_level( void )
   return level;
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_install_raw_handler
  *
  *  This routine installs the specified handler as a "raw" non-executive
@@ -203,8 +202,7 @@ void _CPU_ISR_install_raw_handler(
 
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_install_vector
  *
  *  This kernel routine installs the RTEMS handler for the
@@ -217,9 +215,7 @@ void _CPU_ISR_install_raw_handler(
  *
  *  Output parameters:
  *    *old_handler - former ISR for this vector number
- *
  */
-
 void _CPU_ISR_install_vector(
   uint64_t    vector,
   proc_ptr    new_handler,

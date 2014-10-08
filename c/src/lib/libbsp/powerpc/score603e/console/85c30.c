@@ -3,7 +3,9 @@
  *  z85c30 chip.
  *
  *  Currently only polled mode is supported.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -359,10 +361,8 @@ int inbyte_nonblocking_85c30(
 
 #if CONSOLE_USE_INTERRUPTS
 
-/*PAGE
- *
+/*
  *  Z8530_Async_Channel_ISR
- *
  */
 /* RR0 */
 

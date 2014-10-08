@@ -1,7 +1,9 @@
 /*
  *  PowerPC CPU Dependent Source
- *
- *  Author:	Andrew Bray <andy@i-cubed.co.uk>
+ */
+
+/*
+ *  Author:  Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -40,23 +42,17 @@
 /*  _CPU_Initialize
  *
  *  This routine performs processor dependent initialization.
- *
- *  INPUT PARAMETERS: NONE
  */
-
 void _CPU_Initialize(void)
 {
-  /* Do nothing */
 #ifdef __ALTIVEC__
   _CPU_Initialize_altivec();
 #endif
 }
 
-/*PAGE
- *
+/*
  *  _CPU_Context_Initialize
  */
-
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
   uint32_t         *stack_base,
