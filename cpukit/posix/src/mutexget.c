@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/posix/muteximpl.h>
+#include <rtems/score/apimutex.h>
 
 static bool _POSIX_Mutex_Check_id_and_auto_init(
   pthread_mutex_t   *mutex,
@@ -34,7 +35,15 @@ static bool _POSIX_Mutex_Check_id_and_auto_init(
   if ( *mutex == PTHREAD_MUTEX_INITIALIZER ) {
     int eno;
 
-    eno = pthread_mutex_init( mutex, NULL );
+    _Once_Lock();
+
+    if ( *mutex == PTHREAD_MUTEX_INITIALIZER ) {
+      eno = pthread_mutex_init( mutex, NULL );
+    } else {
+      eno = 0;
+    }
+
+    _Once_Unlock();
 
     if ( eno != 0 ) {
       *location = OBJECTS_ERROR;
