@@ -26,6 +26,6 @@ bool _Timestamp64_Equal_to(
   const Timestamp64_Control *_rhs
 )
 {
-  _Timestamp64_implementation_Equal_to( _lhs, _rhs );
+  return _Timestamp64_implementation_Equal_to( _lhs, _rhs );
 }
 #endif

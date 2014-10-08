@@ -26,6 +26,6 @@ bool _Timestamp64_Less_than(
   const Timestamp64_Control *_rhs
 )
 {
-  _Timestamp64_implementation_Less_than( _lhs, _rhs );
+  return _Timestamp64_implementation_Less_than( _lhs, _rhs );
 }
 #endif

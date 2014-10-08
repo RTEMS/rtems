@@ -25,6 +25,6 @@ uint32_t _Timestamp64_Get_seconds(
   const Timestamp64_Control *_time
 )
 {
-  _Timestamp64_implementation_Get_seconds( _time );
+  return _Timestamp64_implementation_Get_seconds( _time );
 }
 #endif
