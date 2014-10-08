@@ -23,8 +23,58 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/posix/rwlockimpl.h>
+#include <rtems/score/apimutex.h>
+
+static bool _POSIX_RWLock_Check_id_and_auto_init(
+  pthread_mutex_t   *rwlock,
+  Objects_Locations *location
+)
+{
+  if ( rwlock == NULL ) {
+    *location = OBJECTS_ERROR;
+
+    return false;
+  }
+
+  if ( *rwlock == PTHREAD_RWLOCK_INITIALIZER ) {
+    int eno;
+
+    _Once_Lock();
+
+    if ( *rwlock == PTHREAD_RWLOCK_INITIALIZER ) {
+      eno = pthread_rwlock_init( rwlock, NULL );
+    } else {
+      eno = 0;
+    }
+
+    _Once_Unlock();
+
+    if ( eno != 0 ) {
+      *location = OBJECTS_ERROR;
+
+      return false;
+    }
+  }
+
+  return true;
+}
+
+POSIX_RWLock_Control *_POSIX_RWLock_Get(
+  pthread_rwlock_t  *rwlock,
+  Objects_Locations *location
+)
+{
+  if ( !_POSIX_RWLock_Check_id_and_auto_init( rwlock, location ) ) {
+    return NULL;
+  }
+
+  return (POSIX_RWLock_Control *) _Objects_Get(
+    &_POSIX_RWLock_Information,
+    *rwlock,
+    location
+  );
+}
 
 /*
  *  pthread_rwlock_init

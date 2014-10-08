@@ -41,9 +41,6 @@ int pthread_rwlock_destroy(
   POSIX_RWLock_Control *the_rwlock = NULL;
   Objects_Locations      location;
 
-  if ( !rwlock )
-    return EINVAL;
-
   _Objects_Allocator_lock();
   the_rwlock = _POSIX_RWLock_Get( rwlock, &location );
   switch ( location ) {

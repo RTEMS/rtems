@@ -52,9 +52,6 @@ int pthread_rwlock_timedwrlock(
   POSIX_Absolute_timeout_conversion_results_t  status;
   Thread_Control                              *executing;
 
-  if ( !rwlock )
-    return EINVAL;
-
   /*
    *  POSIX requires that blocking calls with timeouts that take
    *  an absolute timeout must ignore issues with the absolute

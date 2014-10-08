@@ -92,28 +92,10 @@ RTEMS_INLINE_ROUTINE void _POSIX_RWLock_Free (
   _Objects_Free( &_POSIX_RWLock_Information, &the_RWLock->Object );
 }
 
-/**
- * @brief Get a RWLock control block.
- *
- * This function maps RWLock IDs to RWLock control blocks.
- * If ID corresponds to a local RWLock, then it returns
- * the_RWLock control pointer which maps to ID and location
- * is set to OBJECTS_LOCAL.  if the RWLock ID is global and
- * resides on a remote node, then location is set to OBJECTS_REMOTE,
- * and the_RWLock is undefined.  Otherwise, location is set
- * to OBJECTS_ERROR and the_RWLock is undefined.
- */
-RTEMS_INLINE_ROUTINE POSIX_RWLock_Control *_POSIX_RWLock_Get (
-  pthread_rwlock_t *RWLock,
+POSIX_RWLock_Control *_POSIX_RWLock_Get(
+  pthread_rwlock_t  *rwlock,
   Objects_Locations *location
-)
-{
-  return (POSIX_RWLock_Control *) _Objects_Get(
-      &_POSIX_RWLock_Information,
-      (Objects_Id) *RWLock,
-      location
-  );
-}
+);
 
 #ifdef __cplusplus
 }

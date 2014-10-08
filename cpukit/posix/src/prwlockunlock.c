@@ -47,9 +47,6 @@ int pthread_rwlock_unlock(
   Objects_Locations      location;
   CORE_RWLock_Status     status;
 
-  if ( !rwlock )
-    return EINVAL;
-
   the_rwlock = _POSIX_RWLock_Get( rwlock, &location );
   switch ( location ) {
 
