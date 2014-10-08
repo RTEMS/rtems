@@ -716,14 +716,8 @@ pppallocmbuf(struct ppp_softc *sc, struct mbuf **mp)
     m = *mp;
     if ( m == NULL ) {
       /* get mbuf header */
-      MGETHDR(m, M_DONTWAIT, MT_DATA);
-      if ( m == NULL ) {
-        /* error - set condition to break out */
-        printf("pppallocmbuf: MGETHDR failed\n");
-        break;
-      }
-      MCLGET(m, M_DONTWAIT);
-      m->m_next = NULL;
+      MGETHDR(m, M_WAIT, MT_DATA);
+      MCLGET(m, M_WAIT);
       *mp = m;
     }
 
