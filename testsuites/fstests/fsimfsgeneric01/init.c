@@ -472,6 +472,17 @@ static void test_imfs_make_generic_node_errors(void)
   rtems_test_assert(rv == -1);
   rtems_test_assert(errno == EIO);
   rtems_test_assert(rtems_resource_snapshot_check(&before));
+
+  errno = 0;
+  rv = IMFS_make_generic_node(
+    "/nil/nada",
+    S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO,
+    &node_control,
+    NULL
+  );
+  rtems_test_assert(rv == -1);
+  rtems_test_assert(errno == ENOENT);
+  rtems_test_assert(rtems_resource_snapshot_check(&before));
 }
 
 static void Init(rtems_task_argument arg)

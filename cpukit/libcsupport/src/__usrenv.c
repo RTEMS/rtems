@@ -229,7 +229,8 @@ rtems_filesystem_mount_table_entry_t rtems_filesystem_null_mt_entry = {
   .mt_point_node = &rtems_filesystem_global_location_null,
   .mt_fs_root = &rtems_filesystem_global_location_null,
   .mounted = false,
-  .writeable = false
+  .writeable = false,
+  .type = ""
 };
 
 rtems_filesystem_global_location_t rtems_filesystem_global_location_null = {
