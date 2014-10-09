@@ -161,7 +161,7 @@ static bool _Neo_InitMMC(void)	{
 
 // Neo MMC driver functions
 
-bool _NMMC_isInserted(void)	{
+static bool _NMMC_isInserted(void)	{
 	int i;
 
 	_Neo_EnableMMC( true );		// Open SPI port to MMC card
@@ -183,7 +183,7 @@ bool _NMMC_isInserted(void)	{
 	return true;
 }
 
-bool _NMMC_clearStatus (void) {
+static bool _NMMC_clearStatus (void) {
 	u32 i;
 
 	_Neo_EnableMMC( true );		// Open SPI port to MMC card
@@ -206,11 +206,11 @@ bool _NMMC_clearStatus (void) {
 	return false;
 }
 
-bool _NMMC_shutdown(void) {
+static bool _NMMC_shutdown(void) {
 	return _NMMC_clearStatus();
 }
 
-bool _NMMC_startUp(void) {
+static bool _NMMC_startUp(void) {
 	int i;
 	int transSpeed;
 	if (_Neo_InitMMC() == false) {
@@ -255,7 +255,7 @@ bool _NMMC_startUp(void) {
 }
 
 
-bool _NMMC_writeSectors (u32 sector, u32 totalSecs, const void* buffer)
+static bool _NMMC_writeSectors (u32 sector, u32 totalSecs, const void* buffer)
 {
 	u32 i;
 	u8 *p=(u8*)buffer;
@@ -302,7 +302,7 @@ bool _NMMC_writeSectors (u32 sector, u32 totalSecs, const void* buffer)
 	return true;
 }
 
-bool _NMMC_readSectors (u32 sector, u32 totalSecs, void* buffer)
+static bool _NMMC_readSectors (u32 sector, u32 totalSecs, void* buffer)
 {
 	u32 i;
 	u8 *p=(u8*)buffer;

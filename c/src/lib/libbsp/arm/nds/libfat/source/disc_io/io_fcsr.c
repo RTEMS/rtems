@@ -73,7 +73,7 @@ _FCSR_isInserted
 Is a GBA Flash Cart with a valid file system inserted?
 bool return OUT:  true if a GBA FC card is inserted
 -----------------------------------------------------------------*/
-bool _FCSR_isInserted (void)
+static bool _FCSR_isInserted (void)
 {
 	bool flagFoundFileSys = false;
 
@@ -101,7 +101,7 @@ _FCSR_clearStatus
 Finish any pending operations
 bool return OUT:  always true for GBA FC
 -----------------------------------------------------------------*/
-bool _FCSR_clearStatus (void)
+static bool _FCSR_clearStatus (void)
 {
 	return true;
 }
@@ -116,7 +116,7 @@ u32 numSectors IN: number of 512 byte sectors to read,
 void* buffer OUT: pointer to 512 byte buffer to store data in
 bool return OUT: true if successful
 -----------------------------------------------------------------*/
-bool _FCSR_readSectors (u32 sector, u32 numSectors, void* buffer)
+static bool _FCSR_readSectors (u32 sector, u32 numSectors, void* buffer)
 {
 	int i;
 	bool flagSramSector = false;
@@ -184,7 +184,7 @@ u32 numSectors IN: number of 512 byte sectors to read,
 void* buffer IN: pointer to 512 byte buffer to read data from
 bool return OUT: true if successful
 -----------------------------------------------------------------*/
-bool _FCSR_writeSectors (u32 sector, u8 numSectors, void* buffer)
+static bool _FCSR_writeSectors (u32 sector, u8 numSectors, void* buffer)
 {
 	int i;
 	bool flagSramSector = false;
@@ -223,7 +223,7 @@ bool _FCSR_writeSectors (u32 sector, u8 numSectors, void* buffer)
 _FCSR_shutdown
 unload the Flash Cart interface
 -----------------------------------------------------------------*/
-bool _FCSR_shutdown(void)
+static bool _FCSR_shutdown(void)
 {
 	int i;
 	if (_FCSR_clearStatus() == false)
@@ -245,7 +245,7 @@ _FCSR_startUp
 initializes the Flash Cart interface, returns true if successful,
 otherwise returns false
 -----------------------------------------------------------------*/
-bool _FCSR_startUp(void)
+static bool _FCSR_startUp(void)
 {
 	bool flagFoundFileSys = false;
 	int i;

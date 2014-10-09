@@ -47,14 +47,9 @@ uint32 vramSetMainBanks(VRAM_A_TYPE a, VRAM_B_TYPE b, VRAM_C_TYPE c, VRAM_D_TYPE
 
 //////////////////////////////////////////////////////////////////////
 
-// remove in a few versions -- joat
-void vramRestorMainBanks(uint32 vramTemp)
-{
-  VRAM_CR = vramTemp;
-}
-
 //////////////////////////////////////////////////////////////////////
 
+void vramRestoreMainBanks(uint32 vramTemp); /* used in videoGL.c */
 void vramRestoreMainBanks(uint32 vramTemp)
 {
   VRAM_CR = vramTemp;

@@ -1,6 +1,8 @@
 /*
  * RTEMS for Nintendo DS realtime clock driver.
- *
+ */
+
+/*
  * Copyright (c) 2008 by Cedric Gestes <ctaf42@gmail.com>
  *
  * The license and distribution terms for this file may be
@@ -20,8 +22,7 @@ size_t RTC_Count = 1;
 /*
  * probe for a rtc. we always claim to have one.
  */
-
-bool
+static bool
 nds_rtc_probe (int minor)
 {
   return true;
@@ -30,8 +31,7 @@ nds_rtc_probe (int minor)
 /*
  * initialize the nds rtc.
  */
-
-void
+static void
 nds_rtc_init (int minor)
 {
   /* nothing to do here (already done in the arm7 main) */
@@ -42,8 +42,7 @@ nds_rtc_init (int minor)
  * read current time from nds real-time clock chip and convert it
  * to the rtems_time_of_day structure.
  */
-
-int
+static int
 nds_rtc_get_time (int minor, rtems_time_of_day * time)
 {
   time->year = 2000 + IPC->time.rtc.year;
@@ -61,8 +60,7 @@ nds_rtc_get_time (int minor, rtems_time_of_day * time)
  * set time to the arm7 nds rtc.
  * NOTE: this is not supported.
  */
-
-int
+static int
 nds_rtc_set_time (int minor, const rtems_time_of_day * time)
 {
   return -1;
@@ -71,7 +69,6 @@ nds_rtc_set_time (int minor, const rtems_time_of_day * time)
 /*
  * driver function table.
  */
-
 rtc_fns nds_rtc_fns = {
   nds_rtc_init,
   nds_rtc_get_time,

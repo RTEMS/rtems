@@ -81,7 +81,7 @@ _MPCF_startup
 initializes the CF interface, returns true if successful,
 otherwise returns false
 -----------------------------------------------------------------*/
-bool _MPCF_startup(void) {
+static bool _MPCF_startup(void) {
 	return _CF_startup(&_MPCF_Registers);
 }
 

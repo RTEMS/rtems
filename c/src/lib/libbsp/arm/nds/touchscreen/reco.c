@@ -1,6 +1,13 @@
 #include <nds.h>
 #include "reco.h"
 
+/*
+ * Prototype
+ *
+ * NOTE: These appear to be part of a public interface.
+ */
+char PA_CheckLetter(int down, int x, int y);
+
 PA_StylusPosition PA_StylusPos[20000];
 
 PA_RecoValues PA_Reco;
@@ -60,7 +67,7 @@ PA_FormType PA_Graffiti[PA_RECOTESTS] = {
 
 
 
-void PA_AddStylusPos(u8 x, u8 y){
+static void PA_AddStylusPos(u8 x, u8 y){
   if (!((x == PA_StylusPos[PA_Reco.nvalues-1].x) && (y == PA_StylusPos[PA_Reco.nvalues-1].y))){
     PA_StylusPos[PA_Reco.nvalues].x = x;
     PA_StylusPos[PA_Reco.nvalues].y = y;
@@ -69,7 +76,7 @@ void PA_AddStylusPos(u8 x, u8 y){
 }
 
 
-void PA_StylusLine(u8 x1, u8 y1, u8 x2, u8 y2){
+static void PA_StylusLine(u8 x1, u8 y1, u8 x2, u8 y2){
   int i,dx,dy,sdx,sdy,dxabs,dyabs,x,y,px,py;
 
   dx=x2-x1;      /* the horizontal distance of the line */
@@ -130,7 +137,7 @@ void PA_StylusLine(u8 x1, u8 y1, u8 x2, u8 y2){
 
 
 
-char PA_AnalyzeShape(void){
+static char PA_AnalyzeShape(void){
   s32 i;
   //  for (i = 0; i < 32; i++) PA_OutputSimpleText(1, 0, i, "             ");
 

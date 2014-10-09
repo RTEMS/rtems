@@ -1,6 +1,8 @@
 /*
  * RTEMS for Nintendo DS interrupt manager.
- *
+ */
+
+/*
  * Copyright (c) 2008 by Matthieu Bucchianeri <mbucchia@gmail.com>
  *
  * The license and distribution terms for this file may be
@@ -11,12 +13,12 @@
 
 #include <bsp.h>
 #include <rtems/irq.h>
+#include <bsp/irq.h>
 #include <nds.h>
 
 /*
  * this function check that the value given for the irq line is valid.
  */
-
 static int
 isValidInterrupt (int irq)
 {
@@ -28,7 +30,6 @@ isValidInterrupt (int irq)
 /*
  * initialize the irq management.
  */
-
 void
 BSP_rtems_irq_mngt_init (void)
 {
@@ -40,7 +41,6 @@ BSP_rtems_irq_mngt_init (void)
 /*
  * install a irq handler.
  */
-
 int
 BSP_install_rtems_irq_handler (const rtems_irq_connect_data * irq)
 {
@@ -67,7 +67,6 @@ BSP_install_rtems_irq_handler (const rtems_irq_connect_data * irq)
 /*
  * return the handler hooked to the given irq.
  */
-
 int
 BSP_get_current_rtems_irq_handler (rtems_irq_connect_data * irq)
 {
@@ -77,7 +76,6 @@ BSP_get_current_rtems_irq_handler (rtems_irq_connect_data * irq)
 /*
  * remove & disable given irq.
  */
-
 int
 BSP_remove_rtems_irq_handler (const rtems_irq_connect_data * irq)
 {

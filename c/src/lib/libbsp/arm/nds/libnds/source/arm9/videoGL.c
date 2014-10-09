@@ -247,12 +247,12 @@ u32 glGetTexParameter(){
 
 
 //---------------------------------------------------------------------------------
-inline uint32 alignVal( uint32 val, uint32 to ) {
+static inline uint32 alignVal( uint32 val, uint32 to ) {
 	return (val & (to-1))? (val & ~(to-1)) + to : val;
 }
 
 //---------------------------------------------------------------------------------
-int getNextPaletteSlot(u16 count, uint8 format) {
+static int getNextPaletteSlot(u16 count, uint8 format) {
 //---------------------------------------------------------------------------------
 	// ensure the result aligns on a palette block for this format
 	uint32 result = alignVal(glGlob->nextPBlock, 1<<(4-(format==GL_RGB4)));
@@ -269,7 +269,7 @@ int getNextPaletteSlot(u16 count, uint8 format) {
 }
 
 //---------------------------------------------------------------------------------
-uint16* vramGetBank(uint16 *addr) {
+static uint16* vramGetBank(uint16 *addr) {
 //---------------------------------------------------------------------------------
 	if(addr >= VRAM_A && addr < VRAM_B)
 		return VRAM_A;
@@ -292,7 +292,7 @@ uint16* vramGetBank(uint16 *addr) {
 
 
 //---------------------------------------------------------------------------------
-int vramIsTextureBank(uint16 *addr) {
+static int vramIsTextureBank(uint16 *addr) {
 //---------------------------------------------------------------------------------
 	uint16* vram = vramGetBank(addr);
 
@@ -324,7 +324,7 @@ int vramIsTextureBank(uint16 *addr) {
 		return 0;
 }
 //---------------------------------------------------------------------------------
-uint32* getNextTextureSlot(int size) {
+static uint32* getNextTextureSlot(int size) {
 //---------------------------------------------------------------------------------
 	uint32* result = glGlob->nextBlock;
 	glGlob->nextBlock += size >> 2;

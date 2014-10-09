@@ -22,6 +22,8 @@
  */
 
 extern void console_push (char c);
+extern void register_kbd_msg_queue (char *q_name);
+extern void unregister_kbd_msg_queue (void);
 
 /*
  * from reco.c
@@ -32,7 +34,8 @@ extern char PA_CheckLetter (int down, int x, int y);
 /*
  * message queue for touchscreen and graffiti events.
  */
-
+extern void register_mou_msg_queue (char *q_name);
+extern void unregister_mou_msg_queue (void);
 static rtems_id mou_queue_id = 0;
 static rtems_id kbd_queue_id = 0;
 
@@ -51,9 +54,14 @@ static int old_btns = 0;
 static int hand = 0;
 
 /*
- * update touchscreen position.
+ * Shared methods
  */
+void update_touchscreen (void);
+void touchscreen_sethand (int h);
 
+/*
+ * update touchscreen position
+ */
 void
 update_touchscreen (void)
 {

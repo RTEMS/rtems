@@ -26,9 +26,7 @@
 
 void IntrMain(void);	// Prototype for assembly interrupt dispatcher
 
-//---------------------------------------------------------------------------------
-void irqDummy(void) {}
-//---------------------------------------------------------------------------------
+static void irqDummy(void) {}
 
 
 #ifdef ARM9

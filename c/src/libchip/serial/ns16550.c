@@ -132,7 +132,9 @@ NS16550_STATIC int ns16550_set_attributes(
   const struct termios *t
 );
 
-NS16550_STATIC void ns16550_isr(void *arg);
+#if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
+  NS16550_STATIC void ns16550_isr(void *arg);
+#endif
 
 static rtems_interrupt_lock ns16550_lock =
   RTEMS_INTERRUPT_LOCK_INITIALIZER("NS16550");

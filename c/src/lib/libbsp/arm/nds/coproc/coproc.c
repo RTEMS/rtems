@@ -117,7 +117,7 @@ void VblankHandler(void) {
 	// microphone code
 	if (!is_recording && my_IPC->record)
 	  {
-	    StartRecording(my_IPC->record_buffer, my_IPC->record_length_max);
+	    StartRecording((u8 *)my_IPC->record_buffer, my_IPC->record_length_max);
 	    is_recording = 1;
 	  }
 

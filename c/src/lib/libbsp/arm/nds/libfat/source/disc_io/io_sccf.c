@@ -65,7 +65,7 @@ static const CF_REGISTERS _SCCF_Registers = {
 };
 
 
-bool _SCCF_startup(void) {
+static bool _SCCF_startup(void) {
 	_SC_changeMode (SC_MODE_MEDIA);
 	return _CF_startup(&_SCCF_Registers);
 }

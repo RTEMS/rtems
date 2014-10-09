@@ -78,7 +78,7 @@ static const CF_REGISTERS _M3CF_Registers = {
 };
 
 
-bool _M3CF_startup(void) {
+static bool _M3CF_startup(void) {
 	_M3_changeMode (M3_MODE_MEDIA);
 	return _CF_startup (&_M3CF_Registers);
 }

@@ -40,7 +40,7 @@ static u8 range = 20;
 static u8 min_range = 20;
 
 //---------------------------------------------------------------------------------
-u8 CheckStylus(void){
+static u8 CheckStylus(void){
 //---------------------------------------------------------------------------------
 
 	SerialWaitBusy();
@@ -133,7 +133,7 @@ static s32 xscale, yscale;
 static s32 xoffset, yoffset;
 
 //---------------------------------------------------------------------------------
-int16 readTouchValue(uint32 command, int16 *dist_max, u8 *err){
+static int16 readTouchValue(uint32 command, int16 *dist_max, u8 *err){
 //---------------------------------------------------------------------------------
 	int16 values[5];
 	int32 aux1, aux2, aux3, dist, dist2, result = 0;
@@ -224,7 +224,7 @@ int16 readTouchValue(uint32 command, int16 *dist_max, u8 *err){
 }
 
 //---------------------------------------------------------------------------------
-void UpdateRange(uint8 *this_range, int16 last_dist_max, u8 data_error, u8 tsc_touched){
+static void UpdateRange(uint8 *this_range, int16 last_dist_max, u8 data_error, u8 tsc_touched){
 //---------------------------------------------------------------------------------
 	//range_counter_1 = counter_0x380A98C
 	//range_counter_2 = counter_0x380A990

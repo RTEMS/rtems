@@ -30,6 +30,17 @@
 #include <nds/arm9/video.h>
 #include <nds/arm9/videoGL.h>
 
+/*
+ * Prototypes
+ *
+ * NOTE: This code appears to be externally available test code.
+ */
+void BoxTest_Asynch(v16 x, v16 y, v16 z, v16 width, v16 height, v16 depth);
+int BoxTestf(float x, float y, float z, float width, float height, float depth);
+void BoxTestf_Asynch(float x, float y, float z, float width, float height, float depth);
+int BoxTestResult(void);
+int BoxTest(v16 x, v16 y, v16 z, v16 width, v16 height, v16 depth);
+
 //---------------------------------------------------------------------------------
 void BoxTest_Asynch(v16 x, v16 y, v16 z, v16 width, v16 height, v16 depth)
 //---------------------------------------------------------------------------------

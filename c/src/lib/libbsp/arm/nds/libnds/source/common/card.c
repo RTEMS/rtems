@@ -173,6 +173,7 @@ int cardEepromGetType(void)
         sysSetBusOwners(BUS_OWNER_ARM9, BUS_OWNER_ARM9);
 #endif
 
+	(void) c03; /* avoid set but not used warning */
         c03=cardEepromCommand(0x03,0);
         c05=cardEepromCommand(0x05,0);
         c9f=cardEepromCommand(0x9f,0);

@@ -64,10 +64,10 @@ void gbfs_search_range(
 	u32 gbfs_stride
 ) {
 //---------------------------------------------------------------------------------
-	if ( NULL != gbfs_1st_limit ) GBFS_1ST_SEARCH_LIMIT = (u32 *)gbfs_1st_limit;
-	if ( NULL != gbfs_2nd_limit ) GBFS_2ND_SEARCH_LIMIT = (u32 *)gbfs_2nd_limit;
-	if ( NULL != gbfs_2nd_start ) GBFS_2ND_SEARCH_START = (u32 *)gbfs_2nd_start;
-	if ( NULL != gbfs_stride ) GBFS_STRIDE = gbfs_stride;
+	if ( 0 != gbfs_1st_limit ) GBFS_1ST_SEARCH_LIMIT = (u32 *)gbfs_1st_limit;
+	if ( 0 != gbfs_2nd_limit ) GBFS_2ND_SEARCH_LIMIT = (u32 *)gbfs_2nd_limit;
+	if ( 0 != gbfs_2nd_start ) GBFS_2ND_SEARCH_START = (u32 *)gbfs_2nd_start;
+	if ( 0 != gbfs_stride ) GBFS_STRIDE = gbfs_stride;
 
 }
 

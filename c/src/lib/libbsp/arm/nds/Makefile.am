@@ -15,6 +15,7 @@ nodist_include_HEADERS = include/bspopts.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
+nodist_include_bsp_HEADERS += irq/irq.h
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 

@@ -35,6 +35,12 @@
 
 #include <time.h>
 
+/*
+ * Prototypes
+ *
+ * NOTE: Called from start.S
+ */
+void initSystem(void);
 
 extern time_t *punixTime;
 

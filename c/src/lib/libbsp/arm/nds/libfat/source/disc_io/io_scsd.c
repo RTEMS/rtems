@@ -194,16 +194,17 @@ static inline bool _SCSD_getResponse_R6 (u8* dest) {
 static void _SCSD_sendClocks (u32 numClocks) {
 	u16 temp;
 	do {
+		(void) temp; /* avoid set but not used warning */
 		temp = REG_SCSD_CMD;
 	} while (numClocks--);
 }
 
-bool _SCSD_cmd_6byte_response (u8* responseBuffer, u8 command, u32 data) {
+static bool _SCSD_cmd_6byte_response (u8* responseBuffer, u8 command, u32 data) {
 	_SCSD_sendCommand (command, data);
 	return _SCSD_getResponse (responseBuffer, 6);
 }
 
-bool _SCSD_cmd_17byte_response (u8* responseBuffer, u8 command, u32 data) {
+static bool _SCSD_cmd_17byte_response (u8* responseBuffer, u8 command, u32 data) {
 	_SCSD_sendCommand (command, data);
 	return _SCSD_getResponse (responseBuffer, 17);
 }
@@ -273,12 +274,12 @@ static bool _SCSD_readData (void* buffer) {
 //---------------------------------------------------------------
 // Functions needed for the external interface
 
-bool _SCSD_startUp (void) {
+static bool _SCSD_startUp (void) {
 	_SCSD_unlock();
 	return _SCSD_initCard();
 }
 
-bool _SCSD_isInserted (void) {
+static bool _SCSD_isInserted (void) {
 	u8 responseBuffer [6];
 
 	// Make sure the card receives the command
@@ -296,7 +297,7 @@ bool _SCSD_isInserted (void) {
 	return true;
 }
 
-bool _SCSD_readSectors (u32 sector, u32 numSectors, void* buffer) {
+static bool _SCSD_readSectors (u32 sector, u32 numSectors, void* buffer) {
 	u32 i;
 	u8* dest = (u8*) buffer;
 	u8 responseBuffer[6];
@@ -332,7 +333,7 @@ bool _SCSD_readSectors (u32 sector, u32 numSectors, void* buffer) {
 	return true;
 }
 
-bool _SCSD_writeSectors (u32 sector, u32 numSectors, const void* buffer) {
+static bool _SCSD_writeSectors (u32 sector, u32 numSectors, const void* buffer) {
 	u16 crc[4];	// One per data line
 	u8 responseBuffer[6];
 	u32 offset = sector * BYTES_PER_READ;
@@ -376,11 +377,11 @@ bool _SCSD_writeSectors (u32 sector, u32 numSectors, const void* buffer) {
 	return true;
 }
 
-bool _SCSD_clearStatus (void) {
+static bool _SCSD_clearStatus (void) {
 	return _SCSD_initCard ();
 }
 
-bool _SCSD_shutdown (void) {
+static bool _SCSD_shutdown (void) {
 	_SC_changeMode (SC_MODE_RAM_RO);
 	return true;
 }

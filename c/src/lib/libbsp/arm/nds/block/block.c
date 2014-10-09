@@ -1,6 +1,8 @@
 /*
  * RTEMS for Nintendo DS flash driver.
- *
+ */
+
+/*
  * Copyright (c) 2008 by Matthieu Bucchianeri <mbucchia@gmail.com>
  *
  * The license and distribution terms for this file may be
@@ -17,13 +19,13 @@
 
 #include <disc.h>
 
-bool
+static bool
 nds_flash_probe (int minor)
 {
   return true;
 }
 
-void
+static void
 nds_flash_initialize (int minor)
 {
   const IO_INTERFACE *flash;
@@ -43,19 +45,19 @@ nds_flash_initialize (int minor)
   }
 }
 
-void
+static void
 nds_flash_read_reg (int minor, int reg, uint16_t * value)
 {
   printk ("nds_flash_read_reg\n");
 }
 
-void
+static void
 nds_flash_write_reg (int minor, int reg, uint16_t value)
 {
   printk ("nds_flash_write_reg\n");
 }
 
-void
+static void
 nds_flash_read_block (int minor, uint32_t block_size,
                       rtems_blkdev_sg_buffer * bufs,
                       uint32_t * cbuf, uint32_t * pos)
@@ -63,7 +65,7 @@ nds_flash_read_block (int minor, uint32_t block_size,
   printk ("nds_flash_read_block\n");
 }
 
-void
+static void
 nds_flash_write_block (int minor, uint32_t block_size,
                        rtems_blkdev_sg_buffer * bufs,
                        uint32_t * cbuf, uint32_t * pos)
@@ -71,14 +73,14 @@ nds_flash_write_block (int minor, uint32_t block_size,
   printk ("nds_flash_write_block\n");
 }
 
-int
+static int
 nds_flash_control (int minor, uint32_t cmd, void *arg)
 {
   printk ("nds_flash_control\n");
   return 0;
 }
 
-rtems_status_code
+static rtems_status_code
 nds_flash_io_speed (int minor, uint16_t mode)
 {
   return RTEMS_SUCCESSFUL;

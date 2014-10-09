@@ -23,10 +23,9 @@ extern "C"
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
-  struct rtems_bsdnet_ifconfig;
+struct rtems_bsdnet_ifconfig;
 
-  int
-    rtems_wifi_driver_attach (struct rtems_bsdnet_ifconfig *config,
+int rtems_wifi_driver_attach (struct rtems_bsdnet_ifconfig *config,
                               int attach);
 
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"dswifi0"
@@ -34,9 +33,9 @@ extern "C"
 
 #define RTC_DRIVER_TABLE_ENTRY \
     { rtc_initialize, NULL, NULL, NULL, NULL, NULL }
-  extern rtems_device_driver rtc_initialize (rtems_device_major_number major,
-                                             rtems_device_minor_number minor,
-                                             void *arg);
+extern rtems_device_driver rtc_initialize (rtems_device_major_number major,
+                                           rtems_device_minor_number minor,
+                                           void *arg);
 
 #ifdef __cplusplus
 }

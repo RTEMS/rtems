@@ -384,11 +384,11 @@ static bool _NJSD_sendCMDN (int speed, u8 cmd, u32 param) {
 	return true;
 }
 
-bool _NJSD_cmd_6byte_response (u8* responseBuffer, u8 command, u32 data) {
+static bool _NJSD_cmd_6byte_response (u8* responseBuffer, u8 command, u32 data) {
 	return _NJSD_sendCMDR (SD_CLK_167KHz, responseBuffer, SD_RSP_48, command, data);
 }
 
-bool _NJSD_cmd_17byte_response (u8* responseBuffer, u8 command, u32 data) {
+static bool _NJSD_cmd_17byte_response (u8* responseBuffer, u8 command, u32 data) {
 	return _NJSD_sendCMDR (SD_CLK_167KHz, responseBuffer, SD_RSP_136, command, data);
 }
 
@@ -413,7 +413,7 @@ static bool _NJSD_cardInit (void) {
 }
 
 
-bool _NJSD_isInserted(void) {
+static bool _NJSD_isInserted(void) {
 	u8 responseBuffer [8];
 	_NJSD_sendCMDR (SD_CLK_167KHz, responseBuffer, SD_RSP_48, SEND_STATUS, 0);
 
@@ -424,15 +424,15 @@ bool _NJSD_isInserted(void) {
 	return true;
 }
 
-bool _NJSD_clearStatus (void) {
+static bool _NJSD_clearStatus (void) {
 	return _NJSD_reset();
 }
 
-bool _NJSD_shutdown(void) {
+static bool _NJSD_shutdown(void) {
 	return _NJSD_clearStatus();
 }
 
-bool _NJSD_startup(void) {
+static bool _NJSD_startup(void) {
 	if (! _NJSD_init(0xA0406000) ) {
 		return false;
 	}
@@ -443,7 +443,7 @@ bool _NJSD_startup(void) {
 }
 
 
-bool _NJSD_writeSectors (u32 sector, u32 numSectors, const void* buffer) {
+static bool _NJSD_writeSectors (u32 sector, u32 numSectors, const void* buffer) {
  	u8 crc[8];
 	u32 offset = sector * BYTES_PER_READ;
 	u8* data = (u8*) buffer;
@@ -461,7 +461,7 @@ bool _NJSD_writeSectors (u32 sector, u32 numSectors, const void* buffer) {
 }
 
 #ifdef _IO_ALLOW_UNALIGNED
-bool _NJSD_readSectors (u32 sector, u32 numSectors, void* buffer) {
+static bool _NJSD_readSectors (u32 sector, u32 numSectors, void* buffer) {
 	u32 tmp[BYTES_PER_READ>>2];
 	int i;
 

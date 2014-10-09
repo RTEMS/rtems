@@ -164,7 +164,7 @@ EFA2_clearStatus
 Reads and checks NAND status information
 bool return OUT:  true if NAND is idle
 -----------------------------------------------------------------*/
-bool _EFA2_clearStatus (void)
+static bool _EFA2_clearStatus (void)
 {
 	// tbd: currently there is no write support, so always return
 	// true, there is no possibility for pending operations
@@ -176,7 +176,7 @@ EFA2_isInserted
 Checks to see if the NAND chip used by the EFA2 is present
 bool return OUT:  true if the correct NAND chip is found
 -----------------------------------------------------------------*/
-bool _EFA2_isInserted (void)
+static bool _EFA2_isInserted (void)
 {
 	_EFA2_clearStatus();
 	return (_EFA2_nand_id() == EFA2_NAND_ID);
@@ -191,7 +191,7 @@ u32 numSecs IN: number of 512 byte sectors to read,
 void* buffer OUT: pointer to 512 byte buffer to store data in
 bool return OUT: true if successful
 -----------------------------------------------------------------*/
-bool _EFA2_readSectors (u32 sector, u32 numSecs, void* buffer)
+static bool _EFA2_readSectors (u32 sector, u32 numSecs, void* buffer)
 {
 	int  i;
 
@@ -265,7 +265,7 @@ u32 numSecs IN: number of 512 byte sectors to write
 void* buffer IN: pointer to 512 byte buffer to read data from
 bool return OUT: true if successful
 -----------------------------------------------------------------*/
-bool _EFA2_writeSectors (u32 sector, u8 numSecs, void* buffer)
+static bool _EFA2_writeSectors (u32 sector, u8 numSecs, void* buffer)
 {
 	// Upto now I focused on reading NAND, write operations
 	// will follow
@@ -276,7 +276,7 @@ bool _EFA2_writeSectors (u32 sector, u8 numSecs, void* buffer)
 EFA2_shutdown
 unload the EFA2 interface
 -----------------------------------------------------------------*/
-bool _EFA2_shutdown(void)
+static bool _EFA2_shutdown(void)
 {
 	return _EFA2_clearStatus();
 }
@@ -286,7 +286,7 @@ EFA2_startUp
 initializes the EFA2 card, returns true if successful,
 otherwise returns false
 -----------------------------------------------------------------*/
-bool _EFA2_startUp(void)
+static bool _EFA2_startUp(void)
 {
 	_EFA2_global_unlock();
 	return (_EFA2_nand_id() == EFA2_NAND_ID);

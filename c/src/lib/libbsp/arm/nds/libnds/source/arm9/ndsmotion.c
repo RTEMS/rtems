@@ -52,7 +52,7 @@ int card_type = -1;
 MotionCalibration calibration = {2048, 2048, 2048, 1680, 819, 819, 819, 825};
 
 // sends and receives 1 byte on the SPI bus
-unsigned char motion_spi(unsigned char in_byte){
+static unsigned char motion_spi(unsigned char in_byte){
 
 	unsigned char out_byte;
 	CARD_EEPDATA = in_byte; // send the output byte to the SPI bus
@@ -62,7 +62,7 @@ unsigned char motion_spi(unsigned char in_byte){
 }
 
 
-void motion_MK6_sensor_mode(void) {
+static void motion_MK6_sensor_mode(void) {
 	// send some commands on the SPI bus
 	SPI_On()
 	motion_spi(0xFE);
@@ -78,7 +78,7 @@ void motion_MK6_sensor_mode(void) {
 	SPI_Off()
 }
 
-void motion_MK6_EEPROM_mode(void) {
+static void motion_MK6_EEPROM_mode(void) {
 	// send some commands on the SPI bus
 	SPI_On()
 	motion_spi(0xFE);
@@ -95,7 +95,7 @@ void motion_MK6_EEPROM_mode(void) {
 }
 
 // checks whether a DS Motion Pak is plugged in
-int motion_pak_is_inserted(void){
+static int motion_pak_is_inserted(void){
     int motion_pak = 0;
 	unsigned char return_byte = V_SRAM[10]; // read first byte of DS Motion Pak check
 	swiDelay(WAIT_CYCLES);
@@ -114,7 +114,7 @@ int motion_pak_is_inserted(void){
 // checks whether a DS Motion Card is plugged in
 // this only works after motion_init()
 // it will return false if it is run before motion_init()
-int motion_card_is_inserted(void){
+static int motion_card_is_inserted(void){
 	// send 0x03 to read from DS Motion Card control register
 	SPI_On()
 	motion_spi(0x03); // command to read from control register
@@ -130,7 +130,7 @@ int motion_card_is_inserted(void){
 
 // turn on the DS Motion Sensor (DS Motion Pak or DS Motion Card)
 // Requires knowing which type is present (can be found by using motion_init)
-int motion_enable(int card_type) {
+static int motion_enable(int card_type) {
 	switch (card_type)
 	{
 		case 1: // DS Motion Pak - automatically enabled on powerup
@@ -448,14 +448,16 @@ void motion_set_calibration(MotionCalibration* cal){
 // enable analog input number 1 (ain_1)
 void motion_enable_ain_1(void){
 	unsigned char return_byte;
-    return_byte = V_SRAM[16];
+	(void) return_byte; /* avoid set but unused warning */
+	return_byte = V_SRAM[16];
 	swiDelay(WAIT_CYCLES);
 }
 
 // enable analog input number 2 (ain_2)
 void motion_enable_ain_2(void){
 	unsigned char return_byte;
-    return_byte = V_SRAM[18];
+	(void) return_byte; /* avoid set but unused warning */
+	return_byte = V_SRAM[18];
 	swiDelay(WAIT_CYCLES);
 }
 

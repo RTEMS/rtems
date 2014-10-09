@@ -238,12 +238,12 @@ static void _M3SD_getClocks (u32 numClocks) {
 	}
 }
 
-bool _M3SD_cmd_6byte_response (u8* responseBuffer, u8 command, u32 data) {
+static bool _M3SD_cmd_6byte_response (u8* responseBuffer, u8 command, u32 data) {
 	_M3SD_sendCommand (command, data);
 	return _M3SD_getResponse (responseBuffer, 6);
 }
 
-bool _M3SD_cmd_17byte_response (u8* responseBuffer, u8 command, u32 data) {
+static bool _M3SD_cmd_17byte_response (u8* responseBuffer, u8 command, u32 data) {
 	_M3SD_sendCommand (command, data);
 	return _M3SD_getResponse (responseBuffer, 17);
 }
@@ -389,12 +389,12 @@ static bool _M3SD_writeData (u8* data, u8* crc) {
 //---------------------------------------------------------------
 // Functions needed for the external interface
 
-bool _M3SD_startUp (void) {
+static bool _M3SD_startUp (void) {
 	_M3SD_unlock();
 	return _M3SD_initCard();
 }
 
-bool _M3SD_isInserted (void) {
+static bool _M3SD_isInserted (void) {
 	u8 responseBuffer [6];
 	// Make sure the card receives the command
 	if (!_M3SD_sendCommand (SEND_STATUS, 0)) {
@@ -411,7 +411,7 @@ bool _M3SD_isInserted (void) {
 	return true;
 }
 
-bool _M3SD_readSectors (u32 sector, u32 numSectors, void* buffer) {
+static bool _M3SD_readSectors (u32 sector, u32 numSectors, void* buffer) {
 	u32 i;
 	u8* dest = (u8*) buffer;
 	u8 responseBuffer[6];
@@ -447,7 +447,7 @@ bool _M3SD_readSectors (u32 sector, u32 numSectors, void* buffer) {
 	return true;
 }
 
-bool _M3SD_writeSectors (u32 sector, u32 numSectors, const void* buffer) {
+static bool _M3SD_writeSectors (u32 sector, u32 numSectors, const void* buffer) {
 	u8 crc[8];
 	u8 responseBuffer[6];
 	u32 offset = sector * BYTES_PER_READ;
@@ -495,11 +495,11 @@ bool _M3SD_writeSectors (u32 sector, u32 numSectors, const void* buffer) {
 
 }
 
-bool _M3SD_clearStatus (void) {
+static bool _M3SD_clearStatus (void) {
 	return _M3SD_initCard ();
 }
 
-bool _M3SD_shutdown (void) {
+static bool _M3SD_shutdown (void) {
 	_M3_changeMode (M3_MODE_ROM);
 	return true;
 }

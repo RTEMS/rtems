@@ -173,7 +173,7 @@ static void consoleClearLine(char mode) {
 	}
 }
 //---------------------------------------------------------------------------------
-int con_write(struct _reent *r,int fd,const char *ptr,int len) {
+static int con_write(struct _reent *r,int fd,const char *ptr,int len) {
 //---------------------------------------------------------------------------------
 
 	if (!consoleInitialised) return -1;

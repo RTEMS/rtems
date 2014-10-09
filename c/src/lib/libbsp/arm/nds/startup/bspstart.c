@@ -1,6 +1,8 @@
 /*
  * RTEMS for Nintendo DS platform initialization.
- *
+ */
+
+/*
  * Copyright (c) 2008 by Matthieu Bucchianeri <mbucchia@gmail.com>
  *
  * The license and distribution terms for this file may be
@@ -12,14 +14,14 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <bsp/linker-symbols.h>
+#include <bsp/irq.h>
 #include <nds.h>
 
-extern void defaultExceptionHandler ();
-extern void BSP_rtems_irq_mngt_init (void);
+extern void defaultExceptionHandler(void);
+
 /*
  * start the platform.
  */
-
 void bsp_start (void)
 {
   /* initialize irq management */
@@ -43,17 +45,6 @@ void bsp_start (void)
   arm_cpu_mode = 0x1f;
 
   defaultExceptionHandler ();
-}
-
-/*
- * reset bss area.
- */
-
-void
-bss_reset (void)
-{
-
-  memset (bsp_section_bss_begin, 0, (size_t) bsp_section_bss_size);
 }
 
 /*
