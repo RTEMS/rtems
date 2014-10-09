@@ -56,14 +56,22 @@ static void mc146818a_initialize(
   int minor
 )
 {
-  uint32_t     mc146818a;
+  uintptr_t      mc146818a;
   setRegister_f  setReg;
 
   mc146818a = RTC_Table[ minor ].ulCtrlPort1;
   setReg = RTC_Table[ minor ].setRegister;
 
-  (*setReg)( mc146818a, MC146818A_STATUSA, MC146818ASA_DIVIDER|MC146818ASA_1024 );
-  (*setReg)( mc146818a, MC146818A_STATUSB, MC146818ASB_24HR );
+  (*setReg)(
+    mc146818a,
+    MC146818A_STATUSA,
+    MC146818ASA_DIVIDER|MC146818ASA_1024
+  );
+  (*setReg)(
+    mc146818a,
+    MC146818A_STATUSB,
+    MC146818ASB_24HR
+  );
 }
 
 /*
@@ -74,9 +82,9 @@ static int mc146818a_get_time(
   rtems_time_of_day *time
 )
 {
-  uint32_t     mc146818a;
-  getRegister_f  getReg;
-  uint32_t     value;
+  uintptr_t             mc146818a;
+  getRegister_f         getReg;
+  uint32_t              value;
   rtems_interrupt_level level;
 
   mc146818a = RTC_Table[ minor ].ulCtrlPort1;
