@@ -11,6 +11,7 @@
  */
 
 #include "MCD_dma.h"
+#include "MCD_tasksInit.h"
 
 extern dmaRegs *MCD_dmaBar;
 
