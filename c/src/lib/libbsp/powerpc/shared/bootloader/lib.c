@@ -5,13 +5,25 @@
  *  from newlib or rtems  because they are not compiled with the right option!!!
  *
  *  You've been warned!!!.
- *
- *  CopyRight (C) 1998, 1999 valette@crf.canon.fr
+ */
+
+/*
+ *  Copyright (C) 1998, 1999 valette@crf.canon.fr
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
  */
+
+
+/*
+ * Provide our own prototypes to avoid warnings and risk getting inlined
+ * conflicts from the normal header files.
+ */
+void* memset(void *p, int c, unsigned int n);
+void* memcpy(void *dst, const void * src, unsigned int n);
+char* strcat(char * dest, const char * src);
+int strlen(const char* string);
 
 void* memset(void *p, int c, unsigned int n)
 {

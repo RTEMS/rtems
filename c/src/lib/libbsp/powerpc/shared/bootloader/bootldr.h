@@ -1,6 +1,8 @@
 /*
  *  bootldr.h -- Include file for bootloader.
- *
+ */
+
+/*
  *  Copyright (C) 1998, 1999 Gabriel Paubert, paubert@iram.es
  *
  *  Modified to compile in RTEMS development environment
@@ -206,6 +208,19 @@ void cleanup_v86_mess(void);
 void em86_main(struct pci_dev *);
 int find_max_mem(struct pci_dev *);
 
+/*
+ * Prototypes for calls from assembly and across files.
+ */
+typedef struct _x86 x86;
+
+int em86_trap(x86 *p);
+void decompress_kernel(int kernel_size, void * zimage_start, int len,
+		       void * initrd_start, int initrd_len );
+void boot_udelay(uint32_t _microseconds);
+void setup_hw(void);
+void _handler(int vec, ctxt *p);
+int early_setup(u_long image_size);
+void mm_init(u_long image_size);
 #endif
 
 #ifdef ASM

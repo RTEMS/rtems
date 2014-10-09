@@ -86,7 +86,7 @@ void hang(const char *s, u_long x, ctxt *p) {
 	exit();
 };
 
-void *zalloc(void *x, unsigned items, unsigned size)
+static void *zalloc(void *x, unsigned items, unsigned size)
 {
 	void *p = salloc(items*size);
 
@@ -96,7 +96,7 @@ void *zalloc(void *x, unsigned items, unsigned size)
 	return p;
 }
 
-void zfree(void *x, void *addr, unsigned nb)
+static void zfree(void *x, void *addr, unsigned nb)
 {
 	sfree(addr);
 }
@@ -230,9 +230,11 @@ void decompress_kernel(int kernel_size, void * zimage_start, int len,
 
 static int ticks_per_ms=0;
 
-/* this is from rtems_bsp_delay from libcpu */
+/*
+ * This is based on rtems_bsp_delay from libcpu
+ */
 void
-boot_udelay(uint32_t   _microseconds)
+boot_udelay(uint32_t _microseconds)
 {
    uint32_t   start, ticks, now;
 
@@ -252,9 +254,6 @@ setup_hw(void)
 	struct pci_dev *default_vga;
 	int timer, err;
 	u_short default_vga_cmd;
-	static unsigned int indic;
-
-	indic = 0;
 
 	res=bd->residual;
 	default_vga=NULL;

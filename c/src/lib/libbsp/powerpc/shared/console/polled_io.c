@@ -443,15 +443,15 @@ int debug_tstc(void)
 
 #define vidmem ((__io_ptr)(ptr_mem_map->isa_mem_base+0xb8000))
 
-void vacuum_putc(u_char c) {
+static void vacuum_putc(u_char c) {
 	console_global_data.vacuum_sent++;
 }
 
-int vacuum_getc(void) {
+static int vacuum_getc(void) {
 	return -1;
 }
 
-int vacuum_tstc(void) {
+static int vacuum_tstc(void) {
 	return 0;
 }
 
@@ -496,7 +496,7 @@ static void pfree(void* p)
 }
 #endif
 
-void log_putc(const u_char c) {
+static void log_putc(const u_char c) {
 	console_log *l;
 	for(l=console_global_data.log; l; l=l->next) {
 		if (l->offset<PAGE_LOG_CHARS) break;
@@ -549,19 +549,19 @@ void flush_log(void) {
 #error "BSP probably didn't define a console port"
 #endif
 
-void serial_putc(const u_char c)
+static void serial_putc(const u_char c)
 {
 	while ((INL_CONSOLE_INB(lsr) & LSR_THRE) == 0) ;
 	INL_CONSOLE_OUTB(thr, c);
 }
 
-int serial_getc(void)
+static int serial_getc(void)
 {
 	while ((INL_CONSOLE_INB(lsr) & LSR_DR) == 0) ;
 	return (INL_CONSOLE_INB(rbr));
 }
 
-int serial_tstc(void)
+static int serial_tstc(void)
 {
 	return ((INL_CONSOLE_INB(lsr) & LSR_DR) != 0);
 }
@@ -592,7 +592,7 @@ cursor(int x, int y)
 	vga_outb(0x15, pos);
 }
 
-void
+static void
 vga_putc(const u_char c)
 {
 	int x,y;
@@ -811,7 +811,7 @@ int kbdreset(void)
 	return 0;
 }
 
-int kbd_tstc(void)
+static int kbd_tstc(void)
 {
 	return ((kbd_inb(KBD_STATUS_REG) & KBD_STAT_OBF) != 0);
 }
@@ -895,6 +895,7 @@ void  printk(const char *fmt, ...) {
 
 	va_start(args, fmt);
 	i = k_vsprintf(buf, fmt, args);
+	(void) i; /* avoid set but not used warning */
 	va_end(args);
 	my_puts((u_char*)buf);
 }

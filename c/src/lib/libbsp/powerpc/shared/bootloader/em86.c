@@ -1,6 +1,8 @@
 /*
  *  em86.c -- Include file for bootloader.
- *
+ */
+
+/*
  *  Copyright (C) 1998, 1999 Gabriel Paubert, paubert@iram.es
  *
  *  Modified to compile in RTEMS development environment
@@ -132,7 +134,7 @@ static void dump86(x86 * p){
 #define dump86(x)
 #endif
 
-int bios86pci(x86 * p) {
+static int bios86pci(x86 * p) {
 	unsigned reg=ld_le16(&DI);
 	reg_type2 tmp;
 
@@ -190,21 +192,21 @@ int bios86pci(x86 * p) {
 	return 0;
 }
 
-void push2(x86 *p, unsigned value) {
+static void push2(x86 *p, unsigned value) {
   	unsigned char * sbase= p->ssbase;
 	unsigned newsp = (ld_le16(&SP)-2)&0xffff;
 	st_le16(&SP,newsp);
 	st_le16((unsigned short *)(sbase+newsp), value);
 }
 
-unsigned pop2(x86 *p) {
+static unsigned pop2(x86 *p) {
   	unsigned char * sbase=p->ssbase;
 	unsigned oldsp = ld_le16(&SP);
 	st_le16(&SP,oldsp+2);
 	return ld_le16((unsigned short *)(sbase+oldsp));
 }
 
-int int10h(x86 * p) { /* Process BIOS video interrupt */
+static int int10h(x86 * p) { /* Process BIOS video interrupt */
   	unsigned vector;
 	vector=ld_le32((uint32_t *)p->vbase+0x10);
 	if (((vector&0xffff0000)>>16)==0xc000) {
@@ -240,7 +242,7 @@ int int10h(x86 * p) { /* Process BIOS video interrupt */
 	}
 }
 
-int process_softint(x86 * p) {
+static int process_softint(x86 * p) {
 #if 0
   	if (p->parm1!=0x10 || AH!=0x0e) {
 		printf("Soft interrupt\n");

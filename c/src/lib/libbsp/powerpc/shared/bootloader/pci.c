@@ -713,7 +713,7 @@ static const struct pci_bootloader_config_access_functions direct_functions = {
    direct_pci_write_config_dword
 };
 
-void pci_read_bases(struct pci_dev *dev, unsigned int howmany)
+static void pci_read_bases(struct pci_dev *dev, unsigned int howmany)
 {
    unsigned int reg, nextreg;
 
@@ -798,7 +798,7 @@ void pci_read_bases(struct pci_dev *dev, unsigned int howmany)
    }
 }
 
-u_int pci_scan_bus(struct pci_bus *bus)
+static u_int pci_scan_bus(struct pci_bus *bus)
 {
    unsigned int devfn, max;
    uint32_t class;
