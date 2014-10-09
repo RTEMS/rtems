@@ -150,34 +150,6 @@ int BSP_setup_the_pic(rtems_irq_global_settings* config)
     rtems_hdl_tbl 		= config->irqHdlTbl;
 
     /*
-     * set up internal tables used by rtems interrupt prologue
-     */
-#if 0
-#ifdef BSP_PCI_ISA_BRIDGE_IRQ
-    /*
-     * start with ISA IRQ
-     */
-    compute_i8259_masks_from_prio (config);
-
-    for (i=BSP_ISA_IRQ_LOWEST_OFFSET; i < BSP_ISA_IRQ_LOWEST_OFFSET + BSP_ISA_IRQ_NUMBER; i++) {
-      if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
-         BSP_irq_enable_at_i8259s (i);
-      }
-      else {
-         BSP_irq_disable_at_i8259s (i);
-      }
-    }
-
-	if ( BSP_ISA_IRQ_NUMBER > 0 ) {
-    	/*
-		 * must enable slave pic anyway
-		 */
-		BSP_irq_enable_at_i8259s (2);
-	}
-#endif
-#endif
-
-    /*
      * continue with PCI IRQ
      */
     for (i=BSP_PCI_IRQ_LOWEST_OFFSET; i < BSP_PCI_IRQ_LOWEST_OFFSET + BSP_PCI_IRQ_NUMBER ; i++) {

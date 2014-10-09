@@ -61,19 +61,6 @@ static void BSP_Increment_Light(void)
   *GENERAL_REGISTER1 = data;
 }
 
-#if 0
-static void BSP_Fatal_Fault_Light(void)
-{
-  uint8_t data;
-
-  data = *GENERAL_REGISTER1;
-  data &= 0xf0;
-  data |= 0x7;
-  while(1)
-    *GENERAL_REGISTER1 = data;
-}
-#endif
-
 /*
  * Vital Board data Start using DATA RESIDUAL
  */

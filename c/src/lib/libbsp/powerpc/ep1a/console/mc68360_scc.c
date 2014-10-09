@@ -25,9 +25,7 @@
 #include <rtems/bspIo.h>
 #include <string.h>
 
-#if 0
-#define DEBUG_360
-#endif
+/* #define DEBUG_360 */
 
 #if 1   /* XXX */
 int EP1A_READ_LENGTH_GREATER_THAN_1 = 0;
@@ -35,19 +33,6 @@ int EP1A_READ_LENGTH_GREATER_THAN_1 = 0;
 #define MC68360_LENGTH_SIZE 400
 int mc68360_length_array[ MC68360_LENGTH_SIZE ];
 int mc68360_length_count=0;
-
-#if 0
-/*
- * This is a debug method which is not currently used.
- */
-static void mc68360_Show_length_array(void)
-{
-  int i;
-  for (i=0; i<MC68360_LENGTH_SIZE; i++)
-    printf(" %d", mc68360_length_array[i] );
-  printf("\n\n");
-}
-#endif
 #endif
 
 
@@ -56,29 +41,6 @@ M68360_t    M68360_chips = NULL;
 #define SYNC     eieio
 #define mc68360_scc_Is_422( _minor ) \
   (Console_Port_Tbl[minor]->sDeviceName[7] == '4' )
-
-#if 0
-/*
- * This method is included for completeness but not currently used.
- */
-static uint8_t scc_read8(
-  const char       *name,
-  volatile uint8_t *address
-)
-{
-  uint8_t value;
-
-#ifdef DEBUG_360
-  printk( "RD8 %s 0x%08x ", name, address );
-#endif
-  value = *address;
-#ifdef DEBUG_360
-  printk( "0x%02x\n", value );
-#endif
-
-  return value;
-}
-#endif
 
 static void scc_write8(
   const char       *name,
@@ -152,21 +114,6 @@ static void scc_write32(
   *address = value;
 }
 
-#if 0
-/*
- * This is a debug method which is not currently used.
- */
-static void mc68360_sccShow_Regs(int minor)
-{
-  M68360_serial_ports_t  ptr;
-  ptr   = Console_Port_Tbl[minor]->pDeviceParams;
-
-  printk( "scce 0x%08x", &ptr->pSCCR->scce );
-  printk( " 0x%04x\n", ptr->pSCCR->scce );
-
-}
-#endif
-
 #define TX_BUFFER_ADDRESS( _ptr ) \
   ((char *)ptr->txBuf - (char *)ptr->chip->board_data->baseaddr)
 #define RX_BUFFER_ADDRESS( _ptr ) \
@@ -194,21 +141,7 @@ static void mc68360_sccShow_Regs(int minor)
 static int
 mc68360_sccBRGC(int baud, int m360_clock_rate)
 {
-   int data;
-#if 0
-   int divisor;
-   int div16;
-
-   div16 = 0;
-   divisor = ((m360_clock_rate / 16) + (baud / 2)) / baud;
-   if (divisor > 4096)
-   {
-      div16   = 1;
-      divisor = (divisor + 8) / 16;
-   }
-   return(M360_BRG_EN | M360_BRG_EXTC_BRGCLK |
-          ((divisor - 1) << 1) | div16);
-#endif
+  int data;
 
   /*
    * configure baud rate generator for 16x bit rate, where.....

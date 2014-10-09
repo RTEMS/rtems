@@ -52,36 +52,6 @@ static unsigned char rsPMCQ1Initialized = FALSE;
 
 /* forward declarations */
 
-#if 0
-/* local Qspan II serial eeprom table */
-static unsigned char rsPMCQ1eeprom[] =
-    {
-    0x00,	/* Byte 0 - PCI_SID */
-    0x00,	/* Byte 1 - PCI_SID */
-    0x00,	/* Byte 2 - PCI_SID */
-    0x00,	/* Byte 3 - PCI_SID */
-    0x00,	/* Byte 4 - PBROM_CTL */
-    0x00,	/* Byte 5 - PBROM_CTL */
-    0x00,	/* Byte 6 - PBROM_CTL */
-    0x2C,	/* Byte 7 - PBTI0_CTL */
-    0xB0,	/* Byte 8 - PBTI1_CTL */
-    0x00,	/* Byte 9 - QBSI0_AT */
-    0x00,	/* Byte 10 - QBSI0_AT */
-    0x02,	/* Byte 11 - QBSI0_AT */
-    0x00,	/* Byte 12 - PCI_ID */
-    0x07,	/* Byte 13 - PCI_ID */
-    0x11,	/* Byte 14 - PCI_ID */
-    0xB5,	/* Byte 15 - PCI_ID */
-    0x06,	/* Byte 16 - PCI_CLASS */
-    0x80,	/* Byte 17 - PCI_CLASS */
-    0x00,	/* Byte 18 - PCI_CLASS */
-    0x00,	/* Byte 19 - PCI_MISC1 */
-    0x00,	/* Byte 20 - PCI_MISC1 */
-    0xC0,	/* Byte 21 - PCI_PMC */
-    0x00	/* Byte 22 - PCI_BST */
-};
-#endif
-
 static void MsDelay(void)
 {
   printk(".");
@@ -98,13 +68,6 @@ static void write16( int addr, int data ) {
 static void write32( int addr, int data ) {
   out_be32((unsigned int *)addr, data );
 }
-
-#if 0
-static int read32( int addr){
-  return in_be32((unsigned int *)addr);
-}
-#endif
-
 
 static void rsPMCQ1_scc_nullFunc(void) {}
 
@@ -212,41 +175,6 @@ unsigned int rsPMCQ1MaIntConnect (
   return (status);
 }
 
-#if 0
-/* This method is apparently unused. --joel 9 Oct 2014 */
-/*******************************************************************************
-*
-* rsPMCQ1MaIntDisconnect - disconnect a MiniAce interrupt routine
-*
-* This routine is called to disconnect a MiniAce interrupt handler
-* from a PMCQ1. It also masks the interrupt source on the PMCQ1.
-*
-* RETURNS: OK if PMCQ1 found, ERROR if not.
-*/
-static unsigned int rsPMCQ1MaIntDisconnect(
-    unsigned long	busNo,	/* Pci Bus number of PMCQ1 */
-    unsigned long	slotNo,	/* Pci Slot number of PMCQ1 */
-    unsigned long	funcNo	/* Pci Function number of PMCQ1 */
-)
-{
-  PPMCQ1BoardData boardData;
-  unsigned int status = RTEMS_IO_ERROR;
-
-  for (boardData = pmcq1BoardData; boardData; boardData = boardData->pNext) {
-    if ((boardData->busNo == busNo) && (boardData->slotNo == slotNo) &&
-        (boardData->funcNo == funcNo))
-    {
-      boardData->maInt = NULL;
-      *(unsigned long *)(boardData->baseaddr + PMCQ1_INT_MASK) |= PMCQ1_INT_MASK_MA;
-      status = RTEMS_SUCCESSFUL;
-      break;
-    }
-  }
-
-  return (status);
-}
-#endif
-
 /*******************************************************************************
 *
 * rsPMCQ1QuiccIntConnect - connect a Quicc interrupt routine
@@ -280,44 +208,6 @@ unsigned int rsPMCQ1QuiccIntConnect(
   }
   return (status);
 }
-
-#if 0
-/* This method is apparently unused. --joel 9 Oct 2014 */
-/*******************************************************************************
-*
-* rsPMCQ1QuiccIntDisconnect - disconnect a Quicc interrupt routine
-*
-* This routine is called to disconnect a Quicc interrupt handler
-* from a PMCQ1. It also masks the interrupt source on the PMCQ1.
-*
-* RETURNS: OK if PMCQ1 found, ERROR if not.
-*/
-static unsigned int rsPMCQ1QuiccIntDisconnect(
-    unsigned long	busNo,	/* Pci Bus number of PMCQ1 */
-    unsigned long	slotNo,	/* Pci Slot number of PMCQ1 */
-    unsigned long	funcNo	/* Pci Function number of PMCQ1 */
-)
-{
-  PPMCQ1BoardData boardData;
-  unsigned int status = RTEMS_IO_ERROR;
-
-  for (boardData = pmcq1BoardData; boardData; boardData = boardData->pNext)
-  {
-    if ((boardData->busNo == busNo) && (boardData->slotNo == slotNo) &&
-        (boardData->funcNo == funcNo))
-    {
-      boardData->quiccInt = NULL;
-      *(unsigned long *)(boardData->baseaddr + PMCQ1_INT_MASK) |= PMCQ1_INT_MASK_QUICC;
-      status = RTEMS_SUCCESSFUL;
-      break;
-    }
-  }
-
-  return (status);
-}
-#endif
-/* This method is apparently unused. --joel 9 Oct 2014 */
-
 
 /*******************************************************************************
 *
@@ -490,87 +380,6 @@ unsigned int rsPMCQ1Init(void)
   }
   return((i > 0) ? RTEMS_SUCCESSFUL : RTEMS_IO_ERROR);
 }
-
-#if 0
-/* This method is apparently unused. --joel 9 Oct 2014 */
-/*******************************************************************************
-*
-* rsPMCQ1Commission - initialize the serial EEPROM on the QSPAN
-*
-* This routine is called to initialize the EEPROM attached to the QSPAN
-* on the PMCQ1 module. It will load standard settings into any QSPAN's
-* found with apparently uninitialised EEPROM's or PMCQ1's (to allow
-* EEPROM modifications to be performed).
-*/
-static unsigned int rsPMCQ1Commission(
-  unsigned long busNo,
-  unsigned long slotNo
-)
-{
-  unsigned int status = RTEMS_IO_ERROR;
-  uint32_t     bridgeaddr = 0;
-  unsigned long val;
-  int i;
-  uint32_t venId1;
-  uint32_t venId2;
-
-  pci_read_config_dword(busNo, slotNo, 0, PCI_VENDOR_ID, &venId1);
-  pci_read_config_dword(busNo, slotNo, 0, PCI_VENDOR_ID, &venId2);
-  if ((venId1 == 0x086210e3) ||
-      (venId2 == PCI_ID(PCI_VEN_ID_RADSTONE, PCI_DEV_ID_PMCQ1)))
-  {
-    pci_read_config_dword(busNo, slotNo, 0, PCI_BASE_ADDRESS_0, &bridgeaddr);
-    status = RTEMS_SUCCESSFUL;
-
-    /*
-     * The On board PMCQ1 on an EP1A has a subVendor ID of 0.
-     * A real PMCQ1 also has the sub vendor ID set up.
-     */
-    if ((busNo == 0) && (slotNo == 1)) {
-      *(unsigned long *)rsPMCQ1eeprom = 0;
-    } else {
-      *(unsigned long *)rsPMCQ1eeprom = PCI_ID(PCI_VEN_ID_RADSTONE, PCI_DEV_ID_PMCQ1);
-    }
-
-    for (i = 0; i < 23; i++) {
-      /* Wait until interface not active */
-      while(read32(bridgeaddr + 0x804) & 0x80000000) {
-        rtems_bsp_delay(1);
-      }
-
-      /* Write value */
-      write32(bridgeaddr + 0x804, (rsPMCQ1eeprom[i] << 8) | i);
-
-      /* delay for > 31 usec to allow active bit to become set */
-      rtems_bsp_delay(100);
-
-      /* Wait until interface not active */
-      while(read32(bridgeaddr + 0x804) & 0x80000000) {
-        rtems_bsp_delay(1);
-      }
-
-      /* Re-read value */
-      write32(bridgeaddr + 0x804, 0x40000000 | i);
-
-      /* delay for > 31 usec to allow active bit to become set */
-      rtems_bsp_delay(100);
-
-      /* Wait until interface not active */
-      while((val = read32(bridgeaddr + 0x804)) & 0x80000000) {
-        rtems_bsp_delay(1);
-      }
-
-      if (((val >> 8) & 0xff) != rsPMCQ1eeprom[i]) {
-        printk("Error writing byte %d expected 0x%02x got 0x%02x\n",
-               i, rsPMCQ1eeprom[i], (unsigned char)(val >> 8));
-        status = RTEMS_IO_ERROR;
-        break;
-      }
-    }
-  }
-  return(status);
-}
-#endif
 
 uint32_t PMCQ1_Read_EPLD( uint32_t base, uint32_t reg )
 {
