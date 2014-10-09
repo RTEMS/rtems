@@ -108,7 +108,7 @@ void     PMCQ1_Write_EPLD( uint32_t base, uint32_t reg, uint32_t data );
 
 #define QSPAN2_INT_STATUS	0x00000600
 
-typedef void (*FUNCION_PTR) (int);
+typedef void (*FUNCTION_PTR) (int);
 
 #define PCI_ID(v, d) ((d << 16) | v)
 
@@ -131,10 +131,10 @@ typedef struct _PMCQ1BoardData
     unsigned long			funcNo;
     unsigned long			baseaddr;
     unsigned long			bridgeaddr;
-    FUNCION_PTR				quiccInt;
-    int					quiccArg;
-    FUNCION_PTR				maInt;
-    int					maArg;
+    FUNCTION_PTR			quiccInt;
+    uintptr_t				quiccArg;
+    FUNCTION_PTR			maInt;
+    uintptr_t				maArg;
 } PMCQ1BoardData, *PPMCQ1BoardData;
 
 extern PPMCQ1BoardData  pmcq1BoardData;
@@ -146,16 +146,18 @@ extern unsigned int rsPMCQ1QuiccIntConnect(
   unsigned long         busNo,
   unsigned long         slotNo,
   unsigned long         funcNo,
-  FUNCION_PTR           routine,
-  int                   arg
+  FUNCTION_PTR          routine,
+  uintptr_t             arg
 );
+
 unsigned int rsPMCQ1Init(void);
+
 unsigned int rsPMCQ1MaIntConnect (
     unsigned long       busNo,  /* Pci Bus number of PMCQ1 */
     unsigned long       slotNo, /* Pci Slot number of PMCQ1 */
     unsigned long       funcNo, /* Pci Function number of PMCQ1 */
-    FUNCION_PTR         routine,/* interrupt routine */
-    int                 arg     /* argument to pass to interrupt routine */
+    FUNCTION_PTR        routine,/* interrupt routine */
+    uintptr_t           arg     /* argument to pass to interrupt routine */
 );
 
 #endif				/* __INCPMCQ1H */

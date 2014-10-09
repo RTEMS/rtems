@@ -3,7 +3,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -51,37 +51,32 @@ uint8_t LightIdx = 0;
 extern int RAM_END;
 unsigned int BSP_mem_size = (unsigned int)&RAM_END;
 
-void BSP_Increment_Light(void){
+static void BSP_Increment_Light(void)
+{
   uint8_t data;
+
   data = *GENERAL_REGISTER1;
   data &= 0xf0;
   data |= LightIdx++;
   *GENERAL_REGISTER1 = data;
 }
 
-void BSP_Fatal_Fault_Light(void) {
+#if 0
+static void BSP_Fatal_Fault_Light(void)
+{
   uint8_t data;
+
   data = *GENERAL_REGISTER1;
   data &= 0xf0;
   data |= 0x7;
   while(1)
     *GENERAL_REGISTER1 = data;
 }
-
-void write_to_Q2ram(int offset, unsigned int data )
-{
-printk("0x%x ==> %d\n", offset, data );
-#if 0
-  unsigned int *ptr = 0x82000000;
-  ptr += offset;
-  *ptr = data;
 #endif
-}
 
 /*
  * Vital Board data Start using DATA RESIDUAL
  */
-
 uint32_t VME_Slot1 = FALSE;
 
 /*
@@ -160,27 +155,10 @@ void bsp_pretasking_hook(void)
   rsPMCQ1Init();
 }
 
-void zero_bss(void)
-{
-  memset(__SBSS_START__, 0, ((unsigned) __SBSS_END__) - ((unsigned)__SBSS_START__));
-  memset(__SBSS2_START__, 0, ((unsigned) __SBSS2_END__) - ((unsigned)__SBSS2_START__));
-  memset(__bss_start, 0, ((unsigned) __rtems_end) - ((unsigned)__bss_start));
-}
-
-char * save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_options)
-{
-#if 0
-  residualCopy = *r3;
-  strncpy(loaderParam, additional_boot_options, MAX_LOADER_ADD_PARM);
-  loaderParam[MAX_LOADER_ADD_PARM - 1] ='\0';
-  return loaderParam;
-#endif
-  return 0;
-}
-
 unsigned int EUMBBAR;
 
-unsigned int get_eumbbar(void) {
+static unsigned int get_eumbbar(void)
+{
   register int a, e;
 
   __asm__ volatile( "lis %0,0xfec0; ori  %0,%0,0x0000": "=r" (a) );
@@ -198,7 +176,7 @@ unsigned int get_eumbbar(void) {
   return e;
 }
 
-void Read_ep1a_config_registers( ppc_cpu_id_t myCpu ) {
+static void Read_ep1a_config_registers( ppc_cpu_id_t myCpu ) {
   unsigned char value;
 
   /*
@@ -273,7 +251,6 @@ void Read_ep1a_config_registers( ppc_cpu_id_t myCpu ) {
  *
  *  This routine does the bulk of the system initialization.
  */
-
 void bsp_start( void )
 {
   uintptr_t intrStackStart;
@@ -290,6 +267,7 @@ void bsp_start( void )
   BSP_Increment_Light();
   myCpu         = get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
+  (void) myCpuRevision; /* avoid set but not used warning */
 
   EUMBBAR = get_eumbbar();
   printk("EUMBBAR 0x%08x\n", EUMBBAR );

@@ -52,6 +52,7 @@ static unsigned char rsPMCQ1Initialized = FALSE;
 
 /* forward declarations */
 
+#if 0
 /* local Qspan II serial eeprom table */
 static unsigned char rsPMCQ1eeprom[] =
     {
@@ -79,30 +80,33 @@ static unsigned char rsPMCQ1eeprom[] =
     0xC0,	/* Byte 21 - PCI_PMC */
     0x00	/* Byte 22 - PCI_BST */
 };
+#endif
 
-void MsDelay(void)
+static void MsDelay(void)
 {
   printk(".");
 }
 
-void write8( int addr, int data ){
+static void write8( int addr, int data ){
   out_8((void *)addr, (unsigned char)data);
 }
 
-void write16( int addr, int data ) {
+static void write16( int addr, int data ) {
   out_be16((void *)addr, (short)data );
 }
 
-void write32( int addr, int data ) {
+static void write32( int addr, int data ) {
   out_be32((unsigned int *)addr, data );
 }
 
-int read32( int addr){
+#if 0
+static int read32( int addr){
   return in_be32((unsigned int *)addr);
 }
+#endif
 
 
-void rsPMCQ1_scc_nullFunc(void) {}
+static void rsPMCQ1_scc_nullFunc(void) {}
 
 /*******************************************************************************
 * rsPMCQ1Int - handle a PMCQ1 interrupt
@@ -113,7 +117,7 @@ void rsPMCQ1_scc_nullFunc(void) {}
 * RETURNS: NONE.
 */
 
-void rsPMCQ1Int( void *ptr )
+static void rsPMCQ1Int( void *ptr )
 {
   unsigned long   status;
   unsigned long   status1;
@@ -156,6 +160,7 @@ void rsPMCQ1Int( void *ptr )
 
   /* read back the status register to ensure that the pci write has completed */
   status1 = *(volatile unsigned long *)(boardData->bridgeaddr + 0x600);
+  (void) status1;  /* avoid set but not used warning */
   RTEMS_COMPILER_MEMORY_BARRIER();
 
 }
@@ -175,8 +180,8 @@ unsigned int rsPMCQ1MaIntConnect (
     unsigned long	busNo,	/* Pci Bus number of PMCQ1 */
     unsigned long	slotNo,	/* Pci Slot number of PMCQ1 */
     unsigned long	funcNo,	/* Pci Function number of PMCQ1 */
-    FUNCION_PTR	routine,/* interrupt routine */
-    int		arg	/* argument to pass to interrupt routine */
+    FUNCTION_PTR	routine,/* interrupt routine */
+    uintptr_t		arg	/* argument to pass to interrupt routine */
 )
 {
   PPMCQ1BoardData boardData;
@@ -207,6 +212,8 @@ unsigned int rsPMCQ1MaIntConnect (
   return (status);
 }
 
+#if 0
+/* This method is apparently unused. --joel 9 Oct 2014 */
 /*******************************************************************************
 *
 * rsPMCQ1MaIntDisconnect - disconnect a MiniAce interrupt routine
@@ -216,8 +223,7 @@ unsigned int rsPMCQ1MaIntConnect (
 *
 * RETURNS: OK if PMCQ1 found, ERROR if not.
 */
-
-unsigned int rsPMCQ1MaIntDisconnect(
+static unsigned int rsPMCQ1MaIntDisconnect(
     unsigned long	busNo,	/* Pci Bus number of PMCQ1 */
     unsigned long	slotNo,	/* Pci Slot number of PMCQ1 */
     unsigned long	funcNo	/* Pci Function number of PMCQ1 */
@@ -239,6 +245,7 @@ unsigned int rsPMCQ1MaIntDisconnect(
 
   return (status);
 }
+#endif
 
 /*******************************************************************************
 *
@@ -249,13 +256,12 @@ unsigned int rsPMCQ1MaIntDisconnect(
 *
 * RETURNS: OK if PMCQ1 found, ERROR if not.
 */
-
 unsigned int rsPMCQ1QuiccIntConnect(
     unsigned long	busNo,	/* Pci Bus number of PMCQ1 */
     unsigned long	slotNo,	/* Pci Slot number of PMCQ1 */
     unsigned long	funcNo,	/* Pci Function number of PMCQ1 */
-    FUNCION_PTR	routine,/* interrupt routine */
-    int		arg	/* argument to pass to interrupt routine */
+    FUNCTION_PTR	routine,/* interrupt routine */
+    uintptr_t		arg	/* argument to pass to interrupt routine */
 )
 {
   PPMCQ1BoardData boardData;
@@ -275,6 +281,8 @@ unsigned int rsPMCQ1QuiccIntConnect(
   return (status);
 }
 
+#if 0
+/* This method is apparently unused. --joel 9 Oct 2014 */
 /*******************************************************************************
 *
 * rsPMCQ1QuiccIntDisconnect - disconnect a Quicc interrupt routine
@@ -284,8 +292,7 @@ unsigned int rsPMCQ1QuiccIntConnect(
 *
 * RETURNS: OK if PMCQ1 found, ERROR if not.
 */
-
-unsigned int rsPMCQ1QuiccIntDisconnect(
+static unsigned int rsPMCQ1QuiccIntDisconnect(
     unsigned long	busNo,	/* Pci Bus number of PMCQ1 */
     unsigned long	slotNo,	/* Pci Slot number of PMCQ1 */
     unsigned long	funcNo	/* Pci Function number of PMCQ1 */
@@ -308,6 +315,8 @@ unsigned int rsPMCQ1QuiccIntDisconnect(
 
   return (status);
 }
+#endif
+/* This method is apparently unused. --joel 9 Oct 2014 */
 
 
 /*******************************************************************************
@@ -323,20 +332,22 @@ unsigned int rsPMCQ1Init(void)
 {
   int busNo;
   int slotNo;
-  unsigned int baseaddr = 0;
-  unsigned int bridgeaddr = 0;
+  uint32_t baseaddr = 0;
+  uint32_t bridgeaddr = 0;
   unsigned long pbti0_ctl;
   int i;
   unsigned char int_vector;
   int fun;
-  int temp;
+  uint32_t temp;
   PPMCQ1BoardData       boardData;
-  rtems_irq_connect_data IrqData = {0,
-                                    rsPMCQ1Int,
-                                    rsPMCQ1_scc_nullFunc,
-                                    rsPMCQ1_scc_nullFunc,
-                                    rsPMCQ1_scc_nullFunc,
-                                    NULL};
+  rtems_irq_connect_data IrqData = {
+    .name   = 0,
+    .hdl    = rsPMCQ1Int,
+    .handle = NULL,
+    .on     = (rtems_irq_enable) rsPMCQ1_scc_nullFunc,
+    .off    = (rtems_irq_disable) rsPMCQ1_scc_nullFunc,
+    .isOn   = (rtems_irq_is_enabled) rsPMCQ1_scc_nullFunc,
+  };
 
   if (rsPMCQ1Initialized)
   {
@@ -480,6 +491,8 @@ unsigned int rsPMCQ1Init(void)
   return((i > 0) ? RTEMS_SUCCESSFUL : RTEMS_IO_ERROR);
 }
 
+#if 0
+/* This method is apparently unused. --joel 9 Oct 2014 */
 /*******************************************************************************
 *
 * rsPMCQ1Commission - initialize the serial EEPROM on the QSPAN
@@ -489,8 +502,10 @@ unsigned int rsPMCQ1Init(void)
 * found with apparently uninitialised EEPROM's or PMCQ1's (to allow
 * EEPROM modifications to be performed).
 */
-
-unsigned int rsPMCQ1Commission( unsigned long busNo, unsigned long slotNo )
+static unsigned int rsPMCQ1Commission(
+  unsigned long busNo,
+  unsigned long slotNo
+)
 {
   unsigned int status = RTEMS_IO_ERROR;
   uint32_t     bridgeaddr = 0;
@@ -555,6 +570,7 @@ unsigned int rsPMCQ1Commission( unsigned long busNo, unsigned long slotNo )
   }
   return(status);
 }
+#endif
 
 uint32_t PMCQ1_Read_EPLD( uint32_t base, uint32_t reg )
 {

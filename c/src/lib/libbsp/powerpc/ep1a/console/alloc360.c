@@ -25,7 +25,8 @@
 
 #define DEBUG_PRINT 1
 
-void M360SetupMemory( M68360_t ptr ){
+void M360SetupMemory( M68360_t ptr )
+{
   volatile m360_t  *m360;
 
   m360  = ptr->m360;
@@ -34,19 +35,19 @@ void M360SetupMemory( M68360_t ptr ){
 printk("m360->mcr:0x%08x  Q1_360_SIM_MCR:0x%08x\n",
        (unsigned int)&(m360->mcr), ((unsigned int)m360+Q1_360_SIM_MCR));
 #endif
-  ptr->bdregions[0].base = (char *)&m360->dpram1[0];
+  ptr->bdregions[0].base = &m360->dpram1[0];
   ptr->bdregions[0].size = sizeof m360->dpram1;
   ptr->bdregions[0].used = 0;
 
-  ptr->bdregions[1].base = (char *)&m360->dpram3[0];
+  ptr->bdregions[1].base = &m360->dpram3[0];
   ptr->bdregions[1].size = sizeof m360->dpram3;
   ptr->bdregions[1].used = 0;
 
-  ptr->bdregions[2].base = (char *)&m360->dpram0[0];
+  ptr->bdregions[2].base = &m360->dpram0[0];
   ptr->bdregions[2].size = sizeof m360->dpram0;
   ptr->bdregions[2].used = 0;
 
-  ptr->bdregions[3].base = (char *)&m360->dpram2[0];
+  ptr->bdregions[3].base = &m360->dpram2[0];
   ptr->bdregions[3].size = sizeof m360->dpram2;
   ptr->bdregions[3].used = 0;
 }
@@ -59,17 +60,17 @@ void *
 M360AllocateBufferDescriptors (M68360_t ptr, int count)
 {
   unsigned int i;
-  ISR_Level    level;
-  void         *bdp  = NULL;
-  unsigned int want  = count * sizeof(m360BufferDescriptor_t);
-  int          have;
+  rtems_interrupt_level   level;
+  volatile unsigned char *bdp  = NULL;
+  unsigned int            want  = count * sizeof(m360BufferDescriptor_t);
+  int                     have;
 
   /*
    * Running with interrupts disabled is usually considered bad
    * form, but this routine is probably being run as part of an
    * initialization sequence so the effect shouldn't be too severe.
    */
-  _ISR_Disable (level);
+  rtems_interrupt_disable(level);
 
   for (i = 0 ; i < M360_NUM_DPRAM_REAGONS ; i++) {
 
@@ -100,10 +101,10 @@ M360AllocateBufferDescriptors (M68360_t ptr, int count)
       break;
     }
   }
-  _ISR_Enable (level);
+  rtems_interrupt_enable(level);
   if (bdp == NULL){
     printk("rtems_panic can't allocate %d buffer descriptor(s).\n");
     rtems_panic ("Can't allocate %d buffer descriptor(s).\n", count);
   }
-  return bdp;
+  return (void *)bdp;
 }

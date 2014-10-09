@@ -1,6 +1,8 @@
 /*  This file contains the termios TTY driver for the
  *  Motorola MC68360 SCC ports.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -34,24 +36,32 @@ int EP1A_READ_LENGTH_GREATER_THAN_1 = 0;
 int mc68360_length_array[ MC68360_LENGTH_SIZE ];
 int mc68360_length_count=0;
 
-void mc68360_Show_length_array(void) {
+#if 0
+/*
+ * This is a debug method which is not currently used.
+ */
+static void mc68360_Show_length_array(void)
+{
   int i;
   for (i=0; i<MC68360_LENGTH_SIZE; i++)
     printf(" %d", mc68360_length_array[i] );
   printf("\n\n");
 }
 #endif
+#endif
 
 
 M68360_t    M68360_chips = NULL;
 
 #define SYNC     eieio
-#define mc68360_scc_Is_422( _minor ) (Console_Port_Tbl[minor]->sDeviceName[7] == '4' )
+#define mc68360_scc_Is_422( _minor ) \
+  (Console_Port_Tbl[minor]->sDeviceName[7] == '4' )
 
-
-void mc68360_scc_nullFunc(void) {}
-
-uint8_t scc_read8(
+#if 0
+/*
+ * This method is included for completeness but not currently used.
+ */
+static uint8_t scc_read8(
   const char       *name,
   volatile uint8_t *address
 )
@@ -68,8 +78,9 @@ uint8_t scc_read8(
 
   return value;
 }
+#endif
 
-void scc_write8(
+static void scc_write8(
   const char       *name,
   volatile uint8_t *address,
   uint8_t           value
@@ -81,8 +92,7 @@ void scc_write8(
   *address = value;
 }
 
-
-uint16_t scc_read16(
+static uint16_t scc_read16(
   const char        *name,
   volatile uint16_t *address
 )
@@ -100,7 +110,7 @@ uint16_t scc_read16(
   return value;
 }
 
-void scc_write16(
+static void scc_write16(
   const char        *name,
   volatile uint16_t *address,
   uint16_t           value
@@ -112,8 +122,7 @@ void scc_write16(
   *address = value;
 }
 
-
-uint32_t scc_read32(
+static uint32_t scc_read32(
   const char        *name,
   volatile uint32_t *address
 )
@@ -131,7 +140,7 @@ uint32_t scc_read32(
   return value;
 }
 
-void scc_write32(
+static void scc_write32(
   const char        *name,
   volatile uint32_t *address,
   uint32_t           value
@@ -143,7 +152,12 @@ void scc_write32(
   *address = value;
 }
 
-void mc68360_sccShow_Regs(int minor){
+#if 0
+/*
+ * This is a debug method which is not currently used.
+ */
+static void mc68360_sccShow_Regs(int minor)
+{
   M68360_serial_ports_t  ptr;
   ptr   = Console_Port_Tbl[minor]->pDeviceParams;
 
@@ -151,6 +165,7 @@ void mc68360_sccShow_Regs(int minor){
   printk( " 0x%04x\n", ptr->pSCCR->scce );
 
 }
+#endif
 
 #define TX_BUFFER_ADDRESS( _ptr ) \
   ((char *)ptr->txBuf - (char *)ptr->chip->board_data->baseaddr)
@@ -325,8 +340,7 @@ if (length > 1)
  *
  *  Default state is 9600 baud, 8 bits, No parity, and 1 stop bit.
  */
-
-int mc68360_scc_open(
+static int mc68360_scc_open(
   int      major,
   int      minor,
   void    * arg
@@ -653,10 +667,10 @@ void mc68360_scc_initialize_interrupts(int minor)
  *  Console Termios output entry point when using interrupt driven output.
  */
 
-int mc68360_scc_write_support_int(
+ssize_t mc68360_scc_write_support_int(
   int         minor,
   const char *buf,
-  int         len
+  size_t      len
 )
 {
   rtems_interrupt_level  Irql;
@@ -953,7 +967,7 @@ int mc68360_scc_create_chip( PPMCQ1BoardData BoardData, uint8_t int_vector )
     chip->board_data->slotNo,
     chip->board_data->funcNo,
     &mc68360_sccInterruptHandler,
-    chip
+    (uintptr_t) chip
   );
 
   return RTEMS_SUCCESSFUL;

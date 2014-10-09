@@ -933,9 +933,9 @@ typedef struct m360_ {
 } m360_t;
 
 struct bdregions_t {
-  char            *base;
-  unsigned int    size;
-  unsigned int    used;
+  volatile unsigned char  *base;
+  unsigned int             size;
+  unsigned int             used;
 };
 
 #define M68360_RX_BUF_SIZE        1

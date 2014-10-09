@@ -1,6 +1,8 @@
 /*
- *  This include file contains all console driver definations for the nc16550
- *
+ *  This include file contains all console driver definitions for the ns16550.
+ */
+
+/*
  * COPYRIGHT (c) 1989-2008.
  * On-Line Applications Research Corporation (OAR).
  *
@@ -21,14 +23,14 @@ extern "C" {
  */
 
 uint8_t Read_ns16550_register(
-  uint32_t  ulCtrlPort,
-  uint8_t   ucRegNum
+  uintptr_t  ulCtrlPort,
+  uint8_t    ucRegNum
 );
 
 void  Write_ns16550_register(
-  uint32_t  ulCtrlPort,
-  uint8_t   ucRegNum,
-  uint8_t   ucData
+  uintptr_t  ulCtrlPort,
+  uint8_t    ucRegNum,
+  uint8_t    ucData
 );
 
 extern const console_fns ns16550_fns_8245;

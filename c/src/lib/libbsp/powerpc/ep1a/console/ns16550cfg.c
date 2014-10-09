@@ -1,6 +1,8 @@
 /*
- *  This include file contains all console driver definations for the nc16550
- *
+ *  This include file contains all console driver definitions for the ns16550.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -9,10 +11,11 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems.h>
+#include <bsp.h>
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>
-#include <bsp.h>
+
+#include "ns16550cfg.h"
 
 typedef struct uart_reg
 {
@@ -21,21 +24,22 @@ typedef struct uart_reg
 } uartReg;
 
 uint8_t Read_ns16550_register(
-  uint32_t  ulCtrlPort,
-  uint8_t   ucRegNum
+  uintptr_t  ulCtrlPort,
+  uint8_t    ucRegNum
 )
 {
-volatile struct uart_reg *p = (volatile struct uart_reg *)ulCtrlPort;
+  volatile struct uart_reg *p = (volatile struct uart_reg *)ulCtrlPort;
   uint8_t  ucData;
+
   ucData = p[ucRegNum].reg;
   __asm__ volatile("sync");
   return ucData;
 }
 
 void  Write_ns16550_register(
-  uint32_t  ulCtrlPort,
-  uint8_t   ucRegNum,
-  uint8_t   ucData
+  uintptr_t  ulCtrlPort,
+  uint8_t    ucRegNum,
+  uint8_t    ucData
 )
 {
   volatile struct uart_reg *p = (volatile struct uart_reg *)ulCtrlPort;
