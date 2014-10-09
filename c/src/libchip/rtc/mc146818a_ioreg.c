@@ -5,7 +5,9 @@
  *    + registers are in I/O space
  *    + registers are accessed as bytes
  *    + registers are only byte-aligned (no address gaps)
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -16,6 +18,8 @@
 
 #include <rtems.h>
 #include <bsp.h>
+#include <libchip/rtc.h>
+#include <libchip/mc146818a.h>
 
 /*
  *  At this point, not all CPUs or BSPs have defined in/out port routines.
@@ -23,12 +27,14 @@
 #if defined(__i386__) || defined(__PPC__)
 #if defined(inport_byte)
 uint32_t mc146818a_get_register(
-  uint32_t  ulCtrlPort,
-  uint8_t   ucRegNum
+  uintptr_t  ulCtrlPort,
+  uint8_t    ucRegNum
 )
 {
   uint8_t   val;
   uint8_t   tmp;
+
+  (void) tmp;                 /* eliminate warning for set but not used */
 
   outport_byte( ulCtrlPort, ucRegNum );
   inport_byte( 0x84, tmp );   /* Hack a delay to give chip time to settle */
@@ -38,9 +44,9 @@ uint32_t mc146818a_get_register(
 }
 
 void  mc146818a_set_register(
-  uint32_t  ulCtrlPort,
-  uint8_t   ucRegNum,
-  uint32_t  ucData
+  uintptr_t  ulCtrlPort,
+  uint8_t    ucRegNum,
+  uint32_t   ucData
 )
 {
   outport_byte( ulCtrlPort, ucRegNum );

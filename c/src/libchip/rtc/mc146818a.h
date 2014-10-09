@@ -54,14 +54,14 @@ bool mc146818a_probe(
  * Default register access routines
  */
 uint32_t mc146818a_get_register(
-  uint32_t  ulCtrlPort,
-  uint8_t   ucRegNum
+  uintptr_t  ulCtrlPort,
+  uint8_t    ucRegNum
 );
 
 void  mc146818a_set_register(
-  uint32_t  ulCtrlPort,
-  uint8_t   ucRegNum,
-  uint32_t  ucData
+  uintptr_t  ulCtrlPort,
+  uint8_t    ucRegNum,
+  uint32_t   ucData
 );
 
 #endif
