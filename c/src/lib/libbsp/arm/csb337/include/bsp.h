@@ -29,7 +29,6 @@ extern "C" {
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
-#include <libchip/serial.h>
 
 /**
  * @defgroup arm_csb337 CSB337 Support
@@ -50,7 +49,13 @@ extern "C" {
 /* What is the last interrupt? */
 #define BSP_MAX_INT AT91RM9200_MAX_INT
 
+/*
+ * forward reference the type to avoid conflicts between libchip serial
+ * and libchip rtc get and set register types.
+ */
+typedef struct _console_tbl console_tbl;
 console_tbl *BSP_get_uart_from_minor(int minor);
+
 static inline int32_t BSP_get_baud(void) {return 38400;}
 
 #define ST_PIMR_PIV	33	/* 33 ticks of the 32.768Khz clock ~= 1msec */
