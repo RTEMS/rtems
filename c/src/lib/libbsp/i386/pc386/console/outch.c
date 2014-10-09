@@ -239,7 +239,7 @@ int ro,co;
 	return rval;
 }
 
-void
+static void
 clear_screen(void)
 {
     int i,j;
@@ -308,6 +308,10 @@ _IBMPC_initVideo(void)
 } /* _IBMPC_initVideo */
 
 /* for old DOS compatibility n-curses type of applications */
+void gotoxy( int x, int y );
+int whereX( void );
+int whereY( void );
+
 void gotoxy( int x, int y )
 {
   gotorc(y,x);

@@ -607,7 +607,7 @@ set_char (char *addr, int val)
 /* return a pointer to the last char put in buf (null) */
 /* If MAY_FAULT is non-zero, then we should set mem_err in response to
    a fault; if zero treat a fault like any other fault in the stub.  */
-char *
+static char *
 mem2hex (char *mem, char *buf, int count, int may_fault)
 {
   int i;
@@ -654,7 +654,7 @@ hex2mem (char *buf, char *mem, int count, int may_fault)
 
 /* this function takes the 386 exception vector and attempts to
    translate this number into a unix compatible signal value */
-int
+static int
 computeSignal (int exceptionVector)
 {
   int sigval;
@@ -715,7 +715,7 @@ computeSignal (int exceptionVector)
 /* WHILE WE FIND NICE HEX CHARS, BUILD AN INT */
 /* RETURN NUMBER OF CHARS PROCESSED           */
 /**********************************************/
-int
+static int
 hexToInt (char **ptr, int *intValue)
 {
   int numChars = 0;
@@ -742,8 +742,12 @@ hexToInt (char **ptr, int *intValue)
 
 /*
  * This function does all command procesing for interfacing to gdb.
+ *
+ * NOTE: This method is called from assembly code so must be marked
+ *       as used.
  */
-void
+static void handle_exception (int exceptionVector) __attribute__((used));
+static void
 handle_exception (int exceptionVector)
 {
   int sigval;

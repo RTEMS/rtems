@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -26,6 +26,7 @@
 #include <rtems/bspIo.h>
 #include <bsp/rtd316.h>
 #include <rtems/score/i386.h>
+#include <rtems/console_private.h>
 
 #define RTD_CLOCK_RATE  (460800 * 32)
 

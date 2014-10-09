@@ -230,6 +230,8 @@ static void pc386_ide_initialize
     char*       p = &model_number[0];
     bool        data_ready;
 
+    (void) cur_multiple_sectors; /* avoid set but not used warning */
+
     memset(model_number, 0, sizeof(model_number));
 
     outport_byte(port+IDE_REGISTER_DEVICE_HEAD,

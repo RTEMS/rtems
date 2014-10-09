@@ -36,9 +36,6 @@
 /*
  *  External routines
  */
-extern void Calibrate_loop_1ms(void);
-extern void rtems_irq_mngt_init(void);
-extern void bsp_size_memory(void);
 void Clock_driver_install_handler(void);
 
 /*-------------------------------------------------------------------------+

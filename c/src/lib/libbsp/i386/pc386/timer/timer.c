@@ -65,15 +65,16 @@ void Timer_exit(void);
  */
 
 /*
- *  Timer cleanup routine at RTEMS exit. NOTE: This routine is
- *  not really necessary, since there will be a reset at exit.
+ *  Timer cleanup routine at RTEMS exit.
+ *
+ *  NOTE: This routine is not really necessary, since there will be
+ *        a reset at exit.
  */
-
-void tsc_timer_exit(void)
+static void tsc_timer_exit(void)
 {
 }
 
-void tsc_timer_initialize(void)
+static void tsc_timer_initialize(void)
 {
   static bool First = true;
 
@@ -86,9 +87,9 @@ void tsc_timer_initialize(void)
 }
 
 /*
- *
+ * Read TSC timer value.
  */
-uint32_t tsc_read_timer(void)
+static uint32_t tsc_read_timer(void)
 {
   register uint32_t  total;
 
@@ -151,16 +152,18 @@ static rtems_raw_irq_connect_data timer_raw_irq_data = {
 };
 
 /*
- * Timer cleanup routine at RTEMS exit. NOTE: This routine is
- *  not really necessary, since there will be a reset at exit.
- */ void
-i386_timer_exit(void)
+ * Timer cleanup routine at RTEMS exit.
+ *
+ * NOTE: This routine is not really necessary, since there will be
+ *       a reset at exit.
+ */
+static void i386_timer_exit(void)
 {
   i386_delete_idt_entry (&timer_raw_irq_data);
 }
 
 extern void rtems_irq_prologue_0(void);
-void i386_timer_initialize(void)
+static void i386_timer_initialize(void)
 {
   static bool First = true;
 
@@ -192,7 +195,7 @@ void i386_timer_initialize(void)
 /*
  * Read hardware timer value.
  */
-uint32_t i386_read_timer(void)
+static uint32_t i386_read_timer(void)
 {
   register uint32_t         total, clicks;
   register uint8_t          lsb, msb;
@@ -268,7 +271,7 @@ static unsigned short lastLoadedValue;
  *
  *  Returns: Nothing. Loaded value must be a number of clock bits...
  */
-void loadTimerValue( unsigned short loadedValue )
+static void loadTimerValue( unsigned short loadedValue )
 {
   lastLoadedValue = loadedValue;
   outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_SQWAVE);
@@ -282,7 +285,7 @@ void loadTimerValue( unsigned short loadedValue )
  *
  * Returns: number of clock bits elapsed since last load.
  */
-unsigned int readTimer0(void)
+static unsigned int readTimer0(void)
 {
   unsigned short lsb, msb;
   unsigned char  status;
@@ -302,19 +305,19 @@ unsigned int readTimer0(void)
   return (2*lastLoadedValue - count);
 }
 
-void Timer0Reset(void)
+static void Timer0Reset(void)
 {
   loadTimerValue(0xffff);
   readTimer0();
 }
 
-void fastLoop (unsigned int loopCount)
+static void fastLoop (unsigned int loopCount)
 {
   unsigned int i;
   for( i=0; i < loopCount; i++ )outport_byte( SLOW_DOWN_IO, 0 );
 }
 
-void slowLoop (unsigned int loopCount)
+static void slowLoop (unsigned int loopCount)
 {
   unsigned int j;
   for (j=0; j <100 ;  j++) {

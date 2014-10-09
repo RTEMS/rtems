@@ -179,9 +179,15 @@ char          _IBMPC_inch     (void);    /* from 'inch.c'   */
 char          _IBMPC_inch_sleep (void);  /* from 'inch.c'   */
 
 void Wait_X_ms(unsigned int timeToWait); /* from 'timer.c'  */
+void Calibrate_loop_1ms(void);           /* from 'timer.c'  */
+
+void rtems_irq_mngt_init(void);          /* from 'irq_init.c' */
+
+void bsp_size_memory(void);              /* from 'bspstart.c' */
 
 void Clock_driver_install_handler(void); /* from 'ckinit.c'  */
 void Clock_driver_support_initialize_hardware(void); /* from 'ckinit.c'  */
+
 size_t read_aux(char * buffer, size_t count); /* from 'ps2_mouse.c'  */
 
 /* Definitions for BSPConsolePort */

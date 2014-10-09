@@ -28,7 +28,7 @@
 #define KBD_DEFLOCK 0
 #endif
 
-int set_bit(int nr, unsigned long * addr)
+static int set_bit(int nr, unsigned long * addr)
 {
   int                   mask;
   int                   retval;
@@ -43,7 +43,7 @@ int set_bit(int nr, unsigned long * addr)
   return retval;
 }
 
-int clear_bit(int nr, unsigned long * addr)
+static int clear_bit(int nr, unsigned long * addr)
 {
   int                   mask;
   int                   retval;
@@ -58,7 +58,7 @@ int clear_bit(int nr, unsigned long * addr)
   return retval;
 }
 
-int test_bit(int nr, unsigned long * addr)
+static int test_bit(int nr, unsigned long * addr)
 {
   int  mask;
 
@@ -167,19 +167,20 @@ static int sysrq_pressed;
  * string, and in both cases we might assume that it is
  * in utf-8 already.
  */
-void to_utf8(ushort c) {
-    if (c < 0x80)
-  put_queue(c);      /*  0*******  */
-    else if (c < 0x800) {
-  put_queue(0xc0 | (c >> 6));   /*  110***** 10******  */
-  put_queue(0x80 | (c & 0x3f));
-    } else {
-  put_queue(0xe0 | (c >> 12));   /*  1110**** 10****** 10******  */
-  put_queue(0x80 | ((c >> 6) & 0x3f));
-  put_queue(0x80 | (c & 0x3f));
-    }
-    /* UTF-8 is defined for words of up to 31 bits,
-       but we need only 16 bits here */
+static void to_utf8(ushort c)
+{
+  if (c < 0x80)
+    put_queue(c);                  /*  0*******  */
+  else if (c < 0x800) {
+    put_queue(0xc0 | (c >> 6));    /*  110***** 10******  */
+    put_queue(0x80 | (c & 0x3f));
+  } else {
+    put_queue(0xe0 | (c >> 12));   /*  1110**** 10****** 10******  */
+    put_queue(0x80 | ((c >> 6) & 0x3f));
+    put_queue(0x80 | (c & 0x3f));
+  }
+  /* UTF-8 is defined for words of up to 31 bits,
+     but we need only 16 bits here */
 }
 
 /*
@@ -333,20 +334,19 @@ void handle_scancode(unsigned char scancode, int down)
 static void ( *driver_input_handler_kbd )( void *, unsigned short, unsigned long ) = 0;
 /*
  */
-void kbd_set_driver_handler( void ( *handler )( void *, unsigned short, unsigned long ) )
+void kbd_set_driver_handler(
+  void ( *handler )( void *, unsigned short, unsigned long )
+)
 {
   driver_input_handler_kbd = handler;
 }
 
 static void put_queue(int ch)
 {
-  if( driver_input_handler_kbd )
-  {
-     driver_input_handler_kbd(  ( void *)kbd, (unsigned short)ch,  0 );
-  }
-  else
-  {
-     add_to_queue( ch );
+  if ( driver_input_handler_kbd ) {
+    driver_input_handler_kbd(  ( void *)kbd, (unsigned short)ch,  0 );
+  } else {
+    add_to_queue( ch );
   }
 }
 
@@ -377,7 +377,6 @@ static void enter(void)
 
   if (vc_kbd_mode(kbd,VC_CRLF))
     put_queue(10);
-
 }
 
 static void caps_toggle(void)
@@ -403,12 +402,10 @@ static void hold(void)
   if (rep )
     return;
    chg_vc_kbd_led(kbd, VC_SCROLLOCK );
-
 }
 
 static void num(void)
 {
-
   if (vc_kbd_mode(kbd,VC_APPLIC))
     applkey('P', 1);
   else
@@ -771,39 +768,45 @@ static unsigned char ledstate = 0xff; /* undefined */
 static unsigned char ledioctl;
 
 unsigned char getledstate(void) {
-    return ledstate;
+  return ledstate;
 }
 
 void setledstate(struct kbd_struct *kbd, unsigned int led) {
-    if (!(led & ~7)) {
-  ledioctl = led;
-   kbd->ledmode = LED_SHOW_IOCTL;
-    } else
+  if (!(led & ~7)) {
+    ledioctl = led;
+     kbd->ledmode = LED_SHOW_IOCTL;
+  } else
     ;
-   kbd->ledmode = LED_SHOW_FLAGS;
-    set_leds();
+  kbd->ledmode = LED_SHOW_FLAGS;
+  set_leds();
 }
 
 static struct ledptr {
-    unsigned int *addr;
-    unsigned int mask;
-    unsigned char valid:1;
+  unsigned int *addr;
+  unsigned int mask;
+  unsigned char valid:1;
 } ledptrs[3];
 
-void register_leds(int console, unsigned int led,
-       unsigned int *addr, unsigned int mask) {
-    struct kbd_struct *kbd = kbd_table + console;
+void register_leds(
+  int console,
+  unsigned int led,
+  unsigned int *addr,
+  unsigned int mask
+)
+{
+  struct kbd_struct *kbd = kbd_table + console;
 
-   if (led < 3) {
-  ledptrs[led].addr = addr;
-  ledptrs[led].mask = mask;
-  ledptrs[led].valid = 1;
-  kbd->ledmode = LED_SHOW_MEM;
-    } else
-  kbd->ledmode = LED_SHOW_FLAGS;
+  if (led < 3) {
+    ledptrs[led].addr = addr;
+    ledptrs[led].mask = mask;
+    ledptrs[led].valid = 1;
+    kbd->ledmode = LED_SHOW_MEM;
+  } else
+    kbd->ledmode = LED_SHOW_FLAGS;
 }
 
-static inline unsigned char getleds(void){
+static inline unsigned char getleds(void)
+{
 
     struct kbd_struct *kbd = kbd_table + fg_console;
 

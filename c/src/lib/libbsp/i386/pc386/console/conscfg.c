@@ -5,7 +5,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,6 +21,7 @@
 #include "vgacons.h"
 #include <bsp/irq.h>
 #include <rtems/pci.h>
+#include <bsp/rtd316.h>
 
 #define VGA_CONSOLE_FUNCTIONS  &vgacons_fns
 #if 0
@@ -39,7 +40,7 @@
 
 #define CLOCK_RATE     (115200 * 16)
 
-uint8_t com_get_register(uint32_t addr, uint8_t i)
+static uint8_t com_get_register(uint32_t addr, uint8_t i)
 {
   register uint8_t val;
   
@@ -47,7 +48,7 @@ uint8_t com_get_register(uint32_t addr, uint8_t i)
   return val;
 }
 
-void com_set_register(uint32_t addr, uint8_t i, uint8_t val)
+static void com_set_register(uint32_t addr, uint8_t i, uint8_t val)
 {
   outport_byte( (addr + i),val );
 }

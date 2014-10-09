@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -46,6 +46,28 @@ rtems_device_driver rtd316_initialize(
   rtems_device_minor_number  minor,
   void                      *arg
 );
+
+/**
+ *  @brief RTD316 Obtain Register Helper
+ *
+ *  This method is used to read registers on the RTD316.
+ *
+ *  @param[in] addr is the base address
+ *  @param[in] reg is the register number
+ *
+ *  @return This method returns the value of the register.
+ */
+uint8_t rtd316_com_get_register(uint32_t addr, uint8_t reg);
+
+/**
+ *  @brief RTD316 Set Register Helper
+ *
+ *  This method is used to set registers on the RTD316.
+ *
+ *  @param[in] addr is the base address
+ *  @param[in] reg is the register number
+ */
+void rtd316_com_set_register(uint32_t addr,uint8_t reg, uint8_t val);
 
 #ifdef __cplusplus
 }
