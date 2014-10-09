@@ -457,7 +457,6 @@ IntUartInitialize(void)
     unsigned int        chan;
 	struct IntUartInfoStruct   *info;
 	rtems_isr_entry old_handler;
-    int level;
 
 	for ( chan = 0; chan < MAX_UART_INFO; chan++ )
 	{
