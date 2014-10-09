@@ -64,7 +64,7 @@ typedef struct __rtems_irq_connect_data__ {
    * processing after a debug session.
    *
    */
-    rtems_irq_enable            on;
+  rtems_irq_enable            on;
   /*
    * function for disabling interrupts at device level (ONLY!).
    * The code will disable it at i8259s level. RATIONALE : anyway
