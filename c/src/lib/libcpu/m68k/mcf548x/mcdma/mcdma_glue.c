@@ -21,6 +21,7 @@
 #include <bsp.h>
 #include <mcf548x/mcf548x.h>
 #include <mcf548x/MCD_dma.h>
+#include <mcf548x/mcdma_glue.h>
 
 #define MCDMA_INT_ENABLE(reg,chan)   (reg &= ~(1 << (chan)))
 #define MCDMA_INT_DISABLE(reg,chan)  (reg |=  (1 << (chan)))
@@ -130,7 +131,7 @@ void mcdma_glue_irq_install
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-rtems_isr mcdma_glue_irq_dispatcher
+static rtems_isr mcdma_glue_irq_dispatcher
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
