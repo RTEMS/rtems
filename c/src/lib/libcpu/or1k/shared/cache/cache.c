@@ -71,7 +71,7 @@ static inline void _CPU_OR1K_Cache_data_block_prefetch(const void *d_addr)
 
   _ISR_Disable (level);
 
-  _OR1K_mtspr(CPU_OR1K_SPR_DCBPR, d_addr);
+  _OR1K_mtspr(CPU_OR1K_SPR_DCBPR, (uintptr_t) d_addr);
 
   _ISR_Enable(level);
 }
@@ -81,7 +81,7 @@ static inline void _CPU_OR1K_Cache_data_block_flush(const void *d_addr)
    ISR_Level level;
   _ISR_Disable (level);
 
-  _OR1K_mtspr(CPU_OR1K_SPR_DCBFR, d_addr);
+  _OR1K_mtspr(CPU_OR1K_SPR_DCBFR, (uintptr_t) d_addr);
 
   _ISR_Enable(level);
 }
@@ -91,7 +91,7 @@ static inline void _CPU_OR1K_Cache_data_block_invalidate(const void *d_addr)
    ISR_Level level;
   _ISR_Disable (level);
 
-  _OR1K_mtspr(CPU_OR1K_SPR_DCBIR, d_addr);
+  _OR1K_mtspr(CPU_OR1K_SPR_DCBIR, (uintptr_t) d_addr);
 
   _ISR_Enable(level);
 }
@@ -101,7 +101,7 @@ static inline void _CPU_OR1K_Cache_data_block_writeback(const void *d_addr)
    ISR_Level level;
   _ISR_Disable (level);
 
-  _OR1K_mtspr(CPU_OR1K_SPR_DCBWR, d_addr);
+  _OR1K_mtspr(CPU_OR1K_SPR_DCBWR, (uintptr_t) d_addr);
 
   _ISR_Enable(level);
 }
@@ -111,7 +111,7 @@ static inline void _CPU_OR1K_Cache_data_block_lock(const void *d_addr)
    ISR_Level level;
   _ISR_Disable (level);
 
-  _OR1K_mtspr(CPU_OR1K_SPR_DCBLR, d_addr);
+  _OR1K_mtspr(CPU_OR1K_SPR_DCBLR, (uintptr_t) d_addr);
 
   _ISR_Enable(level);
 }
@@ -122,7 +122,7 @@ static inline void _CPU_OR1K_Cache_instruction_block_prefetch
    ISR_Level level;
   _ISR_Disable (level);
 
-  _OR1K_mtspr(CPU_OR1K_SPR_ICBPR, d_addr);
+  _OR1K_mtspr(CPU_OR1K_SPR_ICBPR, (uintptr_t) d_addr);
 
   _ISR_Enable(level);
 }
@@ -133,7 +133,7 @@ static inline void _CPU_OR1K_Cache_instruction_block_invalidate
    ISR_Level level;
   _ISR_Disable (level);
 
-  _OR1K_mtspr(CPU_OR1K_SPR_ICBIR, d_addr);
+  _OR1K_mtspr(CPU_OR1K_SPR_ICBIR, (uintptr_t) d_addr);
 
   _ISR_Enable(level);
 }
@@ -144,7 +144,7 @@ static inline void _CPU_OR1K_Cache_instruction_block_lock
    ISR_Level level;
   _ISR_Disable (level);
 
-  _OR1K_mtspr(CPU_OR1K_SPR_ICBLR, d_addr);
+  _OR1K_mtspr(CPU_OR1K_SPR_ICBLR, (uintptr_t) d_addr);
 
   _ISR_Enable(level);
 }
