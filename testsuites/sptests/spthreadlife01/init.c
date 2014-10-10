@@ -136,16 +136,20 @@ static void restart_extension(
   rtems_status_code sc;
 
   rtems_test_assert(executing == restarted);
-  rtems_test_assert(ctx->worker_task_id == rtems_task_self());
 
   switch (ctx->current) {
     case RESTART_0:
+      rtems_test_assert(ctx->worker_task_id == rtems_task_self());
       ctx->current = RESTART_1;
       sc = rtems_task_restart(RTEMS_SELF, 0);
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
       break;
     case RESTART_1:
+      rtems_test_assert(ctx->worker_task_id == rtems_task_self());
       ctx->current = RESTART_2;
+      break;
+    case INIT:
+      /* Restart via _Thread_Global_construction() */
       break;
     default:
       rtems_test_assert(0);

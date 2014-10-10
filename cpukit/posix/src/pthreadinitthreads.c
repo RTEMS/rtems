@@ -34,6 +34,7 @@
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/time.h>
+#include <rtems/rtems/config.h>
 
 void _POSIX_Threads_Initialize_user_threads_body(void)
 {
@@ -43,12 +44,17 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
   posix_initialization_threads_table *user_threads;
   pthread_t                           thread_id;
   pthread_attr_t                      attr;
+  bool                                register_global_construction;
+  void                             *(*thread_entry)(void *);
 
   user_threads = Configuration_POSIX_API.User_initialization_threads_table;
   maximum      = Configuration_POSIX_API.number_of_initialization_threads;
 
-  if ( !user_threads || maximum == 0 )
+  if ( !user_threads )
     return;
+
+  register_global_construction =
+    Configuration_RTEMS_API.number_of_initialization_tasks == 0;
 
   /*
    *  Be careful .. if the default attribute set changes, this may need to.
@@ -68,10 +74,17 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
     eno = pthread_attr_setstacksize(&attr, user_threads[ index ].stack_size);
     _Assert( eno == 0 );
 
+    thread_entry = user_threads[ index ].thread_entry;
+
+    if ( register_global_construction && thread_entry != NULL ) {
+      register_global_construction = false;
+      thread_entry = (void *(*)(void *)) _Thread_Global_construction;
+    }
+
     eno = pthread_create(
       &thread_id,
       &attr,
-      user_threads[ index ].thread_entry,
+      thread_entry,
       NULL
     );
     if ( eno )

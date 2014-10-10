@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: psxglobalcon01
+
+directives:
+
+  - _Thread_Global_construction()
+
+concepts:
+
+  - Ensure that the global construction is performed exactly once in case only
+    a POSIX initialization thread is present.

@@ -305,6 +305,16 @@ void _Thread_Load_environment(
 void _Thread_Handler( void );
 
 /**
+ * @brief Executes the global constructors and then restarts itself as the
+ * first initialization thread.
+ *
+ * The first initialization thread is the first RTEMS initialization task or
+ * the first POSIX initialization thread in case no RTEMS initialization tasks
+ * are present.
+ */
+void *_Thread_Global_construction( void );
+
+/**
  *  @brief Ended the delay of a thread.
  *
  *  This routine is invoked when a thread must be unblocked at the

@@ -50,6 +50,7 @@ _SUBDIRS += spcache01
 _SUBDIRS += sptls03
 _SUBDIRS += spcpucounter01
 if HAS_CPLUSPLUS
+_SUBDIRS += spglobalcon01
 _SUBDIRS += sptls02
 endif
 _SUBDIRS += sptls01

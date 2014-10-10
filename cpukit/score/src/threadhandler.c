@@ -24,76 +24,11 @@
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/userextimpl.h>
 
-/*
- *  Conditional magic to determine what style of C++ constructor
- *  initialization this target and compiler version uses.
- */
-#if defined(__USE_INIT_FINI__)
-  #if defined(__M32R__)
-    #define INIT_NAME __init
-  #elif defined(__ARM_EABI__)
-    #define INIT_NAME __libc_init_array
-  #else
-    #define INIT_NAME _init
-  #endif
-
-  extern void INIT_NAME(void);
-  #define EXECUTE_GLOBAL_CONSTRUCTORS
-#endif
-
-#if defined(__USE__MAIN__)
-  extern void __main(void);
-  #define INIT_NAME __main
-  #define EXECUTE_GLOBAL_CONSTRUCTORS
-#endif
-
-#if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
-  static bool _Thread_Handler_is_constructor_execution_required(
-    Thread_Control *executing
-  )
-  {
-    static bool doneConstructors;
-    bool doCons = false;
-
-    #if defined(RTEMS_SMP)
-      static SMP_lock_Control constructor_lock =
-        SMP_LOCK_INITIALIZER("constructor");
-
-      SMP_lock_Context lock_context;
-
-      if ( !doneConstructors ) {
-        _SMP_lock_Acquire( &constructor_lock, &lock_context );
-    #endif
-
-    #if defined(RTEMS_MULTIPROCESSING)
-      doCons = !doneConstructors
-        && _Objects_Get_API( executing->Object.id ) != OBJECTS_INTERNAL_API;
-      if (doCons)
-        doneConstructors = true;
-    #else
-      (void) executing;
-      doCons = !doneConstructors;
-      doneConstructors = true;
-    #endif
-
-    #if defined(RTEMS_SMP)
-        _SMP_lock_Release( &constructor_lock, &lock_context );
-      }
-    #endif
-
-    return doCons;
-  }
-#endif
-
 void _Thread_Handler( void )
 {
-  ISR_Level  level;
-  Thread_Control *executing;
-  #if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
-    bool doCons;
-  #endif
+  Thread_Control *executing = _Thread_Executing;
+  ISR_Level       level;
 
-  executing = _Thread_Executing;
 
   /*
    * Some CPUs need to tinker with the call frame or registers when the
@@ -109,10 +44,6 @@ void _Thread_Handler( void )
      */
     level = executing->Start.isr_level;
     _ISR_Set_level( level );
-  #endif
-
-  #if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
-    doCons = _Thread_Handler_is_constructor_execution_required( executing );
   #endif
 
   /*
@@ -170,17 +101,6 @@ void _Thread_Handler( void )
   #else
     _Thread_Enable_dispatch();
   #endif
-
-  #if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
-    /*
-     *  _init could be a weak symbol and we SHOULD test it but it isn't
-     *  in any configuration I know of and it generates a warning on every
-     *  RTEMS target configuration.  --joel (12 May 2007)
-     */
-    if (doCons) /* && (volatile void *)_init) */ {
-      INIT_NAME ();
-    }
- #endif
 
   /*
    *  RTEMS supports multiple APIs and each API can define a different

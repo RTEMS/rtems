@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spglobalcon01
+
+directives:
+
+  - _Thread_Global_construction()
+
+concepts:
+
+  - Ensure that the global construction is not performed in case the idle
+    thread initializes the application.
