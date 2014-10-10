@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -50,13 +50,13 @@ void bsp_pretasking_hook(void)
       RTEMS_Malloc_Heap,
       lpc24xx_region_heap_0_begin,
       (uintptr_t) lpc24xx_region_heap_0_size,
-      NULL
+      0
     );
     _Heap_Extend(
       RTEMS_Malloc_Heap,
       lpc24xx_region_heap_1_begin,
       (uintptr_t) lpc24xx_region_heap_1_size,
-      NULL
+      0
     );
   #endif
 }
