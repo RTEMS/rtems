@@ -180,7 +180,7 @@ uint8_t psc_minor_to_regset[MPC5200_PSC_NO] = {0,1,2,3,4,6};
 /* Used to track termios private data for callbacks */
 struct rtems_termios_tty *ttyp[NUM_PORTS];
 
-int mpc5200_psc_setAttributes(
+static int mpc5200_psc_setAttributes(
   int                   minor,
   const struct termios *t
 )
@@ -264,7 +264,7 @@ int mpc5200_psc_setAttributes(
 }
 
 
-int mpc5200_uart_setAttributes(int minor, const struct termios *t)
+static int mpc5200_uart_setAttributes(int minor, const struct termios *t)
 {
   /*
    * Check that port number is valid
@@ -361,7 +361,7 @@ static void mpc5200_psc_interrupt_handler(rtems_irq_hdl_param handle)
   }
 }
 
-void mpc5200_psc_enable(
+static void mpc5200_psc_enable(
   const rtems_irq_connect_data* ptr
 )
 {
@@ -376,7 +376,7 @@ void mpc5200_psc_enable(
 }
 
 
-void mpc5200_psc_disable(
+static void mpc5200_psc_disable(
   const rtems_irq_connect_data* ptr
 )
 {
@@ -390,7 +390,7 @@ void mpc5200_psc_disable(
   }
 }
 
-int mpc5200_psc_isOn(
+static int mpc5200_psc_isOn(
   const rtems_irq_connect_data* ptr
 )
 {
@@ -408,7 +408,7 @@ int mpc5200_psc_isOn(
 static rtems_irq_connect_data consoleIrqData;
 #endif
 
-void mpc5200_uart_psc_initialize(
+static void mpc5200_uart_psc_initialize(
   int minor
 )
 {
@@ -532,7 +532,7 @@ void mpc5200_uart_psc_initialize(
 }
 
 
-int mpc5200_uart_pollRead(
+static int mpc5200_uart_pollRead(
   int minor
 )
 {
@@ -549,7 +549,7 @@ int mpc5200_uart_pollRead(
 }
 
 
-ssize_t mpc5200_uart_pollWrite(
+static ssize_t mpc5200_uart_pollWrite(
   int minor,
   const char *buf,
   size_t len
@@ -575,7 +575,7 @@ ssize_t mpc5200_uart_pollWrite(
 
 }
 
-ssize_t mpc5200_uart_write(
+static ssize_t mpc5200_uart_write(
   int         minor,
   const char *buf,
   size_t len

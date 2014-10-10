@@ -503,7 +503,7 @@ static void dispatch(uint32_t irq, uint32_t offset, volatile uint32_t *maskreg)
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned excNum)
+static int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned excNum)
 {
   uint32_t irq;
   uint32_t pmce;
@@ -622,7 +622,7 @@ int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned excNum)
 /*
  * setup irqMaskTable to support a priorized/nested interrupt environment
  */
-void setup_irqMaskTable( void)
+static void setup_irqMaskTable( void)
 {
   rtems_irq_prio prio = 0;
   uint32_t i = 0,
@@ -669,7 +669,7 @@ void setup_irqMaskTable( void)
 /*
  * Initialize MPC5x00 SIU interrupt management
  */
-void BSP_SIU_irq_init( void)
+static void BSP_SIU_irq_init( void)
 {
 
   /* disable all peripheral interrupts */

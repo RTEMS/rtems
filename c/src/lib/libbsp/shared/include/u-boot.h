@@ -45,6 +45,9 @@ extern bd_t bsp_uboot_board_info;
 
 void bsp_uboot_copy_board_info(const bd_t *src);
 
+/* FIXME: Do not use this function */
+void dumpUBootBDInfo(bd_t *u);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

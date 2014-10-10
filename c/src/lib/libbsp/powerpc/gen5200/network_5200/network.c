@@ -443,7 +443,7 @@ static void mpc5200_fec_reset(mpc5200_fec_context *self)
  * Notes:
  *
  */
-void mpc5200_fec_off(mpc5200_fec_context *self)
+static void mpc5200_fec_off(mpc5200_fec_context *self)
   {
   int            counter = 0xffff;
 
@@ -502,7 +502,7 @@ void mpc5200_fec_off(mpc5200_fec_context *self)
 /*
  * MPC5200 FEC interrupt handler
  */
-void mpc5200_fec_irq_handler(rtems_irq_hdl_param handle)
+static void mpc5200_fec_irq_handler(rtems_irq_hdl_param handle)
 {
   mpc5200_fec_context *self = (mpc5200_fec_context *) handle;
   volatile uint32_t ievent;
@@ -537,7 +537,7 @@ void mpc5200_fec_irq_handler(rtems_irq_hdl_param handle)
   }
 }
 
-void mpc5200_smartcomm_rx_irq_handler(void *arg)
+static void mpc5200_smartcomm_rx_irq_handler(void *arg)
 {
   mpc5200_fec_context *self = arg;
 
@@ -547,7 +547,7 @@ void mpc5200_smartcomm_rx_irq_handler(void *arg)
   bestcomm_glue_irq_disable(FEC_RECV_TASK_NO);
 }
 
-void mpc5200_smartcomm_tx_irq_handler(void *arg)
+static void mpc5200_smartcomm_tx_irq_handler(void *arg)
 {
   mpc5200_fec_context *self = arg;
 
@@ -559,7 +559,7 @@ void mpc5200_smartcomm_tx_irq_handler(void *arg)
 
 static void mpc5200_fec_init_mib(mpc5200_fec_context *self)
 {
-  memset(&mpc5200.RES [0], 0, 0x2e4);
+  memset(RTEMS_DEVOLATILE(uint8_t *, &mpc5200.RES [0]), 0, 0x2e4);
   mpc5200.mib_control = 0x40000000;
 }
 
@@ -1294,7 +1294,7 @@ static void enet_stats (mpc5200_fec_context *self)
   printf ("       Tx Misaligned:%-8lu\n", self->txMisaligned);
 }
 
-int32_t mpc5200_fec_setMultiFilter(struct ifnet *ifp)
+static int32_t mpc5200_fec_setMultiFilter(struct ifnet *ifp)
 {
   /*mpc5200_fec_context *self = ifp->if_softc; */
   /* XXX anything to do? */
@@ -1397,7 +1397,7 @@ static int mpc5200_fec_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_
 /*
  * Attach the MPC5200 fec driver to the system
  */
-int rtems_mpc5200_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
+static int rtems_mpc5200_fec_driver_attach(struct rtems_bsdnet_ifconfig *config)
   {
   mpc5200_fec_context *self;
   struct ifnet *ifp;

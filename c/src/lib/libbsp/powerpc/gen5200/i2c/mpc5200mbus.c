@@ -438,7 +438,7 @@ mpc5200mbus_machine(mpc5200mbus *bus, i2c_event event)
  * RETURNS:
  *     none
  */
-void mpc5200mbus_interrupt_handler(rtems_irq_hdl_param handle)
+static void mpc5200mbus_interrupt_handler(rtems_irq_hdl_param handle)
 {
     i2c_event event;
     mpc5200mbus *bus = handle;
@@ -456,7 +456,7 @@ void mpc5200mbus_interrupt_handler(rtems_irq_hdl_param handle)
  * mpc5200_mbus_irq_enable
  *    enable irq for mbus
  */
-void mpc5200mbus_irq_enable(const rtems_irq_connect_data* ptr)
+static void mpc5200mbus_irq_enable(const rtems_irq_connect_data* ptr)
 {
   int minor = ((mpc5200mbus*)(ptr->handle))->bus_idx;
 
@@ -467,7 +467,7 @@ void mpc5200mbus_irq_enable(const rtems_irq_connect_data* ptr)
  * mpc5200_mbus_irq_disable
  *    enable irq for mbus
  */
-void mpc5200mbus_irq_disable(const rtems_irq_connect_data* ptr)
+static void mpc5200mbus_irq_disable(const rtems_irq_connect_data* ptr)
 {
   int minor = ((mpc5200mbus*)(ptr->handle))->bus_idx;
 
@@ -478,7 +478,7 @@ void mpc5200mbus_irq_disable(const rtems_irq_connect_data* ptr)
  * mpc5200_mbus_isOn
  *    check, whether irq is enabled
  */
-int mpc5200mbus_irq_isOn(const rtems_irq_connect_data* ptr)
+static int mpc5200mbus_irq_isOn(const rtems_irq_connect_data* ptr)
 {
   int minor = ((mpc5200mbus*)(ptr->handle))->bus_idx;
 

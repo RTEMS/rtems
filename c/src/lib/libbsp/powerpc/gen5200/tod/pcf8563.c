@@ -58,7 +58,7 @@
  * PARAMETERS:
  *     minor -- minor RTC device number
  */
-void
+static void
 pcf8563_initialize(int minor)
 {
     i2c_message_status status;
@@ -103,7 +103,7 @@ pcf8563_initialize(int minor)
  *     0, if time obtained successfully
  *     -1, if error occured
  */
-int
+static int
 pcf8563_get_time(int minor, rtems_time_of_day *time)
 {
     i2c_bus_number bus;
@@ -170,7 +170,7 @@ pcf8563_get_time(int minor, rtems_time_of_day *time)
  *     0, if time obtained successfully
  *     -1, if error occured
  */
-int
+static int
 pcf8563_set_time(int minor, const rtems_time_of_day *time)
 {
     i2c_bus_number bus;

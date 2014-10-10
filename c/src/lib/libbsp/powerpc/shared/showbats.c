@@ -14,6 +14,7 @@
 #include <bsp.h>
 #include <rtems/bspIo.h>
 #include <libcpu/spr.h>
+#include <libcpu/powerpc-utility.h>
 
 void printBAT( int bat, uint32_t upper, uint32_t lower )
 {

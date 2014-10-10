@@ -822,6 +822,12 @@ static inline uint32_t ppc_fsl_system_version_mnrev(uint32_t svr)
 
 void ppc_code_copy(void *dest, const void *src, size_t n);
 
+/* FIXME: Do not use this function */
+void printBAT(int bat, uint32_t upper, uint32_t lower);
+
+/* FIXME: Do not use this function */
+void ShowBATS(void);
+
 #endif /* ifndef ASM */
 
 #if defined(ASM)

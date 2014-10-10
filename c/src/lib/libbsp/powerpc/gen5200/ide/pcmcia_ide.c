@@ -138,7 +138,7 @@ void mpc5200_pcmciaide_dma_blockop(
 /*
  * support functions for PCMCIA IDE IF
  */
-bool mpc5200_pcmciaide_probe(int minor)
+static bool mpc5200_pcmciaide_probe(int minor)
   {
   bool ide_card_plugged = false; /* assume: we don't have a card plugged in */
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[GPT2]);
@@ -181,7 +181,7 @@ bool mpc5200_pcmciaide_probe(int minor)
 #define DMA2_TJ(val) BSP_BFLD32(COUNT_VAL(val), 8, 15)
 #define DMA2_TN(val) BSP_BFLD32(COUNT_VAL(val), 16, 23)
 
-rtems_status_code mpc5200_pcmciaide_config_io_speed(int minor, uint16_t modes_avail)
+static rtems_status_code mpc5200_pcmciaide_config_io_speed(int minor, uint16_t modes_avail)
   {
   uint8_t pio_t0, pio_t2_8, pio_t2_16, pio_t4, pio_t1, pio_ta;
 
@@ -221,7 +221,7 @@ rtems_status_code mpc5200_pcmciaide_config_io_speed(int minor, uint16_t modes_av
 
 
 
-void mpc5200_pcmciaide_read_reg(int minor, int reg, uint16_t *value)
+static void mpc5200_pcmciaide_read_reg(int minor, int reg, uint16_t *value)
   {
   volatile uint32_t *ata_reg = mpc5200_ata_drive_regs[reg];
 
@@ -232,7 +232,7 @@ void mpc5200_pcmciaide_read_reg(int minor, int reg, uint16_t *value)
   }
 
 
-void mpc5200_pcmciaide_write_reg(int minor, int reg, uint16_t value)
+static void mpc5200_pcmciaide_write_reg(int minor, int reg, uint16_t value)
   {
   volatile uint32_t *ata_reg = mpc5200_ata_drive_regs[reg];
 
@@ -465,8 +465,8 @@ void mpc5200_pcmciaide_dma_blockop(bool is_write,
 }
 
 
-void mpc5200_pcmciaide_read_block(int minor, uint32_t block_size, rtems_blkdev_sg_buffer *bufs,
-                                  uint32_t *cbuf, uint32_t *pos)
+static void mpc5200_pcmciaide_read_block(int minor, uint32_t block_size,
+    rtems_blkdev_sg_buffer *bufs, uint32_t *cbuf, uint32_t *pos)
 {
 
   volatile uint32_t *ata_reg=mpc5200_ata_drive_regs[IDE_REGISTER_DATA_WORD];
@@ -543,10 +543,8 @@ void mpc5200_pcmciaide_read_block(int minor, uint32_t block_size, rtems_blkdev_s
   }
 }
 
-void mpc5200_pcmciaide_write_block(int minor, uint32_t block_size,
-                                   rtems_blkdev_sg_buffer *bufs, uint32_t *cbuf,
-                                   uint32_t *pos)
-
+static void mpc5200_pcmciaide_write_block(int minor, uint32_t block_size,
+    rtems_blkdev_sg_buffer *bufs, uint32_t *cbuf, uint32_t *pos)
 {
 
 
@@ -635,12 +633,12 @@ void mpc5200_pcmciaide_write_block(int minor, uint32_t block_size,
   }
 }
 
-int mpc5200_pcmciaide_control(int  minor, uint32_t cmd, void * arg)
+static int mpc5200_pcmciaide_control(int  minor, uint32_t cmd, void * arg)
   {
   return RTEMS_SUCCESSFUL;
   }
 
-void mpc5200_pcmciaide_initialize(int minor)
+static void mpc5200_pcmciaide_initialize(int minor)
   {
 #if defined (MPC5200_BOARD_BRS5L)
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[GPT7]);

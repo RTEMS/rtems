@@ -230,7 +230,7 @@ uint32_t mpc5200_check_slt_status(uint32_t slt_no)
 /*
  *  switch MPC5x00 slt on
  */
-void sltOn(const rtems_irq_connect_data* irq)
+static void sltOn(const rtems_irq_connect_data* irq)
   {
   uint32_t slt_no = 0;
 
@@ -248,7 +248,7 @@ void sltOn(const rtems_irq_connect_data* irq)
 /*
  *  switch MPC5x00 slt off
  */
-void sltOff(const rtems_irq_connect_data* irq)
+static void sltOff(const rtems_irq_connect_data* irq)
   {
   uint32_t slt_no = 0;
 
@@ -265,7 +265,7 @@ void sltOff(const rtems_irq_connect_data* irq)
 /*
  *  get status of MPC5x00 slt
  */
-int sltIsOn(const rtems_irq_connect_data* irq)
+static int sltIsOn(const rtems_irq_connect_data* irq)
   {
   uint32_t slt_no = 0;
 

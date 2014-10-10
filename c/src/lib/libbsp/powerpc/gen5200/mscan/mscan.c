@@ -352,7 +352,7 @@ static void mscan_interrupts_enable(mscan *m)
 /*
  * Unmask MPC5x00 MSCAN_A interrupts
  */
-void mpc5200_mscan_a_on(const rtems_irq_connect_data * ptr)
+static void mpc5200_mscan_a_on(const rtems_irq_connect_data * ptr)
 {
   mscan *m = (&chan_info[MSCAN_A])->regs;
 
@@ -365,7 +365,7 @@ void mpc5200_mscan_a_on(const rtems_irq_connect_data * ptr)
 /*
  * Mask MPC5x00 MSCAN_A interrupts
  */
-void mpc5200_mscan_a_off(const rtems_irq_connect_data * ptr)
+static void mpc5200_mscan_a_off(const rtems_irq_connect_data * ptr)
 {
   mscan *m = (&chan_info[MSCAN_A])->regs;
 
@@ -378,7 +378,7 @@ void mpc5200_mscan_a_off(const rtems_irq_connect_data * ptr)
 /*
  *  Get MSCAN_A interrupt mask setting
  */
-int mpc5200_mscan_a_isOn(const rtems_irq_connect_data * ptr)
+static int mpc5200_mscan_a_isOn(const rtems_irq_connect_data * ptr)
 {
   mscan *m = (&chan_info[MSCAN_A])->regs;
 
@@ -394,7 +394,7 @@ int mpc5200_mscan_a_isOn(const rtems_irq_connect_data * ptr)
 /*
  * Unmask MPC5x00 MSCAN_B interrupts
  */
-void mpc5200_mscan_b_on(const rtems_irq_connect_data * ptr)
+static void mpc5200_mscan_b_on(const rtems_irq_connect_data * ptr)
 {
   mscan *m = (&chan_info[MSCAN_B])->regs;
 
@@ -407,7 +407,7 @@ void mpc5200_mscan_b_on(const rtems_irq_connect_data * ptr)
 /*
  * Mask MPC5x00 MSCAN_B interrupts
  */
-void mpc5200_mscan_b_off(const rtems_irq_connect_data * ptr)
+static void mpc5200_mscan_b_off(const rtems_irq_connect_data * ptr)
 {
   mscan *m = (&chan_info[MSCAN_B])->regs;
 
@@ -420,7 +420,7 @@ void mpc5200_mscan_b_off(const rtems_irq_connect_data * ptr)
 /*
  *  Get MSCAN_B interrupt mask setting
  */
-int mpc5200_mscan_b_isOn(const rtems_irq_connect_data * ptr)
+static int mpc5200_mscan_b_isOn(const rtems_irq_connect_data * ptr)
 {
   mscan *m = (&chan_info[MSCAN_B])->regs;
 
@@ -491,7 +491,7 @@ void mpc5200_mscan_wait_sync(mscan *m)
 /*
  * MPC5x00 MSCAN perform settings in init mode
  */
-void mpc5200_mscan_perform_initialization_mode_settings(mscan *m)
+static void mpc5200_mscan_perform_initialization_mode_settings(mscan *m)
 {
   mscan_context context;
 
@@ -829,13 +829,11 @@ rtems_device_driver mscan_close(rtems_device_major_number major,
                                 rtems_device_minor_number minor, void *arg)
 {
   rtems_status_code status;
-  struct mscan_channel_info *chan = NULL;
 
   switch (minor) {
 
     case MSCAN_A:
     case MSCAN_B:
-      chan = &chan_info[minor];
       break;
 
     default:
@@ -912,14 +910,12 @@ rtems_device_driver mscan_write(rtems_device_major_number major,
   struct mscan_tx_parms *tx_parms = (struct mscan_tx_parms *) (parms->buffer);
   struct can_message *tx_mess = (struct can_message *) (tx_parms->tx_mess);
   struct mscan_channel_info *chan = NULL;
-  mscan_handle *mscan_hdl = NULL;
   mscan *m = NULL;
 
   switch (minor) {
     case MSCAN_A:
     case MSCAN_B:
       chan = &chan_info[minor];
-      mscan_hdl = mpc5200_mscan_irq_data[minor].handle;
       m = chan->regs;
       break;
 

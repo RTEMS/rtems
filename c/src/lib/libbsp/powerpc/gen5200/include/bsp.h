@@ -254,6 +254,13 @@ void BSP_IRQ_Benchmarking_Report(void);
 
 void cpu_init(void);
 
+int mpc5200_eth_mii_read(
+  int phyAddr,
+  void *arg,
+  unsigned regAddr,
+  uint32_t *retVal
+);
+
 #ifdef __cplusplus
 }
 #endif

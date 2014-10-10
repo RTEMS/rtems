@@ -9,6 +9,7 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <bsp.h>
 
 /* Assumed to be provided by BSP */
 extern const uint8_t *uboot_environment;

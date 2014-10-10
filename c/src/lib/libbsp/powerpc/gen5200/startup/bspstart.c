@@ -126,16 +126,13 @@ void _BSP_Fatal_error(unsigned int v)
 
 void bsp_start(void)
 {
-  ppc_cpu_id_t myCpu;
-  ppc_cpu_revision_t myCpuRevision;
-
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
    * function store the result in global variables so that it can be used
    * later...
    */
-  myCpu         = get_ppc_cpu_type();
-  myCpuRevision = get_ppc_cpu_revision();
+  get_ppc_cpu_type();
+  get_ppc_cpu_revision();
 
   #if defined(HAS_UBOOT) && defined(SHOW_MORE_INIT_SETTINGS)
     {
