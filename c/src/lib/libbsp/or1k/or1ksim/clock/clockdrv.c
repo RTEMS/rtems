@@ -137,8 +137,8 @@ CPU_Counter_ticks _CPU_Counter_difference(
 
 #define Clock_driver_support_install_isr(isr, old_isr) \
   do {                                                 \
-    or1ksim_clock_handler_install(isr, old_isr);               \
     old_isr = NULL;                                    \
+    or1ksim_clock_handler_install(isr, old_isr);       \
   } while (0)
 
 #define Clock_driver_support_shutdown_hardware() or1ksim_clock_cleanup()

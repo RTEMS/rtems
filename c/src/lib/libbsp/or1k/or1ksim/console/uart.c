@@ -21,6 +21,14 @@
 #include <bsp/uart.h>
 #include <rtems/score/isr.h>
 
+static void uart_initialize(int minor);
+static int  uart_first_open(int major, int minor, void *arg);
+static int  uart_last_close(int major, int minor, void *arg);
+static int  uart_read_polled(int minor);
+static ssize_t uart_write(int minor, const char *buf, size_t len);
+static void uart_write_polled(int minor, char c);
+static int  uart_set_attributes(int minor, const struct termios *t);
+
 static rtems_vector_number uart_get_irq_number(const console_tbl *ct)
 {
    return ct->ulIntVector;
@@ -86,10 +94,9 @@ static int uart_last_close(int major, int minor, void *arg)
   return 0;
 }
 
-static char uart_read_polled(int minor)
+static int uart_read_polled(int minor)
 {
   unsigned char lsr;
-  char c;
 
  /* Get a character when avaiable */
   do {
@@ -120,7 +127,7 @@ static void uart_write_polled(int minor, char c)
   } while ( (lsr & transmit_finished) != transmit_finished );
 }
 
-static ssize_t uart_write_support_polled(
+static ssize_t uart_write(
   int minor,
   const char *s,
   size_t n
@@ -145,7 +152,7 @@ const console_fns or1ksim_uart_fns = {
   .deviceFirstOpen = uart_first_open,
   .deviceLastClose = uart_last_close,
   .deviceRead = uart_read_polled,
-  .deviceWrite = uart_write_support_polled,
+  .deviceWrite = uart_write,
   .deviceInitialize = uart_initialize,
   .deviceWritePolled = uart_write_polled,
   .deviceSetAttributes = uart_set_attributes,
