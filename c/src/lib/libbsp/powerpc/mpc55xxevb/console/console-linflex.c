@@ -5,10 +5,10 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -50,7 +50,7 @@ mpc55xx_linflex_context mpc55xx_linflex_devices [] = {
   }
 };
 
-void enter_init_mode(volatile LINFLEX_tag *regs)
+static void enter_init_mode(volatile LINFLEX_tag *regs)
 {
   LINFLEX_LINCR1_32B_tag cr1 = { .R = regs->LINCR1.R };
   cr1.B.SLEEP = 0;
@@ -58,7 +58,7 @@ void enter_init_mode(volatile LINFLEX_tag *regs)
   regs->LINCR1.R = cr1.R;
 }
 
-void enter_active_mode(volatile LINFLEX_tag *regs)
+static void enter_active_mode(volatile LINFLEX_tag *regs)
 {
   LINFLEX_LINCR1_32B_tag cr1 = { .R = regs->LINCR1.R };
   cr1.B.SLEEP = 0;
@@ -66,7 +66,7 @@ void enter_active_mode(volatile LINFLEX_tag *regs)
   regs->LINCR1.R = cr1.R;
 }
 
-void enter_sleep_mode(volatile LINFLEX_tag *regs)
+static void enter_sleep_mode(volatile LINFLEX_tag *regs)
 {
   LINFLEX_LINCR1_32B_tag cr1 = { .R = regs->LINCR1.R };
   cr1.B.SLEEP = 1;
