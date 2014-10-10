@@ -23,7 +23,6 @@
 #include <at91rm9200_usart.h>
 
 /* Function prototypes */
-extern void rtems_exception_init_mngt(void);
 static void fix_mac_addr(void);
 void bsp_usart_init(void);
 
@@ -57,6 +56,7 @@ void bsp_start_default( void )
   /*
    * Init rtems exceptions management
    */
+  /* FIXME: Use shared start.S */
   rtems_exception_init_mngt();
 
   /*

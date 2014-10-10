@@ -12,9 +12,6 @@
 #include <rtems/libio.h>
 #include <pxa255.h>
 
-/* Function prototypes */
-void rtems_exception_init_mngt(void);
-
 /*
  *
  * NAME: bsp_start_default - BSP initialization function
@@ -33,6 +30,7 @@ void bsp_start_default( void )
 {
   /* disable interrupts */
   XSCALE_INT_ICMR = 0x0;
+  /* FIXME: Use shared start.S */
   rtems_exception_init_mngt();
   bsp_interrupt_initialize();
 } /* bsp_start */

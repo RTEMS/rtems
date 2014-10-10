@@ -14,11 +14,6 @@
 #include <uart.h>
 
 /*
- * Function prototypes
- */
-extern void rtems_exception_init_mngt(void);
-
-/*
  * NAME: bsp_start_default - BSP initialization function
  *
  *   This function is called before RTEMS is initialized
@@ -38,6 +33,7 @@ void bsp_start_default( void )
   /*
    * Init rtems exceptions management
    */
+  /* FIXME: Use shared start.S */
   rtems_exception_init_mngt();
 
   /*

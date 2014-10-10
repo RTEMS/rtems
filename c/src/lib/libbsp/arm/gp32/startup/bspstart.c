@@ -19,11 +19,6 @@
 #include <s3c24xx.h>
 
 /*
- * External Prototypes
- */
-extern void rtems_exception_init_mngt(void);
-
-/*
  *  BSP Specific Initialization in C
  */
 void bsp_start_default( void )
@@ -78,6 +73,7 @@ void bsp_start_default( void )
   /*
    * Init rtems exceptions management
    */
+  /* FIXME: Use shared start.S */
   rtems_exception_init_mngt();
 
   /*

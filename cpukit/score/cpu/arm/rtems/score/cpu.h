@@ -695,6 +695,12 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
 void _ARM_Exception_default( CPU_Exception_frame *frame );
 
+/*
+ * FIXME: In case your BSP uses this function, then convert it to use
+ * the shared start.S file for ARM.
+ */
+void rtems_exception_init_mngt( void );
+
 /** @} */
 
 #ifdef __cplusplus

@@ -15,7 +15,6 @@
 /*
  * Function prototypes
  */
-extern void rtems_exception_init_mngt(void);
 extern void  UART0_Ini(void);
 extern void printi(unsigned long);
 
@@ -80,6 +79,7 @@ void bsp_start_default( void )
   /*
    * Init rtems exceptions management
    */
+  /* FIXME: Use shared start.S */
   rtems_exception_init_mngt();
 
   /*
