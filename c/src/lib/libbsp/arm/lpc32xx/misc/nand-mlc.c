@@ -203,7 +203,7 @@ void lpc32xx_mlc_write_protection(
   mlc->icr |= MLC_ICR_SOFT_WRITE_PROT;
 }
 
-bool is_word_aligned(const void *data, const void *spare)
+static bool is_word_aligned(const void *data, const void *spare)
 {
   return (((uintptr_t) data) | ((uintptr_t) spare)) % 4 == 0;
 }
