@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -17,6 +17,7 @@
 #endif
 
 #include <stdio.h>
+#include <inttypes.h>
 
 #include <rtems/libio_.h>
 #include <rtems/shell.h>
@@ -39,14 +40,14 @@ static void lsof(void)
 
     fprintf(
       stdout,
-      "%c %c %s %s -> %s root 0x%08x -> 0x%08x\n",
+      "%c %c %s %s -> %s root 0x%08" PRIxPTR " -> 0x%08" PRIxPTR "\n",
       mt_entry->mounted ? 'M' : 'U',
       mt_entry->writeable ? 'W' : 'R',
       mt_entry->type,
       mt_entry->target,
       mt_entry->dev == NULL ? "none" : mt_entry->dev,
-      (unsigned)mt_entry->mt_fs_root,
-      (unsigned)mt_entry->mt_fs_root->location.node_access
+      (uintptr_t) mt_entry->mt_fs_root,
+      (uintptr_t) mt_entry->mt_fs_root->location.node_access
     );
 
     for (
@@ -59,9 +60,9 @@ static void lsof(void)
 
       fprintf(
         stdout,
-        "\t0x%08x -> 0x%08x\n",
-        (unsigned)loc,
-        (unsigned)loc->node_access
+        "\t0x%08" PRIxPTR " -> 0x%08" PRIxPTR "\n",
+        (uintptr_t) loc,
+        (uintptr_t) loc->node_access
       );
     }
   }
