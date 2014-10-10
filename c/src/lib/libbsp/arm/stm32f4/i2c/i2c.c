@@ -208,8 +208,6 @@ static void stm32f4_i2c_handler(void *arg)
 
 static rtems_status_code i2c_wait_done(stm32f4_i2c_bus_entry *e)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-
   bsp_interrupt_vector_enable(e->vector);
   e->task_id = rtems_task_self();
   return rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
