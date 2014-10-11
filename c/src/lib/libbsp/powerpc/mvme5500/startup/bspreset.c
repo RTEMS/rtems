@@ -3,8 +3,8 @@
  *
  */
 
-#include <rtems.h>
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
 #include <libcpu/io.h>
 #include <libcpu/stackTrace.h>
