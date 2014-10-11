@@ -14,8 +14,7 @@
  */
 
 #include <rtems.h>
-
-void bsp_reset(void);
+#include <bsp/bootcard.h>
 
 void bsp_reset(void)
 {
