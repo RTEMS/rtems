@@ -9,6 +9,7 @@
  *  http://www.rtems.org/license/LICENSE.
 */
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <at91rm9200.h>
 #include <at91rm9200_pmc.h>
 #include <at91rm9200_emac.h>
