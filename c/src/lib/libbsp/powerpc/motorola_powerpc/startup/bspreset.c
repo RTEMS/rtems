@@ -1,6 +1,7 @@
-#include "../../shared/console/console.inl"
+#include <bsp.h>
 #include <rtems/bspIo.h>
 #include <libcpu/stackTrace.h>
+#include <bsp/bootcard.h>
 
 /*-------------------------------------------------------------------------+
 |         Function: bsp_reset
