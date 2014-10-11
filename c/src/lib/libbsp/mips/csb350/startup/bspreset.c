@@ -6,7 +6,9 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
  */
+
 #include <rtems.h>
+#include <bsp/bootcard.h>
 #include <libcpu/au1x00.h>
 
 void bsp_reset(void)
