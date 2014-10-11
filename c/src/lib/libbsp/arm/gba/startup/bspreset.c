@@ -5,7 +5,7 @@
  */
 
 #include <bsp.h>
-#include <gba.h>
+#include <bsp/bootcard.h>
 
 void bsp_reset(void)
 {
