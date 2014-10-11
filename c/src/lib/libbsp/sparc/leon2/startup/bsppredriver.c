@@ -15,13 +15,8 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
-/*
- *  bsp_predriver_hook
- *
- *  BSP predriver hook. Called just before drivers are initialized.
- *  Is used to initialize shared interrupt handling.
- */
 void bsp_predriver_hook( void )
 {
   /* Initialize shared interrupt handling, must be done after IRQ

@@ -1,4 +1,5 @@
 #include <rasta.h>
+#include <grcan_rasta.h>
 
 /* PCI frequency */
 #define SYS_FREQ_HZ 30000000

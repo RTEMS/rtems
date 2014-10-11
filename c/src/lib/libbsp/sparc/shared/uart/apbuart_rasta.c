@@ -1,5 +1,7 @@
 #undef DEBUG
 
+#include <apbuart_rasta.h>
+
 /* Set registered device name */
 #define APBUART_DEVNAME "/dev/apburasta0"
 #define APBUART_DEVNAME_NO(devstr,no) ((devstr)[14]='0'+(no))

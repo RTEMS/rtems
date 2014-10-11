@@ -126,7 +126,7 @@ static rtems_isr rasta_interrupt_handler (rtems_vector_number v)
 
 }
 
-void rasta_interrrupt_register(void *handler, int irqno, void *arg)
+static void rasta_interrrupt_register(void *handler, int irqno, void *arg)
 {
   DBG("RASTA: Registering irq %d\n",irqno);
   if ( irqno == UART0_IRQNO ){
@@ -201,8 +201,9 @@ void rasta_interrrupt_register(void *handler, int irqno, void *arg)
 }
 
 
-int rasta_get_gpio(struct ambapp_bus *abus, int index, struct gpio_reg **regs,
-                   int *irq)
+static int rasta_get_gpio(
+  struct ambapp_bus *abus, int index, struct gpio_reg **regs,
+  int *irq)
 {
   struct ambapp_apb_info dev;
   int cores;
@@ -231,7 +232,7 @@ static struct ambapp_mmap amba_maps[3];
 
 int rasta_register(void)
 {
-    unsigned int bar0, bar1, data;
+    uint32_t bar0, bar1, data;
 
     unsigned int *page0 = NULL;
     unsigned int *apb_base = NULL;

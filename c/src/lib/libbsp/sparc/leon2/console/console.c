@@ -26,10 +26,9 @@
  *
  *  This routine transmits a character using polling.
  */
-
 void console_outbyte_polled(
-  int  port,
-  char ch
+  int           port,
+  unsigned char ch
 );
 
 /* body is in debugputs.c */
@@ -274,7 +273,7 @@ void console_outbyte_interrupt(
  *
  */
 
-ssize_t console_write_support (int minor, const char *buf, size_t len)
+static ssize_t console_write_support (int minor, const char *buf, size_t len)
 {
   int nwrite = 0;
 
@@ -375,6 +374,7 @@ rtems_device_driver console_open(
 #else
   sc = rtems_termios_open (major, minor, arg, &pollCallbacks);
 #endif
+  (void) sc; /* avoid set but not used warning */
 
   return RTEMS_SUCCESSFUL;
 }

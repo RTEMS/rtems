@@ -1,3 +1,6 @@
+#include <rtems.h>
+#include <grspw_rasta.h>
+
 /* Select PCI driver */
 #define GRSPW_PCI
 
@@ -74,7 +77,7 @@ void (*grspw_rasta_int_reg)(void *handler, int irq, void *arg) = 0;
 static int grspw_rasta_calc_memoffs(int maxcores, int corenum, unsigned int *mem_base, unsigned int *mem_end, unsigned int *bdtable_base);
 #endif
 
-int grspw_rasta_interrupt_handler(unsigned int status);
+void grspw_rasta_interrupt_handler(unsigned int status);
 
 void grspwrasta_interrupt_handler(int irq, void *pDev);
 
@@ -106,7 +109,7 @@ int grspw_rasta_register(
  * which GRSPW core was responsible for the IRQ (may be multiple).
  * v = status of the PCI/AMBA MCPU IRQ CTRL
  */
-int grspw_rasta_interrupt_handler(unsigned int status)
+void grspw_rasta_interrupt_handler(unsigned int status)
 {
         int minor;
 

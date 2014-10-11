@@ -28,7 +28,7 @@
 /*
  * Default location of device registers
  */
-#define OPEN_ETH_BASE_ADDRESS 0xb0000000
+#define OPEN_ETH_BASE_ADDRESS ((void *)0xb0000000)
 
 /*
  * Default interrupt vector
@@ -36,11 +36,11 @@
 #define OPEN_ETH_VECTOR 0x1C
 
 open_eth_configuration_t leon_open_eth_configuration = {
-  OPEN_ETH_BASE_ADDRESS,        /* base address */
-  OPEN_ETH_VECTOR,              /* vector number */
+  OPEN_ETH_BASE_ADDRESS,     /* base address */
+  OPEN_ETH_VECTOR,           /* vector number */
   TDA_COUNT,                 /* number of transmit descriptors */
   RDA_COUNT,                 /* number of receive descriptors */
-  0                   /* 100 MHz operation */
+  0                          /* 100 MHz operation */
 };
 
 int rtems_leon_open_eth_driver_attach(struct rtems_bsdnet_ifconfig *config)

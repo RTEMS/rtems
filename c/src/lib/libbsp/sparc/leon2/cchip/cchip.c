@@ -92,7 +92,7 @@ typedef struct {
   amba_bridge_regs *ambab;
 
   /* AT697 PCI */
-  unsigned int bars[5];
+  uint32_t bars[5];
   int bus, dev, fun;
 
   /* AMBA bus */
@@ -108,8 +108,9 @@ typedef struct {
 
 cchip1 cc1;
 
-int init_pcif(void){
-  unsigned int com1;
+static int init_pcif(void)
+{
+  uint32_t com1;
   int i,bus,dev,fun;
   pci_bridge_regs *pcib;
   amba_bridge_regs *ambab;
@@ -202,7 +203,8 @@ int init_pcif(void){
 #ifndef GAISLER_FTAHBRAM
  #define GAISLER_FTAHBRAM 0x50
 #endif
-int init_onboard_sram(void){
+static int init_onboard_sram(void)
+{
   struct ambapp_ahb_info ahb;
   struct ambapp_apb_info apb;
   unsigned int conf, size;
@@ -241,7 +243,8 @@ int init_onboard_sram(void){
   return 0;
 }
 
-int cchip1_register(void){
+int cchip1_register(void)
+{
 
   /* Init AT697 PCI Controller */
   init_pci();

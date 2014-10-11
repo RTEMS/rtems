@@ -79,7 +79,7 @@ extern int rtems_smc91111_driver_attach_leon2(
 
 /* Configure GRETH driver */
 #define GRETH_SUPPORTED
-#define GRETH_MEM_LOAD(addr) leon_r32_no_cache(addr)
+#define GRETH_MEM_LOAD(addr) leon_r32_no_cache((uintptr_t) addr)
 
 /*
  *  The synchronous trap is an arbitrarily chosen software trap.
@@ -197,6 +197,10 @@ extern void BSP_shared_interrupt_unmask(int irq);
  */
 extern void BSP_shared_interrupt_mask(int irq);
 
+/*
+ * Delat method
+ */
+void rtems_bsp_delay(int usecs);
 #ifdef __cplusplus
 }
 #endif

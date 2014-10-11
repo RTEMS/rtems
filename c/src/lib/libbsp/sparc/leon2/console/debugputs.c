@@ -23,6 +23,12 @@
 #include <assert.h>
 
 /*
+ *  Method is shared with console.c
+ */
+void console_outbyte_polled( int port, unsigned char ch );
+int console_inbyte_nonblocking( int port );
+
+/*
  *  console_outbyte_polled
  *
  *  This routine transmits a character using polling.
