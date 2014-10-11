@@ -7,6 +7,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <ep7312.h>
 
 void bsp_reset(void)
