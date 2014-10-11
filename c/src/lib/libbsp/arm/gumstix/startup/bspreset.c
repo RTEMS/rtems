@@ -7,9 +7,7 @@
  */
 
 #include <bsp.h>
-#include <bsp/irq-generic.h>
-#include <rtems/libcsupport.h>
-#include <rtems/libio.h>
+#include <bsp/bootcard.h>
 #include <pxa255.h>
 
 void bsp_reset( void )
