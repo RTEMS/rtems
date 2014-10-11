@@ -7,6 +7,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 void bsp_reset(void)
 {
