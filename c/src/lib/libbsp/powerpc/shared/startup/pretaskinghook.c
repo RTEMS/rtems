@@ -1,8 +1,10 @@
 /*
  *  bsp_pretasking_hook().
  *  Initializes the heap, libc and VME.
- *
- *  COPYRIGHT (c) 1989-1998.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,6 +18,7 @@
 #include <string.h>
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #ifndef BSP_HAS_NO_VME
 #include <bsp/VME.h>
 #endif
