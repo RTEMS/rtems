@@ -1,12 +1,9 @@
-/*  Clock_init()
- *
+/*
  *  This routine initializes the Tick Timer 2 on the MVME147 board.
  *  The tick frequency is 1 millisecond.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -34,17 +31,9 @@ rtems_isr_entry  Old_ticker;
 void Clock_exit( void );
 
 /*
- * These are set by clock driver during its init
- */
-
-rtems_device_major_number rtems_clock_major = ~0;
-rtems_device_minor_number rtems_clock_minor;
-
-/*
  *  ISR Handler
  */
-
-rtems_isr Clock_isr(rtems_vector_number vector)
+static rtems_isr Clock_isr(rtems_vector_number vector)
 {
   Clock_driver_ticks += 1;
   pcc->timer2_int_control |= 0x80; /* Acknowledge interr. */
@@ -57,7 +46,7 @@ rtems_isr Clock_isr(rtems_vector_number vector)
     Clock_isrs -= 1;
 }
 
-void Install_clock(rtems_isr_entry clock_isr )
+static void Install_clock(rtems_isr_entry clock_isr )
 {
 
   Clock_driver_ticks = 0;
@@ -87,13 +76,6 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
-
-  /*
-   * make major/minor avail to others such as shared memory driver
-   */
-
-  rtems_clock_major = major;
-  rtems_clock_minor = minor;
 
   return RTEMS_SUCCESSFUL;
 }
