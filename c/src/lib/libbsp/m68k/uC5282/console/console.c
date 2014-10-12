@@ -50,7 +50,9 @@ _BSP_null_char( char c )
         continue;
 	rtems_interrupt_enable(level);
 }
-BSP_output_char_function_type BSP_output_char = _BSP_null_char;
+
+BSP_polling_getchar_function_type       BSP_poll_char = NULL;
+BSP_output_char_function_type           BSP_output_char = _BSP_null_char;
 
 /*
  * The MCF5282 has three UARTs.  Enable all them here.  I/O pin selection
@@ -769,26 +771,4 @@ rtems_device_driver console_control(
 {
     return( rtems_termios_ioctl (arg) );
 }
-int DEBUG_OUTCHAR(int c)
-{
-    if(c == '\n')
-        DEBUG_OUTCHAR('\r');
-    _BSP_null_char(c);
-    return c;
-}
-void DEBUG_OUTSTR(const char *msg)
-{
-    while (*msg)
-        DEBUG_OUTCHAR(*msg++);
-}
-void DEBUG_OUTNUM(int i)
-{
-    int n;
-    static const char map[] = "0123456789ABCDEF";
-    DEBUG_OUTCHAR(' ');
-    for (n = 28 ; n >= 0 ; n -= 4)
-        DEBUG_OUTCHAR(map[(i >> n) & 0xF]);
-}
-
-BSP_polling_getchar_function_type       BSP_poll_char = NULL;
 
