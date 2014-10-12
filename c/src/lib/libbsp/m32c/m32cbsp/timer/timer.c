@@ -1,7 +1,9 @@
 /*
  *  This file implements a stub benchmark timer that is sufficient to
  *  satisfy linking the RTEMS Benchmarks.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2001.
  *  On-Line Applications Research Corporation (OAR).
  */
@@ -20,6 +22,8 @@ uint32_t benchmark_timer_overhead = 10;
 #define TA0IC *((uint8_t *)0x6c)
 
 static int benchmark_timer_interrupts;
+
+static void __attribute__((interrupt)) timer_ra_interrupt(void);
 
 #define ivec_timer_a0 12
 
