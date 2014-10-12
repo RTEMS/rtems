@@ -46,8 +46,8 @@
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
 
-#include <rtems.h>
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 void
 bsp_reset(void)
