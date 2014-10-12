@@ -196,6 +196,12 @@ unsigned int SCORE603e_FLASH_Enable_writes(
 #define Convert_Endian_16( _data ) \
   ( ((_data&0x00ff)<<8) | ((_data&0xff00)>>8) )
 
+/*
+ *  Interfaces to required Clock Driver support methods
+ */
+int BSP_disconnect_clock_handler(void);
+int BSP_connect_clock_handler(void);
+
 #endif /* ASM */
 
 #ifdef __cplusplus
