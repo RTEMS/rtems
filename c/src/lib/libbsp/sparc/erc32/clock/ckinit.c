@@ -1,12 +1,12 @@
 /*
- *  Clock Tick Device Driver
- *
  *  This routine initializes the Real Time Clock Counter Timer which is
  *  part of the MEC on the ERC32 CPU.
  *
  *  The tick frequency is directly programmed to the configured number of
  *  microseconds per tick.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -33,7 +33,6 @@
 /*
  *  The Real Time Clock Counter Timer uses this trap type.
  */
-
 #define CLOCK_VECTOR ERC32_TRAP_TYPE( ERC32_INTERRUPT_REAL_TIME_CLOCK )
 
 #define Clock_driver_support_at_tick()
@@ -45,7 +44,7 @@
 
 extern int CLOCK_SPEED;
 
-uint32_t bsp_clock_nanoseconds_since_last_tick(void)
+static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
   uint32_t clicks;
   uint32_t usecs;
