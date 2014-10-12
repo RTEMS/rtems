@@ -1,13 +1,10 @@
-/*  Clock_init()
- *
+/*
  *  This routine initailizes the periodic interrupt timer on
  *  the Motorola 68332.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,24 +18,13 @@
 
 #define CLOCK_VECTOR   MRM_PIV
 
-uint32_t         Clock_isrs;        /* ISRs until next tick */
-volatile uint32_t         Clock_driver_ticks;
-                                    /* ticks since initialization */
-rtems_isr_entry  Old_ticker;
+uint32_t                Clock_isrs;         /* ISRs until next tick */
+volatile uint32_t       Clock_driver_ticks; /* ticks since initialization */
+static rtems_isr_entry  Old_ticker;
 
 void Clock_exit( void );
 
-/*
- * These are set by clock driver during its init
- */
-
-rtems_device_major_number rtems_clock_major = ~0;
-rtems_device_minor_number rtems_clock_minor;
-
-rtems_isr Clock_isr(rtems_vector_number vector);
-void Install_clock(rtems_isr_entry clock_isr);
-
-rtems_isr Clock_isr(rtems_vector_number vector)
+static rtems_isr Clock_isr(rtems_vector_number vector)
 {
   Clock_driver_ticks += 1;
 
@@ -50,7 +36,7 @@ rtems_isr Clock_isr(rtems_vector_number vector)
     Clock_isrs -= 1;
 }
 
-void Install_clock(rtems_isr_entry clock_isr)
+static void Install_clock(rtems_isr_entry clock_isr)
 {
   Clock_driver_ticks = 0;
   Clock_isrs = rtems_configuration_get_microseconds_per_tick() / 1000;
@@ -82,13 +68,6 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
-
-  /*
-   * make major/minor avail to others such as shared memory driver
-   */
-
-  rtems_clock_major = major;
-  rtems_clock_minor = minor;
 
   return RTEMS_SUCCESSFUL;
 }
