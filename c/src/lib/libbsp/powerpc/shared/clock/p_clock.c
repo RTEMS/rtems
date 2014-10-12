@@ -1,6 +1,8 @@
 /*
  *  Clock Tick interrupt conexion code.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -18,21 +20,24 @@
 #include <libcpu/cpuIdent.h>
 
 static rtems_irq_connect_data clockIrqData;
-static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
-					      clockIsr,
-                                              NULL,
-					      (rtems_irq_enable)clockOn,
-					      (rtems_irq_disable)clockOff,
-					      (rtems_irq_is_enabled) clockIsOn};
-int BSP_disconnect_clock_handler (void)
+static rtems_irq_connect_data clockIrqData = {
+  BSP_DECREMENTER,
+  clockIsr,
+  NULL,
+  (rtems_irq_enable)clockOn,
+  (rtems_irq_disable)clockOff,
+  (rtems_irq_is_enabled) clockIsOn
+};
+
+int BSP_disconnect_clock_handler(void)
 {
-  return BSP_remove_rtems_irq_handler (&clockIrqData);
+  return BSP_remove_rtems_irq_handler(&clockIrqData);
 }
 
-int BSP_connect_clock_handler (void)
+int BSP_connect_clock_handler(void)
 {
   if ( ppc_cpu_is_bookE() )
-  	clockIrqData.hdl = clockIsrBookE;
+    clockIrqData.hdl = clockIsrBookE;
 
-  return BSP_install_rtems_irq_handler (&clockIrqData);
+  return BSP_install_rtems_irq_handler(&clockIrqData);
 }
