@@ -1,5 +1,7 @@
 /*  RTEMS Clock Tick Driver for Blackfin.  Uses Blackfin Core Timer.
- *
+ */
+
+/*
  *  Copyright (c) 2008 Kallisti Labs, Los Gatos, CA, USA
  *             written by Allan Hessenflow <allanh@kallisti.com>
  *
@@ -25,13 +27,6 @@ volatile uint32_t Clock_driver_ticks;
 
 void Clock_exit(void);
 
-/*
- *  Major and minor number.
- */
-
-rtems_device_major_number rtems_clock_major = ~0;
-rtems_device_minor_number rtems_clock_minor;
-
 static rtems_isr clockISR(rtems_vector_number vector) {
 
   Clock_driver_ticks += 1;
@@ -49,23 +44,14 @@ static rtems_isr clockISR(rtems_vector_number vector) {
 #endif
 }
 
-
 /*
  *  Clock_exit
  *
  *  This routine allows the clock driver to exit by masking the interrupt and
  *  disabling the clock's counter.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- *
  */
-
-void Clock_exit(void) {
-
+void Clock_exit(void)
+{
   *(uint32_t volatile *) TCNTL = 0;
 }
 
@@ -73,22 +59,13 @@ void Clock_exit(void) {
  *  Clock_initialize
  *
  *  This routine initializes the clock driver.
- *
- *  Input parameters:
- *    major - clock device major number
- *    minor - clock device minor number
- *    parg  - pointer to optional device driver arguments
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    rtems_device_driver status code
  */
-
-rtems_device_driver Clock_initialize(rtems_device_major_number major,
-                                     rtems_device_minor_number minor,
-                                     void *pargp) {
-
+rtems_device_driver Clock_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *pargp
+)
+{
   Clock_driver_ticks = 0;
 
   set_vector(clockISR, CEC_CORE_TIMER_VECTOR, 1);
@@ -100,12 +77,6 @@ rtems_device_driver Clock_initialize(rtems_device_major_number major,
   *(uint32_t volatile *) TCNTL = TCNTL_TMPWR | TCNTL_TAUTORLD | TCNTL_TMREN;
 
   atexit(Clock_exit);
-  /*
-   * make major/minor avail to others such as shared memory driver
-   */
-
-  rtems_clock_major = major;
-  rtems_clock_minor = minor;
 
   return RTEMS_SUCCESSFUL;
 }

@@ -1,5 +1,7 @@
 /*  Real Time Clock Driver for Blackfin
- *
+ */
+
+/*
  *  Copyright (c) 2006 by Atos Automacao Industrial Ltda.
  *             written by Alain Schaefer <alain.schaefer@easc.ch>
  *                    and Antonio Giovanini <antonio@atos.com.br>
@@ -30,13 +32,12 @@ int Leap_years_until_now (int year);
 
 void Init_RTC(void)
 {
-  *((uint16_t*)RTC_PREN)    = RTC_PREN_PREN; /* Enable Prescaler */
+  *((uint16_t*)RTC_PREN) = RTC_PREN_PREN; /* Enable Prescaler */
 }
 
 /*
  *  Read time from RTEMS' clock manager and set it to RTC
  */
-
 void setRealTimeFromRTEMS (void)
 {
   rtems_time_of_day time_buffer;
@@ -51,7 +52,6 @@ void setRealTimeFromRTEMS (void)
 /*
  *  Read real time from RTC and set it to RTEMS' clock manager
  */
-
 void setRealTimeToRTEMS (void)
 {
   rtems_time_of_day time_buffer;
@@ -60,9 +60,9 @@ void setRealTimeToRTEMS (void)
   rtems_clock_set( &time_buffer );
 }
 
- /*
-  * Set the RTC time
-  */
+/*
+ * Set the RTC time
+ */
 int setRealTime(
   const rtems_time_of_day *tod
 )
@@ -87,10 +87,9 @@ int setRealTime(
   return 0;
 }
 
- /*
-  *  Get the time from the RTC.
-  */
-
+/*
+ *  Get the time from the RTC.
+ */
 void getRealTime(
   rtems_time_of_day *tod
 )
@@ -134,7 +133,6 @@ void getRealTime(
  *  Return the difference between RTC and RTEMS' clock manager time in minutes.
  *  If the difference is greater than 1 day, this returns 9999.
  */
-
 int checkRealTime (void)
 {
   rtems_time_of_day rtems_tod;
