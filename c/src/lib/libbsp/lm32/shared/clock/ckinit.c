@@ -1,7 +1,8 @@
-/*  ckinit.c
- *
+/*
  *  Clock device driver for Lattice Mico32 (lm32).
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -36,7 +37,6 @@ static inline void clockwrite(unsigned int reg, int value)
  *  The interrupt vector number associated with the clock tick device
  *  driver.
  */
-
 #define CLOCK_VECTOR    ( TIMER0_IRQ )
 #define CLOCK_IRQMASK   ( 1 << CLOCK_VECTOR )
 
@@ -52,7 +52,7 @@ static inline void clockwrite(unsigned int reg, int value)
     _old = (rtems_isr_entry) set_vector( _new, CLOCK_VECTOR, 1 ); \
   } while (0)
 
-void Clock_driver_support_initialize_hardware(void)
+static void Clock_driver_support_initialize_hardware(void)
 {
   /* Set clock period */
   clockwrite(LM32_CLOCK_PERIOD,
@@ -67,7 +67,7 @@ void Clock_driver_support_initialize_hardware(void)
   lm32_interrupt_unmask(CLOCK_IRQMASK);
 }
 
-void Clock_driver_support_shutdown_hardware(void)
+static void Clock_driver_support_shutdown_hardware(void)
 {
   /* Disable clock interrupts and stop */
 

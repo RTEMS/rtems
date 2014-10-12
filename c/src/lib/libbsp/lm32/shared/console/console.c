@@ -1,6 +1,8 @@
 /*
  *  Console driver for Lattice Mico32 (lm32).
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -25,14 +27,7 @@ char BSP_uart_is_character_ready(char *ch);
 /*  console_initialize
  *
  *  This routine initializes the console IO driver.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
  */
-
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
@@ -55,37 +50,11 @@ rtems_device_driver console_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
-/*  is_character_ready
- *
- *  This routine returns TRUE if a character is available.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- */
-
-bool is_character_ready(
-  char *ch
-)
-{
-  return BSP_uart_is_character_ready(ch);
-}
-
 /*  inbyte
  *
  *  This routine reads a character from the SOURCE.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    character read from SOURCE
  */
-
-int inbyte( void )
+static int inbyte( void )
 {
   /*
    *  If polling, wait until a character is available.
@@ -98,14 +67,8 @@ int inbyte( void )
  *
  *  This routine transmits a character out the SOURCE.  It may support
  *  XON/XOFF flow control.
- *
- *  Input parameters:
- *    ch  - character to be transmitted
- *
- *  Output parameters:  NONE
  */
-
-void outbyte(
+static void outbyte(
   char ch
 )
 {
@@ -121,7 +84,6 @@ void outbyte(
 /*
  *  Open entry point
  */
-
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -134,7 +96,6 @@ rtems_device_driver console_open(
 /*
  *  Close entry point
  */
-
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -147,7 +108,6 @@ rtems_device_driver console_close(
 /*
  * read bytes from the serial port. We only have stdin.
  */
-
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -179,7 +139,6 @@ rtems_device_driver console_read(
 /*
  * write bytes to the serial port. Stdout and stderr are the same.
  */
-
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -210,7 +169,6 @@ rtems_device_driver console_write(
 /*
  *  IO Control entry point
  */
-
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
