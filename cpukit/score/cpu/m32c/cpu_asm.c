@@ -36,15 +36,16 @@
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
 
+void _ISR_Handler(void);
+
 /*  void __ISR_Handler()
  *
  *  This routine provides the RTEMS interrupt management.
  *
- *  NO_CPU Specific Information:
+ *  M32C Specific Information:
  *
- *  XXX document implementation including references if appropriate
+ *  Interrupts are not currently supported.
  */
-
 void _ISR_Handler(void)
 {
    /*

@@ -842,7 +842,7 @@ void _CPU_Context_Initialize(
  */
 void _CPU_Context_Restart_self(
   Context_Control  *the_context
-);
+) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /**
  * @ingroup CPUContext
