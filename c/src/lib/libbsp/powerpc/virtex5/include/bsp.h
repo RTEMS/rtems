@@ -88,6 +88,11 @@ extern unsigned int BSP_time_base_divisor;
 #define BSP_Convert_decrementer( _value ) \
   ((unsigned long long) ((((unsigned long long)BSP_time_base_divisor) * 1000000ULL) /((unsigned long long) BSP_bus_frequency)) * ((unsigned long long) (_value)))
 
+/*
+ *  Interfaces to required Clock Driver support methods
+ */
+int BSP_disconnect_clock_handler(void);
+int BSP_connect_clock_handler(void);
 
 #endif /* ASM */
 
