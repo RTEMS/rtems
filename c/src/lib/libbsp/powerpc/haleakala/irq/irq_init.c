@@ -36,8 +36,15 @@ static int not_connected(void)
 static rtems_irq_connect_data      rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings   initial_config;
 static rtems_irq_connect_data      defaultIrq = {
-  /* name,     hdl   , handle  , on       , off      , isOn */
-      0,    nop_func , NULL    , nop_func , nop_func , not_connected
+  .name   = 0,
+  .hdl    = NULL,
+  .handle = NULL,
+  .on     = (rtems_irq_enable) nop_func,
+  .off    = (rtems_irq_disable) nop_func,
+  .isOn   = (rtems_irq_is_enabled) not_connected,
+#ifdef BSP_SHARED_HANDLER_SUPPORT
+  .next_handler = NULL
+#endif
 };
 
 static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={

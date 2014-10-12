@@ -105,7 +105,7 @@ InitUARTClock(void)
   mtsdr(SDR0_UART0,reg);
 }
 
-void GPIO_AlternateSelect(int bitnum, int source)
+static void GPIO_AlternateSelect(int bitnum, int source)
 /* PPC405EX: select a GPIO function for the specified pin */
 {
   int shift;
@@ -124,7 +124,7 @@ void GPIO_AlternateSelect(int bitnum, int source)
   }
 }
 
-void Init_FPGA(void)
+static void Init_FPGA(void)
 {
   /* Have to write to the FPGA to enable the UART drivers */
   /* Have to enable CS2 as an output in GPIO to get the FPGA working */
@@ -161,9 +161,6 @@ BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
 void bsp_start( void )
 {
-  ppc_cpu_id_t myCpu;
-  ppc_cpu_revision_t myCpuRevision;
-
   /* Get the UART clock initialized first in case we call printk */
 
   InitUARTClock();
@@ -175,8 +172,8 @@ void bsp_start( void )
    * function store the result in global variables
    * so that it can be used later...
    */
-  myCpu       = get_ppc_cpu_type();
-  myCpuRevision = get_ppc_cpu_revision();
+  get_ppc_cpu_type();
+  get_ppc_cpu_revision();
 
   /*
    *  initialize the device driver parameters
@@ -205,7 +202,7 @@ void bsp_start( void )
   BSP_rtems_irq_mng_init(0);
 }
 
-void BSP_ask_for_reset(void)
+static void BSP_ask_for_reset(void)
 {
   printk("system stopped, press RESET");
   while(1) {};
@@ -219,6 +216,7 @@ void BSP_panic(char *s)
 
 void _BSP_Fatal_error(unsigned int v)
 {
-  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
+  printk("%s FATAL ERROR %x\n",_RTEMS_version, v);
   BSP_ask_for_reset();
 }
+
