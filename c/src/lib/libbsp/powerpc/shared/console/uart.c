@@ -82,8 +82,7 @@ uwrite(int uart, int reg, unsigned int val)
 }
 
 
-#ifdef UARTDEBUG
-    static void
+static void
 uartError(int uart, void *termiosPrivate)
 {
   unsigned char uartStatus, dummy;
@@ -92,6 +91,7 @@ uartError(int uart, void *termiosPrivate)
   uartStatus = uread(uart, LSR);
   dummy = uread(uart, RBR);
 
+#ifdef UARTDEBUG
   if (uartStatus & OE)
     printk("********* Over run Error **********\n");
   if (uartStatus & PE)
@@ -100,32 +100,18 @@ uartError(int uart, void *termiosPrivate)
     printk("********* Framing Error  **********\n");
   if (uartStatus & BI) {
     printk("********* BREAK INTERRUPT *********\n");
-	if ((h=uart_data[uart].breakCallback.handler))
-		h(uart,
-		  (dummy<<8)|uartStatus,
-		  termiosPrivate,
-		  uart_data[uart].breakCallback.private);
-
+#endif
+   if ((h=uart_data[uart].breakCallback.handler)) {
+     h(uart,
+       (dummy<<8)|uartStatus,
+       termiosPrivate,
+       uart_data[uart].breakCallback.private);
   }
+#ifdef UARTDEBUG
   if (uartStatus & ERFIFO)
     printk("********* Error receive Fifo **********\n");
-
-}
-#else
-inline void uartError(int uart, void *termiosPrivate)
-{
-  unsigned char uartStatus,dummy;
-  BSP_UartBreakCbProc		h;
-
-  uartStatus = uread(uart, LSR);
-  dummy		 = uread(uart, RBR);
-  if ((uartStatus & BI) && (h=uart_data[uart].breakCallback.handler))
-		h(uart,
-		  (dummy<<8)|uartStatus,
-		  termiosPrivate,
-		  uart_data[uart].breakCallback.private);
-}
 #endif
+}
 
 /*
  * Uart initialization, it is hardcoded to 8 bit, no parity,
@@ -197,6 +183,7 @@ BSP_uart_init(int uart, int baud, int hwFlow)
   tmp = uread(uart, LSR);
   tmp = uread(uart, RBR);
   tmp = uread(uart, MSR);
+  (void) tmp; /* avoid set but not used warning */
 
   /* Remember state */
   uart_data[uart].hwFlow     = hwFlow;
