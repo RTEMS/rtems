@@ -37,7 +37,7 @@ void Init5225x(void)
    * Copy the vector table to RAM 
    */
 
-  if (&_VBR != _INTERRUPT_VECTOR) {
+  if (&_VBR != (void *)_INTERRUPT_VECTOR) {
     sp = (uint32_t *) _INTERRUPT_VECTOR;
     dp = (uint32_t *) &_VBR;
     for (i = 0; i < 256; i++) {

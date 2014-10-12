@@ -479,7 +479,7 @@ static int IntUartTaskRead(int minor)
    Description : This reads a character from the internal uart. It returns 
    to the caller without blocking if not character is waiting.
  ***************************************************************************/
-/*static*/
+static
 int IntUartPollRead(int minor)
 {
   if ((MCF_UART_USR(minor) & MCF_UART_USR_RXRDY) == 0)
