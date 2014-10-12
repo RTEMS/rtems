@@ -452,7 +452,7 @@ _returnFromException (void)
   return_to_prog ();
 }
 
-int
+static int
 hex (char ch)
 {
   if ((ch >= 'a') && (ch <= 'f'))
@@ -597,7 +597,7 @@ get_char (char *addr)
   return *addr;
 }
 
-void
+static void
 set_char (char *addr, int val)
 {
   *addr = val;

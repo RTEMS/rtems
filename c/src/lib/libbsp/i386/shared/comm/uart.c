@@ -632,7 +632,7 @@ BSP_uart_termios_write_com2(int minor, const char *buf, size_t len)
 }
 
 void
-BSP_uart_termios_isr_com1(void)
+BSP_uart_termios_isr_com1(void *ignored)
 {
   unsigned char buf[40];
   unsigned char val;
@@ -728,7 +728,7 @@ BSP_uart_termios_isr_com1(void)
 }
 
 void
-BSP_uart_termios_isr_com2(void)
+BSP_uart_termios_isr_com2(void *ignored)
 {
   unsigned char buf[40];
   unsigned char val;

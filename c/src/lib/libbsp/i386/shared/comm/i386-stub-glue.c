@@ -49,17 +49,17 @@ i386_stub_glue_init(int uart)
   BSP_uart_init(uart, 115200, CHR_8_BITS, 0, 0, 0);
 }
 
-void BSP_uart_on(const rtems_raw_irq_connect_data* used)
+static void BSP_uart_on(const rtems_raw_irq_connect_data* used)
 {
   BSP_irq_enable_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
 }
 
-void BSP_uart_off(const rtems_raw_irq_connect_data* used)
+static void BSP_uart_off(const rtems_raw_irq_connect_data* used)
 {
   BSP_irq_disable_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
 }
 
-int BSP_uart_isOn(const rtems_raw_irq_connect_data* used)
+static int BSP_uart_isOn(const rtems_raw_irq_connect_data* used)
 {
   return BSP_irq_enabled_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
 }
