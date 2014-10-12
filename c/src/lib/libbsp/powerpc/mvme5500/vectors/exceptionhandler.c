@@ -48,6 +48,7 @@
 
 #include <bsp.h>
 #include <bsp/vectors.h>
+#include <bsp/bootcard.h>
 #include <libcpu/spr.h>
 #include <bsp/pci.h>
 #include <rtems/bspIo.h>

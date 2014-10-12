@@ -29,27 +29,23 @@ static void nop_func(void){}
  * default isOn function
  */
 static int not_connected(void) {return 0;}
-/*
- * default possible isOn function
- */
-static int connected(void) {return 1;}
 
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings     	initial_config;
 
+static rtems_irq_connect_data     	defaultIrq = {
+  .name   = 0,
+  .hdl    = NULL,
+  .handle = NULL,
+  .on     = (rtems_irq_enable) nop_func,
+  .off    = (rtems_irq_disable) nop_func,
+  .isOn   = (rtems_irq_is_enabled) not_connected,
 #ifdef BSP_SHARED_HANDLER_SUPPORT
-static rtems_irq_connect_data     	defaultIrq = {
-  /* vectorIdex,  hdl	    ,handle  , on	, off	   , isOn      ,next_handler, */
-  0, 		  nop_func  , NULL   , nop_func	, nop_func , not_connected, 0
-};
-#else
-static rtems_irq_connect_data     	defaultIrq = {
-  /* vectorIdex,	 hdl	  , handle	, on		, off		, isOn */
-  0, 			 nop_func  , NULL	, nop_func	, nop_func	, not_connected
-};
+  .next_handler = NULL
 #endif
+};
 
-rtems_irq_prio BSPirqPrioTable[BSP_PIC_IRQ_NUMBER]={
+rtems_irq_prio BSPirqPrioTable[BSP_PIC_IRQ_NUMBER] = {
   /*
    * This table is where the developers can change the levels of priority
    * based on the need of their applications.
@@ -97,7 +93,7 @@ rtems_irq_prio BSPirqPrioTable[BSP_PIC_IRQ_NUMBER]={
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
   int                   i;
-  rtems_interrupt_level l;
+  rtems_interrupt_level level;
 
   /*
    * First initialize the Interrupt management hardware
@@ -133,7 +129,9 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   printk("Going to setup irq mngt configuration\n");
 #endif
 
-  rtems_interrupt_disable(l);
+  rtems_interrupt_disable(level);
+  (void) level; /* avoid set but not used warning */
+
   if (!BSP_rtems_irq_mngt_set(&initial_config)) {
       /*
        * put something here that will show the failure...

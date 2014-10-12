@@ -16,6 +16,13 @@
  * is enabled again. 
  * 
  */
+
+/*
+ *  Prototypes
+ */
+int BSP_VMEInit(void);
+int BSP_VMEIrqMgrInstall(void);
+
 /* BSP specific address space configuration parameters */
 
 /* 

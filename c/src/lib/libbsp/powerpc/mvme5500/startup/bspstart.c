@@ -196,8 +196,6 @@ void bsp_start( void )
 #endif
   uintptr_t intrStackStart;
   uintptr_t intrStackSize;
-  ppc_cpu_id_t myCpu;
-  ppc_cpu_revision_t myCpuRevision;
   Triv121PgTbl  pt=0;
 
   /* Till Straumann: 4/2005
@@ -219,11 +217,11 @@ void bsp_start( void )
 
 
   /*
-   * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
-   * store the result in global variables so that it can be used latter...
+   * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
+   * function store the result in global variables so that it can be used later.
    */
-  myCpu   = get_ppc_cpu_type();
-  myCpuRevision = get_ppc_cpu_revision();
+  get_ppc_cpu_type();
+  get_ppc_cpu_revision();
 
 #ifdef SHOW_LCR1_REGISTER
   l1cr = get_L1CR();

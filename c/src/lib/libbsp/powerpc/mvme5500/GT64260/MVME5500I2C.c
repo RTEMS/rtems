@@ -16,11 +16,12 @@
 
 /* #define I2C_DEBUG*/
 
-unsigned char I2cAddrPack(unsigned char busAddr,uint32_t offset)
+static unsigned char I2cAddrPack(unsigned char busAddr,uint32_t offset)
 {
   return(busAddr | ((offset & 0x700) >> 7));
 }
-unsigned char I2cDevByteAddr(uint32_t devA2A1A0, unsigned char byteNum)
+
+static unsigned char I2cDevByteAddr(uint32_t devA2A1A0, unsigned char byteNum)
 {
   return(( devA2A1A0 >>(byteNum*8)) & 0xff);
 }
