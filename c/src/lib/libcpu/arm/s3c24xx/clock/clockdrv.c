@@ -1,9 +1,8 @@
 /*
  *  S3C2400 clock specific using the System Timer
- *
- *  This is hardware specific part of the clock driver. At the end of this
- *  file, the generic part of the driver is #included.
- *
+ */
+
+/*
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -31,7 +30,7 @@ rtems_irq_connect_data clock_isr_data = {
 /**
  *  Return the nanoseconds since last tick
  */
-uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
+static uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
 {
   return 0;
 }
@@ -129,6 +128,7 @@ static void clock_isr_off(const rtems_irq_connect_data *unused)
  */
 static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
+  return 1;
 }
 
 /* Make sure to include this, and only at the end of the file */
