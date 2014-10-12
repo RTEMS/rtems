@@ -66,13 +66,21 @@ extern uint32_t   BSP_mem_size;
 #define Processor_Synchronize() \
   __asm__ (" eieio ")
 
+/*
+ *  Network configuration
+ */
 struct rtems_bsdnet_ifconfig;
 
-int
-rtems_ifsim_attach(struct rtems_bsdnet_ifconfig *ifcfg, int attaching);
+int rtems_ifsim_attach(struct rtems_bsdnet_ifconfig *ifcfg, int attaching);
 
 #define RTEMS_BSP_NETWORK_DRIVER_NAME   "ifsim1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_ifsim_attach
+
+/*
+ *  Interfaces to required Clock Driver support methods
+ */
+int BSP_disconnect_clock_handler(void);
+int BSP_connect_clock_handler(void);
 
 #endif /* ASM */
 
