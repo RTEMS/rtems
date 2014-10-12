@@ -22,7 +22,7 @@
 #include <rtems.h>
 #include <rtems/bspIo.h>
 
-void BSP_output_char_f(char c)
+static void BSP_output_char_f(char c)
 {
   /* the character just needs to disappear */
 }
