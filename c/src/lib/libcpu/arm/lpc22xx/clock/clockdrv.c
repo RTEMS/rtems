@@ -1,10 +1,11 @@
 /*
  *  LPC22XX/LPC21xx clock specific using the System Timer
- *  Copyright (c) 2006 by Ray <rayx.cn@gmail.com>
- *  Set the Time0 to generate click for RTEMS
  *
- *  This is hardware specific part of the clock driver. At the end of this
- *  file, the generic part of the driver is #included.
+ *  Set the Time0 to generate click for RTEMS
+ */
+
+/*
+ *  Copyright (c) 2006 by Ray <rayx.cn@gmail.com>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -103,7 +104,7 @@ rtems_irq_connect_data clock_isr_data = {
     BSP_remove_rtems_irq_handler(&clock_isr_data);                  \
   } while (0)
 
-uint32_t bsp_clock_nanoseconds_since_last_tick(void)
+static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
   uint32_t clicks;
   uint32_t microseconds;
