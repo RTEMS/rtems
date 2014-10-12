@@ -24,7 +24,7 @@ typedef struct {
 /* 8 microseconds per click, 125,000 per second */
 
 /* XXX should check that microseconds_per_tick is >= 8 */
-void Clock_driver_support_initialize_hardware(void)
+static void Clock_driver_support_initialize_hardware(void)
 {
   timer_hw_t *t = TIMER_BASE;
 
@@ -34,14 +34,14 @@ void Clock_driver_support_initialize_hardware(void)
   t->cr  = 0xA1;  /* enable timer */
 }
 
-void Clock_driver_support_at_tick(void)
+static void Clock_driver_support_at_tick(void)
 {
   timer_hw_t *t = TIMER_BASE;
 
   t->sr  = 0xA0;  /* Negate timer interrupt request */
 }
 
-void Clock_driver_support_shutdown_hardware(void)
+static void Clock_driver_support_shutdown_hardware(void)
 {
   timer_hw_t *t = TIMER_BASE;
 
