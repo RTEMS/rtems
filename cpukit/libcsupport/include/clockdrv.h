@@ -27,8 +27,6 @@ extern "C" {
 /* variables */
 
 extern volatile uint32_t   Clock_driver_ticks;
-extern rtems_device_major_number rtems_clock_major;
-extern rtems_device_minor_number rtems_clock_minor;
 
 /* default clock driver entry */
 
