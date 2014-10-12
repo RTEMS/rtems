@@ -3,6 +3,7 @@
  *
  *  This file contains the GBA console I/O package.
  */
+
 /*
  *  RTEMS GBA BSP
  *
@@ -34,7 +35,7 @@
  */
 static int gba_pollRead(int minor)
 {
-    return(gba_getch());
+  return (gba_getch());
 }
 
 /**
@@ -52,7 +53,7 @@ static ssize_t gba_write(int minor, const char *buf, size_t len)
   int i;
 
   for (i=0;i<len;i++) {
-     gba_putch((unsigned short)buf[i]);
+    gba_putch((unsigned short)buf[i]);
   }
   return len;
 }
@@ -85,9 +86,11 @@ BSP_polling_getchar_function_type BSP_poll_char   = gba_getch;
  *  @return status code
  */
 rtems_device_driver
-console_initialize(rtems_device_major_number  major,
-                   rtems_device_minor_number  minor,
-                   void                      *arg)
+console_initialize(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+)
 {
   rtems_status_code status;
 
@@ -95,13 +98,13 @@ console_initialize(rtems_device_major_number  major,
   rtems_termios_initialize ();
 
   /* Do device-specific initialization  */
-  /* Allready done in bspstart.c -> gba_textmode(CO60); */
+  /* Already done in bspstart.c -> gba_textmode(CO60); */
 
   /* Register the device */
   status = rtems_io_register_name ("/dev/console", major, 0);
   if (status != RTEMS_SUCCESSFUL) {
-      printk("Error registering console device!\n");
-      rtems_fatal_error_occurred (status);
+    printk("Error registering console device!\n");
+    rtems_fatal_error_occurred (status);
   }
 
   printk("Initialized GBA console\n\n");
@@ -119,7 +122,7 @@ console_initialize(rtems_device_major_number  major,
  */
 static int console_first_open(int major, int minor, void *arg)
 {
-    return 0;
+  return 0;
 }
 
 /**
@@ -132,9 +135,8 @@ static int console_first_open(int major, int minor, void *arg)
  */
 static int console_last_close(int major, int minor, void *arg)
 {
-    return 0;
+  return 0;
 }
-
 
 /**
  *  @brief Console device driver OPEN entry point
@@ -145,9 +147,11 @@ static int console_last_close(int major, int minor, void *arg)
  *  @return status code
  */
 rtems_device_driver
-console_open(rtems_device_major_number major,
-             rtems_device_minor_number minor,
-             void                      *arg)
+console_open(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                      *arg
+)
 {
   rtems_status_code              status;
   static rtems_termios_callbacks cb =
@@ -165,8 +169,8 @@ console_open(rtems_device_major_number major,
   status = rtems_termios_open (major, minor, arg, &cb);
 
   if (status != RTEMS_SUCCESSFUL) {
-      printk("Error openning console device\n");
-      return status;
+    printk("Error openning console device\n");
+    return status;
   }
 
   return RTEMS_SUCCESSFUL;
@@ -181,9 +185,11 @@ console_open(rtems_device_major_number major,
  *  @return status code
  */
 rtems_device_driver
-console_close(rtems_device_major_number major,
-              rtems_device_minor_number minor,
-              void                      *arg)
+console_close(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                      *arg
+)
 {
   rtems_device_driver res = RTEMS_SUCCESSFUL;
 
@@ -203,13 +209,13 @@ console_close(rtems_device_major_number major,
  *  @return status code
  */
 rtems_device_driver
-console_read(rtems_device_major_number major,
-             rtems_device_minor_number minor,
-             void                      *arg)
+console_read(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                      *arg
+)
 {
-
-    return rtems_termios_read (arg);
-
+  return rtems_termios_read (arg);
 }
 
 /**
@@ -223,11 +229,13 @@ console_read(rtems_device_major_number major,
  *  @return status code
 */
 rtems_device_driver
-console_write(rtems_device_major_number major,
-              rtems_device_minor_number minor,
-              void                      *arg)
+console_write(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                      *arg
+)
 {
-    return rtems_termios_write (arg);
+  return rtems_termios_write (arg);
 }
 
 /**
@@ -239,10 +247,11 @@ console_write(rtems_device_major_number major,
  *  @return status code
  */
 rtems_device_driver
-console_control(rtems_device_major_number major,
-                rtems_device_minor_number minor,
-                void                      *arg
+console_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                      *arg
 )
 {
-    return rtems_termios_ioctl (arg);
+  return rtems_termios_ioctl (arg);
 }

@@ -3,6 +3,7 @@
  *
  *  This file contains the GBA conio I/O package.
  */
+
 /*
  *  RTEMS GBA BSP
  *
@@ -118,21 +119,39 @@ void gba_gotoxy(int _x, int _y)
  *  @param  y screen y coordinate
  *  @return None
  */
-void gba_putchar(char c, int textattr, int x, int y)
+static void gba_putchar(char c, int textattr, int x, int y)
 {
-    int       f = textattr & 0x0F;
-    int       b = textattr >> 4;
-    uint32_t  fmask = f | f<<8 | f<<16 | f<<24;
-    uint32_t  bmask = b | b<<8 | b<<16 | b<<24;
-    uint32_t  *dest = (uint32_t *)&bg_bitmap4a[((y<<1) + y) << 1][x<<2];
-    const uint32_t  *src = (uint32_t *)&(font3x5[(int)c]);
-    uint32_t s;
-    s = *src++; *dest = (fmask&s) | (bmask&~s); dest += GBA_LCD_WIDTH/sizeof(uint32_t);
-    s = *src++; *dest = (fmask&s) | (bmask&~s); dest += GBA_LCD_WIDTH/sizeof(uint32_t);
-    s = *src++; *dest = (fmask&s) | (bmask&~s); dest += GBA_LCD_WIDTH/sizeof(uint32_t);
-    s = *src++; *dest = (fmask&s) | (bmask&~s); dest += GBA_LCD_WIDTH/sizeof(uint32_t);
-    s = *src++; *dest = (fmask&s) | (bmask&~s); dest += GBA_LCD_WIDTH/sizeof(uint32_t);
-    s = *src++; *dest = (fmask&s) | (bmask&~s); dest += GBA_LCD_WIDTH/sizeof(uint32_t);
+  int       f = textattr & 0x0F;
+  int       b = textattr >> 4;
+  uint32_t  fmask = f | f<<8 | f<<16 | f<<24;
+  uint32_t  bmask = b | b<<8 | b<<16 | b<<24;
+  uint32_t  *dest = (uint32_t *)&bg_bitmap4a[((y<<1) + y) << 1][x<<2];
+  const uint32_t  *src = (uint32_t *)&(font3x5[(int)c]);
+  uint32_t s;
+
+  s = *src++;
+  *dest = (fmask&s) | (bmask&~s);
+  dest += GBA_LCD_WIDTH/sizeof(uint32_t);
+
+  s = *src++;
+  *dest = (fmask&s) | (bmask&~s);
+  dest += GBA_LCD_WIDTH/sizeof(uint32_t);
+
+  s = *src++;
+  *dest = (fmask&s) | (bmask&~s);
+  dest += GBA_LCD_WIDTH/sizeof(uint32_t);
+
+  s = *src++;
+  *dest = (fmask&s) | (bmask&~s);
+  dest += GBA_LCD_WIDTH/sizeof(uint32_t);
+
+  s = *src++;
+  *dest = (fmask&s) | (bmask&~s);
+  dest += GBA_LCD_WIDTH/sizeof(uint32_t);
+
+  s = *src++;
+  *dest = (fmask&s) | (bmask&~s);
+  dest += GBA_LCD_WIDTH/sizeof(uint32_t);
 }
 
 
@@ -144,7 +163,7 @@ void gba_putchar(char c, int textattr, int x, int y)
  */
 void gba_textattr(int _attr)
 {
-    _textattr = _attr;
+  _textattr = _attr;
 }
 
 /**
@@ -152,11 +171,11 @@ void gba_textattr(int _attr)
  *
  *  @param  _color backround color
  *  @return None
-
+ *
  */
 void gba_textbackground(int _color)
 {
-    _textattr = (_textattr & 0x0F) | (_color << 4);
+  _textattr = (_textattr & 0x0F) | (_color << 4);
 }
 
 /**
@@ -167,25 +186,25 @@ void gba_textbackground(int _color)
  */
 void gba_textcolor(int _color)
 {
-    _textattr = (_textattr & 0xF0) | (_color);
+  _textattr = (_textattr & 0xF0) | (_color);
 }
 
 
 /**
- *  @brief gba_clearline function clear line nro y
+ *  @brief gba_clearline function clear line number y
  *
  *  Line is filled with spaces
  *
  *  @param  y line number
  *  @return None
  */
-void gba_clearline(int y)
+static void gba_clearline(int y)
 {
-    int x;
+  int x;
 
-    for (x=0 ; x<=W ; x++) {
-       gba_putchar(0, _textattr, x, y);
-    }
+  for (x=0 ; x<=W ; x++) {
+     gba_putchar(0, _textattr, x, y);
+  }
 }
 
 /**
@@ -194,7 +213,7 @@ void gba_clearline(int y)
  *  @param  None
  *  @return None
  */
-void gba_nextline(void)
+static void gba_nextline(void)
 {
     _wherex = 0;
     if (++_wherey >= H) {
@@ -226,7 +245,7 @@ void gba_clrscr(void)
  *  @param  _c character code
  *  @return None
  */
-void gba_put(char _c)
+static void gba_put(char _c)
 {
   /* We have save some memory with reduced fonts */
   _c = _c & 0x7F;   /* no extened chars */
@@ -334,13 +353,12 @@ void gba_initconio(void)
  */
 void gba_textmode(int _mode)
 {
-    switch (_mode) {
-        case CO60:
-        {
-            gba_initconio();
-            break;
-        }
+  switch (_mode) {
+    case CO60: {
+      gba_initconio();
+      break;
     }
+  }
 }
 
 
@@ -350,17 +368,19 @@ void gba_textmode(int _mode)
  *  @param  count loop counter
  *  @return None
  */
-void delay_loop(unsigned int count)
+static void delay_loop(unsigned int count)
 {
-    int i;
-    for (i = 0; i<count; i++) i = i;
+  int i;
+
+  for (i = 0; i<count; i++) i = i;
 }
 
 static unsigned char inputch = ASCII_CR;    /**< input character value */
 /**
  *  @brief gba_getch function read char from game pad keys
  *
- *  Character input is done with GBA buttons, up-down-left-right/A/B/R/L/Select/Start
+ *  Character input is done with GBA buttons,
+ *      up-down-left-right/A/B/R/L/Select/Start
  *  - Select-key accept selected character
  *  - Start-key read CR (Enter)
  *  - A-key select 'A' character
@@ -380,47 +400,47 @@ int gba_getch(void)
   int  keyx, key  = 0;
 
   while(1) {
-      key = GBA_KEY();
-      while ( (keyx=GBA_KEY())==key );
-      switch (key)
-      {
-        case GBA_KEY_SELECT:
-            gba_put(inputch);
-            return inputch;
-            break;
-        case GBA_KEY_START:
-            gba_put(' ');
-            inputch = ASCII_CR;
-            return inputch;
-            break;
-        case GBA_KEY_A:
-            inputch = 'A';
-            break;
-        case GBA_KEY_B:
-            inputch = 'Z';
-            break;
-        case GBA_KEY_UP:
-            if ((inputch-1) >= 0x20) inputch--;
-            break;
-        case GBA_KEY_DOWN:
-            if ((inputch+1) <=  0x7E) inputch++;
-            break;
-        case GBA_KEY_LEFT:
-            if ((inputch - 0x20) >= 0x20) inputch -= 0x20;
-            break;
-        case GBA_KEY_RIGHT:
-            if ((inputch + 0x20) <= 0x7E) inputch += 0x20;
-            break;
-        case GBA_KEY_R:
-            inputch = '1';
-            break;
-        case GBA_KEY_L:
-            inputch = '9';
-            break;
-        default:
-            break;
-      }
-      gba_put(inputch);
-      delay_loop(1000);
+    key = GBA_KEY();
+    while ( (keyx=GBA_KEY())==key );
+    switch (key) {
+      case GBA_KEY_SELECT:
+	gba_put(inputch);
+	return inputch;
+	break;
+      case GBA_KEY_START:
+	gba_put(' ');
+	inputch = ASCII_CR;
+	return inputch;
+	break;
+      case GBA_KEY_A:
+	inputch = 'A';
+	break;
+      case GBA_KEY_B:
+	inputch = 'Z';
+	break;
+      case GBA_KEY_UP:
+	if ((inputch-1) >= 0x20) inputch--;
+	break;
+      case GBA_KEY_DOWN:
+	if ((inputch+1) <=  0x7E) inputch++;
+	break;
+      case GBA_KEY_LEFT:
+	if ((inputch - 0x20) >= 0x20) inputch -= 0x20;
+	break;
+      case GBA_KEY_RIGHT:
+	if ((inputch + 0x20) <= 0x7E) inputch += 0x20;
+	break;
+      case GBA_KEY_R:
+	inputch = '1';
+	break;
+      case GBA_KEY_L:
+	inputch = '9';
+	break;
+      default:
+	break;
+    }
+
+    gba_put(inputch);
+    delay_loop(1000);
   }
 }
