@@ -1,6 +1,8 @@
 /*
  *  This file contains the clock driver the Hitachi SH 704X
- *
+ */
+
+/*
  *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de) and
  *           Bernd Becker (becker@faw.uni-ulm.de)
  *
@@ -9,7 +11,6 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -35,7 +36,7 @@
 
 #include <stdlib.h>
 
-#include <rtems/libio.h>
+#include <rtems/clockdrv.h>
 #include <rtems/score/sh_io.h>
 #include <rtems/score/sh.h>
 #include <rtems/score/ispsh7045.h>
@@ -70,10 +71,8 @@ extern uint32_t bsp_clicks_per_second;
  *  Clock_driver_ticks is a monotonically increasing counter of the
  *  number of clock ticks since the driver was initialized.
  */
-
 volatile uint32_t   Clock_driver_ticks;
 
-static void Clock_exit( void );
 static rtems_isr Clock_isr( rtems_vector_number vector );
 static uint32_t   Clock_MHZ ;
 
@@ -84,28 +83,18 @@ static uint32_t   Clock_MHZ ;
  *  length of time between the user configured microseconds per tick
  *  has passed.
  */
-
 uint32_t   Clock_isrs;              /* ISRs until next tick */
 static uint32_t   Clock_isrs_const;        /* only calculated once */
 
 /*
- * These are set by clock driver during its init
- */
-
-rtems_device_major_number rtems_clock_major = ~0;
-rtems_device_minor_number rtems_clock_minor;
-
-/*
  *  The previous ISR on this clock tick interrupt vector.
  */
-
 rtems_isr_entry  Old_ticker;
 
 /*
  *  Isr Handler
  */
-
-rtems_isr Clock_isr(
+static rtems_isr Clock_isr(
   rtems_vector_number vector
 )
 {
@@ -143,14 +132,12 @@ rtems_isr Clock_isr(
  *  Install a clock tick handler and reprograms the chip.  This
  *  is used to initially establish the clock tick.
  */
-
-void Install_clock(
+static void Install_clock(
   rtems_isr_entry clock_isr
 )
 {
   uint8_t   temp8 = 0;
   uint32_t   factor = 1000000;
-
 
   /*
    *  Initialize the clock tick device driver variables
@@ -212,14 +199,12 @@ void Install_clock(
   /*
    *  Schedule the clock cleanup routine to execute if the application exits.
    */
-
   atexit( Clock_exit );
 }
 
 /*
  *  Clean up before the application exits
  */
-
 void Clock_exit( void )
 {
   uint8_t   temp8 = 0;
@@ -246,7 +231,6 @@ void Clock_exit( void )
  *
  *  Device driver entry point for clock tick driver initialization.
  */
-
 rtems_device_driver Clock_initialize(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -254,13 +238,6 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
-
-  /*
-   * make major/minor avail to others such as shared memory driver
-   */
-
-  rtems_clock_major = major;
-  rtems_clock_minor = minor;
 
   return RTEMS_SUCCESSFUL;
 }
