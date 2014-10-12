@@ -1,9 +1,8 @@
 /*
  *  MC9328MXL clock specific using the System Timer
- *
- *  This is hardware specific part of the clock driver. At the end of this
- *  file, the generic part of the driver is #included.
- *
+ */
+
+/*
  *  Copyright (c) 2004 by Cogent Computer Systems
  *  Written by Jay Monkman <jtm@lopingdog.com>
  *
@@ -39,11 +38,13 @@ rtems_irq_connect_data clock_isr_data = {
  *    - clear the interrupt bit?
  *    - restart the timer?
  */
-#define Clock_driver_support_at_tick()                \
-  do {                                                \
-        uint32_t reg;                                 \
-        reg = MC9328MXL_TMR1_TSTAT;                   \
-        MC9328MXL_TMR1_TSTAT = 0;                     \
+#define Clock_driver_support_at_tick()               \
+  do {                                               \
+    uint32_t reg;                                    \
+                                                     \
+    reg = MC9328MXL_TMR1_TSTAT;                      \
+    (void) reg; /* avoid set but not used warning */ \
+    MC9328MXL_TMR1_TSTAT = 0;                        \
   } while(0)
 
 /**
@@ -54,7 +55,6 @@ rtems_irq_connect_data clock_isr_data = {
       (_old) = NULL;                                   \
       BSP_install_rtems_irq_handler(&clock_isr_data);  \
   } while(0)
-
 
 /**
  * Initialize the hardware for the clock
