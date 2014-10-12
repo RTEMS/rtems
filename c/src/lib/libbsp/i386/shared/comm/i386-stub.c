@@ -465,7 +465,7 @@ hex (char ch)
 }
 
 /* scan for the sequence $<data>#<checksum>     */
-void
+static void
 getpacket (char *buffer)
 {
   unsigned char checksum;
@@ -529,7 +529,7 @@ getpacket (char *buffer)
 
 /* send the packet in buffer.  */
 
-void
+static void
 putpacket (char *buffer)
 {
   unsigned char checksum;
@@ -631,7 +631,7 @@ mem2hex (char *mem, char *buf, int count, int may_fault)
 
 /* convert the hex array pointed to by buf into binary to be placed in mem */
 /* return a pointer to the character AFTER the last byte written */
-char *
+static char *
 hex2mem (char *buf, char *mem, int count, int may_fault)
 {
   int i;

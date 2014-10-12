@@ -177,6 +177,10 @@ void          _IBMPC_initVideo(void);    /* from 'outch.c'  */
 void          _IBMPC_outch    (char);    /* from 'outch.c'  */
 char          _IBMPC_inch     (void);    /* from 'inch.c'   */
 char          _IBMPC_inch_sleep (void);  /* from 'inch.c'   */
+int           BSP_wait_polled_input(void); /* from 'inch.c' */
+int           rtems_kbpoll( void );      /* from 'inch.c' */
+int           getch( void );             /* from 'inch.c' */
+void           add_to_queue( unsigned short b ); /* from 'inch.c' */
 
 void Wait_X_ms(unsigned int timeToWait); /* from 'timer.c'  */
 void Calibrate_loop_1ms(void);           /* from 'timer.c'  */
@@ -188,6 +192,7 @@ void bsp_size_memory(void);              /* from 'bspstart.c' */
 void Clock_driver_install_handler(void); /* from 'ckinit.c'  */
 void Clock_driver_support_initialize_hardware(void); /* from 'ckinit.c'  */
 
+void kbd_reset_setup(char *str, int *ints);   /* from 'pc_keyb.c' */
 size_t read_aux(char * buffer, size_t count); /* from 'ps2_mouse.c'  */
 
 /* Definitions for BSPConsolePort */

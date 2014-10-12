@@ -60,15 +60,17 @@ uwrite(int uart, int reg, unsigned int val)
   }
 }
 
-#ifdef UARTDEBUG
-    static void
+static void
 uartError(int uart)
 {
   unsigned char uartStatus, dummy;
 
   uartStatus = uread(uart, LSR);
+  (void) uartStatus; /* avoid set but not used warning */
   dummy = uread(uart, RBR);
+  (void) dummy;      /* avoid set but not used warning */
 
+#ifdef UARTDEBUG
   if (uartStatus & OE)
     printk("********* Over run Error **********\n");
   if (uartStatus & PE)
@@ -79,15 +81,8 @@ uartError(int uart)
     printk("********* Parity Error   **********\n");
   if (uartStatus & ERFIFO)
     printk("********* Error receive Fifo **********\n");
-
-}
-#else
-inline void uartError(int uart)
-{
-  uread(uart, LSR);
-  uread(uart, RBR);
-}
 #endif
+}
 
 /*
  * Uart initialization, it is hardcoded to 8 bit, no parity,
@@ -455,7 +450,10 @@ static void ( *driver_input_handler_com2 )( void *,  char *, int ) = 0;
  * This routine sets the handler to handle the characters received
  * from the serial port.
  */
-void uart_set_driver_handler( int port, void ( *handler )( void *,  char *, int ) )
+static void uart_set_driver_handler(
+  int port,
+  void ( *handler )( void *,  char *, int )
+)
 {
   switch( port )
   {

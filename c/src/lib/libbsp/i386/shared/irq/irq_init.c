@@ -98,6 +98,10 @@ static interrupt_gate_descriptor	idtEntry;
 
 static rtems_raw_irq_global_settings raw_initial_config;
 
+
+/*
+ *  This method is called from irq_asm.S and cannot be static.
+ */
 void raw_idt_notify(void)
 {
   printk("raw_idt_notify has been called \n");

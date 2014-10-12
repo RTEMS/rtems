@@ -239,12 +239,10 @@ _IBMPC_inch(void)
     return c;
 } /* _IBMPC_inch */
 
- /*
-  * Routine that can be used before interrupt management is initialized.
-  */
-
-int
-BSP_wait_polled_input(void)
+/*
+ * Routine that can be used before interrupt management is initialized.
+ */
+int BSP_wait_polled_input(void)
 {
   char c;
   while (!_IBMPC_scankey(&c))

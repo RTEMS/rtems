@@ -257,8 +257,6 @@ static void clockOff(void)
   outport_byte(TIMER_CNTR0, 0);
 } /* Clock_exit */
 
-#define Clock_driver_support_shutdown_hardware() clockOff()
-
 bool Clock_isr_enabled = false;
 static void Clock_isr_handler(void *param)
 {
