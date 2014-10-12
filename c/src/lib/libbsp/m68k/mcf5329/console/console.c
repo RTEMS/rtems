@@ -665,24 +665,3 @@ rtems_device_driver console_control(rtems_device_major_number major,
 {
   return (rtems_termios_ioctl(arg));
 }
-int DEBUG_OUTCHAR(int c)
-{
-  if (c == '\n')
-    DEBUG_OUTCHAR('\r');
-  _BSP_null_char(c);
-  return c;
-}
-void DEBUG_OUTSTR(const char *msg)
-{
-  while (*msg)
-    DEBUG_OUTCHAR(*msg++);
-}
-void DEBUG_OUTNUM(int i)
-{
-  int n;
-  static const char map[] = "0123456789ABCDEF";
-
-  DEBUG_OUTCHAR(' ');
-  for (n = 28; n >= 0; n -= 4)
-    DEBUG_OUTCHAR(map[(i >> n) & 0xF]);
-}
