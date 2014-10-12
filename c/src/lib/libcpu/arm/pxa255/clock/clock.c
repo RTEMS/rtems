@@ -1,8 +1,11 @@
 /*
- *  By Yang Xi <hiyangxi@gmail.com>
  *  PXA255 clock specific using the System Timer
  *
  *  RTEMS uses IRQ 26 as Clock Source
+ */
+
+/*
+ *  By Yang Xi <hiyangxi@gmail.com>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -24,17 +27,6 @@
 #endif
 
 static unsigned long period_num;
-
-/**
- *  Return the nanoseconds since last tick
- */
-uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
-{
-  return 0;
-}
-
-#define Clock_driver_nanoseconds_since_last_tick \
-  clock_driver_get_nanoseconds_since_last_tick
 
 /**
  * Enables clock interrupt.
@@ -95,17 +87,18 @@ rtems_irq_connect_data clock_isr_data = {
 };
 
 #define Clock_driver_support_install_isr( _new, _old ) \
-  do {						       \
-    _old = NULL;				       \
+  do {                                                 \
+    _old = NULL;                                       \
     BSP_install_rtems_irq_handler(&clock_isr_data);    \
   } while (0)
 
-void Clock_driver_support_initialize_hardware(void)
+static void Clock_driver_support_initialize_hardware(void)
 {
+  period_num = TIMER_RATE* rtems_configuration_get_microseconds_per_tick();
 #if ON_SKYEYE==1
-  period_num = (TIMER_RATE* rtems_configuration_get_microseconds_per_tick())/100000;
+  period_num /= 100000;
 #else
-  period_num = (TIMER_RATE* rtems_configuration_get_microseconds_per_tick())/10000;
+  period_num /= 10000;
 #endif
 }
 
@@ -118,7 +111,7 @@ void Clock_driver_support_initialize_hardware(void)
     XSCALE_OS_TIMER_MR0 = XSCALE_OS_TIMER_TCR + period_num; \
   } while (0)
 
-void Clock_driver_support_shutdown_hardware( void )
+static void Clock_driver_support_shutdown_hardware( void )
 {
   BSP_remove_rtems_irq_handler(&clock_isr_data);
 }
