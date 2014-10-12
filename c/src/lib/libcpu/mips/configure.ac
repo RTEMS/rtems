@@ -2,7 +2,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libcpu-mips],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
-AC_CONFIG_SRCDIR([clock])
+AC_CONFIG_SRCDIR([tx39])
 RTEMS_TOP([../../../../..],[../../..])
 
 RTEMS_CANONICAL_TARGET_CPU
@@ -18,9 +18,6 @@ RTEMS_PROG_CC_FOR_TARGET
 AM_PROG_CC_C_O
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
-
-AM_CONDITIONAL(r46xx, test "$RTEMS_CPU_MODEL" = "R4600" \
-|| test "$RTEMS_CPU_MODEL" = "R4650" )
 
 AM_CONDITIONAL(tx39, test "$RTEMS_CPU_MODEL" = "tx3904")
 

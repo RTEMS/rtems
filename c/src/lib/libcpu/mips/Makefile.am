@@ -56,18 +56,6 @@ include_libcpu_HEADERS += au1x00/include/au1x00.h
 
 endif
 
-if r46xx
-noinst_PROGRAMS += r46xx/timer.rel
-r46xx_timer_rel_SOURCES = timer/timer.c timer/gettime.S
-r46xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-r46xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += r46xx/clock.rel
-r46xx_clock_rel_SOURCES = clock/ckinit.c clock/clock.S clock/clock.h
-r46xx_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-r46xx_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
 if rm52xx
 include_libcpu_HEADERS += rm52xx/include/rm5231.h
 
