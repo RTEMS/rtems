@@ -1,5 +1,4 @@
-/*  ckinit.c
- *
+/*
  *  Implementation of the Clock_initialize() functions
  *  prototyped in rtems/c/src/lib/include/clockdrv.h.
  *
@@ -12,7 +11,9 @@
  *  All page references are to the MVME166/MVME167/MVME187 Single Board
  *  Computer Programmer's Reference Guide (MVME187PG/D2) with the April
  *  1993 supplements/addenda (MVME187PG/D2A1).
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -32,28 +33,10 @@
 #define CLOCK_VECTOR (VBR0 * 0x10 + 0x9)    /* T2 is vector $X9 (p. 2-71)*/
 
 /*
- *  These are declared in rtems/c/src/lib/include/clockdrv.h
- *  In other BSPs, rtems_clock_major is set to the largest possible value
- *  (which is almost certainly greater than the number of I/O devices) to
- *  indicate that this device has not been initialized yet. The actual
- *  device number is supplied during initialization. We do not do that.
- *
- *  Initialized data ends up the the .data section. This causes two problems:
- *  1) the .data section is no longer ROMable because we need to write into
- *  it. 2) The initial value is correct only after a download. On subsequent
- *  program restarts, the value is not re-initialized but left to whatever it
- *  was when the previous run terminated or aborted. If we depend on some
- *  global variable value, we must initialize that value explicitly in code
- *  at boot time.
- */
-rtems_device_major_number rtems_clock_major;
-rtems_device_minor_number rtems_clock_minor;
-
-/*
  *  Clock_driver_ticks is a monotonically increasing counter of the number of
  *  VMEchip2 timer #2 ticks since the driver was initialized.
  */
-volatile uint32_t         Clock_driver_ticks;
+volatile uint32_t Clock_driver_ticks;
 
 /*
  *  Clock_isrs is the number of clock ISRs until the next invocation of the
@@ -82,15 +65,8 @@ void clock_exit( void );
  *  C ISR Handler. Increment the number of internal ticks. If it is time for a
  *  kernel clock tick (if Clock_isrs == 1), call rtems_clock_tick() to signal
  *  the event and reset the Clock_isrs counter; else, just decrement it.
- *
- *  Input parameters:
- *    vector number
- *
- *  Output parameters: NONE
- *
- *  Return values: NONE
  */
-rtems_isr VMEchip2_T2_isr(
+static rtems_isr VMEchip2_T2_isr(
   rtems_vector_number vector
 )
 {
@@ -136,14 +112,8 @@ rtems_isr VMEchip2_T2_isr(
  *  VMEbus global timeout timer. The prescaler value is normally set by the
  *  boot ROM to provide a 1 MHz clock to the timers. For a 25 MHz MVME167, the
  *  prescaler value should be 0xE7 (page 2-63).
- *
- *  Input parameters: NONE
- *
- *  Output paremeters: NONE
- *
- *  Return values: NONE
  */
-void VMEchip2_T2_initialize( void )
+static void VMEchip2_T2_initialize( void )
 {
   Clock_driver_ticks = 0;
   Clock_isrs = rtems_configuration_get_microseconds_per_tick() / 1000;
@@ -164,17 +134,8 @@ void VMEchip2_T2_initialize( void )
 }
 
 /*
- *  clock_exit
- *
  *  This routine stops the VMEchip2 T2 timer, disables its interrupt, and
  *  re-install the old interrupt vectors.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- *
  */
 void clock_exit( void )
 {
@@ -185,23 +146,6 @@ void clock_exit( void )
   set_vector( Old_ticker, CLOCK_VECTOR, 1 );
 }
 
-/*
- *  Clock_initialize()
- *  prototyped in rtems/c/src/lib/include/clockdrv.h.
- *
- *  Input parameters:
- *     major - console device major number
- *     minor - console device minor number
- *             ALWAYS 0 IN VERSION 3.6.0 OF RTEMS!
- *             Probably provided for symmetry with the other I/O calls.
- *     arg   - pointer to optional device driver arguments
- *             ALWAYS NULL IN VERSION 3.6.0 OF RTEMS!
- *
- *  Output paremeters: NONE
- *
- *  Return values:
- *     rtems_device_driver status code
- */
 rtems_device_driver Clock_initialize(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -209,12 +153,6 @@ rtems_device_driver Clock_initialize(
 )
 {
   VMEchip2_T2_initialize();
-
-  /*
-   *  Make major/minor avail to others such as shared memory driver
-   */
-  rtems_clock_major = major;
-  rtems_clock_minor = minor;
 
   return RTEMS_SUCCESSFUL;
 }
