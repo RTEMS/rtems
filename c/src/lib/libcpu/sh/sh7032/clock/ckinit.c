@@ -1,6 +1,8 @@
 /*
  *  This file contains the clock driver the Hitachi SH 703X
- *
+ */
+
+/*
  *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de) and
  *           Bernd Becker (becker@faw.uni-ulm.de)
  *
@@ -9,7 +11,6 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -23,7 +24,7 @@
 
 #include <stdlib.h>
 
-#include <rtems/libio.h>
+#include <rtems/clockdrv.h>
 #include <rtems/score/sh_io.h>
 #include <rtems/score/sh.h>
 #include <rtems/score/ispsh7032.h>
@@ -122,7 +123,7 @@ static unsigned int sh_clicks_per_tick(
 
 volatile uint32_t   Clock_driver_ticks;
 
-static void Clock_exit( void );
+void Clock_exit( void );
 static rtems_isr Clock_isr( rtems_vector_number vector );
 
 /*
@@ -137,23 +138,14 @@ uint32_t   Clock_isrs;              /* ISRs until next tick */
 static uint32_t   Clock_isrs_const;        /* only calculated once */
 
 /*
- * These are set by clock driver during its init
- */
-
-rtems_device_major_number rtems_clock_major = ~0;
-rtems_device_minor_number rtems_clock_minor;
-
-/*
  *  The previous ISR on this clock tick interrupt vector.
  */
-
 rtems_isr_entry  Old_ticker;
 
 /*
  *  Isr Handler
  */
-
-rtems_isr Clock_isr(
+static rtems_isr Clock_isr(
   rtems_vector_number vector
 )
 {
@@ -190,8 +182,7 @@ rtems_isr Clock_isr(
  *  Install a clock tick handler and reprograms the chip.  This
  *  is used to initially establish the clock tick.
  */
-
-void Install_clock(
+static void Install_clock(
   rtems_isr_entry clock_isr
 )
 {
@@ -276,7 +267,6 @@ void Install_clock(
 /*
  *  Clean up before the application exits
  */
-
 void Clock_exit( void )
 {
   uint8_t   temp8 = 0;
@@ -311,13 +301,6 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
-
-  /*
-   * make major/minor avail to others such as shared memory driver
-   */
-
-  rtems_clock_major = major;
-  rtems_clock_minor = minor;
 
   return RTEMS_SUCCESSFUL;
 }
