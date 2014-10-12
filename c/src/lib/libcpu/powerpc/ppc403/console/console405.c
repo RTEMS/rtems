@@ -56,8 +56,7 @@
 #include <rtems/libio.h>
 #include "../irq/ictrl.h"
 #include <stdlib.h>                                     /* for atexit() */
-
-
+#include <rtems/console.h>
 
 struct async {
 /*---------------------------------------------------------------------------+

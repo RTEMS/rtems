@@ -17,6 +17,7 @@
 #include <rtems/libio.h>
 #include "../irq/ictrl.h"
 #include <stdlib.h>                                     /* for atexit() */
+#include <tty_drv.h>
 
 extern uint32_t bsp_serial_per_sec;
 extern bool bsp_serial_external_clock;
@@ -149,13 +150,14 @@ static const tty0pasync tty0port = (tty0pasync)(0xEF600300   + (TTY0_USE_UART*0x
 static void *tty0ttyp;         /* handle for termios */
 
 
-int tty0_round(double x)
+static int
+tty0_round(double x)
 {
   return (int)((int)((x-(int)x)*1000)>500 ? x+1 : x);
 }
 
-void
-tty0BaudSet(uint32_t   baudrate)
+static void
+tty0BaudSet(uint32_t baudrate)
 {
   uint32_t   tmp;
 
@@ -168,6 +170,7 @@ tty0BaudSet(uint32_t   baudrate)
 
   tty0port->LCR = tty0port->LCR & ~LCR_DL;
 }
+
 /*
  * Hardware-dependent portion of tcsetattr().
  */
@@ -176,7 +179,7 @@ tty0SetAttributes (int minor, const struct termios *t)
 {
   int baud;
 
-  /* FIXME: check c_cflag & CRTSCTS for hardware flowcontrol */
+  /* FIXME: check c_cflag & CRTSCTS for hardware flow control */
   /* FIXME: check and IMPLEMENT XON/XOFF                     */
   switch (t->c_cflag & CBAUD) {
   default:	baud = -1;	break;
@@ -323,8 +326,7 @@ static rtems_isr tty0serial_ISR(rtems_vector_number v)
  * deinit TTY0
  *
  */
-void
-tty0DeInit(void)
+static void tty0DeInit(void)
 {
   /*
    * disable interrupts for serial tty0port
@@ -343,7 +345,7 @@ tty0DeInit(void)
  * init SPI
  *
  */
-rtems_status_code
+static rtems_status_code
 tty0Initialize(void)
 {
   register unsigned tmp;
@@ -370,6 +372,7 @@ tty0Initialize(void)
 
   /* Disable tty0port interrupts while changing hardware */
   _ier = tty0port->IER;
+  (void) _ier; /* avoid set but not used warning */
   tty0port->IER = 0;
 
   /* set up tty0port control: 8 bit,1 stop,no parity */
@@ -395,6 +398,7 @@ tty0Initialize(void)
     _tmp = tty0port->LSR;
     _tmp = tty0port->RBR;
     _tmp = tty0port->MSR;
+    (void) _tmp; /* avoid set but not used warning */
 
     /* Enable recive interrupts, don't enable TxInt yet */
     tty0port->IER=IER_RCV;

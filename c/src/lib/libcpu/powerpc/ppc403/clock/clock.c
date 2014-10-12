@@ -228,7 +228,7 @@ static void ClockOn(const rtems_irq_connect_data* unused)
 #endif
 }
 
-void Install_clock(void (*clock_isr)(void *))
+static void Install_clock(void (*clock_isr)(void *))
 {
   rtems_irq_connect_data clockIrqConnData;
 
@@ -252,35 +252,6 @@ void Install_clock(void (*clock_isr)(void *))
   }
 
   atexit(Clock_exit);
-}
-
-void ReInstall_clock(void (*new_clock_isr)(void *))
-{
-  uint32_t               isrlevel = 0;
-  rtems_irq_connect_data clockIrqConnData;
-
-  rtems_interrupt_disable(isrlevel);
-
-  clockIrqConnData.name = BSP_PIT;
-  if (!BSP_get_current_rtems_irq_handler(&clockIrqConnData)) {
-    printk("Unable to stop system clock\n");
-    rtems_fatal_error_occurred(1);
-  }
-
-  BSP_remove_rtems_irq_handler (&clockIrqConnData);
-
-  clockIrqConnData.on   = ClockOn;
-  clockIrqConnData.off  = ClockOff;
-  clockIrqConnData.isOn = ClockIsOn;
-  clockIrqConnData.name = BSP_PIT;
-  clockIrqConnData.hdl  = new_clock_isr;
-
-  if (!BSP_install_rtems_irq_handler (&clockIrqConnData)) {
-    printk("Unable to connect Clock Irq handler\n");
-    rtems_fatal_error_occurred(1);
-  }
-
-  rtems_interrupt_enable(isrlevel);
 }
 
 /*
