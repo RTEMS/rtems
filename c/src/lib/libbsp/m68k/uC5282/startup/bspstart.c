@@ -411,6 +411,7 @@ do {                                                   \
 } while (0)
 
 #define syscall_1(type,name,d1type,d1)                      \
+type bsp_##name(d1type d1);                                 \
 type bsp_##name(d1type d1)                                  \
 {                                                           \
    long ret;                                                \
@@ -425,6 +426,7 @@ type bsp_##name(d1type d1)                                  \
 }
 
 #define syscall_2(type,name,d1type,d1,d2type,d2)            \
+type bsp_##name(d1type d1, d2type d2);                      \
 type bsp_##name(d1type d1, d2type d2)                       \
 {                                                           \
    long ret;                                                \
@@ -441,6 +443,7 @@ type bsp_##name(d1type d1, d2type d2)                       \
 }
 
 #define syscall_3(type,name,d1type,d1,d2type,d2,d3type,d3)  \
+type bsp_##name(d1type d1, d2type d2, d3type d3);           \
 type bsp_##name(d1type d1, d2type d2, d3type d3)            \
 {                                                           \
    long ret;                                                \
@@ -598,53 +601,6 @@ rtems_interrupt_level level;
   rtems_interrupt_enable(level);
 }
 
-static void
-disable_irq(unsigned source)
-{
-rtems_interrupt_level level;
-
-  rtems_interrupt_disable(level);
-  if (source >= 32)
-    MCF5282_INTC0_IMRH |= (1 << (source - 32));
-  else
-    MCF5282_INTC0_IMRL |= (1 << source);
-  rtems_interrupt_enable(level);
-}
-
-void
-BSP_enable_irq_at_pic(rtems_vector_number v)
-{
-int                   source = v - 64;
-
-  if ( source > 0 && source < 64 ) {
-    enable_irq(source);
-  }
-}
-
-void
-BSP_disable_irq_at_pic(rtems_vector_number v)
-{
-int                   source = v - 64;
-
-  if ( source > 0 && source < 64 ) {
-    disable_irq(source);
-  }
-}
-
-int
-BSP_irq_is_enabled_at_pic(rtems_vector_number v)
-{
-int                   source = v - 64;
-
-  if ( source > 0 && source < 64 ) {
-    return ! ((source >= 32) ?
-      MCF5282_INTC0_IMRH & (1 << (source - 32)) :
-      MCF5282_INTC0_IMRL & (1 << source));
-  }
-  return -1;
-}
-
-
 static int
 init_intc0_bit(unsigned long vector)
 {
@@ -756,7 +712,7 @@ BSP_vme2local_adrs(unsigned am, unsigned long vmeaddr, unsigned long *plocaladdr
 }
 
 void
-rtems_bsp_reset_cause(char *buf, size_t capacity)
+bsp_reset_cause(char *buf, size_t capacity)
 {
   int bit, rsr;
   size_t i;

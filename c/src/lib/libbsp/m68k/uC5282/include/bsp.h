@@ -138,6 +138,16 @@ void *bsp_idle_thread( uintptr_t ignored );
 #define BSP_IDLE_TASK_BODY bsp_idle_thread
 
 /*
+ *  The custom IDLE task keeps some idle statistics.
+ */
+int bsp_cpu_load_percentage(void);
+
+/*
+ *  This is a helper method to determine the cause of a reset.
+ */
+void bsp_reset_cause(char *buf, size_t capacity);
+
+/*
  * SRAM. The BSP uses SRAM for maintaining some clock-driver data
  *       and for ethernet descriptors (and the initial stack during
  *       early boot).

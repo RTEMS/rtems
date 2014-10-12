@@ -5,7 +5,9 @@
  *
  * This routine is pretty simple for the uC5282 because all the hard
  * work has been done by the bootstrap dBUG code.
- *
+ */
+
+/*
  *  Author: W. Eric Norum <norume@aps.anl.gov>
  *
  *  COPYRIGHT (c) 2005.
@@ -23,7 +25,15 @@
 #define m68k_set_acr0(_acr0) __asm__ volatile ("movec %0,%%acr0" : : "d" (_acr0))
 #define m68k_set_acr1(_acr1) __asm__ volatile ("movec %0,%%acr1" : : "d" (_acr1))
 
- extern void CopyDataClearBSSAndStart (void);
+/*
+ * This method is implemented in start.S.
+ */
+extern void CopyDataClearBSSAndStart (void);
+
+/*
+ * This method cannot be static because it is called from start.S.
+ */
+void Init5282 (void);
 
 void Init5282 (void)
 {

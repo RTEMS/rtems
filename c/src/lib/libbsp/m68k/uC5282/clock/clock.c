@@ -128,7 +128,7 @@ Thread bsp_idle_thread(uint32_t ignored)
     __asm__ volatile ("addq.l #1,%0"::"m"(IDLE_COUNTER));
 }
 
-int rtems_bsp_cpu_load_percentage(void)
+int bsp_cpu_load_percentage(void)
 {
     return MAX_IDLE_COUNT ?
            (100 - ((100 * (FILTERED_IDLE >> FILTER_SHIFT)) / MAX_IDLE_COUNT)) :
