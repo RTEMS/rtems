@@ -1,6 +1,8 @@
 /*
  *  AT91RM9200 clock specific using the System Timer
- *
+ */
+
+/*
  *  Copyright (c) 2003 by Cogent Computer Systems
  *  Written by Mike Kelly <mike@cogcomp.com>
  *         and Jay Monkman <jtm@lopingdog.com>
@@ -76,7 +78,7 @@ rtems_irq_connect_data clock_isr_data = {
   } while(0)
 
 uint16_t st_pimr_value;
-void Clock_driver_support_initialize_hardware(void)
+static void Clock_driver_support_initialize_hardware(void)
 {
   uint32_t st_str;
   int slck;
@@ -89,6 +91,7 @@ void Clock_driver_support_initialize_hardware(void)
 
   /* read the status to clear the int */
   st_str = ST_REG(ST_SR);
+  (void) st_str; /* avoid set but not used warning */ \
 
   /* set priority */
   AIC_SMR_REG(AIC_SMR_SYSIRQ) = AIC_SMR_PRIOR(0x7);
@@ -97,7 +100,7 @@ void Clock_driver_support_initialize_hardware(void)
   ST_REG(ST_PIMR) = st_pimr_reload;
 }
 
-uint32_t bsp_clock_nanoseconds_since_last_tick(void)
+static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
   uint16_t slck_counts;
 
@@ -115,9 +118,10 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
     \
     /* read the status to clear the int */ \
     st_str = ST_REG(ST_SR); \
+    (void) st_str; /* avoid set but not used warning */ \
   } while (0)
 
-void Clock_driver_support_shutdown_hardware( void )
+static void Clock_driver_support_shutdown_hardware( void )
 {
   BSP_remove_rtems_irq_handler(&clock_isr_data);
 }
