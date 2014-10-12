@@ -46,7 +46,7 @@ static unsigned int get_Frequency(void)
   return freq;
 }
 
-void Clock_driver_support_at_tick(void)
+static void Clock_driver_support_at_tick(void)
 {
   uint64_t tick_reg;
   int bit_mask;
@@ -85,7 +85,7 @@ void Clock_driver_support_at_tick(void)
     _old = set_vector( _new, CLOCK_VECTOR, 1 ); \
   } while ( 0 )
 
-void Clock_driver_support_initialize_hardware(void)
+static void Clock_driver_support_initialize_hardware(void)
 {
   uint64_t tick_reg;
   int bit_mask;
