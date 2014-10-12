@@ -1,7 +1,8 @@
-/*  ckinit.c
- *
+/*
  *  Clock device driver for Lattice Mico32 (lm32).
- *
+ */
+
+/*
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -30,7 +31,7 @@
     rtems_interrupt_catch(_new, MM_IRQ_TIMER0, &_old); \
   } while (0)
 
-void Clock_driver_support_initialize_hardware(void)
+static void Clock_driver_support_initialize_hardware(void)
 {
   MM_WRITE(MM_TIMER0_COMPARE, 
    (MM_READ(MM_FREQUENCY)/(1000000/rtems_configuration_get_microseconds_per_tick())));
@@ -39,7 +40,7 @@ void Clock_driver_support_initialize_hardware(void)
   bsp_interrupt_vector_enable(MM_IRQ_TIMER0);
 }
 
-void Clock_driver_support_shutdown_hardware(void)
+static void Clock_driver_support_shutdown_hardware(void)
 {
   bsp_interrupt_vector_disable(MM_IRQ_TIMER0);
   MM_WRITE(MM_TIMER0_CONTROL, 0);
