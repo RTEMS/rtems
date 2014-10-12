@@ -1,8 +1,9 @@
-/*  bsp.h
- *
+/*
  *  This include file contains all MVME136 board IO definitions.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -68,7 +69,7 @@ extern rtems_isr_entry M68Kvec[];   /* vector table address */
 /* functions */
 
 rtems_isr_entry set_vector(
-  rtems_isr_entry     handler,
+  rtems_isr_entry     handle,
   rtems_vector_number vector,
   int                 type
 );

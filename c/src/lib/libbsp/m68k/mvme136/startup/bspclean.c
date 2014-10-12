@@ -13,16 +13,16 @@
 #include <bsp/bootcard.h>
 #include <rtems/zilog/z8036.h>
 
-extern void start( void  );
+void start(void);
 
-void bsp_return_to_monitor_trap(void)
+static rtems_isr bsp_return_to_monitor_trap(rtems_vector_number ignored)
 {
   register volatile void *start_addr;
 
-  m68k_set_vbr( 0 );                /* restore 135Bug vectors */
-  __asm__ volatile( "trap   #15"  );    /* trap to 135Bug */
-  __asm__ volatile( ".short 0x63" );    /* return to 135Bug (.RETURN) */
-                                    /* restart program */
+  m68k_set_vbr( 0 );                  /* restore 135Bug vectors */
+  __asm__ volatile( "trap   #15"  );  /* trap to 135Bug */
+  __asm__ volatile( ".short 0x63" );  /* return to 135Bug (.RETURN) */
+                                      /* restart program */
   start_addr = start;
 
   __asm__ volatile ( "jmp %0@" : "=a" (start_addr) : "0" (start_addr) );
