@@ -312,7 +312,7 @@ va_list	ap;
 	va_end(ap);
 }
 
-int
+static int
 vmeUniverseFindPciBase(
 	int instance,
 	volatile LERegister **pbase

@@ -52,10 +52,11 @@
 #include <stdio.h>
 #include <string.h>
 
+#define DEBUG
+#include <bsp/VMEDMA.h>
 #include <bsp/bspVmeDmaList.h>
 #include "bspVmeDmaListP.h"
 
-#define DEBUG
 
 typedef struct VMEDmaListNodeRec_ {
 	VMEDmaListNode	p, n;		/* linkage         */
@@ -283,7 +284,7 @@ VMEDmaListNode d = p;
 }
 
 BSP_VMEDmaListDescriptor
-BSP_VMEDmaDescriptorPrev(BSP_VMEDmaListDescriptor p)
+BSP_VMEDmaListDescriptorPrev(BSP_VMEDmaListDescriptor p)
 {
 VMEDmaListNode d = p;
 	return d->p;

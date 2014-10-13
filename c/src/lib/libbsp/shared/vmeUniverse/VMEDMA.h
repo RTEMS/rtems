@@ -297,6 +297,11 @@ BSP_VMEDmaListRefresh(BSP_VMEDmaListDescriptor anchor);
 int
 BSP_VMEDmaListStart(int channel, BSP_VMEDmaListDescriptor list);
 
+#ifdef DEBUG
+void
+BSP_VMEDmaListDump(BSP_VMEDmaListDescriptor p);
+#endif
+
 #ifdef __cplusplus
 }
 #endif
