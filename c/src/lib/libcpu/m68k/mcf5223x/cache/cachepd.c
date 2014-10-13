@@ -9,6 +9,7 @@
 
 #include <rtems.h>
 #include <mcf5223x/mcf5223x.h>
+#include "cache_.h"
 
 /*
  * Cannot be frozen
