@@ -130,18 +130,17 @@ rtems_status_code  bsp_tqm_get_cib_uint32( const char *cib_id,
 
 void bsp_start( void)
 {
-  ppc_cpu_id_t myCpu;
-  ppc_cpu_revision_t myCpuRevision;
 
   uintptr_t interrupt_stack_start = (uintptr_t) bsp_interrupt_stack_start;
   uintptr_t interrupt_stack_size = (uintptr_t) bsp_interrupt_stack_size;
 
   /*
-   * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
-   * store the result in global variables so that it can be used latter...
+   * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
+   * function stores the result in global variables so that it can be used
+   * later...
    */
-  myCpu = get_ppc_cpu_type();
-  myCpuRevision = get_ppc_cpu_revision();
+  get_ppc_cpu_type();
+  get_ppc_cpu_revision();
 
   /* Basic CPU initialization */
   cpu_init();
