@@ -1,14 +1,11 @@
-/*  bsp_start()
- *
+/*
  *  This routine starts the application.  It includes application,
  *  board, and monitor specific initialization and configuration.
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
- *
- *  INPUT:  NONE
- *
- *  OUTPUT: NONE
- *
+ */
+
+/*
  *  Author:	Thomas Doerfler <td@imd.m.isar.de>
  *              IMD Ingenieurbuero fuer Microcomputertechnik
  *
