@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -23,13 +23,22 @@
 #ifndef LIBBSP_ARM_SHARED_ARM_PL050_H
 #define LIBBSP_ARM_SHARED_ARM_PL050_H
 
-#include <libchip/serial.h>
+#include <rtems/termiostypes.h>
+
+#include <bsp/arm-pl050-regs.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-extern const console_fns arm_pl050_fns;
+typedef struct {
+  rtems_termios_device_context base;
+  volatile pl050 *regs;
+  rtems_vector_number irq;
+  uint32_t initial_baud;
+} arm_pl050_context;
+
+extern const rtems_termios_device_handler arm_pl050_fns;
 
 #ifdef __cplusplus
 }

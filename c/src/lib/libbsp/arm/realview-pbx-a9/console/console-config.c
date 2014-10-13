@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -13,53 +13,66 @@
  */
 
 #include <rtems/serial_mouse.h>
-
-#include <libchip/serial.h>
+#include <rtems/bspIo.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/arm-pl011.h>
 #include <bsp/arm-pl050.h>
+#include <bsp/console-termios.h>
 
-console_tbl Console_Configuration_Ports[] = {
+static arm_pl011_context pl011_context = {
+  .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("PL011"),
+  .regs = (volatile pl011 *) 0x10009000,
+  .irq = RVPBXA9_IRQ_UART_0,
+  .initial_baud = 115200
+};
+
+static arm_pl050_context pl050_context = {
+  .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("PL050"),
+  .regs = (volatile pl050 *) 0x10007000,
+  .irq = RVPBXA9_IRQ_KMI1,
+  .initial_baud = 115200
+};
+
+static void output_char(char c)
+{
+  if (c == '\n') {
+    arm_pl011_write_polled(&pl011_context.base, '\r');
+  }
+
+  arm_pl011_write_polled(&pl011_context.base, c);
+}
+
+static bool pl011_probe(rtems_termios_device_context *base)
+{
+  BSP_output_char = output_char;
+
+  return arm_pl011_probe(base);
+}
+
+static void output_char_init(char c)
+{
+  pl011_probe(&pl011_context.base);
+  output_char(c);
+}
+
+BSP_output_char_function_type BSP_output_char = output_char_init;
+
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
+
+const console_device console_device_table[] = {
   {
-    .sDeviceName = "/dev/ttyS0",
-    .deviceType = SERIAL_CUSTOM,
-    .pDeviceFns = &arm_pl011_fns,
-    .deviceProbe = NULL,
-    .pDeviceFlow = NULL,
-    .ulMargin = 10,
-    .ulHysteresis = 0,
-    .pDeviceParams = (void *) 115200,
-    .ulCtrlPort1 = 0x10009000,
-    .ulCtrlPort2 = 0,
-    .ulDataPort = 0,
-    .getRegister = NULL,
-    .setRegister = NULL,
-    .getData = NULL,
-    .setData = NULL,
-    .ulClock = 0,
-    .ulIntVector = RVPBXA9_IRQ_UART_0
+    .device_file = "/dev/ttyS0",
+    .probe = pl011_probe,
+    .handler = &arm_pl011_fns,
+    .context = &pl011_context.base
   }, {
-    .sDeviceName = SERIAL_MOUSE_DEVICE_PS2,
-    .deviceType = SERIAL_CUSTOM,
-    .pDeviceFns = &arm_pl050_fns,
-    .deviceProbe = NULL,
-    .pDeviceFlow = NULL,
-    .ulMargin = 10,
-    .ulHysteresis = 0,
-    .pDeviceParams = (void *) 115200,
-    .ulCtrlPort1 = 0x10007000,
-    .ulCtrlPort2 = 0,
-    .ulDataPort = 0,
-    .getRegister = NULL,
-    .setRegister = NULL,
-    .getData = NULL,
-    .setData = NULL,
-    .ulClock = 0,
-    .ulIntVector = RVPBXA9_IRQ_KMI1
+    .device_file = SERIAL_MOUSE_DEVICE_PS2,
+    .probe = console_device_probe_default,
+    .handler = &arm_pl050_fns,
+    .context = &pl050_context.base
   }
 };
 
-unsigned long Console_Configuration_Count =
-  RTEMS_ARRAY_SIZE(Console_Configuration_Ports);
+const size_t console_device_count = RTEMS_ARRAY_SIZE(console_device_table);
