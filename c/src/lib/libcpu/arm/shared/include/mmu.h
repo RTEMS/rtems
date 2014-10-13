@@ -1,11 +1,14 @@
 /*
  *  ARM MMU header file
- *
+ */
+
+/*
  *  Copyright (c) 2004 by Cogent Computer Systems
  *  Written by Jay Monkman <jtm@lopingdog.com>
  */
-#ifndef __MMU_H__
-#define __MMU_H__
+
+#ifndef __LIBCPU_MMU_H__
+#define __LIBCPU_MMU_H__
 
 #include <stdint.h>
 
@@ -24,5 +27,6 @@ typedef struct {
 } mmu_sect_map_t;
 
 void mmu_init(mmu_sect_map_t *map);
+void mmu_set_cpu_async_mode(void);
 
 #endif /* __MMU_H__ */

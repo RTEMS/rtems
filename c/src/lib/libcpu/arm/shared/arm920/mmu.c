@@ -1,9 +1,12 @@
 /*
  *  ARM920 MMU functions
- *
+ */
+
+/*
  *  Copyright (c) 2004 by Cogent Computer Systems
  *  Written by Jay Monkman <jtm@lopingdog.com>
  */
+
 #include <libcpu/mmu.h>
 #include <libcpu/arm-cp15.h>
 
