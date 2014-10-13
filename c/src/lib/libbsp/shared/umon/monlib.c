@@ -181,6 +181,31 @@ static int	(*_moncom)(int,void *,void *, void *);
 #define GENERIC_MONLOCK		monLock
 #define GENERIC_MONUNLOCK	monUnlock
 
+/*
+ * Prototype these to avoid warnings but let them appear varargs to user.
+ */
+extern void mon_memtrace(
+  char *fmt,
+  int   a1, int a2, int a3, int a4,  int a5,  int a6,
+  int   a7, int a8, int a9, int a10, int a11, int a12
+);
+extern int mon_printf(
+  char *fmt,
+  int   a1, int a2, int a3, int a4,  int a5,  int a6,
+  int   a7, int a8, int a9, int a10, int a11, int a12
+);
+extern int mon_cprintf(
+  char *fmt,
+  int   a1, int a2, int a3, int a4,  int a5,  int a6,
+  int   a7, int a8, int a9, int a10, int a11, int a12
+);
+extern int mon_sprintf(
+  char *buf,
+  char *fmt,
+  int   a1, int a2, int a3, int a4,  int a5,  int a6,
+  int   a7, int a8, int a9, int a10, int a11, int a12
+);
+
 /**************************************************************************
  *
  * monConnect():
@@ -311,6 +336,7 @@ monConnect(int (*mon)(int,void *,void *,void *),
  */
 static int ignorelock = 0;
 
+#if KEEP_TO_STAY_IN_SYNC_WITH_UPSTREAM_BUT_UNUSED
 static void
 DisableMonLock(void)
 {
@@ -322,6 +348,7 @@ EnableMonLock(void)
 {
 	ignorelock = 0;
 }
+#endif
 
 /* monLock() & monUnlock():
  * Used by all of the wrapper functions below this point to call
