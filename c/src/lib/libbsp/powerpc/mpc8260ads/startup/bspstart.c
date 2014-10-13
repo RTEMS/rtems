@@ -147,9 +147,6 @@ void _BSP_Uart2_disable(void)
 
 void bsp_start(void)
 {
-  ppc_cpu_id_t myCpu;
-  ppc_cpu_revision_t myCpuRevision;
-
   /* Set MPC8260ADS board LEDS and Uart enable lines */
   _BSP_GPLED0_off();
   _BSP_GPLED1_off();
@@ -157,11 +154,12 @@ void bsp_start(void)
   _BSP_Uart2_enable();
 
   /*
-   * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
-   * store the result in global variables so that it can be used latter...
+   * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
+   * function stores the result in global variables so that it can be used
+   * later...
    */
-  myCpu 	= get_ppc_cpu_type();
-  myCpuRevision = get_ppc_cpu_revision();
+  get_ppc_cpu_type();
+  get_ppc_cpu_revision();
 
   cpu_init();
 
