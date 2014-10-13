@@ -59,6 +59,12 @@ extern void assertSoftwareInterrupt(uint32_t);
 extern void promCopyIcacheFlush(void);
 extern void promCopyDcacheFlush(void);
 
+/*
+ * Called from user programs wanting to use the GDB stub.
+ */
+void mg5rdbgCloseGDBuart(void);
+int mg5rdbgOpenGDBuart(int);
+
 #ifdef __cplusplus
 }
 #endif

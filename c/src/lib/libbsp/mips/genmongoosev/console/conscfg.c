@@ -76,7 +76,8 @@ console_tbl     Console_Configuration_Ports[] = {
  *  Declare some information used by the console driver
  */
 
-#define NUM_CONSOLE_PORTS (sizeof(Console_Configuration_Ports)/sizeof(console_tbl))
+#define NUM_CONSOLE_PORTS \
+  (sizeof(Console_Configuration_Ports)/sizeof(console_tbl))
 
 unsigned long  Console_Configuration_Count = NUM_CONSOLE_PORTS;
 
@@ -86,7 +87,7 @@ unsigned long  Console_Configuration_Count = NUM_CONSOLE_PORTS;
 
 #include <rtems/bspIo.h>
 
-void GENMG5_output_char(char c) { write( 2, &c, 1 ); }
+static void GENMG5_output_char(char c) { write( 2, &c, 1 ); }
 
 BSP_output_char_function_type           BSP_output_char = GENMG5_output_char;
 BSP_polling_getchar_function_type       BSP_poll_char = NULL;

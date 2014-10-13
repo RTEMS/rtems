@@ -1,5 +1,4 @@
 /*
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -81,12 +80,12 @@ extern const console_fns mg5uart_fns_polled;
  */
 
 uint32_t   mg5uart_get_register(    /* registers are on 32-bit boundaries */
-  uint32_t    ulCtrlPort,           /*   and accessed as word             */
+  uintptr_t   ulCtrlPort,           /*   and accessed as word             */
   uint32_t    ucRegNum
 );
 
 void  mg5uart_set_register(
-  uint32_t    ulCtrlPort,
+  uintptr_t   ulCtrlPort,
   uint32_t    ucRegNum,
   uint32_t    ucData
 );

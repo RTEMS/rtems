@@ -44,19 +44,14 @@ typedef struct _mg5uart_context
  *  Define MG5UART_STATIC to nothing while debugging so the entry points
  *  will show up in the symbol table.
  */
-
-#define MG5UART_STATIC
-
-/* #define MG5UART_STATIC static */
-
-
+/* #define MG5UART_STATIC */
+#define MG5UART_STATIC static
 
 #define MG5UART_SETREG( _base, _register, _value ) \
         MONGOOSEV_WRITE_REGISTER( _base, _register, _value )
 
 #define MG5UART_GETREG( _base, _register ) \
         MONGOOSEV_READ_REGISTER( _base, _register )
-
 
 /*
  *  Console Device Driver Support Functions
@@ -83,8 +78,6 @@ MG5UART_STATIC void mg5uart_enable_interrupts(
  *  NOTE: Yes .. this is ugly but it provides 5 interrupt source
  *  wrappers which are nearly functionally identical.
  */
-
-
 extern void mips_default_isr(int vector);
 
 #define __ISR(_TYPE, _OFFSET) \
@@ -121,7 +114,6 @@ __ISR(rx_ready, MG5UART_IRQ_RX_READY)
  *  This function sets the UART channel to reflect the requested termios
  *  port settings.
  */
-
 MG5UART_STATIC int mg5uart_set_attributes(
   int minor,
   const struct termios *t
@@ -233,7 +225,6 @@ MG5UART_STATIC int mg5uart_set_attributes(
  *
  *  This function sets the default values of the per port context structure.
  */
-
 MG5UART_STATIC void mg5uart_initialize_context(
   int               minor,
   mg5uart_context  *pmg5uartContext
@@ -263,10 +254,8 @@ MG5UART_STATIC void mg5uart_initialize_context(
  *
  *  This function initializes the DUART to a quiecsent state.
  */
-
 MG5UART_STATIC void mg5uart_init(int minor)
 {
-  uint32_t              pMG5UART_port;
   uint32_t              pMG5UART;
   uint32_t  		cmdSave;
   uint32_t  		shift;
@@ -280,7 +269,6 @@ MG5UART_STATIC void mg5uart_init(int minor)
   mg5uart_initialize_context( minor, pmg5uartContext );
 
   pMG5UART      = Console_Port_Tbl[minor]->ulCtrlPort1;
-  pMG5UART_port = Console_Port_Tbl[minor]->ulCtrlPort2;
 
   if ( Console_Port_Tbl[minor]->ulDataPort == MG5UART_UART0 )
      shift = MONGOOSEV_UART0_CMD_SHIFT;
@@ -308,7 +296,6 @@ MG5UART_STATIC void mg5uart_init(int minor)
  *
  *  Default state is 9600 baud, 8 bits, No parity, and 1 stop bit.
  */
-
 MG5UART_STATIC int mg5uart_open(
   int      major,
   int      minor,
@@ -317,7 +304,6 @@ MG5UART_STATIC int mg5uart_open(
 {
   uint32_t      pMG5UART;
   uint32_t      pMG5UART_port;
-  uint32_t  	vector;
   uint32_t      cmd, cmdSave;
   uint32_t      baudcmd;
   uint32_t      shift;
@@ -326,13 +312,11 @@ MG5UART_STATIC int mg5uart_open(
 
   pMG5UART      = Console_Port_Tbl[minor]->ulCtrlPort1;
   pMG5UART_port = Console_Port_Tbl[minor]->ulCtrlPort2;
-  vector        = Console_Port_Tbl[minor]->ulIntVector;
 
   if ( Console_Port_Tbl[minor]->ulDataPort == MG5UART_UART0 )
     shift = MONGOOSEV_UART0_CMD_SHIFT;
   else
     shift = MONGOOSEV_UART1_CMD_SHIFT;
-
 
   /* XXX default baud rate could be from configuration table */
 
@@ -365,7 +349,6 @@ MG5UART_STATIC int mg5uart_open(
  *
  *  This function shuts down the requested port.
  */
-
 MG5UART_STATIC int mg5uart_close(
   int      major,
   int      minor,
@@ -373,13 +356,11 @@ MG5UART_STATIC int mg5uart_close(
 )
 {
   uint32_t      pMG5UART;
-  uint32_t      pMG5UART_port;
   uint32_t  	cmd, cmdSave;
   uint32_t      shift;
   rtems_interrupt_level  Irql;
 
   pMG5UART      = Console_Port_Tbl[minor]->ulCtrlPort1;
-  pMG5UART_port = Console_Port_Tbl[minor]->ulCtrlPort2;
 
   /*
    *  Disable interrupts from this channel and then disable it totally.
@@ -406,15 +387,11 @@ MG5UART_STATIC int mg5uart_close(
   return(RTEMS_SUCCESSFUL);
 }
 
-
-
-
 /*
  *  mg5uart_write_polled
  *
  *  This routine polls out the requested character.
  */
-
 MG5UART_STATIC void mg5uart_write_polled(
   int   minor,
   char  c
@@ -494,7 +471,6 @@ MG5UART_STATIC void mg5uart_process_isr_rx_error(
      mask << shift );
 }
 
-
 MG5UART_STATIC void mg5uart_process_isr_rx_frame_error(
   int  minor
 )
@@ -508,13 +484,6 @@ MG5UART_STATIC void mg5uart_process_isr_rx_overrun_error(
 {
    mg5uart_process_isr_rx_error( minor, MONGOOSEV_UART_RX_OVERRUN_ERROR );
 }
-
-
-
-
-
-
-
 
 MG5UART_STATIC void mg5uart_process_tx_isr(
    int        minor,
@@ -554,8 +523,6 @@ MG5UART_STATIC void mg5uart_process_tx_isr(
    /* mg5uart_enable_interrupts(minor, MG5UART_ENABLE_ALL_EXCEPT_TX); */
 }
 
-
-
 MG5UART_STATIC void mg5uart_process_isr_tx_empty(
   int  minor
 )
@@ -569,10 +536,6 @@ MG5UART_STATIC void mg5uart_process_isr_tx_ready(
 {
    mg5uart_process_tx_isr( minor, MONGOOSEV_UART_TX_READY );
 }
-
-
-
-
 
 MG5UART_STATIC void mg5uart_process_isr_rx_ready(
   int  minor
@@ -589,7 +552,9 @@ MG5UART_STATIC void mg5uart_process_isr_rx_ready(
 
   rtems_termios_enqueue_raw_characters(
      Console_Port_Data[minor].termios_data,
-     &c, 1 );
+     &c,
+    1
+  );
 }
 
 static rtems_irq_connect_data mg5uart_rx_frame_error_cd  = {  \
@@ -680,7 +645,6 @@ MG5UART_STATIC void mg5uart_initialize_interrupts(int minor)
  *
  *  Console Termios output entry point when using interrupt driven output.
  */
-
 MG5UART_STATIC int mg5uart_write_support_int(
   int         minor,
   const char *buf,

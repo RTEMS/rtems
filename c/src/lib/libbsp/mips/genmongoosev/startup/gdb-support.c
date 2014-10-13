@@ -1,7 +1,9 @@
 /*
  *  GDB Support Routines for the Mongoose-V
- *
- *  COPYRIGHT (c) 1989-2002.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -9,7 +11,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems.h>
+#include <bsp.h>
 #include <rtems/bspIo.h>
 #include <bsp/mongoose-v.h>
 #include "gdb_if.h"
@@ -34,6 +36,12 @@ extern int mg5uart_open(int major,int minor, void *arg);
 extern int mg5uart_close(int major,int minor, void *arg);
 extern void mg5uart_write_polled(int minor, char c );
 extern int mg5uart_inbyte_nonblocking_polled(int minor);
+
+/*
+ *  Prototypes for methods assumed to exist by the gdb stub
+ */
+char getDebugChar (void);
+void putDebugChar (char c);
 
 static int debugUartEnabled = 0;
 
