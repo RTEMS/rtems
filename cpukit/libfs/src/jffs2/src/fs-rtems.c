@@ -318,12 +318,14 @@ static void rtems_jffs2_do_lock(const struct super_block *sb)
 {
 	rtems_status_code sc = rtems_semaphore_obtain(sb->s_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 	assert(sc == RTEMS_SUCCESSFUL);
+	(void) sc; /* avoid unused variable warning */
 }
 
 static void rtems_jffs2_do_unlock(const struct super_block *sb)
 {
 	rtems_status_code sc = rtems_semaphore_release(sb->s_mutex);
 	assert(sc == RTEMS_SUCCESSFUL);
+	(void) sc; /* avoid unused variable warning */
 }
 
 static void rtems_jffs2_free_directory_entries(struct _inode *inode)
@@ -366,6 +368,7 @@ static void rtems_jffs2_free_fs_info(rtems_jffs2_fs_info *fs_info, bool do_mount
 	if (sb->s_mutex != 0) {
 		rtems_status_code sc = rtems_semaphore_delete(sb->s_mutex);
 		assert(sc == RTEMS_SUCCESSFUL);
+		(void) sc; /* avoid unused variable warning */
 	}
 
 	rtems_jffs2_flash_control_destroy(fs_info->sb.s_flash_control);
