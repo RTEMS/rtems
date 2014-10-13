@@ -21,7 +21,7 @@
 /*
  *  BSP Specific Initialization in C
  */
-void bsp_start_default( void )
+static void bsp_start_default( void )
 {
   uint32_t cr;
   uint32_t pend,last;
