@@ -122,14 +122,15 @@ rtems_task Init(
   for (index=1 ; index <=10 ; index++ ) {
     struct timespec start, stop;
     struct timespec diff;
-    int j, max = (index * 10000);
+    long j, max = (index * 10000L);
     rtems_clock_get_uptime( &start );
       for (j=0 ; j<max ; j++ )
         dummy_function_empty_body_to_force_call();
     rtems_clock_get_uptime( &stop );
 
     subtract_em( &start, &stop, &diff );
-    printf( "loop of %d %" PRIdtime_t ":%ld %" PRIdtime_t ":%ld --> %" PRIdtime_t ":%ld\n",
+    printf( "loop of %ld %" PRIdtime_t
+              ":%ld %" PRIdtime_t ":%ld --> %" PRIdtime_t ":%ld\n",
       max,
       start.tv_sec, start.tv_nsec,
       stop.tv_sec, stop.tv_nsec,
