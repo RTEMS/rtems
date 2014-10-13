@@ -45,8 +45,8 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += startup/cpuboot.c startup/crc.c startup/debugport.c \
     startup/gdb-hooks.c ../../shared/bootcard.c \
     startup/m68302scc.c startup/m68k-stub.c \
-    ../../shared/bsppretaskinghook.c startup/memcheck.c \
-    ../../shared/bspgetworkarea.c startup/memcheck.c \
+    ../../shared/bsppretaskinghook.c \
+    ../../shared/bspgetworkarea.c \
     startup/trace.c ../../shared/gnatinstallhandler.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppost.c \
     ../../shared/bspstart.c ../../shared/bspclean.c ../../shared/sbrk.c \

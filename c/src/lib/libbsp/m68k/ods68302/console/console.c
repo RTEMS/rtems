@@ -1,7 +1,9 @@
 /*
  * Initialize the MC68302 SCC2 for console IO board support package.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,14 +20,7 @@
 /*  console_initialize
  *
  *  This routine initializes the console IO driver.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
  */
-
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
@@ -46,23 +41,14 @@ rtems_device_driver console_initialize(
     rtems_fatal_error_occurred(status);
 
   return RTEMS_SUCCESSFUL;
-
 }
 
 /*  is_character_ready
  *
  *  Check to see if a character is available on the MC68302's SCC2.  If so,
  *  then return a TRUE (along with the character).  Otherwise return FALSE.
- *
- *  Input parameters:   pointer to location in which to return character
- *
- *  Output parameters:  character (if available)
- *
- *  Return values:      TRUE - character available
- *                      FALSE - no character available
  */
-
-bool is_character_ready(
+static bool is_character_ready(
   char *ch				/* -> character  */
 )
 {
@@ -77,15 +63,8 @@ bool is_character_ready(
 /*  inbyte
  *
  *  Receive a character from the MC68302's SCC2.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:      character read
  */
-
-char inbyte( void )
+static char inbyte( void )
 {
   char ch;
 
@@ -98,14 +77,8 @@ char inbyte( void )
  *
  *  Transmit a character out on the MC68302's SCC2.
  *  It may support XON/XOFF flow control.
- *
- *  Input parameters:
- *    ch  - character to be transmitted
- *
- *  Output parameters:  NONE
  */
-
-void outbyte(
+static void outbyte(
   char ch
 )
 {
@@ -115,7 +88,6 @@ void outbyte(
 /*
  *  Open entry point
  */
-
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -128,7 +100,6 @@ rtems_device_driver console_open(
 /*
  *  Close entry point
  */
-
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -141,7 +112,6 @@ rtems_device_driver console_close(
 /*
  * read bytes from the serial port. We only have stdin.
  */
-
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -173,7 +143,6 @@ rtems_device_driver console_read(
 /*
  * write bytes to the serial port. Stdout and stderr are the same.
  */
-
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -204,7 +173,6 @@ rtems_device_driver console_write(
 /*
  *  IO Control entry point
  */
-
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,

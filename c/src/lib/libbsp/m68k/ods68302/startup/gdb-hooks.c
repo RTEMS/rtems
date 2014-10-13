@@ -1,15 +1,22 @@
-/*****************************************************************************/
 /*
-  Hooks for GDB
-
+ *  Hooks for GDB
+ *
  */
-/*****************************************************************************/
 
 #include <bsp.h>
 #include <rtems/m68k/m68302.h>
 #include <m68302scc.h>
 
 static int initialised = 0;
+
+/*
+ * This file does not intend to make things part of the public interface.
+ * Methods here are only available to the GDB stub. So prototypes are
+ * needed to avoid warnings.
+ */
+void putDebugChar(char ch);
+char getDebugChar(void);
+void exceptionHandler(unsigned int vector, void *handler);
 
 void putDebugChar(char ch)
 {

@@ -1,9 +1,7 @@
-/*****************************************************************************/
 /*
-  Trace Exception dumps a back trace to the debug serial port
-
+ *  Trace Exception dumps a back trace to the debug serial port
+ *
  */
-/*****************************************************************************/
 
 #include <bsp.h>
 #include <debugport.h>

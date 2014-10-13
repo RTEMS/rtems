@@ -537,6 +537,12 @@ __asm__ ("		movel   %d0,%sp@-");	/* push exception onto stack  */
 __asm__ ("		jbsr    handle_exception");    /* this never returns */
 __asm__ ("           rts");                  /* return */
 
+/*
+ * This is only called from assembly in this file. This file is a self
+ * contained gdb stub.
+ */
+void _returnFromException(Frame *frame);
+
 void _returnFromException(Frame *frame)
 {
   /* if no passed in frame, use the last one */

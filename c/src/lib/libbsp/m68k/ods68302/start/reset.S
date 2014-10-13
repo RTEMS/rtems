@@ -1,16 +1,18 @@
 /*
+ *  Manages all vectors with seperate handlers to trap unhandled
+ *  execptions.
+ *
  *  Re-written the gen68302 start-up code.
  *
  *  Uses gas syntax only, removed the OAR asm.h.
  *
  *  Supplies a complete vector table in ROM.
  *
- *  Manages all vectors with seperate handlers to trap unhandled
- *  execptions.
- *
  *  Uses the target specific header file to get the runtime
  *  configuration
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1996
  *  Objective Design Systems Pty Ltd (ODS)
  *
@@ -18,6 +20,8 @@
  *  On-Line Applications Research Corporation (OAR).
  *
  */
+
+#include <bsp.h>  /* just to indicate the dependency */
 
 |
 | some basic defined, this is that is required
