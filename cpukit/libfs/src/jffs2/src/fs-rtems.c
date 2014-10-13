@@ -25,6 +25,7 @@
 #include <errno.h>
 #include <string.h>
 #include <assert.h>
+#include <rtems/libio.h>
 #include <rtems/libio_.h>
 
 /* Ensure that the JFFS2 values are identical to the POSIX defines */
