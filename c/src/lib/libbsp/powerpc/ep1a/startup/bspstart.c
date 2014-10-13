@@ -243,7 +243,6 @@ void bsp_start( void )
   uintptr_t intrStackStart;
   uintptr_t intrStackSize;
   ppc_cpu_id_t myCpu;
-  ppc_cpu_revision_t myCpuRevision;
   Triv121PgTbl	pt=0;   /*  R = e; */
 
   /*
@@ -252,9 +251,8 @@ void bsp_start( void )
    * latter...
    */
   BSP_Increment_Light();
-  myCpu         = get_ppc_cpu_type();
-  myCpuRevision = get_ppc_cpu_revision();
-  (void) myCpuRevision; /* avoid set but not used warning */
+  myCpu = get_ppc_cpu_type();
+  get_ppc_cpu_revision();
 
   EUMBBAR = get_eumbbar();
   printk("EUMBBAR 0x%08x\n", EUMBBAR );
