@@ -414,10 +414,12 @@ rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqnum)
 static int BSP_irq_handle_at_ipic( unsigned excNum)
 {
 	int32_t vecnum;
+#ifdef GEN83XX_ENABLE_INTERRUPT_NESTING
 	mpc83xx_ipic_mask_t mask_save;
 	const mpc83xx_ipic_mask_t *mask_ptr;
 	uint32_t msr = 0;
 	rtems_interrupt_level level;
+#endif
 
 	/* Get vector number */
 	switch (excNum) {

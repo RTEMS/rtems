@@ -296,7 +296,9 @@ rtems_status_code bsp_register_spi
 |    0 or error code                                                        |
 \*=========================================================================*/
 {
+#if defined(MPC83XX_BOARD_MPC8313ERDB)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
+#endif
   int ret_code;
   unsigned spi_busno;
 
@@ -373,7 +375,7 @@ rtems_status_code bsp_register_spi
   }
   spi_busno = (unsigned) ret_code;
 
-#if defined( MPC83XX_BOARD_MPC8313ERDB)
+#if defined(MPC83XX_BOARD_MPC8313ERDB)
 
   /* Register SD Card driver */
   sd_card_driver_table [0].bus = spi_busno;
@@ -382,7 +384,7 @@ rtems_status_code bsp_register_spi
     return sc;
   }
 
-#elif defined( MPC83XX_BOARD_MPC8349EAMDS)
+#elif defined(MPC83XX_BOARD_MPC8349EAMDS)
 
   /*
    * register M25P40 Flash
