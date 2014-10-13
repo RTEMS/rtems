@@ -10,8 +10,7 @@
 
 #include <libchip/serial.h>
 
-extern void ofw_write(const char *,const int );
-extern void ofw_read(void *,int );
+#include <boot/ofw.h>
 
 int sun4v_console_device_first_open(int major, int minor, void *arg)
 {

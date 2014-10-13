@@ -100,6 +100,8 @@ extern int ofw_package_to_path(const phandle device, char *buf, const int buflen
 
 extern int ofw(ofw_args_t *arg);
 extern unsigned long ofw_call(const char *service, const int nargs, const int nret, ofw_arg_t *rets, ...);
+extern void ofw_write(const char *str, const int len);
+extern void ofw_read(void *str, const int len);
 extern unsigned int ofw_get_address_cells(const phandle device);
 extern unsigned int ofw_get_size_cells(const phandle device);
 extern void *ofw_translate(const void *virt);
