@@ -447,27 +447,6 @@ static void ( *driver_input_handler_com1 )( void *,  char *, int ) = 0;
 static void ( *driver_input_handler_com2 )( void *,  char *, int ) = 0;
 
 /*
- * This routine sets the handler to handle the characters received
- * from the serial port.
- */
-static void uart_set_driver_handler(
-  int port,
-  void ( *handler )( void *,  char *, int )
-)
-{
-  switch( port )
-  {
-    case BSP_UART_COM1:
-     driver_input_handler_com1 = handler;
-     break;
-
-    case BSP_UART_COM2:
-     driver_input_handler_com2 = handler;
-     break;
-  }
-}
-
-/*
  * Set channel parameters
  */
 void
