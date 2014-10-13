@@ -28,15 +28,6 @@ static void BSP_clock_hdl(void * arg)
   Clock_isr(arg);
 }
 
-static int BSP_get_clock_irq_level(void)
-{
-  /*
-   * Caution : if you change this, you must change the
-   * definition of BSP_PERIODIC_TIMER accordingly
-   */
-  return 6;
-}
-
 int BSP_disconnect_clock_handler (void)
 {
   rtems_status_code sc;
