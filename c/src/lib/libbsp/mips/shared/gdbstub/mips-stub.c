@@ -208,6 +208,10 @@ extern char getDebugChar (void);
 extern void putDebugChar (char);
 
 /*
+ * Exception handler
+ */
+void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame);
+/*
  * The following definitions are used for the gdb stub memory map
  */
 struct memseg
@@ -870,8 +874,7 @@ computeSignal (void)
  *  This support function prepares and sends the message containing the
  *  basic information about this exception.
  */
-
-void gdb_stub_report_exception_info(
+static void gdb_stub_report_exception_info(
   rtems_vector_number vector,
   CPU_Interrupt_frame *frame,
   int                  thread
