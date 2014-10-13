@@ -1,7 +1,9 @@
 /*
- *  This file contains the ep1a printk support routines
- *
- *  COPYRIGHT (c) 2011.
+ *  This file contains the ep1a printk support routines.
+ */
+
+/*
+ *  COPYRIGHT (c) 2011-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,8 +21,7 @@
 rtems_device_minor_number         BSPPrintkPort = 0;
 
 /* const char arg to be compatible with BSP_output_char decl. */
-void
-debug_putc_onlcr(const char c)
+static void debug_putc_onlcr(const char c)
 {
   volatile int i;
 
@@ -30,7 +31,6 @@ debug_putc_onlcr(const char c)
    *        forces a character to be polled out of com1
    *        regardless of where the console is.
    */
-
   volatile unsigned char *ptr = (void *)0xff800000;
 
   if ('\n'==c){

@@ -1,7 +1,9 @@
 /*
  *  This file contains the implementation of rtems initialization
  *  related to interrupt handling.
- *
+ */
+
+/*
  *  CopyRight (C) 1999 valette@crf.canon.fr
  *
  * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
@@ -34,25 +36,42 @@
 */
 #define TRACE_IRQ_INIT
 
-/*
- * default on/off function
- */
-static void nop_func(void){}
-/*
- * default isOn function
- */
-static int not_connected(void) {return 0;}
-/*
- * default possible isOn function
- */
-static int connected(void) {return 1;}
+static void IRQ_Default_rtems_irq_hdl(
+  rtems_irq_hdl_param ptr
+)
+{
+}
+
+static void IRQ_Default_rtems_irq_enable(
+  const struct __rtems_irq_connect_data__ *ptr
+)
+{
+}
+
+static void IRQ_Default_rtems_irq_disable(
+  const struct __rtems_irq_connect_data__ *ptr
+)
+{
+}
+
+static int  IRQ_Default_rtems_irq_is_enabled(
+  const struct __rtems_irq_connect_data__ *ptr)
+{
+  return 1;
+}
 
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings     	initial_config;
-static rtems_irq_connect_data     	defaultIrq = {
-  /* vectorIdex,	 hdl		, handle	, on		, off		, isOn */
-  0, 			 nop_func	, NULL		, nop_func	, nop_func	, not_connected
+
+static rtems_irq_connect_data defaultIrq = {
+  .name   = 0,
+  .hdl    = IRQ_Default_rtems_irq_hdl,
+  .handle = NULL,
+  .on     = IRQ_Default_rtems_irq_enable,
+  .on     = IRQ_Default_rtems_irq_disable,
+  .isOn   = IRQ_Default_rtems_irq_is_enabled
 };
+
 static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
   /*
    * actual rpiorities for interrupt :
