@@ -9,6 +9,7 @@
 
 #include <rtems.h>
 #include <mcf5235/mcf5235.h>
+#include "cache_.h"
 
 /*
  *  Default value for the cacr is set by the BSP
