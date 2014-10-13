@@ -42,17 +42,40 @@ extern void external_exception_vector_prolog_code(void);
 extern unsigned int decrementer_exception_vector_prolog_code_size[];
 extern void decrementer_exception_vector_prolog_code(void);
 
-static void IRQ_Default_rtems_irq_hdl( rtems_irq_hdl_param ptr ) {}
-static void IRQ_Default_rtems_irq_enable (const struct __rtems_irq_connect_data__ *ptr){}
-static void IRQ_Default_rtems_irq_disable(const struct __rtems_irq_connect_data__ *ptr){}
-static int  IRQ_Default_rtems_irq_is_enabled(const struct __rtems_irq_connect_data__ *ptr){ return 1; }
+static void IRQ_Default_rtems_irq_hdl(
+  rtems_irq_hdl_param ptr
+)
+{
+}
+
+static void IRQ_Default_rtems_irq_enable(
+  const struct __rtems_irq_connect_data__ *ptr
+)
+{
+}
+
+static void IRQ_Default_rtems_irq_disable(
+  const struct __rtems_irq_connect_data__ *ptr
+)
+{
+}
+
+static int  IRQ_Default_rtems_irq_is_enabled(
+  const struct __rtems_irq_connect_data__ *ptr)
+{
+  return 1;
+}
 
 static rtems_irq_connect_data     	rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings     	initial_config;
 
-static rtems_irq_connect_data     	defaultIrq = {
-/*name,	 hdl				handle	on				off				isOn */
-  0,	 IRQ_Default_rtems_irq_hdl,	NULL,	IRQ_Default_rtems_irq_enable,	IRQ_Default_rtems_irq_disable,	IRQ_Default_rtems_irq_is_enabled
+static rtems_irq_connect_data defaultIrq = {
+  .name   = 0,
+  .hdl    = IRQ_Default_rtems_irq_hdl,
+  .handle = NULL,
+  .on     = IRQ_Default_rtems_irq_enable,
+  .on     = IRQ_Default_rtems_irq_disable,
+  .isOn   = IRQ_Default_rtems_irq_is_enabled
 };
 
 static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER];
