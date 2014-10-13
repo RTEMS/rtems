@@ -259,7 +259,7 @@ rtems_stdio_redirect_close(rtems_stdio_redirect* sr)
 
     while (sr->state & RTEMS_STDIO_REDIRECT_FINISHED)
     {
-      sleep(250);
+      usleep(250UL * 1000000UL);
     }
 
     rtems_stdio_redirect_lock(sr);
