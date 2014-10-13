@@ -5,8 +5,10 @@
 #include <rtems.h>
 #include <rtems/score/registers.h>
 #include "cache_.h"
+#include <libcpu/cpu.h>
 
-void _CPU_disable_cache(void) {
+void _CPU_disable_cache(void)
+{
   unsigned int regCr0;
 
   regCr0 = i386_get_cr0();
@@ -20,7 +22,8 @@ void _CPU_disable_cache(void) {
  * Enable the entire cache
  */
 
-void _CPU_enable_cache(void) {
+void _CPU_enable_cache(void)
+{
   unsigned int regCr0;
 
   regCr0 = i386_get_cr0();
