@@ -44,10 +44,13 @@ rtems_isr_entry set_vector(
   int                 type
 );
 
+void rtems_bsp_delay(int num);
+
+/*
+ * Prototypes for methods inside the BSP that cross file boundaries.
+ */
 void init_pit( void );
-
 void transmit_char( char ch );
-
 void transmit_char_portb( char ch );
 
 #endif

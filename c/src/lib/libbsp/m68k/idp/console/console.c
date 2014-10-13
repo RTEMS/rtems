@@ -1,6 +1,8 @@
 /*
  *  This file contains the Motorola IDP console IO package.
- *
+ */
+
+/*
  *  Written by Doug McBride, Colorado Space Grant College
  *  Based off of the board support packages of RTEMS
  *
@@ -21,14 +23,7 @@ rtems_isr C_Receive_ISR(rtems_vector_number vector);
 /*  console_initialize
  *
  *  This routine initializes the console IO driver.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
  */
-
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
@@ -75,15 +70,8 @@ rtems_device_driver console_initialize(
 /*  is_character_ready
  *
  *  This routine returns TRUE if a character is available.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
  */
-
-bool is_character_ready(
+static bool is_character_ready(
   char *ch,
   int   port
 )
@@ -95,41 +83,11 @@ bool is_character_ready(
   return true;
 }
 
-/*  quick_char_check
- *
- *  This routine returns TRUE if a character is available.
- *  It is different from above because it does not disturb the ring buffer
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- */
-
-bool quick_char_check(
-  int   port
-)
-{
-  if ( Ring_buffer_Is_empty( &Console_Buffer[ port ] ) )
-    return false;
-
-  return true;
-}
-
 /*  inbyte
  *
  *  This routine reads a character from the UART through a buffer.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    character read from UART
  */
-
-char inbyte(
+static char inbyte(
   int port
 )
 {
@@ -147,14 +105,8 @@ char inbyte(
  *
  *  This routine transmits a character out the M68681.  It supports
  *  XON/XOFF flow control.
- *
- *  Input parameters:
- *    ch  - character to be transmitted
- *
- *  Output parameters:  NONE
  */
-
-void outbyte(
+static void outbyte(
   char ch,
   int  port
 )
@@ -173,7 +125,6 @@ void outbyte(
 /*
  *  Open entry point
  */
-
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -186,7 +137,6 @@ rtems_device_driver console_open(
 /*
  *  Close entry point
  */
-
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -199,7 +149,6 @@ rtems_device_driver console_close(
 /*
  * read bytes from the serial port. We only have stdin.
  */
-
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -234,7 +183,6 @@ rtems_device_driver console_read(
 /*
  * write bytes to the serial port. Stdout and stderr are the same.
  */
-
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
