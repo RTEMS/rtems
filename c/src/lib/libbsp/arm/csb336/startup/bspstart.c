@@ -1,6 +1,8 @@
 /*
  * Cogent CSB336 - MC9328MXL SBC startup code
- *
+ */
+
+/*
  * Copyright (c) 2004 by Cogent Computer Systems
  * Written by Jay Monkman <jtm@lopingdog.com>
  *
@@ -13,8 +15,7 @@
 #include <bsp/irq-generic.h>
 #include <rtems/bspIo.h>
 #include <mc9328mxl.h>
-
-extern void mmu_set_cpu_async_mode(void);
+#include <libcpu/mmu.h>
 
 /*
  * bsp_start_default - BSP initialization function
@@ -28,7 +29,7 @@ extern void mmu_set_cpu_async_mode(void);
  *   Since RTEMS is not configured, no RTEMS functions can be called.
  *
  */
-void bsp_start_default( void )
+static void bsp_start_default( void )
 {
   int i;
 
