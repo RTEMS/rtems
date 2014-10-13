@@ -100,7 +100,6 @@ uint32_t   _CPU_ISR_Get_level( void )
  *  a synchronous trap.  This will avoid the executive changing the return
  *  address.
  */
-/*  Verified this is working properly from sparc64_install_isr_entries */
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,

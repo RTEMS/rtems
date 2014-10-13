@@ -89,7 +89,7 @@ startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/bspgetworkarea.c \
-    ../shared/startup/bsppredriverhook.c \
+    ../../shared/bsppredriverhook.c \
     ../shared/startup/setvec.c \
     ../../shared/gnatinstallhandler.c  \
     ../shared/helenos/boot/genarch/balloc.c \
@@ -124,7 +124,6 @@ libbsp_a_SOURCES = $(startup_SOURCES) $(mmu_SOURCES) $(clock_SOURCES) $(console_
 libbsp_a_LIBADD = \
       ../../../libcpu/@RTEMS_CPU@/shared/shared-score.rel \
       ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
-      ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel \
       ../../../libcpu/@RTEMS_CPU@/shared/sparc64-syscall.rel 
 
 include $(srcdir)/preinstall.am

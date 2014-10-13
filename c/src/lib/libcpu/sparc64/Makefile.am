@@ -25,11 +25,6 @@ shared_sparc64_syscall_rel_SOURCES = shared/syscall/sparc64-syscall.S \
 shared_sparc64_syscall_rel_CPPFLAGS = $(AM_CPPFLAGS)
 shared_sparc64_syscall_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-noinst_PROGRAMS += shared/interrupts.rel
-shared_interrupts_rel_SOURCES = shared/interrupts/installisrentries.c
-shared_interrupts_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/interrupts
-shared_interrupts_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 noinst_PROGRAMS += shared/cache.rel
 shared_cache_rel_SOURCES = shared/cache/cache.c shared/cache/cache_.h \
     ../shared/src/cache_aligned_malloc.c ../shared/src/cache_manager.c
