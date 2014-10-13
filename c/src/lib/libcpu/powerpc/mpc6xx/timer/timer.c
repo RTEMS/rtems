@@ -2,11 +2,11 @@
  *  @file
  *  @brief
  *
- *  This file implements a benchmark timer using the PPC Timebase
+ *  This file implements a benchmark timer using the PPC Timebase Register.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2000.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -30,8 +30,7 @@ unsigned clicks_overhead = 0;
 /*
  * Timer Get overhead
  */
-
-int Timer_get_clicks_overhead(void)
+static int Timer_get_clicks_overhead(void)
 {
   uint64_t    clicks;
 
@@ -78,14 +77,6 @@ benchmark_timer_t benchmark_timer_read(void)
     return total;          /* in "clicks" of the decrementer units */
 
   return (int) BSP_Convert_decrementer(total - clicks_overhead);
-}
-
-unsigned long long Read_long_timer(void)
-{
-  uint64_t    total64;
-
-  total64 = PPC_Get_timebase_register();
-  return BSP_Convert_decrementer(total64 - clicks_overhead);
 }
 
 void benchmark_timer_disable_subtracting_average_overhead(bool find_flag)
