@@ -141,8 +141,6 @@ void bsp_start( void )
 #endif
   uintptr_t intrStackStart;
   uintptr_t intrStackSize;
-/*  ppc_cpu_id_t myCpu; */
-/*  ppc_cpu_revision_t myCpuRevision; */
   prep_t boardManufacturer;
   motorolaBoard myBoard;
   Triv121PgTbl	pt=0;
@@ -152,8 +150,8 @@ void bsp_start( void )
    * function store the result in global variables so that it can be used
    * later...
    */
-  /* myCpu 	= */ get_ppc_cpu_type();
-  /* myCpuRevision = */ get_ppc_cpu_revision();
+  get_ppc_cpu_type();
+  get_ppc_cpu_revision();
 
   /*
    * Init MMU block address translation to enable hardware access
