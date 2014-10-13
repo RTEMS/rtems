@@ -52,8 +52,10 @@
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
 
+void __BSP_default_pgtbl_activate(Triv121PgTbl pt);
 void
-BSP_pgtbl_activate(Triv121PgTbl) __attribute__ (( weak, alias("__BSP_default_pgtbl_activate") ));
+BSP_pgtbl_activate(Triv121PgTbl)
+  __attribute__ (( weak, alias("__BSP_default_pgtbl_activate") ));
 
 void
 __BSP_default_pgtbl_activate(Triv121PgTbl pt)

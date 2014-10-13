@@ -1,16 +1,18 @@
 /*
+ *  PCI defines and function prototypes
  *
- *	PCI defines and function prototypes
- *	Copyright 1994, Drew Eckhardt
- *	Copyright 1997, 1998 Martin Mares <mj@atrey.karlin.mff.cuni.cz>
+ *  For more information, please consult the following manuals (look at
+ *  http://www.pcisig.com/ for how to get them):
  *
- *	For more information, please consult the following manuals (look at
- *	http://www.pcisig.com/ for how to get them):
- *
- *	PCI BIOS Specification
- *	PCI Local Bus Specification
- *	PCI to PCI Bridge Specification
- *	PCI System Design Guide
+ *    PCI BIOS Specification
+ *    PCI Local Bus Specification
+ *    PCI to PCI Bridge Specification
+ *    PCI System Design Guide
+ */
+
+/*
+ *  Copyright 1994, Drew Eckhardt
+ *  Copyright 1997, 1998 Martin Mares <mj@atrey.karlin.mff.cuni.cz>
  */
 
 #ifndef BSP_POWERPC_PCI_H
@@ -21,19 +23,27 @@
 
 struct _pin_routes
 {
-      int pin, int_name[4];
+  int pin;
+  int int_name[4];
 };
 struct _int_map
 {
-      int bus, slot, opts;
-      struct _pin_routes pin_route[5];
+  int bus;
+  int slot;
+  int opts;
+  struct _pin_routes pin_route[5];
 };
 
 /* If there's a conflict between a name in the routing table and
  * what's already set on the device, reprogram the device setting
  * to reflect int_name[0] for the routing table entry
  */
-#define PCI_FIXUP_OPT_OVERRIDE_NAME	(1<<0)
+#define PCI_FIXUP_OPT_OVERRIDE_NAME  (1<<0)
+
+/*
+ * This is assumed to be provided by the BSP.
+ */
+void detect_host_bridge(void);
 
 void FixupPCI( const struct _int_map *, int (*swizzler)(int,int) );
 

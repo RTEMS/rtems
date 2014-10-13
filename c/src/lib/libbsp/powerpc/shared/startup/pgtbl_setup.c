@@ -61,8 +61,9 @@
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
 
-Triv121PgTbl
-BSP_pgtbl_setup(unsigned int *) __attribute__ (( weak, alias("__BSP_default_pgtbl_setup") ));
+Triv121PgTbl __BSP_default_pgtbl_setup(unsigned int *pmemsize);
+Triv121PgTbl BSP_pgtbl_setup(unsigned int *)
+  __attribute__ (( weak, alias("__BSP_default_pgtbl_setup") ));
 
 /* get those from the linker script.
  * NOTE THAT THE CORRECTNESS OF THE LINKER SCRIPT IS CRUCIAL

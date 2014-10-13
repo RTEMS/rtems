@@ -69,7 +69,9 @@ extern int BSP_VMEIrqMgrInstall(void);
  * at all :-).
  */
 
-void BSP_vme_config(void) __attribute__ (( weak, alias("__BSP_default_vme_config") ));
+void __BSP_default_vme_config(void);
+void BSP_vme_config(void)
+  __attribute__ (( weak, alias("__BSP_default_vme_config") ));
 
 void
 __BSP_default_vme_config(void)
