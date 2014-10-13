@@ -42,6 +42,7 @@ libbsp_a_SOURCES += timer/timer.c
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/mcf5225x/cachepd.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/misc.rel
 
 include $(srcdir)/preinstall.am
