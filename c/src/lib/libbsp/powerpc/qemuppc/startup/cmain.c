@@ -6,11 +6,15 @@ __outb(int port, unsigned char v)
   *((volatile unsigned char *)(0x80000000 + port)) = v;
 }
 
+#if 0
+/* currently unused but keep just in case */
+
 static unsigned char
 __inb(int port)
 {
   return *((volatile unsigned char *)(0x80000000 + port));
 }
+#endif
 
 static void
 __memcpy (unsigned char *d, unsigned char *s, int len)
