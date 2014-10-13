@@ -21,7 +21,7 @@ COPYRIGHT IDT CORPORATION 1996
 LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 
 
-/*************************************************************************
+*************************************************************************
 **
 ** Copyright 1991-95 Integrated Device Technology, Inc.
 **	All Rights Reserved
