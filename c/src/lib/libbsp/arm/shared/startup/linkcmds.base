@@ -296,10 +296,6 @@ SECTIONS {
 
 		. = ALIGN (bsp_stack_align);
 
-		bsp_stack_abt_begin = .;
-		. = . + bsp_stack_abt_size;
-		bsp_stack_abt_end = .;
-
 		bsp_stack_fiq_begin = .;
 		. = . + bsp_stack_fiq_size;
 		bsp_stack_fiq_end = .;
@@ -315,6 +311,10 @@ SECTIONS {
 		bsp_stack_und_begin = .;
 		. = . + bsp_stack_und_size;
 		bsp_stack_und_end = .;
+
+		bsp_stack_abt_begin = .;
+		. = . + bsp_stack_abt_size;
+		bsp_stack_abt_end = .;
 
 		bsp_stack_main_begin = .;
 		. = . + bsp_stack_main_size;
