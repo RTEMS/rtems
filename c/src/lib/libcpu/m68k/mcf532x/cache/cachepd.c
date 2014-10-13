@@ -6,8 +6,10 @@
 
 #include <rtems.h>
 #include <mcf532x/mcf532x.h>
+#include "cache_.h"
 
-#define m68k_set_cacr(_cacr) __asm__ volatile ("movec %0,%%cacr" : : "d" (_cacr))
+#define m68k_set_cacr(_cacr) \
+  __asm__ volatile ("movec %0,%%cacr" : : "d" (_cacr))
 
 /*
  * Read/write copy of common cache
