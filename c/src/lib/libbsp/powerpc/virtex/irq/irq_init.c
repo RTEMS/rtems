@@ -83,7 +83,7 @@ static void BSP_irq_disable_at_opbintc (rtems_irq_number irqnum)
  */
 static void BSP_irq_handle_at_opbintc(void)
 {
-  uint32_t ipr, i, c;
+  uint32_t ipr;
 
   /* Get pending interrupts */
   ipr = get_ipr();
