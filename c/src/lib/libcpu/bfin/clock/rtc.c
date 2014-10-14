@@ -1,4 +1,5 @@
-/*  Real Time Clock Driver for Blackfin
+/*
+ * Real Time Clock Driver for Blackfin
  */
 
 /*

@@ -59,47 +59,12 @@ const unsigned int _icplbs_table[16][2] = {
 };
 
 /*
- *  Use the shared implementations of the following routines
- */
-
-void Init_PLL (void);
-void Init_EBIU (void);
-void Init_Flags(void);
-void Init_RTC (void);
-
-void null_isr(void);
-
-/*
- *      BSP pretasking hook.  Called just before drivers are initialized.
- *      Used to setup libc and install any BSP extensions.
- */
-
-void bsp_pretasking_hook(void)
-{
-  bfin_interrupt_init();
-}
-
-void bsp_start( void )
-{
-  /* BSP Hardware Initialization*/
-  Init_RTC();   /* Blackfin Real Time Clock initialization */
-  Init_PLL();   /* PLL initialization */
-  Init_EBIU();  /* EBIU initialization */
-  Init_Flags(); /* GPIO initialization */
-
-  int i=0;
-  for (i=5;i<16;i++) {
-    set_vector((rtems_isr_entry)null_isr, i, 1);
-  }
-}
-
-/*
  * Init_PLL
  *
  * Routine to initialize the PLL. The Ezkit uses a 27 Mhz XTAL.
  * See "../eZKit533/include/bsp.h" for more information.
  */
-void Init_PLL (void)
+static void Init_PLL (void)
 {
   unsigned int n;
 
@@ -117,13 +82,12 @@ void Init_PLL (void)
   for (n=0; n<200; n++) {}
 }
 
- /*
-  * Init_EBIU
-  *
-  * Configure extern memory
-  */
-
-void Init_EBIU (void)
+/*
+ * Init_EBIU
+ *
+ * Configure extern memory
+ */
+static void Init_EBIU (void)
 {
   /* Configure FLASH */
   *((uint32_t*)EBIU_AMBCTL0)  = 0x7bb07bb0L;
@@ -142,7 +106,7 @@ void Init_EBIU (void)
  *
  * Enable LEDs port
  */
-void Init_Flags(void)
+static void Init_Flags(void)
 {
   *((uint16_t*)FIO_INEN)    = 0x0100;
   *((uint16_t*)FIO_DIR)     = 0x0000;
@@ -151,6 +115,29 @@ void Init_Flags(void)
 
   *((uint8_t*)FlashA_PortB_Dir)  = 0x3f;
   *((uint8_t*)FlashA_PortB_Data) = 0x00;
+}
+
+/*
+ * BSP pretasking hook.  Called just before drivers are initialized.
+ * Used to setup libc and install any BSP extensions.
+ */
+void bsp_pretasking_hook(void)
+{
+  bfin_interrupt_init();
+}
+
+void bsp_start( void )
+{
+  /* BSP Hardware Initialization*/
+  Init_RTC();   /* Blackfin Real Time Clock initialization */
+  Init_PLL();   /* PLL initialization */
+  Init_EBIU();  /* EBIU initialization */
+  Init_Flags(); /* GPIO initialization */
+
+  int i=0;
+  for (i=5;i<16;i++) {
+    set_vector((rtems_isr_entry)bfin_null_isr, i, 1);
+  }
 }
 
 /*
@@ -168,21 +155,4 @@ void setLED (uint8_t value)
 uint8_t getLED (void)
 {
   return *((uint8_t*)FlashA_PortB_Data);
-}
-
-void initCPLB(void)
-{
-  int i = 0;
-  unsigned int *addr;
-  unsigned int *data;
-
-  addr = (unsigned int *)0xffe00100;
-  data = (unsigned int *)0xffe00200;
-
-  while ( dcplbs_table[i][0] != 0xffffffff ) {
-    *addr = dcplbs_table[i][0];
-    *data = dcplbs_table[i][1];
-    addr++;
-    data++;
-  }
 }

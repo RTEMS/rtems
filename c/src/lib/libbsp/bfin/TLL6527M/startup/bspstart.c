@@ -1,6 +1,6 @@
 /*  bspstart.c for TLL6527M
  *
- *  This routine does the bulk of the system initialisation.
+ *  This routine does the bulk of the system initialization.
  */
 
 /*
@@ -10,7 +10,6 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.org/license
  */
-
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
@@ -61,62 +60,12 @@ const unsigned int _icplbs_table[16][2] = {
   { 0xffffffff, 0xffffffff }/* end of section - termination */
 };
 
-void Init_PLL (void);
-void Init_EBIU (void);
-void Init_Flags(void);
-void Init_RTC (void);
-void initCPLB(void);
-
-
-void null_isr(void);
-
 /*
- *  Function:   bsp_pretasking_hook
- *  Created:    95/03/10
+ * Init_PLL
  *
- *  Description:
- *      BSP pretasking hook.  Called just before drivers are initialized.
- *      Used to setup libc and install any BSP extensions.
- *
- *  NOTES:
- *      Must not use libc (to do io) from here, since drivers are
- *      not yet initialized.
- *
+ * Routine to initialize the PLL. The TLL6527M uses a 25 Mhz XTAL.
  */
-
-void bsp_pretasking_hook(void)
-{
-  bfin_interrupt_init();
-}
-
-void bsp_start( void )
-{
-  /* BSP Hardware Initialization*/
-  Init_RTC();   /* Blackfin Real Time Clock initialization */  
-  Init_PLL();   /* PLL initialization */
-  Init_EBIU();  /* EBIU initialization */
-  Init_Flags(); /* GPIO initialization */
-
-  /*
-   *  Allocate the memory for the RTEMS Work Space.  This can come from
-   *  a variety of places: hard coded address, malloc'ed from outside
-   *  RTEMS world (e.g. simulator or primitive memory manager), or (as
-   *  typically done by stock BSPs) by subtracting the required amount
-   *  of work space from the last physical address on the CPU board.
-   */
-  int i=0;
-  for (i=5;i<16;i++) {
-    set_vector((rtems_isr_entry)null_isr, i, 1);
-  }
-  
-}
-
- /*
-  * Init_PLL
-  * 
-  * Routine to initialize the PLL. The TLL6527M uses a 25 Mhz XTAL.
-  */
-void Init_PLL (void)
+static void Init_PLL (void)
 {
   unsigned short msel = 0;
   unsigned short ssel = 0;
@@ -138,13 +87,12 @@ void Init_PLL (void)
   asm("sti r0;");
 }
 
- /*
-  * Init_EBIU
-  * 
-  * Configure extern memory
-  */
-
-void Init_EBIU (void)
+/*
+ * Init_EBIU
+ *
+ * Configure extern memory
+ */
+static void Init_EBIU (void)
 {
   /* Check if SDRAM is already enabled */
   if ( 0 != (*(uint16_t *)EBIU_SDSTAT & EBIU_SDSTAT_SDRS) ){
@@ -160,12 +108,12 @@ void Init_EBIU (void)
   }
 }
 
- /*
-  * Init_Flags
-  * 
-  * Enable LEDs port
-  */
-void Init_Flags(void)
+/*
+ * Init_Flags
+ *
+ * Enable LEDs port
+ */
+static void Init_Flags(void)
 {
   *((uint16_t*)PORTH_FER)    = 0x0;
   *((uint16_t*)PORTH_MUX)    = 0x0;
@@ -173,22 +121,33 @@ void Init_Flags(void)
   *((uint16_t*)PORTHIO_SET)  = 0x1<<15;
 }
 
+/*
+ *  bsp_pretasking_hook
+ */
+void bsp_pretasking_hook(void)
+{
+  bfin_interrupt_init();
+}
 
+void bsp_start( void )
+{
+  int i;
 
-void initCPLB(void) {
+  /* BSP Hardware Initialization*/
+  Init_RTC();   /* Blackfin Real Time Clock initialization */
+  Init_PLL();   /* PLL initialization */
+  Init_EBIU();  /* EBIU initialization */
+  Init_Flags(); /* GPIO initialization */
 
-       int i = 0;
-       unsigned int *addr;
-       unsigned int *data;
-        
-       addr = (unsigned int *)0xffe00100;
-       data = (unsigned int *)0xffe00200;
+  /*
+   *  Allocate the memory for the RTEMS Work Space.  This can come from
+   *  a variety of places: hard coded address, malloc'ed from outside
+   *  RTEMS world (e.g. simulator or primitive memory manager), or (as
+   *  typically done by stock BSPs) by subtracting the required amount
+   *  of work space from the last physical address on the CPU board.
+   */
+  for (i=5;i<16;i++) {
+    set_vector((rtems_isr_entry)bfin_null_isr, i, 1);
+  }
 
-       while ( dcplbs_table[i][0] != 0xffffffff ) {
-               *addr = dcplbs_table[i][0];
-               *data = dcplbs_table[i][1];
-
-               addr++;
-               data++;
-       } 
 }

@@ -6,6 +6,7 @@
  * This file defines Macros for MMR register common to all Blackfin
  * Processors.
  */
+
 /*
  *  COPYRIGHT (c) 2006 by Atos Automacao Industrial Ltda.
  *             modified by Alain Schaefer <alain.schaefer@easc.ch>

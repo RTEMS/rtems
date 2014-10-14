@@ -1,5 +1,7 @@
 /*  UART driver for Blackfin
- *
+ */
+
+/*
  *  Copyright (c) 2008 Kallisti Labs, Los Gatos, CA, USA
  *             written by Allan Hessenflow <allanh@kallisti.com>
  *
@@ -8,7 +10,6 @@
  *  http://www.rtems.org/license/LICENSE.
  */
  
-
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/termiostypes.h>
@@ -22,11 +23,10 @@
 /* flags */
 #define BFIN_UART_XMIT_BUSY 0x01
 
-
 static bfin_uart_config_t *uartsConfig;
 
-
-static int pollRead(int minor) {
+static int pollRead(int minor)
+{
   int c;
   uint32_t base;
 
@@ -44,7 +44,8 @@ static int pollRead(int minor) {
   return c;
 }
 
-char bfin_uart_poll_read(rtems_device_minor_number minor) {
+char bfin_uart_poll_read(rtems_device_minor_number minor)
+{
   int c;
 
   do {
@@ -54,7 +55,8 @@ char bfin_uart_poll_read(rtems_device_minor_number minor) {
   return c;
 }
 
-void bfin_uart_poll_write(int minor, char c) {
+void bfin_uart_poll_write(int minor, char c)
+{
   uint32_t base;
 
   base = uartsConfig->channels[minor].uart_baseAddress;
@@ -64,61 +66,13 @@ void bfin_uart_poll_write(int minor, char c) {
   *(uint16_t volatile *) (base + UART_THR_OFFSET) = c;
 }
 
-/* begin BISON */
-void debug_write_char(char c) {
-  bfin_uart_poll_write(0, c);
-}
-
-void debug_write_string(char *s) {
-
-  while (s && *s) {
-    if (*s == '\n')
-      debug_write_char('\r');
-    debug_write_char(*s++);
-  }
-}
-
-void debug_write_crlf(void) {
-
-  debug_write_char('\r');
-  debug_write_char('\n');
-}
-
-void debug_write_nybble(int nybble) {
-
-  nybble &= 0x0f;
-  debug_write_char((nybble > 9) ? 'a' + (nybble - 10) : '0' + nybble);
-}
-
-void debug_write_byte(int byte) {
-
-  byte &= 0xff;
-  debug_write_nybble(byte >> 4);
-  debug_write_nybble(byte & 0x0f);
-}
-
-void debug_write_half(int half) {
-
-  half &= 0xffff;
-  debug_write_byte(half >> 8);
-  debug_write_byte(half & 0xff);
-}
-
-void debug_write_word(int word) {
-
-  word &= 0xffffffff;
-  debug_write_half(word >> 16);
-  debug_write_half(word & 0xffff);
-}
-/* end BISON */
-
 /*
  *  Console Termios Support Entry Points
  *
  */
 
-static ssize_t pollWrite(int minor, const char *buf, size_t len) {
-
+static ssize_t pollWrite(int minor, const char *buf, size_t len)
+{
   size_t count;
   for ( count = 0; count < len; count++ )
     bfin_uart_poll_write(minor, *buf++);
@@ -126,13 +80,13 @@ static ssize_t pollWrite(int minor, const char *buf, size_t len) {
   return count;
 }
 
-
 /**
  * Routine to initialize the hardware. It initialize the DMA,
  * interrupt if required.
  * @param channel channel information
  */
-static void initializeHardware(bfin_uart_channel_t *channel) {
+static void initializeHardware(bfin_uart_channel_t *channel)
+{
   uint16_t divisor        = 0;
   uint32_t base           = 0;
   uint32_t tx_dma_base    = 0;
@@ -188,8 +142,6 @@ static void initializeHardware(bfin_uart_channel_t *channel) {
     * We use polling or interrupts only sending one char at a time :(
     */
   }
-
-  return;
 }
 
 
@@ -199,7 +151,8 @@ static void initializeHardware(bfin_uart_channel_t *channel) {
  * @param termios
  * @return
  */
-static int setAttributes(int minor, const struct termios *termios) {
+static int setAttributes(int minor, const struct termios *termios)
+{
   uint32_t base;
   int baud;
   uint16_t divisor;
@@ -207,96 +160,46 @@ static int setAttributes(int minor, const struct termios *termios) {
 
   base = uartsConfig->channels[minor].uart_baseAddress;
   switch (termios->c_cflag & CBAUD) {
-  case B0:
-    baud = 0;
-    break;
-  case B50:
-    baud = 50;
-    break;
-  case B75:
-    baud = 75;
-    break;
-  case B110:
-    baud = 110;
-    break;
-  case B134:
-    baud = 134;
-    break;
-  case B150:
-    baud = 150;
-    break;
-  case B200:
-    baud = 200;
-    break;
-  case B300:
-    baud = 300;
-    break;
-  case B600:
-    baud = 600;
-    break;
-  case B1200:
-    baud = 1200;
-    break;
-  case B1800:
-    baud = 1800;
-    break;
-  case B2400:
-    baud = 2400;
-    break;
-  case B4800:
-    baud = 4800;
-    break;
-  case B9600:
-    baud = 9600;
-    break;
-  case B19200:
-    baud = 19200;
-    break;
-  case B38400:
-    baud = 38400;
-    break;
-  case B57600:
-    baud = 57600;
-    break;
-  case B115200:
-    baud = 115200;
-    break;
-  case B230400:
-    baud = 230400;
-    break;
-  case B460800:
-    baud = 460800;
-    break;
-  default:
-    baud = -1;
-    break;
+    case B0:      baud = 0;      break;
+    case B50:     baud = 50;     break;
+    case B75:     baud = 75;     break;
+    case B110:    baud = 110;    break;
+    case B134:    baud = 134;    break;
+    case B150:    baud = 150;    break;
+    case B200:    baud = 200;    break;
+    case B300:    baud = 300;    break;
+    case B600:    baud = 600;    break;
+    case B1200:   baud = 1200;   break;
+    case B1800:   baud = 1800;   break;
+    case B2400:   baud = 2400;   break;
+    case B4800:   baud = 4800;   break;
+    case B9600:   baud = 9600;   break;
+    case B19200:  baud = 19200;  break;
+    case B38400:  baud = 38400;  break;
+    case B57600:  baud = 57600;  break;
+    case B115200: baud = 115200; break;
+    case B230400: baud = 230400; break;
+    case B460800: baud = 460800; break;
+    default: baud = -1; break;
   }
   if (baud > 0 && uartsConfig->channels[minor].uart_baud)
     baud = uartsConfig->channels[minor].uart_baud;
   switch (termios->c_cflag & CSIZE) {
-  case CS5:
-    lcr = UART_LCR_WLS_5;
-    break;
-  case CS6:
-    lcr = UART_LCR_WLS_6;
-    break;
-  case CS7:
-    lcr = UART_LCR_WLS_7;
-    break;
-  case CS8:
+  case CS5: lcr = UART_LCR_WLS_5; break;
+  case CS6: lcr = UART_LCR_WLS_6; break;
+  case CS7: lcr = UART_LCR_WLS_7; break;
   default:
-    lcr = UART_LCR_WLS_8;
-    break;
+  case CS8: lcr = UART_LCR_WLS_8; break;
   }
   switch (termios->c_cflag & (PARENB | PARODD)) {
-  case PARENB:
-    lcr |= UART_LCR_PEN | UART_LCR_EPS;
-    break;
-  case PARENB | PARODD:
-  lcr |= UART_LCR_PEN;
-  break;
-  default:
-    break;
+    case PARENB:
+      lcr |= UART_LCR_PEN | UART_LCR_EPS;
+      break;
+    case PARENB | PARODD:
+      lcr |= UART_LCR_PEN;
+      break;
+    default:
+      break;
   }
   if (termios->c_cflag & CSTOPB)
     lcr |= UART_LCR_STB;
@@ -320,7 +223,8 @@ static int setAttributes(int minor, const struct termios *termios) {
  * @param len Length of buffer to be transmitted.
  * @return
  */
-static ssize_t uart_interruptWrite(int minor, const char *buf, size_t len) {
+static ssize_t uart_interruptWrite(int minor, const char *buf, size_t len)
+{
   uint32_t              base      = 0;
   bfin_uart_channel_t*  channel   = NULL;
 
@@ -351,16 +255,14 @@ static ssize_t uart_interruptWrite(int minor, const char *buf, size_t len) {
 }
 
 /**
-* This function implements RX ISR
-*/
+ * This function implements RX ISR
+ */
 void bfinUart_rxIsr(void *_arg)
 {
   /**
    * TODO: UART RX ISR implementation.
    */
-
 }
-
 
 /**
  * This function implements TX ISR. The function gets called when the TX FIFO is
@@ -370,7 +272,8 @@ void bfinUart_rxIsr(void *_arg)
  * TODO: error handling.
  * @param _arg gets the channel information.
  */
-void bfinUart_txIsr(void *_arg) {
+void bfinUart_txIsr(void *_arg)
+{
   bfin_uart_channel_t*  channel = NULL;
   uint32_t              base    = 0;
 
@@ -390,12 +293,7 @@ void bfinUart_txIsr(void *_arg) {
   channel->flags &= ~BFIN_UART_XMIT_BUSY;
 
   rtems_termios_dequeue_characters(channel->termios, channel->length);
-
-  return;
 }
-
-
-
 
 /**
  * interrupt based DMA write Routine. It configure the DMA to write len bytes.
@@ -406,7 +304,8 @@ void bfinUart_txIsr(void *_arg) {
  * @param len length of data items to be written
  * @return data already written
  */
-static ssize_t uart_DmaWrite(int minor, const char *buf, size_t len) {
+static ssize_t uart_DmaWrite(int minor, const char *buf, size_t len)
+{
   uint32_t              base        = 0;
   bfin_uart_channel_t*  channel     = NULL;
   uint32_t              tx_dma_base = 0;
@@ -443,14 +342,14 @@ static ssize_t uart_DmaWrite(int minor, const char *buf, size_t len) {
   return 0;
 }
 
-
 /**
  * RX DMA ISR.
  * The polling route is used for receiving the characters. This is a place
  * holder for future implementation.
  * @param _arg
  */
-void bfinUart_rxDmaIsr(void *_arg) {
+void bfinUart_rxDmaIsr(void *_arg)
+{
 /**
  * TODO: Implementation of RX DMA
  */
@@ -467,7 +366,8 @@ void bfinUart_rxDmaIsr(void *_arg) {
  * @param _arg argument passed to the interrupt handler. It contains the
  * channel argument.
  */
-void bfinUart_txDmaIsr(void *_arg) {
+void bfinUart_txDmaIsr(void *_arg)
+{
   bfin_uart_channel_t*  channel     = NULL;
   uint32_t              tx_dma_base = 0;
 
@@ -495,19 +395,16 @@ void bfinUart_txDmaIsr(void *_arg) {
      * This routine must not be called.
      */
   }
-
-  return;
 }
 
 /**
  * Function called during exit
  */
-void uart_exit(void)
+static void uart_exit(void)
 {
   /**
    * TODO: Flushing of quques
    */
-
 }
 
 /**
@@ -571,7 +468,6 @@ rtems_device_driver bfin_uart_open(rtems_device_major_number major,
       TERMIOS_IRQ_DRIVEN           /* outputUsesInterrupts */
   };
 
-
   if ( NULL == uartsConfig || 0 > minor || minor >= uartsConfig->num_channels) {
     return RTEMS_INVALID_NUMBER;
   }
@@ -598,15 +494,17 @@ rtems_device_driver bfin_uart_open(rtems_device_major_number major,
   return sc;
 }
 
-
 /**
 * Uart initialization function.
 * @param major major number of the device
 * @param config configuration parameters
 * @return rtems status code
 */
-rtems_status_code bfin_uart_initialize(rtems_device_major_number major,
-    bfin_uart_config_t *config) {
+rtems_status_code bfin_uart_initialize(
+  rtems_device_major_number major,
+  bfin_uart_config_t *config
+)
+{
   rtems_status_code sc = RTEMS_NOT_DEFINED;
   int               i  = 0;
 

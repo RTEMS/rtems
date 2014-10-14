@@ -15,6 +15,8 @@
 #ifndef _BSP_H
 #define _BSP_H
 
+#ifndef ASM
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -89,13 +91,20 @@ void setLED(uint8_t value);
 /*
  * Helper Function to use the EzKits LEDS
  */
-uint8_t getLED(void);
+uint8_t getLEDs(void);
+void setLEDs(uint8_t value);
+uint8_t getButtons(void);
 
 rtems_isr_entry set_vector(                     /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */
   int                 type                      /* RTEMS or RAW intr  */
 );
+
+/*
+ *  Internal BSP methods that are used across file boundaries
+ */
+void Init_RTC(void);
 
 /*
  * Network driver configuration
@@ -109,5 +118,7 @@ extern int bf537Stamp_network_driver_attach(struct rtems_bsdnet_ifconfig *, int)
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* !ASM */
 
 #endif

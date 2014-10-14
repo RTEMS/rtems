@@ -1,6 +1,7 @@
 
 #include <rtems/bfin/bfin.h>
 
+#include <bsp.h>
 #include <bspopts.h>
 
 #ifndef LO
@@ -88,7 +89,7 @@ __start:
     P3 = P4;
     jump    (p0)        /* Should not return.  */
 
-.global _null_isr
-_null_isr:
+.global _bfin_null_isr
+_bfin_null_isr:
     rti;
 

@@ -65,8 +65,6 @@ static bfin_mmu_config_t mmuRegions = {
     }
 };
 
-void Init_RTC(void);
-
 static void initPLL(void);
 static void initEBIU(void);
 static void initGPIO(void);

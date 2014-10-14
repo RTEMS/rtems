@@ -1,25 +1,23 @@
 /**
- * @file
+ * @file bsp.h
  * @ingroup bfin_tll6527m
  * @brief Global BSP definitions.
+ *
+ * This include file contains all board IO definitions for TLL6527M.
  */
 
-/**
- *@file bsp.h
- *  
- *  This include file contains all board IO definitions for TLL6527M.
- *
+/*
  * COPYRIGHT (c) 2010 by ECE Northeastern University.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.org/license
  */
- 
 
 #ifndef _BSP_H
 #define _BSP_H
 
+#ifndef ASM
 
 #ifdef __cplusplus
 extern "C" {
@@ -95,16 +93,39 @@ extern "C" {
 
 /** @} */
 
-rtems_isr_entry set_vector(                     ///< @brief returns old vector */
-  rtems_isr_entry     handler,                  ///< @brief isr routine        */
-  rtems_vector_number vector,                   ///< @brief vector number      */
-  int                 type                      ///< @brief RTEMS or RAW intr  */
+/**
+ * @brief Install an interrupt handler
+ *
+ * This method installs an interrupt handle.
+ *
+ * @param[in] handler is the isr routine
+ * @param[in] vector is the vector number
+ * @param[in] type indicates whether RTEMS or RAW intr
+ *
+ * @return returns old vector
+ */
+rtems_isr_entry set_vector(
+  rtems_isr_entry     handler,
+  rtems_vector_number vector,
+  int                 type
 );
+
+/*
+ *  Internal BSP methods that are used across file boundaries
+ */
+void Init_RTC(void);
+
+/*
+ * Prototype for methods in .S files that are referenced from C.
+ */
+void bfin_null_isr(void);
 
 /** @} */
 
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* !ASM */
 
 #endif
