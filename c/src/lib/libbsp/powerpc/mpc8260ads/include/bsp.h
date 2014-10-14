@@ -80,6 +80,11 @@ void *M8260AllocateRiscTimers( int count );
 extern char M8260DefaultWatchdogFeeder;
 #endif
 
+/*
+ * Prototypes for items shared across file boundaries in the BSP
+ */
+extern uint32_t bsp_serial_per_sec;
+
 #ifdef __cplusplus
 }
 #endif
