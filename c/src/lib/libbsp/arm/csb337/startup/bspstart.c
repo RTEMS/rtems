@@ -37,7 +37,7 @@ void bsp_usart_init(void);
  * RESTRICTIONS/LIMITATIONS:
  *   Since RTEMS is not configured, no RTEMS functions can be called.
  */
-void bsp_start_default( void )
+static void bsp_start_default( void )
 {
   /* disable interrupts */
   AIC_CTL_REG(AIC_IDCR) = 0xffffffff;
