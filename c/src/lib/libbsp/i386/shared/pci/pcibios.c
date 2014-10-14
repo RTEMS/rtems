@@ -264,24 +264,6 @@ pci_bus_count(void)
   return ucBusCount;
 }
 
-
-int
-BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
-                   int instance, int *pbus, int *pdev, int *pfun )
-{
-   int sig, rval;
-
-   rval = pcib_find_by_devid(vendorid, deviceid, instance, &sig);
-
-   if ( PCIB_ERR_SUCCESS == rval ) {
-		*pbus = PCIB_DEVSIG_BUS(sig);
-		*pdev = PCIB_DEVSIG_DEV(sig);
-		*pfun = PCIB_DEVSIG_FUNC(sig);
-   }
-
-   return rval;
-}
-
 /*
  * Generate Special Cycle
  */

@@ -1,7 +1,8 @@
-/* irq.c
- *
+/*
  *  This file contains the implementation of the function described in irq.h
- *
+ */
+
+/*
  *  Copyright (c) 2009 embedded brains GmbH
  *  Copyright (C) 1998 valette@crf.canon.fr
  *

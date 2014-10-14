@@ -99,6 +99,15 @@
 #include <string.h>
 #include <stdbool.h>
 
+/*
+ * Prototypes we need to avoid warnings but not going into public space.
+ */
+void breakpoint (void);
+void set_debug_traps(void);
+void set_mem_err(void);
+void _returnFromException(void);
+void exceptionHandler (int, void (*handler) (void));
+
 /************************************************************************
  *
  * external low-level support routines
@@ -106,8 +115,6 @@
 extern int putDebugChar (int ch);	   /* write a single character      */
 extern int getDebugChar (void);	           /* read and return a single char */
 
-/* assign an exception handler */
-extern void exceptionHandler (int, void (*handler) (void));
 
 /************************************************************************/
 /* BUFMAX defines the maximum number of characters in inbound/outbound buffers */
@@ -564,7 +571,7 @@ char remcomInBuffer[BUFMAX];
 char remcomOutBuffer[BUFMAX];
 static short error;
 
-void
+static void
 debug_error (
      char *format,
      char *parm
@@ -753,7 +760,6 @@ handle_exception (int exceptionVector)
   int sigval;
   int addr, length, reg;
   char *ptr;
-  int newPC;
 
   gdb_i386vector = exceptionVector;
 
@@ -897,8 +903,6 @@ handle_exception (int exceptionVector)
 	  ptr = &remcomInBuffer[1];
 	  if (hexToInt (&ptr, &addr))
 	    registers[PC] = addr;
-
-	  newPC = registers[PC];
 
 	  /* clear the trace bit */
 	  registers[PS] &= 0xfffffeff;

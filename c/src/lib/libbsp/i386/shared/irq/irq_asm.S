@@ -1,7 +1,8 @@
-/* irq.c
- *
+/*
  *  This file contains the implementation of the function described in irq.h
- *
+ */
+
+/*
  *  Copyright (C) 1998 valette@crf.canon.fr
  *
  *  COPYRIGHT (c) 1989-2011.
@@ -18,6 +19,8 @@
 #include <bsp/irq_asm.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/percpu.h>
+
+#include <bsp.h> /* to establish dependency on prototype */
 
 #ifndef CPU_STACK_ALIGNMENT
 #error "Missing header? CPU_STACK_ALIGNMENT is not defined here"
