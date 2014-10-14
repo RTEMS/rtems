@@ -4256,9 +4256,9 @@ extern "C" {
                 uint8_t:4;
                 uint8_t PRI:4;
             } B;
-        } PSR[474];
+        } PSR[480];
 
-        uint16_t INTC_reserved021A[7923]; /* 0x021A-0x3FFF */
+        uint16_t INTC_reserved0220[7920]; /* 0x0220-0x3FFF */
 
     };
 
