@@ -1,6 +1,8 @@
 /*
  * Cirrus EP7312 Startup code
- *
+ */
+
+/*
  * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
  *
  *  The license and distribution terms for this file may be
@@ -24,7 +26,7 @@
  *   Since RTEMS is not configured, no RTEMS functions can be called.
  *
  */
-void bsp_start_default( void )
+static void bsp_start_default( void )
 {
   /* disable interrupts */
   *EP7312_INTMR1 = 0;
