@@ -1,6 +1,8 @@
 /*
  *  Driver for AT91RM9200 USART ports
- *
+ */
+
+/*
  * COPYRIGHT (c) 2006-2009.
  * NCB - Sistemas Embarcados Ltda. (Brazil)
  * Fernando Nicodemos <fgnicodemos@terra.com.br>
@@ -256,18 +258,4 @@ static int usart_set_attributes(int minor, const struct termios *t)
   usart->mr = mode;
   usart->brgr = brgr;
   return 0;
-}
-
-/*
- * The following functions are not used by TERMIOS, but other RTEMS
- * functions use them instead.
- */
-
-/*
- * Read from UART. This is used in the exit code, and can't
- * rely on interrupts.
- */
-int usart_poll_read(int minor)
-{
-  return usart_read_polled(minor);
 }
