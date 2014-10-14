@@ -1,7 +1,6 @@
 /*
- *
  *  This routine initializes the PIT on the MPC5xx.
- *  The tick frequency is specified by the bsp.
+ *  The tick frequency is specified by the BSP.
  */
 
 /*

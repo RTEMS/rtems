@@ -1,9 +1,9 @@
 /*
- * mpc5xx.h
  *
  * MPC5xx Internal I/O Definitions
- *
- *
+ */
+
+/*
  *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
@@ -608,6 +608,14 @@ typedef struct imb_ {
 
 extern volatile imb_t imb;		/* defined in linkcmds */
 
+
+/*
+ * Methods shared across libcpu and the BSP.
+ */
+void clockOn(void* unused);
+void clockOff(void* unused);
+int clockIsOn(void* unused);
+rtems_isr Clock_isr(rtems_vector_number vector);
 
 #ifdef __cplusplus
 }

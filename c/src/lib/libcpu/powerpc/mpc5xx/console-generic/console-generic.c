@@ -9,8 +9,9 @@
  *   resource   minor                note
  *	SCI1	  0
  *	SCI2	  1
- *
- *
+ */
+
+/*
  *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
@@ -266,11 +267,11 @@ m5xx_sci_interrupt_handler (rtems_irq_hdl_param unused)
   }
 }
 
-void m5xx_sci_nop(const rtems_irq_connect_data* ptr)
+static void m5xx_sci_nop(const rtems_irq_connect_data* ptr)
 {
 }
 
-int m5xx_sci_isOn(const rtems_irq_connect_data* ptr)
+static int m5xx_sci_isOn(const rtems_irq_connect_data* ptr)
 {
   return 1;
 }

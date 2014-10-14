@@ -1,8 +1,8 @@
 /*
- * irq.c
- *
  *  This file contains the implementation of the function described in irq.h
- *
+ */
+
+/*
  *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
@@ -21,12 +21,12 @@
 #include <libcpu/vectors.h>
 #include <libcpu/raw_exception.h>
 #include <libcpu/irq.h>
+#include <bsp/irq.h>
 
 /*
  * Convert an rtems_irq_number constant to an interrupt level
  * suitable for programming into an I/O device's interrupt level field.
  */
-
 int CPU_irq_level_from_symbolic_name(const rtems_irq_number name)
 {
   if (CPU_USIU_EXT_IRQ_0 <= name && name <= CPU_USIU_INT_IRQ_7)
@@ -138,28 +138,21 @@ static int isValidInterrupt(int irq)
   return 1;
 }
 
-int CPU_irq_enable_at_uimb(const rtems_irq_number irqLine)
+static int CPU_irq_enable_at_uimb(const rtems_irq_number irqLine)
 {
   if (!is_uimb_irq(irqLine))
     return 1;
   return 0;
 }
 
-int CPU_irq_disable_at_uimb(const rtems_irq_number irqLine)
+static int CPU_irq_disable_at_uimb(const rtems_irq_number irqLine)
 {
   if (!is_uimb_irq(irqLine))
     return 1;
   return 0;
 }
 
-int CPU_irq_enabled_at_uimb(const rtems_irq_number irqLine)
-{
-  if (!is_uimb_irq(irqLine))
-    return 0;
-  return 1;
-}
-
-int CPU_irq_enable_at_usiu(const rtems_irq_number irqLine)
+static int CPU_irq_enable_at_usiu(const rtems_irq_number irqLine)
 {
   int usiu_irq_index;
 
@@ -173,7 +166,7 @@ int CPU_irq_enable_at_usiu(const rtems_irq_number irqLine)
   return 0;
 }
 
-int CPU_irq_disable_at_usiu(const rtems_irq_number irqLine)
+static int CPU_irq_disable_at_usiu(const rtems_irq_number irqLine)
 {
   int usiu_irq_index;
 
@@ -185,17 +178,6 @@ int CPU_irq_disable_at_usiu(const rtems_irq_number irqLine)
   usiu.simask = ppc_cached_irq_mask;
 
   return 0;
-}
-
-int CPU_irq_enabled_at_usiu(const rtems_irq_number irqLine)
-{
-  int usiu_irq_index;
-
-  if (!is_usiu_irq(irqLine))
-    return 0;
-
-  usiu_irq_index = ((int) (irqLine) - CPU_USIU_IRQ_MIN_OFFSET);
-  return ppc_cached_irq_mask & (1 << (31-usiu_irq_index));
 }
 
 /*

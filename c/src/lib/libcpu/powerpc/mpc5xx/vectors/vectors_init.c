@@ -3,8 +3,9 @@
  *
  *  This include file describe the data structure and the functions implemented
  *  by rtems to handle exceptions.
- *
- *
+ */
+
+/*
  *  MPC5xx port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
@@ -19,13 +20,13 @@
 #include <rtems/bspIo.h>
 #include <libcpu/vectors.h>
 #include <libcpu/raw_exception.h>
+#include <bsp/irq.h>
 
 extern rtems_exception_handler_t default_exception_handler;
 
 static rtems_raw_except_global_settings exception_config;
 static rtems_raw_except_connect_data    exception_table[NUM_EXCEPTIONS];
 rtems_exception_handler_t* exception_handler_table[NUM_EXCEPTIONS];
-
 
 void C_default_exception_handler(CPU_Exception_frame* excPtr)
 {
@@ -84,11 +85,11 @@ void C_default_exception_handler(CPU_Exception_frame* excPtr)
     }
 }
 
-void nop_except_enable(const rtems_raw_except_connect_data* ptr)
+static void nop_except_enable(const rtems_raw_except_connect_data* ptr)
 {
 }
 
-int except_always_enabled(const rtems_raw_except_connect_data* ptr)
+static int except_always_enabled(const rtems_raw_except_connect_data* ptr)
 {
   return 1;
 }

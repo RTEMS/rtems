@@ -1,9 +1,10 @@
-/*  start.S
- *
+/*
  *  This file contains the entry veneer for RTEMS programs on the Intec
  *  SS555 board.  It jumps to the BSP which is responsible for performing
  *  all remaining initialization.
- *
+ */
+
+/*
  * This file is based on several others:
  *
  * (1) start360.s from the gen68360 BSP by
@@ -51,6 +52,8 @@
 
 #include <rtems/asm.h>
 #include <rtems/powerpc/registers.h>
+
+#include <bsp.h>
 
 /*
  *  The initial stack is set to the top of the internal RAM.

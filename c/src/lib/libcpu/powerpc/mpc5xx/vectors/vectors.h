@@ -85,9 +85,9 @@
  * default raw exception handlers
  */
 
-extern	void default_exception_vector_code_prolog();
+extern	void default_exception_vector_code_prolog(void);
 extern	int  default_exception_vector_code_prolog_size;
-extern  void initialize_exceptions();
+extern  void initialize_exceptions(void);
 
 typedef void rtems_exception_handler_t (CPU_Exception_frame* excPtr);
 /*DEBUG typedef rtems_exception_handler_t cpuExcHandlerType; */

@@ -1,8 +1,8 @@
 /*
- *  iss555.c
- *
  *  Intec SS555 initialization routines.
- *
+ */
+
+/*
  *  SS555 port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *

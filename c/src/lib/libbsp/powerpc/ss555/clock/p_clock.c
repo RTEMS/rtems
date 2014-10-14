@@ -20,11 +20,7 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <rtems/bspIo.h>
-
-extern void clockOn(void*);
-extern void clockOff (void*);
-extern int clockIsOn(void*);
-extern void Clock_isr(void *);
+#include <mpc5xx.h>
 
 static rtems_irq_connect_data clockIrqData = {
   CPU_PERIODIC_TIMER,
