@@ -26,6 +26,8 @@
 #ifndef _BSP_H
 #define _BSP_H
 
+#ifndef ASM
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -60,8 +62,23 @@ rtems_isr_entry set_vector(
   int                 type
 );
 
+/*
+ *  Methods used across files inside the BSP
+ */
+int dbug_in_char( int minor );
+void dbug_out_char( int minor, int ch );
+int dbug_char_present( int minor );
+void _dbug_dumpanic(void);
+
+/*
+ *  Only called from .S but prototyped here to capture the dependecy.
+ */
+void _Init68340 (void);
+
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* !ASM */
 
 #endif
