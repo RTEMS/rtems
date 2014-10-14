@@ -34,7 +34,7 @@ volatile unsigned int *Regs = (unsigned int *)GBA_IO_REGS_ADDR;
  *  @param  None
  *  @return None
  */
-void bsp_start_default( void )
+static void bsp_start_default( void )
 {
   /* Init conio  */
   gba_textmode(CO60);
