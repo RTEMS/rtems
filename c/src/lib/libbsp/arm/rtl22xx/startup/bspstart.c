@@ -1,6 +1,8 @@
 /*
  *  LPC22XX/LPC21xx Startup code
- *
+ */
+
+/*
  *  Copyright (c) 2007 by Ray Xu <rayx.cn@gmail.com>
  *
  *  The license and distribution terms for this file may be
@@ -23,7 +25,7 @@
  * RESTRICTIONS/LIMITATIONS:
  *   Since RTEMS is not configured, no RTEMS functions can be called.
  */
-void bsp_start_default( void )
+static void bsp_start_default( void )
 {
   PINSEL2 =0x0f814914;
   BCFG0 = 0x1000ffef;
@@ -85,5 +87,4 @@ void bsp_start_default( void )
  *  By making this a weak alias for bsp_start_default, a brave soul
  *  can override the actual bsp_start routine used.
  */
-
 void bsp_start (void) __attribute__ ((weak, alias("bsp_start_default")));
