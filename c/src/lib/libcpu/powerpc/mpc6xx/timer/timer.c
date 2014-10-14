@@ -21,7 +21,6 @@
 #include <assert.h>
 #include <libcpu/powerpc-utility.h>
 
-
 uint64_t   Timer_driver_Start_time;
 
 bool benchmark_timer_find_average_overhead = false;
