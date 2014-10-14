@@ -73,6 +73,12 @@ typedef volatile uint32		vuint32 __attribute__((__may_alias__)); /* 32 bits */
 #define MCF5XXX_SR_V		(0x0002)
 #define MCF5XXX_SR_C		(0x0001)
 
+/*
+ * Used to set the initialize the cacr register to the BSP's desired
+ * starting value.
+ */
+void mcf5xxx_initialize_cacr(uint32_t);
+
 #define MCF5XXX_CACR_CENB		(0x80000000)
 #define MCF5XXX_CACR_CPDI		(0x10000000)
 #define MCF5XXX_CACR_CPD		(0x10000000)

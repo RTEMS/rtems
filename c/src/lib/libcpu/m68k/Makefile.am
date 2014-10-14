@@ -176,6 +176,11 @@ if mcf5282
 ## mcf5282/include
 include_mcf5282dir = $(includedir)/mcf5282
 include_mcf5282_HEADERS = mcf5282/include/mcf5282.h
+
+noinst_PROGRAMS += mcf5282/cachepd.rel
+mcf5282_cachepd_rel_SOURCES = mcf5282/cache/cachepd.c
+mcf5282_cachepd_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/cache
+mcf5282_cachepd_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if mcf548x

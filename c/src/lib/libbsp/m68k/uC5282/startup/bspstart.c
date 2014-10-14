@@ -36,6 +36,7 @@ extern char _PLLRefClockSpeed[];
 
 uint32_t BSP_sys_clk_speed = (uint32_t)_CPUClockSpeed;
 uint32_t BSP_pll_ref_clock = (uint32_t)_PLLRefClockSpeed;
+
 /*
  * CPU-space access
  * The NOP after writing the CACR is there to address the following issue as
@@ -76,115 +77,17 @@ uint32_t BSP_pll_ref_clock = (uint32_t)_PLLRefClockSpeed;
  *               ACRn[5] = BUFW (buffered write enable) must be 0
  *   Fix plan: Currently, there are no plans to fix this.
  */
-#define m68k_set_cacr_nop(_cacr) __asm__ volatile ("movec %0,%%cacr\n\tnop" : : "d" (_cacr))
-#define m68k_set_cacr(_cacr) __asm__ volatile ("movec %0,%%cacr" : : "d" (_cacr))
-#define m68k_set_acr0(_acr0) __asm__ volatile ("movec %0,%%acr0" : : "d" (_acr0))
-#define m68k_set_acr1(_acr1) __asm__ volatile ("movec %0,%%acr1" : : "d" (_acr1))
+#define m68k_set_cacr_nop(_cacr) \
+  __asm__ volatile ("movec %0,%%cacr\n\tnop" : : "d" (_cacr))
+#define m68k_set_cacr(_cacr) \
+  __asm__ volatile ("movec %0,%%cacr" : : "d" (_cacr))
+#define m68k_set_acr0(_acr0) \
+  __asm__ volatile ("movec %0,%%acr0" : : "d" (_acr0))
+#define m68k_set_acr1(_acr1) \
+  __asm__ volatile ("movec %0,%%acr1" : : "d" (_acr1))
 
-/*
- * Read/write copy of cache registers
- *   Split instruction/data or instruction-only
- *   Allow CPUSHL to invalidate a cache line
- *   Disable buffered writes
- *   No burst transfers on non-cacheable accesses
- *   Default cache mode is *disabled* (cache only ACRx areas)
- */
-uint32_t mcf5282_cacr_mode = MCF5XXX_CACR_CENB |
-#ifndef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
-                             MCF5XXX_CACR_DISD |
-#endif
-                             MCF5XXX_CACR_DCM;
 uint32_t mcf5282_acr0_mode = 0;
 uint32_t mcf5282_acr1_mode = 0;
-/*
- * Cannot be frozen
- */
-void _CPU_cache_freeze_data(void) {}
-void _CPU_cache_unfreeze_data(void) {}
-void _CPU_cache_freeze_instruction(void) {}
-void _CPU_cache_unfreeze_instruction(void) {}
-
-/*
- * Write-through data cache -- flushes are unnecessary
- */
-void _CPU_cache_flush_1_data_line(const void *d_addr) {}
-void _CPU_cache_flush_entire_data(void) {}
-
-void _CPU_cache_enable_instruction(void)
-{
-    rtems_interrupt_level level;
-
-    rtems_interrupt_disable(level);
-    mcf5282_cacr_mode &= ~MCF5XXX_CACR_DIDI;
-    m68k_set_cacr_nop(mcf5282_cacr_mode | MCF5XXX_CACR_CINV | MCF5XXX_CACR_INVI);
-    rtems_interrupt_enable(level);
-}
-
-void _CPU_cache_disable_instruction(void)
-{
-    rtems_interrupt_level level;
-
-    rtems_interrupt_disable(level);
-    mcf5282_cacr_mode |= MCF5XXX_CACR_DIDI;
-    m68k_set_cacr(mcf5282_cacr_mode);
-    rtems_interrupt_enable(level);
-}
-
-void _CPU_cache_invalidate_entire_instruction(void)
-{
-    m68k_set_cacr_nop(mcf5282_cacr_mode | MCF5XXX_CACR_CINV | MCF5XXX_CACR_INVI);
-}
-
-void _CPU_cache_invalidate_1_instruction_line(const void *addr)
-{
-    /*
-     * Top half of cache is I-space
-     */
-    addr = (void *)((int)addr | 0x400);
-    __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (addr));
-}
-
-void _CPU_cache_enable_data(void)
-{
-#ifdef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
-    rtems_interrupt_level level;
-
-    rtems_interrupt_disable(level);
-    mcf5282_cacr_mode &= ~MCF5XXX_CACR_DISD;
-    m68k_set_cacr_nop(mcf5282_cacr_mode | MCF5XXX_CACR_CINV | MCF5XXX_CACR_INVD);
-    rtems_interrupt_enable(level);
-#endif
-}
-
-void _CPU_cache_disable_data(void)
-{
-#ifdef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
-    rtems_interrupt_level level;
-
-    rtems_interrupt_disable(level);
-    mcf5282_cacr_mode |= MCF5XXX_CACR_DISD;
-    m68k_set_cacr(mcf5282_cacr_mode);
-    rtems_interrupt_enable(level);
-#endif
-}
-
-void _CPU_cache_invalidate_entire_data(void)
-{
-#ifdef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
-    m68k_set_cacr_nop(mcf5282_cacr_mode | MCF5XXX_CACR_CINV | MCF5XXX_CACR_INVD);
-#endif
-}
-
-void _CPU_cache_invalidate_1_data_line(const void *addr)
-{
-#ifdef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
-    /*
-     * Bottom half of cache is D-space
-     */
-    addr = (void *)((int)addr & ~0x400);
-    __asm__ volatile ("cpushl %%bc,(%0)" :: "a" (addr));
-#endif
-}
 
 extern void bsp_fake_syscall(int);
 
@@ -280,9 +183,20 @@ void bsp_start( void )
     *((void (**)(int))((32+2) * 4)) = bsp_fake_syscall;
 
   /*
-   * Enable the cache
+   * Read/write copy of cache registers
+   *   Split instruction/data or instruction-only
+   *   Allow CPUSHL to invalidate a cache line
+   *   Disable buffered writes
+   *   No burst transfers on non-cacheable accesses
+   *   Default cache mode is *disabled* (cache only ACRx areas)
    */
-  m68k_set_cacr(mcf5282_cacr_mode);
+  mcf5xxx_initialize_cacr(
+     MCF5XXX_CACR_CENB |
+     #ifndef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE
+       MCF5XXX_CACR_DISD |
+     #endif
+     MCF5XXX_CACR_DCM
+  );
 
   /*
    * Set up CS* space (fake 'VME')

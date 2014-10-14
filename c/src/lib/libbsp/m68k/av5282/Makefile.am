@@ -50,6 +50,7 @@ endif
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
+    ../../../libcpu/@RTEMS_CPU@/mcf5282/cachepd.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/misc.rel
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
