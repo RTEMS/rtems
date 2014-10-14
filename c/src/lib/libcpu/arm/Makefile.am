@@ -46,12 +46,6 @@ pxa255_ffuart_rel_SOURCES = pxa255/ffuart/ffuart.c
 pxa255_ffuart_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pxa255_ffuart_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-## pxa255/pmc
-noinst_PROGRAMS += pxa255/pmc.rel
-pxa255_pmc_rel_SOURCES = pxa255/pmc/pmc.c
-pxa255_pmc_rel_CPPFLAGS = $(AM_CPPFLAGS)
-pxa255_pmc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 ## pxa255/interrupt
 include_bsp_HEADERS += pxa255/irq/irq.h
 noinst_PROGRAMS += pxa255/irq.rel
