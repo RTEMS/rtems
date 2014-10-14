@@ -86,5 +86,4 @@ static void bsp_start_default( void )
  *  By making this a weak alias for bsp_start_default, a brave soul
  *  can override the actual bsp_start routine used.
  */
-
 void bsp_start (void) __attribute__ ((weak, alias("bsp_start_default")));
