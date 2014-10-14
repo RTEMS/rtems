@@ -215,6 +215,11 @@ int cs8900_driver_attach (struct rtems_bsdnet_ifconfig *config,
 
 /** @} */
 
+/*
+ * Prototypes for methods used across file boundaries in the BSP.
+ */
+extern void  UART0_Ini(void);
+
 /** @} */
 
 #ifdef __cplusplus

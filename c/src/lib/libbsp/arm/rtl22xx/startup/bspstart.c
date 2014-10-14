@@ -13,12 +13,6 @@
 #include <lpc22xx.h>
 
 /*
- * Function prototypes
- */
-extern void  UART0_Ini(void);
-extern void printi(unsigned long);
-
-/*
  * bsp_start_default - BSP initialization function
  *
  * This function is called before RTEMS is initialized and used
@@ -28,7 +22,6 @@ extern void printi(unsigned long);
  *
  * RESTRICTIONS/LIMITATIONS:
  *   Since RTEMS is not configured, no RTEMS functions can be called.
- *
  */
 void bsp_start_default( void )
 {
