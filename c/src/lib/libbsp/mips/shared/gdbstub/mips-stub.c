@@ -211,6 +211,12 @@ extern void putDebugChar (char);
  * Exception handler
  */
 void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame);
+
+/*
+ * Prototype needed by this code and to keep it self contained.
+ *.
+void rtems_interrupt_catch( rtems_isr_entry, int, rtems_isr_entry *);
+
 /*
  * The following definitions are used for the gdb stub memory map
  */
