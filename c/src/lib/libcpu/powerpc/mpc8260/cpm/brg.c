@@ -56,7 +56,6 @@ m8xx_get_brg_cd (int baud)
 {
   int divisor;
   int div16 = 0;
-  extern uint32_t bsp_serial_per_sec;
 
   divisor = ((bsp_serial_per_sec) + (baud / 2)) / baud;
   if (divisor > 4096) {
