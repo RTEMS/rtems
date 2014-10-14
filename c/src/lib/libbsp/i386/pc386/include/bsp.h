@@ -47,6 +47,8 @@
 #ifndef _BSP_H
 #define _BSP_H
 
+#ifndef ASM
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -195,6 +197,18 @@ void Clock_driver_support_initialize_hardware(void); /* from 'ckinit.c'  */
 void kbd_reset_setup(char *str, int *ints);   /* from 'pc_keyb.c' */
 size_t read_aux(char * buffer, size_t count); /* from 'ps2_mouse.c'  */
 
+bool bsp_get_serial_mouse_device(             /* from 'serial_mouse.c' */
+  const char **name,
+  const char **type
+);
+
+void register_leds(                           /* from 'keyboard.c' */
+  int console,
+  unsigned int led,
+  unsigned int *addr,
+  unsigned int mask
+);
+
 /* Definitions for BSPConsolePort */
 #define BSP_CONSOLE_PORT_CONSOLE (-1)
 #define BSP_CONSOLE_PORT_COM1    (BSP_UART_COM1)
@@ -217,15 +231,30 @@ void bsp_ide_cmdline_init(void);
 #define RTEMS_BSP_HAS_IDE_DRIVER
 
 /* GDB stub stuff */
+void init_remote_gdb( void );
 void i386_stub_glue_init(int uart);
 void i386_stub_glue_init_breakin(void);
-void set_debug_traps(void);
 void breakpoint(void);
 
 #define BSP_MAXIMUM_DEVICES 6
 
+/*
+ * Debug helper methods
+ */
+typedef __FILE FILE;
+uint32_t BSP_irq_count_dump(FILE *f);
+
+/*
+ * Prototypes just called from .S files. This lets the .S file include
+ * bsp.h just to establish the dependency.
+ */
+void raw_idt_notify(void);
+void C_dispatch_isr(int vector);
+
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* !ASM */
 
 #endif /* _BSP_H */

@@ -45,7 +45,7 @@ void Clock_driver_install_handler(void);
 |        Arguments: None.
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
-void bsp_start_default( void )
+static void bsp_start_default( void )
 {
   int pci_init_retval;
 
@@ -81,11 +81,10 @@ void bsp_start_default( void )
 
   bsp_ide_cmdline_init();
 
-} /* bsp_start */
+} /* bsp_start_default */
 
 /*
  *  By making this a weak alias for bsp_start_default, a brave soul
  *  can override the actual bsp_start routine used.
  */
-
 void bsp_start (void) __attribute__ ((weak, alias("bsp_start_default")));
