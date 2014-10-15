@@ -30,5 +30,6 @@ void bsp_restart( const void const *addr )
   void (*start) ( void ) = addr;
 
   rtems_interrupt_disable( level );
-  ( *start )();
+    (void) level; /* avoid set but not used warning */
+    ( *start )();
 }
