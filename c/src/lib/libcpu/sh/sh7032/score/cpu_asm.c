@@ -35,6 +35,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/sh.h>
+#include <rtems/score/ispsh7032.h>
 
 #include <rtems/score/ispsh7032.h>
 #include <rtems/score/iosh7032.h>

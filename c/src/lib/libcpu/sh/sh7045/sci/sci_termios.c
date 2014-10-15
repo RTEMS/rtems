@@ -1,6 +1,8 @@
 /*
  * Termios console serial driver.
- *
+ */
+
+/*
  * Based on SCI driver by Ralf Corsepius and John M. Mills
  *
  * Author: Radzislaw Galler <rgaller@et.put.poznan.pl>
@@ -124,7 +126,7 @@ int sh_sci_set_attributes(
  *
  * The same routine for all interrupt sources of the same type.
  */
-rtems_isr sh_sci_rx_isr(rtems_vector_number vector)
+static rtems_isr sh_sci_rx_isr(rtems_vector_number vector)
 {
     int minor;
 
@@ -151,7 +153,7 @@ rtems_isr sh_sci_rx_isr(rtems_vector_number vector)
  *
  * The same routine for all interrupt sources of the same type.
  */
-rtems_isr sh_sci_tx_isr(rtems_vector_number vector)
+static rtems_isr sh_sci_tx_isr(rtems_vector_number vector)
 {
     int minor;
 

@@ -77,7 +77,7 @@ sh4uart_init(sh4uart *uart, void *tty, int chn, int int_driven)
  * RETURNS:
  *    peripheral module clock in Hz.
  */
-uint32_t
+static uint32_t
 sh4uart_get_Pph(void)
 {
   uint16_t   frqcr = *(volatile uint16_t*)SH7750_FRQCR;
@@ -418,7 +418,7 @@ sh4uart_set_attributes(sh4uart *uart, const struct termios *t)
  * RETURNS:
  *     nothing
  */
-void
+static void
 sh4uart_handle_error(sh4uart *uart)
 {
   if (uart->chn == SH4_SCI) {
@@ -451,7 +451,6 @@ int
 sh4uart_poll_read(sh4uart *uart)
 {
   int chn = uart->chn;
-  int error_occured = 0;
   int parity_error = 0;
   int break_occured = 0;
   int ch;
@@ -464,7 +463,6 @@ sh4uart_poll_read(sh4uart *uart)
   if (chn == SH4_SCI) {
     if ((SCSSR1 & (SH7750_SCSSR1_PER | SH7750_SCSSR1_FER |
                  SH7750_SCSSR1_ORER)) != 0) {
-      error_occured = 1;
       if (SCSSR1 & (SH7750_SCSSR1_PER | SH7750_SCSSR1_FER))
         parity_error = 1;
       sh4uart_handle_error(uart);
@@ -475,7 +473,6 @@ sh4uart_poll_read(sh4uart *uart)
     if ((SCSSR2 & (SH7750_SCSSR2_ER | SH7750_SCSSR2_DR |
                  SH7750_SCSSR2_BRK)) != 0 ||
             (SCLSR2 & SH7750_SCLSR2_ORER) != 0) {
-      error_occured = 1;
       if (SCSSR2 & (SH7750_SCSSR1_PER | SH7750_SCSSR1_FER))
         parity_error = 1;
       if (SCSSR2 & SH7750_SCSSR2_BRK)

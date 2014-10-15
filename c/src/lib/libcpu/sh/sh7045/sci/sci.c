@@ -8,7 +8,9 @@
  * This approach is similar to installing a sym-link from one device to
  * another device. If rtems once will support sym-links for devices files,
  * this implementation could be dropped.
- *
+ */
+
+/*
  *  Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de)
  *
  *  COPYRIGHT (c) 1997-1998, FAW Ulm, Germany
@@ -75,11 +77,11 @@
 /*  #define SH_SCI_DEF_COMM_1   B9600 | CS8 */
 
 struct scidev_t {
-  char *			name;
-  uint32_t  			addr;
-  rtems_device_minor_number	minor;
-  unsigned short		opened;
-  tcflag_t			cflags;
+  char *                     name;
+  uint32_t                   addr;
+  rtems_device_minor_number  minor;
+  unsigned short             opened;
+  tcflag_t                   cflags;
 } sci_device[SCI_MINOR_DEVICES] =
 {
   { "/dev/sci0", SH_SCI_BASE_0, 0, 0, SH_SCI_DEF_COMM_0 },
@@ -104,8 +106,8 @@ static int _sci_set_cflags(
   tcflag_t          c_cflag
 )
 {
-  uint8_t  	smr;
-  uint8_t  	brr;
+  uint8_t  smr;
+  uint8_t  brr;
 
   if ( c_cflag & CBAUD )
   {
@@ -148,7 +150,7 @@ static int _sci_set_cflags(
  * local functions operate SCI ports 0 and 1
  * called from polling routines or ISRs
  */
-bool wrtSCI0(unsigned char ch)
+static bool wrtSCI0(unsigned char ch)
 {
   uint8_t   temp;
   bool result = false;
@@ -164,7 +166,7 @@ bool wrtSCI0(unsigned char ch)
   return result;
 } /* wrtSCI0 */
 
-bool wrtSCI1(unsigned char ch)
+static bool wrtSCI1(unsigned char ch)
 {
   uint8_t   temp;
   bool result = false;
@@ -181,27 +183,27 @@ bool wrtSCI1(unsigned char ch)
 } /* wrtSCI1 */
 
 /* polled output steers byte to selected port */
-void sh_sci_outbyte_polled(
+static void sh_sci_outbyte_polled(
   rtems_device_minor_number  minor,
   char ch )
 {
-	if (minor == 0) /* blocks until port ready */
-		while (wrtSCI0(ch) != true); /* SCI0*/
-	else
-		while (wrtSCI1(ch) != true); /* SCI1*/
+  if (minor == 0) /* blocks until port ready */
+    while (wrtSCI0(ch) != true); /* SCI0*/
+  else
+    while (wrtSCI1(ch) != true); /* SCI1*/
 } /* sh_sci_outbyte_polled */
 
 /*
  * Initial version calls polled output driver and blocks
  */
-void outbyte(
+static void outbyte(
   rtems_device_minor_number  minor,
   char ch)
 {
-	sh_sci_outbyte_polled(minor, (unsigned char)ch);
+  sh_sci_outbyte_polled(minor, (unsigned char)ch);
 } /* outbyte */
 
-bool rdSCI0(unsigned char *ch)
+static bool rdSCI0(unsigned char *ch)
 {
   uint8_t   temp;
   bool result = false;
@@ -225,7 +227,7 @@ bool rdSCI0(unsigned char *ch)
   return result;
 } /* rdSCI0 */
 
-bool rdSCI1(unsigned char *ch)
+static bool rdSCI1(unsigned char *ch)
 {
   uint8_t   temp;
   bool result = false;
@@ -249,9 +251,8 @@ bool rdSCI1(unsigned char *ch)
   return result;
 } /* rdSCI1 */
 
-
 /* initial version pulls byte from selected port */
-char sh_sci_inbyte_polled( rtems_device_minor_number  minor )
+static char sh_sci_inbyte_polled( rtems_device_minor_number  minor )
 {
   uint8_t ch = 0;
 
@@ -263,14 +264,13 @@ char sh_sci_inbyte_polled( rtems_device_minor_number  minor )
 } /* sh_sci_inbyte_polled */
 
 /* Initial version calls polled input driver */
-char inbyte( rtems_device_minor_number  minor )
+static char inbyte( rtems_device_minor_number  minor )
 {
   char ch;
 
   ch = sh_sci_inbyte_polled(minor);
   return ch;
 } /* inbyte */
-
 
 /*  sh_sci_initialize
  *
@@ -283,9 +283,7 @@ char inbyte( rtems_device_minor_number  minor )
  *  Return values: RTEMS_SUCCESSFUL
  *   if all sci[...] register, else calls
  *   rtems_fatal_error_occurred(status)
- *
  */
-
 rtems_device_driver sh_sci_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
@@ -295,7 +293,6 @@ rtems_device_driver sh_sci_initialize(
   rtems_device_minor_number i;
   rtems_driver_name_t driver;
 
-
   /*
    * register all possible devices.
    * the initialization of the hardware is done by sci_open
@@ -303,19 +300,17 @@ rtems_device_driver sh_sci_initialize(
    * One of devices could be previously registered by console
    * initialization therefore we check it everytime
    */
-
-  for ( i = 0 ; i < SCI_MINOR_DEVICES ; i++ )
-  {
+  for ( i = 0 ; i < SCI_MINOR_DEVICES ; i++ ) {
     status = rtems_io_lookup_name(
         sci_device[i].name,
         &driver);
-    if ( status != RTEMS_SUCCESSFUL )
-    {
+    if ( status != RTEMS_SUCCESSFUL ) {
         /* OK. We assume it is not registered yet. */
         status = rtems_io_register_name(
             sci_device[i].name,
             major,
-            sci_device[i].minor );
+            sci_device[i].minor
+        );
         if (status != RTEMS_SUCCESSFUL)
             rtems_fatal_error_occurred(status);
     }
@@ -326,31 +321,27 @@ rtems_device_driver sh_sci_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
-
 /*
  *  Open entry point
  *   Sets up port and pins for selected sci.
  */
-
 rtems_device_driver sh_sci_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg )
 {
-  uint8_t   temp8;
+  uint8_t    temp8;
   uint16_t   temp16;
 
-  unsigned 	a;
+  unsigned   a;
 
  /* check for valid minor number */
-   if (( minor > ( SCI_MINOR_DEVICES -1 )) || ( minor < 0 ))
-   {
-     return RTEMS_INVALID_NUMBER;
-   }
+ if (( minor > ( SCI_MINOR_DEVICES -1 )) || ( minor < 0 )) {
+   return RTEMS_INVALID_NUMBER;
+ }
 
   /* device already opened */
-  if ( sci_device[minor].opened > 0 )
-  {
+  if ( sci_device[minor].opened > 0 ) {
     sci_device[minor].opened++;
     return RTEMS_SUCCESSFUL;
   }
@@ -372,7 +363,7 @@ rtems_device_driver sh_sci_open(
   } /* add other devices and pins as req'd. */
 
   /* set up SCI registers */
-      write8(0x00, sci_device[minor].addr + SCI_SCR);	 /* Clear SCR */
+      write8(0x00, sci_device[minor].addr + SCI_SCR);   /* Clear SCR */
                                                    /* set SMR and BRR */
     _sci_set_cflags( &sci_device[minor], sci_device[minor].cflags );
 
@@ -381,7 +372,7 @@ rtems_device_driver sh_sci_open(
     }
 
     write8((SCI_RE | SCI_TE),              /* enable async. Tx and Rx */
-	   sci_device[minor].addr + SCI_SCR);
+     sci_device[minor].addr + SCI_SCR);
 
     /* clear error flags */
     temp8 = read8(sci_device[minor].addr + SCI_SSR);
@@ -409,7 +400,6 @@ rtems_device_driver sh_sci_open(
 /*
  *  Close entry point
  */
-
 rtems_device_driver sh_sci_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -428,7 +418,6 @@ rtems_device_driver sh_sci_close(
 /*
  * read bytes from the serial port. We only have stdin.
  */
-
 rtems_device_driver sh_sci_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -460,7 +449,6 @@ rtems_device_driver sh_sci_read(
 /*
  * write bytes to the serial port. Stdout and stderr are the same.
  */
-
 rtems_device_driver sh_sci_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -491,7 +479,6 @@ rtems_device_driver sh_sci_write(
 /*
  *  IO Control entry point
  */
-
 rtems_device_driver sh_sci_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -573,7 +560,7 @@ const rtems_termios_callbacks sci_interrupt_callbacks;
 
 const rtems_termios_callbacks* sh_sci_get_termios_handlers( bool poll )
 {
-    return poll ?
-        &sci_poll_callbacks :
-        &sci_interrupt_callbacks;
+  return poll ?
+      &sci_poll_callbacks :
+      &sci_interrupt_callbacks;
 }

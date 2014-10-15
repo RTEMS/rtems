@@ -1,8 +1,10 @@
 /*
- *  This include file contains all board IO definitions.
- *
  *  generic sh1
  *
+ *  This include file contains all board IO definitions.
+ */
+
+/*
  *  Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de)
  *
  *  COPYRIGHT (c) 1997-1998, FAW Ulm, Germany
@@ -68,8 +70,9 @@ extern void *CPU_Interrupt_stack_high;
       console_read, console_write, console_control }
 
 /*
- * NOTE: Use the standard Clock driver entry
+ * BSP methods that cross file boundaries.
  */
+void bsp_hw_init(void);
 
 #ifdef __cplusplus
 }

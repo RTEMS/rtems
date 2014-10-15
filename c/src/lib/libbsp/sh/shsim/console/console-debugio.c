@@ -1,9 +1,6 @@
 /**
  *  @file
  *  @brief Stub printk() support
- *
- *  This file contains a stub for the required printk() support.
- *  It is NOT functional!!!
  */
 
 /*
@@ -27,7 +24,7 @@ void console_outbyte_polled(
   char ch
 );
 
-void BSP_output_char_f(char c)
+static void BSP_output_char_f(char c)
 {
   console_outbyte_polled( 0, c );
 }

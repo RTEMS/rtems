@@ -1,6 +1,8 @@
 /*
  *  Support for SuperH Simulator in GDB
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,10 +24,11 @@
 
 register unsigned long  *stack_ptr __asm__ ("r15");
 
+void __ISR_Handler(uint32_t vector);
+
 /*
  *  This routine provides the RTEMS interrupt management.
  */
-
 void __ISR_Handler( uint32_t   vector)
 {
   ISR_Level level;

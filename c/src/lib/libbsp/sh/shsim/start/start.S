@@ -18,6 +18,7 @@
  */
 
 #include <rtems/asm.h>
+#include <bsp.h>
 
 	BEGIN_CODE
 	PUBLIC(start)

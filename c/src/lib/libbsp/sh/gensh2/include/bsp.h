@@ -1,8 +1,10 @@
 /*
- *  This include file contains all board IO definitions.
- *
  *  generic sh2
  *
+ *  This include file contains all board IO definitions.
+ */
+
+/*
  *  Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de)
  *
  *  COPYRIGHT (c) 1997-1998, FAW Ulm, Germany
@@ -45,12 +47,11 @@ extern "C" {
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
-#if 0
-#include <rtems/devnull.h>
-#define BSP_CONSOLE_DEVNAME "/dev/null"
-#define BSP_CONSOLE_DRIVER_TABLE_ENTRY DEVNULL_DRIVER_TABLE_ENTRY
-#else
+#include <termios.h> /* for tcflag_t */
+
 #include <sh/sci.h>
+
+#if 1
 /* FIXME:
  *   These definitions will be no longer necessary if the old
  *   implementation of SCI driver will be droped
@@ -66,17 +67,18 @@ extern "C" {
 /*
  * Defined in the linker script 'linkcmds'
  */
-
 extern void *CPU_Interrupt_stack_low;
 extern void *CPU_Interrupt_stack_high;
 
 /*
- *  Device Driver Table Entries
+ * BSP methods that cross file boundaries.
  */
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
+void bsp_hw_init(void);
+extern int _sci_get_brparms(
+  tcflag_t      cflag,
+  unsigned char *smr,
+  unsigned char *brr
+);
 
 #ifdef __cplusplus
 }

@@ -20,20 +20,13 @@
 
 #include <bsp/syscall.h>
 
-int errno;
-
-extern int __trap34(int, int, void*, int );
-
 /*
  *  console_initialize_hardware
  *
  *  This routine initializes the console hardware.
- *
  */
-
 void console_initialize_hardware(void)
 {
-  return;
 }
 
 /*
@@ -41,14 +34,12 @@ void console_initialize_hardware(void)
  *
  *  This routine transmits a character using polling.
  */
-
 void console_outbyte_polled(
   int  port,
   char ch
 )
 {
   __trap34 (SYS_write, 1, &ch, 1);
-  return;
 }
 
 /*
@@ -56,7 +47,6 @@ void console_outbyte_polled(
  *
  *  This routine polls for a character.
  */
-
 int console_inbyte_nonblocking(
   int port
 )
@@ -64,10 +54,4 @@ int console_inbyte_nonblocking(
   unsigned char c;
 
   return __trap34 (SYS_read, 0, &c, 1);
-}
-
-/* XXX wrong place for this */
-int _sys_exit (int n)
-{
-  return __trap34 (SYS_exit, n, 0, 0);
 }

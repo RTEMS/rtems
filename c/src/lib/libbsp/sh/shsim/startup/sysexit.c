@@ -1,5 +1,5 @@
 /*
- *  This is a dummy bsp_hw_init routine.
+ *  This file contains the simulator specific exit trap.
  */
 
 /*
@@ -13,6 +13,9 @@
 
 #include <bsp.h>
 
-void bsp_hw_init( void )
+extern int __trap34(int, int, void*, int );
+
+int _sys_exit (int n)
 {
+  return __trap34 (SYS_exit, n, 0, 0);
 }
