@@ -94,6 +94,11 @@ extern unsigned int BSP_time_base_divisor;
 int BSP_disconnect_clock_handler(void);
 int BSP_connect_clock_handler(void);
 
+/*
+ * Prototypes for BSP methods shared across file boundaries
+ */
+void zero_bss(void);
+
 #endif /* ASM */
 
 void BSP_ask_for_reset(void);
