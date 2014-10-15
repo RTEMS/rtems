@@ -493,7 +493,10 @@ mpc55xx_flash_copy_op(
         flash[0] = 0xffffffff;      /* Step 3: Write to any address in the flash
                                      * (the "erase interlock write)".
                                      */
-        rtems_cache_flush_multiple_data_lines(flash, sizeof(flash[0]));
+        rtems_cache_flush_multiple_data_lines(
+          RTEMS_DEVOLATILE(void *,flash),
+          sizeof(flash[0])
+        );
 
         FLASH.MCR.B.EHV = 1;         /* Step 4: Enable high V to start erase. */
         while (FLASH.MCR.B.DONE == 0) { /* Step 5: Wait until done. */
