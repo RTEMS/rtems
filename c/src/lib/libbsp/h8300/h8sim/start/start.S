@@ -13,9 +13,10 @@ _start:
 	adds	#2,r0
 	cmp	r1,r0
 	blo	.loop
-        ;       call __main
 	mov.w	#0,r0		; pass in NULL
 	jsr	@_boot_card
+	.global	_bsp_reset
+_bsp_reset:
 	mov.w	#0,r0		; indicate reason to exit
 	sleep
 	jmp	@_start 	; restart
@@ -37,8 +38,9 @@ _start:
 	adds	#2,er0
 	cmp.l	er1,er0
 	blo	.loop
-        ;       call __main
 	jsr	@_boot_card
+	.global	_bsp_reset
+_bsp_reset:
 	mov.w	#0,r0		; indicate reason to exit
 	sleep
 	jmp	@_start 	; restart
