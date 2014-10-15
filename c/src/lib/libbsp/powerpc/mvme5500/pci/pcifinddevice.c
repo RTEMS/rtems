@@ -1,13 +1,12 @@
-/* pcifinddevice.c
- *
- * Copyright 2001,  Till Straumann <strauman@slac.stanford.edu>
- *
+/*
  * find a particular PCI device
  * (we assume, the firmware configured the PCI bus[es] for us)
- *
+ */
+
+/*
+ * Copyright 2001,  Till Straumann <strauman@slac.stanford.edu>
  *
  * Kate Feng <feng1@bnl.gov>, modified it to support the mvme5500 board.
- *
  */
 
 #include <bsp/pci.h>
@@ -19,10 +18,8 @@ static int BSP_pciDebug=0;
 int BSP_pciFindDevicePrint(unsigned short vendorid, unsigned short deviceid,
                    int instance, int *pbus, int *pdev, int *pfun )
 {
-  int x;
-
   BSP_pciDebug = 1;
-  x=pci_find_device(vendorid, deviceid, instance, pbus, pdev, pfun );
+  (void) pci_find_device(vendorid, deviceid, instance, pbus, pdev, pfun );
   BSP_pciDebug = 0;
 
   return 0;
