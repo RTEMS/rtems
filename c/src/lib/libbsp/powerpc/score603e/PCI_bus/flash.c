@@ -60,6 +60,7 @@ unsigned int SCORE603e_FLASH_verify_enable( void )
   return RTEMS_SUCCESSFUL;
 }
 
+#if 0
 unsigned int SCORE603e_FLASH_pci_reset_reg(
   uint8_t          reg,
   uint32_t         cmask,
@@ -79,6 +80,7 @@ unsigned int SCORE603e_FLASH_pci_reset_reg(
   }
   return RTEMS_SUCCESSFUL;
 }
+#endif
 
 /*
  *  SCORE603e_FLASH_Enable_writes

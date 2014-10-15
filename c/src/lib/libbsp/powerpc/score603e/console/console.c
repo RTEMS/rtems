@@ -4,8 +4,10 @@
  *  This driver uses the termios pseudo driver.
  *
  *  Currently only polled mode is supported.
- *
- *  COPYRIGHT (c) 1989-2009.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -36,14 +38,12 @@ int USE_FOR_CONSOLE = USE_FOR_CONSOLE_DEF;
  *  Console Device Driver Entry Points
  */
 
-/* PAGE
- *
+/*
  *  console_inbyte_nonblocking
  *
  *  Console Termios polling input entry point.
  */
-
-int console_inbyte_nonblocking(
+static int console_inbyte_nonblocking(
   int minor
 )
 {
@@ -164,8 +164,7 @@ void console_outbyte_interrupts(
 
 #endif
 
-/* PAGE
- *
+/*
  *  console_initialize
  *
  *  Routine called to initialize the console device driver.
@@ -178,7 +177,7 @@ rtems_device_driver console_initialize(
 {
   rtems_status_code          status;
   rtems_device_minor_number  console;
-  int                        port, chip, p0,p1;
+  int                        port, p0,p1;
 
   /*
    * initialize the termio interface.
@@ -234,7 +233,6 @@ rtems_device_driver console_initialize(
    */
 
   for (port=1; port<NUM_Z85C30_PORTS; port++) {
-   chip = port >> 1;
     initialize_85c30_port( &Ports_85C30[port] );
   }
 
@@ -245,14 +243,13 @@ rtems_device_driver console_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
-/* PAGE
- *
+/*
  *  console_write_support
  *
  *  Console Termios output entry point.
  *
  */
-ssize_t console_write_support(
+static ssize_t console_write_support(
   int   minor,
   const char *buf,
   size_t   len)
@@ -289,12 +286,10 @@ ssize_t console_write_support(
   return nwrite;
 }
 
-/* PAGE
- *
+/*
  *  console_open
  *
  *  open a port as a termios console.
- *
  */
 rtems_device_driver console_open(
   rtems_device_major_number major,
@@ -354,19 +349,10 @@ rtems_device_driver console_open(
 }
 
 #if (CONSOLE_USE_INTERRUPTS)
-
 /*
  *  console_outbyte_interrupts
  *
  *  This routine transmits a character out.
- *
- *  Input parameters:
- *    port - port to transmit character to
- *    ch  - character to be transmitted
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
  */
 void console_outbyte_interrupts(
   const Port_85C30_info *Port,
@@ -396,12 +382,10 @@ void console_outbyte_interrupts(
 
   Ring_buffer_Add_character( &protocol->TX_Buffer, ch );
 }
-
 #endif
 
 /* const char arg to be compatible with BSP_output_char decl. */
-void
-debug_putc_onlcr(const char c)
+static void debug_putc_onlcr(const char c)
 {
   int                      console;
   volatile uint8_t         *csr;

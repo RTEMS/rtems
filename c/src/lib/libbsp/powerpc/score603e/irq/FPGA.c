@@ -1,6 +1,9 @@
-/*  FPGA.c -- Bridge for second and subsequent generations
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ * FPGA.c -- Bridge for second and subsequent generations
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -120,7 +123,7 @@ void init_irq_data_register(void)
   }
 }
 
-uint16_t         read_and_clear_PMC_irq(
+uint16_t read_and_clear_PMC_irq(
   uint16_t            irq
 )
 {

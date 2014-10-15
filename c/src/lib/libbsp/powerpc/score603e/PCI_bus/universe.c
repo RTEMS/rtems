@@ -16,22 +16,6 @@
 #include <bsp.h>
 #include "PCI.h"
 
-/********************************************************************
- ********************************************************************
- *********                                                  *********
- *********                  Prototypes                      *********
- *********                                                  *********
- ********************************************************************
- ********************************************************************/
-
-/********************************************************************
- ********************************************************************
- *********                                                  *********
- *********                                                  *********
- *********                                                  *********
- ********************************************************************
- ********************************************************************/
-
 typedef struct {
   uint32_t         PCI_ID;                 /* 0x80030000 */
   uint32_t         PCI_CSR;                /* 0x80030004 */
@@ -153,7 +137,6 @@ volatile Universe_Memory *UNIVERSE =
  * by the boot code.  This routine should be called by user code only if
  * a complete SCORE603e VME initialization is required.
  */
-
 void initialize_universe(void)
 {
   uint32_t         jumper_selection;
@@ -227,7 +210,7 @@ void set_vme_base_address (
 /*
  * Gets the VME base address
  */
-uint32_t         get_vme_base_address (void)
+static uint32_t get_vme_base_address (void)
 {
   volatile uint32_t         temp;
 
@@ -236,7 +219,7 @@ uint32_t         get_vme_base_address (void)
   return (temp);
 }
 
-uint32_t         get_vme_slave_size(void)
+uint32_t get_vme_slave_size(void)
 {
   volatile uint32_t         temp;
   temp  =  PCI_bus_read( &UNIVERSE->VSI0_BD);
@@ -249,7 +232,7 @@ uint32_t         get_vme_slave_size(void)
  * Set the size of the VME slave image
  * Note: The maximum size is up to 24 M bytes. (00000000 - 017FFFFF)
  */
-void set_vme_slave_size (uint32_t         size)
+void set_vme_slave_size (uint32_t size)
 {
   volatile uint32_t         temp;
 

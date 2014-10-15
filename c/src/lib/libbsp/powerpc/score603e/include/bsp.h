@@ -1,8 +1,9 @@
-/*  bsp.h
- *
+/*
  *  This include file contains all board IO definitions.
- *
- *  COPYRIGHT (c) 1989-2009.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -123,68 +124,55 @@ rtems_isr_entry  set_EE_vector(
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector                    /* vector number      */
 );
-void initialize_external_exception_vector ();
+void initialize_external_exception_vector(void);
 
 /*
  * Hwr_init.c
  */
-void init_PCI();
-void instruction_cache_enable ();
-void data_cache_enable ();
+void init_PCI(void);
+void init_RTC(void);
+void instruction_cache_enable(void);
+void data_cache_enable(void);
 
-void initialize_PCI_bridge ();
-uint16_t         read_and_clear_irq ();
-void set_irq_mask(
-  uint16_t         value
-);
-uint16_t         get_irq_mask();
+void     initialize_PCI_bridge(void);
+uint16_t read_and_clear_irq(void);
+void     set_irq_mask(uint16_t value);
+uint16_t get_irq_mask(void);
 
 /*
  * universe.c
  */
-void initialize_universe();
-
-void set_irq_mask(
-  uint16_t         value
-);
-
-uint16_t         get_irq_mask();
-
-void unmask_irq(
-  uint16_t         irq_idx
-);
-
-void mask_irq(
-  uint16_t         irq_idx
-);
-
-void init_irq_data_register();
-
-uint16_t         read_and_clear_PMC_irq(
-  uint16_t            irq
-);
-
-bool Is_PMC_IRQ(
-  uint32_t           pmc_irq,
-  uint16_t           status_word
-);
-
-uint16_t         read_and_clear_irq();
+void     initialize_universe(void);
+void     set_irq_mask(uint16_t value);
+uint16_t get_irq_mask(void);
+void     unmask_irq(uint16_t irq_idx);
+void     mask_irq(uint16_t irq_idx);
+void     init_irq_data_register(void);
+uint16_t read_and_clear_PMC_irq(uint16_t irq);
+bool     Is_PMC_IRQ( uint32_t pmc_irq, uint16_t status_word);
+uint16_t read_and_clear_irq(void);
+void set_vme_base_address(uint32_t base_address);
+uint32_t get_vme_slave_size(void);
+void set_vme_slave_size (uint32_t size);
 
 /*
  * FPGA.c
  */
-void initialize_PCI_bridge ();
+void initialize_PCI_bridge(void);
+void init_irq_data_register(void);
+uint32_t Read_pci_device_register(uint32_t address);
+void  Write_pci_device_register(uint32_t address, uint32_t data);
 
 /* flash.c */
+unsigned int SCORE603e_FLASH_Disable(uint32_t unused);
+unsigned int SCORE603e_FLASH_verify_enable(void);
+unsigned int SCORE603e_FLASH_Enable_writes(uint32_t area);
 
-unsigned int SCORE603e_FLASH_Disable(
-  uint32_t                       unused
-);
-unsigned int SCORE603e_FLASH_verify_enable();
-unsigned int SCORE603e_FLASH_Enable_writes(
-  uint32_t                       area        /* Unused  */
-);
+/*
+ * PCI.c
+ */
+uint32_t PCI_bus_read(volatile uint32_t *_addr);
+void PCI_bus_write(volatile uint32_t *_addr, uint32_t _data);
 
 #define BSP_FLASH_ENABLE_WRITES( _area) SCORE603e_FLASH_Enable_writes( _area )
 #define BSP_FLASH_DISABLE_WRITES(_area) SCORE603e_FLASH_Disable( _area )

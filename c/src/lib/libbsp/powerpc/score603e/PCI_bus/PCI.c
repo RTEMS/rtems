@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,10 +24,10 @@
  * an UNIVERSE register, without sufficient delay, the second access will
  * not work correctly.
  */
-void PCI_bus_delay (void)
+static void PCI_bus_delay (void)
 {
-  __asm__ ("	nop");
-  __asm__ (" nop");
+  __asm__ volatile ("nop");
+  __asm__ volatile ("nop");
 }
 
 /*
@@ -43,7 +42,7 @@ void PCI_bus_write(
   *_addr = _data;
 }
 
-uint32_t         PCI_bus_read(
+uint32_t PCI_bus_read(
   volatile uint32_t         *  _addr                  /* IN */
 )
 {
@@ -57,8 +56,7 @@ uint32_t         PCI_bus_read(
  * PCI Configuration Cycle Read/Write Access which is used to access all of
  * devices registers on the PCI bus.  i.e.: Universe, Ethernet & PMC.
  */
-
-uint32_t         Read_pci_device_register(
+uint32_t Read_pci_device_register(
   uint32_t         address
 )
 {
