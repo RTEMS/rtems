@@ -34,6 +34,13 @@ extern "C" {
 
 rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
 
+/*
+ * Prototype for methods in the BSP that cross file boundaries.
+ */
+void bsp_spurious_initialize(void);
+void bsp_spurious_handler_assistant(rtems_vector_number vector);
+rtems_isr bsp_spurious_handler(rtems_vector_number vector);
+
 #ifdef __cplusplus
 }
 #endif
