@@ -1,7 +1,8 @@
-/*  bsp.h
- *
- *  This include file contains all GEN405 board IO definitions.
- *
+/*
+ *  This include file contains all Virtex4 board IO definitions.
+ */
+
+/*
  * derived from helas403/include/bsp.h:
  *  Id: bsp.h,v 1.4 2001/06/18 17:01:48 joel Exp
  *  Author:	Thomas Doerfler <td@imd.m.isar.de>
@@ -74,6 +75,11 @@ extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
 void BSP_ask_for_reset(void);
 void BSP_panic(char *s);
 void _BSP_Fatal_error(unsigned int v);
+
+/*
+ * Prototypes for BSP methods shared across file boundaries
+ */
+void zero_bss(void);
 
 #ifdef __cplusplus
 }
