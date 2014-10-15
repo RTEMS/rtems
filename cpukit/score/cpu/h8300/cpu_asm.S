@@ -148,7 +148,7 @@ nested:
 	mov.l	er1,@THREAD_DISPATCH_DISABLE_LEVEL
 	bne	exit
 	
-	mov.b	@DISPATCH_NEEDED,er1
+	mov.l	@DISPATCH_NEEDED,er1
 	beq	exit		; If no then exit
 
 	/* Context switch here through ISR_Dispatch */
