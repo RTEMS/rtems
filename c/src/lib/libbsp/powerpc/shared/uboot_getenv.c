@@ -7,9 +7,16 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <bsp.h>
+
+/*
+ * If the BSP variant does not have UBoot, then disable all contents
+ * of this file.
+ */
+#if defined(HAS_UBOOT)
+
 #include <stdint.h>
 #include <string.h>
-#include <bsp.h>
 
 /* Assumed to be provided by BSP */
 extern const uint8_t *uboot_environment;
@@ -64,4 +71,4 @@ const char *bsp_uboot_getenv(
   return NULL;
 }
 
-
+#endif /* defined(HAS_UBOOT) */
