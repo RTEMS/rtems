@@ -1,5 +1,6 @@
-/* Trivial page table setup for RTEMS
- * Purpose: allow write protection of text/ro-data
+/*
+ * Trivial page table setup for RTEMS
+ * Purpose: allow write protection of text/RO-data
  */
 
 /*
@@ -193,7 +194,8 @@ whatPrintf (void)
 #endif
 
 #ifdef DEBUG
-unsigned long triv121PgTblConsistency (Triv121PgTbl pt, int pass, int expect);
+static unsigned long triv121PgTblConsistency(
+  Triv121PgTbl pt, int pass, int expect);
 
 static int consistencyPass = 0;
 #define CONSCHECK(expect) triv121PgTblConsistency(&pgTbl,consistencyPass++,(expect))
@@ -304,12 +306,11 @@ static APte
 slotFor (Triv121PgTbl pt, unsigned long vsid, unsigned long pi)
 {
   int i;
-  unsigned long hash, api;
+  unsigned long hash;
   APte pte;
 
   /* primary hash */
   hash = PTE_HASH1 (vsid, pi);
-  api = API (pi);
   /* linear search thru all buckets for this hash */
   for (i = 0, pte = ptegOf (pt, hash); i < PTE_PER_PTEG; i++, pte++) {
     if (!pte->v && !pte->marked) {
@@ -707,6 +708,7 @@ myhdl (BSP_Exception_frame * excPtr)
 
 
 
+#ifdef DEBUG
 /* test the consistency of the page table
  *
  * 'pass' is merely a number which will be printed
@@ -725,7 +727,7 @@ myhdl (BSP_Exception_frame * excPtr)
  *
  * RETURNS: total number of valid plus 'marked' slots.
  */
-unsigned long
+static unsigned long
 triv121PgTblConsistency (Triv121PgTbl pt, int pass, int expected)
 {
   APte pte;
@@ -822,6 +824,7 @@ triv121PgTblConsistency (Triv121PgTbl pt, int pass, int expected)
   }
   return v;
 }
+#endif
 
 /* Find the PTE for a EA and print its contents
  * RETURNS: pte for EA or NULL if no entry was found.
@@ -1072,6 +1075,7 @@ dumpPte (APte pte)
 }
 
 
+#if defined(DEBUG_MAIN)
 /* dump page table entries from index 'from' to 'to'
  * The special values (unsigned)-1 are allowed which
  * cause the routine to dump the entire table.
@@ -1096,7 +1100,6 @@ triv121PgTblDump (Triv121PgTbl pt, unsigned from, unsigned to)
 }
 
 
-#if defined(DEBUG_MAIN)
 
 #define LD_DBG_PT_SIZE	LD_MIN_PT_SIZE
 

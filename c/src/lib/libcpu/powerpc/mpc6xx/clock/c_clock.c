@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -93,7 +93,7 @@ static void clockHandler(void)
     } while (
       _Thread_Heir == _Thread_Executing
         && _Thread_Executing->Start.entry_point
-          == rtems_configuration_get_idle_task()
+          == (Thread_Entry) rtems_configuration_get_idle_task()
     );
 
   #else
@@ -150,14 +150,6 @@ void clockIsr(void *unused)
  *  for bookE CPUs. For efficiency reasons we
  *  provide a separate handler rather than
  *  checking the CPU type each time.
- *
- *  Input parameters:
- *    vector - vector number
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- *
  */
 void clockIsrBookE(void *unused)
 {
@@ -195,13 +187,6 @@ int clockIsOn(void* unused)
  *
  *  This routine allows the clock driver to exit by masking the interrupt and
  *  disabling the clock's counter.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- *
  */
 void Clock_exit( void )
 {
@@ -228,16 +213,6 @@ static uint32_t Clock_driver_nanoseconds_since_last_tick(void)
  *  Clock_initialize
  *
  *  This routine initializes the clock driver.
- *
- *  Input parameters:
- *    major - clock device major number
- *    minor - clock device minor number
- *    parg  - pointer to optional device driver arguments
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    rtems_device_driver status code
  */
 rtems_device_driver Clock_initialize(
   rtems_device_major_number major,
