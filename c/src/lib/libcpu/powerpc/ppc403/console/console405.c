@@ -1,6 +1,8 @@
 /*
  *  This file contains the PowerPC 405GP console IO package.
- *
+ */
+
+/*
  *  Author:	Thomas Doerfler <td@imd.m.isar.de>
  *              IMD Ingenieurbuero fuer Microcomputertechnik
  *
@@ -190,7 +192,7 @@ static int spiBaudRound(double x)
   return (int)((int)((x-(int)x)*1000)>500 ? x+1 : x);
 }
 
-void
+static void
 spiBaudSet(uint32_t   baudrate)
 {
   uint32_t   tmp;
@@ -251,7 +253,6 @@ spiPollRead (int minor)
 
   return port->RBR;
 }
-
 
 static ssize_t
 spiPollWrite(int minor, const char *buf, size_t len)
@@ -325,13 +326,10 @@ static rtems_isr serial_ISR(rtems_vector_number v)
    }
 }
 
-
 /*
- *
  * deinit SPI
- *
  */
-void
+static void
 spiDeInit(void)
 {
   /*
@@ -339,20 +337,16 @@ spiDeInit(void)
    * set it to state to work with polling boot monitor, if any...
    */
 
-
   /* set up baud rate to original state */
   spiBaudSet(bsp_serial_rate);
 
   port->IER = 0;
-
 }
 
 /*
- *
  * init SPI
- *
  */
-rtems_status_code
+static rtems_status_code
 spiInitialize(void)
 {
   register unsigned tmp;
@@ -453,11 +447,9 @@ rtems_device_driver console_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
-
 /*
  *  Open entry point
  */
-
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -501,7 +493,6 @@ rtems_device_driver console_open(
 /*
  *  Close entry point
  */
-
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -514,7 +505,6 @@ rtems_device_driver console_close(
 /*
  * read bytes from the serial port. We only have stdin.
  */
-
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -527,7 +517,6 @@ rtems_device_driver console_read(
 /*
  * write bytes to the serial port. Stdout and stderr are the same.
  */
-
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -540,7 +529,6 @@ rtems_device_driver console_write(
 /*
  *  IO Control entry point
  */
-
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
