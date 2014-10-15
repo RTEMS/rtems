@@ -61,6 +61,7 @@ void BSP_panic( char *s)
   rtems_interrupt_level level;
 
   rtems_interrupt_disable( level);
+  (void) level; /* avoid set but not used warning */
 
   printk( "%s PANIC %s\n", _RTEMS_version, s);
 
