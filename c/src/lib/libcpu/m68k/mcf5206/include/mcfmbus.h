@@ -36,7 +36,7 @@ typedef struct mcfmbus {
     rtems_isr_entry        oldisr; /* Old interrupt handler */
     rtems_id               sema; /* MBUS semaphore */
     i2c_transfer_done      done; /* Transfer done function */
-    uint32_t       done_arg_ptr; /* Done function argument ptr */
+    uintptr_t      done_arg_ptr; /* Done function argument ptr */
 } mcfmbus;
 
 /* mcfmbus_initialize --

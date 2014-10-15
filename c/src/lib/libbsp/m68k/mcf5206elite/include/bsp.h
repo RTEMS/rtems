@@ -173,6 +173,11 @@ rtems_isr_entry set_vector(
   int                 type
 );
 
+/*
+ * Prototypes for BSP methods that cross file boundaries
+ */
+void Init5206e(void);
+
 #ifdef __cplusplus
 }
 #endif
