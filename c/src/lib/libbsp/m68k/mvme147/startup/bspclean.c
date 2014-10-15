@@ -1,7 +1,9 @@
 /*
  *  This routine returns control to 147Bug.
- *
- *  COPYRIGHT (c) 1989-2010.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,16 +18,18 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
-extern void start( void  );
+extern void start(void);
 
-void bsp_return_to_monitor_trap(void)
+static rtems_isr bsp_return_to_monitor_trap(
+  rtems_vector_number vector
+)
 {
   register volatile void *start_addr;
 
-  m68k_set_vbr( 0 );                /* restore 147Bug vectors */
+  m68k_set_vbr( 0 );                    /* restore 147Bug vectors */
   __asm__ volatile( "trap   #15"  );    /* trap to 147Bug */
   __asm__ volatile( ".short 0x63" );    /* return to 147Bug (.RETURN) */
-                                    /* restart program */
+                                        /* restart program */
   start_addr = start;
 
   __asm__ volatile ( "jmp %0@" : "=a" (start_addr) : "0" (start_addr) );
@@ -41,5 +45,5 @@ void bsp_fatal_extension(
    pcc->timer2_int_control = 0; /* Disable Timer 2 */
 
    M68Kvec[ 45 ] = bsp_return_to_monitor_trap;   /* install handler */
-   __asm__ volatile( "trap #13" );  /* ensures SUPV mode */
+   __asm__ volatile( "trap #13" );               /* ensures SUPV mode */
 }
