@@ -21,6 +21,7 @@
 #define _RTEMS_SCORE_OBJECT_H
 
 #include <rtems/score/basedefs.h>
+#include <rtems/score/cpu.h>
 #include <rtems/score/chain.h>
 
 #ifdef __cplusplus
