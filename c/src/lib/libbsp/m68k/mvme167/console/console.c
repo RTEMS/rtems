@@ -1,6 +1,4 @@
 /*
- *  console.c
- *
  *  This file contains the MVME167 termios console package. Only asynchronous
  *  I/O is supported.
  *
@@ -117,7 +115,9 @@
  *  All page references are to the MVME166/MVME167/MVME187 Single Board
  *  Computer Programmer's Reference Guide (MVME187PG/D2) with the April
  *  1993 supplements/addenda (MVME187PG/D2A1).
- *
+ */
+
+/*
  *  Copyright (c) 1998, National Research Council of Canada
  *
  *  The license and distribution terms for this file may be
@@ -535,8 +535,13 @@ rtems_isr cd2401_rx_isr(
 )
 {
   char c;
-  uint8_t         ch, status, nchars, i, total;
-  char buffer[256];
+  uint8_t         ch, status, nchars, total;
+  #ifdef CD2401_RECORD_DEBUG_INFO
+    uint8_t i = 0;
+    char    buffer[256];
+  #endif
+
+  (void) total; /* avoid set but not used warnings when not recording info */
 
   status = cd2401->u5.b.risrl;
   ch = cd2401->licr >> 2;
@@ -545,11 +550,12 @@ rtems_isr cd2401_rx_isr(
   if ( CD2401_Channel_Info[ch].tty && !status ) {
     /* Normal Rx Int, read chars, enqueue them, and issue EOI */
     total = nchars = cd2401->rfoc;  /* Nb of chars to retrieve from rx FIFO */
-    i = 0;
     while ( nchars-- > 0 ) {
       c = (char)cd2401->dr;         /* Next char in rx FIFO */
       rtems_termios_enqueue_raw_characters( CD2401_Channel_Info[ch].tty ,&c, 1 );
-      buffer[i++] = c;
+      #ifdef CD2401_RECORD_DEBUG_INFO
+	buffer[i++] = c;
+      #endif
     }
     cd2401->reoir = 0;              /* EOI */
     CD2401_RECORD_RX_ISR_INFO(( ch, total, buffer ));
@@ -587,6 +593,15 @@ rtems_isr cd2401_tx_isr(
   ch = cd2401->licr >> 2;
   initial_ier = cd2401->ier;
 
+  #ifndef CD2401_RECORD_DEBUG_INFO
+    /*
+     * When the debug is disabled, these variables are really not read.
+     * But when debug is enabled, they are.
+     */
+    (void) initial_ier; /* avoid set but not used warning */
+    (void) final_ier; /* avoid set but not used warning */
+  #endif
+
   /* Has this channel been initialized? */
   if ( !CD2401_Channel_Info[ch].tty ) {
     /* No, record as spurious interrupt */
@@ -594,6 +609,7 @@ rtems_isr cd2401_tx_isr(
         (vector << 24) | (cd2401->stk << 16) | (cd2401->tir << 8) | cd2401->tisr;
     CD2401_Channel_Info[ch].spur_cnt++;
     final_ier = cd2401->ier &= 0xFC;/* Shut up, whoever you are */
+
     cd2401->teoir = 0x88;           /* EOI - Terminate buffer and no transfer */
     CD2401_RECORD_TX_ISR_SPURIOUS_INFO(( ch, status, initial_ier, final_ier,
                                          CD2401_Channel_Info[ch].spur_dev,
@@ -1332,7 +1348,7 @@ ssize_t _167Bug_pollWrite(
  *
  *  CANNOT BE COMBINED WITH INTERRUPT DRIVEN I/O!
  */
-rtems_status_code do_poll_read(
+static rtems_status_code do_poll_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
@@ -1370,7 +1386,7 @@ rtems_status_code do_poll_read(
  *
  *  CANNOT BE COMBINED WITH INTERRUPT DRIVEN I/O!
  */
-rtems_status_code do_poll_write(
+static rtems_status_code do_poll_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
