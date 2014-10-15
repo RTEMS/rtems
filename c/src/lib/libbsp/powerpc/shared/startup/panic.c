@@ -32,6 +32,8 @@ void _BSP_Fatal_error(unsigned int v)
   const char *err = 0;
 
   rtems_interrupt_disable(flags);
+  (void) flags; /* avoid set but not used warning */
+
   printk("%s\n",_RTEMS_version);
   printk("FATAL ERROR:\n");
   printk("Internal error: %s\n", ISITNL? "Yes":"No");
