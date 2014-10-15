@@ -1,6 +1,4 @@
 /*
- *  console.c
- *
  *  This file contains the MBX8xx termios serial I/O package.
  *  Only asynchronous I/O is supported.
  *
@@ -13,6 +11,16 @@
  *    SCC2      /dev/tty2      3
  *    SCC3      /dev/tty3      4
  *    SCC4      /dev/tty4      5
+ *
+ * The SCCs and SMCs on the eval board are assigned as follows
+ *
+ *   Channel     Device      Minor   Termios
+ *    SMC1      /dev/tty3      4       no
+ *    SMC2      /dev/tty4      5       no
+ *    SCC1      /dev/tty0      0       no
+ *    SCC2      /dev/console   1       yes
+ *    SCC3      /dev/tty1      2       no  	* USED FOR NETWORK I/F
+ *    SCC4      /dev/tty2      3       no	* USED FOR NETWORK I/F
  *
  *  All ports support termios. The use of termios is recommended for real-time
  *  applications. Termios provides buffering and input processing. When not
@@ -64,7 +72,9 @@
  *  the sub-devices using minor device numbers. It is not possible to have
  *  other protocols running on the other ports when this driver is used as
  *  currently written.
- *
+ */
+
+/*
  *  Based on code (alloc860.c in eth_comm port) by
  *  Jay Monkman (jmonkman@frasca.com),
  *  Copyright (C) 1998 by Frasca International, Inc.
@@ -75,17 +85,6 @@
  *
  *  Modifications by Andy Dachs <iwe@fsmal.net> for MPC8260
  *  support.
- *
- * The SCCs and SMCs on the eval board are assigned as follows
- *
- *   Channel     Device      Minor   Termios
- *    SMC1      /dev/tty3      4       no
- *    SMC2      /dev/tty4      5       no
- *    SCC1      /dev/tty0      0       no
- *    SCC2      /dev/console   1       yes
- *    SCC3      /dev/tty1      2       no  	* USED FOR NETWORK I/F
- *    SCC4      /dev/tty2      3       no	* USED FOR NETWORK I/F
- *
  */
 #include <stdarg.h>
 #include <stdio.h>
@@ -451,7 +450,6 @@ rtems_device_driver console_control(
 /*
  *  Support routine for console-generic
  */
-
 int mbx8xx_console_get_configuration(void)
 {
 #if UARTS_IO_MODE == 1

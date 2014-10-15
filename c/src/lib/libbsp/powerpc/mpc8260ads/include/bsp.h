@@ -1,10 +1,9 @@
-/*  bsp.h
- *
+/*
  *  This include file contains all board IO definitions.
- *
- *  XXX : put yours in here
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -46,12 +45,6 @@ typedef struct bcsr
 
 } BCSR;
 
-#define UART1_E	0x02000002		/* bit 6 of BCSR1 */
-#define UART2_E	0x01000001		/* bit 7 of BCSR1 */
-
-#define GP0_LED 0x02000002    /*  bit 6 of BCSR0 */
-#define GP1_LED 0x01000001    /*  bit 7 of BCSR0 */
-
 /*
  * Network driver configuration
  */
@@ -84,6 +77,9 @@ extern char M8260DefaultWatchdogFeeder;
  * Prototypes for items shared across file boundaries in the BSP
  */
 extern uint32_t bsp_serial_per_sec;
+void *bsp_idle_thread( uintptr_t ignored );
+void  cpu_init(void);
+int mbx8xx_console_get_configuration(void);
 
 #ifdef __cplusplus
 }

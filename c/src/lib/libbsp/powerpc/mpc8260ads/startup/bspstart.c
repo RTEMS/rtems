@@ -49,6 +49,12 @@
 
 #include <string.h>
 
+#define UART1_E	0x02000002		/* bit 6 of BCSR1 */
+#define UART2_E	0x01000001		/* bit 7 of BCSR1 */
+
+#define GP0_LED 0x02000002    /*  bit 6 of BCSR0 */
+#define GP1_LED 0x01000001    /*  bit 7 of BCSR0 */
+
 SPR_RW(SPRG1)
 
 /*
@@ -66,12 +72,36 @@ uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
 bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 
-void  _BSP_GPLED1_on(void);
-void  _BSP_GPLED0_on(void);
-void  cpu_init(void);
-
 extern char IntrStack_start [];
 extern char intrStack [];
+
+static void _BSP_GPLED0_on(void)
+{
+  BCSR *csr;
+  csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
+  csr->bcsr0 &=  ~GP0_LED;		/* Turn on GP0 LED */
+}
+
+static void _BSP_GPLED0_off(void)
+{
+  BCSR *csr;
+  csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
+  csr->bcsr0 |=  GP0_LED;		/* Turn off GP0 LED */
+}
+
+static void _BSP_GPLED1_on(void)
+{
+  BCSR *csr;
+  csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
+  csr->bcsr0 &=  ~GP1_LED;		/* Turn on GP1 LED */
+}
+
+static void _BSP_GPLED1_off(void)
+{
+  BCSR *csr;
+  csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
+  csr->bcsr0 |=  GP1_LED;		/* Turn off GP1 LED */
+}
 
 void BSP_panic(char *s)
 {
@@ -88,61 +118,18 @@ void _BSP_Fatal_error(unsigned int v)
   __asm__ __volatile ("sc");
 }
 
-void _BSP_GPLED0_on(void)
-{
-  BCSR *csr;
-  csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
-  csr->bcsr0 &=  ~GP0_LED;		/* Turn on GP0 LED */
-}
-
-void _BSP_GPLED0_off(void)
-{
-  BCSR *csr;
-  csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
-  csr->bcsr0 |=  GP0_LED;		/* Turn off GP0 LED */
-}
-
-void _BSP_GPLED1_on(void)
-{
-  BCSR *csr;
-  csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
-  csr->bcsr0 &=  ~GP1_LED;		/* Turn on GP1 LED */
-}
-
-void _BSP_GPLED1_off(void)
-{
-  BCSR *csr;
-  csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
-  csr->bcsr0 |=  GP1_LED;		/* Turn off GP1 LED */
-}
-
-void _BSP_Uart1_enable(void)
+static void _BSP_Uart1_enable(void)
 {
   BCSR *csr;
   csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
   csr->bcsr1 &= ~UART1_E;		/* Enable Uart1 */
 }
 
-void _BSP_Uart1_disable(void)
-{
-  BCSR *csr;
-  csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
-  csr->bcsr1 |=  UART1_E;		/* Disable Uart1 */
-}
-
-void _BSP_Uart2_enable(void)
+static void _BSP_Uart2_enable(void)
 {
   BCSR *csr;
   csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
   csr->bcsr1 &= ~UART2_E;		/* Enable Uart2 */
-}
-
-void _BSP_Uart2_disable(void)
-{
-  BCSR *csr;
-  csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
-  csr->bcsr1 |=  UART2_E;		/* Disable Uart2 */
-
 }
 
 void bsp_start(void)

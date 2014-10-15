@@ -20,6 +20,9 @@
  *    BRG2
  *    BRG3
  *    BRG4
+ */
+
+/*
  *  Author: Jay Monkman (jmonkman@frasca.com)
  *  Copyright (C) 1998 by Frasca International, Inc.
  *
@@ -59,11 +62,8 @@
 #include <bsp/irq.h>
 #include <rtems/bspIo.h>   /* for printk */
 
-
-
 /* BSP supplied routine */
 extern int mbx8xx_console_get_configuration(void);
-
 
 /*
  * Interrupt-driven input buffer
@@ -82,8 +82,6 @@ static volatile char txBuf[NUM_PORTS];
 
 /* SCC/SMC buffer descriptors */
 static volatile m8260BufferDescriptor_t *RxBd[NUM_PORTS], *TxBd[NUM_PORTS];
-
-
 
 /* Used to track termios private data for callbacks */
 struct rtems_termios_tty *ttyp[NUM_PORTS];
@@ -104,8 +102,6 @@ static rtems_isr m8xx_scc1_interrupt_handler(rtems_irq_hdl_param unused);
 static rtems_isr m8xx_scc2_interrupt_handler(rtems_irq_hdl_param unused);
 static rtems_isr m8xx_scc3_interrupt_handler(rtems_irq_hdl_param unused);
 static rtems_isr m8xx_scc4_interrupt_handler(rtems_irq_hdl_param unused);
-
-
 
 /*
  * Hardware-dependent portion of tcsetattr().
@@ -223,7 +219,6 @@ m8xx_smc_set_attributes (int minor, const struct termios *t)
   return 0;
 }
 
-
 static int
 m8xx_scc_set_attributes (int minor, const struct termios *t)
 {
@@ -315,7 +310,6 @@ m8xx_scc_set_attributes (int minor, const struct termios *t)
   return 0;
 }
 
-
 int
 m8xx_uart_setAttributes(
   int minor,
@@ -342,11 +336,9 @@ m8xx_uart_setAttributes(
   return 0;
 }
 
-
 /*
  * Interrupt handlers
  */
-
 static void
 m8xx_scc1_interrupt_handler (rtems_irq_hdl_param unused)
 {
@@ -431,7 +423,6 @@ m8xx_scc2_interrupt_handler (rtems_irq_hdl_param unused)
 #endif
 }
 
-
 static void
 m8xx_scc3_interrupt_handler (rtems_irq_hdl_param unused)
 {
@@ -474,7 +465,6 @@ m8xx_scc3_interrupt_handler (rtems_irq_hdl_param unused)
   m8260.sipnr_l |= M8260_SIMASK_SCC3;      /* Clear pending register */
 #endif
 }
-
 
 static void
 m8xx_scc4_interrupt_handler (rtems_irq_hdl_param unused)
@@ -560,7 +550,6 @@ m8xx_smc1_interrupt_handler (rtems_irq_hdl_param unused)
 #endif
 }
 
-
 static void
 m8xx_smc2_interrupt_handler (rtems_irq_hdl_param unused)
 {
@@ -603,8 +592,7 @@ m8xx_smc2_interrupt_handler (rtems_irq_hdl_param unused)
 #endif
 }
 
-
-void m8xx_scc_enable(const rtems_irq_connect_data* ptr)
+static void m8xx_scc_enable(const rtems_irq_connect_data* ptr)
 {
   volatile m8260SCCRegisters_t *sccregs = 0;
   switch (ptr->name) {
@@ -630,7 +618,7 @@ void m8xx_scc_enable(const rtems_irq_connect_data* ptr)
   sccregs->sccm = 3;
 }
 
-void m8xx_scc_disable(const rtems_irq_connect_data* ptr)
+static void m8xx_scc_disable(const rtems_irq_connect_data* ptr)
 {
   volatile m8260SCCRegisters_t *sccregs = 0;
   switch (ptr->name) {
@@ -652,7 +640,7 @@ void m8xx_scc_disable(const rtems_irq_connect_data* ptr)
   sccregs->sccm &= (~3);
 }
 
-int m8xx_scc_isOn(const rtems_irq_connect_data* ptr)
+static int m8xx_scc_isOn(const rtems_irq_connect_data* ptr)
 {
  return BSP_irq_enabled_at_cpm (ptr->name);
 }
@@ -666,7 +654,6 @@ static rtems_irq_connect_data consoleIrqData =
   (rtems_irq_disable) m8xx_scc_disable,
   (rtems_irq_is_enabled) m8xx_scc_isOn
 };
-
 
 void
 m8xx_uart_scc_initialize (int minor)
@@ -729,9 +716,6 @@ m8xx_uart_scc_initialize (int minor)
   sccparms->rbase = (char *)RxBd[minor] - (char *)&m8260;
   sccparms->tbase = (char *)TxBd[minor] - (char *)&m8260;
 
-
-
-
   sccparms->rfcr = M8260_RFCR_MOT | M8260_RFCR_60X_BUS;
   sccparms->tfcr = M8260_TFCR_MOT | M8260_TFCR_60X_BUS;
   if ( (mbx8xx_console_get_configuration() & 0x06) == 0x02 )
@@ -758,7 +742,6 @@ m8xx_uart_scc_initialize (int minor)
   sccparms->un.uart.character[5] = 0x8000; /* Entry is invalid */
   sccparms->un.uart.character[6] = 0x8000; /* Entry is invalid */
   sccparms->un.uart.character[7] = 0x8000; /* Entry is invalid */
-
 
   sccparms->un.uart.rccm = 0xc0ff;  /* No masking */
 
@@ -831,9 +814,7 @@ m8xx_uart_scc_initialize (int minor)
   }
 }
 
-
-
-void m8xx_smc_enable(const rtems_irq_connect_data* ptr)
+static void m8xx_smc_enable(const rtems_irq_connect_data* ptr)
 {
   volatile m8260SMCRegisters_t *smcregs = 0;
   switch (ptr->name) {
@@ -849,7 +830,7 @@ void m8xx_smc_enable(const rtems_irq_connect_data* ptr)
   smcregs->smcm = 3;
 }
 
-void m8xx_smc_disable(const rtems_irq_connect_data* ptr)
+static void m8xx_smc_disable(const rtems_irq_connect_data* ptr)
 {
   volatile m8260SMCRegisters_t *smcregs = 0;
   switch (ptr->name) {
@@ -865,11 +846,10 @@ void m8xx_smc_disable(const rtems_irq_connect_data* ptr)
   smcregs->smcm &= (~3);
 }
 
-int m8xx_smc_isOn(const rtems_irq_connect_data* ptr)
+static int m8xx_smc_isOn(const rtems_irq_connect_data* ptr)
 {
  return BSP_irq_enabled_at_cpm (ptr->name);
 }
-
 
 void
 m8xx_uart_smc_initialize (int minor)
@@ -889,6 +869,7 @@ m8xx_uart_smc_initialize (int minor)
     brg = m8xx_get_brg(M8260_SMC1_BRGS, 9600*16);
   else
     brg = m8xx_get_brg(M8260_SMC2_BRGS, 9600*16);
+  (void) brg; /* avoid set but not used warning */
 
   /*
    * Allocate buffer descriptors
@@ -1036,9 +1017,7 @@ m8xx_uart_smc_initialize (int minor)
 void
 m8xx_uart_initialize(void)
 {
-
 }
-
 
 void
 m8xx_uart_interrupts_initialize(void)
@@ -1055,10 +1034,8 @@ m8xx_uart_interrupts_initialize(void)
   m8xx.cicr = 0x00043F80;           /* SCaP=SCC1, SCbP=SCC2, IRL=1, HP=PC15, IEN=1 */
 #endif
   m8xx.simask |= M8xx_SIMASK_LVM1;  /* Enable level interrupts */
-
 #endif
 }
-
 
 int
 m8xx_uart_pollRead(
@@ -1078,7 +1055,6 @@ m8xx_uart_pollRead(
   RxBd[minor]->status = M8260_BD_EMPTY | M8260_BD_WRAP;
   return c;
 }
-
 
 /*
  *  TODO: Get a free buffer and set it up.
@@ -1101,7 +1077,6 @@ m8xx_uart_write(
 
   return 0;
 }
-
 
 ssize_t
 m8xx_uart_pollWrite(

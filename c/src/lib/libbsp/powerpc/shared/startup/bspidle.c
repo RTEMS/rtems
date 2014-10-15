@@ -1,6 +1,8 @@
 /*
  *  Moved to libbsp/powerpc/shared by Joel Sherrill (9 Sept 09).
- *
+ */
+
+/*
  *  The MPC860 specific stuff was written by Jay Monkman (jmonkman@frasca.com)
  *
  *  Modified for the MPC8260ADS board by Andy Dachs <a.dachs@sstl.co.uk>
