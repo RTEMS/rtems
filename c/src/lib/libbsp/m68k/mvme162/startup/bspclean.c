@@ -1,7 +1,9 @@
 /*
  *  This routine returns control to 162Bug.
- *
- *  COPYRIGHT (c) 1989-2010.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,9 +23,9 @@
 #include <rtems/zilog/z8036.h>
 #include <page_table.h>
 
-extern void start( void  );
-
-void bsp_return_to_monitor_trap(void)
+static rtems_isr bsp_return_to_monitor_trap(
+  rtems_vector_number vector
+)
 {
   page_table_teardown();
 
@@ -32,18 +34,6 @@ void bsp_return_to_monitor_trap(void)
 
   __asm__ volatile( "trap   #15"  );    /* trap to 162Bug */
   __asm__ volatile( ".short 0x63" );    /* return to 162Bug (.RETURN) */
-                                    /* restart program */
-  /*
-   *  This does not work on the 162....
-   */
-#if 0
-  {  register volatile void *start_addr;
-
-     start_addr = start;
-
-     __asm__ volatile ( "jmp %0@" : "=a" (start_addr) : "0" (start_addr) );
-  }
-#endif
 }
 
 void bsp_fatal_extension(
@@ -53,5 +43,5 @@ void bsp_fatal_extension(
 )
 {
    M68Kvec[ 45 ] = bsp_return_to_monitor_trap;   /* install handler */
-   __asm__ volatile( "trap #13" );  /* insures SUPV mode */
+   __asm__ volatile( "trap #13" );               /* ensures SUPV mode */
 }

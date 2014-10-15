@@ -1,7 +1,9 @@
 /*
  *  This file contains the MVME162 console IO package.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,19 +26,10 @@
 
 Ring_buffer_t  Console_Buffer[2];
 
-static bool    Console_Is_Initialized = false;
-
-/* Printk function */
-static void _162Bug_output_char( char c );
-static void _BSP_output_char( char c );
-BSP_output_char_function_type BSP_output_char = _BSP_output_char;
-
-
 /*
  *  Interrupt handler for receiver interrupts
  */
-
-rtems_isr C_Receive_ISR(rtems_vector_number vector)
+static rtems_isr C_Receive_ISR(rtems_vector_number vector)
 {
   register int    ipend, port;
 
@@ -55,44 +48,6 @@ rtems_isr C_Receive_ISR(rtems_vector_number vector)
   }
 }
 
-
-/*
- *  _162Bug_output_char
- *
- *  Output a single character using the 162Bug functions.  The character
- *  will be written to the default output port.
- */
-
-void _162Bug_output_char( char c )
-{
-  asm volatile( "moveb  %0, -(%%sp)\n\t"   /* char to output */
-                "trap   #15\n\t"           /* Trap to 162Bug */
-                ".short 0x20"              /* Code for .OUTCHR */
-    :: "d" (c) );
-}
-
-
-/*
- *  _BSP_output_char
- *
- *  printk() function prototyped in bspIo.h. Does not use termios.
- *
- *  If we have initialized the console device then use it, otherwise
- *  use the 162Bug routines to send it to the default output port.
- */
-
-void _BSP_output_char(char c)
-{
-  if (Console_Is_Initialized)
-    putchar(c);
-  else
-    _162Bug_output_char(c);
-
-  if ('\n' == c)
-    _BSP_output_char('\r');
-}
-
-
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
@@ -105,7 +60,6 @@ rtems_device_driver console_initialize(
   /*
    * Initialise receiver interrupts on both ports
    */
-
   for (i = 0; i <= 1; i++) {
     Ring_buffer_Initialize( &Console_Buffer[i] );
     ZWRITE(i, 2, SCC_VECTOR);
@@ -153,7 +107,6 @@ rtems_device_driver console_initialize(
 /*
  *   Non-blocking char input
  */
-
 bool char_ready(int port, char *ch)
 {
   if ( Ring_buffer_Is_empty( &Console_Buffer[port] ) )
@@ -167,8 +120,7 @@ bool char_ready(int port, char *ch)
 /*
  *   Block on char input
  */
-
-char inbyte(int port)
+static char inbyte(int port)
 {
   char tmp_char;
 
@@ -180,8 +132,7 @@ char inbyte(int port)
  *   This routine transmits a character out the SCC.  It no longer supports
  *   XON/XOFF flow control.
  */
-
-void outbyte(char ch, int port)
+static void outbyte(char ch, int port)
 {
   while (1) {
     if (ZREAD0(port) & TX_BUFFER_EMPTY) break;
@@ -192,7 +143,6 @@ void outbyte(char ch, int port)
 /*
  *  Open entry point
  */
-
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -205,7 +155,6 @@ rtems_device_driver console_open(
 /*
  *  Close entry point
  */
-
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -218,7 +167,6 @@ rtems_device_driver console_close(
 /*
  * read bytes from the serial port. We only have stdin.
  */
-
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -253,7 +201,6 @@ rtems_device_driver console_read(
 /*
  * write bytes to the serial port. Stdout and stderr are the same.
  */
-
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -287,7 +234,6 @@ rtems_device_driver console_write(
 /*
  *  IO Control entry point
  */
-
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -296,3 +242,33 @@ rtems_device_driver console_control(
 {
   return RTEMS_SUCCESSFUL;
 }
+
+/*
+ *  _162Bug_output_char
+ *
+ *  Output a single character using the 162Bug functions.  The character
+ *  will be written to the default output port.
+ */
+static void _162Bug_output_char( char c )
+{
+  asm volatile( "moveb  %0, -(%%sp)\n\t"   /* char to output */
+                "trap   #15\n\t"           /* Trap to 162Bug */
+                ".short 0x20"              /* Code for .OUTCHR */
+    :: "d" (c) );
+}
+
+/*
+ *  _BSP_output_char
+ *
+ *  printk() function prototyped in bspIo.h. Does not use termios.
+ *
+ *  If we have initialized the console device then use it, otherwise
+ *  use the 162Bug routines to send it to the default output port.
+ */
+static void _BSP_output_char(char c)
+{
+  _162Bug_output_char(c);
+}
+
+/* Printk function */
+BSP_output_char_function_type BSP_output_char = _BSP_output_char;

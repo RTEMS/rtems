@@ -1,8 +1,9 @@
-/*  bsp.h
- *
+/*
  *  This include file contains all MVME162fx board IO definitions.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -162,7 +163,6 @@ typedef volatile struct {
 #define EXTERN extern
 #endif
 
-
 /*
  *  This value is the default address location of the 162Bug vector table
  *  and is also the default start address of the boards DRAM.  This value
@@ -193,6 +193,12 @@ rtems_isr_entry set_vector(
   rtems_vector_number vector,
   int                 type
 );
+
+/*
+ * Prototypes for methods in the BSP that cross file boundaries.
+ */
+bool char_ready(int port, char *ch);
+
 
 #ifdef __cplusplus
 }

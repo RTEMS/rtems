@@ -31,9 +31,11 @@ rtems_isr bsp_spurious_handler(
    CPU_Interrupt_frame *isf */
 )
 {
+#if 0
+  printk( "Unexpected interrupt (0x%x)\n", vector );
+#else
   char *s;
 
-  printk( "Unexpected interrupt (0x%x)\n", vector );
 /*
   printk( "It looks like we got the interrupt at 0x%x\n", isf->interrupted );
 */
@@ -41,9 +43,7 @@ rtems_isr bsp_spurious_handler(
   /*
    *  Can we print a name?
    */
-
   s = 0;
-#if 0
   if ( vector <= 0x1f ) {
     switch ( vector ) {
       case 1:     s = "INT0";     break;

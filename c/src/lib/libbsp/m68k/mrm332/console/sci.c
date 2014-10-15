@@ -1038,7 +1038,6 @@ rtems_device_driver SciRead (
 {
     rtems_libio_rw_args_t *rw_args;             /* ptr to argument struct */
     char      *buffer;
-    uint16_t   length;
 
     rw_args = (rtems_libio_rw_args_t *) arg;    /* arguments to read() */
 
@@ -1053,8 +1052,6 @@ rtems_device_driver SciRead (
     }
 
     buffer = rw_args->buffer;                   /* points to user's buffer */
-
-    length = rw_args->count;                    /* how many bytes they want */
 
 /*  *buffer = SciReadCharWait();                   wait for a character */
 
@@ -1147,7 +1144,6 @@ rtems_device_driver SciControl (
 {
     rtems_libio_ioctl_args_t *args = arg;       /* rtems arg struct */
     uint16_t   command;                         /* the cmd to execute */
-    uint16_t   unused;                          /* maybe later */
     uint16_t   *ptr;                            /* ptr to user data */
 
 /*printk("%s major=%d minor=%d\r\n", __FUNCTION__,major,minor); */

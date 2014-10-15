@@ -229,9 +229,8 @@ rtems_isr_entry Prev_modem_isr;     /* Previous modem/timer isr */
 )
 {
   unsigned long i = 20000;  /* In case clock is off */
-  rtems_interval ticks_per_second, start_ticks, end_ticks, current_ticks;
+  rtems_interval start_ticks, end_ticks, current_ticks;
 
-  ticks_per_second = rtems_clock_get_ticks_per_second();
   start_ticks = rtems_clock_get_ticks_since_boot();
   end_ticks = start_ticks + delay;
 

@@ -27,7 +27,7 @@
 uint32_t            Ttimer_val;
 bool                benchmark_timer_find_average_overhead;
 
-rtems_isr timerisr(void);
+rtems_isr timerisr(rtems_vector_number vector);
 
 void benchmark_timer_initialize(void)
 {
