@@ -1,6 +1,5 @@
 /**
  *  @file
- *  
  */
 
 /*
@@ -14,6 +13,8 @@
 
 #ifndef _BSP_H
 #define _BSP_H
+
+#ifndef ASM
 
 #ifdef __cplusplus
 extern "C" {
@@ -66,8 +67,16 @@ extern uint32_t mips_get_timer( void );
 #define RAM_START 0
 #define RAM_END   0x100000
 
+/*
+ * Prototypes for methods called from .S for dependency tracking
+ */
+void init_tlb(void);
+void resettlb(int i);
+
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* !ASM */
 
 #endif	/* __HURRICANE_BSP_h */

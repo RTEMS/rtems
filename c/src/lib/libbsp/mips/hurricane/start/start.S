@@ -33,6 +33,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #include <rtems/mips/idtcpu.h>
 #include <rtems/asm.h>
 
+#include <bsp.h>
 
 #if 0
 	.extern _fdata,4		/* this is defined by the linker */
