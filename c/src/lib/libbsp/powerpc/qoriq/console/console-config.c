@@ -94,7 +94,7 @@ static ns16550_context qoriq_uart_context_1 = {
         bridge_0_context.transmit_fifo
       )
     };
-    #define BRIDGE_0_CONTEXT &bridge_0_context
+    #define BRIDGE_0_CONTEXT &bridge_0_context.base
   #endif
   #if QORIQ_UART_BRIDGE_1_ENABLE
     static uart_bridge_master_context bridge_1_context = {
@@ -105,7 +105,7 @@ static ns16550_context qoriq_uart_context_1 = {
         bridge_1_context.transmit_fifo
       )
     };
-    #define BRIDGE_1_CONTEXT &bridge_1_context
+    #define BRIDGE_1_CONTEXT &bridge_1_context.base
   #endif
 #endif
 
@@ -120,7 +120,7 @@ static ns16550_context qoriq_uart_context_1 = {
         bridge_0_context.transmit_fifo
       )
     };
-    #define BRIDGE_0_CONTEXT &bridge_0_context
+    #define BRIDGE_0_CONTEXT &bridge_0_context.base
   #endif
   #if QORIQ_UART_BRIDGE_1_ENABLE
     static uart_bridge_slave_context bridge_1_context = {
@@ -130,7 +130,7 @@ static ns16550_context qoriq_uart_context_1 = {
         bridge_1_context.transmit_fifo
       )
     };
-    #define BRIDGE_1_CONTEXT &bridge_1_context
+    #define BRIDGE_1_CONTEXT &bridge_1_context.base
   #endif
 #endif
 
