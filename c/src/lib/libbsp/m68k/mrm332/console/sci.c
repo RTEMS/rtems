@@ -1144,7 +1144,6 @@ rtems_device_driver SciControl (
 {
     rtems_libio_ioctl_args_t *args = arg;       /* rtems arg struct */
     uint16_t   command;                         /* the cmd to execute */
-    uint16_t   *ptr;                            /* ptr to user data */
 
 /*printk("%s major=%d minor=%d\r\n", __FUNCTION__,major,minor); */
 
@@ -1168,8 +1167,6 @@ rtems_device_driver SciControl (
     args->ioctl_return = -1;                    /* assume an error */
 
     command = args->command;                    /* get the command */
-    ptr     = args->buffer;                     /* this is an address */
-    unused  = *ptr;                             /* brightness */
 
     if (command == SCI_SEND_BREAK)              /* process the command */
     {
