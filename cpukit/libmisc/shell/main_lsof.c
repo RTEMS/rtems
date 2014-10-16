@@ -23,6 +23,19 @@
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
 
+static void print_location( const rtems_filesystem_location_info_t *loc )
+{
+  fprintf(
+    stdout,
+    "\tloc = 0x%08" PRIxPTR "\n\t\tnode_access = 0x%08" PRIxPTR
+      ", node_access_2 = 0x%08" PRIxPTR ", handler = 0x%08" PRIxPTR "\n",
+    (uintptr_t) loc,
+    (uintptr_t) loc->node_access,
+    (uintptr_t) loc->node_access_2,
+    (uintptr_t) loc->handlers
+  );
+}
+
 static void lsof(void)
 {
   rtems_chain_control *mt_chain = &rtems_filesystem_mount_table;
@@ -40,14 +53,13 @@ static void lsof(void)
 
     fprintf(
       stdout,
-      "%c %c %s %s -> %s root 0x%08" PRIxPTR " -> 0x%08" PRIxPTR "\n",
-      mt_entry->mounted ? 'M' : 'U',
-      mt_entry->writeable ? 'W' : 'R',
+      "type = %s, %s, %s, target = %s, dev = %s, root loc = 0x%08" PRIxPTR "\n",
       mt_entry->type,
+      mt_entry->mounted ? "mounted" : "unmounted",
+      mt_entry->writeable ? "read-write" : "read-only",
       mt_entry->target,
-      mt_entry->dev == NULL ? "none" : mt_entry->dev,
-      (uintptr_t) mt_entry->mt_fs_root,
-      (uintptr_t) mt_entry->mt_fs_root->location.node_access
+      mt_entry->dev == NULL ? "NULL" : mt_entry->dev,
+      (uintptr_t) mt_entry->mt_fs_root
     );
 
     for (
@@ -58,12 +70,7 @@ static void lsof(void)
       const rtems_filesystem_location_info_t *loc =
         (const rtems_filesystem_location_info_t *) mt_entry_node;
 
-      fprintf(
-        stdout,
-        "\t0x%08" PRIxPTR " -> 0x%08" PRIxPTR "\n",
-        (uintptr_t) loc,
-        (uintptr_t) loc->node_access
-      );
+      print_location( loc );
     }
   }
 }
