@@ -104,6 +104,9 @@
  * sharing.
  */
 
+extern int BSP_VMEInit(void);
+extern int BSP_VMEIrqMgrInstall(void);
+
 /**
  *  @defgroup powerpc_vme BSP_VME_INSTALL_IRQ_MGR Support
  *
@@ -111,7 +114,6 @@
  *
  *  @brief BSP_VME_INSTALL_IRQ_MGR Support Package
  */
-
 #define BSP_VME_INSTALL_IRQ_MGR(err)    \
 	do {                                \
 		err = vmeTsi148InstallIrqMgrAlt(\

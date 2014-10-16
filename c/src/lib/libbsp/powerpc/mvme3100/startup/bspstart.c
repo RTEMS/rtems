@@ -47,8 +47,6 @@
 #endif
 
 extern unsigned long __rtems_end[];
-extern void          BSP_vme_config(void);
-extern void          BSP_pciConfigDump_early( void );
 extern unsigned      ppc_exc_lock_std, ppc_exc_gpr3_std;
 
 /*
@@ -123,14 +121,16 @@ char *rtems_progname;
 /*
  *  Use the shared implementations of the following routines
  */
-char * save_boot_params(
-  void* r3,
+char *save_boot_params(
+  void *r3,
   void *r4,
-  void* r5,
-  char *additional_boot_options)
+  void *r5,
+  char *cmdline_start,
+  char *cmdline_end
+)
 {
 
-  strncpy(cmdline_buf, additional_boot_options, CMDLINE_BUF_SIZE);
+  strncpy(cmdline_buf, cmdline_start, CMDLINE_BUF_SIZE);
   cmdline_buf[CMDLINE_BUF_SIZE - 1] ='\0';
   return cmdline_buf;
 }
