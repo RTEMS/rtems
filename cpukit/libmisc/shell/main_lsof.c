@@ -36,20 +36,45 @@ static void print_location( const rtems_filesystem_location_info_t *loc )
   );
 }
 
-static void lsof(void)
+static void print_mt_entry_locations(
+  const rtems_filesystem_mount_table_entry_t *mt_entry
+)
 {
-  rtems_chain_control *mt_chain = &rtems_filesystem_mount_table;
-  rtems_chain_node *mt_node = NULL;
+  const rtems_chain_control *mt_entry_chain = &mt_entry->location_chain;
+  const rtems_chain_node *mt_entry_node;
 
   for (
-    mt_node = rtems_chain_first( mt_chain );
+    mt_entry_node = rtems_chain_immutable_first( mt_entry_chain );
+    !rtems_chain_is_tail( mt_entry_chain, mt_entry_node );
+    mt_entry_node = rtems_chain_immutable_next( mt_entry_node )
+  ) {
+    const rtems_filesystem_location_info_t *loc =
+      (const rtems_filesystem_location_info_t *) mt_entry_node;
+
+    print_location( loc );
+  }
+}
+
+static void lsof(void)
+{
+  const rtems_chain_control *mt_chain = &rtems_filesystem_mount_table;
+  const rtems_chain_node *mt_node;
+
+  fprintf(
+    stdout,
+    "type = null, root loc = 0x%08" PRIxPTR "\n",
+    (uintptr_t) rtems_filesystem_null_mt_entry.mt_fs_root
+  );
+
+  print_mt_entry_locations( &rtems_filesystem_null_mt_entry );
+
+  for (
+    mt_node = rtems_chain_immutable_first( mt_chain );
     !rtems_chain_is_tail( mt_chain, mt_node );
-    mt_node = rtems_chain_next( mt_node )
+    mt_node = rtems_chain_immutable_next( mt_node )
   ) {
     rtems_filesystem_mount_table_entry_t *mt_entry =
       (rtems_filesystem_mount_table_entry_t *) mt_node;
-    rtems_chain_control *mt_entry_chain = &mt_entry->location_chain;
-    rtems_chain_node *mt_entry_node = NULL;
 
     fprintf(
       stdout,
@@ -62,16 +87,7 @@ static void lsof(void)
       (uintptr_t) mt_entry->mt_fs_root
     );
 
-    for (
-      mt_entry_node = rtems_chain_first( mt_entry_chain );
-      !rtems_chain_is_tail( mt_entry_chain, mt_entry_node );
-      mt_entry_node = rtems_chain_next( mt_entry_node )
-    ) {
-      const rtems_filesystem_location_info_t *loc =
-        (const rtems_filesystem_location_info_t *) mt_entry_node;
-
-      print_location( loc );
-    }
+    print_mt_entry_locations( mt_entry );
   }
 }
 
