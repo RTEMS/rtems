@@ -17,6 +17,8 @@
 #ifndef _BSP_H
 #define _BSP_H
 
+#ifndef ASM
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -99,8 +101,16 @@ uint32_t simple_in_32( uint32_t base, uint32_t addr );
 void simple_out_le16( uint32_t base, uint32_t addr, uint16_t val );
 void simple_out_16( uint32_t base, uint32_t addr, uint16_t val );
 
+/*
+ * Prototypes for methods called from .S for dependency tracking
+ */
+void init_tlb(void);
+void resettlb(int i);
+
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* !ASM */
 
 #endif

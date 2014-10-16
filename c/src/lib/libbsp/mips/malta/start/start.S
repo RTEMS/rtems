@@ -20,6 +20,8 @@
 #include <rtems/asm.h>
 #include <bsp/regs.h>
 
+#include <bsp.h>
+
 #ifdef __mips16
 /* This file contains 32 bit assembly code.  */
 	.set nomips16

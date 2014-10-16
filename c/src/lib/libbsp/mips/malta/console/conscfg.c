@@ -39,13 +39,13 @@
 
 #define COM_IO_BASE_ADDRESS   (0xa0000000UL | 0x18000000UL)
 
-uint8_t com_get_register(uint32_t addr, uint8_t i);
-void com_set_register(uint32_t addr, uint8_t i, uint8_t val);
-uint8_t tty2_get_register(uint32_t addr, uint8_t i);
-void tty2_set_register(uint32_t addr, uint8_t i, uint8_t val);
+static uint8_t com_get_register(uintptr_t addr, uint8_t i);
+static void com_set_register(uintptr_t addr, uint8_t i, uint8_t val);
+static uint8_t tty2_get_register(uintptr_t addr, uint8_t i);
+static void tty2_set_register(uintptr_t addr, uint8_t i, uint8_t val);
 
 
-uint8_t com_get_register(uint32_t addr, uint8_t i)
+uint8_t com_get_register(uintptr_t addr, uint8_t i)
 {
   uint8_t val;
   volatile uint8_t *ptr;
@@ -57,7 +57,7 @@ uint8_t com_get_register(uint32_t addr, uint8_t i)
   return val;
 }
 
-void com_set_register(uint32_t addr, uint8_t i, uint8_t val)
+void com_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 {
   volatile uint8_t *ptr;
 
@@ -67,7 +67,7 @@ void com_set_register(uint32_t addr, uint8_t i, uint8_t val)
   *ptr = val;
 }
 
-uint8_t tty2_get_register(uint32_t addr, uint8_t i)
+uint8_t tty2_get_register(uintptr_t addr, uint8_t i)
 {
   uint8_t val;
   volatile uint8_t *ptr;
@@ -80,7 +80,7 @@ uint8_t tty2_get_register(uint32_t addr, uint8_t i)
   return val;
 }
 
-void tty2_set_register(uint32_t addr, uint8_t i, uint8_t val)
+void tty2_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 {
   volatile uint8_t *ptr;
 

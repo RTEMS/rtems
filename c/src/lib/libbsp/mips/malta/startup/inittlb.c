@@ -11,6 +11,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <bsp.h>
 #include <rtems/mips/idtcpu.h>
 
 extern void resettlb( int i );
