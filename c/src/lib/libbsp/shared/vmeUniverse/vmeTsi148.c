@@ -57,6 +57,7 @@
 #include <libcpu/byteorder.h>
 
 #define __INSIDE_RTEMS_BSP__
+#define _VME_TSI148_DECLARE_SHOW_ROUTINES
 
 #include "vmeTsi148.h"
 #include <bsp/VMEDMA.h>
@@ -573,7 +574,7 @@ static unsigned long ck2esst(unsigned long am)
 	return am;
 }
 
-STATIC int
+static int
 am2omode(unsigned long address_space, unsigned long *pmode)
 {
 unsigned long mode = 0;
@@ -687,7 +688,7 @@ unsigned long tm   = TSI_TM_SCT_IDX;
 	return 0;
 }
 
-STATIC int
+static int
 am2imode(unsigned long address_space, unsigned long *pmode)
 {
 unsigned long mode=0;
