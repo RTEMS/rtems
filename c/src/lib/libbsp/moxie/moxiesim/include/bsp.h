@@ -1,9 +1,10 @@
-/*  bsp.h
- *
+/*
  *  This include file contains some definitions specific to the
  *  moxie simulator in gdb.
- *
- *  COPYRIGHT (c) 1989-1999, 2010.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-1999, 2010, 2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +25,7 @@ extern "C" {
 #include <rtems/iosupp.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
+#include <bsp/default-initial-extension.h>
 
 /* support for simulated clock tick */
 Thread clock_driver_sim_idle_body(uintptr_t);
