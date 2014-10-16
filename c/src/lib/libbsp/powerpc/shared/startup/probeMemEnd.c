@@ -1,8 +1,3 @@
-#include <rtems.h>
-#include <libcpu/spr.h>
-#include <libcpu/cpuIdent.h>
-#include <rtems/bspIo.h>
-
 /*
  * Authorship
  * ----------
@@ -48,6 +43,10 @@
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
 
+#include <bsp.h>
+#include <libcpu/spr.h>
+#include <libcpu/cpuIdent.h>
+#include <rtems/bspIo.h>
 
 /* Simple memory probing routine
  *
@@ -116,7 +115,7 @@ SPR_RW(HID0)
 /* Shouldn't matter if the caches are enabled or not... */
 
 /* FIXME: This should go into libcpu, really... */
-int
+static int
 CPU_lockUnlockCaches(register int doLock)
 {
 register uint32_t v, x;
