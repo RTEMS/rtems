@@ -33,6 +33,8 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #include <rtems/mips/idtcpu.h>
 #include <rtems/asm.h>
 
+#include <bsp.h>
+
 	.extern	mon_flush_cache
 
 #if 0

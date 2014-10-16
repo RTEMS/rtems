@@ -2,6 +2,7 @@
  *  inittlb.c
  */
 
+#include <bsp.h>
 #include <rtems/mips/idtcpu.h>
 
 extern void resettlb( int i );

@@ -16,6 +16,8 @@
 #ifndef _BSP_H
 #define _BSP_H
 
+#ifndef ASM
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,8 +34,16 @@ extern "C" {
 #define BSP_FEATURE_IRQ_EXTENSION
 #define BSP_SHARED_HANDLER_SUPPORT      1
 
+/*
+ * Prototypes for methods called from .S for dependency tracking
+ */
+void init_tlb(void);
+void resettlb(int i);
+
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* !ASM */
 
 #endif
