@@ -1,9 +1,10 @@
-/*  exception.S
- *
+/*
  *  This file contains a customized MIPS exception handler.
  *  It hooks into the exception handler present in the resident
  *  PMON debug monitor.
- *
+ */
+
+/*
  *  Author: Bruce Robinson
  *
  *  This code was derived from cpu_asm.S with the following copyright:
@@ -78,14 +79,6 @@
 
 #define ISR_VEC_SIZE	4
 #define EXCP_STACK_SIZE (NREGS*R_SZ)
-
-
-#ifdef __GNUC__
-#define EXTERN(x,size) .extern x,size
-#else
-#define EXTERN(x,size)
-#endif
-
 
 .extern _Thread_Dispatch
 

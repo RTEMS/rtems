@@ -214,7 +214,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame);
 
 /*
  * Prototype needed by this code and to keep it self contained.
- *.
+ */
 void rtems_interrupt_catch( rtems_isr_entry, int, rtems_isr_entry *);
 
 /*
