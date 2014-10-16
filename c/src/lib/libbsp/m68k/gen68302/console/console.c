@@ -1,7 +1,9 @@
 /*
  * Initialize the MC68302 SCC2 for console IO board support package.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,14 +21,7 @@
 /*  console_initialize
  *
  *  This routine initializes the console IO driver.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
  */
-
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
@@ -89,81 +84,37 @@ rtems_device_driver console_initialize(
 
 }
 
-/*  is_character_ready
- *
- *  Check to see if a character is available on the MC68302's SCC2.  If so,
- *  then return a TRUE (along with the character).  Otherwise return FALSE.
- *
- *  Input parameters:   pointer to location in which to return character
- *
- *  Output parameters:  character (if available)
- *
- *  Return values:      TRUE - character available
- *                      FALSE - no character available
- */
-
-bool is_character_ready(
-  char *ch				/* -> character  */
-)
-{
-#define RXS (m302.scc2.bd.rx[0].status)
-#define RXD (* ((volatile char *) m302.scc2.bd.rx[0].buffer))
-
-    for (;;) {
-	if (RXS & RBIT_HDLC_EMPTY_BIT)
-	    return false;
-
-	*ch = RXD;
-	RXS = RBIT_HDLC_EMPTY_BIT | RBIT_HDLC_WRAP_BIT;
-	if ( *ch >= ' ' &&  *ch <= '~' )
-	    return true;
-    }
-}
-
 /*  inbyte
  *
  *  Receive a character from the MC68302's SCC2.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:      character read
  */
-
-char inbyte( void )
+static char inbyte( void )
 {
-    char ch;
+  char ch;
 
 #define RXS (m302.scc2.bd.rx[0].status)
 #define RXD (* ((volatile char *) m302.scc2.bd.rx[0].buffer))
 
-    do {
-	while (RXS & RBIT_HDLC_EMPTY_BIT)
-	    /* Wait until character received */ ;
+  do {
+    while (RXS & RBIT_HDLC_EMPTY_BIT)
+      /* Wait until character received */ ;
 
-	ch = RXD;
-	RXS = RBIT_HDLC_EMPTY_BIT | RBIT_HDLC_WRAP_BIT;
+    ch = RXD;
+    RXS = RBIT_HDLC_EMPTY_BIT | RBIT_HDLC_WRAP_BIT;
 
-	if (ch == '\r' || ch == '\n')
-	    break;
-    } while (ch < ' ' ||  ch > '~');
+    if (ch == '\r' || ch == '\n')
+      break;
+  } while (ch < ' ' ||  ch > '~');
 
-    return ch;
+  return ch;
 }
 
 /*  outbyte
  *
  *  Transmit a character out on the MC68302's SCC2.
  *  It may support XON/XOFF flow control.
- *
- *  Input parameters:
- *    ch  - character to be transmitted
- *
- *  Output parameters:  NONE
  */
-
-void outbyte(
+static void outbyte(
   char ch
 )
 {
@@ -173,32 +124,32 @@ void outbyte(
 #define RXS (m302.scc2.bd.rx[0].status)
 #define RXD (* ((volatile char *) m302.scc2.bd.rx[0].buffer))
 
-    while (TXS & RBIT_HDLC_READY_BIT)
-	/* Wait until okay to transmit */ ;
+  while (TXS & RBIT_HDLC_READY_BIT)
+    /* Wait until okay to transmit */ ;
 
     /*
      * Check for flow control requests and process.
      */
     while ( ! (RXS & RBIT_HDLC_EMPTY_BIT)) {
-	if (RXD == XOFF)
-	    do {
-		RXS = RBIT_HDLC_EMPTY_BIT | RBIT_HDLC_WRAP_BIT;
-		while (RXS & RBIT_HDLC_EMPTY_BIT)
-		    /* Wait until character received */ ;
-	    } while (RXD != XON);
+      if (RXD == XOFF) {
+	do {
+	  RXS = RBIT_HDLC_EMPTY_BIT | RBIT_HDLC_WRAP_BIT;
+	  while (RXS & RBIT_HDLC_EMPTY_BIT)
+	    /* Wait until character received */ ;
+	} while (RXD != XON);
 	RXS = RBIT_HDLC_EMPTY_BIT | RBIT_HDLC_WRAP_BIT;
+      }
     }
 
     TXD = ch;
     TXS = RBIT_HDLC_READY_BIT | RBIT_HDLC_WRAP_BIT;
     if (ch == '\n')
-	outbyte('\r');
+      outbyte('\r');
 }
 
 /*
  *  Open entry point
  */
-
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -211,7 +162,6 @@ rtems_device_driver console_open(
 /*
  *  Close entry point
  */
-
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -224,7 +174,6 @@ rtems_device_driver console_close(
 /*
  * read bytes from the serial port. We only have stdin.
  */
-
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -256,7 +205,6 @@ rtems_device_driver console_read(
 /*
  * write bytes to the serial port. Stdout and stderr are the same.
  */
-
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -287,7 +235,6 @@ rtems_device_driver console_write(
 /*
  *  IO Control entry point
  */
-
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
