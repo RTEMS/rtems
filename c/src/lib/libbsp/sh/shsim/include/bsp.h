@@ -56,7 +56,6 @@ extern void *CPU_Interrupt_stack_high;
 /*
  * BSP methods that cross file boundaries.
  */
-int __trap34(int, int, void*, int );
 int _sys_exit (int n);
 void bsp_hw_init(void);
 

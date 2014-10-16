@@ -28,3 +28,5 @@
 
 #define SYS_utime       201 /* not really a system call */
 #define SYS_wait        202 /* nor is this */
+
+int __trap34(int, int, void*, int );

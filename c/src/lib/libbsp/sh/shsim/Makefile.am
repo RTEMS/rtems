@@ -38,6 +38,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c
 libbsp_a_SOURCES += ../../shared/sbrk.c ../../shared/bootcard.c
 libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 libbsp_a_SOURCES += ../shared/bsphwinit.c
+libbsp_a_SOURCES += startup/sysexit.c
 
 # clock
 libbsp_a_SOURCES += ../../shared/clock_driver_simidle.c

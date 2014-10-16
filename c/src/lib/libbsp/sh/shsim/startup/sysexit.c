@@ -12,8 +12,9 @@
  */
 
 #include <bsp.h>
+#include <bsp/syscall.h>
 
-extern int __trap34(int, int, void*, int );
+int errno; /* assumed to exist by exit_k() */
 
 int _sys_exit (int n)
 {
