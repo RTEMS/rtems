@@ -1,6 +1,8 @@
 /*
  *  bsp.h  -- contain BSP API definition.
- *
+ */
+
+/*
  *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
  *
  *  The license and distribution terms for this file may be
@@ -11,8 +13,11 @@
  *
  *  Modified for the 'beatnik' BSP by T. Straumann, 2005-2007.
  */
+
 #ifndef LIBBSP_BEATNIK_BSP_H
 #define LIBBSP_BEATNIK_BSP_H
+
+#ifndef ASM
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -24,26 +29,25 @@
 #include <bsp/vectors.h>
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
 /* Board type */
 typedef enum {
-	Unknown = 0,
-	MVME5500,
-	MVME6100
+  Unknown = 0,
+  MVME5500,
+  MVME6100
 } BSP_BoardType;
 
-BSP_BoardType
-BSP_getBoardType();
+BSP_BoardType BSP_getBoardType(void);
 
 /* Discovery Version */
 
 typedef enum {
-	unknown    = 0,
-	GT_64260_A,		/* Revision 0x10 */
-	GT_64260_B,	    /* Revision 0x20 */
-	MV_64360,
+  unknown    = 0,
+  GT_64260_A,      /* Revision 0x10 */
+  GT_64260_B,      /* Revision 0x20 */
+  MV_64360,
 } DiscoveryVersion;
 
 /* Determine the type of discovery chip on this board; info
@@ -52,9 +56,7 @@ typedef enum {
  * If a non-zero argument is passed, the routine panics
  * (BSP_panic) if no recognized bridge is found;
  */
- 
-DiscoveryVersion
-BSP_getDiscoveryVersion(int assertion);
+DiscoveryVersion BSP_getDiscoveryVersion(int assertion);
 
 /*
  *  confdefs.h overrides for this BSP:
@@ -65,18 +67,18 @@ BSP_getDiscoveryVersion(int assertion);
 /*
  *  base address definitions for several devices
  */
-#define BSP_MV64x60_BASE    		(0xf1000000)
-#define BSP_MV64x60_DEV1_BASE		(0xf1100000)
-#define BSP_UART_IOBASE_COM1 		((BSP_MV64x60_DEV1_BASE)+0x20000)
-#define BSP_UART_IOBASE_COM2 		((BSP_MV64x60_DEV1_BASE)+0x21000)
+#define BSP_MV64x60_BASE        (0xf1000000)
+#define BSP_MV64x60_DEV1_BASE   (0xf1100000)
+#define BSP_UART_IOBASE_COM1    ((BSP_MV64x60_DEV1_BASE)+0x20000)
+#define BSP_UART_IOBASE_COM2    ((BSP_MV64x60_DEV1_BASE)+0x21000)
 #define BSP_UART_USE_SHARED_IRQS
 
-#define BSP_NVRAM_BASE_ADDR			(0xf1110000)
-#define BSP_NVRAM_END_ADDR			(0xf1117fff)
-#define BSP_NVRAM_RTC_START			(0xf1117ff8)
+#define BSP_NVRAM_BASE_ADDR      (0xf1110000)
+#define BSP_NVRAM_END_ADDR       (0xf1117fff)
+#define BSP_NVRAM_RTC_START      (0xf1117ff8)
 
-#define BSP_NVRAM_BOOTPARMS_START	(0xf1111000)
-#define BSP_NVRAM_BOOTPARMS_END		(0xf1111fff)
+#define BSP_NVRAM_BOOTPARMS_START  (0xf1111000)
+#define BSP_NVRAM_BOOTPARMS_END    (0xf1111fff)
 
 
 /* This is only active/used during early init. It defines
@@ -85,18 +87,22 @@ BSP_getDiscoveryVersion(int assertion);
  * override the PCI configuration (see gt_pci_init.c:BSP_pci_initialize)
  */
 
-#define PCI_CONFIG_ADDR				(BSP_MV64x60_BASE + 0xcf8)
-#define PCI_CONFIG_DATA				(BSP_MV64x60_BASE + 0xcfc)
+#define PCI_CONFIG_ADDR        (BSP_MV64x60_BASE + 0xcf8)
+#define PCI_CONFIG_DATA        (BSP_MV64x60_BASE + 0xcfc)
 
 /* our wonderful PCI initialization remaps everything to CPU addresses
  * - before calling BSP_pci_initialize() this is NOT VALID, however
  * and the deprecated inl()/outl() etc won't work!
  */
-#define _IO_BASE					0x00000000
-/* wonderful MotLoad has the base address as seen from the CPU programmed into config space :-) */
-#define PCI_MEM_BASE				0
-#define PCI_MEM_BASE_ADJUSTMENT		0
-#define PCI_DRAM_OFFSET				0
+#define _IO_BASE          0x00000000
+/* wonderful MotLoad has the base address as seen from the
+ * CPU programmed into config space :-)
+ */
+#define PCI_MEM_BASE               0
+#define PCI_MEM_BASE_ADJUSTMENT    0
+#define PCI_DRAM_OFFSET            0
+
+extern void BSP_motload_pci_fixup(void);
 
 /* PCI <-> local address mapping - no sophisticated windows
  * (i.e., no support for cached regions etc. you read a BAR
@@ -106,20 +112,20 @@ BSP_getDiscoveryVersion(int assertion);
 #define BSP_PCI2LOCAL_ADDR(a) ((uint32_t)(a))
 #define BSP_LOCAL2PCI_ADDR(a) ((uint32_t)(a))
 
-#define BSP_CONFIG_NUM_PCI_CACHE_SLOTS	32
+#define BSP_CONFIG_NUM_PCI_CACHE_SLOTS  32
 
-#define BSP_CONSOLE_PORT			BSP_UART_COM1
-#define BSP_UART_BAUD_BASE			115200
+#define BSP_CONSOLE_PORT      BSP_UART_COM1
+#define BSP_UART_BAUD_BASE    115200
 
 /* I2C Devices */
 /* Note that the i2c addresses stated in the manual are
  * left-shifted by one bit.
  */
-#define BSP_VPD_I2C_ADDR			(0xA8>>1)		/* the VPD EEPROM  */
-#define BSP_USR_I2C_ADDR			(0xAA>>1)		/* the user EEPROM */
-#define BSP_THM_I2C_ADDR			(0x90>>1)		/* the DS1621 temperature sensor & thermostat */
+#define BSP_VPD_I2C_ADDR      (0xA8>>1)    /* the VPD EEPROM  */
+#define BSP_USR_I2C_ADDR      (0xAA>>1)    /* the user EEPROM */
+#define BSP_THM_I2C_ADDR      (0x90>>1)    /* the DS1621 temperature sensor & thermostat */
 
-#define BSP_I2C_BUS_DESCRIPTOR		gt64260_i2c_bus_descriptor
+#define BSP_I2C_BUS_DESCRIPTOR    gt64260_i2c_bus_descriptor
 
 #define BSP_I2C_BUS0_NAME             "/dev/i2c0"
 
@@ -129,11 +135,11 @@ BSP_getDiscoveryVersion(int assertion);
 #define BSP_I2C_THM_NAME              BSP_I2C_DS1621_NAME
 #define BSP_I2C_DS1621_RAW_NAME       "ds1621-raw"
 
-#define	BSP_I2C_VPD_EEPROM_DEV_NAME      (BSP_I2C_BUS0_NAME"."BSP_I2C_VPD_EEPROM_NAME)
-#define	BSP_I2C_USR_EEPROM_DEV_NAME      (BSP_I2C_BUS0_NAME"."BSP_I2C_USR_EEPROM_NAME)
-#define	BSP_I2C_DS1621_DEV_NAME          (BSP_I2C_BUS0_NAME"."BSP_I2C_DS1621_NAME)
+#define  BSP_I2C_VPD_EEPROM_DEV_NAME      (BSP_I2C_BUS0_NAME"."BSP_I2C_VPD_EEPROM_NAME)
+#define  BSP_I2C_USR_EEPROM_DEV_NAME      (BSP_I2C_BUS0_NAME"."BSP_I2C_USR_EEPROM_NAME)
+#define  BSP_I2C_DS1621_DEV_NAME          (BSP_I2C_BUS0_NAME"."BSP_I2C_DS1621_NAME)
 #define BSP_I2C_THM_DEV_NAME              BSP_I2C_DS1621_DEV_NAME
-#define	BSP_I2C_DS1621_RAW_DEV_NAME      (BSP_I2C_BUS0_NAME"."BSP_I2C_DS1621_RAW_NAME)
+#define  BSP_I2C_DS1621_RAW_DEV_NAME      (BSP_I2C_BUS0_NAME"."BSP_I2C_DS1621_RAW_NAME)
 
 
 /* Initialize the I2C driver and register all devices 
@@ -148,8 +154,7 @@ BSP_getDiscoveryVersion(int assertion);
  *   /dev/i2c0.ds1621       (read-only; one byte: board-temp in degC)
  *   /dev/i2c0.ds1621-raw   (read-write; transfer bytes to/from the ds1621)
  */
-int
-BSP_i2c_initialize();
+int BSP_i2c_initialize(void);
 
 /* Networking; */
 #if defined(RTEMS_NETWORKING)
@@ -157,27 +162,29 @@ BSP_i2c_initialize();
 #endif
 
 /* NOT FOR PUBLIC USE BELOW HERE */
-#define BSP_PCI_HOSE0_MEM_BASE		0x80000000	/* must be aligned to size */
-#define BSP_PCI_HOSE0_MEM_SIZE		0x20000000
+#define BSP_PCI_HOSE0_MEM_BASE    0x80000000  /* must be aligned to size */
+#define BSP_PCI_HOSE0_MEM_SIZE    0x20000000
 
-#define BSP_PCI_HOSE1_MEM_BASE		0xe0000000
+#define BSP_PCI_HOSE1_MEM_BASE    0xe0000000
 
-#define BSP_DEV_AND_PCI_IO_BASE 	0xf0000000
-#define BSP_DEV_AND_PCI_IO_SIZE 	0x10000000
+#define BSP_DEV_AND_PCI_IO_BASE   0xf0000000
+#define BSP_DEV_AND_PCI_IO_SIZE   0x10000000
 
-/* maintain coherency between CPU and GT64340 ethernet (& possibly other discovery components) */
-#define BSP_RW_PAGE_ATTRIBUTES	TRIV121_ATTR_M
+/* maintain coherency between CPU and GT64340 Ethernet
+ * (andpossibly other Discovery components).
+ */
+#define BSP_RW_PAGE_ATTRIBUTES  TRIV121_ATTR_M
 
 extern unsigned BSP_pci_hose1_bus_base;
 
-void BSP_pci_initialize();
+void BSP_pci_initialize(void);
 
 /* Exception Handling */
 
 /* Use a task notepad to attach user exception handler info;
  * may be changed by application startup code (EPICS uses 11)
  */
-#define BSP_EXCEPTION_NOTEPAD		14
+#define BSP_EXCEPTION_NOTEPAD    14
   
 #ifndef ASM
 
@@ -257,14 +264,37 @@ extern unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet);
  *            16-bit error status on error.
  *
  */
-extern unsigned short
-(*_BSP_clear_vmebridge_errors)(int);
+extern unsigned short (*_BSP_clear_vmebridge_errors)(int);
 
+/*
+ * Prototypes for debug helpers
+ */
+void discovery_pic_set_debug_irq(int on);
+void discovery_pic_install_debug_irq(void);
+
+/*
+ * Prototypes for methods called only from .S for dependency tracking
+ */
+char *save_boot_params(
+  void *r3,
+  void *r4,
+  void *r5,
+  char *cmdline_start,
+  char *cmdline_end
+);
+void zero_bss(void);
+
+/*
+ * Prototypes for methods in the BSP that cross file boundaries
+ */
+uint32_t probeMemoryEnd(void);
 
 #endif
 
 #ifdef __cplusplus
-  }
+}
 #endif
+
+#endif /* !ASM */
 
 #endif

@@ -196,7 +196,7 @@ int i;
 	}
 }
 
-void discovery_dump_picregs(void)
+static void discovery_dump_picregs(void)
 {
 		printk("       ..GPP_IRQ. -- ..MAIN_HI. -- ..MAIN_LO.\n");
 		printk("Cause:"); pregs(thePic.causes);

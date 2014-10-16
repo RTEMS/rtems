@@ -143,8 +143,13 @@ char *BSP_commandline_string = cmdline_buf;
 /* this routine is called early and must be safe with a not properly
  * aligned stack
  */
-char *
-save_boot_params(void *r3, void *r4, void* r5, char *cmdline_start, char *cmdline_end)
+char *save_boot_params(
+  void *r3,
+  void *r4,
+  void *r5,
+  char *cmdline_start,
+  char *cmdline_end
+)
 {
 int             i=cmdline_end-cmdline_start;
 	if ( i >= CMDLINE_BUF_SIZE )

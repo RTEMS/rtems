@@ -8,13 +8,13 @@
  * ----------
  * This software ('beatnik' RTEMS BSP for MVME6100 and MVME5500) was
  *     created by Till Straumann <strauman@slac.stanford.edu>, 2005-2007,
- * 	   Stanford Linear Accelerator Center, Stanford University.
+ *      Stanford Linear Accelerator Center, Stanford University.
  * 
  * Acknowledgement of sponsorship
  * ------------------------------
  * The 'beatnik' BSP was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
- * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
+ *      under Contract DE-AC03-76SFO0515 with the Department of Energy.
  * 
  * Government disclaimer of liability
  * ----------------------------------
@@ -56,56 +56,59 @@
  * hardcoded window lengths that match this
  * layout when setting BATs:
  */
-#define _VME_A32_WIN0_ON_PCI	0x90000000
+#define _VME_A32_WIN0_ON_PCI  0x90000000
 /* If _VME_CSR_ON_PCI is defined then the A32 window is reduced to accommodate
  * CSR for space.
  */
-#define _VME_CSR_ON_PCI			0x9e000000
-#define _VME_A24_ON_PCI			0x9f000000
-#define _VME_A16_ON_PCI			0x9fff0000
+#define _VME_CSR_ON_PCI      0x9e000000
+#define _VME_A24_ON_PCI      0x9f000000
+#define _VME_A16_ON_PCI      0x9fff0000
 
 /* start of the A32 window on the VME bus
  * TODO: this should perhaps be a configuration option
  */
-#define _VME_A32_WIN0_ON_VME	0x20000000
+#define _VME_A32_WIN0_ON_VME  0x20000000
 
 /* if _VME_DRAM_OFFSET is defined, the BSP
  * will map our RAM onto the VME bus, starting
  * at _VME_DRAM_OFFSET
  */
-#define _VME_DRAM_OFFSET		0x90000000
+#define _VME_DRAM_OFFSET    0x90000000
 
-#define BSP_VME_INSTALL_IRQ_MGR(err)	\
-  do {									\
-  err = -1;								\
-  switch (BSP_getBoardType()) {			\
-	case MVME6100:						\
-		err = theOps->install_irq_mgr(	\
-					VMETSI148_IRQ_MGR_FLAG_SHARED,	\
-					0, BSP_IRQ_GPP_0 + 20,			\
-					1, BSP_IRQ_GPP_0 + 21,			\
-					2, BSP_IRQ_GPP_0 + 22,			\
-					3, BSP_IRQ_GPP_0 + 23,			\
-					-1);				\
-	break;								\
-										\
-	case MVME5500:						\
-		err = theOps->install_irq_mgr(	\
-					VMEUNIVERSE_IRQ_MGR_FLAG_SHARED |			\
-					VMEUNIVERSE_IRQ_MGR_FLAG_PW_WORKAROUND,		\
-					0, BSP_IRQ_GPP_0 + 12,						\
-					1, BSP_IRQ_GPP_0 + 13,						\
-					2, BSP_IRQ_GPP_0 + 14,						\
-					3, BSP_IRQ_GPP_0 + 15,						\
-					-1);										\
-	break;								\
-										\
-	default:							\
-		printk("WARNING: unknown board; ");						\
-	break;								\
-  }										\
-  if ( err )							\
-	printk("VME interrupt manager NOT INSTALLED (error: %i)\n", err); \
+extern int BSP_VMEInit(void);
+extern int BSP_VMEIrqMgrInstall(void);
+
+#define BSP_VME_INSTALL_IRQ_MGR(err)  \
+  do { \
+    err = -1; \
+    switch (BSP_getBoardType()) { \
+      case MVME6100: \
+	err = theOps->install_irq_mgr( \
+	      VMETSI148_IRQ_MGR_FLAG_SHARED, \
+	      0, BSP_IRQ_GPP_0 + 20, \
+	      1, BSP_IRQ_GPP_0 + 21, \
+	      2, BSP_IRQ_GPP_0 + 22, \
+	      3, BSP_IRQ_GPP_0 + 23, \
+	      -1); \
+	break; \
+\
+      case MVME5500: \
+	err = theOps->install_irq_mgr( \
+	      VMEUNIVERSE_IRQ_MGR_FLAG_SHARED | \
+	      VMEUNIVERSE_IRQ_MGR_FLAG_PW_WORKAROUND, \
+	      0, BSP_IRQ_GPP_0 + 12, \
+	      1, BSP_IRQ_GPP_0 + 13, \
+	      2, BSP_IRQ_GPP_0 + 14, \
+	      3, BSP_IRQ_GPP_0 + 15, \
+	      -1); \
+	break; \
+\
+      default: \
+	printk("WARNING: unknown board; "); \
+	break; \
+    } \
+    if ( err ) \
+      printk("VME interrupt manager NOT INSTALLED (error: %i)\n", err); \
   } while (0)
 
 #endif
