@@ -1,7 +1,8 @@
-/*  BSP_irq.c
- *
+/*
  *  This file contains the implementation of the function described in irq.h
- *
+ */
+
+/*
  *  Copyright (C) 1998, 1999 valette@crf.canon.fr
  *
  *  The license and distribution terms for this file may be
@@ -319,11 +320,6 @@ void BSP_enable_irq_at_pic(const rtems_irq_number irqNum)
   rtems_interrupt_enable(level);
 }
 
-void BSP_enable_pic_irq(const rtems_irq_number irqNum)
-{
-	BSP_enable_irq_at_pic(irqNum);
-}
-
 int BSP_disable_irq_at_pic(const rtems_irq_number irqNum)
 {
   int      rval;
@@ -331,7 +327,7 @@ int BSP_disable_irq_at_pic(const rtems_irq_number irqNum)
   unsigned int level;
 
   if ( ! is_pic_irq(irqNum) )
-  	return -1;
+    return -1;
 
   bitNum = (((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET)%32;
   regNum = (((unsigned int)irqNum) - BSP_MICL_IRQ_LOWEST_OFFSET)>>5;
@@ -354,85 +350,80 @@ int BSP_disable_irq_at_pic(const rtems_irq_number irqNum)
   return rval ? 1 : 0;
 }
 
-void BSP_disable_pic_irq(const rtems_irq_number irqNum)
-{
-	(void)BSP_disable_irq_at_pic(irqNum);
-}
-
 /* Use shared/irq : 2008 */
 int BSP_setup_the_pic(rtems_irq_global_settings* config)
 {
-    int i;
+  int i;
 
-    BSP_config = *config;
-    default_rtems_hdl = config->defaultEntry.hdl;
-    rtems_hdl_tbl     = config->irqHdlTbl;
+  BSP_config = *config;
+  default_rtems_hdl = config->defaultEntry.hdl;
+  rtems_hdl_tbl     = config->irqHdlTbl;
 
-    /* Get ready for discovery BSP */
-    BSP_irqMask_reg[0]= (volatile unsigned int *) (GT64x60_REG_BASE + GT64260_CPU_INT_MASK_LO);
-    BSP_irqMask_reg[1]= (volatile unsigned int *) (GT64x60_REG_BASE + GT64260_CPU_INT_MASK_HI);
-    BSP_irqCause_reg[0]= (volatile unsigned int *) (GT64x60_REG_BASE + GT64260_MAIN_INT_CAUSE_LO);
-    BSP_irqCause_reg[1]= (volatile unsigned int *) (GT64x60_REG_BASE + GT64260_MAIN_INT_CAUSE_HI);
-    BSP_irqMask_reg[2]= (volatile unsigned int *) (GT64x60_REG_BASE + GT_GPP_Interrupt_Mask);
-    BSP_irqCause_reg[2]= (volatile unsigned int *) (GT64x60_REG_BASE + GT_GPP_Value);
+  /* Get ready for discovery BSP */
+  BSP_irqMask_reg[0]= (volatile unsigned int *) (GT64x60_REG_BASE + GT64260_CPU_INT_MASK_LO);
+  BSP_irqMask_reg[1]= (volatile unsigned int *) (GT64x60_REG_BASE + GT64260_CPU_INT_MASK_HI);
+  BSP_irqCause_reg[0]= (volatile unsigned int *) (GT64x60_REG_BASE + GT64260_MAIN_INT_CAUSE_LO);
+  BSP_irqCause_reg[1]= (volatile unsigned int *) (GT64x60_REG_BASE + GT64260_MAIN_INT_CAUSE_HI);
+  BSP_irqMask_reg[2]= (volatile unsigned int *) (GT64x60_REG_BASE + GT_GPP_Interrupt_Mask);
+  BSP_irqCause_reg[2]= (volatile unsigned int *) (GT64x60_REG_BASE + GT_GPP_Value);
 
-    /* Page 401, Table 598:
-     * Comm Unit Arbiter Control register :
-     * bit 10:GPP interrupts as level sensitive(1) or edge sensitive(0).
-     * MOTload default is set as level sensitive(1). Set it agin to make sure.
-     */
-    out_le32((volatile unsigned int *)GT_CommUnitArb_Ctrl,
-	     (in_le32((volatile unsigned int *)GT_CommUnitArb_Ctrl)| (1<<10)));
-
-#if 0
-    printk("BSP_irqMask_reg[0] = 0x%x, BSP_irqCause_reg[0] 0x%x\n",
-	   in_le32(BSP_irqMask_reg[0]),
-	   in_le32(BSP_irqCause_reg[0]));
-    printk("BSP_irqMask_reg[1] = 0x%x, BSP_irqCause_reg[1] 0x%x\n",
-	   in_le32(BSP_irqMask_reg[1]),
-	   in_le32(BSP_irqCause_reg[1]));
-    printk("BSP_irqMask_reg[2] = 0x%x, BSP_irqCause_reg[2] 0x%x\n",
-	   in_le32(BSP_irqMask_reg[2]),
-	   in_le32(BSP_irqCause_reg[2]));
-#endif
-
-    /* Initialize the interrupt related  registers */
-    for (i=0; i<3; i++) {
-      out_le32(BSP_irqCause_reg[i], 0);
-      out_le32(BSP_irqMask_reg[i], 0);
-    }
-    in_le32(BSP_irqMask_reg[2]);
-    compute_pic_masks_from_prio();
+  /* Page 401, Table 598:
+   * Comm Unit Arbiter Control register :
+   * bit 10:GPP interrupts as level sensitive(1) or edge sensitive(0).
+   * MOTload default is set as level sensitive(1). Set it agin to make sure.
+   */
+  out_le32((volatile unsigned int *)GT_CommUnitArb_Ctrl,
+           (in_le32((volatile unsigned int *)GT_CommUnitArb_Ctrl)| (1<<10)));
 
 #if 0
-    printk("BSP_irqMask_reg[0] = 0x%x, BSP_irqCause_reg[0] 0x%x\n",
-	   in_le32(BSP_irqMask_reg[0]),
-	   in_le32(BSP_irqCause_reg[0]));
-    printk("BSP_irqMask_reg[1] = 0x%x, BSP_irqCause_reg[1] 0x%x\n",
-	   in_le32(BSP_irqMask_reg[1]),
-	   in_le32(BSP_irqCause_reg[1]));
-    printk("BSP_irqMask_reg[2] = 0x%x, BSP_irqCause_reg[2] 0x%x\n",
-	   in_le32(BSP_irqMask_reg[2]),
-	   in_le32(BSP_irqCause_reg[2]));
+  printk("BSP_irqMask_reg[0] = 0x%x, BSP_irqCause_reg[0] 0x%x\n",
+         in_le32(BSP_irqMask_reg[0]),
+         in_le32(BSP_irqCause_reg[0]));
+  printk("BSP_irqMask_reg[1] = 0x%x, BSP_irqCause_reg[1] 0x%x\n",
+         in_le32(BSP_irqMask_reg[1]),
+         in_le32(BSP_irqCause_reg[1]));
+  printk("BSP_irqMask_reg[2] = 0x%x, BSP_irqCause_reg[2] 0x%x\n",
+         in_le32(BSP_irqMask_reg[2]),
+         in_le32(BSP_irqCause_reg[2]));
 #endif
 
-    /*
-     *
-     */
-    for (i=BSP_MICL_IRQ_LOWEST_OFFSET; i < BSP_PROCESSOR_IRQ_LOWEST_OFFSET ; i++) {
-      if ( BSP_config.irqHdlTbl[i].hdl != BSP_config.defaultEntry.hdl) {
-	BSP_enable_irq_at_pic(i);
-	BSP_config.irqHdlTbl[i].on(&BSP_config.irqHdlTbl[i]);
-      }
-      else {
-	BSP_config.irqHdlTbl[i].off(&BSP_config.irqHdlTbl[i]);
-	BSP_disable_irq_at_pic(i);
-      }
-    }
-    for (i= BSP_MAIN_GPP7_0_IRQ; i < BSP_MAIN_GPP31_24_IRQ; i++)
+  /* Initialize the interrupt related  registers */
+  for (i=0; i<3; i++) {
+    out_le32(BSP_irqCause_reg[i], 0);
+    out_le32(BSP_irqMask_reg[i], 0);
+  }
+  in_le32(BSP_irqMask_reg[2]);
+  compute_pic_masks_from_prio();
+
+#if 0
+  printk("BSP_irqMask_reg[0] = 0x%x, BSP_irqCause_reg[0] 0x%x\n",
+         in_le32(BSP_irqMask_reg[0]),
+         in_le32(BSP_irqCause_reg[0]));
+  printk("BSP_irqMask_reg[1] = 0x%x, BSP_irqCause_reg[1] 0x%x\n",
+         in_le32(BSP_irqMask_reg[1]),
+         in_le32(BSP_irqCause_reg[1]));
+  printk("BSP_irqMask_reg[2] = 0x%x, BSP_irqCause_reg[2] 0x%x\n",
+         in_le32(BSP_irqMask_reg[2]),
+         in_le32(BSP_irqCause_reg[2]));
+#endif
+
+  /*
+   *
+   */
+  for (i=BSP_MICL_IRQ_LOWEST_OFFSET; i < BSP_PROCESSOR_IRQ_LOWEST_OFFSET ; i++) {
+    if ( BSP_config.irqHdlTbl[i].hdl != BSP_config.defaultEntry.hdl) {
       BSP_enable_irq_at_pic(i);
+      BSP_config.irqHdlTbl[i].on(&BSP_config.irqHdlTbl[i]);
+    }
+    else {
+      BSP_config.irqHdlTbl[i].off(&BSP_config.irqHdlTbl[i]);
+      BSP_disable_irq_at_pic(i);
+    }
+  }
+  for (i= BSP_MAIN_GPP7_0_IRQ; i < BSP_MAIN_GPP31_24_IRQ; i++)
+    BSP_enable_irq_at_pic(i);
 
-    return(1);
+  return(1);
 }
 
 /*

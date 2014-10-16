@@ -1,16 +1,18 @@
-/* MVME5500I2C.c
- *
+/*
+ * To read information of the EEPROM via the I2C
+ */
+
+/*
  * Copyright (c) 2003, 2004 Brookhaven National Laboratory
  * Author:    S. Kate Feng <feng1@bnl.gov>
  * All rights reserved.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution.
- *
- * To read information of the EEPROM via the I2C
  */
 
-#include <rtems/bspIo.h>	    /* printk */
+#include <bsp.h>
+#include <rtems/bspIo.h>      /* printk */
 #include <stdint.h>           /* uint32_t */
 #include "bsp/GT64260TWSI.h"
 
@@ -28,28 +30,34 @@ static unsigned char I2cDevByteAddr(uint32_t devA2A1A0, unsigned char byteNum)
 /****************************************************************************
 * I2Cread_eeprom - read EEPROM VPD from the I2C
 */
-int I2Cread_eeprom(unsigned char I2cBusAddr,uint32_t devA2A1A0,uint32_t AddrBytes,unsigned char *pBuff,uint32_t numBytes)
+int I2Cread_eeprom(
+  unsigned char  I2cBusAddr,
+  uint32_t       devA2A1A0,
+  uint32_t       AddrBytes,
+  unsigned char *pBuff,
+  uint32_t       numBytes
+)
 {
   int status=0, lastByte=0;
 
   switch (AddrBytes) {
     case 1:
       if ((status=GT64260TWSIstart()) != -1) {
-	if ((status=GT64260TWSIwrite(I2cAddrPack(I2cBusAddr,devA2A1A0)))!= -1){
-	  if ((status=GT64260TWSIwrite(devA2A1A0))!=-1){
-	    if ((status=GT64260TWSIstart())!=-1)
-	        status=GT64260TWSIwrite(I2cAddrPack((I2cBusAddr|0x01),devA2A1A0));
-	  }
+        if ((status=GT64260TWSIwrite(I2cAddrPack(I2cBusAddr,devA2A1A0)))!= -1){
+          if ((status=GT64260TWSIwrite(devA2A1A0))!=-1){
+            if ((status=GT64260TWSIstart())!=-1)
+                status=GT64260TWSIwrite(I2cAddrPack((I2cBusAddr|0x01),devA2A1A0));
+          }
         }
       }
       break;
     case 2:
       if ((status=GT64260TWSIstart())!=-1) {
-	if ((status=GT64260TWSIwrite(I2cBusAddr))!= -1) {
-	  if ((status=GT64260TWSIwrite(I2cDevByteAddr(devA2A1A0,1)))!=-1) {
-	    if ((status=GT64260TWSIwrite(I2cDevByteAddr(devA2A1A0,0)))!= -1){
-	      if ((status=GT64260TWSIstart()) != -1) {
-		status = GT64260TWSIwrite((I2cBusAddr | 0x01));
+        if ((status=GT64260TWSIwrite(I2cBusAddr))!= -1) {
+          if ((status=GT64260TWSIwrite(I2cDevByteAddr(devA2A1A0,1)))!=-1) {
+            if ((status=GT64260TWSIwrite(I2cDevByteAddr(devA2A1A0,0)))!= -1){
+              if ((status=GT64260TWSIstart()) != -1) {
+                status = GT64260TWSIwrite((I2cBusAddr | 0x01));
               }
             }
           }
@@ -58,12 +66,12 @@ int I2Cread_eeprom(unsigned char I2cBusAddr,uint32_t devA2A1A0,uint32_t AddrByte
       break;
     case 3:
       if ((status = GT64260TWSIstart())!= -1) {
-	if ((status = GT64260TWSIwrite(I2cBusAddr))!= -1) {
-	  if ((status=GT64260TWSIwrite(I2cDevByteAddr(devA2A1A0,2)))!= -1){
-	    if ((status=GT64260TWSIwrite(I2cDevByteAddr(devA2A1A0,1)))!= -1){
-	      if ((status=GT64260TWSIwrite(I2cDevByteAddr(devA2A1A0,0)))!= -1){
-  	        if ((status=GT64260TWSIstart())!= -1) {
-		  status = GT64260TWSIwrite(I2cBusAddr | 0x01);
+        if ((status = GT64260TWSIwrite(I2cBusAddr))!= -1) {
+          if ((status=GT64260TWSIwrite(I2cDevByteAddr(devA2A1A0,2)))!= -1){
+            if ((status=GT64260TWSIwrite(I2cDevByteAddr(devA2A1A0,1)))!= -1){
+              if ((status=GT64260TWSIwrite(I2cDevByteAddr(devA2A1A0,0)))!= -1){
+                  if ((status=GT64260TWSIstart())!= -1) {
+                  status = GT64260TWSIwrite(I2cBusAddr | 0x01);
                 }
               }
             }

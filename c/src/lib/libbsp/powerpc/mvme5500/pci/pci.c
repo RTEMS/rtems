@@ -72,8 +72,6 @@ static rtems_pci_config_t BSP_pci[2]={
    0 /* defined at BSP_pci_configuration */}
 };
 
-extern void pci_interface(void);
-
 /* Pack RegNum,FuncNum,DevNum,BusNum,and ConfigEnable for
  * PCI Configuration Address Register
  */
