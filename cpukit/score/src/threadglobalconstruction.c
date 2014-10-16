@@ -21,8 +21,7 @@
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/assert.h>
-#include <rtems/rtems/config.h>
-#include <rtems/posix/config.h>
+#include <rtems/config.h>
 
 /*
  *  Conditional magic to determine what style of C++ constructor
