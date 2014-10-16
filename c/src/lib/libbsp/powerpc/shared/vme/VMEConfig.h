@@ -8,13 +8,13 @@
  * ----------
  * This software was created by
  *     Till Straumann <strauman@slac.stanford.edu>, 2002,
- * 	   Stanford Linear Accelerator Center, Stanford University.
+ *      Stanford Linear Accelerator Center, Stanford University.
  *
  * Acknowledgement of sponsorship
  * ------------------------------
  * This software was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
- * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
+ *      under Contract DE-AC03-76SFO0515 with the Department of Energy.
  *
  * Government disclaimer of liability
  * ----------------------------------
@@ -67,27 +67,27 @@
  */
 
 #if defined(mvme2100)
-#define _VME_A32_WIN0_ON_PCI	0x90000000
-#define _VME_A24_ON_PCI			0x9f000000
-#define _VME_A16_ON_PCI			0x9fff0000
-#define BSP_VME_BAT_IDX			1
+#define _VME_A32_WIN0_ON_PCI  0x90000000
+#define _VME_A24_ON_PCI      0x9f000000
+#define _VME_A16_ON_PCI      0x9fff0000
+#define BSP_VME_BAT_IDX      1
 #else
-#define _VME_A32_WIN0_ON_PCI	0x10000000
-#define _VME_A24_ON_PCI			0x1f000000
-#define _VME_A16_ON_PCI			0x1fff0000
-#define BSP_VME_BAT_IDX			0
+#define _VME_A32_WIN0_ON_PCI  0x10000000
+#define _VME_A24_ON_PCI      0x1f000000
+#define _VME_A16_ON_PCI      0x1fff0000
+#define BSP_VME_BAT_IDX      0
 #endif
 
 /* start of the A32 window on the VME bus
  * TODO: this should perhaps be a run-time configuration option
  */
-#define _VME_A32_WIN0_ON_VME	0x20000000
+#define _VME_A32_WIN0_ON_VME  0x20000000
 
 /* if _VME_DRAM_OFFSET is defined, the BSP
  * will map the board RAM onto the VME bus, starting
  * at _VME_DRAM_OFFSET
  */
-#define _VME_DRAM_OFFSET		0xc0000000
+#define _VME_DRAM_OFFSET    0xc0000000
 
 /* Define BSP_PCI_VME_DRIVER_DOES_EOI to let the vmeUniverse
  * driver (Tsi148 driver doesn't implement this) implement
@@ -184,47 +184,50 @@ extern int _BSP_vme_bridge_irq;
 #include <bsp/motorola.h>
 #include <bsp/pci.h>
 
-#define BSP_VME_UNIVERSE_INSTALL_IRQ_MGR(err)					\
-do {															\
-int              bus, dev, i = 0, j;							\
-const struct _int_map  *bspmap;									\
-  /* install the VME interrupt manager;							\
-   * if there's a bsp route map, use it to						\
-   * configure additional lines...								\
-   */															\
-  err = -1;														\
-  if (0 == pci_find_device(0x10e3, 0x0000, 0, &bus, &dev, &i)){	\
-	if ( (bspmap = motorolaIntMap(currentBoard)) ) {			\
-	for ( i=0; bspmap[i].bus >= 0; i++ ) {						\
-	  if ( bspmap[i].bus == bus && bspmap[i].slot == dev ) {	\
-		int pins[5], names[4];									\
-		/* found it; use info here...                   */		\
-		/* copy up to 4 entries; terminated with -1 pin */		\
-		for ( j=0;												\
-		      j<5 && (pins[j]=bspmap[i].pin_route[j].pin-1)>=0;	\
-		      j++) {											\
-			names[j] = bspmap[i].pin_route[j].int_name[0];		\
-		}														\
-		pins[4] = -1;											\
-		if ( 0 == vmeUniverseInstallIrqMgrAlt(					\
-				VMEUNIVERSE_IRQ_MGR_FLAG_SHARED, /* shared IRQs */\
-				pins[0], names[0],								\
-				pins[1], names[1],								\
-				pins[2], names[2],								\
-				pins[3], names[3],								\
-				-1) ) {											\
-		  i = -1;												\
-		  break;												\
-		}														\
-	  }															\
-	}															\
-    }															\
-	if ( i >= 0 )												\
-  	  err = vmeUniverseInstallIrqMgrAlt(						\
-	  			VMEUNIVERSE_IRQ_MGR_FLAG_SHARED,				\
-				0,-1,											\
-				-1);											\
-  }																\
+#define BSP_VME_UNIVERSE_INSTALL_IRQ_MGR(err) \
+do { \
+int              bus, dev, i = 0, j; \
+const struct _int_map  *bspmap; \
+  /* install the VME interrupt manager; \
+   * if there's a bsp route map, use it to \
+   * configure additional lines... \
+   */ \
+  err = -1; \
+  if (0 == pci_find_device(0x10e3, 0x0000, 0, &bus, &dev, &i)){ \
+  if ( (bspmap = motorolaIntMap(currentBoard)) ) { \
+  for ( i=0; bspmap[i].bus >= 0; i++ ) { \
+    if ( bspmap[i].bus == bus && bspmap[i].slot == dev ) { \
+    int pins[5], names[4]; \
+    /* found it; use info here...                   */ \
+    /* copy up to 4 entries; terminated with -1 pin */ \
+    for ( j=0; \
+          j<5 && (pins[j]=bspmap[i].pin_route[j].pin-1)>=0; \
+          j++) { \
+      names[j] = bspmap[i].pin_route[j].int_name[0]; \
+    } \
+    pins[4] = -1; \
+    if ( 0 == vmeUniverseInstallIrqMgrAlt( \
+        VMEUNIVERSE_IRQ_MGR_FLAG_SHARED, /* shared IRQs */\
+        pins[0], names[0], \
+        pins[1], names[1], \
+        pins[2], names[2], \
+        pins[3], names[3], \
+        -1) ) { \
+      i = -1; \
+      break; \
+    } \
+    } \
+  } \
+    } \
+  if ( i >= 0 ) \
+      err = vmeUniverseInstallIrqMgrAlt( \
+          VMEUNIVERSE_IRQ_MGR_FLAG_SHARED, \
+        0,-1, \
+        -1); \
+  } \
 } while (0)
+
+extern int BSP_VMEInit(void);
+extern int BSP_VMEIrqMgrInstall(void);
 
 #endif

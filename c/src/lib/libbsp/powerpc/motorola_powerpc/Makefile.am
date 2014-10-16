@@ -71,46 +71,45 @@ polledIO_rel_CPPFLAGS = $(AM_CPPFLAGS) $(polledIO_CPPFLAGS)
 polledIO_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # console
-libbsp_a_SOURCES += \
-    ../../powerpc/shared/console/uart.c \
-    ../../powerpc/shared/console/console.c \
-    ../../powerpc/shared/console/inch.c \
-    ../../powerpc/shared/console/consoleIo.h \
-    ../../powerpc/shared/console/keyboard.h \
-    ../../powerpc/shared/console/uart.h
+libbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
+libbsp_a_SOURCES += ../../powerpc/shared/console/console.c
+libbsp_a_SOURCES += ../../powerpc/shared/console/consoleIo.h
+libbsp_a_SOURCES += ../../powerpc/shared/console/keyboard.h
+libbsp_a_SOURCES += ../../powerpc/shared/console/uart.h
 
 include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
 
 # irq
-libbsp_a_SOURCES += ../../powerpc/shared/irq/irq_init.c \
-    ../../powerpc/shared/irq/openpic_i8259_irq.c \
-    ../../powerpc/shared/irq/i8259.c ../../powerpc/shared/irq/irq.h
+libbsp_a_SOURCES += ../../powerpc/shared/irq/irq_init.c
+libbsp_a_SOURCES += ../../powerpc/shared/irq/openpic_i8259_irq.c
+libbsp_a_SOURCES += ../../powerpc/shared/irq/i8259.c ../../powerpc/shared/irq/irq.h
 
 include_bsp_HEADERS += ../../powerpc/shared/motorola/motorola.h
 # motorola
-libbsp_a_SOURCES += ../../powerpc/shared/motorola/motorola.h \
-    ../../powerpc/shared/motorola/motorola.c
+libbsp_a_SOURCES += ../../powerpc/shared/motorola/motorola.h
+libbsp_a_SOURCES += ../../powerpc/shared/motorola/motorola.c
 
 include_bsp_HEADERS += ../../powerpc/shared/openpic/openpic.h
 # openpic
-libbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h \
-    ../../powerpc/shared/openpic/openpic.c \
-    ../../powerpc/shared/openpic/openpic.h
+libbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h
+libbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.c
+libbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h
 
 include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
 # pci
-libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
-    ../../powerpc/shared/pci/detect_raven_bridge.c \
-    ../../powerpc/shared/pci/generic_clear_hberrs.c \
-    ../../powerpc/shared/pci/pcifinddevice.c ../../powerpc/shared/pci/pci.h
+libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c
+libbsp_a_SOURCES += ../../powerpc/shared/pci/detect_raven_bridge.c
+libbsp_a_SOURCES += ../../powerpc/shared/pci/generic_clear_hberrs.c
+libbsp_a_SOURCES += ../../powerpc/shared/pci/pcifinddevice.c
+libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.h
 
 include_bsp_HEADERS += ../../powerpc/shared/residual/residual.h \
     ../../powerpc/shared/residual/pnp.h
 # residual
-libbsp_a_SOURCES += ../../powerpc/shared/residual/pnp.h \
-    ../../powerpc/shared/residual/residual.h \
-    ../../powerpc/shared/residual/residual.c
+libbsp_a_SOURCES += ../../powerpc/shared/residual/pnp.h
+libbsp_a_SOURCES += ../../powerpc/shared/residual/residual.h
+libbsp_a_SOURCES += ../../powerpc/shared/residual/residual.c
 
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     ../../shared/vmeUniverse/vme_am_defs.h \
@@ -120,14 +119,14 @@ include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     ../../shared/vmeUniverse/bspVmeDmaList.h\
     ../../shared/vmeUniverse/VMEDMA.h
 # vme
-libbsp_a_SOURCES += ../../shared/vmeUniverse/vmeUniverse.c \
-    ../../shared/vmeUniverse/bspVmeDmaList.c \
-    ../../shared/vmeUniverse/vmeUniverse.h \
-    ../../shared/vmeUniverse/vme_am_defs.h \
-    ../../shared/vmeUniverse/VME.h \
-    ../../powerpc/shared/vme/vmeconfig.c \
-    ../../powerpc/shared/vme/vme_universe.c \
-    ../../powerpc/shared/vme/VMEConfig.h
+libbsp_a_SOURCES += ../../shared/vmeUniverse/vmeUniverse.c
+libbsp_a_SOURCES += ../../shared/vmeUniverse/bspVmeDmaList.c
+libbsp_a_SOURCES += ../../shared/vmeUniverse/vmeUniverse.h
+libbsp_a_SOURCES += ../../shared/vmeUniverse/vme_am_defs.h
+libbsp_a_SOURCES += ../../shared/vmeUniverse/VME.h
+libbsp_a_SOURCES += ../../powerpc/shared/vme/vmeconfig.c
+libbsp_a_SOURCES += ../../powerpc/shared/vme/vme_universe.c
+libbsp_a_SOURCES += ../../powerpc/shared/vme/VMEConfig.h
 
 if QEMU
 if HAS_NETWORKING

@@ -1,7 +1,4 @@
 /*
- *  bsp.h  -- contain BSP API definition.
- *
- *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -26,10 +23,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/*
- *  confdefs.h overrides for this BSP:
- */
 
 /*
  * diagram illustrating the role of the configuration
@@ -231,6 +224,18 @@ extern int BSP_connect_clock_handler (void);
  *            on PCI config space access to empty slots.
  */
 extern unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet);
+
+/*
+ * Prototypes for methods called only from .S for dependency tracking
+ */
+char *save_boot_params(
+  void *r3,
+  void *r4,
+  void *r5,
+  char *cmdline_start,
+  char *cmdline_end
+);
+void zero_bss(void);
 
 #endif
 

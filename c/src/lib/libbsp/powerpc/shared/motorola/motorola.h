@@ -60,7 +60,7 @@ typedef enum {
 
 extern prep_t 			checkPrepBoardType(RESIDUAL *res);
 extern prep_t 			currentPrepType;
-extern motorolaBoard		getMotorolaBoard();
+extern motorolaBoard		getMotorolaBoard(void);
 extern motorolaBoard		currentBoard;
 extern const char*		motorolaBoardToString(motorolaBoard);
 extern const struct _int_map    *motorolaIntMap(motorolaBoard board);

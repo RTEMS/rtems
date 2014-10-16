@@ -100,16 +100,17 @@ void _BSP_Fatal_error(unsigned int v)
  *  Use the shared implementations of the following routines
  */
 
-char * save_boot_params(
-  RESIDUAL *r3,
-  void     *r4,
-  void     *r5,
-  char     *additional_boot_options
+char *save_boot_params(
+  void *r3,
+  void *r4,
+  void *r5,
+  char *cmdline_start,
+  char *cmdline_end
 )
 {
 
-  residualCopy = *r3;
-  strncpy(loaderParam, additional_boot_options, MAX_LOADER_ADD_PARM);
+  residualCopy = *(RESIDUAL *)r3;
+  strncpy(loaderParam, cmdline_start, MAX_LOADER_ADD_PARM);
   loaderParam[MAX_LOADER_ADD_PARM - 1] ='\0';
   return loaderParam;
 }

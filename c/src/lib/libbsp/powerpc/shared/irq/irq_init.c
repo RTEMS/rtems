@@ -164,7 +164,7 @@ static unsigned char mcp750_openpic_initsenses[] = {
 #endif
 
 #if BSP_ISA_IRQ_NUMBER > 0 && !defined(qemu)
-void VIA_isa_bridge_interrupts_setup(void)
+static void VIA_isa_bridge_interrupts_setup(void)
 {
   pci_isa_bridge_device pci_dev;
   uint32_t temp;
