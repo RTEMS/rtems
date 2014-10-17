@@ -1,12 +1,13 @@
-/* irq_init.c
- *
+/*
  *  This file contains the implementation of rtems initialization
- *  related to interrupt handling.
+ *  related to interrupt handling
+ */
+
+/*
+ *  Copyright (C) 1999 valette@crf.canon.fr
  *
- *  CopyRight (C) 1999 valette@crf.canon.fr
- *
- * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
- * to make it valid for MVME2300 Motorola boards.
+ *  Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
+ *  to make it valid for MVME2300 Motorola boards.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -21,6 +22,7 @@
 #include <bsp/vectors.h>
 #include <rtems/bspIo.h>
 #include <bsp/openpic.h>
+#include <bsp/irq-generic.h>
 
 static rtems_irq_connect_data      rtemsIrq[BSP_IRQ_NUMBER];
 static rtems_irq_global_settings   initial_config;
@@ -88,7 +90,10 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   #endif
 }
 
-int psim_exception_handler( BSP_Exception_frame *frame, unsigned exception_number)
+static int psim_exception_handler(
+  BSP_Exception_frame *frame,
+  unsigned exception_number
+)
 {
   BSP_panic("Unexpected interrupt occured");
   return 0;
