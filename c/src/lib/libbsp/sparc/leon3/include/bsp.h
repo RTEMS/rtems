@@ -135,6 +135,11 @@ void BSP_fatal_exit(uint32_t error);
 
 void bsp_spurious_initialize( void );
 
+/*
+ *  Delay for the specified number of microseconds.
+ */
+void rtems_bsp_delay(int usecs);
+
 /* Allocate 8-byte aligned non-freeable pre-malloc() memory. The function
  * can be called at any time. The work-area will shrink when called before
  * bsp_work_area_initialize(). malloc() is called to get memory when this
