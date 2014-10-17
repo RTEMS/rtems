@@ -237,6 +237,11 @@ char *save_boot_params(
 );
 void zero_bss(void);
 
+/*
+ * Prototypes for BSP methods which cross file boundaries
+ */
+void VIA_isa_bridge_interrupts_setup(void);
+
 #endif
 
 #ifdef __cplusplus
