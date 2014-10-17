@@ -1,6 +1,9 @@
 /* A fake 'bios' which does nothing but move a kernel image 
  * to RAM address zero and then starts that...
  */
+
+#include <bsp/residual.h>
+
 #define LD_CACHE_LINE_SIZE  5
 #define INIT_STACK (0x100 - 16) /* 16-byte/svr4 aligned */
 

@@ -16,6 +16,8 @@
 
 #ifndef ASM
 
+#include <stdint.h>
+
 #define MAX_CPUS 32                     /* These should be set to the maximum */
 #define MAX_MEMS 64                     /* number possible for this system.   */
 #define MAX_DEVICES 256                 /* Changing these will change the     */
@@ -345,5 +347,10 @@ extern PnP_TAG_PACKET *PnP_find_small_vendor_packet(unsigned char *p,
 extern PnP_TAG_PACKET *PnP_find_large_vendor_packet(unsigned char *p,
 						    unsigned packet_type,
 						    int n);
+/*
+ * Prototypes for methods called only from .S for dependency tracking
+ */
+uint32_t res_copy(void);
+
 #endif /* ASM */
 #endif  /* ndef _RESIDUAL_ */

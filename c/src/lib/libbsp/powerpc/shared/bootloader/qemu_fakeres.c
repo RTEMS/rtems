@@ -119,7 +119,7 @@ nvram_addr(uint16_t addr)
 }
 
 /* Read a 32-bit (big-endian) work from NVRAM */
-uint32_t
+static uint32_t
 nvram_rdl_be(uint16_t addr)
 {
 int i;
