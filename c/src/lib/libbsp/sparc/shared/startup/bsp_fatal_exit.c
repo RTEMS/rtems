@@ -2,7 +2,9 @@
  * @file
  * @ingroup sparc_bsp
  * @brief ERC32/LEON2/LEON3 BSP specific exit handler.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 2014.
  *  Aeroflex Gaisler AB.
  *
@@ -11,7 +13,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems.h>
+#include <bsp.h>
+#include <rtems/score/cpu.h>
 
 void BSP_fatal_exit(uint32_t error)
 {

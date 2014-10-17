@@ -74,6 +74,8 @@ void (*b1553brm_rasta_int_reg)(void *handler, int irq, void *arg) = 0;
 static void b1553brmrasta_interrupt_handler(int irq, void *arg);
 
 #include "b1553brm.c"
+#include <b1553brm_rasta.h>
+
 
 /*
  *
