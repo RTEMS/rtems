@@ -6,10 +6,7 @@
  * @brief Global BSP Definitions.
  */
 
-/*  bsp.h
- *
- *  This include file contains all SPARC simulator definitions.
- *
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -175,6 +172,17 @@ extern void BSP_shared_interrupt_unmask(int irq);
  *  irq         System IRQ number
  */
 extern void BSP_shared_interrupt_mask(int irq);
+
+/*
+ *  Delay for the specified number of microseconds.
+ */
+void rtems_bsp_delay(int usecs);
+
+/*
+ * Prototypes for methods used across file boundaries
+ */
+void console_outbyte_polled(int  port, unsigned char ch);
+int console_inbyte_nonblocking(int port);
 
 #ifdef __cplusplus
 }

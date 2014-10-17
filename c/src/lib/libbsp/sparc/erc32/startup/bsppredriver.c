@@ -1,5 +1,7 @@
 /*  Installs the BSP pre-driver hook
- *
+ */
+
+/*
  *  COPYRIGHT (c) 2011
  *  Aeroflex Gaisler
  *
@@ -9,6 +11,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 /*
  *  bsp_predriver_hook

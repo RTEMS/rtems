@@ -1,8 +1,4 @@
 /*
- *  This file contains the TTY driver for the serial ports on the erc32.
- *
- *  This driver uses the termios pseudo driver.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,7 +16,6 @@
  *
  *  This routine transmits a character using polling.
  */
-
 void console_outbyte_polled(
   int  port,
   unsigned char ch
@@ -41,7 +36,6 @@ void console_outbyte_polled(
  *
  *  This routine polls for a character.
  */
-
 int console_inbyte_nonblocking( int port )
 {
   int UStat;
@@ -83,7 +77,7 @@ int console_inbyte_nonblocking( int port )
 
 #include <rtems/bspIo.h>
 
-void BSP_output_char_f(char c) { console_outbyte_polled( 0, c ); }
+static void BSP_output_char_f(char c) { console_outbyte_polled( 0, c ); }
 
 BSP_output_char_function_type           BSP_output_char = BSP_output_char_f;
 BSP_polling_getchar_function_type       BSP_poll_char = NULL;
