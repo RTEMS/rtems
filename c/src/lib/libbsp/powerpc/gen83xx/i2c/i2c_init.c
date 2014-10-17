@@ -117,7 +117,7 @@ rtems_status_code bsp_register_i2c
     i2c_busno[i] = rtems_libi2c_register_bus(device_path, &desc->bus_desc);
   }
 
-#ifdef RTEMS_BSP_I2C_EEPROM_DEVICE_NAME
+#if defined(RTEMS_BSP_I2C_EEPROM_DEVICE_NAME)
   if (n > 0) {
     /*
      * register EEPROM to bus 1, Address 0x50
@@ -126,9 +126,7 @@ rtems_status_code bsp_register_i2c
                  i2c_2b_eeprom_driver_descriptor,
                  i2c_busno[0],0x50);
   }
-#endif /* RTEMS_BSP_I2C_EEPROM_DEVICE_NAME */
-
-#ifdef MPC83XX_BOARD_BR_UID
+#elif defined(MPC83XX_BOARD_BR_UID)
   if (n > 0) {
     rtems_libi2c_register_drv(
       "sc620",
@@ -137,7 +135,14 @@ rtems_status_code bsp_register_i2c
       0x70
     );
   }
-#endif /* MPC83XX_BOARD_BR_UID */
+#else
+
+  /*
+   * We have no i2c configuration for this variant but need to mark
+   * i2c_busno as used.
+   */
+   (void) i2c_busno[0]; /* avoid set but not used warning */
+#endif
 
   /*
    * FIXME: register RTC driver, when available
