@@ -198,9 +198,15 @@ extern void BSP_shared_interrupt_unmask(int irq);
 extern void BSP_shared_interrupt_mask(int irq);
 
 /*
- * Delat method
+ * Delay method
  */
 void rtems_bsp_delay(int usecs);
+
+/*
+ * Prototypes for BSP methods that are used across file boundaries
+ */
+int cchip1_register(void);
+
 #ifdef __cplusplus
 }
 #endif
