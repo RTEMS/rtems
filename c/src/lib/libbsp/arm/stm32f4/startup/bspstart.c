@@ -174,7 +174,7 @@ static rtems_status_code set_system_clk(
   /* pll_q is a prescaler from VCO for the USB OTG FS, SDIO and RNG,
    * best if results in the 48MHz for the USB
    */
-  pll_q = ( (long) ( src_clk * pll_n + src_clk * pll_n / 2 ) ) / pll_m / 48;
+  pll_q = ( (long) ( src_clk * pll_n ) ) / pll_m / 48;
 
   if ( pll_q < 2 ) {
     pll_q = 2;
@@ -257,9 +257,10 @@ static rtems_status_code set_system_clk(
    * Set flash parameters, hard coded for now for fast system clocks.
    * TODO implement some math to use flash on as low latancy as possible
    */
-  flash->acr = FLASH_ACR_LATENCY( 5 ) | /* latency */
-               FLASH_ACR_ICEN |       /* instruction cache */
-               FLASH_ACR_DCEN;        /* data cache */
+  flash->acr = STM32F4_FLASH_ACR_LATENCY( 5 ) | /* latency */
+               STM32F4_FLASH_ACR_ICEN |       /* instruction cache */
+               STM32F4_FLASH_ACR_DCEN |        /* data cache */
+               STM32F4_FLASH_ACR_PRFTEN;
 
   /* turn on PLL */
   rcc->cr |= RCC_CR_PLLON;

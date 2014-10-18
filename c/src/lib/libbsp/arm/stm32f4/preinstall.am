@@ -113,6 +113,14 @@ $(PROJECT_INCLUDE)/bsp/stm32f10xxx_exti.h: include/stm32f10xxx_exti.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f10xxx_exti.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f10xxx_exti.h
 
+$(PROJECT_INCLUDE)/bsp/stm32f4xxxx_adc.h: include/stm32f4xxxx_adc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_adc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_adc.h
+
+$(PROJECT_INCLUDE)/bsp/stm32f4xxxx_exti.h: include/stm32f4xxxx_exti.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_exti.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_exti.h
+
 $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_gpio.h: include/stm32f4xxxx_gpio.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_gpio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_gpio.h
@@ -121,9 +129,25 @@ $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_rcc.h: include/stm32f4xxxx_rcc.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_rcc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_rcc.h
 
+$(PROJECT_INCLUDE)/bsp/stm32f4xxxx_pwr.h: include/stm32f4xxxx_pwr.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_pwr.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_pwr.h
+
+$(PROJECT_INCLUDE)/bsp/stm32f4xxxx_syscfg.h: include/stm32f4xxxx_syscfg.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_syscfg.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_syscfg.h
+
+$(PROJECT_INCLUDE)/bsp/stm32f4xxxx_tim.h: include/stm32f4xxxx_tim.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_tim.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_tim.h
+
 $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_flash.h: include/stm32f4xxxx_flash.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_flash.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_flash.h
+
+$(PROJECT_INCLUDE)/bsp/stm32f4xxxx_otgfs.h: include/stm32f4xxxx_otgfs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_otgfs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_otgfs.h
 
 $(PROJECT_INCLUDE)/bsp/stm32_i2c.h: include/stm32_i2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32_i2c.h
