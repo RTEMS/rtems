@@ -249,22 +249,26 @@ mpc6xx_altivec_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 EXTRA_DIST      += mpc6xx/altivec/README
 
-if e500
-# mpc6xx/clock
+# e500/clock
+if e500_clock
 include_libcpu_HEADERS += mpc6xx/clock/c_clock.h
 
 noinst_PROGRAMS += e500/clock.rel
 e500_clock_rel_SOURCES = mpc6xx/clock/c_clock.c mpc6xx/clock/c_clock.h
 e500_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 e500_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
 
-# mpc6xx/timer
+# e500/timer
+if e500_timer
 noinst_PROGRAMS += e500/timer.rel
 e500_timer_rel_SOURCES = mpc6xx/timer/timer.c
 e500_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 e500_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
 
 # e500/mmu
+if e500_mmu
 include_libcpu_HEADERS += e500/mmu/e500_mmu.h
 noinst_PROGRAMS += e500/mmu.rel
 e500_mmu_rel_SOURCES = e500/mmu/mmu.c e500/mmu/e500_mmu.h

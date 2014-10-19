@@ -72,7 +72,13 @@ AM_CONDITIONAL(ppc440, test "$RTEMS_CPU_MODEL" = "ppc440")
 AM_CONDITIONAL(ppc4xx, test "$RTEMS_CPU_MODEL" = "ppc403" \
 || test "$RTEMS_CPU_MODEL" = "ppc405")
 
-AM_CONDITIONAL(e500, test "$RTEMS_CPU_MODEL" = "e500" \
+AM_CONDITIONAL(e500_clock, test "$RTEMS_CPU_MODEL" = "e500" \
+|| test "$RTEMS_CPU_MODEL" = "ppc440")
+
+AM_CONDITIONAL(e500_timer, test "$RTEMS_CPU_MODEL" = "e500" \
+|| test "$RTEMS_CPU_MODEL" = "ppc440")
+
+AM_CONDITIONAL(e500_mmu, test "$RTEMS_CPU_MODEL" = "e500" \
 || test "$RTEMS_CPU_MODEL" = "ppc440" \
 || test "$RTEMS_CPU_MODEL" = "qoriq" )
 
