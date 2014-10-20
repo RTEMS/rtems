@@ -42,7 +42,7 @@ struct super_block;
 
 static inline unsigned int full_name_hash(const unsigned char * name, size_t len) {
 
-	unsigned hash = 0;
+	uint32_t hash = 0;
  	while (len--) {
 		hash = (hash << 4) | (hash >> 28);
 		hash ^= *(name++);

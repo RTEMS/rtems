@@ -9,7 +9,7 @@
 
 #define jiffies ((unsigned long)rtems_clock_get_ticks_since_boot())
 
-#define ERR_PTR(err) ((void*)(err))
+#define ERR_PTR(err) ((void*)((intptr_t)(err)))
 #define PTR_ERR(err) ((unsigned long)(err))
 #define IS_ERR(err) ((unsigned long)err > (unsigned long)-1000L)
 static inline void *ERR_CAST(const void *ptr)
