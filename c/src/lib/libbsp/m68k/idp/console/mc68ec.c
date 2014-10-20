@@ -3,6 +3,7 @@
  *             Written by rob@cygnus.com (Rob Savoye)
  */
 
+#include <bsp.h>
 #include "leds.h"
 
 /*
