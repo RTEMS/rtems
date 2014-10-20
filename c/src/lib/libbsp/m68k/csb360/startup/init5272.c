@@ -8,7 +8,9 @@
  *  This initialization code based on hardware settings of dBUG
  *  monitor. This must be changed if you like to run it immediately
  *  after reset.
- *
+ */
+
+/*
  *  Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Victor V. Vengerov <vvv@oktet.ru>
  *
@@ -25,7 +27,6 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems.h>
 #include <bsp.h>
 #include <mcf5272/mcf5272.h>
 
@@ -71,84 +72,75 @@ usb_regs_t *g_usb_regs            = (void *) MCF5272_USB_BASE(BSP_MBAR);
                   "nop\n\t" \
                   : : "d" (MCF5272_CACR_CINV) )
 
-/* init5272 --
- *     Initialize MCF5272 on-chip modules
- *
- * PARAMETERS:
- *     none
- *
- * RETURNS:
- *     none
- */
-void
-init5272(void)
-{
-    /* Invalidate the cache - WARNING: It won't complete for 64 clocks */
-    m68k_set_cacr(MCF5272_CACR_CINV);
-
-    /* Set Module Base Address register */
-    m68k_set_mbar((BSP_MBAR & MCF5272_MBAR_BA) | MCF5272_MBAR_V);
-
-    /* Set RAM Base Address register */
-    m68k_set_srambar((BSP_RAMBAR & MCF5272_RAMBAR_BA) | MCF5272_RAMBAR_V);
-
-    /* Set System Control Register:
-     * Enet has highest priority, 16384 bus cycles before timeout
-     */
-    g_sim_regs->scr = (MCF5272_SCR_HWR_16384);
-
-    /* System Protection Register:
-     * Enable Hardware watchdog timer.
-     */
-    g_sim_regs->spr = MCF5272_SPR_HWTEN;
-
-    /* Clear and mask all interrupts */
-    g_intctrl_regs->icr1 = 0x88888888;
-    g_intctrl_regs->icr2 = 0x88888888;
-    g_intctrl_regs->icr3 = 0x88888888;
-    g_intctrl_regs->icr4 = 0x88880000;
-
-    /* Copy the interrupt vector table to SRAM */
-    {
-        uint32_t *inttab = (uint32_t *)&INTERRUPT_VECTOR;
-        uint32_t *intvec = (uint32_t *)BSP_RAMBAR;
-        register int i;
-        for (i = 0; i < 256; i++)
-        {
-            *(intvec++) = *(inttab++);
-        }
-    }
-    m68k_set_vbr(BSP_RAMBAR);
-
-
-    /*
-     * Setup ACRs so that if cache turned on, periphal accesses
-     * are not messed up.  (Non-cacheable, serialized)
-     */
-
-    m68k_set_acr0(MCF5272_ACR_BASE(BSP_MEM_ADDR_SDRAM)    |
-                  MCF5272_ACR_MASK(BSP_MEM_MASK_SDRAM)    |
-                  MCF5272_ACR_EN                          |
-                  MCF5272_ACR_SM_ANY);
-
 /*
-    m68k_set_acr1 (MCF5206E_ACR_BASE(BSP_MEM_ADDR_FLASH) |
-                   MCF5206E_ACR_MASK(BSP_MEM_MASK_FLASH) |
-                   MCF5206E_ACR_EN                       |
-                   MCF5206E_ACR_SM_ANY);
-*/
+ * Initialize MCF5272 on-chip modules
+ */
+void init5272(void)
+{
+  /* Invalidate the cache - WARNING: It won't complete for 64 clocks */
+  m68k_set_cacr(MCF5272_CACR_CINV);
 
-    /* Enable the caches */
-    m68k_set_cacr(MCF5272_CACR_CENB |
-                  MCF5272_CACR_DCM);       /* Default is not cached */
+  /* Set Module Base Address register */
+  m68k_set_mbar((BSP_MBAR & MCF5272_MBAR_BA) | MCF5272_MBAR_V);
+
+  /* Set RAM Base Address register */
+  m68k_set_srambar((BSP_RAMBAR & MCF5272_RAMBAR_BA) | MCF5272_RAMBAR_V);
+
+  /* Set System Control Register:
+   * Enet has highest priority, 16384 bus cycles before timeout
+   */
+  g_sim_regs->scr = (MCF5272_SCR_HWR_16384);
+
+  /* System Protection Register:
+   * Enable Hardware watchdog timer.
+   */
+  g_sim_regs->spr = MCF5272_SPR_HWTEN;
+
+  /* Clear and mask all interrupts */
+  g_intctrl_regs->icr1 = 0x88888888;
+  g_intctrl_regs->icr2 = 0x88888888;
+  g_intctrl_regs->icr3 = 0x88888888;
+  g_intctrl_regs->icr4 = 0x88880000;
+
+  /* Copy the interrupt vector table to SRAM */
+  {
+    uint32_t *inttab = (uint32_t *)&INTERRUPT_VECTOR;
+    uint32_t *intvec = (uint32_t *)BSP_RAMBAR;
+    register int i;
+    for (i = 0; i < 256; i++) {
+	*(intvec++) = *(inttab++);
+    }
+  }
+  m68k_set_vbr(BSP_RAMBAR);
+
 
   /*
-   * Copy data, clear BSS, switch stacks and call boot_card()
+   * Setup ACRs so that if cache turned on, periphal accesses
+   * are not messed up.  (Non-cacheable, serialized)
    */
+  m68k_set_acr0(MCF5272_ACR_BASE(BSP_MEM_ADDR_SDRAM)    |
+		MCF5272_ACR_MASK(BSP_MEM_MASK_SDRAM)    |
+		MCF5272_ACR_EN                          |
+		MCF5272_ACR_SM_ANY);
+
 /*
-  CopyDataClearBSSAndStart(BSP_MEM_SIZE_ESRAM - 0x400);
+  m68k_set_acr1 (MCF5206E_ACR_BASE(BSP_MEM_ADDR_FLASH) |
+		 MCF5206E_ACR_MASK(BSP_MEM_MASK_FLASH) |
+		 MCF5206E_ACR_EN                       |
+		 MCF5206E_ACR_SM_ANY);
 */
-    clear_bss();
-    start_csb360();
+
+  /* Enable the caches */
+  m68k_set_cacr(MCF5272_CACR_CENB |
+		MCF5272_CACR_DCM);       /* Default is not cached */
+
+/*
+ * Copy data, clear BSS, switch stacks and call boot_card()
+ */
+/*
+CopyDataClearBSSAndStart(BSP_MEM_SIZE_ESRAM - 0x400);
+*/
+  clear_bss();
+  start_csb360();
 
 }

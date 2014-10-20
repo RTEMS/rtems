@@ -5,7 +5,9 @@
  *  The name of this entry point is compiler dependent.
  *  It jumps to the BSP which is responsible for performing
  *  all initialization.
- *
+ */
+
+/*
  *  Copyright (C) 2004 Cogent Computer Systems
  *  Author: Jay Monkman <jtm@lopingdog.com>
  *
