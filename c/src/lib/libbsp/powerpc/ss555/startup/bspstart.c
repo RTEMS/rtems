@@ -19,8 +19,6 @@
  *  Copyright (c) 1999, National Research Council of Canada
  */
 
-#warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).
-
 #include <rtems/bspIo.h>
 #include <rtems/counter.h>
 #include <bsp/bootcard.h>
