@@ -87,6 +87,10 @@ int  _wherex;                /**< Screen X coordinate */
 int  _wherey;                /**< Screen Y coordinate */
 int  _textattr;              /**< Text attribute      */
 
+/*
+ * Forward reference
+ */
+static void gba_initconio(void);
 
 /*---------------------------------------------------------------------------*
  *  Defaultfont                                                              *
@@ -318,7 +322,7 @@ int gba_printf(const char *_format, ...)
  *  @param  None
  *  @return None
  */
-void gba_initconio(void)
+static void gba_initconio(void)
 {
     GBA_REG_DISPCNT = GBA_DISP_MODE_4 | GBA_DISP_BG2_ON;/*  256 color bitmapped mode */
     const BgAffineDestData bgAffineReset = {256,0,0,256,0,-256*2};
