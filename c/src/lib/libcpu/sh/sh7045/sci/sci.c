@@ -39,7 +39,7 @@
  *  by the authors or by TGA Technologies.
  */
 
-#include <rtems.h>
+#include <bsp.h>
 
 
 #include <stdlib.h>
@@ -92,13 +92,6 @@ struct scidev_t {
 #if UNUSED
 static sci_setup_t sio_param[2];
 #endif
-
-/*  imported from scitab.rel */
-extern int _sci_get_brparms(
-  tcflag_t      cflag,
-  unsigned char *smr,
-  unsigned char *brr
-);
 
 /* Translate termios' tcflag_t into sci settings */
 static int _sci_set_cflags(
@@ -291,7 +284,6 @@ rtems_device_driver sh_sci_initialize(
 {
   rtems_device_driver status;
   rtems_device_minor_number i;
-  rtems_driver_name_t driver;
 
   /*
    * register all possible devices.
@@ -301,23 +293,17 @@ rtems_device_driver sh_sci_initialize(
    * initialization therefore we check it everytime
    */
   for ( i = 0 ; i < SCI_MINOR_DEVICES ; i++ ) {
-    status = rtems_io_lookup_name(
-        sci_device[i].name,
-        &driver);
-    if ( status != RTEMS_SUCCESSFUL ) {
-        /* OK. We assume it is not registered yet. */
-        status = rtems_io_register_name(
-            sci_device[i].name,
-            major,
-            sci_device[i].minor
-        );
-        if (status != RTEMS_SUCCESSFUL)
-            rtems_fatal_error_occurred(status);
-    }
+    /* OK. We assume it is not registered yet. */
+    status = rtems_io_register_name(
+      sci_device[i].name,
+      major,
+      sci_device[i].minor
+    );
+    if (status != RTEMS_SUCCESSFUL)
+      rtems_fatal_error_occurred(status);
   }
 
   /* non-default hardware setup occurs in sh_sci_open() */
-
   return RTEMS_SUCCESSFUL;
 }
 
