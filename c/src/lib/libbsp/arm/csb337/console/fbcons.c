@@ -1,7 +1,9 @@
 /*
  *  LCD Console Output Driver for CSBx37
- *
- *  COPYRIGHT (c) 1989-2009.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Modified by Fernando Nicodemos <fgnicodemos@terra.com.br>
@@ -120,20 +122,4 @@ static int fbcons_set_attributes(int minor, const struct termios *t)
 {
   /* printk( "frame buffer -- set attributes\n" ); */
   return 0;
-}
-
-/***********************************************************************/
-/*
- * The following functions are not used by TERMIOS, but other RTEMS
- * functions use them instead.
- */
-/***********************************************************************/
-/*
- * Read from UART. This is used in the exit code, and can't
- * rely on interrupts.
- */
-int fbcons_poll_read(int minor)
-{
-  /* printk( "frame buffer -- poll read\n" ); */
-  return -1;
 }
