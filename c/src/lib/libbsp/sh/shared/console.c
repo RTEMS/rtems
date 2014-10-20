@@ -1,14 +1,11 @@
 /*
  * /dev/console for Hitachi SH 703X
  *
- * The SH doesn't have a designated console device. Therefore we "alias"
- * another device as /dev/console and revector all calls to /dev/console
- * to this device.
- *
- * This approach is similar to installing a sym-link from one device to
- * another device. If rtems once will support sym-links for devices files,
- * this implementation could be dropped.
- *
+ * This driver installs an alternate device name (e.g. /dev/console for
+ * the designated console device /dev/console.
+ */
+
+/*
  *  Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de)
  *
  *  COPYRIGHT (c) 1997-1998, FAW Ulm, Germany
@@ -17,8 +14,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *
- *  COPYRIGHT (c) 1998.
+ *  COPYRIGHT (c) 1998, 2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,23 +27,16 @@
 #include <rtems/libio.h>
 #include <rtems/iosupp.h>
 
+#include <sys/stat.h>
+
 #ifndef BSP_CONSOLE_DEVNAME
 #error Missing BSP_CONSOLE_DEVNAME
 #endif
 
-static rtems_driver_name_t low_level_device_info;
-
 /*  console_initialize
  *
  *  This routine initializes the console IO driver.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
  */
-
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
@@ -55,17 +44,18 @@ rtems_device_driver console_initialize(
 )
 {
   rtems_device_driver status;
+  struct stat         st;
+  int                 rv;
+
+  rv = stat( BSP_CONSOLE_DEVNAME, &st );
+  if ( rv != 0 )
+    rtems_fatal_error_occurred(rv);
 
   status = rtems_io_register_name(
     "/dev/console",
-    major,
-    (rtems_device_minor_number) 0
+    rtems_filesystem_dev_major_t( st.st_rdev ),
+    rtems_filesystem_dev_minor_t( st.st_rdev )
   );
-
-  if (status != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred(status);
-
-  status = rtems_io_lookup_name( BSP_CONSOLE_DEVNAME, &low_level_device_info );
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
 
@@ -75,74 +65,59 @@ rtems_device_driver console_initialize(
 /*
  *  Open entry point
  */
-
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  return rtems_io_open( low_level_device_info.major,
-    low_level_device_info.minor,
-    arg );
+  rtems_fatal_error_occurred(-1);
 }
 
 /*
  *  Close entry point
  */
-
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  return rtems_io_close( low_level_device_info.major,
-    low_level_device_info.minor,
-    arg );
+  rtems_fatal_error_occurred(-1);
 }
 
 /*
  * read bytes from the serial port. We only have stdin.
  */
-
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  return rtems_io_read( low_level_device_info.major,
-    low_level_device_info.minor,
-    arg );
+  rtems_fatal_error_occurred(-1);
 }
 
 /*
  * write bytes to the serial port. Stdout and stderr are the same.
  */
-
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  return rtems_io_write( low_level_device_info.major,
-    low_level_device_info.minor,
-    arg );
+  rtems_fatal_error_occurred(-1);
 }
 
 /*
  *  IO Control entry point
  */
-
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  return rtems_io_control( low_level_device_info.major,
-    low_level_device_info.minor,
-    arg );
+  rtems_fatal_error_occurred(-1);
 }
