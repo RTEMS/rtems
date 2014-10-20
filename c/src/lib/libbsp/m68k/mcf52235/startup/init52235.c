@@ -4,6 +4,7 @@
  *  functions can be called from here.
  */
 
+#include <bsp.h>
 #include <bsp/bootcard.h>
 
 extern void _wr_vbr(uint32_t);
