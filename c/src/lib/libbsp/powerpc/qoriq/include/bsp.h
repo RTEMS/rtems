@@ -51,6 +51,16 @@ int qoriq_if_intercom_attach_detach(
   int attaching
 );
 
+#if defined(HAS_UBOOT)
+  /* Routine to obtain U-Boot environment variables */
+  const char *bsp_uboot_getenv(
+    const char *name
+  );
+#endif
+
+void *bsp_idle_thread( uintptr_t ignored );
+#define BSP_IDLE_TASK_BODY bsp_idle_thread
+
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH BSP_tsec_attach
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH4 qoriq_if_intercom_attach_detach
 
