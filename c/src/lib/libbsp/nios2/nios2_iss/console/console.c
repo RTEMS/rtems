@@ -20,36 +20,28 @@
 #include <bsp/console-polled.h>
 #include <rtems/libio.h>
 
-/* #define JTAG_UART_REGS ((altera_avalon_jtag_uart_regs*)NIOS2_IO_BASE(JTAG_UART_BASE)) */
+/* #define JTAG_UART_REGS \
+        ((altera_avalon_jtag_uart_regs*)NIOS2_IO_BASE(JTAG_UART_BASE)) */
 
 /*  is_character_ready
  *
  *  If a character is available, this routine reads it and stores
- *  it in
- *  reads the character and stores
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
+ *  it in reads the character and stores
  */
-
-bool is_character_ready(
+static bool is_character_ready(
   char *ch
 )
 {
-    altera_avalon_jtag_uart_regs *ajur = NIOS2_IO_BASE(JTAG_UART_BASE);
-    unsigned int data = ajur->data;
+  altera_avalon_jtag_uart_regs *ajur = NIOS2_IO_BASE(JTAG_UART_BASE);
+  unsigned int data = ajur->data;
 
-    if (data & ALTERA_AVALON_JTAG_UART_DATA_RVALID_MSK)
-    {
-        *ch = (data & ALTERA_AVALON_JTAG_UART_DATA_DATA_MSK)
-              >> ALTERA_AVALON_JTAG_UART_DATA_DATA_OFST;
-        return true;
-    };
+  if (data & ALTERA_AVALON_JTAG_UART_DATA_RVALID_MSK) {
+    *ch = (data & ALTERA_AVALON_JTAG_UART_DATA_DATA_MSK)
+	  >> ALTERA_AVALON_JTAG_UART_DATA_DATA_OFST;
+    return true;
+  }
 
-    return false;
+  return false;
 }
 
 void console_initialize_hardware(void)
@@ -58,51 +50,36 @@ void console_initialize_hardware(void)
 
 /*
  *  This routine reads a character from the SOURCE.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    character read from SOURCE
  */
-
 int console_inbyte_nonblocking(
   int port
 )
 {
   char ch;
+
   /*
    *  Wait until a character is available.
    */
-
   if (is_character_ready(&ch))
     return ch;
   return -1;
 }
 
 /*
- *  This routine transmits a character out the SOURCE.  It may support
- *  XON/XOFF flow control.
- *
- *  Input parameters:
- *    ch  - character to be transmitted
- *
- *  Output parameters:  NONE
+ *  This routine transmits a character out the SOURCE.
  */
-
 void console_outbyte_polled(
   int  port,
   char ch
 )
 {
   altera_avalon_jtag_uart_regs *ajur = NIOS2_IO_BASE(JTAG_UART_BASE);
+
   /*
    *  Wait for the transmitter to be ready.
    *  Check for flow control requests and process.
    *  Then output the character.
    */
-
   while ((ajur->control & ALTERA_AVALON_JTAG_UART_CONTROL_WSPACE_MSK) == 0);
 
   ajur->data = ch;
@@ -113,7 +90,6 @@ void console_outbyte_polled(
  */
 
 #include <rtems/bspIo.h>
-
 
 static void ISS_output_char(char c) { console_outbyte_polled( 0, c ); }
 

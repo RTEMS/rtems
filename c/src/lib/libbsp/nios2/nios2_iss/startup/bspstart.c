@@ -16,10 +16,9 @@
 
 #include <sys/cdefs.h>
 
-#include <rtems.h>
-#include <rtems/score/nios2-utility.h>
-
 #include <bsp.h>
+#include <rtems/score/nios2-utility.h>
+#include <bsp/bootcard.h>
 
 void bsp_start( void )
 {
