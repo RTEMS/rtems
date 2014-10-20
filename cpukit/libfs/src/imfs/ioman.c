@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @brief RTMES Register IO Name
+ * @brief RTEMS Register IO Name
  * @ingroup ClassicIO
  */
 
