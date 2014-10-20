@@ -29,15 +29,20 @@ static ssize_t uart_write(int minor, const char *buf, size_t len);
 static void uart_write_polled(int minor, char c);
 static int  uart_set_attributes(int minor, const struct termios *t);
 
+#if 0
+/*
+ *  These will be useful when the driver supports interrupt driven IO.
+ */
 static rtems_vector_number uart_get_irq_number(const console_tbl *ct)
 {
-   return ct->ulIntVector;
+  return ct->ulIntVector;
 }
 
 static uint32_t uart_get_baud(const console_tbl *ct)
 {
-   return ct->ulClock;
+  return ct->ulClock;
 }
+#endif
 
 static void uart_set_baud(int baud)
 {
@@ -60,11 +65,11 @@ static void uart_initialize(int minor)
   OR1KSIM_REG(OR1KSIM_BSP_UART_REG_INT_ENABLE) = 0x00;
 
   /* Reset receiver and transmitter */
-   OR1KSIM_REG(OR1KSIM_BSP_UART_REG_FIFO_CTRL) =
-     OR1KSIM_BSP_UART_REG_FIFO_CTRL_ENABLE_FIFO |
-     OR1KSIM_BSP_UART_REG_FIFO_CTRL_CLEAR_RCVR  |
-     OR1KSIM_BSP_UART_REG_FIFO_CTRL_CLEAR_XMIT  |
-     OR1KSIM_BSP_UART_REG_FIFO_CTRL_TRIGGER_14;
+  OR1KSIM_REG(OR1KSIM_BSP_UART_REG_FIFO_CTRL) =
+    OR1KSIM_BSP_UART_REG_FIFO_CTRL_ENABLE_FIFO |
+    OR1KSIM_BSP_UART_REG_FIFO_CTRL_CLEAR_RCVR  |
+    OR1KSIM_BSP_UART_REG_FIFO_CTRL_CLEAR_XMIT  |
+    OR1KSIM_BSP_UART_REG_FIFO_CTRL_TRIGGER_14;
 
   /* Set data pattern configuration */
   OR1KSIM_REG(OR1KSIM_BSP_UART_REG_LINE_CTRL) =
