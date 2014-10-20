@@ -16,13 +16,8 @@
 
 #define NO_BSP_INIT
 
-#include <rtems.h>
 #include <bsp.h>
 #include <rtems/libio.h>
-
-void BSP_uart_polled_write(char ch);
-int BSP_uart_polled_read( void );
-char BSP_uart_is_character_ready(char *ch);
 
 /*  console_initialize
  *
@@ -59,7 +54,6 @@ static int inbyte( void )
   /*
    *  If polling, wait until a character is available.
    */
-
   return BSP_uart_polled_read();
 }
 

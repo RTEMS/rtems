@@ -76,6 +76,13 @@ rtems_isr_entry set_vector(                     /* returns old vector */
   int                 type                      /* RTEMS or RAW intr  */
 );
 
+/*
+ * Prototypes for BSP methods that cross file boundaries
+ */
+void BSP_uart_polled_write(char ch);
+int BSP_uart_polled_read( void );
+char BSP_uart_is_character_ready(char *ch);
+
 #ifdef __cplusplus
 }
 #endif

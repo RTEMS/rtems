@@ -1,6 +1,8 @@
 /*
  *  Uart driver for Lattice Mico32 (lm32) UART
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -14,6 +16,7 @@
 
 #include "../include/system_conf.h"
 #include "uart.h"
+#include <bsp.h>
 #include <rtems/libio.h>
 
 static inline int uartread(unsigned int reg)
@@ -51,11 +54,11 @@ void BSP_uart_polled_write(char ch)
   uartwrite(LM32_UART_RBR, ch);
 }
 
-char BSP_uart_polled_read( void )
+int BSP_uart_polled_read( void )
 {
   /* Wait until there is a byte in RBR */
   while (!(uartread(LM32_UART_LSR) & LM32_UART_LSR_DR));
-  return (char) uartread(LM32_UART_RBR);
+  return (int) uartread(LM32_UART_RBR);
 }
 
 char BSP_uart_is_character_ready(char *ch)
