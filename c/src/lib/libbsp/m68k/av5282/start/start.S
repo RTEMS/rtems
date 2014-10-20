@@ -5,8 +5,10 @@
  *  The name of this entry point is compiler dependent.
  *  It jumps to the BSP which is responsible for performing
  *  all initialization.
- *
- *  COPYRIGHT (c) 1989-1998.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +16,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <bsp.h>
 #include <rtems/asm.h>
 
 #define SRAM_SIZE (64*1024)
