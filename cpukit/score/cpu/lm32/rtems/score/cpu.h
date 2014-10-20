@@ -826,6 +826,9 @@ extern char _gp[];
                                  _isr, _entry_point, _is_fp, _tls_area ) \
    do { \
      uint32_t _stack = (uint32_t)(_stack_base) + (_size) - 4; \
+     \
+     (void) _is_fp; /* avoid warning for being unused */ \
+     (void) _isr;  /* avoid warning for being unused */ \
      (_the_context)->gp = (uint32_t)_gp; \
      (_the_context)->fp = (uint32_t)_stack; \
      (_the_context)->sp = (uint32_t)_stack; \
