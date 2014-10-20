@@ -82,6 +82,11 @@ rtems_isr_entry set_vector(
 #define UART2_IRQ_LEVEL     3
 #define UART2_IRQ_PRIORITY  5
 
+/*
+ * Prototypes for BSP methods which cross file boundaries
+ */
+void Init5225x(void);
+
 #ifdef __cplusplus
 }
 #endif
