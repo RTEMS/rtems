@@ -1,7 +1,8 @@
-/*  bspclean.c
- *
+/*
  *  Milkymist shutdown routine
- *
+ */
+
+/*
  *  COPYRIGHT (c) 2010 Sebastien Bourdeauducq
  *
  *  The license and distribution terms for this file may be
@@ -9,6 +10,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <bsp.h>
 #include <bsp/bootcard.h>
 #include "../include/system_conf.h"
 
@@ -25,6 +27,7 @@ static void icap_write(int val, unsigned int w)
     w |= ICAP_CE|ICAP_WRITE;
   MM_WRITE(MM_ICAP, w);
 }
+
 static void reconf(void)
 {
   icap_write(0, 0xffff); /* dummy word */
