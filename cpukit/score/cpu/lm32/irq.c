@@ -29,6 +29,12 @@ void *_exception_stack_frame;
 
 register unsigned long  *stack_ptr __asm__ ("sp");
 
+/*
+ *  Prototypes for routines called from assembly that we don't want in
+ *  the public name space.
+ */
+void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr);
+
 void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr)
 {
   register uint32_t   level;
