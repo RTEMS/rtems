@@ -16,6 +16,8 @@
 #ifndef _BSP_H
 #define _BSP_H
 
+#ifndef ASM
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -57,10 +59,17 @@ int cs8900_driver_attach (struct rtems_bsdnet_ifconfig *config,
 
 /** @} */
 
+/*
+ * Prototypes for methods called from .S but implemented in C
+ */
+void edb7312_interrupt_dispatch(rtems_vector_number vector);
+
 /** @} */
 
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* !ASM */
 
 #endif /* _BSP_H */

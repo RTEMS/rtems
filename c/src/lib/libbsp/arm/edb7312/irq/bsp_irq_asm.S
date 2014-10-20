@@ -1,6 +1,8 @@
 /*
  * Cirrus EP7312 Intererrupt handler
- *
+ */
+
+/*
  * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
  *
  * Copyright (c) 2002 by Charlie Steader <charlies@poliac.com>
@@ -9,7 +11,9 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
 */
+
 #define __asm__
+#include <bsp.h>
 #include "irq.h"
 
 	.extern edb7312_interrupt_dispatch
