@@ -70,7 +70,7 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
     msdos_fs_info_t  *fs_info = parent_loc->mt_entry->fs_info;
     fat_file_fd_t    *parent_fat_fd = parent_loc->node_access;
     fat_file_fd_t    *fat_fd = NULL;
-    time_t            time_ret = 0;
+    time_t            now;
     uint16_t          time_val = 0;
     uint16_t          date = 0;
     fat_dir_pos_t     dir_pos;
@@ -102,11 +102,10 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
     *MSDOS_DIR_NT_RES(short_node) = MSDOS_RES_NT_VALUE;
 
     /* set up last write date and time */
-    time_ret = time(NULL);
-    if ( time_ret == -1 )
-        return -1;
+    now = time(NULL);
+    fat_file_set_ctime_mtime(parent_fat_fd, now);
 
-    msdos_date_unix2dos(time_ret, &date, &time_val);
+    msdos_date_unix2dos(now, &date, &time_val);
     *MSDOS_DIR_CRT_TIME(short_node) = CT_LE_W(time_val);
     *MSDOS_DIR_CRT_DATE(short_node) = CT_LE_W(date);
     *MSDOS_DIR_WRITE_TIME(short_node) = CT_LE_W(time_val);
@@ -192,6 +191,7 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
         fat_fd->fat_file_size = 0;
         fat_fd->fat_file_type = FAT_DIRECTORY;
         fat_fd->size_limit = MSDOS_MAX_DIR_LENGHT;
+        fat_file_set_ctime_mtime(fat_fd, now);
 
         /*
          * dot and dotdot entries are identical to new node except the
@@ -260,7 +260,7 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
         }
 
         /* write first cluster num of a new directory to disk */
-        rc = msdos_set_first_cluster_num(parent_loc->mt_entry, fat_fd);
+        rc = fat_file_write_first_cluster_num(&fs_info->fat, fat_fd);
         if (rc != RC_OK)
             goto error;
 

@@ -403,6 +403,8 @@ msdos_dir_stat(
     buf->st_size = fat_fd->fat_file_size;
     buf->st_blocks = fat_fd->fat_file_size >> FAT_SECTOR512_BITS;
     buf->st_blksize = fs_info->fat.vol.bps;
+    buf->st_atime = fat_fd->mtime;
+    buf->st_ctime = fat_fd->ctime;
     buf->st_mtime = fat_fd->mtime;
 
     rtems_semaphore_release(fs_info->vol_sema);

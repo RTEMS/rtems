@@ -88,6 +88,7 @@ typedef struct fat_file_fd_s
     fat_dir_pos_t    dir_pos;
     uint8_t          flags;
     fat_file_map_t   map;
+    time_t           ctime;
     time_t           mtime;
 
 } fat_file_fd_t;
@@ -137,6 +138,22 @@ fat_construct_key(
     return ( ((fat_cluster_num_to_sector512_num(fs_info, pos->cln) +
               (pos->ofs >> FAT_SECTOR512_BITS)) << 4)              +
               ((pos->ofs >> 5) & (FAT_DIRENTRIES_PER_SEC512 - 1)) );
+}
+
+static inline void fat_file_set_ctime(fat_file_fd_t *fat_fd, time_t t)
+{
+    fat_fd->ctime = t;
+}
+
+static inline void fat_file_set_mtime(fat_file_fd_t *fat_fd, time_t t)
+{
+    fat_fd->mtime = t;
+}
+
+static inline void fat_file_set_ctime_mtime(fat_file_fd_t *fat_fd, time_t t)
+{
+    fat_fd->ctime = t;
+    fat_fd->mtime = t;
 }
 
 /* Prototypes for "fat-file" operations */
@@ -191,6 +208,26 @@ fat_file_size(fat_fs_info_t                        *fs_info,
 void
 fat_file_mark_removed(fat_fs_info_t                        *fs_info,
                       fat_file_fd_t                        *fat_fd);
+
+int
+fat_file_size(fat_fs_info_t                        *fs_info,
+              fat_file_fd_t                        *fat_fd);
+
+int
+fat_file_write_first_cluster_num(fat_fs_info_t *fs_info,
+                                 fat_file_fd_t *fat_fd);
+
+int
+fat_file_write_file_size(fat_fs_info_t *fs_info,
+                         fat_file_fd_t *fat_fd);
+
+int
+fat_file_write_time_and_date(fat_fs_info_t *fs_info,
+                             fat_file_fd_t *fat_fd);
+
+int
+fat_file_update(fat_fs_info_t *fs_info,
+                fat_file_fd_t *fat_fd);
 
 #ifdef __cplusplus
 }

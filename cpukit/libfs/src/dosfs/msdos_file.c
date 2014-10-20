@@ -30,70 +30,6 @@
 
 #include "msdos.h"
 
-static int
-msdos_file_update(rtems_libio_t *iop)
-{
-    int              rc = RC_OK;
-    fat_file_fd_t   *fat_fd = iop->pathinfo.node_access;
-
-    /*
-     * if fat-file descriptor is not marked as "removed", synchronize
-     * size, first cluster number, write time and date fields of the file
-     */
-    if (!FAT_FILE_IS_REMOVED(fat_fd))
-    {
-        rc = msdos_set_first_cluster_num(iop->pathinfo.mt_entry, fat_fd);
-        if (rc != RC_OK)
-        {
-            return rc;
-        }
-
-        rc = msdos_set_file_size(iop->pathinfo.mt_entry, fat_fd);
-        if (rc != RC_OK)
-        {
-            return rc;
-        }
-
-        rc = msdos_set_dir_wrt_time_and_date(iop->pathinfo.mt_entry, fat_fd);
-        if (rc != RC_OK)
-        {
-            return rc;
-        }
-    }
-
-    return rc;
-}
-
-/* msdos_file_close --
- *     Close fat-file which correspondes to the file. If fat-file descriptor
- *     which correspondes to the file is not marked "removed", synchronize
- *     size, first cluster number, write time and date fields of the file.
- *
- * PARAMETERS:
- *     iop - file control block
- *
- * RETURNS:
- *     RC_OK, if file closed successfully, or -1 if error occured (errno set
- *     appropriately)
- */
-int
-msdos_file_close(rtems_libio_t *iop)
-{
-    int                rc = RC_OK;
-    rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
-                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        rtems_set_errno_and_return_minus_one(EIO);
-
-    rc = msdos_file_update(iop);
-
-    rtems_semaphore_release(fs_info->vol_sema);
-    return rc;
-}
-
 /* msdos_file_read --
  *     This routine read from file pointed to by file control block into
  *     the specified data buffer provided by user
@@ -174,6 +110,9 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, size_t count)
     if (iop->offset > fat_fd->fat_file_size)
         fat_fd->fat_file_size = iop->offset;
 
+    if (ret > 0)
+        fat_file_set_ctime_mtime(fat_fd, time(NULL));
+
     rtems_semaphore_release(fs_info->vol_sema);
     return ret;
 }
@@ -211,6 +150,8 @@ msdos_file_stat(
     buf->st_blocks = ((fat_fd->fat_file_size + cl_mask) & ~cl_mask)
       >> FAT_SECTOR512_BITS;
     buf->st_blksize = fs_info->fat.vol.bpc;
+    buf->st_atime = fat_fd->mtime;
+    buf->st_ctime = fat_fd->ctime;
     buf->st_mtime = fat_fd->mtime;
 
     rtems_semaphore_release(fs_info->vol_sema);
@@ -259,8 +200,10 @@ msdos_file_ftruncate(rtems_libio_t *iop, off_t length)
         }
     }
 
-    if (rc == RC_OK) {
+    if (rc == RC_OK)
+    {
         fat_fd->fat_file_size = length;
+        fat_file_set_ctime_mtime(fat_fd, time(NULL));
     }
 
     rtems_semaphore_release(fs_info->vol_sema);
@@ -284,13 +227,14 @@ msdos_file_sync(rtems_libio_t *iop)
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
+    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         rtems_set_errno_and_return_minus_one(EIO);
 
-    rc = msdos_file_update(iop);
+    rc = fat_file_update(&fs_info->fat, fat_fd);
     if (rc != RC_OK)
     {
         rtems_semaphore_release(fs_info->vol_sema);

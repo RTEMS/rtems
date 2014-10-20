@@ -134,6 +134,8 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 #define MSDOS_FILE_WDATE_OFFSET           24
 #define MSDOS_FILE_WTIME_OFFSET           22
 #define MSDOS_FILE_ADATE_OFFSET           18
+#define MSDOS_FILE_CDATE_OFFSET           16
+#define MSDOS_FILE_CTIME_OFFSET           14
 
 /*
  * Possible values of DIR_Attr field of 32 bytes long FAT Directory Entry
@@ -333,8 +335,6 @@ int msdos_initialize_support(
   rtems_dosfs_convert_control             *converter
 );
 
-int msdos_file_close(rtems_libio_t *iop /* IN  */);
-
 ssize_t msdos_file_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
@@ -359,8 +359,6 @@ msdos_file_ftruncate(
 );
 
 int msdos_file_sync(rtems_libio_t *iop);
-
-int msdos_file_datasync(rtems_libio_t *iop);
 
 ssize_t msdos_dir_read(
   rtems_libio_t *iop,              /* IN  */
@@ -461,27 +459,11 @@ void msdos_date_unix2dos(
 
 unsigned int msdos_date_dos2unix(unsigned int dd, unsigned int dt);
 
-int msdos_set_first_cluster_num(
-  rtems_filesystem_mount_table_entry_t *mt_entry,
-  fat_file_fd_t                        *fat_fd
-);
-
-int msdos_set_file_size(
-  rtems_filesystem_mount_table_entry_t *mt_entry,
-  fat_file_fd_t                        *fat_fd
-);
-
 int msdos_set_first_char4file_name(
   rtems_filesystem_mount_table_entry_t *mt_entry,
   fat_dir_pos_t                        *dir_pos,
   unsigned char                         first_char
 );
-
-int msdos_set_dir_wrt_time_and_date(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
-    fat_file_fd_t                        *fat_fd
-);
-
 
 int msdos_dir_is_empty(
   rtems_filesystem_mount_table_entry_t *mt_entry,

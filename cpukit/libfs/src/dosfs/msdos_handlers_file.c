@@ -23,7 +23,7 @@
 
 const rtems_filesystem_file_handlers_r msdos_file_handlers = {
   .open_h = rtems_filesystem_default_open,
-  .close_h = msdos_file_close,
+  .close_h = rtems_filesystem_default_close,
   .read_h = msdos_file_read,
   .write_h = msdos_file_write,
   .ioctl_h = rtems_filesystem_default_ioctl,
