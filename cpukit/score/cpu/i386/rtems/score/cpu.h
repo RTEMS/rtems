@@ -472,6 +472,7 @@ uint32_t   _CPU_ISR_Get_level( void );
   do { \
     uint32_t   _stack; \
     \
+    (void) _is_fp; /* avoid warning for being unused */ \
     if ( (_isr) ) (_the_context)->eflags = CPU_EFLAGS_INTERRUPTS_OFF; \
     else          (_the_context)->eflags = CPU_EFLAGS_INTERRUPTS_ON; \
     \
