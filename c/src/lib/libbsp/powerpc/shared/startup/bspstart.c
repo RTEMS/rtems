@@ -123,7 +123,7 @@ unsigned int EUMBBAR;
  * Register (EUMBBAR) as read from the processor configuration register using
  * Processor Address Map B (CHRP).
  */
-unsigned int get_eumbbar(void) {
+static unsigned int get_eumbbar(void) {
   out_le32( (volatile unsigned *)0xfec00000, 0x80000078 );
   return in_le32( (volatile unsigned *)0xfee00000 );
 }
