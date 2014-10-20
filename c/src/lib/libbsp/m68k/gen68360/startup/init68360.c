@@ -1,6 +1,8 @@
 /*
  * MC68360 support routines
- *
+ */
+
+/*
  * W. Eric Norum
  * Saskatchewan Accelerator Laboratory
  * University of Saskatchewan
@@ -8,7 +10,6 @@
  * eric@skatter.usask.ca
  */
 
-#include <rtems.h>
 #include <bsp.h>
 #include <rtems/m68k/m68360.h>
 
@@ -45,11 +46,12 @@ void _Init68360 (void)
   int i;
   rtems_isr_entry *vbr;
   unsigned long ramSize;
+
+#if (defined (__mc68040__))
   volatile unsigned long *RamBase_p;
 
   RamBase_p = (volatile unsigned long *)&RamBase;
 
-#if (defined (__mc68040__))
   /*
    *******************************************
    * Motorola 68040 and companion-mode 68360 *
@@ -645,6 +647,9 @@ void _Init68360 (void)
    m360.mcr = 0x4C7F;
 
 #else
+  volatile unsigned long *RamBase_p;
+
+  RamBase_p = (volatile unsigned long *)&RamBase;
   /*
    ***************************************************
    * Generic Standalone Motorola 68360               *

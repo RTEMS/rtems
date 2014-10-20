@@ -102,6 +102,11 @@ rtems_isr_entry set_vector(
 #define PGH360_PB_SPI_EEP_CE_MSK     (1<< 0)
 #endif /* defined(PGH360) */
 
+/*
+ * Prototypes for BSP methods which cross file boundaries
+ */
+void _Init68360(void);
+
 #ifdef __cplusplus
 }
 #endif
