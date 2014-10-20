@@ -198,7 +198,7 @@ static int dbgu_set_attributes(int minor, const struct termios *t)
  * Read from UART. This is used in the exit code, and can't
  * rely on interrupts.
  */
-int dbgu_poll_read(int minor)
+static int dbgu_poll_read(int minor)
 {
     return dbgu_read(minor);
 }
@@ -217,7 +217,7 @@ static void _BSP_put_char( char c ) {
 
 BSP_output_char_function_type     BSP_output_char = _BSP_put_char;
 
-int _BSP_poll_char(void)
+static int _BSP_poll_char(void)
 {
   return dbgu_poll_read(0);
 }
