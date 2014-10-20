@@ -25,65 +25,71 @@
 
 static void usart_delay(uint32_t n)
 {
-   volatile uint32_t i = 0;
-   for(i = 0; i < n; i++);
+ volatile uint32_t i = 0;
+
+ for(i = 0; i < n; i++)
+   ;
 }
 
+#if 0
+/*
+ *  These will be useful when the driver supports interrupt driven IO.
+ */
 static rtems_vector_number usart_get_irq_number(const console_tbl *ct)
 {
-   return ct->ulIntVector;
+  return ct->ulIntVector;
 }
 
 static uint32_t usart_get_baud(const console_tbl *ct)
 {
-   return ct->ulClock;
+  return ct->ulClock;
 }
+#endif
 
 static void usart_set_baud(int minor, int baud)
 {
-   /*
-   ** Nothing for now
-   */
-   return;
+ /*
+  * Nothing for now
+  */
+ return;
 }
 
 static void usart_initialize(int minor)
 {
-   unsigned int gpio_reg;
+  unsigned int gpio_reg;
 
-   /*
-   ** Program GPIO pins for UART 0
-   */
-   gpio_reg = BCM2835_REG(BCM2835_GPIO_GPFSEL1);
-   gpio_reg &= ~(7<<12);    /* gpio14 */
-   gpio_reg |=  (4<<12);    /* alt0   */
-   gpio_reg &= ~(7<<15);    /* gpio15 */
-   gpio_reg |=  (4<<15);    /* alt0   */
-   BCM2835_REG(BCM2835_GPIO_GPFSEL1) = gpio_reg;
+  /*
+  ** Program GPIO pins for UART 0
+  */
+  gpio_reg = BCM2835_REG(BCM2835_GPIO_GPFSEL1);
+  gpio_reg &= ~(7<<12);    /* gpio14 */
+  gpio_reg |=  (4<<12);    /* alt0   */
+  gpio_reg &= ~(7<<15);    /* gpio15 */
+  gpio_reg |=  (4<<15);    /* alt0   */
+  BCM2835_REG(BCM2835_GPIO_GPFSEL1) = gpio_reg;
 
-   BCM2835_REG(BCM2835_GPIO_GPPUD) = 0;
-   usart_delay(150);
-   BCM2835_REG(BCM2835_GPIO_GPPUDCLK0) = (1<<14)|(1<<15);
-   usart_delay(150);
-   BCM2835_REG(BCM2835_GPIO_GPPUDCLK0) = 0;
+  BCM2835_REG(BCM2835_GPIO_GPPUD) = 0;
+  usart_delay(150);
+  BCM2835_REG(BCM2835_GPIO_GPPUDCLK0) = (1<<14)|(1<<15);
+  usart_delay(150);
+  BCM2835_REG(BCM2835_GPIO_GPPUDCLK0) = 0;
 
-   /*
-   ** Init the PL011 UART
-   */
-   BCM2835_REG(BCM2835_UART0_CR)   = 0;
-   BCM2835_REG(BCM2835_UART0_ICR)  = 0x7FF;
-   BCM2835_REG(BCM2835_UART0_IMSC) = 0;
-   BCM2835_REG(BCM2835_UART0_IBRD) = 1;
-   BCM2835_REG(BCM2835_UART0_FBRD) = 40;
-   BCM2835_REG(BCM2835_UART0_LCRH) = 0x70;
-   BCM2835_REG(BCM2835_UART0_RSRECR) =  0;
+  /*
+  ** Init the PL011 UART
+  */
+  BCM2835_REG(BCM2835_UART0_CR)   = 0;
+  BCM2835_REG(BCM2835_UART0_ICR)  = 0x7FF;
+  BCM2835_REG(BCM2835_UART0_IMSC) = 0;
+  BCM2835_REG(BCM2835_UART0_IBRD) = 1;
+  BCM2835_REG(BCM2835_UART0_FBRD) = 40;
+  BCM2835_REG(BCM2835_UART0_LCRH) = 0x70;
+  BCM2835_REG(BCM2835_UART0_RSRECR) =  0;
 
-   BCM2835_REG(BCM2835_UART0_CR)   = 0x301;
+  BCM2835_REG(BCM2835_UART0_CR)   = 0x301;
 
-   BCM2835_REG(BCM2835_UART0_IMSC) = BCM2835_UART0_IMSC_RX;
+  BCM2835_REG(BCM2835_UART0_IMSC) = BCM2835_UART0_IMSC_RX;
 
-   usart_set_baud(minor, 115000);
-
+  usart_set_baud(minor, 115000);
 }
 
 static int usart_first_open(int major, int minor, void *arg)
@@ -106,30 +112,23 @@ static int usart_last_close(int major, int minor, void *arg)
 
 static int usart_read_polled(int minor)
 {
-   if (minor == 0)
-   {
-      if(((BCM2835_REG(BCM2835_UART0_FR)) & BCM2835_UART0_FR_RXFE) == 0)
-      {
-         return((BCM2835_REG(BCM2835_UART0_DR)) & 0xFF );
-      }
-      else
-      {
-         return -1;
-      }
-   }
-   else
-   {
-      printk("Unknown console minor number: %d\n", minor);
+  if (minor == 0) {
+    if (((BCM2835_REG(BCM2835_UART0_FR)) & BCM2835_UART0_FR_RXFE) == 0) {
+       return((BCM2835_REG(BCM2835_UART0_DR)) & 0xFF );
+    } else {
       return -1;
-   }
-
+    }
+  } else {
+    printk("Unknown console minor number: %d\n", minor);
+    return -1;
+  }
 }
 
 static void usart_write_polled(int minor, char c)
 {
-   while (1)
-   {
-      if ((BCM2835_REG(BCM2835_UART0_FR) & BCM2835_UART0_FR_TXFF) == 0) break;
+   while (1) {
+     if ((BCM2835_REG(BCM2835_UART0_FR) & BCM2835_UART0_FR_TXFF) == 0)
+       break;
    }
    BCM2835_REG(BCM2835_UART0_DR) = c;
 }
@@ -142,8 +141,7 @@ static ssize_t usart_write_support_polled(
 {
   ssize_t i = 0;
 
-  for (i = 0; i < n; ++i)
-  {
+  for (i = 0; i < n; ++i) {
     usart_write_polled(minor, s [i]);
   }
 
