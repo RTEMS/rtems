@@ -29,7 +29,6 @@ const char rtems_test_name[] = "SMPSCHEDSEM 01";
  */
 static void test(void)
 {
-  rtems_id            id;
   rtems_status_code   sc;
   rtems_task_priority priority;
   rtems_id            task_sem;
