@@ -13,13 +13,7 @@
 
 #include "system.h"
 
-void Loop(void) {
-  volatile int i;
-
-  for (i=0; i<300000; i++);
-}
-
-void LogSemaphore(
+static void LogSemaphore(
   bool      obtained,
   uint32_t  cpu_num,
   uint32_t  task_index
