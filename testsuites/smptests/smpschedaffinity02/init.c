@@ -44,7 +44,6 @@ struct task_data_t task_data = {
 rtems_id           task_sem;
 
 static void task(rtems_task_argument arg);
-static void show_threads(void);
 static void task_verify( bool ran, bool change_affinity, int cpu );
 static void init_verify( int expect ); 
 
