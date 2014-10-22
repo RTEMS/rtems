@@ -83,7 +83,9 @@ rtems_task Init(
       RTEMS_DEFAULT_ATTRIBUTES,
       &id
     );
+    directive_failed( status, "rtems_task_create" );
     status = rtems_task_start( id, Test_task, i );
+    directive_failed( status, "rtems_task_start" );
     
     /* Allow task to start before starting next task.
      * This is necessary on some simulators.
@@ -101,7 +103,9 @@ rtems_task Init(
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
   );
+  directive_failed( status, "rtems_task_create" );
   status = rtems_task_start(id,Test_task,rtems_get_processor_count());
+  directive_failed( status, "rtems_task_start" );
 
   /* Wait on all tasks to run */
   while (1) {
