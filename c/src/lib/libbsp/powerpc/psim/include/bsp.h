@@ -30,10 +30,6 @@
 #ifndef _BSP_H
 #define _BSP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 
 #ifdef ASM
@@ -48,6 +44,10 @@ extern "C" {
 #include <rtems/iosupp.h>
 #include <bsp/vectors.h>
 #include <bsp/default-initial-extension.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* Constants */
 
@@ -82,12 +82,12 @@ int rtems_ifsim_attach(struct rtems_bsdnet_ifconfig *ifcfg, int attaching);
 int BSP_disconnect_clock_handler(void);
 int BSP_connect_clock_handler(void);
 
-#endif /* ASM */
-
-#define BSP_HAS_NO_VME
-
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* ASM */
+
+#define BSP_HAS_NO_VME
 
 #endif

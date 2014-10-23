@@ -17,10 +17,6 @@
 
 #ifndef ASM
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -30,6 +26,10 @@ extern "C" {
 
 #include <libcpu/bf537.h>
 #include <libcpu/memoryRegs.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* configure data cache to use 16K of each SRAM bank when enabled */
 #define BSP_DATA_CACHE_CONFIG  (3 << DMEM_CONTROL_DMC_SHIFT)

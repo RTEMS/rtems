@@ -36,10 +36,6 @@
 #ifndef _BSP_H
 #define _BSP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems.h>
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
@@ -50,6 +46,10 @@ extern "C" {
 #include <termios.h> /* for tcflag_t */
 
 #include <sh/sci.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #if 1
 /* FIXME:

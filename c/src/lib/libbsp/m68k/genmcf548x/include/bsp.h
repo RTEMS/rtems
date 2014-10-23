@@ -54,9 +54,6 @@
 #ifndef __GENMCF548X_BSP_H
 #define __GENMCF548X_BSP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -78,6 +75,10 @@ extern "C" {
 /***************************************************************************/
 /**  Hardware data structure headers                                      **/
 #include <mcf548x/mcf548x.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /***************************************************************************/
 /**  User Definable configuration                                         **/

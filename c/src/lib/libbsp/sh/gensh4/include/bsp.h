@@ -40,10 +40,6 @@
 #ifndef _BSP_H
 #define _BSP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems.h>
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
@@ -52,6 +48,10 @@ extern "C" {
 #include <termios.h> /* for tcflag_t */
 
 #include "rtems/score/sh7750_regs.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* Constants */
 

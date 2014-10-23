@@ -45,10 +45,6 @@
 #ifndef _BSP_H
 #define _BSP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 
 #ifdef ASM
@@ -69,6 +65,10 @@ extern "C" {
   #include <bsp/vectors.h>
   #include <bsp/default-initial-extension.h>
 
+  #ifdef __cplusplus
+  extern "C" {
+  #endif
+
   /* Network Defines */
   #define RTEMS_BSP_NETWORK_DRIVER_NAME     "eth0"
 
@@ -83,10 +83,9 @@ extern "C" {
 
   #define BSP_UART_BAUD_BASE    (11059200 / 16)    /* Kilauea ext clock, max speed */
 
+  #ifdef __cplusplus
+  }
+  #endif
 #endif /* ASM */
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* BSP_H */

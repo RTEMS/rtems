@@ -25,10 +25,6 @@
 
 #include <libcpu/bf533.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -37,6 +33,10 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <rtems/score/bfin.h>
 #include <rtems/bfin/bf533.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @defgroup bfin_ezkit533 eZKit533 Support

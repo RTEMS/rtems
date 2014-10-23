@@ -7,10 +7,6 @@
 #ifndef _BSP_H
 #define _BSP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 #include <rtems.h>
@@ -23,7 +19,11 @@ extern "C" {
 /***************************************************************************/
 /**  Hardware data structure headers                                      **/
 #include <mcf5225x/mcf5225x.h>
-    
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Declare base address of peripherals area */
 #define __IPSBAR ((vuint8 *) 0x40000000)    
 

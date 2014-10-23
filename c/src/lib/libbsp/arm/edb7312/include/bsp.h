@@ -18,10 +18,6 @@
 
 #ifndef ASM
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -29,6 +25,10 @@ extern "C" {
 #include <rtems/iosupp.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define BSP_FEATURE_IRQ_EXTENSION
 

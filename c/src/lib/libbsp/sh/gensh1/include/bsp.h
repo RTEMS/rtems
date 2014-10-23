@@ -25,16 +25,16 @@
 #ifndef _BSP_H
 #define _BSP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems.h>
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* EDIT: To activate the sci driver, change the define below */
 #if 1

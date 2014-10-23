@@ -23,10 +23,6 @@
 
 #ifndef ASM
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -40,6 +36,10 @@ extern "C" {
 /***************************************************************************/
 /**  Hardware data structure headers                                      **/
 #include <mcf5282/mcf5282.h>   /* internal MCF5282 modules */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /***************************************************************************/
 /**  Network driver configuration                                         **/

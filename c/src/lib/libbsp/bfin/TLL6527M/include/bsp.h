@@ -19,10 +19,6 @@
 
 #ifndef ASM
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -32,6 +28,10 @@ extern "C" {
 #include <rtems/score/bfin.h>
 #include <rtems/bfin/bf52x.h>
 #include <bf52x.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @defgroup bfin_tll6527m TLL6527M Support

@@ -26,10 +26,6 @@
 
 #ifndef ASM
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems.h>
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
@@ -41,6 +37,10 @@ extern "C" {
  * FIXME: One of these would be enough.
  */
 #include <rtems/devnull.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* Constants */
 

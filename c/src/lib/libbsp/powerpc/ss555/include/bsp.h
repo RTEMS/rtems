@@ -21,10 +21,6 @@
 
 #ifndef ASM
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -35,6 +31,10 @@ extern "C" {
 #include <mpc5xx/console.h>
 #include <libcpu/vectors.h>
 #include <bsp/irq.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * Clock definitions

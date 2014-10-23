@@ -14,10 +14,6 @@
 #ifndef _BSP_H
 #define _BSP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define BSP_ZERO_WORKSPACE_AUTOMATICALLY TRUE
 
 #include <bspopts.h>
@@ -44,6 +40,10 @@ extern "C" {
 
 #include <gen2.h>
 #include <bsp/irq.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * The following macro calculates the Baud constant. For the Z8530 chip.
@@ -190,10 +190,10 @@ void PCI_bus_write(volatile uint32_t *_addr, uint32_t _data);
 int BSP_disconnect_clock_handler(void);
 int BSP_connect_clock_handler(void);
 
-#endif /* ASM */
-
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* ASM */
 
 #endif

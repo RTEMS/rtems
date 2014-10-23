@@ -41,10 +41,6 @@
 #ifndef _BSP_H
 #define _BSP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 
 #ifdef ASM
@@ -60,6 +56,10 @@ extern "C" {
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
 #include <bsp/default-initial-extension.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define BSP_FEATURE_IRQ_EXTENSION
 
@@ -78,10 +78,10 @@ extern bool bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 extern xilTemac_driver_attach(struct rtems_bsdnet_ifconfig*, int );
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH xilTemac_driver_attach
 
-#endif /* ASM */
-
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* ASM */
 
 #endif

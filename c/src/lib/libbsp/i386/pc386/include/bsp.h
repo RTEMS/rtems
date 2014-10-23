@@ -49,10 +49,6 @@
 
 #ifndef ASM
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -62,6 +58,10 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <libcpu/cpu.h>
 #include <rtems/bspIo.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @degroup pc386_i386 PC386 Support

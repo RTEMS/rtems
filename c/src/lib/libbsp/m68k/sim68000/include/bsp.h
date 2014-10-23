@@ -14,10 +14,6 @@
 #ifndef __BSVC_SIM
 #define __BSVC_SIM
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -25,6 +21,10 @@ extern "C" {
 #include <rtems/iosupp.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  *  Define some hardware constants here

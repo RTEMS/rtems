@@ -14,10 +14,6 @@
 #ifndef _BSP_H
 #define _BSP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -30,6 +26,10 @@ extern "C" {
 #include <mpc8260/console.h>
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * Board configuration registers

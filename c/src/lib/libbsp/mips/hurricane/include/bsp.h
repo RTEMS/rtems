@@ -16,10 +16,6 @@
 
 #ifndef ASM
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -28,6 +24,10 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 #include <libcpu/rm5231.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 extern void WriteDisplay( char * string );
 
