@@ -25,10 +25,11 @@
 #include <rtems/test.h>
 #include <rtems/score/threaddispatch.h>
 
+#include <buffer_test_io.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 #define FOREVER 1                  /* infinite loop */
 
@@ -37,8 +38,6 @@ extern "C" {
 #else
 #define TEST_EXTERN extern
 #endif
-
-#include <buffer_test_io.h>
 
 /*
  *  Check that that the dispatch disable level is proper for the
