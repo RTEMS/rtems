@@ -11,8 +11,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <bsp.h>
 #include <leon.h>
-#include <rtems/score/sparc.h>
 
 #ifdef BSP_POWER_DOWN_AT_FATAL_HALT
 
