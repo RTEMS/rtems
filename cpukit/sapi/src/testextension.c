@@ -19,18 +19,38 @@
 #include <rtems/test.h>
 #include <rtems/profiling.h>
 
+#if defined(RTEMS_SMP)
+#include <rtems/score/smpimpl.h>
+#endif
+
+#if defined(RTEMS_PROFILING)
+static bool should_report(
+  rtems_fatal_source source,
+  rtems_fatal_code code
+)
+{
+#if defined(RTEMS_SMP)
+  return source != RTEMS_FATAL_SOURCE_SMP
+    || code != SMP_FATAL_SHUTDOWN_RESPONSE;
+#else
+  (void) source;
+  (void) code;
+
+  return true;
+#endif
+}
+#endif
+
 void rtems_test_fatal_extension(
   rtems_fatal_source source,
   bool is_internal,
   rtems_fatal_code code
 )
 {
-  (void) source;
   (void) is_internal;
-  (void) code;
 
 #if defined(RTEMS_PROFILING)
-  if ( rtems_get_current_processor() == 0 ) {
+  if ( should_report( source, code ) ) {
     printk(
       "\n*** PROFILING REPORT BEGIN %s ***\n",
       rtems_test_name
