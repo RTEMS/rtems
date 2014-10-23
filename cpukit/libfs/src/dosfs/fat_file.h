@@ -93,10 +93,19 @@ typedef struct fat_file_fd_s
 
 } fat_file_fd_t;
 
-#define FAT_FILE_REMOVED  0x01
+#define FAT_FILE_REMOVED 0x01
 
-#define FAT_FILE_IS_REMOVED(p)\
-    (((p)->flags & FAT_FILE_REMOVED) ? 1 : 0)
+#define FAT_FILE_META_DATA_CHANGED 0x02
+
+static inline bool FAT_FILE_IS_REMOVED(const fat_file_fd_t *fat_fd)
+{
+     return (fat_fd->flags & FAT_FILE_REMOVED) != 0;
+}
+
+static inline bool FAT_FILE_HAS_META_DATA_CHANGED(const fat_file_fd_t *fat_fd)
+{
+     return (fat_fd->flags & FAT_FILE_META_DATA_CHANGED) != 0;
+}
 
 /* ioctl macros */
 #define F_CLU_NUM  0x01
@@ -140,20 +149,36 @@ fat_construct_key(
               ((pos->ofs >> 5) & (FAT_DIRENTRIES_PER_SEC512 - 1)) );
 }
 
+static inline void
+fat_file_set_first_cluster_num(fat_file_fd_t *fat_fd, uint32_t cln)
+{
+    fat_fd->cln = cln;
+    fat_fd->flags |= FAT_FILE_META_DATA_CHANGED;
+}
+
+static inline void fat_file_set_file_size(fat_file_fd_t *fat_fd, uint32_t s)
+{
+    fat_fd->fat_file_size = s;
+    fat_fd->flags |= FAT_FILE_META_DATA_CHANGED;
+}
+
 static inline void fat_file_set_ctime(fat_file_fd_t *fat_fd, time_t t)
 {
     fat_fd->ctime = t;
+    fat_fd->flags |= FAT_FILE_META_DATA_CHANGED;
 }
 
 static inline void fat_file_set_mtime(fat_file_fd_t *fat_fd, time_t t)
 {
     fat_fd->mtime = t;
+    fat_fd->flags |= FAT_FILE_META_DATA_CHANGED;
 }
 
 static inline void fat_file_set_ctime_mtime(fat_file_fd_t *fat_fd, time_t t)
 {
     fat_fd->ctime = t;
     fat_fd->mtime = t;
+    fat_fd->flags |= FAT_FILE_META_DATA_CHANGED;
 }
 
 /* Prototypes for "fat-file" operations */

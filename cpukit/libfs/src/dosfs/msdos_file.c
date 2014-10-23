@@ -108,7 +108,7 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, size_t count)
      */
     iop->offset += ret;
     if (iop->offset > fat_fd->fat_file_size)
-        fat_fd->fat_file_size = iop->offset;
+        fat_file_set_file_size(fat_fd, (uint32_t) iop->offset);
 
     if (ret > 0)
         fat_file_set_ctime_mtime(fat_fd, time(NULL));
@@ -202,7 +202,7 @@ msdos_file_ftruncate(rtems_libio_t *iop, off_t length)
 
     if (rc == RC_OK)
     {
-        fat_fd->fat_file_size = length;
+        fat_file_set_file_size(fat_fd, length);
         fat_file_set_ctime_mtime(fat_fd, time(NULL));
     }
 
