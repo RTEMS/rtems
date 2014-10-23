@@ -20,6 +20,7 @@
 #include <rtems/test.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/smpimpl.h>
+#include <rtems/score/smpbarrier.h>
 
 #include <assert.h>
 #include <stdlib.h>
@@ -29,6 +30,8 @@ const char rtems_test_name[] = "SMPFATAL 2";
 #define MAX_CPUS 32
 
 static uint32_t main_cpu;
+
+static SMP_barrier_Control barrier = SMP_BARRIER_CONTROL_INITIALIZER;
 
 static void Init(rtems_task_argument arg)
 {
@@ -41,6 +44,8 @@ static void fatal_extension(
   rtems_fatal_code code
 )
 {
+  SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
+
   if (
     source == RTEMS_FATAL_SOURCE_APPLICATION
       || source == RTEMS_FATAL_SOURCE_SMP
@@ -63,11 +68,14 @@ static void fatal_extension(
       }
 
       rtems_test_endk();
+      rtems_test_fatal_extension(source, is_internal, code);
     } else {
       assert(source == RTEMS_FATAL_SOURCE_SMP);
       assert(code == SMP_FATAL_SHUTDOWN);
     }
   }
+
+  _SMP_barrier_Wait(&barrier, &barrier_state, rtems_get_processor_count());
 }
 
 static rtems_status_code test_driver_init(
@@ -119,8 +127,7 @@ static rtems_status_code test_driver_init(
   { .initialization_entry = test_driver_init }
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { .fatal = fatal_extension }, \
-  RTEMS_TEST_INITIAL_EXTENSION
+  { .fatal = fatal_extension }
 
 #define CONFIGURE_SMP_APPLICATION
 
