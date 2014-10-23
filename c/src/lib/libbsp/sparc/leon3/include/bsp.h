@@ -220,12 +220,13 @@ extern void BSP_shared_interrupt_unmask(int irq);
  */
 extern void BSP_shared_interrupt_mask(int irq);
 
+#if defined(RTEMS_SMP) || defined(RTEMS_MULTIPROCESSING)
 /* Irq used by the shared memory driver and for inter-processor interrupts.
  * The variable is weakly linked. Redefine the variable in your application
  * to override the BSP default.
- * See startup/bspsmp.c for the default value.
  */
 extern const unsigned char LEON3_mp_irq;
+#endif
 
 #ifdef RTEMS_SMP
 /* Weak table used to implement static interrupt CPU affinity in a SMP

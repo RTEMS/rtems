@@ -21,6 +21,13 @@
 #include <rtems/bspIo.h>
 #include <bsp/bootcard.h>
 
+#if defined(RTEMS_SMP) || defined(RTEMS_MULTIPROCESSING)
+/* Irq used by shared memory driver and for inter-processor interrupts.
+ * Can be overridden by being defined in the application.
+ */
+const unsigned char LEON3_mp_irq __attribute__((weak)) = 14;
+#endif
+
 /*
  * Tells us if data cache snooping is available
  */
