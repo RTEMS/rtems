@@ -63,7 +63,6 @@ static void fatal_extension(
       }
 
       rtems_test_endk();
-      rtems_test_fatal_extension(source, is_internal, code);
     }
   }
 
@@ -122,7 +121,8 @@ static rtems_status_code test_driver_init(
   { .initialization_entry = test_driver_init }
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
-  { .fatal = fatal_extension }
+  { .fatal = fatal_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_SMP_APPLICATION
 
