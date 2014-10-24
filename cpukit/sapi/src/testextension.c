@@ -19,27 +19,10 @@
 #include <rtems/test.h>
 #include <rtems/profiling.h>
 
-#if defined(RTEMS_SMP)
-#include <rtems/score/smpimpl.h>
-#endif
+static bool report_done;
 
-#if defined(RTEMS_PROFILING)
-static bool should_report(
-  rtems_fatal_source source,
-  rtems_fatal_code code
-)
-{
-#if defined(RTEMS_SMP)
-  return source != RTEMS_FATAL_SOURCE_SMP
-    || code != SMP_FATAL_SHUTDOWN_RESPONSE;
-#else
-  (void) source;
-  (void) code;
-
-  return true;
-#endif
-}
-#endif
+static rtems_interrupt_lock report_lock =
+  RTEMS_INTERRUPT_LOCK_INITIALIZER( "test report" );
 
 void rtems_test_fatal_extension(
   rtems_fatal_source source,
@@ -47,10 +30,18 @@ void rtems_test_fatal_extension(
   rtems_fatal_code code
 )
 {
-  (void) is_internal;
-
 #if defined(RTEMS_PROFILING)
-  if ( should_report( source, code ) ) {
+  rtems_interrupt_lock_context lock_context;
+
+  /*
+   * Ensures to report only once on SMP machines and ensures that the report is
+   * output completely.
+   */
+  rtems_interrupt_lock_acquire( &report_lock, &lock_context );
+
+  if ( !report_done ) {
+    report_done = true;
+
     printk(
       "\n*** PROFILING REPORT BEGIN %s ***\n",
       rtems_test_name
@@ -69,5 +60,11 @@ void rtems_test_fatal_extension(
       rtems_test_name
     );
   }
+
+  rtems_interrupt_lock_release( &report_lock, &lock_context );
 #endif
+
+  (void) source;
+  (void) is_internal;
+  (void) code;
 }
