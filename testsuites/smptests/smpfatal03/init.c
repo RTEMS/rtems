@@ -126,6 +126,8 @@ static void fatal_extension(
     if (self == 0) {
       rtems_test_endk();
     }
+
+    _SMP_barrier_Wait(&fatal_barrier, &state, CPU_COUNT);
   }
 }
 
