@@ -39,6 +39,7 @@ extern rtems_shell_cmd_t rtems_shell_MMOVE_Command;
 extern rtems_shell_cmd_t rtems_shell_JOEL_Command;
 extern rtems_shell_cmd_t rtems_shell_DATE_Command;
 extern rtems_shell_cmd_t rtems_shell_ECHO_Command;
+extern rtems_shell_cmd_t rtems_shell_EDIT_Command;
 extern rtems_shell_cmd_t rtems_shell_SLEEP_Command;
 extern rtems_shell_cmd_t rtems_shell_ID_Command;
 extern rtems_shell_cmd_t rtems_shell_TTY_Command;
@@ -173,6 +174,11 @@ extern rtems_shell_alias_t *rtems_shell_Initial_aliases[];
          !defined(CONFIGURE_SHELL_NO_COMMAND_ECHO)) || \
         defined(CONFIGURE_SHELL_COMMAND_ECHO)
       &rtems_shell_ECHO_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_EDIT)) || \
+        defined(CONFIGURE_SHELL_COMMAND_EDIT)
+      &rtems_shell_EDIT_Command,
     #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_SLEEP)) || \
