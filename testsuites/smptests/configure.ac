@@ -67,6 +67,7 @@ smp09/Makefile
 smpaffinity01/Makefile
 smpatomic01/Makefile
 smpcache01/Makefile
+smpcapture01/Makefile
 smpfatal01/Makefile
 smpfatal02/Makefile
 smpfatal03/Makefile

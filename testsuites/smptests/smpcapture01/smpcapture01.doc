@@ -1,0 +1,50 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpcapture01
+
+directives:
+  rtems_capture_open
+  rtems_capture_watch_ceiling
+  rtems_capture_watch_floor
+  rtems_capture_watch_global
+  rtems_capture_set_trigger
+  rtems_capture_control
+  rtems_capture_print_trace_records
+
+
+concepts:
+
+This test does a worst case migration of 4 tasks on a 4 core system tracking
+and displaying the user extension records. This task is rather complex to
+describe but using the notation TaskName:Priority:{cpu,cpu} where the third
+portion indicates the CPUs the task has affinity for. The test starts with
+the initialization task (UT1:7:{2,3}) starting execution on CPU 3. This
+results in the following tasks assigned across the CPUs:
+
+     CPUs 0-2: Idle threads
+     CPU 3: UT1
+
+The UT1 task creates four more tasks as follows:
+     TA1:8:{2,3}
+     TA2:5:{0,1}
+     TA3:6:{0,3}
+     TA4:9:{1}
+
+This should result in the tasks being assigned to CPUs as follows:
+     CPU 0: TA3
+     CPU 1: TA2
+     CPU 2: TA1
+     CPU 3: UT1
+
+TA4 should be ready to execute but waiting on a CPU it has affinity for
+to become available.  The test then raises the priority of TA4 to 4,
+resulting in the tasks being assigned to CPUs as follows:
+     CPU 0: TA2
+     CPU 1: TA4
+     CPU 2: UT1
+     CPU 3: TA3
+
+At this point TA1 should still be ready to execute but is waiting on a CPU
+it has affinity for to become available.  The tasks are then terminated.
+Additionally, the capture engine output shows that the migration that can
+occur during task termination adheres to the affinity settings.
