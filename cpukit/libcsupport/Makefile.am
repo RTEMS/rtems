@@ -119,7 +119,7 @@ TERMINAL_IDENTIFICATION_C_FILES += src/ttyname.c
 LIBC_GLUE_C_FILES = src/__getpid.c src/__gettod.c src/__times.c \
     src/truncate.c src/access.c src/stat.c src/lstat.c src/pathconf.c \
     src/newlibc_reent.c src/newlibc_init.c src/newlibc_exit.c \
-    src/kill_noposix.c src/utsname.c
+    src/kill_noposix.c src/utsname.c src/realpath.c
 
 BSD_LIBC_C_FILES = src/strlcpy.c src/strlcat.c src/issetugid.c
 
