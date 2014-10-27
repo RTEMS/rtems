@@ -298,7 +298,7 @@ AC_ENABLE_MULTILIB([Makefile],[..])
 AC_MSG_CHECKING([for assignable stdio])
 AC_COMPILE_IFELSE(
   [AC_LANG_PROGRAM(
-    [#include <stdio.h>], 
+    [#include <stdio.h>],
     [stdin = fopen("/tmp", "r")])],
   [HAVE_ASSIGNABLE_STDIO=yes],
   [HAVE_ASSIGNABLE_STDIO=no])
@@ -322,7 +322,7 @@ AC_CHECK_SIZEOF([time_t])
 
 AC_CHECK_SIZEOF([size_t])
 
-# FIXME: Mandatory in SUSv4, optional in SUSv3. 
+# FIXME: Mandatory in SUSv4, optional in SUSv3.
 #   Not implemented in GCC/newlib, so far.
 AC_CHECK_DECLS([WORD_BIT],,,[#include <limits.h>])
 AC_CHECK_DECLS([LONG_BIT],,,[#include <limits.h>])
@@ -372,6 +372,19 @@ AM_CONDITIONAL([RPCTOOLS],[test "$RPCGEN" = rpcgen \
 && test -n "$AWK" \
 && test "$enable_rpcgen" = yes])
 
+# Filter dynamic loading to only build for architectures that have
+# reloc backends
+AC_MSG_CHECKING([whether CPU supports libdl])
+case $RTEMS_CPU in
+  arm | bfin | h8300 | i386 | lm32 | m32r | m68k | mips | \
+  moxie | nios2 | powerpc | sparc | v850)
+   HAVE_LIBDL=yes ;;
+  *)
+   HAVE_LIBDL=no ;;
+esac
+AM_CONDITIONAL(LIBDL,[test x"$HAVE_LIBDL" = x"yes"])
+AC_MSG_RESULT([$HAVE_LIBDL])
+
 RTEMS_AMPOLISH3
 
 # Explicitly list all Makefiles here
@@ -412,6 +425,7 @@ librpc/Makefile
 libmisc/Makefile
 libi2c/Makefile
 libmd/Makefile
+libdl/Makefile
 zlib/Makefile
 ftpd/Makefile
 telnetd/Makefile

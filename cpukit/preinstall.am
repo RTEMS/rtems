@@ -46,7 +46,6 @@ $(PROJECT_INCLUDE)/utf8proc/utf8proc.h: libmisc/utf8proc/utf8proc.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/utf8proc/utf8proc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/utf8proc/utf8proc.h
 
-if NEWLIB
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
@@ -130,6 +129,92 @@ $(PROJECT_INCLUDE)/rtems/bsdnet/_types.h: libnetworking/rtems/bsdnet/_types.h $(
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bsdnet/_types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bsdnet/_types.h
 endif
+if LIBDL
+$(PROJECT_INCLUDE)/dlfcn.h: libdl/dlfcn.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dlfcn.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/dlfcn.h
+
+$(PROJECT_INCLUDE)/link.h: libdl/include/link.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/link.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/link.h
+
+$(PROJECT_INCLUDE)/link_elf.h: libdl/include/link_elf.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/link_elf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/link_elf.h
+
+$(PROJECT_INCLUDE)/sys/cdefs_elf.h: libdl/include/sys/cdefs_elf.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/cdefs_elf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/cdefs_elf.h
+
+$(PROJECT_INCLUDE)/sys/exec_elf.h: libdl/include/sys/exec_elf.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/exec_elf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/exec_elf.h
+
+$(PROJECT_INCLUDE)/machine/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/machine
+	@: > $(PROJECT_INCLUDE)/machine/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/machine/$(dirstamp)
+
+$(PROJECT_INCLUDE)/machine/elf_machdep.h: libdl/include/arch/@RTEMS_CPU@/machine/elf_machdep.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/elf_machdep.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/elf_machdep.h
+
+$(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/rtl
+	@: > $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/rtl/dlfcn-shell.h: libdl/dlfcn-shell.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/dlfcn-shell.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/dlfcn-shell.h
+
+$(PROJECT_INCLUDE)/rtems/rtl/rtl.h: libdl/rtl.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rtl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rtl.h
+
+$(PROJECT_INCLUDE)/rtems/rtl/rtl-allocator.h: libdl/rtl-allocator.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rtl-allocator.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rtl-allocator.h
+
+$(PROJECT_INCLUDE)/rtems/rtl/rtl-obj-fwd.h: libdl/rtl-obj-fwd.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rtl-obj-fwd.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rtl-obj-fwd.h
+
+$(PROJECT_INCLUDE)/rtems/rtl/rtl-fwd.h: libdl/rtl-fwd.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rtl-fwd.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rtl-fwd.h
+
+$(PROJECT_INCLUDE)/rtems/rtl/rtl-obj.h: libdl/rtl-obj.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rtl-obj.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rtl-obj.h
+
+$(PROJECT_INCLUDE)/rtems/rtl/rtl-obj-cache.h: libdl/rtl-obj-cache.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rtl-obj-cache.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rtl-obj-cache.h
+
+$(PROJECT_INCLUDE)/rtems/rtl/rtl-obj-comp.h: libdl/rtl-obj-comp.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rtl-obj-comp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rtl-obj-comp.h
+
+$(PROJECT_INCLUDE)/rtems/rtl/rtl-unresolved.h: libdl/rtl-unresolved.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rtl-unresolved.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rtl-unresolved.h
+
+$(PROJECT_INCLUDE)/rtems/rtl/rtl-indirect-ptr.h: libdl/rtl-indirect-ptr.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rtl-indirect-ptr.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rtl-indirect-ptr.h
+
+$(PROJECT_INCLUDE)/rtems/rtl/rtl-sym.h: libdl/rtl-sym.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rtl-sym.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rtl-sym.h
+
+$(PROJECT_INCLUDE)/rtems/rtl/rap.h: libdl/rap.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rap.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rap.h
+
+$(PROJECT_INCLUDE)/rtems/rtl/rap-shell.h: libdl/rap-shell.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rap-shell.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rap-shell.h
 endif
 $(PROJECT_INCLUDE)/rtems/bspIo.h: include/rtems/bspIo.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bspIo.h

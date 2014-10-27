@@ -11,6 +11,7 @@ SUBDIRS += libi2c
 SUBDIRS += libmisc
 SUBDIRS += libmd
 SUBDIRS += libgnat
+SUBDIRS += libdl
 SUBDIRS += wrapup
 
 SUBDIRS += zlib
@@ -41,7 +42,6 @@ include_uuid_HEADERS = libmisc/uuid/uuid.h
 include_utf8procdir = $(includedir)/utf8proc
 include_utf8proc_HEADERS = libmisc/utf8proc/utf8proc.h
 
-if NEWLIB
 include_sysdir = $(includedir)/sys
 include_sys_HEADERS =
 
@@ -69,6 +69,24 @@ include_rtems_bsdnetdir = $(includedir)/rtems/bsdnet
 include_rtems_bsdnet_HEADERS = libnetworking/rtems/bsdnet/servers.h
 include_rtems_bsdnet_HEADERS += libnetworking/rtems/bsdnet/_types.h
 endif
+
+if LIBDL
+include_HEADERS += libdl/dlfcn.h
+include_HEADERS += libdl/include/link.h
+include_HEADERS += libdl/include/link_elf.h
+include_sys_HEADERS += libdl/include/sys/cdefs_elf.h
+include_sys_HEADERS += libdl/include/sys/exec_elf.h
+include_arch_machinedir = $(includedir)/machine
+include_arch_machine_HEADERS =
+include_arch_machine_HEADERS += libdl/include/arch/@RTEMS_CPU@/machine/elf_machdep.h
+include_rtems_rtldir = $(includedir)/rtems/rtl
+include_rtems_rtl_HEADERS =
+include_rtems_rtl_HEADERS += libdl/dlfcn-shell.h
+include_rtems_rtl_HEADERS += libdl/rtl.h libdl/rtl-allocator.h libdl/rtl-obj-fwd.h
+include_rtems_rtl_HEADERS += libdl/rtl-fwd.h libdl/rtl-obj.h libdl/rtl-obj-cache.h
+include_rtems_rtl_HEADERS += libdl/rtl-obj-comp.h libdl/rtl-unresolved.h
+include_rtems_rtl_HEADERS += libdl/rtl-indirect-ptr.h libdl/rtl-sym.h
+include_rtems_rtl_HEADERS += libdl/rap.h libdl/rap-shell.h
 endif
 
 include_rtems_HEADERS += include/rtems/bspIo.h

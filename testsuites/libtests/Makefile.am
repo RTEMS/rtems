@@ -14,7 +14,7 @@ _SUBDIRS += block14
 _SUBDIRS += block13
 _SUBDIRS += rbheap01
 _SUBDIRS += flashdisk01
-_SUBDIRS += capture01 
+_SUBDIRS += capture01
 
 _SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \
     deviceio01 devnullfatal01 dumpbuf01 gxx01 top\
@@ -34,6 +34,10 @@ _SUBDIRS += mghttpd01
 endif
 _SUBDIRS += ftp01
 _SUBDIRS += syscall01
+endif
+
+if DLTESTS
+_SUBDIRS += dl01
 endif
 
 include $(top_srcdir)/../automake/test-subdirs.am
