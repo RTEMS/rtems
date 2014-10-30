@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -51,6 +51,7 @@
 #define FLASH_BUICR_CPU_PREFTCH 0x00010000
 
 /* Fields for APC (access pipelining control bits [16:18]) */
+#define FLASH_BUICR_APC_0 0x00000000
 #define FLASH_BUICR_APC_1 0x00002000
 #define FLASH_BUICR_APC_2 0x00004000
 #define FLASH_BUICR_APC_3 0x00006000
