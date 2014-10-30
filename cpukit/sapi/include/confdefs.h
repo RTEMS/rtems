@@ -2276,6 +2276,12 @@ const rtems_libio_helper rtems_fs_init_helper =
 #else
   #define CONFIGURE_MEMORY_FOR_POSIX 0
 #endif
+/**
+ *  This is the default alut size for libmm 
+ */
+#ifndef CONFIGURE_LIBMM_ALUT_SIZE 
+  #define CONFIGURE_LIBMM_ALUT_SIZE 64
+#endif
 
 /*
  *  Calculate the RAM size based on the maximum number of objects configured.
@@ -2672,6 +2678,10 @@ const rtems_libio_helper rtems_fs_init_helper =
    */
   uint8_t rtems_maximum_priority = CONFIGURE_MAXIMUM_PRIORITY;
 
+  /** This variable specifies the number of entries for libmm alut 
+   */
+  uint32_t libmm_alut_size  = CONFIGURE_LIBMM_ALUT_SIZE; 
+ 
   /**
    * This is the primary Configuration Table for this application.
    */

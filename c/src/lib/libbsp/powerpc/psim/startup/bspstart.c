@@ -26,7 +26,7 @@
 #include <libcpu/cpuIdent.h>
 #include <libcpu/bat.h>
 #include <libcpu/spr.h>
-
+#include <libcpu/mmu_support.h>
 SPR_RW(SPRG1)
 
 /*  On psim, each click of the decrementer register corresponds
@@ -108,7 +108,7 @@ void bsp_start( void )
    * Initalize RTEMS IRQ system
    */
   BSP_rtems_irq_mng_init(0);
-
+  mmu_irq_init();
   /*
    * Setup BATs and enable MMU
    */
@@ -119,7 +119,9 @@ void bsp_start( void )
   setdbat(1, 0x8<<24, 0x8<<24, 1<<24,  IO_PAGE);
   setdbat(2, 0xc<<24, 0xc<<24, 1<<24,  IO_PAGE);
 
-  _write_MSR(_read_MSR() | MSR_DR | MSR_IR);
-  __asm__ volatile("sync; isync");
+/* Invalidate all TLB Entries */
+   asm volatile("sync; isync; tlbia; sync; isync");
+   _write_MSR(_read_MSR() | MSR_DR | MSR_IR);
 
+  __asm__ volatile("sync; isync");
 }
