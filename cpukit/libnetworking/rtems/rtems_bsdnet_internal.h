@@ -188,7 +188,7 @@ extern char *rtems_bsdnet_domain_name;
 /*
  * Some extra prototypes
  */
-int sethostname (char *name, size_t namelen);
+int sethostname (const char *name, size_t namelen);
 void domaininit (void *);
 void ifinit (void *);
 void ipintr (void);

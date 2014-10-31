@@ -11,6 +11,6 @@
 u_int16_t _getshort(const u_char *src);
 u_int32_t _getlong(const u_char *src);
 int gethostname (char *name, size_t namelen);
-int sethostname (char *name, size_t namelen);
+int sethostname (const char *name, size_t namelen);
 int issetugid (void);
 #endif

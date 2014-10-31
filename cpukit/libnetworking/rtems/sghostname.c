@@ -28,7 +28,7 @@ gethostname (char *name, size_t namelen)
 }
 
 int
-sethostname (char *name, size_t namelen)
+sethostname (const char *name, size_t namelen)
 {
 	char *old, *new;
 
