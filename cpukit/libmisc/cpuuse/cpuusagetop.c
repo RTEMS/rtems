@@ -30,12 +30,10 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
-
 /*
  * Common variable to sync the load monitor task.
  */
 static volatile int rtems_cpuusage_top_thread_active;
-
 
 typedef struct {
   void                  *context;
@@ -44,13 +42,53 @@ typedef struct {
 
 #define RTEMS_CPUUSAGE_TOP_MAX_LOAD_TASKS (20)
 
+
+static inline bool equal_to_uint32_t( uint32_t * lhs, uint32_t * rhs )
+{
+   if ( *lhs == *rhs )
+     return true;
+   else 
+     return false;
+}
+
+static inline bool less_than_uint32_t( uint32_t * lhs, uint32_t * rhs )
+{
+   if ( *lhs < *rhs )
+    return true;
+   else
+    return false;
+}
+
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+  #define _Thread_CPU_usage_Equal_to( _lhs, _rhs ) \
+          _Timestamp_Equal_to( _lhs, _rhs )
+#else
+  #define _Thread_CPU_usage_Equal_to( _lhs, _rhs ) \
+          equal_to_uint32_t( _lhs, _rhs )
+#endif
+
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+#define  _Thread_CPU_usage_Set_to_zero( _time ) \
+         _Timestamp_Set_to_zero( _time )
+#else
+#define  _Thread_CPU_usage_Set_to_zero( _time ) \
+       do { \
+         *_time = 0; \
+       } while (0)
+#endif
+
+#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+#define _Thread_CPU_usage_Less_than( _lhs, _rhs ) \
+        _Timestamp_Less_than( _lhs, _rhs )
+#else
+#define _Thread_CPU_usage_Less_than( _lhs, _rhs ) \
+         less_than_uint32_t( _lhs, _rhs )
+#endif
+
 /*
  * rtems_cpuusage_top_thread
  *
- *  DESCRIPTION:
- *
  * This function displays the load of the tasks on an ANSI terminal.
- *
  */
 
 static void
@@ -62,25 +100,29 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
   int                       j;
   int                       k;
   Objects_Information*      information;
-    char                    name[13];
+  char                      name[13];
   int                       task_count = 0;
   uint32_t                  seconds, nanoseconds;
   rtems_cpu_usage_plugin_t* plugin = (rtems_cpu_usage_plugin_t*)arg;
   Thread_Control*           load_tasks[RTEMS_CPUUSAGE_TOP_MAX_LOAD_TASKS + 1];
-  unsigned long long        load[RTEMS_CPUUSAGE_TOP_MAX_LOAD_TASKS + 1];
+  Thread_CPU_usage_t        load[RTEMS_CPUUSAGE_TOP_MAX_LOAD_TASKS + 1];
+  Thread_CPU_usage_t        zero;
+  Timestamp_Control         uptime;
+  uint32_t                  ival, fval;
 
-  while (true)
-  {
+  while (true) {
     #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-      Timestamp_Control  uptime, total, ran, uptime_at_last_reset;
+      Timestamp_Control  total, ran, uptime_at_last_reset;
     #else
       uint32_t           total_units = 0;
     #endif
 
     rtems_cpuusage_top_thread_active = 1;
 
+    _Thread_CPU_usage_Set_to_zero( &zero);
     memset (load_tasks, 0, sizeof (load_tasks));
-    memset (load, 0, sizeof (load));
+    for (i=0; i< (RTEMS_CPUUSAGE_TOP_MAX_LOAD_TASKS + 1); i++)
+      _Thread_CPU_usage_Set_to_zero( &load[i] );
 
    /*
      * Iterate over the tasks and sort the highest load tasks
@@ -95,11 +137,10 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
 
       information = _Objects_Information_table[ api_index ][ 1 ];
       if ( information ) {
-        for ( k=1 ; k <= information->maximum ; k++ ) {
-          the_thread = (Thread_Control *)information->local_table[ k ];
+        for ( i=1 ; i <= information->maximum ; i++ ) {
+          the_thread = (Thread_Control *)information->local_table[ i ];
           if ( the_thread ) {
-
-            Thread_CPU_usage_t l = the_thread->cpu_time_used;
+            Thread_CPU_usage_t usage = the_thread->cpu_time_used;
 
             /*
              *  When not using nanosecond CPU usage resolution, we have to count
@@ -107,22 +148,23 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
              *  guideline as to what each number means proportionally.
              */
             #ifdef __RTEMS_USE_TICKS_FOR_STATISTICS__
-              total_units += l;
+              total_units += usage;
             #endif
 
             /* Count the number of tasks and sort this load value */
             task_count++;
-            for (i = 0; i < RTEMS_CPUUSAGE_TOP_MAX_LOAD_TASKS; i++) {
-              if (load_tasks[i]) {
-                if ((l == 0) || (l < load[i]))
+            for (j = 0; j < RTEMS_CPUUSAGE_TOP_MAX_LOAD_TASKS; j++) {
+              if (load_tasks[j]) {
+                if ( _Thread_CPU_usage_Equal_to( &usage, &zero) || 
+                     _Thread_CPU_usage_Less_than( &usage, &load[j]))
                   continue;
-                for (j = (RTEMS_CPUUSAGE_TOP_MAX_LOAD_TASKS - 1); j >= i; j--){
-                  load_tasks[j + 1] = load_tasks[j];
-                  load[j + 1]  = load[j];
+                for (k = (RTEMS_CPUUSAGE_TOP_MAX_LOAD_TASKS - 1); k >= j; k--){
+                  load_tasks[k + 1] = load_tasks[k];
+                  load[k + 1]  = load[k];
                 }
               }
-              load_tasks[i] = the_thread;
-              load[i]  = l;
+              load_tasks[j] = the_thread;
+              load[j]  = usage;
               break;
             }
           }
@@ -153,13 +195,12 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
        #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
         " ID         | NAME                | RPRI | CPRI   | SECONDS       | PERCENT\n"
        #else
-         " ID        | NAME                | RPRI | CPRI   | TICKS         | PERCENT\n"
+        " ID         | NAME                | RPRI | CPRI   | TICKS         | PERCENT\n"
        #endif
        "------------+---------------------+---------------+---------------+------------\n"
     );
 
-    for (i = 0; i < RTEMS_CPUUSAGE_TOP_MAX_LOAD_TASKS; i++)
-    {
+    for (i = 0; i < RTEMS_CPUUSAGE_TOP_MAX_LOAD_TASKS; i++) {
 
       if (!load_tasks[i])
         break;
@@ -183,7 +224,6 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
       #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
       {
         Timestamp_Control last;
-        uint32_t          ival, fval;
 
         /*
          * If this is the currently executing thread, account for time
