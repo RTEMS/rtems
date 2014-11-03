@@ -12,7 +12,7 @@
 
 #include "dl-load.h"
 
-typedef int (*call_t)(int argc, char* argv[]);
+typedef int (*call_t)(int argc, const char* argv[]);
 
 
 static const char* call_1[] = { "Line 1", "Line 2" };
