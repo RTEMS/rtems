@@ -1,33 +1,29 @@
-/**
- * @file
- *
- * @ingroup beagle
- *
- * @brief Startup code.
- */
-
 /*
- * Copyright (c) 2012 Claas Ziemke. All rights reserved.
+ * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
- *  Claas Ziemke
- *  Kernerstrasse 11
- *  70182 Stuttgart
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
  *  Germany
- *  <claas.ziemke@gmx.net>
+ *  <info@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
- * http://www.rtems.com/license/LICENSE.
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <bsp/irq-generic.h>
-#include <bsp/irq.h>
-#include <bsp/linker-symbols.h>
-#include <bsp/beagle.h>
 
 void bsp_start(void)
 {
+#if IS_DM3730
+  const char* type = "dm3730-based";
+#endif
+#if IS_AM335X
+  const char* type = "am335x-based";
+#endif
   bsp_interrupt_initialize();
+  printk("\nRTEMS Beagleboard: %s\n", type);
 }

@@ -19,6 +19,7 @@ dist_project_lib_DATA = bsp_specs
 ###############################################################################
 
 include_HEADERS = include/bsp.h
+include_HEADERS += ../../shared/include/tm27.h
 
 nodist_include_HEADERS = ../../shared/include/coverhd.h \
   include/bspopts.h
@@ -31,16 +32,19 @@ include_bsp_HEADERS += ../../shared/include/irq-generic.h
 include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += ../../shared/include/stackalloc.h
 include_bsp_HEADERS += ../../shared/include/uart-output-char.h
-include_bsp_HEADERS += ../../shared/tod.h
+include_bsp_HEADERS += ../shared/include/arm-a8core-start.h
+include_bsp_HEADERS += ../shared/include/arm-cp15-start.h
+include_bsp_HEADERS += ../shared/include/arm-errata.h
+include_bsp_HEADERS += ../shared/include/arm-release-id.h
 include_bsp_HEADERS += ../shared/include/start.h
 include_bsp_HEADERS += include/irq.h
-include_bsp_HEADERS += include/beagle.h
-include_bsp_HEADERS += include/beagle-clock-config.h
-include_bsp_HEADERS += include/beagle-timer.h
-include_bsp_HEADERS += include/boot.h
 include_bsp_HEADERS += include/i2c.h
 
-include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/arm-cp15.h
+include_libcpu_HEADERS =
+include_libcpu_HEADERS += ../../../libcpu/arm/shared/include/arm-cp15.h
+include_libcpu_HEADERS += ../../../libcpu/arm/shared/include/omap3.h
+include_libcpu_HEADERS += ../../../libcpu/arm/shared/include/am335x.h
+include_libcpu_HEADERS += ../../../libcpu/arm/shared/include/omap_timer.h
 
 ###############################################################################
 #                  Data                                                       #
@@ -78,13 +82,18 @@ libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
 libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 libbsp_a_SOURCES += ../../shared/sbrk.c
 libbsp_a_SOURCES += ../../shared/src/stackalloc.c
-libbsp_a_SOURCES += ../../shared/src/uart-output-char.c
+libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+libbsp_a_SOURCES += ../../shared/timerstub.c
+libbsp_a_SOURCES += ../../shared/cpucounterread.c
 libbsp_a_SOURCES += ../shared/abort/simple_abort.c
 libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+libbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
 
 # Startup
 libbsp_a_SOURCES += startup/bspreset.c
 libbsp_a_SOURCES += startup/bspstart.c
+libbsp_a_SOURCES += startup/bspstarthooks.c
+libbsp_a_SOURCES += startup/bspstartmmu.c
 
 # IRQ
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
@@ -93,7 +102,7 @@ libbsp_a_SOURCES += ../../shared/src/irq-info.c
 libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
 libbsp_a_SOURCES += ../../shared/src/irq-server.c
 libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += irq/irq.c
+libbsp_a_SOURCES += irq.c
 
 # Console
 libbsp_a_SOURCES += ../../shared/console.c \
@@ -103,36 +112,17 @@ libbsp_a_SOURCES += ../../shared/console.c \
         ../../shared/console_write.c \
         ../../shared/console_control.c
 
-# Clock
-libbsp_a_SOURCES += clock/beagle-clock-config.c
-libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
-
-# RTC
-libbsp_a_SOURCES += ../../shared/tod.c \
-  rtc/rtc-config.c
-
-# Misc
-libbsp_a_SOURCES += misc/boot.c
-libbsp_a_SOURCES += misc/i2c.c
-libbsp_a_SOURCES += misc/restart.c
-libbsp_a_SOURCES += misc/system-clocks.c
-libbsp_a_SOURCES += misc/timer.c
-
-# SSP
-
 # I2C
+libbsp_a_SOURCES += misc/i2c.c
+
+# Clock
+libbsp_a_SOURCES += clock.c
+libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
 libbsp_a_SOURCES += ../../../libcpu/arm/shared/include/cache_.h
 libbsp_a_CPPFLAGS += -I$(srcdir)/../../../libcpu/arm/shared/include
-
-# Start hooks
-libbsp_a_SOURCES += startup/bspstarthooks.c
-
-###############################################################################
-#                  Network                                                    #
-###############################################################################
 
 ###############################################################################
 #                  Special Rules                                              #

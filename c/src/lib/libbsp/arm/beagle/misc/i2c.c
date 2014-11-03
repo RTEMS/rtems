@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup beagle_i2c
+ * @ingroup arm_beagle
  *
  * @brief I2C support implementation.
  */

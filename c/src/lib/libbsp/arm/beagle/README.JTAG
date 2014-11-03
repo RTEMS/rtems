@@ -1,0 +1,20 @@
+To run RTEMS from scratch (without any other bootcode) on the beagles,
+you can comfortably load the executables over JTAG using gdb. This is
+necessarily target-specific however.
+
+1. BBXM
+
+  - For access to JTAG using openocd, see simscripts/bbxm.cfg.
+  - openocd then offers access to gdb using simscripts/gdbinit.bbxm.
+  - start openocd using bbxm.cfg
+  - copy your .exe to a new dir and that gdbinit file as .gdbinit in the same dir
+  - go there and start gdb:
+    $ arm-rtems4.11-gdb hello.exe
+  - gdb will invoke the BBXM hardware initialization in the bbxm.cfg
+    and load the ELF over JTAG. type 'c' (for continue) to run it.
+  - breakpoints, C statement and single-instruction stepping work.
+
+2. beaglebone white
+
+This has been tested with openocd and works but not in as much detail as for
+the BBXM yet (i.e. loading an executable from scratch).

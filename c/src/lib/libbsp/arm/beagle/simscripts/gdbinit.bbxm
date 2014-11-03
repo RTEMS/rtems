@@ -1,0 +1,16 @@
+target remote localhost:3333
+mon reset halt
+mon beagleboard_xm_init
+load
+
+b _ARMV4_Exception_undef_default
+b _ARMV4_Exception_swi_default
+b _ARMV4_Exception_pref_abort_default
+b _ARMV4_Exception_data_abort_default
+b _ARMV4_Exception_reserved_default
+b _ARMV4_Exception_irq_default
+b _ARMV4_Exception_fiq_default
+
+b rtems_fatal
+b rtems_fatal_error_occurred
+b _exit

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup beagle
+ * @ingroup arm_beagle
  *
  * @brief Global BSP definitions.
  */
@@ -18,232 +18,329 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
+ *
+ * Modified by Ben Gras <beng@shrike-systems.com> to add lots
+ * of beagleboard/beaglebone definitions, delete lpc32xx specific
+ * ones, and merge with some other header files.
  */
 
 #ifndef LIBBSP_ARM_BEAGLE_BSP_H
 #define LIBBSP_ARM_BEAGLE_BSP_H
 
 #include <bspopts.h>
+#include <stdint.h>
+#include <bsp/start.h>
+#include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
-//#include <rtems/console.h>
-//#include <rtems/clockdrv.h>
+#include <rtems/irq-extension.h>
 
-#include <bsp/beagle.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#include <libcpu/omap3.h>
+#include <libcpu/am335x.h>
 
 #define BSP_FEATURE_IRQ_EXTENSION
 
-#ifndef ASM
+/* UART base clock frequency */
+#define UART_CLOCK     48000000
 
-struct rtems_bsdnet_ifconfig;
+/* Access memory-mapped I/O devices */
+#define mmio_read(a)    (*(volatile uint32_t *)(a))
+#define mmio_write(a,v) (*(volatile uint32_t *)(a) = (v))
+#define mmio_set(a,v)   mmio_write((a), mmio_read((a)) | (v))
+#define mmio_clear(a,v) mmio_write((a), mmio_read((a)) & ~(v))
 
-/**
- * @defgroup beagle BEAGLE Support
- *
- * @ingroup bsp_kit
- *
- * @brief BEAGLE support package.
- *
- * @{
- */
+#define REG16(x)(*((volatile uint16_t *)(x)))
+#define REG(x)(*((volatile uint32_t *)(x)))
+#define BIT(x)(0x1 << x)
 
-/**
- * @brief Network driver attach and detach function.
- */
-int beagle_eth_attach_detach(
-  struct rtems_bsdnet_ifconfig *config,
-  int attaching
-);
+#define udelay(u) rtems_task_wake_after(1 + ((u)/rtems_configuration_get_microseconds_per_tick()))
 
-/**
- * @brief Standard network driver attach and detach function.
- */
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH beagle_eth_attach_detach
-
-/**
- * @brief Standard network driver name.
- */
-#define RTEMS_BSP_NETWORK_DRIVER_NAME "eth0"
-
-/**
- * @brief Optimized idle task.
- *
- * This idle task sets the power mode to idle.  This causes the processor clock
- * to be stopped, while on-chip peripherals remain active.  Any enabled
- * interrupt from a peripheral or an external interrupt source will cause the
- * processor to resume execution.
- *
- * To enable the idle task use the following in the system configuration:
- *
- * @code
- * #include <bsp.h>
- *
- * #define CONFIGURE_INIT
- *
- * #define CONFIGURE_IDLE_TASK_BODY beagle_idle
- *
- * #include <confdefs.h>
- * @endcode
- */
-void *beagleboard_idle(uintptr_t ignored);
-
-#define BEAGLE_STANDARD_TIMER (&beagle.timer_1)
-
-static inline unsigned beagleboard_timer(void)
+/* Write a uint32_t value to a memory address. */
+static inline void
+write32(uint32_t address, uint32_t value)
 {
-  volatile beagle_timer *timer = BEAGLE_STANDARD_TIMER;
-
-  return timer->tc;
+    REG(address) = value;
 }
 
-static inline void beagleboard_micro_seconds_delay(unsigned us)
+/* Read an uint32_t from a memory address */
+static inline uint32_t
+read32(uint32_t address)
 {
-  unsigned start = beagleboard_timer();
-  unsigned delay = us * (BEAGLE_PERIPH_CLK / 1000000);
-  unsigned elapsed = 0;
-
-  do {
-    elapsed = beagleboard_timer() - start;
-  } while (elapsed < delay);
+    return REG(address);
 }
 
-#if BEAGLE_OSCILLATOR_MAIN == 13000000U
-  #define BEAGLE_HCLKPLL_CTRL_INIT_VALUE \
-    (HCLK_PLL_POWER | HCLK_PLL_DIRECT | HCLK_PLL_M(16 - 1))
-  #define BEAGLE_HCLKDIV_CTRL_INIT_VALUE \
-    (HCLK_DIV_HCLK(2 - 1) | \
-    HCLK_DIV_PERIPH_CLK(16 - 1) | \
-    HCLK_DIV_DDRAM_CLK(1))
-#else
-  #error "unexpected main oscillator frequency"
+/* Set a 32 bits value depending on a mask */
+static inline void
+set32(uint32_t address, uint32_t mask, uint32_t value)
+{
+    uint32_t val;
+    val = read32(address);
+    /* clear the bits */
+    val &= ~(mask);
+    /* apply the value using the mask */
+    val |= (value & mask);
+    write32(address, val);
+}
+
+/* Write a uint16_t value to a memory address. */
+static inline void
+write16(uint32_t address, uint16_t value)
+{
+    REG16(address) = value;
+}
+
+/* Read an uint16_t from a memory address */
+static inline uint16_t
+read16(uint32_t address)
+{
+    return REG16(address);
+}
+
+/* Data synchronization barrier */
+static inline void dsb(void)
+{
+    asm volatile("dsb" : : : "memory");
+}
+
+/* Instruction synchronization barrier */
+static inline void isb(void)
+{
+    asm volatile("isb" : : : "memory");
+}
+
+/* flush data cache */
+static inline void flush_data_cache(void)
+{
+    asm volatile("mov r0, #0; mcr p15, #0, r0, c7, c10, #4" : : : "memory");
+}
+
+
+#define TIMER_FREQ  1000    /* clock frequency for OMAP timer (1ms) */
+#define TIMER_COUNT(freq) (TIMER_FREQ/(freq)) /* initial value for counter*/
+
+#define __arch_getb(a)      (*(volatile unsigned char *)(a))
+#define __arch_getw(a)      (*(volatile unsigned short *)(a))
+#define __arch_getl(a)      (*(volatile unsigned int *)(a))
+
+#define __arch_putb(v,a)    (*(volatile unsigned char *)(a) = (v))
+#define __arch_putw(v,a)    (*(volatile unsigned short *)(a) = (v))
+#define __arch_putl(v,a)    (*(volatile unsigned int *)(a) = (v))
+
+#define writeb(v,c) ({ unsigned char  __v = v; __arch_putb(__v,c); __v; })
+#define writew(v,c) ({ unsigned short __v = v; __arch_putw(__v,c); __v; })
+#define writel(v,c) ({ unsigned int __v = v; __arch_putl(__v,c); __v; })
+
+#define readb(c)  ({ unsigned char  __v = __arch_getb(c); __v; })
+#define readw(c)  ({ unsigned short __v = __arch_getw(c); __v; })
+#define readl(c)  ({ unsigned int __v = __arch_getl(c); __v; })
+
+#define SYSTEM_CLOCK_12       12000000
+#define SYSTEM_CLOCK_13       13000000
+#define SYSTEM_CLOCK_192      19200000
+#define SYSTEM_CLOCK_96       96000000
+
+#if !defined(IS_DM3730) && !defined(IS_AM335X)
+#error Unrecognized BSP configured.
 #endif
 
-bool beagleboard_start_pll_setup(
-  uint32_t hclkpll_ctrl,
-  uint32_t hclkdiv_ctrl,
-  bool force
-);
-
-uint32_t beagleboard__sysclk(void);
-
-uint32_t beagleboard_hclkpll_clk(void);
-
-uint32_t beagleboard_periph_clk(void);
-
-uint32_t beagleboard_hclk(void);
-
-uint32_t beagleboard_arm_clk(void);
-
-uint32_t beagleboard_dram_clk(void);
-
-void bsp_restart(void *addr);
-
-#define BSP_CONSOLE_UART_BASE BEAGLE_BASE_UART_5
-
-/**
- * @brief Begin of magic zero area.
- *
- * A read from this area returns zero.  Writes have no effect.
- */
-//extern uint32_t beagle_magic_zero_begin [];
-
-/**
- * @brief End of magic zero area.
- *
- * A read from this area returns zero.  Writes have no effect.
- */
-//extern uint32_t beagle_magic_zero_end [];
-
-/**
- * @brief Size of magic zero area.
- *
- * A read from this area returns zero.  Writes have no effect.
- */
-//extern uint32_t beagle_magic_zero_size [];
-
-#ifdef BEAGLE_SCRATCH_AREA_SIZE
-  /**
-   * @rief Scratch area.
-   *
-   * The usage is application specific.
-   */
-  //extern uint8_t beagle_scratch_area [BEAGLE_SCRATCH_AREA_SIZE];
+#if IS_DM3730
+#define BSP_DEVICEMEM_START 0x48000000
+#define BSP_DEVICEMEM_END   0x5F000000
 #endif
 
-#define BEAGLE_DO_STOP_GPDMA \
-  do { \
-    if ((BEAGLE_DMACLK_CTRL & 0x1) != 0) { \
-      if ((beagle.dma.cfg & DMA_CFG_E) != 0) { \
-        int i = 0; \
-        for (i = 0; i < 8; ++i) { \
-          beagle.dma.channels [i].cfg = 0; \
-        } \
-        beagle.dma.cfg &= ~DMA_CFG_E; \
-      } \
-      BEAGLE_DMACLK_CTRL = 0; \
-    } \
-  } while (0)
+#if IS_AM335X
+#define BSP_DEVICEMEM_START 0x44000000
+#define BSP_DEVICEMEM_END   0x57000000
+#endif
 
-#define BEAGLE_DO_STOP_ETHERNET \
-  do { \
-    if ((BEAGLE_MAC_CLK_CTRL & 0x7) == 0x7) { \
-      beagle.eth.command = 0x38; \
-      beagle.eth.mac1 = 0xcf00; \
-      beagle.eth.mac1 = 0; \
-      BEAGLE_MAC_CLK_CTRL = 0; \
-    } \
-  } while (0)
+/* per-target uart config */
+#if IS_AM335X
+#define BSP_CONSOLE_UART        1
+#define BSP_CONSOLE_UART_BASE   BEAGLE_BASE_UART_1
+#define BSP_CONSOLE_UART_IRQ    OMAP3_UART1_IRQ
+#define BEAGLE_BASE_UART_1      0x44E09000
+#define BEAGLE_BASE_UART_2      0x48022000
+#define BEAGLE_BASE_UART_3      0x48024000
+#endif
 
-#define BEAGLE_DO_STOP_USB \
-  do { \
-    if ((BEAGLE_USB_CTRL & 0x010e8000) != 0) { \
-      BEAGLE_OTG_CLK_CTRL = 0; \
-      BEAGLE_USB_CTRL = 0x80000; \
-    } \
-  } while (0)
+/* per-target uart config */
+#if IS_DM3730
+#define BSP_CONSOLE_UART        3
+#define BSP_CONSOLE_UART_BASE   BEAGLE_BASE_UART_3
+#define BSP_CONSOLE_UART_IRQ    OMAP3_UART3_IRQ
+#define BEAGLE_BASE_UART_1      0x4806A000
+#define BEAGLE_BASE_UART_2      0x4806C000
+#define BEAGLE_BASE_UART_3      0x49020000
+#endif
 
-#define BEAGLE_DO_RESTART(addr) \
-  do { \
-    ARM_SWITCH_REGISTERS; \
-    rtems_interrupt_level level; \
-    uint32_t ctrl = 0; \
-  \
-    rtems_interrupt_disable(level); \
-  \
-    arm_cp15_data_cache_test_and_clean(); \
-    arm_cp15_instruction_cache_invalidate(); \
-  \
-    ctrl = arm_cp15_get_control(); \
-    ctrl &= ~(ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M); \
-    arm_cp15_set_control(ctrl); \
-  \
-    __asm__ volatile ( \
-      ARM_SWITCH_TO_ARM \
-      "mov pc, %[addr]\n" \
-      ARM_SWITCH_BACK \
-      : ARM_SWITCH_OUTPUT \
-      : [addr] "r" (addr) \
-    ); \
-  } while (0)
+/* i2c stuff */
+typedef struct {
+    uint32_t rx_or_tx;
+    uint32_t stat;
+    uint32_t ctrl;
+    uint32_t clk_hi;
+    uint32_t clk_lo;
+    uint32_t adr;
+    uint32_t rxfl;
+    uint32_t txfl;
+    uint32_t rxb;
+    uint32_t txb;
+    uint32_t s_tx;
+    uint32_t s_txfl;
+} beagle_i2c;
 
-/** @} */
+/* sctlr */
+/* Read System Control Register */
+static inline uint32_t read_sctlr()
+{
+    uint32_t ctl;
+
+    asm volatile("mrc p15, 0, %[ctl], c1, c0, 0 @ Read SCTLR\n\t"
+        : [ctl] "=r" (ctl));
+    return ctl;
+}
+
+/* Write System Control Register */
+static inline void write_sctlr(uint32_t ctl)
+{
+    asm volatile("mcr p15, 0, %[ctl], c1, c0, 0 @ Write SCTLR\n\t"
+        : : [ctl] "r" (ctl));
+    isb();
+}
+
+/* Read Auxiliary Control Register */
+static inline uint32_t read_actlr()
+{
+    uint32_t ctl;
+
+    asm volatile("mrc p15, 0, %[ctl], c1, c0, 1 @ Read ACTLR\n\t"
+            : [ctl] "=r" (ctl));
+    return ctl;
+}
+
+/* Write Auxiliary Control Register */
+static inline void write_actlr(uint32_t ctl)
+{
+    asm volatile("mcr p15, 0, %[ctl], c1, c0, 1 @ Write ACTLR\n\t"
+        : : [ctl] "r" (ctl));
+    isb();
+}
+
+/* Write Translation Table Base Control Register */
+static inline void write_ttbcr(uint32_t bcr)
+{
+        asm volatile("mcr p15, 0, %[bcr], c2, c0, 2 @ Write TTBCR\n\t"
+                        : : [bcr] "r" (bcr));
+
+        isb();
+}
+
+/* Read Domain Access Control Register */
+static inline uint32_t read_dacr()
+{
+        uint32_t dacr;
+
+        asm volatile("mrc p15, 0, %[dacr], c3, c0, 0 @ Read DACR\n\t"
+                        : [dacr] "=r" (dacr));
+
+        return dacr;
+}
+
+
+/* Write Domain Access Control Register */
+static inline void write_dacr(uint32_t dacr)
+{
+        asm volatile("mcr p15, 0, %[dacr], c3, c0, 0 @ Write DACR\n\t"
+                        : : [dacr] "r" (dacr));
+
+        isb();
+}
+
+static inline void refresh_tlb(void)
+{
+    dsb();
+
+    /* Invalidate entire unified TLB */
+    asm volatile("mcr p15, 0, %[zero], c8, c7, 0 @ TLBIALL\n\t"
+        : : [zero] "r" (0));
+
+    /* Invalidate all instruction caches to PoU.
+     * Also flushes branch target cache. */
+    asm volatile("mcr p15, 0, %[zero], c7, c5, 0"
+        : : [zero] "r" (0));
+
+    /* Invalidate entire branch predictor array */
+    asm volatile("mcr p15, 0, %[zero], c7, c5, 6"
+        : : [zero] "r" (0)); /* flush BTB */
+
+    dsb();
+    isb();
+}
+
+/* Read Translation Table Base Register 0 */
+static inline uint32_t read_ttbr0()
+{
+    uint32_t bar;
+
+    asm volatile("mrc p15, 0, %[bar], c2, c0, 0 @ Read TTBR0\n\t"
+        : [bar] "=r" (bar));
+
+    return bar & ARM_TTBR_ADDR_MASK;
+}
+
+
+/* Read Translation Table Base Register 0 */
+static inline uint32_t read_ttbr0_unmasked()
+{
+    uint32_t bar;
+
+    asm volatile("mrc p15, 0, %[bar], c2, c0, 0 @ Read TTBR0\n\t"
+        : [bar] "=r" (bar));
+
+    return bar;
+}
+
+/* Write Translation Table Base Register 0 */
+static inline void write_ttbr0(uint32_t bar)
+{
+    dsb();
+    isb();
+    /* In our setup TTBR contains the base address *and* the flags
+       but other pieces of the kernel code expect ttbr to be the
+       base address of the l1 page table. We therefore add the
+       flags here and remove them in the read_ttbr0 */
+    uint32_t v  =  (bar  & ARM_TTBR_ADDR_MASK ) | ARM_TTBR_FLAGS_CACHED;
+    asm volatile("mcr p15, 0, %[bar], c2, c0, 0 @ Write TTBR0\n\t"
+        : : [bar] "r" (v));
+
+    refresh_tlb();
+}
+
+/* Behaviour on fatal error; default: test-friendly.
+ * set breakpoint to bsp_fatal_extension.
+ */
+/* Enabling BSP_PRESS_KEY_FOR_RESET prevents noninteractive testing */
+/*#define  BSP_PRESS_KEY_FOR_RESET     1 */
+#define    BSP_PRINT_EXCEPTION_CONTEXT 1
+    /* human-readable exception info */
+#define    BSP_RESET_BOARD_AT_EXIT 1
+    /* causes qemu to exit, signaling end of test */
+
 
 /**
- * @defgroup beagle BEAGLE Support
+ * @defgroup arm_beagle Beaglebone, Beagleboard Support
  *
- * @ingroup beagle
+ * @ingroup bsp_arm
  *
- * @brief BEAGLE support package.
+ * @brief Beaglebones and beagleboards support package
+ *
  */
 
-#endif /* ASM */
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+/**
+ * @brief Beagleboard specific set up of the MMU.
+ *
+ * Provide in the application to override.
+ */
+BSP_START_TEXT_SECTION void beagle_setup_mmu_and_cache(void);
 
 #endif /* LIBBSP_ARM_BEAGLE_BSP_H */

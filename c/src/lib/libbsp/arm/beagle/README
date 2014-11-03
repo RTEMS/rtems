@@ -1,6 +1,118 @@
-Development board is a BeagleBoard Rev Cx.  Basic initialization via stage 1
-bootloader or U-Boot will be assumed.  Drivers:
+BSP for beagleboard xm, beaglebone (original aka white), and beaglebone black.
 
-        o Standard UART 3, 4, 5, 6 (Console = 5, 115200N1)
-        o Clock uses TIMER 0
-        o Ethernet
+original beagleboard isn't tested.
+
+wiki: http://www.rtems.org/wiki/index.php/Beagleboard
+
+1.   *** CONFIGURING ************
+
+bsp-specific build options in the environment at build time:
+CONSOLE_POLLED=1 use polled i/o for console, required to run testsuite
+CONSOLE_BAUD=... override default console baud rate
+
+BSPs recognized are:
+beagleboardorig  original beagleboard
+beagleboardxm    beagleboard xm
+beaglebonewhite  original beaglebone
+beagleboneblack  beaglebone black
+
+Currently the only distinction in the BSP are between the beagleboards and
+the beaglebones, but the 4 names are specified in case hardware-specific
+distinctions are made in the future, so this can be done without changing the
+usage.
+
+
+2.   *** BUILDING    ************
+
+To build BSPs for the beaglebone white and beagleboard xm, starting from
+a directory in which you have this source tree in rtems-src:
+
+$ mkdir b-beagle
+$ cd b-beagle
+$ ../rtems-src/configure --target=arm-rtems4.11 --enable-rtemsbsp="beaglebonewhite beagleboardxm"
+$ make all
+
+This should give you .exes somewhere.
+
+Then you need 'mkimage' to transform a .exe file to a u-boot image
+file. first make a flat binary:
+
+$ arm-rtems4.11-objcopy $exe -O binary $exe.bin
+$ gzip -9 $exe.bin
+$ mkimage -A arm -O rtems -T kernel -a 0x80000000 -e 0x80000000 -n RTEMS -d $exe.bin.gz rtems-app.img
+
+All beagles have memory starting at 0x80000000 so the load & run syntax is the same.
+
+3.   *** BOOTING     ************
+
+Then, boot the beaglebone with u-boot on an SD card and load rtems-app.img
+from u-boot. Interrupt the u-boot boot to get a prompt.
+
+Set up a tftp server and a network connection for netbooting. And to
+copy rtems-app.img to the tftp dir. Otherwise copy the .img to the FAT
+partition on the SD card and make uboot load & run that.
+
+4.   *** BEAGLEBONES ************
+
+(tested on both beaglebones)
+
+Beaglebone original (white) or beaglebone black netbooting:
+
+uboot# setenv ipaddr 192.168.12.20
+uboot# setenv serverip 192.168.12.10
+uboot# echo starting from TFTP
+uboot# tftp 0x80800000 rtems-app.img
+uboot# dcache off ; icache off
+uboot# bootm 0x80800000
+
+Beaglebone original (white) or beaglebone black from a FAT partition:
+
+uboot# fatload mmc :1 0x80800000 ticker.img
+uboot# dcache off ; icache off
+uboot# bootm 0x80800000
+
+4.   *** BEAGLEBOARD ************
+
+(tested on xm)
+
+For the beagleboard the necessary commands are a bit different because
+of the ethernet over usb:
+
+uboot# setenv serverip 192.168.12.10
+uboot# setenv ipaddr 192.168.12.62
+uboot# setenv usbnet_devaddr e8:03:9a:24:f9:10
+uboot# setenv usbethaddr e8:03:9a:24:f9:11
+uboot# usb start
+uboot# echo starting from TFTP
+uboot# tftp 0x80800000 rtems-app.img
+uboot# dcache off ; icache off
+uboot# bootm 0x80800000
+
+4.   *** SD CARD ****************
+
+There is a script here that automatically writes an SD card for any of
+the beagle targets.
+
+Let's write one for the Beaglebone Black. Assuming your source tree is
+at $HOME/development/rtems/rtems-src and your bsp is built and linked
+with examples and installed at $HOME/development/rtems/4.11.
+
+    % cd $HOME/development/rtems/rtems-src/c/src/lib/libbsp/arm/beagle/simscripts
+    % sh sdcard.sh $HOME/development/rtems/4.11 $HOME/development/rtems/b-beagle/arm-rtems4.11/c/beagleboneblack/testsuites/samples/hello/hello.exe
+
+The script should give you a whole bunch of output, ending in:
+
+    Result is in bone_hello.exe-sdcard.img.
+
+There you go. dd that to an SD card and boot!
+
+The script needs to know whether it's for a Beagleboard xM or one of the
+Beaglebones. This is to know which uboot to use. It will detect this
+from the path the executable is in (in the above example, it contains
+'beagleboneblack'), so you have to specify the full path.
+
+
+Good luck & enjoy!
+
+Ben Gras
+beng@shrike-systems.com

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup beagle_i2c
+ * @ingroup arm_beagle
  *
  * @brief I2C support API.
  */
@@ -25,7 +25,7 @@
 
 #include <rtems.h>
 
-#include <bsp/beagle.h>
+#include <bsp.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -215,89 +215,6 @@ static int imw ( unsigned char  chip, unsigned long addr, unsigned char byte );
 static int imd( unsigned char chip, unsigned int addr, unsigned int length );
 
 /**
- * @defgroup beagle_i2c I2C Support
- *
- * @ingroup beagle
- *
- * @brief I2C Support
- *
- * All writes and reads will be performed in master mode.  Exclusive bus access
- * will be assumed.
- *
- * @{
- */
-
-/**
- * @name I2C Clock Control Register (I2CCLK_CTRL)
- *
- * @{
- */
-
-//#define I2CCLK_1_EN BSP_BIT32(0)
-//#define I2CCLK_2_EN BSP_BIT32(1)
-//#define I2CCLK_1_HIGH_DRIVE BSP_BIT32(2)
-//#define I2CCLK_2_HIGH_DRIVE BSP_BIT32(3)
-//#define I2CCLK_USB_HIGH_DRIVE BSP_BIT32(4)
-
-/** @} */
-
-/**
- * @name I2C TX Data FIFO Register (I2Cn_TX)
- *
- * @{
- */
-
-//#define I2C_TX_READ BSP_BIT32(0)
-//#define I2C_TX_ADDR(val) BSP_FLD32(val, 1, 7)
-//#define I2C_TX_START BSP_BIT32(8)
-//#define I2C_TX_STOP BSP_BIT32(9)
-
-/** @} */
-
-/**
- * @name I2C Status Register (I2Cn_STAT)
- *
- * @{
- */
-
-//#define I2C_STAT_TDI BSP_BIT32(0)
-//#define I2C_STAT_AFI BSP_BIT32(1)
-//#define I2C_STAT_NAI BSP_BIT32(2)
-//#define I2C_STAT_DRMI BSP_BIT32(3)
-//#define I2C_STAT_DRSI BSP_BIT32(4)
-//#define I2C_STAT_ACTIVE BSP_BIT32(5)
-//#define I2C_STAT_SCL BSP_BIT32(6)
-//#define I2C_STAT_SDA BSP_BIT32(7)
-//#define I2C_STAT_RFF BSP_BIT32(8)
-//#define I2C_STAT_RFE BSP_BIT32(9)
-//#define I2C_STAT_TFF BSP_BIT32(10)
-//#define I2C_STAT_TFE BSP_BIT32(11)
-//#define I2C_STAT_TFFS BSP_BIT32(12)
-//#define I2C_STAT_TFES BSP_BIT32(13)
-
-/** @} */
-
-/**
- * @name I2C Control Register (I2Cn_CTRL)
- *
- * @{
- */
-
-//#define I2C_CTRL_TDIE BSP_BIT32(0)
-//#define I2C_CTRL_AFIE BSP_BIT32(1)
-//#define I2C_CTRL_NAIE BSP_BIT32(2)
-//#define I2C_CTRL_DRMIE BSP_BIT32(3)
-//#define I2C_CTRL_DRSIE BSP_BIT32(4)
-//#define I2C_CTRL_RFFIE BSP_BIT32(5)
-//#define I2C_CTRL_RFDAIE BSP_BIT32(6)
-//#define I2C_CTRL_TFFIO BSP_BIT32(7)
-//#define I2C_CTRL_RESET BSP_BIT32(8)
-//#define I2C_CTRL_SEVEN BSP_BIT32(9)
-//#define I2C_CTRL_TFFSIE BSP_BIT32(10)
-
-/** @} */
-
-/**
  * @brief Initializes the I2C module @a i2c.
  *
  * Valid @a clock_in_hz values are 100000 and 400000.
@@ -443,8 +360,6 @@ static inline rtems_status_code beagle_i2c_read(
 {
   return beagle_i2c_write_and_read(i2c, addr, NULL, 0, in, in_size);
 }
-
-/** @} */
 
 #ifdef __cplusplus
 }
