@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012-2014 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -73,7 +73,10 @@ rtems_rtl_elf_find_symbol (rtems_rtl_obj_t* obj,
 
   if (ELF_ST_TYPE(sym->st_info) == STT_NOTYPE)
   {
-    rtems_rtl_obj_sym_t* symbol = rtems_rtl_symbol_global_find (symname);
+    /*
+     * Search the object file then the global table for the symbol.
+     */
+    rtems_rtl_obj_sym_t* symbol = rtems_rtl_symbol_obj_find (obj, symname);
     if (!symbol)
     {
       rtems_rtl_set_error (EINVAL, "global symbol not found: %s", symname);
@@ -337,9 +340,14 @@ rtems_rtl_elf_symbols (rtems_rtl_obj_t*      obj,
   rtems_rtl_obj_cache_t* symbols;
   rtems_rtl_obj_cache_t* strings;
   rtems_rtl_obj_sect_t*  strtab;
+  int                    locals;
+  int                    local_string_space;
+  rtems_rtl_obj_sym_t*   lsym;
+  char*                  lstring;
   int                    globals;
-  int                    string_space;
-  char*                  string;
+  int                    global_string_space;
+  rtems_rtl_obj_sym_t*   gsym;
+  char*                  gstring;
   int                    sym;
 
   strtab = rtems_rtl_obj_find_section (obj, ".strtab");
@@ -359,8 +367,10 @@ rtems_rtl_elf_symbols (rtems_rtl_obj_t*      obj,
    * needed. Also check for duplicate symbols.
    */
 
-  globals      = 0;
-  string_space = 0;
+  globals             = 0;
+  global_string_space = 0;
+  locals              = 0;
+  local_string_space  = 0;
 
   for (sym = 0; sym < (sect->size / sizeof (Elf_Sym)); ++sym)
   {
@@ -382,121 +392,181 @@ rtems_rtl_elf_symbols (rtems_rtl_obj_t*      obj,
       return false;
 
     /*
-     * Only keep the functions and global or weak symbols.
+     * Only keep the functions and global or weak symbols so place them in a
+     * separate table to local symbols. Local symbols are not needed after the
+     * object file has been loaded. Undefined symbols are NOTYPE so for locals
+     * we need to make sure there is a valid seciton.
      */
-    if ((ELF_ST_TYPE (symbol.st_info) == STT_OBJECT) ||
-        (ELF_ST_TYPE (symbol.st_info) == STT_FUNC))
+    if ((symbol.st_shndx != 0) &&
+        ((ELF_ST_TYPE (symbol.st_info) == STT_OBJECT) ||
+         (ELF_ST_TYPE (symbol.st_info) == STT_FUNC) ||
+         (ELF_ST_TYPE (symbol.st_info) == STT_NOTYPE)))
     {
-      if ((ELF_ST_BIND (symbol.st_info) == STB_GLOBAL) ||
-          (ELF_ST_BIND (symbol.st_info) == STB_WEAK))
+      rtems_rtl_obj_sect_t* symsect;
+
+      symsect = rtems_rtl_obj_find_section_by_index (obj, symbol.st_shndx);
+      if (symsect)
       {
-        /*
-         * If there is a globally exported symbol already present and this
-         * symbol is not weak raise an error. If the symbol is weak and present
-         * globally ignore this symbol and use the global one and if it is not
-         * present take this symbol global or weak. We accept the first weak
-         * symbol we find and make it globally exported.
-         */
-        if (rtems_rtl_symbol_global_find (name) &&
-            (ELF_ST_BIND (symbol.st_info) != STB_WEAK))
+        if ((ELF_ST_BIND (symbol.st_info) == STB_GLOBAL) ||
+            (ELF_ST_BIND (symbol.st_info) == STB_WEAK))
         {
-          rtems_rtl_set_error (ENOMEM, "duplicate global symbol: %s", name);
-          return false;
+          /*
+           * If there is a globally exported symbol already present and this
+           * symbol is not weak raise an error. If the symbol is weak and
+           * present globally ignore this symbol and use the global one and if
+           * it is not present take this symbol global or weak. We accept the
+           * first weak symbol we find and make it globally exported.
+           */
+          if (rtems_rtl_symbol_global_find (name) &&
+              (ELF_ST_BIND (symbol.st_info) != STB_WEAK))
+          {
+            rtems_rtl_set_error (ENOMEM, "duplicate global symbol: %s", name);
+            return false;
+          }
+          else
+          {
+            ++globals;
+            global_string_space += strlen (name) + 1;
+          }
         }
-        else
+        else if (ELF_ST_BIND (symbol.st_info) == STB_LOCAL)
         {
-          ++globals;
-          string_space += strlen (name) + 1;
+          ++locals;
+          local_string_space += strlen (name) + 1;
         }
       }
     }
   }
 
+  if (locals)
+  {
+    obj->local_size = locals * sizeof (rtems_rtl_obj_sym_t) + local_string_space;
+    obj->local_table = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_SYMBOL,
+                                            obj->local_size, true);
+    if (!obj->local_table)
+    {
+      obj->local_size = 0;
+      rtems_rtl_set_error (ENOMEM, "no memory for obj local syms");
+      return false;
+    }
+
+    obj->local_syms = locals;
+  }
+
   if (globals)
   {
-    rtems_rtl_obj_sym_t* gsym;
-
-    obj->global_size = globals * sizeof (rtems_rtl_obj_sym_t) + string_space;
+    obj->global_size = globals * sizeof (rtems_rtl_obj_sym_t) + global_string_space;
     obj->global_table = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_SYMBOL,
                                              obj->global_size, true);
     if (!obj->global_table)
     {
+      if (locals)
+      {
+        rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, obj->local_table);
+        obj->local_size = 0;
+        obj->local_syms = 0;
+      }
       obj->global_size = 0;
       rtems_rtl_set_error (ENOMEM, "no memory for obj global syms");
       return false;
     }
 
     obj->global_syms = globals;
+  }
 
-    for (sym = 0,
-           gsym = obj->global_table,
-           string = (((char*) obj->global_table) +
-                     (globals * sizeof (rtems_rtl_obj_sym_t)));
-         sym < (sect->size / sizeof (Elf_Sym));
-         ++sym)
+  lsym = obj->local_table;
+  lstring =
+    (((char*) obj->local_table) + (locals * sizeof (rtems_rtl_obj_sym_t)));
+  gsym = obj->global_table;
+  gstring =
+    (((char*) obj->global_table) + (globals * sizeof (rtems_rtl_obj_sym_t)));
+
+  for (sym = 0; sym < (sect->size / sizeof (Elf_Sym)); ++sym)
+  {
+    Elf_Sym     symbol;
+    off_t       off;
+    const char* name;
+    size_t      len;
+
+    off = obj->ooffset + sect->offset + (sym * sizeof (symbol));
+
+    if (!rtems_rtl_obj_cache_read_byval (symbols, fd, off,
+                                         &symbol, sizeof (symbol)))
     {
-      Elf_Sym     symbol;
-      off_t       off;
-      const char* name;
-      size_t      len;
-
-      off = obj->ooffset + sect->offset + (sym * sizeof (symbol));
-
-      if (!rtems_rtl_obj_cache_read_byval (symbols, fd, off,
-                                           &symbol, sizeof (symbol)))
+      if (locals)
       {
-        free (obj->global_table);
+        rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, obj->local_table);
+        obj->local_table = NULL;
+        obj->local_size = 0;
+        obj->local_syms = 0;
+      }
+      if (globals)
+      {
+        rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, obj->global_table);
         obj->global_table = NULL;
         obj->global_syms = 0;
         obj->global_size = 0;
-        return false;
       }
-
-      off = obj->ooffset + strtab->offset + symbol.st_name;
-      len = RTEMS_RTL_ELF_STRING_MAX;
-
-      if (!rtems_rtl_obj_cache_read (strings, fd, off, (void**) &name, &len))
-        return false;
-
-      if (((ELF_ST_TYPE (symbol.st_info) == STT_OBJECT) ||
-           (ELF_ST_TYPE (symbol.st_info) == STT_FUNC)) &&
-          ((ELF_ST_BIND (symbol.st_info) == STB_GLOBAL) ||
-           (ELF_ST_BIND (symbol.st_info) == STB_WEAK)))
-      {
-        rtems_rtl_obj_sect_t* symsect;
-        symsect = rtems_rtl_obj_find_section_by_index (obj, symbol.st_shndx);
-        if (!symsect)
-        {
-          free (obj->global_table);
-          obj->global_table = NULL;
-          obj->global_syms = 0;
-          obj->global_size = 0;
-          rtems_rtl_set_error (EINVAL, "sym section not found");
-          return false;
-        }
-
-        rtems_chain_set_off_chain (&gsym->node);
-
-        memcpy (string, name, strlen (name) + 1);
-        gsym->name = string;
-        string += strlen (name) + 1;
-        gsym->value = symbol.st_value + (uint8_t*) symsect->base;
-        gsym->data = symbol.st_info;
-
-        if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
-          printf ("rtl: sym:add:%-2d name:%-2d:%-20s bind:%-2d type:%-2d val:%8p sect:%d size:%d\n",
-                  sym, (int) symbol.st_name, gsym->name,
-                  (int) ELF_ST_BIND (symbol.st_info),
-                  (int) ELF_ST_TYPE (symbol.st_info),
-                  gsym->value, symbol.st_shndx,
-                  (int) symbol.st_size);
-
-        ++gsym;
-      }
+      return false;
     }
 
-    rtems_rtl_symbol_obj_add (obj);
+    off = obj->ooffset + strtab->offset + symbol.st_name;
+    len = RTEMS_RTL_ELF_STRING_MAX;
+
+    if (!rtems_rtl_obj_cache_read (strings, fd, off, (void**) &name, &len))
+      return false;
+
+    if ((symbol.st_shndx != 0) &&
+        ((ELF_ST_TYPE (symbol.st_info) == STT_OBJECT) ||
+         (ELF_ST_TYPE (symbol.st_info) == STT_FUNC) ||
+         (ELF_ST_TYPE (symbol.st_info) == STT_NOTYPE)) &&
+         ((ELF_ST_BIND (symbol.st_info) == STB_GLOBAL) ||
+          (ELF_ST_BIND (symbol.st_info) == STB_WEAK) ||
+          (ELF_ST_BIND (symbol.st_info) == STB_LOCAL)))
+      {
+        rtems_rtl_obj_sect_t* symsect;
+        rtems_rtl_obj_sym_t*  osym;
+        char*                 string;
+
+        symsect = rtems_rtl_obj_find_section_by_index (obj, symbol.st_shndx);
+        if (symsect)
+        {
+          if ((ELF_ST_BIND (symbol.st_info) == STB_GLOBAL) ||
+              (ELF_ST_BIND (symbol.st_info) == STB_WEAK))
+          {
+            osym = gsym;
+            string = gstring;
+            gstring += strlen (name) + 1;
+            ++gsym;
+          }
+          else
+          {
+            osym = lsym;
+            string = lstring;
+            lstring += strlen (name) + 1;
+            ++lsym;
+          }
+
+          rtems_chain_set_off_chain (&osym->node);
+          memcpy (string, name, strlen (name) + 1);
+          osym->name = string;
+          osym->value = symbol.st_value + (uint8_t*) symsect->base;
+          osym->data = symbol.st_info;
+
+          if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
+            printf ("rtl: sym:add:%-2d name:%-2d:%-20s bind:%-2d " \
+                    "type:%-2d val:%8p sect:%d size:%d\n",
+                    sym, (int) symbol.st_name, osym->name,
+                    (int) ELF_ST_BIND (symbol.st_info),
+                    (int) ELF_ST_TYPE (symbol.st_info),
+                    osym->value, symbol.st_shndx,
+                    (int) symbol.st_size);
+        }
+      }
   }
+
+  if (globals)
+    rtems_rtl_symbol_obj_add (obj);
 
   return true;
 }
@@ -631,8 +701,9 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj_t* obj, int fd, Elf_Ehdr* ehdr)
         break;
 
       default:
-        printf ("rtl: unsupported section: %2d: type=%02d flags=%02x\n",
-                section, (int) shdr.sh_type, (int) shdr.sh_flags);
+        if (rtems_rtl_trace (RTEMS_RTL_TRACE_WARNING))
+          printf ("rtl: unsupported section: %2d: type=%02d flags=%02x\n",
+                  section, (int) shdr.sh_type, (int) shdr.sh_flags);
         break;
     }
 
@@ -866,6 +937,8 @@ rtems_rtl_elf_file_load (rtems_rtl_obj_t* obj, int fd)
 
   if (!rtems_rtl_obj_relocate (obj, fd, rtems_rtl_elf_relocator, &ehdr))
     return false;
+
+  rtems_rtl_symbol_obj_erase_local (obj);
 
   if (!rtems_rtl_elf_load_details (obj))
   {

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012-2014 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -47,6 +47,7 @@ typedef uint32_t rtems_rtl_trace_mask;
 #define RTEMS_RTL_TRACE_ALLOCATOR              (1UL << 7)
 #define RTEMS_RTL_TRACE_UNRESOLVED             (1UL << 8)
 #define RTEMS_RTL_TRACE_DETAIL                 (1UL << 9)
+#define RTEMS_RTL_TRACE_WARNING                (1UL << 10)
 
 /**
  * Call to check if this part is bring traced. If RTEMS_RTL_TRACE is defined to

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012-2014 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -208,9 +208,18 @@ rtems_rtl_symbol_obj_find (rtems_rtl_obj_t* obj, const char* name)
    * Check the object file's symbols first. If not found search the
    * global symbol table.
    */
-  for (s = 0, sym = obj->global_table; s < obj->global_syms; ++s, ++sym)
-    if (strcmp (name, sym->name) == 0)
-      return sym;
+  if (obj->local_syms)
+  {
+    for (s = 0, sym = obj->local_table; s < obj->local_syms; ++s, ++sym)
+      if (strcmp (name, sym->name) == 0)
+        return sym;
+  }
+  if (obj->global_syms)
+  {
+    for (s = 0, sym = obj->global_table; s < obj->global_syms; ++s, ++sym)
+      if (strcmp (name, sym->name) == 0)
+        return sym;
+  }
   return rtems_rtl_symbol_global_find (name);
 }
 
@@ -228,8 +237,21 @@ rtems_rtl_symbol_obj_add (rtems_rtl_obj_t* obj)
 }
 
 void
+rtems_rtl_symbol_obj_erase_local (rtems_rtl_obj_t* obj)
+{
+  if (obj->local_table)
+  {
+    rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, obj->local_table);
+    obj->local_table = NULL;
+    obj->local_size = 0;
+    obj->local_syms = 0;
+  }
+}
+
+void
 rtems_rtl_symbol_obj_erase (rtems_rtl_obj_t* obj)
 {
+  rtems_rtl_symbol_obj_erase_local (obj);
   if (obj->global_table)
   {
     rtems_rtl_obj_sym_t* sym;

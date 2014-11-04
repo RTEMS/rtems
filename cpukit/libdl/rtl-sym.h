@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012-2014 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -113,6 +113,13 @@ rtems_rtl_obj_sym_t* rtems_rtl_symbol_obj_find (rtems_rtl_obj_t* obj,
  * @param obj The object file the symbols are to be added.
  */
 void rtems_rtl_symbol_obj_add (rtems_rtl_obj_t* obj);
+
+/**
+ * Erase the object file's local symbols.
+ *
+ * @param obj The object file the local symbols are to be erased from.
+ */
+void rtems_rtl_symbol_obj_erase_local (rtems_rtl_obj_t* obj);
 
 /**
  * Erase the object file's symbols.

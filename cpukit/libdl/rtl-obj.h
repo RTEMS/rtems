@@ -145,6 +145,9 @@ struct rtems_rtl_obj_s
   size_t               fsize;        /**< Size of the object file. */
   rtems_chain_control  sections;     /**< The sections of interest in the
                                       *   object file. */
+  rtems_rtl_obj_sym_t* local_table;  /**< Local symbol table. */
+  size_t               local_syms;   /**< Local symbol count. */
+  size_t               local_size;   /**< Local symbol memory usage. */
   rtems_rtl_obj_sym_t* global_table; /**< Global symbol table. */
   size_t               global_syms;  /**< Global symbol count. */
   size_t               global_size;  /**< Global symbol memory usage. */
