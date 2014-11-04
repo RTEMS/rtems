@@ -102,6 +102,7 @@ devfs04/Makefile
 deviceio01/Makefile
 devnullfatal01/Makefile
 dl01/Makefile
+dl02/Makefile
 dumpbuf01/Makefile
 ftp01/Makefile
 gxx01/Makefile

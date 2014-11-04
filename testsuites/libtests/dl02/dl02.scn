@@ -1,0 +1,22 @@
+*** BEGIN OF TEST libdl (RTL) 2 ***
+load: /dl-o1.o
+handle: 0x2150d0 has unresolved externals
+load: /dl-o2.o
+handle: 0x215838 loaded
+Loaded module: argc:4
+[../../../../../../../../rtems.master/c/src/../../testsuites/libtests/dl02/dl-o1.c]
+  0: 1
+  1: 2
+  2: 3
+  3: 4
+Loaded module: argc:4
+[../../../../../../../../rtems.master/c/src/../../testsuites/libtests/dl02/dl-o2.c]
+  0: 1
+  1: 2
+  2: 3
+  3: 4
+dl_o1_callback: string in dl_o2
+rtems_main: callback count: 3
+handle: 0x2150d0 closed
+handle: 0x215838 closed
+*** END OF TEST libdl (RTL) 2 ***
