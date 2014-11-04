@@ -22,7 +22,7 @@
 
 #include "dl-load.h"
 
-const char rtems_test_name[] = "libdl (RTL) Loader 1";
+const char rtems_test_name[] = "libdl (RTL) 1";
 
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);

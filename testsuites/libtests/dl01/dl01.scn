@@ -1,0 +1,14 @@
+*** BEGIN OF TEST libdl (RTL) 1 ***
+load: /dl-o1.o
+handle: 0x2137d8 loaded
+Loaded module: argc:2
+[../../../../../../../../rtems.master/c/src/../../testsuites/libtests/dl01/dl-o1.c]
+  0: Line 1
+  1: Line 2
+Loaded module: argc:3
+[../../../../../../../../rtems.master/c/src/../../testsuites/libtests/dl01/dl-o1.c]
+  0: Call 2, line 1
+  1: Call 2, line 2
+  2: Call 2, line 3
+handle: 0x2137d8 closed
+*** END OF TEST libdl (RTL) 1 ***
