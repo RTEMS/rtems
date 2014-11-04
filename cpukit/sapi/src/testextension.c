@@ -19,10 +19,12 @@
 #include <rtems/test.h>
 #include <rtems/profiling.h>
 
+#if defined(RTEMS_PROFILING)
 static bool report_done;
 
 static rtems_interrupt_lock report_lock =
   RTEMS_INTERRUPT_LOCK_INITIALIZER( "test report" );
+#endif
 
 void rtems_test_fatal_extension(
   rtems_fatal_source source,
