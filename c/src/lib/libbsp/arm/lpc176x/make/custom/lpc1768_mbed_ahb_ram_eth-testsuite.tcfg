@@ -17,6 +17,7 @@ jffs2_fssymlink
 jffs2_fstime
 mghttpd01
 pppd
+rbheap01
 spstkalloc02
 utf8proc01
 iostream
