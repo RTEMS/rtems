@@ -781,7 +781,7 @@ static void outstr(char *str) {
   fputs(str, stdout);
 }
 
-static void clear_screen() {
+static void clear_screen(void) {
   outstr(CLRSCR);
 }
 
@@ -809,7 +809,7 @@ static void get_modifier_keys(int *shift, int *ctrl) {
 #endif
 }
 
-static int getachar()
+static int getachar(void)
 {
   int ch = getchar();
 #if KEY_HISTORY
@@ -823,7 +823,7 @@ static int getachar()
   return ch;
 }
 
-static int getkey() {
+static int getkey(void) {
   int ch, shift, ctrl;
 
   ch = getachar();
@@ -1058,7 +1058,7 @@ static int prompt(struct editor *ed, char *msg, int selection) {
   }
 }
 
-static int ask() {
+static int ask(void) {
   int ch = getachar();
   return ch == 'y' || ch == 'Y';
 }
@@ -1918,7 +1918,7 @@ static void goto_line(struct editor *ed) {
   ed->refresh = 1;
 }
 
-struct editor *next_file(struct editor *ed) {
+static struct editor *next_file(struct editor *ed) {
   ed = ed->env->current = ed->next;
   ed->refresh = 1;
   return ed;
@@ -2156,14 +2156,16 @@ static void edit(struct editor *ed) {
 //
 // main
 //
-
-int rtems_shell_main_edit(int argc, char *argv[]) {
+static int rtems_shell_main_edit(int argc, char *argv[])
+{
   struct env env;
   int rc;
   int i;
   sigset_t blocked_sigmask, orig_sigmask;
-#if defined(__linux__) || defined(__rtems__)
+#if defined(__linux__)
   struct termios tio;
+#endif
+#if defined(__linux__) || defined(__rtems__)
   struct termios orig_tio;
 #endif
 #ifdef SANOS
