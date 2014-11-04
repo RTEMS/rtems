@@ -199,7 +199,8 @@ struct grtm_list {
 					 * the payload to a buffer on the SpaceWire target. 
 					 */
 
-#define GRTM_FLAGS_TS		(1<<9)
+#define GRTM_FLAGS_TS		(1<<14)
+#define GRTM_FLAGS_VCE		(1<<9)
 #define GRTM_FLAGS_MCB		(1<<8)
 #define GRTM_FLAGS_FSHB		(1<<7)
 #define GRTM_FLAGS_OCFB		(1<<6)
@@ -207,9 +208,9 @@ struct grtm_list {
 #define GRTM_FLAGS_IZB		(1<<4)
 #define GRTM_FLAGS_FECFB	(1<<3)
 
-#define GRTM_FLAGS_MASK		(GRTM_FLAGS_TS|GRTM_FLAGS_MCB|GRTM_FLAGS_FSHB|\
-				 GRTM_FLAGS_OCFB|GRTM_FLAGS_FHECB|GRTM_FLAGS_IZB|\
-				 GRTM_FLAGS_FECFB)
+#define GRTM_FLAGS_MASK		(GRTM_FLAGS_TS|GRTM_FLAGS_VCE|GRTM_FLAGS_MCB|\
+				 GRTM_FLAGS_FSHB|GRTM_FLAGS_OCFB|GRTM_FLAGS_FHECB|\
+				 GRTM_FLAGS_IZB|GRTM_FLAGS_FECFB)
 
 /* The GRTM software representation of a Frame */
 struct grtm_frame {
