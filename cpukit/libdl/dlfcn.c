@@ -97,19 +97,28 @@ void*
 dlsym (void* handle, const char *symbol)
 {
   rtems_rtl_obj_t*     obj;
-  rtems_rtl_obj_sym_t* sym;
+  rtems_rtl_obj_sym_t* sym = NULL;
   void*                symval = NULL;
 
   if (!rtems_rtl_lock ())
     return NULL;
 
-  obj = dl_get_obj_from_handle (handle);
-  if (obj)
+  /*
+   * If the handle is "default" search the global symbol table.
+   */
+  if (handle == RTLD_DEFAULT)
   {
-    sym = rtems_rtl_symbol_obj_find (obj, symbol);
-    if (sym)
-      symval = sym->value;
+    sym = rtems_rtl_symbol_global_find (symbol);
   }
+  else
+  {
+    obj = dl_get_obj_from_handle (handle);
+    if (obj)
+      sym = rtems_rtl_symbol_obj_find (obj, symbol);
+  }
+
+  if (sym)
+    symval = sym->value;
 
   rtems_rtl_unlock ();
 
