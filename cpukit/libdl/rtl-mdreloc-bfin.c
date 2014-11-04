@@ -1,7 +1,7 @@
 #include <sys/cdefs.h>
 
 #include <stdio.h>
-#include <rtl.h>
+#include <rtems/rtl/rtl.h>
 #include <errno.h>
 #include "rtl-elf.h"
 #include "rtl-error.h"
