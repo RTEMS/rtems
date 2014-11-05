@@ -16,8 +16,16 @@ jffs2_fsrdwr
 jffs2_fssymlink
 jffs2_fstime
 mghttpd01
+monitor01
+monitor02
 pppd
+psxconfig01
 rbheap01
+sp16
+sp25
+sp48
+spregion_err01
+spstkalloc
 spstkalloc02
 utf8proc01
 iostream
