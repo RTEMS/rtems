@@ -5,6 +5,7 @@ include $(top_srcdir)/automake/multilib.am
 
 # librtemscpu
 SUBDIRS = . score rtems sapi posix
+SUBDIRS += dev
 SUBDIRS += libcsupport libblock libfs
 SUBDIRS += libnetworking librpc
 SUBDIRS += libi2c

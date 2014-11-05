@@ -391,6 +391,7 @@ RTEMS_AMPOLISH3
 AC_CONFIG_FILES([
 Doxyfile
 Makefile
+dev/Makefile
 rtems/Makefile
 sapi/Makefile
 score/Makefile
