@@ -520,9 +520,6 @@ rtems_capture_clear_trigger (rtems_name                   from_name,
  * @brief Capture read records from capture buffer
  *
  * This function reads a number of records from the capture buffer.
- * The user can optionally block and wait until the buffer as a
- * specific number of records available or a specific time has
- * elasped.
  *
  * The function returns the number of record that is has that are
  * in a continous block of memory. If the number of available records
@@ -535,17 +532,7 @@ rtems_capture_clear_trigger (rtems_name                   from_name,
  * rtems_capture_release. Calls this function without a release will
  * result in at least the same number of records being released.
  *
- * The 'threshold' parameter is the number of records that must be
- * captured before returning. If a timeout period is specified (non-0)
- * any captured records will be returned. These parameters stop
- * thrashing occuring for a small number of records, yet allows
- * a user configured latiency to be applied for single events.
- *
- * The @a timeout parameter is in microseconds. A value of 0 will
- * disable the timeout.
- *
- * @param[in] threshold The number of records that must be captured 
- * @param[in] timeout The micro-second timeout period
+ * @param[in]  cpu The cpu number that the records were recorded on
  * @param[out] read will contain the number of records read
  * @param[out] recs The capture records that are read.
  *
@@ -554,8 +541,7 @@ rtems_capture_clear_trigger (rtems_name                   from_name,
  *         source of the error.
  */
 rtems_status_code
-rtems_capture_read (uint32_t                 threshold,
-                    uint32_t                 timeout,
+rtems_capture_read (uint32_t                 cpu,
                     uint32_t*                read,
                     rtems_capture_record_t** recs);
 
@@ -566,13 +552,13 @@ rtems_capture_read (uint32_t                 threshold,
  * to the capture engine. The count must match the number read.
  *
  * @param[in] count The number of record slots to release
- * 
+ *
  * @retval This method returns RTEMS_SUCCESSFUL if there was not an
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
 rtems_status_code
-rtems_capture_release (uint32_t count);
+rtems_capture_release (uint32_t cpu, uint32_t count);
 
 /*
  * @brief Capture nano-second time period.

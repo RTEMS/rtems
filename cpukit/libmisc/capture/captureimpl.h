@@ -43,14 +43,19 @@ extern "C" {
 /*
  * Global capture flags.
  */
-#define RTEMS_CAPTURE_ON             (1U << 0)
-#define RTEMS_CAPTURE_NO_MEMORY      (1U << 1)
-#define RTEMS_CAPTURE_OVERFLOW       (1U << 2)
+#define RTEMS_CAPTURE_INIT           (1u << 0)
+#define RTEMS_CAPTURE_ON             (1U << 1)
+#define RTEMS_CAPTURE_NO_MEMORY      (1U << 2)
 #define RTEMS_CAPTURE_TRIGGERED      (1U << 3)
-#define RTEMS_CAPTURE_READER_ACTIVE  (1U << 4)
-#define RTEMS_CAPTURE_READER_WAITING (1U << 5)
-#define RTEMS_CAPTURE_GLOBAL_WATCH   (1U << 6)
-#define RTEMS_CAPTURE_ONLY_MONITOR   (1U << 7)
+#define RTEMS_CAPTURE_GLOBAL_WATCH   (1U << 4)
+#define RTEMS_CAPTURE_ONLY_MONITOR   (1U << 5)
+
+/*
+ * Per-CPU capture flags.
+ */
+#define RTEMS_CAPTURE_OVERFLOW       (1U << 0)
+#define RTEMS_CAPTURE_READER_ACTIVE  (1U << 1)
+#define RTEMS_CAPTURE_READER_WAITING (1U << 2)
 
 /**
  * @brief Capture set extension index.

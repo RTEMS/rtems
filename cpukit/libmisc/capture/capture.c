@@ -5,7 +5,7 @@
   All rights reserved Objective Design Systems Pty Ltd, 2002
   Chris Johns (ccj@acm.org)
 
-  COPYRIGHT (c) 1989-2009.
+  COPYRIGHT (c) 1989-2014.
   On-Line Applications Research Corporation (OAR).
 
   The license and distribution terms for this file may be
@@ -59,21 +59,52 @@
 #define RTEMS_CAPTURE_RECORD_EVENTS  (0)
 #endif
 
+typedef struct {
+  rtems_capture_buffer_t   records;
+  uint32_t                 count;
+  rtems_id                 reader;
+  rtems_interrupt_lock     lock;
+  uint32_t                 flags;
+} rtems_capture_per_cpu_data;
+
+typedef struct {
+  uint32_t                 flags;
+  rtems_capture_control_t* controls;
+  int                      extension_index;
+  rtems_capture_timestamp  timestamp;
+  rtems_task_priority      ceiling;
+  rtems_task_priority      floor;
+  rtems_interrupt_lock     lock;
+} rtems_capture_global_data;
+
+static rtems_capture_per_cpu_data  *capture_per_cpu = NULL;
+
+static rtems_capture_global_data capture_global;
 
 /*
  * RTEMS Capture Data.
  */
-static rtems_capture_buffer_t   capture_records = {NULL, 0, 0, 0, 0, 0};
-static uint32_t                 capture_count;
-static uint32_t                 capture_flags;
-static rtems_capture_control_t* capture_controls;
-static int                      capture_extension_index;
-static rtems_capture_timestamp  capture_timestamp;
-static rtems_task_priority      capture_ceiling;
-static rtems_task_priority      capture_floor;
-static rtems_id                 capture_reader;
-static rtems_interrupt_lock     capture_lock =
-  RTEMS_INTERRUPT_LOCK_INITIALIZER("capture");
+#define capture_per_cpu_get( _cpu ) \
+   ( &capture_per_cpu[ _cpu ] )
+
+#define capture_records_on_cpu( _cpu ) capture_per_cpu[ _cpu ].records
+#define capture_count_on_cpu( _cpu )   capture_per_cpu[ _cpu ].count
+#define capture_flags_on_cpu( _cpu )   capture_per_cpu[ _cpu ].flags
+#define capture_reader_on_cpu( _cpu )  capture_per_cpu[ _cpu ].reader
+#define capture_lock_on_cpu( _cpu )    capture_per_cpu[ _cpu ].lock
+
+#define capture_records          capture_records_on_cpu( _SMP_Get_current_processor() )
+#define capture_count            capture_count_on_cpu(  _SMP_Get_current_processor() )
+#define capture_flags_per_cpu    capture_flags_on_cpu( _SMP_Get_current_processor() )
+#define capture_flags_global     capture_global.flags
+#define capture_controls         capture_global.controls
+#define capture_extension_index  capture_global.extension_index
+#define capture_timestamp        capture_global.timestamp
+#define capture_ceiling          capture_global.ceiling
+#define capture_floor            capture_global.floor
+#define capture_reader           capture_reader_on_cpu(  _SMP_Get_current_processor() )
+#define capture_lock_per_cpu     capture_lock_on_cpu( _SMP_Get_current_processor() )
+#define capture_lock_global      capture_global.lock
 
 /*
  * RTEMS Event text.
@@ -108,12 +139,12 @@ int  rtems_capture_get_extension_index(void)
 
 uint32_t rtems_capture_get_flags(void)
 {
-  return capture_flags;
+  return capture_flags_global;
 }
 
 void rtems_capture_set_flags(uint32_t mask)
 {
-  capture_flags |= mask;
+  capture_flags_global |= mask;
 }
 
 /*
@@ -284,11 +315,11 @@ rtems_capture_create_control (rtems_name name, rtems_id id)
 
   if (control == NULL)
   {
-    bool ok = rtems_workspace_allocate (sizeof (*control), (void **) &control);
+    control = malloc( sizeof (*control));
 
-    if (!ok)
+    if (!control)
     {
-      capture_flags |= RTEMS_CAPTURE_NO_MEMORY;
+      capture_flags_global |= RTEMS_CAPTURE_NO_MEMORY;
       return NULL;
     }
 
@@ -301,13 +332,13 @@ rtems_capture_create_control (rtems_name name, rtems_id id)
 
     memset (control->by, 0, sizeof (control->by));
 
-    rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
+    rtems_interrupt_lock_acquire (&capture_lock_global, &lock_context);
 
     control->next    = capture_controls;
     capture_controls = control;
     rtems_iterate_over_all_threads (rtems_capture_initialize_control);
 
-    rtems_interrupt_lock_release (&capture_lock, &lock_context);
+    rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
   }
 
   return control;
@@ -315,16 +346,18 @@ rtems_capture_create_control (rtems_name name, rtems_id id)
 
 void rtems_capture_initialize_task( rtems_tcb* tcb )
 {
-  rtems_capture_control_t*    control;
-  rtems_name                  name;
+  rtems_capture_control_t*     control;
+  rtems_name                   name;
+  rtems_interrupt_lock_context lock_context;
 
   /*
-   * We need to scan the default control list to initialise
+   * We need to scan the default control list to initialize
    * this control if it is a new task.
    */
 
   rtems_object_get_classic_name( tcb->Object.id, &name );
 
+  rtems_interrupt_lock_acquire (&capture_lock_global, &lock_context);
   if (tcb->Capture.control == NULL) {
     for (control = capture_controls; control != NULL; control = control->next)
       if (rtems_capture_match_name_id (control->name, control->id,
@@ -333,28 +366,31 @@ void rtems_capture_initialize_task( rtems_tcb* tcb )
   }
 
   tcb->Capture.flags |= RTEMS_CAPTURE_INIT_TASK;
+  rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
 }
 
 void rtems_capture_record_task( rtems_tcb* tcb )
 {
   rtems_capture_task_record_t rec;
   void*                       ptr;
+  rtems_interrupt_lock_context lock_context;
 
   rtems_object_get_classic_name( tcb->Object.id, &rec.name );
-   
+
   rec.stack_size = tcb->Start.Initial_stack.size;
   rec.start_priority = _RTEMS_tasks_Priority_from_Core(
     tcb->Start.initial_priority
   );
 
+  rtems_interrupt_lock_acquire (&capture_lock_global, &lock_context);
   tcb->Capture.flags |= RTEMS_CAPTURE_RECORD_TASK;
+  rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
 
   /*
    *  Log the task information. The first time a task is
    *  seen a record is logged.  This record can be identified
    *  by a 0 in the event identifier.
    */
-
   rtems_capture_begin_add_record (tcb, 0, sizeof(rec), &ptr);
   ptr = rtems_capture_append_to_record(
     ptr,
@@ -375,14 +411,14 @@ void rtems_capture_record_task( rtems_tcb* tcb )
 }
 
 /*
- * This function indicates if data should be filtered from the 
+ * This function indicates if data should be filtered from the
  * log.
  */
 bool rtems_capture_filter( rtems_tcb*            tcb,
                            uint32_t              events)
 {
   if (tcb &&
-      ((capture_flags &
+      ((capture_flags_global &
         (RTEMS_CAPTURE_TRIGGERED | RTEMS_CAPTURE_ONLY_MONITOR)) ==
        RTEMS_CAPTURE_TRIGGERED))
   {
@@ -398,7 +434,7 @@ bool rtems_capture_filter( rtems_tcb*            tcb,
     if ((events & RTEMS_CAPTURE_RECORD_EVENTS) ||
         ((tcb->real_priority >= capture_ceiling) &&
          (tcb->real_priority <= capture_floor) &&
-         ((capture_flags & RTEMS_CAPTURE_GLOBAL_WATCH) ||
+         ((capture_flags_global & RTEMS_CAPTURE_GLOBAL_WATCH) ||
           (control && (control->flags & RTEMS_CAPTURE_WATCH)))))
     {
       return false;
@@ -420,7 +456,7 @@ rtems_capture_record_open (rtems_tcb*                    tcb,
   uint8_t*                     ptr;
   rtems_capture_record_t*      capture_in;
 
-  rtems_interrupt_lock_acquire (&capture_lock, lock_context);
+  rtems_interrupt_lock_acquire (&capture_lock_per_cpu, lock_context);
 
   ptr = rtems_capture_buffer_allocate(&capture_records, size);
   capture_in = (rtems_capture_record_t *) ptr;
@@ -441,14 +477,14 @@ rtems_capture_record_open (rtems_tcb*                    tcb,
     ptr = ptr + sizeof(*capture_in);
   }
   else
-    capture_flags |= RTEMS_CAPTURE_OVERFLOW;
+    capture_flags_per_cpu |= RTEMS_CAPTURE_OVERFLOW;
 
   return ptr;
 }
 
 void rtems_capture_record_close( void *rec, rtems_interrupt_lock_context* lock_context)
 {
-  rtems_interrupt_lock_release (&capture_lock, lock_context);
+  rtems_interrupt_lock_release (&capture_lock_per_cpu, lock_context);
 }
 
 /*
@@ -460,11 +496,10 @@ rtems_capture_trigger (rtems_tcb* ft,
                        rtems_tcb* tt,
                        uint32_t   events)
 {
-
   /*
    * If we have not triggered then see if this is a trigger condition.
    */
-  if (!(capture_flags & RTEMS_CAPTURE_TRIGGERED))
+  if (!(capture_flags_global & RTEMS_CAPTURE_TRIGGERED))
   {
     rtems_capture_control_t* fc = NULL;
     rtems_capture_control_t* tc = NULL;
@@ -499,7 +534,7 @@ rtems_capture_trigger (rtems_tcb* ft,
      */
     if (from_events || to_events)
     {
-      capture_flags |= RTEMS_CAPTURE_TRIGGERED;
+      capture_flags_global |= RTEMS_CAPTURE_TRIGGERED;
       return 1;
     }
 
@@ -510,7 +545,7 @@ rtems_capture_trigger (rtems_tcb* ft,
     {
       if (rtems_capture_by_in_to (events, ft, tc))
       {
-        capture_flags |= RTEMS_CAPTURE_TRIGGERED;
+        capture_flags_global |= RTEMS_CAPTURE_TRIGGERED;
         return 1;
       }
     }
@@ -523,47 +558,61 @@ rtems_capture_trigger (rtems_tcb* ft,
 
 /*
  * This function initialises the realtime capture engine allocating the trace
- * buffer. It is assumed we have a working heap at stage of initialisation.
+ * buffer. It is assumed we have a working heap at stage of initialization.
  */
 rtems_status_code
 rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribute__((unused)))
 {
-  rtems_status_code      sc;
+  rtems_status_code       sc = RTEMS_SUCCESSFUL;
+  size_t                  count;
+  uint32_t                i;
+  rtems_capture_buffer_t* buff;
 
   /*
    * See if the capture engine is already open.
    */
 
-  if (capture_records.buffer)
+  if ((capture_flags_global & RTEMS_CAPTURE_INIT) == RTEMS_CAPTURE_INIT) {
     return RTEMS_RESOURCE_IN_USE;
+  }
 
-  rtems_capture_buffer_create( &capture_records, size );
+  count = rtems_get_processor_count();
+  if (capture_per_cpu == NULL) {
+    capture_per_cpu = calloc( count, sizeof(rtems_capture_per_cpu_data) );
+  }
 
-  if (capture_records.buffer == NULL)
-    return RTEMS_NO_MEMORY;
+  for (i=0; i<count; i++) {
+    buff = &capture_records_on_cpu(i);
+    rtems_capture_buffer_create( buff, size );
+    if (buff->buffer == NULL) {
+      sc = RTEMS_NO_MEMORY;
+      break;
+    }
 
-  capture_count   = 0;
-  capture_flags   = 0;
+    capture_count_on_cpu(i) = 0;
+    capture_flags_on_cpu(i) = 0;
+  }
+
+  capture_flags_global   = 0;
   capture_ceiling = 0;
   capture_floor   = 255;
-
-  sc = rtems_capture_user_extension_open();
+  if (sc == RTEMS_SUCCESSFUL)
+    sc = rtems_capture_user_extension_open();
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    rtems_capture_buffer_destroy( &capture_records);
+    for (i=0; i<count; i++)
+      rtems_capture_buffer_destroy( &capture_records_on_cpu(i));
+  }  else {
+    capture_flags_global |= RTEMS_CAPTURE_INIT;
   }
-
-  /*
-   * Iterate over the list of existing tasks.
-   */
 
   return sc;
 }
 
 /*
  * This function shutdowns the capture engine and release any claimed
- * resources.
+ * resources.  Capture control must be disabled prior to calling a close.
  */
 rtems_status_code
 rtems_capture_close (void)
@@ -571,18 +620,26 @@ rtems_capture_close (void)
   rtems_interrupt_lock_context lock_context;
   rtems_capture_control_t*     control;
   rtems_status_code            sc;
+  uint32_t                     cpu;
 
-  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
+  rtems_interrupt_lock_acquire (&capture_lock_global, &lock_context);
 
-  if (!capture_records.buffer)
+  if ((capture_flags_global & RTEMS_CAPTURE_INIT) != RTEMS_CAPTURE_INIT)
   {
-    rtems_interrupt_lock_release (&capture_lock, &lock_context);
+    rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
     return RTEMS_SUCCESSFUL;
   }
 
-  capture_flags &= ~(RTEMS_CAPTURE_ON | RTEMS_CAPTURE_ONLY_MONITOR);
+  if ( (capture_flags_global & RTEMS_CAPTURE_ON) != 0 )
+  {
+    rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
+    return RTEMS_UNSATISFIED;
+  }
 
-  rtems_interrupt_lock_release (&capture_lock, &lock_context);
+  capture_flags_global &=
+    ~(RTEMS_CAPTURE_ON | RTEMS_CAPTURE_ONLY_MONITOR | RTEMS_CAPTURE_INIT);
+
+  rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
 
   /*
    * Delete the extension first. This means we are now able to
@@ -600,15 +657,18 @@ rtems_capture_close (void)
   {
     rtems_capture_control_t* delete = control;
     control = control->next;
-    rtems_workspace_free (delete);
+    free (delete);
   }
 
   capture_controls = NULL;
-
-  if (capture_records.buffer)
-  {
-    rtems_capture_buffer_destroy( &capture_records);
+  for (cpu=0; cpu < rtems_get_processor_count(); cpu++) {
+    capture_count_on_cpu(cpu) = 0;
+    if (capture_records_on_cpu(cpu).buffer)
+      rtems_capture_buffer_destroy( &capture_records_on_cpu(cpu) );
   }
+
+  free( capture_per_cpu );
+  capture_per_cpu = NULL;
 
   return RTEMS_SUCCESSFUL;
 }
@@ -618,20 +678,20 @@ rtems_capture_control (bool enable)
 {
   rtems_interrupt_lock_context lock_context;
 
-  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
+  rtems_interrupt_lock_acquire (&capture_lock_global, &lock_context);
 
-  if (!capture_records.buffer)
+  if ((capture_flags_global & RTEMS_CAPTURE_INIT) != RTEMS_CAPTURE_INIT)
   {
-    rtems_interrupt_lock_release (&capture_lock, &lock_context);
+    rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
     return RTEMS_UNSATISFIED;
   }
 
   if (enable)
-    capture_flags |= RTEMS_CAPTURE_ON;
+    capture_flags_global |= RTEMS_CAPTURE_ON;
   else
-    capture_flags &= ~RTEMS_CAPTURE_ON;
+    capture_flags_global &= ~RTEMS_CAPTURE_ON;
 
-  rtems_interrupt_lock_release (&capture_lock, &lock_context);
+  rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -646,20 +706,20 @@ rtems_capture_monitor (bool enable)
 {
   rtems_interrupt_lock_context lock_context;
 
-  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
+  rtems_interrupt_lock_acquire (&capture_lock_global, &lock_context);
 
-  if (!capture_records.buffer)
+  if ((capture_flags_global & RTEMS_CAPTURE_INIT) != RTEMS_CAPTURE_INIT)
   {
-    rtems_interrupt_lock_release (&capture_lock, &lock_context);
+    rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
     return RTEMS_UNSATISFIED;
   }
 
   if (enable)
-    capture_flags |= RTEMS_CAPTURE_ONLY_MONITOR;
+    capture_flags_global |= RTEMS_CAPTURE_ONLY_MONITOR;
   else
-    capture_flags &= ~RTEMS_CAPTURE_ONLY_MONITOR;
+    capture_flags_global &= ~RTEMS_CAPTURE_ONLY_MONITOR;
 
-  rtems_interrupt_lock_release (&capture_lock, &lock_context);
+  rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -673,7 +733,6 @@ rtems_capture_flush_tcb (rtems_tcb *tcb)
   tcb->Capture.flags &= ~RTEMS_CAPTURE_TRACED;
 }
 
-
 /*
  * This function flushes the capture buffer. The prime parameter allows the
  * capture engine to also be primed again.
@@ -681,21 +740,36 @@ rtems_capture_flush_tcb (rtems_tcb *tcb)
 rtems_status_code
 rtems_capture_flush (bool prime)
 {
-  rtems_interrupt_lock_context lock_context;
+  rtems_interrupt_lock_context lock_context_global;
+  rtems_interrupt_lock_context lock_context_per_cpu;
+  rtems_interrupt_lock*        lock;
+  uint32_t                     cpu;
 
-  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
+  rtems_interrupt_lock_acquire (&capture_lock_global, &lock_context_global);
+
+  if ( (capture_flags_global & RTEMS_CAPTURE_ON) != 0 )
+  {
+    rtems_interrupt_lock_release (&capture_lock_global, &lock_context_global);
+    return RTEMS_UNSATISFIED;
+  }
 
   rtems_iterate_over_all_threads (rtems_capture_flush_tcb);
 
   if (prime)
-    capture_flags &= ~(RTEMS_CAPTURE_TRIGGERED | RTEMS_CAPTURE_OVERFLOW);
+    capture_flags_global &= ~(RTEMS_CAPTURE_TRIGGERED | RTEMS_CAPTURE_OVERFLOW);
   else
-    capture_flags &= ~RTEMS_CAPTURE_OVERFLOW;
+    capture_flags_global &= ~RTEMS_CAPTURE_OVERFLOW;
 
-  rtems_capture_buffer_flush( &capture_records );
-  capture_count = 0;
+  for (cpu=0; cpu < rtems_get_processor_count(); cpu++) {
+    lock = &(capture_lock_on_cpu( cpu ));
+    rtems_interrupt_lock_acquire (lock, &lock_context_per_cpu);
+    capture_count_on_cpu(cpu) = 0;
+    if (capture_records_on_cpu(cpu).buffer)
+      rtems_capture_buffer_flush( &capture_records_on_cpu(cpu) );
+    rtems_interrupt_lock_release (lock, &lock_context_per_cpu);
+  }
 
-  rtems_interrupt_lock_release (&capture_lock, &lock_context);
+  rtems_interrupt_lock_release (&capture_lock_global, &lock_context_global);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -704,12 +778,15 @@ rtems_capture_flush (bool prime)
  * This function defines a watch for a specific task given a name. A watch
  * causes it to be traced either in or out of context. The watch can be
  * optionally enabled or disabled with the set routine. It is disabled by
- * default.
+ * default.  A watch can only be defined when capture control is disabled
  */
 rtems_status_code
 rtems_capture_watch_add (rtems_name name, rtems_id id)
 {
   rtems_capture_control_t* control;
+
+  if ( (capture_flags_global & RTEMS_CAPTURE_ON) != 0 )
+    return RTEMS_UNSATISFIED;
 
   if ((name == 0) && (id == 0))
     return RTEMS_UNSATISFIED;
@@ -731,7 +808,8 @@ rtems_capture_watch_add (rtems_name name, rtems_id id)
 /*
  * This function removes a watch for a specific task given a name. The task
  * description will still exist if referenced by a trace record in the trace
- * buffer or a global watch is defined.
+ * buffer or a global watch is defined.  A watch can only be deleted when
+ * capture control is disabled.
  */
 rtems_status_code
 rtems_capture_watch_del (rtems_name name, rtems_id id)
@@ -740,6 +818,9 @@ rtems_capture_watch_del (rtems_name name, rtems_id id)
   rtems_capture_control_t*     control;
   rtems_capture_control_t**    prev_control;
   bool                         found = false;
+
+  if ( (capture_flags_global & RTEMS_CAPTURE_ON) != 0 )
+    return RTEMS_UNSATISFIED;
 
   /*
    * Should this test be for wildcards ?
@@ -750,13 +831,13 @@ rtems_capture_watch_del (rtems_name name, rtems_id id)
   {
     if (rtems_capture_match_name_id (control->name, control->id, name, id))
     {
-      rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
+      rtems_interrupt_lock_acquire (&capture_lock_global, &lock_context);
 
       *prev_control = control->next;
 
-      rtems_interrupt_lock_release (&capture_lock, &lock_context);
+      rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
 
-      rtems_workspace_free (control);
+      free (control);
 
       control = *prev_control;
 
@@ -786,6 +867,9 @@ rtems_capture_watch_ctrl (rtems_name name, rtems_id id, bool enable)
   rtems_capture_control_t*     control;
   bool                         found = false;
 
+  if ( (capture_flags_global & RTEMS_CAPTURE_ON) != 0 )
+    return RTEMS_UNSATISFIED;
+
   /*
    * Find the control and then set the watch. It must exist before it can
    * be controlled.
@@ -794,14 +878,14 @@ rtems_capture_watch_ctrl (rtems_name name, rtems_id id, bool enable)
   {
     if (rtems_capture_match_name_id (control->name, control->id, name, id))
     {
-      rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
+      rtems_interrupt_lock_acquire (&capture_lock_global, &lock_context);
 
       if (enable)
         control->flags |= RTEMS_CAPTURE_WATCH;
       else
         control->flags &= ~RTEMS_CAPTURE_WATCH;
 
-      rtems_interrupt_lock_release (&capture_lock, &lock_context);
+      rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
 
       found = true;
     }
@@ -823,18 +907,18 @@ rtems_capture_watch_global (bool enable)
 {
   rtems_interrupt_lock_context lock_context;
 
-  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
+  rtems_interrupt_lock_acquire (&capture_lock_global, &lock_context);
 
   /*
    * We need to keep specific and global watches separate so
    * a global enable/disable does not lose a specific watch.
    */
   if (enable)
-    capture_flags |= RTEMS_CAPTURE_GLOBAL_WATCH;
+    capture_flags_global |= RTEMS_CAPTURE_GLOBAL_WATCH;
   else
-    capture_flags &= ~RTEMS_CAPTURE_GLOBAL_WATCH;
+    capture_flags_global &= ~RTEMS_CAPTURE_GLOBAL_WATCH;
 
-  rtems_interrupt_lock_release (&capture_lock, &lock_context);
+  rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -845,7 +929,7 @@ rtems_capture_watch_global (bool enable)
 bool
 rtems_capture_watch_global_on (void)
 {
-  return capture_flags & RTEMS_CAPTURE_GLOBAL_WATCH ? 1 : 0;
+  return capture_flags_global & RTEMS_CAPTURE_GLOBAL_WATCH ? 1 : 0;
 }
 
 /*
@@ -1082,30 +1166,26 @@ rtems_capture_clear_trigger (rtems_name                   from_name,
 }
 
 static inline uint32_t rtems_capture_count_records( void* recs, size_t size )
-{ 
+{
   rtems_capture_record_t* rec;
   uint8_t*                ptr = recs;
   uint32_t                rec_count = 0;
   size_t                  byte_count = 0;
-  
- 
+
+
  while (byte_count < size) {
     rec = (rtems_capture_record_t*) ptr;
     rec_count++;
     _Assert( rec->size >= sizeof(*rec) );
     ptr += rec->size;
     byte_count += rec->size;
-    _Assert( rec_count <= capture_count ); 
  };
-   
+
  return rec_count;
 }
 
 /*
  * This function reads a number of records from the capture buffer.
- * The user can optionally block and wait until the buffer as a
- * specific number of records available or a specific time has
- * elasped.
  *
  * The function returns the number of record that is has that are
  * in a continous block of memory. If the number of available records
@@ -1117,106 +1197,47 @@ static inline uint32_t rtems_capture_count_records( void* recs, size_t size )
  * The user must release the records. This is achieved with a call to
  * rtems_capture_release. Calls this function without a release will
  * result in at least the same number of records being released.
- *
- * The 'threshold' parameter is the number of records that must be
- * captured before returning. If a timeout period is specified (non-0)
- * any captured records will be returned. These parameters stop
- * thrashing occuring for a small number of records, yet allows
- * a user configured latiency to be applied for single events.
- *
- * The 'timeout' parameter is in micro-seconds. A value of 0 will disable
- * the timeout.
  */
 rtems_status_code
-rtems_capture_read (uint32_t                 threshold,
-                    uint32_t                 timeout,
+rtems_capture_read (uint32_t                 cpu,
                     uint32_t*                read,
                     rtems_capture_record_t** recs)
 {
   rtems_interrupt_lock_context lock_context;
   rtems_status_code            sc = RTEMS_SUCCESSFUL;
   size_t                       recs_size = 0;
-  bool                         wrapped;
+  rtems_interrupt_lock*        lock = &(capture_lock_on_cpu( cpu ));
+  rtems_capture_buffer_t*      records = &(capture_records_on_cpu( cpu ));
+  uint32_t*                    flags = &(capture_flags_on_cpu( cpu ));
 
   *read = 0;
   *recs = NULL;
 
-  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
+  rtems_interrupt_lock_acquire (lock, &lock_context);
 
   /*
    * Only one reader is allowed.
    */
 
-  if (capture_flags & RTEMS_CAPTURE_READER_ACTIVE)
+  if (*flags & RTEMS_CAPTURE_READER_ACTIVE)
   {
-    rtems_interrupt_lock_release (&capture_lock, &lock_context);
+    rtems_interrupt_lock_release (lock, &lock_context);
     return RTEMS_RESOURCE_IN_USE;
   }
 
-  capture_flags |= RTEMS_CAPTURE_READER_ACTIVE;
+  if ( (capture_flags_global & RTEMS_CAPTURE_ON) != 0 )
+  {
+    rtems_interrupt_lock_release (lock, &lock_context);
+    return RTEMS_UNSATISFIED;
+  }
 
-  *recs = rtems_capture_buffer_peek( &capture_records, &recs_size );
+  *flags |= RTEMS_CAPTURE_READER_ACTIVE;
+
+  *recs = rtems_capture_buffer_peek( records, &recs_size );
+
   *read = rtems_capture_count_records( *recs, recs_size );
 
-  rtems_interrupt_lock_release (&capture_lock, &lock_context);
-
-  for (;;)
-  {
-    /*
-     * See if the data wraps the end of the record buffer.
-     */
-    wrapped = rtems_capture_buffer_has_wrapped( &capture_records);
-
-    /*
-     * Do we have a threshold and have not wrapped
-     * around the end of the capture record buffer ?
-     */
-    if ((!wrapped) && threshold)
-    {
-      /*
-       * Do we have enough records ?
-       */
-      if (*read < threshold)
-      {
-        rtems_event_set event_out;
-
-        rtems_task_ident (RTEMS_SELF, RTEMS_LOCAL, &capture_reader);
-
-        rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
-
-        capture_flags |= RTEMS_CAPTURE_READER_WAITING;
-
-        rtems_interrupt_lock_release (&capture_lock, &lock_context);
-
-        sc = rtems_event_receive (RTEMS_EVENT_0,
-                                  RTEMS_WAIT | RTEMS_EVENT_ANY,
-                                  RTEMS_MICROSECONDS_TO_TICKS (timeout),
-                                  &event_out);
-
-        /*
-         * Let the user handle all other sorts of errors. This may
-         * not be the best solution, but oh well, it will do for
-         * now.
-         */
-        if ((sc != RTEMS_SUCCESSFUL) && (sc != RTEMS_TIMEOUT))
-          break;
-
-        rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
-
-        *recs = rtems_capture_buffer_peek( &capture_records, &recs_size );
-        *read = rtems_capture_count_records( *recs, recs_size );
-
-        rtems_interrupt_lock_release (&capture_lock, &lock_context);
-
-        continue;
-      }
-    }
-
-    /*
-     * Always out if we reach here. To loop use continue.
-     */
-    break;
-  }
+  rtems_interrupt_lock_release (lock, &lock_context);
 
   return sc;
 }
@@ -1226,7 +1247,7 @@ rtems_capture_read (uint32_t                 threshold,
  * to the capture engine. The count must match the number read.
  */
 rtems_status_code
-rtems_capture_release (uint32_t count)
+rtems_capture_release (uint32_t cpu, uint32_t count)
 {
   rtems_interrupt_lock_context lock_context;
   uint8_t*                     ptr;
@@ -1235,43 +1256,49 @@ rtems_capture_release (uint32_t count)
   size_t                       ptr_size = 0;
   size_t                       rel_size = 0;
   rtems_status_code            ret_val = RTEMS_SUCCESSFUL;
+  rtems_interrupt_lock*        lock = &(capture_lock_on_cpu( cpu ));
+  rtems_capture_buffer_t*      records = &(capture_records_on_cpu( cpu ));
+  uint32_t*                    flags = &(capture_flags_on_cpu( cpu ));
+  uint32_t*                    total = &(capture_count_on_cpu( cpu ));
 
-  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
+  rtems_interrupt_lock_acquire (lock, &lock_context);
 
-  if (count > capture_count)
-    count = capture_count;
+  if (count > *total) {
+    count = *total;
+  }
 
-  rtems_interrupt_lock_release (&capture_lock, &lock_context);
+  if ( (capture_flags_global & RTEMS_CAPTURE_ON) != 0 ) {
+    rtems_interrupt_lock_release (lock, &lock_context);
+    return RTEMS_UNSATISFIED;
+  }
 
   counted = count;
- 
-  ptr = rtems_capture_buffer_peek( &capture_records, &ptr_size );
+
+  ptr = rtems_capture_buffer_peek( records, &ptr_size );
   _Assert(ptr_size >= (count * sizeof(*rec) ));
 
   rel_size = 0;
-  while (counted--)
-  {
+  while (counted--) {
     rec = (rtems_capture_record_t*) ptr;
     rel_size += rec->size;
     _Assert( rel_size <= ptr_size );
     ptr += rec->size;
   }
 
-  rtems_interrupt_lock_acquire (&capture_lock, &lock_context);
-
   if (rel_size > ptr_size ) {
     ret_val = RTEMS_INVALID_NUMBER;
     rel_size = ptr_size;
   }
 
-  capture_count -= count;
+  *total -= count;
 
-  if (count) 
-    rtems_capture_buffer_free( &capture_records, rel_size );
+  if (count) {
+    rtems_capture_buffer_free( records, rel_size );
+  }
 
-  capture_flags &= ~RTEMS_CAPTURE_READER_ACTIVE;
+  *flags &= ~RTEMS_CAPTURE_READER_ACTIVE;
 
-  rtems_interrupt_lock_release (&capture_lock, &lock_context);
+  rtems_interrupt_lock_release (lock, &lock_context);
 
   return ret_val;
 }
@@ -1308,5 +1335,3 @@ rtems_capture_get_control_list (void)
 {
   return capture_controls;
 }
-
-
