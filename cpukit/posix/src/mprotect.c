@@ -28,16 +28,10 @@
 #endif
 
 #include <unistd.h>
-
-/*
- * RTEMS does not have <sys/mman.h> so we need a prototype here to
- * avoid warnings.
- */
-
-int mprotect( const void *, size_t, int );
+#include <sys/mman.h>
 
 int mprotect(
-  const void *addr __attribute__((unused)),
+  void *addr __attribute__((unused)),
   size_t len __attribute__((unused)),
   int prot __attribute__((unused)) )
 {

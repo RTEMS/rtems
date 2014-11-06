@@ -50,6 +50,7 @@ include_sys_HEADERS =
 include_HEADERS += include/crypt.h
 include_HEADERS += include/memory.h
 
+include_sys_HEADERS += posix/include/sys/mman.h
 include_sys_HEADERS += libcsupport/include/sys/ioccom.h
 include_sys_HEADERS += libcsupport/include/sys/event.h
 include_sys_HEADERS += libcsupport/include/sys/filio.h

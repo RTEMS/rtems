@@ -91,7 +91,9 @@ libposix_a_SOURCES += src/cond.c src/condattrdestroy.c \
     src/condtimedwait.c src/condwait.c src/condwaitsupp.c src/condget.c
 
 ## MEMORY_C_FILES
+libposix_a_SOURCES += src/mmap.c
 libposix_a_SOURCES += src/mprotect.c
+libposix_a_SOURCES += src/munmap.c
 
 ## MESSAGE_QUEUE_C_FILES
 libposix_a_SOURCES += src/mqueue.c src/mqueueclose.c \
