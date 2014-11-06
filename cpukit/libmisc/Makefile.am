@@ -19,6 +19,7 @@ EXTRA_DIST += capture/README
 noinst_LIBRARIES += libcapture.a
 libcapture_a_SOURCES = capture/capture.c capture/capture-cli.c \
     capture/capture_user_extension.c capture/capture_buffer.c \
+    capture/capture_support.c \
     capture/capture.h capture/captureimpl.h capture/capture-cli.h \
     capture/capture_buffer.h
 

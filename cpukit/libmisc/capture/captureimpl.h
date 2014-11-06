@@ -260,6 +260,64 @@ void* rtems_capture_record_open (rtems_tcb*                    task,
  */
 void rtems_capture_record_close( void *rec, rtems_interrupt_lock_context* lock_context);
 
+/**
+ * @brief Capture print trace records.
+ *
+ * This function reads, prints and releases up to
+ * total trace records in either a csv format or an
+ * ascii table format.
+ *
+ * @param[in] total specifies the number of records to print
+ * @param[in] csv specifies a comma seperated value format
+ */
+void rtems_capture_print_trace_records ( int total, bool csv );
+
+/**
+ * @brief Capture print timestamp.
+ *
+ * This function prints uptime in a timestamp format.
+ *
+ * @param[in] uptime specifies the timestamp to print
+ */
+void rtems_capture_print_timestamp (uint64_t uptime);
+
+/**
+ * @brief Capture print record task.
+ *
+ * This function  prints a capture record task.  This
+ * record contains information to identify a task.  It
+ * is refrenced in other records by the task id.
+ *
+ * @param[in] cpu specifies the cpu the cpu the record was logged on.
+ * @param[in] rec specifies the task record.
+ */
+void rtems_capture_print_record_task(
+  uint32_t                cpu,
+  rtems_capture_record_t* rec
+);
+
+/**
+ * @brief Capture print capture record.
+ *
+ * This function prints a user extension
+ * capture record.
+ *
+ * @param[in] cpu specifies the cpu the cpu the record was logged on.
+ * @param[in] rec specifies the record.
+ * @param[in] diff specifies the time between this and the last capture record.
+ */
+void rtems_capture_print_record_capture(
+  uint32_t                cpu,
+  rtems_capture_record_t* rec,
+  uint64_t                diff
+);
+
+/**
+ * @brief Capture print watch list
+ *
+ * This function  prints a capture watch list
+ */
+void rtems_capture_print_watch_list( void );
 
 #ifdef __cplusplus
 }
