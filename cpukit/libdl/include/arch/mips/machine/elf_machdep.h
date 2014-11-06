@@ -9,19 +9,22 @@
 #define ARCH_ELFSIZE		32	/* MD native binary size */
 #endif
 
-#if ELFSIZE == 32
+#if ARCH_ELFSIZE == 32
 #define	ELF32_MACHDEP_ID_CASES						\
 		case EM_MIPS:						\
 			break;
 
 #define	ELF32_MACHDEP_ID	EM_MIPS
-#elif ELFSIZE == 64
+
+#elif ARCH_ELFSIZE == 64
 #define	ELF64_MACHDEP_ID_CASES						\
 		case EM_MIPS:						\
 			break;
 
 #define	ELF64_MACHDEP_ID	EM_MIPS
+
 #endif
+
 
 /* mips relocs.  */
 
