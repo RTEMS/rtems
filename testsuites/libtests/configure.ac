@@ -45,7 +45,7 @@ AM_CONDITIONAL(HAS_POSIX,test x"${rtems_cv_RTEMS_POSIX_API}" = x"yes")
 AC_MSG_CHECKING([whether CPU supports libdl])
 case $RTEMS_CPU in
   arm | bfin | h8300 | i386 | lm32 | m32r | m68k | mips | \
-  moxie | nios2 | powerpc | sparc | v850)
+  moxie | powerpc | sparc | v850)
    HAVE_LIBDL=yes ;;
   *)
    HAVE_LIBDL=no ;;
