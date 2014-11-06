@@ -5,7 +5,7 @@
   All rights reserved Objective Design Systems Pty Ltd, 2002
   Chris Johns (ccj@acm.org)
 
-  COPYRIGHT (c) 1989-2009.
+  COPYRIGHT (c) 1989-2014.
   On-Line Applications Research Corporation (OAR).
 
   The license and distribution terms for this file may be
@@ -18,10 +18,6 @@
   RTEMS Performance Monitoring and Measurement Framework.
 
   This is the Capture Engine component.
-rtems_status_code rtems_capture_user_extension_open(void);
-rtems_status_code rtems_capture_user_extension_close(void);
-
-
 */
 
 #ifdef HAVE_CONFIG_H
@@ -43,8 +39,8 @@ rtems_status_code rtems_capture_user_extension_close(void);
  */
 static rtems_id                 capture_id;
 
-static bool 
-rtems_capture_create_task (rtems_tcb* current_task, 
+static bool
+rtems_capture_create_task (rtems_tcb* current_task,
                            rtems_tcb* new_task);
 
 static void
@@ -95,7 +91,7 @@ static inline void rtems_capture_record (
 
   if (rtems_capture_filter( tcb, events) )
     return;
-  
+
   if (!rtems_capture_task_recorded (tcb))
     rtems_capture_record_task (tcb);
 
@@ -143,7 +139,6 @@ rtems_capture_create_task (rtems_tcb* ct,
    * The task pointers may not be known as the task may have
    * been created before the capture engine was open. Add them.
    */
-
   if (!rtems_capture_task_initialized (ct))
     rtems_capture_initialize_task (ct);
 
@@ -176,7 +171,7 @@ rtems_capture_start_task (rtems_tcb* ct,
   if (!rtems_capture_task_initialized (ct))
     rtems_capture_initialize_task (ct);
 
-  if (st == NULL)
+  if (st != NULL)
     rtems_capture_initialize_task (st);
 
   if (rtems_capture_trigger (ct, st, RTEMS_CAPTURE_START))
@@ -197,7 +192,6 @@ rtems_capture_restart_task (rtems_tcb* ct,
    * The task pointers may not be known as the task may have
    * been created before the capture engine was open. Add them.
    */
-
   if (!rtems_capture_task_initialized (ct))
     rtems_capture_initialize_task (ct);
 
@@ -302,7 +296,6 @@ rtems_capture_switch_task (rtems_tcb* ct,
   if (flags & RTEMS_CAPTURE_ON)
   {
     rtems_capture_time_t time;
-
     if (!rtems_capture_task_initialized (ct))
       rtems_capture_initialize_task (ct);
 

@@ -84,10 +84,10 @@ void * rtems_capture_buffer_allocate( rtems_capture_buffer_t* buffer, size_t siz
   buffer->head = size;
   buffer->count = buffer->count + size;
 
-  return ptr; 
+  return ptr;
 }
 
-void *rtems_capture_buffer_free( rtems_capture_buffer_t* buffer, size_t size ) 
+void *rtems_capture_buffer_free( rtems_capture_buffer_t* buffer, size_t size )
 {
     static void             *ptr;
     static uint32_t         next;
@@ -112,6 +112,6 @@ void *rtems_capture_buffer_free( rtems_capture_buffer_t* buffer, size_t size )
     } else {
       buffer->tail = next;
     }
-     
+
     return ptr;
 }

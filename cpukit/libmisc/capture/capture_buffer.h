@@ -79,14 +79,14 @@ static inline bool rtems_capture_buffer_has_wrapped( rtems_capture_buffer_t* buf
   return false;
 }
 
-static inline void *rtems_capture_buffer_peek(  rtems_capture_buffer_t* buffer, size_t *size ) 
+static inline void *rtems_capture_buffer_peek(  rtems_capture_buffer_t* buffer, size_t *size )
 {
   if (rtems_capture_buffer_is_empty(buffer)) {
-    *size = 0; 
+    *size = 0;
     return NULL;
   }
 
-  if ( buffer->tail > buffer->head)  
+  if ( buffer->tail > buffer->head)
     *size = buffer->end - buffer->tail;
   else
     *size = buffer->head - buffer->tail;
