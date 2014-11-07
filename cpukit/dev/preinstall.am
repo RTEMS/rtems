@@ -27,6 +27,10 @@ $(PROJECT_INCLUDE)/dev/i2c/eeprom.h: include/dev/i2c/eeprom.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/i2c/eeprom.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/eeprom.h
 
+$(PROJECT_INCLUDE)/dev/i2c/gpio-nxp-pca9535.h: include/dev/i2c/gpio-nxp-pca9535.h $(PROJECT_INCLUDE)/dev/i2c/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/i2c/gpio-nxp-pca9535.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/gpio-nxp-pca9535.h
+
 $(PROJECT_INCLUDE)/dev/i2c/i2c.h: include/dev/i2c/i2c.h $(PROJECT_INCLUDE)/dev/i2c/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/i2c/i2c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/i2c.h

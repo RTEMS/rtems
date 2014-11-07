@@ -7,6 +7,7 @@ include_dev_HEADERS =
 include_dev_i2cdir = $(includedir)/dev/i2c
 include_dev_i2c_HEADERS =
 include_dev_i2c_HEADERS += include/dev/i2c/eeprom.h
+include_dev_i2c_HEADERS += include/dev/i2c/gpio-nxp-pca9535.h
 include_dev_i2c_HEADERS += include/dev/i2c/i2c.h
 
 include_linuxdir = $(includedir)/linux
@@ -18,6 +19,7 @@ noinst_LIBRARIES = libdev.a
 
 libdev_a_SOURCES =
 libdev_a_SOURCES += i2c/eeprom.c
+libdev_a_SOURCES += i2c/gpio-nxp-pca9535.c
 libdev_a_SOURCES += i2c/i2c-bus.c
 libdev_a_SOURCES += i2c/i2c-dev.c
 

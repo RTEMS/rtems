@@ -18,6 +18,7 @@
 
 #include <dev/i2c/i2c.h>
 #include <dev/i2c/eeprom.h>
+#include <dev/i2c/gpio-nxp-pca9535.h>
 
 #include <sys/ioctl.h>
 #include <sys/stat.h>
@@ -39,6 +40,8 @@ const char rtems_test_name[] = "I2C 1";
 
 #define DEVICE_EEPROM (1UL << SPARE_ADDRESS_BITS)
 
+#define DEVICE_GPIO_NXP_PCA9535 (2UL << SPARE_ADDRESS_BITS)
+
 #define EEPROM_SIZE 512
 
 typedef struct test_device test_device;
@@ -59,6 +62,12 @@ typedef struct {
 
 typedef struct {
   test_device base;
+  unsigned current_reg;
+  uint8_t regs[8];
+} test_device_gpio_nxp_pca9535;
+
+typedef struct {
+  test_device base;
   unsigned current_address;
   uint8_t data[EEPROM_SIZE];
 } test_device_eeprom;
@@ -66,12 +75,15 @@ typedef struct {
 typedef struct {
   i2c_bus base;
   unsigned long clock;
-  test_device *devices[2];
+  test_device *devices[3];
   test_device_simple_read_write simple_read_write;
+  test_device_gpio_nxp_pca9535 gpio_nxp_pca9535;
   test_device_eeprom eeprom;
 } test_bus;
 
 static const char bus_path[] = "/dev/i2c-0";
+
+static const char gpio_nxp_pca9535_path[] = "/dev/i2c-0.gpio-nxp-pc9535-0";
 
 static const char eeprom_path[] = "/dev/i2c-0.eeprom-0";
 
@@ -103,6 +115,64 @@ static int test_simple_read_write_transfer(
   } else {
     return -EIO;
   }
+}
+
+static int test_gpio_nxp_pca9535_transfer(
+  i2c_bus *bus,
+  i2c_msg *msgs,
+  uint32_t msg_count,
+  test_device *base
+)
+{
+  test_device_gpio_nxp_pca9535 *dev = (test_device_gpio_nxp_pca9535 *) base;
+  i2c_msg *first = &msgs[0];
+  i2c_msg *second = &msgs[1];
+  int i;
+
+  /* Get command byte */
+  if (
+    msg_count < 1
+      || (first->flags & I2C_M_RD) != 0
+      || first->len < 1
+  ) {
+    return -EIO;
+  }
+
+  dev->current_reg = first->buf[0];
+
+  if (first->len > 1) {
+    /* Write */
+
+    if (msg_count != 1) {
+      return -EIO;
+    }
+
+    for (i = 1; i < first->len; ++i) {
+      dev->regs[dev->current_reg] = first->buf[i];
+
+      /* Output is input */
+      if (dev->current_reg == 2) {
+        dev->regs[0] = first->buf[i];
+      } else if (dev->current_reg == 3) {
+        dev->regs[1] = first->buf[i];
+      }
+
+      cyclic_inc(&dev->current_reg, 2);
+    }
+  } else {
+    /* Read */
+
+    if (msg_count != 2) {
+      return -EIO;
+    }
+
+    for (i = 0; i < second->len; ++i) {
+      second->buf[i] = dev->regs[dev->current_reg];
+      cyclic_inc(&dev->current_reg, 2);
+    }
+  }
+
+  return 0;
 }
 
 static int test_eeprom_transfer(
@@ -221,6 +291,81 @@ static void test_simple_read_write(test_bus *bus, int fd)
   rtems_test_assert(memcmp(&buf[0], &abc[0], sizeof(buf)) == 0);
 }
 
+static void test_gpio_nxp_pca9535(void)
+{
+  int rv;
+  int fd;
+  uint16_t val;
+
+  rv = i2c_dev_register_gpio_nxp_pca9535(
+    &bus_path[0],
+    &gpio_nxp_pca9535_path[0],
+    DEVICE_GPIO_NXP_PCA9535
+  );
+  rtems_test_assert(rv == 0);
+
+  fd = open(&gpio_nxp_pca9535_path[0], O_RDWR);
+  rtems_test_assert(fd >= 0);
+
+  rv = gpio_nxp_pca9535_get_input(fd, &val);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(val == 0);
+
+  rv = gpio_nxp_pca9535_get_output(fd, &val);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(val == 0);
+
+  rv = gpio_nxp_pca9535_set_output(fd, 0xa5ef);
+  rtems_test_assert(rv == 0);
+
+  rv = gpio_nxp_pca9535_get_input(fd, &val);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(val == 0xa5ef);
+
+  rv = gpio_nxp_pca9535_get_output(fd, &val);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(val == 0xa5ef);
+
+  rv = gpio_nxp_pca9535_clear_and_set_output(fd, 0x0ff0, 0x0170);
+  rtems_test_assert(rv == 0);
+
+  rv = gpio_nxp_pca9535_get_polarity_inversion(fd, &val);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(val == 0);
+
+  rv = gpio_nxp_pca9535_set_polarity_inversion(fd, 0x5afe);
+  rtems_test_assert(rv == 0);
+
+  rv = gpio_nxp_pca9535_get_config(fd, &val);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(val == 0);
+
+  rv = gpio_nxp_pca9535_set_config(fd, 0x2bcd);
+  rtems_test_assert(rv == 0);
+
+  rv = gpio_nxp_pca9535_get_input(fd, &val);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(val == 0xa17f);
+
+  rv = gpio_nxp_pca9535_get_output(fd, &val);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(val == 0xa17f);
+
+  rv = gpio_nxp_pca9535_get_polarity_inversion(fd, &val);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(val == 0x5afe);
+
+  rv = gpio_nxp_pca9535_get_config(fd, &val);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(val == 0x2bcd);
+
+  rv = close(fd);
+  rtems_test_assert(rv == 0);
+
+  rv = unlink(&gpio_nxp_pca9535_path[0]);
+  rtems_test_assert(rv == 0);
+}
+
 static void test_eeprom(void)
 {
   int rv;
@@ -317,6 +462,9 @@ static void test(void)
   bus->eeprom.base.transfer = test_eeprom_transfer;
   bus->devices[1] = &bus->eeprom.base;
 
+  bus->gpio_nxp_pca9535.base.transfer = test_gpio_nxp_pca9535_transfer;
+  bus->devices[2] = &bus->gpio_nxp_pca9535.base;
+
   rv = i2c_bus_register(&bus->base, &bus_path[0]);
   rtems_test_assert(rv == 0);
 
@@ -384,6 +532,7 @@ static void test(void)
 
   test_simple_read_write(bus, fd);
   test_eeprom();
+  test_gpio_nxp_pca9535();
 
   rv = close(fd);
   rtems_test_assert(rv == 0);
