@@ -17,6 +17,7 @@
 #endif
 
 #include <dev/i2c/i2c.h>
+#include <dev/i2c/eeprom.h>
 
 #include <sys/ioctl.h>
 #include <sys/stat.h>
@@ -36,6 +37,10 @@ const char rtems_test_name[] = "I2C 1";
 
 #define DEVICE_SIMPLE_READ_WRITE (0UL << SPARE_ADDRESS_BITS)
 
+#define DEVICE_EEPROM (1UL << SPARE_ADDRESS_BITS)
+
+#define EEPROM_SIZE 512
+
 typedef struct test_device test_device;
 
 struct test_device {
@@ -53,13 +58,30 @@ typedef struct {
 } test_device_simple_read_write;
 
 typedef struct {
+  test_device base;
+  unsigned current_address;
+  uint8_t data[EEPROM_SIZE];
+} test_device_eeprom;
+
+typedef struct {
   i2c_bus base;
   unsigned long clock;
-  test_device *devices[1];
+  test_device *devices[2];
   test_device_simple_read_write simple_read_write;
+  test_device_eeprom eeprom;
 } test_bus;
 
 static const char bus_path[] = "/dev/i2c-0";
+
+static const char eeprom_path[] = "/dev/i2c-0.eeprom-0";
+
+static void cyclic_inc(unsigned *val, unsigned cycle)
+{
+  unsigned v = *val;
+  unsigned m = cycle - 1U;
+
+  *val = (v & ~m) + ((v + 1U) & m);
+}
 
 static int test_simple_read_write_transfer(
   i2c_bus *bus,
@@ -81,6 +103,48 @@ static int test_simple_read_write_transfer(
   } else {
     return -EIO;
   }
+}
+
+static int test_eeprom_transfer(
+  i2c_bus *bus,
+  i2c_msg *msgs,
+  uint32_t msg_count,
+  test_device *base
+)
+{
+  test_device_eeprom *dev = (test_device_eeprom *) base;
+  i2c_msg *msg = &msgs[0];
+  uint32_t i;
+
+  if (msg_count > 0 && (msg->flags & I2C_M_RD) == 0) {
+    if (msg->len < 1) {
+      return -EIO;
+    }
+
+    dev->current_address = msg->buf[0] | ((msg->addr & 0x1) << 8);
+    --msg->len;
+    ++msg->buf;
+  }
+
+  for (i = 0; i < msg_count; ++i) {
+    int j;
+
+    msg = &msgs[i];
+
+    if ((msg->flags & I2C_M_RD) != 0) {
+      for (j = 0; j < msg->len; ++j) {
+        msg->buf[j] = dev->data[dev->current_address];
+        cyclic_inc(&dev->current_address, sizeof(dev->data));
+      }
+    } else {
+      for (j = 0; j < msg->len; ++j) {
+        dev->data[dev->current_address] = msg->buf[j];
+        cyclic_inc(&dev->current_address, 8);
+      }
+    }
+  }
+
+  return 0;
 }
 
 static int test_transfer(i2c_bus *base, i2c_msg *msgs, uint32_t msg_count)
@@ -157,6 +221,78 @@ static void test_simple_read_write(test_bus *bus, int fd)
   rtems_test_assert(memcmp(&buf[0], &abc[0], sizeof(buf)) == 0);
 }
 
+static void test_eeprom(void)
+{
+  int rv;
+  int fd_in;
+  int fd_out;
+  struct stat st;
+  uint8_t in[EEPROM_SIZE];
+  uint8_t out[EEPROM_SIZE];
+  ssize_t n;
+  off_t off;
+  size_t i;
+
+  rv = i2c_dev_register_eeprom(
+    &bus_path[0],
+    &eeprom_path[0],
+    DEVICE_EEPROM,
+    1,
+    8,
+    sizeof(out),
+    0
+  );
+  rtems_test_assert(rv == 0);
+
+  fd_in = open(&eeprom_path[0], O_RDWR);
+  rtems_test_assert(fd_in >= 0);
+
+  fd_out = open(&eeprom_path[0], O_RDWR);
+  rtems_test_assert(fd_out >= 0);
+
+  rv = fstat(fd_in, &st);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(st.st_blksize == 8);
+  rtems_test_assert(st.st_size == sizeof(out));
+
+  memset(&out[0], 0, sizeof(out));
+
+  n = read(fd_in, &in[0], sizeof(in) + 1);
+  rtems_test_assert(n == (ssize_t) sizeof(in));
+
+  rtems_test_assert(memcmp(&in[0], &out[0], sizeof(in)) == 0);
+
+  off = lseek(fd_in, 0, SEEK_CUR);
+  rtems_test_assert(off == sizeof(out));
+
+  for (i = 0; i < sizeof(out); ++i) {
+    off = lseek(fd_out, 0, SEEK_CUR);
+    rtems_test_assert(off == i);
+
+    out[i] = (uint8_t) i;
+
+    n = write(fd_out, &out[i], sizeof(out[i]));
+    rtems_test_assert(n == (ssize_t) sizeof(out[i]));
+
+    off = lseek(fd_in, 0, SEEK_SET);
+    rtems_test_assert(off == 0);
+
+    n = read(fd_in, &in[0], sizeof(in));
+    rtems_test_assert(n == (ssize_t) sizeof(in));
+
+    rtems_test_assert(memcmp(&in[0], &out[0], sizeof(in)) == 0);
+  }
+
+  rv = close(fd_in);
+  rtems_test_assert(rv == 0);
+
+  rv = close(fd_out);
+  rtems_test_assert(rv == 0);
+
+  rv = unlink(&eeprom_path[0]);
+  rtems_test_assert(rv == 0);
+}
+
 static void test(void)
 {
   rtems_resource_snapshot snapshot;
@@ -177,6 +313,9 @@ static void test(void)
 
   bus->simple_read_write.base.transfer = test_simple_read_write_transfer;
   bus->devices[0] = &bus->simple_read_write.base;
+
+  bus->eeprom.base.transfer = test_eeprom_transfer;
+  bus->devices[1] = &bus->eeprom.base;
 
   rv = i2c_bus_register(&bus->base, &bus_path[0]);
   rtems_test_assert(rv == 0);
@@ -244,6 +383,7 @@ static void test(void)
   rtems_test_assert(bus->base.timeout == 0);
 
   test_simple_read_write(bus, fd);
+  test_eeprom();
 
   rv = close(fd);
   rtems_test_assert(rv == 0);
