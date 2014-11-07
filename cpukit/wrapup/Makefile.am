@@ -8,6 +8,7 @@ project_lib_LIBRARIES = librtemscpu.a
 librtemscpu_a_SOURCES =
 
 TMP_LIBS =
+TMP_LIBS += ../dev/libdev.a
 TMP_LIBS += ../score/cpu/@RTEMS_CPU@/libscorecpu.a
 TMP_LIBS += ../score/libscore.a
 TMP_LIBS += ../sapi/libsapi.a

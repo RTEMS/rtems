@@ -1,12 +1,23 @@
 include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/multilib.am
 
 include_devdir = $(includedir)/dev
 include_dev_HEADERS =
+
+include_dev_i2cdir = $(includedir)/dev/i2c
+include_dev_i2c_HEADERS =
+include_dev_i2c_HEADERS += include/dev/i2c/i2c.h
 
 include_linuxdir = $(includedir)/linux
 include_linux_HEADERS =
 include_linux_HEADERS += include/linux/i2c.h
 include_linux_HEADERS += include/linux/i2c-dev.h
+
+noinst_LIBRARIES = libdev.a
+
+libdev_a_SOURCES =
+libdev_a_SOURCES += i2c/i2c-bus.c
+libdev_a_SOURCES += i2c/i2c-dev.c
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

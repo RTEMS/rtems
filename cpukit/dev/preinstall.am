@@ -18,6 +18,15 @@ $(PROJECT_INCLUDE)/dev/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/dev/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/dev/$(dirstamp)
 
+$(PROJECT_INCLUDE)/dev/i2c/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/dev/i2c
+	@: > $(PROJECT_INCLUDE)/dev/i2c/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/dev/i2c/$(dirstamp)
+
+$(PROJECT_INCLUDE)/dev/i2c/i2c.h: include/dev/i2c/i2c.h $(PROJECT_INCLUDE)/dev/i2c/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/i2c/i2c.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/i2c.h
+
 $(PROJECT_INCLUDE)/linux/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/linux
 	@: > $(PROJECT_INCLUDE)/linux/$(dirstamp)
