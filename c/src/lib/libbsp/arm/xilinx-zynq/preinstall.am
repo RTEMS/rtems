@@ -126,6 +126,18 @@ $(PROJECT_INCLUDE)/bsp/arm-release-id.h: ../shared/include/arm-release-id.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-release-id.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-release-id.h
 
+$(PROJECT_INCLUDE)/bsp/cadence-i2c.h: include/cadence-i2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/cadence-i2c.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/cadence-i2c.h
+
+$(PROJECT_INCLUDE)/bsp/cadence-i2c-regs.h: include/cadence-i2c-regs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/cadence-i2c-regs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/cadence-i2c-regs.h
+
+$(PROJECT_INCLUDE)/bsp/i2c.h: include/i2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/i2c.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/i2c.h
+
 $(PROJECT_INCLUDE)/bsp/irq.h: include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h

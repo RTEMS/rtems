@@ -43,6 +43,9 @@ include_bsp_HEADERS += ../shared/include/arm-gic-irq.h
 include_bsp_HEADERS += ../shared/include/arm-gic-regs.h
 include_bsp_HEADERS += ../shared/include/arm-gic-tm27.h
 include_bsp_HEADERS += ../shared/include/arm-release-id.h
+include_bsp_HEADERS += include/cadence-i2c.h
+include_bsp_HEADERS += include/cadence-i2c-regs.h
+include_bsp_HEADERS += include/i2c.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/zynq-uart.h
 include_bsp_HEADERS += include/zynq-uart-regs.h
@@ -113,6 +116,9 @@ libbsp_a_SOURCES += console/zynq-uart.c
 # Clock
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 libbsp_a_SOURCES += ../shared/arm-a9mpcore-clock-config.c
+
+# I2C
+libbsp_a_SOURCES += i2c/cadence-i2c.c
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
