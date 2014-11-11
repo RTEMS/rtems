@@ -7,6 +7,6 @@
 #
 
 This is a set of simple tests that verify that the fixed size
-functions in cpuset.h:  CPU_ZERO, CPU_COUNT,CPU_ISET, CPU_EQUAL, 
-CPU_CMP, CPU_EMPTY, CPU_SET, CPU_CLR, CPU_AND, CPU_NAND, CPU_OR, 
+functions in cpuset.h:  CPU_ZERO, CPU_COUNT, CPU_ISSET, CPU_EQUAL,
+CPU_CMP, CPU_EMPTY, CPU_SET, CPU_CLR, CPU_AND, CPU_NAND, CPU_OR,
 and CPU_XOR
