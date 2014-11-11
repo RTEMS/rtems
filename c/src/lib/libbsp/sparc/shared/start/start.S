@@ -51,6 +51,15 @@
   nop
 
 /*
+ * Window Underflow optimized trap table entry
+ */
+#define WUTRAP(_vector, _handler)  \
+  mov   %wim, %l3 ; \
+  sethi %hi(_handler), %l4 ; \
+  jmp   %l4+%lo(_handler); \
+   mov  %g0, %wim ! WIM = 0, so that we can restore regardless of WIM
+
+/*
  *  Software trap. Treat as BAD_TRAP for the time being...
  */
 
@@ -82,7 +91,7 @@ SYM(trap_table):
   BAD_TRAP;                                     ! 03 privileged instruction
   BAD_TRAP;                                     ! 04 fp disabled
   WOTRAP(5, SYM(window_overflow_trap_handler)); ! 05 window overflow
-  TRAP( 6, SYM(window_underflow_trap_handler) );! 06 window underflow
+  WUTRAP(6, SYM(window_underflow_trap_handler));! 06 window underflow
   BAD_TRAP;                                     ! 07 memory address not aligned
   BAD_TRAP;                                     ! 08 fp exception
   BAD_TRAP;                                     ! 09 data access exception
