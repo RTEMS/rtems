@@ -35,6 +35,10 @@ $(PROJECT_INCLUDE)/dev/i2c/i2c.h: include/dev/i2c/i2c.h $(PROJECT_INCLUDE)/dev/i
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/i2c/i2c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/i2c.h
 
+$(PROJECT_INCLUDE)/dev/i2c/switch-nxp-pca9548a.h: include/dev/i2c/switch-nxp-pca9548a.h $(PROJECT_INCLUDE)/dev/i2c/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/i2c/switch-nxp-pca9548a.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/switch-nxp-pca9548a.h
+
 $(PROJECT_INCLUDE)/linux/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/linux
 	@: > $(PROJECT_INCLUDE)/linux/$(dirstamp)

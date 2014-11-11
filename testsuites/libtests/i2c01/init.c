@@ -19,6 +19,7 @@
 #include <dev/i2c/i2c.h>
 #include <dev/i2c/eeprom.h>
 #include <dev/i2c/gpio-nxp-pca9535.h>
+#include <dev/i2c/switch-nxp-pca9548a.h>
 
 #include <sys/ioctl.h>
 #include <sys/stat.h>
@@ -41,6 +42,8 @@ const char rtems_test_name[] = "I2C 1";
 #define DEVICE_EEPROM (1UL << SPARE_ADDRESS_BITS)
 
 #define DEVICE_GPIO_NXP_PCA9535 (2UL << SPARE_ADDRESS_BITS)
+
+#define DEVICE_SWITCH_NXP_PCA9548A (3UL << SPARE_ADDRESS_BITS)
 
 #define EEPROM_SIZE 512
 
@@ -73,12 +76,18 @@ typedef struct {
 } test_device_eeprom;
 
 typedef struct {
+  test_device base;
+  uint8_t control;
+} test_device_switch_nxp_pca9548a;
+
+typedef struct {
   i2c_bus base;
   unsigned long clock;
-  test_device *devices[3];
+  test_device *devices[4];
   test_device_simple_read_write simple_read_write;
   test_device_gpio_nxp_pca9535 gpio_nxp_pca9535;
   test_device_eeprom eeprom;
+  test_device_switch_nxp_pca9548a switch_nxp_pca9548a;
 } test_bus;
 
 static const char bus_path[] = "/dev/i2c-0";
@@ -86,6 +95,9 @@ static const char bus_path[] = "/dev/i2c-0";
 static const char gpio_nxp_pca9535_path[] = "/dev/i2c-0.gpio-nxp-pc9535-0";
 
 static const char eeprom_path[] = "/dev/i2c-0.eeprom-0";
+
+static const char switch_nxp_pca9548a_path[] =
+  "/dev/i2c-0.switch-nxp-pca9548a-0";
 
 static void cyclic_inc(unsigned *val, unsigned cycle)
 {
@@ -210,6 +222,34 @@ static int test_eeprom_transfer(
       for (j = 0; j < msg->len; ++j) {
         dev->data[dev->current_address] = msg->buf[j];
         cyclic_inc(&dev->current_address, 8);
+      }
+    }
+  }
+
+  return 0;
+}
+
+static int test_switch_nxp_pca9548a_transfer(
+  i2c_bus *bus,
+  i2c_msg *msgs,
+  uint32_t msg_count,
+  test_device *base
+)
+{
+  test_device_switch_nxp_pca9548a *dev = (test_device_switch_nxp_pca9548a *) base;
+  uint32_t i;
+
+  for (i = 0; i < msg_count; ++i) {
+    i2c_msg *msg = &msgs[i];
+    int j;
+
+    if ((msg->flags & I2C_M_RD) != 0) {
+      for (j = 0; j < msg->len; ++j) {
+        msg->buf[j] = dev->control;
+      }
+    } else {
+      for (j = 0; j < msg->len; ++j) {
+        dev->control = msg->buf[j];
       }
     }
   }
@@ -438,6 +478,40 @@ static void test_eeprom(void)
   rtems_test_assert(rv == 0);
 }
 
+static void test_switch_nxp_pca9548a(void)
+{
+  int rv;
+  int fd;
+  uint8_t val;
+
+  rv = i2c_dev_register_switch_nxp_pca9548a(
+    &bus_path[0],
+    &switch_nxp_pca9548a_path[0],
+    DEVICE_SWITCH_NXP_PCA9548A
+  );
+  rtems_test_assert(rv == 0);
+
+  fd = open(&switch_nxp_pca9548a_path[0], O_RDWR);
+  rtems_test_assert(fd >= 0);
+
+  rv = switch_nxp_pca9548a_get_control(fd, &val);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(val == 0);
+
+  rv = switch_nxp_pca9548a_set_control(fd, 0xa5);
+  rtems_test_assert(rv == 0);
+
+  rv = switch_nxp_pca9548a_get_control(fd, &val);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(val == 0xa5);
+
+  rv = close(fd);
+  rtems_test_assert(rv == 0);
+
+  rv = unlink(&switch_nxp_pca9548a_path[0]);
+  rtems_test_assert(rv == 0);
+}
+
 static void test(void)
 {
   rtems_resource_snapshot snapshot;
@@ -464,6 +538,9 @@ static void test(void)
 
   bus->gpio_nxp_pca9535.base.transfer = test_gpio_nxp_pca9535_transfer;
   bus->devices[2] = &bus->gpio_nxp_pca9535.base;
+
+  bus->switch_nxp_pca9548a.base.transfer = test_switch_nxp_pca9548a_transfer;
+  bus->devices[3] = &bus->switch_nxp_pca9548a.base;
 
   rv = i2c_bus_register(&bus->base, &bus_path[0]);
   rtems_test_assert(rv == 0);
@@ -533,6 +610,7 @@ static void test(void)
   test_simple_read_write(bus, fd);
   test_eeprom();
   test_gpio_nxp_pca9535();
+  test_switch_nxp_pca9548a();
 
   rv = close(fd);
   rtems_test_assert(rv == 0);
