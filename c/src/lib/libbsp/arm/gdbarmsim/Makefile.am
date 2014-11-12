@@ -45,8 +45,6 @@ libbsp_a_SOURCES += ../../shared/console-polled.c console/console-io.c
 libbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
 # timer
 libbsp_a_SOURCES += ../../shared/timerstub.c
-# above
-libbsp_a_SOURCES += ../shared/abort/abort.c
 # start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c
 libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
