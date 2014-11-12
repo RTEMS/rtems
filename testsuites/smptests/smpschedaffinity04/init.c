@@ -85,11 +85,9 @@ static void test(void)
   sc = rtems_semaphore_create(  
     rtems_build_name('S', 'E', 'M', '0'),
     1,                                               /* initial count = 1 */
-    RTEMS_LOCAL                   |
-    RTEMS_SIMPLE_BINARY_SEMAPHORE |
-    RTEMS_NO_INHERIT_PRIORITY     |
-    RTEMS_NO_PRIORITY_CEILING     |
-    RTEMS_FIFO,
+    RTEMS_BINARY_SEMAPHORE |
+    RTEMS_PRIORITY | 
+    RTEMS_PRIORITY_CEILING,
     0,
     &task_sem
   );  
