@@ -115,6 +115,7 @@ static void task(rtems_task_argument arg)
     if (sc == RTEMS_SUCCESSFUL) {
       task_data.actual_cpu = rtems_get_current_processor();
       task_data.ran = true;
+      test_delay(25);
       rtems_semaphore_release(task_sem);
     }
   }
@@ -140,11 +141,9 @@ static void test(void)
   sc = rtems_semaphore_create(  
     rtems_build_name('S', 'E', 'M', '0'),
     1,
-    RTEMS_LOCAL                   |
-    RTEMS_SIMPLE_BINARY_SEMAPHORE |
-    RTEMS_NO_INHERIT_PRIORITY     |
-    RTEMS_NO_PRIORITY_CEILING     |
-    RTEMS_FIFO,
+    RTEMS_BINARY_SEMAPHORE |
+    RTEMS_PRIORITY | 
+    RTEMS_PRIORITY_CEILING,
     0,
     &task_sem
   );  
