@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 _SUBDIRS = POSIX
+_SUBDIRS += crypt01
 _SUBDIRS += sha
 _SUBDIRS += i2c01
 _SUBDIRS += newlib01

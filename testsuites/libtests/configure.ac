@@ -66,6 +66,7 @@ AS_IF([test x"$HAVE_LIBDL" = x"yes"],[
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+crypt01/Makefile
 sha/Makefile
 i2c01/Makefile
 newlib01/Makefile

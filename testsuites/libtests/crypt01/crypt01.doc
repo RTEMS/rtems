@@ -1,0 +1,15 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: crypt01
+
+directives:
+
+  - crypt_set_format
+  - crypt_get_format
+  - crypt_md5_r
+  - crypt_sha256_r
+  - crypt_sha512_r
+
+concepts:
+
+  - Ensure that the crypt family functions work for some test cases.

@@ -19,6 +19,7 @@ if LIBGNAT
 TMP_LIBS += ../libgnat/libgnat.a
 endif
 
+TMP_LIBS += ../libcrypt/libcrypt.a
 TMP_LIBS += ../libcsupport/libcsupport.a
 TMP_LIBS += ../libblock/libblock.a
 if LIBDOSFS

@@ -51,6 +51,10 @@ $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
+$(PROJECT_INCLUDE)/crypt.h: include/crypt.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/crypt.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/crypt.h
+
 $(PROJECT_INCLUDE)/memory.h: include/memory.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/memory.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/memory.h

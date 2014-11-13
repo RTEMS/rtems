@@ -420,6 +420,7 @@ libblock/Makefile
 libfs/Makefile
 libfs/src/nfsclient/Makefile
 libgnat/Makefile
+libcrypt/Makefile
 libcsupport/Makefile
 libnetworking/Makefile
 librpc/Makefile
