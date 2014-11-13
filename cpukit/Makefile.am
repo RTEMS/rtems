@@ -61,6 +61,7 @@ include_sys_HEADERS += libcsupport/include/sys/ttycom.h
 include_sys_HEADERS += libcsupport/include/sys/termios.h
 include_sys_HEADERS += libcsupport/include/sys/utsname.h
 
+include_sys_HEADERS += include/sys/endian.h
 include_sys_HEADERS += include/sys/uio.h
 include_sys_HEADERS += include/sys/_iovec.h
 include_sys_HEADERS += include/sys/priority.h
