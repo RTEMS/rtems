@@ -34,7 +34,7 @@ uint32_t zynq_uart_input_clock(void) __attribute__ ((weak));
 
 uint32_t zynq_uart_input_clock(void)
 {
-  return BSP_ARM_A9MPCORE_UARTCLK;
+  return ZYNQ_CLOCK_UART;
 }
 
 static int zynq_cal_baud_rate(uint32_t  baudrate,
