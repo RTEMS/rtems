@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -66,6 +66,8 @@ extern "C" {
  * PL rather than just open the whole of the GP[01] address space up.
  */
 BSP_START_TEXT_SECTION void zynq_setup_mmu_and_cache(void);
+
+uint32_t zynq_clock_cpu_1x(void);
 
 /** @} */
 
