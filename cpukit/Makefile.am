@@ -47,8 +47,6 @@ include_sysdir = $(includedir)/sys
 include_sys_HEADERS =
 
 include_HEADERS += include/memory.h
-include_HEADERS += libmd/md4.h
-include_HEADERS += libmd/md5.h
 
 include_sys_HEADERS += libcsupport/include/sys/ioccom.h
 include_sys_HEADERS += libcsupport/include/sys/event.h

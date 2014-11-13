@@ -1,0 +1,17 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: sha01
+
+directives:
+
+  - SHA256_Init
+  - SHA256_Update
+  - SHA256_Final
+  - SHA512_Init
+  - SHA512_Update
+  - SHA512_Final
+
+concepts:
+
+  - Ensure that the SHA256 and SHA512 implementations yield the expected
+    results for some standard test vectors.
