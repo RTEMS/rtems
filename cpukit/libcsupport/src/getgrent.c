@@ -24,55 +24,85 @@
 
 #include "pwdgrp.h"
 
-/*
- * Static, thread-unsafe, buffers
- */
-static FILE *group_fp;
-static char grbuf[200];
-static struct group grent;
+#include <stdlib.h>
+#include <pthread.h>
 
-struct group *getgrnam(
-  const char *name
-)
+typedef struct {
+  FILE *fp;
+  char buf[256];
+  struct group grp;
+} grp_context;
+
+static pthread_once_t grp_once = PTHREAD_ONCE_INIT;
+
+static pthread_key_t grp_key;
+
+static void grp_init(void)
 {
-  struct group *p;
-
-  if(getgrnam_r(name, &grent, grbuf, sizeof grbuf, &p))
-    return NULL;
-  return p;
+  pthread_key_create(&grp_key, free);
 }
 
-struct group *getgrgid(
-  gid_t gid
-)
+static grp_context *grp_get_context(void)
 {
-  struct group *p;
+  pthread_once(&grp_once, grp_init);
 
-  if(getgrgid_r(gid, &grent, grbuf, sizeof grbuf, &p))
-    return NULL;
-  return p;
+  return pthread_getspecific(grp_key);
 }
 
 struct group *getgrent(void)
 {
-  if (group_fp == NULL)
+  grp_context *ctx = grp_get_context();
+
+  if (ctx == NULL)
     return NULL;
-  if (!_libcsupport_scangr(group_fp, &grent, grbuf, sizeof grbuf))
+
+  if (ctx->fp == NULL)
     return NULL;
-  return &grent;
+
+  if (!_libcsupport_scangr(ctx->fp, &ctx->grp, ctx->buf, sizeof(ctx->buf)))
+    return NULL;
+
+  return &ctx->grp;
 }
 
 void setgrent(void)
 {
+  grp_context *ctx = grp_get_context();
+
+  if (ctx == NULL) {
+    int eno;
+
+    ctx = calloc(1, sizeof(*ctx));
+    if (ctx == NULL)
+      return;
+
+    eno = pthread_setspecific(grp_key, ctx);
+    if (eno != 0) {
+      free(ctx);
+
+      return;
+    }
+  }
+
   _libcsupport_pwdgrp_init();
 
-  if (group_fp != NULL)
-    fclose(group_fp);
-  group_fp = fopen("/etc/group", "r");
+  if (ctx->fp != NULL)
+    fclose(ctx->fp);
+
+  ctx->fp = fopen("/etc/group", "r");
 }
 
 void endgrent(void)
 {
-  if (group_fp != NULL)
-    fclose(group_fp);
+  grp_context *ctx = grp_get_context();
+
+  if (ctx == NULL)
+    return;
+
+  if (ctx->fp != NULL) {
+    fclose(ctx->fp);
+  }
+
+  free(ctx);
+  pthread_setspecific(grp_key, NULL);
 }

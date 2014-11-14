@@ -110,6 +110,7 @@ MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
 
 PASSWORD_GROUP_C_FILES = src/pwdgrp.c
 PASSWORD_GROUP_C_FILES += src/getgrent.c
+PASSWORD_GROUP_C_FILES += src/getgrnam.c
 PASSWORD_GROUP_C_FILES += src/getpwent.c
 
 TERMINAL_IDENTIFICATION_C_FILES = src/ctermid.c
