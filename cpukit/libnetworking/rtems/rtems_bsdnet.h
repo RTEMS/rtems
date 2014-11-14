@@ -11,6 +11,7 @@ extern "C" {
 #endif
 
 #include <rtems.h>
+#include <sys/cpuset.h>
 
 /*
  *  If this file is included from inside the Network Stack proper or
@@ -181,6 +182,14 @@ struct rtems_bsdnet_config {
 	 */
 	unsigned long		tcp_tx_buf_size;
 	unsigned long		tcp_rx_buf_size;
+
+	/*
+	 * Default Network Tasks CPU Affinity
+	 */
+#ifdef RTEMS_SMP
+	const cpu_set_t		*network_task_cpuset;
+	size_t			network_task_cpuset_size;
+#endif
 };
 
 /*

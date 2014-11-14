@@ -56,6 +56,10 @@ Semaphore_Control   *the_networkSemaphore;
 #endif
 static rtems_id networkDaemonTid;
 static uint32_t   networkDaemonPriority;
+#ifdef RTEMS_SMP
+static const cpu_set_t *networkDaemonCpuset = 0;
+static size_t          networkDaemonCpusetSize = 0;
+#endif
 static void networkDaemon (void *task_argument);
 
 /*
@@ -279,6 +283,14 @@ rtems_bsdnet_initialize (void)
 		networkDaemonPriority = 100;
 	else
 		networkDaemonPriority = rtems_bsdnet_config.network_task_priority;
+
+	/*
+	 * Default network task CPU affinity
+	 */
+#ifdef RTEMS_SMP
+	networkDaemonCpuset = rtems_bsdnet_config.network_task_cpuset;
+	networkDaemonCpusetSize = rtems_bsdnet_config.network_task_cpuset_size;
+#endif
 
 	/*
 	 * Set the memory allocation limits
@@ -660,11 +672,25 @@ taskEntry (rtems_task_argument arg)
 	rtems_panic ("Network task returned!\n");
 }
 
+
 /*
  * Start a network task
  */
+#ifdef RTEMS_SMP
 rtems_id
 rtems_bsdnet_newproc (char *name, int stacksize, void(*entry)(void *), void *arg)
+{
+	return rtems_bsdnet_newproc_affinity( name, stacksize, entry, arg,
+		networkDaemonCpuset, networkDaemonCpusetSize );
+}
+
+rtems_id
+rtems_bsdnet_newproc_affinity (char *name, int stacksize, void(*entry)(void *),
+    void *arg, const cpu_set_t *set, const size_t setsize)
+#else
+rtems_id
+rtems_bsdnet_newproc (char *name, int stacksize, void(*entry)(void *), void *arg)
+#endif
 {
 	struct newtask *t;
 	char nm[4];
@@ -680,6 +706,14 @@ rtems_bsdnet_newproc (char *name, int stacksize, void(*entry)(void *), void *arg
 		&tid);
 	if (sc != RTEMS_SUCCESSFUL)
 		rtems_panic ("Can't create network daemon `%s': `%s'\n", name, rtems_status_text (sc));
+
+#ifdef RTEMS_SMP
+	/*
+	 * Use the default affinity or use the user-provided CPU set
+	 */
+	if ( set != 0 )
+		rtems_task_set_affinity( tid, setsize, set );
+#endif
 
 	/*
 	 * Set up task arguments

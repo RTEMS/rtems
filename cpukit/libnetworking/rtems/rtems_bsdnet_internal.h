@@ -157,6 +157,18 @@ rtems_id rtems_bsdnet_newproc (
   void  *arg
 );
 
+#ifdef RTEMS_SMP
+/* As rtems_bsdnet_newproc() but with ability to set CPU affinity too */
+rtems_id rtems_bsdnet_newproc_affinity (
+  char  *name,
+  int   stacksize,
+  void  (*entry)(void *),
+  void  *arg,
+  const cpu_set_t *set,
+  const size_t setsize
+);
+#endif
+
 rtems_status_code rtems_bsdnet_event_receive (
   rtems_event_set  event_in,
   rtems_option     option_set,
