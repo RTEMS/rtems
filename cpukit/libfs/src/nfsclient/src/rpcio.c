@@ -84,6 +84,7 @@
 #include <string.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <sys/cpuset.h>
 
 #include "rpcio.h"
 
@@ -407,6 +408,10 @@ static rtems_interval	ticksPerSec;		/* cached system clock rate (WHO IS ASSUMED 
 											 */
 
 rtems_task_priority		rpciodPriority = 0;
+#ifdef RTEMS_SMP
+const cpu_set_t			*rpciodCpuset = 0;
+size_t				rpciodCpusetSize = 0;
+#endif
 
 #if (DEBUG) & DEBUG_MALLOC
 /* malloc wrappers for debugging */
@@ -982,6 +987,15 @@ struct sockwakeup	wkup;
 											RTEMS_DEFAULT_ATTRIBUTES | RTEMS_FLOATING_POINT,
 											&rpciod);
 			assert( status == RTEMS_SUCCESSFUL );
+
+#ifdef RTEMS_SMP
+			if ( rpciodCpuset == 0 ) {
+				rpciodCpuset = rtems_bsdnet_config.network_task_cpuset;
+				rpciodCpusetSize = rtems_bsdnet_config.network_task_cpuset_size;
+			}
+			if ( rpciodCpuset != 0 )
+				rtems_task_set_affinity( rpciod, rpciodCpusetSize, rpciodCpuset );
+#endif
 
 			wkup.sw_pfn = rxWakeupCB;
 			wkup.sw_arg = &rpciod;

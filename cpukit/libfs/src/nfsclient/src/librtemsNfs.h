@@ -98,6 +98,15 @@ extern "C" {
  */
 extern rtems_task_priority rpciodPriority;
 
+#ifdef RTEMS_SMP
+/** CPU affinity of daemon; may be setup prior to calling rpcUdpInit();
+ * otherwise the network task CPU affinity from the rtems_bsdnet_config
+ * is used...
+ */
+extern const cpu_set_t *rpciodCpuset;
+extern size_t rpciodCpusetSize;
+#endif
+
 /**
  * @brief Sets the XIDs of the RPC transaction hash table.
  *
