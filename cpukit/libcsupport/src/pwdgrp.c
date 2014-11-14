@@ -39,40 +39,42 @@
 
 static pthread_once_t pwdgrp_once = PTHREAD_ONCE_INIT;
 
+static void init_file(const char *name, const char *content)
+{
+  FILE *fp = fopen(name, "wx");
+
+  if (fp != NULL) {
+    fputs(content, fp);
+    fclose(fp);
+  }
+}
+
 /**
  *  Initialize useable but dummy databases
  */
 static void pwdgrp_init(void)
 {
-  FILE *fp;
-
   mkdir("/etc", 0777);
 
   /*
    *  Initialize /etc/passwd
    */
-  if ((fp = fopen("/etc/passwd", "r")) != NULL) {
-    fclose(fp);
-  }
-  else if ((fp = fopen("/etc/passwd", "w")) != NULL) {
-    fprintf(fp, "root:*:0:0:root::/:/bin/sh\n"
-                 "rtems:*:1:1:RTEMS Application::/:/bin/sh\n"
-                 "tty:!:2:2:tty owner::/:/bin/false\n" );
-    fclose(fp);
-  }
+  init_file(
+    "/etc/passwd",
+    "root:*:0:0:root::/:/bin/sh\n"
+      "rtems:*:1:1:RTEMS Application::/:/bin/sh\n"
+      "tty:!:2:2:tty owner::/:/bin/false\n"
+  );
 
   /*
    *  Initialize /etc/group
    */
-  if ((fp = fopen("/etc/group", "r")) != NULL) {
-    fclose(fp);
-  }
-  else if ((fp = fopen("/etc/group", "w")) != NULL) {
-    fprintf( fp, "root:x:0:root\n"
-                 "rtems:x:1:rtems\n"
-                 "tty:x:2:tty\n" );
-    fclose(fp);
-  }
+  init_file(
+    "/etc/group",
+    "root:x:0:root\n"
+      "rtems:x:1:rtems\n"
+      "tty:x:2:tty\n"
+  );
 }
 
 void _libcsupport_pwdgrp_init(void)

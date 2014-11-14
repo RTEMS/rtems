@@ -1,0 +1,19 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: pwdgrp01
+
+directives:
+
+  - _libcsupport_pwdgrp_init
+  - getpwnam_r
+  - getpwuid_r
+  - getgrnam_r
+  - getgrgid_r
+
+concepts:
+
+  - Ensure that _libcsupport_pwdgrp_init() doesn't overwrite existing files.
+  - Ensure that getpwnam_r() and getpwuid_r() return the values specified by
+    custom /etc/passwd.
+  - Ensure that getgrnam_r() and getgrgid_r() return the values specified by
+    custom /etc/group.
