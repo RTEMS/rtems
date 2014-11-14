@@ -31,22 +31,21 @@
 #include <string.h>
 #include <limits.h>
 #include <ctype.h>
+#include <pthread.h>
 
 #include <rtems/seterr.h>
 
 #include "pwdgrp.h"
 
+static pthread_once_t pwdgrp_once = PTHREAD_ONCE_INIT;
+
 /**
  *  Initialize useable but dummy databases
  */
-void _libcsupport_pwdgrp_init(void)
+static void pwdgrp_init(void)
 {
   FILE *fp;
-  static char etc_passwd_initted = 0;
 
-  if (etc_passwd_initted)
-    return;
-  etc_passwd_initted = 1;
   mkdir("/etc", 0777);
 
   /*
@@ -74,6 +73,11 @@ void _libcsupport_pwdgrp_init(void)
                  "tty:x:2:tty\n" );
     fclose(fp);
   }
+}
+
+void _libcsupport_pwdgrp_init(void)
+{
+  pthread_once(&pwdgrp_once, pwdgrp_init);
 }
 
 /**
