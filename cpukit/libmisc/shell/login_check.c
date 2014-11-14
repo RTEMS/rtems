@@ -5,10 +5,10 @@
  */
 
 /*
- * Copyright (c) 2009 embedded brains GmbH and others.
+ * Copyright (c) 2009-2014 embedded brains GmbH and others.
  *
  * embedded brains GmbH
- * Obere Lagerstr. 30
+ * Dornierstr. 4
  * D-82178 Puchheim
  * Germany
  * <rtems@embedded-brains.de>
@@ -30,36 +30,53 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <string.h>
+#include <crypt.h>
 
 #include <rtems/shell.h>
-#include <rtems/userenv.h>
 
 bool rtems_shell_login_check(
   const char *user,
   const char *passphrase
 )
 {
-  struct passwd *pw = getpwnam( user);
+  char buf[256];
+  struct passwd *pw_res;
+  struct passwd pw;
+  int eno;
+  bool ok;
+
+  eno = getpwnam_r(user, &pw, &buf[0], sizeof(buf), &pw_res);
 
   /* Valid user? */
-  if (pw != NULL && strcmp( pw->pw_passwd, "!") != 0) {
-    rtems_shell_env_t *env = rtems_shell_get_current_env();
-    setuid( pw->pw_uid);
-    setgid( pw->pw_gid);
-    rtems_current_user_env->euid = 0;
-    rtems_current_user_env->egid = 0;
-    if (env)
-      chown( env->devname, pw->pw_uid, 0);
-    rtems_current_user_env->euid = pw->pw_uid;
-    rtems_current_user_env->egid = pw->pw_gid;
-    if (strcmp( pw->pw_passwd, "*") == 0) {
+  if (eno == 0 && strcmp(pw.pw_passwd, "*") != 0) {
+    if (strcmp(pw.pw_passwd, "") == 0) {
+      ok = true;
+    } else if (strcmp(pw.pw_passwd, "x") == 0) {
       /* TODO: /etc/shadow */
-      return true;
+      ok = false;
     } else {
-      /* TODO: crypt() */
-      return true;
+      struct crypt_data data;
+      char *s;
+
+      s = crypt_r(passphrase, pw.pw_passwd, &data);
+      ok = strcmp(s, pw.pw_passwd) == 0;
     }
+  } else {
+    ok = false;
   }
 
-  return false;
+  if (ok) {
+    rtems_shell_env_t *env = rtems_shell_get_current_env();
+
+    if (env != NULL) {
+      chown(env->devname, pw.pw_uid, 0);
+    }
+
+    setuid(pw.pw_uid);
+    setgid(pw.pw_gid);
+    seteuid(pw.pw_uid);
+    setegid(pw.pw_gid);
+  }
+
+  return ok;
 }

@@ -13,6 +13,7 @@
 
 #define CONFIGURE_INIT
 #include "system.h"
+#include <crypt.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -641,10 +642,11 @@ static void fileio_start_shell(void)
   writeFile(
     "/etc/passwd",
     0644,
-    "root:7QR4o148UPtb.:0:0:root::/:/bin/sh\n"
-    "rtems:*:1:1:RTEMS Application::/:/bin/sh\n"
-    "test:8Yy.AaxynxbLI:2:2:test account::/:/bin/sh\n"
-    "tty:!:3:3:tty owner::/:/bin/false\n"
+    "root:$6$$FuPOhnllx6lhW2qqlnmWvZQLJ8Thr/09I7ESTdb9VbnTOn5.65"
+      "/Vh2Mqa6FoKXwT0nHS/O7F0KfrDc6Svb/sH.:0:0:root::/:/bin/sh\n"
+    "rtems::1:1:RTEMS Application::/:/bin/sh\n"
+    "test:$1$$oPu1Xt2Pw0ngIc7LyDHqu1:2:2:test account::/:/bin/sh\n"
+    "tty:*:3:3:tty owner::/:/bin/false\n"
   );
   writeFile(
     "/etc/group",
@@ -1224,6 +1226,9 @@ Init (rtems_task_argument ignored)
   rtems_status_code status;
 
   TEST_BEGIN();
+
+  crypt_add_format(&crypt_md5_format);
+  crypt_add_format(&crypt_sha512_format);
 
   status = rtems_shell_wait_for_input(
     STDIN_FILENO,

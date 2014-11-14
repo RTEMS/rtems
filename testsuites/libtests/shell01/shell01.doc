@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: shell01
+
+directives:
+
+  - rtems_shell_login_check
+
+concepts:
+
+  - Ensure that rtems_shell_login_check() works as expected.
