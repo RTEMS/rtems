@@ -59,22 +59,12 @@ static void pwdgrp_init(void)
   /*
    *  Initialize /etc/passwd
    */
-  init_file(
-    "/etc/passwd",
-    "root:*:0:0:root::/:/bin/sh\n"
-      "rtems:*:1:1:RTEMS Application::/:/bin/sh\n"
-      "tty:!:2:2:tty owner::/:/bin/false\n"
-  );
+  init_file("/etc/passwd", "root::0:0::::\n");
 
   /*
    *  Initialize /etc/group
    */
-  init_file(
-    "/etc/group",
-    "root:x:0:root\n"
-      "rtems:x:1:rtems\n"
-      "tty:x:2:tty\n"
-  );
+  init_file("/etc/group", "root::0:\n");
 }
 
 void _libcsupport_pwdgrp_init(void)
@@ -265,9 +255,13 @@ int _libcsupport_scangr(
   /*
    * Determine number of members
    */
-  for (cp = grmem, memcount = 1 ; *cp != 0 ; cp++) {
-    if(*cp == ',')
-      memcount++;
+  if (grmem[0] == '\0') {
+    memcount = 0;
+  } else {
+    for (cp = grmem, memcount = 1 ; *cp != 0 ; cp++) {
+      if(*cp == ',')
+        memcount++;
+    }
   }
 
   /*
@@ -280,13 +274,18 @@ int _libcsupport_scangr(
   /*
    * Fill in pointer array
    */
-  grp->gr_mem[0] = grmem;
-  for (cp = grmem, memcount = 1 ; *cp != 0 ; cp++) {
-    if(*cp == ',') {
-      *cp = '\0';
-      grp->gr_mem[memcount++] = cp + 1;
+  if (grmem[0] == '\0') {
+    memcount = 0;
+  } else {
+    grp->gr_mem[0] = grmem;
+    for (cp = grmem, memcount = 1 ; *cp != 0 ; cp++) {
+      if(*cp == ',') {
+        *cp = '\0';
+        grp->gr_mem[memcount++] = cp + 1;
+      }
     }
   }
+
   grp->gr_mem[memcount] = NULL;
   return 1;
 }

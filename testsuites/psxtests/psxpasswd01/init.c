@@ -98,17 +98,7 @@ rtems_task Init(
   rtems_test_assert( pw );
   print_passwd( pw );
 
-  puts( "Init - getpwent() (2) -- OK" );
-  pw = getpwent();
-  rtems_test_assert( pw );
-  print_passwd( pw );
-
-  puts( "Init - getpwent() (3) -- OK" );
-  pw = getpwent();
-  rtems_test_assert( pw );
-  print_passwd( pw );
-
-  puts( "Init - getpwent() (4) -- result should be NULL" );
+  puts( "Init - getpwent() (2) -- result should be NULL" );
   pw = getpwent();
   rtems_test_assert( !pw );
 
@@ -119,28 +109,13 @@ rtems_task Init(
   rtems_test_assert( gr );
   print_group( gr );
 
-  puts( "Init - getgrent() (2) -- OK" );
-  gr = getgrent();
-  rtems_test_assert( gr );
-  print_group( gr );
-
-  puts( "Init - getgrent() (3) -- OK" );
-  gr = getgrent();
-  rtems_test_assert( gr );
-  print_group( gr );
-
-  puts( "Init - getgrent() (4) -- result should be NULL" );
+  puts( "Init - getgrent() (2) -- result should be NULL" );
   gr = getgrent();
   rtems_test_assert( !gr );
 
   /* getpwnam */
   puts( "Init - getpwnam(\"root\") -- OK" );
   pw = getpwnam( "root" );
-  rtems_test_assert( pw );
-  print_passwd( pw );
-
-  puts( "Init - getpwnam(\"rtems\") -- OK" );
-  pw = getpwnam( "rtems" );
   rtems_test_assert( pw );
   print_passwd( pw );
 
@@ -154,10 +129,14 @@ rtems_task Init(
   rtems_test_assert( pw );
   print_passwd( pw );
 
-  puts( "Init - getpwuid(1) -- OK" );
-  pw = getpwuid( 1 );
-  rtems_test_assert( pw );
-  print_passwd( pw );
+  rtems_test_assert( strcmp(pw->pw_name, "root") == 0 );
+  rtems_test_assert( strcmp(pw->pw_passwd, "") == 0 );
+  rtems_test_assert( pw->pw_uid == 0 );
+  rtems_test_assert( pw->pw_gid == 0 );
+  rtems_test_assert( strcmp(pw->pw_comment, "") == 0 );
+  rtems_test_assert( strcmp(pw->pw_gecos, "") == 0 );
+  rtems_test_assert( strcmp(pw->pw_dir, "") == 0 );
+  rtems_test_assert( strcmp(pw->pw_shell, "") == 0 );
 
   puts( "Init - getpwuid(4) -- result should be NULL" );
   pw = getpwuid( 4 );
@@ -169,21 +148,16 @@ rtems_task Init(
   rtems_test_assert( gr );
   print_group( gr );
 
-  puts( "Init - getgrnam(\"rtems\") -- OK" );
-  gr = getgrnam("rtems");
-  rtems_test_assert( gr );
-  print_group( gr );
-
   /* getgrgid */
   puts( "Init - getgrgid(0) -- OK" );
   gr = getgrgid(0);
   rtems_test_assert( gr );
   print_group( gr );
 
-  puts( "Init - getgrgid(1) -- OK" );
-  gr = getgrgid(1);
-  rtems_test_assert( gr );
-  print_group( gr );
+  rtems_test_assert( strcmp(gr->gr_name, "root") == 0 );
+  rtems_test_assert( strcmp(gr->gr_passwd, "") == 0 );
+  rtems_test_assert( gr->gr_gid == 0 );
+  rtems_test_assert( gr->gr_mem[0] == NULL );
 
   puts( "Init - getgrgid(4) -- result should be NULL");
   gr = getgrgid( 4 );
