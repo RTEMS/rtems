@@ -76,7 +76,7 @@ extern rtems_shell_cmd_t rtems_shell_MD5_Command;
 
 extern rtems_shell_cmd_t rtems_shell_RTC_Command;
 
-extern rtems_shell_cmd_t rtems_shell_HALT_Command;
+extern rtems_shell_cmd_t rtems_shell_SHUTDOWN_Command;
 extern rtems_shell_cmd_t rtems_shell_CPUUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_TOP_Command;
 extern rtems_shell_cmd_t rtems_shell_STACKUSE_Command;
@@ -400,9 +400,9 @@ extern rtems_shell_alias_t *rtems_shell_Initial_aliases[];
      *  RTEMS Related commands
      */
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
-         !defined(CONFIGURE_SHELL_NO_COMMAND_HALT)) || \
-        defined(CONFIGURE_SHELL_COMMAND_HALT)
-      &rtems_shell_HALT_Command,
+         !defined(CONFIGURE_SHELL_NO_COMMAND_SHUTDOWN)) || \
+        defined(CONFIGURE_SHELL_COMMAND_SHUTDOWN)
+      &rtems_shell_SHUTDOWN_Command,
     #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_CPUUSE)) || \

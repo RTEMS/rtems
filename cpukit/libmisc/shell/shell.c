@@ -891,9 +891,6 @@ bool rtems_shell_main_loop(
           if (!strcmp(cmds[cmd],"bye") || !strcmp(cmds[cmd],"exit")) {
             fprintf(stdout, "Shell exiting\n" );
             break;
-          } else if (!strcmp(cmds[cmd],"shutdown")) { /* exit application */
-            fprintf(stdout, "System shutting down at user request\n" );
-            exit(0);
           }
 
           /* exec cmd section */
