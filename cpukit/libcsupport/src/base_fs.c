@@ -49,12 +49,9 @@ void rtems_filesystem_initialize( void )
    *  Traditionally RTEMS devices are under "/dev" so install this directory.
    *
    *  If the mkdir() fails, we can't print anything so just fatal error.
-   *
-   *  NOTE: UNIX root is 755 and owned by root/root (0/0).  It is actually
-   *        created that way by the IMFS.
    */
 
-  rv = mkdir( "/dev", 0777);
+  rv = mkdir( "/dev", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
   if ( rv != 0 )
     rtems_fatal_error_occurred( 0xABCD0003 );
 

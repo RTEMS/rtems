@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: pwdgrp02
+
+directives:
+
+  - _libcsupport_pwdgrp_init
+
+concepts:
+
+  - Ensures security of default user environment.

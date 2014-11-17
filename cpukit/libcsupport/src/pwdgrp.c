@@ -26,6 +26,7 @@
 #include <pwd.h>
 #include <grp.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,11 +42,17 @@ static pthread_once_t pwdgrp_once = PTHREAD_ONCE_INIT;
 
 static void init_file(const char *name, const char *content)
 {
-  FILE *fp = fopen(name, "wx");
+  /*
+   * Unlike to standard UNIX systems, these files are only readable and
+   * writeable for the root user.  This way we avoid the need for an
+   * /etc/shadow.  In case more UNIX compatibility is desired, this can be
+   * added on demand.
+   */
+  int fd = open(name, O_CREAT | O_EXCL | O_WRONLY, S_IRUSR | S_IWUSR);
 
-  if (fp != NULL) {
-    fputs(content, fp);
-    fclose(fp);
+  if (fd >= 0) {
+    write(fd, content, strlen(content));
+    close(fd);
   }
 }
 
@@ -54,7 +61,7 @@ static void init_file(const char *name, const char *content)
  */
 static void pwdgrp_init(void)
 {
-  mkdir("/etc", 0777);
+  mkdir("/etc", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 
   /*
    *  Initialize /etc/passwd

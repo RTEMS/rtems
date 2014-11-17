@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 _SUBDIRS = POSIX
+_SUBDIRS += pwdgrp02
 _SUBDIRS += shell01
 _SUBDIRS += pwdgrp01
 _SUBDIRS += crypt01
