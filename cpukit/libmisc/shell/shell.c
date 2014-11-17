@@ -56,7 +56,8 @@ const rtems_shell_env_t rtems_global_shell_env = {
   .login_check   = NULL
 };
 
-static pthread_once_t rtems_shell_current_env_once = PTHREAD_ONCE_INIT;
+static pthread_once_t rtems_shell_once = PTHREAD_ONCE_INIT;
+
 static pthread_key_t rtems_shell_current_env_key;
 
 /*
@@ -101,12 +102,35 @@ static void rtems_shell_env_free(
   free( ptr );
 }
 
-/*
- *  Create the posix key.
- */
-static void rtems_shell_current_env_make_key(void)
+static void rtems_shell_create_file(const char *name, const char *content)
 {
-  (void) pthread_key_create(&rtems_shell_current_env_key, rtems_shell_env_free);
+  FILE *fp = fopen(name, "wx");
+
+  if (fp != NULL) {
+    fputs(content, fp);
+    fclose(fp);
+  }
+}
+
+static void rtems_shell_init_once(void)
+{
+  struct passwd pwd;
+  struct passwd *pwd_res;
+
+  pthread_key_create(&rtems_shell_current_env_key, rtems_shell_env_free);
+
+  /* dummy call to init /etc dir */
+  getpwuid_r(0, &pwd, NULL, 0, &pwd_res);
+
+  rtems_shell_create_file("etc/issue",
+                          "\n"
+                          "Welcome to @V\\n"
+                          "Login into @S\\n");
+
+  rtems_shell_create_file("/etc/issue.net",
+                          "\n"
+                          "Welcome to %v\n"
+                          "running on %m\n");
 }
 
 /*
@@ -504,33 +528,6 @@ static int rtems_shell_line_editor(
  * TODO: Redirection. Tty Signals. ENVVARs. Shell language.
  * ----------------------------------------------- */
 
-static void rtems_shell_init_issue(void)
-{
-  static bool issue_inited=false;
-  struct stat buf;
-
-  if (issue_inited)
-    return;
-  issue_inited = true;
-
-  /* dummy call to init /etc dir */
-  getpwnam("root");
-
-  if (stat("/etc/issue",&buf)) {
-    rtems_shell_write_file("/etc/issue",
-                           "\n"
-                           "Welcome to @V\\n"
-                           "Login into @S\\n");
-  }
-
-  if (stat("/etc/issue.net",&buf)) {
-     rtems_shell_write_file("/etc/issue.net",
-                           "\n"
-                            "Welcome to %v\n"
-                            "running on %m\n");
-  }
-}
-
 static bool rtems_shell_login(FILE * in,FILE * out) {
   rtems_shell_env_t *env;
   FILE              *fd;
@@ -540,7 +537,6 @@ static bool rtems_shell_login(FILE * in,FILE * out) {
   env = rtems_shell_get_current_env();
   assert(env != NULL);
 
-  rtems_shell_init_issue();
   setuid(0);
   setgid(0);
   rtems_current_user_env->euid =
@@ -709,10 +705,7 @@ bool rtems_shell_main_loop(
 
   rtems_shell_initialize_command_set();
 
-  eno = pthread_once(
-    &rtems_shell_current_env_once,
-    rtems_shell_current_env_make_key
-  );
+  eno = pthread_once(&rtems_shell_once, rtems_shell_init_once);
   assert(eno == 0);
 
   shell_env = rtems_shell_init_env(shell_env_arg);
