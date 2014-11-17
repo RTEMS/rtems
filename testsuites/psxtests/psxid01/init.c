@@ -34,9 +34,11 @@ void test_gid(void)
   int sc;
 
   gid = getegid();
+  rtems_test_assert( gid == 0 );
   printf( "getegid = %d\n", gid );
 
   gid = getgid();
+  rtems_test_assert( gid == 0 );
   printf( "getgid = %d\n", gid );
 
   puts( "setgid(5)" );
@@ -44,11 +46,34 @@ void test_gid(void)
   rtems_test_assert( sc == 0 );
 
   gid = getegid();
+  rtems_test_assert( gid == 0 );
   printf( "getegid = %d\n", gid );
 
   gid = getgid();
+  rtems_test_assert( gid == 5 );
   printf( "getgid = %d\n", gid );
 
+  puts( "setegid(5)" );
+  sc = setegid(5);
+  rtems_test_assert( sc == 0 );
+
+  gid = getegid();
+  rtems_test_assert( gid == 5 );
+  printf( "getegid = %d\n", gid );
+
+  gid = getgid();
+  rtems_test_assert( gid == 5 );
+  printf( "getgid = %d\n", gid );
+
+  puts( "setgid(0)" );
+  sc = setgid(0);
+  rtems_test_assert( sc == 0 );
+
+  puts( "setegid(0)" );
+  sc = setegid(0);
+  rtems_test_assert( sc == 0 );
+
+  errno = 0;
   puts( "setpgid(getpid(), 10) - ENOSYS" );
   sc = setpgid( getpid(), 10 );
   rtems_test_assert( sc == -1 );
@@ -61,9 +86,11 @@ void test_uid(void)
   int sc;
 
   uid = geteuid();
+  rtems_test_assert( uid == 0 );
   printf( "geteuid = %d\n", uid );
 
   uid = getuid();
+  rtems_test_assert( uid == 0 );
   printf( "getuid = %d\n", uid );
 
   puts( "setuid(5)" );
@@ -71,11 +98,32 @@ void test_uid(void)
   rtems_test_assert( sc == 0 );
 
   uid = geteuid();
+  rtems_test_assert( uid == 0 );
   printf( "geteuid = %d\n", uid );
 
   uid = getuid();
+  rtems_test_assert( uid == 5 );
   printf( "getuid = %d\n", uid );
 
+  puts( "seteuid(5)" );
+  sc = seteuid(5);
+  rtems_test_assert( sc == 0 );
+
+  uid = geteuid();
+  rtems_test_assert( uid == 5 );
+  printf( "geteuid = %d\n", uid );
+
+  uid = getuid();
+  rtems_test_assert( uid == 5 );
+  printf( "getuid = %d\n", uid );
+
+  puts( "seteuid(0)" );
+  sc = seteuid(0);
+  rtems_test_assert( sc == 0 );
+
+  puts( "setuid(0)" );
+  sc = setuid(0);
+  rtems_test_assert( sc == 0 );
 }
 
 pid_t __getpid(void);
@@ -106,11 +154,6 @@ void test_pid(void)
   puts( "getpgrp - return local node - OK" );
   pid = getpgrp();
   printf( "getpgrp returned %d\n", pid ); 
-
-  puts( "getgroups - return 0 - OK" );
-  sc = getgroups( 0, NULL );
-  rtems_test_assert( sc == 0 );
-  
 }
 
 void test_getlogin(void)

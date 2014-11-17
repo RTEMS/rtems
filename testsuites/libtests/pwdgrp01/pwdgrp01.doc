@@ -9,6 +9,7 @@ directives:
   - getpwuid_r
   - getgrnam_r
   - getgrgid_r
+  - getgroups
 
 concepts:
 
@@ -17,3 +18,4 @@ concepts:
     custom /etc/passwd.
   - Ensure that getgrnam_r() and getgrgid_r() return the values specified by
     custom /etc/group.
+  - Ensure that getgroups() returns the values specified by custom /etc/group.

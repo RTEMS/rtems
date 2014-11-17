@@ -1,9 +1,14 @@
-*** TEST ID 01 ***
+*** BEGIN OF TEST PSXID 1 ***
 getegid = 0
 getgid = 0
 setgid(5)
 getegid = 0
 getgid = 5
+setegid(5)
+getegid = 5
+getgid = 5
+setgid(0)
+setegid(0)
 setpgid(getpid(), 10) - ENOSYS
 
 geteuid = 0
@@ -11,6 +16,11 @@ getuid = 0
 setuid(5)
 geteuid = 0
 getuid = 5
+seteuid(5)
+geteuid = 5
+getuid = 5
+seteuid(0)
+setuid(0)
 
 getpid = 1
 __getpid = 1
@@ -18,7 +28,6 @@ getppid = 0
 setsid - EPERM
 getpgrp - return local node - OK
 getpgrp returned 1
-getgroups - return 0 - OK
 
 setuid(5)
 getlogin() -- ()
@@ -26,4 +35,4 @@ setuid(0)
 getlogin() -- (root)
 getlogin_r(NULL, LOGIN_NAME_MAX) -- EFAULT
 getlogin_r(buffer, 0) -- ERANGE
-*** END OF TEST ID 01 ***
+*** END OF TEST PSXID 1 ***

@@ -17,9 +17,12 @@
 #endif
 
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
 #include <grp.h>
 #include <pwd.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include "tmacros.h"
 
@@ -69,6 +72,7 @@ static void test(void)
   struct passwd *pwd_res;
   struct group *grp_res;
   char buf[256];
+  gid_t grps[5];
 
   rv = mkdir("/etc", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
   rtems_test_assert(rv == 0);
@@ -80,7 +84,14 @@ static void test(void)
 
   create_file(
     "/etc/group",
+    "A::1:moop,u,v,w\n"
+    "B::2:moop\n"
     "blub:bar:3:moop\n"
+    "C::4:l,m,n,moop\n"
+    "D::5:moop,moop\n"
+    "E::6:x\n"
+    "E::7:y,z\n"
+    "F::8:s,moop,t\n"
   );
 
   memset(&pwd, 0xff, sizeof(pwd));
@@ -106,6 +117,34 @@ static void test(void)
   rtems_test_assert(rv == 0);
   rtems_test_assert(&grp == grp_res);
   assert_grp(grp_res);
+
+  rv = setuid(0);
+  rtems_test_assert(rv == 0);
+
+  errno = 0;
+  rv = getgroups(0, NULL);
+  rtems_test_assert(rv == -1);
+  rtems_test_assert(errno == EINVAL);
+
+  rv = setuid(1);
+  rtems_test_assert(rv == 0);
+
+  rv = getgroups(0, NULL);
+  rtems_test_assert(rv == 5);
+
+  errno = 0;
+  rv = getgroups(1, &grps[0]);
+  rtems_test_assert(rv == -1);
+  rtems_test_assert(errno == EINVAL);
+
+  memset(&grps[0], 0xff, sizeof(grps));
+  rv = getgroups(5, &grps[0]);
+  rtems_test_assert(rv == 5);
+  rtems_test_assert(grps[0] == 1);
+  rtems_test_assert(grps[1] == 2);
+  rtems_test_assert(grps[2] == 4);
+  rtems_test_assert(grps[3] == 5);
+  rtems_test_assert(grps[4] == 8);
 }
 
 static void Init(rtems_task_argument arg)
@@ -126,6 +165,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
+#define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
