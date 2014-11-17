@@ -25,6 +25,7 @@
  * limits.h is supposed to provide _POSIX_LOGIN_NAME_MAX
  * XXX: We do not rely on this.
  */
+#include <sys/param.h>
 #include <limits.h>
 
 #include <rtems.h>
@@ -52,18 +53,64 @@ extern "C" {
   #endif
 #endif
 
+/**
+ * @brief User environment.
+ */
 typedef struct {
+  /**
+   * @brief The anchor directory for relative paths.
+   */
   rtems_filesystem_global_location_t *current_directory;
+
+  /**
+   * @brief The anchor directory for absolute paths.
+   */
   rtems_filesystem_global_location_t *root_directory;
-  /* Default mode for all files. */
-  mode_t                           umask;
-  /* _POSIX_types */
-  uid_t                            uid;
-  gid_t                            gid;
-  uid_t                            euid;
-  gid_t                            egid;
-  char      login_buffer[LOGIN_NAME_MAX];
-  pid_t                            pgrp; /* process group id */
+
+  /**
+   * @brief The file mode creation mask.
+   */
+  mode_t umask;
+
+  /**
+   * @brief The real user ID.
+   */
+  uid_t uid;
+
+  /**
+   * @brief The real group ID.
+   */
+  gid_t gid;
+
+  /**
+   * @brief The effective user ID.
+   */
+  uid_t euid;
+
+  /**
+   * @brief The effective group ID.
+   */
+  gid_t egid;
+
+  /**
+   * @brief The login buffer.
+   */
+  char login_buffer[LOGIN_NAME_MAX];
+
+  /**
+   * @brief The process group ID.
+   */
+  pid_t pgrp;
+
+  /**
+   * @brief The count of supplementary group IDs.
+   */
+  size_t ngroups;
+
+  /**
+   * @brief The list of supplementary group IDs.
+   */
+  gid_t groups[NGROUPS];
 } rtems_user_env_t;
 
 extern rtems_user_env_t rtems_global_user_env;
@@ -115,6 +162,15 @@ rtems_status_code rtems_libio_set_private_env(void);
  * critical sections.
  */
 void rtems_libio_use_global_env(void);
+
+/**
+ * @brief Gets the supplementary group IDs using the current user ID and
+ * updates the table of supplementary group IDs in the current user
+ * environment.
+ *
+ * In case of an error, the count of supplementary group IDs is set to zero.
+ */
+void rtems_current_user_env_getgroups(void);
 
 /** @} */
 

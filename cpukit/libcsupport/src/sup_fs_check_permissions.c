@@ -70,29 +70,50 @@ RTEMS_STATIC_ASSERT(
   S_IXOTH
 );
 
-bool rtems_filesystem_check_access(
-  int eval_flags,
-  mode_t node_mode,
-  uid_t node_uid,
-  gid_t node_gid
+static bool equals_supplementary_group(
+  const rtems_user_env_t *uenv,
+  gid_t object_gid
 )
 {
-  mode_t perm_flags = eval_flags & RTEMS_FS_PERMS_RWX;
-  uid_t task_uid = geteuid();
+  size_t i;
 
-  if (task_uid == 0 || task_uid == node_uid) {
-    perm_flags <<= RTEMS_FS_USR_SHIFT;
-  } else {
-    gid_t task_gid = getegid();
-
-    if (task_gid == 0 || task_gid == node_gid) {
-      perm_flags <<= RTEMS_FS_GRP_SHIFT;
-    } else {
-      perm_flags <<= RTEMS_FS_OTH_SHIFT;
+  for (i = 0; i < uenv->ngroups; ++i) {
+    if (uenv->groups[i] == object_gid) {
+      return true;
     }
   }
 
-  return (perm_flags & node_mode) == perm_flags;
+  return false;
+}
+
+bool rtems_filesystem_check_access(
+  int flags,
+  mode_t object_mode,
+  uid_t object_uid,
+  gid_t object_gid
+)
+{
+  const rtems_user_env_t *uenv = rtems_current_user_env_get();
+  mode_t access_flags = flags & RTEMS_FS_PERMS_RWX;
+  uid_t task_uid = uenv->euid;
+
+  if (task_uid == 0 || task_uid == object_uid) {
+    access_flags <<= RTEMS_FS_USR_SHIFT;
+  } else {
+    gid_t task_gid = uenv->egid;
+
+    if (
+      task_gid == 0
+        || task_gid == object_gid
+        || equals_supplementary_group(uenv, object_gid)
+    ) {
+      access_flags <<= RTEMS_FS_GRP_SHIFT;
+    } else {
+      access_flags <<= RTEMS_FS_OTH_SHIFT;
+    }
+  }
+
+  return (access_flags & object_mode) == access_flags;
 }
 
 bool rtems_filesystem_eval_path_check_access(

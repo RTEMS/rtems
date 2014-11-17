@@ -58,6 +58,7 @@ BASE_FS_C_FILES = src/base_fs.c src/mount.c src/unmount.c src/libio.c \
     src/libio_helper_null.c \
     src/libio_exit.c \
     src/open_dev_console.c src/__usrenv.c src/rtems_mkdir.c
+BASE_FS_C_FILES += src/uenvgetgroups.c
 
 TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c \
     src/cfsetospeed.c src/tcgetattr.c src/tcsetattr.c src/tcdrain.c \

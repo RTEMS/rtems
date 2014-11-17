@@ -810,11 +810,30 @@ int rtems_filesystem_location_exists_in_same_instance_as(
   const rtems_filesystem_location_info_t *b
 );
 
+/**
+ * @brief Checks if access to an object is allowed for the current user.
+ *
+ * If the effective UID is zero or equals the UID of the object, then the user
+ * permission flags of the object will be used.  Otherwise if the effective GID
+ * is zero or equals the GID of the object or one of the supplementary group
+ * IDs is equal to the GID of the object, then the group permission flags of
+ * the object will be used.  Otherwise the other permission flags of the object
+ * will be used.
+ *
+ * @param[in] flags The flags determining the access type.  It can be
+ *   RTEMS_FS_PERMS_READ, RTEMS_FS_PERMS_WRITE or RTEMS_FS_PERMS_EXEC.
+ * @param[in] object_mode The mode of the object specifying the permission flags.
+ * @param[in] object_uid The UID of the object.
+ * @param[in] object_gid The GID of the object.
+ *
+ * @retval true Access is allowed.
+ * @retval false Otherwise.
+ */
 bool rtems_filesystem_check_access(
-  int eval_flags,
-  mode_t node_mode,
-  uid_t node_uid,
-  gid_t node_gid
+  int flags,
+  mode_t object_mode,
+  uid_t object_uid,
+  gid_t object_gid
 );
 
 bool rtems_filesystem_eval_path_check_access(

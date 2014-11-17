@@ -16,6 +16,7 @@
   #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
 #include "tmacros.h"
 
 #include <sys/stat.h>
@@ -321,6 +322,175 @@ static void test_user_env(void)
   rtems_test_assert(null_loc->reference_count == 4);
 }
 
+typedef struct {
+  int flags;
+  mode_t object_mode;
+  uid_t object_uid;
+  gid_t object_gid;
+  bool expected_ok;
+} check_access_case;
+
+#define FR RTEMS_FS_PERMS_READ
+#define FW RTEMS_FS_PERMS_WRITE
+#define FX RTEMS_FS_PERMS_EXEC
+
+#define UR S_IRUSR
+#define UW S_IWUSR
+#define UX S_IXUSR
+
+#define GR S_IRGRP
+#define GW S_IWGRP
+#define GX S_IXGRP
+
+#define OR S_IROTH
+#define OW S_IWOTH
+#define OX S_IXOTH
+
+static const check_access_case check_access_euid_0_cases[] = {
+  { 0,   0, 6, 7, true },
+  { FR,  0, 6, 7, false },
+  { FW,  0, 6, 7, false },
+  { FX,  0, 6, 7, false },
+  { FR, UR, 6, 7, true },
+  { FW, UW, 6, 7, true },
+  { FX, UX, 6, 7, true },
+  { FR, GR, 6, 7, false },
+  { FW, GW, 6, 7, false },
+  { FX, GX, 6, 7, false },
+  { FR, OR, 6, 7, false },
+  { FW, OW, 6, 7, false },
+  { FX, OX, 6, 7, false }
+};
+
+static const check_access_case check_access_egid_0_cases[] = {
+  { 0,   0, 6, 7, true },
+  { FR,  0, 6, 7, false },
+  { FW,  0, 6, 7, false },
+  { FX,  0, 6, 7, false },
+  { FR, UR, 6, 7, false },
+  { FW, UW, 6, 7, false },
+  { FX, UX, 6, 7, false },
+  { FR, GR, 6, 7, true },
+  { FW, GW, 6, 7, true },
+  { FX, GX, 6, 7, true },
+  { FR, OR, 6, 7, false },
+  { FW, OW, 6, 7, false },
+  { FX, OX, 6, 7, false }
+};
+
+static const check_access_case check_access_other_cases[] = {
+  { 0,   0, 3, 7, true },
+  { FR,  0, 3, 7, false },
+  { FW,  0, 3, 7, false },
+  { FX,  0, 3, 7, false },
+  { FR, UR, 3, 7, true },
+  { FW, UW, 3, 7, true },
+  { FX, UX, 3, 7, true },
+  { FR, GR, 3, 7, false },
+  { FW, GW, 3, 7, false },
+  { FX, GX, 3, 7, false },
+  { FR, OR, 3, 7, false },
+  { FW, OW, 3, 7, false },
+  { FX, OX, 3, 7, false },
+  { 0,   0, 6, 4, true },
+  { FR,  0, 6, 4, false },
+  { FW,  0, 6, 4, false },
+  { FX,  0, 6, 4, false },
+  { FR, UR, 6, 4, false },
+  { FW, UW, 6, 4, false },
+  { FX, UX, 6, 4, false },
+  { FR, GR, 6, 4, true },
+  { FW, GW, 6, 4, true },
+  { FX, GX, 6, 4, true },
+  { FR, OR, 6, 4, false },
+  { FW, OW, 6, 4, false },
+  { FX, OX, 6, 4, false },
+  { 0,   0, 6, 5, true },
+  { FR,  0, 6, 5, false },
+  { FW,  0, 6, 5, false },
+  { FX,  0, 6, 5, false },
+  { FR, UR, 6, 5, false },
+  { FW, UW, 6, 5, false },
+  { FX, UX, 6, 5, false },
+  { FR, GR, 6, 5, true },
+  { FW, GW, 6, 5, true },
+  { FX, GX, 6, 5, true },
+  { FR, OR, 6, 5, false },
+  { FW, OW, 6, 5, false },
+  { FX, OX, 6, 5, false },
+  { 0,   0, 6, 7, true },
+  { FR,  0, 6, 7, false },
+  { FW,  0, 6, 7, false },
+  { FX,  0, 6, 7, false },
+  { FR, UR, 6, 7, false },
+  { FW, UW, 6, 7, false },
+  { FX, UX, 6, 7, false },
+  { FR, GR, 6, 7, false },
+  { FW, GW, 6, 7, false },
+  { FX, GX, 6, 7, false },
+  { FR, OR, 6, 7, true },
+  { FW, OW, 6, 7, true },
+  { FX, OX, 6, 7, true }
+};
+
+static void check_access(const check_access_case *table, size_t n)
+{
+  size_t i;
+
+  for (i = 0; i < n; ++i) {
+    const check_access_case *cac = &table[i];
+    bool ok = rtems_filesystem_check_access(
+      cac->flags,
+      cac->object_mode,
+      cac->object_uid,
+      cac->object_gid
+    );
+
+    rtems_test_assert(ok == cac->expected_ok);
+  }
+}
+
+static void test_check_access(void)
+{
+  rtems_user_env_t *uenv = rtems_current_user_env_get();
+
+  rtems_test_assert(uenv->uid == 0);
+  rtems_test_assert(uenv->gid == 0);
+  rtems_test_assert(uenv->euid == 0);
+  rtems_test_assert(uenv->egid == 0);
+  rtems_test_assert(uenv->ngroups == 0);
+
+  uenv->uid = 1;
+  uenv->gid = 2;
+
+  check_access(
+    &check_access_euid_0_cases[0],
+    RTEMS_ARRAY_SIZE(check_access_euid_0_cases)
+  );
+
+  uenv->euid = 3;
+
+  check_access(
+    &check_access_egid_0_cases[0],
+    RTEMS_ARRAY_SIZE(check_access_egid_0_cases)
+  );
+
+  uenv->egid = 4;
+  uenv->ngroups = 1;
+  uenv->groups[0] = 5;
+
+  check_access(
+    &check_access_other_cases[0],
+    RTEMS_ARRAY_SIZE(check_access_other_cases)
+  );
+
+  uenv->uid = 0;
+  uenv->gid = 0;
+  uenv->euid = 0;
+  uenv->egid = 0;
+  uenv->ngroups = 0;
+}
+
 static void Init(rtems_task_argument arg)
 {
   rtems_test_begink();
@@ -334,6 +504,7 @@ static void Init(rtems_task_argument arg)
   test_null_location_get_and_replace();
   test_path_ops();
   test_user_env();
+  test_check_access();
 
   rtems_test_endk();
   exit(0);
