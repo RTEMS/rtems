@@ -25,6 +25,7 @@
 #include <unistd.h>
 
 #include <rtems/shell.h>
+#include <rtems/userenv.h>
 
 #include "tmacros.h"
 
@@ -47,6 +48,7 @@ static void create_file(const char *name, const char *content)
 
 static void test(void)
 {
+  rtems_user_env_t *uenv;
   bool ok;
   int rv;
 
@@ -73,6 +75,8 @@ static void test(void)
     "F::8:s,moop,t\n"
   );
 
+  uenv = rtems_current_user_env_get();
+
   rv = setuid(0);
   rtems_test_assert(rv == 0);
 
@@ -95,6 +99,7 @@ static void test(void)
   rtems_test_assert(geteuid() == 0);
   rtems_test_assert(getgid() == 0);
   rtems_test_assert(getegid() == 0);
+  rtems_test_assert(uenv->ngroups == 0);
 
   ok = rtems_shell_login_check("zero", NULL);
   rtems_test_assert(ok);
@@ -102,6 +107,8 @@ static void test(void)
   rtems_test_assert(geteuid() == 3);
   rtems_test_assert(getgid() == 5);
   rtems_test_assert(getegid() == 5);
+  rtems_test_assert(uenv->ngroups == 1);
+  rtems_test_assert(uenv->groups[0] == 1);
 
   ok = rtems_shell_login_check("moop", "foo");
   rtems_test_assert(ok);
@@ -109,6 +116,12 @@ static void test(void)
   rtems_test_assert(geteuid() == 1);
   rtems_test_assert(getgid() == 3);
   rtems_test_assert(getegid() == 3);
+  rtems_test_assert(uenv->ngroups == 5);
+  rtems_test_assert(uenv->groups[0] == 1);
+  rtems_test_assert(uenv->groups[1] == 2);
+  rtems_test_assert(uenv->groups[2] == 4);
+  rtems_test_assert(uenv->groups[3] == 5);
+  rtems_test_assert(uenv->groups[4] == 8);
 }
 
 static void Init(rtems_task_argument arg)

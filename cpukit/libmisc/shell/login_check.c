@@ -33,6 +33,7 @@
 #include <crypt.h>
 
 #include <rtems/shell.h>
+#include <rtems/userenv.h>
 
 bool rtems_shell_login_check(
   const char *user,
@@ -76,6 +77,7 @@ bool rtems_shell_login_check(
     setgid(pw.pw_gid);
     seteuid(pw.pw_uid);
     setegid(pw.pw_gid);
+    rtems_current_user_env_getgroups();
   }
 
   return ok;
