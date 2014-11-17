@@ -108,24 +108,25 @@ rtems_shell_cmd_t *rtems_shell_add_cmd_struct(
   rtems_shell_cmd_t *shell_cmd
 )
 {
-  rtems_shell_cmd_t *shell_pvt;
+  rtems_shell_cmd_t **next_ptr = &rtems_shell_first_cmd;
+  rtems_shell_cmd_t *existing;
 
-  shell_pvt = rtems_shell_first_cmd;
-  while (shell_pvt) {
-    if (strcmp(shell_pvt->name, shell_cmd->name) == 0)
+  /*
+   * Iterate through all commands and check if a command with this name is
+   * already present.
+   */
+  while ((existing = *next_ptr) != NULL) {
+    if (strcmp(existing->name, shell_cmd->name) == 0)
       return NULL;
-    shell_pvt = shell_pvt->next;
+
+    next_ptr = &existing->next;
   }
 
-  if ( !rtems_shell_first_cmd ) {
-    rtems_shell_first_cmd = shell_cmd;
-  } else {
-    shell_pvt = rtems_shell_first_cmd;
-    while (shell_pvt->next)
-      shell_pvt = shell_pvt->next;
-    shell_pvt->next = shell_cmd;
-  }
+  /* Append */
+  *next_ptr = shell_cmd;
+
   rtems_shell_add_topic( shell_cmd->topic );
+
   return shell_cmd;
 }
 
