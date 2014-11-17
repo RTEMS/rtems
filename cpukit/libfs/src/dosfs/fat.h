@@ -68,7 +68,9 @@ extern "C" {
 #    define CT_LE_L(v) (v)
 #endif
 
+#ifndef MIN
 #define MIN(a, b)  (((a) < (b)) ? (a) : (b))
+#endif
 
 #define FAT_HASH_SIZE   2
 #define FAT_HASH_MODULE FAT_HASH_SIZE
