@@ -49,10 +49,19 @@ static void create_file(const char *name, const char *content)
 static void test(void)
 {
   rtems_user_env_t *uenv;
+  rtems_status_code sc;
+  struct stat st_chroot;
+  struct stat st_workdir;
   bool ok;
   int rv;
 
   rv = mkdir("/etc", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+  rtems_test_assert(rv == 0);
+
+  rv = mkdir("/chroot", S_IRWXU | S_IRWXG | S_IRWXO);
+  rtems_test_assert(rv == 0);
+
+  rv = lstat("/chroot", &st_chroot);
   rtems_test_assert(rv == 0);
 
   create_file(
@@ -61,6 +70,8 @@ static void test(void)
     "no:*:2:4::::\n"
     "zero::3:5::::\n"
     "shadow:x:4:6::::\n"
+    "invchroot::5:7:::/inv:\n"
+    "chroot::6:8:::/chroot:\n"
   );
 
   create_file(
@@ -74,6 +85,9 @@ static void test(void)
     "E::7:y,z\n"
     "F::8:s,moop,t\n"
   );
+
+  sc = rtems_libio_set_private_env();
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   uenv = rtems_current_user_env_get();
 
@@ -93,6 +107,9 @@ static void test(void)
   rtems_test_assert(!ok);
 
   ok = rtems_shell_login_check("moop", "false");
+  rtems_test_assert(!ok);
+
+  ok = rtems_shell_login_check("invchroot", NULL);
   rtems_test_assert(!ok);
 
   rtems_test_assert(getuid() == 0);
@@ -122,6 +139,25 @@ static void test(void)
   rtems_test_assert(uenv->groups[2] == 4);
   rtems_test_assert(uenv->groups[3] == 5);
   rtems_test_assert(uenv->groups[4] == 8);
+
+  rv = setuid(0);
+  rtems_test_assert(rv == 0);
+
+  rv = seteuid(0);
+  rtems_test_assert(rv == 0);
+
+  ok = rtems_shell_login_check("chroot", NULL);
+  rtems_test_assert(ok);
+  rtems_test_assert(getuid() == 6);
+  rtems_test_assert(geteuid() == 6);
+  rtems_test_assert(getgid() == 8);
+  rtems_test_assert(getegid() == 8);
+
+  rv = lstat(".", &st_workdir);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(memcmp(&st_chroot, &st_workdir, sizeof(st_chroot)) == 0);
+
+  rtems_libio_use_global_env();
 }
 
 static void Init(rtems_task_argument arg)
@@ -143,7 +179,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 #define CONFIGURE_MAXIMUM_POSIX_KEYS 1
-#define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 1
+#define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 2
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

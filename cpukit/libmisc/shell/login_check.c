@@ -66,6 +66,10 @@ bool rtems_shell_login_check(
     ok = false;
   }
 
+  if (ok && strcmp(pw.pw_dir, "") != 0) {
+    ok = chroot(pw.pw_dir) == 0;
+  }
+
   if (ok) {
     rtems_shell_env_t *env = rtems_shell_get_current_env();
 

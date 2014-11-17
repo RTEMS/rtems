@@ -522,25 +522,11 @@ static int rtems_shell_line_editor(
   return -2;
 }
 
-/* ----------------------------------------------- *
- * - The shell TASK
- * Poor but enough..
- * TODO: Redirection. Tty Signals. ENVVARs. Shell language.
- * ----------------------------------------------- */
-
-static bool rtems_shell_login(FILE * in,FILE * out) {
-  rtems_shell_env_t *env;
+static bool rtems_shell_login(rtems_shell_env_t *env, FILE * in,FILE * out)
+{
   FILE              *fd;
   int               c;
   time_t            t;
-
-  env = rtems_shell_get_current_env();
-  assert(env != NULL);
-
-  setuid(0);
-  setgid(0);
-  rtems_current_user_env->euid =
-  rtems_current_user_env->egid =0;
 
   if (out) {
     if ((env->devname[5]!='p')||
@@ -675,6 +661,24 @@ static rtems_task rtems_shell_task(rtems_task_argument task_argument)
   rtems_task_delete( RTEMS_SELF );
 }
 
+static bool rtems_shell_init_user_env(void)
+{
+  rtems_status_code sc;
+
+  /* Make sure we have a private user environment */
+  sc = rtems_libio_set_private_env();
+  if (sc != RTEMS_SUCCESSFUL) {
+    rtems_error(sc, "rtems_libio_set_private_env():");
+    return false;
+  }
+
+  /* Make an effective root user */
+  seteuid(0);
+  setegid(0);
+
+  return chroot("/") == 0;
+}
+
 #define RTEMS_SHELL_MAXIMUM_ARGUMENTS (128)
 #define RTEMS_SHELL_CMD_SIZE          (128)
 #define RTEMS_SHELL_CMD_COUNT         (32)
@@ -686,7 +690,6 @@ bool rtems_shell_main_loop(
 {
   rtems_shell_env_t *shell_env;
   rtems_shell_cmd_t *shell_cmd;
-  rtems_status_code  sc;
   int                eno;
   struct termios     term;
   struct termios     previous_term;
@@ -720,10 +723,10 @@ bool rtems_shell_main_loop(
     return false;
   }
 
-  setuid(0);
-  setgid(0);
-
-  rtems_current_user_env->euid = rtems_current_user_env->egid = 0;
+  if (!rtems_shell_init_user_env()) {
+    rtems_error(0, "rtems_shell_init_user_env");
+    return false;
+  }
 
   fileno(stdout);
 
@@ -811,23 +814,19 @@ bool rtems_shell_main_loop(
     }
 
     do {
-      /* Set again root user and root filesystem, side effect of set_priv..*/
-      sc = rtems_libio_set_private_env();
-      if (sc != RTEMS_SUCCESSFUL) {
-        rtems_error(sc,"rtems_libio_set_private_env():");
-        result = false;
-        break;
-      }
+      result = rtems_shell_init_user_env();
 
-      /*
-       *  By using result here, we can fall to the bottom of the
-       *  loop when the connection is dropped during login and
-       *  keep on trucking.
-       */
-      if (shell_env->login_check != NULL) {
-        result = rtems_shell_login(stdin,stdout);
-      } else {
-        result = true;
+      if (result) {
+        /*
+         *  By using result here, we can fall to the bottom of the
+         *  loop when the connection is dropped during login and
+         *  keep on trucking.
+         */
+        if (shell_env->login_check != NULL) {
+          result = rtems_shell_login(shell_env, stdin,stdout);
+        } else {
+          result = true;
+        }
       }
 
       if (result)  {

@@ -636,9 +636,14 @@ static void fileio_start_shell(void)
     printf( "mkdir /etc: %s:\n", strerror(errno) );
   }
 
+  sc = mkdir("/chroot", 0777);
+  if ( sc ) {
+    printf( "mkdir /chroot: %s:\n", strerror(errno) );
+  }
+
   printf(
     "Creating /etc/passwd and group with three useable accounts\n"
-    "root/pwd , test/pwd, rtems/NO PASSWORD"
+    "root/pwd , test/pwd, rtems/NO PASSWORD, chroot/NO PASSWORD"
   );
 
   writeFile(
@@ -649,6 +654,7 @@ static void fileio_start_shell(void)
     "rtems::1:1:RTEMS Application::/:/bin/sh\n"
     "test:$1$$oPu1Xt2Pw0ngIc7LyDHqu1:2:2:test account::/:/bin/sh\n"
     "tty:*:3:3:tty owner::/:/bin/false\n"
+    "chroot::4:2:chroot account::/chroot:/bin/sh\n"
   );
   writeFile(
     "/etc/group",
