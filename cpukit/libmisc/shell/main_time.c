@@ -38,7 +38,6 @@ static int rtems_shell_main_time(
   char *argv[]
 )
 {
-  rtems_shell_cmd_t* shell_cmd;
   int                errorlevel = 0;
   struct timespec    start;
   struct timespec    end;
@@ -52,14 +51,7 @@ static int rtems_shell_main_time(
     fprintf(stderr, "error: cannot read time\n");
 
   if (argc) {
-    shell_cmd = rtems_shell_lookup_cmd(argv[1]);
-    if ( argv[1] == NULL ) {
-      errorlevel = -1;
-    } else if ( shell_cmd == NULL ) {
-      errorlevel = rtems_shell_script_file(argc, &argv[1]);
-    } else {
-      errorlevel = shell_cmd->command(argc, &argv[1]);
-    }
+    errorlevel = rtems_shell_execute_cmd(argv[1], argc, &argv[1]);
   }
 
   sc = rtems_clock_get_uptime(&end);

@@ -705,7 +705,6 @@ bool rtems_shell_main_loop(
 )
 {
   rtems_shell_env_t *shell_env;
-  rtems_shell_cmd_t *shell_cmd;
   int                eno;
   struct termios     term;
   struct termios     previous_term;
@@ -917,14 +916,7 @@ bool rtems_shell_main_loop(
           memcpy (cmd_argv, cmds[cmd], RTEMS_SHELL_CMD_SIZE);
           if (!rtems_shell_make_args(cmd_argv, &argc, argv,
                                      RTEMS_SHELL_MAXIMUM_ARGUMENTS)) {
-            shell_cmd = rtems_shell_lookup_cmd(argv[0]);
-            if ( argv[0] == NULL ) {
-              shell_env->errorlevel = -1;
-            } else if ( shell_cmd == NULL ) {
-              shell_env->errorlevel = rtems_shell_script_file(argc, argv);
-            } else {
-              shell_env->errorlevel = shell_cmd->command(argc, argv);
-            }
+            shell_env->errorlevel = rtems_shell_execute_cmd(argv[0], argc, argv);
           }
 
           /* end exec cmd section */

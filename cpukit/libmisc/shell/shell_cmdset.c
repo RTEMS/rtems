@@ -214,3 +214,20 @@ rtems_shell_cmd_t *rtems_shell_alias_cmd(
   }
   return shell_aux;
 }
+
+int rtems_shell_execute_cmd(const char *cmd, int argc, char *argv[])
+{
+  rtems_shell_cmd_t *shell_cmd;
+
+  if (argv[0] == NULL) {
+    return -1;
+  }
+
+  shell_cmd = rtems_shell_lookup_cmd(argv[0]);
+
+  if (shell_cmd == NULL) {
+    return rtems_shell_script_file(argc, argv);
+  } else {
+    return shell_cmd->command(argc, argv);
+  }
+}
