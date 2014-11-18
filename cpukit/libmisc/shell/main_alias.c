@@ -34,10 +34,9 @@ static int rtems_shell_rtems_main_alias(int argc, char **argv)
 }
 
 rtems_shell_cmd_t rtems_shell_ALIAS_Command = {
-  "alias",                                /* name */
-  "alias old new",                        /* usage */
-  "misc",                                 /* topic */
-  rtems_shell_rtems_main_alias,           /* command */
-  NULL,                                   /* alias */
-  NULL                                    /* next */
+  .name = "alias",
+  .usage = "alias old new",
+  .topic = "misc",
+  .command = rtems_shell_rtems_main_alias,
+  .mode = S_IRUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
 };

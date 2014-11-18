@@ -18,6 +18,7 @@
 #define __RTEMS_SHELL_H__
 
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <rtems.h>
 #include <stdio.h>
 #include <termios.h>
@@ -83,6 +84,9 @@ struct rtems_shell_cmd_tt {
   rtems_shell_command_t  command;
   rtems_shell_cmd_t     *alias;
   rtems_shell_cmd_t     *next;
+  mode_t                 mode;
+  uid_t                  uid;
+  gid_t                  gid;
 };
 
 typedef struct {

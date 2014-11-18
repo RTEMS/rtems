@@ -29,6 +29,7 @@
 #include <rtems.h>
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
+#include <rtems/libio_.h>
 #include "internal.h"
 
 /*
@@ -122,6 +123,9 @@ rtems_shell_cmd_t *rtems_shell_add_cmd_struct(
     next_ptr = &existing->next;
   }
 
+  /* Ensure that the user can read and execute commands */
+  shell_cmd->mode |= S_IRUSR | S_IXUSR;
+
   /* Append */
   *next_ptr = shell_cmd;
 
@@ -152,7 +156,7 @@ rtems_shell_cmd_t * rtems_shell_add_cmd(
   }
 
   /* Allocate command stucture */
-  shell_cmd = (rtems_shell_cmd_t *) malloc(sizeof(rtems_shell_cmd_t));
+  shell_cmd = (rtems_shell_cmd_t *) calloc(1, sizeof(*shell_cmd));
   if (shell_cmd == NULL) {
     return NULL;
   }
@@ -167,8 +171,6 @@ rtems_shell_cmd_t * rtems_shell_add_cmd(
   shell_cmd->topic   = my_topic;
   shell_cmd->usage   = my_usage;
   shell_cmd->command = command;
-  shell_cmd->alias   = NULL;
-  shell_cmd->next    = NULL;
 
   if (rtems_shell_add_cmd_struct(shell_cmd) == NULL) {
     /* Something is wrong, free allocated resources */
@@ -208,11 +210,35 @@ rtems_shell_cmd_t *rtems_shell_alias_cmd(
          shell_cmd->usage,
          shell_cmd->command
       );
-      if (shell_aux)
+      if (shell_aux) {
         shell_aux->alias = shell_cmd;
+        shell_aux->mode = shell_cmd->mode;
+        shell_aux->uid = shell_cmd->uid;
+        shell_aux->gid = shell_cmd->gid;
+      }
     }
   }
   return shell_aux;
+}
+
+bool rtems_shell_can_see_cmd(const rtems_shell_cmd_t *shell_cmd)
+{
+  return rtems_filesystem_check_access(
+    RTEMS_FS_PERMS_READ,
+    shell_cmd->mode,
+    shell_cmd->uid,
+    shell_cmd->gid
+  );
+}
+
+static bool rtems_shell_can_execute_cmd(const rtems_shell_cmd_t *shell_cmd)
+{
+  return rtems_filesystem_check_access(
+    RTEMS_FS_PERMS_EXEC,
+    shell_cmd->mode,
+    shell_cmd->uid,
+    shell_cmd->gid
+  );
 }
 
 int rtems_shell_execute_cmd(const char *cmd, int argc, char *argv[])
@@ -225,9 +251,17 @@ int rtems_shell_execute_cmd(const char *cmd, int argc, char *argv[])
 
   shell_cmd = rtems_shell_lookup_cmd(argv[0]);
 
+  if (shell_cmd != NULL && !rtems_shell_can_see_cmd(shell_cmd)) {
+    shell_cmd = NULL;
+  }
+
   if (shell_cmd == NULL) {
     return rtems_shell_script_file(argc, argv);
-  } else {
+  } else if (rtems_shell_can_execute_cmd(shell_cmd)) {
     return shell_cmd->command(argc, argv);
+  } else {
+    fprintf(stderr, "%s: Permission denied\n", cmd);
+
+    return -1;
   }
 }

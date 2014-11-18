@@ -75,10 +75,9 @@ static int rtems_shell_main_time(
 }
 
 rtems_shell_cmd_t rtems_shell_TIME_Command = {
-  "time",                                     /* name */
-  "time command [arguments...]",              /* usage */
-  "misc",                                     /* topic */
-  rtems_shell_main_time,                      /* command */
-  NULL,                                       /* alias */
-  NULL                                        /* next */
+  .name = "time",
+  .usage = "time command [arguments...]",
+  .topic = "misc",
+  .command = rtems_shell_main_time,
+  .mode = S_IRUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
 };
