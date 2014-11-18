@@ -8,7 +8,7 @@
 @section Introduction
 
 This chapter provides information on how the application
-configures and intializes the RTEMS shell.
+configures and initializes the RTEMS shell.
 
 @c
 @c
@@ -213,13 +213,127 @@ is exited by the user, then control returns to the caller.
 
 TBD
 
+@c
+@c
+@c
+@section Access Control
+
+@subsection Login Checks
+
+Login checks are optional for the RTEMS shell and can be configured via a login
+check handler passed to @code{rtems_shell_init()}.  One login check handler is
+@code{rtems_shell_login_check()}.
+
+@subsection Configuration Files
+
+The following files are used by the login check handler
+@code{rtems_shell_login_check()} to validate a passphrase for a user and to set
+up the user environment for the shell command execution.
+
+@table @file
+
+@item /etc/passwd
+The format for each line is
+
+@example
+user_name:password:UID:GID:GECOS:directory:shell
+@end example
+
+with colon separated
+fields.  For more information refer to the Linux PASSWD(5) man page.  Use a
+@code{password} of @code{*} to disable the login of the user.  An empty
+password allows login without a password for this user.  In contrast to
+standard UNIX systems, this file is only readable and writeable for the user
+with an UID of zero by default.  The @code{directory} is used to perform a
+filesystem change root operation in @code{rtems_shell_login_check()} in
+contrast to a normal usage as the HOME directory of the user.  The
+@strong{default} content is
+
+@example
+root::0:0::::
+@end example
+
+so there is @strong{no password required} for the @code{root} user.
+
+@item /etc/group
+The format for each line is
+
+@example
+group_name:password:GID:user_list
+@end example
+
+with colon separated fields.  The @code{user_list} is comma separated.  For
+more information refer to the Linux GROUP(5) man page.  In contrast to standard
+UNIX systems, this file is only readable and writeable for the user with an UID
+of zero by default.  The default content is
+
+@example
+root::0:
+@end example
+
+@end table
+
+@subsection Command Visibility and Execution Permission
+
+Each command has
+
+@itemize @bullet
+@item an owner,
+@item a group, and
+@item a read permission flag for the owner, the group and all other users, and
+@item an execution permission flag for the owner, the group and all other
+users.
+@end itemize
+
+The read and write permission flags are stored in the command mode.  The read
+permission flags determine the visibility of the command for the current user.
+The execution permission flags determine the ability to execute a command for
+the current user.  These command properties can be displayed and changed with
+the
+
+@itemize @bullet
+@item @code{cmdls},
+@item @code{cmdchown}, and
+@item @code{cmdchmod}
+@end itemize
+
+commands.  The access is determined by the effective UID, the effective GID and
+the supplementary group IDs of the current user and follows the standard
+filesystem access procedure.
+
+@subsection Add CRYPT(3) Formats
+
+By default the @code{crypt_r()} function used by
+@code{rtems_shell_login_check()} supports only plain text passphrases.  Use
+@code{crypt_add_format()} to add more formats.  The following formats are
+available out of the box
+
+@itemize @bullet
+@item @code{crypt_md5_format},
+@item @code{crypt_sha256_format}, and
+@item @code{crypt_sha512_format}.
+@end itemize
+
+An example follows.
+
+@findex crypt_add_format
+@example
+#include <crypt.h>
+
+void add_formats( void )
+@{
+  crypt_add_format( &crypt_md5_format );
+  crypt_add_format( &crypt_sha512_format );
+@}
+@end example
+
 @section Functions
 
 This section describes the Shell related C functions which are 
 publicly available related to initialization and configuration.
 
 @page
-@subsection rtems_shell_init - initialize the shell
+@subsection rtems_shell_init - Initialize the shell
 
 @cindex initialization
 
@@ -255,3 +369,47 @@ may return.
 There is one POSIX key necessary for all shell instances together and one POSIX
 key value pair per instance. You should make sure that your RTEMS configuration
 accounts for these resources.
+
+@page
+@subsection rtems_shell_login_check - Default login check handler
+
+@cindex initialization
+
+@subheading CALLING SEQUENCE:
+
+@findex rtems_shell_login_check
+@example
+bool rtems_shell_login_check(
+  const char *user,
+  const char *passphrase
+);
+@end example
+
+@subheading DIRECTIVE STATUS CODES:
+@code{true} - login is allowed, and@*
+@code{false} - otherwise.
+
+@subheading DESCRIPTION:
+
+This function checks if the specified passphrase is valid for the specified user.
+
+@subheading NOTES:
+
+As a side-effect if the specified passphrase is valid for the specified user,
+this function
+
+@itemize @bullet
+@item performs a filesystem change root operation to the directory of the
+specified user if the directory path is non-empty,
+@item changes the owner of the current shell device to the UID of the specified
+user,
+@item sets the real and effective UID of the current user environment to the
+UID of the specified user,
+@item sets the real and effective GID of the current user environment to the
+GID of the specified user, and
+@item sets the supplementary group IDs of the current user environment to the
+supplementary group IDs of the specified user.
+@end itemize
+
+In case the filesystem change root operation fails, then the environment setup
+is aborted and @code{false} is returned.

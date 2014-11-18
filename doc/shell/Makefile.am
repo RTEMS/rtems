@@ -24,7 +24,7 @@ confinit.texi: confinit.t
 	    -n "General Commands" < $< > $@
 
 general.texi: general.t
-	$(BMENU2) -p "Configuration and Initialization rtems_shell_init - initialize the shell" \
+	$(BMENU2) -p "Configuration and Initialization rtems_shell_login_check - Default login check handler" \
 	    -u "Top" \
 	    -n "File and Directory Commands" < $< > $@
 
