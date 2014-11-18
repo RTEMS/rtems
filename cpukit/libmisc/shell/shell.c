@@ -838,6 +838,12 @@ bool rtems_shell_main_loop(
         if (shell_env->login_check != NULL) {
           result = rtems_shell_login(shell_env, stdin,stdout);
         } else {
+          setuid(shell_env->uid);
+          setgid(shell_env->gid);
+          seteuid(shell_env->uid);
+          setegid(shell_env->gid);
+          rtems_current_user_env_getgroups();
+
           result = true;
         }
       }
@@ -1010,6 +1016,8 @@ static rtems_status_code rtems_shell_run (
   shell_env->output_append = output_append;
   shell_env->wake_on_end   = wake_on_end;
   shell_env->login_check   = login_check;
+  shell_env->uid           = getuid();
+  shell_env->gid           = getgid();
 
   getcwd(shell_env->cwd, sizeof(shell_env->cwd));
 
