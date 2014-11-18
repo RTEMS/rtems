@@ -49,7 +49,7 @@ static int rtems_shell_main_time(
 
   sc = rtems_clock_get_uptime(&start);
   if (sc != RTEMS_SUCCESSFUL)
-    printf("error: cannot read time\n");
+    fprintf(stderr, "error: cannot read time\n");
 
   if (argc) {
     shell_cmd = rtems_shell_lookup_cmd(argv[1]);
@@ -64,7 +64,7 @@ static int rtems_shell_main_time(
 
   sc = rtems_clock_get_uptime(&end);
   if (sc != RTEMS_SUCCESSFUL)
-    printf("error: cannot read time\n");
+    fprintf(stderr, "error: cannot read time\n");
 
   period.tv_sec = end.tv_sec - start.tv_sec;
   period.tv_nsec = end.tv_nsec - start.tv_nsec;
@@ -74,7 +74,7 @@ static int rtems_shell_main_time(
     period.tv_nsec += 1000000000UL;
   }
 
-  printf("time: %" PRIdtime_t ":%02" PRIdtime_t ":%02" PRIdtime_t ".%03li\n",
+  fprintf(stderr, "time: %" PRIdtime_t ":%02" PRIdtime_t ":%02" PRIdtime_t ".%03li\n",
          period.tv_sec / 3600,
          period.tv_sec / 60, period.tv_sec % 60,
          period.tv_nsec / 1000000);
