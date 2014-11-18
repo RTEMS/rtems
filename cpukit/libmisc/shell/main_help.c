@@ -96,17 +96,16 @@ static int rtems_shell_help(
     lines = 16;
 
   if (argc<2) {
-    printf("help: ('r' repeat last cmd - 'e' edit last cmd)\n"
-           "  TOPIC? The topics are\n");
+    printf("help: The topics are\n");
     topic = rtems_shell_first_topic;
     col = 0;
     while (topic) {
       if (!col){
-        col = printf("   %s",topic->topic);
+        col = printf("  %s",topic->topic);
       } else {
         if ((col+strlen(topic->topic)+2)>78){
           printf("\n");
-          col = printf("   %s",topic->topic);
+          col = printf("  %s",topic->topic);
         } else {
           col+= printf(", %s",topic->topic);
         }
