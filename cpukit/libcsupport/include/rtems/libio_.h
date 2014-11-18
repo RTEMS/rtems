@@ -374,7 +374,7 @@ void rtems_filesystem_eval_path_cleanup_with_parent(
  * Sets the start and current location to the new start location.  The caller
  * must terminate its current evaluation process.  The path evaluation
  * continues in the next loop iteration within
- * rtems_filesystem_eval_path_continue().  This avoids recursive invokations.
+ * rtems_filesystem_eval_path_continue().  This avoids recursive invocations.
  * The function obtains the new start location and clones it to set the new
  * current location.  The previous start and current locations are released.
  *
