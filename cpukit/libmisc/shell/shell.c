@@ -112,6 +112,20 @@ static void rtems_shell_create_file(const char *name, const char *content)
   }
 }
 
+static void rtems_shell_init_commands(void)
+{
+  rtems_shell_cmd_t * const *c;
+  rtems_shell_alias_t * const *a;
+
+  for ( c = rtems_shell_Initial_commands ; *c  ; c++ ) {
+    rtems_shell_add_cmd_struct( *c );
+  }
+
+  for ( a = rtems_shell_Initial_aliases ; *a  ; a++ ) {
+    rtems_shell_alias_cmd( (*a)->name, (*a)->alias );
+  }
+}
+
 static void rtems_shell_init_once(void)
 {
   struct passwd pwd;
@@ -131,6 +145,8 @@ static void rtems_shell_init_once(void)
                           "\n"
                           "Welcome to %v\n"
                           "running on %m\n");
+
+  rtems_shell_init_commands();
 }
 
 /*
@@ -706,10 +722,10 @@ bool rtems_shell_main_loop(
   FILE              *stdinToClose = NULL;
   FILE              *stdoutToClose = NULL;
 
-  rtems_shell_initialize_command_set();
-
   eno = pthread_once(&rtems_shell_once, rtems_shell_init_once);
   assert(eno == 0);
+
+  rtems_shell_register_monitor_commands();
 
   shell_env = rtems_shell_init_env(shell_env_arg);
   if (shell_env == NULL) {
@@ -789,8 +805,6 @@ bool rtems_shell_main_loop(
 
   setvbuf(stdin,NULL,_IONBF,0); /* Not buffered*/
   setvbuf(stdout,NULL,_IONBF,0); /* Not buffered*/
-
-  rtems_shell_initialize_command_set();
 
   /*
    * Allocate the command line buffers.

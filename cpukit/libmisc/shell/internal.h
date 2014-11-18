@@ -27,7 +27,6 @@ rtems_shell_topic_t * rtems_shell_lookup_topic(const char *topic);
 
 
 extern void rtems_shell_register_monitor_commands(void);
-extern void rtems_shell_initialize_command_set(void);
 
 extern void rtems_shell_print_heap_info(
   const char       *c,

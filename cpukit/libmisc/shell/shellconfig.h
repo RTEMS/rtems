@@ -90,7 +90,7 @@ extern rtems_shell_cmd_t rtems_shell_MALLOC_INFO_Command;
   extern rtems_shell_cmd_t rtems_shell_PING_Command;
 #endif
 
-extern rtems_shell_cmd_t *rtems_shell_Initial_commands[];
+extern rtems_shell_cmd_t * const rtems_shell_Initial_commands[];
 
 /*
  *  Extern for alias commands
@@ -99,7 +99,7 @@ extern rtems_shell_alias_t rtems_shell_DIR_Alias;
 extern rtems_shell_alias_t rtems_shell_CD_Alias;
 extern rtems_shell_alias_t rtems_shell_EXIT_Alias;
 
-extern rtems_shell_alias_t *rtems_shell_Initial_aliases[];
+extern rtems_shell_alias_t * const rtems_shell_Initial_aliases[];
 
 /*
  *  If we are configured to alias a command, then make sure the underlying
@@ -124,7 +124,7 @@ extern rtems_shell_alias_t *rtems_shell_Initial_aliases[];
 #endif
 
 #if defined(CONFIGURE_SHELL_COMMANDS_INIT)
-  rtems_shell_alias_t *rtems_shell_Initial_aliases[] = {
+  rtems_shell_alias_t * const rtems_shell_Initial_aliases[] = {
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_DIR)) || \
         defined(CONFIGURE_SHELL_COMMAND_DIR)
@@ -150,7 +150,7 @@ extern rtems_shell_alias_t *rtems_shell_Initial_aliases[];
     NULL
   };
 
-  rtems_shell_cmd_t *rtems_shell_Initial_commands[] = {
+  rtems_shell_cmd_t * const rtems_shell_Initial_commands[] = {
     /*
      *  General comamnds that should be present
      */

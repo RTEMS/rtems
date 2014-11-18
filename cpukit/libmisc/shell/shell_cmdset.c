@@ -183,23 +183,6 @@ rtems_shell_cmd_t * rtems_shell_add_cmd(
   return shell_cmd;
 }
 
-
-void rtems_shell_initialize_command_set(void)
-{
-  rtems_shell_cmd_t **c;
-  rtems_shell_alias_t **a;
-
-  for ( c = rtems_shell_Initial_commands ; *c  ; c++ ) {
-    rtems_shell_add_cmd_struct( *c );
-  }
-
-  for ( a = rtems_shell_Initial_aliases ; *a  ; a++ ) {
-    rtems_shell_alias_cmd( (*a)->name, (*a)->alias );
-  }
-
-  rtems_shell_register_monitor_commands();
-}
-
 /* ----------------------------------------------- *
  * you can make an alias for every command.
  * ----------------------------------------------- */
