@@ -13,6 +13,9 @@ The RTEMS shell has the following general commands:
 
 @item @code{help} - Print command help
 @item @code{alias} - Add alias for an existing command
+@item @code{cmdls} - List commands
+@item @code{cmdchown} - Change user or owner of commands
+@item @code{cmdchmod} - Change mode of commands
 @item @code{date} - Print or set current date and time
 @item @code{echo} - Produce message in a shell script
 @item @code{sleep} - Delay for a specified amount of time
@@ -190,6 +193,189 @@ following prototype:
 
 @example
 extern rtems_shell_cmd_t rtems_shell_ALIAS_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection cmdls - List commands
+
+@pgindex cmdls
+
+@subheading SYNOPSYS:
+
+@example
+cmdls COMMAND...
+@end example
+
+@subheading DESCRIPTION:
+
+This command lists the visible commands of the command set.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+The current user must have read permission to list a command.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{cmdls}:
+
+@example
+SHLL [/] # cmdls help shutdown
+r-xr-xr-x     0     0 help
+r-x------     0     0 shutdown
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_CMDLS
+@findex CONFIGURE_SHELL_COMMAND_CMDLS
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_CMDLS} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_CMDLS} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+The configuration structure for the @code{cmdls} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_CMDLS_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection cmdchown - Change user or owner of commands
+
+@pgindex cmdchown
+
+@subheading SYNOPSYS:
+
+@example
+cmdchown [OWNER][:[GROUP]] COMMAND...
+@end example
+
+@subheading DESCRIPTION:
+
+This command changes the user or owner of a command.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+The current user must have an UID of zero or be the command owner to change the
+owner or group.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{cmdchown}:
+
+@example
+[/] # cmdls help
+r-xr-xr-x     0     0 help
+[/] # cmdchown 1:1 help
+[/] # cmdls help
+r--r--r--     1     1 help
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_CMDCHOWN
+@findex CONFIGURE_SHELL_COMMAND_CMDCHOWN
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_CMDCHOWN} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_CMDCHOWN} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+The configuration structure for the @code{cmdchown} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_CMDCHOWN_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection cmdchmod - Change mode of commands
+
+@pgindex cmdchmod
+
+@subheading SYNOPSYS:
+
+@example
+cmdchmod OCTAL-MODE COMMAND...
+@end example
+
+@subheading DESCRIPTION:
+
+This command changes the mode of a command.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+The current user must have an UID of zero or be the command owner to change the
+mode.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{cmdchmod}:
+
+@example
+[/] # cmdls help
+r-xr-xr-x     0     0 help
+[/] # cmdchmod 544 help
+[/] # cmdls help
+r-xr--r--     0     0 help
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_CMDCHMOD
+@findex CONFIGURE_SHELL_COMMAND_CMDCHMOD
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_CMDCHMOD} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_CMDCHMOD} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+The configuration structure for the @code{cmdchmod} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_CMDCHMOD_Command;
 @end example
 
 @c

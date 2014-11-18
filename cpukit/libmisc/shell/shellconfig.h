@@ -24,6 +24,9 @@
 extern rtems_shell_cmd_t rtems_shell_HELP_Command;
 extern rtems_shell_cmd_t rtems_shell_ALIAS_Command;
 extern rtems_shell_cmd_t rtems_shell_TIME_Command;
+extern rtems_shell_cmd_t rtems_shell_CMDLS_Command;
+extern rtems_shell_cmd_t rtems_shell_CMDCHOWN_Command;
+extern rtems_shell_cmd_t rtems_shell_CMDCHMOD_Command;
 extern rtems_shell_cmd_t rtems_shell_LOGOFF_Command;
 extern rtems_shell_cmd_t rtems_shell_SETENV_Command;
 extern rtems_shell_cmd_t rtems_shell_GETENV_Command;
@@ -161,6 +164,21 @@ extern rtems_shell_alias_t * const rtems_shell_Initial_aliases[];
     /*
      *  Common commands that can be optional
      */
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_CMDLS)) || \
+        defined(CONFIGURE_SHELL_COMMAND_CMDLS)
+      &rtems_shell_CMDLS_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_CMDCHOWN)) || \
+        defined(CONFIGURE_SHELL_COMMAND_CMDCHOWN)
+      &rtems_shell_CMDCHOWN_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_CMDCHMOD)) || \
+        defined(CONFIGURE_SHELL_COMMAND_CMDCHMOD)
+      &rtems_shell_CMDCHMOD_Command,
+    #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_JOEL)) || \
         defined(CONFIGURE_SHELL_COMMAND_JOEL)

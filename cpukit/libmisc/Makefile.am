@@ -112,6 +112,9 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_lsof.c shell/main_edit.c \
     shell/main_blkstats.c \
     shell/shell-wait-for-input.c
+libshell_a_SOURCES += shell/main_cmdls.c
+libshell_a_SOURCES += shell/main_cmdchown.c
+libshell_a_SOURCES += shell/main_cmdchmod.c
 
 if LIBNETWORKING
 libshell_a_SOURCES += \
