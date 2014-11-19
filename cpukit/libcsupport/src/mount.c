@@ -77,7 +77,6 @@ static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
 
     memcpy( str, target, target_size );
     mt_entry->target = str;
-    str += target_size;
 
     mt_entry->mounted = true;
     mt_entry->mt_fs_root = mt_fs_root;
