@@ -639,7 +639,7 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj_t* obj, int fd, Elf_Ehdr* ehdr)
   {
     uint32_t flags;
 
-    off = obj->ooffset + ehdr->e_shoff + (section * ehdr->e_shentsize);
+    off = obj->ooffset + ehdr->e_shoff + (((uint32_t) section) * ehdr->e_shentsize);
 
     if (!rtems_rtl_obj_cache_read_byval (sects, fd, off, &shdr, sizeof (shdr)))
       return false;
