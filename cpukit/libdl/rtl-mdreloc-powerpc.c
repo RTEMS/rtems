@@ -35,7 +35,6 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
                              const Elf_Byte              syminfo,
                              const Elf_Word              symvalue)
 {
-  Elf_Addr  target = 0;
   Elf_Addr* where;
   Elf_Word tmp;
   uint32_t mask = 0;
@@ -72,7 +71,7 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
         mask = 0x3fffffc;
       }
       tmp = (symvalue + rela->r_addend) >> 2;
-      if (tmp > (1<<bits -1 )) {
+      if (tmp > ((1<<bits) - 1 )) {
         printf("Overflow ADDR14/ADDR24\n");
         return false;
       }
