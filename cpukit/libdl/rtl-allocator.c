@@ -52,6 +52,9 @@ rtems_rtl_alloc_new (rtems_rtl_alloc_tag_t tag, size_t size, bool zero)
   rtems_rtl_data_t* rtl = rtems_rtl_lock ();
   void*             address = NULL;
 
+  /*
+   * Obtain memory from the allocator.
+   */
   if (rtl)
     rtl->allocator.allocator (true, tag, &address, size);
 
