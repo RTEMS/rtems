@@ -76,28 +76,28 @@ extern "C" {
   ARM_CACHE_L1_CPU_SUPPORT_PROVIDES_RANGE_FUNCTIONS
 #define CPU_CACHE_SUPPORT_PROVIDES_CACHE_SIZE_FUNCTIONS
 
-#define CACHE_L2C_310_DATA_LINE_MASK ( CPU_DATA_CACHE_ALIGNMENT - 1 )
-#define CACHE_L2C_310_INSTRUCTION_LINE_MASK \
+#define L2C_310_DATA_LINE_MASK ( CPU_DATA_CACHE_ALIGNMENT - 1 )
+#define L2C_310_INSTRUCTION_LINE_MASK \
   ( CPU_INSTRUCTION_CACHE_ALIGNMENT \
     - 1 )
-#define CACHE_l2C_310_NUM_WAYS 8
-#define CACHE_l2C_310_WAY_MASK ( ( 1 << CACHE_l2C_310_NUM_WAYS ) - 1 )
+#define L2C_310_NUM_WAYS 8
+#define L2C_310_WAY_MASK ( ( 1 << L2C_310_NUM_WAYS ) - 1 )
 
-#define CACHE_MIN( a, b ) \
+#define L2C_310_MIN( a, b ) \
   ((a < b) ? (a) : (b))
 
-#define CACHE_MAX_LOCKING_BYTES (4 * 1024)
+#define L2C_310_MAX_LOCKING_BYTES (4 * 1024)
 
 
 /* RTL release number as can be read from cache_id register */
 typedef enum {
-  CACHE_L2C_310_RTL_RELEASE_R0_P0 = 0x0,
-  CACHE_L2C_310_RTL_RELEASE_R1_P0 = 0x2,
-  CACHE_L2C_310_RTL_RELEASE_R2_P0 = 0x4,
-  CACHE_L2C_310_RTL_RELEASE_R3_P0 = 0x5,
-  CACHE_L2C_310_RTL_RELEASE_R3_P1 = 0x6,
-  CACHE_L2C_310_RTL_RELEASE_R3_P2 = 0x8,
-  CACHE_L2C_310_RTL_RELEASE_R3_P3 = 0x9
+  L2C_310_RTL_RELEASE_R0_P0 = 0x0,
+  L2C_310_RTL_RELEASE_R1_P0 = 0x2,
+  L2C_310_RTL_RELEASE_R2_P0 = 0x4,
+  L2C_310_RTL_RELEASE_R3_P0 = 0x5,
+  L2C_310_RTL_RELEASE_R3_P1 = 0x6,
+  L2C_310_RTL_RELEASE_R3_P2 = 0x8,
+  L2C_310_RTL_RELEASE_R3_P3 = 0x9
 } cache_l2c_310_rtl_release;
 
 /**
@@ -114,156 +114,156 @@ typedef enum {
 typedef struct {
   /** @brief Cache ID */
   uint32_t cache_id;
-#define CACHE_L2C_310_L2CC_ID_RTL_MASK 0x3f
-#define CACHE_L2C_310_L2CC_ID_PART_MASK ( 0xf << 6 )
-#define CACHE_L2C_310_L2CC_ID_PART_L210 ( 1 << 6 )
-#define CACHE_L2C_310_L2CC_ID_PART_L310 ( 3 << 6 )
-#define CACHE_L2C_310_L2CC_ID_IMPL_MASK ( 0xff << 24 )
+#define L2C_310_ID_RTL_MASK 0x3f
+#define L2C_310_ID_PART_MASK ( 0xf << 6 )
+#define L2C_310_ID_PART_L210 ( 1 << 6 )
+#define L2C_310_ID_PART_L310 ( 3 << 6 )
+#define L2C_310_ID_IMPL_MASK ( 0xff << 24 )
   /** @brief Cache type */
   uint32_t cache_type;
 /** @brief 1 if data banking implemented, 0 if not */
-#define CACHE_L2C_310_L2CC_TYPE_DATA_BANKING_MASK 0x80000000
+#define L2C_310_TYPE_DATA_BANKING_MASK 0x80000000
 /** @brief 11xy, where: x=1 if pl310_LOCKDOWN_BY_MASTER is defined, otherwise 0 */
-#define CACHE_L2C_310_L2CC_TYPE_CTYPE_MASK 0x1E000000
+#define L2C_310_TYPE_CTYPE_MASK 0x1E000000
 /** @brief y=1 if pl310_LOCKDOWN_BY_LINE is defined, otherwise 0. */
-#define CACHE_L2C_310_L2CC_TYPE_CTYPE_SHIFT 25
+#define L2C_310_TYPE_CTYPE_SHIFT 25
 /** @brief 1 for Harvard architecture, 0 for unified architecture */
-#define CACHE_L2C_310_L2CC_TYPE_HARVARD_MASK 0x01000000
+#define L2C_310_TYPE_HARVARD_MASK 0x01000000
 /** @brief Data cache way size = 2 Exp(value + 2) KB */
-#define CACHE_L2C_310_L2CC_TYPE_SIZE_D_WAYS_MASK 0x00700000
-#define CACHE_L2C_310_L2CC_TYPE_SIZE_D_WAYS_SHIFT 20
+#define L2C_310_TYPE_SIZE_D_WAYS_MASK 0x00700000
+#define L2C_310_TYPE_SIZE_D_WAYS_SHIFT 20
 /** @brief Assoziativity aka number of data ways = (value * 8) + 8 */
-#define CACHE_L2C_310_L2CC_TYPE_NUM_D_WAYS_MASK 0x00040000
-#define CACHE_L2C_310_L2CC_TYPE_NUM_D_WAYS_SHIFT 18
+#define L2C_310_TYPE_NUM_D_WAYS_MASK 0x00040000
+#define L2C_310_TYPE_NUM_D_WAYS_SHIFT 18
 /** @brief Data cache line length 00 - 32 */
-#define CACHE_L2C_310_L2CC_TYPE_LENGTH_D_LINE_MASK 0x00003000
-#define CACHE_L2C_310_L2CC_TYPE_LENGTH_D_LINE_SHIFT 12
-#define CACHE_L2C_310_L2CC_TYPE_LENGTH_D_LINE_VAL_32 0x0
+#define L2C_310_TYPE_LENGTH_D_LINE_MASK 0x00003000
+#define L2C_310_TYPE_LENGTH_D_LINE_SHIFT 12
+#define L2C_310_TYPE_LENGTH_D_LINE_VAL_32 0x0
 /** @brief Instruction cache way size = 2 Exp(value + 2) KB */
-#define CACHE_L2C_310_L2CC_TYPE_SIZE_I_WAYS_MASK 0x00000700
-#define CACHE_L2C_310_L2CC_TYPE_SIZE_I_WAYS_SHIFT 8
+#define L2C_310_TYPE_SIZE_I_WAYS_MASK 0x00000700
+#define L2C_310_TYPE_SIZE_I_WAYS_SHIFT 8
 /** @brief Assoziativity aka number of instruction ways = (value * 8) + 8 */
-#define CACHE_L2C_310_L2CC_TYPE_NUM_I_WAYS_MASK 0x00000040
-#define CACHE_L2C_310_L2CC_TYPE_NUM_I_WAYS_SHIFT 6
+#define L2C_310_TYPE_NUM_I_WAYS_MASK 0x00000040
+#define L2C_310_TYPE_NUM_I_WAYS_SHIFT 6
 /** @brief Instruction cache line length 00 - 32 */
-#define CACHE_L2C_310_L2CC_TYPE_LENGTH_I_LINE_MASK 0x00000003
-#define CACHE_L2C_310_L2CC_TYPE_LENGTH_I_LINE_SHIFT 0
-#define CACHE_L2C_310_L2CC_TYPE_LENGTH_I_LINE_VAL_32 0x0
+#define L2C_310_TYPE_LENGTH_I_LINE_MASK 0x00000003
+#define L2C_310_TYPE_LENGTH_I_LINE_SHIFT 0
+#define L2C_310_TYPE_LENGTH_I_LINE_VAL_32 0x0
 
   uint8_t reserved_8[0x100 - 8];
   uint32_t ctrl; /* Control */
 /** @brief Enables the L2CC */
-#define CACHE_L2C_310_L2CC_ENABLE_MASK 0x00000001
+#define L2C_310_ENABLE_MASK 0x00000001
 
   /** @brief Auxiliary control */
   uint32_t aux_ctrl;
 
 /** @brief Early BRESP Enable */
-#define CACHE_L2C_310_L2CC_AUX_EBRESPE_MASK 0x40000000
+#define L2C_310_AUX_EBRESPE_MASK 0x40000000
 
 /** @brief Instruction Prefetch Enable */
-#define CACHE_L2C_310_L2CC_AUX_IPFE_MASK 0x20000000
+#define L2C_310_AUX_IPFE_MASK 0x20000000
 
 /** @brief Data Prefetch Enable */
-#define CACHE_L2C_310_L2CC_AUX_DPFE_MASK 0x10000000
+#define L2C_310_AUX_DPFE_MASK 0x10000000
 
 /** @brief Non-secure interrupt access control */
-#define CACHE_L2C_310_L2CC_AUX_NSIC_MASK 0x08000000
+#define L2C_310_AUX_NSIC_MASK 0x08000000
 
 /** @brief Non-secure lockdown enable */
-#define CACHE_L2C_310_L2CC_AUX_NSLE_MASK 0x04000000
+#define L2C_310_AUX_NSLE_MASK 0x04000000
 
 /** @brief Cache replacement policy */
-#define CACHE_L2C_310_L2CC_AUX_CRP_MASK 0x02000000
+#define L2C_310_AUX_CRP_MASK 0x02000000
 
 /** @brief Force write allocate */
-#define CACHE_L2C_310_L2CC_AUX_FWE_MASK 0x01800000
+#define L2C_310_AUX_FWE_MASK 0x01800000
 
 /** @brief Shared attribute override enable */
-#define CACHE_L2C_310_L2CC_AUX_SAOE_MASK 0x00400000
+#define L2C_310_AUX_SAOE_MASK 0x00400000
 
 /** @brief Parity enable */
-#define CACHE_L2C_310_L2CC_AUX_PE_MASK 0x00200000
+#define L2C_310_AUX_PE_MASK 0x00200000
 
 /** @brief Event monitor bus enable */
-#define CACHE_L2C_310_L2CC_AUX_EMBE_MASK 0x00100000
+#define L2C_310_AUX_EMBE_MASK 0x00100000
 
 /** @brief Way-size */
-#define CACHE_L2C_310_L2CC_AUX_WAY_SIZE_MASK 0x000E0000
-#define CACHE_L2C_310_L2CC_AUX_WAY_SIZE_SHIFT 17
+#define L2C_310_AUX_WAY_SIZE_MASK 0x000E0000
+#define L2C_310_AUX_WAY_SIZE_SHIFT 17
 
 /** @brief Way-size */
-#define CACHE_L2C_310_L2CC_AUX_ASSOC_MASK 0x00010000
+#define L2C_310_AUX_ASSOC_MASK 0x00010000
 
 /** @brief Shared attribute invalidate enable */
-#define CACHE_L2C_310_L2CC_AUX_SAIE_MASK 0x00002000
+#define L2C_310_AUX_SAIE_MASK 0x00002000
 
 /** @brief Exclusive cache configuration */
-#define CACHE_L2C_310_L2CC_AUX_EXCL_CACHE_MASK 0x00001000
+#define L2C_310_AUX_EXCL_CACHE_MASK 0x00001000
 
 /** @brief Store buffer device limitation Enable */
-#define CACHE_L2C_310_L2CC_AUX_SBDLE_MASK 0x00000800
+#define L2C_310_AUX_SBDLE_MASK 0x00000800
 
 /** @brief High Priority for SO and Dev Reads Enable */
-#define CACHE_L2C_310_L2CC_AUX_HPSODRE_MASK 0x00000400
+#define L2C_310_AUX_HPSODRE_MASK 0x00000400
 
 /** @brief Full line of zero enable */
-#define CACHE_L2C_310_L2CC_AUX_FLZE_MASK 0x00000001
+#define L2C_310_AUX_FLZE_MASK 0x00000001
 
 /** @brief Enable all prefetching, */
-#define CACHE_L2C_310_L2CC_AUX_REG_DEFAULT_MASK \
-  ( CACHE_L2C_310_L2CC_AUX_WAY_SIZE_MASK & ( 0x3 << CACHE_L2C_310_L2CC_AUX_WAY_SIZE_SHIFT ) ) \
-  | CACHE_L2C_310_L2CC_AUX_PE_MASK      /* Prefetch enable */ \
-  | CACHE_L2C_310_L2CC_AUX_SAOE_MASK    /* Shared attribute override enable */ \
-  | CACHE_L2C_310_L2CC_AUX_CRP_MASK     /* Cache replacement policy */ \
-  | CACHE_L2C_310_L2CC_AUX_DPFE_MASK    /* Data prefetch enable */ \
-  | CACHE_L2C_310_L2CC_AUX_IPFE_MASK    /* Instruction prefetch enable */ \
-  | CACHE_L2C_310_L2CC_AUX_EBRESPE_MASK /* Early BRESP enable */
+#define L2C_310_AUX_REG_DEFAULT_MASK \
+  ( L2C_310_AUX_WAY_SIZE_MASK & ( 0x3 << L2C_310_AUX_WAY_SIZE_SHIFT ) ) \
+  | L2C_310_AUX_PE_MASK      /* Prefetch enable */ \
+  | L2C_310_AUX_SAOE_MASK    /* Shared attribute override enable */ \
+  | L2C_310_AUX_CRP_MASK     /* Cache replacement policy */ \
+  | L2C_310_AUX_DPFE_MASK    /* Data prefetch enable */ \
+  | L2C_310_AUX_IPFE_MASK    /* Instruction prefetch enable */ \
+  | L2C_310_AUX_EBRESPE_MASK /* Early BRESP enable */
 
-#define CACHE_L2C_310_L2CC_AUX_REG_ZERO_MASK 0xFFF1FFFF
+#define L2C_310_AUX_REG_ZERO_MASK 0xFFF1FFFF
 
 /** @brief 1 cycle of latency, there is no additional latency fot tag RAM */
-#define CACHE_L2C_310_L2CC_RAM_1_CYCLE_LAT_VAL 0x00000000
+#define L2C_310_RAM_1_CYCLE_LAT_VAL 0x00000000
 /** @brief 2 cycles of latency for tag RAM */
-#define CACHE_L2C_310_L2CC_RAM_2_CYCLE_LAT_VAL 0x00000001
+#define L2C_310_RAM_2_CYCLE_LAT_VAL 0x00000001
 /** @brief 3 cycles of latency for tag RAM */
-#define CACHE_L2C_310_L2CC_RAM_3_CYCLE_LAT_VAL 0x00000002
+#define L2C_310_RAM_3_CYCLE_LAT_VAL 0x00000002
 /** @brief 4 cycles of latency for tag RAM */
-#define CACHE_L2C_310_L2CC_RAM_4_CYCLE_LAT_VAL 0x00000003
+#define L2C_310_RAM_4_CYCLE_LAT_VAL 0x00000003
 /** @brief 5 cycles of latency for tag RAM */
-#define CACHE_L2C_310_L2CC_RAM_5_CYCLE_LAT_VAL 0x00000004
+#define L2C_310_RAM_5_CYCLE_LAT_VAL 0x00000004
 /** @brief 6 cycles of latency for tag RAM */
-#define CACHE_L2C_310_L2CC_RAM_6_CYCLE_LAT_VAL 0x00000005
+#define L2C_310_RAM_6_CYCLE_LAT_VAL 0x00000005
 /** @brief 7 cycles of latency for tag RAM */
-#define CACHE_L2C_310_L2CC_RAM_7_CYCLE_LAT_VAL 0x00000006
+#define L2C_310_RAM_7_CYCLE_LAT_VAL 0x00000006
 /** @brief 8 cycles of latency for tag RAM */
-#define CACHE_L2C_310_L2CC_RAM_8_CYCLE_LAT_VAL 0x00000007
+#define L2C_310_RAM_8_CYCLE_LAT_VAL 0x00000007
 /** @brief Shift left setup latency values by this value */
-#define CACHE_L2C_310_L2CC_RAM_SETUP_SHIFT 0x00000000
+#define L2C_310_RAM_SETUP_SHIFT 0x00000000
 /** @brief Shift left read latency values by this value */
-#define CACHE_L2C_310_L2CC_RAM_READ_SHIFT 0x00000004
+#define L2C_310_RAM_READ_SHIFT 0x00000004
 /** @brief Shift left write latency values by this value */
-#define CACHE_L2C_310_L2CC_RAM_WRITE_SHIFT 0x00000008
+#define L2C_310_RAM_WRITE_SHIFT 0x00000008
 /** @brief Mask for RAM setup latency */
-#define CACHE_L2C_310_L2CC_RAM_SETUP_LAT_MASK 0x00000007
+#define L2C_310_RAM_SETUP_LAT_MASK 0x00000007
 /** @brief Mask for RAM read latency */
-#define CACHE_L2C_310_L2CC_RAM_READ_LAT_MASK 0x00000070
+#define L2C_310_RAM_READ_LAT_MASK 0x00000070
 /** @brief Mask for RAM read latency */
-#define CACHE_L2C_310_L2CC_RAM_WRITE_LAT_MASK 0x00000700
+#define L2C_310_RAM_WRITE_LAT_MASK 0x00000700
   /** @brief Latency for tag RAM */
   uint32_t tag_ram_ctrl;
 /* @brief Latency for tag RAM */
-#define CACHE_L2C_310_L2CC_TAG_RAM_DEFAULT_LAT \
-  ( ( CACHE_L2C_310_L2CC_RAM_2_CYCLE_LAT_VAL << CACHE_L2C_310_L2CC_RAM_SETUP_SHIFT ) \
-    | ( CACHE_L2C_310_L2CC_RAM_2_CYCLE_LAT_VAL << CACHE_L2C_310_L2CC_RAM_READ_SHIFT ) \
-    | ( CACHE_L2C_310_L2CC_RAM_2_CYCLE_LAT_VAL << CACHE_L2C_310_L2CC_RAM_WRITE_SHIFT ) )
+#define L2C_310_TAG_RAM_DEFAULT_LAT \
+  ( ( L2C_310_RAM_2_CYCLE_LAT_VAL << L2C_310_RAM_SETUP_SHIFT ) \
+    | ( L2C_310_RAM_2_CYCLE_LAT_VAL << L2C_310_RAM_READ_SHIFT ) \
+    | ( L2C_310_RAM_2_CYCLE_LAT_VAL << L2C_310_RAM_WRITE_SHIFT ) )
   /** @brief Latency for data RAM */
   uint32_t data_ram_ctrl;
 /** @brief Latency for data RAM */
-#define CACHE_L2C_310_L2CC_DATA_RAM_DEFAULT_MASK \
-  ( ( CACHE_L2C_310_L2CC_RAM_2_CYCLE_LAT_VAL << CACHE_L2C_310_L2CC_RAM_SETUP_SHIFT ) \
-    | ( CACHE_L2C_310_L2CC_RAM_3_CYCLE_LAT_VAL << CACHE_L2C_310_L2CC_RAM_READ_SHIFT ) \
-    | ( CACHE_L2C_310_L2CC_RAM_2_CYCLE_LAT_VAL << CACHE_L2C_310_L2CC_RAM_WRITE_SHIFT ) )
+#define L2C_310_DATA_RAM_DEFAULT_MASK \
+  ( ( L2C_310_RAM_2_CYCLE_LAT_VAL << L2C_310_RAM_SETUP_SHIFT ) \
+    | ( L2C_310_RAM_3_CYCLE_LAT_VAL << L2C_310_RAM_READ_SHIFT ) \
+    | ( L2C_310_RAM_2_CYCLE_LAT_VAL << L2C_310_RAM_WRITE_SHIFT ) )
 
   uint8_t reserved_110[0x200 - 0x110];
 
@@ -301,31 +301,31 @@ typedef struct {
  */
 
 /** @brief DECERR from L3 */
-#define CACHE_L2C_310_L2CC_INT_DECERR_MASK 0x00000100
+#define L2C_310_INT_DECERR_MASK 0x00000100
 
 /** @brief SLVERR from L3 */
-#define CACHE_L2C_310_L2CC_INT_SLVERR_MASK 0x00000080
+#define L2C_310_INT_SLVERR_MASK 0x00000080
 
 /** @brief Error on L2 data RAM (Read) */
-#define CACHE_L2C_310_L2CC_INT_ERRRD_MASK 0x00000040
+#define L2C_310_INT_ERRRD_MASK 0x00000040
 
 /** @brief Error on L2 tag RAM (Read) */
-#define CACHE_L2C_310_L2CC_INT_ERRRT_MASK 0x00000020
+#define L2C_310_INT_ERRRT_MASK 0x00000020
 
 /** @brief Error on L2 data RAM (Write) */
-#define CACHE_L2C_310_L2CC_INT_ERRWD_MASK 0x00000010
+#define L2C_310_INT_ERRWD_MASK 0x00000010
 
 /** @brief Error on L2 tag RAM (Write) */
-#define CACHE_L2C_310_L2CC_INT_ERRWT_MASK 0x00000008
+#define L2C_310_INT_ERRWT_MASK 0x00000008
 
 /** @brief Parity Error on L2 data RAM (Read) */
-#define CACHE_L2C_310_L2CC_INT_PARRD_MASK 0x00000004
+#define L2C_310_INT_PARRD_MASK 0x00000004
 
 /** @brief Parity Error on L2 tag RAM (Read) */
-#define CACHE_L2C_310_L2CC_INT_PARRT_MASK 0x00000002
+#define L2C_310_INT_PARRT_MASK 0x00000002
 
 /** @brief Event Counter1/0 Overflow Increment */
-#define CACHE_L2C_310_L2CC_INT_ECNTR_MASK 0x00000001
+#define L2C_310_INT_ECNTR_MASK 0x00000001
 
 /** @} */
 
@@ -432,10 +432,10 @@ typedef struct {
   uint32_t addr_filtering_end;
 
 /** @brief Address filtering valid bits*/
-#define CACHE_L2C_310_L2CC_ADDR_FILTER_VALID_MASK 0xFFF00000
+#define L2C_310_ADDR_FILTER_VALID_MASK 0xFFF00000
 
 /** @brief Address filtering enable bit*/
-#define CACHE_L2C_310_L2CC_ADDR_FILTER_ENABLE_MASK 0x00000001
+#define L2C_310_ADDR_FILTER_ENABLE_MASK 0x00000001
 
   uint8_t reserved_c08[0xf40 - 0xc08];
 
@@ -443,20 +443,20 @@ typedef struct {
   uint32_t debug_ctrl;
 
 /** @brief Debug SPIDEN bit */
-#define CACHE_L2C_310_L2CC_DEBUG_SPIDEN_MASK 0x00000004
+#define L2C_310_DEBUG_SPIDEN_MASK 0x00000004
 
 /** @brief Debug DWB bit, forces write through */
-#define CACHE_L2C_310_L2CC_DEBUG_DWB_MASK 0x00000002
+#define L2C_310_DEBUG_DWB_MASK 0x00000002
 
 /** @brief Debug DCL bit, disables cache line fill */
-#define CACHE_L2C_310_L2CC_DEBUG_DCL_MASK 0x00000002
+#define L2C_310_DEBUG_DCL_MASK 0x00000002
 
   uint8_t reserved_f44[0xf60 - 0xf44];
 
   /** @brief Purpose prefetch enables */
   uint32_t prefetch_ctrl;
 /** @brief Prefetch offset */
-#define CACHE_L2C_310_L2CC_PREFETCH_OFFSET_MASK 0x0000001F
+#define L2C_310_PREFETCH_OFFSET_MASK 0x0000001F
   uint8_t reserved_f64[0xf80 - 0xf64];
 
   /** @brief Purpose power controls */
@@ -484,15 +484,15 @@ static bool l2c_310_cache_errata_is_applicable_753970(
   bool is_applicable = false;
 
   switch ( rtl_release ) {
-    case CACHE_L2C_310_RTL_RELEASE_R3_P3:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P2:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P1:
-    case CACHE_L2C_310_RTL_RELEASE_R2_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R1_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R0_P0:
+    case L2C_310_RTL_RELEASE_R3_P3:
+    case L2C_310_RTL_RELEASE_R3_P2:
+    case L2C_310_RTL_RELEASE_R3_P1:
+    case L2C_310_RTL_RELEASE_R2_P0:
+    case L2C_310_RTL_RELEASE_R1_P0:
+    case L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
       break;
-    case CACHE_L2C_310_RTL_RELEASE_R3_P0:
+    case L2C_310_RTL_RELEASE_R3_P0:
       is_applicable = true;
       break;
     default:
@@ -510,15 +510,15 @@ static bool l2c_310_cache_errata_is_applicable_727913(
   bool is_applicable = false;
 
   switch ( rtl_release ) {
-    case CACHE_L2C_310_RTL_RELEASE_R3_P3:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P2:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P1:
-    case CACHE_L2C_310_RTL_RELEASE_R2_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R1_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R0_P0:
+    case L2C_310_RTL_RELEASE_R3_P3:
+    case L2C_310_RTL_RELEASE_R3_P2:
+    case L2C_310_RTL_RELEASE_R3_P1:
+    case L2C_310_RTL_RELEASE_R2_P0:
+    case L2C_310_RTL_RELEASE_R1_P0:
+    case L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
       break;
-    case CACHE_L2C_310_RTL_RELEASE_R3_P0:
+    case L2C_310_RTL_RELEASE_R3_P0:
       is_applicable = true;
       break;
     default:
@@ -536,15 +536,15 @@ static bool l2c_310_cache_errata_is_applicable_727914(
   bool is_applicable = false;
 
   switch ( rtl_release ) {
-    case CACHE_L2C_310_RTL_RELEASE_R3_P3:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P2:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P1:
-    case CACHE_L2C_310_RTL_RELEASE_R2_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R1_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R0_P0:
+    case L2C_310_RTL_RELEASE_R3_P3:
+    case L2C_310_RTL_RELEASE_R3_P2:
+    case L2C_310_RTL_RELEASE_R3_P1:
+    case L2C_310_RTL_RELEASE_R2_P0:
+    case L2C_310_RTL_RELEASE_R1_P0:
+    case L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
       break;
-    case CACHE_L2C_310_RTL_RELEASE_R3_P0:
+    case L2C_310_RTL_RELEASE_R3_P0:
       is_applicable = true;
       break;
     default:
@@ -562,15 +562,15 @@ static bool l2c_310_cache_errata_is_applicable_727915(
   bool is_applicable = false;
 
   switch ( rtl_release ) {
-    case CACHE_L2C_310_RTL_RELEASE_R3_P3:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P2:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P1:
-    case CACHE_L2C_310_RTL_RELEASE_R1_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R0_P0:
+    case L2C_310_RTL_RELEASE_R3_P3:
+    case L2C_310_RTL_RELEASE_R3_P2:
+    case L2C_310_RTL_RELEASE_R3_P1:
+    case L2C_310_RTL_RELEASE_R1_P0:
+    case L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
       break;
-    case CACHE_L2C_310_RTL_RELEASE_R3_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R2_P0:
+    case L2C_310_RTL_RELEASE_R3_P0:
+    case L2C_310_RTL_RELEASE_R2_P0:
       is_applicable = true;
       break;
     default:
@@ -588,15 +588,15 @@ static bool l2c_310_cache_errata_is_applicable_729806(
   bool is_applicable = false;
 
   switch ( rtl_release ) {
-    case CACHE_L2C_310_RTL_RELEASE_R3_P3:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P2:
-    case CACHE_L2C_310_RTL_RELEASE_R2_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R1_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R0_P0:
+    case L2C_310_RTL_RELEASE_R3_P3:
+    case L2C_310_RTL_RELEASE_R3_P2:
+    case L2C_310_RTL_RELEASE_R2_P0:
+    case L2C_310_RTL_RELEASE_R1_P0:
+    case L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
       break;
-    case CACHE_L2C_310_RTL_RELEASE_R3_P1:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P0:
+    case L2C_310_RTL_RELEASE_R3_P1:
+    case L2C_310_RTL_RELEASE_R3_P0:
       is_applicable = true;
       break;
     default:
@@ -614,15 +614,15 @@ static bool l2c_310_cache_errata_is_applicable_729815(
   bool is_applicable = false;
 
   switch ( rtl_release ) {
-    case CACHE_L2C_310_RTL_RELEASE_R3_P3:
-    case CACHE_L2C_310_RTL_RELEASE_R1_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R0_P0:
+    case L2C_310_RTL_RELEASE_R3_P3:
+    case L2C_310_RTL_RELEASE_R1_P0:
+    case L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
       break;
-    case CACHE_L2C_310_RTL_RELEASE_R3_P2:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P1:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R2_P0:
+    case L2C_310_RTL_RELEASE_R3_P2:
+    case L2C_310_RTL_RELEASE_R3_P1:
+    case L2C_310_RTL_RELEASE_R3_P0:
+    case L2C_310_RTL_RELEASE_R2_P0:
       is_applicable = true;
       break;
     default:
@@ -640,15 +640,15 @@ static bool l2c_310_cache_errata_is_applicable_742884(
   bool is_applicable = false;
 
   switch ( rtl_release ) {
-    case CACHE_L2C_310_RTL_RELEASE_R3_P3:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P2:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R2_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R1_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R0_P0:
+    case L2C_310_RTL_RELEASE_R3_P3:
+    case L2C_310_RTL_RELEASE_R3_P2:
+    case L2C_310_RTL_RELEASE_R3_P0:
+    case L2C_310_RTL_RELEASE_R2_P0:
+    case L2C_310_RTL_RELEASE_R1_P0:
+    case L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
       break;
-    case CACHE_L2C_310_RTL_RELEASE_R3_P1:
+    case L2C_310_RTL_RELEASE_R3_P1:
       is_applicable = true;
       break;
     default:
@@ -666,15 +666,15 @@ static bool l2c_310_cache_errata_is_applicable_752271(
   bool is_applicable = false;
 
   switch ( rtl_release ) {
-    case CACHE_L2C_310_RTL_RELEASE_R3_P3:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P2:
-    case CACHE_L2C_310_RTL_RELEASE_R2_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R1_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R0_P0:
+    case L2C_310_RTL_RELEASE_R3_P3:
+    case L2C_310_RTL_RELEASE_R3_P2:
+    case L2C_310_RTL_RELEASE_R2_P0:
+    case L2C_310_RTL_RELEASE_R1_P0:
+    case L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
       break;
-    case CACHE_L2C_310_RTL_RELEASE_R3_P1:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P0:
+    case L2C_310_RTL_RELEASE_R3_P1:
+    case L2C_310_RTL_RELEASE_R3_P0:
       is_applicable = true;
       break;
     default:
@@ -692,13 +692,13 @@ static bool l2c_310_cache_errata_is_applicable_765569(
   bool is_applicable = false;
 
   switch ( rtl_release ) {
-    case CACHE_L2C_310_RTL_RELEASE_R3_P3:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P2:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P1:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R2_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R1_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R0_P0:
+    case L2C_310_RTL_RELEASE_R3_P3:
+    case L2C_310_RTL_RELEASE_R3_P2:
+    case L2C_310_RTL_RELEASE_R3_P1:
+    case L2C_310_RTL_RELEASE_R3_P0:
+    case L2C_310_RTL_RELEASE_R2_P0:
+    case L2C_310_RTL_RELEASE_R1_P0:
+    case L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = true;
       break;
     default:
@@ -716,15 +716,15 @@ static bool l2c_310_cache_errata_is_applicable_769419(
   bool is_applicable = false;
 
   switch ( rtl_release ) {
-    case CACHE_L2C_310_RTL_RELEASE_R3_P3:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P2:
+    case L2C_310_RTL_RELEASE_R3_P3:
+    case L2C_310_RTL_RELEASE_R3_P2:
       is_applicable = false;
       break;
-    case CACHE_L2C_310_RTL_RELEASE_R3_P1:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R2_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R1_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R0_P0:
+    case L2C_310_RTL_RELEASE_R3_P1:
+    case L2C_310_RTL_RELEASE_R3_P0:
+    case L2C_310_RTL_RELEASE_R2_P0:
+    case L2C_310_RTL_RELEASE_R1_P0:
+    case L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = true;
       break;
     default:
@@ -742,15 +742,15 @@ static bool l2c_310_cache_errata_is_applicable_588369(
   bool is_applicable = false;
 
   switch ( rtl_release ) {
-    case CACHE_L2C_310_RTL_RELEASE_R3_P3:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P2:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P1:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R2_P0:
+    case L2C_310_RTL_RELEASE_R3_P3:
+    case L2C_310_RTL_RELEASE_R3_P2:
+    case L2C_310_RTL_RELEASE_R3_P1:
+    case L2C_310_RTL_RELEASE_R3_P0:
+    case L2C_310_RTL_RELEASE_R2_P0:
       is_applicable = false;
       break;
-    case CACHE_L2C_310_RTL_RELEASE_R1_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R0_P0:
+    case L2C_310_RTL_RELEASE_R1_P0:
+    case L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = true;
       break;
     default:
@@ -769,13 +769,13 @@ static bool l2c_310_cache_errata_is_applicable_754670(
   bool is_applicable = false;
 
   switch ( rtl_release ) {
-    case CACHE_L2C_310_RTL_RELEASE_R3_P3:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P2:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P1:
-    case CACHE_L2C_310_RTL_RELEASE_R3_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R2_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R1_P0:
-    case CACHE_L2C_310_RTL_RELEASE_R0_P0:
+    case L2C_310_RTL_RELEASE_R3_P3:
+    case L2C_310_RTL_RELEASE_R3_P2:
+    case L2C_310_RTL_RELEASE_R3_P1:
+    case L2C_310_RTL_RELEASE_R3_P0:
+    case L2C_310_RTL_RELEASE_R2_P0:
+    case L2C_310_RTL_RELEASE_R1_P0:
+    case L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = true;
     break;
     default:
@@ -824,7 +824,7 @@ static void l2c_310_cache_check_errata( cache_l2c_310_rtl_release rtl_release )
   {
     volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
-    assert( 0 == ( l2cc->aux_ctrl & CACHE_L2C_310_L2CC_AUX_HPSODRE_MASK ) );
+    assert( 0 == ( l2cc->aux_ctrl & L2C_310_AUX_HPSODRE_MASK ) );
 
     /* Erratum: 729815 The “High Priority for SO and Dev reads” feature can
      * cause Quality of Service issues to cacheable read transactions*/
@@ -860,9 +860,9 @@ static void l2c_310_cache_check_errata( cache_l2c_310_rtl_release rtl_release )
   {
     volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
-    assert( !( ( l2cc->aux_ctrl & CACHE_L2C_310_L2CC_AUX_IPFE_MASK
-                 || l2cc->aux_ctrl & CACHE_L2C_310_L2CC_AUX_DPFE_MASK )
-               && ( ( l2cc->prefetch_ctrl & CACHE_L2C_310_L2CC_PREFETCH_OFFSET_MASK )
+    assert( !( ( l2cc->aux_ctrl & L2C_310_AUX_IPFE_MASK
+                 || l2cc->aux_ctrl & L2C_310_AUX_DPFE_MASK )
+               && ( ( l2cc->prefetch_ctrl & L2C_310_PREFETCH_OFFSET_MASK )
                     == 23 ) ) );
 
     /* Unhandled erratum present: 765569 Prefetcher can cross 4KB boundary if
@@ -888,7 +888,7 @@ cache_l2c_310_sync( void )
 {
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   cache_l2c_310_rtl_release rtl_release =
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
+    l2cc->cache_id & L2C_310_ID_RTL_MASK;
 
   if( l2c_310_cache_errata_is_applicable_753970( rtl_release ) ) {
     l2cc->dummy_cache_sync_reg = 0;
@@ -926,14 +926,14 @@ cache_l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
   rtems_interrupt_lock_context lock_context;
   /* Back starting address up to start of a line and invalidate until ADDR_LAST */
   uint32_t       adx               = (uint32_t)d_addr
-    & ~CACHE_L2C_310_DATA_LINE_MASK;
+    & ~L2C_310_DATA_LINE_MASK;
   const uint32_t ADDR_LAST         =
     (uint32_t)( (size_t)d_addr + n_bytes - 1 );
   uint32_t       block_end         =
-    CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES );
+    L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES );
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   cache_l2c_310_rtl_release rtl_release =
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
+    l2cc->cache_id & L2C_310_ID_RTL_MASK;
   bool is_errata_588369_applicable =
     l2c_310_cache_errata_is_applicable_588369( rtl_release );
 
@@ -942,7 +942,7 @@ cache_l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
   for (;
        adx      <= ADDR_LAST;
        adx       = block_end + 1,
-       block_end = CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES )) {
+       block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES )) {
     for (; adx <= block_end; adx += CPU_DATA_CACHE_ALIGNMENT ) {
       cache_l2c_310_flush_1_line( (void*)adx, is_errata_588369_applicable );
     }
@@ -962,15 +962,15 @@ cache_l2c_310_flush_entire( void )
   rtems_interrupt_lock_context lock_context;
 
   /* Only flush if level 2 cache is active */
-  if( ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) != 0 ) {
+  if( ( l2cc->ctrl & L2C_310_ENABLE_MASK ) != 0 ) {
 
     /* ensure ordering with previous memory accesses */
     _ARM_Data_memory_barrier();
 
     rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
-    l2cc->clean_inv_way = CACHE_l2C_310_WAY_MASK;
+    l2cc->clean_inv_way = L2C_310_WAY_MASK;
 
-    while ( l2cc->clean_inv_way & CACHE_l2C_310_WAY_MASK ) {};
+    while ( l2cc->clean_inv_way & L2C_310_WAY_MASK ) {};
 
     /* Wait for the flush to complete */
     cache_l2c_310_sync();
@@ -1016,9 +1016,9 @@ cache_l2c_310_invalidate_entire( void )
   /* ensure ordering with previous memory accesses */
   _ARM_Data_memory_barrier();
 
-  l2cc->inv_way = CACHE_l2C_310_WAY_MASK;
+  l2cc->inv_way = L2C_310_WAY_MASK;
 
-  while ( l2cc->inv_way & CACHE_l2C_310_WAY_MASK ) ;
+  while ( l2cc->inv_way & L2C_310_WAY_MASK ) ;
 
   /* Wait for the invalidate to complete */
   cache_l2c_310_sync();
@@ -1030,16 +1030,16 @@ cache_l2c_310_clean_and_invalidate_entire( void )
   volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   rtems_interrupt_lock_context lock_context;
 
-  if( ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) != 0 ) {
+  if( ( l2cc->ctrl & L2C_310_ENABLE_MASK ) != 0 ) {
     /* Invalidate the caches */
 
     /* ensure ordering with previous memory accesses */
     _ARM_Data_memory_barrier();
 
     rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
-    l2cc->clean_inv_way = CACHE_l2C_310_WAY_MASK;
+    l2cc->clean_inv_way = L2C_310_WAY_MASK;
 
-    while ( l2cc->clean_inv_way & CACHE_l2C_310_WAY_MASK ) ;
+    while ( l2cc->clean_inv_way & L2C_310_WAY_MASK ) ;
 
     /* Wait for the invalidate to complete */
     cache_l2c_310_sync();
@@ -1071,10 +1071,10 @@ cache_l2c_310_get_cache_size( void )
   uint32_t       way_size;
   uint32_t       num_ways;
 
-  way_size = (cache_type & CACHE_L2C_310_L2CC_TYPE_SIZE_D_WAYS_MASK)
-    >> CACHE_L2C_310_L2CC_TYPE_SIZE_D_WAYS_SHIFT;
-  num_ways = (cache_type & CACHE_L2C_310_L2CC_TYPE_NUM_D_WAYS_MASK)
-    >> CACHE_L2C_310_L2CC_TYPE_NUM_D_WAYS_SHIFT;
+  way_size = (cache_type & L2C_310_TYPE_SIZE_D_WAYS_MASK)
+    >> L2C_310_TYPE_SIZE_D_WAYS_SHIFT;
+  num_ways = (cache_type & L2C_310_TYPE_NUM_D_WAYS_MASK)
+    >> L2C_310_TYPE_NUM_D_WAYS_SHIFT;
 
   assert( way_size <= 0x07 );
   assert( num_ways <= 0x01 );
@@ -1124,22 +1124,22 @@ static void cache_l2c_310_unlock( volatile L2CC *l2cc )
 
 static void cache_l2c_310_wait_for_background_ops( volatile L2CC *l2cc )
 {
-  while ( l2cc->inv_way & CACHE_l2C_310_WAY_MASK ) ;
+  while ( l2cc->inv_way & L2C_310_WAY_MASK ) ;
 
-  while ( l2cc->clean_way & CACHE_l2C_310_WAY_MASK ) ;
+  while ( l2cc->clean_way & L2C_310_WAY_MASK ) ;
 
-  while ( l2cc->clean_inv_way & CACHE_l2C_310_WAY_MASK ) ;
+  while ( l2cc->clean_inv_way & L2C_310_WAY_MASK ) ;
 }
 
 /* We support only the L2C-310 revisions r3p2 and r3p3 cache controller */
 
-#if (BSP_ARM_L2C_310_ID & CACHE_L2C_310_L2CC_ID_PART_MASK) \
-  != CACHE_L2C_310_L2CC_ID_PART_L310
+#if (BSP_ARM_L2C_310_ID & L2C_310_ID_PART_MASK) \
+  != L2C_310_ID_PART_L310
 #error "invalid L2-310 cache controller part number"
 #endif
 
-#if ((BSP_ARM_L2C_310_ID & CACHE_L2C_310_L2CC_ID_RTL_MASK) != 0x8) \
-  && ((BSP_ARM_L2C_310_ID & CACHE_L2C_310_L2CC_ID_RTL_MASK) != 0x9)
+#if ((BSP_ARM_L2C_310_ID & L2C_310_ID_RTL_MASK) != 0x8) \
+  && ((BSP_ARM_L2C_310_ID & L2C_310_ID_RTL_MASK) != 0x9)
 #error "invalid L2-310 cache controller RTL revision"
 #endif
 
@@ -1149,9 +1149,9 @@ cache_l2c_310_enable( void )
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   uint32_t cache_id = l2cc->cache_id;
   cache_l2c_310_rtl_release rtl_release =
-    cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
+    cache_id & L2C_310_ID_RTL_MASK;
   uint32_t id_mask =
-    CACHE_L2C_310_L2CC_ID_IMPL_MASK | CACHE_L2C_310_L2CC_ID_PART_MASK;
+    L2C_310_ID_IMPL_MASK | L2C_310_ID_PART_MASK;
 
   /*
    * Do we actually have an L2C-310 cache controller?  Has BSP_ARM_L2C_310_BASE
@@ -1159,7 +1159,7 @@ cache_l2c_310_enable( void )
    */
   if (
     (BSP_ARM_L2C_310_ID & id_mask) != (cache_id & id_mask)
-      || rtl_release < (BSP_ARM_L2C_310_ID & CACHE_L2C_310_L2CC_ID_RTL_MASK)
+      || rtl_release < (BSP_ARM_L2C_310_ID & L2C_310_ID_RTL_MASK)
   ) {
     bsp_fatal( ARM_FATAL_L2C_310_UNEXPECTED_ID );
   }
@@ -1167,7 +1167,7 @@ cache_l2c_310_enable( void )
   l2c_310_cache_check_errata( rtl_release );
 
   /* Only enable if L2CC is currently disabled */
-  if( ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) == 0 ) {
+  if( ( l2cc->ctrl & L2C_310_ENABLE_MASK ) == 0 ) {
     uint32_t aux_ctrl;
     int ways;
 
@@ -1184,19 +1184,19 @@ cache_l2c_310_enable( void )
       ways = 8;
     }
 
-    if ( ways != CACHE_l2C_310_NUM_WAYS ) {
+    if ( ways != L2C_310_NUM_WAYS ) {
       bsp_fatal( ARM_FATAL_L2C_310_UNEXPECTED_NUM_WAYS );
     }
 
     /* Set up the way size */
-    aux_ctrl &= CACHE_L2C_310_L2CC_AUX_REG_ZERO_MASK; /* Set way_size to 0 */
-    aux_ctrl |= CACHE_L2C_310_L2CC_AUX_REG_DEFAULT_MASK;
+    aux_ctrl &= L2C_310_AUX_REG_ZERO_MASK; /* Set way_size to 0 */
+    aux_ctrl |= L2C_310_AUX_REG_DEFAULT_MASK;
 
     l2cc->aux_ctrl = aux_ctrl;
 
     /* Set up the latencies */
-    l2cc->tag_ram_ctrl  = CACHE_L2C_310_L2CC_TAG_RAM_DEFAULT_LAT;
-    l2cc->data_ram_ctrl = CACHE_L2C_310_L2CC_DATA_RAM_DEFAULT_MASK;
+    l2cc->tag_ram_ctrl  = L2C_310_TAG_RAM_DEFAULT_LAT;
+    l2cc->data_ram_ctrl = L2C_310_DATA_RAM_DEFAULT_MASK;
 
     cache_l2c_310_invalidate_entire();
 
@@ -1204,7 +1204,7 @@ cache_l2c_310_enable( void )
     l2cc->int_clr = l2cc->int_raw_status;
 
     /* Enable the L2CC */
-    l2cc->ctrl |= CACHE_L2C_310_L2CC_ENABLE_MASK;
+    l2cc->ctrl |= L2C_310_ENABLE_MASK;
   }
 }
 
@@ -1214,7 +1214,7 @@ cache_l2c_310_disable( void )
   volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   rtems_interrupt_lock_context lock_context;
 
-  if ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) {
+  if ( l2cc->ctrl & L2C_310_ENABLE_MASK ) {
     /* Clean and Invalidate L2 Cache */
     cache_l2c_310_flush_entire();
     rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
@@ -1222,7 +1222,7 @@ cache_l2c_310_disable( void )
     cache_l2c_310_wait_for_background_ops( l2cc );
 
     /* Disable the L2 cache */
-    l2cc->ctrl &= ~CACHE_L2C_310_L2CC_ENABLE_MASK;
+    l2cc->ctrl &= ~L2C_310_ENABLE_MASK;
     rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
   }
 }
@@ -1287,18 +1287,18 @@ _CPU_cache_invalidate_data_range(
   if ( n_bytes > 0 ) {
     /* Back starting address up to start of a line and invalidate until ADDR_LAST */
     uint32_t       adx       = (uint32_t) addr_first
-      & ~CACHE_L2C_310_DATA_LINE_MASK;
+      & ~L2C_310_DATA_LINE_MASK;
     const uint32_t ADDR_LAST =
       (uint32_t)( (size_t)addr_first + n_bytes - 1 );
     uint32_t       block_end =
-      CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES );
+      L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES );
 
-    /* We have to apply a lock. Thus we will operate only CACHE_MAX_LOCKING_BYTES
+    /* We have to apply a lock. Thus we will operate only L2C_310_MAX_LOCKING_BYTES
      * at a time */
     for (;
          adx      <= ADDR_LAST;
          adx       = block_end + 1,
-         block_end = CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES )) {
+         block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES )) {
       cache_l2c_310_invalidate_range(
         adx,
         block_end
@@ -1309,12 +1309,12 @@ _CPU_cache_invalidate_data_range(
       n_bytes
     );
 
-    adx       = (uint32_t)addr_first & ~CACHE_L2C_310_DATA_LINE_MASK;
-    block_end = CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES );
+    adx       = (uint32_t)addr_first & ~L2C_310_DATA_LINE_MASK;
+    block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES );
     for (;
          adx      <= ADDR_LAST;
          adx       = block_end + 1,
-         block_end = CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES )) {
+         block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES )) {
       cache_l2c_310_invalidate_range(
         adx,
         block_end
