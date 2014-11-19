@@ -100,6 +100,9 @@ __FBSDID("$FreeBSD$");
 #include "err.h"
 #include "sysexits.h"
 #include <sys/select.h>
+#ifdef __rtems__
+#include <rtems/shell.h>
+#endif /* __rtems__ */
 
 #define	INADDR_LEN	((int)sizeof(in_addr_t))
 #define	TIMEVAL_LEN	((int)sizeof(struct tv32))
@@ -1970,8 +1973,6 @@ g_usage(globals)
 }
 
 #if __rtems__
-  #include <rtems/shell.h>
-
   rtems_shell_cmd_t rtems_shell_PING_Command = {
     "ping",                        /* name */
     "ping [args]",                 /* usage */
