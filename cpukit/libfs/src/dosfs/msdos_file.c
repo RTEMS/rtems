@@ -244,5 +244,8 @@ msdos_file_sync(rtems_libio_t *iop)
     rc = fat_sync(&fs_info->fat);
 
     rtems_semaphore_release(fs_info->vol_sema);
-    return RC_OK;
+    if ( rc == 0 )
+      return RC_OK;
+
+    rtems_set_errno_and_return_minus_one(EIO);
 }
