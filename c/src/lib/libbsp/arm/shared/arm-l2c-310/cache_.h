@@ -98,7 +98,7 @@ typedef enum {
   L2C_310_RTL_RELEASE_R3_P1 = 0x6,
   L2C_310_RTL_RELEASE_R3_P2 = 0x8,
   L2C_310_RTL_RELEASE_R3_P3 = 0x9
-} cache_l2c_310_rtl_release;
+} l2c_310_rtl_release;
 
 /**
  * @defgroup L2C-310_cache Cache Support
@@ -463,7 +463,7 @@ typedef struct {
   uint32_t power_ctrl;
 } L2CC;
 
-rtems_interrupt_lock l2c_310_cache_lock = RTEMS_INTERRUPT_LOCK_INITIALIZER(
+rtems_interrupt_lock l2c_310_lock = RTEMS_INTERRUPT_LOCK_INITIALIZER(
   "cache"
 );
 
@@ -477,8 +477,8 @@ rtems_interrupt_lock l2c_310_cache_lock = RTEMS_INTERRUPT_LOCK_INITIALIZER(
 * - ARM CoreLink Level 2 Cache Controller (L2C-310 or PL310),
 *   r3 releases Software Developers Errata Notice"
 * Please see this document for more information on these erratas */
-static bool l2c_310_cache_errata_is_applicable_753970(
-  cache_l2c_310_rtl_release rtl_release
+static bool l2c_310_errata_is_applicable_753970(
+  l2c_310_rtl_release rtl_release
 )
 {
   bool is_applicable = false;
@@ -503,8 +503,8 @@ static bool l2c_310_cache_errata_is_applicable_753970(
   return is_applicable;
 }
 
-static bool l2c_310_cache_errata_is_applicable_727913(
-  cache_l2c_310_rtl_release rtl_release
+static bool l2c_310_errata_is_applicable_727913(
+  l2c_310_rtl_release rtl_release
 )
 {
   bool is_applicable = false;
@@ -529,8 +529,8 @@ static bool l2c_310_cache_errata_is_applicable_727913(
   return is_applicable;
 }
 
-static bool l2c_310_cache_errata_is_applicable_727914(
-  cache_l2c_310_rtl_release rtl_release
+static bool l2c_310_errata_is_applicable_727914(
+  l2c_310_rtl_release rtl_release
 )
 {
   bool is_applicable = false;
@@ -555,8 +555,8 @@ static bool l2c_310_cache_errata_is_applicable_727914(
   return is_applicable;
 }
 
-static bool l2c_310_cache_errata_is_applicable_727915(
-  cache_l2c_310_rtl_release rtl_release
+static bool l2c_310_errata_is_applicable_727915(
+  l2c_310_rtl_release rtl_release
 )
 {
   bool is_applicable = false;
@@ -581,8 +581,8 @@ static bool l2c_310_cache_errata_is_applicable_727915(
   return is_applicable;
 }
 
-static bool l2c_310_cache_errata_is_applicable_729806(
-  cache_l2c_310_rtl_release rtl_release
+static bool l2c_310_errata_is_applicable_729806(
+  l2c_310_rtl_release rtl_release
 )
 {
   bool is_applicable = false;
@@ -607,8 +607,8 @@ static bool l2c_310_cache_errata_is_applicable_729806(
   return is_applicable;
 }
 
-static bool l2c_310_cache_errata_is_applicable_729815(
-  cache_l2c_310_rtl_release rtl_release
+static bool l2c_310_errata_is_applicable_729815(
+  l2c_310_rtl_release rtl_release
 )
 {
   bool is_applicable = false;
@@ -633,8 +633,8 @@ static bool l2c_310_cache_errata_is_applicable_729815(
   return is_applicable;
 }
 
-static bool l2c_310_cache_errata_is_applicable_742884(
-  cache_l2c_310_rtl_release rtl_release
+static bool l2c_310_errata_is_applicable_742884(
+  l2c_310_rtl_release rtl_release
 )
 {
   bool is_applicable = false;
@@ -659,8 +659,8 @@ static bool l2c_310_cache_errata_is_applicable_742884(
   return is_applicable;
 }
 
-static bool l2c_310_cache_errata_is_applicable_752271(
-  cache_l2c_310_rtl_release rtl_release
+static bool l2c_310_errata_is_applicable_752271(
+  l2c_310_rtl_release rtl_release
 )
 {
   bool is_applicable = false;
@@ -685,8 +685,8 @@ static bool l2c_310_cache_errata_is_applicable_752271(
   return is_applicable;
 }
 
-static bool l2c_310_cache_errata_is_applicable_765569(
-  cache_l2c_310_rtl_release rtl_release
+static bool l2c_310_errata_is_applicable_765569(
+  l2c_310_rtl_release rtl_release
 )
 {
   bool is_applicable = false;
@@ -709,8 +709,8 @@ static bool l2c_310_cache_errata_is_applicable_765569(
   return is_applicable;
 }
 
-static bool l2c_310_cache_errata_is_applicable_769419(
-  cache_l2c_310_rtl_release rtl_release
+static bool l2c_310_errata_is_applicable_769419(
+  l2c_310_rtl_release rtl_release
 )
 {
   bool is_applicable = false;
@@ -735,8 +735,8 @@ static bool l2c_310_cache_errata_is_applicable_769419(
   return is_applicable;
 }
 
-static bool l2c_310_cache_errata_is_applicable_588369(
-  cache_l2c_310_rtl_release rtl_release
+static bool l2c_310_errata_is_applicable_588369(
+  l2c_310_rtl_release rtl_release
 )
 {
   bool is_applicable = false;
@@ -762,8 +762,8 @@ static bool l2c_310_cache_errata_is_applicable_588369(
 }
 
 #ifdef CACHE_ERRATA_CHECKS_FOR_IMPLEMENTED_ERRATAS
-static bool l2c_310_cache_errata_is_applicable_754670(
-  cache_l2c_310_rtl_release rtl_release
+static bool l2c_310_errata_is_applicable_754670(
+  l2c_310_rtl_release rtl_release
 )
 {
   bool is_applicable = false;
@@ -795,32 +795,32 @@ static bool l2c_310_cache_errata_is_applicable_754670(
   if( arm_errata_is_applicable_processor_errata_775420 ) {  \
   }                                                         \
 
-static void l2c_310_cache_check_errata( cache_l2c_310_rtl_release rtl_release )
+static void l2c_310_check_errata( l2c_310_rtl_release rtl_release )
 {
   /* This erratum gets handled within the sources */
   /* Unhandled erratum present: 588369 Errata 588369 says that clean + inv may
    * keep the cache line if it was clean. See ARMs documentation on the erratum
    * for a workaround */
-  /* assert( ! l2c_310_cache_errata_is_applicable_588369( rtl_release ) ); */
+  /* assert( ! l2c_310_errata_is_applicable_588369( rtl_release ) ); */
 
   /* Unhandled erratum present: 727913 Prefetch dropping feature can cause
    * incorrect behavior when PL310 handles reads that cross cache line
    * boundary */
-  assert( ! l2c_310_cache_errata_is_applicable_727913( rtl_release ) );
+  assert( ! l2c_310_errata_is_applicable_727913( rtl_release ) );
 
   /* Unhandled erratum present: 727914 Double linefill feature can cause
    * deadlock */
-  assert( ! l2c_310_cache_errata_is_applicable_727914( rtl_release ) );
+  assert( ! l2c_310_errata_is_applicable_727914( rtl_release ) );
 
   /* Unhandled erratum present: 727915 Background Clean and Invalidate by Way
    * operation can cause data corruption */
-  assert( ! l2c_310_cache_errata_is_applicable_727915( rtl_release ) );
+  assert( ! l2c_310_errata_is_applicable_727915( rtl_release ) );
 
   /* Unhandled erratum present: 729806 Speculative reads from the Cortex-A9
    * MPCore processor can cause deadlock */
-  assert( ! l2c_310_cache_errata_is_applicable_729806( rtl_release ) );
+  assert( ! l2c_310_errata_is_applicable_729806( rtl_release ) );
 
-  if( l2c_310_cache_errata_is_applicable_729815( rtl_release ) )
+  if( l2c_310_errata_is_applicable_729815( rtl_release ) )
   {
     volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
@@ -845,18 +845,18 @@ static void l2c_310_cache_check_errata( cache_l2c_310_rtl_release rtl_release )
 
   /* Unhandled erratum present: 742884 Double linefill feature might introduce
    * circular dependency and deadlock */
-  assert( ! l2c_310_cache_errata_is_applicable_742884( rtl_release ) );
+  assert( ! l2c_310_errata_is_applicable_742884( rtl_release ) );
 
   /* Unhandled erratum present: 752271 Double linefill feature can cause data
    * corruption */
-  assert( ! l2c_310_cache_errata_is_applicable_752271( rtl_release ) );
+  assert( ! l2c_310_errata_is_applicable_752271( rtl_release ) );
 
   /* This erratum can not be worked around: 754670 A continuous write flow can
    * stall a read targeting the same memory area
    * But this erratum does not lead to any data corruption */
-  /* assert( ! l2c_310_cache_errata_is_applicable_754670() ); */
+  /* assert( ! l2c_310_errata_is_applicable_754670() ); */
 
-  if( l2c_310_cache_errata_is_applicable_765569( rtl_release ) )
+  if( l2c_310_errata_is_applicable_765569( rtl_release ) )
   {
     volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
@@ -880,17 +880,17 @@ static void l2c_310_cache_check_errata( cache_l2c_310_rtl_release rtl_release )
 
   /* Unhandled erratum present: 769419 No automatic Store Buffer drain,
    * visibility of written data requires an explicit Cache */
-  assert( ! l2c_310_cache_errata_is_applicable_769419( rtl_release ) );
+  assert( ! l2c_310_errata_is_applicable_769419( rtl_release ) );
 }
 
 static inline void
-cache_l2c_310_sync( void )
+l2c_310_sync( void )
 {
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  cache_l2c_310_rtl_release rtl_release =
+  l2c_310_rtl_release rtl_release =
     l2cc->cache_id & L2C_310_ID_RTL_MASK;
 
-  if( l2c_310_cache_errata_is_applicable_753970( rtl_release ) ) {
+  if( l2c_310_errata_is_applicable_753970( rtl_release ) ) {
     l2cc->dummy_cache_sync_reg = 0;
   } else {
     l2cc->cache_sync           = 0;
@@ -898,7 +898,7 @@ cache_l2c_310_sync( void )
 }
 
 static inline void
-cache_l2c_310_flush_1_line(
+l2c_310_flush_1_line(
   const void *d_addr,
   const bool  is_errata_588369applicable
 )
@@ -913,7 +913,7 @@ cache_l2c_310_flush_1_line(
     * line, with write-back and cache linefill disabled.
     */
     l2cc->clean_pa     = (uint32_t) d_addr;
-    cache_l2c_310_sync();
+    l2c_310_sync();
     l2cc->inv_pa       = (uint32_t) d_addr;
   } else {
     l2cc->clean_inv_pa = (uint32_t) d_addr;
@@ -921,7 +921,7 @@ cache_l2c_310_flush_1_line(
 }
 
 static inline void
-cache_l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
+l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
 {
   rtems_interrupt_lock_context lock_context;
   /* Back starting address up to start of a line and invalidate until ADDR_LAST */
@@ -932,31 +932,31 @@ cache_l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
   uint32_t       block_end         =
     L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES );
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  cache_l2c_310_rtl_release rtl_release =
+  l2c_310_rtl_release rtl_release =
     l2cc->cache_id & L2C_310_ID_RTL_MASK;
   bool is_errata_588369_applicable =
-    l2c_310_cache_errata_is_applicable_588369( rtl_release );
+    l2c_310_errata_is_applicable_588369( rtl_release );
 
-  rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
+  rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
 
   for (;
        adx      <= ADDR_LAST;
        adx       = block_end + 1,
        block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES )) {
     for (; adx <= block_end; adx += CPU_DATA_CACHE_ALIGNMENT ) {
-      cache_l2c_310_flush_1_line( (void*)adx, is_errata_588369_applicable );
+      l2c_310_flush_1_line( (void*)adx, is_errata_588369_applicable );
     }
     if( block_end < ADDR_LAST ) {
-      rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
-      rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
+      rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
+      rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
     }
   }
-  cache_l2c_310_sync();
-  rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
+  l2c_310_sync();
+  rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
 }
 
 static inline void
-cache_l2c_310_flush_entire( void )
+l2c_310_flush_entire( void )
 {
   volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   rtems_interrupt_lock_context lock_context;
@@ -967,47 +967,47 @@ cache_l2c_310_flush_entire( void )
     /* ensure ordering with previous memory accesses */
     _ARM_Data_memory_barrier();
 
-    rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
+    rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
     l2cc->clean_inv_way = L2C_310_WAY_MASK;
 
     while ( l2cc->clean_inv_way & L2C_310_WAY_MASK ) {};
 
     /* Wait for the flush to complete */
-    cache_l2c_310_sync();
+    l2c_310_sync();
 
-    rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
+    rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
   }
 }
 
 static inline void
-cache_l2c_310_invalidate_1_line( const void *d_addr )
+l2c_310_invalidate_1_line( const void *d_addr )
 {
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
 
   l2cc->inv_pa = (uint32_t) d_addr;
-  cache_l2c_310_sync();
+  l2c_310_sync();
 }
 
 static inline void
-cache_l2c_310_invalidate_range( uint32_t adx, const uint32_t ADDR_LAST )
+l2c_310_invalidate_range( uint32_t adx, const uint32_t ADDR_LAST )
 {
   volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   rtems_interrupt_lock_context lock_context;
 
-  rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
+  rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
   for (;
        adx <= ADDR_LAST;
        adx += CPU_INSTRUCTION_CACHE_ALIGNMENT ) {
     /* Invalidate L2 cache line */
     l2cc->inv_pa = adx;
   }
-  cache_l2c_310_sync();
-  rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
+  l2c_310_sync();
+  rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
 }
 
 static inline void
-cache_l2c_310_invalidate_entire( void )
+l2c_310_invalidate_entire( void )
 {
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
@@ -1021,11 +1021,11 @@ cache_l2c_310_invalidate_entire( void )
   while ( l2cc->inv_way & L2C_310_WAY_MASK ) ;
 
   /* Wait for the invalidate to complete */
-  cache_l2c_310_sync();
+  l2c_310_sync();
 }
 
 static inline void
-cache_l2c_310_clean_and_invalidate_entire( void )
+l2c_310_clean_and_invalidate_entire( void )
 {
   volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   rtems_interrupt_lock_context lock_context;
@@ -1036,34 +1036,34 @@ cache_l2c_310_clean_and_invalidate_entire( void )
     /* ensure ordering with previous memory accesses */
     _ARM_Data_memory_barrier();
 
-    rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
+    rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
     l2cc->clean_inv_way = L2C_310_WAY_MASK;
 
     while ( l2cc->clean_inv_way & L2C_310_WAY_MASK ) ;
 
     /* Wait for the invalidate to complete */
-    cache_l2c_310_sync();
+    l2c_310_sync();
 
-    rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
+    rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
   }
 }
 
 static inline void
-cache_l2c_310_freeze( void )
+l2c_310_freeze( void )
 {
   /* To be implemented as needed, if supported
    by hardware at all */
 }
 
 static inline void
-cache_l2c_310_unfreeze( void )
+l2c_310_unfreeze( void )
 {
   /* To be implemented as needed, if supported
    by hardware at all */
 }
 
 static inline size_t
-cache_l2c_310_get_cache_size( void )
+l2c_310_get_cache_size( void )
 {
   size_t         size       = 0;
   volatile L2CC *l2cc       = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
@@ -1102,7 +1102,7 @@ cache_l2c_310_get_cache_size( void )
   return size;
 }
 
-static void cache_l2c_310_unlock( volatile L2CC *l2cc )
+static void l2c_310_unlock( volatile L2CC *l2cc )
 {
   l2cc->d_lockdown_0 = 0;
   l2cc->i_lockdown_0 = 0;
@@ -1122,7 +1122,7 @@ static void cache_l2c_310_unlock( volatile L2CC *l2cc )
   l2cc->i_lockdown_7 = 0;
 }
 
-static void cache_l2c_310_wait_for_background_ops( volatile L2CC *l2cc )
+static void l2c_310_wait_for_background_ops( volatile L2CC *l2cc )
 {
   while ( l2cc->inv_way & L2C_310_WAY_MASK ) ;
 
@@ -1144,11 +1144,11 @@ static void cache_l2c_310_wait_for_background_ops( volatile L2CC *l2cc )
 #endif
 
 static inline void
-cache_l2c_310_enable( void )
+l2c_310_enable( void )
 {
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   uint32_t cache_id = l2cc->cache_id;
-  cache_l2c_310_rtl_release rtl_release =
+  l2c_310_rtl_release rtl_release =
     cache_id & L2C_310_ID_RTL_MASK;
   uint32_t id_mask =
     L2C_310_ID_IMPL_MASK | L2C_310_ID_PART_MASK;
@@ -1164,7 +1164,7 @@ cache_l2c_310_enable( void )
     bsp_fatal( ARM_FATAL_L2C_310_UNEXPECTED_ID );
   }
 
-  l2c_310_cache_check_errata( rtl_release );
+  l2c_310_check_errata( rtl_release );
 
   /* Only enable if L2CC is currently disabled */
   if( ( l2cc->ctrl & L2C_310_ENABLE_MASK ) == 0 ) {
@@ -1172,9 +1172,9 @@ cache_l2c_310_enable( void )
     int ways;
 
     /* Make sure that I&D is not locked down when starting */
-    cache_l2c_310_unlock( l2cc );
+    l2c_310_unlock( l2cc );
 
-    cache_l2c_310_wait_for_background_ops( l2cc );
+    l2c_310_wait_for_background_ops( l2cc );
 
     aux_ctrl = l2cc->aux_ctrl;
 
@@ -1198,7 +1198,7 @@ cache_l2c_310_enable( void )
     l2cc->tag_ram_ctrl  = L2C_310_TAG_RAM_DEFAULT_LAT;
     l2cc->data_ram_ctrl = L2C_310_DATA_RAM_DEFAULT_MASK;
 
-    cache_l2c_310_invalidate_entire();
+    l2c_310_invalidate_entire();
 
     /* Clear the pending interrupts */
     l2cc->int_clr = l2cc->int_raw_status;
@@ -1209,48 +1209,48 @@ cache_l2c_310_enable( void )
 }
 
 static inline void
-cache_l2c_310_disable( void )
+l2c_310_disable( void )
 {
   volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   rtems_interrupt_lock_context lock_context;
 
   if ( l2cc->ctrl & L2C_310_ENABLE_MASK ) {
     /* Clean and Invalidate L2 Cache */
-    cache_l2c_310_flush_entire();
-    rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
+    l2c_310_flush_entire();
+    rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
 
-    cache_l2c_310_wait_for_background_ops( l2cc );
+    l2c_310_wait_for_background_ops( l2cc );
 
     /* Disable the L2 cache */
     l2cc->ctrl &= ~L2C_310_ENABLE_MASK;
-    rtems_interrupt_lock_release( &l2c_310_cache_lock, &lock_context );
+    rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
   }
 }
 
 static inline void
 _CPU_cache_enable_data( void )
 {
-  cache_l2c_310_enable();
+  l2c_310_enable();
 }
 
 static inline void
 _CPU_cache_disable_data( void )
 {
   arm_cache_l1_disable_data();
-  cache_l2c_310_disable();
+  l2c_310_disable();
 }
 
 static inline void
 _CPU_cache_enable_instruction( void )
 {
-  cache_l2c_310_enable();
+  l2c_310_enable();
 }
 
 static inline void
 _CPU_cache_disable_instruction( void )
 {
   arm_cache_l1_disable_instruction();
-  cache_l2c_310_disable();
+  l2c_310_disable();
 }
 
 static inline void
@@ -1264,7 +1264,7 @@ _CPU_cache_flush_data_range(
       d_addr,
       n_bytes
     );
-    cache_l2c_310_flush_range(
+    l2c_310_flush_range(
       d_addr,
       n_bytes
     );
@@ -1275,7 +1275,7 @@ static inline void
 _CPU_cache_flush_entire_data( void )
 {
   arm_cache_l1_flush_entire_data();
-  cache_l2c_310_flush_entire();
+  l2c_310_flush_entire();
 }
 
 static inline void
@@ -1299,7 +1299,7 @@ _CPU_cache_invalidate_data_range(
          adx      <= ADDR_LAST;
          adx       = block_end + 1,
          block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES )) {
-      cache_l2c_310_invalidate_range(
+      l2c_310_invalidate_range(
         adx,
         block_end
       );
@@ -1315,7 +1315,7 @@ _CPU_cache_invalidate_data_range(
          adx      <= ADDR_LAST;
          adx       = block_end + 1,
          block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES )) {
-      cache_l2c_310_invalidate_range(
+      l2c_310_invalidate_range(
         adx,
         block_end
       );
@@ -1334,7 +1334,7 @@ _CPU_cache_invalidate_entire_data( void )
   arm_cache_l1_flush_entire_data();
 
   /* forces the address out past level 2 */
-  cache_l2c_310_clean_and_invalidate_entire();
+  l2c_310_clean_and_invalidate_entire();
 
   /*This is broadcast within the cluster */
   arm_cache_l1_clean_and_invalidate_entire_data();
@@ -1344,14 +1344,14 @@ static inline void
 _CPU_cache_freeze_data( void )
 {
   arm_cache_l1_freeze_data();
-  cache_l2c_310_freeze();
+  l2c_310_freeze();
 }
 
 static inline void
 _CPU_cache_unfreeze_data( void )
 {
   arm_cache_l1_unfreeze_data();
-  cache_l2c_310_unfreeze();
+  l2c_310_unfreeze();
 }
 
 static inline void
@@ -1370,14 +1370,14 @@ static inline void
 _CPU_cache_freeze_instruction( void )
 {
   arm_cache_l1_freeze_instruction();
-  cache_l2c_310_freeze();
+  l2c_310_freeze();
 }
 
 static inline void
 _CPU_cache_unfreeze_instruction( void )
 {
   arm_cache_l1_unfreeze_instruction();
-  cache_l2c_310_unfreeze();
+  l2c_310_unfreeze();
 }
 
 static inline size_t
@@ -1392,7 +1392,7 @@ _CPU_cache_get_data_cache_size( const uint32_t level )
     break;
     case 0:
     case 2:
-      size = cache_l2c_310_get_cache_size();
+      size = l2c_310_get_cache_size();
     break;
     default:
       size = 0;
@@ -1413,7 +1413,7 @@ _CPU_cache_get_instruction_cache_size( const uint32_t level )
       break;
     case 0:
     case 2:
-      size = cache_l2c_310_get_cache_size();
+      size = l2c_310_get_cache_size();
       break;
     default:
       size = 0;
