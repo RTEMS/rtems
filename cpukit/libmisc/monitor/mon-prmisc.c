@@ -103,7 +103,7 @@ rtems_monitor_dump_name(rtems_id id)
 
     rtems_object_get_name( id, sizeof(name_buffer), name_buffer );
 
-    return fprintf( stdout, name_buffer );
+    return puts( name_buffer );
 }
 
 int
