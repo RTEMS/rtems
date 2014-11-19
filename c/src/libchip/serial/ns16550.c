@@ -532,9 +532,12 @@ int ns16550_set_attributes(
 
   /*
    *  Calculate the baud rate divisor
+   *
+   *  Assert ensures there is no division by 0.
    */
 
   baud_requested = rtems_termios_baud_to_number(t->c_cflag);
+  _Assert( baud_requested != 0 );
   ulBaudDivisor = NS16550_GetBaudDivisor(c, baud_requested);
 
   ucLineControl = 0;
