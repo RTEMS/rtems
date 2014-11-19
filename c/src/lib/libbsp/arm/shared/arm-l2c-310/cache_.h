@@ -4,7 +4,7 @@
  * @ingroup L2C-310_cache
  *
  * @brief Cache definitions and functions.
- * 
+ *
  * This file implements handling for the ARM L2C-310 cache controller
  */
 
@@ -478,16 +478,12 @@ rtems_interrupt_lock l2c_310_cache_lock = RTEMS_INTERRUPT_LOCK_INITIALIZER(
 * http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0360f/BABJFIBA.html
 * Please see this document for more information on these erratas */
 static bool l2c_310_cache_errata_is_applicable_753970(
-  void
+  cache_l2c_310_rtl_release rtl_release
 )
 {
-  volatile L2CC                  *l2cc          =
-    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  const cache_l2c_310_rtl_release RTL_RELEASE   =
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
-  bool                            is_applicable = false;
-  
-  switch( RTL_RELEASE ) {
+  bool is_applicable = false;
+
+  switch ( rtl_release ) {
     case CACHE_L2C_310_RTL_RELEASE_R3_P3:
     case CACHE_L2C_310_RTL_RELEASE_R3_P2:
     case CACHE_L2C_310_RTL_RELEASE_R3_P1:
@@ -495,18 +491,12 @@ static bool l2c_310_cache_errata_is_applicable_753970(
     case CACHE_L2C_310_RTL_RELEASE_R1_P0:
     case CACHE_L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
-    break;
+      break;
     case CACHE_L2C_310_RTL_RELEASE_R3_P0:
       is_applicable = true;
-    break;
+      break;
     default:
-       assert(   RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
+      assert( 0 );
       break;
   }
 
@@ -514,16 +504,12 @@ static bool l2c_310_cache_errata_is_applicable_753970(
 }
 
 static bool l2c_310_cache_errata_is_applicable_727913(
-  void
+  cache_l2c_310_rtl_release rtl_release
 )
 {
-  volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  const cache_l2c_310_rtl_release RTL_RELEASE   = 
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
-  bool                            is_applicable = false;
-  
-  switch( RTL_RELEASE ) {
+  bool is_applicable = false;
+
+  switch ( rtl_release ) {
     case CACHE_L2C_310_RTL_RELEASE_R3_P3:
     case CACHE_L2C_310_RTL_RELEASE_R3_P2:
     case CACHE_L2C_310_RTL_RELEASE_R3_P1:
@@ -531,35 +517,25 @@ static bool l2c_310_cache_errata_is_applicable_727913(
     case CACHE_L2C_310_RTL_RELEASE_R1_P0:
     case CACHE_L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
-    break;
+      break;
     case CACHE_L2C_310_RTL_RELEASE_R3_P0:
       is_applicable = true;
-    break;
+      break;
     default:
-       assert(   RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-     break;
+      assert( 0 );
+      break;
   }
-  
+
   return is_applicable;
 }
 
 static bool l2c_310_cache_errata_is_applicable_727914(
-  void
+  cache_l2c_310_rtl_release rtl_release
 )
 {
-  volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  const cache_l2c_310_rtl_release RTL_RELEASE   = 
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
-  bool                            is_applicable = false;
-  
-  switch( RTL_RELEASE ) {
+  bool is_applicable = false;
+
+  switch ( rtl_release ) {
     case CACHE_L2C_310_RTL_RELEASE_R3_P3:
     case CACHE_L2C_310_RTL_RELEASE_R3_P2:
     case CACHE_L2C_310_RTL_RELEASE_R3_P1:
@@ -567,143 +543,103 @@ static bool l2c_310_cache_errata_is_applicable_727914(
     case CACHE_L2C_310_RTL_RELEASE_R1_P0:
     case CACHE_L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
-    break;
+      break;
     case CACHE_L2C_310_RTL_RELEASE_R3_P0:
       is_applicable = true;
-    break;
+      break;
     default:
-       assert(   RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-     break;
+      assert( 0 );
+      break;
   }
-  
+
   return is_applicable;
 }
 
 static bool l2c_310_cache_errata_is_applicable_727915(
-  void
+  cache_l2c_310_rtl_release rtl_release
 )
 {
-  volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  const cache_l2c_310_rtl_release RTL_RELEASE   = 
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
-  bool                            is_applicable = false;
-  
-  switch( RTL_RELEASE ) {
+  bool is_applicable = false;
+
+  switch ( rtl_release ) {
     case CACHE_L2C_310_RTL_RELEASE_R3_P3:
     case CACHE_L2C_310_RTL_RELEASE_R3_P2:
     case CACHE_L2C_310_RTL_RELEASE_R3_P1:
     case CACHE_L2C_310_RTL_RELEASE_R1_P0:
     case CACHE_L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
-    break;
+      break;
     case CACHE_L2C_310_RTL_RELEASE_R3_P0:
     case CACHE_L2C_310_RTL_RELEASE_R2_P0:
       is_applicable = true;
-    break;
+      break;
     default:
-       assert(   RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-     break;
+      assert( 0 );
+      break;
   }
-  
+
   return is_applicable;
 }
 
 static bool l2c_310_cache_errata_is_applicable_729806(
-  void
+  cache_l2c_310_rtl_release rtl_release
 )
 {
-  volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  const cache_l2c_310_rtl_release RTL_RELEASE   = 
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
-  bool                            is_applicable = false;
-  
-  switch( RTL_RELEASE ) {
+  bool is_applicable = false;
+
+  switch ( rtl_release ) {
     case CACHE_L2C_310_RTL_RELEASE_R3_P3:
     case CACHE_L2C_310_RTL_RELEASE_R3_P2:
     case CACHE_L2C_310_RTL_RELEASE_R2_P0:
     case CACHE_L2C_310_RTL_RELEASE_R1_P0:
     case CACHE_L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
-    break;
+      break;
     case CACHE_L2C_310_RTL_RELEASE_R3_P1:
     case CACHE_L2C_310_RTL_RELEASE_R3_P0:
       is_applicable = true;
-    break;
+      break;
     default:
-       assert(   RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-     break;
+      assert( 0 );
+      break;
   }
-  
+
   return is_applicable;
 }
 
 static bool l2c_310_cache_errata_is_applicable_729815(
-  void
+  cache_l2c_310_rtl_release rtl_release
 )
 {
-  volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  const cache_l2c_310_rtl_release RTL_RELEASE   = 
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
-  bool                            is_applicable = false;
-  
-  switch( RTL_RELEASE ) {
+  bool is_applicable = false;
+
+  switch ( rtl_release ) {
     case CACHE_L2C_310_RTL_RELEASE_R3_P3:
     case CACHE_L2C_310_RTL_RELEASE_R1_P0:
     case CACHE_L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
-    break;
+      break;
     case CACHE_L2C_310_RTL_RELEASE_R3_P2:
     case CACHE_L2C_310_RTL_RELEASE_R3_P1:
     case CACHE_L2C_310_RTL_RELEASE_R3_P0:
     case CACHE_L2C_310_RTL_RELEASE_R2_P0:
       is_applicable = true;
-    break;
+      break;
     default:
-       assert(   RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-     break;
+      assert( 0 );
+      break;
   }
-  
+
   return is_applicable;
 }
 
 static bool l2c_310_cache_errata_is_applicable_742884(
-  void
+  cache_l2c_310_rtl_release rtl_release
 )
 {
-  volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  const cache_l2c_310_rtl_release RTL_RELEASE   = 
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
-  bool                            is_applicable = false;
-  
-  switch( RTL_RELEASE ) {
+  bool is_applicable = false;
+
+  switch ( rtl_release ) {
     case CACHE_L2C_310_RTL_RELEASE_R3_P3:
     case CACHE_L2C_310_RTL_RELEASE_R3_P2:
     case CACHE_L2C_310_RTL_RELEASE_R3_P0:
@@ -711,71 +647,51 @@ static bool l2c_310_cache_errata_is_applicable_742884(
     case CACHE_L2C_310_RTL_RELEASE_R1_P0:
     case CACHE_L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
-    break;
+      break;
     case CACHE_L2C_310_RTL_RELEASE_R3_P1:
       is_applicable = true;
-    break;
+      break;
     default:
-       assert(   RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-     break;
+      assert( 0 );
+      break;
   }
-  
+
   return is_applicable;
 }
 
 static bool l2c_310_cache_errata_is_applicable_752271(
-  void
+  cache_l2c_310_rtl_release rtl_release
 )
 {
-  volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  const cache_l2c_310_rtl_release RTL_RELEASE   = 
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
-  bool                            is_applicable = false;
-  
-  switch( RTL_RELEASE ) {
+  bool is_applicable = false;
+
+  switch ( rtl_release ) {
     case CACHE_L2C_310_RTL_RELEASE_R3_P3:
     case CACHE_L2C_310_RTL_RELEASE_R3_P2:
     case CACHE_L2C_310_RTL_RELEASE_R2_P0:
     case CACHE_L2C_310_RTL_RELEASE_R1_P0:
     case CACHE_L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = false;
-    break;
+      break;
     case CACHE_L2C_310_RTL_RELEASE_R3_P1:
     case CACHE_L2C_310_RTL_RELEASE_R3_P0:
       is_applicable = true;
-    break;
+      break;
     default:
-       assert(   RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-     break;
+      assert( 0 );
+      break;
   }
-  
+
   return is_applicable;
 }
 
 static bool l2c_310_cache_errata_is_applicable_765569(
-  void
+  cache_l2c_310_rtl_release rtl_release
 )
 {
-  volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  const cache_l2c_310_rtl_release RTL_RELEASE   = 
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
-  bool                            is_applicable = false;
-  
-  switch( RTL_RELEASE ) {
+  bool is_applicable = false;
+
+  switch ( rtl_release ) {
     case CACHE_L2C_310_RTL_RELEASE_R3_P3:
     case CACHE_L2C_310_RTL_RELEASE_R3_P2:
     case CACHE_L2C_310_RTL_RELEASE_R3_P1:
@@ -784,105 +700,75 @@ static bool l2c_310_cache_errata_is_applicable_765569(
     case CACHE_L2C_310_RTL_RELEASE_R1_P0:
     case CACHE_L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = true;
-    break;
+      break;
     default:
-       assert(   RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-     break;
+      assert( 0 );
+      break;
   }
-  
+
   return is_applicable;
 }
 
 static bool l2c_310_cache_errata_is_applicable_769419(
-  void
+  cache_l2c_310_rtl_release rtl_release
 )
 {
-  volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  const cache_l2c_310_rtl_release RTL_RELEASE   = 
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
-  bool                            is_applicable = false;
-  
-  switch( RTL_RELEASE ) {
+  bool is_applicable = false;
+
+  switch ( rtl_release ) {
     case CACHE_L2C_310_RTL_RELEASE_R3_P3:
     case CACHE_L2C_310_RTL_RELEASE_R3_P2:
       is_applicable = false;
-    break;
+      break;
     case CACHE_L2C_310_RTL_RELEASE_R3_P1:
     case CACHE_L2C_310_RTL_RELEASE_R3_P0:
     case CACHE_L2C_310_RTL_RELEASE_R2_P0:
     case CACHE_L2C_310_RTL_RELEASE_R1_P0:
     case CACHE_L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = true;
-    break;
+      break;
     default:
-       assert(   RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-     break;
+      assert( 0 );
+      break;
   }
-  
+
   return is_applicable;
 }
 
 static bool l2c_310_cache_errata_is_applicable_588369(
-  void
+  cache_l2c_310_rtl_release rtl_release
 )
 {
-  volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  const cache_l2c_310_rtl_release RTL_RELEASE   = 
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
-  bool                            is_applicable = false;
-  
-  switch( RTL_RELEASE ) {
+  bool is_applicable = false;
+
+  switch ( rtl_release ) {
     case CACHE_L2C_310_RTL_RELEASE_R3_P3:
     case CACHE_L2C_310_RTL_RELEASE_R3_P2:
     case CACHE_L2C_310_RTL_RELEASE_R3_P1:
     case CACHE_L2C_310_RTL_RELEASE_R3_P0:
     case CACHE_L2C_310_RTL_RELEASE_R2_P0:
       is_applicable = false;
-    break;
+      break;
     case CACHE_L2C_310_RTL_RELEASE_R1_P0:
     case CACHE_L2C_310_RTL_RELEASE_R0_P0:
       is_applicable = true;
-    break;
+      break;
     default:
-       assert(   RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-     break;
+      assert( 0 );
+      break;
   }
-  
+
   return is_applicable;
 }
 
 #ifdef CACHE_ERRATA_CHECKS_FOR_IMPLEMENTED_ERRATAS
 static bool l2c_310_cache_errata_is_applicable_754670(
-  void
+  cache_l2c_310_rtl_release rtl_release
 )
 {
-  volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  const cache_l2c_310_rtl_release RTL_RELEASE   = 
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
-  bool                            is_applicable = false;
-  
-  switch( RTL_RELEASE ) {
+  bool is_applicable = false;
+
+  switch ( rtl_release ) {
     case CACHE_L2C_310_RTL_RELEASE_R3_P3:
     case CACHE_L2C_310_RTL_RELEASE_R3_P2:
     case CACHE_L2C_310_RTL_RELEASE_R3_P1:
@@ -893,90 +779,84 @@ static bool l2c_310_cache_errata_is_applicable_754670(
       is_applicable = true;
     break;
     default:
-       assert(   RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-              || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-     break;
+      assert( 0 );
+      break;
   }
-  
+
   return is_applicable;
 }
 #endif /* CACHE_ERRATA_CHECKS_FOR_IMPLEMENTED_ERRATAS */
 
-/* The common workaround for this erratum would be to add a 
+/* The common workaround for this erratum would be to add a
  * data synchronization barrier to the beginning of the abort handler.
- * But for RTEMS a call of the abort handler means a fatal condition anyway. 
+ * But for RTEMS a call of the abort handler means a fatal condition anyway.
  * So there is no need to handle this erratum */
 #define CACHE_ARM_ERRATA_775420_HANDLER()                   \
   if( arm_errata_is_applicable_processor_errata_775420 ) {  \
   }                                                         \
 
-static void l2c_310_cache_check_errata( void )
+static void l2c_310_cache_check_errata( cache_l2c_310_rtl_release rtl_release )
 {
   /* This erratum gets handled within the sources */
-  /* Unhandled erratum present: 588369 Errata 588369 says that clean + inv may 
+  /* Unhandled erratum present: 588369 Errata 588369 says that clean + inv may
    * keep the cache line if it was clean. See ARMs documentation on the erratum
    * for a workaround */
-  /* assert( ! l2c_310_cache_errata_is_applicable_588369() ); */
+  /* assert( ! l2c_310_cache_errata_is_applicable_588369( rtl_release ) ); */
 
-  /* Unhandled erratum present: 727913 Prefetch dropping feature can cause 
-   * incorrect behavior when PL310 handles reads that cross cache line 
+  /* Unhandled erratum present: 727913 Prefetch dropping feature can cause
+   * incorrect behavior when PL310 handles reads that cross cache line
    * boundary */
-  assert( ! l2c_310_cache_errata_is_applicable_727913() );
+  assert( ! l2c_310_cache_errata_is_applicable_727913( rtl_release ) );
 
-  /* Unhandled erratum present: 727914 Double linefill feature can cause 
+  /* Unhandled erratum present: 727914 Double linefill feature can cause
    * deadlock */
-  assert( ! l2c_310_cache_errata_is_applicable_727914() );
-  
-  /* Unhandled erratum present: 727915 Background Clean and Invalidate by Way 
+  assert( ! l2c_310_cache_errata_is_applicable_727914( rtl_release ) );
+
+  /* Unhandled erratum present: 727915 Background Clean and Invalidate by Way
    * operation can cause data corruption */
-  assert( ! l2c_310_cache_errata_is_applicable_727915() );
+  assert( ! l2c_310_cache_errata_is_applicable_727915( rtl_release ) );
 
-  /* Unhandled erratum present: 729806 Speculative reads from the Cortex-A9 
+  /* Unhandled erratum present: 729806 Speculative reads from the Cortex-A9
    * MPCore processor can cause deadlock */
-  assert( ! l2c_310_cache_errata_is_applicable_729806() );
+  assert( ! l2c_310_cache_errata_is_applicable_729806( rtl_release ) );
 
-  if( l2c_310_cache_errata_is_applicable_729815() )
+  if( l2c_310_cache_errata_is_applicable_729815( rtl_release ) )
   {
     volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
     assert( 0 == ( l2cc->aux_ctrl & CACHE_L2C_310_L2CC_AUX_HPSODRE_MASK ) );
 
-    /* Erratum: 729815 The “High Priority for SO and Dev reads” feature can 
+    /* Erratum: 729815 The “High Priority for SO and Dev reads” feature can
      * cause Quality of Service issues to cacheable read transactions*/
 
     /* Conditions
        This problem occurs when the following conditions are met:
-       1. Bit[10] “High Priority for SO and Dev reads enable” of the PL310 
+       1. Bit[10] “High Priority for SO and Dev reads enable” of the PL310
           Auxiliary Control Register is set to 1.
        2. PL310 receives a cacheable read that misses in the L2 cache.
-       3. PL310 receives a continuous flow of Strongly Ordered or Device 
+       3. PL310 receives a continuous flow of Strongly Ordered or Device
           reads that take all address slots in the master interface.
        Workaround
-       A workaround is only necessary in systems that are able to issue a 
-       continuous flow of Strongly Ordered or Device reads. In such a case, 
-       the workaround is to disable the “High Priority for SO and Dev reads” 
+       A workaround is only necessary in systems that are able to issue a
+       continuous flow of Strongly Ordered or Device reads. In such a case,
+       the workaround is to disable the “High Priority for SO and Dev reads”
        feature. This is the default behavior.*/
   }
-  
-  /* Unhandled erratum present: 742884 Double linefill feature might introduce 
+
+  /* Unhandled erratum present: 742884 Double linefill feature might introduce
    * circular dependency and deadlock */
-  assert( ! l2c_310_cache_errata_is_applicable_742884() );
+  assert( ! l2c_310_cache_errata_is_applicable_742884( rtl_release ) );
 
-  /* Unhandled erratum present: 752271 Double linefill feature can cause data 
+  /* Unhandled erratum present: 752271 Double linefill feature can cause data
    * corruption */
-  assert( ! l2c_310_cache_errata_is_applicable_752271() );
+  assert( ! l2c_310_cache_errata_is_applicable_752271( rtl_release ) );
 
-  /* This erratum can not be worked around: 754670 A continuous write flow can 
+  /* This erratum can not be worked around: 754670 A continuous write flow can
    * stall a read targeting the same memory area
    * But this erratum does not lead to any data corruption */
   /* assert( ! l2c_310_cache_errata_is_applicable_754670() ); */
 
-  if( l2c_310_cache_errata_is_applicable_765569() )
+  if( l2c_310_cache_errata_is_applicable_765569( rtl_release ) )
   {
     volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
@@ -985,12 +865,12 @@ static void l2c_310_cache_check_errata( void )
                && ( ( l2cc->prefetch_ctrl & CACHE_L2C_310_L2CC_PREFETCH_OFFSET_MASK )
                     == 23 ) ) );
 
-    /* Unhandled erratum present: 765569 Prefetcher can cross 4KB boundary if 
+    /* Unhandled erratum present: 765569 Prefetcher can cross 4KB boundary if
      * offset is programmed with value 23 */
 
     /* Conditions
        This problem occurs when the following conditions are met:
-       1. One of the Prefetch Enable bits (bits [29:28] of the Auxiliary or 
+       1. One of the Prefetch Enable bits (bits [29:28] of the Auxiliary or
           Prefetch Control Register) is set HIGH.
        2. The prefetch offset bits are programmed with value 23 (5'b10111).
        Workaround
@@ -998,17 +878,19 @@ static void l2c_310_cache_check_errata( void )
        value except 23.*/
   }
 
-  /* Unhandled erratum present: 769419 No automatic Store Buffer drain, 
+  /* Unhandled erratum present: 769419 No automatic Store Buffer drain,
    * visibility of written data requires an explicit Cache */
-  assert( ! l2c_310_cache_errata_is_applicable_769419() );
+  assert( ! l2c_310_cache_errata_is_applicable_769419( rtl_release ) );
 }
 
 static inline void
 cache_l2c_310_sync( void )
 {
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
+  cache_l2c_310_rtl_release rtl_release =
+    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
 
-  if( l2c_310_cache_errata_is_applicable_753970() ) {
+  if( l2c_310_cache_errata_is_applicable_753970( rtl_release ) ) {
     l2cc->dummy_cache_sync_reg = 0;
   } else {
     l2cc->cache_sync           = 0;
@@ -1049,8 +931,11 @@ cache_l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
     (uint32_t)( (size_t)d_addr + n_bytes - 1 );
   uint32_t       block_end         =
     CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES );
+  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
+  cache_l2c_310_rtl_release rtl_release =
+    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool is_errata_588369_applicable =
-    l2c_310_cache_errata_is_applicable_588369();
+    l2c_310_cache_errata_is_applicable_588369( rtl_release );
 
   rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
 
@@ -1185,7 +1070,7 @@ cache_l2c_310_get_cache_size( void )
   uint32_t       cache_type = l2cc->cache_type;
   uint32_t       way_size;
   uint32_t       num_ways;
-  
+
   way_size = (cache_type & CACHE_L2C_310_L2CC_TYPE_SIZE_D_WAYS_MASK)
     >> CACHE_L2C_310_L2CC_TYPE_SIZE_D_WAYS_SHIFT;
   num_ways = (cache_type & CACHE_L2C_310_L2CC_TYPE_NUM_D_WAYS_MASK)
@@ -1244,7 +1129,9 @@ static inline void
 cache_l2c_310_enable( void )
 {
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  
+  cache_l2c_310_rtl_release rtl_release =
+    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
+
   /* Only enable if L2CC is currently disabled */
   if( ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) == 0 ) {
     uint32_t                     cache_id =
@@ -1256,19 +1143,17 @@ cache_l2c_310_enable( void )
     switch ( cache_id ) {
       case CACHE_L2C_310_L2CC_ID_PART_L310:
       {
-        const cache_l2c_310_rtl_release RTL_RELEASE =
-          l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
         /* If this assertion fails, you have a release of the
         * L2C-310 cache for which the l2c_310_cache_errata_is_applicable_ ...
         * methods are not yet implemented. This means you will get incorrect
         * errata handling */
-        assert(    RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P3
-                || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P2
-                || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P1
-                || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R3_P0
-                || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R2_P0
-                || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R1_P0
-                || RTL_RELEASE == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
+        assert(    rtl_release == CACHE_L2C_310_RTL_RELEASE_R3_P3
+                || rtl_release == CACHE_L2C_310_RTL_RELEASE_R3_P2
+                || rtl_release == CACHE_L2C_310_RTL_RELEASE_R3_P1
+                || rtl_release == CACHE_L2C_310_RTL_RELEASE_R3_P0
+                || rtl_release == CACHE_L2C_310_RTL_RELEASE_R2_P0
+                || rtl_release == CACHE_L2C_310_RTL_RELEASE_R1_P0
+                || rtl_release == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
         if ( l2cc->aux_ctrl & ( 1 << 16 ) ) {
           ways = 16;
         } else {
@@ -1324,7 +1209,7 @@ cache_l2c_310_enable( void )
       /* Clear the pending interrupts */
       l2cc->int_clr = l2cc->int_raw_status;
 
-      l2c_310_cache_check_errata();
+      l2c_310_cache_check_errata( rtl_release );
 
       /* Enable the L2CC */
       l2cc->ctrl |= CACHE_L2C_310_L2CC_ENABLE_MASK;
@@ -1332,7 +1217,7 @@ cache_l2c_310_enable( void )
   }
 }
 
-static inline void 
+static inline void
 cache_l2c_310_disable( void )
 {
   volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
@@ -1357,40 +1242,40 @@ cache_l2c_310_disable( void )
   }
 }
 
-static inline void 
+static inline void
 _CPU_cache_enable_data( void )
 {
   cache_l2c_310_enable();
 }
 
-static inline void 
+static inline void
 _CPU_cache_disable_data( void )
 {
   arm_cache_l1_disable_data();
   cache_l2c_310_disable();
 }
 
-static inline void 
+static inline void
 _CPU_cache_enable_instruction( void )
 {
   cache_l2c_310_enable();
 }
 
-static inline void 
+static inline void
 _CPU_cache_disable_instruction( void )
 {
   arm_cache_l1_disable_instruction();
   cache_l2c_310_disable();
 }
 
-static inline void 
+static inline void
 _CPU_cache_flush_data_range(
   const void *d_addr,
   size_t      n_bytes
 )
 {
   if ( n_bytes != 0 ) {
-    arm_cache_l1_flush_data_range( 
+    arm_cache_l1_flush_data_range(
       d_addr,
       n_bytes
     );
@@ -1401,17 +1286,17 @@ _CPU_cache_flush_data_range(
   }
 }
 
-static inline void 
+static inline void
 _CPU_cache_flush_entire_data( void )
 {
   arm_cache_l1_flush_entire_data();
   cache_l2c_310_flush_entire();
 }
 
-static inline void 
-_CPU_cache_invalidate_data_range( 
+static inline void
+_CPU_cache_invalidate_data_range(
   const void *addr_first,
-  size_t     n_bytes 
+  size_t     n_bytes
 )
 {
   if ( n_bytes > 0 ) {
@@ -1422,7 +1307,7 @@ _CPU_cache_invalidate_data_range(
       (uint32_t)( (size_t)addr_first + n_bytes - 1 );
     uint32_t       block_end =
       CACHE_MIN( ADDR_LAST, adx + CACHE_MAX_LOCKING_BYTES );
-    
+
     /* We have to apply a lock. Thus we will operate only CACHE_MAX_LOCKING_BYTES
      * at a time */
     for (;
@@ -1457,7 +1342,7 @@ _CPU_cache_invalidate_data_range(
   }
 }
 
-static inline void 
+static inline void
 _CPU_cache_invalidate_entire_data( void )
 {
   /* This is broadcast within the cluster */
@@ -1470,40 +1355,40 @@ _CPU_cache_invalidate_entire_data( void )
   arm_cache_l1_clean_and_invalidate_entire_data();
 }
 
-static inline void 
+static inline void
 _CPU_cache_freeze_data( void )
 {
   arm_cache_l1_freeze_data();
   cache_l2c_310_freeze();
 }
 
-static inline void 
+static inline void
 _CPU_cache_unfreeze_data( void )
 {
   arm_cache_l1_unfreeze_data();
   cache_l2c_310_unfreeze();
 }
 
-static inline void 
+static inline void
 _CPU_cache_invalidate_instruction_range( const void *i_addr, size_t n_bytes)
 {
   arm_cache_l1_invalidate_instruction_range( i_addr, n_bytes );
 }
 
-static inline void 
+static inline void
 _CPU_cache_invalidate_entire_instruction( void )
 {
   arm_cache_l1_invalidate_entire_instruction();
 }
 
-static inline void 
+static inline void
 _CPU_cache_freeze_instruction( void )
 {
   arm_cache_l1_freeze_instruction();
   cache_l2c_310_freeze();
 }
 
-static inline void 
+static inline void
 _CPU_cache_unfreeze_instruction( void )
 {
   arm_cache_l1_unfreeze_instruction();
@@ -1514,7 +1399,7 @@ static inline size_t
 _CPU_cache_get_data_cache_size( const uint32_t level )
 {
   size_t size = 0;
-  
+
   switch( level )
   {
     case 1:
@@ -1535,7 +1420,7 @@ static inline size_t
 _CPU_cache_get_instruction_cache_size( const uint32_t level )
 {
   size_t size = 0;
-  
+
   switch( level )
   {
     case 1:
