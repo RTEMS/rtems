@@ -45,7 +45,7 @@ void _exit(int status)
 
   (*rtems_libio_exit_helper)();
   rtems_shutdown_executive(status);
-  for (;;) ; /* to avoid warnings */
+  /* does not return */
 }
 
 #endif
