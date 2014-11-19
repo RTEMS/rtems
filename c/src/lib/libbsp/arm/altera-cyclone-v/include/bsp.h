@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -39,7 +39,9 @@ extern "C" {
 
 #define BSP_ARM_GIC_DIST_BASE ( BSP_ARM_A9MPCORE_SCU_BASE + 0x00001000 )
 
-#define BSP_ARM_L2C_310_BASE 0xFFFEF000U
+#define BSP_ARM_L2C_310_BASE 0xfffef000
+
+#define BSP_ARM_L2C_310_ID 0x410000c9
 
 /* Forward declaration */
 struct rtems_bsdnet_ifconfig;

@@ -58,6 +58,7 @@
 
 #include <assert.h>
 #include <bsp.h>
+#include <bsp/fatal.h>
 #include <libcpu/arm-cp15.h>
 #include <rtems/rtems/intr.h>
 #include <bsp/arm-release-id.h>
@@ -117,6 +118,7 @@ typedef struct {
 #define CACHE_L2C_310_L2CC_ID_PART_MASK ( 0xf << 6 )
 #define CACHE_L2C_310_L2CC_ID_PART_L210 ( 1 << 6 )
 #define CACHE_L2C_310_L2CC_ID_PART_L310 ( 3 << 6 )
+#define CACHE_L2C_310_L2CC_ID_IMPL_MASK ( 0xff << 24 )
   /** @brief Cache type */
   uint32_t cache_type;
 /** @brief 1 if data banking implemented, 0 if not */
@@ -1100,11 +1102,8 @@ cache_l2c_310_get_cache_size( void )
   return size;
 }
 
-static void cache_l2c_310_unlock( void )
+static void cache_l2c_310_unlock( volatile L2CC *l2cc )
 {
-  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-
-
   l2cc->d_lockdown_0 = 0;
   l2cc->i_lockdown_0 = 0;
   l2cc->d_lockdown_1 = 0;
@@ -1123,95 +1122,89 @@ static void cache_l2c_310_unlock( void )
   l2cc->i_lockdown_7 = 0;
 }
 
+static void cache_l2c_310_wait_for_background_ops( volatile L2CC *l2cc )
+{
+  while ( l2cc->inv_way & CACHE_l2C_310_WAY_MASK ) ;
+
+  while ( l2cc->clean_way & CACHE_l2C_310_WAY_MASK ) ;
+
+  while ( l2cc->clean_inv_way & CACHE_l2C_310_WAY_MASK ) ;
+}
+
+/* We support only the L2C-310 revisions r3p2 and r3p3 cache controller */
+
+#if (BSP_ARM_L2C_310_ID & CACHE_L2C_310_L2CC_ID_PART_MASK) \
+  != CACHE_L2C_310_L2CC_ID_PART_L310
+#error "invalid L2-310 cache controller part number"
+#endif
+
+#if ((BSP_ARM_L2C_310_ID & CACHE_L2C_310_L2CC_ID_RTL_MASK) != 0x8) \
+  && ((BSP_ARM_L2C_310_ID & CACHE_L2C_310_L2CC_ID_RTL_MASK) != 0x9)
+#error "invalid L2-310 cache controller RTL revision"
+#endif
+
 static inline void
 cache_l2c_310_enable( void )
 {
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
+  uint32_t cache_id = l2cc->cache_id;
   cache_l2c_310_rtl_release rtl_release =
-    l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
+    cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
+  uint32_t id_mask =
+    CACHE_L2C_310_L2CC_ID_IMPL_MASK | CACHE_L2C_310_L2CC_ID_PART_MASK;
+
+  /*
+   * Do we actually have an L2C-310 cache controller?  Has BSP_ARM_L2C_310_BASE
+   * been configured correctly?
+   */
+  if (
+    (BSP_ARM_L2C_310_ID & id_mask) != (cache_id & id_mask)
+      || rtl_release < (BSP_ARM_L2C_310_ID & CACHE_L2C_310_L2CC_ID_RTL_MASK)
+  ) {
+    bsp_fatal( ARM_FATAL_L2C_310_UNEXPECTED_ID );
+  }
+
+  l2c_310_cache_check_errata( rtl_release );
 
   /* Only enable if L2CC is currently disabled */
   if( ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) == 0 ) {
-    uint32_t                     cache_id =
-      l2cc->cache_id & CACHE_L2C_310_L2CC_ID_PART_MASK;
-    int                          ways     = 0;
+    uint32_t aux_ctrl;
+    int ways;
 
-    /* Do we actually have an L2C-310 cache controller?
-    * Has BSP_ARM_L2C_310_BASE been configured correctly? */
-    switch ( cache_id ) {
-      case CACHE_L2C_310_L2CC_ID_PART_L310:
-      {
-        /* If this assertion fails, you have a release of the
-        * L2C-310 cache for which the l2c_310_cache_errata_is_applicable_ ...
-        * methods are not yet implemented. This means you will get incorrect
-        * errata handling */
-        assert(    rtl_release == CACHE_L2C_310_RTL_RELEASE_R3_P3
-                || rtl_release == CACHE_L2C_310_RTL_RELEASE_R3_P2
-                || rtl_release == CACHE_L2C_310_RTL_RELEASE_R3_P1
-                || rtl_release == CACHE_L2C_310_RTL_RELEASE_R3_P0
-                || rtl_release == CACHE_L2C_310_RTL_RELEASE_R2_P0
-                || rtl_release == CACHE_L2C_310_RTL_RELEASE_R1_P0
-                || rtl_release == CACHE_L2C_310_RTL_RELEASE_R0_P0 );
-        if ( l2cc->aux_ctrl & ( 1 << 16 ) ) {
-          ways = 16;
-        } else {
-          ways = 8;
-        }
+    /* Make sure that I&D is not locked down when starting */
+    cache_l2c_310_unlock( l2cc );
 
-        assert( ways == CACHE_l2C_310_NUM_WAYS );
-      }
-      break;
-      case CACHE_L2C_310_L2CC_ID_PART_L210:
+    cache_l2c_310_wait_for_background_ops( l2cc );
 
-        /* Invalid case */
+    aux_ctrl = l2cc->aux_ctrl;
 
-        /* Support for this type is not implemented in this driver.
-        * Either support needs to get added or a seperate driver needs to get
-        * implemented */
-        assert( cache_id != CACHE_L2C_310_L2CC_ID_PART_L210 );
-        break;
-      default:
-
-        /* Unknown case */
-        assert( cache_id == CACHE_L2C_310_L2CC_ID_PART_L310 );
-        break;
+    if ( (aux_ctrl & ( 1 << 16 )) != 0 ) {
+      ways = 16;
+    } else {
+      ways = 8;
     }
 
-    if ( ways > 0 ) {
-      uint32_t              aux;
-
-      /* Set up the way size */
-      aux  = l2cc->aux_ctrl;
-      aux &= CACHE_L2C_310_L2CC_AUX_REG_ZERO_MASK; /* Set way_size to 0 */
-      aux |= CACHE_L2C_310_L2CC_AUX_REG_DEFAULT_MASK;
-
-      /* Make sure that I&D is not locked down when starting */
-      cache_l2c_310_unlock();
-
-      /* Level 2 configuration and control registers must not get written while
-      * background operations are pending */
-      while ( l2cc->inv_way & CACHE_l2C_310_WAY_MASK ) ;
-
-      while ( l2cc->clean_way & CACHE_l2C_310_WAY_MASK ) ;
-
-      while ( l2cc->clean_inv_way & CACHE_l2C_310_WAY_MASK ) ;
-
-      l2cc->aux_ctrl = aux;
-
-      /* Set up the latencies */
-      l2cc->tag_ram_ctrl  = CACHE_L2C_310_L2CC_TAG_RAM_DEFAULT_LAT;
-      l2cc->data_ram_ctrl = CACHE_L2C_310_L2CC_DATA_RAM_DEFAULT_MASK;
-
-      cache_l2c_310_invalidate_entire();
-
-      /* Clear the pending interrupts */
-      l2cc->int_clr = l2cc->int_raw_status;
-
-      l2c_310_cache_check_errata( rtl_release );
-
-      /* Enable the L2CC */
-      l2cc->ctrl |= CACHE_L2C_310_L2CC_ENABLE_MASK;
+    if ( ways != CACHE_l2C_310_NUM_WAYS ) {
+      bsp_fatal( ARM_FATAL_L2C_310_UNEXPECTED_NUM_WAYS );
     }
+
+    /* Set up the way size */
+    aux_ctrl &= CACHE_L2C_310_L2CC_AUX_REG_ZERO_MASK; /* Set way_size to 0 */
+    aux_ctrl |= CACHE_L2C_310_L2CC_AUX_REG_DEFAULT_MASK;
+
+    l2cc->aux_ctrl = aux_ctrl;
+
+    /* Set up the latencies */
+    l2cc->tag_ram_ctrl  = CACHE_L2C_310_L2CC_TAG_RAM_DEFAULT_LAT;
+    l2cc->data_ram_ctrl = CACHE_L2C_310_L2CC_DATA_RAM_DEFAULT_MASK;
+
+    cache_l2c_310_invalidate_entire();
+
+    /* Clear the pending interrupts */
+    l2cc->int_clr = l2cc->int_raw_status;
+
+    /* Enable the L2CC */
+    l2cc->ctrl |= CACHE_L2C_310_L2CC_ENABLE_MASK;
   }
 }
 
@@ -1226,13 +1219,7 @@ cache_l2c_310_disable( void )
     cache_l2c_310_flush_entire();
     rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
 
-    /* Level 2 configuration and control registers must not get written while
-     * background operations are pending */
-    while ( l2cc->inv_way & CACHE_l2C_310_WAY_MASK ) ;
-
-    while ( l2cc->clean_way & CACHE_l2C_310_WAY_MASK ) ;
-
-    while ( l2cc->clean_inv_way & CACHE_l2C_310_WAY_MASK ) ;
+    cache_l2c_310_wait_for_background_ops( l2cc );
 
     /* Disable the L2 cache */
     l2cc->ctrl &= ~CACHE_L2C_310_L2CC_ENABLE_MASK;
