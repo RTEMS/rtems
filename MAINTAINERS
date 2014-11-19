@@ -45,9 +45,9 @@ Gedare Bloom               gedare@rtems.org
 
 Write After Approval
 ====================
-Daniel Hellstrom           daniel@gaisler.com 
+Daniel Hellstrom           daniel@gaisler.com (blanket SPARC)
 
 Localized Write Permission
 ==========================
-sparc64                    Gedare Bloom          gedare@rtems.org
+sparc                      Daniel Hellstrom (daniel@gaisler.com)
 
