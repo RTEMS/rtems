@@ -409,8 +409,8 @@ msdos_filename_utf8_to_long_name_for_save (
 {
     ssize_t      returned_size = 0;
     int          eno           = 0;
-    size_t       name_size     = utf8_name_size;
-    size_t       name_size_tmp = long_name_size / MSDOS_NAME_LFN_BYTES_PER_CHAR;
+    size_t       name_size;
+    size_t       name_size_tmp;
     int          i;
     uint16_t     c;
     unsigned int chars_written;
@@ -452,7 +452,6 @@ msdos_filename_utf8_to_long_name_for_save (
         if ( name_size == UTF16_NULL_SIZE && c == UTF16_NULL ) {
           long_name[i]   = c;
           returned_size += MSDOS_NAME_LFN_BYTES_PER_CHAR;
-          name_size     -= MSDOS_NAME_LFN_BYTES_PER_CHAR;
         }
         else if ( name_size != 0 )
           eno = EINVAL;
