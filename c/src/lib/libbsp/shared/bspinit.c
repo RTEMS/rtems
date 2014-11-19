@@ -37,12 +37,10 @@ rtems_task Init (rtems_task_argument arg)
   char**      argv = NULL;
   int         result = -124;
 
-  if (boot_cmdline)
-  {
+  if (boot_cmdline) {
     cmdline = malloc (strlen (boot_cmdline) + 1);
 
-    if (cmdline)
-    {
+    if (cmdline) {
       strcpy (cmdline, boot_cmdline);
 
       command = cmdline;
@@ -50,8 +48,7 @@ rtems_task Init (rtems_task_argument arg)
       /*
        * Break the line up into arguments with "" being ignored.
        */
-      while (true)
-      {
+      while (true) {
         command = strtok (command, " \t\r\n");
         if (command == NULL)
           break;
@@ -59,22 +56,25 @@ rtems_task Init (rtems_task_argument arg)
         command = '\0';
       }
 
+      /*
+       * If there are arguments, allocate enough memory for the argv
+       * array to be passed into main().
+       *
+       * NOTE: If argc is 0, then argv will be NULL.
+       */
       argv = calloc (argc, sizeof (char*));
 
-      if (argv)
-      {
+      if (argv) {
         int a;
 
         command = cmdline;
         argv[0] = command;
 
-        for (a = 1; a < argc; a++)
-        {
+        for (a = 1; a < argc; a++) {
           command += strlen (command) + 1;
           argv[a] = command;
         }
-      }
-      else
+      } else
         argc = 0;
     }
   }
