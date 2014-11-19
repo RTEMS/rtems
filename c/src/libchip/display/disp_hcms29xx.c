@@ -514,14 +514,9 @@ static rtems_timer_service_routine disp_hcms29xx_timer_sr
 |    <none used>                                                            |
 \*=========================================================================*/
 {
-  rtems_status_code rc = RTEMS_SUCCESSFUL;
   disp_hcms29xx_drv_t *softc_ptr = arg;
 
-
-  if (rc == RTEMS_SUCCESSFUL) {
-    rc = rtems_event_send(softc_ptr->disp_param.task_id,
-			  DISP_HCMS29XX_EVENT_TIMER);
-  }
+  rtems_event_send(softc_ptr->disp_param.task_id, DISP_HCMS29XX_EVENT_TIMER);
 }
 
 /*=========================================================================*\
