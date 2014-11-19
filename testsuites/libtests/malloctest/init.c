@@ -1,17 +1,5 @@
-/*  Init
- *
- *  This routine is the initialization task for this test program.
- *  It is a user initialization task and has the responsibility for creating
- *  and starting the tasks that make up the test.  If the time of day
- *  clock is required for the test, it should also be set to a known
- *  value by this function.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2011.
+/* 
+ *  COPYRIGHT (c) 1989-2011, 2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Copyright (c) 2009, 2010 embedded brains GmbH.
@@ -1188,9 +1176,17 @@ static void test_posix_memalign(void)
   int sc;
   int maximumShift;
 
+  /*
+   * posix_memalign() is declared as never having a NULL first parameter.
+   * We need to explicitly disable this compiler warning to make this code
+   * warning free.
+   */
+  COMPILER_DIAGNOSTIC_SETTINGS_PUSH
+  COMPILER_DIAGNOSTIC_SETTINGS_DISABLE_NONNULL
   puts( "posix_memalign - NULL return pointer -- EINVAL" );
   sc = posix_memalign( NULL, 32, 8 );
   fatal_posix_service_status( sc, EINVAL, "posix_memalign NULL pointer" );
+  COMPILER_DIAGNOSTIC_SETTINGS_POP
 
   puts( "posix_memalign - alignment of 0 -- EINVAL" );
   sc = posix_memalign( &p1, 0, 8 );

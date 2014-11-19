@@ -1,9 +1,12 @@
-/*  tmacros.h
+/**
+ * @file
  *
- *  This include file contains macros which are useful in the RTEMS
- *  test suites.
- *
- *  COPYRIGHT (c) 1989-2009.
+ * This include file contains macros which are useful in the RTEMS
+ * test suites.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -296,6 +299,25 @@ extern "C" {
 
 /* newlib's ino_t is a typedef to "unsigned long" */
 #define PRIxino_t "lx"
+
+/**
+ * This assists in clearly disabling warnings on GCC in certain very
+ * specific cases.
+ *
+ * + -Wnon-null - If a method is declared as never having a NULL first
+ *   parameter. We need to explicitly disable this compiler warning to make
+ *   the code warning free.
+ */
+#ifdef __GNUC__
+  #define COMPILER_DIAGNOSTIC_SETTINGS_PUSH _Pragma("GCC diagnostic push")
+  #define COMPILER_DIAGNOSTIC_SETTINGS_POP _Pragma("GCC diagnostic pop")
+  #define COMPILER_DIAGNOSTIC_SETTINGS_DISABLE_NONNULL \
+    _Pragma("GCC diagnostic ignored \"-Wnonnull\"")
+#else
+  #define COMPILER_DIAGNOSTIC_SETTINGS_PUSH
+  #define COMPILER_DIAGNOSTIC_SETTINGS_POP
+  #define COMPILER_DIAGNOSTIC_SETTINGS_DISABLE_NONNULL
+#endif
 
 #ifdef __cplusplus
 }
