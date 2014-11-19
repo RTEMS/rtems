@@ -482,7 +482,7 @@ static bool l2c_310_cache_errata_is_applicable_753970(
 )
 {
   volatile L2CC                  *l2cc          =
-    (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   const cache_l2c_310_rtl_release RTL_RELEASE   =
     l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool                            is_applicable = false;
@@ -518,7 +518,7 @@ static bool l2c_310_cache_errata_is_applicable_727913(
 )
 {
   volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   const cache_l2c_310_rtl_release RTL_RELEASE   = 
     l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool                            is_applicable = false;
@@ -554,7 +554,7 @@ static bool l2c_310_cache_errata_is_applicable_727914(
 )
 {
   volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   const cache_l2c_310_rtl_release RTL_RELEASE   = 
     l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool                            is_applicable = false;
@@ -590,7 +590,7 @@ static bool l2c_310_cache_errata_is_applicable_727915(
 )
 {
   volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   const cache_l2c_310_rtl_release RTL_RELEASE   = 
     l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool                            is_applicable = false;
@@ -626,7 +626,7 @@ static bool l2c_310_cache_errata_is_applicable_729806(
 )
 {
   volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   const cache_l2c_310_rtl_release RTL_RELEASE   = 
     l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool                            is_applicable = false;
@@ -662,7 +662,7 @@ static bool l2c_310_cache_errata_is_applicable_729815(
 )
 {
   volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   const cache_l2c_310_rtl_release RTL_RELEASE   = 
     l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool                            is_applicable = false;
@@ -698,7 +698,7 @@ static bool l2c_310_cache_errata_is_applicable_742884(
 )
 {
   volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   const cache_l2c_310_rtl_release RTL_RELEASE   = 
     l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool                            is_applicable = false;
@@ -734,7 +734,7 @@ static bool l2c_310_cache_errata_is_applicable_752271(
 )
 {
   volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   const cache_l2c_310_rtl_release RTL_RELEASE   = 
     l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool                            is_applicable = false;
@@ -770,7 +770,7 @@ static bool l2c_310_cache_errata_is_applicable_765569(
 )
 {
   volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   const cache_l2c_310_rtl_release RTL_RELEASE   = 
     l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool                            is_applicable = false;
@@ -804,7 +804,7 @@ static bool l2c_310_cache_errata_is_applicable_769419(
 )
 {
   volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   const cache_l2c_310_rtl_release RTL_RELEASE   = 
     l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool                            is_applicable = false;
@@ -840,7 +840,7 @@ static bool l2c_310_cache_errata_is_applicable_588369(
 )
 {
   volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   const cache_l2c_310_rtl_release RTL_RELEASE   = 
     l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool                            is_applicable = false;
@@ -877,7 +877,7 @@ static bool l2c_310_cache_errata_is_applicable_754670(
 )
 {
   volatile L2CC                  *l2cc          = 
-    (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   const cache_l2c_310_rtl_release RTL_RELEASE   = 
     l2cc->cache_id & CACHE_L2C_310_L2CC_ID_RTL_MASK;
   bool                            is_applicable = false;
@@ -942,7 +942,7 @@ static void l2c_310_cache_check_errata( void )
 
   if( l2c_310_cache_errata_is_applicable_729815() )
   {
-    volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
     assert( 0 == ( l2cc->aux_ctrl & CACHE_L2C_310_L2CC_AUX_HPSODRE_MASK ) );
 
@@ -978,7 +978,7 @@ static void l2c_310_cache_check_errata( void )
 
   if( l2c_310_cache_errata_is_applicable_765569() )
   {
-    volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+    volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
     assert( !( ( l2cc->aux_ctrl & CACHE_L2C_310_L2CC_AUX_IPFE_MASK
                  || l2cc->aux_ctrl & CACHE_L2C_310_L2CC_AUX_DPFE_MASK )
@@ -1006,7 +1006,7 @@ static void l2c_310_cache_check_errata( void )
 static inline void
 cache_l2c_310_sync( void )
 {
-  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
   if( l2c_310_cache_errata_is_applicable_753970() ) {
     l2cc->dummy_cache_sync_reg = 0;
@@ -1021,7 +1021,7 @@ cache_l2c_310_flush_1_line(
   const bool  is_errata_588369applicable
 )
 {
-  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
   if( is_errata_588369applicable ) {
     /*
@@ -1073,7 +1073,7 @@ cache_l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
 static inline void
 cache_l2c_310_flush_entire( void )
 {
-  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   rtems_interrupt_lock_context lock_context;
 
   /* Only flush if level 2 cache is active */
@@ -1097,7 +1097,7 @@ cache_l2c_310_flush_entire( void )
 static inline void
 cache_l2c_310_invalidate_1_line( const void *d_addr )
 {
-  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
 
   l2cc->inv_pa = (uint32_t) d_addr;
@@ -1107,7 +1107,7 @@ cache_l2c_310_invalidate_1_line( const void *d_addr )
 static inline void
 cache_l2c_310_invalidate_range( uint32_t adx, const uint32_t ADDR_LAST )
 {
-  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   rtems_interrupt_lock_context lock_context;
 
   rtems_interrupt_lock_acquire( &l2c_310_cache_lock, &lock_context );
@@ -1124,7 +1124,7 @@ cache_l2c_310_invalidate_range( uint32_t adx, const uint32_t ADDR_LAST )
 static inline void
 cache_l2c_310_invalidate_entire( void )
 {
-  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
   /* Invalidate the caches */
 
@@ -1142,7 +1142,7 @@ cache_l2c_310_invalidate_entire( void )
 static inline void
 cache_l2c_310_clean_and_invalidate_entire( void )
 {
-  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   rtems_interrupt_lock_context lock_context;
 
   if( ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) != 0 ) {
@@ -1181,7 +1181,7 @@ static inline size_t
 cache_l2c_310_get_cache_size( void )
 {
   size_t         size       = 0;
-  volatile L2CC *l2cc       = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  volatile L2CC *l2cc       = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   uint32_t       cache_type = l2cc->cache_type;
   uint32_t       way_size;
   uint32_t       num_ways;
@@ -1219,7 +1219,7 @@ cache_l2c_310_get_cache_size( void )
 
 static void cache_l2c_310_unlock( void )
 {
-  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
 
   l2cc->d_lockdown_0 = 0;
@@ -1243,7 +1243,7 @@ static void cache_l2c_310_unlock( void )
 static inline void
 cache_l2c_310_enable( void )
 {
-  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   
   /* Only enable if L2CC is currently disabled */
   if( ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) == 0 ) {
@@ -1252,7 +1252,7 @@ cache_l2c_310_enable( void )
     int                          ways     = 0;
 
     /* Do we actually have an L2C-310 cache controller?
-    * Has BSP_ARM_L2CC_BASE been configured correctly? */
+    * Has BSP_ARM_L2C_310_BASE been configured correctly? */
     switch ( cache_id ) {
       case CACHE_L2C_310_L2CC_ID_PART_L310:
       {
@@ -1335,7 +1335,7 @@ cache_l2c_310_enable( void )
 static inline void 
 cache_l2c_310_disable( void )
 {
-  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2CC_BASE;
+  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   rtems_interrupt_lock_context lock_context;
 
   if ( l2cc->ctrl & CACHE_L2C_310_L2CC_ENABLE_MASK ) {

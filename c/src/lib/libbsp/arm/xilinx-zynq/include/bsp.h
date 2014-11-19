@@ -55,7 +55,7 @@ extern "C" {
 
 #define BSP_ARM_GIC_DIST_BASE 0xf8f01000
 
-#define BSP_ARM_L2CC_BASE 0xF8F02000U
+#define BSP_ARM_L2C_310_BASE 0xF8F02000U
 
 /**
  * @brief Zynq specific set up of the MMU.

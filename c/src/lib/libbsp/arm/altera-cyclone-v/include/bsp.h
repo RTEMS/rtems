@@ -39,7 +39,7 @@ extern "C" {
 
 #define BSP_ARM_GIC_DIST_BASE ( BSP_ARM_A9MPCORE_SCU_BASE + 0x00001000 )
 
-#define BSP_ARM_L2CC_BASE 0xFFFEF000U
+#define BSP_ARM_L2C_310_BASE 0xFFFEF000U
 
 /* Forward declaration */
 struct rtems_bsdnet_ifconfig;
