@@ -474,8 +474,6 @@ rtems_interrupt_lock l2c_310_cache_lock = RTEMS_INTERRUPT_LOCK_INITIALIZER(
 * - Software Developer Errata Notice
 * - ARM CoreLink Level 2 Cache Controller (L2C-310 or PL310),
 *   r3 releases Software Developers Errata Notice"
-* The corresponding link is:
-* http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0360f/BABJFIBA.html
 * Please see this document for more information on these erratas */
 static bool l2c_310_cache_errata_is_applicable_753970(
   cache_l2c_310_rtl_release rtl_release
