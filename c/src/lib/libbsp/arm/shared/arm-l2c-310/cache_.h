@@ -153,7 +153,9 @@ typedef struct {
   uint8_t reserved_8[0x100 - 8];
   uint32_t ctrl; /* Control */
 /** @brief Enables the L2CC */
-#define L2C_310_ENABLE_MASK 0x00000001
+#define L2C_310_CTRL_ENABLE 0x00000001
+
+#define L2C_310_CTRL_EXCL_CONFIG (1 << 12)
 
   /** @brief Auxiliary control */
   uint32_t aux_ctrl;
@@ -962,7 +964,7 @@ l2c_310_flush_entire( void )
   rtems_interrupt_lock_context lock_context;
 
   /* Only flush if level 2 cache is active */
-  if( ( l2cc->ctrl & L2C_310_ENABLE_MASK ) != 0 ) {
+  if( ( l2cc->ctrl & L2C_310_CTRL_ENABLE ) != 0 ) {
 
     /* ensure ordering with previous memory accesses */
     _ARM_Data_memory_barrier();
@@ -1030,7 +1032,7 @@ l2c_310_clean_and_invalidate_entire( void )
   volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   rtems_interrupt_lock_context lock_context;
 
-  if( ( l2cc->ctrl & L2C_310_ENABLE_MASK ) != 0 ) {
+  if( ( l2cc->ctrl & L2C_310_CTRL_ENABLE ) != 0 ) {
     /* Invalidate the caches */
 
     /* ensure ordering with previous memory accesses */
@@ -1152,6 +1154,7 @@ l2c_310_enable( void )
     cache_id & L2C_310_ID_RTL_MASK;
   uint32_t id_mask =
     L2C_310_ID_IMPL_MASK | L2C_310_ID_PART_MASK;
+  uint32_t ctrl;
 
   /*
    * Do we actually have an L2C-310 cache controller?  Has BSP_ARM_L2C_310_BASE
@@ -1166,8 +1169,14 @@ l2c_310_enable( void )
 
   l2c_310_check_errata( rtl_release );
 
+  ctrl = l2cc->ctrl;
+
+  if ( ( ctrl & L2C_310_CTRL_EXCL_CONFIG ) != 0 ) {
+    bsp_fatal( ARM_FATAL_L2C_310_EXCLUSIVE_CONFIG );
+  }
+
   /* Only enable if L2CC is currently disabled */
-  if( ( l2cc->ctrl & L2C_310_ENABLE_MASK ) == 0 ) {
+  if( ( ctrl & L2C_310_CTRL_ENABLE ) == 0 ) {
     uint32_t aux_ctrl;
     int ways;
 
@@ -1204,7 +1213,7 @@ l2c_310_enable( void )
     l2cc->int_clr = l2cc->int_raw_status;
 
     /* Enable the L2CC */
-    l2cc->ctrl |= L2C_310_ENABLE_MASK;
+    l2cc->ctrl = ctrl | L2C_310_CTRL_ENABLE;
   }
 }
 
@@ -1214,7 +1223,7 @@ l2c_310_disable( void )
   volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
   rtems_interrupt_lock_context lock_context;
 
-  if ( l2cc->ctrl & L2C_310_ENABLE_MASK ) {
+  if ( l2cc->ctrl & L2C_310_CTRL_ENABLE ) {
     /* Clean and Invalidate L2 Cache */
     l2c_310_flush_entire();
     rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
@@ -1222,7 +1231,7 @@ l2c_310_disable( void )
     l2c_310_wait_for_background_ops( l2cc );
 
     /* Disable the L2 cache */
-    l2cc->ctrl &= ~L2C_310_ENABLE_MASK;
+    l2cc->ctrl &= ~L2C_310_CTRL_ENABLE;
     rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
   }
 }
