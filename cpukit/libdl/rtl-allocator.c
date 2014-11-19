@@ -53,7 +53,8 @@ rtems_rtl_alloc_new (rtems_rtl_alloc_tag_t tag, size_t size, bool zero)
   void*             address = NULL;
 
   /*
-   * Obtain memory from the allocator.
+   * Obtain memory from the allocator. The address field is set by the
+   * allocator.
    */
   if (rtl)
     rtl->allocator.allocator (true, tag, &address, size);
