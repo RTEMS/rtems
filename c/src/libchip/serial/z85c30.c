@@ -269,7 +269,6 @@ Z85C30_STATIC void z85c30_init(int minor)
 
   pz85c30Context->ucModemCtrl = SCC_WR5_TX_8_BITS | SCC_WR5_TX_EN;
 
-  ulCtrlPort = Console_Port_Tbl[minor]->ulCtrlPort1;
   if ( ulCtrlPort == Console_Port_Tbl[minor]->ulCtrlPort2 ) {
     /*
      * This is channel A
