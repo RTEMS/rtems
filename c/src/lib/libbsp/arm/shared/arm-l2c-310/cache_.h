@@ -466,7 +466,7 @@ typedef struct {
 } L2CC;
 
 rtems_interrupt_lock l2c_310_lock = RTEMS_INTERRUPT_LOCK_INITIALIZER(
-  "cache"
+  "L2-310 cache controller"
 );
 
 /* Errata table for the LC2 310 Level 2 cache from ARM.
@@ -873,7 +873,6 @@ l2c_310_flush_1_line( volatile L2CC *l2cc, uint32_t d_addr )
 static inline void
 l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
 {
-  rtems_interrupt_lock_context lock_context;
   /* Back starting address up to start of a line and invalidate until ADDR_LAST */
   uint32_t       adx               = (uint32_t)d_addr
     & ~L2C_310_DATA_LINE_MASK;
@@ -883,22 +882,22 @@ l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
     L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES );
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
-  rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
-
   for (;
        adx      <= ADDR_LAST;
        adx       = block_end + 1,
        block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES )) {
+    rtems_interrupt_lock_context lock_context;
+
+    rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
+
     for (; adx <= block_end; adx += CPU_DATA_CACHE_ALIGNMENT ) {
       l2c_310_flush_1_line( l2cc, adx );
     }
-    if( block_end < ADDR_LAST ) {
-      rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
-      rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
-    }
+
+    l2c_310_sync( l2cc );
+
+    rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
   }
-  l2c_310_sync( l2cc );
-  rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
 }
 
 static inline void
@@ -936,21 +935,36 @@ l2c_310_invalidate_1_line( const void *d_addr )
 }
 
 static inline void
-l2c_310_invalidate_range( uint32_t adx, const uint32_t ADDR_LAST )
+l2c_310_invalidate_range( const void* d_addr, const size_t n_bytes )
 {
-  volatile L2CC               *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  rtems_interrupt_lock_context lock_context;
+  /* Back starting address up to start of a line and invalidate until ADDR_LAST */
+  uint32_t       adx               = (uint32_t)d_addr
+    & ~L2C_310_DATA_LINE_MASK;
+  const uint32_t ADDR_LAST         =
+    (uint32_t)( (size_t)d_addr + n_bytes - 1 );
+  uint32_t       block_end         =
+    L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES );
+  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
-  rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
   for (;
-       adx <= ADDR_LAST;
-       adx += CPU_INSTRUCTION_CACHE_ALIGNMENT ) {
-    /* Invalidate L2 cache line */
-    l2cc->inv_pa = adx;
+       adx      <= ADDR_LAST;
+       adx       = block_end + 1,
+       block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES )) {
+    rtems_interrupt_lock_context lock_context;
+
+    rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
+
+    for (; adx <= block_end; adx += CPU_DATA_CACHE_ALIGNMENT ) {
+      /* Invalidate L2 cache line */
+      l2cc->inv_pa = adx;
+    }
+
+    l2c_310_sync( l2cc );
+
+    rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
   }
-  l2c_310_sync( l2cc );
-  rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
 }
+
 
 static inline void
 l2c_310_invalidate_entire( void )
@@ -1210,16 +1224,14 @@ _CPU_cache_flush_data_range(
   size_t      n_bytes
 )
 {
-  if ( n_bytes != 0 ) {
-    arm_cache_l1_flush_data_range(
-      d_addr,
-      n_bytes
-    );
-    l2c_310_flush_range(
-      d_addr,
-      n_bytes
-    );
-  }
+  arm_cache_l1_flush_data_range(
+    d_addr,
+    n_bytes
+  );
+  l2c_310_flush_range(
+    d_addr,
+    n_bytes
+  );
 }
 
 static inline void
@@ -1235,47 +1247,14 @@ _CPU_cache_invalidate_data_range(
   size_t     n_bytes
 )
 {
-  if ( n_bytes > 0 ) {
-    /* Back starting address up to start of a line and invalidate until ADDR_LAST */
-    uint32_t       adx       = (uint32_t) addr_first
-      & ~L2C_310_DATA_LINE_MASK;
-    const uint32_t ADDR_LAST =
-      (uint32_t)( (size_t)addr_first + n_bytes - 1 );
-    uint32_t       block_end =
-      L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES );
-
-    /* We have to apply a lock. Thus we will operate only L2C_310_MAX_LOCKING_BYTES
-     * at a time */
-    for (;
-         adx      <= ADDR_LAST;
-         adx       = block_end + 1,
-         block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES )) {
-      l2c_310_invalidate_range(
-        adx,
-        block_end
-      );
-    }
-    arm_cache_l1_invalidate_data_range(
-      addr_first,
-      n_bytes
-    );
-
-    adx       = (uint32_t)addr_first & ~L2C_310_DATA_LINE_MASK;
-    block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES );
-    for (;
-         adx      <= ADDR_LAST;
-         adx       = block_end + 1,
-         block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES )) {
-      l2c_310_invalidate_range(
-        adx,
-        block_end
-      );
-    }
-    arm_cache_l1_invalidate_data_range(
-      addr_first,
-      n_bytes
-    );
-  }
+  l2c_310_invalidate_range(
+    addr_first,
+    n_bytes
+  );
+  arm_cache_l1_invalidate_data_range(
+    addr_first,
+    n_bytes
+  );
 }
 
 static inline void
