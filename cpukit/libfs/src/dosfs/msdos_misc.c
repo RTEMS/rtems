@@ -110,7 +110,7 @@ msdos_short_name_hex(char* sfn, int num)
     for (i = 0; i < 4; i++, c++)
       *c = hex[(num >> ((3 - i) * 4)) & 0xf];
     *c++ = '~';
-    *c++ = '1';
+    *c   = '1';
 }
 
 /* msdos_name_type --
