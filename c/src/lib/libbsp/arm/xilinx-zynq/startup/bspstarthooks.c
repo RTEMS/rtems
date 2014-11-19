@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -29,5 +29,13 @@ BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
   arm_a9mpcore_start_hook_1();
   bsp_start_copy_sections();
   zynq_setup_mmu_and_cache();
+
+#if !defined(RTEMS_SMP) \
+  && (defined(BSP_DATA_CACHE_ENABLED) \
+    || defined(BSP_INSTRUCTION_CACHE_ENABLED))
+  /* Enable unified L2 cache */
+  rtems_cache_enable_data();
+#endif
+
   bsp_start_clear_bss();
 }

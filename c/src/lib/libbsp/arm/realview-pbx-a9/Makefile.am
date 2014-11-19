@@ -97,6 +97,10 @@ libbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 # Startup
 libbsp_a_SOURCES += startup/bspreset.c
 libbsp_a_SOURCES += startup/bspstart.c
+if HAS_SMP
+libbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
+libbsp_a_SOURCES += startup/bspsmp.c
+endif
 
 # IRQ
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
@@ -130,10 +134,6 @@ libbsp_a_SOURCES += startup/bspstarthooks.c
 # Framebuffer
 libbsp_a_SOURCES += ../shared/arm-pl111-fb.c
 libbsp_a_SOURCES += startup/fb-config.c
-
-if HAS_SMP
-libbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
-endif
 
 ###############################################################################
 #                  Special Rules                                              #

@@ -174,6 +174,7 @@ libbsp_a_SOURCES += startup/bspstarthooks.c
 libbsp_a_SOURCES += startup/nocache-heap.c
 libbsp_a_SOURCES += startup/mmu-config.c
 if HAS_SMP
+libbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
 libbsp_a_SOURCES += startup/bspsmp.c
 endif
 

@@ -19,6 +19,7 @@
 #include <libcpu/arm-cp15.h>
 
 #include <bsp/irq.h>
+#include <bsp/linker-symbols.h>
 
 static void bsp_inter_processor_interrupt(void *arg)
 {
@@ -27,16 +28,10 @@ static void bsp_inter_processor_interrupt(void *arg)
 
 uint32_t _CPU_SMP_Initialize(void)
 {
-  return arm_gic_irq_processor_count();
-}
+  uint32_t hardware_count = arm_gic_irq_processor_count();
+  uint32_t linker_count = (uint32_t) bsp_processor_count;
 
-bool _CPU_SMP_Start_processor(uint32_t cpu_index)
-{
-  (void) cpu_index;
-
-  /* Nothing to do */
-
-  return true;
+  return hardware_count <= linker_count ? hardware_count : linker_count;
 }
 
 void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
@@ -52,6 +47,11 @@ void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
       NULL
     );
     assert(sc == RTEMS_SUCCESSFUL);
+
+#if defined(BSP_DATA_CACHE_ENABLED) || defined(BSP_INSTRUCTION_CACHE_ENABLED)
+    /* Enable unified L2 cache */
+    rtems_cache_enable_data();
+#endif
   }
 }
 
