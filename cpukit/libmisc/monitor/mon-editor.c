@@ -265,7 +265,7 @@ rtems_monitor_line_editor (
         switch (c)
         {
           case KEYS_END:
-            fprintf(stdout,buffer + pos);
+            puts(buffer + pos);
             pos = (int) strlen (buffer);
             break;
 
@@ -428,7 +428,7 @@ rtems_monitor_line_editor (
                 int ch, bs;
                 for (ch = end; ch > pos; ch--)
                   buffer[ch] = buffer[ch - 1];
-                fprintf(stdout,buffer + pos);
+                puts(buffer + pos);
                 for (bs = 0; bs < (end - pos + 1); bs++)
                   putchar ('\b');
               }
@@ -490,16 +490,18 @@ rtems_monitor_command_read(char *command,
    */
 #if defined(RTEMS_MULTIPROCESSING)
   if (!rtems_configuration_get_user_multiprocessing_table ())
-    sprintf (monitor_prompt, "%s",
+    snprintf (monitor_prompt, sizeof(monitor_prompt), "%s",
              (env_prompt == NULL) ? MONITOR_PROMPT: env_prompt);
   else /* .... */
 #endif
   if (rtems_monitor_default_node != rtems_monitor_node)
-    sprintf (monitor_prompt, "%" PRId32 "-%s-%" PRId32 "", rtems_monitor_node,
+    snprintf (monitor_prompt, sizeof(monitor_prompt),
+              "%" PRId32 "-%s-%" PRId32 "", rtems_monitor_node,
              (env_prompt == NULL) ? MONITOR_PROMPT : env_prompt,
              rtems_monitor_default_node);
   else
-    sprintf (monitor_prompt, "%" PRId32 "-%s", rtems_monitor_node,
+    snprintf (monitor_prompt, sizeof(monitor_prompt),
+             "%" PRId32 "-%s", rtems_monitor_node,
              (env_prompt == NULL) ? MONITOR_PROMPT : env_prompt);
 
   rtems_monitor_line_editor (command);
