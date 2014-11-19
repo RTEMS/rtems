@@ -875,6 +875,9 @@ RTEMS_INLINE_ROUTINE void _Objects_Invalidate_Id(
   Objects_Control      *the_object
 )
 {
+  _Assert( information != NULL );
+  _Assert( the_object != NULL );
+
   _Objects_Set_local_object(
     information,
     _Objects_Get_index( the_object->id ),
@@ -896,6 +899,9 @@ RTEMS_INLINE_ROUTINE void _Objects_Open(
   Objects_Name         name
 )
 {
+  _Assert( information != NULL );
+  _Assert( the_object != NULL );
+
   the_object->name = name;
 
   _Objects_Set_local_object(
