@@ -61,6 +61,9 @@ rtems_rtl_alloc_new (rtems_rtl_alloc_tag_t tag, size_t size, bool zero)
     printf ("rtl: alloc: new: %s addr=%p size=%zu\n",
             rtems_rtl_trace_tag_label (tag), address, size);
 
+  /*
+   * Only zero the memory if asked to and the allocation was successful.
+   */
   if (address && zero)
     memset (address, 0, size);
 
