@@ -25,7 +25,6 @@
 #ifndef LIBBSP_ARM_SHARED_CACHE_L1_H
 #define LIBBSP_ARM_SHARED_CACHE_L1_H
 
-#include <assert.h>
 #include <bsp.h>
 #include <libcpu/arm-cp15.h>
 
@@ -46,12 +45,13 @@ extern "C" {
     - 1 )
 
 /* Errata Handlers */
-#define ARM_CACHE_L1_ERRATA_764369_HANDLER()                 \
-  if( arm_errata_is_applicable_processor_errata_764369() ) { \
-    _ARM_Data_synchronization_barrier();                     \
-  }
+static void arm_cache_l1_errata_764369_handler( void )
+{
+#ifdef RTEMS_SMP
+  _ARM_Data_synchronization_barrier();
+#endif
+}
 
-    
 static void arm_cache_l1_select( const uint32_t selection )
 {
   /* select current cache level in cssr */
@@ -223,7 +223,7 @@ static inline void arm_cache_l1_flush_data_range(
     const uint32_t ADDR_LAST =
       (uint32_t)( (size_t) d_addr + n_bytes - 1 );
 
-    ARM_CACHE_L1_ERRATA_764369_HANDLER();
+    arm_cache_l1_errata_764369_handler();
 
     for (; adx <= ADDR_LAST; adx += ARM_CACHE_L1_CPU_DATA_ALIGNMENT ) {
       /* Store and invalidate the Data cache line */
@@ -276,7 +276,7 @@ static inline void arm_cache_l1_invalidate_data_range(
     const uint32_t end =
       (uint32_t)( (size_t)d_addr + n_bytes -1);
 
-    ARM_CACHE_L1_ERRATA_764369_HANDLER();
+    arm_cache_l1_errata_764369_handler();
     
     /* Back starting address up to start of a line and invalidate until end */
     for (;
@@ -301,9 +301,7 @@ static inline void arm_cache_l1_invalidate_instruction_range(
     const uint32_t end =
       (uint32_t)( (size_t)i_addr + n_bytes -1);
 
-    arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_INSTRUCTION );
-
-    ARM_CACHE_L1_ERRATA_764369_HANDLER();
+    arm_cache_l1_errata_764369_handler();
 
     /* Back starting address up to start of a line and invalidate until end */
     for (;
@@ -314,8 +312,6 @@ static inline void arm_cache_l1_invalidate_instruction_range(
     }
     /* Wait for L1 invalidate to complete */
     _ARM_Data_synchronization_barrier();
-
-    arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_DATA );
   }
 }
 
@@ -375,12 +371,19 @@ static inline void arm_cache_l1_disable_instruction( void )
 
 static inline size_t arm_cache_l1_get_data_cache_size( void )
 {
+  rtems_interrupt_level level;
   size_t   size;
   uint32_t line_size     = 0;
   uint32_t associativity = 0;
   uint32_t num_sets      = 0;
+
+  rtems_interrupt_disable(level);
+
+  arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_DATA );
   arm_cache_l1_properties( &line_size, &associativity,
                            &num_sets );
+
+  rtems_interrupt_enable(level);
 
   size = (1 << line_size) * associativity * num_sets;
 
@@ -389,17 +392,19 @@ static inline size_t arm_cache_l1_get_data_cache_size( void )
 
 static inline size_t arm_cache_l1_get_instruction_cache_size( void )
 {
+  rtems_interrupt_level level;
   size_t   size;
   uint32_t line_size     = 0;
   uint32_t associativity = 0;
   uint32_t num_sets      = 0;
 
+  rtems_interrupt_disable(level);
+
   arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_INSTRUCTION );
-  
   arm_cache_l1_properties( &line_size, &associativity,
                            &num_sets );
-  
-  arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_DATA );
+
+  rtems_interrupt_enable(level);
 
   size = (1 << line_size) * associativity * num_sets;
   
