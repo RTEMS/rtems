@@ -715,31 +715,10 @@ static bool l2c_310_errata_is_applicable_769419(
   return is_applicable;
 }
 
-static bool l2c_310_errata_is_applicable_588369(
-  uint32_t rtl_release
-)
-{
-  bool is_applicable = false;
-
-  switch ( rtl_release ) {
-    case L2C_310_RTL_RELEASE_R3_P3:
-    case L2C_310_RTL_RELEASE_R3_P2:
-    case L2C_310_RTL_RELEASE_R3_P1:
-    case L2C_310_RTL_RELEASE_R3_P0:
-    case L2C_310_RTL_RELEASE_R2_P0:
-      is_applicable = false;
-      break;
-    case L2C_310_RTL_RELEASE_R1_P0:
-    case L2C_310_RTL_RELEASE_R0_P0:
-      is_applicable = true;
-      break;
-    default:
-      assert( 0 );
-      break;
-  }
-
-  return is_applicable;
-}
+#if BSP_ARM_L2C_310_RTL_RELEASE == L2C_310_RTL_RELEASE_R0_P0 \
+   || BSP_ARM_L2C_310_RTL_RELEASE == L2C_310_RTL_RELEASE_R1_P0
+#define L2C_310_ERRATA_IS_APPLICABLE_588369
+#endif
 
 #ifdef CACHE_ERRATA_CHECKS_FOR_IMPLEMENTED_ERRATAS
 static bool l2c_310_errata_is_applicable_754670(
@@ -874,26 +853,21 @@ l2c_310_sync( volatile L2CC *l2cc )
 }
 
 static inline void
-l2c_310_flush_1_line(
-  const void *d_addr,
-  const bool  is_errata_588369applicable
-)
+l2c_310_flush_1_line( volatile L2CC *l2cc, uint32_t d_addr )
 {
-  volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-
-  if( is_errata_588369applicable ) {
-    /*
-    * Errata 588369 says that clean + inv may keep the
-    * cache line if it was clean, the recommended
-    * workaround is to clean then invalidate the cache
-    * line, with write-back and cache linefill disabled.
-    */
-    l2cc->clean_pa     = (uint32_t) d_addr;
-    l2c_310_sync( l2cc );
-    l2cc->inv_pa       = (uint32_t) d_addr;
-  } else {
-    l2cc->clean_inv_pa = (uint32_t) d_addr;
-  }
+#ifdef L2C_310_ERRATA_IS_APPLICABLE_588369
+  /*
+  * Errata 588369 says that clean + inv may keep the
+  * cache line if it was clean, the recommended
+  * workaround is to clean then invalidate the cache
+  * line, with write-back and cache linefill disabled.
+  */
+  l2cc->clean_pa     = d_addr;
+  l2c_310_sync( l2cc );
+  l2cc->inv_pa       = d_addr;
+#else
+  l2cc->clean_inv_pa = d_addr;
+#endif
 }
 
 static inline void
@@ -908,10 +882,6 @@ l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
   uint32_t       block_end         =
     L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES );
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
-  uint32_t rtl_release =
-    l2cc->cache_id & L2C_310_ID_RTL_MASK;
-  bool is_errata_588369_applicable =
-    l2c_310_errata_is_applicable_588369( rtl_release );
 
   rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
 
@@ -920,7 +890,7 @@ l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
        adx       = block_end + 1,
        block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES )) {
     for (; adx <= block_end; adx += CPU_DATA_CACHE_ALIGNMENT ) {
-      l2c_310_flush_1_line( (void*)adx, is_errata_588369_applicable );
+      l2c_310_flush_1_line( l2cc, adx );
     }
     if( block_end < ADDR_LAST ) {
       rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
