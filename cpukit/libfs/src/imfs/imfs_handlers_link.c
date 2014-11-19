@@ -78,6 +78,8 @@ static IMFS_jnode_t *IMFS_node_remove_hard_link(
 {
   IMFS_jnode_t *target = node->info.hard_link.link_node;
 
+  _Assert( target != NULL );
+
   if ( target->st_nlink == 1) {
     target = (*target->control->node_remove)( target );
     if ( target == NULL ) {
