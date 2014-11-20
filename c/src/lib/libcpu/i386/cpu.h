@@ -28,6 +28,8 @@
  */
 #include <rtems/score/interrupts.h>
 
+#include <stdint.h>
+
 /*
  *  Segment Access Routines
  *
@@ -261,13 +263,13 @@ typedef struct {
  * the actual value of GDT register.
  */
 extern void i386_get_info_from_GDTR (segment_descriptors** table,
-				     unsigned* limit);
+                                     uint16_t* limit);
 /*
  * C callable function enabling to change the value of GDT register. Must be called
  * with interrupts masked at processor level!!!.
  */
 extern void i386_set_GDTR (segment_descriptors*,
-			   unsigned limit);
+                           uint16_t limit);
 
 /*
  * C callable function enabling to set up one raw interrupt handler

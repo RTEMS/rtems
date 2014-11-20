@@ -69,7 +69,7 @@ SYM (i386_set_IDTR):
  * C callable function enabling to get easilly usable info from
  * the actual value of GDT register.
 extern void i386_get_info_from_GDTR (segment_descriptors** table,
-				     unsigned* limit);
+                                     uint16_t* limit);
  */
 
 SYM (i386_get_info_from_GDTR):
@@ -85,7 +85,7 @@ SYM (i386_get_info_from_GDTR):
 	movl	eax, (ecx)
 
 	movzwl	(esp), eax	    /* get limit */
-	movl	eax, (edx)
+	movw	ax, (edx)
 
 	addl	$6, esp		    /* restore %esp */
 	ret
@@ -93,7 +93,7 @@ SYM (i386_get_info_from_GDTR):
 /*
  * C callable function enabling to change the value of GDT register.
  * Must be called with interrupts masked at processor level!!!.
- *   extern void i386_set_GDTR (segment_descriptors*, unsigned limit);
+ *   extern void i386_set_GDTR (segment_descriptors*, uint16_t limit);
  */
 SYM (i386_set_GDTR):
 
