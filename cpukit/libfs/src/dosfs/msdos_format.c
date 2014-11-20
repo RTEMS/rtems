@@ -217,7 +217,7 @@ static int msdos_format_fill_sectors
    * write to consecutive sectors
    */
   while ((ret_val == 0) &&
-	 (sector_cnt > 0)) {
+         (sector_cnt > 0)) {
     int percent = (sector_cnt * 100) / total_sectors;
     if (percent != last_percent) {
       if ((percent & 1) == 0)
@@ -310,7 +310,6 @@ static int msdos_format_eval_sectors_per_cluster
 {
 
   bool     finished = false;
-  int      ret_val = 0;
   uint32_t fatdata_cluster_cnt;
   uint32_t fat_capacity;
   uint32_t sectors_per_fat;
@@ -350,17 +349,17 @@ static int msdos_format_eval_sectors_per_cluster
     }
 
     sectors_per_fat = ((fat_capacity
-			+ (bytes_per_sector - 1))
-		       / bytes_per_sector);
+                        + (bytes_per_sector - 1))
+                       / bytes_per_sector);
 
     fat_sectors_cnt = loc_align_object (sectors_per_fat * fat_num,
                                         sectors_per_cluster,
                                         skip_alignment);
 
     *data_cluster_cnt = (fatdata_cluster_cnt -
-			((fat_sectors_cnt
-			  + (sectors_per_cluster - 1))
-			 / sectors_per_cluster));
+                        ((fat_sectors_cnt
+                          + (sectors_per_cluster - 1))
+                         / sectors_per_cluster));
     /*
      * data cluster count too big? Then make clusters bigger
      */
@@ -379,7 +378,7 @@ static int msdos_format_eval_sectors_per_cluster
         finished = true;
       }
     } else if ((sectors_per_cluster * bytes_per_sector)
-	> MS_BYTES_PER_CLUSTER_LIMIT) {
+        > MS_BYTES_PER_CLUSTER_LIMIT) {
       finished = true;
     }
   } while (!finished);
@@ -387,11 +386,7 @@ static int msdos_format_eval_sectors_per_cluster
   *sectors_per_cluster_adj = sectors_per_cluster;
   *sectors_per_fat_ptr     = fat_sectors_cnt / fat_num;
 
-  if (ret_val != 0) {
-    errno = EINVAL;
-  }
-
-  return ret_val;
+  return 0;
 }
 
 static uint8_t
@@ -525,8 +520,7 @@ static int msdos_format_determine_fmt_params
    * determine number of FATs
    */
   if (ret_val == 0) {
-    if ((rqdata == NULL) ||
-	(rqdata->fat_num == 0)) {
+    if ((rqdata == NULL) || (rqdata->fat_num == 0)) {
       fmt_params->fat_num = 2;
     }
     else if (rqdata->fat_num <= 6) {
@@ -682,16 +676,16 @@ static int msdos_format_determine_fmt_params
          */
 
         ret_val = msdos_format_eval_sectors_per_cluster(fmt_params->fattype,
-                                                        fmt_params->bytes_per_sector,
-                                                        fmt_params->totl_sector_cnt,
-                                                        fmt_params->rsvd_sector_cnt,
-                                                        fmt_params->root_dir_sectors,
-                                                        fmt_params->fat_num,
-                                                        fmt_params->sectors_per_cluster,
-                                                        fmt_params->skip_alignment,
-                                                        &sectors_per_cluster_adj,
-                                                        &fmt_params->sectors_per_fat,
-                                                        &data_clusters_cnt);
+                     fmt_params->bytes_per_sector,
+                     fmt_params->totl_sector_cnt,
+                     fmt_params->rsvd_sector_cnt,
+                     fmt_params->root_dir_sectors,
+                     fmt_params->fat_num,
+                     fmt_params->sectors_per_cluster,
+                     fmt_params->skip_alignment,
+                     &sectors_per_cluster_adj,
+                     &fmt_params->sectors_per_fat,
+                     &data_clusters_cnt);
         fmt_params->sectors_per_cluster = sectors_per_cluster_adj;
         fat_type = fmt_params->fattype;
 
@@ -743,18 +737,17 @@ static int msdos_format_determine_fmt_params
    * determine media code
    */
   if (ret_val == 0) {
-    if ((rqdata != NULL) &&
-	(rqdata->media != 0)) {
+    if ((rqdata != NULL) && (rqdata->media != 0)) {
       const char valid_media_codes[] =
-	{0xF0,0xF8,0xF9,0xFA,0xFB,0xFC,0xFD,0xFE,0xFF};
+        {0xF0,0xF8,0xF9,0xFA,0xFB,0xFC,0xFD,0xFE,0xFF};
       if (NULL==memchr(valid_media_codes,
-		       rqdata->media,
-		       sizeof(valid_media_codes))) {
-	ret_val = -1;
-	errno = EINVAL;
+                       rqdata->media,
+                       sizeof(valid_media_codes))) {
+        ret_val = -1;
+        errno = EINVAL;
       }
       else {
-	fmt_params->media_code = rqdata->media;
+        fmt_params->media_code = rqdata->media;
       }
     }
     else {
@@ -788,23 +781,20 @@ static int msdos_format_determine_fmt_params
       char        *to = fmt_params->OEMName;
       int          cnt;
       from = "RTEMS"; /* default: make "from" point to OS Name */
-    if ((rqdata != NULL) &&
-	(rqdata->OEMName != NULL)) {
+    if ((rqdata != NULL) && (rqdata->OEMName != NULL)) {
       from = rqdata->OEMName;
     }
-    for (cnt = 0;
-	 cnt < (sizeof(fmt_params->OEMName)-1);
-	 cnt++) {
+    for (cnt = 0; cnt < (sizeof(fmt_params->OEMName)-1); cnt++) {
       if (isprint((unsigned char)*from)) {
-	*to++ = *from++;
+        *to++ = *from++;
       }
       else {
-	/*
-	 * non-printable character in given name, so keep stuck
-	 * at that character and replace all following characters
-	 * with a ' '
-	 */
-	*to++=' ';
+        /*
+         * non-printable character in given name, so keep stuck
+         * at that character and replace all following characters
+         * with a ' '
+         */
+        *to++=' ';
       }
       *to = '\0';
     }
@@ -819,23 +809,21 @@ static int msdos_format_determine_fmt_params
       int          cnt;
       from = ""; /* default: make "from" point to empty string */
     if ((rqdata != NULL) &&
-	(rqdata->VolLabel != NULL)) {
+        (rqdata->VolLabel != NULL)) {
       from = rqdata->VolLabel;
       fmt_params->VolLabel_present = true;
     }
-    for (cnt = 0;
-	 cnt < (sizeof(fmt_params->VolLabel)-1);
-	 cnt++) {
+    for (cnt = 0; cnt < (sizeof(fmt_params->VolLabel)-1); cnt++) {
       if (isprint((unsigned char)*from)) {
-	*to++ = *from++;
+        *to++ = *from++;
       }
       else {
-	/*
-	 * non-printable character in given name, so keep stuck
-	 * at that character and replace all following characters
-	 * with a ' '
-	 */
-	*to++=' ';
+        /*
+         * non-printable character in given name, so keep stuck
+         * at that character and replace all following characters
+         * with a ' '
+         */
+        *to++=' ';
       }
       *to = '\0';
     }
@@ -900,8 +888,8 @@ static int msdos_format_gen_mbr
    * fill OEMName
    */
   memcpy(FAT_GET_ADDR_BR_OEMNAME(mbr),
-	 fmt_params->OEMName,
-	 FAT_BR_OEMNAME_SIZE);
+         fmt_params->OEMName,
+         FAT_BR_OEMNAME_SIZE);
   FAT_SET_BR_BYTES_PER_SECTOR(mbr    , fmt_params->bytes_per_sector);
   FAT_SET_BR_SECTORS_PER_CLUSTER(mbr , fmt_params->sectors_per_cluster);
   FAT_SET_BR_RESERVED_SECTORS_NUM(mbr, fmt_params->rsvd_sector_cnt);
@@ -924,13 +912,13 @@ static int msdos_format_gen_mbr
     FAT_SET_BR_BOOTSIG(mbr           , FAT_BR_BOOTSIG_VAL);
     FAT_SET_BR_VOLID(mbr             , fmt_params->vol_id); /* volume id */
   memcpy(FAT_GET_ADDR_BR_VOLLAB(mbr),
-	 fmt_params->VolLabel,
-	 FAT_BR_VOLLAB_SIZE);
+         fmt_params->VolLabel,
+         FAT_BR_VOLLAB_SIZE);
     memcpy(FAT_GET_ADDR_BR_FILSYSTYPE(mbr),
-	   (fmt_params->fattype == FAT_FAT12)
-	   ? "FAT12   "
-	   : "FAT16   ",
-	   FAT_BR_FILSYSTYPE_SIZE);
+           (fmt_params->fattype == FAT_FAT12)
+           ? "FAT12   "
+           : "FAT16   ",
+           FAT_BR_FILSYSTYPE_SIZE);
   }
   else {
     FAT_SET_BR_SECTORS_PER_FAT32(mbr   ,fmt_params->sectors_per_fat);
@@ -947,8 +935,8 @@ static int msdos_format_gen_mbr
     FAT_SET_BR_FAT32_VOLID(mbr       , 0); /* not set */
     memset(FAT_GET_ADDR_BR_FAT32_VOLLAB(mbr)   ,0,FAT_BR_VOLLAB_SIZE);
     memcpy(FAT_GET_ADDR_BR_FAT32_FILSYSTYPE(mbr),
-	   "FAT32   ",
-	   FAT_BR_FILSYSTYPE_SIZE);
+           "FAT32   ",
+           FAT_BR_FILSYSTYPE_SIZE);
   }
   /*
    * add boot record signature
@@ -1002,10 +990,8 @@ static int msdos_format_gen_fsinfo
   /*
    * write "empty" values for free cluster count and next cluster number
    */
-  FAT_SET_FSINFO_FREE_CLUSTER_COUNT(fsinfo+FAT_FSI_INFO,
-				    0xffffffff);
-  FAT_SET_FSINFO_NEXT_FREE_CLUSTER (fsinfo+FAT_FSI_INFO,
-				    0xffffffff);
+  FAT_SET_FSINFO_FREE_CLUSTER_COUNT(fsinfo+FAT_FSI_INFO, 0xffffffff);
+  FAT_SET_FSINFO_NEXT_FREE_CLUSTER (fsinfo+FAT_FSI_INFO, 0xffffffff);
   return 0;
 }
 
@@ -1141,9 +1127,9 @@ int msdos_format
   if ((ret_val == 0) &&
       (fmt_params.fsinfo_sec != 0)) {
     ret_val = msdos_format_write_sec(fd,
-				     fmt_params.fsinfo_sec,
-				     fmt_params.bytes_per_sector,
-				     tmp_sec);
+                                     fmt_params.fsinfo_sec,
+                                     fmt_params.bytes_per_sector,
+                                     tmp_sec);
   }
   /*
    * write FAT as all empty
@@ -1239,8 +1225,8 @@ int msdos_format
                                      fmt_params.sectors_per_cluster,
                                      fmt_params.skip_alignment);
     for (i = 0;
-	 (i < fmt_params.fat_num) && (ret_val == 0);
-	 i++) {
+         (i < fmt_params.fat_num) && (ret_val == 0);
+         i++) {
       ret_val = msdos_format_write_sec
         (fd,
          start_sector
