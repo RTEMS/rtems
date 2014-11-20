@@ -150,8 +150,13 @@ cleanup:
 
     /* cleanup activity */
     fat_free_fat_clusters_chain(fs_info, (*chain));
-    /* trying to save last allocated cluster for future use */
-    fat_set_fat_cluster(fs_info, cl4find, FAT_GENFAT_FREE);
+
+    /*
+     * Trying to save last allocated cluster for future use
+     *
+     * NOTE: Deliberately ignoring return value.
+     */
+    (void) fat_set_fat_cluster(fs_info, cl4find, FAT_GENFAT_FREE);
     fat_buf_release(fs_info);
     return rc;
 }
