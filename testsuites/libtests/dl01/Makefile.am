@@ -19,6 +19,7 @@ dl-o1.o: dl-o1.c
 dl.tar: dl-o1.o
 	@rm -f $@
 	$(PAX) -w -f $@ $<
+CLEANFILES += dl.tar
 
 dl-tar.c: dl.tar
 	$(BIN2C) -C $< $@
@@ -31,8 +32,13 @@ CLEANFILES += dl-tar.h
 dl01.pre$(EXEEXT): $(dl01_OBJECTS) $(dl01_DEPENDENCIES)
 	@rm -f dl01.pre$(EXEEXT)
 	$(make-exe)
+	rm dl01.pre.ralf
 
-dl-sym.o: dl01.pre$(EXEEXT)
+dl01.pre: dl01.pre$(EXEEXT)
+	mv $< $@
+CLEANFILES += dl01.pre
+
+dl-sym.o: dl01.pre
 	rtems-syms -e -c "$(CFLAGS)" -o $@ $<
 
 dl01$(EXEEXT):  $(dl01_OBJECTS) $(dl01_DEPENDENCIES) dl-sym.o
