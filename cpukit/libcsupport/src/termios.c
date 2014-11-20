@@ -1,6 +1,9 @@
-/*
+/**
+ * @file
  * TERMIOS serial line support
- *
+ */
+
+/*
  *  Author:
  *    W. Eric Norum
  *    Saskatchewan Accelerator Laboratory
@@ -344,7 +347,7 @@ rtems_termios_destroy_tty (rtems_termios_tty *tty, void *arg, bool last_close)
     /*
      * call discipline-specific close
      */
-    sc = rtems_termios_linesw[tty->t_line].l_close(tty);
+    (void) rtems_termios_linesw[tty->t_line].l_close(tty);
   } else if (last_close) {
     /*
      * default: just flush output buffer
