@@ -41,6 +41,7 @@
 
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
+#include <bspopts.h>
 
 /*----------------------------------------------------------------------------+
 | Size of heap and stack:
@@ -61,6 +62,9 @@ BEGIN_CODE
 	PUBLIC (start)		# GNU default entry point
 
 	EXTERN (boot_card)
+#ifdef USE_VBE_RM
+        EXTERN (vesa_realmode_bootup_init)
+#endif
 	EXTERN (_load_segments)
 	EXTERN (_return_to_monitor)
 	EXTERN (_IBMPC_initVideo)
@@ -200,6 +204,10 @@ SYM (zero_bss):
 | So from now we can use printk
 +-------------------------------------------------------------------*/
 	call _IBMPC_initVideo
+
+#ifdef USE_VBE_RM
+        call    vesa_realmode_bootup_init
+#endif
 
 /*---------------------------------------------------------------------+
 | Check CPU type. Enable Cache and init coprocessor if needed.

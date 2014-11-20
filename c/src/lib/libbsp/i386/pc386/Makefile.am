@@ -106,12 +106,17 @@ libbsp_a_SOURCES += console/printk_support.c
 libbsp_a_SOURCES += console/vgacons.c
 libbsp_a_SOURCES += console/exar17d15x.c
 libbsp_a_SOURCES += console/rtd316.c
+if USE_VBE_RM
 include_bsp_HEADERS += include/vbe3.h
 include_HEADERS += include/edid.h
+include_bsp_HEADERS += include/fb_vesa.h
+libbsp_a_SOURCES += console/fb_vesa_rm.c
+else
 if USE_CIRRUS_GD5446
 libbsp_a_SOURCES += console/fb_cirrus.c
 else
 libbsp_a_SOURCES += console/fb_vga.c
+endif
 endif
 
 # gdb

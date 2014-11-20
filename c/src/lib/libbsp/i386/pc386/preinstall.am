@@ -147,6 +147,7 @@ $(PROJECT_INCLUDE)/i386_io.h: ../../i386/shared/comm/i386_io.h $(PROJECT_INCLUDE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i386_io.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/i386_io.h
 
+if USE_VBE_RM
 $(PROJECT_INCLUDE)/bsp/vbe3.h: include/vbe3.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vbe3.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vbe3.h
@@ -154,6 +155,11 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vbe3.h
 $(PROJECT_INCLUDE)/edid.h: include/edid.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/edid.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/edid.h
+
+$(PROJECT_INCLUDE)/bsp/fb_vesa.h: include/fb_vesa.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/fb_vesa.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/fb_vesa.h
+endif
 
 $(PROJECT_INCLUDE)/pcibios.h: ../../i386/shared/pci/pcibios.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pcibios.h
