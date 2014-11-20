@@ -639,6 +639,9 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj_t* obj, int fd, Elf_Ehdr* ehdr)
   {
     uint32_t flags;
 
+    /*
+     * Make sure section is at least 32bits to avoid 16-bit overflow errors.
+     */
     off = obj->ooffset + ehdr->e_shoff + (((uint32_t) section) * ehdr->e_shentsize);
 
     if (!rtems_rtl_obj_cache_read_byval (sects, fd, off, &shdr, sizeof (shdr)))
