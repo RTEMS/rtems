@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -53,10 +53,10 @@ bool _Objects_Set_name(
 #endif
   {
     the_object->name.name_u32 =  _Objects_Build_name(
-      ((0 <= length) ? s[ 0 ] : ' '),
-      ((1 <  length) ? s[ 1 ] : ' '),
-      ((2 <  length) ? s[ 2 ] : ' '),
-      ((3 <  length) ? s[ 3 ] : ' ')
+      ((length)     ? s[ 0 ] : ' '),
+      ((length > 1) ? s[ 1 ] : ' '),
+      ((length > 2) ? s[ 2 ] : ' '),
+      ((length > 3) ? s[ 3 ] : ' ')
     );
 
   }
