@@ -1513,7 +1513,6 @@ rtems_bdbuf_do_init (void)
   rtems_bdbuf_buffer* bd;
   uint8_t*            buffer;
   size_t              b;
-  size_t              cache_aligment;
   rtems_status_code   sc;
 
   if (rtems_bdbuf_tracer)
@@ -1532,13 +1531,6 @@ rtems_bdbuf_do_init (void)
   if (rtems_bdbuf_read_request_size (bdbuf_config.max_read_ahead_blocks)
       > RTEMS_MINIMUM_STACK_SIZE / 8U)
     return RTEMS_INVALID_NUMBER;
-
-  /*
-   * For unspecified cache alignments we use the CPU alignment.
-   */
-  cache_aligment = 32; /* FIXME rtems_cache_get_data_line_size() */
-  if (cache_aligment <= 0)
-    cache_aligment = CPU_ALIGNMENT;
 
   bdbuf_cache.sync_device = BDBUF_INVALID_DEV;
 
@@ -1613,7 +1605,7 @@ rtems_bdbuf_do_init (void)
    * The memory allocate allows a
    */
   if (rtems_memalign ((void **) &bdbuf_cache.buffers,
-                      cache_aligment,
+                      rtems_cache_get_data_line_size(),
                       bdbuf_cache.buffer_min_count * bdbuf_config.buffer_min) != 0)
     goto error;
 
