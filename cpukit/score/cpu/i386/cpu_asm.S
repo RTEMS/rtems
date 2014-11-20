@@ -327,6 +327,49 @@ SYM (i386_Physical_to_logical):
         movl    ecx,eax                /* eax = ecx */
         ret
 
+/*
+ *  int i386_Physical_to_real(
+ *     void     *address,
+ *     uint16_t *segment,
+ *     uint16_t *offset
+ *  );
+ *
+ *  Fills segment:offest realmode pointer counted from thirty-two bit physical
+ *  address.
+ *  Returns 0 if unconvertible, 1 if successfuly converted.
+ */
+
+.set PHYS_PTR_ARG,   4
+.set RM_PTR_SEG_ARG, 8
+.set RM_PTR_OFF_ARG, 12
+
+       PUBLIC (i386_Physical_to_real)
+
+SYM (i386_Physical_to_real):
+        movl    PHYS_PTR_ARG(esp),eax
+        cmpl    $0x10FFF0, eax
+        js      1f
+        movl    $0, eax
+        ret
+1:  	cmpl    $0x100000, eax
+        js      2f
+        subl    $0xFFFF0, eax
+        movl    RM_PTR_OFF_ARG(esp), ecx
+        movw    ax, (ecx)
+        movl    RM_PTR_SEG_ARG(esp), ecx
+        movw    $0xFFFF, (ecx)
+        movl    $1, eax
+        ret
+2: 	movl    eax, edx
+        and     $0xF, ax
+        movl    RM_PTR_OFF_ARG(esp), ecx
+        movw    ax, (ecx)
+        shrl    $4, edx
+        movl    RM_PTR_SEG_ARG(esp), ecx
+        movw    dx, (ecx)
+        movl    $1, eax
+        ret
+
 END_CODE
 
 END

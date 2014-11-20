@@ -186,6 +186,38 @@ void *i386_Physical_to_logical(
 );
 
 /*
+ *  i386_Real_to_physical
+ *
+ *  Converts real mode pointer {segment, offset} to physical address.
+ */
+RTEMS_INLINE_ROUTINE void *i386_Real_to_physical(
+    uint16_t segment,
+    uint16_t offset)
+{
+    return (void *)(((uint32_t)segment<<4)+offset);
+}
+
+/*
+ *  i386_Physical_to_real
+ *  Retreives real mode pointer elements {segmnet, offset} from physical address
+ *  Function returns the highest segment (base) address possible.
+ *  Example:    input   address - 0x4B3A2
+ *              output  segment - 0x4B3A
+ *                      offset  - 0x2
+ *              input   address - 0x10F12E
+ *              output  segment - 0xFFFF
+ *                      offset  - 0xF13E
+ *
+ *  return  0 address not convertible, must be less than 0x10FFEF
+ *          1 segment and offset extracted
+ */
+int i386_Physical_to_real(
+  void *address,
+  uint16_t *segment,
+  uint16_t *offset
+);
+
+/*
  *  "Simpler" names for a lot of the things defined in this file
  */
 
