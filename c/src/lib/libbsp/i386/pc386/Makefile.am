@@ -32,6 +32,7 @@ include_bsp_HEADERS += ../../shared/include/irq-generic.h
 include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += console/rtd316.h
 include_bsp_HEADERS += console/exar17d15x.h
+include_bsp_HEADERS += include/tblsizes.h
 
 if HAS_SMP
 include_bsp_HEADERS += ../../i386/shared/irq/apic.h

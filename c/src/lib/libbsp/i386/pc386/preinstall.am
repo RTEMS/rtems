@@ -81,6 +81,10 @@ $(PROJECT_INCLUDE)/bsp/exar17d15x.h: console/exar17d15x.h $(PROJECT_INCLUDE)/bsp
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/exar17d15x.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/exar17d15x.h
 
+$(PROJECT_INCLUDE)/bsp/tblsizes.h: include/tblsizes.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tblsizes.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tblsizes.h
+
 if HAS_SMP
 $(PROJECT_INCLUDE)/bsp/apic.h: ../../i386/shared/irq/apic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/apic.h
