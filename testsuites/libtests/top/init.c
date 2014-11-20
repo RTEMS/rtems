@@ -24,6 +24,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#include <rtems/shell.h>
+
 const char rtems_test_name[] = "TOP";
 
 /*
@@ -46,6 +48,14 @@ void add_some(
   }
 }
 
+static void notification(int fd, int seconds_remaining, void *arg)
+{
+  printf(
+    "Press any key to enter top test (%is remaining)\n",
+    seconds_remaining
+  );
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -54,6 +64,19 @@ rtems_task Init(
   rtems_time_of_day time;
 
   TEST_BEGIN();
+
+  status = rtems_shell_wait_for_input(
+    STDIN_FILENO,
+    20,
+    notification,
+    NULL
+  );
+  if ( status != RTEMS_SUCCESSFUL ) {
+    TEST_END();
+
+    rtems_test_exit( 0 );
+  }
+
   build_time( &time, 12, 31, 1988, 9, 15, 0, 0 );
 
   status = rtems_clock_set( &time );
