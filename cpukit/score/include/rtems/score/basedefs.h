@@ -197,6 +197,16 @@
   #define RTEMS_COMPILER_UNUSED_ATTRIBUTE
 #endif
 
+/**
+ *  Instructs the compiler that a specific structure or union members will be
+ *  placed so that the least memory is used.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_COMPILER_PACKED_ATTRIBUTE __attribute__((packed))
+#else
+  #define RTEMS_COMPILER_PACKED_ATTRIBUTE
+#endif
+
 #if __cplusplus >= 201103L
   #define RTEMS_STATIC_ASSERT(cond, msg) \
     static_assert(cond, # msg)
