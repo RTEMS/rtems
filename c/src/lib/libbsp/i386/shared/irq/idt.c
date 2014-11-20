@@ -229,50 +229,37 @@ int i386_get_idt_config (rtems_raw_irq_global_settings** config)
   return 1;
 }
 
-/*
- * Caution this function assumes the GDTR has been already set.
- */
-int i386_set_gdt_entry (unsigned short segment_selector, unsigned base,
-			unsigned limit)
+uint32_t i386_raw_gdt_entry (uint16_t segment_selector_index,
+                             segment_descriptors* sd)
 {
-    unsigned 			gdt_limit;
-    unsigned short              tmp_segment = 0;
-    unsigned int                limit_adjusted;
-    segment_descriptors* 	gdt_entry_tbl;
+    uint16_t                gdt_limit;
+    uint16_t                tmp_segment = 0;
+    segment_descriptors*    gdt_entry_tbl;
+    uint8_t                 present;
 
     i386_get_info_from_GDTR (&gdt_entry_tbl, &gdt_limit);
 
-    if (segment_selector > limit) {
+    if (segment_selector_index >= (gdt_limit+1)/8) {
+      /* index to GDT table out of bounds */
       return 0;
     }
-    /*
-     * set up limit first
-     */
-    limit_adjusted = limit;
-    if ( limit > 4095 ) {
-      gdt_entry_tbl[segment_selector].granularity = 1;
-      limit_adjusted /= 4096;
+    if (segment_selector_index == 0) {
+      /* index 0 is not usable */
+      return 0;
     }
-    gdt_entry_tbl[segment_selector].limit_15_0  = limit_adjusted & 0xffff;
-    gdt_entry_tbl[segment_selector].limit_19_16 = (limit_adjusted >> 16) & 0xf;
-    /*
-     * set up base
-     */
-    gdt_entry_tbl[segment_selector].base_address_15_0  = base & 0xffff;
-    gdt_entry_tbl[segment_selector].base_address_23_16 = (base >> 16) & 0xff;
-    gdt_entry_tbl[segment_selector].base_address_31_24 = (base >> 24) & 0xff;
-    /*
-     * set up descriptor type (this may well becomes a parameter if needed)
-     */
-    gdt_entry_tbl[segment_selector].type 		= 2;   	/* Data R/W */
-    gdt_entry_tbl[segment_selector].descriptor_type 	= 1;	/* Code or Data */
-    gdt_entry_tbl[segment_selector].privilege 		= 0; 	/* ring 0 */
-    gdt_entry_tbl[segment_selector].present 		= 1; 	/* not present */
 
+    /* put prepared descriptor into the GDT */
+    present = sd->present;
+    sd->present = 0;
+    gdt_entry_tbl[segment_selector_index].present = 0;
+    RTEMS_COMPILER_MEMORY_BARRIER();
+    gdt_entry_tbl[segment_selector_index] = *sd;
+    RTEMS_COMPILER_MEMORY_BARRIER();
+    gdt_entry_tbl[segment_selector_index].present = present;
+    sd->present = present;
     /*
-     * Now, reload all segment registers so the limit takes effect.
+     * Now, reload all segment registers so that the possible changes takes effect.
      */
-
     __asm__ volatile( "movw %%ds,%0 ; movw %0,%%ds\n\t"
                   "movw %%es,%0 ; movw %0,%%es\n\t"
                   "movw %%fs,%0 ; movw %0,%%fs\n\t"
@@ -280,7 +267,104 @@ int i386_set_gdt_entry (unsigned short segment_selector, unsigned base,
                   "movw %%ss,%0 ; movw %0,%%ss"
                    : "=r" (tmp_segment)
                    : "0"  (tmp_segment)
-		  );
-
+                 );
     return 1;
+}
+
+void i386_fill_segment_desc_base(uint32_t base,
+                                 segment_descriptors* sd)
+{
+    sd->base_address_15_0  = base & 0xffff;
+    sd->base_address_23_16 = (base >> 16) & 0xff;
+    sd->base_address_31_24 = (base >> 24) & 0xff;
+}
+
+void i386_fill_segment_desc_limit(uint32_t limit,
+                                  segment_descriptors* sd)
+{
+    sd->granularity = 0;
+    if (limit > 65535) {
+      sd->granularity = 1;
+      limit /= 4096;
+    }
+    sd->limit_15_0  = limit & 0xffff;
+    sd->limit_19_16 = (limit >> 16) & 0xf;
+}
+
+/*
+ * Caution this function assumes the GDTR has been already set.
+ */
+uint32_t i386_set_gdt_entry (uint16_t segment_selector_index, uint32_t base,
+                             uint32_t limit)
+{
+    segment_descriptors     gdt_entry;
+    memset(&gdt_entry, 0, sizeof(gdt_entry));
+
+    i386_fill_segment_desc_limit(limit, &gdt_entry);
+    i386_fill_segment_desc_base(base, &gdt_entry);
+    /*
+     * set up descriptor type (this may well becomes a parameter if needed)
+     */
+    gdt_entry.type              = 2;    /* Data R/W */
+    gdt_entry.descriptor_type   = 1;    /* Code or Data */
+    gdt_entry.privilege         = 0;    /* ring 0 */
+    gdt_entry.present           = 1;    /* not present */
+
+    /*
+     * Now, reload all segment registers so the limit takes effect.
+     */
+    return i386_raw_gdt_entry(segment_selector_index, &gdt_entry);
+}
+
+uint16_t i386_next_empty_gdt_entry ()
+{
+    uint16_t                gdt_limit;
+    segment_descriptors*    gdt_entry_tbl;
+    /* initial amount of filled descriptors */
+    static uint16_t         segment_selector_index = 2;
+
+    segment_selector_index += 1;
+    i386_get_info_from_GDTR (&gdt_entry_tbl, &gdt_limit);
+    if (segment_selector_index >= (gdt_limit+1)/8) {
+      return 0;
+    }
+    return segment_selector_index;
+}
+
+uint16_t i386_cpy_gdt_entry(uint16_t segment_selector_index,
+                            segment_descriptors* struct_to_fill)
+{
+    uint16_t                gdt_limit;
+    segment_descriptors*    gdt_entry_tbl;
+
+    i386_get_info_from_GDTR (&gdt_entry_tbl, &gdt_limit);
+
+    if (segment_selector_index >= (gdt_limit+1)/8) {
+      return 0;
+    }
+
+    *struct_to_fill = gdt_entry_tbl[segment_selector_index];
+    return segment_selector_index;
+}
+
+segment_descriptors* i386_get_gdt_entry(uint16_t segment_selector_index)
+{
+    uint16_t                gdt_limit;
+    segment_descriptors*    gdt_entry_tbl;
+
+    i386_get_info_from_GDTR (&gdt_entry_tbl, &gdt_limit);
+
+    if (segment_selector_index >= (gdt_limit+1)/8) {
+      return 0;
+    }
+    return &gdt_entry_tbl[segment_selector_index];
+}
+
+uint32_t i386_limit_gdt_entry(segment_descriptors* gdt_entry)
+{
+    uint32_t lim = (gdt_entry->limit_15_0 + (gdt_entry->limit_19_16<<16));
+    if (gdt_entry->granularity) {
+      return lim*4096+4095;
+    }
+    return lim;
 }
