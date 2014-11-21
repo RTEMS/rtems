@@ -78,59 +78,86 @@ enum {
 };
 
 enum {
+	SDR0_PINSTP = 0x40,
 	SDR0_UART0	= 0x120,
 	SDR0_UART1  = 0x121,
 	SDR0_C405	= 0x180,
+	SDR0_SRST0  = 0x200,
 	SDR0_MALTBL = 0x280,
 	SDR0_MALRBL = 0x2A0,
 	SDR0_MALTBS = 0x2C0,
-	SDR0_MALRBS = 0x2E0
+	SDR0_MALRBS = 0x2E0,
+	SDR0_PFC2   = 0x4102,
+	SDR0_MFR    = 0x4300,
+	SDR0_EMAC0RXST = 0x4301,
+	SDR0_HSF    = 0x4400
 };
 
+enum {
+	CPR0_CLKUPD = 0x20,
+	CPR0_PLLC = 0x40,
+	CPR0_PLLD = 0x60,
+	CPR0_CPUD = 0x80,
+	CPR0_PLBD = 0xA0,
+	CPR0_OPBD = 0xC0,
+	CPR0_PERD = 0xE0,
+	CPR0_AHBD = 0x100,
+	CPR0_ICFG = 0x140
+};
 
 /* Memory-mapped registers */
 
 
 /*======================= Ethernet =================== */
 
-
-typedef struct EthernetRegisters_EX {
-	uint32_t mode0;
-	uint32_t mode1;
-	uint32_t xmtMode0;
-	uint32_t xmtMode1;
-	uint32_t rcvMode;
-	uint32_t intStatus;
-	uint32_t intEnable;
-	uint32_t addrHi;
-	uint32_t addrLo;
-	uint32_t VLANTPID;
-	uint32_t VLANTCI;
-	uint32_t pauseTimer;
-	uint32_t multicastAddr[2];
-	uint32_t multicastMask[2];
-	uint32_t unused[4];
-	uint32_t lastSrcLo;
-	uint32_t lastSrcHi;
-	uint32_t IPGap;
-	uint32_t STAcontrol;
-	uint32_t xmtReqThreshold;
-	uint32_t rcvWatermark;
-	uint32_t bytesXmtd;
-	uint32_t bytesRcvd;
-	uint32_t unused2;
-	uint32_t revID;
-	uint32_t unused3[2];
-	uint32_t indivHash[8];
-	uint32_t groupHash[8];
-	uint32_t xmtPause;
-} EthernetRegisters_EX;
-
 enum {
-	EMAC0Address = 0xEF600900,
-	EMAC1Address = 0xEF600A00
-};
+	EMAC0EXAddress = 0xEF600900,
+	EMAC1EXAddress = 0xEF600A00,
+	
+	/* 405EX-specific bits in EMAC_MR1 */
+	keEMAC1000Mbps = 0x00800000,
+	keEMAC16KRxFIFO = 0x00280000,
+	keEMAC8KRxFIFO  = 0x00200000,
+	keEMAC4KRxFIFO  = 0x00180000,
+	keEMAC2KRxFIFO  = 0x00100000,
+	keEMAC1KRxFIFO  = 0x00080000,
+	keEMAC16KTxFIFO = 0x00050000,
+	keEMAC8KTxFIFO  = 0x00040000,
+	keEMAC4KTxFIFO  = 0x00030000,
+	keEMAC2KTxFIFO  = 0x00020000,
+	keEMAC1KTxFIFO  = 0x00010000,
+	keEMACJumbo	    = 0x00000800,
+	keEMACIPHYAddr4 = 0x180,
+	keEMACOPB50MHz  = 0x00,
+	keEMACOPB66MHz  = 0x08,
+	keEMACOPB83MHz  = 0x10,
+	keEMACOPB100MHz = 0x18,
+	keEMACOPBGt100  = 0x20,
+	
+	/* 405EX-specific bits in MAL0_CFG */
+	keMALRdMaxBurst4  = 0,
+	keMALRdMaxBurst8  = 0x00100000,
+	keMALRdMaxBurst16 = 0x00200000,
+	keMALRdMaxBurst32 = 0x00300000,
+	
+	keMALWrLowPriority    = 0,
+	keMALWrMedLowPriority = 0x00040000,
+	keMALWrMedHiPriority  = 0x00080000,
+	keMALWrHighPriority   = 0x000C0000,
 
+	keMALWrMaxBurst4  = 0,
+	keMALWrMaxBurst8  = 0x00010000,
+	keMALWrMaxBurst16 = 0x00020000,
+	keMALWrMaxBurst32 = 0x00030000,
+	
+	/* 405EX-specific STA bits */
+	keSTARun	  = 0x8000,
+	keSTADirectRd = 0x1000,
+	keSTADirectWr = 0x0800,
+	keSTAIndirAddr = 0x2000,
+	keSTAIndirRd  = 0x3000,
+	keSTAIndirWr  = 0x2800
+};
 
 typedef struct GPIORegisters {
 	uint32_t OR;
@@ -154,4 +181,11 @@ typedef struct GPIORegisters {
 } GPIORegisters;
 
 enum { GPIOAddress = 0xEF600800 };
+
+typedef struct RGMIIRegisters {
+	uint32_t FER;
+	uint32_t SSR;
+} RGMIIRegisters;
+
+enum { RGMIIAddress = 0xEF600B00 };
 
