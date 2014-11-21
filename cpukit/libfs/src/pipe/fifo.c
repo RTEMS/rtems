@@ -18,6 +18,7 @@
 #include "config.h"
 #endif
 
+#include <sys/param.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,9 +29,6 @@
 #include <rtems/score/statesimpl.h>
 
 #include "pipe.h"
-
-
-#define MIN(a, b) ((a) < (b)? (a): (b))
 
 #define LIBIO_ACCMODE(_iop) ((_iop)->flags & LIBIO_FLAGS_READ_WRITE)
 #define LIBIO_NODELAY(_iop) ((_iop)->flags & LIBIO_FLAGS_NO_DELAY)

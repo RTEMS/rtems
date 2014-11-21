@@ -15,6 +15,7 @@
 #ifndef __ATA_INTERNAL_H__
 #define __ATA_INTERNAL_H__
 
+#include <sys/param.h>
 #include <rtems.h>
 #include <sys/types.h>
 #include <rtems/libio.h>
@@ -45,7 +46,6 @@ extern "C" {
 #    define CT_LE_L(v) (v)
 #endif
 
-#define MIN(a, b)  (((a) < (b)) ? (a) : (b))
 #define ATA_UNDEFINED_VALUE   (-1)
 
 /* Sector size for all ATA devices */

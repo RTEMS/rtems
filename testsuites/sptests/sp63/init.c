@@ -23,8 +23,7 @@ void test_case_one(void);
 void test_case_two(void);
 void test_case_three(void);
 
-#define MAX 256
-uint32_t      Memory[MAX];
+uint32_t      Memory[256];
 Heap_Control  Heap;
 
 /*

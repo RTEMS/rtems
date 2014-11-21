@@ -22,6 +22,7 @@
 #ifndef __DOSFS_FAT_H__
 #define __DOSFS_FAT_H__
 
+#include <sys/param.h>
 #include <string.h>
 
 #include <rtems/seterr.h>
@@ -66,10 +67,6 @@ extern "C" {
 #    define CF_LE_L(v) (v)
 #    define CT_LE_W(v) (v)
 #    define CT_LE_L(v) (v)
-#endif
-
-#ifndef MIN
-#define MIN(a, b)  (((a) < (b)) ? (a) : (b))
 #endif
 
 #define FAT_HASH_SIZE   2

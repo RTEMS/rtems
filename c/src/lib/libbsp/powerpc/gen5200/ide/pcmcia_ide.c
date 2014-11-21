@@ -75,6 +75,7 @@
 /*                                                                     */
 /***********************************************************************/
 
+#include <sys/param.h>
 #include <rtems.h>
 #include <rtems/error.h>
 #include <rtems/score/sysstate.h>
@@ -88,9 +89,6 @@
 #include <libchip/ide_ctrl_io.h>
 #include <string.h>
 
-#ifndef MIN
-#define MIN(a,b) (((a)<(b))?(a):(b))
-#endif
 #define IDE_DMA_TEST            FALSE
 
 /* DMA supported PIO mode is broken */

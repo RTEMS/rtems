@@ -23,6 +23,7 @@
 #include "config.h"
 #endif
 
+#include <sys/param.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -65,9 +66,6 @@
  *************************************************************************/
 
 #define MAX_NAME_FIELD_SIZE      99
-
-#define MIN(a,b)   ((a)>(b)?(b):(a))
-
 
 /**************************************************************************
  * This converts octal ASCII number representations into an

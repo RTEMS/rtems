@@ -25,7 +25,7 @@
 #include <stdbool.h>		/* bool */
 #include <stdio.h>		/* for FILE */
 #include <limits.h>		/* for NGROUPS_MAX */
-#include <sys/param.h>		/* for MAXPATHLEN and BSD4_4, if defined */
+#include <sys/param.h>
 #include <sys/types.h>		/* for uint32_t, if defined */
 #include <sys/time.h>		/* for struct timeval */
 #include <net/ppp_defs.h>
@@ -652,12 +652,5 @@ extern void (*auth_linkdown_hook)(void);
 #define SIGTYPE int
 #endif /* defined(sun) || defined(SYSV) || defined(POSIX_SOURCE) */
 #endif /* SIGTYPE */
-
-#ifndef MIN
-#define MIN(a, b)	((a) < (b)? (a): (b))
-#endif
-#ifndef MAX
-#define MAX(a, b)	((a) > (b)? (a): (b))
-#endif
 
 #endif /* __PPP_H__ */

@@ -13,6 +13,7 @@
 
 #define CONFIGURE_INIT
 #include "system.h"
+#include <sys/param.h>
 #include <crypt.h>
 #include <stdio.h>
 #include <string.h>
@@ -213,10 +214,6 @@ fstab_t fs_table[] = {
     0
   }
 };
-
-#ifndef MIN
-#define MIN(a,b) (((a) > (b)) ? (b) : (a))
-#endif
 
 #define USE_SHELL
 

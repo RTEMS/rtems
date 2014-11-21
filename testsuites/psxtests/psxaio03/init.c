@@ -30,7 +30,7 @@ const char rtems_test_name[] = "PSXAIO 3";
 struct aiocb *create_aiocb(int fd);
 void free_aiocb(struct aiocb *aiocbp);
 
-#define MAX 6
+#define FD_COUNT 6
 #define BUFSIZE 128
 
 struct aiocb *
@@ -60,8 +60,8 @@ free_aiocb (struct aiocb *aiocbp)
 void *
 POSIX_Init (void *argument)
 {
-  int fd[MAX];
-  struct aiocb *aiocbp[MAX+1];
+  int fd[FD_COUNT];
+  struct aiocb *aiocbp[FD_COUNT+1];
   int status, i, policy = SCHED_FIFO;
   char filename[BUFSIZE];
   struct sched_param param;
@@ -80,7 +80,7 @@ POSIX_Init (void *argument)
 
   puts (" Init: Open files ");
 
-  for (i=0; i<MAX; i++)
+  for (i=0; i<FD_COUNT; i++)
     {
       sprintf (filename, "/tmp/aio_fildes%d",i);
       fd[i] = open (filename, O_RDWR|O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO);
@@ -131,7 +131,7 @@ POSIX_Init (void *argument)
   
   TEST_END();
   
-  for (i = 0; i < MAX; i++)
+  for (i = 0; i < FD_COUNT; i++)
     {
       close (fd[i]);
       free_aiocb (aiocbp[i]);

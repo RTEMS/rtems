@@ -900,8 +900,6 @@ static int txq_high_limit(struct GTeth_softc *sc)
 }
 #endif
 
-#define MAX(a,b) (((a) > (b)) ? (a) : (b))
-
 static int GT64260eth_sendpacket(struct GTeth_softc *sc,struct mbuf *m)
 {
   volatile struct GTeth_desc *txd = &sc->txq_desc[sc->txq_lo];

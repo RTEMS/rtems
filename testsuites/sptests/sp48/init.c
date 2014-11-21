@@ -20,8 +20,8 @@ const char rtems_test_name[] = "SP 48";
 
 rtems_task Init(rtems_task_argument ignored);
 
-#define MAX 5000
-rtems_id Semaphores[MAX];
+#define SEMA_COUNT 5000
+rtems_id Semaphores[SEMA_COUNT];
 
 rtems_task Init(rtems_task_argument ignored)
 {
@@ -35,7 +35,7 @@ rtems_task Init(rtems_task_argument ignored)
     "Largest C program heap block available: %zu\n",
     malloc_free_space()
   );
-  for (i=0 ; i<MAX ; i++ ) {
+  for (i=0 ; i<SEMA_COUNT ; i++ ) {
     sc = rtems_semaphore_create(
       rtems_build_name('s', 'e', 'm', ' '),
       1,
@@ -57,7 +57,7 @@ rtems_task Init(rtems_task_argument ignored)
   }
 
   created = i;
-  if ( created == MAX )
+  if ( created == SEMA_COUNT )
     puts( "Created all semaphores allowed in this test" );
 
   printf( "%d semaphores created\n", i );

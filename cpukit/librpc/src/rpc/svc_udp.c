@@ -45,6 +45,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_udp.c,v 1.13 2000/01/27 23:
 #include "config.h"
 #endif
 
+#include <sys/param.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -54,7 +55,6 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_udp.c,v 1.13 2000/01/27 23:
 #include <errno.h>
 
 #define rpc_buffer(xprt) ((xprt)->xp_p1)
-#define MAX(a, b)     ((a > b) ? a : b)
 
 static bool_t		svcudp_recv(SVCXPRT *xprt, struct rpc_msg *msg);
 static bool_t		svcudp_reply(SVCXPRT *xprt, struct rpc_msg *msg);

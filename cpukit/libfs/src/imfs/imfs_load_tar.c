@@ -20,6 +20,7 @@
 
 #include "imfs.h"
 
+#include <sys/param.h>
 #include <sys/stat.h>
 #include <string.h>
 #include <tar.h>
@@ -27,8 +28,6 @@
 #include <rtems/untar.h>
 
 #define MAX_NAME_FIELD_SIZE      99
-
-#define MIN(a,b)   ((a)>(b)?(b):(a))
 
 int rtems_tarfs_load(
   const char *mountpoint,
