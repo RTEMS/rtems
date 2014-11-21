@@ -1081,6 +1081,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Release_idle_thread(
  */
 RTEMS_INLINE_ROUTINE bool _Scheduler_Block_node(
   Scheduler_Context         *context,
+  Thread_Control            *thread,
   Scheduler_Node            *node,
   bool                       is_scheduled,
   Scheduler_Get_idle_thread  get_idle_thread
@@ -1088,25 +1089,24 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Block_node(
 {
   bool block;
   Thread_Control *old_user = _Scheduler_Node_get_user( node );
-  Thread_Control *new_user;
+  Thread_Control *new_user = NULL;
 
   _Scheduler_Thread_change_state( old_user, THREAD_SCHEDULER_BLOCKED );
 
-  if ( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL ) {
-    new_user = _Scheduler_Node_get_owner( node );
+  if ( is_scheduled ) {
+    if ( node->help_state == SCHEDULER_HELP_ACTIVE_OWNER ) {
+      new_user = _Scheduler_Use_idle_thread( context, node, get_idle_thread );
+    } else if ( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL ) {
+      Thread_Control *owner = _Scheduler_Node_get_owner( node );
 
-    _Assert( new_user != old_user );
-    _Scheduler_Node_set_user( node, new_user );
-  } else if (
-    node->help_state == SCHEDULER_HELP_ACTIVE_OWNER
-      && is_scheduled
-  ) {
-    new_user = _Scheduler_Use_idle_thread( context, node, get_idle_thread );
-  } else {
-    new_user = NULL;
+      if ( thread == old_user && owner != old_user ) {
+        new_user = owner;
+        _Scheduler_Node_set_user( node, new_user );
+      }
+    }
   }
 
-  if ( new_user != NULL && is_scheduled ) {
+  if ( new_user != NULL ) {
     Per_CPU_Control *cpu = _Thread_Get_CPU( old_user );
 
     _Scheduler_Thread_change_state( new_user, THREAD_SCHEDULER_SCHEDULED );

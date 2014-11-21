@@ -5,6 +5,7 @@ test MrsP nested obtain error
 test MrsP unlock order error
 test MrsP deadlock error
 test MrsP multiple obtain
+test MrsP unblock ready
 test MrsP obtain and sleep and release
 [0] MAIN ->  RUN (prio   2, node  RUN)
 [0]  RUN -> MAIN (prio   1, node MAIN)
