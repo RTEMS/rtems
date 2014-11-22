@@ -266,7 +266,7 @@ rtems_capture_cli_task_list (int                          argc,
     fprintf (stdout, " ");
     rtems_monitor_dump_id (rtems_capture_task_id (task));
     fprintf (stdout, " ");
-    rtems_monitor_dump_name (rtems_capture_task_name (task));
+    rtems_monitor_dump_name (rtems_capture_task_id (task));
     fprintf (stdout, " ");
     rtems_monitor_dump_priority (rtems_capture_task_start_priority (task));
     fprintf (stdout, " ");
@@ -404,7 +404,7 @@ rtems_capture_cli_task_load_thread (rtems_task_argument arg)
       fprintf (stdout, "\x1b[K");
       rtems_monitor_dump_id (rtems_capture_task_id (tasks[i]));
       fprintf (stdout, " ");
-      rtems_monitor_dump_name (rtems_capture_task_name (tasks[i]));
+      rtems_monitor_dump_name (rtems_capture_task_id (tasks[i]));
       fprintf (stdout, "  ");
       rtems_monitor_dump_priority (priority);
       fprintf (stdout, "  ");
@@ -1390,7 +1390,7 @@ rtems_capture_cli_trace_records (int                          argc,
                     (unsigned long) (t % 1000000));
             rtems_monitor_dump_id (rtems_capture_task_id (rec->task));
             fprintf (stdout, " ");
-            rtems_monitor_dump_name (rtems_capture_task_name (rec->task));
+            rtems_monitor_dump_name (rtems_capture_task_id (rec->task));
             fprintf (stdout, " %3" PRId32 " %3" PRId32 " %s\n",
                     (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
                     (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
