@@ -307,7 +307,7 @@ static __inline__ int bsp_irq_fixup(int irq)
   (LEON_REG.Interrupt_Pending & (1 << (_source)))
 
 #define LEON_Is_interrupt_masked( _source ) \
-  (LEON_REG.Interrupt_Masked & (1 << (_source)))
+  (!(LEON_REG.Interrupt_Mask & (1 << (_source))))
 
 #define LEON_Mask_interrupt( _source ) \
   do { \
