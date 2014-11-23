@@ -158,9 +158,7 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
   (LEON3_IrqCtrl_Regs->ipend & (1 << (_source)))
 
 #define LEON_Cpu_Is_interrupt_masked( _source, _cpu ) \
-  do {\
-     (LEON3_IrqCtrl_Regs->mask[_cpu] & (1 << (_source))); \
-   } while (0)
+     (!(LEON3_IrqCtrl_Regs->mask[_cpu] & (1 << (_source))))
 
 #define LEON_Cpu_Mask_interrupt( _source, _cpu ) \
   do { \
