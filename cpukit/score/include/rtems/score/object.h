@@ -396,9 +396,9 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_index(
  */
 RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
   Objects_APIs     the_api,
-  uint32_t         the_class,
-  uint32_t         node,
-  uint32_t         index
+  uint16_t         the_class,
+  uint8_t          node,
+  uint16_t         index
 )
 {
   return (( (Objects_Id) the_api )   << OBJECTS_API_START_BIT)   |
