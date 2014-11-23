@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -53,7 +53,7 @@ int console_inbyte_nonblocking( int port );
  *  Buffers between task and ISRs
  */
 
-#include <ringbuf.h>
+#include <rtems/ringbuf.h>
 
 Ring_buffer_t  TX_Buffer[ 2 ];
 bool           Is_TX_active[ 2 ];
