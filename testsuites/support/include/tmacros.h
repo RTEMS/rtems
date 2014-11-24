@@ -56,8 +56,8 @@ extern "C" {
  #define check_dispatch_disable_level( _expect ) \
   do { \
     if ( (_expect) != -1 \
-           && ((!_Thread_Dispatch_is_enabled() == false && (_expect) != 0) \
-             || (!_Thread_Dispatch_is_enabled() && (_expect) == 0)) \
+           && (((!_Thread_Dispatch_is_enabled()) == false && (_expect) != 0) \
+             || ((!_Thread_Dispatch_is_enabled()) && (_expect) == 0)) \
     ) { \
       printk( \
         "\n_Thread_Dispatch_disable_level is (%" PRId32 \
