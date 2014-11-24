@@ -36,8 +36,7 @@ void free(
   /*
    *  Do not attempt to free memory if in a critical section or ISR.
    */
-  if ( _System_state_Is_up(_System_state_Get()) &&
-       !malloc_is_system_state_OK() ) {
+  if ( !malloc_is_system_state_OK() ) {
       malloc_deferred_free(ptr);
       return;
   }

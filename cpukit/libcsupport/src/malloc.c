@@ -24,8 +24,6 @@
 
 #include "malloc_p.h"
 
-#include <rtems/score/sysstate.h>
-
 void *malloc(
   size_t  size
 )
@@ -48,8 +46,7 @@ void *malloc(
   /*
    *  Do not attempt to allocate memory if not in correct system state.
    */
-  if ( _System_state_Is_up(_System_state_Get()) &&
-       !malloc_is_system_state_OK() )
+  if ( !malloc_is_system_state_OK() )
     return NULL;
 
   /*

@@ -24,8 +24,6 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include <rtems/score/sysstate.h>
-
 int rtems_memalign(
   void   **pointer,
   size_t   alignment,
@@ -45,8 +43,7 @@ int rtems_memalign(
   /*
    *  Do not attempt to allocate memory if not in correct system state.
    */
-  if ( _System_state_Is_up(_System_state_Get()) &&
-       !malloc_is_system_state_OK() )
+  if ( !malloc_is_system_state_OK() )
     return EINVAL;
 
   /*
