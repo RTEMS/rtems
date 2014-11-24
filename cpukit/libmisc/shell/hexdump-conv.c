@@ -142,7 +142,15 @@ retry:
 			pad = 3 - width;
 			if (pad < 0)
 				pad = 0;
-			(void)printf("%*s%lc", pad, "", wc);
+			#if defined(__rtems__)
+			{
+			  wchar_t wc_tmp[2] = {0,0};
+			  wc_tmp[0] = wc;
+			  (void)printf("%*s%lc", pad, "", wc_tmp);
+			}
+			#else
+			  (void)printf("%*s%lc", pad, "", wc);
+			#endif
 			pr->mbleft = clen - 1;
 		}
 	} else {
