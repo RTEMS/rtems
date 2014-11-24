@@ -815,6 +815,11 @@ static int getachar(void)
 #if KEY_HISTORY
   if (key_history_in < sizeof(key_history)) {
       key_history[key_history_in++] = ch;
+#if defined(__rtems__)
+  } if (key_history_in > sizeof(key_history)) {
+    /* eliminate possibility of using index above array bounds */
+   assert( key_history_in > sizeof(key_history));
+#endif
   } else {
     memmove(&key_history[0], &key_history[1], sizeof(key_history) - sizeof(key_history[0]));
     key_history[key_history_in - 1] = ch;
