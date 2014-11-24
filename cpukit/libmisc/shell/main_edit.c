@@ -2213,7 +2213,7 @@ static int rtems_shell_main_edit(int argc, char *argv[])
   setvbuf(stdout, NULL, 0, 8192);
 
 #if defined(__linux__) || defined(__rtems__)
-  tcgetattr(0, &orig_tio);
+  (void) tcgetattr(0, &orig_tio);
 #if !defined(__rtems__)
   cfmakeraw(&tio);
   tcsetattr(0, TCSANOW, &tio);
