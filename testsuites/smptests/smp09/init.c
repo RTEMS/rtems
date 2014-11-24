@@ -19,6 +19,14 @@ const char rtems_test_name[] = "SMP 9";
 
 volatile int killtime;
 
+rtems_task Init(
+  rtems_task_argument argument
+);
+
+rtems_task Test_task(
+  rtems_task_argument argument
+);
+
 rtems_task Test_task(
   rtems_task_argument argument
 )
