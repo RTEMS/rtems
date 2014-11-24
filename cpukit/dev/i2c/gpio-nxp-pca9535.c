@@ -43,22 +43,27 @@ static int gpio_nxp_pca9535_get_reg(
   uint16_t *val
 )
 {
-  uint8_t buf[1] = { port };
+  uint8_t out[1] = { port };
+  uint8_t in[sizeof(*val)];
   i2c_msg msgs[2] = {
     {
       .addr = dev->address,
       .flags = 0,
-      .len = (uint16_t) sizeof(buf),
-      .buf = &buf[0]
+      .len = (uint16_t) sizeof(out),
+      .buf = &out[0]
     }, {
       .addr = dev->address,
       .flags = I2C_M_RD,
-      .len = (uint16_t) sizeof(*val),
-      .buf = (uint8_t *) val
+      .len = (uint16_t) sizeof(in),
+      .buf = &in[0]
     }
   };
+  int err;
 
-  return i2c_bus_transfer(dev->bus, &msgs[0], RTEMS_ARRAY_SIZE(msgs));
+  err = i2c_bus_transfer(dev->bus, &msgs[0], RTEMS_ARRAY_SIZE(msgs));
+  *val = in[0] | (in[1] << 8);
+
+  return err;
 }
 
 static int gpio_nxp_pca9535_set_reg(
@@ -67,13 +72,13 @@ static int gpio_nxp_pca9535_set_reg(
   uint16_t val
 )
 {
-  uint8_t buf[3] = { port, (uint8_t) val, (uint8_t) (val >> 8) };
+  uint8_t out[3] = { port, (uint8_t) val, (uint8_t) (val >> 8) };
   i2c_msg msgs[1] = {
     {
       .addr = dev->address,
       .flags = 0,
-      .len = (uint16_t) sizeof(buf),
-      .buf = &buf[0]
+      .len = (uint16_t) sizeof(out),
+      .buf = &out[0]
     }
   };
 
