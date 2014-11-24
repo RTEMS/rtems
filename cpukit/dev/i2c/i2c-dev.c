@@ -224,14 +224,13 @@ static int i2c_dev_do_init(
   fd = open(bus_path, O_RDWR);
   if (fd < 0) {
     (*destroy)(dev);
-
     return -1;
   }
 
   rv = ioctl(fd, I2C_BUS_GET_CONTROL, &dev->bus);
   if (rv != 0) {
+    (void) close(fd);
     (*destroy)(dev);
-
     return -1;
   }
 
