@@ -2147,7 +2147,15 @@ static void edit(struct editor *ed) {
         case ctrl('s'): save_editor(ed); break;
         case ctrl('p'): pipe_command(ed); break;
 #endif
+#if defined(__rtems__)
+        /*
+         * Coverity spotted this as using ed after free() so changing 
+         * the order of the statements.
+         */
+        case ctrl('w'): ed = ed->env->current; close_editor(ed); break;
+#else
         case ctrl('w'): close_editor(ed); ed = ed->env->current; break;
+#endif
       }
     }
   }
