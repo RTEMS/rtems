@@ -20,6 +20,14 @@ volatile bool TaskRan = false;
 volatile bool TSRFired = false;
 rtems_id      Semaphore; 
 
+rtems_task Init(
+  rtems_task_argument argument
+);
+
+rtems_task Test_task(
+  rtems_task_argument argument
+);
+
 static void success(void)
 {
   rtems_test_end_with_plugin(locked_printf_plugin, NULL);
@@ -65,7 +73,7 @@ rtems_task Test_task(
 }
 
 
-rtems_timer_service_routine TimerMethod(
+static rtems_timer_service_routine TimerMethod(
   rtems_id  timer,
   void     *arg
 )
