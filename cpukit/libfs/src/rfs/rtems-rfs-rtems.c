@@ -521,7 +521,7 @@ rtems_rfs_rtems_fstat (const rtems_filesystem_location_info_t* pathloc,
                                    rtems_rfs_inode_get_block (&inode, 1));
   }
 
-  buf->st_dev     = (dev_t) rtems_rfs_fs_device (fs);
+  buf->st_dev     = (dev_t) (uintptr_t)rtems_rfs_fs_device (fs);
   buf->st_ino     = rtems_rfs_inode_ino (&inode);
   buf->st_mode    = rtems_rfs_rtems_mode (mode);
   buf->st_nlink   = rtems_rfs_inode_get_links (&inode);
