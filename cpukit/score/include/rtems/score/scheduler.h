@@ -552,15 +552,6 @@ void _Scheduler_default_Start_idle(
   #define SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY
 #endif
 
-/**
- * @brief Indicates if thread priority queues are broken with the configured
- * scheduler or not.
- *
- * See also PR2174: Memory corruption with EDF scheduler and thread priority
- * queues.
- */
-extern const bool _Scheduler_FIXME_thread_priority_queues_are_broken;
-
 /**@}*/
 
 #ifdef __cplusplus

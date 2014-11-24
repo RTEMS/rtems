@@ -51,10 +51,6 @@ void _Thread_queue_Initialize(
   uint32_t                      timeout_status
 )
 {
-  if ( _Scheduler_FIXME_thread_priority_queues_are_broken ) {
-    the_discipline = THREAD_QUEUE_DISCIPLINE_FIFO;
-  }
-
   the_thread_queue->state          = state;
   the_thread_queue->discipline     = the_discipline;
   the_thread_queue->timeout_status = timeout_status;

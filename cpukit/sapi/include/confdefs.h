@@ -966,12 +966,6 @@ const rtems_libio_helper rtems_fs_init_helper =
       _Scheduler_Assignments
     );
   #endif
-
-  #if defined(CONFIGURE_SCHEDULER_EDF)
-    const bool _Scheduler_FIXME_thread_priority_queues_are_broken = true;
-  #else
-    const bool _Scheduler_FIXME_thread_priority_queues_are_broken = false;
-  #endif
 #endif
 
 /*
