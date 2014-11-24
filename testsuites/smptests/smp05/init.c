@@ -16,6 +16,15 @@
 
 const char rtems_test_name[] = "SMP 5";
 
+rtems_task Init(
+  rtems_task_argument argument
+);
+
+rtems_task Test_task(
+  rtems_task_argument argument
+);
+
+
 static void success(void)
 {
   rtems_test_end_with_plugin(locked_printf_plugin, NULL);
