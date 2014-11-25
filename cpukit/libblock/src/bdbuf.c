@@ -19,7 +19,7 @@
  *    Rewritten to remove score mutex access. Fixes many performance
  *    issues.
  *
- * Copyright (c) 2009-2012 embedded brains GmbH.
+ * Copyright (c) 2009-2014 embedded brains GmbH.
  */
 
 /**
@@ -39,7 +39,6 @@
 
 #include <rtems.h>
 #include <rtems/error.h>
-#include <rtems/malloc.h>
 
 #include "rtems/bdbuf.h"
 
@@ -1599,14 +1598,12 @@ rtems_bdbuf_do_init (void)
 
   /*
    * Allocate memory for buffer memory. The buffer memory will be cache
-   * aligned. It is possible to free the memory allocated by rtems_memalign()
-   * with free(). Return 0 if allocated.
-   *
-   * The memory allocate allows a
+   * aligned. It is possible to free the memory allocated by
+   * rtems_cache_aligned_malloc() with free().
    */
-  if (rtems_memalign ((void **) &bdbuf_cache.buffers,
-                      rtems_cache_get_data_line_size(),
-                      bdbuf_cache.buffer_min_count * bdbuf_config.buffer_min) != 0)
+  bdbuf_cache.buffers = rtems_cache_aligned_malloc(bdbuf_cache.buffer_min_count
+                                                   * bdbuf_config.buffer_min);
+  if (bdbuf_cache.buffers == NULL)
     goto error;
 
   /*
