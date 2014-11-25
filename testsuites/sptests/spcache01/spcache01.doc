@@ -14,6 +14,9 @@ directives:
   - rtems_cache_invalidate_multiple_data_lines()
   - rtems_cache_invalidate_multiple_instruction_lines()
   - rtems_cache_aligned_malloc()
+  - rtems_cache_coherent_allocate()
+  - rtems_cache_coherent_free()
+  - rtems_cache_coherent_add_area()
 
 concepts:
 

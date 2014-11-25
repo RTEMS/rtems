@@ -22,6 +22,7 @@
 
 #include <rtems.h>
 #include <rtems/counter.h>
+#include <rtems/score/sysstate.h>
 
 #define TESTS_USE_PRINTF
 #include "tmacros.h"
@@ -409,6 +410,51 @@ static void test_cache_aligned_alloc(void)
   free(p1);
 }
 
+#define AREA_SIZE 256
+
+static char cache_coherent_area_0[AREA_SIZE];
+
+static char cache_coherent_area_1[AREA_SIZE];
+
+static char cache_coherent_area_2[AREA_SIZE];
+
+static void add_area(void *begin)
+{
+  rtems_cache_coherent_add_area(NULL, 0);
+  rtems_cache_coherent_add_area(begin, AREA_SIZE);
+}
+
+static void test_cache_coherent_alloc(void)
+{
+  void *p0;
+  void *p1;
+  System_state_Codes previous_state;
+
+  printf("test cache coherent allocation\n");
+
+  p0 = rtems_cache_coherent_allocate(1, 0, 0);
+  rtems_test_assert(p0 != NULL);
+
+  rtems_cache_coherent_free(p0);
+
+  p0 = rtems_cache_coherent_allocate(1, 0, 0);
+  rtems_test_assert(p0 != NULL);
+
+  add_area(&cache_coherent_area_0[0]);
+  add_area(&cache_coherent_area_1[0]);
+
+  previous_state = _System_state_Get();
+  _System_state_Set(previous_state + 1);
+  add_area(&cache_coherent_area_2[0]);
+  _System_state_Set(previous_state);
+
+  p1 = rtems_cache_coherent_allocate(1, 0, 0);
+  rtems_test_assert(p1 != NULL);
+
+  rtems_cache_coherent_free(p0);
+  rtems_cache_coherent_free(p1);
+}
+
 static void Init(rtems_task_argument arg)
 {
   TEST_BEGIN();
@@ -416,6 +462,7 @@ static void Init(rtems_task_argument arg)
   test_data_flush_and_invalidate();
   test_timing();
   test_cache_aligned_alloc();
+  test_cache_coherent_alloc();
 
   TEST_END();
 

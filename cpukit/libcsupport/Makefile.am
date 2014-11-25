@@ -109,6 +109,7 @@ MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
     src/rtems_heap_extend.c \
     src/rtems_heap_greedy.c
 MALLOC_C_FILES += src/cachealignedalloc.c
+MALLOC_C_FILES += src/cachecoherentalloc.c
 
 PASSWORD_GROUP_C_FILES = src/pwdgrp.c
 PASSWORD_GROUP_C_FILES += src/getgrent.c

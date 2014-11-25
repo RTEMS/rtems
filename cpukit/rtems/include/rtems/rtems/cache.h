@@ -191,6 +191,67 @@ void rtems_cache_disable_instruction( void );
  */
 void *rtems_cache_aligned_malloc ( size_t nbytes );
 
+/**
+ * @brief Allocates a memory area of size @a size bytes from cache coherent
+ * memory.
+ *
+ * A size value of zero will return a unique address which may be freed with
+ * rtems_cache_coherent_free().
+ *
+ * The memory allocated by this function can be released with a call to
+ * rtems_cache_coherent_free().
+ *
+ * By default the C program heap allocator is used.  In case special memory
+ * areas must be used, then the BSP or the application must add cache coherent
+ * memory areas for the allocator via rtems_cache_coherent_add_area().
+ *
+ * This function must be called from driver initialization or task context
+ * only.
+ *
+ * @param[in] alignment If the alignment parameter is not equal to zero, the
+ *   allocated memory area will begin at an address aligned by this value.
+ * @param[in] boundary If the boundary parameter is not equal to zero, the
+ *   allocated memory area will comply with a boundary constraint.  The
+ *   boundary value specifies the set of addresses which are aligned by the
+ *   boundary value.  The interior of the allocated memory area will not
+ *   contain an element of this set.  The begin or end address of the area may
+ *   be a member of the set.
+ *
+ * @retval NULL If no memory is available or the parameters are inconsistent.
+ * @retval other A pointer to the begin of the allocated memory area.
+ */
+void *rtems_cache_coherent_allocate(
+  size_t size,
+  uintptr_t alignment,
+  uintptr_t boundary
+);
+
+/**
+ * @brief Frees memory allocated by rtems_cache_coherent_allocate().
+ *
+ * This function must be called from driver initialization or task context
+ * only.
+ *
+ * @param[in] ptr A pointer returned by rtems_cache_coherent_allocate().
+ */
+void rtems_cache_coherent_free( void *ptr );
+
+/**
+ * @brief Adds a cache coherent memory area to the cache coherent allocator.
+ *
+ * This function must be called from BSP initialization, driver initialization
+ * or task context only.
+ *
+ * @param[in] area_begin The area begin address.
+ * @param[in] area_size The area size in bytes.
+ *
+ * @see rtems_cache_coherent_allocate().
+ */
+void rtems_cache_coherent_add_area(
+  void *area_begin,
+  uintptr_t area_size
+);
+
 #if defined( RTEMS_SMP )
 
 /**
