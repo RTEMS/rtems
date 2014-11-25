@@ -36,6 +36,7 @@ usage:    unhex [-va] [ -o file ] [ file [file ... ] ]\n\
 #include <stdlib.h>
 #include <stdarg.h>
 #include <errno.h>
+#include <assert.h>
 
 #include "config.h"
 
@@ -71,10 +72,10 @@ typedef unsigned long u32;
  * Pick out designated bytes
  */
 
-#define B0(x)       ((x) & 0xff)
-#define B1(x)       B0((x) >> 8)
-#define B2(x)       B0((x) >> 16)
-#define B3(x)       B0((x) >> 24)
+#define B0(x)       (((u32)x) & 0xff)
+#define B1(x)       B0(((u32)x) >> 8)
+#define B2(x)       B0(((u32)x) >> 16)
+#define B3(x)       B0(((u32)x) >> 24)
 
 typedef struct buffer_rec {
     u32 dl_destaddr;
@@ -119,9 +120,10 @@ int   getnibble(char **p);
 int   getbyte(char **p);
 long  getNbytes(char **p, int n);
 void  badformat(char *s, char *fname, char *msg);
+void  fix_string_from_gets(char *s, size_t max);
 
-#define get1bytes(p)    ((int) getbyte(p))
-#define get2bytes(p)    ((int) getNbytes(p, 2))
+#define get1bytes(p)    (getbyte(p))
+#define get2bytes(p)    getNbytes(p, 2)
 #define get3bytes(p)    getNbytes(p, 3)
 #define get4bytes(p)    getNbytes(p, 4)
 
@@ -140,15 +142,15 @@ int main(
   char **argv
 )
 {
-    register int c;
+    int c;
     bool showusage = FALSE;                     /* usage error? */
     int rc = 0;
     FILE *outfp, *infp;
+    long base_long = 0;
 
     /*
      * figure out invocation leaf-name
      */
-
     if ((progname = strrchr(argv[0], '/')) == (char *) NULL)
         progname = argv[0];
     else
@@ -159,13 +161,18 @@ int main(
     /*
      *  Check options and arguments.
      */
-
     progname = argv[0];
-    while ((c = getopt(argc, argv, "F:a:o:vl")) != EOF)
-        switch (c)
-        {
+    while ((c = getopt(argc, argv, "F:a:o:vl")) != EOF) {
+        switch (c) {
             case 'a':                           /* base address */
-                base = stol(optarg);
+                base_long = stol(optarg);
+                if (base_long < 0) {
+                    (void) fprintf(stderr, "%s", USAGE);
+                    (void) fprintf(stderr, "\n*** base is an illegal value\n" );
+                    exit(1);
+                }
+                base = (u32) base_long;
+
                 break;
 
             case 'l':                           /* linear output */
@@ -187,53 +194,47 @@ int main(
             case '?':
                 showusage = TRUE;
         }
+    }
 
-    if (showusage)
-    {
+    if (showusage) {
         (void) fprintf(stderr, "%s", USAGE);
         exit(1);
     }
 
-    if (linear && (base != 0))
-    {
+    if (linear && (base != 0)) {
         error(0, "-l and -a may not be specified in combination");
         exit(1);
     }
 
-    if (STREQ(outfilename, "-"))
-    {
+    if (STREQ(outfilename, "-")) {
         outfp = stdout;
         outfilename = "stdout";
+    } else if ((outfp = fopen(outfilename, "w")) == (FILE *) NULL) {
+        error(-1, "couldn't open '%s' for output", outfilename);
+        exit(1);
     }
-    else
-        if ((outfp = fopen(outfilename, "w")) == (FILE *) NULL)
-        {
-            error(-1, "couldn't open '%s' for output", outfilename);
-            exit(1);
-        }
 
     /*
      * Now process the input files (or stdin, if none specified)
      */
-
-    if (argv[optind] == (char *) NULL)          /* just stdin */
+    if (argc == optind)          /* just stdin */
         exit(unhex(stdin, "stdin", outfp, outfilename));
     else
-        for (; (optarg = argv[optind]); optind++)
-        {
-            if (STREQ(optarg, "-"))
+        for (; optind < argc ; optind++) {
+            optarg = argv[optind];
+            if (STREQ(optarg, "-")) {
                 rc += unhex(stdin, "stdin", outfp, outfilename);
-            else
-            {
-                if ((infp = fopen(optarg, "r")) == (FILE *) NULL)
-                {
+            } else {
+                if ((infp = fopen(optarg, "r")) == (FILE *) NULL) {
                     error(-1, "couldn't open '%s' for input", optarg);
                     exit(1);
                 }
                 rc += unhex(infp, optarg, outfp, outfilename);
+                fclose(infp);
             }
         }
 
+    fclose(outfp);
     return(rc);
 }
 
@@ -260,8 +261,7 @@ unhex(FILE *ifp,
      *  'stripffs'
      */
 
-    if (FFfill)
-    {
+    if (FFfill) {
         (void) fseek(ofp, 0, 0);
         for (c = FFfill; c > 0; c--)
             (void) fputc(0xFF, ofp);
@@ -271,11 +271,9 @@ unhex(FILE *ifp,
      * Read the first char from file and determine record types
      */
 
-    if ((c = getc(ifp)) != EOF)
-    {
+    if ((c = getc(ifp)) != EOF) {
         ungetc(c, ifp);
-        switch(c)
-        {
+        switch(c) {
             case 'S':
                 convert_S_records(ifp, inm, ofp, onm);
                 break;
@@ -292,7 +290,8 @@ unhex(FILE *ifp,
             default:
             {
                 char tmp[2];
-                tmp[0] = c; tmp[1] = 0;
+                tmp[0] = (char) (c & 0x7f);
+                tmp[1] = 0;
                 badformat(tmp, inm, BADFMT);
             }
         }
@@ -317,21 +316,17 @@ convert_Intel_records(
     int incksum;
     int c;
     int rectype;                    /* record type */
-    int len;                        /* data length of current line */
+    long len;                        /* data length of current line */
     u32 addr;
     u32 base_address = 0;
     bool endrecord = FALSE;
     buffer_rec tb;
+    long getBytesStatus;
 
-    while ( ! endrecord && (fgets(buff, sizeof(buff), ifp)))
-    {
+    while ( !endrecord && (fgets(buff, sizeof(buff), ifp)) ) {
         p = &buff[0];
 
-        if (p[strlen(p)-1] == '\n')                 /* get rid of newline */
-            p[strlen(p)-1] = '\0';
-
-        if (p[strlen(p)-1] == '\r')                 /* get rid of any CR */
-            p[strlen(p)-1] = '\0';
+        fix_string_from_gets(p, sizeof(buff));
 
         tb.dl_count = 0;
 
@@ -342,17 +337,17 @@ convert_Intel_records(
         if ((len = getbyte(&p)) == -1)      /* record len */
             badformat(buff, inm, BADLEN);
 
-        if ((addr = get2bytes(&p)) == -1L)          /* record addr */
+        if ((getBytesStatus = get2bytes(&p)) == -1L)          /* record addr */
             badformat(buff, inm, BADADDR);
+        addr = (u32) getBytesStatus;
 
         rectype = getbyte(&p);
 
         cksum = len + B0(addr) + B1(addr) + rectype;
 
-        switch (rectype)
-        {
+        switch (rectype) {
             case 0x00:                  /* normal data record */
-                tb.dl_destaddr = base_address + addr;
+                tb.dl_destaddr = (u32) base_address + addr;
                 while (len--)
                 {
                     if ((c = getbyte(&p)) == -1)
@@ -369,15 +364,18 @@ convert_Intel_records(
                 break;
 
             case 0x02:                  /* new base */
-                if ((base_address = get2bytes(&p)) == -1L)
+            {
+                long blong;
+                if ((blong = get2bytes(&p)) == -1L)
                     badformat(buff, inm, BADBASE);
+                base_address = (u32) blong;
                 cksum += B0(base_address) + B1(base_address);
                 base_address <<= 4;
                 break;
-
+            }
             case 0x03:                  /* seg/off execution start address */
             {
-                u32 seg, off;
+                long seg, off;
 
                 seg = get2bytes(&p);
                 off = get2bytes(&p);
@@ -423,21 +421,16 @@ convert_S_records(
     u8 cksum;
     int incksum;
     int c;
-    int len;                        /* data length of current line */
+    long len;                        /* data length of current line */
     int rectype;                    /* record type */
-    u32 addr;
+    long addr;
     bool endrecord = FALSE;
     buffer_rec tb;
 
-    while ( ! endrecord && (fgets(buff, sizeof(buff), ifp)))
-    {
+    while ( !endrecord && (fgets(buff, sizeof(buff), ifp)) ) {
         p = &buff[0];
 
-        if (p[strlen(p)-1] == '\n')                 /* get rid of newline */
-            p[strlen(p)-1] = '\0';
-
-        if (p[strlen(p)-1] == '\r')                 /* get rid of any CR */
-            p[strlen(p)-1] = '\0';
+        fix_string_from_gets(p, sizeof(buff));
 
         tb.dl_count = 0;
 
@@ -452,8 +445,7 @@ convert_S_records(
             badformat(buff, inm, BADLEN);
         cksum = len;
 
-        switch (rectype)
-        {
+        switch (rectype) {
             case 0x00:                  /* comment field, ignored */
                 goto write_it;
 
@@ -476,9 +468,8 @@ convert_S_records(
     doit:
                 cksum += B0(addr) + B1(addr) + B2(addr) + B3(addr);
 
-                tb.dl_destaddr = addr;
-                while (len--)
-                {
+                tb.dl_destaddr = (u32) addr;
+                while (len--) {
                     if ((c = getbyte(&p)) == -1)
                         badformat(buff, inm, BADDATA);
                     cksum += c;
@@ -543,33 +534,29 @@ convert_TI_records(
     bool eol;
     buffer_rec tb;
 
-    while ( ! endrecord && (fgets(buff, sizeof(buff), ifp)))
-    {
+    while ( ! endrecord && (fgets(buff, sizeof(buff), ifp))) {
         p = &buff[0];
-        if (p[strlen(p)-1] == '\n')                 /* get rid of newline */
-            p[strlen(p)-1] = '\0';
-
-        if (p[strlen(p)-1] == '\r')                 /* get rid of any CR */
-            p[strlen(p)-1] = '\0';
+        fix_string_from_gets(p, sizeof(buff));
 
         tb.dl_count = 0;
 
         eol = FALSE;
-        while ( ! eol && ! endrecord)
-        {
-            switch (*p++)
-            {
+        while ( ! eol && ! endrecord) {
+            switch (*p++) {
                 case '9':
                     if (tb.dl_count)
                         write_record(&tb, ofp);
-                    tb.dl_destaddr = get2bytes(&p);
+                    tb.dl_destaddr = (u32) get2bytes(&p);
                     break;
 
                 case 'B':
                     c = getbyte(&p);
+                    assert( c != -1 );
                     filesum += c;
                     tb.dl_buf[tb.dl_count++] = c;
+
                     c = getbyte(&p);
+                    assert( c != -1 );
                     filesum += c;
                     tb.dl_buf[tb.dl_count++] = c;
                     break;
@@ -596,8 +583,7 @@ void
 write_record(buffer_rec *tb,
              FILE *fp)
 {
-    if ( ! linear)
-    {
+    if ( ! linear) {
         if (tb->dl_destaddr < base)
             error(ERR_FATAL, "record at address 0x%x precedes base of 0x%x",
                      tb->dl_destaddr, base);
@@ -615,8 +601,7 @@ getnibble(char **p)
     register int val;
 
     **p = toupper(**p);
-    switch (**p)
-    {
+    switch (**p) {
         case '0': case '1': case '2': case '3': case '4':
         case '5': case '6': case '7': case '8': case '9':
             val = **p - '0';
@@ -651,15 +636,14 @@ long
 getNbytes(char **p,
           int n)
 {
-    int t;
+    long t;
     u32 val = 0;
 
-    while (n--)
-    {
+    while (n--) {
         if ((t = getbyte(p)) == -1)
             return(-1L);
         val <<= 8;
-        val += t;
+        val += (u32) t;
     }
 
     return(val);
@@ -670,8 +654,10 @@ badformat(char *s,
           char *fname,
           char *msg)
 {
-    if (s[strlen(s)-1] == '\n')             /* get rid of newline */
+    if ( *s != '\0' ) {
+      if (s[strlen(s)-1] == '\n')             /* get rid of newline */
         s[strlen(s)-1] = '\0';
+    }
     error(0, "line '%s'::\n\tfrom file '%s'; %s", s, fname, msg);
     exit(1);
 }
@@ -719,17 +705,31 @@ error(int error_flag, ...)
 
     (void) fflush(stderr);
 
-    if (error_flag & (ERR_FATAL | ERR_ABORT))
-    {
-        if (error_flag & ERR_FATAL)
-        {
+    if (error_flag & (ERR_FATAL | ERR_ABORT)) {
+        if (error_flag & ERR_FATAL) {
             error(0, "fatal error, exiting");
             exit(local_errno ? local_errno : 1);
-        }
-        else
-        {
+        } else {
             error(0, "fatal error, aborting");
             abort();
         }
     }
+}
+
+void  fix_string_from_gets(char *s, size_t max)
+{
+  size_t len;
+  assert( s );
+
+  if ( *s == '\0' )
+    return;
+
+  len = strnlen( s, max );
+
+  if ( s[len - 1] == '\n')                 /* get rid of newline */
+      s[len - 1] = '\0';
+
+  if ( s[len - 1] == '\r')                 /* get rid of any CR */
+      s[len - 1] = '\0';
+
 }

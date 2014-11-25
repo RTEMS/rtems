@@ -189,13 +189,14 @@ process(char *arg)
     /*
      *  Don't count the carriage return.
      */
-
-    length = strlen( buffer ) - 1;
+    length = 0;
+    if ( *buffer != '\0' )
+      length = strnlen( buffer, BUFFER_SIZE ) - 1;
 
     if ( buffer[ length ] != '\n' )
       error(ERR_ERRNO|ERR_FATAL, "Line %d too long in %s\n", line_number, arg);
 
-    while ( isspace( (unsigned char) buffer[ length ] ) )
+    while ( length && isspace( (unsigned char) buffer[ length ] ) )
       buffer[ length-- ] = '\0';
 
     if ( test_only ) {
@@ -208,8 +209,11 @@ process(char *arg)
 
   fclose( in );
   if ( !test_only ) {
-    fclose( out );
-    rename( outname, arg );
+    if (out) fclose( out );
+    rc = rename( outname, arg );
+    if ( rc != 0 ) {
+      fprintf( stderr, "Unable to rename %s to %s\n", outname, arg );
+    }
   }
   return rc;
 }

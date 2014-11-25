@@ -125,8 +125,7 @@ int main(
 
     opterr = 0;                                 /* we'll report all errors */
     while ((c = getopt(argc, argv, GETOPTARGS)) != EOF)
-        switch (c)
-        {
+        switch (c) {
             case 'l':                            /* line length */
                 line_length = atoi( optarg );
                 if ( line_length < 0 || line_length > BUFFER_SIZE )
@@ -150,8 +149,7 @@ int main(
                 showusage = TRUE;
         }
 
-    if (showusage)
-    {
+    if (showusage) {
         (void) fprintf(stderr, "%s", USAGE);
         exit(1);
     }
@@ -160,9 +158,10 @@ int main(
      *  traverse and process the arguments
      */
 
-    for ( ; argv[optind]; optind++)
+    for ( ; optind < argc; optind++) {
         if (Failed(process(argv[optind])))
             rc = FAILURE;
+    }
 
     return rc;
 }
@@ -268,15 +267,11 @@ error(int error_flag, ...)
 
     (void) fflush(stderr);
 
-    if (error_flag & (ERR_FATAL | ERR_ABORT))
-    {
-        if (error_flag & ERR_FATAL)
-        {
+    if (error_flag & (ERR_FATAL | ERR_ABORT)) {
+        if (error_flag & ERR_FATAL) {
             error(0, "fatal error, exiting");
             exit(local_errno ? local_errno : 1);
-        }
-        else
-        {
+        } else {
             error(0, "fatal error, aborting");
             abort();
         }
@@ -291,19 +286,18 @@ getparm(char *s,
 {
     long val;
 
-    if ( ! strchr("0123456789-", *s))
-    {
+    if ( !strchr("0123456789-", *s) ) {
         error(ERR_FATAL, "'%s' is not a number", s);
-        return min;
+        /* does not return */
     }
 
     val = strtol(s, (char **) NULL, 0);
-    if ((val < min) || (val > max))
-    {
+    if ((val < min) || (val > max)) {
         if (min == max)
             error(ERR_FATAL, "%s can only be %ld", s, min);
         else
             error(ERR_FATAL, "%s must be between %ld and %ld", msg, min, max);
+        /* does not return */
     }
 
     return val;

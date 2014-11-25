@@ -55,12 +55,15 @@ int myfgetc(FILE *f)
 void process(const char *ifname, const char *ofname)
 {
   FILE *ifile, *ocfile, *ohfile;
-  char buf[PATH_MAX], *p;
-  char obasename[PATH_MAX];
-  char ocname[PATH_MAX];
-  char ohname[PATH_MAX];
+  char buf[PATH_MAX+1], *p;
+  char obasename[PATH_MAX+1];
+  char ocname[PATH_MAX+1];
+  char ohname[PATH_MAX+1];
   const char *cp;
   size_t len;
+
+  ocfile = NULL;
+  ohfile = NULL;
 
   /* Error check */
   if ( !ifname || !ofname ) {
@@ -100,75 +103,84 @@ void process(const char *ifname, const char *ofname)
   }
 
   if ( createC ) {
-  ocfile = fopen(ocname, "wb");
-  if (ocfile == NULL) {
-    fprintf(stderr, "cannot open %s for writing\n", ocname);
-    exit(1);
-  }
+    ocfile = fopen(ocname, "wb");
+    if (ocfile == NULL) {
+      fprintf(stderr, "cannot open %s for writing\n", ocname);
+      exit(1);
+    }
   }
 
   if ( createH ) {
-  ohfile = fopen(ohname, "wb");
-  if (ohfile == NULL) {
-    fprintf(stderr, "cannot open %s for writing\n", ohname);
-    exit(1);
-  }
+    ohfile = fopen(ohname, "wb");
+    if (ohfile == NULL) {
+      fprintf(stderr, "cannot open %s for writing\n", ohname);
+      exit(1);
+    }
   }
 
   /* find basename */
   char *ifbasename = strdup(ifname);
+  if ( ifbasename == NULL ) {
+    fprintf(stderr, "cannot allocate memory\n" );
+    fclose(ifile);
+    if ( createC ) { fclose(ocfile); }
+    if ( createH ) { fclose(ohfile); }
+    exit(1);
+  }
+
   ifbasename = basename(ifbasename);
 
   strcpy(buf, ifbasename);
-  for (p = buf; *p != '\0'; ++p)
-    if (!isalnum(*p))
+  for (p = buf; *p != '\0'; ++p) {
+    if (!isalnum((unsigned char)*p)) /* cast to avoid negative indexing */
       *p = '_';
+  }
 
   if ( createC ) {
-  /* print C file header */
-  fprintf(
-    ocfile,
-    "/*\n"
-    " *  Declarations for C structure representing binary file %s\n"
-    " *\n"
-    " *  WARNING: Automatically generated -- do not edit!\n"
-    " */\n"
-    "\n"
-    "#include <sys/types.h>\n"
-    "\n",
-    ifbasename
-  );
+    /* print C file header */
+    fprintf(
+      ocfile,
+      "/*\n"
+      " *  Declarations for C structure representing binary file %s\n"
+      " *\n"
+      " *  WARNING: Automatically generated -- do not edit!\n"
+      " */\n"
+      "\n"
+      "#include <sys/types.h>\n"
+      "\n",
+      ifbasename
+    );
 
-  /* print structure */
-  fprintf(
-    ocfile,
-    "%s%sunsigned char %s[] = {\n  ",
-    ((usestatic) ? "static " : ""),
-    ((useconst) ? "const " : ""),
-    buf
-  );
-  int c, col = 1;
-  while ((c = myfgetc(ifile)) != EOF) {
-    if (col >= 78 - 6) {
-      fprintf(ocfile, "\n  ");
-      col = 1;
+    /* print structure */
+    fprintf(
+      ocfile,
+      "%s%sunsigned char %s[] = {\n  ",
+      ((usestatic) ? "static " : ""),
+      ((useconst) ? "const " : ""),
+      buf
+    );
+    int c, col = 1;
+    while ((c = myfgetc(ifile)) != EOF) {
+      if (col >= 78 - 6) {
+        fprintf(ocfile, "\n  ");
+        col = 1;
+      }
+      fprintf(ocfile, "0x%.2x, ", c);
+      col += 6;
+
     }
-    fprintf(ocfile, "0x%.2x, ", c);
-    col += 6;
+    fprintf(ocfile, "\n};\n");
 
-  }
-  fprintf(ocfile, "\n};\n");
-
-  /* print sizeof */
-  fprintf(
-    ocfile,
-    "\n"
-    "%s%ssize_t %s_size = sizeof(%s);\n",
-    ((usestatic) ? "static " : ""),
-    ((useconst) ? "const " : ""),
-    buf,
-    buf
-  );
+    /* print sizeof */
+    fprintf(
+      ocfile,
+      "\n"
+      "%s%ssize_t %s_size = sizeof(%s);\n",
+      ((usestatic) ? "static " : ""),
+      ((useconst) ? "const " : ""),
+      buf,
+      buf
+    );
   } /* createC */
 
   /*****************************************************************/
@@ -176,61 +188,61 @@ void process(const char *ifname, const char *ofname)
   /*****************************************************************/
 
   if ( createH ) {
-  /* print H file header */
-  char hbasename[PATH_MAX];
-  char* p;
-  /* Clean up the file name if it is an abs path */
-  strcpy(
-    hbasename,
-    obasename
-  );
-  p = hbasename;
-  while (*p != '\0') {
-    if (*p < '0' || *p > 'z')
-      *p = '_';
-    ++p;
-  }
-  fprintf(
-    ohfile,
-    "/*\n"
-    " *  Extern declarations for C structure representing binary file %s\n"
-    " *\n"
-    " *  WARNING: Automatically generated -- do not edit!\n"
-    " */\n"
-    "\n"
-    "#ifndef __%s_h\n"
-    "#define __%s_h\n"
-    "\n"
-    "#include <sys/types.h>\n"
-    "\n",
-    ifbasename,  /* header */
-    hbasename,  /* ifndef */
-    hbasename   /* define */
-  );
+    /* print H file header */
+    char hbasename[PATH_MAX];
+    char* p;
+    /* Clean up the file name if it is an abs path */
+    strcpy(
+      hbasename,
+      obasename
+    );
+    p = hbasename;
+    while (*p != '\0') {
+      if (*p < '0' || *p > 'z')
+        *p = '_';
+      ++p;
+    }
+    fprintf(
+      ohfile,
+      "/*\n"
+      " *  Extern declarations for C structure representing binary file %s\n"
+      " *\n"
+      " *  WARNING: Automatically generated -- do not edit!\n"
+      " */\n"
+      "\n"
+      "#ifndef __%s_h\n"
+      "#define __%s_h\n"
+      "\n"
+      "#include <sys/types.h>\n"
+      "\n",
+      ifbasename,  /* header */
+      hbasename,  /* ifndef */
+      hbasename   /* define */
+    );
 
-  /* print structure */
-  fprintf(
-    ohfile,
-    "extern %s%sunsigned char %s[];",
-    ((usestatic) ? "static " : ""),
-    ((useconst) ? "const " : ""),
-    buf
-  );
-  /* print sizeof */
-  fprintf(
-    ohfile,
-    "\n"
-    "extern %s%ssize_t %s_size;\n",
-    ((usestatic) ? "static " : ""),
-    ((useconst) ? "const " : ""),
-    buf
-  );
+    /* print structure */
+    fprintf(
+      ohfile,
+      "extern %s%sunsigned char %s[];",
+      ((usestatic) ? "static " : ""),
+      ((useconst) ? "const " : ""),
+      buf
+    );
+    /* print sizeof */
+    fprintf(
+      ohfile,
+      "\n"
+      "extern %s%ssize_t %s_size;\n",
+      ((usestatic) ? "static " : ""),
+      ((useconst) ? "const " : ""),
+      buf
+    );
 
-  fprintf(
-    ohfile,
-    "\n"
-    "#endif\n"
-  );
+    fprintf(
+      ohfile,
+      "\n"
+      "#endif\n"
+    );
   } /* createH */
 
   /*****************************************************************/
@@ -240,6 +252,7 @@ void process(const char *ifname, const char *ofname)
   fclose(ifile);
   if ( createC ) { fclose(ocfile); }
   if ( createH ) { fclose(ohfile); }
+  free(ifbasename);
 }
 
 void usage(void)
