@@ -12,7 +12,7 @@ include_libcpudir = $(includedir)/libcpu
 include_libcpu_HEADERS = ../shared/include/cache.h
 
 noinst_PROGRAMS += shared/cache.rel
-shared_cache_rel_SOURCES = shared/cache/cache.c ../shared/src/cache_aligned_malloc.c \
+shared_cache_rel_SOURCES = shared/cache/cache.c \
     ../shared/src/cache_manager.c shared/cache/cache_.h
 shared_cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/cache
 shared_cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

@@ -13,6 +13,7 @@ directives:
   - rtems_cache_invalidate_entire_instruction()
   - rtems_cache_invalidate_multiple_data_lines()
   - rtems_cache_invalidate_multiple_instruction_lines()
+  - rtems_cache_aligned_malloc()
 
 concepts:
 

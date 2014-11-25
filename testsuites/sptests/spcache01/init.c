@@ -17,6 +17,7 @@
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <inttypes.h>
 
 #include <rtems.h>
@@ -379,12 +380,42 @@ static void test_timing(void)
   rtems_interrupt_lock_destroy(&lock);
 }
 
+static void test_cache_aligned_alloc(void)
+{
+  void *p0;
+  void *p1;
+  size_t cls;
+
+  printf("test rtems_cache_aligned_malloc()\n");
+
+  p0 = rtems_cache_aligned_malloc(1);
+  p1 = rtems_cache_aligned_malloc(1);
+
+  rtems_test_assert(p0 != NULL);
+  rtems_test_assert(p1 != NULL);
+
+  cls = rtems_cache_get_data_line_size();
+  if (cls > 0) {
+    size_t m = cls - 1;
+    uintptr_t a0 = (uintptr_t) p0;
+    uintptr_t a1 = (uintptr_t) p1;
+
+    rtems_test_assert(a1 - a0 > cls);
+    rtems_test_assert((a0 & m) == 0);
+    rtems_test_assert((a1 & m) == 0);
+  }
+
+  free(p0);
+  free(p1);
+}
+
 static void Init(rtems_task_argument arg)
 {
   TEST_BEGIN();
 
   test_data_flush_and_invalidate();
   test_timing();
+  test_cache_aligned_alloc();
 
   TEST_END();
 

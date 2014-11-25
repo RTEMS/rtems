@@ -54,7 +54,7 @@ include_libcpu_HEADERS += include/gpioRegs.h
 
 include_libcpu_HEADERS += ../shared/include/cache.h
 noinst_PROGRAMS += cache.rel
-cache_rel_SOURCES = cache/cache.c ../shared/src/cache_aligned_malloc.c \
+cache_rel_SOURCES = cache/cache.c \
     ../shared/src/cache_manager.c cache/cache_.h
 cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/cache
 cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

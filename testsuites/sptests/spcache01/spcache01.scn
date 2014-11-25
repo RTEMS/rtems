@@ -42,4 +42,5 @@ invalidate multiple instruction
   duration with normal cache 680 ns
   duration with warm cache 640 ns
   duration with invalidated cache 2600 ns
+test rtems_cache_aligned_malloc()
 *** END OF TEST SPCACHE 1 ***

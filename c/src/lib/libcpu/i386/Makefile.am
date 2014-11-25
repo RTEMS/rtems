@@ -11,7 +11,7 @@ include_libcpu_HEADERS += ../shared/include/cache.h
 include_libcpu_HEADERS += byteorder.h
 
 noinst_PROGRAMS += cache.rel
-cache_rel_SOURCES = cache.c cache_.h ../shared/src/cache_aligned_malloc.c \
+cache_rel_SOURCES = cache.c cache_.h \
     ../shared/src/cache_manager.c ../shared/include/cache.h
 cache_rel_CPPFLAGS = $(AM_CPPFLAGS)
 cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
