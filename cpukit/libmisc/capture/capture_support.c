@@ -154,6 +154,7 @@ rtems_capture_print_trace_records ( int total, bool csv )
         {
           fprintf (stdout, "error: trace read failed: %s\n", rtems_status_text (sc));
           rtems_capture_flush (0);
+          free( per_cpu );
           return;
         }
         /* Release the buffer if there are no records to read */
