@@ -108,6 +108,10 @@ static void test_data_flush_and_invalidate(void)
         " due to cache line size of zero\n"
     );
   }
+
+  /* Make sure these are nops */
+  rtems_cache_flush_multiple_data_lines(NULL, 0);
+  rtems_cache_invalidate_multiple_data_lines(NULL, 0);
 }
 
 static uint64_t do_some_work(void)
