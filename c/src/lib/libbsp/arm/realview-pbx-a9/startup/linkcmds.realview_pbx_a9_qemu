@@ -19,6 +19,8 @@ REGION_ALIAS ("REGION_FAST_DATA_LOAD", RAM);
 REGION_ALIAS ("REGION_BSS", RAM);
 REGION_ALIAS ("REGION_WORK", RAM);
 REGION_ALIAS ("REGION_STACK", RAM);
+REGION_ALIAS ("REGION_NOCACHE", RAM);
+REGION_ALIAS ("REGION_NOCACHE_LOAD", RAM);
 
 bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 4096;
 bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;

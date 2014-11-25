@@ -135,10 +135,6 @@ $(PROJECT_INCLUDE)/bsp/irq.h: include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 
-$(PROJECT_INCLUDE)/bsp/nocache-heap.h: include/nocache-heap.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/nocache-heap.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/nocache-heap.h
-
 $(PROJECT_INCLUDE)/bsp/alt_16550_uart.h: hwlib/include/alt_16550_uart.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/alt_16550_uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/alt_16550_uart.h

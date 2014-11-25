@@ -38,7 +38,6 @@
 #include <bsp/hwlib.h>
 #include <bsp/alt_clock_manager.h>
 #include <bsp/alt_generalpurpose_io.h>
-#include <bsp/nocache-heap.h>
 #include "socal/alt_rstmgr.h"
 #include "socal/alt_sysmgr.h"
 #include "socal/hps.h"
@@ -1032,7 +1031,7 @@ static int network_if_mem_alloc_nocache(
   assert( memory != NULL );
 
   if ( memory != NULL ) {
-    *memory = altera_cyclone_v_nocache_malloc( size );
+    *memory = rtems_cache_coherent_allocate( size, 0, 0 );
 
     if ( *memory != NULL ) {
       eno = 0;
@@ -1057,18 +1056,11 @@ static int network_if_mem_free_nocache(
   void *arg,
   void *memory )
 {
-  int eno = EINVAL;
-
   (void) arg;
 
-  assert( memory != NULL );
+  free( memory );
 
-  if ( memory != NULL ) {
-    altera_cyclone_v_nocache_free( memory );
-    eno = 0;
-  }
-
-  return eno;
+  return 0;
 }
 
 /**

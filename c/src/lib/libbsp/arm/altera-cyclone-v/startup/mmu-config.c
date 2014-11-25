@@ -14,16 +14,9 @@
 
 #include <bsp/arm-cp15-start.h>
 
-LINKER_SYMBOL(bsp_section_nocache_end);
-LINKER_SYMBOL(bsp_section_nocache_begin);
-
 const arm_cp15_start_section_config arm_cp15_start_mmu_config_table[] = {
   ARMV7_CP15_START_DEFAULT_SECTIONS,
-  {
-    .begin = (uint32_t) bsp_section_nocache_begin,
-    .end   = (uint32_t) bsp_section_nocache_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE
-  }, { /* Periphery area */
+  { /* Periphery area */
     .begin = 0xFC000000U,
     .end   = 0x00000000U,
     .flags = ARMV7_MMU_DEVICE

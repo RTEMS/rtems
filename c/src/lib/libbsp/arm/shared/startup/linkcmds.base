@@ -397,6 +397,19 @@ SECTIONS {
 	} > REGION_STACK AT > REGION_STACK
 	bsp_section_stack_size = bsp_section_stack_end - bsp_section_stack_begin;
 
+	.nocache : ALIGN_WITH_INPUT {
+		bsp_section_nocache_begin = .;
+		*(SORT(.bsp_nocache*))
+		bsp_nocache_heap_begin = .;
+		. += ORIGIN (REGION_NOCACHE) + LENGTH (REGION_NOCACHE) - ABSOLUTE (.);
+		bsp_nocache_heap_end = .;
+		bsp_section_nocache_end = .;
+	} > REGION_NOCACHE AT > REGION_NOCACHE_LOAD
+	bsp_nocache_heap_size = bsp_nocache_heap_end - bsp_nocache_heap_begin;
+	bsp_section_nocache_size = bsp_section_nocache_end - bsp_section_nocache_begin;
+	bsp_section_nocache_load_begin = LOADADDR (.nocache);
+	bsp_section_nocache_load_end = bsp_section_nocache_load_begin + bsp_section_nocache_size;
+
 	/* FIXME */
 	RamBase = ORIGIN (REGION_WORK);
 	RamSize = LENGTH (REGION_WORK);

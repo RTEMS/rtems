@@ -80,6 +80,10 @@ typedef struct {
     .begin = (uint32_t) bsp_section_stack_begin, \
     .end = (uint32_t) bsp_section_stack_end, \
     .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED \
+  }, { \
+    .begin = (uint32_t) bsp_section_nocache_begin, \
+    .end = (uint32_t) bsp_section_nocache_end, \
+    .flags = ARMV7_MMU_DEVICE \
   }
 
 BSP_START_DATA_SECTION extern const arm_cp15_start_section_config

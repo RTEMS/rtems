@@ -15,11 +15,14 @@
 #include <bsp/bootcard.h>
 #include <bsp/arm-a9mpcore-clock.h>
 #include <bsp/irq-generic.h>
-#include <bsp/nocache-heap.h>
+#include <bsp/linker-symbols.h>
 
 void bsp_start( void )
 {
   a9mpcore_clock_initialize_early();
   bsp_interrupt_initialize();
-  altera_cyclone_v_nocache_init_heap();
+  rtems_cache_coherent_add_area(
+    bsp_nocache_heap_begin,
+    (uintptr_t) bsp_nocache_heap_size
+  );
 }

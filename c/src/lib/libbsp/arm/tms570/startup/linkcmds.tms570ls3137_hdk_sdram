@@ -20,6 +20,8 @@ REGION_ALIAS ("REGION_FAST_DATA_LOAD", RAM_EXT);
 REGION_ALIAS ("REGION_BSS", RAM_EXT);
 REGION_ALIAS ("REGION_WORK", RAM_EXT);
 REGION_ALIAS ("REGION_STACK", RAM_EXT);
+REGION_ALIAS ("REGION_NOCACHE", RAM_EXT);
+REGION_ALIAS ("REGION_NOCACHE_LOAD", RAM_EXT);
 
 bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 1024;
 bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);

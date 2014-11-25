@@ -47,7 +47,6 @@ include_bsp_HEADERS += ../shared/include/arm-gic-regs.h
 include_bsp_HEADERS += ../shared/include/arm-gic-tm27.h
 include_bsp_HEADERS += ../shared/include/arm-release-id.h
 include_bsp_HEADERS += include/irq.h
-include_bsp_HEADERS += include/nocache-heap.h
 
 # Altera hwlib
 include_bsp_HEADERS += hwlib/include/alt_16550_uart.h
@@ -171,7 +170,6 @@ libbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 libbsp_a_SOURCES += startup/bspreset.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/bspstarthooks.c
-libbsp_a_SOURCES += startup/nocache-heap.c
 libbsp_a_SOURCES += startup/mmu-config.c
 if HAS_SMP
 libbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
