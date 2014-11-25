@@ -882,6 +882,10 @@ l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
     L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES );
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
+  if ( n_bytes == 0 ) {
+    return;
+  }
+
   for (;
        adx      <= ADDR_LAST;
        adx       = block_end + 1,
@@ -945,6 +949,10 @@ l2c_310_invalidate_range( const void* d_addr, const size_t n_bytes )
   uint32_t       block_end         =
     L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES );
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
+
+  if ( n_bytes == 0 ) {
+    return;
+  }
 
   for (;
        adx      <= ADDR_LAST;
