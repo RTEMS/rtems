@@ -842,19 +842,21 @@ static inline Thread_Control *_Scheduler_SMP_Unblock(
   Thread_Control *needs_help;
 
   if ( unblock ) {
-    if ( node->state != SCHEDULER_SMP_NODE_READY ) {
+    if ( node->state == SCHEDULER_SMP_NODE_BLOCKED ) {
       _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
 
       needs_help = ( *enqueue_fifo )( context, &node->Base, thread );
     } else {
       _Assert( node->state == SCHEDULER_SMP_NODE_READY );
+      _Assert(
+        node->Base.help_state == SCHEDULER_HELP_ACTIVE_OWNER
+          || node->Base.help_state == SCHEDULER_HELP_ACTIVE_RIVAL
+      );
       _Assert( node->Base.idle == NULL );
 
       if ( node->Base.accepts_help == thread ) {
-        _Assert( node->Base.help_state == SCHEDULER_HELP_ACTIVE_OWNER );
         needs_help = thread;
       } else {
-        _Assert( node->Base.help_state == SCHEDULER_HELP_ACTIVE_RIVAL );
         needs_help = NULL;
       }
     }
