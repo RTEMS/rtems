@@ -221,15 +221,18 @@ int i2c_dev_register_eeprom(
 
   if (address_bytes > EEPROM_MAX_ADDRESS_BYTES) {
     rtems_set_errno_and_return_minus_one(ERANGE);
+  } else if (address_bytes == EEPROM_MAX_ADDRESS_BYTES) {
+    extra_address = 0;
+  } else {
+    extra_address = size_in_bytes >> (8 * address_bytes);
+  }
+
+  if (extra_address != 0 && (extra_address & (extra_address - 1)) != 0) {
+    rtems_set_errno_and_return_minus_one(EINVAL);
   }
 
   if (page_size_in_bytes > EEPROM_MAX_PAGE_SIZE) {
     page_size_in_bytes = EEPROM_MAX_PAGE_SIZE;
-  }
-
-  extra_address = size_in_bytes >> (8 * address_bytes);
-  if (extra_address != 0 && (extra_address & (extra_address - 1)) != 0) {
-    rtems_set_errno_and_return_minus_one(EINVAL);
   }
 
   if (program_timeout_in_ms == 0) {
