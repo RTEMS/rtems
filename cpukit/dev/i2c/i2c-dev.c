@@ -218,19 +218,19 @@ static int i2c_dev_do_init(
   void (*destroy)(i2c_dev *dev)
 )
 {
-  int fd;
   int rv;
 
-  fd = open(bus_path, O_RDWR);
-  if (fd < 0) {
+  dev->bus_fd = open(bus_path, O_RDWR);
+  if (dev->bus_fd < 0) {
     (*destroy)(dev);
+
     return -1;
   }
 
-  rv = ioctl(fd, I2C_BUS_GET_CONTROL, &dev->bus);
+  rv = ioctl(dev->bus_fd, I2C_BUS_GET_CONTROL, &dev->bus);
   if (rv != 0) {
-    (void) close(fd);
     (*destroy)(dev);
+
     return -1;
   }
 
@@ -240,7 +240,6 @@ static int i2c_dev_do_init(
   dev->get_size = i2c_dev_get_size_default;
   dev->get_block_size = i2c_dev_get_block_size_default;
   dev->destroy = destroy;
-  dev->bus_fd = fd;
   dev->address = address;
 
   return 0;
@@ -251,7 +250,7 @@ void i2c_dev_destroy(i2c_dev *dev)
   int rv;
 
   rv = close(dev->bus_fd);
-  _Assert(rv == 0);
+  _Assert(dev->bus_fd < 0 || rv == 0);
   (void) rv;
 }
 
