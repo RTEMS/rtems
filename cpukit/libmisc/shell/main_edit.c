@@ -46,6 +46,7 @@
 #endif
 
 #ifdef __rtems__
+#include <assert.h>
 #include <rtems.h>
 #include <rtems/shell.h>
 #endif
