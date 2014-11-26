@@ -949,9 +949,10 @@ void _Scheduler_Thread_change_resource_root(
 /**
  * @brief Use an idle thread for this scheduler node.
  *
- * A thread in the SCHEDULER_HELP_ACTIVE_OWNER owner state may use an idle
- * thread for the scheduler node owned by itself in case it executes currently
- * using another scheduler node or in case it is in a blocking state.
+ * A thread in the SCHEDULER_HELP_ACTIVE_OWNER or SCHEDULER_HELP_ACTIVE_RIVAL
+ * helping state may use an idle thread for the scheduler node owned by itself
+ * in case it executes currently using another scheduler node or in case it is
+ * in a blocking state.
  *
  * @param[in] context The scheduler instance context.
  * @param[in] node The node which wants to use the idle thread.
@@ -965,7 +966,10 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Use_idle_thread(
 {
   Thread_Control *idle = ( *get_idle_thread )( context );
 
-  _Assert( node->help_state == SCHEDULER_HELP_ACTIVE_OWNER );
+  _Assert(
+    node->help_state == SCHEDULER_HELP_ACTIVE_OWNER
+      || node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL
+  );
   _Assert( _Scheduler_Node_get_idle( node ) == NULL );
   _Assert(
     _Scheduler_Node_get_owner( node ) == _Scheduler_Node_get_user( node )
@@ -1009,6 +1013,8 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Try_to_schedule_node(
   if ( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL) {
     if ( user->Scheduler.state == THREAD_SCHEDULER_READY ) {
       _Scheduler_Thread_set_scheduler_and_node( user, node, owner );
+    } else if ( owner->Scheduler.state == THREAD_SCHEDULER_BLOCKED ) {
+      _Scheduler_Use_idle_thread( context, node, get_idle_thread );
     } else {
       _Scheduler_Node_set_user( node, owner );
     }
@@ -1072,6 +1078,9 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Release_idle_thread(
  * @brief Block this scheduler node.
  *
  * @param[in] context The scheduler instance context.
+ * @param[in] thread The thread which wants to get blocked referencing this
+ *   node.  This is not necessarily the user of this node in case the node
+ *   participates in the scheduler helping protocol.
  * @param[in] node The node which wants to get blocked.
  * @param[in] is_scheduled This node is scheduled.
  * @param[in] get_idle_thread Function to get an idle thread.
@@ -1087,23 +1096,46 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Block_node(
   Scheduler_Get_idle_thread  get_idle_thread
 )
 {
-  bool block;
-  Thread_Control *old_user = _Scheduler_Node_get_user( node );
-  Thread_Control *new_user = NULL;
+  Thread_Control *old_user;
+  Thread_Control *new_user;
 
-  _Scheduler_Thread_change_state( old_user, THREAD_SCHEDULER_BLOCKED );
+  _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_BLOCKED );
 
-  if ( is_scheduled ) {
-    if ( node->help_state == SCHEDULER_HELP_ACTIVE_OWNER ) {
+  if ( node->help_state == SCHEDULER_HELP_YOURSELF ) {
+    _Assert( thread == _Scheduler_Node_get_user( node ) );
+
+    return true;
+  }
+
+  new_user = NULL;
+
+  if ( node->help_state == SCHEDULER_HELP_ACTIVE_OWNER ) {
+    if ( is_scheduled ) {
+      _Assert( thread == _Scheduler_Node_get_user( node ) );
+      old_user = thread;
       new_user = _Scheduler_Use_idle_thread( context, node, get_idle_thread );
-    } else if ( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL ) {
-      Thread_Control *owner = _Scheduler_Node_get_owner( node );
+    }
+  } else if ( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL ) {
+    if ( is_scheduled ) {
+      old_user = _Scheduler_Node_get_user( node );
 
-      if ( thread == old_user && owner != old_user ) {
-        new_user = owner;
-        _Scheduler_Node_set_user( node, new_user );
+      if ( thread == old_user ) {
+        Thread_Control *owner = _Scheduler_Node_get_owner( node );
+
+        if (
+          thread != owner
+            && owner->Scheduler.state == THREAD_SCHEDULER_READY
+        ) {
+          new_user = owner;
+          _Scheduler_Node_set_user( node, new_user );
+        } else {
+          new_user = _Scheduler_Use_idle_thread( context, node, get_idle_thread );
+        }
       }
     }
+  } else {
+    /* Not implemented, this is part of the OMIP support path. */
+    _Assert(0);
   }
 
   if ( new_user != NULL ) {
@@ -1112,13 +1144,9 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Block_node(
     _Scheduler_Thread_change_state( new_user, THREAD_SCHEDULER_SCHEDULED );
     _Thread_Set_CPU( new_user, cpu );
     _Thread_Dispatch_update_heir( _Per_CPU_Get(), cpu, new_user );
-
-    block = false;
-  } else {
-    block = true;
   }
 
-  return block;
+  return false;
 }
 
 /**
@@ -1146,26 +1174,38 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Unblock_node(
   if ( is_scheduled ) {
     Thread_Control *old_user = _Scheduler_Node_get_user( node );
     Per_CPU_Control *cpu = _Thread_Get_CPU( old_user );
+    Thread_Control *idle = _Scheduler_Release_idle_thread(
+      context,
+      node,
+      release_idle_thread
+    );
+    Thread_Control *owner = _Scheduler_Node_get_owner( node );
+    Thread_Control *new_user;
 
     if ( node->help_state == SCHEDULER_HELP_ACTIVE_OWNER ) {
-      Thread_Control *idle = _Scheduler_Release_idle_thread(
-        context,
-        node,
-        release_idle_thread
-      );
-
       _Assert( idle != NULL );
-      (void) idle;
+      new_user = the_thread;
+    } else if ( idle != NULL ) {
+      _Assert( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL );
+      new_user = the_thread;
+    } else if ( the_thread != owner ) {
+      _Assert( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL );
+      _Assert( old_user != the_thread );
+      _Scheduler_Thread_change_state( owner, THREAD_SCHEDULER_READY );
+      new_user = the_thread;
+      _Scheduler_Node_set_user( node, new_user );
     } else {
       _Assert( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL );
-
-      _Scheduler_Thread_change_state( old_user, THREAD_SCHEDULER_READY );
-      _Scheduler_Node_set_user( node, the_thread );
+      _Assert( old_user != the_thread );
+      _Scheduler_Thread_change_state( the_thread, THREAD_SCHEDULER_READY );
+      new_user = NULL;
     }
 
-    _Scheduler_Thread_change_state( the_thread, THREAD_SCHEDULER_SCHEDULED );
-    _Thread_Set_CPU( the_thread, cpu );
-    _Thread_Dispatch_update_heir( _Per_CPU_Get(), cpu, the_thread );
+    if ( new_user != NULL ) {
+      _Scheduler_Thread_change_state( new_user, THREAD_SCHEDULER_SCHEDULED );
+      _Thread_Set_CPU( new_user, cpu );
+      _Thread_Dispatch_update_heir( _Per_CPU_Get(), cpu, new_user );
+    }
 
     unblock = false;
   } else {
@@ -1243,7 +1283,10 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Ask_scheduled_node_for_help(
     if ( needs_help->Scheduler.state == THREAD_SCHEDULER_READY ) {
       new_user = needs_help;
     } else {
-      _Assert( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL );
+      _Assert(
+        node->help_state == SCHEDULER_HELP_ACTIVE_OWNER
+          || node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL
+      );
       _Assert( offers_help->Scheduler.node == offers_help->Scheduler.own_node );
 
       new_user = offers_help;
