@@ -150,18 +150,18 @@ union {
 
 
 #ifdef __PPC__
-#define _out_byte(a,v) out_8((volatile unsigned char*)(a),(v))
-#define _inp_byte(a)   in_8((volatile unsigned char*)(a))
+#define _out_byte(a,v) out_8((volatile uint8_t*)(a),(v))
+#define _inp_byte(a)   in_8((volatile uint8_t*)(a))
 #ifdef NET_CHIP_LE
-#define _out_word(a,v) out_le16((volatile unsigned short*)(a),(v))
-#define _out_long(a,v) out_le32((volatile unsigned *)(a),(v))
-#define _inp_word(a)   in_le16((volatile unsigned short*)(a))
-#define _inp_long(a)   in_le32((volatile unsigned *)(a))
+#define _out_word(a,v) out_le16((volatile uint16_t*)(a),(v))
+#define _out_long(a,v) out_le32((volatile uint32_t *)(a),(v))
+#define _inp_word(a)   in_le16((volatile uint16_t*)(a))
+#define _inp_long(a)   in_le32((volatile uint32_t *)(a))
 #elif defined(NET_CHIP_BE)
-#define _out_word(a,v) out_be16((volatile unsigned short*)(a),(v))
-#define _out_long(a,v) out_be32((volatile unsigned *)(a),(v))
-#define _inp_word(a)   in_be16((volatile unsigned short*)(a))
-#define _inp_long(a)   in_be32((volatile unsigned *)(a))
+#define _out_word(a,v) out_be16((volatile uint16_t*)(a),(v))
+#define _out_long(a,v) out_be32((volatile uint32_t *)(a),(v))
+#define _inp_word(a)   in_be16((volatile uint16_t*)(a))
+#define _inp_long(a)   in_be32((volatile uint32_t *)(a))
 #else
 #error rtemscompat_defs.h must define either NET_CHIP_LE or NET_CHIP_BE
 #endif

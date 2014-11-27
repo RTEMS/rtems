@@ -142,13 +142,13 @@ char *save_boot_params(
 static inline uint32_t
 _ccsr_rd32(uint32_t off)
 {
-  return in_be32( (volatile unsigned *)(BSP_8540_CCSR_BASE + off) );
+  return in_be32( (volatile uint32_t *)(BSP_8540_CCSR_BASE + off) );
 }
 
 static inline void
 _ccsr_wr32(uint32_t off, uint32_t val)
 {
-  out_be32( (volatile unsigned *)(BSP_8540_CCSR_BASE + off), val );
+  out_be32( (volatile uint32_t *)(BSP_8540_CCSR_BASE + off), val );
 }
 
 

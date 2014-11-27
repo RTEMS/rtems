@@ -30,6 +30,7 @@
 #ifndef ASM
 
 #include <bsp.h>		/* for _IO_BASE & friends */
+#include <stdint.h>
 
 /* NOTE: The use of these macros is DISCOURAGED.
  *       you should consider e.g. using in_xxx / out_xxx
@@ -37,12 +38,12 @@
  *       defined by the BSP. This makes drivers easier
  *       to port.
  */
-#define inb(port)		in_8((unsigned char *)((port)+_IO_BASE))
-#define outb(val, port)		out_8((unsigned char *)((port)+_IO_BASE), (val))
-#define inw(port)		in_le16((unsigned short *)((port)+_IO_BASE))
-#define outw(val, port)		out_le16((unsigned short *)((port)+_IO_BASE), (val))
-#define inl(port)		in_le32((unsigned *)((port)+_IO_BASE))
-#define outl(val, port)		out_le32((unsigned *)((port)+_IO_BASE), (val))
+#define inb(port)		in_8((uint8_t *)((port)+_IO_BASE))
+#define outb(val, port)		out_8((uint8_t *)((port)+_IO_BASE), (val))
+#define inw(port)		in_le16((uint16_t *)((port)+_IO_BASE))
+#define outw(val, port)		out_le16((uint16_t *)((port)+_IO_BASE), (val))
+#define inl(port)		in_le32((uint32_t *)((port)+_IO_BASE))
+#define outl(val, port)		out_le32((uint32_t *)((port)+_IO_BASE), (val))
 
 /*
  * Enforce In-order Execution of I/O:
@@ -65,71 +66,71 @@ static inline void eieio(void)
 /*
  * 8, 16 and 32 bit, big and little endian I/O operations, with barrier.
  */
-static inline int in_8(volatile unsigned char *addr)
+static inline uint8_t in_8(const volatile uint8_t *addr)
 {
-	int ret;
+	uint8_t ret;
 
 	__asm__ __volatile__("lbz%U1%X1 %0,%1; eieio" : "=r" (ret) : "m" (*addr));
 	return ret;
 }
 
-static inline void out_8(volatile unsigned char *addr, int val)
+static inline void out_8(volatile uint8_t *addr, uint8_t val)
 {
 	__asm__ __volatile__("stb%U0%X0 %1,%0; eieio" : "=m" (*addr) : "r" (val));
 }
 
-static inline int in_le16(volatile unsigned short *addr)
+static inline uint16_t in_le16(const volatile uint16_t *addr)
 {
-	int ret;
+	uint16_t ret;
 
 	__asm__ __volatile__("lhbrx %0,0,%1; eieio" : "=r" (ret) :
 			      "r" (addr), "m" (*addr));
 	return ret;
 }
 
-static inline int in_be16(volatile unsigned short *addr)
+static inline uint16_t in_be16(const volatile uint16_t *addr)
 {
-	int ret;
+	uint16_t ret;
 
 	__asm__ __volatile__("lhz%U1%X1 %0,%1; eieio" : "=r" (ret) : "m" (*addr));
 	return ret;
 }
 
-static inline void out_le16(volatile unsigned short *addr, int val)
+static inline void out_le16(volatile uint16_t *addr, uint16_t val)
 {
 	__asm__ __volatile__("sthbrx %1,0,%2; eieio" : "=m" (*addr) :
 			      "r" (val), "r" (addr));
 }
 
-static inline void out_be16(volatile unsigned short *addr, int val)
+static inline void out_be16(volatile uint16_t *addr, uint16_t val)
 {
 	__asm__ __volatile__("sth%U0%X0 %1,%0; eieio" : "=m" (*addr) : "r" (val));
 }
 
-static inline unsigned in_le32(volatile unsigned *addr)
+static inline uint32_t in_le32(const volatile uint32_t *addr)
 {
-	unsigned ret;
+	uint32_t ret;
 
 	__asm__ __volatile__("lwbrx %0,0,%1; eieio" : "=r" (ret) :
 			     "r" (addr), "m" (*addr));
 	return ret;
 }
 
-static inline unsigned in_be32(volatile unsigned *addr)
+static inline uint32_t in_be32(const volatile uint32_t *addr)
 {
-	unsigned ret;
+	uint32_t ret;
 
 	__asm__ __volatile__("lwz%U1%X1 %0,%1; eieio" : "=r" (ret) : "m" (*addr));
 	return ret;
 }
 
-static inline void out_le32(volatile unsigned *addr, int val)
+static inline void out_le32(volatile uint32_t *addr, uint32_t val)
 {
 	__asm__ __volatile__("stwbrx %1,0,%2; eieio" : "=m" (*addr) :
 			     "r" (val), "r" (addr));
 }
 
-static inline void out_be32(volatile unsigned *addr, int val)
+static inline void out_be32(volatile uint32_t *addr, uint32_t val)
 {
 	__asm__ __volatile__("stw%U0%X0 %1,%0; eieio" : "=m" (*addr) : "r" (val));
 }

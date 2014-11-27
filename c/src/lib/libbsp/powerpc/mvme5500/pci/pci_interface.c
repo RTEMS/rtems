@@ -23,6 +23,8 @@
 #include <bsp/gtreg.h>
 #include <bsp/gtpcireg.h>
 
+#include <inttypes.h>
+
 #define PCI_DEBUG     0
 
 #if 0
@@ -71,10 +73,10 @@ void pci_interface(void)
 
 #ifdef CPU2PCI_ORDER
     /* MOTLOad deafult : 0x07ff8600 */
-    out_le32((volatile unsigned int *)(GT64x60_REG_BASE+CNT_SYNC_REG), 0x07fff600);
+    out_le32((volatile uint32_t *)(GT64x60_REG_BASE+CNT_SYNC_REG), 0x07fff600);
 #endif
     /* asserts SERR upon various detection */
-    out_le32((volatile unsigned int *)(GT64x60_REG_BASE+0xc28), 0x3fffff);
+    out_le32((volatile uint32_t *)(GT64x60_REG_BASE+0xc28), 0x3fffff);
     pciAccessInit();
 }
 
@@ -83,15 +85,15 @@ void pciAccessInit(void)
   unsigned int PciLocal, data;
 
   for (PciLocal=0; PciLocal < 2; PciLocal++) {
-    data = in_le32((volatile unsigned int *)(GT64x60_REG_BASE+PCI0_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80)));
+    data = in_le32((volatile uint32_t *)(GT64x60_REG_BASE+PCI0_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80)));
 #if 0
     printk("PCI%d_ACCESS_CNTL_BASE0_LOW was 0x%x\n",PciLocal,data);
 #endif
     data |= PCI_ACCCTLBASEL_VALUE;
     data &= ~0x300000;
-    out_le32((volatile unsigned int *)(GT64x60_REG_BASE+PCI0_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80)), data);
+    out_le32((volatile uint32_t *)(GT64x60_REG_BASE+PCI0_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80)), data);
 #if 0
-      printf("PCI%d_ACCESS_CNTL_BASE0_LOW now 0x%x\n",PciLocal,in_le32((volatile unsigned int *)(GT64x60_REG_BASE+PCI0_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80))));
+      printf("PCI%d_ACCESS_CNTL_BASE0_LOW now 0x%" PRIx32 "\n",PciLocal,in_le32((volatile uint32_t *)(GT64x60_REG_BASE+PCI0_ACCESS_CNTL_BASE0_LOW+(PciLocal * 0x80))));
 #endif
   }
 }

@@ -27,6 +27,7 @@
  *
  */
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <rtems/system.h>
 #include <bsp.h>
@@ -314,8 +315,8 @@ void BSP_enable_irq_at_pic(const rtems_irq_number irqNum)
 #endif
   BSP_irqMask_cache[regNum] |= (1 << bitNum);
 
-  out_le32(BSP_irqMask_reg[regNum], BSP_irqMask_cache[regNum]);
-  while (in_le32(BSP_irqMask_reg[regNum]) != BSP_irqMask_cache[regNum]);
+  out_le32((volatile uint32_t *)BSP_irqMask_reg[regNum], BSP_irqMask_cache[regNum]);
+  while (in_le32((volatile uint32_t *)BSP_irqMask_reg[regNum]) != BSP_irqMask_cache[regNum]);
 
   rtems_interrupt_enable(level);
 }
@@ -342,8 +343,8 @@ int BSP_disable_irq_at_pic(const rtems_irq_number irqNum)
 
   BSP_irqMask_cache[regNum] &=  ~(1 << bitNum);
 
-  out_le32(BSP_irqMask_reg[regNum], BSP_irqMask_cache[regNum]);
-  while (in_le32(BSP_irqMask_reg[regNum]) != BSP_irqMask_cache[regNum]);
+  out_le32((volatile uint32_t *)BSP_irqMask_reg[regNum], BSP_irqMask_cache[regNum]);
+  while (in_le32((volatile uint32_t *)BSP_irqMask_reg[regNum]) != BSP_irqMask_cache[regNum]);
 
   rtems_interrupt_enable(level);
 
@@ -372,39 +373,39 @@ int BSP_setup_the_pic(rtems_irq_global_settings* config)
    * bit 10:GPP interrupts as level sensitive(1) or edge sensitive(0).
    * MOTload default is set as level sensitive(1). Set it agin to make sure.
    */
-  out_le32((volatile unsigned int *)GT_CommUnitArb_Ctrl,
-           (in_le32((volatile unsigned int *)GT_CommUnitArb_Ctrl)| (1<<10)));
+  out_le32((volatile uint32_t *)GT_CommUnitArb_Ctrl,
+           (in_le32((volatile uint32_t *)GT_CommUnitArb_Ctrl)| (1<<10)));
 
 #if 0
-  printk("BSP_irqMask_reg[0] = 0x%x, BSP_irqCause_reg[0] 0x%x\n",
-         in_le32(BSP_irqMask_reg[0]),
-         in_le32(BSP_irqCause_reg[0]));
-  printk("BSP_irqMask_reg[1] = 0x%x, BSP_irqCause_reg[1] 0x%x\n",
-         in_le32(BSP_irqMask_reg[1]),
-         in_le32(BSP_irqCause_reg[1]));
-  printk("BSP_irqMask_reg[2] = 0x%x, BSP_irqCause_reg[2] 0x%x\n",
-         in_le32(BSP_irqMask_reg[2]),
-         in_le32(BSP_irqCause_reg[2]));
+  printk("BSP_irqMask_reg[0] = 0x%" PRIx32 ", BSP_irqCause_reg[0] 0x%" PRIx32 "\n",
+         in_le32((volatile uint32_t *)BSP_irqMask_reg[0]),
+         in_le32((volatile uint32_t *)BSP_irqCause_reg[0]));
+  printk("BSP_irqMask_reg[1] = 0x%" PRIx32 ", BSP_irqCause_reg[1] 0x%" PRIx32 "\n",
+         in_le32((volatile uint32_t *)BSP_irqMask_reg[1]),
+         in_le32((volatile uint32_t *)BSP_irqCause_reg[1]));
+  printk("BSP_irqMask_reg[2] = 0x%" PRIx32 ", BSP_irqCause_reg[2] 0x%" PRIx32 "\n",
+         in_le32((volatile uint32_t *)BSP_irqMask_reg[2]),
+         in_le32((volatile uint32_t *)BSP_irqCause_reg[2]));
 #endif
 
   /* Initialize the interrupt related  registers */
   for (i=0; i<3; i++) {
-    out_le32(BSP_irqCause_reg[i], 0);
-    out_le32(BSP_irqMask_reg[i], 0);
+    out_le32((volatile uint32_t *)BSP_irqCause_reg[i], 0);
+    out_le32((volatile uint32_t *)BSP_irqMask_reg[i], 0);
   }
-  in_le32(BSP_irqMask_reg[2]);
+  in_le32((volatile uint32_t *)BSP_irqMask_reg[2]);
   compute_pic_masks_from_prio();
 
 #if 0
-  printk("BSP_irqMask_reg[0] = 0x%x, BSP_irqCause_reg[0] 0x%x\n",
-         in_le32(BSP_irqMask_reg[0]),
-         in_le32(BSP_irqCause_reg[0]));
-  printk("BSP_irqMask_reg[1] = 0x%x, BSP_irqCause_reg[1] 0x%x\n",
-         in_le32(BSP_irqMask_reg[1]),
-         in_le32(BSP_irqCause_reg[1]));
-  printk("BSP_irqMask_reg[2] = 0x%x, BSP_irqCause_reg[2] 0x%x\n",
-         in_le32(BSP_irqMask_reg[2]),
-         in_le32(BSP_irqCause_reg[2]));
+  printk("BSP_irqMask_reg[0] = 0x%" PRIx32 ", BSP_irqCause_reg[0] 0x%" PRIx32 "\n",
+         in_le32((volatile uint32_t *)BSP_irqMask_reg[0]),
+         in_le32((volatile uint32_t *)BSP_irqCause_reg[0]));
+  printk("BSP_irqMask_reg[1] = 0x%" PRIx32 ", BSP_irqCause_reg[1] 0x%" PRIx32 "\n",
+         in_le32((volatile uint32_t *)BSP_irqMask_reg[1]),
+         in_le32((volatile uint32_t *)BSP_irqCause_reg[1]));
+  printk("BSP_irqMask_reg[2] = 0x%" PRIx32 ", BSP_irqCause_reg[2] 0x%" PRIx32 "\n",
+         in_le32((volatile uint32_t *)BSP_irqMask_reg[2]),
+         in_le32((volatile uint32_t *)BSP_irqCause_reg[2]));
 #endif
 
   /*
@@ -442,7 +443,7 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
   }
 
   for (j=0; j<3; j++ ) oldMask[j] = BSP_irqMask_cache[j];
-  for (j=0; j<3; j++) irqCause[j] = in_le32(BSP_irqCause_reg[j]) & in_le32(BSP_irqMask_reg[j]);
+  for (j=0; j<3; j++) irqCause[j] = in_le32((volatile uint32_t *)BSP_irqCause_reg[j]) & in_le32((volatile uint32_t *)BSP_irqMask_reg[j]);
 
   while (((irq = picPrioTable[i++])!=-1)&& (loop++ < MAX_IRQ_LOOP))
   {
@@ -450,19 +451,19 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
       for (j=0; j<3; j++)
         BSP_irqMask_cache[j] &= (~ BSP_irq_prio_mask_tbl[j][irq]);
 
-      out_le32(BSP_irqMask_reg[0], BSP_irqMask_cache[0]);
-      out_le32(BSP_irqMask_reg[1], BSP_irqMask_cache[1]);
-      out_le32(BSP_irqMask_reg[2], BSP_irqMask_cache[2]);
-      in_le32(BSP_irqMask_reg[2]);
+      out_le32((volatile uint32_t *)BSP_irqMask_reg[0], BSP_irqMask_cache[0]);
+      out_le32((volatile uint32_t *)BSP_irqMask_reg[1], BSP_irqMask_cache[1]);
+      out_le32((volatile uint32_t *)BSP_irqMask_reg[2], BSP_irqMask_cache[2]);
+      in_le32((volatile uint32_t *)BSP_irqMask_reg[2]);
 
       bsp_irq_dispatch_list( rtems_hdl_tbl, irq, default_rtems_hdl);
 
       for (j=0; j<3; j++ ) BSP_irqMask_cache[j] = oldMask[j];
 
-      out_le32(BSP_irqMask_reg[0], oldMask[0]);
-      out_le32(BSP_irqMask_reg[1], oldMask[1]);
-      out_le32(BSP_irqMask_reg[2], oldMask[2]);
-      in_le32(BSP_irqMask_reg[2]);
+      out_le32((volatile uint32_t *)BSP_irqMask_reg[0], oldMask[0]);
+      out_le32((volatile uint32_t *)BSP_irqMask_reg[1], oldMask[1]);
+      out_le32((volatile uint32_t *)BSP_irqMask_reg[2], oldMask[2]);
+      in_le32((volatile uint32_t *)BSP_irqMask_reg[2]);
     }
   }
 

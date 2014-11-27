@@ -96,36 +96,36 @@ uint32_t	b0,b1,r0,r1,lim,dis;
 	 *  whereas the mvme6100 does it the other way round...
 	 */
 
-	b0 = in_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI0_IO_Low_Decode) );
-	b1 = in_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI1_IO_Low_Decode) );
+	b0 = in_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI0_IO_Low_Decode) );
+	b1 = in_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI1_IO_Low_Decode) );
 
-	r0 = in_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI0_IO_Remap) );
-	r1 = in_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI1_IO_Remap) );
+	r0 = in_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI0_IO_Remap) );
+	r1 = in_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI1_IO_Remap) );
 
 	switch ( BSP_getDiscoveryVersion(0) ) {
 		case MV_64360:
 			/* In case of the MV64360 the 'limit' is actually a 'size'!
 			 * Disable by setting special bits in the 'BAR disable reg'.
 			 */
-			dis = in_le32( (volatile unsigned*)(BSP_MV64x60_BASE + MV_64360_BASE_ADDR_DISBL) );
+			dis = in_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + MV_64360_BASE_ADDR_DISBL) );
 			/* disable PCI0 I/O and PCI1 I/O */
-			out_le32( (volatile unsigned*)(BSP_MV64x60_BASE + MV_64360_BASE_ADDR_DISBL), dis | (1<<9) | (1<<14) );
+			out_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + MV_64360_BASE_ADDR_DISBL), dis | (1<<9) | (1<<14) );
 			/* remap busses on hose 0; if the remap register was already set, assume
 			 * that someone else [such as the bootloader] already performed the fixup
 			 */
 			if ( (b0 & 0xffff) && 0 == (r0 & 0xffff) ) {
 				rtems_pci_io_remap( 0, BSP_pci_hose1_bus_base, (b0 & 0xffff)<<16 );
-				out_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI0_IO_Remap), (b0 & 0xffff) );
+				out_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI0_IO_Remap), (b0 & 0xffff) );
 			}
 
 			/* remap busses on hose 1 */
 			if ( (b1 & 0xffff) && 0 == (r1 & 0xffff) ) {
 				rtems_pci_io_remap( BSP_pci_hose1_bus_base, pci_bus_count(), (b1 & 0xffff)<<16 );
-				out_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI1_IO_Remap), (b1 & 0xffff) );
+				out_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI1_IO_Remap), (b1 & 0xffff) );
 			}
 
 			/* re-enable */
-			out_le32( (volatile unsigned*)(BSP_MV64x60_BASE + MV_64360_BASE_ADDR_DISBL), dis );
+			out_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + MV_64360_BASE_ADDR_DISBL), dis );
 		break;
 
 		case GT_64260_A:
@@ -133,32 +133,32 @@ uint32_t	b0,b1,r0,r1,lim,dis;
 			
 			if ( (b0 & 0xfff) && 0 == (r0 & 0xfff) ) { /* base are only 12 bits */
 				/* switch window off by setting the limit < base */
-				lim = in_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI0_IO_High_Decode) );
-				out_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI0_IO_High_Decode), 0 );
+				lim = in_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI0_IO_High_Decode) );
+				out_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI0_IO_High_Decode), 0 );
 				/* remap busses on hose 0 */
 				rtems_pci_io_remap( 0, BSP_pci_hose1_bus_base, (b0 & 0xfff)<<20 );
 
 				/* BTW: it seems that writing the base register also copies the
 				 * value into the 'remap' register automatically (??)
 				 */
-				out_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI0_IO_Remap), (b0 & 0xfff) );
+				out_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI0_IO_Remap), (b0 & 0xfff) );
 
 				/* re-enable */
-				out_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI0_IO_High_Decode), lim );
+				out_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI0_IO_High_Decode), lim );
 			}
 
 			if ( (b1 & 0xfff) && 0 == (r1 & 0xfff) ) { /* base are only 12 bits */
 				/* switch window off by setting the limit < base */
-				lim = in_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI1_IO_High_Decode) );
-				out_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI1_IO_High_Decode), 0 );
+				lim = in_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI1_IO_High_Decode) );
+				out_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI1_IO_High_Decode), 0 );
 
 				/* remap busses on hose 1 */
 				rtems_pci_io_remap( BSP_pci_hose1_bus_base, pci_bus_count(), (b1 & 0xfff)<<20 );
 
-				out_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI1_IO_Remap), (b1 & 0xfff) );
+				out_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI1_IO_Remap), (b1 & 0xfff) );
 
 				/* re-enable */
-				out_le32( (volatile unsigned*)(BSP_MV64x60_BASE + GT_PCI1_IO_High_Decode), lim );
+				out_le32( (volatile uint32_t*)(BSP_MV64x60_BASE + GT_PCI1_IO_High_Decode), lim );
 			}
 		break;
 

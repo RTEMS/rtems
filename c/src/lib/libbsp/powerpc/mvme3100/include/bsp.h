@@ -110,7 +110,7 @@
 #define BSP_UART_IOBASE_COM2 (BSP_8540_CCSR_BASE+0x4600)
 #define PCI_CONFIG_ADDR      (BSP_8540_CCSR_BASE+0x8000)
 #define PCI_CONFIG_DATA      (BSP_8540_CCSR_BASE+0x8004)
-#define PCI_CONFIG_WR_ADDR( addr, val ) out_be32((unsigned int*)(addr), (val))
+#define PCI_CONFIG_WR_ADDR( addr, val ) out_be32((uint32_t*)(addr), (val))
 
 #define BSP_CONSOLE_PORT	BSP_UART_COM1
 #define BSP_UART_BAUD_BASE	(-9600) /* use existing divisor to determine clock rate */

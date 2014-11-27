@@ -571,7 +571,7 @@ indirect_pci_read_config_word(unsigned char bus, unsigned char dev_fn,
    if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
    out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|((offset&~3)<<24));
-   *val=in_le16((volatile u_short *)(pci->config_data + (offset&3)));
+   *val=in_le16((volatile uint16_t *)(pci->config_data + (offset&3)));
    return PCIBIOS_SUCCESSFUL;
 }
 
@@ -582,7 +582,7 @@ indirect_pci_read_config_dword(unsigned char bus, unsigned char dev_fn,
    if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
    out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|(offset<<24));
-   *val=in_le32((volatile u_int *)pci->config_data);
+   *val=in_le32((volatile uint32_t *)pci->config_data);
    return PCIBIOS_SUCCESSFUL;
 }
 
@@ -601,7 +601,7 @@ indirect_pci_write_config_word(unsigned char bus, unsigned char dev_fn,
    if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
    out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|((offset&~3)<<24));
-   out_le16((volatile u_short *)(pci->config_data + (offset&3)), val);
+   out_le16((volatile uint16_t *)(pci->config_data + (offset&3)), val);
    return PCIBIOS_SUCCESSFUL;
 }
 
@@ -611,7 +611,7 @@ indirect_pci_write_config_dword(unsigned char bus, unsigned char dev_fn,
    if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
    out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|(offset<<24));
-   out_le32((volatile u_int *)pci->config_data, val);
+   out_le32((volatile uint32_t *)pci->config_data, val);
    return PCIBIOS_SUCCESSFUL;
 }
 
@@ -644,7 +644,7 @@ direct_pci_read_config_word(unsigned char bus, unsigned char dev_fn,
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
       return PCIBIOS_DEVICE_NOT_FOUND;
    }
-   *val=in_le16((volatile u_short *)
+   *val=in_le16((volatile uint16_t *)
                 (pci->config_data + ((1<<PCI_SLOT(dev_fn))&~1)
                  + (PCI_FUNC(dev_fn)<<8) + offset));
    return PCIBIOS_SUCCESSFUL;
@@ -658,7 +658,7 @@ direct_pci_read_config_dword(unsigned char bus, unsigned char dev_fn,
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
       return PCIBIOS_DEVICE_NOT_FOUND;
    }
-   *val=in_le32((volatile u_int *)
+   *val=in_le32((volatile uint32_t *)
                 (pci->config_data + ((1<<PCI_SLOT(dev_fn))&~1)
                  + (PCI_FUNC(dev_fn)<<8) + offset));
    return PCIBIOS_SUCCESSFUL;
@@ -683,7 +683,7 @@ direct_pci_write_config_word(unsigned char bus, unsigned char dev_fn,
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
       return PCIBIOS_DEVICE_NOT_FOUND;
    }
-   out_le16((volatile u_short *)
+   out_le16((volatile uint16_t *)
             (pci->config_data + ((1<<PCI_SLOT(dev_fn))&~1)
              + (PCI_FUNC(dev_fn)<<8) + offset),
             val);
@@ -697,7 +697,7 @@ direct_pci_write_config_dword(unsigned char bus, unsigned char dev_fn,
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
       return PCIBIOS_DEVICE_NOT_FOUND;
    }
-   out_le32((volatile u_int *)
+   out_le32((volatile uint32_t *)
             (pci->config_data + ((1<<PCI_SLOT(dev_fn))&~1)
              + (PCI_FUNC(dev_fn)<<8) + offset),
             val);

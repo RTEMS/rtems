@@ -113,13 +113,13 @@ static gti2c_desc_rec my_bus_tbl = {
 static inline uint32_t
 gt_read(uint32_t base, uint32_t off)
 {
-	return in_le32((volatile unsigned*)(base+off));
+	return in_le32((volatile uint32_t*)(base+off));
 }
 
 static inline void
 gt_write(uint32_t base, uint32_t off, uint32_t val)
 {
-	out_le32((volatile unsigned*)(base+off), val);
+	out_le32((volatile uint32_t*)(base+off), val);
 }
 
 
@@ -206,7 +206,7 @@ struct gti2c_softc * const sc = &my_bus_tbl.pvt;
  */
 {unsigned from,to;
 	asm volatile("mftb %0":"=r"(from));
-	while ( in_le32((volatile unsigned*)0xf100000c) & 0x20 )
+	while ( in_le32((volatile uint32_t*)0xf100000c) & 0x20 )
 		;
 	asm volatile("mftb %0":"=r"(to));
 	printk("I2C IRQ remained asserted for %i TB ticks!\n",to-from);

@@ -69,12 +69,12 @@
 
 static inline uint32_t gt_rd(uint32_t off)
 {
-  return in_le32( (volatile unsigned *)(BSP_MV64x60_BASE+off) );
+  return in_le32( (volatile uint32_t *)(BSP_MV64x60_BASE+off) );
 }
 
 static inline void gt_wr(uint32_t off, uint32_t val)
 {
-  out_le32( (volatile unsigned *)(BSP_MV64x60_BASE+off), val);
+  out_le32( (volatile uint32_t *)(BSP_MV64x60_BASE+off), val);
 }
 
 static inline uint32_t gt_timer_bitmod(uint32_t off, uint32_t clr, uint32_t set)

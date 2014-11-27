@@ -39,6 +39,7 @@
 #include <rtems.h>
 #include <rtems/bspIo.h>      /* printk */
 
+#include <inttypes.h>
 #include <stdio.h>	      /* printf for statistics */
 #include <string.h>
 
@@ -217,8 +218,8 @@ struct wm_softc {
 #define	WM_F_BUS64		0x20	/* bus is 64-bit */
 #define	WM_F_PCIX		0x40	/* bus is PCI-X */
 
-#define	CSR_READ(sc,reg) in_le32((volatile unsigned *)(sc->sc_membase+reg))
-#define	CSR_WRITE(sc,reg,val) out_le32((volatile unsigned *)(sc->sc_membase+reg), val)
+#define	CSR_READ(sc,reg) in_le32((volatile uint32_t *)(sc->sc_membase+reg))
+#define	CSR_WRITE(sc,reg,val) out_le32((volatile uint32_t *)(sc->sc_membase+reg), val)
 
 #define	WM_CDTXADDR(sc)	( (uint32_t) &sc->sc_txdescs[0] )
 #define	WM_CDRXADDR(sc)	( (uint32_t) &sc->sc_rxdescs[0] )
@@ -540,18 +541,18 @@ static void i82544EI_stats(struct wm_softc *sc)
 
   printf("    Ghost Interrupts:%-8lu\n", sc->stats.ghostInterrupts);
   printf("       Rx Interrupts:%-8lu\n", sc->stats.rxInterrupts);
-  printf("     Receive Packets:%-8u\n", CSR_READ(sc,WMREG_GPRC));
+  printf("     Receive Packets:%-8u\n", (unsigned)CSR_READ(sc,WMREG_GPRC));
   printf("     Receive Overrun:%-8lu\n", sc->stats.rxOvrRunInterrupts);
-  printf("     Receive  errors:%-8u\n", CSR_READ(sc,WMREG_RXERRC));
+  printf("     Receive  errors:%-8u\n", (unsigned)CSR_READ(sc,WMREG_RXERRC));
   printf("   Rx sequence error:%-8lu\n", sc->stats.rxSeqErr);
   printf("      Rx /C/ ordered:%-8lu\n", sc->stats.rxC_ordered);
-  printf("    Rx Length Errors:%-8u\n", CSR_READ(sc,WMREG_RLEC));
+  printf("    Rx Length Errors:%-8u\n", (unsigned)CSR_READ(sc,WMREG_RLEC));
   printf("       Tx Interrupts:%-8lu\n", sc->stats.txInterrupts);
-  printf("   Transmitt Packets:%-8u\n", CSR_READ(sc,WMREG_GPTC));
+  printf("   Transmitt Packets:%-8u\n", (unsigned)CSR_READ(sc,WMREG_GPTC));
   printf("   Transmitt  errors:%-8lu\n", ifp->if_oerrors);
   printf("         Active Txqs:%-8lu\n", sc->txq_nactive);
-  printf("          collisions:%-8u\n", CSR_READ(sc,WMREG_COLC));
-  printf("          Crc Errors:%-8u\n", CSR_READ(sc,WMREG_CRCERRS));
+  printf("          collisions:%-8u\n", (unsigned)CSR_READ(sc,WMREG_COLC));
+  printf("          Crc Errors:%-8u\n", (unsigned)CSR_READ(sc,WMREG_CRCERRS));
   printf("  Link Status Change:%-8lu\n", sc->stats.linkStatusChng);
 }
 
@@ -1146,21 +1147,21 @@ static int i82544EI_init_hw(struct wm_softc *sc)
 
 void BSP_rdTIDV(void)
 {
-  printf("Reg TIDV: 0x%x\n", in_le32((volatile unsigned *) (BSP_1GHz_membase+WMREG_TIDV)));
+  printf("Reg TIDV: 0x%" PRIx32 "\n", in_le32((volatile uint32_t *) (BSP_1GHz_membase+WMREG_TIDV)));
 }
 void BSP_rdRDTR(void)
 {
-  printf("Reg RDTR: 0x%x\n", in_le32((volatile unsigned *) (BSP_1GHz_membase+WMREG_RDTR)));
+  printf("Reg RDTR: 0x%" PRIx32 "\n", in_le32((volatile uint32_t *) (BSP_1GHz_membase+WMREG_RDTR)));
 }
 
 void BSP_setTIDV(int val)
 {
-  out_le32((volatile unsigned *) (BSP_1GHz_membase+WMREG_TIDV), val);
+  out_le32((volatile uint32_t *) (BSP_1GHz_membase+WMREG_TIDV), val);
 }
 
 void BSP_setRDTR(int val)
 {
-  out_le32((volatile unsigned *) (BSP_1GHz_membase+WMREG_RDTR), val);
+  out_le32((volatile uint32_t *) (BSP_1GHz_membase+WMREG_RDTR), val);
 }
 /*
  * i82544EI_ifinit:		[ifnet interface function]

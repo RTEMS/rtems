@@ -326,12 +326,12 @@
 #define TSI_CRG_SIZE		(1<<12)		/* 4k */
 
 
-#define TSI_RD(base, reg)				in_be32((volatile unsigned *)((base) + (reg)/sizeof(*base)))
-#define TSI_RD16(base, reg)				in_be16((volatile unsigned short *)(base) + (reg)/sizeof(short))
-#define TSI_LE_RD16(base, reg) 			in_le16((volatile unsigned short *)(base) + (reg)/sizeof(short))
-#define TSI_LE_RD32(base, reg) 			in_le32((volatile unsigned *)(base) + (reg)/sizeof(*base))
-#define TSI_RD8(base, reg)				in_8((volatile unsigned char *)(base) + (reg))
-#define TSI_WR(base, reg, val)			out_be32((volatile unsigned *)((base) + (reg)/sizeof(*base)), val)
+#define TSI_RD(base, reg)				in_be32((volatile uint32_t *)((base) + (reg)/sizeof(*base)))
+#define TSI_RD16(base, reg)				in_be16((volatile uint16_t *)(base) + (reg)/sizeof(uint16_t))
+#define TSI_LE_RD16(base, reg) 			in_le16((volatile uint16_t *)(base) + (reg)/sizeof(uint16_t))
+#define TSI_LE_RD32(base, reg) 			in_le32((volatile uint32_t *)(base) + (reg)/sizeof(*base))
+#define TSI_RD8(base, reg)				in_8((volatile uint8_t *)(base) + (reg))
+#define TSI_WR(base, reg, val)			out_be32((volatile uint32_t *)((base) + (reg)/sizeof(*base)), val)
 
 #define UNIV_SCTL_AM_MASK	(UNIV_CTL_VAS | UNIV_SCTL_PGM | UNIV_SCTL_DAT | UNIV_SCTL_USER | UNIV_SCTL_SUPER)
 

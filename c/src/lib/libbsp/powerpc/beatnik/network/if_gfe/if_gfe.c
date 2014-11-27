@@ -1758,7 +1758,7 @@ gfe_tx_enqueue(struct gfe_softc *sc, enum gfe_txprio txprio)
 	 */
 	d = NEXT_TXD(l);
 
-	out_be32((unsigned int*)&d->ed_cmdsts,0);
+	out_be32((uint32_t*)&d->ed_cmdsts,0);
 
 	GE_TXDPRESYNC(sc, txq, d - txq->txq_descs);
 

@@ -58,15 +58,15 @@ static void MsDelay(void)
 }
 
 static void write8( int addr, int data ){
-  out_8((void *)addr, (unsigned char)data);
+  out_8((uint8_t *)addr, (uint8_t)data);
 }
 
 static void write16( int addr, int data ) {
-  out_be16((void *)addr, (short)data );
+  out_be16((uint16_t *)addr, (uint16_t)data );
 }
 
 static void write32( int addr, int data ) {
-  out_be32((unsigned int *)addr, data );
+  out_be32((uint32_t *)addr, (uint32_t)data );
 }
 
 static void rsPMCQ1_scc_nullFunc(void) {}

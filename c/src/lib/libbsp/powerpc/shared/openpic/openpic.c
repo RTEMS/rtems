@@ -92,9 +92,9 @@ static inline unsigned int openpic_read(volatile unsigned int *addr)
     unsigned int val;
 
 #ifdef BSP_OPEN_PIC_BIG_ENDIAN
-	val = in_be32(addr);
+	val = in_be32((volatile uint32_t *)addr);
 #else
-    val = in_le32(addr);
+    val = in_le32((volatile uint32_t *)addr);
 #endif
 #ifdef REGISTER_DEBUG
     printk("openpic_read(0x%08x) = 0x%08x\n", (unsigned int)addr, val);
@@ -108,9 +108,9 @@ static inline void openpic_write(volatile unsigned int *addr, unsigned int val)
     printk("openpic_write(0x%08x, 0x%08x)\n", (unsigned int)addr, val);
 #endif
 #ifdef BSP_OPEN_PIC_BIG_ENDIAN
-    out_be32(addr, val);
+    out_be32((volatile uint32_t *)addr, val);
 #else
-	out_le32(addr, val);
+	out_le32((volatile uint32_t *)addr, val);
 #endif
 }
 
@@ -307,7 +307,7 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
 		 */
 		uint32_t eicr_val, ratio;
 		/* On the 8240 this is the EICR register */
-		eicr_val = in_le32( &OpenPIC->Global.Global_Configuration1 ) & ~(7<<28);
+		eicr_val = in_le32( (volatile uint32_t *)&OpenPIC->Global.Global_Configuration1 ) & ~(7<<28);
 		if ( (1<<27) & eicr_val ) {
 			/* serial interface mode enabled */
 
@@ -318,7 +318,7 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
 			ratio >>= 2; /* EICR value is half actual divisor */
 			if ( 0==ratio )
 				ratio = 1;
-			out_le32(&OpenPIC->Global.Global_Configuration1, eicr_val | ((ratio &7) << 28));
+			out_le32((volatile uint32_t *)&OpenPIC->Global.Global_Configuration1, eicr_val | ((ratio &7) << 28));
 			/*  Delay in TB cycles (assuming TB runs at 1/4 of the bus frequency) */
 			openpic_set_eoi_delay( 16 * (2*ratio) / 4 );
 		}

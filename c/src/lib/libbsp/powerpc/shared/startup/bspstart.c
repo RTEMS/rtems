@@ -124,8 +124,8 @@ unsigned int EUMBBAR;
  * Processor Address Map B (CHRP).
  */
 static unsigned int get_eumbbar(void) {
-  out_le32( (volatile unsigned *)0xfec00000, 0x80000078 );
-  return in_le32( (volatile unsigned *)0xfee00000 );
+  out_le32( (volatile uint32_t *)0xfec00000, 0x80000078 );
+  return in_le32( (volatile uint32_t *)0xfee00000 );
 }
 #endif
 

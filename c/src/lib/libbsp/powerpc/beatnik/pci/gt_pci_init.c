@@ -83,7 +83,7 @@ indirect_pci_read_config_byte(unsigned char bus, unsigned char slot,
 			      unsigned char function, 
 			      unsigned char offset, uint8_t *val) {
 HOSE_PREAMBLE;
-	out_be32((volatile unsigned *) pci.pci_config_addr, 
+	out_be32((volatile uint32_t *) pci.pci_config_addr,
 		 0x80|(bus<<8)|(PCI_DEVFN(slot,function)<<16)|((offset&~3)<<24));
 	*val = in_8(pci.pci_config_data + (offset&3));
 	return PCIBIOS_SUCCESSFUL;
@@ -96,9 +96,9 @@ indirect_pci_read_config_word(unsigned char bus, unsigned char slot,
 HOSE_PREAMBLE;
 	*val = 0xffff; 
 	if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
-	out_be32((unsigned int*) pci.pci_config_addr, 
+	out_be32((uint32_t*) pci.pci_config_addr,
 		 0x80|(bus<<8)|(PCI_DEVFN(slot,function)<<16)|((offset&~3)<<24));
-	*val = in_le16((volatile unsigned short *)(pci.pci_config_data + (offset&3)));
+	*val = in_le16((volatile uint16_t *)(pci.pci_config_data + (offset&3)));
 	return PCIBIOS_SUCCESSFUL;
 }
 
@@ -109,9 +109,9 @@ indirect_pci_read_config_dword(unsigned char bus, unsigned char slot,
 HOSE_PREAMBLE;
 	*val = 0xffffffff; 
 	if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
-	out_be32((unsigned int*) pci.pci_config_addr, 
+	out_be32((uint32_t*) pci.pci_config_addr,
 		 0x80|(bus<<8)|(PCI_DEVFN(slot,function)<<16)|(offset<<24));
-	*val = in_le32((volatile unsigned *)pci.pci_config_data);
+	*val = in_le32((volatile uint32_t *)pci.pci_config_data);
 	return PCIBIOS_SUCCESSFUL;
 }
 
@@ -120,7 +120,7 @@ indirect_pci_write_config_byte(unsigned char bus, unsigned char slot,
 			       unsigned char function, 
 			       unsigned char offset, uint8_t val) {
 HOSE_PREAMBLE;
-	out_be32((unsigned int*) pci.pci_config_addr, 
+	out_be32((uint32_t*) pci.pci_config_addr,
 		 0x80|(bus<<8)|(PCI_DEVFN(slot,function)<<16)|((offset&~3)<<24));
 	out_8(pci.pci_config_data + (offset&3), val);
 	return PCIBIOS_SUCCESSFUL;
@@ -132,9 +132,9 @@ indirect_pci_write_config_word(unsigned char bus, unsigned char slot,
 			       unsigned char offset, uint16_t val) {
 HOSE_PREAMBLE;
 	if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
-	out_be32((unsigned int*) pci.pci_config_addr, 
+	out_be32((uint32_t*) pci.pci_config_addr,
 		 0x80|(bus<<8)|(PCI_DEVFN(slot,function)<<16)|((offset&~3)<<24));
-	out_le16((volatile unsigned short *)(pci.pci_config_data + (offset&3)), val);
+	out_le16((volatile uint16_t *)(pci.pci_config_data + (offset&3)), val);
 	return PCIBIOS_SUCCESSFUL;
 }
 
@@ -144,9 +144,9 @@ indirect_pci_write_config_dword(unsigned char bus, unsigned char slot,
 				unsigned char offset, uint32_t val) {
 HOSE_PREAMBLE;
 	if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
-	out_be32((unsigned int*) pci.pci_config_addr, 
+	out_be32((uint32_t*) pci.pci_config_addr,
 		 0x80|(bus<<8)|(PCI_DEVFN(slot,function)<<16)|(offset<<24));
-	out_le32((volatile unsigned *)pci.pci_config_data, val);
+	out_le32((volatile uint32_t *)pci.pci_config_data, val);
 	return PCIBIOS_SUCCESSFUL;
 }
 
