@@ -78,9 +78,24 @@ static test_context test_instance = {
   .switch_lock = SMP_LOCK_INITIALIZER("test instance switch lock")
 };
 
+static void busy_wait(void)
+{
+  rtems_interval later = rtems_clock_tick_later(2);
+
+  while (rtems_clock_tick_before(later)) {
+    /* Wait */
+  }
+}
+
 static void barrier(test_context *ctx, SMP_barrier_State *bs)
 {
   _SMP_barrier_Wait(&ctx->barrier, bs, 2);
+}
+
+static void barrier_and_delay(test_context *ctx, SMP_barrier_State *bs)
+{
+  barrier(ctx, bs);
+  busy_wait();
 }
 
 static rtems_task_priority get_prio(rtems_id task_id)
@@ -347,19 +362,13 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   /* Obtain with timeout (A) */
-  barrier(ctx, &barrier_state);
-
-  sc = rtems_task_wake_after(2);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  barrier_and_delay(ctx, &barrier_state);
 
   assert_prio(ctx->worker_ids[0], 2);
   assert_executing_worker(ctx);
 
   /* Obtain with priority change and timeout (B) */
-  barrier(ctx, &barrier_state);
-
-  sc = rtems_task_wake_after(2);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  barrier_and_delay(ctx, &barrier_state);
 
   assert_prio(ctx->worker_ids[0], 2);
   change_prio(ctx->worker_ids[0], 1);
@@ -372,10 +381,7 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
   change_prio(ctx->worker_ids[0], 3);
 
   /* Obtain without timeout (D) */
-  barrier(ctx, &barrier_state);
-
-  sc = rtems_task_wake_after(2);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  barrier_and_delay(ctx, &barrier_state);
 
   assert_prio(ctx->worker_ids[0], 2);
   assert_executing_worker(ctx);
@@ -835,16 +841,12 @@ static void various_block_unblock(test_context *ctx)
   SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
 
   /* Worker obtain (F) */
-  barrier(ctx, &barrier_state);
-
-  sc = rtems_task_wake_after(2);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  barrier_and_delay(ctx, &barrier_state);
 
   sc = rtems_task_suspend(ctx->worker_ids[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_wake_after(2);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  busy_wait();
 
   sc = rtems_task_start(
     ctx->high_task_id[1],
