@@ -313,7 +313,7 @@ typedef struct {
   uint32_t searches;
 
   /**
-   * @brief Total number of suceessful calls to free.
+   * @brief Total number of successful calls to free.
    */
   uint32_t frees;
 
@@ -366,6 +366,7 @@ typedef struct {
 typedef struct {
   Heap_Information Free;
   Heap_Information Used;
+  Heap_Statistics Stats;
 } Heap_Information_block;
 
 /**

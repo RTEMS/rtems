@@ -37,6 +37,7 @@ static int rtems_shell_main_malloc_info(
     malloc_info( &info );
     rtems_shell_print_heap_info( "free", &info.Free );
     rtems_shell_print_heap_info( "used", &info.Used );
+    rtems_shell_print_heap_stats( &info.Stats );
   }
 
   return 0;

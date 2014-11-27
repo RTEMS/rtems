@@ -98,6 +98,12 @@ static int open_files(void)
   return (int) rtems_libio_number_iops - free_count;
 }
 
+static void get_heap_info(Heap_Control *heap, Heap_Information_block *info)
+{
+  _Heap_Get_information(heap, info);
+  memset(&info->Stats, 0, sizeof(info->Stats));
+}
+
 void rtems_resource_snapshot_take(rtems_resource_snapshot *snapshot)
 {
   uint32_t *active = &snapshot->rtems_api.active_barriers;
@@ -107,13 +113,8 @@ void rtems_resource_snapshot_take(rtems_resource_snapshot *snapshot)
 
   _Thread_Kill_zombies();
 
-  #ifdef HEAP_PROTECTION
-    _Heap_Protection_free_all_delayed_blocks(RTEMS_Malloc_Heap);
-    _Heap_Protection_free_all_delayed_blocks(&_Workspace_Area);
-  #endif
-
-  _Heap_Get_information(RTEMS_Malloc_Heap, &snapshot->heap_info);
-  _Heap_Get_information(&_Workspace_Area, &snapshot->workspace_info);
+  get_heap_info(RTEMS_Malloc_Heap, &snapshot->heap_info);
+  get_heap_info(&_Workspace_Area, &snapshot->workspace_info);
 
   for (i = 0; i < RTEMS_ARRAY_SIZE(objects_info_table); ++i) {
     active [i] = _Objects_Active_count(objects_info_table[i]);

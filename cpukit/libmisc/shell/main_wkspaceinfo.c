@@ -24,7 +24,7 @@
 
 void rtems_shell_print_unified_work_area_message(void)
 {
-  printf( "\nC Program Heap and RTEMS Workspace are %s.\n",
+  printf( "C Program Heap and RTEMS Workspace are %s.\n",
     rtems_configuration_get_unified_work_area() ? "the same" : "separate"
   );
 }
@@ -41,6 +41,7 @@ static int rtems_shell_main_wkspace_info(
   _Protected_heap_Get_information( &_Workspace_Area, &info );
   rtems_shell_print_heap_info( "free", &info.Free );
   rtems_shell_print_heap_info( "used", &info.Used );
+  rtems_shell_print_heap_stats( &info.Stats );
 
   return 0;
 }

@@ -546,6 +546,15 @@ to the command.  This includes the following information:
 @item Number of used blocks
 @item Largest used block
 @item Total bytes used
+@item Instance number
+@item Size of the allocatable area in bytes
+@item Minimum free size ever in bytes
+@item Maximum number of free blocks ever
+@item Maximum number of blocks searched ever
+@item Total number of successful allocations
+@item Total number of searches ever
+@item Total number of successful calls to free
+@item Total number of successful resizes
 @end itemize
 
 When the subcommand @code{walk} is specified, then a heap walk will be
@@ -565,12 +574,22 @@ The following is an example of how to use the @code{malloc} command.
 
 @example
 SHLL [/] $ malloc
-Number of free blocks: 3
-Largest free block:    3626672
-Total bytes free:      3627768
-Number of used blocks: 130
-Largest used block:    1048
-Total bytes used:      10136
+C Program Heap and RTEMS Workspace are the same.
+Number of free blocks:                              14
+Largest free block:                          266157192
+Total bytes free:                            266164928
+Number of used blocks:                             167
+Largest used block:                              16424
+Total bytes used:                                90888
+Instance number:                                     0
+Size of the allocatable area in bytes:       266255816
+Minimum free size ever in bytes:             266156136
+Maximum number of free blocks ever:                 15
+Maximum number of blocks searched ever:             15
+Total number of successful allocations:            186
+Total number of searches ever:                     186
+Total number of successful calls to free:           19
+Total number of successful resizes:                  0
 SHLL [/] $ malloc walk
 malloc walk
 PASS[0]: page size 8, min block size 48

@@ -32,10 +32,13 @@ int rtems_shell_execute_cmd(const char *cmd, int argc, char *argv[]);
 extern void rtems_shell_register_monitor_commands(void);
 
 extern void rtems_shell_print_heap_info(
-  const char       *c,
-  Heap_Information *h
+  const char             *c,
+  const Heap_Information *h
 );
 
+extern void rtems_shell_print_heap_stats(
+  const Heap_Statistics *s
+);
 
 extern void rtems_shell_print_unified_work_area_message(void);
 
