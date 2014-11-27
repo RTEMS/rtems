@@ -39,9 +39,6 @@ extern void rtems_shell_print_heap_info(
 
 extern void rtems_shell_print_unified_work_area_message(void);
 
-extern int rtems_shell_main_rm(int argc, char *argv[]);
-extern int rtems_shell_main_cp(int argc, char *argv[]);
-
 #include <sys/types.h>
 
 extern void strmode(mode_t mode, char *p);

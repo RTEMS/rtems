@@ -324,6 +324,13 @@ extern rtems_status_code rtems_shell_wait_for_input(
 
 extern int rtems_shell_main_monitor(int argc, char **argv);
 
+/*
+ * Provide these commands for application use, as their implementation
+ * is tedious.
+ */
+int rtems_shell_main_mv(int argc, char *argv[]);
+int rtems_shell_main_cp(int argc, char *argv[]);
+int rtems_shell_main_rm(int argc, char *argv[]);
 
 #ifdef __cplusplus
 }

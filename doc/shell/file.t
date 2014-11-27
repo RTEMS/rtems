@@ -695,13 +695,13 @@ shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
-@findex rtems_shell_rtems_main_cp
+@findex rtems_shell_main_cp
 
 The @code{cp} command is implemented by a C language function which
 has the following prototype:
 
 @example
-int rtems_shell_rtems_main_cp(
+int rtems_shell_main_cp(
   int    argc,
   char **argv
 );
@@ -2460,13 +2460,13 @@ shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
-@findex rtems_shell_rtems_main_mv
+@findex rtems_shell_main_mv
 
 The @code{mv} command is implemented by a C language function which
 has the following prototype:
 
 @example
-int rtems_shell_rtems_main_mv(
+int rtems_shell_main_mv(
   int    argc,
   char **argv
 );
@@ -2697,13 +2697,13 @@ shell commands have been configured.
 
 @subheading PROGRAMMING INFORMATION:
 
-@findex rtems_shell_rtems_main_rm
+@findex rtems_shell_main_rm
 
 The @code{rm} is implemented by a C language function
 which has the following prototype:
 
 @example
-int rtems_shell_rtems_main_rm(
+int rtems_shell_main_rm(
   int    argc,
   char **argv
 );

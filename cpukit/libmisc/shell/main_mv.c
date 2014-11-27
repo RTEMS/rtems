@@ -116,7 +116,7 @@ rtems_shell_mv_exit (rtems_shell_mv_globals* globals, int code)
 const char *user_from_uid(uid_t uid, int nouser);
 char *group_from_gid(gid_t gid, int nogroup);
 
-static int
+int
 rtems_shell_main_mv(int argc, char *argv[])
 {
   rtems_shell_mv_globals mv_globals;
