@@ -119,8 +119,8 @@ void process(const char *ifname, const char *ofname)
   }
 
   /* find basename */
-  char *ifbasename = strdup(ifname);
-  if ( ifbasename == NULL ) {
+  char *ifbasename_to_free = strdup(ifname);
+  if ( ifbasename_to_free == NULL ) {
     fprintf(stderr, "cannot allocate memory\n" );
     fclose(ifile);
     if ( createC ) { fclose(ocfile); }
@@ -128,7 +128,8 @@ void process(const char *ifname, const char *ofname)
     exit(1);
   }
 
-  ifbasename = basename(ifbasename);
+  char *ifbasename;
+  ifbasename = basename(ifbasename_to_free);
 
   strcpy(buf, ifbasename);
   for (p = buf; *p != '\0'; ++p) {
@@ -252,7 +253,7 @@ void process(const char *ifname, const char *ofname)
   fclose(ifile);
   if ( createC ) { fclose(ocfile); }
   if ( createH ) { fclose(ohfile); }
-  free(ifbasename);
+  free(ifbasename_to_free);
 }
 
 void usage(void)
