@@ -22,13 +22,6 @@
 #include <rtems/chain.h>
 
 /*
- *  Malloc Statistics Structure
- */
-extern rtems_malloc_statistics_t rtems_malloc_statistics;
-
-#define MSBUMP(_f,_n)    rtems_malloc_statistics._f += (_n)
-
-/*
  *  Process deferred free operations
  */
 bool malloc_is_system_state_OK(void);

@@ -52,8 +52,6 @@ void *rtems_heap_extend_via_sbrk(
       bool ok = _Protected_heap_Extend( heap, area_begin, sbrk_size );
 
       if ( ok ) {
-        MSBUMP( space_available, sbrk_size );
-
         return_this = _Protected_heap_Allocate( heap, alloc_size );
       } else {
         sbrk( -sbrk_size );

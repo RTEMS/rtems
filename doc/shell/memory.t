@@ -530,18 +530,14 @@ extern rtems_shell_cmd_t rtems_shell_MMOVE_Command;
 @subheading SYNOPSYS:
 
 @example
-malloc [info|stats]
+malloc [walk]
 @end example
 
 @subheading DESCRIPTION:
 
-This command prints either information or statistics about the
-C Program Heap used by the @code{malloc} family of calls based upon
-the value of the first argument passed to the command.
-
-When the subcommand @code{info} is specified, information on the
-current state of the C Program Heap is reported.  This includes the following
-information:
+This command prints information about the current state of the C Program Heap
+used by the @code{malloc()} family of calls if no or invalid options are passed
+to the command.  This includes the following information:
 
 @itemize @bullet
 @item Number of free blocks
@@ -552,23 +548,8 @@ information:
 @item Total bytes used
 @end itemize
 
-When the subcommand @code{stats} is specified, statistics on the
-the C Program Heap are reported.  Malloc Family Statistics must
-be enabled for all of the values to be updated.  The statistics
-available includes the following information:
-
-@itemize @bullet
-@item
-@item Currently available memory (in kilobytes)
-@item Currently allocated memory (in kilobytes)
-@item Maximum amount of memory ever allocated (in kilobytes)
-@item Lifetime tally of allocated memory  (in kilobytes)
-@item Lifetime tally of freed memory (in kilobytes)
-@item Number of calls to @code{malloc}
-@item Number of calls to @code{free}
-@item Number of calls to @code{realloc}
-@item Number of calls to @code{calloc}
-@end itemize
+When the subcommand @code{walk} is specified, then a heap walk will be
+performed and information about each block is printed out.
 
 @subheading EXIT STATUS:
 
@@ -576,46 +557,40 @@ This command returns 0 on success and non-zero if an error is encountered.
 
 @subheading NOTES:
 
-@findex CONFIGURE_MALLOC_STATISTICS
-
-The @code{CONFIGURE_MALLOC_STATISTICS} @code{confdefs.h} constant
-must be defined when the application is configured for the full
-set of statistics information to be available.
+NONE
 
 @subheading EXAMPLES:
 
 The following is an example of how to use the @code{malloc} command.
 
 @example
-SHLL [/] $ malloc info
+SHLL [/] $ malloc
 Number of free blocks: 3
 Largest free block:    3626672
 Total bytes free:      3627768
 Number of used blocks: 130
 Largest used block:    1048
 Total bytes used:      10136
-SHLL [/] $ malloc stats
-Malloc statistics
-  avail:3552k  allocated:9k (0%) max:10k (0%) lifetime:21k freed:12k
-  Call counts:   malloc:203   free:93   realloc:0   calloc:20
-SHLL [/] $ malloc info
-Number of free blocks: 3
-Largest free block:    3626672
-Total bytes free:      3627768
-Number of used blocks: 130
-Largest used block:    1048
-Total bytes used:      10136
-SHLL [/] $ malloc stats
-Malloc statistics
-  avail:3552k  allocated:9k (0%) max:10k (0%) lifetime:23k freed:14k
-  Call counts:   malloc:205   free:95   realloc:0   calloc:20
+SHLL [/] $ malloc walk
+malloc walk
+PASS[0]: page size 8, min block size 48
+        area begin 0x00210210, area end 0x0FFFC000
+        first block 0x00210214, last block 0x0FFFBFDC
+        first free 0x00228084, last free 0x00228354
+PASS[0]: block 0x00210214: size 88
+...
+PASS[0]: block 0x00220154: size 144
+PASS[0]: block 0x002201E4: size 168, prev 0x002205BC, next 0x00228354 (= last free)
+PASS[0]: block 0x0022028C: size 168, prev_size 168
+...
+PASS[0]: block 0x00226E7C: size 4136
+PASS[0]: block 0x00227EA4: size 408, prev 0x00228084 (= first free), next 0x00226CE4
+PASS[0]: block 0x0022803C: size 72, prev_size 408
+PASS[0]: block 0x00228084: size 648, prev 0x0020F75C (= head), next 0x00227EA4
+PASS[0]: block 0x0022830C: size 72, prev_size 648
+PASS[0]: block 0x00228354: size 266157192, prev 0x002201E4, next 0x0020F75C (= tail)
+PASS[0]: block 0x0FFFBFDC: size 4028711480, prev_size 266157192
 @end example
-
-Note that in the above example, the lifetime allocated and free
-values have increased between the two calls to @code{malloc stats}
-even though the amount of memory available in the C Program Heap
-is the same in both the @code{malloc info} invocations. This indicates
-that memory was allocated and freed as a side-effect of the commands.
 
 @subheading CONFIGURATION:
 

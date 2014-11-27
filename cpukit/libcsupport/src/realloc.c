@@ -35,8 +35,6 @@ void *realloc(
   uintptr_t old_size;
   char    *new_area;
 
-  MSBUMP(realloc_calls, 1);
-
   /*
    *  Do not attempt to allocate memory if in a critical section or ISR.
    */
@@ -76,8 +74,6 @@ void *realloc(
    */
 
   new_area = malloc( size );
-
-  MSBUMP(malloc_calls, (uint32_t) -1);   /* subtract off the malloc */
 
   if ( !new_area ) {
     return (void *) 0;

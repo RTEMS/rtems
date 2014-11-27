@@ -24,12 +24,12 @@
 
 #include <rtems/score/sysstate.h>
 
+#include "malloc_p.h"
+
 void free(
   void *ptr
 )
 {
-  MSBUMP(free_calls, 1);
-
   if ( !ptr )
     return;
 
@@ -40,12 +40,6 @@ void free(
       malloc_deferred_free(ptr);
       return;
   }
-
-  /*
-   *  If configured, update the statistics
-   */
-  if ( rtems_malloc_statistics_helpers )
-    (*rtems_malloc_statistics_helpers->at_free)(ptr);
 
   if ( !_Protected_heap_Free( RTEMS_Malloc_Heap, ptr ) ) {
     printk( "Program heap: free of bad pointer %p -- range %p - %p \n",

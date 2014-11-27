@@ -2434,37 +2434,6 @@ related configuration parameters supported by
 @code{<rtems/confdefs.h>}.
 
 @c
-@c === CONFIGURE_MALLOC_STATISTICS ===
-@c
-@subsection Enable Malloc Family Statistics
-
-@findex CONFIGURE_MALLOC_STATISTICS
-
-
-@table @b
-@item CONSTANT:
-@code{CONFIGURE_MALLOC_STATISTICS}
-
-@item DATA TYPE:
-Boolean feature macro.
-
-@item RANGE:
-Defined or undefined.
-
-@item DEFAULT VALUE:
-This is not defined by default, and Malloc Statistics are disabled.
-
-@end table
-
-@subheading DESCRIPTION:
-This configuration parameter is defined when the application wishes to
-enable the gathering of more detailed statistics on the C Malloc Family
-of routines.
-
-@subheading NOTES:
-None.
-
-@c
 @c === CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS ===
 @c
 @subsection Specify Maximum Number of File Descriptors

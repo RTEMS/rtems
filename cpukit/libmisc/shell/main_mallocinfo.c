@@ -19,7 +19,7 @@
 #include <rtems.h>
 #include <rtems/malloc.h>
 #include <rtems/libcsupport.h>
-#include <rtems/shell.h>
+#include <rtems/shellconfig.h>
 
 #include "internal.h"
 
@@ -28,31 +28,23 @@ static int rtems_shell_main_malloc_info(
   char *argv[]
 )
 {
-  if ( argc == 2 ) {
+  if ( argc == 2 && strcmp( argv[ 1 ], "walk" ) == 0 ) {
+    malloc_walk( 0, true );
+  } else {
+    region_information_block info;
+
     rtems_shell_print_unified_work_area_message();
-
-    if ( !strcmp( argv[1], "info" ) ) {
-      region_information_block info;
-
-      malloc_info( &info );
-      rtems_shell_print_heap_info( "free", &info.Free );
-      rtems_shell_print_heap_info( "used", &info.Used );
-      return 0;
-    } else if ( !strcmp( argv[1], "stats" ) ) {
-      malloc_report_statistics_with_plugin(
-        stdout,
-        (rtems_printk_plugin_t) fprintf
-      );
-      return 0;
-    }
+    malloc_info( &info );
+    rtems_shell_print_heap_info( "free", &info.Free );
+    rtems_shell_print_heap_info( "used", &info.Used );
   }
-  fprintf( stderr, "%s: [info|stats]\n", argv[0] );
-  return -1;
+
+  return 0;
 }
 
 rtems_shell_cmd_t rtems_shell_MALLOC_INFO_Command = {
   "malloc",                                   /* name */
-  "[info|stats]",                             /* usage */
+  "malloc [walk]",                            /* usage */
   "mem",                                      /* topic */
   rtems_shell_main_malloc_info,               /* command */
   NULL,                                       /* alias */

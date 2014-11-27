@@ -30,8 +30,6 @@ void *malloc(
 {
   void        *return_this;
 
-  MSBUMP(malloc_calls, 1);
-
   /*
    *  If some free's have been deferred, then do them now.
    */
@@ -70,12 +68,6 @@ void *malloc(
    */
   if ( rtems_malloc_dirty_helper )
     (*rtems_malloc_dirty_helper)( return_this, size );
-
-  /*
-   *  If configured, update the statistics
-   */
-  if ( rtems_malloc_statistics_helpers )
-    (*rtems_malloc_statistics_helpers->at_malloc)(return_this);
 
   return return_this;
 }

@@ -19,7 +19,6 @@
 #endif
 
 #if defined(RTEMS_NEWLIB) && !defined(HAVE_CALLOC)
-#include "malloc_p.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -31,14 +30,10 @@ void *calloc(
   char   *cptr;
   size_t  length;
 
-  MSBUMP(calloc_calls, 1);
-
   length = nelem * elsize;
   cptr = malloc( length );
   if ( cptr )
     memset( cptr, '\0', length );
-
-  MSBUMP(malloc_calls, (uint32_t) -1);   /* subtract off the malloc */
 
   return cptr;
 }

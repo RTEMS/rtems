@@ -59,7 +59,6 @@ rtems_task Task_1_through_5(
     }
     printf("mallocing %d bytes\n",mem_amt);
     memset( mem_ptr, mem_amt, mem_amt );
-    malloc_report_statistics();
     malloc_walk_ok = malloc_walk( 1, false );
     rtems_test_assert( malloc_walk_ok );
     status = rtems_task_wake_after(

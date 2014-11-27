@@ -48,34 +48,6 @@ void RTEMS_Malloc_Initialize(
   Heap_Initialization_or_extend_handler extend
 );
 
-/*
- *  Malloc Statistics Structure
- */
-typedef struct {
-    uint32_t    space_available;             /* current size of malloc area */
-    uint32_t    malloc_calls;                /* # calls to malloc */
-    uint32_t    memalign_calls;              /* # calls to memalign */
-    uint32_t    free_calls;
-    uint32_t    realloc_calls;
-    uint32_t    calloc_calls;
-    uint32_t    max_depth;		     /* most ever malloc'd at 1 time */
-    uintmax_t   lifetime_allocated;
-    uintmax_t   lifetime_freed;
-} rtems_malloc_statistics_t;
-
-/*
- *  Malloc statistics plugin
- */
-typedef struct {
-  void (*initialize)(void);
-  void (*at_malloc)(void *);
-  void (*at_free)(void *);
-} rtems_malloc_statistics_functions_t;
-
-extern rtems_malloc_statistics_functions_t
-  rtems_malloc_statistics_helpers_table;
-extern rtems_malloc_statistics_functions_t *rtems_malloc_statistics_helpers;
-
 extern ptrdiff_t RTEMS_Malloc_Sbrk_amount;
 
 static inline void rtems_heap_set_sbrk_amount( ptrdiff_t sbrk_amount )
@@ -119,41 +91,6 @@ extern rtems_malloc_dirtier_t rtems_malloc_dirty_helper;
 void rtems_malloc_dirty_memory(
   void   *start,
   size_t  size
-);
-
-/**
- *  @brief Print Malloc Statistic Usage Report
- *
- *  This method fills in the called provided malloc statistics area.
- *
- *  @return This method returns 0 if successful and -1 on error.
- */
-int malloc_get_statistics(
-  rtems_malloc_statistics_t *stats
-);
-
-/**
- *  @brief Print Malloc Statistic Usage Report
- *
- *  This method prints a malloc statistics report.
- *
- *  @note It uses printk to print the report.
- */
-void malloc_report_statistics(void);
-
-/**
- *  @brief Print Malloc Statistic Usage Report
- *
- *  This method prints a malloc statistics report.
- *
- *  @param[in] context is the context to pass to the print handler
- *  @param[in] print is the print handler
- *
- *  @note It uses the CALLER's routine to print the report.
- */
-void malloc_report_statistics_with_plugin(
-  void                  *context,
-  rtems_printk_plugin_t  print
 );
 
 /**

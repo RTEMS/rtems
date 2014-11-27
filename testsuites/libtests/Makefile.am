@@ -24,7 +24,7 @@ _SUBDIRS += capture01
 
 _SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \
     deviceio01 devnullfatal01 dumpbuf01 gxx01 top\
-    malloctest malloc02 malloc03 malloc04 malloc05 heapwalk \
+    malloctest malloc02 malloc03 malloc04 heapwalk \
     putenvtest monitor monitor02 rtmonuse stackchk stackchk01 \
     termios termios01 termios02 termios03 termios04 termios05 \
     termios06 termios07 termios08 \

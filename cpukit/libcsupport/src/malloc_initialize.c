@@ -22,8 +22,6 @@
 #include "malloc_p.h"
 
 #ifdef RTEMS_NEWLIB
-rtems_malloc_statistics_t rtems_malloc_statistics;
-
 void RTEMS_Malloc_Initialize(
   const Heap_Area *areas,
   size_t area_count,
@@ -59,15 +57,6 @@ void RTEMS_Malloc_Initialize(
       );
     }
   }
-
-  /*
-   *  If configured, initialize the statistics support
-   */
-  if ( rtems_malloc_statistics_helpers != NULL ) {
-    (*rtems_malloc_statistics_helpers->initialize)();
-  }
-
-  MSBUMP( space_available, _Protected_heap_Get_size( heap ) );
 }
 #else
 void RTEMS_Malloc_Initialize(

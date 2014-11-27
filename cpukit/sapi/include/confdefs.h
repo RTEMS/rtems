@@ -1115,19 +1115,6 @@ const rtems_libio_helper rtems_fs_init_helper =
 
 #ifdef CONFIGURE_INIT
   /**
-   * This configures the malloc family statistics to be available.
-   * By default only function call counts are kept.
-   */
-  rtems_malloc_statistics_functions_t *rtems_malloc_statistics_helpers =
-    #ifndef CONFIGURE_MALLOC_STATISTICS
-      NULL;
-    #else
-      &rtems_malloc_statistics_helpers_table;
-    #endif
-#endif
-
-#ifdef CONFIGURE_INIT
-  /**
    * This configures the sbrk() support for the malloc family.
    * By default it is assumed that the BSP provides all available
    * RAM to the malloc family implementation so sbrk()'ing to get

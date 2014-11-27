@@ -1,7 +1,6 @@
 /**
  * @file
  *
- * @brief Update call statistics
  * @ingroup libcsupport
  */
 
@@ -30,11 +29,6 @@ int posix_memalign(
   size_t   size
 )
 {
-  /*
-   *  Update call statistics
-   */
-  MSBUMP(memalign_calls, 1);
-
   if (((alignment - 1) & alignment) != 0 || (alignment < sizeof(void *)))
     return EINVAL;
 

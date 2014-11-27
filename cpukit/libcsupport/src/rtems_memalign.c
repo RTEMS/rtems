@@ -62,12 +62,6 @@ int rtems_memalign(
   if ( !return_this )
     return ENOMEM;
 
-  /*
-   *  If configured, update the more involved statistics
-   */
-  if ( rtems_malloc_statistics_helpers )
-    (*rtems_malloc_statistics_helpers->at_malloc)(pointer);
-
   *pointer = return_this;
   return 0;
 }

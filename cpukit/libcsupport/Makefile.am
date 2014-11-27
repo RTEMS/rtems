@@ -98,10 +98,9 @@ MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
     src/realloc.c src/_calloc_r.c src/_malloc_r.c \
     src/free.c src/_free_r.c \
     src/_realloc_r.c src/mallocfreespace.c \
-   src/mallocgetheapptr.c src/mallocsetheapptr.c \
-    src/mallocinfo.c src/malloc_walk.c src/malloc_get_statistics.c \
-    src/malloc_report_statistics.c src/malloc_report_statistics_plugin.c \
-    src/malloc_statistics_helpers.c src/posix_memalign.c \
+    src/mallocgetheapptr.c src/mallocsetheapptr.c \
+    src/mallocinfo.c src/malloc_walk.c \
+    src/posix_memalign.c \
     src/rtems_memalign.c src/malloc_deferred.c \
     src/malloc_dirtier.c src/malloc_p.h src/rtems_malloc.c \
     src/rtems_heap_extend_via_sbrk.c \
