@@ -93,10 +93,6 @@ $(PROJECT_INCLUDE)/bsp/linker-symbols.h: ../shared/include/linker-symbols.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/linker-symbols.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/linker-symbols.h
 
-$(PROJECT_INCLUDE)/bsp/hwreg_vals.h: include/hwreg_vals.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/hwreg_vals.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/hwreg_vals.h
-
 $(PROJECT_INCLUDE)/bsp/tsec-config.h: include/tsec-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tsec-config.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tsec-config.h

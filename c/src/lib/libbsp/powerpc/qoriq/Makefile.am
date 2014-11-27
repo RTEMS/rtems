@@ -28,7 +28,6 @@ include_bsp_HEADERS = include/irq.h \
 	../shared/include/start.h \
 	../shared/include/tictac.h \
 	../shared/include/linker-symbols.h \
-	include/hwreg_vals.h \
 	include/tsec-config.h \
 	include/u-boot-config.h \
 	include/mmu.h \
