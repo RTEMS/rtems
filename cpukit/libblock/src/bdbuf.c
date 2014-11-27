@@ -2749,8 +2749,14 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
 {
   rtems_bdbuf_swapout_worker* worker;
   bool                        transfered_buffers = false;
+  bool                        sync_active;
 
   rtems_bdbuf_lock_cache ();
+
+  /*
+   * To set this to true you need the cache and the sync lock.
+   */
+  sync_active = bdbuf_cache.sync_active;
 
   /*
    * If a sync is active do not use a worker because the current code does not
@@ -2761,7 +2767,7 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
    * lock. The simplest solution is to get the main swap out task perform all
    * sync operations.
    */
-  if (bdbuf_cache.sync_active)
+  if (sync_active)
     worker = NULL;
   else
   {
@@ -2773,14 +2779,14 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
 
   rtems_chain_initialize_empty (&transfer->bds);
   transfer->dd = BDBUF_INVALID_DEV;
-  transfer->syncing = bdbuf_cache.sync_active;
+  transfer->syncing = sync_active;
 
   /*
    * When the sync is for a device limit the sync to that device. If the sync
    * is for a buffer handle process the devices in the order on the sync
    * list. This means the dev is BDBUF_INVALID_DEV.
    */
-  if (bdbuf_cache.sync_active)
+  if (sync_active)
     transfer->dd = bdbuf_cache.sync_device;
 
   /*
@@ -2799,7 +2805,7 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
   rtems_bdbuf_swapout_modified_processing (&transfer->dd,
                                            &bdbuf_cache.modified,
                                            &transfer->bds,
-                                           bdbuf_cache.sync_active,
+                                           sync_active,
                                            update_timers,
                                            timer_delta);
 
@@ -2830,7 +2836,7 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
     transfered_buffers = true;
   }
 
-  if (bdbuf_cache.sync_active && !transfered_buffers)
+  if (sync_active && !transfered_buffers)
   {
     rtems_id sync_requester;
     rtems_bdbuf_lock_cache ();
