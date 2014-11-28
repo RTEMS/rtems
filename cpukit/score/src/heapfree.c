@@ -201,6 +201,7 @@ bool _Heap_Free( Heap_Control *heap, void *alloc_begin_ptr )
   --stats->used_blocks;
   ++stats->frees;
   stats->free_size += block_size;
+  stats->lifetime_freed += block_size;
 
   return( true );
 }

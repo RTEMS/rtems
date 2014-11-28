@@ -257,6 +257,20 @@ struct Heap_Block {
  */
 typedef struct {
   /**
+   * @brief Lifetime number of bytes allocated from this heap.
+   *
+   * This value is an integral multiple of the page size.
+   */
+  uint64_t lifetime_allocated;
+
+  /**
+   * @brief Lifetime number of bytes freed to this heap.
+   *
+   * This value is an integral multiple of the page size.
+   */
+  uint64_t lifetime_freed;
+
+  /**
    * @brief Instance number of this heap.
    */
   uint32_t instance;
@@ -303,17 +317,22 @@ typedef struct {
   uint32_t max_search;
 
   /**
+   * @brief Total number of searches.
+   */
+  uint32_t searches;
+
+  /**
    * @brief Total number of successful allocations.
    */
   uint32_t allocs;
 
   /**
-   * @brief Total number of searches ever.
+   * @brief Total number of failed allocations.
    */
-  uint32_t searches;
+  uint32_t failed_allocs;
 
   /**
-   * @brief Total number of successful calls to free.
+   * @brief Total number of successful frees.
    */
   uint32_t frees;
 

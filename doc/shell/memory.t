@@ -551,9 +551,12 @@ to the command.  This includes the following information:
 @item Minimum free size ever in bytes
 @item Maximum number of free blocks ever
 @item Maximum number of blocks searched ever
+@item Lifetime number of bytes allocated
+@item Lifetime number of bytes freed
+@item Total number of searches
 @item Total number of successful allocations
-@item Total number of searches ever
-@item Total number of successful calls to free
+@item Total number of failed allocations
+@item Total number of successful frees
 @item Total number of successful resizes
 @end itemize
 
@@ -575,20 +578,23 @@ The following is an example of how to use the @code{malloc} command.
 @example
 SHLL [/] $ malloc
 C Program Heap and RTEMS Workspace are the same.
-Number of free blocks:                              14
-Largest free block:                          266157192
-Total bytes free:                            266164928
+Number of free blocks:                               2
+Largest free block:                          266207504
+Total bytes free:                            266208392
 Number of used blocks:                             167
-Largest used block:                              16424
-Total bytes used:                                90888
+Largest used block:                              16392
+Total bytes used:                                83536
 Instance number:                                     0
-Size of the allocatable area in bytes:       266255816
-Minimum free size ever in bytes:             266156136
-Maximum number of free blocks ever:                 15
-Maximum number of blocks searched ever:             15
+Size of the allocatable area in bytes:       266291928
+Minimum free size ever in bytes:             266207360
+Maximum number of free blocks ever:                  6
+Maximum number of blocks searched ever:              5
+Lifetime number of bytes allocated:              91760
+Lifetime number of bytes freed:                   8224
+Total number of searches:                          234
 Total number of successful allocations:            186
-Total number of searches ever:                     186
-Total number of successful calls to free:           19
+Total number of failed allocations:                  0
+Total number of successful frees:                   19
 Total number of successful resizes:                  0
 SHLL [/] $ malloc walk
 malloc walk

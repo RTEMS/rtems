@@ -254,10 +254,6 @@ void *_Heap_Allocate_aligned_with_boundary(
   } while ( search_again );
 
   if ( alloc_begin != 0 ) {
-    /* Statistics */
-    ++stats->allocs;
-    stats->searches += search_count;
-
     block = _Heap_Block_allocate( heap, block, alloc_begin, alloc_size );
 
     _Heap_Check_allocation(
@@ -268,6 +264,14 @@ void *_Heap_Allocate_aligned_with_boundary(
       alignment,
       boundary
     );
+
+    /* Statistics */
+    ++stats->allocs;
+    stats->searches += search_count;
+    stats->lifetime_allocated += _Heap_Block_size( block );
+  } else {
+    /* Statistics */
+    ++stats->failed_allocs;
   }
 
   /* Statistics */

@@ -43,17 +43,23 @@ void rtems_shell_print_heap_stats(
     "Minimum free size ever in bytes:          %12" PRIuPTR "\n"
     "Maximum number of free blocks ever:       %12" PRIu32 "\n"
     "Maximum number of blocks searched ever:   %12" PRIu32 "\n"
+    "Lifetime number of bytes allocated:       %12" PRIu64 "\n"
+    "Lifetime number of bytes freed:           %12" PRIu64 "\n"
+    "Total number of searches:                 %12" PRIu32 "\n"
     "Total number of successful allocations:   %12" PRIu32 "\n"
-    "Total number of searches ever:            %12" PRIu32 "\n"
-    "Total number of successful calls to free: %12" PRIu32 "\n"
+    "Total number of failed allocations:       %12" PRIu32 "\n"
+    "Total number of successful frees:         %12" PRIu32 "\n"
     "Total number of successful resizes:       %12" PRIu32 "\n",
     s->instance,
     s->size,
     s->min_free_size,
     s->max_free_blocks,
     s->max_search,
-    s->allocs,
+    s->lifetime_allocated,
+    s->lifetime_freed,
     s->searches,
+    s->allocs,
+    s->failed_allocs,
     s->frees,
     s->resizes
   );
