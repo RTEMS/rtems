@@ -9,9 +9,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#define m68k_set_cacr(_cacr) __asm__ volatile ("movec %0,%%cacr" : : "d" (_cacr))
-#define m68k_set_acr0(_acr0) __asm__ volatile ("movec %0,%%acr0" : : "d" (_acr0))
-#define m68k_set_acr1(_acr1) __asm__ volatile ("movec %0,%%acr1" : : "d" (_acr1))
+
 #define MM_SDRAM_BASE		(0x00000000)
 
 /*
@@ -25,6 +23,8 @@
 extern uint32_t MCF5235_BSP_START_FROM_FLASH;
 extern void CopyDataClearBSSAndStart (void);
 extern void INTERRUPT_VECTOR(void);
+
+extern void CopyVectors(const uint32_t* old, uint32_t* new);
 
 void Init5235 (void)
 {
@@ -77,15 +77,7 @@ void Init5235 (void)
     } /* we have finished setting up the sdram */
 
     /* Copy the interrupt vector table to address 0x0 in SDRAM */
-    {
-        uint32_t *inttab = (uint32_t *)&INTERRUPT_VECTOR;
-        uint32_t *intvec = (uint32_t *)0x0;
-        register int i;
-        for (i = 0; i < 256; i++)
-        {
-            *(intvec++) = *(inttab++);
-        }
-    }
+    CopyVectors((const uint32_t *)&INTERRUPT_VECTOR, (uint32_t*)0);
 
     m68k_set_vbr(0);
 
@@ -93,4 +85,5 @@ void Init5235 (void)
      * Copy data, clear BSS and call boot_card()
      */
     CopyDataClearBSSAndStart ();
+
 }
