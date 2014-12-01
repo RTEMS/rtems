@@ -25,11 +25,13 @@
 
 extern void FUNC(docomplex) (void);
 
+volatile complex FTYPE ca, cb;
+
 void
 FUNC(docomplex) (void)
 {
 #ifndef PROVIDE_EMPTY_FUNC
-  complex FTYPE ca, cb, cc;
+  complex FTYPE cc;
   FTYPE f1;
 
   ca = 1.0 + 1.0 * I;
