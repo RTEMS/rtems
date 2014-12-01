@@ -219,16 +219,6 @@ struct env {
   int untitled;             // Counter for untitled files
 };
 
-/*
- * This is a hack to allow a simple way to inspect the keys to
- * add extar decoding. It is not multi-user safe.
- */
-#define KEY_HISTORY 1
-#if KEY_HISTORY
-int key_history[32];
-size_t key_history_in;
-#endif
-
 //
 // Editor buffer functions
 //
@@ -813,19 +803,6 @@ static void get_modifier_keys(int *shift, int *ctrl) {
 static int getachar(void)
 {
   int ch = getchar();
-#if KEY_HISTORY
-  if (key_history_in < sizeof(key_history)) {
-      key_history[key_history_in++] = ch;
-#if defined(__rtems__)
-  } if (key_history_in > sizeof(key_history)) {
-    /* eliminate possibility of using index above array bounds */
-   assert( key_history_in > sizeof(key_history));
-#endif
-  } else {
-    memmove(&key_history[0], &key_history[1], sizeof(key_history) - sizeof(key_history[0]));
-    key_history[key_history_in - 1] = ch;
-  }
-#endif
   return ch;
 }
 
@@ -2155,7 +2132,7 @@ static void edit(struct editor *ed) {
 #endif
 #if defined(__rtems__)
         /*
-         * Coverity spotted this as using ed after free() so changing 
+         * Coverity spotted this as using ed after free() so changing
          * the order of the statements.
          */
         case ctrl('w'): ed = ed->env->current; close_editor(ed); break;
