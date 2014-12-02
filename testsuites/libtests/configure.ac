@@ -46,23 +46,24 @@ AC_MSG_CHECKING([whether CPU supports libdl])
 case $RTEMS_CPU in
   arm | bfin | h8300 | i386 | lm32 | m32r | m68k | mips | \
   moxie | powerpc | sparc | v850)
-   HAVE_LIBDL=yes ;;
+   TEST_LIBDL=yes ;;
   *)
-   HAVE_LIBDL=no ;;
+   TEST_LIBDL=no ;;
 esac
-AM_CONDITIONAL(DLTESTS,[test x"$HAVE_LIBDL" = x"yes"])
-AC_MSG_RESULT([$HAVE_LIBDL])
+AC_MSG_RESULT([$TEST_LIBDL])
 
-AS_IF([test x"$HAVE_LIBDL" = x"yes"],[
+AS_IF([test x"$TEST_LIBDL" = x"yes"],[
   AC_CHECK_PROG(RTEMS_LD_CHECK,rtems-ld,yes)
   if test x"$RTEMS_LD_CHECK" != x"yes" ; then
-    AC_MSG_ERROR([Please install rtems-tools.])
+    TEST_LIBDL=no
   fi
   AC_CHECK_PROG(RTEMS_SYMS_CHECK,rtems-syms,yes)
   if test x"$RTEMS_SYMS_CHECK" != x"yes" ; then
-    AC_MSG_ERROR([Please install rtems-tools.])
+    TEST_LIBDL=no
   fi
 ])
+
+AM_CONDITIONAL(DLTESTS,[test x"$TEST_LIBDL" = x"yes"])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
