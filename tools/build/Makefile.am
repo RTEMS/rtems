@@ -5,9 +5,9 @@ bin_PROGRAMS = cklength eolstrip packhex unhex rtems-bin2c
 noinst_PROGRAMS = binpatch
 
 cklength_SOURCES = cklength.c
-eolstrip_SOURCES = eolstrip.c
+eolstrip_SOURCES = eolstrip.c compat.c
 packhex_SOURCES = packhex.c
-unhex_SOURCES = unhex.c
+unhex_SOURCES = unhex.c compat.c
 binpatch_SOURCES = binpatch.c
 rtems_bin2c_SOURCES = rtems-bin2c.c
 
