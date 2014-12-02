@@ -62,7 +62,7 @@ BEGIN_CODE
 	PUBLIC (start)		# GNU default entry point
 
 	EXTERN (boot_card)
-#ifdef USE_VBE_RM
+#if USE_VBE_RM
         EXTERN (vesa_realmode_bootup_init)
 #endif
 	EXTERN (_load_segments)
@@ -205,7 +205,7 @@ SYM (zero_bss):
 +-------------------------------------------------------------------*/
 	call _IBMPC_initVideo
 
-#ifdef USE_VBE_RM
+#if USE_VBE_RM
         call    vesa_realmode_bootup_init
 #endif
 
