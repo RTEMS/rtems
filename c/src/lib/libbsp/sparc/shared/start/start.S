@@ -35,11 +35,20 @@
 /*
  * System call optimized trap table entry
  */
-#define SYSCALL_TRAP(_vector, _handler)  \
+#define IRQDIS_TRAP(_handler)  \
   mov   %psr, %l0 ; \
   sethi %hi(_handler), %l4 ; \
   jmp   %l4+%lo(_handler); \
-   subcc %g1, 3, %g0; ! prepare for syscall 3 check
+   or   %l0, 0x0f00, %l3; ! Set PIL=0xf to disable IRQ
+
+/*
+ * System call optimized trap table entry
+ */
+#define IRQEN_TRAP(_handler)  \
+  mov   %psr, %l0 ; \
+  sethi %hi(_handler), %l4 ; \
+  jmp   %l4+%lo(_handler); \
+   andn %l0, 0xf00, %l3; ! Set PIL=0 to Enable IRQ
 
 /*
  * Window Overflow optimized trap table entry
@@ -183,12 +192,23 @@ SYM(CLOCK_SPEED):
    *        installed before.
    */
 
-  SYSCALL_TRAP( 0x80, SYM(syscall) );		! 80 syscall SW trap
-  SOFT_TRAP; SOFT_TRAP;  	            	! 81 - 82
+  TRAP( 0x80, SYM(syscall) );                   ! 80 halt syscall SW trap
+  SOFT_TRAP; SOFT_TRAP;                         ! 81 - 82
   TRAP( 0x83, SYM(window_flush_trap_handler) ); ! 83 flush windows SW trap
 
   SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 84 - 87
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 88 - 8B
+  SOFT_TRAP;                                    ! 88
+
+  /*
+   *  SW Trap 9-15 Reserved for Operating System
+   *  
+   *  SPARC_SWTRAP_IRQDIS
+   *  SPARC_SWTRAP_IRQEN
+   */
+  IRQDIS_TRAP(SYM(syscall_irqdis));             ! 89 IRQ Disable syscall trap
+  IRQEN_TRAP(SYM(syscall_irqen));               ! 8A IRQ Enable syscall trap
+
+  SOFT_TRAP;                                    ! 8B
   SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 8C - 8F
   SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 90 - 93
   SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 94 - 97

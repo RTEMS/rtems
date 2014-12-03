@@ -499,8 +499,7 @@ dont_fix_pil2:
         cmp      %l7, 0
         bne      profiling_not_outer_most_exit
          nop
-        call     SYM(sparc_disable_interrupts), 0
-         nop
+        ta       SPARC_SWTRAP_IRQDIS    ! Call interrupt disable trap handler
         ld       [%l4], %o2             ! o2 = 3rd arg = interrupt exit instant
         mov      %l3, %o1               ! o1 = 2nd arg = interrupt entry instant
         call     SYM(_Profiling_Outer_most_interrupt_entry_and_exit), 0
@@ -585,38 +584,31 @@ profiling_not_outer_most_exit:
         nop
 isr_dispatch:
         call    SYM(_Thread_Dispatch), 0
-        nop
+         nop
 
-	/*
-	 *  We invoked _Thread_Dispatch in a state similar to the interrupted
-	 *  task.  In order to safely be able to tinker with the register
-	 *  windows and get the task back to its pre-interrupt state,
-	 *  we need to disable interrupts disabled so we can safely tinker
-	 *  with the register windowing.  In particular, the CWP in the PSR
-	 *  is fragile during this period. (See PR578.)
-	 */
-	mov	2,%g1				! syscall (disable interrupts)
-	ta	0				! syscall (disable interrupts)
+        /*
+         *  We invoked _Thread_Dispatch in a state similar to the interrupted
+         *  task.  In order to safely be able to tinker with the register
+         *  windows and get the task back to its pre-interrupt state,
+         *  we need to disable interrupts disabled so we can safely tinker
+         *  with the register windowing.  In particular, the CWP in the PSR
+         *  is fragile during this period. (See PR578.)
+         */
+        ta      SPARC_SWTRAP_IRQDIS  ! syscall (disable interrupts)
 
         /*
          *  While we had ISR dispatching disabled in this thread,
          *  did we miss anything.  If so, then we need to do another
          *  _Thread_Dispatch before leaving this ISR Dispatch context.
          */
+        ldub    [%g6 + PER_CPU_DISPATCH_NEEDED], %l7
 
-        ldub     [%g6 + PER_CPU_DISPATCH_NEEDED], %l7
+        orcc    %l7, %g0, %g0        ! Is thread switch necesary?
+        bne,a   isr_dispatch         ! Yes, then invoke the dispatcher.
+                                     ! g1 = Old PSR PIL returned from IRQDis
+        ta      SPARC_SWTRAP_IRQEN   ! syscall (enable interrupts to same level)
 
-        orcc     %l7, %g0, %g0    ! Is thread switch necesary?
-        bz       allow_nest_again ! No, then clear out and return
-        nop
-
-        ! Yes, then invoke the dispatcher
-dispatchAgain:
-	mov	3,%g1				! syscall (enable interrupts)
-	ta	0				! syscall (enable interrupts)
-        ba      isr_dispatch
-        nop
-
+        ! No, then clear out and return
 allow_nest_again:
 
         ! Zero out ISR stack nesting prevention flag

@@ -149,6 +149,11 @@ extern "C" {
 
 #define LEON3_ASR17_PROCESSOR_INDEX_SHIFT 28
 
+/* SPARC Software Trap number definitions */
+#define SPARC_SWTRAP_SYSCALL 0
+#define SPARC_SWTRAP_IRQDIS 9
+#define SPARC_SWTRAP_IRQEN 10
+
 #ifndef ASM
 
 /**
@@ -298,7 +303,12 @@ void _SPARC_Set_TBR( uint32_t new_tbr );
  *
  * @return This method returns the entire PSR contents.
  */
-uint32_t sparc_disable_interrupts(void);
+static inline uint32_t sparc_disable_interrupts(void)
+{
+  register uint32_t psr __asm__("g1"); /* return value of trap handler */
+  __asm__ volatile ( "ta %1\n\t" : "=r" (psr) : "i" (SPARC_SWTRAP_IRQDIS));
+  return psr;
+}
 
 /**
  * @brief SPARC enable processor interrupts.
@@ -307,7 +317,11 @@ uint32_t sparc_disable_interrupts(void);
  *
  * @param[in] psr is the PSR returned by @ref sparc_disable_interrupts.
  */
-void sparc_enable_interrupts(uint32_t psr);
+static inline void sparc_enable_interrupts(uint32_t psr)
+{
+  register uint32_t _psr __asm__("g1") = psr; /* input to trap handler */
+  __asm__ volatile ( "ta %0\n" :: "i" (SPARC_SWTRAP_IRQEN), "r" (_psr));
+}
 
 /**
  * @brief SPARC exit through system call 1
