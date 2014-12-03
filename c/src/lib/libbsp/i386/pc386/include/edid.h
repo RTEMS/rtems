@@ -34,7 +34,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <rtems/score/basedefs.h>
-#define EDID_PACKED_ATTRIBUTE   RTEMS_COMPILER_PACKED_ATTRIBUTE
 #define EDID_INLINE_ROUTINE     RTEMS_INLINE_ROUTINE
 
 /*  VESA Enhanced Extended Display Identification Data (E-EDID) Proposed
@@ -70,7 +69,7 @@ extern "C" {
 #define EDID1_DTD_HorizontalSyncIsPositiveOff   1
 #define EDID1_DTD_HorizontalSyncIsPositiveMask  0x1
 
-struct DetailedTimingDescriptor {
+typedef struct {
     uint8_t PixelClock_div10000[2];
     uint8_t HorizontalActiveLow;
     uint8_t HorizontalBlankingLow;
@@ -88,85 +87,85 @@ struct DetailedTimingDescriptor {
     uint8_t HorizontalBorder;
     uint8_t VerticalBorder;
     uint8_t Flags;
-} EDID_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_detailed_timing_descriptor;
 
-EDID_INLINE_ROUTINE uint16_t DTD_HorizontalActive (
-    struct DetailedTimingDescriptor *dtd)
+EDID_INLINE_ROUTINE uint16_t DTD_horizontal_active (
+    EDID_detailed_timing_descriptor *dtd)
 {
     return (dtd->HorizontalActiveLow |
         (dtd->HorizontalBlanking_ActiveHigh & 0xF0) << 4);
 }
 
-EDID_INLINE_ROUTINE uint16_t DTD_HorizontalBlanking (
-    struct DetailedTimingDescriptor *dtd)
+EDID_INLINE_ROUTINE uint16_t DTD_horizontal_blanking (
+    EDID_detailed_timing_descriptor *dtd)
 {
     return (dtd->HorizontalBlankingLow |
         (dtd->HorizontalBlanking_ActiveHigh & 0xF) << 8);
 }
 
-EDID_INLINE_ROUTINE uint16_t DTD_VerticalActive (
-    struct DetailedTimingDescriptor *dtd)
+EDID_INLINE_ROUTINE uint16_t DTD_vertical_active (
+    EDID_detailed_timing_descriptor *dtd)
 {
     return (dtd->VerticalActiveLow |
         (dtd->VerticalBlanking_ActiveHigh & 0xF0) << 4);
 }
 
-EDID_INLINE_ROUTINE uint16_t DTD_VerticalBlanking (
-    struct DetailedTimingDescriptor *dtd)
+EDID_INLINE_ROUTINE uint16_t DTD_vertical_blanking (
+    EDID_detailed_timing_descriptor *dtd)
 {
     return (dtd->VerticalBlankingLow |
         (dtd->VerticalBlanking_ActiveHigh & 0xF) << 8);
 }
 
-EDID_INLINE_ROUTINE uint16_t DTD_VerticalSyncPulseWidth (
-    struct DetailedTimingDescriptor *dtd)
+EDID_INLINE_ROUTINE uint16_t DTD_vertical_sync_pulse_width (
+    EDID_detailed_timing_descriptor *dtd)
 {
     return ((dtd->VerticalSyncPulseWidth_OffsetLow & 0xF) |
         (dtd->Vert_Hor_SyncPulseWidth_Offset_High & 0x3) << 4);
 }
 
-EDID_INLINE_ROUTINE uint16_t DTD_VerticalSyncOffset (
-    struct DetailedTimingDescriptor *dtd)
+EDID_INLINE_ROUTINE uint16_t DTD_vertical_sync_offset (
+    EDID_detailed_timing_descriptor *dtd)
 {
     return ((dtd->VerticalSyncPulseWidth_OffsetLow >> 4) |
         (dtd->Vert_Hor_SyncPulseWidth_Offset_High & 0xC) << 2);
 }
 
-EDID_INLINE_ROUTINE uint16_t DTD_HorizontalSyncPulseWidth (
-    struct DetailedTimingDescriptor *dtd)
+EDID_INLINE_ROUTINE uint16_t DTD_horizontal_sync_pulse_width (
+    EDID_detailed_timing_descriptor *dtd)
 {
     return (dtd->HorizontalSyncPulseWidthLow |
         (dtd->Vert_Hor_SyncPulseWidth_Offset_High & 0x30) << 4);
 }
 
-EDID_INLINE_ROUTINE uint16_t DTD_HorizontalSyncOffset (
-    struct DetailedTimingDescriptor *dtd)
+EDID_INLINE_ROUTINE uint16_t DTD_horizontal_sync_offset (
+    EDID_detailed_timing_descriptor *dtd)
 {
     return (dtd->HorizontalSyncOffsetLow |
         (dtd->Vert_Hor_SyncPulseWidth_Offset_High & 0xC0) << 2);
 }
 
-EDID_INLINE_ROUTINE uint16_t DTD_VerticalImageSize (
-    struct DetailedTimingDescriptor *dtd)
+EDID_INLINE_ROUTINE uint16_t DTD_vertical_image_size (
+    EDID_detailed_timing_descriptor *dtd)
 {
     return (dtd->VerticalImageSizeLow |
         (dtd->Vertical_HorizontalImageSizeHigh & 0xF) << 8);
 }
 
-EDID_INLINE_ROUTINE uint16_t DTD_HorizontalImageSize (
-    struct DetailedTimingDescriptor *dtd)
+EDID_INLINE_ROUTINE uint16_t DTD_horizontal_image_size (
+    EDID_detailed_timing_descriptor *dtd)
 {
     return (dtd->HorizontalImageSizeLow |
         (dtd->Vertical_HorizontalImageSizeHigh & 0xF0) << 4);
 }
 
-struct ColorPointData {
+typedef struct {
     uint8_t ColorPointWhitePointIndexNumber;
     uint8_t ColorPointWhiteLowBits;
     uint8_t ColorPointWhite_x;
     uint8_t ColorPointWhite_y;
     uint8_t ColorPointWhiteGamma;
-} EDID_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_color_point_data;
 
 /* Basic Display Parameters */
 /* Monitor Descriptor - Data Type Tag */
@@ -175,7 +174,7 @@ struct ColorPointData {
 #define EDID_DTT_ASCIIString                0xFE
 
 #define EDID_DTT_MonitorRangeLimits         0xFD
-struct MonitorRangeLimits {
+typedef struct {
     uint8_t MinVerticalRateInHz;
     uint8_t MaxVerticalRateInHz;
     uint8_t MinHorizontalInKHz;
@@ -184,7 +183,7 @@ struct MonitorRangeLimits {
 /* see  VESA, Generalized Timing Formula Standard - GTF
         Version 1.0, December 18, 1996 */
     uint8_t GTFStandard[8];
-} EDID_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_monitor_range_limits;
 
 #define EDID_DTT_MonitorName                0xFC
 
@@ -222,18 +221,18 @@ struct MonitorRangeLimits {
 #define EDID_CVT_PrefVertRate60Hz           1
 #define EDID_CVT_PrefVertRate75Hz           2
 #define EDID_CVT_PrefVertRate85Hz           3
-struct CVT3ByteCodeDescriptor {
+typedef struct {
     uint8_t AddressableLinesLow;
     uint8_t AspectRatio_AddressableLinesHigh;
     uint8_t VerticalRate_PreferredVerticalRate;
-} EDID_PACKED_ATTRIBUTE;
-struct CVTTimingCodes3B {
+} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_CVT_3_byte_code_descriptor;
+typedef struct {
     uint8_t VersionNumber;
-    struct CVT3ByteCodeDescriptor cvt[4];
-} EDID_PACKED_ATTRIBUTE;
+    EDID_CVT_3_byte_code_descriptor cvt[4];
+} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_CVT_timing_codes_3B;
 
-EDID_INLINE_ROUTINE uint16_t edid1_CVT_AddressableLinesHigh (
-    struct CVT3ByteCodeDescriptor *cvt)
+EDID_INLINE_ROUTINE uint16_t edid1_CVT_addressable_lines_high (
+    EDID_CVT_3_byte_code_descriptor *cvt)
 {
     return (cvt->AddressableLinesLow |
         (cvt->VerticalRate_PreferredVerticalRate &
@@ -241,18 +240,18 @@ EDID_INLINE_ROUTINE uint16_t edid1_CVT_AddressableLinesHigh (
         ) << (8-EDID1_CVT_AddressableLinesHighOff) );
 }
 
-EDID_INLINE_ROUTINE uint8_t edid1_CVT_AspectRatio (
-    struct CVT3ByteCodeDescriptor *cvt)
+EDID_INLINE_ROUTINE uint8_t edid1_CVT_aspect_ratio (
+    EDID_CVT_3_byte_code_descriptor *cvt)
 {
     return (cvt->AspectRatio_AddressableLinesHigh >> EDID1_CVT_AspectRatioOff) &
         EDID1_CVT_AspectRatioMask;
 }
 
 #define EDID_DTT_EstablishedTimingsIII      0xF7
-struct EstablishedTimingsIII {
+typedef struct {
     uint8_t RevisionNumber;
     uint8_t EST_III[12];
-} EDID_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_established_timings_III;
 enum EST_III {
     EST_1152x864_75Hz   = 0,
     EST_1024x768_85Hz   = 1,
@@ -308,18 +307,18 @@ enum EST_III {
 #define EDID_DTT_DescriptorSpaceUnused      0x10
 /* DTT 0x0 - 0xF are manufacturer specific */
 
-struct MonitorDescriptor {
+typedef struct {
     uint8_t Flag0[2];
     uint8_t Flag1;
     uint8_t DataTypeTag;
     uint8_t Flag2;
     uint8_t DescriptorData[13];
-} EDID_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_monitor_descriptor;
 
-union DTD_MD {
-    struct DetailedTimingDescriptor dtd;
-    struct MonitorDescriptor md;
-} EDID_PACKED_ATTRIBUTE;
+union EDID_DTD_MD {
+    EDID_detailed_timing_descriptor dtd;
+    EDID_monitor_descriptor md;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE;
 
 #define EDID1_STI_ImageAspectRatioOff           0
 #define EDID1_STI_ImageAspectRatioMask          0x3
@@ -331,10 +330,10 @@ union DTD_MD {
 #define EDID_STI_AspectRatio_4_3            1
 #define EDID_STI_AspectRatio_5_4            2
 #define EDID_STI_AspectRatio_16_9           3
-struct StandardTimingIdentification {
+typedef struct {
     uint8_t HorizontalActivePixels;
     uint8_t ImageAspectRatio_RefreshRate;
-} EDID_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_standard_timing_identification;
 
 /* Video Input Definition */
 /* Analog = 0, Digital = 1 */
@@ -409,7 +408,7 @@ struct StandardTimingIdentification {
 #define EDID_DisplayType_RGB444YCrCb422             2
 #define EDID_DisplayType_RGB444YCrCb444YCrCb422     3
 
-struct edid1 {
+typedef struct {
     uint8_t Header[8];
 /*  Vendor Product Identification */
     uint8_t IDManufacturerName[2];
@@ -442,39 +441,39 @@ struct edid1 {
 /*  Established Timings I, II, Manufacturer's */
     uint8_t EST_I_II_Man[3];
 /*  Standard Timing Identification */
-    struct StandardTimingIdentification STI[8];
+    EDID_standard_timing_identification STI[8];
 /*  Detailed Timing Descriptions / Monitor Descriptions */
-    union DTD_MD dtd_md[4];
+    union EDID_DTD_MD dtd_md[4];
     uint8_t ExtensionFlag;
     uint8_t Checksum;
-} EDID_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_edid1;
 
-EDID_INLINE_ROUTINE uint16_t edid1_RedX (struct edid1 *edid) {
+EDID_INLINE_ROUTINE uint16_t edid1_RedX (EDID_edid1 *edid) {
     return (edid->RedXHigh<<2) | (edid->GreenRedLow>>6);
 }
-EDID_INLINE_ROUTINE uint16_t edid1_RedY (struct edid1 *edid) {
+EDID_INLINE_ROUTINE uint16_t edid1_RedY (EDID_edid1 *edid) {
     return (edid->RedYHigh<<2) | (edid->GreenRedLow>>4)&&0x3;
 }
-EDID_INLINE_ROUTINE uint16_t edid1_GreenX (struct edid1 *edid) {
+EDID_INLINE_ROUTINE uint16_t edid1_GreenX (EDID_edid1 *edid) {
     return (edid->GreenXHigh<<2) | (edid->GreenRedLow>>2)&&0x3;
 }
-EDID_INLINE_ROUTINE uint16_t edid1_GreenY (struct edid1 *edid) {
+EDID_INLINE_ROUTINE uint16_t edid1_GreenY (EDID_edid1 *edid) {
     return (edid->GreenYHigh<<2) | (edid->GreenRedLow&0x3);
 }
-EDID_INLINE_ROUTINE uint16_t edid1_BlueX (struct edid1 *edid) {
+EDID_INLINE_ROUTINE uint16_t edid1_BlueX (EDID_edid1 *edid) {
     return (edid->BlueXHigh<<2)  | (edid->WhiteBlueLow>>6);
 }
-EDID_INLINE_ROUTINE uint16_t edid1_BlueY (struct edid1 *edid) {
+EDID_INLINE_ROUTINE uint16_t edid1_BlueY (EDID_edid1 *edid) {
     return (edid->BlueYHigh<<2)  | (edid->WhiteBlueLow>>4)&&0x3;
 }
-EDID_INLINE_ROUTINE uint16_t edid1_WhiteX (struct edid1 *edid) {
+EDID_INLINE_ROUTINE uint16_t edid1_WhiteX (EDID_edid1 *edid) {
     return (edid->WhiteXHigh<<2) | (edid->WhiteBlueLow>>2)&&0x3;
 }
-EDID_INLINE_ROUTINE uint16_t edid1_WhiteY (struct edid1 *edid) {
+EDID_INLINE_ROUTINE uint16_t edid1_WhiteY (EDID_edid1 *edid) {
     return (edid->WhiteYHigh<<2) | (edid->WhiteBlueLow&0x3);
 }
 
-enum edid1_EstablishedTimings {
+enum edid1_established_timings {
 /*  Established Timings I */
     EST_800x600_60Hz    = 0,
     EST_800x600_56Hz    = 1,
@@ -497,9 +496,9 @@ enum edid1_EstablishedTimings {
     EST_1152x870_75Hz   = 23,
 };
 
-EDID_INLINE_ROUTINE uint8_t edid1_EstablishedTim (
-    struct edid1 *edid,
-    enum edid1_EstablishedTimings est)
+EDID_INLINE_ROUTINE uint8_t edid1_established_tim (
+    EDID_edid1 *edid,
+    enum edid1_established_timings est)
 {
     return (uint8_t)(edid->EST_I_II_Man[est/8] & (est%8));
 }

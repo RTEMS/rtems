@@ -45,9 +45,9 @@ extern "C" {
  * @retval  register ax content as defined in VBE RETURN STATUS paragraph
  *          -1 error calling graphical bios
  */
-uint32_t VBEControllerInformation (
-    struct VBE_VbeInfoBlock *infoBlock,
-    uint16_t queriedVBEVersion
+uint32_t VBE_controller_information (
+    VBE_vbe_info_block *info_block,
+    uint16_t queried_VBE_Version
 );
 
 /**
@@ -59,9 +59,9 @@ uint32_t VBEControllerInformation (
  * @retval  register ax content as defined in VBE RETURN STATUS paragraph
  *          -1 error calling graphical bios
  */
-uint32_t VBEModeInformation (
-    struct VBE_ModeInfoBlock *infoBlock,
-    uint16_t modeNumber
+uint32_t VBE_mode_information (
+    VBE_mode_info_block *info_block,
+    uint16_t mode_number
 );
 
 /**
@@ -73,9 +73,9 @@ uint32_t VBEModeInformation (
  * @retval  register ax content as defined in VBE RETURN STATUS paragraph
  *          -1 error calling graphical bios
  */
-uint32_t VBESetMode (
-    uint16_t modeNumber,
-    struct VBE_CRTCInfoBlock *infoBlock
+uint32_t VBE_set_mode (
+    uint16_t mode_number,
+    VBE_CRTC_info_block *info_block
 );
 
 /**
@@ -85,8 +85,8 @@ uint32_t VBESetMode (
  * @retval  register ax content as defined in VBE RETURN STATUS paragraph
  *          -1 error calling graphical bios
  */
-uint32_t VBECurrentMode (
-    uint16_t *modeNumber
+uint32_t VBE_current_mode (
+    uint16_t *mode_number
 );
 
 /**
@@ -101,10 +101,10 @@ uint32_t VBECurrentMode (
  * @retval  register ax content as defined in VBE RETURN STATUS paragraph
  *          -1 error calling graphical bios
  */
-uint32_t VBEReportDDCCapabilities (
-    uint16_t controllerUnitNumber,
-    uint8_t *secondsToTransferEDIDBlock,
-    uint8_t *DDCLevelSupported
+uint32_t VBE_report_DDC_capabilities (
+    uint16_t controller_unit_number,
+    uint8_t *seconds_to_transfer_EDID_block,
+    uint8_t *DDC_level_supported
 );
 
 /**
@@ -116,10 +116,10 @@ uint32_t VBEReportDDCCapabilities (
  * @retval  register ax content as defined in VBE RETURN STATUS paragraph
  *          -1 error calling graphical bios
  */
-uint32_t VBEReadEDID (
-    uint16_t controllerUnitNumber,
-    uint16_t EDIDBlockNumber,
-    struct edid1 *buffer
+uint32_t VBE_read_EDID (
+    uint16_t controller_unit_number,
+    uint16_t EDID_block_number,
+    EDID_edid1 *buffer
 );
 
 #ifdef __cplusplus

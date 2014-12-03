@@ -22,4 +22,3 @@
 
 #define IDT_SIZE (256)
 #define GDT_SIZE (3 + NUM_APP_DRV_GDT_DESCRIPTORS)
-

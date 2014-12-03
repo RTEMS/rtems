@@ -74,7 +74,10 @@ extern void *i386_get_default_rm_buffer(uint16_t *size);
  * @retval  0 call failed (GDT too small or pagin is on)
  *          1 call successful
  */
-extern int i386_real_interrupt_call(uint8_t interruptNumber, i386_realmode_interrupt_registers *ir);
+extern int i386_real_interrupt_call(
+    uint8_t interrupt_number,
+    i386_realmode_interrupt_registers *ir
+);
 
 #ifdef __cplusplus
 }

@@ -33,7 +33,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <rtems/score/basedefs.h>
-#define VBE3_PACKED_ATTRIBUTE   RTEMS_COMPILER_PACKED_ATTRIBUTE
 
 /*  VESA BIOS EXTENSION (VBE) Core functions Standard
     Version: 3.0 Date: September 16, 1998               */
@@ -156,12 +155,12 @@ extern "C" {
 #define VBE_RetVBESupSpeInf    0x00  /* Return VBE Supplemental
                                         Specification Information */
 /* *** Structures *** */
-struct VBE_FarPtr {
+typedef struct {
     uint16_t offset;
     uint16_t selector;
-} VBE3_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_far_pointer;
 
-struct VBE_PMInfoBlock {
+typedef struct {
     uint8_t   Signature[4];    /*  PM Info Block Signature */
     uint16_t  EntryPoint;      /*  Offset of PM entry point within BIOS */
     uint16_t  PMInitialize;    /*  Offset of PM initialization entry point */
@@ -172,7 +171,7 @@ struct VBE_PMInfoBlock {
     uint16_t  CodeSegSel;      /*  Selector to access code segment as data */
     uint8_t   InProtectMode;   /*  Set to 1 when in protected mode */
     uint8_t   Checksum;        /*  Checksum byte for structure */
-} VBE3_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_protected_mode_info_block;
 
 /* General VBE signature */
 #define VBE_SIGNATURE "VESA"
@@ -181,7 +180,7 @@ struct VBE_PMInfoBlock {
 /* for STUB see VBE CORE FUNCTIONS VERSION 3.0 - Appendix 1 */
 #define VBE_END_OF_VideoModeList 0xFFFF
 #define VBE_STUB_VideoModeList 0xFFFF
-struct VBE_VbeInfoBlock {
+typedef struct {
     uint8_t   VbeSignature[4];   /*  VBE Signature */
     uint16_t  VbeVersion;        /*  VBE Version */
     uint8_t  *OemStringPtr;      /*  VbeFarPtr to OEM String */
@@ -196,9 +195,9 @@ struct VBE_VbeInfoBlock {
     uint8_t   Reserved[222];     /*  Reserved for VBE implementation scratch */
     /*    area */
     uint8_t   OemData[256];      /*  Data Area for OEM Strings */
-} VBE3_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_vbe_info_block;
 
-struct VBE_ModeInfoBlock {
+typedef struct {
     /*  Mandatory information for all VBE revisions */
     uint16_t  ModeAttributes;        /* mode attributes */
     uint8_t   WinAAttributes;        /* window A attributes */
@@ -252,9 +251,9 @@ struct VBE_ModeInfoBlock {
     uint32_t  MaxPixelClock;         /* maximum pixel clock
                                         (in Hz) for graphics mode */
     uint8_t   Reserved3[189];        /* remainder of ModeInfoBlock */
-} VBE3_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_mode_info_block;
 
-struct VBE_CRTCInfoBlock {
+typedef struct {
     uint16_t  HorizontalTotal;       /* Horizontal total in pixels */
     uint16_t  HorizontalSyncStart;   /* Horizontal sync start in pixels */
     uint16_t  HorizontalSyncEnd;     /* Horizontal sync end in pixels */
@@ -265,16 +264,16 @@ struct VBE_CRTCInfoBlock {
     uint32_t  PixelClock;            /* Pixel clock in units of Hz */
     uint16_t  RefreshRate;           /* Refresh rate in units of 0.01 Hz */
     uint8_t   Reserved[40];          /* remainder of ModeInfoBlock */
-} VBE3_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_CRTC_info_block;
 
-struct VBE_PaletteEntry {
+typedef struct {
     uint8_t   Blue;                  /* Blue channel value (6 or 8 bits) */
     uint8_t   Green;                 /* Green channel value (6 or 8 bits) */
     uint8_t   Red;                   /* Red channel value(6 or 8 bits) */
     uint8_t   Alignment;             /* DWORD alignment byte (unused) */
-} VBE3_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_palette_entry;
 
-struct VBE_SupVbeInfoBlock {
+typedef struct {
     uint8_t   SupVbeSignature[7];    /* Supplemental VBE Signature */
     uint16_t  SupVbeVersion;         /* Supplemental VBE Version */
     uint8_t   SupVbeSubFunc[8];      /* Bitfield of supported subfunctions */
@@ -286,7 +285,7 @@ struct VBE_SupVbeInfoBlock {
     uint8_t   Reserved[221];         /* Reserved for description
                                         strings and future */
     /*  expansion */
-} VBE3_PACKED_ATTRIBUTE;
+} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_supplemental_vbe_info_block;
 
 /* VbeInfoBlock Capabilities */
 /*  D0 = 0  DAC is fixed width, with 6 bits per primary color */
@@ -460,4 +459,3 @@ struct VBE_SupVbeInfoBlock {
 #endif /* ASM */
 
 #endif /* _VBE_H */
-

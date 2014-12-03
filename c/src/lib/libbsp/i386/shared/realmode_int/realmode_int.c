@@ -181,7 +181,7 @@ void *i386_get_default_rm_buffer(uint16_t *size) {
     return default_rm_buffer_spot;
 }
 
-int i386_real_interrupt_call(uint8_t interruptNumber,
+int i386_real_interrupt_call(uint8_t interrupt_number,
                              i386_realmode_interrupt_registers *ir)
 {
     uint32_t pagingon;
@@ -270,7 +270,7 @@ int i386_real_interrupt_call(uint8_t interruptNumber,
         : "=rm"(interrupt_number_off)
     );
     interrupt_number_ptr = (uint8_t *)(rm_swtch_code_dst+interrupt_number_off);
-    *interrupt_number_ptr = interruptNumber;
+    *interrupt_number_ptr = interrupt_number;
     /* execute code that jumps to coppied function, which switches to real mode,
        loads registers with values passed to interrupt and executes interrupt */
     __asm__ volatile(   "\t"
@@ -403,4 +403,3 @@ int i386_real_interrupt_call(uint8_t interruptNumber,
     *ir = int_passed_regs_spot->inoutregs;
     return 1;
 }
-
