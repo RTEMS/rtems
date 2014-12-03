@@ -265,7 +265,7 @@ rtems_monitor_line_editor (
         switch (c)
         {
           case KEYS_END:
-            puts(buffer + pos);
+            fprintf(stdout, "%s", buffer + pos);
             pos = (int) strlen (buffer);
             break;
 
@@ -428,7 +428,7 @@ rtems_monitor_line_editor (
                 int ch, bs;
                 for (ch = end; ch > pos; ch--)
                   buffer[ch] = buffer[ch - 1];
-                puts(buffer + pos);
+                fprintf(stdout, "%s", buffer + pos);
                 for (bs = 0; bs < (end - pos + 1); bs++)
                   putchar ('\b');
               }
