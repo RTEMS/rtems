@@ -1,20 +1,28 @@
+/**
+ * @file realmode_int.c
+ *
+ * @ingroup i386_shared
+ *
+ * @brief Real mode interrupt call implementation
+ */
+
 /*
- *  Realmode interrupt call implementation.
- *
- *
- *  Copyright (c) 2014 - CTU in Prague
- *                       Jan Doležal ( dolezj21@fel.cvut.cz )
+ * Copyright (c) 2014 - CTU in Prague
+ *                      Jan Doležal ( dolezj21@fel.cvut.cz )
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
- *
  */
 
 #include <bsp/realmode_int.h>
 #include <string.h>
 #include <rtems/score/cpu.h>
 
+/*
+ * offsets to \a i386_realmode_interrupt_registers declared in realmode_int.h
+ * used in inline assmbler for better readability
+ */
 #define IR_EAX_OFF      "0x00"
 #define IR_EBX_OFF      "0x04"
 #define IR_ECX_OFF      "0x08"
@@ -26,25 +34,45 @@
 #define IR_FS_OFF       "0x1C"
 #define IR_GS_OFF       "0x1E"
 
+/*
+ * offsets to \a rm_int_regs_bkp_param
+ */
 #define BKP_ESP_OFF     "0x20"
 #define BKP_SS_OFF      "0x24"
 #define BKP_DS_OFF      "0x26"
 #define RM_ENTRY        "0x28"
 #define PM_ENTRY        "0x2C"
 
-/* parameters, results, backup values accessible in real mode */
+/**
+ * @brief parameters, results, backup values accessible in real mode
+ *
+ * @note Struct members not necessarily used in C. This serves also as
+ *       layout of memory and it is used within inline assembler.
+ */
 typedef struct {
     i386_realmode_interrupt_registers inoutregs;
+    /** spot for back up of protected mode stack pointer */
     uint32_t pm_esp_bkp;
+    /** spot for back up of protected mode stack selector */
     uint16_t pm_ss_bkp;
+    /** spot for back up of protected mode data selector */
     uint16_t ds_bkp;
+    /** spot for setting up long indirect jump offset
+        to real mode from 16bit protected mode */
     uint16_t rm_entry;
+    /** spot for setting up long indirect jump segment
+        to real mode from 16bit protected mode */
     uint16_t rm_code_segment;
+    /** returning offset for long indirect jump back
+        to 32bit protected mode */
     uint32_t pm_entry;
+    /** returning selector for long indirect jump back
+        to 32bit protected mode */
     uint16_t pm_code_selector;
-    /* if modifying update offset definitions as well */
+    /* if this struct is to be modified update offset definitions as well */
 } RTEMS_COMPILER_PACKED_ATTRIBUTE rm_int_regs_bkp_param;
 
+/* offsets to \a pm_bkp_and_param */
 #define BKP_IDTR_LIM    "0x00"
 #define BKP_IDTR_BASE   "0x02"
 #define BKP_ES_OFF      "0x06"
@@ -55,18 +83,35 @@ typedef struct {
 #define RM_SS           "0x14"
 #define RM_SP           "0x16"
 #define RM_DS           "0x18"
-/* backup values, pointers/parameters accessible in protected mode */
+
+/**
+ * @brief backup values, pointers/parameters accessible in protected mode
+ *
+ * @note Struct members not necessarily used in C. This serves also as
+ *       layout of memory and it is used within inline assembler.
+ */
 typedef struct {
+    /** spot for backup protected mode interrupt descriptor table register */
     uint16_t idtr_lim_bkp;
+    /** @see idtr_lim_bkp */
     uint32_t idtr_base_bkp;
+    /** spot to backup of ES register value in 32bit protected mode */
     uint16_t es_bkp;
+    /** spot to backup of FS register value in 32bit protected mode */
     uint16_t fs_bkp;
+    /** spot to backup of GS register value in 32bit protected mode */
     uint16_t gs_bkp;
+    /** values for indirect jump to 16bit protected mode */
     uint32_t rml_entry;
+    /** @see rml_entry */
     uint16_t rml_code_selector;
+    /** data selector for 16bit protected mode */
     uint16_t rml_data_selector;
+    /** values determinig location of real mode stack */
     uint16_t rm_stack_segment;
+    /** @see rm_stack_segment */
     uint16_t rm_stack_pointer;
+    /** data segment for real mode */
     uint16_t rm_data_segment;
 } RTEMS_COMPILER_PACKED_ATTRIBUTE pm_bkp_and_param;
 
@@ -112,10 +157,14 @@ static __DP_TYPE descsPrepared = __DP_NO;
 static uint16_t rml_code_dsc_index = 0;
 static uint16_t rml_data_dsc_index = 0;
 
-/*
- * Prepares real-mode like descriptors to be used for switching
+/**
+ * @brief Prepares real-mode like descriptors to be used for switching
  * to real mode.
  *
+ * Descriptors will be placed to the GDT.
+ *
+ * @param[in] base32 32-bit physical address to be used as base for 16-bit
+ *               protected mode descriptors
  * @retval __DP_YES descriptors are prepared
  * @retval __DP_FAIL descriptors allocation failed (GDT too small)
  */

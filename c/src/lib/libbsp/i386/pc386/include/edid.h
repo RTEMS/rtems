@@ -4,16 +4,16 @@
  * @ingroup i386_pc386
  *
  * @brief VESA EDID definitions.
+ *
+ * This file contains definitions for constants related to
+ * VESA Extended Display Identification Data.
+ *         More information can be found at
+ *     <http://www.vesa.org/vesa-standards/free-standards/>
+ *         VESA public standards may be found at
+ *     <http://www.vesa.org/wp-content/uploads/2010/12/thankspublic.htm>
  */
 
 /*
- * edid.h  - This file contains definitions for constants related to
- *           VESA Extended Display Identification Data.
- *          More information can be found at
- *      <http://www.vesa.org/vesa-standards/free-standards/>
- *          VESA public standards may be found at
- *      <http://www.vesa.org/wp-content/uploads/2010/12/thankspublic.htm>
- *
  * Copyright (C) 2014  Jan Doležal (dolezj21@fel.cvut.cz)
  *                     CTU in Prague.
  *

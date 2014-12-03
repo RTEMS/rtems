@@ -334,9 +334,9 @@ SYM (i386_Physical_to_logical):
  *     uint16_t *offset
  *  );
  *
- *  Fills segment:offest realmode pointer counted from thirty-two bit physical
+ *  Fills segment:offest real mode pointer counted from thirty-two bit physical
  *  address.
- *  Returns 0 if unconvertible, 1 if successfuly converted.
+ *  Returns 0 if inconvertible, 1 if successfuly converted.
  */
 
 .set PHYS_PTR_ARG,   4

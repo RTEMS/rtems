@@ -7,7 +7,6 @@
  */
 
 /*
- * Definitions related to the PC386 BSP.
  * This header file is also used in assembler modules.
  *
  * Copyright (C) 2014  Jan Doležal (dolezj21@fel.cvut.cz)

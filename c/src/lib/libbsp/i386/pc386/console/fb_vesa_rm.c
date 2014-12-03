@@ -1,35 +1,39 @@
-/*
- *  FB driver for graphic hardware compatible with VESA Bios Extension
- *  Real mode interface utilized
- *  Tested on real HW.
+/**
+ * @file fb_vesa_rm.c
  *
- *  Copyright (c) 2014 - CTU in Prague
- *                       Jan Doležal ( dolezj21@fel.cvut.cz )
+ * @ingroup i386_pc386
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * @brief FB driver for graphic hardware compatible with VESA Bios Extension
+ *     Real mode interface utilized
+ *     Tested on real HW.
  *
- *  The code for rtems_buffer_* functions were greatly
- *  inspired or coppied from:
- *    - RTEMS fb_cirrus.c - Alexandru-Sever Horin (alex.sever.h@gmail.com)
+ * Public sources related:
+ *   - VESA BIOS EXTENSION (VBE) Core Function Standard, Ver: 3.0, Sep 16, 1998
+ *   - VESA Enhanced Extended Display Identification Data (E-EDID) Standard
+ *     Release A, Revision 2, September 25, 2006
  *
- *  Public sources related:
- *    - VESA BIOS EXTENSION (VBE) Core Function Standard, Ver: 3.0, Sep 16, 1998
- *    - VESA Enhanced Extended Display Identification Data (E-EDID) Standard
- *      Release A, Revision 2, September 25, 2006
+ * Hardware is completely initialized upon boot of the system.
+ * Therefore there is no way to change graphics mode later.
+ *
+ * Interrupt 0x10 is used for entering graphics BIOS.
+ *
+ * Driver reads parameter from multiboot command line to setup video:
+ * "--video=<resX>x<resY>[-<bpp>]"
+ * If cmdline parameter is not specified an attempt for obtaining
+ * resolution from display attached is made.
  */
 
 /*
- *  Hardware is completely initialized upon boot of the system.
- *  Therefore there is no way to change graphics mode later.
+ * Copyright (c) 2014 - CTU in Prague
+ *                      Jan Doležal ( dolezj21@fel.cvut.cz )
  *
- *  Interrupt 0x10 is used for entering graphics BIOS.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  *
- *  Driver reads parameter from multiboot command line to setup video:
- *  "--video=<resX>x<resY>[-<bpp>]"
- *  If cmdline parameter is not specified an attempt for obtaining
- *  resolution from display attached is made.
+ * The code for rtems_buffer_* functions were greatly
+ * inspired or coppied from:
+ *   - RTEMS fb_cirrus.c - Alexandru-Sever Horin (alex.sever.h@gmail.com)
  */
 
 #include <bsp.h>
@@ -48,6 +52,13 @@
 
 #define FB_VESA_NAME    "FB_VESA_RM"
 
+/**
+ * @brief Initializes VBE framebuffer during bootup.
+ *
+ * utilizes switches to real mode interrupts and therefore must be
+ * called during bootup before tick is set up and real-time
+ * interrupt vectors utilized
+ */
 void vesa_realmode_bootup_init(void);
 
 /* mutex for protection against multiple opens, when called frame_buffer_open */
@@ -187,19 +198,37 @@ uint32_t VBE_read_EDID(uint16_t controller_unit_number,
     return (parret.reg_eax & 0xFFFF);
 }
 
+/**
+ * @brief Basic graphic's mode parameters
+ */
 typedef struct {
+    /** number of the graphic's mode */
     uint16_t mode_number;
+    /** number of pixels in one line */
     uint16_t resX;
+    /** number of lines */
     uint16_t resY;
+    /** bits per pixel */
     uint8_t bpp;
 } Mode_params;
 
-/* finds mode in 'modeList' of 'listLength' length according to resolution
-    given in 'searchedResolution'. If bpp is given in that struct as well
-    mode with such color depth and resolution is searched for. Otherwise bpp
-    has to be zero. Mode number found is returned and also filled into
-    'searchedResolution'. bpp is also filled into 'searchedResolution' if it
-    was 0 before call. */
+/**
+ * @brief Find mode by resolution in the given list of modes
+ *
+ * finds mode in \p mode_list of \p list_length length according to resolution
+ * given in \p searched_resolution . If bpp is given in that struct as well
+ * mode with such color depth and resolution is searched for. Otherwise bpp
+ * has to be zero. Mode number found is returned and also filled into
+ * \p searched_resolution . bpp is also filled into \p searchedResolution if it
+ * was 0 before call.
+ *
+ * @param[in] mode_list list of modes to be searched
+ * @param[in] list_length number of modes in the list
+ * @param[in,out] searched_resolution element filled with searched resolution
+ *                or/and bpp; mode_number is filled in if appropriate mode found
+ * @retval mode number satisfying given parameters
+ * @retval -1 no suitable mode found
+ */
 static uint16_t find_mode_by_resolution(Mode_params *mode_list,
                                         uint8_t list_length,
                                         Mode_params *searched_resolution)
@@ -223,14 +252,18 @@ static uint16_t find_mode_by_resolution(Mode_params *mode_list,
     return -1;
 }
 
-/*
- * Parse comandline option "--video=" if available.
+/**
+ * @brief Find mode given within command line.
+ *
+ * Parse command line option "--video=" if available.
  *  expected format
  *  --video=<resX>x<resY>[-<bpp>]
  *  numbers <resX>, <resY> and <bpp> are decadic
  *
+ * @param[in] mode_list list of modes to be searched
+ * @param[in] list_length number of modes in the list
  * @retval video mode number to be set
- *         -1 on parsing error or when no suitable mode found
+ * @retval -1 on parsing error or when no suitable mode found
  */
 static uint16_t find_mode_using_cmdline(Mode_params *mode_list,
                                         uint8_t list_length)
@@ -278,11 +311,13 @@ static uint16_t find_mode_using_cmdline(Mode_params *mode_list,
     return -1;
 }
 
-/*
- * returns mode number best fitting to monitor attached
+/**
+ * @brief Find mode number best fitting to monitor attached
  *
+ * @param[in] mode_list list of modes to be searched
+ * @param[in] list_length number of modes in the list
  * @retval video mode number to be set
- *         -1 on parsing error or when no suitable mode found
+ * @retval -1 on parsing error or when no suitable mode found
  */
 static uint16_t find_mode_using_EDID( Mode_params *mode_list,
                                       uint8_t list_length)

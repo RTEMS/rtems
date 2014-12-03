@@ -185,10 +185,14 @@ void *i386_Physical_to_logical(
   void           *address
 );
 
-/*
- *  i386_Real_to_physical
+/**
+ * @brief Converts real mode pointer {segment, offset} to physical address.
  *
- *  Converts real mode pointer {segment, offset} to physical address.
+ * i386_Real_to_physical
+ *
+ * @param[in] segment used with \p offset to compute physical address
+ * @param[in] offset used with \p segment to compute physical address
+ * @retval    physical address
  */
 RTEMS_INLINE_ROUTINE void *i386_Real_to_physical(
     uint16_t segment,
@@ -197,19 +201,24 @@ RTEMS_INLINE_ROUTINE void *i386_Real_to_physical(
     return (void *)(((uint32_t)segment<<4)+offset);
 }
 
-/*
- *  i386_Physical_to_real
- *  Retreives real mode pointer elements {segmnet, offset} from physical address
- *  Function returns the highest segment (base) address possible.
- *  Example:    input   address - 0x4B3A2
- *              output  segment - 0x4B3A
- *                      offset  - 0x2
- *              input   address - 0x10F12E
- *              output  segment - 0xFFFF
- *                      offset  - 0xF13E
+/**
+ * @brief Retreives real mode pointer elements {segmnet, offset} from
+ * physical address.
  *
- *  return  0 address not convertible, must be less than 0x10FFEF
- *          1 segment and offset extracted
+ * i386_Physical_to_real
+ * Function returns the highest segment (base) address possible.
+ * Example:    input   address - 0x4B3A2
+ *             output  segment - 0x4B3A
+ *                     offset  - 0x2
+ *             input   address - 0x10F12E
+ *             output  segment - 0xFFFF
+ *                     offset  - 0xF13E
+ *
+ * @param[in]  address address to be converted, must be less than 0x10FFEF
+ * @param[out] segment segment computed from \p address
+ * @param[out] offset offset computed from \p address
+ * @retval  0 address not convertible
+ * @retval  1 segment and offset extracted
  */
 int i386_Physical_to_real(
   void *address,
