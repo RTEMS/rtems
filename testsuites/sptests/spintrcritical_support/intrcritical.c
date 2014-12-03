@@ -67,41 +67,13 @@ static __attribute__( ( noinline ) ) void busy( rtems_interval max )
   } while ( i < max );
 }
 
-static bool interrupt_critical_busy_wait( void )
-{
-  rtems_interval max = interrupt_critical.maximum_current;
-  bool reset = max <= interrupt_critical.minimum;
-
-  if ( reset ) {
-    interrupt_critical.maximum_current = interrupt_critical.maximum;
-  } else {
-    interrupt_critical.maximum_current = max - 1;
-  }
-
-  busy( max );
-
-  return reset;
-}
-
-void interrupt_critical_section_test_support_initialize(
-  rtems_timer_service_routine_entry tsr
-)
+static rtems_interval get_one_tick_busy_value( void )
 {
   rtems_interval last;
   rtems_interval now;
   rtems_interval a;
   rtems_interval b;
   rtems_interval m;
-
-  interrupt_critical.tsr = tsr;
-
-  if ( tsr != NULL && interrupt_critical.timer == 0 ) {
-    rtems_status_code sc = rtems_timer_create(
-      INTERRUPT_CRITICAL_NAME,
-      &interrupt_critical.timer
-    );
-    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-  }
 
   /* Choose a lower bound */
   a = 1;
@@ -138,6 +110,43 @@ void interrupt_critical_section_test_support_initialize(
       a = m;
     }
   } while ( b - a > 1 );
+
+  return m;
+}
+
+static bool interrupt_critical_busy_wait( void )
+{
+  rtems_interval max = interrupt_critical.maximum_current;
+  bool reset = max <= interrupt_critical.minimum;
+
+  if ( reset ) {
+    interrupt_critical.maximum_current = interrupt_critical.maximum;
+  } else {
+    interrupt_critical.maximum_current = max - 1;
+  }
+
+  busy( max );
+
+  return reset;
+}
+
+void interrupt_critical_section_test_support_initialize(
+  rtems_timer_service_routine_entry tsr
+)
+{
+  rtems_interval m;
+
+  interrupt_critical.tsr = tsr;
+
+  if ( tsr != NULL && interrupt_critical.timer == 0 ) {
+    rtems_status_code sc = rtems_timer_create(
+      INTERRUPT_CRITICAL_NAME,
+      &interrupt_critical.timer
+    );
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  }
+
+  m = get_one_tick_busy_value();
 
   interrupt_critical.minimum = 0;
   interrupt_critical.maximum = m;
