@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: defaultconfig01
+
+directives:
+
+  - main()
+
+concepts:
+
+  - Make sure the default configuration works.

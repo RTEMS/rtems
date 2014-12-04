@@ -35,11 +35,8 @@ noinst_LIBRARIES += libdevnull.a
 libdevnull_a_SOURCES = devnull/devnull.c devnull/devnull.h \
     devnull/devzero.c devnull/devzero.h
 
-## dummy
-EXTRA_DIST += dummy/README
-
 noinst_LIBRARIES += libdummy.a
-libdummy_a_SOURCES = dummy/dummy.c dummy/dummy-networking.c
+libdummy_a_SOURCES = dummy/default-configuration.c dummy/dummy-networking.c
 
 ## dumpbuf
 noinst_LIBRARIES += libdumpbuf.a

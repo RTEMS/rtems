@@ -36,7 +36,6 @@ libbsp_a_SOURCES += ../../sparc/shared/bsppretaskinghook.c
 libbsp_a_SOURCES += ../../shared/bsppost.c
 libbsp_a_SOURCES += ../../shared/bspstart.c
 libbsp_a_SOURCES += ../../shared/bootcard.c
-libbsp_a_SOURCES += ../../shared/bspinit.c
 libbsp_a_SOURCES += ../../shared/sbrk.c
 libbsp_a_SOURCES += startup/setvec.c
 libbsp_a_SOURCES += startup/spurious.c
