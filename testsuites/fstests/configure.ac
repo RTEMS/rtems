@@ -2,7 +2,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-tests-fstests],
-        [_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
+        [_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([imfs_support])
 RTEMS_TOP([../..],[..])
 

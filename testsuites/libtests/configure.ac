@@ -1,7 +1,7 @@
 ## Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([rtems-c-src-tests-libtests],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
+AC_INIT([rtems-c-src-tests-libtests],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([cpuuse])
 AC_CONFIG_HEADER([config.h])
 RTEMS_TOP([../..],[..])

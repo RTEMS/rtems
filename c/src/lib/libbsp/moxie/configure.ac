@@ -3,7 +3,7 @@
 ## $Id: configure.ac,v 1.15 2009/11/28 06:28:39 ralf Exp $
 
 AC_PREREQ(2.60)
-AC_INIT([rtems-c-src-lib-libbsp-moxie],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
+AC_INIT([rtems-c-src-lib-libbsp-moxie],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([moxiesim])
 RTEMS_TOP(../../../../..)
 
