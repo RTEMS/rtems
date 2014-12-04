@@ -274,3 +274,9 @@
     /* Control posted mode and functional SW reset */
 #define AM335X_TIMER_TCAR2            0x058
     /* Second captured value of counter register */
+#define AM335X_WDT_BASE                0x44E35000
+    /* Watchdog timer */
+#define AM335X_WDT_WWPS                0x34
+    /* Command posted status */
+#define AM335X_WDT_WSPR                0x48
+    /* Activate/deactivate sequence */

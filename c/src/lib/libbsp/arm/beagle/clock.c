@@ -251,6 +251,15 @@ beagle_clock_initialize(void)
       OMAP3_TCLR_OVF_TRG | OMAP3_TCLR_AR | OMAP3_TCLR_ST);
   /* also initilize the free runnning timer */
   omap3_frclock_init();
+
+#if IS_AM335X
+  /* Disable AM335X watchdog */
+  mmio_write(AM335X_WDT_BASE+AM335X_WDT_WSPR, 0xAAAA);
+  while(mmio_read(AM335X_WDT_BASE+AM335X_WDT_WWPS) != 0) ;
+  mmio_write(AM335X_WDT_BASE+AM335X_WDT_WSPR, 0x5555);
+  while(mmio_read(AM335X_WDT_BASE+AM335X_WDT_WWPS) != 0) ;
+#endif
+
 }
 
 static void beagle_clock_at_tick(void)
