@@ -155,7 +155,8 @@ void bsp_spurious_initialize()
     if (( trap == 5 ) || ( trap == 6 ) ||
         (( trap >= 0x11 ) && ( trap <= 0x1f )) ||
         (( trap >= 0x70 ) && ( trap <= 0x83 )) ||
-        ( trap == SPARC_SWTRAP_IRQDIS ) || ( trap == SPARC_SWTRAP_IRQEN ))
+        ( trap == 0x80 + SPARC_SWTRAP_IRQDIS ) ||
+        ( trap == 0x80 + SPARC_SWTRAP_IRQEN ))
       continue;
 
     set_vector(
