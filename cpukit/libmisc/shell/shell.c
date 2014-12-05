@@ -854,8 +854,7 @@ bool rtems_shell_main_loop(
         if (!input_file) {
           rtems_shell_cat_file(stdout,"/etc/motd");
           fprintf(stdout, "\n"
-                  "RTEMS SHELL (Ver.1.0-FRC):%s. " \
-                  __DATE__". 'help' to list commands.\n",
+                  "RTEMS Shell on %s. Use 'help' to list commands.\n",
                   shell_env->devname);
         }
 
