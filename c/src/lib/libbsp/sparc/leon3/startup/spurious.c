@@ -149,7 +149,7 @@ void bsp_spurious_initialize()
      *  Skip window overflow, underflow, and flush as well as software
      *  trap 0,9,10 which we will use as a shutdown, IRQ disable, IRQ enable.
      *  Also avoid trap 0x70 - 0x7f which cannot happen and where some of the
-     *  space is used to pass paramaters to the program.
+     *  space is used to pass parameters to the program.
      */
 
     if (( trap == 5 ) || ( trap == 6 ) ||

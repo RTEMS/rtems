@@ -142,14 +142,16 @@ void bsp_spurious_initialize()
 
     /*
      *  Skip window overflow, underflow, and flush as well as software
-     *  trap 0 which we will use as a shutdown. Also avoid trap 0x70 - 0x7f
-     *  which cannot happen and where some of the space is used to pass
-     *  paramaters to the program.
+     *  trap 0,9,10 which we will use as a shutdown, IRQ disable, IRQ enable.
+     *  Also avoid trap 0x70 - 0x7f which cannot happen and where some of the
+     *  space is used to pass parameters to the program.
      */
 
     if (( trap == 5 || trap == 6 ) ||
         (( trap >= 0x11 ) && ( trap <= 0x1f )) ||
-        (( trap >= 0x70 ) && ( trap <= 0x83 )))
+        (( trap >= 0x70 ) && ( trap <= 0x83 )) ||
+        ( trap == 0x80 + SPARC_SWTRAP_IRQDIS ) ||
+        ( trap == 0x80 + SPARC_SWTRAP_IRQEN ))
       continue;
 
     set_vector(
