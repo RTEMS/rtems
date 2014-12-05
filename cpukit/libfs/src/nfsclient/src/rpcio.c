@@ -1348,9 +1348,7 @@ rtems_status_code	status;
 					fprintf(stderr,"RPCIO XACT timed out; waking up requestor\n");
 #endif
 					if ( rtems_event_send(xact->requestor, RTEMS_RPC_EVENT) ) {
-						rtems_panic("RPCIO PANIC file %s line: %i, requestor id was 0x%08x",
-									__FILE__,
-									__LINE__,
+						rtems_panic("RPCIO PANIC: requestor id was 0x%08x",
 									xact->requestor);
 					}
 
