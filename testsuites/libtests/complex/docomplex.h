@@ -25,7 +25,7 @@
 
 extern void FUNC(docomplex) (void);
 
-volatile complex FTYPE ca, cb;
+static volatile complex FTYPE ca, cb;
 
 void
 FUNC(docomplex) (void)
