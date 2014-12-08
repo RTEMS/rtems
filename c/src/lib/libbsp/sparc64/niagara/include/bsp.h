@@ -2,18 +2,16 @@
  *
  *  This include file contains all SPARC64 simulator definitions.
  *
- *  COPYRIGHT (c) 1989-1998.
- *  On-Line Applications Research Corporation (OAR).
- *  COPYRIGHT (c) 1995.
- *  European Space Agency.
+ *  COPYRIGHT (c) 1989-1998. On-Line Applications Research Corporation (OAR).
+ *  COPYRIGHT (c) 1995. European Space Agency.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
  *
  *  Ported to Simics Niagara version of SPARC64 
- *  Niagara modifications of respective RTEMS file: COPYRIGHT (c) 2010.
- *  Eugen Leontie.
+ *  Niagara modifications of respective RTEMS file:
+ *  COPYRIGHT (c) 2010. Eugen Leontie.
  */
 
 #ifndef _BSP_H

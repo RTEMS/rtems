@@ -5,12 +5,11 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
- *  On-Line Applications Research Corporation (OAR).
+ *  COPYRIGHT (c) 1989-2007. On-Line Applications Research Corporation (OAR).
  *
  *  This file is based on the SPARC cpu.c file. Modifications are made to
  *  provide support for the SPARC-v9.
- *    COPYRIGHT (c) 2010. Gedare Bloom.
+ *  COPYRIGHT (c) 2010. Gedare Bloom.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

@@ -2,10 +2,8 @@
  *
  *  This include file contains all SPARC64 simulator definitions.
  *
- *  COPYRIGHT (c) 1989-1998.
- *  On-Line Applications Research Corporation (OAR).
- *  COPYRIGHT (c) 1995.
- *  European Space Agency.
+ *  COPYRIGHT (c) 1989-1998. On-Line Applications Research Corporation (OAR).
+ *  COPYRIGHT (c) 1995. European Space Agency.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -13,9 +11,8 @@
  *
  *  Ported to sun4u version of SPARC64 
  *  sun4u modifications of respective RTEMS file: 
- *    COPYRIGHT (c) 2010. 
- *    Eugen Leontie
- *    Gedare Bloom
+ *    COPYRIGHT (c) 2010. Eugen Leontie
+ *    COPYRIGHT (c) 2010. Gedare Bloom
  */
 
 #ifndef _BSP_H

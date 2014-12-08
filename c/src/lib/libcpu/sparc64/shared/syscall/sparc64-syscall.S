@@ -8,8 +8,6 @@
  *    + SYS_irqdis  (disable interrupts)
  *    + SYS_irqset  (set interrupt level)
  * 
- *  COPYRIGHT:
- *
  *  COPYRIGHT (c) 1995. European Space Agency.
  *  COPYRIGHT (c) 2010. Gedare Bloom.
  *
