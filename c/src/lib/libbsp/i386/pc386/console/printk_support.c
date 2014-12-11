@@ -19,7 +19,9 @@
 
 #include <rtems.h>
 #include <rtems/bspIo.h>
-#include <rtems/keyboard.h>
+#if BSP_ENABLE_VGA
+  #include <rtems/keyboard.h>
+#endif
 #include <bsp.h>
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>
@@ -36,27 +38,32 @@ int BSP_inch(void);
 
 void BSP_outch(char ch)
 {
-  if ( BSPPrintkPort == BSP_CONSOLE_VGA ) {
-    _IBMPC_outch( ch );
-  } else {
-    console_tbl *cptr;
+  #if BSP_ENABLE_VGA
+    if ( BSPPrintkPort == BSP_CONSOLE_VGA ) {
+      _IBMPC_outch( ch );
+      return;
+    }
+  #endif
+  console_tbl *cptr;
 
-    cptr = &Console_Configuration_Ports[BSPPrintkPort];
-    cptr->pDeviceFns->deviceWritePolled( BSPPrintkPort, ch );
-  }
+  cptr = &Console_Configuration_Ports[BSPPrintkPort];
+  cptr->pDeviceFns->deviceWritePolled( BSPPrintkPort, ch );
 }
 
 int BSP_inch(void) 
 {
   int           result;
 
-  if ( BSPPrintkPort == BSP_CONSOLE_VGA ) {
-    result = BSP_wait_polled_input();
-  } else {
-    do {
-      result = ns16550_inbyte_nonblocking_polled( BSPPrintkPort );
-    } while (result == -1);
-  }
+  #if BSP_ENABLE_VGA
+    if ( BSPPrintkPort == BSP_CONSOLE_VGA ) {
+      result = BSP_wait_polled_input();
+    } else
+  #endif
+    {
+      do {
+        result = ns16550_inbyte_nonblocking_polled( BSPPrintkPort );
+      } while (result == -1);
+    }
   return result;
 }
 

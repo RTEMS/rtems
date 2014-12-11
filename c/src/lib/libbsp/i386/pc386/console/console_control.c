@@ -26,7 +26,9 @@
 #include <rtems/termiostypes.h>
 #include <libchip/serial.h>
 #include <rtems/mouse_parser.h>
+#if BSP_ENABLE_VGA
 #include "keyboard.h"
+#endif
 #include "../../../shared/console_private.h"
 
 /*
@@ -40,6 +42,7 @@ rtems_device_driver console_control(
   void                    * arg
 )
 {
+#if BSP_ENABLE_VGA
   rtems_libio_ioctl_args_t *args = arg;
 
   switch (args->command) {
@@ -60,4 +63,7 @@ rtems_device_driver console_control(
  
   args->ioctl_return = 0;
   return RTEMS_SUCCESSFUL;
+#else
+  return rtems_termios_ioctl (arg);
+#endif
 }

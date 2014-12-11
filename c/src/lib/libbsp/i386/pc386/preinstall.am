@@ -123,6 +123,7 @@ $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
+if RTEMS_VGA
 $(PROJECT_INCLUDE)/rtems/keyboard.h: console/keyboard.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/keyboard.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/keyboard.h
@@ -143,10 +144,6 @@ $(PROJECT_INCLUDE)/rtems/vgacons.h: console/vgacons.h $(PROJECT_INCLUDE)/rtems/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/vgacons.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/vgacons.h
 
-$(PROJECT_INCLUDE)/i386_io.h: ../../i386/shared/comm/i386_io.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i386_io.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/i386_io.h
-
 if USE_VBE_RM
 $(PROJECT_INCLUDE)/bsp/vbe3.h: include/vbe3.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vbe3.h
@@ -162,6 +159,11 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/fb_vesa.h
 
 else
 endif
+endif
+$(PROJECT_INCLUDE)/i386_io.h: ../../i386/shared/comm/i386_io.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i386_io.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/i386_io.h
+
 $(PROJECT_INCLUDE)/pcibios.h: ../../i386/shared/pci/pcibios.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pcibios.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/pcibios.h

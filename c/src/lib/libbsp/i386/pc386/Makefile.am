@@ -74,14 +74,14 @@ libbsp_a_SOURCES += ../../shared/tod.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 include_rtemsdir = $(includedir)/rtems
-include_rtems_HEADERS = console/keyboard.h
+include_rtems_HEADERS  =
+
+if RTEMS_VGA
+include_rtems_HEADERS += console/keyboard.h
 include_rtems_HEADERS += console/kd.h
 include_rtems_HEADERS += console/ps2_drv.h
 include_rtems_HEADERS += ../../shared/console_private.h
 include_rtems_HEADERS += console/vgacons.h
-
-include_HEADERS += ../../i386/shared/comm/i386_io.h
-# console
 libbsp_a_SOURCES += console/inch.c
 libbsp_a_SOURCES += console/outch.c
 libbsp_a_SOURCES += console/defkeymap.c
@@ -92,20 +92,7 @@ libbsp_a_SOURCES += console/vgainit.c
 libbsp_a_SOURCES += console/vt.c
 libbsp_a_SOURCES += console/videoAsm.S
 libbsp_a_SOURCES += console/kbd_parser.c
-libbsp_a_SOURCES += console/serial_mouse_config.c
-libbsp_a_SOURCES += ../../i386/shared/comm/uart.c
-libbsp_a_SOURCES += ../../i386/shared/comm/tty_drv.c
-libbsp_a_SOURCES += ../../i386/shared/realmode_int/realmode_int.c
-libbsp_a_SOURCES += ../../shared/console.c
-libbsp_a_SOURCES += console/console_select.c
-libbsp_a_SOURCES += ../../shared/console_read.c
-libbsp_a_SOURCES += ../../shared/console_write.c
-libbsp_a_SOURCES += console/console_control.c
-libbsp_a_SOURCES += console/conscfg.c
-libbsp_a_SOURCES += console/printk_support.c
 libbsp_a_SOURCES += console/vgacons.c
-libbsp_a_SOURCES += console/exar17d15x.c
-libbsp_a_SOURCES += console/rtd316.c
 if USE_VBE_RM
 include_bsp_HEADERS += include/vbe3.h
 include_HEADERS += include/edid.h
@@ -118,6 +105,23 @@ else
 libbsp_a_SOURCES += console/fb_vga.c
 endif
 endif
+endif
+
+# console (non-graphics support)
+include_HEADERS += ../../i386/shared/comm/i386_io.h
+libbsp_a_SOURCES += console/serial_mouse_config.c
+libbsp_a_SOURCES += ../../i386/shared/comm/uart.c
+libbsp_a_SOURCES += ../../i386/shared/comm/tty_drv.c
+libbsp_a_SOURCES += ../../i386/shared/realmode_int/realmode_int.c
+libbsp_a_SOURCES += ../../shared/console.c
+libbsp_a_SOURCES += console/console_select.c
+libbsp_a_SOURCES += ../../shared/console_read.c
+libbsp_a_SOURCES += ../../shared/console_write.c
+libbsp_a_SOURCES += console/console_control.c
+libbsp_a_SOURCES += console/conscfg.c
+libbsp_a_SOURCES += console/printk_support.c
+libbsp_a_SOURCES += console/exar17d15x.c
+libbsp_a_SOURCES += console/rtd316.c
 
 # gdb
 libbsp_a_SOURCES += ../../i386/shared/comm/i386-stub.c

@@ -17,6 +17,11 @@ RTEMS_PROG_CCAS
 RTEMS_CHECK_NETWORKING
 RTEMS_CHECK_SMP
 
+RTEMS_BSPOPTS_SET([BSP_ENABLE_VGA],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_ENABLE_VGA],
+[Set if the VGA and keyboard console support is enabled.])
+AM_CONDITIONAL(RTEMS_VGA,[test "$BSP_ENABLE_VGA" = "1"])
+
 RTEMS_BSPOPTS_SET([USE_COM1_AS_CONSOLE],[*],[0])
 RTEMS_BSPOPTS_HELP([USE_COM1_AS_CONSOLE],
 [Determines, whether the console will be associated with the standard

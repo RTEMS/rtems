@@ -18,12 +18,17 @@
 #include <bsp.h>
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>
+#if BSP_ENABLE_VGA
 #include "vgacons.h"
+#endif
 #include <bsp/irq.h>
 #include <rtems/pci.h>
 #include <bsp/rtd316.h>
 
+#if BSP_ENABLE_VGA
 #define VGA_CONSOLE_FUNCTIONS  &vgacons_fns
+#endif
+
 #if 0
 #define COM_CONSOLE_FUNCTIONS  &ns16550_fns_polled
 #else
@@ -54,6 +59,7 @@ static void com_set_register(uint32_t addr, uint8_t i, uint8_t val)
 }
 
 console_tbl     Console_Configuration_Ports[] = {
+#if BSP_ENABLE_VGA
   {
     "/dev/vgacons",                        /* sDeviceName */
     VGA_CONSOLE,                           /* deviceType */
@@ -73,6 +79,7 @@ console_tbl     Console_Configuration_Ports[] = {
     0X0,                                   /* ulClock */
     0x0                                     /* ulIntVector -- base for port */
   },
+#endif
   {
     "/dev/com1",                           /* sDeviceName */
     SERIAL_NS16550,                        /* deviceType */

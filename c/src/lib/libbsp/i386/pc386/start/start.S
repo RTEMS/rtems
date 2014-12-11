@@ -198,6 +198,7 @@ SYM (zero_bss):
 	repne				# while ecx != 0
 	stosl				#   clear a long in the bss
 
+#if BSP_ENABLE_VGA
 /*-------------------------------------------------------------------+
 | Initialize the video because zero_bss has cleared initVideo parameters
 | if it was called earlier
@@ -207,6 +208,7 @@ SYM (zero_bss):
 
 #if USE_VBE_RM
         call    vesa_realmode_bootup_init
+#endif
 #endif
 
 /*---------------------------------------------------------------------+
