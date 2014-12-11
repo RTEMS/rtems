@@ -164,8 +164,11 @@ libbsp_a_SOURCES += ../../shared/src/irq-server.c
 # timer
 libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
 
+if HAS_IDE
 # ide
-libbsp_a_SOURCES += ide/idecfg.c ide/ide.c
+libbsp_a_SOURCES += ide/ide.c
+libbsp_a_SOURCES += ide/idecfg.c
+endif
 
 if HAS_SMP
 libbsp_a_SOURCES += ../../i386/shared/smp/getcpuid.c 

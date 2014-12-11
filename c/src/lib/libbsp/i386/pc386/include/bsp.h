@@ -218,6 +218,7 @@ void register_leds(                           /* from 'keyboard.c' */
 const char* bsp_cmdline(void);
 const char* bsp_cmdline_arg(const char* arg);
 
+#if BSP_ENABLE_IDE
 /*
  * IDE command line parsing.
  */
@@ -227,6 +228,7 @@ void bsp_ide_cmdline_init(void);
  * indicate, that BSP has IDE driver
  */
 #define RTEMS_BSP_HAS_IDE_DRIVER
+#endif
 
 /* GDB stub stuff */
 void init_remote_gdb( void );

@@ -79,7 +79,9 @@ static void bsp_start_default( void )
 
   Clock_driver_install_handler();
 
+#if BSP_ENABLE_IDE
   bsp_ide_cmdline_init();
+#endif
 
 } /* bsp_start_default */
 
