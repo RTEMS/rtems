@@ -2349,8 +2349,14 @@ const rtems_libio_helper rtems_fs_init_helper =
  * This defines the formula used to compute the amount of memory
  * reserved for IDLE task control structures.
  */
-#define CONFIGURE_MEMORY_FOR_IDLE_TASK \
-  CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_IDLE_TASKS_COUNT, 0)
+#if CPU_IDLE_TASK_IS_FP == TRUE
+  #define CONFIGURE_MEMORY_FOR_IDLE_TASK \
+    CONFIGURE_MEMORY_FOR_TASKS( \
+      CONFIGURE_IDLE_TASKS_COUNT, CONFIGURE_IDLE_TASKS_COUNT)
+#else
+  #define CONFIGURE_MEMORY_FOR_IDLE_TASK \
+    CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_IDLE_TASKS_COUNT, 0)
+#endif
 
 /**
  * This macro accounts for general RTEMS system overhead.
