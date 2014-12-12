@@ -150,6 +150,8 @@ extern "C" {
 
 #define BSP_INTERRUPT_VECTOR_MAX BSP_MAX_OFFSET
 
+extern int BSP_irq_enabled_at_cpm(const rtems_irq_number irqLine);
+
 #ifdef __cplusplus
 }
 #endif

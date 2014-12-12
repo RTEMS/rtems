@@ -626,30 +626,7 @@ int m8xx_spi_ioctl
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static rtems_status_code bsp_dummy_spi_sel_addr
-(
-/*-------------------------------------------------------------------------*\
-| Purpose:                                                                  |
-|   address a slave device on the bus                                       |
-+---------------------------------------------------------------------------+
-| Input Parameters:                                                         |
-\*-------------------------------------------------------------------------*/
- rtems_libi2c_bus_t *bh,                 /* bus specifier structure        */
- uint32_t addr,                          /* address to send on bus         */
- int rw                                  /* 0=write,1=read                 */
-)
-/*-------------------------------------------------------------------------*\
-| Return Value:                                                             |
-|    rtems_status_code                                                      |
-\*=========================================================================*/
-{			    
-  return  RTEMS_SUCCESSFUL;
-}
-
-/*=========================================================================*\
-| Function:                                                                 |
-\*-------------------------------------------------------------------------*/
-static rtems_status_code bsp_dummy_spi_send_start
+static rtems_status_code bsp_spi_send_start
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -670,28 +647,7 @@ static rtems_status_code bsp_dummy_spi_send_start
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static rtems_status_code bsp_dummy_spi_send_stop
-(
-/*-------------------------------------------------------------------------*\
-| Purpose:                                                                  |
-|   deselect SPI                                                            |
-+---------------------------------------------------------------------------+
-| Input Parameters:                                                         |
-\*-------------------------------------------------------------------------*/
- rtems_libi2c_bus_t *bh                  /* bus specifier structure        */
-)
-/*-------------------------------------------------------------------------*\
-| Return Value:                                                             |
-|    o = ok or error code                                                   |
-\*=========================================================================*/
-{
-  return RTEMS_SUCCESSFUL;
-}
-
-/*=========================================================================*\
-| Function:                                                                 |
-\*-------------------------------------------------------------------------*/
-static rtems_status_code bsp_pghplus_spi_sel_addr
+static rtems_status_code bsp_spi_sel_addr
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -740,7 +696,7 @@ static rtems_status_code bsp_pghplus_spi_sel_addr
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static rtems_status_code bsp_pghplus_spi_send_stop
+static rtems_status_code bsp_spi_send_stop
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -756,7 +712,7 @@ static rtems_status_code bsp_pghplus_spi_send_stop
 \*=========================================================================*/
 {
 #if defined(DEBUG)
-  printk("bsp_pghplus_spi_send_stop called... ");
+  printk("bsp_spi_send_stop called... ");
 #endif
     m8xx.pbdat = (m8xx.pbdat
 		  | PGHPLUS_PB_SPI_DISP4_CE_MSK
@@ -770,7 +726,7 @@ static rtems_status_code bsp_pghplus_spi_send_stop
 /*=========================================================================*\
 | Function:                                                                 |
 \*-------------------------------------------------------------------------*/
-static rtems_status_code bsp_pghplus_spi_init
+static rtems_status_code bsp_spi_init
 (
 /*-------------------------------------------------------------------------*\
 | Purpose:                                                                  |
@@ -790,7 +746,7 @@ static rtems_status_code bsp_pghplus_spi_init
   int ret_code;
 
 #if defined(DEBUG)
-  printk("bsp_pghplus_spi_init called... ");
+  printk("bsp_spi_init called... ");
 #endif
 
   /*
@@ -843,44 +799,14 @@ static rtems_status_code bsp_pghplus_spi_init
 }
 
 /*=========================================================================*\
-| Function:                                                                 |
-\*-------------------------------------------------------------------------*/
-static rtems_status_code bsp_dummy_spi_init
-(
-/*-------------------------------------------------------------------------*\
-| Purpose:                                                                  |
-|   do board specific init:                                                 |
-|   - initialize pins for addressing                                        |
-|   - register further drivers                                              |
-+---------------------------------------------------------------------------+
-| Input Parameters:                                                         |
-\*-------------------------------------------------------------------------*/
- int spi_busno
-)
-/*-------------------------------------------------------------------------*\
-| Return Value:                                                             |
-|    o = ok or error code                                                   |
-\*=========================================================================*/
-{
-#if defined(DEBUG)
-  printk("bsp_dummy_spi_init called... ");
-#endif
-
-#if defined(DEBUG)
-  printk("... exit OK\r\n");
-#endif
-  return RTEMS_SUCCESSFUL;
-}
-
-/*=========================================================================*\
 | list of handlers                                                          |
 \*=========================================================================*/
 
 rtems_libi2c_bus_ops_t bsp_spi_ops = {
   init:             m8xx_spi_init,
-  send_start:       bsp_dummy_spi_send_start,
-  send_stop:        SPI_SEND_STOP_FNC,
-  send_addr:        SPI_SEND_ADDR_FNC,
+  send_start:       bsp_spi_send_start,
+  send_stop:        bsp_spi_send_stop,
+  send_addr:        bsp_spi_sel_addr,
   read_bytes:       m8xx_spi_read_bytes,
   write_bytes:      m8xx_spi_write_bytes,
   ioctl:            m8xx_spi_ioctl
@@ -937,7 +863,7 @@ rtems_status_code bsp_register_spi
   }
   spi_busno = ret_code;
 
-  SPI_BOARD_INIT_FNC(spi_busno);
+  bsp_spi_init(spi_busno);
   /*
    * FIXME: further drivers, when available
    */

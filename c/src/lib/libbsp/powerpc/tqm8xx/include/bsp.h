@@ -66,6 +66,7 @@ LINKER_SYMBOL( bsp_work_area_start);
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
+#include <rtems/irq.h>
 #include <mpc8xx.h>
 #include <mpc8xx/cpm.h>
 #include <mpc8xx/mmu.h>
@@ -143,6 +144,24 @@ extern uint32_t BSP_bus_frequency;
  */
 int BSP_disconnect_clock_handler(void);
 int BSP_connect_clock_handler (rtems_irq_hdl);
+
+extern uint32_t bsp_clock_speed;
+
+char serial_getc(void);
+
+int serial_tstc(void);
+
+void serial_init(void);
+
+int mbx8xx_console_get_configuration(void);
+
+void _InitTQM8xx (void);
+
+rtems_status_code bsp_register_spi(void);
+
+void *bsp_idle_thread( uintptr_t ignored );
+
+void cpu_init(void);
 
 #ifdef __cplusplus
 }

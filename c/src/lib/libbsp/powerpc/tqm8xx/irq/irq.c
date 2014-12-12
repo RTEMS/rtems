@@ -35,28 +35,28 @@
  * functions to enable/disable a source at the SIU/CPM irq controller
  */
 
-rtems_status_code bsp_irq_disable_at_SIU(rtems_vector_number irqnum)
+static rtems_status_code bsp_irq_disable_at_SIU(rtems_vector_number irqnum)
 {
   rtems_vector_number vecnum = irqnum - BSP_SIU_IRQ_LOWEST_OFFSET;
   m8xx.simask &= ~(1 << (31 - vecnum));
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_irq_enable_at_SIU(rtems_vector_number irqnum)
+static rtems_status_code bsp_irq_enable_at_SIU(rtems_vector_number irqnum)
 {
   rtems_vector_number vecnum = irqnum - BSP_SIU_IRQ_LOWEST_OFFSET;
   m8xx.simask |= (1 << (31 - vecnum));
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_irq_disable_at_CPM(rtems_vector_number irqnum)
+static rtems_status_code bsp_irq_disable_at_CPM(rtems_vector_number irqnum)
 {
   rtems_vector_number vecnum = irqnum - BSP_CPM_IRQ_LOWEST_OFFSET;
   m8xx.cimr &= ~(1 << (vecnum));
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_irq_enable_at_CPM(rtems_vector_number irqnum)
+static rtems_status_code bsp_irq_enable_at_CPM(rtems_vector_number irqnum)
 {
   rtems_vector_number vecnum = irqnum - BSP_CPM_IRQ_LOWEST_OFFSET;
   m8xx.cimr |= (1 << (vecnum));
@@ -184,7 +184,7 @@ static int BSP_irq_handle_at_siu( unsigned excNum)
 /*
  * Activate the CPIC
  */
-rtems_status_code mpc8xx_cpic_initialize( void)
+static rtems_status_code mpc8xx_cpic_initialize( void)
 {
   /*
    * mask off all interrupts
@@ -204,7 +204,7 @@ rtems_status_code mpc8xx_cpic_initialize( void)
 /*
  * Activate the SIU interrupt controller
  */
-rtems_status_code mpc8xx_siu_int_initialize( void)
+static rtems_status_code mpc8xx_siu_int_initialize( void)
 {
   /*
    * mask off all interrupts
@@ -214,7 +214,7 @@ rtems_status_code mpc8xx_siu_int_initialize( void)
   return RTEMS_SUCCESSFUL;
 }
 
-int mpc8xx_exception_handler(BSP_Exception_frame *frame,
+static int mpc8xx_exception_handler(BSP_Exception_frame *frame,
 			     unsigned exception_number)
 {
   return BSP_irq_handle_at_siu(exception_number);

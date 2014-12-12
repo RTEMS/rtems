@@ -85,6 +85,10 @@ int mbx8xx_console_get_configuration(void);
 
 void _InitMBX8xx(void);
 
+int BSP_disconnect_clock_handler(void);
+
+int BSP_connect_clock_handler (rtems_irq_hdl);
+
 #ifdef __cplusplus
 }
 #endif
