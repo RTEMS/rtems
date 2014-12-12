@@ -52,10 +52,10 @@ A clock tick is required to support the functionality provided by this manager.
 
 @subsection Period Statistics
 
-This manager maintains a set of statistics on each period.  These
-statistics are reset implictly at period creation time and may be
-reset or obtained at any time by the application.  The following
-is a list of the information kept:
+This manager maintains a set of statistics on each period object.  These
+statistics are reset implictly at period creation time and may be reset or
+obtained at any time by the application.  The following is a list of the
+information kept:
 
 @itemize @bullet
 @item @code{owner}
@@ -92,6 +92,17 @@ is the total amount of wall time that passed
 during executions of the periodic loop.
 
 @end itemize
+
+Each period is divided into two consecutive phases.  The period starts with the
+active phase of the task and is followed by the inactive phase of the task.  In
+the inactive phase the task is blocked and waits for the start of the next
+period.  The inactive phase is skipped in case of a period miss.  The wall time
+includes the time during the active phase of the task on which the task is not
+executing on a processor.  The task is either blocked (for example it waits for
+a resource) or a higher priority tasks executes, thus preventing it from
+executing.  In case the wall time exceeds the period time, then this is a
+period miss.  The gap between the wall time and the period time is the margin
+between a period miss or success.
 
 The period statistics information is inexpensive to maintain
 and can provide very useful insights into the execution
