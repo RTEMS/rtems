@@ -73,6 +73,18 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
  */
 #define RTEMS_BSP_HAS_IDE_DRIVER
 
+extern uint32_t bsp_clock_speed;
+
+char serial_getc(void);
+
+int serial_tstc(void);
+
+void serial_init(void);
+
+int mbx8xx_console_get_configuration(void);
+
+void _InitMBX8xx(void);
+
 #ifdef __cplusplus
 }
 #endif

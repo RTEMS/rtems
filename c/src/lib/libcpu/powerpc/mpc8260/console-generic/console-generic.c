@@ -62,9 +62,6 @@
 #include <bsp/irq.h>
 #include <rtems/bspIo.h>   /* for printk */
 
-/* BSP supplied routine */
-extern int mbx8xx_console_get_configuration(void);
-
 /*
  * Interrupt-driven input buffer
  */

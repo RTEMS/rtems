@@ -652,6 +652,7 @@ m8xx_Enet_retire_tx_bd (struct m8xx_enet_struct *sc)
         nRetired--;
         m = sc->txMbuf[sc->txBdTail];
         MFREE (m, n);
+        (void) n;
         if (++sc->txBdTail == sc->txBdCount)
           sc->txBdTail = 0;
       }
@@ -1199,7 +1200,7 @@ fec_sendpacket (struct ifnet *ifp, struct mbuf *m)
 /*
  * Driver transmit daemon
  */
-void
+static void
 scc_txDaemon (void *arg)
 {
   struct m8xx_enet_struct *sc = (struct m8xx_enet_struct *)arg;
@@ -1519,7 +1520,7 @@ fec_ioctl (struct ifnet *ifp, int command, caddr_t data)
 /*
  * Attach an SCC driver to the system
  */
-int
+static int
 rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
 {
   struct m8xx_enet_struct *sc;

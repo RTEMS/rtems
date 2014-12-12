@@ -50,15 +50,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <termios.h>
+#include <bsp.h>
 #include <bsp/irq.h>
 #include <rtems/bspIo.h>   /* for printk */
-
-int BSP_irq_enabled_at_cpm(const rtems_irq_number irqLine);
-
-/* BSP supplied routine */
-extern int mbx8xx_console_get_configuration(void);
-
-extern uint32_t bsp_clock_speed;
 
 /*
  * Interrupt-driven input buffer

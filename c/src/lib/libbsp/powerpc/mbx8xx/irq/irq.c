@@ -63,7 +63,7 @@ const static unsigned int SIU_IvectMask[BSP_SIU_IRQ_NUMBER] =
      0xFFF00000, 0xFFF80000, 0xFFFC0000, 0xFFFE0000
 };
 
-int BSP_irq_enable_at_cpm(const rtems_irq_number irqLine)
+static int BSP_irq_enable_at_cpm(const rtems_irq_number irqLine)
 {
   int cpm_irq_index;
 
@@ -76,7 +76,7 @@ int BSP_irq_enable_at_cpm(const rtems_irq_number irqLine)
   return 0;
 }
 
-int BSP_irq_disable_at_cpm(const rtems_irq_number irqLine)
+static int BSP_irq_disable_at_cpm(const rtems_irq_number irqLine)
 {
   int cpm_irq_index;
 
@@ -146,7 +146,7 @@ volatile unsigned int maxLoop = 0;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
+static int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 {
   register unsigned int irq;
   register unsigned cpmIntr;                  /* boolean */
@@ -249,7 +249,7 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
   return 0;
 }
 
-void BSP_SIU_irq_init(void)
+static void BSP_SIU_irq_init(void)
 {
   /*
    * In theory we should initialize two registers at least :
@@ -267,7 +267,7 @@ void BSP_SIU_irq_init(void)
 /*
  * Initialize CPM interrupt management
  */
-void
+static void
 BSP_CPM_irq_init(void)
 {
   /*
