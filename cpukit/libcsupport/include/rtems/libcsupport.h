@@ -118,7 +118,6 @@ typedef struct {
 typedef struct {
   uint32_t active_barriers;
   uint32_t active_condition_variables;
-  uint32_t active_keys;
   uint32_t active_message_queues;
   uint32_t active_message_queue_descriptors;
   uint32_t active_mutexes;
@@ -132,6 +131,8 @@ typedef struct {
 typedef struct {
   Heap_Information_block workspace_info;
   Heap_Information_block heap_info;
+  uint32_t active_posix_key_value_pairs;
+  uint32_t active_posix_keys;
   rtems_resource_rtems_api rtems_api;
   rtems_resource_posix_api posix_api;
   int open_files;

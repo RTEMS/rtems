@@ -8,10 +8,10 @@
 
 /*
  * Copyright (c) 2014. On-Line Applications Research Corporation (OAR).
- * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -45,6 +45,11 @@ const char rtems_test_name[] = "PSXCONFIG 1";
 
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 23
+#ifdef CONFIGURE_MAXIMUM_POSIX_KEYS
+  #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS CONFIGURE_MAXIMUM_POSIX_KEYS
+#endif
+
 #define CONFIGURE_MAXIMUM_BARRIERS 2
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 7
 #define CONFIGURE_MAXIMUM_PARTITIONS 37
@@ -60,7 +65,6 @@ const char rtems_test_name[] = "PSXCONFIG 1";
 
 #define CONFIGURE_MAXIMUM_POSIX_BARRIERS 31
 #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES 29
-#define CONFIGURE_MAXIMUM_POSIX_KEYS 23
 #define POSIX_MQ_COUNT 5
 #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 19
 #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 7
@@ -262,6 +266,7 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_extensions_table table;
   rtems_resource_snapshot snapshot;
   int i = 0;
+  pthread_key_t key;
 
   TEST_BEGIN();
 
@@ -297,6 +302,27 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_test_assert(
     snapshot.rtems_api.active_extensions == CONFIGURE_MAXIMUM_USER_EXTENSIONS
   );
+#endif
+
+#ifdef CONFIGURE_MAXIMUM_POSIX_KEYS
+  for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_KEYS; ++i) {
+    eno = pthread_key_create(&key, posix_key_dtor);
+    rtems_test_assert(eno == 0);
+
+    eno = pthread_setspecific(key, (void *) (i + 1));
+    rtems_test_assert(eno == 0);
+  }
+  eno = pthread_key_create(&key, posix_key_dtor);
+  rtems_test_assert(eno == EAGAIN);
+  rtems_resource_snapshot_take(&snapshot);
+  rtems_test_assert(
+    snapshot.active_posix_keys == CONFIGURE_POSIX_KEYS
+  );
+  rtems_test_assert(
+    snapshot.active_posix_key_value_pairs == CONFIGURE_MAXIMUM_POSIX_KEYS
+  );
+#else
+  (void) key;
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_BARRIERS
@@ -452,18 +478,6 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_test_assert(
     snapshot.posix_api.active_condition_variables
       == CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
-  );
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_POSIX_KEYS
-  for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_KEYS; ++i) {
-    pthread_key_t key;
-    eno = pthread_key_create(&key, posix_key_dtor);
-    rtems_test_assert(eno == 0);
-  }
-  rtems_resource_snapshot_take(&snapshot);
-  rtems_test_assert(
-    snapshot.posix_api.active_keys == CONFIGURE_POSIX_KEYS
   );
 #endif
 
