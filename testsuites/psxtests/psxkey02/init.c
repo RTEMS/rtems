@@ -30,6 +30,7 @@ rtems_task Init(rtems_task_argument ignored)
   bool                    ok;
   rtems_resource_snapshot snapshot;
   void                   *greedy;
+  void                   *value;
 
   TEST_BEGIN();
 
@@ -39,6 +40,24 @@ rtems_task Init(rtems_task_argument ignored)
   puts( "Init - pthread_key_create - OK" );
   eno = pthread_key_create( &key1, NULL );
   rtems_test_assert( eno == 0 );
+
+  eno = pthread_setspecific( key1, (void *) 1 );
+  rtems_test_assert( eno == 0 );
+
+  value = pthread_getspecific( key1 );
+  rtems_test_assert( value == (void *) 1 );
+
+  eno = pthread_setspecific( key1, NULL );
+  rtems_test_assert( eno == 0 );
+
+  value = pthread_getspecific( key1 );
+  rtems_test_assert( value == NULL );
+
+  eno = pthread_setspecific( key1, NULL );
+  rtems_test_assert( eno == 0 );
+
+  value = pthread_getspecific( key1 );
+  rtems_test_assert( value == NULL );
 
   puts( "Init - pthread_key_create - EAGAIN" );
   eno = pthread_key_create( &key2, NULL );

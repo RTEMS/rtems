@@ -51,9 +51,8 @@ void _POSIX_Keys_Free_memory(
   p = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( iter );
   while ( iter != NULL && p->key == key_id ) {
     next = _RBTree_Next( iter, RBT_RIGHT );
-    _RBTree_Extract( &_POSIX_Keys_Key_value_lookup_tree, iter );
-    _Chain_Extract_unprotected( &p->Key_values_per_thread_node );
-    _POSIX_Keys_Key_value_pair_free( p );
+
+    _POSIX_Keys_Free_key_value_pair( p );
 
     iter = next;
     p = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( iter );
