@@ -29,7 +29,6 @@ int fdatasync(int);        /* still not always prototyped */
 #include <stdio.h>
 
 #include <rtems.h>
-#include <rtems/score/assert.h>
 
 /* XXX check standards -- Linux version appears to be void */
 void _fwalk(struct _reent *, void *);
@@ -38,19 +37,12 @@ void _fwalk(struct _reent *, void *);
 static void sync_wrapper(FILE *f)
 {
   int fn = fileno(f);
-  int rc;
 
   /*
-   *  We are explicitly NOT checking the return values in non-debug builds
-   *  as it does not matter if they succeed.  We are just making a best
-   *  faith attempt at both and trusting that we were passed a good
-   *  FILE pointer.
+   * There is no way to report errors here.  So this is a best-effort approach.
    */
-  rc = fsync(fn);
-  _Assert( rc == 0 );
-
-  rc = fdatasync(fn);
-  _Assert( rc == 0 );
+  (void) fsync(fn);
+  (void) fdatasync(fn);
 }
 
 /* iterate over all FILE *'s for this thread */
