@@ -26,13 +26,12 @@ void _POSIX_Keys_Free_memory(
   POSIX_Keys_Control *the_key
 )
 {
-  POSIX_Keys_Key_value_pair search_node;
   POSIX_Keys_Key_value_pair *p;
   RBTree_Node *iter, *next;
   Objects_Id key_id;
 
   key_id = the_key->Object.id;
-  iter = _POSIX_Keys_Find( key_id, 0, &search_node );
+  iter = _POSIX_Keys_Find( key_id, 0 );
   if ( !iter )
     return;
   /**
