@@ -1291,6 +1291,9 @@ The calling task may be preempted if its preemption mode is
 enabled and it lowers its own priority or raises another task's
 priority.
 
+In case the new priority equals the current priority of the task, then nothing
+happens.
+
 Setting the priority of a global task which does not reside on
 the local node will generate a request to the remote node to
 change the priority of the specified task.
