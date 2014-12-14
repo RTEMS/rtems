@@ -31,6 +31,15 @@ volatile bool clock_driver_enabled;
 #include "clockdrv_shell.h"
 
 /*
+ * If this is defined, then the BSP has defined a delay of some sort so
+ * time passage appears somewhat correctly. Otherwise, it runs extremely
+ * fast with no delays.
+ */
+#ifndef BSP_CLOCK_DRIVER_DELAY
+#define BSP_CLOCK_DRIVER_DELAY()
+#endif
+
+/*
  *  Since there is no interrupt on this simulator, let's just
  *  fake time passing.  This will not let preemption from an
  *  interrupt work but is enough for many tests.
@@ -46,6 +55,7 @@ Thread clock_driver_sim_idle_body(
 	rtems_clock_tick();
       _ISR_Nest_level--;
       _Thread_Enable_dispatch();
+      BSP_CLOCK_DRIVER_DELAY();
     }
   }
   return 0;   /* to avoid warning */
