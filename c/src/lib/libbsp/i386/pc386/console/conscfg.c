@@ -29,34 +29,36 @@
 #define VGA_CONSOLE_FUNCTIONS  &vgacons_fns
 #endif
 
-#if 0
-#define COM_CONSOLE_FUNCTIONS  &ns16550_fns_polled
-#else
-#define COM_CONSOLE_FUNCTIONS  &ns16550_fns
-#endif
+#if BSP_ENABLE_COM1_COM4
+  #if 0
+  #define COM_CONSOLE_FUNCTIONS  &ns16550_fns_polled
+  #else
+  #define COM_CONSOLE_FUNCTIONS  &ns16550_fns
+  #endif
 
-/*
- * Base IO for UART
- */
-#define COM1_BASE_IO  0x3F8
-#define COM2_BASE_IO  0x3E8
-#define COM3_BASE_IO  0x2F8
-#define COM4_BASE_IO  0x2E8
+  /*
+   * Base IO for UART
+   */
+  #define COM1_BASE_IO  0x3F8
+  #define COM2_BASE_IO  0x3E8
+  #define COM3_BASE_IO  0x2F8
+  #define COM4_BASE_IO  0x2E8
 
-#define CLOCK_RATE     (115200 * 16)
+  #define CLOCK_RATE     (115200 * 16)
 
-static uint8_t com_get_register(uint32_t addr, uint8_t i)
-{
-  register uint8_t val;
+  static uint8_t com_get_register(uint32_t addr, uint8_t i)
+  {
+    register uint8_t val;
   
-  inport_byte( (addr + i),val );
-  return val;
-}
+    inport_byte( (addr + i),val );
+    return val;
+  }
 
-static void com_set_register(uint32_t addr, uint8_t i, uint8_t val)
-{
-  outport_byte( (addr + i),val );
-}
+  static void com_set_register(uint32_t addr, uint8_t i, uint8_t val)
+  {
+    outport_byte( (addr + i),val );
+  }
+#endif
 
 console_tbl     Console_Configuration_Ports[] = {
 #if BSP_ENABLE_VGA
@@ -80,6 +82,7 @@ console_tbl     Console_Configuration_Ports[] = {
     0x0                                     /* ulIntVector -- base for port */
   },
 #endif
+#if BSP_ENABLE_COM1_COM4
   {
     "/dev/com1",                           /* sDeviceName */
     SERIAL_NS16550,                        /* deviceType */
@@ -158,6 +161,7 @@ console_tbl     Console_Configuration_Ports[] = {
     CLOCK_RATE,                            /* ulClock */
     BSP_UART_COM4_IRQ                      /* ulIntVector -- base for port */
   },
+#endif
 
 };
 

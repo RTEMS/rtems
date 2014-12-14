@@ -29,9 +29,9 @@
 
 rtems_device_minor_number         BSPPrintkPort = 0;
 
-int ns16550_inbyte_nonblocking_polled(
-  int minor
-);
+#if BSP_ENABLE_COM1_COM4
+int ns16550_inbyte_nonblocking_polled( int minor );
+#endif
 
 void BSP_outch(char ch);
 int BSP_inch(void);
@@ -52,18 +52,20 @@ void BSP_outch(char ch)
 
 int BSP_inch(void) 
 {
-  int           result;
+  int           result = -1;
 
   #if BSP_ENABLE_VGA
     if ( BSPPrintkPort == BSP_CONSOLE_VGA ) {
       result = BSP_wait_polled_input();
     } else
   #endif
+  #if BSP_ENABLE_COM1_COM4
     {
       do {
         result = ns16550_inbyte_nonblocking_polled( BSPPrintkPort );
       } while (result == -1);
     }
+  #endif
   return result;
 }
 
