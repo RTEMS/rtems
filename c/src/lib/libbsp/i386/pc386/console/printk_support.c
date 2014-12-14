@@ -29,6 +29,11 @@
 
 rtems_device_minor_number         BSPPrintkPort = 0;
 
+#if (BSP_IS_EDISON == 1)
+void edison_write_polled(int minor, char cChar); /* XXX */
+int edison_inbyte_nonblocking_polled(int minor);
+#endif
+
 #if BSP_ENABLE_COM1_COM4
 int ns16550_inbyte_nonblocking_polled( int minor );
 #endif
@@ -65,6 +70,11 @@ int BSP_inch(void)
         result = ns16550_inbyte_nonblocking_polled( BSPPrintkPort );
       } while (result == -1);
     }
+  #endif
+  #if (BSP_IS_EDISON == 1)
+    do {
+      result = edison_inbyte_nonblocking_polled( BSPPrintkPort );
+    } while (result == -1);
   #endif
   return result;
 }

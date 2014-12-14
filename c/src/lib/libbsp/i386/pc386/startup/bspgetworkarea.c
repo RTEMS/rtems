@@ -56,6 +56,7 @@ void bsp_size_memory(void)
 {
   uintptr_t topAddr;
 
+#if (BSP_IS_EDISON == 0)
   /* Set the value of start of free memory. */
   rtemsWorkAreaStart = (uint32_t)WorkAreaBase + _stack_size;
 
@@ -116,6 +117,9 @@ void bsp_size_memory(void)
     #endif
   }
 
+#else
+    topAddr = (1 * 1024 * 1024 * 1024);
+#endif
   
   bsp_mem_size = topAddr;
 }

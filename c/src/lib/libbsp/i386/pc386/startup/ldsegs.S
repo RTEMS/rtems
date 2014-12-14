@@ -35,6 +35,7 @@
 
 #include <rtems/asm.h>
 #include <bsp/tblsizes.h> /* contains sizes of GDT and IDT */
+#include <bspopts.h>
 
 /*----------------------------------------------------------------------------+
 | CODE section
@@ -109,6 +110,7 @@ next_step:
 	movw ax, fs
 	movw ax, gs
 
+#if (BSP_IS_EDISON == 0)
 /*---------------------------------------------------------------------+
 | Now we have to reprogram the interrupts :-(. We put them right after
 | the intel-reserved hardware interrupts, at int 0x20-0x2F. There they
@@ -154,6 +156,7 @@ next_step:
 
 	movw	$0xFFFB, SYM(i8259s_cache) /* set up same values in cache */
 
+  #endif
 	jmp	SYM (_establish_stack)	# return to the bsp entry code
 
 /*-------------------------------------------------------------------------+

@@ -60,7 +60,32 @@
   }
 #endif
 
+#if (BSP_IS_EDISON == 1 )
+  extern const console_fns edison_fns;
+#endif
+
 console_tbl     Console_Configuration_Ports[] = {
+#if (BSP_IS_EDISON == 1)
+  {
+    "/dev/vgacons",                        /* sDeviceName */
+    -1,                                     /* deviceType */
+    &edison_fns,                           /* pDeviceFns */
+    NULL,                                  /* deviceProbe */
+    NULL,                                  /* pDeviceFlow */
+    16,                                    /* ulMargin */
+    8,                                     /* ulHysteresis */
+    (void *) NULL,              /* NULL */ /* pDeviceParams */
+    0x00000000,                            /* ulCtrlPort1 */
+    0x00000000,                            /* ulCtrlPort2 */
+    0x00000000,                            /* ulDataPort */
+    NULL,                                  /* getRegister */
+    NULL,                                  /* setRegister */
+    NULL,/* unused */                      /* getData */
+    NULL,/* unused */                      /* setData */
+    0X0,                                   /* ulClock */
+    0x0                                     /* ulIntVector -- base for port */
+  },
+#endif
 #if BSP_ENABLE_VGA
   {
     "/dev/vgacons",                        /* sDeviceName */

@@ -34,9 +34,19 @@
 #include <libcpu/cpuModel.h>
 
 /*
- *  External routines
+ * Helper to initialize the PCI Bus
  */
-void Clock_driver_install_handler(void);
+static void bsp_pci_initialize_helper(void)
+{
+#if (BSP_IS_EDISON == 0)
+  int pci_init_retval;
+
+  pci_init_retval = pci_initialize();
+  if (pci_init_retval != PCIB_ERR_SUCCESS) {
+      printk("PCI bus: could not initialize PCI BIOS interface\n");
+  }
+#endif
+}
 
 /*-------------------------------------------------------------------------+
 |         Function: bsp_start
@@ -47,17 +57,26 @@ void Clock_driver_install_handler(void);
 +--------------------------------------------------------------------------*/
 static void bsp_start_default( void )
 {
-  int pci_init_retval;
-
   /*
    *  We need to determine how much memory there is in the system.
    */
   bsp_size_memory();
 
   /*
+   * Turn off watchdog
+   */
+#if (BSP_IS_EDISON == 1)
+  volatile uint32_t *edison_wd = (volatile uint32_t *)0xff009000;
+  *edison_wd = 0x11f8;
+#endif
+
+
+  /*
    * Calibrate variable for 1ms-loop (see timer.c)
    */
+#if (BSP_IS_EDISON == 0)
   Calibrate_loop_1ms();
+#endif
 
   /*
    * Init rtems interrupt management
@@ -72,12 +91,11 @@ static void bsp_start_default( void )
   /*
    * init PCI Bios interface...
    */
-  pci_init_retval = pci_initialize();
-  if (pci_init_retval != PCIB_ERR_SUCCESS) {
-      printk("PCI bus: could not initialize PCI BIOS interface\n");
-  }
+  bsp_pci_initialize_helper();
 
+#if (BSP_IS_EDISON == 0)
   Clock_driver_install_handler();
+#endif
 
 #if BSP_ENABLE_IDE
   bsp_ide_cmdline_init();

@@ -17,6 +17,15 @@ RTEMS_PROG_CCAS
 RTEMS_CHECK_NETWORKING
 RTEMS_CHECK_SMP
 
+# Is this an Intel Edison?
+# NOTE: As we learn more, this could be trimmed if more issues
+#       turn out fo lack of legacy peripherals
+RTEMS_BSPOPTS_SET([BSP_IS_EDISON],[edison],[1])
+RTEMS_BSPOPTS_SET([BSP_IS_EDISON],[*],[0])
+RTEMS_BSPOPTS_HELP([BSP_IS_EDISON],[Set if the BSP variant is Intel Edison.])
+AM_CONDITIONAL(RTEMS_EDISON,[test "$BSP_IS_EDISON" = "1"])
+
+RTEMS_BSPOPTS_SET([BSP_ENABLE_VGA],[edison],[0])
 RTEMS_BSPOPTS_SET([BSP_ENABLE_VGA],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_ENABLE_VGA],
 [Set if the VGA and keyboard console support is enabled.])
@@ -27,6 +36,7 @@ RTEMS_BSPOPTS_HELP([BSP_ENABLE_COM1_COM4],
 [Set if COM1..COM4 support is enabled.])
 AM_CONDITIONAL(RTEMS_VGA,[test "$BSP_ENABLE_COM1_COM4" = "1"])
 
+RTEMS_BSPOPTS_SET([BSP_ENABLE_IDE],[edison],[0])
 RTEMS_BSPOPTS_SET([BSP_ENABLE_IDE],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_ENABLE_IDE],
 [Set if IDE support is enabled.])
