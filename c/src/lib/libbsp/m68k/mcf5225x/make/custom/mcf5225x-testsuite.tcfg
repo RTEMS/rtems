@@ -4,6 +4,7 @@
 # Format is one line per test that is _NOT_ built.
 #
 
+fileio
 flashdisk01
 fsdosfsname01
 jffs2_fserror
