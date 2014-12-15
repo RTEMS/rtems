@@ -181,6 +181,40 @@ the PPC603e.
 @c
 @c
 @c
+@section Multilibs
+
+The following multilibs are available:
+
+@enumerate
+@item @code{.}: 32-bit PowerPC with FPU
+@item @code{nof}: 32-bit PowerPC with software floating point support
+@item @code{m403}: Instruction set for PPC403 with FPU
+@item @code{m505}: Instruction set for MPC505 with FPU
+@item @code{m603e}: Instruction set for MPC603e with FPU
+@item @code{m603e/nof}: Instruction set for MPC603e with software floating
+point support
+@item @code{m604}: Instruction set for MPC604 with FPU
+@item @code{m604/nof}: Instruction set for MPC604 with software floating point
+support
+@item @code{m860}: Instruction set for MPC860 with FPU
+@item @code{m7400}: Instruction set for MPC7500 with FPU
+@item @code{m7400/nof}: Instruction set for MPC7500 with software floating
+point support
+@item @code{m8540}: Instruction set for e200, e500 and e500v2 cores with
+single-precision FPU and SPE
+@item @code{m8540/gprsdouble}: Instruction set for e200, e500 and e500v2 cores
+with double-precision FPU and SPE
+@item @code{m8540/nof/nospe}: Instruction set for e200, e500 and e500v2 cores
+with software floating point support and no SPE
+@item @code{me6500/m32}: 32-bit instruction set for e6500 core with FPU and
+AltiVec
+@item @code{me6500/m32/nof/noaltivec}: 32-bit instruction set for e6500 core
+with software floating point support and no AltiVec
+@end enumerate
+
+@c
+@c
+@c
 
 @section Calling Conventions
 

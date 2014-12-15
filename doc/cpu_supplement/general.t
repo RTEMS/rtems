@@ -102,6 +102,36 @@ the FP software emulation will be context switched.
 @c
 @c
 @c
+@section Multilibs
+
+Newlib and GCC provide several target libraries like the @file{libc.a},
+@file{libm.a} and @file{libgcc.a}.  These libraries are artifacts of the GCC
+build process.  Newlib is built together with GCC.  To provide optimal support
+for various chip derivatives and instruction set revisions multiple variants of
+these libraries are available for each architecture.  For example one set may
+use software floating point support and another set may use hardware floating
+point instructions.  These sets of libraries are called @emph{multilibs}.  Each
+library set corresponds to an application binary interface (ABI) and
+instruction set.
+
+A multilib variant can be usually detected via built-in compiler defines at
+compile-time.  This mechanism is used by RTEMS to select for example the
+context switch support for a particular BSP.  The built-in compiler defines
+corresponding to multilibs are the only architecture specific defines allowed
+in the @code{cpukit} area of the RTEMS sources.
+
+Invoking the GCC with the @code{-print-multi-lib} option lists the available
+multilibs.  Each line of the output describes one multilib variant.  The
+default variant is denoted by @code{.} which is selected when no or
+contradicting GCC machine options are selected.  The multilib selection for a
+target is specified by target makefile fragments (see file @file{t-rtems} in
+the GCC sources and section
+@uref{https://gcc.gnu.org/onlinedocs/gccint/Target-Fragment.html#Target-Fragment,The Target Makefile Fragment}
+in the @uref{https://gcc.gnu.org/onlinedocs/gccint/,GCC Internals Manual}.
+
+@c
+@c
+@c
 @section Calling Conventions
 
 Each high-level language compiler generates subroutine entry and exit
