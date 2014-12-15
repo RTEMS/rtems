@@ -18,10 +18,33 @@
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 #include <netdb.h>
+#include <limits.h>
 #include <unistd.h>
+#include <stdint.h>
 #include <string.h>
 
+#include <tmacros.h>
+
 #include "test-http-client.h"
+
+#define HTTPC_WS_CONN_REQ  "GET / HTTP/1.1\r\n" \
+                           "Host: localhost\r\n" \
+                           "Upgrade: websocket\r\n" \
+                           "Connection: Upgrade\r\n" \
+                           "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n" \
+                           "Sec-WebSocket-Version: 13\r\n" \
+                           "\r\n"
+#define HTTPC_WS_CONN_RESP "HTTP/1.1 101 Switching Protocols\r\n" \
+                           "Upgrade: websocket\r\n" \
+                           "Connection: Upgrade\r\n" \
+                           "Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=\r\n" \
+                           "\r\n"
+
+static ssize_t httpc_read_full(
+  const httpc_context *ctx,
+  void *response,
+  size_t responsesize
+);
 
 void httpc_init_context(
   httpc_context *ctx
@@ -33,7 +56,7 @@ void httpc_init_context(
 
 bool httpc_open_connection(
   httpc_context *ctx,
-  char *targethost,
+  const char *targethost,
   int targetport
 )
 {
@@ -76,21 +99,126 @@ bool httpc_close_connection(
 }
 
 bool httpc_send_request(
-  httpc_context *ctx,
-  char *request,
+  const httpc_context *ctx,
+  const char *request,
   char *response,
   int responsesize
 )
 {
-  int size = strlen(request);
-  char lineend[] = " HTTP/1.1\r\n\r\n";
+  rtems_test_assert(ctx != NULL);
+  rtems_test_assert(ctx->socket >= 0);
+  rtems_test_assert(request != NULL);
+  rtems_test_assert(response != NULL);
+  rtems_test_assert(responsesize > 1);
 
-  write(ctx->socket, request, size);
-  write(ctx->socket, lineend, sizeof(lineend));
+  static const char * const lineend = " HTTP/1.1\r\n\r\n";
 
-  size = read(ctx->socket, response, responsesize-1);
-  response[size] = '\0';
+  write(ctx->socket, request, strlen(request));
+  write(ctx->socket, lineend, strlen(lineend));
+
+  ssize_t size;
+  if((size = httpc_read_full(ctx, response, responsesize - 1)) == -1)
+  {
+    return false;
+  }
+  *(response + size) = '\0';
 
   return true;
 }
 
+bool httpc_ws_open_connection(
+  const httpc_context *ctx
+)
+{
+  rtems_test_assert(ctx != NULL);
+  rtems_test_assert(ctx->socket >= 0);
+
+  write(ctx->socket, HTTPC_WS_CONN_REQ, strlen(HTTPC_WS_CONN_REQ));
+
+  char response[strlen(HTTPC_WS_CONN_RESP)];
+  if(httpc_read_full(ctx, response, sizeof(response)) != sizeof(response))
+  {
+    return false;
+  }
+  if(strncmp(response, HTTPC_WS_CONN_RESP, sizeof(response)) != 0)
+  {
+    return false;
+  }
+
+  return true;
+}
+
+bool httpc_ws_send_request(
+  const httpc_context *ctx,
+  const char *request,
+  char *response,
+  int responsesize
+)
+{
+  rtems_test_assert(ctx != NULL);
+  rtems_test_assert(ctx->socket >= 0);
+  rtems_test_assert(request != NULL);
+  rtems_test_assert(response != NULL);
+  rtems_test_assert(responsesize > 0);
+
+  static const uint16_t ws_header_fin  = 1U << 15;
+  static const uint16_t ws_header_text = 1U << 8;
+  static const uint16_t ws_header_size = 0x7FU;
+
+  /*
+   * We don't support sending WebSocket messages which require multiple
+   * chunks
+   */
+  if(strlen(request) > ws_header_size) { return false; }
+
+  uint16_t header = htons(ws_header_fin | ws_header_text | strlen(request));
+
+  write(ctx->socket, &header, sizeof(header));
+  write(ctx->socket, request, strlen(request));
+
+  if (httpc_read_full(ctx, &header, sizeof(header)) != sizeof(header))
+  {
+    return false;
+  }
+  header = ntohs(header);
+  if (!(header & ws_header_fin)) { return false; }
+  if (!(header & ws_header_text)) { return false; }
+  if (responsesize < (header & ws_header_size) + 1) { return false; }
+
+  responsesize = header & ws_header_size;
+  if (httpc_read_full(ctx, response, responsesize) != responsesize)
+  {
+    return false;
+  }
+  *(response + responsesize) = '\0';
+
+  return true;
+}
+
+
+static ssize_t httpc_read_full(
+  const httpc_context *ctx,
+  void *response,
+  size_t responsesize
+)
+{
+  rtems_test_assert(ctx != NULL);
+  rtems_test_assert(ctx->socket >= 0);
+  rtems_test_assert(response != NULL);
+  rtems_test_assert(responsesize > 0);
+
+  if (responsesize > SSIZE_MAX) { return -1; }
+
+  unsigned char *pos = response;
+
+  while(pos < (unsigned char *)response + responsesize)
+  {
+    ssize_t size =
+      read(ctx->socket, pos, (unsigned char *)response + responsesize - pos);
+    if (size == -1) { return -1; }
+    if (size == 0) { break; }
+    pos += size;
+  }
+
+  return (pos - (unsigned char *)response);
+}
