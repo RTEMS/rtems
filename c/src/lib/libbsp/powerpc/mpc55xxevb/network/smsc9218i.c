@@ -1657,6 +1657,7 @@ static void smsc9218i_interrupt_init(
   volatile smsc9218i_registers *regs
 )
 {
+#ifdef SMSC9218I_IRQ_PIN
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   union SIU_PCR_tag pcr = MPC55XX_ZERO_FLAGS;
   union SIU_DIRER_tag direr = MPC55XX_ZERO_FLAGS;
@@ -1743,15 +1744,19 @@ static void smsc9218i_interrupt_init(
 
   /* Enable error interrupts */
   regs->int_en = SMSC9218I_ERROR_INTERRUPTS;
+#endif
 }
 
 static void smsc9218i_reset_signal(bool signal)
 {
+#ifdef SMSC9218I_RESET_PIN
   SIU.GPDO [SMSC9218I_RESET_PIN].R = signal ? 1 : 0;
+#endif
 }
 
 static void smsc9218i_reset_signal_init(void)
 {
+#ifdef SMSC9218I_RESET_PIN
   union SIU_PCR_tag pcr = MPC55XX_ZERO_FLAGS;
 
   smsc9218i_reset_signal(true);
@@ -1769,6 +1774,7 @@ static void smsc9218i_reset_signal_init(void)
   pcr.B.WPS = 1;
 
   SIU.PCR [SMSC9218I_RESET_PIN].R = pcr.R;
+#endif
 }
 
 static bool smsc9218i_hardware_reset(volatile smsc9218i_registers *regs)
