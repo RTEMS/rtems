@@ -44,6 +44,7 @@ static omap_timer_registers_t regs_v1 = {
   .TOWR = OMAP3_TIMER_TOWR,
 };
 
+#if IS_AM335X
 /* AM335X has a different ip block for the non 1ms timers */
 static omap_timer_registers_t regs_v2 = {
   .TIDR = AM335X_TIMER_TIDR,
@@ -67,6 +68,7 @@ static omap_timer_registers_t regs_v2 = {
   .TOCR = -1,		/* UNDEF */
   .TOWR = -1		/* UNDEF */
 };
+#endif
 
 /* which timers are in use? target-dependent.
  * initialize at compile time.
@@ -264,8 +266,6 @@ beagle_clock_initialize(void)
 
 static void beagle_clock_at_tick(void)
 {
-  uint32_t tisr;
-
   last_tick_nanoseconds = read_frc();
 
   mmio_write(timer->base + timer->regs->TISR,

@@ -26,6 +26,7 @@
 #include <termios.h>
 
 #include <rtems/termiostypes.h>
+#include <rtems/console.h>
 #include <libchip/serial.h>
 #include "console_private.h"
 

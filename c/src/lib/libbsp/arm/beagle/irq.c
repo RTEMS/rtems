@@ -136,7 +136,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 
   /* Install generic interrupt handler */
   arm_cp15_set_exception_handler(ARM_EXCEPTION_IRQ, _ARMV4_Exception_interrupt);
-  arm_cp15_set_vector_base_address((uint32_t) bsp_vector_table_begin);
+  arm_cp15_set_vector_base_address(bsp_vector_table_begin);
 
   return RTEMS_SUCCESSFUL;
 }
