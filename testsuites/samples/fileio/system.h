@@ -53,8 +53,6 @@ rtems_task Init(
   #define CONFIGURE_FILESYSTEM_DOSFS
 #endif
 
-#define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
-
 /*
  * XXX: these values are higher than needed...
  */

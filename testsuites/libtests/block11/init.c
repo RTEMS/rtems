@@ -430,7 +430,6 @@ static rtems_task Init(rtems_task_argument argument)
   { .initialization_entry = invalid_initialize, \
     .control_entry = invalid_control }
 
-#define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
 #define CONFIGURE_MAXIMUM_TASKS 1

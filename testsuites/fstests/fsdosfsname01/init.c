@@ -1314,8 +1314,6 @@ size_t rtems_ramdisk_configuration_size = RTEMS_ARRAY_SIZE(rtems_ramdisk_configu
 
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 
-#define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
-
 #define CONFIGURE_FILESYSTEM_DOSFS
 
 /* 2 RAM disk device files + 2 mount_dir + stdin + stdout + stderr +

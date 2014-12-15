@@ -276,8 +276,6 @@ static void Init( rtems_task_argument arg )
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 
-#define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
-
 #define CONFIGURE_FILESYSTEM_DOSFS
 
 /* 1 device file for blkstats + 1 file for writing + 1 mount_dir + stdin + stdout + stderr + device file when mounted */
