@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -38,7 +38,7 @@ void BSP_panic(char *s)
   rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
-  (void) level; /* avoid set but not used warning */
+  (void) level;
 
   printk("%s PANIC %s\n", rtems_get_version_string(), s);
 
@@ -52,6 +52,7 @@ void _BSP_Fatal_error(unsigned n)
   rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
+  (void) level;
 
   printk("%s PANIC ERROR %u\n", rtems_get_version_string(), n);
 
