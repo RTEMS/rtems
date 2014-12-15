@@ -61,7 +61,7 @@ REGION_ALIAS ("REGION_NOCACHE_LOAD", RAM_INT);
 
 lpc32xx_scratch_area = ORIGIN (RAM_SCRATCH);
 
-bsp_stack_svc_size = DEFINED (bsp_stack_svc_size) ? bsp_stack_svc_size : 7296;
+bsp_stack_svc_size = DEFINED (bsp_stack_svc_size) ? bsp_stack_svc_size : 7168;
 
 bsp_vector_table_in_start_section = 1;
 
