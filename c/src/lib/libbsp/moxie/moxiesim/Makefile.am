@@ -43,6 +43,11 @@ libbsp_a_SOURCES += ../../shared/console-polled.c console/console-io.c \
 # timer
 libbsp_a_SOURCES += ../../shared/timerstub.c
 
+# Cache
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += ../../shared/include/cache_.h
+libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
+
 EXTRA_DIST = times
 
 include $(srcdir)/preinstall.am
