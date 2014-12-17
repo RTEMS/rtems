@@ -36,12 +36,6 @@ extern "C" {
  * @{
  */
 
-#define MRSP_RIVAL_STATE_WAITING 0x0U
-
-#define MRSP_RIVAL_STATE_NEW_OWNER 0x1U
-
-#define MRSP_RIVAL_STATE_TIMEOUT 0x2U
-
 RTEMS_INLINE_ROUTINE void _MRSP_Elevate_priority(
   MRSP_Control     *mrsp,
   Thread_Control   *new_owner,
@@ -52,9 +46,8 @@ RTEMS_INLINE_ROUTINE void _MRSP_Elevate_priority(
 }
 
 RTEMS_INLINE_ROUTINE void _MRSP_Restore_priority(
-  const MRSP_Control *mrsp,
-  Thread_Control     *thread,
-  Priority_Control    initial_priority
+  Thread_Control   *thread,
+  Priority_Control  initial_priority
 )
 {
   /*
@@ -134,24 +127,34 @@ RTEMS_INLINE_ROUTINE void _MRSP_Set_ceiling_priority(
   mrsp->ceiling_priorities[ scheduler_index ] = ceiling_priority;
 }
 
-RTEMS_INLINE_ROUTINE void _MRSP_Add_state(
-  MRSP_Rival   *rival,
-  unsigned int  state
-)
-{
-  _Atomic_Fetch_or_uint( &rival->state, state, ATOMIC_ORDER_RELEASE );
-}
-
 RTEMS_INLINE_ROUTINE void _MRSP_Timeout(
   Objects_Id  id,
   void       *arg
 )
 {
   MRSP_Rival *rival = arg;
+  Thread_Control *thread = rival->thread;
+  ISR_Level level;
 
   (void) id;
 
-  _MRSP_Add_state( rival, MRSP_RIVAL_STATE_TIMEOUT );
+  _ISR_Disable( level );
+
+  if ( rival->status == MRSP_WAIT_FOR_OWNERSHIP ) {
+    _Chain_Extract_unprotected( &rival->Node );
+
+    _ISR_Enable( level );
+
+    rival->status = MRSP_TIMEOUT;
+
+    _Resource_Node_extract( &thread->Resource_node );
+    _Resource_Node_set_dependency( &thread->Resource_node, NULL );
+    _Scheduler_Thread_change_help_state( thread, rival->initial_help_state );
+    _Scheduler_Thread_change_resource_root( thread, thread );
+    _MRSP_Restore_priority( thread, rival->initial_priority );
+  } else {
+    _ISR_Enable( level );
+  }
 }
 
 RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
@@ -165,19 +168,23 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
 {
   MRSP_Status status;
   MRSP_Rival rival;
-  bool previous_life_protection;
-  unsigned int state;
-  Scheduler_Help_state previous_help_state;
+  bool initial_life_protection;
+  ISR_Level level;
+
+  rival.thread = executing;
+  rival.initial_priority = initial_priority;
+  rival.initial_help_state =
+    _Scheduler_Thread_change_help_state( executing, SCHEDULER_HELP_ACTIVE_RIVAL );
+  rival.status = MRSP_WAIT_FOR_OWNERSHIP;
 
   _MRSP_Elevate_priority( mrsp, executing, ceiling_priority );
 
-  rival.thread = executing;
-  _Atomic_Init_uint( &rival.state, MRSP_RIVAL_STATE_WAITING );
+  _ISR_Disable( level );
   _Chain_Append_unprotected( &mrsp->Rivals, &rival.Node );
+  _ISR_Enable( level );
+
   _Resource_Add_rival( &mrsp->Resource, &executing->Resource_node );
   _Resource_Node_set_dependency( &executing->Resource_node, &mrsp->Resource );
-  previous_help_state =
-    _Scheduler_Thread_change_help_state( executing, SCHEDULER_HELP_ACTIVE_RIVAL );
 
   _Scheduler_Thread_change_resource_root(
     executing,
@@ -194,39 +201,21 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
     _Watchdog_Insert_ticks( &executing->Timer, timeout );
   }
 
-  previous_life_protection = _Thread_Set_life_protection( true );
+  initial_life_protection = _Thread_Set_life_protection( true );
   _Thread_Enable_dispatch();
 
   _Assert( _Debug_Is_thread_dispatching_allowed() );
 
-  while (
-    _Atomic_Load_uint( &rival.state, ATOMIC_ORDER_ACQUIRE )
-      == MRSP_RIVAL_STATE_WAITING
-  ) {
-    /* Wait for state change */
-  }
+  /* Wait for state change */
+  do {
+    status = rival.status;
+  } while ( status == MRSP_WAIT_FOR_OWNERSHIP );
 
   _Thread_Disable_dispatch();
-  _Thread_Set_life_protection( previous_life_protection );
+  _Thread_Set_life_protection( initial_life_protection );
 
   if ( timeout > 0 ) {
     _Watchdog_Remove( &executing->Timer );
-  }
-
-  _Chain_Extract_unprotected( &rival.Node );
-  state = _Atomic_Load_uint( &rival.state, ATOMIC_ORDER_RELAXED );
-
-  if ( ( state & MRSP_RIVAL_STATE_NEW_OWNER ) != 0 ) {
-    mrsp->initial_priority_of_owner = initial_priority;
-    status = MRSP_SUCCESSFUL;
-  } else {
-    _Resource_Node_extract( &executing->Resource_node );
-    _Resource_Node_set_dependency( &executing->Resource_node, NULL );
-    _Scheduler_Thread_change_help_state( executing, previous_help_state );
-    _Scheduler_Thread_change_resource_root( executing, executing );
-    _MRSP_Restore_priority( mrsp, executing, initial_priority );
-
-    status = MRSP_TIMEOUT;
   }
 
   return status;
@@ -289,6 +278,8 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Release(
   Thread_Control *executing
 )
 {
+  ISR_Level level;
+
   if ( _Resource_Get_owner( &mrsp->Resource ) != &executing->Resource_node ) {
     return MRSP_NOT_OWNER_OF_RESOURCE;
   }
@@ -303,21 +294,35 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Release(
   }
 
   _Resource_Extract( &mrsp->Resource );
-  _MRSP_Restore_priority( mrsp, executing, mrsp->initial_priority_of_owner );
+  _MRSP_Restore_priority( executing, mrsp->initial_priority_of_owner );
+
+  _ISR_Disable( level );
 
   if ( _Chain_Is_empty( &mrsp->Rivals ) ) {
+    _ISR_Enable( level );
+
     _Resource_Set_owner( &mrsp->Resource, NULL );
   } else {
-    MRSP_Rival *rival = (MRSP_Rival *) _Chain_First( &mrsp->Rivals );
-    Thread_Control *new_owner = rival->thread;
+    MRSP_Rival *rival = (MRSP_Rival *)
+      _Chain_Get_first_unprotected( &mrsp->Rivals );
+    Thread_Control *new_owner;
 
+    /*
+     * This must be inside the critical section since the status prevents a
+     * potential double extraction in _MRSP_Timeout().
+     */
+    rival->status = MRSP_SUCCESSFUL;
+
+    _ISR_Enable( level );
+
+    new_owner = rival->thread;
+    mrsp->initial_priority_of_owner = rival->initial_priority;
     _Resource_Node_extract( &new_owner->Resource_node );
     _Resource_Node_set_dependency( &new_owner->Resource_node, NULL );
     _Resource_Node_add_resource( &new_owner->Resource_node, &mrsp->Resource );
     _Resource_Set_owner( &mrsp->Resource, &new_owner->Resource_node );
     _Scheduler_Thread_change_help_state( new_owner, SCHEDULER_HELP_ACTIVE_OWNER );
     _Scheduler_Thread_change_resource_root( new_owner, new_owner );
-    _MRSP_Add_state( rival, MRSP_RIVAL_STATE_NEW_OWNER );
   }
 
   if ( !_Resource_Node_owns_resources( &executing->Resource_node ) ) {

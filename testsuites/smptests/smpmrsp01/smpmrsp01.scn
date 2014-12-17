@@ -45,6 +45,11 @@ test MrsP obtain and release with help
 [0] IDLE -> MAIN (prio   3, node MAIN)
 [1] MAIN -> HELP (prio   2, node HELP)
 test MrsP obtain and release
+[1] IDLE -> WORK (prio   4, node WORK)
+[1] WORK -> MAIN (prio   3, node WORK)
+[0] MAIN -> HIG0 (prio   1, node HIG0)
+[1] MAIN -> WORK (prio   4, node WORK)
+[0] HIG0 -> MAIN (prio   2, node MAIN)
 test MrsP load
 worker[0]
   sleep = 53

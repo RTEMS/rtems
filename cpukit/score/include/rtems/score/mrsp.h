@@ -19,8 +19,8 @@
 
 #if defined(RTEMS_SMP)
 
-#include <rtems/score/atomic.h>
 #include <rtems/score/chain.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/thread.h>
 
 #ifdef __cplusplus
@@ -66,7 +66,13 @@ typedef enum {
   MRSP_INCORRECT_STATE = 14,
   MRSP_INVALID_PRIORITY = 19,
   MRSP_NOT_OWNER_OF_RESOURCE = 23,
-  MRSP_NO_MEMORY = 26
+  MRSP_NO_MEMORY = 26,
+
+  /**
+   * @brief Internal state used for MRSP_Rival::status to indicate that this
+   * rival waits for resource ownership.
+   */
+  MRSP_WAIT_FOR_OWNERSHIP = 255
 } MRSP_Status;
 
 /**
@@ -79,6 +85,9 @@ typedef struct {
   /**
    * @brief The node for registration in the MRSP rival chain.
    *
+   * The chain operations are protected by the Giant lock and disabled
+   * interrupts.
+   *
    * @see MRSP_Control::Rivals.
    */
   Chain_Node Node;
@@ -89,13 +98,30 @@ typedef struct {
   Thread_Control *thread;
 
   /**
-   * @brief The rival state.
+   * @brief The initial priority of the thread at the begin of the resource
+   * obtain sequence.
    *
-   * Initially no state bits are set (MRSP_RIVAL_STATE_WAITING).  The rival
-   * will busy wait until a state change happens.  This can be
-   * MRSP_RIVAL_STATE_NEW_OWNER or MRSP_RIVAL_STATE_TIMEOUT.
+   * Used to restore the priority after a release of this resource or timeout.
    */
-  Atomic_Uint state;
+  Priority_Control initial_priority;
+
+  /**
+   * @brief The initial help state of the thread at the begin of the resource
+   * obtain sequence.
+   *
+   * Used to restore this state after a timeout.
+   */
+  Scheduler_Help_state initial_help_state;
+
+  /**
+   * @brief The rival status.
+   *
+   * Initially the status is set to MRSP_WAIT_FOR_OWNERSHIP.  The rival will
+   * busy wait until a status change happens.  This can be MRSP_SUCCESSFUL or
+   * MRSP_TIMEOUT.  State changes are protected by the Giant lock and disabled
+   * interrupts.
+   */
+  volatile MRSP_Status status;
 } MRSP_Rival;
 
 /**

@@ -208,6 +208,15 @@ static void print_switch_events(test_context *ctx)
   }
 }
 
+static void run_task(rtems_task_argument arg)
+{
+  volatile bool *run = (volatile bool *) arg;
+
+  while (true) {
+    *run = true;
+  }
+}
+
 static void obtain_and_release_worker(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
@@ -216,7 +225,7 @@ static void obtain_and_release_worker(rtems_task_argument arg)
 
   ctx->worker_task = _Thread_Get_executing();
 
-  assert_prio(RTEMS_SELF, 3);
+  assert_prio(RTEMS_SELF, 4);
 
   /* Obtain with timeout (A) */
   barrier(ctx, &barrier_state);
@@ -224,7 +233,7 @@ static void obtain_and_release_worker(rtems_task_argument arg)
   sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, 4);
   rtems_test_assert(sc == RTEMS_TIMEOUT);
 
-  assert_prio(RTEMS_SELF, 3);
+  assert_prio(RTEMS_SELF, 4);
 
   /* Obtain with priority change and timeout (B) */
   barrier(ctx, &barrier_state);
@@ -232,7 +241,7 @@ static void obtain_and_release_worker(rtems_task_argument arg)
   sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, 4);
   rtems_test_assert(sc == RTEMS_TIMEOUT);
 
-  assert_prio(RTEMS_SELF, 1);
+  assert_prio(RTEMS_SELF, 2);
 
   /* Restore priority (C) */
   barrier(ctx, &barrier_state);
@@ -243,14 +252,25 @@ static void obtain_and_release_worker(rtems_task_argument arg)
   sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  assert_prio(RTEMS_SELF, 2);
+  assert_prio(RTEMS_SELF, 3);
 
   sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  assert_prio(RTEMS_SELF, 3);
+  assert_prio(RTEMS_SELF, 4);
 
-  /* Worker done (E) */
+  /* Obtain and help with timeout (E) */
+  barrier(ctx, &barrier_state);
+
+  sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, 4);
+  rtems_test_assert(sc == RTEMS_TIMEOUT);
+
+  assert_prio(RTEMS_SELF, 4);
+
+  sc = rtems_task_suspend(ctx->high_task_id[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  /* Worker done (H) */
   barrier(ctx, &barrier_state);
 
   rtems_task_suspend(RTEMS_SELF);
@@ -266,7 +286,21 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
 
   puts("test MrsP obtain and release");
 
-  change_prio(RTEMS_SELF, 2);
+  change_prio(RTEMS_SELF, 3);
+
+  reset_switch_events(ctx);
+
+  ctx->high_run[0] = false;
+
+  sc = rtems_task_create(
+    rtems_build_name('H', 'I', 'G', '0'),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &ctx->high_task_id[0]
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   /* Check executing task parameters */
 
@@ -282,17 +316,17 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
     1,
     RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
       | RTEMS_BINARY_SEMAPHORE,
-    1,
+    2,
     &ctx->mrsp_ids[0]
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  assert_prio(RTEMS_SELF, 2);
+  assert_prio(RTEMS_SELF, 3);
 
   sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  assert_prio(RTEMS_SELF, 1);
+  assert_prio(RTEMS_SELF, 2);
 
   /*
    * The ceiling priority values per scheduler are equal to the value specified
@@ -307,11 +341,11 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
     &prio
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(prio == 1);
+  rtems_test_assert(prio == 2);
 
   /* Check the old value and set a new ceiling priority for scheduler B */
 
-  prio = 2;
+  prio = 3;
   sc = rtems_semaphore_set_priority(
     ctx->mrsp_ids[0],
     ctx->scheduler_ids[1],
@@ -319,7 +353,7 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
     &prio
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(prio == 1);
+  rtems_test_assert(prio == 2);
 
   /* Check the ceiling priority values */
 
@@ -331,7 +365,7 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
     &prio
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(prio == 1);
+  rtems_test_assert(prio == 2);
 
   prio = RTEMS_CURRENT_PRIORITY;
   sc = rtems_semaphore_set_priority(
@@ -341,13 +375,13 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
     &prio
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(prio == 2);
+  rtems_test_assert(prio == 3);
 
   /* Check that a thread waiting to get ownership remains executing */
 
   sc = rtems_task_create(
     rtems_build_name('W', 'O', 'R', 'K'),
-    3,
+    4,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -364,35 +398,66 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
   /* Obtain with timeout (A) */
   barrier_and_delay(ctx, &barrier_state);
 
-  assert_prio(ctx->worker_ids[0], 2);
+  assert_prio(ctx->worker_ids[0], 3);
   assert_executing_worker(ctx);
 
   /* Obtain with priority change and timeout (B) */
   barrier_and_delay(ctx, &barrier_state);
 
-  assert_prio(ctx->worker_ids[0], 2);
-  change_prio(ctx->worker_ids[0], 1);
+  assert_prio(ctx->worker_ids[0], 3);
+  change_prio(ctx->worker_ids[0], 2);
   assert_executing_worker(ctx);
 
   /* Restore priority (C) */
   barrier(ctx, &barrier_state);
 
-  assert_prio(ctx->worker_ids[0], 1);
-  change_prio(ctx->worker_ids[0], 3);
+  assert_prio(ctx->worker_ids[0], 2);
+  change_prio(ctx->worker_ids[0], 4);
 
   /* Obtain without timeout (D) */
   barrier_and_delay(ctx, &barrier_state);
 
-  assert_prio(ctx->worker_ids[0], 2);
+  assert_prio(ctx->worker_ids[0], 3);
   assert_executing_worker(ctx);
 
   sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  /* Worker done (E) */
+  /* Check that a timeout works in case the waiting thread actually helps */
+
+  sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  /* Obtain and help with timeout (E) */
+  barrier_and_delay(ctx, &barrier_state);
+
+  sc = rtems_task_start(
+    ctx->high_task_id[0],
+    run_task,
+    (rtems_task_argument) &ctx->high_run[0]
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(rtems_get_current_processor() == 1);
+
+  while (rtems_get_current_processor() != 0) {
+    /* Wait */
+  }
+
+  rtems_test_assert(ctx->high_run[0]);
+
+  sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  print_switch_events(ctx);
+
+  /* Worker done (H) */
   barrier(ctx, &barrier_state);
 
   sc = rtems_task_delete(ctx->worker_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(ctx->high_task_id[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_semaphore_delete(ctx->mrsp_ids[0]);
@@ -725,15 +790,6 @@ static void test_mrsp_multiple_obtain(void)
 
   sc = rtems_semaphore_delete(sem_c_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-}
-
-static void run_task(rtems_task_argument arg)
-{
-  volatile bool *run = (volatile bool *) arg;
-
-  while (true) {
-    *run = true;
-  }
 }
 
 static void ready_unlock_worker(rtems_task_argument arg)
