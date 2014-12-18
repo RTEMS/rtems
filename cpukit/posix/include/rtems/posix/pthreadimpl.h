@@ -97,27 +97,6 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Free(
 );
 
 /**
- * @brief Map POSIX thread IDs to control blocks.
- *
- * This function maps pthread IDs to pthread control blocks.
- * If ID corresponds to a local pthread, then it returns
- * the_pthread control pointer which maps to ID and location
- * is set to OBJECTS_LOCAL.  if the pthread ID is global and
- * resides on a remote node, then location is set to OBJECTS_REMOTE,
- * and the_pthread is undefined.  Otherwise, location is set
- * to OBJECTS_ERROR and the_pthread is undefined.
- *
- * @param[in] id is the id to lookup
- * @param[in] location points to the returned location value
- *
- * @return This methods returns a pointer to the corresponding Thread_Control.
- */
-RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Get(
-  pthread_t          id,
-  Objects_Locations *location
-);
-
-/**
  * @brief POSIX threads initialize user threads body.
  *
  * This routine initializes the thread attributes structure.
@@ -222,19 +201,6 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Free (
 )
 {
   _Objects_Free( &_POSIX_Threads_Information, &the_pthread->Object );
-}
-
-/*
- *  _POSIX_Threads_Get
- */
-
-RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Get (
-  pthread_t          id,
-  Objects_Locations *location
-)
-{
-  return (Thread_Control *)
-    _Objects_Get( &_POSIX_Threads_Information, (Objects_Id)id, location );
 }
 
 /*
