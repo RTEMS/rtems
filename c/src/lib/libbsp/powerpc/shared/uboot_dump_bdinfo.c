@@ -41,7 +41,9 @@ void dumpUBootBDInfo(
     "Ethernet speed in Mbps = %d\n"
     "Internal Freq, in MHz = %ld\n"
     "Bus Freq, in MHz = %ld\n"
-    "Console Baud Rate = %ld\n"
+    #if !defined(U_BOOT_GENERIC_BOARD_INFO)
+      "Console Baud Rate = %ld\n"
+    #endif
     #if defined(CONFIG_MPC5xxx)
       "MBAR                       = %p\n"
       "IPB Bus Freq, in MHz       = %ld\n"
@@ -59,8 +61,11 @@ void dumpUBootBDInfo(
     u->bi_enetaddr[3], u->bi_enetaddr[4], u->bi_enetaddr[5],
     u->bi_ethspeed,
     u->bi_intfreq,
-    u->bi_busfreq,
-    u->bi_baudrate
+    u->bi_busfreq
+    #if !defined(U_BOOT_GENERIC_BOARD_INFO)
+      ,
+      u->bi_baudrate
+    #endif
     #if defined(CONFIG_MPC5xxx)
       ,
       u->bi_mbar_base,

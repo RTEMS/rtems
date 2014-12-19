@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -25,9 +25,20 @@
 
 #include <bsp/u-boot-config.h>
 
-typedef unsigned long phys_size_t;
+#include <sys/types.h>
+#include <stdint.h>
 
-#include <bsp/u-boot-board-info.h>
+#ifdef U_BOOT_64_BIT_PHYS_SIZE
+  typedef uint64_t phys_size_t;
+#else
+  typedef unsigned long phys_size_t;
+#endif
+
+#ifdef U_BOOT_GENERIC_BOARD_INFO
+  #include <bsp/u-boot-generic-board-info.h>
+#else
+  #include <bsp/u-boot-board-info.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
