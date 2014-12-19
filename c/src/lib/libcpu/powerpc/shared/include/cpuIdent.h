@@ -51,6 +51,7 @@ typedef enum
   PPC_8245 = 0x8081,
   PPC_8540 = 0x8020,
   PPC_e500v2 = 0x8021,
+  PPC_e6500 = 0x8040,
   PPC_603le = 0x8082, /* 603le core, in MGT5100 and MPC5200 */
   PPC_e300c1  = 0x8083, /* e300c1  core, in MPC83xx*/
   PPC_e300c2  = 0x8084, /* e300c2  core */
