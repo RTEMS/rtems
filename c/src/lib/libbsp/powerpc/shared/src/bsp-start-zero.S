@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -21,6 +21,7 @@
  */
 
 #include <rtems/asm.h>
+#include <rtems/powerpc/powerpc.h>
 #include <bspopts.h>
 
 	.globl bsp_start_zero
@@ -34,8 +35,8 @@ bsp_start_zero:
 bsp_start_zero_begin:
 	li	r0, 0
 	subi	r11, r3, 1
-	clrrwi	r11, r11, 5
-	addi	r10, r11, 32
+	clrrwi	r11, r11, PPC_CACHE_ALIGN_POWER
+	addi	r10, r11, PPC_CACHE_ALIGNMENT
 	subf	r11, r3, r10
 	cmplw	cr7, r11, r4
 	add	r9, r3, r4
@@ -55,7 +56,7 @@ head_loop_update:
 	bdnz+	head_loop_begin
 
 	subf	r11, r3, r9
-	srwi	r11, r11, 5
+	srwi	r11, r11, PPC_CACHE_ALIGN_POWER
 	addi	r11, r11, 1
 	mtctr	r11
 
@@ -66,6 +67,7 @@ main_loop_begin:
 	dcbz	r0, r3
 	dcbf	r0, r3
 #else
+  #if PPC_CACHE_ALIGNMENT >= 32
 	stw	r0, 0(r3)
 	stw	r0, 4(r3)
 	stw	r0, 8(r3)
@@ -74,8 +76,23 @@ main_loop_begin:
 	stw	r0, 20(r3)
 	stw	r0, 24(r3)
 	stw	r0, 28(r3)
+    #if PPC_CACHE_ALIGNMENT == 64
+	stw	r0, 32(r3)
+	stw	r0, 36(r3)
+	stw	r0, 40(r3)
+	stw	r0, 44(r3)
+	stw	r0, 48(r3)
+	stw	r0, 52(r3)
+	stw	r0, 56(r3)
+	stw	r0, 60(r3)
+    #else
+      #error "unsupported cache alignment"
+    #endif
+  #else
+    #error "unsupported cache alignment"
+  #endif
 #endif
-	addi	r3, r3, 32
+	addi	r3, r3, PPC_CACHE_ALIGNMENT
 main_loop_update:
 	bdnz+	main_loop_begin
 
