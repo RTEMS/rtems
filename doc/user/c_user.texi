@@ -111,6 +111,7 @@
 * CPU Usage Statistics::
 * Object Services::
 * Chains::
+* Red-Black Trees::
 * Timespec Helpers::
 * Constant Bandwidth Server Scheduler API::
 * Directive Status Codes::
@@ -155,6 +156,7 @@
 @include cpuuse.texi
 @include object.texi
 @include chains.texi
+@include rbtree.texi
 @include timespec.texi
 @include cbs.texi
 @include dirstat.texi
