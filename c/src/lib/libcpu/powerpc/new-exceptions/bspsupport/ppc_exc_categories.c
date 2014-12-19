@@ -288,6 +288,7 @@ const ppc_exc_categories *ppc_exc_categories_for_cpu(ppc_cpu_id_t cpu)
       return &psim_category_table;
     case PPC_8540:
     case PPC_e500v2:
+    case PPC_e6500:
       return &e500_category_table;
     case PPC_e200z0:
     case PPC_e200z1:
