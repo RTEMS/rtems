@@ -635,6 +635,7 @@ static void tsec_receive_packets
        * throw away mbuf
        */
       MFREE(m,n);
+      (void) n;
     }
     /*
      * mark buffer as non-allocated (for refill)
@@ -684,6 +685,7 @@ static void tsec_refill_rxbds
       MCLGET(m,M_DONTWAIT);
       if ((m->m_flags & M_EXT) == 0) {
 	MFREE(m,n);
+	(void) n;
 	m = NULL;
       }
     }
@@ -735,7 +737,6 @@ static void tsec_rxDaemon
   struct tsec_struct *sc =
     (struct tsec_struct *)arg;
   bool finished = false;
-  rtems_event_set events;
 #if !defined(CLREVENT_IN_IRQ)
   uint32_t irq_events;
 #endif
@@ -751,7 +752,7 @@ static void tsec_rxDaemon
     /*
      * wait for events to come in
      */
-    events = tsec_rx_wait_for_events(sc,INTERRUPT_EVENT);
+    tsec_rx_wait_for_events(sc,INTERRUPT_EVENT);
 #if !defined(CLREVENT_IN_IRQ)
     /*
      * clear any pending RX events
@@ -924,6 +925,7 @@ static void tsec_tx_retire
     sc->Tx_mBuf_Ptr[bd_idx] = NULL;
 
     MFREE(m,n);
+    (void) n;
     RetBD->buffer = NULL;
     /*
      * Advance CurrBD to next BD
@@ -1071,7 +1073,6 @@ static void tsec_txDaemon
   struct ifnet *ifp = &sc->arpcom.ac_if;
   struct mbuf *m;
   bool finished = false;
-  rtems_event_set events;
 #if !defined(CLREVENT_IN_IRQ)
   uint32_t irq_events;
 #endif
@@ -1085,7 +1086,7 @@ static void tsec_txDaemon
     /*
      * wait for events to come in
      */
-    events = tsec_tx_wait_for_events(sc,
+    tsec_tx_wait_for_events(sc,
 					     START_TRANSMIT_EVENT
 					     | INTERRUPT_EVENT);
 #if !defined(CLREVENT_IN_IRQ)
