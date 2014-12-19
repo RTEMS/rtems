@@ -62,6 +62,12 @@ extern "C" {
 #include <rtems/score/powerpc.h>
 
 /*
+ * Unfortunately it is very inefficient to use run-time detection for the cache
+ * line size, so give the BSP the opportunity to define it here.
+ */
+#include <bspopts.h>
+
+/*
  *  This file contains the information required to build
  *  RTEMS for a particular member of the PowerPC family.  It does
  *  this by setting variables to indicate which implementation
@@ -271,7 +277,6 @@ extern "C" {
 #define PPC_USE_MULTIPLE	1
 
 #elif defined(__ppc_generic)
-#define PPC_CACHE_ALIGNMENT 32
 
 #else
 
@@ -302,6 +307,8 @@ extern "C" {
 #define PPC_CACHE_ALIGN_POWER 4
 #elif (PPC_CACHE_ALIGNMENT == 32)
 #define PPC_CACHE_ALIGN_POWER 5
+#elif (PPC_CACHE_ALIGNMENT == 64)
+#define PPC_CACHE_ALIGN_POWER 6
 #elif (PPC_CACHE_ALIGNMENT == PPC_NO_CACHE_ALIGNMENT)
 #define PPC_CACHE_ALIGN_POWER PPC_NO_CACHE_ALIGNMENT_POWER
 #else
