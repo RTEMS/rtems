@@ -52,6 +52,7 @@ typedef struct {
 	uint32_t mas1;
 	uint32_t mas2;
 	uint32_t mas3;
+	uint32_t mas7;
 } qoriq_mmu_entry;
 
 typedef struct {
@@ -67,7 +68,8 @@ bool qoriq_mmu_add(
 	uint32_t last,
 	uint32_t mas1,
 	uint32_t mas2,
-	uint32_t mas3
+	uint32_t mas3,
+	uint32_t mas7
 );
 
 void qoriq_mmu_partition(qoriq_mmu_context *self, int max_count);
@@ -83,6 +85,7 @@ void qoriq_tlb1_write(
 	uint32_t mas1,
 	uint32_t mas2,
 	uint32_t mas3,
+	uint32_t mas7,
 	uint32_t ea,
 	uint32_t tsize
 );

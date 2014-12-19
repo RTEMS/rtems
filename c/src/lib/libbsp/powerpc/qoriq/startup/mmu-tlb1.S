@@ -30,19 +30,18 @@
 
 qoriq_tlb1_write:
 	rlwinm	r3, r3, 16, 12, 15
-	rlwinm	r7, r7, 0, 0, 19
+	rlwinm	r8, r8, 0, 0, 19
 	oris	r3, r3, 0x1000
 	mtspr	FSL_EIS_MAS0, r3
 	oris	r4, r4, 0xc000
-	rlwinm	r8, r8, 8, 20, 23
-	or	r8, r4, r8
-	mtspr	FSL_EIS_MAS1, r8
-	or	r5, r7, r5
+	rlwinm	r9, r9, 8, 20, 23
+	or	r9, r4, r9
+	mtspr	FSL_EIS_MAS1, r9
+	or	r5, r8, r5
 	mtspr	FSL_EIS_MAS2, r5
-	or	r6, r7, r6
+	or	r6, r8, r6
 	mtspr	FSL_EIS_MAS3, r6
-	li	r0, 0
-	mtspr	FSL_EIS_MAS7, r0
+	mtspr	FSL_EIS_MAS7, r7
 	tlbwe
 	sync
 	isync

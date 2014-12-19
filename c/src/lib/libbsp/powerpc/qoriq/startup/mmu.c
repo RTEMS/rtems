@@ -165,7 +165,8 @@ bool TEXT qoriq_mmu_add(
 	uint32_t last,
 	uint32_t mas1,
 	uint32_t mas2,
-	uint32_t mas3
+	uint32_t mas3,
+	uint32_t mas7
 )
 {
 	bool ok = true;
@@ -181,7 +182,8 @@ bool TEXT qoriq_mmu_add(
 				.last = last,
 				.mas1 = mas1,
 				.mas2 = mas2,
-				.mas3 = mas3
+				.mas3 = mas3,
+				.mas7 = mas7
 			};
 			append(self, &new_entry);
 		} else {
@@ -269,7 +271,15 @@ void TEXT qoriq_mmu_write_to_tlb1(qoriq_mmu_context *self, int first_tlb)
 		uint32_t tsize = (power_of_two(size) - 10) / 2;
 		int tlb = first_tlb + i;
 
-		qoriq_tlb1_write(tlb, cur->mas1, cur->mas2, cur->mas3, ea, tsize);
+		qoriq_tlb1_write(
+			tlb,
+			cur->mas1,
+			cur->mas2,
+			cur->mas3,
+			cur->mas7,
+			ea,
+			tsize
+		);
 	}
 }
 

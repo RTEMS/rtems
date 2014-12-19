@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -93,7 +93,15 @@ static void release_core_1(void)
   qoriq_mmu_context mmu_context;
 
   qoriq_mmu_context_init(&mmu_context);
-  qoriq_mmu_add(&mmu_context, BOOT_BEGIN, BOOT_LAST, 0, 0, FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW);
+  qoriq_mmu_add(
+    &mmu_context,
+    BOOT_BEGIN,
+    BOOT_LAST,
+    0,
+    0,
+    FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW,
+    0
+  );
   qoriq_mmu_partition(&mmu_context, TLB_COUNT);
   qoriq_mmu_write_to_tlb1(&mmu_context, TLB_BEGIN);
 

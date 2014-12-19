@@ -33,6 +33,7 @@ typedef struct {
 	uint32_t size;
 	uint32_t mas2;
 	uint32_t mas3;
+	uint32_t mas7;
 } entry;
 
 #define ENTRY_X(b, s) { \
@@ -66,7 +67,8 @@ typedef struct {
 	.begin = (uint32_t) b, \
 	.size = (uint32_t) s, \
 	.mas2 = FSL_EIS_MAS2_I | FSL_EIS_MAS2_G, \
-	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW \
+	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW, \
+	.mas7 = QORIQ_MMU_DEVICE_MAS7 \
 }
 
 static const entry DATA config [] = {
@@ -118,7 +120,8 @@ void TEXT qoriq_mmu_config(int first_tlb, int scratch_tlb)
 				cur->begin + cur->size - 1,
 				0,
 				cur->mas2,
-				cur->mas3
+				cur->mas3,
+				cur->mas7
 			);
 		}
 	}

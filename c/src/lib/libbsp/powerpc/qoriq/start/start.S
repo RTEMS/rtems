@@ -58,7 +58,8 @@ _start:
 	li	r5, FSL_EIS_MAS2_I
 	li	r6, FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW | FSL_EIS_MAS3_SX
 	li	r7, 0
-	li	r8, 11
+	li	r8, 0
+	li	r9, 11
 	bl	qoriq_tlb1_write
 
 	/* MSR initialization */
@@ -137,8 +138,9 @@ null_area_setup_done:
 	li	r4, 0
 	li	r5, 0
 	li	r6, FSL_EIS_MAS3_SR
-	mr	r7, UBOOT_BOARD_INFO
-	li	r8, 1
+	li	r7, 0
+	mr	r8, UBOOT_BOARD_INFO
+	li	r9, 1
 	bl	qoriq_tlb1_write
 	mr	r3, UBOOT_BOARD_INFO
 	bl	bsp_uboot_copy_board_info
@@ -180,7 +182,8 @@ _start_core_1:
 	li	r5, FSL_EIS_MAS2_I
 	li	r6, FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW | FSL_EIS_MAS3_SX
 	li	r7, 0
-	li	r8, 11
+	li	r8, 0
+	li	r9, 11
 	bl	qoriq_tlb1_write
 
 	/* MSR initialization */
