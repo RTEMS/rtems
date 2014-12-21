@@ -845,31 +845,6 @@ static bool rtems_jffs2_are_nodes_equal(
 	return inode_a->i_ino == inode_b->i_ino;
 }
 
-static rtems_filesystem_node_types_t rtems_jffs2_node_type(
-	const rtems_filesystem_location_info_t *loc
-)
-{
-	struct _inode *inode = rtems_jffs2_get_inode_by_location(loc);
-	rtems_filesystem_node_types_t type;
-
-	switch (inode->i_mode & S_IFMT) {
-		case S_IFDIR:
-			type = RTEMS_FILESYSTEM_DIRECTORY;
-			break;
-		case S_IFREG:
-			type = RTEMS_FILESYSTEM_MEMORY_FILE;
-			break;
-		case S_IFLNK:
-			type = RTEMS_FILESYSTEM_SYM_LINK;
-			break;
-		default:
-			type = RTEMS_FILESYSTEM_INVALID_NODE_TYPE;
-			break;
-	}
-
-	return type;
-}
-
 static int rtems_jffs2_mknod(
 	const rtems_filesystem_location_info_t *parentloc,
 	const char *name,
@@ -1123,7 +1098,6 @@ static const rtems_filesystem_operations_table rtems_jffs2_ops = {
 	.eval_path_h = rtems_jffs2_eval_path,
 	.link_h = rtems_jffs2_link,
 	.are_nodes_equal_h = rtems_jffs2_are_nodes_equal,
-	.node_type_h = rtems_jffs2_node_type,
 	.mknod_h = rtems_jffs2_mknod,
 	.rmnod_h = rtems_jffs2_rmnod,
 	.fchmod_h = rtems_jffs2_fchmod,

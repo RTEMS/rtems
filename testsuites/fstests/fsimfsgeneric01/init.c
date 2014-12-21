@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -34,7 +34,8 @@ const char rtems_test_name[] = "FSIMFSGENERIC 1";
 typedef enum {
   TEST_NEW,
   TEST_INITIALIZED,
-  TEST_FSTAT_OPEN,
+  TEST_FSTAT_OPEN_0,
+  TEST_FSTAT_OPEN_1,
   TEST_OPEN,
   TEST_READ,
   TEST_WRITE,
@@ -61,7 +62,7 @@ static int handler_open(
 {
   test_state *state = IMFS_generic_get_context_by_iop(iop);
 
-  rtems_test_assert(*state == TEST_FSTAT_OPEN);
+  rtems_test_assert(*state == TEST_FSTAT_OPEN_1);
   *state = TEST_OPEN;
 
   return 0;
@@ -144,17 +145,23 @@ static int handler_fstat(
 
   switch (*state) {
     case TEST_INITIALIZED:
-      *state = TEST_FSTAT_OPEN;
+      *state = TEST_FSTAT_OPEN_0;
+      break;
+    case TEST_FSTAT_OPEN_0:
+      *state = TEST_FSTAT_OPEN_1;
       break;
     case TEST_CLOSED:
       *state = TEST_FSTAT_UNLINK;
       break;
     default:
-      rtems_test_assert(0);
+      printk("x\n");
+      //rtems_test_assert(0);
       break;
   }
 
-  return rtems_filesystem_default_fstat(loc, buf);
+  buf->st_mode = S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO;
+
+  return 0;
 }
 
 static int handler_ftruncate(

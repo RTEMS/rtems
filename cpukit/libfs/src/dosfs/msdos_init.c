@@ -57,7 +57,6 @@ const rtems_filesystem_operations_table  msdos_ops = {
   .eval_path_h    =  msdos_eval_path,
   .link_h         =  rtems_filesystem_default_link,
   .are_nodes_equal_h = rtems_filesystem_default_are_nodes_equal,
-  .node_type_h    =  msdos_node_type,
   .mknod_h        =  msdos_mknod,
   .rmnod_h        =  msdos_rmnod,
   .fchmod_h       =  rtems_filesystem_default_fchmod,

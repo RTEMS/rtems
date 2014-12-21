@@ -54,18 +54,6 @@ struct knote;
 /**@{**/
 
 /**
- * @brief File system node types.
- */
-typedef enum {
-  RTEMS_FILESYSTEM_DIRECTORY,
-  RTEMS_FILESYSTEM_DEVICE,
-  RTEMS_FILESYSTEM_HARD_LINK,
-  RTEMS_FILESYSTEM_SYM_LINK,
-  RTEMS_FILESYSTEM_MEMORY_FILE,
-  RTEMS_FILESYSTEM_INVALID_NODE_TYPE
-} rtems_filesystem_node_types_t;
-
-/**
  * @brief Locks a file system instance.
  *
  * This lock must allow nesting.
@@ -343,19 +331,6 @@ typedef bool (*rtems_filesystem_are_nodes_equal_t)(
 );
 
 /**
- * @brief Returns the node type.
- *
- * @param[in] loc The location of the node.
- *
- * @return Type of the node.
- *
- * @see rtems_filesystem_default_node_type().
- */
-typedef rtems_filesystem_node_types_t (*rtems_filesystem_node_type_t)(
-  const rtems_filesystem_location_info_t *loc
-);
-
-/**
  * @brief Creates a new node.
  *
  * This handler should create a new node according to the parameters.
@@ -499,7 +474,6 @@ struct _rtems_filesystem_operations_table {
   rtems_filesystem_eval_path_t eval_path_h;
   rtems_filesystem_link_t link_h;
   rtems_filesystem_are_nodes_equal_t are_nodes_equal_h;
-  rtems_filesystem_node_type_t node_type_h;
   rtems_filesystem_mknod_t mknod_h;
   rtems_filesystem_rmnod_t rmnod_h;
   rtems_filesystem_fchmod_t fchmod_h;
@@ -578,15 +552,6 @@ int rtems_filesystem_default_link(
 bool rtems_filesystem_default_are_nodes_equal(
   const rtems_filesystem_location_info_t *a,
   const rtems_filesystem_location_info_t *b
-);
-
-/**
- * @retval RTEMS_FILESYSTEM_INVALID_NODE_TYPE Always.
- *
- * @see rtems_filesystem_node_type_t.
- */
-rtems_filesystem_node_types_t rtems_filesystem_default_node_type(
-  const rtems_filesystem_location_info_t *pathloc
 );
 
 /**

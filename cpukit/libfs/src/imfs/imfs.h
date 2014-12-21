@@ -136,11 +136,11 @@ typedef struct {
  *  What types of IMFS file systems entities there can be.
  */
 typedef enum {
-  IMFS_DIRECTORY = RTEMS_FILESYSTEM_DIRECTORY,
-  IMFS_DEVICE = RTEMS_FILESYSTEM_DEVICE,
-  IMFS_HARD_LINK = RTEMS_FILESYSTEM_HARD_LINK,
-  IMFS_SYM_LINK =  RTEMS_FILESYSTEM_SYM_LINK,
-  IMFS_MEMORY_FILE = RTEMS_FILESYSTEM_MEMORY_FILE,
+  IMFS_DIRECTORY,
+  IMFS_DEVICE,
+  IMFS_HARD_LINK,
+  IMFS_SYM_LINK,
+  IMFS_MEMORY_FILE,
   IMFS_LINEAR_FILE,
   IMFS_FIFO,
   IMFS_GENERIC,
@@ -513,16 +513,6 @@ extern int IMFS_node_clone( rtems_filesystem_location_info_t *loc );
  * @brief Free an IMFS node.
  */
 extern void IMFS_node_free( const rtems_filesystem_location_info_t *loc );
-
-/**
- * @brief IMFS Node Type Get the type of an IMFS node.
- * 
- * The following verifies that returns the type of node that the
- * loc refers to.
- */
-extern rtems_filesystem_node_types_t IMFS_node_type(
-  const rtems_filesystem_location_info_t *loc
-);
 
 /**
  * @brief Perform a status processing for the IMFS.

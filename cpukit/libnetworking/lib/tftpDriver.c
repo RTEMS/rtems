@@ -973,16 +973,18 @@ static int rtems_tftp_ftruncate(
     return 0;
 }
 
-static rtems_filesystem_node_types_t rtems_tftp_node_type(
-    const rtems_filesystem_location_info_t *loc
+static int rtems_tftp_fstat(
+    const rtems_filesystem_location_info_t *loc,
+    struct stat                            *buf
 )
 {
     const char *path = loc->node_access;
     size_t pathlen = strlen (path);
 
-    return rtems_tftp_is_directory (path, pathlen) ?
-        RTEMS_FILESYSTEM_DIRECTORY
-            : RTEMS_FILESYSTEM_MEMORY_FILE;
+    buf->st_mode = S_IRWXU | S_IRWXG | S_IRWXO
+        | (rtems_tftp_is_directory (path, pathlen) ? S_IFDIR : S_IFREG);
+
+    return 0;
 }
 
 static int rtems_tftp_clone(
@@ -1022,7 +1024,6 @@ static const rtems_filesystem_operations_table  rtems_tftp_ops = {
     .eval_path_h = rtems_tftp_eval_path,
     .link_h = rtems_filesystem_default_link,
     .are_nodes_equal_h = rtems_tftp_are_nodes_equal,
-    .node_type_h = rtems_tftp_node_type,
     .mknod_h = rtems_filesystem_default_mknod,
     .rmnod_h = rtems_filesystem_default_rmnod,
     .fchmod_h = rtems_filesystem_default_fchmod,
@@ -1047,7 +1048,7 @@ static const rtems_filesystem_file_handlers_r rtems_tftp_handlers = {
    .write_h = rtems_tftp_write,
    .ioctl_h = rtems_filesystem_default_ioctl,
    .lseek_h = rtems_filesystem_default_lseek,
-   .fstat_h = rtems_filesystem_default_fstat,
+   .fstat_h = rtems_tftp_fstat,
    .ftruncate_h = rtems_tftp_ftruncate,
    .fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
    .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,

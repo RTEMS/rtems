@@ -37,6 +37,11 @@
 extern "C" {
 #endif
 
+typedef enum {
+  FAT_DIRECTORY = 0,
+  FAT_FILE = 4
+} fat_file_type_t;
+
 /**
  * @brief The "fat-file" representation.
  *
@@ -52,11 +57,6 @@ extern "C" {
  * Such interface hides the architecture of fat-file and represents it like
  * linear file
  */
-typedef rtems_filesystem_node_types_t fat_file_type_t;
-
-#define FAT_DIRECTORY     RTEMS_FILESYSTEM_DIRECTORY
-#define FAT_FILE          RTEMS_FILESYSTEM_MEMORY_FILE
-
 typedef struct fat_file_map_s
 {
     uint32_t   file_cln;

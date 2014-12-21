@@ -1988,41 +1988,6 @@ LOCK(nfsGlob.llock);
 UNLOCK(nfsGlob.llock);
 }
 
-/* OPTIONAL; may be NULL - BUT: CAUTION; mount() doesn't check
- * for this handler to be present - a fs bug
- * //NOTE: (10/25/2002) patch submitted and probably applied
- */
-static rtems_filesystem_node_types_t nfs_node_type(
-  const rtems_filesystem_location_info_t *loc
-)
-{
-NfsNode node = loc->node_access;
-
-	if (updateAttr(node, 0 /* only if old */))
-		return -1;
-
-	switch( SERP_ATTR(node).type ) {
-		default:
-			/* rtems has no value for 'unknown';
-			 */
-		case NFNON:
-		case NFSOCK:
-		case NFBAD:
-		case NFFIFO:
-				break;
-
-
-		case NFREG: return RTEMS_FILESYSTEM_MEMORY_FILE;
-		case NFDIR:	return RTEMS_FILESYSTEM_DIRECTORY;
-
-		case NFBLK:
-		case NFCHR:	return RTEMS_FILESYSTEM_DEVICE;
-
-		case NFLNK: return RTEMS_FILESYSTEM_SYM_LINK;
-	}
-	return -1;
-}
-
 static int nfs_mknod(
 	const rtems_filesystem_location_info_t *parentloc,
 	const char *name,
@@ -2315,7 +2280,6 @@ const struct _rtems_filesystem_operations_table nfs_fs_ops = {
 	.eval_path_h    = nfs_eval_path,
 	.link_h         = nfs_link,
 	.are_nodes_equal_h = nfs_are_nodes_equal,
-	.node_type_h    = nfs_node_type,
 	.mknod_h        = nfs_mknod,
 	.rmnod_h        = nfs_rmnod,
 	.fchmod_h       = nfs_fchmod,

@@ -203,7 +203,6 @@ static const rtems_filesystem_operations_table null_ops = {
   .eval_path_h = rtems_filesystem_default_eval_path,
   .link_h = null_op_link,
   .are_nodes_equal_h = rtems_filesystem_default_are_nodes_equal,
-  .node_type_h = rtems_filesystem_default_node_type,
   .mknod_h = null_op_mknod,
   .rmnod_h = null_op_rmnod,
   .fchmod_h = null_op_fchmod,

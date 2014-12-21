@@ -27,7 +27,6 @@ const rtems_filesystem_operations_table IMFS_ops = {
   .eval_path_h = IMFS_eval_path,
   .link_h = IMFS_link,
   .are_nodes_equal_h = rtems_filesystem_default_are_nodes_equal,
-  .node_type_h = IMFS_node_type,
   .mknod_h = IMFS_mknod,
   .rmnod_h = IMFS_rmnod,
   .fchmod_h = IMFS_fchmod,

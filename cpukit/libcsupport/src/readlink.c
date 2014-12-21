@@ -34,9 +34,9 @@ ssize_t readlink( const char *__restrict path, char *__restrict buf,
   const rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
   const rtems_filesystem_operations_table *ops = currentloc->mt_entry->ops;
-  rtems_filesystem_node_types_t type = (*ops->node_type_h)( currentloc );
+  mode_t type = rtems_filesystem_location_type( currentloc );
 
-  if ( type == RTEMS_FILESYSTEM_SYM_LINK ) {
+  if ( S_ISLNK( type ) ) {
     rv = (*ops->readlink_h)( currentloc, buf, bufsize );
   } else {
     rtems_filesystem_eval_path_error( &ctx, EINVAL );

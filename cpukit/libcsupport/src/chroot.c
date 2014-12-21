@@ -54,12 +54,9 @@ int chroot( const char *path )
   if ( !rtems_filesystem_global_location_is_null( new_current_loc ) ) {
     rtems_filesystem_global_location_t *new_root_loc =
       rtems_filesystem_global_location_obtain( &new_current_loc );
-    rtems_filesystem_node_types_t type =
-      (*new_root_loc->location.mt_entry->ops->node_type_h)(
-        &new_root_loc->location
-      );
+    mode_t type = rtems_filesystem_location_type( &new_root_loc->location );
 
-    if ( type == RTEMS_FILESYSTEM_DIRECTORY ) {
+    if ( S_ISDIR( type ) ) {
       sc = rtems_libio_set_private_env();
       if (sc == RTEMS_SUCCESSFUL) {
         rtems_filesystem_global_location_assign(

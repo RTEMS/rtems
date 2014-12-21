@@ -27,7 +27,6 @@ const rtems_filesystem_operations_table rtems_filesystem_operations_default = {
   .eval_path_h = rtems_filesystem_default_eval_path,
   .link_h = rtems_filesystem_default_link,
   .are_nodes_equal_h = rtems_filesystem_default_are_nodes_equal,
-  .node_type_h = rtems_filesystem_default_node_type,
   .mknod_h = rtems_filesystem_default_mknod,
   .rmnod_h = rtems_filesystem_default_rmnod,
   .fchmod_h = rtems_filesystem_default_fchmod,

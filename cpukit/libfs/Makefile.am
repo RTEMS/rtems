@@ -30,7 +30,6 @@ libdefaultfs_a_SOURCES = \
     src/defaults/default_unmount.c \
     src/defaults/default_open.c src/defaults/default_close.c \
     src/defaults/default_fsunmount.c src/defaults/default_mknod.c \
-    src/defaults/default_node_type.c \
     src/defaults/default_ftruncate_directory.c \
     src/defaults/default_handlers.c src/defaults/default_ops.c
 libdefaultfs_a_SOURCES += src/defaults/default_kqfilter.c
@@ -52,7 +51,7 @@ libimfs_a_SOURCES += src/imfs/deviceio.c \
     src/imfs/imfs_handlers_directory.c src/imfs/imfs_handlers_link.c \
     src/imfs/imfs_handlers_memfile.c src/imfs/imfs_init.c \
     src/imfs/imfs_initsupp.c src/imfs/imfs_link.c src/imfs/imfs_load_tar.c \
-    src/imfs/imfs_mknod.c src/imfs/imfs_mount.c src/imfs/imfs_ntype.c \
+    src/imfs/imfs_mknod.c src/imfs/imfs_mount.c \
     src/imfs/imfs_readlink.c src/imfs/imfs_rename.c src/imfs/imfs_rmnod.c \
     src/imfs/imfs_stat.c src/imfs/imfs_symlink.c \
     src/imfs/imfs_unmount.c src/imfs/imfs_utime.c src/imfs/ioman.c \
@@ -64,7 +63,7 @@ libimfs_a_SOURCES += src/pipe/fifo.c src/pipe/pipe.c src/pipe/pipe.h
 noinst_LIBRARIES += libdevfs.a
 libdevfs_a_SOURCES = src/devfs/devfs_init.c src/devfs/devfs_eval.c \
     src/devfs/devfs_mknod.c src/devfs/devfs_show.c \
-    src/devfs/devfs_node_type.c src/devfs/devopen.c src/devfs/devread.c \
+    src/devfs/devopen.c src/devfs/devread.c \
     src/devfs/devwrite.c src/devfs/devclose.c src/devfs/devioctl.c \
     src/devfs/devstat.c src/devfs/devfs.h
 
@@ -83,7 +82,7 @@ libdosfs_a_SOURCES += src/dosfs/msdos_create.c src/dosfs/msdos_dir.c \
     src/dosfs/msdos_fsunmount.c src/dosfs/msdos_handlers_dir.c \
     src/dosfs/msdos_handlers_file.c src/dosfs/msdos_init.c \
     src/dosfs/msdos_initsupp.c src/dosfs/msdos_misc.c \
-    src/dosfs/msdos_mknod.c src/dosfs/msdos_node_type.c \
+    src/dosfs/msdos_mknod.c \
     src/dosfs/msdos_rmnod.c src/dosfs/msdos_statvfs.c \
     src/dosfs/msdos_conv_default.c \
     src/dosfs/msdos_conv_utf8.c \

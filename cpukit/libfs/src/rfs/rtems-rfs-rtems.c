@@ -52,28 +52,6 @@ rtems_rfs_rtems_eval_perms (rtems_filesystem_eval_path_context_t *ctx,
   );
 }
 
-static rtems_filesystem_node_types_t
-rtems_rfs_rtems_node_type_by_inode (rtems_rfs_inode_handle* inode)
-{
-  /*
-   * Do not return RTEMS_FILESYSTEM_HARD_LINK because this would result in an
-   * eval link which does not make sense in the case of the RFS file
-   * system. All directory entries are links to an inode. A link such as a HARD
-   * link is actually the normal path to a regular file, directory, device
-   * etc's inode. Links to inodes can be considered "the real" one, yet they
-   * are all links.
-   */
-  uint16_t mode = rtems_rfs_inode_get_mode (inode);
-  if (RTEMS_RFS_S_ISDIR (mode))
-    return RTEMS_FILESYSTEM_DIRECTORY;
-  else if (RTEMS_RFS_S_ISLNK (mode))
-    return RTEMS_FILESYSTEM_SYM_LINK;
-  else if (RTEMS_RFS_S_ISBLK (mode) || RTEMS_RFS_S_ISCHR (mode))
-    return RTEMS_FILESYSTEM_DEVICE;
-  else
-    return RTEMS_FILESYSTEM_MEMORY_FILE;
-}
-
 static void
 rtems_rfs_rtems_lock_by_mt_entry (
   const rtems_filesystem_mount_table_entry_t *mt_entry
@@ -102,8 +80,7 @@ rtems_rfs_rtems_is_directory(
 {
   rtems_rfs_inode_handle* inode = arg;
 
-  return rtems_rfs_rtems_node_type_by_inode (inode)
-    == RTEMS_FILESYSTEM_DIRECTORY;
+  return S_ISDIR (rtems_rfs_inode_get_mode (inode));
 }
 
 static void rtems_rfs_rtems_follow_link(
@@ -180,8 +157,7 @@ rtems_rfs_rtems_eval_token(
       }
 
       if (rc == 0) {
-        bool is_sym_link = rtems_rfs_rtems_node_type_by_inode (inode)
-          == RTEMS_FILESYSTEM_SYM_LINK;
+        bool is_sym_link = S_ISLNK (rtems_rfs_inode_get_mode (inode));
         int eval_flags = rtems_filesystem_eval_path_get_flags (ctx);
         bool follow_sym_link = (eval_flags & RTEMS_FS_FOLLOW_SYM_LINK) != 0;
         bool terminal = !rtems_filesystem_eval_path_has_path (ctx);
@@ -278,40 +254,6 @@ rtems_rfs_rtems_link (const rtems_filesystem_location_info_t *parentloc,
 
 
 	return 0;
-}
-
-/**
- * The following verifies that and returns the type of node that the loc refers
- * to.
- *
- * @param pathloc
- * @return rtems_filesystem_node_types_t
- */
-
-static rtems_filesystem_node_types_t
-rtems_rfs_rtems_node_type (const rtems_filesystem_location_info_t* pathloc)
-{
-  rtems_rfs_file_system*        fs = rtems_rfs_rtems_pathloc_dev (pathloc);
-  rtems_rfs_ino                 ino = rtems_rfs_rtems_get_pathloc_ino (pathloc);
-  rtems_filesystem_node_types_t type;
-  rtems_rfs_inode_handle        inode;
-  int                           rc;
-
-  rc = rtems_rfs_inode_open (fs, ino, &inode, true);
-  if (rc > 0)
-  {
-    return rtems_rfs_rtems_error ("node_type: opening inode", rc);
-  }
-
-  type = rtems_rfs_rtems_node_type_by_inode (&inode);
-
-  rc = rtems_rfs_inode_close (fs, &inode);
-  if (rc > 0)
-  {
-    return rtems_rfs_rtems_error ("node_type: closing inode", rc);
-  }
-
-  return type;
 }
 
 /**
@@ -805,7 +747,6 @@ const rtems_filesystem_operations_table rtems_rfs_ops =
   .are_nodes_equal_h = rtems_filesystem_default_are_nodes_equal,
   .eval_path_h    = rtems_rfs_rtems_eval_path,
   .link_h         = rtems_rfs_rtems_link,
-  .node_type_h    = rtems_rfs_rtems_node_type,
   .fchmod_h       = rtems_rfs_rtems_fchmod,
   .mknod_h        = rtems_rfs_rtems_mknod,
   .rmnod_h        = rtems_rfs_rtems_rmnod,

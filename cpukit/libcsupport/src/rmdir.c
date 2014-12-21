@@ -43,9 +43,9 @@ int rmdir( const char *path )
       parent_eval_flags
     );
   const rtems_filesystem_operations_table *ops = currentloc->mt_entry->ops;
-  rtems_filesystem_node_types_t type = (*ops->node_type_h)( currentloc );
+  mode_t type = rtems_filesystem_location_type( currentloc );
 
-  if ( type == RTEMS_FILESYSTEM_DIRECTORY ) {
+  if ( S_ISDIR( type ) ) {
     if ( !rtems_filesystem_location_is_instance_root( currentloc ) ) {
       rv = (*ops->rmnod_h)( &parentloc, currentloc );
     } else {

@@ -206,21 +206,6 @@ void rtems_filesystem_location_clone(
 );
 
 /**
- * @brief Returns the type of a node.
- *
- * This function obtains and releases the file system instance lock.
- *
- * @param[in] loc The location of the node.
- *
- * @retval type The node type.
- *
- * @see rtems_filesystem_instance_lock().
- */
-rtems_filesystem_node_types_t rtems_filesystem_node_type(
-  const rtems_filesystem_location_info_t *loc
-);
-
-/**
  * @brief Releases all resources of a location.
  *
  * This function may block on a mutex and may complete an unmount process.
@@ -917,6 +902,26 @@ static inline ssize_t rtems_libio_iovec_eval(
   }
 
   return total;
+}
+
+/**
+ * @brief Returns the file type of the file referenced by the filesystem
+ * location.
+ *
+ * @brief[in] loc The filesystem location.
+ *
+ * @return The type of the file or an invalid file type in case of an error.
+ */
+static inline mode_t rtems_filesystem_location_type(
+  const rtems_filesystem_location_info_t *loc
+)
+{
+  struct stat st;
+
+  st.st_mode = 0;
+  (void) ( *loc->handlers->fstat_h )( loc, &st );
+
+  return st.st_mode;
 }
 
 /** @} */

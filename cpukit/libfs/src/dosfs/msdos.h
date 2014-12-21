@@ -86,17 +86,11 @@ extern const rtems_filesystem_file_handlers_r  msdos_file_handlers;
 #define MSDOS_VOLUME_SEMAPHORE_TIMEOUT    RTEMS_NO_TIMEOUT
 
 /* Node types */
-#define MSDOS_DIRECTORY     RTEMS_FILESYSTEM_DIRECTORY
-#define MSDOS_REGULAR_FILE  RTEMS_FILESYSTEM_MEMORY_FILE
-#define MSDOS_HARD_LINK     RTEMS_FILESYSTEM_HARD_LINK /* pseudo type */
-
-/**
- *  @brief Type of node that loc refers to.
- *
- *  The following returns the type of node that the loc refers to.
- *
- */
-typedef rtems_filesystem_node_types_t msdos_node_type_t;
+typedef enum {
+  MSDOS_DIRECTORY = 0,
+  MSDOS_REGULAR_FILE = 4,
+  MSDOS_HARD_LINK = 2 /* pseudo type */
+} msdos_node_type_t;
 
 /*
  * Macros for fetching fields from 32 bytes long FAT Directory Entry
@@ -273,10 +267,6 @@ void msdos_eval_path(rtems_filesystem_eval_path_context_t *ctx);
  *  Free node handler implementation for the filesystem operations table.
  */
 void msdos_free_node_info(const rtems_filesystem_location_info_t *pathloc);
-
-rtems_filesystem_node_types_t msdos_node_type(
-  const rtems_filesystem_location_info_t *loc
-);
 
 /**
  * @brief Routine for node creation in a MSDOS filesystem.

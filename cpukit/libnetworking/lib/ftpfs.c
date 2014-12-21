@@ -1260,13 +1260,6 @@ static void rtems_ftpfs_free_node(const rtems_filesystem_location_info_t *loc)
   }
 }
 
-static rtems_filesystem_node_types_t rtems_ftpfs_node_type(
-  const rtems_filesystem_location_info_t *loc
-)
-{
-  return RTEMS_FILESYSTEM_MEMORY_FILE;
-}
-
 int rtems_ftpfs_initialize(
   rtems_filesystem_mount_table_entry_t *e,
   const void                           *d
@@ -1383,7 +1376,6 @@ static const rtems_filesystem_operations_table rtems_ftpfs_ops = {
   .eval_path_h = rtems_ftpfs_eval_path,
   .link_h = rtems_filesystem_default_link,
   .are_nodes_equal_h = rtems_filesystem_default_are_nodes_equal,
-  .node_type_h = rtems_ftpfs_node_type,
   .mknod_h = rtems_filesystem_default_mknod,
   .rmnod_h = rtems_filesystem_default_rmnod,
   .fchmod_h = rtems_filesystem_default_fchmod,

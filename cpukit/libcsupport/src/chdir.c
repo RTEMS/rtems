@@ -30,10 +30,9 @@ int rtems_filesystem_chdir( rtems_filesystem_location_info_t *loc )
   int rv = 0;
   rtems_filesystem_global_location_t *global_loc =
     rtems_filesystem_location_transform_to_global( loc );
-  rtems_filesystem_node_types_t type =
-    rtems_filesystem_node_type( &global_loc->location );
+  mode_t type = rtems_filesystem_location_type( &global_loc->location );
 
-  if ( type == RTEMS_FILESYSTEM_DIRECTORY ) {
+  if ( S_ISDIR( type ) ) {
     rtems_filesystem_global_location_assign(
       &rtems_filesystem_current,
       global_loc

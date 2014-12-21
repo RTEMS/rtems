@@ -23,7 +23,6 @@ const rtems_filesystem_operations_table devFS_ops = {
   .eval_path_h = devFS_eval_path,
   .link_h = rtems_filesystem_default_link,
   .are_nodes_equal_h = rtems_filesystem_default_are_nodes_equal,
-  .node_type_h = devFS_node_type,
   .mknod_h = devFS_mknod,
   .rmnod_h = rtems_filesystem_default_rmnod,
   .fchmod_h = rtems_filesystem_default_fchmod,
