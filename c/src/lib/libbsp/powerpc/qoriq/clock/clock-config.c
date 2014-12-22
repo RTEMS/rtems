@@ -29,6 +29,8 @@
 /* This is defined in clockdrv_shell.h */
 static rtems_isr Clock_isr(void *arg);
 
+static uint32_t qoriq_clock_last_ccr;
+
 static uint32_t qoriq_clock_nanoseconds_per_timer_tick;
 
 static volatile qoriq_pic_global_timer *const qoriq_clock =
@@ -86,6 +88,7 @@ static void qoriq_clock_initialize(void)
     nanoseconds_per_second / timer_frequency;
 
   qoriq_clock->bcr = GTBCR_COUNT(interval);
+  qoriq_clock_last_ccr = qoriq_clock->ccr;
 }
 
 static void qoriq_clock_cleanup(void)
@@ -104,15 +107,25 @@ static void qoriq_clock_cleanup(void)
   }
 }
 
-static uint32_t qoriq_clock_nanoseconds_since_last_tick(void)
+static void qoriq_clock_at_tick(void)
 {
-  uint32_t current = GTCCR_COUNT_GET(qoriq_clock->ccr);
-  uint32_t base = qoriq_clock->bcr;
-
-  return (base - current) * qoriq_clock_nanoseconds_per_timer_tick;
+  qoriq_clock_last_ccr = qoriq_clock->ccr;
 }
 
-#define Clock_driver_support_at_tick()
+static uint32_t qoriq_clock_nanoseconds_since_last_tick(void)
+{
+  uint32_t ccr = qoriq_clock->ccr;
+  uint32_t bcr = qoriq_clock->bcr;
+
+  if ((ccr & GTCCR_TOG) != (qoriq_clock_last_ccr & GTCCR_TOG)) {
+    bcr += bcr;
+  }
+
+  return (bcr - GTCCR_COUNT_GET(ccr)) * qoriq_clock_nanoseconds_per_timer_tick;
+}
+
+#define Clock_driver_support_at_tick() \
+  qoriq_clock_at_tick()
 #define Clock_driver_support_initialize_hardware() \
   qoriq_clock_initialize()
 #define Clock_driver_support_install_isr(clock_isr, old_isr) \
