@@ -25,6 +25,52 @@
   #define CPU_INSTRUCTION_CACHE_ALIGNMENT PPC_CACHE_ALIGNMENT
 #endif
 
+#define CPU_CACHE_SUPPORT_PROVIDES_CACHE_SIZE_FUNCTIONS
+
+static inline size_t _CPU_cache_get_data_cache_size(uint32_t level)
+{
+  switch (level) {
+    case 0:
+      /* Fall through */
+#ifdef PPC_CACHE_DATA_L3_SIZE
+    case 3:
+      return PPC_CACHE_DATA_L3_SIZE;
+#endif
+#ifdef PPC_CACHE_DATA_L2_SIZE
+    case 2:
+      return PPC_CACHE_DATA_L2_SIZE;
+#endif
+#ifdef PPC_CACHE_DATA_L1_SIZE
+    case 1:
+      return PPC_CACHE_DATA_L1_SIZE;
+#endif
+    default:
+      return 0;
+  }
+}
+
+static inline size_t _CPU_cache_get_instruction_cache_size(uint32_t level)
+{
+  switch (level) {
+    case 0:
+      /* Fall through */
+#ifdef PPC_CACHE_INSTRUCTION_L3_SIZE
+    case 3:
+      return PPC_CACHE_INSTRUCTION_L3_SIZE;
+#endif
+#ifdef PPC_CACHE_INSTRUCTION_L2_SIZE
+    case 2:
+      return PPC_CACHE_INSTRUCTION_L2_SIZE;
+#endif
+#ifdef PPC_CACHE_INSTRUCTION_L1_SIZE
+    case 1:
+      return PPC_CACHE_INSTRUCTION_L1_SIZE;
+#endif
+    default:
+      return 0;
+  }
+}
+
 /*
  * CACHE MANAGER: The following functions are CPU-specific.
  * They provide the basic implementation for the rtems_* cache
