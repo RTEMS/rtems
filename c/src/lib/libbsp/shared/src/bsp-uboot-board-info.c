@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -14,9 +14,17 @@
 
 #include <bsp/u-boot.h>
 
-bd_t bsp_uboot_board_info;
+#ifndef U_BOOT_BOARD_INFO_TEXT_SECTION
+#define U_BOOT_BOARD_INFO_TEXT_SECTION
+#endif
 
-void bsp_uboot_copy_board_info(const bd_t *src)
+#ifndef U_BOOT_BOARD_INFO_DATA_SECTION
+#define U_BOOT_BOARD_INFO_DATA_SECTION
+#endif
+
+U_BOOT_BOARD_INFO_DATA_SECTION bd_t bsp_uboot_board_info;
+
+U_BOOT_BOARD_INFO_TEXT_SECTION void bsp_uboot_copy_board_info(const bd_t *src)
 {
   const int *s = (const int *) src;
   int *d = (int *) &bsp_uboot_board_info;
