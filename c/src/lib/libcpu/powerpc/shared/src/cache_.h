@@ -200,8 +200,6 @@ static inline void _CPU_cache_disable_instruction(void)
 
 #else
 
-#warning Most cache functions are not implemented
-
 static inline void _CPU_cache_flush_entire_data(void)
 {
 	/* Void */
