@@ -782,9 +782,9 @@ static inline CPU_Counter_ticks _CPU_Counter_read( void )
 {
   CPU_Counter_ticks value;
 
-#ifdef ppc8540
-  /* Book E has no mftb */
-  __asm__ volatile( "mfspr %0, 268" : "=r" (value) );
+#if defined(ppc8540) || defined(__PPC_CPU_E6500__)
+  /* Use Alternate Time Base */
+  __asm__ volatile( "mfspr %0, 526" : "=r" (value) );
 #else
   __asm__ volatile( "mftb %0" : "=r" (value) );
 #endif

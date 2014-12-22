@@ -89,8 +89,8 @@ void bsp_start(void)
   #ifdef HAS_UBOOT
     BSP_bus_frequency = bsp_uboot_board_info.bi_busfreq;
     bsp_clicks_per_usec = bsp_uboot_board_info.bi_busfreq / 8000000;
+    rtems_counter_initialize_converter(bsp_uboot_board_info.bi_intfreq);
   #endif /* HAS_UBOOT */
-  rtems_counter_initialize_converter(BSP_bus_frequency / 8);
 
   /* Initialize some console parameters */
   for (i = 0; i < console_device_count; ++i) {
