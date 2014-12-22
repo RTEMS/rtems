@@ -29,7 +29,7 @@
 	.section ".bsp_start_text", "ax"
 
 qoriq_tlb1_write:
-	rlwinm	r3, r3, 16, 12, 15
+	rlwinm	r3, r3, 16, 10, 15
 	rlwinm	r8, r8, 0, 0, 19
 	oris	r3, r3, 0x1000
 	mtspr	FSL_EIS_MAS0, r3
@@ -48,7 +48,7 @@ qoriq_tlb1_write:
 	blr
 
 qoriq_tlb1_invalidate:
-	rlwinm	r3, r3, 16, 12, 15
+	rlwinm	r3, r3, 16, 10, 15
 	oris	r3, r3, 0x1000
 	mtspr	FSL_EIS_MAS0, r3
 	li	r0, 0
@@ -67,7 +67,7 @@ qoriq_tlb1_ts_0_only:
 	mtctr	r11
 	li	r11, 0
 2:
-	rlwinm	r0, r11, 16, 12, 15
+	rlwinm	r0, r11, 16, 10, 15
 	oris	r0, r0, (FSL_EIS_MAS0_TLBSEL >> 16)
 	mtspr	FSL_EIS_MAS0, r0
 	tlbre
