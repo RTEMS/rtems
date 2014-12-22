@@ -117,9 +117,12 @@ uint32_t
 rtems_bsdnet_semaphore_release_recursive(void)
 {
 #ifdef RTEMS_FAST_MUTEX
-	uint32_t nest_count = the_networkSemaphore->Core_control.mutex.nest_count;
+	uint32_t nest_count;
 	uint32_t i;
 
+	nest_count =
+		the_networkSemaphore ?
+		the_networkSemaphore->Core_control.mutex.nest_count : 0;
 	for (i = 0; i < nest_count; ++i) {
 		rtems_bsdnet_semaphore_release();
 	}
@@ -379,6 +382,8 @@ rtems_bsdnet_semaphore_obtain (void)
 	_Thread_Disable_dispatch();
 #endif
 	_ISR_Disable (level);
+	if (!the_networkSemaphore)
+		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
 	executing = _Thread_Executing;
 	_CORE_mutex_Seize (
 		&the_networkSemaphore->Core_control.mutex,
@@ -414,6 +419,8 @@ rtems_bsdnet_semaphore_release (void)
 	int i;
 
 	_Thread_Disable_dispatch();
+	if (!the_networkSemaphore)
+		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
 	i = _CORE_mutex_Surrender (
 		&the_networkSemaphore->Core_control.mutex,
 		networkSemaphore,
