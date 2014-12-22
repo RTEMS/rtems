@@ -212,8 +212,10 @@ static void run_task(rtems_task_argument arg)
 {
   volatile bool *run = (volatile bool *) arg;
 
+  *run = true;
+
   while (true) {
-    *run = true;
+    /* Do nothing */
   }
 }
 
