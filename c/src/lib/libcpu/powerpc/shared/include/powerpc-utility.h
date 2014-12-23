@@ -628,6 +628,34 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
   } while (0)
 
 /**
+ * @brief Returns the value of the Thread Management Register with number @a tmr.
+ *
+ * @note This macro uses a GNU C extension.
+ */
+#define PPC_THREAD_MGMT_REGISTER(tmr) \
+  ({ \
+    uint32_t val; \
+    __asm__ volatile (\
+      "mftmr %0, " PPC_STRINGOF(tmr) \
+      : "=r" (val) \
+    ); \
+    val;\
+  } )
+
+/**
+ * @brief Sets the Thread Management Register with number @a tmr to the value in
+ * @a val.
+ */
+#define PPC_SET_THREAD_MGMT_REGISTER(tmr, val) \
+  do { \
+    __asm__ volatile (\
+      "mttmr " PPC_STRINGOF(tmr) ", %0" \
+      : \
+      : "r" (val) \
+    ); \
+  } while (0)
+
+/**
  * @brief Returns the value of the Device Control Register with number @a dcr.
  *
  * The PowerPC 4XX family has Device Control Registers.
