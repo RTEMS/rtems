@@ -392,6 +392,7 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
 
 #ifndef ASM
 typedef struct {
+#if (PPC_HAS_FPU == 1)
     /* The ABIs (PowerOpen/SVR4/EABI) only require saving f14-f31 over
      * procedure calls.  However, this would mean that the interrupt
      * frame had to hold f0-f13, and the fpscr.  And as the majority
@@ -405,6 +406,7 @@ typedef struct {
     float	f[32];
     uint32_t	fpscr;
 #endif
+#endif /* (PPC_HAS_FPU == 1) */
 } Context_Control_fp;
 
 typedef struct CPU_Interrupt_frame {

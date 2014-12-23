@@ -56,8 +56,12 @@
 #define PPC_CONTEXT_CACHE_LINE_3 (4 * PPC_DEFAULT_CACHE_LINE_SIZE)
 #define PPC_CONTEXT_CACHE_LINE_4 (5 * PPC_DEFAULT_CACHE_LINE_SIZE)
 
+	BEGIN_CODE
+
+#if PPC_HAS_FPU == 1
+
 /*
- * Offsets for various Contexts
+ * Offsets for Context_Control_fp
  */
 
 #if (PPC_HAS_DOUBLE==1)
@@ -104,7 +108,6 @@
 	.set	FP_31, (FP_30 + FP_SIZE)
 	.set	FP_FPSCR, (FP_31 + FP_SIZE)
 
-	BEGIN_CODE
 /*
  *  _CPU_Context_save_fp_context
  *
@@ -121,7 +124,6 @@
 	ALIGN (PPC_CACHE_ALIGNMENT, PPC_CACHE_ALIGN_POWER)
 	PUBLIC_PROC (_CPU_Context_save_fp)
 PROC (_CPU_Context_save_fp):
-#if (PPC_HAS_FPU == 1)
 /* A FP context switch may occur in an ISR or exception handler when the FPU is not
  * available. Therefore, we must explicitely enable it here!
  */
@@ -171,7 +173,6 @@ PROC (_CPU_Context_save_fp):
 	mtmsr	r4
 	isync
 1:
-#endif
 	blr
 
 /*
@@ -190,7 +191,6 @@ PROC (_CPU_Context_save_fp):
 	ALIGN (PPC_CACHE_ALIGNMENT, PPC_CACHE_ALIGN_POWER)
 	PUBLIC_PROC (_CPU_Context_restore_fp)
 PROC (_CPU_Context_restore_fp):
-#if (PPC_HAS_FPU == 1)
 	lwz	r3, 0(r3)
 /* A FP context switch may occur in an ISR or exception handler when the FPU is not
  * available. Therefore, we must explicitely enable it here!
@@ -240,8 +240,8 @@ PROC (_CPU_Context_restore_fp):
 	mtmsr	r4
 	isync
 1:
-#endif
 	blr
+#endif /* PPC_HAS_FPU == 1 */
 
 	ALIGN (PPC_CACHE_ALIGNMENT, PPC_CACHE_ALIGN_POWER)
 	PUBLIC_PROC (_CPU_Context_switch)
