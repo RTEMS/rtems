@@ -73,7 +73,10 @@ extern "C" {
 #endif
 
 #define PPC_ALIGNMENT			8
-#define PPC_STRUCTURE_ALIGNMENT	32
+
+#define PPC_DEFAULT_CACHE_LINE_SIZE 32
+
+#define PPC_STRUCTURE_ALIGNMENT PPC_DEFAULT_CACHE_LINE_SIZE
 
 /*
  *  Application binary interfaces.

@@ -265,8 +265,6 @@ extern "C" {
   #define PPC_GPR_STORE evstdd
 #endif
 
-#define PPC_DEFAULT_CACHE_LINE_SIZE 32
-
 #ifndef ASM
 
 typedef struct {

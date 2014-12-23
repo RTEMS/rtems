@@ -78,7 +78,7 @@ extern "C" {
  *  unless specifically set by the model definition:
  *
  *    + PPC_INTERRUPT_MAX        - 16
- *    + PPC_CACHE_ALIGNMENT      - 32
+ *    + PPC_CACHE_ALIGNMENT
  *    + PPC_LOW_POWER_MODE       - PPC_LOW_POWER_MODE_NONE
  *    + PPC_HAS_EXCEPTION_PREFIX - 1
  *    + PPC_USE_MULTIPLE         - 0
@@ -293,14 +293,8 @@ extern "C" {
 #define PPC_INTERRUPT_MAX	16
 #endif
 
-/*
- *  Unless specified otherwise, the cache line size is defaulted to 32.
- *
- *  The derive the power of 2 the cache line is.
- */
-
 #ifndef PPC_CACHE_ALIGNMENT
-#define PPC_CACHE_ALIGNMENT 32
+#define PPC_CACHE_ALIGNMENT PPC_DEFAULT_CACHE_LINE_SIZE
 #endif
 
 #if (PPC_CACHE_ALIGNMENT == 16)
