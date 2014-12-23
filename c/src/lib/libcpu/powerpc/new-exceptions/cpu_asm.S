@@ -36,10 +36,6 @@
 #include <libcpu/powerpc-utility.h>
 #include <bspopts.h>
 
-#if PPC_DEFAULT_CACHE_LINE_SIZE != 32
-  #error "unexpected PPC_DEFAULT_CACHE_LINE_SIZE value"
-#endif
-
 #ifdef BSP_USE_DATA_CACHE_BLOCK_TOUCH
   #define DATA_CACHE_TOUCH(rega, regb) \
 	dcbt rega, regb
@@ -47,18 +43,18 @@
   #define DATA_CACHE_TOUCH(rega, regb)
 #endif
 
-#if BSP_DATA_CACHE_ENABLED && PPC_CACHE_ALIGNMENT == 32
+#if BSP_DATA_CACHE_ENABLED && PPC_DEFAULT_CACHE_LINE_SIZE == 32
   #define DATA_CACHE_ZERO_AND_TOUCH(reg, offset) \
 	li reg, offset; dcbz reg, r3; DATA_CACHE_TOUCH(reg, r4)
 #else
   #define DATA_CACHE_ZERO_AND_TOUCH(reg, offset)
 #endif
 
-#define PPC_CONTEXT_CACHE_LINE_0 32
-#define PPC_CONTEXT_CACHE_LINE_1 64
-#define PPC_CONTEXT_CACHE_LINE_2 96
-#define PPC_CONTEXT_CACHE_LINE_3 128
-#define PPC_CONTEXT_CACHE_LINE_4 160
+#define PPC_CONTEXT_CACHE_LINE_0 (1 * PPC_DEFAULT_CACHE_LINE_SIZE)
+#define PPC_CONTEXT_CACHE_LINE_1 (2 * PPC_DEFAULT_CACHE_LINE_SIZE)
+#define PPC_CONTEXT_CACHE_LINE_2 (3 * PPC_DEFAULT_CACHE_LINE_SIZE)
+#define PPC_CONTEXT_CACHE_LINE_3 (4 * PPC_DEFAULT_CACHE_LINE_SIZE)
+#define PPC_CONTEXT_CACHE_LINE_4 (5 * PPC_DEFAULT_CACHE_LINE_SIZE)
 
 /*
  * Offsets for various Contexts
@@ -257,8 +253,8 @@ PROC (_CPU_Context_switch):
 #endif
 
 	/* Align to a cache line */
-	clrrwi	r3, r3, 5
-	clrrwi	r5, r4, 5
+	clrrwi	r3, r3, PPC_DEFAULT_CACHE_LINE_POWER
+	clrrwi	r5, r4, PPC_DEFAULT_CACHE_LINE_POWER
 
 	DATA_CACHE_ZERO_AND_TOUCH(r10, PPC_CONTEXT_CACHE_LINE_0)
 	DATA_CACHE_ZERO_AND_TOUCH(r11, PPC_CONTEXT_CACHE_LINE_1)
@@ -278,7 +274,7 @@ PROC (_CPU_Context_switch):
 	 */
 #if PPC_CONTEXT_OFFSET_GPR1 != PPC_CONTEXT_CACHE_LINE_0 \
   || !BSP_DATA_CACHE_ENABLED \
-  || PPC_CACHE_ALIGNMENT != 32
+  || PPC_DEFAULT_CACHE_LINE_SIZE != 32
 	li	r10, PPC_CONTEXT_OFFSET_GPR1
 #endif
 #ifndef RTEMS_SMP
@@ -407,7 +403,7 @@ restore_context:
 	PUBLIC_PROC (_CPU_Context_restore)
 PROC (_CPU_Context_restore):
 	/* Align to a cache line */
-	clrrwi	r5, r3, 5
+	clrrwi	r5, r3, PPC_DEFAULT_CACHE_LINE_POWER
 
 #ifdef __ALTIVEC__
 	li	r3, 0
@@ -439,7 +435,7 @@ check_thread_dispatch_necessary:
 	/* Calculate the heir context pointer */
 	sub	r7, r4, r7
 	add	r4, r8, r7
-	clrrwi	r5, r4, 5
+	clrrwi	r5, r4, PPC_DEFAULT_CACHE_LINE_POWER
 
 	/* Update the executing */
 	stw	r8, PER_CPU_OFFSET_EXECUTING(r6)
