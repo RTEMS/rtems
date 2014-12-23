@@ -455,8 +455,7 @@ uninitialized += (sizeof _CPU_Null_fp_context) +
 
 /* cpu.h */
 uninitialized += (sizeof _CPU_Interrupt_stack_low) +
-                 (sizeof _CPU_Interrupt_stack_high) +
-                 (sizeof _CPU_IRQ_info);
+                 (sizeof _CPU_Interrupt_stack_high);
 
 #endif
 #endif /* !unix */

@@ -582,22 +582,6 @@ typedef struct CPU_Interrupt_frame {
 #define CPU_MODES_INTERRUPT_MASK   0x00000001 /* interrupt level in mode */
 
 /*
- *  Nothing prevents the porter from declaring more CPU specific variables.
- */
-
-#ifndef ASM
-
-SCORE_EXTERN struct {
-  uint32_t      *Disable_level;
-  void          *Stack;
-  volatile bool *Switch_necessary;
-  bool          *Signal;
-
-} _CPU_IRQ_info CPU_STRUCTURE_ALIGNMENT;
-
-#endif /* ndef ASM */
-
-/*
  *  The size of the floating point context area.  On some CPUs this
  *  will not be a "sizeof" because the format of the floating point
  *  area is not defined -- only the size is.  This is usually on
