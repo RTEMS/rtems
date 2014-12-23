@@ -79,7 +79,9 @@ typedef struct {
 
 static rtems_capture_per_cpu_data  *capture_per_cpu = NULL;
 
-static rtems_capture_global_data capture_global;
+static rtems_capture_global_data capture_global = {
+  .lock = RTEMS_INTERRUPT_LOCK_INITIALIZER( "Capture" )
+};
 
 /*
  * RTEMS Capture Data.
@@ -109,7 +111,7 @@ static rtems_capture_global_data capture_global;
 /*
  * RTEMS Event text.
  */
-static const char* capture_event_text[] =
+static const char * const capture_event_text[] =
 {
   "CREATED_BY",
   "CREATED",
@@ -578,7 +580,7 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribu
 
   count = rtems_get_processor_count();
   if (capture_per_cpu == NULL) {
-    capture_per_cpu = calloc( count, sizeof(rtems_capture_per_cpu_data) );
+    capture_per_cpu = calloc( count, sizeof( *capture_per_cpu ) );
   }
 
   for (i=0; i<count; i++) {
@@ -589,8 +591,10 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribu
       break;
     }
 
-    capture_count_on_cpu(i) = 0;
-    capture_flags_on_cpu(i) = 0;
+    rtems_interrupt_lock_initialize(
+      &capture_lock_on_cpu( i ),
+      "Capture Per-CPU"
+    );
   }
 
   capture_flags_global   = 0;
@@ -662,9 +666,10 @@ rtems_capture_close (void)
 
   capture_controls = NULL;
   for (cpu=0; cpu < rtems_get_processor_count(); cpu++) {
-    capture_count_on_cpu(cpu) = 0;
     if (capture_records_on_cpu(cpu).buffer)
       rtems_capture_buffer_destroy( &capture_records_on_cpu(cpu) );
+
+    rtems_interrupt_lock_destroy( &capture_lock_on_cpu( cpu ) );
   }
 
   free( capture_per_cpu );
