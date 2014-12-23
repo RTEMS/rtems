@@ -171,6 +171,17 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
 }
 
 /**
+ *  @brief Returns true, if the processor with the specified index should be
+ *  started.
+ *
+ *  @param[in] cpu_index The processor index.
+ *
+ *  @retval true The processor should be started.
+ *  @retval false Otherwise.
+ */
+bool _SMP_Should_start_processor( uint32_t cpu_index );
+
+/**
  *  @brief Sends a SMP message to a processor.
  *
  *  The target processor may be the sending processor.

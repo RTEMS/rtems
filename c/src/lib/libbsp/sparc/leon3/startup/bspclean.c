@@ -23,7 +23,6 @@
 #include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
 #include <rtems/score/smpimpl.h>
-#include <rtems/score/schedulerimpl.h>
 
 void bsp_fatal_extension(
   rtems_fatal_source source,
@@ -55,10 +54,7 @@ void bsp_fatal_extension(
       uint32_t i;
 
       for (i = 0; i < cpu_count; ++i) {
-        const Scheduler_Assignment *assignment = _Scheduler_Get_assignment( i );
-
-        if ( (i != self_cpu) &&
-            _Scheduler_Should_start_processor( assignment ) ) {
+        if ( (i != self_cpu) && _SMP_Should_start_processor( i ) ) {
           halt_mask |= UINT32_C(1) << i;
         }
       }
