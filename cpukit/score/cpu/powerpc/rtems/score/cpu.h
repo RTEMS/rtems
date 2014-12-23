@@ -300,10 +300,22 @@ typedef struct {
   PPC_GPR_TYPE gpr30;
   PPC_GPR_TYPE gpr31;
   uint32_t gpr2;
-  #ifdef RTEMS_SMP
-    volatile uint32_t is_executing;
-  #endif
-  #ifdef __ALTIVEC__
+  #if defined(PPC_MULTILIB_ALTIVEC)
+    uint32_t reserved_for_alignment;
+    uint8_t v20[16];
+    uint8_t v21[16];
+    uint8_t v22[16];
+    uint8_t v23[16];
+    uint8_t v24[16];
+    uint8_t v25[16];
+    uint8_t v26[16];
+    uint8_t v27[16];
+    uint8_t v28[16];
+    uint8_t v29[16];
+    uint8_t v30[16];
+    uint8_t v31[16];
+    uint32_t vrsave;
+  #elif defined(__ALTIVEC__)
     /*
      * 12 non-volatile vector registers, cache-aligned area for vscr/vrsave
      * and padding to ensure cache-alignment.  Unfortunately, we can't verify
@@ -314,6 +326,34 @@ typedef struct {
      *       volatile vregs across interrupts and exceptions.
      */
     uint8_t altivec[16*12 + 32 + PPC_DEFAULT_CACHE_LINE_SIZE];
+  #endif
+  #if defined(PPC_MULTILIB_FPU)
+    double f14;
+    double f15;
+    double f16;
+    double f17;
+    double f18;
+    double f19;
+    double f20;
+    double f21;
+    double f22;
+    double f23;
+    double f24;
+    double f25;
+    double f26;
+    double f27;
+    double f28;
+    double f29;
+    double f30;
+    double f31;
+  #endif
+  #if defined(RTEMS_SMP)
+    /*
+     * This item is at the structure end, so that we can use dcbz for the
+     * previous items to optimize the context switch.  We must not set this
+     * item to zero via the dcbz.
+     */
+    volatile uint32_t is_executing;
   #endif
 } ppc_context;
 
@@ -386,8 +426,60 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
 #define PPC_CONTEXT_OFFSET_GPR31 PPC_CONTEXT_GPR_OFFSET( 31 )
 #define PPC_CONTEXT_OFFSET_GPR2 PPC_CONTEXT_GPR_OFFSET( 32 )
 
+#ifdef PPC_MULTILIB_ALTIVEC
+  #define PPC_CONTEXT_OFFSET_V( v ) \
+    ( ( ( v ) - 20 ) * 16 + PPC_DEFAULT_CACHE_LINE_SIZE + 96 )
+  #define PPC_CONTEXT_OFFSET_V20 PPC_CONTEXT_OFFSET_V( 20 )
+  #define PPC_CONTEXT_OFFSET_V21 PPC_CONTEXT_OFFSET_V( 21 )
+  #define PPC_CONTEXT_OFFSET_V22 PPC_CONTEXT_OFFSET_V( 22 )
+  #define PPC_CONTEXT_OFFSET_V23 PPC_CONTEXT_OFFSET_V( 23 )
+  #define PPC_CONTEXT_OFFSET_V24 PPC_CONTEXT_OFFSET_V( 24 )
+  #define PPC_CONTEXT_OFFSET_V25 PPC_CONTEXT_OFFSET_V( 25 )
+  #define PPC_CONTEXT_OFFSET_V26 PPC_CONTEXT_OFFSET_V( 26 )
+  #define PPC_CONTEXT_OFFSET_V27 PPC_CONTEXT_OFFSET_V( 27 )
+  #define PPC_CONTEXT_OFFSET_V28 PPC_CONTEXT_OFFSET_V( 28 )
+  #define PPC_CONTEXT_OFFSET_V29 PPC_CONTEXT_OFFSET_V( 29 )
+  #define PPC_CONTEXT_OFFSET_V30 PPC_CONTEXT_OFFSET_V( 30 )
+  #define PPC_CONTEXT_OFFSET_V31 PPC_CONTEXT_OFFSET_V( 31 )
+  #define PPC_CONTEXT_OFFSET_VRSAVE PPC_CONTEXT_OFFSET_V( 32 )
+  #define PPC_CONTEXT_OFFSET_F( f ) \
+    ( ( ( f ) - 14 ) * 8 + PPC_DEFAULT_CACHE_LINE_SIZE + 296 )
+#else
+  #define PPC_CONTEXT_OFFSET_F( f ) \
+    ( ( ( f ) - 14 ) * 8 + PPC_DEFAULT_CACHE_LINE_SIZE + 96 )
+#endif
+
+#ifdef PPC_MULTILIB_FPU
+  #define PPC_CONTEXT_OFFSET_F14 PPC_CONTEXT_OFFSET_F( 14 )
+  #define PPC_CONTEXT_OFFSET_F15 PPC_CONTEXT_OFFSET_F( 15 )
+  #define PPC_CONTEXT_OFFSET_F16 PPC_CONTEXT_OFFSET_F( 16 )
+  #define PPC_CONTEXT_OFFSET_F17 PPC_CONTEXT_OFFSET_F( 17 )
+  #define PPC_CONTEXT_OFFSET_F18 PPC_CONTEXT_OFFSET_F( 18 )
+  #define PPC_CONTEXT_OFFSET_F19 PPC_CONTEXT_OFFSET_F( 19 )
+  #define PPC_CONTEXT_OFFSET_F20 PPC_CONTEXT_OFFSET_F( 20 )
+  #define PPC_CONTEXT_OFFSET_F21 PPC_CONTEXT_OFFSET_F( 21 )
+  #define PPC_CONTEXT_OFFSET_F22 PPC_CONTEXT_OFFSET_F( 22 )
+  #define PPC_CONTEXT_OFFSET_F23 PPC_CONTEXT_OFFSET_F( 23 )
+  #define PPC_CONTEXT_OFFSET_F24 PPC_CONTEXT_OFFSET_F( 24 )
+  #define PPC_CONTEXT_OFFSET_F25 PPC_CONTEXT_OFFSET_F( 25 )
+  #define PPC_CONTEXT_OFFSET_F26 PPC_CONTEXT_OFFSET_F( 26 )
+  #define PPC_CONTEXT_OFFSET_F27 PPC_CONTEXT_OFFSET_F( 27 )
+  #define PPC_CONTEXT_OFFSET_F28 PPC_CONTEXT_OFFSET_F( 28 )
+  #define PPC_CONTEXT_OFFSET_F29 PPC_CONTEXT_OFFSET_F( 29 )
+  #define PPC_CONTEXT_OFFSET_F30 PPC_CONTEXT_OFFSET_F( 30 )
+  #define PPC_CONTEXT_OFFSET_F31 PPC_CONTEXT_OFFSET_F( 31 )
+#endif
+
+#if defined(PPC_MULTILIB_FPU)
+  #define PPC_CONTEXT_VOLATILE_SIZE PPC_CONTEXT_OFFSET_F( 32 )
+#elif defined(PPC_MULTILIB_ALTIVEC)
+  #define PPC_CONTEXT_VOLATILE_SIZE (PPC_CONTEXT_OFFSET_VRSAVE + 4)
+#else
+  #define PPC_CONTEXT_VOLATILE_SIZE (PPC_CONTEXT_GPR_OFFSET( 32 ) + 4)
+#endif
+
 #ifdef RTEMS_SMP
-  #define PPC_CONTEXT_OFFSET_IS_EXECUTING (PPC_CONTEXT_GPR_OFFSET( 32 ) + 4)
+  #define PPC_CONTEXT_OFFSET_IS_EXECUTING PPC_CONTEXT_VOLATILE_SIZE
 #endif
 
 #ifndef ASM
@@ -1101,6 +1193,80 @@ typedef struct {
   PPC_GPR_TYPE GPR29;
   PPC_GPR_TYPE GPR30;
   PPC_GPR_TYPE GPR31;
+  #if defined(PPC_MULTILIB_ALTIVEC) || defined(PPC_MULTILIB_FPU)
+    uint32_t reserved_for_alignment;
+  #endif
+  #ifdef PPC_MULTILIB_ALTIVEC
+    uint32_t VSCR;
+    uint32_t VRSAVE;
+    uint8_t V0[16];
+    uint8_t V1[16];
+    uint8_t V2[16];
+    uint8_t V3[16];
+    uint8_t V4[16];
+    uint8_t V5[16];
+    uint8_t V6[16];
+    uint8_t V7[16];
+    uint8_t V8[16];
+    uint8_t V9[16];
+    uint8_t V10[16];
+    uint8_t V11[16];
+    uint8_t V12[16];
+    uint8_t V13[16];
+    uint8_t V14[16];
+    uint8_t V15[16];
+    uint8_t V16[16];
+    uint8_t V17[16];
+    uint8_t V18[16];
+    uint8_t V19[16];
+    uint8_t V20[16];
+    uint8_t V21[16];
+    uint8_t V22[16];
+    uint8_t V23[16];
+    uint8_t V24[16];
+    uint8_t V25[16];
+    uint8_t V26[16];
+    uint8_t V27[16];
+    uint8_t V28[16];
+    uint8_t V29[16];
+    uint8_t V30[16];
+    uint8_t V31[16];
+  #endif
+  #ifdef PPC_MULTILIB_FPU
+    double F0;
+    double F1;
+    double F2;
+    double F3;
+    double F4;
+    double F5;
+    double F6;
+    double F7;
+    double F8;
+    double F9;
+    double F10;
+    double F11;
+    double F12;
+    double F13;
+    double F14;
+    double F15;
+    double F16;
+    double F17;
+    double F18;
+    double F19;
+    double F20;
+    double F21;
+    double F22;
+    double F23;
+    double F24;
+    double F25;
+    double F26;
+    double F27;
+    double F28;
+    double F29;
+    double F30;
+    double F31;
+    uint64_t FPSCR;
+  #endif
 } CPU_Exception_frame;
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );

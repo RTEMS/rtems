@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -40,8 +40,60 @@
 #define GPR29_OFFSET OFFSET(15)
 #define GPR30_OFFSET OFFSET(16)
 #define GPR31_OFFSET OFFSET(17)
+
+#ifdef PPC_MULTILIB_FPU
+  #define FOFFSET(i) ((i) * 8 + OFFSET(18))
+  #define F14_OFFSET FOFFSET(0)
+  #define F15_OFFSET FOFFSET(1)
+  #define F16_OFFSET FOFFSET(2)
+  #define F17_OFFSET FOFFSET(3)
+  #define F18_OFFSET FOFFSET(4)
+  #define F19_OFFSET FOFFSET(5)
+  #define F20_OFFSET FOFFSET(6)
+  #define F21_OFFSET FOFFSET(7)
+  #define F22_OFFSET FOFFSET(8)
+  #define F23_OFFSET FOFFSET(9)
+  #define F24_OFFSET FOFFSET(10)
+  #define F25_OFFSET FOFFSET(11)
+  #define F26_OFFSET FOFFSET(12)
+  #define F27_OFFSET FOFFSET(13)
+  #define F28_OFFSET FOFFSET(14)
+  #define F29_OFFSET FOFFSET(15)
+  #define F30_OFFSET FOFFSET(16)
+  #define F31_OFFSET FOFFSET(17)
+  #define FPSCR_OFFSET FOFFSET(18)
+  #define FTMP_OFFSET FOFFSET(19)
+  #define FTMP2_OFFSET FOFFSET(20)
+  #define FPUEND FOFFSET(21)
+#else
+  #define FPUEND OFFSET(18)
+#endif
+
+#ifdef PPC_MULTILIB_ALTIVEC
+  #define VOFFSET(i) ((i) * 16 + ((FPUEND + 16 - 1) & ~(16 - 1)))
+  #define V20_OFFSET VOFFSET(0)
+  #define V21_OFFSET VOFFSET(1)
+  #define V22_OFFSET VOFFSET(2)
+  #define V23_OFFSET VOFFSET(3)
+  #define V24_OFFSET VOFFSET(4)
+  #define V25_OFFSET VOFFSET(5)
+  #define V26_OFFSET VOFFSET(6)
+  #define V27_OFFSET VOFFSET(7)
+  #define V28_OFFSET VOFFSET(8)
+  #define V29_OFFSET VOFFSET(9)
+  #define V30_OFFSET VOFFSET(10)
+  #define V31_OFFSET VOFFSET(11)
+  #define VTMP_OFFSET VOFFSET(12)
+  #define VTMP2_OFFSET VOFFSET(13)
+  #define VSCR_OFFSET VOFFSET(14)
+  #define VRSAVE_OFFSET (VSCR_OFFSET + 4)
+  #define ALTIVECEND (VRSAVE_OFFSET + 4)
+#else
+  #define ALTIVECEND FPUEND
+#endif
+
 #define FRAME_SIZE \
-  ((OFFSET(18) + CPU_STACK_ALIGNMENT - 1) & ~(CPU_STACK_ALIGNMENT - 1))
+  ((ALTIVECEND + CPU_STACK_ALIGNMENT - 1) & ~(CPU_STACK_ALIGNMENT - 1))
 
 	.global _CPU_Context_validate
 
@@ -71,6 +123,61 @@ _CPU_Context_validate:
 	stw	r29, GPR29_OFFSET(r1)
 	stw	r30, GPR30_OFFSET(r1)
 	stw	r31, GPR31_OFFSET(r1)
+
+#ifdef PPC_MULTILIB_FPU
+	stfd	f14, F14_OFFSET(r1)
+	stfd	f15, F15_OFFSET(r1)
+	stfd	f16, F16_OFFSET(r1)
+	stfd	f17, F17_OFFSET(r1)
+	stfd	f18, F18_OFFSET(r1)
+	stfd	f19, F19_OFFSET(r1)
+	stfd	f20, F20_OFFSET(r1)
+	stfd	f21, F21_OFFSET(r1)
+	stfd	f22, F22_OFFSET(r1)
+	stfd	f23, F23_OFFSET(r1)
+	stfd	f24, F24_OFFSET(r1)
+	stfd	f25, F25_OFFSET(r1)
+	stfd	f26, F26_OFFSET(r1)
+	stfd	f27, F27_OFFSET(r1)
+	stfd	f28, F28_OFFSET(r1)
+	stfd	f29, F29_OFFSET(r1)
+	stfd	f30, F30_OFFSET(r1)
+	stfd	f31, F31_OFFSET(r1)
+	mffs	f0
+	stfd	f0, FPSCR_OFFSET(r1)
+#endif
+
+#ifdef PPC_MULTILIB_ALTIVEC
+	li	r0, V20_OFFSET
+	stvx	v20, r1, r0
+	li	r0, V21_OFFSET
+	stvx	v21, r1, r0
+	li	r0, V22_OFFSET
+	stvx	v22, r1, r0
+	li	r0, V23_OFFSET
+	stvx	v23, r1, r0
+	li	r0, V24_OFFSET
+	stvx	v24, r1, r0
+	li	r0, V25_OFFSET
+	stvx	v25, r1, r0
+	li	r0, V26_OFFSET
+	stvx	v26, r1, r0
+	li	r0, V27_OFFSET
+	stvx	v27, r1, r0
+	li	r0, V28_OFFSET
+	stvx	v28, r1, r0
+	li	r0, V29_OFFSET
+	stvx	v29, r1, r0
+	li	r0, V30_OFFSET
+	stvx	v30, r1, r0
+	li	r0, V31_OFFSET
+	stvx	v31, r1, r0
+	mfvscr	v0
+	li	r0, VSCR_OFFSET
+	stvewx	v0, r1, r0
+	mfvrsave	r0
+	stw	r0, VRSAVE_OFFSET(r1)
+#endif
 
 	/* Fill */
 
@@ -123,6 +230,99 @@ _CPU_Context_validate:
 
 	/* GPR31 contains the stack pointer */
 	mr	r31, r1
+
+#ifdef PPC_MULTILIB_FPU
+.macro FILL_F i
+	addi	r4, r3, 0x100 + \i
+	stw	r4, FTMP_OFFSET(r1)
+	addi	r4, r3, 0x200 + \i
+	stw	r4, FTMP_OFFSET + 4(r1)
+	lfd	\i, FTMP_OFFSET(r1)
+.endm
+
+	FILL_F 0
+	FILL_F 1
+	FILL_F 2
+	FILL_F 3
+	FILL_F 4
+	FILL_F 5
+	FILL_F 6
+	FILL_F 7
+	FILL_F 8
+	FILL_F 9
+	FILL_F 10
+	FILL_F 11
+	FILL_F 12
+	FILL_F 13
+	FILL_F 14
+	FILL_F 15
+	FILL_F 16
+	FILL_F 17
+	FILL_F 18
+	FILL_F 19
+	FILL_F 20
+	FILL_F 21
+	FILL_F 22
+	FILL_F 23
+	FILL_F 24
+	FILL_F 25
+	FILL_F 26
+	FILL_F 27
+	FILL_F 28
+	FILL_F 29
+	FILL_F 30
+	FILL_F 31
+#endif
+
+#ifdef PPC_MULTILIB_ALTIVEC
+.macro FILL_V i
+	addi	r4, r3, 0x300 + \i
+	stw	r4, VTMP_OFFSET(r1)
+	addi	r4, r3, 0x400 + \i
+	stw	r4, VTMP_OFFSET + 4(r1)
+	addi	r4, r3, 0x500 + \i
+	stw	r4, VTMP_OFFSET + 8(r1)
+	addi	r4, r3, 0x600 + \i
+	stw	r4, VTMP_OFFSET + 12(r1)
+	li	r4, VTMP_OFFSET
+	lvx	\i, r1, r4
+.endm
+
+	FILL_V 0
+	FILL_V 1
+	FILL_V 2
+	FILL_V 3
+	FILL_V 4
+	FILL_V 5
+	FILL_V 6
+	FILL_V 7
+	FILL_V 8
+	FILL_V 9
+	FILL_V 10
+	FILL_V 11
+	FILL_V 12
+	FILL_V 13
+	FILL_V 14
+	FILL_V 15
+	FILL_V 16
+	FILL_V 17
+	FILL_V 18
+	FILL_V 19
+	FILL_V 20
+	FILL_V 21
+	FILL_V 22
+	FILL_V 23
+	FILL_V 24
+	FILL_V 25
+	FILL_V 26
+	FILL_V 27
+	FILL_V 28
+	FILL_V 29
+	FILL_V 30
+	FILL_V 31
+	addi	r4, r3, 0x700
+	mtvrsave	r4
+#endif
 
 	/* Check */
 check:
@@ -226,12 +426,194 @@ check:
 	bne	restore
 	cmpw	r31, r1
 	bne	restore
+
+#ifdef PPC_MULTILIB_FPU
+.macro CHECK_F i
+	stfd	\i, FTMP_OFFSET(r1)
+	lwz	r5, FTMP_OFFSET(r1)
+	addi	r4, r3, 0x100 + \i
+	cmpw	r5, r4
+	bne	restore
+	lwz	r5, FTMP_OFFSET + 4(r1)
+	addi	r4, r3, 0x200 + \i
+	cmpw	r5, r4
+	bne	restore
+.endm
+
+	/* Check FPSCR */
+	stfd	f0, FTMP_OFFSET(r1)
+	mffs	f0
+	stfd	f0, FTMP2_OFFSET(r1)
+	lwz	r4, FTMP2_OFFSET + 4(r1)
+	lwz	r5, FPSCR_OFFSET + 4(r1)
+	cmpw	r5, r4
+	bne	restore
+	lfd	f0, FTMP_OFFSET(r1)
+
+	CHECK_F 0
+	CHECK_F 1
+	CHECK_F 2
+	CHECK_F 3
+	CHECK_F 4
+	CHECK_F 5
+	CHECK_F 6
+	CHECK_F 7
+	CHECK_F 8
+	CHECK_F 9
+	CHECK_F 10
+	CHECK_F 11
+	CHECK_F 12
+	CHECK_F 13
+	CHECK_F 14
+	CHECK_F 15
+	CHECK_F 16
+	CHECK_F 17
+	CHECK_F 18
+	CHECK_F 19
+	CHECK_F 20
+	CHECK_F 21
+	CHECK_F 22
+	CHECK_F 23
+	CHECK_F 24
+	CHECK_F 25
+	CHECK_F 26
+	CHECK_F 27
+	CHECK_F 28
+	CHECK_F 29
+	CHECK_F 30
+	CHECK_F 31
+#endif
+
+#ifdef PPC_MULTILIB_ALTIVEC
+.macro CHECK_V i
+	li	r4, VTMP_OFFSET
+	stvx	\i, r1, r4
+	lwz	r5, VTMP_OFFSET(r1)
+	addi	r4, r3, 0x300 + \i
+	cmpw	r5, r4
+	bne	restore
+	lwz	r5, VTMP_OFFSET + 4(r1)
+	addi	r4, r3, 0x400 + \i
+	cmpw	r5, r4
+	bne	restore
+	lwz	r5, VTMP_OFFSET + 8(r1)
+	addi	r4, r3, 0x500 + \i
+	cmpw	r5, r4
+	bne	restore
+	lwz	r5, VTMP_OFFSET + 12(r1)
+	addi	r4, r3, 0x600 + \i
+	cmpw	r5, r4
+	bne	restore
+.endm
+
+	/* Check VSCR */
+	li	r4, VTMP_OFFSET
+	stvx	v0, r1, r4
+	mfvscr	v0
+	li	r4, VTMP2_OFFSET
+	stvewx	v0, r1, r4
+	lwz	r4, VTMP2_OFFSET(r1)
+	lwz	r5, VSCR_OFFSET(r1)
+	cmpw	r5, r4
+	bne	restore
+	li	r4, VTMP_OFFSET
+	lvx	v0, r1, r4
+
+	CHECK_V 0
+	CHECK_V 1
+	CHECK_V 2
+	CHECK_V 3
+	CHECK_V 4
+	CHECK_V 5
+	CHECK_V 6
+	CHECK_V 7
+	CHECK_V 8
+	CHECK_V 9
+	CHECK_V 10
+	CHECK_V 11
+	CHECK_V 12
+	CHECK_V 13
+	CHECK_V 14
+	CHECK_V 15
+	CHECK_V 16
+	CHECK_V 17
+	CHECK_V 18
+	CHECK_V 19
+	CHECK_V 20
+	CHECK_V 21
+	CHECK_V 22
+	CHECK_V 23
+	CHECK_V 24
+	CHECK_V 25
+	CHECK_V 26
+	CHECK_V 27
+	CHECK_V 28
+	CHECK_V 29
+	CHECK_V 30
+	CHECK_V 31
+	mfvrsave	r5
+	addi	r4, r3, 0x700
+	cmpw	r5, r4
+	bne	restore
+#endif
+
 	mtcr	r29
 	addi	r5, r3, 1
 	b	check
 
 	/* Restore */
 restore:
+
+#ifdef PPC_MULTILIB_ALTIVEC
+	lwz	r0, VRSAVE_OFFSET(r1)
+	mtvrsave	r0
+	li	r0, V31_OFFSET
+	lvx	v31, r1, r0
+	li	r0, V30_OFFSET
+	lvx	v30, r1, r0
+	li	r0, V29_OFFSET
+	lvx	v29, r1, r0
+	li	r0, V28_OFFSET
+	lvx	v28, r1, r0
+	li	r0, V27_OFFSET
+	lvx	v27, r1, r0
+	li	r0, V26_OFFSET
+	lvx	v26, r1, r0
+	li	r0, V25_OFFSET
+	lvx	v25, r1, r0
+	li	r0, V24_OFFSET
+	lvx	v24, r1, r0
+	li	r0, V23_OFFSET
+	lvx	v23, r1, r0
+	li	r0, V22_OFFSET
+	lvx	v22, r1, r0
+	li	r0, V21_OFFSET
+	lvx	v21, r1, r0
+	li	r0, V20_OFFSET
+	lvx	v20, r1, r0
+#endif
+
+#ifdef PPC_MULTILIB_FPU
+	lfd	f31, F31_OFFSET(r1)
+	lfd	f30, F30_OFFSET(r1)
+	lfd	f29, F29_OFFSET(r1)
+	lfd	f28, F28_OFFSET(r1)
+	lfd	f27, F27_OFFSET(r1)
+	lfd	f26, F26_OFFSET(r1)
+	lfd	f25, F25_OFFSET(r1)
+	lfd	f24, F24_OFFSET(r1)
+	lfd	f23, F23_OFFSET(r1)
+	lfd	f22, F22_OFFSET(r1)
+	lfd	f21, F21_OFFSET(r1)
+	lfd	f20, F20_OFFSET(r1)
+	lfd	f19, F19_OFFSET(r1)
+	lfd	f18, F18_OFFSET(r1)
+	lfd	f17, F17_OFFSET(r1)
+	lfd	f16, F16_OFFSET(r1)
+	lfd	f15, F15_OFFSET(r1)
+	lfd	f14, F14_OFFSET(r1)
+#endif
+
 	lwz	r31, GPR31_OFFSET(r1)
 	lwz	r30, GPR30_OFFSET(r1)
 	lwz	r29, GPR29_OFFSET(r1)

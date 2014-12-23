@@ -120,10 +120,20 @@ extern "C" {
  *  Assume PPC_HAS_FPU to be a synonym for _SOFT_FLOAT.
  */
 
-#if defined(_SOFT_FLOAT) || defined(__NO_FPRS__) /* e500 has unified integer/FP registers */
+#if defined(_SOFT_FLOAT) \
+  || defined(__NO_FPRS__) /* e500 has unified integer/FP registers */ \
+  || defined(__PPC_CPU_E6500__)
 #define PPC_HAS_FPU 0
 #else
 #define PPC_HAS_FPU 1
+#endif
+
+#if defined(__PPC_CPU_E6500__) && defined(__ALTIVEC__)
+#define PPC_MULTILIB_ALTIVEC
+#endif
+
+#if defined(__PPC_CPU_E6500__) && !defined(_SOFT_FLOAT)
+#define PPC_MULTILIB_FPU
 #endif
 
 /*

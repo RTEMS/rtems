@@ -22,6 +22,99 @@
 
 _CPU_Context_volatile_clobber:
 
+#ifdef PPC_MULTILIB_FPU
+.macro CLOBBER_F i
+	addi	r4, r3, 0x100 + \i
+	stw	r4, 16(r1)
+	addi	r4, r3, 0x200 + \i
+	stw	r4, 16 + 4(r1)
+	lfd	\i, 16(r1)
+.endm
+
+	stwu	r1, -32(r1)
+
+	/* Negate FPSCR[FPRF] bits */
+	mffs	f0
+	stfd	f0, 16(r1)
+	lwz	r0, 20(r1)
+	nor	r3, r0, r0
+	rlwinm	r0, r0, 0, 20, 14
+	rlwinm	r3, r3, 0, 15, 19
+	or	r0, r3, r0
+	stw	r0, 20(r1)
+	lfd	f0, 16(r1)
+	mtfsf	0xff, f0
+
+	CLOBBER_F 0
+	CLOBBER_F 1
+	CLOBBER_F 2
+	CLOBBER_F 3
+	CLOBBER_F 4
+	CLOBBER_F 5
+	CLOBBER_F 6
+	CLOBBER_F 7
+	CLOBBER_F 8
+	CLOBBER_F 9
+	CLOBBER_F 10
+	CLOBBER_F 11
+	CLOBBER_F 12
+	CLOBBER_F 13
+	addi	r1, r1, 32
+#endif
+
+#ifdef PPC_MULTILIB_ALTIVEC
+.macro CLOBBER_V i
+	addi	r4, r3, 0x300 + \i
+	stw	r4, 16(r1)
+	addi	r4, r3, 0x400 + \i
+	stw	r4, 16 + 4(r1)
+	addi	r4, r3, 0x500 + \i
+	stw	r4, 16 + 8(r1)
+	addi	r4, r3, 0x600 + \i
+	stw	r4, 16 + 12(r1)
+	li	r4, 16
+	lvx	\i, r1, r4
+.endm
+
+	stwu	r1, -32(r1)
+
+	/* Negate VSCR[SAT] bit */
+	mfvscr	v0
+	li	r3, 16
+	stvewx	v0, r1, r3
+	lwz	r0, 16(r1)
+	nor	r3, r0, r0
+	rlwinm	r0, r0, 0, 0, 30
+	rlwinm	r3, r3, 0, 31, 31
+	or	r0, r3, r0
+	stw	r0, 16(r1)
+	li	r3, 16
+	lvewx	v0, r1, r3
+	mtvscr	v0
+
+	CLOBBER_V 0
+	CLOBBER_V 1
+	CLOBBER_V 2
+	CLOBBER_V 3
+	CLOBBER_V 4
+	CLOBBER_V 5
+	CLOBBER_V 6
+	CLOBBER_V 7
+	CLOBBER_V 8
+	CLOBBER_V 9
+	CLOBBER_V 10
+	CLOBBER_V 11
+	CLOBBER_V 12
+	CLOBBER_V 13
+	CLOBBER_V 14
+	CLOBBER_V 15
+	CLOBBER_V 16
+	CLOBBER_V 17
+	CLOBBER_V 18
+	CLOBBER_V 19
+	addi	r1, r1, 32
+#endif
+
 	addi	r4, r3, 10
 	rlwinm	r4, r4, 0, 20, 7
 	mfcr	r5

@@ -45,7 +45,7 @@
  */
 void _CPU_Initialize(void)
 {
-#ifdef __ALTIVEC__
+#if defined(__ALTIVEC__) && !defined(PPC_MULTILIB_ALTIVEC)
   _CPU_Initialize_altivec();
 #endif
 }
@@ -75,6 +75,8 @@ void _CPU_Context_Initialize(
 
   _CPU_MSR_GET( msr_value );
 
+  the_ppc_context = ppc_get_context( the_context );
+
   /*
    * Setting the interrupt mask here is not strictly necessary
    * since the IRQ level will be established from _Thread_Handler()
@@ -95,6 +97,9 @@ void _CPU_Context_Initialize(
     msr_value &= ~ppc_interrupt_get_disable_mask();
   }
 
+#ifdef PPC_MULTILIB_FPU
+  msr_value |= MSR_FP;
+#else
   /*
    *  The FP bit of the MSR should only be enabled if this is a floating
    *  point task.  Unfortunately, the vfprintf_r routine in newlib
@@ -118,13 +123,19 @@ void _CPU_Context_Initialize(
     msr_value |= PPC_MSR_FP;
   else
     msr_value &= ~PPC_MSR_FP;
+#endif
 
-  the_ppc_context = ppc_get_context( the_context );
+#ifdef PPC_MULTILIB_ALTIVEC
+  msr_value |= MSR_VE;
+
+  the_ppc_context->vrsave = 0;
+#endif
+
   the_ppc_context->gpr1 = sp;
   the_ppc_context->msr = msr_value;
   the_ppc_context->lr = (uint32_t) entry_point;
 
-#ifdef __ALTIVEC__
+#if defined(__ALTIVEC__) && !defined(PPC_MULTILIB_ALTIVEC)
   _CPU_Context_initialize_altivec( the_ppc_context );
 #endif
 

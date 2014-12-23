@@ -23,7 +23,7 @@
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2011-2014 embedded brains GmbH
+ *  Copyright (c) 2011-2015 embedded brains GmbH
  *
  *  The license and distribution terms for this file may in
  *  the file LICENSE in this distribution or at
@@ -55,6 +55,7 @@
 #define PPC_CONTEXT_CACHE_LINE_2 (3 * PPC_DEFAULT_CACHE_LINE_SIZE)
 #define PPC_CONTEXT_CACHE_LINE_3 (4 * PPC_DEFAULT_CACHE_LINE_SIZE)
 #define PPC_CONTEXT_CACHE_LINE_4 (5 * PPC_DEFAULT_CACHE_LINE_SIZE)
+#define PPC_CONTEXT_CACHE_LINE_5 (6 * PPC_DEFAULT_CACHE_LINE_SIZE)
 
 	BEGIN_CODE
 
@@ -257,7 +258,10 @@ PROC (_CPU_Context_switch):
 	clrrwi	r5, r4, PPC_DEFAULT_CACHE_LINE_POWER
 
 	DATA_CACHE_ZERO_AND_TOUCH(r10, PPC_CONTEXT_CACHE_LINE_0)
+
+#if PPC_CONTEXT_CACHE_LINE_2 <= PPC_CONTEXT_VOLATILE_SIZE
 	DATA_CACHE_ZERO_AND_TOUCH(r11, PPC_CONTEXT_CACHE_LINE_1)
+#endif
 
 	/* Save context to r3 */
 
@@ -317,6 +321,11 @@ PROC (_CPU_Context_switch):
 
 	PPC_GPR_STORE	r24, PPC_CONTEXT_OFFSET_GPR24(r3)
 	PPC_GPR_STORE	r25, PPC_CONTEXT_OFFSET_GPR25(r3)
+
+#if PPC_CONTEXT_OFFSET_V22 == PPC_CONTEXT_CACHE_LINE_2
+	DATA_CACHE_ZERO_AND_TOUCH(r10, PPC_CONTEXT_CACHE_LINE_2)
+#endif
+
 	PPC_GPR_STORE	r26, PPC_CONTEXT_OFFSET_GPR26(r3)
 	PPC_GPR_STORE	r27, PPC_CONTEXT_OFFSET_GPR27(r3)
 
@@ -326,6 +335,71 @@ PROC (_CPU_Context_switch):
 	PPC_GPR_STORE	r31, PPC_CONTEXT_OFFSET_GPR31(r3)
 
 	stw	r2, PPC_CONTEXT_OFFSET_GPR2(r3)
+
+#ifdef PPC_MULTILIB_ALTIVEC
+	li	r9, PPC_CONTEXT_OFFSET_V20
+	stvx	v20, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V21
+	stvx	v21, r3, r9
+
+#if PPC_CONTEXT_OFFSET_V26 == PPC_CONTEXT_CACHE_LINE_3
+	DATA_CACHE_ZERO_AND_TOUCH(r10, PPC_CONTEXT_CACHE_LINE_3)
+#endif
+
+	li	r9, PPC_CONTEXT_OFFSET_V22
+	stvx	v22, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V23
+	stvx	v23, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V24
+	stvx	v24, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V25
+	stvx	v25, r3, r9
+
+#if PPC_CONTEXT_OFFSET_V30 == PPC_CONTEXT_CACHE_LINE_4
+	DATA_CACHE_ZERO_AND_TOUCH(r10, PPC_CONTEXT_CACHE_LINE_4)
+#endif
+
+	li	r9, PPC_CONTEXT_OFFSET_V26
+	stvx	v26, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V27
+	stvx	v27, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V28
+	stvx	v28, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V29
+	stvx	v29, r3, r9
+
+#if PPC_CONTEXT_OFFSET_F17 == PPC_CONTEXT_CACHE_LINE_5
+	DATA_CACHE_ZERO_AND_TOUCH(r10, PPC_CONTEXT_CACHE_LINE_5)
+#endif
+
+	li	r9, PPC_CONTEXT_OFFSET_V30
+	stvx	v30, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V31
+	stvx	v31, r3, r9
+	mfvrsave	r9
+	stw	r9, PPC_CONTEXT_OFFSET_VRSAVE(r3)
+#endif
+
+#ifdef PPC_MULTILIB_FPU
+	stfd	f14, PPC_CONTEXT_OFFSET_F14(r3)
+	stfd	f15, PPC_CONTEXT_OFFSET_F15(r3)
+	stfd	f16, PPC_CONTEXT_OFFSET_F16(r3)
+	stfd	f17, PPC_CONTEXT_OFFSET_F17(r3)
+	stfd	f18, PPC_CONTEXT_OFFSET_F18(r3)
+	stfd	f19, PPC_CONTEXT_OFFSET_F19(r3)
+	stfd	f20, PPC_CONTEXT_OFFSET_F20(r3)
+	stfd	f21, PPC_CONTEXT_OFFSET_F21(r3)
+	stfd	f22, PPC_CONTEXT_OFFSET_F22(r3)
+	stfd	f23, PPC_CONTEXT_OFFSET_F23(r3)
+	stfd	f24, PPC_CONTEXT_OFFSET_F24(r3)
+	stfd	f25, PPC_CONTEXT_OFFSET_F25(r3)
+	stfd	f26, PPC_CONTEXT_OFFSET_F26(r3)
+	stfd	f27, PPC_CONTEXT_OFFSET_F27(r3)
+	stfd	f28, PPC_CONTEXT_OFFSET_F28(r3)
+	stfd	f29, PPC_CONTEXT_OFFSET_F29(r3)
+	stfd	f30, PPC_CONTEXT_OFFSET_F30(r3)
+	stfd	f31, PPC_CONTEXT_OFFSET_F31(r3)
+#endif
 
 #ifdef RTEMS_SMP
 	/* The executing context no longer executes on this processor */
@@ -351,7 +425,7 @@ check_is_executing:
 	/* Restore context from r5 */
 restore_context:
 
-#ifdef __ALTIVEC__
+#if defined(__ALTIVEC__) && !defined(PPC_MULTILIB_ALTIVEC)
 	mr	r14, r5
 	.extern	_CPU_Context_switch_altivec
 	bl	_CPU_Context_switch_altivec
@@ -390,6 +464,56 @@ restore_context:
 
 	lwz	r2, PPC_CONTEXT_OFFSET_GPR2(r5)
 
+#ifdef PPC_MULTILIB_ALTIVEC
+	li	r9, PPC_CONTEXT_OFFSET_V20
+	lvx	v20, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V21
+	lvx	v21, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V22
+	lvx	v22, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V23
+	lvx	v23, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V24
+	lvx	v24, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V25
+	lvx	v25, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V26
+	lvx	v26, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V27
+	lvx	v27, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V28
+	lvx	v28, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V29
+	lvx	v29, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V30
+	lvx	v30, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V31
+	lvx	v31, r5, r9
+	lwz	r9, PPC_CONTEXT_OFFSET_VRSAVE(r5)
+	mtvrsave	r9
+#endif
+
+#ifdef PPC_MULTILIB_FPU
+	lfd	f14, PPC_CONTEXT_OFFSET_F14(r5)
+	lfd	f15, PPC_CONTEXT_OFFSET_F15(r5)
+	lfd	f16, PPC_CONTEXT_OFFSET_F16(r5)
+	lfd	f17, PPC_CONTEXT_OFFSET_F17(r5)
+	lfd	f18, PPC_CONTEXT_OFFSET_F18(r5)
+	lfd	f19, PPC_CONTEXT_OFFSET_F19(r5)
+	lfd	f20, PPC_CONTEXT_OFFSET_F20(r5)
+	lfd	f21, PPC_CONTEXT_OFFSET_F21(r5)
+	lfd	f22, PPC_CONTEXT_OFFSET_F22(r5)
+	lfd	f23, PPC_CONTEXT_OFFSET_F23(r5)
+	lfd	f24, PPC_CONTEXT_OFFSET_F24(r5)
+	lfd	f25, PPC_CONTEXT_OFFSET_F25(r5)
+	lfd	f26, PPC_CONTEXT_OFFSET_F26(r5)
+	lfd	f27, PPC_CONTEXT_OFFSET_F27(r5)
+	lfd	f28, PPC_CONTEXT_OFFSET_F28(r5)
+	lfd	f29, PPC_CONTEXT_OFFSET_F29(r5)
+	lfd	f30, PPC_CONTEXT_OFFSET_F30(r5)
+	lfd	f31, PPC_CONTEXT_OFFSET_F31(r5)
+#endif
+
 	mtcr	r8
 	mtlr	r7
 	mtmsr	r6
@@ -405,7 +529,7 @@ PROC (_CPU_Context_restore):
 	/* Align to a cache line */
 	clrrwi	r5, r3, PPC_DEFAULT_CACHE_LINE_POWER
 
-#ifdef __ALTIVEC__
+#if defined(__ALTIVEC__) && !defined(PPC_MULTILIB_ALTIVEC)
 	li	r3, 0
 #endif
 

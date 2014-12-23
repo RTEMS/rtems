@@ -146,8 +146,37 @@ extern "C" {
 #ifndef __SPE__
   #define PPC_EXC_GPR_OFFSET(gpr) ((gpr) * PPC_GPR_SIZE + 36)
   #define PPC_EXC_VECTOR_PROLOGUE_OFFSET PPC_EXC_GPR_OFFSET(4)
-  #define PPC_EXC_MINIMAL_FRAME_SIZE 96
-  #define PPC_EXC_FRAME_SIZE 176
+  #if defined(PPC_MULTILIB_ALTIVEC) && defined(PPC_MULTILIB_FPU)
+    #define PPC_EXC_VSCR_OFFSET 168
+    #define PPC_EXC_VRSAVE_OFFSET 172
+    #define PPC_EXC_VR_OFFSET(v) ((v) * 16 + 176)
+    #define PPC_EXC_FR_OFFSET(f) ((f) * 8 + 688)
+    #define PPC_EXC_FPSCR_OFFSET 944
+    #define PPC_EXC_FRAME_SIZE 960
+    #define PPC_EXC_MIN_VSCR_OFFSET 92
+    #define PPC_EXC_MIN_VR_OFFSET(v) ((v) * 16 + 96)
+    #define PPC_EXC_MIN_FR_OFFSET(f) ((f) * 8 + 416)
+    #define PPC_EXC_MIN_FPSCR_OFFSET 528
+    #define PPC_EXC_MINIMAL_FRAME_SIZE 544
+  #elif defined(PPC_MULTILIB_ALTIVEC)
+    #define PPC_EXC_VSCR_OFFSET 168
+    #define PPC_EXC_VRSAVE_OFFSET 172
+    #define PPC_EXC_VR_OFFSET(v) ((v) * 16 + 176)
+    #define PPC_EXC_FRAME_SIZE 688
+    #define PPC_EXC_MIN_VSCR_OFFSET 92
+    #define PPC_EXC_MIN_VR_OFFSET(v) ((v) * 16 + 96)
+    #define PPC_EXC_MINIMAL_FRAME_SIZE 416
+  #elif defined(PPC_MULTILIB_FPU)
+    #define PPC_EXC_FR_OFFSET(f) ((f) * 8 + 168)
+    #define PPC_EXC_FPSCR_OFFSET 424
+    #define PPC_EXC_FRAME_SIZE 448
+    #define PPC_EXC_MIN_FR_OFFSET(f) ((f) * 8 + 96)
+    #define PPC_EXC_MIN_FPSCR_OFFSET 92
+    #define PPC_EXC_MINIMAL_FRAME_SIZE 224
+  #else
+    #define PPC_EXC_FRAME_SIZE 176
+    #define PPC_EXC_MINIMAL_FRAME_SIZE 96
+  #endif
 #else
   #define PPC_EXC_SPEFSCR_OFFSET 36
   #define PPC_EXC_ACC_OFFSET 40
@@ -214,7 +243,7 @@ extern "C" {
 
 #define EXC_GENERIC_SIZE PPC_EXC_FRAME_SIZE
 
-#ifdef __ALTIVEC__
+#if defined(__ALTIVEC__) && !defined(PPC_MULTILIB_ALTIVEC)
 #define EXC_VEC_OFFSET EXC_GENERIC_SIZE
 #ifndef PPC_CACHE_ALIGNMENT
 #error "Missing include file!"
@@ -247,6 +276,77 @@ extern "C" {
  *
  * @{
  */
+
+typedef struct {
+  uint32_t EXC_SRR0;
+  uint32_t EXC_SRR1;
+  uint32_t unused;
+  uint32_t EXC_CR;
+  uint32_t EXC_CTR;
+  uint32_t EXC_XER;
+  uint32_t EXC_LR;
+  #ifdef __SPE__
+    uint32_t EXC_SPEFSCR;
+    uint64_t EXC_ACC;
+  #endif
+  PPC_GPR_TYPE GPR0;
+  PPC_GPR_TYPE GPR1;
+  PPC_GPR_TYPE GPR2;
+  PPC_GPR_TYPE GPR3;
+  PPC_GPR_TYPE GPR4;
+  PPC_GPR_TYPE GPR5;
+  PPC_GPR_TYPE GPR6;
+  PPC_GPR_TYPE GPR7;
+  PPC_GPR_TYPE GPR8;
+  PPC_GPR_TYPE GPR9;
+  PPC_GPR_TYPE GPR10;
+  PPC_GPR_TYPE GPR11;
+  PPC_GPR_TYPE GPR12;
+  uint32_t EARLY_INSTANT;
+  #ifdef PPC_MULTILIB_ALTIVEC
+    uint32_t VSCR;
+    uint8_t V0[16];
+    uint8_t V1[16];
+    uint8_t V2[16];
+    uint8_t V3[16];
+    uint8_t V4[16];
+    uint8_t V5[16];
+    uint8_t V6[16];
+    uint8_t V7[16];
+    uint8_t V8[16];
+    uint8_t V9[16];
+    uint8_t V10[16];
+    uint8_t V11[16];
+    uint8_t V12[16];
+    uint8_t V13[16];
+    uint8_t V14[16];
+    uint8_t V15[16];
+    uint8_t V16[16];
+    uint8_t V17[16];
+    uint8_t V18[16];
+    uint8_t V19[16];
+  #endif
+  #ifdef PPC_MULTILIB_FPU
+    #ifndef PPC_MULTILIB_ALTIVEC
+      uint32_t reserved_for_alignment;
+    #endif
+    double F0;
+    double F1;
+    double F2;
+    double F3;
+    double F4;
+    double F5;
+    double F6;
+    double F7;
+    double F8;
+    double F9;
+    double F10;
+    double F11;
+    double F12;
+    double F13;
+    uint64_t FPSCR;
+  #endif
+} ppc_exc_min_frame;
 
 typedef CPU_Exception_frame BSP_Exception_frame;
 

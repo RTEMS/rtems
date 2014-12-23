@@ -179,6 +179,42 @@ void _CPU_Exception_frame_print(const CPU_Exception_frame *excPtr)
     printk(" MCSR = 0x%08x\n", mcsr);
   }
 
+#ifdef PPC_MULTILIB_ALTIVEC
+  {
+    unsigned char *v = (unsigned char *) &excPtr->V0;
+    int i;
+    int j;
+
+    printk(" VSCR = 0x%08x\n", excPtr->VSCR);
+    printk("VRSAVE = 0x%08x\n", excPtr->VRSAVE);
+
+    for (i = 0; i < 32; ++i) {
+      printk("  V%02i = 0x", i);
+
+      for (j = 0; j < 16; ++j) {
+        printk("%02x", v[j]);
+      }
+
+      printk("\n");
+
+      v += 16;
+    }
+  }
+#endif
+
+#ifdef PPC_MULTILIB_FPU
+  {
+    unsigned long long *f = (unsigned long long *) &excPtr->F0;
+    int i;
+
+    printk("FPSCR = 0x%08llx\n", excPtr->FPSCR);
+
+    for (i = 0; i < 32; ++i) {
+      printk("  F%02i = 0x%016llx\n", i, f[i]);
+    }
+  }
+#endif
+
   if (executing != NULL) {
     const char *name = (const char *) &executing->Object.name;
 
