@@ -355,6 +355,25 @@ rtems_status_code ppc_exc_make_prologue(
   size_t *prologue_size
 );
 
+static inline void ppc_exc_initialize_interrupt_stack(
+  uintptr_t stack_begin,
+  uintptr_t stack_size
+)
+{
+  uintptr_t stack_end = stack_begin + stack_size;
+  uintptr_t stack_pointer = stack_end - PPC_MINIMUM_STACK_FRAME_SIZE;
+
+  /* Ensure proper interrupt stack alignment */
+  stack_pointer &= ~((uintptr_t) CPU_STACK_ALIGNMENT - 1);
+
+  /* Tag interrupt stack bottom */
+  *(uint32_t *) stack_pointer = 0;
+
+  /* Move interrupt stack values to special purpose registers */
+  PPC_SET_SPECIAL_PURPOSE_REGISTER(SPRG1, stack_pointer);
+  PPC_SET_SPECIAL_PURPOSE_REGISTER(SPRG2, stack_begin);
+}
+
 /**
  * @brief Initializes the exception handling.
  *

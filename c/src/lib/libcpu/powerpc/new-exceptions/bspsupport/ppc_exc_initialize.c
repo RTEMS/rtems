@@ -156,8 +156,6 @@ void ppc_exc_initialize_with_vector_base(
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   const ppc_exc_categories *const categories = ppc_exc_current_categories();
-  uintptr_t const interrupt_stack_end = interrupt_stack_begin + interrupt_stack_size;
-  uintptr_t interrupt_stack_pointer = interrupt_stack_end - PPC_MINIMUM_STACK_FRAME_SIZE;
   unsigned vector = 0;
   uint32_t sda_base = 0;
   uint32_t r13 = 0;
@@ -180,15 +178,7 @@ void ppc_exc_initialize_with_vector_base(
     ppc_exc_fatal_error();
   }
 
-  /* Ensure proper interrupt stack alignment */
-  interrupt_stack_pointer &= ~((uintptr_t) CPU_STACK_ALIGNMENT - 1);
-
-  /* Tag interrupt stack bottom */
-  *(uint32_t *) interrupt_stack_pointer = 0;
-
-  /* Move interrupt stack values to special purpose registers */
-  PPC_SET_SPECIAL_PURPOSE_REGISTER(SPRG1, interrupt_stack_pointer);
-  PPC_SET_SPECIAL_PURPOSE_REGISTER(SPRG2, interrupt_stack_begin);
+  ppc_exc_initialize_interrupt_stack(interrupt_stack_begin, interrupt_stack_size);
 
 #ifndef PPC_EXC_CONFIG_BOOKE_ONLY
 
