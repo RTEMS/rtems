@@ -30,18 +30,18 @@
 
   * Optionally, after the interface is configured (either with DHCP or
     statically), a task is started to monitor it.  When the interface remains
-    disconnected (i.e. its IFF_RUNNING flag is off) for NETWORK_FAIL_TIMEOUT
+    disconnected (i.e. its IFF_RUNNING flag is off) for network_fail_timeout
     seconds, the dhcp lease renewal is stopped.  As soon as the interface is
     connected again, DHCP is started again as above.
-    If NETWORK_FAIL_TIMEOUT is set to 0, the monitor task is not started.
+    If network_fail_timeout is set to 0, the monitor task is not started.
 
   * Optionally, when the interface is disconnected, it is also brought down
-    for NETWORK_DOWN_TIME seconds.  Since this possibly makes the IFF_RUNNING
+    for network_down_time seconds.  Since this possibly makes the IFF_RUNNING
     flag unuseable, the interface is brought up again before the flag is
     polled.
-    If NETWORK_DOWN_TIME is set to 0, the interface is not brought down.
+    If network_down_time is set to 0, the interface is not brought down.
 
-  * Optionally, before DHCP is started, we wait for BROADCAST_DELAY seconds.
+  * Optionally, before DHCP is started, we wait for broadcast_delay seconds.
     This is necessary to allow some routers to perform spanning tree discovery.
 
   Note that DHCP doesn't work well with multiple interfaces: only one of them
@@ -60,6 +60,7 @@
 #include <errno.h>
 
 #include <rtems/dhcp.h>
+#include <rtems/rtems_dhcp_failsafe.h>
 
 struct  proc;                   /* Unused parameter of some functions. */
 #include <sys/ioctl.h>
@@ -73,10 +74,23 @@ struct  proc;                   /* Unused parameter of some functions. */
 #include <arpa/inet.h>          /* for inet_addr, inet_ntop */
 
 
-#define NETWORK_FAIL_TIMEOUT 5     /* the number of seconds before the interface is considered disconnected */
-#define NETWORK_DOWN_TIME 30       /* number of seconds the interface remains down */
-#define BROADCAST_DELAY 0          /* Delay (seconds) before broadcasts are sent */
-#define DHCP_MONITOR_PRIORITY 250  /* Low priority */
+static int network_fail_timeout = RTEMS_DHCP_FAILSAFE_NETWORK_FAIL_TIMEOUT;
+static int network_down_time = RTEMS_DHCP_FAILSAFE_NETWORK_DOWN_TIME;
+static int broadcast_delay = RTEMS_DHCP_FAILSAFE_BROADCAST_DELAY;
+static int dhcp_monitor_priority = RTEMS_DHCP_FAILSAFE_DHCP_MONITOR_PRIORITY;
+
+void rtems_bsdnet_dhcp_failsafe_config(
+  int network_fail_timeout_,
+  int network_down_time_,
+  int broadcast_delay_,
+  int dhcp_monitor_priority_
+)
+{
+  network_fail_timeout = network_fail_timeout_;
+  network_down_time = network_down_time_;
+  broadcast_delay = broadcast_delay_;
+  dhcp_monitor_priority = dhcp_monitor_priority_;
+}
 
 /*
  *  returns 0 when successful, negative value for failure
@@ -117,11 +131,10 @@ static int remove_address(const char *if_name)
 }
 
 
-#if NETWORK_DOWN_TIME
 static int
 dhcp_if_down (const char* ifname)
 {
-  int flags;
+  int16_t flags;
   if (rtems_bsdnet_ifconfig (ifname, SIOCGIFFLAGS, &flags) < 0) {
     printf ("Can't get flags for %s: %s\n", ifname, strerror (errno));
     return -1;
@@ -136,12 +149,11 @@ dhcp_if_down (const char* ifname)
 
   return 0;
 }
-#endif
 
 static int
 dhcp_if_up (const char* ifname)
 {
-  int flags;
+  int16_t flags;
   if (rtems_bsdnet_ifconfig (ifname, SIOCGIFFLAGS, &flags) < 0) {
     printf ("Can't get flags for %s: %s\n", ifname, strerror (errno));
     return -1;
@@ -161,7 +173,7 @@ dhcp_if_up (const char* ifname)
 static int
 set_static_address (struct rtems_bsdnet_ifconfig *ifp)
 {
-  short flags;
+  int16_t flags;
   struct sockaddr_in address;
   struct sockaddr_in netmask;
   struct sockaddr_in broadcast;
@@ -255,10 +267,10 @@ set_static_address (struct rtems_bsdnet_ifconfig *ifp)
 static void
 do_dhcp_init (struct rtems_bsdnet_ifconfig *ifp)
 {
-#if BROADCAST_DELAY
-  /* Wait before sending broadcast. */
-  rtems_task_wake_after(RTEMS_MILLISECONDS_TO_TICKS(BROADCAST_DELAY * 1000));
-#endif
+  if (broadcast_delay) {
+    /* Wait before sending broadcast. */
+    rtems_task_wake_after(RTEMS_MILLISECONDS_TO_TICKS(broadcast_delay * 1000));
+  }
 
   printf ("starting dhcp client...\n");
 
@@ -278,7 +290,7 @@ static void dhcp_monitor_task (rtems_task_argument ifp_arg)
   struct rtems_bsdnet_ifconfig *ifp = (struct rtems_bsdnet_ifconfig *)ifp_arg;
   char                         *ifname = ifp->name;
   unsigned int                  downcount = 0;
-  int                           ifflags;
+  int16_t                       ifflags;
   int                           must_renew = FALSE;
 
   while (TRUE) {
@@ -294,19 +306,17 @@ static void dhcp_monitor_task (rtems_task_argument ifp_arg)
       }
       downcount = 0;
     } else {
-      if (downcount < NETWORK_FAIL_TIMEOUT) {
+      if (downcount < network_fail_timeout) {
         downcount++;
 
-        if (downcount == NETWORK_FAIL_TIMEOUT) {
+        if (downcount == network_fail_timeout) {
           printf ("lost network connection...\n");
           rtems_bsdnet_dhcp_down ();
           must_renew = TRUE;
-#if NETWORK_DOWN_TIME
           dhcp_if_down(ifname);
-          rtems_task_wake_after(RTEMS_MILLISECONDS_TO_TICKS(NETWORK_DOWN_TIME * 1000));
+          rtems_task_wake_after(RTEMS_MILLISECONDS_TO_TICKS(network_down_time * 1000));
           dhcp_if_up(ifname);
           downcount = 0;
-#endif
         }
       }
     }
@@ -328,7 +338,7 @@ void rtems_bsdnet_do_dhcp_failsafe (void)
   rtems_status_code             sc;
   rtems_id                      id;
   struct rtems_bsdnet_ifconfig *ifp;
-  int                           ifflags;
+  int16_t                       ifflags;
 
   /* Find a suitable interface */
   for (ifp = rtems_bsdnet_config.ifconfig; ifp; ifp = ifp->next) {
@@ -344,27 +354,27 @@ void rtems_bsdnet_do_dhcp_failsafe (void)
   printf("starting dhcp on interface %s\n", ifp->name);
   do_dhcp_init(ifp);
 
-#if NETWORK_FAIL_TIMEOUT
-  sc = rtems_task_create (rtems_build_name ('d','h','c','m'),
-                          DHCP_MONITOR_PRIORITY,
-                          2048,
-                          RTEMS_PREEMPT |
-                          RTEMS_NO_TIMESLICE |
-                          RTEMS_NO_ASR |
-                          RTEMS_INTERRUPT_LEVEL (0),
-                          RTEMS_LOCAL,
-                          &id);
+  if (network_fail_timeout) {
+    sc = rtems_task_create (rtems_build_name ('d','h','c','m'),
+                            dhcp_monitor_priority,
+                            2048,
+                            RTEMS_PREEMPT |
+                            RTEMS_NO_TIMESLICE |
+                            RTEMS_NO_ASR |
+                            RTEMS_INTERRUPT_LEVEL (0),
+                            RTEMS_LOCAL,
+                            &id);
 
-  if (sc != RTEMS_SUCCESSFUL) {
-    printf ("Failed to create dhcp monitor task, code %d\n", sc);
-    return;
+    if (sc != RTEMS_SUCCESSFUL) {
+      printf ("Failed to create dhcp monitor task, code %d\n", sc);
+      return;
+    }
+
+    sc = rtems_task_start (id, dhcp_monitor_task, (rtems_task_argument) ifp);
+
+    if (sc != RTEMS_SUCCESSFUL) {
+      printf ("Failed to start dhcp monitor task, code %d\n", sc);
+    }
   }
-
-  sc = rtems_task_start (id, dhcp_monitor_task, (rtems_task_argument) ifp);
-
-  if (sc != RTEMS_SUCCESSFUL) {
-    printf ("Failed to start dhcp monitor task, code %d\n", sc);
-  }
-#endif
 }
 
