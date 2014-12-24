@@ -228,6 +228,8 @@ pci_bus_count(void)
   if ( ucBusCount == 0xff ) {
     unsigned char bus;
     unsigned char dev;
+    unsigned char fun;
+    unsigned char nfn;
     unsigned char hd = 0;
     uint32_t d = 0;
     int sig;
@@ -239,15 +241,29 @@ pci_bus_count(void)
         sig = PCIB_DEVSIG_MAKE(bus,dev,0);
         pcib_conf_read32(sig, PCI_VENDOR_ID, &d);
 
-        if ( d != -1 ) {
-           pcib_conf_read32(sig, PCI_CLASS_REVISION, &d);
+        if ( -1 == d ) {
+          continue;
+        }
 
-           if ( (d >> 16) == PCI_CLASS_BRIDGE_PCI ) {
-             pcib_conf_read8(sig, PCI_SUBORDINATE_BUS, &hd);
+        pcib_conf_read8(sig, PCI_HEADER_TYPE, &hd);
+        nfn = (hd & 0x80) ? PCI_MAX_FUNCTIONS : 1;
 
-             if ( hd > ucBusCount )
-               ucBusCount = hd;
-           }
+        for ( fun=0; fun<nfn; fun++ ) {
+
+          sig = PCIB_DEVSIG_MAKE(bus,dev,fun);
+          pcib_conf_read32(sig, PCI_VENDOR_ID, &d);
+          if ( -1 == d )
+            continue;
+
+          pcib_conf_read32(sig, PCI_CLASS_REVISION, &d);
+
+          if ( (d >> 16) == PCI_CLASS_BRIDGE_PCI ) {
+            pcib_conf_read8(sig, PCI_SUBORDINATE_BUS, &hd);
+
+            if ( hd > ucBusCount )
+              ucBusCount = hd;
+          }
+
         }
       }
     }
