@@ -1,4 +1,4 @@
-*** TEST IMFS 02 ***
+*** BEGIN OF TEST PSXIMFS 2 ***
 Creating directory /dir00
 Creating directory /dir00/dir01
 Changing directory to /dir00
@@ -24,42 +24,22 @@ Opening /node-link in WRONLY mode -- expect EACCES
 Creating a symlink /node-slink for /node
 Opening /node-slink in WRONLY mode -- expect EACCES
 Allocate most of heap
-Attempt to mount a fs at /dir01 -- expect ENOMEM
-Freeing allocated memory
-Allocate most of heap
+Attempt to mount a fs at dir01 -- expect ENOMEMFreeing allocated memory
 Changing directory to /
+Allocate most of heap
 Attempt to create /node-link-2 for /node -- expect ENOMEM
 Attempt to create /node-slink-2 for /node -- expect ENOMEM
 Freeing allocated memory
 Allocate most of heap
-Attempt to create /node-slink-2 for /node -- expect ENOMEM
-Freeing allocated memory
-Attempt to stat a hardlink -- expect ENOTSUP
+Attempt to create node-slink-2 for /node -- expect ENOMEMFreeing allocated memory
+Attempt to stat a hardlink
 Changing euid to 10
 Attempt chmod on /node -- expect EPERM
 Attempt chown on /node -- expect EPERM
 Changing euid back to 0 [root]
 Creating a fifo -- OK
-*************** Dump of Entire IMFS ***************
-/
-....dev/
-........console (device 0, 0)
-....dir00/
-........dir01/
-........dir01-link0 links not printed
-........dir01-link1 links not printed
-........dir01-link2 links not printed
-........dir01-link3 links not printed
-........dir01-link4 links not printed
-........dir01-link5 links not printed
-........dir01-link6 links not printed
-....node (file 0)
-....node-link links not printed
-....node-slink links not printed
-....fifo FIFO not printed
-***************      End of Dump       ***************
 chown /fifo to 10 -- OK
 Changing euid to 10
 chmod /fifo -- OK
 chown /fifo to 0 -- OK
-*** END OF TEST IMFS 02 ***
+*** END OF TEST PSXIMFS 2 ***

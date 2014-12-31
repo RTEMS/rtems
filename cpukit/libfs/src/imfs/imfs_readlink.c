@@ -26,15 +26,13 @@ ssize_t IMFS_readlink(
   size_t bufsize
 )
 {
-  IMFS_jnode_t      *node;
+  IMFS_sym_link_t   *sym_link;
   ssize_t            i;
 
-  node = loc->node_access;
+  sym_link = loc->node_access;
 
-  IMFS_assert( node->control->imfs_type == IMFS_SYM_LINK );
-
-  for( i=0; ((i<bufsize) && (node->info.sym_link.name[i] != '\0')); i++ )
-    buf[i] = node->info.sym_link.name[i];
+  for( i=0; ((i<bufsize) && (sym_link->name[i] != '\0')); i++ )
+    buf[i] = sym_link->name[i];
 
   return i;
 }

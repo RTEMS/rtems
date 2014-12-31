@@ -33,19 +33,19 @@ ssize_t imfs_dir_read(
    *  Read up to element  iop->offset in the directory chain of the
    *  imfs_jnode_t struct for this file descriptor.
    */
-   rtems_chain_node    *the_node;
-   rtems_chain_control *the_chain;
-   IMFS_jnode_t        *the_jnode;
-   int                  bytes_transferred;
-   int                  current_entry;
-   int                  first_entry;
-   int                  last_entry;
-   struct dirent        tmp_dirent;
+   const IMFS_directory_t    *dir;
+   const rtems_chain_node    *node;
+   const rtems_chain_control *entries;
+   struct dirent             *dir_ent;
+   ssize_t                    bytes_transferred;
+   off_t                      current_entry;
+   off_t                      first_entry;
+   off_t                      last_entry;
 
    rtems_filesystem_instance_lock( &iop->pathinfo );
 
-   the_jnode = (IMFS_jnode_t *)iop->pathinfo.node_access;
-   the_chain = &the_jnode->info.directory.Entries;
+   dir = IMFS_iop_to_directory( iop );
+   entries = &dir->Entries;
 
    /* Move to the first of the desired directory entries */
 
@@ -54,32 +54,31 @@ ssize_t imfs_dir_read(
    /* protect against using sizes that are not exact multiples of the */
    /* -dirent- size. These could result in unexpected results          */
    last_entry = first_entry
-     + (count / sizeof( struct dirent )) * sizeof( struct dirent );
+     + (count / sizeof( *dir_ent )) * sizeof( *dir_ent );
 
    /* The directory was not empty so try to move to the desired entry in chain*/
    for (
       current_entry = 0,
-        the_node = rtems_chain_first( the_chain );
+        node = rtems_chain_immutable_first( entries );
       current_entry < last_entry
-        && !rtems_chain_is_tail( the_chain, the_node );
-      current_entry +=  sizeof( struct dirent ),
-        the_node = rtems_chain_next( the_node )
+        && !rtems_chain_is_tail( entries, node );
+      current_entry +=  sizeof( *dir_ent ),
+        node = rtems_chain_immutable_next( node )
    ) {
       if( current_entry >= first_entry ) {
+         const IMFS_jnode_t *imfs_node = (const IMFS_jnode_t *) node;
+
+         dir_ent = (struct dirent *) ((char *) buffer + bytes_transferred);
+
          /* Move the entry to the return buffer */
-         tmp_dirent.d_off = current_entry;
-         tmp_dirent.d_reclen = sizeof( struct dirent );
-         the_jnode = (IMFS_jnode_t *) the_node;
-         tmp_dirent.d_ino = the_jnode->st_ino;
-         tmp_dirent.d_namlen = strlen( the_jnode->name );
-         strcpy( tmp_dirent.d_name, the_jnode->name );
-         memcpy(
-            buffer + bytes_transferred,
-            (void *)&tmp_dirent,
-            sizeof( struct dirent )
-         );
-         iop->offset += sizeof( struct dirent );
-         bytes_transferred += sizeof( struct dirent );
+         dir_ent->d_off = current_entry;
+         dir_ent->d_reclen = sizeof( *dir_ent );
+         dir_ent->d_ino = imfs_node->st_ino;
+         dir_ent->d_namlen = strlen( imfs_node->name );
+         memcpy( dir_ent->d_name, imfs_node->name, dir_ent->d_namlen + 1 );
+
+         iop->offset += sizeof( *dir_ent );
+         bytes_transferred += (ssize_t) sizeof( *dir_ent );
       }
    }
 

@@ -232,13 +232,11 @@ static const rtems_filesystem_file_handlers_r node_handlers = {
   .writev_h = handler_writev
 };
 
-static const IMFS_node_control node_control = {
-  .imfs_type = IMFS_GENERIC,
-  .handlers = &node_handlers,
-  .node_initialize = IMFS_node_initialize_default,
-  .node_remove = IMFS_node_remove_default,
-  .node_destroy = IMFS_node_destroy_default
-};
+static const IMFS_node_control node_control = IMFS_GENERIC_INITIALIZER(
+  &node_handlers,
+  IMFS_node_initialize_default,
+  IMFS_node_destroy_default
+);
 
 static void test(void)
 {

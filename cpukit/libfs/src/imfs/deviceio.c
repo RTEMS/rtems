@@ -29,17 +29,15 @@ int device_open(
   mode_t         mode
 )
 {
-  IMFS_jnode_t                  *the_jnode;
-
-  the_jnode  = iop->pathinfo.node_access;
+  const IMFS_device_t *device = IMFS_iop_to_device( iop );
 
   return rtems_deviceio_open(
     iop,
     pathname,
     oflag,
     mode,
-    the_jnode->info.device.major,
-    the_jnode->info.device.minor
+    device->major,
+    device->minor
   );
 }
 
@@ -47,14 +45,12 @@ int device_close(
   rtems_libio_t *iop
 )
 {
-  IMFS_jnode_t                  *the_jnode;
-
-  the_jnode = iop->pathinfo.node_access;
+  const IMFS_device_t *device = IMFS_iop_to_device( iop );
 
   return rtems_deviceio_close(
     iop,
-    the_jnode->info.device.major,
-    the_jnode->info.device.minor
+    device->major,
+    device->minor
   );
 }
 
@@ -64,16 +60,14 @@ ssize_t device_read(
   size_t         count
 )
 {
-  IMFS_jnode_t           *the_jnode;
-
-  the_jnode = iop->pathinfo.node_access;
+  const IMFS_device_t *device = IMFS_iop_to_device( iop );
 
   return rtems_deviceio_read(
     iop,
     buffer,
     count,
-    the_jnode->info.device.major,
-    the_jnode->info.device.minor
+    device->major,
+    device->minor
   );
 }
 
@@ -83,16 +77,14 @@ ssize_t device_write(
   size_t         count
 )
 {
-  IMFS_jnode_t           *the_jnode;
-
-  the_jnode = iop->pathinfo.node_access;
+  const IMFS_device_t *device = IMFS_iop_to_device( iop );
 
   return rtems_deviceio_write(
     iop,
     buffer,
     count,
-    the_jnode->info.device.major,
-    the_jnode->info.device.minor
+    device->major,
+    device->minor
   );
 }
 
@@ -102,16 +94,14 @@ int device_ioctl(
   void            *buffer
 )
 {
-  IMFS_jnode_t             *the_jnode;
-
-  the_jnode = iop->pathinfo.node_access;
+  const IMFS_device_t *device = IMFS_iop_to_device( iop );
 
   return rtems_deviceio_control(
     iop,
     command,
     buffer,
-    the_jnode->info.device.major,
-    the_jnode->info.device.minor
+    device->major,
+    device->minor
   );
 }
 

@@ -1,4 +1,4 @@
-*** TAR02 TEST ***
+*** BEGIN OF TEST TAR 2 ***
 Loading tarfs image ... successful
 ========= /home/test_file =========
 (0)This is a test of loading an RTEMS filesystem from an
@@ -8,14 +8,4 @@ initial tar image.
 (0)This is a test of loading an RTEMS filesystem from an
 initial tar image.
 
-*************** Dump of Entire IMFS ***************
-/
-....dev/
-........ttyS0 (device 0, 0)
-........console (device 0, 0)
-........ttyS1 (device 0, 1)
-....home/
-........test_file (file 73 0x390f8)
-....symlink links not printed
-***************      End of Dump       ***************
-*** END OF TAR02 TEST ***
+*** END OF TEST TAR 2 ***

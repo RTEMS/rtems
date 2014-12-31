@@ -30,14 +30,17 @@ static int IMFS_stat_link(
 {
   const IMFS_jnode_t *node = loc->node_access;
 
-  if ( IMFS_type( node ) != IMFS_HARD_LINK ) {
-    buf->st_size = strlen( node->info.sym_link.name );
+  if ( !IMFS_is_hard_link( node->st_mode ) ) {
+    const IMFS_sym_link_t *sym_link = (const IMFS_sym_link_t *) node;
+
+    buf->st_size = strlen( sym_link->name );
 
     return IMFS_stat( loc, buf );
   } else {
+    const IMFS_link_t *hard_link = (const IMFS_link_t *) node;
     rtems_filesystem_location_info_t targetloc = *loc;
 
-    targetloc.node_access = node->info.hard_link.link_node;
+    targetloc.node_access = hard_link->link_node;
     IMFS_Set_handlers( &targetloc );
 
     return (targetloc.handlers->fstat_h)( &targetloc, buf );
@@ -64,10 +67,12 @@ static const rtems_filesystem_file_handlers_r IMFS_link_handlers = {
 
 static IMFS_jnode_t *IMFS_node_initialize_hard_link(
   IMFS_jnode_t *node,
-  const IMFS_types_union *info
+  void *arg
 )
 {
-  node->info.hard_link.link_node = info->hard_link.link_node;
+  IMFS_link_t *hard_link = (IMFS_link_t *) node;
+
+  hard_link->link_node = arg;
 
   return node;
 }
@@ -76,7 +81,8 @@ static IMFS_jnode_t *IMFS_node_remove_hard_link(
   IMFS_jnode_t *node
 )
 {
-  IMFS_jnode_t *target = node->info.hard_link.link_node;
+  IMFS_link_t *hard_link = (IMFS_link_t *) node;
+  IMFS_jnode_t *target = hard_link->link_node;
 
   _Assert( target != NULL );
 
@@ -94,8 +100,8 @@ static IMFS_jnode_t *IMFS_node_remove_hard_link(
 }
 
 const IMFS_node_control IMFS_node_control_hard_link = {
-  .imfs_type = IMFS_HARD_LINK,
   .handlers = &IMFS_link_handlers,
+  .node_size = sizeof(IMFS_link_t),
   .node_initialize = IMFS_node_initialize_hard_link,
   .node_remove = IMFS_node_remove_hard_link,
   .node_destroy = IMFS_node_destroy_default
@@ -103,24 +109,28 @@ const IMFS_node_control IMFS_node_control_hard_link = {
 
 static IMFS_jnode_t *IMFS_node_initialize_sym_link(
   IMFS_jnode_t *node,
-  const IMFS_types_union *info
+  void *arg
 )
 {
-  node->info.sym_link.name = info->sym_link.name;
+  IMFS_sym_link_t *sym_link = (IMFS_sym_link_t *) node;
+
+  sym_link->name = arg;
 
   return node;
 }
 
-static IMFS_jnode_t *IMFS_node_destroy_sym_link( IMFS_jnode_t *node )
+static void IMFS_node_destroy_sym_link( IMFS_jnode_t *node )
 {
-  free( node->info.sym_link.name );
+  IMFS_sym_link_t *sym_link = (IMFS_sym_link_t *) node;
 
-  return node;
+  free( sym_link->name );
+
+  IMFS_node_destroy_default( node );
 }
 
 const IMFS_node_control IMFS_node_control_sym_link = {
-  .imfs_type = IMFS_SYM_LINK,
   .handlers = &IMFS_link_handlers,
+  .node_size = sizeof(IMFS_sym_link_t),
   .node_initialize = IMFS_node_initialize_sym_link,
   .node_remove = IMFS_node_remove_default,
   .node_destroy = IMFS_node_destroy_sym_link

@@ -31,7 +31,6 @@ extern int seteuid(uid_t euid);
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
-void IMFS_dump(void);
 
 rtems_task Init(
   rtems_task_argument argument
@@ -183,8 +182,6 @@ rtems_task Init(
   puts( "Creating a fifo -- OK" );
   status = mkfifo( "/fifo", S_IRWXU );
   rtems_test_assert( status == 0 );
-
-  IMFS_dump();
   
   puts( "chown /fifo to 10 -- OK" );
   status = chown( "/fifo", 10, 10 );

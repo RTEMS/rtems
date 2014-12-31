@@ -23,27 +23,17 @@
 
 #include "imfs.h"
 
-static void get_type_and_info_by_mode_and_dev(
-  mode_t mode,
-  dev_t dev,
-  IMFS_jnode_types_t *type,
-  IMFS_types_union *info
-)
+static IMFS_jnode_types_t get_type( mode_t mode )
 {
   if ( S_ISDIR( mode ) ) {
-    *type = IMFS_DIRECTORY;
+    return IMFS_DIRECTORY;
   } else if ( S_ISBLK( mode ) || S_ISCHR( mode ) ) {
-    *type = IMFS_DEVICE;
-    rtems_filesystem_split_dev_t(
-      dev,
-      info->device.major,
-      info->device.minor
-    );
+    return IMFS_DEVICE;
   } else if (S_ISFIFO( mode )) {
-    *type = IMFS_FIFO;
+    return IMFS_FIFO;
   } else {
     IMFS_assert( S_ISREG( mode ) );
-    *type = IMFS_MEMORY_FILE;
+    return IMFS_MEMORY_FILE;
   }
 }
 
@@ -57,12 +47,11 @@ int IMFS_mknod(
 {
   int rv = 0;
   IMFS_jnode_types_t type;
-  IMFS_types_union info;
   IMFS_jnode_t *new_node;
 
-  get_type_and_info_by_mode_and_dev( mode, dev, &type, &info );
+  type = get_type( mode );
 
-  new_node = IMFS_create_node( parentloc, type, name, namelen, mode, &info );
+  new_node = IMFS_create_node( parentloc, type, name, namelen, mode, &dev );
   if ( new_node != NULL ) {
     IMFS_jnode_t *parent = parentloc->node_access;
 

@@ -21,7 +21,7 @@
 #include "imfs.h"
 
 #define jnode_get_control( jnode ) \
-  (&jnode->info.directory.Entries)
+  (&((IMFS_directory_t *) jnode)->Entries)
 
 #define jnode_has_no_children( jnode )  \
   rtems_chain_is_empty( jnode_get_control( jnode ) )

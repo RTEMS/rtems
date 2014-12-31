@@ -27,12 +27,10 @@ int IMFS_link(
   size_t namelen
 )
 {
-  IMFS_types_union   info;
-  IMFS_jnode_t      *new_node;
-  IMFS_jnode_t      *target;
+  IMFS_jnode_t *new_node;
+  IMFS_jnode_t *target;
 
   target = targetloc->node_access;
-  info.hard_link.link_node = target;
 
   /*
    *  Verify this node can be linked to.
@@ -48,8 +46,8 @@ int IMFS_link(
     IMFS_HARD_LINK,
     name,
     namelen,
-    ( S_IFLNK | ( S_IRWXU | S_IRWXG | S_IRWXO )),
-    &info
+    IMFS_STAT_FMT_HARD_LINK | ( S_IRWXU | S_IRWXG | S_IRWXO ),
+    target
   );
 
   if ( !new_node )

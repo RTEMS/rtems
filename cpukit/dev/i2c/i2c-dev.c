@@ -116,23 +116,21 @@ static const rtems_filesystem_file_handlers_r i2c_dev_handler = {
   .writev_h = rtems_filesystem_default_writev
 };
 
-static IMFS_jnode_t *i2c_dev_node_destroy(IMFS_jnode_t *node)
+static void i2c_dev_node_destroy(IMFS_jnode_t *node)
 {
   i2c_dev *dev;
 
   dev = IMFS_generic_get_context_by_node(node);
   (*dev->destroy)(dev);
 
-  return node;
+  IMFS_node_destroy_default(node);
 }
 
-static const IMFS_node_control i2c_dev_node_control = {
-  .imfs_type = IMFS_GENERIC,
-  .handlers = &i2c_dev_handler,
-  .node_initialize = IMFS_node_initialize_generic,
-  .node_remove = IMFS_node_remove_default,
-  .node_destroy = i2c_dev_node_destroy
-};
+static const IMFS_node_control i2c_dev_node_control = IMFS_GENERIC_INITIALIZER(
+  &i2c_dev_handler,
+  IMFS_node_initialize_generic,
+  i2c_dev_node_destroy
+);
 
 int i2c_dev_register(
   i2c_dev *dev,

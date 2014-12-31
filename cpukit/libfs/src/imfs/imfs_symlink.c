@@ -30,14 +30,14 @@ int IMFS_symlink(
   const char *target
 )
 {
-  IMFS_types_union   info;
-  IMFS_jnode_t      *new_node;
+  char         *dup_target;
+  IMFS_jnode_t *new_node;
 
   /*
    * Duplicate link name
    */
-  info.sym_link.name = strdup(target);
-  if (info.sym_link.name == NULL) {
+  dup_target = strdup(target);
+  if (dup_target == NULL) {
     rtems_set_errno_and_return_minus_one(ENOMEM);
   }
 
@@ -50,11 +50,11 @@ int IMFS_symlink(
     name,
     namelen,
     ( S_IFLNK | ( S_IRWXU | S_IRWXG | S_IRWXO )),
-    &info
+    dup_target
   );
 
   if (new_node == NULL) {
-    free(info.sym_link.name);
+    free(dup_target);
     rtems_set_errno_and_return_minus_one(ENOMEM);
   }
 

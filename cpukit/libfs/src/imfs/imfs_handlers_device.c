@@ -25,10 +25,9 @@ static int IMFS_stat_device(
   struct stat *buf
 )
 {
-  const IMFS_jnode_t *node = loc->node_access;
-  const IMFS_device_t *io = &node->info.device;
+  const IMFS_device_t *device = loc->node_access;
 
-  buf->st_rdev = rtems_filesystem_make_dev_t( io->major, io->minor );
+  buf->st_rdev = rtems_filesystem_make_dev_t( device->major, device->minor );
 
   return IMFS_stat( loc, buf );
 }
@@ -53,18 +52,20 @@ static const rtems_filesystem_file_handlers_r IMFS_device_handlers = {
 
 static IMFS_jnode_t *IMFS_node_initialize_device(
   IMFS_jnode_t *node,
-  const IMFS_types_union *info
+  void *arg
 )
 {
-  node->info.device.major = info->device.major;
-  node->info.device.minor = info->device.minor;
+  IMFS_device_t *device = (IMFS_device_t *) node;
+  dev_t *dev = arg;
+
+  rtems_filesystem_split_dev_t( *dev, device->major, device->minor );
 
   return node;
 }
 
 const IMFS_node_control IMFS_node_control_device = {
-  .imfs_type = IMFS_DEVICE,
   .handlers = &IMFS_device_handlers,
+  .node_size = sizeof(IMFS_device_t),
   .node_initialize = IMFS_node_initialize_device,
   .node_remove = IMFS_node_remove_default,
   .node_destroy = IMFS_node_destroy_default

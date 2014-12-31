@@ -68,7 +68,6 @@ rtems_task Init(
   TEST_BEGIN();
 
   test_tarfs_load();
-  IMFS_dump();
 
   TEST_END();
   exit( 0 );

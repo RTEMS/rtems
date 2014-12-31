@@ -229,13 +229,13 @@ static const rtems_filesystem_file_handlers_r rtems_blkdev_imfs_node = {
 
 static IMFS_jnode_t *rtems_blkdev_imfs_initialize(
   IMFS_jnode_t *node,
-  const IMFS_types_union *info
+  void *arg
 )
 {
   rtems_blkdev_imfs_context *ctx;
   rtems_disk_device *dd;
 
-  node = IMFS_node_initialize_generic(node, info);
+  node = IMFS_node_initialize_generic(node, arg);
 
   ctx = IMFS_generic_get_context_by_node(node);
   dd = &ctx->dd;
@@ -244,7 +244,7 @@ static IMFS_jnode_t *rtems_blkdev_imfs_initialize(
   return node;
 }
 
-static IMFS_jnode_t *rtems_blkdev_imfs_destroy(IMFS_jnode_t *node)
+static void rtems_blkdev_imfs_destroy(IMFS_jnode_t *node)
 {
   rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_node(node);
   rtems_disk_device *dd = &ctx->dd;
@@ -260,16 +260,15 @@ static IMFS_jnode_t *rtems_blkdev_imfs_destroy(IMFS_jnode_t *node)
 
   free(ctx);
 
-  return node;
+  IMFS_node_destroy_default(node);
 }
 
-static const IMFS_node_control rtems_blkdev_imfs_control = {
-  .imfs_type = IMFS_GENERIC,
-  .handlers = &rtems_blkdev_imfs_node,
-  .node_initialize = rtems_blkdev_imfs_initialize,
-  .node_remove = IMFS_node_remove_default,
-  .node_destroy = rtems_blkdev_imfs_destroy
-};
+static const IMFS_node_control rtems_blkdev_imfs_control =
+  IMFS_GENERIC_INITIALIZER(
+    &rtems_blkdev_imfs_node,
+    rtems_blkdev_imfs_initialize,
+    rtems_blkdev_imfs_destroy
+  );
 
 rtems_status_code rtems_blkdev_create(
   const char *device,

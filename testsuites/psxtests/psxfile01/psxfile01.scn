@@ -1,11 +1,4 @@
-*** FILE TEST 1 ***
-*************** Dump of Entire IMFS ***************
-/
-....dev/
-........console_a (device 0, 0)
-........console (device 0, 0)
-........console_b (device 0, 1)
-***************      End of Dump       ***************
+*** BEGIN OF TEST PSXFILE 1 ***
 stat of /dev/console
 ....st_dev     (0xfffe:0x0)
 ....st_rdev    (0x0:0x0)
@@ -181,26 +174,6 @@ This is call 5 to fprintf
 ....ctime = Sat Dec 31 09:00:00 1988
 ....st_blksize 80
 ....st_blocks  0
-*************** Dump of Entire IMFS ***************
-/
-....dev/
-........console_a (device 0, 0)
-........console (device 0, 0)
-........console_b (device 0, 1)
-........tty/
-............S3 (device 255, 128)
-........test_console (device 0, 0)
-....etc/
-........passwd (file 0)
-....tmp/
-........my_dir/
-........tom (file 0)
-........john (file 0)
-........joel (file 533)
-........j (file 130)
-....imfs/
-........hidden_on_mount/
-***************      End of Dump       ***************
 truncate /tmp/j to length of 40
 ....st_dev     (0xfffe:0x0)
 ....st_rdev    (0x0:0x0)
@@ -209,53 +182,15 @@ truncate /tmp/j to length of 40
 ....nlink = 1
 ....uid = 0
 ....gid = 0
-....atime = Sat Dec 31 09:00:02 1988
-....mtime = Sat Dec 31 09:00:00 1988
-....ctime = Sat Dec 31 09:00:00 1988
+....atime = Sat Dec 31 09:00:01 1988
+....mtime = Sat Dec 31 09:00:02 1988
+....ctime = Sat Dec 31 09:00:02 1988
 ....st_blksize 80
 ....st_blocks  0
-*************** Dump of Entire IMFS ***************
-/
-....dev/
-........console_a (device 0, 0)
-........console (device 0, 0)
-........console_b (device 0, 1)
-........tty/
-............S3 (device 255, 128)
-........test_console (device 0, 0)
-....etc/
-........passwd (file 0)
-....tmp/
-........my_dir/
-........tom (file 0)
-........john (file 0)
-........j (file 40)
-....imfs/
-........hidden_on_mount/
-***************      End of Dump       ***************
 truncate /tmp/j to length of 0
 truncate /tmp to length of 0 should fail with EISDIR
 
 21: Is a directory
-*************** Dump of Entire IMFS ***************
-/
-....dev/
-........console_a (device 0, 0)
-........console (device 0, 0)
-........console_b (device 0, 1)
-........tty/
-............S3 (device 255, 128)
-........test_console (device 0, 0)
-....etc/
-........passwd (file 0)
-....tmp/
-........my_dir/
-........tom (file 0)
-........john (file 0)
-........j (file 0)
-....imfs/
-........hidden_on_mount/
-***************      End of Dump       ***************
 Writing First File
 Writing Second File
 (0)this is a test line
@@ -264,4 +199,4 @@ this is a test line
 (0)this is a test line
 this is a test line
 
-*** END OF FILE TEST 1 ***
+*** END OF TEST PSXFILE 1 ***

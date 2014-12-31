@@ -166,17 +166,11 @@ int main(
    *  Grab the maximum size of an in-memory file.
    */
 
-  max_size = IMFS_memfile_maximum_size();
+  max_size = IMFS_MEMFILE_MAXIMUM_SIZE;
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   rtems_status = rtems_clock_set( &time );
   directive_failed( rtems_status, "clock set" );
-
-  /*
-   *  Dump an empty file system
-   */
-
-  IMFS_dump();
 
   /*
    *  Simple stat() of /dev/console.
@@ -605,8 +599,6 @@ since new path is not valid");
   rtems_test_assert( mtime1 == mtime2);
   rtems_test_assert( ctime1 == ctime2);
 
-  IMFS_dump();
-
   unlink( "/tmp/joel" );
 
   /*
@@ -631,8 +623,6 @@ since new path is not valid");
   rtems_test_assert( mtime1 != mtime2);
   rtems_test_assert( ctime1 != ctime2);
 
-  IMFS_dump();
-
   /* try to truncate the console and see what happens */
   status = truncate( "/dev/console", 40 );
   rtems_test_assert( status == 0 );
@@ -646,8 +636,6 @@ since new path is not valid");
   rtems_test_assert( status == -1 );
   printf( "%d: %s\n", errno, strerror( errno ) );
   rtems_test_assert( errno == EISDIR );
-
-  IMFS_dump();
 
   status = truncate( "/tmp/fred", 10 );
   rtems_test_assert( status == -1);

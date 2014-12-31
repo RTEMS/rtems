@@ -25,7 +25,8 @@
 static size_t IMFS_directory_size( const IMFS_jnode_t *node )
 {
   size_t size = 0;
-  const rtems_chain_control *chain = &node->info.directory.Entries;
+  const IMFS_directory_t *dir = (const IMFS_directory_t *) node;
+  const rtems_chain_control *chain = &dir->Entries;
   const rtems_chain_node *current = rtems_chain_immutable_first( chain );
   const rtems_chain_node *tail = rtems_chain_immutable_tail( chain );
 
@@ -69,37 +70,41 @@ static const rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
 
 static IMFS_jnode_t *IMFS_node_initialize_directory(
   IMFS_jnode_t *node,
-  const IMFS_types_union *info
+  void *arg
 )
 {
-  rtems_chain_initialize_empty( &node->info.directory.Entries );
+  IMFS_directory_t *dir = (IMFS_directory_t *) node;
+
+  rtems_chain_initialize_empty( &dir->Entries );
 
   return node;
 }
 
-static bool IMFS_is_mount_point( const IMFS_jnode_t *node )
+static bool IMFS_is_mount_point( const IMFS_directory_t *dir )
 {
-  return node->info.directory.mt_fs != NULL;
+  return dir->mt_fs != NULL;
 }
 
 static IMFS_jnode_t *IMFS_node_remove_directory(
   IMFS_jnode_t *node
 )
 {
-  if ( !rtems_chain_is_empty( &node->info.directory.Entries ) ) {
+  IMFS_directory_t *dir = (IMFS_directory_t *) node;
+
+  if ( !rtems_chain_is_empty( &dir->Entries ) ) {
     errno = ENOTEMPTY;
-    node = NULL;
-  } else if ( IMFS_is_mount_point( node ) ) {
+    dir = NULL;
+  } else if ( IMFS_is_mount_point( dir ) ) {
     errno = EBUSY;
-    node = NULL;
+    dir = NULL;
   }
 
-  return node;
+  return &dir->Node;
 }
 
 const IMFS_node_control IMFS_node_control_directory = {
-  .imfs_type = IMFS_DIRECTORY,
   .handlers = &IMFS_directory_handlers,
+  .node_size = sizeof(IMFS_directory_t),
   .node_initialize = IMFS_node_initialize_directory,
   .node_remove = IMFS_node_remove_directory,
   .node_destroy = IMFS_node_destroy_default

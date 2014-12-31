@@ -29,8 +29,10 @@ int IMFS_mount( rtems_filesystem_mount_table_entry_t *mt_entry )
   IMFS_jnode_t *node = mt_entry->mt_point_node->location.node_access;
 
   if ( IMFS_is_directory( node ) ) {
-    if ( node->info.directory.mt_fs == NULL ) {
-      node->info.directory.mt_fs = mt_entry;
+    IMFS_directory_t *dir = (IMFS_directory_t *) node;
+
+    if ( dir->mt_fs == NULL ) {
+      dir->mt_fs = mt_entry;
     } else {
       errno = EBUSY;
       rv = -1;

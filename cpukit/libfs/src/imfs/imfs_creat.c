@@ -28,7 +28,7 @@ IMFS_jnode_t *IMFS_allocate_node(
   const char *name,
   size_t namelen,
   mode_t mode,
-  const IMFS_types_union *info
+  void *arg
 )
 {
   IMFS_jnode_t        *node;
@@ -46,7 +46,7 @@ IMFS_jnode_t *IMFS_allocate_node(
   /*
    *  Allocate an IMFS jnode
    */
-  node = calloc( 1, sizeof( IMFS_jnode_t ) );
+  node = calloc( 1, node_control->node_size );
   if ( !node ) {
     errno = ENOMEM;
 
@@ -78,7 +78,7 @@ IMFS_jnode_t *IMFS_allocate_node(
   node->stat_ctime  = (time_t) tv.tv_sec;
   node->st_ino = ++fs_info->ino_count;
 
-  initialized_node = (*node->control->node_initialize)( node, info );
+  initialized_node = (*node->control->node_initialize)( node, arg );
   if ( initialized_node == NULL ) {
     free( node );
   }
@@ -92,7 +92,7 @@ IMFS_jnode_t *IMFS_create_node_with_control(
   const char *name,
   size_t namelen,
   mode_t mode,
-  const IMFS_types_union *info
+  void *arg
 )
 {
   IMFS_fs_info_t *fs_info = parentloc->mt_entry->fs_info;
@@ -102,7 +102,7 @@ IMFS_jnode_t *IMFS_create_node_with_control(
     name,
     namelen,
     mode,
-    info
+    arg
   );
 
   if ( node != NULL ) {
