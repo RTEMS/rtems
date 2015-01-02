@@ -51,8 +51,8 @@ struct gr1553b_regs {
 
 	int unused2[(0x68-0x60)/4];	/* Padding */
 
-	volatile uint32_t bc_slot;	/* 0x48 BC Current BD pointer */
-	volatile uint32_t bc_aslot;	/* 0x4c BC Current async BD pointer */
+	volatile uint32_t bc_slot;	/* 0x68 BC Current BD pointer */
+	volatile uint32_t bc_aslot;	/* 0x6c BC Current async BD pointer */
 
 	int unused3[(0x80-0x70)/4];	/* Padding */
 
