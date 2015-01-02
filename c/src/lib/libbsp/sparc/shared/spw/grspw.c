@@ -553,9 +553,11 @@ int grspw_device_init(GRSPW_DEV *pDev)
 		pDev->txhbufsize = value->i;
 
 	value = drvmgr_dev_key_get(pDev->dev, "rxPktSize", DRVMGR_KT_INT);
-	if ( value )
+	if ( value ) {
 		pDev->rxbufsize = value->i;
-	
+		pDev->config.rxmaxlen = pDev->rxbufsize;
+	}
+
 	value = drvmgr_dev_key_get(pDev->dev, "rxDmaArea", DRVMGR_KT_INT);
 	if ( value )
 		pDev->rx_dma_area = value->i;
