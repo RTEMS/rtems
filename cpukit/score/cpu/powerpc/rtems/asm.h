@@ -152,6 +152,38 @@
 #define f29 FREG(29)
 #define f30 FREG(30)
 #define f31 FREG(31)
+#define v0 0
+#define v1 1
+#define v2 2
+#define v3 3
+#define v4 4
+#define v5 5
+#define v6 6
+#define v7 7
+#define v8 8
+#define v9 9
+#define v10 10
+#define v11 11
+#define v12 12
+#define v13 13
+#define v14 14
+#define v15 15
+#define v16 16
+#define v17 17
+#define v18 18
+#define v19 19
+#define v20 20
+#define v21 21
+#define v22 22
+#define v23 23
+#define v24 24
+#define v25 25
+#define v26 26
+#define v27 27
+#define v28 28
+#define v29 29
+#define v30 30
+#define v31 31
 
 /*
  * Some special purpose registers (SPRs).
