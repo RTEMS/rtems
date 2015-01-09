@@ -153,6 +153,9 @@ typedef void (*bsp_shared_isr)(void *arg);
 /* Initializes the Shared System Interrupt service */
 extern void BSP_shared_interrupt_init(void);
 
+/* Called directly from IRQ trap handler TRAP[0x10..0x1F] = IRQ[0..15] */
+void bsp_isr_handler(rtems_vector_number vector);
+
 /* Registers a shared IRQ handler, and enable it at IRQ controller. Multiple
  * interrupt handlers may use the same IRQ number, all ISRs will be called
  * when an interrupt on that line is fired.

@@ -82,6 +82,7 @@ include_bsp_HEADERS += \
 libbsp_a_SOURCES += \
     startup/eirq.c \
     ../../sparc/shared/irq/irq-shared.c \
+    ../../sparc/shared/irq/bsp_isr_handler.c \
     ../../shared/src/irq-default-handler.c \
     ../../shared/src/irq-generic.c \
     ../../shared/src/irq-info.c \

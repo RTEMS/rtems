@@ -11,6 +11,7 @@ EXTRA_DIST += shared/start/start.S
 
 # Interrupt
 EXTRA_DIST += shared/irq/irq-shared.c
+EXTRA_DIST += shared/irq/bsp_isr_handler.c
 
 # AMBA Plug&Play bus
 EXTRA_DIST += shared/include/ambapp.h

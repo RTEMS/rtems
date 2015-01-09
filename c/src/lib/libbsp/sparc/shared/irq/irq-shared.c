@@ -1,3 +1,13 @@
+/*
+*  COPYRIGHT (c) 2012-2015
+*  Cobham Gaisler
+*
+*  The license and distribution terms for this file may be
+*  found in the file LICENSE in this distribution or at
+*  http://www.rtems.org/license/LICENSE.
+*
+*/
+
 #include <rtems.h>
 #include <bsp.h>
 #include <bsp/irq-generic.h>
@@ -27,28 +37,6 @@ static inline int bsp_irq_cpu(int irq)
 }
 #endif
 
-static inline void bsp_dispatch_irq(int irq)
-{
-  bsp_interrupt_handler_entry *e =
-    &bsp_interrupt_handler_table[bsp_interrupt_handler_index(irq)];
-
-  while (e != NULL) {
-    (*e->handler)(e->arg);
-    e = e->next;
-  }
-}
-
-/* Called directly from IRQ trap handler TRAP[0x10..0x1F] = IRQ[0..15] */
-static void BSP_ISR_handler(rtems_vector_number vector)
-{
-  int irq = vector - 0x10;
-
-  /* Let BSP fixup and/or handle incomming IRQ */
-  irq = bsp_irq_fixup(irq);
-
-  bsp_dispatch_irq(irq);
-}
-
 /* Initialize interrupts */
 void BSP_shared_interrupt_init(void)
 {
@@ -64,7 +52,7 @@ void BSP_shared_interrupt_init(void)
       continue;
 #endif
     vector = SPARC_ASYNCHRONOUS_TRAP(i) + 0x10;
-    rtems_interrupt_catch(BSP_ISR_handler, vector, &previous_isr);
+    rtems_interrupt_catch(bsp_isr_handler, vector, &previous_isr);
   }
 
   /* Initalize interrupt support */
