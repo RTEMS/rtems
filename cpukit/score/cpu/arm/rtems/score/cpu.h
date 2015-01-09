@@ -260,7 +260,7 @@ typedef struct {
   uint32_t register_fp;
   uint32_t register_sp;
   uint32_t register_lr;
-#elif defined(ARM_MULTILIB_ARCH_V7M)
+#elif defined(ARM_MULTILIB_ARCH_V6M) || defined(ARM_MULTILIB_ARCH_V7M)
   uint32_t register_r4;
   uint32_t register_r5;
   uint32_t register_r6;
@@ -682,7 +682,7 @@ typedef struct {
 #if defined(ARM_MULTILIB_ARCH_V4)
   uint32_t register_cpsr;
   Arm_symbolic_exception_name vector;
-#elif defined(ARM_MULTILIB_ARCH_V7M)
+#elif defined(ARM_MULTILIB_ARCH_V6M) || defined(ARM_MULTILIB_ARCH_V7M)
   uint32_t register_xpsr;
   uint32_t vector;
 #endif

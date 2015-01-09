@@ -32,6 +32,9 @@ extern "C" {
 #if defined(__ARM_ARCH_7M__)
   #define CPU_MODEL_NAME "ARMv7M"
   #define ARM_MULTILIB_ARCH_V7M
+#elif defined(__ARM_ARCH_6M__)
+  #define CPU_MODEL_NAME "ARMv6M"
+  #define ARM_MULTILIB_ARCH_V6M
 #else
   #define CPU_MODEL_NAME "ARMv4"
   #define ARM_MULTILIB_ARCH_V4
