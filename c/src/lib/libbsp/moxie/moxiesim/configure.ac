@@ -17,6 +17,19 @@ RTEMS_PROG_CCAS
 
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 
+AC_MSG_CHECKING([for old moxie assembly syntax])
+AC_COMPILE_IFELSE(
+  [AC_LANG_PROGRAM(
+    [],
+    [asm("sub.l $r0, $r0");])],
+  [HAVE_OLD_MOXIE_ASM=yes],
+  [HAVE_OLD_MOXIE_ASM=no])
+AC_MSG_RESULT([$HAVE_OLD_MOXIE_ASM])
+if test "x$HAVE_OLD_MOXIE_ASM" = xyes; then
+  AC_DEFINE(HAVE_OLD_MOXIE_ASM, 
+            1, [Define if you are using old moxie asm syntax (sub.l)])
+fi
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

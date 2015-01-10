@@ -1,7 +1,13 @@
-/* Copyright (C) 2011, 2013  Anthony Green */
+/* Copyright (C) 2011, 2013, 2014  Anthony Green */
 
 /* moxie start up file. */
 
+#include "bspopts.h"
+
+#if defined(HAVE_OLD_MOXIE_ASM)
+#define sub sub.l
+#endif
+	
         .text
         .global _start
 _start:
@@ -12,7 +18,7 @@ _start:
         ldi.l   $r0, __bss_start__
         xor     $r1, $r1
         ldi.l   $r2, __bss_end__
-        sub.l   $r2, $r0
+        sub     $r2, $r0
         jsra    memset
 
         ldi.l   $r0, 0x0        # pass in NULL
