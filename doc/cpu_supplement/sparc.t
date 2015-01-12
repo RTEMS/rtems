@@ -951,10 +951,18 @@ handler.
 
 The default fatal error handler which is invoked by
 the fatal_error_occurred directive when there is no user handler
-configured or the user handler returns control to RTEMS.  The
-default fatal error handler disables processor interrupts to
-level 15, places the error code in g1, and goes into an infinite
-loop to simulate a halt processor instruction.
+configured or the user handler returns control to RTEMS.
+
+If the BSP has been configured with @code{BSP_POWER_DOWN_AT_FATAL_HALT}
+set to true, the default handler will disable interrupts
+and enter power down mode. If power down mode is not available,
+it goes into an infinite loop to simulate a halt processor instruction.
+
+If @code{BSP_POWER_DOWN_AT_FATAL_HALT} is set to false, the default
+handler will place the value @code{1} in register @code{g1}, the
+error source in register @code{g2}, and the error code in register
+@code{g3}. It will then generate a system error which will
+hand over control to the debugger, simulator, etc.
 
 @section Thread-Local Storage
 
