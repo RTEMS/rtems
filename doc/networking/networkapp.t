@@ -101,6 +101,11 @@ struct rtems_bsdnet_config @{
   unsigned long        tcp_tx_buf_size;
   /* TCP TX: 16 * 1024 bytes */
   unsigned long        tcp_rx_buf_size;
+  /* Default Network Tasks CPU Affinity */
+#ifdef RTEMS_SMP
+  const cpu_set_t     *network_task_cpuset;
+  size_t               network_task_cpuset_size;
+#endif
 @};
 @end group
 @end example
@@ -228,6 +233,15 @@ with.  The default size is sixteen kilobytes.
 This configuration parameter specifies the maximum amount of 
 buffer memory which may be used for TCP sockets to receive
 into.  The default size is sixteen kilobytes.
+
+@item const cpu_set_t *network_task_cpuset
+This configuration parameter specifies the CPU affinity of the
+network task. If set to @code{0} the network task can be scheduled on
+any CPU. Only available in SMP configurations.
+
+@item size_t network_task_cpuset_size
+This configuration parameter specifies the size of the
+@code{network_task_cpuset} used. Only available in SMP configurations.
 
 @end table
 
