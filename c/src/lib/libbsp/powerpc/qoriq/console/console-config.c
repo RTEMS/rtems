@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -66,7 +66,7 @@ static ns16550_context qoriq_uart_context_0 = {
   .get_reg = get_register,
   .set_reg = set_register,
   .port = (uintptr_t) &qoriq.uart_0,
-  .irq = QORIQ_IRQ_DUART,
+  .irq = QORIQ_IRQ_DUART_1,
   .initial_baud = BSP_CONSOLE_BAUD
 };
 #endif
@@ -77,7 +77,7 @@ static ns16550_context qoriq_uart_context_1 = {
   .get_reg = get_register,
   .set_reg = set_register,
   .port = (uintptr_t) &qoriq.uart_1,
-  .irq = QORIQ_IRQ_DUART,
+  .irq = QORIQ_IRQ_DUART_1,
   .initial_baud = BSP_CONSOLE_BAUD
 };
 #endif

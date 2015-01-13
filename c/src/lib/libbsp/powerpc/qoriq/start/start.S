@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -20,7 +20,7 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems/asm.h>
+#include <rtems/score/percpu.h>
 
 #include <bspopts.h>
 
@@ -29,26 +29,25 @@
 #include <bsp/vectors.h>
 
 #define FIRST_TLB 0
-#define SCRATCH_TLB 15
+#define SCRATCH_TLB QORIQ_TLB1_ENTRY_COUNT - 1
 #define INITIAL_MSR r14
-#define UBOOT_BOARD_INFO r15
 
 	.globl _start
 #ifdef RTEMS_SMP
-	.globl _start_core_1
+#if QORIQ_THREAD_COUNT > 1
+	.globl _start_thread
+#endif
+	.globl _start_secondary_processor
 #endif
 	.globl bsp_exc_vector_base
 
 	.section ".bsp_start_text", "ax"
 
 _start:
-	/* Reset time base */
-	li	r0, 0
-	mtspr	TBWU, r0
-	mtspr	TBWL, r0
+	bl	.Linit
 
 #ifdef HAS_UBOOT
-	mr	UBOOT_BOARD_INFO, r3
+	bl	bsp_uboot_copy_board_info
 #endif /* HAS_UBOOT */
 
 	/* Initial MMU setup */
@@ -67,13 +66,9 @@ _start:
 	ori	r0, INITIAL_MSR, MSR_IS | MSR_DS
 	mtmsr	r0
 
-	/* SPEFSCR initialization */
-	LWI	r0, QORIQ_INITIAL_SPEFSCR
-	mtspr	FSL_EIS_SPEFSCR, r0
-
 	/* Initialize start stack */
-	LWI	r1, start_stack_end
-	subi	r1, r1, 16
+	LWI	r1, start_stack_end - PPC_MINIMUM_STACK_FRAME_SIZE
+	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
 	li	r0, 0
 	stw	r0, 0(r1)
 
@@ -81,39 +76,39 @@ _start:
 	LWI	r3, bsp_section_fast_text_begin
 	LWI	r4, bsp_section_fast_text_load_begin
 	LWI	r5, bsp_section_fast_text_size
-	bl	copy
+	bl	.Lcopy
 
 	/* Copy read-only data */
 	LWI	r3, bsp_section_rodata_begin
 	LWI	r4, bsp_section_rodata_load_begin
 	LWI	r5, bsp_section_rodata_size
-	bl	copy
+	bl	.Lcopy
 
 	/* Copy fast data */
 	LWI	r3, bsp_section_fast_data_begin
 	LWI	r4, bsp_section_fast_data_load_begin
 	LWI	r5, bsp_section_fast_data_size
-	bl	copy
+	bl	.Lcopy
 
 	/* Copy data */
 	LWI	r3, bsp_section_data_begin
 	LWI	r4, bsp_section_data_load_begin
 	LWI	r5, bsp_section_data_size
-	bl	copy
+	bl	.Lcopy
 
 	/* NULL pointer access protection (only core 0 has to do this) */
 	mfspr	r3, BOOKE_PIR
 	cmpwi	r3, 0
-	bne	null_area_setup_done
+	bne	.Lnull_area_setup_done
 	LWI	r3, bsp_section_start_begin
 	srawi	r3, r3, 2
 	mtctr	r3
 	li	r3, -4
 	LWI	r4, 0x44000002
-null_area_setup_loop:
+.Lnull_area_setup_loop:
 	stwu	r4, 4(r3)
-	bdnz	null_area_setup_loop
-null_area_setup_done:
+	bdnz	.Lnull_area_setup_loop
+.Lnull_area_setup_done:
 
 	/* Configure MMU */
 	li	r3, FIRST_TLB
@@ -133,21 +128,6 @@ null_area_setup_done:
 	LWI	r4, bsp_section_bss_size
 	bl	bsp_start_zero
 
-#ifdef HAS_UBOOT
-	li	r3, SCRATCH_TLB
-	li	r4, 0
-	li	r5, 0
-	li	r6, FSL_EIS_MAS3_SR
-	li	r7, 0
-	mr	r8, UBOOT_BOARD_INFO
-	li	r9, 1
-	bl	qoriq_tlb1_write
-	mr	r3, UBOOT_BOARD_INFO
-	bl	bsp_uboot_copy_board_info
-	li	r3, SCRATCH_TLB
-	bl	qoriq_tlb1_invalidate
-#endif /* HAS_UBOOT */
-
 	/* Set up EABI and SYSV environment */
 	bl	__eabi
 
@@ -156,24 +136,63 @@ null_area_setup_done:
 
 	bl	boot_card
 
-twiddle:
-	b	twiddle
-
-copy:
+.Lcopy:
 	cmpw	r3, r4
 	beqlr
 	b	memcpy
 
-#ifdef RTEMS_SMP
-_start_core_1:
-
+	/* Do not use r3 here, since this could be the U-Boot board info */
+.Linit:
 	/* Reset time base */
 	li	r0, 0
 	mtspr	TBWU, r0
 	mtspr	TBWL, r0
 
+	/* Disable decrementer */
+	mfspr	r0, BOOKE_TCR
+	LWI	r4, BOOKE_TCR_DIE
+	andc	r0, r0, r4
+	mtspr	BOOKE_TCR, r0
+
+#ifdef QORIQ_INITIAL_SPEFSCR
+	/* SPEFSCR initialization */
+	LWI	r0, QORIQ_INITIAL_SPEFSCR
+	mtspr	FSL_EIS_SPEFSCR, r0
+#endif
+
+	/* Set small-data anchors */
+	LA	r2, _SDA2_BASE_
+	LA	r13, _SDA_BASE_
+
+	blr
+
+#ifdef RTEMS_SMP
+#if QORIQ_THREAD_COUNT > 1
+_start_thread:
+	/* Adjust PIR */
+	mfspr	r0, BOOKE_PIR
+	srawi	r0, r0, 2
+	ori	r0, r0, 1
+	mtspr	BOOKE_PIR, r0
+
+	bl	.Linit
+
+	/* Initialize start stack */
+	GET_SELF_CPU_CONTROL	r3
+	lwz	r3, PER_CPU_INTERRUPT_STACK_HIGH(r3)
+	subi	r1, r3, PPC_MINIMUM_STACK_FRAME_SIZE
+	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
+	li	r0, 0
+	stw	r0, 0(r1)
+
+	b	qoriq_start_thread
+#endif
+_start_secondary_processor:
+
+	bl	.Linit
+
 	/* Get start stack */
-	subi	r1, r3, 16
+	mr	r1, r3
 
 	/* Initial MMU setup */
 	bl	qoriq_tlb1_ts_0_only
@@ -191,11 +210,9 @@ _start_core_1:
 	ori	r0, INITIAL_MSR, MSR_IS | MSR_DS
 	mtmsr	r0
 
-	/* SPEFSCR initialization */
-	LWI	r0, QORIQ_INITIAL_SPEFSCR
-	mtspr	FSL_EIS_SPEFSCR, r0
-
 	/* Initialize start stack */
+	subi	r1, r1, PPC_MINIMUM_STACK_FRAME_SIZE
+	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
 	li	r0, 0
 	stw	r0, 0(r1)
 
@@ -207,13 +224,7 @@ _start_core_1:
 	li	r3, SCRATCH_TLB
 	bl	qoriq_tlb1_invalidate
 
-	/* Set small-data anchors */
-	LA	r2, _SDA2_BASE_
-	LA	r13, _SDA_BASE_
-
 	b	bsp_start_on_secondary_processor
-
-	b	twiddle
 #endif /* RTEMS_SMP */
 
 	/* Exception vector prologues area */

@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -36,6 +36,16 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define BSP_FEATURE_IRQ_EXTENSION
+
+#define QORIQ_CHIP(alpha, num) ((alpha) * 10000 + (num))
+
+#define QORIQ_CHIP_P1020 QORIQ_CHIP('P', 1020)
+
+#define QORIQ_CHIP_T2080 QORIQ_CHIP('T', 2080)
+
+#define QORIQ_CHIP_T4240 QORIQ_CHIP('T', 4240)
+
+#define QORIQ_CHIP_IS_T_VARIANT(variant) ((variant) / 10000 == 'T')
 
 extern unsigned BSP_bus_frequency;
 

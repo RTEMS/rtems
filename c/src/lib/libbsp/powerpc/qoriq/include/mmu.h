@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -26,6 +26,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include <bspopts.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -40,10 +42,8 @@ extern "C" {
  * @{
  */
 
-#define QORIQ_MMU_ENTRY_COUNT 32
-
 #define QORIQ_MMU_MIN_POWER 12
-#define QORIQ_MMU_MAX_POWER 32
+#define QORIQ_MMU_MAX_POWER 30
 #define QORIQ_MMU_POWER_STEP 2
 
 typedef struct {
@@ -57,7 +57,7 @@ typedef struct {
 
 typedef struct {
 	int count;
-	qoriq_mmu_entry entries [QORIQ_MMU_ENTRY_COUNT];
+	qoriq_mmu_entry entries [QORIQ_TLB1_ENTRY_COUNT];
 } qoriq_mmu_context;
 
 void qoriq_mmu_context_init(qoriq_mmu_context *self);

@@ -87,8 +87,9 @@ void bsp_start(void)
 
   /* Initialize some device driver parameters */
   #ifdef HAS_UBOOT
-    BSP_bus_frequency = bsp_uboot_board_info.bi_busfreq;
-    bsp_clicks_per_usec = bsp_uboot_board_info.bi_busfreq / 8000000;
+    BSP_bus_frequency = bsp_uboot_board_info.bi_busfreq
+      / QORIQ_BUS_CLOCK_DIVIDER;
+    bsp_clicks_per_usec = BSP_bus_frequency / 8000000;
     rtems_counter_initialize_converter(bsp_uboot_board_info.bi_intfreq);
   #endif /* HAS_UBOOT */
 
@@ -108,13 +109,14 @@ void bsp_start(void)
       ctx->clock = BSP_bus_frequency;
 
       #ifdef HAS_UBOOT
-        ctx->initial_baud = bsp_uboot_board_info.bi_baudrate;
+        #ifdef U_BOOT_GENERIC_BOARD_INFO
+          ctx->initial_baud = 115200;
+        #else
+          ctx->initial_baud = bsp_uboot_board_info.bi_baudrate;
+        #endif
       #endif
     }
   }
-
-  /* Disable decrementer */
-  PPC_CLEAR_SPECIAL_PURPOSE_REGISTER_BITS(BOOKE_TCR, BOOKE_TCR_DIE);
 
   /* Initialize exception handler */
   ppc_exc_initialize_with_vector_base(
@@ -134,5 +136,9 @@ void bsp_start(void)
   bsp_interrupt_initialize();
 
   /* Disable boot page translation */
+#if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
+  qoriq.lcc.bstar &= ~LCC_BSTAR_EN;
+#else
   qoriq.lcc.bptr &= ~BPTR_EN;
+#endif
 }

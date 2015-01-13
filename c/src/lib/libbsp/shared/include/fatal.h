@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -111,7 +111,10 @@ typedef enum {
   /* ARM fatal codes */
   ARM_FATAL_L2C_310_UNEXPECTED_ID = BSP_FATAL_CODE_BLOCK(9),
   ARM_FATAL_L2C_310_UNEXPECTED_NUM_WAYS,
-  ARM_FATAL_L2C_310_EXCLUSIVE_CONFIG
+  ARM_FATAL_L2C_310_EXCLUSIVE_CONFIG,
+
+  /* QorIQ fatal codes */
+  QORIQ_FATAL_SMP_IPI_HANDLER_INSTALL = BSP_FATAL_CODE_BLOCK(10)
 } bsp_fatal_code;
 
 RTEMS_COMPILER_NO_RETURN_ATTRIBUTE static inline void

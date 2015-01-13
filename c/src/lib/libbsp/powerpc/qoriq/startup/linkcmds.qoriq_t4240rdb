@@ -1,0 +1,7 @@
+/**
+ * @file
+ *
+ * Memory map for T4240RDB.
+ */
+
+INCLUDE linkcmds.qoriq_t2080rdb

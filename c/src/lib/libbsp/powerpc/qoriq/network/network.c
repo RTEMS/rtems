@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -35,6 +35,8 @@
 #include <bsp/tsec.h>
 #include <bsp/u-boot.h>
 #include <bsp/qoriq.h>
+
+#if QORIQ_CHIP_VARIANT == QORIQ_CHIP_P1020
 
 int BSP_tsec_attach(
   struct rtems_bsdnet_ifconfig *config,
@@ -131,3 +133,5 @@ int BSP_tsec_attach(
 
   return tsec_driver_attach_detach(config, attaching);
 }
+
+#endif /* QORIQ_CHIP_VARIANT */

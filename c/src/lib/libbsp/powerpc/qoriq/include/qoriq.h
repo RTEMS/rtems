@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -23,6 +23,7 @@
 #ifndef LIBBSP_POWERPC_QORIQ_QORIQ_H
 #define LIBBSP_POWERPC_QORIQ_QORIQ_H
 
+#include <bsp.h>
 #include <bsp/tsec.h>
 #include <bsp/utility.h>
 
@@ -32,168 +33,6 @@ extern "C" {
 
 #define QORIQ_FILL(a, b, s) uint8_t reserved_ ## b [b - a - sizeof(s)]
 #define QORIQ_RESERVE(a, b) uint8_t reserved_ ## b [b - a]
-
-typedef struct {
-	uint32_t ccsrbar;
-	uint32_t reserved_0;
-	uint32_t altcbar;
-	uint32_t reserved_1;
-	uint32_t altcar;
-	uint32_t reserved_2 [3];
-	uint32_t bptr;
-} qoriq_lcc;
-
-#define CCSRBAR_BASE_ADDR(val) BSP_BFLD32(val, 8, 23)
-#define CCSRBAR_BASE_ADDR_GET(reg) BSP_BFLD32GET(reg, 8, 23)
-#define CCSRBAR_BASE_ADDR_SET(reg, val) BSP_BFLD32SET(reg, val, 8, 23)
-
-#define ALTCBAR_BASE_ADDR(val) BSP_BFLD32(val, 8, 23)
-#define ALTCBAR_BASE_ADDR_GET(reg) BSP_BFLD32GET(reg, 8, 23)
-#define ALTCBAR_BASE_ADDR_SET(reg, val) BSP_BFLD32SET(reg, val, 8, 23)
-
-#define ALTCAR_EN BSP_BBIT32(0)
-#define ALTCAR_TRGT_ID(val) BSP_BFLD32(val, 8, 11)
-#define ALTCAR_TRGT_ID_GET(reg) BSP_BFLD32GET(reg, 8, 11)
-#define ALTCAR_TRGT_ID_SET(reg, val) BSP_BFLD32SET(reg, val, 8, 11)
-
-#define BPTR_EN BSP_BBIT32(0)
-#define BPTR_BOOT_PAGE(val) BSP_BFLD32(val, 8, 31)
-#define BPTR_BOOT_PAGE_GET(reg) BSP_BFLD32GET(reg, 8, 31)
-#define BPTR_BOOT_PAGE_SET(reg, val) BSP_BFLD32SET(reg, val, 8, 31)
-
-typedef struct {
-	uint32_t bar;
-	uint32_t reserved_0;
-	uint32_t ar;
-	uint32_t reserved_1 [5];
-} qoriq_law;
-
-#define LAWBAR_BASE_ADDR(val) BSP_BFLD32(val, 8, 31)
-#define LAWBAR_BASE_ADDR_GET(reg) BSP_BFLD32GET(reg, 8, 31)
-#define LAWBAR_BASE_ADDR_SET(reg, val) BSP_BFLD32SET(reg, val, 8, 31)
-
-#define LAWAR_EN BSP_BBIT32(0)
-#define LAWAR_TRGT(val) BSP_BFLD32(val, 8, 11)
-#define LAWAR_TRGT_GET(reg) BSP_BFLD32GET(reg, 8, 11)
-#define LAWAR_TRGT_SET(reg, val) BSP_BFLD32SET(reg, val, 8, 11)
-#define LAWAR_SIZE(val) BSP_BFLD32(val, 26, 31)
-#define LAWAR_SIZE_GET(reg) BSP_BFLD32GET(reg, 26, 31)
-#define LAWAR_SIZE_SET(reg, val) BSP_BFLD32SET(reg, val, 26, 31)
-
-typedef struct {
-} qoriq_ecm;
-
-typedef struct {
-} qoriq_ddr_controller;
-
-typedef struct {
-} qoriq_i2c;
-
-typedef struct {
-} qoriq_uart;
-
-typedef struct {
-} qoriq_local_bus;
-
-typedef struct {
-} qoriq_spi;
-
-typedef struct {
-} qoriq_pci_express;
-
-typedef struct {
-} qoriq_gpio;
-
-typedef struct {
-} qoriq_tdm;
-
-typedef struct {
-} qoriq_l2_cache;
-
-typedef struct {
-} qoriq_dma;
-
-typedef struct {
-  QORIQ_RESERVE(0x000, 0x100);
-  uint16_t caplength;
-  uint16_t hciversion;
-  uint32_t hcsparams;
-  uint32_t hccparams;
-  QORIQ_RESERVE(0x10c, 0x120);
-  uint32_t dciversion;
-  uint32_t dccparams;
-  QORIQ_RESERVE(0x128, 0x140);
-  uint32_t usbcmd;
-  uint32_t usbsts;
-  uint32_t usbintr;
-  uint32_t frindex;
-  QORIQ_RESERVE(0x150, 0x154);
-  union {
-    uint32_t periodiclistbase;
-    uint32_t deviceaddr;
-  } perbase_devaddr;
-  union {
-    uint32_t asynclistaddr;
-    uint32_t addr;
-  } async_addr;
-  QORIQ_RESERVE(0x15c, 0x160);
-  uint32_t burstsize;
-  uint32_t txfilltuning;
-  QORIQ_RESERVE(0x168, 0x170);
-  uint32_t viewport;
-  QORIQ_RESERVE(0x174, 0x180);
-  uint32_t configflag;
-  uint32_t portsc1;
-  QORIQ_RESERVE(0x188, 0x1a8);
-  uint32_t usbmode;
-  uint32_t endptsetupstat;
-  uint32_t endpointprime;
-  uint32_t endptflush;
-  uint32_t endptstatus;
-  uint32_t endptcomplete;
-  uint32_t endptctrl[6];
-  QORIQ_RESERVE(0x1d8, 0x400);
-  uint32_t snoop1;
-  uint32_t snoop2;
-  uint32_t age_cnt_thresh;
-  uint32_t pri_ctrl;
-  uint32_t si_ctrl;
-  QORIQ_RESERVE(0x414, 0x500);
-  uint32_t control;
-} qoriq_usb;
-
-typedef struct {
-} qoriq_tdm_dma;
-
-typedef struct {
-  uint32_t dsaddr;
-  uint32_t blkattr;
-  uint32_t cmdarg;
-  uint32_t xfertyp;
-  uint32_t cmdrsp0;
-  uint32_t cmdrsp1;
-  uint32_t cmdrsp2;
-  uint32_t cmdrsp3;
-  uint32_t datport;
-  uint32_t prsstat;
-  uint32_t proctl;
-  uint32_t sysctl;
-  uint32_t irqstat;
-  uint32_t irqstaten;
-  uint32_t irqsigen;
-  uint32_t autoc12err;
-  uint32_t hostcapblt;
-  uint32_t wml;
-  QORIQ_FILL(0x00044, 0x00050, uint32_t);
-  uint32_t fevt;
-  QORIQ_FILL(0x00050, 0x000fc, uint32_t);
-  uint32_t hostver;
-  QORIQ_FILL(0x000fc, 0x0040c, uint32_t);
-  uint32_t dcr;
-} qoriq_esdhc;
-
-typedef struct {
-} qoriq_sec;
 
 typedef struct {
   uint32_t reg;
@@ -330,6 +169,213 @@ typedef struct {
 #define GTTCR_CASC_SET(reg, val) BSP_BFLD32SET(reg, val, 29, 31)
 
 typedef struct {
+} qoriq_uart;
+
+#if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
+
+typedef struct {
+	uint32_t ccsrbarh;
+	uint32_t ccsrbarl;
+	uint32_t ccsrar;
+	uint32_t altcbarh;
+	uint32_t altcbarl;
+	uint32_t altcar;
+	uint32_t bstrh;
+	uint32_t bstrl;
+	uint32_t bstar;
+} qoriq_lcc;
+
+#define LCC_BSTAR_EN BSP_BBIT32(0)
+
+typedef struct {
+	uint32_t lawbarh;
+	uint32_t lawbarl;
+	uint32_t lawar;
+	uint32_t reserved_0xc;
+} qoriq_law;
+
+typedef struct {
+  qoriq_lcc lcc;
+  QORIQ_FILL(0x000000, 0x000c00, qoriq_lcc);
+  qoriq_law law [32];
+  QORIQ_FILL(0x000c00, 0x001000, qoriq_law [32]);
+  QORIQ_RESERVE(0x001000, 0x040000);
+  qoriq_pic pic;
+  QORIQ_FILL(0x040000, 0x070000, qoriq_pic);
+  QORIQ_RESERVE(0x070000, 0x11c500);
+  qoriq_uart uart_0;
+  QORIQ_FILL(0x11c500, 0x11c600, qoriq_uart);
+  qoriq_uart uart_1;
+  QORIQ_FILL(0x11c600, 0x11d500, qoriq_uart);
+  qoriq_uart uart_2;
+  QORIQ_FILL(0x11d500, 0x11d600, qoriq_uart);
+  qoriq_uart uart_3;
+  QORIQ_FILL(0x11d600, 0x11e000, qoriq_uart);
+  QORIQ_RESERVE(0x11e000, 0x2000000);
+} qoriq_ccsr;
+
+#else /* QORIQ_CHIP_VARIANT */
+
+typedef struct {
+	uint32_t ccsrbar;
+	uint32_t reserved_0;
+	uint32_t altcbar;
+	uint32_t reserved_1;
+	uint32_t altcar;
+	uint32_t reserved_2 [3];
+	uint32_t bptr;
+} qoriq_lcc;
+
+#define CCSRBAR_BASE_ADDR(val) BSP_BFLD32(val, 8, 23)
+#define CCSRBAR_BASE_ADDR_GET(reg) BSP_BFLD32GET(reg, 8, 23)
+#define CCSRBAR_BASE_ADDR_SET(reg, val) BSP_BFLD32SET(reg, val, 8, 23)
+
+#define ALTCBAR_BASE_ADDR(val) BSP_BFLD32(val, 8, 23)
+#define ALTCBAR_BASE_ADDR_GET(reg) BSP_BFLD32GET(reg, 8, 23)
+#define ALTCBAR_BASE_ADDR_SET(reg, val) BSP_BFLD32SET(reg, val, 8, 23)
+
+#define ALTCAR_EN BSP_BBIT32(0)
+#define ALTCAR_TRGT_ID(val) BSP_BFLD32(val, 8, 11)
+#define ALTCAR_TRGT_ID_GET(reg) BSP_BFLD32GET(reg, 8, 11)
+#define ALTCAR_TRGT_ID_SET(reg, val) BSP_BFLD32SET(reg, val, 8, 11)
+
+#define BPTR_EN BSP_BBIT32(0)
+#define BPTR_BOOT_PAGE(val) BSP_BFLD32(val, 8, 31)
+#define BPTR_BOOT_PAGE_GET(reg) BSP_BFLD32GET(reg, 8, 31)
+#define BPTR_BOOT_PAGE_SET(reg, val) BSP_BFLD32SET(reg, val, 8, 31)
+
+typedef struct {
+	uint32_t bar;
+	uint32_t reserved_0;
+	uint32_t ar;
+	uint32_t reserved_1 [5];
+} qoriq_law;
+
+#define LAWBAR_BASE_ADDR(val) BSP_BFLD32(val, 8, 31)
+#define LAWBAR_BASE_ADDR_GET(reg) BSP_BFLD32GET(reg, 8, 31)
+#define LAWBAR_BASE_ADDR_SET(reg, val) BSP_BFLD32SET(reg, val, 8, 31)
+
+#define LAWAR_EN BSP_BBIT32(0)
+#define LAWAR_TRGT(val) BSP_BFLD32(val, 8, 11)
+#define LAWAR_TRGT_GET(reg) BSP_BFLD32GET(reg, 8, 11)
+#define LAWAR_TRGT_SET(reg, val) BSP_BFLD32SET(reg, val, 8, 11)
+#define LAWAR_SIZE(val) BSP_BFLD32(val, 26, 31)
+#define LAWAR_SIZE_GET(reg) BSP_BFLD32GET(reg, 26, 31)
+#define LAWAR_SIZE_SET(reg, val) BSP_BFLD32SET(reg, val, 26, 31)
+
+typedef struct {
+} qoriq_ecm;
+
+typedef struct {
+} qoriq_ddr_controller;
+
+typedef struct {
+} qoriq_i2c;
+
+typedef struct {
+} qoriq_local_bus;
+
+typedef struct {
+} qoriq_spi;
+
+typedef struct {
+} qoriq_pci_express;
+
+typedef struct {
+} qoriq_gpio;
+
+typedef struct {
+} qoriq_tdm;
+
+typedef struct {
+} qoriq_l2_cache;
+
+typedef struct {
+} qoriq_dma;
+
+typedef struct {
+  QORIQ_RESERVE(0x000, 0x100);
+  uint16_t caplength;
+  uint16_t hciversion;
+  uint32_t hcsparams;
+  uint32_t hccparams;
+  QORIQ_RESERVE(0x10c, 0x120);
+  uint32_t dciversion;
+  uint32_t dccparams;
+  QORIQ_RESERVE(0x128, 0x140);
+  uint32_t usbcmd;
+  uint32_t usbsts;
+  uint32_t usbintr;
+  uint32_t frindex;
+  QORIQ_RESERVE(0x150, 0x154);
+  union {
+    uint32_t periodiclistbase;
+    uint32_t deviceaddr;
+  } perbase_devaddr;
+  union {
+    uint32_t asynclistaddr;
+    uint32_t addr;
+  } async_addr;
+  QORIQ_RESERVE(0x15c, 0x160);
+  uint32_t burstsize;
+  uint32_t txfilltuning;
+  QORIQ_RESERVE(0x168, 0x170);
+  uint32_t viewport;
+  QORIQ_RESERVE(0x174, 0x180);
+  uint32_t configflag;
+  uint32_t portsc1;
+  QORIQ_RESERVE(0x188, 0x1a8);
+  uint32_t usbmode;
+  uint32_t endptsetupstat;
+  uint32_t endpointprime;
+  uint32_t endptflush;
+  uint32_t endptstatus;
+  uint32_t endptcomplete;
+  uint32_t endptctrl[6];
+  QORIQ_RESERVE(0x1d8, 0x400);
+  uint32_t snoop1;
+  uint32_t snoop2;
+  uint32_t age_cnt_thresh;
+  uint32_t pri_ctrl;
+  uint32_t si_ctrl;
+  QORIQ_RESERVE(0x414, 0x500);
+  uint32_t control;
+} qoriq_usb;
+
+typedef struct {
+} qoriq_tdm_dma;
+
+typedef struct {
+  uint32_t dsaddr;
+  uint32_t blkattr;
+  uint32_t cmdarg;
+  uint32_t xfertyp;
+  uint32_t cmdrsp0;
+  uint32_t cmdrsp1;
+  uint32_t cmdrsp2;
+  uint32_t cmdrsp3;
+  uint32_t datport;
+  uint32_t prsstat;
+  uint32_t proctl;
+  uint32_t sysctl;
+  uint32_t irqstat;
+  uint32_t irqstaten;
+  uint32_t irqsigen;
+  uint32_t autoc12err;
+  uint32_t hostcapblt;
+  uint32_t wml;
+  QORIQ_FILL(0x00044, 0x00050, uint32_t);
+  uint32_t fevt;
+  QORIQ_FILL(0x00050, 0x000fc, uint32_t);
+  uint32_t hostver;
+  QORIQ_FILL(0x000fc, 0x0040c, uint32_t);
+  uint32_t dcr;
+} qoriq_esdhc;
+
+typedef struct {
+} qoriq_sec;
+
+typedef struct {
 } qoriq_serial_rapid_io;
 
 typedef struct {
@@ -440,6 +486,8 @@ typedef struct {
   qoriq_boot_rom boot_rom;
   QORIQ_FILL(0xf0000, 0x100000, qoriq_boot_rom);
 } qoriq_ccsr;
+
+#endif /* QORIQ_CHIP_VARIANT */
 
 extern volatile qoriq_ccsr qoriq;
 

@@ -25,6 +25,7 @@ include_bsp_HEADERS = include/irq.h \
 	../../shared/include/u-boot.h \
 	../../shared/include/utility.h \
 	../shared/include/u-boot-board-info.h \
+	../shared/include/u-boot-generic-board-info.h \
 	../shared/include/start.h \
 	../shared/include/tictac.h \
 	../shared/include/linker-symbols.h \
@@ -46,7 +47,9 @@ dist_project_lib_DATA += startup/linkcmds \
 	../shared/startup/linkcmds.base \
 	startup/linkcmds.qoriq_core_0 \
 	startup/linkcmds.qoriq_core_1 \
-	startup/linkcmds.qoriq_p1020rdb
+	startup/linkcmds.qoriq_p1020rdb \
+	startup/linkcmds.qoriq_t2080rdb \
+	startup/linkcmds.qoriq_t4240rdb
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =

@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4

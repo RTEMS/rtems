@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -105,7 +105,7 @@ void TEXT qoriq_mmu_config(int first_tlb, int scratch_tlb)
 
 	qoriq_mmu_context_init(&context);
 
-	for (i = 0; i < 16; ++i) {
+	for (i = 0; i < QORIQ_TLB1_ENTRY_COUNT; ++i) {
 		if (i != scratch_tlb) {
 			qoriq_tlb1_invalidate(i);
 		}
@@ -126,6 +126,6 @@ void TEXT qoriq_mmu_config(int first_tlb, int scratch_tlb)
 		}
 	}
 
-	qoriq_mmu_partition(&context, 8);
+	qoriq_mmu_partition(&context, (3 * QORIQ_TLB1_ENTRY_COUNT) / 4);
 	qoriq_mmu_write_to_tlb1(&context, first_tlb);
 }

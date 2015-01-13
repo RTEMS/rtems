@@ -81,6 +81,10 @@ $(PROJECT_INCLUDE)/bsp/u-boot-board-info.h: ../shared/include/u-boot-board-info.
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot-board-info.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot-board-info.h
 
+$(PROJECT_INCLUDE)/bsp/u-boot-generic-board-info.h: ../shared/include/u-boot-generic-board-info.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot-generic-board-info.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot-generic-board-info.h
+
 $(PROJECT_INCLUDE)/bsp/start.h: ../shared/include/start.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/start.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/start.h
@@ -144,4 +148,12 @@ PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.qoriq_core_1
 $(PROJECT_LIB)/linkcmds.qoriq_p1020rdb: startup/linkcmds.qoriq_p1020rdb $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.qoriq_p1020rdb
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.qoriq_p1020rdb
+
+$(PROJECT_LIB)/linkcmds.qoriq_t2080rdb: startup/linkcmds.qoriq_t2080rdb $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.qoriq_t2080rdb
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.qoriq_t2080rdb
+
+$(PROJECT_LIB)/linkcmds.qoriq_t4240rdb: startup/linkcmds.qoriq_t4240rdb $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.qoriq_t4240rdb
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.qoriq_t4240rdb
 
