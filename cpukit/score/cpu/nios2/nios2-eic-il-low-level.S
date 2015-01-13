@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -37,6 +37,7 @@
 #define FRAME_SIZE (FRAME_OFFSET_EA + 4)
 
 	.set	noat
+	.set	nobreak
 	.section	.text
 
 	.extern	_Per_CPU_Information
