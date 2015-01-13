@@ -52,20 +52,20 @@ static unsigned bat_in_use[2] = { 0, 0 };
 /* define a few macros */
 
 #define CLRBAT_ASM(batu,r)			\
-	"	sync                 \n"	\
-	"	isync                \n"	\
-	"	li      "#r",    0   \n"	\
-	"	mtspr	"#batu", "#r"\n"	\
-	"	sync                 \n"	\
-	"	isync                \n"
+	"	sync                   \n"	\
+	"	isync                  \n"	\
+	"	li      "#r ",    0    \n"	\
+	"	mtspr   "#batu ", "#r "\n"	\
+	"	sync                   \n"	\
+	"	isync                  \n"
 
 #define SETBAT_ASM(batu, batl, u, l)\
-	"	mtspr	"#batl", "#l" \n"	\
-	"	sync                  \n"	\
-	"	isync                 \n"	\
-	"	mtspr	"#batu", "#u" \n"	\
-	"	sync                  \n"	\
-	"	isync                 \n"
+	"	mtspr	"#batl ", "#l " \n"	\
+	"	sync                    \n"	\
+	"	isync                   \n"	\
+	"	mtspr	"#batu ", "#u " \n"	\
+	"	sync                    \n"	\
+	"	isync                   \n"
 
 #define	CLRBAT(bat)					\
 	asm volatile(					\
