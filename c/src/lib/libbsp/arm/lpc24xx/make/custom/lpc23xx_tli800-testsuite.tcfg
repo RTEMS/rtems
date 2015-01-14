@@ -6,6 +6,8 @@
 
 capture
 cdtest
+complex
+crypt01
 dl01
 dl02
 fileio
@@ -24,6 +26,8 @@ jffs2_fsrdwr
 jffs2_fssymlink
 jffs2_fstime
 loopback
+math
+mathf
 mdosfs_fserror
 mghttpd01
 monitor
@@ -38,11 +42,14 @@ mrfs_fssymlink
 mrfs_fstime
 mdosfs_fsrdwr
 mdosfs_fspatheval
+mdosfs_fstime
 paranoia
 pppd
 psxmsgq01
 rtems++
+shell01
 sptls02
 spstkalloc02
 syscall01
+termios
 utf8proc01
