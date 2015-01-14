@@ -20,4 +20,5 @@ mghttpd01
 monitor02
 pppd
 rtems++
+spstkalloc02
 utf8proc01
