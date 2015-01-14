@@ -23,6 +23,7 @@ jffs2_fsrdwr
 jffs2_fssymlink
 jffs2_fstime
 loopback
+math
 mdosfs_fserror
 mghttpd01
 monitor02
@@ -38,6 +39,7 @@ mdosfs_fsrdwr
 paranoia
 pppd
 rtems++
+shell01
 spstkalloc02
 sptls02
 syscall01
