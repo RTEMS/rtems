@@ -37,6 +37,8 @@ mrfs_fstime
 paranoia
 pppd
 rtems++
+shell01
+spstkalloc02
 sptls02
 syscall01
 utf8proc01
