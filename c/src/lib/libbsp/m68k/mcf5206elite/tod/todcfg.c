@@ -11,7 +11,7 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <bsp.h>
+#include <i2c.h>
 #include <libchip/rtc.h>
 #include <ds1307.h>
 

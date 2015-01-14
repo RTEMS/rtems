@@ -125,8 +125,6 @@
 #include <rtems/rtc.h>
 #include <bsp/default-initial-extension.h>
 
-#include "i2c.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
