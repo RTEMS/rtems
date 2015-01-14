@@ -67,7 +67,7 @@ main_loop_begin:
 	dcbz	r0, r3
 	dcbf	r0, r3
 #else
-  #if PPC_CACHE_ALIGNMENT >= 32
+  #if PPC_CACHE_ALIGNMENT == 32 || PPC_CACHE_ALIGNMENT == 64
 	stw	r0, 0(r3)
 	stw	r0, 4(r3)
 	stw	r0, 8(r3)
@@ -85,8 +85,6 @@ main_loop_begin:
 	stw	r0, 52(r3)
 	stw	r0, 56(r3)
 	stw	r0, 60(r3)
-    #else
-      #error "unsupported cache alignment"
     #endif
   #else
     #error "unsupported cache alignment"
