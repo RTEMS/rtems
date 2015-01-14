@@ -275,8 +275,9 @@ static void obtain_and_release_worker(rtems_task_argument arg)
   /* Worker done (H) */
   barrier(ctx, &barrier_state);
 
-  rtems_task_suspend(RTEMS_SELF);
-  rtems_test_assert(0);
+  while (true) {
+    /* Wait for termination */
+  }
 }
 
 static void test_mrsp_obtain_and_release(test_context *ctx)
