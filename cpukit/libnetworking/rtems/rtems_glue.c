@@ -461,19 +461,9 @@ sbwait(struct sockbuf *sb)
 	sb->sb_flags |= SB_WAIT;
 
 	/*
-	 * Release the network semaphore.
-	 */
-	rtems_bsdnet_semaphore_release ();
-
-	/*
 	 * Wait for the wakeup event.
 	 */
-	sc = rtems_event_system_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, sb->sb_timeo, &events);
-
-	/*
-	 * Reobtain the network semaphore.
-	 */
-	rtems_bsdnet_semaphore_obtain ();
+	sc = rtems_bsdnet_event_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, sb->sb_timeo, &events);
 
 	/*
 	 * Return the status of the wait.
