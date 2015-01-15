@@ -167,7 +167,10 @@ static rtems_task serverTask(rtems_task_argument arg)
         addrlen = sizeof farAddr;
         s1 = accept(s, (struct sockaddr *)&farAddr, &addrlen);
         if (s1 < 0)
-            rtems_panic("Can't accept connection: %s", strerror(errno));
+            if (errno == ENXIO)
+                rtems_task_delete(RTEMS_SELF);
+            else
+                rtems_panic("Can't accept connection: %s", strerror(errno));
         else
             printf("ACCEPTED:%lX\n", ntohl(farAddr.sin_addr.s_addr));
         spawnTask(workerTask, myPriority, s1);

@@ -145,6 +145,26 @@ sofree(struct socket *so)
 	FREE(so, M_SOCKET);
 }
 
+static void
+rtems_socket_close_notify(struct socket *so)
+{
+	if (so->so_pgid) {
+		rtems_event_system_send(so->so_pgid, RTEMS_EVENT_SYSTEM_NETWORK_CLOSE);
+	}
+}
+
+static void
+rtems_sockbuf_close_notify(struct socket *so, struct sockbuf *sb)
+{
+	if (sb->sb_flags & SB_WAIT) {
+		rtems_event_system_send(sb->sb_sel.si_pid,
+		    RTEMS_EVENT_SYSTEM_NETWORK_CLOSE);
+	}
+
+	if (sb->sb_wakeup)
+		(*sb->sb_wakeup)(so, sb->sb_wakeuparg);
+}
+
 /*
  * Close a socket on last file table reference removal.
  * Initiate disconnect if connected.
@@ -155,6 +175,10 @@ soclose(struct socket *so)
 {
 	int s = splnet();		/* conservative */
 	int error = 0;
+
+	rtems_socket_close_notify(so);
+	rtems_sockbuf_close_notify(so, &so->so_snd);
+	rtems_sockbuf_close_notify(so, &so->so_rcv);
 
 	if (so->so_options & SO_ACCEPTCONN) {
 		struct socket *sp, *sonext;
@@ -742,7 +766,8 @@ dontblock:
 				break;
 			error = sbwait(&so->so_rcv);
 			if (error) {
-				sbunlock(&so->so_rcv);
+				if (error != ENXIO)
+					sbunlock(&so->so_rcv);
 				splx(s);
 				return (0);
 			}

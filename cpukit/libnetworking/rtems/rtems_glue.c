@@ -432,47 +432,68 @@ rtems_bsdnet_semaphore_release (void)
 #endif
 }
 
+static int
+rtems_bsdnet_sleep(rtems_event_set in, rtems_interval ticks)
+{
+	rtems_status_code sc;
+	rtems_event_set out;
+	rtems_event_set out2;
+
+	in |= RTEMS_EVENT_SYSTEM_NETWORK_CLOSE;
+
+	/*
+	 * Soak up any pending events.  The sleep/wakeup synchronization in the
+	 * FreeBSD kernel has no memory.
+	 */
+	rtems_event_system_receive(in, RTEMS_EVENT_ANY | RTEMS_NO_WAIT,
+	    RTEMS_NO_TIMEOUT, &out);
+
+	/*
+	 * Wait for the wakeup event.
+	 */
+	sc = rtems_bsdnet_event_receive(in, RTEMS_EVENT_ANY | RTEMS_WAIT,
+	    ticks, &out);
+
+	/*
+	 * Get additional events that may have been received between the
+	 * rtems_event_system_receive() and the rtems_bsdnet_semaphore_obtain().
+	 */
+	rtems_event_system_receive(in, RTEMS_EVENT_ANY | RTEMS_NO_WAIT,
+	    RTEMS_NO_TIMEOUT, &out2);
+	out |= out2;
+
+	if (out & RTEMS_EVENT_SYSTEM_NETWORK_CLOSE)
+		return (ENXIO);
+
+	if (sc == RTEMS_SUCCESSFUL)
+		return (0);
+
+	return (EWOULDBLOCK);
+}
+
 /*
  * Wait for something to happen to a socket buffer
  */
 int
 sbwait(struct sockbuf *sb)
 {
-	rtems_event_set events;
-	rtems_id tid;
-	rtems_status_code sc;
-
-	/*
-	 * Soak up any pending events.
-	 * The sleep/wakeup synchronization in the FreeBSD
-	 * kernel has no memory.
-	 */
-	rtems_event_system_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events);
+	int error;
 
 	/*
 	 * Set this task as the target of the wakeup operation.
 	 */
-	rtems_task_ident (RTEMS_SELF, 0, &tid);
-	sb->sb_sel.si_pid = tid;
+	sb->sb_sel.si_pid = rtems_task_self();
 
 	/*
 	 * Show that socket is waiting
 	 */
 	sb->sb_flags |= SB_WAIT;
 
-	/*
-	 * Wait for the wakeup event.
-	 */
-	sc = rtems_bsdnet_event_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, sb->sb_timeo, &events);
+	error = rtems_bsdnet_sleep(SBWAIT_EVENT, sb->sb_timeo);
+	if (error != ENXIO)
+		sb->sb_flags &= ~SB_WAIT;
 
-	/*
-	 * Return the status of the wait.
-	 */
-	switch (sc) {
-	case RTEMS_SUCCESSFUL:	return 0;
-	case RTEMS_TIMEOUT:	return EWOULDBLOCK;
-	default:		return ENXIO;
-	}
+	return (error);
 }
 
 
@@ -485,7 +506,6 @@ sowakeup(
 	struct sockbuf *sb)
 {
 	if (sb->sb_flags & SB_WAIT) {
-		sb->sb_flags &= ~SB_WAIT;
 		rtems_event_system_send (sb->sb_sel.si_pid, SBWAIT_EVENT);
 	}
 	if (sb->sb_wakeup) {
@@ -514,40 +534,20 @@ wakeup (void *p)
 int
 soconnsleep (struct socket *so)
 {
-	rtems_event_set events;
-	rtems_id tid;
-	rtems_status_code sc;
-
-	/*
-	 * Soak up any pending events.
-	 * The sleep/wakeup synchronization in the FreeBSD
-	 * kernel has no memory.
-	 */
-	rtems_event_system_receive (SOSLEEP_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events);
+	int error;
 
 	/*
 	 * Set this task as the target of the wakeup operation.
 	 */
 	if (so->so_pgid)
 		rtems_panic ("Another task is already sleeping on that socket");
-	rtems_task_ident (RTEMS_SELF, 0, &tid);
-	so->so_pgid = tid;
+	so->so_pgid = rtems_task_self();
 
-	/*
-	 * Wait for the wakeup event.
-	 */
-	sc = rtems_bsdnet_event_receive (SOSLEEP_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, so->so_rcv.sb_timeo, &events);
+	error = rtems_bsdnet_sleep(SOSLEEP_EVENT, so->so_rcv.sb_timeo);
+	if (error != ENXIO)
+		so->so_pgid = 0;
 
-	/*
-	 * Relinquish ownership of the socket.
-	 */
-	so->so_pgid = 0;
-
-	switch (sc) {
-	case RTEMS_SUCCESSFUL:	return 0;
-	case RTEMS_TIMEOUT:	return EWOULDBLOCK;
-	default:		return ENXIO;
-	}
+	return (error);
 }
 
 /*

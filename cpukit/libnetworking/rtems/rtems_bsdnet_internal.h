@@ -219,7 +219,7 @@ int ioctl (int, ioctl_command_t, ...);
 #define NETISR_IP_EVENT        (1L << NETISR_IP)
 #define NETISR_ARP_EVENT       (1L << NETISR_ARP)
 #define NETISR_EVENTS  (NETISR_IP_EVENT|NETISR_ARP_EVENT)
-#if (SBWAIT_EVENT & SOSLEEP_EVENT & NETISR_EVENTS)
+#if (SBWAIT_EVENT & SOSLEEP_EVENT & NETISR_EVENTS & RTEMS_EVENT_SYSTEM_NETWORK_CLOSE)
 # error "Network event conflict"
 #endif
 

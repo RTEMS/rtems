@@ -314,6 +314,11 @@ rtems_status_code rtems_event_receive (
 #define RTEMS_EVENT_SYSTEM_NETWORK_SOSLEEP RTEMS_EVENT_25
 
 /**
+ * @brief Reserved system event for network socket close.
+ */
+#define RTEMS_EVENT_SYSTEM_NETWORK_CLOSE RTEMS_EVENT_26
+
+/**
  * @brief Reserved system event for transient usage.
  */
 #define RTEMS_EVENT_SYSTEM_TRANSIENT RTEMS_EVENT_31

@@ -119,7 +119,8 @@ select (int nfds, fd_set *__restrict readfds, fd_set *__restrict writefds,
 	int retval = 0;
 	rtems_id tid;
 	rtems_interval then = 0, now;
-	rtems_event_set events;
+	rtems_event_set in = SBWAIT_EVENT | RTEMS_EVENT_SYSTEM_NETWORK_CLOSE;
+	rtems_event_set out;
 
 	if (nfds < 0)
 		return (EINVAL);
@@ -145,7 +146,7 @@ select (int nfds, fd_set *__restrict readfds, fd_set *__restrict writefds,
 #undef getbits
 
 	rtems_task_ident (RTEMS_SELF, 0, &tid);
-	rtems_event_system_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events);
+	rtems_event_system_receive (in, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &out);
 	for (;;) {
 		rtems_bsdnet_semaphore_obtain ();
 		error = selscan(tid, ibits, obits, nfds, &retval);
@@ -159,7 +160,7 @@ select (int nfds, fd_set *__restrict readfds, fd_set *__restrict writefds,
 				break;
 			then = now;
 		}
-		rtems_event_system_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, timo, &events);
+		rtems_event_system_receive (in, RTEMS_EVENT_ANY | RTEMS_WAIT, timo, &out);
 	}
 
 #define putbits(name,i) if (name) *name = ob[i]
