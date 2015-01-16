@@ -79,7 +79,6 @@ socreate(int dom, struct socket **aso, int type, int proto,
 	TAILQ_INIT(&so->so_comp);
 	so->so_type = type;
 	so->so_state = SS_PRIV;
-	so->so_uid = 0;
 	so->so_proto = prp;
 	error = (*prp->pr_usrreqs->pru_attach)(so, proto);
 	if (error) {

@@ -226,7 +226,6 @@ sonewconn1(struct socket *head, int connstatus)
 	so->so_state = head->so_state | SS_NOFDREF;
 	so->so_proto = head->so_proto;
 	so->so_timeo = head->so_timeo;
-	so->so_uid = head->so_uid;
 	(void) soreserve(so, head->so_snd.sb_hiwat, head->so_rcv.sb_hiwat);
 	if (connstatus) {
 		TAILQ_INSERT_TAIL(&head->so_comp, so, so_list);

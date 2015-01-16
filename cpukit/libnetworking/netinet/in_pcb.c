@@ -190,13 +190,6 @@ in_pcbbind(struct inpcb *inp, struct mbuf *nam)
 			if (ntohs(lport) < IPPORT_RESERVED &&
 			    (error = suser(p->p_ucred, &p->p_acflag)))
 				return (EACCES);
-			if (so->so_uid) {
-				t = in_pcblookup(inp->inp_pcbinfo, zeroin_addr,
-				    0, sin->sin_addr, lport,
-				    INPLOOKUP_WILDCARD);
-				if (t && (so->so_uid != t->inp_socket->so_uid))
-					return (EADDRINUSE);
-			}
 			t = in_pcblookup(inp->inp_pcbinfo, zeroin_addr, 0,
 			    sin->sin_addr, lport, wild);
 			if (t && (reuseport & t->inp_socket->so_options) == 0)

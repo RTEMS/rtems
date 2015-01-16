@@ -103,7 +103,6 @@ struct socket {
 	caddr_t	so_tpcb;		/* Wisc. protocol control block XXX */
 	void	(*so_upcall)(struct socket *, void *arg, int);
 	void 	*so_upcallarg;		/* Arg for above */
-	uid_t	so_uid;			/* who opened the socket */
 };
 
 /*
