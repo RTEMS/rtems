@@ -32,7 +32,7 @@ CLEANFILES += dl-tar.h
 dl01.pre$(EXEEXT): $(dl01_OBJECTS) $(dl01_DEPENDENCIES)
 	@rm -f dl01.pre$(EXEEXT)
 	$(make-exe)
-	rm dl01.pre.ralf
+	rm -f dl01.pre.ralf
 
 dl01.pre: dl01.pre$(EXEEXT)
 	mv $< $@
