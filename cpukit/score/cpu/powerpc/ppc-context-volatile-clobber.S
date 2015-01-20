@@ -80,15 +80,15 @@ _CPU_Context_volatile_clobber:
 
 	/* Negate VSCR[SAT] bit */
 	mfvscr	v0
-	li	r3, 16
+	li	r3, 28
 	stvewx	v0, r1, r3
-	lwz	r0, 16(r1)
+	lwz	r0, 28(r1)
 	nor	r3, r0, r0
 	rlwinm	r0, r0, 0, 0, 30
 	rlwinm	r3, r3, 0, 31, 31
 	or	r0, r3, r0
-	stw	r0, 16(r1)
-	li	r3, 16
+	stw	r0, 28(r1)
+	li	r3, 28
 	lvewx	v0, r1, r3
 	mtvscr	v0
 

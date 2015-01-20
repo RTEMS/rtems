@@ -1197,8 +1197,11 @@ typedef struct {
     uint32_t reserved_for_alignment;
   #endif
   #ifdef PPC_MULTILIB_ALTIVEC
-    uint32_t VSCR;
     uint32_t VRSAVE;
+
+    /* This field must take stvewx/lvewx requirements into account */
+    uint32_t VSCR;
+
     uint8_t V0[16];
     uint8_t V1[16];
     uint8_t V2[16];

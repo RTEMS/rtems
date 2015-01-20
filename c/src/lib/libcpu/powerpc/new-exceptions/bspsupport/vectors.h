@@ -147,8 +147,8 @@ extern "C" {
   #define PPC_EXC_GPR_OFFSET(gpr) ((gpr) * PPC_GPR_SIZE + 36)
   #define PPC_EXC_VECTOR_PROLOGUE_OFFSET PPC_EXC_GPR_OFFSET(4)
   #if defined(PPC_MULTILIB_ALTIVEC) && defined(PPC_MULTILIB_FPU)
-    #define PPC_EXC_VSCR_OFFSET 168
-    #define PPC_EXC_VRSAVE_OFFSET 172
+    #define PPC_EXC_VRSAVE_OFFSET 168
+    #define PPC_EXC_VSCR_OFFSET 172
     #define PPC_EXC_VR_OFFSET(v) ((v) * 16 + 176)
     #define PPC_EXC_FR_OFFSET(f) ((f) * 8 + 688)
     #define PPC_EXC_FPSCR_OFFSET 944
@@ -159,8 +159,8 @@ extern "C" {
     #define PPC_EXC_MIN_FPSCR_OFFSET 528
     #define PPC_EXC_MINIMAL_FRAME_SIZE 544
   #elif defined(PPC_MULTILIB_ALTIVEC)
-    #define PPC_EXC_VSCR_OFFSET 168
-    #define PPC_EXC_VRSAVE_OFFSET 172
+    #define PPC_EXC_VRSAVE_OFFSET 168
+    #define PPC_EXC_VSCR_OFFSET 172
     #define PPC_EXC_VR_OFFSET(v) ((v) * 16 + 176)
     #define PPC_EXC_FRAME_SIZE 688
     #define PPC_EXC_MIN_VSCR_OFFSET 92
@@ -304,7 +304,9 @@ typedef struct {
   PPC_GPR_TYPE GPR12;
   uint32_t EARLY_INSTANT;
   #ifdef PPC_MULTILIB_ALTIVEC
+    /* This field must take stvewx/lvewx requirements into account */
     uint32_t VSCR;
+
     uint8_t V0[16];
     uint8_t V1[16];
     uint8_t V2[16];

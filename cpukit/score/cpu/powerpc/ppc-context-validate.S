@@ -85,9 +85,9 @@
   #define V31_OFFSET VOFFSET(11)
   #define VTMP_OFFSET VOFFSET(12)
   #define VTMP2_OFFSET VOFFSET(13)
-  #define VSCR_OFFSET VOFFSET(14)
-  #define VRSAVE_OFFSET (VSCR_OFFSET + 4)
-  #define ALTIVECEND (VRSAVE_OFFSET + 4)
+  #define VRSAVE_OFFSET VOFFSET(14)
+  #define VSCR_OFFSET (VOFFSET(14) + 12)
+  #define ALTIVECEND VOFFSET(15)
 #else
   #define ALTIVECEND FPUEND
 #endif
@@ -510,9 +510,9 @@ check:
 	li	r4, VTMP_OFFSET
 	stvx	v0, r1, r4
 	mfvscr	v0
-	li	r4, VTMP2_OFFSET
+	li	r4, VTMP2_OFFSET + 12
 	stvewx	v0, r1, r4
-	lwz	r4, VTMP2_OFFSET(r1)
+	lwz	r4, VTMP2_OFFSET + 12(r1)
 	lwz	r5, VSCR_OFFSET(r1)
 	cmpw	r5, r4
 	bne	restore
