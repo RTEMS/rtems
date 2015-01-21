@@ -271,11 +271,6 @@ typedef struct {
   uint64_t lifetime_freed;
 
   /**
-   * @brief Instance number of this heap.
-   */
-  uint32_t instance;
-
-  /**
    * @brief Size of the allocatable area in bytes.
    *
    * This value is an integral multiple of the page size.

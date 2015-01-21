@@ -546,7 +546,6 @@ to the command.  This includes the following information:
 @item Number of used blocks
 @item Largest used block
 @item Total bytes used
-@item Instance number
 @item Size of the allocatable area in bytes
 @item Minimum free size ever in bytes
 @item Maximum number of free blocks ever
@@ -584,7 +583,6 @@ Total bytes free:                            266208392
 Number of used blocks:                             167
 Largest used block:                              16392
 Total bytes used:                                83536
-Instance number:                                     0
 Size of the allocatable area in bytes:       266291928
 Minimum free size ever in bytes:             266207360
 Maximum number of free blocks ever:                  6

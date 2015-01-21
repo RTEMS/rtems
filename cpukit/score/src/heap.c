@@ -31,8 +31,6 @@
   #error "invalid CPU_ALIGNMENT value"
 #endif
 
-static uint32_t instance = 0;
-
 /*
  *  _Heap_Initialize
  *
@@ -284,7 +282,6 @@ uintptr_t _Heap_Initialize(
   stats->min_free_size = first_block_size;
   stats->free_blocks = 1;
   stats->max_free_blocks = 1;
-  stats->instance = instance++;
 
   _Heap_Protection_set_delayed_free_fraction( heap, 2 );
 

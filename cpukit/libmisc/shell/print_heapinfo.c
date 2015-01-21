@@ -38,7 +38,6 @@ void rtems_shell_print_heap_stats(
 )
 {
   printf(
-    "Instance number:                          %12" PRIu32 "\n"
     "Size of the allocatable area in bytes:    %12" PRIuPTR "\n"
     "Minimum free size ever in bytes:          %12" PRIuPTR "\n"
     "Maximum number of free blocks ever:       %12" PRIu32 "\n"
@@ -50,7 +49,6 @@ void rtems_shell_print_heap_stats(
     "Total number of failed allocations:       %12" PRIu32 "\n"
     "Total number of successful frees:         %12" PRIu32 "\n"
     "Total number of successful resizes:       %12" PRIu32 "\n",
-    s->instance,
     s->size,
     s->min_free_size,
     s->max_free_blocks,
