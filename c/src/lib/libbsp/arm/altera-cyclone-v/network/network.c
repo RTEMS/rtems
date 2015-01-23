@@ -1058,7 +1058,7 @@ static int network_if_mem_free_nocache(
 {
   (void) arg;
 
-  free( memory );
+  rtems_cache_coherent_free( memory );
 
   return 0;
 }
