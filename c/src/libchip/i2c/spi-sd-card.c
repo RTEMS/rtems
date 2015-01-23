@@ -917,7 +917,7 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 			RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Failed CMD58 for MMC 4.2");
 
 			/* Check HCS bit of the OCR */
-			high_capacity = (reg & 0x600000) == SD_CARD_FLAG_HCS;
+			high_capacity = (reg & 0x6000000) == SD_CARD_FLAG_HCS;
 		}
 	}
 
