@@ -194,6 +194,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
 	break;
     case PPC_440:
       current_ppc_features.is_bookE          = PPC_BOOKE_STD;
+      break;
   	case PPC_8540:
   	case PPC_e200z0:
   	case PPC_e200z1:
@@ -203,6 +204,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
   	case PPC_e500v2:
   	case PPC_e6500:
 		current_ppc_features.is_bookE			= PPC_BOOKE_E500;
+		break;
 	default:
 	break;
   }
