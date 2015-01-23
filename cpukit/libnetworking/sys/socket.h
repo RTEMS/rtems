@@ -36,6 +36,7 @@
 
 #include <sys/cdefs.h>
 #include <rtems/bsdnet/_types.h>
+#include <sys/_types.h>
 
 /*
  * Definitions related to sockets: types, address families, options.
