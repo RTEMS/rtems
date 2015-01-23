@@ -540,7 +540,7 @@ void ptf_dump_ptf_item(FILE *f, struct ptf_item *pi)
     }
     else
     {
-        fprintf(f, "  %d: NULL\n");
+        fprintf(f, "  %d: NULL\n", i);
     }
     fflush(f);
   }
