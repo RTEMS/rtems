@@ -378,13 +378,11 @@ static rtems_device_driver apbuart_initialize(rtems_device_major_number  major, 
 	DBG("Found %d APBUART(s)\n\r",dev_cnt);
 
 	/* Allocate memory for device structures */
-	apbuarts = malloc(sizeof(apbuart_priv) * dev_cnt);
+	apbuarts = calloc(dev_cnt, sizeof(*apbuarts));
 	if ( !apbuarts ){
 		printk("APBUART: Failed to allocate SW memory\n\r");
 		return -1;
 	}
-
-  memset(apbuarts,0,sizeof(sizeof(apbuart_priv) * dev_cnt));
 
 	/* Detect System Frequency from initialized timer */
 #ifndef SYS_FREQ_HZ
