@@ -557,7 +557,7 @@ static socklen_t rtems_ftpfs_create_address(
   unsigned short port
 )
 {
-  memset(sa, sizeof(*sa), 0);
+  memset(sa, 0, sizeof(*sa));
 
   sa->sin_family = AF_INET;
   sa->sin_addr.s_addr = address;
