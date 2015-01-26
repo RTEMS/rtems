@@ -585,7 +585,7 @@ requirements @b{ABOVE} the minimum size required.  See
 @ref{Configuring a System Reserve Task/Thread Stack Memory Above Minimum}
 for more information about @code{CONFIGURE_EXTRA_TASK_STACKS}.
 
-The maximumm number of POSIX threads is specified by
+The maximum number of POSIX threads is specified by
 @code{CONFIGURE_MAXIMUM_POSIX_THREADS}.
 @c XXX - Add xref to CONFIGURE_MAXIMUM_POSIX_THREADS.
 
