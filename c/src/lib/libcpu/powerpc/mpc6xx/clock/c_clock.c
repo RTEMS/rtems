@@ -46,7 +46,13 @@ volatile uint32_t   Clock_driver_ticks;
 /*
  *  This is the value programmed into the count down timer.
  */
-uint32_t   Clock_Decrementer_value;
+static uint32_t   Clock_Decrementer_value;
+
+/*
+ *  This is the value by which elapsed count down timer ticks are multiplied to
+ *  give an elapsed duration in nanoseconds, left-shifted by 32 bits
+ */
+static uint64_t   Clock_Decrementer_reference;
 
 void clockOff(void* unused)
 {
@@ -209,6 +215,37 @@ static uint32_t Clock_driver_nanoseconds_since_last_tick(void)
   return tmp * 1000;
 }
 
+static uint32_t Clock_driver_nanoseconds_since_last_tick_bookE(void)
+{
+  uint32_t clicks;
+  uint64_t c;
+
+  PPC_Get_decrementer( clicks );
+  c = Clock_Decrementer_value - clicks;
+
+  /*
+   * Check whether a clock tick interrupt is pending and hence that the
+   * decrementer's wrapped. If it has, we'll compensate by returning a time one
+   * tick period longer.
+   *
+   * We have to check interrupt status after reading the decrementer. If we
+   * don't, we may miss an interrupt and read a wrapped decrementer value
+   * without compensating for it
+   */
+  if ( _read_BOOKE_TSR() & BOOKE_TSR_DIS )
+  {
+    /*
+     * Re-read the decrementer: The tick interrupt may have been
+     * generated and the decrementer wrapped during the time since we
+     * last read it and the time we checked the interrupt status
+     */
+    PPC_Get_decrementer( clicks );
+    c = (Clock_Decrementer_value - clicks) + Clock_Decrementer_value;
+  }
+
+  return (uint32_t)((c * Clock_Decrementer_reference) >> 32);
+}
+
 /*
  *  Clock_initialize
  *
@@ -223,7 +260,10 @@ rtems_device_driver Clock_initialize(
   rtems_interrupt_level l,tcr;
 
   Clock_Decrementer_value = (BSP_bus_frequency/BSP_time_base_divisor)*
-            (rtems_configuration_get_microseconds_per_tick()/1000);
+            rtems_configuration_get_milliseconds_per_tick();
+
+  Clock_Decrementer_reference = ((uint64_t)1000000U<<32)/
+            (BSP_bus_frequency/BSP_time_base_divisor);
 
   /* set the decrementer now, prior to installing the handler
    * so no interrupts will happen in a while.
@@ -244,14 +284,22 @@ rtems_device_driver Clock_initialize(
 
     rtems_interrupt_enable(l);
 
+    /*
+     *  Set the nanoseconds since last tick handler
+     */
+    rtems_clock_set_nanoseconds_extension(
+      Clock_driver_nanoseconds_since_last_tick_bookE
+    );
   }
-
-  /*
-   *  Set the nanoseconds since last tick handler
-   */
-  rtems_clock_set_nanoseconds_extension(
-    Clock_driver_nanoseconds_since_last_tick
-  );
+  else
+  {
+    /*
+     *  Set the nanoseconds since last tick handler
+     */
+    rtems_clock_set_nanoseconds_extension(
+      Clock_driver_nanoseconds_since_last_tick
+    );
+  }
 
   /*
    * If a decrementer exception was pending, it is cleared by
