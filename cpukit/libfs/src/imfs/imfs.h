@@ -100,10 +100,7 @@ typedef block_p *block_ptr;
 typedef enum {
   IMFS_DIRECTORY,
   IMFS_DEVICE,
-  IMFS_HARD_LINK,
-  IMFS_SYM_LINK,
   IMFS_MEMORY_FILE,
-  IMFS_LINEAR_FILE,
   IMFS_FIFO
 } IMFS_jnode_types_t;
 
@@ -399,8 +396,6 @@ typedef struct {
 
 extern const IMFS_node_control IMFS_node_control_directory;
 extern const IMFS_node_control IMFS_node_control_device;
-extern const IMFS_node_control IMFS_node_control_hard_link;
-extern const IMFS_node_control IMFS_node_control_sym_link;
 extern const IMFS_node_control IMFS_node_control_memfile;
 extern const IMFS_node_control IMFS_node_control_linfile;
 extern const IMFS_node_control IMFS_node_control_fifo;
@@ -594,7 +589,7 @@ extern IMFS_jnode_t *IMFS_allocate_node(
  * Create an IMFS filesystem node of an arbitrary type that is NOT
  * the root directory node.
  */
-extern IMFS_jnode_t *IMFS_create_node_with_control(
+extern IMFS_jnode_t *IMFS_create_node(
   const rtems_filesystem_location_info_t *parentloc,
   const IMFS_node_control *node_control,
   const char *name,
@@ -977,28 +972,6 @@ static inline bool IMFS_is_directory( const IMFS_jnode_t *node )
 static inline bool IMFS_is_hard_link( mode_t mode )
 {
   return ( mode & S_IFMT ) == IMFS_STAT_FMT_HARD_LINK;
-}
-
-static inline IMFS_jnode_t *IMFS_create_node(
-  const rtems_filesystem_location_info_t *parentloc,
-  IMFS_jnode_types_t type,
-  const char *name,
-  size_t namelen,
-  mode_t mode,
-  void *arg
-)
-{
-  const IMFS_fs_info_t *fs_info =
-    (const IMFS_fs_info_t *) parentloc->mt_entry->fs_info;
-
-  return IMFS_create_node_with_control(
-    parentloc,
-    fs_info->node_controls [type],
-    name,
-    namelen,
-    mode,
-    arg
-  );
 }
 
 /** @} */

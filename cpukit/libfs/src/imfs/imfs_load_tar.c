@@ -125,7 +125,7 @@ int rtems_tarfs_load(
         IMFS_linearfile_t *linfile = (IMFS_linearfile_t *)
           IMFS_create_node(
             currentloc,
-            IMFS_LINEAR_FILE,
+            &IMFS_node_control_linfile,
             rtems_filesystem_eval_path_get_token( &ctx ),
             rtems_filesystem_eval_path_get_tokenlen( &ctx ),
             (file_mode & (S_IRWXU | S_IRWXG | S_IRWXO)) | S_IFREG,

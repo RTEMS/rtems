@@ -82,7 +82,7 @@ int IMFS_make_generic_node(
       rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 
     if ( IMFS_is_imfs_instance( currentloc ) ) {
-      IMFS_jnode_t *new_node = IMFS_create_node_with_control(
+      IMFS_jnode_t *new_node = IMFS_create_node(
         currentloc,
         node_control,
         rtems_filesystem_eval_path_get_token( &ctx ),

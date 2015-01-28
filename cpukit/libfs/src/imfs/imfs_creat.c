@@ -86,7 +86,7 @@ IMFS_jnode_t *IMFS_allocate_node(
   return initialized_node;
 }
 
-IMFS_jnode_t *IMFS_create_node_with_control(
+IMFS_jnode_t *IMFS_create_node(
   const rtems_filesystem_location_info_t *parentloc,
   const IMFS_node_control *node_control,
   const char *name,
