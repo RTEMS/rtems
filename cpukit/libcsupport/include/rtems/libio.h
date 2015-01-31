@@ -1442,6 +1442,15 @@ static inline dev_t rtems_filesystem_make_dev_t(
   return temp.device;
 }
 
+static inline dev_t rtems_filesystem_make_dev_t_from_pointer(
+  const void *pointer
+)
+{
+  uint64_t temp = (((uint64_t) 1) << 63) | (((uintptr_t) pointer) >> 1);
+
+  return rtems_filesystem_make_dev_t((uint32_t) (temp >> 32), (uint32_t) temp);
+}
+
 static inline rtems_device_major_number rtems_filesystem_dev_major_t(
   dev_t device
 )
