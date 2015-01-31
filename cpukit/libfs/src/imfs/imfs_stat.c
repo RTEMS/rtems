@@ -34,7 +34,7 @@ int IMFS_stat(
   buf->st_dev   = rtems_filesystem_make_dev_t_from_pointer( fs_info );
   buf->st_mode  = the_jnode->st_mode;
   buf->st_nlink = the_jnode->st_nlink;
-  buf->st_ino   = the_jnode->st_ino;
+  buf->st_ino   = IMFS_node_to_ino( the_jnode );
   buf->st_uid   = the_jnode->st_uid;
   buf->st_gid   = the_jnode->st_gid;
 

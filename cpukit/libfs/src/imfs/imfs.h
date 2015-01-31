@@ -244,7 +244,6 @@ struct IMFS_jnode_tt {
   mode_t              st_mode;               /* File mode */
   unsigned short      reference_count;
   nlink_t             st_nlink;              /* Link count */
-  ino_t               st_ino;                /* inode */
 
   uid_t               st_uid;                /* User ID of owner */
   gid_t               st_gid;                /* Group ID of owner */
@@ -372,7 +371,6 @@ static inline void IMFS_mtime_ctime_update( IMFS_jnode_t *jnode )
 }
 
 typedef struct {
-  ino_t ino_count;
   const IMFS_node_control *node_controls [IMFS_TYPE_COUNT];
 } IMFS_fs_info_t;
 
@@ -958,6 +956,11 @@ static inline bool IMFS_is_directory( const IMFS_jnode_t *node )
 static inline bool IMFS_is_hard_link( mode_t mode )
 {
   return ( mode & S_IFMT ) == IMFS_STAT_FMT_HARD_LINK;
+}
+
+static inline ino_t IMFS_node_to_ino( const IMFS_jnode_t *node )
+{
+  return (ino_t) node;
 }
 
 /** @} */

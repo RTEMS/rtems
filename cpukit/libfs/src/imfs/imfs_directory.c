@@ -73,7 +73,7 @@ ssize_t imfs_dir_read(
          /* Move the entry to the return buffer */
          dir_ent->d_off = current_entry;
          dir_ent->d_reclen = sizeof( *dir_ent );
-         dir_ent->d_ino = imfs_node->st_ino;
+         dir_ent->d_ino = IMFS_node_to_ino( imfs_node );
          dir_ent->d_namlen = strlen( imfs_node->name );
          memcpy( dir_ent->d_name, imfs_node->name, dir_ent->d_namlen + 1 );
 

@@ -76,7 +76,6 @@ IMFS_jnode_t *IMFS_allocate_node(
   node->stat_atime  = (time_t) tv.tv_sec;
   node->stat_mtime  = (time_t) tv.tv_sec;
   node->stat_ctime  = (time_t) tv.tv_sec;
-  node->st_ino = ++fs_info->ino_count;
 
   initialized_node = (*node->control->node_initialize)( node, arg );
   if ( initialized_node == NULL ) {
