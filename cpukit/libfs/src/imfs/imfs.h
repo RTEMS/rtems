@@ -228,19 +228,6 @@ typedef struct {
 /**@{*/
 
 /*
- * Major device number for the IMFS. This is not a real device number because
- * the IMFS is just a file system and does not have a driver.
- */
-#define IMFS_DEVICE_MAJOR_NUMBER (0xfffe)
-
-/**
- * @ingroup IMFSGenericNodes
- *
- * @brief Generic IMFS device major number.
- */
-#define IMFS_GENERIC_DEVICE_MAJOR_NUMBER (0xfffd)
-
-/*
  *  Maximum length of a "basename" of an IMFS file/node.
  */
 
@@ -385,7 +372,6 @@ static inline void IMFS_mtime_ctime_update( IMFS_jnode_t *jnode )
 }
 
 typedef struct {
-  int instance;
   ino_t ino_count;
   const IMFS_node_control *node_controls [IMFS_TYPE_COUNT];
 } IMFS_fs_info_t;
@@ -1008,10 +994,7 @@ static inline dev_t IMFS_generic_get_device_identifier_by_node(
   const IMFS_jnode_t *node
 )
 {
-  return rtems_filesystem_make_dev_t(
-    IMFS_GENERIC_DEVICE_MAJOR_NUMBER,
-    node->st_ino
-  );
+  return rtems_filesystem_make_dev_t_from_pointer( node );
 }
 
 #ifdef __cplusplus

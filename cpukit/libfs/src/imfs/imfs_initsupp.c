@@ -61,15 +61,12 @@ int IMFS_initialize_support(
   const IMFS_node_control *const node_controls [IMFS_TYPE_COUNT]
 )
 {
-  static int imfs_instance;
-
   int rv = 0;
   IMFS_fs_info_t *fs_info = calloc( 1, sizeof( *fs_info ) );
 
   if ( fs_info != NULL ) {
     IMFS_jnode_t *root_node;
 
-    fs_info->instance = imfs_instance++;
     memcpy(
       fs_info->node_controls,
       node_controls,
