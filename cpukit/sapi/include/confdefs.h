@@ -157,7 +157,7 @@ const rtems_libio_helper rtems_fs_init_helper =
    * When instantiating the configuration tables, this variable is
    * initialized to specify the maximum number of file descriptors.
    */
-  uint32_t rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
+  const uint32_t rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
 #endif
 
 /**
