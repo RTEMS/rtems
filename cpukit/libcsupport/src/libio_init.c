@@ -38,7 +38,6 @@
  */
 
 rtems_id           rtems_libio_semaphore;
-rtems_libio_t     *rtems_libio_iops;
 rtems_libio_t     *rtems_libio_iop_freelist;
 
 void rtems_libio_init( void )
@@ -50,12 +49,7 @@ void rtems_libio_init( void )
 
     if (rtems_libio_number_iops > 0)
     {
-        rtems_libio_iops = (rtems_libio_t *) calloc(rtems_libio_number_iops,
-                                                    sizeof(rtems_libio_t));
-        if (rtems_libio_iops == NULL)
-            rtems_fatal_error_occurred(RTEMS_NO_MEMORY);
-
-        iop = rtems_libio_iop_freelist = rtems_libio_iops;
+        iop = rtems_libio_iop_freelist = &rtems_libio_iops[0];
         for (i = 0 ; (i + 1) < rtems_libio_number_iops ; i++, iop++)
           iop->data1 = iop + 1;
         iop->data1 = NULL;

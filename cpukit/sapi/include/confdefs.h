@@ -92,7 +92,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #endif
 
 #ifndef RTEMS_SCHEDSIM
-#include <rtems/libio.h>
+#include <rtems/libio_.h>
 
 #ifdef CONFIGURE_INIT
 const rtems_libio_helper rtems_libio_init_helper =
@@ -153,11 +153,13 @@ const rtems_libio_helper rtems_fs_init_helper =
 #define CONFIGURE_LIBIO_POSIX_KEYS 1
 
 #ifdef CONFIGURE_INIT
+  rtems_libio_t rtems_libio_iops[CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS];
+
   /**
    * When instantiating the configuration tables, this variable is
    * initialized to specify the maximum number of file descriptors.
    */
-  const uint32_t rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
+  const uint32_t rtems_libio_number_iops = RTEMS_ARRAY_SIZE(rtems_libio_iops);
 #endif
 
 /**
