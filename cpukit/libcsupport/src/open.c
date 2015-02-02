@@ -66,7 +66,7 @@ static int do_open(
 )
 {
   int rv = 0;
-  int fd = iop - rtems_libio_iops;
+  int fd = rtems_libio_iop_to_descriptor( iop );
   int rwflag = oflag + 1;
   bool read_access = (rwflag & _FREAD) == _FREAD;
   bool write_access = (rwflag & _FWRITE) == _FWRITE;

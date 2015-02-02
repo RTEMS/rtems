@@ -107,7 +107,7 @@ extern rtems_filesystem_global_location_t rtems_filesystem_global_location_null;
  */
 
 #define rtems_libio_iop_to_descriptor(_iop) \
-   ((!(_iop)) ? -1 : (_iop - rtems_libio_iops))
+  ((_iop) - &rtems_libio_iops[0])
 
 /*
  *  rtems_libio_check_is_open

@@ -83,7 +83,7 @@ rtems_bsdnet_makeFdForSocket (void *so)
   if (iop == 0)
       rtems_set_errno_and_return_minus_one( ENFILE );
 
-  fd = iop - rtems_libio_iops;
+  fd = rtems_libio_iop_to_descriptor(iop);
   iop->flags |= LIBIO_FLAGS_WRITE | LIBIO_FLAGS_READ;
   iop->data0 = fd;
   iop->data1 = so;

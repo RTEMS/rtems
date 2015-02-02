@@ -47,7 +47,7 @@ static int duplicate_iop( rtems_libio_t *iop )
      */
     rv = (*diop->pathinfo.handlers->open_h)( diop, NULL, oflag, 0 );
     if ( rv == 0 ) {
-      rv = diop - rtems_libio_iops;
+      rv = rtems_libio_iop_to_descriptor( diop );
     } else {
       rtems_libio_free( diop );
     }
