@@ -76,6 +76,7 @@ struct kevent {
 #define EV_DISPATCH	0x0080		/* disable event after reporting */
 
 #define EV_SYSFLAGS	0xF000		/* reserved by system */
+#define	EV_DROP		0x1000		/* note should be dropped */
 #define EV_FLAG1	0x2000		/* filter-specific flag */
 
 /* returned values */
@@ -134,7 +135,7 @@ struct kevent {
 struct knote;
 SLIST_HEAD(klist, knote);
 struct kqueue;
-SLIST_HEAD(kqlist, kqueue);
+TAILQ_HEAD(kqlist, kqueue);
 struct knlist {
 	struct	klist	kl_list;
 	void    (*kl_lock)(void *);	/* lock function */
@@ -209,6 +210,7 @@ struct knote {
 #define KN_MARKER	0x20			/* ignore this knote */
 #define KN_KQUEUE	0x40			/* this knote belongs to a kq */
 #define KN_HASKQLOCK	0x80			/* for _inevent */
+#define	KN_SCAN		0x100			/* flux set in kqueue_scan() */
 	int			kn_sfflags;	/* saved filter flags */
 	intptr_t		kn_sdata;	/* saved data field */
 	union {
