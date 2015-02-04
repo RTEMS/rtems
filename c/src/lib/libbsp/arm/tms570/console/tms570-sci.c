@@ -40,7 +40,7 @@
  *
  * Definitions of all serial drivers
  */
-const tms570_sci_context driver_context_table[] = {
+tms570_sci_context driver_context_table[] = {
   {
     .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("TMS570 SCI1"),
     .device_name = "/dev/console",
@@ -91,7 +91,7 @@ rtems_device_driver console_initialize(
     minor < RTEMS_ARRAY_SIZE(driver_context_table);
     ++minor
   ) {
-    const tms570_sci_context *ctx = &driver_context_table[minor];
+    tms570_sci_context *ctx = &driver_context_table[minor];
 
     /*
      * Install this device in the file system and Termios.  In order
@@ -105,7 +105,7 @@ rtems_device_driver console_initialize(
         minor,
         handler,
 	NULL,
-        RTEMS_DECONST(rtems_termios_device_context *, &ctx->base)
+        &ctx->base
     );
     if ( sc != RTEMS_SUCCESSFUL ) {
       bsp_fatal(BSP_FATAL_CONSOLE_NO_DEV);

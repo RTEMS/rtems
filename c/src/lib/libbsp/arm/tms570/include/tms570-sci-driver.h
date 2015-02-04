@@ -47,7 +47,7 @@ extern const rtems_termios_device_handler tms570_sci_handler_polled;
 
 extern const rtems_termios_device_handler tms570_sci_handler_interrupt;
 
-extern const tms570_sci_context driver_context_table[];
+extern tms570_sci_context driver_context_table[];
 
 /** @} */
 
