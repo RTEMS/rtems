@@ -66,6 +66,9 @@ extern int ahbstat_last_error(int minor, uint32_t *status, uint32_t *address);
  */
 extern struct ahbstat_regs *ahbstat_get_regs(int minor);
 
+/* Registers the AHBSTAT driver to the Driver Manager */
+void ahbstat_register_drv (void);
+
 #ifdef __cplusplus
 }
 #endif

@@ -58,7 +58,7 @@ struct ahbstat_priv {
 	uint32_t last_address;
 };
 
-int ahbstat_init2(struct drvmgr_dev *dev);
+static int ahbstat_init2(struct drvmgr_dev *dev);
 
 struct drvmgr_drv_ops ahbstat_ops =
 {
@@ -95,7 +95,7 @@ void ahbstat_register_drv (void)
 	drvmgr_drv_register(&ahbstat_drv_info.general);
 }
 
-int ahbstat_init2(struct drvmgr_dev *dev)
+static int ahbstat_init2(struct drvmgr_dev *dev)
 {
 	struct ahbstat_priv *priv;
 	struct amba_dev_info *ambadev;
