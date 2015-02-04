@@ -117,7 +117,7 @@ void gptimer_tlib_irq_register(struct tlib_drv *tdrv, tlib_isr_t func, void *dat
 /******************* Driver manager interface ***********************/
 
 /* Driver prototypes */
-struct tlib_drv gptimer_tlib_drv;
+static struct tlib_drv gptimer_tlib_drv;
 int gptimer_device_init(struct gptimer_priv *priv);
 
 int gptimer_init1(struct drvmgr_dev *dev);
@@ -424,7 +424,7 @@ void gptimer_tlib_reset(struct tlib_dev *hand)
 	timer->tregs->ctrl = GPTIMER_CTRL_LD;
 }
 
-void gptimer_tlib_get_freq(
+static void gptimer_tlib_get_freq(
 	struct tlib_dev *hand,
 	unsigned int *basefreq,
 	unsigned int *tickrate)
@@ -439,7 +439,7 @@ void gptimer_tlib_get_freq(
 		*tickrate = timer->tregs->reload + 1;
 }
 
-int gptimer_tlib_set_freq(struct tlib_dev *hand, unsigned int tickrate)
+static int gptimer_tlib_set_freq(struct tlib_dev *hand, unsigned int tickrate)
 {
 	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
 
@@ -452,7 +452,7 @@ int gptimer_tlib_set_freq(struct tlib_dev *hand, unsigned int tickrate)
 		return 0;
 }
 
-void gptimer_tlib_irq_reg(struct tlib_dev *hand, tlib_isr_t func, void *data)
+static void gptimer_tlib_irq_reg(struct tlib_dev *hand, tlib_isr_t func, void *data)
 {
 	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
 	struct gptimer_priv *priv = priv_from_timer(timer);
@@ -465,7 +465,7 @@ void gptimer_tlib_irq_reg(struct tlib_dev *hand, tlib_isr_t func, void *data)
 	timer->tregs->ctrl |= GPTIMER_CTRL_IE;
 }
 
-void gptimer_tlib_irq_unreg(struct tlib_dev *hand, tlib_isr_t func, void *data)
+static void gptimer_tlib_irq_unreg(struct tlib_dev *hand, tlib_isr_t func, void *data)
 {
 	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
 	struct gptimer_priv *priv = priv_from_timer(timer);
@@ -481,7 +481,7 @@ void gptimer_tlib_irq_unreg(struct tlib_dev *hand, tlib_isr_t func, void *data)
 	}
 }
 
-void gptimer_tlib_start(struct tlib_dev *hand, int once)
+static void gptimer_tlib_start(struct tlib_dev *hand, int once)
 {
 	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
 	unsigned int ctrl;
@@ -493,7 +493,7 @@ void gptimer_tlib_start(struct tlib_dev *hand, int once)
 	timer->tregs->ctrl |= ctrl;
 }
 
-void gptimer_tlib_stop(struct tlib_dev *hand)
+static void gptimer_tlib_stop(struct tlib_dev *hand)
 {
 	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
 
@@ -501,21 +501,21 @@ void gptimer_tlib_stop(struct tlib_dev *hand)
 	timer->tregs->ctrl &= ~(GPTIMER_CTRL_EN|GPTIMER_CTRL_IP);
 }
 
-void gptimer_tlib_restart(struct tlib_dev *hand)
+static void gptimer_tlib_restart(struct tlib_dev *hand)
 {
 	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
 
 	timer->tregs->ctrl |= GPTIMER_CTRL_LD | GPTIMER_CTRL_EN;
 }
 
-void gptimer_tlib_get_counter(struct tlib_dev *hand, unsigned int *counter)
+static void gptimer_tlib_get_counter(struct tlib_dev *hand, unsigned int *counter)
 {
 	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
 
 	*counter = timer->tregs->value;
 }
 
-struct tlib_drv gptimer_tlib_drv =
+static struct tlib_drv gptimer_tlib_drv =
 {
 	.reset = gptimer_tlib_reset,
 	.get_freq = gptimer_tlib_get_freq,
