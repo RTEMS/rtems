@@ -1379,8 +1379,8 @@ static int grspw_hw_init(GRSPW_DEV *pDev) {
         pDev->rx = (SPACEWIRE_RXBD *) pDev->mem_bdtable;
         pDev->tx = (SPACEWIRE_RXBD *) pDev->mem_bdtable + SPACEWIRE_BDTABLE_SIZE;
 #else
-        pDev->rx = (SPACEWIRE_RXBD *) rtems_heap_allocate_aligned_with_boundry( SPACEWIRE_BDTABLE_SIZE, 1024, 0 );
-        pDev->tx = (SPACEWIRE_TXBD *) rtems_heap_allocate_aligned_with_boundry( SPACEWIRE_BDTABLE_SIZE, 1024, 0 );
+        pDev->rx = (SPACEWIRE_RXBD *) rtems_heap_allocate_aligned_with_boundary( SPACEWIRE_BDTABLE_SIZE, 1024, 0 );
+        pDev->tx = (SPACEWIRE_TXBD *) rtems_heap_allocate_aligned_with_boundary( SPACEWIRE_BDTABLE_SIZE, 1024, 0 );
 #endif
         SPACEWIRE_DBG("hw_init [minor %i]\n", pDev->minor);
 
@@ -1423,7 +1423,7 @@ static void grspw_hw_reset(GRSPW_DEV *pDev)
         SPW_CTRL_WRITE(pDev, SPW_CTRL_LINKSTART); /*start link core*/
         #ifndef GRSPW_STATIC_MEM
                 free(pDev->rx);
-                free(pDec->tx);
+                free(pDev->tx);
         #endif
 }
 
