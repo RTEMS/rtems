@@ -1,0 +1,30 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpcapture02
+
+directives:
+
+  rtems_capture_begin_add_record
+  rtems_capture_append_to_record
+  rtems_capture_end_add_record
+  rtems_capture_read
+
+concepts:
+
+SMP Capture Test 2
+
+This program tests the functionality to add custom entries to
+the SMP capture trace.
+
+A simple function is wrapped inside another function that stores
+the input arguments and the function's result in the capture trace
+every time it is called. The function is called by a set of tasks
+per CPU during the test. The tasks are linked together by semaphores
+in such a way that only one task is active at any given time. At the
+end of the test the data stored in the capture trace is verified to
+make sure that all invocations of the traced function were stored correctly.
+
+The test also traces clock tick interrupts. If an interrupt handler
+with the name "Clock" or "clock" exists, it is assumed to be the main
+clock interrupt handler. The test wraps this function with another function
+that adds an entry to the trace for every clock tick.

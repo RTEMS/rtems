@@ -13,6 +13,7 @@ SUBDIRS += smpaffinity01
 SUBDIRS += smpatomic01
 SUBDIRS += smpcache01
 SUBDIRS += smpcapture01
+SUBDIRS += smpcapture02
 SUBDIRS += smpfatal01
 SUBDIRS += smpfatal02
 SUBDIRS += smpfatal03
