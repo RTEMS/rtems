@@ -25,7 +25,7 @@
 #include <apbuart_termios.h>
 
 int debug_uart_index __attribute__((weak)) = 0;
-static struct apbuart_regs *dbg_uart = NULL;
+struct apbuart_regs *dbg_uart = NULL;
 
 /* Before UART driver has registered (or when no UART is available), calls to
  * printk that gets to bsp_out_char() will be filling data into the
