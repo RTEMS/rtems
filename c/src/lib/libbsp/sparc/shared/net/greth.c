@@ -117,7 +117,7 @@ extern void ipalign(struct mbuf *m);
 #endif
 const struct timespec greth_tan = {
    GRETH_AUTONEGO_TIMEOUT_MS/1000,
-   GRETH_AUTONEGO_TIMEOUT_MS*1000000
+   (GRETH_AUTONEGO_TIMEOUT_MS % 1000) * 1000000
 };
 
 /* For optimizing the autonegotiation time */
@@ -213,7 +213,7 @@ static char *almalloc(int sz, int alignment)
 
 /* GRETH interrupt handler */
 
-void greth_interrupt (void *arg)
+static void greth_interrupt (void *arg)
 {
         uint32_t status;
         uint32_t ctrl;
@@ -256,16 +256,17 @@ static uint32_t read_mii(struct greth_softc *sc, uint32_t phy_addr, uint32_t reg
     sc->regs->mdio_ctrl = (phy_addr << 11) | (reg_addr << 6) | GRETH_MDIO_READ;
     while (sc->regs->mdio_ctrl & GRETH_MDIO_BUSY) {}
     if (!(sc->regs->mdio_ctrl & GRETH_MDIO_LINKFAIL)) {
-	MIIDBG("greth%d: mii read[%d] OK to %x.%x (0x%08x,0x%08x)\n",
-                sc->minor, sc->phy_read_access, phy_addr, reg_addr,
-                sc->regs->ctrl, sc->regs->mdio_ctrl);
-
+        MIIDBG("greth%d: mii read[%d] OK to %" PRIx32 ".%" PRIx32
+               " (0x%08" PRIx32 ",0x%08" PRIx32 ")\n",
+               sc->minor, sc->phy_read_access, phy_addr, reg_addr,
+               sc->regs->ctrl, sc->regs->mdio_ctrl);
         return((sc->regs->mdio_ctrl >> 16) & 0xFFFF);
     } else {
-	printf("greth%d: mii read[%d] failed to %x.%x (0x%08x,0x%08x)\n",
-                sc->minor, sc->phy_read_access, phy_addr, reg_addr,
-                sc->regs->ctrl, sc->regs->mdio_ctrl);
-	return (0xffff);
+        printf("greth%d: mii read[%d] failed to %" PRIx32 ".%" PRIx32
+               " (0x%08" PRIx32 ",0x%08" PRIx32 ")\n",
+               sc->minor, sc->phy_read_access, phy_addr, reg_addr,
+               sc->regs->ctrl, sc->regs->mdio_ctrl);
+        return (0xffff);
     }
 }
 
@@ -277,13 +278,15 @@ static void write_mii(struct greth_softc *sc, uint32_t phy_addr, uint32_t reg_ad
      ((data & 0xFFFF) << 16) | (phy_addr << 11) | (reg_addr << 6) | GRETH_MDIO_WRITE;
     while (sc->regs->mdio_ctrl & GRETH_MDIO_BUSY) {}
     if (!(sc->regs->mdio_ctrl & GRETH_MDIO_LINKFAIL)) {
-	MIIDBG("greth%d: mii write[%d] OK to %x.%x (0x%08x,0x%08x)\n",
-                sc->minor, sc->phy_write_access, phy_addr, reg_addr,
-                sc->regs->ctrl, sc->regs->mdio_ctrl);
+        MIIDBG("greth%d: mii write[%d] OK to  to %" PRIx32 ".%" PRIx32
+               "(0x%08" PRIx32 ",0x%08" PRIx32 ")\n",
+               sc->minor, sc->phy_write_access, phy_addr, reg_addr,
+               sc->regs->ctrl, sc->regs->mdio_ctrl);
     } else {
-	printf("greth%d: mii write[%d] failed to %x.%x (0x%08x,0x%08x)\n",
-                sc->minor, sc->phy_write_access, phy_addr, reg_addr,
-                sc->regs->ctrl, sc->regs->mdio_ctrl);
+        printf("greth%d: mii write[%d] failed to to %" PRIx32 ".%" PRIx32
+               " (0x%08" PRIx32 ",0x%08" PRIx32 ")\n",
+               sc->minor, sc->phy_write_access, phy_addr, reg_addr,
+               sc->regs->ctrl, sc->regs->mdio_ctrl);
     }
 }
 
@@ -310,7 +313,7 @@ static void print_init_info(struct greth_softc *sc)
     }
 #ifdef GRETH_AUTONEGO_PRINT_TIME
     if ( sc->auto_neg ) {
-        printf("Autonegotiation Time: %dms\n", sc->auto_neg_time.tv_sec * 1000 +
+        printf("Autonegotiation Time: %ldms\n", sc->auto_neg_time.tv_sec * 1000 +
                sc->auto_neg_time.tv_nsec / 1000000);
     }
 #endif
@@ -621,7 +624,7 @@ void ipalign(struct mbuf *m)
 }
 #endif
 
-void
+static void
 greth_Daemon (void *arg)
 {
     struct ether_header *eh;
@@ -841,7 +844,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 }
 
 
-int
+static int
 sendpacket_gbit (struct ifnet *ifp, struct mbuf *m)
 {
         struct greth_softc *dp = ifp->if_softc;
@@ -1236,7 +1239,7 @@ greth_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 /*
  * Attach an GRETH driver to the system
  */
-int
+static int
 greth_interface_driver_attach (
     struct rtems_bsdnet_ifconfig *config,
     int attach
