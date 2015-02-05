@@ -21,6 +21,7 @@
 #include <string.h>
 #include <libcpu/byteorder.h>
 #include <libcpu/access.h>
+#include <rtems/bspIo.h>
 #include <pci.h>
 #include <pci/cfg.h>
 
@@ -28,10 +29,8 @@
 #include <drvmgr/ambapp_bus.h>
 #include <ambapp.h>
 #include <drvmgr/pci_bus.h>
+#include <pcif.h>
 
-#include <pci.h>
-#include <rtems/bspIo.h>
-#include <string.h>
 
 /* Configuration options */
 #define SYSTEM_MAINMEM_START 0x40000000
@@ -153,7 +152,7 @@ void pcif_register_drv(void)
 	drvmgr_drv_register(&pcif_info.general);
 }
 
-int pcif_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
+static int pcif_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 {
 	struct pcif_priv *priv = pcifpriv;
 	volatile uint32_t *pci_conf;
@@ -197,7 +196,8 @@ int pcif_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 
 	return retval;
 }
-int pcif_cfg_r16(pci_dev_t dev, int ofs, uint16_t *val)
+
+static int pcif_cfg_r16(pci_dev_t dev, int ofs, uint16_t *val)
 {
 	uint32_t v;
 	int retval;
@@ -211,7 +211,7 @@ int pcif_cfg_r16(pci_dev_t dev, int ofs, uint16_t *val)
 	return retval;
 }
 
-int pcif_cfg_r8(pci_dev_t dev, int ofs, uint8_t *val)
+static int pcif_cfg_r8(pci_dev_t dev, int ofs, uint8_t *val)
 {
 	uint32_t v;
 	int retval;
@@ -223,7 +223,7 @@ int pcif_cfg_r8(pci_dev_t dev, int ofs, uint8_t *val)
 	return retval;
 }
 
-int pcif_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
+static int pcif_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 {
 	struct pcif_priv *priv = pcifpriv;
 	volatile uint32_t *pci_conf;
@@ -259,7 +259,7 @@ int pcif_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 	return PCISTS_OK;
 }
 
-int pcif_cfg_w16(pci_dev_t dev, int ofs, uint16_t val)
+static int pcif_cfg_w16(pci_dev_t dev, int ofs, uint16_t val)
 {
 	uint32_t v;
 	int retval;
@@ -276,7 +276,7 @@ int pcif_cfg_w16(pci_dev_t dev, int ofs, uint16_t val)
 	return pcif_cfg_w32(dev, ofs & ~0x3, v);
 }
 
-int pcif_cfg_w8(pci_dev_t dev, int ofs, uint8_t val)
+static int pcif_cfg_w8(pci_dev_t dev, int ofs, uint8_t val)
 {
 	uint32_t v;
 	int retval;
@@ -300,7 +300,7 @@ int pcif_cfg_w8(pci_dev_t dev, int ofs, uint8_t val)
  * Returns the "system IRQ" for the PCI INTA#..INTD# pin in irq_pin. Returns
  * 0xff if not assigned.
  */
-uint8_t pcif_bus0_irq_map(pci_dev_t dev, int irq_pin)
+static uint8_t pcif_bus0_irq_map(pci_dev_t dev, int irq_pin)
 {
 	uint8_t sysIrqNr = 0; /* not assigned */
 	int irq_group;
@@ -315,7 +315,7 @@ uint8_t pcif_bus0_irq_map(pci_dev_t dev, int irq_pin)
 	return sysIrqNr;
 }
 
-int pcif_translate(uint32_t *address, int type, int dir)
+static int pcif_translate(uint32_t *address, int type, int dir)
 {
 	/* No address translation implmented at this point */
 	return 0;
@@ -350,7 +350,7 @@ struct pci_access_drv pcif_access_drv = {
 /* Initializes the PCIF core hardware
  *
  */
-int pcif_hw_init(struct pcif_priv *priv)
+static int pcif_hw_init(struct pcif_priv *priv)
 {
 	struct pcif_regs *regs;
 	uint32_t data, size;
@@ -412,7 +412,7 @@ int pcif_hw_init(struct pcif_priv *priv)
  *  -3            Error due to PCIF hardware initialization
  *  -4            Error registering driver to PCI layer
  */
-int pcif_init(struct pcif_priv *priv)
+static int pcif_init(struct pcif_priv *priv)
 {
 	struct ambapp_apb_info *apb;
 	struct ambapp_ahb_info *ahb;

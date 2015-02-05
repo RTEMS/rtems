@@ -41,6 +41,7 @@ EXTRA_DIST += shared/timer/tlib_ckinit.c
 # PCI bus
 EXTRA_DIST += shared/include/grpci.h
 EXTRA_DIST += shared/include/grpci2.h
+EXTRA_DIST += shared/include/pcif.h
 EXTRA_DIST += shared/pci/grpci.c
 EXTRA_DIST += shared/pci/grpci2.c
 EXTRA_DIST += shared/pci/pcif.c
