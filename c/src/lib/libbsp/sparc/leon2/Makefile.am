@@ -97,6 +97,7 @@ libbsp_a_SOURCES += ../../sparc/shared/timer/gptimer.c
 libbsp_a_SOURCES += ../../sparc/shared/timer/tlib.c
 
 # PCI
+include_HEADERS += ../../sparc/shared/include/grpci.h
 include_HEADERS += ../../sparc/shared/include/grpci2.h
 libbsp_a_SOURCES += ../../sparc/shared/pci/grpci2.c
 libbsp_a_SOURCES += ../../sparc/shared/pci/grpci.c

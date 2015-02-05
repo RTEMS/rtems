@@ -133,6 +133,10 @@ $(PROJECT_INCLUDE)/bsp/irq.h: include/bsp/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstam
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 
+$(PROJECT_INCLUDE)/grpci.h: ../../sparc/shared/include/grpci.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grpci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/grpci.h
+
 $(PROJECT_INCLUDE)/grpci2.h: ../../sparc/shared/include/grpci2.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grpci2.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/grpci2.h

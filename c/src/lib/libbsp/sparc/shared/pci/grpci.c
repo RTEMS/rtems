@@ -29,6 +29,7 @@
 #include <drvmgr/ambapp_bus.h>
 #include <ambapp.h>
 #include <drvmgr/pci_bus.h>
+#include <grpci.h>
 
 #define DMAPCI_ADDR 0x80000500
 
@@ -166,7 +167,7 @@ void grpci_register_drv(void)
 	drvmgr_drv_register(&grpci_info.general);
 }
 
-int grpci_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
+static int grpci_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 {
 	struct grpci_priv *priv = grpcipriv;
 	volatile uint32_t *pci_conf;
@@ -216,7 +217,7 @@ int grpci_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 }
 
 
-int grpci_cfg_r16(pci_dev_t dev, int ofs, uint16_t *val)
+static int grpci_cfg_r16(pci_dev_t dev, int ofs, uint16_t *val)
 {
 	uint32_t v;
 	int retval;
@@ -230,7 +231,7 @@ int grpci_cfg_r16(pci_dev_t dev, int ofs, uint16_t *val)
 	return retval;
 }
 
-int grpci_cfg_r8(pci_dev_t dev, int ofs, uint8_t *val)
+static int grpci_cfg_r8(pci_dev_t dev, int ofs, uint8_t *val)
 {
 	uint32_t v;
 	int retval;
@@ -242,7 +243,7 @@ int grpci_cfg_r8(pci_dev_t dev, int ofs, uint8_t *val)
 	return retval;
 }
 
-int grpci_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
+static int grpci_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 {
 	struct grpci_priv *priv = grpcipriv;
 	volatile uint32_t *pci_conf;
@@ -284,7 +285,7 @@ int grpci_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 	return PCISTS_OK;
 }
 
-int grpci_cfg_w16(pci_dev_t dev, int ofs, uint16_t val)
+static int grpci_cfg_w16(pci_dev_t dev, int ofs, uint16_t val)
 {
 	uint32_t v;
 	int retval;
@@ -301,7 +302,7 @@ int grpci_cfg_w16(pci_dev_t dev, int ofs, uint16_t val)
 	return grpci_cfg_w32(dev, ofs & ~0x3, v);
 }
 
-int grpci_cfg_w8(pci_dev_t dev, int ofs, uint8_t val)
+static int grpci_cfg_w8(pci_dev_t dev, int ofs, uint8_t val)
 {
 	uint32_t v;
 	int retval;
@@ -324,7 +325,7 @@ int grpci_cfg_w8(pci_dev_t dev, int ofs, uint8_t val)
  * Returns the "system IRQ" for the PCI INTA#..INTD# pin in irq_pin. Returns
  * 0xff if not assigned.
  */
-uint8_t grpci_bus0_irq_map(pci_dev_t dev, int irq_pin)
+static uint8_t grpci_bus0_irq_map(pci_dev_t dev, int irq_pin)
 {
 	uint8_t sysIrqNr = 0; /* not assigned */
 	int irq_group;
@@ -339,7 +340,7 @@ uint8_t grpci_bus0_irq_map(pci_dev_t dev, int irq_pin)
 	return sysIrqNr;
 }
 
-int grpci_translate(uint32_t *address, int type, int dir)
+static int grpci_translate(uint32_t *address, int type, int dir)
 {
 	uint32_t adr;
 	struct grpci_priv *priv = grpcipriv;
@@ -427,7 +428,7 @@ struct pci_io_ops grpci_io_ops_be =
 	_st_be32,
 };
 
-int grpci_hw_init(struct grpci_priv *priv)
+static int grpci_hw_init(struct grpci_priv *priv)
 {
 	volatile unsigned int *mbar0, *page0;
 	uint32_t data, addr, mbar0size;
@@ -501,7 +502,7 @@ int grpci_hw_init(struct grpci_priv *priv)
  *  -3            Error due to GRPCI hardware initialization
  *  -4            Error registering driver to PCI layer
  */
-int grpci_init(struct grpci_priv *priv)
+static int grpci_init(struct grpci_priv *priv)
 {
 	struct ambapp_apb_info *apb;
 	struct ambapp_ahb_info *ahb;
@@ -673,7 +674,11 @@ int grpci_init1(struct drvmgr_dev *dev)
 }
 
 /* DMA functions which uses GRPCIs optional DMA controller (len in words) */
-int grpci_dma_to_pci(unsigned int ahb_addr, unsigned int pci_addr, unsigned int len) {
+int grpci_dma_to_pci(
+	unsigned int ahb_addr,
+	unsigned int pci_addr,
+	unsigned int len)
+{
     int ret = 0;
 
     pcidma[0] = 0x82;
@@ -694,7 +699,11 @@ int grpci_dma_to_pci(unsigned int ahb_addr, unsigned int pci_addr, unsigned int 
 
 }
 
-int grpci_dma_from_pci(unsigned int ahb_addr, unsigned int pci_addr, unsigned int len) {
+int grpci_dma_from_pci(
+	unsigned int ahb_addr,
+	unsigned int pci_addr,
+	unsigned int len)
+{
     int ret = 0;
 
     pcidma[0] = 0x80;
