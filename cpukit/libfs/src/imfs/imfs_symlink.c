@@ -20,7 +20,6 @@
 
 #include "imfs.h"
 
-#include <stdlib.h>
 #include <string.h>
 
 static const IMFS_node_control IMFS_node_control_sym_link;
@@ -32,16 +31,7 @@ int IMFS_symlink(
   const char *target
 )
 {
-  char         *dup_target;
   IMFS_jnode_t *new_node;
-
-  /*
-   * Duplicate link name
-   */
-  dup_target = strdup(target);
-  if (dup_target == NULL) {
-    rtems_set_errno_and_return_minus_one(ENOMEM);
-  }
 
   /*
    *  Create a new link node.
@@ -49,16 +39,15 @@ int IMFS_symlink(
   new_node = IMFS_create_node(
     parentloc,
     &IMFS_node_control_sym_link,
-    sizeof( IMFS_sym_link_t ),
+    sizeof( IMFS_sym_link_t ) + strlen( target ) + 1,
     name,
     namelen,
     ( S_IFLNK | ( S_IRWXU | S_IRWXG | S_IRWXO )),
-    dup_target
+    RTEMS_DECONST( char *, target )
   );
 
-  if (new_node == NULL) {
-    free(dup_target);
-    rtems_set_errno_and_return_minus_one(ENOMEM);
+  if ( new_node == NULL ) {
+    rtems_set_errno_and_return_minus_one( ENOMEM );
   }
 
   return 0;
@@ -118,23 +107,15 @@ static IMFS_jnode_t *IMFS_node_initialize_sym_link(
 {
   IMFS_sym_link_t *sym_link = (IMFS_sym_link_t *) node;
 
-  sym_link->name = arg;
+  sym_link->name = (char *) sym_link + sizeof( *sym_link );
+  strcpy( sym_link->name, arg );
 
   return node;
-}
-
-static void IMFS_node_destroy_sym_link( IMFS_jnode_t *node )
-{
-  IMFS_sym_link_t *sym_link = (IMFS_sym_link_t *) node;
-
-  free( sym_link->name );
-
-  IMFS_node_destroy_default( node );
 }
 
 static const IMFS_node_control IMFS_node_control_sym_link = {
   .handlers = &IMFS_link_handlers,
   .node_initialize = IMFS_node_initialize_sym_link,
   .node_remove = IMFS_node_remove_default,
-  .node_destroy = IMFS_node_destroy_sym_link
+  .node_destroy = IMFS_node_destroy_default
 };
