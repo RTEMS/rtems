@@ -2004,12 +2004,9 @@ static void check_rx_errors(GRSPW_DEV *pDev, int ctrl)
 }
 
 
-void grspw_print_dev(struct drvmgr_dev *dev, int options)
+static void grspw_print_dev(struct drvmgr_dev *dev, int options)
 {
 	GRSPW_DEV *pDev = dev->priv;
-	struct amba_dev_info *devinfo;
-
-	devinfo = (struct amba_dev_info *)pDev->dev->businfo;
 
 	/* Print */
 	printf("--- GRSPW %s ---\n", pDev->devName);
