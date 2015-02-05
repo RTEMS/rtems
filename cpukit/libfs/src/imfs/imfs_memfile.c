@@ -23,106 +23,45 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MEMFILE_STATIC
-
 /*
  *  Prototypes of private routines
  */
-MEMFILE_STATIC int IMFS_memfile_extend(
+static int IMFS_memfile_extend(
    IMFS_memfile_t *memfile,
    bool            zero_fill,
    off_t           new_length
 );
 
-MEMFILE_STATIC int IMFS_memfile_addblock(
+static int IMFS_memfile_addblock(
    IMFS_memfile_t *memfile,
    unsigned int    block
 );
 
-MEMFILE_STATIC void IMFS_memfile_remove_block(
+static void IMFS_memfile_remove_block(
    IMFS_memfile_t *memfile,
    unsigned int    block
 );
 
-MEMFILE_STATIC block_p *IMFS_memfile_get_block_pointer(
+static block_p *IMFS_memfile_get_block_pointer(
    IMFS_memfile_t *memfile,
    unsigned int    block,
    int             malloc_it
 );
 
-MEMFILE_STATIC ssize_t IMFS_memfile_read(
+static ssize_t IMFS_memfile_read(
    IMFS_file_t     *file,
    off_t            start,
    unsigned char   *destination,
    unsigned int     length
 );
 
-ssize_t IMFS_memfile_write(  /* cannot be static as used in imfs_fchmod.c */
-   IMFS_memfile_t        *memfile,
-   off_t                  start,
-   const unsigned char   *source,
-   unsigned int           length
-);
+static void *memfile_alloc_block(void);
 
-void *memfile_alloc_block(void);
-
-void memfile_free_block(
+static void memfile_free_block(
   void *memory
 );
 
-int IMFS_linfile_open(
-  rtems_libio_t *iop,
-  const char    *pathname,
-  int            oflag,
-  mode_t         mode
-)
-{
-  IMFS_file_t *file;
-
-  file = iop->pathinfo.node_access;
-
-  /*
-   * Perform 'copy on write' for linear files
-   */
-  if ((iop->flags & LIBIO_FLAGS_WRITE) != 0) {
-    uint32_t count = file->File.size;
-    const unsigned char *buffer = file->Linearfile.direct;
-
-    file->Node.control            = &IMFS_mknod_control_memfile.node_control;
-    file->File.size               = 0;
-    file->Memfile.indirect        = 0;
-    file->Memfile.doubly_indirect = 0;
-    file->Memfile.triply_indirect = 0;
-    if ((count != 0)
-     && (IMFS_memfile_write(&file->Memfile, 0, buffer, count) == -1))
-        return -1;
-  }
-
-  return 0;
-}
-
-ssize_t IMFS_linfile_read(
-  rtems_libio_t *iop,
-  void          *buffer,
-  size_t         count
-)
-{
-  IMFS_file_t *file = IMFS_iop_to_file( iop );
-  off_t start = iop->offset;
-  size_t size = file->File.size;
-  const unsigned char *data = file->Linearfile.direct;
-
-  if (count > size - start)
-    count = size - start;
-
-  IMFS_update_atime( &file->Node );
-  iop->offset = start + count;
-  memcpy(buffer, &data[start], count);
-
-  return (ssize_t) count;
-}
-
-ssize_t memfile_read(
+static ssize_t memfile_read(
   rtems_libio_t *iop,
   void          *buffer,
   size_t         count
@@ -139,7 +78,7 @@ ssize_t memfile_read(
   return status;
 }
 
-ssize_t memfile_write(
+static ssize_t memfile_write(
   rtems_libio_t *iop,
   const void    *buffer,
   size_t         count
@@ -165,7 +104,7 @@ ssize_t memfile_write(
  *  This IMFS_stat() can be used.
  */
 
-int memfile_ftruncate(
+static int memfile_ftruncate(
   rtems_libio_t        *iop,
   off_t                 length
 )
@@ -200,7 +139,7 @@ int memfile_ftruncate(
  *  specified.  If necessary, it will allocate memory blocks to
  *  extend the file.
  */
-MEMFILE_STATIC int IMFS_memfile_extend(
+static int IMFS_memfile_extend(
    IMFS_memfile_t *memfile,
    bool            zero_fill,
    off_t           new_length
@@ -271,7 +210,7 @@ MEMFILE_STATIC int IMFS_memfile_extend(
  *
  *  This routine adds a single block to the specified in-memory file.
  */
-MEMFILE_STATIC int IMFS_memfile_addblock(
+static int IMFS_memfile_addblock(
    IMFS_memfile_t *memfile,
    unsigned int    block
 )
@@ -312,7 +251,7 @@ MEMFILE_STATIC int IMFS_memfile_addblock(
  *         block from the middle of a file would be exceptionally
  *         dangerous and the results unpredictable.
  */
-MEMFILE_STATIC void IMFS_memfile_remove_block(
+static void IMFS_memfile_remove_block(
    IMFS_memfile_t *memfile,
    unsigned int    block
 )
@@ -368,7 +307,7 @@ static void memfile_free_blocks_in_table(
 }
 
 /*
- *  IMFS_memfile_remove
+ *  IMFS_memfile_destroy
  *
  *  This routine frees all memory associated with an in memory file.
  *
@@ -385,7 +324,7 @@ static void memfile_free_blocks_in_table(
  *         Regardless until the IMFS implementation is proven, it
  *         is better to stick to simple, easy to understand algorithms.
  */
-void IMFS_memfile_remove(
+static void IMFS_memfile_destroy(
  IMFS_jnode_t  *the_jnode
 )
 {
@@ -461,7 +400,7 @@ void IMFS_memfile_remove(
  *  reading the data between offset and the end of the file (truncated
  *  read).
  */
-MEMFILE_STATIC ssize_t IMFS_memfile_read(
+static ssize_t IMFS_memfile_read(
    IMFS_file_t     *file,
    off_t            start,
    unsigned char   *destination,
@@ -566,7 +505,7 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
  *  This routine writes the specified data buffer into the in memory
  *  file pointed to by memfile.  The file is extended as needed.
  */
-MEMFILE_STATIC ssize_t IMFS_memfile_write(
+ssize_t IMFS_memfile_write(
    IMFS_memfile_t        *memfile,
    off_t                  start,
    const unsigned char   *source,
@@ -891,3 +830,31 @@ void memfile_free_block(
   free(memory);
   memfile_blocks_allocated--;
 }
+
+static const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
+  .open_h = rtems_filesystem_default_open,
+  .close_h = rtems_filesystem_default_close,
+  .read_h = memfile_read,
+  .write_h = memfile_write,
+  .ioctl_h = rtems_filesystem_default_ioctl,
+  .lseek_h = rtems_filesystem_default_lseek_file,
+  .fstat_h = IMFS_stat_file,
+  .ftruncate_h = memfile_ftruncate,
+  .fsync_h = rtems_filesystem_default_fsync_or_fdatasync_success,
+  .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync_success,
+  .fcntl_h = rtems_filesystem_default_fcntl,
+  .kqfilter_h = rtems_filesystem_default_kqfilter,
+  .poll_h = rtems_filesystem_default_poll,
+  .readv_h = rtems_filesystem_default_readv,
+  .writev_h = rtems_filesystem_default_writev
+};
+
+const IMFS_mknod_control IMFS_mknod_control_memfile = {
+  {
+    .handlers = &IMFS_memfile_handlers,
+    .node_initialize = IMFS_node_initialize_default,
+    .node_remove = IMFS_node_remove_default,
+    .node_destroy = IMFS_memfile_destroy
+  },
+  .node_size = sizeof( IMFS_file_t )
+};

@@ -1,7 +1,6 @@
 /**
  * @file
  *
- * @brief Memfile Operations Tables
  * @ingroup IMFS
  */
 
@@ -20,36 +19,57 @@
 
 #include "imfs.h"
 
-static int IMFS_stat_file(
-  const rtems_filesystem_location_info_t *loc,
-  struct stat *buf
+static ssize_t IMFS_linfile_read(
+  rtems_libio_t *iop,
+  void          *buffer,
+  size_t         count
 )
 {
-  const IMFS_file_t *file = loc->node_access;
+  IMFS_file_t *file = IMFS_iop_to_file( iop );
+  off_t start = iop->offset;
+  size_t size = file->File.size;
+  const unsigned char *data = file->Linearfile.direct;
 
-  buf->st_size = file->File.size;
-  buf->st_blksize = imfs_rq_memfile_bytes_per_block;
+  if (count > size - start)
+    count = size - start;
 
-  return IMFS_stat( loc, buf );
+  IMFS_update_atime( &file->Node );
+  iop->offset = start + count;
+  memcpy(buffer, &data[start], count);
+
+  return (ssize_t) count;
 }
 
-static const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
-  .open_h = rtems_filesystem_default_open,
-  .close_h = rtems_filesystem_default_close,
-  .read_h = memfile_read,
-  .write_h = memfile_write,
-  .ioctl_h = rtems_filesystem_default_ioctl,
-  .lseek_h = rtems_filesystem_default_lseek_file,
-  .fstat_h = IMFS_stat_file,
-  .ftruncate_h = memfile_ftruncate,
-  .fsync_h = rtems_filesystem_default_fsync_or_fdatasync_success,
-  .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync_success,
-  .fcntl_h = rtems_filesystem_default_fcntl,
-  .kqfilter_h = rtems_filesystem_default_kqfilter,
-  .poll_h = rtems_filesystem_default_poll,
-  .readv_h = rtems_filesystem_default_readv,
-  .writev_h = rtems_filesystem_default_writev
-};
+static int IMFS_linfile_open(
+  rtems_libio_t *iop,
+  const char    *pathname,
+  int            oflag,
+  mode_t         mode
+)
+{
+  IMFS_file_t *file;
+
+  file = iop->pathinfo.node_access;
+
+  /*
+   * Perform 'copy on write' for linear files
+   */
+  if ((iop->flags & LIBIO_FLAGS_WRITE) != 0) {
+    uint32_t count = file->File.size;
+    const unsigned char *buffer = file->Linearfile.direct;
+
+    file->Node.control            = &IMFS_mknod_control_memfile.node_control;
+    file->File.size               = 0;
+    file->Memfile.indirect        = 0;
+    file->Memfile.doubly_indirect = 0;
+    file->Memfile.triply_indirect = 0;
+    if ((count != 0)
+     && (IMFS_memfile_write(&file->Memfile, 0, buffer, count) == -1))
+        return -1;
+  }
+
+  return 0;
+}
 
 static const rtems_filesystem_file_handlers_r IMFS_linfile_handlers = {
   .open_h = IMFS_linfile_open,
@@ -67,16 +87,6 @@ static const rtems_filesystem_file_handlers_r IMFS_linfile_handlers = {
   .poll_h = rtems_filesystem_default_poll,
   .readv_h = rtems_filesystem_default_readv,
   .writev_h = rtems_filesystem_default_writev
-};
-
-const IMFS_mknod_control IMFS_mknod_control_memfile = {
-  {
-    .handlers = &IMFS_memfile_handlers,
-    .node_initialize = IMFS_node_initialize_default,
-    .node_remove = IMFS_node_remove_default,
-    .node_destroy = IMFS_memfile_remove
-  },
-  .node_size = sizeof( IMFS_file_t )
 };
 
 const IMFS_node_control IMFS_node_control_linfile = {

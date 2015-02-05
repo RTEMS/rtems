@@ -49,13 +49,14 @@ libimfs_a_SOURCES += src/imfs/deviceio.c \
     src/imfs/imfs_fsunmount.c \
     src/imfs/imfs_handlers_device.c \
     src/imfs/imfs_handlers_directory.c \
-    src/imfs/imfs_handlers_memfile.c src/imfs/imfs_init.c \
+    src/imfs/imfs_init.c \
     src/imfs/imfs_initsupp.c src/imfs/imfs_link.c src/imfs/imfs_load_tar.c \
+    src/imfs/imfs_linfile.c \
     src/imfs/imfs_mknod.c src/imfs/imfs_mount.c \
     src/imfs/imfs_rename.c src/imfs/imfs_rmnod.c \
-    src/imfs/imfs_stat.c src/imfs/imfs_symlink.c \
+    src/imfs/imfs_stat.c src/imfs/imfs_stat_file.c src/imfs/imfs_symlink.c \
     src/imfs/imfs_unmount.c src/imfs/imfs_utime.c src/imfs/ioman.c \
-    src/imfs/memfile.c src/imfs/miniimfs_init.c src/imfs/imfs.h
+    src/imfs/imfs_memfile.c src/imfs/miniimfs_init.c src/imfs/imfs.h
 
 # POSIX FIFO/pipe
 libimfs_a_SOURCES += src/pipe/fifo.c src/pipe/pipe.c src/pipe/pipe.h

@@ -511,6 +511,11 @@ extern int IMFS_stat(
   struct stat *buf
 );
 
+extern int IMFS_stat_file(
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
+);
+
 /**
  * @brief IMFS evaluation node support.
  */
@@ -711,20 +716,6 @@ extern int IMFS_unmount(
   rtems_filesystem_mount_table_entry_t *mt_entry  /* IN */
 );
 
-extern void IMFS_memfile_remove(
- IMFS_jnode_t  *the_jnode         /* IN/OUT */
-);
-
-/**
- * @brief Truncate a memory file.
- *
- * This routine processes the ftruncate() system call.
- */
-extern int memfile_ftruncate(
-  rtems_libio_t *iop,               /* IN  */
-  off_t          length             /* IN  */
-);
-
 /**
  * @brief Read the next directory of the IMFS.
  * 
@@ -756,44 +747,11 @@ extern ssize_t imfs_dir_read(
  */
 /**@{*/
 
-/**
- * @brief Open a linear file.
- *
- * Transforms the file into a memfile if opened for writing.
- */
-extern int IMFS_linfile_open(
-  rtems_libio_t *iop,             /* IN  */
-  const char    *pathname,        /* IN  */
-  int            oflag,           /* IN  */
-  mode_t         mode             /* IN  */
-);
-
-extern ssize_t IMFS_linfile_read(
-  rtems_libio_t *iop,
-  void          *buffer,
-  size_t         count
-);
-
-/**
- * @brief Read a memory file.
- *
- * This routine processes the read() system call.
- */
-extern ssize_t memfile_read(
-  rtems_libio_t *iop,             /* IN  */
-  void          *buffer,          /* IN  */
-  size_t         count            /* IN  */
-);
-
-/**
- * @brief Write a memory file.
- *
- * This routine processes the write() system call.
- */
-extern ssize_t memfile_write(
-  rtems_libio_t *iop,             /* IN  */
-  const void    *buffer,          /* IN  */
-  size_t         count            /* IN  */
+extern ssize_t IMFS_memfile_write(
+  IMFS_memfile_t      *memfile,
+  off_t                start,
+  const unsigned char *source,
+  unsigned int         length
 );
 
 /** @} */
