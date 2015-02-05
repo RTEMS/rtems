@@ -23,8 +23,8 @@
 #include <string.h>
 
 IMFS_jnode_t *IMFS_allocate_node(
-  IMFS_fs_info_t *fs_info,
   const IMFS_node_control *node_control,
+  size_t node_size,
   const char *name,
   size_t namelen,
   mode_t mode,
@@ -46,7 +46,7 @@ IMFS_jnode_t *IMFS_allocate_node(
   /*
    *  Allocate an IMFS jnode
    */
-  node = calloc( 1, node_control->node_size );
+  node = calloc( 1, node_size );
   if ( !node ) {
     errno = ENOMEM;
 
@@ -88,16 +88,16 @@ IMFS_jnode_t *IMFS_allocate_node(
 IMFS_jnode_t *IMFS_create_node(
   const rtems_filesystem_location_info_t *parentloc,
   const IMFS_node_control *node_control,
+  size_t node_size,
   const char *name,
   size_t namelen,
   mode_t mode,
   void *arg
 )
 {
-  IMFS_fs_info_t *fs_info = parentloc->mt_entry->fs_info;
   IMFS_jnode_t *node = IMFS_allocate_node(
-    fs_info,
     node_control,
+    node_size,
     name,
     namelen,
     mode,

@@ -102,10 +102,12 @@ static IMFS_jnode_t *IMFS_node_remove_directory(
   return &dir->Node;
 }
 
-const IMFS_node_control IMFS_node_control_directory = {
-  .handlers = &IMFS_directory_handlers,
-  .node_size = sizeof(IMFS_directory_t),
-  .node_initialize = IMFS_node_initialize_directory,
-  .node_remove = IMFS_node_remove_directory,
-  .node_destroy = IMFS_node_destroy_default
+const IMFS_mknod_control IMFS_mknod_control_directory = {
+  {
+    .handlers = &IMFS_directory_handlers,
+    .node_initialize = IMFS_node_initialize_directory,
+    .node_remove = IMFS_node_remove_directory,
+    .node_destroy = IMFS_node_destroy_default
+  },
+  .node_size = sizeof( IMFS_directory_t )
 };

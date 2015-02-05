@@ -43,12 +43,12 @@ const rtems_filesystem_operations_table IMFS_ops = {
   .statvfs_h = rtems_filesystem_default_statvfs
 };
 
-static const IMFS_node_control *const
-  IMFS_node_controls [IMFS_TYPE_COUNT] = {
-  [IMFS_DIRECTORY] = &IMFS_node_control_directory,
-  [IMFS_DEVICE] = &IMFS_node_control_device,
-  [IMFS_MEMORY_FILE] = &IMFS_node_control_memfile,
-  [IMFS_FIFO] = &IMFS_node_control_enosys
+static const IMFS_mknod_control *const
+  IMFS_mknod_controls[ IMFS_TYPE_COUNT ] = {
+  [IMFS_DIRECTORY] = &IMFS_mknod_control_directory,
+  [IMFS_DEVICE] = &IMFS_mknod_control_device,
+  [IMFS_MEMORY_FILE] = &IMFS_mknod_control_memfile,
+  [IMFS_FIFO] = &IMFS_mknod_control_enosys
 };
 
 int IMFS_initialize(
@@ -59,6 +59,6 @@ int IMFS_initialize(
   return IMFS_initialize_support(
     mt_entry,
     &IMFS_ops,
-    IMFS_node_controls
+    IMFS_mknod_controls
   );
 }

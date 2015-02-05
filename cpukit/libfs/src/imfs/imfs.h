@@ -214,11 +214,15 @@ void IMFS_node_destroy_default( IMFS_jnode_t *node );
  */
 typedef struct {
   const rtems_filesystem_file_handlers_r *handlers;
-  size_t node_size;
   IMFS_node_control_initialize node_initialize;
   IMFS_node_control_remove node_remove;
   IMFS_node_control_destroy node_destroy;
 } IMFS_node_control;
+
+typedef struct {
+  IMFS_node_control node_control;
+  size_t node_size;
+} IMFS_mknod_control;
 
 /** @} */
 
@@ -371,19 +375,19 @@ static inline void IMFS_mtime_ctime_update( IMFS_jnode_t *jnode )
 }
 
 typedef struct {
-  const IMFS_node_control *node_controls [IMFS_TYPE_COUNT];
+  const IMFS_mknod_control *mknod_controls[ IMFS_TYPE_COUNT ];
 } IMFS_fs_info_t;
 
 /*
  *  Shared Data
  */
 
-extern const IMFS_node_control IMFS_node_control_directory;
-extern const IMFS_node_control IMFS_node_control_device;
-extern const IMFS_node_control IMFS_node_control_memfile;
+extern const IMFS_mknod_control IMFS_mknod_control_directory;
+extern const IMFS_mknod_control IMFS_mknod_control_device;
+extern const IMFS_mknod_control IMFS_mknod_control_memfile;
 extern const IMFS_node_control IMFS_node_control_linfile;
-extern const IMFS_node_control IMFS_node_control_fifo;
-extern const IMFS_node_control IMFS_node_control_enosys;
+extern const IMFS_mknod_control IMFS_mknod_control_fifo;
+extern const IMFS_mknod_control IMFS_mknod_control_enosys;
 
 extern const rtems_filesystem_operations_table miniIMFS_ops;
 extern const rtems_filesystem_operations_table IMFS_ops;
@@ -416,7 +420,7 @@ extern int miniIMFS_initialize(
 extern int IMFS_initialize_support(
   rtems_filesystem_mount_table_entry_t *mt_entry,
   const rtems_filesystem_operations_table *op_table,
-  const IMFS_node_control *const node_controls [IMFS_TYPE_COUNT]
+  const IMFS_mknod_control *const mknod_controls[ IMFS_TYPE_COUNT ]
 );
 /**
  * @brief Unmount this instance of IMFS.
@@ -559,8 +563,8 @@ extern int IMFS_mknod(
  * Routine to create a new in memory file system node.
  */
 extern IMFS_jnode_t *IMFS_allocate_node(
-  IMFS_fs_info_t *fs_info,
   const IMFS_node_control *node_control,
+  size_t node_size,
   const char *name,
   size_t namelen,
   mode_t mode,
@@ -576,6 +580,7 @@ extern IMFS_jnode_t *IMFS_allocate_node(
 extern IMFS_jnode_t *IMFS_create_node(
   const rtems_filesystem_location_info_t *parentloc,
   const IMFS_node_control *node_control,
+  size_t node_size,
   const char *name,
   size_t namelen,
   mode_t mode,
@@ -614,7 +619,6 @@ extern bool IMFS_is_imfs_instance(
 #define IMFS_GENERIC_INITIALIZER( handlers, init, destroy ) \
   { \
     ( handlers ), \
-    sizeof( IMFS_generic_t ), \
     ( init ), \
     IMFS_node_remove_default, \
     ( destroy ) \

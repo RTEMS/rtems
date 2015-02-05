@@ -49,6 +49,7 @@ int IMFS_symlink(
   new_node = IMFS_create_node(
     parentloc,
     &IMFS_node_control_sym_link,
+    sizeof( IMFS_sym_link_t ),
     name,
     namelen,
     ( S_IFLNK | ( S_IRWXU | S_IRWXG | S_IRWXO )),
@@ -133,7 +134,6 @@ static void IMFS_node_destroy_sym_link( IMFS_jnode_t *node )
 
 static const IMFS_node_control IMFS_node_control_sym_link = {
   .handlers = &IMFS_link_handlers,
-  .node_size = sizeof(IMFS_sym_link_t),
   .node_initialize = IMFS_node_initialize_sym_link,
   .node_remove = IMFS_node_remove_default,
   .node_destroy = IMFS_node_destroy_sym_link

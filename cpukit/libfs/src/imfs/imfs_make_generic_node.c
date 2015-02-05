@@ -85,6 +85,7 @@ int IMFS_make_generic_node(
       IMFS_jnode_t *new_node = IMFS_create_node(
         currentloc,
         node_control,
+        sizeof( IMFS_generic_t ),
         rtems_filesystem_eval_path_get_token( &ctx ),
         rtems_filesystem_eval_path_get_tokenlen( &ctx ),
         mode,

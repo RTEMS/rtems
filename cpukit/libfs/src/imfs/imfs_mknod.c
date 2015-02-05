@@ -47,11 +47,14 @@ int IMFS_mknod(
 {
   int rv = 0;
   const IMFS_fs_info_t *fs_info = parentloc->mt_entry->fs_info;
+  const IMFS_mknod_control *mknod_control =
+    fs_info->mknod_controls[ get_type( mode ) ];
   IMFS_jnode_t *new_node;
 
   new_node = IMFS_create_node(
     parentloc,
-    fs_info->node_controls[ get_type( mode ) ],
+    &mknod_control->node_control,
+    mknod_control->node_size,
     name,
     namelen,
     mode,

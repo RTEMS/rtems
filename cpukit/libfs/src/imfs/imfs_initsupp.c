@@ -58,7 +58,7 @@ static int IMFS_determine_bytes_per_block(
 int IMFS_initialize_support(
   rtems_filesystem_mount_table_entry_t *mt_entry,
   const rtems_filesystem_operations_table *op_table,
-  const IMFS_node_control *const node_controls [IMFS_TYPE_COUNT]
+  const IMFS_mknod_control *const mknod_controls[ IMFS_TYPE_COUNT ]
 )
 {
   int rv = 0;
@@ -68,14 +68,14 @@ int IMFS_initialize_support(
     IMFS_jnode_t *root_node;
 
     memcpy(
-      fs_info->node_controls,
-      node_controls,
-      sizeof( fs_info->node_controls )
+      fs_info->mknod_controls,
+      mknod_controls,
+      sizeof( fs_info->mknod_controls )
     );
 
     root_node = IMFS_allocate_node(
-      fs_info,
-      fs_info->node_controls [IMFS_DIRECTORY],
+      &fs_info->mknod_controls[ IMFS_DIRECTORY ]->node_control,
+      fs_info->mknod_controls[ IMFS_DIRECTORY ]->node_size,
       "",
       0,
       (S_IFDIR | 0755),
@@ -165,10 +165,12 @@ void IMFS_node_destroy_default( IMFS_jnode_t *node )
   free( node );
 }
 
-const IMFS_node_control IMFS_node_control_enosys = {
-  .handlers = &rtems_filesystem_handlers_default,
-  .node_size = sizeof(IMFS_jnode_t),
-  .node_initialize = IMFS_node_initialize_enosys,
-  .node_remove = IMFS_node_remove_default,
-  .node_destroy = IMFS_node_destroy_default
+const IMFS_mknod_control IMFS_mknod_control_enosys = {
+  {
+    .handlers = &rtems_filesystem_handlers_default,
+    .node_initialize = IMFS_node_initialize_enosys,
+    .node_remove = IMFS_node_remove_default,
+    .node_destroy = IMFS_node_destroy_default
+  },
+  .node_size = sizeof( IMFS_jnode_t )
 };

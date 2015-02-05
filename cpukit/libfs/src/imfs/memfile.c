@@ -88,7 +88,7 @@ int IMFS_linfile_open(
     uint32_t count = file->File.size;
     const unsigned char *buffer = file->Linearfile.direct;
 
-    file->Node.control            = &IMFS_node_control_memfile;
+    file->Node.control            = &IMFS_mknod_control_memfile.node_control;
     file->File.size               = 0;
     file->Memfile.indirect        = 0;
     file->Memfile.doubly_indirect = 0;

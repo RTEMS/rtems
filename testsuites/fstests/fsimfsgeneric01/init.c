@@ -298,7 +298,6 @@ static void node_destroy(IMFS_jnode_t *node)
 
 static const IMFS_node_control node_control = {
   .handlers = &node_handlers,
-  .node_size = sizeof(IMFS_generic_t),
   .node_initialize = node_initialize,
   .node_remove = node_remove,
   .node_destroy = node_destroy
@@ -392,7 +391,6 @@ static void node_destroy_inhibited(IMFS_jnode_t *node)
 
 static const IMFS_node_control node_initialization_error_control = {
   .handlers = &node_handlers,
-  .node_size = sizeof(IMFS_generic_t),
   .node_initialize = node_initialize_error,
   .node_remove = node_remove_inhibited,
   .node_destroy = node_destroy_inhibited

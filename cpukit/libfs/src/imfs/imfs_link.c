@@ -46,6 +46,7 @@ int IMFS_link(
   new_node = IMFS_create_node(
     parentloc,
     &IMFS_node_control_hard_link,
+    sizeof( IMFS_link_t ),
     name,
     namelen,
     IMFS_STAT_FMT_HARD_LINK | ( S_IRWXU | S_IRWXG | S_IRWXO ),
@@ -133,7 +134,6 @@ static IMFS_jnode_t *IMFS_node_remove_hard_link(
 
 static const IMFS_node_control IMFS_node_control_hard_link = {
   .handlers = &IMFS_link_handlers,
-  .node_size = sizeof(IMFS_link_t),
   .node_initialize = IMFS_node_initialize_hard_link,
   .node_remove = IMFS_node_remove_hard_link,
   .node_destroy = IMFS_node_destroy_default
