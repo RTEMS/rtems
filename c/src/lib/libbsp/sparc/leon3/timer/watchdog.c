@@ -66,7 +66,7 @@ void bsp_watchdog_reload(int watchdog, unsigned int reload_value)
   /* Kick watchdog, and clear interrupt pending bit */
   bsp_watchdogs[watchdog].timer->reload = reload_value;
   bsp_watchdogs[watchdog].timer->ctrl =
-    (LEON3_GPTIMER_LD | LEON3_GPTIMER_EN) |
+    (GPTIMER_TIMER_CTRL_LD | GPTIMER_TIMER_CTRL_EN) |
     (bsp_watchdogs[watchdog].timer->ctrl & ~(1<<4));
 }
 
