@@ -1185,7 +1185,8 @@ static void filesystem_test (void)
 
   puts ("\nRename files across diferent filesystems\n");
 
-  test_initialize_filesystem ();
+  rv = chroot ("/");
+  rtems_test_assert (rv == 0);
 
   fd = creat (name01, mode);
   rtems_test_assert (fd >= 0);
@@ -1196,14 +1197,11 @@ static void filesystem_test (void)
   rtems_test_assert (rv < sizeof(path01));
   EXPECT_ERROR (EXDEV, rename, name01, path01);
 
-  /*
-   * Clear directory
-   */
-
-  test_shutdown_filesystem ();
-
   EXPECT_EQUAL (-1, unlink, path01);
   EXPECT_EQUAL (0, unlink, name01);
+
+  rv = chroot (BASE_FOR_TEST);
+  rtems_test_assert (rv == 0);
 
   /*
    * Go back to parent directory
