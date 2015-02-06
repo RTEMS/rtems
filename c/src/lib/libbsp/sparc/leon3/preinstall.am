@@ -117,6 +117,10 @@ $(PROJECT_INCLUDE)/cons.h: ../../sparc/shared/include/cons.h $(PROJECT_INCLUDE)/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/cons.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/cons.h
 
+$(PROJECT_INCLUDE)/apbuart_cons.h: ../../sparc/shared/include/apbuart_cons.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/apbuart_cons.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/apbuart_cons.h
+
 $(PROJECT_INCLUDE)/genirq.h: ../../sparc/shared/include/genirq.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/genirq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/genirq.h

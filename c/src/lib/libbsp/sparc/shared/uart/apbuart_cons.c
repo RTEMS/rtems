@@ -32,6 +32,7 @@
 #include <grlib.h>
 #include <cons.h>
 #include <rtems/termiostypes.h>
+#include <apbuart_cons.h>
 
 /*#define DEBUG 1  */
 
@@ -450,7 +451,7 @@ struct apbuart_baud {
 	unsigned int num;
 	unsigned int baud;
 };
-struct apbuart_baud apbuart_baud_table[] = {
+static struct apbuart_baud apbuart_baud_table[] = {
 	{B50, 50},
 	{B75, 75},
 	{B110, 110},
@@ -473,7 +474,7 @@ struct apbuart_baud apbuart_baud_table[] = {
 };
 #define BAUD_NUM (sizeof(apbuart_baud_table)/sizeof(struct apbuart_baud))
 
-int apbuart_baud_num2baud(unsigned int num)
+static int apbuart_baud_num2baud(unsigned int num)
 {
 	int i;
 
@@ -483,7 +484,7 @@ int apbuart_baud_num2baud(unsigned int num)
 	return -1;
 }
 
-struct apbuart_baud *apbuart_baud_find_closest(unsigned int baud)
+static struct apbuart_baud *apbuart_baud_find_closest(unsigned int baud)
 {
 	int i, diff;
 
@@ -511,7 +512,7 @@ int apbuart_get_baud(struct apbuart_priv *uart)
 	return core_clk_hz / ((scaler + 1) * 8);
 }
 
-struct apbuart_baud *apbuart_get_baud_closest(struct apbuart_priv *uart)
+static struct apbuart_baud *apbuart_get_baud_closest(struct apbuart_priv *uart)
 {
 	return apbuart_baud_find_closest(apbuart_get_baud(uart));
 }
