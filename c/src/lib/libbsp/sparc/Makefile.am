@@ -52,6 +52,7 @@ EXTRA_DIST += shared/pci/pci_memreg_sparc_be.c
 EXTRA_DIST += shared/include/gr_701.h
 EXTRA_DIST += shared/include/gr_rasta_adcdac.h
 EXTRA_DIST += shared/include/gr_rasta_io.h
+EXTRA_DIST += shared/include/gr_rasta_spw_router.h
 EXTRA_DIST += shared/include/gr_rasta_tmtc.h
 EXTRA_DIST += shared/include/gr_tmtc_1553.h
 EXTRA_DIST += shared/include/gr_leon4_n2x.h

@@ -111,6 +111,7 @@ libbsp_a_SOURCES +=  pci/at697_pci.c
 include_HEADERS += ../../sparc/shared/include/gr_701.h
 include_HEADERS += ../../sparc/shared/include/gr_rasta_adcdac.h
 include_HEADERS += ../../sparc/shared/include/gr_rasta_io.h
+include_HEADERS += ../../sparc/shared/include/gr_rasta_spw_router.h
 include_HEADERS += ../../sparc/shared/include/gr_rasta_tmtc.h
 include_HEADERS += ../../sparc/shared/include/gr_leon4_n2x.h
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_701.c

@@ -157,6 +157,10 @@ $(PROJECT_INCLUDE)/gr_rasta_io.h: ../../sparc/shared/include/gr_rasta_io.h $(PRO
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/gr_rasta_io.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/gr_rasta_io.h
 
+$(PROJECT_INCLUDE)/gr_rasta_spw_router.h: ../../sparc/shared/include/gr_rasta_spw_router.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/gr_rasta_spw_router.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/gr_rasta_spw_router.h
+
 $(PROJECT_INCLUDE)/gr_rasta_tmtc.h: ../../sparc/shared/include/gr_rasta_tmtc.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/gr_rasta_tmtc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/gr_rasta_tmtc.h

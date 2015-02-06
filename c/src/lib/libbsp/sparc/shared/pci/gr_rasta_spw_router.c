@@ -29,8 +29,7 @@
 #include <drvmgr/ambapp_bus.h>
 #include <drvmgr/pci_bus.h>
 #include <genirq.h>
-
-/*#include <gr_rasta_spw_router.h> */
+#include <gr_rasta_spw_router.h>
 
 /* Determines which PCI address the AHB masters will access, it should be
  * set so that the masters can access the CPU RAM. Default is base of CPU RAM,
@@ -45,9 +44,6 @@ extern unsigned int _RAM_START;
 
 #define GRPCI2_BAR0_TO_AHB_MAP 0x04  /* Fixme */
 #define GRPCI2_PCI_CONFIG      0x20  /* Fixme */
-#define RASTA_SPW_ROUTER_OPTIONS_AMBA  0x01 /* Print AMBA bus devices */  /* Fixme */
-#define RASTA_SPW_ROUTER_OPTIONS_IRQ   0x02 /* Print current IRQ setup */ /* Fixme */
-
 
 /* #define DEBUG 1 */
 
@@ -62,6 +58,7 @@ extern unsigned int _RAM_START;
 
 int gr_rasta_spw_router_init1(struct drvmgr_dev *dev);
 int gr_rasta_spw_router_init2(struct drvmgr_dev *dev);
+void gr_rasta_spw_router_isr(void *arg);
 
 struct grpci2_regs {
 	volatile unsigned int ctrl;
@@ -235,7 +232,7 @@ void gr_rasta_spw_router_isr(void *arg)
 	DBG("RASTA-SPW_ROUTER-IRQ: 0x%x\n", tmp);
 }
 
-int gr_rasta_spw_router_hw_init(struct gr_rasta_spw_router_priv *priv)
+static int gr_rasta_spw_router_hw_init(struct gr_rasta_spw_router_priv *priv)
 {
 	int i;
 	uint32_t data;
@@ -372,7 +369,7 @@ int gr_rasta_spw_router_hw_init(struct gr_rasta_spw_router_priv *priv)
 	return 0;
 }
 
-int gr_rasta_spw_router_hw_init2(struct gr_rasta_spw_router_priv *priv)
+static int gr_rasta_spw_router_hw_init2(struct gr_rasta_spw_router_priv *priv)
 {
 	/* Enable DMA by enabling PCI target as master */
 	pci_master_enable(priv->pcidev);
