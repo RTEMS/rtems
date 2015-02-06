@@ -22,69 +22,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-IMFS_jnode_t *IMFS_allocate_node(
-  const IMFS_node_control *node_control,
-  size_t node_size,
-  const char *name,
-  size_t namelen,
-  mode_t mode,
-  void *arg
-)
-{
-  IMFS_jnode_t        *node;
-  IMFS_jnode_t        *initialized_node;
-  struct timeval       tv;
-
-  if ( namelen > IMFS_NAME_MAX ) {
-    errno = ENAMETOOLONG;
-
-    return NULL;
-  }
-
-  gettimeofday( &tv, 0 );
-
-  /*
-   *  Allocate an IMFS jnode
-   */
-  node = calloc( 1, node_size );
-  if ( !node ) {
-    errno = ENOMEM;
-
-    return NULL;
-  }
-
-  /*
-   *  Fill in the basic information
-   */
-  node->reference_count = 1;
-  node->st_nlink = 1;
-  memcpy( node->name, name, namelen );
-  node->name [namelen] = '\0';
-  node->control = node_control;
-
-  /*
-   *  Fill in the mode and permission information for the jnode structure.
-   */
-  node->st_mode = mode;
-  node->st_uid = geteuid();
-  node->st_gid = getegid();
-
-  /*
-   *  Now set all the times.
-   */
-
-  node->stat_atime  = (time_t) tv.tv_sec;
-  node->stat_mtime  = (time_t) tv.tv_sec;
-  node->stat_ctime  = (time_t) tv.tv_sec;
-
-  initialized_node = (*node->control->node_initialize)( node, arg );
-  if ( initialized_node == NULL ) {
-    free( node );
-  }
-
-  return initialized_node;
-}
-
 IMFS_jnode_t *IMFS_create_node(
   const rtems_filesystem_location_info_t *parentloc,
   const IMFS_node_control *node_control,
@@ -95,15 +32,24 @@ IMFS_jnode_t *IMFS_create_node(
   void *arg
 )
 {
-  IMFS_jnode_t *node = IMFS_allocate_node(
+  IMFS_jnode_t *allocated_node;
+  IMFS_jnode_t *node;
+
+  allocated_node = calloc( 1, node_size );
+  if ( allocated_node == NULL ) {
+    errno = ENOMEM;
+
+    return NULL;
+  }
+
+  node = IMFS_initialize_node(
+    allocated_node,
     node_control,
-    node_size,
     name,
     namelen,
     mode,
     arg
   );
-
   if ( node != NULL ) {
     IMFS_jnode_t *parent = parentloc->node_access;
 
@@ -112,6 +58,8 @@ IMFS_jnode_t *IMFS_create_node(
      */
     IMFS_assert( parent != NULL );
     IMFS_add_to_directory( parent, node );
+  } else {
+    free( allocated_node );
   }
 
   return node;

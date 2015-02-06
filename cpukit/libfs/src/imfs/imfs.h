@@ -375,6 +375,7 @@ static inline void IMFS_mtime_ctime_update( IMFS_jnode_t *jnode )
 }
 
 typedef struct {
+  IMFS_directory_t Root_directory;
   const IMFS_mknod_control *mknod_controls[ IMFS_TYPE_COUNT ];
 } IMFS_fs_info_t;
 
@@ -562,14 +563,9 @@ extern int IMFS_mknod(
   dev_t dev
 );
 
-/**
- * @brief Create a new IMFS node.
- * 
- * Routine to create a new in memory file system node.
- */
-extern IMFS_jnode_t *IMFS_allocate_node(
+extern IMFS_jnode_t *IMFS_initialize_node(
+  IMFS_jnode_t *node,
   const IMFS_node_control *node_control,
-  size_t node_size,
   const char *name,
   size_t namelen,
   mode_t mode,

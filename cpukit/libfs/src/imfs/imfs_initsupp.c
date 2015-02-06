@@ -23,6 +23,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 /*
  *  IMFS_determine_bytes_per_block
@@ -55,6 +56,52 @@ static int IMFS_determine_bytes_per_block(
   return 0;
 }
 
+IMFS_jnode_t *IMFS_initialize_node(
+  IMFS_jnode_t *node,
+  const IMFS_node_control *node_control,
+  const char *name,
+  size_t namelen,
+  mode_t mode,
+  void *arg
+)
+{
+  struct timeval tv;
+
+  if ( namelen > IMFS_NAME_MAX ) {
+    errno = ENAMETOOLONG;
+
+    return NULL;
+  }
+
+  gettimeofday( &tv, 0 );
+
+  /*
+   *  Fill in the basic information
+   */
+  node->reference_count = 1;
+  node->st_nlink = 1;
+  memcpy( node->name, name, namelen );
+  node->name [namelen] = '\0';
+  node->control = node_control;
+
+  /*
+   *  Fill in the mode and permission information for the jnode structure.
+   */
+  node->st_mode = mode;
+  node->st_uid = geteuid();
+  node->st_gid = getegid();
+
+  /*
+   *  Now set all the times.
+   */
+
+  node->stat_atime  = (time_t) tv.tv_sec;
+  node->stat_mtime  = (time_t) tv.tv_sec;
+  node->stat_ctime  = (time_t) tv.tv_sec;
+
+  return (*node_control->node_initialize)( node, arg );
+}
+
 int IMFS_initialize_support(
   rtems_filesystem_mount_table_entry_t *mt_entry,
   const rtems_filesystem_operations_table *op_table,
@@ -73,25 +120,21 @@ int IMFS_initialize_support(
       sizeof( fs_info->mknod_controls )
     );
 
-    root_node = IMFS_allocate_node(
+    root_node = IMFS_initialize_node(
+      &fs_info->Root_directory.Node,
       &fs_info->mknod_controls[ IMFS_DIRECTORY ]->node_control,
-      fs_info->mknod_controls[ IMFS_DIRECTORY ]->node_size,
       "",
       0,
       (S_IFDIR | 0755),
       NULL
     );
-    if ( root_node != NULL ) {
-      mt_entry->fs_info = fs_info;
-      mt_entry->ops = op_table;
-      mt_entry->pathconf_limits_and_options = &IMFS_LIMITS_AND_OPTIONS;
-      mt_entry->mt_fs_root->location.node_access = root_node;
-      IMFS_Set_handlers( &mt_entry->mt_fs_root->location );
-    } else {
-      free(fs_info);
-      errno = ENOMEM;
-      rv = -1;
-    }
+    IMFS_assert( root_node != NULL );
+
+    mt_entry->fs_info = fs_info;
+    mt_entry->ops = op_table;
+    mt_entry->pathconf_limits_and_options = &IMFS_LIMITS_AND_OPTIONS;
+    mt_entry->mt_fs_root->location.node_access = root_node;
+    IMFS_Set_handlers( &mt_entry->mt_fs_root->location );
   } else {
     errno = ENOMEM;
     rv = -1;

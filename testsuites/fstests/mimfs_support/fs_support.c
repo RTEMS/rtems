@@ -14,9 +14,12 @@
 
 #include <sys/stat.h>
 #include <rtems/libio.h>
+#include <rtems/libcsupport.h>
 
 #include "fstest.h"
 #include "fstest_support.h"
+
+static rtems_resource_snapshot before_mount;
 
 void
 test_initialize_filesystem (void)
@@ -24,6 +27,8 @@ test_initialize_filesystem (void)
   int rc = 0;
   rc = mkdir (BASE_FOR_TEST,S_IRWXU|S_IRWXG|S_IRWXO);
   rtems_test_assert (rc == 0);
+
+  rtems_resource_snapshot_take(&before_mount);
 
   rc = mount (NULL, BASE_FOR_TEST, "imfs", RTEMS_FILESYSTEM_READ_WRITE, NULL);
   rtems_test_assert (rc == 0);
@@ -36,6 +41,8 @@ test_shutdown_filesystem (void)
   int rc = 0;
   rc = unmount (BASE_FOR_TEST);
   rtems_test_assert (rc == 0);
+
+  rtems_test_assert(rtems_resource_snapshot_check(&before_mount));
 }
 
 /* configuration information */
