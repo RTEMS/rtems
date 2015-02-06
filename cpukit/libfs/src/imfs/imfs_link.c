@@ -119,7 +119,7 @@ static IMFS_jnode_t *IMFS_node_remove_hard_link(
 
   _Assert( target != NULL );
 
-  if ( target->st_nlink == 1) {
+  if ( target->st_nlink == 1 ) {
     target = (*target->control->node_remove)( target );
     if ( target == NULL ) {
       node = NULL;
@@ -127,6 +127,14 @@ static IMFS_jnode_t *IMFS_node_remove_hard_link(
   } else {
     --target->st_nlink;
     IMFS_update_ctime( target );
+  }
+
+  if ( target != NULL ) {
+    --target->reference_count;
+
+    if ( target->reference_count == 0 ) {
+      IMFS_node_destroy( target );
+    }
   }
 
   return node;
