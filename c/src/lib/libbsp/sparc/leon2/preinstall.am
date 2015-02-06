@@ -241,6 +241,10 @@ $(PROJECT_INCLUDE)/gradcdac.h: ../../sparc/shared/include/gradcdac.h $(PROJECT_I
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/gradcdac.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/gradcdac.h
 
+$(PROJECT_INCLUDE)/mctrl.h: ../../sparc/shared/include/mctrl.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mctrl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mctrl.h
+
 $(PROJECT_INCLUDE)/grtc.h: ../../sparc/shared/include/grtc.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grtc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/grtc.h

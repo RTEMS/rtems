@@ -200,6 +200,7 @@ libbsp_a_SOURCES += ../../sparc/shared/analog/gradcdac.c
 
 # Memory controllers
 libbsp_a_SOURCES += ../../sparc/shared/mem/mctrl.c
+include_HEADERS += ../../sparc/shared/include/mctrl.h
 
 # timer
 libbsp_a_SOURCES += timer/timer.c
