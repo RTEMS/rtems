@@ -37,6 +37,7 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <grlib.h>
+#include <gptimer.h>
 #include "tlib.h"
 
 #if defined(LEON3) && defined(RTEMS_DRVMGR_STARTUP)
@@ -379,7 +380,7 @@ static inline struct gptimer_priv *priv_from_timer(struct gptimer_timer *t)
 		t->index * sizeof(struct gptimer_timer));
 }
 
-int gptimer_tlib_int_pend(struct tlib_dev *hand, int ack)
+static int gptimer_tlib_int_pend(struct tlib_dev *hand, int ack)
 {
 	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
 	unsigned int ctrl = timer->tregs->ctrl;
@@ -415,7 +416,7 @@ void gptimer_isr(void *data)
 	}
 }
 
-void gptimer_tlib_reset(struct tlib_dev *hand)
+static void gptimer_tlib_reset(struct tlib_dev *hand)
 {
 	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
 
@@ -508,7 +509,9 @@ static void gptimer_tlib_restart(struct tlib_dev *hand)
 	timer->tregs->ctrl |= GPTIMER_CTRL_LD | GPTIMER_CTRL_EN;
 }
 
-static void gptimer_tlib_get_counter(struct tlib_dev *hand, unsigned int *counter)
+static void gptimer_tlib_get_counter(
+	struct tlib_dev *hand,
+	unsigned int *counter)
 {
 	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
 

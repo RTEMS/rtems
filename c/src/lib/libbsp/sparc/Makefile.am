@@ -33,6 +33,7 @@ EXTRA_DIST += shared/amba/ambapp_old.c
 EXTRA_DIST += shared/amba/ambapp_show.c
 
 # Clock Driver and Timer Library
+EXTRA_DIST += shared/include/gptimer.h
 EXTRA_DIST += shared/include/tlib.h
 EXTRA_DIST += shared/timer/gptimer.c
 EXTRA_DIST += shared/timer/tlib.c

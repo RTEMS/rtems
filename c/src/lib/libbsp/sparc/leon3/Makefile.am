@@ -70,6 +70,7 @@ libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_show.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ahbstat.c
 
 # Clock Driver and Timer Library
+include_HEADERS += ../../sparc/shared/include/gptimer.h
 include_HEADERS += ../../sparc/shared/include/tlib.h
 libbsp_a_SOURCES += ../../sparc/shared/timer/gptimer.c
 libbsp_a_SOURCES += ../../sparc/shared/timer/tlib.c
