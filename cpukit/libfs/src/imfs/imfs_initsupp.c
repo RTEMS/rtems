@@ -104,51 +104,38 @@ IMFS_jnode_t *IMFS_initialize_node(
 
 int IMFS_initialize_support(
   rtems_filesystem_mount_table_entry_t *mt_entry,
-  const rtems_filesystem_operations_table *op_table,
-  const IMFS_mknod_control *const mknod_controls[ IMFS_TYPE_COUNT ]
+  const void                           *data
 )
 {
-  int rv = 0;
-  IMFS_fs_info_t *fs_info = calloc( 1, sizeof( *fs_info ) );
+  const IMFS_mount_data *mount_data = data;
+  IMFS_fs_info_t *fs_info = mount_data->fs_info;
+  IMFS_jnode_t *root_node;
 
-  if ( fs_info != NULL ) {
-    IMFS_jnode_t *root_node;
+  fs_info->mknod_controls = mount_data->mknod_controls;
 
-    memcpy(
-      fs_info->mknod_controls,
-      mknod_controls,
-      sizeof( fs_info->mknod_controls )
-    );
+  root_node = IMFS_initialize_node(
+    &fs_info->Root_directory.Node,
+    &fs_info->mknod_controls->directory->node_control,
+    "",
+    0,
+    (S_IFDIR | 0755),
+    NULL
+  );
+  IMFS_assert( root_node != NULL );
 
-    root_node = IMFS_initialize_node(
-      &fs_info->Root_directory.Node,
-      &fs_info->mknod_controls[ IMFS_DIRECTORY ]->node_control,
-      "",
-      0,
-      (S_IFDIR | 0755),
-      NULL
-    );
-    IMFS_assert( root_node != NULL );
+  mt_entry->fs_info = fs_info;
+  mt_entry->ops = mount_data->ops;
+  mt_entry->pathconf_limits_and_options = &IMFS_LIMITS_AND_OPTIONS;
+  mt_entry->mt_fs_root->location.node_access = root_node;
+  IMFS_Set_handlers( &mt_entry->mt_fs_root->location );
 
-    mt_entry->fs_info = fs_info;
-    mt_entry->ops = op_table;
-    mt_entry->pathconf_limits_and_options = &IMFS_LIMITS_AND_OPTIONS;
-    mt_entry->mt_fs_root->location.node_access = root_node;
-    IMFS_Set_handlers( &mt_entry->mt_fs_root->location );
-  } else {
-    errno = ENOMEM;
-    rv = -1;
-  }
+  IMFS_determine_bytes_per_block(
+    &imfs_memfile_bytes_per_block,
+    imfs_rq_memfile_bytes_per_block,
+    IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK
+  );
 
-  if ( rv == 0 ) {
-    IMFS_determine_bytes_per_block(
-      &imfs_memfile_bytes_per_block,
-      imfs_rq_memfile_bytes_per_block,
-      IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK
-    );
-  }
-
-  return rv;
+  return 0;
 }
 
 int IMFS_node_clone( rtems_filesystem_location_info_t *loc )

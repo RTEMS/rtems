@@ -23,17 +23,20 @@
 
 #include "imfs.h"
 
-static IMFS_jnode_types_t get_type( mode_t mode )
+static const IMFS_mknod_control *get_control(
+  const IMFS_mknod_controls *controls,
+  mode_t mode
+)
 {
   if ( S_ISDIR( mode ) ) {
-    return IMFS_DIRECTORY;
+    return controls->directory;
   } else if ( S_ISBLK( mode ) || S_ISCHR( mode ) ) {
-    return IMFS_DEVICE;
-  } else if (S_ISFIFO( mode )) {
-    return IMFS_FIFO;
+    return controls->device;
+  } else if ( S_ISFIFO( mode ) ) {
+    return controls->fifo;
   } else {
     IMFS_assert( S_ISREG( mode ) );
-    return IMFS_MEMORY_FILE;
+    return controls->file;
   }
 }
 
@@ -48,7 +51,7 @@ int IMFS_mknod(
   int rv = 0;
   const IMFS_fs_info_t *fs_info = parentloc->mt_entry->fs_info;
   const IMFS_mknod_control *mknod_control =
-    fs_info->mknod_controls[ get_type( mode ) ];
+    get_control( fs_info->mknod_controls, mode );
   IMFS_jnode_t *new_node;
 
   new_node = IMFS_create_node(

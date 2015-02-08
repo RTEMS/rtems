@@ -94,18 +94,6 @@ typedef block_p *block_ptr;
 #define IMFS_MEMFILE_MAXIMUM_SIZE \
   (LAST_TRIPLY_INDIRECT * IMFS_MEMFILE_BYTES_PER_BLOCK)
 
-/*
- *  What types of IMFS file systems entities there can be.
- */
-typedef enum {
-  IMFS_DIRECTORY,
-  IMFS_DEVICE,
-  IMFS_MEMORY_FILE,
-  IMFS_FIFO
-} IMFS_jnode_types_t;
-
-#define IMFS_TYPE_COUNT (IMFS_FIFO + 1)
-
 /** @} */
 
 /**
@@ -375,9 +363,22 @@ static inline void IMFS_mtime_ctime_update( IMFS_jnode_t *jnode )
 }
 
 typedef struct {
+  const IMFS_mknod_control *directory;
+  const IMFS_mknod_control *device;
+  const IMFS_mknod_control *file;
+  const IMFS_mknod_control *fifo;
+} IMFS_mknod_controls;
+
+typedef struct {
   IMFS_directory_t Root_directory;
-  const IMFS_mknod_control *mknod_controls[ IMFS_TYPE_COUNT ];
+  const IMFS_mknod_controls *mknod_controls;
 } IMFS_fs_info_t;
+
+typedef struct {
+  IMFS_fs_info_t *fs_info;
+  const rtems_filesystem_operations_table *ops;
+  const IMFS_mknod_controls *mknod_controls;
+} IMFS_mount_data;
 
 /*
  *  Shared Data
@@ -415,14 +416,11 @@ extern int miniIMFS_initialize(
    const void                           *data
 );
 
-/**
- * @brief IMFS initialization support.
- */
 extern int IMFS_initialize_support(
   rtems_filesystem_mount_table_entry_t *mt_entry,
-  const rtems_filesystem_operations_table *op_table,
-  const IMFS_mknod_control *const mknod_controls[ IMFS_TYPE_COUNT ]
+  const void                           *data
 );
+
 /**
  * @brief Unmount this instance of IMFS.
  */

@@ -25,6 +25,10 @@
 
 #include "imfs.h"
 
+#include <stdlib.h>
+
+#include <rtems/seterr.h>
+
 const rtems_filesystem_operations_table fifoIMFS_ops = {
   .lock_h = rtems_filesystem_default_lock,
   .unlock_h = rtems_filesystem_default_unlock,
@@ -47,12 +51,11 @@ const rtems_filesystem_operations_table fifoIMFS_ops = {
   .statvfs_h = rtems_filesystem_default_statvfs
 };
 
-static const IMFS_mknod_control *const
-  IMFS_fifo_mknod_controls[IMFS_TYPE_COUNT] = {
-  [IMFS_DIRECTORY] = &IMFS_mknod_control_directory,
-  [IMFS_DEVICE] = &IMFS_mknod_control_device,
-  [IMFS_MEMORY_FILE] = &IMFS_mknod_control_memfile,
-  [IMFS_FIFO] = &IMFS_mknod_control_fifo
+static const IMFS_mknod_controls IMFS_fifo_mknod_controls = {
+  .directory = &IMFS_mknod_control_directory,
+  .device = &IMFS_mknod_control_device,
+  .file = &IMFS_mknod_control_memfile,
+  .fifo = &IMFS_mknod_control_fifo
 };
 
 int fifoIMFS_initialize(
@@ -60,9 +63,16 @@ int fifoIMFS_initialize(
   const void *data
 )
 {
-  return IMFS_initialize_support(
-    mt_entry,
-    &fifoIMFS_ops,
-    IMFS_fifo_mknod_controls
-  );
+  IMFS_fs_info_t *fs_info = calloc( 1, sizeof( *fs_info ) );
+  IMFS_mount_data mount_data = {
+    .fs_info = fs_info,
+    .ops = &fifoIMFS_ops,
+    .mknod_controls = &IMFS_fifo_mknod_controls
+  };
+
+  if ( fs_info == NULL ) {
+    rtems_set_errno_and_return_minus_one( ENOMEM );
+  }
+
+  return IMFS_initialize_support( mt_entry, &mount_data );
 }
