@@ -58,10 +58,7 @@ int rtems_tarfs_load(
      RTEMS_FS_MAKE | RTEMS_FS_EXCLUSIVE
    );
 
-   if (
-     rootloc.mt_entry->ops != &IMFS_ops
-       && rootloc.mt_entry->ops != &fifoIMFS_ops
-   ) {
+   if ( !IMFS_is_imfs_instance( &rootloc ) ) {
      rv = -1;
    }
 

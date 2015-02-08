@@ -39,16 +39,6 @@ IMFS_jnode_t *IMFS_node_initialize_generic(
   return node;
 }
 
-bool IMFS_is_imfs_instance(
-  const rtems_filesystem_location_info_t *loc
-)
-{
-  const char *type = loc->mt_entry->type;
-
-  return strcmp(type, RTEMS_FILESYSTEM_TYPE_IMFS) == 0
-    || strcmp(type, RTEMS_FILESYSTEM_TYPE_MINIIMFS) == 0;
-}
-
 int IMFS_make_generic_node(
   const char *path,
   mode_t mode,

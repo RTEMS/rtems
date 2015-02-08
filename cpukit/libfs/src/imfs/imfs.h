@@ -391,10 +391,6 @@ extern const IMFS_node_control IMFS_node_control_linfile;
 extern const IMFS_mknod_control IMFS_mknod_control_fifo;
 extern const IMFS_mknod_control IMFS_mknod_control_enosys;
 
-extern const rtems_filesystem_operations_table miniIMFS_ops;
-extern const rtems_filesystem_operations_table IMFS_ops;
-extern const rtems_filesystem_operations_table fifoIMFS_ops;
-
 extern const rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS;
 
 /*
@@ -402,16 +398,6 @@ extern const rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS;
  */
 
 extern int IMFS_initialize(
-   rtems_filesystem_mount_table_entry_t *mt_entry,
-   const void                           *data
-);
-
-extern int fifoIMFS_initialize(
-  rtems_filesystem_mount_table_entry_t  *mt_entry,
-  const void                            *data
-);
-
-extern int miniIMFS_initialize(
    rtems_filesystem_mount_table_entry_t *mt_entry,
    const void                           *data
 );
@@ -586,9 +572,12 @@ extern IMFS_jnode_t *IMFS_create_node(
   void *arg
 );
 
-extern bool IMFS_is_imfs_instance(
+static inline bool IMFS_is_imfs_instance(
   const rtems_filesystem_location_info_t *loc
-);
+)
+{
+  return loc->mt_entry->ops->clonenod_h == IMFS_node_clone;
+}
 
 /** @} */
 

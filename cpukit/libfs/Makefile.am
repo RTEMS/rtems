@@ -41,7 +41,7 @@ noinst_LIBRARIES += libimfs.a
 libimfs_a_SOURCES =
 
 libimfs_a_SOURCES += src/imfs/deviceio.c \
-    src/imfs/fifoimfs_init.c src/imfs/imfs_chown.c src/imfs/imfs_config.c \
+    src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/imfs/imfs_creat.c src/imfs/imfs_directory.c \
     src/imfs/imfs_eval.c src/imfs/imfs_fchmod.c \
     src/imfs/imfs_fifo.c \
@@ -56,7 +56,7 @@ libimfs_a_SOURCES += src/imfs/deviceio.c \
     src/imfs/imfs_rename.c src/imfs/imfs_rmnod.c \
     src/imfs/imfs_stat.c src/imfs/imfs_stat_file.c src/imfs/imfs_symlink.c \
     src/imfs/imfs_unmount.c src/imfs/imfs_utime.c src/imfs/ioman.c \
-    src/imfs/imfs_memfile.c src/imfs/miniimfs_init.c src/imfs/imfs.h
+    src/imfs/imfs_memfile.c src/imfs/imfs.h
 
 # POSIX FIFO/pipe
 libimfs_a_SOURCES += src/pipe/fifo.c src/pipe/pipe.c src/pipe/pipe.h

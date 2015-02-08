@@ -25,7 +25,7 @@
 
 #include <rtems/seterr.h>
 
-const rtems_filesystem_operations_table IMFS_ops = {
+static const rtems_filesystem_operations_table IMFS_ops = {
   .lock_h = rtems_filesystem_default_lock,
   .unlock_h = rtems_filesystem_default_unlock,
   .eval_path_h = IMFS_eval_path,

@@ -74,7 +74,5 @@ rtems_task Init(rtems_task_argument ignored)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
-
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

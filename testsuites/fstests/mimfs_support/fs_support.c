@@ -64,5 +64,7 @@ test_shutdown_filesystem (void)
 #define CONFIGURE_INIT_TASK_STACK_SIZE (16 * 1024)
 #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS  1
 
+#define CONFIGURE_FILESYSTEM_IMFS
+
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

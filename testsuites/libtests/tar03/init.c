@@ -34,13 +34,6 @@ void test_tarfs_error(void)
     printf ("error: untar failed returned %d\n", sc);
     rtems_test_exit(1);
   }
-
-  puts("Loading tarfs image with miniIMFS as root filesystem - ERROR");
-  sc = rtems_tarfs_load("/",(void *)rtems_task_create, 72);
-  if (sc != -1) {
-    printf ("error: untar failed returned %d\n", sc);
-    rtems_test_exit(1);
-  }
 }
 
 rtems_task Init(
@@ -64,8 +57,6 @@ rtems_task Init(
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-#define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

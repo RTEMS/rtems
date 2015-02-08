@@ -125,14 +125,6 @@ const rtems_libio_helper rtems_fs_init_helper =
 #endif
 #endif
 
-/*
- *  If the application disables the filesystem, they will not need
- *  a mount table, so do not produce one.
- */
-#ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-  #define CONFIGURE_HAS_OWN_MOUNT_TABLE
-#endif
-
 /**
  * This macro defines the number of POSIX file descriptors allocated
  * and managed by libio.  These are the "integer" file descriptors that
@@ -257,7 +249,6 @@ const rtems_libio_helper rtems_fs_init_helper =
  *     Add file filesystems to the default filesystem table.
  *
  *   List of available file systems. You can define as many as you like:
- *     CONFIGURE_FILESYSTEM_MINIIMFS - MiniIMFS, use DEVFS now
  *     CONFIGURE_FILESYSTEM_IMFS     - In Memory File System (IMFS)
  *     CONFIGURE_FILESYSTEM_DEVFS    - Device File System (DSVFS)
  *     CONFIGURE_FILESYSTEM_TFTPFS   - TFTP File System, networking enabled
@@ -271,10 +262,10 @@ const rtems_libio_helper rtems_fs_init_helper =
  *
  *    - If nothing is defined the base file system is the IMFS.
  *
- *    - If CONFIGURE_APPLICATION_DISABLE_FILESYSTEM is defined all filesystem
- *      are disabled by force and an empty DEVFS is created.
+ *    - If CONFIGURE_APPLICATION_DISABLE_FILESYSTEM is defined all filesystems
+ *      are disabled by force.
  *
- *    - If CONFIGURE_USE_DEV_AS_BASE_FILESYSTEM is defined all filesystem
+ *    - If CONFIGURE_USE_DEV_AS_BASE_FILESYSTEM is defined all filesystems
  *      are disabled by force and DEVFS is defined.
  */
 
@@ -285,7 +276,6 @@ const rtems_libio_helper rtems_fs_init_helper =
    * been disabled.
    */
   #ifdef CONFIGURE_FILESYSTEM_ALL
-    #define CONFIGURE_FILESYSTEM_MINIIMFS
     #define CONFIGURE_FILESYSTEM_IMFS
     #define CONFIGURE_FILESYSTEM_DEVFS
     #define CONFIGURE_FILESYSTEM_TFTPFS
@@ -301,23 +291,19 @@ const rtems_libio_helper rtems_fs_init_helper =
    * configured other filesystem parameters.
    */
   #if defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM)
-     #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM) || \
-	 defined(CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM)
-       #error "Filesystem disabled but a base filesystem configured."
+     #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
+       #error "Filesystem disabled and a base filesystem configured."
      #endif
 
-    #if defined(CONFIGURE_FILESYSTEM_MINIIMFS) || \
-        defined(CONFIGURE_FILESYSTEM_IMFS) || \
-        defined(CONFIGURE_FILESYSTEM_DEVFS) || \
-        defined(CONFIGURE_FILESYSTEM_TFTPFS) || \
-        defined(CONFIGURE_FILESYSTEM_FTPFS) || \
-        defined(CONFIGURE_FILESYSTEM_NFS) || \
-        defined(CONFIGURE_FILESYSTEM_DOSFS) || \
-        defined(CONFIGURE_FILESYSTEM_RFS) || \
-        defined(CONFIGURE_FILESYSTEM_JFFS2)
-        #error "Configured filesystems but root filesystem was not IMFS!"
-        #error "Filesystems could be disabled, DEVFS is root, or"
-        #error "  miniIMFS is root!"
+     #if defined(CONFIGURE_FILESYSTEM_IMFS) || \
+       defined(CONFIGURE_FILESYSTEM_DEVFS) || \
+       defined(CONFIGURE_FILESYSTEM_TFTPFS) || \
+       defined(CONFIGURE_FILESYSTEM_FTPFS) || \
+       defined(CONFIGURE_FILESYSTEM_NFS) || \
+       defined(CONFIGURE_FILESYSTEM_DOSFS) || \
+       defined(CONFIGURE_FILESYSTEM_RFS) || \
+       defined(CONFIGURE_FILESYSTEM_JFFS2)
+       #error "Filesystem disabled and a filesystem configured."
      #endif
   #endif
 
@@ -328,10 +314,6 @@ const rtems_libio_helper rtems_fs_init_helper =
   #if !defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM)
     #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
       #define CONFIGURE_FILESYSTEM_DEVFS
-    #elif defined(CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM)
-      #define CONFIGURE_FILESYSTEM_MINIIMFS
-    #elif !defined(CONFIGURE_FILESYSTEM_IMFS)
-      #define CONFIGURE_FILESYSTEM_IMFS
     #endif
   #endif
 
@@ -355,28 +337,12 @@ const rtems_libio_helper rtems_fs_init_helper =
 #endif
 
 /**
- * This defines the miniIMFS file system table entry.
- */
-#if !defined(CONFIGURE_FILESYSTEM_ENTRY_miniIMFS) && \
-    defined(CONFIGURE_FILESYSTEM_MINIIMFS)
-  #define CONFIGURE_FILESYSTEM_ENTRY_miniIMFS \
-    { RTEMS_FILESYSTEM_TYPE_MINIIMFS, miniIMFS_initialize }
-#endif
-#endif
-
-#ifndef RTEMS_SCHEDSIM
-/**
  * This defines the IMFS file system table entry.
  */
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_IMFS) && \
-    defined(CONFIGURE_FILESYSTEM_IMFS)
-  #if CONFIGURE_MAXIMUM_FIFOS > 0 || CONFIGURE_MAXIMUM_PIPES > 0
-    #define CONFIGURE_FILESYSTEM_ENTRY_IMFS \
-      { RTEMS_FILESYSTEM_TYPE_IMFS, fifoIMFS_initialize }
-  #else
-    #define CONFIGURE_FILESYSTEM_ENTRY_IMFS \
-      { RTEMS_FILESYSTEM_TYPE_IMFS, IMFS_initialize }
-  #endif
+  defined(CONFIGURE_FILESYSTEM_IMFS)
+  #define CONFIGURE_FILESYSTEM_ENTRY_IMFS \
+    { RTEMS_FILESYSTEM_TYPE_IMFS, IMFS_initialize }
 #endif
 #endif
 
@@ -506,28 +472,27 @@ const rtems_libio_helper rtems_fs_init_helper =
     #include <rtems/devfs.h>
   #endif
 
-#ifndef RTEMS_SCHEDSIM
-  #if defined(CONFIGURE_FILESYSTEM_IMFS) || \
-      defined(CONFIGURE_FILESYSTEM_MINIIMFS)
-    int imfs_rq_memfile_bytes_per_block = CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK;
-  #endif
-#endif
-
   /**
    * Table termination record.
    */
   #define CONFIGURE_FILESYSTEM_NULL { NULL, NULL }
 
 #ifndef RTEMS_SCHEDSIM
+  #if !defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM) && \
+    !defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
+    int imfs_rq_memfile_bytes_per_block =
+      CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK;
+  #endif
+
   /**
    * The default file system table. Must be terminated with the NULL entry if
    * you provide your own.
    */
-  #ifndef CONFIGURE_HAS_OWN_FILESYSTEM_TABLE
+  #if !defined(CONFIGURE_HAS_OWN_FILESYSTEM_TABLE) && \
+    !defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM)
     const rtems_filesystem_table_t rtems_filesystem_table[] = {
-      #if defined(CONFIGURE_FILESYSTEM_MINIIMFS) && \
-          defined(CONFIGURE_FILESYSTEM_ENTRY_miniIMFS)
-        CONFIGURE_FILESYSTEM_ENTRY_miniIMFS,
+      #if !defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
+        { "/", IMFS_initialize_support },
       #endif
       #if defined(CONFIGURE_FILESYSTEM_IMFS) && \
           defined(CONFIGURE_FILESYSTEM_ENTRY_IMFS)
@@ -565,30 +530,115 @@ const rtems_libio_helper rtems_fs_init_helper =
     };
   #endif
 
-  #ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE
+  #if !defined(CONFIGURE_HAS_OWN_MOUNT_TABLE) && \
+    !defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM)
     #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
       static devFS_node devFS_root_filesystem_nodes [CONFIGURE_MAXIMUM_DEVICES];
       static const devFS_data devFS_root_filesystem_data = {
         devFS_root_filesystem_nodes,
         CONFIGURE_MAXIMUM_DEVICES
       };
+    #else
+      static IMFS_fs_info_t _Configure_IMFS_fs_info;
+
+      static const rtems_filesystem_operations_table _Configure_IMFS_ops = {
+        rtems_filesystem_default_lock,
+        rtems_filesystem_default_unlock,
+        IMFS_eval_path,
+        #ifdef CONFIGURE_IMFS_DISABLE_LINK
+          rtems_filesystem_default_link,
+        #else
+          IMFS_link,
+        #endif
+        rtems_filesystem_default_are_nodes_equal,
+        #ifdef CONFIGURE_IMFS_DISABLE_MKNOD
+          rtems_filesystem_default_mknod,
+        #else
+          IMFS_mknod,
+        #endif
+        #ifdef CONFIGURE_IMFS_DISABLE_RMNOD
+          rtems_filesystem_default_rmnod,
+        #else
+          IMFS_rmnod,
+        #endif
+        #ifdef CONFIGURE_IMFS_DISABLE_FCHMOD
+          rtems_filesystem_default_fchmod,
+        #else
+          IMFS_fchmod,
+        #endif
+        #ifdef CONFIGURE_IMFS_DISABLE_CHOWN
+          rtems_filesystem_default_chown,
+        #else
+          IMFS_chown,
+        #endif
+        IMFS_node_clone,
+        IMFS_node_free,
+        #ifdef CONFIGURE_IMFS_DISABLE_MOUNT
+          rtems_filesystem_default_mount,
+        #else
+          IMFS_mount,
+        #endif
+        #ifdef CONFIGURE_IMFS_DISABLE_UNMOUNT
+          rtems_filesystem_default_unmount,
+        #else
+          IMFS_unmount,
+        #endif
+        rtems_filesystem_default_fsunmount,
+        #ifdef CONFIGURE_IMFS_DISABLE_UTIME
+          rtems_filesystem_default_utime,
+        #else
+          IMFS_utime,
+        #endif
+        #ifdef CONFIGURE_IMFS_DISABLE_SYMLINK
+          rtems_filesystem_default_symlink,
+        #else
+          IMFS_symlink,
+        #endif
+        #ifdef CONFIGURE_IMFS_DISABLE_READLINK
+          rtems_filesystem_default_readlink,
+        #else
+          IMFS_readlink,
+        #endif
+        #ifdef CONFIGURE_IMFS_DISABLE_RENAME
+          rtems_filesystem_default_rename,
+        #else
+          IMFS_rename,
+        #endif
+        rtems_filesystem_default_statvfs
+      };
+
+      static const IMFS_mknod_controls _Configure_IMFS_mknod_controls = {
+        &IMFS_mknod_control_directory,
+        &IMFS_mknod_control_device,
+        &IMFS_mknod_control_memfile,
+        #if CONFIGURE_MAXIMUM_FIFOS > 0 || CONFIGURE_MAXIMUM_PIPES > 0
+          &IMFS_mknod_control_fifo
+        #else
+          &IMFS_mknod_control_enosys
+        #endif
+      };
+
+      static const IMFS_mount_data _Configure_IMFS_mount_data = {
+        &_Configure_IMFS_fs_info,
+        &_Configure_IMFS_ops,
+        &_Configure_IMFS_mknod_controls
+      };
     #endif
+
     const rtems_filesystem_mount_configuration
       rtems_filesystem_root_configuration = {
       NULL,
       NULL,
       #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
         RTEMS_FILESYSTEM_TYPE_DEVFS,
-      #elif defined(CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM)
-        RTEMS_FILESYSTEM_TYPE_MINIIMFS,
       #else
-        RTEMS_FILESYSTEM_TYPE_IMFS,
+        "/",
       #endif
       RTEMS_FILESYSTEM_READ_WRITE,
       #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
         &devFS_root_filesystem_data
       #else
-        NULL
+        &_Configure_IMFS_mount_data
       #endif
     };
   #endif

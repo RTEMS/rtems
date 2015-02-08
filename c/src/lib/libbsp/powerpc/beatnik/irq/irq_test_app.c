@@ -36,7 +36,6 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_MAXIMUM_TASKS            1
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
 #include <confdefs.h>
 
 #include <stdio.h>
