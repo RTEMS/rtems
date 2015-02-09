@@ -217,7 +217,6 @@ rtems_task Init(
 
 #define CONFIGURE_INIT
 
-#define CONFIGURE_FIFOS_ENABLED
 #define CONFIGURE_MAXIMUM_FIFOS 1
 
 #include <rtems/confdefs.h>

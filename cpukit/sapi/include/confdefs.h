@@ -220,6 +220,28 @@ const rtems_libio_helper rtems_fs_init_helper =
 #endif
 
 /*
+ * This sets up the resources for the FIFOs/pipes.
+ */
+
+#if !defined(CONFIGURE_MAXIMUM_FIFOS)
+  #define CONFIGURE_MAXIMUM_FIFOS 0
+#endif
+
+#if !defined(CONFIGURE_MAXIMUM_PIPES)
+  #define CONFIGURE_MAXIMUM_PIPES 0
+#endif
+
+#if CONFIGURE_MAXIMUM_FIFOS > 0 || CONFIGURE_MAXIMUM_PIPES > 0
+  #define CONFIGURE_BARRIERS_FOR_FIFOS \
+    (2 * (CONFIGURE_MAXIMUM_FIFOS + CONFIGURE_MAXIMUM_PIPES))
+  #define CONFIGURE_SEMAPHORES_FOR_FIFOS \
+    (1 + (CONFIGURE_MAXIMUM_FIFOS + CONFIGURE_MAXIMUM_PIPES))
+#else
+  #define CONFIGURE_BARRIERS_FOR_FIFOS   0
+  #define CONFIGURE_SEMAPHORES_FOR_FIFOS 0
+#endif
+
+/*
  *  Filesystems and Mount Table Configuration.
  *
  *  Defines to control the file system:
@@ -342,20 +364,13 @@ const rtems_libio_helper rtems_fs_init_helper =
 #endif
 #endif
 
-/**
- * Internall it is called FIFOs not pipes
- */
-#if defined(CONFIGURE_PIPES_ENABLED)
-  #define CONFIGURE_FIFOS_ENABLED
-#endif
-
 #ifndef RTEMS_SCHEDSIM
 /**
  * This defines the IMFS file system table entry.
  */
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_IMFS) && \
     defined(CONFIGURE_FILESYSTEM_IMFS)
-  #if defined(CONFIGURE_FIFOS_ENABLED)
+  #if CONFIGURE_MAXIMUM_FIFOS > 0 || CONFIGURE_MAXIMUM_PIPES > 0
     #define CONFIGURE_FILESYSTEM_ENTRY_IMFS \
       { RTEMS_FILESYSTEM_TYPE_IMFS, fifoIMFS_initialize }
   #else
@@ -363,28 +378,6 @@ const rtems_libio_helper rtems_fs_init_helper =
       { RTEMS_FILESYSTEM_TYPE_IMFS, IMFS_initialize }
   #endif
 #endif
-#endif
-
-/**
- * This sets up the resources for the PIPES/FIFOs
- */
-#if defined(CONFIGURE_FIFOS_ENABLED)
-  #if !defined(CONFIGURE_MAXIMUM_FIFOS) && !defined(CONFIGURE_MAXIMUM_PIPES)
-     #error "No FIFOs or PIPES configured"
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_FIFOS)
-    #define CONFIGURE_MAXIMUM_FIFOS 0
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_PIPES)
-    #define CONFIGURE_MAXIMUM_PIPES 0
-  #endif
-  #define CONFIGURE_BARRIERS_FOR_FIFOS \
-    (2 * (CONFIGURE_MAXIMUM_FIFOS + CONFIGURE_MAXIMUM_PIPES))
-  #define CONFIGURE_SEMAPHORES_FOR_FIFOS \
-    (1 + (CONFIGURE_MAXIMUM_FIFOS + CONFIGURE_MAXIMUM_PIPES))
-#else
-  #define CONFIGURE_BARRIERS_FOR_FIFOS   0
-  #define CONFIGURE_SEMAPHORES_FOR_FIFOS 0
 #endif
 
 /**
