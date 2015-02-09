@@ -754,7 +754,6 @@ const rtems_filesystem_operations_table rtems_rfs_ops =
   .clonenod_h     = rtems_filesystem_default_clonenode,
   .freenod_h      = rtems_filesystem_default_freenode,
   .mount_h        = rtems_filesystem_default_mount,
-  .fsmount_me_h   = rtems_rfs_rtems_initialise,
   .unmount_h      = rtems_filesystem_default_unmount,
   .fsunmount_me_h = rtems_rfs_rtems_shutdown,
   .utime_h        = rtems_rfs_rtems_utime,

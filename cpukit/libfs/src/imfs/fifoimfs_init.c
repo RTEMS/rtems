@@ -38,7 +38,6 @@ const rtems_filesystem_operations_table fifoIMFS_ops = {
   .clonenod_h = IMFS_node_clone,
   .freenod_h = IMFS_node_free,
   .mount_h = IMFS_mount,
-  .fsmount_me_h = fifoIMFS_initialize,
   .unmount_h = IMFS_unmount,
   .fsunmount_me_h = IMFS_fsunmount,
   .utime_h = IMFS_utime,

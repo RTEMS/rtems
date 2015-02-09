@@ -210,7 +210,6 @@ static const rtems_filesystem_operations_table null_ops = {
   .clonenod_h = null_op_clonenode,
   .freenod_h = rtems_filesystem_default_freenode,
   .mount_h = null_op_mount,
-  .fsmount_me_h = null_op_fsmount_me,
   .unmount_h = null_op_unmount,
   .fsunmount_me_h = null_op_fsunmount_me,
   .utime_h = null_op_utime,

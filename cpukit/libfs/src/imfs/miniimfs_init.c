@@ -34,7 +34,6 @@ const rtems_filesystem_operations_table miniIMFS_ops = {
   .clonenod_h = IMFS_node_clone,
   .freenod_h = IMFS_node_free,
   .mount_h = IMFS_mount,
-  .fsmount_me_h = miniIMFS_initialize,
   .unmount_h = rtems_filesystem_default_unmount,
   .fsunmount_me_h = rtems_filesystem_default_fsunmount,
   .utime_h = rtems_filesystem_default_utime,

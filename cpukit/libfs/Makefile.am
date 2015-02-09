@@ -17,7 +17,7 @@ libdefaultfs_a_SOURCES = \
     src/defaults/default_link.c \
     src/defaults/default_read.c src/defaults/default_rmnod.c \
     src/defaults/default_chown.c \
-    src/defaults/default_fcntl.c src/defaults/default_fsmount.c \
+    src/defaults/default_fcntl.c \
     src/defaults/default_ftruncate.c src/defaults/default_lseek.c \
     src/defaults/default_lseek_file.c \
     src/defaults/default_lseek_directory.c \

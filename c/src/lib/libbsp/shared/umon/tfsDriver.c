@@ -655,7 +655,6 @@ static const rtems_filesystem_operations_table  rtems_tfs_ops = {
   .clonenod_h = rtems_tfs_clone_node_info,
   .freenod_h = rtems_tfs_free_node_info,
   .mount_h = rtems_filesystem_default_mount,
-  .fsmount_me_h = rtems_tfs_mount_me,
   .unmount_h = rtems_filesystem_default_unmount,
   .fsunmount_me_h = rtems_filesystem_default_fsunmount,
   .utime_h = rtems_filesystem_default_utime,

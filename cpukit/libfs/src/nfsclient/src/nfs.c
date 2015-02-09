@@ -2287,7 +2287,6 @@ const struct _rtems_filesystem_operations_table nfs_fs_ops = {
 	.clonenod_h     = nfs_clonenode,
 	.freenod_h      = nfs_freenode,
 	.mount_h        = rtems_filesystem_default_mount,
-	.fsmount_me_h   = rtems_nfs_initialize,
 	.unmount_h      = rtems_filesystem_default_unmount,
 	.fsunmount_me_h = nfs_fsunmount_me,
 	.utime_h        = nfs_utime,

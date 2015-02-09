@@ -64,7 +64,6 @@ const rtems_filesystem_operations_table  msdos_ops = {
   .clonenod_h     =  msdos_clone_node_info,
   .freenod_h      =  msdos_free_node_info,
   .mount_h        =  rtems_filesystem_default_mount,
-  .fsmount_me_h   =  rtems_dosfs_initialize,
   .unmount_h      =  rtems_filesystem_default_unmount,
   .fsunmount_me_h =  msdos_shut_down,
   .utime_h        =  msdos_utime,

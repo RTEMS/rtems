@@ -30,7 +30,6 @@ const rtems_filesystem_operations_table devFS_ops = {
   .clonenod_h = rtems_filesystem_default_clonenode,
   .freenod_h = rtems_filesystem_default_freenode,
   .mount_h = rtems_filesystem_default_mount,
-  .fsmount_me_h = devFS_initialize,
   .unmount_h = rtems_filesystem_default_unmount,
   .fsunmount_me_h = rtems_filesystem_default_fsunmount,
   .utime_h = rtems_filesystem_default_utime,

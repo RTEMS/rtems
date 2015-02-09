@@ -1383,7 +1383,6 @@ static const rtems_filesystem_operations_table rtems_ftpfs_ops = {
   .clonenod_h = rtems_filesystem_default_clonenode,
   .freenod_h = rtems_ftpfs_free_node,
   .mount_h = rtems_filesystem_default_mount,
-  .fsmount_me_h = rtems_ftpfs_initialize,
   .unmount_h = rtems_filesystem_default_unmount,
   .fsunmount_me_h = rtems_ftpfs_unmount_me,
   .utime_h = rtems_filesystem_default_utime,
