@@ -280,7 +280,7 @@ static rtems_driver_address_table occan_driver = OCCAN_DRIVER_TABLE_ENTRY;
 #define READ_REG(priv, address) occan_reg_read(priv, (unsigned int)address)
 #define WRITE_REG(priv, address, data) occan_reg_write(priv, (unsigned int)address, data)
 
-unsigned int occan_reg_read(occan_priv *priv, unsigned int address)
+static unsigned int occan_reg_read(occan_priv *priv, unsigned int address)
 {
 	unsigned int adr;
 	if ( priv->byte_regs ) {
@@ -292,7 +292,10 @@ unsigned int occan_reg_read(occan_priv *priv, unsigned int address)
 	return *(volatile unsigned char *)adr;
 }
 
-void occan_reg_write(occan_priv *priv, unsigned int address, unsigned char value)
+static void occan_reg_write(
+	occan_priv *priv, 
+	unsigned int address,
+	unsigned char value)
 {
 	unsigned int adr;
 	if ( priv->byte_regs ) {
