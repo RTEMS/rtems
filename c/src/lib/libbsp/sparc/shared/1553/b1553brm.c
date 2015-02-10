@@ -1484,10 +1484,7 @@ static void b1553brm_interrupt(void *arg)
 void b1553brm_print_dev(struct drvmgr_dev *dev, int options)
 {
 	brm_priv *pDev = dev->priv;
-	struct amba_dev_info *devinfo;
 	struct brm_reg *regs = pDev->regs;
-
-	devinfo = (struct amba_dev_info *)pDev->dev->businfo;
 
 	/* Print */
 	printf("--- B1553BRM[%d] %s ---\n", pDev->minor, pDev->devName);

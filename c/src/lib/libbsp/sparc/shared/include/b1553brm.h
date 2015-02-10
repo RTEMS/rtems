@@ -18,6 +18,8 @@
 #ifndef __B1553BRM_H__
 #define __B1553BRM_H__
 
+#include <drvmgr/drvmgr.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -161,6 +163,12 @@ void b1553brm_register_drv(void);
  * an affect. Note that this affects all B1553BRM RTs in the system.
  */
 extern unsigned short b1553brm_rt_cmd_legalize[16];
+
+/* Print information about all BRM devices handled by this driver */
+void b1553brm_print(int options);
+
+/* Print information about one BRM device */
+void b1553brm_print_dev(struct drvmgr_dev *dev, int options);
 
 #ifdef __cplusplus
 }
