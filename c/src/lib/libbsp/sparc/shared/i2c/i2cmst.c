@@ -268,7 +268,7 @@ static rtems_libi2c_bus_ops_t gr_i2cmst_ops = {
 };
 
 /* Get Hardware and disable it */
-int i2cmst_device_init(gr_i2cmst_prv_t *priv)
+static int i2cmst_device_init(gr_i2cmst_prv_t *priv)
 {
 	struct amba_dev_info *ambadev;
 	struct ambapp_core *pnpinfo;

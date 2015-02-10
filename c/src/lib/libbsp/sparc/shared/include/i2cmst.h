@@ -55,6 +55,9 @@ typedef struct gr_i2cmst_regs {
 
 #define GRI2C_STATUS_IDLE     0x00000000
 
+/* Register I2CMST driver to Driver Manager */
+void i2cmst_register_drv (void);
+
 #ifdef __cplusplus
 }
 #endif
