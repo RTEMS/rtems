@@ -1,7 +1,7 @@
 /*
  *  Opencore OR1K CPU Dependent Source
  *
- *  COPYRIGHT (c) 2014 Hesham ALMatary <heshamelmatary@gmail.com>
+ *  COPYRIGHT (c) 2014-2015 Hesham ALMatary <heshamelmatary@gmail.com>
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -14,8 +14,13 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/wkspace.h>
-#include <bsp/linker-symbols.h>
 #include <rtems/score/cpu.h>
+
+/* bsp_start_vector_table_begin is the start address of the vector table
+ * containing addresses to ISR Handlers. It's defined at the BSP linkcmds
+ * and may differ from one BSP to another. 
+ */
+extern char bsp_start_vector_table_begin[];
 
 /**
  * @brief Performs processor dependent initialization.
