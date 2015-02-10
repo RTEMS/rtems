@@ -253,6 +253,7 @@ struct grpci2_priv {
 
 int grpci2_init1(struct drvmgr_dev *dev);
 int grpci2_init3(struct drvmgr_dev *dev);
+void grpci2_err_isr(void *arg);
 
 /* GRPCI2 DRIVER */
 
@@ -292,7 +293,7 @@ void grpci2_register_drv(void)
 	drvmgr_drv_register(&grpci2_info.general);
 }
 
-int grpci2_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
+static int grpci2_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 {
 	struct grpci2_priv *priv = grpci2priv;
 	volatile uint32_t *pci_conf;
@@ -358,7 +359,7 @@ out2:
 	return retval;
 }
 
-int grpci2_cfg_r16(pci_dev_t dev, int ofs, uint16_t *val)
+static int grpci2_cfg_r16(pci_dev_t dev, int ofs, uint16_t *val)
 {
 	uint32_t v;
 	int retval;
@@ -372,7 +373,7 @@ int grpci2_cfg_r16(pci_dev_t dev, int ofs, uint16_t *val)
 	return retval;
 }
 
-int grpci2_cfg_r8(pci_dev_t dev, int ofs, uint8_t *val)
+static int grpci2_cfg_r8(pci_dev_t dev, int ofs, uint8_t *val)
 {
 	uint32_t v;
 	int retval;
@@ -384,7 +385,7 @@ int grpci2_cfg_r8(pci_dev_t dev, int ofs, uint8_t *val)
 	return retval;
 }
 
-int grpci2_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
+static int grpci2_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 {
 	struct grpci2_priv *priv = grpci2priv;
 	volatile uint32_t *pci_conf;
@@ -440,7 +441,7 @@ int grpci2_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 	return retval;
 }
 
-int grpci2_cfg_w16(pci_dev_t dev, int ofs, uint16_t val)
+static int grpci2_cfg_w16(pci_dev_t dev, int ofs, uint16_t val)
 {
 	uint32_t v;
 	int retval;
@@ -457,7 +458,7 @@ int grpci2_cfg_w16(pci_dev_t dev, int ofs, uint16_t val)
 	return grpci2_cfg_w32(dev, ofs & ~0x3, v);
 }
 
-int grpci2_cfg_w8(pci_dev_t dev, int ofs, uint8_t val)
+static int grpci2_cfg_w8(pci_dev_t dev, int ofs, uint8_t val)
 {
 	uint32_t v;
 	int retval;
@@ -480,7 +481,7 @@ int grpci2_cfg_w8(pci_dev_t dev, int ofs, uint8_t val)
  * Returns the "system IRQ" for the PCI INTA#..INTD# pin in irq_pin. Returns
  * 0xff if not assigned.
  */
-uint8_t grpci2_bus0_irq_map(pci_dev_t dev, int irq_pin)
+static uint8_t grpci2_bus0_irq_map(pci_dev_t dev, int irq_pin)
 {
 	uint8_t sysIrqNr = 0; /* not assigned */
 	int irq_group;
@@ -495,7 +496,7 @@ uint8_t grpci2_bus0_irq_map(pci_dev_t dev, int irq_pin)
 	return sysIrqNr;
 }
 
-int grpci2_translate(uint32_t *address, int type, int dir)
+static int grpci2_translate(uint32_t *address, int type, int dir)
 {
 	uint32_t adr, start, end;
 	struct grpci2_priv *priv = grpci2priv;
@@ -628,7 +629,7 @@ void grpci2_err_isr(void *arg)
 	}
 }
 
-int grpci2_hw_init(struct grpci2_priv *priv)
+static int grpci2_hw_init(struct grpci2_priv *priv)
 {
 	struct grpci2_regs *regs = priv->regs;
 	int i;
@@ -706,7 +707,7 @@ int grpci2_hw_init(struct grpci2_priv *priv)
  *  -2            Error PCI controller not HOST (targets not supported)
  *  -3            Error due to GRPCI2 hardware initialization
  */
-int grpci2_init(struct grpci2_priv *priv)
+static int grpci2_init(struct grpci2_priv *priv)
 {
 	struct ambapp_apb_info *apb;
 	struct ambapp_ahb_info *ahb;
