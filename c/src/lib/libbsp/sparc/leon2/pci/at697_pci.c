@@ -43,6 +43,7 @@
 #include <drvmgr/pci_bus.h>
 #include <drvmgr/leon2_amba_bus.h>
 
+#include <at697_pci.h>
 #include <leon.h>
 
 /* Configuration options */
@@ -217,7 +218,7 @@ void at697pci_register_drv(void)
  *  AT697 pci controller to be able access all slots
  */
 
-int at697pci_cfg_r32(pci_dev_t dev, int offset, uint32_t *val)
+static int at697pci_cfg_r32(pci_dev_t dev, int offset, uint32_t *val)
 {
 	struct at697pci_regs *regs;
 	volatile unsigned int data = 0;
@@ -268,7 +269,7 @@ int at697pci_cfg_r32(pci_dev_t dev, int offset, uint32_t *val)
 	return retval;
 }
 
-int at697pci_cfg_r16(pci_dev_t dev, int ofs, uint16_t *val)
+static int at697pci_cfg_r16(pci_dev_t dev, int ofs, uint16_t *val)
 {
 	uint32_t v;
 	int retval;
@@ -282,7 +283,7 @@ int at697pci_cfg_r16(pci_dev_t dev, int ofs, uint16_t *val)
 	return retval;
 }
 
-int at697pci_cfg_r8(pci_dev_t dev, int ofs, uint8_t *val)
+static int at697pci_cfg_r8(pci_dev_t dev, int ofs, uint8_t *val)
 {
 	uint32_t v;
 	int retval;
@@ -294,7 +295,7 @@ int at697pci_cfg_r8(pci_dev_t dev, int ofs, uint8_t *val)
 	return retval;
 }
 
-int at697pci_cfg_w32(pci_dev_t dev, int offset, uint32_t val)
+static int at697pci_cfg_w32(pci_dev_t dev, int offset, uint32_t val)
 {
 	struct at697pci_regs *regs;
 	volatile unsigned int tmp_val = val;
@@ -340,7 +341,7 @@ int at697pci_cfg_w32(pci_dev_t dev, int offset, uint32_t val)
 	return retval;
 }
 
-int at697pci_cfg_w16(pci_dev_t dev, int ofs, uint16_t val)
+static int at697pci_cfg_w16(pci_dev_t dev, int ofs, uint16_t val)
 {
 	uint32_t v;
 	int retval;
@@ -357,7 +358,7 @@ int at697pci_cfg_w16(pci_dev_t dev, int ofs, uint16_t val)
 	return at697pci_cfg_w32(dev, ofs & ~0x3, v);
 }
 
-int at697pci_cfg_w8(pci_dev_t dev, int ofs, uint8_t val)
+static int at697pci_cfg_w8(pci_dev_t dev, int ofs, uint8_t val)
 {
 	uint32_t v;
 
@@ -377,7 +378,7 @@ int at697pci_cfg_w8(pci_dev_t dev, int ofs, uint8_t val)
  * Returns the "system IRQ" for the PCI INTA#..INTD# pin in irq_pin. Returns
  * 0xff if not assigned.
  */
-uint8_t at697pci_bus0_irq_map(pci_dev_t dev, int irq_pin)
+static uint8_t at697pci_bus0_irq_map(pci_dev_t dev, int irq_pin)
 {
 	uint8_t sysIrqNr = 0; /* not assigned */
 	int irq_group;
@@ -392,7 +393,7 @@ uint8_t at697pci_bus0_irq_map(pci_dev_t dev, int irq_pin)
 	return sysIrqNr;
 }
 
-int at697pci_translate(uint32_t *address, int type, int dir)
+static int at697pci_translate(uint32_t *address, int type, int dir)
 {
 	/* No address translation implmented at this point */
 	return 0;
@@ -401,7 +402,7 @@ int at697pci_translate(uint32_t *address, int type, int dir)
 extern struct pci_memreg_ops pci_memreg_sparc_be_ops;
 
 /* AT697 Big-Endian PCI access routines */
-struct pci_access_drv at697pci_access_drv = {
+static struct pci_access_drv at697pci_access_drv = {
 	.cfg =
 	{
 		at697pci_cfg_r8,
@@ -428,11 +429,10 @@ struct pci_access_drv at697pci_access_drv = {
 /* Initializes the AT697PCI core hardware
  *
  */
-int at697pci_hw_init(struct at697pci_priv *priv)
+static int at697pci_hw_init(struct at697pci_priv *priv)
 {
 	struct at697pci_regs *regs = priv->regs;
 	unsigned short vendor = regs->pciid1 >> 16;
-	pci_dev_t host = PCI_DEV(0, 0, 0);
 
 	/* Must match ATMEL or ESA ID */
 	if ( !((vendor == 0x1202) || (vendor == 0x1E0F)) ) {
@@ -477,7 +477,7 @@ int at697pci_hw_init(struct at697pci_priv *priv)
  *  0             Successful initalization
  *  -1            Error during initialization.
  */
-int at697pci_init(struct at697pci_priv *priv)
+static int at697pci_init(struct at697pci_priv *priv)
 {
 	int pin;
 	union drvmgr_key_value *value;

@@ -133,6 +133,10 @@ $(PROJECT_INCLUDE)/pcif.h: ../../sparc/shared/include/pcif.h $(PROJECT_INCLUDE)/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pcif.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/pcif.h
 
+$(PROJECT_INCLUDE)/at697_pci.h: include/at697_pci.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at697_pci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at697_pci.h
+
 $(PROJECT_INCLUDE)/gr_701.h: ../../sparc/shared/include/gr_701.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/gr_701.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/gr_701.h
