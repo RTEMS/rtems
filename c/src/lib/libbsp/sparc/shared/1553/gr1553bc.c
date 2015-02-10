@@ -615,7 +615,7 @@ union gr1553bc_bd *gr1553bc_slot_bd
 	return &minor->bds[slot_no];
 }
 
-int gr1553bc_minor_first_avail(struct gr1553bc_minor *minor)
+static int gr1553bc_minor_first_avail(struct gr1553bc_minor *minor)
 {
 	int slot_num;
 	uint32_t alloc;
@@ -1233,7 +1233,7 @@ void gr1553bc_register(void)
 	gr1553_register();
 }
 
-void gr1553bc_isr_std(union gr1553bc_bd *bd, void *data)
+static void gr1553bc_isr_std(union gr1553bc_bd *bd, void *data)
 {
 	/* Do nothing */
 }

@@ -17,10 +17,10 @@
 #include <gr1553bm.h>
 
 
-#define GR1553BM_WRITE_MEM(adr, val) *(volatile uint32_t *)(adr) = (val)
+#define GR1553BM_WRITE_MEM(adr, val) *(volatile uint32_t *)(adr) = (uint32_t)(val)
 #define GR1553BM_READ_MEM(adr) (*(volatile uint32_t *)(adr))
 
-#define GR1553BM_WRITE_REG(adr, val) *(volatile uint32_t *)(adr) = (val)
+#define GR1553BM_WRITE_REG(adr, val) *(volatile uint32_t *)(adr) = (uint32_t)(val)
 #define GR1553BM_READ_REG(adr) (*(volatile uint32_t *)(adr))
 
 #ifndef IRQ_GLOBAL_PREPARE

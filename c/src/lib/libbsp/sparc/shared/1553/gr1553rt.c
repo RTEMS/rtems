@@ -19,10 +19,10 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 
-#define GR1553RT_WRITE_MEM(adr, val) *(volatile uint32_t *)(adr) = (val)
+#define GR1553RT_WRITE_MEM(adr, val) *(volatile uint32_t *)(adr) = (uint32_t)(val)
 #define GR1553RT_READ_MEM(adr) (*(volatile uint32_t *)(adr))
 
-#define GR1553RT_WRITE_REG(adr, val) *(volatile uint32_t *)(adr) = (val)
+#define GR1553RT_WRITE_REG(adr, val) *(volatile uint32_t *)(adr) = (uint32_t)(val)
 #define GR1553RT_READ_REG(adr) (*(volatile uint32_t *)(adr))
 
 #ifndef IRQ_GLOBAL_PREPARE
@@ -129,14 +129,14 @@ struct gr1553rt_priv {
 
 void gr1553rt_sw_init(struct gr1553rt_priv *priv);
 void gr1553rt_sw_free(struct gr1553rt_priv *priv);
-int gr1553rt_sw_alloc(struct gr1553rt_priv *priv);
+void gr1553rt_isr(void *data);
 
 /* Assign and ID to the list. An LIST ID is needed before scheduling list
  * on an RT subaddress.
  *
  * Only 64 lists can be registered at a time on the same device.
  */
-int gr1553rt_list_reg(struct gr1553rt_list *list)
+static int gr1553rt_list_reg(struct gr1553rt_list *list)
 {
 	struct gr1553rt_priv *priv = list->rt;
 	int i;
@@ -156,14 +156,16 @@ int gr1553rt_list_reg(struct gr1553rt_list *list)
 	return -1;
 }
 
+#if 0 /* unused for now */
 /* Unregister List from device */
-void gr1553rt_list_unreg(struct gr1553rt_list *list)
+static void gr1553rt_list_unreg(struct gr1553rt_list *list)
 {
 	struct gr1553rt_priv *priv = list->rt;
 
 	priv->lists[list->listid] = NULL;
 	list->listid = -1;
 }
+#endif
 
 static int gr1553rt_bdid(void *rt, struct gr1553rt_sw_bd *bd)
 {
@@ -178,7 +180,7 @@ static int gr1553rt_bdid(void *rt, struct gr1553rt_sw_bd *bd)
 	return index;
 }
 
-void gr1553rt_bd_alloc_init(void *rt, int count)
+static void gr1553rt_bd_alloc_init(void *rt, int count)
 {
 	struct gr1553rt_priv *priv = rt;
 	int i;
@@ -192,7 +194,7 @@ void gr1553rt_bd_alloc_init(void *rt, int count)
 }
 
 /* Allocate a Chain of descriptors */
-int gr1553rt_bd_alloc(void *rt, struct gr1553rt_sw_bd **bd, int cnt)
+static int gr1553rt_bd_alloc(void *rt, struct gr1553rt_sw_bd **bd, int cnt)
 {
 	struct gr1553rt_priv *priv = rt;
 	struct gr1553rt_sw_bd *curr;
@@ -222,7 +224,8 @@ int gr1553rt_bd_alloc(void *rt, struct gr1553rt_sw_bd **bd, int cnt)
 	return 0;
 }
 
-void gr1553rt_bd_free(void *rt, struct gr1553rt_sw_bd *bd)
+#if 0 /* unused for now */
+static void gr1553rt_bd_free(void *rt, struct gr1553rt_sw_bd *bd)
 {
 	struct gr1553rt_priv *priv = rt;
 	unsigned short index;
@@ -235,6 +238,7 @@ void gr1553rt_bd_free(void *rt, struct gr1553rt_sw_bd *bd)
 	priv->swbd_free = index;
 	priv->swbd_free_cnt++;
 }
+#endif
 
 int gr1553rt_list_init
 	(
@@ -816,7 +820,7 @@ void gr1553rt_sw_free(struct gr1553rt_priv *priv)
 }
 
 /* Free dynamically allocated buffers, if any */
-int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
+static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 {
 	int size;
 
@@ -863,7 +867,8 @@ int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 	size = priv->bds_cnt * sizeof(struct gr1553rt_bd);
 	if ((unsigned int)priv->cfg.bd_buffer & 1) {
 		/* Translate Address from HARDWARE (REMOTE) to CPU-LOCAL */
-		priv->bds_hw = (unsigned int)priv->cfg.bd_buffer & ~0x1;
+		priv->bds_hw = (struct gr1553rt_bd *)
+			((unsigned int)priv->cfg.bd_buffer & ~0x1);
 		priv->bd_buffer = priv->cfg.bd_buffer;
 		drvmgr_translate_check(
 			*priv->pdev,
@@ -906,7 +911,8 @@ int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 	/* Allocate Sub address table */
 	if ((unsigned int)priv->cfg.satab_buffer & 1) {
 		/* Translate Address from HARDWARE (REMOTE) to CPU-LOCAL */
-		priv->sas_hw = (unsigned int)priv->cfg.satab_buffer & ~0x1;
+		priv->sas_hw = (struct gr1553rt_sa *)
+			((unsigned int)priv->cfg.satab_buffer & ~0x1);
 		priv->satab_buffer = priv->cfg.satab_buffer;
 		drvmgr_translate_check(
 			*priv->pdev,

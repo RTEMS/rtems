@@ -39,15 +39,15 @@ struct gr1553_device_feature {
 };
 
 /* Device lists */
-struct gr1553_device_feature *gr1553_bm_root = NULL;
-struct gr1553_device_feature *gr1553_rt_root = NULL;
-struct gr1553_device_feature *gr1553_bc_root = NULL;
+static struct gr1553_device_feature *gr1553_bm_root = NULL;
+static struct gr1553_device_feature *gr1553_rt_root = NULL;
+static struct gr1553_device_feature *gr1553_bc_root = NULL;
 
 /* Driver registered */
-int gr1553_driver_registerd = 0;
+static int gr1553_driver_registerd = 0;
 
 /* Add 'feat' to linked list pointed to by 'root'. A minor is also assigned. */
-void gr1553_list_add
+static void gr1553_list_add
 	(
 	struct gr1553_device_feature **root,
 	struct gr1553_device_feature *feat
@@ -79,7 +79,7 @@ retry_new_minor:
 	curr->next = feat;
 }
 
-struct gr1553_device_feature *gr1553_list_find
+static struct gr1553_device_feature *gr1553_list_find
 	(
 	struct gr1553_device_feature *root,
 	int minor
@@ -179,7 +179,7 @@ void gr1553_bm_close(struct drvmgr_dev **dev)
 	d->alloc &= ~ALLOC_BM;
 }
 
-int gr1553_init2(struct drvmgr_dev *dev)
+static int gr1553_init2(struct drvmgr_dev *dev)
 {
 	struct amba_dev_info *ambadev;
 	struct ambapp_core *pnpinfo;
@@ -209,7 +209,7 @@ int gr1553_init2(struct drvmgr_dev *dev)
 /* Register the different functionalities that the
  * core supports.
  */
-int gr1553_init3(struct drvmgr_dev *dev)
+static int gr1553_init3(struct drvmgr_dev *dev)
 {
 	struct amba_dev_info *ambadev;
 	struct ambapp_core *pnpinfo;

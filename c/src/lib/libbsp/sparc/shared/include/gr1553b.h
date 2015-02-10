@@ -23,6 +23,8 @@
 #ifndef __GR1553B_H__
 #define __GR1553B_H__
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -30,57 +32,57 @@ extern "C" {
 /* The GR1553B registers */
 struct gr1553b_regs {
 	/* Common Registers */
-	volatile unsigned int irq; /* 0x00 IRQ register */
-	volatile unsigned int imask;	/* 0x04 IRQ enable mask */
+	volatile uint32_t irq;		/* 0x00 IRQ register */
+	volatile uint32_t imask;	/* 0x04 IRQ enable mask */
 	int unused0[(0x10-0x08)/4];
-	volatile unsigned int hwcfg;	/* 0x10 HW config register */
+	volatile uint32_t hwcfg;	/* 0x10 HW config register */
 
 	int unused1[(0x40-0x14)/4];	/* Padding */
 
 	/* BC Registers */
-	volatile unsigned int bc_stat;	/* 0x40 BC status */
-	volatile unsigned int bc_ctrl;	/* 0x44 BC Action register */
-	volatile unsigned int bc_bd;	/* 0x48 BC transfer list pointer */
-	volatile unsigned int bc_abd;	/* 0x4c BC async list pointer */
-	volatile unsigned int bc_timer;	/* 0x50 BC timer register */
-	volatile unsigned int bc_wake;	/* 0x54 BC wakeup control register */
-	volatile unsigned int bc_irqptr;/* 0x58 BC transfer IRQ pointer */
-	volatile unsigned int bc_busmsk;/* 0x5C BC per-RT bus mask register */
+	volatile uint32_t bc_stat;	/* 0x40 BC status */
+	volatile uint32_t bc_ctrl;	/* 0x44 BC Action register */
+	volatile uint32_t bc_bd;	/* 0x48 BC transfer list pointer */
+	volatile uint32_t bc_abd;	/* 0x4c BC async list pointer */
+	volatile uint32_t bc_timer;	/* 0x50 BC timer register */
+	volatile uint32_t bc_wake;	/* 0x54 BC wakeup control register */
+	volatile uint32_t bc_irqptr;	/* 0x58 BC transfer IRQ pointer */
+	volatile uint32_t bc_busmsk;	/* 0x5C BC per-RT bus mask register */
 
 	int unused2[(0x68-0x60)/4];	/* Padding */
 
-	volatile unsigned int bc_slot;	/* 0x48 BC Current BD pointer */
-	volatile unsigned int bc_aslot;	/* 0x4c BC Current async BD pointer */
+	volatile uint32_t bc_slot;	/* 0x48 BC Current BD pointer */
+	volatile uint32_t bc_aslot;	/* 0x4c BC Current async BD pointer */
 
 	int unused3[(0x80-0x70)/4];	/* Padding */
 
 	/* RT Registers */
-	volatile unsigned int rt_stat;	/* 0x80 RT status */
-	volatile unsigned int rt_cfg;	/* 0x84 RT config register */
-	volatile unsigned int rt_stat2;	/* 0x88 RT bus status bits */
-	volatile unsigned int rt_statw;	/* 0x8c RT status words */
-	volatile unsigned int rt_sync;	/* 0x90 RT bus synchronize */
-	volatile unsigned int rt_tab;	/* 0x94 RT subaddress table base */
-	volatile unsigned int rt_mcctrl;/* 0x98 RT valid mode code mask */
+	volatile uint32_t rt_stat;	/* 0x80 RT status */
+	volatile uint32_t rt_cfg;	/* 0x84 RT config register */
+	volatile uint32_t rt_stat2;	/* 0x88 RT bus status bits */
+	volatile uint32_t rt_statw;	/* 0x8c RT status words */
+	volatile uint32_t rt_sync;	/* 0x90 RT bus synchronize */
+	volatile uint32_t rt_tab;	/* 0x94 RT subaddress table base */
+	volatile uint32_t rt_mcctrl;	/* 0x98 RT valid mode code mask */
 	int unused4[(0xa4-0x9c)/4];
-	volatile unsigned int rt_ttag;	/* 0xa4 RT time tag register */
+	volatile uint32_t rt_ttag;	/* 0xa4 RT time tag register */
 	int unused5;			/* 0xa8 RESERVED */
-	volatile unsigned int rt_evsz;	/* 0xac RT event log end pointer */
-	volatile unsigned int rt_evlog;	/* 0xb0 RT event log position */
-	volatile unsigned int rt_evirq;	/* 0xb4 RT event log IRQ position */
+	volatile uint32_t rt_evsz;	/* 0xac RT event log end pointer */
+	volatile uint32_t rt_evlog;	/* 0xb0 RT event log position */
+	volatile uint32_t rt_evirq;	/* 0xb4 RT event log IRQ position */
 
 	int unused6[(0xc0-0xb8)/4];	/* Padding */
 
 	/* BM Registers */
-	volatile unsigned int bm_stat;	/* 0xc0 BM status */
-	volatile unsigned int bm_ctrl;	/* 0xc4 BM control register */
-	volatile unsigned int bm_adr;	/* 0xc8 BM address filter */
-	volatile unsigned int bm_subadr;/* 0xcc BM subaddress filter */
-	volatile unsigned int bm_mc;	/* 0xd0 BM mode code filter */
-	volatile unsigned int bm_start;	/* 0xd4 BM log start address */
-	volatile unsigned int bm_end;	/* 0xd8 BM log size/alignment mask */
-	volatile unsigned int bm_pos;	/* 0xdc BM log position */
-	volatile unsigned int bm_ttag;	/* 0xe0 BM time tag register */
+	volatile uint32_t bm_stat;	/* 0xc0 BM status */
+	volatile uint32_t bm_ctrl;	/* 0xc4 BM control register */
+	volatile uint32_t bm_adr;	/* 0xc8 BM address filter */
+	volatile uint32_t bm_subadr;	/* 0xcc BM subaddress filter */
+	volatile uint32_t bm_mc;	/* 0xd0 BM mode code filter */
+	volatile uint32_t bm_start;	/* 0xd4 BM log start address */
+	volatile uint32_t bm_end;	/* 0xd8 BM log size/alignment mask */
+	volatile uint32_t bm_pos;	/* 0xdc BM log position */
+	volatile uint32_t bm_ttag;	/* 0xe0 BM time tag register */
 };
 
 #define GR1553BC_KEY 0x15520000
