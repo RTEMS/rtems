@@ -149,10 +149,13 @@ EXTRA_DIST += shared/drvmgr/ambapp_bus.c
 EXTRA_DIST += shared/drvmgr/ambapp_bus_grlib.c
 EXTRA_DIST += shared/drvmgr/ambapp_bus_leon2.c
 EXTRA_DIST += shared/drvmgr/leon2_amba_bus.c
+EXTRA_DIST += shared/drvmgr/get_resarray_count.c
 
 EXTRA_DIST += shared/include/drvmgr/ambapp_bus_grlib.h
 EXTRA_DIST += shared/include/drvmgr/ambapp_bus.h
 EXTRA_DIST += shared/include/drvmgr/leon2_amba_bus.h
+EXTRA_DIST += shared/include/drvmgr/bspcommon.h
+
 # GR712
 EXTRA_DIST += shared/ascs/grascs.c
 EXTRA_DIST += shared/include/grascs.h

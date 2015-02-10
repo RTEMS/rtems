@@ -231,8 +231,10 @@ libbsp_a_SOURCES += ../../sparc/shared/tmtc/grtm.c
 include_drvmgrdir = $(includedir)/drvmgr
 include_drvmgr_HEADERS = ../../sparc/shared/include/drvmgr/ambapp_bus_grlib.h
 include_drvmgr_HEADERS += ../../sparc/shared/include/drvmgr/ambapp_bus.h
+include_drvmgr_HEADERS += ../../sparc/shared/include/drvmgr/bspcommon.h
 libbsp_a_SOURCES += ../../sparc/shared/drvmgr/ambapp_bus.c
 libbsp_a_SOURCES += ../../sparc/shared/drvmgr/ambapp_bus_grlib.c
+libbsp_a_SOURCES += ../../sparc/shared/drvmgr/get_resarray_count.c
 
 if HAS_SMP
 libbsp_a_SOURCES += startup/bspsmp.c

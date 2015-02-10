@@ -310,6 +310,10 @@ $(PROJECT_INCLUDE)/drvmgr/ambapp_bus.h: ../../sparc/shared/include/drvmgr/ambapp
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/drvmgr/ambapp_bus.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/drvmgr/ambapp_bus.h
 
+$(PROJECT_INCLUDE)/drvmgr/bspcommon.h: ../../sparc/shared/include/drvmgr/bspcommon.h $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/drvmgr/bspcommon.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/drvmgr/bspcommon.h
+
 if HAS_NETWORKING
 $(PROJECT_INCLUDE)/greth.h: ../../sparc/shared/include/greth.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/greth.h
