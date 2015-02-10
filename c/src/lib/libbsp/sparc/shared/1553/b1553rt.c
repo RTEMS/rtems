@@ -318,7 +318,7 @@ int b1553rt_device_init(rt_priv *pDev)
             /* Use dynamically allocated memory,
              * 4k DMA memory + 4k for alignment 
              */
-            mem = (char *)malloc(4 * 1024 * 2);
+            mem = (unsigned int)malloc(4 * 1024 * 2);
             if ( !mem ){
                 printk("RT: Failed to allocate HW memory\n\r");
                 return -1;
@@ -835,9 +835,6 @@ static void b1553rt_interrupt(void *arg)
 void b1553rt_print_dev(struct drvmgr_dev *dev, int options)
 {
     rt_priv *pDev = dev->priv;
-    struct amba_dev_info *devinfo;
-
-    devinfo = (struct amba_dev_info *)pDev->dev->businfo;
 
     /* Print */
     printf("--- B1553RT[%d] %s ---\n", pDev->minor, pDev->devName);

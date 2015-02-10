@@ -11,6 +11,8 @@
 #ifndef __B1553RT_H__
 #define __B1553RT_H__
 
+#include <drvmgr/drvmgr.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -63,6 +65,9 @@ struct rt_msg {
 #define RT_TSW_MAN  (1<<7)
 #define RT_TSW_PAR  (1<<6)
 #define RT_TSW_WC   (1<<5)
+
+void b1553rt_print_dev(struct drvmgr_dev *dev, int options);
+void b1553rt_print(int options);
 
 void b1553rt_register_drv(void);
 
