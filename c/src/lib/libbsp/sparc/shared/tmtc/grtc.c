@@ -268,7 +268,7 @@ struct grtc_priv {
 	/* Frame read data (Frame mode only) */
 	int			frame_state;
 	int			filler;
-	unsigned char		hdr[5] __attribute__((aligned(2)));
+	unsigned int		hdr[2];		/* 5 byte header */
 	struct grtc_frame	*frm;		/* Frame currently beeing copied */
 	int			frmlen;
 
@@ -700,18 +700,17 @@ static int grtc_start(struct grtc_priv *pDev)
 static void grtc_stop(struct grtc_priv *pDev)
 {
 	struct grtc_regs *regs = pDev->regs;
-	unsigned int tmp;
-	
+
 	/* Disable the receiver */
 	regs->cor = GRTC_SEB;
-	
+
 	/* disable all interrupts and clear them */
 	regs->imr = 0;
-	tmp = READ_REG(&regs->pir);
+	READ_REG(&regs->pir);
 	regs->picr = GRTC_INT_ALL;
-	
+
 	DBG("GRTC: STOPPED\n");
-	
+
 	/* Flush semaphores in case a thread is stuck waiting for CLTUs (RX data) */
 	rtems_semaphore_flush(pDev->sem_rx);
 }
@@ -1151,7 +1150,6 @@ static int grtc_hw_check_ending(struct grtc_priv *pDev, int max)
 	unsigned int rp, wp, asr, bufmax, rrp, rwp;
 	unsigned int upper, lower;
 	unsigned int count, cnt, left;
-	int tot;
 
 	FUNCDBG();
 
@@ -1183,7 +1181,6 @@ static int grtc_hw_check_ending(struct grtc_priv *pDev, int max)
 	/* Count bytes will be read */
 	count = max;
 	left = count;
-	tot = 0;
 	
 	/* Read from upper part of data buffer */
 	if ( upper > 0 ){
@@ -1358,7 +1355,7 @@ static int process_dma(struct grtc_priv *pDev)
 		DBG2("FRAME_STATE_HDR\n");
 		
 		/* Wait for all of header to be in place by setting partial to 0 */
-		ret = grtc_hw_copy(pDev,pDev->hdr,5,0);
+		ret = grtc_hw_copy(pDev, (unsigned char *)pDev->hdr, 5, 0);
 		if ( ret < 0 ) {
 			/* Error copying header, restart scanning for new frame */
 			DEBUG_ERR_LOG(pDev,1);
@@ -1374,7 +1371,7 @@ static int process_dma(struct grtc_priv *pDev)
 		}
 
 		/* The complete header has been copied, parse it */
-		pDev->frmlen = ((*(unsigned short *)&pDev->hdr[2]) & 0x3ff)+1;
+		pDev->frmlen = (((unsigned short *)pDev->hdr)[1] & 0x3ff)+1;
 		if ( pDev->frmlen < 5 ) {
 			/* Error: frame length is not correct */
 			pDev->stats.err++;
@@ -1421,11 +1418,11 @@ static int process_dma(struct grtc_priv *pDev)
 		frm->len = 5; /* Only header currenlty in frame */
 
 		/* Copy Frame Header into frame structure */
-		*((unsigned char *)&frm->hdr + 0) = pDev->hdr[0];
-		*((unsigned char *)&frm->hdr + 1) = pDev->hdr[1];
-		*((unsigned char *)&frm->hdr + 2) = pDev->hdr[2];
-		*((unsigned char *)&frm->hdr + 3) = pDev->hdr[3];
-		*((unsigned char *)&frm->hdr + 4) = pDev->hdr[4];
+		((unsigned char*)&frm->hdr)[0] = ((unsigned char*)pDev->hdr)[0];
+		((unsigned char*)&frm->hdr)[1] = ((unsigned char*)pDev->hdr)[1];
+		((unsigned char*)&frm->hdr)[2] = ((unsigned char*)pDev->hdr)[2];
+		((unsigned char*)&frm->hdr)[3] = ((unsigned char*)pDev->hdr)[3];
+		((unsigned char*)&frm->hdr)[4] = ((unsigned char*)pDev->hdr)[4];
 
 		/* Calc Total and Filler byte count in frame */
 		total_len = pDev->frmlen / 7;

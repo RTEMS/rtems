@@ -145,6 +145,9 @@ struct grtc_ioc_stats {
 /* Register GRTC driver at driver manager */
 void grtc_register_drv(void);
 
+/* Register GRTC RMAP driver at driver manager */
+void grtc_rmap_register_drv (void);
+
 #ifdef __cplusplus
 }
 #endif
