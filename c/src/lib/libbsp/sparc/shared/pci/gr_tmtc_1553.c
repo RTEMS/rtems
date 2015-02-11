@@ -31,6 +31,7 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <drvmgr/pci_bus.h>
+#include <drvmgr/bspcommon.h>
 #include <genirq.h>
 
 #include <gr_tmtc_1553.h>
@@ -49,6 +50,7 @@
 
 int gr_tmtc_1553_init1(struct drvmgr_dev *dev);
 int gr_tmtc_1553_init2(struct drvmgr_dev *dev);
+void gr_tmtc_1553_isr (void *arg);
 
 struct gr_tmtc_1553_ver {
 	const unsigned int	amba_freq_hz;	/* The frequency */
@@ -160,7 +162,6 @@ struct drvmgr_bus_res *gr_tmtc_1553_resources[] __attribute__((weak)) =
 {
 	NULL
 };
-int gr_tmtc_1553_resources_cnt = 0;
 
 void gr_tmtc_1553_register_drv(void)
 {
@@ -194,11 +195,10 @@ void gr_tmtc_1553_isr (void *arg)
 	DBG("GR-TMTC-1553-IRQ: 0x%x\n", tmp);
 }
 
-int gr_tmtc_1553_hw_init(struct gr_tmtc_1553_priv *priv)
+static int gr_tmtc_1553_hw_init(struct gr_tmtc_1553_priv *priv)
 {
 	unsigned int *page0 = NULL;
 	struct ambapp_dev *tmp;
-	int status;
 	unsigned int pci_freq_hz;
 	struct pci_dev_info *devinfo = priv->devinfo;
 	uint32_t bar0, bar0_size;
@@ -243,12 +243,12 @@ int gr_tmtc_1553_hw_init(struct gr_tmtc_1553_priv *priv)
 		NULL, &priv->amba_maps[0]);
 
 	/* Frequency is the hsame as the PCI bus frequency */
-	drvmgr_freq_get(priv->dev, NULL, &pci_freq_hz);
+	drvmgr_freq_get(priv->dev, 0, &pci_freq_hz);
 
 	ambapp_freq_init(&priv->abus, NULL, pci_freq_hz);
 
 	/* Find IRQ controller */
-	tmp = (void *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_APB_SLVS),
 					VENDOR_GAISLER, GAISLER_IRQMP,
 					ambapp_find_by_idx, NULL);
@@ -283,6 +283,7 @@ int gr_tmtc_1553_init1(struct drvmgr_dev *dev)
 	struct pci_dev_info *devinfo;
 	int status;
 	uint32_t bar0, bar0_size;
+	int resources_cnt;
 
 	/* PCI device does not have the IRQ line register, when PCI autoconf configures it the configuration
 	 * is forgotten. We take the IRQ number from the PCI Host device (AMBA device), this works as long
@@ -291,7 +292,7 @@ int gr_tmtc_1553_init1(struct drvmgr_dev *dev)
 	 * Note that this only works on LEON.
 	 */
 	((struct pci_dev_info *)dev->businfo)->irq = ((struct amba_dev_info *)dev->parent->dev->businfo)->info.irq; 
-	
+
 	priv = malloc(sizeof(struct gr_tmtc_1553_priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
@@ -301,10 +302,7 @@ int gr_tmtc_1553_init1(struct drvmgr_dev *dev)
 	priv->dev = dev;
 
 	/* Determine number of configurations */
-	if ( gr_tmtc_1553_resources_cnt == 0 ) {
-		while ( gr_tmtc_1553_resources[gr_tmtc_1553_resources_cnt] )
-			gr_tmtc_1553_resources_cnt++;
-	}
+	resources_cnt = get_resarray_count(gr_tmtc_1553_resources);
 
 	/* Generate Device prefix */
 
@@ -354,7 +352,7 @@ int gr_tmtc_1553_init1(struct drvmgr_dev *dev)
 	 * which means that translation from AMBA->PCI should fail if attempted.
 	 */
 	priv->config.maps_up = DRVMGR_TRANSLATE_NO_BRIDGE;
-	if ( priv->dev->minor_drv < gr_tmtc_1553_resources_cnt ) {
+	if ( priv->dev->minor_drv < resources_cnt ) {
 		priv->config.resources = gr_tmtc_1553_resources[priv->dev->minor_drv];
 	} else {
 		priv->config.resources = NULL;

@@ -28,7 +28,7 @@ extern "C" {
  * used by the drivers controlling the cores on the GR-TMTC-1553 target AMBA bus.
  *
  * The gr_rasta_io_resources is declared weak so that the user can override the
- * default configuration.
+ * default configuration. The array must be terminated with a NULL resource.
  */
 extern struct drvmgr_bus_res *gr_tmtc_1553_resources[];
 
@@ -41,6 +41,12 @@ void gr_tmtc_1553_print(int options);
 
 /* Register GR-RASTA-IO driver */
 void gr_tmtc_1553_register_drv(void);
+
+/* Print information about all GR-TMTC-1553 devices registered to this driver */
+void gr_tmtc_1553_print(int options);
+
+/* Print information about one GR-TMTC-1553 device */
+void gr_tmtc_1553_print_dev(struct drvmgr_dev *dev, int options);
 
 #ifdef __cplusplus
 }
