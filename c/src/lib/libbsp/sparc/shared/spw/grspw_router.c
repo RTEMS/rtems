@@ -88,7 +88,9 @@ static rtems_device_driver router_control(
     NULL, \
     router_control }
 
-void router_hwinfo(struct router_priv *priv, struct router_hw_info *hwinfo);
+static void router_hwinfo(
+	struct router_priv *priv,
+	struct router_hw_info *hwinfo);
 
 static rtems_driver_address_table router_driver = ROUTER_DRIVER_TABLE_ENTRY;
 static int router_driver_io_registered = 0;
@@ -277,7 +279,9 @@ static rtems_device_driver router_close(
 	return RTEMS_SUCCESSFUL;
 }
 
-void router_hwinfo(struct router_priv *priv, struct router_hw_info *hwinfo)
+static void router_hwinfo(
+	struct router_priv *priv,
+	struct router_hw_info *hwinfo)
 {
 	unsigned int tmp;
 
@@ -295,7 +299,9 @@ void router_hwinfo(struct router_priv *priv, struct router_hw_info *hwinfo)
 	hwinfo->iid         = (tmp >>  0) & 0xff;
 }
 
-int router_config_set(struct router_priv *priv, struct router_config *cfg)
+static int router_config_set(
+	struct router_priv *priv,
+	struct router_config *cfg)
 {
 	int i;
 
@@ -333,7 +339,9 @@ int router_config_set(struct router_priv *priv, struct router_config *cfg)
 	return 0;
 }
 
-int router_config_read(struct router_priv *priv, struct router_config *cfg)
+static int router_config_read(
+	struct router_priv *priv,
+	struct router_config *cfg)
 {
 	int i;
 
@@ -347,7 +355,9 @@ int router_config_read(struct router_priv *priv, struct router_config *cfg)
 	return 0;
 }
 
-int router_routes_set(struct router_priv *priv, struct router_routes *routes)
+static int router_routes_set(
+	struct router_priv *priv,
+	struct router_routes *routes)
 {
 	int i;
 	for (i=0; i<224; i++)
@@ -355,7 +365,9 @@ int router_routes_set(struct router_priv *priv, struct router_routes *routes)
 	return 0;
 }
 
-int router_routes_read(struct router_priv *priv, struct router_routes *routes)
+static int router_routes_read(
+	struct router_priv *priv,
+	struct router_routes *routes)
 {
 	int i;
 	for (i=0; i<224; i++)
@@ -363,7 +375,7 @@ int router_routes_read(struct router_priv *priv, struct router_routes *routes)
 	return 0;
 }
 
-int router_ps_set(struct router_priv *priv, struct router_ps *ps)
+static int router_ps_set(struct router_priv *priv, struct router_ps *ps)
 {
 	int i;
 	unsigned int *p = &ps->ps[0];
@@ -372,7 +384,7 @@ int router_ps_set(struct router_priv *priv, struct router_ps *ps)
 	return 0;
 }
 
-int router_ps_read(struct router_priv *priv, struct router_ps *ps)
+static int router_ps_read(struct router_priv *priv, struct router_ps *ps)
 {
 	int i;
 	unsigned int *p = &ps->ps[0];
@@ -381,13 +393,13 @@ int router_ps_read(struct router_priv *priv, struct router_ps *ps)
 	return 0;
 }
 
-int router_we_set(struct router_priv *priv, int we)
+static int router_we_set(struct router_priv *priv, int we)
 {
 	REG_WRITE(&priv->regs->cfgwe, we & 0x1);
 	return 0;
 }
 
-int router_port_ctrl(struct router_priv *priv, struct router_port *port)
+static int router_port_ctrl(struct router_priv *priv, struct router_port *port)
 {
 	unsigned int ctrl, sts;
 
@@ -415,19 +427,19 @@ int router_port_ctrl(struct router_priv *priv, struct router_port *port)
 	return 0;
 }
 
-int router_cfgsts_set(struct router_priv *priv, unsigned int cfgsts)
+static int router_cfgsts_set(struct router_priv *priv, unsigned int cfgsts)
 {
 	REG_WRITE(&priv->regs->cfgsts, cfgsts);
 	return 0;
 }
 
-int router_cfgsts_read(struct router_priv *priv, unsigned int *cfgsts)
+static int router_cfgsts_read(struct router_priv *priv, unsigned int *cfgsts)
 {
 	*cfgsts = REG_READ(&priv->regs->cfgsts);
 	return 0;
 }
 
-int router_tc_read(struct router_priv *priv, unsigned int *tc)
+static int router_tc_read(struct router_priv *priv, unsigned int *tc)
 {
 	*tc = REG_READ(&priv->regs->timecode);
 	return 0;

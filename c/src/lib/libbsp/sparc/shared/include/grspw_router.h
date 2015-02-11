@@ -101,4 +101,7 @@ struct router_port {
 /* Get Current Time-Code Register */
 #define GRSPWR_IOCTL_TC_GET	0x0c	/* OUT:    unsigned int */
 
+/* Register GRSPW Router driver to Driver Manager */
+void router_register_drv (void);
+
 #endif
