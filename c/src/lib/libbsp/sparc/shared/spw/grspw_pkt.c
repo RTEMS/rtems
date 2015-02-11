@@ -2434,7 +2434,7 @@ static void grspw_work_dma_func(struct grspw_dma_priv *dma)
 /* Work task is receiving work for the work message queue posted from
  * the ISR.
  */
-void grspw_work_func(rtems_task_argument unused)
+static void grspw_work_func(rtems_task_argument unused)
 {
 	rtems_status_code status;
 	unsigned int message;

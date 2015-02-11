@@ -551,6 +551,9 @@ extern void grspw_dma_config_read(void *c, struct grspw_dma_config *cfg);
 extern void grspw_dma_stats_read(void *c, struct grspw_dma_stats *sts);
 extern void grspw_dma_stats_clr(void *c);
 
+/* Register GRSPW packet driver to Driver Manager */
+void grspw2_register_drv (void);
+
 /*** GRSPW SpaceWire Packet List Handling Routines ***/
 
 static inline void grspw_list_clr(struct grspw_list *list)
