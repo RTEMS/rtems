@@ -32,6 +32,7 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <drvmgr/pci_bus.h>
+#include <drvmgr/bspcommon.h>
 #include <genirq.h>
 
 #include <gr_701.h>
@@ -50,6 +51,7 @@
 
 int gr701_init1(struct drvmgr_dev *dev);
 int gr701_init2(struct drvmgr_dev *dev);
+void gr701_interrupt(void *arg);
 
 #define READ_REG(address) (*(volatile unsigned int *)address)
 
@@ -186,7 +188,6 @@ struct drvmgr_bus_res *gr701_resources[] __attribute__((weak)) =
 {
 	NULL
 };
-int gr701_resources_cnt = 0;
 
 void gr701_register_drv(void)
 {
@@ -213,7 +214,7 @@ void gr701_interrupt(void *arg)
 		drvmgr_interrupt_clear(priv->dev, 0);
 }
 
-int gr701_hw_init(struct gr701_priv *priv)
+static int gr701_hw_init(struct gr701_priv *priv)
 {
 	uint32_t com1;
 	struct pci_bridge_regs *pcib;
@@ -277,7 +278,7 @@ int gr701_hw_init(struct gr701_priv *priv)
 			NULL, &priv->amba_maps[0]);
 
 	/* Frequency is the same as the PCI bus frequency */
-	drvmgr_freq_get(priv->dev, NULL, &pci_freq_hz);
+	drvmgr_freq_get(priv->dev, 0, &pci_freq_hz);
 
 	/* Initialize Frequency of AMBA bus */
 	ambapp_freq_init(&priv->abus, NULL, pci_freq_hz);
@@ -293,7 +294,7 @@ int gr701_hw_init(struct gr701_priv *priv)
 	return 0;
 }
 
-void gr701_hw_init2(struct gr701_priv *priv)
+static void gr701_hw_init2(struct gr701_priv *priv)
 {
 	/* Enable PCI Master (for DMA) */
 	pci_master_enable(priv->pcidev);
@@ -307,6 +308,7 @@ int gr701_init1(struct drvmgr_dev *dev)
 	struct gr701_priv *priv;
 	struct pci_dev_info *devinfo;
 	uint32_t bar0, bar1, bar0_size, bar1_size;
+	int resources_cnt;
 
 	priv = malloc(sizeof(struct gr701_priv));
 	if ( !priv )
@@ -317,13 +319,9 @@ int gr701_init1(struct drvmgr_dev *dev)
 	priv->dev = dev;
 
 	/* Determine number of configurations */
-	if ( gr701_resources_cnt == 0 ) {
-		while ( gr701_resources[gr701_resources_cnt] )
-			gr701_resources_cnt++;
-	}
+	resources_cnt = get_resarray_count(gr701_resources);
 
 	/* Generate Device prefix */
-
 	strcpy(priv->prefix, "/dev/gr701_0");
 	priv->prefix[11] += dev->minor_drv;
 	mkdir(priv->prefix, S_IRWXU | S_IRWXG | S_IRWXO);
@@ -369,7 +367,7 @@ int gr701_init1(struct drvmgr_dev *dev)
 	priv->config.ops = &ambapp_gr701_ops;
 	priv->config.maps_up = &priv->bus_maps_up[0];
 	priv->config.maps_down = &priv->bus_maps_down[0];
-	if ( priv->dev->minor_drv < gr701_resources_cnt ) {
+	if ( priv->dev->minor_drv < resources_cnt ) {
 		priv->config.resources = gr701_resources[priv->dev->minor_drv];
 	} else {
 		priv->config.resources = NULL;

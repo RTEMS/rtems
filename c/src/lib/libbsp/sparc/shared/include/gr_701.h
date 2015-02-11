@@ -27,16 +27,19 @@ extern "C" {
 /* An array of pointers to GR-701 resources. The resources will be
  * used by the drivers controlling the cores on the GR-701 target AMBA bus.
  *
- * The gr_rasta_io_resources is declared weak so that the user can override the
- * default configuration.
+ * The gr701_resources is declared weak so that the user can override the
+ * default configuration. The array must be terminated with a NULL resource.
  */
 extern struct drvmgr_bus_res *gr701_resources[];
 
 #define GR701_OPTIONS_AMBA   0x01
 #define GR701_OPTIONS_IRQ    0x02
 
-/* Print information about GR-RASTA-IO PCI board */
+/* Print information about all GR-701 PCI boards */
 void gr701_print(int options);
+
+/* Print information about one GR-701 PCI board */
+void gr701_print_dev(struct drvmgr_dev *dev, int options);
 
 /* Register GR-701 driver */
 void gr701_register_drv(void);
