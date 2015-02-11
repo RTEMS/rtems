@@ -144,7 +144,7 @@ int grgpio_init1(struct drvmgr_dev *dev)
 /******************* Driver Implementation ***********************/
 
 /* Find port from handle, returns -1 if not found */
-int grgpio_find_port(void *handle, struct grgpio_priv **priv)
+static int grgpio_find_port(void *handle, struct grgpio_priv **priv)
 {
 	unsigned char portnr;
 	
@@ -157,7 +157,7 @@ int grgpio_find_port(void *handle, struct grgpio_priv **priv)
 	return portnr;
 }
 
-int grgpio_gpiolib_open(void *handle)
+static int grgpio_gpiolib_open(void *handle)
 {
 	struct grgpio_priv *priv;
 	int portnr;
@@ -174,7 +174,7 @@ int grgpio_gpiolib_open(void *handle)
 	return 0;
 }
 
-int grgpio_grpiolib_config(void *handle, struct gpiolib_config *cfg)
+static int grgpio_grpiolib_config(void *handle, struct gpiolib_config *cfg)
 {
 	struct grgpio_priv *priv;
 	int portnr;
@@ -207,7 +207,7 @@ int grgpio_grpiolib_config(void *handle, struct gpiolib_config *cfg)
 	return 0;
 }
 
-int grgpio_grpiolib_get(void *handle, int *inval)
+static int grgpio_grpiolib_get(void *handle, int *inval)
 {
 	struct grgpio_priv *priv;
 	int portnr;
@@ -225,7 +225,7 @@ int grgpio_grpiolib_get(void *handle, int *inval)
 	return 0;
 }
 
-int grgpio_grpiolib_irq_opts(void *handle, unsigned int options)
+static int grgpio_grpiolib_irq_opts(void *handle, unsigned int options)
 {
 	struct grgpio_priv *priv;
 	int portnr;
@@ -278,7 +278,7 @@ int grgpio_grpiolib_irq_opts(void *handle, unsigned int options)
 	return 0;
 }
 
-int grgpio_grpiolib_irq_register(void *handle, void *func, void *arg)
+static int grgpio_grpiolib_irq_register(void *handle, void *func, void *arg)
 {
 	struct grgpio_priv *priv;
 	int portnr;
@@ -297,7 +297,7 @@ int grgpio_grpiolib_irq_register(void *handle, void *func, void *arg)
 	return 0;
 }
 
-int grgpio_grpiolib_set(void *handle, int dir, int outval)
+static int grgpio_grpiolib_set(void *handle, int dir, int outval)
 {
 	struct grgpio_priv *priv;
 	int portnr;
@@ -318,7 +318,7 @@ int grgpio_grpiolib_set(void *handle, int dir, int outval)
 	return 0;
 }
 
-int grgpio_gpiolib_show(void *handle)
+static int grgpio_gpiolib_show(void *handle)
 {
 	struct grgpio_priv *priv;
 	int portnr, i, regs[7];
@@ -337,7 +337,7 @@ int grgpio_gpiolib_show(void *handle)
 	return 0;
 }
 
-int grgpio_gpiolib_get_info(void *handle, struct gpiolib_info *pinfo)
+static int grgpio_gpiolib_get_info(void *handle, struct gpiolib_info *pinfo)
 {
 	struct grgpio_priv *priv;
 	int portnr;
