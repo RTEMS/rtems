@@ -649,7 +649,8 @@ static void grtm_hw_get_implementation(struct grtm_priv *pDev, struct grtm_ioc_h
 	hwcfg->fifo_size= (cfg & GRTM_DMA_CFG_FIFOSZ) >> GRTM_DMA_CFG_FIFOSZ_BIT;
 }
 
-#warning Extra: Implement proper default calculation from hardware configuration
+
+/* TODO: Implement proper default calculation from hardware configuration */
 static void grtm_hw_get_default_modes(struct grtm_ioc_config *cfg, struct grtm_ioc_hw *hwcfg)
 {
 	cfg->mode = GRTM_MODE_TM;
@@ -1094,7 +1095,7 @@ static int grtm_schedule_ready(struct grtm_priv *pDev, int ints_off)
 			/* Do translation */
 			drvmgr_translate(pDev->dev, CPUMEM_TO_DMA, (void *)curr_frm->payload, (void **)&curr_bd->bd->address);
 			if ( curr_frm->flags & GRTM_FLAGS_TRANSLATE_AND_REMEMBER ) {
-				if ( curr_frm->payload != curr_bd->bd->address ) {
+				if ( curr_frm->payload != (unsigned int *)curr_bd->bd->address ) {
 					/* Translation needed */
 					curr_frm->flags &= ~GRTM_FLAGS_TRANSLATE_AND_REMEMBER;
 					curr_frm->flags |= GRTM_FLAGS_TRANSLATE;
@@ -1313,7 +1314,7 @@ static rtems_device_driver grtm_ioctl(rtems_device_major_number major, rtems_dev
 		}
 		/* We disable interrupt in order to get a snapshot of the registers */
 		IRQ_GLOBAL_DISABLE(oldLevel);
-#warning IMPLEMENT HWREGS
+/* TODO: implement hwregs */
 		IRQ_GLOBAL_ENABLE(oldLevel);
 		break;
 
@@ -1564,9 +1565,10 @@ static void grtm_interrupt(void *arg)
 		}
 
 	}
-
+#if 0
 procceed_processing_interrupts:
 	;
+#endif
 }
 
 static rtems_device_driver grtm_initialize(

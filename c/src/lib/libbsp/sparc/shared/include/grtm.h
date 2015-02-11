@@ -235,6 +235,9 @@ struct grtm_ioc_stats {
 /* Register GRTM driver at driver manager */
 void grtm_register_drv(void);
 
+/* Register GRTM RMAP driver at driver manager */
+void grtm_rmap_register_drv (void);
+
 #ifdef __cplusplus
 }
 #endif
