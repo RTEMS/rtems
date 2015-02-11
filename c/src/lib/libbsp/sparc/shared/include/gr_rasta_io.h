@@ -28,7 +28,7 @@ extern "C" {
  * used by the drivers controlling the cores on the GR-RASTA-IO target AMBA bus.
  *
  * The gr_rasta_io_resources is declared weak so that the user can override the
- * default configuration.
+ * default configuration. The array must be terminated with a NULL resource.
  */
 extern struct drvmgr_bus_res *gr_rasta_io_resources[];
 
@@ -36,8 +36,11 @@ extern struct drvmgr_bus_res *gr_rasta_io_resources[];
 #define RASTA_IO_OPTIONS_AMBA   0x01 /* Print AMBA bus devices */
 #define RASTA_IO_OPTIONS_IRQ    0x02 /* Print current IRQ setup */
 
-/* Print information about GR-RASTA-IO PCI board */
+/* Print information about GR-RASTA-IO PCI boards */
 void gr_rasta_io_print(int options);
+
+/* Print information about a GR-RASTA-IO PCI board */
+void gr_rasta_io_print_dev(struct drvmgr_dev *dev, int options);
 
 /* Register GR-RASTA-IO driver */
 void gr_rasta_io_register_drv(void);
