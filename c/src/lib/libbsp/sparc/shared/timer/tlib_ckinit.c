@@ -50,6 +50,7 @@ unsigned int Clock_basefreq;
 #endif
 
 void Clock_exit(void);
+void Clock_isr(void *arg_unused);
 
 /*
  *  Major and minor number.
@@ -152,7 +153,7 @@ void Clock_exit( void )
   }
 }
 
-uint32_t Clock_nanoseconds_since_last_tick(void)
+static uint32_t Clock_nanoseconds_since_last_tick(void)
 {
   uint32_t clicks;
   int ip;
