@@ -39,6 +39,7 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <drvmgr/pci_bus.h>
+#include <drvmgr/bspcommon.h>
 #include <genirq.h>
 
 #include <gr_leon4_n2x.h>
@@ -67,6 +68,7 @@ extern unsigned int _RAM_START;
 
 int gr_cpci_leon4_n2x_init1(struct drvmgr_dev *dev);
 int gr_cpci_leon4_n2x_init2(struct drvmgr_dev *dev);
+void gr_cpci_leon4_n2x_isr(void *arg);
 
 struct grpci2_regs {
 	volatile unsigned int ctrl;		/* 0x00 */
@@ -199,7 +201,6 @@ struct drvmgr_bus_res *gr_leon4_n2x_resources[] __attribute__((weak)) =
 {
 	NULL
 };
-int gr_leon4_n2x_resources_cnt = 0;
 
 void gr_cpci_leon4_n2x_register_drv(void)
 {
@@ -244,7 +245,7 @@ void gr_cpci_leon4_n2x_isr(void *arg)
 	DBG("RASTA-SPW_ROUTER-IRQ: 0x%x\n", tmp);
 }
 
-int gr_cpci_leon4_n2x_hw_init1(struct gr_cpci_leon4_n2x_priv *priv)
+static int gr_cpci_leon4_n2x_hw_init1(struct gr_cpci_leon4_n2x_priv *priv)
 {
 	int i;
 	uint32_t data;
@@ -398,7 +399,7 @@ int gr_cpci_leon4_n2x_hw_init1(struct gr_cpci_leon4_n2x_priv *priv)
 	priv->bus_maps_down[3].size = 0;
 
 	/* Find GRPCI2 controller AHB Slave interface */
-	tmp = (void *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_AHB_SLVS),
 					VENDOR_GAISLER, GAISLER_GRPCI2,
 					ambapp_find_by_idx, NULL);
@@ -414,7 +415,7 @@ int gr_cpci_leon4_n2x_hw_init1(struct gr_cpci_leon4_n2x_priv *priv)
 	priv->bus_maps_up[1].size = 0;
 
 	/* Find GRPCI2 controller APB Slave interface */
-	tmp = (void *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_APB_SLVS),
 					VENDOR_GAISLER, GAISLER_GRPCI2,
 					ambapp_find_by_idx, NULL);
@@ -451,7 +452,7 @@ int gr_cpci_leon4_n2x_hw_init1(struct gr_cpci_leon4_n2x_priv *priv)
 	return 0;
 }
 
-int gr_cpci_leon4_n2x_hw_init2(struct gr_cpci_leon4_n2x_priv *priv)
+static int gr_cpci_leon4_n2x_hw_init2(struct gr_cpci_leon4_n2x_priv *priv)
 {
 	/* Enable DMA by enabling PCI target as master */
 	pci_master_enable(priv->pcidev);
@@ -468,6 +469,7 @@ int gr_cpci_leon4_n2x_init1(struct drvmgr_dev *dev)
 	struct pci_dev_info *devinfo;
 	int status, i;
 	union drvmgr_key_value *value;
+	int resources_cnt;
 
 	priv = dev->priv;
 	if (!priv)
@@ -478,10 +480,7 @@ int gr_cpci_leon4_n2x_init1(struct drvmgr_dev *dev)
 	priv->dev = dev;
 
 	/* Determine number of configurations */
-	if (gr_leon4_n2x_resources_cnt == 0) {
-		while (gr_leon4_n2x_resources[gr_leon4_n2x_resources_cnt])
-			gr_leon4_n2x_resources_cnt++;
-	}
+	resources_cnt = get_resarray_count(gr_leon4_n2x_resources);
 
 	/* Generate Device prefix */
 
@@ -556,7 +555,7 @@ int gr_cpci_leon4_n2x_init1(struct drvmgr_dev *dev)
 	priv->config.ops = &ambapp_leon4_n2x_ops;
 	priv->config.maps_up = &priv->bus_maps_up[0];
 	priv->config.maps_down = &priv->bus_maps_down[0];
-	if ( priv->dev->minor_drv < gr_leon4_n2x_resources_cnt ) {
+	if ( priv->dev->minor_drv < resources_cnt ) {
 		priv->config.resources = gr_leon4_n2x_resources[priv->dev->minor_drv];
 	} else {
 		priv->config.resources = NULL;
