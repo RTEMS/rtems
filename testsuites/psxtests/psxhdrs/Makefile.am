@@ -22,6 +22,27 @@ lib_a_SOURCES = clock01.c clock02.c clock03.c clock04.c clock05.c clock06.c \
     time08.c time09.c time10.c time11.c time12.c time13.c timer01.c \
     timer02.c timer03.c timer04.c timer05.c timer06.c timer07.c
 
+if HAS_NETWORKING
+# methods in <sys/socket.h>
+lib_a_SOURCES += sys/socket/accept.c
+lib_a_SOURCES += sys/socket/bind.c
+lib_a_SOURCES += sys/socket/connect.c
+lib_a_SOURCES += sys/socket/getpeername.c
+lib_a_SOURCES += sys/socket/getsockname.c
+lib_a_SOURCES += sys/socket/getsockopt.c
+lib_a_SOURCES += sys/socket/listen.c
+lib_a_SOURCES += sys/socket/recv.c
+lib_a_SOURCES += sys/socket/recvfrom.c
+lib_a_SOURCES += sys/socket/recvmsg.c
+lib_a_SOURCES += sys/socket/send.c
+lib_a_SOURCES += sys/socket/sendmsg.c
+lib_a_SOURCES += sys/socket/sendto.c
+lib_a_SOURCES += sys/socket/setsockopt.c
+lib_a_SOURCES += sys/socket/shutdown.c
+lib_a_SOURCES += sys/socket/socket.c
+lib_a_SOURCES += sys/socket/socketpair.c
+endif
+
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
