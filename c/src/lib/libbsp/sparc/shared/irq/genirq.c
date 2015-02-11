@@ -159,7 +159,12 @@ int genirq_unregister(genirq_t d, int irq, genirq_handler isr, void *arg)
  *
  * \param action 1=enable, 0=disable ISR
  */
-int genirq_set_active(struct genirq_priv *priv, int irq, genirq_handler isr, void *arg, int action)
+static int genirq_set_active(
+	struct genirq_priv *priv,
+	int irq,
+	genirq_handler isr,
+	void *arg,
+	int action)
 {
 	struct genirq_irq_entry *irqentry;
 	struct genirq_handler_entry *isrentry, *e = NULL;
