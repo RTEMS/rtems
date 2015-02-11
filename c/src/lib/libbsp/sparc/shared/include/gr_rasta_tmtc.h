@@ -78,7 +78,8 @@ extern "C" {
  * used by the device drivers controlling the cores on the GR-RASTA-IO target
  * AMBA bus.
  *
- * The array is defined weak, and defualts to no resources.
+ * The array is defined weak, and defaults to no resources. The array must be
+ * terminated with a NULL resource.
  */
 extern struct drvmgr_bus_res *gr_rasta_tmtc_resources[];
 
@@ -86,8 +87,11 @@ extern struct drvmgr_bus_res *gr_rasta_tmtc_resources[];
 #define RASTA_TMTC_OPTIONS_AMBA   0x01 /* Print AMBA bus devices */
 #define RASTA_TMTC_OPTIONS_IRQ    0x02 /* Print current IRQ setup */
 
-/* Print information about GR-RASTA-TMTC PCI board */
+/* Print information about GR-RASTA-TMTC PCI boards */
 void gr_rasta_tmtc_print(int options);
+
+/* Print information about a GR-RASTA-TMTC PCI boards */
+void gr_rasta_tmtc_print_dev(struct drvmgr_dev *dev, int options);
 
 /* Register GR-RASTA-TMTC driver */
 void gr_rasta_tmtc_register_drv(void);

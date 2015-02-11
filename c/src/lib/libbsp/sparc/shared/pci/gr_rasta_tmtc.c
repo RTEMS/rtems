@@ -30,6 +30,7 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <drvmgr/pci_bus.h>
+#include <drvmgr/bspcommon.h>
 #include <genirq.h>
 
 #include <gr_rasta_tmtc.h>
@@ -61,6 +62,7 @@ extern unsigned int _RAM_START;
 
 int gr_rasta_tmtc_init1(struct drvmgr_dev *dev);
 int gr_rasta_tmtc_init2(struct drvmgr_dev *dev);
+void gr_rasta_tmtc_isr (void *arg);
 
 struct grpci_regs {
 	volatile unsigned int cfg_stat;
@@ -210,7 +212,6 @@ struct drvmgr_bus_res *gr_rasta_tmtc_resources[] __attribute__((weak)) =
 {
 	NULL,
 };
-int gr_rasta_tmtc_resources_cnt = 0;
 
 void gr_rasta_tmtc_register_drv(void)
 {
@@ -247,7 +248,7 @@ void gr_rasta_tmtc_isr (void *arg)
 /* Init AMBA bus frequency, IRQ controller, GPIO register, bus maps and other
  * common stuff between rev0 and rev1.
  */
-int gr_rasta_tmtc_hw_init_common(struct gr_rasta_tmtc_priv *priv)
+static int gr_rasta_tmtc_hw_init_common(struct gr_rasta_tmtc_priv *priv)
 {
 	struct ambapp_dev *tmp;
 	unsigned int pci_freq_hz;
@@ -259,7 +260,7 @@ int gr_rasta_tmtc_hw_init_common(struct gr_rasta_tmtc_priv *priv)
 	ambapp_freq_init(&priv->abus, NULL, pci_freq_hz);
 
 	/* Find IRQ controller, Clear all current IRQs */
-	tmp = (void *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_APB_SLVS),
 					VENDOR_GAISLER, GAISLER_IRQMP,
 					ambapp_find_by_idx, NULL);
@@ -273,7 +274,7 @@ int gr_rasta_tmtc_hw_init_common(struct gr_rasta_tmtc_priv *priv)
 	priv->irq->ilevel = 0;
 
 	/* Find First GPIO controller */
-	tmp = (void *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_APB_SLVS),
 					VENDOR_GAISLER, GAISLER_GPIO,
 					ambapp_find_by_idx, NULL);
@@ -309,7 +310,7 @@ int gr_rasta_tmtc_hw_init_common(struct gr_rasta_tmtc_priv *priv)
 }
 
 /* PCI Hardware (Revision 0) initialization */
-int gr_rasta_tmtc0_hw_init(struct gr_rasta_tmtc_priv *priv)
+static int gr_rasta_tmtc0_hw_init(struct gr_rasta_tmtc_priv *priv)
 {
 	unsigned int *page0 = NULL;
 	struct ambapp_dev *tmp;
@@ -381,7 +382,7 @@ int gr_rasta_tmtc0_hw_init(struct gr_rasta_tmtc_priv *priv)
 	*page0 = AHB1_BASE_ADDR;
 
 	/* Find GRPCI controller */
-	tmp = (void *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_APB_SLVS),
 					VENDOR_GAISLER, GAISLER_PCIFBRG,
 					ambapp_find_by_idx, NULL);
@@ -427,7 +428,7 @@ int gr_rasta_tmtc0_hw_init(struct gr_rasta_tmtc_priv *priv)
 }
 
 /* PCI Hardware (Revision 1) initialization */
-int gr_rasta_tmtc1_hw_init(struct gr_rasta_tmtc_priv *priv)
+static int gr_rasta_tmtc1_hw_init(struct gr_rasta_tmtc_priv *priv)
 {
 	int i;
 	uint32_t data;
@@ -507,7 +508,7 @@ int gr_rasta_tmtc1_hw_init(struct gr_rasta_tmtc_priv *priv)
 		return status;
 
 	/* Find GRPCI2 controller AHB Slave interface */
-	tmp = (void *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_AHB_SLVS),
 					VENDOR_GAISLER, GAISLER_GRPCI2,
 					ambapp_find_by_idx, NULL);
@@ -523,7 +524,7 @@ int gr_rasta_tmtc1_hw_init(struct gr_rasta_tmtc_priv *priv)
 	priv->bus_maps_up[1].size = 0;
 
 	/* Find GRPCI2 controller APB Slave interface */
-	tmp = (void *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_APB_SLVS),
 					VENDOR_GAISLER, GAISLER_GRPCI2,
 					ambapp_find_by_idx, NULL);
@@ -548,7 +549,7 @@ int gr_rasta_tmtc1_hw_init(struct gr_rasta_tmtc_priv *priv)
 	return 0;
 }
 
-void gr_rasta_tmtc_hw_init2(struct gr_rasta_tmtc_priv *priv)
+static void gr_rasta_tmtc_hw_init2(struct gr_rasta_tmtc_priv *priv)
 {
 	/* Enable DMA by enabling PCI target as master */
 	pci_master_enable(priv->pcidev);
@@ -564,6 +565,7 @@ int gr_rasta_tmtc_init1(struct drvmgr_dev *dev)
 	int status;
 	uint32_t bar0, bar1, bar0_size, bar1_size;
 	union drvmgr_key_value *value;
+	int resources_cnt;
 
 	priv = dev->priv;
 	if (!priv)
@@ -571,10 +573,7 @@ int gr_rasta_tmtc_init1(struct drvmgr_dev *dev)
 	priv->dev = dev;
 
 	/* Determine number of configurations */
-	if ( gr_rasta_tmtc_resources_cnt == 0 ) {
-		while ( gr_rasta_tmtc_resources[gr_rasta_tmtc_resources_cnt] )
-			gr_rasta_tmtc_resources_cnt++;
-	}
+	resources_cnt = get_resarray_count(gr_rasta_tmtc_resources);
 
 	/* Generate Device prefix */
 
@@ -645,7 +644,7 @@ int gr_rasta_tmtc_init1(struct drvmgr_dev *dev)
 	priv->config.ops = &ambapp_rasta_tmtc_ops;
 	priv->config.maps_up = &priv->bus_maps_up[0];
 	priv->config.maps_down = &priv->bus_maps_down[0];
-	if ( priv->dev->minor_drv < gr_rasta_tmtc_resources_cnt ) {
+	if ( priv->dev->minor_drv < resources_cnt ) {
 		priv->config.resources = gr_rasta_tmtc_resources[priv->dev->minor_drv];
 	} else {
 		priv->config.resources = NULL;
