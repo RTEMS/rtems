@@ -61,7 +61,7 @@ extern "C" {
 #define GRASCS_STS_USCONF_BITS 18
 #define GRASCS_STS_TMCONF_BITS 19
 
-extern int ASCS_init();
+extern int ASCS_init(void);
 
 extern int ASCS_input_select(int slave);
 
