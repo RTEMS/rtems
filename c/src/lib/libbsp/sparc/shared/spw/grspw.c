@@ -116,11 +116,12 @@ typedef struct {
    char *ptr_rxbuf0;
    char *ptr_txdbuf0;
    char *ptr_txhbuf0;
-   char *ptr_bd0;
+   char *_ptr_bd0, *ptr_bd0;
 
    char *ptr_rxbuf0_remote;
    char *ptr_txdbuf0_remote;
    char *ptr_txhbuf0_remote;
+   char *ptr_bd0_remote;
 
    unsigned int irq;
    int minor;
@@ -610,74 +611,123 @@ static unsigned int grspw_calc_disconnect(int freq_khz){
 
 static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 {
-	if ( pDev->rx_dma_area ) {
-#warning Check size?
-		if ( pDev->rx_dma_area & 1 ) {
-			/* Address given in remote address */
-			drvmgr_translate(pDev->dev, 1, 1, (void *)(pDev->rx_dma_area & ~1), (void **)&pDev->ptr_rxbuf0);
-		} else {
-			pDev->ptr_rxbuf0 = pDev->rx_dma_area;
-		}
+	/* RX DMA AREA */
+	if (pDev->rx_dma_area & 1) {
+		/* Address given in remote address */
+		pDev->ptr_rxbuf0_remote = (char *)(pDev->rx_dma_area & ~1);
+		drvmgr_translate_check(
+			pDev->dev,
+			DMAMEM_TO_CPU,
+			(void *)pDev->ptr_rxbuf0_remote,
+			(void **)&pDev->ptr_rxbuf0,
+			pDev->rxbufsize * pDev->rxbufcnt);
+		
 	} else {
-		if (pDev->_ptr_rxbuf0) {
-			free(pDev->_ptr_rxbuf0);
-		}
-		pDev->_ptr_rxbuf0 = (unsigned int) malloc(pDev->rxbufsize * pDev->rxbufcnt+4);
-		pDev->ptr_rxbuf0 = (char *)((pDev->_ptr_rxbuf0+7)&~7);
-		if ( !pDev->ptr_rxbuf0 )
-			return 1;
-	}
-	if ( pDev->tx_data_dma_area ) {
-		if ( pDev->tx_data_dma_area & 1 ) {
-			/* Address given in remote address */
-			drvmgr_translate(pDev->dev, 1, 1, (void *)(pDev->tx_data_dma_area & ~1), (void **)&pDev->ptr_txdbuf0);
+		if (pDev->rx_dma_area == 0) {
+			if (pDev->_ptr_rxbuf0)
+				free((void *)pDev->_ptr_rxbuf0);
+			pDev->_ptr_rxbuf0 = (unsigned int) malloc(pDev->rxbufsize * pDev->rxbufcnt+4);
+			pDev->ptr_rxbuf0 = (char *)((pDev->_ptr_rxbuf0+7)&~7);
+			if ( !pDev->ptr_rxbuf0 )
+				return 1;
 		} else {
-			pDev->ptr_txdbuf0 = pDev->tx_data_dma_area;
+			pDev->ptr_rxbuf0 = (char *)pDev->rx_dma_area;
 		}
-	} else {
-		if (pDev->ptr_txdbuf0) {
-			free(pDev->ptr_txdbuf0);
-		}
-		pDev->ptr_txdbuf0 = (char *) malloc(pDev->txdbufsize * pDev->txbufcnt);
-		if ( !pDev->ptr_txdbuf0 )
-			return 1;
-	}
-	if ( pDev->tx_hdr_dma_area ) {
-		if ( pDev->tx_hdr_dma_area & 1 ) {
-			/* Address given in remote address */
-			drvmgr_translate(pDev->dev, 1, 1, (void *)(pDev->tx_hdr_dma_area & ~1), (void **)&pDev->ptr_txhbuf0);
-		} else {
-			pDev->ptr_txhbuf0 = pDev->tx_hdr_dma_area;
-		}
-	} else {
-		if (pDev->ptr_txhbuf0) {
-			free(pDev->ptr_txhbuf0);
-		}
-		pDev->ptr_txhbuf0 = (char *) malloc(pDev->txhbufsize * pDev->txbufcnt);
-		if ( !pDev->ptr_txhbuf0 )
-			return 1;
-	}
-	if ( pDev->bd_dma_area ) {
-		if ( pDev->bd_dma_area & 1 ) {
-			/* Address given in remote address */
-			drvmgr_translate(pDev->dev, 1, 1, (void *)(pDev->bd_dma_area & ~1), (void **)&pDev->ptr_bd0);
-		} else {
-			pDev->ptr_bd0 = pDev->bd_dma_area;
-		}
-	} else {
-		if (pDev->ptr_bd0) {
-			free(pDev->ptr_bd0);
-		}
-		pDev->ptr_bd0 = (char *)
-			rtems_heap_allocate_aligned_with_boundary(SPACEWIRE_BDTABLE_SIZE*2, 1024, 0);
-		if ( !pDev->ptr_bd0 )
-			return 1;
+		drvmgr_translate_check(
+			pDev->dev,
+			CPUMEM_TO_DMA,
+			(void *)pDev->ptr_rxbuf0,
+			(void **)&pDev->ptr_rxbuf0_remote,
+			pDev->rxbufsize * pDev->rxbufcnt);
 	}
 
-	/* Translate into remote address */
-	drvmgr_translate(pDev->dev, 0, 0, (void *)pDev->ptr_rxbuf0, (void **)&pDev->ptr_rxbuf0_remote);
-	drvmgr_translate(pDev->dev, 0, 0, (void *)pDev->ptr_txdbuf0,(void **)&pDev->ptr_txdbuf0_remote);
-	drvmgr_translate(pDev->dev, 0, 0, (void *)pDev->ptr_txhbuf0, (void **)&pDev->ptr_txhbuf0_remote);
+	/* TX-DATA DMA AREA */
+	if (pDev->tx_data_dma_area & 1) {
+		/* Address given in remote address */
+		pDev->ptr_txdbuf0_remote = (char*)(pDev->tx_data_dma_area & ~1);
+		drvmgr_translate_check(
+			pDev->dev,
+			DMAMEM_TO_CPU,
+			(void *)pDev->ptr_txdbuf0_remote,
+			(void **)&pDev->ptr_txdbuf0,
+			pDev->txdbufsize * pDev->txbufcnt);
+	} else {
+		if (pDev->tx_data_dma_area == 0) {
+			if (pDev->ptr_txdbuf0)
+				free(pDev->ptr_txdbuf0);
+			pDev->ptr_txdbuf0 = (char *) malloc(pDev->txdbufsize * pDev->txbufcnt);
+			if (!pDev->ptr_txdbuf0)
+				return 1;
+		} else {
+			pDev->ptr_txdbuf0 = (char *)pDev->tx_data_dma_area;
+		}
+		drvmgr_translate_check(
+			pDev->dev,
+			CPUMEM_TO_DMA,
+			(void *)pDev->ptr_txdbuf0,
+			(void **)&pDev->ptr_txdbuf0_remote,
+			pDev->txdbufsize * pDev->txbufcnt);
+	}
+
+	/* TX-HEADER DMA AREA */
+	if (pDev->tx_hdr_dma_area & 1) {
+		/* Address given in remote address */
+		pDev->ptr_txhbuf0_remote = (char *)(pDev->tx_hdr_dma_area & ~1);
+		drvmgr_translate_check(
+			pDev->dev,
+			DMAMEM_TO_CPU,
+			(void *)pDev->ptr_txhbuf0_remote,
+			(void **)&pDev->ptr_txhbuf0,
+			pDev->txhbufsize * pDev->txbufcnt);
+	} else {
+		if (pDev->tx_hdr_dma_area == 0) {
+			if (pDev->ptr_txhbuf0)
+				free(pDev->ptr_txhbuf0);
+			pDev->ptr_txhbuf0 = (char *) malloc(pDev->txhbufsize * pDev->txbufcnt);
+			if (!pDev->ptr_txhbuf0)
+				return 1;
+		} else {
+			pDev->ptr_txhbuf0 = (char *)pDev->tx_hdr_dma_area;
+		}
+		drvmgr_translate_check(
+			pDev->dev,
+			CPUMEM_TO_DMA,
+			(void *)pDev->ptr_txhbuf0,
+			(void **)&pDev->ptr_txhbuf0_remote,
+			pDev->txhbufsize * pDev->txbufcnt);
+	}
+
+	/* DMA DESCRIPTOR TABLES */
+	if (pDev->bd_dma_area & 1) {
+		/* Address given in remote address */
+		pDev->ptr_bd0_remote = (char *)(pDev->bd_dma_area & ~1);
+		drvmgr_translate_check(
+			pDev->dev,
+			DMAMEM_TO_CPU,
+			(void *)pDev->ptr_bd0_remote,
+			(void **)&pDev->ptr_bd0,
+			2 * SPACEWIRE_BDTABLE_SIZE);
+	} else {
+		if (pDev->bd_dma_area == 0) {
+			if (pDev->_ptr_bd0)
+				free(pDev->_ptr_bd0);
+			pDev->_ptr_bd0 =
+				rtems_heap_allocate_aligned_with_boundary(
+					SPACEWIRE_BDTABLE_SIZE*2, 1024, 0);
+			if (!pDev->_ptr_bd0)
+				return 1;
+			pDev->ptr_bd0 = (char *)pDev->_ptr_bd0;
+		} else {
+			pDev->ptr_bd0 = (char *)pDev->bd_dma_area;
+		}
+		drvmgr_translate_check(
+			pDev->dev, 
+			CPUMEM_TO_DMA,
+			(void *)pDev->ptr_bd0,
+			(void **)&pDev->ptr_bd0_remote,
+			2 * SPACEWIRE_BDTABLE_SIZE);
+	}
+
 	return 0;
 }
 
@@ -1549,11 +1599,11 @@ static int grspw_hw_init(GRSPW_DEV *pDev) {
 	ctrl = SPW_CTRL_READ(pDev);
 
 	pDev->rx = (SPACEWIRE_RXBD *) pDev->ptr_bd0;
-	pDev->tx = (SPACEWIRE_TXBD *) &pDev->rx[SPACEWIRE_RXBUFS_NR];
+	pDev->tx = (SPACEWIRE_TXBD *) (pDev->ptr_bd0 + SPACEWIRE_BDTABLE_SIZE);
 
-	/* Translate into remote address */
-	drvmgr_translate(pDev->dev, 0, 0, (void *)pDev->rx, (void **)&pDev->rx_remote);
-	drvmgr_translate(pDev->dev, 0, 0, (void *)pDev->tx, (void **)&pDev->tx_remote);
+	/* Set up remote addresses */
+	pDev->rx_remote = (unsigned int)pDev->ptr_bd0_remote;
+	pDev->tx_remote = pDev->rx_remote + SPACEWIRE_BDTABLE_SIZE;
 
 	SPACEWIRE_DBG("hw_init [minor %i]\n", pDev->minor);
 
@@ -1735,7 +1785,6 @@ int grspw_hw_send(GRSPW_DEV *pDev, unsigned int hlen, char *hdr, unsigned int dl
 	char *txd = pDev->ptr_txdbuf0 + (cur * pDev->txdbufsize);
 	char *txh_remote = pDev->ptr_txhbuf0_remote + (cur * pDev->txhbufsize);
 	char *txd_remote = pDev->ptr_txdbuf0_remote + (cur * pDev->txdbufsize);
-	unsigned int tmp, tmp2;
 	
 	ctrl = SPW_READ((volatile void *)&pDev->tx[cur].ctrl);
 
