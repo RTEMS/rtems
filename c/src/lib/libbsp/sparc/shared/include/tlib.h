@@ -16,6 +16,13 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
+#ifndef __TLIB_H__
+#define __TLIB_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct tlib_dev;
 
 typedef void (*tlib_isr_t)(void *data);
@@ -175,3 +182,9 @@ static inline int tlib_interrupt_pending(void *hand, int ack)
 
 	return dev->drv->int_pend(dev, ack);
 }
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
