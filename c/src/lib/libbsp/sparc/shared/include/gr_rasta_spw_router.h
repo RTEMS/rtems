@@ -32,8 +32,11 @@ extern struct drvmgr_bus_res *gr_rasta_spw_router_resources[];
 #define RASTA_SPW_ROUTER_OPTIONS_AMBA  0x01 /* Print AMBA bus devices */
 #define RASTA_SPW_ROUTER_OPTIONS_IRQ   0x02 /* Print current IRQ setup */
 
-/* Print information about GR-CPCI-LEON4-N2X PCI board */
+/* Print information about all GR-CPCI-LEON4-N2X PCI boards */
 void gr_rasta_spw_router_print(int options);
+
+/* Print information about one GR-CPCI-LEON4-N2X PCI board */
+void gr_rasta_spw_router_print_dev(struct drvmgr_dev *dev, int options);
 
 /* Register GR-RASTA-SPW-ROUTER driver to Driver Manager */
 void gr_rasta_spw_router_register_drv(void);

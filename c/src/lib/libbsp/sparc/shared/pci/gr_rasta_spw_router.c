@@ -28,6 +28,7 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <drvmgr/pci_bus.h>
+#include <drvmgr/bspcommon.h>
 #include <genirq.h>
 #include <gr_rasta_spw_router.h>
 
@@ -196,7 +197,6 @@ struct drvmgr_bus_res *gr_rasta_spw_router_resources[] __attribute__((weak)) =
 {
 	NULL
 };
-int gr_rasta_spw_router_resources_cnt = 0;
 
 void gr_rasta_spw_router_register_drv(void)
 {
@@ -239,7 +239,6 @@ static int gr_rasta_spw_router_hw_init(struct gr_rasta_spw_router_priv *priv)
 	unsigned int ctrl;
 	uint8_t tmp2;
 	struct ambapp_dev *tmp;
-	int status;
 	struct ambapp_ahb_info *ahb;
 	uint8_t cap_ptr;
 	pci_dev_t pcidev = priv->pcidev;
@@ -307,7 +306,7 @@ static int gr_rasta_spw_router_hw_init(struct gr_rasta_spw_router_priv *priv)
 	ambapp_freq_init(&priv->abus, NULL, priv->version->amba_freq_hz);
 
 	/* Find IRQ controller, Clear all current IRQs */
-	tmp = ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
 				(OPTIONS_ALL|OPTIONS_APB_SLVS),
 				VENDOR_GAISLER, GAISLER_IRQMP,
 				ambapp_find_by_idx, NULL);
@@ -327,7 +326,7 @@ static int gr_rasta_spw_router_hw_init(struct gr_rasta_spw_router_priv *priv)
 	priv->bus_maps_down[1].size = 0;
 
 	/* Find GRPCI2 controller AHB Slave interface */
-	tmp = (void *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_AHB_SLVS),
 					VENDOR_GAISLER, GAISLER_GRPCI2,
 					ambapp_find_by_idx, NULL);
@@ -343,7 +342,7 @@ static int gr_rasta_spw_router_hw_init(struct gr_rasta_spw_router_priv *priv)
 	priv->bus_maps_up[1].size = 0;
 
 	/* Find GRPCI2 controller APB Slave interface */
-	tmp = (void *)ambapp_for_each(&priv->abus,
+	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
 					(OPTIONS_ALL|OPTIONS_APB_SLVS),
 					VENDOR_GAISLER, GAISLER_GRPCI2,
 					ambapp_find_by_idx, NULL);
@@ -387,6 +386,7 @@ int gr_rasta_spw_router_init1(struct drvmgr_dev *dev)
 	int status;
 	uint32_t bar0, bar0_size;
 	union drvmgr_key_value *value;
+	int resources_cnt;
 
 	priv = dev->priv;
 	if (!priv)
@@ -397,10 +397,7 @@ int gr_rasta_spw_router_init1(struct drvmgr_dev *dev)
 	priv->dev = dev;
 
 	/* Determine number of configurations */
-	if ( gr_rasta_spw_router_resources_cnt == 0 ) {
-		while ( gr_rasta_spw_router_resources[gr_rasta_spw_router_resources_cnt] )
-			gr_rasta_spw_router_resources_cnt++;
-	}
+	resources_cnt = get_resarray_count(gr_rasta_spw_router_resources);
 
 	/* Generate Device prefix */
 
@@ -454,7 +451,7 @@ int gr_rasta_spw_router_init1(struct drvmgr_dev *dev)
 	priv->config.ops = &ambapp_rasta_spw_router_ops;
 	priv->config.maps_up = &priv->bus_maps_up[0];
 	priv->config.maps_down = &priv->bus_maps_down[0];
-	if ( priv->dev->minor_drv < gr_rasta_spw_router_resources_cnt ) {
+	if ( priv->dev->minor_drv < resources_cnt ) {
 		priv->config.resources = gr_rasta_spw_router_resources[priv->dev->minor_drv];
 	} else {
 		priv->config.resources = NULL;
