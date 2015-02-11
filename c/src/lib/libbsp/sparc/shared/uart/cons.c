@@ -40,7 +40,7 @@ struct console_priv {
 struct console_priv cons[CONSOLE_MAX] = {{0,0},};
 
 /* Register Console to TERMIOS layer and initialize it */
-void console_dev_init(struct console_priv *con, int minor)
+static void console_dev_init(struct console_priv *con, int minor)
 {
 	char name[16], *fsname;
 	rtems_status_code status;
