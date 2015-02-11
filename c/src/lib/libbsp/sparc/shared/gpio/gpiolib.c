@@ -35,13 +35,13 @@ static int port_nr;
 static int gpiolib_initied = 0;
 
 /* Insert a port first in ports list */
-void gpiolib_list_add(struct gpiolib_port *port)
+static void gpiolib_list_add(struct gpiolib_port *port)
 {
 	port->next = gpiolib_ports;
 	gpiolib_ports = port;
 }
 
-struct gpiolib_port *gpiolib_find(int minor)
+static struct gpiolib_port *gpiolib_find(int minor)
 {
 	struct gpiolib_port *p;
 
@@ -52,7 +52,7 @@ struct gpiolib_port *gpiolib_find(int minor)
 	return p;
 }
 
-struct gpiolib_port *gpiolib_find_by_name(char *name)
+static struct gpiolib_port *gpiolib_find_by_name(char *name)
 {
 	struct gpiolib_port *p;
 	struct gpiolib_info info;
@@ -69,11 +69,6 @@ struct gpiolib_port *gpiolib_find_by_name(char *name)
 		p = p->next;
 	}
 	return p;
-}
-
-void gpiolib_list_remove(struct gpiolib_port *port)
-{
-	
 }
 
 int gpiolib_drv_register(struct gpiolib_drv *drv, void *handle)
@@ -123,7 +118,7 @@ void gpiolib_show(int port, void *handle)
 	}
 }
 
-void *gpiolib_open_internal(int port, char *devName)
+static void *gpiolib_open_internal(int port, char *devName)
 {
 	struct gpiolib_port *p;
 
@@ -218,7 +213,7 @@ int gpiolib_irq_register(void *handle, void *func, void *arg)
 	return port->drv->ops->irq_register(port->handle, func, arg);
 }
 
-int gpiolib_irq_opts(void *handle, unsigned int options)
+static int gpiolib_irq_opts(void *handle, unsigned int options)
 {
 	struct gpiolib_port *port = handle;
 
