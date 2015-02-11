@@ -26,6 +26,9 @@ struct grlib_config {
 /* Register GRLIB AMBA PnP Bus as root bus at driver manager */
 extern int ambapp_grlib_root_register(struct grlib_config *config);
 
+/* Register bus driver to Driver Manager */
+void ambapp_grlib_register(void);
+
 #ifdef __cplusplus
 }
 #endif
