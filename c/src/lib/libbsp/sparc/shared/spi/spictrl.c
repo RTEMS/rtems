@@ -297,10 +297,10 @@ STATIC rtems_status_code spictrl_libi2c_send_addr(rtems_libi2c_bus_t *bushdl,
 /* Set as high frequency of SCK as possible but not higher than 
  * requested frequency (freq).
  */
-int spictrl_set_freq(struct spictrl_priv *priv, unsigned int freq)
+static int spictrl_set_freq(struct spictrl_priv *priv, unsigned int freq)
 {
 	unsigned int core_freq_hz = priv->core_freq_hz;
-	unsigned int lowest_freq_possible, result;
+	unsigned int lowest_freq_possible;
 	unsigned int div, div16, pm, fact;
 
 	/* Lowest possible when DIV16 is set and PM is 0xf */
@@ -338,14 +338,15 @@ int spictrl_set_freq(struct spictrl_priv *priv, unsigned int freq)
 		(pm << SPICTRL_MODE_PM_BIT) | (div16 << SPICTRL_MODE_DIV16_BIT) |
 		(fact << SPICTRL_MODE_FACT_BIT);
 
-	result = core_freq_hz / (2 * (fact ? 1 : 2) * (div) * (div16 ? 16 : 1) );
-	DBG("SPICTRL: Effective bit rate %u (requested %u), PM: %x, FACT: %d, div16: %x, core_freq: %u\n", result, freq, pm, fact, div16, core_freq_hz);
+	DBG("SPICTRL: Effective bit rate %u (requested %u), PM: %x, FACT: %d, div16: %x, core_freq: %u\n",
+		core_freq_hz / (2 * (fact ? 1 : 2) * (div) * (div16 ? 16 : 1)),
+		freq, pm, fact, div16, core_freq_hz);
 
 	return 0;
 }
 
 /* Start Automated Periodic transfers, after this call read can be done */
-int spictrl_start_periodic(struct spictrl_priv *priv)
+static int spictrl_start_periodic(struct spictrl_priv *priv)
 {
 	struct spictrl_ioctl_config *cfg = &priv->periodic_cfg;
 	unsigned int am_cfg;
@@ -376,7 +377,7 @@ int spictrl_start_periodic(struct spictrl_priv *priv)
 }
 
 /* Stop Automated Periodic transfers */
-void spictrl_stop_periodic(struct spictrl_priv *priv)
+static void spictrl_stop_periodic(struct spictrl_priv *priv)
 {
 	priv->regs->am_cfg = 0;
 }
@@ -385,12 +386,14 @@ void spictrl_stop_periodic(struct spictrl_priv *priv)
  * it may be needed in periodic mode to look at the Not Full bit (NF)
  * in order not to hang in an infinte loop when read is called.
  */
-unsigned int spictrl_status(struct spictrl_priv *priv)
+static inline unsigned int spictrl_status(struct spictrl_priv *priv)
 {
 	return priv->regs->event;
 }
 
-int spictrl_read_periodic(struct spictrl_priv *priv, struct spictrl_period_io *rarg)
+static int spictrl_read_periodic(
+	struct spictrl_priv *priv,
+	struct spictrl_period_io *rarg)
 {
 	int i, rxi, rxshift, bits_per_char, reg;
 	unsigned int rx_word, mask;
@@ -455,7 +458,9 @@ int spictrl_read_periodic(struct spictrl_priv *priv, struct spictrl_period_io *r
 	return 0;
 }
 
-int spictrl_write_periodic(struct spictrl_priv *priv, struct spictrl_period_io *warg)
+static int spictrl_write_periodic(
+	struct spictrl_priv *priv,
+	struct spictrl_period_io *warg)
 {
 	int i, txi, txshift, bits_per_char, reg;
 	unsigned int tx_word, mask;
@@ -522,7 +527,11 @@ int spictrl_write_periodic(struct spictrl_priv *priv, struct spictrl_period_io *
 	return 0;
 }
 
-int spictrl_read_write(struct spictrl_priv *priv, void *rxbuf, void *txbuf, int len)
+static int spictrl_read_write(
+	struct spictrl_priv *priv,
+	void *rxbuf, 
+	void *txbuf,
+	int len)
 {
 	unsigned int tx_word, rx_word, tmp;
 	int txshift = priv->txshift;
