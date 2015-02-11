@@ -324,7 +324,10 @@ int grpwm_register_io(rtems_device_major_number *m)
 	return 0;
 }
 
-void grpwm_scaler_set(struct grpwm_regs *regs, int scaler, unsigned int value)
+static void grpwm_scaler_set(
+	struct grpwm_regs *regs,
+	int scaler,
+	unsigned int value)
 {
 	/* Select scaler */
 	regs->ctrl = (regs->ctrl & ~GRPWM_CTRL_SCSEL) | (scaler << GRPWM_CTRL_SCSEL_BIT);
@@ -333,7 +336,10 @@ void grpwm_scaler_set(struct grpwm_regs *regs, int scaler, unsigned int value)
 }
 
 /* Write Wave form RAM */
-void grpwm_write_wram(struct grpwm_regs *regs, unsigned int *data, int length)
+static void grpwm_write_wram(
+	struct grpwm_regs *regs,
+	unsigned int *data,
+	int length)
 {
 	unsigned int *end;
 	volatile unsigned int *pos;
@@ -354,7 +360,7 @@ void grpwm_write_wram(struct grpwm_regs *regs, unsigned int *data, int length)
 	}
 }
 
-void grpwm_hw_reset(struct grpwm_priv *priv)
+static void grpwm_hw_reset(struct grpwm_priv *priv)
 {
 	int i;
 	struct grpwm_chan_priv *pwm;
@@ -392,7 +398,7 @@ void grpwm_hw_reset(struct grpwm_priv *priv)
  *
  * A bit mask of updated bits are returned.
  */
-unsigned int grpwm_update_prepare_channel(
+static unsigned int grpwm_update_prepare_channel(
 	struct grpwm_priv *priv,
 	int channel,
 	struct grpwm_ioctl_update_chan *up
@@ -441,7 +447,7 @@ unsigned int grpwm_update_prepare_channel(
 	return ret;
 }
 
-void grpwm_update_active(struct grpwm_priv *priv, int enable)
+static void grpwm_update_active(struct grpwm_priv *priv, int enable)
 {
 	unsigned int ctrl;
 	int i;
@@ -462,7 +468,7 @@ void grpwm_update_active(struct grpwm_priv *priv, int enable)
 }
 
 /* Configure the hardware of a channel according to this */
-rtems_status_code grpwm_config_channel(
+static rtems_status_code grpwm_config_channel(
 	struct grpwm_priv *priv,
 	int channel,
 	struct grpwm_ioctl_config *cfg
