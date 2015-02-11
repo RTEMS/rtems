@@ -77,9 +77,6 @@ struct leon2_isr_handler {
 	void *arg;
 };
 
-/* Interrupt handlers */
-struct leon2_isr_handler leon2_isrs[16];
-
 /* Standard LEON2 configuration */
 
 struct drvmgr_key leon2_timers[] =
@@ -133,7 +130,9 @@ struct leon2_core leon2_std_cores[] =
 static struct leon2_bus *leon2_bus_config = NULL;
 static struct drvmgr_bus_res *leon2_bus_res = NULL;
 
-int leon2_root_register(struct leon2_bus *bus_config, struct drvmgr_bus_res *resources)
+int leon2_root_register(
+	struct leon2_bus *bus_config,
+	struct drvmgr_bus_res *resources)
 {
 	/* Save the configuration for later */
 	leon2_bus_config = bus_config;
@@ -145,7 +144,10 @@ int leon2_root_register(struct leon2_bus *bus_config, struct drvmgr_bus_res *res
 	return 0;
 }
 
-int leon2_amba_dev_register(struct drvmgr_bus *bus, struct leon2_core *core, int index)
+static int leon2_amba_dev_register(
+	struct drvmgr_bus *bus,
+	struct leon2_core *core,
+	int index)
 {
 	struct drvmgr_dev *newdev;
 	struct leon2_amba_dev_info *info;
@@ -209,13 +211,11 @@ int leon2_amba_dev_register(struct drvmgr_bus *bus, struct leon2_core *core, int
 	return 0;
 }
 
-int leon2_amba_init1(struct drvmgr_dev *dev)
+static int leon2_amba_init1(struct drvmgr_dev *dev)
 {
 	/* Init our own device */
 	dev->priv = NULL;
 	dev->name = "LEON2 AMBA";
-
-	memset(leon2_isrs, 0, sizeof(leon2_isrs));
 
 	/* Init the bus */
 	drvmgr_alloc_bus(&dev->bus, 0);
@@ -234,12 +234,12 @@ int leon2_amba_init1(struct drvmgr_dev *dev)
 	return DRVMGR_OK;
 }
 
-int leon2_amba_init2(struct drvmgr_dev *dev)
+static int leon2_amba_init2(struct drvmgr_dev *dev)
 {
 	return DRVMGR_OK;
 }
 
-int leon2_amba_remove(struct drvmgr_dev *dev)
+static int leon2_amba_remove(struct drvmgr_dev *dev)
 {
 	return DRVMGR_OK;
 }
@@ -312,18 +312,7 @@ int leon2_amba_unite(struct drvmgr_drv *drv, struct drvmgr_dev *dev)
 	return 0;
 }
 
-rtems_isr leon2_amba_isr(rtems_vector_number v)
-{
-	int irq = v - 0x10; /* Convert Vector number to Interrupt number */
-	struct leon2_isr_handler *isr;
-	
-	isr = &leon2_isrs[irq];
-	if ( isr->handler ) {
-		isr->handler(irq, isr->arg);
-	}
-}
-
-int leon2_amba_get_irq(struct drvmgr_dev *dev, int index)
+static int leon2_amba_get_irq(struct drvmgr_dev *dev, int index)
 {
 	int irq;
 	struct leon2_amba_dev_info *info;
