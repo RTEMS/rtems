@@ -162,6 +162,9 @@ void grctm_set_fs_incr(void *grctm, int incr);
 /* Set ET increment */
 void grctm_set_et_incr(void *grctm, int incr);
 
+/* Get register base address */
+struct grctm_regs *grctm_get_regs(void *grctm);
+
 /* Register the GRCTM driver to Driver Manager */
 extern void grctm_register(void);
 

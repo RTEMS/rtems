@@ -343,7 +343,7 @@ void grctm_int_register(void *grctm, grctm_isr_t func, void *data)
 
 /*** INTERFACE TO DRIVER MANAGER ***/
 
-int grctm_init2(struct drvmgr_dev *dev)
+static int grctm_init2(struct drvmgr_dev *dev)
 {
 	struct amba_dev_info *ambadev;
 	struct ambapp_core *pnpinfo;
