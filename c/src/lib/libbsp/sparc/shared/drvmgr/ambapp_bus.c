@@ -145,11 +145,9 @@ int ambapp_int_register(
 	drvmgr_isr isr,
 	void *arg)
 {
-	struct drvmgr_dev *busdev;
 	struct ambapp_priv *priv;
 	int irq;
 
-	busdev = dev->parent->dev;
 	priv = dev->parent->priv;
 
 	/* Get IRQ number from index and device information */
@@ -157,7 +155,8 @@ int ambapp_int_register(
 	if ( irq < 0 ) 
 		return DRVMGR_EINVAL;
 
-	DBG("Register interrupt on 0x%x for dev 0x%x (IRQ: %d)\n", (unsigned int)busdev, (unsigned int)dev, irq);
+	DBG("Register interrupt on 0x%x for dev 0x%x (IRQ: %d)\n",
+		(unsigned int)dev->parent->dev, (unsigned int)dev, irq);
 
 	if ( priv->config->ops->int_register ) {
 		/* Let device override driver default */
@@ -173,11 +172,9 @@ int ambapp_int_unregister(
 	drvmgr_isr isr,
 	void *arg)
 {
-	struct drvmgr_dev *busdev;
 	struct ambapp_priv *priv;
 	int irq;
 
-	busdev = dev->parent->dev;
 	priv = dev->parent->priv;
 
 	/* Get IRQ number from index and device information */
@@ -185,7 +182,8 @@ int ambapp_int_unregister(
 	if ( irq < 0 ) 
 		return DRVMGR_EINVAL;
 
-	DBG("Unregister interrupt on 0x%x for dev 0x%x (IRQ: %d)\n", (unsigned int)busdev, (unsigned int)dev, irq);
+	DBG("Unregister interrupt on 0x%x for dev 0x%x (IRQ: %d)\n",
+		(unsigned int)dev->parent->dev, (unsigned int)dev, irq);
 
 	if ( priv->config->ops->int_unregister ) {
 		/* Let device override driver default */
@@ -199,11 +197,9 @@ int ambapp_int_clear(
 	struct drvmgr_dev *dev,
 	int index)
 {
-	struct drvmgr_dev *busdev;
 	struct ambapp_priv *priv;
 	int irq;
 
-	busdev = dev->parent->dev;
 	priv = dev->parent->priv;
 
 	/* Get IRQ number from index and device information */
@@ -211,7 +207,8 @@ int ambapp_int_clear(
 	if ( irq < 0 ) 
 		return -1;
 
-	DBG("Clear interrupt on 0x%x for dev 0x%x (IRQ: %d)\n", (unsigned int)busdev, (unsigned int)dev, irq);
+	DBG("Clear interrupt on 0x%x for dev 0x%x (IRQ: %d)\n",
+		(unsigned int)dev->parent->dev, (unsigned int)dev, irq);
 
 	if ( priv->config->ops->int_clear ) {
 		/* Let device override driver default */
@@ -225,11 +222,9 @@ int ambapp_int_mask(
 	struct drvmgr_dev *dev,
 	int index)
 {
-	struct drvmgr_dev *busdev;
 	struct ambapp_priv *priv;
 	int irq;
 
-	busdev = dev->parent->dev;
 	priv = dev->parent->priv;
 
 	/* Get IRQ number from index and device information */
@@ -237,7 +232,8 @@ int ambapp_int_mask(
 	if ( irq < 0 ) 
 		return -1;
 
-	DBG("MASK interrupt on 0x%x for dev 0x%x (IRQ: %d)\n", (unsigned int)busdev, (unsigned int)dev, irq);
+	DBG("MASK interrupt on 0x%x for dev 0x%x (IRQ: %d)\n",
+		(unsigned int)dev->parent->dev, (unsigned int)dev, irq);
 
 	if ( priv->config->ops->int_mask ) {
 		/* Let device override driver default */
@@ -251,11 +247,9 @@ int ambapp_int_unmask(
 	struct drvmgr_dev *dev,
 	int index)
 {
-	struct drvmgr_dev *busdev;
 	struct ambapp_priv *priv;
 	int irq;
 
-	busdev = dev->parent->dev;
 	priv = dev->parent->priv;
 
 	/* Get IRQ number from index and device information */
@@ -263,7 +257,8 @@ int ambapp_int_unmask(
 	if ( irq < 0 ) 
 		return DRVMGR_EINVAL;
 
-	DBG("UNMASK interrupt on 0x%x for dev 0x%x (IRQ: %d)\n", (unsigned int)busdev, (unsigned int)dev, irq);
+	DBG("UNMASK interrupt on 0x%x for dev 0x%x (IRQ: %d)\n",
+		(unsigned int)dev->parent->dev, (unsigned int)dev, irq);
 
 	if ( priv->config->ops->int_unmask ) {
 		/* Let device override driver default */
@@ -459,7 +454,7 @@ void ambapp_dev_info(
 #endif
 
 /* Fix device in last stage */
-int ambapp_dev_fixup(struct drvmgr_dev *dev, struct amba_dev_info *pnp)
+static int ambapp_dev_fixup(struct drvmgr_dev *dev, struct amba_dev_info *pnp)
 {
 	/* OCCAN speciality:
 	 *  Mulitple cores are supported through the same amba AHB interface.
@@ -496,14 +491,14 @@ int ambapp_dev_fixup(struct drvmgr_dev *dev, struct amba_dev_info *pnp)
 }
 
 struct ambapp_dev_reg_struct {
-	struct ambapp_bus		*abus;
+	struct ambapp_bus	*abus;
 	struct drvmgr_bus	*bus;
-	struct ambapp_dev		*ahb_mst;
-	struct ambapp_dev		*ahb_slv;
-	struct ambapp_dev		*apb_slv;
+	struct ambapp_dev	*ahb_mst;
+	struct ambapp_dev	*ahb_slv;
+	struct ambapp_dev	*apb_slv;
 };
 
-void ambapp_core_register(
+static void ambapp_core_register(
 	struct ambapp_dev	*ahb_mst,
 	struct ambapp_dev	*ahb_slv,
 	struct ambapp_dev	*apb_slv,
@@ -595,7 +590,7 @@ void ambapp_core_register(
 }
 
 /* Register one AMBA device */
-int ambapp_dev_register(struct ambapp_dev *dev, int index, void *arg)
+static int ambapp_dev_register(struct ambapp_dev *dev, int index, void *arg)
 {
 	struct ambapp_dev_reg_struct *p = arg;
 
@@ -672,7 +667,7 @@ int ambapp_dev_register(struct ambapp_dev *dev, int index, void *arg)
 }
 
 /* Register all AMBA devices available on the AMBAPP bus */
-int ambapp_ids_register(struct drvmgr_bus *bus)
+static int ambapp_ids_register(struct drvmgr_bus *bus)
 {
 	struct ambapp_priv *priv = bus->priv;
 	struct ambapp_bus *abus;
