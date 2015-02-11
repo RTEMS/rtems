@@ -141,7 +141,7 @@ int gradcdac_init3(struct drvmgr_dev *dev)
 	return DRVMGR_OK;
 }
 
-void gradcdac_print_dev(struct gradcdac_priv *pDev)
+static void gradcdac_print_dev(struct gradcdac_priv *pDev)
 {
 	printf("======= GRADCDAC %p =======\n", pDev->regs);
 	printf(" Minor:          %d\n", pDev->minor);
@@ -174,7 +174,7 @@ void gradcdac_print(void *cookie)
 	}
 }
 
-void gradcdac_hw_reset(struct gradcdac_regs *regs)
+static void gradcdac_hw_reset(struct gradcdac_regs *regs)
 {
 	/* Reset core */
 	regs->config = 0;
