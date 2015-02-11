@@ -32,7 +32,7 @@ void spwcuc_isr(void *data);
 struct amba_drv_info spwcuc_drv_info;
 
 /* Hardware Reset of SPWCUC */
-int spwcuc_hw_reset(struct spwcuc_priv *priv)
+static int spwcuc_hw_reset(struct spwcuc_priv *priv)
 {
 	struct spwcuc_regs *r = priv->regs;
 	int i = 1000;
@@ -303,7 +303,7 @@ void spwcuc_isr(void *data)
 
 /*** INTERFACE TO DRIVER MANAGER ***/
 
-int spwcuc_init2(struct drvmgr_dev *dev)
+static int spwcuc_init2(struct drvmgr_dev *dev)
 {
 	struct amba_dev_info *ambadev;
 	struct ambapp_core *pnpinfo;
