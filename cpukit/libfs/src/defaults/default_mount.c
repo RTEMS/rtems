@@ -22,5 +22,5 @@ int rtems_filesystem_default_mount (
    rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
 )
 {
-  return 0;
+  rtems_set_errno_and_return_minus_one( ENOTSUP );
 }
