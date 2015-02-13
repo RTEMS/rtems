@@ -2677,9 +2677,45 @@ infrastructure necessary to support @code{printf()}.
 None.
 
 @c
+@c === CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM ===
+@c
+@subsection Use a Root IMFS with a Minimalistic Feature Set
+
+@findex CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM}
+
+@item DATA TYPE:
+Boolean feature macro.
+
+@item RANGE:
+Defined or undefined.
+
+@item DEFAULT VALUE:
+This is not defined by default.
+
+@end table
+
+@subheading DESCRIPTION:
+In case this configuration option is defined, then the following configuration
+options will be defined as well
+@itemize @bullet
+@item @code{CONFIGURE_IMFS_DISABLE_FCHMOD},
+@item @code{CONFIGURE_IMFS_DISABLE_CHOWN},
+@item @code{CONFIGURE_IMFS_DISABLE_UTIME},
+@item @code{CONFIGURE_IMFS_DISABLE_LINK},
+@item @code{CONFIGURE_IMFS_DISABLE_SYMLINK},
+@item @code{CONFIGURE_IMFS_DISABLE_READLINK},
+@item @code{CONFIGURE_IMFS_DISABLE_RENAME}, and
+@item @code{CONFIGURE_IMFS_DISABLE_UNMOUNT}.
+@end itemize
+
+@c
 @c === CONFIGURE_IMFS_DISABLE_CHOWN ===
 @c
-@subsection Disable change owner support of root IMFS
+@subsection Disable Change Owner Support of Root IMFS
 
 @findex CONFIGURE_IMFS_DISABLE_CHOWN
 
@@ -2705,7 +2741,7 @@ owner is disabled in the root IMFS.
 @c
 @c === CONFIGURE_IMFS_DISABLE_FCHMOD ===
 @c
-@subsection Disable change mode support of root IMFS
+@subsection Disable Change Mode Support of Root IMFS
 
 @findex CONFIGURE_IMFS_DISABLE_FCHMOD
 
@@ -2731,7 +2767,7 @@ mode is disabled in the root IMFS.
 @c
 @c === CONFIGURE_IMFS_DISABLE_UTIME ===
 @c
-@subsection Disable change times support of root IMFS
+@subsection Disable Change Times Support of Root IMFS
 
 @findex CONFIGURE_IMFS_DISABLE_UTIME
 
@@ -2757,7 +2793,7 @@ is disabled in the root IMFS.
 @c
 @c === CONFIGURE_IMFS_DISABLE_LINK ===
 @c
-@subsection Disable create hard link support of root IMFS
+@subsection Disable Create Hard Link Support of Root IMFS
 
 @findex CONFIGURE_IMFS_DISABLE_LINK
 
@@ -2783,7 +2819,7 @@ links is disabled in the root IMFS.
 @c
 @c === CONFIGURE_IMFS_DISABLE_SYMLINK ===
 @c
-@subsection Disable create symbolic link support of root IMFS
+@subsection Disable Create Symbolic Link Support of Root IMFS
 
 @findex CONFIGURE_IMFS_DISABLE_SYMLINK
 
@@ -2809,7 +2845,7 @@ symbolic links is disabled in the root IMFS.
 @c
 @c === CONFIGURE_IMFS_DISABLE_READLINK ===
 @c
-@subsection Disable read symbolic link support of root IMFS
+@subsection Disable Read Symbolic Link Support of Root IMFS
 
 @findex CONFIGURE_IMFS_DISABLE_READLINK
 
@@ -2835,7 +2871,7 @@ links is disabled in the root IMFS.
 @c
 @c === CONFIGURE_IMFS_DISABLE_RENAME ===
 @c
-@subsection Disable rename support of root IMFS
+@subsection Disable Rename Support of Root IMFS
 
 @findex CONFIGURE_IMFS_DISABLE_RENAME
 
@@ -2861,7 +2897,7 @@ is disabled in the root IMFS.
 @c
 @c === CONFIGURE_IMFS_DISABLE_MOUNT ===
 @c
-@subsection Disable mount support of root IMFS
+@subsection Disable Mount Support of Root IMFS
 
 @findex CONFIGURE_IMFS_DISABLE_MOUNT
 
@@ -2887,7 +2923,7 @@ file systems is disabled in the root IMFS.
 @c
 @c === CONFIGURE_IMFS_DISABLE_UNMOUNT ===
 @c
-@subsection Disable unmount support of root IMFS
+@subsection Disable Unmount Support of Root IMFS
 
 @findex CONFIGURE_IMFS_DISABLE_UNMOUNT
 
@@ -2913,7 +2949,7 @@ systems is disabled in the root IMFS.
 @c
 @c === CONFIGURE_IMFS_DISABLE_MKNOD ===
 @c
-@subsection Disable make nodes support of root IMFS
+@subsection Disable Make Nodes Support of Root IMFS
 
 @findex CONFIGURE_IMFS_DISABLE_MKNOD
 
@@ -2939,7 +2975,7 @@ directories, devices, regular files and FIFOs is disabled in the root IMFS.
 @c
 @c === CONFIGURE_IMFS_DISABLE_RMNOD ===
 @c
-@subsection Disable remove nodes support of root IMFS
+@subsection Disable Remove Nodes Support of Root IMFS
 
 @findex CONFIGURE_IMFS_DISABLE_RMNOD
 

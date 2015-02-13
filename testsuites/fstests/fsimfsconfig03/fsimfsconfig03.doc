@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: fsimfsconfig03
+
+directives:
+
+  TBD
+
+concepts:
+
+  - Ensure that the IMFS configuration defines work.

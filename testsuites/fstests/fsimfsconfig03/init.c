@@ -28,7 +28,7 @@
 #include <rtems/imfs.h>
 #include <rtems/libio.h>
 
-const char rtems_test_name[] = "FSIMFSCONFIG 1";
+const char rtems_test_name[] = "FSIMFSCONFIG 3";
 
 static const IMFS_node_control node_control = IMFS_GENERIC_INITIALIZER(
   &rtems_filesystem_handlers_default,
@@ -89,7 +89,6 @@ static void Init(rtems_task_argument arg)
   rtems_test_assert(rv == -1);
   rtems_test_assert(errno == ENOSYS);
 
-  errno = 0;
   rv = mount(
     "",
     mnt,
@@ -97,6 +96,10 @@ static void Init(rtems_task_argument arg)
     RTEMS_FILESYSTEM_READ_ONLY,
     NULL
   );
+  rtems_test_assert(rv == 0);
+
+  errno = 0;
+  rv = unmount(mnt);
   rtems_test_assert(rv == -1);
   rtems_test_assert(errno == ENOTSUP);
 
@@ -115,10 +118,8 @@ static void Init(rtems_task_argument arg)
   rtems_test_assert(rv == -1);
   rtems_test_assert(errno == ENOTSUP);
 
-  errno = 0;
   rv = unlink(generic);
-  rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENOTSUP);
+  rtems_test_assert(rv == 0);
 
   TEST_END();
   rtems_test_exit(0);
@@ -131,23 +132,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_FILESYSTEM_IMFS
 
-#define CONFIGURE_IMFS_DISABLE_CHOWN
-#define CONFIGURE_IMFS_DISABLE_FCHMOD
-#define CONFIGURE_IMFS_DISABLE_LINK
-
-#if 0
-/*
- * This would lead to a fatal error since rtems_filesystem_initialize() creates
- * a "/dev" directory.
- */
-#define CONFIGURE_IMFS_DISABLE_MKNOD
-#endif
-
-#define CONFIGURE_IMFS_DISABLE_MOUNT
-#define CONFIGURE_IMFS_DISABLE_RENAME
-#define CONFIGURE_IMFS_DISABLE_RMNOD
-#define CONFIGURE_IMFS_DISABLE_SYMLINK
-#define CONFIGURE_IMFS_DISABLE_UTIME
+#define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 
