@@ -2702,7 +2702,7 @@ This is not defined by default.
 In case this configuration option is defined, then the following configuration
 options will be defined as well
 @itemize @bullet
-@item @code{CONFIGURE_IMFS_DISABLE_FCHMOD},
+@item @code{CONFIGURE_IMFS_DISABLE_CHMOD},
 @item @code{CONFIGURE_IMFS_DISABLE_CHOWN},
 @item @code{CONFIGURE_IMFS_DISABLE_UTIME},
 @item @code{CONFIGURE_IMFS_DISABLE_LINK},
@@ -2739,15 +2739,15 @@ In case this configuration option is defined, then the support to change the
 owner is disabled in the root IMFS.
 
 @c
-@c === CONFIGURE_IMFS_DISABLE_FCHMOD ===
+@c === CONFIGURE_IMFS_DISABLE_CHMOD ===
 @c
 @subsection Disable Change Mode Support of Root IMFS
 
-@findex CONFIGURE_IMFS_DISABLE_FCHMOD
+@findex CONFIGURE_IMFS_DISABLE_CHMOD
 
 @table @b
 @item CONSTANT:
-@code{CONFIGURE_IMFS_DISABLE_FCHMOD}
+@code{CONFIGURE_IMFS_DISABLE_CHMOD}
 
 @item DATA TYPE:
 Boolean feature macro.

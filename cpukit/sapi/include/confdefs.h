@@ -347,7 +347,7 @@ const rtems_libio_helper rtems_fs_init_helper =
 #endif
 
 #ifdef CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
-  #define CONFIGURE_IMFS_DISABLE_FCHMOD
+  #define CONFIGURE_IMFS_DISABLE_CHMOD
   #define CONFIGURE_IMFS_DISABLE_CHOWN
   #define CONFIGURE_IMFS_DISABLE_UTIME
   #define CONFIGURE_IMFS_DISABLE_LINK
@@ -572,7 +572,7 @@ const rtems_libio_helper rtems_fs_init_helper =
         #else
           IMFS_rmnod,
         #endif
-        #ifdef CONFIGURE_IMFS_DISABLE_FCHMOD
+        #ifdef CONFIGURE_IMFS_DISABLE_CHMOD
           rtems_filesystem_default_fchmod,
         #else
           IMFS_fchmod,
