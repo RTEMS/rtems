@@ -69,7 +69,7 @@ void _Thread_Start_multitasking( void )
    * FIXME: We have a race condition here in case another thread already
    * performed scheduler operations and moved our heir thread to another
    * processor.  The time frame for this is likely too small to be practically
-   * relevant.
+   * relevant.  See https://devel.rtems.org/ticket/2268.
    */
   _CPU_Context_Set_is_executing( &heir->Registers, true );
 #endif
