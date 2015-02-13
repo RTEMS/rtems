@@ -2973,6 +2973,32 @@ In case this configuration option is defined, then the support to make
 directories, devices, regular files and FIFOs is disabled in the root IMFS.
 
 @c
+@c === CONFIGURE_IMFS_DISABLE_MKNOD_FILE ===
+@c
+@subsection Disable Make Files Support of Root IMFS
+
+@findex CONFIGURE_IMFS_DISABLE_MKNOD_FILE
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_IMFS_DISABLE_MKNOD_FILE}
+
+@item DATA TYPE:
+Boolean feature macro.
+
+@item RANGE:
+Defined or undefined.
+
+@item DEFAULT VALUE:
+This is not defined by default.
+
+@end table
+
+@subheading DESCRIPTION:
+In case this configuration option is defined, then the support to make regular
+files is disabled in the root IMFS.
+
+@c
 @c === CONFIGURE_IMFS_DISABLE_RMNOD ===
 @c
 @subsection Disable Remove Nodes Support of Root IMFS

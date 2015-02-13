@@ -78,11 +78,10 @@ static void Init(rtems_task_argument arg)
   rv = mknod(dev, S_IFCHR | S_IRWXU, 0);
   rtems_test_assert(rv == 0);
 
+  errno = 0;
   fd = creat(file, S_IRWXU);
-  rtems_test_assert(fd == 3);
-
-  rv = close(fd);
-  rtems_test_assert(rv == 0);
+  rtems_test_assert(fd == -1);
+  rtems_test_assert(errno == ENOSYS);
 
   errno = 0;
   rv = mkfifo(fifo, S_IRWXU);
@@ -143,6 +142,7 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_IMFS_DISABLE_MKNOD
 #endif
 
+#define CONFIGURE_IMFS_DISABLE_MKNOD_FILE
 #define CONFIGURE_IMFS_DISABLE_MOUNT
 #define CONFIGURE_IMFS_DISABLE_RENAME
 #define CONFIGURE_IMFS_DISABLE_RMNOD

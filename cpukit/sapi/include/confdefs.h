@@ -621,7 +621,11 @@ const rtems_libio_helper rtems_fs_init_helper =
       static const IMFS_mknod_controls _Configure_IMFS_mknod_controls = {
         &IMFS_mknod_control_directory,
         &IMFS_mknod_control_device,
-        &IMFS_mknod_control_memfile,
+        #ifdef CONFIGURE_IMFS_DISABLE_MKNOD_FILE
+          &IMFS_mknod_control_enosys,
+        #else
+          &IMFS_mknod_control_memfile,
+        #endif
         #if CONFIGURE_MAXIMUM_FIFOS > 0 || CONFIGURE_MAXIMUM_PIPES > 0
           &IMFS_mknod_control_fifo
         #else
