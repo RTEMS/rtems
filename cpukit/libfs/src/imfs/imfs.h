@@ -135,6 +135,11 @@ IMFS_jnode_t *IMFS_node_initialize_default(
   void *arg
 );
 
+IMFS_jnode_t *IMFS_node_initialize_directory(
+  IMFS_jnode_t *node,
+  void *arg
+);
+
 /**
  * @brief Returns the node and sets the generic node context.
  *
@@ -178,6 +183,8 @@ typedef IMFS_jnode_t *(*IMFS_node_control_remove)(
 IMFS_jnode_t *IMFS_node_remove_default(
   IMFS_jnode_t *node
 );
+
+IMFS_jnode_t *IMFS_node_remove_directory( IMFS_jnode_t *node );
 
 /**
  * @brief Destroys an IMFS node.
@@ -384,7 +391,8 @@ typedef struct {
  *  Shared Data
  */
 
-extern const IMFS_mknod_control IMFS_mknod_control_directory;
+extern const IMFS_mknod_control IMFS_mknod_control_dir_default;
+extern const IMFS_mknod_control IMFS_mknod_control_dir_minimal;
 extern const IMFS_mknod_control IMFS_mknod_control_device;
 extern const IMFS_mknod_control IMFS_mknod_control_memfile;
 extern const IMFS_node_control IMFS_node_control_linfile;
@@ -697,26 +705,6 @@ extern int IMFS_mount(
  */
 extern int IMFS_unmount(
   rtems_filesystem_mount_table_entry_t *mt_entry  /* IN */
-);
-
-/**
- * @brief Read the next directory of the IMFS.
- * 
- * This routine will read the next directory entry based on the directory
- * offset. The offset should be equal to -n- time the size of an individual
- * dirent structure. If n is not an integer multiple of the sizeof a
- * dirent structure, an integer division will be performed to determine
- * directory entry that will be returned in the buffer. Count should reflect
- * -m- times the sizeof dirent bytes to be placed in the buffer.
- * If there are not -m- dirent elements from the current directory position
- * to the end of the exisiting file, the remaining entries will be placed in
- * the buffer and the returned value will be equal to -m actual- times the
- * size of a directory entry.
- */
-extern ssize_t imfs_dir_read(
-  rtems_libio_t *iop,              /* IN  */
-  void          *buffer,           /* IN  */
-  size_t         count             /* IN  */
 );
 
 /**

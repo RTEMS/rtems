@@ -48,7 +48,7 @@ static const rtems_filesystem_operations_table IMFS_ops = {
 };
 
 static const IMFS_mknod_controls IMFS_default_mknod_controls = {
-  .directory = &IMFS_mknod_control_directory,
+  .directory = &IMFS_mknod_control_dir_default,
   .device = &IMFS_mknod_control_device,
   .file = &IMFS_mknod_control_memfile,
   .fifo = &IMFS_mknod_control_enosys

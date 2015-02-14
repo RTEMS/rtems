@@ -19,6 +19,7 @@
 #include "tmacros.h"
 
 #include <sys/stat.h>
+#include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -46,6 +47,9 @@ static void Init(rtems_task_argument arg)
   const char *fifo = "fifo";
   int rv;
   int fd;
+  DIR *dirp;
+  struct dirent *dire;
+  struct stat st;
 
   TEST_BEGIN();
 
@@ -87,6 +91,21 @@ static void Init(rtems_task_argument arg)
   rv = mkfifo(fifo, S_IRWXU);
   rtems_test_assert(rv == -1);
   rtems_test_assert(errno == ENOSYS);
+
+  dirp = opendir(mnt);
+  rtems_test_assert(dirp != NULL);
+
+  errno = 0;
+  dire = readdir(dirp);
+  rtems_test_assert(dire == NULL);
+  rtems_test_assert(errno == ENOTSUP);
+
+  rv = closedir(dirp);
+  rtems_test_assert(rv == 0);
+
+  rv = stat(mnt, &st);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(st.st_size == 0);
 
   errno = 0;
   rv = mount(
@@ -145,6 +164,7 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_IMFS_DISABLE_MKNOD_FILE
 #define CONFIGURE_IMFS_DISABLE_MOUNT
 #define CONFIGURE_IMFS_DISABLE_RENAME
+#define CONFIGURE_IMFS_DISABLE_READDIR
 #define CONFIGURE_IMFS_DISABLE_RMNOD
 #define CONFIGURE_IMFS_DISABLE_SYMLINK
 #define CONFIGURE_IMFS_DISABLE_UTIME

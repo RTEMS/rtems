@@ -619,7 +619,11 @@ const rtems_libio_helper rtems_fs_init_helper =
       };
 
       static const IMFS_mknod_controls _Configure_IMFS_mknod_controls = {
-        &IMFS_mknod_control_directory,
+        #ifdef CONFIGURE_IMFS_DISABLE_READDIR
+          &IMFS_mknod_control_dir_minimal,
+        #else
+          &IMFS_mknod_control_dir_default,
+        #endif
         &IMFS_mknod_control_device,
         #ifdef CONFIGURE_IMFS_DISABLE_MKNOD_FILE
           &IMFS_mknod_control_enosys,

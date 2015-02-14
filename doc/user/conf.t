@@ -2895,6 +2895,33 @@ In case this configuration option is defined, then the support to rename nodes
 is disabled in the root IMFS.
 
 @c
+@c === CONFIGURE_IMFS_DISABLE_READDIR ===
+@c
+@subsection Disable Directory Read Support of Root IMFS
+
+@findex CONFIGURE_IMFS_DISABLE_READDIR
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_IMFS_DISABLE_READDIR}
+
+@item DATA TYPE:
+Boolean feature macro.
+
+@item RANGE:
+Defined or undefined.
+
+@item DEFAULT VALUE:
+This is not defined by default.
+
+@end table
+
+@subheading DESCRIPTION:
+In case this configuration option is defined, then the support to read a
+directory is disabled in the root IMFS.  It is still possible to open nodes in
+a directory.
+
+@c
 @c === CONFIGURE_IMFS_DISABLE_MOUNT ===
 @c
 @subsection Disable Mount Support of Root IMFS
