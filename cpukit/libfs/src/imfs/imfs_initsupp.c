@@ -78,10 +78,10 @@ IMFS_jnode_t *IMFS_initialize_node(
   /*
    *  Fill in the basic information
    */
+  node->name = name;
+  node->namelen = namelen;
   node->reference_count = 1;
   node->st_nlink = 1;
-  memcpy( node->name, name, namelen );
-  node->name [namelen] = '\0';
   node->control = node_control;
 
   /*
@@ -192,6 +192,10 @@ IMFS_jnode_t *IMFS_node_remove_default(
 
 void IMFS_node_destroy_default( IMFS_jnode_t *node )
 {
+  if ( ( node->flags & IMFS_NODE_FLAG_NAME_ALLOCATED ) != 0 ) {
+    free( node->name );
+  }
+
   free( node );
 }
 

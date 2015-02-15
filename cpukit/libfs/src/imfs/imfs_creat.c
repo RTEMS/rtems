@@ -35,7 +35,7 @@ IMFS_jnode_t *IMFS_create_node(
   IMFS_jnode_t *allocated_node;
   IMFS_jnode_t *node;
 
-  allocated_node = calloc( 1, node_size );
+  allocated_node = calloc( 1, node_size + namelen );
   if ( allocated_node == NULL ) {
     errno = ENOMEM;
 
@@ -45,13 +45,15 @@ IMFS_jnode_t *IMFS_create_node(
   node = IMFS_initialize_node(
     allocated_node,
     node_control,
-    name,
+    (char *) allocated_node + node_size,
     namelen,
     mode,
     arg
   );
   if ( node != NULL ) {
     IMFS_jnode_t *parent = parentloc->node_access;
+
+    memcpy( node->name, name, namelen );
 
     /*
      *  This node MUST have a parent, so put it in that directory list.

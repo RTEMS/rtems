@@ -230,16 +230,19 @@ typedef struct {
  *  Maximum length of a "basename" of an IMFS file/node.
  */
 
-#define IMFS_NAME_MAX  32
+#define IMFS_NAME_MAX _POSIX_NAME_MAX
 
 /*
+
  *  The control structure for an IMFS jnode.
  */
 
 struct IMFS_jnode_tt {
   rtems_chain_node    Node;                  /* for chaining them together */
   IMFS_jnode_t       *Parent;                /* Parent node */
-  char                name[IMFS_NAME_MAX+1]; /* "basename" */
+  const char         *name;                  /* "basename" (not \0 terminated) */
+  uint16_t            namelen;               /* Length of "basename" */
+  uint16_t            flags;                 /* Node flags */
   mode_t              st_mode;               /* File mode */
   unsigned short      reference_count;
   nlink_t             st_nlink;              /* Link count */
@@ -252,6 +255,8 @@ struct IMFS_jnode_tt {
   time_t              stat_ctime;            /* Time of last status change */
   const IMFS_node_control *control;
 };
+
+#define IMFS_NODE_FLAG_NAME_ALLOCATED 0x1
 
 typedef struct {
   IMFS_jnode_t                          Node;

@@ -55,8 +55,8 @@ static IMFS_jnode_t *IMFS_search_in_directory(
 
       while ( current != tail ) {
         IMFS_jnode_t *entry = (IMFS_jnode_t *) current;
-        bool match = strncmp( entry->name, token, tokenlen ) == 0
-          && entry->name [tokenlen] == '\0';
+        bool match = entry->namelen == tokenlen
+          && memcmp( entry->name, token, tokenlen ) == 0;
 
         if ( match ) {
           return entry;
