@@ -228,6 +228,11 @@ void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
   }
 }
 
+void _CPU_SMP_Prepare_start_multitasking(void)
+{
+  /* Do nothing */
+}
+
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
 {
   qoriq.pic.ipidr [IPI_INDEX].reg = 1U << target_processor_index;

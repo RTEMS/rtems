@@ -494,6 +494,8 @@ uint32_t   _CPU_ISR_Get_level( void );
 
   void _CPU_SMP_Finalize_initialization( uint32_t cpu_count );
 
+  void _CPU_SMP_Prepare_start_multitasking( void );
+
   uint32_t _CPU_SMP_Get_current_processor( void );
 
   void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );

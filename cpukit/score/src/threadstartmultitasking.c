@@ -62,6 +62,8 @@ void _Thread_Start_multitasking( void )
   _Profiling_Thread_dispatch_disable( cpu_self, 0 );
 
 #if defined(RTEMS_SMP)
+  _CPU_SMP_Prepare_start_multitasking();
+
   /*
    * The _CPU_Context_Restart_self() implementations usually assume that self
    * context is executing.

@@ -86,16 +86,13 @@ void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
   /* Nothing to do */
 }
 
+void _CPU_SMP_Prepare_start_multitasking( void )
+{
+  _CPU_cache_invalidate_entire_instruction();
+}
+
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
 {
   /* send interrupt to destination CPU */
   LEON3_IrqCtrl_Regs->force[target_processor_index] = 1 << LEON3_mp_irq;
-}
-
-void _LEON3_Start_multitasking(
-  Context_Control *heir
-)
-{
-  _CPU_cache_invalidate_entire_instruction();
-  _CPU_Context_Restart_self( heir );
 }

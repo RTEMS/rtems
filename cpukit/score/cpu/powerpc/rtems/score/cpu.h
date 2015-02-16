@@ -1123,6 +1123,8 @@ void _CPU_Context_validate( uintptr_t pattern );
 
   void _CPU_SMP_Finalize_initialization( uint32_t cpu_count );
 
+  void _CPU_SMP_Prepare_start_multitasking( void );
+
   static inline uint32_t _CPU_SMP_Get_current_processor( void )
   {
     uint32_t pir;

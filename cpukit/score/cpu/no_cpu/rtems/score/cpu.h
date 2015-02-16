@@ -1574,6 +1574,18 @@ register struct Per_CPU_Control *_CPU_Per_CPU_current asm( "rX" );
   void _CPU_SMP_Finalize_initialization( uint32_t cpu_count );
 
   /**
+   * @brief Prepares a CPU to start multitasking in terms of SMP.
+   *
+   * This function is invoked on all processors requested by the application
+   * during system initialization.
+   *
+   * This function will be called after all processors requested by the
+   * application have been started right before the context switch to the first
+   * thread takes place.
+   */
+  void _CPU_SMP_Prepare_start_multitasking( void );
+
+  /**
    * @brief Returns the index of the current processor.
    *
    * An architecture specific method must be used to obtain the index of the

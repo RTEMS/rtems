@@ -1186,6 +1186,8 @@ register struct Per_CPU_Control *_SPARC_Per_CPU_current __asm__( "g6" );
 
   void _CPU_SMP_Finalize_initialization( uint32_t cpu_count );
 
+  void _CPU_SMP_Prepare_start_multitasking( void );
+
   #if defined(__leon__) && !defined(RTEMS_PARAVIRT)
     static inline uint32_t _CPU_SMP_Get_current_processor( void )
     {
@@ -1196,12 +1198,6 @@ register struct Per_CPU_Control *_SPARC_Per_CPU_current __asm__( "g6" );
   #endif
 
   void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
-
-  #if defined(__leon__)
-  void _LEON3_Start_multitasking( Context_Control *heir )
-    RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
-  #define _CPU_Start_multitasking _LEON3_Start_multitasking
-  #endif
 
   static inline void _CPU_SMP_Processor_event_broadcast( void )
   {
