@@ -41,21 +41,23 @@ void _Thread_Start_multitasking( void )
 
 #if defined(RTEMS_SMP)
   _CPU_SMP_Prepare_start_multitasking();
-
-  /*
-   * The _CPU_Context_Restart_self() implementations usually assume that self
-   * context is executing.
-   *
-   * FIXME: We have a race condition here in case another thread already
-   * performed scheduler operations and moved our heir thread to another
-   * processor.  The time frame for this is likely too small to be practically
-   * relevant.  See https://devel.rtems.org/ticket/2268.
-   */
-  _CPU_Context_Set_is_executing( &heir->Registers, true );
 #endif
 
 #if defined(_CPU_Start_multitasking)
   _CPU_Start_multitasking( &heir->Registers );
+#elif defined(RTEMS_SMP)
+  {
+    Context_Control trash;
+
+    /*
+     * Mark the trash context as executing to not confuse the
+     * _CPU_Context_switch().  On SMP configurations the context switch
+     * contains a special hand over section to atomically switch from the
+     * executing to the currently selected heir thread.
+     */
+    _CPU_Context_Set_is_executing( &trash, true );
+    _CPU_Context_switch( &trash, &heir->Registers );
+  }
 #else
   _CPU_Context_Restart_self( &heir->Registers );
 #endif
