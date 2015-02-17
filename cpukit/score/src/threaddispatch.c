@@ -142,43 +142,9 @@ void _Thread_Dispatch( void )
 #endif
 
     _User_extensions_Thread_switch( executing, heir );
-
-    /*
-     *  If the CPU has hardware floating point, then we must address saving
-     *  and restoring it as part of the context switch.
-     *
-     *  The second conditional compilation section selects the algorithm used
-     *  to context switch between floating point tasks.  The deferred algorithm
-     *  can be significantly better in a system with few floating point tasks
-     *  because it reduces the total number of save and restore FP context
-     *  operations.  However, this algorithm can not be used on all CPUs due
-     *  to unpredictable use of FP registers by some compilers for integer
-     *  operations.
-     */
-
-#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-#if ( CPU_USE_DEFERRED_FP_SWITCH != TRUE )
-    if ( executing->fp_context != NULL )
-      _Context_Save_fp( &executing->fp_context );
-#endif
-#endif
-
+    _Thread_Save_fp( executing );
     _Context_Switch( &executing->Registers, &heir->Registers );
-
-#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-#if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
-    if ( (executing->fp_context != NULL) &&
-         !_Thread_Is_allocated_fp( executing ) ) {
-      if ( _Thread_Allocated_fp != NULL )
-        _Context_Save_fp( &_Thread_Allocated_fp->fp_context );
-      _Context_Restore_fp( &executing->fp_context );
-      _Thread_Allocated_fp = executing;
-    }
-#else
-    if ( executing->fp_context != NULL )
-      _Context_Restore_fp( &executing->fp_context );
-#endif
-#endif
+    _Thread_Restore_fp( executing );
 
     /*
      * We have to obtain this value again after the context switch since the

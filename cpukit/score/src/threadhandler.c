@@ -51,16 +51,7 @@ void _Thread_Handler( void )
    * through _Thread_Dispatch on our first invocation. So the normal
    * code path for performing the FP context switch is not hit.
    */
-  #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-    #if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
-      if ( (executing->fp_context != NULL) &&
-            !_Thread_Is_allocated_fp( executing ) ) {
-        if ( _Thread_Allocated_fp != NULL )
-          _Context_Save_fp( &_Thread_Allocated_fp->fp_context );
-        _Thread_Allocated_fp = executing;
-      }
-    #endif
-  #endif
+  _Thread_Restore_fp( executing );
 
   /*
    * Take care that 'begin' extensions get to complete before

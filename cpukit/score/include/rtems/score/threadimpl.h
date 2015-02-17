@@ -587,6 +587,47 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_allocated_fp (
 }
 #endif
 
+/*
+ *  If the CPU has hardware floating point, then we must address saving
+ *  and restoring it as part of the context switch.
+ *
+ *  The second conditional compilation section selects the algorithm used
+ *  to context switch between floating point tasks.  The deferred algorithm
+ *  can be significantly better in a system with few floating point tasks
+ *  because it reduces the total number of save and restore FP context
+ *  operations.  However, this algorithm can not be used on all CPUs due
+ *  to unpredictable use of FP registers by some compilers for integer
+ *  operations.
+ */
+
+RTEMS_INLINE_ROUTINE void _Thread_Save_fp( Thread_Control *executing )
+{
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+#if ( CPU_USE_DEFERRED_FP_SWITCH != TRUE )
+  if ( executing->fp_context != NULL )
+    _Context_Save_fp( &executing->fp_context );
+#endif
+#endif
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Restore_fp( Thread_Control *executing )
+{
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+#if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
+  if ( (executing->fp_context != NULL) &&
+       !_Thread_Is_allocated_fp( executing ) ) {
+    if ( _Thread_Allocated_fp != NULL )
+      _Context_Save_fp( &_Thread_Allocated_fp->fp_context );
+    _Context_Restore_fp( &executing->fp_context );
+    _Thread_Allocated_fp = executing;
+  }
+#else
+  if ( executing->fp_context != NULL )
+    _Context_Restore_fp( &executing->fp_context );
+#endif
+#endif
+}
+
 /**
  * This routine is invoked when the currently loaded floating
  * point context is now longer associated with an active thread.
