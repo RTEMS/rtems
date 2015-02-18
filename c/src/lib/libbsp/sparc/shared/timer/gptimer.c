@@ -94,7 +94,8 @@ struct gptimer_priv {
 	struct gptimer_regs *regs;
 	unsigned int base_clk;
 	unsigned int base_freq;
-	int separate_interrupt;
+	char separate_interrupt;
+	char isr_installed;
 
 	/* Structure per Timer unit, the core supports up to 8 timers */
 	int timer_cnt;
@@ -303,16 +304,6 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	 */
 	priv->separate_interrupt = regs->cfg & GPTIMER_CFG_SI;
 
-	if ( priv->separate_interrupt == 0 ) {
-		/* Shared IRQ handler */
-		drvmgr_interrupt_register(
-			priv->dev,
-			0,
-			"gptimer_shared",
-			gptimer_isr,
-			priv);
-	}
-
 	/* Older HW */
 	
 	
@@ -461,6 +452,17 @@ static void gptimer_tlib_irq_reg(struct tlib_dev *hand, tlib_isr_t func, void *d
 	if ( priv->separate_interrupt ) {
 		drvmgr_interrupt_register(priv->dev, timer->tindex,
 						"gptimer", func, data);
+	} else {
+		if (priv->isr_installed == 0) {
+			/* Shared IRQ handler */
+			drvmgr_interrupt_register(
+				priv->dev,
+				0,
+				"gptimer_shared",
+				gptimer_isr,
+				priv);
+		}
+		priv->isr_installed++;
 	}
 
 	timer->tregs->ctrl |= GPTIMER_CTRL_IE;
@@ -479,6 +481,11 @@ static void gptimer_tlib_irq_unreg(struct tlib_dev *hand, tlib_isr_t func, void 
 						func, data);
 	} else {
 		timer->tdev.isr_func = NULL;
+		priv->isr_installed--;
+		if (priv->isr_installed == 0) {
+			drvmgr_interrupt_unregister(priv->dev, 0,
+							gptimer_isr, priv);
+		}
 	}
 }
 
