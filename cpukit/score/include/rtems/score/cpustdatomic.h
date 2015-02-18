@@ -6,6 +6,7 @@
 
 /*
  * COPYRIGHT (c) 2013 Deng Hengyi.
+ * Copyright (c) 2015 embedded brains GmbH.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -15,20 +16,29 @@
 #ifndef _RTEMS_SCORE_CPUSTDATOMIC_H
 #define _RTEMS_SCORE_CPUSTDATOMIC_H
 
-#include <stdint.h>
+#include <rtems/score/basedefs.h>
 
-#if defined(__cplusplus) && __GNUC__ >= 4 && __GNUC_MINOR__ >= 9
+#ifdef RTEMS_SMP
+  #if defined(__cplusplus) && __GNUC__ >= 4 && __GNUC_MINOR__ >= 9
+    /*
+     * The GCC 4.9 ships its own <stdatomic.h> which is not C++ compatible.  The
+     * suggested solution was to include <atomic> in case C++ is used.  This works
+     * at least with GCC 4.9.  See also:
+     *
+     * http://gcc.gnu.org/bugzilla/show_bug.cgi?id=60932
+     * http://gcc.gnu.org/bugzilla/show_bug.cgi?id=60940
+     */
+    #include <atomic>
+    #define _RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC
+  #else
+    #include <stdatomic.h>
+    #define _RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC
+  #endif
+#else
+  #include <rtems/score/isrlevel.h>
+#endif
 
-/*
- * The GCC 4.9 ships its own <stdatomic.h> which is not C++ compatible.  The
- * suggested solution was to include <atomic> in case C++ is used.  This works
- * at least with GCC 4.9.  See also:
- *
- * http://gcc.gnu.org/bugzilla/show_bug.cgi?id=60932
- * http://gcc.gnu.org/bugzilla/show_bug.cgi?id=60940
- */
-
-#include <atomic>
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
 
 typedef std::atomic_uint CPU_atomic_Uint;
 
@@ -37,6 +47,8 @@ typedef std::atomic_ulong CPU_atomic_Ulong;
 typedef std::atomic_uintptr_t CPU_atomic_Pointer;
 
 typedef std::atomic_flag CPU_atomic_Flag;
+
+typedef std::memory_order CPU_atomic_Order;
 
 #define CPU_ATOMIC_ORDER_RELAXED std::memory_order_relaxed
 
@@ -55,98 +67,7 @@ typedef std::atomic_flag CPU_atomic_Flag;
 
 #define CPU_ATOMIC_INITIALIZER_FLAG ATOMIC_FLAG_INIT
 
-#define _CPU_atomic_Fence( order ) atomic_thread_fence( order )
-
-#define _CPU_atomic_Init_uint( obj, desired ) \
-  (obj)->store( desired )
-
-#define _CPU_atomic_Init_ulong( obj, desired ) \
-  (obj)->store( desired )
-
-#define _CPU_atomic_Init_ptr( obj, desired ) \
-  (obj)->store( desired )
-
-#define _CPU_atomic_Load_uint( obj, order ) \
-  (obj)->load( order )
-
-#define _CPU_atomic_Load_ulong( obj, order ) \
-  (obj)->load( order )
-
-#define _CPU_atomic_Load_ptr( obj, order ) \
-  (void *) (obj)->load( order )
-
-#define _CPU_atomic_Store_uint( obj, desr, order ) \
-  (obj)->store( desr, order )
-
-#define _CPU_atomic_Store_ulong( obj, desr, order ) \
-  (obj)->store( desr, order )
-
-#define _CPU_atomic_Store_ptr( obj, desr, order ) \
-  (obj)->store( (uintptr_t) desr, order )
-
-#define _CPU_atomic_Fetch_add_uint( obj, arg, order ) \
-  (obj)->fetch_add( arg, order )
-
-#define _CPU_atomic_Fetch_add_ulong( obj, arg, order ) \
-  (obj)->fetch_add( arg, order )
-
-#define _CPU_atomic_Fetch_add_ptr( obj, arg, order ) \
-  (obj)->fetch_add( arg, (uintptr_t) order )
-
-#define _CPU_atomic_Fetch_sub_uint( obj, arg, order ) \
-  (obj)->fetch_sub( arg, order )
-
-#define _CPU_atomic_Fetch_sub_ulong( obj, arg, order ) \
-  (obj)->fetch_sub( arg, order )
-
-#define _CPU_atomic_Fetch_sub_ptr( obj, arg, order ) \
-  (obj)->fetch_sub( arg, (uintptr_t) order )
-
-#define _CPU_atomic_Fetch_or_uint( obj, arg, order ) \
-  (obj)->fetch_or( arg, order )
-
-#define _CPU_atomic_Fetch_or_ulong( obj, arg, order ) \
-  (obj)->fetch_or( arg, order )
-
-#define _CPU_atomic_Fetch_or_ptr( obj, arg, order ) \
-  (obj)->fetch_or( arg, (uintptr_t) order )
-
-#define _CPU_atomic_Fetch_and_uint( obj, arg, order ) \
-  (obj)->fetch_and( arg, order )
-
-#define _CPU_atomic_Fetch_and_ulong( obj, arg, order ) \
-  (obj)->fetch_and( arg, order )
-
-#define _CPU_atomic_Fetch_and_ptr( obj, arg, order ) \
-  (obj)->fetch_and( arg, (uintptr_t) order )
-
-#define _CPU_atomic_Exchange_uint( obj, desr, order ) \
-  (obj)->exchange( desr, order )
-
-#define _CPU_atomic_Exchange_ulong( obj, desr, order ) \
-  (obj)->exchange( desr, order )
-
-#define _CPU_atomic_Exchange_ptr( obj, desr, order ) \
-  (void *) (obj)->exchange( desr, (uintptr_t) order )
-
-#define _CPU_atomic_Compare_exchange_uint( obj, expected, desired, succ, fail ) \
-  (obj)->compare_exchange_strong( expected, desired, succ, fail )
-
-#define _CPU_atomic_Compare_exchange_ulong( obj, expected, desired, succ, fail ) \
-  (obj)->compare_exchange_strong( expected, desired, succ, fail )
-
-#define _CPU_atomic_Compare_exchange_ptr( obj, expected, desired, succ, fail ) \
-  (obj)->compare_exchange_strong( (void **) expected, (uintptr_t) desired, succ, fail )
-
-#define _CPU_atomic_Flag_clear( obj, order ) \
-  (obj)->clear( order )
-
-#define _CPU_atomic_Flag_test_and_set( obj, order ) \
-  (obj)->test_and_set( order )
-
-#else /* __cplusplus */
-
-#include <stdatomic.h>
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
 
 typedef atomic_uint CPU_atomic_Uint;
 
@@ -155,6 +76,8 @@ typedef atomic_ulong CPU_atomic_Ulong;
 typedef atomic_uintptr_t CPU_atomic_Pointer;
 
 typedef atomic_flag CPU_atomic_Flag;
+
+typedef memory_order CPU_atomic_Order;
 
 #define CPU_ATOMIC_ORDER_RELAXED memory_order_relaxed
 
@@ -173,95 +96,552 @@ typedef atomic_flag CPU_atomic_Flag;
 
 #define CPU_ATOMIC_INITIALIZER_FLAG ATOMIC_FLAG_INIT
 
-#define _CPU_atomic_Fence( order ) atomic_thread_fence( order )
+#else
 
-#define _CPU_atomic_Init_uint( obj, desired ) \
-  atomic_init( obj, desired )
+typedef unsigned int CPU_atomic_Uint;
 
-#define _CPU_atomic_Init_ulong( obj, desired ) \
-  atomic_init( obj, desired )
+typedef unsigned long CPU_atomic_Ulong;
 
-#define _CPU_atomic_Init_ptr( obj, desired ) \
-  atomic_init( obj, (uintptr_t) desired )
+typedef uintptr_t CPU_atomic_Pointer;
 
-#define _CPU_atomic_Load_uint( obj, order ) \
-  atomic_load_explicit( obj, order )
+typedef bool CPU_atomic_Flag;
 
-#define _CPU_atomic_Load_ulong( obj, order ) \
-  atomic_load_explicit( obj, order )
+typedef int CPU_atomic_Order;
 
-#define _CPU_atomic_Load_ptr( obj, order ) \
-  (void *) atomic_load_explicit( obj, order )
+#define CPU_ATOMIC_ORDER_RELAXED 0
 
-#define _CPU_atomic_Store_uint( obj, desr, order ) \
-  atomic_store_explicit( obj, desr, order )
+#define CPU_ATOMIC_ORDER_ACQUIRE 2
 
-#define _CPU_atomic_Store_ulong( obj, desr, order ) \
-  atomic_store_explicit( obj, desr, order )
+#define CPU_ATOMIC_ORDER_RELEASE 3
 
-#define _CPU_atomic_Store_ptr( obj, desr, order ) \
-  atomic_store_explicit( obj, desr, order )
+#define CPU_ATOMIC_ORDER_SEQ_CST 5
 
-#define _CPU_atomic_Fetch_add_uint( obj, arg, order ) \
-  atomic_fetch_add_explicit( obj, arg, order )
+#define CPU_ATOMIC_INITIALIZER_UINT( value ) ( value )
 
-#define _CPU_atomic_Fetch_add_ulong( obj, arg, order ) \
-  atomic_fetch_add_explicit( obj, arg, order )
+#define CPU_ATOMIC_INITIALIZER_ULONG( value ) ( value )
 
-#define _CPU_atomic_Fetch_add_ptr( obj, arg, order ) \
-  atomic_fetch_add_explicit( obj, arg, order )
+#define CPU_ATOMIC_INITIALIZER_PTR( value ) ( (uintptr_t) (value) )
 
-#define _CPU_atomic_Fetch_sub_uint( obj, arg, order ) \
-  atomic_fetch_sub_explicit( obj, arg, order )
+#define CPU_ATOMIC_INITIALIZER_FLAG false
 
-#define _CPU_atomic_Fetch_sub_ulong( obj, arg, order ) \
-  atomic_fetch_sub_explicit( obj, arg, order )
+#endif
 
-#define _CPU_atomic_Fetch_sub_ptr( obj, arg, order ) \
-  atomic_fetch_sub_explicit( obj, arg, order )
+static inline void _CPU_atomic_Fence( CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  std::atomic_thread_fence( order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  atomic_thread_fence( order );
+#else
+  (void) order;
+  RTEMS_COMPILER_MEMORY_BARRIER();
+#endif
+}
 
-#define _CPU_atomic_Fetch_or_uint( obj, arg, order ) \
-  atomic_fetch_or_explicit( obj, arg, order )
+static inline void _CPU_atomic_Init_uint( CPU_atomic_Uint *obj, unsigned int desired )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  obj->store( desired );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  atomic_init( obj, desired );
+#else
+  *obj = desired;
+#endif
+}
 
-#define _CPU_atomic_Fetch_or_ulong( obj, arg, order ) \
-  atomic_fetch_or_explicit( obj, arg, order )
+static inline void _CPU_atomic_Init_ulong( CPU_atomic_Ulong *obj, unsigned long desired )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  obj->store( desired );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  atomic_init( obj, desired );
+#else
+  *obj = desired;
+#endif
+}
 
-#define _CPU_atomic_Fetch_or_ptr( obj, arg, order ) \
-  atomic_fetch_or_explicit( obj, arg, order )
+static inline void _CPU_atomic_Init_ptr( CPU_atomic_Pointer *obj, void *desired )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  obj->store( (uintptr_t) desired );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  atomic_init( obj, (uintptr_t) desired );
+#else
+  *obj = (uintptr_t) desired;
+#endif
+}
 
-#define _CPU_atomic_Fetch_and_uint( obj, arg, order ) \
-  atomic_fetch_and_explicit( obj, arg, order )
+static inline unsigned int _CPU_atomic_Load_uint( const CPU_atomic_Uint *obj, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->load( order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_load_explicit( obj, order );
+#else
+  (void) order;
+  return *obj;
+#endif
+}
 
-#define _CPU_atomic_Fetch_and_ulong( obj, arg, order ) \
-  atomic_fetch_and_explicit( obj, arg, order )
+static inline unsigned long _CPU_atomic_Load_ulong( const CPU_atomic_Ulong *obj, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->load( order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_load_explicit( obj, order );
+#else
+  (void) order;
+  return *obj;
+#endif
+}
 
-#define _CPU_atomic_Fetch_and_ptr( obj, arg, order ) \
-  atomic_fetch_and_explicit( obj, arg, order )
+static inline void *_CPU_atomic_Load_ptr( const CPU_atomic_Pointer *obj, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return (void *) obj->load( order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return (void *) atomic_load_explicit( obj, order );
+#else
+  (void) order;
+  return (void *) *obj;
+#endif
+}
 
-#define _CPU_atomic_Exchange_uint( obj, desr, order ) \
-  atomic_exchange_explicit( obj, desr, order )
+static inline void _CPU_atomic_Store_uint( CPU_atomic_Uint *obj, unsigned int desired, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  obj->store( desired );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  atomic_store_explicit( obj, desired, order );
+#else
+  (void) order;
+  *obj = desired;
+#endif
+}
 
-#define _CPU_atomic_Exchange_ulong( obj, desr, order ) \
-  atomic_exchange_explicit( obj, desr, order )
+static inline void _CPU_atomic_Store_ulong( CPU_atomic_Ulong *obj, unsigned long desired, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  obj->store( desired );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  atomic_store_explicit( obj, desired, order );
+#else
+  (void) order;
+  *obj = desired;
+#endif
+}
 
-#define _CPU_atomic_Exchange_ptr( obj, desr, order ) \
-  atomic_exchange_explicit( obj, desr, order )
+static inline void _CPU_atomic_Store_ptr( CPU_atomic_Pointer *obj, void *desired, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  obj->store( (uintptr_t) desired );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  atomic_store_explicit( obj, (uintptr_t) desired, order );
+#else
+  (void) order;
+  *obj = (uintptr_t) desired;
+#endif
+}
 
-#define _CPU_atomic_Compare_exchange_uint( obj, expected, desired, succ, fail ) \
-  atomic_compare_exchange_strong_explicit( obj, expected, desired, succ, fail )
+static inline unsigned int _CPU_atomic_Fetch_add_uint( CPU_atomic_Uint *obj, unsigned int arg, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->fetch_add( arg, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_fetch_add_explicit( obj, arg, order );
+#else
+  unsigned int val;
+  ISR_Level level;
 
-#define _CPU_atomic_Compare_exchange_ulong( obj, expected, desired, succ, fail ) \
-  atomic_compare_exchange_strong_explicit( obj, expected, desired, succ, fail )
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = val + arg;
+  _ISR_Enable( level );
 
-#define _CPU_atomic_Compare_exchange_ptr( obj, expected, desired, succ, fail ) \
-  atomic_compare_exchange_strong_explicit( obj, expected, desired, succ, fail )
+  return val;
+#endif
+}
 
-#define _CPU_atomic_Flag_clear( obj, order ) \
-  atomic_flag_clear_explicit( obj, order )
+static inline unsigned long _CPU_atomic_Fetch_add_ulong( CPU_atomic_Ulong *obj, unsigned long arg, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->fetch_add( arg, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_fetch_add_explicit( obj, arg, order );
+#else
+  unsigned long val;
+  ISR_Level level;
 
-#define _CPU_atomic_Flag_test_and_set( obj, order ) \
-  atomic_flag_test_and_set_explicit( obj, order )
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = val + arg;
+  _ISR_Enable( level );
 
-#endif /* __cplusplus */
+  return val;
+#endif
+}
+
+static inline void *_CPU_atomic_Fetch_add_ptr( CPU_atomic_Pointer *obj, void *arg, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return (void *) obj->fetch_add( (uintptr_t) arg, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return (void *) atomic_fetch_add_explicit( obj, (uintptr_t) arg, order );
+#else
+  uintptr_t val;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = val + (uintptr_t) arg;
+  _ISR_Enable( level );
+
+  return (void *) val;
+#endif
+}
+
+static inline unsigned int _CPU_atomic_Fetch_sub_uint( CPU_atomic_Uint *obj, unsigned int arg, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->fetch_sub( arg, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_fetch_sub_explicit( obj, arg, order );
+#else
+  unsigned int val;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = val - arg;
+  _ISR_Enable( level );
+
+  return val;
+#endif
+}
+
+static inline unsigned long _CPU_atomic_Fetch_sub_ulong( CPU_atomic_Ulong *obj, unsigned long arg, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->fetch_sub( arg, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_fetch_sub_explicit( obj, arg, order );
+#else
+  unsigned long val;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = val - arg;
+  _ISR_Enable( level );
+
+  return val;
+#endif
+}
+
+static inline void *_CPU_atomic_Fetch_sub_ptr( CPU_atomic_Pointer *obj, void *arg, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return (void *) obj->fetch_sub( (uintptr_t) arg, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return (void *) atomic_fetch_sub_explicit( obj, (uintptr_t) arg, order );
+#else
+  unsigned int val;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = val - (uintptr_t) arg;
+  _ISR_Enable( level );
+
+  return (void *) val;
+#endif
+}
+
+static inline unsigned int _CPU_atomic_Fetch_or_uint( CPU_atomic_Uint *obj, unsigned int arg, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->fetch_or( arg, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_fetch_or_explicit( obj, arg, order );
+#else
+  unsigned int val;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = val | arg;
+  _ISR_Enable( level );
+
+  return val;
+#endif
+}
+
+static inline unsigned long _CPU_atomic_Fetch_or_ulong( CPU_atomic_Ulong *obj, unsigned long arg, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->fetch_or( arg, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_fetch_or_explicit( obj, arg, order );
+#else
+  unsigned long val;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = val | arg;
+  _ISR_Enable( level );
+
+  return val;
+#endif
+}
+
+static inline void *_CPU_atomic_Fetch_or_ptr( CPU_atomic_Pointer *obj, void *arg, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return (void *) obj->fetch_or( (uintptr_t) arg, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return (void *) atomic_fetch_or_explicit( obj, (uintptr_t) arg, order );
+#else
+  uintptr_t val;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = val | (uintptr_t) arg;
+  _ISR_Enable( level );
+
+  return (void *) val;
+#endif
+}
+
+static inline unsigned int _CPU_atomic_Fetch_and_uint( CPU_atomic_Uint *obj, unsigned int arg, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->fetch_and( arg, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_fetch_and_explicit( obj, arg, order );
+#else
+  unsigned int val;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = val & arg;
+  _ISR_Enable( level );
+
+  return val;
+#endif
+}
+
+static inline unsigned long _CPU_atomic_Fetch_and_ulong( CPU_atomic_Ulong *obj, unsigned long arg, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->fetch_and( arg, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_fetch_and_explicit( obj, arg, order );
+#else
+  unsigned long val;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = val & arg;
+  _ISR_Enable( level );
+
+  return val;
+#endif
+}
+
+static inline void *_CPU_atomic_Fetch_and_ptr( CPU_atomic_Pointer *obj, void *arg, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return (void *) obj->fetch_and( (uintptr_t) arg, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return (void *) atomic_fetch_and_explicit( obj, (uintptr_t) arg, order );
+#else
+  uintptr_t val;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = val & (uintptr_t) arg;
+  _ISR_Enable( level );
+
+  return (void *) val;
+#endif
+}
+
+static inline unsigned int _CPU_atomic_Exchange_uint( CPU_atomic_Uint *obj, unsigned int desired, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->exchange( desired, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_exchange_explicit( obj, desired, order );
+#else
+  unsigned int val;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = desired;
+  _ISR_Enable( level );
+
+  return val;
+#endif
+}
+
+static inline unsigned long _CPU_atomic_Exchange_ulong( CPU_atomic_Ulong *obj, unsigned long desired, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->exchange( desired, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_exchange_explicit( obj, desired, order );
+#else
+  unsigned long val;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = desired;
+  _ISR_Enable( level );
+
+  return val;
+#endif
+}
+
+static inline void *_CPU_atomic_Exchange_ptr( CPU_atomic_Pointer *obj, void *desired, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return (void *) obj->exchange( (uintptr_t) desired, order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return (void *) atomic_exchange_explicit( obj, (uintptr_t) desired, order );
+#else
+  uintptr_t val;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  val = *obj;
+  *obj = (uintptr_t) desired;
+  _ISR_Enable( level );
+
+  return (void *) val;
+#endif
+}
+
+static inline bool _CPU_atomic_Compare_exchange_uint( CPU_atomic_Uint *obj, unsigned int *expected, unsigned int desired, CPU_atomic_Order succ, CPU_atomic_Order fail )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->compare_exchange_strong( *expected, desired, succ, fail );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_compare_exchange_strong_explicit( obj, expected, desired, succ, fail );
+#else
+  bool success;
+  ISR_Level level;
+
+  (void) succ;
+  (void) fail;
+  _ISR_Disable( level );
+  success = *obj == *expected;
+  if ( success ) {
+    *obj = desired;
+  }
+  _ISR_Enable( level );
+
+  return success;
+#endif
+}
+
+static inline bool _CPU_atomic_Compare_exchange_ulong( CPU_atomic_Ulong *obj, unsigned long *expected, unsigned long desired, CPU_atomic_Order succ, CPU_atomic_Order fail )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->compare_exchange_strong( *expected, desired, succ, fail );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_compare_exchange_strong_explicit( obj, expected, desired, succ, fail );
+#else
+  bool success;
+  ISR_Level level;
+
+  (void) succ;
+  (void) fail;
+  _ISR_Disable( level );
+  success = *obj == *expected;
+  if ( success ) {
+    *obj = desired;
+  }
+  _ISR_Enable( level );
+
+  return success;
+#endif
+}
+
+static inline bool _CPU_atomic_Compare_exchange_ptr( CPU_atomic_Pointer *obj, void **expected, void *desired, CPU_atomic_Order succ, CPU_atomic_Order fail )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->compare_exchange_strong( *(uintptr_t *) expected, (uintptr_t) desired, succ, fail );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_compare_exchange_strong_explicit( obj, (uintptr_t *) expected, (uintptr_t) desired, succ, fail );
+#else
+  bool success;
+  ISR_Level level;
+
+  (void) succ;
+  (void) fail;
+  _ISR_Disable( level );
+  success = *obj == (uintptr_t) *expected;
+  if ( success ) {
+    *obj = (uintptr_t) desired;
+  }
+  _ISR_Enable( level );
+
+  return success;
+#endif
+}
+
+static inline void _CPU_atomic_Flag_clear( CPU_atomic_Flag *obj, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  obj->clear( order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  atomic_flag_clear_explicit( obj, order );
+#else
+  (void) order;
+  *obj = false;
+#endif
+}
+
+static inline bool _CPU_atomic_Flag_test_and_set( CPU_atomic_Flag *obj, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->test_and_set( order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_flag_test_and_set_explicit( obj, order );
+#else
+  bool flag;
+  ISR_Level level;
+
+  (void) order;
+  _ISR_Disable( level );
+  flag = *obj;
+  *obj = true;
+  _ISR_Enable( level );
+
+  return flag;
+#endif
+}
 
 #endif /* _RTEMS_SCORE_CPUSTDATOMIC_H */

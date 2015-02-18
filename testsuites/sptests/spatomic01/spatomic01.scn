@@ -1,0 +1,9 @@
+*** BEGIN OF TEST SPATOMIC 1 ***
+=== static and dynamic initialization test case ===
+=== atomic simple add test case ===
+=== atomic simple sub test case ===
+=== atomic simple or test case ===
+=== atomic simple and test case ===
+=== atomic simple exchange test case ===
+=== atomic simple compare exchange test case ===
+*** END OF TEST SPATOMIC 1 ***

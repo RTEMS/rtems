@@ -42,6 +42,8 @@ typedef CPU_atomic_Pointer Atomic_Pointer;
 
 typedef CPU_atomic_Flag Atomic_Flag;
 
+typedef CPU_atomic_Order Atomic_Order;
+
 #define ATOMIC_ORDER_RELAXED CPU_ATOMIC_ORDER_RELAXED
 
 #define ATOMIC_ORDER_ACQUIRE CPU_ATOMIC_ORDER_ACQUIRE

@@ -51,6 +51,10 @@ $(PROJECT_INCLUDE)/rtems/score/assert.h: include/rtems/score/assert.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/assert.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/assert.h
 
+$(PROJECT_INCLUDE)/rtems/score/atomic.h: include/rtems/score/atomic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/atomic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/atomic.h
+
 $(PROJECT_INCLUDE)/rtems/score/chain.h: include/rtems/score/chain.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/chain.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/chain.h
@@ -106,6 +110,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpuset.h
 $(PROJECT_INCLUDE)/rtems/score/cpusetimpl.h: include/rtems/score/cpusetimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpusetimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpusetimpl.h
+
+$(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h: include/rtems/score/cpustdatomic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h
 
 $(PROJECT_INCLUDE)/rtems/score/heap.h: include/rtems/score/heap.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/heap.h
@@ -398,14 +406,6 @@ $(PROJECT_INCLUDE)/rtems/score/threadmp.h: include/rtems/score/threadmp.h $(PROJ
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/threadmp.h
 endif
 if HAS_SMP
-$(PROJECT_INCLUDE)/rtems/score/atomic.h: include/rtems/score/atomic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/atomic.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/atomic.h
-
-$(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h: include/rtems/score/cpustdatomic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h
-
 $(PROJECT_INCLUDE)/rtems/score/schedulerprioritysmpimpl.h: include/rtems/score/schedulerprioritysmpimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerprioritysmpimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerprioritysmpimpl.h
