@@ -193,7 +193,7 @@ IMFS_jnode_t *IMFS_node_remove_default(
 void IMFS_node_destroy_default( IMFS_jnode_t *node )
 {
   if ( ( node->flags & IMFS_NODE_FLAG_NAME_ALLOCATED ) != 0 ) {
-    free( node->name );
+    free( RTEMS_DECONST( char *, node->name ) );
   }
 
   free( node );
