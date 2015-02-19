@@ -472,8 +472,6 @@ noStackRestore:
 	cc = r0 == 0;
 	if cc jump noDispatch
 doDispatch:
-	r0 = 0;
-	B[p0] = r0;
 	raise 15;
 noDispatch:
 	r0 = [sp++];
