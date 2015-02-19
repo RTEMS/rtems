@@ -87,15 +87,8 @@ static void leon3_clock_profiling_interrupt_delay(void)
 
 #define Clock_driver_support_find_timer() \
   do { \
-    struct ambapp_dev *adev; \
-    \
-    /* Find first LEON3 GP Timer */ \
-    adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),\
-              VENDOR_GAISLER, GAISLER_GPTIMER, ambapp_find_by_idx, NULL); \
-    if (adev) { \
-      /* Found APB GPTIMER Timer */ \
-      LEON3_Timer_Regs = (volatile struct gptimer_regs *) \
-                         DEV_TO_APB(adev)->start; \
+    /* Assume timer found during BSP initialization */ \
+    if (LEON3_Timer_Regs) { \
       clkirq = (LEON3_Timer_Regs->cfg & 0xf8) >> 3; \
       \
       Adjust_clkirq_for_node(); \
