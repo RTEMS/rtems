@@ -94,8 +94,11 @@ extern "C" {
 
 /* LEON3 Interrupt Controller */
 extern volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
+extern struct ambapp_dev *irqmp_dev;
+
 /* LEON3 GP Timer */
 extern volatile struct gptimer_regs *LEON3_Timer_Regs;
+extern struct ambapp_dev *timer_dev;
 
 /* LEON3 CPU Index of boot CPU */
 extern uint32_t LEON3_Cpu_Index;
@@ -307,6 +310,27 @@ extern int syscon_uart_index;
  * ...
  */
 extern int debug_uart_index;
+
+/* Let user override which on-chip TIMER core will be used for system clock
+ * timer. This controls which timer core will be accociated with
+ * LEON3_Timer_Regs registers base address. This value will by destroyed during
+ * initialization.
+ *  0 = Default configuration. GPTIMER[0]
+ *  1 = GPTIMER[1]
+ *  2 = GPTIMER[2]
+ *  ...
+ */
+extern int leon3_timer_core_index;
+
+/* Let user override system clock timer prescaler. This affects all timer
+ * instances on the system clock timer core determined by
+ * leon3_timer_core_index.
+ *  0 = Default configuration. Use bootloader configured value.
+ *  N = Prescaler is set to N. N must not be less that number of timers.
+ *  8 = Prescaler is set to 8 (the fastest prescaler possible on all HW)
+ *  ...
+ */
+extern unsigned int leon3_timer_prescaler;
 
 void leon3_cpu_counter_initialize(void);
 

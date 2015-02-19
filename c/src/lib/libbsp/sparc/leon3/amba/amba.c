@@ -16,6 +16,9 @@
 #include <leon.h>
 #include <ambapp.h>
 
+unsigned int leon3_timer_prescaler __attribute__((weak)) = 0;
+int leon3_timer_core_index __attribute__((weak)) = 0;
+
 /* AMBA Plug&Play information description.
  *
  * After software has scanned AMBA PnP it builds a tree to make
@@ -28,6 +31,8 @@ rtems_interrupt_lock LEON3_IrqCtrl_Lock =
 
 /* Pointers to Interrupt Controller configuration registers */
 volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
+struct ambapp_dev *irqmp_dev;
+struct ambapp_dev *timer_dev;
 
 /*
  *  amba_initialize
@@ -64,6 +69,7 @@ void amba_initialize(void)
   }
 
   LEON3_IrqCtrl_Regs = (volatile struct irqmp_regs *)DEV_TO_APB(adev)->start;
+  irqmp_dev = adev;
   if ((LEON3_IrqCtrl_Regs->ampctrl >> 28) > 0) {
     /* IRQ Controller has support for multiple IRQ Controllers, each
      * CPU can be routed to different Controllers, we find out which
@@ -84,16 +90,24 @@ void amba_initialize(void)
   /* find GP Timer */
   adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
                                  VENDOR_GAISLER, GAISLER_GPTIMER,
-                                 ambapp_find_by_idx, NULL);
+                                 ambapp_find_by_idx, &leon3_timer_core_index);
   if (adev) {
     LEON3_Timer_Regs = (volatile struct gptimer_regs *)DEV_TO_APB(adev)->start;
+    timer_dev = adev;
 
     /* Register AMBA Bus Frequency */
     ambapp_freq_init(
       &ambapp_plb,
-      adev,
+      timer_dev,
       (LEON3_Timer_Regs->scaler_reload + 1)
         * LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER
     );
+    /* Set user prescaler configuration. Use this to increase accuracy of timer
+     * and accociated services like cpucounter.
+     * Note that minimum value is the number of timer instances present in
+     * GRTIMER/GPTIMER hardware. See HW manual.
+     */
+    if (leon3_timer_prescaler)
+      LEON3_Timer_Regs->scaler_reload = leon3_timer_prescaler;
   }
 }
