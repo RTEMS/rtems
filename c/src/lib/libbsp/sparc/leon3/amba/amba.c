@@ -73,10 +73,10 @@ void amba_initialize(void)
     icsel = LEON3_IrqCtrl_Regs->icsel[LEON3_Cpu_Index/8];
     icsel = (icsel >> ((7 - (LEON3_Cpu_Index & 0x7)) * 4)) & 0xf;
     LEON3_IrqCtrl_Regs += icsel;
-    LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] = 0;
-    LEON3_IrqCtrl_Regs->force[LEON3_Cpu_Index] = 0;
-    LEON3_IrqCtrl_Regs->iclear = 0xffffffff;
   }
+  LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] = 0;
+  LEON3_IrqCtrl_Regs->force[LEON3_Cpu_Index] = 0;
+  LEON3_IrqCtrl_Regs->iclear = 0xffffffff;
 
   /* Init Extended IRQ controller if available */
   leon3_ext_irq_init();
