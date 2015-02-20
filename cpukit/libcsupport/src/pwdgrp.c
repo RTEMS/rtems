@@ -61,11 +61,10 @@ static void init_file(const char *name, const char *content)
  */
 static void pwdgrp_init(void)
 {
-  int rc;
-
-  rc = mkdir("/etc", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
-  if ( rc != 0 )
-    return;
+  /*
+   * Do the best to create this directory.
+   */
+  mkdir("/etc", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 
   /*
    *  Initialize /etc/passwd
