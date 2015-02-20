@@ -187,7 +187,7 @@ _start:
 
 	/* Stay in SVC mode */
 
-#ifdef ARM_MULTILIB_VFP_D32
+#ifdef ARM_MULTILIB_VFP
 	/* Read CPACR */
 	mrc p15, 0, r0, c1, c0, 2
 
@@ -195,7 +195,9 @@ _start:
 	orr r0, r0, #(1 << 20)
 	orr r0, r0, #(1 << 22)
 
-	/* Clear ASEDIS and D32DIS */
+	/*
+	 * Clear ASEDIS and D32DIS.  Writes to D32DIS are ignored for VFP-D16.
+	 */
 	bic r0, r0, #(3 << 30)
 
 	/* Write CPACR */
@@ -205,7 +207,7 @@ _start:
 	/* Enable FPU */
 	mov r0, #(1 << 30)
 	vmsr FPEXC, r0
-#endif
+#endif /* ARM_MULTILIB_VFP */
 
 	/*
 	 * Branch to start hook 0.
