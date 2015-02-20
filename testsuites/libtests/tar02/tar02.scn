@@ -7,5 +7,6 @@ initial tar image.
 ========= /symlink =========
 (0)This is a test of loading an RTEMS filesystem from an
 initial tar image.
+And some other stuff.
 
 *** END OF TEST TAR 2 ***

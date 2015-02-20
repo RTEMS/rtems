@@ -63,6 +63,9 @@ static int IMFS_linfile_open(
     file->Memfile.indirect        = 0;
     file->Memfile.doubly_indirect = 0;
     file->Memfile.triply_indirect = 0;
+
+    IMFS_Set_handlers( &iop->pathinfo );
+
     if ((count != 0)
      && (IMFS_memfile_write(&file->Memfile, 0, buffer, count) == -1))
         return -1;

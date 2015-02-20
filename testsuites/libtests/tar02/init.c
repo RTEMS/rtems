@@ -22,6 +22,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "initial_filesystem_tar.h"
 
@@ -34,10 +35,67 @@ void test_tarfs_load(void);
 #define TARFILE_START initial_filesystem_tar
 #define TARFILE_SIZE  initial_filesystem_tar_size
 
+static const char file[] = "/home/test_file";
+
+static const char content_0[] =
+  "This is a test of loading an RTEMS filesystem from an\n"
+  "initial tar image.\n";
+
+static const char content_1[] =
+  "This is a test of loading an RTEMS filesystem from an\n"
+  "initial tar image.\n"
+  "And some other stuff.\n";
+
+static char buf[sizeof(content_1) - 1];
+
+static void check_file(
+  const char *file,
+  const char *expected_content,
+  char *buf,
+  size_t size
+)
+{
+  int fd;
+  ssize_t n;
+  int rv;
+
+  fd = open(file, O_RDONLY);
+  rtems_test_assert(fd >= 0);
+
+  n = read(fd, buf, size);
+  rtems_test_assert(n == (ssize_t) size);
+
+  rtems_test_assert(memcmp(expected_content, buf, size) == 0);
+
+  rv = close(fd);
+  rtems_test_assert(rv == 0);
+}
+
+static void write_file(
+  const char *file,
+  const char *content,
+  size_t size
+)
+{
+  int fd;
+  ssize_t n;
+  int rv;
+
+  fd = open(file, O_WRONLY);
+  rtems_test_assert(fd >= 0);
+
+  n = write(fd, content, size);
+  rtems_test_assert(n == (ssize_t) size);
+
+  rv = close(fd);
+  rtems_test_assert(rv == 0);
+}
+
+/* FIXME */
 void test_cat(
-  char *file,
-  int   offset_arg,
-  int   length
+  const char *file,
+  int         offset_arg,
+  int         length
 );
 
 void test_tarfs_load(void)
@@ -54,8 +112,11 @@ void test_tarfs_load(void)
 
   /******************/
   printf( "========= /home/test_file =========\n" );
-  test_cat( "/home/test_file", 0, 0 );
-  
+  test_cat(&file[0], 0, 0);
+  check_file(&file[0], &content_0[0], &buf[0], sizeof(content_0) - 1);
+  write_file(&file[0], &content_1[0], sizeof(content_1) - 1);
+  check_file(&file[0], &content_1[0], &buf[0], sizeof(content_1) - 1);
+
   /******************/
   printf( "========= /symlink =========\n" );
   test_cat( "/symlink", 0, 0 );
