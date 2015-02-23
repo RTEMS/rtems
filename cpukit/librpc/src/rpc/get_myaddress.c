@@ -49,12 +49,26 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/get_myaddress.c,v 1.17 2000/01/
 #include <rpc/pmap_prot.h>
 #include <sys/socket.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
-#include <sys/mbuf.h>
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+
+
+/*
+ * Determine the size of an ifreq structure when addresses larger 
+ * than the pifreq structure size may be returned from the kernel.
+ */
+static size_t ifreqSize ( struct ifreq *pifreq )
+{
+  size_t size = pifreq->ifr_addr.sa_len + sizeof(pifreq->ifr_name);
+  if ( size < sizeof ( *pifreq ) ) {
+    size = sizeof ( *pifreq );
+  }
+  return size;
+}
 
 /*
  * don't use gethostbyname, which would invoke yellow pages
@@ -67,28 +81,32 @@ get_myaddress(
 	struct sockaddr_in *addr)
 {
 	int s;
-	char buf[BUFSIZ];
 	struct ifconf ifc;
-	struct ifreq ifreq, *ifr, *end;
+	struct ifreq ifreq, *ifr;
 	int loopback = 0, gotit = 0;
 
 	if ((s = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
 		return(-1);
 	}
-	ifc.ifc_len = sizeof (buf);
-	ifc.ifc_buf = buf;
+again:
+	ifc.ifc_len = sizeof ( struct ifreq ) * 8u;
+	ifc.ifc_buf = malloc ( ifc.ifc_len );
+  if ( ! ifc.ifc_buf ) {
+		_RPC_close(s);
+    return -1;
+  }
 	if (ioctl(s, SIOCGIFCONF, (char *)&ifc) < 0) {
 		_RPC_close(s);
+    free ( ifc.ifc_buf );
 		return(-1);
 	}
-again:
 	ifr = ifc.ifc_req;
-	end = (struct ifreq *) (ifc.ifc_buf + ifc.ifc_len);
 
-	while (ifr < end) {
-		ifreq = *ifr;
-		if (ioctl(s, SIOCGIFFLAGS, (char *)&ifreq) < 0) {
+	while ( ifc.ifc_len >= ifreqSize ( ifr ) ) {
+    ifreq = *ifr;
+		if (ioctl(s, SIOCGIFFLAGS, (char *) &ifreq ) < 0) {
 			_RPC_close(s);
+      free ( ifc.ifc_buf );
 			return(-1);
 		}
 		if (((ifreq.ifr_flags & IFF_UP) &&
@@ -102,16 +120,21 @@ again:
 			gotit = 1;
 			break;
 		}
-		if (ifr->ifr_addr.sa_len)
-			ifr = (struct ifreq *) ((caddr_t) ifr +
-			      ifr->ifr_addr.sa_len -
-			      sizeof(struct sockaddr));
-		ifr++;
+
+    const size_t len = ifreqSize ( ifr );
+    ifc.ifc_len -= len;
+    /* 
+     * RTEMS seems to require copy up to properly aligned 
+     * boundary at the beginning of the buffer?
+     */
+    memmove ( ifr, len + (char *) ifr, ifc.ifc_len );
 	}
 	if (gotit == 0 && loopback == 0) {
+    free ( ifc.ifc_buf );
 		loopback = 1;
 		goto again;
 	}
 	(void)_RPC_close(s);
+  free ( ifc.ifc_buf );
 	return (gotit ? 0 : -1);
 }
