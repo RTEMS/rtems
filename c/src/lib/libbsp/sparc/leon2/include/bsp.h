@@ -227,6 +227,7 @@ int cchip1_register(void);
  */
 #define AMBAPPBUS_INFO_AVAIL          /* AMBAPP Bus driver */
 #define GPTIMER_INFO_AVAIL            /* GPTIMER Timer driver */
+#define GRETH_INFO_AVAIL              /* GRETH Ethernet driver */
 
 #ifdef __cplusplus
 }

@@ -58,6 +58,8 @@ libbsp_a_SOURCES += console/console.c console/debugputs.c
 libbsp_a_SOURCES += clock/ckinit.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # IRQ
+include_HEADERS += ../../sparc/shared/include/genirq.h
+libbsp_a_SOURCES += ../../sparc/shared/irq/genirq.c
 include_bsp_HEADERS += \
     ../../shared/include/irq-generic.h \
     ../../shared/include/irq-info.h \
@@ -76,6 +78,7 @@ libbsp_a_SOURCES += \
 include_HEADERS += ../../sparc/shared/include/ambapp.h
 include_HEADERS += ../../sparc/shared/include/ambapp_ids.h
 include_HEADERS += ../../sparc/shared/include/grlib.h
+include_HEADERS += ../../sparc/shared/include/ahbstat.h
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_alloc.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_count.c
@@ -86,6 +89,7 @@ libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_parent.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_old.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_names.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_show.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ahbstat.c
 
 # Clock Driver and Timer Library
 include_HEADERS += ../../sparc/shared/include/tlib.h
@@ -114,7 +118,20 @@ libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_rasta_tmtc.c
 
 # B1553BRM
 include_HEADERS += ../../sparc/shared/include/b1553brm.h
+include_HEADERS += ../../sparc/shared/include/b1553rt.h
 libbsp_a_SOURCES += ../../sparc/shared/1553/b1553brm.c
+libbsp_a_SOURCES += ../../sparc/shared/1553/b1553rt.c
+
+# GR1553B
+include_HEADERS += ../../sparc/shared/include/gr1553b.h
+include_HEADERS += ../../sparc/shared/include/gr1553bc.h
+include_HEADERS += ../../sparc/shared/include/gr1553bc_list.h
+include_HEADERS += ../../sparc/shared/include/gr1553bm.h
+include_HEADERS += ../../sparc/shared/include/gr1553rt.h
+libbsp_a_SOURCES += ../../sparc/shared/1553/gr1553b.c
+libbsp_a_SOURCES += ../../sparc/shared/1553/gr1553bc.c
+libbsp_a_SOURCES += ../../sparc/shared/1553/gr1553bm.c
+libbsp_a_SOURCES += ../../sparc/shared/1553/gr1553rt.c
 
 # CAN
 include_HEADERS += ../../sparc/shared/include/occan.h
@@ -124,7 +141,9 @@ libbsp_a_SOURCES += ../../sparc/shared/can/occan.c \
 
 # SpaceWire
 include_HEADERS += ../../sparc/shared/include/grspw.h
+include_HEADERS += ../../sparc/shared/include/grspw_router.h
 libbsp_a_SOURCES += ../../sparc/shared/spw/grspw.c
+libbsp_a_SOURCES += ../../sparc/shared/spw/grspw_router.c
 
 # UART (RAW)
 include_HEADERS += ../../sparc/shared/include/apbuart.h
@@ -134,8 +153,41 @@ libbsp_a_SOURCES += ../../sparc/shared/uart/apbuart.c
 include_HEADERS += ../../sparc/shared/include/i2cmst.h
 libbsp_a_SOURCES += ../../sparc/shared/i2c/i2cmst.c
 
+# SPI
+include_HEADERS += ../../sparc/shared/include/spictrl.h
+libbsp_a_SOURCES += ../../sparc/shared/spi/spictrl.c
+
+# TIME
+include_HEADERS += ../../sparc/shared/include/spwcuc.h
+include_HEADERS += ../../sparc/shared/include/grctm.h
+libbsp_a_SOURCES += ../../sparc/shared/time/spwcuc.c
+libbsp_a_SOURCES += ../../sparc/shared/time/grctm.c
+
+# GPIO
+include_HEADERS += ../../sparc/shared/include/grgpio.h
+include_HEADERS += ../../sparc/shared/include/gpiolib.h
+libbsp_a_SOURCES += ../../sparc/shared/gpio/grgpio.c
+libbsp_a_SOURCES += ../../sparc/shared/gpio/gpiolib.c
+
+# PWM
+include_HEADERS += ../../sparc/shared/include/grpwm.h
+libbsp_a_SOURCES += ../../sparc/shared/pwm/grpwm.c
+
+# ADC and DAC
+include_HEADERS += ../../sparc/shared/include/gradcdac.h
+libbsp_a_SOURCES += ../../sparc/shared/analog/gradcdac.c
+
+# Memory controllers
+libbsp_a_SOURCES += ../../sparc/shared/mem/mctrl.c
+
 # timer
 libbsp_a_SOURCES += timer/timer.c
+
+# TM/TC
+include_HEADERS += ../../sparc/shared/include/grtc.h
+include_HEADERS += ../../sparc/shared/include/grtm.h
+libbsp_a_SOURCES += ../../sparc/shared/tmtc/grtc.c
+libbsp_a_SOURCES += ../../sparc/shared/tmtc/grtm.c
 
 # Driver Manager
 include_drvmgrdir = $(includedir)/drvmgr
@@ -166,6 +218,14 @@ leon_open_eth_rel_CPPFLAGS +=  -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 leon_open_eth_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+if HAS_NETWORKING
+noinst_PROGRAMS += leon_greth.rel
+leon_greth_rel_SOURCES = ../../sparc/shared/net/greth.c
+include_HEADERS += ../../sparc/shared/include/greth.h
+leon_greth_rel_CPPFLAGS = $(AM_CPPFLAGS)
+leon_greth_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+leon_greth_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 # BSP Network configuration
 include_HEADERS += ../../sparc/shared/include/network_interface_add.h
 libbsp_a_SOURCES += ../../sparc/shared/net/network_interface_add.c
@@ -178,6 +238,7 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/syscall.rel
 
 if HAS_NETWORKING
+libbsp_a_LIBADD += leon_greth.rel
 libbsp_a_LIBADD += leon_open_eth.rel
 libbsp_a_LIBADD += leon_smc91111.rel
 endif
