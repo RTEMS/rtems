@@ -51,7 +51,6 @@ rtems_status_code rtems_signal_send(
             the_thread,
             &api->Signal_action
           );
-          _Thread_Signal_notification( the_thread );
         } else {
           _ASR_Post_signals( asr, signal_set, &asr->signals_pending );
         }

@@ -235,7 +235,6 @@ static void _Thread_Start_life_change(
   _Scheduler_Set_priority_if_higher( scheduler, the_thread, priority );
   _Thread_Add_post_switch_action( the_thread, &the_thread->Life.Action );
   _Thread_Ready( the_thread );
-  _Thread_Request_dispatch_if_executing( the_thread );
 }
 
 static void _Thread_Request_life_change(

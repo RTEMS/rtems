@@ -35,6 +35,17 @@
 #include <rtems/posix/time.h>
 #include <stdio.h>
 
+static bool _POSIX_signals_Unblock_thread_done(
+  Thread_Control    *the_thread,
+  POSIX_API_Control *api,
+  bool               status
+)
+{
+  _Thread_Add_post_switch_action( the_thread, &api->Signal_action );
+
+  return status;
+}
+
 bool _POSIX_signals_Unblock_thread(
   Thread_Control  *the_thread,
   int              signo,
@@ -46,8 +57,6 @@ bool _POSIX_signals_Unblock_thread(
   siginfo_t          *the_info = NULL;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-
-  _Thread_Add_post_switch_action( the_thread, &api->Signal_action );
 
   mask = signo_to_mask( signo );
 
@@ -71,14 +80,14 @@ bool _POSIX_signals_Unblock_thread(
       }
 
       _Thread_queue_Extract_with_proxy( the_thread );
-      return true;
+      return _POSIX_signals_Unblock_thread_done( the_thread, api, true );
     }
 
     /*
      *  This should only be reached via pthread_kill().
      */
 
-    return false;
+    return _POSIX_signals_Unblock_thread_done( the_thread, api, false );
   }
 
   /*
@@ -111,10 +120,7 @@ bool _POSIX_signals_Unblock_thread(
           (void) _Watchdog_Remove( &the_thread->Timer );
           _Thread_Unblock( the_thread );
        }
-
-    } else if ( the_thread->current_state == STATES_READY ) {
-      _Thread_Signal_notification( the_thread );
     }
   }
-  return false;
+  return _POSIX_signals_Unblock_thread_done( the_thread, api, false );
 }

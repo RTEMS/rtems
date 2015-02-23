@@ -695,45 +695,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Internal_allocate( void )
     _Objects_Allocate_unprotected( &_Thread_Internal_information );
 }
 
-RTEMS_INLINE_ROUTINE void _Thread_Request_dispatch_if_executing(
-  Thread_Control *thread
-)
-{
-#if defined(RTEMS_SMP)
-  if ( _Thread_Is_executing_on_a_processor( thread ) ) {
-    const Per_CPU_Control *cpu_of_executing = _Per_CPU_Get();
-    Per_CPU_Control *cpu_of_thread = _Thread_Get_CPU( thread );
-
-    cpu_of_thread->dispatch_necessary = true;
-
-    if ( cpu_of_executing != cpu_of_thread ) {
-      _Per_CPU_Send_interrupt( cpu_of_thread );
-    }
-  }
-#else
-  (void) thread;
-#endif
-}
-
-RTEMS_INLINE_ROUTINE void _Thread_Signal_notification( Thread_Control *thread )
-{
-  if ( _ISR_Is_in_progress() && _Thread_Is_executing( thread ) ) {
-    _Thread_Dispatch_necessary = true;
-  } else {
-#if defined(RTEMS_SMP)
-    if ( _Thread_Is_executing_on_a_processor( thread ) ) {
-      const Per_CPU_Control *cpu_of_executing = _Per_CPU_Get();
-      Per_CPU_Control *cpu_of_thread = _Thread_Get_CPU( thread );
-
-      if ( cpu_of_executing != cpu_of_thread ) {
-        cpu_of_thread->dispatch_necessary = true;
-        _Per_CPU_Send_interrupt( cpu_of_thread );
-      }
-    }
-#endif
-  }
-}
-
 /**
  * @brief Gets the heir of the processor and makes it executing.
  *
@@ -870,15 +831,24 @@ RTEMS_INLINE_ROUTINE void _Thread_Add_post_switch_action(
   Thread_Action  *action
 )
 {
-  Per_CPU_Control *cpu;
+  Per_CPU_Control *cpu_of_thread;
   ISR_Level        level;
 
-  cpu = _Thread_Action_ISR_disable_and_acquire( thread, &level );
+  cpu_of_thread = _Thread_Action_ISR_disable_and_acquire( thread, &level );
+  cpu_of_thread->dispatch_necessary = true;
+
+#if defined(RTEMS_SMP)
+  if ( _Per_CPU_Get() != cpu_of_thread ) {
+    _Per_CPU_Send_interrupt( cpu_of_thread );
+  }
+#endif
+
   _Chain_Append_if_is_off_chain_unprotected(
     &thread->Post_switch_actions.Chain,
     &action->Node
   );
-  _Thread_Action_release_and_ISR_enable( cpu, level );
+
+  _Thread_Action_release_and_ISR_enable( cpu_of_thread, level );
 }
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_life_restarting(
