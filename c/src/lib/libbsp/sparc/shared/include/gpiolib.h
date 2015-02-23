@@ -51,6 +51,8 @@ extern int gpiolib_get(void *handle, int *inval);
 extern int gpiolib_irq_clear(void *handle);
 extern int gpiolib_irq_enable(void *handle);
 extern int gpiolib_irq_disable(void *handle);
+extern int gpiolib_irq_mask(void *handle);
+extern int gpiolib_irq_unmask(void *handle);
 extern int gpiolib_irq_force(void *handle);
 extern int gpiolib_irq_register(void *handle, void *func, void *arg);
 
@@ -75,6 +77,8 @@ struct gpiolib_drv_ops {
 #define GPIOLIB_IRQ_DISABLE 0x02
 #define GPIOLIB_IRQ_CLEAR   0x04
 #define GPIOLIB_IRQ_FORCE   0x08
+#define GPIOLIB_IRQ_MASK    0x10
+#define GPIOLIB_IRQ_UNMASK  0x20
 
 struct gpiolib_drv {
 	struct gpiolib_drv_ops	*ops;

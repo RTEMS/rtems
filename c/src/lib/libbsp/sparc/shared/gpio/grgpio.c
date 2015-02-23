@@ -262,6 +262,18 @@ int grgpio_grpiolib_irq_opts(void *handle, unsigned int options)
 			return -1;
 		}
 	}
+	if ( options & GPIOLIB_IRQ_MASK ) {
+		/* Mask (disable) interrupt at interrupt controller */
+		if ( drvmgr_interrupt_mask(priv->dev, portnr) ) {
+			return -1;
+		}
+	}
+	if ( options & GPIOLIB_IRQ_UNMASK ) {
+		/* Unmask (enable) interrupt at interrupt controller */
+		if ( drvmgr_interrupt_unmask(priv->dev, portnr) ) {
+			return -1;
+		}
+	}
 
 	return 0;
 }

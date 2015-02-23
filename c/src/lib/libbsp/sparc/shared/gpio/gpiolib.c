@@ -251,6 +251,17 @@ int gpiolib_irq_disable(void *handle)
 	return gpiolib_irq_opts(handle, GPIOLIB_IRQ_DISABLE);
 }
 
+int gpiolib_irq_mask(void *handle)
+{
+	return gpiolib_irq_opts(handle, GPIOLIB_IRQ_MASK);
+}
+
+int gpiolib_irq_unmask(void *handle)
+{
+	return gpiolib_irq_opts(handle, GPIOLIB_IRQ_UNMASK);
+}
+
+
 /*** Initialization ***/
 int gpiolib_initialize(void)
 {
