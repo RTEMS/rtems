@@ -72,7 +72,7 @@ void process(const char *ifname, const char *ofname)
   }
 
   strncpy( obasename, ofname, PATH_MAX );
-  len = strlen( obasename );
+  len = strnlen( obasename, PATH_MAX );
   if ( len >= 2 ) {
     if ( obasename[len-2] == '.' ) {
       if ( (obasename[len-1] == 'c') || (obasename[len-1] == 'h') )
