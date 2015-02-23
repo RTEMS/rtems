@@ -45,7 +45,7 @@ void print_schedparam(
      schedparam->sched_ss_init_budget.tv_sec,
      schedparam->sched_ss_init_budget.tv_nsec );
 #else
-  printf( "%s_POSIX_SPORADIC_SERVER is not defined\n" );
+  printf( "%s_POSIX_SPORADIC_SERVER is not defined\n", prefix );
 #endif
 }
 
