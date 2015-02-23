@@ -8,11 +8,11 @@
  *    + SYS_irqdis  (disable interrupts)
  *    + SYS_irqset  (set interrupt level)
  * 
- *  COPYRIGHT (c) 1995. European Space Agency.
  *  COPYRIGHT (c) 2010. Gedare Bloom.
  *
- *  This terms of the RTEMS license apply to this file.
- *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems/asm.h>

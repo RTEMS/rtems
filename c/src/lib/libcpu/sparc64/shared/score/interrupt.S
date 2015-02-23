@@ -5,21 +5,11 @@
  *  in assembly language. 
  *
  *  COPYRIGHT (c) 1989-2007. On-Line Applications Research Corporation (OAR).
+ *  COPYRIGHT (c) 2010. Gedare Bloom.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
- *
- *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
- *  Agency (ESA).
- *
- *  ERC32 modifications of respective RTEMS file:
- *  COPYRIGHT (c) 1995. European Space Agency.
- *
- *  Ported to Niagara and UltraSPARC III (US3) implementations of the SPARC-v9.
- *  Niagara and US3 modifications of respective RTEMS file: 
- *  COPYRIGHT (c) 2010. Gedare Bloom.
  */
 
 #include <rtems/asm.h>

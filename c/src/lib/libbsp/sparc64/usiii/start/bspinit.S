@@ -5,7 +5,6 @@
  */
 
 /*
- *
  *  COPYRIGHT (c) 2010 Gedare Bloom.
  *
  *  The license and distribution terms for this file may be
