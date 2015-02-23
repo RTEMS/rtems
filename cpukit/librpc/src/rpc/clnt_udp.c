@@ -89,13 +89,13 @@ struct cu_data {
 	u_int		   cu_xdrpos;
 	u_int			cu_sendsz;	/* send size */
 	union {
-	  u_int32_t	   *i32;
+	  u_int32_t	   *pi32;
 	  char		   *c;
 	} _cu_outbuf;
 #define cu_outbuf _cu_outbuf.c
 	u_int			cu_recvsz;	/* recv size */
 	union {
-	  u_int32_t	*i32;
+	  u_int32_t	i32;
 	  char		c[1];
 	} _cu_inbuf;
 #define cu_inbuf _cu_inbuf.c
@@ -360,7 +360,7 @@ send_again:
 		if (inlen < sizeof(u_int32_t))
 			continue;
 		/* see if reply transaction id matches sent id */
-		if (*(cu->_cu_inbuf.i32) != *(cu->_cu_outbuf.i32))
+		if ( cu->_cu_inbuf.i32 != *cu->_cu_outbuf.pi32 )
 			continue;
 		/* we now assume we have the proper reply */
 		break;
