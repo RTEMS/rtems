@@ -716,9 +716,10 @@ ifconf(u_long cmd, caddr_t data)
 	struct ifnet *ifp = ifnet;
 	struct ifaddr *ifa;
 	struct ifreq ifr, *ifrp;
+	char              *ifrpc;
 	int space = ifc->ifc_len, error = 0;
 
-	ifrp = ifc->ifc_req;
+	ifrpc = (char*)ifc->ifc_req;
 	for (; space > sizeof (ifr) && ifp; ifp = ifp->if_next) {
 		char workbuf[64];
 		int ifnlen;
@@ -732,11 +733,11 @@ ifconf(u_long cmd, caddr_t data)
 
 		if ((ifa = ifp->if_addrlist) == 0) {
 			bzero((caddr_t)&ifr.ifr_addr, sizeof(ifr.ifr_addr));
-			error = copyout((caddr_t)&ifr, (caddr_t)ifrp,
+			error = copyout((caddr_t)&ifr, (caddr_t)ifrpc,
 			    sizeof (ifr));
 			if (error)
 				break;
-			space -= sizeof (ifr), ifrp++;
+			space -= sizeof (ifr); ifrpc+=sizeof(ifr);
 		} else
 		    for ( ; space > sizeof (ifr) && ifa; ifa = ifa->ifa_next) {
 			struct sockaddr *sa = ifa->ifa_addr;
@@ -746,27 +747,27 @@ ifconf(u_long cmd, caddr_t data)
 					 (struct osockaddr *)&ifr.ifr_addr;
 				ifr.ifr_addr = *sa;
 				osa->sa_family = sa->sa_family;
-				error = copyout((caddr_t)&ifr, (caddr_t)ifrp,
+				error = copyout((caddr_t)&ifr, (caddr_t)ifrpc,
 						sizeof (ifr));
-				ifrp++;
+				ifrpc+=sizeof(ifr);
 			} else
 #endif
 			if (sa->sa_len <= sizeof(*sa)) {
 				ifr.ifr_addr = *sa;
-				error = copyout((caddr_t)&ifr, (caddr_t)ifrp,
+				error = copyout((caddr_t)&ifr, (caddr_t)ifrpc,
 						sizeof (ifr));
-				ifrp++;
+				ifrpc+=sizeof(ifr);
 			} else {
 				space -= sa->sa_len - sizeof(*sa);
 				if (space < sizeof (ifr))
 					break;
-				error = copyout((caddr_t)&ifr, (caddr_t)ifrp,
+				error = copyout((caddr_t)&ifr, (caddr_t)ifrpc,
 						sizeof (ifr.ifr_name));
+				ifrpc+=sizeof(ifr.ifr_name);
 				if (error == 0)
 				    error = copyout((caddr_t)sa,
-				      (caddr_t)&ifrp->ifr_addr, sa->sa_len);
-				ifrp = (struct ifreq *)
-					(sa->sa_len + (caddr_t)&ifrp->ifr_addr);
+				      (caddr_t)ifrpc, sa->sa_len);
+				ifrpc += sa->sa_len;
 			}
 			if (error)
 				break;
