@@ -580,8 +580,8 @@ The mutex has the protocol attribute of PTHREAD_PRIO_PROTECT and the
 priority of the calling thread is higher than the current priority
 ceiling.
 
-@item EDEADLK
-The current thread already owns the mutex.
+@item EBUSY
+The mutex is already locked.
 
 @end table
 

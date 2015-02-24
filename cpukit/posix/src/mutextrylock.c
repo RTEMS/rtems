@@ -37,5 +37,8 @@ int pthread_mutex_trylock(
   pthread_mutex_t           *mutex
 )
 {
-  return _POSIX_Mutex_Lock_support( mutex, false, THREAD_QUEUE_WAIT_FOREVER );
+  int r = _POSIX_Mutex_Lock_support( mutex, false, THREAD_QUEUE_WAIT_FOREVER );
+  if ( r == EDEADLK )
+    r = EBUSY;
+  return r;
 }
