@@ -43,7 +43,7 @@ clock_t _times(
    struct tms  *ptms
 )
 {
-  rtems_interval ticks;
+  rtems_interval ticks, us_per_tick;
   Thread_Control *executing;
 
   if ( !ptms )
@@ -54,6 +54,7 @@ clock_t _times(
    */
 
   ticks = rtems_clock_get_ticks_since_boot();
+  us_per_tick = rtems_configuration_get_microseconds_per_tick();
 
   /*
    *  RTEMS technically has no notion of system versus user time
@@ -90,18 +91,18 @@ clock_t _times(
         &fractional_ticks
       );
       _Thread_Enable_dispatch();
-      ptms->tms_utime = ticks_of_executing / 100;
+      ptms->tms_utime = ticks_of_executing * us_per_tick;
     }
   #else
     executing = _Thread_Get_executing();
-    ptms->tms_utime  = executing->cpu_time_used;
+    ptms->tms_utime  = executing->cpu_time_used * us_per_tick;
   #endif
-  ptms->tms_stime  = ticks;
+  ptms->tms_stime  = ticks * us_per_tick;
   ptms->tms_cutime = 0;
   ptms->tms_cstime = 0;
 
-  return ticks;
-} 
+  return ticks * us_per_tick;
+}
 
 /**
  *  times() system call wrapper for _times() above.
