@@ -48,6 +48,12 @@
 	.extern	_ARMV4_Exception_fiq_default
 	.extern	_ARMV7M_Exception_default
 
+#ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
+	.extern bsp_start_init_registers_core
+	.extern bsp_start_init_registers_banked_fiq
+	.extern bsp_start_init_registers_vfp
+#endif
+
 	/* Global symbols */
 	.globl	_start
 	.globl	bsp_start_vector_table_begin
@@ -127,6 +133,10 @@ _start:
 	 * loader.
 	 */
 
+#ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
+	bl bsp_start_init_registers_core
+#endif
+
 #ifdef RTEMS_SMP
 	/* Read MPIDR */
 	mrc	p15, 0, r0, c0, c0, 5
@@ -159,6 +169,10 @@ _start:
 	ldr	sp, =bsp_stack_fiq_end
 #ifdef RTEMS_SMP
 	add	sp, r1
+#endif
+
+#ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
+	bl bsp_start_init_registers_banked_fiq
 #endif
 
 	/* Enter ABT mode and set up the ABT stack pointer */
@@ -207,6 +221,11 @@ _start:
 	/* Enable FPU */
 	mov r0, #(1 << 30)
 	vmsr FPEXC, r0
+
+#ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
+	bl bsp_start_init_registers_vfp
+#endif
+
 #endif /* ARM_MULTILIB_VFP */
 
 	/*
@@ -304,6 +323,10 @@ bsp_start_vector_table_end:
 
 _start:
 
+#ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
+	bl bsp_start_init_registers_core
+#endif
+
 #ifdef ARM_MULTILIB_VFP
 	/*
 	 * Enable CP10 and CP11 coprocessors for privileged and user mode in
@@ -315,7 +338,12 @@ _start:
 	str	r1, [r0]
 	dsb
 	isb
+
+#ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
+	bl bsp_start_init_registers_vfp
 #endif
+
+#endif /* ARM_MULTILIB_VFP */
 
 	ldr	sp, =bsp_stack_main_end
 	ldr	lr, =bsp_start_hook_0_done + 1
