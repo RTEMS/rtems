@@ -95,14 +95,14 @@ static void standard_funcs_giant_taken_test( size_t set_size,
     cpu_set_t *cpu_set, SMP_barrier_State *bs )
 {
   if ( rtems_get_current_processor() == 0)
-    _Giant_Acquire();
+    _Thread_Disable_dispatch();
 
   _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
 
   cache_manager_smp_functions( set_size, cpu_set );
 
   if ( rtems_get_current_processor() == 0)
-    _Giant_Release();
+    _Thread_Enable_dispatch();
 }
 
 static void test_func_test( size_t set_size, cpu_set_t *cpu_set,
@@ -145,7 +145,7 @@ static void test_func_giant_taken_test( size_t set_size, cpu_set_t *cpu_set,
   ctx.count[rtems_get_current_processor()] = 0;
 
   if ( rtems_get_current_processor() == 0)
-    _Giant_Acquire();
+    _Thread_Disable_dispatch();
 
   _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
 
@@ -157,7 +157,7 @@ static void test_func_giant_taken_test( size_t set_size, cpu_set_t *cpu_set,
       rtems_get_processor_count() );
 
   if ( rtems_get_current_processor() == 0)
-    _Giant_Release();
+    _Thread_Enable_dispatch();
 }
 
 static void cmlog(  const char* str )

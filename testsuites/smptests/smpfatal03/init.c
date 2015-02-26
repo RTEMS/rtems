@@ -42,7 +42,7 @@ static void acquire_giant_and_fatal_task(rtems_task_argument arg)
   int i;
 
   for (i = 0; i < 13; ++i) {
-    _Giant_Acquire();
+    _Thread_Disable_dispatch();
   }
 
   _SMP_barrier_Wait(&giant_barrier, &state, CPU_COUNT);
@@ -62,7 +62,7 @@ static void wait_for_giant(void)
 
   _SMP_barrier_Wait(&giant_barrier, &state, CPU_COUNT);
 
-  _Giant_Acquire();
+  _Thread_Disable_dispatch();
 }
 
 static void Init(rtems_task_argument arg)
