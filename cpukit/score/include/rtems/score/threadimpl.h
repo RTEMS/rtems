@@ -558,7 +558,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Restart_self( Thread_Control *executing )
 #if defined(RTEMS_SMP)
   ISR_Level level;
 
-  _Giant_Release();
+  _Giant_Release( _Per_CPU_Get() );
 
   _ISR_Disable_without_giant( level );
   ( void ) level;

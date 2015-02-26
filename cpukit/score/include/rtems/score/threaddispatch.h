@@ -97,17 +97,25 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
    * This lock is implicitly acquired in
    * _Thread_Dispatch_increment_disable_level().
    *
-   * Thread dispatching must be disabled before this lock can be acquired.
+   * Thread dispatching must be disabled before the Giant lock can be acquired
+   * and must no be enabled while owning the Giant lock.  The thread dispatch
+   * disable level is not altered by this function.
+   *
+   * @param[in] cpu_self The current processor.
    */
-  void _Giant_Acquire( void );
+  void _Giant_Acquire( Per_CPU_Control *cpu_self );
 
   /**
    * @brief Releases the giant lock.
    *
    * This lock is implicitly released in
    * _Thread_Dispatch_decrement_disable_level().
+   *
+   * The thread dispatch disable level is not altered by this function.
+   *
+   * @param[in] cpu_self The current processor.
    */
-  void _Giant_Release( void );
+  void _Giant_Release( Per_CPU_Control *cpu_self );
 
   /**
    * @brief Releases the giant lock completely if held by the executing processor.
@@ -116,9 +124,9 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
    *
    * The only use case for this operation is in _SMP_Request_shutdown().
    *
-   * @param[in] self_cpu The current processor.
+   * @param[in] cpu_self The current processor.
    */
-  void _Giant_Drop( Per_CPU_Control *self_cpu );
+  void _Giant_Drop( Per_CPU_Control *cpu_self );
 
   /**
    *  @brief Increments the thread dispatch level.

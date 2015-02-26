@@ -119,23 +119,23 @@ uint32_t _Thread_Dispatch_decrement_disable_level( void )
   return disable_level;
 }
 
-void _Giant_Acquire( void )
+void _Giant_Acquire( Per_CPU_Control *cpu_self )
 {
   ISR_Level isr_level;
 
   _ISR_Disable_without_giant( isr_level );
   _Assert( _Thread_Dispatch_disable_level != 0 );
-  _Giant_Do_acquire( _Per_CPU_Get() );
+  _Giant_Do_acquire( cpu_self );
   _ISR_Enable_without_giant( isr_level );
 }
 
-void _Giant_Release( void )
+void _Giant_Release( Per_CPU_Control *cpu_self )
 {
   ISR_Level isr_level;
 
   _ISR_Disable_without_giant( isr_level );
   _Assert( _Thread_Dispatch_disable_level != 0 );
-  _Giant_Do_release( _Per_CPU_Get() );
+  _Giant_Do_release( cpu_self );
   _ISR_Enable_without_giant( isr_level );
 }
 
