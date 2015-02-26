@@ -226,6 +226,12 @@ RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
 }
 #endif
 
+RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch_body( void )
+{
+  if ( _Thread_Dispatch_decrement_disable_level() == 0 )
+    _Thread_Dispatch();
+}
+
 /**
  * This routine allows dispatching to occur again.  If this is
  * the outer most dispatching critical section, then a dispatching
@@ -240,8 +246,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
   RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch( void )
   {
     RTEMS_COMPILER_MEMORY_BARRIER();
-    if ( _Thread_Dispatch_decrement_disable_level() == 0 )
-      _Thread_Dispatch();
+    _Thread_Enable_dispatch_body();
   }
 #endif
 
