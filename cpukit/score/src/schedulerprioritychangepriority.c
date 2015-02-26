@@ -59,5 +59,7 @@ Scheduler_Void_or_thread _Scheduler_priority_Change_priority(
     );
   }
 
+  _Scheduler_priority_Schedule_body( scheduler, the_thread, false );
+
   SCHEDULER_RETURN_VOID_OR_NULL;
 }

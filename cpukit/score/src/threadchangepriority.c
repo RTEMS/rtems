@@ -46,17 +46,10 @@ void _Thread_Change_priority(
         new_priority,
         prepend_it
       );
-
-      _ISR_Flash( level );
-
-      /*
-       *  We altered the set of thread priorities.  So let's figure out
-       *  who is the heir and if we need to switch to them.
-       */
-      _Scheduler_Schedule( the_thread );
     } else {
       _Scheduler_Update_priority( the_thread, new_priority );
     }
+
     _ISR_Enable( level );
 
     _Thread_queue_Requeue( the_thread->Wait.queue, the_thread );

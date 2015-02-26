@@ -34,6 +34,103 @@ showTaskSwitches (void)
   }
 }
 
+static int test_no_preempt_step;
+
+static rtems_id high_task_id;
+
+static rtems_id low_task_id;
+
+static void high_task( rtems_task_argument arg )
+{
+  rtems_status_code sc;
+
+  rtems_test_assert( test_no_preempt_step == 2 );
+  test_no_preempt_step = 3;
+
+  sc = rtems_event_transient_send( Task_id[ 1 ] );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  rtems_task_suspend(RTEMS_SELF);
+  rtems_test_assert(0);
+}
+
+static void low_task( rtems_task_argument arg )
+{
+  rtems_test_assert( test_no_preempt_step == 1 );
+  test_no_preempt_step = 2;
+
+  rtems_task_suspend(RTEMS_SELF);
+  rtems_test_assert(0);
+}
+
+static void no_preempt_timer( rtems_id id, void *arg )
+{
+  rtems_status_code sc;
+
+  rtems_test_assert( test_no_preempt_step == 0 );
+  test_no_preempt_step = 1;
+
+  sc = rtems_task_start( low_task_id, low_task, 0 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_task_start( high_task_id, high_task, 0 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+}
+
+static void test_no_preempt( void )
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  rtems_test_assert( test_no_preempt_step == 0 );
+
+  sc = rtems_task_delete( Task_id[ 2 ] );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_task_delete( Task_id[ 3 ] );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_task_create(
+    rtems_build_name( 'H', 'I', 'G', 'H' ),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &high_task_id
+  );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_task_create(
+    rtems_build_name( 'L', 'O', 'W', ' ' ),
+    2,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_NO_PREEMPT,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &low_task_id
+  );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_timer_create( rtems_build_name( 'N', 'O', 'P', 'R' ), &id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_timer_fire_after( id, 1, no_preempt_timer, NULL );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_event_transient_receive( RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_timer_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_task_delete( high_task_id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_task_delete( low_task_id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  rtems_test_assert( test_no_preempt_step == 3 );
+}
+
 rtems_task Task_1(
   rtems_task_argument argument
 )
@@ -116,6 +213,8 @@ rtems_task Task_1(
       puts( "TA1 - rtems_extension_delete - successful" );
       status = rtems_extension_delete( Extension_id[1] );
       directive_failed( status, "rtems_extension_delete" );
+
+      test_no_preempt();
 
       TEST_END();
       rtems_test_exit (0);

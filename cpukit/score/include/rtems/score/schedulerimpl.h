@@ -314,6 +314,9 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
  * must ensure that the priority value actually changed and is not equal to the
  * current priority value.
  *
+ * The operation must update the heir and thread dispatch necessary variables
+ * in case the set of scheduled threads changes.
+ *
  * @param[in] the_thread The thread changing its priority.
  * @param[in] new_priority The new thread priority.
  * @param[in] prepend_it In case this is true, then enqueue the thread as the
@@ -630,16 +633,16 @@ bool _Scheduler_Set_affinity(
 #endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
 
 RTEMS_INLINE_ROUTINE void _Scheduler_Update_heir(
-  Thread_Control *heir,
-  bool force_dispatch
+  Thread_Control *new_heir,
+  bool            force_dispatch
 )
 {
-  Thread_Control *executing = _Thread_Executing;
+  Thread_Control *heir = _Thread_Heir;
 
-  _Thread_Heir = heir;
-
-  if ( executing != heir && ( force_dispatch || executing->is_preemptible ) )
+  if ( heir != new_heir && ( heir->is_preemptible || force_dispatch ) ) {
+    _Thread_Heir = new_heir;
     _Thread_Dispatch_necessary = true;
+  }
 }
 
 RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(

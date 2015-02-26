@@ -343,6 +343,7 @@ rtems_task Low_tasks(
 {
   rtems_id          id;
   rtems_status_code status;
+  rtems_mode        prev;
 
   task_count--;
 
@@ -379,6 +380,8 @@ rtems_task Low_tasks(
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT
   );
+
+  rtems_task_mode(RTEMS_PREEMPT, RTEMS_PREEMPT_MASK, &prev);
 }
 
 rtems_task Restart_task(

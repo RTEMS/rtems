@@ -39,5 +39,7 @@ Scheduler_Void_or_thread _Scheduler_EDF_Change_priority(
     false
   );
 
+  _Scheduler_EDF_Schedule_body( scheduler, the_thread, false );
+
   SCHEDULER_RETURN_VOID_OR_NULL;
 }

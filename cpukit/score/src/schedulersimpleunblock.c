@@ -44,10 +44,10 @@ Scheduler_Void_or_thread _Scheduler_simple_Unblock(
    *    a pseudo-ISR system task, we need to do a context switch.
    */
   if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
-    _Thread_Heir = the_thread;
-    if ( _Thread_Executing->is_preemptible ||
-        the_thread->current_priority == 0 )
-      _Thread_Dispatch_necessary = true;
+    _Scheduler_Update_heir(
+      the_thread,
+      the_thread->current_priority == PRIORITY_PSEUDO_ISR
+    );
   }
 
   SCHEDULER_RETURN_VOID_OR_NULL;

@@ -21,41 +21,9 @@
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/modesimpl.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/config.h>
-
-static void _RTEMS_Tasks_Dispatch_if_necessary(
-  Thread_Control *executing,
-  bool            needs_asr_dispatching
-)
-{
-  if ( _Thread_Dispatch_is_enabled() ) {
-    bool dispatch_necessary = needs_asr_dispatching;
-
-    /*
-     * FIXME: This locking approach is brittle.  It only works since the
-     * current simple SMP scheduler has no support for the non-preempt mode.
-     */
-#if defined( RTEMS_SMP )
-    ISR_Level level;
-
-    _ISR_Disable_without_giant( level );
-#endif
-
-    if ( !_Thread_Is_heir( executing ) && executing->is_preemptible ) {
-      dispatch_necessary = true;
-      _Thread_Dispatch_necessary = dispatch_necessary;
-    }
-
-#if defined( RTEMS_SMP )
-    _ISR_Enable_without_giant( level );
-#endif
-
-    if ( dispatch_necessary ) {
-      _Thread_Dispatch();
-    }
-  }
-}
 
 rtems_status_code rtems_task_mode(
   rtems_mode  mode_set,
@@ -66,6 +34,7 @@ rtems_status_code rtems_task_mode(
   Thread_Control     *executing;
   RTEMS_API_Control  *api;
   ASR_Information    *asr;
+  bool                preempt_enabled;
   bool                needs_asr_dispatching;
   rtems_mode          old_mode;
 
@@ -91,6 +60,7 @@ rtems_status_code rtems_task_mode(
   /*
    *  These are generic thread scheduling characteristics.
    */
+  preempt_enabled = false;
   if ( mask & RTEMS_PREEMPT_MASK ) {
 #if defined( RTEMS_SMP )
     if ( rtems_configuration_is_smp_enabled() &&
@@ -98,8 +68,10 @@ rtems_status_code rtems_task_mode(
       return RTEMS_NOT_IMPLEMENTED;
     }
 #endif
+    bool is_preempt_enabled = _Modes_Is_preempt( mode_set );
 
-    executing->is_preemptible = _Modes_Is_preempt( mode_set );
+    preempt_enabled = !executing->is_preemptible && is_preempt_enabled;
+    executing->is_preemptible = is_preempt_enabled;
   }
 
   if ( mask & RTEMS_TIMESLICE_MASK ) {
@@ -137,7 +109,15 @@ rtems_status_code rtems_task_mode(
     }
   }
 
-  _RTEMS_Tasks_Dispatch_if_necessary( executing, needs_asr_dispatching );
+  if ( preempt_enabled || needs_asr_dispatching ) {
+    ISR_Level level;
+
+    _Thread_Disable_dispatch();
+    _ISR_Disable( level );
+    _Scheduler_Schedule( executing );
+    _ISR_Enable( level );
+    _Thread_Enable_dispatch();
+  }
 
   return RTEMS_SUCCESSFUL;
 }
