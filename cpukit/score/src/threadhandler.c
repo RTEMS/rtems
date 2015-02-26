@@ -26,9 +26,9 @@
 
 void _Thread_Handler( void )
 {
-  Thread_Control *executing = _Thread_Executing;
-  ISR_Level       level;
-
+  Thread_Control  *executing = _Thread_Executing;
+  ISR_Level        level;
+  Per_CPU_Control *cpu_self;
 
   /*
    * Some CPUs need to tinker with the call frame or registers when the
@@ -37,14 +37,19 @@ void _Thread_Handler( void )
    */
   _Context_Initialization_at_thread_begin();
 
-  #if !defined(RTEMS_SMP)
-    /*
-     * have to put level into a register for those cpu's that use
-     * inline asm here
-     */
-    level = executing->Start.isr_level;
-    _ISR_Set_level( level );
+  #if defined(RTEMS_SMP)
+    /* On SMP we enter _Thread_Handler() with interrupts disabled */
+    _Assert( _ISR_Get_level() != 0 );
+
+    _Thread_Debug_set_real_processor( executing, _Per_CPU_Get() );
   #endif
+
+  /*
+   * have to put level into a register for those cpu's that use
+   * inline asm here
+   */
+  level = executing->Start.isr_level;
+  _ISR_Set_level( level );
 
   /*
    * Initialize the floating point context because we do not come
@@ -61,37 +66,24 @@ void _Thread_Handler( void )
   _User_extensions_Thread_begin( executing );
 
   /*
+   * Do not use the level of the thread control block, since it has a
+   * different format.
+   */
+  _ISR_Disable_without_giant( level );
+
+  /*
    *  At this point, the dispatch disable level BETTER be 1.
    */
-  #if defined(RTEMS_SMP)
-    {
-      /*
-       * On SMP we enter _Thread_Handler() with interrupts disabled and
-       * _Thread_Dispatch() obtained the per-CPU lock for us.  We have to
-       * release it here and set the desired interrupt level of the thread.
-       */
-      Per_CPU_Control *cpu_self = _Per_CPU_Get();
+  cpu_self = _Per_CPU_Get();
+  _Assert( cpu_self->thread_dispatch_disable_level == 1 );
 
-      _Assert( cpu_self->thread_dispatch_disable_level == 1 );
-      _Assert( _ISR_Get_level() != 0 );
-
-      _Thread_Debug_set_real_processor( executing, cpu_self );
-
-      cpu_self->thread_dispatch_disable_level = 0;
-      _Profiling_Thread_dispatch_enable( cpu_self, 0 );
-
-      level = executing->Start.isr_level;
-      _ISR_Set_level( level);
-
-      /*
-       * The thread dispatch level changed from one to zero.  Make sure we lose
-       * no thread dispatch necessary update.
-       */
-      _Thread_Dispatch();
-    }
-  #else
-    _Thread_Enable_dispatch();
-  #endif
+  /*
+   * Make sure we lose no thread dispatch necessary update and execute the
+   * post-switch actions.  As a side-effect change the thread dispatch level
+   * from one to zero.  Do not use _Thread_Enable_dispatch() since there is no
+   * valid thread dispatch necessary indicator in this context.
+   */
+  _Thread_Do_dispatch( cpu_self, level );
 
   /*
    *  RTEMS supports multiple APIs and each API can define a different

@@ -99,6 +99,10 @@ static void set_thread_dispatch_necessary( bool dispatch_necessary )
 
   _Thread_Dispatch_necessary = dispatch_necessary;
 
+  if ( !dispatch_necessary ) {
+    _Thread_Heir = _Thread_Executing;
+  }
+
 #if defined( PREVENT_SMP_ASSERT_FAILURES )
   _ISR_Enable_without_giant( level );
 #endif

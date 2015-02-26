@@ -60,40 +60,15 @@ static void _Thread_Run_post_switch_actions( Thread_Control *executing )
   _Thread_Action_release_and_ISR_enable( cpu_self, level );
 }
 
-void _Thread_Dispatch( void )
+void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
 {
-  Per_CPU_Control  *cpu_self;
-  Thread_Control   *executing;
-  ISR_Level         level;
+  Thread_Control *executing;
 
-#if defined( RTEMS_SMP )
-  /*
-   * On SMP the complete context switch must be atomic with respect to one
-   * processor.  See also _Thread_Handler() since _Context_switch() may branch
-   * to this function.
-   */
-  _ISR_Disable_without_giant( level );
-#endif
+  _Assert( cpu_self->thread_dispatch_disable_level == 1 );
 
-  cpu_self = _Per_CPU_Get();
-  _Assert( cpu_self->thread_dispatch_disable_level == 0 );
-  _Profiling_Thread_dispatch_disable( cpu_self, 0 );
-  cpu_self->thread_dispatch_disable_level = 1;
-
-  /*
-   *  Now determine if we need to perform a dispatch on the current CPU.
-   */
   executing = cpu_self->executing;
 
-#if !defined( RTEMS_SMP )
-  _ISR_Disable( level );
-#endif
-
-#if defined( RTEMS_SMP )
-  if ( cpu_self->dispatch_necessary ) {
-#else
-  while ( cpu_self->dispatch_necessary ) {
-#endif
+  do {
     Thread_Control *heir = _Thread_Get_heir_and_make_it_executing( cpu_self );
 
     /*
@@ -115,6 +90,11 @@ void _Thread_Dispatch( void )
     if ( heir->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE )
       heir->cpu_time_budget = rtems_configuration_get_ticks_per_timeslice();
 
+    /*
+     * On SMP the complete context switch must be atomic with respect to one
+     * processor.  See also _Thread_Handler() since _Context_switch() may branch
+     * to this function.
+     */
 #if !defined( RTEMS_SMP )
     _ISR_Enable( level );
 #endif
@@ -158,7 +138,13 @@ void _Thread_Dispatch( void )
 #if !defined( RTEMS_SMP )
     _ISR_Disable( level );
 #endif
-  }
+  } while (
+#if defined( RTEMS_SMP )
+    false
+#else
+    cpu_self->dispatch_necessary
+#endif
+  );
 
 post_switch:
   _Assert( cpu_self->thread_dispatch_disable_level == 1 );
@@ -168,4 +154,22 @@ post_switch:
   _ISR_Enable_without_giant( level );
 
   _Thread_Run_post_switch_actions( executing );
+}
+
+void _Thread_Dispatch( void )
+{
+  ISR_Level        level;
+  Per_CPU_Control *cpu_self;
+
+  _ISR_Disable_without_giant( level );
+
+  cpu_self = _Per_CPU_Get();
+
+  if ( cpu_self->dispatch_necessary ) {
+    _Profiling_Thread_dispatch_disable( cpu_self, 0 );
+    cpu_self->thread_dispatch_disable_level = 1;
+    _Thread_Do_dispatch( cpu_self, level );
+  } else {
+    _ISR_Enable_without_giant( level );
+  }
 }

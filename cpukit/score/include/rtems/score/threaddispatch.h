@@ -193,24 +193,38 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
 #endif /* RTEMS_SMP */
 
 /**
- *  @brief Dispatch thread.
+ * @brief Performs a thread dispatch if necessary.
  *
- *  This routine is responsible for transferring control of the
- *  processor from the executing thread to the heir thread. Once the
- *  heir is running an attempt is made to dispatch any ASRs.
- *  As part of this process, it is responsible for the following actions:
- *     + saving the context of the executing thread
- *     + restoring the context of the heir thread
- *     + dispatching any signals for the resulting executing thread
-
- *  ALTERNATE ENTRY POINTS:
- *    void _Thread_Enable_dispatch();
+ * This routine is responsible for transferring control of the processor from
+ * the executing thread to the heir thread.  Once the heir is running an
+ * attempt is made to run the pending post-switch thread actions.
  *
- *  - INTERRUPT LATENCY:
- *    + dispatch thread
- *    + no dispatch thread
+ * As part of this process, it is responsible for the following actions
+ *   - update timing information of the executing thread,
+ *   - save the context of the executing thread,
+ *   - invokation of the thread switch user extensions,
+ *   - restore the context of the heir thread, and
+ *   - run of pending post-switch thread actions of the resulting executing
+ *     thread.
+ *
+ * On entry the thread dispatch level must be equal to zero.
  */
 void _Thread_Dispatch( void );
+
+/**
+ * @brief Performs a thread dispatch on the current processor.
+ *
+ * On entry the thread dispatch disable level must be equal to one and
+ * interrupts must be disabled.
+ *
+ * This function assumes that a thread dispatch is necessary.
+ *
+ * @param[in] cpu_self The current processor.
+ * @param[in] level The previous interrupt level.
+ *
+ * @see _Thread_Dispatch().
+ */
+void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level );
 
 /**
  * This routine prevents dispatching.
@@ -228,8 +242,33 @@ RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
 
 RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch_body( void )
 {
-  if ( _Thread_Dispatch_decrement_disable_level() == 0 )
-    _Thread_Dispatch();
+  Per_CPU_Control *cpu_self;
+  uint32_t         disable_level;
+
+  cpu_self = _Per_CPU_Get();
+
+#if defined( RTEMS_SMP )
+  _Giant_Release( cpu_self );
+#endif
+
+  disable_level = cpu_self->thread_dispatch_disable_level;
+
+  if ( disable_level == 1 ) {
+    ISR_Level level;
+
+    _ISR_Disable_without_giant( level );
+
+    if ( cpu_self->dispatch_necessary ) {
+      _Thread_Do_dispatch( cpu_self, level );
+    } else {
+      cpu_self->thread_dispatch_disable_level = 0;
+      _Profiling_Thread_dispatch_enable( cpu_self, 0 );
+    }
+
+    _ISR_Enable_without_giant( level );
+  } else {
+    cpu_self->thread_dispatch_disable_level = disable_level - 1;
+  }
 }
 
 /**
