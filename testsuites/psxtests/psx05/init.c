@@ -377,9 +377,9 @@ void *POSIX_Init(
 
   puts( "Init: pthread_mutex_trylock - EDEADLK (already locked)" );
   status = pthread_mutex_trylock( &Mutex_id );
-  if ( status != EDEADLK )
+  if ( status != EBUSY )
     printf( "status = %d\n", status );
-  rtems_test_assert( status == EDEADLK );
+  rtems_test_assert( status == EBUSY );
 
   puts( "Init: pthread_mutex_lock - EINVAL (NULL id)" );
   status = pthread_mutex_lock( NULL );
