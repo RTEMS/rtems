@@ -22,8 +22,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#if defined(RTEMS_SMP) || \
-    defined(RTEMS_HEAVY_STACK_DEBUG) || \
+#if defined(RTEMS_HEAVY_STACK_DEBUG) || \
     defined(RTEMS_HEAVY_MALLOC_DEBUG)
   #define __THREAD_DO_NOT_INLINE_DISABLE_DISPATCH__
 #endif
