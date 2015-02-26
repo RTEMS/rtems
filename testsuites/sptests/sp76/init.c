@@ -15,11 +15,7 @@
 
 const char rtems_test_name[] = "SP 76";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_task Test_task(rtems_task_argument index);
-
-rtems_task Test_task(
+static rtems_task High_task(
   rtems_task_argument index
 )
 {
@@ -36,7 +32,14 @@ rtems_task Test_task(
   rtems_test_exit( 0 );
 }
 
-rtems_task Init(
+static rtems_task Equal_task(
+  rtems_task_argument index
+)
+{
+  rtems_test_assert( 0 );
+}
+
+static rtems_task Init(
   rtems_task_argument argument
 )
 {
@@ -65,7 +68,7 @@ rtems_task Init(
   );
   directive_failed( status, "create 1" );
 
-  status = rtems_task_start( id, Test_task, 1 );
+  status = rtems_task_start( id, High_task, 1 );
   directive_failed( status, "start 1" );
 
   puts( "Create TA2 at equal priority task" );
@@ -79,7 +82,7 @@ rtems_task Init(
   );
   directive_failed( status, "create 2" );
 
-  status = rtems_task_start( id, Test_task, 1 );
+  status = rtems_task_start( id, Equal_task, 1 );
   directive_failed( status, "start 2" );
 
   puts( "Yield to TA1" );
