@@ -99,6 +99,14 @@ _ARMV4_Exception_fiq_default:
 	stmdb	sp!, {r0-r12}
 	mov	r4, #7
 
+	/*
+	 * Don't enable FIQs yet. Set the FIQ disable bit in the SPSR
+	 * (which we'll load into the CPSR in save_more_context).
+	 */
+	mrs r2, spsr
+	orr r2, #ARM_PSR_F
+	msr spsr_c, r2
+
 save_more_context:
 
 	/* Save more context */
