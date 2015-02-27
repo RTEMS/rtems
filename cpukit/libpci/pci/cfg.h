@@ -146,9 +146,12 @@ struct pci_res {
 	uint32_t	end;
 };
 
-/* Get Device from resource pointer */
+/* Get Device from resource pointer. bar is the index of the pci_dev.resources
+ * array and used to get the device base address of which the resource is
+ * associated with.
+ */
 #define RES2DEV(res) ((struct pci_dev *) \
-			((void *)res - (res->bar * (sizeof(struct pci_res)))))
+	((uintptr_t)res - (uintptr_t)(res->bar * (sizeof(struct pci_res)))))
 
 /* Device flags */
 #define PCI_DEV_BRIDGE    0x01  /* Device is a Bridge (struct pci_bus) */
