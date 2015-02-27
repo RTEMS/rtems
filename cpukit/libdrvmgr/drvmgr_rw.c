@@ -1,7 +1,6 @@
 /* Driver Manager Read/Write Interface Implementation.
  *
- * COPYRIGHT (c) 2009.
- * Cobham Gaisler AB.
+ * COPYRIGHT (c) 2009 Cobham Gaisler AB.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
