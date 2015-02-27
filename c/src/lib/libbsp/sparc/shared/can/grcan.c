@@ -18,7 +18,7 @@
 #include <ctype.h>
 #include <rtems/bspIo.h>
 
-#include <grcan.h>
+#include <bsp/grcan.h>
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <ambapp.h>
@@ -85,7 +85,7 @@
 #define DEBUG
 #define DEBUGFUNCS
 */
-#include <debug_defs.h>
+#include <bsp/debug_defs.h>
 
 /*********************************************************/
 

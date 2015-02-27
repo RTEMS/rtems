@@ -18,8 +18,8 @@
 
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
-#include <grgpio.h>
-#include <gpiolib.h>
+#include <bsp/grgpio.h>
+#include <bsp/gpiolib.h>
 #include <ambapp.h>
 #include <grlib.h>
 

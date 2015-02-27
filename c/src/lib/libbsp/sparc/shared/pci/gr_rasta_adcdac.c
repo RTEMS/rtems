@@ -31,9 +31,9 @@
 #include <drvmgr/ambapp_bus.h>
 #include <drvmgr/pci_bus.h>
 #include <drvmgr/bspcommon.h>
-#include <genirq.h>
+#include <bsp/genirq.h>
 
-#include <gr_rasta_adcdac.h>
+#include <bsp/gr_rasta_adcdac.h>
 
 /*#define DEBUG 1*/
 

@@ -11,8 +11,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <apbuart_termios.h>
-#include <apbuart.h>
+#include <bsp/apbuart_termios.h>
+#include <bsp/apbuart.h>
 #include <bsp.h>
 
 static void apbuart_isr(void *arg)

@@ -14,7 +14,7 @@
 
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
-#include <grspw_router.h>
+#include <bsp/grspw_router.h>
 
 #define ROUTER_DBG(args...)
 

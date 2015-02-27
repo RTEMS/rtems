@@ -26,7 +26,7 @@
 #include <drvmgr/drvmgr.h>
 #include <ambapp.h>
 #include <drvmgr/ambapp_bus.h>
-#include <grspw_pkt.h>
+#include <bsp/grspw_pkt.h>
 
 /* This driver has been prepared for SMP operation however never tested 
  * on a SMP system - use on your own risk.

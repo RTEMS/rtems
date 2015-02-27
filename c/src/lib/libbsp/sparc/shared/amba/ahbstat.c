@@ -12,7 +12,7 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 
-#include <ahbstat.h>
+#include <bsp/ahbstat.h>
 
 void ahbstat_isr(void *arg);
 

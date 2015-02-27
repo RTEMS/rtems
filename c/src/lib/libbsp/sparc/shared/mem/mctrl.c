@@ -20,7 +20,7 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 
-#include <mctrl.h>
+#include <bsp/mctrl.h>
 
 #define MEMSET(priv, start, c, length) memset((void *)start, c, length)
 

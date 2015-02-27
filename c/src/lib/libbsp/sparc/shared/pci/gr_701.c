@@ -33,9 +33,9 @@
 #include <drvmgr/ambapp_bus.h>
 #include <drvmgr/pci_bus.h>
 #include <drvmgr/bspcommon.h>
-#include <genirq.h>
+#include <bsp/genirq.h>
 
-#include <gr_701.h>
+#include <bsp/gr_701.h>
 
 /* Offset from 0x80000000 (dual bus version) */
 #define AHB1_BASE_ADDR 0x80000000

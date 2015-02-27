@@ -13,8 +13,8 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 
-#include <gr1553b.h>
-#include <gr1553bm.h>
+#include <bsp/gr1553b.h>
+#include <bsp/gr1553bm.h>
 
 
 #define GR1553BM_WRITE_MEM(adr, val) *(volatile uint32_t *)(adr) = (uint32_t)(val)

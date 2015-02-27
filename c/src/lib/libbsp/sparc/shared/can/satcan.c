@@ -16,7 +16,7 @@
 #include <bsp.h>
 #include <rtems/bspIo.h> /* printk */
 
-#include <satcan.h>
+#include <bsp/satcan.h>
 #include <ambapp.h>
 
 #ifndef GAISLER_SATCAN

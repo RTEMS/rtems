@@ -29,7 +29,7 @@
 #include <drvmgr/ambapp_bus.h>
 #include <ambapp.h>
 #include <drvmgr/pci_bus.h>
-#include <pcif.h>
+#include <bsp/pcif.h>
 
 
 /* Configuration options */

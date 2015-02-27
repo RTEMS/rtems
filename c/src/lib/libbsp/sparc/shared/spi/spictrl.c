@@ -19,7 +19,7 @@
 
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
-#include <spictrl.h>
+#include <bsp/spictrl.h>
 #include <ambapp.h>
 
 #include <rtems/libi2c.h>

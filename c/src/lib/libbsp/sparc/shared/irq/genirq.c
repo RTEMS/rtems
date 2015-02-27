@@ -12,7 +12,7 @@
 #include <rtems.h>
 #include <stdlib.h>
 #include <string.h>
-#include <genirq.h>
+#include <bsp/genirq.h>
 
 struct genirq_handler_entry {
 	struct genirq_handler_entry	*next;		/* Next ISR entry for this IRQ number */

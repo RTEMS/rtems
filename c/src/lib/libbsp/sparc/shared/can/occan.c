@@ -17,7 +17,7 @@
 
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
-#include <occan.h>
+#include <bsp/occan.h>
 
 /* RTEMS -> ERRNO decoding table
 

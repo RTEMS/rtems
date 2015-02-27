@@ -23,7 +23,7 @@
 
 #include <ambapp.h>
 #include <grlib.h>
-#include <apbuart.h>
+#include <bsp/apbuart.h>
 
 #ifndef DEFAULT_TXBUF_SIZE
  #define DEFAULT_TXBUF_SIZE 32

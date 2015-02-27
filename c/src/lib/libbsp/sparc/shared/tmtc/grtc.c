@@ -21,7 +21,7 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <ambapp.h>
-#include <grtc.h>
+#include <bsp/grtc.h>
 
 #ifndef IRQ_GLOBAL_PREPARE
  #define IRQ_GLOBAL_PREPARE(level) rtems_interrupt_level level
@@ -40,7 +40,7 @@
 #define DEBUGFUNCS
 */
 
-#include <debug_defs.h>
+#include <bsp/debug_defs.h>
 
 #ifdef DEBUG_ERROR
 #define DEBUG_ERR_LOG(device,error) grtc_log_error(device,error)

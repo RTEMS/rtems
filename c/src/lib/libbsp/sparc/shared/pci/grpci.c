@@ -29,7 +29,7 @@
 #include <drvmgr/ambapp_bus.h>
 #include <ambapp.h>
 #include <drvmgr/pci_bus.h>
-#include <grpci.h>
+#include <bsp/grpci.h>
 
 #define DMAPCI_ADDR 0x80000500
 

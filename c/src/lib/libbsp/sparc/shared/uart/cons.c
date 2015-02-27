@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <rtems/libio.h>
 #include <rtems/bspIo.h>
-#include <cons.h>
+#include <bsp/cons.h>
 
 #ifdef RTEMS_DRVMGR_STARTUP
 

@@ -22,7 +22,7 @@
 
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
-#include <grspw.h>
+#include <bsp/grspw.h>
 
 #define DBGSPW_IOCALLS 1
 #define DBGSPW_TX 2

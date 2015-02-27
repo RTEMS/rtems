@@ -40,9 +40,9 @@
 #include <drvmgr/ambapp_bus.h>
 #include <drvmgr/pci_bus.h>
 #include <drvmgr/bspcommon.h>
-#include <genirq.h>
+#include <bsp/genirq.h>
 
-#include <gr_leon4_n2x.h>
+#include <bsp/gr_leon4_n2x.h>
 
 /* Determines which PCI address the AHB masters on the LEON-N2X board will
  * access when accessing the AHB to PCI window, it should be set so that the

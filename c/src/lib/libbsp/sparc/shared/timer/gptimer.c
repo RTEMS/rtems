@@ -37,8 +37,8 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <grlib.h>
-#include <gptimer.h>
-#include "tlib.h"
+#include <bsp/gptimer.h>
+#include <bsp/tlib.h>
 
 #if defined(LEON3) && defined(RTEMS_DRVMGR_STARTUP)
 #include <leon.h>

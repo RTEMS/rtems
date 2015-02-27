@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <bsp.h>
 #include <ambapp.h>
-#include <grascs.h>
+#include <bsp/grascs.h>
 
 #ifndef GAISLER_ASCS
 #define GAISLER_ASCS 0x043

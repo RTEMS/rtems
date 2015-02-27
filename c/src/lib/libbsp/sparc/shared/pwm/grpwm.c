@@ -19,7 +19,7 @@
 
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
-#include <grpwm.h>
+#include <bsp/grpwm.h>
 #include <ambapp.h>
 
 /* #define DEBUG 1 */

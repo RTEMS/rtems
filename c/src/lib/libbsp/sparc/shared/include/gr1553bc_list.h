@@ -193,7 +193,7 @@
  */
 
 #include <stdint.h>
-#include <gr1553bc.h>
+#include <bsp/gr1553bc.h>
 
 /**** CONFIGURATION OPTIONS ****/
 

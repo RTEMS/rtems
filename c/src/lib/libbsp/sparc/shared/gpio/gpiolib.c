@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <gpiolib.h>
+#include <bsp/gpiolib.h>
 
 struct gpiolib_port;
 

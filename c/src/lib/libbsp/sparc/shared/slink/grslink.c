@@ -23,7 +23,7 @@
 #include <stdlib.h>
 
 #include <bsp.h>
-#include <grslink.h>
+#include <bsp/grslink.h>
 #include <ambapp.h>
 
 #ifndef GAISLER_SLINK
@@ -553,7 +553,7 @@ void SLINK_seqabort(void)
  * Function: SLINK_seqstatus
  * Returns: The current or status of the SEQUENCE operation:
  *          SLINK_COMPLETED, SLINK_ACTIVE, SLINK_PARERR, SLINK_AMBAERR,
- *          SLINK_ABORTED (these are defined in grslink.h)
+ *          SLINK_ABORTED (these are defined in bsp/grslink.h)
  * Description: Meaning of returned values:
  *              SLINK_ABORTED: Aborted before all operations completed.
  *              SLINK_ACTIVE: The core is busy processing the SEQUENCE
@@ -588,7 +588,7 @@ int SLINK_seqwrds(void)
 /* 
  * Function: SLINK_hwstatus
  * Returns: The SLINK core's status register. The register values can be 
- *          interpreted with the help of macros defined in grslink.h.
+ *          interpreted with the help of macros defined in bsp/grslink.h.
  */
 int SLINK_hwstatus(void)
 {

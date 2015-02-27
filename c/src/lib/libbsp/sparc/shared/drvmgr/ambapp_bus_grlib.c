@@ -19,7 +19,7 @@
 
 #include <drvmgr/ambapp_bus.h>
 #include <drvmgr/ambapp_bus_grlib.h>
-#include <genirq.h>
+#include <bsp/genirq.h>
 
 #include <bsp.h>
 

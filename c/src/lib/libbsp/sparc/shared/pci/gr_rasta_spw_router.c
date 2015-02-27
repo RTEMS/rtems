@@ -29,8 +29,8 @@
 #include <drvmgr/ambapp_bus.h>
 #include <drvmgr/pci_bus.h>
 #include <drvmgr/bspcommon.h>
-#include <genirq.h>
-#include <gr_rasta_spw_router.h>
+#include <bsp/genirq.h>
+#include <bsp/gr_rasta_spw_router.h>
 
 /* Determines which PCI address the AHB masters will access, it should be
  * set so that the masters can access the CPU RAM. Default is base of CPU RAM,

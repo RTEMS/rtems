@@ -40,7 +40,7 @@ struct gr1553bc_major_cfg;
 #endif
 
 #include <stdint.h>
-#include <gr1553bc_list.h>
+#include <bsp/gr1553bc_list.h>
 
 #ifdef __cplusplus
 extern "C" {

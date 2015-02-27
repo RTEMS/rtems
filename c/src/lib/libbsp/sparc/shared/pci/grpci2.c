@@ -40,7 +40,7 @@
 #include <drvmgr/ambapp_bus.h>
 #include <ambapp.h>
 #include <drvmgr/pci_bus.h>
-#include <grpci2.h>
+#include <bsp/grpci2.h>
 
 #ifndef IRQ_GLOBAL_PREPARE
  #define IRQ_GLOBAL_PREPARE(level) rtems_interrupt_level level

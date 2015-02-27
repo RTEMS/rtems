@@ -14,7 +14,7 @@
 #include <rtems.h>
 #include <stdlib.h>
 #include <bsp.h>
-#include <tlib.h>
+#include <bsp/tlib.h>
 
 #ifdef RTEMS_DRVMGR_STARTUP
 

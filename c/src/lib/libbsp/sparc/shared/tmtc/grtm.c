@@ -21,7 +21,7 @@
 #include <drvmgr/drvmgr.h>
 #include <ambapp.h>
 #include <drvmgr/ambapp_bus.h>
-#include <grtm.h>
+#include <bsp/grtm.h>
 
 #ifndef IRQ_GLOBAL_PREPARE
  #define IRQ_GLOBAL_PREPARE(level) rtems_interrupt_level level
@@ -40,7 +40,7 @@
 #define DEBUGFUNCS
 */
 
-#include <debug_defs.h>
+#include <bsp/debug_defs.h>
 
 /* GRTM register map */
 struct grtm_regs {

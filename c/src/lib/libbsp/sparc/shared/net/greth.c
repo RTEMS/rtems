@@ -27,7 +27,7 @@
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 
-#include <greth.h>
+#include <bsp/greth.h>
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <ambapp.h>

@@ -13,8 +13,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <gr1553b.h>
-#include <gr1553rt.h>
+#include <bsp/gr1553b.h>
+#include <bsp/gr1553rt.h>
 
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>

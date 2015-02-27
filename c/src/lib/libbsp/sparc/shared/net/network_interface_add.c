@@ -17,7 +17,7 @@
 #include <rtems/rtems_bsdnet.h>
 #include <stdio.h>
 
-#include <network_interface_add.h>
+#include <bsp/network_interface_add.h>
 
 extern struct rtems_bsdnet_config rtems_bsdnet_config;
 

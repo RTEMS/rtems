@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <drvmgr/ambapp_bus.h>
 
-#include <gr1553b.h>
+#include <bsp/gr1553b.h>
 
 /* Driver Manager interface for BC, RT, BM, BRM, BC-BM and RT-BM */
 

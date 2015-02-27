@@ -43,7 +43,7 @@
 #include <drvmgr/pci_bus.h>
 #include <drvmgr/leon2_amba_bus.h>
 
-#include <at697_pci.h>
+#include <bsp/at697_pci.h>
 #include <leon.h>
 
 /* Configuration options */

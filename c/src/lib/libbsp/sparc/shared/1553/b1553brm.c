@@ -27,7 +27,7 @@
 #include <rtems/bspIo.h>
 
 #include <drvmgr/drvmgr.h>
-#include <b1553brm.h>
+#include <bsp/b1553brm.h>
 #include <ambapp.h>
 #include <drvmgr/ambapp_bus.h>
 

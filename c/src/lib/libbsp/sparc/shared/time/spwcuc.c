@@ -13,7 +13,7 @@
 #include <drvmgr/ambapp_bus.h>
 #include <stdlib.h>
  
-#include <spwcuc.h>
+#include <bsp/spwcuc.h>
 
 /* Private structure of SPWCUC driver. */
 struct spwcuc_priv {

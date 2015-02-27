@@ -12,7 +12,7 @@
 #include <drvmgr/ambapp_bus.h>
 #include <stdlib.h>
 
-#include <grctm.h>
+#include <bsp/grctm.h>
 
 /* Private structure of GRCTM driver */
 struct grctm_priv {

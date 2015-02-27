@@ -19,7 +19,7 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 
-#include <i2cmst.h>
+#include <bsp/i2cmst.h>
 
 /* Enable debug printks? */
 /*#define DEBUG*/

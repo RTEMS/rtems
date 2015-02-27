@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
-#include <gradcdac.h>
+#include <bsp/gradcdac.h>
 
 /****************** DEBUG Definitions ********************/
 #define DBG_IOCTRL 1
@@ -26,7 +26,7 @@
 #define DEBUG
 #define DEBUGFUNCS
 */
-#include <debug_defs.h>
+#include <bsp/debug_defs.h>
 
 struct gradcdac_priv {
 	struct gradcdac_regs *regs;	/* Must be first */

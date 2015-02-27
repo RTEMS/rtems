@@ -16,7 +16,7 @@
 #include <bsp.h>
 #include <rtems/bspIo.h> /* printk */
 
-#include <canmux.h>
+#include <bsp/canmux.h>
 #include <ambapp.h>
 
 #ifndef GAISLER_CANMUX
