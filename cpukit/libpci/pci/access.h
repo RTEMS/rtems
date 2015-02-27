@@ -1,8 +1,7 @@
 /* Routines to access PCI memory/configuration space and other PCI related
  * functions the PCI Library provides.
  *
- * COPYRIGHT (c) 2010.
- * Cobham Gaisler AB.
+ * COPYRIGHT (c) 2010 Cobham Gaisler AB.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

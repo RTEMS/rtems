@@ -1,8 +1,7 @@
 /* PCI (Static) Configuration Library. PCI Configuration C code console
  * printout routines that can be used to build a static PCI configuration.
  *
- *  COPYRIGHT (c) 2010.
- *  Cobham Gaisler AB.
+ *  COPYRIGHT (c) 2010 Cobham Gaisler AB.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

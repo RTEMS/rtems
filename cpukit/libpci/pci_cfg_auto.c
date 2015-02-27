@@ -1,7 +1,6 @@
 /*  PCI (Auto) configuration Library. Setup PCI configuration space and IRQ.
  *
- *  COPYRIGHT (c) 2010.
- *  Cobham Gaisler AB.
+ *  COPYRIGHT (c) 2010 Cobham Gaisler AB.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

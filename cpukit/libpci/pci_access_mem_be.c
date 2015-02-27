@@ -1,8 +1,7 @@
 /*  PCI Access Library
  *  Registers-over-Memory Space - Generic Big endian PCI bus definitions
  *
- *  COPYRIGHT (c) 2010.
- *  Cobham Gaisler AB.
+ *  COPYRIGHT (c) 2010 Cobham Gaisler AB.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
