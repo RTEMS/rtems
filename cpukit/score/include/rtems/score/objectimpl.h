@@ -591,6 +591,83 @@ Objects_Control *_Objects_Get_no_protection(
 );
 
 /**
+ * @brief Acquires an object by its identifier.
+ *
+ * This function is similar to _Objects_Get_isr_disable().  It acquires the
+ * object specific ISR lock for local objects.  Thread dispatching is not
+ * disabled for local objects.  For remote objects thread dispatching is
+ * disabled.
+ *
+ * @param[in] information The object information.
+ * @param[in] id The object identifier.
+ * @param[in] location The location of the object.
+ * @param[in] lock_context The lock context for local objects.
+ *
+ * @retval object The object corresponding to the identifier.
+ * @retval NULL No object exists in this domain for this identifer.
+ *
+ * @see _Objects_Release(), _Objects_Release_and_ISR_enable(), and
+ * _Objects_Release_and_thread_dispatch_disable().
+ */
+Objects_Control *_Objects_Acquire(
+  const Objects_Information *information,
+  Objects_Id                 id,
+  Objects_Locations         *location,
+  ISR_lock_Context          *lock_context
+);
+
+/**
+ * @brief Releases a local object.
+ *
+ * @param[in] the_object The local object acquired by _Objects_Acquire().
+ * @param[in] lock_context The lock context initialized by _Objects_Acquire().
+ */
+RTEMS_INLINE_ROUTINE void _Objects_Release(
+  Objects_Control  *the_object,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Release( &the_object->Lock, lock_context );
+}
+
+/**
+ * @brief Releases a local object and restores the interrupt level.
+ *
+ * @param[in] the_object The local object acquired by _Objects_Acquire().
+ * @param[in] lock_context The lock context initialized by _Objects_Acquire().
+ */
+RTEMS_INLINE_ROUTINE void _Objects_Release_and_ISR_enable(
+  Objects_Control  *the_object,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Release_and_ISR_enable( &the_object->Lock, lock_context );
+}
+
+/**
+ * @brief Releases a local object, disables thread dispatching and restores the
+ * interrupt level.
+ *
+ * @param[in] the_object The local object acquired by _Objects_Acquire().
+ * @param[in] lock_context The lock context initialized by _Objects_Acquire().
+ *
+ * @return The current processor.
+ */
+RTEMS_INLINE_ROUTINE Per_CPU_Control *
+_Objects_Release_and_thread_dispatch_disable(
+  Objects_Control  *the_object,
+  ISR_lock_Context *lock_context
+)
+{
+  Per_CPU_Control *cpu_self = _Per_CPU_Get();
+
+  _Thread_Dispatch_disable_critical( cpu_self );
+  _Objects_Release_and_ISR_enable( the_object, lock_context );
+
+  return cpu_self;
+}
+
+/**
  *  Like @ref _Objects_Get, but is used to find "next" open object.
  *
  *  @param[in] information points to an object class information block.
@@ -903,6 +980,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Open(
   _Assert( the_object != NULL );
 
   the_object->name = name;
+  _ISR_lock_Initialize( &the_object->Lock, "Object" );
 
   _Objects_Set_local_object(
     information,
@@ -927,6 +1005,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
 {
   /* ASSERT: information->is_string == false */
   the_object->name.name_u32 = name;
+  _ISR_lock_Initialize( &the_object->Lock, "Object" );
 
   _Objects_Set_local_object(
     information,
@@ -953,6 +1032,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_string(
     /* ASSERT: information->is_string */
     the_object->name.name_p = name;
   #endif
+  _ISR_lock_Initialize( &the_object->Lock, "Object" );
 
   _Objects_Set_local_object(
     information,

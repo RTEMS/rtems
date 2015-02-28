@@ -202,6 +202,7 @@ libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
     src/objectgetinfo.c src/objectgetinfoid.c src/objectapimaximumclass.c \
     src/objectnamespaceremove.c \
     src/objectactivecount.c
+libscore_a_SOURCES += src/objectacquire.c
 
 ## SCHEDULER_C_FILES
 libscore_a_SOURCES += src/log2table.c

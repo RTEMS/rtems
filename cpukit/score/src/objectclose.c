@@ -28,4 +28,6 @@ void _Objects_Close(
   _Objects_Invalidate_Id( information, the_object );
 
   _Objects_Namespace_remove( information, the_object );
+
+  _ISR_lock_Destroy( &the_object->Lock );
 }

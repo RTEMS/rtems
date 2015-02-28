@@ -23,6 +23,7 @@
 #include <rtems/score/basedefs.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/chain.h>
+#include <rtems/score/isrlock.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -236,6 +237,8 @@ typedef struct {
   Objects_Id     id;
   /** This is the object's name. */
   Objects_Name   name;
+  /** This is the object's ISR lock. */
+  ISR_LOCK_MEMBER( Lock )
 } Objects_Control;
 
 #if defined( RTEMS_MULTIPROCESSING )
