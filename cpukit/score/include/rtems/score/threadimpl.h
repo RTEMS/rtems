@@ -398,6 +398,24 @@ Thread_Control *_Thread_Get (
 );
 
 /**
+ * @brief Acquires a thread by its identifier.
+ *
+ * @see _Objects_Acquire().
+ */
+Thread_Control *_Thread_Acquire(
+  Objects_Id         id,
+  Objects_Locations *location,
+  ISR_lock_Context  *lock_context
+);
+
+/**
+ * @brief Acquires the executing thread.
+ *
+ * @see _Objects_Acquire().
+ */
+Thread_Control *_Thread_Acquire_executing( ISR_lock_Context *lock_context );
+
+/**
  *  @brief Cancel a blocking operation due to ISR.
  *
  *  This method is used to cancel a blocking operation that was
