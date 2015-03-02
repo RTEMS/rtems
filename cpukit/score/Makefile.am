@@ -293,7 +293,6 @@ libscore_a_SOURCES += src/threadglobalconstruction.c
 libscore_a_SOURCES += src/threadyield.c
 
 if HAS_SMP
-libscore_a_SOURCES += src/smpbarrierwait.c
 libscore_a_SOURCES += src/threaddispatchdisablelevel.c
 endif
 
@@ -343,6 +342,7 @@ libscore_a_SOURCES += src/debugisownerofallocator.c
 libscore_a_SOURCES += src/profilingisrentryexit.c
 libscore_a_SOURCES += src/once.c
 libscore_a_SOURCES += src/resourceiterate.c
+libscore_a_SOURCES += src/smpbarrierwait.c
 
 EXTRA_DIST = src/Unlimited.txt
 

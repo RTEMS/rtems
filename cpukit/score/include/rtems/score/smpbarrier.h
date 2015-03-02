@@ -24,9 +24,6 @@
 #define _RTEMS_SCORE_SMPBARRIER_H
 
 #include <rtems/score/cpuopts.h>
-
-#if defined( RTEMS_SMP )
-
 #include <rtems/score/atomic.h>
 
 #ifdef __cplusplus
@@ -121,7 +118,5 @@ void _SMP_barrier_Wait(
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
-#endif /* defined( RTEMS_SMP ) */
 
 #endif /* _RTEMS_SCORE_SMPBARRIER_H */
