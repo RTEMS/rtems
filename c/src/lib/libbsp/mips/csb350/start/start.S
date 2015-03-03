@@ -57,7 +57,6 @@ _branch:
 /*
  * zero out the bss section.
  */
-	.globl	__memsize
 	.globl	zerobss
 	.ent	zerobss
 zerobss:

@@ -129,7 +129,6 @@ _start_in_ram:
 /*
  * zero out the bss section.
  */
-	.globl	__memsize
 	.globl	zerobss
 	.ent	zerobss
 zerobss:

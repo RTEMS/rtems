@@ -339,7 +339,6 @@ _start_in_ram:
 **
 ** Function: zerobss
 */
-   .globl  __memsize
    .globl  zerobss
    .ent    zerobss
 zerobss:
