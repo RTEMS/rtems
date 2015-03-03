@@ -1,0 +1,19 @@
+# Copyright (c) 2015 Gedare Bloom 
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution or at
+# http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxclock01
+
+directives:
+
+  clock
+
+concepts:
+
++ Reads clock() and converts to time in seconds.
+
