@@ -1,0 +1,7 @@
+*** BEGIN OF TEST FSSCANDIR MOUNTED IMFS ***
+Initializing filesystem MOUNTED IMFS
+scandir: Success
+
+
+Shutting down filesystem MOUNTED IMFS
+*** END OF TEST FSSCANDIR MOUNTED IMFS ***

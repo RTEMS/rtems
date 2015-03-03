@@ -90,6 +90,7 @@ imfs_fslink/Makefile
 imfs_fspatheval/Makefile
 imfs_fspermission/Makefile
 imfs_fsrdwr/Makefile
+imfs_fsscandir01/Makefile
 imfs_fssymlink/Makefile
 imfs_fstime/Makefile
 jffs2_fserror/Makefile
@@ -97,11 +98,13 @@ jffs2_fslink/Makefile
 jffs2_fspatheval/Makefile
 jffs2_fspermission/Makefile
 jffs2_fsrdwr/Makefile
+jffs2_fsscandir01/Makefile
 jffs2_fssymlink/Makefile
 jffs2_fstime/Makefile
 mdosfs_fserror/Makefile
 mdosfs_fspatheval/Makefile
 mdosfs_fsrdwr/Makefile
+mdosfs_fsscandir01/Makefile
 mdosfs_fsstatvfs/Makefile
 mdosfs_fstime/Makefile
 mimfs_fserror/Makefile
@@ -109,6 +112,7 @@ mimfs_fslink/Makefile
 mimfs_fspatheval/Makefile
 mimfs_fspermission/Makefile
 mimfs_fsrdwr/Makefile
+mimfs_fsscandir01/Makefile
 mimfs_fssymlink/Makefile
 mimfs_fstime/Makefile
 mimfs_fsrename/Makefile
@@ -117,6 +121,7 @@ mrfs_fslink/Makefile
 mrfs_fspatheval/Makefile
 mrfs_fspermission/Makefile
 mrfs_fsrdwr/Makefile
+mrfs_fsscandir01/Makefile
 mrfs_fssymlink/Makefile
 mrfs_fstime/Makefile
 mrfs_fsfpathconf/Makefile

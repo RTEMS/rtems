@@ -1,0 +1,7 @@
+*** BEGIN OF TEST FSSCANDIR JFFS2 ***
+Initializing filesystem JFFS2
+scandir: Success
+
+
+Shutting down filesystem JFFS2
+*** END OF TEST FSSCANDIR JFFS2 ***
