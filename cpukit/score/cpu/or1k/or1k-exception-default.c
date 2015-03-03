@@ -12,7 +12,6 @@
 
 #include <rtems/score/cpu.h>
 #include <rtems/fatal.h>
-#include <bsp/linker-symbols.h>
 #include <stdio.h>
 
 void _OR1K_Exception_default(uint32_t vector, CPU_Exception_frame *frame);
