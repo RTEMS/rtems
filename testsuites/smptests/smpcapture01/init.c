@@ -78,6 +78,7 @@ static void task(rtems_task_argument arg)
       task_data[arg].ran = true;
       task_data[arg].actual_cpu = rtems_get_current_processor();
       rtems_semaphore_release(task_sem);
+      test_delay(1);
     }
   }
 }
