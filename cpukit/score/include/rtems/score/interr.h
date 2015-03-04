@@ -43,8 +43,21 @@ extern "C" {
  *  can be reported.
  */
 typedef enum {
+  /**
+   * @brief Errors of the core system.
+   *
+   * @see Internal_errors_Core_list.
+   */
   INTERNAL_ERROR_CORE,
+
+  /**
+   * @brief Errors of the RTEMS API.
+   */
   INTERNAL_ERROR_RTEMS_API,
+
+  /**
+   * @brief Errors of the POSIX API.
+   */
   INTERNAL_ERROR_POSIX_API,
 
   /**
