@@ -49,10 +49,13 @@ extern "C" {
 
 /**
  * @brief ISR lock control.
+ *
+ * @warning Empty structures are implementation-defined in C.  GCC gives them a
+ * size of zero.  In C++ empty structures have a non-zero size.
  */
 typedef struct {
 #if defined( RTEMS_SMP )
-  SMP_lock_Control lock;
+  SMP_lock_Control Lock;
 #endif
 } ISR_lock_Control;
 
@@ -61,11 +64,24 @@ typedef struct {
  */
 typedef struct {
 #if defined( RTEMS_SMP )
-  SMP_lock_Context lock_context;
+  SMP_lock_Context Lock_context;
 #else
   ISR_Level isr_level;
 #endif
 } ISR_lock_Context;
+
+/**
+ * @brief Defines an ISR lock.
+ *
+ * Do not add a ';' after this macro.
+ *
+ * @param _designator The designator for the interrupt lock.
+ */
+#if defined( RTEMS_SMP )
+  #define ISR_LOCK_DEFINE( _designator ) ISR_lock_Control _designator;
+#else
+  #define ISR_LOCK_DEFINE( _designator )
+#endif
 
 /**
  * @brief Initializer for static initialization of ISR locks.
@@ -74,10 +90,10 @@ typedef struct {
  * name is only used if profiling is enabled.
  */
 #if defined( RTEMS_SMP )
-  #define ISR_LOCK_INITIALIZER( name ) \
-    { SMP_LOCK_INITIALIZER( name ) }
+  #define ISR_LOCK_INITIALIZER( _name ) \
+    { SMP_LOCK_INITIALIZER( _name ) }
 #else
-  #define ISR_LOCK_INITIALIZER( name ) \
+  #define ISR_LOCK_INITIALIZER( _name ) \
     { }
 #endif
 
@@ -86,39 +102,31 @@ typedef struct {
  *
  * Concurrent initialization leads to unpredictable results.
  *
- * @param[in,out] lock The ISR lock control.
+ * @param[in] _lock The ISR lock control.
  * @param[in] _name The name for the ISR lock.  This name must be a
  * string persistent throughout the life time of this lock.  The name is only
  * used if profiling is enabled.
  */
-static inline void _ISR_lock_Initialize(
-  ISR_lock_Control *lock,
-  const char *name
-)
-{
 #if defined( RTEMS_SMP )
-  _SMP_lock_Initialize( &lock->lock, name );
+  #define _ISR_lock_Initialize( _lock, _name ) \
+    _SMP_lock_Initialize( &( _lock )->Lock, _name )
 #else
-  (void) lock;
-  (void) name;
+  #define _ISR_lock_Initialize( _lock, _name )
 #endif
-}
 
 /**
  * @brief Destroys an ISR lock.
  *
  * Concurrent destruction leads to unpredictable results.
  *
- * @param[in,out] lock The ISR lock control.
+ * @param[in] _lock The ISR lock control.
  */
-static inline void _ISR_lock_Destroy( ISR_lock_Control *lock )
-{
 #if defined( RTEMS_SMP )
-  _SMP_lock_Destroy( &lock->lock );
+  #define _ISR_lock_Destroy( _lock ) \
+    _SMP_lock_Destroy( &( _lock )->Lock )
 #else
-  (void) lock;
+  #define _ISR_lock_Destroy( _lock )
 #endif
-}
 
 /**
  * @brief Acquires an ISR lock.
@@ -128,24 +136,22 @@ static inline void _ISR_lock_Destroy( ISR_lock_Control *lock )
  *
  * This function can be used in thread and interrupt context.
  *
- * @param[in,out] lock The ISR lock control.
- * @param[in,out] context The local ISR lock context for an acquire and release
+ * @param[in] _lock The ISR lock control.
+ * @param[in] context The local ISR lock context for an acquire and release
  * pair.
  *
  * @see _ISR_lock_Release_and_ISR_enable().
  */
-static inline void _ISR_lock_ISR_disable_and_acquire(
-  ISR_lock_Control *lock,
-  ISR_lock_Context *context
-)
-{
 #if defined( RTEMS_SMP )
-  _SMP_lock_ISR_disable_and_acquire( &lock->lock, &context->lock_context );
+  #define _ISR_lock_ISR_disable_and_acquire( _lock, _context ) \
+    _SMP_lock_ISR_disable_and_acquire( \
+      &( _lock )->Lock, \
+      &( _context )->Lock_context \
+    )
 #else
-  (void) lock;
-  _ISR_Disable( context->isr_level );
+  #define _ISR_lock_ISR_disable_and_acquire( _lock, _context ) \
+    _ISR_Disable( ( _context )->isr_level )
 #endif
-}
 
 /**
  * @brief Releases an ISR lock.
@@ -155,24 +161,22 @@ static inline void _ISR_lock_ISR_disable_and_acquire(
  *
  * This function can be used in thread and interrupt context.
  *
- * @param[in,out] lock The ISR lock control.
- * @param[in,out] context The local ISR lock context for an acquire and release
+ * @param[in] _lock The ISR lock control.
+ * @param[in] _context The local ISR lock context for an acquire and release
  * pair.
  *
  * @see _ISR_lock_ISR_disable_and_acquire().
  */
-static inline void _ISR_lock_Release_and_ISR_enable(
-  ISR_lock_Control *lock,
-  ISR_lock_Context *context
-)
-{
 #if defined( RTEMS_SMP )
-  _SMP_lock_Release_and_ISR_enable( &lock->lock, &context->lock_context );
+  #define _ISR_lock_Release_and_ISR_enable( _lock, _context ) \
+    _SMP_lock_Release_and_ISR_enable( \
+      &( _lock )->Lock, \
+      &( _context )->Lock_context \
+    )
 #else
-  (void) lock;
-  _ISR_Enable( context->isr_level );
+  #define _ISR_lock_Release_and_ISR_enable( _lock, _context ) \
+    _ISR_Enable( ( _context )->isr_level )
 #endif
-}
 
 /**
  * @brief Acquires an ISR lock inside an ISR disabled section.
@@ -184,24 +188,21 @@ static inline void _ISR_lock_Release_and_ISR_enable(
  * interrupts and these interrupts enter the critical section protected by this
  * lock, then the result is unpredictable.
  *
- * @param[in,out] lock The ISR lock control.
- * @param[in,out] context The local ISR lock context for an acquire and release
+ * @param[in] _lock The ISR lock control.
+ * @param[in] _context The local ISR lock context for an acquire and release
  * pair.
  *
  * @see _ISR_lock_Release().
  */
-static inline void _ISR_lock_Acquire(
-  ISR_lock_Control *lock,
-  ISR_lock_Context *context
-)
-{
 #if defined( RTEMS_SMP )
-  _SMP_lock_Acquire( &lock->lock, &context->lock_context );
+  #define _ISR_lock_Acquire( _lock, _context ) \
+    _SMP_lock_Acquire( \
+      &( _lock )->Lock, \
+      &( _context )->Lock_context \
+    )
 #else
-  (void) lock;
-  (void) context;
+  #define _ISR_lock_Acquire( _lock, _context )
 #endif
-}
 
 /**
  * @brief Releases an ISR lock inside an ISR disabled section.
@@ -209,24 +210,21 @@ static inline void _ISR_lock_Acquire(
  * The interrupt status will remain unchanged.  On SMP configurations this
  * function releases an SMP lock.
  *
- * @param[in,out] lock The ISR lock control.
- * @param[in,out] context The local ISR lock context for an acquire and release
+ * @param[in] _lock The ISR lock control.
+ * @param[in] _context The local ISR lock context for an acquire and release
  * pair.
  *
  * @see _ISR_lock_Acquire().
  */
-static inline void _ISR_lock_Release(
-  ISR_lock_Control *lock,
-  ISR_lock_Context *context
-)
-{
 #if defined( RTEMS_SMP )
-  _SMP_lock_Release( &lock->lock, &context->lock_context );
+  #define _ISR_lock_Release( _lock, _context ) \
+    _SMP_lock_Release( \
+      &( _lock )->Lock, \
+      &( _context )->Lock_context \
+    )
 #else
-  (void) lock;
-  (void) context;
+  #define _ISR_lock_Release( _lock, _context )
 #endif
-}
 
 /** @} */
 
