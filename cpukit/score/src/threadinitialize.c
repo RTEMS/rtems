@@ -200,6 +200,8 @@ bool _Thread_Initialize(
   the_thread->real_priority           = priority;
   the_thread->Start.initial_priority  = priority;
 
+  _Thread_Wait_flags_set( the_thread, THREAD_WAIT_FLAGS_INITIAL );
+
   _Scheduler_Node_initialize( scheduler, the_thread );
   scheduler_node_initialized = true;
 

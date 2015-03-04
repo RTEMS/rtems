@@ -21,6 +21,7 @@
 #ifndef _RTEMS_SCORE_THREAD_H
 #define _RTEMS_SCORE_THREAD_H
 
+#include <rtems/score/atomic.h>
 #include <rtems/score/context.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mppkt.h>
@@ -262,6 +263,25 @@ typedef union {
 } Thread_Wait_information_Object_argument_type;
 
 /**
+ * @brief This type is able to contain several flags used to control the wait
+ * class and state of a thread.
+ *
+ * The mutually exclusive wait class flags are
+ * - @ref THREAD_WAIT_CLASS_EVENT,
+ * - @ref THREAD_WAIT_CLASS_SYSTEM_EVENT, and
+ * - @ref THREAD_WAIT_CLASS_OBJECT.
+ *
+ * The mutually exclusive wait state flags are
+ * - @ref THREAD_WAIT_STATE_INTEND_TO_BLOCK,
+ * - @ref THREAD_WAIT_STATE_BLOCKED,
+ * - @ref THREAD_WAIT_STATE_SATISFIED,
+ * - @ref THREAD_WAIT_STATE_TIMEOUT,
+ * - @ref THREAD_WAIT_STATE_INTERRUPT_SATISFIED, and
+ * - @ref THREAD_WAIT_STATE_INTERRUPT_TIMEOUT,
+ */
+typedef unsigned int Thread_Wait_flags;
+
+/**
  *  @brief Information required to manage a thread while it is blocked.
  *
  *  This contains the information required to manage a thread while it is
@@ -288,6 +308,16 @@ typedef struct {
 
   /** This field points to the thread queue on which this thread is blocked. */
   Thread_queue_Control *queue;
+
+  /**
+   * @brief This field contains several flags used to control the wait class
+   * and state of a thread in case fine-grained locking is used.
+   */
+#if defined(RTEMS_SMP)
+  Atomic_Uint           flags;
+#else
+  Thread_Wait_flags     flags;
+#endif
 }   Thread_Wait_information;
 
 /**

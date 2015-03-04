@@ -923,6 +923,167 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
   return owns_resources;
 }
 
+/**
+ * @brief The initial thread wait flags value set by _Thread_Initialize().
+ */
+#define THREAD_WAIT_FLAGS_INITIAL 0x0U
+
+/**
+ * @brief Mask to get the thread wait state flags.
+ */
+#define THREAD_WAIT_STATE_MASK 0xffU
+
+/**
+ * @brief Indicates that the thread begins with the blocking operation.
+ *
+ * A blocking operation consists of an optional watchdog initialization and the
+ * setting of the appropriate thread blocking state with the corresponding
+ * scheduler block operation.
+ */
+#define THREAD_WAIT_STATE_INTEND_TO_BLOCK 0x1U
+
+/**
+ * @brief Indicates that the thread completed the blocking operation.
+ */
+#define THREAD_WAIT_STATE_BLOCKED 0x2U
+
+/**
+ * @brief Indicates that the thread progress condition is satisfied and it is
+ * ready to resume execution.
+ */
+#define THREAD_WAIT_STATE_SATISFIED 0x4U
+
+/**
+ * @brief Indicates that a timeout occurred and the thread is ready to resume
+ * execution.
+ */
+#define THREAD_WAIT_STATE_TIMEOUT 0x8U
+
+/**
+ * @brief Indicates that the thread progress condition was satisfied during the
+ * blocking operation and it is ready to resume execution.
+ */
+#define THREAD_WAIT_STATE_INTERRUPT_SATISFIED 0x10U
+
+/**
+ * @brief Indicates that a timeout occurred during the blocking operation and
+ * the thread is ready to resume execution.
+ */
+#define THREAD_WAIT_STATE_INTERRUPT_TIMEOUT 0x20U
+
+/**
+ * @brief Mask to get the thread wait class flags.
+ */
+#define THREAD_WAIT_CLASS_MASK 0xff00U
+
+/**
+ * @brief Indicates that the thread waits for an event.
+ */
+#define THREAD_WAIT_CLASS_EVENT 0x100U
+
+/**
+ * @brief Indicates that the thread waits for a system event.
+ */
+#define THREAD_WAIT_CLASS_SYSTEM_EVENT 0x200U
+
+/**
+ * @brief Indicates that the thread waits for a object.
+ */
+#define THREAD_WAIT_CLASS_OBJECT 0x400U
+
+RTEMS_INLINE_ROUTINE void _Thread_Wait_flags_set(
+  Thread_Control    *the_thread,
+  Thread_Wait_flags  flags
+)
+{
+#if defined(RTEMS_SMP)
+  _Atomic_Store_uint( &the_thread->Wait.flags, flags, ATOMIC_ORDER_RELAXED );
+#else
+  the_thread->Wait.flags = flags;
+#endif
+}
+
+RTEMS_INLINE_ROUTINE Thread_Wait_flags _Thread_Wait_flags_get(
+  const Thread_Control *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  return _Atomic_Load_uint( &the_thread->Wait.flags, ATOMIC_ORDER_RELAXED );
+#else
+  return the_thread->Wait.flags;
+#endif
+}
+
+/**
+ * @brief Tries to change the thread wait flags inside a critical section
+ * (interrupts disabled).
+ *
+ * In case the wait flags are equal to the expected wait flags, then the wait
+ * flags are set to the desired wait flags.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] expected_flags The expected wait flags.
+ * @param[in] desired_flags The desired wait flags.
+ *
+ * @retval true The wait flags were equal to the expected wait flags.
+ * @retval false Otherwise.
+ */
+RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change_critical(
+  Thread_Control    *the_thread,
+  Thread_Wait_flags  expected_flags,
+  Thread_Wait_flags  desired_flags
+)
+{
+#if defined(RTEMS_SMP)
+  return _Atomic_Compare_exchange_uint(
+    &the_thread->Wait.flags,
+    &expected_flags,
+    desired_flags,
+    ATOMIC_ORDER_RELAXED,
+    ATOMIC_ORDER_RELAXED
+  );
+#else
+  bool success = the_thread->Wait.flags == expected_flags;
+
+  if ( success ) {
+    the_thread->Wait.flags = desired_flags;
+  }
+
+  return success;
+#endif
+}
+
+/**
+ * @brief Tries to change the thread wait flags.
+ *
+ * @see _Thread_Wait_flags_try_change_critical().
+ */
+RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change(
+  Thread_Control    *the_thread,
+  Thread_Wait_flags  expected_flags,
+  Thread_Wait_flags  desired_flags
+)
+{
+  bool success;
+#if !defined(RTEMS_SMP)
+  ISR_Level level;
+
+  _ISR_Disable_without_giant( level );
+#endif
+
+  success = _Thread_Wait_flags_try_change_critical(
+    the_thread,
+    expected_flags,
+    desired_flags
+  );
+
+#if !defined(RTEMS_SMP)
+  _ISR_Enable_without_giant( level );
+#endif
+
+  return success;
+}
+
 RTEMS_INLINE_ROUTINE void _Thread_Debug_set_real_processor(
   Thread_Control  *the_thread,
   Per_CPU_Control *cpu
