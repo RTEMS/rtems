@@ -29,7 +29,6 @@ extern "C" {
 /* conditional compilation parameters */
 
 #define CPU_INLINE_ENABLE_DISPATCH       TRUE
-#define CPU_UNROLL_ENQUEUE_PRIORITY      FALSE
 
 /*
  *  Does the CPU follow the simple vectored interrupt model?

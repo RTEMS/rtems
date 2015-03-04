@@ -32,11 +32,6 @@ extern "C" {
  */
 #define CPU_INLINE_ENABLE_DISPATCH FALSE
 
-/*
- * TODO: Run the timing tests and figure out what is better.
- */
-#define CPU_UNROLL_ENQUEUE_PRIORITY TRUE
-
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK TRUE
 
 #define CPU_SIMPLE_VECTORED_INTERRUPTS TRUE

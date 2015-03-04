@@ -113,8 +113,6 @@
   #error "unknown endianness"
 #endif
 
-#define CPU_UNROLL_ENQUEUE_PRIORITY TRUE
-
 /*
  *  The ARM uses the PIC interrupt model.
  */

@@ -64,29 +64,6 @@ extern "C" {
 #define CPU_INLINE_ENABLE_DISPATCH       FALSE
 
 /**
- * Should the body of the search loops in _Thread_queue_Enqueue_priority
- * be unrolled one time?  In unrolled each iteration of the loop examines
- * two "nodes" on the chain being searched.  Otherwise, only one node
- * is examined per iteration.
- *
- * If TRUE, then the loops are unrolled.
- * If FALSE, then the loops are not unrolled.
- *
- * The primary factor in making this decision is the cost of disabling
- * and enabling interrupts (_ISR_Flash) versus the cost of rest of the
- * body of the loop.  On some CPUs, the flash is more expensive than
- * one iteration of the loop body.  In this case, it might be desirable
- * to unroll the loop.  It is important to note that on some CPUs, this
- * code is the longest interrupt disable period in RTEMS.  So it is
- * necessary to strike a balance when setting this parameter.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define CPU_UNROLL_ENQUEUE_PRIORITY      TRUE
-
-/**
  * Does RTEMS manage a dedicated interrupt stack in software?
  *
  * If TRUE, then a stack is allocated in @ref _ISR_Handler_initialization.

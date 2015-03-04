@@ -43,23 +43,6 @@ extern "C" {
 #define CPU_INLINE_ENABLE_DISPATCH       TRUE
 
 /*
- *  Should the body of the search loops in _Thread_queue_Enqueue_priority
- *  be unrolled one time?  In unrolled each iteration of the loop examines
- *  two "nodes" on the chain being searched.  Otherwise, only one node
- *  is examined per iteration.
- *
- *  If TRUE, then the loops are unrolled.
- *  If FALSE, then the loops are not unrolled.
- *
- *  This parameter could go either way on the SPARC.  The interrupt flash
- *  code is relatively lengthy given the requirements for nops following
- *  writes to the psr.  But if the clock speed were high enough, this would
- *  not represent a great deal of time.
- */
-
-#define CPU_UNROLL_ENQUEUE_PRIORITY      TRUE
-
-/*
  *  Does the executive manage a dedicated interrupt stack in software?
  *
  *  If TRUE, then a stack is allocated in _ISR_Handler_initialization.
