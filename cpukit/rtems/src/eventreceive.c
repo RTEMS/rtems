@@ -21,7 +21,7 @@
 #include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/statesimpl.h>
-#include <rtems/score/threaddispatch.h>
+#include <rtems/score/threadimpl.h>
 
 rtems_status_code rtems_event_receive(
   rtems_event_set  event_in,
@@ -33,12 +33,12 @@ rtems_status_code rtems_event_receive(
   rtems_status_code sc;
 
   if ( event_out != NULL ) {
-    Thread_Control    *executing = _Thread_Get_executing();
+    ISR_lock_Context   lock_context;
+    Thread_Control    *executing = _Thread_Acquire_executing( &lock_context );
     RTEMS_API_Control *api = executing->API_Extensions[ THREAD_API_RTEMS ];
     Event_Control     *event = &api->Event;
 
     if ( !_Event_sets_Is_empty( event_in ) ) {
-      _Thread_Disable_dispatch();
       _Event_Seize(
         event_in,
         option_set,
@@ -46,14 +46,15 @@ rtems_status_code rtems_event_receive(
         event_out,
         executing,
         event,
-        &_Event_Sync_state,
-        STATES_WAITING_FOR_EVENT
+        THREAD_WAIT_CLASS_EVENT,
+        STATES_WAITING_FOR_EVENT,
+        &lock_context
       );
-      _Thread_Enable_dispatch();
 
       sc = executing->Wait.return_code;
     } else {
       *event_out = event->pending_events;
+      _Objects_Release_and_ISR_enable( &executing->Object, &lock_context );
       sc = RTEMS_SUCCESSFUL;
     }
   } else {

@@ -37,8 +37,9 @@ rtems_status_code rtems_event_system_send(
   Thread_Control    *thread;
   Objects_Locations  location;
   RTEMS_API_Control *api;
+  ISR_lock_Context   lock_context;
 
-  thread = _Thread_Get( id, &location );
+  thread = _Thread_Acquire( id, &location, &lock_context );
   switch ( location ) {
     case OBJECTS_LOCAL:
       api = thread->API_Extensions[ THREAD_API_RTEMS ];
@@ -46,10 +47,9 @@ rtems_status_code rtems_event_system_send(
         thread,
         event_in,
         &api->System_event,
-        &_System_event_Sync_state,
-        STATES_WAITING_FOR_SYSTEM_EVENT
+        THREAD_WAIT_CLASS_SYSTEM_EVENT,
+        &lock_context
       );
-      _Objects_Put( &thread->Object );
       sc = RTEMS_SUCCESSFUL;
       break;
 #ifdef RTEMS_MULTIPROCESSING

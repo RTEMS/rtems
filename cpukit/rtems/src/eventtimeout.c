@@ -26,55 +26,61 @@ void _Event_Timeout(
   void       *arg
 )
 {
-  Thread_Control                   *the_thread;
-  Objects_Locations                 location;
-  ISR_Level                         level;
-  Thread_blocking_operation_States *sync_state;
+  Thread_Control    *the_thread;
+  Objects_Locations  location;
+  ISR_lock_Context   lock_context;
+  Thread_Wait_flags  wait_flags;
+  Thread_Wait_flags  wait_class;
+  Thread_Wait_flags  intend_to_block;
+  Thread_Wait_flags  blocked;
+  bool               success;
+  bool               unblock;
 
-  sync_state = arg;
-
-  the_thread = _Thread_Get( id, &location );
+  the_thread = _Thread_Acquire( id, &location, &lock_context );
   switch ( location ) {
-
     case OBJECTS_LOCAL:
+      wait_flags = _Thread_Wait_flags_get( the_thread );
+      wait_class = wait_flags & THREAD_WAIT_CLASS_MASK;
+      intend_to_block = wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK;
+      blocked = wait_class | THREAD_WAIT_STATE_BLOCKED;
+      success = _Thread_Wait_flags_try_change_critical(
+        the_thread,
+        intend_to_block,
+        wait_class | THREAD_WAIT_STATE_INTERRUPT_TIMEOUT
+      );
 
-      /*
-       *  If the event manager is not synchronized, then it is either
-       *  "nothing happened", "timeout", or "satisfied".   If the_thread
-       *  is the executing thread, then it is in the process of blocking
-       *  and it is the thread which is responsible for the synchronization
-       *  process.
-       *
-       *  If it is not satisfied, then it is "nothing happened" and
-       *  this is the "timeout" transition.  After a request is satisfied,
-       *  a timeout is not allowed to occur.
-       */
-      _ISR_Disable( level );
-        /*
-         * Verify that the thread is still waiting for the event condition.
-         * This test is necessary to avoid state corruption if the timeout
-         * happens after the event condition is satisfied in
-         * _Event_Surrender().  A satisfied event condition is indicated with
-         * count set to zero.
-         */
-        if ( !the_thread->Wait.count ) {
-          _ISR_Enable( level );
-          _Objects_Put_without_thread_dispatch( &the_thread->Object );
-          return;
-        }
-
-        the_thread->Wait.count = 0;
-        if ( _Thread_Is_executing( the_thread ) ) {
-          if ( *sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED )
-            *sync_state = THREAD_BLOCKING_OPERATION_TIMEOUT;
-        }
-
+      if ( success ) {
         the_thread->Wait.return_code = RTEMS_TIMEOUT;
-      _ISR_Enable( level );
-      _Thread_Unblock( the_thread );
-      _Objects_Put_without_thread_dispatch( &the_thread->Object );
-      break;
+        unblock = false;
+      } else if ( _Thread_Wait_flags_get( the_thread ) == blocked ) {
+        the_thread->Wait.return_code = RTEMS_TIMEOUT;
+        _Thread_Wait_flags_set(
+          the_thread,
+          wait_class | THREAD_WAIT_STATE_TIMEOUT
+        );
+        unblock = true;
+      } else {
+        unblock = false;
+      }
 
+      if ( unblock ) {
+        Per_CPU_Control *cpu_self;
+
+        cpu_self = _Objects_Release_and_thread_dispatch_disable(
+          &the_thread->Object,
+          &lock_context
+        );
+        _Giant_Acquire( cpu_self );
+
+        _Thread_Unblock( the_thread );
+
+        _Giant_Release( cpu_self );
+        _Thread_Dispatch_enable( cpu_self );
+      } else {
+        _Objects_Release_and_ISR_enable( &the_thread->Object, &lock_context );
+      }
+
+      break;
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:  /* impossible */
 #endif

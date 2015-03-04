@@ -33,16 +33,6 @@ extern "C" {
  */
 
 /**
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
- */
-#ifndef RTEMS_EVENT_EXTERN
-#define RTEMS_EVENT_EXTERN extern
-#endif
-
-/**
  *  This constant is passed as the event_in to the
  *  rtems_event_receive directive to determine which events are pending.
  */
@@ -53,10 +43,6 @@ extern "C" {
  *  has no events pending.
  */
 #define EVENT_SETS_NONE_PENDING 0
-
-RTEMS_EVENT_EXTERN Thread_blocking_operation_States _Event_Sync_state;
-
-RTEMS_EVENT_EXTERN Thread_blocking_operation_States _System_event_Sync_state;
 
 /**
  *  @brief Event Manager Initialization
@@ -71,30 +57,23 @@ RTEMS_EVENT_EXTERN Thread_blocking_operation_States _System_event_Sync_state;
 void _Event_Manager_initialization( void );
 
 void _Event_Seize(
-  rtems_event_set                   event_in,
-  rtems_option                      option_set,
-  rtems_interval                    ticks,
-  rtems_event_set                  *event_out,
-  Thread_Control                   *executing,
-  Event_Control                    *event,
-  Thread_blocking_operation_States *sync_state,
-  States_Control                    wait_state
+  rtems_event_set    event_in,
+  rtems_option       option_set,
+  rtems_interval     ticks,
+  rtems_event_set   *event_out,
+  Thread_Control    *executing,
+  Event_Control     *event,
+  Thread_Wait_flags  wait_class,
+  States_Control     block_state,
+  ISR_lock_Context  *lock_context
 );
 
-/**
- *  @brief Surrender Event
- *
- *  - INTERRUPT LATENCY:
- *    + before flash
- *    + after flash
- *    + check sync
- */
 void _Event_Surrender(
-  Thread_Control                   *the_thread,
-  rtems_event_set                   event_in,
-  Event_Control                    *event,
-  Thread_blocking_operation_States *sync_state,
-  States_Control                    wait_state
+  Thread_Control    *the_thread,
+  rtems_event_set    event_in,
+  Event_Control     *event,
+  Thread_Wait_flags  wait_class,
+  ISR_lock_Context  *lock_context
 );
 
 /**

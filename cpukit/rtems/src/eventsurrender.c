@@ -23,75 +23,100 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
-void _Event_Surrender(
-  Thread_Control                   *the_thread,
-  rtems_event_set                   event_in,
-  Event_Control                    *event,
-  Thread_blocking_operation_States *sync_state,
-  States_Control                    wait_state
+static void _Event_Satisfy(
+  Thread_Control  *the_thread,
+  Event_Control   *event,
+  rtems_event_set  pending_events,
+  rtems_event_set  seized_events
 )
 {
-  ISR_Level       level;
-  rtems_event_set pending_events;
-  rtems_event_set event_condition;
-  rtems_event_set seized_events;
+  event->pending_events = _Event_sets_Clear( pending_events, seized_events );
+  *(rtems_event_set *) the_thread->Wait.return_argument = seized_events;
+}
+
+static bool _Event_Is_satisfied(
+  const Thread_Control *the_thread,
+  rtems_event_set       pending_events,
+  rtems_event_set      *seized_events
+)
+{
   rtems_option    option_set;
+  rtems_event_set event_condition;
 
   option_set = the_thread->Wait.option;
-
-  _ISR_Disable( level );
-  _Event_sets_Post( event_in, &event->pending_events );
-  pending_events  = event->pending_events;
-
-  /*
-   * At this point the event condition is a speculative quantity.  Later state
-   * checks will show if the thread actually waits for an event.
-   */
   event_condition = the_thread->Wait.count;
+  *seized_events = _Event_sets_Get( pending_events, event_condition );
 
-  seized_events = _Event_sets_Get( pending_events, event_condition );
+  return !_Event_sets_Is_empty( *seized_events )
+    && ( *seized_events == event_condition || _Options_Is_any( option_set ) );
+}
+
+void _Event_Surrender(
+  Thread_Control    *the_thread,
+  rtems_event_set    event_in,
+  Event_Control     *event,
+  Thread_Wait_flags  wait_class,
+  ISR_lock_Context  *lock_context
+)
+{
+  rtems_event_set   pending_events;
+  rtems_event_set   seized_events;
+  Thread_Wait_flags wait_flags;
+  bool              unblock;
+
+  _Event_sets_Post( event_in, &event->pending_events );
+  pending_events = event->pending_events;
+
+  wait_flags = _Thread_Wait_flags_get( the_thread );
 
   if (
-    !_Event_sets_Is_empty( seized_events )
-      && ( seized_events == event_condition || _Options_Is_any( option_set ) )
+    ( wait_flags & THREAD_WAIT_CLASS_MASK ) == wait_class
+      && _Event_Is_satisfied( the_thread, pending_events, &seized_events )
   ) {
-    /*
-     *  If we are sending to the executing thread, then we have a critical
-     *  section issue to deal with.  The entity sending to the executing thread
-     *  can be either the executing thread or an ISR.  In case it is the
-     *  executing thread, then the blocking operation state is not equal to
-     *  THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED.
-     */
-    if ( _Thread_Is_executing( the_thread ) &&
-         *sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
-      event->pending_events = _Event_sets_Clear(
-        pending_events,
-        seized_events
-      );
-      the_thread->Wait.count = 0;
-      *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
-      *sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
-    } else if ( _States_Are_set( the_thread->current_state, wait_state ) ) {
-      event->pending_events = _Event_sets_Clear(
-        pending_events,
-        seized_events
-      );
-      the_thread->Wait.count = 0;
-      *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
+    Thread_Wait_flags intend_to_block;
+    Thread_Wait_flags blocked;
+    bool success;
 
-      _ISR_Flash( level );
+    intend_to_block = wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK;
+    blocked = wait_class | THREAD_WAIT_STATE_BLOCKED;
 
-      if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
-        _ISR_Enable( level );
-        _Thread_Unblock( the_thread );
-      } else {
-        _Watchdog_Deactivate( &the_thread->Timer );
-        _ISR_Enable( level );
-        (void) _Watchdog_Remove( &the_thread->Timer );
-        _Thread_Unblock( the_thread );
-      }
-      return;
+    success = _Thread_Wait_flags_try_change_critical(
+      the_thread,
+      intend_to_block,
+      wait_class | THREAD_WAIT_STATE_INTERRUPT_SATISFIED
+    );
+    if ( success ) {
+      _Event_Satisfy( the_thread, event, pending_events, seized_events );
+      unblock = false;
+    } else if ( _Thread_Wait_flags_get( the_thread ) == blocked ) {
+      _Event_Satisfy( the_thread, event, pending_events, seized_events );
+      _Thread_Wait_flags_set(
+        the_thread,
+        wait_class | THREAD_WAIT_STATE_SATISFIED
+      );
+      unblock = true;
+    } else {
+      unblock = false;
     }
+  } else {
+    unblock = false;
   }
-  _ISR_Enable( level );
+
+  if ( unblock ) {
+    Per_CPU_Control *cpu_self;
+
+    cpu_self = _Objects_Release_and_thread_dispatch_disable(
+      &the_thread->Object,
+      lock_context
+    );
+    _Giant_Acquire( cpu_self );
+
+    _Watchdog_Remove( &the_thread->Timer );
+    _Thread_Unblock( the_thread );
+
+    _Giant_Release( cpu_self );
+    _Thread_Dispatch_enable( cpu_self );
+  } else {
+    _Objects_Release_and_ISR_enable( &the_thread->Object, lock_context );
+  }
 }

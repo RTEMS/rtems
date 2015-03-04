@@ -31,24 +31,25 @@
  */
 
 void _Event_Seize(
-  rtems_event_set                   event_in,
-  rtems_option                      option_set,
-  rtems_interval                    ticks,
-  rtems_event_set                  *event_out,
-  Thread_Control                   *executing,
-  Event_Control                    *event,
-  Thread_blocking_operation_States *sync_state,
-  States_Control                    wait_state
+  rtems_event_set    event_in,
+  rtems_option       option_set,
+  rtems_interval     ticks,
+  rtems_event_set   *event_out,
+  Thread_Control    *executing,
+  Event_Control     *event,
+  Thread_Wait_flags  wait_class,
+  States_Control     block_state,
+  ISR_lock_Context  *lock_context
 )
 {
-  rtems_event_set                  seized_events;
-  rtems_event_set                  pending_events;
-  ISR_Level                        level;
-  Thread_blocking_operation_States current_sync_state;
+  rtems_event_set    seized_events;
+  rtems_event_set    pending_events;
+  bool               success;
+  Thread_Wait_flags  intend_to_block;
+  Per_CPU_Control   *cpu_self;
 
   executing->Wait.return_code = RTEMS_SUCCESSFUL;
 
-  _ISR_Disable( level );
   pending_events = event->pending_events;
   seized_events  = _Event_sets_Get( pending_events, event_in );
 
@@ -56,17 +57,19 @@ void _Event_Seize(
        (seized_events == event_in || _Options_Is_any( option_set )) ) {
     event->pending_events =
       _Event_sets_Clear( pending_events, seized_events );
-    _ISR_Enable( level );
+    _Objects_Release_and_ISR_enable( &executing->Object, lock_context );
     *event_out = seized_events;
     return;
   }
 
   if ( _Options_Is_no_wait( option_set ) ) {
-    _ISR_Enable( level );
+    _Objects_Release_and_ISR_enable( &executing->Object, lock_context );
     executing->Wait.return_code = RTEMS_UNSATISFIED;
     *event_out = seized_events;
     return;
   }
+
+  intend_to_block = wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK;
 
   /*
    *  Note what we are waiting for BEFORE we enter the critical section.
@@ -76,41 +79,39 @@ void _Event_Seize(
    *  NOTE: Since interrupts are disabled, this isn't that much of an
    *        issue but better safe than sorry.
    */
-  executing->Wait.option            = option_set;
-  executing->Wait.count             = event_in;
-  executing->Wait.return_argument   = event_out;
+  executing->Wait.option          = option_set;
+  executing->Wait.count           = event_in;
+  executing->Wait.return_argument = event_out;
+  _Thread_Wait_flags_set( executing, intend_to_block );
 
-  *sync_state = THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED;
-
-  _ISR_Enable( level );
+  cpu_self = _Objects_Release_and_thread_dispatch_disable(
+    &executing->Object,
+    lock_context
+  );
+  _Giant_Acquire( cpu_self );
 
   if ( ticks ) {
     _Watchdog_Initialize(
       &executing->Timer,
       _Event_Timeout,
       executing->Object.id,
-      sync_state
+      NULL
     );
     _Watchdog_Insert_ticks( &executing->Timer, ticks );
   }
 
-  _Thread_Set_state( executing, wait_state );
+  _Thread_Set_state( executing, block_state );
 
-  _ISR_Disable( level );
-
-  current_sync_state = *sync_state;
-  *sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
-  if ( current_sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
-    _ISR_Enable( level );
-    return;
+  success = _Thread_Wait_flags_try_change(
+    executing,
+    intend_to_block,
+    wait_class | THREAD_WAIT_STATE_BLOCKED
+  );
+  if ( !success ) {
+    _Watchdog_Remove( &executing->Timer );
+    _Thread_Unblock( executing );
   }
 
-  /*
-   *  An interrupt completed the thread's blocking request.
-   *  The blocking thread was satisfied by an ISR or timed out.
-   *
-   *  WARNING! Entering with interrupts disabled and returning with interrupts
-   *  enabled!
-   */
-  _Thread_blocking_operation_Cancel( current_sync_state, executing, level );
+  _Giant_Release( cpu_self );
+  _Thread_Dispatch_enable( cpu_self );
 }

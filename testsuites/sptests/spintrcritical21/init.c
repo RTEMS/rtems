@@ -18,6 +18,7 @@
 
 #include <intrcritical.h>
 
+#include <rtems/score/threadimpl.h>
 #include <rtems/rtems/eventimpl.h>
 
 const char rtems_test_name[] = "SPINTRCRITICAL 21";
@@ -34,7 +35,15 @@ static volatile bool case_hit;
 
 static rtems_id main_task;
 
+static Thread_Control *main_thread;
+
 static rtems_id other_task;
+
+static bool is_case_hit( void )
+{
+  return _Thread_Wait_flags_get( main_thread)
+    == ( THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
+}
 
 static rtems_timer_service_routine test_event_from_isr(
   rtems_id  timer,
@@ -43,7 +52,7 @@ static rtems_timer_service_routine test_event_from_isr(
 {
   rtems_status_code     status;
 
-  if ( _Event_Sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
+  if ( is_case_hit() ) {
     /*
      *  This event send hits the critical section but sends to
      *  another task so doesn't impact this critical section.
@@ -84,7 +93,7 @@ static rtems_timer_service_routine test_event_with_timeout_from_isr(
 {
   rtems_status_code     status;
 
-  if ( _Event_Sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
+  if ( is_case_hit() ) {
     /*
      *  We want to catch the task while it is blocking.  Otherwise
      *  just send and make it happy.
@@ -117,6 +126,7 @@ rtems_task Init(
   TEST_BEGIN();
 
   main_task = rtems_task_self();
+  main_thread = _Thread_Get_executing();
 
   status = rtems_task_create(
     0xa5a5a5a5,

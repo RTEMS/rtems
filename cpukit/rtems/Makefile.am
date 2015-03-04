@@ -211,7 +211,6 @@ librtems_a_SOURCES += src/eventseize.c
 librtems_a_SOURCES += src/eventsend.c
 librtems_a_SOURCES += src/eventsurrender.c
 librtems_a_SOURCES += src/eventtimeout.c
-librtems_a_SOURCES += src/eventdata.c
 librtems_a_SOURCES += src/systemeventsend.c
 librtems_a_SOURCES += src/systemeventreceive.c
 

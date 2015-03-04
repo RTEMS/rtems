@@ -268,8 +268,6 @@ uninitialized =
 
 /*dpmemimpl.h*/ (sizeof _Dual_ported_memory_Information)  +
 
-/*eventimpl.h*/ (sizeof _Event_Sync_state)                +
-
 #if defined(RTEMS_MULTIPROCESSING)
 /*eventmp.h*/   0                                         +
 #endif
