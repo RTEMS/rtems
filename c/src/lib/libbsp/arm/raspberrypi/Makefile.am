@@ -94,7 +94,6 @@ libbsp_a_SOURCES += ../../shared/bspreset_loop.c
 libbsp_a_SOURCES += startup/bspstart.c
 
 # IRQ
-libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
 libbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c
 libbsp_a_SOURCES += ../../shared/src/irq-info.c
