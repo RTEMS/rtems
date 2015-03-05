@@ -179,6 +179,7 @@ static inline unsigned int _CPU_atomic_Load_uint( const CPU_atomic_Uint *obj, CP
   return atomic_load_explicit( obj, order );
 #else
   (void) order;
+  RTEMS_COMPILER_MEMORY_BARRIER();
   return *obj;
 #endif
 }
@@ -191,6 +192,7 @@ static inline unsigned long _CPU_atomic_Load_ulong( const CPU_atomic_Ulong *obj,
   return atomic_load_explicit( obj, order );
 #else
   (void) order;
+  RTEMS_COMPILER_MEMORY_BARRIER();
   return *obj;
 #endif
 }
@@ -203,6 +205,7 @@ static inline void *_CPU_atomic_Load_ptr( const CPU_atomic_Pointer *obj, CPU_ato
   return (void *) atomic_load_explicit( obj, order );
 #else
   (void) order;
+  RTEMS_COMPILER_MEMORY_BARRIER();
   return (void *) *obj;
 #endif
 }
@@ -216,6 +219,7 @@ static inline void _CPU_atomic_Store_uint( CPU_atomic_Uint *obj, unsigned int de
 #else
   (void) order;
   *obj = desired;
+  RTEMS_COMPILER_MEMORY_BARRIER();
 #endif
 }
 
@@ -228,6 +232,7 @@ static inline void _CPU_atomic_Store_ulong( CPU_atomic_Ulong *obj, unsigned long
 #else
   (void) order;
   *obj = desired;
+  RTEMS_COMPILER_MEMORY_BARRIER();
 #endif
 }
 
@@ -240,6 +245,7 @@ static inline void _CPU_atomic_Store_ptr( CPU_atomic_Pointer *obj, void *desired
 #else
   (void) order;
   *obj = (uintptr_t) desired;
+  RTEMS_COMPILER_MEMORY_BARRIER();
 #endif
 }
 
