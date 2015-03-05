@@ -165,6 +165,51 @@ typedef ISR_lock_Control rtems_interrupt_lock;
 typedef ISR_lock_Context rtems_interrupt_lock_context;
 
 /**
+ * @brief Defines an interrupt lock member.
+ *
+ * Do not add a ';' after this macro.
+ *
+ * @param _designator The designator for the interrupt lock.
+ */
+#define RTEMS_INTERRUPT_LOCK_MEMBER( _designator ) \
+  ISR_LOCK_MEMBER( _designator )
+
+/**
+ * @brief Declares an interrupt lock variable.
+ *
+ * Do not add a ';' after this macro.
+ *
+ * @param _qualifier The qualifier for the interrupt lock, e.g. extern.
+ * @param _designator The designator for the interrupt lock.
+ */
+#define RTEMS_INTERRUPT_LOCK_DECLARE( _qualifier, _designator ) \
+  ISR_LOCK_DECLARE( _qualifier, _designator )
+
+/**
+ * @brief Defines an interrupt lock variable.
+ *
+ * Do not add a ';' after this macro.
+ *
+ * @param _qualifier The qualifier for the interrupt lock, e.g. static.
+ * @param _designator The designator for the interrupt lock.
+ * @param _name The name for the interrupt lock.  It must be a string.  The
+ * name is only used if profiling is enabled.
+ */
+#define RTEMS_INTERRUPT_LOCK_DEFINE( _qualifier, _designator, _name ) \
+  ISR_LOCK_DEFINE( _qualifier, _designator, _name )
+
+/**
+ * @brief Defines an interrupt lock variable reference.
+ *
+ * Do not add a ';' after this macro.
+ *
+ * @param _designator The designator for the interrupt lock reference.
+ * @param _target The target for the interrupt lock reference.
+ */
+#define RTEMS_INTERRUPT_LOCK_REFERENCE( _designator, _target ) \
+  ISR_LOCK_REFERENCE( _designator, _target )
+
+/**
  * @brief Initializer for static initialization of interrupt locks.
  *
  * @param _name The name for the interrupt lock.  It must be a string.  The

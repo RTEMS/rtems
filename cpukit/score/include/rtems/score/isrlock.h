@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -71,16 +71,63 @@ typedef struct {
 } ISR_lock_Context;
 
 /**
- * @brief Defines an ISR lock.
+ * @brief Defines an ISR lock member.
  *
  * Do not add a ';' after this macro.
  *
  * @param _designator The designator for the interrupt lock.
  */
 #if defined( RTEMS_SMP )
-  #define ISR_LOCK_DEFINE( _designator ) ISR_lock_Control _designator;
+  #define ISR_LOCK_MEMBER( _designator ) ISR_lock_Control _designator;
 #else
-  #define ISR_LOCK_DEFINE( _designator )
+  #define ISR_LOCK_MEMBER( _designator )
+#endif
+
+/**
+ * @brief Declares an ISR lock variable.
+ *
+ * Do not add a ';' after this macro.
+ *
+ * @param _qualifier The qualifier for the interrupt lock, e.g. extern.
+ * @param _designator The designator for the interrupt lock.
+ */
+#if defined( RTEMS_SMP )
+  #define ISR_LOCK_DECLARE( _qualifier, _designator ) \
+    _qualifier ISR_lock_Control _designator;
+#else
+  #define ISR_LOCK_DECLARE( _qualifier, _designator )
+#endif
+
+/**
+ * @brief Defines an ISR lock variable.
+ *
+ * Do not add a ';' after this macro.
+ *
+ * @param _qualifier The qualifier for the interrupt lock, e.g. static.
+ * @param _designator The designator for the interrupt lock.
+ * @param _name The name for the interrupt lock.  It must be a string.  The
+ * name is only used if profiling is enabled.
+ */
+#if defined( RTEMS_SMP )
+  #define ISR_LOCK_DEFINE( _qualifier, _designator, _name ) \
+    _qualifier ISR_lock_Control _designator = { SMP_LOCK_INITIALIZER( _name ) };
+#else
+  #define ISR_LOCK_DEFINE( _qualifier, _designator, _name )
+#endif
+
+/**
+ * @brief Defines an ISR lock variable reference.
+ *
+ * Do not add a ';' after this macro.
+ *
+ * @param _designator The designator for the interrupt lock reference.
+ * @param _target The target for the interrupt lock reference.
+ */
+#if defined( RTEMS_SMP )
+  #define ISR_LOCK_REFERENCE( _designator, _target ) \
+    ISR_lock_Control *_designator = _target;
+#else
+  #define ISR_LOCK_REFERENCE( _designator, _target )
 #endif
 
 /**
