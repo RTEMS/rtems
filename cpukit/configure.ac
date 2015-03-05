@@ -385,6 +385,16 @@ esac
 AM_CONDITIONAL(LIBDL,[test x"$HAVE_LIBDL" = x"yes"])
 AC_MSG_RESULT([$HAVE_LIBDL])
 
+AC_MSG_CHECKING([whether CPU supports SHA])
+case $RTEMS_CPU in
+  m32c)
+   HAVE_SHA=no ;;
+  *)
+   HAVE_SHA=yes ;;
+esac
+AM_CONDITIONAL(SHA,[test x"$HAVE_SHA" = x"yes"])
+AC_MSG_RESULT([$HAVE_SHA])
+
 RTEMS_AMPOLISH3
 
 # Explicitly list all Makefiles here

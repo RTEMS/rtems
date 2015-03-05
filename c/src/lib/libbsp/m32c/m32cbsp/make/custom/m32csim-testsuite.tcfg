@@ -4,6 +4,8 @@
 
 include: testdata/require-tick-isr.tcfg
 
+crypt01
+fileio
 flashdisk01
 fsdosfsname01
 jffs2_fserror
@@ -13,5 +15,6 @@ jffs2_fspermission
 jffs2_fsrdwr
 jffs2_fssymlink
 jffs2_fstime
+sha
 sptls01
 utf8proc01
