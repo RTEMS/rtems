@@ -22,8 +22,7 @@
 #if defined(RTEMS_PROFILING)
 static bool report_done;
 
-static rtems_interrupt_lock report_lock =
-  RTEMS_INTERRUPT_LOCK_INITIALIZER( "test report" );
+RTEMS_INTERRUPT_LOCK_DEFINE( static, report_lock, "test report" )
 #endif
 
 void rtems_test_fatal_extension(
