@@ -128,14 +128,6 @@ static int null_op_mount(
   return -1;
 }
 
-static int null_op_fsmount_me(
-  rtems_filesystem_mount_table_entry_t *mt_entry,
-  const void *data
-)
-{
-  return -1;
-}
-
 static int null_op_unmount(
   rtems_filesystem_mount_table_entry_t *mt_entry
 )
