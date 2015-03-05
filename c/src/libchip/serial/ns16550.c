@@ -136,8 +136,7 @@ NS16550_STATIC int ns16550_set_attributes(
   NS16550_STATIC void ns16550_isr(void *arg);
 #endif
 
-static rtems_interrupt_lock ns16550_lock =
-  RTEMS_INTERRUPT_LOCK_INITIALIZER("NS16550");
+RTEMS_INTERRUPT_LOCK_DEFINE(static, ns16550_lock, "NS16550")
 
 /*
  * Flow control is only supported when using interrupts
