@@ -47,8 +47,7 @@
 
 #define SPURIOUS 0xffff
 
-static rtems_interrupt_lock lock =
- RTEMS_INTERRUPT_LOCK_INITIALIZER("QorIQ IRQ");
+RTEMS_INTERRUPT_LOCK_DEFINE(static, lock, "QorIQ IRQ")
 
 static const uint16_t vpr_and_dr_offsets [] = {
 	[0] = 0x10200 >> 4,
