@@ -1,0 +1,8 @@
+#
+# On some architectures, some BSPs work with libdl and others do not.
+# There may be Trac tickets files regarding the BSPs which have issues.
+# This file should be included by those BSPs which have dl* test issues
+# which remain to be investigated and solved.
+#
+dl01
+dl02
