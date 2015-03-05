@@ -46,7 +46,7 @@ CPU_STRUCTURE_ALIGNMENT static int data[1024];
 static void test_data_flush_and_invalidate(void)
 {
   if (rtems_cache_get_data_line_size() > 0) {
-    rtems_interrupt_lock lock;
+    RTEMS_INTERRUPT_LOCK_DECLARE(, lock)
     rtems_interrupt_lock_context lock_context;
     volatile int *vdata = &data[0];
     int n = 32;
@@ -173,7 +173,7 @@ static uint64_t store(void)
 
 static void test_timing(void)
 {
-  rtems_interrupt_lock lock;
+  RTEMS_INTERRUPT_LOCK_DECLARE(, lock)
   rtems_interrupt_lock_context lock_context;
   size_t data_size = sizeof(data);
   uint64_t d[3];

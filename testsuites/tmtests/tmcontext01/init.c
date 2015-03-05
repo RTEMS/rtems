@@ -139,7 +139,7 @@ static void sort_t(void)
 
 static void test_by_function_level(int fl, bool dirty)
 {
-  rtems_interrupt_lock lock;
+  RTEMS_INTERRUPT_LOCK_DECLARE(, lock)
   rtems_interrupt_lock_context lock_context;
   int s;
   uint64_t min;
