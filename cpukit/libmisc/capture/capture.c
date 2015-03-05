@@ -746,8 +746,6 @@ rtems_status_code
 rtems_capture_flush (bool prime)
 {
   rtems_interrupt_lock_context lock_context_global;
-  rtems_interrupt_lock_context lock_context_per_cpu;
-  rtems_interrupt_lock*        lock;
   uint32_t                     cpu;
 
   rtems_interrupt_lock_acquire (&capture_lock_global, &lock_context_global);
@@ -766,7 +764,9 @@ rtems_capture_flush (bool prime)
     capture_flags_global &= ~RTEMS_CAPTURE_OVERFLOW;
 
   for (cpu=0; cpu < rtems_get_processor_count(); cpu++) {
-    lock = &(capture_lock_on_cpu( cpu ));
+    RTEMS_INTERRUPT_LOCK_REFERENCE( lock, &(capture_lock_on_cpu( cpu )) )
+    rtems_interrupt_lock_context lock_context_per_cpu;
+
     rtems_interrupt_lock_acquire (lock, &lock_context_per_cpu);
     capture_count_on_cpu(cpu) = 0;
     if (capture_records_on_cpu(cpu).buffer)
@@ -1211,7 +1211,7 @@ rtems_capture_read (uint32_t                 cpu,
   rtems_interrupt_lock_context lock_context;
   rtems_status_code            sc = RTEMS_SUCCESSFUL;
   size_t                       recs_size = 0;
-  rtems_interrupt_lock*        lock = &(capture_lock_on_cpu( cpu ));
+  RTEMS_INTERRUPT_LOCK_REFERENCE( lock, &(capture_lock_on_cpu( cpu )) )
   rtems_capture_buffer_t*      records = &(capture_records_on_cpu( cpu ));
   uint32_t*                    flags = &(capture_flags_on_cpu( cpu ));
 
@@ -1261,7 +1261,7 @@ rtems_capture_release (uint32_t cpu, uint32_t count)
   size_t                       ptr_size = 0;
   size_t                       rel_size = 0;
   rtems_status_code            ret_val = RTEMS_SUCCESSFUL;
-  rtems_interrupt_lock*        lock = &(capture_lock_on_cpu( cpu ));
+  RTEMS_INTERRUPT_LOCK_REFERENCE( lock, &(capture_lock_on_cpu( cpu )) )
   rtems_capture_buffer_t*      records = &(capture_records_on_cpu( cpu ));
   uint32_t*                    flags = &(capture_flags_on_cpu( cpu ));
   uint32_t*                    total = &(capture_count_on_cpu( cpu ));
