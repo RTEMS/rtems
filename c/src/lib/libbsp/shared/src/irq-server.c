@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009, 2010
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009, 2015 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -27,6 +28,12 @@
 #include <bsp/irq-generic.h>
 
 #define BSP_INTERRUPT_EVENT RTEMS_EVENT_13
+
+RTEMS_INTERRUPT_LOCK_DEFINE(
+  static,
+  bsp_interrupt_server_lock,
+  "Interrupt Server"
+)
 
 typedef struct bsp_interrupt_server_entry {
   rtems_chain_node node;
@@ -57,7 +64,11 @@ static void bsp_interrupt_server_trigger(void *arg)
   bsp_interrupt_vector_disable(e->vector);
 
   if (e->node.next == NULL) {
-    rtems_chain_append(&bsp_interrupt_server_chain, &e->node);
+    rtems_interrupt_lock_context lock_context;
+
+    rtems_interrupt_lock_acquire(&bsp_interrupt_server_lock, &lock_context);
+    rtems_chain_append_unprotected(&bsp_interrupt_server_chain, &e->node);
+    rtems_interrupt_lock_release(&bsp_interrupt_server_lock, &lock_context);
   } else {
     ++bsp_interrupt_server_errors;
   }
@@ -67,16 +78,18 @@ static void bsp_interrupt_server_trigger(void *arg)
 
 static bsp_interrupt_server_entry *bsp_interrupt_server_get_entry(void)
 {
-  rtems_interrupt_level level;
+  rtems_interrupt_lock_context lock_context;
   bsp_interrupt_server_entry *e;
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_lock_acquire(&bsp_interrupt_server_lock, &lock_context);
+
   e = (bsp_interrupt_server_entry *)
     rtems_chain_get_unprotected(&bsp_interrupt_server_chain);
   if (e != NULL) {
     e->node.next = NULL;
   }
-  rtems_interrupt_enable(level);
+
+  rtems_interrupt_lock_release(&bsp_interrupt_server_lock, &lock_context);
 
   return e;
 }
