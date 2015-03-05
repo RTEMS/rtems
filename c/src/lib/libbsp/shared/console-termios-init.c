@@ -17,8 +17,7 @@
 
 #include <rtems/console.h>
 
-static rtems_interrupt_lock console_lock =
-  RTEMS_INTERRUPT_LOCK_INITIALIZER( "console" );
+RTEMS_INTERRUPT_LOCK_DEFINE( static, console_lock, "console" )
 
 static rtems_device_major_number console_major = UINT32_MAX;
 
