@@ -53,7 +53,7 @@ IMFS_jnode_t *IMFS_create_node(
   if ( node != NULL ) {
     IMFS_jnode_t *parent = parentloc->node_access;
 
-    memcpy( node->name, name, namelen );
+    memcpy( RTEMS_DECONST( char *, node->name ), name, namelen );
 
     /*
      *  This node MUST have a parent, so put it in that directory list.
