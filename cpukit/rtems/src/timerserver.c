@@ -481,7 +481,7 @@ rtems_status_code rtems_timer_initiate_server(
   if ( !_RTEMS_tasks_Priority_is_valid( priority ) ) {
     if ( priority != RTEMS_TIMER_SERVER_DEFAULT_PRIORITY )
       return RTEMS_INVALID_PRIORITY;
-    _priority = 0;
+    _priority = PRIORITY_PSEUDO_ISR;
   }
 
   /*

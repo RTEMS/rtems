@@ -112,7 +112,7 @@ void _MPCI_Create_server( void )
       CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK +
       _Configuration_MP_table->extra_mpci_receive_server_stack,
     CPU_ALL_TASKS_ARE_FP,
-    PRIORITY_MINIMUM,
+    PRIORITY_PSEUDO_ISR,
     false,       /* no preempt */
     THREAD_CPU_BUDGET_ALGORITHM_NONE,
     NULL,        /* no budget algorithm callout */

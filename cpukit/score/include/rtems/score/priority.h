@@ -58,6 +58,13 @@ typedef uint32_t   Priority_Control;
 /** This defines the highest (most important) thread priority. */
 #define PRIORITY_MINIMUM      0
 
+/**
+ * @brief This defines the priority of pseudo-ISR threads.
+ *
+ * Examples are the MPCI and timer server threads.
+ */
+#define PRIORITY_PSEUDO_ISR   PRIORITY_MINIMUM
+
 /** This defines the default lowest (least important) thread priority. */
 #if defined (CPU_PRIORITY_MAXIMUM)
   #define PRIORITY_DEFAULT_MAXIMUM      CPU_PRIORITY_MAXIMUM
