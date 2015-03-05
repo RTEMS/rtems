@@ -56,7 +56,7 @@ int IMFS_rename(
   memcpy( allocated_name, name, namelen );
 
   if ( ( node->flags & IMFS_NODE_FLAG_NAME_ALLOCATED ) != 0 ) {
-    free( node->name );
+    free( RTEMS_DECONST( char *, node->name ) );
   }
 
   node->name = allocated_name;
