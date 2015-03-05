@@ -21,6 +21,7 @@
 #include "imfs.h"
 
 #include <string.h>
+#include <stdlib.h>
 
 int IMFS_rename(
   const rtems_filesystem_location_info_t *oldparentloc,
