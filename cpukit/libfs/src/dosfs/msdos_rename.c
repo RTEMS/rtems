@@ -51,7 +51,7 @@ msdos_rename(
      * existing file
      */
     rc = msdos_creat_node(new_parent_loc,
-                          MSDOS_HARD_LINK,new_name,new_namelen,S_IFREG,
+                          FAT_HARD_LINK,new_name,new_namelen,S_IFREG,
                           old_fat_fd);
     if (rc != RC_OK)
     {

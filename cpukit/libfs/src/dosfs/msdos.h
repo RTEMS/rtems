@@ -85,13 +85,6 @@ extern const rtems_filesystem_file_handlers_r  msdos_file_handlers;
  * of ticks to help debugging or if you need such a  */
 #define MSDOS_VOLUME_SEMAPHORE_TIMEOUT    RTEMS_NO_TIMEOUT
 
-/* Node types */
-typedef enum {
-  MSDOS_DIRECTORY = 0,
-  MSDOS_REGULAR_FILE = 4,
-  MSDOS_HARD_LINK = 2 /* pseudo type */
-} msdos_node_type_t;
-
 /*
  * Macros for fetching fields from 32 bytes long FAT Directory Entry
  * Structure
@@ -370,7 +363,7 @@ int msdos_dir_stat(
  *
  */
 int msdos_creat_node(const rtems_filesystem_location_info_t *parent_loc,
-                     msdos_node_type_t                       type,
+                     fat_file_type_t                         type,
                      const char                             *name,
                      int                                     name_len,
                      mode_t                                  mode,

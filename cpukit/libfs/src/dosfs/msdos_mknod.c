@@ -43,18 +43,18 @@ int msdos_mknod(
 )
 {
     int                  rc = RC_OK;
-    msdos_node_type_t    type = 0;
+    fat_file_type_t      type = 0;
 
     /*
      *  Figure out what type of msdos node this is.
      */
     if (S_ISDIR(mode))
     {
-       type = MSDOS_DIRECTORY;
+       type = FAT_DIRECTORY;
     }
     else if (S_ISREG(mode))
     {
-        type = MSDOS_REGULAR_FILE;
+        type = FAT_FILE;
     }
     else
         rtems_set_errno_and_return_minus_one(EINVAL);

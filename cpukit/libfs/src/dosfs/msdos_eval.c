@@ -64,7 +64,7 @@ static bool msdos_is_directory(
     rtems_filesystem_eval_path_get_currentloc( ctx );
   fat_file_fd_t *fat_fd = currentloc->node_access;
 
-  return fat_fd->fat_file_type == MSDOS_DIRECTORY;
+  return fat_fd->fat_file_type == FAT_DIRECTORY;
 }
 
 static rtems_filesystem_eval_path_generic_status msdos_eval_token(

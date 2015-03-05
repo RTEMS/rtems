@@ -28,7 +28,7 @@ msdos_rmnod(const rtems_filesystem_location_info_t *parent_pathloc,
     msdos_fs_info_t   *fs_info = pathloc->mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = pathloc->node_access;
 
-    if (fat_fd->fat_file_type == MSDOS_DIRECTORY)
+    if (fat_fd->fat_file_type == FAT_FILE)
     {
         bool is_empty = false;
 

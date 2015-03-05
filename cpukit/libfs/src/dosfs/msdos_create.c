@@ -59,7 +59,7 @@
  */
 int
 msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
-                 msdos_node_type_t                        type,
+                 fat_file_type_t                          type,
                  const char                              *name,
                  int                                      name_len,
                  mode_t                                   mode,
@@ -115,10 +115,10 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
     /* initialize directory/file size */
     *MSDOS_DIR_FILE_SIZE(short_node) = MSDOS_INIT_DIR_SIZE;
 
-    if (type == MSDOS_DIRECTORY) {
+    if (type == FAT_DIRECTORY) {
       *MSDOS_DIR_ATTR(short_node) |= MSDOS_ATTR_DIRECTORY;
     }
-    else if (type == MSDOS_HARD_LINK) {
+    else if (type == FAT_HARD_LINK) {
       /*
        * when we establish a (temporary) hard link,
        * we must copy some information from the original
@@ -177,7 +177,7 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
      * if we create a new file we are done, if directory there are more steps
      * to do
      */
-    if (type == MSDOS_DIRECTORY)
+    if (type == FAT_DIRECTORY)
     {
         /* open new directory as fat-file */
         rc = fat_file_open(&fs_info->fat, &dir_pos, &fat_fd);

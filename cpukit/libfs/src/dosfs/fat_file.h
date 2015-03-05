@@ -39,6 +39,7 @@ extern "C" {
 
 typedef enum {
   FAT_DIRECTORY = 0,
+  FAT_HARD_LINK = 2, /* pseudo type */
   FAT_FILE = 4
 } fat_file_type_t;
 
