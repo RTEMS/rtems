@@ -4,6 +4,7 @@
 # Format is one line per test that is _NOT_ built.
 #
 
+include: testdata/dltests-broken-on-this-bsp.tcfg
 fsdosfsname01
 jffs2_fserror
 jffs2_fslink
