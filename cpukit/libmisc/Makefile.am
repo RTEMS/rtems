@@ -157,6 +157,12 @@ libstringto_a_SOURCES = stringto/stringtodouble.c stringto/stringtofloat.c \
     stringto/stringtounsignedchar.c stringto/stringtounsignedlong.c \
     stringto/stringtounsignedlonglong.c
 
+## testsupport
+noinst_LIBRARIES += libtestsupport.a
+libtestsupport_a_SOURCES =
+libtestsupport_a_SOURCES += testsupport/testbeginend.c
+libtestsupport_a_SOURCES += testsupport/testextension.c
+
 ## fsmount
 noinst_LIBRARIES += libfsmount.a
 libfsmount_a_SOURCES = fsmount/fsmount.c fsmount/fsmount.h

@@ -56,6 +56,7 @@ TMP_LIBS += ../libmisc/libmouse.a
 TMP_LIBS += ../libmisc/libmw-fb.a
 TMP_LIBS += ../libmisc/libredirector.a
 TMP_LIBS += ../libmisc/libstringto.a
+TMP_LIBS += ../libmisc/libtestsupport.a
 
 if LIBUTF8PROC
 TMP_LIBS += ../libmisc/libutf8proc.a

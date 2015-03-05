@@ -480,6 +480,10 @@ $(PROJECT_INCLUDE)/rtems/stringto.h: libmisc/stringto/stringto.h $(PROJECT_INCLU
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/stringto.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/stringto.h
 
+$(PROJECT_INCLUDE)/rtems/test.h: libmisc/testsupport/test.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/test.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/test.h
+
 $(PROJECT_INCLUDE)/rtems/libi2c.h: libi2c/libi2c.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/libi2c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/libi2c.h

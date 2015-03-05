@@ -207,6 +207,9 @@ endif
 ## stringto
 include_rtems_HEADERS += libmisc/stringto/stringto.h
 
+## testsupport
+include_rtems_HEADERS += libmisc/testsupport/test.h
+
 ## i2c
 include_rtems_HEADERS += libi2c/libi2c.h
 
