@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -19,8 +19,8 @@
 #endif
 
 #include <rtems/score/atomic.h>
-#include <rtems/score/smpbarrier.h>
 #include <rtems.h>
+#include <rtems/test.h>
 #include <limits.h>
 #include <string.h>
 
@@ -35,10 +35,7 @@ const char rtems_test_name[] = "SMPATOMIC 1";
 #define CPU_COUNT 32
 
 typedef struct {
-  Atomic_Ulong stop;
-  SMP_barrier_Control barrier;
-  size_t worker_count;
-  rtems_id stop_worker_timer_id;
+  rtems_test_parallel_context base;
   Atomic_Uint atomic_int_value;
   Atomic_Ulong atomic_value;
   unsigned long per_worker_value[CPU_COUNT];
@@ -46,31 +43,17 @@ typedef struct {
   char unused_space_for_cache_line_separation[128];
   unsigned long second_value;
   Atomic_Flag global_flag;
-} test_context;
+} smpatomic01_context;
 
-typedef struct {
-  void (*init)(test_context *ctx);
-  void (*body)(test_context *ctx, size_t worker_index);
-  void (*fini)(test_context *ctx);
-} test_case;
+static smpatomic01_context test_instance;
 
-static test_context test_instance = {
-  .stop = ATOMIC_INITIALIZER_ULONG(0),
-  .barrier = SMP_BARRIER_CONTROL_INITIALIZER
-};
-
-static bool stop(test_context *ctx)
+static rtems_interval test_duration(void)
 {
-  return _Atomic_Load_ulong(&ctx->stop, ATOMIC_ORDER_RELAXED) != 0;
-}
-
-static bool is_master_worker(size_t worker_index)
-{
-  return worker_index == 0;
+  return rtems_clock_get_ticks_per_second();
 }
 
 static void test_fini(
-  test_context *ctx,
+  smpatomic01_context *ctx,
   const char *test,
   bool atomic
 )
@@ -81,7 +64,11 @@ static void test_fini(
 
   printf("=== atomic %s test case ===\n", test);
 
-  for (worker_index = 0; worker_index < ctx->worker_count; ++worker_index) {
+  for (
+    worker_index = 0;
+    worker_index < ctx->base.worker_count;
+    ++worker_index
+  ) {
     unsigned long worker_value = ctx->per_worker_value[worker_index];
 
     expected_value += worker_value;
@@ -108,16 +95,29 @@ static void test_fini(
   rtems_test_assert(expected_value == actual_value);
 }
 
-static void test_atomic_add_init(test_context *ctx)
+
+static rtems_interval test_atomic_add_init(
+  rtems_test_parallel_context *base,
+  void *arg
+)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
   _Atomic_Init_ulong(&ctx->atomic_value, 0);
+
+  return test_duration();
 }
 
-static void test_atomic_add_body(test_context *ctx, size_t worker_index)
+static void test_atomic_add_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t worker_index
+)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
   unsigned long counter = 0;
 
-  while (!stop(ctx)) {
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
     ++counter;
     _Atomic_Fetch_add_ulong(&ctx->atomic_value, 1, ATOMIC_ORDER_RELAXED);
   }
@@ -125,22 +125,36 @@ static void test_atomic_add_body(test_context *ctx, size_t worker_index)
   ctx->per_worker_value[worker_index] = counter;
 }
 
-static void test_atomic_add_fini(test_context *ctx)
+static void test_atomic_add_fini(rtems_test_parallel_context *base, void *arg)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
   test_fini(ctx, "add", true);
 }
 
-static void test_atomic_flag_init(test_context *ctx)
+static rtems_interval test_atomic_flag_init(
+  rtems_test_parallel_context *base,
+  void *arg
+)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
   _Atomic_Flag_clear(&ctx->global_flag, ATOMIC_ORDER_RELEASE);
   ctx->normal_value = 0;
+
+  return test_duration();
 }
 
-static void test_atomic_flag_body(test_context *ctx, size_t worker_index)
+static void test_atomic_flag_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t worker_index
+)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
   unsigned long counter = 0;
 
-  while (!stop(ctx)) {
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
     while (_Atomic_Flag_test_and_set(&ctx->global_flag, ATOMIC_ORDER_ACQUIRE)) {
       /* Wait */
     }
@@ -154,21 +168,35 @@ static void test_atomic_flag_body(test_context *ctx, size_t worker_index)
   ctx->per_worker_value[worker_index] = counter;
 }
 
-static void test_atomic_flag_fini(test_context *ctx)
+static void test_atomic_flag_fini(rtems_test_parallel_context *base, void *arg)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
   test_fini(ctx, "flag", false);
 }
 
-static void test_atomic_sub_init(test_context *ctx)
+static rtems_interval test_atomic_sub_init(
+  rtems_test_parallel_context *base,
+  void *arg
+)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
   _Atomic_Init_ulong(&ctx->atomic_value, 0);
+
+  return test_duration();
 }
 
-static void test_atomic_sub_body(test_context *ctx, size_t worker_index)
+static void test_atomic_sub_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t worker_index
+)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
   unsigned long counter = 0;
 
-  while (!stop(ctx)) {
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
     --counter;
     _Atomic_Fetch_sub_ulong(&ctx->atomic_value, 1, ATOMIC_ORDER_RELAXED);
   }
@@ -176,22 +204,36 @@ static void test_atomic_sub_body(test_context *ctx, size_t worker_index)
   ctx->per_worker_value[worker_index] = counter;
 }
 
-static void test_atomic_sub_fini(test_context *ctx)
+static void test_atomic_sub_fini(rtems_test_parallel_context *base, void *arg)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
   test_fini(ctx, "sub", true);
 }
 
-static void test_atomic_compare_exchange_init(test_context *ctx)
+static rtems_interval test_atomic_compare_exchange_init(
+  rtems_test_parallel_context *base,
+  void *arg
+)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
   _Atomic_Init_ulong(&ctx->atomic_value, 0);
   ctx->normal_value = 0;
+
+  return test_duration();
 }
 
-static void test_atomic_compare_exchange_body(test_context *ctx, size_t worker_index)
+static void test_atomic_compare_exchange_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t worker_index
+)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
   unsigned long counter = 0;
 
-  while (!stop(ctx)) {
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
     bool success;
 
     do {
@@ -215,22 +257,39 @@ static void test_atomic_compare_exchange_body(test_context *ctx, size_t worker_i
   ctx->per_worker_value[worker_index] = counter;
 }
 
-static void test_atomic_compare_exchange_fini(test_context *ctx)
+static void test_atomic_compare_exchange_fini(
+  rtems_test_parallel_context *base,
+  void *arg
+)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
   test_fini(ctx, "compare exchange", false);
 }
 
-static void test_atomic_or_and_init(test_context *ctx)
+static rtems_interval test_atomic_or_and_init(
+  rtems_test_parallel_context *base,
+  void *arg
+)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
   _Atomic_Init_ulong(&ctx->atomic_value, 0);
+
+  return test_duration();
 }
 
-static void test_atomic_or_and_body(test_context *ctx, size_t worker_index)
+static void test_atomic_or_and_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t worker_index
+)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
   unsigned long the_bit = 1UL << worker_index;
   unsigned long current_bit = 0;
 
-  while (!stop(ctx)) {
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
     unsigned long previous;
 
     if (current_bit != 0) {
@@ -255,31 +314,49 @@ static void test_atomic_or_and_body(test_context *ctx, size_t worker_index)
   ctx->per_worker_value[worker_index] = current_bit;
 }
 
-static void test_atomic_or_and_fini(test_context *ctx)
+static void test_atomic_or_and_fini(
+  rtems_test_parallel_context *base,
+  void *arg
+)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
   test_fini(ctx, "or/and", true);
 }
 
-static void test_atomic_fence_init(test_context *ctx)
+static rtems_interval test_atomic_fence_init(
+  rtems_test_parallel_context *base,
+  void *arg
+)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
   ctx->normal_value = 0;
   ctx->second_value = 0;
   _Atomic_Fence(ATOMIC_ORDER_RELEASE);
+
+  return test_duration();
 }
 
-static void test_atomic_fence_body(test_context *ctx, size_t worker_index)
+static void test_atomic_fence_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t worker_index
+)
 {
-  if (is_master_worker(worker_index)) {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
+  if (rtems_test_parallel_is_master_worker(worker_index)) {
     unsigned long counter = 0;
 
-    while (!stop(ctx)) {
+    while (!rtems_test_parallel_stop_job(&ctx->base)) {
       ++counter;
       ctx->normal_value = counter;
       _Atomic_Fence(ATOMIC_ORDER_RELEASE);
       ctx->second_value = counter;
     }
   } else {
-    while (!stop(ctx)) {
+    while (!rtems_test_parallel_stop_job(&ctx->base)) {
       unsigned long n;
       unsigned long s;
 
@@ -292,8 +369,10 @@ static void test_atomic_fence_body(test_context *ctx, size_t worker_index)
   }
 }
 
-static void test_atomic_fence_fini(test_context *ctx)
+static void test_atomic_fence_fini(rtems_test_parallel_context *base, void *arg)
 {
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
   printf(
     "=== atomic fence test case ===\n"
     "normal value = %lu, second value = %lu\n",
@@ -302,7 +381,7 @@ static void test_atomic_fence_fini(test_context *ctx)
   );
 }
 
-static const test_case test_cases[] = {
+static const rtems_test_parallel_job test_jobs[] = {
   {
     test_atomic_add_init,
     test_atomic_add_body,
@@ -330,104 +409,18 @@ static const test_case test_cases[] = {
   },
 };
 
-#define TEST_COUNT RTEMS_ARRAY_SIZE(test_cases)
-
-static void stop_worker_timer(rtems_id timer_id, void *arg)
-{
-  test_context *ctx = arg;
-
-  _Atomic_Store_ulong(&ctx->stop, 1, ATOMIC_ORDER_RELAXED);
-}
-
-static void start_worker_stop_timer(test_context *ctx)
-{
-  rtems_status_code sc;
-
-  _Atomic_Store_ulong(&ctx->stop, 0, ATOMIC_ORDER_RELEASE);
-
-  sc = rtems_timer_fire_after(
-    ctx->stop_worker_timer_id,
-    rtems_clock_get_ticks_per_second(),
-    stop_worker_timer,
-    ctx
-  );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-}
-
-static void run_tests(test_context *ctx, size_t worker_index)
-{
-  SMP_barrier_State bs = SMP_BARRIER_STATE_INITIALIZER;
-  size_t test;
-
-  for (test = 0; test < TEST_COUNT; ++test) {
-    const test_case *tc = &test_cases[test];
-
-    if (is_master_worker(worker_index)) {
-      start_worker_stop_timer(ctx);
-      (*tc->init)(ctx);
-    }
-
-    _SMP_barrier_Wait(&ctx->barrier, &bs, ctx->worker_count);
-
-    (*tc->body)(ctx, worker_index);
-
-    _SMP_barrier_Wait(&ctx->barrier, &bs, ctx->worker_count);
-
-    if (is_master_worker(worker_index)) {
-      (*tc->fini)(ctx);
-    }
-  }
-}
-
-static void worker_task(size_t worker_index)
-{
-  test_context *ctx = &test_instance;
-
-  run_tests(ctx, worker_index);
-
-  (void) rtems_task_suspend(RTEMS_SELF);
-  rtems_test_assert(0);
-}
-
-static void test(void)
-{
-  test_context *ctx = &test_instance;
-  rtems_status_code sc;
-  size_t worker_index;
-
-  ctx->worker_count = rtems_get_processor_count();
-
-  sc = rtems_timer_create(
-    rtems_build_name('S', 'T', 'O', 'P'),
-    &ctx->stop_worker_timer_id
-  );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  for (worker_index = 1; worker_index < ctx->worker_count; ++worker_index) {
-    rtems_id worker_id;
-
-    sc = rtems_task_create(
-      rtems_build_name('W', 'O', 'R', 'K'),
-      WORKER_PRIORITY,
-      RTEMS_MINIMUM_STACK_SIZE,
-      RTEMS_DEFAULT_MODES,
-      RTEMS_DEFAULT_ATTRIBUTES,
-      &worker_id
-    );
-    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-    sc = rtems_task_start(worker_id, worker_task, worker_index);
-    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  }
-
-  run_tests(ctx, 0);
-}
-
 static void Init(rtems_task_argument arg)
 {
+  smpatomic01_context *ctx = &test_instance;
+
   TEST_BEGIN();
 
-  test();
+  rtems_test_parallel(
+    &ctx->base,
+    WORKER_PRIORITY,
+    &test_jobs[0],
+    RTEMS_ARRAY_SIZE(test_jobs)
+  );
 
   TEST_END();
   rtems_test_exit(0);

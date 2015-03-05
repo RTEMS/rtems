@@ -17,6 +17,8 @@
 
 #include <rtems.h>
 #include <rtems/bspIo.h>
+#include <rtems/score/atomic.h>
+#include <rtems/score/smpbarrier.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -115,6 +117,117 @@ static inline int rtems_test_endk(void)
 {
   return rtems_test_end_with_plugin(printk_plugin, NULL);
 }
+
+/**
+ * @brief Internal context for parallel job execution.
+ */
+typedef struct {
+  Atomic_Ulong stop;
+  SMP_barrier_Control barrier;
+  size_t worker_count;
+  rtems_id stop_worker_timer_id;
+  rtems_id master_id;
+} rtems_test_parallel_context;
+
+/**
+ * @brief Basic parallel job description.
+ */
+typedef struct {
+  /**
+   * @brief Job initialization handler.
+   *
+   * This handler executes only in the context of the master worker before the
+   * job body handler.
+   *
+   * @param[in] ctx The parallel context.
+   * @param[in] arg The user specified argument.
+   *
+   * @return The desired job body execution time in clock ticks.  See
+   *   rtems_test_parallel_stop_job().
+   */
+  rtems_interval (*init)(
+    rtems_test_parallel_context *ctx,
+    void *arg
+  );
+
+  /**
+   * @brief Job body handler.
+   *
+   * @param[in] ctx The parallel context.
+   * @param[in] arg The user specified argument.
+   * @param[in] worker_index The worker index.  It ranges from 0 to the
+   *   processor count minus one.
+   */
+  void (*body)(
+    rtems_test_parallel_context *ctx,
+    void *arg,
+    size_t worker_index
+  );
+
+  /**
+   * @brief Job finalization handler.
+   *
+   * This handler executes only in the context of the master worker after the
+   * job body handler.
+   *
+   * @param[in] ctx The parallel context.
+   * @param[in] arg The user specified argument.
+   */
+  void (*fini)(
+    rtems_test_parallel_context *ctx,
+    void *arg
+  );
+
+  void *arg;
+} rtems_test_parallel_job;
+
+/**
+ * @brief Indicates if a job body should stop its work loop.
+ *
+ * @param[in] ctx The parallel context.
+ *
+ * @retval true The job body should stop its work loop and return to the caller.
+ * @retval false Otherwise.
+ */
+static inline bool rtems_test_parallel_stop_job(
+  rtems_test_parallel_context *ctx
+)
+{
+  return _Atomic_Load_ulong(&ctx->stop, ATOMIC_ORDER_RELAXED) != 0;
+}
+
+/**
+ * @brief Indicates if a worker is the master worker.
+ *
+ * The master worker is the thread that called rtems_test_parallel().
+ *
+ * @param[in] worker_index The worker index.
+ *
+ * @retval true This is the master worker.
+ * @retval false Otherwise.
+ */
+static inline bool rtems_test_parallel_is_master_worker(size_t worker_index)
+{
+  return worker_index == 0;
+}
+
+/**
+ * @brief Runs a bunch of jobs in parallel on all processors of the system.
+ *
+ * There are SMP barriers before and after the job body.
+ *
+ * @param[in] ctx The parallel context.
+ * @param[in] non_master_worker_priority The task priority for non-master
+ *   workers.
+ * @param[in] jobs The table of jobs.
+ * @param[in] job_count The count of jobs in the job table.
+ */
+void rtems_test_parallel(
+  rtems_test_parallel_context *ctx,
+  rtems_task_priority non_master_worker_priority,
+  const rtems_test_parallel_job *jobs,
+  size_t job_count
+);
 
 /** @} */
 
