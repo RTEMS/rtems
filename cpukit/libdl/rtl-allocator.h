@@ -147,7 +147,7 @@ void rtems_rtl_alloc_indirect_del (rtems_rtl_alloc_tag_t tag,
  * @param const_base Pointer to the const base pointer.
  * @param const_size The size of the read only section.
  * @param data_base Pointer to the data base pointer.
- * @prarm data_size The size of the read/write secton.
+ * @param data_size The size of the read/write secton.
  * @param bss_base Pointer to the bss base pointer.
  * @param bss_size The size of the read/write.
  * @retval true The memory has been allocated.

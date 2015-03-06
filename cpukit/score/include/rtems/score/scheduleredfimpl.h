@@ -26,7 +26,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreSchedulerEDF EDF
+ * @addtogroup ScoreSchedulerEDF
  *
  * @{
  */

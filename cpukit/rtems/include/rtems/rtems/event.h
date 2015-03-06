@@ -224,7 +224,7 @@ rtems_status_code rtems_event_send (
  * This directive attempts to receive the event condition specified in
  * @a event_in. If @a event_in is set to @ref RTEMS_PENDING_EVENTS, then the
  * current pending events are returned in @a event_out and left pending. The
- * @aref RTEMS_WAIT and @aref RTEMS_NO_WAIT options in the @a option_set
+ * @ref RTEMS_WAIT and @ref RTEMS_NO_WAIT options in the @a option_set
  * parameter are used to specify whether or not the task is willing to wait
  * for the event condition to be satisfied. The @ref RTEMS_EVENT_ANY and @ref
  * RTEMS_EVENT_ALL are used in the @a option_set parameter to specify whether

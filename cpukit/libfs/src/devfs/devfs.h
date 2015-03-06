@@ -20,7 +20,6 @@
  * @brief This structure defines the type of device table
  */
 /**@{*/
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -241,7 +240,7 @@ extern int devFS_initialize(
  *    /dev/clock       1  0
  *    /dev/tty0        0  0
  *    /flash           2  0
- *  @end code
+ *  @endcode
  *
  *  This routine is intended for debugging, and can be used by shell
  *  program to provide user with the system information.
@@ -251,6 +250,6 @@ extern void devFS_Show(void);
 #ifdef __cplusplus
 }
 #endif
-/** @} */
+/**@}*/
 #endif
 

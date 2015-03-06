@@ -5,6 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  */
+
 /**
  * @file
  *
@@ -224,7 +225,7 @@ rtems_rtl_obj_t* rtems_rtl_find_obj (const char* name);
  *  2. Relative file references an object format file in the search path.
  *
  *  3. Absolute archive and file reference to a specific location in the file
- *     system. The archive and file are encoded as 'archive:file [@offset]'
+ *     system. The archive and file are encoded as 'archive:file [@@offset]'
  *     where 'archive' is a valid file at the absolute path in the file system,
  *     and 'file' is a contained in the archive, and optionally an offset to
  *     the 'file' in the 'archive'. If no offset is provided the archive is
@@ -275,7 +276,7 @@ int rtems_rtl_get_error (char* message, size_t max_message);
 /**
  * Append the path to the search path.
  *
- * @path The path to append.
+ * @param path The path to append.
  * @retval false The path could not be appended.
  * @retval true The path was appended.
  */
@@ -284,7 +285,7 @@ bool rtems_rtl_path_append (const char* path);
 /**
  * Prepend the path to the search path.
  *
- * @path The path to prepend.
+ * @param path The path to prepend.
  * @retval false The path could not be prepended.
  * @retval true The path was prepended.
  */

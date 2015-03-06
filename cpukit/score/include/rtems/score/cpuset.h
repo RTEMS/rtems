@@ -30,7 +30,7 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreCpuset
+ *  @defgroup ScoreCpuset SuperCore CPU Set
  *
  *  @ingroup Score
  *
