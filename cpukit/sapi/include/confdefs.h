@@ -1810,7 +1810,11 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_TASKS \
     (CONFIGURE_MAXIMUM_TASKS + CONFIGURE_LIBBLOCK_TASKS)
 
-  #ifndef CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS
+  #if defined(CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS)
+    #warning "CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS is deprecated and will be removed."
+  #endif
+  #if defined(CONFIGURE_ENABLE_CLASSIC_API_NOTEPADS)
+    #warning "CONFIGURE_ENABLE_CLASSIC_API_NOTEPADS is deprecated and will be removed."
     #define CONFIGURE_NOTEPADS_ENABLED           TRUE
   #else
     #define CONFIGURE_NOTEPADS_ENABLED           FALSE
@@ -2613,8 +2617,8 @@ const rtems_libio_helper rtems_fs_init_helper =
       #endif
     } Scheduler;
     RTEMS_API_Control API_RTEMS;
-    #ifndef CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS
-      uint32_t Notepads[ RTEMS_NUMBER_NOTEPADS ];
+    #if defined(CONFIGURE_ENABLE_CLASSIC_API_NOTEPADS)
+      uint32_t Notepads[ RTEMS_NUMBER_NOTEPADS ] RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
     #endif
     #ifdef RTEMS_POSIX_API
       POSIX_API_Control API_POSIX;

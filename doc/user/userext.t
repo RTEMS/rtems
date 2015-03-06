@@ -137,7 +137,8 @@ be used to store additional data required by the user's
 extension functions.  It is also possible for a user extension
 to utilize the notepad locations associated with each task
 although this may conflict with application usage of those
-particular notepads.
+particular notepads. However, notepads are deprecated and will
+be removed.
 
 The TCB extension is an array of pointers in the TCB. The
 index into the table can be obtained from the extension id

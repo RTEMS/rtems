@@ -104,7 +104,8 @@ typedef struct {
     rtems_event_set            events;
     rtems_mode                 modes;
     rtems_attribute            attributes;
-    uint32_t                   notepad[RTEMS_NUMBER_NOTEPADS];
+    uint32_t                   notepad[RTEMS_NUMBER_NOTEPADS]
+                                            RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
     rtems_id                   wait_id;
     uint32_t                   wait_args;
     uint32_t                   ticks;

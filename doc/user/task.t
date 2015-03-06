@@ -645,6 +645,7 @@ to set a task's notepad entry to a specified note.  The
 @code{@value{DIRPREFIX}task_get_note}
 directive allows the user to obtain the note
 contained in any one of the sixteen notepads of a specified task.
+Notepads are deprecated and will be removed.
 
 @subsection Task Deletion
 
@@ -1515,6 +1516,8 @@ This directive returns the note contained in the notepad
 location of the task specified by id.
 
 @subheading NOTES:
+This directive is deprecated and will be removed.
+
 This directive will not cause the running task to be preempted.
 
 If id is set to @code{@value{RPREFIX}SELF},
@@ -1567,6 +1570,8 @@ procedure Task_Set_Note (
 @code{@value{RPREFIX}INVALID_NUMBER} - invalid notepad location
 
 @subheading DESCRIPTION:
+This directive is deprecated and will be removed.
+
 This directive sets the notepad entry for the task specified by
 id to the value note.
 

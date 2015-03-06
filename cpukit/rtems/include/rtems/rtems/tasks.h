@@ -271,6 +271,8 @@ rtems_status_code rtems_task_delete(
 /**
  * @brief RTEMS Get Task Node
  *
+ * @deprecated Notepads are deprecated and will be removed.
+ *
  * This routine implements the rtems_task_get_note directive. The
  * value of the indicated notepad for the task associated with ID
  * is returned in note.
@@ -285,10 +287,12 @@ rtems_status_code rtems_task_get_note(
   rtems_id    id,
   uint32_t    notepad,
   uint32_t   *note
-);
+) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 
 /**
  * @brief RTEMS Set Task Note
+ *
+ * @deprecated Notepads are deprecated and will be removed.
  *
  * This routine implements the rtems_task_set_note directive. The
  * value of the indicated notepad for the task associated with ID
@@ -306,7 +310,7 @@ rtems_status_code rtems_task_set_note(
   rtems_id   id,
   uint32_t   notepad,
   uint32_t   note
-);
+) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 
 /**
  * @brief RTEMS Task Mode
@@ -663,10 +667,12 @@ typedef struct {
 
   /**
    *  This field contains the notepads for this task.
+   * 
+   *  @deprecated Notepads are deprecated and will be removed.
    *
    *  @note MUST BE LAST ENTRY.
    */
-  uint32_t                 Notepads[ RTEMS_ZERO_LENGTH_ARRAY ];
+  uint32_t Notepads[ RTEMS_ZERO_LENGTH_ARRAY ] RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 }  RTEMS_API_Control;
 
 /**
