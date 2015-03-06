@@ -488,7 +488,7 @@ void _Scheduler_default_Release_job(
  * This routine is invoked as part of processing each clock tick.
  *
  * @param[in] scheduler The scheduler.
- * @param[in] execution An executing thread.
+ * @param[in] executing An executing thread.
  */
 void _Scheduler_default_Tick(
   const Scheduler_Control *scheduler,
@@ -512,6 +512,7 @@ void _Scheduler_default_Start_idle(
   /**
    * @brief Get affinity for the default scheduler.
    *
+   * @param[in] scheduler The scheduler instance.
    * @param[in] thread The associated thread.
    * @param[in] cpusetsize The size of the cpuset.
    * @param[out] cpuset Affinity set containing all CPUs.
@@ -529,6 +530,7 @@ void _Scheduler_default_Start_idle(
   /** 
    * @brief Set affinity for the default scheduler.
    *
+   * @param[in] scheduler The scheduler instance.
    * @param[in] thread The associated thread.
    * @param[in] cpusetsize The size of the cpuset.
    * @param[in] cpuset Affinity new affinity set.

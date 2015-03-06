@@ -113,7 +113,7 @@ int   rtems_error(
  *
  *  @param[in] printf_format is a normal printf(3) format string,
  *  with its concommitant arguments
- *  @param[in] @p arglist is a varargs list corresponding to
+ *  @param[in] arglist is a varargs list corresponding to
  *  printf_format
  *
  *  @return the number of characters written.

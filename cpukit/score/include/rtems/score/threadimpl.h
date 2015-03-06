@@ -116,6 +116,7 @@ void _Thread_Start_multitasking( void ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
  *  Set the Start.stack field to the address of the stack.
  *
  *  @param[in] the_thread is the thread where the stack space is requested
+ *  @param[in] stack_size is the stack space is requested
  *
  *  @retval actual size allocated after any adjustment
  *  @retval zero if the allocation failed
@@ -322,6 +323,7 @@ void *_Thread_Global_construction( void );
  *  It is called by the watchdog handler.
  *
  *  @param[in] id is the thread id
+ *  @param[in] ignored is not used
  */
 void _Thread_Delay_ended(
   Objects_Id  id,

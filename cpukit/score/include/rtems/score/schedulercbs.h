@@ -150,6 +150,7 @@ extern Scheduler_CBS_Server _Scheduler_CBS_Server_list[];
  *  remaining budget is sufficient. If not, the thread continues as a
  *  new job in order to protect concurrent threads.
  *
+ *  @param[in] scheduler The scheduler instance.
  *  @param[in] the_thread will be unblocked.
  *
  *  @note This has to be asessed as missed deadline of the current job.
@@ -166,6 +167,7 @@ Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
  *  It is called only from Rate Monotonic manager in the beginning
  *  of new period. Deadline has to be shifted and budget replenished.
  *
+ *  @param[in] scheduler The scheduler instance.
  *  @param[in] the_thread is the owner of the job.
  *  @param[in] length of the new job from now. If equal to 0,
  *             the job was cancelled or deleted.

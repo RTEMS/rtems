@@ -129,7 +129,7 @@ bool _Scheduler_priority_affinity_SMP_Get_affinity(
  * @brief Change priority for the priority affinity SMP scheduler.
  *
  * @param[in] scheduler The scheduler of the thread.
- * @param[in] thread The associated thread.
+ * @param[in] the_thread The associated thread.
  * @param[in] new_priority The new priority for the thread.
  * @param[in] prepend_it Append or prepend the thread to its priority FIFO.
  */

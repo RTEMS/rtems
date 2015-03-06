@@ -80,6 +80,9 @@ void _Scheduler_simple_Initialize( const Scheduler_Control *scheduler );
  *  This routine sets the heir thread to be the next ready thread
  *  on the ready queue by getting the first node in the scheduler
  *  information.
+ *
+ *  @param[in] scheduler The scheduler instance.
+ *  @param[in] the_thread causing the scheduling operation.
  */
 void _Scheduler_simple_Schedule(
   const Scheduler_Control *scheduler,
@@ -100,7 +103,8 @@ void _Scheduler_simple_Schedule(
  *  the timeslice counter is reset.  The heir THREAD will be updated if the
  *  running is also the currently the heir.
  *
- *  @param[in,out] thread The yielding thread.
+ *  @param[in] scheduler The scheduler instance.
+ *  @param[in,out] the_thread The yielding thread.
  */
 Scheduler_Void_or_thread _Scheduler_simple_Yield(
   const Scheduler_Control *scheduler,
@@ -115,6 +119,7 @@ Scheduler_Void_or_thread _Scheduler_simple_Yield(
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
  *
+ *  @param[in] scheduler The scheduler instance.
  *  @param[in] the_thread is the thread that is to be blocked
  */
 void _Scheduler_simple_Block(
@@ -129,6 +134,7 @@ void _Scheduler_simple_Block(
  *  that is, adds it to the ready queue and
  *  updates any appropriate scheduling variables, for example the heir thread.
  *
+ *  @param[in] scheduler The scheduler instance.
  *  @param[in] the_thread is the thread that is to be unblocked
  */
 Scheduler_Void_or_thread _Scheduler_simple_Unblock(

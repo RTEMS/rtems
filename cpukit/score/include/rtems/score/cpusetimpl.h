@@ -51,7 +51,6 @@ bool _CPU_set_Is_valid( const cpu_set_t *cpuset, size_t setsize );
  *
  * @param[in] description is a string to print before the value.
  * @param[in] cpuset is the cpuset to validate
- * @param[in] setsize is the number of CPUs in the cpuset
  */
 void _CPU_set_Show( const char *description, const cpu_set_t  *cpuset);
 

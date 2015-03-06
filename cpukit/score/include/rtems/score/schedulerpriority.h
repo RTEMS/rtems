@@ -113,6 +113,7 @@ void _Scheduler_priority_Initialize( const Scheduler_Control *scheduler );
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
  *
+ *  @param[in] scheduler The scheduler instance.
  *  @param[in] the_thread is the thread to be blocked
  */
 void _Scheduler_priority_Block(
@@ -148,6 +149,7 @@ void _Scheduler_priority_Update_priority(
  *  that is, adds it to the ready queue and
  *  updates any appropriate scheduling variables, for example the heir thread.
  *
+ *  @param[in] scheduler The scheduler instance.
  *  @param[in] the_thread will be unblocked
  */
 Scheduler_Void_or_thread _Scheduler_priority_Unblock(
@@ -179,7 +181,8 @@ Scheduler_Void_or_thread _Scheduler_priority_Change_priority(
  *    + ready chain
  *    + select heir
  *
- *  @param[in,out] thread The yielding thread.
+ *  @param[in] scheduler The scheduler instance.
+ *  @param[in,out] the_thread The yielding thread.
  */
 Scheduler_Void_or_thread _Scheduler_priority_Yield(
   const Scheduler_Control *scheduler,
@@ -190,6 +193,8 @@ Scheduler_Void_or_thread _Scheduler_priority_Yield(
  *  @brief Compare two priorities.
  *
  *  This routine compares two priorities.
+ *
+ * @retval >0 for p1 > p2; 0 for p1 == p2; <0 for p1 < p2.
  */
 int _Scheduler_priority_Priority_compare(
   Priority_Control   p1,

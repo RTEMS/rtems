@@ -114,9 +114,11 @@ typedef struct {
 } Scheduler_EDF_Node;
 
 /**
- * @brief Initialize EDF scheduler.
+ *  @brief Initialize EDF scheduler.
  *
- * This routine initializes the EDF scheduler.
+ *  This routine initializes the EDF scheduler.
+ *
+ *  @param[in] scheduler The scheduler instance.
  */
 void _Scheduler_EDF_Initialize( const Scheduler_Control *scheduler );
 
@@ -128,6 +130,7 @@ void _Scheduler_EDF_Initialize( const Scheduler_Control *scheduler );
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
  *
+ *  @param[in] scheduler The scheduler instance.
  *  @param[in] the_thread is the thread to be blocked.
  */
 void _Scheduler_EDF_Block(
@@ -141,6 +144,9 @@ void _Scheduler_EDF_Block(
  *
  *  This kernel routine sets the heir thread to be the next ready thread
  *  in the rbtree ready queue.
+ *
+ *  @param[in] scheduler The scheduler instance.
+ *  @param[in] the_thread being scheduled.
  */
 void _Scheduler_EDF_Schedule(
   const Scheduler_Control *scheduler,
@@ -149,6 +155,9 @@ void _Scheduler_EDF_Schedule(
 
 /**
  *  @brief Initializes an EDF specific scheduler node of @a the_thread.
+ *
+ *  @param[in] scheduler The scheduler instance.
+ *  @param[in] the_thread being initialized.
  */
 void _Scheduler_EDF_Node_initialize(
   const Scheduler_Control *scheduler,
@@ -160,8 +169,10 @@ void _Scheduler_EDF_Node_initialize(
  *
  *  This routine updates position in the ready queue of @a the_thread.
  *
+ *  @param[in] scheduler The scheduler instance.
  *  @param[in] the_thread will have its scheduler specific information
  *             structure updated.
+ *  @param[in] new_priority is the desired new priority.
  */
 void _Scheduler_EDF_Update_priority(
   const Scheduler_Control *scheduler,
@@ -176,6 +187,7 @@ void _Scheduler_EDF_Update_priority(
  *  adds it to the ready queue and updates any appropriate scheduling
  *  variables, for example the heir thread.
  *
+ *  @param[in] scheduler The scheduler instance.
  *  @param[in] the_thread will be unblocked.
  */
 Scheduler_Void_or_thread _Scheduler_EDF_Unblock(
@@ -203,7 +215,8 @@ Scheduler_Void_or_thread _Scheduler_EDF_Change_priority(
  *  and place it back. The rbtree ready queue is responsible for FIFO ordering
  *  in such a case.
  *
- *  @param[in,out] thread The yielding thread.
+ *  @param[in] scheduler The scheduler instance.
+ *  @param[in,out] the_thread The yielding thread.
  */
 Scheduler_Void_or_thread _Scheduler_EDF_Yield(
   const Scheduler_Control *scheduler,
@@ -230,6 +243,7 @@ int _Scheduler_EDF_Priority_compare (
  *  It is called only from Rate Monotonic manager in the beginning
  *  of new period.
  *
+ *  @param[in] scheduler The scheduler instance.
  *  @param[in] the_thread is the owner of the job.
  *  @param[in] deadline of the new job from now. If equal to 0,
  *             the job was cancelled or deleted, thus a running task

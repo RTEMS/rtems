@@ -123,7 +123,7 @@ rtems_counter_ticks rtems_counter_nanoseconds_to_ticks(
  * rtems_counter_nanoseconds_to_ticks() functions.  It should be called during
  * system initialization by the board support package.
  *
- * @param[in] uint32_t frequency The current counter frequency in Hz.
+ * @param[in] frequency The current counter frequency in Hz.
  */
 void rtems_counter_initialize_converter( uint32_t frequency );
 
