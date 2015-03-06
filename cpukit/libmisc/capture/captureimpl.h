@@ -220,7 +220,7 @@ static inline void *rtems_capture_append_to_record(void*  rec,
   } while (0)
 
 /**
- * @brief .
+ * @brief Capture returns the current time.
  *
  * This function returns the current time. If a handler is provided
  * by the user the time is gotten from that.
@@ -328,5 +328,6 @@ void rtems_capture_print_watch_list( void );
 #ifdef __cplusplus
 }
 #endif
+/**@}*/
 
 #endif

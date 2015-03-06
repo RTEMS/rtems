@@ -67,7 +67,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_is_enabled(void)
 }
 
 /**
- * @briefs Gets thread dispatch disable level.
+ * @brief Gets thread dispatch disable level.
  *
  * @return The value of the thread dispatch level.
  */

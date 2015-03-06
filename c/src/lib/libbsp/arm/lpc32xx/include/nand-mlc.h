@@ -396,7 +396,7 @@ rtems_status_code lpc32xx_mlc_read_blocks(
  * @brief Checks if the page spare area indicates to a bad page.
  *
  * If the first (byte offset 0) or sixth (byte offset 5) byte of the spare area
- * has a value other than 0xff, then it returns @true (the page is bad), else
+ * has a value other than 0xff, then it returns @a true (the page is bad), else
  * it returns @a false (the page is not bad).
  *
  * Samsung uses the sixth byte to indicate a bad page.  Mircon uses the first

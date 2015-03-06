@@ -983,5 +983,6 @@ rtems_capture_control_count (void)
 #ifdef __cplusplus
 }
 #endif
+/**@}*/
 
 #endif

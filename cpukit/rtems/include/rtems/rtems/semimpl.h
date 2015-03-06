@@ -66,7 +66,7 @@ void _Semaphore_Manager_initialization(void);
  * This function returns a RTEMS status code based on the mutex
  * status code specified.
  *
- * @param[in] the_mutex_status is the mutex status code to translate
+ * @param[in] status is the mutex status code to translate
  *
  * @retval translated RTEMS status code
  */
@@ -107,7 +107,7 @@ _Semaphore_Translate_MRSP_status_code( MRSP_Status mrsp_status )
  * This function returns a RTEMS status code based on the semaphore
  * status code specified.
  *
- * @param[in] the_mutex_status is the semaphore status code to translate
+ * @param[in] status is the semaphore status code to translate
  *
  * @retval translated RTEMS status code
  */

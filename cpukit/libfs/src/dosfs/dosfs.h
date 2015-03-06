@@ -35,7 +35,7 @@ typedef struct rtems_dosfs_convert_control rtems_dosfs_convert_control;
  *
  * @param[in,out] self The convert control.
  * @param[in] src A well-formed UTF-8 string to be converted.
- * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
+ * @param[in] src_size The size of the string in bytes (inludes '\\0' if any).
  * @param[out] dst The address the converted string will get copied to.
  * @param[in,out] dst_size The size of the buffer in bytes respectively the
  * number of bytes written to the buffer.
@@ -57,7 +57,7 @@ typedef int (*rtems_dosfs_utf8_to_codepage)(
  *
  * @param[in,out] self The convert control.
  * @param[in] src A well-formed string in code page format.
- * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
+ * @param[in] src_size The size of the string in bytes (inludes '\\0' if any).
  * @param[out] dst The address the converted string will get copied to.
  * @param[in,out] dst_size The size of the buffer in bytes respectively the
  * number of bytes written to the buffer.
@@ -79,7 +79,7 @@ typedef int (*rtems_dosfs_codepage_to_utf8)(
  *
  * @param[in,out] self The convert control.
  * @param[in] src A well-formed UTF-8 string to be converted.
- * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
+ * @param[in] src_size The size of the string in bytes (inludes '\\0' if any).
  * @param[out] dst The address the converted string will get copied to
  * @param[in,out] dst_size The size of the buffer in bytes respectively the
  * number of bytes written to the buffer.
@@ -101,7 +101,7 @@ typedef int (*rtems_dosfs_utf8_to_utf16)(
  *
  * @param[in,out] self The convert control.
  * @param[in] src A well-formed UTF-16 string to be converted.
- * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
+ * @param[in] src_size The size of the string in bytes (inludes '\\0' if any).
  * @param[out] dst The address the converted string will get copied to.
  * @param[in,out] dst_size The size of the buffer in bytes respectively the
  * number of bytes written to the buffer
@@ -126,7 +126,7 @@ typedef int (*rtems_dosfs_utf16_to_utf8)(
  *
  * @param[in,out] self The convert control.
  * @param[in] src A well-formed UTF-8 string to be normalized and fold.
- * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
+ * @param[in] src_size The size of the string in bytes (inludes '\\0' if any).
  * @param[out] dst The address the normalized and fold string will get
  * copied to.
  * @param[in,out] dst_size The size of the buffer in bytes respectively the

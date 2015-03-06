@@ -497,8 +497,8 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_executing (
 
 #if defined(RTEMS_SMP)
 /**
- * @brief Returns @true in case the thread executes currently on some processor
- * in the system, otherwise @a false.
+ * @brief Returns @a true in case the thread executes currently on some
+ * processor in the system, otherwise @a false.
  *
  * Do not confuse this with _Thread_Is_executing() which checks only the
  * current processor.
@@ -512,7 +512,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_executing_on_a_processor(
 #endif
 
 /**
- * @brief Returns @true and sets time_of_context_switch to the the
+ * @brief Returns @a true and sets time_of_context_switch to the
  * time of the last context switch when the thread is currently executing
  * in the system, otherwise @a false.
  */
