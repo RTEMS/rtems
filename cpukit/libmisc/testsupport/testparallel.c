@@ -44,6 +44,7 @@ static void start_worker_stop_timer(
     ctx
   );
   _Assert(sc == RTEMS_SUCCESSFUL);
+  (void) sc;
 }
 
 static void run_tests(
@@ -58,21 +59,31 @@ static void run_tests(
 
   for (i = 0; i < job_count; ++i) {
     const rtems_test_parallel_job *job = &jobs[i];
+    size_t n = rtems_get_processor_count();
+    size_t j = job->cascade ? 0 : rtems_get_processor_count() - 1;
 
-    if (rtems_test_parallel_is_master_worker(worker_index)) {
-      rtems_interval duration = (*job->init)(ctx, job->arg);
+    while (j < n) {
+      size_t active_worker = j + 1;
 
-      start_worker_stop_timer(ctx, duration);
-    }
+      if (rtems_test_parallel_is_master_worker(worker_index)) {
+        rtems_interval duration = (*job->init)(ctx, job->arg, active_worker);
 
-    _SMP_barrier_Wait(&ctx->barrier, &bs, ctx->worker_count);
+        start_worker_stop_timer(ctx, duration);
+      }
 
-    (*job->body)(ctx, job->arg, worker_index);
+      _SMP_barrier_Wait(&ctx->barrier, &bs, ctx->worker_count);
 
-    _SMP_barrier_Wait(&ctx->barrier, &bs, ctx->worker_count);
+      if (worker_index <= j) {
+        (*job->body)(ctx, job->arg, active_worker, worker_index);
+      }
 
-    if (rtems_test_parallel_is_master_worker(worker_index)) {
-      (*job->fini)(ctx, job->arg);
+      _SMP_barrier_Wait(&ctx->barrier, &bs, ctx->worker_count);
+
+      if (rtems_test_parallel_is_master_worker(worker_index)) {
+        (*job->fini)(ctx, job->arg, active_worker);
+      }
+
+      ++j;
     }
   }
 }
@@ -91,6 +102,7 @@ static void worker_task(rtems_task_argument arg)
 
   sc = rtems_event_transient_send(warg.ctx->master_id);
   _Assert(sc == RTEMS_SUCCESSFUL);
+  (void) sc;
 
   run_tests(warg.ctx, warg.jobs, warg.job_count, warg.worker_index);
 

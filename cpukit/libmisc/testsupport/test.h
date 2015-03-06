@@ -141,13 +141,16 @@ typedef struct {
    *
    * @param[in] ctx The parallel context.
    * @param[in] arg The user specified argument.
+   * @param[in] active_workers Count of active workers.  Depends on the cascade
+   *   option.
    *
    * @return The desired job body execution time in clock ticks.  See
    *   rtems_test_parallel_stop_job().
    */
   rtems_interval (*init)(
     rtems_test_parallel_context *ctx,
-    void *arg
+    void *arg,
+    size_t active_workers
   );
 
   /**
@@ -155,12 +158,15 @@ typedef struct {
    *
    * @param[in] ctx The parallel context.
    * @param[in] arg The user specified argument.
+   * @param[in] active_workers Count of active workers.  Depends on the cascade
+   *   option.
    * @param[in] worker_index The worker index.  It ranges from 0 to the
    *   processor count minus one.
    */
   void (*body)(
     rtems_test_parallel_context *ctx,
     void *arg,
+    size_t active_workers,
     size_t worker_index
   );
 
@@ -172,13 +178,28 @@ typedef struct {
    *
    * @param[in] ctx The parallel context.
    * @param[in] arg The user specified argument.
+   * @param[in] active_workers Count of active workers.  Depends on the cascade
+   *   option.
    */
   void (*fini)(
     rtems_test_parallel_context *ctx,
-    void *arg
+    void *arg,
+    size_t active_workers
   );
 
+  /**
+   * @brief Job specific argument.
+   */
   void *arg;
+
+  /**
+   * @brief Job cascading flag.
+   *
+   * This flag indicates whether the job should be executed in a cascaded
+   * manner (the job is executed on one processor first, two processors
+   * afterwards and incremented step by step until all processors are used).
+   */
+  bool cascade;
 } rtems_test_parallel_job;
 
 /**

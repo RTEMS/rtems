@@ -98,7 +98,8 @@ static void test_fini(
 
 static rtems_interval test_atomic_add_init(
   rtems_test_parallel_context *base,
-  void *arg
+  void *arg,
+  size_t active_workers
 )
 {
   smpatomic01_context *ctx = (smpatomic01_context *) base;
@@ -111,6 +112,7 @@ static rtems_interval test_atomic_add_init(
 static void test_atomic_add_body(
   rtems_test_parallel_context *base,
   void *arg,
+  size_t active_workers,
   size_t worker_index
 )
 {
@@ -125,7 +127,11 @@ static void test_atomic_add_body(
   ctx->per_worker_value[worker_index] = counter;
 }
 
-static void test_atomic_add_fini(rtems_test_parallel_context *base, void *arg)
+static void test_atomic_add_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
 {
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
@@ -134,7 +140,8 @@ static void test_atomic_add_fini(rtems_test_parallel_context *base, void *arg)
 
 static rtems_interval test_atomic_flag_init(
   rtems_test_parallel_context *base,
-  void *arg
+  void *arg,
+  size_t active_workers
 )
 {
   smpatomic01_context *ctx = (smpatomic01_context *) base;
@@ -148,6 +155,7 @@ static rtems_interval test_atomic_flag_init(
 static void test_atomic_flag_body(
   rtems_test_parallel_context *base,
   void *arg,
+  size_t active_workers,
   size_t worker_index
 )
 {
@@ -168,7 +176,11 @@ static void test_atomic_flag_body(
   ctx->per_worker_value[worker_index] = counter;
 }
 
-static void test_atomic_flag_fini(rtems_test_parallel_context *base, void *arg)
+static void test_atomic_flag_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+  )
 {
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
@@ -177,7 +189,8 @@ static void test_atomic_flag_fini(rtems_test_parallel_context *base, void *arg)
 
 static rtems_interval test_atomic_sub_init(
   rtems_test_parallel_context *base,
-  void *arg
+  void *arg,
+  size_t active_workers
 )
 {
   smpatomic01_context *ctx = (smpatomic01_context *) base;
@@ -190,6 +203,7 @@ static rtems_interval test_atomic_sub_init(
 static void test_atomic_sub_body(
   rtems_test_parallel_context *base,
   void *arg,
+  size_t active_workers,
   size_t worker_index
 )
 {
@@ -204,7 +218,11 @@ static void test_atomic_sub_body(
   ctx->per_worker_value[worker_index] = counter;
 }
 
-static void test_atomic_sub_fini(rtems_test_parallel_context *base, void *arg)
+static void test_atomic_sub_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
 {
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
@@ -213,7 +231,8 @@ static void test_atomic_sub_fini(rtems_test_parallel_context *base, void *arg)
 
 static rtems_interval test_atomic_compare_exchange_init(
   rtems_test_parallel_context *base,
-  void *arg
+  void *arg,
+  size_t active_workers
 )
 {
   smpatomic01_context *ctx = (smpatomic01_context *) base;
@@ -227,6 +246,7 @@ static rtems_interval test_atomic_compare_exchange_init(
 static void test_atomic_compare_exchange_body(
   rtems_test_parallel_context *base,
   void *arg,
+  size_t active_workers,
   size_t worker_index
 )
 {
@@ -259,7 +279,8 @@ static void test_atomic_compare_exchange_body(
 
 static void test_atomic_compare_exchange_fini(
   rtems_test_parallel_context *base,
-  void *arg
+  void *arg,
+  size_t active_workers
 )
 {
   smpatomic01_context *ctx = (smpatomic01_context *) base;
@@ -269,7 +290,8 @@ static void test_atomic_compare_exchange_fini(
 
 static rtems_interval test_atomic_or_and_init(
   rtems_test_parallel_context *base,
-  void *arg
+  void *arg,
+  size_t active_workers
 )
 {
   smpatomic01_context *ctx = (smpatomic01_context *) base;
@@ -282,6 +304,7 @@ static rtems_interval test_atomic_or_and_init(
 static void test_atomic_or_and_body(
   rtems_test_parallel_context *base,
   void *arg,
+  size_t active_workers,
   size_t worker_index
 )
 {
@@ -316,7 +339,8 @@ static void test_atomic_or_and_body(
 
 static void test_atomic_or_and_fini(
   rtems_test_parallel_context *base,
-  void *arg
+  void *arg,
+  size_t active_workers
 )
 {
   smpatomic01_context *ctx = (smpatomic01_context *) base;
@@ -326,7 +350,8 @@ static void test_atomic_or_and_fini(
 
 static rtems_interval test_atomic_fence_init(
   rtems_test_parallel_context *base,
-  void *arg
+  void *arg,
+  size_t active_workers
 )
 {
   smpatomic01_context *ctx = (smpatomic01_context *) base;
@@ -341,6 +366,7 @@ static rtems_interval test_atomic_fence_init(
 static void test_atomic_fence_body(
   rtems_test_parallel_context *base,
   void *arg,
+  size_t active_workers,
   size_t worker_index
 )
 {
@@ -369,7 +395,11 @@ static void test_atomic_fence_body(
   }
 }
 
-static void test_atomic_fence_fini(rtems_test_parallel_context *base, void *arg)
+static void test_atomic_fence_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
 {
   smpatomic01_context *ctx = (smpatomic01_context *) base;
 
@@ -383,29 +413,29 @@ static void test_atomic_fence_fini(rtems_test_parallel_context *base, void *arg)
 
 static const rtems_test_parallel_job test_jobs[] = {
   {
-    test_atomic_add_init,
-    test_atomic_add_body,
-    test_atomic_add_fini
+    .init = test_atomic_add_init,
+    .body = test_atomic_add_body,
+    .fini = test_atomic_add_fini
   }, {
-    test_atomic_flag_init,
-    test_atomic_flag_body,
-    test_atomic_flag_fini
+    .init = test_atomic_flag_init,
+    .body =test_atomic_flag_body,
+    .fini =test_atomic_flag_fini
   }, {
-    test_atomic_sub_init,
-    test_atomic_sub_body,
-    test_atomic_sub_fini
+    .init = test_atomic_sub_init,
+    .body =test_atomic_sub_body,
+    .fini =test_atomic_sub_fini
   }, {
-    test_atomic_compare_exchange_init,
-    test_atomic_compare_exchange_body,
-    test_atomic_compare_exchange_fini
+    .init = test_atomic_compare_exchange_init,
+    .body =test_atomic_compare_exchange_body,
+    .fini =test_atomic_compare_exchange_fini
   }, {
-    test_atomic_or_and_init,
-    test_atomic_or_and_body,
-    test_atomic_or_and_fini
+    .init = test_atomic_or_and_init,
+    .body =test_atomic_or_and_body,
+    .fini =test_atomic_or_and_fini
   }, {
-    test_atomic_fence_init,
-    test_atomic_fence_body,
-    test_atomic_fence_fini
+    .init = test_atomic_fence_init,
+    .body =test_atomic_fence_body,
+    .fini =test_atomic_fence_fini
   },
 };
 
