@@ -20,6 +20,7 @@ jffs2_fslink
 jffs2_fspatheval
 jffs2_fspermission
 jffs2_fsrdwr
+jffs2_fsscandir01
 jffs2_fssymlink
 jffs2_fstime
 loopback
@@ -33,6 +34,7 @@ mrfs_fslink
 mrfs_fspatheval
 mrfs_fspermission
 mrfs_fsrdwr
+mrfs_fsscandir01
 mrfs_fssymlink
 mrfs_fstime
 mdosfs_fsrdwr
