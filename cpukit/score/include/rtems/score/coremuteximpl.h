@@ -156,6 +156,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
    *  which makes it harder to get full binary test coverage.
    *
    *  @param[in] the_mutex will attempt to lock
+   *  @param[in] _executing points to the executing thread
    *  @param[in] level_p is the interrupt level
    */
   int _CORE_mutex_Seize_interrupt_trylock(
@@ -169,6 +170,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
    *  a few instructions.  This is very important for mutex performance.
    *
    *  @param[in] _mutex will attempt to lock
+   *  @param[in] _executing points to the executing thread
    *  @param[in] _level is the interrupt level
    */
   #define _CORE_mutex_Seize_interrupt_trylock( _mutex, _executing, _level ) \
@@ -191,6 +193,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
   Thread_Control      *executing,
   Watchdog_Interval    timeout
 );
+
 /**
  *  @brief Verifies that a mutex blocking seize is performed safely.
  *
@@ -219,11 +222,11 @@ void _CORE_mutex_Seize_interrupt_blocking(
  *  then it will return immediately.  Otherwise, it will invoke the
  *  support routine @a _Core_mutex_Seize_interrupt_blocking.
  *
- *  @param[in] _the_mutex is the mutex to attempt to lock
- *  @param[in] _id is the Id of the owning API level Semaphore object
- *  @param[in] _wait is true if the thread is willing to wait
- *  @param[in] _timeout is the maximum number of ticks to block
- *  @param[in] _level is a temporary variable used to contain the ISR
+ *  @param[in] the_mutex is the mutex to attempt to lock
+ *  @param[in] id is the Id of the owning API level Semaphore object
+ *  @param[in] wait is true if the thread is willing to wait
+ *  @param[in] timeout is the maximum number of ticks to block
+ *  @param[in] level is a temporary variable used to contain the ISR
  *         disable level cookie
  *
  *  @note If the mutex is called from an interrupt service routine,
@@ -275,6 +278,7 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
  *  This method is used to obtain a core mutex.
  *
  *  @param[in] _the_mutex is the mutex to attempt to lock
+ *  @param[in] _executing The currently executing thread.
  *  @param[in] _id is the Id of the owning API level Semaphore object
  *  @param[in] _wait is true if the thread is willing to wait
  *  @param[in] _timeout is the maximum number of ticks to block
@@ -291,8 +295,10 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
     ISR_Level            _level
   );
 #else
-  #define _CORE_mutex_Seize( _executing, _mtx, _id, _wait, _timeout, _level ) \
-     _CORE_mutex_Seize_body( _executing, _mtx, _id, _wait, _timeout, _level )
+  #define _CORE_mutex_Seize( \
+      _the_mutex, _executing, _id, _wait, _timeout, _level ) \
+       _CORE_mutex_Seize_body( \
+         _the_mutex, _executing, _id, _wait, _timeout, _level )
 #endif
 
 /**
