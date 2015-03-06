@@ -56,6 +56,8 @@ typedef std::memory_order CPU_atomic_Order;
 
 #define CPU_ATOMIC_ORDER_RELEASE std::memory_order_release
 
+#define CPU_ATOMIC_ORDER_ACQ_REL std::memory_order_acq_rel
+
 #define CPU_ATOMIC_ORDER_SEQ_CST std::memory_order_seq_cst
 
 #define CPU_ATOMIC_INITIALIZER_UINT( value ) ATOMIC_VAR_INIT( value )
@@ -85,6 +87,8 @@ typedef memory_order CPU_atomic_Order;
 
 #define CPU_ATOMIC_ORDER_RELEASE memory_order_release
 
+#define CPU_ATOMIC_ORDER_ACQ_REL memory_order_acq_rel
+
 #define CPU_ATOMIC_ORDER_SEQ_CST memory_order_seq_cst
 
 #define CPU_ATOMIC_INITIALIZER_UINT( value ) ATOMIC_VAR_INIT( value )
@@ -113,6 +117,8 @@ typedef int CPU_atomic_Order;
 #define CPU_ATOMIC_ORDER_ACQUIRE 2
 
 #define CPU_ATOMIC_ORDER_RELEASE 3
+
+#define CPU_ATOMIC_ORDER_ACQ_REL 4
 
 #define CPU_ATOMIC_ORDER_SEQ_CST 5
 
