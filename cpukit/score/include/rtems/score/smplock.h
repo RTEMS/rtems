@@ -505,7 +505,7 @@ static inline bool _SMP_lock_Stats_iteration_next(
 
   current = iteration_context->current;
   if ( !_Chain_Is_tail( &control->Stats_chain, &current->Node ) ) {
-    size_t name_len = strlen(current->name);
+    size_t name_len = current->name != NULL ? strlen(current->name) : 0;
 
     valid = true;
 
