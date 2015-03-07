@@ -51,7 +51,6 @@ __FBSDID("$FreeBSD r284178 2015-06-09T11:49:56Z$");
 #include <sys/limits.h>
 #include <sys/lock.h>
 #include <sys/mutex.h>
-#include <sys/sbuf.h>
 #include <sys/sysctl.h>
 #include <sys/syslog.h>
 #include <sys/systm.h>
@@ -1713,17 +1712,10 @@ pps_fetch(struct pps_fetch_args *fapi, struct pps_state *pps)
 		cseq = pps->ppsinfo.clear_sequence;
 		while (aseq == pps->ppsinfo.assert_sequence &&
 		    cseq == pps->ppsinfo.clear_sequence) {
-			if (abi_aware(pps, 1) && pps->driver_mtx != NULL) {
-				if (pps->flags & PPSFLAG_MTX_SPIN) {
-					err = msleep_spin(pps, pps->driver_mtx,
-					    "ppsfch", timo);
-				} else {
-					err = msleep(pps, pps->driver_mtx, PCATCH,
-					    "ppsfch", timo);
-				}
-			} else {
+			if (pps->mtx != NULL)
+				err = msleep(pps, pps->mtx, PCATCH, "ppsfch", timo);
+			else
 				err = tsleep(pps, PCATCH, "ppsfch", timo);
-			}
 			if (err == EWOULDBLOCK && fapi->timeout.tv_sec == -1) {
 				continue;
 			} else if (err != 0) {
