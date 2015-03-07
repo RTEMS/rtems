@@ -36,7 +36,7 @@
 #include <rtems/score/watchdogimpl.h>
 #endif /* __rtems__ */
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD r277406 2015-01-20T03:54:30Z$");
+__FBSDID("$FreeBSD r279728 2015-03-07T18:23:32Z$");
 
 #include "opt_compat.h"
 #include "opt_ntp.h"
@@ -46,14 +46,8 @@ __FBSDID("$FreeBSD r277406 2015-01-20T03:54:30Z$");
 #ifndef __rtems__
 #include <sys/kernel.h>
 #include <sys/limits.h>
-#else /* __rtems__ */
-#include <limits.h>
-#endif /* __rtems__ */
-#ifdef FFCLOCK
 #include <sys/lock.h>
 #include <sys/mutex.h>
-#endif
-#ifndef __rtems__
 #include <sys/sysctl.h>
 #include <sys/syslog.h>
 #include <sys/systm.h>
@@ -66,6 +60,7 @@ __FBSDID("$FreeBSD r277406 2015-01-20T03:54:30Z$");
 #include <sys/vdso.h>
 #endif /* __rtems__ */
 #ifdef __rtems__
+#include <limits.h>
 #include <rtems.h>
 ISR_LOCK_DEFINE(static, _Timecounter_Lock, "Timecounter");
 #define hz rtems_clock_get_ticks_per_second()
@@ -1607,7 +1602,10 @@ pps_fetch(struct pps_fetch_args *fapi, struct pps_state *pps)
 		cseq = pps->ppsinfo.clear_sequence;
 		while (aseq == pps->ppsinfo.assert_sequence &&
 		    cseq == pps->ppsinfo.clear_sequence) {
-			err = tsleep(pps, PCATCH, "ppsfch", timo);
+			if (pps->mtx != NULL)
+				err = msleep(pps, pps->mtx, PCATCH, "ppsfch", timo);
+			else
+				err = tsleep(pps, PCATCH, "ppsfch", timo);
 			if (err == EWOULDBLOCK && fapi->timeout.tv_sec == -1) {
 				continue;
 			} else if (err != 0) {
