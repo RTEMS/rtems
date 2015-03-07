@@ -67,7 +67,7 @@ typedef struct _pci_area_head {
 #define PCI_AREA_IO 2
 
 struct _pci_private {
-      volatile u_int * config_addr;
+      volatile void * config_addr;
       volatile u_char * config_data;
       struct pci_dev **last_dev_p;
       struct pci_bus pci_root;
@@ -1328,7 +1328,7 @@ void pci_init(void)
           * but we should not use residual data in
           * this case anyway.
           */
-         pci->config_addr = ((volatile u_int *)
+         pci->config_addr = ((volatile void *)
                              (ptr_mem_map->io_base+0xcf8));
          pci->config_data = ptr_mem_map->io_base+0xcfc;
       } else if(hostbridge->DeviceId.Interface==PCIBridgeDirect) {
