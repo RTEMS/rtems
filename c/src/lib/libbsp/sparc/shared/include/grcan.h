@@ -193,9 +193,10 @@ struct grcan_device_info {
 };
 
 /* Use hard coded addresses and IRQs to find hardware */
-int grcan_register_abs(struct grcan_device_info *devices, int dev_cnt);
+int grcan_rasta_register_abs(struct grcan_device_info *devices, int dev_cnt);
 
 /* Use prescanned AMBA Plug&Play information to find all GRFIFO cores */
+int grcan_rasta_register(struct ambapp_bus *abus);
 int grcan_register(struct ambapp_bus *abus);
 #if 0
 void grcan_register(unsigned int baseaddr, unsigned int ram_base);
