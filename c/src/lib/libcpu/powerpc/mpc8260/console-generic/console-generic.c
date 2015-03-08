@@ -40,8 +40,6 @@
  *  and Charles-Antoine Gauthier <charles.gauthier@iit.nrc.ca>
  *  Copyright (c) 1999, National Research Council of Canada
  *
- *  Modifications by Andy Dachs <a.dachs@sstl.co.uk> to add MPC8260
- *  support.
  *  Copyright (c) 2001, Surrey Satellite Technology Ltd
  *    SCC1 and SSC2 are used on MPC8260ADS board
  *    SMCs are unused
@@ -51,7 +49,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems.h>
+#include <bsp.h>
 #include <rtems/libio.h>
 #include <mpc8260.h>
 #include <mpc8260/console.h>
