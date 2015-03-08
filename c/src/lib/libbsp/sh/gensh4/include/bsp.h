@@ -45,7 +45,6 @@
 #include <rtems/console.h>
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
-#include <termios.h> /* for tcflag_t */
 
 #include "rtems/score/sh7750_regs.h"
 
@@ -87,11 +86,6 @@ extern uint32_t   boot_mode;
 void bsp_hw_init(void);
 void early_hw_init(void);
 void bsp_cache_on(void);
-extern int _sci_get_brparms(
-  tcflag_t      cflag,
-  unsigned char *smr,
-  unsigned char *brr
-);
 
 #ifdef __cplusplus
 }
