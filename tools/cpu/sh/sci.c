@@ -117,6 +117,7 @@ int shgen_gensci(
     " *   Hitachi's HW manual recommends bitrates with an error less than 1%%\n"
     " *   We experienced values less than 2%% to be stable\n"
     " */\n\n" );
+  fprintf( file, "#include <bsp.h>\n" );
   fprintf( file, "#include <termios.h>\n\n" );
   fprintf( file,
     "static struct sci_bitrate_t {\n"
