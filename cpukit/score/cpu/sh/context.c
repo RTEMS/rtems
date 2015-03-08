@@ -168,7 +168,7 @@ asm volatile("\n\
  * FIXME: This is an ugly hack, but we wanted to avoid recalculating
  *        the offset each time Context_Control is changed
  */
-void __CPU_Context_switch(
+void _CPU_Context_switch(
   Context_Control  *run,	/* r4 */
   Context_Control  *heir	/* r5 */
 )
