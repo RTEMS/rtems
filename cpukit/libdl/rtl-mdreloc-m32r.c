@@ -69,7 +69,7 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
         printf("24_RELA Overflow\n");
         return false;
       }
-      *where = (*where & 0xff000000) | tmp & 0xffffff;
+      *where = (*where & 0xff000000) | (tmp & 0xffffff);
       break;
 
     case R_TYPE(32_RELA):
