@@ -109,7 +109,7 @@ void _CPU_Install_interrupt_stack( void )
 {
 }
 
-void _CPU_Thread_Idle_body( void )
+void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
   do {
      _OR1K_CPU_Sleep();
