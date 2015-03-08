@@ -158,16 +158,17 @@ void vprintk(
     }
 
     switch (lflag) {
-      case LFLAG_INT:
-        num = sign ? (long long) va_arg(ap, int)
-          : (long long) va_arg(ap, unsigned int);
-        break;
       case LFLAG_LONG:
         num = sign ? (long long) va_arg(ap, long)
           : (long long) va_arg(ap, unsigned long);
         break;
       case LFLAG_LONG_LONG:
         num = va_arg(ap, long long);
+        break;
+      case LFLAG_INT:
+      default:
+        num = sign ? (long long) va_arg(ap, int)
+          : (long long) va_arg(ap, unsigned int);
         break;
     }
 
