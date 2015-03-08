@@ -28,6 +28,7 @@
 #include <rtems.h>
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
+#include <termios.h> /* for tcflag_t */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -73,6 +74,12 @@ extern void *CPU_Interrupt_stack_high;
  * BSP methods that cross file boundaries.
  */
 void bsp_hw_init(void);
+
+extern int _sci_get_brparms(
+  tcflag_t      cflag,
+  unsigned char *smr,
+  unsigned char *brr
+);
 
 #ifdef __cplusplus
 }
