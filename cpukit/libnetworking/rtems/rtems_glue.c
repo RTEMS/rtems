@@ -1343,3 +1343,8 @@ m_clalloc(int ncl, int nowait)
 	}
 	return 1;
 }
+
+void microtime(struct timeval *tv)
+{
+	rtems_clock_get_uptime_timeval(tv);
+}
