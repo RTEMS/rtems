@@ -8,11 +8,10 @@
  *
  * This file contains the fsmount functions. These functions       
  * are used to mount a list of filesystems (and create their mount 
- * points before)
-  */
+ * points before).
+ */
 
 /*
- *
  * Copyright (c) 2003 IMD
  *    
  * Ingenieurbuero fuer Microcomputertechnik Th. Doerfler      
@@ -24,30 +23,6 @@
  * http://www.rtems.org/license/LICENSE. 
  */
  
-/*===============================================================*\
-| Project: RTEMS fsmount                                          |
-+-----------------------------------------------------------------+
-| File: fsmount.h                                                 |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2003 IMD                       |
-|      Ingenieurbuero fuer Microcomputertechnik Th. Doerfler      |
-|               <Thomas.Doerfler@imd-systems.de>                  |
-|                       all rights reserved                       |
-+-----------------------------------------------------------------+
-| this file contains the fsmount functions. These functions       |
-| are used to mount a list of filesystems (and create their mount |
-| points before)                                                  |
-|                                                                 |
-|  The license and distribution terms for this file may be        |
-|  found in the file LICENSE in this distribution or at           |
-|  http://www.rtems.org/license/LICENSE.                     |
-|                                                                 |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 02.07.03  creation                                         doe  |
-\*===============================================================*/
-
 #ifndef _FSMOUNT_H
 #define _FSMOUNT_H
 
@@ -63,7 +38,6 @@ extern "C" {
  * @defgroup rtems_fstab File System Mount Support
  *
  * @ingroup FileSystemTypesAndMount
- *
  */
 /**@{**/
 
@@ -214,7 +188,11 @@ typedef struct {
  * }
  * @endcode
  */
-int rtems_fsmount( const rtems_fstab_entry *fstab, size_t size, size_t *abort_index);
+int rtems_fsmount(
+  const rtems_fstab_entry *fstab,
+  size_t                   size,
+  size_t                  *abort_index
+);
 
 /** @} */
 
