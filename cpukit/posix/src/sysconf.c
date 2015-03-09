@@ -22,8 +22,7 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include <rtems/score/todimpl.h>
-#include <rtems/system.h>
+#include <rtems.h>
 #include <rtems/seterr.h>
 #include <rtems/libio_.h>
 
@@ -37,26 +36,22 @@ long sysconf(
   int name
 )
 {
-  if ( name == _SC_CLK_TCK )
-    return (TOD_MICROSECONDS_PER_SECOND /
-      rtems_configuration_get_microseconds_per_tick());
-
-  if ( name == _SC_OPEN_MAX )
-    return rtems_libio_number_iops;
-
-  if ( name == _SC_GETPW_R_SIZE_MAX )
-    return 1024;
-
-  if ( name == _SC_PAGESIZE )
-    return PAGE_SIZE;
-
-  if ( name == _SC_SYMLOOP_MAX )
-    return RTEMS_FILESYSTEM_SYMLOOP_MAX;
-
+  switch ( name ) {
+    case _SC_CLK_TCK:
+      return (long) rtems_clock_get_ticks_per_second();
+    case _SC_OPEN_MAX:
+      return rtems_libio_number_iops;
+    case _SC_GETPW_R_SIZE_MAX:
+      return 1024;
+    case _SC_PAGESIZE:
+      return PAGE_SIZE;
+    case _SC_SYMLOOP_MAX:
+      return RTEMS_FILESYSTEM_SYMLOOP_MAX;
 #if defined(__sparc__)
-  if ( name == 515 ) /* Solaris _SC_STACK_PROT */
-   return 0;
+    case 515: /* Solaris _SC_STACK_PROT */
+      return 0;
 #endif
-
-  rtems_set_errno_and_return_minus_one( EINVAL );
+    default:
+      rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 }
