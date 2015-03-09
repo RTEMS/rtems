@@ -57,6 +57,15 @@ $(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
+$(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/zilog
+	@: > $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/zilog/z8530.h: ../../shared/include/zilog/z8530.h $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/zilog/z8530.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/zilog/z8530.h
+
 $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)

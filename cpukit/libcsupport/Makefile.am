@@ -26,13 +26,6 @@ include_rtems_HEADERS += include/rtems/malloc.h
 include_rtems_HEADERS += include/rtems/termiostypes.h
 include_rtems_HEADERS += include/rtems/gxx_wrappers.h
 
-## zilog
-
-include_rtems_zilogdir = $(includedir)/rtems/zilog
-
-include_rtems_zilog_HEADERS = include/zilog/z8036.h
-include_rtems_zilog_HEADERS += include/zilog/z8530.h
-
 ##  General stuff
 ERROR_C_FILES = src/error.c src/__assert.c
 

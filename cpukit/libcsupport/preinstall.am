@@ -90,16 +90,3 @@ $(PROJECT_INCLUDE)/rtems/gxx_wrappers.h: include/rtems/gxx_wrappers.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/gxx_wrappers.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/gxx_wrappers.h
 
-$(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/zilog
-	@: > $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
-
-$(PROJECT_INCLUDE)/rtems/zilog/z8036.h: include/zilog/z8036.h $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/zilog/z8036.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/zilog/z8036.h
-
-$(PROJECT_INCLUDE)/rtems/zilog/z8530.h: include/zilog/z8530.h $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/zilog/z8530.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/zilog/z8530.h
-
