@@ -421,6 +421,8 @@ int i2c_dev_register(
   const char *dev_path
 );
 
+/** @} */  /* end of i2c device driver */
+
 /** @} */
 
 #ifdef __cplusplus
