@@ -139,6 +139,6 @@ return_id:
     the_semaphore->Semaphore_id = the_semaphore->Object.id;
     return &the_semaphore->Semaphore_id;
   #else
-    return (sem_t *)&the_semaphore->Object.id;
+    return &the_semaphore->Object.id;
   #endif
 }
