@@ -40,7 +40,8 @@ void TEST_STRING_TO_NAME(void)
     " - NULL return value - RTEMS_INVALID_ADDRESS"
   );
   #if defined(STRING_TO_INTEGER)
-    status = STRING_TO_NAME_METHOD( GOOD_VALUE_STRING, NULL, &endptr, 10 );
+    status = STRING_TO_NAME_METHOD( GOOD_VALUE_STRING, NULL, &endptr,
+        get_base_10_or_16( GOOD_VALUE_STRING ) );
   #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
     status = STRING_TO_NAME_METHOD( GOOD_VALUE_STRING, NULL, &endptr );
   #endif
@@ -52,7 +53,8 @@ void TEST_STRING_TO_NAME(void)
     " NULL endptr return value - RTEMS_SUCCESSFUL"
   );
   #if defined(STRING_TO_INTEGER)
-    status = STRING_TO_NAME_METHOD( GOOD_VALUE_STRING, &value, NULL, 10 );
+    status = STRING_TO_NAME_METHOD( GOOD_VALUE_STRING, &value, NULL,
+        get_base_10_or_16( GOOD_VALUE_STRING ) );
   #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
     status = STRING_TO_NAME_METHOD( GOOD_VALUE_STRING, &value, NULL );
   #endif
@@ -67,8 +69,8 @@ void TEST_STRING_TO_NAME(void)
       " w/endptr return value - RTEMS_SUCCESSFUL"
     );
     #if defined(STRING_TO_INTEGER)
-      status = STRING_TO_NAME_METHOD(
-        STRING_TO_MAX_STRING, &value, &endptr, 10 );
+      status = STRING_TO_NAME_METHOD( STRING_TO_MAX_STRING, &value, &endptr,
+          get_base_10_or_16( STRING_TO_MAX_STRING ) );
     #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
       status = STRING_TO_NAME_METHOD( STRING_TO_MAX_STRING, &value, &endptr );
     #endif
@@ -84,7 +86,8 @@ void TEST_STRING_TO_NAME(void)
     " w/endptr return value - RTEMS_SUCCESSFUL"
   );
   #if defined(STRING_TO_INTEGER)
-    status = STRING_TO_NAME_METHOD( GOOD_VALUE_STRING, &value, &endptr, 10 );
+    status = STRING_TO_NAME_METHOD( GOOD_VALUE_STRING, &value, &endptr,
+        get_base_10_or_16( GOOD_VALUE_STRING ) );
   #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
     status = STRING_TO_NAME_METHOD( GOOD_VALUE_STRING, &value, &endptr );
   #endif
@@ -99,7 +102,8 @@ void TEST_STRING_TO_NAME(void)
     " w/endptr return value - RTEMS_NOT_DEFINED"
   );
   #if defined(STRING_TO_INTEGER)
-    status = STRING_TO_NAME_METHOD( BAD_VALUE_STRING, &value, &endptr, 10 );
+    status = STRING_TO_NAME_METHOD( BAD_VALUE_STRING, &value, &endptr,
+        get_base_10_or_16( BAD_VALUE_STRING ) );
   #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
     status = STRING_TO_NAME_METHOD( BAD_VALUE_STRING, &value, &endptr );
   #endif
@@ -114,7 +118,8 @@ void TEST_STRING_TO_NAME(void)
     " - empty string - w/endptr return value - RTEMS_NOT_DEFINED"
   );
   #if defined(STRING_TO_INTEGER)
-    status = STRING_TO_NAME_METHOD( "", &value, &endptr, 10 );
+    status = STRING_TO_NAME_METHOD( "", &value, &endptr,
+        get_base_10_or_16( "" ) );
   #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
     status = STRING_TO_NAME_METHOD( "", &value, &endptr );
   #endif
@@ -129,8 +134,8 @@ void TEST_STRING_TO_NAME(void)
     puts(
     STRING_TO_NAME_METHOD_STRING " - overflow - RTEMS_INVALID_NUMBER" );
     #if defined(STRING_TO_INTEGER)
-      status = STRING_TO_NAME_METHOD(
-                 TEST_TOO_LARGE_STRING, &value, &endptr, 10 );
+      status = STRING_TO_NAME_METHOD( TEST_TOO_LARGE_STRING, &value, &endptr,
+          get_base_10_or_16( TEST_TOO_LARGE_STRING ) );
     #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
       status = STRING_TO_NAME_METHOD( TEST_TOO_LARGE_STRING, &value, &endptr );
     #endif
@@ -148,8 +153,8 @@ void TEST_STRING_TO_NAME(void)
     puts(
     STRING_TO_NAME_METHOD_STRING " - overflow - RTEMS_INVALID_NUMBER" );
     #if defined(STRING_TO_INTEGER)
-      status = STRING_TO_NAME_METHOD(
-                 TEST_TOO_LARGE_FOR_UCHAR, &value, &endptr, 10 );
+      status = STRING_TO_NAME_METHOD( TEST_TOO_LARGE_FOR_UCHAR, &value,
+          &endptr, get_base_10_or_16( TEST_TOO_LARGE_FOR_UCHAR ) );
     #endif
     if ( status != RTEMS_INVALID_NUMBER )
       printf( "ERROR = %s\n", rtems_status_text(status) );
@@ -163,8 +168,8 @@ void TEST_STRING_TO_NAME(void)
     value = 0;
     puts( STRING_TO_NAME_METHOD_STRING "- RTEMS_INVALID_NUMBER" );
     #if defined(STRING_TO_INTEGER)
-      status = STRING_TO_NAME_METHOD(
-                 TEST_TOO_SMALL_STRING, &value, &endptr, 10 );
+      status = STRING_TO_NAME_METHOD( TEST_TOO_SMALL_STRING, &value, &endptr,
+          get_base_10_or_16( TEST_TOO_SMALL_STRING ) );
     #elif defined(STRING_TO_POINTER) || defined(STRING_TO_FLOAT)
       status = STRING_TO_NAME_METHOD( TEST_TOO_SMALL_STRING, &value, &endptr );
     #endif

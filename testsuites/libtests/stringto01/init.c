@@ -26,6 +26,11 @@ rtems_task Init(rtems_task_argument argument);
 #define __STRING(x)     #x              /* stringify without expanding x */
 #define __XSTRING(x)    __STRING(x)     /* expand x, then stringify */
 
+static int get_base_10_or_16(const char *s)
+{
+  return (s[0] == '0' && s[1] == 'x') ? 16 : 10;
+}
+
 /* c99 has LLONG_MAX instead of LONG_LONG_MAX */
 #ifndef LONG_LONG_MAX
 #define LONG_LONG_MAX	LLONG_MAX
