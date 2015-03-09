@@ -136,6 +136,9 @@ AC_CHECK_HEADERS([tar.h errno.h sched.h sys/cdefs.h sys/queue.h],,
 AS_IF([test -n "$rtems_missing_header"],
   AC_MSG_ERROR([Missing required header $rtems_missing_header])])
 
+AC_CHECK_HEADERS([semaphore.h])
+AM_CONDITIONAL([HAVE_SEMAPHORE_H],[test x"$ac_cv_header_semaphore_h" = x"yes"])
+
 ## error out if libc doesn't provide stdint.h
 AS_IF([test x"${ac_cv_header_stdint_h}" != xyes],
 [AC_MSG_ERROR([Required header stdint.h not found])])

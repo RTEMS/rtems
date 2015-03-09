@@ -52,10 +52,11 @@ $(PROJECT_INCLUDE)/mqueue.h: include/mqueue.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mqueue.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mqueue.h
 
+if !HAVE_SEMAPHORE_H
 $(PROJECT_INCLUDE)/semaphore.h: include/semaphore.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/semaphore.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/semaphore.h
-
+endif
 $(PROJECT_INCLUDE)/rtems/posix/aio_misc.h: include/rtems/posix/aio_misc.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/aio_misc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/aio_misc.h
