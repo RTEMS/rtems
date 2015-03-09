@@ -47,6 +47,10 @@ long sysconf(
       return PAGE_SIZE;
     case _SC_SYMLOOP_MAX:
       return RTEMS_FILESYSTEM_SYMLOOP_MAX;
+    case _SC_NPROCESSORS_CONF:
+      return (long) rtems_configuration_get_maximum_processors();
+    case _SC_NPROCESSORS_ONLN:
+      return (long) rtems_get_processor_count();
 #if defined(__sparc__)
     case 515: /* Solaris _SC_STACK_PROT */
       return 0;

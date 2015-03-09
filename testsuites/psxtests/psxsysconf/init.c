@@ -73,6 +73,15 @@ void *POSIX_Init(
   if ( (sc != -1) || (errno != EINVAL) )
    rtems_test_exit(0);
 
+  rtems_test_assert(
+    sysconf( _SC_NPROCESSORS_CONF )
+      == (long) rtems_configuration_get_maximum_processors()
+  );
+
+  rtems_test_assert(
+    sysconf( _SC_NPROCESSORS_ONLN ) == (long) rtems_get_processor_count()
+  );
+
 #if defined(__sparc__)
   /* Solaris _SC_STACK_PROT - 515 */
   sc = sysconf( _SC_PAGESIZE );
