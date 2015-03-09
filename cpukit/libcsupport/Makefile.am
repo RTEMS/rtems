@@ -15,13 +15,6 @@ include_rtems_HEADERS += include/rtems/tod.h
 include_rtems_HEADERS += include/spurious.h
 include_rtems_HEADERS += include/vmeintr.h
 
-## motorola
-
-include_rtems_motoroladir = $(includedir)/rtems/motorola
-
-include_rtems_motorola_HEADERS = include/motorola/mc68230.h
-include_rtems_motorola_HEADERS += include/motorola/mc68681.h
-
 ## rtems
 include_rtems_HEADERS += include/rtems/assoc.h
 include_rtems_HEADERS += include/rtems/deviceio.h
@@ -39,7 +32,6 @@ include_rtems_zilogdir = $(includedir)/rtems/zilog
 
 include_rtems_zilog_HEADERS = include/zilog/z8036.h
 include_rtems_zilog_HEADERS += include/zilog/z8530.h
-include_rtems_zilog_HEADERS += include/zilog/z8536.h
 
 ##  General stuff
 ERROR_C_FILES = src/error.c src/__assert.c

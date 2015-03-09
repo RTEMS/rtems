@@ -103,7 +103,3 @@ $(PROJECT_INCLUDE)/rtems/zilog/z8530.h: include/zilog/z8530.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/zilog/z8530.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/zilog/z8530.h
 
-$(PROJECT_INCLUDE)/rtems/zilog/z8536.h: include/zilog/z8536.h $(PROJECT_INCLUDE)/rtems/zilog/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/zilog/z8536.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/zilog/z8536.h
-
