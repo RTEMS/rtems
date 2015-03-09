@@ -54,19 +54,6 @@ $(PROJECT_INCLUDE)/rtems/vmeintr.h: include/vmeintr.h $(PROJECT_INCLUDE)/rtems/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/vmeintr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/vmeintr.h
 
-$(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/motorola
-	@: > $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
-
-$(PROJECT_INCLUDE)/rtems/motorola/mc68230.h: include/motorola/mc68230.h $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/motorola/mc68230.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/motorola/mc68230.h
-
-$(PROJECT_INCLUDE)/rtems/motorola/mc68681.h: include/motorola/mc68681.h $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/motorola/mc68681.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/motorola/mc68681.h
-
 $(PROJECT_INCLUDE)/rtems/assoc.h: include/rtems/assoc.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/assoc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/assoc.h

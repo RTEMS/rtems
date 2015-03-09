@@ -16,6 +16,11 @@ DISTCLEANFILES = include/bspopts.h
 include_HEADERS += include/leds.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
+## Motorola device support files
+include_rtems_motoroladir = $(includedir)/rtems/motorola
+include_rtems_motorola_HEADERS = include/motorola/mc68230.h
+include_rtems_motorola_HEADERS += include/motorola/mc68681.h
+
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = ../../m68k/shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
