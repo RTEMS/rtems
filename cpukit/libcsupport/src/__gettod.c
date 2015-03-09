@@ -80,20 +80,4 @@ int _gettimeofday_r(
 }
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE__GETTIMEOFDAY)
-
-/**
- *  "System call" version
- */
-int _gettimeofday(
-  struct timeval *tp,
-  void           *__tz
-)
-{
-  struct timezone *tzp = __tz;
-
-  return gettimeofday( tp, tzp );
-}
-#endif
-
 #endif /* defined(RTEMS_NEWLIB) */
