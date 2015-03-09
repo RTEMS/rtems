@@ -44,6 +44,8 @@
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
 
+#define MQ_OPEN_FAILED ((mqd_t) -1)
+
 /*
  *  15.2.2 Open a Message Queue, P1003.1b-1993, p. 272
  */
@@ -82,7 +84,7 @@ mqd_t mq_open(
   the_mq_fd = _POSIX_Message_queue_Allocate_fd();
   if ( !the_mq_fd ) {
     _Objects_Allocator_unlock();
-    rtems_set_errno_and_return_minus_one( ENFILE );
+    rtems_set_errno_and_return_value( ENFILE, MQ_OPEN_FAILED );
   }
   the_mq_fd->oflag = oflag;
 
@@ -102,7 +104,7 @@ mqd_t mq_open(
     if ( !( status == ENOENT && (oflag & O_CREAT) ) ) {
       _POSIX_Message_queue_Free_fd( the_mq_fd );
       _Objects_Allocator_unlock();
-      rtems_set_errno_and_return_minus_one_cast( status, mqd_t );
+      rtems_set_errno_and_return_value( status, MQ_OPEN_FAILED );
     }
 
   } else {                /* name -> ID translation succeeded */
@@ -112,7 +114,7 @@ mqd_t mq_open(
     if ( (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL) ) {
       _POSIX_Message_queue_Free_fd( the_mq_fd );
       _Objects_Allocator_unlock();
-      rtems_set_errno_and_return_minus_one_cast( EEXIST, mqd_t );
+      rtems_set_errno_and_return_value( EEXIST, MQ_OPEN_FAILED );
     }
 
     /*
@@ -129,7 +131,7 @@ mqd_t mq_open(
     );
     _Thread_Enable_dispatch();
     _Objects_Allocator_unlock();
-    return (mqd_t)the_mq_fd->Object.id;
+    return the_mq_fd->Object.id;
 
   }
 
@@ -151,7 +153,7 @@ mqd_t mq_open(
   if ( status == -1 ) {
     _POSIX_Message_queue_Free_fd( the_mq_fd );
     _Objects_Allocator_unlock();
-    return (mqd_t) -1;
+    return MQ_OPEN_FAILED;
   }
 
   the_mq_fd->Queue = the_mq;
@@ -163,5 +165,5 @@ mqd_t mq_open(
 
   _Objects_Allocator_unlock();
 
-  return (mqd_t) the_mq_fd->Object.id;
+  return the_mq_fd->Object.id;
 }

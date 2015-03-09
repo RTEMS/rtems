@@ -92,7 +92,7 @@ sem_t *sem_open(
 
     if ( !( status == ENOENT && (oflag & O_CREAT) ) ) {
       _Objects_Allocator_unlock();
-      rtems_set_errno_and_return_minus_one_cast( status, sem_t * );
+      rtems_set_errno_and_return_value( status, SEM_FAILED );
     }
   } else {
 
@@ -102,7 +102,7 @@ sem_t *sem_open(
 
     if ( (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL) ) {
       _Objects_Allocator_unlock();
-      rtems_set_errno_and_return_minus_one_cast( EEXIST, sem_t * );
+      rtems_set_errno_and_return_value( EEXIST, SEM_FAILED );
     }
 
     the_semaphore = _POSIX_Semaphore_Get( (sem_t *) &the_semaphore_id, &location );
