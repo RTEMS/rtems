@@ -362,7 +362,7 @@ static inline void *_CPU_atomic_Fetch_sub_ptr( CPU_atomic_Pointer *obj, void *ar
 #elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
   return (void *) atomic_fetch_sub_explicit( obj, (uintptr_t) arg, order );
 #else
-  unsigned int val;
+  uintptr_t val;
   ISR_Level level;
 
   (void) order;
