@@ -71,8 +71,6 @@
 /*
  *  _CORE_mutex_Surrender
  *
- *  DESCRIPTION:
- *
  *  This routine frees a unit to the mutex.  If a task was blocked waiting for
  *  a unit from this mutex, then that task will be readied and the unit
  *  given to that task.  Otherwise, the unit will be returned to the mutex.

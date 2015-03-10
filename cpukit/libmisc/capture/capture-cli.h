@@ -41,11 +41,8 @@ extern "C" {
 /**
  * rtems_capture_cli_init
  *
- *  DESCRIPTION:
- *
  * This function initialises the command line interface to the capture
  * engine.
- *
  */
 rtems_status_code
 rtems_capture_cli_init (rtems_capture_timestamp timestamp);

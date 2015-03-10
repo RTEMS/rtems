@@ -480,13 +480,11 @@ static inline uint16_t m68k_swap_u16(
 /*
  *  _CPU_virtual_to_physical
  *
- *  DESCRIPTION:
+ *  This function is used to map virtual addresses to physical
+ *  addresses.
  *
- *	This function is used to map virtual addresses to physical
- *	addresses.
- *
- *	FIXME: ASSUMES THAT VIRTUAL ADDRESSES ARE THE SAME AS THE
- *	PHYSICAL ADDRESSES
+ *  FIXME: ASSUMES THAT VIRTUAL ADDRESSES ARE THE SAME AS THE
+ *  PHYSICAL ADDRESSES
  */
 static inline void * _CPU_virtual_to_physical (
   const void * d_addr )

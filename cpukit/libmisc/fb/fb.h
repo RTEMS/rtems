@@ -8,9 +8,6 @@
 
 /*
  * Copyright (c) 2000 - Rosimildo da Silva
- *
- * MODULE DESCRIPTION:
- * Micro FrameBuffer interface for Embedded Systems.
  */
 
 #ifndef _MW_FB_H

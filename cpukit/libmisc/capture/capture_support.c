@@ -50,8 +50,6 @@ typedef struct {
 /*
  * rtems_catpure_print_uptime
  *
- *  DESCRIPTION:
- *
  * This function prints the nanosecond uptime to stdout.
  */
 void
@@ -122,12 +120,9 @@ rtems_capture_print_record_capture(
 }
 
 /*
- *  rtems_capture_print_trace_records
- *
- *  DESCRIPTION:
+ * rtems_capture_print_trace_records
  *
  * This function is a monitor command that dumps trace records.
- *
  */
 
 void

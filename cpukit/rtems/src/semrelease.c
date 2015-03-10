@@ -4,20 +4,8 @@
  * @brief RTEMS Semaphore Release
  * @ingroup ClassicSem Semaphores
  *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the Semaphore Manager.
- *  This manager utilizes standard Dijkstra counting semaphores to provide
- *  synchronization and mutual exclusion capabilities.
- *
- *  Directives provided are:
- *
- *     + create a semaphore
- *     + get an ID of a semaphore
- *     + delete a semaphore
- *     + acquire a semaphore
- *     + release a semaphore
- *
+ * This file contains the implementation of the Classic API directive
+ * rtems_semaphore_release().
  */
 
 /*

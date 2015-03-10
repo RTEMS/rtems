@@ -81,8 +81,6 @@ typedef void ( *CORE_semaphore_API_mp_support_callout )(
 /**
  *  @brief Initialize the semaphore based on the parameters passed.
  *
- *  DESCRIPTION:
- *
  *  This package is the implementation of the CORE Semaphore Handler.
  *  This core object utilizes standard Dijkstra counting semaphores to provide
  *  synchronization and mutual exclusion capabilities.
@@ -147,7 +145,6 @@ CORE_semaphore_Status _CORE_semaphore_Surrender(
 /**
  *  @brief Core semaphore flush.
  *
- *  DESCRIPTION:
  *  This package is the implementation of the CORE Semaphore Handler.
  *  This core object utilizes standard Dijkstra counting semaphores to provide
  *  synchronization and mutual exclusion capabilities.

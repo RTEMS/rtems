@@ -55,11 +55,8 @@ static rtems_capture_timestamp capture_timestamp;
 /*
  * rtems_capture_cli_open
  *
- *  DESCRIPTION:
- *
  * This function opens the capture engine. We need the size of the
  * capture buffer.
- *
  */
 
 static const char* open_usage = "usage: copen [-i] size\n";
@@ -129,10 +126,7 @@ rtems_capture_cli_open (int                                argc,
 /*
  * rtems_capture_cli_close
  *
- *  DESCRIPTION:
- *
  * This function closes the capture engine.
- *
  */
 
 static void
@@ -157,10 +151,7 @@ rtems_capture_cli_close (int                                argc RC_UNUSED,
 /*
  * rtems_capture_cli_enable
  *
- *  DESCRIPTION:
- *
  * This function enables the capture engine.
- *
  */
 
 static void
@@ -185,10 +176,7 @@ rtems_capture_cli_enable (int                                argc RC_UNUSED,
 /*
  * rtems_capture_cli_disable
  *
- *  DESCRIPTION:
- *
  * This function disables the capture engine.
- *
  */
 
 static void
@@ -253,11 +241,8 @@ rtems_capture_cli_print_task (rtems_tcb *tcb)
 /*
  * rtems_capture_cli_count_tasks
  *
- *  DESCRIPTION:
- *
  * This function is called for each tcb and counts the
  * number of tasks.
- *
  */
 
 static void
@@ -270,10 +255,7 @@ rtems_capture_cli_count_tasks (rtems_tcb *tcb)
 /*
  * rtems_capture_cli_task_list
  *
- *  DESCRIPTION:
- *
  * This function lists the tasks the capture engine knows about.
- *
  */
 
 static void
@@ -298,10 +280,7 @@ rtems_capture_cli_task_list (int                                argc RC_UNUSED,
 /*
  * rtems_capture_cli_watch_list
  *
- *  DESCRIPTION:
- *
  * This function lists the controls in the capture engine.
- *
  */
 
 static void
@@ -316,10 +295,7 @@ rtems_capture_cli_watch_list (int                                argc RC_UNUSED,
 /*
  * rtems_capture_cli_get_name_id
  *
- *  DESCRIPTION:
- *
  * This function checks arguments for a name or an id.
- *
  */
 
 static bool
@@ -375,11 +351,8 @@ rtems_capture_cli_get_name_id (char*       arg,
 /*
  * rtems_capture_cli_watch_add
  *
- *  DESCRIPTION:
- *
  * This function is a monitor command that add a watch to the capture
  * engine.
- *
  */
 
 static char const * watch_add_usage = "usage: cwadd [task name] [id]\n";
@@ -438,11 +411,8 @@ rtems_capture_cli_watch_add (int                                argc,
 /*
  * rtems_capture_cli_watch_del
  *
- *  DESCRIPTION:
- *
  * This function is a monitor command that deletes a watch from the capture
  * engine.
- *
  */
 
 static char const * watch_del_usage = "usage: cwdel [task name] [id]\n";
@@ -501,10 +471,7 @@ rtems_capture_cli_watch_del (int                                argc,
 /*
  * rtems_capture_cli_watch_control
  *
- *  DESCRIPTION:
- *
  * This function is a monitor command that controls a watch.
- *
  */
 
 static char const * watch_control_usage = "usage: cwctl [task name] [id] on/off\n";
@@ -568,10 +535,7 @@ rtems_capture_cli_watch_control (int                                argc,
 /*
  * rtems_capture_cli_watch_global
  *
- *  DESCRIPTION:
- *
  * This function is a monitor command that sets a global watch.
- *
  */
 
 static char const * watch_global_usage = "usage: cwglob on/off\n";
@@ -622,10 +586,7 @@ rtems_capture_cli_watch_global (int                                argc,
 /*
  * rtems_capture_cli_watch_ceiling
  *
- *  DESCRIPTION:
- *
  * This function is a monitor command that sets watch ceiling.
- *
  */
 
 static char const * watch_ceiling_usage = "usage: cwceil priority\n";
@@ -673,10 +634,7 @@ rtems_capture_cli_watch_ceiling (int                                argc,
 /*
  * rtems_capture_cli_watch_floor
  *
- *  DESCRIPTION:
- *
  * This function is a monitor command that sets watch floor.
- *
  */
 
 static char const * watch_floor_usage = "usage: cwfloor priority\n";
@@ -724,10 +682,7 @@ rtems_capture_cli_watch_floor (int                                argc,
 /*
  * rtems_capture_cli_trigger_worker
  *
- *  DESCRIPTION:
- *
  * This function is a monitor command that sets or clears a trigger.
- *
  */
 
 static char const *trigger_set_usage =
@@ -969,10 +924,7 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
 /*
  * rtems_capture_cli_trigger_set
  *
- *  DESCRIPTION:
- *
  * This function is a monitor command that sets a trigger.
- *
  */
 
 static void
@@ -987,10 +939,7 @@ rtems_capture_cli_trigger_set (int                                argc,
 /*
  * rtems_capture_cli_trigger_clear
  *
- *  DESCRIPTION:
- *
  * This function is a monitor command that clears a trigger.
- *
  */
 
 static void
@@ -1005,10 +954,7 @@ rtems_capture_cli_trigger_clear (int                                argc,
 /*
  * rtems_capture_cli_trace_records
  *
- *  DESCRIPTION:
- *
  * This function is a monitor command that dumps trace records.
- *
  */
 
 static void
@@ -1054,11 +1000,8 @@ rtems_capture_cli_trace_records (int                                argc,
 /*
  * rtems_capture_cli_flush
  *
- *  DESCRIPTION:
- *
  * This function is a monitor command that flushes and primes the capture
  * engine.
- *
  */
 
 static void
@@ -1229,11 +1172,8 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
 /*
  * rtems_capture_cli_init
  *
- *  DESCRIPTION:
- *
  * This function initialises the command line interface to the capture
  * engine.
- *
  */
 
 rtems_status_code

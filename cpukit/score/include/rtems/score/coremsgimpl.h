@@ -113,8 +113,6 @@ typedef void ( *CORE_message_queue_API_mp_support_callout )(
 /**
  *  @brief Initialize a message queue.
  *
- *  DESCRIPTION:
- *
  *  This package is the implementation of the CORE Message Queue Handler.
  *  This core object provides task synchronization and communication functions
  *  via messages passed to queue objects.
@@ -144,7 +142,6 @@ bool _CORE_message_queue_Initialize(
 /**
  *  @brief Close a message queue.
  *
- *  DESCRIPTION:
  *  This package is the implementation of the CORE Message Queue Handler.
  *  This core object provides task synchronization and communication functions
  *  via messages passed to queue objects
@@ -167,7 +164,6 @@ void _CORE_message_queue_Close(
 /**
  *  @brief Flush pending messages.
  *
- *  DESCRIPTION:
  *  This package is the implementation of the CORE Message Queue Handler.
  *  This core object provides task synchronization and communication functions
  *  via messages passed to queue objects.
@@ -220,7 +216,6 @@ uint32_t   _CORE_message_queue_Flush_support(
 /**
  *  @brief Broadcast a message to the message queue.
  *
- *  DESCRIPTION:
  *  This package is the implementation of the CORE Message Queue Handler.
  *  This core object provides task synchronization and communication functions
  *  via messages passed to queue objects.
@@ -289,7 +284,6 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
 /**
  *  @brief Size a message from the message queue.
  *
- *  DESCRIPTION:
  *  This package is the implementation of the CORE Message Queue Handler.
  *  This core object provides task synchronization and communication functions
  *  via messages passed to queue objects.

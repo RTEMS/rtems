@@ -17,9 +17,12 @@
  * - delete a semaphore
  * - acquire a semaphore
  * - release a semaphore
+ * - flush a semaphore
+ * - set ceiling priority for a semaphore
  */
 
-/* COPYRIGHT (c) 1989-2008.
+/*
+ * COPYRIGHT (c) 1989-2008.
  * On-Line Applications Research Corporation (OAR).
  *
  * The license and distribution terms for this file may be
@@ -198,8 +201,7 @@ rtems_status_code rtems_semaphore_release(
 /**
  * @brief RTEMS Semaphore Flush
  *
- * DESCRIPTION:
- * This package is the implementation of the flush directive
+ * This method is the implementation of the flush directive
  * of the Semaphore Manager.
  *
  * This directive allows a thread to flush the threads
