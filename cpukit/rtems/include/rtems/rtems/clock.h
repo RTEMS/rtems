@@ -77,6 +77,9 @@ typedef TOD_Nanoseconds_since_last_tick_routine
 /**
  * @brief Obtain Current Time of Day
  *
+ * @deprecated rtems_clock_get() is deprecated. Use the more explicit
+ * function calls rtems_clock_get_xxx().
+ *
  * This routine implements the rtems_clock_get directive. It returns
  * one of the following:
  * + current time of day
@@ -94,7 +97,7 @@ typedef TOD_Nanoseconds_since_last_tick_routine
 rtems_status_code rtems_clock_get(
   rtems_clock_get_options  option,
   void                    *time_buffer
-);
+) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 
 /**
  * @brief Obtain Current Time of Day (Classic TOD)

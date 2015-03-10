@@ -319,6 +319,8 @@ procedure Clock_Get (
 
 @subheading DESCRIPTION:
 
+This directive is deprecated.
+
 This directive obtains the system date and time.  If
 the caller is attempting to obtain the date and time (i.e.
 option is set to either @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH},
