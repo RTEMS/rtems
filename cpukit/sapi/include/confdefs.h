@@ -1823,6 +1823,8 @@ const rtems_libio_helper rtems_fs_init_helper =
 /**
  * This macro calculates the memory required for task variables.
  *
+ * @deprecated Task variables are deprecated.
+ *
  * Each task variable is individually allocated from the Workspace.
  * Hence, we do the multiplication on the configured size.
  *
@@ -1839,6 +1841,7 @@ const rtems_libio_helper rtems_fs_init_helper =
     #define CONFIGURE_MAXIMUM_TASK_VARIABLES                     0
     #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) 0
   #else
+    #warning "Per-Task Variables are deprecated and will be removed."
     #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) \
       (_task_variables) * \
          _Configure_From_workspace(sizeof(rtems_task_variable_t))

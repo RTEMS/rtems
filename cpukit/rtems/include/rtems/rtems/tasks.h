@@ -462,6 +462,8 @@ rtems_status_code rtems_task_is_suspended(
 /**
  *  @brief RTEMS Add Task Variable
  *
+ *  @deprecated Task variables are deprecated.
+ *
  *  This directive adds a per task variable.
  *
  *  @note This service is not available in SMP configurations.
@@ -470,10 +472,12 @@ rtems_status_code rtems_task_variable_add(
   rtems_id  tid,
   void    **ptr,
   void    (*dtor)(void *)
-);
+) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 
 /**
  *  @brief Get a per-task variable
+ *
+ *  @deprecated Task variables are deprecated.
  *
  *  This directive gets the value of a task variable.
  *
@@ -483,10 +487,12 @@ rtems_status_code rtems_task_variable_get(
   rtems_id tid,
   void **ptr,
   void **result
-);
+) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 
 /**
  *  @brief RTEMS Delete Task Variable
+ *
+ *  @deprecated Task variables are deprecated.
  *
  *  This directive removes a per task variable.
  *
@@ -495,7 +501,7 @@ rtems_status_code rtems_task_variable_get(
 rtems_status_code rtems_task_variable_delete(
   rtems_id  tid,
   void    **ptr
-);
+) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 #endif
 
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)

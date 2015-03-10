@@ -70,13 +70,15 @@ void _RTEMS_tasks_Initialize_user_tasks( void );
 /**
  *  @brief RTEMS Tasks Invoke Task Variable Destructor
  *
+ *  @deprecated Task variables are deprecated.
+ *
  *  This routine invokes the optional user provided destructor on the
  *  task variable and frees the memory for the task variable.
  */
 void _RTEMS_Tasks_Invoke_task_variable_dtor(
   Thread_Control        *the_thread,
   rtems_task_variable_t *tvp
-);
+) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 #endif
 
 RTEMS_INLINE_ROUTINE Thread_Control *_RTEMS_tasks_Allocate(void)
