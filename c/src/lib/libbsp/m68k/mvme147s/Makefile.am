@@ -16,6 +16,10 @@ noinst_PROGRAMS =
 
 include_HEADERS += include/coverhd.h
 
+## Zilog component header files
+include_rtems_zilogdir = $(includedir)/rtems/zilog
+include_rtems_zilog_HEADERS = ../../shared/include/zilog/z8530.h
+
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = ../../m68k/shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
