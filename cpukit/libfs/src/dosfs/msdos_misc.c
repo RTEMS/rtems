@@ -1055,8 +1055,8 @@ msdos_get_utf16_string_from_long_entry (
 
         if (is_first_entry) {
             for (chars_in_entry = 0;
-                 (    entry_string_buf[chars_in_entry] != 0x0000
-                  && chars_in_entry < MSDOS_LFN_LEN_PER_ENTRY );
+                 (   chars_in_entry < MSDOS_LFN_LEN_PER_ENTRY
+                  && entry_string_buf[chars_in_entry] != 0x0000);
                   ++chars_in_entry) {
                 ;
             }
