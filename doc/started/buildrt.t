@@ -5,6 +5,11 @@
 
 @chapter Building RTEMS
 
+@b{NOTE}: If you built your toolset with RSB, by default the RSB also 
+builds RTEMS while building the compiler toolset. You may already have
+a built and installed RTEMS in this case, and if not you should check
+the RSB documentation at @uref{https://docs.rtems.org/rsb/,https://docs.rtems.org/rsb/}.
+
 @section Obtain the RTEMS Source Code
 
 This section provides pointers to the RTEMS source code and example
@@ -14,8 +19,8 @@ directory whose name is the release on the ftp site.  The RTEMS ftp site
 is accessible via both the ftp and http protocols at the following URLs:
 
 @itemize @bullet
-@item @uref{http://www.rtems.org/ftp/pub/rtems,http://www.rtems.org/ftp/pub/rtems}
-@item @uref{ftp://www.rtems.org/pub/rtems,ftp://www.rtems.org/pub/rtems}
+@item @uref{http://ftp.rtems.org/pub/rtems,http://ftp.rtems.org/pub/rtems}
+@item @uref{ftp://ftp.rtems.org/pub/rtems,ftp://ftp.rtems.org/pub/rtems}
 @end itemize
 
 Associated with each RTEMS Release is a set of example programs.
@@ -47,7 +52,7 @@ Instead of downloading release tarballs you may choose to check out the current
 RTEMS source from the project's source code repository. For details on
 accessing the RTEMS source repository consult:
 
-@uref{http://wiki.rtems.org/wiki/index.php/RTEMS_GIT_Repository, http://wiki.rtems.org/wiki/index.php/RTEMS_GIT_Repository}.
+@uref{https://devel.rtems.org/wiki/Developer/Git,https://devel.rtems.org/wiki/Developer/Git}.
 
 @section Add <INSTALL_POINT>/bin to Executable PATH
 
@@ -56,8 +61,8 @@ in your search path.  It is important to have the RTEMS toolset first
 in your path to ensure that you are using the intended version of all
 tools.  The following command prepends the directory where
 the tools were installed in a previous step.  If you are using
-binaries provided by the RTEMS Project, the <INSTALL_POINT> will be
-@code{/opt/rtems-@value{RTEMSAPI}}
+binaries installed to @code{/opt/rtems-@value{RTEMSAPI}}, then the
+<INSTALL_POINT> will be @code{/opt/rtems-@value{RTEMSAPI}}
 
 @example
 export PATH=<INSTALL_POINT>/bin:$@{PATH@}
@@ -106,11 +111,9 @@ m68k-rtems@code{RTEMSAPI}-gcc -v -c f.c
 @end example
 
 If this produces messages that indicate the assembly code is not valid,
-then it is likely that you have fallen victim to one of the problems
-described in @ref{Error Message Indicates Invalid Option to Assembler}
-Please do not feel bad about this and do not give up, one of the most
-common installation errors is for the cross-compiler not to be able
-to find the cross assembler and default to using the native @code{as}.
+then it is likely that you have fallen victim to one of the most
+common installation errors and the cross-compiler is not able
+to find the cross assembler and defaults to using the native @code{as}.
 This can result in very confusing error messages.
 
 @section Building RTEMS for a Specific Target and BSP
@@ -162,8 +165,9 @@ the @code{BOARD_SUPPORT_PACKAGE} board.
 @example
 mkdir build-rtems
 cd build-rtems
-../rtems-@value{RTEMSAPI}.VERSION/configure --target=<TARGET_CONFIGURATION> \
-    --disable-posix --disable-networking --disable-cxx \
+../rtems-@value{RTEMSAPI}.VERSION/configure \
+    --target=<TARGET_CONFIGURATION> \
+    --disable-networking \
     --enable-rtemsbsp=<BSP>\
     --prefix=<INSTALL_POINT>
 make all

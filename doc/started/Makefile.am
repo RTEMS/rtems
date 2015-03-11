@@ -8,7 +8,7 @@ PROJECT = started
 include $(top_srcdir)/project.am
 include $(top_srcdir)/main.am
 
-GENERATED_FILES = binaries.texi buildc.texi buildrt.texi intro.texi nt.texi \
+GENERATED_FILES = buildc.texi buildrt.texi intro.texi nt.texi \
     require.texi nextstep.texi sample.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
@@ -24,23 +24,19 @@ intro.texi: intro.t
 	    -n "Requirements" < $< > $@
 
 require.texi: require.t
-	$(BMENU2) -c -p "GCC Mailing Lists" \
+	$(BMENU2) -c -p "RTEMS Mailing Lists" \
 	    -u "Top" \
-	    -n "Prebuilt Toolset Executables" < $< > $@
-
-binaries.texi: binaries.t
-	$(BMENU2) -c \
-	    -p "GNU/Linux Distributions using Debian Packaging Format" \
-	    -u "Top" \
-	    -n "Building the GNU Cross Compiler Toolset" < $< > $@
+	    -n "Building the GNU Cross Compiler Toolset with RSB" < $< > $@
 
 buildc.texi: buildc.t
-	$(BMENU2) -c -p "Removing Zipped Tar Files" \
+	$(BMENU2) -c \
+	    -p "Distribution Independent Potential GNU/Linux Issues" \
 	    -u "Top" \
 	    -n "Building RTEMS" < $< > $@
 
 buildrt.texi: buildrt.t
-	$(BMENU2) -c -p "Error Messages Indicating Configuration Problems" \
+	$(BMENU2) -c \
+	    -p "Building the GNU Cross Compiler Toolset with RSB" \
 	    -u "Top" \
 	    -n "Building the Sample Applications" < $< > $@
 
@@ -59,7 +55,7 @@ nt.texi: nt.t
 	    -u "Top" \
 	    -n "" < $< > $@
 
-EXTRA_DIST = binaries.t buildc.t buildrt.t intro.t nextstep.t nt.t require.t \
+EXTRA_DIST = buildc.t buildrt.t intro.t nextstep.t nt.t require.t \
     sample.t
 
 if USE_HTML

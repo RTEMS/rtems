@@ -136,37 +136,24 @@ The RTEMS Project provides formatted documentation for the primary
 tools in the cross development toolset including BINUTILS, GCC,
 NEWLIB, and GDB with the pre-built versions of those tools.
 
-Much of the documentation is available at other sites on the Internet.
-The following is a list of URLs where one can find HTML versions of
-the GNU manuals:
+Much of the documentation is available at other sites on the Internet,
+for example the GNU manuals are hosted by the Free Software Foundation
+at @uref{http://www.gnu.org/manual/manual.html, http://www.gnu.org/manual/manual.html}.
 
-@table @b
-
-@item Free Software Foundation
-@uref{http://www.gnu.org/manual/manual.html,
-http://www.gnu.org/manual/manual.html}
-
-@item Delorie Software
-@uref{http://www.delorie.com/gnu/docs, http://www.delorie.com/gnu/docs}
-
-@end table
-
-
-@subsection RTEMS Mailing List
+@subsection RTEMS Mailing Lists
 
 @uref{mailto:@value{RTEMSUSERS},@value{RTEMSUSERS}}
 
-This is the primary  mailing list for the discussion of issues
-related to RTEMS, including GNAT/RTEMS.  If you have questions
-about RTEMS, wish to make suggestions, track development efforts,
-or just want to pick up hints, this is a good list to monitor.
+The users mailing list is for any and all questions about RTEMS, especially
+those focusing on how to use RTEMS.
 If you would like to browse the thousands of messages in the fifteen
 year archive of the mailing list or subscribe to it, please visit
-@uref{http://www.rtems.org/mailman,http://www.rtems.org/mailman} for
+@uref{https://lists.rtems.org/mailman/listinfo/users,https://lists.rtems.org/mailman/listinfo/users} for
 more information,
 
-@subsection GCC Mailing Lists
+@uref{mailto:@value{RTEMSDEVEL},@value{RTEMSDEVEL}}
 
-The GCC Project is hosted at @uref{http://gcc.gnu.org,http://gcc.gnu.org}.
-They maintain multiple mailing lists that are described at the web site
-along with subscription information.
+The devel mailing list is the place to track ongoing RTEMS development
+and to discuss changes to RTEMS. This list is also where patches are
+submitted.
+

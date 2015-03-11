@@ -64,8 +64,7 @@ This is the online version of the Getting Started with RTEMS.
 @menu
 * Introduction::
 * Requirements::
-* Prebuilt Toolset Executables::
-* Building the GNU Cross Compiler Toolset::
+* Building the GNU Cross Compiler Toolset with RSB::
 * Building RTEMS::
 * Building the Sample Applications::
 * Where To Go From Here::
@@ -77,7 +76,6 @@ This is the online version of the Getting Started with RTEMS.
 
 @include intro.texi
 @include require.texi
-@include binaries.texi
 @include buildc.texi
 @include buildrt.texi
 @include sample.texi

@@ -152,10 +152,3 @@ to at least GNU fileutils version 3.16 to resolve this problem.
 
 @end itemize
 
-@subsection GNU/Linux Distributions using Debian Packaging Format
-
-The RTEMS Project does not currently provide prebuilt toolsets in the Debian packaging format used by the Debian and Ubuntu distributions.  If you are using a distribution using this packaging format, then you have two options for installing the RTEMS toolset.
-
-The first option is to build the toolset from source following the instructions in the @ref{Building the GNU Cross Compiler Toolset}.  This is an approach taken by many users.
-
-Alternatively, it is often possible to extract the contents of the RPM files which contain the portions of the toolset you require.  In this case, you will follow the instructions in @ref{Locating the RPMs for your GNU/Linux Distribution} but assume your distribution is the RedHat Enterprise Linux version which is closest to yours from a shared library perspective.  As of December 2010, this is usually RedHat Enterprise Linux version 5.  As time passes, it is expected that version 6 will be appropriate in more cases.  You will extract the contents of these RPM files using either @code{rpm2cpio} and install them or you may be able to use the @code{alien} tool to convert them to Debian packaging.
