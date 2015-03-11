@@ -42,6 +42,12 @@ include_bsp_HEADERS += include/io.h
 include_bsp_HEADERS += include/common-types.h
 include_bsp_HEADERS += include/gpio-defs.h
 include_bsp_HEADERS += include/gpio.h
+include_bsp_HEADERS += include/can.h
+include_bsp_HEADERS += include/can-defs.h
+include_bsp_HEADERS += include/pwmout.h
+include_bsp_HEADERS += include/pwmout-defs.h
+include_bsp_HEADERS += include/adc.h
+include_bsp_HEADERS += include/adc-defs.h
 include_bsp_HEADERS += include/timer-defs.h
 include_bsp_HEADERS += include/timer.h
 include_bsp_HEADERS += include/watchdog.h
@@ -50,6 +56,7 @@ include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/lpc176x.h
 include_bsp_HEADERS += include/lpc-clock-config.h
 include_bsp_HEADERS += include/system-clocks.h
+include_bsp_HEADERS += include/mbed-pinmap.h
 
 include_HEADERS += ../../shared/include/tm27.h
 
@@ -125,6 +132,15 @@ libbsp_a_SOURCES += ../../shared/tod.c \
 
 # GPIO
 libbsp_a_SOURCES += gpio/gpio.c
+
+# CAN
+libbsp_a_SOURCES += can/can.c
+
+# PWMOUT
+libbsp_a_SOURCES += pwmout/pwmout.c
+
+# ADC
+libbsp_a_SOURCES += adc/adc.c
 
 # Timer
 libbsp_a_SOURCES += timer/timer.c

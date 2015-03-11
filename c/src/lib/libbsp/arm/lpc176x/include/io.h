@@ -31,7 +31,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @brief Set pin to the selected function.
+ * @brief Sets pin to the selected function.
  *
  * @param pin The pin to set.
  * @param function Defines the function to set.
@@ -39,6 +39,17 @@ extern "C" {
 void lpc176x_pin_select(
   uint32_t             pin,
   lpc176x_pin_function function
+);
+
+/**
+ * @brief Sets pin to the selected mode.
+ *
+ * @param pin The pin to set.
+ * @param mode Defines the mode to set.
+ */
+void lpc176x_pin_set_mode(
+  const uint32_t             pin,
+  const lpc176x_pin_mode mode
 );
 
 /**

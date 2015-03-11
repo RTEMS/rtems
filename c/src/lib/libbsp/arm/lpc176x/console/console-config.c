@@ -62,6 +62,42 @@ static inline void lpc176x_uart_set_register(
   reg[ i ] = val;
 }
 
+static bool lpc176x_uart1_probe(rtems_termios_device_context *ctx)
+{
+  (void)ctx;
+
+  lpc176x_module_enable( LPC176X_MODULE_UART_1, LPC176X_MODULE_PCLK_DEFAULT );
+
+  lpc176x_pin_select( LPC176X_PIN_UART_1_TXD, LPC176X_PIN_FUNCTION_01 );
+  lpc176x_pin_select( LPC176X_PIN_UART_1_RXD, LPC176X_PIN_FUNCTION_01 );
+
+  return true;
+}
+
+static bool lpc176x_uart2_probe(rtems_termios_device_context *ctx)
+{
+  (void)ctx;
+
+  lpc176x_module_enable( LPC176X_MODULE_UART_2, LPC176X_MODULE_PCLK_DEFAULT );
+
+  lpc176x_pin_select( LPC176X_PIN_UART_2_TXD, LPC176X_PIN_FUNCTION_01 );
+  lpc176x_pin_select( LPC176X_PIN_UART_2_RXD, LPC176X_PIN_FUNCTION_01 );
+
+  return true;
+}
+
+static bool lpc176x_uart3_probe(rtems_termios_device_context *ctx)
+{
+  (void)ctx;
+
+  lpc176x_module_enable( LPC176X_MODULE_UART_3, LPC176X_MODULE_PCLK_DEFAULT );
+
+  lpc176x_pin_select( LPC176X_PIN_UART_3_TXD, LPC176X_PIN_FUNCTION_10 );
+  lpc176x_pin_select( LPC176X_PIN_UART_3_RXD, LPC176X_PIN_FUNCTION_10 );
+
+  return true;
+}
+
 #ifdef LPC176X_CONFIG_CONSOLE
 static ns16550_context lpc176x_uart_context_0 = {
   .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("UART 0"),
@@ -126,7 +162,7 @@ const console_device console_device_table[] = {
   #ifdef LPC176X_CONFIG_UART_1
     {
       .device_file = "/dev/ttyS1",
-      .probe = ns16550_probe,
+      .probe = lpc176x_uart1_probe,
       .handler = &ns16550_handler_interrupt,
       .context = &lpc176x_uart_context_1.base
     },
@@ -134,7 +170,7 @@ const console_device console_device_table[] = {
   #ifdef LPC176X_CONFIG_UART_2
     {
       .device_file = "/dev/ttyS2",
-      .probe = ns16550_probe,
+      .probe = lpc176x_uart2_probe,
       .handler = &ns16550_handler_interrupt,
       .context = &lpc176x_uart_context_2.base
     },
@@ -142,7 +178,7 @@ const console_device console_device_table[] = {
   #ifdef LPC176X_CONFIG_UART_3
     {
       .device_file = "/dev/ttyS3",
-      .probe = ns16550_probe,
+      .probe = lpc176x_uart3_probe,
       .handler = &ns16550_handler_interrupt,
       .context = &lpc176x_uart_context_3.base
     },

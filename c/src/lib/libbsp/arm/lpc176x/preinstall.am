@@ -117,6 +117,30 @@ $(PROJECT_INCLUDE)/bsp/gpio.h: include/gpio.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/gpio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/gpio.h
 
+$(PROJECT_INCLUDE)/bsp/can.h: include/can.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/can.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/can.h
+
+$(PROJECT_INCLUDE)/bsp/can-defs.h: include/can-defs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/can-defs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/can-defs.h
+
+$(PROJECT_INCLUDE)/bsp/pwmout.h: include/pwmout.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pwmout.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pwmout.h
+
+$(PROJECT_INCLUDE)/bsp/pwmout-defs.h: include/pwmout-defs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pwmout-defs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pwmout-defs.h
+
+$(PROJECT_INCLUDE)/bsp/adc.h: include/adc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/adc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/adc.h
+
+$(PROJECT_INCLUDE)/bsp/adc-defs.h: include/adc-defs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/adc-defs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/adc-defs.h
+
 $(PROJECT_INCLUDE)/bsp/timer-defs.h: include/timer-defs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/timer-defs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/timer-defs.h
@@ -148,6 +172,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc-clock-config.h
 $(PROJECT_INCLUDE)/bsp/system-clocks.h: include/system-clocks.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/system-clocks.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/system-clocks.h
+
+$(PROJECT_INCLUDE)/bsp/mbed-pinmap.h: include/mbed-pinmap.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mbed-pinmap.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mbed-pinmap.h
 
 $(PROJECT_INCLUDE)/tm27.h: ../../shared/include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h

@@ -51,8 +51,8 @@
     CONSOLE_LCR = 0x00; \
     CONSOLE_IER = 0x00; \
     CONSOLE_LCR = 0x80; \
-    CONSOLE_DLL = (dll); \
-    CONSOLE_DLM = 0x00; \
+    CONSOLE_DLL = (dll & 0xFF); \
+    CONSOLE_DLM = (dll >> 8); \
     CONSOLE_LCR = 0x03; \
     CONSOLE_FCR = 0x07; \
   } while (0)

@@ -43,6 +43,12 @@ extern "C" {
 #define LPC176X_PIN_SELECT_MASK_SIZE 2U
 #define LPC176X_PIN_UART_0_TXD 2U
 #define LPC176X_PIN_UART_0_RXD 3U
+#define LPC176X_PIN_UART_1_TXD 15U
+#define LPC176X_PIN_UART_1_RXD 16U
+#define LPC176X_PIN_UART_2_TXD 10U
+#define LPC176X_PIN_UART_2_RXD 11U
+#define LPC176X_PIN_UART_3_TXD 0U
+#define LPC176X_PIN_UART_3_RXD 1U
 
 #define LPC176X_MODULE_BITS_COUNT 32U
 #define LPC176X_MODULE_COUNT ( LPC176X_MODULE_USB + 1U )
@@ -67,6 +73,19 @@ typedef enum {
   LPC176X_PIN_FUNCTION_COUNT
 }
 lpc176x_pin_function;
+
+/**
+ * @brief Defines the pin modes.
+ *
+ */
+typedef enum {
+  LPC176X_PIN_MODE_PULLUP,
+  LPC176X_PIN_MODE_REPEATER,
+  LPC176X_PIN_MODE_NONE,
+  LPC176X_PIN_MODE_PULLDOWN,
+  LPC176X_PIN_MODE_COUNT
+}
+lpc176x_pin_mode;
 
 /**
  * @brief Defines all type of pins.

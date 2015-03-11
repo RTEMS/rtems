@@ -33,6 +33,7 @@ static const lpc176x_module_entry lpc176x_module_table[] = {
   LPC176X_MODULE_ENTRY( LPC176X_MODULE_ADC, 1, 1, 12 ),
   LPC176X_MODULE_ENTRY( LPC176X_MODULE_CAN_0, 1, 1, 13 ),
   LPC176X_MODULE_ENTRY( LPC176X_MODULE_CAN_1, 1, 1, 14 ),
+  LPC176X_MODULE_ENTRY(LPC176X_MODULE_ACCF, 0, 1, 15),
   LPC176X_MODULE_ENTRY( LPC176X_MODULE_DAC, 0, 1, 11 ),
   LPC176X_MODULE_ENTRY( LPC176X_MODULE_GPDMA, 1, 1, 29 ),
   LPC176X_MODULE_ENTRY( LPC176X_MODULE_GPIO, 0, 1, 15 ),
@@ -67,6 +68,20 @@ inline void lpc176x_pin_select(
   volatile uint32_t *const pinsel = &LPC176X_PINSEL[ pin_selected ];
   const uint32_t           shift = LPC176X_PIN_SELECT_SHIFT( pin );
   *pinsel = SET_FIELD( *pinsel, function,
+    LPC176X_PIN_SELECT_MASK << shift, shift );
+}
+
+void lpc176x_pin_set_mode(
+  const uint32_t             pin,
+  const lpc176x_pin_mode mode
+)
+{
+  assert( pin <= LPC176X_IO_INDEX_MAX
+    && mode < LPC176X_PIN_MODE_COUNT );
+  const uint32_t           pin_selected = LPC176X_PIN_SELECT( pin );
+  volatile uint32_t *const pinmode = &LPC176X_PINMODE[ pin_selected ];
+  const uint32_t           shift = LPC176X_PIN_SELECT_SHIFT( pin );
+  *pinmode = SET_FIELD( *pinmode, mode,
     LPC176X_PIN_SELECT_MASK << shift, shift );
 }
 
