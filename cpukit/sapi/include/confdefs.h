@@ -8,28 +8,10 @@
  * be instantiated by an application based on the setting of a number
  * of macros.  The macros are documented in the Configuring a System
  * chapter of the Classic API User's Guide
- *
- * The model is to estimate the memory required for each configured item
- * and sum those estimates.  The estimate can be too high or too low for
- * a variety of reasons:
- *
- * Reasons estimate is too high:
- *   + FP contexts (not all tasks are FP)
- *
- * Reasons estimate is too low:
- *   + stacks greater than minimum size
- *   + messages
- *   + application must account for device driver resources
- *   + application must account for add-on library resource requirements
- *
- * NOTE:  Eventually this may be able to take into account some of
- *        the above.  This procedure has evolved from just enough to
- *        support the RTEMS Test Suites into something that can be
- *        used remarkably reliably by most applications.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2014.
+ *  COPYRIGHT (c) 1989-2015.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -69,11 +51,46 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup Configuration RTEMS Configuration
+ *
+ * This module contains all RTEMS Configuration parameters.
+ *
+ * The model is to estimate the memory required for each configured item
+ * and sum those estimates.  The estimate can be too high or too low for
+ * a variety of reasons:
+ *
+ * Reasons estimate is too high:
+ *   + FP contexts (not all tasks are FP)
+ *
+ * Reasons estimate is too low:
+ *   + stacks greater than minimum size
+ *   + messages
+ *   + application must account for device driver resources
+ *   + application must account for add-on library resource requirements
+ *
+ * NOTE:  Eventually this may be able to take into account some of
+ *        the above.  This procedure has evolved from just enough to
+ *        support the RTEMS Test Suites into something that can be
+ *        used remarkably reliably by most applications.
+ */
+
+/**
+ * This is the Classic API initialization tasks table.
+ */
 extern rtems_initialization_tasks_table Initialization_tasks[];
+
 #if defined(RTEMS_MULTIPROCESSING)
+  /**
+   * This it the distributed multiprocessing configuration table.
+   */
   extern rtems_multiprocessing_table      Multiprocessing_configuration;
 #endif
+
 #ifdef RTEMS_POSIX_API
+  /**
+   * This it the POSIX API configuration table.
+   */
   extern posix_api_configuration_table    Configuration_POSIX_API;
 #endif
 
@@ -215,48 +232,72 @@ const rtems_libio_helper rtems_fs_init_helper =
  * This sets up the resources for the FIFOs/pipes.
  */
 
+/**
+ * This is specified to configure the maximum number of POSIX FIFOs.
+ */
 #if !defined(CONFIGURE_MAXIMUM_FIFOS)
   #define CONFIGURE_MAXIMUM_FIFOS 0
 #endif
 
+/**
+ * This is specified to configure the maximum number of POSIX named pipes.
+ */
 #if !defined(CONFIGURE_MAXIMUM_PIPES)
   #define CONFIGURE_MAXIMUM_PIPES 0
 #endif
 
+/**
+ * This specifies the number of barriers required for the configured
+ * number of FIFOs and named pipes.
+ *
+ * This is an internal parameter.
+ */
 #if CONFIGURE_MAXIMUM_FIFOS > 0 || CONFIGURE_MAXIMUM_PIPES > 0
   #define CONFIGURE_BARRIERS_FOR_FIFOS \
     (2 * (CONFIGURE_MAXIMUM_FIFOS + CONFIGURE_MAXIMUM_PIPES))
+#else
+  #define CONFIGURE_BARRIERS_FOR_FIFOS   0
+#endif
+
+/**
+ * This specifies the number of semaphores required for the configured
+ * number of FIFOs and named pipes.
+ *
+ * This is an internal parameter.
+ */
+#if CONFIGURE_MAXIMUM_FIFOS > 0 || CONFIGURE_MAXIMUM_PIPES > 0
   #define CONFIGURE_SEMAPHORES_FOR_FIFOS \
     (1 + (CONFIGURE_MAXIMUM_FIFOS + CONFIGURE_MAXIMUM_PIPES))
 #else
-  #define CONFIGURE_BARRIERS_FOR_FIFOS   0
   #define CONFIGURE_SEMAPHORES_FOR_FIFOS 0
 #endif
 
-/*
- *  Filesystems and Mount Table Configuration.
+/**
+ *  @defgroup ConfigFilesystems Filesystems and Mount Table Configuration
+ *
+ *  @ingroup Configuration
  *
  *  Defines to control the file system:
  *
- *   CONFIGURE_APPLICATION_DISABLE_FILESYSTEM:
+ *   - CONFIGURE_APPLICATION_DISABLE_FILESYSTEM:
  *     Disable the RTEMS filesystems. You get an empty DEVFS.
  *
- *   CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM:
+ *   - CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM:
  *     Use the DEVFS as the root file system. Limited functions are
  *     provided when this is used.
  *
- *   CONFIGURE_FILESYSTEM_ALL:
+ *   - CONFIGURE_FILESYSTEM_ALL:
  *     Add file filesystems to the default filesystem table.
  *
  *   List of available file systems. You can define as many as you like:
- *     CONFIGURE_FILESYSTEM_IMFS     - In Memory File System (IMFS)
- *     CONFIGURE_FILESYSTEM_DEVFS    - Device File System (DSVFS)
- *     CONFIGURE_FILESYSTEM_TFTPFS   - TFTP File System, networking enabled
- *     CONFIGURE_FILESYSTEM_FTPFS    - FTP File System, networking enabled
- *     CONFIGURE_FILESYSTEM_NFS      - Network File System, networking enabled
- *     CONFIGURE_FILESYSTEM_DOSFS    - DOS File System, uses libblock
- *     CONFIGURE_FILESYSTEM_RFS      - RTEMS File System (RFS), uses libblock
- *     CONFIGURE_FILESYSTEM_JFFS2    - Journalling Flash File System, Version 2
+ *     - CONFIGURE_FILESYSTEM_IMFS   - In Memory File System (IMFS)
+ *     - CONFIGURE_FILESYSTEM_DEVFS  - Device File System (DSVFS)
+ *     - CONFIGURE_FILESYSTEM_TFTPFS - TFTP File System, networking enabled
+ *     - CONFIGURE_FILESYSTEM_FTPFS  - FTP File System, networking enabled
+ *     - CONFIGURE_FILESYSTEM_NFS    - Network File System, networking enabled
+ *     - CONFIGURE_FILESYSTEM_DOSFS  - DOS File System, uses libblock
+ *     - CONFIGURE_FILESYSTEM_RFS    - RTEMS File System (RFS), uses libblock
+ *     - CONFIGURE_FILESYSTEM_JFFS2  - Journalling Flash File System, Version 2
  *
  *   Combinations:
  *
@@ -268,6 +309,7 @@ const rtems_libio_helper rtems_fs_init_helper =
  *    - If CONFIGURE_USE_DEV_AS_BASE_FILESYSTEM is defined all filesystems
  *      are disabled by force and DEVFS is defined.
  */
+/**@{*/
 
 #ifdef CONFIGURE_INIT
 
@@ -455,11 +497,18 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_SEMAPHORES_FOR_JFFS2 0
 #endif
 
-#define CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS (CONFIGURE_SEMAPHORES_FOR_FIFOS + \
-                                               CONFIGURE_SEMAPHORES_FOR_NFS + \
-                                               CONFIGURE_SEMAPHORES_FOR_DOSFS + \
-                                               CONFIGURE_SEMAPHORES_FOR_RFS + \
-                                               CONFIGURE_SEMAPHORES_FOR_JFFS2)
+/**
+ * This computes the number of semaphores required for the various
+ * file systems including the FIFO plugin to the IMFS.
+ *
+ * This is an internal parameter.
+ */
+#define CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS \
+    (CONFIGURE_SEMAPHORES_FOR_FIFOS + \
+     CONFIGURE_SEMAPHORES_FOR_NFS + \
+     CONFIGURE_SEMAPHORES_FOR_DOSFS + \
+     CONFIGURE_SEMAPHORES_FOR_RFS + \
+     CONFIGURE_SEMAPHORES_FOR_JFFS2)
 
 #ifdef CONFIGURE_INIT
 
@@ -664,6 +713,7 @@ const rtems_libio_helper rtems_fs_init_helper =
 
 #endif
 #endif
+/**@}*/ /* end of file system group */
 
 /*
  *  STACK_CHECKER_ON was still available in 4.9 so give a warning for now.
@@ -716,31 +766,38 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_MAXIMUM_PRIORITY PRIORITY_DEFAULT_MAXIMUM
 #endif
 
-/*
- * Scheduler configuration.
+/**
+ *  @defgroup ConfigScheduler Scheduler configuration
+ *
+ *  @ingroup Configuration
  *
  * The scheduler configuration allows an application to select the
  * scheduling policy to use.  The supported configurations are:
- *  CONFIGURE_SCHEDULER_USER       - user provided scheduler
- *  CONFIGURE_SCHEDULER_PRIORITY   - Deterministic Priority Scheduler
- *  CONFIGURE_SCHEDULER_PRIORITY_SMP - Deterministic Priority SMP Scheduler
- *  CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP - Deterministic Priority SMP Affinity Scheduler
- *  CONFIGURE_SCHEDULER_SIMPLE     - Light-weight Priority Scheduler
- *  CONFIGURE_SCHEDULER_SIMPLE_SMP - Simple SMP Priority Scheduler
- *  CONFIGURE_SCHEDULER_EDF        - EDF Scheduler
- *  CONFIGURE_SCHEDULER_CBS        - CBS Scheduler
  *
- * If no configuration is specified by the application, then
- * CONFIGURE_SCHEDULER_PRIORITY is assumed to be the default.
+ *  - CONFIGURE_SCHEDULER_PRIORITY - Deterministic Priority Scheduler
+ *  - CONFIGURE_SCHEDULER_PRIORITY_SMP - Deterministic Priority SMP Scheduler
+ *  - CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP - Deterministic
+ *    Priority SMP Affinity Scheduler
+ *  - CONFIGURE_SCHEDULER_SIMPLE - Light-weight Priority Scheduler
+ *  - CONFIGURE_SCHEDULER_SIMPLE_SMP - Simple SMP Priority Scheduler
+ *  - CONFIGURE_SCHEDULER_EDF - EDF Scheduler
+ *  - CONFIGURE_SCHEDULER_CBS - CBS Scheduler
+ *  - CONFIGURE_SCHEDULER_USER  - user provided scheduler
+ *
+ * If no configuration is specified by the application in a uniprocessor
+ * configuration, then CONFIGURE_SCHEDULER_PRIORITY is the default.
+ *
+ * If no configuration is specified by the application in SMP
+ * configuration, then CONFIGURE_SCHEDULER_PRIORITY_SMP is the default.
  *
  * An application can define its own scheduling policy by defining
  * CONFIGURE_SCHEDULER_USER and the following:
+ *
  *    - CONFIGURE_SCHEDULER_CONTEXT
  *    - CONFIGURE_SCHEDULER_CONTROLS
  *    - CONFIGURE_SCHEDULER_USER_PER_THREAD
  */
 
-/* If no scheduler is specified, the priority scheduler is default. */
 #if !defined(CONFIGURE_SCHEDULER_USER) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY_SMP) && \
@@ -750,8 +807,16 @@ const rtems_libio_helper rtems_fs_init_helper =
     !defined(CONFIGURE_SCHEDULER_EDF) && \
     !defined(CONFIGURE_SCHEDULER_CBS)
   #if defined(RTEMS_SMP) && defined(CONFIGURE_SMP_APPLICATION)
+    /**
+     * If no scheduler is specified in an SMP configuration, the
+     * priority scheduler is default.
+     */
     #define CONFIGURE_SCHEDULER_PRIORITY_SMP
   #else
+    /**
+     * If no scheduler is specified in a uniprocessor configuration, the
+     * priority scheduler is default.
+     */
     #define CONFIGURE_SCHEDULER_PRIORITY
   #endif
 #endif
@@ -763,16 +828,19 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY)
   #if !defined(CONFIGURE_SCHEDULER_NAME)
+    /** Configure the name of the scheduler instance */
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('U', 'P', 'D', ' ')
   #endif
 
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTEXT \
       RTEMS_SCHEDULER_CONTEXT_PRIORITY( \
         dflt, \
         CONFIGURE_MAXIMUM_PRIORITY + 1 \
       )
 
+    /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTROLS \
       RTEMS_SCHEDULER_CONTROL_PRIORITY(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
@@ -784,16 +852,19 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY_SMP)
   #if !defined(CONFIGURE_SCHEDULER_NAME)
+    /** Configure the name of the scheduler instance */
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('M', 'P', 'D', ' ')
   #endif
 
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTEXT \
       RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP( \
         dflt, \
         CONFIGURE_MAXIMUM_PRIORITY + 1 \
       )
 
+    /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTROLS \
       RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
@@ -805,10 +876,12 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP)
   #if !defined(CONFIGURE_SCHEDULER_NAME)
+    /** Configure the name of the scheduler instance */
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('M', 'P', 'A', ' ')
   #endif
 
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTEXT \
       RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP( \
         dflt, \
@@ -828,12 +901,15 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #if defined(CONFIGURE_SCHEDULER_SIMPLE)
   #if !defined(CONFIGURE_SCHEDULER_NAME)
+    /** Configure the name of the scheduler instance */
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('U', 'P', 'S', ' ')
   #endif
 
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTEXT RTEMS_SCHEDULER_CONTEXT_SIMPLE(dflt)
 
+    /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTROLS \
       RTEMS_SCHEDULER_CONTROL_SIMPLE(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
@@ -844,13 +920,16 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #if defined(CONFIGURE_SCHEDULER_SIMPLE_SMP)
   #if !defined(CONFIGURE_SCHEDULER_NAME)
+    /** Configure the name of the scheduler instance */
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('M', 'P', 'S', ' ')
   #endif
 
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTEXT \
       RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(dflt)
 
+    /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTROLS \
       RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
@@ -861,12 +940,15 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #if defined(CONFIGURE_SCHEDULER_EDF)
   #if !defined(CONFIGURE_SCHEDULER_NAME)
+    /** Configure the name of the scheduler instance */
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('U', 'E', 'D', 'F')
   #endif
 
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTEXT RTEMS_SCHEDULER_CONTEXT_EDF(dflt)
 
+    /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTROLS \
       RTEMS_SCHEDULER_CONTROL_EDF(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
@@ -877,12 +959,15 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #if defined(CONFIGURE_SCHEDULER_CBS)
   #if !defined(CONFIGURE_SCHEDULER_NAME)
+    /** Configure the name of the scheduler instance */
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('U', 'C', 'B', 'S')
   #endif
 
   #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTEXT RTEMS_SCHEDULER_CONTEXT_CBS(dflt)
 
+    /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTROLS \
       RTEMS_SCHEDULER_CONTROL_CBS(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
@@ -1031,6 +1116,17 @@ const rtems_libio_helper rtems_fs_init_helper =
     );
   #endif
 #endif
+/**@}*/ /* end of Scheduler Configuration */
+
+/**
+ * @defgroup ConfigurationIdle IDLE Thread Configuration
+ *
+ * @addtogroup Configuration
+ *
+ * This module contains configuration parameters related to the
+ * set of IDLE threads. On a uniprocessor system, there is one
+ * IDLE thread. On an SMP system, there is one for each core.
+ */
 
 /*
  *  If you said the IDLE task was going to do application initialization
@@ -1066,6 +1162,15 @@ const rtems_libio_helper rtems_fs_init_helper =
     #define CONFIGURE_IDLE_TASK_BODY _Thread_Idle_body
   #endif
 #endif
+/**@}*/ /* end of IDLE thread configuration */
+
+/**
+ * @defgroup ConfigurationStackSize Configuration Thread Stack Size
+ *
+ * @addtogroup Configuration
+ *
+ * This module contains parameters related to thread aand interrupt stacks.
+ */
 
 /**
  * By default, use the minimum stack size requested by this port.
@@ -1074,6 +1179,10 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_MINIMUM_TASK_STACK_SIZE CPU_STACK_MINIMUM_SIZE
 #endif
 
+/**
+ * This specifies the default POSIX thread stack size. By default, it is
+ * twice that recommended for the port.
+ */
 #define CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE \
   (2 * CONFIGURE_MINIMUM_TASK_STACK_SIZE)
 
@@ -1134,7 +1243,13 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #if !defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
   && !defined(CONFIGURE_TASK_STACK_DEALLOCATOR)
+  /**
+   * This specifies the task stack allocator method.
+   */
   #define CONFIGURE_TASK_STACK_ALLOCATOR _Workspace_Allocate
+  /**
+   * This specifies the task stack deallocator method.
+   */
   #define CONFIGURE_TASK_STACK_DEALLOCATOR _Workspace_Free
 #elif (defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
   && !defined(CONFIGURE_TASK_STACK_DEALLOCATOR)) \
@@ -1142,6 +1257,12 @@ const rtems_libio_helper rtems_fs_init_helper =
       && defined(CONFIGURE_TASK_STACK_DEALLOCATOR))
   #error "CONFIGURE_TASK_STACK_ALLOCATOR and CONFIGURE_TASK_STACK_DEALLOCATOR must be both defined or both undefined"
 #endif
+/**@}*/ /* end of thread/interrupt stack configuration */
+
+/**
+ * @addtogroup Configuration
+ */
+/**@{*/
 
 /**
  * Should the RTEMS Workspace and C Program Heap be cleared automatically
@@ -1155,11 +1276,15 @@ const rtems_libio_helper rtems_fs_init_helper =
     #define CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY FALSE
   #endif
 #endif
+/**@}*/ /* end of add to group Configuration */
 
-/*
- *  RTEMS Malloc configuration
+/**
+ * @defgroup ConfigurationMalloc RTEMS Malloc configuration
+ *
+ * This module contains parameters related to configuration of the RTEMS
+ * Malloc implementation.
  */
-
+/**@{*/
 #include <rtems/malloc.h>
 
 #ifdef CONFIGURE_INIT
@@ -1205,12 +1330,26 @@ const rtems_libio_helper rtems_fs_init_helper =
       NULL;
     #endif
 #endif
+/**@}*/  /* end of Malloc Configuration */
+
+/**
+ * @defgroup ConfigurationHelpers Configuration Helpers
+ *
+ * @ingroup Configuration
+ *
+ * This module contains items which are used internally to ease
+ * the configuration calculations.
+ */
+/**@{*/
 
 /**
  * Zero of one returns 0 if the parameter is 0 else 1 is returned.
  */
 #define _Configure_Zero_or_One(_number) ((_number) ? 1 : 0)
 
+/**
+ * General helper to aligned a value up to a power of two boundary.
+ */
 #define _Configure_Align_up(_val, _align) \
   (((_val) + (_align) - 1) & ~((_align) - 1))
 
@@ -1261,12 +1400,19 @@ const rtems_libio_helper rtems_fs_init_helper =
       ) \
     ) \
   )
+/**@}*/
 
-/*
+/**
+ * @defgroup ConfigurationInitTasksTable Initialization Tasks Configuration
+ *
+ * @addtogroup Configuration
+ *
+ * This group contains the elements needed to define the Classic API
+ * Initialization Tasks Table.
+ *
  *  Default User Initialization Task Table.  This table guarantees that
  *  one user initialization table is defined.
  */
-
 #ifdef CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #ifdef CONFIGURE_HAS_OWN_INIT_TASK_TABLE
@@ -1278,22 +1424,42 @@ const rtems_libio_helper rtems_fs_init_helper =
 
 #else
 
+/**
+ * When using the default Classic API Initialization Tasks Table, this is
+ * used to specify the name of the single Classic API task.
+ */
 #ifndef CONFIGURE_INIT_TASK_NAME
   #define CONFIGURE_INIT_TASK_NAME          rtems_build_name('U', 'I', '1', ' ')
 #endif
 
+/**
+ * When using the default Classic API Initialization Tasks Table, this is
+ * used to specify the stack size of the single Classic API task.
+ */
 #ifndef CONFIGURE_INIT_TASK_STACK_SIZE
   #define CONFIGURE_INIT_TASK_STACK_SIZE    CONFIGURE_MINIMUM_TASK_STACK_SIZE
 #endif
 
+/**
+ * When using the default Classic API Initialization Tasks Table, this is
+ * used to specify the priority of the single Classic API task.
+ */
 #ifndef CONFIGURE_INIT_TASK_PRIORITY
   #define CONFIGURE_INIT_TASK_PRIORITY      1
 #endif
 
+/**
+ * When using the default Classic API Initialization Tasks Table, this is
+ * used to specify the attributes size of the single Classic API task.
+ */
 #ifndef CONFIGURE_INIT_TASK_ATTRIBUTES
   #define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_DEFAULT_ATTRIBUTES
 #endif
 
+/**
+ * When using the default Classic API Initialization Tasks Table, this is
+ * used to specify the entry point of the single Classic API task.
+ */
 #ifndef CONFIGURE_INIT_TASK_ENTRY_POINT
   #ifdef __cplusplus
   extern "C" {
@@ -1307,6 +1473,10 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_INIT_TASK_ARGUMENTS     ((rtems_task_argument) &bsp_boot_cmdline)
 #endif
 
+/**
+ * When using the default Classic API Initialization Tasks Table, this is
+ * used to specify the initial execution mode of the single Classic API task.
+ */
 #ifndef CONFIGURE_INIT_TASK_INITIAL_MODES
   #if defined(RTEMS_SMP) && defined(CONFIGURE_SMP_APPLICATION)
     #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
@@ -1315,6 +1485,10 @@ const rtems_libio_helper rtems_fs_init_helper =
   #endif
 #endif
 
+/**
+ * When using the default Classic API Initialization Tasks Table, this is
+ * used to specify the initial argument to the single Classic API task.
+ */
 #ifndef CONFIGURE_INIT_TASK_ARGUMENTS
   #define CONFIGURE_INIT_TASK_ARGUMENTS     0
 #endif
@@ -1332,8 +1506,18 @@ const rtems_libio_helper rtems_fs_init_helper =
   };
 #endif
 
+/**
+ * This is the name of the Initialization Tasks Table generated.
+ *
+ * This is an internal parameter.
+ */
 #define CONFIGURE_INIT_TASK_TABLE Initialization_tasks
 
+/**
+ * This is the size of the Initialization Tasks Table generated.
+ *
+ * This is an internal parameter.
+ */
 #define CONFIGURE_INIT_TASK_TABLE_SIZE \
   RTEMS_ARRAY_SIZE(CONFIGURE_INIT_TASK_TABLE)
 
@@ -1341,17 +1525,46 @@ const rtems_libio_helper rtems_fs_init_helper =
 
 #else     /* CONFIGURE_RTEMS_INIT_TASKS_TABLE */
 
+/**
+ * This is the name of the Initialization Task when none is configured.
+ *
+ * This is an internal parameter.
+ */
 #define CONFIGURE_INIT_TASK_TABLE      NULL
+
+/**
+ * This is the size of the Initialization Task when none is configured.
+ *
+ * This is an internal parameter.
+ */
 #define CONFIGURE_INIT_TASK_TABLE_SIZE 0
+
+/**
+ * This is the stack size of the Initialization Task when none is configured.
+ *
+ * This is an internal parameter.
+ */
 #define CONFIGURE_INIT_TASK_STACK_SIZE 0
 
 #endif
+/**@}*/  /* end of Classic API Initialization Tasks Table */
 
-/*
- *  Default Device Driver Table.  Each driver needed by the test is explicitly
- *  choosen by that test.  There is always a null driver entry.
+/**
+ * @defgroup ConfigurationDriverTable Device Driver Table Configuration
+ *
+ * @addtogroup Configuration
+ *
+ * This group contains parameters related to generating a Device Driver
+ * Table.
+ *
+ * Default Device Driver Table.  Each driver needed by the test is explicitly
+ * choosen by the application.  There is always a null driver entry.
  */
+/**@{*/
 
+/**
+ * This is an empty device driver slot.
+ */
 #define NULL_DRIVER_TABLE_ENTRY \
  { NULL, NULL, NULL, NULL, NULL, NULL }
 
@@ -1482,10 +1695,18 @@ const rtems_libio_helper rtems_fs_init_helper =
       = CONFIGURE_ATA_DRIVER_TASK_PRIORITY;
   #endif /* CONFIGURE_INIT */
 #endif
+/**@}*/ /* end of Device Driver Table Configuration */
 
-/*
- * add bdbuf configuration and values for swapout task priority
+/**
+ * @defgroup ConfigurationLibBlock Configuration of LIBBLOCK
+ *
+ * @addtogroup Configuration
+ *
+ * This module contains parameters related to the LIBBLOCK buffering
+ * and caching subsystem. It requires tasks to swap out data to be
+ * written to non-volatile storage.
  */
+/**@{*/
 #ifdef CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
   #include <rtems/bdbuf.h>
   /*
@@ -1608,16 +1829,51 @@ const rtems_libio_helper rtems_fs_init_helper =
     #error BDBUF Cache does not use a buffer configuration table. Please remove.
   #endif
 #else
+  /** This specifies the number of libblock tasks. */
   #define CONFIGURE_LIBBLOCK_TASKS 0
+  /** This specifies the extra stack space configured for libblock tasks. */
   #define CONFIGURE_LIBBLOCK_TASK_EXTRA_STACKS 0
+  /** This specifies the number of Classic API semaphores needed by libblock. */
   #define CONFIGURE_LIBBLOCK_SEMAPHORES 0
+  /** This specifies the number of POSIX Mutexes needed by libblock. */
   #define CONFIGURE_LIBBLOCK_POSIX_MUTEXES 0
+  /**
+   * This specifies the number of POSIX Condition Variables needed
+   * by libblock.
+   */
   #define CONFIGURE_LIBBLOCK_POSIX_CONDITION_VARIABLES 0
 #endif /* CONFIGURE_APPLICATION_NEEDS_LIBBLOCK */
+/**@}*/
 
+/**
+ * @defgroup ConfigurationMultiprocessing Multiprocessing Configuration
+ *
+ * @addtogroup Configuration
+ *
+ * This module contains the parameters related to the Multiprocessing
+ * configuration of RTEMS.
+ *
+ * In a single processor or SMP configuration, only two parameters are
+ * needed and they are defaulted. The user should not have to specify
+ * any parameters.
+ */
+/**@{*/
+
+/**
+ * This defines the extra stack space required for the MPCI server thread.
+ */
 #ifndef CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
   #define CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK 0
 #endif
+
+/**
+ * This defines the timers required for the shared memory driver in
+ * a multiprocessing configuration.
+ */
+#ifndef CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER
+  #define CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER 0
+#endif
+
 
 #if defined(RTEMS_MULTIPROCESSING)
   /*
@@ -1677,11 +1933,7 @@ const rtems_libio_helper rtems_fs_init_helper =
 
   #endif /* CONFIGURE_MP_APPLICATION */
 #endif /* RTEMS_MULTIPROCESSING */
-
-#ifndef CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER
-  #define CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER 0
-#endif
-
+/**@}*/ /* end of Multiprocessing Configuration */
 
 /**
  * This macro specifies that the user wants to use unlimited objects for any
@@ -1797,59 +2049,94 @@ const rtems_libio_helper rtems_fs_init_helper =
 #endif /* CONFIGURE_UNLIMITED_OBJECTS */
 
 
-/*
- *  Default Configuration Table.
+/**
+ * @defgroup ConfigurationClassicAPI Classic API Configuration
+ *
+ * @ingroup Configuration
+ *
+ * This module contains the parameters related to configuration
+ * of the Classic API services.
  */
-
+/**@{*/
 #ifndef CONFIGURE_HAS_OWN_CONFIGURATION_TABLE
 
+  /** This configures the maximum number of Classic API tasks. */
   #ifndef CONFIGURE_MAXIMUM_TASKS
     #define CONFIGURE_MAXIMUM_TASKS               0
   #endif
 
+  /**
+   * This is calculated to account for the maximum number of Classic API
+   * tasks used by the application and configured RTEMS capabilities.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_TASKS \
     (CONFIGURE_MAXIMUM_TASKS + CONFIGURE_LIBBLOCK_TASKS)
 
+  /*
+   * Classic API notepads are a deprecated feature and will be removed
+   * in a future release of RTEMS. Warn the user who uses them.
+   */
   #if defined(CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS)
-    #warning "CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS is deprecated and will be removed."
+    #warning "Classic API Notepads are deprecated and will be removed."
   #endif
   #if defined(CONFIGURE_ENABLE_CLASSIC_API_NOTEPADS)
-    #warning "CONFIGURE_ENABLE_CLASSIC_API_NOTEPADS is deprecated and will be removed."
+    #warning "Classic API Notepads are deprecated and will be removed."
+  #endif
+
+  /** This configuration parameter enables/disables Classic API notepads. */
+  #ifdef CONFIGURE_ENABLE_CLASSIC_API_NOTEPADS
     #define CONFIGURE_NOTEPADS_ENABLED           TRUE
   #else
     #define CONFIGURE_NOTEPADS_ENABLED           FALSE
   #endif
 
-/**
- * This macro calculates the memory required for task variables.
- *
- * @deprecated Task variables are deprecated.
- *
- * Each task variable is individually allocated from the Workspace.
- * Hence, we do the multiplication on the configured size.
- *
- * @note Per-task variables are disabled for SMP configurations.
- */
-#if defined(RTEMS_SMP)
-  #ifdef CONFIGURE_MAXIMUM_TASK_VARIABLES
-    #error "Per-Task Variables are not safe for SMP systems and disabled"
-  #endif
-  #define CONFIGURE_MAXIMUM_TASK_VARIABLES                     0
-  #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) 0
-#else
-  #ifndef CONFIGURE_MAXIMUM_TASK_VARIABLES
+  /**
+   * This macro calculates the memory required for task variables.
+   *
+   * @deprecated Task variables are deprecated.
+   *
+   * Each task variable is individually allocated from the Workspace.
+   * Hence, we do the multiplication on the configured size.
+   *
+   * @note Per-task variables are disabled for SMP configurations.
+   */
+  #if defined(RTEMS_SMP)
+    #ifdef CONFIGURE_MAXIMUM_TASK_VARIABLES
+      #warning "Per-Task Variables are deprecated and will be removed."
+      #error "Per-Task Variables are not safe for SMP systems and disabled."
+    #endif
     #define CONFIGURE_MAXIMUM_TASK_VARIABLES                     0
     #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) 0
   #else
-    #warning "Per-Task Variables are deprecated and will be removed."
-    #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) \
-      (_task_variables) * \
-         _Configure_From_workspace(sizeof(rtems_task_variable_t))
+    #ifndef CONFIGURE_MAXIMUM_TASK_VARIABLES
+      /** This macro specifies the maximum number of task variables. */
+      #define CONFIGURE_MAXIMUM_TASK_VARIABLES                     0
+      /**
+       * This macro is calculated to specify the memory required for task
+       * variables.
+       *
+       * This is an internal parameter.
+       */
+      #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) 0
+    #else
+      #warning "Per-Task Variables are deprecated and will be removed."
+      #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) \
+	(_task_variables) * \
+	   _Configure_From_workspace(sizeof(rtems_task_variable_t))
+    #endif
   #endif
-#endif
 
   #ifndef CONFIGURE_MAXIMUM_TIMERS
+    /** This specifies the maximum number of Classic API timers. */
     #define CONFIGURE_MAXIMUM_TIMERS             0
+    /**
+     * This macro is calculated to specify the memory required for
+     * Classic API timers.
+     *
+     * This is an internal parameter.
+     */
     #define CONFIGURE_MEMORY_FOR_TIMERS(_timers) 0
   #else
     #define CONFIGURE_MEMORY_FOR_TIMERS(_timers) \
@@ -1857,21 +2144,41 @@ const rtems_libio_helper rtems_fs_init_helper =
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_SEMAPHORES
+    /** This specifies the maximum number of Classic API semaphores. */
     #define CONFIGURE_MAXIMUM_SEMAPHORES                 0
   #endif
 
+  /**
+   * This specifies the number of Classic API semaphores required
+   *
+   * This is an internal parameter.
+   */
   #ifdef RTEMS_NETWORKING
     #define CONFIGURE_NETWORKING_SEMAPHORES 1
   #else
     #define CONFIGURE_NETWORKING_SEMAPHORES 0
   #endif
 
+  /**
+   * This macro is calculated to specify the number of Classic API
+   * semaphores required by the application and configured RTEMS
+   * capabilities.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_SEMAPHORES \
     (CONFIGURE_MAXIMUM_SEMAPHORES + CONFIGURE_LIBIO_SEMAPHORES + \
       CONFIGURE_TERMIOS_SEMAPHORES + CONFIGURE_LIBBLOCK_SEMAPHORES + \
       CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS + \
       CONFIGURE_NETWORKING_SEMAPHORES)
 
+  /**
+   * This macro is calculated to specify the memory required for
+   * Classic API Semaphores using MRSP. This is only available in
+   * SMP configurations.
+   *
+   * This is an internal parameter.
+   */
   #if !defined(RTEMS_SMP) || \
     !defined(CONFIGURE_MAXIMUM_MRSP_SEMAPHORES)
     #define CONFIGURE_MEMORY_FOR_MRSP_SEMAPHORES 0
@@ -1883,9 +2190,14 @@ const rtems_libio_helper rtems_fs_init_helper =
         )
   #endif
 
-  /*
+  /**
+   * This macro is calculated to specify the memory required for
+   * Classic API Semaphores.
+   *
    * If there are no user or support semaphores defined, then we can assume
    * that no memory need be allocated at all for semaphores.
+   *
+   * This is an internal parameter.
    */
   #if CONFIGURE_SEMAPHORES == 0
     #define CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) 0
@@ -1896,7 +2208,17 @@ const rtems_libio_helper rtems_fs_init_helper =
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_MESSAGE_QUEUES
+    /**
+     * This configuration parameter specifies the maximum number of
+     * Classic API Message Queues.
+     */
     #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES             0
+    /**
+     * This macro is calculated to specify the RTEMS Workspace required for
+     * the Classic API Message Queues.
+     *
+     * This is an internal parameter.
+     */
     #define CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(_queues) 0
   #else
     #define CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(_queues) \
@@ -1904,7 +2226,17 @@ const rtems_libio_helper rtems_fs_init_helper =
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_PARTITIONS
+    /**
+     * This configuration parameter specifies the maximum number of
+     * Classic API Partitions.
+     */
     #define CONFIGURE_MAXIMUM_PARTITIONS                 0
+    /**
+     * This macro is calculated to specify the memory required for
+     * Classic API
+     *
+     * This is an internal parameter.
+     */
     #define CONFIGURE_MEMORY_FOR_PARTITIONS(_partitions) 0
   #else
     #define CONFIGURE_MEMORY_FOR_PARTITIONS(_partitions) \
@@ -1912,7 +2244,17 @@ const rtems_libio_helper rtems_fs_init_helper =
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_REGIONS
+    /**
+     * This configuration parameter specifies the maximum number of
+     * Classic API Regions.
+     */
     #define CONFIGURE_MAXIMUM_REGIONS              0
+    /**
+     * This macro is calculated to specify the memory required for
+     * Classic API Regions.
+     *
+     * This is an internal parameter.
+     */
     #define CONFIGURE_MEMORY_FOR_REGIONS(_regions) 0
   #else
     #define CONFIGURE_MEMORY_FOR_REGIONS(_regions) \
@@ -1920,7 +2262,17 @@ const rtems_libio_helper rtems_fs_init_helper =
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_PORTS
+    /**
+     * This configuration parameter specifies the maximum number of
+     * Classic API Dual-Ported Memory Ports.
+     */
     #define CONFIGURE_MAXIMUM_PORTS            0
+    /**
+     * This macro is calculated to specify the memory required for
+     * Classic API Dual-Ported Memory Ports.
+     *
+     * This is an internal parameter.
+     */
     #define CONFIGURE_MEMORY_FOR_PORTS(_ports) 0
   #else
     #define CONFIGURE_MEMORY_FOR_PORTS(_ports) \
@@ -1928,20 +2280,46 @@ const rtems_libio_helper rtems_fs_init_helper =
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_PERIODS
+    /**
+     * This configuration parameter specifies the maximum number of
+     * Classic API Rate Monotonic Periods.
+     */
     #define CONFIGURE_MAXIMUM_PERIODS              0
-    #define CONFIGURE_MEMORY_FOR_PERIODS(_periods) 0
-  #else
+    /**
+     * This macro is calculated to specify the memory required for
+     * Classic API Rate Monotonic Periods.
+     *
+     * This is an internal parameter.
+     */
+  #define CONFIGURE_MEMORY_FOR_PERIODS(_periods) 0
+#else
     #define CONFIGURE_MEMORY_FOR_PERIODS(_periods) \
       _Configure_Object_RAM(_periods, sizeof(Rate_monotonic_Control) )
   #endif
 
+  /**
+   * This configuration parameter specifies the maximum number of
+   * Classic API Barriers.
+   */
   #ifndef CONFIGURE_MAXIMUM_BARRIERS
     #define CONFIGURE_MAXIMUM_BARRIERS               0
   #endif
 
+  /**
+   * This macro is calculated to specify the number of Classic API
+   * Barriers required by the application and configured capabilities.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_BARRIERS \
      (CONFIGURE_MAXIMUM_BARRIERS + CONFIGURE_BARRIERS_FOR_FIFOS)
 
+  /**
+   * This macro is calculated to specify the memory required for
+   * Classic API Barriers.
+   *
+   * This is an internal parameter.
+   */
   #if CONFIGURE_BARRIERS == 0
     #define CONFIGURE_MEMORY_FOR_BARRIERS(_barriers) 0
   #else
@@ -1950,21 +2328,46 @@ const rtems_libio_helper rtems_fs_init_helper =
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_USER_EXTENSIONS
+    /**
+     * This configuration parameter specifies the maximum number of
+     * Classic API User Extensions.
+     */
     #define CONFIGURE_MAXIMUM_USER_EXTENSIONS                 0
+    /**
+     * This macro is calculated to specify the memory required for
+     * Classic API User Extensions.
+     *
+     * This is an internal parameter.
+     */
     #define CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(_extensions) 0
   #else
     #define CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(_extensions) \
       _Configure_Object_RAM(_extensions, sizeof(Extension_Control) )
   #endif
+  /**@}*/ /* end of Classic API Configuration */
 
+  /**
+   * @defgroup ConfigurationGeneral General System Configuration
+   *
+   * @ingroup Configuration
+   *
+   * This module contains configuration parameters that are independent
+   * of any API but impact general system configuration.
+   */
+  /**@{*/
+
+  /** The configures the number of microseconds per clock tick. */
   #ifndef CONFIGURE_MICROSECONDS_PER_TICK
     #define CONFIGURE_MICROSECONDS_PER_TICK \
             RTEMS_MILLISECONDS_TO_MICROSECONDS(10)
   #endif
 
+  /** The configures the number of clock ticks per timeslice. */
   #ifndef CONFIGURE_TICKS_PER_TIMESLICE
     #define CONFIGURE_TICKS_PER_TIMESLICE        50
   #endif
+
+/**@}*/ /* end of General Configuration */
 
 /*
  *  Initial Extension Set
@@ -2016,28 +2419,54 @@ const rtems_libio_helper rtems_fs_init_helper =
 
 #endif
 
-/*
- *  POSIX API Configuration Parameters
+/**
+ * @defgroup ConfigurationPOSIXAPI POSIX API Configuration Parameters
+ *
+ * This module contains the parameters related to configuration
+ * of the POSIX API services.
  */
+/**@{*/
 
-/*
- *  POSIX Keys are available whether or not the POSIX API is enabled.
- */
 #include <rtems/posix/key.h>
 
+/**
+ * This configuration parameter specifies the maximum number of
+ * POSIX API keys.
+ *
+ * POSIX Keys are available whether or not the POSIX API is enabled.
+ */
 #ifndef CONFIGURE_MAXIMUM_POSIX_KEYS
   #define CONFIGURE_MAXIMUM_POSIX_KEYS 0
 #endif
 
+/**
+ * This macro is calculated to specify the memory required for
+ * POSIX API key/value pairs.
+ *
+ * This is an internal parameter.
+ */
 #ifndef CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
   #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
     (CONFIGURE_MAXIMUM_POSIX_KEYS * \
      (CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS))
 #endif
 
+/**
+ * This macro is calculated to specify the total number of
+ * POSIX API keys required by the application and configured
+ * system capabilities.
+ *
+ * This is an internal parameter.
+ */
 #define CONFIGURE_POSIX_KEYS \
   (CONFIGURE_MAXIMUM_POSIX_KEYS + CONFIGURE_LIBIO_POSIX_KEYS)
 
+/**
+ * This macro is calculated to specify the memory required for
+ * POSIX API keys.
+ *
+ * This is an internal parameter.
+ */
 #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys, _key_value_pairs) \
    (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
     + _Configure_From_workspace( \
@@ -2047,7 +2476,6 @@ const rtems_libio_helper rtems_fs_init_helper =
  *  The rest of the POSIX threads API features are only available when
  *  POSIX is enabled.
  */
-
 #ifdef RTEMS_POSIX_API
   #include <sys/types.h>
   #include <signal.h>
@@ -2068,82 +2496,196 @@ const rtems_libio_helper rtems_fs_init_helper =
   /**
    * Account for the object control structures plus the name
    * of the object to be duplicated.
+   *
+   * This is an internal macro.
    */
   #define _Configure_POSIX_Named_Object_RAM(_number, _size) \
     _Configure_Object_RAM( (_number), _size ) + \
     (_Configure_Max_Objects(_number) * _Configure_From_workspace(NAME_MAX) )
 
+  /**
+   * This configuration parameter specifies the maximum number of
+   * POSIX API threads.
+   */
   #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
     #define CONFIGURE_MAXIMUM_POSIX_THREADS 0
   #endif
 
+  /**
+   * This configuration parameter specifies the maximum number of
+   * POSIX API mutexes.
+   */
   #ifndef CONFIGURE_MAXIMUM_POSIX_MUTEXES
     #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 0
   #endif
+
+  /**
+   * This macro is calculated to specify the memory required for
+   * POSIX API mutexes.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) \
     _Configure_Object_RAM(_mutexes, sizeof(POSIX_Mutex_Control) )
 
+  /**
+   * This configuration parameter specifies the maximum number of
+   * POSIX API condition variables.
+   */
   #ifndef CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
     #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES 0
   #endif
+
+  /**
+   * This macro is calculated to specify the memory required for
+   * POSIX API condition variables.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condvars) \
       _Configure_Object_RAM(_condvars, \
                           sizeof(POSIX_Condition_variables_Control) )
 
+  /**
+   * This configuration parameter specifies the maximum number of
+   * POSIX API timers.
+   */
   #ifndef CONFIGURE_MAXIMUM_POSIX_TIMERS
     #define CONFIGURE_MAXIMUM_POSIX_TIMERS 0
   #endif
+
+  /**
+   * This macro is calculated to specify the memory required for
+   * POSIX API timers.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) \
     _Configure_Object_RAM(_timers, sizeof(POSIX_Timer_Control) )
 
+  /**
+   * This configuration parameter specifies the maximum number of
+   * POSIX API queued signals.
+   */
   #ifndef CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
     #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 0
   #endif
+
+  /**
+   * This macro is calculated to specify the memory required for
+   * POSIX API queued signals.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) \
     _Configure_From_workspace( \
       (_queued_signals) * (sizeof(POSIX_signals_Siginfo_node)) )
 
+  /**
+   * This configuration parameter specifies the maximum number of
+   * POSIX API message queues.
+   */
   #ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
     #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES                     0
-    #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS          0
-  #else
-    /* default to same number */
-    #ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
-       #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS \
-               CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
-    #endif
   #endif
 
+  /**
+   * This configuration parameter specifies the maximum number of
+   * POSIX API messages queue descriptors.
+   *
+   * This defaults to the number of POSIX API message queues.
+   */
+  #ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
+     #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS \
+             CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
+  #endif
+
+  /**
+   * This macro is calculated to specify the memory required for
+   * POSIX API message queues.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
     _Configure_POSIX_Named_Object_RAM( \
        _message_queues, sizeof(POSIX_Message_queue_Control) )
 
+  /**
+   * This macro is calculated to specify the memory required for
+   * POSIX API message queue descriptors.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUE_DESCRIPTORS(_mqueue_fds) \
     _Configure_Object_RAM( \
        _mqueue_fds, sizeof(POSIX_Message_queue_Control_fd) )
 
+  /**
+   * This configuration parameter specifies the maximum number of
+   * POSIX API semaphores.
+   */
   #ifndef CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
     #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 0
   #endif
+
+  /**
+   * This macro is calculated to specify the memory required for
+   * POSIX API semaphores.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
     _Configure_POSIX_Named_Object_RAM( \
        _semaphores, sizeof(POSIX_Semaphore_Control) )
 
+  /**
+   * This configuration parameter specifies the maximum number of
+   * POSIX API barriers.
+   */
   #ifndef CONFIGURE_MAXIMUM_POSIX_BARRIERS
     #define CONFIGURE_MAXIMUM_POSIX_BARRIERS 0
   #endif
+
+  /**
+   * This macro is calculated to specify the memory required for
+   * POSIX API barriers.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) \
     _Configure_Object_RAM(_barriers, sizeof(POSIX_Barrier_Control) )
 
+  /**
+   * This configuration parameter specifies the maximum number of
+   * POSIX API spinlocks.
+   */
   #ifndef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
     #define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS 0
   #endif
+
+  /**
+   * This macro is calculated to specify the memory required for
+   * POSIX API spinlocks.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) \
     _Configure_Object_RAM(_spinlocks, sizeof(POSIX_Spinlock_Control) )
 
+  /**
+   * This configuration parameter specifies the maximum number of
+   * POSIX API rwlocks.
+   */
   #ifndef CONFIGURE_MAXIMUM_POSIX_RWLOCKS
     #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 0
   #endif
+
+  /**
+   * This macro is calculated to specify the memory required for
+   * POSIX API rwlocks.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) \
     _Configure_Object_RAM(_rwlocks, sizeof(POSIX_RWLock_Control) )
 
@@ -2191,18 +2733,32 @@ const rtems_libio_helper rtems_fs_init_helper =
 
 #else
 
+  /**
+   * This configuration parameter specifies the maximum number of
+   * POSIX API threads.
+   */
   #define CONFIGURE_MAXIMUM_POSIX_THREADS         0
 
 #endif    /* RTEMS_POSIX_API */
 
+/**
+ * This configuration parameter specifies the stack size of the
+ * POSIX API Initialization thread (if used).
+ */
 #ifndef CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
   #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE    0
 #endif
+/**@}*/  /* end of POSIX API Configuration */
 
-/*
- *  This block of defines are for applications which use GNAT/RTEMS.
- *  GNAT implements each Ada task as a POSIX thread.
+/**
+ * @defgroup ConfigurationGNAT GNAT/RTEMS Configuration
+ *
+ * @addtogroup Configuration
+ *
+ *  This modules includes configuration parameters for applications which
+ *  use GNAT/RTEMS. GNAT implements each Ada task as a POSIX thread.
  */
+/**@{*/
 #ifdef CONFIGURE_GNAT_RTEMS
 
   /**
@@ -2228,11 +2784,27 @@ const rtems_libio_helper rtems_fs_init_helper =
   #endif
 
 #else
+  /** This defines he number of POSIX mutexes GNAT needs. */
   #define CONFIGURE_GNAT_MUTEXES           0
+  /** This defines he number of Ada tasks needed by the application. */
   #define CONFIGURE_MAXIMUM_ADA_TASKS      0
+  /**
+   * This defines he number of non-Ada tasks/threads that will invoke
+   * Ada subprograms or functions.
+   */
   #define CONFIGURE_MAXIMUM_FAKE_ADA_TASKS 0
 #endif
+/**@}*/  /* end of GNAT Configuration */
 
+/**
+ * @defgroup ConfigurationGo GCC Go Configuration
+ *
+ * @addtogroup Configuration
+ *
+ *  This modules includes configuration parameters for applications which
+ *  use GCC Go.
+ */
+/**@{*/
 #ifdef CONFIGURE_ENABLE_GO
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
@@ -2260,12 +2832,32 @@ const rtems_libio_helper rtems_fs_init_helper =
   #endif
 
 #else
+  /**
+   * This specifies the number of mutexes required by the Go run-time
+   * for its own use.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_GO_INIT_MUTEXES             0
+
+  /**
+   * This specifies the number of condition variables required by the Go
+   * run-time for its own use.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_GO_INIT_CONDITION_VARIABLES 0
+
+  /** This specifies the maximum number of Go co-routines. */
   #define CONFIGURE_MAXIMUM_GOROUTINES          0
+
+  /** This specifies the maximum number of Go per-task variables required. */
   #define CONFIGURE_GOROUTINES_TASK_VARIABLES   0
+
+  /** This specifies the maximum number of Go channels required. */
   #define CONFIGURE_MAXIMUM_GO_CHANNELS         0
 #endif
+/**@}*/  /* end of Go Configuration */
 
 /**
  * This is so we can account for tasks with stacks greater than minimum
@@ -2298,6 +2890,8 @@ const rtems_libio_helper rtems_fs_init_helper =
 
   /**
    * This macro provides summation of the POSIX Condition Variables.
+   *
+   * This is an internal parameter.
    */
   #define CONFIGURE_POSIX_CONDITION_VARIABLES \
     (CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES + \
@@ -2307,6 +2901,12 @@ const rtems_libio_helper rtems_fs_init_helper =
       CONFIGURE_GO_INIT_CONDITION_VARIABLES + \
       CONFIGURE_MAXIMUM_GO_CHANNELS)
 
+  /**
+   * This macro is calculated to specify the memory required for
+   * the POSIX API in its entirety.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_MEMORY_FOR_POSIX \
     (CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(CONFIGURE_POSIX_MUTEXES) + \
       CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES( \
@@ -2326,13 +2926,18 @@ const rtems_libio_helper rtems_fs_init_helper =
         CONFIGURE_MAXIMUM_POSIX_RWLOCKS) + \
       CONFIGURE_MEMORY_FOR_POSIX_TIMERS(CONFIGURE_MAXIMUM_POSIX_TIMERS))
 #else
+  /**
+   * This macro is calculated to specify the memory required for
+   * the POSIX API in its entirety.
+   *
+   * This is an internal parameter.
+   */
   #define CONFIGURE_MEMORY_FOR_POSIX 0
 #endif
 
 /*
  *  Calculate the RAM size based on the maximum number of objects configured.
  */
-
 #ifndef CONFIGURE_EXECUTIVE_RAM_SIZE
 
 /**
@@ -2340,8 +2945,9 @@ const rtems_libio_helper rtems_fs_init_helper =
  *   + array of object control structures
  *   + local pointer table -- pointer per object plus a zero'th
  *     entry in the local pointer table.
+ *
+ * This is an internal parameter.
  */
-
 #define CONFIGURE_MEMORY_FOR_TASKS(_tasks, _number_FP_tasks) \
   ( \
     _Configure_Object_RAM(_tasks, sizeof(Configuration_Thread_control)) \
@@ -2353,6 +2959,8 @@ const rtems_libio_helper rtems_fs_init_helper =
 /**
  * This defines the amount of memory configured for the multiprocessing
  * support required by this application.
+ *
+ * This is an internal parameter.
  */
 #ifdef CONFIGURE_MP_APPLICATION
   #define CONFIGURE_MEMORY_FOR_MP \
@@ -2375,9 +2983,11 @@ const rtems_libio_helper rtems_fs_init_helper =
       (_messages) * ((_size) + sizeof(CORE_message_queue_Buffer_control)))
 
 /**
- * This macros is set to the amount of memory required for pending message
+ * This macro is set to the amount of memory required for pending message
  * buffers in bytes.  It should be constructed by adding together a
  * set of values determined by CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE.
+ *
+ * This is an internal parameter.
  */
 #ifndef CONFIGURE_MESSAGE_BUFFER_MEMORY
   #define CONFIGURE_MESSAGE_BUFFER_MEMORY 0
@@ -2468,6 +3078,11 @@ const rtems_libio_helper rtems_fs_init_helper =
    CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(CONFIGURE_MAXIMUM_USER_EXTENSIONS) \
   )
 
+/**
+ * This macro provides a summation of the memory required by SMP as configured.
+ *
+ * This is an internal parameter.
+ */
 #if defined(RTEMS_SMP)
   #define CONFIGURE_MEMORY_FOR_SMP \
      (CONFIGURE_SMP_MAXIMUM_PROCESSORS * \
@@ -2479,6 +3094,8 @@ const rtems_libio_helper rtems_fs_init_helper =
 
 /**
  * This calculates the memory required for the executive workspace.
+ *
+ * This is an internal parameter.
  */
 #define CONFIGURE_EXECUTIVE_RAM_SIZE \
 (( \
@@ -2507,6 +3124,8 @@ const rtems_libio_helper rtems_fs_init_helper =
 /**
  * This accounts for any extra memory required by the Classic API
  * Initialization Task.
+ *
+ * This is an internal parameter.
  */
 #if (CONFIGURE_INIT_TASK_STACK_SIZE > CONFIGURE_MINIMUM_TASK_STACK_SIZE)
   #define CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART \
@@ -2518,6 +3137,8 @@ const rtems_libio_helper rtems_fs_init_helper =
 /**
  * This accounts for any extra memory required by the POSIX API
  * Initialization Thread.
+ *
+ * This is an internal parameter.
  */
 #if defined(RTEMS_POSIX_API) && \
     (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE > \
@@ -2532,29 +3153,61 @@ const rtems_libio_helper rtems_fs_init_helper =
 /**
  * This macro provides a summation of the various initialization task
  * and thread stack requirements.
+ *
+ * This is an internal parameter.
  */
 #define CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS \
     (CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART + \
     CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART)
 
+/**
+ * This macro is calculated to specify the memory required for
+ * the Idle tasks(s) stack.
+ *
+ * This is an internal parameter.
+ */
 #define CONFIGURE_IDLE_TASKS_STACK \
   (CONFIGURE_IDLE_TASKS_COUNT * \
     _Configure_From_stackspace( CONFIGURE_IDLE_TASK_STACK_SIZE ) )
 
+/**
+ * This macro is calculated to specify the memory required for
+ * the stacks of all tasks.
+ *
+ * This is an internal parameter.
+ */
 #define CONFIGURE_TASKS_STACK \
   (_Configure_Max_Objects( CONFIGURE_TASKS ) * \
     _Configure_From_stackspace( CONFIGURE_MINIMUM_TASK_STACK_SIZE ) )
 
+/**
+ * This macro is calculated to specify the memory required for
+ * the stacks of all POSIX threads.
+ *
+ * This is an internal parameter.
+ */
 #define CONFIGURE_POSIX_THREADS_STACK \
   (_Configure_Max_Objects( CONFIGURE_MAXIMUM_POSIX_THREADS ) * \
     _Configure_From_stackspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
 
-#define CONFIGURE_GOROUTINES_STACK \
-  (_Configure_Max_Objects( CONFIGURE_MAXIMUM_GOROUTINES ) * \
-    _Configure_From_stackspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
-
+/**
+ * This macro is calculated to specify the memory required for
+ * the stacks of all Ada tasks.
+ *
+ * This is an internal parameter.
+ */
 #define CONFIGURE_ADA_TASKS_STACK \
   (_Configure_Max_Objects( CONFIGURE_MAXIMUM_ADA_TASKS ) * \
+    _Configure_From_stackspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
+
+/**
+ * This macro is calculated to specify the memory required for
+ * the stacks of all Go routines.
+ *
+ * This is an internal parameter.
+ */
+#define CONFIGURE_GOROUTINES_STACK \
+  (_Configure_Max_Objects( CONFIGURE_MAXIMUM_GOROUTINES ) * \
     _Configure_From_stackspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
 
 #else /* CONFIGURE_EXECUTIVE_RAM_SIZE */
@@ -2576,6 +3229,12 @@ const rtems_libio_helper rtems_fs_init_helper =
 
 #endif /* CONFIGURE_EXECUTIVE_RAM_SIZE */
 
+/**
+ * This macro is calculated to specify the memory required for
+ * all tasks and threads of all varieties.
+ *
+ * This is an internal parameter.
+ */
 #define CONFIGURE_STACK_SPACE_SIZE \
   ( \
     CONFIGURE_IDLE_TASKS_STACK + \
