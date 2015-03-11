@@ -189,7 +189,7 @@ _Cache_manager_Send_smp_msg(
 
   _Cache_manager_Process_cache_messages();
 
-  while ( !_Atomic_Load_uint( &node.done, ATOMIC_ORDER_ACQUIRE ) );
+  while ( !_Atomic_Load_ulong( &node.done, ATOMIC_ORDER_ACQUIRE ) );
 }
 #endif
 
