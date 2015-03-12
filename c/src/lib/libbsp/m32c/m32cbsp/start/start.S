@@ -83,6 +83,8 @@ _start:
 	mov.w	r0,r1
 #endif
 
+	.global _bsp_reset
+_bsp_reset:
 	jsr.a	_sys_exit
 
 	.text
