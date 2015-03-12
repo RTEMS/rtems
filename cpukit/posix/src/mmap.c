@@ -17,10 +17,14 @@
 
 #include <sys/mman.h>
 
-int munmap(
+void *mmap(
   void   *addr __attribute__((unused)),
-  size_t  length __attribute__((unused))
+  size_t  lenhth __attribute__((unused)),
+  int     prot __attribute__((unused)),
+  int     flags __attribute__((unused)),
+  int     fildes __attribute__((unused)),
+  off_t   off
 )
 {
-  return -1;
+  return NULL;
 }
