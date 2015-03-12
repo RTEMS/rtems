@@ -26,5 +26,5 @@ void *mmap(
   off_t   off
 )
 {
-  return NULL;
+  return MAP_FAILED;
 }
