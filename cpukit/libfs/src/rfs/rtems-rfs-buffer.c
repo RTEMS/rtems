@@ -52,12 +52,12 @@ rtems_rfs_scan_chain (rtems_chain_control*   chain,
     buffer = (rtems_rfs_buffer*) node;
 
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_CHAINS))
-      printf ("%" PRIuPTR " ", ((intptr_t) buffer->user));
+      printf ("%" PRIiPTR " ", ((intptr_t) buffer->user));
 
     if (((rtems_rfs_buffer_block) ((intptr_t)(buffer->user))) == block)
     {
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_CHAINS))
-        printf (": found block=%" PRIuPTR "\n",
+        printf (": found block=%" PRIiPTR "\n",
                 ((intptr_t)(buffer->user)));
 
       (*count)--;

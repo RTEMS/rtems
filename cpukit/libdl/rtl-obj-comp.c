@@ -142,7 +142,7 @@ rtems_rtl_obj_comp_read (rtems_rtl_obj_comp_t* comp,
 
       if (in_length != block_size)
       {
-        rtems_rtl_set_error (EIO, "compressed read failed: bs=%u in=%u",
+        rtems_rtl_set_error (EIO, "compressed read failed: bs=%u in=%zu",
                              block_size, in_length);
         return false;
       }
