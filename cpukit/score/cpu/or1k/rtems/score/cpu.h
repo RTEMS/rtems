@@ -994,6 +994,10 @@ void _CPU_Context_restore_fp(
  *
  */
 
+void _CPU_Context_volatile_clobber( uintptr_t pattern );
+
+void _CPU_Context_validate( uintptr_t pattern );
+
 static inline unsigned int CPU_swap_u32(
   unsigned int value
 )
