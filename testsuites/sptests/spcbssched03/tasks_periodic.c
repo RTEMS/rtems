@@ -98,7 +98,7 @@ rtems_task Tasks_Periodic(
     if (rtems_rate_monotonic_period(rmid, Periods[argument])==RTEMS_TIMEOUT)
       printf("P%" PRIdPTR " - Deadline miss\n", argument);
 
-    rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start);
+    start = rtems_clock_get_ticks_since_boot();
     printf("P%" PRIdPTR "-S ticks:%d\n", argument, start);
     if ( start >= 2*HP_LENGTH ) break; /* stop */
 
@@ -134,14 +134,14 @@ rtems_task Tasks_Periodic(
 
     /* active computing */
     while(FOREVER) {
-      rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+      now = rtems_clock_get_ticks_since_boot();
       if ( argument == 4 && !Violating_task[ argument ] &&
           (now >= start + Execution[argument]))
         break;
       if ( argument != 4 && (now >= start + Execution[argument]) )
         break;
     }
-    rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &stop);
+    stop = rtems_clock_get_ticks_since_boot();
     printf("P%" PRIdPTR "-F ticks:%d\n", argument, stop);
   }
 

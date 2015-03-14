@@ -31,15 +31,15 @@ rtems_task Tasks_Aperiodic(
   status = rtems_task_wake_after( 2 + Phases[argument] );
   directive_failed( status, "rtems_task_wake_after" );
 
-  rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start);
+  start = rtems_clock_get_ticks_since_boot();
   printf("AT%" PRIdPTR "-S ticks:%d\n", argument, start);
   /* active computing */
 
   while(FOREVER) {
-    rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+    now = rtems_clock_get_ticks_since_boot();
     if (now >= start + Execution[argument]) break;
   }
-  rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &stop);
+  stop = rtems_clock_get_ticks_since_boot();
   printf("P%" PRIdPTR "-F ticks:%d\n", argument, stop);
 
   /* delete SELF */
