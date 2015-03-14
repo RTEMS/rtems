@@ -94,14 +94,11 @@ static rtems_status_code spi_memdrv_wait_ms
 |    o = ok or error code                                                   |
 \*=========================================================================*/
 {
-  rtems_status_code          rc = RTEMS_SUCCESSFUL;
-  rtems_interval ticks_per_second;
+  rtems_interval   ticks_per_second;
 
-  rc = rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND,&ticks_per_second);
-  if (rc == RTEMS_SUCCESSFUL) {
-    rc = rtems_task_wake_after(ticks_per_second * ms / 1000);
-  }
-  return rc;
+  ticks_per_second = rtems_clock_get_ticks_per_second();
+  (void) rtems_task_wake_after(ticks_per_second * ms / 1000);
+  return 0;
 }
 
 /*=========================================================================*\
