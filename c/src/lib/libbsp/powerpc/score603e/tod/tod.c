@@ -52,7 +52,7 @@ void setRealTimeFromRTEMS()
 {
   rtems_time_of_day rtems_tod;
 
-  rtems_clock_get( RTEMS_CLOCK_GET_TOD, &rtems_tod );
+  rtems_clock_get_tod( &rtems_tod );
   ICM7170_SetTOD( BSP_RTC_ADDRESS, BSP_RTC_FREQUENCY, &rtems_tod );
 }
 
@@ -62,7 +62,7 @@ int checkRealTime()
   rtems_time_of_day rtc_tod;
 
   ICM7170_GetTOD( BSP_RTC_ADDRESS, BSP_RTC_FREQUENCY, &rtc_tod );
-  rtems_clock_get( RTEMS_CLOCK_GET_TOD, &rtems_tod );
+  rtems_clock_get_tod( &rtems_tod );
 
   if( rtems_tod.year == rtc_tod.year &&
       rtems_tod.month == rtc_tod.month &&
