@@ -51,6 +51,7 @@ __FBSDID("$FreeBSD r284178 2015-06-09T11:49:56Z$");
 #include <sys/limits.h>
 #include <sys/lock.h>
 #include <sys/mutex.h>
+#include <sys/sbuf.h>
 #include <sys/sysctl.h>
 #include <sys/syslog.h>
 #include <sys/systm.h>
