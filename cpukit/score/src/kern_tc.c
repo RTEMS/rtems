@@ -36,7 +36,7 @@
 #include <rtems/score/watchdogimpl.h>
 #endif /* __rtems__ */
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD r279728 2015-03-07T18:23:32Z$");
+__FBSDID("$FreeBSD r280012 2015-03-14T23:16:12Z$");
 
 #include "opt_compat.h"
 #include "opt_ntp.h"
@@ -48,6 +48,7 @@ __FBSDID("$FreeBSD r279728 2015-03-07T18:23:32Z$");
 #include <sys/limits.h>
 #include <sys/lock.h>
 #include <sys/mutex.h>
+#include <sys/sbuf.h>
 #include <sys/sysctl.h>
 #include <sys/syslog.h>
 #include <sys/systm.h>
@@ -1549,18 +1550,18 @@ SYSCTL_PROC(_kern_timecounter, OID_AUTO, hardware, CTLTYPE_STRING | CTLFLAG_RW,
 static int
 sysctl_kern_timecounter_choice(SYSCTL_HANDLER_ARGS)
 {
-	char buf[32], *spc;
+	struct sbuf sb;
 	struct timecounter *tc;
 	int error;
 
-	spc = "";
-	error = 0;
-	for (tc = timecounters; error == 0 && tc != NULL; tc = tc->tc_next) {
-		sprintf(buf, "%s%s(%d)",
-		    spc, tc->tc_name, tc->tc_quality);
-		error = SYSCTL_OUT(req, buf, strlen(buf));
-		spc = " ";
+	sbuf_new_for_sysctl(&sb, NULL, 0, req);
+	for (tc = timecounters; tc != NULL; tc = tc->tc_next) {
+		if (tc != timecounters)
+			sbuf_putc(&sb, ' ');
+		sbuf_printf(&sb, "%s(%d)", tc->tc_name, tc->tc_quality);
 	}
+	error = sbuf_finish(&sb);
+	sbuf_delete(&sb);
 	return (error);
 }
 
