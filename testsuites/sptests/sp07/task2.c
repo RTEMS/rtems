@@ -13,6 +13,11 @@
 
 #include "system.h"
 
+/*
+ * We know this is deprecated and don't want a warning on every BSP built.
+ */
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 rtems_task Task_2(
   rtems_task_argument argument
 )

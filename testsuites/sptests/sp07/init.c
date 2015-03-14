@@ -210,25 +210,23 @@ rtems_task Init(
   directive_failed( status, "rtems_task_restart of TA3" );
   assert_extension_counts( &Task_restarted[ 0 ], 0x0 );
 
-  status = rtems_task_set_note( rtems_task_self(), RTEMS_NOTEPAD_4, 32 );
-  directive_failed( status, "task_set_node of Self id" );
-  printf( "INIT - rtems_task_set_note - set my (id) RTEMS_NOTEPAD_4 " );
-  puts  ( "to TA1's priority: 04" );
+ /*
+  * We know this is deprecated and don't want a warning on every BSP built.
+  */
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
-  status = rtems_task_set_note( RTEMS_SELF, RTEMS_NOTEPAD_4, 32 );
-  directive_failed( status, "task_set_node of Self 0" );
-  printf( "INIT - rtems_task_set_note - set my (SELF) RTEMS_NOTEPAD_4 " );
-  puts  ( "to TA1's priority: 04" );
+    status = rtems_task_set_note( Task_id[ 1 ], RTEMS_NOTEPAD_8, 4 );
+    directive_failed( status, "task_set_node of TA1" );
+    printf( "INIT - rtems_task_set_note - set TA1's RTEMS_NOTEPAD_8 " );
+    puts  ( "to TA1's priority: 04" );
 
-  status = rtems_task_set_note( Task_id[ 1 ], RTEMS_NOTEPAD_8, 4 );
-  directive_failed( status, "task_set_node of TA1" );
-  printf( "INIT - rtems_task_set_note - set TA1's RTEMS_NOTEPAD_8 " );
-  puts  ( "to TA1's priority: 04" );
+    status = rtems_task_set_note( Task_id[ 2 ], RTEMS_NOTEPAD_8, 4 );
+    directive_failed( status, "task_set_node of TA2" );
+    printf( "INIT - rtems_task_set_note - set TA2's RTEMS_NOTEPAD_8 " );
+    puts  ( "to TA2's priority: 04");
 
-  status = rtems_task_set_note( Task_id[ 2 ], RTEMS_NOTEPAD_8, 4 );
-  directive_failed( status, "task_set_node of TA2" );
-  printf( "INIT - rtems_task_set_note - set TA2's RTEMS_NOTEPAD_8 " );
-  puts  ( "to TA2's priority: 04");
+  #pragma GCC diagnostic pop
 
   status = rtems_task_delete( RTEMS_SELF );
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
