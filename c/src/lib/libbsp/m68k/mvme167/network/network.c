@@ -334,16 +334,17 @@ static unsigned long uti596_portSelfTest(
   stp->results = 0xFFFFFFFF;
   uti596_writePortFunction( stp, UTI596_SELFTEST_PORT_FUNCTION );
 
-  rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second);
-	rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks);
-	end_ticks = start_ticks + ticks_per_second;
+  ticks_per_second = rtems_clock_get_ticks_per_second();
+ 
+  start_ticks = rtems_clock_get_ticks_since_boot();
+  end_ticks = start_ticks + ticks_per_second;
 
   do {
     if( stp->results != 0xFFFFFFFF )
       break;
-		else
-			rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks);
-	} while (start_ticks <= end_ticks);
+    else
+      start_ticks = rtems_clock_get_ticks_since_boot();
+  } while (start_ticks <= end_ticks);
 
   if (start_ticks > end_ticks ) {
     #ifdef DBG_SELFTEST_CMD
@@ -388,16 +389,16 @@ static int uti596_portDump(
   dp->dump_status = 0;
   uti596_writePortFunction( dp, UTI596_DUMP_PORT_FUNCTION );
 
-  rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second);
-	rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks);
-	end_ticks = start_ticks + ticks_per_second;
+  ticks_per_second = rtems_clock_get_ticks_per_second();
+  start_ticks = rtems_clock_get_ticks_since_boot();
+  end_ticks = start_ticks + ticks_per_second;
 
   do {
     if( dp->dump_status != 0xA006 )
       break;
-		else
-			rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks);
-	} while (start_ticks <= end_ticks);
+    else
+      start_ticks = rtems_clock_get_ticks_since_boot();
+  } while (start_ticks <= end_ticks);
 
   if (start_ticks > end_ticks ) {
     #ifdef DBG_DUMP_CMD
@@ -439,9 +440,9 @@ static int uti596_wait(
 {
   rtems_interval ticks_per_second, start_ticks, end_ticks;
 
-  rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second);
-	rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks);
-	end_ticks = start_ticks + ticks_per_second;
+  ticks_per_second = rtems_clock_get_ticks_per_second();
+  start_ticks = rtems_clock_get_ticks_since_boot();
+  end_ticks = start_ticks + ticks_per_second;
 
   switch( waitType ) {
 
@@ -453,7 +454,8 @@ static int uti596_wait(
 			  if (sc->scb.command == 0)
 				  break;
 			  else
-				  rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks);
+				  
+  				  start_ticks = rtems_clock_get_ticks_since_boot();
 
 		  } while (start_ticks <= end_ticks);
 
@@ -470,7 +472,7 @@ static int uti596_wait(
 		    if( !sc->iscp.busy )
 		      break;
 				else
-					rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks);
+  				  start_ticks = rtems_clock_get_ticks_since_boot();
 			} while (start_ticks <= end_ticks);
 
 		  if (start_ticks > end_ticks ) {
@@ -491,7 +493,7 @@ static int uti596_wait(
 		   if( *sc->pCurrent_command_status & STAT_C )
 		      break;
 			 else
-					rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks);
+  				  start_ticks = rtems_clock_get_ticks_since_boot();
 			} while (start_ticks <= end_ticks);
 
 		  if (start_ticks > end_ticks ) {
@@ -2116,7 +2118,7 @@ void uti596_resetDaemon(
                                 RTEMS_EVENT_ANY | RTEMS_WAIT,
                                 RTEMS_NO_TIMEOUT, &events);
 
-    rtems_clock_get(RTEMS_CLOCK_GET_TOD, &tm_struct);
+    rtems_clock_get_tod(&tm_struct);
     printk(("reset daemon: Resetting NIC @ %d:%d:%d \n",
            tm_struct.hour, tm_struct.minute, tm_struct.second))
 
