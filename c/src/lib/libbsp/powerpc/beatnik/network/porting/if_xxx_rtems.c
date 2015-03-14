@@ -135,7 +135,7 @@ NET_EMBEMB(rtems_,NETDRIVER_PREFIX,_attach)
 	}
 
 	if ( !net_driver_ticks_per_sec )
-		rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &net_driver_ticks_per_sec );
+		net_driver_ticks_per_sec = rtems_clock_get_ticks_per_second();
 
 	sc  = device_get_softc( dev );
 	ifp = &sc->arpcom.ac_if;
