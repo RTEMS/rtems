@@ -438,10 +438,16 @@ static rtems_task Init(rtems_task_argument argument)
 
 #if !defined(RTEMS_SMP)
 #ifdef CONFIGURE_MAXIMUM_TASK_VARIABLES
-  for (i = 0; i < CONFIGURE_MAXIMUM_TASK_VARIABLES; ++i) {
-    sc = rtems_task_variable_add(RTEMS_SELF, &task_var, task_var_dtor);
-    directive_failed(sc, "rtems_task_variable_add");
-  }
+  /*
+   * We know this is deprecated and don't want a warning on every BSP built.
+   */
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    for (i = 0; i < CONFIGURE_MAXIMUM_TASK_VARIABLES; ++i) {
+      sc = rtems_task_variable_add(RTEMS_SELF, &task_var, task_var_dtor);
+      directive_failed(sc, "rtems_task_variable_add");
+    }
+  #pragma GCC diagnostic pop
 #endif
 #endif
 

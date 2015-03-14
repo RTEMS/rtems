@@ -15,6 +15,11 @@
 
 const char rtems_test_name[] = "SPNOTEPAD 1";
 
+/*
+ * We know this is deprecated and don't want a warning on every BSP built.
+ */
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 

@@ -14,6 +14,8 @@
 #include <tmacros.h>
 #include "pritime.h"
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 const char rtems_test_name[] = "SPCLOCKGET";
 
 /* forward declarations to avoid warnings */

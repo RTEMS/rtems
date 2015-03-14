@@ -186,31 +186,43 @@ rtems_task test_task(
   benchmark_timer_initialize();
     (void)  rtems_task_mode( RTEMS_PREEMPT, RTEMS_PREEMPT_MASK, &old_mode );
 
-  benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_set_note( Test_task_id, 8, 10 );
-  end_time = benchmark_timer_read();
+  /** START OF NOTEPAD TESTS **/
 
-  put_time(
-    "rtems_task_set_note: only case",
-    end_time,
-    OPERATION_COUNT,
-    overhead,
-    CALLING_OVERHEAD_TASK_SET_NOTE
-  );
+  /*
+   * We know this is deprecated and don't want a warning on every BSP built.
+   */
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
-  benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_task_get_note( Test_task_id, 8, &old_note );
-  end_time = benchmark_timer_read();
+    benchmark_timer_initialize();
+      for ( index=1 ; index <= OPERATION_COUNT ; index++ )
+        (void) rtems_task_set_note( Test_task_id, 8, 10 );
+    end_time = benchmark_timer_read();
 
-  put_time(
-    "rtems_task_get_note: only case",
-    end_time,
-    OPERATION_COUNT,
-    overhead,
-    CALLING_OVERHEAD_TASK_GET_NOTE
-  );
+    put_time(
+      "rtems_task_set_note: only case",
+      end_time,
+      OPERATION_COUNT,
+      overhead,
+      CALLING_OVERHEAD_TASK_SET_NOTE
+    );
+
+    benchmark_timer_initialize();
+      for ( index=1 ; index <= OPERATION_COUNT ; index++ )
+        (void) rtems_task_get_note( Test_task_id, 8, &old_note );
+    end_time = benchmark_timer_read();
+
+    put_time(
+      "rtems_task_get_note: only case",
+      end_time,
+      OPERATION_COUNT,
+      overhead,
+      CALLING_OVERHEAD_TASK_GET_NOTE
+    );
+
+  #pragma GCC diagnostic pop
+
+  /** END OF NOTEPAD TESTS **/
 
   build_time( &time, 1, 1, 1988, 0, 0, 0, 0 );
 
