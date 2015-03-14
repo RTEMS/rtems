@@ -45,7 +45,18 @@ rtems_monitor_task_canonical(
 /* XXX if they are important enough to include anymore.   */
     canonical_task->modes = 0; /* XXX FIX ME.... rtems_thread->current_modes; */
     canonical_task->attributes = 0 /* XXX FIX ME rtems_thread->API_Extensions[ THREAD_API_RTEMS ]->attribute_set */;
-    (void) memcpy(canonical_task->notepad, api ->Notepads, sizeof(canonical_task->notepad));
+
+  /*
+   * We know this is deprecated and don't want a warning on every BSP built.
+   */
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+  if ( rtems_configuration_get_notepads_enabled() ) {
+    (void) memcpy(
+      canonical_task->notepad, api ->Notepads, sizeof(canonical_task->notepad));
+  }
+  #pragma GCC diagnostic pop
+
 /* XXX more to fix */
 /*
     (void) memcpy(&canonical_task->wait_args, &rtems_thread->Wait.Extra, sizeof(canonical_task->wait_args));
@@ -98,6 +109,14 @@ rtems_monitor_task_dump(
     }
 
     length += rtems_monitor_pad(72, length);
-    length += rtems_monitor_dump_notepad(monitor_task->notepad);
+
+    /*
+     * We know this is deprecated and don't want a warning on every BSP built.
+     */
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+      length += rtems_monitor_dump_notepad(monitor_task->notepad);
+    #pragma GCC diagnostic pop
+
     fprintf(stdout,"\n");
 }
