@@ -44,7 +44,7 @@ void setRealTimeFromRTEMS (void)
   rtems_time_of_day time_buffer;
   rtems_status_code status;
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time_buffer );
+  status = rtems_clock_get_tod( &time_buffer );
   if (status == RTEMS_SUCCESSFUL){
     setRealTime(&time_buffer);
   }
@@ -141,7 +141,7 @@ int checkRealTime (void)
   uint32_t   rtems_time;
   uint32_t   rtc_time;
 
-  rtems_clock_get( RTEMS_CLOCK_GET_TOD, &rtems_tod );
+  (void) rtems_clock_get_tod( &rtems_tod );
   getRealTime ( &rtc_tod );
 
   rtems_time = _TOD_To_seconds( &rtems_tod );
