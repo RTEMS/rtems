@@ -415,7 +415,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
     /*
      * Set up some timing values
      */
-    rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, &fxp_ticksPerSecond);
+	fxp_ticksPerSecond = rtems_clock_get_ticks_per_second();
 	DBGLVL_PRINTK(1,"fxp_attach called\n");
 
 	/*
