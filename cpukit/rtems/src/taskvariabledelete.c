@@ -24,6 +24,11 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
 
+/*
+ * We know this is deprecated and don't want a warning on every BSP built.
+ */
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 rtems_status_code rtems_task_variable_delete(
   rtems_id  tid,
   void    **ptr

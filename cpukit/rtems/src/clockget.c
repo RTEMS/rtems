@@ -25,6 +25,12 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
 
+/*
+ * Ignore deprecated warning when compiling this method. We know
+ * this method is deprecated.
+ */
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 rtems_status_code rtems_clock_get(
   rtems_clock_get_options  option,
   void                    *time_buffer

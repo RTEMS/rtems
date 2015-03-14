@@ -22,6 +22,11 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/config.h>
 
+/*
+ * We know this is deprecated and don't want a warning on every BSP built.
+ */
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 rtems_status_code rtems_task_set_note(
   rtems_id id,
   uint32_t notepad,

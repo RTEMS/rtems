@@ -25,10 +25,9 @@
 #include <rtems/config.h>
 
 /*
- *  rtems_task_variable_get
- *
- *  This directive gets the value of a task variable.
+ * We know this is deprecated and don't want a warning on every BSP built.
  */
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 rtems_status_code rtems_task_variable_get(
   rtems_id tid,

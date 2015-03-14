@@ -23,6 +23,11 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
 
+/*
+ * We know this is deprecated and don't want a warning on every BSP built.
+ */
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 void _RTEMS_Tasks_Invoke_task_variable_dtor(
   Thread_Control        *the_thread,
   rtems_task_variable_t *tvp
