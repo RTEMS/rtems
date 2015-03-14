@@ -54,7 +54,7 @@ void	setRealTimeFromRTEMS()
 {
     rtems_time_of_day	t;
 
-    rtems_clock_get(RTEMS_CLOCK_GET_TOD,&t);
+    rtems_clock_get_tod(&t);
     t.year -= 1900;
 
     tod[0] |= 0x80;	/* Stop write register */
@@ -74,7 +74,7 @@ int	checkRealTime()
     int		d;
 
     tod[0] |= 0x40;	/* Stop read register */
-    rtems_clock_get(RTEMS_CLOCK_GET_TOD,&t);
+    rtems_clock_get_tod(&t);
     if((t.year != 1900+getTod(7,0xff))
        || (t.month != getTod(6,0x1f))
        || (t.day != getTod(5,0x3f)))
