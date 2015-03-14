@@ -114,10 +114,6 @@ static inline void flush_data_cache(void)
     asm volatile("mov r0, #0; mcr p15, #0, r0, c7, c10, #4" : : : "memory");
 }
 
-
-#define TIMER_FREQ  1000    /* clock frequency for OMAP timer (1ms) */
-#define TIMER_COUNT(freq) (TIMER_FREQ/(freq)) /* initial value for counter*/
-
 #define __arch_getb(a)      (*(volatile unsigned char *)(a))
 #define __arch_getw(a)      (*(volatile unsigned short *)(a))
 #define __arch_getl(a)      (*(volatile unsigned int *)(a))
