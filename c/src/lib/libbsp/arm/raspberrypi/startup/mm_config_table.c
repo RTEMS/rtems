@@ -20,6 +20,7 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#include <bsp.h>
 #include <bsp/arm-cp15-start.h>
 
 const arm_cp15_start_section_config arm_cp15_start_mmu_config_table[] = {
@@ -64,8 +65,8 @@ const arm_cp15_start_section_config arm_cp15_start_mmu_config_table[] = {
     .end = (uint32_t) bsp_section_stack_end,
     .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
   }, {
-    .begin = 0x20000000,
-    .end = 0x21000000,
+    .begin = RPI_PERIPHERAL_BASE,
+    .end =   RPI_PERIPHERAL_BASE + RPI_PERIPHERAL_SIZE,
     .flags = ARMV7_MMU_DEVICE
   }
 };

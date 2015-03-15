@@ -45,6 +45,20 @@
 /** @} */
 
 /**
+ * @name Peripheral Base Register Address
+ *
+ * @{
+ */
+
+#if (BSP_IS_RPI2 == 1)
+   #define RPI_PERIPHERAL_BASE      0x3F000000
+#else
+   #define RPI_PERIPHERAL_BASE      0x20000000
+#endif
+
+#define RPI_PERIPHERAL_SIZE         0x01000000
+
+/**
  * @name Internal ARM Timer Registers
  *
  * @{
@@ -52,7 +66,7 @@
 
 #define BCM2835_CLOCK_FREQ       250000000
 
-#define BCM2835_TIMER_BASE       (0x2000B400)
+#define BCM2835_TIMER_BASE       (RPI_PERIPHERAL_BASE + 0xB400)
 
 #define BCM2835_TIMER_LOD        (BCM2835_TIMER_BASE+0x00)
 #define BCM2835_TIMER_VAL        (BCM2835_TIMER_BASE+0x04)
@@ -74,7 +88,7 @@
  * @{
  */
 
-#define BCM2835_GPIO_REGS_BASE   (0x20200000)
+#define BCM2835_GPIO_REGS_BASE   (RPI_PERIPHERAL_BASE + 0x200000)
 
 #define BCM2835_GPIO_GPFSEL1     (BCM2835_GPIO_REGS_BASE+0x04)
 #define BCM2835_GPIO_GPSET0      (BCM2835_GPIO_REGS_BASE+0x1C)
@@ -90,7 +104,7 @@
  * @{
  */
 
-#define BCM2835_AUX_BASE         (0x20215000)
+#define BCM2835_AUX_BASE         (RPI_PERIPHERAL_BASE + 0x215000)
 
 #define AUX_ENABLES              (BCM2835_AUX_BASE+0x04)
 #define AUX_MU_IO_REG            (BCM2835_AUX_BASE+0x40)
@@ -115,7 +129,7 @@
  */
 
 
-#define BCM2835_UART0_BASE       (0x20201000)
+#define BCM2835_UART0_BASE       (RPI_PERIPHERAL_BASE + 0x201000)
 
 #define BCM2835_UART0_DR         (BCM2835_UART0_BASE+0x00)
 #define BCM2835_UART0_RSRECR     (BCM2835_UART0_BASE+0x04)
@@ -155,7 +169,7 @@
  * @{
  */
 
-#define BCM2835_BASE_INTC         (0x2000B200)
+#define BCM2835_BASE_INTC         (RPI_PERIPHERAL_BASE + 0xB200)
 
 #define BCM2835_IRQ_BASIC         (BCM2835_BASE_INTC + 0x00)
 #define BCM2835_IRQ_PENDING1      (BCM2835_BASE_INTC + 0x04)
@@ -182,7 +196,7 @@
  *       it's own RTOS. 1 and 3 are available for use in
  *       RTEMS.
  */
-#define BCM2835_GPU_TIMER_BASE    (0x20003000)
+#define BCM2835_GPU_TIMER_BASE    (RPI_PERIPHERAL_BASE + 0x3000)
 
 #define BCM2835_GPU_TIMER_CS      (BCM2835_TIMER_BASE+0x00)
 #define BCM2835_GPU_TIMER_CLO     (BCM2835_TIMER_BASE+0x04)
