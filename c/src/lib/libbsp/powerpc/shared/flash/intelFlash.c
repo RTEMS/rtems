@@ -62,7 +62,7 @@
 
 #include <rtems.h>
 #define TIMEOUT_US       1000
-#define CLOCKRATE_GET(p) p = rtems_clock_get_ticks_per_second()
+#define CLOCKRATE_GET(p) *p = rtems_clock_get_ticks_per_second()
 
 #endif
 
