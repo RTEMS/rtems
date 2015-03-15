@@ -52,7 +52,7 @@ extern "C" {
  */
 
 /**
- * @brief Benchmark Timer Value Type
+ * @brief This type is used to return a Benchmark Timer value.
  *
  * This type is used to contain benchmark times. The units are BSP specific.
  */
