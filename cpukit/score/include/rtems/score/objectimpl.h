@@ -593,10 +593,10 @@ Objects_Control *_Objects_Get_no_protection(
 /**
  * @brief Acquires an object by its identifier.
  *
- * This function is similar to _Objects_Get_isr_disable().  It acquires the
- * object specific ISR lock for local objects.  Thread dispatching is not
- * disabled for local objects.  For remote objects thread dispatching is
- * disabled.
+ * This function is similar to _Objects_Get_isr_disable().  It disables
+ * interrupts and acquires the object specific ISR lock for local objects.
+ * Thread dispatching is not disabled for local objects.  For remote objects
+ * thread dispatching is disabled.
  *
  * @param[in] information The object information.
  * @param[in] id The object identifier.
@@ -604,10 +604,11 @@ Objects_Control *_Objects_Get_no_protection(
  * @param[in] lock_context The lock context for local objects.
  *
  * @retval object The object corresponding to the identifier.
- * @retval NULL No object exists in this domain for this identifer.
+ * @retval NULL No object exists in this domain for this identifier.
  *
- * @see _Objects_Release(), _Objects_Release_and_ISR_enable(), and
- * _Objects_Release_and_thread_dispatch_disable().
+ * @see _Objects_ISR_disable_and_acquire(), _Objects_Release(),
+ *   _Objects_Release_and_ISR_enable(), and
+ *   _Objects_Release_and_thread_dispatch_disable().
  */
 Objects_Control *_Objects_Acquire(
   const Objects_Information *information,
@@ -615,6 +616,20 @@ Objects_Control *_Objects_Acquire(
   Objects_Locations         *location,
   ISR_lock_Context          *lock_context
 );
+
+/**
+ * @brief Acquires a local object and disables interrupts.
+ *
+ * @param[in] the_object The local object to acquire.
+ * @param[in] lock_context The lock context.
+ */
+RTEMS_INLINE_ROUTINE void _Objects_ISR_disable_and_acquire(
+  Objects_Control  *the_object,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_ISR_disable_and_acquire( &the_object->Lock, lock_context );
+}
 
 /**
  * @brief Releases a local object.
