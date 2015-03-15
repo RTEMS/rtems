@@ -104,6 +104,7 @@ rtems_task Tasks_Periodic(
 
     /* Specific scenario for task 4: tries to exceed announced budget,
        the task priority has to be pulled down to background. */
+    now = rtems_clock_get_ticks_since_boot();
     if ( !scenario_done && argument == 4 && now >= 200 ) {
       Violating_task[ argument ] = 1;
       scenario_done = 1;
