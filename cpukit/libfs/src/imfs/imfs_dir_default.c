@@ -19,6 +19,7 @@
 
 #include "imfs.h"
 
+#include <sys/param.h>
 #include <dirent.h>
 #include <string.h>
 
@@ -73,8 +74,10 @@ static ssize_t IMFS_dir_read(
          dir_ent->d_off = current_entry;
          dir_ent->d_reclen = sizeof( *dir_ent );
          dir_ent->d_ino = IMFS_node_to_ino( imfs_node );
-         dir_ent->d_namlen = imfs_node->namelen;
-         memcpy( dir_ent->d_name, imfs_node->name, dir_ent->d_namlen + 1 );
+         dir_ent->d_namlen =
+           MIN( imfs_node->namelen, sizeof( dir_ent->d_name ) - 1 );
+         dir_ent->d_name[ dir_ent->d_namlen ] = '\0';
+         memcpy( dir_ent->d_name, imfs_node->name, dir_ent->d_namlen );
 
          iop->offset += sizeof( *dir_ent );
          bytes_transferred += (ssize_t) sizeof( *dir_ent );
