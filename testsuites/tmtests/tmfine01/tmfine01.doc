@@ -1,0 +1,21 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: tmfine01
+
+directives:
+
+  - rtems_event_send()
+  - rtems_event_receive()
+  - rtems_semaphore_obtain()
+  - rtems_semaphore_release()
+  - rtems_message_queue_send()
+  - rtems_message_queue_receive()
+
+concepts:
+
+  - Count event send and receive operations to self.
+  - Count event send and receive operations from all tasks to one.
+  - Count mutex obtain and release operations with a private mutex.
+  - Count mutex obtain and release operations with a global mutex.
+  - Count message send and receive operations with a private message queue.
+  - Count message send and receive operations with a global message queue.
