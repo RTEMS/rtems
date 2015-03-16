@@ -31,6 +31,9 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
+/** Type that can store a 32-bit integer or a pointer. */
+typedef unsigned long CPU_Uint32ptr;
+
 /** This defines the type for a priority bit map entry. */
 typedef uint16_t Priority_bit_map_Word;
 

@@ -31,6 +31,9 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
+/** Type that can store a 32-bit integer or a pointer. */
+typedef uintptr_t CPU_Uint32ptr;
+
 typedef uint16_t Priority_bit_map_Word;
 typedef void nios2_isr;
 typedef void ( *nios2_isr_entry )( void );

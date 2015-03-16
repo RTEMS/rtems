@@ -109,7 +109,7 @@ typedef void *Thread;
  *  then converted back to a pointer to void.  The result will compare equal to
  *  the original pointer.
  */
-typedef uintptr_t Thread_Entry_numeric_type;
+typedef CPU_Uint32ptr Thread_Entry_numeric_type;
 
 /**
  *  The following defines the ways in which the entry point for a

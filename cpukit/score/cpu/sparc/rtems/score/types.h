@@ -27,6 +27,9 @@
 extern "C" {
 #endif
 
+/** Type that can store a 32-bit integer or a pointer. */
+typedef uintptr_t CPU_Uint32ptr;
+
 /**
  * @brief Priority bit map type.
  *

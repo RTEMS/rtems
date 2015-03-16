@@ -31,6 +31,9 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
+/** Type that can store a 32-bit integer or a pointer. */
+typedef unsigned long CPU_Uint32ptr;
+
 typedef uint16_t     Priority_bit_map_Word;
 typedef void avr_isr;
 typedef void ( *avr_isr_entry )( void );
