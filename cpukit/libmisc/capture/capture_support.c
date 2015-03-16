@@ -59,15 +59,17 @@ rtems_capture_print_timestamp (uint64_t uptime)
   uint32_t minutes;
   uint32_t seconds;
   uint32_t nanosecs;
+  uint64_t up_secs;
 
-  seconds  = uptime / 1000000000LLU;
-  minutes  = seconds / 60;
+  up_secs  = uptime / 1000000000LLU;
+  minutes  = up_secs / 60;
   hours    = minutes / 60;
   minutes  = minutes % 60;
-  seconds  = seconds % 60;
+  seconds  = up_secs % 60;
   nanosecs = uptime % 1000000000;
 
-  fprintf (stdout, "%5lu:%02lu:%02lu.%09lu", hours, minutes, seconds, nanosecs);
+  fprintf (stdout, "%5" PRIu32 ":%02" PRIu32 ":%02" PRIu32".%09" PRIu32,
+		  hours, minutes, seconds, nanosecs);
 }
 
 void
