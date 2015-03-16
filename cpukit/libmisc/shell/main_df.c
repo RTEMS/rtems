@@ -22,6 +22,7 @@
 #define __need_getopt_newlib
 #include <getopt.h>
 #include <string.h>
+#include <inttypes.h>
 
 static const char suffixes[] =
 { 'B', 'K', 'M', 'G', 'T' };
@@ -83,12 +84,12 @@ static bool rtems_shell_df_print_entry(
 
   if (context->block_size > 0)
   {
-    printf("%-15s %10llu %9llu %11llu %9llu%% %14s\n",
+    printf("%-15s %10lu %9lu %11lu %9" PRIu64 "%% %14s\n",
         mt_entry->dev == NULL ? "none" : mt_entry->dev,
         (svfs.f_blocks * svfs.f_frsize + (context->block_size - 1)) / context->block_size,
         ((svfs.f_blocks - svfs.f_bfree) * svfs.f_frsize + (context->block_size - 1)) / context->block_size,
         (svfs.f_bfree * svfs.f_frsize + (context->block_size - 1)) / context->block_size,
-        ((svfs.f_blocks - svfs.f_bfree) * 100 / svfs.f_blocks),
+        (uint64_t)((svfs.f_blocks - svfs.f_bfree) * 100 / svfs.f_blocks),
         mt_entry->target == NULL ? "none" : mt_entry->target);
   }
   else
@@ -99,9 +100,9 @@ static bool rtems_shell_df_print_entry(
         u_buf, sizeof(u_buf));
     rtems_shell_df_humanize_size(svfs.f_bfree * svfs.f_frsize, a_buf,
         sizeof(a_buf));
-    printf("%-15s %10s %9s %11s %9llu%% %14s\n",
+    printf("%-15s %10s %9s %11s %9" PRIu64 "%% %14s\n",
         mt_entry->dev == NULL ? "none" : mt_entry->dev, f_buf, u_buf, a_buf,
-        (svfs.f_blocks - svfs.f_bfree) * 100 / svfs.f_blocks,
+        (uint64_t)(svfs.f_blocks - svfs.f_bfree) * 100 / svfs.f_blocks,
         mt_entry->target == NULL ? "none" : mt_entry->target);
   }
 
