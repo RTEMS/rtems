@@ -30,7 +30,7 @@ rtems_rfs_rtems_device_get_major_and_minor ( const rtems_libio_t       *iop,
                                              rtems_device_minor_number *minor)
 {
   *major = iop->data0;
-  *minor = (rtems_device_minor_number) iop->data1;
+  *minor = (rtems_device_minor_number) (uintptr_t) iop->data1;
 }
 
 /**
@@ -77,7 +77,7 @@ rtems_rfs_rtems_device_open ( rtems_libio_t *iop,
   rtems_rfs_rtems_unlock (fs);
 
   iop->data0 = major;
-  iop->data1 = (void *) minor;
+  iop->data1 = (void *) (uintptr_t) minor;
 
   return rtems_deviceio_open (iop, pathname, oflag, mode, minor, major);
 }
