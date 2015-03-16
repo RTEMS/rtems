@@ -82,11 +82,7 @@
 #include <termios.h>
 #include <bsp/mbx.h>
 
-static int _EPPCBug_pollRead( int minor );
-static ssize_t _EPPCBug_pollWrite( int minor, const char *buf, size_t len );
 static void _BSP_output_char( char c );
-static rtems_status_code do_poll_read( rtems_device_major_number major, rtems_device_minor_number minor, void * arg);
-static rtems_status_code do_poll_write( rtems_device_major_number major, rtems_device_minor_number minor, void * arg);
 
 static void _BSP_null_char( char c ) {return;}
 static void serial_putchar(const char c);
@@ -97,6 +93,7 @@ BSP_polling_getchar_function_type BSP_poll_char = NULL;
 extern volatile m8xx_t m8xx;
 extern struct rtems_termios_tty *ttyp[];
 
+#if UARTS_IO_MODE == 2 || NVRAM_CONFIGURE == 1
 /*
  * _EPPCBug_pollRead
  *
@@ -200,7 +197,9 @@ static int _EPPCBug_pollRead(
   _ISR_Enable( level );
   return retval;
 }
+#endif /* UARTS_IO_MODE == 2 || NVRAM_CONFIGURE == 1 */
 
+#if PRINTK_IO_MODE == 2 || UARTS_IO_MODE == 2 || NVRAM_CONFIGURE == 1
 /*
  * _EPPCBug_pollWrite
  *
@@ -320,7 +319,9 @@ error:
   _ISR_Enable( level );
   return -1;
 }
+#endif /* PRINTK_IO_MODE == 2 || UARTS_IO_MODE == 2 || NVRAM_CONFIGURE == 1 */
 
+#if UARTS_USE_TERMIOS != 1 || NVRAM_CONFIGURE == 1
 /*
  *  do_poll_read
  *
@@ -453,6 +454,7 @@ static rtems_status_code do_poll_write(
 
 #endif
 }
+#endif /* UARTS_USE_TERMIOS != 1 || NVRAM_CONFIGURE == 1 */
 
 /*
  *  Print functions prototyped in bspIo.h
