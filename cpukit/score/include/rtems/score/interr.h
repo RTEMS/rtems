@@ -164,7 +164,7 @@ typedef enum {
   INTERNAL_ERROR_RESOURCE_IN_USE
 } Internal_errors_Core_list;
 
-typedef uint32_t Internal_errors_t;
+typedef uintptr_t Internal_errors_t;
 
 /**
  *  This type holds the fatal error information.
