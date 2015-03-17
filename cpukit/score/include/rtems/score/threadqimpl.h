@@ -266,23 +266,6 @@ RBTree_Compare_result _Thread_queue_Compare_priority(
 );
 
 /**
- *  @brief Invoked when a thread changes priority and is blocked.
- *
- *  This routine is invoked when a thread changes priority and is
- *  blocked on a thread queue.  If the queue is priority ordered,
- *  the_thread is removed from the_thread_queue and reinserted using
- *  its new priority.  This method has no impact on the state of the_thread
- *  or of any timeouts associated with this blocking.
- *
- *  @param[in] the_thread_queue pointer to a threadq header
- *  @param[in] the_thread pointer to a thread control block
- */
-void _Thread_queue_Requeue(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
-);
-
-/**
  * This routine is invoked to indicate that the specified thread queue is
  * entering a critical section.
  */

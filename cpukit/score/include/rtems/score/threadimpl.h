@@ -883,6 +883,41 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
   return owns_resources;
 }
 
+void _Thread_Priority_change_do_nothing(
+  Thread_Control   *the_thread,
+  Priority_Control  new_priority,
+  void             *context
+);
+
+/**
+ * @brief Sets the thread priority change handler and its context.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_handler The new handler.
+ * @param[in] new_context The new handler context.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Priority_set_change_handler(
+  Thread_Control                 *the_thread,
+  Thread_Priority_change_handler  new_handler,
+  void                           *new_context
+)
+{
+  the_thread->Priority.change_handler = new_handler;
+  the_thread->Priority.change_handler_context = new_context;
+}
+
+/**
+ * @brief Restores the thread priority change default handler and its context.
+ *
+ * @param[in] the_thread The thread.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Priority_restore_default_change_handler(
+  Thread_Control *the_thread
+)
+{
+  the_thread->Priority.change_handler = _Thread_Priority_change_do_nothing;
+}
+
 /**
  * @brief The initial thread wait flags value set by _Thread_Initialize().
  */

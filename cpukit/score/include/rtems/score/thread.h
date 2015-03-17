@@ -374,6 +374,56 @@ typedef enum {
 /** This macro defines the last API which has threads. */
 #define THREAD_API_LAST  THREAD_API_POSIX
 
+/**
+ * @brief Priority change handler.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_priority The new priority value.
+ * @param[in] context The handler context.
+ *
+ * @see _Thread_Priority_set_change_handler().
+ */
+typedef void (*Thread_Priority_change_handler)(
+  Thread_Control   *the_thread,
+  Priority_Control  new_priority,
+  void             *context
+);
+
+/**
+ * @brief Thread priority control.
+ */
+typedef struct {
+  /**
+   * @brief Generation of the current priority value.
+   *
+   * It is used in _Thread_Change_priority() to serialize the update of
+   * priority related data structures.
+   */
+  uint32_t generation;
+
+  /**
+   * @brief Priority change handler.
+   *
+   * Called by _Thread_Change_priority() to notify a thread about a priority
+   * change.  In case this thread waits currently for a resource the handler
+   * may adjust its data structures according to the new priority value.  This
+   * handler must not be NULL, instead the default handler
+   * _Thread_Priority_change_do_nothing() should be used in case nothing needs
+   * to be done during a priority change.
+   *
+   * @see _Thread_Priority_set_change_handler() and
+   * _Thread_Priority_restore_default_change_handler().
+   */
+  Thread_Priority_change_handler change_handler;
+
+  /**
+   * @brief Context for priority change handler.
+   *
+   * @see _Thread_Priority_set_change_handler().
+   */
+  void *change_handler_context;
+} Thread_Priority_control;
+
 typedef struct Thread_Action Thread_Action;
 
 /**
@@ -584,12 +634,9 @@ struct Thread_Control_struct {
   Priority_Control         real_priority;
 
   /**
-   * @brief Generation of the current priority value.
-   *
-   * It is used in _Thread_Change_priority() to serialize the update of
-   * priority related data structures.
+   * @brief Thread priority control.
    */
-  uint32_t                 priority_generation;
+  Thread_Priority_control  Priority;
 
   /** This field is the number of mutexes currently held by this thread. */
   uint32_t                 resource_count;

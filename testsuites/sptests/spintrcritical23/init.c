@@ -70,7 +70,7 @@ static void change_priority(rtems_id timer, void *arg)
 
   rtems_interrupt_lock_acquire(&ctx->lock, &lock_context);
   if (
-    ctx->priority_generation != ctx->tcb->priority_generation
+    ctx->priority_generation != ctx->tcb->Priority.generation
       && scheduler_node_unchanged(ctx)
   ) {
     rtems_task_priority priority_interrupt;
@@ -113,7 +113,7 @@ static bool test_body(void *arg)
   priority_interrupt = 1 + (priority_task + 1) % 3;
   ctx->priority_task = priority_task;
   ctx->priority_interrupt = priority_interrupt;
-  ctx->priority_generation = ctx->tcb->priority_generation;
+  ctx->priority_generation = ctx->tcb->Priority.generation;
   memcpy(
     &ctx->scheduler_node,
     ctx->tcb->Scheduler.node,

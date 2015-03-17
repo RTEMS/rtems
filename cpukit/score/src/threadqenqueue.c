@@ -73,6 +73,24 @@ static void _Thread_blocking_operation_Finalize(
 #endif
 }
 
+static void _Thread_queue_Requeue_priority(
+  Thread_Control   *the_thread,
+  Priority_Control  new_priority,
+  void             *context
+)
+{
+  Thread_queue_Control *tq = context;
+
+  _Thread_queue_Enter_critical_section( tq );
+  _RBTree_Extract( &tq->Queues.Priority, &the_thread->RBNode );
+  _RBTree_Insert(
+    &tq->Queues.Priority,
+    &the_thread->RBNode,
+    _Thread_queue_Compare_priority,
+    false
+  );
+}
+
 void _Thread_queue_Enqueue_with_handler(
   Thread_queue_Control         *the_thread_queue,
   Thread_Control               *the_thread,
@@ -127,6 +145,11 @@ void _Thread_queue_Enqueue_with_handler(
         &the_thread->Object.Node
       );
     } else { /* must be THREAD_QUEUE_DISCIPLINE_PRIORITY */
+      _Thread_Priority_set_change_handler(
+        the_thread,
+        _Thread_queue_Requeue_priority,
+        the_thread_queue
+      );
       _RBTree_Insert(
         &the_thread_queue->Queues.Priority,
         &the_thread->RBNode,
@@ -172,6 +195,7 @@ void _Thread_queue_Extract_with_return_code(
       &the_thread->Wait.queue->Queues.Priority,
       &the_thread->RBNode
     );
+    _Thread_Priority_restore_default_change_handler( the_thread );
   }
 
   the_thread->Wait.return_code = return_code;
@@ -221,6 +245,7 @@ Thread_Control *_Thread_queue_Dequeue(
     first = _RBTree_Get( &the_thread_queue->Queues.Priority, RBT_LEFT );
     if ( first ) {
       the_thread = THREAD_RBTREE_NODE_TO_THREAD( first );
+      _Thread_Priority_restore_default_change_handler( the_thread );
     }
   }
 
@@ -248,46 +273,4 @@ Thread_Control *_Thread_queue_Dequeue(
   _Thread_blocking_operation_Finalize( the_thread, level );
 
   return the_thread;
-}
-
-void _Thread_queue_Requeue(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
-)
-{
-  /*
-   * Just in case the thread really wasn't blocked on a thread queue
-   * when we get here.
-   */
-  if ( !the_thread_queue )
-    return;
-
-  /*
-   * If queueing by FIFO, there is nothing to do. This only applies to
-   * priority blocking discipline.
-   */
-  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY ) {
-    Thread_queue_Control *tq = the_thread_queue;
-    ISR_Level             level;
-
-    _ISR_Disable( level );
-    if ( _States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
-      _Thread_queue_Enter_critical_section( tq );
-
-      /* extract the thread */
-      _RBTree_Extract(
-        &the_thread->Wait.queue->Queues.Priority,
-        &the_thread->RBNode
-      );
-
-      /* enqueue the thread at the new priority */
-      _RBTree_Insert(
-        &the_thread_queue->Queues.Priority,
-        &the_thread->RBNode,
-        _Thread_queue_Compare_priority,
-        false
-      );
-    }
-    _ISR_Enable( level );
-  }
 }

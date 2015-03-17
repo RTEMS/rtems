@@ -38,16 +38,20 @@ void _Thread_Change_priority(
    *  we are not REALLY changing priority.
    */
   if ( the_thread->current_priority != new_priority ) {
-    uint32_t my_generation = the_thread->priority_generation + 1;
+    uint32_t my_generation = the_thread->Priority.generation + 1;
 
     the_thread->current_priority = new_priority;
-    the_thread->priority_generation = my_generation;
+    the_thread->Priority.generation = my_generation;
 
-    _Thread_queue_Requeue( the_thread->Wait.queue, the_thread );
+    (*the_thread->Priority.change_handler)(
+      the_thread,
+      new_priority,
+      the_thread->Priority.change_handler_context
+    );
 
     _ISR_Flash( level );
 
-    if ( the_thread->priority_generation == my_generation ) {
+    if ( the_thread->Priority.generation == my_generation ) {
       if ( _States_Is_ready( the_thread->current_state ) ) {
         _Scheduler_Change_priority(
           the_thread,
