@@ -68,6 +68,9 @@ int qoriq_if_intercom_attach_detach(
   );
 #endif
 
+/* Internal SMP startup function */
+void qoriq_start_thread(void);
+
 void *bsp_idle_thread( uintptr_t ignored );
 #define BSP_IDLE_TASK_BODY bsp_idle_thread
 
