@@ -100,36 +100,50 @@ static void worker_task(rtems_task_argument arg)
   worker_arg warg = *(worker_arg *) arg;
   rtems_status_code sc;
 
-  sc = rtems_event_transient_send(warg.ctx->master_id);
+  sc = rtems_event_transient_send(warg.ctx->worker_ids[0]);
   _Assert(sc == RTEMS_SUCCESSFUL);
   (void) sc;
 
   run_tests(warg.ctx, warg.jobs, warg.job_count, warg.worker_index);
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_suspend(RTEMS_SELF);
 }
 
 void rtems_test_parallel(
   rtems_test_parallel_context *ctx,
-  rtems_task_priority non_master_worker_priority,
+  rtems_test_parallel_worker_setup worker_setup,
   const rtems_test_parallel_job *jobs,
   size_t job_count
 )
 {
   rtems_status_code sc;
   size_t worker_index;
+  rtems_task_priority worker_priority;
 
   _Atomic_Init_ulong(&ctx->stop, 0);
   _SMP_barrier_Control_initialize(&ctx->barrier);
   ctx->worker_count = rtems_get_processor_count();
-  ctx->master_id = rtems_task_self();
+  ctx->worker_ids[0] = rtems_task_self();
+
+  if (RTEMS_ARRAY_SIZE(ctx->worker_ids) < ctx->worker_count) {
+    rtems_fatal_error_occurred(0xdeadbeef);
+  }
+
+  sc = rtems_task_set_priority(
+    RTEMS_SELF,
+    RTEMS_CURRENT_PRIORITY,
+    &worker_priority
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    rtems_fatal_error_occurred(0xdeadbeef);
+  }
 
   sc = rtems_timer_create(
     rtems_build_name('S', 'T', 'O', 'P'),
     &ctx->stop_worker_timer_id
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal_error_occurred(sc);
+    rtems_fatal_error_occurred(0xdeadbeef);
   }
 
   for (worker_index = 1; worker_index < ctx->worker_count; ++worker_index) {
@@ -143,14 +157,20 @@ void rtems_test_parallel(
 
     sc = rtems_task_create(
       rtems_build_name('W', 'O', 'R', 'K'),
-      non_master_worker_priority,
+      worker_priority,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
       &worker_id
     );
     if (sc != RTEMS_SUCCESSFUL) {
-      rtems_fatal_error_occurred(sc);
+      rtems_fatal_error_occurred(0xdeadbeef);
+    }
+
+    ctx->worker_ids[worker_index] = worker_id;
+
+    if (worker_setup != NULL) {
+      (*worker_setup)(ctx, worker_index, worker_id);
     }
 
     sc = rtems_task_start(worker_id, worker_task, (rtems_task_argument) &warg);
@@ -161,6 +181,11 @@ void rtems_test_parallel(
   }
 
   run_tests(ctx, jobs, job_count, 0);
+
+  for (worker_index = 1; worker_index < ctx->worker_count; ++worker_index) {
+    sc = rtems_task_delete(ctx->worker_ids[worker_index]);
+    _Assert(sc == RTEMS_SUCCESSFUL);
+  }
 
   sc = rtems_timer_delete(ctx->stop_worker_timer_id);
   _Assert(sc == RTEMS_SUCCESSFUL);

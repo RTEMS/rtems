@@ -125,9 +125,25 @@ typedef struct {
   Atomic_Ulong stop;
   SMP_barrier_Control barrier;
   size_t worker_count;
+  rtems_id worker_ids[32];
   rtems_id stop_worker_timer_id;
-  rtems_id master_id;
 } rtems_test_parallel_context;
+
+/**
+ * @brief Worker task setup handler.
+ *
+ * Called during rtems_test_parallel() to optionally setup a worker task before
+ * it is started.
+ *
+ * @param[in] ctx The parallel context.
+ * @param[in] worker_index The worker index.
+ * @param[in] worker_id The worker task identifier.
+ */
+typedef void (*rtems_test_parallel_worker_setup)(
+  rtems_test_parallel_context *ctx,
+  size_t worker_index,
+  rtems_id worker_id
+);
 
 /**
  * @brief Basic parallel job description.
@@ -211,7 +227,7 @@ typedef struct {
  * @retval false Otherwise.
  */
 static inline bool rtems_test_parallel_stop_job(
-  rtems_test_parallel_context *ctx
+  const rtems_test_parallel_context *ctx
 )
 {
   return _Atomic_Load_ulong(&ctx->stop, ATOMIC_ORDER_RELAXED) != 0;
@@ -233,19 +249,37 @@ static inline bool rtems_test_parallel_is_master_worker(size_t worker_index)
 }
 
 /**
+ * @brief Returns the task identifier for a worker.
+ *
+ * @param[in] ctx The parallel context.
+ * @param[in] worker_index The worker index.
+ *
+ * @return The task identifier of the worker.
+ */
+static inline rtems_id rtems_test_parallel_get_task_id(
+  const rtems_test_parallel_context *ctx,
+  size_t worker_index
+)
+{
+  return ctx->worker_ids[worker_index];
+}
+
+/**
  * @brief Runs a bunch of jobs in parallel on all processors of the system.
+ *
+ * The worker tasks inherit the priority of the executing task.
  *
  * There are SMP barriers before and after the job body.
  *
  * @param[in] ctx The parallel context.
- * @param[in] non_master_worker_priority The task priority for non-master
- *   workers.
+ * @param[in] worker_setup Optional handler to setup a worker task before it is
+ *   started.
  * @param[in] jobs The table of jobs.
  * @param[in] job_count The count of jobs in the job table.
  */
 void rtems_test_parallel(
   rtems_test_parallel_context *ctx,
-  rtems_task_priority non_master_worker_priority,
+  rtems_test_parallel_worker_setup worker_setup,
   const rtems_test_parallel_job *jobs,
   size_t job_count
 );

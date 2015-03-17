@@ -438,7 +438,7 @@ static void Init(rtems_task_argument arg)
 
   rtems_test_parallel(
     &ctx->base,
-    1,
+    NULL,
     &test_jobs[0],
     RTEMS_ARRAY_SIZE(test_jobs)
   );

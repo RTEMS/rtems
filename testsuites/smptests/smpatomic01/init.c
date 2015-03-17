@@ -418,26 +418,39 @@ static const rtems_test_parallel_job test_jobs[] = {
     .fini = test_atomic_add_fini
   }, {
     .init = test_atomic_flag_init,
-    .body =test_atomic_flag_body,
-    .fini =test_atomic_flag_fini
+    .body = test_atomic_flag_body,
+    .fini = test_atomic_flag_fini
   }, {
     .init = test_atomic_sub_init,
-    .body =test_atomic_sub_body,
-    .fini =test_atomic_sub_fini
+    .body = test_atomic_sub_body,
+    .fini = test_atomic_sub_fini
   }, {
     .init = test_atomic_compare_exchange_init,
-    .body =test_atomic_compare_exchange_body,
-    .fini =test_atomic_compare_exchange_fini
+    .body = test_atomic_compare_exchange_body,
+    .fini = test_atomic_compare_exchange_fini
   }, {
     .init = test_atomic_or_and_init,
-    .body =test_atomic_or_and_body,
-    .fini =test_atomic_or_and_fini
+    .body = test_atomic_or_and_body,
+    .fini = test_atomic_or_and_fini
   }, {
     .init = test_atomic_fence_init,
-    .body =test_atomic_fence_body,
-    .fini =test_atomic_fence_fini
+    .body = test_atomic_fence_body,
+    .fini = test_atomic_fence_fini
   },
 };
+
+static void setup_worker(
+  rtems_test_parallel_context *base,
+  size_t worker_index,
+  rtems_id worker_id
+)
+{
+  rtems_status_code sc;
+  rtems_task_priority prio;
+
+  sc = rtems_task_set_priority(worker_id, WORKER_PRIORITY, &prio);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
 
 static void Init(rtems_task_argument arg)
 {
@@ -447,7 +460,7 @@ static void Init(rtems_task_argument arg)
 
   rtems_test_parallel(
     &ctx->base,
-    WORKER_PRIORITY,
+    setup_worker,
     &test_jobs[0],
     RTEMS_ARRAY_SIZE(test_jobs)
   );
