@@ -54,4 +54,5 @@ sptls02
 spstkalloc02
 syscall01
 termios
+tmfine01
 utf8proc01
