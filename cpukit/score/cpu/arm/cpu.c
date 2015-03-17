@@ -64,6 +64,11 @@ RTEMS_STATIC_ASSERT(
 );
 
 RTEMS_STATIC_ASSERT(
+  sizeof( CPU_Exception_frame ) % CPU_STACK_ALIGNMENT == 0,
+  CPU_Exception_frame_alignment
+);
+
+RTEMS_STATIC_ASSERT(
   offsetof( CPU_Exception_frame, register_sp )
     == ARM_EXCEPTION_FRAME_REGISTER_SP_OFFSET,
   ARM_EXCEPTION_FRAME_REGISTER_SP_OFFSET

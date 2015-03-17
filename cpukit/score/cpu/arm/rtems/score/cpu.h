@@ -222,7 +222,7 @@
   #endif
 #endif
 
-#define ARM_EXCEPTION_FRAME_SIZE 76
+#define ARM_EXCEPTION_FRAME_SIZE 80
 
 #define ARM_EXCEPTION_FRAME_REGISTER_SP_OFFSET 52
 
@@ -687,6 +687,7 @@ typedef struct {
   uint32_t vector;
 #endif
   const ARM_VFP_context *vfp_context;
+  uint32_t reserved_for_stack_alignment;
 } CPU_Exception_frame;
 
 typedef CPU_Exception_frame CPU_Interrupt_frame;
