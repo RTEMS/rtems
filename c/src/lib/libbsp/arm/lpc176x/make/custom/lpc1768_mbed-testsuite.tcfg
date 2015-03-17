@@ -19,5 +19,6 @@ jffs2_fssymlink
 jffs2_fstime
 pppd
 mghttpd01
+tmfine01
 iostream
 rtems++
