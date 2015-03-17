@@ -23,6 +23,16 @@
 #include <rtems/score/smpimpl.h>
 #include <rtems/config.h>
 
+RTEMS_STATIC_ASSERT(
+  sizeof( CPU_Uint32ptr ) >= sizeof( uintptr_t ),
+  CPU_Uint32ptr_greater_equal_uintptr_t
+);
+
+RTEMS_STATIC_ASSERT(
+  sizeof( CPU_Uint32ptr ) >= sizeof( uint32_t ),
+  CPU_Uint32ptr_greater_equal_uint32_t
+);
+
 #if defined(RTEMS_SMP)
 
 static SMP_lock_Control _Per_CPU_State_lock =
