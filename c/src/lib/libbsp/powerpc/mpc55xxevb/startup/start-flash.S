@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2008-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -25,14 +25,12 @@
 
 	.section	".bsp_start_text", "ax"
 
-.equ FLASH_SETTINGS_RESET, 0xff00
-
 #if MPC55XX_CHIP_FAMILY == 551
 
 /* MPC5510 Microcontroller Family Data Sheet, Rev. 3, Table 16, Num 7 */
-.equ FLASH_CLOCK_0, 25
-.equ FLASH_CLOCK_1, 50
-.equ FLASH_CLOCK_2, 80
+.equ FLASH_CLOCK_0, 25000000
+.equ FLASH_CLOCK_1, 50000000
+.equ FLASH_CLOCK_2, 80000000
 .equ FLASH_CLOCK_3, FLASH_CLOCK_2
 .equ FLASH_SETTINGS_0, FLASH_BUICR_CPU_PREFTCH | FLASH_BUICR_APC_0 | FLASH_BUICR_RWSC_0 | FLASH_BUICR_WWSC_1 | FLASH_BUICR_DPFEN_1 | FLASH_BUICR_IPFEN_1 | FLASH_BUICR_PFLIM_2 | FLASH_BUICR_BFEN
 .equ FLASH_SETTINGS_1, FLASH_BUICR_CPU_PREFTCH | FLASH_BUICR_APC_1 | FLASH_BUICR_RWSC_1 | FLASH_BUICR_WWSC_1 | FLASH_BUICR_DPFEN_1 | FLASH_BUICR_IPFEN_1 | FLASH_BUICR_PFLIM_2 | FLASH_BUICR_BFEN
@@ -42,10 +40,10 @@
 #else
 
 /* Optimized flash configurations (Table 13-15 [MPC5567 Microcontroller Reference Manual]) */
-.equ FLASH_CLOCK_0, 82
-.equ FLASH_CLOCK_1, 102
-.equ FLASH_CLOCK_2, 132
-.equ FLASH_CLOCK_3, 264
+.equ FLASH_CLOCK_0, 82000000
+.equ FLASH_CLOCK_1, 102000000
+.equ FLASH_CLOCK_2, 132000000
+.equ FLASH_CLOCK_3, 264000000
 .equ FLASH_SETTINGS_0, FLASH_BUICR_CPU_PREFTCH | FLASH_BUICR_APC_1 | FLASH_BUICR_RWSC_1 | FLASH_BUICR_WWSC_1 | FLASH_BUICR_DPFEN_3 | FLASH_BUICR_IPFEN_3 | FLASH_BUICR_PFLIM_6 | FLASH_BUICR_BFEN
 .equ FLASH_SETTINGS_1, FLASH_BUICR_CPU_PREFTCH | FLASH_BUICR_APC_1 | FLASH_BUICR_RWSC_2 | FLASH_BUICR_WWSC_1 | FLASH_BUICR_DPFEN_3 | FLASH_BUICR_IPFEN_3 | FLASH_BUICR_PFLIM_6 | FLASH_BUICR_BFEN
 .equ FLASH_SETTINGS_2, FLASH_BUICR_CPU_PREFTCH | FLASH_BUICR_APC_2 | FLASH_BUICR_RWSC_3 | FLASH_BUICR_WWSC_1 | FLASH_BUICR_DPFEN_3 | FLASH_BUICR_IPFEN_3 | FLASH_BUICR_PFLIM_6 | FLASH_BUICR_BFEN
@@ -86,8 +84,13 @@ GLOBAL_FUNCTION mpc55xx_start_flash
 	LWI	r4, FLASH_CLOCK_3
 	cmpw	r3, r4
 	ble	clock_3
-	LWI	r3, FLASH_SETTINGS_RESET
-	b	settings_done
+
+	/*
+	 * In case we don't have the right flash settings for the system clock
+	 * value, then rely on the BAM settings.
+	 */
+	blr
+
 clock_0:
 	LWI	r3, FLASH_SETTINGS_0
 	b	settings_done
