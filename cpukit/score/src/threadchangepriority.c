@@ -29,29 +29,36 @@ void _Thread_Change_priority(
   bool              prepend_it
 )
 {
+  ISR_Level level;
+
+  _ISR_Disable( level );
+
   /*
    *  Do not bother recomputing all the priority related information if
    *  we are not REALLY changing priority.
    */
   if ( the_thread->current_priority != new_priority ) {
-    ISR_Level level;
-
-    _ISR_Disable( level );
+    uint32_t my_generation = the_thread->priority_generation + 1;
 
     the_thread->current_priority = new_priority;
-
-    if ( _States_Is_ready( the_thread->current_state ) ) {
-      _Scheduler_Change_priority(
-        the_thread,
-        new_priority,
-        prepend_it
-      );
-    } else {
-      _Scheduler_Update_priority( the_thread, new_priority );
-    }
-
-    _ISR_Enable( level );
+    the_thread->priority_generation = my_generation;
 
     _Thread_queue_Requeue( the_thread->Wait.queue, the_thread );
+
+    _ISR_Flash( level );
+
+    if ( the_thread->priority_generation == my_generation ) {
+      if ( _States_Is_ready( the_thread->current_state ) ) {
+        _Scheduler_Change_priority(
+          the_thread,
+          new_priority,
+          prepend_it
+        );
+      } else {
+        _Scheduler_Update_priority( the_thread, new_priority );
+      }
+    }
   }
+
+  _ISR_Enable( level );
 }

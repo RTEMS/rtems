@@ -198,6 +198,7 @@ bool _Thread_Initialize(
   the_thread->Wait.queue              = NULL;
   the_thread->resource_count          = 0;
   the_thread->real_priority           = priority;
+  the_thread->priority_generation     = 0;
   the_thread->Start.initial_priority  = priority;
 
   _Thread_Wait_flags_set( the_thread, THREAD_WAIT_FLAGS_INITIAL );

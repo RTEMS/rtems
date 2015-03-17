@@ -582,6 +582,15 @@ struct Thread_Control_struct {
   Priority_Control         current_priority;
   /** This field is the base priority of this thread. */
   Priority_Control         real_priority;
+
+  /**
+   * @brief Generation of the current priority value.
+   *
+   * It is used in _Thread_Change_priority() to serialize the update of
+   * priority related data structures.
+   */
+  uint32_t                 priority_generation;
+
   /** This field is the number of mutexes currently held by this thread. */
   uint32_t                 resource_count;
   /** This field is the blocking information for this thread. */

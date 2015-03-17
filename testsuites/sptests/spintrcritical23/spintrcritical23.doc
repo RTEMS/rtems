@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spintrcritical23
+
+directives:
+
+  - _Thread_Change_priority()
+
+concepts:
+
+  - Ensure that priority updates work if carried out in interrupt context while
+    a priority change at task level is in progress.
