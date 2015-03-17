@@ -171,6 +171,82 @@ typedef struct {
 typedef struct {
 } qoriq_uart;
 
+typedef struct {
+  QORIQ_RESERVE(0x000, 0x100);
+  uint16_t caplength;
+  uint16_t hciversion;
+  uint32_t hcsparams;
+  uint32_t hccparams;
+  QORIQ_RESERVE(0x10c, 0x120);
+  uint32_t dciversion;
+  uint32_t dccparams;
+  QORIQ_RESERVE(0x128, 0x140);
+  uint32_t usbcmd;
+  uint32_t usbsts;
+  uint32_t usbintr;
+  uint32_t frindex;
+  QORIQ_RESERVE(0x150, 0x154);
+  union {
+    uint32_t periodiclistbase;
+    uint32_t deviceaddr;
+  } perbase_devaddr;
+  union {
+    uint32_t asynclistaddr;
+    uint32_t addr;
+  } async_addr;
+  QORIQ_RESERVE(0x15c, 0x160);
+  uint32_t burstsize;
+  uint32_t txfilltuning;
+  QORIQ_RESERVE(0x168, 0x170);
+  uint32_t viewport;
+  QORIQ_RESERVE(0x174, 0x180);
+  uint32_t configflag;
+  uint32_t portsc1;
+  QORIQ_RESERVE(0x188, 0x1a8);
+  uint32_t usbmode;
+  uint32_t endptsetupstat;
+  uint32_t endpointprime;
+  uint32_t endptflush;
+  uint32_t endptstatus;
+  uint32_t endptcomplete;
+  uint32_t endptctrl[6];
+  QORIQ_RESERVE(0x1d8, 0x400);
+  uint32_t snoop1;
+  uint32_t snoop2;
+  uint32_t age_cnt_thresh;
+  uint32_t pri_ctrl;
+  uint32_t si_ctrl;
+  QORIQ_RESERVE(0x414, 0x500);
+  uint32_t control;
+} qoriq_usb;
+
+typedef struct {
+  uint32_t dsaddr;
+  uint32_t blkattr;
+  uint32_t cmdarg;
+  uint32_t xfertyp;
+  uint32_t cmdrsp0;
+  uint32_t cmdrsp1;
+  uint32_t cmdrsp2;
+  uint32_t cmdrsp3;
+  uint32_t datport;
+  uint32_t prsstat;
+  uint32_t proctl;
+  uint32_t sysctl;
+  uint32_t irqstat;
+  uint32_t irqstaten;
+  uint32_t irqsigen;
+  uint32_t autoc12err;
+  uint32_t hostcapblt;
+  uint32_t wml;
+  QORIQ_FILL(0x00044, 0x00050, uint32_t);
+  uint32_t fevt;
+  QORIQ_FILL(0x00050, 0x000fc, uint32_t);
+  uint32_t hostver;
+  QORIQ_FILL(0x000fc, 0x0040c, uint32_t);
+  uint32_t dcr;
+} qoriq_esdhc;
+
 #if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
 
 typedef struct {
@@ -202,7 +278,10 @@ typedef struct {
   QORIQ_RESERVE(0x001000, 0x040000);
   qoriq_pic pic;
   QORIQ_FILL(0x040000, 0x070000, qoriq_pic);
-  QORIQ_RESERVE(0x070000, 0x11c500);
+  QORIQ_RESERVE(0x070000, 0x114000);
+  qoriq_esdhc esdhc;
+  QORIQ_FILL(0x114000, 0x115000, qoriq_esdhc);
+  QORIQ_RESERVE(0x115000, 0x11c500);
   qoriq_uart uart_0;
   QORIQ_FILL(0x11c500, 0x11c600, qoriq_uart);
   qoriq_uart uart_1;
@@ -211,7 +290,10 @@ typedef struct {
   QORIQ_FILL(0x11d500, 0x11d600, qoriq_uart);
   qoriq_uart uart_3;
   QORIQ_FILL(0x11d600, 0x11e000, qoriq_uart);
-  QORIQ_RESERVE(0x11e000, 0x2000000);
+  QORIQ_RESERVE(0x11e000, 0x210000);
+  qoriq_usb usb_1;
+  QORIQ_FILL(0x210000, 0x211000, qoriq_usb);
+  QORIQ_RESERVE(0x211000, 0x2000000);
 } qoriq_ccsr;
 
 #else /* QORIQ_CHIP_VARIANT */
@@ -294,83 +376,7 @@ typedef struct {
 } qoriq_dma;
 
 typedef struct {
-  QORIQ_RESERVE(0x000, 0x100);
-  uint16_t caplength;
-  uint16_t hciversion;
-  uint32_t hcsparams;
-  uint32_t hccparams;
-  QORIQ_RESERVE(0x10c, 0x120);
-  uint32_t dciversion;
-  uint32_t dccparams;
-  QORIQ_RESERVE(0x128, 0x140);
-  uint32_t usbcmd;
-  uint32_t usbsts;
-  uint32_t usbintr;
-  uint32_t frindex;
-  QORIQ_RESERVE(0x150, 0x154);
-  union {
-    uint32_t periodiclistbase;
-    uint32_t deviceaddr;
-  } perbase_devaddr;
-  union {
-    uint32_t asynclistaddr;
-    uint32_t addr;
-  } async_addr;
-  QORIQ_RESERVE(0x15c, 0x160);
-  uint32_t burstsize;
-  uint32_t txfilltuning;
-  QORIQ_RESERVE(0x168, 0x170);
-  uint32_t viewport;
-  QORIQ_RESERVE(0x174, 0x180);
-  uint32_t configflag;
-  uint32_t portsc1;
-  QORIQ_RESERVE(0x188, 0x1a8);
-  uint32_t usbmode;
-  uint32_t endptsetupstat;
-  uint32_t endpointprime;
-  uint32_t endptflush;
-  uint32_t endptstatus;
-  uint32_t endptcomplete;
-  uint32_t endptctrl[6];
-  QORIQ_RESERVE(0x1d8, 0x400);
-  uint32_t snoop1;
-  uint32_t snoop2;
-  uint32_t age_cnt_thresh;
-  uint32_t pri_ctrl;
-  uint32_t si_ctrl;
-  QORIQ_RESERVE(0x414, 0x500);
-  uint32_t control;
-} qoriq_usb;
-
-typedef struct {
 } qoriq_tdm_dma;
-
-typedef struct {
-  uint32_t dsaddr;
-  uint32_t blkattr;
-  uint32_t cmdarg;
-  uint32_t xfertyp;
-  uint32_t cmdrsp0;
-  uint32_t cmdrsp1;
-  uint32_t cmdrsp2;
-  uint32_t cmdrsp3;
-  uint32_t datport;
-  uint32_t prsstat;
-  uint32_t proctl;
-  uint32_t sysctl;
-  uint32_t irqstat;
-  uint32_t irqstaten;
-  uint32_t irqsigen;
-  uint32_t autoc12err;
-  uint32_t hostcapblt;
-  uint32_t wml;
-  QORIQ_FILL(0x00044, 0x00050, uint32_t);
-  uint32_t fevt;
-  QORIQ_FILL(0x00050, 0x000fc, uint32_t);
-  uint32_t hostver;
-  QORIQ_FILL(0x000fc, 0x0040c, uint32_t);
-  uint32_t dcr;
-} qoriq_esdhc;
 
 typedef struct {
 } qoriq_sec;
