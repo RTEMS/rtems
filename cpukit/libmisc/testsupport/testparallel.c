@@ -106,7 +106,9 @@ static void worker_task(rtems_task_argument arg)
 
   run_tests(warg.ctx, warg.jobs, warg.job_count, warg.worker_index);
 
-  rtems_task_suspend(RTEMS_SELF);
+  while (true) {
+    /* Wait for delete by master worker */
+  }
 }
 
 void rtems_test_parallel(
