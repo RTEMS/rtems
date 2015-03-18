@@ -84,12 +84,13 @@ static bool rtems_shell_df_print_entry(
 
   if (context->block_size > 0)
   {
-    printf("%-15s %10lu %9lu %11lu %9" PRIu64 "%% %14s\n",
+    printf(
+        "%-15s %10" PRIu64 " %9" PRIu64 " %11" PRIu64 " %9" PRIu64 "%% %14s\n",
         mt_entry->dev == NULL ? "none" : mt_entry->dev,
         (svfs.f_blocks * svfs.f_frsize + (context->block_size - 1)) / context->block_size,
         ((svfs.f_blocks - svfs.f_bfree) * svfs.f_frsize + (context->block_size - 1)) / context->block_size,
         (svfs.f_bfree * svfs.f_frsize + (context->block_size - 1)) / context->block_size,
-        (uint64_t)((svfs.f_blocks - svfs.f_bfree) * 100 / svfs.f_blocks),
+        ((svfs.f_blocks - svfs.f_bfree) * 100 / svfs.f_blocks),
         mt_entry->target == NULL ? "none" : mt_entry->target);
   }
   else
