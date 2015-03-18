@@ -93,7 +93,7 @@ rtems_stdio_redirect_write (rtems_stdio_redirect* sr, const char* buf, ssize_t l
   if (sr->handler)
     sr->handler(buf, len);
 
-  return rtems_stdio_redirect_lock(sr);
+  return rtems_stdio_redirect_unlock(sr);
 }
 
 static rtems_task
