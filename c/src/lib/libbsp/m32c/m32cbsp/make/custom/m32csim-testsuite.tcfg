@@ -3,19 +3,13 @@
 #
 
 include: testdata/require-tick-isr.tcfg
+include: testdata/disable-jffs2-tests.tcfg
+include: testdata/disable-mrfs-tests.tcfg
 
 crypt01
 fileio
 flashdisk01
 fsdosfsname01
-jffs2_fserror
-jffs2_fslink
-jffs2_fspatheval
-jffs2_fspermission
-jffs2_fsrdwr
-jffs2_fsscandir01
-jffs2_fssymlink
-jffs2_fstime
 sha
 spstkalloc02
 sptls01
