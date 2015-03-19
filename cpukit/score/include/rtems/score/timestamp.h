@@ -109,24 +109,6 @@ extern "C" {
 #endif
 
 /**
- *  @brief Determines the validity of a timestamp.
- *
- *  This method determines the validity of a timestamp.
- *
- *  @param[in] _time points to the timestamp instance to validate.
- *
- *  @retval This method returns true if @a time is valid and
- *          false otherwise.
- */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_Is_valid( _time ) \
-          _Timespec_Is_valid( _time )
-#else
-  #define _Timestamp_Is_valid( _time ) \
-          _Timestamp64_Is_valid( _time )
-#endif
-
-/**
  *  @brief Less than operator for timestamps.
  *
  *  This method is the less than operator for timestamps.

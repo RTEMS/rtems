@@ -106,19 +106,6 @@ static inline void _Timestamp64_implementation_Set_to_zero(
   );
 #endif
 
-/**
- *  @brief Determines the validity of a 64-bit timestamp.
- *
- *  This method determines the validity of a timestamp.
- *
- *  @param[in] _time points to the timestamp instance to validate.
- *
- *  @retval This method returns true if @a time is valid and
- *          false otherwise.
- */
-#define _Timestamp64_Is_valid( _time ) \
-  (1)
-
 static inline bool _Timestamp64_implementation_Less_than(
   const Timestamp64_Control *_lhs,
   const Timestamp64_Control *_rhs
