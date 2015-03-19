@@ -28,7 +28,7 @@ bsp_tests=${tests}
 
 if test -f $testdata; then
   disabled_tests=""
-  while [ ! -z $testdata ];
+  while [ ! -z "$testdata" ];
   do
     for td in $testdata;
     do
