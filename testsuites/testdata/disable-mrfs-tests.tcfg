@@ -1,0 +1,13 @@
+#
+# Some targets cannot declare the RAM disk space for the mounted RFS tests.
+#
+
+mrfs_fserror
+mrfs_fsfpathconf
+mrfs_fslink
+mrfs_fspatheval
+mrfs_fspermission
+mrfs_fsrdwr
+mrfs_fsscandir01
+mrfs_fssymlink
+mrfs_fstime

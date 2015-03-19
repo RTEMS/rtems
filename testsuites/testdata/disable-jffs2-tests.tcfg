@@ -1,0 +1,12 @@
+#
+# Some targets cannot declare the RAM disk space for the JFFS2 tests.
+#
+
+jffs2_fserror
+jffs2_fslink
+jffs2_fspatheval
+jffs2_fspermission
+jffs2_fsrdwr
+jffs2_fsscandir01
+jffs2_fssymlink
+jffs2_fstime
