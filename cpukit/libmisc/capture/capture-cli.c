@@ -1,11 +1,10 @@
 /*
   ------------------------------------------------------------------------
 
-  Copyright Objective Design Systems Pty Ltd, 2002
-  All rights reserved Objective Design Systems Pty Ltd, 2002
-  Chris Johns (ccj@acm.org)
+  Copyright 2002, 2015 Chris Johns <chrisj@rtems.org>
+  All rights reserved.
 
-  COPYRIGHT (c) 1989-2014.
+  COPYRIGHT (c) 2014.
   On-Line Applications Research Corporation (OAR).
 
   The license and distribution terms for this file may be
@@ -45,7 +44,7 @@
 /*
  * Counter used to count the number of active tasks.
  */
-static int                   rtems_capture_cli_task_count = 0;
+static int rtems_capture_cli_task_count = 0;
 
 /*
  * The user capture timestamper.
@@ -162,7 +161,7 @@ rtems_capture_cli_enable (int                                argc RC_UNUSED,
 {
   rtems_status_code sc;
 
-  sc = rtems_capture_control (1);
+  sc = rtems_capture_control (true);
 
   if (sc != RTEMS_SUCCESSFUL)
   {
@@ -187,7 +186,7 @@ rtems_capture_cli_disable (int                                argc RC_UNUSED,
 {
   rtems_status_code sc;
 
-  sc = rtems_capture_control (0);
+  sc = rtems_capture_control (false);
 
   if (sc != RTEMS_SUCCESSFUL)
   {

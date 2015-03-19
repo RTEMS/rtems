@@ -1,9 +1,8 @@
 /*
   ------------------------------------------------------------------------
 
-  Copyright Objective Design Systems Pty Ltd, 2002
-  All rights reserved Objective Design Systems Pty Ltd, 2002
-  Chris Johns (ccj@acm.org)
+  Copyright 2002, 2015 Chris Johns <chrisj@rtems.org>
+  All rights reserved.
 
   COPYRIGHT (c) 1989-2014.
   On-Line Applications Research Corporation (OAR).
@@ -79,17 +78,24 @@ rtems_capture_print_record_task( uint32_t cpu, rtems_capture_record_t* rec)
 
   fprintf(stdout,"%2" PRId32 " ", cpu);
   rtems_capture_print_timestamp (rec->time);
-  fprintf (stdout, "            ");
+  fprintf (stdout, "              ");
   rtems_monitor_dump_id (rec->task_id);
-  fprintf (stdout, " %c%c%c%c",
-           (char) (task_rec->name >> 24) & 0xff,
-           (char) (task_rec->name >> 16) & 0xff,
-           (char) (task_rec->name >> 8) & 0xff,
-           (char) (task_rec->name >> 0) & 0xff);
+  if (rtems_object_id_get_api(rec->task_id) != OBJECTS_POSIX_API)
+  {
+    fprintf (stdout, " %c%c%c%c",
+             (char) (task_rec->name >> 24) & 0xff,
+             (char) (task_rec->name >> 16) & 0xff,
+             (char) (task_rec->name >> 8) & 0xff,
+             (char) (task_rec->name >> 0) & 0xff);
+  }
+  else
+  {
+    fprintf (stdout, " ____");
+  }
   fprintf(stdout, " %3" PRId32 " %3" PRId32 " ",
              (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
-             (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff );
-   fprintf (stdout, "%3" PRId32   " %3" PRId32 "  TASK_RECORD\n",
+             (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff);
+   fprintf (stdout, "%3" PRId32   " %6" PRId32 "  TASK_RECORD\n",
             task_rec->start_priority,
             task_rec->stack_size);
 }
@@ -110,9 +116,9 @@ rtems_capture_print_record_capture(
     {
       fprintf(stdout,"%2" PRId32 " ", cpu);
       rtems_capture_print_timestamp (rec->time);
-      fprintf (stdout, " %10" PRId64 " ", diff);
+      fprintf (stdout, " %12" PRId32 " ", (uint32_t) diff);
       rtems_monitor_dump_id (rec->task_id);
-      fprintf(stdout, "      %3" PRId32 " %3" PRId32 "           %s\n",
+      fprintf(stdout, "      %3" PRId32 " %3" PRId32 "             %s\n",
              (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
              (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
              rtems_capture_event_text (e));
@@ -188,9 +194,11 @@ rtems_capture_print_trace_records ( int total, bool csv )
       if ((rec_out->events >> RTEMS_CAPTURE_EVENT_START) == 0)
           rtems_capture_print_record_task(cpu, rec_out );
       else {
-        uint64_t diff = 0;
-        if (per_cpu[cpu].last_t)
+        uint64_t diff;
+        if (per_cpu[cpu].last_t != 0)
           diff = rec_out->time - per_cpu[cpu].last_t;
+        else
+          diff = 0;
         per_cpu[cpu].last_t = rec_out->time;
 
         rtems_capture_print_record_capture( cpu, rec_out, diff );
