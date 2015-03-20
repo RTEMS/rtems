@@ -9,7 +9,7 @@
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
- * http://www.rtems.com/license/LICENSE.
+ * http://www.rtems.org/license/LICENSE.
  *
  * Modified by Ben Gras <beng@shrike-systems.com> to add lots
  * of beagleboard/beaglebone definitions, delete lpc32xx specific
