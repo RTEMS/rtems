@@ -20,6 +20,8 @@
 
 #include <rtems/score/schedulerimpl.h>
 
+ISR_LOCK_DEFINE( , _Scheduler_Lock, "Scheduler" )
+
 void _Scheduler_Handler_initialization(void)
 {
   size_t n = _Scheduler_Count;

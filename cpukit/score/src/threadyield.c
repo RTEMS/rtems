@@ -29,13 +29,13 @@
 
 void _Thread_Yield( Thread_Control *executing )
 {
-  ISR_Level level;
+  ISR_lock_Context lock_context;
 
-  _ISR_Disable( level );
+  _Scheduler_Acquire( executing, &lock_context );
 
   if ( _States_Is_ready( executing->current_state ) ) {
     _Scheduler_Yield( executing );
   }
 
-  _ISR_Enable( level );
+  _Scheduler_Release( executing, &lock_context );
 }

@@ -39,8 +39,7 @@ void _Thread_Change_priority(
    *  we are not REALLY changing priority.
    */
   if ( the_thread->current_priority != new_priority ) {
-    uint32_t  my_generation;
-    ISR_Level level;
+    uint32_t my_generation;
 
     my_generation = the_thread->Priority.generation + 1;
     the_thread->current_priority = new_priority;
@@ -54,7 +53,7 @@ void _Thread_Change_priority(
 
     _Thread_Lock_release( lock, &lock_context );
 
-    _ISR_Disable( level );
+    _Scheduler_Acquire( the_thread, &lock_context );
 
     if ( the_thread->Priority.generation == my_generation ) {
       if ( _States_Is_ready( the_thread->current_state ) ) {
@@ -68,7 +67,7 @@ void _Thread_Change_priority(
       }
     }
 
-    _ISR_Enable( level );
+    _Scheduler_Release( the_thread, &lock_context );
   } else {
     _Thread_Lock_release( lock, &lock_context );
   }

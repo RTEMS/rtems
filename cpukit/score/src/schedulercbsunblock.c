@@ -53,10 +53,11 @@ Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
     if ( deadline*budget_left > budget*deadline_left ) {
       /* Put late unblocked task to background until the end of period. */
       new_priority = the_thread->Start.initial_priority;
-      if ( the_thread->real_priority != new_priority )
-        the_thread->real_priority = new_priority;
-      if ( the_thread->current_priority != new_priority )
-        _Thread_Change_priority(the_thread, new_priority, true);
+      the_thread->real_priority = new_priority;
+      if ( the_thread->current_priority != new_priority ) {
+        the_thread->current_priority = new_priority;
+        _Scheduler_Change_priority(the_thread, new_priority, true);
+      }
     }
   }
 

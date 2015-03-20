@@ -1374,6 +1374,38 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Ask_blocked_node_for_help(
 }
 #endif
 
+ISR_LOCK_DECLARE( extern, _Scheduler_Lock )
+
+/**
+ * @brief Acquires the scheduler instance of the thread.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] lock_context The lock context for _Scheduler_Release().
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Acquire(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  (void) the_thread;
+  _ISR_lock_ISR_disable_and_acquire( &_Scheduler_Lock, lock_context );
+}
+
+/**
+ * @brief Releases the scheduler instance of the thread.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] lock_context The lock context used for _Scheduler_Acquire().
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Release(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  (void) the_thread;
+  _ISR_lock_Release_and_ISR_enable( &_Scheduler_Lock, lock_context );
+}
+
 /** @} */
 
 #ifdef __cplusplus

@@ -110,12 +110,12 @@ rtems_status_code rtems_task_mode(
   }
 
   if ( preempt_enabled || needs_asr_dispatching ) {
-    ISR_Level level;
+    ISR_lock_Context lock_context;
 
     _Thread_Disable_dispatch();
-    _ISR_Disable( level );
+    _Scheduler_Acquire( executing, &lock_context );
     _Scheduler_Schedule( executing );
-    _ISR_Enable( level );
+    _Scheduler_Release( executing, &lock_context );
     _Thread_Enable_dispatch();
   }
 

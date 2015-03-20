@@ -26,13 +26,13 @@ void _Thread_Ready(
   Thread_Control *the_thread
 )
 {
-  ISR_Level              level;
+  ISR_lock_Context lock_context;
 
-  _ISR_Disable( level );
+  _Scheduler_Acquire( the_thread, &lock_context );
 
   the_thread->current_state = STATES_READY;
 
   _Scheduler_Unblock( the_thread );
 
-  _ISR_Enable( level );
+  _Scheduler_Release( the_thread, &lock_context );
 }
