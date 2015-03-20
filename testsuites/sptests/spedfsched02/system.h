@@ -47,8 +47,6 @@ void Get_all_counters( void );
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_EXTRA_TASK_STACKS         (6 * 4 * RTEMS_MINIMUM_STACK_SIZE)
-
 #define CONFIGURE_SCHEDULER_EDF
 
 #include <rtems/confdefs.h>
