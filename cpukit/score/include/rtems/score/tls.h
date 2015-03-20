@@ -117,12 +117,18 @@ static inline uintptr_t _TLS_Get_allocation_size(
 
 static inline void *_TLS_Copy_and_clear( void *tls_area )
 {
-  tls_area = memcpy( tls_area, _TLS_Data_begin, (size_t) _TLS_Data_size );
+  tls_area = memcpy(
+    tls_area,
+    _TLS_Data_begin,
+    (size_t) ((uintptr_t)_TLS_Data_size)
+  );
+
 
   memset(
-    (char *) tls_area + (size_t) _TLS_BSS_begin - (size_t) _TLS_Data_begin,
+    (char *) tls_area + (size_t)((intptr_t) _TLS_BSS_begin) -
+      (size_t)((intptr_t) _TLS_Data_begin),
     0,
-    (size_t) _TLS_BSS_size
+    ((size_t) (intptr_t)_TLS_BSS_size)
   );
 
   return tls_area;
