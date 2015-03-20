@@ -328,6 +328,15 @@ copy_special(rtems_shell_cp_globals* cp_globals, struct stat *from_stat, int exi
 	return (pflag ? setfile(cp_globals, from_stat, -1) : 0);
 }
 
+#if defined(__rtems__)
+  /*
+   * Newlib's <sys/timespec.h> has the real BSD definition of this macro
+   * and it does not behave the same as this one. Thus we need to undefine
+   * the BSD standard one and use the one expected by this file.
+   */
+  #undef TIMESPEC_TO_TIMEVAL
+#endif
+
 #define TIMESPEC_TO_TIMEVAL(tv, ts) {                                   \
         (tv)->tv_sec = *(ts);                                           \
         (tv)->tv_usec = 0;                                              \
