@@ -898,7 +898,7 @@ static inline bool IMFS_is_hard_link( mode_t mode )
 
 static inline ino_t IMFS_node_to_ino( const IMFS_jnode_t *node )
 {
-  return (ino_t) node;
+  return (ino_t) ((uintptr_t) node);
 }
 
 /** @} */
