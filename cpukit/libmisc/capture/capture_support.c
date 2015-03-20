@@ -68,7 +68,7 @@ rtems_capture_print_timestamp (uint64_t uptime)
   nanosecs = uptime % 1000000000;
 
   fprintf (stdout, "%5" PRIu32 ":%02" PRIu32 ":%02" PRIu32".%09" PRIu32,
-		  hours, minutes, seconds, nanosecs);
+             hours, minutes, seconds, nanosecs);
 }
 
 void
@@ -182,15 +182,19 @@ rtems_capture_print_trace_records ( int total, bool csv )
       break;
 
     /* Print the record */
-    if (csv)
-      fprintf (stdout, "%03" PRIu32 ",%08" PRIu32 ",%03" PRIu32
-                   ",%03" PRIu32 ",%04" PRIx32 ",%" PRId64 "\n",
-                 cpu, rec_out->task_id,
-                 (rec_out->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
-                 (rec_out->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
-                 (rec_out->events >> RTEMS_CAPTURE_EVENT_START),
-                 (uint64_t) rec_out->time);
-    else {
+    if (csv) {
+      fprintf(
+        stdout,
+        "%03" PRIu32 ",%08" PRIu32 ",%03" PRIu32
+           ",%03" PRIu32 ",%04" PRIx32 ",%" PRId64 "\n",
+        cpu,
+        (uint32_t) rec_out->task_id,
+        (rec_out->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
+        (rec_out->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
+        (rec_out->events >> RTEMS_CAPTURE_EVENT_START),
+        (uint64_t) rec_out->time
+      );
+    } else {
       if ((rec_out->events >> RTEMS_CAPTURE_EVENT_START) == 0)
           rtems_capture_print_record_task(cpu, rec_out );
       else {
