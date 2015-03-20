@@ -6,4 +6,6 @@ include: testdata/require-tick-isr.tcfg
 include: testdata/disable-jffs2-tests.tcfg
 include: testdata/disable-mrfs-tests.tcfg
 
-fsdosfsname01
+fsbdpart01
+fsdosfsformat01
+fsdosfswrite01

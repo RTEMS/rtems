@@ -7,4 +7,10 @@ include: testdata/disable-jffs2-tests.tcfg
 include: testdata/disable-mrfs-tests.tcfg
 
 capture
+capture01
+fsbdpart01
+fsdosfsformat01
 fsdosfsname01
+fsdosfswrite01
+fsrfsbitmap01
+tmcontext01
