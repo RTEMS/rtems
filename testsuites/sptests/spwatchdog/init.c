@@ -36,9 +36,15 @@ static void test_watchdog_routine( Objects_Id id, void *arg )
 
 static void test_watchdog_static_init( void )
 {
+  #if defined(RTEMS_USE_16_BIT_OBJECT)
+    #define JUNK_ID 0x1234
+  #else
+    #define JUNK_ID 0x12345678
+  #endif
+
   static Watchdog_Control a = WATCHDOG_INITIALIZER(
     test_watchdog_routine,
-    0x12345678,
+    JUNK_ID,
     (void *) 0xdeadbeef
   );
   Watchdog_Control b;
@@ -47,7 +53,7 @@ static void test_watchdog_static_init( void )
   _Watchdog_Initialize(
     &b,
     test_watchdog_routine,
-    0x12345678,
+    JUNK_ID,
     (void *) 0xdeadbeef
   );
 
