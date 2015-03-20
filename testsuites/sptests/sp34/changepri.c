@@ -75,6 +75,7 @@ rtems_id  Semaphore;
 rtems_task BlockingTasks(rtems_task_argument arg)
 {
   rtems_status_code   status;
+  rtems_task_priority pri = (rtems_task_priority) arg;
   rtems_task_priority opri;
   rtems_task_priority npri;
 
@@ -82,9 +83,9 @@ rtems_task BlockingTasks(rtems_task_argument arg)
   directive_failed( status, "rtems_task_set_priority" );
 
   printf(
-    "semaphore_obtain -- BlockingTask %" PRIdrtems_task_argument
+    "semaphore_obtain -- BlockingTask %" PRIdrtems_task_priority
       " @ pri=%" PRIdrtems_task_priority ") blocks\n",
-    arg,
+    pri,
     opri
   );
   status = rtems_semaphore_obtain(Semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
@@ -95,9 +96,9 @@ rtems_task BlockingTasks(rtems_task_argument arg)
   directive_failed( status, "rtems_task_set_priority" );
 
   printf(
-    "semaphore_obtain -- BlockingTask %" PRIdrtems_task_argument
+    "semaphore_obtain -- BlockingTask %" PRIdrtems_task_priority
       " @ pri=%" PRIdrtems_task_priority ") returns\n",
-    arg,
+    pri,
     npri
   );
 
