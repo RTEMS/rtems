@@ -139,7 +139,11 @@ void *Test_Thread(void *arg)
    * likely should use %p. However, this would render this test's
    * behavior non-deterministic, because %p's behavior is
    * "implementation defined" */
-  printf( "%s - siginfo.si_value=0x%08" PRIxPTR "\n", name, (uintptr_t) info.si_value.sival_ptr );
+  printf(
+    "%s - siginfo.si_value=0x%08" PRIxPTR "\n",
+    name,
+    (uintptr_t) info.si_value.sival_ptr
+  );
 
   rtems_test_assert( info.si_signo == SIGNAL_TWO );
   rtems_test_assert( info.si_code == SI_USER );
