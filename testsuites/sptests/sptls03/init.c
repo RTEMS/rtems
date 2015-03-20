@@ -22,16 +22,16 @@
 
 const char rtems_test_name[] = "SPTLS 3";
 
-static volatile int read_write_small = 0xdeadbeef;
+static volatile uint32_t read_write_small = 0xdeadbeefUL;
 
-static const volatile int read_only_small = 0x601dc0fe;
+static const volatile uint32_t read_only_small = 0x601dc0feUL;
 
 static void test(void)
 {
   Thread_Control *executing = _Thread_Get_executing();
 
-  rtems_test_assert(read_write_small == 0xdeadbeef);
-  rtems_test_assert(read_only_small == 0x601dc0fe);
+  rtems_test_assert(read_write_small == 0xdeadbeefUL);
+  rtems_test_assert(read_only_small == 0x601dc0feUL);
 
   rtems_test_assert(executing->Start.tls_area == NULL);
 }
