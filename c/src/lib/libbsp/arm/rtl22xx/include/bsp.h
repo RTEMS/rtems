@@ -174,13 +174,13 @@ extern "C" {
  * @{
  */
 
-//#define FLASH_SIZE      (0x200000-FLASH_BOOT)   // Total area of Flash region in words 8 bit
+//#define RTL22XX_FLASH_SIZE      (0x200000-RTL22XX_FLASH_BOOT)   // Total area of Flash region in words 8 bit
 /** @brief Total area of Flash region in words 8 bit */
-#define FLASH_SIZE        (0x80000-FLASH_BOOT)
-//#define FLASH_SIZE      (0x80000-FLASH_BOOT)      // Total area of Flash region in words 8 bit
-#define FLASH_BEGIN       0x80000000
+#define RTL22XX_FLASH_SIZE        (0x80000-RTL22XX_FLASH_BOOT)
+//#define RTL22XX_FLASH_SIZE      (0x80000-RTL22XX_FLASH_BOOT)      // Total area of Flash region in words 8 bit
+#define RTL22XX_FLASH_BEGIN       0x80000000
 /** @brief First 0x8000 bytes reserved for boot loader etc. */
-#define FLASH_BASE        (FLASH_BEGIN+FLASH_BOOT)
+#define RTL22XX_FLASH_BASE        (RTL22XX_FLASH_BEGIN+RTL22XX_FLASH_BOOT)
 
 /** @} */
 
