@@ -255,37 +255,6 @@ static inline void _Timestamp64_implementation_Subtract(
   );
 #endif
 
-static inline void _Timestamp64_implementation_Divide_by_integer(
-  const Timestamp64_Control *_time,
-  uint32_t             _iterations,
-  Timestamp64_Control *_result
-)
-{
-  *_result = *_time / _iterations;
-}
-
-/**
- *  @brief Divide 64-bit timestamp by an integer.
- *
- *  This routine divides a timestamp by an integer value.  The expected
- *  use is to assist in benchmark calculations where you typically
- *  divide a duration by a number of iterations.
- *
- *  @param[in] _time points to the total
- *  @param[in] _iterations is the number of iterations
- *  @param[out] _result points to the average time.
- */
-#if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
-  #define _Timestamp64_Divide_by_integer( _time, _iterations, _result ) \
-    _Timestamp64_implementation_Divide_by_integer( _time, _iterations, _result )
-#else
-  void _Timestamp64_Divide_by_integer(
-    const Timestamp64_Control *_time,
-    uint32_t                   _iterations,
-    Timestamp64_Control       *_result
-  );
-#endif
-
 /**
  *  @brief Divide 64-bit timestamp by another 64-bit timestamp.
  *

@@ -310,7 +310,7 @@ libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \
     src/timespecdividebyinteger.c src/timespecgetasnanoseconds.c
 
 ## TIMESTAMP_INT64_C_FILES
-libscore_a_SOURCES += src/ts64addto.c src/ts64dividebyinteger.c \
+libscore_a_SOURCES += src/ts64addto.c \
     src/ts64divide.c src/ts64equalto.c \
     src/ts64getnanoseconds.c src/ts64getseconds.c \
     src/ts64lessthan.c \

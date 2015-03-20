@@ -236,27 +236,6 @@ extern "C" {
 #endif
 
 /**
- *  @brief Divides a timestamp by an integer value.
- *
- *  This routine divides a timestamp by an integer value.  The expected
- *  use is to assist in benchmark calculations where you typically
- *  divide a duration by a number of iterations.
- *
- *  @param[in] _time points to the total
- *  @param[in] _iterations is the number of iterations
- *  @param[in] _result points to the average time.
- *
- *  @retval This method fills in @a result.
- */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_Divide_by_integer( _time, _iterations, _result ) \
-          _Timespec_Divide_by_integer(_time, _iterations, _result )
-#else
-  #define _Timestamp_Divide_by_integer( _time, _iterations, _result ) \
-	  _Timestamp64_Divide_by_integer( _time, _iterations, _result )
-#endif
-
-/**
  *  @brief Divides a timestamp by another timestamp.
  *
  *  This routine divides a timestamp by another timestamp.  The
