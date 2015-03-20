@@ -56,7 +56,9 @@ static void thread_delete_hook(
 
 static void suicide_task(rtems_task_argument arg)
 {
-  printf("suicide task %" PRIuPTR "\n", arg);
+  int me = (int) arg;
+
+  printf("suicide task %d\n", me);
 
   rtems_task_delete(RTEMS_SELF);
   rtems_test_assert(false);
