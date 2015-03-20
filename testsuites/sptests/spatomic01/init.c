@@ -35,13 +35,16 @@ static test_context test_instance;
 
 static void test_static_and_dynamic_initialization(void)
 {
-  static Atomic_Uint static_uint =
-    ATOMIC_INITIALIZER_UINT(0xc01dc0feU);
-  static Atomic_Ulong static_ulong =
-    ATOMIC_INITIALIZER_ULONG(0xdeadbeefUL);
-  static Atomic_Pointer static_ptr =
-    ATOMIC_INITIALIZER_PTR(&static_ptr);
-  static Atomic_Flag static_flag = ATOMIC_INITIALIZER_FLAG;
+  #if (__SIZEOF_INT__ == 2)
+    #define UINT_CONSTANT 0xc0feU
+  #else
+    #define UINT_CONSTANT 0xc01dc0feU
+  #endif
+
+  static Atomic_Uint static_uint   = ATOMIC_INITIALIZER_UINT(UINT_CONSTANT);
+  static Atomic_Ulong static_ulong = ATOMIC_INITIALIZER_ULONG(0xdeadbeefUL);
+  static Atomic_Pointer static_ptr = ATOMIC_INITIALIZER_PTR(&static_ptr);
+  static Atomic_Flag static_flag  = ATOMIC_INITIALIZER_FLAG;
 
   Atomic_Uint stack_uint;
   Atomic_Ulong stack_ulong;
@@ -50,7 +53,7 @@ static void test_static_and_dynamic_initialization(void)
 
   puts("=== static and dynamic initialization test case ===");
 
-  _Atomic_Init_uint(&stack_uint, 0xc01dc0feU);
+  _Atomic_Init_uint(&stack_uint, UINT_CONSTANT);
   _Atomic_Init_ulong(&stack_ulong, 0xdeadbeefUL);
   _Atomic_Init_ptr(&stack_ptr, &static_ptr);
   _Atomic_Flag_clear(&stack_flag, ATOMIC_ORDER_RELAXED);
