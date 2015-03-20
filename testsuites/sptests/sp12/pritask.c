@@ -14,15 +14,17 @@
 #include "system.h"
 
 rtems_task Priority_task(
-  rtems_task_argument its_index
+  rtems_task_argument its_index_arg
 )
 {
   rtems_interval      timeout;
   rtems_task_priority its_priority;
   rtems_task_priority current_priority;
   rtems_status_code   status;
+  int                 its_index;
   uint32_t            index;
 
+  its_index = (int) its_index_arg;
   its_priority = Task_priority[ its_index ];
 
   if ( its_priority < 3 )
@@ -42,8 +44,7 @@ rtems_task Priority_task(
 
   if ( its_priority < PRIORITY_INHERIT_BASE_PRIORITY ) {
     printf(
-      "PRI%" PRIdrtems_task_argument " - WHY AM I HERE? (pri=%"
-        PRIdrtems_task_priority ")",
+      "PRI%d - WHY AM I HERE? (pri=%" PRIdrtems_task_priority ")",
      its_index,
      its_priority
     );
