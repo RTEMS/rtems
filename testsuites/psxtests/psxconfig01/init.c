@@ -309,7 +309,7 @@ static rtems_task Init(rtems_task_argument argument)
     eno = pthread_key_create(&key, posix_key_dtor);
     rtems_test_assert(eno == 0);
 
-    eno = pthread_setspecific(key, (void *) (i + 1));
+    eno = pthread_setspecific(key, (void *) (uintptr_t)(i + 1));
     rtems_test_assert(eno == 0);
   }
   eno = pthread_key_create(&key, posix_key_dtor);
