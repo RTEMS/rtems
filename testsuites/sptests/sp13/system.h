@@ -40,6 +40,18 @@ rtems_task Task_3(
   rtems_task_argument argument
 );
 
+/* global variables */
+
+TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
+
+TEST_EXTERN rtems_id   Queue_id[ 4 ];        /* array of queue ids */
+TEST_EXTERN rtems_name Queue_name[ 4 ];      /* array of queue names */
+
+/* test configuration */
+
+#define MESSAGE_SIZE (sizeof(long) * 4)  /* must be multiple of sizeof(long) */
+
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
@@ -53,21 +65,13 @@ rtems_task Task_3(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_MESSAGE_BUFFER_MEMORY     (32 * 1024)
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY \
+   CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, MESSAGE_SIZE ) + \
+   CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 10, MESSAGE_SIZE ) + \
+   CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, MESSAGE_SIZE )
+
 #define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
 
 #include <rtems/confdefs.h>
-
-/* global variables */
-
-TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
-
-TEST_EXTERN rtems_id   Queue_id[ 4 ];        /* array of queue ids */
-TEST_EXTERN rtems_name Queue_name[ 4 ];      /* array of queue names */
-
-/* test configuration */
-
-#define MESSAGE_SIZE (sizeof(long) * 4)  /* must be multiple of sizeof(long) */
 
 /* end of include file */
