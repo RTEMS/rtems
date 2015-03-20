@@ -180,41 +180,6 @@ extern "C" {
 #endif
 
 /**
- *  @brief Convert timestamp to number of clock ticks.
- *
- *  This routine convert the @a time timestamp to the corresponding number
- *  of clock ticks.
- *
- *  @param[in] _time points to the time to be converted
- *
- *  @retval This method returns the number of ticks computed.
- */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_To_ticks( _time ) \
-          _Timespec_To_ticks( _time )
-#else
-  #define _Timestamp_To_ticks( _time ) \
-          _Timestamp64_To_ticks( _time )
-#endif
-
-/**
- *  @brief Converts the @a _ticks value to timestamp format.
- *
- *  This routine converts the @a _ticks value to the corresponding
- *  timestamp format @a _time.
- *
- *  @param[in] _time points to the timestamp format time result
- *  @param[in] _ticks points to the number of ticks to be filled in
- */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_From_ticks( _ticks, _time ) \
-          _Timespec_From_ticks( _ticks, _time )
-#else
-  #define _Timestamp_From_ticks( _ticks, _time ) \
-          _Timestamp64_From_ticks( _ticks, _time )
-#endif
-
-/**
  *  @brief Subtracts two timestamps.
  *
  *  This routine subtracts two timestamps.  @a result is set to

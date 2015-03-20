@@ -196,34 +196,6 @@ static inline void _Timestamp64_implementation_Add_to(
   );
 #endif
 
-/**
- *  @brief Convert 64-bit timestamp to number of ticks.
- *
- *  This routine convert the @a time timestamp to the corresponding number
- *  of clock ticks.
- *
- *  @param[in] _time points to the time to be converted
- *
- *  @retval This method returns the number of ticks computed.
- */
-uint32_t _Timestamp64_To_ticks(
-  const Timestamp64_Control *_time
-);
-
-/**
- *  @brief Convert ticks to 64-bit timestamp.
- *
- *  This routine converts the @a _ticks value to the corresponding
- *  timestamp format @a _time.
- *
- *  @param[in] _time points to the timestamp format time result
- *  @param[out] _ticks points to the number of ticks to be filled in
- */
-void _Timestamp64_From_ticks(
-  uint32_t             _ticks,
-  Timestamp64_Control *_time
-);
-
 static inline void _Timestamp64_implementation_Subtract(
   const Timestamp64_Control *_start,
   const Timestamp64_Control *_end,
