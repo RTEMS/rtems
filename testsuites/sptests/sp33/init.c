@@ -44,11 +44,12 @@ rtems_task Waiter(
 )
 {
   rtems_status_code status;
+  int               waiter = (int) number;
 
-  printf( "Waiter %" PRIdrtems_task_argument " waiting on barrier\n", number );
+  printf( "Waiter %d waiting on barrier\n", waiter );
   status = rtems_barrier_wait( Barrier, RTEMS_NO_TIMEOUT );
 
-  printf( "Waiter %" PRIdrtems_task_argument " back from barrier\n", number );
+  printf( "Waiter %d back from barrier\n", waiter );
 
   if ( SuccessfulCase == TRUE ) {
     directive_failed(status, "rtems_barrier_wait");
