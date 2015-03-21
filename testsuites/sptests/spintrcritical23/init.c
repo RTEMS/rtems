@@ -67,23 +67,21 @@ static void change_priority(rtems_id timer, void *arg)
   /* The arg is NULL */
   test_context *ctx = &ctx_instance;
   rtems_interrupt_lock_context lock_context;
-  rtems_task_priority priority_interrupt;
-  rtems_task_priority priority_task;
 
   rtems_interrupt_lock_acquire(&ctx->lock, &lock_context);
   if (
     ctx->priority_generation != ctx->tcb->priority_generation
       && scheduler_node_unchanged(ctx)
   ) {
-    ctx->done = true;
+    rtems_task_priority priority_interrupt;
+    rtems_task_priority priority_task;
+    rtems_task_priority previous;
+    rtems_status_code sc;
+
     priority_interrupt = ctx->priority_interrupt;
     priority_task = ctx->priority_task;
-  }
-  rtems_interrupt_lock_release(&ctx->lock, &lock_context);
 
-  if (ctx->done) {
-    rtems_status_code sc;
-    rtems_task_priority previous;
+    rtems_interrupt_lock_release(&ctx->lock, &lock_context);
 
     sc = rtems_task_set_priority(
       ctx->task_id,
@@ -92,6 +90,10 @@ static void change_priority(rtems_id timer, void *arg)
     );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
     rtems_test_assert(previous == priority_task);
+
+    ctx->done = true;
+  } else {
+    rtems_interrupt_lock_release(&ctx->lock, &lock_context);
   }
 }
 
