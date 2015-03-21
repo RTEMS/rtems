@@ -186,8 +186,8 @@ void SciWriteCharNoWait( uint8_t );                     /* hardware routine */
 
 uint8_t   inline SciCharAvailable( void );              /* hardware routine */
 
-uint8_t   inline SciReadCharWait( void );               /* hardware routine */
-uint8_t   inline SciReadCharNoWait( void );             /* hardware routine */
+static uint8_t   inline SciReadCharWait( void );        /* hardware routine */
+static uint8_t   inline SciReadCharNoWait( void );      /* hardware routine */
 
 void SciSendBreak( void );                              /* test routine */
 
@@ -1434,7 +1434,7 @@ void SciWriteCharNoWait(uint8_t   c)
 * Scope:    public
 ****************************************************************************/
 
-uint8_t   inline SciReadCharWait( void )
+static uint8_t   inline SciReadCharWait( void )
 {
     uint8_t   ch;
 
@@ -1464,7 +1464,7 @@ uint8_t   inline SciReadCharWait( void )
 * Scope:    public
 ****************************************************************************/
 
-uint8_t   inline SciReadCharNoWait( void )
+static uint8_t   inline SciReadCharNoWait( void )
 {
     uint8_t   ch;
 
