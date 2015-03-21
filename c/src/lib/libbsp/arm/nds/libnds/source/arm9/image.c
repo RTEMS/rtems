@@ -121,7 +121,7 @@ void imageTileData(sImage* img) {
 
 	free(img->image.data32);
 
-	img->image.data32 = temp;
+	img->image.data32 = (unsigned int *)temp;
 }
 
 //---------------------------------------------------------------------------------
