@@ -74,6 +74,7 @@ static bool lpc176x_uart1_probe(rtems_termios_device_context *ctx)
   return true;
 }
 
+#ifdef LPC176X_CONFIG_UART_2
 static bool lpc176x_uart2_probe(rtems_termios_device_context *ctx)
 {
   (void)ctx;
@@ -85,7 +86,9 @@ static bool lpc176x_uart2_probe(rtems_termios_device_context *ctx)
 
   return true;
 }
+#endif
 
+#ifdef LPC176X_CONFIG_UART_3
 static bool lpc176x_uart3_probe(rtems_termios_device_context *ctx)
 {
   (void)ctx;
@@ -97,6 +100,7 @@ static bool lpc176x_uart3_probe(rtems_termios_device_context *ctx)
 
   return true;
 }
+#endif
 
 #ifdef LPC176X_CONFIG_CONSOLE
 static ns16550_context lpc176x_uart_context_0 = {
