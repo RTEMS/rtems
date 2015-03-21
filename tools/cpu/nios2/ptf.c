@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <ctype.h>
 #include "ptf.h"
 
 #define PTFPARSER_MAXDEPTH 20
