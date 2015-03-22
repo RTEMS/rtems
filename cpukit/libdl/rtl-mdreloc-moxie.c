@@ -54,7 +54,7 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
       tmp = (symvalue + rela->r_addend - ((Elf_Word)where + 2)); /* pc is the next instruction */
       tmp = (Elf_Sword)tmp >> 1;
       if (((Elf32_Sword)tmp > 0x1ff) || ((Elf32_Sword)tmp < -(Elf32_Sword)0x200)){
-        printf("Overflow for PCREL10: %d exceed -0x200:0x1ff\n", tmp);
+        printf("Overflow for PCREL10: %ld exceed -0x200:0x1ff\n", tmp);
         return false;
       }
 

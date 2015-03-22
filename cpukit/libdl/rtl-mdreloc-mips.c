@@ -114,8 +114,8 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
       *where |= tmp & 0x03ffffff;
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf ("rtl: R_MIPS_26 local=%d %p @ %p in %s\n",
-                local, (void *)*(where), where, rtems_rtl_obj_oname (obj));
+        printf ("rtl: R_MIPS_26 local=%lu @ %p in %s\n",
+                local, (void *)*(where), rtems_rtl_obj_oname (obj));
       break;
 
     case R_TYPE(HI16):
@@ -140,7 +140,7 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
       *where = addend;
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf("*where %x where %x\n", *where, where);
+        printf("*where %lx where %p\n", *where, where);
 
       addend = *where_hi16;
       addend &= 0xffff0000;
@@ -148,7 +148,7 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
       *where_hi16 = addend;
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf("*where_hi %x where_hi %x\n", *where_hi16, where_hi16);
+        printf("*where_hi %lx where_hi %p\n", *where_hi16, where_hi16);
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
         printf ("rtl: R_MIPS_LO16 %p @ %p in %s\n",
