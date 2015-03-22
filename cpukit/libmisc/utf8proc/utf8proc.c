@@ -145,8 +145,13 @@ ssize_t utf8proc_iterate(
       (uc >= 0xFDD0 && uc < 0xFDF0)) uc = -1;
     break;
     case 4:
+#if defined(__rtems__)
+    uc = (((int32_t)str[0] & 0x07) << 18) + (((int32_t)str[1] & 0x3F) << 12)
+      + (((int32_t)str[2] & 0x3F) <<  6) + (str[3] & 0x3F);
+#else
     uc = ((str[0] & 0x07) << 18) + ((str[1] & 0x3F) << 12)
       + ((str[2] & 0x3F) <<  6) + (str[3] & 0x3F);
+#endif
     if (uc < 0x10000 || uc >= 0x110000) uc = -1;
     break;
   }
