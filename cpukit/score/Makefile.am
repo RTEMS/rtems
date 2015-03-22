@@ -297,8 +297,8 @@ libscore_a_SOURCES += src/threaddispatchdisablelevel.c
 endif
 
 ## THREADQ_C_FILES
-libscore_a_SOURCES += src/threadq.c src/threadqdequeue.c \
-    src/threadqenqueue.c src/threadqextract.c src/threadqrequeue.c \
+libscore_a_SOURCES += src/threadq.c \
+    src/threadqenqueue.c src/threadqrequeue.c \
     src/threadqextractwithproxy.c src/threadqfirst.c \
     src/threadqflush.c src/threadqprocesstimeout.c src/threadqtimeout.c
 

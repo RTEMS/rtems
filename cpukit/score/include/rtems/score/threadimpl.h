@@ -417,24 +417,6 @@ Thread_Control *_Thread_Acquire(
  */
 Thread_Control *_Thread_Acquire_executing( ISR_lock_Context *lock_context );
 
-/**
- *  @brief Finalize a blocking operation.
- *
- *  This method is used to finalize a blocking operation that was
- *  satisfied. It may be used with thread queues or any other synchronization
- *  object that uses the blocking states and watchdog times for timeout.
- *
- *  This method will restore the previous ISR disable level during the cancel
- *  operation.  Thus it is an implicit _ISR_Enable().
- *
- *  @param[in] the_thread is the thread whose blocking is canceled
- *  @param[in] level is the previous ISR disable level
- */
-void _Thread_blocking_operation_Finalize(
-  Thread_Control                   *the_thread,
-  ISR_Level                         level
-);
-
 RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Get_CPU(
   const Thread_Control *thread
 )

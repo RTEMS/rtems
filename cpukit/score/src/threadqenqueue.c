@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @brief Thread Queue Enqueue
+ * @brief Thread Queue Operations
  * @ingroup ScoreThreadQ
  */
 
@@ -20,10 +20,24 @@
 
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/isrlevel.h>
+#include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
-void _Thread_blocking_operation_Finalize(
+/**
+ *  @brief Finalize a blocking operation.
+ *
+ *  This method is used to finalize a blocking operation that was
+ *  satisfied. It may be used with thread queues or any other synchronization
+ *  object that uses the blocking states and watchdog times for timeout.
+ *
+ *  This method will restore the previous ISR disable level during the cancel
+ *  operation.  Thus it is an implicit _ISR_Enable().
+ *
+ *  @param[in] the_thread is the thread whose blocking is canceled
+ *  @param[in] level is the previous ISR disable level
+ */
+static void _Thread_blocking_operation_Finalize(
   Thread_Control                   *the_thread,
   ISR_Level                         level
 )
@@ -181,4 +195,104 @@ void _Thread_queue_Enqueue_with_handler(
   } else { /* sync_state != THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) */
     _Thread_blocking_operation_Cancel( sync_state, the_thread, level );
   }
+}
+
+void _Thread_queue_Extract_with_return_code(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread,
+  uint32_t              return_code
+)
+{
+  ISR_Level level;
+
+  _ISR_Disable( level );
+
+  if ( !_States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
+    _ISR_Enable( level );
+    return;
+  }
+
+  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_FIFO ) {
+    _Chain_Extract_unprotected( &the_thread->Object.Node );
+  } else { /* must be THREAD_QUEUE_DISCIPLINE_PRIORITY */
+    _RBTree_Extract(
+      &the_thread->Wait.queue->Queues.Priority,
+      &the_thread->RBNode
+    );
+  }
+
+  the_thread->Wait.return_code = return_code;
+
+  /*
+   * We found a thread to unblock.
+   *
+   * NOTE: This is invoked with interrupts still disabled.
+   */
+  _Thread_blocking_operation_Finalize( the_thread, level );
+}
+
+void _Thread_queue_Extract(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread
+)
+{
+  _Thread_queue_Extract_with_return_code(
+    the_thread_queue,
+    the_thread,
+    the_thread->Wait.return_code
+  );
+}
+
+Thread_Control *_Thread_queue_Dequeue(
+  Thread_queue_Control *the_thread_queue
+)
+{
+  Thread_Control *the_thread;
+  ISR_Level       level;
+  Thread_blocking_operation_States  sync_state;
+
+  the_thread = NULL;
+  _ISR_Disable( level );
+
+  /*
+   * Invoke the discipline specific dequeue method.
+   */
+  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_FIFO ) {
+    if ( !_Chain_Is_empty( &the_thread_queue->Queues.Fifo ) ) {
+      the_thread = (Thread_Control *)
+       _Chain_Get_first_unprotected( &the_thread_queue->Queues.Fifo );
+    }
+  } else { /* must be THREAD_QUEUE_DISCIPLINE_PRIORITY */
+    RBTree_Node    *first;
+
+    first = _RBTree_Get( &the_thread_queue->Queues.Priority, RBT_LEFT );
+    if ( first ) {
+      the_thread = THREAD_RBTREE_NODE_TO_THREAD( first );
+    }
+  }
+
+  if ( the_thread == NULL ) {
+    /*
+     * We did not find a thread to unblock in the queue.  Maybe the executing
+     * thread is about to block on this thread queue.
+     */
+    sync_state = the_thread_queue->sync_state;
+    if ( (sync_state == THREAD_BLOCKING_OPERATION_TIMEOUT) ||
+         (sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED) ) {
+      the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
+      the_thread = _Thread_Executing;
+    } else {
+      _ISR_Enable( level );
+      return NULL;
+    }
+  }
+
+  /*
+   * We found a thread to unblock.
+   *
+   * NOTE: This is invoked with interrupts still disabled.
+   */
+  _Thread_blocking_operation_Finalize( the_thread, level );
+
+  return the_thread;
 }
