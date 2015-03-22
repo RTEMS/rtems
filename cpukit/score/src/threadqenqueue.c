@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/threadqimpl.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/threadimpl.h>
@@ -70,60 +71,6 @@ static void _Thread_blocking_operation_Finalize(
   if ( !_Objects_Is_local_id( the_thread->Object.id ) )
     _Thread_MP_Free_proxy( the_thread );
 #endif
-}
-
-/**
- *  @brief Cancel a blocking operation due to ISR.
- *
- *  This method is used to cancel a blocking operation that was
- *  satisfied from an ISR while the thread executing was in the
- *  process of blocking.
- *
- *  This method will restore the previous ISR disable level during the cancel
- *  operation.  Thus it is an implicit _ISR_Enable().
- *
- *  @param[in] sync_state is the synchronization state
- *  @param[in] the_thread is the thread whose blocking is canceled
- *  @param[in] level is the previous ISR disable level
- *
- *  @note This is a rare routine in RTEMS.  It is called with
- *        interrupts disabled and only when an ISR completed
- *        a blocking condition in process.
- */
-static void _Thread_blocking_operation_Cancel(
-  Thread_blocking_operation_States  sync_state,
-  Thread_Control                   *the_thread,
-  ISR_Level                         level
-)
-{
-  /*
-   *  Cases that should not happen and why.
-   *
-   *  THREAD_BLOCKING_OPERATION_SYNCHRONIZED:
-   *
-   *  This indicates that someone did not enter a blocking
-   *  operation critical section.
-   *
-   *  THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED:
-   *
-   *  This indicates that there was nothing to cancel so
-   *  we should not have been called.
-   */
-
-  #if defined(RTEMS_DEBUG)
-    if ( (sync_state == THREAD_BLOCKING_OPERATION_SYNCHRONIZED) ||
-         (sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED) ) {
-      _Terminate(
-        INTERNAL_ERROR_CORE,
-        true,
-        INTERNAL_ERROR_IMPLEMENTATION_BLOCKING_OPERATION_CANCEL
-      );
-    }
-  #else
-    (void) sync_state;
-  #endif
-
-  _Thread_blocking_operation_Finalize( the_thread, level );
 }
 
 void _Thread_queue_Enqueue_with_handler(
@@ -191,9 +138,15 @@ void _Thread_queue_Enqueue_with_handler(
     the_thread->Wait.queue = the_thread_queue;
     the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
     _ISR_Enable( level );
-    return;
-  } else { /* sync_state != THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) */
-    _Thread_blocking_operation_Cancel( sync_state, the_thread, level );
+  } else {
+    /* Cancel a blocking operation due to ISR */
+
+    _Assert(
+      sync_state == THREAD_BLOCKING_OPERATION_TIMEOUT ||
+        sync_state == THREAD_BLOCKING_OPERATION_SATISFIED
+    );
+
+    _Thread_blocking_operation_Finalize( the_thread, level );
   }
 }
 
