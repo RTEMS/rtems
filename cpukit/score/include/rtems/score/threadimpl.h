@@ -418,30 +418,6 @@ Thread_Control *_Thread_Acquire(
 Thread_Control *_Thread_Acquire_executing( ISR_lock_Context *lock_context );
 
 /**
- *  @brief Cancel a blocking operation due to ISR.
- *
- *  This method is used to cancel a blocking operation that was
- *  satisfied from an ISR while the thread executing was in the
- *  process of blocking.
- *
- *  This method will restore the previous ISR disable level during the cancel
- *  operation.  Thus it is an implicit _ISR_Enable().
- *
- *  @param[in] sync_state is the synchronization state
- *  @param[in] the_thread is the thread whose blocking is canceled
- *  @param[in] level is the previous ISR disable level
- *
- *  @note This is a rare routine in RTEMS.  It is called with
- *        interrupts disabled and only when an ISR completed
- *        a blocking condition in process.
- */
-void _Thread_blocking_operation_Cancel(
-  Thread_blocking_operation_States  sync_state,
-  Thread_Control                   *the_thread,
-  ISR_Level                         level
-);
-
-/**
  *  @brief Finalize a blocking operation.
  *
  *  This method is used to finalize a blocking operation that was
