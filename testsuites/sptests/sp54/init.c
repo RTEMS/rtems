@@ -68,7 +68,7 @@ rtems_task Init(
  *  In this application, the initialization task performs the system
  *  initialization and then transforms itself into the idle task.
  */
-#define CONFIGURE_IDLE_TASK_BODY Init
+#define CONFIGURE_IDLE_TASK_BODY (Thread_Entry_numeric) Init
 #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
 
 /*
