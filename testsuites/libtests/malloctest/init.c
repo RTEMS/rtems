@@ -1199,6 +1199,9 @@ static void test_posix_memalign(void)
   maximumShift = (sizeof(size_t) * CHAR_BIT) - 1;
   for ( i=sizeof(void *) ; i<maximumShift ; i++ ) {
     size_t alignment = 1 << i;
+
+    p1 = NULL; /* Initialize p1 to aovid used uninitialized */
+
     printf( "posix_memalign - alignment of %zd -- OK\n", alignment);
     sc = posix_memalign( &p1, alignment, 8 );
     if ( sc == ENOMEM ) {
