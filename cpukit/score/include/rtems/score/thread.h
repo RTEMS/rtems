@@ -618,6 +618,42 @@ typedef struct  {
   void *        control;
 }Thread_Capture_control;
 
+#if defined(RTEMS_SMP)
+/**
+ * @brief Thread lock control.
+ *
+ * The thread lock is either the default lock or the lock of the resource on
+ * which the thread is currently blocked.  The generation number takes care
+ * that the up to date lock is used.  Only resources using fine grained locking
+ * provide their own lock.
+ *
+ * The thread lock protects the following thread variables
+ *  - Thread_Control::current_priority,
+ *  - Thread_Control::Priority::change_handler, and
+ *  - Thread_Control::Priority::change_handler_context.
+ *
+ * @see _Thread_Lock_acquire(), _Thread_Lock_release(), _Thread_Lock_set() and
+ * _Thread_Lock_restore_default().
+ */
+typedef struct {
+  /**
+   * @brief The current thread lock.
+   */
+  ISR_lock_Control *current;
+
+  /**
+   * @brief The default thread lock in case the thread is not blocked on a
+   * resource.
+   */
+  ISR_lock_Control Default;
+
+  /**
+   * @brief Generation number to invalidate stale locks.
+   */
+  Atomic_Uint generation;
+} Thread_Lock_control;
+#endif
+
 /**
  *  This structure defines the Thread Control Block (TCB).
  */
@@ -640,6 +676,14 @@ struct Thread_Control_struct {
 
   /** This field is the number of mutexes currently held by this thread. */
   uint32_t                 resource_count;
+
+#if defined(RTEMS_SMP)
+  /**
+   * @brief Thread lock control.
+   */
+  Thread_Lock_control Lock;
+#endif
+
   /** This field is the blocking information for this thread. */
   Thread_Wait_information  Wait;
   /** This field is the Watchdog used to manage thread delays and timeouts. */

@@ -196,6 +196,9 @@ bool _Thread_Initialize(
   the_thread->Scheduler.own_node = the_thread->Scheduler.node;
   _Resource_Node_initialize( &the_thread->Resource_node );
   _CPU_Context_Set_is_executing( &the_thread->Registers, false );
+  the_thread->Lock.current = &the_thread->Lock.Default;
+  _ISR_lock_Initialize( &the_thread->Lock.Default, "Thread Lock Default");
+  _Atomic_Init_uint(&the_thread->Lock.generation, 0);
 #endif
 
   _Thread_Debug_set_real_processor( the_thread, cpu );

@@ -98,6 +98,10 @@ static void _Thread_Free( Thread_Control *the_thread )
 
   _Workspace_Free( the_thread->Start.tls_area );
 
+#if defined(RTEMS_SMP)
+  _ISR_lock_Destroy( &the_thread->Lock.Default );
+#endif
+
   _Objects_Free(
     _Objects_Get_information_id( the_thread->Object.id ),
     &the_thread->Object

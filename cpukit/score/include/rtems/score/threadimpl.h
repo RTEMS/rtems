@@ -883,6 +883,151 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
   return owns_resources;
 }
 
+/**
+ * @brief Release the thread lock.
+ *
+ * @param[in] lock The lock returned by _Thread_Lock_acquire().
+ * @param[in] lock_context The lock context used for _Thread_Lock_acquire().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Lock_release(
+  ISR_lock_Control *lock,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Release_and_ISR_enable( lock, lock_context );
+}
+
+/**
+ * @brief Acquires the thread lock.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] lock_context The lock context for _Thread_Lock_release().
+ *
+ * @return The lock required by _Thread_Lock_release().
+ */
+RTEMS_INLINE_ROUTINE ISR_lock_Control *_Thread_Lock_acquire(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+#if defined(RTEMS_SMP)
+  ISR_lock_Control *lock;
+
+  while ( true ) {
+    uint32_t my_generation;
+
+    _ISR_Disable_without_giant( lock_context->Lock_context.isr_level );
+    my_generation = the_thread->Lock.generation;
+
+    /*
+     * Ensure that we read the initial lock generation before we obtain our
+     * current lock.
+     */
+    _Atomic_Fence( ATOMIC_ORDER_ACQUIRE );
+
+    lock = the_thread->Lock.current;
+    _ISR_lock_Acquire( lock, lock_context );
+
+    /*
+     * Ensure that we read the second lock generation after we obtained our
+     * current lock.
+     */
+    _Atomic_Fence( ATOMIC_ORDER_ACQUIRE );
+
+    if ( the_thread->Lock.generation == my_generation ) {
+      break;
+    }
+
+    _Thread_Lock_release( lock, lock_context );
+  }
+
+  return lock;
+#else
+  _ISR_Disable( lock_context->isr_level );
+
+  return NULL;
+#endif
+}
+
+#if defined(RTEMS_SMP)
+/*
+ * Internal function, use _Thread_Lock_set() or _Thread_Lock_restore_default()
+ * instead.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Lock_set_unprotected(
+  Thread_Control   *the_thread,
+  ISR_lock_Control *new_lock
+)
+{
+  the_thread->Lock.current = new_lock;
+
+  /*
+   * Ensure that the new lock is visible before we update the generation
+   * number.  Otherwise someone would be able to read an up to date generation
+   * number and an old lock.
+   */
+  _Atomic_Fence( ATOMIC_ORDER_RELEASE );
+
+  /*
+   * Since we set a new lock right before, this increment is not protected by a
+   * lock and thus must be an atomic operation.
+   */
+  _Atomic_Fetch_add_uint(
+    &the_thread->Lock.generation,
+    1,
+    ATOMIC_ORDER_RELAXED
+  );
+}
+#endif
+
+/**
+ * @brief Sets a new thread lock.
+ *
+ * The caller must not be the owner of the default thread lock.  The caller
+ * must be the owner of the new lock.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_lock The new thread lock.
+ */
+#if defined(RTEMS_SMP)
+RTEMS_INLINE_ROUTINE void _Thread_Lock_set(
+  Thread_Control   *the_thread,
+  ISR_lock_Control *new_lock
+)
+{
+  ISR_lock_Control *lock;
+  ISR_lock_Context  lock_context;
+
+  lock = _Thread_Lock_acquire( the_thread, &lock_context );
+  _Thread_Lock_set_unprotected( the_thread, new_lock );
+  _Thread_Lock_release( lock, &lock_context );
+}
+#else
+#define _Thread_Lock_set( the_thread, new_lock ) \
+  do { } while ( 0 )
+#endif
+
+/**
+ * @brief Restores the default thread lock.
+ *
+ * The caller must be the owner of the current thread lock.
+ *
+ * @param[in] the_thread The thread.
+ */
+#if defined(RTEMS_SMP)
+RTEMS_INLINE_ROUTINE void _Thread_Lock_restore_default(
+  Thread_Control *the_thread
+)
+{
+  _Atomic_Fence( ATOMIC_ORDER_RELEASE );
+
+  _Thread_Lock_set_unprotected( the_thread, &the_thread->Lock.Default );
+}
+#else
+#define _Thread_Lock_restore_default( the_thread ) \
+  do { } while ( 0 )
+#endif
+
 void _Thread_Priority_change_do_nothing(
   Thread_Control   *the_thread,
   Priority_Control  new_priority,
