@@ -20,6 +20,7 @@
 #include <rtems/test.h>
 #include <rtems/score/smpimpl.h>
 
+#include <bsp.h>
 #include <bsp/bootcard.h>
 
 #include <assert.h>
@@ -36,6 +37,13 @@ void bsp_start_on_secondary_processor(void)
 {
   /* Provided to avoid multiple definitions of the CPU SMP support functions */
 }
+
+#if QORIQ_THREAD_COUNT > 1
+void qoriq_start_thread(void)
+{
+  /* Provided to avoid multiple definitions of the CPU SMP support functions */
+}
+#endif
 
 uint32_t _CPU_SMP_Initialize(void)
 {
