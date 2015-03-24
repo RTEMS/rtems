@@ -141,14 +141,14 @@ RTEMS_INLINE_ROUTINE void _MRSP_Timeout(
   _ISR_Disable( level );
 
   if ( rival->status == MRSP_WAIT_FOR_OWNERSHIP ) {
+    rival->status = MRSP_TIMEOUT;
+
     _Chain_Extract_unprotected( &rival->Node );
+    _Resource_Node_extract( &thread->Resource_node );
+    _Resource_Node_set_dependency( &thread->Resource_node, NULL );
 
     _ISR_Enable( level );
 
-    rival->status = MRSP_TIMEOUT;
-
-    _Resource_Node_extract( &thread->Resource_node );
-    _Resource_Node_set_dependency( &thread->Resource_node, NULL );
     _Scheduler_Thread_change_help_state( thread, rival->initial_help_state );
     _Scheduler_Thread_change_resource_root( thread, thread );
     _MRSP_Restore_priority( thread, rival->initial_priority );
@@ -180,11 +180,12 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
   _MRSP_Elevate_priority( mrsp, executing, ceiling_priority );
 
   _ISR_Disable( level );
-  _Chain_Append_unprotected( &mrsp->Rivals, &rival.Node );
-  _ISR_Enable( level );
 
+  _Chain_Append_unprotected( &mrsp->Rivals, &rival.Node );
   _Resource_Add_rival( &mrsp->Resource, &executing->Resource_node );
   _Resource_Node_set_dependency( &executing->Resource_node, &mrsp->Resource );
+
+  _ISR_Enable( level );
 
   _Scheduler_Thread_change_resource_root(
     executing,
@@ -293,10 +294,11 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Release(
     return MRSP_INCORRECT_STATE;
   }
 
-  _Resource_Extract( &mrsp->Resource );
   _MRSP_Restore_priority( executing, mrsp->initial_priority_of_owner );
 
   _ISR_Disable( level );
+
+  _Resource_Extract( &mrsp->Resource );
 
   if ( _Chain_Is_empty( &mrsp->Rivals ) ) {
     _ISR_Enable( level );
@@ -313,14 +315,15 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Release(
      */
     rival->status = MRSP_SUCCESSFUL;
 
-    _ISR_Enable( level );
-
     new_owner = rival->thread;
     mrsp->initial_priority_of_owner = rival->initial_priority;
     _Resource_Node_extract( &new_owner->Resource_node );
     _Resource_Node_set_dependency( &new_owner->Resource_node, NULL );
     _Resource_Node_add_resource( &new_owner->Resource_node, &mrsp->Resource );
     _Resource_Set_owner( &mrsp->Resource, &new_owner->Resource_node );
+
+    _ISR_Enable( level );
+
     _Scheduler_Thread_change_help_state( new_owner, SCHEDULER_HELP_ACTIVE_OWNER );
     _Scheduler_Thread_change_resource_root( new_owner, new_owner );
   }
