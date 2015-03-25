@@ -12,8 +12,8 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#ifndef LIBBSP_ARM_ALTERY_CYCLONE_V_BSP_H
-#define LIBBSP_ARM_ALTERY_CYCLONE_V_BSP_H
+#ifndef LIBBSP_ARM_ALTERA_CYCLONE_V_BSP_H
+#define LIBBSP_ARM_ALTERA_CYCLONE_V_BSP_H
 
 #include <bspopts.h>
 
@@ -64,4 +64,4 @@ int altera_cyclone_v_network_if_attach_detach(
 
 #endif /* ASM */
 
-#endif /* LIBBSP_ARM_ALTERY_CYCLONE_V_BSP_H */
+#endif /* LIBBSP_ARM_ALTERA_CYCLONE_V_BSP_H */
