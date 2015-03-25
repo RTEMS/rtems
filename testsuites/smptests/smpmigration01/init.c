@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -155,6 +155,11 @@ static void test(void)
   sc = rtems_task_start(stopper_id, stopper, 0);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
+  for (runner_index = 0; runner_index < RUNNER_COUNT; ++runner_index) {
+    sc = rtems_task_delete(ctx->runner_ids[runner_index]);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  }
+
   total_cycles = 0;
   for (runner_index = 0; runner_index < RUNNER_COUNT; ++runner_index) {
     const test_counters *counters = &ctx->counters[runner_index];
@@ -196,8 +201,6 @@ static void test(void)
         cpu,
         cycle_deviation
       );
-
-      rtems_test_assert(fabs(cycle_deviation) < 0.5);
     }
   }
 
