@@ -111,6 +111,11 @@ static void worker_task(rtems_task_argument arg)
   }
 }
 
+static char digit(size_t i, size_t pos)
+{
+  return '0' + (i / pos) % 10;
+}
+
 void rtems_test_parallel(
   rtems_test_parallel_context *ctx,
   rtems_test_parallel_worker_setup worker_setup,
@@ -158,7 +163,12 @@ void rtems_test_parallel(
     rtems_id worker_id;
 
     sc = rtems_task_create(
-      rtems_build_name('W', 'O', 'R', 'K'),
+      rtems_build_name(
+        'W',
+        digit(worker_index, 100),
+        digit(worker_index, 10),
+        digit(worker_index, 1)
+      ),
       worker_priority,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
