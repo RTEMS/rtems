@@ -320,7 +320,14 @@ static inline uint32_t sparc_disable_interrupts(void)
 static inline void sparc_enable_interrupts(uint32_t psr)
 {
   register uint32_t _psr __asm__("g1") = psr; /* input to trap handler */
-  __asm__ volatile ( "ta %0\n" :: "i" (SPARC_SWTRAP_IRQEN), "r" (_psr));
+
+  /*
+   * The trap instruction has a higher trap priority than the interrupts
+   * according to "The SPARC Architecture Manual: Version 8", Table 7-1
+   * "Exception and Interrupt Request Priority and tt Values".  Add a nop to
+   * prevent a trap instruction right after the interrupt enable trap.
+   */
+  __asm__ volatile ( "ta %0\nnop\n" :: "i" (SPARC_SWTRAP_IRQEN), "r" (_psr));
 }
 
 /**
