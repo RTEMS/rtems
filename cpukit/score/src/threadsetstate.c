@@ -25,7 +25,7 @@
 #include <rtems/score/assert.h>
 #include <rtems/score/schedulerimpl.h>
 
-void _Thread_Set_state(
+States_Control _Thread_Set_state(
   Thread_Control *the_thread,
   States_Control  state
 )
@@ -47,4 +47,6 @@ void _Thread_Set_state(
   }
 
   _Scheduler_Release( the_thread, &lock_context );
+
+  return previous_state;
 }

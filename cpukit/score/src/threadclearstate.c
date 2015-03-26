@@ -19,27 +19,35 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/schedulerimpl.h>
 
-void _Thread_Clear_state(
+States_Control _Thread_Clear_state(
   Thread_Control *the_thread,
   States_Control  state
 )
 {
   ISR_lock_Context lock_context;
-  States_Control   current_state;
+  States_Control   previous_state;
+
+  _Assert( state != 0 );
 
   _Scheduler_Acquire( the_thread, &lock_context );
 
-  current_state = the_thread->current_state;
-  if ( current_state & state ) {
-    current_state =
-    the_thread->current_state = _States_Clear( state, current_state );
+  previous_state = the_thread->current_state;
 
-    if ( _States_Is_ready( current_state ) ) {
+  if ( ( previous_state & state ) != 0 ) {
+    States_Control next_state;
+
+    next_state = _States_Clear( state, previous_state );
+    the_thread->current_state = next_state;
+
+    if ( _States_Is_ready( next_state ) ) {
       _Scheduler_Unblock( the_thread );
     }
   }
 
   _Scheduler_Release( the_thread, &lock_context );
+
+  return previous_state;
 }

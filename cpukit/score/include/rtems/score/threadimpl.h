@@ -242,17 +242,17 @@ void _Thread_Ready(
 );
 
 /**
- *  @brief Clears the indicated STATES for @a the_thread.
+ * @brief Clears the specified thread state.
  *
- *  This routine clears the indicated STATES for @a the_thread.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
+ * In case the previous state is a non-ready state and the next state is the
+ * ready state, then the thread is unblocked by the scheduler.
  *
- *  - INTERRUPT LATENCY:
- *    + priority map
- *    + select heir
+ * @param[in] the_thread The thread.
+ * @param[in] state The state to clear.  It must not be zero.
+ *
+ * @return The previous state.
  */
-void _Thread_Clear_state(
+States_Control _Thread_Clear_state(
   Thread_Control *the_thread,
   States_Control  state
 );
@@ -265,8 +265,10 @@ void _Thread_Clear_state(
  *
  * @param[in] the_thread The thread.
  * @param[in] state The state to set.  It must not be zero.
+ *
+ * @return The previous state.
  */
-void _Thread_Set_state(
+States_Control _Thread_Set_state(
   Thread_Control *the_thread,
   States_Control  state
 );
