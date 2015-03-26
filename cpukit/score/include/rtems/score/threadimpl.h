@@ -258,18 +258,13 @@ void _Thread_Clear_state(
 );
 
 /**
- *  @brief Sets the indicated @a state for @a the_thread.
+ * @brief Sets the specified thread state.
  *
- *  This routine sets the indicated @a state for @a the_thread.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
+ * In case the previous state is the ready state, then the thread is blocked by
+ * the scheduler.
  *
- *  @param[in] the_thread is the thread to set the state for.
- *  @param[in] state is the state to set the_thread to.
- *
- *  - INTERRUPT LATENCY:
- *   + ready chain
- *   + select map
+ * @param[in] the_thread The thread.
+ * @param[in] state The state to set.  It must not be zero.
  */
 void _Thread_Set_state(
   Thread_Control *the_thread,
