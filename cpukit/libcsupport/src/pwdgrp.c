@@ -33,6 +33,7 @@
 #include <limits.h>
 #include <ctype.h>
 #include <pthread.h>
+#include <stdint.h>
 
 #include <rtems/seterr.h>
 
