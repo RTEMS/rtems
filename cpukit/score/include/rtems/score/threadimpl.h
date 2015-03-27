@@ -356,21 +356,6 @@ void _Thread_Set_priority(
 );
 
 /**
- *  This routine updates the related suspend fields in the_thread
- *  control block to indicate the current nested level.
- */
-#define _Thread_Suspend( _the_thread ) \
-        _Thread_Set_state( _the_thread, STATES_SUSPENDED )
-
-/**
- *  This routine updates the related suspend fields in the_thread
- *  control block to indicate the current nested level.  A force
- *  parameter of true will force a resume and clear the suspend count.
- */
-#define _Thread_Resume( _the_thread ) \
-        _Thread_Clear_state( _the_thread, STATES_SUSPENDED )
-
-/**
  *  @brief Maps thread Id to a TCB pointer.
  *
  *  This function maps thread IDs to thread control

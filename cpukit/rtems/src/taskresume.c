@@ -27,18 +27,17 @@ rtems_status_code rtems_task_resume(
 {
   Thread_Control          *the_thread;
   Objects_Locations        location;
+  States_Control           previous_state;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      if ( _States_Is_suspended( the_thread->current_state ) ) {
-        _Thread_Resume( the_thread );
-        _Objects_Put( &the_thread->Object );
-        return RTEMS_SUCCESSFUL;
-      }
+      previous_state = _Thread_Clear_state( the_thread, STATES_SUSPENDED );
       _Objects_Put( &the_thread->Object );
-      return RTEMS_INCORRECT_STATE;
+
+      return _States_Is_suspended( previous_state ) ?
+        RTEMS_SUCCESSFUL : RTEMS_INCORRECT_STATE;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:

@@ -174,7 +174,7 @@ static void thread_resume( Thread_Control *thread )
   _Thread_Disable_dispatch();
 #endif
 
-  _Thread_Resume( thread );
+  _Thread_Clear_state( thread, STATES_SUSPENDED );
 
 #if defined( PREVENT_SMP_ASSERT_FAILURES )
   _Thread_Unnest_dispatch();
