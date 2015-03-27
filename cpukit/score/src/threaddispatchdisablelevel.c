@@ -107,11 +107,15 @@ uint32_t _Thread_Dispatch_decrement_disable_level( void )
 
   cpu_self = _Per_CPU_Get();
   disable_level = cpu_self->thread_dispatch_disable_level;
+  _Assert( disable_level > 0);
   --disable_level;
   cpu_self->thread_dispatch_disable_level = disable_level;
 
   _Giant_Do_release( cpu_self );
-  _Assert( disable_level != 0 || _Giant.owner_cpu != cpu_self );
+  _Assert(
+    ( disable_level == 0 && _Giant.owner_cpu != cpu_self )
+      || ( disable_level != 0 && _Giant.owner_cpu == cpu_self )
+  );
 
   _Profiling_Thread_dispatch_enable( cpu_self, disable_level );
   _ISR_Enable_without_giant( isr_level );
