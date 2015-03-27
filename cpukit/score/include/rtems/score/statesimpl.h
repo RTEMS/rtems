@@ -118,6 +118,9 @@ extern "C" {
                                  STATES_WAITING_ON_THREAD_QUEUE | \
                                  STATES_INTERRUPTIBLE_BY_SIGNAL )
 
+/** All state bits set to one (provided for _Thread_Ready()) */
+#define STATES_ALL_SET 0xffffffff
+
 /**
  * This function sets the given states_to_set into the current_state
  * passed in.  The result is returned to the user in current_state.

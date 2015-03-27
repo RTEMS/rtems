@@ -227,21 +227,6 @@ void _Thread_Kill_zombies( void );
 void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing );
 
 /**
- *  @brief Removes any set states for @a the_thread.
- *
- *  This routine removes any set states for @a the_thread.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
- *
- *  - INTERRUPT LATENCY:
- *    + ready chain
- *    + select heir
- */
-void _Thread_Ready(
-  Thread_Control *the_thread
-);
-
-/**
  * @brief Clears the specified thread state.
  *
  * In case the previous state is a non-ready state and the next state is the
@@ -272,6 +257,21 @@ States_Control _Thread_Set_state(
   Thread_Control *the_thread,
   States_Control  state
 );
+
+/**
+ * @brief Clears all thread states.
+ *
+ * In case the previous state is a non-ready state, then the thread is
+ * unblocked by the scheduler.
+ *
+ * @param[in] the_thread The thread.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Ready(
+  Thread_Control *the_thread
+)
+{
+  _Thread_Clear_state( the_thread, STATES_ALL_SET );
+}
 
 /**
  *  @brief Initializes enviroment for a thread.
