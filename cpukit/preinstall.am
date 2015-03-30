@@ -423,6 +423,15 @@ $(PROJECT_INCLUDE)/rtems/captureimpl.h: libmisc/capture/captureimpl.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/captureimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/captureimpl.h
 
+$(PROJECT_INCLUDE)/rtems/trace/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/trace
+	@: > $(PROJECT_INCLUDE)/rtems/trace/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/trace/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/trace/rtems-trace-buffer-vars.h: libmisc/capture/rtems-trace-buffer-vars.h $(PROJECT_INCLUDE)/rtems/trace/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/trace/rtems-trace-buffer-vars.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/trace/rtems-trace-buffer-vars.h
+
 $(PROJECT_INCLUDE)/rtems/cpuuse.h: libmisc/cpuuse/cpuuse.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/cpuuse.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cpuuse.h

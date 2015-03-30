@@ -172,6 +172,11 @@ include_rtems_HEADERS += libmisc/capture/capture.h
 include_rtems_HEADERS += libmisc/capture/capture-cli.h
 include_rtems_HEADERS += libmisc/capture/captureimpl.h
 
+# tracing headers
+include_rtems_tracedir = $(include_rtemsdir)/trace
+include_rtems_trace_HEADERS =
+include_rtems_trace_HEADERS += libmisc/capture/rtems-trace-buffer-vars.h
+
 ## cpuuse
 include_rtems_HEADERS += libmisc/cpuuse/cpuuse.h
 

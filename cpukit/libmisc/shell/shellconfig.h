@@ -87,6 +87,7 @@ extern rtems_shell_cmd_t rtems_shell_PERIODUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_PROFREPORT_Command;
 extern rtems_shell_cmd_t rtems_shell_WKSPACE_INFO_Command;
 extern rtems_shell_cmd_t rtems_shell_MALLOC_INFO_Command;
+extern rtems_shell_cmd_t rtems_shell_RTRACE_Command;
 #if RTEMS_NETWORKING
   extern rtems_shell_cmd_t rtems_shell_IFCONFIG_Command;
   extern rtems_shell_cmd_t rtems_shell_ROUTE_Command;
@@ -461,6 +462,15 @@ extern rtems_shell_alias_t * const rtems_shell_Initial_aliases[];
          !defined(CONFIGURE_SHELL_NO_COMMAND_MALLOC_INFO)) || \
         defined(CONFIGURE_SHELL_COMMAND_MALLOC_INFO)
       &rtems_shell_MALLOC_INFO_Command,
+    #endif
+
+    /*
+     *  Tracing family commands
+     */
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_RTRACE)) || \
+        defined(CONFIGURE_SHELL_COMMAND_RTRACE)
+      &rtems_shell_RTRACE_Command,
     #endif
 
     /*

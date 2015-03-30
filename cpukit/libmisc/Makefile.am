@@ -21,7 +21,8 @@ libcapture_a_SOURCES = capture/capture.c capture/capture-cli.c \
     capture/capture_user_extension.c capture/capture_buffer.c \
     capture/capture_support.c \
     capture/capture.h capture/captureimpl.h capture/capture-cli.h \
-    capture/capture_buffer.h
+    capture/capture_buffer.h \
+    capture/rtems-trace-buffer-vars.c capture/rtems-trace-buffer-vars.h
 
 ## cpuuse
 EXTRA_DIST += cpuuse/README
@@ -108,7 +109,7 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_setenv.c shell/main_getenv.c shell/main_unsetenv.c \
     shell/main_mkrfs.c shell/main_debugrfs.c shell/main_df.c \
     shell/main_lsof.c shell/main_edit.c \
-    shell/main_blkstats.c \
+    shell/main_blkstats.c shell/main_rtrace.c \
     shell/shell-wait-for-input.c
 libshell_a_SOURCES += shell/main_cmdls.c
 libshell_a_SOURCES += shell/main_cmdchown.c
