@@ -140,7 +140,7 @@ static void symlink_loop_error_test(void )
 
   mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
 
-  puts("symlink loop erro test");
+  puts("symlink loop error test");
 
   status=symlink(file01,file02);
   rtems_test_assert(status==0);
