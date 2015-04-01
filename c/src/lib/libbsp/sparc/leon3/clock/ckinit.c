@@ -24,6 +24,7 @@
 #include <rtems/rtems/intr.h>
 #include <ambapp.h>
 #include <rtems/score/profiling.h>
+#include <rtems/timecounter.h>
 
 /* The LEON3 BSP Timer driver can rely on the Driver Manager if the
  * DrvMgr is initialized during startup. Otherwise the classic driver
@@ -39,6 +40,43 @@
 
 /* LEON3 Timer system interrupt number */
 static int clkirq;
+
+static bool leon3_tc_use_irqmp;
+
+static rtems_timecounter_simple leon3_tc;
+
+static uint32_t leon3_tc_get(rtems_timecounter_simple *tc)
+{
+  return LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].value;
+}
+
+static bool leon3_tc_is_pending(rtems_timecounter_simple *tc)
+{
+  return LEON_Is_interrupt_pending(clkirq);
+}
+
+static uint32_t leon3_tc_get_timecount(struct timecounter *tc)
+{
+  return rtems_timecounter_simple_downcounter_get(
+    tc,
+    leon3_tc_get,
+    leon3_tc_is_pending
+  );
+}
+
+static uint32_t leon3_tc_get_timecount_irqmp(struct timecounter *tc)
+{
+  return LEON3_IrqCtrl_Regs->timestamp[0].counter;
+}
+
+static void leon3_tc_tick(void)
+{
+  if (leon3_tc_use_irqmp) {
+    rtems_timecounter_tick();
+  } else {
+    rtems_timecounter_simple_downcounter_tick(&leon3_tc, leon3_tc_get);
+  }
+}
 
 static void leon3_clock_profiling_interrupt_delay(void)
 {
@@ -112,15 +150,36 @@ static void bsp_clock_handler_install(rtems_isr *new)
   }
 }
 
+static void leon3_clock_initialize(void)
+{
+  volatile struct irqmp_timestamp_regs *irqmp_ts =
+    &LEON3_IrqCtrl_Regs->timestamp[0];
+
+  LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].reload =
+    rtems_configuration_get_microseconds_per_tick() - 1;
+  LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].ctrl =
+    GPTIMER_TIMER_CTRL_EN | GPTIMER_TIMER_CTRL_RS |
+      GPTIMER_TIMER_CTRL_LD | GPTIMER_TIMER_CTRL_IE;
+
+  if (leon3_irqmp_has_timestamp(irqmp_ts)) {
+    leon3_tc.tc.tc_get_timecount = leon3_tc_get_timecount_irqmp;
+    leon3_tc.tc.tc_counter_mask = 0xffffffff;
+    leon3_tc.tc.tc_frequency = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev);
+    leon3_tc.tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+    leon3_tc_use_irqmp = true;
+    rtems_timecounter_install(&leon3_tc.tc);
+  } else {
+    rtems_timecounter_simple_install(
+      &leon3_tc,
+      LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER,
+      rtems_configuration_get_microseconds_per_tick(),
+      leon3_tc_get_timecount
+    );
+  }
+}
+
 #define Clock_driver_support_initialize_hardware() \
-  do { \
-    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].reload = \
-      rtems_configuration_get_microseconds_per_tick() - 1; \
-    \
-    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].ctrl = \
-      GPTIMER_TIMER_CTRL_EN | GPTIMER_TIMER_CTRL_RS | \
-        GPTIMER_TIMER_CTRL_LD | GPTIMER_TIMER_CTRL_IE; \
-  } while (0)
+  leon3_clock_initialize()
 
 #define Clock_driver_support_shutdown_hardware() \
   do { \
@@ -128,27 +187,7 @@ static void bsp_clock_handler_install(rtems_isr *new)
     LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].ctrl = 0; \
   } while (0)
 
-static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
-{
-  uint32_t clicks;
-  uint32_t usecs;
-
-  if ( !LEON3_Timer_Regs )
-    return 0;
-
-  clicks = LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].value;
-
-  if ( LEON_Is_interrupt_pending( clkirq ) ) {
-    clicks = LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].value;
-    usecs = (2*rtems_configuration_get_microseconds_per_tick() - clicks);
-  } else {
-    usecs = (rtems_configuration_get_microseconds_per_tick() - clicks);
-  }
-  return usecs * 1000;
-}
-
-#define Clock_driver_nanoseconds_since_last_tick \
-        bsp_clock_nanoseconds_since_last_tick
+#define Clock_driver_timecounter_tick() leon3_tc_tick()
 
 #include "../../../shared/clockdrv_shell.h"
 

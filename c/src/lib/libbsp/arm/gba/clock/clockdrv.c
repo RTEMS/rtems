@@ -92,4 +92,6 @@ void Clock_driver_support_initialize_hardware(void)
   GBA_REG_TM3CNT = (0x00c0|GBA_TMCNT_PS);
 }
 
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
+
 #include "../../../shared/clockdrv_shell.h"

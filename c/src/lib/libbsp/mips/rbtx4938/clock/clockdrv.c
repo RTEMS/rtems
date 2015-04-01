@@ -114,4 +114,6 @@ void new_brk_esr(void)
   } while(0)
 
 
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
+
 #include "../../../shared/clockdrv_shell.h"

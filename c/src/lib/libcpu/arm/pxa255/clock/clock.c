@@ -116,4 +116,6 @@ static void Clock_driver_support_shutdown_hardware( void )
   BSP_remove_rtems_irq_handler(&clock_isr_data);
 }
 
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
+
 #include "../../../../libbsp/shared/clockdrv_shell.h"

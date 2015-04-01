@@ -22,10 +22,13 @@
 #include <bsp/generic_or1k.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/or1k-utility.h>
+#include <rtems/timecounter.h>
 
 /* The number of clock cycles before generating a tick timer interrupt. */
 #define TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT     0x09ED9
 #define OR1K_CLOCK_CYCLE_TIME_NANOSECONDS     10
+
+static struct timecounter or1ksim_tc;
 
 /* CPU counter */
 static CPU_Counter_ticks cpu_counter_ticks;
@@ -69,8 +72,23 @@ static void generic_or1k_clock_handler_install(
   }
 }
 
+static uint32_t or1ksim_get_timecount(struct timecounter *tc)
+{
+  uint32_t ticks_since_last_timer_interrupt;
+
+  ticks_since_last_timer_interrupt = _OR1K_mfspr(CPU_OR1K_SPR_TTCR);
+
+  return cpu_counter_ticks + ticks_since_last_timer_interrupt;
+}
+
+CPU_Counter_ticks _CPU_Counter_read(void)
+{
+  return or1ksim_get_timecount(NULL);
+}
+
 static void generic_or1k_clock_initialize(void)
 {
+  uint64_t frequency = (1000000000 / OR1K_CLOCK_CYCLE_TIME_NANOSECONDS);
   uint32_t TTMR;
 
  /* For TTMR register,
@@ -90,11 +108,15 @@ static void generic_or1k_clock_initialize(void)
   _OR1K_mtspr(CPU_OR1K_SPR_TTMR, TTMR);
   _OR1K_mtspr(CPU_OR1K_SPR_TTCR, 0);
 
-  /* Initialize CPU Counter */
-  cpu_counter_ticks = 0;
+  /* Initialize timecounter */
+  or1ksim_tc.tc_get_timecount = or1ksim_get_timecount;
+  or1ksim_tc.tc_counter_mask = 0xffffffff;
+  or1ksim_tc.tc_frequency = frequency;
+  or1ksim_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+  rtems_timecounter_install(&or1ksim_tc);
 }
 
- static void generic_or1k_clock_cleanup(void)
+static void generic_or1k_clock_cleanup(void)
 {
  uint32_t sr;
 
@@ -109,24 +131,6 @@ static void generic_or1k_clock_initialize(void)
   _OR1K_mtspr(CPU_OR1K_SPR_TTMR, 0);
 }
 
-/*
- *  Return the nanoseconds since last tick
- */
-static uint32_t generic_or1k_clock_nanoseconds_since_last_tick(void)
-{
-  return
-  TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT * OR1K_CLOCK_CYCLE_TIME_NANOSECONDS;
-}
-
-CPU_Counter_ticks _CPU_Counter_read(void)
-{
-  uint32_t ticks_since_last_timer_interrupt;
-
-  ticks_since_last_timer_interrupt = _OR1K_mfspr(CPU_OR1K_SPR_TTCR);
-
-  return cpu_counter_ticks + ticks_since_last_timer_interrupt;
-}
-
 CPU_Counter_ticks _CPU_Counter_difference(
   CPU_Counter_ticks second,
   CPU_Counter_ticks first
@@ -134,6 +138,7 @@ CPU_Counter_ticks _CPU_Counter_difference(
 {
   return second - first;
 }
+
 #define Clock_driver_support_at_tick() generic_or1k_clock_at_tick()
 
 #define Clock_driver_support_initialize_hardware() generic_or1k_clock_initialize()
@@ -145,8 +150,5 @@ CPU_Counter_ticks _CPU_Counter_difference(
   } while (0)
 
 #define Clock_driver_support_shutdown_hardware() generic_or1k_clock_cleanup()
-
-#define Clock_driver_nanoseconds_since_last_tick \
-  generic_or1k_clock_nanoseconds_since_last_tick
 
 #include "../../../shared/clockdrv_shell.h"

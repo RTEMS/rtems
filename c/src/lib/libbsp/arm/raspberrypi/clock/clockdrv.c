@@ -72,14 +72,6 @@ static void raspberrypi_clock_cleanup(void)
   }
 }
 
-/*
- *  Return the nanoseconds since last tick
- */
-static uint32_t raspberrypi_clock_nanoseconds_since_last_tick(void)
-{
-  return 0;
-}
-
 #define Clock_driver_support_at_tick() raspberrypi_clock_at_tick()
 
 #define Clock_driver_support_initialize_hardware() raspberrypi_clock_initialize()
@@ -92,8 +84,6 @@ static uint32_t raspberrypi_clock_nanoseconds_since_last_tick(void)
 
 #define Clock_driver_support_shutdown_hardware() raspberrypi_clock_cleanup()
 
-#define Clock_driver_nanoseconds_since_last_tick \
-  raspberrypi_clock_nanoseconds_since_last_tick
-
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
 
 #include "../../../shared/clockdrv_shell.h"

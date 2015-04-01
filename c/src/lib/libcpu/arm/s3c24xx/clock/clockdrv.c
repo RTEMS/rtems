@@ -28,17 +28,6 @@ rtems_irq_connect_data clock_isr_data = {
 };
 
 /**
- *  Return the nanoseconds since last tick
- */
-static uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
-{
-  return 0;
-}
-
-#define Clock_driver_nanoseconds_since_last_tick \
-  clock_driver_get_nanoseconds_since_last_tick
-
-/**
  * When we get the clock interrupt
  *    - clear the interrupt bit?
  *    - restart the timer?
@@ -74,6 +63,7 @@ static uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
   do { \
         uint32_t cr; \
         uint32_t freq; \
+        uint32_t mask; \
         /* set MUX for Timer4 to 1/16 */ \
         cr=rTCFG1 & 0xFFF0FFFF; \
         rTCFG1=(cr | (3<<16)); \
@@ -130,6 +120,8 @@ static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
   return 1;
 }
+
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
 
 /* Make sure to include this, and only at the end of the file */
 #include "../../../../libbsp/shared/clockdrv_shell.h"

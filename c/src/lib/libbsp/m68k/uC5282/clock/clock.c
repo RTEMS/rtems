@@ -12,6 +12,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/timecounter.h>
 #include <bsp.h>
 #include <mcf5282/mcf5282.h>
 
@@ -19,6 +20,32 @@
  * Use INTC0 base
  */
 #define CLOCK_VECTOR (64+58)
+
+static rtems_timecounter_simple uC5282_tc;
+
+static uint32_t uC5282_tc_get(rtems_timecounter_simple *tc)
+{
+  return MCF5282_PIT3_PCNTR;
+}
+
+static bool uC5282_tc_is_pending(rtems_timecounter_simple *tc)
+{
+  return (MCF5282_PIT3_PCSR & MCF5282_PIT_PCSR_PIF) != 0;
+}
+
+static uint32_t uC5282_tc_get_timecount(struct timecounter *tc)
+{
+  return rtems_timecounter_simple_downcounter_get(
+    tc,
+    uC5282_tc_get,
+    uC5282_tc_is_pending
+  );
+}
+
+static void uC5282_tc_tick(void)
+{
+  rtems_timecounter_simple_downcounter_tick(&uC5282_tc, uC5282_tc_get);
+}
 
 /*
  * CPU load counters
@@ -30,17 +57,6 @@
 #define PITC_PER_TICK   __SRAMBASE.pitc_per_tick
 #define NSEC_PER_PITC   __SRAMBASE.nsec_per_pitc
 #define FILTER_SHIFT    6
-
-static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
-{
-    int i = MCF5282_PIT3_PCNTR;
-    if (MCF5282_PIT3_PCSR & MCF5282_PIT_PCSR_PIF)
-        i = MCF5282_PIT3_PCNTR - PITC_PER_TICK;
-    return (PITC_PER_TICK - i) * NSEC_PER_PITC;
-}
-
-#define Clock_driver_nanoseconds_since_last_tick \
-    bsp_clock_nanoseconds_since_last_tick
 
 /*
  * Periodic interval timer interrupt handler
@@ -83,7 +99,7 @@ static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
  */
 #define Clock_driver_support_initialize_hardware()                       \
     do {                                                                 \
-		unsigned long long N;                                            \
+        unsigned long long N;                                            \
         int level;                                                       \
         int preScaleCode = 0;                                            \
 		N  = bsp_get_CPU_clock_speed();                                  \
@@ -116,6 +132,12 @@ static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
                             MCF5282_PIT_PCSR_PIE |                       \
                             MCF5282_PIT_PCSR_RLD |                       \
                             MCF5282_PIT_PCSR_EN;                         \
+         rtems_timecounter_simple_install( \
+           &uC5282_tc, \
+           bsp_get_CPU_clock_speed() >> (preScaleCode + 1), \
+           PITC_PER_TICK, \
+           uC5282_tc_get_timecount \
+         ); \
     } while (0)
 
 /*
@@ -134,5 +156,7 @@ int bsp_cpu_load_percentage(void)
            (100 - ((100 * (FILTERED_IDLE >> FILTER_SHIFT)) / MAX_IDLE_COUNT)) :
            0;
 }
+
+#define Clock_driver_timecounter_tick() uC5282_tc_tick()
 
 #include "../../../shared/clockdrv_shell.h"

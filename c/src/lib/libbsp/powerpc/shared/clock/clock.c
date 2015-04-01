@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -22,6 +22,7 @@
 
 #include <rtems.h>
 #include <rtems/clockdrv.h>
+#include <rtems/timecounter.h>
 
 #include <libcpu/powerpc-utility.h>
 #include <bsp/vectors.h>
@@ -46,7 +47,12 @@ static uint32_t ppc_clock_decrementer_value = PPC_CLOCK_DECREMENTER_MAX;
 
 static uint32_t ppc_clock_next_time_base;
 
-static uint64_t ppc_clock_factor;
+static struct timecounter ppc_tc;
+
+static uint32_t ppc_get_timecount(struct timecounter *tc)
+{
+  return ppc_time_base();
+}
 
 static void ppc_clock_no_tick(void)
 {
@@ -161,28 +167,6 @@ static int ppc_clock_exception_handler_ppc405(BSP_Exception_frame *frame, unsign
   return 0;
 }
 
-static uint32_t ppc_clock_nanoseconds_since_last_tick(void)
-{
-  uint64_t k = ppc_clock_factor;
-  uint32_t c = ppc_decrementer_register();
-  uint32_t i = ppc_clock_decrementer_value + 1;
-
-  return (uint32_t) (((i - c) * k) >> 32);
-}
-
-static uint32_t ppc_clock_nanoseconds_since_last_tick_ppc405(void)
-{
-  uint64_t k = ppc_clock_factor;
-  uint32_t i = ppc_clock_decrementer_value;
-  uint32_t c = i - PPC_SPECIAL_PURPOSE_REGISTER(PPC405_PIT);
-
-  if ((PPC_SPECIAL_PURPOSE_REGISTER(PPC405_TSR) & BOOKE_TSR_DIS) != 0) {
-    c = i - PPC_SPECIAL_PURPOSE_REGISTER(PPC405_PIT) + i;
-  }
-
-  return (uint32_t) ((c * k) >> 32);
-}
-
 void Clock_exit(void)
 {
   /* Set the decrementer to the maximum value */
@@ -201,18 +185,12 @@ rtems_device_driver Clock_initialize(
   uint64_t frequency = bsp_time_base_frequency;
   uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
   uint32_t interval = (uint32_t) ((frequency * us_per_tick) / 1000000);
+  uint32_t mask;
 
   /*
    * Set default ticker.
-   *
-   * The function rtems_clock_tick() returns a status code.  This value
-   * will be discarded since the RTEMS documentation claims that it is
-   * always successful.
    */
-  ppc_clock_tick = (void (*)(void)) rtems_clock_tick;
-
-  /* Factor for nano seconds extension */
-  ppc_clock_factor = (1000000000ULL << 32) / frequency;
+  ppc_clock_tick = rtems_timecounter_tick;
 
   if (ppc_cpu_is_bookE() != PPC_BOOKE_405) {
     /* Decrementer value */
@@ -223,10 +201,6 @@ rtems_device_driver Clock_initialize(
       ppc_clock_decrementer_value = PPC_CLOCK_DECREMENTER_MAX;
       RTEMS_SYSLOG_ERROR( "decrementer value would be zero, will be set to maximum value instead\n");
     }
-
-    /* Set the nanoseconds since last tick handler */
-    rtems_clock_set_nanoseconds_extension( ppc_clock_nanoseconds_since_last_tick);
-
     if (ppc_cpu_is_bookE()) {
       /* Set decrementer auto-reload value */
       PPC_SET_SPECIAL_PURPOSE_REGISTER( BOOKE_DECAR, ppc_clock_decrementer_value);
@@ -253,9 +227,6 @@ rtems_device_driver Clock_initialize(
     /* PIT interval value */
     ppc_clock_decrementer_value = interval;
 
-    /* Set the nanoseconds since last tick handler */
-    rtems_clock_set_nanoseconds_extension(ppc_clock_nanoseconds_since_last_tick_ppc405);
-
     /* Install exception handler */
     ppc_exc_set_handler(ASM_BOOKE_DEC_VECTOR, ppc_clock_exception_handler_ppc405);
 
@@ -265,6 +236,13 @@ rtems_device_driver Clock_initialize(
     /* Set PIT auto-reload and initial value */
     PPC_SET_SPECIAL_PURPOSE_REGISTER(PPC405_PIT, interval);
   }
+
+  /* Install timecounter */
+  ppc_tc.tc_get_timecount = ppc_get_timecount;
+  ppc_tc.tc_counter_mask = 0xffffffff;
+  ppc_tc.tc_frequency = frequency;
+  ppc_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+  rtems_timecounter_install(&ppc_tc);
 
   return RTEMS_SUCCESSFUL;
 }

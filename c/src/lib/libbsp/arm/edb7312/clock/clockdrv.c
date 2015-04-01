@@ -68,4 +68,6 @@ void Clock_isr(void * arg);
     assert(status == RTEMS_SUCCESSFUL);             \
   } while (0)
 
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
+
 #include "../../../shared/clockdrv_shell.h"

@@ -28,6 +28,8 @@ volatile bool clock_driver_enabled;
     clock_driver_enabled = false; \
   } while (0)
 
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
+
 #include "clockdrv_shell.h"
 
 /*

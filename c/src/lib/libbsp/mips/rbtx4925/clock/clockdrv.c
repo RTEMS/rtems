@@ -123,5 +123,6 @@
     TX4925_REG_WRITE( TX4925_REG_BASE, TX4925_TIMER0_BASE + TX4925_TIMER_TCR, 0x0 ); /* Disable timer */ \
   } while(0)
 
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
 
 #include "../../../shared/clockdrv_shell.h"

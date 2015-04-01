@@ -30,13 +30,14 @@
 #include <bsp/irq.h>
 #include <bsp/tms570-rti.h>
 #include <rtems/counter.h>
+#include <rtems/timecounter.h>
 
-/**
- *  holds HW counter value since last interrupt event
- *  sets in tms570_clock_driver_support_at_tick
- *  used in tms570_clock_driver_nanoseconds_since_last_tick
- */
-static uint32_t tms570_rti_last_tick_fcr0;
+static struct timecounter tms570_rti_tc;
+
+static uint32_t tms570_rti_get_timecount(struct timecounter tc)
+{
+  return TMS570_RTI.RTIFRC0;
+}
 
 /**
  *  @brief Initialize the HW peripheral for clock driver
@@ -72,6 +73,12 @@ static void tms570_clock_driver_support_initialize_hardware( void )
   TMS570_RTI.RTISETINTENA = 0x1;
   /* enable timer */
   TMS570_RTI.RTIGCTRL = 1;
+  /* set timecounter */
+  tms570_rti_tc.tc_get_timecount = tms570_rti_get_timecount;
+  tms570_rti_tc.tc_counter_mask = 0xffffffff;
+  tms570_rti_tc.tc_frequency = BSP_PLL_OUT_CLOCK;
+  tms570_rti_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+  rtems_timecounter_install(&tms570_rti_tc);
 }
 
 /**
@@ -82,7 +89,6 @@ static void tms570_clock_driver_support_initialize_hardware( void )
 static void tms570_clock_driver_support_at_tick( void )
 {
   TMS570_RTI.RTIINTFLAG = 0x00000001;
-  tms570_rti_last_tick_fcr0 = TMS570_RTI.RTICOMP0 - TMS570_RTI.RTIUDCP0;
 }
 
 /**
@@ -124,24 +130,6 @@ static void tms570_clock_driver_support_shutdown_hardware( void )
   TMS570_RTI.RTICLEARINTENA = 0x20000;
 }
 
-/**
- * @brief returns the nanoseconds since last tick
- *
- * Return the nanoseconds since last tick
- *
- * @retval x nanoseconds
- *
- */
-static uint32_t tms570_clock_driver_nanoseconds_since_last_tick( void )
-{
-  uint32_t actual_fcr0 = TMS570_RTI.RTIFRC0;
-  uint32_t usec_since_tick;
-
-  usec_since_tick = actual_fcr0 - tms570_rti_last_tick_fcr0;
-
-  return usec_since_tick * 1000;
-}
-
 #define Clock_driver_support_initialize_hardware \
                         tms570_clock_driver_support_initialize_hardware
 #define Clock_driver_support_at_tick \
@@ -150,8 +138,6 @@ static uint32_t tms570_clock_driver_nanoseconds_since_last_tick( void )
                         tms570_clock_driver_support_initialize_hardware
 #define Clock_driver_support_shutdown_hardware \
                         tms570_clock_driver_support_shutdown_hardware
-#define Clock_driver_nanoseconds_since_last_tick \
-                        tms570_clock_driver_nanoseconds_since_last_tick
 
 #define Clock_driver_support_install_isr(Clock_isr, Old_ticker ) \
               tms570_clock_driver_support_install_isr( Clock_isr )

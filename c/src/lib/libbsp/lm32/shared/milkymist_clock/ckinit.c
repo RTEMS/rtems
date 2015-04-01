@@ -46,4 +46,6 @@ static void Clock_driver_support_shutdown_hardware(void)
   MM_WRITE(MM_TIMER0_CONTROL, 0);
 }
 
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
+
 #include "../../../shared/clockdrv_shell.h"

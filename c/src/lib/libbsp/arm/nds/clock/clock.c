@@ -81,4 +81,6 @@ void Clock_driver_support_initialize_hardware (void)
   TIMER_DATA (0) = TIMER_FREQ_64 ((uint16_t) freq);
 }
 
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
+
 #include "../../../shared/clockdrv_shell.h"

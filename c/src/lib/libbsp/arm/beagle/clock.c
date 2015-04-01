@@ -15,11 +15,12 @@
  */
 
 #include <rtems.h>
+#include <rtems/timecounter.h>
 #include <bsp.h>
 
 #include <libcpu/omap_timer.h>
 
-#ifdef ARM_MULTILIB_ARCH_V4
+static struct timecounter beagle_clock_tc;
 
 static omap_timer_registers_t regs_v1 = {
   .TIDR = OMAP3_TIMER_TIDR,
@@ -115,8 +116,6 @@ static struct omap_timer *timer = &am335x_timer;
 
 #endif
 
-static int done = 0;
-
 #if IS_AM335X
 #define FRCLOCK_HZ (16*1500000)
 #endif
@@ -181,19 +180,13 @@ omap3_frclock_init(void)
   /* Start timer, without prescaler */
   mmio_set(fr_timer->base + fr_timer->regs->TCLR,
       OMAP3_TCLR_OVF_TRG | OMAP3_TCLR_AR | OMAP3_TCLR_ST);
-  done = 1;
 }
 
-static inline uint32_t
-read_frc(void)
+static uint32_t
+beagle_clock_get_timecount(struct timecounter *tc)
 {
-  if (done == 0) {
-    return 0;
-  }
   return mmio_read(fr_timer->base + fr_timer->regs->TCRR);
 }
-
-static uint32_t last_tick_nanoseconds;
 
 static void
 beagle_clock_initialize(void)
@@ -262,12 +255,16 @@ beagle_clock_initialize(void)
   while(mmio_read(AM335X_WDT_BASE+AM335X_WDT_WWPS) != 0) ;
 #endif
 
+  /* Install timecounter */ \
+  beagle_clock_tc.tc_get_timecount = beagle_clock_get_timecount;
+  beagle_clock_tc.tc_counter_mask = 0xffffffff;
+  beagle_clock_tc.tc_frequency = FRCLOCK_HZ;
+  beagle_clock_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+  rtems_timecounter_install(&beagle_clock_tc);
 }
 
 static void beagle_clock_at_tick(void)
 {
-  last_tick_nanoseconds = read_frc();
-
   mmio_write(timer->base + timer->regs->TISR,
     OMAP3_TISR_MAT_IT_FLAG | OMAP3_TISR_OVF_IT_FLAG |
       OMAP3_TISR_TCAR_IT_FLAG);
@@ -315,14 +312,6 @@ static void beagle_clock_cleanup(void)
   mmio_clear(fr_timer->base + fr_timer->regs->TCLR, OMAP3_TCLR_ST);
 }
 
-static inline uint32_t beagle_clock_nanoseconds_since_last_tick(void)
-{
-  /* this arithmetic also works if read_frc() wraps around, as long
-   * as the subtraction wraps around too
-   */
-  return (read_frc() - (uint64_t) last_tick_nanoseconds) * 1000000000 / FRCLOCK_HZ;
-}
-
 #define Clock_driver_support_at_tick() beagle_clock_at_tick()
 #define Clock_driver_support_initialize_hardware() beagle_clock_initialize()
 #define Clock_driver_support_install_isr(isr, old_isr) \
@@ -332,10 +321,6 @@ static inline uint32_t beagle_clock_nanoseconds_since_last_tick(void)
   } while (0)
 
 #define Clock_driver_support_shutdown_hardware() beagle_clock_cleanup()
-#define Clock_driver_nanoseconds_since_last_tick \
-  beagle_clock_nanoseconds_since_last_tick
 
 /* Include shared source clock driver code */
 #include "../../shared/clockdrv_shell.h"
-
-#endif /* ARM_MULTILIB_ARCH_V4 */

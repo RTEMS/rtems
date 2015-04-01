@@ -29,6 +29,7 @@
 #include <libcpu/spr.h>
 #include <rtems/bspIo.h>                /* for printk() */
 #include <libcpu/powerpc-utility.h>
+#include <rtems/timecounter.h>
 
 #include <bspopts.h>   /* for CLOCK_DRIVER_USE_FAST_IDLE */
 
@@ -48,11 +49,12 @@ volatile uint32_t   Clock_driver_ticks;
  */
 static uint32_t   Clock_Decrementer_value;
 
-/*
- *  This is the value by which elapsed count down timer ticks are multiplied to
- *  give an elapsed duration in nanoseconds, left-shifted by 32 bits
- */
-static uint64_t   Clock_Decrementer_reference;
+static struct timecounter Clock_TC;
+
+static uint32_t Clock_Get_timecount(struct timecounter *tc)
+{
+  return ppc_time_base();
+}
 
 void clockOff(void* unused)
 {
@@ -94,16 +96,27 @@ void clockOn(void* unused)
 static void clockHandler(void)
 {
   #if (CLOCK_DRIVER_USE_FAST_IDLE == 1)
-    do {
-      rtems_clock_tick();
-    } while (
+    rtems_interrupt_level level;
+    uint32_t tb;
+
+    rtems_interrupt_disable(level);
+
+    tb = ppc_time_base();
+    rtems_timecounter_tick();
+
+    while (
       _Thread_Heir == _Thread_Executing
         && _Thread_Executing->Start.entry_point
           == (Thread_Entry) rtems_configuration_get_idle_task()
-    );
+    ) {
+      tb += Clock_Decrementer_value;
+      ppc_set_time_base( tb );
+      rtems_timecounter_tick();
+    }
 
+    rtems_interrupt_enable(level);
   #else
-    rtems_clock_tick();
+    rtems_timecounter_tick();
   #endif
 }
 
@@ -141,7 +154,6 @@ void clockIsr(void *unused)
     rtems_interrupt_enable(flags);
 
     Clock_driver_ticks += 1;
-
     /*
      *  Real Time Clock counter/timer is set to automatically reload.
      */
@@ -187,7 +199,6 @@ int clockIsOn(void* unused)
   return 0;
 }
 
-
 /*
  *  Clock_exit
  *
@@ -197,53 +208,6 @@ int clockIsOn(void* unused)
 void Clock_exit( void )
 {
   (void) BSP_disconnect_clock_handler ();
-}
-
-static uint32_t Clock_driver_nanoseconds_since_last_tick(void)
-{
-  uint32_t clicks, tmp;
-
-  PPC_Get_decrementer( clicks );
-
-  /*
-   * Multiply by 1000 here separately from below so we do not overflow
-   * and get a negative value.
-   */
-  tmp = (Clock_Decrementer_value - clicks) * 1000;
-  tmp /= (BSP_bus_frequency/BSP_time_base_divisor);
-
-  return tmp * 1000;
-}
-
-static uint32_t Clock_driver_nanoseconds_since_last_tick_bookE(void)
-{
-  uint32_t clicks;
-  uint64_t c;
-
-  PPC_Get_decrementer( clicks );
-  c = Clock_Decrementer_value - clicks;
-
-  /*
-   * Check whether a clock tick interrupt is pending and hence that the
-   * decrementer's wrapped. If it has, we'll compensate by returning a time one
-   * tick period longer.
-   *
-   * We have to check interrupt status after reading the decrementer. If we
-   * don't, we may miss an interrupt and read a wrapped decrementer value
-   * without compensating for it
-   */
-  if ( _read_BOOKE_TSR() & BOOKE_TSR_DIS )
-  {
-    /*
-     * Re-read the decrementer: The tick interrupt may have been
-     * generated and the decrementer wrapped during the time since we
-     * last read it and the time we checked the interrupt status
-     */
-    PPC_Get_decrementer( clicks );
-    c = (Clock_Decrementer_value - clicks) + Clock_Decrementer_value;
-  }
-
-  return (uint32_t)((c * Clock_Decrementer_reference) >> 32);
 }
 
 /*
@@ -261,9 +225,6 @@ rtems_device_driver Clock_initialize(
 
   Clock_Decrementer_value = (BSP_bus_frequency/BSP_time_base_divisor)*
             rtems_configuration_get_milliseconds_per_tick();
-
-  Clock_Decrementer_reference = ((uint64_t)1000000U<<32)/
-            (BSP_bus_frequency/BSP_time_base_divisor);
 
   /* set the decrementer now, prior to installing the handler
    * so no interrupts will happen in a while.
@@ -283,23 +244,13 @@ rtems_device_driver Clock_initialize(
       _write_BOOKE_TCR(tcr);
 
     rtems_interrupt_enable(l);
+  }
 
-    /*
-     *  Set the nanoseconds since last tick handler
-     */
-    rtems_clock_set_nanoseconds_extension(
-      Clock_driver_nanoseconds_since_last_tick_bookE
-    );
-  }
-  else
-  {
-    /*
-     *  Set the nanoseconds since last tick handler
-     */
-    rtems_clock_set_nanoseconds_extension(
-      Clock_driver_nanoseconds_since_last_tick
-    );
-  }
+  Clock_TC.tc_get_timecount = Clock_Get_timecount;
+  Clock_TC.tc_counter_mask = 0xffffffff;
+  Clock_TC.tc_frequency = (1000 * BSP_bus_frequency) / BSP_time_base_divisor;
+  Clock_TC.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+  rtems_timecounter_install(&Clock_TC);
 
   /*
    * If a decrementer exception was pending, it is cleared by
