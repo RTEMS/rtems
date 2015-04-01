@@ -4,6 +4,7 @@
 #
 
 include: testdata/require-tick-isr.tcfg
+include: testdata/disable-intrcritical-tests.tcfg
 
 fsdosfsname01
 utf8proc01
