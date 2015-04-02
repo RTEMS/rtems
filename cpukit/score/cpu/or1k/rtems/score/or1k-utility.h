@@ -362,7 +362,6 @@ static inline void _OR1K_mtspr(uint32_t reg, uint32_t value)
 #define _OR1K_CPU_Sleep() \
    _OR1K_mtspr(CPU_OR1K_SPR_PMR, CPU_OR1K_SPR_PMR_SME)
 
-
 #define _OR1K_CPU_Suspend() \
    _OR1K_mtspr(CPU_OR1K_SPR_PMR, CPU_OR1K_SPR_PMR_SME)
 
@@ -375,6 +374,16 @@ static inline void _OR1K_Sync_pipeline( void )
 {
   asm volatile("l.psync");
 }
+
+/**
+ * @brief or1ksim simulator can be sent a halt signal from RTEMS to tell
+ * the running or1ksim process on the host machine to exit. The following
+ * implementation has no effect on QEMU or hardware implementation and will
+ * be treated as normal l.nop.
+ *
+ */
+#define _OR1KSIM_CPU_Halt() \
+	asm volatile ("l.nop 0xc")
 
 #else /* ASM */
 

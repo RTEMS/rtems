@@ -702,6 +702,7 @@ void _CPU_Context_Initialize(
 
 #define _CPU_Fatal_halt(_source, _error ) \
         printk("Fatal Error %d.%d Halted\n",_source, _error); \
+        _OR1KSIM_CPU_Halt(); \
         for(;;)
 
 /* end of Fatal Error manager macros */
