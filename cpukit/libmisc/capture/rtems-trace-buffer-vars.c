@@ -37,6 +37,8 @@ volatile uint32_t __rtld_tbg_buffer_in __attribute__ ((weak));
 volatile bool __rtld_tbg_finished __attribute__ ((weak));
 volatile bool __rtld_tbg_triggered __attribute__ ((weak));
 
+ISR_LOCK_DEFINE (static, __rtld_tbg_lock, "RTLD TBG")
+
 uint32_t
 rtems_trace_names_size (void)
 {
