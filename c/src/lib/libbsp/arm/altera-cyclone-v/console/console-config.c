@@ -107,7 +107,7 @@ static ns16550_context altera_cyclone_v_uart_context_0 = {
 };
 #endif
 
-#ifdef CYCLONE_V_CONFIG_CONSOLE
+#ifdef CYCLONE_V_CONFIG_UART_1
 static bool altera_cyclone_v_uart_probe_1(rtems_termios_device_context *base)
 {
   return altera_cyclone_v_uart_probe(base, ALT_RSTMGR_PERMODRST_UART1_SET_MSK);
