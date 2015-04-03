@@ -1,0 +1,5 @@
+#
+# or1ksim RTEMS Test Database.
+#
+
+include: testdata/disable-intrcritical-tests.tcfg
