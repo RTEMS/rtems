@@ -132,7 +132,7 @@ rtems_trace_buffering_shell_funcs (int argc, char *argv[])
     printf(" %4zu: %c%c %-*s\n", t,
            rtems_trace_enable_set(t) ? 'E' : '-',
            rtems_trace_trigger_set(t) ? 'T' : '-',
-           max, rtems_trace_names (t));
+           (int) max, rtems_trace_names (t));
   }
 
   return 0;
