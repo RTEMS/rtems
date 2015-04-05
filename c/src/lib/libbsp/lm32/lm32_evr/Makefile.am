@@ -29,16 +29,22 @@ libbsp_a_SOURCES =
 libbsp_a_LIBADD =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c ../shared/startup/bspstart.c \
-    ../../shared/bspreset.c ../../shared/bsppretaskinghook.c \
-    ../../shared/bspgetworkarea.c ../../shared/bootcard.c \
-    ../../shared/sbrk.c ../../shared/setvec.c \
-    ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/bspclean.c
+libbsp_a_SOURCES += ../../shared/bsplibc.c
+libbsp_a_SOURCES += ../../shared/bsppost.c
+libbsp_a_SOURCES += ../shared/startup/bspstart.c
+libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
+libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+libbsp_a_SOURCES += ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/sbrk.c
+libbsp_a_SOURCES += ../../shared/setvec.c
+libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../shared/startup/bspreset.c
 # clock
 libbsp_a_SOURCES += ../../lm32/shared/clock/ckinit.c
 # console
-libbsp_a_SOURCES += ../../lm32/shared/console/console.c ../../lm32/shared/console/uart.c
+libbsp_a_SOURCES += ../../lm32/shared/console/console.c
+libbsp_a_SOURCES += ../../lm32/shared/console/uart.c
 # timer
 libbsp_a_SOURCES += ../../lm32/shared/timer/timer.c
 

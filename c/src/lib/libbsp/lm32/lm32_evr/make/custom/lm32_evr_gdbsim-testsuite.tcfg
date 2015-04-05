@@ -1,0 +1,6 @@
+#
+# The GDB LM32 simulator in GDB
+#
+
+include: testdata/disable-intrcritical-tests.tcfg
+
