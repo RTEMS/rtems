@@ -1,4 +1,29 @@
-/* PCI Identifiers - auto generated */
+/*
+ *  Copyright 1994, Drew Eckhardt
+ *  Copyright 1997, 1998 Martin Mares <mj@atrey.karlin.mff.cuni.cz>
+ *
+ *  This file comes from the auto-generated PCI IDs part of the
+ *  cpukit/include/rtems/pci.h.
+ *  Copyright 2009, Cobham Gaisler AB
+ *
+ *  For more information, please consult the following manuals (look at
+ *  http://www.pcisig.com/ for how to get them):
+ *
+ *  PCI BIOS Specification
+ *  PCI Local Bus Specification
+ *  PCI to PCI Bridge Specification
+ *  PCI System Design Guide
+ */
+
+/* PCI Vendor and card ID's: sort these numerically according to vendor
+ * (and according to card ID within vendor). Send all updates to
+ * <linux-pcisupport@cck.uni-kl.de>.
+ */
+ 
+/* For the future this file should be generated
+ * from the PCI IDS database at http://pciids.sourceforge.net/ ?
+ */
+
 #ifndef __PCI_IDS_H__
 #define __PCI_IDS_H__
 
