@@ -69,6 +69,10 @@ struct pci_res; /* Resource: BAR, ROM or Bridge Window */
 /* The Host Bridge and all subdevices (the PCI RAM data structure) */
 extern struct pci_bus pci_hb;
 
+/* Arguments for pci_for_each_child() search option */
+#define SEARCH_CHILDREN 0	/* direct children of bus only  */
+#define SEARCH_DEPTH 1		/* all children of bus */
+
 /* Iterate over all PCI devices on a bus (see search options) and call func(),
  * iteration is stopped if a non-zero value is returned by func().
  *
@@ -82,7 +86,6 @@ extern struct pci_bus pci_hb;
  *  0  All PCI devices were processed, func() returned 0 on every call
  *  X  func() returned non-zero X value, the search was stopped
  */
-#define SEARCH_DEPTH 1
 extern int pci_for_each_child(
 	struct pci_bus *bus,
 	int (*func)(struct pci_dev *, void *arg),
