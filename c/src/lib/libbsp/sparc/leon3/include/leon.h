@@ -131,11 +131,11 @@ extern "C" {
 
 /* LEON3 Interrupt Controller */
 extern volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
-extern struct ambapp_dev *irqmp_dev;
+extern struct ambapp_dev *LEON3_IrqCtrl_Adev;
 
 /* LEON3 GP Timer */
 extern volatile struct gptimer_regs *LEON3_Timer_Regs;
-extern struct ambapp_dev *timer_dev;
+extern struct ambapp_dev *LEON3_Timer_Adev;
 
 /* LEON3 CPU Index of boot CPU */
 extern uint32_t LEON3_Cpu_Index;
