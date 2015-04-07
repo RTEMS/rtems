@@ -81,9 +81,6 @@
 #define DBG(x...) 
 #endif
 
-#define PCI_INVALID_VENDORDEVICEID	0xffffffff
-#define PCI_MULTI_FUNCTION		0x80
-
 /*
  * GRPCI2 APB Register MAP
  */
@@ -654,10 +651,10 @@ static int grpci2_hw_init(struct grpci2_priv *priv)
 		regs->ahbmst_map[i] = priv->pci_area;
 
 	/* Get the GRPCI2 Host PCI ID */
-	grpci2_cfg_r32(host, PCI_VENDOR_ID, &priv->devVend);
+	grpci2_cfg_r32(host, PCIR_VENDOR, &priv->devVend);
 
 	/* Get address to first (always defined) capability structure */
-	grpci2_cfg_r8(host, PCI_CAP_PTR, &capptr);
+	grpci2_cfg_r8(host, PCIR_CAP_PTR, &capptr);
 	if (capptr == 0)
 		return -1;
 
@@ -679,17 +676,17 @@ static int grpci2_hw_init(struct grpci2_priv *priv)
 
 		pciadr = barcfg[i].pciadr;
 		ahbadr = barcfg[i].ahbadr;
-		size |= PCI_BASE_ADDRESS_MEM_PREFETCH;
+		size |= PCIM_BAR_MEM_PREFETCH;
 
 		grpci2_cfg_w32(host, capptr+CAP9_BARSIZE_OFS+i*4, size);
 		grpci2_cfg_w32(host, capptr+CAP9_BAR_OFS+i*4, ahbadr);
-		grpci2_cfg_w32(host, PCI_BASE_ADDRESS_0+i*4, pciadr);
+		grpci2_cfg_w32(host, PCIR_BAR(0)+i*4, pciadr);
 	}
 
 	/* set as bus master and enable pci memory responses */  
-	grpci2_cfg_r32(host, PCI_COMMAND, &data);
-	data |= (PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER);
-	grpci2_cfg_w32(host, PCI_COMMAND, data);
+	grpci2_cfg_r32(host, PCIR_COMMAND, &data);
+	data |= (PCIM_CMD_MEMEN | PCIM_CMD_BUSMASTEREN);
+	grpci2_cfg_w32(host, PCIR_COMMAND, data);
 
 	/* Enable Error respone (CPU-TRAP) on illegal memory access */
 	regs->ctrl = CTRL_ER | CTRL_PE;

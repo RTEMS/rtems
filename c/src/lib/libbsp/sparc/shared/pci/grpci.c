@@ -69,9 +69,6 @@
 #define DBG(x...) 
 #endif
 
-#define PCI_INVALID_VENDORDEVICEID	0xffffffff
-#define PCI_MULTI_FUNCTION		0x80
-
 /*
  * Bit encode for PCI_CONFIG_HEADER_TYPE register
  */
@@ -438,10 +435,10 @@ static int grpci_hw_init(struct grpci_priv *priv)
 
 	if ( !priv->bt_enabled && ((priv->regs->page0 & PAGE0_BTEN) == PAGE0_BTEN) ) {
 		/* Byte twisting is on, turn it off */
-		grpci_cfg_w32(host, PCI_BASE_ADDRESS_0, 0xffffffff);
-		grpci_cfg_r32(host, PCI_BASE_ADDRESS_0, &addr);
+		grpci_cfg_w32(host, PCIR_BAR(0), 0xffffffff);
+		grpci_cfg_r32(host, PCIR_BAR(0), &addr);
 		/* Setup bar0 to nonzero value */
-		grpci_cfg_w32(host, PCI_BASE_ADDRESS_0,
+		grpci_cfg_w32(host, PCIR_BAR(0),
 				CPU_swap_u32(0x80000000));
 		/* page0 is accessed through upper half of bar0 */
 		addr = (~CPU_swap_u32(addr)+1)>>1;
@@ -454,19 +451,19 @@ static int grpci_hw_init(struct grpci_priv *priv)
 	}
 
 	/* Get the GRPCI Host PCI ID */
-	grpci_cfg_r32(host, PCI_VENDOR_ID, &priv->devVend);
+	grpci_cfg_r32(host, PCIR_VENDOR, &priv->devVend);
 
 	/* set 1:1 mapping between AHB -> PCI memory */
 	priv->regs->cfg_stat = (priv->regs->cfg_stat & 0x0fffffff) | priv->pci_area;
 
 	/* determine size of target BAR1 */
-	grpci_cfg_w32(host, PCI_BASE_ADDRESS_1, 0xffffffff);
-	grpci_cfg_r32(host, PCI_BASE_ADDRESS_1, &addr);
+	grpci_cfg_w32(host, PCIR_BAR(1), 0xffffffff);
+	grpci_cfg_r32(host, PCIR_BAR(1), &addr);
 	priv->bar1_size = (~(addr & ~0xf)) + 1;
 
 	/* and map system RAM at pci address 0x40000000 */
 	priv->bar1_pci_adr &= ~(priv->bar1_size - 1); /* Fix alignment of BAR1 */
-	grpci_cfg_w32(host, PCI_BASE_ADDRESS_1, priv->bar1_pci_adr);
+	grpci_cfg_w32(host, PCIR_BAR(1), priv->bar1_pci_adr);
 	priv->regs->page1 = priv->bar1_pci_adr;
 
 	/* Translate I/O accesses 1:1 */
@@ -476,13 +473,13 @@ static int grpci_hw_init(struct grpci_priv *priv)
 	 * size will result in poor performance (256 word fetches), 0xff
 	 * will set it according to the max size of the PCI FIFO.
 	 */
-	grpci_cfg_w8(host, PCI_CACHE_LINE_SIZE, 0xff);
-	grpci_cfg_w8(host, PCI_LATENCY_TIMER, 0x40);
+	grpci_cfg_w8(host, PCIR_CACHELNSZ, 0xff);
+	grpci_cfg_w8(host, PCIR_LATTIMER, 0x40);
 
 	/* set as bus master and enable pci memory responses */  
-	grpci_cfg_r32(host, PCI_COMMAND, &data);
-	data |= (PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER);
-	grpci_cfg_w32(host, PCI_COMMAND, data);
+	grpci_cfg_r32(host, PCIR_COMMAND, &data);
+	data |= (PCIM_CMD_MEMEN | PCIM_CMD_BUSMASTEREN);
+	grpci_cfg_w32(host, PCIR_COMMAND, data);
 
 	/* unmask all PCI interrupts at PCI Core, not all GRPCI cores support
 	 * this

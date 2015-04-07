@@ -97,9 +97,6 @@
 #define DBG(x...) 
 #endif
 
-#define PCI_INVALID_VENDORDEVICEID	0xffffffff
-#define PCI_MULTI_FUNCTION		0x80
-
 struct at697pci_regs {
     volatile unsigned int pciid1;        /* 0x80000100 - PCI Device identification register 1         */
     volatile unsigned int pcisc;         /* 0x80000104 - PCI Status & Command                         */

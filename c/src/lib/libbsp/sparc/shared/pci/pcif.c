@@ -363,7 +363,7 @@ static int pcif_hw_init(struct pcif_priv *priv)
 	regs->intr = 0;
 
 	/* Get the PCIF Host PCI ID */
-	pcif_cfg_r32(host, PCI_VENDOR_ID, &priv->devVend);
+	pcif_cfg_r32(host, PCIR_VENDOR, &priv->devVend);
 
 	/* set 1:1 mapping between AHB -> PCI memory space, for all Master cores */
 	for ( mst=0; mst<16; mst++) {
@@ -383,21 +383,21 @@ static int pcif_hw_init(struct pcif_priv *priv)
 	regs->bars[3] = 0;
 
 	/* determine size of target BAR1 */
-	pcif_cfg_w32(host, PCI_BASE_ADDRESS_1, 0xffffffff);
-	pcif_cfg_r32(host, PCI_BASE_ADDRESS_1, &size);
+	pcif_cfg_w32(host, PCIR_BAR(1), 0xffffffff);
+	pcif_cfg_r32(host, PCIR_BAR(1), &size);
 	priv->bar1_size = (~(size & ~0xf)) + 1;
 
-	pcif_cfg_w32(host, PCI_BASE_ADDRESS_0, 0);
-	pcif_cfg_w32(host, PCI_BASE_ADDRESS_1, SYSTEM_MAINMEM_START);
-	pcif_cfg_w32(host, PCI_BASE_ADDRESS_2, 0);
-	pcif_cfg_w32(host, PCI_BASE_ADDRESS_3, 0);
-	pcif_cfg_w32(host, PCI_BASE_ADDRESS_4, 0);
-	pcif_cfg_w32(host, PCI_BASE_ADDRESS_5, 0);
+	pcif_cfg_w32(host, PCIR_BAR(0), 0);
+	pcif_cfg_w32(host, PCIR_BAR(1), SYSTEM_MAINMEM_START);
+	pcif_cfg_w32(host, PCIR_BAR(2), 0);
+	pcif_cfg_w32(host, PCIR_BAR(3), 0);
+	pcif_cfg_w32(host, PCIR_BAR(4), 0);
+	pcif_cfg_w32(host, PCIR_BAR(5), 0);
 
 	/* set as bus master and enable pci memory responses */  
-	pcif_cfg_r32(host, PCI_COMMAND, &data);
-	data |= (PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER);
-	pcif_cfg_w32(host, PCI_COMMAND, data);
+	pcif_cfg_r32(host, PCIR_COMMAND, &data);
+	data |= (PCIM_CMD_MEMEN | PCIM_CMD_BUSMASTEREN);
+	pcif_cfg_w32(host, PCIR_COMMAND, data);
 
 	/* Successful */
 	return 0;
