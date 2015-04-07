@@ -67,10 +67,11 @@ void leon3_cpu_counter_initialize(void)
     );
 
     /* Get and set the frequency */
-    rtems_counter_initialize_converter(ambapp_freq_get(&ambapp_plb, irqmp_dev));
+    rtems_counter_initialize_converter(
+      ambapp_freq_get(&ambapp_plb, LEON3_IrqCtrl_Adev));
   } else if (LEON3_Timer_Regs != NULL) {
       /* Fall back to the first GPTIMER if available */
-      freq = ambapp_freq_get(&ambapp_plb, timer_dev);
+      freq = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev);
 
       gpt_counter_initialize(
         LEON3_Timer_Regs,
