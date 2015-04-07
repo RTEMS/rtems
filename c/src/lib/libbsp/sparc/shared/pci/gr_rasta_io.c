@@ -274,8 +274,8 @@ static int gr_rasta_io_hw_init(struct gr_rasta_io_priv *priv)
 	{
 		uint32_t data;
 		/* set parity error response */
-		pci_cfg_r32(priv->pcidev, PCI_COMMAND, &data);
-		pci_cfg_w32(priv->pcidev, PCI_COMMAND, (data|PCI_COMMAND_PARITY));
+		pci_cfg_r32(priv->pcidev, PCIR_COMMAND, &data);
+		pci_cfg_w32(priv->pcidev, PCIR_COMMAND, (data|PCIM_CMD_PERRESPEN));
 	}
 #endif
 
@@ -283,7 +283,7 @@ static int gr_rasta_io_hw_init(struct gr_rasta_io_priv *priv)
 	 * poor performance (256 word fetches), 0xff will set it according
 	 * to the max size of the PCI FIFO.
 	 */
-	pci_cfg_w8(priv->pcidev, PCI_CACHE_LINE_SIZE, 0xff);
+	pci_cfg_w8(priv->pcidev, PCIR_CACHELNSZ, 0xff);
 
 	/* Scan AMBA Plug&Play */
 
@@ -401,7 +401,7 @@ static int gr_rasta_io2_hw_init(struct gr_rasta_io_priv *priv)
 	struct pci_dev_info *devinfo = priv->devinfo;
 
 	/* Check capabilities list bit */
-	pci_cfg_r8(pcidev, PCI_STATUS, &tmp2);
+	pci_cfg_r8(pcidev, PCIR_STATUS, &tmp2);
 
 	if (!((tmp2 >> 4) & 1)) {
 		/* Capabilities list not available which it should be in the
@@ -411,7 +411,7 @@ static int gr_rasta_io2_hw_init(struct gr_rasta_io_priv *priv)
 	}
 
 	/* Read capabilities pointer */
-	pci_cfg_r8(pcidev, PCI_CAP_PTR, &cap_ptr);
+	pci_cfg_r8(pcidev, PCIR_CAP_PTR, &cap_ptr);
 
 	/* Set AHB address mappings for target PCI bars
 	 * BAR0: 16MB  : Mapped to I/O at 0x80000000
@@ -430,8 +430,8 @@ static int gr_rasta_io2_hw_init(struct gr_rasta_io_priv *priv)
 
 #if 0
 	/* set parity error response */
-	pci_cfg_r32(pcidev, PCI_COMMAND, &data);
-	pci_cfg_w32(pcidev, PCI_COMMAND, (data|PCI_COMMAND_PARITY));
+	pci_cfg_r32(pcidev, PCIR_COMMAND, &data);
+	pci_cfg_w32(pcidev, PCIR_COMMAND, (data|PCIM_CMD_PERRESPEN));
 #endif
 
 	/* Scan AMBA Plug&Play */

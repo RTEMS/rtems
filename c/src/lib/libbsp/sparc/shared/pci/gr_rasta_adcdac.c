@@ -240,14 +240,14 @@ static int gr_rasta_adcdac_hw_init1(struct gr_rasta_adcdac_priv *priv)
 	*page0 = priv->version->amba_ioarea & 0xf0000000;
 
 	/* set parity error response */
-	pci_cfg_r32(priv->pcidev, PCI_COMMAND, &data);
-	pci_cfg_w32(priv->pcidev, PCI_COMMAND, (data|PCI_COMMAND_PARITY));
+	pci_cfg_r32(priv->pcidev, PCIR_COMMAND, &data);
+	pci_cfg_w32(priv->pcidev, PCIR_COMMAND, (data|PCIM_CMD_PERRESPEN));
 
 	/* Setup cache line size. Default cache line size will result in
 	 * poor performance (256 word fetches), 0xff will set it according
 	 * to the max size of the PCI FIFO.
 	 */
-	pci_cfg_w8(priv->pcidev, PCI_CACHE_LINE_SIZE, 0xff);
+	pci_cfg_w8(priv->pcidev, PCIR_CACHELNSZ, 0xff);
 
 	/* Scan AMBA Plug&Play */
 

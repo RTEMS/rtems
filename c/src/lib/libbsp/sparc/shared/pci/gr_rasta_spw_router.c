@@ -256,7 +256,7 @@ static int gr_rasta_spw_router_hw_init(struct gr_rasta_spw_router_priv *priv)
 	}
 
 	/* Check capabilities list bit */
-	pci_cfg_r8(pcidev, PCI_STATUS, &tmp2);
+	pci_cfg_r8(pcidev, PCIR_STATUS, &tmp2);
 
 	if (!((tmp2 >> 4) & 1)) {
 		/* Capabilities list not available which it should be in the GRPCI2 */
@@ -264,7 +264,7 @@ static int gr_rasta_spw_router_hw_init(struct gr_rasta_spw_router_priv *priv)
 	}
 
 	/* Read capabilities pointer */
-	pci_cfg_r8(pcidev, PCI_CAP_PTR, &cap_ptr);
+	pci_cfg_r8(pcidev, PCIR_CAP_PTR, &cap_ptr);
 
 	/* Set AHB address mappings for target PCI bars */
 	pci_cfg_w32(pcidev, cap_ptr+GRPCI2_BAR0_TO_AHB_MAP, 0xffe00000);  /* APB bus, AHB I/O bus 2 MB */ 
@@ -276,8 +276,8 @@ static int gr_rasta_spw_router_hw_init(struct gr_rasta_spw_router_priv *priv)
 
 #if 0
 	/* set parity error response */
-	pci_cfg_r32(pcidev, PCI_COMMAND, &data);
-	pci_cfg_w32(pcidev, PCI_COMMAND, (data|PCI_COMMAND_PARITY));
+	pci_cfg_r32(pcidev, PCIR_COMMAND, &data);
+	pci_cfg_w32(pcidev, PCIR_COMMAND, (data|PCIM_CMD_PERRESPEN));
 #endif
 
 	/* Scan AMBA Plug&Play */

@@ -269,9 +269,9 @@ static int gr701_hw_init(struct gr701_priv *priv)
 	priv->bus_maps_up[1].size = 0;
 
 	/* Enable I/O and Mem accesses */
-	pci_cfg_r32(pcidev, PCI_COMMAND, &com1);
-	com1 |= PCI_COMMAND_IO | PCI_COMMAND_MEMORY;
-	pci_cfg_w32(pcidev, PCI_COMMAND, com1);
+	pci_cfg_r32(pcidev, PCIR_COMMAND, &com1);
+	com1 |= PCIM_CMD_PORTEN | PCIM_CMD_MEMEN;
+	pci_cfg_w32(pcidev, PCIR_COMMAND, com1);
 
 	/* Start AMBA PnP scan at first AHB bus */
 	ambapp_scan(&priv->abus, devinfo->resources[1].address + 0x3f00000,
