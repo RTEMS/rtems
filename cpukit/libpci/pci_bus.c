@@ -297,7 +297,7 @@ void pcibus_dev_info(
 	if (!devinfo)
 		return;
 
-	if ((devinfo->id.class >> 8) == PCI_CLASS_BRIDGE_PCI)
+	if ((devinfo->id.class >> 8) == PCID_PCI2PCI_BRIDGE)
 		print_line(p, "PCI BRIDGE DEVICE");
 	else
 		print_line(p, "PCI DEVICE");
@@ -459,24 +459,24 @@ static int pcibus_dev_register(pci_dev_t pcidev, void *arg)
 	pciinfo = (struct pci_dev_info *)((char *)(newdev + 1) + 24);
 
 	/* Read Device and Vendor */
-	pci_cfg_r16(pcidev, PCI_VENDOR_ID, &pciinfo->id.vendor);
-	pci_cfg_r16(pcidev, PCI_DEVICE_ID, &pciinfo->id.device);
-	pci_cfg_r32(pcidev, PCI_CLASS_REVISION, &pciinfo->id.class);
+	pci_cfg_r16(pcidev, PCIR_VENDOR, &pciinfo->id.vendor);
+	pci_cfg_r16(pcidev, PCIR_DEVICE, &pciinfo->id.device);
+	pci_cfg_r32(pcidev, PCIR_REVID, &pciinfo->id.class);
 	pciinfo->rev = pciinfo->id.class & 0xff;
 	pciinfo->id.class = pciinfo->id.class >> 8;
 
 	/* Devices have subsytem device and vendor ID */
-	if ((pciinfo->id.class >> 8) != PCI_CLASS_BRIDGE_PCI) {
-		pci_cfg_r16(pcidev, PCI_SUBSYSTEM_VENDOR_ID,
+	if ((pciinfo->id.class >> 8) != PCID_PCI2PCI_BRIDGE) {
+		pci_cfg_r16(pcidev, PCIR_SUBVEND_0,
 							&pciinfo->id.subvendor);
-		pci_cfg_r16(pcidev, PCI_SUBSYSTEM_ID, &pciinfo->id.subdevice);
+		pci_cfg_r16(pcidev, PCIR_SUBDEV_0, &pciinfo->id.subdevice);
 	} else {
 		pciinfo->id.subvendor = 0;
 		pciinfo->id.subdevice = 0;
 	}
 
 	/* Read IRQ information set by PCI layer */
-	pci_cfg_r8(pcidev, PCI_INTERRUPT_LINE, &pciinfo->irq);
+	pci_cfg_r8(pcidev, PCIR_INTLINE, &pciinfo->irq);
 
 	/* Save Location */
 	pciinfo->pcidev = pcidev;
