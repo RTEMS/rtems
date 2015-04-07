@@ -14,6 +14,6 @@
 int pci_dev_irq(pci_dev_t dev)
 {
 	uint8_t irq_line;
-	pci_cfg_r8(dev, PCI_INTERRUPT_LINE, &irq_line);
+	pci_cfg_r8(dev, PCIR_INTLINE, &irq_line);
 	return irq_line;
 }

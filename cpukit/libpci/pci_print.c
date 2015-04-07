@@ -31,26 +31,26 @@ void pci_print_dev(pci_dev_t dev)
 	maxbars = 6;
 	romadrs = 0x30;
 	str = "";
-	PCI_CFG_R32(dev, PCI_CLASS_REVISION, &tmp);
+	PCI_CFG_R32(dev, PCIR_REVID, &tmp);
 	tmp >>= 16;
-	if (tmp == PCI_CLASS_BRIDGE_PCI) {
+	if (tmp == PCID_PCI2PCI_BRIDGE) {
 		maxbars = 2;
 		romadrs = 0x38;
 		str = "(BRIDGE)";
 	}
 
-	PCI_CFG_R32(dev, PCI_VENDOR_ID, &id);
+	PCI_CFG_R32(dev, PCIR_VENDOR, &id);
 	printf("\nBus %x Slot %x function: %x [0x%x] %s\n",
 		PCI_DEV_EXPAND(dev), dev, str);
 	printf("\tVendor id: 0x%lx, device id: 0x%lx\n",
 		id & 0xffff, id >> 16);
 	if (maxbars == 2) {
-		PCI_CFG_R32(dev, PCI_PRIMARY_BUS, &tmp);
+		PCI_CFG_R32(dev, PCIR_PRIBUS_1, &tmp);
 		printf("\tPrimary: %lx  Secondary: %lx  Subordinate: %lx\n",
 			tmp & 0xff, (tmp >> 8) & 0xff, (tmp >> 16) & 0xff);
 	}
 
-	PCI_CFG_R16(dev, PCI_INTERRUPT_LINE, &irq);
+	PCI_CFG_R16(dev, PCIR_INTLINE, &irq);
 	irq_pin = irq >> 8;
 	if ((irq_pin > 0) && (irq_pin < 5))
 		printf("\tIRQ INT%c#  LINE: %d\n",
@@ -58,10 +58,10 @@ void pci_print_dev(pci_dev_t dev)
 
 	/* Print standard BARs */
 	for (pos = 0; pos < maxbars; pos++) {
-		PCI_CFG_R32(dev, PCI_BASE_ADDRESS_0 + pos*4, &tmp);
-		PCI_CFG_W32(dev, PCI_BASE_ADDRESS_0 + pos*4, 0xffffffff);
-		PCI_CFG_R32(dev, PCI_BASE_ADDRESS_0 + pos*4, &tmp2);
-		PCI_CFG_W32(dev, PCI_BASE_ADDRESS_0 + pos*4, tmp);
+		PCI_CFG_R32(dev, PCIR_BAR(0) + pos*4, &tmp);
+		PCI_CFG_W32(dev, PCIR_BAR(0) + pos*4, 0xffffffff);
+		PCI_CFG_R32(dev, PCIR_BAR(0) + pos*4, &tmp2);
+		PCI_CFG_W32(dev, PCIR_BAR(0) + pos*4, tmp);
 
 		if (tmp2 != 0 && tmp2 != 0xffffffff && ((tmp2 & 0x1) ||
 		    ((tmp2 & 0x6) == 0))) {
@@ -93,7 +93,7 @@ void pci_print_dev(pci_dev_t dev)
 	PCI_CFG_W32(dev, romadrs, tmp);
 	if (tmp2 & 1) {
 		/* ROM BAR available */
-		tmp2 &= PCI_ROM_ADDRESS_MASK;
+		tmp2 &= PCIM_BIOS_ADDR_MASK;
 		tmp2 = (~tmp2 + 1); /* Size of BAR */
 		if (tmp2 < 0x1000) {
 			str = "B";
@@ -165,19 +165,19 @@ void pci_print(void)
 
     printf("\nPCI devices found and configured:\n");
     for (bus = 0; bus < pci_bus_count(); bus++) {
-        for (slot = 0; slot < PCI_MAX_DEVICES; slot++) {
-            for (func=0; func < PCI_MAX_FUNCTIONS; func++) {
+        for (slot = 0; slot <= PCI_SLOTMAX; slot++) {
+            for (func=0; func <= PCI_FUNCMAX; func++) {
 
                 dev = PCI_DEV(bus, slot, func);
-                fail = PCI_CFG_R32(dev, PCI_VENDOR_ID, &id);
+                fail = PCI_CFG_R32(dev, PCIR_VENDOR, &id);
 
                 if (!fail && id != PCI_INVALID_VENDORDEVICEID && id != 0) {
 	               	pci_print_dev(dev);
 
         	        /* Stop if not a multi-function device */
                 	if (func == 0) {
-	                    PCI_CFG_R8(dev, PCI_HEADER_TYPE, &header);
-        	            if ((header & PCI_MULTI_FUNCTION) == 0)
+	                    PCI_CFG_R8(dev, PCIR_HDRTYPE, &header);
+        	            if ((header & PCIM_MFDEV) == 0)
                 	        break;
 	                }
 		} else if (func == 0)

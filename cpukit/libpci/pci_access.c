@@ -55,10 +55,10 @@ void pci_modify_cmdsts(pci_dev_t dev, uint32_t mask, uint32_t val)
 {
 	uint32_t data;
 
-	pci_cfg_r32(dev, PCI_COMMAND, &data);
+	pci_cfg_r32(dev, PCIR_COMMAND, &data);
 	data &= ~mask;
 	data |= val;
-	pci_cfg_w32(dev, PCI_COMMAND, data);
+	pci_cfg_w32(dev, PCIR_COMMAND, data);
 }
 
 /* Register a driver for handling access to PCI */

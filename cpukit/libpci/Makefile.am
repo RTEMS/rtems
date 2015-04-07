@@ -15,7 +15,8 @@ include_pcidir = $(includedir)/pci
 include_pci_HEADERS =	pci/access.h pci/cfg.h \
 			pci/cfg_auto.h pci/cfg_static.h \
 			pci/cfg_peripheral.h pci/cfg_read.h \
-			pci/ids.h pci/ids_extra.h pci/irq.h
+			pci/ids.h pci/ids_extra.h pci/irq.h \
+			pci/pcireg.h
 
 noinst_LIBRARIES = libpci.a
 

@@ -64,6 +64,10 @@ $(PROJECT_INCLUDE)/pci/irq.h: pci/irq.h $(PROJECT_INCLUDE)/pci/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pci/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/pci/irq.h
 
+$(PROJECT_INCLUDE)/pci/pcireg.h: pci/pcireg.h $(PROJECT_INCLUDE)/pci/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pci/pcireg.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/pci/pcireg.h
+
 $(PROJECT_INCLUDE)/drvmgr/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/drvmgr
 	@: > $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)

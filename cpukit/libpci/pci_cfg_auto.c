@@ -302,14 +302,14 @@ static void pci_find_devs(struct pci_bus *bus)
 	DBG("Scanning bus %d\n", bus->num);
 
 	listptr = &bus->devs;
-	for (slot = 0; slot < PCI_MAX_DEVICES; slot++) {
+	for (slot = 0; slot <= PCI_SLOTMAX; slot++) {
 
 		/* Slot address */
 		pcidev = PCI_DEV(bus->num, slot, 0);
 
-		for (func = 0; func < PCI_MAX_FUNCTIONS; func++, pcidev++) {
+		for (func = 0; func <= PCI_FUNCMAX; func++, pcidev++) {
 
-			fail = PCI_CFG_R32(pcidev, PCI_VENDOR_ID, &id);
+			fail = PCI_CFG_R32(pcidev, PCIR_VENDOR, &id);
 			if (fail || id == 0xffffffff || id == 0) {
 				/*
 				 * This slot is empty
@@ -326,27 +326,27 @@ static void pci_find_devs(struct pci_bus *bus)
 			/* Set command to reset values, it disables bus
 			 * mastering and address responses.
 			 */
-			PCI_CFG_W16(pcidev, PCI_COMMAND, 0);
+			PCI_CFG_W16(pcidev, PCIR_COMMAND, 0);
 
 			/* Clear any already set status bits */
-			PCI_CFG_W16(pcidev, PCI_STATUS, 0xf900);
+			PCI_CFG_W16(pcidev, PCIR_STATUS, 0xf900);
 
 			/* Set latency timer to 64 */
-			PCI_CFG_W8(pcidev, PCI_LATENCY_TIMER, 64);
+			PCI_CFG_W8(pcidev, PCIR_LATTIMER, 64);
 
-			PCI_CFG_R32(pcidev, PCI_CLASS_REVISION, &tmp);
+			PCI_CFG_R32(pcidev, PCIR_REVID, &tmp);
 			tmp >>= 16;
-			dev = pci_dev_create(tmp == PCI_CLASS_BRIDGE_PCI);
+			dev = pci_dev_create(tmp == PCID_PCI2PCI_BRIDGE);
 			*listptr = dev;
 			listptr = &dev->next;
 
 			dev->busdevfun = pcidev;
 			dev->bus = bus;
-			PCI_CFG_R16(pcidev, PCI_VENDOR_ID, &dev->vendor);
-			PCI_CFG_R16(pcidev, PCI_DEVICE_ID, &dev->device);
-			PCI_CFG_R32(pcidev, PCI_CLASS_REVISION, &dev->classrev);
+			PCI_CFG_R16(pcidev, PCIR_VENDOR, &dev->vendor);
+			PCI_CFG_R16(pcidev, PCIR_DEVICE, &dev->device);
+			PCI_CFG_R32(pcidev, PCIR_REVID, &dev->classrev);
 
-			if (tmp == PCI_CLASS_BRIDGE_PCI) {
+			if (tmp == PCID_PCI2PCI_BRIDGE) {
 				DBG("Found PCI-PCI Bridge 0x%x at "
 				    "(bus %x, slot %x, func %x)\n",
 				    id, bus, slot, func);
@@ -363,7 +363,7 @@ static void pci_find_devs(struct pci_bus *bus)
 				PCI_CFG_W32(pcidev, 0x2C, 0);
 				tmp = (64 << 24) | (0xff << 16) |
 				      (bridge->num << 8) | bridge->pri;
-				PCI_CFG_W32(pcidev, PCI_PRIMARY_BUS, tmp);
+				PCI_CFG_W32(pcidev, PCIR_PRIBUS_1, tmp);
 
 				/* Scan Secondary Bus */
 				pci_find_devs(bridge);
@@ -377,19 +377,19 @@ static void pci_find_devs(struct pci_bus *bus)
 				    bridge->pri, bridge->num, bridge->sord);
 			} else {
 				/* Disable Cardbus CIS Pointer */
-				PCI_CFG_W32(pcidev, PCI_CARDBUS_CIS, 0);
+				PCI_CFG_W32(pcidev, PCIR_CIS, 0);
 
 				/* Devices have subsytem device and vendor ID */
-				PCI_CFG_R16(pcidev, PCI_SUBSYSTEM_VENDOR_ID,
+				PCI_CFG_R16(pcidev, PCIR_SUBVEND_0,
 							&dev->subvendor);
-				PCI_CFG_R16(pcidev, PCI_SUBSYSTEM_ID,
+				PCI_CFG_R16(pcidev, PCIR_SUBDEV_0,
 							&dev->subdevice);
 			}
 
 			/* Stop if not a multi-function device */
 			if (func == 0) {
-				pci_cfg_r8(pcidev, PCI_HEADER_TYPE, &header);
-				if ((header & PCI_MULTI_FUNCTION) == 0)
+				pci_cfg_r8(pcidev, PCIR_HDRTYPE, &header);
+				if ((header & PCIM_MFDEV) == 0)
 					break;
 			}
 		}
@@ -415,12 +415,12 @@ static void pci_find_bar(struct pci_dev *dev, int bar)
 	res->bar = bar;
 	if (bar == DEV_RES_ROM) {
 		if (dev->flags & PCI_DEV_BRIDGE)
-			ofs = PCI_ROM_ADDRESS1;
+			ofs = PCIR_BIOS_1;
 		else
-			ofs = PCI_ROM_ADDRESS;
+			ofs = PCIR_BIOS;
 		disable = 0; /* ROM BARs have a unique enable bit per BAR */
 	} else {
-		ofs = PCI_BASE_ADDRESS_0 + (bar << 2);
+		ofs = PCIR_BAR(0) + (bar << 2);
 		disable = pci_invalid_address;
 	}
 
@@ -431,7 +431,7 @@ static void pci_find_bar(struct pci_dev *dev, int bar)
 	if (size == 0 || size == 0xffffffff)
 		return;
 	if (bar == DEV_RES_ROM) {
-		mask = PCI_ROM_ADDRESS_MASK;
+		mask = PCIM_BIOS_ADDR_MASK;
 		DBG_SET_STR(str, "ROM");
 		if (dev->bus->flags & PCI_BUS_MEM)
 			res->flags = PCI_RES_MEM;
@@ -731,10 +731,10 @@ static void pci_set_bar(struct pci_dev *dev, int residx)
 	if (res->bar == DEV_RES_ROM) {
 		/* ROM: 32-bit prefetchable memory BAR */
 		if (is_bridge)
-			ofs = PCI_ROM_ADDRESS1;
+			ofs = PCIR_BIOS_1;
 		else
-			ofs = PCI_ROM_ADDRESS;
-		PCI_CFG_W32(pcidev, ofs, res->start | PCI_ROM_ADDRESS_ENABLE);
+			ofs = PCIR_BIOS;
+		PCI_CFG_W32(pcidev, ofs, res->start | PCIM_BIOS_ENABLE);
 		DBG("PCI[%x:%x:%x]: ROM BAR: 0x%x-0x%x\n",
 			PCI_DEV_EXPAND(pcidev), res->start, res->end);
 	} else if (is_bridge && (res->bar == BRIDGE_RES_IO)) {
@@ -765,7 +765,7 @@ static void pci_set_bar(struct pci_dev *dev, int residx)
 		/* PCI Device */
 		DBG("PCI[%x:%x:%x]: DEV BAR%d: 0x%08x\n",
 			PCI_DEV_EXPAND(pcidev), res->bar, res->start);
-		ofs = PCI_BASE_ADDRESS_0 + res->bar*4;
+		ofs = PCIR_BAR(0) + res->bar*4;
 		PCI_CFG_W32(pcidev, ofs, res->start);
 	}
 
@@ -827,7 +827,7 @@ static int pci_set_irq_dev(struct pci_dev *dev, void *cfg)
 
 	psysirq = &dev->sysirq;
 	pcidev = dev->busdevfun;
-	PCI_CFG_R8(pcidev, PCI_INTERRUPT_PIN, &irq_pin);
+	PCI_CFG_R8(pcidev, PCIR_INTPIN, &irq_pin);
 
 	/* perform IRQ routing until we reach host bridge */
 	while (dev->bus && irq_pin != 0) {
@@ -844,7 +844,7 @@ static int pci_set_irq_dev(struct pci_dev *dev, void *cfg)
 	*psysirq = irq_line;
 
 	/* Set System Interrupt/Vector for device. 0 means no-IRQ */
-	PCI_CFG_W8(pcidev, PCI_INTERRUPT_LINE, irq_line);
+	PCI_CFG_W8(pcidev, PCIR_INTLINE, irq_line);
 
 	return 0;
 }

@@ -131,32 +131,32 @@ extern void pci_modify_cmdsts(pci_dev_t dev, uint32_t mask, uint32_t val);
 /* Enable Memory in command register */
 static inline void pci_mem_enable(pci_dev_t dev)
 {
-	pci_modify_cmdsts(dev, PCI_COMMAND_MEMORY, PCI_COMMAND_MEMORY);
+	pci_modify_cmdsts(dev, PCIM_CMD_MEMEN, PCIM_CMD_MEMEN);
 }
 
 static inline void pci_mem_disable(pci_dev_t dev)
 {
-	pci_modify_cmdsts(dev, PCI_COMMAND_MEMORY, 0);
+	pci_modify_cmdsts(dev, PCIM_CMD_MEMEN, 0);
 }
 
 static inline void pci_io_enable(pci_dev_t dev)
 {
-	pci_modify_cmdsts(dev, PCI_COMMAND_IO, PCI_COMMAND_IO);
+	pci_modify_cmdsts(dev, PCIM_CMD_PORTEN, PCIM_CMD_PORTEN);
 }
 
 static inline void pci_io_disable(pci_dev_t dev)
 {
-	pci_modify_cmdsts(dev, PCI_COMMAND_IO, 0);
+	pci_modify_cmdsts(dev, PCIM_CMD_PORTEN, 0);
 }
 
 static inline void pci_master_enable(pci_dev_t dev)
 {
-	pci_modify_cmdsts(dev, PCI_COMMAND_MASTER, PCI_COMMAND_MASTER);
+	pci_modify_cmdsts(dev, PCIM_CMD_BUSMASTEREN, PCIM_CMD_BUSMASTEREN);
 }
 
 static inline void pci_master_disable(pci_dev_t dev)
 {
-	pci_modify_cmdsts(dev, PCI_COMMAND_MASTER, 0);
+	pci_modify_cmdsts(dev, PCIM_CMD_BUSMASTEREN, 0);
 }
 
 /* Configuration Space Access Read Routines */

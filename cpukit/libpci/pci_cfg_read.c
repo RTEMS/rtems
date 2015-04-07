@@ -109,11 +109,11 @@ static void pci_read_bar(struct pci_dev *dev, int bar)
 	res->bar = bar;
 	if (bar == DEV_RES_ROM) {
 		if (dev->flags & PCI_DEV_BRIDGE)
-			ofs = PCI_ROM_ADDRESS1;
+			ofs = PCIR_BIOS_1;
 		else
-			ofs = PCI_ROM_ADDRESS;
+			ofs = PCIR_BIOS;
 	} else {
-		ofs = PCI_BASE_ADDRESS_0 + (bar << 2);
+		ofs = PCIR_BAR(0) + (bar << 2);
 	}
 
 	PCI_CFG_R32(pcidev, ofs, &orig);
@@ -124,7 +124,7 @@ static void pci_read_bar(struct pci_dev *dev, int bar)
 	if (size == 0 || size == 0xffffffff)
 		return;
 	if (bar == DEV_RES_ROM) {
-		mask = PCI_ROM_ADDRESS_MASK;
+		mask = PCIM_BIOS_ADDR_MASK;
 		DBG_SET_STR(str, "ROM");
 		if (dev->bus->flags & PCI_BUS_MEM)
 			res->flags = PCI_RES_MEM;
@@ -192,14 +192,14 @@ static void pci_read_devs(struct pci_bus *bus)
 
 	max_sord = bus->num;
 	listptr = &bus->devs;
-	for (slot = 0; slot < PCI_MAX_DEVICES; slot++) {
+	for (slot = 0; slot <= PCI_SLOTMAX; slot++) {
 
 		/* Slot address */
 		pcidev = PCI_DEV(bus->num, slot, 0);
 
-		for (func = 0; func < PCI_MAX_FUNCTIONS; func++, pcidev++) {
+		for (func = 0; func <= PCI_FUNCMAX; func++, pcidev++) {
 
-			fail = PCI_CFG_R32(pcidev, PCI_VENDOR_ID, &id);
+			fail = PCI_CFG_R32(pcidev, PCIR_VENDOR, &id);
 			if (fail || id == 0xffffffff || id == 0) {
 				/*
 				 * This slot is empty
@@ -213,26 +213,26 @@ static void pci_read_devs(struct pci_bus *bus)
 			DBG("Found PCIDEV 0x%x at (bus %x, slot %x, func %x)\n",
 							id, bus, slot, func);
 
-			PCI_CFG_R32(pcidev, PCI_CLASS_REVISION, &tmp);
+			PCI_CFG_R32(pcidev, PCIR_REVID, &tmp);
 			tmp >>= 16;
-			dev = pci_dev_create(tmp == PCI_CLASS_BRIDGE_PCI);
+			dev = pci_dev_create(tmp == PCID_PCI2PCI_BRIDGE);
 			*listptr = dev;
 			listptr = &dev->next;
 
 			dev->busdevfun = pcidev;
 			dev->bus = bus;
-			PCI_CFG_R16(pcidev, PCI_VENDOR_ID, &dev->vendor);
-			PCI_CFG_R16(pcidev, PCI_DEVICE_ID, &dev->device);
-			PCI_CFG_R32(pcidev, PCI_CLASS_REVISION, &dev->classrev);
+			PCI_CFG_R16(pcidev, PCIR_VENDOR, &dev->vendor);
+			PCI_CFG_R16(pcidev, PCIR_DEVICE, &dev->device);
+			PCI_CFG_R32(pcidev, PCIR_REVID, &dev->classrev);
 
-			if (tmp == PCI_CLASS_BRIDGE_PCI) {
+			if (tmp == PCID_PCI2PCI_BRIDGE) {
 				DBG("Found PCI-PCI Bridge 0x%x at "
 				    "(bus %x, slot %x, func %x)\n",
 				    id, bus, slot, func);
 				dev->flags = PCI_DEV_BRIDGE;
 				bridge = (struct pci_bus *)dev;
 
-				PCI_CFG_R32(pcidev, PCI_PRIMARY_BUS, &tmp);
+				PCI_CFG_R32(pcidev, PCIR_PRIBUS_1, &tmp);
 				bridge->pri = tmp & 0xff;
 				bridge->num = (tmp >> 8) & 0xff;
 				bridge->sord = (tmp >> 16) & 0xff;
@@ -308,9 +308,9 @@ static void pci_read_devs(struct pci_bus *bus)
 				maxbars = 2;
 			} else {
 				/* Devices have subsytem device and vendor ID */
-				PCI_CFG_R16(pcidev, PCI_SUBSYSTEM_VENDOR_ID,
+				PCI_CFG_R16(pcidev, PCIR_SUBVEND_0,
 							&dev->subvendor);
-				PCI_CFG_R16(pcidev, PCI_SUBSYSTEM_ID,
+				PCI_CFG_R16(pcidev, PCIR_SUBDEV_0,
 							&dev->subdevice);
 
 				/* Normal PCI Device has max 6 BARs */
@@ -325,12 +325,12 @@ static void pci_read_devs(struct pci_bus *bus)
 			/* Get System Interrupt/Vector for device.
 			 * 0 means no-IRQ
 			 */
-			PCI_CFG_R8(pcidev, PCI_INTERRUPT_LINE, &dev->sysirq);
+			PCI_CFG_R8(pcidev, PCIR_INTLINE, &dev->sysirq);
 
 			/* Stop if not a multi-function device */
 			if (func == 0) {
-				pci_cfg_r8(pcidev, PCI_HEADER_TYPE, &header);
-				if ((header & PCI_MULTI_FUNCTION) == 0)
+				pci_cfg_r8(pcidev, PCIR_HDRTYPE, &header);
+				if ((header & PCIM_MFDEV) == 0)
 					break;
 			}
 		}

@@ -21,8 +21,8 @@ static int compare_dev_id(pci_dev_t pcidev, void *arg)
 	struct compare_info *info = arg;
 	uint16_t vid, did;
 
-	pci_cfg_r16(pcidev, PCI_VENDOR_ID, &vid);
-	pci_cfg_r16(pcidev, PCI_DEVICE_ID, &did);
+	pci_cfg_r16(pcidev, PCIR_VENDOR, &vid);
+	pci_cfg_r16(pcidev, PCIR_DEVICE, &did);
 	if ((vid != info->vendor) || (did != info->device))
 		return 0;
 	if (info->index-- == 0)
