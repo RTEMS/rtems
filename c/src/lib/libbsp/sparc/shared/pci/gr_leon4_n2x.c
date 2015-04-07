@@ -259,12 +259,12 @@ static int gr_cpci_leon4_n2x_hw_init1(struct gr_cpci_leon4_n2x_priv *priv)
 	unsigned int cgmask, enabled;
 
 	/* Check capabilities list bit and read its pointer */
-	pci_cfg_r8(pcidev, PCI_STATUS, &tmp2);
+	pci_cfg_r8(pcidev, PCIR_STATUS, &tmp2);
 	if (!((tmp2 >> 4) & 1)) {
 		/* Capabilities list not available which it should be in the GRPCI2 */
 		return -2;
 	}
-	pci_cfg_r8(pcidev, PCI_CAP_PTR, &cap_ptr);
+	pci_cfg_r8(pcidev, PCIR_CAP_PTR, &cap_ptr);
 
 	/* Workarounds depends on PCI revision of GR-CPCI-LEON4-N2X board */
 	switch (devinfo->rev) {
@@ -291,8 +291,8 @@ static int gr_cpci_leon4_n2x_hw_init1(struct gr_cpci_leon4_n2x_priv *priv)
 
 #if 0
 	/* set parity error response */
-	pci_cfg_r32(pcidev, PCI_COMMAND, &data);
-	pci_cfg_w32(pcidev, PCI_COMMAND, (data|PCI_COMMAND_PARITY));
+	pci_cfg_r32(pcidev, PCIR_COMMAND, &data);
+	pci_cfg_w32(pcidev, PCIR_COMMAND, (data|PCIM_CMD_PERRESPEN));
 #endif
 
 	/* Scan AMBA Plug&Play */
