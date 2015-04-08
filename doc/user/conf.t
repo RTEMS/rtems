@@ -5277,11 +5277,11 @@ None.
 @c
 @section PCI Library
 
-This section defines the system configuration paramters supported
+This section defines the system configuration parameters supported
 by @code{rtems/confdefs.h} related to configuring the PCI Library
 for RTEMS.
 
-The PCI Library startup behaviour can be configured in four diffent
+The PCI Library startup behaviour can be configured in four different
 ways depending on how @code{CONFIGURE_PCI_CONFIG_LIB} is defined:
 
 @itemize @bullet
@@ -5298,7 +5298,7 @@ bridge driver set up.
 @item @code{PCI_LIB_READ} is used to enable the PCI read configuration
 software. The current PCI configuration is read to create the RAM
 representation (the PCI device tree) of the PCI devices present. PCI devices
-are assumed to already have been initialized and PCI buses enumrated, it is
+are assumed to already have been initialized and PCI buses enumerated, it is
 therefore required that a BIOS or a boot loader has set up configuration space
 prior to booting into RTEMS.
 
@@ -5307,15 +5307,15 @@ prior to booting into RTEMS.
 software. The user provides a PCI tree with information how all PCI devices
 are to be configured at compile time by linking in a custom
 @code{struct pci_bus pci_hb} tree. The static PCI library will not probe PCI
-for devices, instead it will assume that all devices defined by the user is
+for devices, instead it will assume that all devices defined by the user are
 present, it will enumerate the PCI buses and configure all PCI devices in
 static configuration accordingly. Since probe and allocation software is not
-needed the startup is faster, have smaller footprint and does not require
+needed the startup is faster, has smaller footprint and does not require
 dynamic memory allocation.
 
 @findex PCI_LIB_PERIPHERAL
 @item @code{PCI_LIB_PERIPHERAL} is used to enable the PCI peripheral
-configuration. It is similar to @code{PCI_LIB_STATIC}, but is will never write
+configuration. It is similar to @code{PCI_LIB_STATIC}, but it will never write
 the configuration to the PCI devices since PCI peripherals are not allowed to
 access PCI configuration space.
 

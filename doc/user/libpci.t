@@ -3,8 +3,6 @@
 @c  Aeroflex Gaisler AB
 @c  All rights reserved.
 @c
-@c  $Id: libpci.t,v v.vv xxxx/yy/zz xx:yy:zz ? Exp $
-@c
 
 @chapter PCI Library
 
@@ -29,8 +27,8 @@ memory space and cardbus bridges.
 In order to support different architectures and with small foot-print embedded
 systems in mind the PCI Library offers four different configuration options
 listed below. It is selected during compile time by defining the appropriate
-macros in confdefs.h. It is also possible to enable NONE (No Configuration)
-which can be used for debuging PCI access functions.
+macros in confdefs.h. It is also possible to enable PCI_LIB_NONE (No
+Configuration) which can be used for debuging PCI access functions.
 @itemize @bullet
 @item Auto Configuration (do Plug & Play)
 @item Read Configuration (read BIOS or boot loader configuration)
@@ -49,9 +47,9 @@ a unique bus, slot and function number. Each PCI slot can have up to 8
 functions and interface to another PCI sub-bus by implementing a PCI-to-PCI
 bridge according to the PCI Bridge Architecture specification.
 
-Using the unique [bus:slot:func] any device can be configured regardless how PCI
-is currently set up as long as all PCI buses are enumerated correctly. The
-enumration is done during probing, all bridges are given a bus numbers in
+Using the unique [bus:slot:func] any device can be configured regardless of how
+PCI is currently set up as long as all PCI buses are enumerated correctly. The
+enumeration is done during probing, all bridges are given a bus number in
 order for the bridges to respond to accesses from both directions. The PCI
 library can assign address ranges to which a PCI device should respond using
 Plug & Play technique or a static user defined configuration. After the
@@ -68,7 +66,7 @@ translate the [bus:slot:func] into a valid PCI configuration space access.
 If the target is not a host, but a peripheral, configuration space can not be
 accessed, the peripheral is set up by the host during start up. In complex
 embedded PCI systems the peripheral may need to access other PCI boards than
-then host. In such systems a custom (static) configuration of both the host
+the host. In such systems a custom (static) configuration of both the host
 and peripheral may be a convenient solution.
 
 The PCI bus defines four interrupt signals INTA#..INTD#. The interrupt signals
@@ -77,10 +75,12 @@ driver to know the mapping, however the BIOS or boot loader may use the
 8-bit read/write "Interrupt Line" register to pass the knowledge along to the
 OS.
 
-
- The PCI standard
-defines and recommends that the backplane route the interupt lines in a
-systematic way, however in 
+The PCI standard defines and recommends that the backplane route the interupt
+lines in a systematic way, however in standard there is no such requirement.
+The PCI Auto Configuration Library implements the recommended way of routing
+which is very common but it is also supported to some extent to override the
+interrupt routing from the BSP or Host Bridge driver using the configuration
+structure.
 
 @subsection Software Components
 
@@ -113,10 +113,10 @@ registers. The interrupt pin which a board is driving can be read out from
 PCI configuration space, however it is up to software to know how interrupt
 signals are routed between PCI-to-PCI bridges and how PCI INT[A..D]# pins are
 mapped to system IRQ. In systems where previous software (boot loader or BIOS)
-has already set up this the configuration overwritten or simply read out.
+has already set up this the configuration is overwritten or simply read out.
 
 In order to support different configuration methods the following configuration
-libraries are available can selectable by the user:
+libraries are selectable by the user:
 @itemize @bullet
 @item Auto Configuration (run Plug & Play software)
 @item Read Configuration (relies on a boot loader or BIOS)
@@ -150,14 +150,14 @@ See the RTEMS configuration section how to setup the PCI library.
 
 @subsubsection Auto Configuration
 
-The auto configuration software enumerate PCI buses and initializes all PCI
+The auto configuration software enumerates PCI buses and initializes all PCI
 devices found using Plug & Play. The auto configuration software requires
 that a configuration setup has been registered by the driver or BSP in order
 to setup the I/O and Memory regions at the correct address ranges. PCI
 interrupt pins can optionally be routed over PCI-to-PCI bridges and mapped
-to a system interrupt number. Resources are sorted by size and required
+to a system interrupt number. BAR resources are sorted by size and required
 alignment, unused "dead" space may be created when PCI bridges are present
-due to the PCI bridge window size does not equal the alignment, to cope with
+due to the PCI bridge window size does not equal the alignment. To cope with
 that resources are reordered to fit smaller BARs into the dead space to minimize
 the PCI space required. If a BAR or ROM register can not be allocated a PCI
 address region (due to too few resources available) the register will be given
@@ -224,7 +224,7 @@ however in some complex systems PCI devices may want to access other devices
 on the same bus or at another PCI bus.
 
 A PCI peripheral is not allowed to do PCI configuration cycles, which means that
-is must either rely on the host to give it the addresses it needs, or that the
+it must either rely on the host to give it the addresses it needs, or that the
 addresses are predefined.
 
 This configuration approach is very similar to the static option, however the
@@ -241,7 +241,7 @@ not dependent upon the host driver, BSP or platform.
 @item PCI configuration space
 @item PCI I/O space
 @item Registers over PCI memory space
-@item Translate PCI address into CPU accessible address and vice verse
+@item Translate PCI address into CPU accessible address and vice versa
 @end itemize
 
 By using the access routines drivers can be made portable over different
@@ -262,7 +262,7 @@ layer to implement drivers that support "run-time endianness detection".
 Configuration space is accessed using the routines listed below. The
 pci_dev_t type is used to specify a specific PCI bus, device and function. It
 is up to the host driver or BSP to create a valid access to the requested
-PCI slot. Requests made to slots that is not supported by hardware should
+PCI slot. Requests made to slots that are not supported by hardware should
 result in PCISTS_MSTABRT and/or data must be ignored (writes) or 0xffffffff
 is always returned (reads).
 
@@ -288,7 +288,7 @@ CPU. The window size may vary and must be taken into consideration by the
 host driver. The below routines must be used to access I/O space. The address
 given to the functions is not the PCI I/O addresses, the caller must have
 translated PCI I/O addresses (available in the PCI BARs) into a BSP or host
-driver custom address, see @ref{Access functions} how addresses are
+driver custom address, see @ref{Access functions} for how addresses are
 translated.
 
 @example
@@ -334,7 +334,7 @@ is required, pci_ld_le16 != ld_le16 on big endian PCI buses.
 
 The PCI Access Library can provide device drivers with function pointers
 executing the above Configuration, I/O and Memory space accesses. The
-functions have the same arguments and return values as the as the above
+functions have the same arguments and return values as the above
 functions.
 
 The pci_access_func() function defined below can be used to get a function
@@ -358,7 +358,7 @@ pointer of a specific access type.
   int pci_access_func(int wr, int size, void **func, int endian, int type);
 @end example
 
-PCI devices drivers may be written to support run-time detection of endianess,
+PCI device drivers may be written to support run-time detection of endianess,
 this is mosly for debugging or for development systems. When the product is
 finally deployed macros switch to using the inline functions instead which
 have been configured for the correct endianness.
@@ -370,7 +370,7 @@ When PCI addresses, both I/O and memory space, is not mapped 1:1 address
 translation before access is needed. If drivers read the PCI resources directly
 using configuration space routines or in the device tree, the addresses given
 are PCI addresses. The below functions can be used to translate PCI addresses
-into CPU accessible addresses or vise versa, translation may be different for
+into CPU accessible addresses or vice versa, translation may be different for
 different PCI spaces/regions.
 
 @example
@@ -404,6 +404,6 @@ use the standard RTEMS interrupt functions directly.
 
 @subsection PCI Shell command
 
-The RTEMS shell have a PCI command 'pci' which makes it possible to read/write
+The RTEMS shell has a PCI command 'pci' which makes it possible to read/write
 configuration space, print the current PCI configuration and print out a
 configuration C-file for the static or peripheral library.
