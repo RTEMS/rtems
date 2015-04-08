@@ -13,6 +13,7 @@
 #include <rtems.h>
 #include <drvmgr/drvmgr_list.h>
 #include <stdint.h>
+#include <rtems/score/basedefs.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -478,7 +479,8 @@ extern union drvmgr_key_value *drvmgr_dev_key_get(
 /*** DRIVER INTERACE USED TO REQUEST INFORMATION/SERVICES FROM BUS DRIVER ***/
 
 /*! Get parent bus */
-static inline struct drvmgr_bus *drvmgr_get_parent(struct drvmgr_dev *dev)
+RTEMS_INLINE_ROUTINE struct drvmgr_bus *drvmgr_get_parent(
+	struct drvmgr_dev *dev)
 {
 	if (dev)
 		return dev->parent;
@@ -487,7 +489,7 @@ static inline struct drvmgr_bus *drvmgr_get_parent(struct drvmgr_dev *dev)
 }
 
 /*! Get Driver of device */
-static inline struct drvmgr_drv *drvmgr_get_drv(struct drvmgr_dev *dev)
+RTEMS_INLINE_ROUTINE struct drvmgr_drv *drvmgr_get_drv(struct drvmgr_dev *dev)
 {
 	if (dev)
 		return dev->drv;
