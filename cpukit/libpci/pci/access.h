@@ -14,6 +14,7 @@
 
 #include <stdint.h>
 #include <libcpu/byteorder.h>
+#include <rtems/score/basedefs.h>
 #include <pci.h>
 
 /* Let BSP configure load/store from PCI */
@@ -129,32 +130,32 @@ extern int pci_access_drv_register(struct pci_access_drv *drv);
 extern void pci_modify_cmdsts(pci_dev_t dev, uint32_t mask, uint32_t val);
 
 /* Enable Memory in command register */
-static inline void pci_mem_enable(pci_dev_t dev)
+RTEMS_INLINE_ROUTINE void pci_mem_enable(pci_dev_t dev)
 {
 	pci_modify_cmdsts(dev, PCIM_CMD_MEMEN, PCIM_CMD_MEMEN);
 }
 
-static inline void pci_mem_disable(pci_dev_t dev)
+RTEMS_INLINE_ROUTINE void pci_mem_disable(pci_dev_t dev)
 {
 	pci_modify_cmdsts(dev, PCIM_CMD_MEMEN, 0);
 }
 
-static inline void pci_io_enable(pci_dev_t dev)
+RTEMS_INLINE_ROUTINE void pci_io_enable(pci_dev_t dev)
 {
 	pci_modify_cmdsts(dev, PCIM_CMD_PORTEN, PCIM_CMD_PORTEN);
 }
 
-static inline void pci_io_disable(pci_dev_t dev)
+RTEMS_INLINE_ROUTINE void pci_io_disable(pci_dev_t dev)
 {
 	pci_modify_cmdsts(dev, PCIM_CMD_PORTEN, 0);
 }
 
-static inline void pci_master_enable(pci_dev_t dev)
+RTEMS_INLINE_ROUTINE void pci_master_enable(pci_dev_t dev)
 {
 	pci_modify_cmdsts(dev, PCIM_CMD_BUSMASTEREN, PCIM_CMD_BUSMASTEREN);
 }
 
-static inline void pci_master_disable(pci_dev_t dev)
+RTEMS_INLINE_ROUTINE void pci_master_disable(pci_dev_t dev)
 {
 	pci_modify_cmdsts(dev, PCIM_CMD_BUSMASTEREN, 0);
 }
@@ -180,25 +181,25 @@ extern void pci_io_w16(uint32_t adr, uint16_t data);
 extern void pci_io_w32(uint32_t adr, uint32_t data);
 
 /* Translate PCI address into CPU accessible address */
-static inline int pci_pci2cpu(uint32_t *address, int type)
+RTEMS_INLINE_ROUTINE int pci_pci2cpu(uint32_t *address, int type)
 {
 	return pci_access_ops.translate(address, type, 0);
 }
 
 /* Translate CPU accessible address into PCI address (for DMA) */
-static inline int pci_cpu2pci(uint32_t *address, int type)
+RTEMS_INLINE_ROUTINE int pci_cpu2pci(uint32_t *address, int type)
 {
 	return pci_access_ops.translate(address, type, 1);
 }
 
 /*** Read/Write a register over PCI Memory Space ***/
 
-static inline uint8_t pci_ld8(volatile uint8_t *addr)
+RTEMS_INLINE_ROUTINE uint8_t pci_ld8(volatile uint8_t *addr)
 {
 	return *addr;
 }
 
-static inline void pci_st8(volatile uint8_t *addr, uint8_t val)
+RTEMS_INLINE_ROUTINE void pci_st8(volatile uint8_t *addr, uint8_t val)
 {
 	*addr = val;
 }
@@ -207,42 +208,42 @@ static inline void pci_st8(volatile uint8_t *addr, uint8_t val)
 
 /* BSP has decided Big Endian PCI Bus (non-standard) */
 
-static inline uint16_t pci_ld_le16(volatile uint16_t *addr)
+RTEMS_INLINE_ROUTINE uint16_t pci_ld_le16(volatile uint16_t *addr)
 {
 	return ld_be16(addr);
 }
 
-static inline void pci_st_le16(volatile uint16_t *addr, uint16_t val)
+RTEMS_INLINE_ROUTINE void pci_st_le16(volatile uint16_t *addr, uint16_t val)
 {
 	st_be16(addr, val);
 }
 
-static inline uint32_t pci_ld_le32(volatile uint32_t *addr)
+RTEMS_INLINE_ROUTINE uint32_t pci_ld_le32(volatile uint32_t *addr)
 {
 	return ld_be32(addr);
 }
 
-static inline void pci_st_le32(volatile uint32_t *addr, uint32_t val)
+RTEMS_INLINE_ROUTINE void pci_st_le32(volatile uint32_t *addr, uint32_t val)
 {
 	st_be32(addr, val);
 }
 
-static inline uint16_t pci_ld_be16(volatile uint16_t *addr)
+RTEMS_INLINE_ROUTINE uint16_t pci_ld_be16(volatile uint16_t *addr)
 {
 	return ld_le16(addr);
 }
 
-static inline void pci_st_be16(volatile uint16_t *addr, uint16_t val)
+RTEMS_INLINE_ROUTINE void pci_st_be16(volatile uint16_t *addr, uint16_t val)
 {
 	st_le16(addr, val);
 }
 
-static inline uint32_t pci_ld_be32(volatile uint32_t *addr)
+RTEMS_INLINE_ROUTINE uint32_t pci_ld_be32(volatile uint32_t *addr)
 {
 	return ld_le32(addr);
 }
 
-static inline void pci_st_be32(volatile uint32_t *addr, uint32_t val)
+RTEMS_INLINE_ROUTINE void pci_st_be32(volatile uint32_t *addr, uint32_t val)
 {
 	st_le32(addr, val);
 }
@@ -251,42 +252,42 @@ static inline void pci_st_be32(volatile uint32_t *addr, uint32_t val)
 
 /* Little Endian PCI Bus */
 
-static inline uint16_t pci_ld_le16(volatile uint16_t *addr)
+RTEMS_INLINE_ROUTINE uint16_t pci_ld_le16(volatile uint16_t *addr)
 {
 	return ld_le16(addr);
 }
 
-static inline void pci_st_le16(volatile uint16_t *addr, uint16_t val)
+RTEMS_INLINE_ROUTINE void pci_st_le16(volatile uint16_t *addr, uint16_t val)
 {
 	st_le16(addr, val);
 }
 
-static inline uint32_t pci_ld_le32(volatile uint32_t *addr)
+RTEMS_INLINE_ROUTINE uint32_t pci_ld_le32(volatile uint32_t *addr)
 {
 	return ld_le32(addr);
 }
 
-static inline void pci_st_le32(volatile uint32_t *addr, uint32_t val)
+RTEMS_INLINE_ROUTINE void pci_st_le32(volatile uint32_t *addr, uint32_t val)
 {
 	st_le32(addr, val);
 }
 
-static inline uint16_t pci_ld_be16(volatile uint16_t *addr)
+RTEMS_INLINE_ROUTINE uint16_t pci_ld_be16(volatile uint16_t *addr)
 {
 	return ld_be16(addr);
 }
 
-static inline void pci_st_be16(volatile uint16_t *addr, uint16_t val)
+RTEMS_INLINE_ROUTINE void pci_st_be16(volatile uint16_t *addr, uint16_t val)
 {
 	st_be16(addr, val);
 }
 
-static inline uint32_t pci_ld_be32(volatile uint32_t *addr)
+RTEMS_INLINE_ROUTINE uint32_t pci_ld_be32(volatile uint32_t *addr)
 {
 	return ld_be32(addr);
 }
 
-static inline void pci_st_be32(volatile uint32_t *addr, uint32_t val)
+RTEMS_INLINE_ROUTINE void pci_st_be32(volatile uint32_t *addr, uint32_t val)
 {
 	st_be32(addr, val);
 }
