@@ -19,11 +19,6 @@
 #include <pci/access.h>
 #include <pci/cfg.h>
 
-/* Define PCI_INFO_ON_STARTUP to get a listing of configured devices at boot
- * time
- */
-#undef PCI_INFO_ON_STARTUP
-
 /* #define DEBUG */
 
 #ifdef DEBUG
@@ -68,7 +63,7 @@ static void pci_res_insert(struct pci_res **root, struct pci_res *res)
 	/* Insert the resources depending on the boundary needs
 	 * Normally the boundary=size of the BAR, however when
 	 * PCI bridges are involved the bridge's boundary may be
-	 * smaller that the size due to the fact that a bridge
+	 * smaller than the size due to the fact that a bridge
 	 * may have different-sized BARs behind, the largest BAR
 	 * (also the BAR with the largest boundary) will decide
 	 * the alignment need.
@@ -136,12 +131,12 @@ void pci_res_list_print(struct pci_res *root)
  * NOTE: If less than three elements in list, nothing will be done
  *
  * Normally a BAR has the same alignment requirements as the size of the
- * BAR. However, when bridges are invloved the alignment need may be smaller
- * that the size, because a bridge resource consist or multiple BARs.
+ * BAR. However, when bridges are involved the alignment need may be smaller
+ * than the size, because a bridge resource consist or multiple BARs.
  * For example, say that a bridge with a 256Mb and a 16Mb BAR is found, then
  * the alignment is required to be 256Mb but the size 256+16Mb.
  *
- * In order to minimize dead space on the bus, the bounadry ordered list
+ * In order to minimize dead space on the bus, the boundary ordered list
  * is reordered, example:
  *  BUS0
  *  |	         BUS1
@@ -156,7 +151,7 @@ void pci_res_list_print(struct pci_res *root)
  *  |            |          |-- BAR2: SIZE=256Mb, ALIGNMENT=256Mb
  *  |            |          |-- BAR3: SIZE=16Mb, ALIGNMENT=16MB
  *
- * A alignement/boundary ordered list of BUS1 will look like:
+ * A alignment/boundary ordered list of BUS1 will look like:
  *	- BAR_BRIDGE1
  *	- BAR0		  (ALIGMENT NEED 256Mb)
  *	- BAR1
@@ -184,8 +179,8 @@ static void pci_res_reorder(struct pci_res *root)
 		start_next = (start + (curr->boundary - 1)) &
 					~(curr->boundary - 1);
 
-		/* Find hole size, the unsed space inbetween last resource
-		 *and next */
+		/* Find hole size, the unsed space in between last resource
+		 * and next */
 		hole_size = start_next - start;
 
 		/* Find Boundary of START */
@@ -230,7 +225,7 @@ static void pci_res_reorder(struct pci_res *root)
 			}
 		}
 
-		/* No hole or nothing fitted into hole. */
+		/* No hole or nothing fit into hole. */
 		start = start_next;
 
 		last = curr;
@@ -851,7 +846,7 @@ static int pci_set_irq_dev(struct pci_dev *dev, void *cfg)
 
 /* This routine assumes that PCI access library has been successfully
  * initialized. All information about the PCI bus needed is found in
- * the argument.
+ * the pci_auto_cfg structure passed on by pci_config_register().
  *
  * The PCI buses are enumerated as bridges are found, PCI devices are
  * setup with BARs and IRQs, etc.
