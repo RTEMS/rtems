@@ -2,20 +2,21 @@
  *
  *  COPYRIGHT (c) 2008 Cobham Gaisler AB.
  *
- *  General part of PCI Bus driver. The driver is typically
- *  initialized from the PCI host driver separating the host
- *  driver from the common parts in PCI drivers.
- *  The PCI library must be initialized before starting the
- *  PCI bus driver. The PCI library have set up BARs and
- *  assigned system IRQs for targets.
- *  This PCI bus driver rely on the PCI library (pci.c) for
- *  interrupt registeration (pci_interrupt_register) and PCI
- *  target set up.
- *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
+ */
+
+/* General part of drvmgr PCI Bus driver. The driver is typically
+ * initialized from the PCI host driver separating the host
+ * driver from the common parts in PCI drivers.
+ * The PCI library must be initialized before starting the
+ * PCI bus driver. The PCI library have set up BARs and
+ * assigned system IRQs for targets.
+ * This PCI bus driver rely on the PCI library (pci.c) for
+ * interrupt registeration (pci_interrupt_register) and PCI
+ * target set up.
  */
 
 #ifndef __PCI_BUS_H__
