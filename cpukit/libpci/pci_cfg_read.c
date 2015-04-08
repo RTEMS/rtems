@@ -14,6 +14,8 @@
 #include <pci/cfg.h>
 #include <pci/access.h>
 
+#include "pci_internal.h"
+
 /* PCI Library
  * (For debugging it might be good to use other functions or the driver's
  *  directly)
@@ -31,28 +33,8 @@
 #define DBG(args...)
 #endif
 
-/* Number of buses */
-extern int pci_bus_cnt;
-
 /* The Host Bridge bus is initialized here */
 extern struct pci_bus pci_hb;
-
-static struct pci_dev *pci_dev_create(int isbus)
-{
-	void *ptr;
-	int size;
-
-	if (isbus)
-		size = sizeof(struct pci_bus);
-	else
-		size = sizeof(struct pci_dev);
-
-	ptr = malloc(size);
-	if (!ptr)
-		rtems_fatal_error_occurred(RTEMS_NO_MEMORY);
-	memset(ptr, 0, size);
-	return ptr;
-}
 
 /* Check if address is accessible from host */
 static int pci_read_addressable(struct pci_dev *dev, struct pci_res *res)

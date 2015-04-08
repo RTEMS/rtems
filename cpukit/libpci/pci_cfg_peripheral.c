@@ -18,8 +18,7 @@
 
 #include <pci/cfg.h>
 
-/* Number of buses */
-extern int pci_bus_cnt;
+#include "pci_internal.h"
 
 /* Assume that user has defined static setup array in pci_hb */
 int pci_config_peripheral(void)

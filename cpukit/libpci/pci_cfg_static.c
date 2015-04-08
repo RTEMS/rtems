@@ -20,15 +20,14 @@
 #include <pci/access.h>
 #include <pci/cfg.h>
 
+#include "pci_internal.h"
+
 #define PCI_CFG_R8(dev, args...) pci_cfg_r8(dev, args)
 #define PCI_CFG_R16(dev, args...) pci_cfg_r16(dev, args)
 #define PCI_CFG_R32(dev, args...) pci_cfg_r32(dev, args)
 #define PCI_CFG_W8(dev, args...) pci_cfg_w8(dev, args)
 #define PCI_CFG_W16(dev, args...) pci_cfg_w16(dev, args)
 #define PCI_CFG_W32(dev, args...) pci_cfg_w32(dev, args)
-
-/* Number of buses */
-extern int pci_bus_cnt;
 
 /* Enumrate one bus if device is a bridge, and all it's subordinate buses */
 static int pci_init_dev(struct pci_dev *dev, void *unused)

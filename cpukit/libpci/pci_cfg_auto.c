@@ -19,6 +19,8 @@
 #include <pci/access.h>
 #include <pci/cfg.h>
 
+#include "pci_internal.h"
+
 /* #define DEBUG */
 
 #ifdef DEBUG
@@ -37,9 +39,6 @@
 #define PCI_CFG_W8(dev, args...) pci_cfg_w8(dev, args)
 #define PCI_CFG_W16(dev, args...) pci_cfg_w16(dev, args)
 #define PCI_CFG_W32(dev, args...) pci_cfg_w32(dev, args)
-
-/* Number of PCI buses */
-extern int pci_bus_cnt;
 
 int pci_config_auto_initialized = 0;
 
@@ -267,23 +266,6 @@ static void pci_dev_free(struct pci_dev *dev)
 	free(dev);
 }
 #endif
-
-static struct pci_dev *pci_dev_create(int isbus)
-{
-	void *ptr;
-	int size;
-
-	if (isbus)
-		size = sizeof(struct pci_bus);
-	else
-		size = sizeof(struct pci_dev);
-
-	ptr = malloc(size);
-	if (!ptr)
-		rtems_fatal_error_occurred(RTEMS_NO_MEMORY);
-	memset(ptr, 0, size);
-	return ptr;
-}
 
 static void pci_find_devs(struct pci_bus *bus)
 {
