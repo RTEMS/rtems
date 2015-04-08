@@ -1,7 +1,3 @@
-##
-##  $Id: Makefile.am
-##
-
 include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST=
