@@ -1,7 +1,4 @@
-/* PCI Configuration Library, two versions of the library exists:
- *  - auto configuration (default)
- *  - static configuration (user defined config)
- * both versions are defined here.
+/* PCI Configuration Library
  *
  * COPYRIGHT (c) 2010 Cobham Gaisler AB.
  *
@@ -10,6 +7,14 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+/* Four versions of the library exists:
+ *  - auto configuration (default)
+ *  - read configuration from PnP (inherit BIOS set up)
+ *  - static configuration (user defined config)
+ *  - peripheral configuration, no CFG space accesses are possible instead a
+ *    device tree known at compile-time have been built in.
+ * all versions are defined through here.
+ */
 
 #ifndef __PCI_CFG_H__
 #define __PCI_CFG_H__
