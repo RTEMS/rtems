@@ -18,7 +18,7 @@ int pci_bus_cnt = 0;
 uint32_t pci_invalid_address = 0;
 
 /* PCI System type. Configuration Library setup this */
-int pci_system_type = PCI_SYSTEM_NONE;
+enum pci_system_type pci_system_type = PCI_SYSTEM_NONE;
 
 /* PCI Endianness.
  *

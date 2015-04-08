@@ -53,12 +53,12 @@ enum {
  *
  * The active configuration Library set this variable.
  */
-enum {
+enum pci_system_type {
 	PCI_SYSTEM_NONE = 0,
 	PCI_SYSTEM_HOST = 1,
 	PCI_SYSTEM_PERIPHERAL = 2,
 };
-extern int pci_system_type;
+extern enum pci_system_type pci_system_type;
 
 /* PCI Bus Endianness. The PCI specification is little endian, however on some
  * embedded systems (AT697-LEON2 for example) the PCI bus is defined as big
