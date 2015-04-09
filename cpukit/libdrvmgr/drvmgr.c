@@ -119,7 +119,6 @@ void drvmgr_init_update(void)
 		goto out;
 	mgr->initializing_objs = 1;
 
-init_registered_buses:
 	/* Take all buses and devices ready into the same stage
 	 * as the driver manager global level.
 	 */
@@ -170,8 +169,9 @@ init_registered_buses:
 		/* Make sure all buses registered and ready are taken at
 		 * the same time into init level N.
 		 */
-		if (bus_might_been_registered)
-			goto init_registered_buses;
+		if (bus_might_been_registered) {
+			level = -1; /* restart loop */
+		}
 	}
 
 	/* Release bus/device initialization "Lock" */
@@ -598,6 +598,7 @@ int drvmgr_alloc_dev(struct drvmgr_dev **pdev, int extra)
 	struct drvmgr_dev *dev;
 	int size;
 
+	/* The extra memory "service" is aligned to 4 bytes boundary. */
 	size = ((sizeof(struct drvmgr_dev) + 3) & ~0x3) + extra;
 	dev = (struct drvmgr_dev *)calloc(size, 1);
 	if (!dev) {
@@ -616,6 +617,7 @@ int drvmgr_alloc_bus(struct drvmgr_bus **pbus, int extra)
 	struct drvmgr_bus *bus;
 	int size;
 
+	/* The extra memory "service" is aligned to 4 bytes boundary. */
 	size = ((sizeof(struct drvmgr_bus) + 3) & ~0x3) + extra;
 	bus = (struct drvmgr_bus *)calloc(size, 1);
 	if (!bus) {
