@@ -92,7 +92,6 @@ static void _Thread_queue_Requeue_priority(
 {
   Thread_queue_Control *tq = context;
 
-  _Thread_queue_Enter_critical_section( tq );
   _RBTree_Extract( &tq->Queues.Priority, &the_thread->RBNode );
   _RBTree_Insert(
     &tq->Queues.Priority,
