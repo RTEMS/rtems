@@ -18,12 +18,12 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
 #include <rtems/score/watchdogimpl.h>
+#include <rtems/score/isrlevel.h>
+#include <rtems/score/percpu.h>
 
 void _Watchdog_Insert(
-  Chain_Control         *header,
+  Watchdog_Header       *header,
   Watchdog_Control      *the_watchdog
 )
 {

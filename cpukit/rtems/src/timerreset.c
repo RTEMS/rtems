@@ -52,7 +52,7 @@ rtems_status_code rtems_timer_reset(
     case OBJECTS_LOCAL:
       if ( the_timer->the_class == TIMER_INTERVAL ) {
         _Watchdog_Remove( &the_timer->Ticker );
-        _Watchdog_Insert( &_Watchdog_Ticks_chain, &the_timer->Ticker );
+        _Watchdog_Insert( &_Watchdog_Ticks_header, &the_timer->Ticker );
       } else if ( the_timer->the_class == TIMER_INTERVAL_ON_TASK ) {
         Timer_server_Control *timer_server = _Timer_server;
 

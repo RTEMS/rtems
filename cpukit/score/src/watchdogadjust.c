@@ -23,7 +23,7 @@
 #include <rtems/score/isrlevel.h>
 
 void _Watchdog_Adjust_backward(
-  Chain_Control     *header,
+  Watchdog_Header   *header,
   Watchdog_Interval  units
 )
 {
@@ -31,7 +31,7 @@ void _Watchdog_Adjust_backward(
 
   _ISR_Disable( level );
 
-  if ( !_Chain_Is_empty( header ) ) {
+  if ( !_Watchdog_Is_empty( header ) ) {
      _Watchdog_First( header )->delta_interval += units;
   }
 
@@ -39,7 +39,7 @@ void _Watchdog_Adjust_backward(
 }
 
 void _Watchdog_Adjust_forward(
-  Chain_Control     *header,
+  Watchdog_Header   *header,
   Watchdog_Interval  units
 )
 {
@@ -47,7 +47,7 @@ void _Watchdog_Adjust_forward(
 
   _ISR_Disable( level );
 
-  while ( !_Chain_Is_empty( header ) && units > 0 ) {
+  while ( !_Watchdog_Is_empty( header ) && units > 0 ) {
     Watchdog_Control *first = _Watchdog_First( header );
 
     if ( units < first->delta_interval ) {

@@ -18,14 +18,13 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
 #include <rtems/score/watchdogimpl.h>
+#include <rtems/score/isrlevel.h>
 
 void _Watchdog_Adjust_to_chain(
-  Chain_Control               *header,
-  Watchdog_Interval            units_arg,
-  Chain_Control               *to_fire
+  Watchdog_Header   *header,
+  Watchdog_Interval  units_arg,
+  Chain_Control     *to_fire
 
 )
 {
@@ -36,7 +35,7 @@ void _Watchdog_Adjust_to_chain(
   _ISR_Disable( level );
 
   while ( 1 ) {
-    if ( _Chain_Is_empty( header ) ) {
+    if ( _Watchdog_Is_empty( header ) ) {
       break;
     }
     first = _Watchdog_First( header );
@@ -63,7 +62,7 @@ void _Watchdog_Adjust_to_chain(
 
       _ISR_Flash( level );
 
-      if ( _Chain_Is_empty( header ) )
+      if ( _Watchdog_Is_empty( header ) )
         break;
       first = _Watchdog_First( header );
       if ( first->delta_interval != 0 )

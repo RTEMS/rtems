@@ -46,10 +46,10 @@ static rtems_timer_service_routine test_release_from_isr(
   void     *arg
 )
 {
-  Chain_Control *chain = &_Watchdog_Ticks_chain;
+  Watchdog_Header *header = &_Watchdog_Ticks_header;
 
-  if ( !_Chain_Is_empty( chain ) ) {
-    Watchdog_Control *watchdog = _Watchdog_First( chain );
+  if ( !_Watchdog_Is_empty( header ) ) {
+    Watchdog_Control *watchdog = _Watchdog_First( header );
 
     if (
       watchdog->delta_interval == 0

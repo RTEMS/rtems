@@ -31,7 +31,6 @@
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/todimpl.h>
-#include <rtems/score/watchdogimpl.h>
 
 static Timer_server_Control _Timer_server_Default;
 
@@ -51,9 +50,9 @@ static void _Timer_server_Reset_interval_system_watchdog(
   _Timer_server_Stop_interval_system_watchdog( ts );
 
   _ISR_Disable( level );
-  if ( !_Chain_Is_empty( &ts->Interval_watchdogs.Chain ) ) {
+  if ( !_Watchdog_Is_empty( &ts->Interval_watchdogs.Header ) ) {
     Watchdog_Interval delta_interval =
-      _Watchdog_First( &ts->Interval_watchdogs.Chain )->delta_interval;
+      _Watchdog_First( &ts->Interval_watchdogs.Header )->delta_interval;
     _ISR_Enable( level );
 
     /*
@@ -84,9 +83,9 @@ static void _Timer_server_Reset_tod_system_watchdog(
   _Timer_server_Stop_tod_system_watchdog( ts );
 
   _ISR_Disable( level );
-  if ( !_Chain_Is_empty( &ts->TOD_watchdogs.Chain ) ) {
+  if ( !_Watchdog_Is_empty( &ts->TOD_watchdogs.Header ) ) {
     Watchdog_Interval delta_interval =
-      _Watchdog_First( &ts->TOD_watchdogs.Chain )->delta_interval;
+      _Watchdog_First( &ts->TOD_watchdogs.Header )->delta_interval;
     _ISR_Enable( level );
 
     /*
@@ -107,9 +106,9 @@ static void _Timer_server_Insert_timer(
 )
 {
   if ( timer->the_class == TIMER_INTERVAL_ON_TASK ) {
-    _Watchdog_Insert( &ts->Interval_watchdogs.Chain, &timer->Ticker );
+    _Watchdog_Insert( &ts->Interval_watchdogs.Header, &timer->Ticker );
   } else if ( timer->the_class == TIMER_TIME_OF_DAY_ON_TASK ) {
-    _Watchdog_Insert( &ts->TOD_watchdogs.Chain, &timer->Ticker );
+    _Watchdog_Insert( &ts->TOD_watchdogs.Header, &timer->Ticker );
   }
 }
 
@@ -144,8 +143,8 @@ static void _Timer_server_Insert_timer_and_make_snapshot(
     _ISR_Disable( level );
     snapshot = _Watchdog_Ticks_since_boot;
     last_snapshot = ts->Interval_watchdogs.last_snapshot;
-    if ( !_Chain_Is_empty( &ts->Interval_watchdogs.Chain ) ) {
-      first_watchdog = _Watchdog_First( &ts->Interval_watchdogs.Chain );
+    if ( !_Watchdog_Is_empty( &ts->Interval_watchdogs.Header ) ) {
+      first_watchdog = _Watchdog_First( &ts->Interval_watchdogs.Header );
 
       /*
        *  We assume adequate unsigned arithmetic here.
@@ -163,7 +162,7 @@ static void _Timer_server_Insert_timer_and_make_snapshot(
     ts->Interval_watchdogs.last_snapshot = snapshot;
     _ISR_Enable( level );
 
-    _Watchdog_Insert( &ts->Interval_watchdogs.Chain, &timer->Ticker );
+    _Watchdog_Insert( &ts->Interval_watchdogs.Header, &timer->Ticker );
 
     if ( !ts->active ) {
       _Timer_server_Reset_interval_system_watchdog( ts );
@@ -176,8 +175,8 @@ static void _Timer_server_Insert_timer_and_make_snapshot(
     _ISR_Disable( level );
     snapshot = (Watchdog_Interval) _TOD_Seconds_since_epoch();
     last_snapshot = ts->TOD_watchdogs.last_snapshot;
-    if ( !_Chain_Is_empty( &ts->TOD_watchdogs.Chain ) ) {
-      first_watchdog = _Watchdog_First( &ts->TOD_watchdogs.Chain );
+    if ( !_Watchdog_Is_empty( &ts->TOD_watchdogs.Header ) ) {
+      first_watchdog = _Watchdog_First( &ts->TOD_watchdogs.Header );
       delta_interval = first_watchdog->delta_interval;
       if ( snapshot > last_snapshot ) {
         /*
@@ -201,7 +200,7 @@ static void _Timer_server_Insert_timer_and_make_snapshot(
     ts->TOD_watchdogs.last_snapshot = snapshot;
     _ISR_Enable( level );
 
-    _Watchdog_Insert( &ts->TOD_watchdogs.Chain, &timer->Ticker );
+    _Watchdog_Insert( &ts->TOD_watchdogs.Header, &timer->Ticker );
 
     if ( !ts->active ) {
       _Timer_server_Reset_tod_system_watchdog( ts );
@@ -244,7 +243,7 @@ static void _Timer_server_Process_interval_watchdogs(
 
   watchdogs->last_snapshot = snapshot;
 
-  _Watchdog_Adjust_to_chain( &watchdogs->Chain, delta, fire_chain );
+  _Watchdog_Adjust_to_chain( &watchdogs->Header, delta, fire_chain );
 }
 
 static void _Timer_server_Process_tod_watchdogs(
@@ -259,7 +258,7 @@ static void _Timer_server_Process_tod_watchdogs(
   /*
    *  Process the seconds chain.  Start by checking that the Time
    *  of Day (TOD) has not been set backwards.  If it has then
-   *  we want to adjust the watchdogs->Chain to indicate this.
+   *  we want to adjust the watchdogs->Header to indicate this.
    */
   if ( snapshot > last_snapshot ) {
     /*
@@ -267,7 +266,7 @@ static void _Timer_server_Process_tod_watchdogs(
      *  TOD has been set forward.
      */
     delta = snapshot - last_snapshot;
-    _Watchdog_Adjust_to_chain( &watchdogs->Chain, delta, fire_chain );
+    _Watchdog_Adjust_to_chain( &watchdogs->Header, delta, fire_chain );
 
   } else if ( snapshot < last_snapshot ) {
      /*
@@ -275,7 +274,7 @@ static void _Timer_server_Process_tod_watchdogs(
       *  TOD has been set backwards.
       */
      delta = last_snapshot - snapshot;
-     _Watchdog_Adjust_backward( &watchdogs->Chain, delta );
+     _Watchdog_Adjust_backward( &watchdogs->Header, delta );
   }
 
   watchdogs->last_snapshot = snapshot;
@@ -543,8 +542,8 @@ rtems_status_code rtems_timer_initiate_server(
   /*
    *  Initialize the timer lists that the server will manage.
    */
-  _Chain_Initialize_empty( &ts->Interval_watchdogs.Chain );
-  _Chain_Initialize_empty( &ts->TOD_watchdogs.Chain );
+  _Watchdog_Header_initialize( &ts->Interval_watchdogs.Header );
+  _Watchdog_Header_initialize( &ts->TOD_watchdogs.Header );
 
   /*
    *  Initialize the timers that will be used to control when the

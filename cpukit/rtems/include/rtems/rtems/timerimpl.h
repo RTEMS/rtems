@@ -21,6 +21,7 @@
 #include <rtems/rtems/timer.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/watchdogimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,9 +65,9 @@ typedef struct {
   Watchdog_Control System_watchdog;
 
   /**
-   * @brief Chain for watchdogs which will be triggered by the timer server.
+   * @brief Watchdog header managed by the timer server.
    */
-  Chain_Control Chain;
+  Watchdog_Header Header;
 
   /**
    * @brief Last known time snapshot of the timer server.

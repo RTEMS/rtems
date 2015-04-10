@@ -53,6 +53,16 @@ extern "C" {
   }
 
 /**
+ * @brief Watchdog header.
+ */
+typedef struct {
+  /**
+   * @brief The chain of active or transient watchdogs.
+   */
+  Chain_Control Watchdogs;
+} Watchdog_Header;
+
+/**
  *  @brief Watchdog synchronization level.
  *
  *  This used for synchronization purposes
@@ -73,14 +83,14 @@ SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_count;
  *
  *  This is the watchdog chain which is managed at ticks.
  */
-SCORE_EXTERN Chain_Control _Watchdog_Ticks_chain;
+SCORE_EXTERN Watchdog_Header _Watchdog_Ticks_header;
 
 /**
  *  @brief Watchdog chain which is managed at second boundaries.
  *
  *  This is the watchdog chain which is managed at second boundaries.
  */
-SCORE_EXTERN Chain_Control _Watchdog_Seconds_chain;
+SCORE_EXTERN Watchdog_Header _Watchdog_Seconds_header;
 
 /**
  *  @brief Initialize the watchdog handler.
@@ -112,7 +122,7 @@ Watchdog_States _Watchdog_Remove (
  *  @param[in] units The units of ticks to adjust.
  */
 void _Watchdog_Adjust_backward(
-  Chain_Control     *header,
+  Watchdog_Header   *header,
   Watchdog_Interval  units
 );
 
@@ -126,7 +136,7 @@ void _Watchdog_Adjust_backward(
  *  @param[in] units The units of ticks to adjust.
  */
 void _Watchdog_Adjust_forward(
-  Chain_Control     *header,
+  Watchdog_Header   *header,
   Watchdog_Interval  units
 );
 
@@ -145,9 +155,9 @@ void _Watchdog_Adjust_forward(
  *  @note This always adjusts forward.
  */
 void _Watchdog_Adjust_to_chain(
-  Chain_Control               *header,
-  Watchdog_Interval            units_arg,
-  Chain_Control               *to_fire
+  Watchdog_Header   *header,
+  Watchdog_Interval  units_arg,
+  Chain_Control     *to_fire
 
 );
 
@@ -163,8 +173,8 @@ void _Watchdog_Adjust_to_chain(
  *  @param[in] the_watchdog is the watchdog to insert
  */
 void _Watchdog_Insert (
-  Chain_Control         *header,
-  Watchdog_Control      *the_watchdog
+  Watchdog_Header  *header,
+  Watchdog_Control *the_watchdog
 );
 
 /**
@@ -178,7 +188,7 @@ void _Watchdog_Insert (
  *  @param[in] header is the watchdog chain to tickle
  */
 void _Watchdog_Tickle (
-  Chain_Control *header
+  Watchdog_Header *header
 );
 
 /**
@@ -250,7 +260,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Deactivate(
 RTEMS_INLINE_ROUTINE void _Watchdog_Tickle_ticks( void )
 {
 
-  _Watchdog_Tickle( &_Watchdog_Ticks_chain );
+  _Watchdog_Tickle( &_Watchdog_Ticks_header );
 
 }
 
@@ -262,7 +272,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Tickle_ticks( void )
 RTEMS_INLINE_ROUTINE void _Watchdog_Tickle_seconds( void )
 {
 
-  _Watchdog_Tickle( &_Watchdog_Seconds_chain );
+  _Watchdog_Tickle( &_Watchdog_Seconds_header );
 
 }
 
@@ -281,7 +291,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Insert_ticks(
 
   the_watchdog->initial = units;
 
-  _Watchdog_Insert( &_Watchdog_Ticks_chain, the_watchdog );
+  _Watchdog_Insert( &_Watchdog_Ticks_header, the_watchdog );
 
 }
 
@@ -300,7 +310,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Insert_seconds(
 
   the_watchdog->initial = units;
 
-  _Watchdog_Insert( &_Watchdog_Seconds_chain, the_watchdog );
+  _Watchdog_Insert( &_Watchdog_Seconds_header, the_watchdog );
 
 }
 
@@ -318,7 +328,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Reset(
 
   (void) _Watchdog_Remove( the_watchdog );
 
-  _Watchdog_Insert( &_Watchdog_Ticks_chain, the_watchdog );
+  _Watchdog_Insert( &_Watchdog_Ticks_header, the_watchdog );
 
 }
 
@@ -356,11 +366,11 @@ RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Previous(
  */
 
 RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_First(
-  Chain_Control *header
+  Watchdog_Header *header
 )
 {
 
-  return ( (Watchdog_Control *) _Chain_First( header ) );
+  return ( (Watchdog_Control *) _Chain_First( &header->Watchdogs ) );
 
 }
 
@@ -370,12 +380,26 @@ RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_First(
  */
 
 RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Last(
-  Chain_Control *header
+  Watchdog_Header *header
 )
 {
 
-  return ( (Watchdog_Control *) _Chain_Last( header ) );
+  return ( (Watchdog_Control *) _Chain_Last( &header->Watchdogs ) );
 
+}
+
+RTEMS_INLINE_ROUTINE bool _Watchdog_Is_empty(
+  const Watchdog_Header *header
+)
+{
+  return _Chain_Is_empty( &header->Watchdogs );
+}
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Header_initialize(
+  Watchdog_Header *header
+)
+{
+  _Chain_Initialize_empty( &header->Watchdogs );
 }
 
 /** @} */

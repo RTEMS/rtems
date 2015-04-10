@@ -18,12 +18,11 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
 #include <rtems/score/watchdogimpl.h>
+#include <rtems/score/isrlevel.h>
 
 void _Watchdog_Tickle(
-  Chain_Control *header
+  Watchdog_Header *header
 )
 {
   ISR_Level level;
@@ -38,7 +37,7 @@ void _Watchdog_Tickle(
 
   _ISR_Disable( level );
 
-  if ( _Chain_Is_empty( header ) )
+  if ( _Watchdog_Is_empty( header ) )
     goto leave;
 
   the_watchdog = _Watchdog_First( header );
@@ -110,7 +109,7 @@ void _Watchdog_Tickle(
      _ISR_Disable( level );
 
      the_watchdog = _Watchdog_First( header );
-   } while ( !_Chain_Is_empty( header ) &&
+   } while ( !_Watchdog_Is_empty( header ) &&
              (the_watchdog->delta_interval == 0) );
 
 leave:
