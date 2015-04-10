@@ -53,22 +53,6 @@ extern "C" {
   }
 
 /**
- *  @brief the manner in which a watchdog chain may
- *  be adjusted by the @ref _Watchdog_Adjust routine.
- *
- *  The following enumerated type details the manner in which
- *  a watchdog chain may be adjusted by the @ref _Watchdog_Adjust
- *  routine.  The direction indicates a movement FORWARD
- *  or BACKWARD in time.
- */
-typedef enum {
-  /** adjust delta value forward */
-  WATCHDOG_FORWARD,
-  /** adjust delta value backward */
-  WATCHDOG_BACKWARD
-} Watchdog_Adjust_directions;
-
-/**
  *  @brief Watchdog synchronization level.
  *
  *  This used for synchronization purposes
@@ -121,20 +105,29 @@ Watchdog_States _Watchdog_Remove (
 );
 
 /**
- *  @brief Adjusts the @a header watchdog chain in the forward
- *  or backward @a direction for @a units ticks.
+ *  @brief Adjusts the header watchdog chain in the backward direction for
+ *  units ticks.
  *
- *  This routine adjusts the @a header watchdog chain in the forward
- *  or backward @a direction for @a units ticks.
- *
- *  @param[in] header is the watchdog chain to adjust
- *  @param[in] direction is the direction to adjust @a header
- *  @param[in] units is the number of units to adjust @a header
+ *  @param[in] header The watchdog chain.
+ *  @param[in] units The units of ticks to adjust.
  */
-void _Watchdog_Adjust (
-  Chain_Control              *header,
-  Watchdog_Adjust_directions  direction,
-  Watchdog_Interval           units
+void _Watchdog_Adjust_backward(
+  Chain_Control     *header,
+  Watchdog_Interval  units
+);
+
+/**
+ *  @brief Adjusts the header watchdog chain in the forward direction for units
+ *  ticks.
+ *
+ *  This may lead to several _Watchdog_Tickle() invocations.
+ *
+ *  @param[in] header The watchdog chain.
+ *  @param[in] units The units of ticks to adjust.
+ */
+void _Watchdog_Adjust_forward(
+  Chain_Control     *header,
+  Watchdog_Interval  units
 );
 
 /**
@@ -308,37 +301,6 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Insert_seconds(
   the_watchdog->initial = units;
 
   _Watchdog_Insert( &_Watchdog_Seconds_chain, the_watchdog );
-
-}
-
-/**
- * This routine adjusts the seconds watchdog chain in the forward
- * or backward DIRECTION for UNITS seconds.  This is invoked when the
- * current time of day is changed.
- */
-
-RTEMS_INLINE_ROUTINE void _Watchdog_Adjust_seconds(
-  Watchdog_Adjust_directions direction,
-  Watchdog_Interval          units
-)
-{
-
-  _Watchdog_Adjust( &_Watchdog_Seconds_chain, direction, units );
-
-}
-
-/**
- * This routine adjusts the ticks watchdog chain in the forward
- * or backward DIRECTION for UNITS ticks.
- */
-
-RTEMS_INLINE_ROUTINE void _Watchdog_Adjust_ticks(
-  Watchdog_Adjust_directions direction,
-  Watchdog_Interval          units
-)
-{
-
-  _Watchdog_Adjust( &_Watchdog_Ticks_chain, direction, units );
 
 }
 

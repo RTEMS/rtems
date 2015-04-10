@@ -31,15 +31,17 @@ void _TOD_Set_with_timestamp(
   Watchdog_Interval seconds_next = _Timestamp_Get_seconds( tod_as_timestamp );
   Watchdog_Interval seconds_now;
   ISR_lock_Context lock_context;
+  Chain_Control *header;
 
   _Thread_Disable_dispatch();
 
   seconds_now = _TOD_Seconds_since_epoch();
+  header = &_Watchdog_Seconds_chain;
 
   if ( seconds_next < seconds_now )
-    _Watchdog_Adjust_seconds( WATCHDOG_BACKWARD, seconds_now - seconds_next );
+    _Watchdog_Adjust_backward( header, seconds_now - seconds_next );
   else
-    _Watchdog_Adjust_seconds( WATCHDOG_FORWARD, seconds_next - seconds_now );
+    _Watchdog_Adjust_forward( header, seconds_next - seconds_now );
 
   _TOD_Acquire( tod, &lock_context );
   tod->now = *tod_as_timestamp;

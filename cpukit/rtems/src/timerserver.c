@@ -275,7 +275,7 @@ static void _Timer_server_Process_tod_watchdogs(
       *  TOD has been set backwards.
       */
      delta = last_snapshot - snapshot;
-     _Watchdog_Adjust( &watchdogs->Chain, WATCHDOG_BACKWARD, delta );
+     _Watchdog_Adjust_backward( &watchdogs->Chain, delta );
   }
 
   watchdogs->last_snapshot = snapshot;
