@@ -65,24 +65,43 @@ typedef struct {
   Watchdog_Control System_watchdog;
 
   /**
+   * @brief Remaining delta of the system watchdog.
+   */
+  Watchdog_Interval system_watchdog_delta;
+
+  /**
+   * @brief Unique identifier of the context which deals currently with the
+   * system watchdog.
+   */
+  Thread_Control *system_watchdog_helper;
+
+  /**
+   * @brief Each insert and tickle operation increases the generation count so
+   * that the system watchdog dealer notices updates of the watchdog chain.
+   */
+  uint32_t generation;
+
+  /**
    * @brief Watchdog header managed by the timer server.
    */
   Watchdog_Header Header;
 
   /**
-   * @brief Last known time snapshot of the timer server.
+   * @brief Last time snapshot of the timer server.
    *
    * The units may be ticks or seconds.
    */
-  Watchdog_Interval volatile last_snapshot;
+  Watchdog_Interval last_snapshot;
+
+  /**
+   * @brief Current time snapshot of the timer server.
+   *
+   * The units may be ticks or seconds.
+   */
+  Watchdog_Interval current_snapshot;
 } Timer_server_Watchdogs;
 
 struct Timer_server_Control {
-  /**
-   * @brief Timer server thread.
-   */
-  Thread_Control *thread;
-
   /**
    * @brief The cancel method of the timer server.
    */
@@ -102,26 +121,6 @@ struct Timer_server_Control {
    * @brief TOD watchdogs triggered by the timer server.
    */
   Timer_server_Watchdogs TOD_watchdogs;
-
-  /**
-   * @brief Chain of timers scheduled for insert.
-   *
-   * This pointer is not @c NULL whenever the interval and TOD chains are
-   * processed.  After the processing this list will be checked and if
-   * necessary the processing will be restarted.  Processing of these chains
-   * can be only interrupted through interrupts.
-   */
-  Chain_Control *volatile insert_chain;
-
-  /**
-   * @brief Indicates that the timer server is active or not.
-   *
-   * The server is active after the delay on a system watchdog.  The activity
-   * period of the server ends when no more watchdogs managed by the server
-   * fire.  The system watchdogs must not be manipulated when the server is
-   * active.
-   */
-  bool volatile active;
 };
 
 /**

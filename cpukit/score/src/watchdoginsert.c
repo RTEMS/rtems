@@ -47,15 +47,12 @@ static void _Watchdog_Insert_fixup(
   }
 }
 
-void _Watchdog_Insert(
+void _Watchdog_Insert_locked(
   Watchdog_Header  *header,
-  Watchdog_Control *the_watchdog
+  Watchdog_Control *the_watchdog,
+  ISR_lock_Context *lock_context
 )
 {
-  ISR_lock_Context lock_context;
-
-  _Watchdog_Acquire( header, &lock_context );
-
   if ( the_watchdog->state == WATCHDOG_INACTIVE ) {
     Watchdog_Iterator  iterator;
     Chain_Node        *current;
@@ -86,7 +83,7 @@ void _Watchdog_Insert(
       iterator.delta_interval = delta - delta_next;
       iterator.current = next;
 
-      _Watchdog_Flash( header, &lock_context );
+      _Watchdog_Flash( header, lock_context );
 
       if ( the_watchdog->state != WATCHDOG_BEING_INSERTED ) {
         goto abort_insert;
@@ -105,6 +102,16 @@ abort_insert:
 
     _Chain_Extract_unprotected( &iterator.Node );
   }
+}
 
+void _Watchdog_Insert(
+  Watchdog_Header  *header,
+  Watchdog_Control *the_watchdog
+)
+{
+  ISR_lock_Context lock_context;
+
+  _Watchdog_Acquire( header, &lock_context );
+  _Watchdog_Insert_locked( header, the_watchdog, &lock_context );
   _Watchdog_Release( header, &lock_context );
 }

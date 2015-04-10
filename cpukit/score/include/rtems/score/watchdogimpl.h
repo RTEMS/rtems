@@ -165,6 +165,22 @@ void _Watchdog_Adjust_backward(
 );
 
 /**
+ * @brief Adjusts the watchdogs in backward direction in a locked context.
+ *
+ * The caller must be the owner of the watchdog lock and will be the owner
+ * after the call.
+ *
+ * @param[in] header The watchdog header.
+ * @param[in] units The units of ticks to adjust.
+ *
+ * @see _Watchdog_Adjust_forward().
+ */
+void _Watchdog_Adjust_backward_locked(
+  Watchdog_Header   *header,
+  Watchdog_Interval  units
+);
+
+/**
  *  @brief Adjusts the header watchdog chain in the forward direction for units
  *  ticks.
  *
@@ -179,24 +195,22 @@ void _Watchdog_Adjust_forward(
 );
 
 /**
- *  @brief Adjusts the @a header watchdog chain in the forward
- *  @a direction for @a units_arg ticks.
+ * @brief Adjusts the watchdogs in forward direction in a locked context.
  *
- *  This routine adjusts the @a header watchdog chain in the forward
- *  @a direction for @a units_arg ticks.
+ * The caller must be the owner of the watchdog lock and will be the owner
+ * after the call.  This function may release and acquire the watchdog lock
+ * internally.
  *
- *  @param[in] header is the watchdog chain to adjust
- *  @param[in] units_arg is the number of units to adjust @a header
- *  @param[in] to_fire is a pointer to an initialized Chain_Control to which
- *             all watchdog instances that are to be fired will be placed.
+ * @param[in] header The watchdog header.
+ * @param[in] units The units of ticks to adjust.
+ * @param[in] lock_context The lock context.
  *
- *  @note This always adjusts forward.
+ * @see _Watchdog_Adjust_forward().
  */
-void _Watchdog_Adjust_to_chain(
+void _Watchdog_Adjust_forward_locked(
   Watchdog_Header   *header,
-  Watchdog_Interval  units_arg,
-  Chain_Control     *to_fire
-
+  Watchdog_Interval  units,
+  ISR_lock_Context  *lock_context
 );
 
 /**
@@ -213,6 +227,25 @@ void _Watchdog_Adjust_to_chain(
 void _Watchdog_Insert (
   Watchdog_Header  *header,
   Watchdog_Control *the_watchdog
+);
+
+/**
+ * @brief Inserts the watchdog in a locked context.
+ *
+ * The caller must be the owner of the watchdog lock and will be the owner
+ * after the call.  This function may release and acquire the watchdog lock
+ * internally.
+ *
+ * @param[in] header The watchdog header.
+ * @param[in] the_watchdog The watchdog.
+ * @param[in] lock_context The lock context.
+ *
+ * @see _Watchdog_Insert().
+ */
+void _Watchdog_Insert_locked(
+  Watchdog_Header  *header,
+  Watchdog_Control *the_watchdog,
+  ISR_lock_Context *lock_context
 );
 
 /**
