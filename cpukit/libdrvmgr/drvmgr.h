@@ -141,7 +141,7 @@ struct drvmgr_bus_ops {
 	/* Get Parameters */
 	int	(*get_params)(struct drvmgr_dev *, struct drvmgr_bus_params *);
 	/* Get Frequency of Bus */
-	int	(*freq_get)(struct drvmgr_dev*, int, unsigned int*);
+	int	(*get_freq)(struct drvmgr_dev*, int, unsigned int*);
 	/*! Function called to request information about a device. The bus
 	 *  driver interpret the bus-specific information about the device.
 	 */

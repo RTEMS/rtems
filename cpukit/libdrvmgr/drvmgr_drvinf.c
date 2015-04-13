@@ -54,10 +54,10 @@ int drvmgr_freq_get(
 	int options,
 	unsigned int *freq_hz)
 {
-	if (!dev || !dev->parent || !dev->parent->ops->freq_get)
+	if (!dev || !dev->parent || !dev->parent->ops->get_freq)
 		return -1;
 
-	return dev->parent->ops->freq_get(dev, options, freq_hz);
+	return dev->parent->ops->get_freq(dev, options, freq_hz);
 }
 
 /* Get driver prefix */

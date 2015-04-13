@@ -61,7 +61,7 @@ int pcibus_int_unregister(
 int pcibus_int_clear(
 	struct drvmgr_dev *dev,
 	int index);
-int pcibus_freq_get(
+static int pcibus_get_freq(
 	struct drvmgr_dev *dev,
 	int options,
 	unsigned int *freq_hz);
@@ -92,7 +92,7 @@ struct drvmgr_bus_ops pcibus_ops = {
 	.int_mask	= NULL,
 	.int_unmask	= NULL,
 	.get_params	= pcibus_get_params,
-	.freq_get	= pcibus_freq_get,
+	.get_freq	= pcibus_get_freq,
 #ifdef PCIBUS_INFO
 	.info_dev	= pcibus_dev_info,
 #endif
@@ -255,7 +255,7 @@ int pcibus_int_clear(
 	return 0;
 }
 
-int pcibus_freq_get(
+static int pcibus_get_freq(
 	struct drvmgr_dev *dev,
 	int options,
 	unsigned int *freq_hz)

@@ -71,7 +71,7 @@ struct drvmgr_bus_ops ambapp_bus_ops =
 	.int_mask	= ambapp_int_mask,
 	.int_unmask	= ambapp_int_unmask,
 	.get_params	= ambapp_get_params,
-	.freq_get	= ambapp_bus_freq_get,
+	.get_freq	= ambapp_bus_freq_get,
 #ifdef AMBAPPBUS_INFO_AVAIL
 	.info_dev	= ambapp_dev_info,
 #endif
