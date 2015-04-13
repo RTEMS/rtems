@@ -5,7 +5,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  *
  *  This is the general part of the different AMBA Plug & Play
  *  drivers. The drivers are wrappers around this driver, making

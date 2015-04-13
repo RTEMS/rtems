@@ -5,7 +5,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  *
  *  Configures the GR-CPIC-LEON4-N2X interface PCI board in peripheral
  *  mode. This driver provides a AMBA PnP bus by using the general part

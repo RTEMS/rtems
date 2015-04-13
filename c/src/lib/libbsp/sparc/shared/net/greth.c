@@ -4,7 +4,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ *  http://www.rtems.org/license/LICENSE.
  *
  *
  *  2008-12-10, Converted to driver manager and added support for
