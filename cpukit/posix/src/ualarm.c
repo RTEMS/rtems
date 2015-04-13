@@ -54,7 +54,7 @@ static void _POSIX_signals_Ualarm_TSR(
   /*
    * If the reset interval is non-zero, reschedule ourselves.
    */
-  _Watchdog_Reset( &_POSIX_signals_Ualarm_timer );
+  _Watchdog_Reset_ticks( &_POSIX_signals_Ualarm_timer );
 }
 
 useconds_t ualarm(

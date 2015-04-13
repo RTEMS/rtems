@@ -321,7 +321,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Insert_seconds(
  * many ticks.
  */
 
-RTEMS_INLINE_ROUTINE void _Watchdog_Reset(
+RTEMS_INLINE_ROUTINE void _Watchdog_Reset_ticks(
   Watchdog_Control *the_watchdog
 )
 {
