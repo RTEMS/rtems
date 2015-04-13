@@ -24,7 +24,7 @@ static int drvmgr_for_each_dev_breadth(
 
 	pos = 0;
 	memset(&buses[0], 0, sizeof(buses));
-	buses[pos++] = drv_mgr.root_dev.bus; 	/* Get root bus */
+	buses[pos++] = drvmgr.root_dev.bus; 	/* Get root bus */
 
 	for (i = 0, bus = buses[0]; buses[i]; i++, bus = buses[i]) {
 		dev = bus->children;
@@ -52,7 +52,7 @@ static int drvmgr_for_each_dev_depth(
 	struct drvmgr_dev *dev;
 
 	/* Get first device */
-	dev = drv_mgr.root_dev.bus->children;
+	dev = drvmgr.root_dev.bus->children;
 
 	while (dev) {
 		ret = func(dev, arg);
@@ -65,7 +65,7 @@ next_dev:
 			if (dev->next_in_bus == NULL) {
 				/* Step up one level... back to parent bus */
 				dev = dev->parent->dev;
-				if (dev == &drv_mgr.root_dev)
+				if (dev == &drvmgr.root_dev)
 					break;
 				goto next_dev;
 			} else {
@@ -89,7 +89,7 @@ int drvmgr_for_each_dev(
 	DRVMGR_LOCK_READ();
 
 	/* Get Root Device */
-	if (drv_mgr.root_dev.bus->children != NULL) {
+	if (drvmgr.root_dev.bus->children != NULL) {
 		if (options & DRVMGR_FED_BF)
 			ret = drvmgr_for_each_dev_breadth(func, arg);
 		else

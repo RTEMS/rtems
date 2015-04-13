@@ -10,7 +10,7 @@
 /*  Structure hold all information the driver manager needs to know of. Used
  *  internally by Driver Manager routines.
  */
-struct rtems_driver_manager {
+struct drvmgr {
 	int	level;
 	int	initializing_objs;
 
@@ -45,7 +45,7 @@ struct rtems_driver_manager {
 	struct drvmgr_list	devices_inactive;
 };
 
-extern struct rtems_driver_manager drv_mgr;
+extern struct drvmgr drvmgr;
 
 extern void _DRV_Manager_Lock(void);
 extern void _DRV_Manager_Unlock(void);

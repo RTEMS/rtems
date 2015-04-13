@@ -42,7 +42,7 @@ int drvmgr_children_unregister(struct drvmgr_bus *bus)
  */
 int drvmgr_bus_unregister(struct drvmgr_bus *bus)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_list *list;
 
 	if (bus->ops->remove == NULL)
@@ -78,7 +78,7 @@ int drvmgr_bus_unregister(struct drvmgr_bus *bus)
 /* Separate Driver and Device from each other */
 int drvmgr_dev_drv_separate(struct drvmgr_dev *dev)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_dev *subdev, **pprev;
 	int rc;
 
@@ -149,7 +149,7 @@ int drvmgr_dev_drv_separate(struct drvmgr_dev *dev)
  */
 int drvmgr_dev_unregister(struct drvmgr_dev *dev)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_dev *subdev, **pprev;
 	int err;
 

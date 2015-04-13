@@ -13,12 +13,12 @@
 
 void _DRV_Manager_Lock(void)
 {
-	rtems_semaphore_obtain(drv_mgr.lock, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+	rtems_semaphore_obtain(drvmgr.lock, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 }
 
 void _DRV_Manager_Unlock(void)
 {
-	rtems_semaphore_release(drv_mgr.lock);
+	rtems_semaphore_release(drvmgr.lock);
 }
 
 int _DRV_Manager_Init_Lock(void)
@@ -30,7 +30,7 @@ int _DRV_Manager_Init_Lock(void)
 		1,
 		RTEMS_DEFAULT_ATTRIBUTES,
 		0,
-		&drv_mgr.lock);
+		&drvmgr.lock);
 	if (rc != RTEMS_SUCCESSFUL)
 		return -1;
 	return 0;

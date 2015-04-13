@@ -14,7 +14,7 @@
 /* Get driver from driver name */
 struct drvmgr_drv *drvmgr_drv_by_name(const char *name)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_drv *drv = NULL;
 
 	if (!name)

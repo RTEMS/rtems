@@ -25,7 +25,7 @@
 #define DBG(x...)
 #endif
 
-struct rtems_driver_manager drv_mgr = {
+struct drvmgr drvmgr = {
 	.level =		0,
 	.initializing_objs =	0,
 	.lock =                 0,
@@ -54,11 +54,11 @@ struct rtems_driver_manager drv_mgr = {
 };
 
 static int do_bus_init(
-	struct rtems_driver_manager *mgr,
+	struct drvmgr *mgr,
 	struct drvmgr_bus *bus,
 	int level);
 static int do_dev_init(
-	struct rtems_driver_manager *mgr,
+	struct drvmgr *mgr,
 	struct drvmgr_dev *dev,
 	int level);
 
@@ -66,7 +66,7 @@ static int do_dev_init(
 
 void _DRV_Manager_init_level(int level)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 
 	if (mgr->level >= level)
 		return;
@@ -85,7 +85,7 @@ void _DRV_Manager_initialization(void)
 {
 	struct drvmgr_drv_reg_func *drvreg;
 
-	/* drv_mgr is already initialized statically by compiler except
+	/* drvmgr is already initialized statically by compiler except
 	 * the lock
 	 */
 	DRVMGR_LOCK_INIT();
@@ -105,7 +105,7 @@ void _DRV_Manager_initialization(void)
  */
 void drvmgr_init_update(void)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_bus *bus;
 	struct drvmgr_dev *dev;
 	int bus_might_been_registered;
@@ -183,7 +183,7 @@ out:
 
 /* Take bus into next level */
 static int do_bus_init(
-	struct rtems_driver_manager *mgr,
+	struct drvmgr *mgr,
 	struct drvmgr_bus *bus,
 	int level)
 {
@@ -242,7 +242,7 @@ inactivate_out:
 
 /* Take device to initialization level 1 */
 static int do_dev_init(
-	struct rtems_driver_manager *mgr,
+	struct drvmgr *mgr,
 	struct drvmgr_dev *dev,
 	int level)
 {
@@ -317,7 +317,7 @@ inactivate_out:
 /* Register Root device driver */
 int drvmgr_root_drv_register(struct drvmgr_drv *drv)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_dev *root = &mgr->root_dev;
 
 	if (mgr->root_drv) {
@@ -346,7 +346,7 @@ int drvmgr_root_drv_register(struct drvmgr_drv *drv)
 /* Register a driver */
 int drvmgr_drv_register(struct drvmgr_drv *drv)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 
 	/* All drivers must have been registered before start of init, 
 	 * because the manager does not scan all existing devices to find
@@ -454,7 +454,7 @@ static void drvmgr_insert_dev_into_bus(
 static struct drvmgr_drv *drvmgr_dev_find_drv(
 		struct drvmgr_dev *dev)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_drv *drv;
 
 	/* NOTE: No locking is needed here since Driver list is supposed to be
@@ -473,7 +473,7 @@ static struct drvmgr_drv *drvmgr_dev_find_drv(
 /* Register a device */
 int drvmgr_dev_register(struct drvmgr_dev *dev)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_drv *drv;
 	struct drvmgr_bus *bus = dev->parent;
 	struct drvmgr_key *keys;
@@ -568,7 +568,7 @@ int drvmgr_dev_register(struct drvmgr_dev *dev)
 /* Register a bus */
 int drvmgr_bus_register(struct drvmgr_bus *bus)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_bus *bus_up;
 
 	/* Get bus architecture depth - the distance from root bus */

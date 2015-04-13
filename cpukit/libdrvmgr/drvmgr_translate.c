@@ -137,11 +137,11 @@ unsigned int drvmgr_translate(
 
 	rev = (~options) & 1;
 	if ((options == CPUMEM_TO_DMA) || (options == DMAMEM_FROM_CPU)) {
-		from = drv_mgr.root_dev.bus;
+		from = drvmgr.root_dev.bus;
 		to = dev->parent;
 	} else { /* CPUMEM_FROM_DMA || DMAMEM_TO_CPU */
 		from = dev->parent;
-		to = drv_mgr.root_dev.bus;
+		to = drvmgr.root_dev.bus;
 	}
 
 	return drvmgr_translate_bus(from, to, rev, src_address, dst_address);

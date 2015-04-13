@@ -39,7 +39,7 @@ static int print_dev_found(struct drvmgr_dev *dev, void *arg)
 
 void drvmgr_print_devs(unsigned int options)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	char *parg;
 
 	/* Print Drivers */
@@ -104,7 +104,7 @@ void drvmgr_print_topo(void)
 /* Print the memory usage */
 void drvmgr_print_mem(void)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_bus *bus;
 	struct drvmgr_dev *dev;
 	struct drvmgr_drv *drv;
@@ -180,7 +180,7 @@ void drvmgr_print_mem(void)
 /* Print the memory usage */
 void drvmgr_summary(void)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_bus *bus;
 	struct drvmgr_dev *dev;
 	struct drvmgr_drv *drv;
@@ -420,7 +420,7 @@ void drvmgr_info_devs_on_bus(struct drvmgr_bus *bus, unsigned int options)
 
 void drvmgr_info_devs(unsigned int options)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_dev *dev;
 
 	/* Print device information of all devices and their child devices */
@@ -431,7 +431,7 @@ void drvmgr_info_devs(unsigned int options)
 
 void drvmgr_info_drvs(unsigned int options)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_drv *drv;
 
 	drv = DRV_LIST_HEAD(&mgr->drivers);
@@ -444,7 +444,7 @@ void drvmgr_info_drvs(unsigned int options)
 
 void drvmgr_info_buses(unsigned int options)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_bus *bus;
 
 	bus = BUS_LIST_HEAD(&mgr->buses[DRVMGR_LEVEL_MAX]);

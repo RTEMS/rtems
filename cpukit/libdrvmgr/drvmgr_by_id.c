@@ -13,7 +13,7 @@
 /* Get driver from driver name */
 struct drvmgr_drv *drvmgr_drv_by_id(uint64_t id)
 {
-	struct rtems_driver_manager *mgr = &drv_mgr;
+	struct drvmgr *mgr = &drvmgr;
 	struct drvmgr_drv *drv = NULL;
 
 	/* NOTE: No locking is needed here since Driver list is supposed to be
