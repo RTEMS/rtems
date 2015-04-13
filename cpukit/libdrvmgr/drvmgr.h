@@ -294,7 +294,7 @@ struct drvmgr_drv_ops {
 	int	(*remove)(struct drvmgr_dev *);	/*! Function called when device instance is to be removed */
 	int	(*info)(struct drvmgr_dev *, void (*print)(void *p, char *str), void *p, int, char *argv[]);/*! Function called to request information about a device or driver */
 };
-#define DRV_OPS_NUM (sizeof(struct drvmgr_drv_ops)/sizeof(void (*)(void)))
+#define DRVMGR_OPS_NUM(x) (sizeof(x)/sizeof(void (*)(void)))
 
 /*! Device driver description */
 struct drvmgr_drv {
