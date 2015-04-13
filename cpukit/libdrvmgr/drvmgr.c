@@ -83,7 +83,7 @@ void _DRV_Manager_init_level(int level)
  */
 void _DRV_Manager_initialization(void)
 {
-	struct drvmgr_drv_reg_func *drvreg;
+	drvmgr_drv_reg_func *drvreg;
 
 	/* drvmgr is already initialized statically by compiler except
 	 * the lock
@@ -92,9 +92,9 @@ void _DRV_Manager_initialization(void)
 
 	/* Call driver register functions. */
 	drvreg = &drvmgr_drivers[0];
-	while (drvreg->drv_reg) {
+	while (*drvreg) {
 		/* Make driver register */
-		drvreg->drv_reg();
+		(*drvreg)();
 		drvreg++;
 	}
 }

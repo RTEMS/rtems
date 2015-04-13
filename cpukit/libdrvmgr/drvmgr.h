@@ -315,9 +315,7 @@ struct drvmgr_drv {
  *  for drivers to register themselfs. Used to select drivers available to the
  *  driver manager.
  */
-struct drvmgr_drv_reg_func {
-	void (*drv_reg)(void);
-};
+typedef void (*drvmgr_drv_reg_func)(void);
 
 /*** DRIVER | DEVICE | BUS FUNCTIONS ***/
 

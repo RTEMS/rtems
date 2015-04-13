@@ -31,9 +31,9 @@
  * the devmgr_confdefs.h. No specifc drivers needed by BSP since IRQ/TIMER/UART
  * is not drvmgr drivers.
  */
-struct drvmgr_drv_reg_func drvmgr_drivers[] __attribute__((weak)) =
+drvmgr_drv_reg_func drvmgr_drivers[] __attribute__((weak)) =
 {
-  {NULL} /* End array with NULL */
+  NULL /* End array with NULL */
 };
 
 /* Defines what cores are avilable on the bus in addition to the standard
