@@ -527,6 +527,7 @@ $(PROJECT_INCLUDE)/rtems/fsmount.h: libmisc/fsmount/fsmount.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/fsmount.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fsmount.h
 
+if LIBDRVMGR
 $(PROJECT_INCLUDE)/drvmgr/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/drvmgr
 	@: > $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
@@ -543,4 +544,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/drvmgr/drvmgr_confdefs.h
 $(PROJECT_INCLUDE)/drvmgr/drvmgr_list.h: libdrvmgr/drvmgr_list.h $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/drvmgr/drvmgr_list.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/drvmgr/drvmgr_list.h
-
+endif

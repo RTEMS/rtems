@@ -427,6 +427,18 @@ esac
 AM_CONDITIONAL(LIBPCI,[test x"$HAVE_LIBPCI" = x"yes"])
 AC_MSG_RESULT([$HAVE_LIBPCI])
 
+# Filter libdrvmgr to only build for architectures that have support for it
+AC_MSG_CHECKING([whether CPU supports libdrvmgr])
+case $RTEMS_CPU in
+  sparc)
+   HAVE_LIBDRVMGR=yes ;;
+  *)
+   HAVE_LIBDRVMGR=no ;;
+esac
+AM_CONDITIONAL(LIBDRVMGR,[test x"$HAVE_LIBDRVMGR" = x"yes"])
+AC_MSG_RESULT([$HAVE_LIBDRVMGR])
+
+
 RTEMS_AMPOLISH3
 
 # Explicitly list all Makefiles here

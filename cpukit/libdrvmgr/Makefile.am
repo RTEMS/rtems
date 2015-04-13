@@ -1,5 +1,7 @@
 include $(top_srcdir)/automake/compile.am
 
+if LIBDRVMGR
+
 EXTRA_DIST=
 
 noinst_LIBRARIES = libdrvmgr.a
@@ -25,5 +27,7 @@ libdrvmgr_a_SOURCES += drvmgr_rw.c
 libdrvmgr_a_SOURCES += drvmgr_translate.c
 libdrvmgr_a_SOURCES += drvmgr_translate_check.c
 libdrvmgr_a_SOURCES += drvmgr_unregister.c
+
+endif
 
 include $(top_srcdir)/automake/local.am
