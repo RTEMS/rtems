@@ -54,7 +54,7 @@ struct drvmgr_bus_res grlib_drv_resources __attribute__((weak)) =
   .next = NULL,
   .resource =
   {
-    RES_EMPTY,
+    DRVMGR_RES_EMPTY,
   }
 };
 

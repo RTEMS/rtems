@@ -179,7 +179,7 @@ enum drvmgr_kt {
 };
 
 #define DRVMGR_KEY_EMPTY	{NULL, DRVMGR_KT_NONE, {0}}
-#define RES_EMPTY	{0, 0, NULL}
+#define DRVMGR_RES_EMPTY	{0, 0, NULL}
 #define MMAP_EMPTY	{0, 0, 0}
 
 /*! Union of different values */

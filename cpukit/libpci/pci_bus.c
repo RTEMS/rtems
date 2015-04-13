@@ -115,7 +115,7 @@ struct drvmgr_func pcibus_funcs[] = {
 struct drvmgr_bus_res pcibus_drv_resources __attribute__((weak)) = {
 	.next = NULL,
 	.resource = {
-		RES_EMPTY,
+		DRVMGR_RES_EMPTY,
 	},
 };
 

@@ -61,7 +61,7 @@ struct drvmgr_bus_res leon2_amba_res __attribute__((weak)) =
 {
   .next = NULL,
   .resource = {
-    RES_EMPTY
+    DRVMGR_RES_EMPTY
   },
 };
 
