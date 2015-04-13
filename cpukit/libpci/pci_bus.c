@@ -1,7 +1,6 @@
 /*  PCI bus driver.
  *
- *  COPYRIGHT (c) 2008.
- *  Cobham Gaisler AB.
+ *  COPYRIGHT (c) 2008 Cobham Gaisler AB.
  *
  *  General part of PCI Bus driver. The driver is typically
  *  initialized from the PCI host driver separating the host
