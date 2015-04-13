@@ -73,7 +73,7 @@ struct drvmgr_bus_ops ambapp_bus_ops =
 	.get_params	= ambapp_get_params,
 	.get_freq	= ambapp_bus_freq_get,
 #ifdef AMBAPPBUS_INFO_AVAIL
-	.info_dev	= ambapp_dev_info,
+	.get_info_dev	= ambapp_dev_info,
 #endif
 };
 

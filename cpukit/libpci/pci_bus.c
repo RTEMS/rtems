@@ -94,7 +94,7 @@ struct drvmgr_bus_ops pcibus_ops = {
 	.get_params	= pcibus_get_params,
 	.get_freq	= pcibus_get_freq,
 #ifdef PCIBUS_INFO
-	.info_dev	= pcibus_dev_info,
+	.get_info_dev	= pcibus_dev_info,
 #endif
 };
 

@@ -145,7 +145,8 @@ struct drvmgr_bus_ops {
 	/*! Function called to request information about a device. The bus
 	 *  driver interpret the bus-specific information about the device.
 	 */
-	void	(*info_dev)(struct drvmgr_dev *, void (*print)(void *p, char *str), void *p);
+	void	(*get_info_dev)(struct drvmgr_dev *,
+				void (*print)(void *p, char *str), void *p);
 };
 #define BUS_OPS_NUM (sizeof(struct drvmgr_bus_ops)/sizeof(void (*)(void)))
 
