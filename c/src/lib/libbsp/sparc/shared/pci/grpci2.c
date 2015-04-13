@@ -761,7 +761,7 @@ static int grpci2_init(struct grpci2_priv *priv)
 
 			/* User may override Both hardcoded IRQ setup and Plug & Play IRQ */
 			keyname[3] = 'A' + (pin-1);
-			value = drvmgr_dev_key_get(priv->dev, keyname, KEY_TYPE_INT);
+			value = drvmgr_dev_key_get(priv->dev, keyname, DRVMGR_KT_INT);
 			if (value)
 				grpci2_pci_irq_table[pin-1] = value->i;
 		}
@@ -772,12 +772,12 @@ static int grpci2_init(struct grpci2_priv *priv)
 	}
 
 	/* User may override DEFAULT_BT_ENABLED to enable/disable byte twisting */
-	value = drvmgr_dev_key_get(priv->dev, "byteTwisting", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "byteTwisting", DRVMGR_KT_INT);
 	if (value)
 		priv->bt_enabled = value->i;
 
 	/* Let user Configure the 6 target BARs */
-	value = drvmgr_dev_key_get(priv->dev, "tgtBarCfg", KEY_TYPE_POINTER);
+	value = drvmgr_dev_key_get(priv->dev, "tgtBarCfg", DRVMGR_KT_POINTER);
 	if (value)
 		priv->barcfg = value->ptr;
 	else

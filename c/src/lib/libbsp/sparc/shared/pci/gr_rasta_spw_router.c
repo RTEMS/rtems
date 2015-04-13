@@ -430,7 +430,7 @@ int gr_rasta_spw_router_init1(struct drvmgr_dev *dev)
 	 * goes out on the PCI bus.
 	 * Only the 4 MSB bits have an effect;
 	 */
-	value = drvmgr_dev_key_get(priv->dev, "ahbmst2pci", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "ahbmst2pci", DRVMGR_KT_INT);
 	if (value)
 		priv->ahbmst2pci_map = value->i;
 	else

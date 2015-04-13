@@ -536,39 +536,39 @@ int grspw_device_init(GRSPW_DEV *pDev)
 
 	/* Get Configuration from Bus resources (Let user override defaults) */
 
-	value = drvmgr_dev_key_get(pDev->dev, "txBdCnt", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "txBdCnt", DRVMGR_KT_INT);
 	if ( value )
 		pDev->txbufcnt = value->i;
 
-	value = drvmgr_dev_key_get(pDev->dev, "rxBdCnt", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "rxBdCnt", DRVMGR_KT_INT);
 	if ( value )
 		pDev->rxbufcnt = value->i;
 
-	value = drvmgr_dev_key_get(pDev->dev, "txDataSize", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "txDataSize", DRVMGR_KT_INT);
 	if ( value )
 		pDev->txdbufsize = value->i;
 
-	value = drvmgr_dev_key_get(pDev->dev, "txHdrSize", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "txHdrSize", DRVMGR_KT_INT);
 	if ( value )
 		pDev->txhbufsize = value->i;
 
-	value = drvmgr_dev_key_get(pDev->dev, "rxPktSize", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "rxPktSize", DRVMGR_KT_INT);
 	if ( value )
 		pDev->rxbufsize = value->i;
 	
-	value = drvmgr_dev_key_get(pDev->dev, "rxDmaArea", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "rxDmaArea", DRVMGR_KT_INT);
 	if ( value )
 		pDev->rx_dma_area = value->i;
 
-	value = drvmgr_dev_key_get(pDev->dev, "txDataDmaArea", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "txDataDmaArea", DRVMGR_KT_INT);
 	if ( value )
 		pDev->tx_data_dma_area = value->i;
 
-	value = drvmgr_dev_key_get(pDev->dev, "txHdrDmaArea", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "txHdrDmaArea", DRVMGR_KT_INT);
 	if ( value )
 		pDev->tx_hdr_dma_area = value->i;
 
-	value = drvmgr_dev_key_get(pDev->dev, "bdDmaArea", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "bdDmaArea", DRVMGR_KT_INT);
 	if ( value )
 		pDev->bd_dma_area = value->i;
 

@@ -547,7 +547,7 @@ void *grspw_open(int dev_no)
 	 *  - 64 TX descriptors per DMA Channel
  	 */
 	bdtabsize = 2 * BDTAB_SIZE * priv->hwsup.ndma_chans;
-	value = drvmgr_dev_key_get(priv->dev, "bdDmaArea", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "bdDmaArea", DRVMGR_KT_INT);
 	if (value) {
 		priv->bd_mem = value->i;
 		priv->bd_mem_alloced = 0;
@@ -2830,7 +2830,7 @@ static int grspw2_init3(struct drvmgr_dev *dev)
 	/* Let user limit the number of DMA channels on this core to save
 	 * space. Only the first nDMA channels will be available.
 	 */
-	value = drvmgr_dev_key_get(priv->dev, "nDMA", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "nDMA", DRVMGR_KT_INT);
 	if (value && (value->i < priv->hwsup.ndma_chans))
 		priv->hwsup.ndma_chans = value->i;
 

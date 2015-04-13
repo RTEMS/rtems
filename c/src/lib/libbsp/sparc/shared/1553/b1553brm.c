@@ -454,7 +454,7 @@ int b1553brm_device_init(brm_priv *pDev)
 #endif
 
 	/* Get memory configuration from bus resources */
-	value = drvmgr_dev_key_get(pDev->dev, "dmaBaseAdr", KEY_TYPE_POINTER);
+	value = drvmgr_dev_key_get(pDev->dev, "dmaBaseAdr", DRVMGR_KT_POINTER);
 	if (value)
 		mem = (unsigned int)value->ptr;
 
@@ -505,17 +505,17 @@ int b1553brm_device_init(brm_priv *pDev)
 	pDev->cfg_clkdiv = 0;
 	pDev->cfg_freq = BRM_FREQ_24MHZ;
 
-	value = drvmgr_dev_key_get(pDev->dev, "clkSel", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "clkSel", DRVMGR_KT_INT);
 	if ( value ) {
 		pDev->cfg_clksel = value->i & CLKSEL_MASK;
 	}
 
-	value = drvmgr_dev_key_get(pDev->dev, "clkDiv", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "clkDiv", DRVMGR_KT_INT);
 	if ( value ) {
 		pDev->cfg_clkdiv = value->i & CLKDIV_MASK;
 	}
 
-	value = drvmgr_dev_key_get(pDev->dev, "coreFreq", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "coreFreq", DRVMGR_KT_INT);
 	if ( value ) {
 		pDev->cfg_freq = value->i & BRM_FREQ_MASK;
 	}

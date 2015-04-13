@@ -545,21 +545,21 @@ static int grpci_init(struct grpci_priv *priv)
 
 			/* User may override Both hardcoded IRQ setup and Plug & Play IRQ */
 			keyname[3] = 'A' + (pin-1);
-			value = drvmgr_dev_key_get(priv->dev, keyname, KEY_TYPE_INT);
+			value = drvmgr_dev_key_get(priv->dev, keyname, DRVMGR_KT_INT);
 			if ( value )
 				grpci_pci_irq_table[pin-1] = value->i;
 		}
 	}
 
 	/* User may override DEFAULT_BT_ENABLED to enable/disable byte twisting */
-	value = drvmgr_dev_key_get(priv->dev, "byteTwisting", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "byteTwisting", DRVMGR_KT_INT);
 	if ( value )
 		priv->bt_enabled = value->i;
 
 	/* Use GRPCI target BAR1 to map CPU RAM to PCI, this is to make it
 	 * possible for PCI peripherals to do DMA directly to CPU memory.
 	 */
-	value = drvmgr_dev_key_get(priv->dev, "tgtbar1", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "tgtbar1", DRVMGR_KT_INT);
 	if (value)
 		priv->bar1_pci_adr = value->i;
 	else

@@ -516,7 +516,7 @@ int gr_cpci_leon4_n2x_init1(struct drvmgr_dev *dev)
 	 *
 	 * Only the 2 MSB bits have an effect.
 	 */
-	value = drvmgr_dev_key_get(priv->dev, "ahbmst2pci", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "ahbmst2pci", DRVMGR_KT_INT);
 	if (value)
 		priv->ahbmst2pci_map = value->i;
 	else
@@ -525,7 +525,7 @@ int gr_cpci_leon4_n2x_init1(struct drvmgr_dev *dev)
 	/* Let user override the default AMBA system frequency of the 
 	 * CPU-bus of the remote GR-CPCI-LEON4-N2X. Default is 200MHz.
 	 */
-	value = drvmgr_dev_key_get(priv->dev, "ambaFreq", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "ambaFreq", DRVMGR_KT_INT);
 	if (value)
 		priv->amba_freq_hz = value->i;
 	else
@@ -534,7 +534,7 @@ int gr_cpci_leon4_n2x_init1(struct drvmgr_dev *dev)
 	/* Let user determine clock-gating unit configuration. The default
 	 * is to turn all cores on (disable gating). PCI is always turned ON.
 	 */
-	value = drvmgr_dev_key_get(priv->dev, "cgEnMask", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "cgEnMask", DRVMGR_KT_INT);
 	if (value)
 		priv->cg_en_mask = (value->i & CG_MASK) | 0x08;
 	else

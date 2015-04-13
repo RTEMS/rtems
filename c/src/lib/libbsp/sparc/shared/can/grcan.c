@@ -1267,19 +1267,19 @@ static rtems_device_driver grcan_open(rtems_device_major_number major, rtems_dev
 	pDev->rxbuf_size = RX_BUF_SIZE;
 
 	/* Override default buffer sizes if available from bus resource */
-	value = drvmgr_dev_key_get(pDev->dev, "txBufSize", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "txBufSize", DRVMGR_KT_INT);
 	if ( value )
 		pDev->txbuf_size = value->i;
 
-	value = drvmgr_dev_key_get(pDev->dev, "rxBufSize", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(pDev->dev, "rxBufSize", DRVMGR_KT_INT);
 	if ( value )
 		pDev->rxbuf_size = value->i;
 
-	value = drvmgr_dev_key_get(pDev->dev, "txBufAdr", KEY_TYPE_POINTER);
+	value = drvmgr_dev_key_get(pDev->dev, "txBufAdr", DRVMGR_KT_POINTER);
 	if ( value )
 		pDev->txbuf_adr = value->ptr;
 
-	value = drvmgr_dev_key_get(pDev->dev, "rxBufAdr", KEY_TYPE_POINTER);
+	value = drvmgr_dev_key_get(pDev->dev, "rxBufAdr", DRVMGR_KT_POINTER);
 	if ( value )
 		pDev->rxbuf_adr = value->ptr;
 

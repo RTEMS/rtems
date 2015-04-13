@@ -238,7 +238,7 @@ int apbuart_init1(struct drvmgr_dev *dev)
 		priv->condev.flags = 0;
 	}
 
-	value = drvmgr_dev_key_get(priv->dev, "syscon", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "syscon", DRVMGR_KT_INT);
 	if (value) {
 		if (value->i)
 			priv->condev.flags |= CONSOLE_FLAG_SYSCON;
@@ -250,7 +250,7 @@ int apbuart_init1(struct drvmgr_dev *dev)
 	priv->condev.ops.get_uart_attrs = apbuart_get_attributes;
 
 	/* Select 0=Polled, 1=IRQ, 2=Task-Driven UART Mode */
-	value = drvmgr_dev_key_get(priv->dev, "mode", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "mode", DRVMGR_KT_INT);
 	if (value)
 		priv->mode = value->i;
 	else

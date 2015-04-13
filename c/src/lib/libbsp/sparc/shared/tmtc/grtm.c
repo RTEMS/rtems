@@ -578,7 +578,7 @@ static int grtm_device_init(struct grtm_priv *pDev)
 	/* Allocate Memory for Buffer Descriptor Table, or let user provide a custom
 	 * address.
 	 */
-	value = drvmgr_dev_key_get(pDev->dev, "bdTabAdr", KEY_TYPE_POINTER);
+	value = drvmgr_dev_key_get(pDev->dev, "bdTabAdr", DRVMGR_KT_POINTER);
 	if ( value ) {
 		pDev->bds = (struct grtm_bd *)value->ptr;
 		pDev->_bds = (void *)value->ptr;	

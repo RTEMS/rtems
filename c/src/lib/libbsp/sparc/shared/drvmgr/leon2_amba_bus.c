@@ -81,40 +81,40 @@ struct leon2_isr_handler {
 
 struct drvmgr_key leon2_timers[] =
 {
-	{"REG0", KEY_TYPE_INT, {0x80000040}},
-	{"IRQ0", KEY_TYPE_INT, {8}},
-	{"IRQ1", KEY_TYPE_INT, {9}},
-	KEY_EMPTY
+	{"REG0", DRVMGR_KT_INT, {0x80000040}},
+	{"IRQ0", DRVMGR_KT_INT, {8}},
+	{"IRQ1", DRVMGR_KT_INT, {9}},
+	DRVMGR_KEY_EMPTY
 };
 
 struct drvmgr_key leon2_uart1[] =
 {
-	{"REG0", KEY_TYPE_INT, {0x80000070}},
-	{"IRQ0", KEY_TYPE_INT, {3}},
-	KEY_EMPTY
+	{"REG0", DRVMGR_KT_INT, {0x80000070}},
+	{"IRQ0", DRVMGR_KT_INT, {3}},
+	DRVMGR_KEY_EMPTY
 };
 
 struct drvmgr_key leon2_uart2[] =
 {
-	{"REG0", KEY_TYPE_INT, {0x80000080}},
-	{"IRQ0", KEY_TYPE_INT, {2}},
-	KEY_EMPTY
+	{"REG0", DRVMGR_KT_INT, {0x80000080}},
+	{"IRQ0", DRVMGR_KT_INT, {2}},
+	DRVMGR_KEY_EMPTY
 };
 
 struct drvmgr_key leon2_irqctrl[] =
 {
-	{"REG0", KEY_TYPE_INT, {0x80000090}},
-	KEY_EMPTY
+	{"REG0", DRVMGR_KT_INT, {0x80000090}},
+	DRVMGR_KEY_EMPTY
 };
 
 struct drvmgr_key leon2_gpio0[] =
 {
-	{"REG0", KEY_TYPE_INT, {0x800000A0}},
-	{"IRQ0", KEY_TYPE_INT, {4}},
-	{"IRQ1", KEY_TYPE_INT, {5}},
-	{"IRQ2", KEY_TYPE_INT, {6}},
-	{"IRQ3", KEY_TYPE_INT, {7}},
-	KEY_EMPTY
+	{"REG0", DRVMGR_KT_INT, {0x800000A0}},
+	{"IRQ0", DRVMGR_KT_INT, {4}},
+	{"IRQ1", DRVMGR_KT_INT, {5}},
+	{"IRQ2", DRVMGR_KT_INT, {6}},
+	{"IRQ3", DRVMGR_KT_INT, {7}},
+	DRVMGR_KEY_EMPTY
 };
 
 struct leon2_core leon2_std_cores[] = 
@@ -163,7 +163,7 @@ static int leon2_amba_dev_register(
 	info->core_id = core->id.core_id;
 
 	/* Get information from bus configuration */
-	value = drvmgr_key_val_get(core->keys, "REG0", KEY_TYPE_INT);
+	value = drvmgr_key_val_get(core->keys, "REG0", DRVMGR_KT_INT);
 	if ( !value ) {
 		printk("leon2_amba_dev_register: Failed getting resource REG0\n");
 		info->reg_base = 0x00000000;
@@ -183,7 +183,7 @@ static int leon2_amba_dev_register(
 			irq_name[5] = '\0';
 		}
 
-		value = drvmgr_key_val_get(core->keys, irq_name, KEY_TYPE_INT);
+		value = drvmgr_key_val_get(core->keys, irq_name, DRVMGR_KT_INT);
 		if ( !value ) {
 			DBG("leon2_amba_dev_register: Failed getting resource IRQ%d for REG 0x%x\n", i, info->reg_base);
 			info->irqs[i] = 0;

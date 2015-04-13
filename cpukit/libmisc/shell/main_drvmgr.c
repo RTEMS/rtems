@@ -149,7 +149,7 @@ static void shell_drvmgr_print_key_array(struct drvmgr_key *keys)
 {
   struct drvmgr_key *key;
   static char *type_strs[4] = {"UNKNOWN","INTEGER","STRING ","POINTER"};
-  int type;
+  enum drvmgr_kt type;
   union drvmgr_key_value *val;
 
   if (keys == NULL) {
@@ -158,23 +158,23 @@ static void shell_drvmgr_print_key_array(struct drvmgr_key *keys)
   }
 
   key = &keys[0];
-  while (key->key_type != KEY_TYPE_NONE) {
-    if (key->key_type > KEY_TYPE_POINTER)
-      type = 0;
+  while (key->key_type != DRVMGR_KT_NONE) {
+    if (key->key_type > DRVMGR_KT_POINTER)
+      type = DRVMGR_KT_NONE;
     else
       type = key->key_type;
     printf("  NAME=%-14s TYPE=%s  VALUE=", key->key_name, type_strs[type]);
     val = &key->key_value;
     switch (type) {
       default:
-      case 0:
-      case KEY_TYPE_INT:
+      case DRVMGR_KT_NONE:
+      case DRVMGR_KT_INT:
         printf("0x%x (%d)\n", val->i, val->i);
         break;
-      case KEY_TYPE_STRING:
+      case DRVMGR_KT_STRING:
         printf("%s\n", val->str);
         break;
-      case KEY_TYPE_POINTER:
+      case DRVMGR_KT_POINTER:
         printf("%p\n", val->ptr);
         break;
     }

@@ -61,7 +61,7 @@ struct drvmgr_key *drvmgr_key_get(
 		return NULL;
 
 	key = keys;
-	while (key->key_type != KEY_TYPE_NONE) {
+	while (key->key_type != DRVMGR_KT_NONE) {
 		if (strcmp(key_name, key->key_name) == 0)
 			return key;
 		key++;
@@ -72,14 +72,15 @@ struct drvmgr_key *drvmgr_key_get(
 union drvmgr_key_value *drvmgr_key_val_get(
 	struct drvmgr_key *keys,
 	char *key_name,
-	int key_type)
+	enum drvmgr_kt key_type)
 {
 	struct drvmgr_key *key_match;
 
 	key_match = drvmgr_key_get(keys, key_name);
 	if (key_match) {
 		/* Found key, put pointer to value into */
-		if ((key_type == -1) || (key_match->key_type == key_type))
+		if ((key_type == DRVMGR_KT_ANY) ||
+		    (key_match->key_type == key_type))
 			return &key_match->key_value;
 	}
 	return NULL;
@@ -88,7 +89,7 @@ union drvmgr_key_value *drvmgr_key_val_get(
 union drvmgr_key_value *drvmgr_dev_key_get(
 	struct drvmgr_dev *dev,
 	char *key_name,
-	int key_type)
+	enum drvmgr_kt key_type)
 {
 	struct drvmgr_key *keys = NULL;
 

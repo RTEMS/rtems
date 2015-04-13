@@ -415,7 +415,7 @@ int grgpio_device_init(struct grgpio_priv *priv)
 	/* Let the user configure the port count, this might be needed
 	 * when the GPIO lines must not be changed (assigned during bootup)
 	 */
-	value = drvmgr_dev_key_get(priv->dev, "nBits", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "nBits", DRVMGR_KT_INT);
 	if ( value ) {
 		priv->port_cnt = value->i;
 	} else {
@@ -434,7 +434,7 @@ int grgpio_device_init(struct grgpio_priv *priv)
 	/* Let the user configure the BYPASS register, this might be needed
 	 * to select which cores can do I/O on a pin.
 	 */
-	value = drvmgr_dev_key_get(priv->dev, "bypass", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "bypass", DRVMGR_KT_INT);
 	if ( value ) {
 		priv->bypass = value->i;
 	} else {

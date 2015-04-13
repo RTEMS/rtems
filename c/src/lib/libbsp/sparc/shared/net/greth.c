@@ -1443,15 +1443,15 @@ int greth_device_init(struct greth_softc *sc)
     sc->rxbufs = 32;
     sc->phyaddr = -1;
 
-    value = drvmgr_dev_key_get(sc->dev, "txDescs", KEY_TYPE_INT);
+    value = drvmgr_dev_key_get(sc->dev, "txDescs", DRVMGR_KT_INT);
     if ( value && (value->i <= 128) )
         sc->txbufs = value->i;
 
-    value = drvmgr_dev_key_get(sc->dev, "rxDescs", KEY_TYPE_INT);
+    value = drvmgr_dev_key_get(sc->dev, "rxDescs", DRVMGR_KT_INT);
     if ( value && (value->i <= 128) )
         sc->rxbufs = value->i;
 
-    value = drvmgr_dev_key_get(sc->dev, "phyAdr", KEY_TYPE_INT);
+    value = drvmgr_dev_key_get(sc->dev, "phyAdr", DRVMGR_KT_INT);
     if ( value && (value->i < 32) )
         sc->phyaddr = value->i;
 

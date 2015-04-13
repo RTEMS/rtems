@@ -170,12 +170,15 @@ struct drvmgr_func {
  */
 
 /* Key Data Types */
-#define KEY_TYPE_NONE		0
-#define KEY_TYPE_INT		1
-#define KEY_TYPE_STRING		2
-#define KEY_TYPE_POINTER	3
+enum drvmgr_kt {
+	DRVMGR_KT_ANY = -1,
+	DRVMGR_KT_NONE = 0,
+	DRVMGR_KT_INT = 1,
+	DRVMGR_KT_STRING = 2,
+	DRVMGR_KT_POINTER = 3,
+};
 
-#define KEY_EMPTY	{NULL, KEY_TYPE_NONE, {0}}
+#define DRVMGR_KEY_EMPTY	{NULL, DRVMGR_KT_NONE, {0}}
 #define RES_EMPTY	{0, 0, NULL}
 #define MMAP_EMPTY	{0, 0, 0}
 
@@ -189,7 +192,7 @@ union drvmgr_key_value {
 /* One key. One Value. Holding information relevant to the driver. */
 struct drvmgr_key {
 	char			*key_name;	/* Name of key */
-	int			key_type;	/* How to interpret key_value */
+	enum drvmgr_kt		key_type;	/* How to interpret key_value */
 	union drvmgr_key_value	key_value;	/* The value or pointer to value */
 };
 
@@ -438,7 +441,7 @@ extern int drvmgr_keys_get(struct drvmgr_dev *dev, struct drvmgr_key **keys);
 /*! Return the one key that matches key name from a driver keys array. The keys
  *  can be obtained using drvmgr_keys_get().
  *
- * \param keys       An array of keys ended with KEY_EMPTY to search among.
+ * \param keys       An array of keys ended with DRVMGR_KEY_EMPTY to search among.
  * \param key_name   Name of key to search for among the keys.
  */
 extern struct drvmgr_key *drvmgr_key_get(struct drvmgr_key *keys, char *key_name);
@@ -449,7 +452,7 @@ extern struct drvmgr_key *drvmgr_key_get(struct drvmgr_key *keys, char *key_name
  *  name), then determines if the type is correct. A pointer to the key value
  *  is returned.
  *
- *  \param keys       An array of keys ended with KEY_EMPTY to search among.
+ *  \param keys       An array of keys ended with DRVMGR_KEY_EMPTY to search among.
  *  \param key_name   Name of key to search for among the keys.
  *  \param key_type   Data Type of value. INTEGER, ADDRESS, STRING.
  *  \return           Returns NULL if no value found matching Key Name and Key
@@ -458,7 +461,7 @@ extern struct drvmgr_key *drvmgr_key_get(struct drvmgr_key *keys, char *key_name
 extern union drvmgr_key_value *drvmgr_key_val_get(
 	struct drvmgr_key *keys,
 	char *key_name,
-	int key_type);
+	enum drvmgr_kt key_type);
 
 /*! Get key value from the bus resources matching [device, key name, key type]
  *  if no matching key is found NULL is returned.
@@ -475,7 +478,7 @@ extern union drvmgr_key_value *drvmgr_key_val_get(
 extern union drvmgr_key_value *drvmgr_dev_key_get(
 	struct drvmgr_dev *dev,
 	char *key_name,
-	int key_type);
+	enum drvmgr_kt key_type);
 
 /*** DRIVER INTERACE USED TO REQUEST INFORMATION/SERVICES FROM BUS DRIVER ***/
 

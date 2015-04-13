@@ -300,7 +300,7 @@ int b1553rt_device_init(rt_priv *pDev)
 #endif	
 
     /* Get memory configuration from bus resources */
-    value = drvmgr_dev_key_get(pDev->dev, "dmaBaseAdr", KEY_TYPE_POINTER);
+    value = drvmgr_dev_key_get(pDev->dev, "dmaBaseAdr", DRVMGR_KT_POINTER);
     if (value)
         mem = (unsigned int)value->ptr;
 
@@ -362,7 +362,7 @@ int b1553rt_device_init(rt_priv *pDev)
         }
     }
 
-    value = drvmgr_dev_key_get(pDev->dev, "coreFreq", KEY_TYPE_INT);
+    value = drvmgr_dev_key_get(pDev->dev, "coreFreq", DRVMGR_KT_INT);
     if ( value ) {
         pDev->cfg_freq = value->i & RT_FREQ_MASK;
     }

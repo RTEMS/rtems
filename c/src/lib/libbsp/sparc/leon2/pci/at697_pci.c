@@ -497,7 +497,7 @@ static int at697pci_init(struct at697pci_priv *priv)
 			/* User may override hardcoded IRQ setup */
 			keyname_sysirq[3] = 'A' + (pin-1);
 			value = drvmgr_dev_key_get(priv->dev,
-					keyname_sysirq, KEY_TYPE_INT);
+					keyname_sysirq, DRVMGR_KT_INT);
 			if ( value )
 				at697_pci_irq_table[pin-1] = value->i;
 		}
@@ -505,7 +505,7 @@ static int at697pci_init(struct at697pci_priv *priv)
 			/* User may override hardcoded IRQ setup */
 			keyname_pio[3] = 'A' + (pin-1);
 			value = drvmgr_dev_key_get(priv->dev,
-						keyname_pio, KEY_TYPE_INT);
+						keyname_pio, DRVMGR_KT_INT);
 			if ( value )
 				at697_pci_irq_pio_table[pin-1] = value->i;
 		}
@@ -517,13 +517,13 @@ static int at697pci_init(struct at697pci_priv *priv)
 	 * Defualt is to map system RAM at pci address 0x40000000 and system
 	 * SDRAM to pci address 0x60000000
 	 */
-	value = drvmgr_dev_key_get(priv->dev, "tgtbar1", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "tgtbar1", DRVMGR_KT_INT);
 	if (value)
 		priv->bar1_pci_adr = value->i;
 	else
 		priv->bar1_pci_adr = SYSTEM_MAINMEM_START; /* default */
 
-	value = drvmgr_dev_key_get(priv->dev, "tgtbar2", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "tgtbar2", DRVMGR_KT_INT);
 	if (value)
 		priv->bar2_pci_adr = value->i;
 	else

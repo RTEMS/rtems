@@ -457,14 +457,14 @@ static int pcif_init(struct pcif_priv *priv)
 
 			/* User may override Plug & Play IRQ */
 			keyname[3] = 'A' + (pin-1);
-			value = drvmgr_dev_key_get(priv->dev, keyname, KEY_TYPE_INT);
+			value = drvmgr_dev_key_get(priv->dev, keyname, DRVMGR_KT_INT);
 			if ( value )
 				pcif_pci_irq_table[pin-1] = value->i;
 		}
 	}
 
 	priv->irq_mask = 0xf;
-	value = drvmgr_dev_key_get(priv->dev, "", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "", DRVMGR_KT_INT);
 	if ( value )
 		priv->irq_mask = value->i & 0xf;
 

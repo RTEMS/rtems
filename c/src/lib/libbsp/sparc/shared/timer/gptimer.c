@@ -213,12 +213,12 @@ int gptimer_init1(struct drvmgr_dev *dev)
 		timer_start = LEON3_Cpu_Index;
 	}
 #endif
-	value = drvmgr_dev_key_get(dev, "timerStart", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(dev, "timerStart", DRVMGR_KT_INT);
 	if ( value) {
 		timer_start = value->i;
 		timer_cnt = timer_hw_cnt - timer_start;
 	}
-	value = drvmgr_dev_key_get(dev, "timerCnt", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(dev, "timerCnt", DRVMGR_KT_INT);
 	if ( value && (value->i < timer_cnt) ) {
 		timer_cnt = value->i;
 	}
@@ -264,7 +264,7 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	 * that doing so for the Root-Bus GPTIMER may affect the RTEMS Clock
 	 * so that Clock frequency is wrong.
 	 */
-	value = drvmgr_dev_key_get(priv->dev, "prescaler", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "prescaler", DRVMGR_KT_INT);
 	if ( value )
 		regs->scaler_reload = value->i;
 
@@ -312,7 +312,7 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	 * the timer must be registered at the Clock Driver.
 	 */
 #if defined(LEON3) && defined(RTEMS_DRVMGR_STARTUP)
-	value = drvmgr_dev_key_get(priv->dev, "clockTimer", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(priv->dev, "clockTimer", DRVMGR_KT_INT);
 	if ( value && (value->i < timer_cnt) ) {
 		LEON3_Timer_Regs = (void *)regs;
 		Clock_timer_register(timer_index[value->i]);

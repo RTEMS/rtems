@@ -1005,7 +1005,7 @@ int spictrl_device_init(struct spictrl_priv *priv)
 	priv->regs->mode = 0;
 
 	/* Get custom */
-	value = drvmgr_dev_key_get(priv->dev, "slvSelFunc", KEY_TYPE_POINTER);
+	value = drvmgr_dev_key_get(priv->dev, "slvSelFunc", DRVMGR_KT_POINTER);
 	if ( value ) {
 		priv->slvSelFunc = value->ptr;
 	}

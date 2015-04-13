@@ -157,7 +157,7 @@ int ambapp_leon2_init1(struct drvmgr_dev *dev)
 
 	/* Try to get Configuration from resource configuration */
 
-	value = drvmgr_dev_key_get(dev, "busFreq", KEY_TYPE_INT);
+	value = drvmgr_dev_key_get(dev, "busFreq", DRVMGR_KT_INT);
 	if (value) {
 		/* Set frequency of AMBA bus if specified by user. The frequency
 		 * must be for AHB bus which IOAREA matches (AHB bus 0).
@@ -173,7 +173,7 @@ int ambapp_leon2_init1(struct drvmgr_dev *dev)
 	/* Note that this can be overrided by a driver on the AMBA PnP bus.*/
 	ambapp_freq_init(&priv->abus, NULL, freq_hz);
 
-	value = drvmgr_dev_key_get(dev, "drvRes", KEY_TYPE_POINTER);
+	value = drvmgr_dev_key_get(dev, "drvRes", DRVMGR_KT_POINTER);
 	if (!value) {
 		DBG("ambapp_leon2_init1: Failed getting resource drvRes\n");
 		config->resources = NULL;

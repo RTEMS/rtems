@@ -135,7 +135,7 @@ void drvmgr_print_mem(void)
 				resmem += sizeof(struct drvmgr_drv_res);
 
 				key = res->keys;
-				while (key->key_type != KEY_TYPE_NONE) {
+				while (key->key_type != DRVMGR_KT_NONE) {
 					resmem += sizeof
 						(struct drvmgr_key);
 					key++;

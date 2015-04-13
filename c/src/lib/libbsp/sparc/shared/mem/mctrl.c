@@ -153,7 +153,7 @@ static int mctrl_init1(struct drvmgr_dev *dev)
 	strcpy(res_name, "mcfgX");
 	for(i=0; i<8; i++) {
 		res_name[4] = '1' + i;
-		value = drvmgr_dev_key_get(priv->dev, res_name, KEY_TYPE_INT);
+		value = drvmgr_dev_key_get(priv->dev, res_name, DRVMGR_KT_INT);
 		if ( value ) {
 			priv->mcfg[i] = value->i;
 			priv->configured |= (1<<i);
@@ -174,12 +174,12 @@ static int mctrl_init1(struct drvmgr_dev *dev)
 	for (i=0; i<9; i++) {
 		strcpy(res_name, "washXStart");
 		res_name[4] = '0' + i;
-		value = drvmgr_dev_key_get(priv->dev, res_name, KEY_TYPE_INT);
+		value = drvmgr_dev_key_get(priv->dev, res_name, DRVMGR_KT_INT);
 		if ( value ) {
 			start = value->i;
 			strcpy(res_name, "washXLength");
 			res_name[4] = '0' + i;
-			value = drvmgr_dev_key_get(priv->dev, res_name, KEY_TYPE_INT);
+			value = drvmgr_dev_key_get(priv->dev, res_name, DRVMGR_KT_INT);
 			if ( value ) {
 				length = value->i;
 
