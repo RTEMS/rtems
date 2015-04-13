@@ -1,7 +1,8 @@
 DRIVER MANAGER
 ==============
 
-See documentation in Aeroflex Gaisler Driver manual.
+See documentation in Cobham Gaisler Driver manual available at
+http://www.gaisler.com/anonftp/rcc/doc/.
 
 
 INITIALIZATION
@@ -24,7 +25,7 @@ the Init task is started. This means, for the first case, that
 drivers can not use interrupt services until after the
 initialization phase is over and the user request services from
 the drivers. For the second case of initialization, this means
-that driver must take extra care during initalization when interrupt
+that driver must take extra care during initialization when interrupt
 is enabled so that spurious interrupts are not generated and that the
 system does not hang in an infinite IRQ loop.
 
@@ -33,7 +34,7 @@ specifying in which initialization levels IRQ handling is done.
 See Level 1 and Level 2 below.
 
 Other differences is that IRQ, System Clock Timer, debug Console
-and Console can be initalized by the help of the driver manager
+and Console can be initialized by the help of the driver manager
 when initialized during start up. Between Level0 and Level1 the
 RTEMS I/O Manager drivers are initialized. The LEON3 BSP has
 therefore two different versions of the basic drivers.
