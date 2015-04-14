@@ -72,6 +72,7 @@ rtems_interrupt_lock LEON3_IrqCtrl_Lock =
 /* Pointers to Interrupt Controller configuration registers */
 volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
 struct ambapp_dev *LEON3_IrqCtrl_Adev;
+volatile struct gptimer_regs *LEON3_Timer_Regs;
 struct ambapp_dev *LEON3_Timer_Adev;
 
 /*

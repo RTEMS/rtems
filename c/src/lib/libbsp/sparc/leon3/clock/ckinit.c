@@ -37,11 +37,7 @@
 #define CLOCK_DRIVER_USE_FAST_IDLE 1
 #endif
 
-/*
- *  The Real Time Clock Counter Timer uses this trap type.
- */
-
-volatile struct gptimer_regs *LEON3_Timer_Regs = 0;
+/* LEON3 Timer system interrupt number */
 static int clkirq;
 
 static void leon3_clock_profiling_interrupt_delay(void)
