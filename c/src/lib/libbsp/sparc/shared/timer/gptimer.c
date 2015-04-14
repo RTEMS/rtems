@@ -40,9 +40,8 @@
 #include <bsp/gptimer.h>
 #include <bsp/tlib.h>
 
-#if defined(LEON3) && defined(RTEMS_DRVMGR_STARTUP)
+#if defined(LEON3)
 #include <leon.h>
-volatile struct gptimer_regs *LEON3_Timer_Regs = 0;
 #endif
 
 #ifdef GPTIMER_INFO_AVAIL
@@ -181,9 +180,6 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	struct gptimer_timer *timer;
 	union drvmgr_key_value *value;
 	unsigned char irq_ack_mask;
-#if defined(LEON3) && defined(RTEMS_DRVMGR_STARTUP)
-	char timer_index[7];
-#endif
 
 	/* Get device information from AMBA PnP information */
 	ambadev = (struct amba_dev_info *)dev->businfo;
@@ -235,22 +231,10 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	priv->dev = dev;
 	priv->regs = regs;
 
-#if defined(LEON3) && defined(RTEMS_DRVMGR_STARTUP)
-	if ( drvmgr_on_rootbus(priv->dev) && !LEON3_Timer_Regs) {
-		/* Bootloader has initialized the Timer prescaler to 1MHz,
-		 * this means that the AMBA Frequency is 1MHz * PRESCALER.
-		 */
-		priv->base_clk = (regs->scaler_reload + 1) * 1000000;
-		ambapp_bus_freq_register(priv->dev,DEV_APB_SLV,priv->base_clk);
-		LEON3_Timer_Regs = (void *)regs;
-	} else
-#endif
-	{
-		/* The Base Frequency of the GPTIMER core is the same as the
-		 * frequency of the AMBA bus it is situated on.
-		 */
-		drvmgr_freq_get(dev, DEV_APB_SLV, &priv->base_clk);
-	}
+	/* The Base Frequency of the GPTIMER core is the same as the
+	 * frequency of the AMBA bus it is situated on.
+	 */
+	drvmgr_freq_get(dev, DEV_APB_SLV, &priv->base_clk);
 
 	/* This core will may provide important Timer functionality
 	 * to other drivers and the RTEMS kernel, the Clock driver
@@ -291,10 +275,7 @@ int gptimer_init1(struct drvmgr_dev *dev)
 		timer->irq_ack_mask = irq_ack_mask;
 
 		/* Register Timer at Timer Library */
-#if defined(LEON3) && defined(RTEMS_DRVMGR_STARTUP)
-		timer_index[i] =
-#endif
-			tlib_dev_reg(&timer->tdev);
+		tlib_dev_reg(&timer->tdev);
 	}
 
 	/* Check Interrupt support implementation, two cases:
@@ -303,21 +284,6 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	 *        BASE_IRQ + timer_index
 	 */
 	priv->separate_interrupt = regs->cfg & GPTIMER_CFG_SI;
-
-	/* Older HW */
-	
-	
-
-	/* If the user request a certain Timer to be the RTEMS Clock Timer,
-	 * the timer must be registered at the Clock Driver.
-	 */
-#if defined(LEON3) && defined(RTEMS_DRVMGR_STARTUP)
-	value = drvmgr_dev_key_get(priv->dev, "clockTimer", DRVMGR_KT_INT);
-	if ( value && (value->i < timer_cnt) ) {
-		LEON3_Timer_Regs = (void *)regs;
-		Clock_timer_register(timer_index[value->i]);
-	}
-#endif
 
 	return DRVMGR_OK;
 }
