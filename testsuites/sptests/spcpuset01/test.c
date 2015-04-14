@@ -5,7 +5,6 @@
 /*
  *  Fully exercise CPU_SET() methods
  */
-
 #include <rtems.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -33,7 +32,7 @@ void test_cpu_and_case_1(size_t cpu1, size_t cpu2)
   size_t i;
 
   /*  AND set1 and set2 */
-  printf( "Exercise CPU_AND with bits %zd,%zd\n", cpu1, cpu2 );
+  DPRINT( "Exercise CPU_AND with bits %zd,%zd\n", cpu1, cpu2 );
   CPU_AND(&set3, &set1, &set2);
 
   /* test if all bits clear except cpu1 */
@@ -51,7 +50,7 @@ void test_cpu_nand_case_1(size_t cpu1, size_t cpu2)
   size_t i;
 
    /*  NAND set1 and set2 */
-  printf( "Exercise CPU_NAND with bits %zd,%zd\n", cpu1, cpu2 );
+  DPRINT( "Exercise CPU_NAND with bits %zd,%zd\n", cpu1, cpu2 );
   CPU_NAND(&set3, &set1, &set2);
 
   /* test if all bits clear except cpu1 */
@@ -68,7 +67,7 @@ void test_cpu_or_case_1(size_t cpu1, size_t cpu2)
   size_t i;
 
   /*  OR set1 and set2 */
-  printf( "Exercise CPU_OR with bits %zd,%zd\n", cpu1, cpu2 );
+  DPRINT( "Exercise CPU_OR with bits %zd,%zd\n", cpu1, cpu2 );
   CPU_OR(&set3, &set1, &set2);
 
   /* test if all bits clear except cpu1 */
@@ -85,7 +84,7 @@ void test_cpu_xor_case_1(size_t cpu1, size_t cpu2)
   size_t i;
 
   /*  XOR set1 and set2 */
-  printf( "Exercise CPU_XOR with bits %zd,%zd\n", cpu1, cpu2 );
+  DPRINT( "Exercise CPU_XOR with bits %zd,%zd\n", cpu1, cpu2 );
   CPU_XOR(&set3, &set1, &set2);
 
   /* test if all bits clear except cpu1 */

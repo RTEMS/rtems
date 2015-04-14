@@ -11,13 +11,18 @@
 #include "test_support.h"
 
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
-
 #include <sys/cpuset.h>
 
 /* global variables */
 extern cpu_set_t set1;
 extern cpu_set_t set2;
 extern cpu_set_t set3;
+#endif
+
+/* enable/disable verbose output */
+#ifndef DPRINT
+  /* #define DPRINT(...) printf(__VA_ARGS__) */
+  #define DPRINT(...)
 #endif
 
 /* functions */
