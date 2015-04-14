@@ -46,7 +46,7 @@ extern "C" {
  *  Check that that the dispatch disable level is proper for the
  *  mode/state of the test.  Normally it should be 0 when in task space.
  *
- *  This test is only valid when in a non smp system.  In an smp system
+ *  This test is only valid when in a non-SMP system.  In an smp system
  *  another cpu may be accessing the core at any point when this core
  *  does not have it locked.
  */
@@ -67,6 +67,32 @@ extern "C" {
       rtems_test_exit( 1 ); \
     } \
   } while ( 0 )
+#endif
+
+/*
+ *  Check that that the allocator mutex is not locked. It should never
+ *  be locked unless inside a service which is allocating a resource.
+ *
+ *  This test is only valid when in a non-SMP system.  In an SMP system
+ *  another cpu may be allocating a resource while we are computing.
+ */
+#if defined SMPTEST
+  #define check_if_allocator_mutex_is_unlocked() 
+#else
+  #include <rtems/score/apimutex.h>
+  #define check_if_allocator_mutex_is_unlocked() \
+    do { \
+      if ( _RTEMS_Check_if_allocator_is_locked() ) { \
+        printk( \
+          "\nRTEMS Allocator Mutex is locked and should not be.\n" \
+          "Detected at %s:%d\n", \
+          __FILE__, \
+          __LINE__ \
+        ); \
+        FLUSH_OUTPUT(); \
+        rtems_test_exit( 1 ); \
+      } \
+    } while ( 0 )
 #endif
 
 /*
@@ -95,6 +121,7 @@ extern "C" {
 #define fatal_directive_status_with_level( _stat, _desired, _msg, _level ) \
   do { \
     check_dispatch_disable_level( _level ); \
+    check_if_allocator_mutex_is_unlocked(); \
     fatal_directive_check_status_only( _stat, _desired, _msg ); \
   } while ( 0 )
 
@@ -112,6 +139,7 @@ extern "C" {
   if ( (_stat != -1) && (errno) != (_desired) ) { \
     long statx = _stat; \
     check_dispatch_disable_level( 0 ); \
+    check_if_allocator_mutex_is_unlocked(); \
     printf( "\n%s FAILED -- expected (%d - %s) got (%ld %d - %s)\n", \
 	    (_msg), _desired, strerror(_desired), \
             statx, errno, strerror(errno) ); \
@@ -125,6 +153,7 @@ extern "C" {
 #define fatal_posix_service_status_with_level( _stat, _desired, _msg, _level ) \
   do { \
     check_dispatch_disable_level( _level ); \
+    check_if_allocator_mutex_is_unlocked(); \
     if ( (_stat) != (_desired) ) { \
       printf( "\n%s FAILED -- expected (%d - %s) got (%d - %s)\n", \
               (_msg), _desired, strerror(_desired), _stat, strerror(_stat) ); \
@@ -134,6 +163,30 @@ extern "C" {
       rtems_test_exit( _stat ); \
     } \
   } while ( 0 )
+
+/*
+ * This macro evaluates the semaphore id returned.
+ */
+#define fatal_posix_sem( _ptr, _msg ) \
+  if ( (_ptr != SEM_FAILED) ) { \
+    check_dispatch_disable_level( 0 ); \
+    printf( "\n%s FAILED -- expected (-1) got (%p - %d/%s)\n", \
+	    (_msg), _ptr, errno, strerror(errno) ); \
+    FLUSH_OUTPUT(); \
+    rtems_test_exit( -1 ); \
+  }
+
+/*
+ * This macro evaluates the message queue id returned.
+ */
+#define fatal_posix_mqd( _ptr, _msg ) \
+  if ( (_ptr != (mqd_t) -1) ) { \
+    check_dispatch_disable_level( 0 ); \
+    printf( "\n%s FAILED -- expected (-1) got (%" PRId32 " - %d/%s)\n", \
+	    (_msg), _ptr, errno, strerror(errno) ); \
+    FLUSH_OUTPUT(); \
+    rtems_test_exit( -1 ); \
+  }
 
 /*
  *  Generic integer version of the error reporting

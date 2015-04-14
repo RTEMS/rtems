@@ -61,15 +61,6 @@ void verify_timedout_mq_timedsend(int que, int is_blocking);
 void verify_mq_send(void);
 void verify_timed_receive(void);
 
-#define fatal_posix_mqd( _ptr, _msg ) \
-  if ( (_ptr != (mqd_t) -1) ) { \
-    check_dispatch_disable_level( 0 ); \
-    printf( "\n%s FAILED -- expected (-1) got (%" PRId32 " - %d/%s)\n", \
-	    (_msg), _ptr, errno, strerror(errno) ); \
-    FLUSH_OUTPUT(); \
-    rtems_test_exit( -1 ); \
-  }
-
 typedef struct {
   char         msg[ 50 ];
   int          size;

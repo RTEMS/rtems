@@ -25,16 +25,6 @@ const char rtems_test_name[] = "PSXSEM 1";
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
-#define fatal_posix_sem( _ptr, _msg ) \
-  if ( (_ptr != SEM_FAILED) ) { \
-    check_dispatch_disable_level( 0 ); \
-    printf( "\n%s FAILED -- expected (-1) got (%p - %d/%s)\n", \
-	    (_msg), _ptr, errno, strerror(errno) ); \
-    FLUSH_OUTPUT(); \
-    rtems_test_exit( -1 ); \
-  }
-
-
 #define MAX_SEMS  10
 
 void *POSIX_Init(

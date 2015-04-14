@@ -149,7 +149,7 @@ endif
 
 ## CORE_APIMUTEX_C_FILES
 libscore_a_SOURCES += src/apimutex.c \
-    src/apimutexlock.c src/apimutexunlock.c
+    src/apimutexlock.c src/apimutexislocked.c src/apimutexunlock.c
 
 ## CORE_BARRIER_C_FILES
 libscore_a_SOURCES += src/corebarrier.c src/corebarrierrelease.c \
