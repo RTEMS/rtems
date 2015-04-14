@@ -44,18 +44,17 @@ int sem_destroy(
 
     case OBJECTS_LOCAL:
       /*
-       *  Undefined operation on a named semaphore.
+       *  Undefined operation on a named semaphore. Release the object
+       *  and fall to the EINVAL return at the bottom.
        */
-
       if ( the_semaphore->named == true ) {
         _Objects_Put( &the_semaphore->Object );
-        rtems_set_errno_and_return_minus_one( EINVAL );
+      } else {
+        _POSIX_Semaphore_Delete( the_semaphore );
+        _Objects_Put( &the_semaphore->Object );
+        _Objects_Allocator_unlock();
+        return 0;
       }
-
-      _POSIX_Semaphore_Delete( the_semaphore );
-      _Objects_Put( &the_semaphore->Object );
-      _Objects_Allocator_unlock();
-      return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
