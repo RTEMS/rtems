@@ -82,16 +82,7 @@ static void leon3_clock_profiling_interrupt_delay(void)
     leon3_clock_profiling_interrupt_delay(); \
   } while (0)
 
-#if defined(RTEMS_MULTIPROCESSING)
-  #define Adjust_clkirq_for_node() \
-    do { \
-      if (rtems_configuration_get_user_multiprocessing_table() != NULL) { \
-        clkirq += LEON3_Cpu_Index; \
-      } \
-    } while(0)
-#else
-  #define Adjust_clkirq_for_node() do { clkirq += LEON3_CLOCK_INDEX; } while(0)
-#endif
+#define Adjust_clkirq_for_node() do { clkirq += LEON3_CLOCK_INDEX; } while(0)
 
 #define Clock_driver_support_find_timer() \
   do { \
