@@ -267,6 +267,7 @@ rtems_test_pause();
     &Queue_id[ 1 ]
   );
   directive_failed( status, "rtems_message_queue_create of Q1; 20 bytes each" );
+
   status = rtems_message_queue_send( Queue_id[ 1 ], big_send_buffer, 40 );
   fatal_directive_status(status,
     RTEMS_INVALID_SIZE,
