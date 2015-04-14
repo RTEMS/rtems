@@ -127,12 +127,6 @@ void amba_initialize(void)
   /* Init Extended IRQ controller if available */
   leon3_ext_irq_init();
 
-  /* If we are running without Driver Manager at startup, we must still
-   * assure that Timer and Console UART is working. So we can not
-   * depend on the DrvMgr capable Timer and Console UART drivers,
-   * instead we use the small-footprint drivers.
-   */
-#ifndef RTEMS_DRVMGR_STARTUP
   /* find GP Timer */
   adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
                                  VENDOR_GAISLER, GAISLER_GPTIMER,
@@ -156,7 +150,8 @@ void amba_initialize(void)
     if (leon3_timer_prescaler)
       LEON3_Timer_Regs->scaler_reload = leon3_timer_prescaler;
   }
-#else
+
+#ifdef RTEMS_DRVMGR_STARTUP
   /* Register Root bus, Use GRLIB AMBA PnP bus as root bus for LEON3 */
   ambapp_grlib_root_register(&grlib_bus_config);
 #endif
