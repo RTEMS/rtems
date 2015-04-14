@@ -11,14 +11,17 @@
  *
  */
 
+#include <rtems.h>
 #include <stdlib.h>
 #include <bsp.h>
 #include <tlib.h>
 
-/* Undefine (default) this to save space in standard LEON configurations,
+#ifdef RTEMS_DRVMGR_STARTUP
+
+/* Undefine this to save space in standard LEON configurations,
  * it will assume that Prescaler is running at 1MHz.
  */
-/*#undef CLOCK_DRIVER_DONT_ASSUME_PRESCALER_1MHZ*/
+#undef CLOCK_DRIVER_DONT_ASSUME_PRESCALER_1MHZ
 
 /* Set the below defines from bsp.h if function needed.
 #undef CLOCK_DRIVER_ISRS_PER_TICK
@@ -206,7 +209,7 @@ rtems_device_driver Clock_initialize(
    * Frequency is set in multiples of the timer base frequency.
    *
    * In standard LEON3 designs the base frequency is is 1MHz, to
-   * save instructions define CLOCK_DRIVER_ASSUME_PRESCALER_1MHZ
+   * save instructions undefine CLOCK_DRIVER_DONT_ASSUME_PRESCALER_1MHZ
    * to avoid 64-bit calculation.
    */
 #ifdef CLOCK_DRIVER_DONT_ASSUME_PRESCALER_1MHZ
@@ -216,7 +219,7 @@ rtems_device_driver Clock_initialize(
     tlib_get_freq(Clock_handle, &Clock_basefreq, NULL);
 
     tmp = (uint64_t)Clock_basefreq;
-    tmp = tmp * (unint64_t)rtems_configuration_get_microseconds_per_tick();
+    tmp = tmp * (uint64_t)rtems_configuration_get_microseconds_per_tick();
     tick_hz = tmp / 1000000;
   }
 #else
@@ -258,7 +261,10 @@ rtems_device_driver Clock_initialize(
 
 /*** Timer Driver Interface ***/
 
+/* Set system clock timer instance */
 void Clock_timer_register(int timer_number)
 {
   Clock_timer = timer_number;
 }
+
+#endif
