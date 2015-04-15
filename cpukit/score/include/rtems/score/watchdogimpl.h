@@ -21,6 +21,7 @@
 
 #include <rtems/score/watchdog.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/isrlock.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,6 +49,11 @@ extern "C" {
  * @brief Watchdog header.
  */
 typedef struct {
+  /**
+   * @brief ISR lock to protect this watchdog chain.
+   */
+  ISR_LOCK_MEMBER( Lock )
+
   /**
    * @brief The chain of active or transient watchdogs.
    */
@@ -83,6 +89,30 @@ SCORE_EXTERN Watchdog_Header _Watchdog_Ticks_header;
  *  This is the watchdog chain which is managed at second boundaries.
  */
 SCORE_EXTERN Watchdog_Header _Watchdog_Seconds_header;
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Acquire(
+  Watchdog_Header  *header,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_ISR_disable_and_acquire( &header->Lock, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Release(
+  Watchdog_Header  *header,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Release_and_ISR_enable( &header->Lock, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Flash(
+  Watchdog_Header  *header,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Flash( &header->Lock, lock_context );
+}
 
 /**
  *  @brief Initialize the watchdog handler.

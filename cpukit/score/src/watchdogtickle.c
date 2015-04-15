@@ -25,9 +25,9 @@ void _Watchdog_Tickle(
   Watchdog_Header *header
 )
 {
-  ISR_Level level;
+  ISR_lock_Context  lock_context;
   Watchdog_Control *the_watchdog;
-  Watchdog_States  watchdog_state;
+  Watchdog_States   watchdog_state;
 
   /*
    * See the comment in watchdoginsert.c and watchdogadjust.c
@@ -35,7 +35,7 @@ void _Watchdog_Tickle(
    * volatile data - till, 2003/7
    */
 
-  _ISR_Disable( level );
+  _Watchdog_Acquire( header, &lock_context );
 
   if ( _Watchdog_Is_empty( header ) )
     goto leave;
@@ -76,7 +76,7 @@ void _Watchdog_Tickle(
   do {
      watchdog_state = _Watchdog_Remove( header, the_watchdog );
 
-     _ISR_Enable( level );
+     _Watchdog_Release( header, &lock_context );
 
      switch( watchdog_state ) {
        case WATCHDOG_ACTIVE:
@@ -106,12 +106,12 @@ void _Watchdog_Tickle(
          break;
      }
 
-     _ISR_Disable( level );
+     _Watchdog_Acquire( header, &lock_context );
 
      the_watchdog = _Watchdog_First( header );
    } while ( !_Watchdog_Is_empty( header ) &&
              (the_watchdog->delta_interval == 0) );
 
 leave:
-   _ISR_Enable(level);
+   _Watchdog_Release( header, &lock_context );
 }

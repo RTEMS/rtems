@@ -27,11 +27,11 @@ Watchdog_States _Watchdog_Remove(
   Watchdog_Control *the_watchdog
 )
 {
-  ISR_Level         level;
+  ISR_lock_Context  lock_context;
   Watchdog_States   previous_state;
   Watchdog_Control *next_watchdog;
 
-  _ISR_Disable( level );
+  _Watchdog_Acquire( header, &lock_context );
   previous_state = the_watchdog->state;
   switch ( previous_state ) {
     case WATCHDOG_INACTIVE:
@@ -63,6 +63,6 @@ Watchdog_States _Watchdog_Remove(
   }
   the_watchdog->stop_time = _Watchdog_Ticks_since_boot;
 
-  _ISR_Enable( level );
+  _Watchdog_Release( header, &lock_context );
   return( previous_state );
 }

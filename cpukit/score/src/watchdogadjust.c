@@ -27,15 +27,15 @@ void _Watchdog_Adjust_backward(
   Watchdog_Interval  units
 )
 {
-  ISR_Level level;
+  ISR_lock_Context lock_context;
 
-  _ISR_Disable( level );
+  _Watchdog_Acquire( header, &lock_context );
 
   if ( !_Watchdog_Is_empty( header ) ) {
      _Watchdog_First( header )->delta_interval += units;
   }
 
-  _ISR_Enable( level );
+  _Watchdog_Release( header, &lock_context );
 }
 
 void _Watchdog_Adjust_forward(
@@ -43,9 +43,9 @@ void _Watchdog_Adjust_forward(
   Watchdog_Interval  units
 )
 {
-  ISR_Level level;
+  ISR_lock_Context lock_context;
 
-  _ISR_Disable( level );
+  _Watchdog_Acquire( header, &lock_context );
 
   while ( !_Watchdog_Is_empty( header ) && units > 0 ) {
     Watchdog_Control *first = _Watchdog_First( header );
@@ -57,13 +57,13 @@ void _Watchdog_Adjust_forward(
       units -= first->delta_interval;
       first->delta_interval = 1;
 
-      _ISR_Enable( level );
+      _Watchdog_Release( header, &lock_context );
 
       _Watchdog_Tickle( header );
 
-      _ISR_Disable( level );
+      _Watchdog_Acquire( header, &lock_context );
     }
   }
 
-  _ISR_Enable( level );
+  _Watchdog_Release( header, &lock_context );
 }

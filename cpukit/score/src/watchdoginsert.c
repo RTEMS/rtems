@@ -27,7 +27,7 @@ void _Watchdog_Insert(
   Watchdog_Control      *the_watchdog
 )
 {
-  ISR_Level          level;
+  ISR_lock_Context   lock_context;
   Watchdog_Control  *after;
   uint32_t           insert_isr_nest_level;
   Watchdog_Interval  delta_interval;
@@ -35,7 +35,7 @@ void _Watchdog_Insert(
 
   insert_isr_nest_level   = _ISR_Nest_level;
 
-  _ISR_Disable( level );
+  _Watchdog_Acquire( header, &lock_context );
 
   /*
    *  Check to see if the watchdog has just been inserted by a
@@ -43,7 +43,7 @@ void _Watchdog_Insert(
    */
 
   if ( the_watchdog->state != WATCHDOG_INACTIVE ) {
-    _ISR_Enable( level );
+    _Watchdog_Release( header, &lock_context );
     return;
   }
 
@@ -67,7 +67,7 @@ restart:
 
      delta_interval -= after->delta_interval;
 
-     _ISR_Flash( level );
+     _Watchdog_Flash( header, &lock_context );
 
      if ( the_watchdog->state != WATCHDOG_BEING_INSERTED ) {
        goto exit_insert;
@@ -90,5 +90,5 @@ restart:
 exit_insert:
   _Watchdog_Sync_level = insert_isr_nest_level;
   _Watchdog_Sync_count--;
-  _ISR_Enable( level );
+  _Watchdog_Release( header, &lock_context );
 }
