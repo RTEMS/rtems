@@ -29,6 +29,10 @@
 void _Timer_Cancel( Timer_Control *the_timer )
 {
   Timer_server_Control *timer_server;
+  ISR_Level level;
+
+  /* The timer class must not change during the cancel operation */
+  _ISR_Disable( level );
 
   switch ( the_timer->the_class ) {
     case TIMER_INTERVAL:
@@ -46,6 +50,8 @@ void _Timer_Cancel( Timer_Control *the_timer )
       _Assert( the_timer->the_class == TIMER_DORMANT );
       break;
   }
+
+  _ISR_Enable( level );
 }
 
 rtems_status_code rtems_timer_create(

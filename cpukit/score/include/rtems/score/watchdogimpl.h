@@ -46,6 +46,28 @@ extern "C" {
   }
 
 /**
+ * @brief Iterator item to synchronize concurrent insert, remove and tickle
+ * operations.
+ */
+typedef struct {
+  /**
+   * @brief A node for a Watchdog_Header::Iterators chain.
+   */
+  Chain_Node Node;
+
+  /**
+   * @brief The current delta interval of the new watchdog to insert.
+   */
+  Watchdog_Interval delta_interval;
+
+  /**
+   * @brief The current watchdog of the chain on the way to insert the new
+   * watchdog.
+   */
+  Chain_Node *current;
+} Watchdog_Iterator;
+
+/**
  * @brief Watchdog header.
  */
 typedef struct {
@@ -58,23 +80,15 @@ typedef struct {
    * @brief The chain of active or transient watchdogs.
    */
   Chain_Control Watchdogs;
+
+  /**
+   * @brief Currently active iterators.
+   *
+   * The iterators are registered in _Watchdog_Insert() and updated in case the
+   * watchdog chain changes.
+   */
+  Chain_Control Iterators;
 } Watchdog_Header;
-
-/**
- *  @brief Watchdog synchronization level.
- *
- *  This used for synchronization purposes
- *  during an insert on a watchdog delta chain.
- */
-SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_level;
-
-/**
- *  @brief Watchdog synchronization count.
- *
- *  This used for synchronization purposes
- *  during an insert on a watchdog delta chain.
- */
-SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_count;
 
 /**
  *  @brief Watchdog chain which is managed at ticks.
@@ -134,6 +148,16 @@ void _Watchdog_Handler_initialization( void );
  *  @retval the state in which @a the_watchdog was in when removed
  */
 Watchdog_States _Watchdog_Remove (
+  Watchdog_Header  *header,
+  Watchdog_Control *the_watchdog
+);
+
+/**
+ * @brief Actually removes an WATCHDOG_ACTIVE or WATCHDOG_REMOVE_IT watchdog.
+ *
+ * @see _Watchdog_Remove() and _Watchdog_Tickle().
+ */
+void _Watchdog_Remove_it(
   Watchdog_Header  *header,
   Watchdog_Control *the_watchdog
 );
@@ -437,7 +461,9 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Header_initialize(
   Watchdog_Header *header
 )
 {
+  _ISR_lock_Initialize( &header->Lock, "Watchdog" );
   _Chain_Initialize_empty( &header->Watchdogs );
+  _Chain_Initialize_empty( &header->Iterators );
 }
 
 /** @} */

@@ -19,99 +19,68 @@
 #endif
 
 #include <rtems/score/watchdogimpl.h>
-#include <rtems/score/isrlevel.h>
 
 void _Watchdog_Tickle(
   Watchdog_Header *header
 )
 {
-  ISR_lock_Context  lock_context;
-  Watchdog_Control *the_watchdog;
-  Watchdog_States   watchdog_state;
-
-  /*
-   * See the comment in watchdoginsert.c and watchdogadjust.c
-   * about why it's safe not to declare header a pointer to
-   * volatile data - till, 2003/7
-   */
+  ISR_lock_Context lock_context;
 
   _Watchdog_Acquire( header, &lock_context );
 
-  if ( _Watchdog_Is_empty( header ) )
-    goto leave;
+  if ( !_Watchdog_Is_empty( header ) ) {
+    Watchdog_Control  *first;
+    Watchdog_Interval  delta;
 
-  the_watchdog = _Watchdog_First( header );
+    first = _Watchdog_First( header );
+    delta = first->delta_interval;
 
-  /*
-   * For some reason, on rare occasions the_watchdog->delta_interval
-   * of the head of the watchdog chain is 0.  Before this test was
-   * added, on these occasions an event (which usually was supposed
-   * to have a timeout of 1 tick would have a delta_interval of 0, which
-   * would be decremented to 0xFFFFFFFF by the unprotected
-   * "the_watchdog->delta_interval--;" operation.
-   * This would mean the event would not timeout, and also the chain would
-   * be blocked, because a timeout with a very high number would be at the
-   * head, rather than at the end.
-   * The test "if (the_watchdog->delta_interval != 0)"
-   * here prevents this from occuring.
-   *
-   * We were not able to categorically identify the situation that causes
-   * this, but proved it to be true empirically.  So this check causes
-   * correct behaviour in this circumstance.
-   *
-   * The belief is that a race condition exists whereby an event at the head
-   * of the chain is removed (by a pending ISR or higher priority task)
-   * during the _ISR_Flash( level ); in _Watchdog_Insert, but the watchdog
-   * to be inserted has already had its delta_interval adjusted to 0, and
-   * so is added to the head of the chain with a delta_interval of 0.
-   *
-   * Steven Johnson - 12/2005 (gcc-3.2.3 -O3 on powerpc)
-   */
-  if (the_watchdog->delta_interval != 0) {
-    the_watchdog->delta_interval--;
-    if ( the_watchdog->delta_interval != 0 )
-      goto leave;
+    /*
+     * Although it is forbidden to insert watchdogs with a delta interval of
+     * zero it is possible to observe watchdogs with a delta interval of zero
+     * at this point.  For example lets have a watchdog chain of one watchdog
+     * with a delta interval of one and insert a new one with an initial value
+     * of one.  At the start of the insert procedure it will advance one step
+     * and reduce its delta interval by one yielding zero.  Now a tick happens.
+     * This will remove the watchdog on the chain and update the insert
+     * iterator.  Now the insert operation continues and will insert the new
+     * watchdog with a delta interval of zero.
+     */
+    if ( delta > 0 ) {
+      --delta;
+      first->delta_interval = delta;
+    }
+
+    while ( delta == 0 ) {
+      bool                            run;
+      Watchdog_Service_routine_entry  routine;
+      Objects_Id                      id;
+      void                           *user_data;
+
+      run = ( first->state == WATCHDOG_ACTIVE );
+
+      _Watchdog_Remove_it( header, first );
+
+      routine = first->routine;
+      id = first->id;
+      user_data = first->user_data;
+
+      _Watchdog_Release( header, &lock_context );
+
+      if ( run ) {
+        (*routine)( id, user_data );
+      }
+
+      _Watchdog_Acquire( header, &lock_context );
+
+      if ( _Watchdog_Is_empty( header ) ) {
+        break;
+      }
+
+      first = _Watchdog_First( header );
+      delta = first->delta_interval;
+    }
   }
 
-  do {
-     watchdog_state = _Watchdog_Remove( header, the_watchdog );
-
-     _Watchdog_Release( header, &lock_context );
-
-     switch( watchdog_state ) {
-       case WATCHDOG_ACTIVE:
-         (*the_watchdog->routine)(
-           the_watchdog->id,
-           the_watchdog->user_data
-         );
-         break;
-
-       case WATCHDOG_INACTIVE:
-         /*
-          *  This state indicates that the watchdog is not on any chain.
-          *  Thus, it is NOT on a chain being tickled.  This case should
-          *  never occur.
-          */
-         break;
-
-       case WATCHDOG_BEING_INSERTED:
-         /*
-          *  This state indicates that the watchdog is in the process of
-          *  BEING inserted on the chain.  Thus, it can NOT be on a chain
-          *  being tickled.  This case should never occur.
-          */
-         break;
-
-       case WATCHDOG_REMOVE_IT:
-         break;
-     }
-
-     _Watchdog_Acquire( header, &lock_context );
-
-     the_watchdog = _Watchdog_First( header );
-   } while ( !_Watchdog_Is_empty( header ) &&
-             (the_watchdog->delta_interval == 0) );
-
-leave:
-   _Watchdog_Release( header, &lock_context );
+  _Watchdog_Release( header, &lock_context );
 }

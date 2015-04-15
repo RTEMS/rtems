@@ -399,9 +399,7 @@ uninitialized =
 
 /*userext.h*/   (sizeof _User_extensions_List)            +
 
-/*watchdog.h*/  (sizeof _Watchdog_Sync_level)             +
-                (sizeof _Watchdog_Sync_count)             +
-                (sizeof _Watchdog_Ticks_since_boot)       +
+/*watchdog.h*/  (sizeof _Watchdog_Ticks_since_boot)       +
                 (sizeof _Watchdog_Ticks_header)           +
                 (sizeof _Watchdog_Seconds_header)         +
 
