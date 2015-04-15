@@ -26,7 +26,7 @@ RTEMS_BSPOPTS_HELP([BFIN_ON_SKYEYE],
 [(BSP--Skyeye)
  If defined, disable features which are not supported on Skyeye.])
 
-RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
+RTEMS_BSP_CLEANUP_OPTIONS(0, 1, 0)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

@@ -106,6 +106,8 @@ loop4:	p0 +=1;
 	call (p0);
 	sp += 12;
 
+	.global _bsp_reset
+_bsp_reset:
 	HLT
 	p0.h = _exit;
 	p0.l = _exit;
