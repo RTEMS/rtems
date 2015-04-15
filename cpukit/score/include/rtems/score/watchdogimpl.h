@@ -32,14 +32,6 @@ extern "C" {
  */
 
 /**
- *  @brief Control block used to manage intervals.
- *
- *  The following type defines the control block used to manage
- *  intervals.
- */
-#define WATCHDOG_MAXIMUM_INTERVAL ((Watchdog_Interval) 0xffffffff)
-
-/**
  * @brief Watchdog initializer for static initialization.
  *
  * @see _Watchdog_Initialize().
