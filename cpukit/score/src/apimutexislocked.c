@@ -23,7 +23,7 @@
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/threadimpl.h>
 
-bool _API_Mutex_Is_Locked( API_Mutex_Control *the_mutex )
+bool _API_Mutex_Is_locked( API_Mutex_Control *the_mutex )
 {
   bool      is_locked;
   ISR_Level level;

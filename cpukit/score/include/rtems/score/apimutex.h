@@ -85,7 +85,7 @@ void _API_Mutex_Lock( API_Mutex_Control *mutex );
  */
 void _API_Mutex_Unlock( API_Mutex_Control *mutex );
 
-bool _API_Mutex_Is_Locked( API_Mutex_Control *mutex );
+bool _API_Mutex_Is_locked( API_Mutex_Control *mutex );
 
 /** @} */
 
@@ -122,7 +122,7 @@ static inline void _RTEMS_Unlock_allocator( void )
 
 static inline bool _RTEMS_Check_if_allocator_is_locked( void )
 {
-  return _API_Mutex_Is_Locked( _RTEMS_Allocator_Mutex );
+  return _API_Mutex_Is_locked( _RTEMS_Allocator_Mutex );
 }
 
 SCORE_EXTERN API_Mutex_Control *_Once_Mutex;
