@@ -23,6 +23,7 @@
 #include <rtems/score/watchdogimpl.h>
 
 Watchdog_States _Watchdog_Remove(
+  Watchdog_Header  *header,
   Watchdog_Control *the_watchdog
 )
 {

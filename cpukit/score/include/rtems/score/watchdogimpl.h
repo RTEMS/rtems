@@ -99,10 +99,12 @@ void _Watchdog_Handler_initialization( void );
  *  This routine removes @a the_watchdog from the watchdog chain on which
  *  it resides and returns the state @a the_watchdog timer was in.
  *
+ *  @param[in] header The watchdog chain.
  *  @param[in] the_watchdog will be removed
  *  @retval the state in which @a the_watchdog was in when removed
  */
 Watchdog_States _Watchdog_Remove (
+  Watchdog_Header  *header,
   Watchdog_Control *the_watchdog
 );
 
@@ -306,6 +308,20 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Insert_seconds(
 
 }
 
+RTEMS_INLINE_ROUTINE Watchdog_States _Watchdog_Remove_ticks(
+  Watchdog_Control *the_watchdog
+)
+{
+  return _Watchdog_Remove( &_Watchdog_Ticks_header, the_watchdog );
+}
+
+RTEMS_INLINE_ROUTINE Watchdog_States _Watchdog_Remove_seconds(
+  Watchdog_Control *the_watchdog
+)
+{
+  return _Watchdog_Remove( &_Watchdog_Seconds_header, the_watchdog );
+}
+
 /**
  * This routine resets THE_WATCHDOG timer to its state at INSERT
  * time.  This routine is valid only on interval watchdog timers
@@ -318,7 +334,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Reset_ticks(
 )
 {
 
-  (void) _Watchdog_Remove( the_watchdog );
+  _Watchdog_Remove_ticks( the_watchdog );
 
   _Watchdog_Insert( &_Watchdog_Ticks_header, the_watchdog );
 

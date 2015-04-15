@@ -62,7 +62,7 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
 
   _Thread_Set_state( the_thread, STATES_ZOMBIE );
   _Thread_queue_Extract_with_proxy( the_thread );
-  _Watchdog_Remove( &the_thread->Timer );
+  _Watchdog_Remove_ticks( &the_thread->Timer );
 
   _ISR_lock_ISR_disable_and_acquire( &zombies->Lock, &lock_context );
   _Chain_Append_unprotected( &zombies->Chain, &the_thread->Object.Node );
@@ -235,7 +235,7 @@ static void _Thread_Start_life_change(
 
   _Thread_Set_state( the_thread, STATES_RESTARTING );
   _Thread_queue_Extract_with_proxy( the_thread );
-  _Watchdog_Remove( &the_thread->Timer );
+  _Watchdog_Remove_ticks( &the_thread->Timer );
   _Scheduler_Set_priority_if_higher( scheduler, the_thread, priority );
   _Thread_Add_post_switch_action( the_thread, &the_thread->Life.Action );
   _Thread_Ready( the_thread );

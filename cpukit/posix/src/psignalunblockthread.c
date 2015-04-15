@@ -115,7 +115,7 @@ bool _POSIX_signals_Unblock_thread(
        *  queue, but is also interruptible by a POSIX signal.
        */
        if ( _States_Is_delaying(the_thread->current_state) ) {
-          (void) _Watchdog_Remove( &the_thread->Timer );
+          _Watchdog_Remove_ticks( &the_thread->Timer );
           _Thread_Unblock( the_thread );
        } else {
          _Thread_queue_Extract_with_proxy( the_thread );

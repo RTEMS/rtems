@@ -66,7 +66,7 @@ static void _Thread_blocking_operation_Finalize(
   if ( _Watchdog_Is_active( &the_thread->Timer ) ) {
     _Watchdog_Deactivate( &the_thread->Timer );
     _Thread_queue_Release( lock_context );
-    (void) _Watchdog_Remove( &the_thread->Timer );
+    _Watchdog_Remove_ticks( &the_thread->Timer );
   } else
     _Thread_queue_Release( lock_context );
 

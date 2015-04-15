@@ -38,7 +38,7 @@ static void _Timer_server_Stop_interval_system_watchdog(
   Timer_server_Control *ts
 )
 {
-  _Watchdog_Remove( &ts->Interval_watchdogs.System_watchdog );
+  _Watchdog_Remove_ticks( &ts->Interval_watchdogs.System_watchdog );
 }
 
 static void _Timer_server_Reset_interval_system_watchdog(
@@ -71,7 +71,7 @@ static void _Timer_server_Stop_tod_system_watchdog(
   Timer_server_Control *ts
 )
 {
-  _Watchdog_Remove( &ts->TOD_watchdogs.System_watchdog );
+  _Watchdog_Remove_seconds( &ts->TOD_watchdogs.System_watchdog );
 }
 
 static void _Timer_server_Reset_tod_system_watchdog(
@@ -208,6 +208,18 @@ static void _Timer_server_Insert_timer_and_make_snapshot(
   }
 
   _Thread_Enable_dispatch();
+}
+
+static void _Timer_server_Cancel_method(
+  Timer_server_Control *ts,
+  Timer_Control *timer
+)
+{
+  if ( timer->the_class == TIMER_INTERVAL_ON_TASK ) {
+    _Watchdog_Remove( &ts->Interval_watchdogs.Header, &timer->Ticker );
+  } else if ( timer->the_class == TIMER_TIME_OF_DAY_ON_TASK ) {
+    _Watchdog_Remove( &ts->TOD_watchdogs.Header, &timer->Ticker );
+  }
 }
 
 static void _Timer_server_Schedule_operation_method(
@@ -563,9 +575,10 @@ rtems_status_code rtems_timer_initiate_server(
   );
 
   /*
-   *  Initialize the pointer to the timer schedule method so applications that
+   *  Initialize the pointer to the timer server methods so applications that
    *  do not use the Timer Server do not have to pull it in.
    */
+  ts->cancel = _Timer_server_Cancel_method;
   ts->schedule_operation = _Timer_server_Schedule_operation_method;
 
   ts->Interval_watchdogs.last_snapshot = _Watchdog_Ticks_since_boot;

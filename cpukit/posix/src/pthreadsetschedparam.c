@@ -70,7 +70,7 @@ int pthread_setschedparam(
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
       if ( api->schedpolicy == SCHED_SPORADIC )
-        (void) _Watchdog_Remove( &api->Sporadic_timer );
+        _Watchdog_Remove_ticks( &api->Sporadic_timer );
 
       api->schedpolicy = policy;
       api->schedparam  = *param;
@@ -99,7 +99,7 @@ int pthread_setschedparam(
 
         case SCHED_SPORADIC:
           api->ss_high_priority = api->schedparam.sched_priority;
-          _Watchdog_Remove( &api->Sporadic_timer );
+          _Watchdog_Remove_ticks( &api->Sporadic_timer );
           _POSIX_Threads_Sporadic_budget_TSR( 0, the_thread );
           break;
       }

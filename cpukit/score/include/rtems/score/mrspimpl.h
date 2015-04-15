@@ -216,7 +216,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
   _Thread_Set_life_protection( initial_life_protection );
 
   if ( timeout > 0 ) {
-    _Watchdog_Remove( &executing->Timer );
+    _Watchdog_Remove_ticks( &executing->Timer );
   }
 
   return status;

@@ -50,9 +50,9 @@ extern "C" {
 typedef struct Timer_server_Control Timer_server_Control;
 
 /**
- * @brief Method used to schedule the insertion of task based timers.
+ * @brief Method used for task based timers.
  */
-typedef void (*Timer_server_Schedule_operation)(
+typedef void (*Timer_server_Method)(
   Timer_server_Control *timer_server,
   Timer_Control        *timer
 );
@@ -84,9 +84,14 @@ struct Timer_server_Control {
   Thread_Control *thread;
 
   /**
+   * @brief The cancel method of the timer server.
+   */
+  Timer_server_Method cancel;
+
+  /**
    * @brief The schedule operation method of the timer server.
    */
-  Timer_server_Schedule_operation schedule_operation;
+  Timer_server_Method schedule_operation;
 
   /**
    * @brief Interval watchdogs triggered by the timer server.
@@ -219,6 +224,8 @@ RTEMS_INLINE_ROUTINE bool _Timer_Is_dormant_class (
 {
   return ( the_class == TIMER_DORMANT );
 }
+
+void _Timer_Cancel( Timer_Control *the_timer );
 
 /**@}*/
 

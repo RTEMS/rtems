@@ -111,7 +111,7 @@ void _Event_Surrender(
     _Thread_Lock_release_default( the_thread, lock_context );
     _Giant_Acquire( cpu_self );
 
-    _Watchdog_Remove( &the_thread->Timer );
+    _Watchdog_Remove_ticks( &the_thread->Timer );
     _Thread_Unblock( the_thread );
 
     _Giant_Release( cpu_self );

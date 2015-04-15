@@ -286,7 +286,7 @@ static void _POSIX_Threads_Terminate_extension(
       *(void **)the_thread->Wait.return_argument = value_ptr;
 
   if ( api->schedpolicy == SCHED_SPORADIC )
-    (void) _Watchdog_Remove( &api->Sporadic_timer );
+    _Watchdog_Remove_ticks( &api->Sporadic_timer );
 
   _Thread_Enable_dispatch();
 }

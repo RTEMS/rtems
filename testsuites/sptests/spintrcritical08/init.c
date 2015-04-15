@@ -55,7 +55,7 @@ static rtems_timer_service_routine test_release_from_isr(
       watchdog->delta_interval == 0
         && watchdog->routine == _Rate_monotonic_Timeout
     ) {
-      Watchdog_States state = _Watchdog_Remove( watchdog );
+      Watchdog_States state = _Watchdog_Remove_ticks( watchdog );
 
       rtems_test_assert( state == WATCHDOG_ACTIVE );
       (*watchdog->routine)( watchdog->id, watchdog->user_data );

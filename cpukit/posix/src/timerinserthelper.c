@@ -39,7 +39,7 @@ bool _POSIX_Timer_Insert_helper(
 {
   ISR_Level            level;
 
-  (void) _Watchdog_Remove( timer );
+  _Watchdog_Remove_ticks( timer );
   _ISR_Disable( level );
 
     /*

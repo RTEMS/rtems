@@ -74,7 +74,7 @@ void _Watchdog_Tickle(
   }
 
   do {
-     watchdog_state = _Watchdog_Remove( the_watchdog );
+     watchdog_state = _Watchdog_Remove( header, the_watchdog );
 
      _ISR_Enable( level );
 

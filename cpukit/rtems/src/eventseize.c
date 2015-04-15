@@ -101,7 +101,7 @@ void _Event_Seize(
     wait_class | THREAD_WAIT_STATE_BLOCKED
   );
   if ( !success ) {
-    _Watchdog_Remove( &executing->Timer );
+    _Watchdog_Remove_ticks( &executing->Timer );
     _Thread_Unblock( executing );
   }
 

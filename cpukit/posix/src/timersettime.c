@@ -85,7 +85,7 @@ int timer_settime(
       /* First, it verifies if the timer must be stopped */
       if ( normalize.it_value.tv_sec == 0 && normalize.it_value.tv_nsec == 0 ) {
          /* Stop the timer */
-         (void) _Watchdog_Remove( &ptimer->Timer );
+         _Watchdog_Remove_ticks( &ptimer->Timer );
          /* The old data of the timer are returned */
          if ( ovalue )
            *ovalue = ptimer->timer_data;
