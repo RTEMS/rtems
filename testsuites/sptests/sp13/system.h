@@ -66,13 +66,34 @@ TEST_EXTERN rtems_name Queue_name[ 4 ];      /* array of queue names */
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 /*
- *  First three created in init.c, last created in task1.c.
+ *  Created in init.c:
+ *    Q1 - CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, MESSAGE_SIZE ) (1600)
+ *    Q2 - CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 10, MESSAGE_SIZE )   (160)
+ *    Q3 - CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, MESSAGE_SIZE ) (1600)
+ *
+ *  Q1 and Q2 deleted in task1.c.
+ *
+ *  Q1 recreated in task1.c:
+ *    Q1 - CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, 20 )           (2000)
+ *
+ *  Q1 deleted again in task1.c.
+ *
+ *  Q1 repeatedly created and deleted for 2 messages of 1-1030 bytes
+ *  in length. Account for peak usage:
+ *    Q1 - CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 2, 1030 )           (2060)
+ *
+ *  Because each message requires memory for the message plus two
+ *  pointers to place the buffer on lists, it is easier to just
+ *  allocate memory for all the message queues. But we can safely
+ *  ignore Q2 and the last instance of Q1 since enough memory is
+ *  free when the third instance of Q1 is created.
  */
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
-   CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, MESSAGE_SIZE ) + \
-   CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 10, MESSAGE_SIZE ) + \
-   CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, MESSAGE_SIZE ) + \
-   CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, 20 )
+   /* Q1 */ CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, MESSAGE_SIZE ) + \
+   /* Q2 */ /* CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 10, MESSAGE_SIZE ) + */ \
+   /* Q3 */ CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, MESSAGE_SIZE ) + \
+   /* Q1 */ CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 100, 20 ) + \
+   /* Q1 */ /* CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 2,  1030 ) */
 
 #define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
 
