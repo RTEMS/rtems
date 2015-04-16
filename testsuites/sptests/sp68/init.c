@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2015 embedded brains GmbH.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -24,8 +25,6 @@
 #endif
 
 #include <tmacros.h>
-
-#include <rtems/rtems/timerimpl.h>
 
 const char rtems_test_name[] = "SP 68";
 
@@ -69,6 +68,8 @@ static void *region_item;
 
 static rtems_interval start;
 
+static rtems_id timer_server_id;
+
 static volatile enum resource_type {
   SEMAPHORE = 0,
   MUTEX,
@@ -79,7 +80,7 @@ static volatile enum resource_type {
   TASK_WAKE_AFTER
 } resource_type;
 
-static const char *resource_type_desc [] = {
+static const char *const resource_type_desc [] = {
   "SEMAPHORE",
   "MUTEX",
   "MESSAGE QUEUE",
@@ -130,6 +131,7 @@ static void obtain_callback(rtems_id timer_id, void *arg)
         region, 1, RTEMS_WAIT, RTEMS_NO_TIMEOUT, &new_region_item);
       break;
     case EVENT:
+      timer_server_id = rtems_task_self();
       sc = rtems_event_receive(
         RTEMS_EVENT_0, RTEMS_EVENT_ALL | RTEMS_WAIT, RTEMS_NO_TIMEOUT, &events);
       break;
@@ -176,7 +178,7 @@ static void release_callback(rtems_id timer_id, void *arg)
       sc = rtems_message_queue_send(message_queue, buf, size);
       break;
     case EVENT:
-      sc = rtems_event_send(_Timer_server->thread->Object.id, RTEMS_EVENT_0);
+      sc = rtems_event_send(timer_server_id, RTEMS_EVENT_0);
       break;
     case BARRIER:
       sc = rtems_barrier_release(barrier, &released);
