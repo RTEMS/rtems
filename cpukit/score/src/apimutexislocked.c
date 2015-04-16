@@ -22,7 +22,7 @@
 #include <rtems/score/apimutex.h>
 #include <rtems/score/coremuteximpl.h>
 
-bool _API_Mutex_Is_locked( API_Mutex_Control *the_mutex )
+bool _API_Mutex_Is_locked( const API_Mutex_Control *the_mutex )
 {
   return _CORE_mutex_Is_locked( &the_mutex->Mutex );
 }

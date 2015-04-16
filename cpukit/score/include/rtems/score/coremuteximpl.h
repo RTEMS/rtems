@@ -351,7 +351,7 @@ void _CORE_mutex_Flush(
  * @retval false The mutex is not locked.
  */
 RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_locked(
-  CORE_mutex_Control  *the_mutex
+  const CORE_mutex_Control *the_mutex
 )
 {
   return the_mutex->holder != NULL;

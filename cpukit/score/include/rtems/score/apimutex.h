@@ -85,7 +85,7 @@ void _API_Mutex_Lock( API_Mutex_Control *mutex );
  */
 void _API_Mutex_Unlock( API_Mutex_Control *mutex );
 
-bool _API_Mutex_Is_locked( API_Mutex_Control *mutex );
+bool _API_Mutex_Is_locked( const API_Mutex_Control *mutex );
 
 /** @} */
 
