@@ -273,6 +273,37 @@ typedef struct {
   #define _ISR_lock_Release( _lock, _context )
 #endif
 
+/**
+ * @brief Flashes an ISR lock.
+ *
+ * On uni-processor configurations this a simple _ISR_Flash().  On SMP
+ * configurations this function releases an SMP lock, restores the interrupt
+ * status, then disables interrupts and acquires the SMP lock again.
+ *
+ * This function can be used in thread and interrupt context.
+ *
+ * @param[in] _lock The ISR lock control.
+ * @param[in] _context The local ISR lock context for an acquire and release
+ * pair.
+ *
+ * @see _ISR_lock_ISR_disable_and_acquire() and
+ * _ISR_lock_Release_and_ISR_enable().
+ */
+#if defined( RTEMS_SMP )
+  #define _ISR_lock_Flash( _lock, _context ) \
+    _SMP_lock_Release_and_ISR_enable( \
+      &( _lock )->Lock, \
+      &( _context )->Lock_context \
+    ); \
+    _SMP_lock_ISR_disable_and_acquire( \
+      &( _lock )->Lock, \
+      &( _context )->Lock_context \
+    )
+#else
+  #define _ISR_lock_Flash( _lock, _context ) \
+    _ISR_Flash( ( _context )->isr_level )
+#endif
+
 /** @} */
 
 #ifdef __cplusplus
