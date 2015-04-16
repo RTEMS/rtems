@@ -21,16 +21,8 @@
 
 #include <rtems/score/apimutex.h>
 #include <rtems/score/coremuteximpl.h>
-#include <rtems/score/threadimpl.h>
 
 bool _API_Mutex_Is_locked( API_Mutex_Control *the_mutex )
 {
-  bool      is_locked;
-  ISR_Level level;
-
-  _ISR_Disable( level );
-    is_locked = _CORE_mutex_Is_locked( &the_mutex->Mutex );
-  _ISR_Enable( level );
-
-  return is_locked;
+  return _CORE_mutex_Is_locked( &the_mutex->Mutex );
 }
