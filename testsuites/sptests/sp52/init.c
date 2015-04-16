@@ -26,29 +26,35 @@
 #endif
 
 #include <tmacros.h>
+#include <string.h>
 
 const char rtems_test_name[] = "SP " TEST_NUMBER;
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_timer_service_routine TIMER_service_routine(
-  rtems_id  ignored_id,
-  void     *user_data
-);
+#define INITIAL_YEAR 2009
 
-#define INITIAL_SECOND 10
-volatile bool _timer_passage = FALSE;
+static bool _timer_passage;
+
+static rtems_time_of_day time_to_fire;
 
 /*timer Routine*/
-rtems_timer_service_routine TIMER_service_routine(
+static rtems_timer_service_routine TIMER_service_routine(
   rtems_id  ignored_id,
   void     *user_data
 )
 {
-  _timer_passage = TRUE;
+  rtems_status_code status;
+  rtems_time_of_day now;
+
+  _timer_passage = true;
+
+  memset( &now, 0, sizeof( now ) );
+
+  status = rtems_clock_get_tod( &now );
+  rtems_test_assert( status == RTEMS_SUCCESSFUL );
+  rtems_test_assert( memcmp( &now, &time_to_fire, sizeof( now ) ) == 0 );
 }
 
-rtems_task Init(
+static rtems_task Init(
   rtems_task_argument argument
 )
 {
@@ -57,7 +63,6 @@ rtems_task Init(
   rtems_name        timer_name;
 
   rtems_time_of_day global_time;
-  rtems_time_of_day time_to_fire;
 
   TEST_BEGIN();
 
@@ -79,7 +84,7 @@ rtems_task Init(
   #endif
 
   /* Set system clock  */
-  build_time(&global_time, 6, 8, 2009, 16, 5, INITIAL_SECOND, 0);
+  build_time(&global_time, 6, 8, INITIAL_YEAR, 16, 5, 13, 0);
   status = rtems_clock_set(&global_time);
   directive_failed( status, "rtems_clock_set" );
 
@@ -88,7 +93,7 @@ rtems_task Init(
   time_to_fire = global_time;
 
   /* only diferent second */
-  time_to_fire.second = INITIAL_SECOND + 5;
+  time_to_fire.year = INITIAL_YEAR + 5;
 
   status = FIRE_WHEN(
     timer_id,
@@ -99,7 +104,7 @@ rtems_task Init(
   directive_failed( status, FIRE_WHEN_STRING );
 
   /* Set system clock FORWARD */
-  global_time.second = INITIAL_SECOND + 10;
+  global_time.year = time_to_fire.year;
   status = rtems_clock_set(&global_time);
 
   if (!_timer_passage) {

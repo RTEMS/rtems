@@ -36,16 +36,17 @@ void _TOD_Set_with_timestamp(
   _Thread_Disable_dispatch();
 
   seconds_now = _TOD_Seconds_since_epoch();
+
+  _TOD_Acquire( tod, &lock_context );
+  tod->now = *tod_as_timestamp;
+  _TOD_Release( tod, &lock_context );
+
   header = &_Watchdog_Seconds_header;
 
   if ( seconds_next < seconds_now )
     _Watchdog_Adjust_backward( header, seconds_now - seconds_next );
   else
     _Watchdog_Adjust_forward( header, seconds_next - seconds_now );
-
-  _TOD_Acquire( tod, &lock_context );
-  tod->now = *tod_as_timestamp;
-  _TOD_Release( tod, &lock_context );
 
   tod->seconds_trigger = nanoseconds;
   tod->is_set = true;
