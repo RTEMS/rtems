@@ -254,6 +254,8 @@ extern const size_t _IO_Number_of_drivers;
 
 extern rtems_driver_address_table _IO_Driver_address_table[];
 
+extern bool _IO_All_drivers_initialized;
+
 /**
  * @brief Initialization of all device drivers.
  *

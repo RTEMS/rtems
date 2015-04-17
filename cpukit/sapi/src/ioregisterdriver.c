@@ -25,8 +25,6 @@
 #include <rtems/rtems/intr.h>
 #include <rtems/score/threaddispatch.h>
 
-extern int _IO_Manager_drivers_inititalized;
-
 static inline bool rtems_io_is_empty_table(
   const rtems_driver_address_table *table
 )
@@ -110,7 +108,7 @@ rtems_status_code rtems_io_register_driver(
 
   _Thread_Enable_dispatch();
 
-  if ( _IO_Manager_drivers_inititalized ) {
+  if ( _IO_All_drivers_initialized ) {
     /* Other drivers have already been initialized, we initialize
      * the driver directly.
      */
