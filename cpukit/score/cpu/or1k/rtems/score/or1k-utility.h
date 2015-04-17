@@ -385,6 +385,10 @@ static inline void _OR1K_Sync_pipeline( void )
 #define _OR1KSIM_CPU_Halt() \
 	asm volatile ("l.nop 0xc")
 
+#ifdef __cplusplus
+}
+#endif
+
 #else /* ASM */
 
 #endif /* ASM */
