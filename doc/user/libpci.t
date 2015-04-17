@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 2011
+@c  COPYRIGHT (c) 2011,2015
 @c  Aeroflex Gaisler AB
 @c  All rights reserved.
 @c
@@ -29,6 +29,7 @@ systems in mind the PCI Library offers four different configuration options
 listed below. It is selected during compile time by defining the appropriate
 macros in confdefs.h. It is also possible to enable PCI_LIB_NONE (No
 Configuration) which can be used for debuging PCI access functions.
+
 @itemize @bullet
 @item Auto Configuration (do Plug & Play)
 @item Read Configuration (read BIOS or boot loader configuration)
@@ -97,9 +98,11 @@ The PCI library is located in cpukit/libpci, it consists of different parts:
 
 @subsection PCI Configuration
 
-During start up the PCI bus must be configured in order for host and peripherals
-to access one another using Memory or I/O accesses and that interrupts are
-properly handled. Three different spaces are defined and mapped separately:
+During start up the PCI bus must be configured in order for host and
+peripherals to access one another using Memory or I/O accesses and that
+interrupts are properly handled. Three different spaces are defined and
+mapped separately:
+
 @enumerate
 @item I/O space (IO)
 @item non-prefetchable Memory space (MEMIO)
@@ -117,11 +120,13 @@ has already set up this the configuration is overwritten or simply read out.
 
 In order to support different configuration methods the following configuration
 libraries are selectable by the user:
+
 @itemize @bullet
 @item Auto Configuration (run Plug & Play software)
 @item Read Configuration (relies on a boot loader or BIOS)
 @item Static Configuration (write user defined setup, no Plug & Play)
-@item Peripheral Configuration (user defined setup, no access to configuration space)
+@item Peripheral Configuration (user defined setup, no access to
+configuration space)
 @end itemize
 
 A host driver can be made to support all three configuration methods, or any
@@ -139,6 +144,7 @@ device tree at compile time when using the static/peripheral method.
 
 The active configuration method can be selected at compile time in the same
 way as other project parameters by including rtems/confdefs.h and setting
+
 @itemize @bullet
 @item CONFIGURE_INIT
 @item RTEMS_PCI_CONFIG_LIB
@@ -146,7 +152,6 @@ way as other project parameters by including rtems/confdefs.h and setting
 @end itemize
 
 See the RTEMS configuration section how to setup the PCI library.
-
 
 @subsubsection Auto Configuration
 
@@ -164,6 +169,7 @@ address region (due to too few resources available) the register will be given
 the value of pci_invalid_address which defaults to 0.
 
 The auto configuration routines support:
+
 @itemize @bullet
 @item PCI 2.3
 @item Little and big endian PCI bus
@@ -178,6 +184,7 @@ The auto configuration routines support:
 @end itemize
 
 Not supported:
+
 @itemize @bullet
 @item hot-pluggable devices
 @item Cardbus bridges
@@ -189,7 +196,6 @@ In PCI 2.3 there may exist I/O BARs that must be located at the low 64kBytes
 address range, in order to support this the host driver or BSP must make sure
 that I/O addresses region is within this region.
 
-
 @subsubsection Read Configuration
 
 When a BIOS or boot loader already has setup the PCI bus the configuration can
@@ -198,7 +204,6 @@ enumerated, this is a much simpler approach than configuring PCI ourselves. The
 PCI device tree is automatically created based on the current configuration and
 devices present. After initialization is done there is no difference between
 the auto or read configuration approaches.
-
 
 @subsubsection Static Configuration
 
@@ -214,7 +219,6 @@ system that has had PCI setup by the auto or read configuration routines, it
 can be called from the PCI shell command. The user must provide the PCI device
 tree named pci_hb.
 
-
 @subsubsection Peripheral Configuration
 
 On systems where a peripheral PCI device needs to access other PCI devices than
@@ -223,9 +227,9 @@ answers on the PCI host's requests and start DMA accesses into the Hosts memory,
 however in some complex systems PCI devices may want to access other devices
 on the same bus or at another PCI bus.
 
-A PCI peripheral is not allowed to do PCI configuration cycles, which means that
-it must either rely on the host to give it the addresses it needs, or that the
-addresses are predefined.
+A PCI peripheral is not allowed to do PCI configuration cycles, which
+means that it must either rely on the host to give it the addresses it
+needs, or that the addresses are predefined.
 
 This configuration approach is very similar to the static option, however the
 configuration is never written to PCI bus, instead it is only used for drivers
@@ -237,6 +241,7 @@ to find PCI devices and resources using the same PCI API as for the host
 The PCI access routines are low-level routines provided for drivers,
 configuration software, etc. in order to access different regions in a way
 not dependent upon the host driver, BSP or platform.
+
 @itemize @bullet
 @item PCI configuration space
 @item PCI I/O space
@@ -288,8 +293,8 @@ CPU. The window size may vary and must be taken into consideration by the
 host driver. The below routines must be used to access I/O space. The address
 given to the functions is not the PCI I/O addresses, the caller must have
 translated PCI I/O addresses (available in the PCI BARs) into a BSP or host
-driver custom address, see @ref{Access functions} for how addresses are
-translated.
+driver custom address, see @ref{PCI Library Access functions} for how
+addresses are translated.
 
 @example
 /* Read a register over PCI I/O Space */
@@ -381,7 +386,6 @@ different PCI spaces/regions.
   static inline int pci_cpu2pci(uint32_t *address, int type);
 @end example
 
-
 @subsection PCI Interrupt
 
 The PCI specification defines four different interrupt lines INTA#..INTD#,
@@ -400,7 +404,6 @@ PCI device drivers may use the pci_interrupt_ routines in order to call the
 BSP specific functions in a platform independent way. The PCI interrupt
 interface has been made similar to the RTEMS IRQ extension so that a BSP can
 use the standard RTEMS interrupt functions directly.
-
 
 @subsection PCI Shell command
 
