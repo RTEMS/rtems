@@ -12,6 +12,7 @@
 
 #include <rtems/score/atomic.h>
 #include <rtems/score/smpbarrier.h>
+#include <rtems/score/smpimpl.h>
 #include <rtems.h>
 #include <limits.h>
 #include <string.h>
@@ -25,17 +26,6 @@ CPU_STRUCTURE_ALIGNMENT static int data_to_flush[1024];
 #define CPU_COUNT 32
 
 #define WORKER_PRIORITY 100
-
-typedef void (*Cache_manager_Function_ptr)(const void *d_addr, size_t n_bytes);
-
-void
-_Cache_manager_Send_smp_msg(
-    const size_t setsize,
-    const cpu_set_t *set,
-    Cache_manager_Function_ptr func,
-    const void * addr,
-    size_t size
-  );
 
 typedef struct {
   SMP_barrier_Control barrier;
@@ -51,10 +41,9 @@ static void function_to_flush( void )
   /* Does nothing. Used to give a pointer to instruction address space. */
 }
 
-static void test_cache_message( const void *d_addr, size_t n_bytes )
+static void test_cache_message( void *arg )
 {
-  rtems_test_assert(n_bytes == 123);
-  rtems_test_assert(d_addr == 0);
+  rtems_test_assert(arg == &ctx);
 
   ctx.count[rtems_get_current_processor()]++;
 }
@@ -111,7 +100,7 @@ static void test_func_test( size_t set_size, cpu_set_t *cpu_set,
   ctx.count[rtems_get_current_processor()] = 0;
   _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
 
-  _Cache_manager_Send_smp_msg( set_size, cpu_set, test_cache_message, 0, 123 );
+  _SMP_Multicast_action( set_size, cpu_set, test_cache_message, &ctx );
 
   _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
 
@@ -129,7 +118,7 @@ static void test_func_isrdisabled_test( size_t set_size, cpu_set_t *cpu_set,
 
   _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
 
-  _Cache_manager_Send_smp_msg( set_size, cpu_set, test_cache_message, 0, 123 );
+  _SMP_Multicast_action( set_size, cpu_set, test_cache_message, &ctx );
 
   _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
 
@@ -149,7 +138,7 @@ static void test_func_giant_taken_test( size_t set_size, cpu_set_t *cpu_set,
 
   _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
 
-  _Cache_manager_Send_smp_msg( set_size, cpu_set, test_cache_message, 0, 123 );
+  _SMP_Multicast_action( set_size, cpu_set, test_cache_message, &ctx );
 
   _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
 

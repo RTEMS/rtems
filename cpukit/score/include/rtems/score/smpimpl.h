@@ -52,11 +52,11 @@ extern "C" {
 #define SMP_MESSAGE_TEST 0x2UL
 
 /**
- * @brief SMP message to request a cache manager invocation.
+ * @brief SMP message to request a multicast action.
  *
  * @see _SMP_Send_message().
  */
-#define SMP_MESSAGE_CACHE_MANAGER 0x4UL
+#define SMP_MESSAGE_MULTICAST_ACTION 0x4UL
 
 /**
  * @brief SMP fatal codes.
@@ -135,10 +135,9 @@ static inline void _SMP_Set_test_message_handler(
 }
 
 /**
- * @brief Handles cache invalidation/flush requests from a remote processor.
- *
+ * @brief Processes all pending multicast actions.
  */
-void _SMP_Cache_manager_message_handler( void );
+void _SMP_Multicast_actions_process( void );
 
 /**
  * @brief Interrupt handler for inter-processor interrupts.
@@ -163,10 +162,9 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
       ( *_SMP_Test_message_handler )( cpu_self );
     }
 
-    if ( ( message & SMP_MESSAGE_CACHE_MANAGER ) != 0 ) {
-      _SMP_Cache_manager_message_handler();
+    if ( ( message & SMP_MESSAGE_MULTICAST_ACTION ) != 0 ) {
+      _SMP_Multicast_actions_process();
     }
-
   }
 }
 
@@ -218,6 +216,25 @@ void _SMP_Send_message_multicast(
   const size_t setsize,
   const cpu_set_t *cpus,
   unsigned long message
+);
+
+typedef void ( *SMP_Multicast_action_handler )( void *arg );
+
+/**
+ *  @brief Initiates a SMP multicast action to a set of processors.
+ *
+ *  The current processor may be part of the set.
+ *
+ *  @param[in] setsize The size of the set of target processors of the message.
+ *  @param[in] cpus The set of target processors of the message.
+ *  @param[in] handler The multicast action handler.
+ *  @param[in] arg The multicast action argument.
+ */
+void _SMP_Multicast_action(
+  const size_t setsize,
+  const cpu_set_t *cpus,
+  SMP_Multicast_action_handler handler,
+  void *arg
 );
 
 #endif /* defined( RTEMS_SMP ) */

@@ -37,161 +37,43 @@
 
 #include <rtems.h>
 #include "cache_.h"
+
+#if defined(RTEMS_SMP)
+
 #include <rtems/score/smpimpl.h>
-#include <rtems/score/smplock.h>
-#include <rtems/score/chainimpl.h>
-#include <rtems/score/sysstate.h>
-
-#if defined( RTEMS_SMP )
-
-typedef void (*Cache_manager_Function_ptr)(const void *d_addr, size_t n_bytes);
 
 typedef struct {
-  Chain_Node Node;
-  Cache_manager_Function_ptr func;
   const void *addr;
   size_t size;
-  cpu_set_t *recipients;
-  size_t setsize;
-  Atomic_Ulong done;
-} Cache_manager_SMP_node;
+} smp_cache_area;
 
-typedef struct {
-  SMP_lock_Control Lock;
-  Chain_Control List;
-} Cache_manager_SMP_control;
+#if defined(CPU_DATA_CACHE_ALIGNMENT)
 
-static Cache_manager_SMP_control _Cache_manager_SMP_control = {
-  .Lock = SMP_LOCK_INITIALIZER("cachemgr"),
-  .List = CHAIN_INITIALIZER_EMPTY(_Cache_manager_SMP_control.List)
-};
-
-void
-_SMP_Cache_manager_message_handler(void)
+static void smp_cache_data_flush(void *arg)
 {
-  SMP_lock_Context lock_context;
-  Cache_manager_SMP_node *node;
-  Cache_manager_SMP_node *next;
-  uint32_t cpu_self_idx;
+  smp_cache_area *area = arg;
 
-  _SMP_lock_ISR_disable_and_acquire( &_Cache_manager_SMP_control.Lock,
-      &lock_context );
-  cpu_self_idx = _SMP_Get_current_processor();
-
-  node = (Cache_manager_SMP_node*)_Chain_First(
-      &_Cache_manager_SMP_control.List );
-  while ( !_Chain_Is_tail( &_Cache_manager_SMP_control.List, &node->Node ) ) {
-    next = (Cache_manager_SMP_node*)_Chain_Next( &node->Node );
-    if ( CPU_ISSET_S ( cpu_self_idx, node->setsize, node->recipients ) ) {
-      CPU_CLR_S ( cpu_self_idx, node->setsize, node->recipients );
-
-      node->func( node->addr, node->size );
-
-      if ( CPU_COUNT_S( node->setsize, node->recipients ) == 0 ) {
-        _Chain_Extract_unprotected( &node->Node );
-        _Atomic_Store_ulong( &node->done, 1, ATOMIC_ORDER_RELEASE );
-      }
-    }
-    node = next;
-  }
-
-  _SMP_lock_Release_and_ISR_enable( &_Cache_manager_SMP_control.Lock,
-      &lock_context );
+  rtems_cache_flush_multiple_data_lines(area->addr, area->size);
 }
 
-#if defined(CPU_DATA_CACHE_ALIGNMENT) || \
-    (defined(CPU_INSTRUCTION_CACHE_ALIGNMENT) && \
-    defined(CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING))
-
-static void
-_Cache_manager_Process_cache_messages( void )
+static void smp_cache_data_inv(void *arg)
 {
-  unsigned long message;
-  Per_CPU_Control *cpu_self;
-  ISR_Level isr_level;
+  smp_cache_area *area = arg;
 
-  _ISR_Disable_without_giant( isr_level );
-
-  cpu_self = _Per_CPU_Get();
-
-  message = _Atomic_Load_ulong( &cpu_self->message, ATOMIC_ORDER_RELAXED );
-
-  if ( message & SMP_MESSAGE_CACHE_MANAGER ) {
-    if ( _Atomic_Compare_exchange_ulong( &cpu_self->message, &message,
-        message & ~SMP_MESSAGE_CACHE_MANAGER, ATOMIC_ORDER_RELAXED,
-        ATOMIC_ORDER_RELAXED ) ) {
-      _SMP_Cache_manager_message_handler();
-    }
-  }
-
-  _ISR_Enable_without_giant( isr_level );
+  rtems_cache_invalidate_multiple_data_lines(area->addr, area->size);
 }
 
-/*
- * We can not make this function static as we need to access it
- * from the test program.
- */
-void
-_Cache_manager_Send_smp_msg(
-    const size_t setsize,
-    const cpu_set_t *set,
-    Cache_manager_Function_ptr func,
-    const void * addr,
-    size_t size
-  );
-
-void
-_Cache_manager_Send_smp_msg(
-    const size_t setsize,
-    const cpu_set_t *set,
-    Cache_manager_Function_ptr func,
-    const void * addr,
-    size_t size
-  )
+static void smp_cache_data_flush_all(void *arg)
 {
-  uint32_t i;
-  Cache_manager_SMP_node node;
-  size_t set_size = CPU_ALLOC_SIZE( _SMP_Get_processor_count() );
-  char cpu_set_copy[set_size];
-  SMP_lock_Context lock_context;
-
-  if ( ! _System_state_Is_up( _System_state_Get() ) ) {
-    func( addr, size );
-    return;
-  }
-
-  memset( cpu_set_copy, 0, set_size );
-  if( set == NULL ) {
-    for( i=0; i<_SMP_Get_processor_count(); ++i )
-      CPU_SET_S( i, set_size, (cpu_set_t *)cpu_set_copy );
-  } else {
-    for( i=0; i<_SMP_Get_processor_count(); ++i )
-      if( CPU_ISSET_S( i, set_size, set ) )
-        CPU_SET_S( i, set_size, (cpu_set_t *)cpu_set_copy );
-  }
-
-  node.func = func;
-  node.addr = addr;
-  node.size = size;
-  node.setsize = set_size;
-  node.recipients = (cpu_set_t *)cpu_set_copy;
-  _Atomic_Store_ulong( &node.done, 0, ATOMIC_ORDER_RELAXED );
-
-
-  _SMP_lock_ISR_disable_and_acquire( &_Cache_manager_SMP_control.Lock,
-      &lock_context );
-  _Chain_Prepend_unprotected( &_Cache_manager_SMP_control.List, &node.Node );
-  _SMP_lock_Release_and_ISR_enable( &_Cache_manager_SMP_control.Lock,
-      &lock_context );
-
-  _SMP_Send_message_multicast( set_size, node.recipients,
-      SMP_MESSAGE_CACHE_MANAGER );
-
-  _Cache_manager_Process_cache_messages();
-
-  while ( !_Atomic_Load_ulong( &node.done, ATOMIC_ORDER_ACQUIRE ) );
+  rtems_cache_flush_entire_data();
 }
-#endif
+
+static void smp_cache_data_inv_all(void *arg)
+{
+  rtems_cache_invalidate_entire_data();
+}
+
+#endif /* defined(CPU_DATA_CACHE_ALIGNMENT) */
 
 void
 rtems_cache_flush_multiple_data_lines_processor_set(
@@ -202,8 +84,9 @@ rtems_cache_flush_multiple_data_lines_processor_set(
 )
 {
 #if defined(CPU_DATA_CACHE_ALIGNMENT)
-  _Cache_manager_Send_smp_msg( setsize, set,
-      rtems_cache_flush_multiple_data_lines, addr, size );
+  smp_cache_area area = { addr, size };
+
+  _SMP_Multicast_action( setsize, set, smp_cache_data_flush, &area );
 #endif
 }
 
@@ -216,8 +99,9 @@ rtems_cache_invalidate_multiple_data_lines_processor_set(
 )
 {
 #if defined(CPU_DATA_CACHE_ALIGNMENT)
-  _Cache_manager_Send_smp_msg( setsize, set,
-      rtems_cache_invalidate_multiple_data_lines, addr, size );
+  smp_cache_area area = { addr, size };
+
+  _SMP_Multicast_action( setsize, set, smp_cache_data_inv, &area );
 #endif
 }
 
@@ -228,8 +112,7 @@ rtems_cache_flush_entire_data_processor_set(
 )
 {
 #if defined(CPU_DATA_CACHE_ALIGNMENT)
-  _Cache_manager_Send_smp_msg( setsize, set,
-      (Cache_manager_Function_ptr)rtems_cache_flush_entire_data, 0, 0 );
+  _SMP_Multicast_action( setsize, set, smp_cache_data_flush_all, NULL );
 #endif
 }
 
@@ -240,11 +123,11 @@ rtems_cache_invalidate_entire_data_processor_set(
 )
 {
 #if defined(CPU_DATA_CACHE_ALIGNMENT)
-  _Cache_manager_Send_smp_msg( setsize, set,
-      (Cache_manager_Function_ptr)rtems_cache_invalidate_entire_data, 0, 0 );
+  _SMP_Multicast_action( setsize, set, smp_cache_data_inv_all, NULL );
 #endif
 }
-#endif
+
+#endif /* defined(RTEMS_SMP) */
 
 /*
  * THESE FUNCTIONS ONLY HAVE BODIES IF WE HAVE A DATA CACHE
@@ -427,7 +310,23 @@ rtems_cache_disable_data( void )
  * THESE FUNCTIONS ONLY HAVE BODIES IF WE HAVE AN INSTRUCTION CACHE
  */
 
+#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT) \
+  && defined(RTEMS_SMP) \
+  && defined(CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING)
 
+static void smp_cache_inst_inv(void *arg)
+{
+  smp_cache_area *area = arg;
+
+  _CPU_cache_invalidate_instruction_range(area->addr, area->size);
+}
+
+static void smp_cache_inst_inv_all(void *arg)
+{
+  _CPU_cache_invalidate_entire_instruction();
+}
+
+#endif
 
 /*
  * This function is responsible for performing an instruction cache
@@ -435,10 +334,10 @@ rtems_cache_disable_data( void )
  * and then perform the invalidations.
  */
 
-#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
-#if !defined(CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS)
+#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT) \
+  && !defined(CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS)
 static void
-_invalidate_multiple_instruction_lines_no_range_functions(
+_CPU_cache_invalidate_instruction_range(
   const void * i_addr,
   size_t n_bytes
 )
@@ -463,7 +362,6 @@ _invalidate_multiple_instruction_lines_no_range_functions(
   }
 }
 #endif
-#endif
 
 void
 rtems_cache_invalidate_multiple_instruction_lines(
@@ -472,25 +370,12 @@ rtems_cache_invalidate_multiple_instruction_lines(
 )
 {
 #if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
-#if defined(CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS)
-
 #if defined(RTEMS_SMP) && defined(CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING)
-  _Cache_manager_Send_smp_msg( 0, 0, _CPU_cache_invalidate_instruction_range,
-      i_addr, n_bytes );
+  smp_cache_area area = { i_addr, n_bytes };
+
+  _SMP_Multicast_action( 0, NULL, smp_cache_inst_inv, &area );
 #else
   _CPU_cache_invalidate_instruction_range( i_addr, n_bytes );
-#endif
-
-#else
-
-#if defined(RTEMS_SMP) && defined(CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING)
-  _Cache_manager_Send_smp_msg( 0, 0,
-      _invalidate_multiple_instruction_lines_no_range_functions, i_addr,
-      n_bytes );
-#else
-  _invalidate_multiple_instruction_lines_no_range_functions( i_addr, n_bytes );
-#endif
-
 #endif
 #endif
 }
@@ -504,14 +389,8 @@ void
 rtems_cache_invalidate_entire_instruction( void )
 {
 #if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
- /*
-  * Call the CPU-specific routine
-  */
-
 #if defined(RTEMS_SMP) && defined(CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING)
-  _Cache_manager_Send_smp_msg( 0, 0,
-      (Cache_manager_Function_ptr)_CPU_cache_invalidate_entire_instruction,
-      0, 0 );
+  _SMP_Multicast_action( 0, NULL, smp_cache_inst_inv_all, NULL );
 #else
  _CPU_cache_invalidate_entire_instruction();
 #endif

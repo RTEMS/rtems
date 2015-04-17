@@ -139,6 +139,7 @@ libscore_a_SOURCES += src/schedulerprioritysmp.c
 libscore_a_SOURCES += src/schedulersimplesmp.c
 libscore_a_SOURCES += src/schedulersmpdebug.c
 libscore_a_SOURCES += src/smp.c
+libscore_a_SOURCES += src/smpmulticastaction.c
 libscore_a_SOURCES += src/cpuset.c
 libscore_a_SOURCES += src/cpusetprintsupport.c
 libscore_a_SOURCES += src/schedulerdefaultaskforhelp.c
