@@ -1,11 +1,11 @@
 #
 # @file
 #
-# @brief Configure script of LibBSP for or1ksim BSP.
+# @brief Configure script of LibBSP for generic_or1k BSP.
 #
 
 AC_PREREQ(2.69)
-AC_INIT([rtems-c-src-lib-libbsp-or1k-or1ksim],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
+AC_INIT([rtems-c-src-lib-libbsp-or1k-generic],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)
 
@@ -16,8 +16,8 @@ RTEMS_BSP_CONFIGURE
 RTEMS_BSPOPTS_SET([BSP_START_RESET_VECTOR],[*],[])
 RTEMS_BSPOPTS_HELP([BSP_START_RESET_VECTOR],[reset vector address for BSP start])
 
-RTEMS_BSPOPTS_SET([BSP_OR1K_OR1KSIM_PERIPHCLK],[*],[50000000U])
-RTEMS_BSPOPTS_HELP([BSP_OR1K_OR1KSIM_PERIPHCLK],[or1ksim PERIPHCLK clock frequency in Hz])
+RTEMS_BSPOPTS_SET([BSP_GENERIC_OR1K_PERIPHCLK],[*],[50000000U])
+RTEMS_BSPOPTS_HELP([BSP_GENERIC_OR1K_PERIPHCLK],[or1k PERIPHCLK clock frequency in Hz])
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS

@@ -1,13 +1,13 @@
 /**
  * @file
  *
- * @ingroup or1ksim
+ * @ingroup generic_or1k
  *
  * @brief Benchmark timer support.
  */
 
 /*
- * Copyright (c) 2014 by Hesham ALMatary
+ * Copyright (c) 2014-2015 by Hesham ALMatary
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

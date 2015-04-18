@@ -1,13 +1,13 @@
 /**
  * @file
  *
- * @ingroup or1ksim
+ * @ingroup generic_or1k
  *
  * @brief Benchmark timer support.
  */
 
 /*
- * Copyright (c) 2014 by Hesham ALMatary
+ * Copyright (c) 2014-2015 by Hesham ALMatary
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -16,10 +16,10 @@
 
 #include <rtems.h>
 #include <rtems/btimer.h>
-#include <bsp/or1ksim.h>
+#include <bsp/generic_or1k.h>
 #include <rtems/score/or1k-utility.h>
 
-#define OR1KSIM_NANOSECONDS_PER_CLK_CYCLE 10
+#define OR1K_NANOSECONDS_PER_CLK_CYCLE 10
 
 static bool benchmark_timer_find_average_overhead = false;
 static uint64_t benchmark_timer_base;
@@ -46,7 +46,7 @@ benchmark_timer_t benchmark_timer_read( void )
   delta = clicks - benchmark_timer_base;
 
   /* total in nanoseconds */
-  total = OR1KSIM_NANOSECONDS_PER_CLK_CYCLE * (delta);
+  total = OR1K_NANOSECONDS_PER_CLK_CYCLE * (delta);
 
   if ( benchmark_timer_find_average_overhead == true )
     return total;          /* in nanoseconds microsecond units */

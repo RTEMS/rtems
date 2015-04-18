@@ -1,13 +1,13 @@
 /**
  * @file
  *
- * @ingroup or1ksim_uart
+ * @ingroup generic_or1k_uart
  *
  * @brief Console Configuration.
  */
 
 /*
- * Copyright (c) 2014 Hesham ALMatary
+ * Copyright (c) 2014-2015 Hesham ALMatary
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -20,19 +20,19 @@
 
 #include <bspopts.h>
 #include <bsp/uart.h>
-#include <bsp/or1ksim.h>
+#include <bsp/generic_or1k.h>
 
 console_tbl Console_Configuration_Ports [] = {
     {
       .sDeviceName = "/dev/ttyS0",
       .deviceType = SERIAL_CUSTOM,
-      .pDeviceFns = &or1ksim_uart_fns,
+      .pDeviceFns = &generic_or1k_uart_fns,
       .deviceProbe = NULL,
       .pDeviceFlow = NULL,
-      .ulCtrlPort1 = OR1KSIM_BSP_UART_BASE,
+      .ulCtrlPort1 = OR1K_BSP_UART_BASE,
       .ulCtrlPort2 = 0,
-      .ulClock = OR1KSIM_UART_DEFAULT_BAUD,
-      .ulIntVector = OR1KSIM_BSP_UART_IRQ
+      .ulClock = OR1K_UART_DEFAULT_BAUD,
+      .ulIntVector = OR1K_BSP_UART_IRQ
     }
 };
 

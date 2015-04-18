@@ -1,27 +1,27 @@
 /**
  * @file
  *
- * @ingroup or1k_or1ksim
+ * @ingroup generic_or1k
  *
  * @brief Global BSP definitions.
  */
 
 /*
- * COPYRIGHT (c) 2014 Hesham ALMatary <heshamelmatary@gmail.com>
+ * COPYRIGHT (c) 2014-2015 Hesham ALMatary <heshamelmatary@gmail.com>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE
  */
 
-#ifndef LIBBSP_OR1K_OR1KSIM_H
-#define LIBBSP_OR1K_OR1KSIM_H
+#ifndef LIBBSP_GENERIC_OR1K_H
+#define LIBBSP_GENERIC_OR1K_H
 
 #include <bspopts.h>
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
-#include <bsp/or1ksim.h>
+#include <bsp/generic_or1k.h>
 
 #include <bsp/default-initial-extension.h>
 
@@ -35,13 +35,13 @@ extern "C" {
 }
 #endif /* __cplusplus */
 
-#endif /* LIBBSP_OR1K_OR1KSIM_H */
+#endif /* LIBBSP_GENERIC_OR1K_H */
 
 /**
- * @defgroup or1k_or1ksim support
+ * @defgroup generic_or1k support
  *
  * @ingroup bsp_or1k
  *
- * @brief or1ksim support package
+ * @brief generic_or1k support package
  *
  */

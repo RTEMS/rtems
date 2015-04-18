@@ -94,9 +94,9 @@ $(PROJECT_INCLUDE)/bsp/uart.h: include/uart.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart.h
 
-$(PROJECT_INCLUDE)/bsp/or1ksim.h: include/or1ksim.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/or1ksim.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/or1ksim.h
+$(PROJECT_INCLUDE)/bsp/generic_or1k.h: include/generic_or1k.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/generic_or1k.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/generic_or1k.h
 
 $(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h

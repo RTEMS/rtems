@@ -1,7 +1,7 @@
 #
 # @file
 #
-# @brief Makefile of LibBSP for the or1ksim BSP.
+# @brief Makefile of LibBSP for the generic_or1k BSP.
 #
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
@@ -32,7 +32,7 @@ include_bsp_HEADERS += ../../shared/include/uart-output-char.h
 include_bsp_HEADERS += ../shared/include/cache_.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/uart.h
-include_bsp_HEADERS += include/or1ksim.h
+include_bsp_HEADERS += include/generic_or1k.h
 
 nodist_include_HEADERS = ../../shared/include/coverhd.h \
   include/bspopts.h
