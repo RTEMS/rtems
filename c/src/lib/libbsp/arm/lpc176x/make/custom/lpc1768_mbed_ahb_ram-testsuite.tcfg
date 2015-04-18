@@ -18,6 +18,7 @@ jffs2_fstime
 mghttpd01
 pppd
 spstkalloc02
+sptls02
 tmfine01
 utf8proc01
 iostream

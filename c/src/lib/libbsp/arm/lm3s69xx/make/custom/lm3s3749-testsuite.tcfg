@@ -5,6 +5,7 @@
 #
 
 capture
+cdtest
 iostream
 dl01
 dl02
