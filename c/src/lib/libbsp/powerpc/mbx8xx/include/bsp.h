@@ -21,6 +21,7 @@
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
+#include <rtems/irq.h>
 #include <mpc8xx.h>
 #include <mpc8xx/cpm.h>
 #include <mpc8xx/mmu.h>
