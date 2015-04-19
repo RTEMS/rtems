@@ -29,6 +29,7 @@ sp48
 spregion_err01
 spstkalloc
 spstkalloc02
+sptls02
 tmfine01
 utf8proc01
 iostream
