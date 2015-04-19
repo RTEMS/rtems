@@ -898,7 +898,7 @@ RTEMS_INLINE_ROUTINE ISR_lock_Control *_Thread_Lock_acquire(
   while ( true ) {
     uint32_t my_generation;
 
-    _ISR_Disable_without_giant( lock_context->Lock_context.isr_level );
+    _ISR_lock_ISR_disable( lock_context );
     my_generation = the_thread->Lock.generation;
 
     /*

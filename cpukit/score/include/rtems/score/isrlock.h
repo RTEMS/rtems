@@ -184,7 +184,7 @@ typedef struct {
  * This function can be used in thread and interrupt context.
  *
  * @param[in] _lock The ISR lock control.
- * @param[in] context The local ISR lock context for an acquire and release
+ * @param[in] _context The local ISR lock context for an acquire and release
  * pair.
  *
  * @see _ISR_lock_Release_and_ISR_enable().
@@ -302,6 +302,42 @@ typedef struct {
 #else
   #define _ISR_lock_Flash( _lock, _context ) \
     _ISR_Flash( ( _context )->isr_level )
+#endif
+
+/**
+ * @brief Disables interrupts and saves the previous interrupt state in the ISR
+ * lock context.
+ *
+ * This function can be used in thread and interrupt context.
+ *
+ * @param[in] _context The local ISR lock context to store the interrupt state.
+ *
+ * @see _ISR_lock_ISR_enable().
+ */
+#if defined( RTEMS_SMP )
+  #define _ISR_lock_ISR_disable( _context ) \
+    _ISR_Disable_without_giant( ( _context )->Lock_context.isr_level )
+#else
+  #define _ISR_lock_ISR_disable( _context ) \
+    _ISR_Disable( ( _context )->isr_level )
+#endif
+
+/**
+ * @brief Restores the saved interrupt state of the ISR lock context.
+ *
+ * This function can be used in thread and interrupt context.
+ *
+ * @param[in] _context The local ISR lock context containing the saved
+ * interrupt state.
+ *
+ * @see _ISR_lock_ISR_disable().
+ */
+#if defined( RTEMS_SMP )
+  #define _ISR_lock_ISR_enable( _context ) \
+    _ISR_Enable_without_giant( ( _context )->Lock_context.isr_level )
+#else
+  #define _ISR_lock_ISR_enable( _context ) \
+    _ISR_Enable( ( _context )->isr_level )
 #endif
 
 /** @} */
