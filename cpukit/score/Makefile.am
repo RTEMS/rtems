@@ -5,6 +5,15 @@ SUBDIRS = cpu
 
 ## include
 
+include_sysdir = $(includedir)/sys
+
+include_sys_HEADERS =
+include_sys_HEADERS += include/sys/_ffcounter.h
+include_sys_HEADERS += include/sys/timeffc.h
+include_sys_HEADERS += include/sys/timepps.h
+include_sys_HEADERS += include/sys/timetc.h
+include_sys_HEADERS += include/sys/timex.h
+
 include_rtemsdir = $(includedir)/rtems
 
 include_rtems_HEADERS = include/rtems/debug.h
@@ -85,6 +94,8 @@ include_rtems_score_HEADERS += include/rtems/score/threadqimpl.h
 include_rtems_score_HEADERS += include/rtems/score/timespec.h
 include_rtems_score_HEADERS += include/rtems/score/timestamp.h
 include_rtems_score_HEADERS += include/rtems/score/timestamp64.h
+include_rtems_score_HEADERS += include/rtems/score/timecounter.h
+include_rtems_score_HEADERS += include/rtems/score/timecounterimpl.h
 include_rtems_score_HEADERS += include/rtems/score/tls.h
 include_rtems_score_HEADERS += include/rtems/score/tod.h
 include_rtems_score_HEADERS += include/rtems/score/todimpl.h
@@ -344,6 +355,7 @@ libscore_a_SOURCES += src/profilingisrentryexit.c
 libscore_a_SOURCES += src/once.c
 libscore_a_SOURCES += src/resourceiterate.c
 libscore_a_SOURCES += src/smpbarrierwait.c
+libscore_a_SOURCES += src/kern_tc.c
 
 EXTRA_DIST = src/Unlimited.txt
 

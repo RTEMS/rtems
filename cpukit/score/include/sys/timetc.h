@@ -12,9 +12,11 @@
 #ifndef _SYS_TIMETC_H_
 #define	_SYS_TIMETC_H_
 
+#ifndef __rtems__
 #ifndef _KERNEL
 #error "no user-serviceable parts inside"
 #endif
+#endif /* __rtems__ */
 
 /*-
  * `struct timecounter' is the interface between the hardware which implements

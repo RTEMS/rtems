@@ -38,6 +38,7 @@ else
 _SUBDIRS += sp29
 endif
 _SUBDIRS += spintrcritical23
+_SUBDIRS += sptimecounter01
 _SUBDIRS += spatomic01
 _SUBDIRS += spintrcritical22
 _SUBDIRS += spsem03

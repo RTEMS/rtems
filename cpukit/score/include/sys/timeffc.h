@@ -55,11 +55,13 @@ struct ffclock_estimate {
 #if __BSD_VISIBLE
 #ifdef _KERNEL
 
+#ifndef __rtems__
 /* Define the kern.sysclock sysctl tree. */
 SYSCTL_DECL(_kern_sysclock);
 
 /* Define the kern.sysclock.ffclock sysctl tree. */
 SYSCTL_DECL(_kern_sysclock_ffclock);
+#endif /* __rtems__ */
 
 /*
  * Index into the sysclocks array for obtaining the ASCII name of a particular

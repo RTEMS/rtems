@@ -4,6 +4,7 @@ include $(top_srcdir)/automake/compile.am
 include_rtemsdir = $(includedir)/rtems
 
 include_rtems_HEADERS = include/confdefs.h
+include_rtems_HEADERS += include/rtems/bsd.h
 include_rtems_HEADERS += include/rtems/chain.h
 include_rtems_HEADERS += include/rtems/config.h
 include_rtems_HEADERS += include/rtems/counter.h
@@ -19,6 +20,7 @@ include_rtems_HEADERS += include/rtems/rbheap.h
 include_rtems_HEADERS += include/rtems/rbtree.h
 include_rtems_HEADERS += include/rtems/scheduler.h
 include_rtems_HEADERS += include/rtems/sptables.h
+include_rtems_HEADERS += include/rtems/timecounter.h
 include_rtems_HEADERS += include/rtems/timespec.h
 
 EXTRA_DIST = include/rtems/README
@@ -39,6 +41,7 @@ libsapi_a_SOURCES += src/delayticks.c
 libsapi_a_SOURCES += src/delaynano.c
 libsapi_a_SOURCES += src/profilingiterate.c
 libsapi_a_SOURCES += src/profilingreportxml.c
+libsapi_a_SOURCES += src/tcsimpleinstall.c
 libsapi_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include $(srcdir)/preinstall.am

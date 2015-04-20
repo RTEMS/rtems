@@ -13,6 +13,27 @@
  * of Melbourne under sponsorship from the FreeBSD Foundation.
  */
 
+#ifdef __rtems__
+#define _KERNEL
+#define bintime _Timecounter_Bintime
+#define binuptime _Timecounter_Binuptime
+#define boottimebin _Timecounter_Boottimebin
+#define getbintime _Timecounter_Getbintime
+#define getbinuptime _Timecounter_Getbinuptime
+#define getmicrotime _Timecounter_Getmicrotime
+#define getmicrouptime _Timecounter_Getmicrouptime
+#define getnanotime _Timecounter_Getnanotime
+#define getnanouptime _Timecounter_Getnanouptime
+#define microtime _Timecounter_Microtime
+#define microuptime _Timecounter_Microuptime
+#define nanotime _Timecounter_Nanotime
+#define nanouptime _Timecounter_Nanouptime
+#define tc_init _Timecounter_Install
+#define timecounter _Timecounter
+#define time_second _Timecounter_Time_second
+#define time_uptime _Timecounter_Time_uptime
+#include <rtems/score/timecounterimpl.h>
+#endif /* __rtems__ */
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD r277406 2015-01-20T03:54:30Z$");
 
@@ -21,20 +42,42 @@ __FBSDID("$FreeBSD r277406 2015-01-20T03:54:30Z$");
 #include "opt_ffclock.h"
 
 #include <sys/param.h>
+#ifndef __rtems__
 #include <sys/kernel.h>
 #include <sys/limits.h>
+#else /* __rtems__ */
+#include <limits.h>
+#endif /* __rtems__ */
 #ifdef FFCLOCK
 #include <sys/lock.h>
 #include <sys/mutex.h>
 #endif
+#ifndef __rtems__
 #include <sys/sysctl.h>
 #include <sys/syslog.h>
 #include <sys/systm.h>
+#endif /* __rtems__ */
 #include <sys/timeffc.h>
 #include <sys/timepps.h>
 #include <sys/timetc.h>
 #include <sys/timex.h>
+#ifndef __rtems__
 #include <sys/vdso.h>
+#endif /* __rtems__ */
+#ifdef __rtems__
+#include <rtems.h>
+ISR_LOCK_DEFINE(static, _Timecounter_Lock, "Timecounter");
+#define hz rtems_clock_get_ticks_per_second()
+#define printf(...)
+#define log(...)
+static inline int
+fls(int x)
+{
+        return x ? sizeof(x) * 8 - __builtin_clz(x) : 0;
+}
+/* FIXME: https://devel.rtems.org/ticket/2348 */
+#define ntp_update_second(a, b) do { (void) a; (void) b; } while (0)
+#endif /* __rtems__ */
 
 /*
  * A large step happens on boot.  This constant detects such steps.
@@ -53,9 +96,13 @@ __FBSDID("$FreeBSD r277406 2015-01-20T03:54:30Z$");
 static uint32_t
 dummy_get_timecount(struct timecounter *tc)
 {
+#ifndef __rtems__
 	static uint32_t now;
 
 	return (++now);
+#else /* __rtems__ */
+	return 0;
+#endif /* __rtems__ */
 }
 
 static struct timecounter dummy_timecounter = {
@@ -76,6 +123,7 @@ struct timehands {
 	struct timehands	*th_next;
 };
 
+#if defined(RTEMS_SMP)
 static struct timehands th0;
 static struct timehands th9 = { NULL, 0, 0, 0, {0, 0}, {0, 0}, {0, 0}, 0, &th0};
 static struct timehands th8 = { NULL, 0, 0, 0, {0, 0}, {0, 0}, {0, 0}, 0, &th9};
@@ -86,6 +134,7 @@ static struct timehands th4 = { NULL, 0, 0, 0, {0, 0}, {0, 0}, {0, 0}, 0, &th5};
 static struct timehands th3 = { NULL, 0, 0, 0, {0, 0}, {0, 0}, {0, 0}, 0, &th4};
 static struct timehands th2 = { NULL, 0, 0, 0, {0, 0}, {0, 0}, {0, 0}, 0, &th3};
 static struct timehands th1 = { NULL, 0, 0, 0, {0, 0}, {0, 0}, {0, 0}, 0, &th2};
+#endif
 static struct timehands th0 = {
 	&dummy_timecounter,
 	0,
@@ -95,19 +144,26 @@ static struct timehands th0 = {
 	{0, 0},
 	{0, 0},
 	1,
+#if defined(RTEMS_SMP)
 	&th1
+#else
+	&th0
+#endif
 };
 
 static struct timehands *volatile timehands = &th0;
 struct timecounter *timecounter = &dummy_timecounter;
 static struct timecounter *timecounters = &dummy_timecounter;
 
+#ifndef __rtems__
 int tc_min_ticktock_freq = 1;
+#endif /* __rtems__ */
 
 volatile time_t time_second = 1;
 volatile time_t time_uptime = 1;
 
 struct bintime boottimebin;
+#ifndef __rtems__
 struct timeval boottime;
 static int sysctl_kern_boottime(SYSCTL_HANDLER_ARGS);
 SYSCTL_PROC(_kern, KERN_BOOTTIME, boottime, CTLTYPE_STRUCT|CTLFLAG_RD,
@@ -133,12 +189,16 @@ SYSCTL_PROC(_kern_timecounter, OID_AUTO, alloweddeviation,
     CTLTYPE_INT | CTLFLAG_RWTUN | CTLFLAG_MPSAFE, 0, 0,
     sysctl_kern_timecounter_adjprecision, "I",
     "Allowed time interval deviation in percents");
+#endif /* __rtems__ */
 
 static void tc_windup(void);
+#ifndef __rtems__
 static void cpu_tick_calibrate(int);
+#endif /* __rtems__ */
 
 void dtrace_getnanotime(struct timespec *tsp);
 
+#ifndef __rtems__
 static int
 sysctl_kern_boottime(SYSCTL_HANDLER_ARGS)
 {
@@ -175,6 +235,7 @@ sysctl_kern_timecounter_freq(SYSCTL_HANDLER_ARGS)
 	freq = tc->tc_frequency;
 	return sysctl_handle_64(oidp, &freq, 0, req);
 }
+#endif /* __rtems__ */
 
 /*
  * Return the difference between the timehands' counter value now and what
@@ -976,6 +1037,7 @@ getmicrotime(struct timeval *tvp)
 
 #endif /* FFCLOCK */
 
+#ifndef __rtems__
 /*
  * This is a clone of getnanotime and used for walltimestamps.
  * The dtrace_ prefix prevents fbt from creating probes for
@@ -993,6 +1055,7 @@ dtrace_getnanotime(struct timespec *tsp)
 		*tsp = th->th_nanotime;
 	} while (gen == 0 || gen != th->th_generation);
 }
+#endif /* __rtems__ */
 
 #ifdef FFCLOCK
 /*
@@ -1006,6 +1069,7 @@ int sysclock_active = SYSCLOCK_FBCK;
 extern int time_status;
 extern long time_esterror;
 
+#ifndef __rtems__
 /*
  * Take a snapshot of sysclock data which can be used to compare system clocks
  * and generate timestamps after the fact.
@@ -1137,6 +1201,7 @@ sysclock_snap2bintime(struct sysclock_snap *cs, struct bintime *bt,
 
 	return (0);
 }
+#endif /* __rtems__ */
 
 /*
  * Initialize a new timecounter and possibly use it.
@@ -1144,6 +1209,7 @@ sysclock_snap2bintime(struct sysclock_snap *cs, struct bintime *bt,
 void
 tc_init(struct timecounter *tc)
 {
+#ifndef __rtems__
 	uint32_t u;
 	struct sysctl_oid *tc_root;
 
@@ -1163,9 +1229,11 @@ tc_init(struct timecounter *tc)
 		    tc->tc_name, (uintmax_t)tc->tc_frequency,
 		    tc->tc_quality);
 	}
+#endif /* __rtems__ */
 
 	tc->tc_next = timecounters;
 	timecounters = tc;
+#ifndef __rtems__
 	/*
 	 * Set up sysctl tree for this counter.
 	 */
@@ -1196,11 +1264,16 @@ tc_init(struct timecounter *tc)
 	if (tc->tc_quality == timecounter->tc_quality &&
 	    tc->tc_frequency < timecounter->tc_frequency)
 		return;
+#endif /* __rtems__ */
 	(void)tc->tc_get_timecount(tc);
 	(void)tc->tc_get_timecount(tc);
 	timecounter = tc;
+#ifdef __rtems__
+	tc_windup();
+#endif /* __rtems__ */
 }
 
+#ifndef __rtems__
 /* Report the frequency of the current timecounter. */
 uint64_t
 tc_getfrequency(void)
@@ -1208,29 +1281,42 @@ tc_getfrequency(void)
 
 	return (timehands->th_counter->tc_frequency);
 }
+#endif /* __rtems__ */
 
 /*
  * Step our concept of UTC.  This is done by modifying our estimate of
  * when we booted.
  * XXX: not locked.
  */
+#ifndef __rtems__
 void
 tc_setclock(struct timespec *ts)
+#else /* __rtems__ */
+void
+_Timecounter_Set_clock(const struct timespec *ts)
+#endif /* __rtems__ */
 {
+#ifndef __rtems__
 	struct timespec tbef, taft;
+#endif /* __rtems__ */
 	struct bintime bt, bt2;
 
+#ifndef __rtems__
 	cpu_tick_calibrate(1);
 	nanotime(&tbef);
+#endif /* __rtems__ */
 	timespec2bintime(ts, &bt);
 	binuptime(&bt2);
 	bintime_sub(&bt, &bt2);
 	bintime_add(&bt2, &boottimebin);
 	boottimebin = bt;
+#ifndef __rtems__
 	bintime2timeval(&bt, &boottime);
+#endif /* __rtems__ */
 
 	/* XXX fiddle all the little crinkly bits around the fiords... */
 	tc_windup();
+#ifndef __rtems__
 	nanotime(&taft);
 	if (timestepwarnings) {
 		log(LOG_INFO,
@@ -1240,6 +1326,7 @@ tc_setclock(struct timespec *ts)
 		    (intmax_t)ts->tv_sec, ts->tv_nsec);
 	}
 	cpu_tick_calibrate(1);
+#endif /* __rtems__ */
 }
 
 /*
@@ -1256,6 +1343,11 @@ tc_windup(void)
 	uint32_t delta, ncount, ogen;
 	int i;
 	time_t t;
+#ifdef __rtems__
+	ISR_lock_Context lock_context;
+
+	_ISR_lock_ISR_disable_and_acquire(&_Timecounter_Lock, &lock_context);
+#endif /* __rtems__ */
 
 	/*
 	 * Make the next timehands a copy of the current one, but do not
@@ -1333,16 +1425,20 @@ tc_windup(void)
 
 	/* Now is a good time to change timecounters. */
 	if (th->th_counter != timecounter) {
+#ifndef __rtems__
 #ifndef __arm__
 		if ((timecounter->tc_flags & TC_FLAGS_C2STOP) != 0)
 			cpu_disable_c2_sleep++;
 		if ((th->th_counter->tc_flags & TC_FLAGS_C2STOP) != 0)
 			cpu_disable_c2_sleep--;
 #endif
+#endif /* __rtems__ */
 		th->th_counter = timecounter;
 		th->th_offset_count = ncount;
+#ifndef __rtems__
 		tc_min_ticktock_freq = max(1, timecounter->tc_frequency /
 		    (((uint64_t)timecounter->tc_counter_mask + 1) / 3));
+#endif /* __rtems__ */
 #ifdef FFCLOCK
 		ffclock_change_tc(th);
 #endif
@@ -1401,9 +1497,15 @@ tc_windup(void)
 #endif
 
 	timehands = th;
+#ifndef __rtems__
 	timekeep_push_vdso();
+#endif /* __rtems__ */
+#ifdef __rtems__
+	_ISR_lock_Release_and_ISR_enable(&_Timecounter_Lock, &lock_context);
+#endif /* __rtems__ */
 }
 
+#ifndef __rtems__
 /* Report or change the active timecounter hardware. */
 static int
 sysctl_kern_timecounter_hardware(SYSCTL_HANDLER_ARGS)
@@ -1468,7 +1570,9 @@ sysctl_kern_timecounter_choice(SYSCTL_HANDLER_ARGS)
 
 SYSCTL_PROC(_kern_timecounter, OID_AUTO, choice, CTLTYPE_STRING | CTLFLAG_RD,
     0, 0, sysctl_kern_timecounter_choice, "A", "Timecounter hardware detected");
+#endif /* __rtems__ */
 
+#ifndef __rtems__
 /*
  * RFC 2783 PPS-API implementation.
  */
@@ -1749,6 +1853,9 @@ pps_event(struct pps_state *pps, int event)
 	/* Wakeup anyone sleeping in pps_fetch().  */
 	wakeup(pps);
 }
+#else /* __rtems__ */
+/* FIXME: https://devel.rtems.org/ticket/2349 */
+#endif /* __rtems__ */
 
 /*
  * Timecounters need to be updated every so often to prevent the hardware
@@ -1757,10 +1864,13 @@ pps_event(struct pps_state *pps, int event)
  * the update frequency.
  */
 
+#ifndef __rtems__
 static int tc_tick;
 SYSCTL_INT(_kern_timecounter, OID_AUTO, tick, CTLFLAG_RD, &tc_tick, 0,
     "Approximate number of hardclock ticks in a millisecond");
+#endif /* __rtems__ */
 
+#ifndef __rtems__
 void
 tc_ticktock(int cnt)
 {
@@ -1770,9 +1880,54 @@ tc_ticktock(int cnt)
 	if (count < tc_tick)
 		return;
 	count = 0;
+#else /* __rtems__ */
+void
+_Timecounter_Tick(void)
+{
+#endif /* __rtems__ */
 	tc_windup();
 }
+#ifdef __rtems__
+void
+_Timecounter_Tick_simple(uint32_t delta, uint32_t offset)
+{
+	struct bintime bt;
+	struct timehands *th;
+	uint32_t ogen;
+	ISR_lock_Context lock_context;
 
+	_ISR_lock_ISR_disable_and_acquire(&_Timecounter_Lock, &lock_context);
+
+	th = timehands;
+	ogen = th->th_generation;
+	th->th_offset_count = offset;
+	bintime_addx(&th->th_offset, th->th_scale * delta);
+
+	bt = th->th_offset;
+	bintime_add(&bt, &boottimebin);
+
+	/* Update the UTC timestamps used by the get*() functions. */
+	/* XXX shouldn't do this here.  Should force non-`get' versions. */
+	bintime2timeval(&bt, &th->th_microtime);
+	bintime2timespec(&bt, &th->th_nanotime);
+
+	/*
+	 * Now that the struct timehands is again consistent, set the new
+	 * generation number, making sure to not make it zero.
+	 */
+	if (++ogen == 0)
+		ogen = 1;
+	th->th_generation = ogen;
+
+	/* Go live with the new struct timehands. */
+	time_second = th->th_microtime.tv_sec;
+	time_uptime = th->th_offset.sec;
+
+	_ISR_lock_Release_and_ISR_enable(&_Timecounter_Lock, &lock_context);
+}
+#endif /* __rtems__ */
+
+#ifndef __rtems__
 static void __inline
 tc_adjprecision(void)
 {
@@ -1794,7 +1949,9 @@ tc_adjprecision(void)
 	sbt_timethreshold = bttosbt(bt_timethreshold);
 	sbt_tickthreshold = bttosbt(bt_tickthreshold);
 }
+#endif /* __rtems__ */
 
+#ifndef __rtems__
 static int
 sysctl_kern_timecounter_adjprecision(SYSCTL_HANDLER_ARGS)
 {
@@ -1811,10 +1968,17 @@ sysctl_kern_timecounter_adjprecision(SYSCTL_HANDLER_ARGS)
 done:
 	return (0);
 }
+#endif /* __rtems__ */
 
+#ifndef __rtems__
 static void
 inittimecounter(void *dummy)
+#else /* __rtems__ */
+void
+_Timecounter_Initialize(void)
+#endif /* __rtems__ */
 {
+#ifndef __rtems__
 	u_int p;
 	int tick_rate;
 
@@ -1838,6 +2002,7 @@ inittimecounter(void *dummy)
 	tc_tick_sbt = bttosbt(tc_tick_bt);
 	p = (tc_tick * 1000000) / hz;
 	printf("Timecounters tick every %d.%03u msec\n", p / 1000, p % 1000);
+#endif /* __rtems__ */
 
 #ifdef FFCLOCK
 	ffclock_init();
@@ -1848,8 +2013,11 @@ inittimecounter(void *dummy)
 	tc_windup();
 }
 
+#ifndef __rtems__
 SYSINIT(timecounter, SI_SUB_CLOCKS, SI_ORDER_SECOND, inittimecounter, NULL);
+#endif /* __rtems__ */
 
+#ifndef __rtems__
 /* Cpu tick handling -------------------------------------------------*/
 
 static int cpu_tick_variable;
@@ -1982,7 +2150,9 @@ cputick2usec(uint64_t tick)
 }
 
 cpu_tick_f	*cpu_ticks = tc_cpu_ticks;
+#endif /* __rtems__ */
 
+#ifndef __rtems__
 static int vdso_th_enable = 1;
 static int
 sysctl_fast_gettime(SYSCTL_HANDLER_ARGS)
@@ -2018,6 +2188,7 @@ tc_fill_vdso_timehands(struct vdso_timehands *vdso_th)
 		enabled = 0;
 	return (enabled);
 }
+#endif /* __rtems__ */
 
 #ifdef COMPAT_FREEBSD32
 uint32_t

@@ -13,6 +13,31 @@ all-am: $(PREINSTALL_FILES)
 PREINSTALL_FILES =
 CLEANFILES = $(PREINSTALL_FILES)
 
+$(PROJECT_INCLUDE)/sys/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/sys
+	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
+
+$(PROJECT_INCLUDE)/sys/_ffcounter.h: include/sys/_ffcounter.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_ffcounter.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_ffcounter.h
+
+$(PROJECT_INCLUDE)/sys/timeffc.h: include/sys/timeffc.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/timeffc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/timeffc.h
+
+$(PROJECT_INCLUDE)/sys/timepps.h: include/sys/timepps.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/timepps.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/timepps.h
+
+$(PROJECT_INCLUDE)/sys/timetc.h: include/sys/timetc.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/timetc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/timetc.h
+
+$(PROJECT_INCLUDE)/sys/timex.h: include/sys/timex.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/timex.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/timex.h
+
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
@@ -322,6 +347,14 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/timestamp.h
 $(PROJECT_INCLUDE)/rtems/score/timestamp64.h: include/rtems/score/timestamp64.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/timestamp64.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/timestamp64.h
+
+$(PROJECT_INCLUDE)/rtems/score/timecounter.h: include/rtems/score/timecounter.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/timecounter.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/timecounter.h
+
+$(PROJECT_INCLUDE)/rtems/score/timecounterimpl.h: include/rtems/score/timecounterimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/timecounterimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/timecounterimpl.h
 
 $(PROJECT_INCLUDE)/rtems/score/tls.h: include/rtems/score/tls.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tls.h
