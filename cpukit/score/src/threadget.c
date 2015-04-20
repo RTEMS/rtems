@@ -75,22 +75,7 @@ Thread_Control *_Thread_Get(
   return (Thread_Control *) _Objects_Get( information, id, location );
 }
 
-Thread_Control *_Thread_Acquire_executing( ISR_lock_Context *lock_context )
-{
-  Thread_Control *executing;
-
-#if defined(RTEMS_SMP)
-  _ISR_Disable_without_giant( lock_context->Lock_context.isr_level );
-#else
-  _ISR_Disable( lock_context->isr_level );
-#endif
-  executing = _Thread_Executing;
-  _ISR_lock_Acquire( &executing->Object.Lock, lock_context );
-
-  return executing;
-}
-
-Thread_Control *_Thread_Acquire(
+Thread_Control *_Thread_Get_interrupt_disable(
   Objects_Id         id,
   Objects_Locations *location,
   ISR_lock_Context  *lock_context
@@ -100,7 +85,8 @@ Thread_Control *_Thread_Acquire(
 
   if ( _Objects_Are_ids_equal( id, OBJECTS_ID_OF_SELF ) ) {
     *location = OBJECTS_LOCAL;
-    return _Thread_Acquire_executing( lock_context );
+    _ISR_lock_ISR_disable( lock_context );
+    return _Thread_Executing;
   }
 
   information = _Thread_Get_objects_information( id );
@@ -110,5 +96,5 @@ Thread_Control *_Thread_Acquire(
   }
 
   return (Thread_Control *)
-    _Objects_Acquire( information, id, location, lock_context );
+    _Objects_Get_isr_disable( information, id, location, lock_context );
 }

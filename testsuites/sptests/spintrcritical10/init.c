@@ -51,7 +51,7 @@ static void any_satisfy_before_timeout(rtems_id timer, void *arg)
 {
   rtems_status_code sc;
   test_context *ctx = arg;
-  const Thread_Control *thread = ctx->thread;
+  Thread_Control *thread = ctx->thread;
   Thread_Wait_flags flags = _Thread_Wait_flags_get(thread);
 
   if (blocks_for_event(flags)) {
@@ -78,7 +78,7 @@ static void any_satisfy_before_timeout(rtems_id timer, void *arg)
     );
     rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
 
-    _Event_Timeout(thread->Object.id, NULL);
+    _Event_Timeout(0, thread);
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == GREEN
@@ -148,7 +148,7 @@ static void all_satisfy_before_timeout(rtems_id timer, void *arg)
 {
   rtems_status_code sc;
   test_context *ctx = arg;
-  const Thread_Control *thread = ctx->thread;
+  Thread_Control *thread = ctx->thread;
   Thread_Wait_flags flags = _Thread_Wait_flags_get(thread);
 
   if (blocks_for_event(flags)) {
@@ -175,7 +175,7 @@ static void all_satisfy_before_timeout(rtems_id timer, void *arg)
     );
     rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
 
-    _Event_Timeout(thread->Object.id, NULL);
+    _Event_Timeout(0, thread);
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == EVENTS
@@ -240,7 +240,7 @@ static void timeout_before_satisfied(rtems_id timer, void *arg)
 {
   rtems_status_code sc;
   test_context *ctx = arg;
-  const Thread_Control *thread = ctx->thread;
+  Thread_Control *thread = ctx->thread;
   Thread_Wait_flags flags = _Thread_Wait_flags_get(thread);
 
   if (blocks_for_event(flags)) {
@@ -251,7 +251,7 @@ static void timeout_before_satisfied(rtems_id timer, void *arg)
     );
     rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
 
-    _Event_Timeout(thread->Object.id, NULL);
+    _Event_Timeout(0, thread);
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == DEADBEEF

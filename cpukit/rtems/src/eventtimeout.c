@@ -27,7 +27,6 @@ void _Event_Timeout(
 )
 {
   Thread_Control    *the_thread;
-  Objects_Locations  location;
   ISR_lock_Context   lock_context;
   Thread_Wait_flags  wait_flags;
   Thread_Wait_flags  wait_class;
@@ -36,55 +35,36 @@ void _Event_Timeout(
   bool               success;
   bool               unblock;
 
-  the_thread = _Thread_Acquire( id, &location, &lock_context );
-  switch ( location ) {
-    case OBJECTS_LOCAL:
-      wait_flags = _Thread_Wait_flags_get( the_thread );
-      wait_class = wait_flags & THREAD_WAIT_CLASS_MASK;
-      intend_to_block = wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK;
-      blocked = wait_class | THREAD_WAIT_STATE_BLOCKED;
-      success = _Thread_Wait_flags_try_change_critical(
-        the_thread,
-        intend_to_block,
-        wait_class | THREAD_WAIT_STATE_INTERRUPT_TIMEOUT
-      );
+  the_thread = arg;
+  _Thread_Lock_acquire_default( the_thread, &lock_context );
 
-      if ( success ) {
-        the_thread->Wait.return_code = RTEMS_TIMEOUT;
-        unblock = false;
-      } else if ( _Thread_Wait_flags_get( the_thread ) == blocked ) {
-        the_thread->Wait.return_code = RTEMS_TIMEOUT;
-        _Thread_Wait_flags_set(
-          the_thread,
-          wait_class | THREAD_WAIT_STATE_TIMEOUT
-        );
-        unblock = true;
-      } else {
-        unblock = false;
-      }
+  wait_flags = _Thread_Wait_flags_get( the_thread );
+  wait_class = wait_flags & THREAD_WAIT_CLASS_MASK;
+  intend_to_block = wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK;
+  blocked = wait_class | THREAD_WAIT_STATE_BLOCKED;
+  success = _Thread_Wait_flags_try_change_critical(
+    the_thread,
+    intend_to_block,
+    wait_class | THREAD_WAIT_STATE_INTERRUPT_TIMEOUT
+  );
 
-      if ( unblock ) {
-        Per_CPU_Control *cpu_self;
+  if ( success ) {
+    the_thread->Wait.return_code = RTEMS_TIMEOUT;
+    unblock = false;
+  } else if ( _Thread_Wait_flags_get( the_thread ) == blocked ) {
+    the_thread->Wait.return_code = RTEMS_TIMEOUT;
+    _Thread_Wait_flags_set(
+      the_thread,
+      wait_class | THREAD_WAIT_STATE_TIMEOUT
+    );
+    unblock = true;
+  } else {
+    unblock = false;
+  }
 
-        cpu_self = _Objects_Release_and_thread_dispatch_disable(
-          &the_thread->Object,
-          &lock_context
-        );
-        _Giant_Acquire( cpu_self );
+  _Thread_Lock_release_default( the_thread, &lock_context );
 
-        _Thread_Unblock( the_thread );
-
-        _Giant_Release( cpu_self );
-        _Thread_Dispatch_enable( cpu_self );
-      } else {
-        _Objects_Release_and_ISR_enable( &the_thread->Object, &lock_context );
-      }
-
-      break;
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:  /* impossible */
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( unblock ) {
+    _Thread_Unblock( the_thread );
   }
 }

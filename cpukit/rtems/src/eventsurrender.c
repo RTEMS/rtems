@@ -64,6 +64,8 @@ void _Event_Surrender(
   Thread_Wait_flags wait_flags;
   bool              unblock;
 
+  _Thread_Lock_acquire_default_critical( the_thread, lock_context );
+
   _Event_sets_Post( event_in, &event->pending_events );
   pending_events = event->pending_events;
 
@@ -105,10 +107,8 @@ void _Event_Surrender(
   if ( unblock ) {
     Per_CPU_Control *cpu_self;
 
-    cpu_self = _Objects_Release_and_thread_dispatch_disable(
-      &the_thread->Object,
-      lock_context
-    );
+    cpu_self = _Thread_Dispatch_disable_critical();
+    _Thread_Lock_release_default( the_thread, lock_context );
     _Giant_Acquire( cpu_self );
 
     _Watchdog_Remove( &the_thread->Timer );
@@ -117,6 +117,6 @@ void _Event_Surrender(
     _Giant_Release( cpu_self );
     _Thread_Dispatch_enable( cpu_self );
   } else {
-    _Objects_Release_and_ISR_enable( &the_thread->Object, lock_context );
+    _Thread_Lock_release_default( the_thread, lock_context );
   }
 }

@@ -57,13 +57,13 @@ void _Event_Seize(
        (seized_events == event_in || _Options_Is_any( option_set )) ) {
     event->pending_events =
       _Event_sets_Clear( pending_events, seized_events );
-    _Objects_Release_and_ISR_enable( &executing->Object, lock_context );
+    _Thread_Lock_release_default( executing, lock_context );
     *event_out = seized_events;
     return;
   }
 
   if ( _Options_Is_no_wait( option_set ) ) {
-    _Objects_Release_and_ISR_enable( &executing->Object, lock_context );
+    _Thread_Lock_release_default( executing, lock_context );
     executing->Wait.return_code = RTEMS_UNSATISFIED;
     *event_out = seized_events;
     return;
@@ -84,19 +84,12 @@ void _Event_Seize(
   executing->Wait.return_argument = event_out;
   _Thread_Wait_flags_set( executing, intend_to_block );
 
-  cpu_self = _Objects_Release_and_thread_dispatch_disable(
-    &executing->Object,
-    lock_context
-  );
+  cpu_self = _Thread_Dispatch_disable_critical();
+  _Thread_Lock_release_default( executing, lock_context );
   _Giant_Acquire( cpu_self );
 
   if ( ticks ) {
-    _Watchdog_Initialize(
-      &executing->Timer,
-      _Event_Timeout,
-      executing->Object.id,
-      NULL
-    );
+    _Watchdog_Initialize( &executing->Timer, _Event_Timeout, 0, executing );
     _Watchdog_Insert_ticks( &executing->Timer, ticks );
   }
 

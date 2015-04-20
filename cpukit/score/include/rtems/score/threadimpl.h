@@ -22,6 +22,7 @@
 #define _RTEMS_SCORE_THREADIMPL_H
 
 #include <rtems/score/thread.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
@@ -382,22 +383,15 @@ Thread_Control *_Thread_Get (
 );
 
 /**
- * @brief Acquires a thread by its identifier.
+ * @brief Gets a thread by its identifier.
  *
- * @see _Objects_Acquire().
+ * @see _Objects_Get_isr_disable().
  */
-Thread_Control *_Thread_Acquire(
+Thread_Control *_Thread_Get_interrupt_disable(
   Objects_Id         id,
   Objects_Locations *location,
   ISR_lock_Context  *lock_context
 );
-
-/**
- * @brief Acquires the executing thread.
- *
- * @see _Objects_Acquire().
- */
-Thread_Control *_Thread_Acquire_executing( ISR_lock_Context *lock_context );
 
 RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Get_CPU(
   const Thread_Control *thread
@@ -863,6 +857,80 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
 #endif
 
   return owns_resources;
+}
+
+/**
+ * @brief Acquires the default thread lock and returns the executing thread.
+ *
+ * @param[in] lock_context The lock context used for the corresponding lock
+ * release.
+ *
+ * @return The executing thread.
+ *
+ * @see _Thread_Lock_release_default().
+ */
+RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Lock_acquire_default_for_executing(
+  ISR_lock_Context *lock_context
+)
+{
+  Thread_Control *executing;
+
+  _ISR_lock_ISR_disable( lock_context );
+  executing = _Thread_Executing;
+  _ISR_lock_Acquire( &executing->Lock.Default, lock_context );
+
+  return executing;
+}
+
+/**
+ * @brief Acquires the default thread lock inside a critical section
+ * (interrupts disabled).
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] lock_context The lock context used for the corresponding lock
+ * release.
+ *
+ * @see _Thread_Lock_release_default().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Lock_acquire_default_critical(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _Assert( _ISR_Get_level() != 0 );
+  _ISR_lock_Acquire( &the_thread->Lock.Default, lock_context );
+}
+
+/**
+ * @brief Acquires the default thread lock.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] lock_context The lock context used for the corresponding lock
+ * release.
+ *
+ * @see _Thread_Lock_release_default().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Lock_acquire_default(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_ISR_disable_and_acquire( &the_thread->Lock.Default, lock_context );
+}
+
+/**
+ * @brief Release the default thread lock.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] lock_context The lock context used for the corresponding lock
+ * acquire.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Lock_release_default(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Release_and_ISR_enable( &the_thread->Lock.Default, lock_context );
 }
 
 /**

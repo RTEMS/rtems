@@ -40,9 +40,13 @@ rtems_status_code rtems_event_system_receive(
 
   if ( event_out != NULL ) {
     ISR_lock_Context   lock_context;
-    Thread_Control    *executing = _Thread_Acquire_executing( &lock_context );
-    RTEMS_API_Control *api = executing->API_Extensions[ THREAD_API_RTEMS ];
-    Event_Control     *event = &api->System_event;
+    Thread_Control    *executing;
+    RTEMS_API_Control *api;
+    Event_Control     *event;
+
+    executing = _Thread_Lock_acquire_default_for_executing( &lock_context );
+    api = executing->API_Extensions[ THREAD_API_RTEMS ];
+    event = &api->System_event;
 
     if ( !_Event_sets_Is_empty( event_in ) ) {
       _Event_Seize(
@@ -60,7 +64,7 @@ rtems_status_code rtems_event_system_receive(
       sc = executing->Wait.return_code;
     } else {
       *event_out = event->pending_events;
-      _Objects_Release_and_ISR_enable( &executing->Object, &lock_context );
+      _Thread_Lock_release_default( executing, &lock_context );
       sc = RTEMS_SUCCESSFUL;
     }
   } else {
