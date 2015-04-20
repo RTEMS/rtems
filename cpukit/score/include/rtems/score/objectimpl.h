@@ -1093,9 +1093,6 @@ RTEMS_INLINE_ROUTINE void _Objects_Put_for_get_isr_disable(
 )
 {
   (void) the_object;
-#if defined(RTEMS_SMP)
-  _Thread_Enable_dispatch();
-#endif
 }
 
 /**

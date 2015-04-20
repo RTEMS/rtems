@@ -33,18 +33,12 @@ Objects_Control *_Objects_Get_isr_disable(
   index = id - information->minimum_id + 1;
 
   if ( information->maximum >= index ) {
-#if defined(RTEMS_SMP)
-    _Thread_Disable_dispatch();
-#endif
     _ISR_lock_ISR_disable( lock_context );
     if ( (the_object = information->local_table[ index ]) != NULL ) {
       *location = OBJECTS_LOCAL;
       return the_object;
     }
     _ISR_lock_ISR_enable( lock_context );
-#if defined(RTEMS_SMP)
-    _Thread_Enable_dispatch();
-#endif
     *location = OBJECTS_ERROR;
     return NULL;
   }

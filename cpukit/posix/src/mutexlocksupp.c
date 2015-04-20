@@ -54,6 +54,9 @@ int _POSIX_Mutex_Lock_support(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+#if defined(RTEMS_SMP)
+      _Thread_Dispatch_disable();
+#endif
       executing = _Thread_Executing;
       _CORE_mutex_Seize(
         &the_mutex->Mutex,
@@ -63,6 +66,9 @@ int _POSIX_Mutex_Lock_support(
         timeout,
         &lock_context
       );
+#if defined(RTEMS_SMP)
+      _Thread_Enable_dispatch();
+#endif
       _Objects_Put_for_get_isr_disable( &the_mutex->Object );
       return _POSIX_Mutex_Translate_core_mutex_return_code(
         (CORE_mutex_Status) executing->Wait.return_code

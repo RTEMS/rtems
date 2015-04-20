@@ -56,6 +56,7 @@ rtems_status_code rtems_semaphore_obtain(
       attribute_set = the_semaphore->attribute_set;
       wait = !_Options_Is_no_wait( option_set );
 #if defined(RTEMS_SMP)
+      _Thread_Disable_dispatch();
       if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
         MRSP_Status mrsp_status;
 
@@ -66,6 +67,7 @@ rtems_status_code rtems_semaphore_obtain(
           wait,
           timeout
         );
+        _Thread_Enable_dispatch();
         _Objects_Put_for_get_isr_disable( &the_semaphore->Object );
         return _Semaphore_Translate_MRSP_status_code( mrsp_status );
       } else
@@ -79,6 +81,9 @@ rtems_status_code rtems_semaphore_obtain(
           timeout,
           &lock_context
         );
+#if defined(RTEMS_SMP)
+        _Thread_Enable_dispatch();
+#endif
         _Objects_Put_for_get_isr_disable( &the_semaphore->Object );
         return _Semaphore_Translate_core_mutex_return_code(
                   executing->Wait.return_code );
@@ -93,6 +98,9 @@ rtems_status_code rtems_semaphore_obtain(
         timeout,
         &lock_context
       );
+#if defined(RTEMS_SMP)
+      _Thread_Enable_dispatch();
+#endif
       _Objects_Put_for_get_isr_disable( &the_semaphore->Object );
       return _Semaphore_Translate_core_semaphore_return_code(
                   executing->Wait.return_code );
