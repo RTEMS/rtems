@@ -674,9 +674,9 @@ _Objects_Release_and_thread_dispatch_disable(
   ISR_lock_Context *lock_context
 )
 {
-  Per_CPU_Control *cpu_self = _Per_CPU_Get();
+  Per_CPU_Control *cpu_self;
 
-  _Thread_Dispatch_disable_critical( cpu_self );
+  cpu_self = _Thread_Dispatch_disable_critical();
   _Objects_Release_and_ISR_enable( the_object, lock_context );
 
   return cpu_self;

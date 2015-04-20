@@ -242,16 +242,19 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level );
  *
  * This function does not acquire the Giant lock.
  *
- * @param[in] cpu_self The current processor.
+ * @return The current processor.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Dispatch_disable_critical(
-  Per_CPU_Control *cpu_self
-)
+RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable_critical( void )
 {
-  uint32_t disable_level = cpu_self->thread_dispatch_disable_level;
+  Per_CPU_Control *cpu_self;
+  uint32_t         disable_level;
 
+  cpu_self = _Per_CPU_Get();
+  disable_level = cpu_self->thread_dispatch_disable_level;
   _Profiling_Thread_dispatch_disable( cpu_self, disable_level );
   cpu_self->thread_dispatch_disable_level = disable_level + 1;
+
+  return cpu_self;
 }
 
 /**
@@ -271,8 +274,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable( void )
   _ISR_Disable_without_giant( level );
 #endif
 
-  cpu_self = _Per_CPU_Get();
-  _Thread_Dispatch_disable_critical( cpu_self );
+  cpu_self = _Thread_Dispatch_disable_critical();
 
 #if defined( RTEMS_SMP ) || defined( RTEMS_PROFILING )
   _ISR_Enable_without_giant( level );
