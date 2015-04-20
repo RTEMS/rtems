@@ -26,6 +26,7 @@
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mppkt.h>
 #endif
+#include <rtems/score/isrlock.h>
 #include <rtems/score/object.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/priority.h>
