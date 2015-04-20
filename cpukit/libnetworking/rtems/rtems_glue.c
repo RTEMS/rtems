@@ -376,12 +376,12 @@ void
 rtems_bsdnet_semaphore_obtain (void)
 {
 #ifdef RTEMS_FAST_MUTEX
-	ISR_Level level;
+	ISR_lock_Context lock_context;
 	Thread_Control *executing;
 #ifdef RTEMS_SMP
 	_Thread_Disable_dispatch();
 #endif
-	_ISR_Disable (level);
+	_ISR_lock_ISR_disable(&lock_context);
 	if (!the_networkSemaphore)
 		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
 	executing = _Thread_Executing;
@@ -391,7 +391,7 @@ rtems_bsdnet_semaphore_obtain (void)
 		networkSemaphore,
 		1,		/* wait */
 		0,		/* forever */
-		level
+		&lock_context
 		);
 #ifdef RTEMS_SMP
 	_Thread_Enable_dispatch();

@@ -203,7 +203,7 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
  * @param[in] id is the Id of the owning API level Semaphore object
  * @param[in] wait is true if the thread is willing to wait
  * @param[in] timeout is the maximum number of ticks to block
- * @param[in] level is a temporary variable used to contain the ISR
+ * @param[in] lock_context is a temporary variable used to contain the ISR
  *        disable level cookie
  *
  * @note There is currently no MACRO version of this routine.
@@ -214,7 +214,7 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
   Objects_Id               id,
   bool                     wait,
   Watchdog_Interval        timeout,
-  ISR_Level                level
+  ISR_lock_Context        *lock_context
 )
 {
   /* disabled when you get here */
@@ -222,12 +222,12 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
   executing->Wait.return_code = CORE_SEMAPHORE_STATUS_SUCCESSFUL;
   if ( the_semaphore->count != 0 ) {
     the_semaphore->count -= 1;
-    _ISR_Enable( level );
+    _ISR_lock_ISR_enable( lock_context );
     return;
   }
 
   if ( !wait ) {
-    _ISR_Enable( level );
+    _ISR_lock_ISR_enable( lock_context );
     executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
     return;
   }
@@ -236,7 +236,7 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
   _Thread_queue_Enter_critical_section( &the_semaphore->Wait_queue );
   executing->Wait.queue          = &the_semaphore->Wait_queue;
   executing->Wait.id             = id;
-  _ISR_Enable( level );
+  _ISR_lock_ISR_enable( lock_context );
 
   _Thread_queue_Enqueue( &the_semaphore->Wait_queue, executing, timeout );
   _Thread_Enable_dispatch();

@@ -21,7 +21,7 @@
 
 #include <rtems/score/object.h>
 #include <rtems/score/apimutex.h>
-#include <rtems/score/isrlevel.h>
+#include <rtems/score/isrlock.h>
 #include <rtems/score/threaddispatch.h>
 
 #ifdef __cplusplus
@@ -539,7 +539,7 @@ Objects_Control *_Objects_Get (
  *  @param[in] information points to an object class information block.
  *  @param[in] id is the Id of the object whose name we are locating.
  *  @param[in] location will contain an indication of success or failure.
- *  @param[in] level is the interrupt level being turned.
+ *  @param[in] lock_context is the previous interrupt state being turned.
  *
  *  @retval This method returns one of the values from the
  *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
@@ -555,7 +555,7 @@ Objects_Control *_Objects_Get_isr_disable(
   Objects_Information *information,
   Objects_Id           id,
   Objects_Locations   *location,
-  ISR_Level           *level
+  ISR_lock_Context    *lock_context
 );
 
 /**

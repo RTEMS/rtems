@@ -39,12 +39,16 @@ rtems_status_code rtems_semaphore_obtain(
 {
   Semaphore_Control              *the_semaphore;
   Objects_Locations               location;
-  ISR_Level                       level;
+  ISR_lock_Context                lock_context;
   Thread_Control                 *executing;
   rtems_attribute                 attribute_set;
   bool                            wait;
 
-  the_semaphore = _Semaphore_Get_interrupt_disable( id, &location, &level );
+  the_semaphore = _Semaphore_Get_interrupt_disable(
+    id,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
@@ -55,7 +59,7 @@ rtems_status_code rtems_semaphore_obtain(
       if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
         MRSP_Status mrsp_status;
 
-        _ISR_Enable( level );
+        _ISR_lock_ISR_enable( &lock_context );
         mrsp_status = _MRSP_Obtain(
           &the_semaphore->Core_control.mrsp,
           executing,
@@ -73,7 +77,7 @@ rtems_status_code rtems_semaphore_obtain(
           id,
           wait,
           timeout,
-          level
+          &lock_context
         );
         _Objects_Put_for_get_isr_disable( &the_semaphore->Object );
         return _Semaphore_Translate_core_mutex_return_code(
@@ -87,7 +91,7 @@ rtems_status_code rtems_semaphore_obtain(
         id,
         wait,
         timeout,
-        level
+        &lock_context
       );
       _Objects_Put_for_get_isr_disable( &the_semaphore->Object );
       return _Semaphore_Translate_core_semaphore_return_code(

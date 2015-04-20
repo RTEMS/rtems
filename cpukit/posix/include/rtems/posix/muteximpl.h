@@ -148,7 +148,7 @@ POSIX_Mutex_Control *_POSIX_Mutex_Get (
 POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable (
   pthread_mutex_t   *mutex,
   Objects_Locations *location,
-  ISR_Level         *level
+  ISR_lock_Context  *lock_context
 );
 
 #ifdef __cplusplus

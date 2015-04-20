@@ -24,12 +24,11 @@ Objects_Control *_Objects_Get_isr_disable(
   Objects_Information *information,
   Objects_Id           id,
   Objects_Locations   *location,
-  ISR_Level           *level_p
+  ISR_lock_Context    *lock_context
 )
 {
   Objects_Control *the_object;
   uint32_t         index;
-  ISR_Level        level;
 
   index = id - information->minimum_id + 1;
 
@@ -37,13 +36,12 @@ Objects_Control *_Objects_Get_isr_disable(
 #if defined(RTEMS_SMP)
     _Thread_Disable_dispatch();
 #endif
-    _ISR_Disable( level );
+    _ISR_lock_ISR_disable( lock_context );
     if ( (the_object = information->local_table[ index ]) != NULL ) {
       *location = OBJECTS_LOCAL;
-      *level_p = level;
       return the_object;
     }
-    _ISR_Enable( level );
+    _ISR_lock_ISR_enable( lock_context );
 #if defined(RTEMS_SMP)
     _Thread_Enable_dispatch();
 #endif

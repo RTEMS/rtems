@@ -43,10 +43,14 @@ int _POSIX_Mutex_Lock_support(
 {
   POSIX_Mutex_Control          *the_mutex;
   Objects_Locations             location;
-  ISR_Level                     level;
+  ISR_lock_Context              lock_context;
   Thread_Control               *executing;
 
-  the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &location, &level );
+  the_mutex = _POSIX_Mutex_Get_interrupt_disable(
+    mutex,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
@@ -57,7 +61,7 @@ int _POSIX_Mutex_Lock_support(
         the_mutex->Object.id,
         blocking,
         timeout,
-        level
+        &lock_context
       );
       _Objects_Put_for_get_isr_disable( &the_mutex->Object );
       return _POSIX_Mutex_Translate_core_mutex_return_code(

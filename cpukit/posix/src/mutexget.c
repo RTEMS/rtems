@@ -71,7 +71,7 @@ POSIX_Mutex_Control *_POSIX_Mutex_Get (
 POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable (
   pthread_mutex_t   *mutex,
   Objects_Locations *location,
-  ISR_Level         *level
+  ISR_lock_Context  *lock_context
 )
 {
   if ( !_POSIX_Mutex_Check_id_and_auto_init( mutex, location ) ) {
@@ -82,6 +82,6 @@ POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable (
     &_POSIX_Mutex_Information,
     (Objects_Id) *mutex,
     location,
-    level
+    lock_context
   );
 }

@@ -190,11 +190,15 @@ RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get (
 RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get_interrupt_disable (
   Objects_Id         id,
   Objects_Locations *location,
-  ISR_Level         *level
+  ISR_lock_Context  *lock_context
 )
 {
-  return (Semaphore_Control *)
-    _Objects_Get_isr_disable( &_Semaphore_Information, id, location, level );
+  return (Semaphore_Control *) _Objects_Get_isr_disable(
+    &_Semaphore_Information,
+    id,
+    location,
+    lock_context
+  );
 }
 
 #ifdef __cplusplus
