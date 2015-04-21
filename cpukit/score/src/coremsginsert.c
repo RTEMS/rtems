@@ -18,12 +18,25 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
 #include <rtems/score/coremsgimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/score/isrlevel.h>
+
+#if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+static bool _CORE_message_queue_Order(
+  const Chain_Node *left,
+  const Chain_Node *right
+)
+{
+   const CORE_message_queue_Buffer_control *left_message;
+   const CORE_message_queue_Buffer_control *right_message;
+
+   left_message = (const CORE_message_queue_Buffer_control *) left;
+   right_message = (const CORE_message_queue_Buffer_control *) right;
+
+   return _CORE_message_queue_Get_message_priority( left_message ) <
+     _CORE_message_queue_Get_message_priority( right_message );
+}
+#endif
 
 void _CORE_message_queue_Insert_message(
   CORE_message_queue_Control        *the_message_queue,
@@ -31,71 +44,37 @@ void _CORE_message_queue_Insert_message(
   CORE_message_queue_Submit_types    submit_type
 )
 {
-  ISR_Level  level;
-  #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
-    bool    notify = false;
-    #define SET_NOTIFY() \
-      do { \
-        if ( the_message_queue->number_of_pending_messages == 0 ) \
-          notify = true; \
-      } while (0)
-  #else
-    #define SET_NOTIFY()
-  #endif
+  Chain_Control *pending_messages;
+  ISR_Level      level;
+#if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
+  bool           notify;
+#endif
 
   _CORE_message_queue_Set_message_priority( the_message, submit_type );
+  pending_messages = &the_message_queue->Pending_messages;
 
-  #if !defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
-    _ISR_Disable( level );
-      SET_NOTIFY();
-      the_message_queue->number_of_pending_messages++;
-      if ( submit_type == CORE_MESSAGE_QUEUE_SEND_REQUEST )
-        _CORE_message_queue_Append_unprotected(the_message_queue, the_message);
-      else
-        _CORE_message_queue_Prepend_unprotected(the_message_queue, the_message);
-    _ISR_Enable( level );
-  #else
-    if ( submit_type == CORE_MESSAGE_QUEUE_SEND_REQUEST ) {
-      _ISR_Disable( level );
-        SET_NOTIFY();
-        the_message_queue->number_of_pending_messages++;
-        _CORE_message_queue_Append_unprotected(the_message_queue, the_message);
-      _ISR_Enable( level );
-    } else if ( submit_type == CORE_MESSAGE_QUEUE_URGENT_REQUEST ) {
-      _ISR_Disable( level );
-        SET_NOTIFY();
-        the_message_queue->number_of_pending_messages++;
-        _CORE_message_queue_Prepend_unprotected(the_message_queue, the_message);
-      _ISR_Enable( level );
-    } else {
-      CORE_message_queue_Buffer_control *this_message;
-      Chain_Node                        *the_node;
-      Chain_Control                     *the_header;
-      int                                the_priority;
+  _ISR_Disable( level );
 
-      the_priority = _CORE_message_queue_Get_message_priority(the_message);
-      the_header = &the_message_queue->Pending_messages;
-      the_node = _Chain_First( the_header );
-      while ( !_Chain_Is_tail( the_header, the_node ) ) {
-        int this_priority;
+#if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
+  notify = ( the_message_queue->number_of_pending_messages == 0 );
+#endif
+  ++the_message_queue->number_of_pending_messages;
 
-        this_message = (CORE_message_queue_Buffer_control *) the_node;
+  if ( submit_type == CORE_MESSAGE_QUEUE_SEND_REQUEST ) {
+    _Chain_Append_unprotected( pending_messages, &the_message->Node );
+#if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+  } else  if ( submit_type != CORE_MESSAGE_QUEUE_URGENT_REQUEST ) {
+    _Chain_Insert_ordered_unprotected(
+      pending_messages,
+      &the_message->Node,
+      _CORE_message_queue_Order
+    );
+#endif
+  } else {
+    _Chain_Prepend_unprotected( pending_messages, &the_message->Node );
+  }
 
-        this_priority = _CORE_message_queue_Get_message_priority(this_message);
-
-        if ( this_priority <= the_priority ) {
-          the_node = the_node->next;
-          continue;
-        }
-        break;
-      }
-      _ISR_Disable( level );
-        SET_NOTIFY();
-        the_message_queue->number_of_pending_messages++;
-        _Chain_Insert_unprotected( the_node->previous, &the_message->Node );
-      _ISR_Enable( level );
-    }
-  #endif
+  _ISR_Enable( level );
 
   #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
     /*

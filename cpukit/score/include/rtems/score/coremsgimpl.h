@@ -443,7 +443,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Free_message_buffer (
  *       disabled if no API requires it.
  */
 RTEMS_INLINE_ROUTINE int _CORE_message_queue_Get_message_priority (
-  CORE_message_queue_Buffer_control *the_message
+  const CORE_message_queue_Buffer_control *the_message
 )
 {
   #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
@@ -492,36 +492,6 @@ RTEMS_INLINE_ROUTINE bool _CORE_message_queue_Is_priority(
 {
   return
     (the_attribute->discipline == CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY);
-}
-
-/**
- * This routine places the_message at the rear of the outstanding
- * messages on the_message_queue.
- */
-RTEMS_INLINE_ROUTINE void _CORE_message_queue_Append_unprotected (
-  CORE_message_queue_Control        *the_message_queue,
-  CORE_message_queue_Buffer_control *the_message
-)
-{
-  _Chain_Append_unprotected(
-    &the_message_queue->Pending_messages,
-    &the_message->Node
-  );
-}
-
-/**
- * This routine places the_message at the front of the outstanding
- * messages on the_message_queue.
- */
-RTEMS_INLINE_ROUTINE void _CORE_message_queue_Prepend_unprotected (
-  CORE_message_queue_Control        *the_message_queue,
-  CORE_message_queue_Buffer_control *the_message
-)
-{
-  _Chain_Prepend_unprotected(
-    &the_message_queue->Pending_messages,
-    &the_message->Node
-  );
 }
 
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
