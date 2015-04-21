@@ -30,6 +30,7 @@
 #include <rtems/score/resourceimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/config.h>
 
@@ -1078,41 +1079,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_restore_default(
   do { } while ( 0 )
 #endif
 
-void _Thread_Priority_change_do_nothing(
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority,
-  void             *context
-);
-
-/**
- * @brief Sets the thread priority change handler and its context.
- *
- * @param[in] the_thread The thread.
- * @param[in] new_handler The new handler.
- * @param[in] new_context The new handler context.
- */
-RTEMS_INLINE_ROUTINE void _Thread_Priority_set_change_handler(
-  Thread_Control                 *the_thread,
-  Thread_Priority_change_handler  new_handler,
-  void                           *new_context
-)
-{
-  the_thread->Priority.change_handler = new_handler;
-  the_thread->Priority.change_handler_context = new_context;
-}
-
-/**
- * @brief Restores the thread priority change default handler and its context.
- *
- * @param[in] the_thread The thread.
- */
-RTEMS_INLINE_ROUTINE void _Thread_Priority_restore_default_change_handler(
-  Thread_Control *the_thread
-)
-{
-  the_thread->Priority.change_handler = _Thread_Priority_change_do_nothing;
-}
-
 /**
  * @brief The initial thread wait flags value set by _Thread_Initialize().
  */
@@ -1255,6 +1221,58 @@ RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change(
 #endif
 
   return success;
+}
+
+/**
+ * @brief Sets the thread queue.
+ *
+ * The caller must be the owner of the thread lock.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_queue The new queue.
+ *
+ * @see _Thread_Lock_set().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_set_queue(
+  Thread_Control       *the_thread,
+  Thread_queue_Control *new_queue
+)
+{
+  the_thread->Wait.queue = new_queue;
+}
+
+/**
+ * @brief Sets the thread queue operations.
+ *
+ * The caller must be the owner of the thread lock.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_operations The new queue operations.
+ *
+ * @see _Thread_Lock_set() and _Thread_Wait_restore_default_operations().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_set_operations(
+  Thread_Control                *the_thread,
+  const Thread_queue_Operations *new_operations
+)
+{
+  the_thread->Wait.operations = new_operations;
+}
+
+/**
+ * @brief Restores the default thread queue operations.
+ *
+ * The caller must be the owner of the thread lock.
+ *
+ * @param[in] the_thread The thread.
+ *
+ * @see _Thread_Wait_set_operations().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_restore_default_operations(
+  Thread_Control *the_thread
+)
+{
+  the_thread->Wait.operations = &_Thread_queue_Operations_default;
 }
 
 /**

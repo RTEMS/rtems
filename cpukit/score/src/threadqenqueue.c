@@ -46,7 +46,7 @@ static void _Thread_blocking_operation_Finalize(
   /*
    * The thread is not waiting on anything after this completes.
    */
-  the_thread->Wait.queue = NULL;
+  _Thread_Wait_set_queue( the_thread, NULL );
 
   _Thread_Lock_restore_default( the_thread );
 
@@ -75,23 +75,6 @@ static void _Thread_blocking_operation_Finalize(
 #endif
 }
 
-static void _Thread_queue_Requeue_priority(
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority,
-  void             *context
-)
-{
-  Thread_queue_Control *tq = context;
-
-  _RBTree_Extract( &tq->Queues.Priority, &the_thread->RBNode );
-  _RBTree_Insert(
-    &tq->Queues.Priority,
-    &the_thread->RBNode,
-    _Thread_queue_Compare_priority,
-    false
-  );
-}
-
 void _Thread_queue_Enqueue_critical(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
@@ -105,7 +88,7 @@ void _Thread_queue_Enqueue_critical(
   _Thread_Lock_set( the_thread, &the_thread_queue->Lock );
 
   the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED;
-  the_thread->Wait.queue = the_thread_queue;
+  _Thread_Wait_set_queue( the_thread, the_thread_queue );
 
   _Thread_queue_Release( the_thread_queue, lock_context );
 
@@ -153,10 +136,9 @@ void _Thread_queue_Enqueue_critical(
         &the_thread->Object.Node
       );
     } else { /* must be THREAD_QUEUE_DISCIPLINE_PRIORITY */
-      _Thread_Priority_set_change_handler(
+      _Thread_Wait_set_operations(
         the_thread,
-        _Thread_queue_Requeue_priority,
-        the_thread_queue
+        &_Thread_queue_Operations_priority
       );
       _RBTree_Insert(
         &the_thread_queue->Queues.Priority,
@@ -206,7 +188,7 @@ void _Thread_queue_Extract_with_return_code(
       &the_thread->Wait.queue->Queues.Priority,
       &the_thread->RBNode
     );
-    _Thread_Priority_restore_default_change_handler( the_thread );
+    _Thread_Wait_restore_default_operations( the_thread );
   }
 
   the_thread->Wait.return_code = return_code;
@@ -252,7 +234,7 @@ Thread_Control *_Thread_queue_Dequeue(
     first = _RBTree_Get( &the_thread_queue->Queues.Priority, RBT_LEFT );
     if ( first ) {
       the_thread = THREAD_RBTREE_NODE_TO_THREAD( first );
-      _Thread_Priority_restore_default_change_handler( the_thread );
+      _Thread_Wait_restore_default_operations( the_thread );
     }
   }
 

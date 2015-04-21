@@ -29,15 +29,6 @@
 #include <rtems/score/cpusetimpl.h>
 #include <rtems/config.h>
 
-void _Thread_Priority_change_do_nothing(
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority,
-  void             *context
-)
-{
-  /* Do nothing */
-}
-
 bool _Thread_Initialize(
   Objects_Information                  *information,
   Thread_Control                       *the_thread,
@@ -208,10 +199,10 @@ bool _Thread_Initialize(
 
   the_thread->current_state           = STATES_DORMANT;
   the_thread->Wait.queue              = NULL;
+  the_thread->Wait.operations         = &_Thread_queue_Operations_default;
   the_thread->resource_count          = 0;
   the_thread->real_priority           = priority;
-  the_thread->Priority.generation     = 0;
-  the_thread->Priority.change_handler = _Thread_Priority_change_do_nothing;
+  the_thread->priority_generation     = 0;
   the_thread->Start.initial_priority  = priority;
 
   _Thread_Wait_flags_set( the_thread, THREAD_WAIT_FLAGS_INITIAL );

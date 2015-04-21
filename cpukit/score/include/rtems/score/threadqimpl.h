@@ -281,6 +281,12 @@ RBTree_Compare_result _Thread_queue_Compare_priority(
   const RBTree_Node *right
 );
 
+extern const Thread_queue_Operations _Thread_queue_Operations_default;
+
+extern const Thread_queue_Operations _Thread_queue_Operations_FIFO;
+
+extern const Thread_queue_Operations _Thread_queue_Operations_priority;
+
 /**@}*/
 
 #ifdef __cplusplus

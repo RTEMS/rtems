@@ -41,21 +41,21 @@ void _Thread_Change_priority(
   if ( the_thread->current_priority != new_priority ) {
     uint32_t my_generation;
 
-    my_generation = the_thread->Priority.generation + 1;
+    my_generation = the_thread->priority_generation + 1;
     the_thread->current_priority = new_priority;
-    the_thread->Priority.generation = my_generation;
+    the_thread->priority_generation = my_generation;
 
-    (*the_thread->Priority.change_handler)(
+    ( *the_thread->Wait.operations->priority_change )(
       the_thread,
       new_priority,
-      the_thread->Priority.change_handler_context
+      the_thread->Wait.queue
     );
 
     _Thread_Lock_release( lock, &lock_context );
 
     _Scheduler_Acquire( the_thread, &lock_context );
 
-    if ( the_thread->Priority.generation == my_generation ) {
+    if ( the_thread->priority_generation == my_generation ) {
       if ( _States_Is_ready( the_thread->current_state ) ) {
         _Scheduler_Change_priority(
           the_thread,

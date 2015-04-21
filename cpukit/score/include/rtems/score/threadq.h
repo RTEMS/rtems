@@ -21,9 +21,11 @@
 
 #include <rtems/score/chain.h>
 #include <rtems/score/isrlock.h>
+#include <rtems/score/percpu.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/rbtree.h>
 #include <rtems/score/states.h>
 #include <rtems/score/threadsync.h>
-#include <rtems/score/rbtree.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,6 +42,42 @@ extern "C" {
  */
 /**@{*/
 
+typedef struct Thread_queue_Control Thread_queue_Control;
+
+/**
+ * @brief Thread queue priority change operation.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_priority The new priority value.
+ * @param[in] queue The thread queue.
+ *
+ * @see Thread_queue_Operations.
+ */
+typedef void ( *Thread_queue_Priority_change_operation )(
+  Thread_Control       *the_thread,
+  Priority_Control      new_priority,
+  Thread_queue_Control *queue
+);
+
+/**
+ * @brief Thread queue operations.
+ *
+ * @see _Thread_wait_Set_operations().
+ */
+typedef struct {
+  /**
+   * @brief Thread queue priority change operation.
+   *
+   * Called by _Thread_Change_priority() to notify a thread about a priority
+   * change.  In case this thread waits currently for a resource the handler
+   * may adjust its data structures according to the new priority value.  This
+   * handler must not be NULL, instead the default handler
+   * _Thread_Do_nothing_priority_change() should be used in case nothing needs
+   * to be done during a priority change.
+   */
+  Thread_queue_Priority_change_operation priority_change;
+} Thread_queue_Operations;
+
 /**
  *  The following enumerated type details all of the disciplines
  *  supported by the Thread Queue Handler.
@@ -53,7 +91,7 @@ typedef enum {
  *  This is the structure used to manage sets of tasks which are blocked
  *  waiting to acquire a resource.
  */
-typedef struct {
+struct Thread_queue_Control {
   /** This union contains the data structures used to manage the blocked
    *  set of tasks which varies based upon the discipline.
    */
@@ -63,6 +101,11 @@ typedef struct {
     /** This is the set of threads for priority discipline waiting. */
     RBTree_Control Priority;
   } Queues;
+
+  /**
+   * @brief The operations for this thread queue.
+   */
+  const Thread_queue_Operations *operations;
 
   /**
    * @brief Lock to protect this thread queue.
@@ -83,7 +126,7 @@ typedef struct {
    *  waiting on this thread queue.
    */
   uint32_t                 timeout_status;
-}   Thread_queue_Control;
+};
 
 /**@}*/
 

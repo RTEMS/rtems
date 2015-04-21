@@ -302,6 +302,7 @@ libscore_a_SOURCES += src/threadq.c \
     src/threadqenqueue.c \
     src/threadqextractwithproxy.c src/threadqfirst.c \
     src/threadqflush.c src/threadqprocesstimeout.c src/threadqtimeout.c
+libscore_a_SOURCES += src/threadqops.c
 
 ## TIMESPEC_C_FILES
 libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \

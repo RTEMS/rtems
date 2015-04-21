@@ -249,56 +249,6 @@ typedef struct {
 } Thread_Start_information;
 
 /**
- * @brief Priority change handler.
- *
- * @param[in] the_thread The thread.
- * @param[in] new_priority The new priority value.
- * @param[in] context The handler context.
- *
- * @see _Thread_Priority_set_change_handler().
- */
-typedef void (*Thread_Priority_change_handler)(
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority,
-  void             *context
-);
-
-/**
- * @brief Thread priority control.
- */
-typedef struct {
-  /**
-   * @brief Generation of the current priority value.
-   *
-   * It is used in _Thread_Change_priority() to serialize the update of
-   * priority related data structures.
-   */
-  uint32_t generation;
-
-  /**
-   * @brief Priority change handler.
-   *
-   * Called by _Thread_Change_priority() to notify a thread about a priority
-   * change.  In case this thread waits currently for a resource the handler
-   * may adjust its data structures according to the new priority value.  This
-   * handler must not be NULL, instead the default handler
-   * _Thread_Priority_change_do_nothing() should be used in case nothing needs
-   * to be done during a priority change.
-   *
-   * @see _Thread_Priority_set_change_handler() and
-   * _Thread_Priority_restore_default_change_handler().
-   */
-  Thread_Priority_change_handler change_handler;
-
-  /**
-   * @brief Context for priority change handler.
-   *
-   * @see _Thread_Priority_set_change_handler().
-   */
-  void *change_handler_context;
-} Thread_Priority_control;
-
-/**
  *  @brief Union type to hold a pointer to an immutable or a mutable object.
  *
  *  The main purpose is to enable passing of pointers to read-only send buffers
@@ -359,7 +309,14 @@ typedef struct {
    */
   uint32_t timeout_code;
 
-  /** This field points to the thread queue on which this thread is blocked. */
+  /**
+   * @brief The current thread queue.
+   *
+   * In case this field is @c NULL, then the thread is not blocked on a thread
+   * queue.  This field is protected by the thread lock.
+   *
+   * @see _Thread_Lock_set() and _Thread_Wait_set_queue().
+   */
   Thread_queue_Control *queue;
 
   /**
@@ -371,6 +328,15 @@ typedef struct {
 #else
   Thread_Wait_flags     flags;
 #endif
+
+  /**
+   * @brief The current thread queue operations.
+   *
+   * This field is protected by the thread lock.
+   *
+   * @see _Thread_Lock_set() and _Thread_Wait_set_operations().
+   */
+  const Thread_queue_Operations *operations;
 }   Thread_Wait_information;
 
 /**
@@ -393,9 +359,12 @@ typedef struct {
   Priority_Control         real_priority;
 
   /**
-   * @brief Thread priority control.
+   * @brief Generation of the current priority value.
+   *
+   * It is used in _Thread_Change_priority() to serialize the update of
+   * priority related data structures.
    */
-  Thread_Priority_control  Priority;
+  uint32_t                 priority_generation;
 
   /** This field is the number of mutexes currently held by this proxy. */
   uint32_t                 resource_count;
@@ -638,8 +607,8 @@ typedef struct  {
  *
  * The thread lock protects the following thread variables
  *  - Thread_Control::current_priority,
- *  - Thread_Control::Priority::change_handler, and
- *  - Thread_Control::Priority::change_handler_context.
+ *  - Thread_Control::Wait::queue, and
+ *  - Thread_Control::Wait::operations.
  *
  * @see _Thread_Lock_acquire(), _Thread_Lock_release(), _Thread_Lock_set() and
  * _Thread_Lock_restore_default().
@@ -679,9 +648,12 @@ struct Thread_Control_struct {
   Priority_Control         real_priority;
 
   /**
-   * @brief Thread priority control.
+   * @brief Generation of the current priority value.
+   *
+   * It is used in _Thread_Change_priority() to serialize the update of
+   * priority related data structures.
    */
-  Thread_Priority_control  Priority;
+  uint32_t                 priority_generation;
 
   /** This field is the number of mutexes currently held by this thread. */
   uint32_t                 resource_count;
