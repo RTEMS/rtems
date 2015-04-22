@@ -120,12 +120,12 @@ static void test_func_isrdisabled_test( size_t set_size, cpu_set_t *cpu_set,
 
   _SMP_Multicast_action( set_size, cpu_set, test_cache_message, &ctx );
 
+  _ISR_Enable_without_giant( isr_level );
+
   _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
 
   rtems_test_assert( ctx.count[rtems_get_current_processor()] ==
       rtems_get_processor_count() );
-
-  _ISR_Enable_without_giant( isr_level );
 }
 
 static void test_func_giant_taken_test( size_t set_size, cpu_set_t *cpu_set,
