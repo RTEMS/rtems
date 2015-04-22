@@ -1257,6 +1257,28 @@ RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change(
   return success;
 }
 
+/**
+ * @brief Sets the thread wait timeout code.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] timeout_code The new thread wait timeout code.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_set_timeout_code(
+  Thread_Control *the_thread,
+  uint32_t        timeout_code
+)
+{
+  the_thread->Wait.timeout_code = timeout_code;
+}
+
+/**
+ * @brief General purpose thread wait timeout.
+ *
+ * @param[in] id Unused.
+ * @param[in] arg The thread.
+ */
+void _Thread_Timeout( Objects_Id id, void *arg );
+
 RTEMS_INLINE_ROUTINE void _Thread_Debug_set_real_processor(
   Thread_Control  *the_thread,
   Per_CPU_Control *cpu

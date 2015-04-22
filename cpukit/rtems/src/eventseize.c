@@ -89,7 +89,13 @@ void _Event_Seize(
   _Giant_Acquire( cpu_self );
 
   if ( ticks ) {
-    _Watchdog_Initialize( &executing->Timer, _Event_Timeout, 0, executing );
+    _Thread_Wait_set_timeout_code( executing, RTEMS_TIMEOUT );
+    _Watchdog_Initialize(
+      &executing->Timer,
+      _Thread_Timeout,
+      0,
+      executing
+    );
     _Watchdog_Insert_ticks( &executing->Timer, ticks );
   }
 

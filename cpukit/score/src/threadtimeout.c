@@ -1,8 +1,9 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Timeout Event
- *  @ingroup ClassicEvent
+ * @brief Thread Wait Timeout
+ *
+ * @ingroup ScoreThread
  */
 
 /*
@@ -18,15 +19,18 @@
   #include "config.h"
 #endif
 
-#include <rtems/rtems/eventimpl.h>
 #include <rtems/score/threadimpl.h>
 
-void _Event_Timeout(
-  Objects_Id  id,
-  void       *arg
-)
+static void _Thread_Do_timeout( Thread_Control *the_thread )
+{
+  the_thread->Wait.return_code = the_thread->Wait.timeout_code;
+  _Thread_Lock_restore_default( the_thread );
+}
+
+void _Thread_Timeout( Objects_Id id, void *arg )
 {
   Thread_Control    *the_thread;
+  ISR_lock_Control  *thread_lock;
   ISR_lock_Context   lock_context;
   Thread_Wait_flags  wait_flags;
   Thread_Wait_flags  wait_class;
@@ -36,7 +40,7 @@ void _Event_Timeout(
   bool               unblock;
 
   the_thread = arg;
-  _Thread_Lock_acquire_default( the_thread, &lock_context );
+  thread_lock = _Thread_Lock_acquire( the_thread, &lock_context );
 
   wait_flags = _Thread_Wait_flags_get( the_thread );
   wait_class = wait_flags & THREAD_WAIT_CLASS_MASK;
@@ -49,20 +53,20 @@ void _Event_Timeout(
   );
 
   if ( success ) {
-    the_thread->Wait.return_code = RTEMS_TIMEOUT;
+    _Thread_Do_timeout( the_thread );
     unblock = false;
   } else if ( _Thread_Wait_flags_get( the_thread ) == blocked ) {
-    the_thread->Wait.return_code = RTEMS_TIMEOUT;
     _Thread_Wait_flags_set(
       the_thread,
       wait_class | THREAD_WAIT_STATE_READY_AGAIN
     );
+    _Thread_Do_timeout( the_thread );
     unblock = true;
   } else {
     unblock = false;
   }
 
-  _Thread_Lock_release_default( the_thread, &lock_context );
+  _Thread_Lock_release( thread_lock, &lock_context );
 
   if ( unblock ) {
     _Thread_Unblock( the_thread );

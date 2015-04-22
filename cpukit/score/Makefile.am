@@ -290,6 +290,7 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
     src/threadstartmultitasking.c src/iterateoverthreads.c
 libscore_a_SOURCES += src/threadglobalconstruction.c
+libscore_a_SOURCES += src/threadtimeout.c
 libscore_a_SOURCES += src/threadyield.c
 
 if HAS_SMP
