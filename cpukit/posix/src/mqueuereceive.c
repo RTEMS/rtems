@@ -45,6 +45,6 @@ ssize_t mq_receive(
     msg_len,
     msg_prio,
     true,
-    THREAD_QUEUE_WAIT_FOREVER
+    WATCHDOG_NO_TIMEOUT
   );
 }

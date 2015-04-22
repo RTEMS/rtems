@@ -32,11 +32,6 @@ extern "C" {
 /**@{*/
 
 /**
- *  Constant for indefinite wait.
- */
-#define THREAD_QUEUE_WAIT_FOREVER  WATCHDOG_NO_TIMEOUT
-
-/**
  *  The following type defines the callout used when a remote task
  *  is extracted from a local thread queue.
  */

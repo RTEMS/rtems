@@ -38,5 +38,5 @@ int pthread_mutex_lock(
   pthread_mutex_t           *mutex
 )
 {
-  return _POSIX_Mutex_Lock_support( mutex, true, THREAD_QUEUE_WAIT_FOREVER );
+  return _POSIX_Mutex_Lock_support( mutex, true, WATCHDOG_NO_TIMEOUT );
 }

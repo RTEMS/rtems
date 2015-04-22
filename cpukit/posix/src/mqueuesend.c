@@ -63,6 +63,6 @@ int mq_send(
     msg_len,
     msg_prio,
     true,
-    THREAD_QUEUE_WAIT_FOREVER
+    WATCHDOG_NO_TIMEOUT
   );
 }

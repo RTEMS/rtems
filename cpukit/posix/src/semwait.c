@@ -35,5 +35,5 @@ int sem_wait(
   sem_t *sem
 )
 {
-  return _POSIX_Semaphore_Wait_support( sem, true, THREAD_QUEUE_WAIT_FOREVER );
+  return _POSIX_Semaphore_Wait_support( sem, true, WATCHDOG_NO_TIMEOUT );
 }

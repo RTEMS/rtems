@@ -39,7 +39,7 @@ int pthread_cond_wait(
   return _POSIX_Condition_variables_Wait_support(
     cond,
     mutex,
-    THREAD_QUEUE_WAIT_FOREVER,
+    WATCHDOG_NO_TIMEOUT,
     false
   );
 }
