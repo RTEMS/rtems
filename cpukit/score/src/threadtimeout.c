@@ -24,6 +24,12 @@
 static void _Thread_Do_timeout( Thread_Control *the_thread )
 {
   the_thread->Wait.return_code = the_thread->Wait.timeout_code;
+  ( *the_thread->Wait.operations->extract )(
+    the_thread->Wait.queue,
+    the_thread
+  );
+  _Thread_Wait_set_queue( the_thread, NULL );
+  _Thread_Wait_restore_default_operations( the_thread );
   _Thread_Lock_restore_default( the_thread );
 }
 

@@ -49,14 +49,81 @@ typedef struct Thread_queue_Control Thread_queue_Control;
  *
  * @param[in] the_thread The thread.
  * @param[in] new_priority The new priority value.
- * @param[in] queue The thread queue.
+ * @param[in] the_thread_queue The thread queue.
  *
  * @see Thread_queue_Operations.
  */
 typedef void ( *Thread_queue_Priority_change_operation )(
   Thread_Control       *the_thread,
   Priority_Control      new_priority,
-  Thread_queue_Control *queue
+  Thread_queue_Control *the_thread_queue
+);
+
+/**
+ * @brief Thread queue initialize operation.
+ *
+ * @param[in] the_thread_queue The thread queue.
+ *
+ * @see _Thread_Wait_set_operations().
+ */
+typedef void ( *Thread_queue_Initialize_operation )(
+  Thread_queue_Control *the_thread_queue
+);
+
+/**
+ * @brief Thread queue enqueue operation.
+ *
+ * @param[in] the_thread_queue The thread queue.
+ * @param[in] the_thread The thread to enqueue on the queue.
+ *
+ * @see _Thread_Wait_set_operations().
+ */
+typedef void ( *Thread_queue_Enqueue_operation )(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread
+);
+
+/**
+ * @brief Thread queue dequeue operation.
+ *
+ * @param[in] the_thread_queue The thread queue.
+ *
+ * @retval NULL No thread is present on the thread queue.
+ * @retval first The first thread of the thread queue according to the insert
+ * order.  This thread is no longer on the thread queue.
+ *
+ * @see _Thread_Wait_set_operations().
+ */
+typedef Thread_Control *( *Thread_queue_Dequeue_operation )(
+  Thread_queue_Control *the_thread_queue
+);
+
+/**
+ * @brief Thread queue extract operation.
+ *
+ * @param[in] the_thread_queue The thread queue.
+ * @param[in] the_thread The thread to extract from the thread queue.
+ *
+ * @see _Thread_Wait_set_operations().
+ */
+typedef void ( *Thread_queue_Extract_operation )(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread
+);
+
+/**
+ * @brief Thread queue first operation.
+ *
+ * @param[in] the_thread_queue The thread queue.
+ *
+ * @retval NULL No thread is present on the thread queue.
+ * @retval first The first thread of the thread queue according to the insert
+ * order.  This thread remains on the thread queue.
+ *
+ * @see _Thread_Wait_set_operations().
+ */
+typedef Thread_Control *( *Thread_queue_First_operation )(
+  Thread_queue_Control *the_thread_queue
 );
 
 /**
@@ -76,6 +143,39 @@ typedef struct {
    * to be done during a priority change.
    */
   Thread_queue_Priority_change_operation priority_change;
+
+  /**
+   * @brief Thread queue initialize operation.
+   *
+   * Called by object initialization routines.
+   */
+  Thread_queue_Initialize_operation initialize;
+
+  /**
+   * @brief Thread queue enqueue operation.
+   *
+   * Called by object routines to enqueue the thread.
+   */
+  Thread_queue_Enqueue_operation enqueue;
+
+  /**
+   * @brief Thread queue dequeue operation.
+   *
+   * Called by object routines to dequeue the first waiting thread if present.
+   */
+  Thread_queue_Dequeue_operation dequeue;
+
+  /**
+   * @brief Thread queue extract operation.
+   *
+   * Called by object routines to extract a thread from a thread queue.
+   */
+  Thread_queue_Extract_operation extract;
+
+  /**
+   * @brief Thread queue first operation.
+   */
+  Thread_queue_First_operation first;
 } Thread_queue_Operations;
 
 /**
@@ -120,8 +220,6 @@ struct Thread_queue_Control {
 
   /** This field is used to manage the critical section. */
   Thread_blocking_operation_States sync_state;
-  /** This field indicates the thread queue's blocking discipline. */
-  Thread_queue_Disciplines discipline;
   /** This is the status value returned to threads which timeout while
    *  waiting on this thread queue.
    */

@@ -19,9 +19,7 @@
 #endif
 
 #include <rtems/score/threadqimpl.h>
-#include <rtems/score/chainimpl.h>
 #include <rtems/score/rbtreeimpl.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/threadimpl.h>
 
 RBTree_Compare_result _Thread_queue_Compare_priority(
@@ -51,15 +49,20 @@ void _Thread_queue_Initialize(
   uint32_t                      timeout_status
 )
 {
-  the_thread_queue->discipline     = the_discipline;
+  const Thread_queue_Operations *operations;
+
   the_thread_queue->timeout_status = timeout_status;
   the_thread_queue->sync_state     = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
 
   _ISR_lock_Initialize( &the_thread_queue->Lock, "Thread Queue" );
 
   if ( the_discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY ) {
-    _RBTree_Initialize_empty( &the_thread_queue->Queues.Priority );
-  } else { /* must be THREAD_QUEUE_DISCIPLINE_FIFO */
-    _Chain_Initialize_empty( &the_thread_queue->Queues.Fifo );
+    operations = &_Thread_queue_Operations_priority;
+  } else {
+    _Assert( the_discipline == THREAD_QUEUE_DISCIPLINE_FIFO );
+    operations = &_Thread_queue_Operations_FIFO;
   }
+
+  the_thread_queue->operations = operations;
+  ( *operations->initialize )( the_thread_queue );
 }

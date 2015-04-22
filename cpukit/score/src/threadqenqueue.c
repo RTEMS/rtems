@@ -20,7 +20,6 @@
 
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/assert.h>
-#include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
@@ -47,6 +46,7 @@ static void _Thread_blocking_operation_Finalize(
    * The thread is not waiting on anything after this completes.
    */
   _Thread_Wait_set_queue( the_thread, NULL );
+  _Thread_Wait_restore_default_operations( the_thread );
 
   _Thread_Lock_restore_default( the_thread );
 
@@ -127,28 +127,14 @@ void _Thread_queue_Enqueue_critical(
   the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
 
   if ( sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
-    /*
-     * Invoke the discipline specific enqueue method.
-     */
-    if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_FIFO ) {
-      _Chain_Append_unprotected(
-        &the_thread_queue->Queues.Fifo,
-        &the_thread->Object.Node
-      );
-    } else { /* must be THREAD_QUEUE_DISCIPLINE_PRIORITY */
-      _Thread_Wait_set_operations(
-        the_thread,
-        &_Thread_queue_Operations_priority
-      );
-      _RBTree_Insert(
-        &the_thread_queue->Queues.Priority,
-        &the_thread->RBNode,
-        _Thread_queue_Compare_priority,
-        false
-      );
-    }
+    const Thread_queue_Operations *operations;
 
     the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
+
+    operations = the_thread_queue->operations;
+    _Thread_Wait_set_operations( the_thread, operations );
+    ( *operations->enqueue )( the_thread_queue, the_thread );
+
     _Thread_queue_Release( the_thread_queue, lock_context );
   } else {
     /* Cancel a blocking operation due to ISR */
@@ -181,15 +167,7 @@ void _Thread_queue_Extract_with_return_code(
 
   _SMP_Assert( lock == &the_thread_queue->Lock );
 
-  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_FIFO ) {
-    _Chain_Extract_unprotected( &the_thread->Object.Node );
-  } else { /* must be THREAD_QUEUE_DISCIPLINE_PRIORITY */
-    _RBTree_Extract(
-      &the_thread->Wait.queue->Queues.Priority,
-      &the_thread->RBNode
-    );
-    _Thread_Wait_restore_default_operations( the_thread );
-  }
+  ( *the_thread_queue->operations->extract )( the_thread_queue, the_thread );
 
   the_thread->Wait.return_code = return_code;
 
@@ -217,27 +195,9 @@ Thread_Control *_Thread_queue_Dequeue(
   ISR_lock_Context                  lock_context;
   Thread_blocking_operation_States  sync_state;
 
-  the_thread = NULL;
   _Thread_queue_Acquire( the_thread_queue, &lock_context );
 
-  /*
-   * Invoke the discipline specific dequeue method.
-   */
-  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_FIFO ) {
-    if ( !_Chain_Is_empty( &the_thread_queue->Queues.Fifo ) ) {
-      the_thread = (Thread_Control *)
-       _Chain_Get_first_unprotected( &the_thread_queue->Queues.Fifo );
-    }
-  } else { /* must be THREAD_QUEUE_DISCIPLINE_PRIORITY */
-    RBTree_Node    *first;
-
-    first = _RBTree_Get( &the_thread_queue->Queues.Priority, RBT_LEFT );
-    if ( first ) {
-      the_thread = THREAD_RBTREE_NODE_TO_THREAD( first );
-      _Thread_Wait_restore_default_operations( the_thread );
-    }
-  }
-
+  the_thread = ( *the_thread_queue->operations->dequeue )( the_thread_queue );
   if ( the_thread == NULL ) {
     /*
      * We did not find a thread to unblock in the queue.  Maybe the executing

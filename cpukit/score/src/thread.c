@@ -28,7 +28,6 @@
   )
 
 THREAD_OFFSET_ASSERT( Object );
-THREAD_OFFSET_ASSERT( RBNode );
 THREAD_OFFSET_ASSERT( current_state );
 THREAD_OFFSET_ASSERT( current_priority );
 THREAD_OFFSET_ASSERT( real_priority );

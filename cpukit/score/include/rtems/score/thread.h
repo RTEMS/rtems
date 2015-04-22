@@ -286,6 +286,21 @@ typedef unsigned int Thread_Wait_flags;
  *  blocked and to return information to it.
  */
 typedef struct {
+  /**
+   * @brief Node for thread queues.
+   */
+  union {
+    /**
+     * @brief A node for chains.
+     */
+    Chain_Node Chain;
+
+    /**
+     * @brief A node for red-black trees.
+     */
+    RBTree_Node RBTree;
+  } Node;
+
   /** This field is the Id of the object this thread is waiting upon. */
   Objects_Id            id;
   /** This field is used to return an integer while when blocked. */
@@ -349,8 +364,6 @@ typedef struct {
 typedef struct {
   /** This field is the object management structure for each proxy. */
   Objects_Control          Object;
-  /** This field is used to enqueue the thread on RBTrees. */
-  RBTree_Node              RBNode;
   /** This field is the current execution state of this proxy. */
   States_Control           current_state;
   /** This field is the current priority state of this proxy. */
@@ -638,8 +651,6 @@ typedef struct {
 struct Thread_Control_struct {
   /** This field is the object management structure for each thread. */
   Objects_Control          Object;
-  /** This field is used to enqueue the thread on RBTrees. */
-  RBTree_Node              RBNode;
   /** This field is the current execution state of this thread. */
   States_Control           current_state;
   /** This field is the current priority state of this thread. */

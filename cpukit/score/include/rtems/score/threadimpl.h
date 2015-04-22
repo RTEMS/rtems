@@ -78,8 +78,11 @@ SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
 SCORE_EXTERN struct _reent **_Thread_libc_reent;
 #endif
 
+#define THREAD_CHAIN_NODE_TO_THREAD( node ) \
+  RTEMS_CONTAINER_OF( node, Thread_Control, Wait.Node.Chain )
+
 #define THREAD_RBTREE_NODE_TO_THREAD( node ) \
-  RTEMS_CONTAINER_OF( node, Thread_Control, RBNode )
+  RTEMS_CONTAINER_OF( node, Thread_Control, Wait.Node.RBTree )
 
 #if defined(RTEMS_SMP)
 #define THREAD_RESOURCE_NODE_TO_THREAD( node ) \

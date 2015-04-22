@@ -19,29 +19,12 @@
 #endif
 
 #include <rtems/score/threadqimpl.h>
-#include <rtems/score/chainimpl.h>
-#include <rtems/score/threadimpl.h>
 
 Thread_Control *_Thread_queue_First_locked(
   Thread_queue_Control *the_thread_queue
 )
 {
-  Thread_Control *thread;
-
-  thread = NULL;
-
-  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_FIFO ) {
-    if ( !_Chain_Is_empty( &the_thread_queue->Queues.Fifo ) )
-      thread = (Thread_Control *) _Chain_First(&the_thread_queue->Queues.Fifo);
-  } else { /* must be THREAD_QUEUE_DISCIPLINE_PRIORITY */
-    RBTree_Node *first;
-
-    first = _RBTree_First( &the_thread_queue->Queues.Priority, RBT_LEFT );
-    if ( first )
-      thread = THREAD_RBTREE_NODE_TO_THREAD( first );
-  }
-
-  return thread;
+  return ( *the_thread_queue->operations->first )( the_thread_queue );
 }
 
 Thread_Control *_Thread_queue_First(
