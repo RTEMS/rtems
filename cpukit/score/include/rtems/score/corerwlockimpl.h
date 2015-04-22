@@ -168,21 +168,6 @@ CORE_RWLock_Status _CORE_RWLock_Release(
   )
 
 /**
- *  @brief RWLock specific thread queue timeout.
- *
- *  This routine processes a thread which timeouts while waiting on
- *  an RWLock's thread queue. It is called by the watchdog handler.
- *
- *  @param[in] id is the Id of thread to timeout
- *  @param[in] ignored is an unused pointer to a caller defined area
- */
-
-void _CORE_RWLock_Timeout(
-  Objects_Id  id,
-  void       *ignored
-);
-
-/**
  * This method is used to initialize core rwlock attributes.
  *
  * @param[in] the_attributes pointer to the attributes to initialize.

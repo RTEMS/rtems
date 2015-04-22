@@ -174,7 +174,7 @@ libscore_a_SOURCES += src/percpuasm.c
 ## CORE_RWLOCK_C_FILES
 if HAS_PTHREADS
 libscore_a_SOURCES += src/corerwlock.c src/corerwlockobtainread.c \
-    src/corerwlockobtainwrite.c src/corerwlockrelease.c src/corerwlocktimeout.c
+    src/corerwlockobtainwrite.c src/corerwlockrelease.c
 endif
 
 ## CORE_SEMAPHORE_C_FILES

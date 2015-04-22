@@ -101,11 +101,10 @@ static void _Thread_queue_Requeue_priority(
   );
 }
 
-void _Thread_queue_Enqueue_with_handler(
-  Thread_queue_Control         *the_thread_queue,
-  Thread_Control               *the_thread,
-  Watchdog_Interval             timeout,
-  Thread_queue_Timeout_callout  handler
+void _Thread_queue_Enqueue(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread,
+  Watchdog_Interval     timeout
 )
 {
   ISR_lock_Context                 lock_context;
@@ -127,7 +126,7 @@ void _Thread_queue_Enqueue_with_handler(
   if ( timeout ) {
     _Watchdog_Initialize(
        &the_thread->Timer,
-       handler,
+       _Thread_queue_Timeout,
        the_thread->Object.id,
        NULL
     );

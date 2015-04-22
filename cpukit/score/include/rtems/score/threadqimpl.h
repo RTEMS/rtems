@@ -64,19 +64,6 @@ Thread_Control *_Thread_queue_Dequeue(
 );
 
 /**
- *  @brief Enqueues the currently executing thread on the_thread_queue.
- *
- *  This routine enqueues the currently executing thread on
- *  the_thread_queue with an optional timeout.
- */
-#define _Thread_queue_Enqueue( _the_thread_queue, _the_thread, _timeout ) \
-  _Thread_queue_Enqueue_with_handler( \
-    _the_thread_queue, \
-    _the_thread, \
-    _timeout, \
-    _Thread_queue_Timeout )
-
-/**
  *  @brief Blocks a thread and places it on a thread.
  *
  *  This routine blocks a thread, places it on a thread, and optionally
@@ -89,11 +76,10 @@ Thread_Control *_Thread_queue_Dequeue(
  *  - INTERRUPT LATENCY:
  *    + single case
  */
-void _Thread_queue_Enqueue_with_handler(
-  Thread_queue_Control         *the_thread_queue,
-  Thread_Control               *the_thread,
-  Watchdog_Interval             timeout,
-  Thread_queue_Timeout_callout  handler
+void _Thread_queue_Enqueue(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread,
+  Watchdog_Interval     timeout
 );
 
 /**
