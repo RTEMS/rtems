@@ -65,7 +65,6 @@ int pthread_cond_init(
   _Thread_queue_Initialize(
     &the_cond->Wait_queue,
     THREAD_QUEUE_DISCIPLINE_FIFO,
-    STATES_WAITING_FOR_CONDITION_VARIABLE | STATES_INTERRUPTIBLE_BY_SIGNAL,
     ETIMEDOUT
   );
 

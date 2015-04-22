@@ -23,6 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/statesimpl.h>
 #include <rtems/score/wkspace.h>
 
 void _CORE_message_queue_Seize(
@@ -121,5 +122,10 @@ void _CORE_message_queue_Seize(
   /* Wait.count will be filled in with the message priority */
   _ISR_Enable( level );
 
-  _Thread_queue_Enqueue( &the_message_queue->Wait_queue, executing, timeout );
+  _Thread_queue_Enqueue(
+    &the_message_queue->Wait_queue,
+    executing,
+    STATES_WAITING_FOR_MESSAGE,
+    timeout
+  );
 }

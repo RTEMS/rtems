@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/score/corerwlockimpl.h>
-#include <rtems/score/statesimpl.h>
 #include <rtems/score/threadqimpl.h>
 
 void _CORE_RWLock_Initialize(
@@ -38,7 +37,6 @@ void _CORE_RWLock_Initialize(
   _Thread_queue_Initialize(
     &the_rwlock->Wait_queue,
     THREAD_QUEUE_DISCIPLINE_FIFO,
-    STATES_WAITING_FOR_RWLOCK,
     CORE_RWLOCK_TIMEOUT
   );
 }

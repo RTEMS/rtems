@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/score/coresemimpl.h>
-#include <rtems/score/statesimpl.h>
 
 void _CORE_semaphore_Initialize(
   CORE_semaphore_Control          *the_semaphore,
@@ -35,7 +34,6 @@ void _CORE_semaphore_Initialize(
     &the_semaphore->Wait_queue,
     _CORE_semaphore_Is_priority( the_semaphore_attributes ) ?
               THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
-    STATES_WAITING_FOR_SEMAPHORE,
     CORE_SEMAPHORE_TIMEOUT
   );
 }

@@ -66,10 +66,6 @@ typedef struct {
   Thread_blocking_operation_States sync_state;
   /** This field indicates the thread queue's blocking discipline. */
   Thread_queue_Disciplines discipline;
-  /** This indicates the blocking state for threads waiting on this
-   *  thread queue.
-   */
-  States_Control           state;
   /** This is the status value returned to threads which timeout while
    *  waiting on this thread queue.
    */

@@ -24,7 +24,6 @@
 #include <stdlib.h>
 
 #include <rtems/score/isrlevel.h>
-#include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdogimpl.h>
@@ -194,7 +193,6 @@ void _POSIX_signals_Manager_Initialization(void)
   _Thread_queue_Initialize(
     &_POSIX_signals_Wait_queue,
     THREAD_QUEUE_DISCIPLINE_FIFO,
-    STATES_WAITING_FOR_SIGNAL | STATES_INTERRUPTIBLE_BY_SIGNAL,
     EAGAIN
   );
 

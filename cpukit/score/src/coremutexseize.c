@@ -22,6 +22,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/score/statesimpl.h>
 #include <rtems/score/thread.h>
 
 #if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
@@ -63,7 +64,12 @@ void _CORE_mutex_Seize_interrupt_blocking(
     );
   }
 
-  _Thread_queue_Enqueue( &the_mutex->Wait_queue, executing, timeout );
+  _Thread_queue_Enqueue(
+    &the_mutex->Wait_queue,
+    executing,
+    STATES_WAITING_FOR_MUTEX,
+    timeout
+  );
 
   _Thread_Enable_dispatch();
 }

@@ -47,11 +47,9 @@ RBTree_Compare_result _Thread_queue_Compare_priority(
 void _Thread_queue_Initialize(
   Thread_queue_Control         *the_thread_queue,
   Thread_queue_Disciplines      the_discipline,
-  States_Control                state,
   uint32_t                      timeout_status
 )
 {
-  the_thread_queue->state          = state;
   the_thread_queue->discipline     = the_discipline;
   the_thread_queue->timeout_status = timeout_status;
   the_thread_queue->sync_state     = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;

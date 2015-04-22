@@ -22,6 +22,7 @@
 #include <rtems/score/coresem.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadqimpl.h>
+#include <rtems/score/statesimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -238,7 +239,12 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
   executing->Wait.id             = id;
   _ISR_lock_ISR_enable( lock_context );
 
-  _Thread_queue_Enqueue( &the_semaphore->Wait_queue, executing, timeout );
+  _Thread_queue_Enqueue(
+    &the_semaphore->Wait_queue,
+    executing,
+    STATES_WAITING_FOR_SEMAPHORE,
+    timeout
+  );
   _Thread_Enable_dispatch();
 }
 

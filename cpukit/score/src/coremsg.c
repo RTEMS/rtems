@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/score/coremsgimpl.h>
-#include <rtems/score/statesimpl.h>
 #include <rtems/score/wkspace.h>
 
 /*
@@ -113,7 +112,6 @@ bool _CORE_message_queue_Initialize(
     &the_message_queue->Wait_queue,
     _CORE_message_queue_Is_priority( the_message_queue_attributes ) ?
        THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
-    STATES_WAITING_FOR_MESSAGE,
     CORE_MESSAGE_QUEUE_STATUS_TIMEOUT
   );
 

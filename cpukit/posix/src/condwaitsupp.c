@@ -23,6 +23,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/score/statesimpl.h>
 #include <rtems/posix/condimpl.h>
 #include <rtems/posix/time.h>
 #include <rtems/posix/muteximpl.h>
@@ -79,7 +80,13 @@ int _POSIX_Condition_variables_Wait_support(
         executing->Wait.queue       = &the_cond->Wait_queue;
         executing->Wait.id          = *cond;
 
-        _Thread_queue_Enqueue( &the_cond->Wait_queue, executing, timeout );
+        _Thread_queue_Enqueue(
+          &the_cond->Wait_queue,
+          executing,
+          STATES_WAITING_FOR_CONDITION_VARIABLE
+            | STATES_INTERRUPTIBLE_BY_SIGNAL,
+          timeout
+        );
 
         _Objects_Put( &the_cond->Object );
 

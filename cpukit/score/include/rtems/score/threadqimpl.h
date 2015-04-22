@@ -71,6 +71,7 @@ Thread_Control *_Thread_queue_Dequeue(
  *
  *  @param[in] the_thread_queue pointer to threadq
  *  @param[in] the_thread the thread to enqueue
+ *  @param[in] state is the new state of the thread
  *  @param[in] timeout interval to wait
  *
  *  - INTERRUPT LATENCY:
@@ -79,6 +80,7 @@ Thread_Control *_Thread_queue_Dequeue(
 void _Thread_queue_Enqueue(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
+  States_Control        state,
   Watchdog_Interval     timeout
 );
 
@@ -170,13 +172,11 @@ void _Thread_queue_Flush(
  *
  *  @param[in] the_thread_queue is the pointer to a threadq header
  *  @param[in] the_discipline is the queueing discipline
- *  @param[in] state is the state of waiting threads
  *  @param[in] timeout_status is the return on a timeout
  */
 void _Thread_queue_Initialize(
   Thread_queue_Control         *the_thread_queue,
   Thread_queue_Disciplines      the_discipline,
-  States_Control                state,
   uint32_t                      timeout_status
 );
 

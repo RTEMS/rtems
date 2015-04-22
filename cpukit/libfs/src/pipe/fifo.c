@@ -61,27 +61,6 @@ static rtems_id pipe_semaphore = RTEMS_ID_NONE;
 #define PIPE_WAKEUPWRITERS(_pipe) \
   do {uint32_t n; rtems_barrier_release(_pipe->writeBarrier, &n); } while(0)
 
-
-#ifdef RTEMS_POSIX_API
-#include <rtems/rtems/barrier.h>
-#include <rtems/score/thread.h>
-
-/* Set barriers to be interruptible by signals. */
-static void pipe_interruptible(pipe_control_t *pipe)
-{
-  Objects_Locations  location;
-  Barrier_Control   *the_barrier;
-
-  the_barrier = _Barrier_Get(pipe->readBarrier, &location);
-  the_barrier->Barrier.Wait_queue.state |= STATES_INTERRUPTIBLE_BY_SIGNAL;
-  _Objects_Put( &the_barrier->Object );
-
-  the_barrier = _Barrier_Get(pipe->writeBarrier, &location);
-  the_barrier->Barrier.Wait_queue.state |= STATES_INTERRUPTIBLE_BY_SIGNAL;
-  _Objects_Put( &the_barrier->Object );
-}
-#endif
-
 /*
  * Alloc pipe control structure, buffer, and resources.
  * Called with pipe_semaphore held.
@@ -121,10 +100,6 @@ static int pipe_alloc(
         RTEMS_BINARY_SEMAPHORE | RTEMS_FIFO,
         RTEMS_NO_PRIORITY, &pipe->Semaphore) != RTEMS_SUCCESSFUL)
     goto err_sem;
-
-#ifdef RTEMS_POSIX_API
-  pipe_interruptible(pipe);
-#endif
 
   *pipep = pipe;
   if (c ++ == 'z')

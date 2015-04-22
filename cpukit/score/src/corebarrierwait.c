@@ -20,6 +20,7 @@
 
 #include <rtems/score/corebarrierimpl.h>
 #include <rtems/score/isrlevel.h>
+#include <rtems/score/statesimpl.h>
 #include <rtems/score/threadqimpl.h>
 
 void _CORE_barrier_Wait(
@@ -51,5 +52,10 @@ void _CORE_barrier_Wait(
   executing->Wait.id             = id;
   _ISR_Enable( level );
 
-  _Thread_queue_Enqueue( &the_barrier->Wait_queue, executing, timeout );
+  _Thread_queue_Enqueue(
+    &the_barrier->Wait_queue,
+    executing,
+    STATES_WAITING_FOR_BARRIER,
+    timeout
+  );
 }

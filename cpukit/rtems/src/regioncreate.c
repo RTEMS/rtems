@@ -22,7 +22,6 @@
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/apimutex.h>
-#include <rtems/score/statesimpl.h>
 #include <rtems/score/threadqimpl.h>
 
 /*
@@ -94,7 +93,6 @@ rtems_status_code rtems_region_create(
           &the_region->Wait_queue,
           _Attributes_Is_priority( attribute_set ) ?
              THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
-          STATES_WAITING_FOR_SEGMENT,
           RTEMS_TIMEOUT
         );
 

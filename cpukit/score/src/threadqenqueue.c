@@ -104,6 +104,7 @@ static void _Thread_queue_Requeue_priority(
 void _Thread_queue_Enqueue(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
+  States_Control        state,
   Watchdog_Interval     timeout
 )
 {
@@ -112,13 +113,13 @@ void _Thread_queue_Enqueue(
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet )
-    the_thread = _Thread_MP_Allocate_proxy( the_thread_queue->state );
+    the_thread = _Thread_MP_Allocate_proxy( state );
   else
 #endif
   /*
    *  Set the blocking state for this thread queue in the thread.
    */
-  _Thread_Set_state( the_thread, the_thread_queue->state );
+  _Thread_Set_state( the_thread, state );
 
   /*
    *  If the thread wants to timeout, then schedule its timer.

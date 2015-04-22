@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/score/corebarrierimpl.h>
-#include <rtems/score/statesimpl.h>
 #include <rtems/score/threadqimpl.h>
 
 void _CORE_barrier_Initialize(
@@ -34,7 +33,6 @@ void _CORE_barrier_Initialize(
   _Thread_queue_Initialize(
     &the_barrier->Wait_queue,
     THREAD_QUEUE_DISCIPLINE_FIFO,
-    STATES_WAITING_FOR_BARRIER,
     CORE_BARRIER_TIMEOUT
   );
 }

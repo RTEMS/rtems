@@ -20,6 +20,7 @@
 
 #include <rtems/score/corerwlockimpl.h>
 #include <rtems/score/threadqimpl.h>
+#include <rtems/score/statesimpl.h>
 #include <rtems/score/watchdog.h>
 
 void _CORE_RWLock_Obtain_for_reading(
@@ -87,6 +88,7 @@ void _CORE_RWLock_Obtain_for_reading(
     _Thread_queue_Enqueue(
        &the_rwlock->Wait_queue,
        executing,
+       STATES_WAITING_FOR_RWLOCK,
        timeout
     );
 

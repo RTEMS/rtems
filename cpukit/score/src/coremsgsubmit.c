@@ -22,6 +22,7 @@
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/statesimpl.h>
 #include <rtems/score/wkspace.h>
 
 CORE_message_queue_Status _CORE_message_queue_Submit(
@@ -133,6 +134,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
       _Thread_queue_Enqueue(
         &the_message_queue->Wait_queue,
         executing,
+        STATES_WAITING_FOR_MESSAGE,
         timeout
       );
     }

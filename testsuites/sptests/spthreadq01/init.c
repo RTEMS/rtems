@@ -33,7 +33,7 @@ void threadq_first_empty(
   Thread_queue_Control tq;
 
   printf( "Init - initialize thread queue for %s\n", discipline_string );
-  _Thread_queue_Initialize( &tq, discipline, 0x01, 3 );
+  _Thread_queue_Initialize( &tq, discipline, 3 );
 
   puts( "Init - _Thread_queue_Extract - thread not blocked on a thread queue" );
   _Thread_Disable_dispatch();

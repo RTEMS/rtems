@@ -22,6 +22,7 @@
 #include <rtems/rtems/optionsimpl.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/threadqimpl.h>
+#include <rtems/score/statesimpl.h>
 
 rtems_status_code rtems_region_get_segment(
   rtems_id           id,
@@ -88,6 +89,7 @@ rtems_status_code rtems_region_get_segment(
             _Thread_queue_Enqueue(
               &the_region->Wait_queue,
               executing,
+              STATES_WAITING_FOR_SEGMENT,
               timeout
             );
 

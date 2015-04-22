@@ -83,7 +83,6 @@ void _MPCI_Handler_initialization(
   _Thread_queue_Initialize(
     &_MPCI_Remote_blocked_threads,
     THREAD_QUEUE_DISCIPLINE_FIFO,
-    STATES_WAITING_FOR_RPC_REPLY,
     timeout_status
   );
 }
@@ -219,11 +218,9 @@ uint32_t   _MPCI_Send_request_packet (
     _Thread_queue_Enqueue(
       &_MPCI_Remote_blocked_threads,
       executing,
+      STATES_WAITING_FOR_RPC_REPLY | extra_state,
       the_packet->timeout
     );
-
-    executing->current_state =
-      _States_Set( extra_state, executing->current_state );
 
   _Thread_Enable_dispatch();
 
