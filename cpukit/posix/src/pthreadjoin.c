@@ -71,7 +71,7 @@ on_EINTR:
         _Thread_queue_Enqueue(
           &api->Join_List,
           executing,
-          STATES_WAITING_FOR_JOIN_AT_EXIT | STATES_INTERRUPTIBLE_BY_SIGNAL,
+          STATES_WAITING_FOR_JOIN | STATES_INTERRUPTIBLE_BY_SIGNAL,
           WATCHDOG_NO_TIMEOUT
         );
       }

@@ -127,6 +127,7 @@ static const rtems_assoc_t rtems_monitor_state_assoc[] = {
     { "Wmutex", STATES_WAITING_FOR_MUTEX, 0 },
     { "Wcvar",  STATES_WAITING_FOR_CONDITION_VARIABLE, 0 },
     { "Wjatx",  STATES_WAITING_FOR_JOIN_AT_EXIT, 0 },
+    { "Wjoin",  STATES_WAITING_FOR_JOIN, 0 },
     { "Wrpc",   STATES_WAITING_FOR_RPC_REPLY, 0 },
     { "WRATE",  STATES_WAITING_FOR_PERIOD, 0 },
     { "Wsig",   STATES_WAITING_FOR_SIGNAL, 0 },
