@@ -32,7 +32,7 @@ void _CORE_RWLock_Obtain_for_writing(
   CORE_RWLock_API_mp_support_callout   api_rwlock_mp_support
 )
 {
-  ISR_Level       level;
+  ISR_lock_Context lock_context;
 
   /*
    *  If unlocked, then OK to read.
@@ -41,13 +41,13 @@ void _CORE_RWLock_Obtain_for_writing(
    *  If any thread is waiting, then we wait.
    */
 
-  _ISR_Disable( level );
+  _Thread_queue_Acquire( &the_rwlock->Wait_queue, &lock_context );
     switch ( the_rwlock->current_state ) {
       case CORE_RWLOCK_UNLOCKED:
-	the_rwlock->current_state = CORE_RWLOCK_LOCKED_FOR_WRITING;
-	_ISR_Enable( level );
-	executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
-	return;
+        the_rwlock->current_state = CORE_RWLOCK_LOCKED_FOR_WRITING;
+        _Thread_queue_Release( &the_rwlock->Wait_queue, &lock_context );
+        executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
+        return;
 
       case CORE_RWLOCK_LOCKED_FOR_READING:
       case CORE_RWLOCK_LOCKED_FOR_WRITING:
@@ -59,7 +59,7 @@ void _CORE_RWLock_Obtain_for_writing(
      */
 
     if ( !wait ) {
-      _ISR_Enable( level );
+      _Thread_queue_Release( &the_rwlock->Wait_queue, &lock_context );
       executing->Wait.return_code = CORE_RWLOCK_UNAVAILABLE;
       return;
     }
@@ -68,18 +68,16 @@ void _CORE_RWLock_Obtain_for_writing(
      *  We need to wait to enter this critical section
      */
 
-    _Thread_queue_Enter_critical_section( &the_rwlock->Wait_queue );
-    executing->Wait.queue       = &the_rwlock->Wait_queue;
     executing->Wait.id          = id;
     executing->Wait.option      = CORE_RWLOCK_THREAD_WAITING_FOR_WRITE;
     executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
-    _ISR_Enable( level );
 
-    _Thread_queue_Enqueue(
+    _Thread_queue_Enqueue_critical(
        &the_rwlock->Wait_queue,
        executing,
        STATES_WAITING_FOR_RWLOCK,
-       timeout
+       timeout,
+       &lock_context
     );
 
     /* return to API level so it can dispatch and we block */

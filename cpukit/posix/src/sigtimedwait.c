@@ -152,17 +152,15 @@ int sigtimedwait(
   the_info->si_signo = -1;
 
   _Thread_Disable_dispatch();
-    executing->Wait.queue           = &_POSIX_signals_Wait_queue;
     executing->Wait.return_code     = EINTR;
     executing->Wait.option          = *set;
     executing->Wait.return_argument = the_info;
-    _Thread_queue_Enter_critical_section( &_POSIX_signals_Wait_queue );
-    _POSIX_signals_Release( &lock_context );
-    _Thread_queue_Enqueue(
+    _Thread_queue_Enqueue_critical(
       &_POSIX_signals_Wait_queue,
       executing,
       STATES_WAITING_FOR_SIGNAL | STATES_INTERRUPTIBLE_BY_SIGNAL,
-      interval
+      interval,
+      &lock_context
     );
   _Thread_Enable_dispatch();
 

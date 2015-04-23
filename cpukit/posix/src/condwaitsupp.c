@@ -74,10 +74,8 @@ int _POSIX_Condition_variables_Wait_support(
       if ( !already_timedout ) {
         the_cond->Mutex = *mutex;
 
-        _Thread_queue_Enter_critical_section( &the_cond->Wait_queue );
         executing = _Thread_Executing;
         executing->Wait.return_code = 0;
-        executing->Wait.queue       = &the_cond->Wait_queue;
         executing->Wait.id          = *cond;
 
         _Thread_queue_Enqueue(

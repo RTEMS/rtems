@@ -21,6 +21,7 @@
 
 #include <rtems/score/corebarrier.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdog.h>
 
 #ifdef __cplusplus
@@ -82,6 +83,13 @@ void _CORE_barrier_Initialize(
   CORE_barrier_Control       *the_barrier,
   CORE_barrier_Attributes    *the_barrier_attributes
 );
+
+RTEMS_INLINE_ROUTINE void _CORE_barrier_Destroy(
+  CORE_barrier_Control *the_barrier
+)
+{
+  _Thread_queue_Destroy( &the_barrier->Wait_queue );
+}
 
 /**
  *  @brief Wait for the barrier.

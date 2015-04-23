@@ -18,6 +18,7 @@
 
 #include <rtems/rtems/message.h>
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/coremsgimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -55,10 +55,11 @@ void _Thread_queue_Initialize(
   the_thread_queue->timeout_status = timeout_status;
   the_thread_queue->sync_state     = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
 
+  _ISR_lock_Initialize( &the_thread_queue->Lock, "Thread Queue" );
+
   if ( the_discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY ) {
     _RBTree_Initialize_empty( &the_thread_queue->Queues.Priority );
   } else { /* must be THREAD_QUEUE_DISCIPLINE_FIFO */
     _Chain_Initialize_empty( &the_thread_queue->Queues.Fifo );
   }
-
 }

@@ -19,6 +19,7 @@
  
 #include <rtems/posix/cond.h>
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdog.h>
 
 #ifdef __cplusplus
@@ -72,6 +73,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Free (
   POSIX_Condition_variables_Control *the_condition_variable
 )
 {
+  _Thread_queue_Destroy( &the_condition_variable->Wait_queue );
   _Objects_Free(
     &_POSIX_Condition_variables_Information,
     &the_condition_variable->Object

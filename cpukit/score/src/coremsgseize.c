@@ -36,15 +36,15 @@ void _CORE_message_queue_Seize(
   Watchdog_Interval                timeout
 )
 {
-  ISR_Level                          level;
+  ISR_lock_Context                   lock_context;
   CORE_message_queue_Buffer_control *the_message;
 
   executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
-  _ISR_Disable( level );
+  _Thread_queue_Acquire( &the_message_queue->Wait_queue, &lock_context );
   the_message = _CORE_message_queue_Get_pending_message( the_message_queue );
   if ( the_message != NULL ) {
     the_message_queue->number_of_pending_messages -= 1;
-    _ISR_Enable( level );
+    _Thread_queue_Release( &the_message_queue->Wait_queue, &lock_context );
 
     *size_p = the_message->Contents.size;
     executing->Wait.count =
@@ -109,23 +109,21 @@ void _CORE_message_queue_Seize(
   }
 
   if ( !wait ) {
-    _ISR_Enable( level );
+    _Thread_queue_Release( &the_message_queue->Wait_queue, &lock_context );
     executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT;
     return;
   }
 
-  _Thread_queue_Enter_critical_section( &the_message_queue->Wait_queue );
-  executing->Wait.queue = &the_message_queue->Wait_queue;
   executing->Wait.id = id;
   executing->Wait.return_argument_second.mutable_object = buffer;
   executing->Wait.return_argument = size_p;
   /* Wait.count will be filled in with the message priority */
-  _ISR_Enable( level );
 
-  _Thread_queue_Enqueue(
+  _Thread_queue_Enqueue_critical(
     &the_message_queue->Wait_queue,
     executing,
     STATES_WAITING_FOR_MESSAGE,
-    timeout
+    timeout,
+    &lock_context
   );
 }

@@ -34,13 +34,13 @@ void _CORE_semaphore_Seize(
   Watchdog_Interval       timeout
 )
 {
-  ISR_Level       level;
+  ISR_lock_Context lock_context;
 
   executing->Wait.return_code = CORE_SEMAPHORE_STATUS_SUCCESSFUL;
-  _ISR_Disable( level );
+  _Thread_queue_Acquire( &the_semaphore->Wait_queue, &lock_context );
   if ( the_semaphore->count != 0 ) {
     the_semaphore->count -= 1;
-    _ISR_Enable( level );
+    _Thread_queue_Release( &the_semaphore->Wait_queue, &lock_context );
     return;
   }
 
@@ -50,7 +50,7 @@ void _CORE_semaphore_Seize(
    *  the semaphore was not available and the caller never blocked.
    */
   if ( !wait ) {
-    _ISR_Enable( level );
+    _Thread_queue_Release( &the_semaphore->Wait_queue, &lock_context );
     executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
     return;
   }
@@ -59,15 +59,13 @@ void _CORE_semaphore_Seize(
    *  If the semaphore is not available and the caller is willing to
    *  block, then we now block the caller with optional timeout.
    */
-  _Thread_queue_Enter_critical_section( &the_semaphore->Wait_queue );
-  executing->Wait.queue = &the_semaphore->Wait_queue;
-  executing->Wait.id    = id;
-  _ISR_Enable( level );
-  _Thread_queue_Enqueue(
+  executing->Wait.id = id;
+  _Thread_queue_Enqueue_critical(
     &the_semaphore->Wait_queue,
     executing,
     STATES_WAITING_FOR_SEMAPHORE,
-    timeout
+    timeout,
+    &lock_context
   );
 }
 #endif

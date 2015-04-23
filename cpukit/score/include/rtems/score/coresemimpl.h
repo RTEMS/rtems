@@ -98,6 +98,13 @@ void _CORE_semaphore_Initialize(
   uint32_t                         initial_value
 );
 
+RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
+  CORE_semaphore_Control *the_semaphore
+)
+{
+  _Thread_queue_Destroy( &the_semaphore->Wait_queue );
+}
+
 #if defined(RTEMS_SCORE_CORESEM_ENABLE_SEIZE_BODY)
   /**
    *  This routine attempts to receive a unit from @a the_semaphore.
@@ -234,16 +241,14 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
   }
 
   _Thread_Disable_dispatch();
-  _Thread_queue_Enter_critical_section( &the_semaphore->Wait_queue );
-  executing->Wait.queue          = &the_semaphore->Wait_queue;
-  executing->Wait.id             = id;
-  _ISR_lock_ISR_enable( lock_context );
-
-  _Thread_queue_Enqueue(
+  executing->Wait.id = id;
+  _Thread_queue_Acquire_critical( &the_semaphore->Wait_queue, lock_context );
+  _Thread_queue_Enqueue_critical(
     &the_semaphore->Wait_queue,
     executing,
     STATES_WAITING_FOR_SEMAPHORE,
-    timeout
+    timeout,
+    lock_context
   );
   _Thread_Enable_dispatch();
 }

@@ -288,6 +288,8 @@ static void _POSIX_Threads_Terminate_extension(
   if ( api->schedpolicy == SCHED_SPORADIC )
     _Watchdog_Remove_ticks( &api->Sporadic_timer );
 
+  _Thread_queue_Destroy( &api->Join_List );
+
   _Thread_Enable_dispatch();
 }
 

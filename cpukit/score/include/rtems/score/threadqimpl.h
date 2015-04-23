@@ -31,6 +31,31 @@ extern "C" {
  */
 /**@{*/
 
+RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire_critical(
+  Thread_queue_Control *the_thread_queue,
+  ISR_lock_Context     *lock_context
+)
+{
+  _ISR_lock_Acquire( &the_thread_queue->Lock, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire(
+  Thread_queue_Control *the_thread_queue,
+  ISR_lock_Context     *lock_context
+)
+{
+  _ISR_lock_ISR_disable( lock_context );
+  _Thread_queue_Acquire_critical( the_thread_queue, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_queue_Release(
+  Thread_queue_Control *the_thread_queue,
+  ISR_lock_Context     *lock_context
+)
+{
+  _ISR_lock_Release_and_ISR_enable( &the_thread_queue->Lock, lock_context );
+}
+
 /**
  *  The following type defines the callout used when a remote task
  *  is extracted from a local thread queue.
@@ -55,25 +80,47 @@ Thread_Control *_Thread_queue_Dequeue(
 );
 
 /**
- *  @brief Blocks a thread and places it on a thread.
+ * @brief Blocks a thread and places it on a thread queue.
  *
- *  This routine blocks a thread, places it on a thread, and optionally
- *  starts a timeout timer.
+ * This routine blocks a thread, places it on a thread queue, and optionally
+ * starts a watchdog in case the timeout interval is not WATCHDOG_NO_TIMEOUT.
  *
- *  @param[in] the_thread_queue pointer to threadq
- *  @param[in] the_thread the thread to enqueue
- *  @param[in] state is the new state of the thread
- *  @param[in] timeout interval to wait
+ * The caller must be the owner of the thread queue lock.  This function will
+ * release the thread queue lock and register it as the new thread lock.
  *
- *  - INTERRUPT LATENCY:
- *    + single case
+ * @param[in] the_thread_queue The thread queue.
+ * @param[in] the_thread The thread to enqueue.
+ * @param[in] state The new state of the thread.
+ * @param[in] timeout Interval to wait.  Use WATCHDOG_NO_TIMEOUT to block
+ * potentially forever.
+ * @param[in] lock_context The lock context of the lock acquire.
  */
-void _Thread_queue_Enqueue(
+void _Thread_queue_Enqueue_critical(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread,
+  States_Control        state,
+  Watchdog_Interval     timeout,
+  ISR_lock_Context     *lock_context
+);
+
+RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
   States_Control        state,
   Watchdog_Interval     timeout
-);
+)
+{
+  ISR_lock_Context lock_context;
+
+  _Thread_queue_Acquire( the_thread_queue, &lock_context );
+  _Thread_queue_Enqueue_critical(
+    the_thread_queue,
+    the_thread,
+    state,
+    timeout,
+    &lock_context
+  );
+}
 
 /**
  *  @brief Extracts thread from thread queue.
@@ -116,15 +163,30 @@ void _Thread_queue_Extract_with_proxy(
 );
 
 /**
- *  @brief Gets a pointer to the "first" thread on the_thread_queue.
+ * @brief Returns the first thread on the thread queue if it exists, otherwise
+ * @c NULL (locked).
  *
- *  This function returns a pointer to the "first" thread
- *  on the_thread_queue.  The "first" thread is selected
- *  based on the discipline of the_thread_queue.
+ * The caller must be the owner of the thread queue lock.
  *
- *  @param[in] the_thread_queue pointer to thread queue
+ * @param[in] the_thread_queue The thread queue.
  *
- *  @retval first thread or NULL
+ * @retval NULL No thread is present on the thread queue.
+ * @retval first The first thread on the thread queue according to the enqueue
+ * order.
+ */
+Thread_Control *_Thread_queue_First_locked(
+  Thread_queue_Control *the_thread_queue
+);
+
+/**
+ * @brief Returns the first thread on the thread queue if it exists, otherwise
+ * @c NULL.
+ *
+ * @param[in] the_thread_queue The thread queue.
+ *
+ * @retval NULL No thread is present on the thread queue.
+ * @retval first The first thread on the thread queue according to the enqueue
+ * order.
  */
 Thread_Control *_Thread_queue_First(
   Thread_queue_Control *the_thread_queue
@@ -164,6 +226,13 @@ void _Thread_queue_Initialize(
   Thread_queue_Disciplines      the_discipline,
   uint32_t                      timeout_status
 );
+
+RTEMS_INLINE_ROUTINE void _Thread_queue_Destroy(
+  Thread_queue_Control *the_thread_queue
+)
+{
+  _ISR_lock_Destroy( &the_thread_queue->Lock );
+}
 
 /**
  *  @brief Thread queue timeout.
@@ -211,17 +280,6 @@ RBTree_Compare_result _Thread_queue_Compare_priority(
   const RBTree_Node *left,
   const RBTree_Node *right
 );
-
-/**
- * This routine is invoked to indicate that the specified thread queue is
- * entering a critical section.
- */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Enter_critical_section (
-  Thread_queue_Control *the_thread_queue
-)
-{
-  the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED;
-}
 
 /**@}*/
 

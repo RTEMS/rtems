@@ -21,6 +21,7 @@
 
 #include <rtems/score/corerwlock.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdog.h>
 
 #ifdef __cplusplus
@@ -86,6 +87,13 @@ void _CORE_RWLock_Initialize(
   CORE_RWLock_Control       *the_rwlock,
   CORE_RWLock_Attributes    *the_rwlock_attributes
 );
+
+RTEMS_INLINE_ROUTINE void _CORE_RWLock_Destroy(
+  CORE_RWLock_Control *the_rwlock
+)
+{
+  _Thread_queue_Destroy( &the_rwlock->Wait_queue );
+}
 
 /**
  *  @brief Obtain RWLock for reading.

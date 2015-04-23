@@ -53,13 +53,17 @@ void _CORE_mutex_Seize_interrupt_blocking(
   ISR_lock_Context    *lock_context
 )
 {
-  _Thread_queue_Enter_critical_section( &the_mutex->Wait_queue );
-  executing->Wait.queue = &the_mutex->Wait_queue;
   _Thread_Disable_dispatch();
-  _ISR_lock_ISR_enable( lock_context );
 
   if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ) {
     Thread_Control *holder = the_mutex->holder;
+
+    /*
+     * To enable interrupts here works only since we own the Giant lock and
+     * only threads are allowed to seize and surrender mutexes with the
+     * priority inheritance protocol.
+     */
+    _ISR_lock_ISR_enable( lock_context );
 
     _Scheduler_Change_priority_if_higher(
       _Scheduler_Get( holder ),
@@ -67,13 +71,17 @@ void _CORE_mutex_Seize_interrupt_blocking(
       executing->current_priority,
       false
     );
+
+    _ISR_lock_ISR_disable( lock_context );
   }
 
-  _Thread_queue_Enqueue(
+  _Thread_queue_Acquire_critical( &the_mutex->Wait_queue, lock_context );
+  _Thread_queue_Enqueue_critical(
     &the_mutex->Wait_queue,
     executing,
     STATES_WAITING_FOR_MUTEX,
-    timeout
+    timeout,
+    lock_context
   );
 
   _Thread_Enable_dispatch();

@@ -54,4 +54,5 @@ void _CORE_message_queue_Close(
 
   (void) _Workspace_Free( the_message_queue->message_buffers );
 
+  _Thread_queue_Destroy( &the_message_queue->Wait_queue );
 }

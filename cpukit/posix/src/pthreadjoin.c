@@ -67,7 +67,6 @@ on_EINTR:
          _Thread_Clear_state( the_thread, STATES_WAITING_FOR_JOIN_AT_EXIT );
       } else {
         executing->Wait.return_argument = &return_pointer;
-        _Thread_queue_Enter_critical_section( &api->Join_List );
         _Thread_queue_Enqueue(
           &api->Join_List,
           executing,

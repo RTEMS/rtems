@@ -120,16 +120,10 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
      *  would be to use this variable prior to here.
      */
     {
-      ISR_Level        level;
-
-      _ISR_Disable( level );
-      _Thread_queue_Enter_critical_section( &the_message_queue->Wait_queue );
-      executing->Wait.queue = &the_message_queue->Wait_queue;
       executing->Wait.id = id;
       executing->Wait.return_argument_second.immutable_object = buffer;
       executing->Wait.option = (uint32_t) size;
       executing->Wait.count = submit_type;
-      _ISR_Enable( level );
 
       _Thread_queue_Enqueue(
         &the_message_queue->Wait_queue,

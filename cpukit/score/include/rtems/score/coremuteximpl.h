@@ -119,6 +119,11 @@ CORE_mutex_Status _CORE_mutex_Initialize(
   bool                          initially_locked
 );
 
+RTEMS_INLINE_ROUTINE void _CORE_mutex_Destroy( CORE_mutex_Control *the_mutex )
+{
+  _Thread_queue_Destroy( &the_mutex->Wait_queue );
+}
+
 /**
  *  @brief Attempt to receive a unit from the_mutex.
  *

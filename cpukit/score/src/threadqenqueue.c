@@ -24,18 +24,6 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
-ISR_LOCK_DEFINE( static, _Thread_queue_Lock, "Thread Queue" )
-
-static void _Thread_queue_Acquire( ISR_lock_Context *lock_context )
-{
-  _ISR_lock_ISR_disable_and_acquire( &_Thread_queue_Lock, lock_context );
-}
-
-static void _Thread_queue_Release( ISR_lock_Context *lock_context )
-{
-  _ISR_lock_Release_and_ISR_enable( &_Thread_queue_Lock, lock_context );
-}
-
 /**
  *  @brief Finalize a blocking operation.
  *
@@ -50,8 +38,9 @@ static void _Thread_queue_Release( ISR_lock_Context *lock_context )
  *  @param[in] lock_context is the previous ISR disable level
  */
 static void _Thread_blocking_operation_Finalize(
-  Thread_Control   *the_thread,
-  ISR_lock_Context *lock_context
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread,
+  ISR_lock_Context     *lock_context
 )
 {
   /*
@@ -59,16 +48,18 @@ static void _Thread_blocking_operation_Finalize(
    */
   the_thread->Wait.queue = NULL;
 
+  _Thread_Lock_restore_default( the_thread );
+
   /*
    *  If the sync state is timed out, this is very likely not needed.
    *  But better safe than sorry when it comes to critical sections.
    */
   if ( _Watchdog_Is_active( &the_thread->Timer ) ) {
     _Watchdog_Deactivate( &the_thread->Timer );
-    _Thread_queue_Release( lock_context );
+    _Thread_queue_Release( the_thread_queue, lock_context );
     _Watchdog_Remove_ticks( &the_thread->Timer );
   } else
-    _Thread_queue_Release( lock_context );
+    _Thread_queue_Release( the_thread_queue, lock_context );
 
   /*
    *  Global objects with thread queue's should not be operated on from an
@@ -101,15 +92,22 @@ static void _Thread_queue_Requeue_priority(
   );
 }
 
-void _Thread_queue_Enqueue(
+void _Thread_queue_Enqueue_critical(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
   States_Control        state,
-  Watchdog_Interval     timeout
+  Watchdog_Interval     timeout,
+  ISR_lock_Context     *lock_context
 )
 {
-  ISR_lock_Context                 lock_context;
   Thread_blocking_operation_States sync_state;
+
+  _Thread_Lock_set( the_thread, &the_thread_queue->Lock );
+
+  the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED;
+  the_thread->Wait.queue = the_thread_queue;
+
+  _Thread_queue_Release( the_thread_queue, lock_context );
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet )
@@ -140,7 +138,7 @@ void _Thread_queue_Enqueue(
    * should be completed or the thread has had its blocking condition
    * satisfied before we got here.
    */
-  _Thread_queue_Acquire( &lock_context );
+  _Thread_queue_Acquire( the_thread_queue, lock_context );
 
   sync_state = the_thread_queue->sync_state;
   the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
@@ -155,7 +153,6 @@ void _Thread_queue_Enqueue(
         &the_thread->Object.Node
       );
     } else { /* must be THREAD_QUEUE_DISCIPLINE_PRIORITY */
-      _Thread_Lock_set( the_thread, &_Thread_queue_Lock );
       _Thread_Priority_set_change_handler(
         the_thread,
         _Thread_queue_Requeue_priority,
@@ -169,9 +166,8 @@ void _Thread_queue_Enqueue(
       );
     }
 
-    the_thread->Wait.queue = the_thread_queue;
     the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
-    _Thread_queue_Release( &lock_context );
+    _Thread_queue_Release( the_thread_queue, lock_context );
   } else {
     /* Cancel a blocking operation due to ISR */
 
@@ -180,7 +176,7 @@ void _Thread_queue_Enqueue(
         sync_state == THREAD_BLOCKING_OPERATION_SATISFIED
     );
 
-    _Thread_blocking_operation_Finalize( the_thread, &lock_context );
+    _Thread_blocking_operation_Finalize( the_thread_queue, the_thread, lock_context );
   }
 }
 
@@ -190,15 +186,18 @@ void _Thread_queue_Extract_with_return_code(
 )
 {
   Thread_queue_Control *the_thread_queue;
-  ISR_lock_Context lock_context;
+  ISR_lock_Control     *lock;
+  ISR_lock_Context      lock_context;
 
-  _Thread_queue_Acquire( &lock_context );
+  lock = _Thread_Lock_acquire( the_thread, &lock_context );
 
   the_thread_queue = the_thread->Wait.queue;
   if ( the_thread_queue == NULL ) {
-    _Thread_queue_Release( &lock_context );
+    _Thread_Lock_release( lock, &lock_context );
     return;
   }
+
+  _SMP_Assert( lock == &the_thread_queue->Lock );
 
   if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_FIFO ) {
     _Chain_Extract_unprotected( &the_thread->Object.Node );
@@ -208,7 +207,6 @@ void _Thread_queue_Extract_with_return_code(
       &the_thread->RBNode
     );
     _Thread_Priority_restore_default_change_handler( the_thread );
-    _Thread_Lock_restore_default( the_thread );
   }
 
   the_thread->Wait.return_code = return_code;
@@ -218,7 +216,7 @@ void _Thread_queue_Extract_with_return_code(
    *
    * NOTE: This is invoked with interrupts still disabled.
    */
-  _Thread_blocking_operation_Finalize( the_thread, &lock_context );
+  _Thread_blocking_operation_Finalize( the_thread_queue, the_thread, &lock_context );
 }
 
 void _Thread_queue_Extract( Thread_Control *the_thread )
@@ -238,7 +236,7 @@ Thread_Control *_Thread_queue_Dequeue(
   Thread_blocking_operation_States  sync_state;
 
   the_thread = NULL;
-  _Thread_queue_Acquire( &lock_context );
+  _Thread_queue_Acquire( the_thread_queue, &lock_context );
 
   /*
    * Invoke the discipline specific dequeue method.
@@ -255,7 +253,6 @@ Thread_Control *_Thread_queue_Dequeue(
     if ( first ) {
       the_thread = THREAD_RBTREE_NODE_TO_THREAD( first );
       _Thread_Priority_restore_default_change_handler( the_thread );
-      _Thread_Lock_restore_default( the_thread );
     }
   }
 
@@ -270,7 +267,7 @@ Thread_Control *_Thread_queue_Dequeue(
       the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
       the_thread = _Thread_Executing;
     } else {
-      _Thread_queue_Release( &lock_context );
+      _Thread_queue_Release( the_thread_queue, &lock_context );
       return NULL;
     }
   }
@@ -280,7 +277,7 @@ Thread_Control *_Thread_queue_Dequeue(
    *
    * NOTE: This is invoked with interrupts still disabled.
    */
-  _Thread_blocking_operation_Finalize( the_thread, &lock_context );
+  _Thread_blocking_operation_Finalize( the_thread_queue, the_thread, &lock_context );
 
   return the_thread;
 }

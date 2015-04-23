@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_THREADQ_H
 
 #include <rtems/score/chain.h>
+#include <rtems/score/isrlock.h>
 #include <rtems/score/states.h>
 #include <rtems/score/threadsync.h>
 #include <rtems/score/rbtree.h>
@@ -62,6 +63,18 @@ typedef struct {
     /** This is the set of threads for priority discipline waiting. */
     RBTree_Control Priority;
   } Queues;
+
+  /**
+   * @brief Lock to protect this thread queue.
+   *
+   * It may be used to protect additional state of the object embedding this
+   * thread queue.
+   *
+   * @see _Thread_queue_Acquire(), _Thread_queue_Acquire_critical() and
+   * _Thread_queue_Release().
+   */
+  ISR_LOCK_MEMBER( Lock )
+
   /** This field is used to manage the critical section. */
   Thread_blocking_operation_States sync_state;
   /** This field indicates the thread queue's blocking discipline. */

@@ -89,6 +89,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_RWLock_Free (
   POSIX_RWLock_Control *the_RWLock
 )
 {
+  _CORE_RWLock_Destroy( &the_RWLock->RWLock );
   _Objects_Free( &_POSIX_RWLock_Information, &the_RWLock->Object );
 }
 

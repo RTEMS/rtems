@@ -65,6 +65,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
   POSIX_Semaphore_Control *the_semaphore
 )
 {
+  _CORE_semaphore_Destroy( &the_semaphore->Semaphore );
   _Objects_Free( &_POSIX_Semaphore_Information, &the_semaphore->Object );
 }
 
