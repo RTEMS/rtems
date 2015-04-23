@@ -49,9 +49,14 @@ void _CORE_mutex_Seize(
 void _CORE_mutex_Seize_interrupt_blocking(
   CORE_mutex_Control  *the_mutex,
   Thread_Control      *executing,
-  Watchdog_Interval    timeout
+  Watchdog_Interval    timeout,
+  ISR_lock_Context    *lock_context
 )
 {
+  _Thread_queue_Enter_critical_section( &the_mutex->Wait_queue );
+  executing->Wait.queue = &the_mutex->Wait_queue;
+  _Thread_Disable_dispatch();
+  _ISR_lock_ISR_enable( lock_context );
 
   if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ) {
     Thread_Control *holder = the_mutex->holder;

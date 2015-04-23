@@ -187,11 +187,13 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
  *  @param[in,out] the_mutex is the mutex to attempt to lock
  *  @param[in,out] executing The currently executing thread.
  *  @param[in] timeout is the maximum number of ticks to block
+ *  @param[in] lock_context is the interrupt level
  */
 void _CORE_mutex_Seize_interrupt_blocking(
   CORE_mutex_Control  *the_mutex,
   Thread_Control      *executing,
-  Watchdog_Interval    timeout
+  Watchdog_Interval    timeout,
+  ISR_lock_Context    *lock_context
 );
 
 /**
@@ -264,12 +266,13 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
       executing->Wait.return_code =
         CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT;
     } else {
-      _Thread_queue_Enter_critical_section( &the_mutex->Wait_queue );
-      executing->Wait.queue = &the_mutex->Wait_queue;
       executing->Wait.id = id;
-      _Thread_Disable_dispatch();
-      _ISR_lock_ISR_enable( lock_context );
-      _CORE_mutex_Seize_interrupt_blocking( the_mutex, executing, timeout );
+      _CORE_mutex_Seize_interrupt_blocking(
+        the_mutex,
+        executing,
+        timeout,
+        lock_context
+      );
     }
   }
 }
