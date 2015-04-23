@@ -194,12 +194,11 @@ void _Thread_queue_Extract_with_return_code(
 
   _Thread_queue_Acquire( &lock_context );
 
-  if ( !_States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
+  the_thread_queue = the_thread->Wait.queue;
+  if ( the_thread_queue == NULL ) {
     _Thread_queue_Release( &lock_context );
     return;
   }
-
-  the_thread_queue = the_thread->Wait.queue;
 
   if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_FIFO ) {
     _Chain_Extract_unprotected( &the_thread->Object.Node );
