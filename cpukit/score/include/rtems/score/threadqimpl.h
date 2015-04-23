@@ -78,25 +78,20 @@ void _Thread_queue_Enqueue(
 /**
  *  @brief Extracts thread from thread queue.
  *
- *  This routine removes @a the_thread from @a the_thread_queue
+ *  This routine removes @a the_thread its thread queue
  *  and cancels any timeouts associated with this blocking.
  *
- *  @param[in] the_thread_queue is the pointer to the ThreadQ header
  *  @param[in] the_thread is the pointer to a thread control block that
  *      is to be removed
  */
-void _Thread_queue_Extract(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
-);
+void _Thread_queue_Extract( Thread_Control *the_thread );
 
 /**
  *  @brief Extracts thread from thread queue (w/return code).
  *
- *  This routine removes @a the_thread from @a the_thread_queue
+ *  This routine removes @a the_thread its thread queue
  *  and cancels any timeouts associated with this blocking.
  *
- *  @param[in] the_thread_queue is the pointer to the ThreadQ header
  *  @param[in] the_thread is the pointer to a thread control block that
  *      is to be removed
  *  @param[in] return_code specifies the status to be returned.
@@ -105,9 +100,8 @@ void _Thread_queue_Extract(
  *    + single case
  */
 void _Thread_queue_Extract_with_return_code(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread,
-  uint32_t              return_code
+  Thread_Control *the_thread,
+  uint32_t        return_code
 );
 
 /**

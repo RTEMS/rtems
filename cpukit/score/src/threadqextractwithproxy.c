@@ -31,8 +31,6 @@ void _Thread_queue_Extract_with_proxy(
   Thread_Control       *the_thread
 )
 {
-  Thread_queue_Control *the_thread_queue;
-
   #if defined(RTEMS_MULTIPROCESSING)
     States_Control state;
 
@@ -50,8 +48,5 @@ void _Thread_queue_Extract_with_proxy(
     }
   #endif
 
-  the_thread_queue = the_thread->Wait.queue;
-  if ( the_thread_queue != NULL ) {
-    _Thread_queue_Extract( the_thread_queue, the_thread );
-  }
+  _Thread_queue_Extract( the_thread );
 }

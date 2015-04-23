@@ -185,11 +185,11 @@ void _Thread_queue_Enqueue(
 }
 
 void _Thread_queue_Extract_with_return_code(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread,
-  uint32_t              return_code
+  Thread_Control *the_thread,
+  uint32_t        return_code
 )
 {
+  Thread_queue_Control *the_thread_queue;
   ISR_lock_Context lock_context;
 
   _Thread_queue_Acquire( &lock_context );
@@ -198,6 +198,8 @@ void _Thread_queue_Extract_with_return_code(
     _Thread_queue_Release( &lock_context );
     return;
   }
+
+  the_thread_queue = the_thread->Wait.queue;
 
   if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_FIFO ) {
     _Chain_Extract_unprotected( &the_thread->Object.Node );
@@ -220,13 +222,9 @@ void _Thread_queue_Extract_with_return_code(
   _Thread_blocking_operation_Finalize( the_thread, &lock_context );
 }
 
-void _Thread_queue_Extract(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
-)
+void _Thread_queue_Extract( Thread_Control *the_thread )
 {
   _Thread_queue_Extract_with_return_code(
-    the_thread_queue,
     the_thread,
     the_thread->Wait.return_code
   );

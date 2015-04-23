@@ -69,7 +69,6 @@ void _Thread_queue_Process_timeout(
        * queue initialization.
        */
       _Thread_queue_Extract_with_return_code(
-        the_thread_queue,
         the_thread,
         the_thread_queue->timeout_status
       );
