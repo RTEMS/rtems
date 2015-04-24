@@ -55,7 +55,7 @@ int _POSIX_Mutex_Lock_support(
 
     case OBJECTS_LOCAL:
 #if defined(RTEMS_SMP)
-      _Thread_Dispatch_disable();
+      _Thread_Disable_dispatch();
 #endif
       executing = _Thread_Executing;
       _CORE_mutex_Seize(
