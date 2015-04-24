@@ -11,6 +11,8 @@ include_rtems_score_HEADERS += rtems/score/cpuatomic.h
 
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_SOURCES = cpu.c cpu_asm.S
+libscorecpu_a_SOURCES += sparc-context-volatile-clobber.S
+libscorecpu_a_SOURCES += sparc-context-validate.S
 libscorecpu_a_SOURCES += sparc-counter.c
 libscorecpu_a_SOURCES += sparcv8-atomic.c
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
