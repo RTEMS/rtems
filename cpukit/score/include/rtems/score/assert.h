@@ -83,6 +83,15 @@ extern "C" {
 #endif
 
 /**
+ * @brief Like _Assert(), but only armed if RTEMS_SMP is defined.
+ */
+#if defined( RTEMS_SMP )
+  #define _SMP_Assert( _e ) _Assert( _e )
+#else
+  #define _SMP_Assert( _e ) ( ( void ) 0 )
+#endif
+
+/**
  * @brief Returns true if thread dispatching is allowed.
  *
  * Thread dispatching can be repressed via _Thread_Disable_dispatch() or
