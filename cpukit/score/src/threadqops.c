@@ -55,16 +55,6 @@ static void _Thread_queue_FIFO_enqueue(
   );
 }
 
-static Thread_Control *_Thread_queue_FIFO_dequeue(
-  Thread_queue_Control *the_thread_queue
-)
-{
-  Chain_Control *fifo = &the_thread_queue->Queues.Fifo;
-
-  return _Chain_Is_empty( fifo ) ?
-    NULL : THREAD_CHAIN_NODE_TO_THREAD( _Chain_Get_first_unprotected( fifo ) );
-}
-
 static void _Thread_queue_FIFO_extract(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread
@@ -121,17 +111,6 @@ static void _Thread_queue_Priority_enqueue(
   );
 }
 
-static Thread_Control *_Thread_queue_Priority_dequeue(
-  Thread_queue_Control *the_thread_queue
-)
-{
-  RBTree_Node *first;
-
-  first = _RBTree_Get( &the_thread_queue->Queues.Priority, RBT_LEFT );
-
-  return first != NULL ? THREAD_RBTREE_NODE_TO_THREAD( first ) : NULL;
-}
-
 static void _Thread_queue_Priority_extract(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread
@@ -168,7 +147,6 @@ const Thread_queue_Operations _Thread_queue_Operations_FIFO = {
   .priority_change = _Thread_queue_Do_nothing_priority_change,
   .initialize = _Thread_queue_FIFO_initialize,
   .enqueue = _Thread_queue_FIFO_enqueue,
-  .dequeue = _Thread_queue_FIFO_dequeue,
   .extract = _Thread_queue_FIFO_extract,
   .first = _Thread_queue_FIFO_first
 };
@@ -177,7 +155,6 @@ const Thread_queue_Operations _Thread_queue_Operations_priority = {
   .priority_change = _Thread_queue_Priority_priority_change,
   .initialize = _Thread_queue_Priority_initialize,
   .enqueue = _Thread_queue_Priority_enqueue,
-  .dequeue = _Thread_queue_Priority_dequeue,
   .extract = _Thread_queue_Priority_extract,
   .first = _Thread_queue_Priority_first
 };

@@ -20,13 +20,6 @@
 
 #include <rtems/score/threadqimpl.h>
 
-Thread_Control *_Thread_queue_First_locked(
-  Thread_queue_Control *the_thread_queue
-)
-{
-  return ( *the_thread_queue->operations->first )( the_thread_queue );
-}
-
 Thread_Control *_Thread_queue_First(
   Thread_queue_Control *the_thread_queue
 )

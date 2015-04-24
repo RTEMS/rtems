@@ -14,12 +14,7 @@
 #include <tmacros.h>
 #include <intrcritical.h>
 
-#include <rtems/rtems/semimpl.h>
-
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_timer_service_routine test_release_from_isr(rtems_id  timer, void *arg);
-Thread_blocking_operation_States getState(void);
+#include <rtems/score/threadimpl.h>
 
 #if defined(FIFO_NO_TIMEOUT)
   #define TEST_NAME                "1"
@@ -58,33 +53,28 @@ Thread_blocking_operation_States getState(void);
 
 const char rtems_test_name[] = "SPINTRCRITICAL " TEST_NAME;
 
-rtems_id Semaphore;
-volatile bool case_hit = false;
+static Thread_Control *thread;
 
-Thread_blocking_operation_States getState(void)
+static rtems_id Semaphore;
+
+static bool case_hit;
+
+static bool interrupts_blocking_op(void)
 {
-  Objects_Locations  location;
-  Semaphore_Control *sem;
+  Thread_Wait_flags flags = _Thread_Wait_flags_get( thread );
 
-  sem = (Semaphore_Control *)_Objects_Get(
-    &_Semaphore_Information, Semaphore, &location );
-  if ( location != OBJECTS_LOCAL ) {
-    puts( "Bad object lookup" );
-    rtems_test_exit(0);
-  }
-  _Thread_Unnest_dispatch();
-
-  return sem->Core_control.semaphore.Wait_queue.sync_state;
+  return
+    flags == ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
 }
 
-rtems_timer_service_routine test_release_from_isr(
+static rtems_timer_service_routine test_release_from_isr(
   rtems_id  timer,
   void     *arg
 )
 {
   rtems_status_code     status;
 
-  if ( getState() == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
+  if ( interrupts_blocking_op() ) {
     case_hit = true;
   }
 
@@ -109,13 +99,15 @@ static bool test_body( void *arg )
   return case_hit;
 }
 
-rtems_task Init(
+static rtems_task Init(
   rtems_task_argument ignored
 )
 {
   rtems_status_code     status;
 
   TEST_BEGIN();
+
+  thread = _Thread_Get_executing();
 
   puts( "Init - Trying to generate semaphore release from ISR while blocking" );
   puts( "Init - Variation is: " TEST_STRING );

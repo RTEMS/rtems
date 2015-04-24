@@ -80,13 +80,54 @@ Thread_Control *_Thread_queue_Dequeue(
 );
 
 /**
- * @brief Blocks a thread and places it on a thread queue.
+ * @brief Blocks the thread and places it on the thread queue.
  *
- * This routine blocks a thread, places it on a thread queue, and optionally
- * starts a watchdog in case the timeout interval is not WATCHDOG_NO_TIMEOUT.
+ * This enqueues the thread on the thread queue, blocks the thread, and
+ * optionally starts the thread timer in case the timeout interval is not
+ * WATCHDOG_NO_TIMEOUT.
  *
  * The caller must be the owner of the thread queue lock.  This function will
  * release the thread queue lock and register it as the new thread lock.
+ * Thread dispatching is disabled before the thread queue lock is released.
+ * Thread dispatching is enabled once the sequence to block the thread is
+ * complete.  The operation to enqueue the thread on the queue is protected by
+ * the thread queue lock.  This makes it possible to use the thread queue lock
+ * to protect the state of objects embedding the thread queue and directly
+ * enter _Thread_queue_Enqueue_critical() in case the thread must block.
+ *
+ * @code
+ * #include <rtems/score/threadqimpl.h>
+ * #include <rtems/score/statesimpl.h>
+ *
+ * typedef struct {
+ *   Thread_queue_Control  Queue;
+ *   Thread_Control       *owner;
+ * } Mutex;
+ *
+ * void _Mutex_Obtain( Mutex *mutex )
+ * {
+ *   ISR_lock_Context  lock_context;
+ *   Thread_Control   *executing;
+ *
+ *   _Thread_queue_Acquire( &mutex->Queue, &lock_context );
+ *
+ *   executing = _Thread_Executing;
+ *
+ *   if ( mutex->owner == NULL ) {
+ *     mutex->owner = executing;
+ *     _Thread_queue_Release( &mutex->Queue, &lock_context );
+ *   } else {
+ *     _Thread_queue_Enqueue_critical(
+ *       &mutex->Queue,
+ *       executing,
+ *       STATES_WAITING_FOR_MUTEX,
+ *       WATCHDOG_NO_TIMEOUT,
+ *       0,
+ *       &lock_context
+ *     );
+ *   }
+ * }
+ * @endcode
  *
  * @param[in] the_thread_queue The thread queue.
  * @param[in] the_thread The thread to enqueue.
@@ -103,6 +144,10 @@ void _Thread_queue_Enqueue_critical(
   ISR_lock_Context     *lock_context
 );
 
+/**
+ * @brief Acquires the thread queue lock and calls
+ * _Thread_queue_Enqueue_critical().
+ */
 RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
@@ -123,6 +168,88 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
 }
 
 /**
+ * @brief Extracts the thread from the thread queue, restores the default wait
+ * operations and restores the default thread lock.
+ *
+ * The caller must be the owner of the thread queue lock.  The thread queue
+ * lock is not released.
+ *
+ * @param[in] the_thread_queue The thread queue.
+ * @param[in] the_thread The thread to extract.
+ */
+void _Thread_queue_Extract_locked(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread
+);
+
+/**
+ * @brief Unblocks the thread which was on the thread queue before.
+ *
+ * The caller must be the owner of the thread queue lock.  This function will
+ * release the thread queue lock.  Thread dispatching is disabled before the
+ * thread queue lock is released and an unblock is necessary.  Thread
+ * dispatching is enabled once the sequence to unblock the thread is complete.
+ *
+ * @param[in] the_thread_queue The thread queue.
+ * @param[in] the_thread The thread to extract.
+ * @param[in] lock_context The lock context of the lock acquire.
+ */
+void _Thread_queue_Unblock_critical(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread,
+  ISR_lock_Context     *lock_context
+);
+
+/**
+ * @brief Extracts the thread from the thread queue and unblocks it.
+ *
+ * The caller must be the owner of the thread queue lock.  This function will
+ * release the thread queue lock and restore the default thread lock.  Thread
+ * dispatching is disabled before the thread queue lock is released and an
+ * unblock is necessary.  Thread dispatching is enabled once the sequence to
+ * unblock the thread is complete.  This makes it possible to use the thread
+ * queue lock to protect the state of objects embedding the thread queue and
+ * directly enter _Thread_queue_Extract_critical() to finalize an operation in
+ * case a waiting thread exists.
+ *
+ * @code
+ * #include <rtems/score/threadqimpl.h>
+ *
+ * typedef struct {
+ *   Thread_queue_Control  Queue;
+ *   Thread_Control       *owner;
+ * } Mutex;
+ *
+ * void _Mutex_Release( Mutex *mutex )
+ * {
+ *   ISR_lock_Context  lock_context;
+ *   Thread_Control   *first;
+ *
+ *   _Thread_queue_Acquire( &mutex->Queue, &lock_context );
+ *
+ *   first = _Thread_queue_First_locked( &mutex->Queue );
+ *   mutex->owner = first;
+ *
+ *   if ( first != NULL ) {
+ *     _Thread_queue_Extract_critical(
+ *       &mutex->Queue,
+ *       first,
+ *       &lock_context
+ *   );
+ * }
+ * @endcode
+ *
+ * @param[in] the_thread_queue The thread queue.
+ * @param[in] the_thread The thread to extract.
+ * @param[in] lock_context The lock context of the lock acquire.
+ */
+void _Thread_queue_Extract_critical(
+  Thread_queue_Control *the_thread_queue,
+  Thread_Control       *the_thread,
+  ISR_lock_Context     *lock_context
+);
+
+/**
  *  @brief Extracts thread from thread queue.
  *
  *  This routine removes @a the_thread its thread queue
@@ -132,24 +259,6 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
  *      is to be removed
  */
 void _Thread_queue_Extract( Thread_Control *the_thread );
-
-/**
- *  @brief Extracts thread from thread queue (w/return code).
- *
- *  This routine removes @a the_thread its thread queue
- *  and cancels any timeouts associated with this blocking.
- *
- *  @param[in] the_thread is the pointer to a thread control block that
- *      is to be removed
- *  @param[in] return_code specifies the status to be returned.
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-void _Thread_queue_Extract_with_return_code(
-  Thread_Control *the_thread,
-  uint32_t        return_code
-);
 
 /**
  *  @brief Extracts the_thread from the_thread_queue.
@@ -164,9 +273,10 @@ void _Thread_queue_Extract_with_proxy(
 
 /**
  * @brief Returns the first thread on the thread queue if it exists, otherwise
- * @c NULL (locked).
+ * @c NULL.
  *
- * The caller must be the owner of the thread queue lock.
+ * The caller must be the owner of the thread queue lock.  The thread queue
+ * lock is not released.
  *
  * @param[in] the_thread_queue The thread queue.
  *
@@ -174,9 +284,12 @@ void _Thread_queue_Extract_with_proxy(
  * @retval first The first thread on the thread queue according to the enqueue
  * order.
  */
-Thread_Control *_Thread_queue_First_locked(
+RTEMS_INLINE_ROUTINE Thread_Control *_Thread_queue_First_locked(
   Thread_queue_Control *the_thread_queue
-);
+)
+{
+  return ( *the_thread_queue->operations->first )( the_thread_queue );
+}
 
 /**
  * @brief Returns the first thread on the thread queue if it exists, otherwise
@@ -233,38 +346,6 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Destroy(
 {
   _ISR_lock_Destroy( &the_thread_queue->Lock );
 }
-
-/**
- *  @brief Thread queue timeout.
- *
- *  This routine is invoked when a task's request has not
- *  been satisfied after the timeout interval specified to
- *  enqueue.  The task represented by ID will be unblocked and
- *  its status code will be set in it's control block to indicate
- *  that a timeout has occurred.
- *
- *  @param[in] id thread id
- */
-void _Thread_queue_Timeout(
-  Objects_Id  id,
-  void       *ignored
-);
-
-/**
- *  @brief Process thread queue timeout.
- *
- * This is a shared helper routine which makes it easier to have multiple
- * object class specific timeout routines.
- *
- * @param[in] the_thread is the thread to extract
- *
- * @note This method assumes thread dispatching is disabled
- *       and is expected to be called via the processing of
- *       a clock tick.
- */
-void _Thread_queue_Process_timeout(
-  Thread_Control *the_thread
-);
 
 /**
  * @brief Compare two thread's priority for RBTree Insertion.

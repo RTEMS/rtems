@@ -52,7 +52,6 @@ void _Thread_queue_Initialize(
   const Thread_queue_Operations *operations;
 
   the_thread_queue->timeout_status = timeout_status;
-  the_thread_queue->sync_state     = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
 
   _ISR_lock_Initialize( &the_thread_queue->Lock, "Thread Queue" );
 

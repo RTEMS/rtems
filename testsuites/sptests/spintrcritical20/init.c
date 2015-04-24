@@ -44,6 +44,10 @@ static void semaphore_task(rtems_task_argument arg)
   test_context *ctx = (test_context *) arg;
 
   ctx->semaphore_task_tcb = _Thread_Get_executing();
+  _Thread_Wait_set_timeout_code(
+    ctx->semaphore_task_tcb,
+    CORE_SEMAPHORE_TIMEOUT
+  );
 
   while (true) {
     rtems_status_code sc = rtems_semaphore_obtain(
@@ -87,7 +91,7 @@ static bool test_body(void *arg)
     ctx->thread_queue_was_null = true;
   }
 
-  _Thread_queue_Process_timeout(ctx->semaphore_task_tcb);
+  _Thread_Timeout(0, ctx->semaphore_task_tcb);
 
   switch (ctx->semaphore_task_tcb->Wait.return_code) {
     case CORE_SEMAPHORE_STATUS_SUCCESSFUL:
@@ -103,7 +107,9 @@ static bool test_body(void *arg)
 
   _Thread_Enable_dispatch();
 
-  return false;
+  return ctx->thread_queue_was_null
+    && ctx->status_was_successful
+    && ctx->status_was_timeout;
 }
 
 static void Init(rtems_task_argument ignored)

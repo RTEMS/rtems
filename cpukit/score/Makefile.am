@@ -82,7 +82,6 @@ include_rtems_score_HEADERS += include/rtems/score/threadimpl.h
 include_rtems_score_HEADERS += include/rtems/score/threaddispatch.h
 include_rtems_score_HEADERS += include/rtems/score/threadq.h
 include_rtems_score_HEADERS += include/rtems/score/threadqimpl.h
-include_rtems_score_HEADERS += include/rtems/score/threadsync.h
 include_rtems_score_HEADERS += include/rtems/score/timespec.h
 include_rtems_score_HEADERS += include/rtems/score/timestamp.h
 include_rtems_score_HEADERS += include/rtems/score/timestamp64.h
@@ -301,7 +300,7 @@ endif
 libscore_a_SOURCES += src/threadq.c \
     src/threadqenqueue.c \
     src/threadqextractwithproxy.c src/threadqfirst.c \
-    src/threadqflush.c src/threadqprocesstimeout.c src/threadqtimeout.c
+    src/threadqflush.c
 libscore_a_SOURCES += src/threadqops.c
 
 ## TIMESPEC_C_FILES

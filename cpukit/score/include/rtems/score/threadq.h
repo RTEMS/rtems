@@ -25,7 +25,6 @@
 #include <rtems/score/priority.h>
 #include <rtems/score/rbtree.h>
 #include <rtems/score/states.h>
-#include <rtems/score/threadsync.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -81,21 +80,6 @@ typedef void ( *Thread_queue_Initialize_operation )(
 typedef void ( *Thread_queue_Enqueue_operation )(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread
-);
-
-/**
- * @brief Thread queue dequeue operation.
- *
- * @param[in] the_thread_queue The thread queue.
- *
- * @retval NULL No thread is present on the thread queue.
- * @retval first The first thread of the thread queue according to the insert
- * order.  This thread is no longer on the thread queue.
- *
- * @see _Thread_Wait_set_operations().
- */
-typedef Thread_Control *( *Thread_queue_Dequeue_operation )(
-  Thread_queue_Control *the_thread_queue
 );
 
 /**
@@ -159,13 +143,6 @@ typedef struct {
   Thread_queue_Enqueue_operation enqueue;
 
   /**
-   * @brief Thread queue dequeue operation.
-   *
-   * Called by object routines to dequeue the first waiting thread if present.
-   */
-  Thread_queue_Dequeue_operation dequeue;
-
-  /**
    * @brief Thread queue extract operation.
    *
    * Called by object routines to extract a thread from a thread queue.
@@ -218,8 +195,6 @@ struct Thread_queue_Control {
    */
   ISR_LOCK_MEMBER( Lock )
 
-  /** This field is used to manage the critical section. */
-  Thread_blocking_operation_States sync_state;
   /** This is the status value returned to threads which timeout while
    *  waiting on this thread queue.
    */
