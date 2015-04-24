@@ -153,16 +153,6 @@ Watchdog_States _Watchdog_Remove (
 );
 
 /**
- * @brief Actually removes an WATCHDOG_ACTIVE or WATCHDOG_REMOVE_IT watchdog.
- *
- * @see _Watchdog_Remove() and _Watchdog_Tickle().
- */
-void _Watchdog_Remove_it(
-  Watchdog_Header  *header,
-  Watchdog_Control *the_watchdog
-);
-
-/**
  *  @brief Adjusts the header watchdog chain in the backward direction for
  *  units ticks.
  *
