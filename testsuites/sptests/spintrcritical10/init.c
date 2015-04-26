@@ -88,7 +88,7 @@ static void any_satisfy_before_timeout(rtems_id timer, void *arg)
     if (ctx->hit) {
       rtems_test_assert(
         _Thread_Wait_flags_get(thread)
-          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_INTERRUPT_SATISFIED)
+          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_READY_AGAIN)
       );
     }
 
@@ -185,7 +185,7 @@ static void all_satisfy_before_timeout(rtems_id timer, void *arg)
     if (ctx->hit) {
       rtems_test_assert(
         _Thread_Wait_flags_get(thread)
-          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_INTERRUPT_SATISFIED)
+          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_READY_AGAIN)
       );
     }
 
@@ -269,7 +269,7 @@ static void timeout_before_satisfied(rtems_id timer, void *arg)
     if (ctx->hit) {
       rtems_test_assert(
         _Thread_Wait_flags_get(thread)
-          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_INTERRUPT_TIMEOUT)
+          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_READY_AGAIN)
       );
     }
 

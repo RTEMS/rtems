@@ -85,7 +85,7 @@ void _Event_Surrender(
     success = _Thread_Wait_flags_try_change_critical(
       the_thread,
       intend_to_block,
-      wait_class | THREAD_WAIT_STATE_INTERRUPT_SATISFIED
+      wait_class | THREAD_WAIT_STATE_READY_AGAIN
     );
     if ( success ) {
       _Event_Satisfy( the_thread, event, pending_events, seized_events );
@@ -94,7 +94,7 @@ void _Event_Surrender(
       _Event_Satisfy( the_thread, event, pending_events, seized_events );
       _Thread_Wait_flags_set(
         the_thread,
-        wait_class | THREAD_WAIT_STATE_SATISFIED
+        wait_class | THREAD_WAIT_STATE_READY_AGAIN
       );
       unblock = true;
     } else {

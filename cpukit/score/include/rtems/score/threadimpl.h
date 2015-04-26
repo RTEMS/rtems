@@ -1138,28 +1138,11 @@ RTEMS_INLINE_ROUTINE void _Thread_Priority_restore_default_change_handler(
 #define THREAD_WAIT_STATE_BLOCKED 0x2U
 
 /**
- * @brief Indicates that the thread progress condition is satisfied and it is
- * ready to resume execution.
+ * @brief Indicates that a condition to end the thread wait occurred.
+ *
+ * This could be a timeout, a signal, an event or a resource availability.
  */
-#define THREAD_WAIT_STATE_SATISFIED 0x4U
-
-/**
- * @brief Indicates that a timeout occurred and the thread is ready to resume
- * execution.
- */
-#define THREAD_WAIT_STATE_TIMEOUT 0x8U
-
-/**
- * @brief Indicates that the thread progress condition was satisfied during the
- * blocking operation and it is ready to resume execution.
- */
-#define THREAD_WAIT_STATE_INTERRUPT_SATISFIED 0x10U
-
-/**
- * @brief Indicates that a timeout occurred during the blocking operation and
- * the thread is ready to resume execution.
- */
-#define THREAD_WAIT_STATE_INTERRUPT_TIMEOUT 0x20U
+#define THREAD_WAIT_STATE_READY_AGAIN 0x4U
 
 /**
  * @brief Mask to get the thread wait class flags.

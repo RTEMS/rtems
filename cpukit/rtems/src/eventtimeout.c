@@ -45,7 +45,7 @@ void _Event_Timeout(
   success = _Thread_Wait_flags_try_change_critical(
     the_thread,
     intend_to_block,
-    wait_class | THREAD_WAIT_STATE_INTERRUPT_TIMEOUT
+    wait_class | THREAD_WAIT_STATE_READY_AGAIN
   );
 
   if ( success ) {
@@ -55,7 +55,7 @@ void _Event_Timeout(
     the_thread->Wait.return_code = RTEMS_TIMEOUT;
     _Thread_Wait_flags_set(
       the_thread,
-      wait_class | THREAD_WAIT_STATE_TIMEOUT
+      wait_class | THREAD_WAIT_STATE_READY_AGAIN
     );
     unblock = true;
   } else {
