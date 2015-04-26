@@ -35,7 +35,7 @@ const char rtems_test_name[] = "SPSTKALLOC 2";
 
 #define TASK_COUNT 5
 
-#define PAGE_SIZE 1024
+#define STACK_HEAP_PAGE_SIZE 1024
 
 static Heap_Control task_stack_heap;
 
@@ -127,7 +127,7 @@ static rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_TASK_STACK_DEALLOCATOR task_stack_free
 #define CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
 #define CONFIGURE_TASK_STACK_FROM_ALLOCATOR(stack_size) \
-  ((stack_size) + HEAP_BLOCK_HEADER_SIZE + PAGE_SIZE - 1)
+  ((stack_size) + HEAP_BLOCK_HEADER_SIZE + STACK_HEAP_PAGE_SIZE - 1)
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
@@ -146,7 +146,7 @@ static void task_stack_init(size_t stack_space_size)
     &task_stack_heap,
     task_stack_space,
     sizeof(task_stack_space),
-    PAGE_SIZE
+    STACK_HEAP_PAGE_SIZE
   );
 
   rtems_test_assert(stack_space_size == CONFIGURE_STACK_SPACE_SIZE);
