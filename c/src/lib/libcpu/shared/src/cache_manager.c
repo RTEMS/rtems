@@ -20,9 +20,13 @@
  *  rtems/c/src/lib/libcpu/CPU/cache_.h
  *
  *  The cache implementation header file can define
- *  CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
+ *
+ *    #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
+ *
  *  if it provides cache maintenance functions which operate on multiple lines.
- *  Otherwise a generic loop with single line operations will be used.
+ *  Otherwise a generic loop with single line operations will be used.  It is
+ *  strongly recommended to provide the implementation in terms of static
+ *  inline functions for performance reasons.
  *
  *  The functions below are implemented with CPU dependent inline routines
  *  found in the cache.c files for each CPU. In the event that a CPU does

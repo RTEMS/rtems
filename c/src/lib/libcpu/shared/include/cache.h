@@ -21,9 +21,7 @@
 #ifndef __LIBCPU_CACHE_h
 #define __LIBCPU_CACHE_h
 
-void _CPU_cache_flush_data_range(const void *d_addr, size_t n_bytes);
 void _CPU_cache_flush_1_data_line(const void *d_addr);
-void _CPU_cache_invalidate_data_range(const void *d_addr, size_t n_bytes);
 void _CPU_cache_invalidate_1_data_line(const void *d_addr);
 void _CPU_cache_freeze_data(void);
 void _CPU_cache_unfreeze_data(void);
