@@ -14,12 +14,40 @@
  * FIXME: Some functions simply have not been implemented.
  */
 
+/* This define is set in a Makefile */
 #if defined(HAS_INSTRUCTION_CACHE)
-#define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
-#define CPU_INSTRUCTION_CACHE_ALIGNMENT 0
-#endif
 
-#include <libcpu/cache.h>
+#define CPU_INSTRUCTION_CACHE_ALIGNMENT 0
+
+static inline void _CPU_cache_invalidate_entire_instruction ( void )
+{
+  __asm__ volatile ("flush");
+}
+
+/* XXX these need to be addressed */
+
+static inline void _CPU_cache_invalidate_1_instruction_line (
+  const void * i_addr )
+{
+}
+
+static inline void _CPU_cache_freeze_instruction ( void )
+{
+}
+
+static inline void _CPU_cache_unfreeze_instruction ( void )
+{
+}
+
+static inline void _CPU_cache_enable_instruction ( void )
+{
+}
+
+static inline void _CPU_cache_disable_instruction (   void )
+{
+}
+
+#endif /* defined(HAS_INSTRUCTION_CACHE) */
 
 #endif
 /* end of include file */
