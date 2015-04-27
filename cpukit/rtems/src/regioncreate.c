@@ -74,8 +74,7 @@ rtems_status_code rtems_region_create(
       _Thread_queue_Initialize(
         &the_region->Wait_queue,
         _Attributes_Is_priority( attribute_set ) ?
-           THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
-        RTEMS_TIMEOUT
+           THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO
       );
 
       the_region->maximum_segment_size = _Heap_Initialize(

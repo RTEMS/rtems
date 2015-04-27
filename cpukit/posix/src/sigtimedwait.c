@@ -160,6 +160,7 @@ int sigtimedwait(
       executing,
       STATES_WAITING_FOR_SIGNAL | STATES_INTERRUPTIBLE_BY_SIGNAL,
       interval,
+      EAGAIN,
       &lock_context
     );
   _Thread_Enable_dispatch();

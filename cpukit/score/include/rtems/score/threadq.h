@@ -194,11 +194,6 @@ struct Thread_queue_Control {
    * _Thread_queue_Release().
    */
   ISR_LOCK_MEMBER( Lock )
-
-  /** This is the status value returned to threads which timeout while
-   *  waiting on this thread queue.
-   */
-  uint32_t                 timeout_status;
 };
 
 /**@}*/

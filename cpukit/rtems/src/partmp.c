@@ -104,7 +104,8 @@ rtems_status_code _Partition_MP_Send_request_packet (
         _MPCI_Send_request_packet(
           _Objects_Get_node( partition_id ),
           &the_packet->Prefix,
-          STATES_READY      /* Not used */
+          STATES_READY,     /* Not used */
+          RTEMS_TIMEOUT
         );
 
       break;

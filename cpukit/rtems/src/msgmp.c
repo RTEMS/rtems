@@ -148,7 +148,8 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
       return (rtems_status_code) _MPCI_Send_request_packet(
         _Objects_Get_node(message_queue_id),
         &the_packet->Prefix,
-        STATES_WAITING_FOR_MESSAGE
+        STATES_WAITING_FOR_MESSAGE,
+        RTEMS_TIMEOUT
       );
       break;
 
@@ -173,7 +174,8 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
       return (rtems_status_code) _MPCI_Send_request_packet(
         _Objects_Get_node(message_queue_id),
         &the_packet->Prefix,
-        STATES_WAITING_FOR_MESSAGE
+        STATES_WAITING_FOR_MESSAGE,
+        RTEMS_TIMEOUT
       );
       break;
 

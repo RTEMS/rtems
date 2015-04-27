@@ -32,7 +32,6 @@ void _CORE_barrier_Initialize(
 
   _Thread_queue_Initialize(
     &the_barrier->Wait_queue,
-    THREAD_QUEUE_DISCIPLINE_FIFO,
-    CORE_BARRIER_TIMEOUT
+    THREAD_QUEUE_DISCIPLINE_FIFO
   );
 }

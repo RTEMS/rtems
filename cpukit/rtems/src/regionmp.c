@@ -102,7 +102,8 @@ rtems_status_code _Region_MP_Send_request_packet (
       return (rtems_status_code) _MPCI_Send_request_packet(
           _Objects_Get_node( region_id ),
           &the_packet->Prefix,
-          STATES_READY      /* Not used */
+          STATES_READY,     /* Not used */
+          RTEMS_TIMEOUT
         );
       break;
 

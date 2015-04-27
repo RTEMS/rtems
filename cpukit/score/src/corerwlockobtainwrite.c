@@ -77,6 +77,7 @@ void _CORE_RWLock_Obtain_for_writing(
        executing,
        STATES_WAITING_FOR_RWLOCK,
        timeout,
+       CORE_RWLOCK_TIMEOUT,
        &lock_context
     );
 

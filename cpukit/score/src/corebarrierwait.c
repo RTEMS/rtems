@@ -54,6 +54,7 @@ void _CORE_barrier_Wait(
     executing,
     STATES_WAITING_FOR_BARRIER,
     timeout,
+    CORE_BARRIER_TIMEOUT,
     &lock_context
   );
 }

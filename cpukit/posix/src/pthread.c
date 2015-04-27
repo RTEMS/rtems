@@ -235,11 +235,7 @@ static bool _POSIX_Threads_Create_extension(
     _POSIX_signals_Action_handler
   );
 
-  _Thread_queue_Initialize(
-    &api->Join_List,
-    THREAD_QUEUE_DISCIPLINE_FIFO,
-    0
-  );
+  _Thread_queue_Initialize( &api->Join_List, THREAD_QUEUE_DISCIPLINE_FIFO );
 
   _Watchdog_Initialize(
     &api->Sporadic_timer,

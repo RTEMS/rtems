@@ -190,8 +190,7 @@ void _POSIX_signals_Manager_Initialization(void)
    */
   _Thread_queue_Initialize(
     &_POSIX_signals_Wait_queue,
-    THREAD_QUEUE_DISCIPLINE_FIFO,
-    EAGAIN
+    THREAD_QUEUE_DISCIPLINE_FIFO
   );
 
   /* XXX status codes */

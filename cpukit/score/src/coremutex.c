@@ -83,8 +83,7 @@ CORE_mutex_Status _CORE_mutex_Initialize(
   _Thread_queue_Initialize(
     &the_mutex->Wait_queue,
     _CORE_mutex_Is_fifo( the_mutex_attributes ) ?
-      THREAD_QUEUE_DISCIPLINE_FIFO : THREAD_QUEUE_DISCIPLINE_PRIORITY,
-    CORE_MUTEX_TIMEOUT
+      THREAD_QUEUE_DISCIPLINE_FIFO : THREAD_QUEUE_DISCIPLINE_PRIORITY
   );
 
   return CORE_MUTEX_STATUS_SUCCESSFUL;

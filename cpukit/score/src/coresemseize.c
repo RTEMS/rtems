@@ -65,6 +65,7 @@ void _CORE_semaphore_Seize(
     executing,
     STATES_WAITING_FOR_SEMAPHORE,
     timeout,
+    CORE_SEMAPHORE_TIMEOUT,
     &lock_context
   );
 }

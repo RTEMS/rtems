@@ -248,6 +248,7 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
     executing,
     STATES_WAITING_FOR_SEMAPHORE,
     timeout,
+    CORE_SEMAPHORE_TIMEOUT,
     lock_context
   );
   _Thread_Enable_dispatch();

@@ -59,7 +59,8 @@ rtems_status_code _Event_MP_Send_request_packet (
         _MPCI_Send_request_packet(
           _Objects_Get_node( event_id ),
           &the_packet->Prefix,
-          STATES_READY
+          STATES_READY,
+          RTEMS_TIMEOUT
         );
 
       break;

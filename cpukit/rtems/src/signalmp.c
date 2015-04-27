@@ -60,7 +60,8 @@ rtems_status_code _Signal_MP_Send_request_packet (
       return _MPCI_Send_request_packet(
         _Objects_Get_node( task_id ),
         &the_packet->Prefix,
-        STATES_READY   /* Not used */
+        STATES_READY,  /* Not used */
+        RTEMS_TIMEOUT
       );
       break;
 

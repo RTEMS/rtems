@@ -124,6 +124,7 @@ void _CORE_message_queue_Seize(
     executing,
     STATES_WAITING_FOR_MESSAGE,
     timeout,
+    CORE_MESSAGE_QUEUE_STATUS_TIMEOUT,
     &lock_context
   );
 }

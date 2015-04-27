@@ -50,6 +50,7 @@ void _Thread_queue_Enqueue_critical(
   Thread_Control       *the_thread,
   States_Control        state,
   Watchdog_Interval     timeout,
+  uint32_t              timeout_code,
   ISR_lock_Context     *lock_context
 )
 {
@@ -83,10 +84,7 @@ void _Thread_queue_Enqueue_critical(
    *  If the thread wants to timeout, then schedule its timer.
    */
   if ( timeout != WATCHDOG_NO_TIMEOUT ) {
-    _Thread_Wait_set_timeout_code(
-      the_thread,
-      the_thread_queue->timeout_status
-    );
+    _Thread_Wait_set_timeout_code( the_thread, timeout_code );
     _Watchdog_Initialize( &the_thread->Timer, _Thread_Timeout, 0, the_thread );
     _Watchdog_Insert_ticks( &the_thread->Timer, timeout );
   }

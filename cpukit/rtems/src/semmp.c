@@ -95,7 +95,8 @@ rtems_status_code _Semaphore_MP_Send_request_packet (
       return _MPCI_Send_request_packet(
           _Objects_Get_node( semaphore_id ),
           &the_packet->Prefix,
-          STATES_WAITING_FOR_SEMAPHORE
+          STATES_WAITING_FOR_SEMAPHORE,
+          RTEMS_TIMEOUT
         );
       break;
 

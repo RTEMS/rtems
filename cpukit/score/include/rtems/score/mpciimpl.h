@@ -189,13 +189,15 @@ void _MPCI_Send_process_packet (
  *             set in addition to the remote operation pending state.  It
  *             may indicate the caller is blocking on a message queue
  *             operation.
+ *  @param[in] timeout_code is the timeout code
  *
  *  @retval This method returns the operation status from the remote node.
  */
 uint32_t _MPCI_Send_request_packet (
   uint32_t           destination,
   MP_packet_Prefix  *the_packet,
-  States_Control     extra_state
+  States_Control     extra_state,
+  uint32_t           timeout_code
 );
 
 /**

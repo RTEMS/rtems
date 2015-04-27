@@ -111,8 +111,7 @@ bool _CORE_message_queue_Initialize(
   _Thread_queue_Initialize(
     &the_message_queue->Wait_queue,
     _CORE_message_queue_Is_priority( the_message_queue_attributes ) ?
-       THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
-    CORE_MESSAGE_QUEUE_STATUS_TIMEOUT
+       THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO
   );
 
   return true;

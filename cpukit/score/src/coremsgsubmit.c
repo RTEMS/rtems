@@ -129,7 +129,8 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
         &the_message_queue->Wait_queue,
         executing,
         STATES_WAITING_FOR_MESSAGE,
-        timeout
+        timeout,
+        CORE_MESSAGE_QUEUE_STATUS_TIMEOUT
       );
     }
 

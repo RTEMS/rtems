@@ -134,6 +134,7 @@ Thread_Control *_Thread_queue_Dequeue(
  * @param[in] state The new state of the thread.
  * @param[in] timeout Interval to wait.  Use WATCHDOG_NO_TIMEOUT to block
  * potentially forever.
+ * @param[in] timeout_code The return code in case a timeout occurs.
  * @param[in] lock_context The lock context of the lock acquire.
  */
 void _Thread_queue_Enqueue_critical(
@@ -141,6 +142,7 @@ void _Thread_queue_Enqueue_critical(
   Thread_Control       *the_thread,
   States_Control        state,
   Watchdog_Interval     timeout,
+  uint32_t              timeout_code,
   ISR_lock_Context     *lock_context
 );
 
@@ -152,7 +154,8 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
   States_Control        state,
-  Watchdog_Interval     timeout
+  Watchdog_Interval     timeout,
+  uint32_t              timeout_code
 )
 {
   ISR_lock_Context lock_context;
@@ -163,6 +166,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
     the_thread,
     state,
     timeout,
+    timeout_code,
     &lock_context
   );
 }
@@ -332,12 +336,10 @@ void _Thread_queue_Flush(
  *
  *  @param[in] the_thread_queue is the pointer to a threadq header
  *  @param[in] the_discipline is the queueing discipline
- *  @param[in] timeout_status is the return on a timeout
  */
 void _Thread_queue_Initialize(
-  Thread_queue_Control         *the_thread_queue,
-  Thread_queue_Disciplines      the_discipline,
-  uint32_t                      timeout_status
+  Thread_queue_Control     *the_thread_queue,
+  Thread_queue_Disciplines  the_discipline
 );
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Destroy(

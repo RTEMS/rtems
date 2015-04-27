@@ -81,6 +81,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
     executing,
     STATES_WAITING_FOR_MUTEX,
     timeout,
+    CORE_MUTEX_TIMEOUT,
     lock_context
   );
 

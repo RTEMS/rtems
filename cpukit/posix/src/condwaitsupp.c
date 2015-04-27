@@ -83,7 +83,8 @@ int _POSIX_Condition_variables_Wait_support(
           executing,
           STATES_WAITING_FOR_CONDITION_VARIABLE
             | STATES_INTERRUPTIBLE_BY_SIGNAL,
-          timeout
+          timeout,
+          ETIMEDOUT
         );
 
         _Objects_Put( &the_cond->Object );

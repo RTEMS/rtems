@@ -71,7 +71,8 @@ on_EINTR:
           &api->Join_List,
           executing,
           STATES_WAITING_FOR_JOIN | STATES_INTERRUPTIBLE_BY_SIGNAL,
-          WATCHDOG_NO_TIMEOUT
+          WATCHDOG_NO_TIMEOUT,
+          0
         );
       }
       _Objects_Put( &the_thread->Object );

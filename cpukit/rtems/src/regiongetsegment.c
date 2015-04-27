@@ -87,7 +87,8 @@ rtems_status_code rtems_region_get_segment(
               &the_region->Wait_queue,
               executing,
               STATES_WAITING_FOR_SEGMENT,
-              timeout
+              timeout,
+              RTEMS_TIMEOUT
             );
 
             _Objects_Put( &the_region->Object );

@@ -44,14 +44,11 @@ RBTree_Compare_result _Thread_queue_Compare_priority(
 }
 
 void _Thread_queue_Initialize(
-  Thread_queue_Control         *the_thread_queue,
-  Thread_queue_Disciplines      the_discipline,
-  uint32_t                      timeout_status
+  Thread_queue_Control     *the_thread_queue,
+  Thread_queue_Disciplines  the_discipline
 )
 {
   const Thread_queue_Operations *operations;
-
-  the_thread_queue->timeout_status = timeout_status;
 
   _ISR_lock_Initialize( &the_thread_queue->Lock, "Thread Queue" );
 
