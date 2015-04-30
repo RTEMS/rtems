@@ -18,11 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
 #include <rtems/score/coremsgimpl.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
 void _CORE_message_queue_Close(
@@ -31,6 +27,7 @@ void _CORE_message_queue_Close(
   uint32_t                    status
 )
 {
+  ISR_lock_Context lock_context;
 
   /*
    *  This will flush blocked threads whether they were blocked on
@@ -49,7 +46,8 @@ void _CORE_message_queue_Close(
    *  the flush satisfying any blocked senders as a side-effect.
    */
 
-  (void) _CORE_message_queue_Flush( the_message_queue );
+  _ISR_lock_ISR_disable( &lock_context );
+  (void) _CORE_message_queue_Flush( the_message_queue, &lock_context );
 
   (void) _Workspace_Free( the_message_queue->message_buffers );
 

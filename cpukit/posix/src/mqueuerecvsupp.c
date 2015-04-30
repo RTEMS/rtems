@@ -54,20 +54,25 @@ ssize_t _POSIX_Message_queue_Receive_support(
   size_t                           length_out;
   bool                             do_wait;
   Thread_Control                  *executing;
+  ISR_lock_Context                 lock_context;
 
-  the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
+  the_mq_fd = _POSIX_Message_queue_Get_fd_interrupt_disable(
+    mqdes,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
       if ( (the_mq_fd->oflag & O_ACCMODE) == O_WRONLY ) {
-        _Objects_Put( &the_mq_fd->Object );
+        _ISR_lock_ISR_enable( &lock_context );
         rtems_set_errno_and_return_minus_one( EBADF );
       }
 
       the_mq = the_mq_fd->Queue;
 
       if ( msg_len < the_mq->Message_queue.maximum_message_size ) {
-        _Objects_Put( &the_mq_fd->Object );
+        _ISR_lock_ISR_enable( &lock_context );
         rtems_set_errno_and_return_minus_one( EMSGSIZE );
       }
 
@@ -97,10 +102,10 @@ ssize_t _POSIX_Message_queue_Receive_support(
         msg_ptr,
         &length_out,
         do_wait,
-        timeout
+        timeout,
+        &lock_context
       );
 
-      _Objects_Put( &the_mq_fd->Object );
       if (msg_prio) {
         *msg_prio = _POSIX_Message_queue_Priority_from_core(
              executing->Wait.count

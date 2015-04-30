@@ -54,16 +54,23 @@ rtems_status_code rtems_message_queue_flush(
 {
   Message_queue_Control          *the_message_queue;
   Objects_Locations               location;
+  ISR_lock_Context                lock_context;
 
   if ( !count )
     return RTEMS_INVALID_ADDRESS;
 
-  the_message_queue = _Message_queue_Get( id, &location );
+  the_message_queue = _Message_queue_Get_interrupt_disable(
+    id,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      *count = _CORE_message_queue_Flush( &the_message_queue->message_queue );
-      _Objects_Put( &the_message_queue->Object );
+      *count = _CORE_message_queue_Flush(
+        &the_message_queue->message_queue,
+        &lock_context
+      );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

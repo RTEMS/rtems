@@ -250,6 +250,21 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *_POSIX_Message_queue_Get_fd
     location
   );
 }
+
+RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *
+_POSIX_Message_queue_Get_fd_interrupt_disable(
+  mqd_t              id,
+  Objects_Locations *location,
+  ISR_lock_Context  *lock_context
+)
+{
+  return (POSIX_Message_queue_Control_fd *) _Objects_Get_isr_disable(
+    &_POSIX_Message_queue_Information_fds,
+    (Objects_Id)id,
+    location,
+    lock_context
+  );
+}
  
 /**
  * @see _POSIX_Name_to_id().

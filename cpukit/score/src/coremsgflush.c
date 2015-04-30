@@ -20,13 +20,12 @@
 #endif
 
 #include <rtems/score/coremsgimpl.h>
-#include <rtems/score/isr.h>
 
 uint32_t   _CORE_message_queue_Flush(
-  CORE_message_queue_Control *the_message_queue
+  CORE_message_queue_Control *the_message_queue,
+  ISR_lock_Context           *lock_context
 )
 {
-  ISR_Level   level;
   Chain_Node *inactive_head;
   Chain_Node *inactive_first;
   Chain_Node *message_queue_first;
@@ -60,7 +59,7 @@ uint32_t   _CORE_message_queue_Flush(
    *  fixed execution time that only deals with pending messages.
    */
 
-  _ISR_Disable( level );
+  _CORE_message_queue_Acquire_critical( the_message_queue, lock_context );
 
   count = the_message_queue->number_of_pending_messages;
   if ( count != 0 ) {
@@ -79,6 +78,6 @@ uint32_t   _CORE_message_queue_Flush(
     _Chain_Initialize_empty( &the_message_queue->Pending_messages );
   }
 
-  _ISR_Enable( level );
+  _CORE_message_queue_Release( the_message_queue, lock_context );
   return count;
 }

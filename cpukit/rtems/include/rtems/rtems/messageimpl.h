@@ -139,6 +139,21 @@ RTEMS_INLINE_ROUTINE Message_queue_Control *_Message_queue_Get (
      _Objects_Get( &_Message_queue_Information, id, location );
 }
 
+RTEMS_INLINE_ROUTINE Message_queue_Control *
+_Message_queue_Get_interrupt_disable(
+  Objects_Id         id,
+  Objects_Locations *location,
+  ISR_lock_Context  *lock_context
+)
+{
+  return (Message_queue_Control *) _Objects_Get_isr_disable(
+    &_Message_queue_Information,
+    id,
+    location,
+    lock_context
+  );
+}
+
 RTEMS_INLINE_ROUTINE Message_queue_Control *_Message_queue_Allocate( void )
 {
   return (Message_queue_Control *)

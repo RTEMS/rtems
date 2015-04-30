@@ -33,18 +33,17 @@ void _CORE_message_queue_Seize(
   void                            *buffer,
   size_t                          *size_p,
   bool                             wait,
-  Watchdog_Interval                timeout
+  Watchdog_Interval                timeout,
+  ISR_lock_Context                *lock_context
 )
 {
-  ISR_lock_Context                   lock_context;
   CORE_message_queue_Buffer_control *the_message;
 
   executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
-  _Thread_queue_Acquire( &the_message_queue->Wait_queue, &lock_context );
+  _CORE_message_queue_Acquire_critical( the_message_queue, lock_context );
   the_message = _CORE_message_queue_Get_pending_message( the_message_queue );
   if ( the_message != NULL ) {
     the_message_queue->number_of_pending_messages -= 1;
-    _Thread_queue_Release( &the_message_queue->Wait_queue, &lock_context );
 
     *size_p = the_message->Contents.size;
     executing->Wait.count =
@@ -61,6 +60,7 @@ void _CORE_message_queue_Seize(
        *  So return immediately.
        */
       _CORE_message_queue_Free_message_buffer(the_message_queue, the_message);
+      _CORE_message_queue_Release( the_message_queue, lock_context );
       return;
     #else
     {
@@ -73,12 +73,15 @@ void _CORE_message_queue_Seize(
        *  NOTE: If we note that the queue was not full before this receive,
        *  then we can avoid this dequeue.
        */
-      the_thread = _Thread_queue_Dequeue( &the_message_queue->Wait_queue );
-      if ( !the_thread ) {
+      the_thread = _Thread_queue_First_locked(
+        &the_message_queue->Wait_queue
+      );
+      if ( the_thread == NULL ) {
         _CORE_message_queue_Free_message_buffer(
           the_message_queue,
           the_message
         );
+        _CORE_message_queue_Release( the_message_queue, lock_context );
         return;
       }
 
@@ -103,13 +106,21 @@ void _CORE_message_queue_Seize(
          the_message,
          _CORE_message_queue_Get_message_priority( the_message )
       );
+      _Thread_queue_Extract_critical(
+        &the_message_queue->Wait_queue,
+        the_thread,
+        lock_context
+      );
+      #if defined(RTEMS_MULTIPROCESSING)
+        _Thread_Dispatch_enable( _Per_CPU_Get() );
+      #endif
       return;
     }
     #endif
   }
 
   if ( !wait ) {
-    _Thread_queue_Release( &the_message_queue->Wait_queue, &lock_context );
+    _CORE_message_queue_Release( the_message_queue, lock_context );
     executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT;
     return;
   }
@@ -125,6 +136,9 @@ void _CORE_message_queue_Seize(
     STATES_WAITING_FOR_MESSAGE,
     timeout,
     CORE_MESSAGE_QUEUE_STATUS_TIMEOUT,
-    &lock_context
+    lock_context
   );
+  #if defined(RTEMS_MULTIPROCESSING)
+    _Thread_Dispatch_enable( _Per_CPU_Get() );
+  #endif
 }

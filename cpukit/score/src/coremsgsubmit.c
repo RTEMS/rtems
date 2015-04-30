@@ -38,36 +38,39 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
   #endif
   CORE_message_queue_Submit_types            submit_type,
   bool                                       wait,
-  Watchdog_Interval                          timeout
+  Watchdog_Interval                          timeout,
+  ISR_lock_Context                          *lock_context
 )
 {
-  CORE_message_queue_Buffer_control   *the_message;
-  Thread_Control                      *the_thread;
+  CORE_message_queue_Buffer_control *the_message;
+  Thread_Control                    *the_thread;
 
   if ( size > the_message_queue->maximum_message_size ) {
+    _ISR_lock_ISR_enable( lock_context );
     return CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE;
   }
+
+  _CORE_message_queue_Acquire_critical( the_message_queue, lock_context );
 
   /*
    *  Is there a thread currently waiting on this message queue?
    */
-  if ( the_message_queue->number_of_pending_messages == 0 ) {
-    the_thread = _Thread_queue_Dequeue( &the_message_queue->Wait_queue );
-    if ( the_thread ) {
-      _CORE_message_queue_Copy_buffer(
-        buffer,
-        the_thread->Wait.return_argument_second.mutable_object,
-        size
-      );
-      *(size_t *) the_thread->Wait.return_argument = size;
-      the_thread->Wait.count = (uint32_t) submit_type;
 
-      #if defined(RTEMS_MULTIPROCESSING)
-        if ( !_Objects_Is_local_id( the_thread->Object.id ) )
-          (*api_message_queue_mp_support) ( the_thread, id );
-      #endif
-      return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
-    }
+  the_thread = _CORE_message_queue_Dequeue_receiver(
+    the_message_queue,
+    buffer,
+    size,
+    submit_type,
+    lock_context
+  );
+  if ( the_thread != NULL ) {
+    #if defined(RTEMS_MULTIPROCESSING)
+      if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+        (*api_message_queue_mp_support) ( the_thread, id );
+
+      _Thread_Dispatch_enable( _Per_CPU_Get() );
+    #endif
+    return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
   }
 
   /*
@@ -77,23 +80,25 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
   the_message =
       _CORE_message_queue_Allocate_message_buffer( the_message_queue );
   if ( the_message ) {
+    the_message->Contents.size = size;
+    _CORE_message_queue_Set_message_priority( the_message, submit_type );
     _CORE_message_queue_Copy_buffer(
       buffer,
       the_message->Contents.buffer,
       size
     );
-    the_message->Contents.size = size;
-    _CORE_message_queue_Set_message_priority( the_message, submit_type );
 
     _CORE_message_queue_Insert_message(
        the_message_queue,
        the_message,
        submit_type
     );
+    _CORE_message_queue_Release( the_message_queue, lock_context );
     return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
   }
 
   #if !defined(RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND)
+    _CORE_message_queue_Release( the_message_queue, lock_context );
     return CORE_MESSAGE_QUEUE_STATUS_TOO_MANY;
   #else
     /*
@@ -102,6 +107,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
      *  on the queue.
      */
     if ( !wait ) {
+      _CORE_message_queue_Release( the_message_queue, lock_context );
       return CORE_MESSAGE_QUEUE_STATUS_TOO_MANY;
     }
 
@@ -110,6 +116,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
      *  deadly to block in an ISR.
      */
     if ( _ISR_Is_in_progress() ) {
+      _CORE_message_queue_Release( the_message_queue, lock_context );
       return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED;
     }
 
@@ -119,20 +126,22 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
      *  it as a variable.  Doing this emphasizes how dangerous it
      *  would be to use this variable prior to here.
      */
-    {
-      executing->Wait.id = id;
-      executing->Wait.return_argument_second.immutable_object = buffer;
-      executing->Wait.option = (uint32_t) size;
-      executing->Wait.count = submit_type;
+    executing->Wait.id = id;
+    executing->Wait.return_argument_second.immutable_object = buffer;
+    executing->Wait.option = (uint32_t) size;
+    executing->Wait.count = submit_type;
 
-      _Thread_queue_Enqueue(
-        &the_message_queue->Wait_queue,
-        executing,
-        STATES_WAITING_FOR_MESSAGE,
-        timeout,
-        CORE_MESSAGE_QUEUE_STATUS_TIMEOUT
-      );
-    }
+    _Thread_queue_Enqueue_critical(
+      &the_message_queue->Wait_queue,
+      executing,
+      STATES_WAITING_FOR_MESSAGE,
+      timeout,
+      CORE_MESSAGE_QUEUE_STATUS_TIMEOUT,
+      lock_context
+    );
+    #if defined(RTEMS_MULTIPROCESSING)
+      _Thread_Dispatch_enable( _Per_CPU_Get() );
+    #endif
 
     return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT;
   #endif
