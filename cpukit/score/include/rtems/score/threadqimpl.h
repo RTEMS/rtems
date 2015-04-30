@@ -40,15 +40,6 @@ typedef void ( *Thread_queue_Flush_callout )(
              );
 
 /**
- *  The following type defines the callout used for timeout processing
- *  methods.
- */
-typedef void ( *Thread_queue_Timeout_callout )(
-                 Objects_Id,
-                 void *
-             );
-
-/**
  *  @brief Gets a pointer to a thread waiting on the_thread_queue.
  *
  *  This function returns a pointer to a thread waiting on
