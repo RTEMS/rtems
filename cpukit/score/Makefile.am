@@ -158,7 +158,7 @@ libscore_a_SOURCES += src/corebarrier.c src/corebarrierrelease.c \
 ## CORE_MESSAGE_QUEUE_C_FILES
 libscore_a_SOURCES += src/coremsg.c src/coremsgbroadcast.c \
     src/coremsgclose.c src/coremsgflush.c src/coremsgflushwait.c \
-    src/coremsginsert.c src/coremsgflushsupp.c src/coremsgseize.c \
+    src/coremsginsert.c src/coremsgseize.c \
     src/coremsgsubmit.c
 
 ## CORE_MUTEX_C_FILES

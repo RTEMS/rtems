@@ -49,8 +49,7 @@ void _CORE_message_queue_Close(
    *  the flush satisfying any blocked senders as a side-effect.
    */
 
-  if ( the_message_queue->number_of_pending_messages != 0 )
-    (void) _CORE_message_queue_Flush_support( the_message_queue );
+  (void) _CORE_message_queue_Flush( the_message_queue );
 
   (void) _Workspace_Free( the_message_queue->message_buffers );
 

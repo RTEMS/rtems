@@ -179,23 +179,6 @@ uint32_t   _CORE_message_queue_Flush(
   CORE_message_queue_Control *the_message_queue
 );
 
-/**
- *  @brief Flush all outstanding messages.
- *
- *  This routine flushes all outstanding messages and returns
- *  them to the inactive message chain.
- *
- *  @param[in] the_message_queue points to the message queue to flush
- *
- *  @retval This method returns the number of pending messages flushed.
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-uint32_t   _CORE_message_queue_Flush_support(
-  CORE_message_queue_Control *the_message_queue
-);
-
 #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
 /**
  *  @brief Flush waiting threads.
