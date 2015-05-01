@@ -62,37 +62,46 @@ rtems_status_code rtems_semaphore_release(
   CORE_mutex_Status           mutex_status;
   CORE_semaphore_Status       semaphore_status;
   rtems_attribute             attribute_set;
+  ISR_lock_Context            lock_context;
 
-  the_semaphore = _Semaphore_Get( id, &location );
+  the_semaphore = _Semaphore_Get_interrupt_disable(
+    id,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
       attribute_set = the_semaphore->attribute_set;
 #if defined(RTEMS_SMP)
       if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
+        _Thread_Disable_dispatch();
+        _ISR_lock_ISR_enable( &lock_context );
         MRSP_Status mrsp_status = _MRSP_Release(
           &the_semaphore->Core_control.mrsp,
           _Thread_Get_executing()
         );
-        _Objects_Put( &the_semaphore->Object );
+        _Thread_Enable_dispatch();
         return _Semaphore_Translate_MRSP_status_code( mrsp_status );
       } else
 #endif
       if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
+        _Thread_Disable_dispatch();
+        _ISR_lock_ISR_enable( &lock_context );
         mutex_status = _CORE_mutex_Surrender(
           &the_semaphore->Core_control.mutex,
           id,
           MUTEX_MP_SUPPORT
         );
-        _Objects_Put( &the_semaphore->Object );
+        _Thread_Enable_dispatch();
         return _Semaphore_Translate_core_mutex_return_code( mutex_status );
       } else {
         semaphore_status = _CORE_semaphore_Surrender(
           &the_semaphore->Core_control.semaphore,
           id,
-          MUTEX_MP_SUPPORT
+          MUTEX_MP_SUPPORT,
+          &lock_context
         );
-        _Objects_Put( &the_semaphore->Object );
         return
           _Semaphore_Translate_core_semaphore_return_code( semaphore_status );
       }

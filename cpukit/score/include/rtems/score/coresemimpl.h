@@ -141,13 +141,16 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
  *         with this instance of a SuperCore Semaphore
  *  @param[in] api_semaphore_mp_support is the routine to invoke if the
  *         thread unblocked is remote
+ *  @param[in] lock_context is a temporary variable used to contain the ISR
+ *        disable level cookie
  *
  *  @retval an indication of whether the routine succeeded or failed
  */
 CORE_semaphore_Status _CORE_semaphore_Surrender(
   CORE_semaphore_Control                *the_semaphore,
   Objects_Id                             id,
-  CORE_semaphore_API_mp_support_callout  api_semaphore_mp_support
+  CORE_semaphore_API_mp_support_callout  api_semaphore_mp_support,
+  ISR_lock_Context                      *lock_context
 );
 
 /**
@@ -228,21 +231,20 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
   /* disabled when you get here */
 
   executing->Wait.return_code = CORE_SEMAPHORE_STATUS_SUCCESSFUL;
+  _Thread_queue_Acquire_critical( &the_semaphore->Wait_queue, lock_context );
   if ( the_semaphore->count != 0 ) {
     the_semaphore->count -= 1;
-    _ISR_lock_ISR_enable( lock_context );
+    _Thread_queue_Release( &the_semaphore->Wait_queue, lock_context );
     return;
   }
 
   if ( !wait ) {
-    _ISR_lock_ISR_enable( lock_context );
+    _Thread_queue_Release( &the_semaphore->Wait_queue, lock_context );
     executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
     return;
   }
 
-  _Thread_Disable_dispatch();
   executing->Wait.id = id;
-  _Thread_queue_Acquire_critical( &the_semaphore->Wait_queue, lock_context );
   _Thread_queue_Enqueue_critical(
     &the_semaphore->Wait_queue,
     executing,
@@ -251,7 +253,6 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
     CORE_SEMAPHORE_TIMEOUT,
     lock_context
   );
-  _Thread_Enable_dispatch();
 }
 
 /** @} */

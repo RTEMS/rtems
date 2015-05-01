@@ -89,6 +89,20 @@ RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
     _Objects_Get( &_POSIX_Semaphore_Information, (Objects_Id)*id, location );
 }
 
+RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *
+_POSIX_Semaphore_Get_interrupt_disable(
+  sem_t             *id,
+  Objects_Locations *location,
+  ISR_lock_Context  *lock_context
+)
+{
+  return (POSIX_Semaphore_Control *) _Objects_Get_isr_disable(
+    &_POSIX_Semaphore_Information,
+    (Objects_Id)*id,
+    location,
+    lock_context
+  );
+}
 
 /**
  *  @brief POSIX Semaphore Create Support

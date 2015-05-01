@@ -329,9 +329,10 @@ Thread _MPCI_Receive_server(
 
 void _MPCI_Announce ( void )
 {
-  _Thread_Disable_dispatch();
-  (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, 0, 0 );
-  _Thread_Enable_dispatch();
+  ISR_lock_Context lock_context;
+
+  _ISR_lock_ISR_disable( &lock_context );
+  (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, 0, 0, &lock_context );
 }
 
 void _MPCI_Internal_packets_Send_process_packet (

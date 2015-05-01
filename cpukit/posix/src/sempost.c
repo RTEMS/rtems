@@ -37,8 +37,13 @@ int sem_post(
 {
   POSIX_Semaphore_Control          *the_semaphore;
   Objects_Locations                 location;
+  ISR_lock_Context                  lock_context;
 
-  the_semaphore = _POSIX_Semaphore_Get( sem, &location );
+  the_semaphore = _POSIX_Semaphore_Get_interrupt_disable(
+    sem,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
@@ -46,12 +51,12 @@ int sem_post(
         &the_semaphore->Semaphore,
         the_semaphore->Object.id,
 #if defined(RTEMS_MULTIPROCESSING)
-        NULL         /* POSIX Semaphores are local only */
+        NULL,        /* POSIX Semaphores are local only */
 #else
-        NULL
+        NULL,
 #endif
+        &lock_context
       );
-      _Objects_Put( &the_semaphore->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)
