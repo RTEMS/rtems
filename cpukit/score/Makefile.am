@@ -177,8 +177,7 @@ libscore_a_SOURCES += src/corerwlock.c src/corerwlockobtainread.c \
 endif
 
 ## CORE_SEMAPHORE_C_FILES
-libscore_a_SOURCES += src/coresem.c \
-    src/coresemsurrender.c
+libscore_a_SOURCES += src/coresem.c
 
 ## CORE_SPINLOCK_C_FILES
 if HAS_PTHREADS
