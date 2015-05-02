@@ -86,14 +86,12 @@ rtems_status_code rtems_semaphore_release(
       } else
 #endif
       if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
-        _Thread_Disable_dispatch();
-        _ISR_lock_ISR_enable( &lock_context );
         mutex_status = _CORE_mutex_Surrender(
           &the_semaphore->Core_control.mutex,
           id,
-          MUTEX_MP_SUPPORT
+          MUTEX_MP_SUPPORT,
+          &lock_context
         );
-        _Thread_Enable_dispatch();
         return _Semaphore_Translate_core_mutex_return_code( mutex_status );
       } else {
         semaphore_status = _CORE_semaphore_Surrender(

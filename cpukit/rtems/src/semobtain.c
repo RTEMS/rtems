@@ -73,9 +73,6 @@ rtems_status_code rtems_semaphore_obtain(
       } else
 #endif
       if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
-#if defined(RTEMS_SMP)
-        _Thread_Disable_dispatch();
-#endif
         _CORE_mutex_Seize(
           &the_semaphore->Core_control.mutex,
           executing,
@@ -84,10 +81,6 @@ rtems_status_code rtems_semaphore_obtain(
           timeout,
           &lock_context
         );
-#if defined(RTEMS_SMP)
-        _Thread_Enable_dispatch();
-#endif
-        _Objects_Put_for_get_isr_disable( &the_semaphore->Object );
         return _Semaphore_Translate_core_mutex_return_code(
                   executing->Wait.return_code );
       }

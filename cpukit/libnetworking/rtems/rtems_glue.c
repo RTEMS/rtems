@@ -378,9 +378,6 @@ rtems_bsdnet_semaphore_obtain (void)
 #ifdef RTEMS_FAST_MUTEX
 	ISR_lock_Context lock_context;
 	Thread_Control *executing;
-#ifdef RTEMS_SMP
-	_Thread_Disable_dispatch();
-#endif
 	_ISR_lock_ISR_disable(&lock_context);
 	if (!the_networkSemaphore)
 		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
@@ -393,9 +390,6 @@ rtems_bsdnet_semaphore_obtain (void)
 		0,		/* forever */
 		&lock_context
 		);
-#ifdef RTEMS_SMP
-	_Thread_Enable_dispatch();
-#endif
 	if (executing->Wait.return_code)
 		rtems_panic ("rtems-net: can't obtain network sema: %d\n",
                  executing->Wait.return_code);
@@ -416,18 +410,19 @@ void
 rtems_bsdnet_semaphore_release (void)
 {
 #ifdef RTEMS_FAST_MUTEX
-	int i;
+        ISR_lock_Context lock_context;
+	CORE_mutex_Status status;
 
-	_Thread_Disable_dispatch();
 	if (!the_networkSemaphore)
 		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
-	i = _CORE_mutex_Surrender (
+        _ISR_lock_ISR_disable(&lock_context);
+	status = _CORE_mutex_Surrender (
 		&the_networkSemaphore->Core_control.mutex,
 		networkSemaphore,
-		NULL
+		NULL,
+                &lock_context
 		);
-	_Thread_Enable_dispatch();
-	if (i)
+	if (status != CORE_MUTEX_STATUS_SUCCESSFUL)
 		rtems_panic ("rtems-net: can't release network sema: %i\n");
 #else
 	rtems_status_code sc;

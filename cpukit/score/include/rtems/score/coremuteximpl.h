@@ -210,17 +210,10 @@ void _CORE_mutex_Seize_interrupt_blocking(
  *
  *  @retval this method returns true if dispatch is in an unsafe state.
  */
-#ifdef RTEMS_SMP
-  #define _CORE_mutex_Check_dispatch_for_seize(_wait) \
-      (_Thread_Dispatch_get_disable_level() != 1 \
-        && (_wait) \
-        && (_System_state_Get() >= SYSTEM_STATE_UP))
-#else
-  #define _CORE_mutex_Check_dispatch_for_seize(_wait) \
-      (!_Thread_Dispatch_is_enabled() \
-        && (_wait) \
-        && (_System_state_Get() >= SYSTEM_STATE_UP))
-#endif
+#define _CORE_mutex_Check_dispatch_for_seize(_wait) \
+  (!_Thread_Dispatch_is_enabled() \
+    && (_wait) \
+    && (_System_state_Get() >= SYSTEM_STATE_UP))
 
 /**
  *  @brief Attempt to obtain the mutex.
@@ -265,9 +258,10 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
       INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE
     );
   }
+  _Thread_queue_Acquire_critical( &the_mutex->Wait_queue, lock_context );
   if ( _CORE_mutex_Seize_interrupt_trylock( the_mutex, executing, lock_context ) ) {
     if ( !wait ) {
-      _ISR_lock_ISR_enable( lock_context );
+      _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
       executing->Wait.return_code =
         CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT;
     } else {
@@ -320,13 +314,15 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
  *  @param[in] id is the id of the RTEMS Object associated with this mutex
  *  @param[in] api_mutex_mp_support is the routine that will be called when
  *         unblocking a remote mutex
+ *  @param[in] lock_context is the interrupt level
  *
  *  @retval an indication of whether the routine succeeded or failed
  */
 CORE_mutex_Status _CORE_mutex_Surrender(
   CORE_mutex_Control                *the_mutex,
   Objects_Id                         id,
-  CORE_mutex_API_mp_support_callout  api_mutex_mp_support
+  CORE_mutex_API_mp_support_callout  api_mutex_mp_support,
+  ISR_lock_Context                  *lock_context
 );
 
 /**
@@ -472,7 +468,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
     }
 
     if ( !_CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
-      _ISR_lock_ISR_enable( lock_context );
+      _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
       return 0;
     } /* else must be CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING
        *
@@ -486,19 +482,21 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
       ceiling = the_mutex->Attributes.priority_ceiling;
       current = executing->current_priority;
       if ( current == ceiling ) {
-        _ISR_lock_ISR_enable( lock_context );
+        _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
         return 0;
       }
 
       if ( current > ceiling ) {
-        _Thread_Disable_dispatch();
-        _ISR_lock_ISR_enable( lock_context );
+        Per_CPU_Control *cpu_self;
+
+        cpu_self = _Thread_Dispatch_disable_critical();
+        _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
         _Thread_Change_priority(
           executing,
           ceiling,
           false
         );
-        _Thread_Enable_dispatch();
+        _Thread_Dispatch_enable( cpu_self );
         return 0;
       }
       /* if ( current < ceiling ) */ {
@@ -506,7 +504,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
         the_mutex->holder = NULL;
         the_mutex->nest_count = 0;     /* undo locking above */
         executing->resource_count--;   /* undo locking above */
-        _ISR_lock_ISR_enable( lock_context );
+        _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
         return 0;
       }
     }
@@ -522,12 +520,12 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
     switch ( the_mutex->Attributes.lock_nesting_behavior ) {
       case CORE_MUTEX_NESTING_ACQUIRES:
         the_mutex->nest_count++;
-        _ISR_lock_ISR_enable( lock_context );
+        _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
         return 0;
       #if defined(RTEMS_POSIX_API)
         case CORE_MUTEX_NESTING_IS_ERROR:
           executing->Wait.return_code = CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
-          _ISR_lock_ISR_enable( lock_context );
+          _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
           return 0;
       #endif
       case CORE_MUTEX_NESTING_BLOCKS:
