@@ -93,7 +93,7 @@ rtems_status_code rtems_semaphore_obtain(
       }
 
       /* must be a counting semaphore */
-      _CORE_semaphore_Seize_isr_disable(
+      _CORE_semaphore_Seize(
         &the_semaphore->Core_control.semaphore,
         executing,
         id,

@@ -33,10 +33,6 @@ extern "C" {
  */
 /**@{**/
 
-#if defined(RTEMS_POSIX_API) || defined(RTEMS_MULTIPROCESSING)
-  #define RTEMS_SCORE_CORESEM_ENABLE_SEIZE_BODY
-#endif
-
 /**
  *  Core Semaphore handler return statuses.
  */
@@ -104,30 +100,6 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
 {
   _Thread_queue_Destroy( &the_semaphore->Wait_queue );
 }
-
-#if defined(RTEMS_SCORE_CORESEM_ENABLE_SEIZE_BODY)
-  /**
-   *  This routine attempts to receive a unit from @a the_semaphore.
-   *  If a unit is available or if the wait flag is false, then the routine
-   *  returns.  Otherwise, the calling task is blocked until a unit becomes
-   *  available.
-   *
-   *  @param[in] the_semaphore is the semaphore to seize
-   *  @param[in,out] executing The currently executing thread.
-   *  @param[in] id is the Id of the API level Semaphore object associated
-   *         with this instance of a SuperCore Semaphore
-   *  @param[in] wait indicates if the caller is willing to block
-   *  @param[in] timeout is the number of ticks the calling thread is willing
-   *         to wait if @a wait is true.
-   */
-  void _CORE_semaphore_Seize(
-    CORE_semaphore_Control  *the_semaphore,
-    Thread_Control          *executing,
-    Objects_Id               id,
-    bool                     wait,
-    Watchdog_Interval        timeout
-  );
-#endif
 
 /**
  *  @brief Surrender a unit to a semaphore.
@@ -219,7 +191,7 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
  *
  * @note There is currently no MACRO version of this routine.
  */
-RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
+RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize(
   CORE_semaphore_Control  *the_semaphore,
   Thread_Control          *executing,
   Objects_Id               id,

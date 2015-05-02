@@ -283,6 +283,7 @@ Thread _MPCI_Receive_server(
   MP_packet_Prefix         *the_packet;
   MPCI_Packet_processor     the_function;
   Thread_Control           *executing;
+  ISR_lock_Context          lock_context;
 
   executing = _Thread_Get_executing();
 
@@ -290,15 +291,15 @@ Thread _MPCI_Receive_server(
 
     executing->receive_packet = NULL;
 
-    _Thread_Disable_dispatch();
+    _ISR_lock_ISR_disable( &lock_context );
     _CORE_semaphore_Seize(
       &_MPCI_Semaphore,
       executing,
       0,
       true,
-      WATCHDOG_NO_TIMEOUT
+      WATCHDOG_NO_TIMEOUT,
+      &lock_context
     );
-    _Thread_Enable_dispatch();
 
     for ( ; ; ) {
       the_packet = _MPCI_Receive_packet();
