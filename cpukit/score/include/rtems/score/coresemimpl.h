@@ -140,11 +140,18 @@ CORE_semaphore_Status _CORE_semaphore_Surrender(
  *         thread unblocked is remote
  *  @param[in] status is the status to be returned to the unblocked thread
  */
-void _CORE_semaphore_Flush(
+RTEMS_INLINE_ROUTINE void _CORE_semaphore_Flush(
   CORE_semaphore_Control         *the_semaphore,
   Thread_queue_Flush_callout      remote_extract_callout,
   uint32_t                        status
-);
+)
+{
+  _Thread_queue_Flush(
+    &the_semaphore->Wait_queue,
+    remote_extract_callout,
+    status
+  );
+}
 
 /**
  * This function returns true if the priority attribute is
