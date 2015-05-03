@@ -280,3 +280,23 @@
     /* Command posted status */
 #define AM335X_WDT_WSPR                0x48
     /* Activate/deactivate sequence */
+
+/* RTC registers */
+#define AM335X_RTC_BASE         0x44E3E000
+#define AM335X_RTC_SECS         0x0
+#define AM335X_RTC_MINS         0x4
+#define AM335X_RTC_HOURS        0x8
+#define AM335X_RTC_DAYS         0xc
+#define AM335X_RTC_MONTHS       0x10
+#define AM335X_RTC_YEARS        0x14
+#define AM335X_RTC_WEEKS        0x18
+#define AM335X_RTC_CTRL_REG     0x40
+#define AM335X_RTC_STATUS_REG   0x44
+#define AM335X_RTC_REV_REG      0x74
+#define AM335X_RTC_SYSCONFIG    0x78
+#define AM335X_RTC_KICK0        0x6c
+#define AM335X_RTC_KICK1        0x70
+#define AM335X_RTC_OSC_CLOCK    0x54
+
+#define AM335X_RTC_KICK0_KEY    0x83E70B13
+#define AM335X_RTC_KICK1_KEY    0x95A4F1E0

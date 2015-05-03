@@ -288,6 +288,12 @@
 #define CLKSEL_TIMER7_CLK_SEL_SEL3 (0x2 << 0) /* Select CLK_32KHZ clock */
 #define CLKSEL_TIMER7_CLK_SEL_SEL4 (0x3 << 0) /* Reserved */
 
+/*RTC CLOCK BASE & Registers*/
+#define CM_RTC_BASE            0x44E00800
+#define CM_RTC_RTC_CLKCTRL     0x0
+#define CM_RTC_CLKSTCTRL       0x4
+
+
 #define OMAP3_CLKSEL_GPT1    (1 << 0)
 #define OMAP3_CLKSEL_GPT10   (1 << 6)
 #define OMAP3_CLKSEL_GPT11   (1 << 7)

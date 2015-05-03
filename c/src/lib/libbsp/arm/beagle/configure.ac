@@ -30,6 +30,9 @@ RTEMS_BSPOPTS_HELP([CONSOLE_BAUD],[initial baud for console UART])
 RTEMS_BSPOPTS_SET([CONSOLE_POLLED],[*],[0])
 RTEMS_BSPOPTS_HELP([CONSOLE_POLLED],[polled console i/o (e.g. to run testsuite)])
 
+RTEMS_BSPOPTS_SET([BBB_DEBUG],[beaglebone*],[0])
+RTEMS_BSPOPTS_HELP([BBB_DEBUG],[Enable BBB debug])
+
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 RTEMS_BSP_LINKCMDS
 
