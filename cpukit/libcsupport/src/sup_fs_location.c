@@ -6,10 +6,10 @@
  */
 
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -30,6 +30,12 @@
 
 rtems_interrupt_lock rtems_filesystem_mt_entry_lock_control =
   RTEMS_INTERRUPT_LOCK_INITIALIZER("mount table entry");
+
+RTEMS_INTERRUPT_LOCK_DEFINE(
+  static,
+  deferred_release_lock,
+  "Filesystem Deferred Release"
+)
 
 static rtems_filesystem_global_location_t *deferred_released_global_locations;
 
@@ -134,9 +140,10 @@ static void deferred_release(void)
   rtems_filesystem_global_location_t *current = NULL;
 
   do {
+    rtems_interrupt_lock_context lock_context;
     int count = 0;
 
-    _Thread_Disable_dispatch();
+    rtems_interrupt_lock_acquire(&deferred_release_lock, &lock_context);
     current = deferred_released_global_locations;
     if (current != NULL) {
       deferred_released_global_locations = current->deferred_released_next;
@@ -144,7 +151,7 @@ static void deferred_release(void)
       current->deferred_released_next = NULL;
       current->deferred_released_count = 0;
     }
-    _Thread_Enable_dispatch();
+    rtems_interrupt_lock_release(&deferred_release_lock, &lock_context);
 
     if (current != NULL) {
       release_with_count(current, count);
@@ -182,6 +189,10 @@ void rtems_filesystem_global_location_release(
   if (_Thread_Dispatch_is_enabled()) {
     release_with_count(global_loc, 1);
   } else {
+    rtems_interrupt_lock_context lock_context;
+
+    rtems_interrupt_lock_acquire(&deferred_release_lock, &lock_context);
+
     if (global_loc->deferred_released_count == 0) {
       rtems_filesystem_global_location_t *head =
         deferred_released_global_locations;
@@ -192,6 +203,8 @@ void rtems_filesystem_global_location_release(
     } else {
       ++global_loc->deferred_released_count;
     }
+
+    rtems_interrupt_lock_release(&deferred_release_lock, &lock_context);
   }
 }
 
