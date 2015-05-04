@@ -36,7 +36,7 @@ int rtems_verror(
 
   if (error_flag & RTEMS_ERROR_PANIC) {
     if (rtems_panic_in_progress++)
-      _Thread_Disable_dispatch();       /* disable task switches */
+      _Thread_Dispatch_disable();       /* disable task switches */
 
     /* don't aggravate things */
     if (rtems_panic_in_progress > 2)
