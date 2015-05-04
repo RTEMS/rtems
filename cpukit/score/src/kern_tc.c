@@ -1713,10 +1713,17 @@ pps_fetch(struct pps_fetch_args *fapi, struct pps_state *pps)
 		cseq = pps->ppsinfo.clear_sequence;
 		while (aseq == pps->ppsinfo.assert_sequence &&
 		    cseq == pps->ppsinfo.clear_sequence) {
-			if (pps->mtx != NULL)
-				err = msleep(pps, pps->mtx, PCATCH, "ppsfch", timo);
-			else
+			if (abi_aware(pps, 1) && pps->driver_mtx != NULL) {
+				if (pps->flags & PPSFLAG_MTX_SPIN) {
+					err = msleep_spin(pps, pps->driver_mtx,
+					    "ppsfch", timo);
+				} else {
+					err = msleep(pps, pps->driver_mtx, PCATCH,
+					    "ppsfch", timo);
+				}
+			} else {
 				err = tsleep(pps, PCATCH, "ppsfch", timo);
+			}
 			if (err == EWOULDBLOCK && fapi->timeout.tv_sec == -1) {
 				continue;
 			} else if (err != 0) {
