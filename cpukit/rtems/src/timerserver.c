@@ -29,6 +29,7 @@
 #include <rtems.h>
 #include <rtems/rtems/timerimpl.h>
 #include <rtems/rtems/tasksimpl.h>
+#include <rtems/score/apimutex.h>
 #include <rtems/score/todimpl.h>
 
 static Timer_server_Control _Timer_server_Default;
@@ -346,10 +347,10 @@ rtems_status_code rtems_timer_initiate_server(
   /*
    *  Just to make sure this is only called once.
    */
-  _Thread_Disable_dispatch();
+  _Once_Lock();
     tmpInitialized  = initialized;
     initialized = true;
-  _Thread_Enable_dispatch();
+  _Once_Unlock();
 
   if ( tmpInitialized )
     return RTEMS_INCORRECT_STATE;
