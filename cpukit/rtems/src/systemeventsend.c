@@ -50,7 +50,6 @@ rtems_status_code rtems_event_system_send(
         THREAD_WAIT_CLASS_SYSTEM_EVENT,
         &lock_context
       );
-      _Objects_Put_for_get_isr_disable( &thread->Object );
       sc = RTEMS_SUCCESSFUL;
       break;
 #ifdef RTEMS_MULTIPROCESSING
