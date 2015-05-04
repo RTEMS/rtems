@@ -66,9 +66,10 @@ clock_t _times(
 
   #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
     {
-      Timestamp_Control per_tick;
-      uint32_t          ticks_of_executing;
-      uint32_t          fractional_ticks;
+      Timestamp_Control  per_tick;
+      uint32_t           ticks_of_executing;
+      uint32_t           fractional_ticks;
+      Per_CPU_Control   *cpu_self;
 
       _Timestamp_Set(
         &per_tick,
@@ -78,7 +79,7 @@ clock_t _times(
             TOD_NANOSECONDS_PER_SECOND)
       );
 
-      _Thread_Disable_dispatch();
+      cpu_self = _Thread_Dispatch_disable();
       executing = _Thread_Executing;
       _Thread_Update_cpu_time_used(
         executing,
@@ -90,7 +91,7 @@ clock_t _times(
         &ticks_of_executing,
         &fractional_ticks
       );
-      _Thread_Enable_dispatch();
+      _Thread_Dispatch_enable( cpu_self );
       ptms->tms_utime = ticks_of_executing * us_per_tick;
     }
   #else
