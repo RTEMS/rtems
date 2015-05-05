@@ -425,9 +425,14 @@ f4, ... f30)
 f8, ... f28)
 @end itemize
 
-The floating point status register (fpsr) specifies
+The floating point status register (FSR) specifies
 the behavior of the floating point unit for rounding, contains
 its condition codes, version specification, and trap information.
+
+According to the ABI all floating point registers and the floating point status
+register (FSR) are volatile.  Thus the floating point context of a thread is the
+empty set.  The rounding direction is a system global state and must not be
+modified by threads.
 
 A queue of the floating point instructions which have
 started execution but not yet completed is maintained.  This
