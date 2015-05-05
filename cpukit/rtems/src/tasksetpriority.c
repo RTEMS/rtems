@@ -41,16 +41,18 @@ rtems_status_code rtems_task_set_priority(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      *old_priority = _RTEMS_tasks_Priority_from_Core(
-                        the_thread->current_priority
-                      );
       if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
-        the_thread->real_priority = _RTEMS_tasks_Priority_to_Core(
-                                      new_priority
-                                    );
-        if ( !_Thread_Owns_resources( the_thread ) ||
-             the_thread->current_priority > new_priority )
-          _Thread_Change_priority( the_thread, new_priority, false );
+        _Thread_Set_priority(
+          the_thread,
+          _RTEMS_tasks_Priority_to_Core( new_priority ),
+          old_priority,
+          false
+        );
+        *old_priority = _RTEMS_tasks_Priority_from_Core( *old_priority );
+      } else {
+        *old_priority = _RTEMS_tasks_Priority_from_Core(
+          the_thread->current_priority
+        );
       }
       _Objects_Put( &the_thread->Object );
       return RTEMS_SUCCESSFUL;

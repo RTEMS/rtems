@@ -44,6 +44,7 @@ int pthread_setschedparam(
   Thread_CPU_budget_algorithm_callout  budget_callout;
   Objects_Locations                    location;
   int                                  rc;
+  Priority_Control                     unused;
 
   /*
    *  Check all the parameters
@@ -87,13 +88,11 @@ int pthread_setschedparam(
           the_thread->cpu_time_budget =
             rtems_configuration_get_ticks_per_timeslice();
 
-          the_thread->real_priority =
-            _POSIX_Priority_To_core( api->schedparam.sched_priority );
-
-          _Thread_Change_priority(
-             the_thread,
-             the_thread->real_priority,
-             true
+          _Thread_Set_priority(
+            the_thread,
+            _POSIX_Priority_To_core( api->schedparam.sched_priority ),
+            &unused,
+            true
           );
           break;
 

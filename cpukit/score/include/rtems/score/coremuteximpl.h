@@ -491,11 +491,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
 
         cpu_self = _Thread_Dispatch_disable_critical();
         _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
-        _Thread_Change_priority(
-          executing,
-          ceiling,
-          false
-        );
+        _Thread_Raise_priority( executing, ceiling );
         _Thread_Dispatch_enable( cpu_self );
         return 0;
       }

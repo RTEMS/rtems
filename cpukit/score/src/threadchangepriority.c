@@ -21,12 +21,13 @@
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
-#include <rtems/score/threadqimpl.h>
 
 void _Thread_Change_priority(
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority,
-  bool              prepend_it
+  Thread_Control                *the_thread,
+  Priority_Control               new_priority,
+  void                          *arg,
+  Thread_Change_priority_filter  filter,
+  bool                           prepend_it
 )
 {
   ISR_lock_Context  lock_context;
@@ -35,10 +36,20 @@ void _Thread_Change_priority(
   lock = _Thread_Lock_acquire( the_thread, &lock_context );
 
   /*
+   * For simplicity set the priority restore hint unconditionally since this is
+   * an average case optimization.  Otherwise complicated atomic operations
+   * would be necessary.  Synchronize with a potential read of the resource
+   * count in the filter function.  See also _CORE_mutex_Surrender(),
+   * _Thread_Set_priority_filter() and _Thread_Restore_priority_filter().
+   */
+  the_thread->priority_restore_hint = true;
+  _Atomic_Fence( ATOMIC_ORDER_ACQ_REL );
+
+  /*
    *  Do not bother recomputing all the priority related information if
    *  we are not REALLY changing priority.
    */
-  if ( the_thread->current_priority != new_priority ) {
+  if ( ( *filter )( the_thread, &new_priority, arg ) ) {
     uint32_t my_generation;
 
     my_generation = the_thread->priority_generation + 1;
@@ -71,4 +82,54 @@ void _Thread_Change_priority(
   } else {
     _Thread_Lock_release( lock, &lock_context );
   }
+}
+
+static bool _Thread_Raise_priority_filter(
+  Thread_Control   *the_thread,
+  Priority_Control *new_priority,
+  void             *arg
+)
+{
+  return _Thread_Priority_less_than(
+    the_thread->current_priority,
+    *new_priority
+  );
+}
+
+void _Thread_Raise_priority(
+  Thread_Control   *the_thread,
+  Priority_Control  new_priority
+)
+{
+  _Thread_Change_priority(
+    the_thread,
+    new_priority,
+    NULL,
+    _Thread_Raise_priority_filter,
+    false
+  );
+}
+
+static bool _Thread_Restore_priority_filter(
+  Thread_Control   *the_thread,
+  Priority_Control *new_priority,
+  void             *arg
+)
+{
+  *new_priority = the_thread->real_priority;
+
+  the_thread->priority_restore_hint = false;
+
+  return *new_priority != the_thread->current_priority;
+}
+
+void _Thread_Restore_priority( Thread_Control *the_thread )
+{
+  _Thread_Change_priority(
+    the_thread,
+    0,
+    NULL,
+    _Thread_Restore_priority_filter,
+    true
+  );
 }

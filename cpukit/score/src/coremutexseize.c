@@ -21,7 +21,6 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/coremuteximpl.h>
-#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/thread.h>
 
@@ -76,12 +75,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
     _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
 #endif
 
-    _Scheduler_Change_priority_if_higher(
-      _Scheduler_Get( holder ),
-      holder,
-      executing->current_priority,
-      false
-    );
+    _Thread_Raise_priority( holder, executing->current_priority );
 
 #if !defined(RTEMS_SMP)
     _Thread_queue_Acquire( &the_mutex->Wait_queue, lock_context );

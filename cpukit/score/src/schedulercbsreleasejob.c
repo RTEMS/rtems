@@ -32,6 +32,7 @@ void _Scheduler_CBS_Release_job(
   Scheduler_CBS_Node   *node = _Scheduler_CBS_Thread_get_node( the_thread );
   Scheduler_CBS_Server *serv_info = node->cbs_server;
   Priority_Control      new_priority;
+  Priority_Control      unused;
 
   if (deadline) {
     /* Initializing or shifting deadline. */
@@ -51,6 +52,5 @@ void _Scheduler_CBS_Release_job(
   if (serv_info)
     the_thread->cpu_time_budget = serv_info->parameters.budget;
 
-  the_thread->real_priority = new_priority;
-  _Thread_Change_priority(the_thread, new_priority, true);
+  _Thread_Set_priority( the_thread, new_priority, &unused, true );
 }

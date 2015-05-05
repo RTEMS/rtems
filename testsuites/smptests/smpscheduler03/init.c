@@ -40,6 +40,30 @@ typedef struct {
 
 static test_context test_instance;
 
+static bool change_priority_filter(
+  Thread_Control   *thread,
+  Priority_Control *new_priority,
+  void             *arg
+)
+{
+  return thread->current_priority != *new_priority;
+}
+
+static void change_priority(
+  Thread_Control   *thread,
+  Priority_Control  new_priority,
+  bool              prepend_it
+)
+{
+  _Thread_Change_priority(
+    thread,
+    new_priority,
+    NULL,
+    change_priority_filter,
+    prepend_it
+  );
+}
+
 static void barrier_wait(test_context *ctx)
 {
   rtems_status_code sc;
@@ -97,10 +121,10 @@ static void test_case_change_priority(
 {
   switch (start_state) {
     case SCHEDULER_SMP_NODE_SCHEDULED:
-      _Thread_Change_priority(executing, 1, true);
+      change_priority(executing, 1, true);
       break;
     case SCHEDULER_SMP_NODE_READY:
-      _Thread_Change_priority(executing, 4, true);
+      change_priority(executing, 4, true);
       break;
     default:
       rtems_test_assert(0);
@@ -108,7 +132,7 @@ static void test_case_change_priority(
   }
   rtems_test_assert(node->state == start_state);
 
-  _Thread_Change_priority(executing, prio, prepend_it);
+  change_priority(executing, prio, prepend_it);
   rtems_test_assert(node->state == new_state);
 }
 
@@ -153,7 +177,7 @@ static void test_change_priority(void)
     }
   }
 
-  _Thread_Change_priority(executing, 1, true);
+  change_priority(executing, 1, true);
   rtems_test_assert(node->state == SCHEDULER_SMP_NODE_SCHEDULED);
 
   _Thread_Enable_dispatch();
@@ -199,10 +223,10 @@ static void test_case_change_priority_op(
 
   switch (start_state) {
     case SCHEDULER_SMP_NODE_SCHEDULED:
-      _Thread_Change_priority(executing, 1, true);
+      change_priority(executing, 1, true);
       break;
     case SCHEDULER_SMP_NODE_READY:
-      _Thread_Change_priority(executing, 4, true);
+      change_priority(executing, 4, true);
       break;
     default:
       rtems_test_assert(0);
@@ -266,7 +290,7 @@ static void test_change_priority_op(void)
     }
   }
 
-  _Thread_Change_priority(executing, 1, true);
+  change_priority(executing, 1, true);
   rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
 
   _Thread_Enable_dispatch();
@@ -298,19 +322,19 @@ static void test_case_yield_op(
 {
   Thread_Control *needs_help;
 
-  _Thread_Change_priority(executing, 4, false);
-  _Thread_Change_priority(other, 4, false);
+  change_priority(executing, 4, false);
+  change_priority(other, 4, false);
 
   switch (start_state) {
     case SCHEDULER_SMP_NODE_SCHEDULED:
       switch (new_state) {
         case SCHEDULER_SMP_NODE_SCHEDULED:
-          _Thread_Change_priority(executing, 2, false);
-          _Thread_Change_priority(other, 3, false);
+          change_priority(executing, 2, false);
+          change_priority(other, 3, false);
           break;
         case SCHEDULER_SMP_NODE_READY:
-          _Thread_Change_priority(executing, 2, false);
-          _Thread_Change_priority(other, 2, false);
+          change_priority(executing, 2, false);
+          change_priority(other, 2, false);
           break;
         default:
           rtems_test_assert(0);
@@ -323,8 +347,8 @@ static void test_case_yield_op(
           rtems_test_assert(0);
           break;
         case SCHEDULER_SMP_NODE_READY:
-          _Thread_Change_priority(executing, 3, false);
-          _Thread_Change_priority(other, 2, false);
+          change_priority(executing, 3, false);
+          change_priority(other, 2, false);
           break;
         default:
           rtems_test_assert(0);
@@ -393,7 +417,7 @@ static void test_yield_op(void)
     }
   }
 
-  _Thread_Change_priority(executing, 1, true);
+  change_priority(executing, 1, true);
   rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
 
   _Thread_Enable_dispatch();
@@ -436,11 +460,11 @@ static void test_case_unblock_op(
 
   switch (new_state) {
     case SCHEDULER_SMP_NODE_SCHEDULED:
-      _Thread_Change_priority(executing, 2, false);
+      change_priority(executing, 2, false);
       rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
       break;
     case SCHEDULER_SMP_NODE_READY:
-      _Thread_Change_priority(executing, 4, false);
+      change_priority(executing, 4, false);
       rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_READY);
       break;
     default:
@@ -494,7 +518,7 @@ static void test_unblock_op(void)
     );
   }
 
-  _Thread_Change_priority(executing, 1, true);
+  change_priority(executing, 1, true);
   rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
 
   _Thread_Enable_dispatch();

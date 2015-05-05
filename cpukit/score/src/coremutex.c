@@ -50,15 +50,20 @@ CORE_mutex_Status _CORE_mutex_Initialize(
       Priority_Control ceiling = the_mutex->Attributes.priority_ceiling;
       Per_CPU_Control *cpu_self;
 
-      /*
-       * The mutex initialization is only protected by the allocator lock in
-       * general.  Disable thread dispatching before the priority check to
-       * prevent interference with priority inheritance.
-       */
+      /* The mutex initialization is only protected by the allocator lock */
       cpu_self = _Thread_Dispatch_disable();
 
+      /*
+       * The test to check for a ceiling violation is a bit arbitrary.  In case
+       * this thread is the owner of a priority inheritance mutex, then it may
+       * get a higher priority later or anytime on SMP configurations.
+       */
       if ( is_priority_ceiling && executing->current_priority < ceiling ) {
-        _Thread_Enable_dispatch();
+        /*
+         * There is no need to undo the previous work since this error aborts
+         * the object creation.
+         */
+        _Thread_Dispatch_enable( cpu_self );
         return CORE_MUTEX_STATUS_CEILING_VIOLATED;
       }
 
@@ -71,7 +76,7 @@ CORE_mutex_Status _CORE_mutex_Initialize(
       executing->resource_count++;
 
       if ( is_priority_ceiling ) {
-        _Thread_Change_priority( executing, ceiling, false );
+        _Thread_Raise_priority( executing, ceiling );
       }
 
       _Thread_Dispatch_enable( cpu_self );

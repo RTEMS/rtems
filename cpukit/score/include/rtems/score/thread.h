@@ -366,9 +366,21 @@ typedef struct {
   Objects_Control          Object;
   /** This field is the current execution state of this proxy. */
   States_Control           current_state;
-  /** This field is the current priority state of this proxy. */
+
+  /**
+   * @brief This field is the current priority state of this thread.
+   *
+   * Writes to this field are only allowed in _Thread_Initialize() or via
+   * _Thread_Change_priority().
+   */
   Priority_Control         current_priority;
-  /** This field is the base priority of this proxy. */
+
+  /**
+   * @brief This field is the base priority of this thread.
+   *
+   * Writes to this field are only allowed in _Thread_Initialize() or via
+   * _Thread_Change_priority().
+   */
   Priority_Control         real_priority;
 
   /**
@@ -378,6 +390,17 @@ typedef struct {
    * priority related data structures.
    */
   uint32_t                 priority_generation;
+
+  /**
+   * @brief Hints if a priority restore is necessary once the resource count
+   * changes from one to zero.
+   *
+   * This is an optimization to speed up the mutex surrender sequence in case
+   * no attempt to change the priority was made during the mutex ownership.  On
+   * SMP configurations atomic fences must synchronize writes to
+   * Thread_Control::priority_restore_hint and Thread_Control::resource_count.
+   */
+  bool                     priority_restore_hint;
 
   /** This field is the number of mutexes currently held by this proxy. */
   uint32_t                 resource_count;
@@ -653,9 +676,21 @@ struct Thread_Control_struct {
   Objects_Control          Object;
   /** This field is the current execution state of this thread. */
   States_Control           current_state;
-  /** This field is the current priority state of this thread. */
+
+  /**
+   * @brief This field is the current priority state of this thread.
+   *
+   * Writes to this field are only allowed in _Thread_Initialize() or via
+   * _Thread_Change_priority().
+   */
   Priority_Control         current_priority;
-  /** This field is the base priority of this thread. */
+
+  /**
+   * @brief This field is the base priority of this thread.
+   *
+   * Writes to this field are only allowed in _Thread_Initialize() or via
+   * _Thread_Change_priority().
+   */
   Priority_Control         real_priority;
 
   /**
@@ -665,6 +700,17 @@ struct Thread_Control_struct {
    * priority related data structures.
    */
   uint32_t                 priority_generation;
+
+  /**
+   * @brief Hints if a priority restore is necessary once the resource count
+   * changes from one to zero.
+   *
+   * This is an optimization to speed up the mutex surrender sequence in case
+   * no attempt to change the priority was made during the mutex ownership.  On
+   * SMP configurations atomic fences must synchronize writes to
+   * Thread_Control::priority_restore_hint and Thread_Control::resource_count.
+   */
+  bool                     priority_restore_hint;
 
   /** This field is the number of mutexes currently held by this thread. */
   uint32_t                 resource_count;

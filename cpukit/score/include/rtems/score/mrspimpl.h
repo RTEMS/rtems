@@ -36,13 +36,18 @@ extern "C" {
  * @{
  */
 
-RTEMS_INLINE_ROUTINE void _MRSP_Elevate_priority(
-  MRSP_Control     *mrsp,
-  Thread_Control   *new_owner,
-  Priority_Control  ceiling_priority
+RTEMS_INLINE_ROUTINE bool _MRSP_Restore_priority_filter(
+  Thread_Control   *thread,
+  Priority_Control *new_priority,
+  void             *arg
 )
 {
-  _Thread_Change_priority( new_owner, ceiling_priority, false );
+  *new_priority = _Thread_Priority_highest(
+    thread->real_priority,
+    *new_priority
+  );
+
+  return *new_priority != thread->current_priority;
 }
 
 RTEMS_INLINE_ROUTINE void _MRSP_Restore_priority(
@@ -55,13 +60,13 @@ RTEMS_INLINE_ROUTINE void _MRSP_Restore_priority(
    * or priority inheritance semaphores.
    */
   if ( thread->resource_count == 0 ) {
-    Priority_Control new_priority = _Scheduler_Highest_priority_of_two(
-      _Scheduler_Get( thread ),
+    _Thread_Change_priority(
+      thread,
       initial_priority,
-      thread->real_priority
+      NULL,
+      _MRSP_Restore_priority_filter,
+      true
     );
-
-    _Thread_Change_priority( thread, new_priority, true );
   }
 }
 
@@ -75,7 +80,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Claim_ownership(
   _Resource_Node_add_resource( &new_owner->Resource_node, &mrsp->Resource );
   _Resource_Set_owner( &mrsp->Resource, &new_owner->Resource_node );
   mrsp->initial_priority_of_owner = initial_priority;
-  _MRSP_Elevate_priority( mrsp, new_owner, ceiling_priority );
+  _Thread_Raise_priority( new_owner, ceiling_priority );
   _Scheduler_Thread_change_help_state( new_owner, SCHEDULER_HELP_ACTIVE_OWNER );
 }
 
@@ -177,7 +182,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
     _Scheduler_Thread_change_help_state( executing, SCHEDULER_HELP_ACTIVE_RIVAL );
   rival.status = MRSP_WAIT_FOR_OWNERSHIP;
 
-  _MRSP_Elevate_priority( mrsp, executing, ceiling_priority );
+  _Thread_Raise_priority( executing, ceiling_priority );
 
   _ISR_Disable( level );
 
@@ -235,10 +240,9 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Obtain(
   Priority_Control initial_priority = executing->current_priority;
   Priority_Control ceiling_priority =
     _MRSP_Get_ceiling_priority( mrsp, scheduler_index );
-  bool priority_ok = !_Scheduler_Is_priority_higher_than(
-    scheduler,
-    initial_priority,
-    ceiling_priority
+  bool priority_ok = !_Thread_Priority_less_than(
+    ceiling_priority,
+    initial_priority
   );
   Resource_Node *owner;
 

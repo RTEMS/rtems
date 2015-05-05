@@ -207,14 +207,10 @@ CORE_mutex_Status _CORE_mutex_Surrender(
         case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
           _CORE_mutex_Push_priority( the_mutex, the_thread );
           the_thread->resource_count++;
-          if (the_mutex->Attributes.priority_ceiling <
-              the_thread->current_priority){
-              _Thread_Change_priority(
-                the_thread,
-                the_mutex->Attributes.priority_ceiling,
-                false
-              );
-          }
+          _Thread_Raise_priority(
+            the_thread,
+            the_mutex->Attributes.priority_ceiling
+          );
           break;
       }
     }
@@ -246,13 +242,20 @@ CORE_mutex_Status _CORE_mutex_Surrender(
    *  inherited priority must be lowered if this is the last
    *  mutex (i.e. resource) this task has.
    */
-  if ( !_Thread_Owns_resources( holder ) &&
-       holder->real_priority != holder->current_priority ) {
-    Per_CPU_Control *cpu_self;
+  if ( !_Thread_Owns_resources( holder ) ) {
+    /*
+     * Ensure that the holder resource count is visible to all other processors
+     * and that we read the latest priority restore hint.
+     */
+    _Atomic_Fence( ATOMIC_ORDER_ACQ_REL );
 
-    cpu_self = _Thread_Dispatch_disable();
-    _Thread_Change_priority( holder, holder->real_priority, true );
-    _Thread_Dispatch_enable( cpu_self );
+    if ( holder->priority_restore_hint ) {
+      Per_CPU_Control *cpu_self;
+
+      cpu_self = _Thread_Dispatch_disable();
+      _Thread_Restore_priority( holder );
+      _Thread_Dispatch_enable( cpu_self );
+    }
   }
 
   return CORE_MUTEX_STATUS_SUCCESSFUL;

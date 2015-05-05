@@ -201,6 +201,7 @@ bool _Thread_Initialize(
   the_thread->Wait.queue              = NULL;
   the_thread->Wait.operations         = &_Thread_queue_Operations_default;
   the_thread->resource_count          = 0;
+  the_thread->current_priority        = priority;
   the_thread->real_priority           = priority;
   the_thread->priority_generation     = 0;
   the_thread->Start.initial_priority  = priority;
@@ -210,7 +211,7 @@ bool _Thread_Initialize(
   _Scheduler_Node_initialize( scheduler, the_thread );
   scheduler_node_initialized = true;
 
-  _Thread_Set_priority( the_thread, priority );
+  _Scheduler_Update_priority( the_thread, priority );
 
   /*
    *  Initialize the CPU usage statistics

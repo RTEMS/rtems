@@ -333,31 +333,117 @@ void _Thread_Delay_ended(
 );
 
 /**
- *  @brief Change the priority of a thread.
- *
- *  This routine changes the current priority of @a the_thread to
- *  @a new_priority.  It performs any necessary scheduling operations
- *  including the selection of a new heir thread.
- *
- *  @param[in] the_thread is the thread to change
- *  @param[in] new_priority is the priority to set @a the_thread to
- *  @param[in] prepend_it is a switch to prepend the thread
+ * @brief Returns true if the left thread priority is less than the right
+ * thread priority in the intuitive sense of priority and false otherwise.
  */
-void _Thread_Change_priority (
+RTEMS_INLINE_ROUTINE bool _Thread_Priority_less_than(
+  Priority_Control left,
+  Priority_Control right
+)
+{
+  return left > right;
+}
+
+/**
+ * @brief Returns the highest priority of the left and right thread priorities
+ * in the intuitive sense of priority.
+ */
+RTEMS_INLINE_ROUTINE Priority_Control _Thread_Priority_highest(
+  Priority_Control left,
+  Priority_Control right
+)
+{
+  return _Thread_Priority_less_than( left, right ) ? right : left;
+}
+
+/**
+ * @brief Filters a thread priority change.
+ *
+ * Called by _Thread_Change_priority() under the protection of the thread lock.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in, out] new_priority The new priority of the thread.  The filter may
+ * alter this value.
+ * @param[in] arg The argument passed to _Thread_Change_priority().
+ *
+ * @retval true Change the current priority.
+ * @retval false Otherwise.
+ */
+typedef bool ( *Thread_Change_priority_filter )(
   Thread_Control   *the_thread,
-  Priority_Control  new_priority,
-  bool              prepend_it
+  Priority_Control *new_priority,
+  void             *arg
 );
 
 /**
- *  @brief Set thread priority.
+ * @brief Changes the priority of a thread if allowed by the filter function.
  *
- *  This routine updates the priority related fields in the_thread
- *  control block to indicate the current priority is now new_priority.
+ * It changes current priority of the thread to the new priority in case the
+ * filter function returns true.  In this case the scheduler is notified of the
+ * priority change as well.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_priority The new priority of the thread.
+ * @param[in] arg The argument for the filter function.
+ * @param[in] filter The filter function to determine if a priority change is
+ * allowed and optionally perform other actions under the protection of the
+ * thread lock simultaneously with the update of the current priority.
+ * @param[in] prepend_it In case this is true, then the thread is prepended to
+ * its priority group in its scheduler instance, otherwise it is appended.
+ */
+void _Thread_Change_priority(
+  Thread_Control                *the_thread,
+  Priority_Control               new_priority,
+  void                          *arg,
+  Thread_Change_priority_filter  filter,
+  bool                           prepend_it
+);
+
+/**
+ * @brief Raises the priority of a thread.
+ *
+ * It changes the current priority of the thread to the new priority if the new
+ * priority is higher than the current priority.  In this case the thread is
+ * appended to its new priority group in its scheduler instance.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_priority The new priority of the thread.
+ *
+ * @see _Thread_Change_priority().
+ */
+void _Thread_Raise_priority(
+  Thread_Control   *the_thread,
+  Priority_Control  new_priority
+);
+
+/**
+ * @brief Sets the current to the real priority of a thread.
+ *
+ * Sets the priority restore hint to false.
+ */
+void _Thread_Restore_priority( Thread_Control *the_thread );
+
+/**
+ * @brief Sets the priority of a thread.
+ *
+ * It sets the real priority of the thread.  In addition it changes the current
+ * priority of the thread if the new priority is higher than the current
+ * priority or the thread owns no resources.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_priority The new priority of the thread.
+ * @param[out] old_priority The old real priority of the thread.  This pointer
+ * must not be @c NULL.
+ * @param[in] prepend_it In case this is true, then the thread is prepended to
+ * its priority group in its scheduler instance, otherwise it is appended.
+ *
+ * @see _Thread_Change_priority().
  */
 void _Thread_Set_priority(
   Thread_Control   *the_thread,
-  Priority_Control  new_priority
+  Priority_Control  new_priority,
+  Priority_Control *old_priority,
+  bool              prepend_it
 );
 
 /**

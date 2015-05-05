@@ -27,15 +27,13 @@ void _Scheduler_CBS_Budget_callout(
 )
 {
   Priority_Control          new_priority;
+  Priority_Control          unused;
   Scheduler_CBS_Node       *node;
   Scheduler_CBS_Server_id   server_id;
 
   /* Put violating task to background until the end of period. */
   new_priority = the_thread->Start.initial_priority;
-  if ( the_thread->real_priority != new_priority )
-    the_thread->real_priority = new_priority;
-  if ( the_thread->current_priority != new_priority )
-    _Thread_Change_priority(the_thread, new_priority, true);
+  _Thread_Set_priority( the_thread, new_priority, &unused, true );
 
   /* Invoke callback function if any. */
   node = _Scheduler_CBS_Thread_get_node( the_thread );

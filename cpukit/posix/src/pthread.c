@@ -83,6 +83,23 @@ pthread_attr_t _POSIX_Threads_Default_attributes = {
   #endif
 };
 
+static bool _POSIX_Threads_Sporadic_budget_TSR_filter(
+  Thread_Control   *the_thread,
+  Priority_Control *new_priority,
+  void             *arg
+)
+{
+  the_thread->real_priority = *new_priority;
+
+  /*
+   * If holding a resource, then do not change it.
+   *
+   * If this would make them less important, then do not change it.
+   */
+  return !_Thread_Owns_resources( the_thread ) &&
+    _Thread_Priority_less_than( the_thread->current_priority, *new_priority );
+}
+
 /*
  *  _POSIX_Threads_Sporadic_budget_TSR
  */
@@ -92,7 +109,6 @@ void _POSIX_Threads_Sporadic_budget_TSR(
 )
 {
   uint32_t            ticks;
-  uint32_t            new_priority;
   Thread_Control     *the_thread;
   POSIX_API_Control  *api;
 
@@ -105,32 +121,37 @@ void _POSIX_Threads_Sporadic_budget_TSR(
 
   the_thread->cpu_time_budget = ticks;
 
-  new_priority = _POSIX_Priority_To_core( api->schedparam.sched_priority );
-  the_thread->real_priority = new_priority;
-
-  /*
-   *  If holding a resource, then do not change it.
-   */
-  #if 0
-    printk( "TSR %d %d %d\n", the_thread->resource_count,
-        the_thread->current_priority, new_priority );
-  #endif
-  if ( !_Thread_Owns_resources( the_thread ) ) {
-    /*
-     *  If this would make them less important, then do not change it.
-     */
-    if ( the_thread->current_priority > new_priority ) {
-      _Thread_Change_priority( the_thread, new_priority, true );
-      #if 0
-        printk( "raise priority\n" );
-      #endif
-    }
-  }
+  _Thread_Change_priority(
+    the_thread,
+    _POSIX_Priority_To_core( api->schedparam.sched_priority ),
+    NULL,
+    _POSIX_Threads_Sporadic_budget_TSR_filter,
+    true
+  );
 
   /* ticks is guaranteed to be at least one */
   ticks = _Timespec_To_ticks( &api->schedparam.sched_ss_repl_period );
 
   _Watchdog_Insert_ticks( &api->Sporadic_timer, ticks );
+}
+
+static bool _POSIX_Threads_Sporadic_budget_callout_filter(
+  Thread_Control   *the_thread,
+  Priority_Control *new_priority,
+  void             *arg
+)
+{
+  the_thread->real_priority = *new_priority;
+
+  /*
+   * If holding a resource, then do not change it.
+   *
+   * Make sure we are actually lowering it. If they have lowered it
+   * to logically lower than sched_ss_low_priority, then we do not want to
+   * change it.
+   */
+  return !_Thread_Owns_resources( the_thread ) &&
+    _Thread_Priority_less_than( *new_priority, the_thread->current_priority );
 }
 
 /*
@@ -141,7 +162,6 @@ void _POSIX_Threads_Sporadic_budget_callout(
 )
 {
   POSIX_API_Control *api;
-  uint32_t           new_priority;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
@@ -151,29 +171,13 @@ void _POSIX_Threads_Sporadic_budget_callout(
    */
   the_thread->cpu_time_budget = UINT32_MAX;
 
-  new_priority = _POSIX_Priority_To_core(api->schedparam.sched_ss_low_priority);
-  the_thread->real_priority = new_priority;
-
-  /*
-   *  If holding a resource, then do not change it.
-   */
-  #if 0
-    printk( "callout %d %d %d\n", the_thread->resource_count,
-	the_thread->current_priority, new_priority );
-  #endif
-  if ( !_Thread_Owns_resources( the_thread ) ) {
-    /*
-     *  Make sure we are actually lowering it. If they have lowered it
-     *  to logically lower than sched_ss_low_priority, then we do not want to
-     *  change it.
-     */
-    if ( the_thread->current_priority < new_priority ) {
-      _Thread_Change_priority( the_thread, new_priority, true );
-      #if 0
-        printk( "lower priority\n" );
-      #endif
-    }
-  }
+  _Thread_Change_priority(
+    the_thread,
+    _POSIX_Priority_To_core( api->schedparam.sched_ss_low_priority ),
+    NULL,
+    _POSIX_Threads_Sporadic_budget_callout_filter,
+    true
+  );
 }
 
 /*
