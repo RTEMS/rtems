@@ -249,6 +249,56 @@ typedef struct {
 } Thread_Start_information;
 
 /**
+ * @brief Priority change handler.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_priority The new priority value.
+ * @param[in] context The handler context.
+ *
+ * @see _Thread_Priority_set_change_handler().
+ */
+typedef void (*Thread_Priority_change_handler)(
+  Thread_Control   *the_thread,
+  Priority_Control  new_priority,
+  void             *context
+);
+
+/**
+ * @brief Thread priority control.
+ */
+typedef struct {
+  /**
+   * @brief Generation of the current priority value.
+   *
+   * It is used in _Thread_Change_priority() to serialize the update of
+   * priority related data structures.
+   */
+  uint32_t generation;
+
+  /**
+   * @brief Priority change handler.
+   *
+   * Called by _Thread_Change_priority() to notify a thread about a priority
+   * change.  In case this thread waits currently for a resource the handler
+   * may adjust its data structures according to the new priority value.  This
+   * handler must not be NULL, instead the default handler
+   * _Thread_Priority_change_do_nothing() should be used in case nothing needs
+   * to be done during a priority change.
+   *
+   * @see _Thread_Priority_set_change_handler() and
+   * _Thread_Priority_restore_default_change_handler().
+   */
+  Thread_Priority_change_handler change_handler;
+
+  /**
+   * @brief Context for priority change handler.
+   *
+   * @see _Thread_Priority_set_change_handler().
+   */
+  void *change_handler_context;
+} Thread_Priority_control;
+
+/**
  *  @brief Union type to hold a pointer to an immutable or a mutable object.
  *
  *  The main purpose is to enable passing of pointers to read-only send buffers
@@ -339,6 +389,12 @@ typedef struct {
   Priority_Control         current_priority;
   /** This field is the base priority of this proxy. */
   Priority_Control         real_priority;
+
+  /**
+   * @brief Thread priority control.
+   */
+  Thread_Priority_control  Priority;
+
   /** This field is the number of mutexes currently held by this proxy. */
   uint32_t                 resource_count;
 
@@ -374,56 +430,6 @@ typedef enum {
 
 /** This macro defines the last API which has threads. */
 #define THREAD_API_LAST  THREAD_API_POSIX
-
-/**
- * @brief Priority change handler.
- *
- * @param[in] the_thread The thread.
- * @param[in] new_priority The new priority value.
- * @param[in] context The handler context.
- *
- * @see _Thread_Priority_set_change_handler().
- */
-typedef void (*Thread_Priority_change_handler)(
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority,
-  void             *context
-);
-
-/**
- * @brief Thread priority control.
- */
-typedef struct {
-  /**
-   * @brief Generation of the current priority value.
-   *
-   * It is used in _Thread_Change_priority() to serialize the update of
-   * priority related data structures.
-   */
-  uint32_t generation;
-
-  /**
-   * @brief Priority change handler.
-   *
-   * Called by _Thread_Change_priority() to notify a thread about a priority
-   * change.  In case this thread waits currently for a resource the handler
-   * may adjust its data structures according to the new priority value.  This
-   * handler must not be NULL, instead the default handler
-   * _Thread_Priority_change_do_nothing() should be used in case nothing needs
-   * to be done during a priority change.
-   *
-   * @see _Thread_Priority_set_change_handler() and
-   * _Thread_Priority_restore_default_change_handler().
-   */
-  Thread_Priority_change_handler change_handler;
-
-  /**
-   * @brief Context for priority change handler.
-   *
-   * @see _Thread_Priority_set_change_handler().
-   */
-  void *change_handler_context;
-} Thread_Priority_control;
 
 typedef struct Thread_Action Thread_Action;
 
@@ -677,14 +683,6 @@ struct Thread_Control_struct {
 
   /** This field is the number of mutexes currently held by this thread. */
   uint32_t                 resource_count;
-
-#if defined(RTEMS_SMP)
-  /**
-   * @brief Thread lock control.
-   */
-  Thread_Lock_control Lock;
-#endif
-
   /** This field is the blocking information for this thread. */
   Thread_Wait_information  Wait;
   /** This field is the Watchdog used to manage thread delays and timeouts. */
@@ -693,6 +691,15 @@ struct Thread_Control_struct {
   /** This field is the received response packet in an MP system. */
   MP_packet_Prefix        *receive_packet;
 #endif
+     /*================= end of common block =================*/
+
+#if defined(RTEMS_SMP)
+  /**
+   * @brief Thread lock control.
+   */
+  Thread_Lock_control Lock;
+#endif
+
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
   /** This field is the head of queue of priority inheritance mutex
    *  held by the thread.
@@ -706,7 +713,6 @@ struct Thread_Control_struct {
    */
   Resource_Node            Resource_node;
 #endif
-     /*================= end of common block =================*/
 #if defined(RTEMS_MULTIPROCESSING)
   /** This field is true if the thread is offered globally */
   bool                                  is_global;

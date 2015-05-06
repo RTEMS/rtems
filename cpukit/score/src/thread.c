@@ -21,6 +21,25 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/interr.h>
 
+#define THREAD_OFFSET_ASSERT( field ) \
+  RTEMS_STATIC_ASSERT( \
+    offsetof( Thread_Control, field ) == offsetof( Thread_Proxy_control, field ), \
+    field \
+  )
+
+THREAD_OFFSET_ASSERT( Object );
+THREAD_OFFSET_ASSERT( RBNode );
+THREAD_OFFSET_ASSERT( current_state );
+THREAD_OFFSET_ASSERT( current_priority );
+THREAD_OFFSET_ASSERT( real_priority );
+THREAD_OFFSET_ASSERT( Priority );
+THREAD_OFFSET_ASSERT( resource_count );
+THREAD_OFFSET_ASSERT( Wait );
+THREAD_OFFSET_ASSERT( Timer );
+#if defined(RTEMS_MULTIPROCESSING)
+THREAD_OFFSET_ASSERT( receive_packet );
+#endif
+
 void _Thread_Handler_initialization(void)
 {
   rtems_stack_allocate_init_hook stack_allocate_init_hook =
