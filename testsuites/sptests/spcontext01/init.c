@@ -31,6 +31,7 @@ const char rtems_test_name[] = "SPCONTEXT 1";
 typedef struct {
   rtems_id control_task;
   rtems_id validate_tasks[2];
+  rtems_id timer;
   size_t task_index;
   int iteration_counter;
 } test_context;
@@ -46,17 +47,21 @@ static void validate_task(rtems_task_argument arg)
 static void start_validate_task(
   rtems_id *id,
   uintptr_t pattern,
-  rtems_task_priority priority
+  rtems_task_priority priority,
+  bool fp_unit
 )
 {
   rtems_status_code sc;
+  rtems_attribute fpu_state;
+
+  fpu_state = fp_unit ? RTEMS_FLOATING_POINT : RTEMS_DEFAULT_ATTRIBUTES;
 
   sc = rtems_task_create(
     rtems_build_name('V', 'A', 'L', 'I'),
     priority,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
+    fpu_state,
     id
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -112,7 +117,7 @@ static void clobber_and_switch_timer(rtems_id timer, void *arg)
   uintptr_t pattern = (uintptr_t) 0xffffffffffffffffU;
   test_context *self = arg;
 
-  reset_timer_or_finish(self, timer);
+  reset_timer_or_finish(self, self->timer);
   switch_priorities(self);
 
   _CPU_Context_volatile_clobber(pattern);
@@ -121,12 +126,11 @@ static void clobber_and_switch_timer(rtems_id timer, void *arg)
 static void start_timer(test_context *self)
 {
   rtems_status_code sc;
-  rtems_id timer;
 
-  sc = rtems_timer_create(rtems_build_name('C', 'L', 'S', 'W'), &timer);
+  sc = rtems_timer_create(rtems_build_name('C', 'L', 'S', 'W'), &self->timer);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_timer_fire_after(timer, 2, clobber_and_switch_timer, self);
+  sc = rtems_timer_fire_after(self->timer, 2, clobber_and_switch_timer, self);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
@@ -145,19 +149,38 @@ static void wait_for_finish(void)
   rtems_test_assert(out == FINISH_EVENT);
 }
 
-static void test(test_context *self)
+static void test(test_context *self, bool task_0_fpu, bool task_1_fpu)
 {
+  rtems_status_code sc;
   uintptr_t pattern_0 = (uintptr_t) 0xaaaaaaaaaaaaaaaaU;
   uintptr_t pattern_1 = (uintptr_t) 0x5555555555555555U;
 
   memset(self, 0, sizeof(*self));
 
   self->control_task = rtems_task_self();
-
-  start_validate_task(&self->validate_tasks[0], pattern_0, PRIORITY_LOW);
-  start_validate_task(&self->validate_tasks[1], pattern_1, PRIORITY_HIGH);
+  start_validate_task(
+    &self->validate_tasks[0],
+    pattern_0,
+    PRIORITY_LOW,
+    task_0_fpu
+  );
+  start_validate_task(
+    &self->validate_tasks[1],
+    pattern_1,
+    PRIORITY_HIGH,
+    task_1_fpu
+  );
   start_timer(self);
   wait_for_finish();
+
+  sc = rtems_task_delete(self->validate_tasks[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(self->validate_tasks[1]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_timer_delete(self->timer);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
 static void test_context_is_executing(void)
@@ -207,7 +230,12 @@ static void Init(rtems_task_argument arg)
   TEST_BEGIN();
 
   test_context_is_executing();
-  test(self);
+  test(self, false, false);
+  printf("Both tasks did not use FPU: done\n");
+  test(self, false, true);
+  printf("One task used the FPU: done\n");
+  test(self, true, true);
+  printf("Both tasks used the FPU: done\n");
 
   TEST_END();
 

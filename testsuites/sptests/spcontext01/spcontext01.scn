@@ -1,2 +1,5 @@
-*** TEST SPCONTEXT 1 ***
+*** BEGIN OF TEST SPCONTEXT 1 ***
+Both tasks did not use FPU: done
+One task used the FPU: done
+Both tasks used the FPU: done
 *** END OF TEST SPCONTEXT 1 ***
