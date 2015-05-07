@@ -59,16 +59,13 @@ rtems_status_code rtems_semaphore_obtain(
       if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
         MRSP_Status mrsp_status;
 
-        _Thread_Disable_dispatch();
-        _ISR_lock_ISR_enable( &lock_context );
         mrsp_status = _MRSP_Obtain(
           &the_semaphore->Core_control.mrsp,
           executing,
           wait,
-          timeout
+          timeout,
+          &lock_context
         );
-        _Thread_Enable_dispatch();
-        _Objects_Put_for_get_isr_disable( &the_semaphore->Object );
         return _Semaphore_Translate_MRSP_status_code( mrsp_status );
       } else
 #endif

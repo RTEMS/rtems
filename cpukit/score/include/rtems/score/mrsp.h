@@ -20,6 +20,7 @@
 #if defined(RTEMS_SMP)
 
 #include <rtems/score/chain.h>
+#include <rtems/score/isrlock.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/thread.h>
 
@@ -75,22 +76,28 @@ typedef enum {
   MRSP_WAIT_FOR_OWNERSHIP = 255
 } MRSP_Status;
 
+typedef struct MRSP_Control MRSP_Control;
+
 /**
  * @brief MrsP rival.
  *
  * The rivals are used by threads waiting for resource ownership.  They are
- * registered in the MRSP control block.
+ * registered in the MrsP control block.
  */
 typedef struct {
   /**
-   * @brief The node for registration in the MRSP rival chain.
+   * @brief The node for registration in the MrsP rival chain.
    *
-   * The chain operations are protected by the Giant lock and disabled
-   * interrupts.
+   * The chain operations are protected by the MrsP control lock.
    *
    * @see MRSP_Control::Rivals.
    */
   Chain_Node Node;
+
+  /**
+   * @brief The corresponding MrsP control block.
+   */
+  MRSP_Control *resource;
 
   /**
    * @brief Identification of the rival thread.
@@ -118,8 +125,7 @@ typedef struct {
    *
    * Initially the status is set to MRSP_WAIT_FOR_OWNERSHIP.  The rival will
    * busy wait until a status change happens.  This can be MRSP_SUCCESSFUL or
-   * MRSP_TIMEOUT.  State changes are protected by the Giant lock and disabled
-   * interrupts.
+   * MRSP_TIMEOUT.  State changes are protected by the MrsP control lock.
    */
   volatile MRSP_Status status;
 } MRSP_Rival;
@@ -127,7 +133,7 @@ typedef struct {
 /**
  * @brief MrsP control block.
  */
-typedef struct {
+struct MRSP_Control {
   /**
    * @brief Basic resource control.
    */
@@ -141,6 +147,11 @@ typedef struct {
   Chain_Control Rivals;
 
   /**
+   * @brief Lock to protect the resource dependency tree.
+   */
+  ISR_LOCK_MEMBER( Lock )
+
+  /**
    * @brief The initial priority of the owner before it was elevated to the
    * ceiling priority.
    */
@@ -150,7 +161,7 @@ typedef struct {
    * @brief One ceiling priority per scheduler instance.
    */
   Priority_Control *ceiling_priorities;
-} MRSP_Control;
+};
 
 /** @} */
 

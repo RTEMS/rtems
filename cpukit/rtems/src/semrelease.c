@@ -75,13 +75,13 @@ rtems_status_code rtems_semaphore_release(
       attribute_set = the_semaphore->attribute_set;
 #if defined(RTEMS_SMP)
       if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-        _Thread_Disable_dispatch();
-        _ISR_lock_ISR_enable( &lock_context );
-        MRSP_Status mrsp_status = _MRSP_Release(
+        MRSP_Status mrsp_status;
+
+        mrsp_status = _MRSP_Release(
           &the_semaphore->Core_control.mrsp,
-          _Thread_Get_executing()
+          _Thread_Executing,
+          &lock_context
         );
-        _Thread_Enable_dispatch();
         return _Semaphore_Translate_MRSP_status_code( mrsp_status );
       } else
 #endif
