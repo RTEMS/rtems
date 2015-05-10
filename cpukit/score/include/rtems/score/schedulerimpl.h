@@ -10,7 +10,7 @@
 /*
  *  Copyright (C) 2010 Gedare Bloom.
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
- *  Copyright (c) 2014 embedded brains GmbH
+ *  Copyright (c) 2014-2015 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -950,6 +950,26 @@ void _Scheduler_Thread_change_resource_root(
   Thread_Control *root
 );
 
+RTEMS_INLINE_ROUTINE void _Scheduler_Set_idle_thread(
+  Scheduler_Node *node,
+  Thread_Control *idle
+)
+{
+  _Assert(
+    node->help_state == SCHEDULER_HELP_ACTIVE_OWNER
+      || node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL
+  );
+  _Assert( _Scheduler_Node_get_idle( node ) == NULL );
+  _Assert(
+    _Scheduler_Node_get_owner( node ) == _Scheduler_Node_get_user( node )
+  );
+
+  _Scheduler_Thread_set_node( idle, node );
+
+  _Scheduler_Node_set_user( node, idle );
+  node->idle = idle;
+}
+
 /**
  * @brief Use an idle thread for this scheduler node.
  *
@@ -970,45 +990,44 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Use_idle_thread(
 {
   Thread_Control *idle = ( *get_idle_thread )( context );
 
-  _Assert(
-    node->help_state == SCHEDULER_HELP_ACTIVE_OWNER
-      || node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL
-  );
-  _Assert( _Scheduler_Node_get_idle( node ) == NULL );
-  _Assert(
-    _Scheduler_Node_get_owner( node ) == _Scheduler_Node_get_user( node )
-  );
-
-  _Scheduler_Thread_set_node( idle, node );
-
-  _Scheduler_Node_set_user( node, idle );
-  node->idle = idle;
+  _Scheduler_Set_idle_thread( node, idle );
 
   return idle;
 }
+
+typedef enum {
+  SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE,
+  SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE,
+  SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK
+} Scheduler_Try_to_schedule_action;
 
 /**
  * @brief Try to schedule this scheduler node.
  *
  * @param[in] context The scheduler instance context.
  * @param[in] node The node which wants to get scheduled.
+ * @param[in] idle A potential idle thread used by a potential victim node.
  * @param[in] get_idle_thread Function to get an idle thread.
  *
  * @retval true This node can be scheduled.
  * @retval false Otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Scheduler_Try_to_schedule_node(
+RTEMS_INLINE_ROUTINE Scheduler_Try_to_schedule_action
+_Scheduler_Try_to_schedule_node(
   Scheduler_Context         *context,
   Scheduler_Node            *node,
+  Thread_Control            *idle,
   Scheduler_Get_idle_thread  get_idle_thread
 )
 {
-  bool schedule;
+  Scheduler_Try_to_schedule_action action;
   Thread_Control *owner;
   Thread_Control *user;
 
+  action = SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE;
+
   if ( node->help_state == SCHEDULER_HELP_YOURSELF ) {
-    return true;
+    return action;
   }
 
   owner = _Scheduler_Node_get_owner( node );
@@ -1018,32 +1037,33 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Try_to_schedule_node(
     if ( user->Scheduler.state == THREAD_SCHEDULER_READY ) {
       _Scheduler_Thread_set_scheduler_and_node( user, node, owner );
     } else if ( owner->Scheduler.state == THREAD_SCHEDULER_BLOCKED ) {
-      _Scheduler_Use_idle_thread( context, node, get_idle_thread );
+      if ( idle != NULL ) {
+        action = SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE;
+      } else {
+        _Scheduler_Use_idle_thread( context, node, get_idle_thread );
+      }
     } else {
       _Scheduler_Node_set_user( node, owner );
     }
-
-    schedule = true;
   } else if ( node->help_state == SCHEDULER_HELP_ACTIVE_OWNER ) {
     if ( user->Scheduler.state == THREAD_SCHEDULER_READY ) {
       _Scheduler_Thread_set_scheduler_and_node( user, node, owner );
+    } else if ( idle != NULL ) {
+      action = SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE;
     } else {
       _Scheduler_Use_idle_thread( context, node, get_idle_thread );
     }
-
-    schedule = true;
   } else {
     _Assert( node->help_state == SCHEDULER_HELP_PASSIVE );
 
     if ( user->Scheduler.state == THREAD_SCHEDULER_READY ) {
       _Scheduler_Thread_set_scheduler_and_node( user, node, owner );
-      schedule = true;
     } else {
-      schedule = false;
+      action = SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK;
     }
   }
 
-  return schedule;
+  return action;
 }
 
 /**
@@ -1076,6 +1096,20 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Release_idle_thread(
   }
 
   return idle;
+}
+
+RTEMS_INLINE_ROUTINE void _Scheduler_Exchange_idle_thread(
+  Scheduler_Node *needs_idle,
+  Scheduler_Node *uses_idle,
+  Thread_Control *idle
+)
+{
+  uses_idle->idle = NULL;
+  _Scheduler_Node_set_user(
+    uses_idle,
+    _Scheduler_Node_get_owner( uses_idle )
+  );
+  _Scheduler_Set_idle_thread( needs_idle, idle );
 }
 
 /**
