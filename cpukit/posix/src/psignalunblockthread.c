@@ -110,16 +110,7 @@ bool _POSIX_signals_Unblock_thread(
 
     if ( _States_Is_interruptible_by_signal( the_thread->current_state ) ) {
       the_thread->Wait.return_code = EINTR;
-      /*
-       *  In pthread_cond_wait, a thread will be blocking on a thread
-       *  queue, but is also interruptible by a POSIX signal.
-       */
-       if ( _States_Is_delaying(the_thread->current_state) ) {
-          _Watchdog_Remove_ticks( &the_thread->Timer );
-          _Thread_Unblock( the_thread );
-       } else {
-         _Thread_queue_Extract_with_proxy( the_thread );
-       }
+      _Thread_queue_Extract_with_proxy( the_thread );
     }
   }
   return _POSIX_signals_Unblock_thread_done( the_thread, api, false );

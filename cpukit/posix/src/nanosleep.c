@@ -23,8 +23,12 @@
 
 #include <rtems/seterr.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/timespec.h>
 #include <rtems/score/watchdogimpl.h>
+
+static Thread_queue_Control _Nanosleep_Pseudo_queue =
+  THREAD_QUEUE_FIFO_INITIALIZER( _Nanosleep_Pseudo_queue, "Nanosleep" );
 
 /*
  *  14.2.5 High Resolution Sleep, P1003.1b-1993, p. 269
@@ -38,7 +42,8 @@ int nanosleep(
    * It is critical to obtain the executing thread after thread dispatching is
    * disabled on SMP configurations.
    */
-  Thread_Control *executing;
+  Thread_Control  *executing;
+  Per_CPU_Control *cpu_self;
 
   Watchdog_Interval  ticks;
   Watchdog_Interval  elapsed;
@@ -58,16 +63,17 @@ int nanosleep(
    */
   ticks = _Timespec_To_ticks( rqtp );
 
+  executing = _Thread_Get_executing();
+
   /*
    *  A nanosleep for zero time is implemented as a yield.
    *  This behavior is also beyond the POSIX specification but is
    *  consistent with the RTEMS API and yields desirable behavior.
    */
   if ( !ticks ) {
-    _Thread_Disable_dispatch();
-      executing = _Thread_Executing;
+    cpu_self = _Thread_Dispatch_disable();
       _Thread_Yield( executing );
-    _Thread_Enable_dispatch();
+    _Thread_Dispatch_enable( cpu_self );
     if ( rmtp ) {
        rmtp->tv_sec = 0;
        rmtp->tv_nsec = 0;
@@ -78,20 +84,13 @@ int nanosleep(
   /*
    *  Block for the desired amount of time
    */
-  _Thread_Disable_dispatch();
-    executing = _Thread_Executing;
-    _Thread_Set_state(
-      executing,
-      STATES_DELAYING | STATES_INTERRUPTIBLE_BY_SIGNAL
-    );
-    _Watchdog_Initialize(
-      &executing->Timer,
-      _Thread_Delay_ended,
-      0,
-      executing
-    );
-    _Watchdog_Insert_ticks( &executing->Timer, ticks );
-  _Thread_Enable_dispatch();
+  _Thread_queue_Enqueue(
+    &_Nanosleep_Pseudo_queue,
+    executing,
+    STATES_DELAYING | STATES_INTERRUPTIBLE_BY_SIGNAL,
+    ticks,
+    0
+  );
 
   /*
    * Calculate the time that passed while we were sleeping and how
