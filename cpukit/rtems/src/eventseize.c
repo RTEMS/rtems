@@ -86,7 +86,6 @@ void _Event_Seize(
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Thread_Lock_release_default( executing, lock_context );
-  _Giant_Acquire( cpu_self );
 
   if ( ticks ) {
     _Thread_Wait_set_timeout_code( executing, RTEMS_TIMEOUT );
@@ -111,6 +110,5 @@ void _Event_Seize(
     _Thread_Unblock( executing );
   }
 
-  _Giant_Release( cpu_self );
   _Thread_Dispatch_enable( cpu_self );
 }
