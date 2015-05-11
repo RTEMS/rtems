@@ -20,6 +20,8 @@
 #define _RTEMS_SCORE_THREADQIMPL_H
 
 #include <rtems/score/threadq.h>
+#include <rtems/score/chainimpl.h>
+#include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/thread.h>
 
 #ifdef __cplusplus
@@ -341,6 +343,38 @@ void _Thread_queue_Initialize(
   Thread_queue_Control     *the_thread_queue,
   Thread_queue_Disciplines  the_discipline
 );
+
+#if defined(RTEMS_SMP)
+  #define THREAD_QUEUE_FIFO_INITIALIZER( designator, name ) { \
+      .Queues = { \
+        .Fifo = CHAIN_INITIALIZER_EMPTY( designator.Queues.Fifo ) \
+      }, \
+      .operations = &_Thread_queue_Operations_FIFO, \
+      .Lock = ISR_LOCK_INITIALIZER( name ) \
+    }
+
+  #define THREAD_QUEUE_PRIORIY_INITIALIZER( designator, name ) { \
+      .Queues = { \
+        .Priority = RBTREE_INITIALIZER_EMPTY( designator.Queues.Priority ) \
+      }, \
+      .operations = &_Thread_queue_Operations_priority, \
+      .Lock = ISR_LOCK_INITIALIZER( name ) \
+    }
+#else
+  #define THREAD_QUEUE_FIFO_INITIALIZER( designator, name ) { \
+      .Queues = { \
+        .Fifo = CHAIN_INITIALIZER_EMPTY( designator.Queues.Fifo ) \
+      }, \
+      .operations = &_Thread_queue_Operations_FIFO \
+    }
+
+  #define THREAD_QUEUE_PRIORIY_INITIALIZER( designator, name ) { \
+      .Queues = { \
+        .Priority = RBTREE_INITIALIZER_EMPTY( designator.Queues.Priority ) \
+      }, \
+      .operations = &_Thread_queue_Operations_priority \
+    }
+#endif
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Destroy(
   Thread_queue_Control *the_thread_queue

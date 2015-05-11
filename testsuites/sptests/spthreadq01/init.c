@@ -18,6 +18,12 @@
 
 const char rtems_test_name[] = "SPTHREADQ 1";
 
+static Thread_queue_Control fifo_queue =
+  THREAD_QUEUE_FIFO_INITIALIZER( fifo_queue, "FIFO" );
+
+static Thread_queue_Control prio_queue =
+  THREAD_QUEUE_PRIORIY_INITIALIZER( prio_queue, "Prio" );
+
 static rtems_task Init(
   rtems_task_argument ignored
 )
@@ -29,6 +35,14 @@ static rtems_task Init(
   _Thread_queue_Extract( _Thread_Executing );
   _Thread_Enable_dispatch();
   /* is there more to check? */
+
+  rtems_test_assert( _Chain_Is_empty( &fifo_queue.Queues.Fifo ) );
+  rtems_test_assert( fifo_queue.operations == &_Thread_queue_Operations_FIFO );
+
+  rtems_test_assert( _RBTree_Is_empty( &fifo_queue.Queues.Priority ) );
+  rtems_test_assert(
+    prio_queue.operations == &_Thread_queue_Operations_priority
+  );
 
   TEST_END();
   rtems_test_exit(0);
