@@ -28,7 +28,7 @@
  */
 
 struct timecounter;
-typedef u_int timecounter_get_t(struct timecounter *);
+typedef uint32_t timecounter_get_t(struct timecounter *);
 typedef void timecounter_pps_t(struct timecounter *);
 
 struct timecounter {
@@ -45,7 +45,7 @@ struct timecounter {
 		 * events.  Normal hardware does not need it but timecounters
 		 * which latch PPS in hardware (like sys/pci/xrpu.c) do.
 		 */
-	u_int 			tc_counter_mask;
+	uint32_t 		tc_counter_mask;
 		/* This mask should mask off any unimplemented bits. */
 	uint64_t		tc_frequency;
 		/* Frequency of the counter in Hz. */

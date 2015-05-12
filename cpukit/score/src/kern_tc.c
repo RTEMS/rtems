@@ -50,10 +50,10 @@ __FBSDID("$FreeBSD r277406 2015-01-20T03:54:30Z$");
  * time services.
  */
 
-static u_int
+static uint32_t
 dummy_get_timecount(struct timecounter *tc)
 {
-	static u_int now;
+	static uint32_t now;
 
 	return (++now);
 }
@@ -67,12 +67,12 @@ struct timehands {
 	struct timecounter	*th_counter;
 	int64_t			th_adjustment;
 	uint64_t		th_scale;
-	u_int	 		th_offset_count;
+	uint32_t	 	th_offset_count;
 	struct bintime		th_offset;
 	struct timeval		th_microtime;
 	struct timespec		th_nanotime;
 	/* Fields not to be copied in tc_windup start with th_generation. */
-	volatile u_int		th_generation;
+	volatile uint32_t	th_generation;
 	struct timehands	*th_next;
 };
 
@@ -159,7 +159,7 @@ sysctl_kern_boottime(SYSCTL_HANDLER_ARGS)
 static int
 sysctl_kern_timecounter_get(SYSCTL_HANDLER_ARGS)
 {
-	u_int ncount;
+	uint32_t ncount;
 	struct timecounter *tc = arg1;
 
 	ncount = tc->tc_get_timecount(tc);
@@ -180,7 +180,7 @@ sysctl_kern_timecounter_freq(SYSCTL_HANDLER_ARGS)
  * Return the difference between the timehands' counter value now and what
  * was when we copied it to the timehands' offset_count.
  */
-static __inline u_int
+static __inline uint32_t
 tc_delta(struct timehands *th)
 {
 	struct timecounter *tc;
@@ -338,7 +338,7 @@ void
 binuptime(struct bintime *bt)
 {
 	struct timehands *th;
-	u_int gen;
+	uint32_t gen;
 
 	do {
 		th = timehands;
@@ -396,7 +396,7 @@ void
 getbinuptime(struct bintime *bt)
 {
 	struct timehands *th;
-	u_int gen;
+	uint32_t gen;
 
 	do {
 		th = timehands;
@@ -409,7 +409,7 @@ void
 getnanouptime(struct timespec *tsp)
 {
 	struct timehands *th;
-	u_int gen;
+	uint32_t gen;
 
 	do {
 		th = timehands;
@@ -422,7 +422,7 @@ void
 getmicrouptime(struct timeval *tvp)
 {
 	struct timehands *th;
-	u_int gen;
+	uint32_t gen;
 
 	do {
 		th = timehands;
@@ -435,7 +435,7 @@ void
 getbintime(struct bintime *bt)
 {
 	struct timehands *th;
-	u_int gen;
+	uint32_t gen;
 
 	do {
 		th = timehands;
@@ -449,7 +449,7 @@ void
 getnanotime(struct timespec *tsp)
 {
 	struct timehands *th;
-	u_int gen;
+	uint32_t gen;
 
 	do {
 		th = timehands;
@@ -462,7 +462,7 @@ void
 getmicrotime(struct timeval *tvp)
 {
 	struct timehands *th;
-	u_int gen;
+	uint32_t gen;
 
 	do {
 		th = timehands;
@@ -985,7 +985,7 @@ void
 dtrace_getnanotime(struct timespec *tsp)
 {
 	struct timehands *th;
-	u_int gen;
+	uint32_t gen;
 
 	do {
 		th = timehands;
@@ -1140,7 +1140,7 @@ sysclock_snap2bintime(struct sysclock_snap *cs, struct bintime *bt,
 void
 tc_init(struct timecounter *tc)
 {
-	u_int u;
+	uint32_t u;
 	struct sysctl_oid *tc_root;
 
 	u = tc->tc_frequency / tc->tc_counter_mask;
@@ -1249,7 +1249,7 @@ tc_windup(void)
 	struct bintime bt;
 	struct timehands *th, *tho;
 	uint64_t scale;
-	u_int delta, ncount, ogen;
+	uint32_t delta, ncount, ogen;
 	int i;
 	time_t t;
 
@@ -1633,7 +1633,7 @@ pps_event(struct pps_state *pps, int event)
 {
 	struct bintime bt;
 	struct timespec ts, *tsp, *osp;
-	u_int tcount, *pcount;
+	uint32_t tcount, *pcount;
 	int foff, fhard;
 	pps_seq_t *pseq;
 #ifdef FFCLOCK
