@@ -31,6 +31,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   Objects_Information *information;
   Objects_Control     *the_object = (Objects_Control *) 0;
   Objects_Locations    ignored_location;
+  ISR_lock_Context     lock_context;
 
   /*
    *  Caller is trusted for name != NULL.
@@ -56,11 +57,16 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
       return OBJECTS_INVALID_ID;
   #endif
 
-  the_object = _Objects_Get( information, tmpId, &ignored_location );
+  the_object = _Objects_Get_isr_disable(
+    information,
+    tmpId,
+    &ignored_location,
+    &lock_context
+  );
   if ( !the_object )
     return OBJECTS_INVALID_ID;
 
   *name = the_object->name;
-  _Objects_Put( the_object );
+  _ISR_lock_ISR_enable( &lock_context );
   return OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
 }
