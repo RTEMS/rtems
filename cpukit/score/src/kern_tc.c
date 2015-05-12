@@ -994,11 +994,13 @@ dtrace_getnanotime(struct timespec *tsp)
 	} while (gen == 0 || gen != th->th_generation);
 }
 
+#ifdef FFCLOCK
 /*
  * System clock currently providing time to the system. Modifiable via sysctl
  * when the FFCLOCK option is defined.
  */
 int sysclock_active = SYSCLOCK_FBCK;
+#endif
 
 /* Internal NTP status and error estimates. */
 extern int time_status;
@@ -1046,7 +1048,9 @@ sysclock_getsnapshot(struct sysclock_snap *clock_snap, int fast)
 	} while (gen == 0 || gen != th->th_generation);
 
 	clock_snap->delta = delta;
+#ifdef FFCLOCK
 	clock_snap->sysclock_active = sysclock_active;
+#endif
 
 	/* Record feedback clock status and error. */
 	clock_snap->fb_info.status = time_status;
