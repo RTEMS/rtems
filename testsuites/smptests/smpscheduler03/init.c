@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -119,6 +119,10 @@ static void test_case_change_priority(
   Scheduler_SMP_Node_state new_state
 )
 {
+  Per_CPU_Control *cpu_self;
+
+  cpu_self = _Thread_Dispatch_disable();
+
   switch (start_state) {
     case SCHEDULER_SMP_NODE_SCHEDULED:
       change_priority(executing, 1, true);
@@ -134,6 +138,11 @@ static void test_case_change_priority(
 
   change_priority(executing, prio, prepend_it);
   rtems_test_assert(node->state == new_state);
+
+  change_priority(executing, 1, true);
+  rtems_test_assert(node->state == SCHEDULER_SMP_NODE_SCHEDULED);
+
+  _Thread_Dispatch_enable( cpu_self );
 }
 
 static const Scheduler_SMP_Node_state states[2] = {
@@ -156,11 +165,8 @@ static void test_change_priority(void)
   size_t k;
 
   task_id = start_task(3);
-
-  _Thread_Disable_dispatch();
-
-  executing = _Thread_Executing;
-  node = _Scheduler_SMP_Thread_get_node( executing );
+  executing = _Thread_Get_executing();
+  node = _Scheduler_SMP_Thread_get_node(executing);
 
   for (i = 0; i < RTEMS_ARRAY_SIZE(states); ++i) {
     for (j = 0; j < RTEMS_ARRAY_SIZE(priorities); ++j) {
@@ -176,11 +182,6 @@ static void test_change_priority(void)
       }
     }
   }
-
-  change_priority(executing, 1, true);
-  rtems_test_assert(node->state == SCHEDULER_SMP_NODE_SCHEDULED);
-
-  _Thread_Enable_dispatch();
 
   sc = rtems_task_delete(task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -220,6 +221,9 @@ static void test_case_change_priority_op(
 )
 {
   Thread_Control *needs_help;
+  Per_CPU_Control *cpu_self;
+
+  cpu_self = _Thread_Dispatch_disable();
 
   switch (start_state) {
     case SCHEDULER_SMP_NODE_SCHEDULED:
@@ -252,6 +256,11 @@ static void test_case_change_priority_op(
   } else {
     rtems_test_assert(needs_help == NULL);
   }
+
+  change_priority(executing, 1, true);
+  rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
+
+  _Thread_Dispatch_enable( cpu_self );
 }
 
 static void test_change_priority_op(void)
@@ -266,10 +275,7 @@ static void test_change_priority_op(void)
   size_t k;
 
   task_id = start_task(3);
-
-  _Thread_Disable_dispatch();
-
-  executing = _Thread_Executing;
+  executing = _Thread_Get_executing();
   executing_node = _Scheduler_SMP_Thread_get_node(executing);
 
   other = get_thread_by_id(task_id);
@@ -290,11 +296,6 @@ static void test_change_priority_op(void)
     }
   }
 
-  change_priority(executing, 1, true);
-  rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
-
-  _Thread_Enable_dispatch();
-
   sc = rtems_task_delete(task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
@@ -303,11 +304,11 @@ static Thread_Control *yield_op(Thread_Control *thread)
 {
   const Scheduler_Control *scheduler = _Scheduler_Get(thread);
   Thread_Control *needs_help;
-  ISR_Level level;
+  ISR_lock_Context lock_context;
 
-  _ISR_Disable( level );
+  _Scheduler_Acquire(thread, &lock_context);
   needs_help = (*scheduler->Operations.yield)(scheduler, thread);
-  _ISR_Enable( level );
+  _Scheduler_Release(thread, &lock_context);
 
   return needs_help;
 }
@@ -321,6 +322,9 @@ static void test_case_yield_op(
 )
 {
   Thread_Control *needs_help;
+  Per_CPU_Control *cpu_self;
+
+  cpu_self = _Thread_Dispatch_disable();
 
   change_priority(executing, 4, false);
   change_priority(other, 4, false);
@@ -379,6 +383,11 @@ static void test_case_yield_op(
   } else {
     rtems_test_assert(needs_help == NULL);
   }
+
+  change_priority(executing, 1, true);
+  rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
+
+  _Thread_Dispatch_enable( cpu_self );
 }
 
 static void test_yield_op(void)
@@ -392,10 +401,7 @@ static void test_yield_op(void)
   size_t j;
 
   task_id = start_task(2);
-
-  _Thread_Disable_dispatch();
-
-  executing = _Thread_Executing;
+  executing = _Thread_Get_executing();
   executing_node = _Scheduler_SMP_Thread_get_node(executing);
 
   other = get_thread_by_id(task_id);
@@ -416,11 +422,6 @@ static void test_yield_op(void)
       }
     }
   }
-
-  change_priority(executing, 1, true);
-  rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
-
-  _Thread_Enable_dispatch();
 
   sc = rtems_task_delete(task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -457,6 +458,9 @@ static void test_case_unblock_op(
 )
 {
   Thread_Control *needs_help;
+  Per_CPU_Control *cpu_self;
+
+  cpu_self = _Thread_Dispatch_disable();
 
   switch (new_state) {
     case SCHEDULER_SMP_NODE_SCHEDULED:
@@ -489,6 +493,11 @@ static void test_case_unblock_op(
       rtems_test_assert(0);
       break;
   }
+
+  change_priority(executing, 1, true);
+  rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
+
+  _Thread_Dispatch_enable( cpu_self );
 }
 
 static void test_unblock_op(void)
@@ -501,10 +510,7 @@ static void test_unblock_op(void)
   size_t i;
 
   task_id = start_task(3);
-
-  _Thread_Disable_dispatch();
-
-  executing = _Thread_Executing;
+  executing = _Thread_Get_executing();
   executing_node = _Scheduler_SMP_Thread_get_node(executing);
 
   other = get_thread_by_id(task_id);
@@ -517,11 +523,6 @@ static void test_unblock_op(void)
       states[i]
     );
   }
-
-  change_priority(executing, 1, true);
-  rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
-
-  _Thread_Enable_dispatch();
 
   sc = rtems_task_delete(task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
