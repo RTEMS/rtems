@@ -49,7 +49,7 @@ int timer_gettime(
     rtems_set_errno_and_return_minus_one( EINVAL );
 
   /* Reads the current time */
-  _TOD_Get( &current_time );
+  _TOD_Get_as_timespec( &current_time );
 
   ptimer = _POSIX_Timer_Get( timerid, &location );
   switch ( location ) {

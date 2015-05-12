@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: sptimecounter02
+
+directives:
+
+  rtems_timecounter_install, rtems_bsd_binuptime.
+
+concepts:
+
+  measurement of performance tests: how often per timeframe can FreeBSD time
+  routines be called in comparison to original rtems timing routines.

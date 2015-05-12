@@ -138,6 +138,13 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Flash(
 void _Watchdog_Handler_initialization( void );
 
 /**
+ *  @brief Triggers a watchdog tick.
+ *
+ *  This routine executes TOD, watchdog and scheduler ticks.
+ */
+void _Watchdog_Tick( void );
+
+/**
  *  @brief Removes @a the_watchdog from the watchdog chain.
  *
  *  This routine removes @a the_watchdog from the watchdog chain on which

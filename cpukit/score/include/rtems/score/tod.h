@@ -24,15 +24,6 @@
 extern "C" {
 #endif
 
-/**
- * @brief Returns the nanoseconds since the last clock tick.
- *
- * @ingroup ScoreTOD
- *
- * @return The nanoseconds since the last clock tick.
- */
-typedef uint32_t ( *TOD_Nanoseconds_since_last_tick_routine )( void );
-
 #ifdef __cplusplus
 }
 #endif

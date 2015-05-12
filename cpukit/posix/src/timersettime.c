@@ -66,7 +66,7 @@ int timer_settime(
   /* Convert absolute to relative time */
   if (flags == TIMER_ABSTIME) {
     struct timespec now;
-    _TOD_Get( &now );
+    _TOD_Get_as_timespec( &now );
     /* Check for seconds in the past */
     if ( _Timespec_Greater_than( &now, &normalize.it_value ) )
       rtems_set_errno_and_return_minus_one( EINVAL );
@@ -125,7 +125,7 @@ int timer_settime(
 
        /* Indicate that the time is running */
        ptimer->state = POSIX_TIMER_STATE_CREATE_RUN;
-       _TOD_Get( &ptimer->time );
+       _TOD_Get_as_timespec( &ptimer->time );
       _Objects_Put( &ptimer->Object );
        return 0;
 

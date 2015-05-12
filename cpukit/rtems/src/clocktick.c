@@ -19,21 +19,14 @@
 #endif
 
 #include <rtems/rtems/clock.h>
-#include <rtems/score/schedulerimpl.h>
-#include <rtems/score/threadimpl.h>
-#include <rtems/score/todimpl.h>
-#include <rtems/score/watchdogimpl.h>
+#include <rtems/score/timecounter.h>
 
 rtems_status_code rtems_clock_tick( void )
 {
-  _TOD_Tickle_ticks();
-
-  _Watchdog_Tickle_ticks();
-
-  _Scheduler_Tick();
-
-  if ( _Thread_Dispatch_is_enabled() )
-    _Thread_Dispatch();
+  _Timecounter_Tick_simple(
+    rtems_configuration_get_microseconds_per_tick(),
+    0
+  );
 
   return RTEMS_SUCCESSFUL;
 }

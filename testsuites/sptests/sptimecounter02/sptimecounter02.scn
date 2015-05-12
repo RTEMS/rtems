@@ -1,0 +1,46 @@
+*** BEGIN OF TEST SPTIMECOUNTER_2 ***
+<SPTimecounter01>
+  <BinuptimeTest activeWorker="1">
+    <Counter worker="1">591457</Counter>
+    <Duration worker="1" unit="sbintime">4294787862</Duration>
+  <BinuptimeTest activeWorker="2">
+    <Counter worker="1">587737</Counter>
+    <Duration worker="1" unit="sbintime">4294603178</Duration>
+    <Counter worker="2">587754</Counter>
+    <Duration worker="2" unit="sbintime">4294596307</Duration>
+  <BinuptimeTest activeWorker="3">
+    <Counter worker="1">583602</Counter>
+    <Duration worker="1" unit="sbintime">4293605982</Duration>
+    <Counter worker="2">583643</Counter>
+    <Duration worker="2" unit="sbintime">4293602260</Duration>
+    <Counter worker="3">583659</Counter>
+    <Duration worker="3" unit="sbintime">4293604551</Duration>
+  <BinuptimeTest activeWorker="4">
+    <Counter worker="1">583086</Counter>
+    <Duration worker="1" unit="sbintime">4291246232</Duration>
+    <Counter worker="2">583124</Counter>
+    <Duration worker="2" unit="sbintime">4291243178</Duration>
+    <Counter worker="3">583139</Counter>
+    <Duration worker="3" unit="sbintime">4291242796</Duration>
+    <Counter worker="4">565417</Counter>
+    <Duration worker="4" unit="sbintime">4291304930</Duration>
+  <BinuptimeNullTest activeWorker="1">
+    <Counter worker="1">615571</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="2">
+    <Counter worker="1">615857</Counter>
+    <Counter worker="2">615856</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="3">
+    <Counter worker="1">615316</Counter>
+    <Counter worker="2">615328</Counter>
+    <Counter worker="3">615337</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="4">
+    <Counter worker="1">615495</Counter>
+    <Counter worker="2">615502</Counter>
+    <Counter worker="3">615509</Counter>
+    <Counter worker="4">597117</Counter>
+  </BinuptimeNullTest>
+</SPTimecounter01>
+*** END OF TEST SPTIMECOUNTER_2 ***

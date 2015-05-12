@@ -344,10 +344,6 @@ $(PROJECT_INCLUDE)/rtems/score/timestamp.h: include/rtems/score/timestamp.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/timestamp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/timestamp.h
 
-$(PROJECT_INCLUDE)/rtems/score/timestamp64.h: include/rtems/score/timestamp64.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/timestamp64.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/timestamp64.h
-
 $(PROJECT_INCLUDE)/rtems/score/timecounter.h: include/rtems/score/timecounter.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/timecounter.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/timecounter.h

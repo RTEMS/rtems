@@ -24,30 +24,10 @@
 
 void _TOD_Tickle_ticks( void )
 {
-  TOD_Control       *tod = &_TOD;
-  ISR_lock_Context   lock_context;
-  Timestamp_Control  tick;
-  uint32_t           nanoseconds_per_tick;
-
-  nanoseconds_per_tick = rtems_configuration_get_nanoseconds_per_tick();
-
-  /* Convert the tick quantum to a timestamp */
-  _Timestamp_Set( &tick, 0, nanoseconds_per_tick );
-
   /* Update the counter of ticks since boot */
   _Watchdog_Ticks_since_boot += 1;
 
-  _TOD_Acquire( tod, &lock_context );
-
-  /* Update the uptime */
-  _Timestamp_Add_to( &tod->uptime, &tick );
-
-  /* Update the current TOD */
-  _Timestamp_Add_to( &tod->now, &tick );
-
-  _TOD_Release( tod, &lock_context );
-
-  _TOD.seconds_trigger += nanoseconds_per_tick;
+  _TOD.seconds_trigger += rtems_configuration_get_nanoseconds_per_tick();
   if ( _TOD.seconds_trigger >= 1000000000UL ) {
     _TOD.seconds_trigger -= 1000000000UL;
     _Watchdog_Tickle_seconds();

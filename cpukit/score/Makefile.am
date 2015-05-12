@@ -93,7 +93,6 @@ include_rtems_score_HEADERS += include/rtems/score/threadq.h
 include_rtems_score_HEADERS += include/rtems/score/threadqimpl.h
 include_rtems_score_HEADERS += include/rtems/score/timespec.h
 include_rtems_score_HEADERS += include/rtems/score/timestamp.h
-include_rtems_score_HEADERS += include/rtems/score/timestamp64.h
 include_rtems_score_HEADERS += include/rtems/score/timecounter.h
 include_rtems_score_HEADERS += include/rtems/score/timecounterimpl.h
 include_rtems_score_HEADERS += include/rtems/score/tls.h
@@ -320,23 +319,16 @@ libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \
     src/timespecsubtract.c src/timespectoticks.c src/timespecdivide.c \
     src/timespecdividebyinteger.c src/timespecgetasnanoseconds.c
 
-## TIMESTAMP_INT64_C_FILES
-libscore_a_SOURCES += src/ts64addto.c \
-    src/ts64divide.c src/ts64equalto.c \
-    src/ts64getnanoseconds.c src/ts64getseconds.c \
-    src/ts64lessthan.c \
-    src/ts64set.c src/ts64settozero.c src/ts64subtract.c \
-    src/ts64totimespec.c src/ts64totimeval.c
-
 ## TOD_C_FILES
-libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodget.c \
-    src/coretodgetuptimetimespec.c src/coretodtickle.c \
-    src/coretodsecondssinceepoch.c src/coretodtickspersec.c \
+libscore_a_SOURCES += src/coretod.c src/coretodset.c \
+    src/coretodtickle.c \
+    src/coretodtickspersec.c \
     src/coretodadjust.c
 
 ## WATCHDOG_C_FILES
 libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c \
     src/watchdoginsert.c src/watchdogremove.c
+libscore_a_SOURCES += src/watchdogtick.c
 libscore_a_SOURCES += src/watchdogtickssinceboot.c
 
 ## USEREXT_C_FILES

@@ -390,9 +390,6 @@ uninitialized =
 
 /*timerimpl.h*/ (sizeof _Timer_Information)               +
 
-/*tod.h*/       (sizeof _TOD.now)                         +
-                (sizeof _TOD.uptime)                      +
-
 /*tqdata.h*/    0                                         +
 
 /*types.h*/     0                                         +

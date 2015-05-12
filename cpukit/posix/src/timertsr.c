@@ -58,7 +58,7 @@ void _POSIX_Timer_TSR(
       return;
 
     /* Store the time when the timer was started again */
-    _TOD_Get( &ptimer->time );
+    _TOD_Get_as_timespec( &ptimer->time );
 
     /* The state really did not change but just to be safe */
     ptimer->state = POSIX_TIMER_STATE_CREATE_RUN;

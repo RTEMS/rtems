@@ -25,8 +25,7 @@ void _TOD_Adjust(
   const Timestamp_Control delta
 )
 {
-  Timestamp_Control  tod;
-  Timestamp_Control *tod_ptr;
+  Timestamp_Control tod;
 
   /*
    * Currently, RTEMS does the adjustment in one movement.
@@ -41,11 +40,11 @@ void _TOD_Adjust(
    */
   _Thread_Disable_dispatch();
 
-    tod_ptr = _TOD_Get_with_nanoseconds( &tod, &_TOD.now );
+    _TOD_Get( &tod );
 
-    _Timestamp_Add_to( tod_ptr, &delta );
+    _Timestamp_Add_to( &tod, &delta );
 
-    _TOD_Set_with_timestamp( tod_ptr );
+    _TOD_Set_with_timestamp( &tod );
 
   _Thread_Enable_dispatch();
 }

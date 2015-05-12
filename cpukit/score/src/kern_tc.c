@@ -33,6 +33,7 @@
 #define time_second _Timecounter_Time_second
 #define time_uptime _Timecounter_Time_uptime
 #include <rtems/score/timecounterimpl.h>
+#include <rtems/score/watchdogimpl.h>
 #endif /* __rtems__ */
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD r277406 2015-01-20T03:54:30Z$");
@@ -1886,6 +1887,9 @@ _Timecounter_Tick(void)
 {
 #endif /* __rtems__ */
 	tc_windup();
+#ifdef __rtems__
+	_Watchdog_Tick();
+#endif /* __rtems__ */
 }
 #ifdef __rtems__
 void
@@ -1924,6 +1928,8 @@ _Timecounter_Tick_simple(uint32_t delta, uint32_t offset)
 	time_uptime = th->th_offset.sec;
 
 	_ISR_lock_Release_and_ISR_enable(&_Timecounter_Lock, &lock_context);
+
+	_Watchdog_Tick();
 }
 #endif /* __rtems__ */
 
