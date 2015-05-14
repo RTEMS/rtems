@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -74,7 +74,6 @@ typedef struct {
 } test_context;
 
 static test_context test_instance = {
-  .barrier = SMP_BARRIER_CONTROL_INITIALIZER,
   .switch_lock = SMP_LOCK_INITIALIZER("test instance switch lock")
 };
 
@@ -85,6 +84,11 @@ static void busy_wait(void)
   while (rtems_clock_tick_before(later)) {
     /* Wait */
   }
+}
+
+static void barrier_init(test_context *ctx)
+{
+  _SMP_barrier_Control_initialize(&ctx->barrier);
 }
 
 static void barrier(test_context *ctx, SMP_barrier_State *bs)
@@ -291,6 +295,7 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
 
   change_prio(RTEMS_SELF, 3);
 
+  barrier_init(ctx);
   reset_switch_events(ctx);
 
   ctx->high_run[0] = false;
@@ -464,6 +469,219 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_semaphore_delete(ctx->mrsp_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void obtain_after_migration_worker(rtems_task_argument arg)
+{
+  test_context *ctx = &test_instance;
+  rtems_status_code sc;
+  SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
+
+  assert_prio(RTEMS_SELF, 3);
+
+  sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  /* Worker done (K) */
+  barrier(ctx, &barrier_state);
+
+  while (true) {
+    /* Wait for termination */
+  }
+}
+
+static void obtain_after_migration_high(rtems_task_argument arg)
+{
+  test_context *ctx = &test_instance;
+  rtems_status_code sc;
+  SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
+
+  assert_prio(RTEMS_SELF, 2);
+
+  sc = rtems_semaphore_obtain(ctx->mrsp_ids[1], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  /* Obtain done (I) */
+  barrier(ctx, &barrier_state);
+
+  /* Ready to release (J) */
+  barrier(ctx, &barrier_state);
+
+  sc = rtems_semaphore_release(ctx->mrsp_ids[1]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_task_suspend(RTEMS_SELF);
+  rtems_test_assert(0);
+}
+
+static void test_mrsp_obtain_after_migration(test_context *ctx)
+{
+  rtems_status_code sc;
+  rtems_task_priority prio;
+  rtems_id scheduler_id;
+  SMP_barrier_State barrier_state;
+
+  puts("test MrsP obtain after migration");
+
+  change_prio(RTEMS_SELF, 3);
+
+  barrier_init(ctx);
+  reset_switch_events(ctx);
+
+  /* Create tasks */
+
+  sc = rtems_task_create(
+    rtems_build_name('H', 'I', 'G', '0'),
+    2,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &ctx->high_task_id[0]
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_create(
+    rtems_build_name('W', 'O', 'R', 'K'),
+    3,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &ctx->worker_ids[0]
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_set_scheduler(ctx->worker_ids[0], ctx->scheduler_ids[1]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  /* Create a MrsP semaphore objects */
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('M', 'R', 'S', 'P'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    3,
+    &ctx->mrsp_ids[0]
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('M', 'R', 'S', 'P'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    2,
+    &ctx->mrsp_ids[1]
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('M', 'R', 'S', 'P'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    1,
+    &ctx->mrsp_ids[2]
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  prio = 4;
+  sc = rtems_semaphore_set_priority(
+    ctx->mrsp_ids[2],
+    ctx->scheduler_ids[1],
+    prio,
+    &prio
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(prio == 1);
+
+  /* Check executing task parameters */
+
+  sc = rtems_task_get_scheduler(RTEMS_SELF, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(ctx->scheduler_ids[0] == scheduler_id);
+
+  assert_prio(RTEMS_SELF, 3);
+
+  sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 3);
+
+  /* Start other tasks */
+
+  sc = rtems_task_start(ctx->worker_ids[0], obtain_after_migration_worker, 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(ctx->high_task_id[0], obtain_after_migration_high, 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(rtems_get_current_processor() == 1);
+
+  /* Obtain done (I) */
+  _SMP_barrier_State_initialize(&barrier_state);
+  barrier(ctx, &barrier_state);
+
+  sc = rtems_task_suspend(ctx->high_task_id[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(rtems_get_current_processor() == 1);
+
+  /*
+   * Obtain second MrsP semaphore and ensure that we change the priority of our
+   * own scheduler node and not the one we are currently using.
+   */
+
+  sc = rtems_semaphore_obtain(ctx->mrsp_ids[2], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  assert_prio(RTEMS_SELF, 1);
+
+  rtems_test_assert(rtems_get_current_processor() == 1);
+
+  sc = rtems_semaphore_release(ctx->mrsp_ids[2]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_resume(ctx->high_task_id[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  /* Ready to release (J) */
+  barrier(ctx, &barrier_state);
+
+  rtems_test_assert(rtems_get_current_processor() == 1);
+
+  /* Prepare barrier for worker */
+  barrier_init(ctx);
+  _SMP_barrier_State_initialize(&barrier_state);
+
+  sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(rtems_get_current_processor() == 0);
+
+  print_switch_events(ctx);
+
+  /* Worker done (K) */
+  barrier(ctx, &barrier_state);
+
+  sc = rtems_task_delete(ctx->worker_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(ctx->high_task_id[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(ctx->mrsp_ids[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(ctx->mrsp_ids[1]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(ctx->mrsp_ids[2]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
@@ -1034,6 +1252,7 @@ static void test_mrsp_various_block_and_unblock(test_context *ctx)
 
   change_prio(RTEMS_SELF, 4);
 
+  barrier_init(ctx);
   reset_switch_events(ctx);
 
   ctx->low_run[0] = false;
@@ -1637,6 +1856,7 @@ static void Init(rtems_task_argument arg)
   test_mrsp_deadlock_error(ctx);
   test_mrsp_multiple_obtain();
   test_mrsp_various_block_and_unblock(ctx);
+  test_mrsp_obtain_after_migration(ctx);
   test_mrsp_obtain_and_sleep_and_release(ctx);
   test_mrsp_obtain_and_release_with_help(ctx);
   test_mrsp_obtain_and_release(ctx);

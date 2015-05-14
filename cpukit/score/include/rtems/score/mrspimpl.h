@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -230,7 +230,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Obtain(
 )
 {
   MRSP_Status status;
-  const Scheduler_Control *scheduler = _Scheduler_Get( executing );
+  const Scheduler_Control *scheduler = _Scheduler_Get_own( executing );
   uint32_t scheduler_index = _Scheduler_Get_index( scheduler );
   Priority_Control initial_priority = executing->current_priority;
   Priority_Control ceiling_priority =
