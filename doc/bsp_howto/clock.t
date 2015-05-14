@@ -19,23 +19,6 @@ The clock driver is located in the @code{clock} directory of the BSP.
 This section describes the global variables expected to be provided by
 this driver.
 
-@subsection Major and Minor Number
-
-The major and minor numbers of the clock driver are made available via 
-the following variables.  
-
-@itemize @bullet
-@item rtems_device_major_number rtems_clock_major;
-@item rtems_device_minor_number rtems_clock_minor;
-@end itemize
-
-The clock device driver is responsible for declaring and
-initializing these variables.  These variables are used
-by other RTEMS components -- notably the Shared Memory Driver. 
-
-@b{NOTE:} In a future RTEMS version, these variables may be replaced
-with the clock device driver registering @b{/dev/clock}.
-
 @subsection Ticks Counter
 
 Most of the clock device drivers provide a global variable

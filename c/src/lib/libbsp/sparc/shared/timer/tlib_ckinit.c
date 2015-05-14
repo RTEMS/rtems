@@ -53,13 +53,6 @@ void Clock_exit(void);
 void Clock_isr(void *arg_unused);
 
 /*
- *  Major and minor number.
- */
-
-rtems_device_major_number rtems_clock_major = UINT32_MAX;
-rtems_device_minor_number rtems_clock_minor;
-
-/*
  *  Clock_isr
  *
  *  This is the clock tick interrupt handler.
@@ -257,13 +250,6 @@ rtems_device_driver Clock_initialize(
    *  Register function called at system shutdown
    */
   atexit( Clock_exit );
-
-  /*
-   * make major/minor avail to others such as shared memory driver
-   */
-
-  rtems_clock_major = major;
-  rtems_clock_minor = minor;
 
   /*
    *  If we are counting ISRs per tick, then initialize the counter.
