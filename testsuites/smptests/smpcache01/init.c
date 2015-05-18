@@ -41,66 +41,77 @@ static void function_to_flush( void )
   /* Does nothing. Used to give a pointer to instruction address space. */
 }
 
-static void test_cache_message( void *arg )
+static void test_action( void *arg )
 {
   rtems_test_assert(arg == &ctx);
 
   ctx.count[rtems_get_current_processor()]++;
 }
 
-static void cache_manager_smp_functions( size_t set_size,
-    cpu_set_t *cpu_set )
+typedef void ( *test_case )(
+  size_t set_size,
+  const cpu_set_t *cpu_set,
+  SMP_barrier_State *bs
+);
+
+static void test_cache_flush_multiple_data_lines(
+  size_t set_size,
+  const cpu_set_t *cpu_set,
+  SMP_barrier_State *bs
+)
 {
   rtems_cache_flush_multiple_data_lines_processor_set( &data_to_flush,
       sizeof(data_to_flush), set_size, cpu_set );
+}
+
+static void test_cache_invalidate_multiple_data_lines(
+  size_t set_size,
+  const cpu_set_t *cpu_set,
+  SMP_barrier_State *bs
+)
+{
   rtems_cache_invalidate_multiple_data_lines_processor_set( &data_to_flush,
       sizeof(data_to_flush), set_size, cpu_set );
+}
+
+static void test_cache_flush_entire_data(
+  size_t set_size,
+  const cpu_set_t *cpu_set,
+  SMP_barrier_State *bs
+)
+{
   rtems_cache_flush_entire_data_processor_set( set_size, cpu_set );
+}
+
+static void test_cache_invalidate_entire_instruction(
+  size_t set_size,
+  const cpu_set_t *cpu_set,
+  SMP_barrier_State *bs
+)
+{
   rtems_cache_invalidate_entire_instruction();
+}
+
+static void test_cache_invalidate_multiple_instruction_lines(
+  size_t set_size,
+  const cpu_set_t *cpu_set,
+  SMP_barrier_State *bs
+)
+{
   rtems_cache_invalidate_multiple_instruction_lines( &function_to_flush,
       4 /* arbitrary size */ );
 }
 
-static void standard_funcs_test( size_t set_size, cpu_set_t *cpu_set )
-{
-  cache_manager_smp_functions( set_size, cpu_set );
-}
-
-static void standard_funcs_isrdisabled_test( size_t set_size,
-    cpu_set_t *cpu_set, SMP_barrier_State *bs  )
-{
-  ISR_Level isr_level;
-
-  _ISR_Disable_without_giant( isr_level );
-
-  _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
-
-  cache_manager_smp_functions( set_size, cpu_set );
-
-  _ISR_Enable_without_giant( isr_level );
-}
-
-static void standard_funcs_giant_taken_test( size_t set_size,
-    cpu_set_t *cpu_set, SMP_barrier_State *bs )
-{
-  if ( rtems_get_current_processor() == 0)
-    _Thread_Disable_dispatch();
-
-  _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
-
-  cache_manager_smp_functions( set_size, cpu_set );
-
-  if ( rtems_get_current_processor() == 0)
-    _Thread_Enable_dispatch();
-}
-
-static void test_func_test( size_t set_size, cpu_set_t *cpu_set,
-    SMP_barrier_State *bs )
+static void test_broadcast_action(
+  size_t set_size,
+  const cpu_set_t *cpu_set,
+  SMP_barrier_State *bs
+)
 {
   ctx.count[rtems_get_current_processor()] = 0;
   _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
 
-  _SMP_Multicast_action( set_size, cpu_set, test_cache_message, &ctx );
+  _SMP_Multicast_action( set_size, cpu_set, test_action, &ctx );
 
   _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
 
@@ -108,45 +119,67 @@ static void test_func_test( size_t set_size, cpu_set_t *cpu_set,
       rtems_get_processor_count() );
 }
 
-static void test_func_isrdisabled_test( size_t set_size, cpu_set_t *cpu_set,
-    SMP_barrier_State *bs )
+static test_case test_cases[] = {
+  test_cache_flush_multiple_data_lines,
+  test_cache_invalidate_multiple_data_lines,
+  test_cache_flush_entire_data,
+  test_cache_invalidate_entire_instruction,
+  test_cache_invalidate_multiple_instruction_lines,
+  test_broadcast_action
+};
+
+static void call_test(
+  size_t set_size,
+  const cpu_set_t *cpu_set,
+  SMP_barrier_State *bs,
+  size_t i
+)
 {
-  ISR_Level isr_level;
-
-  ctx.count[rtems_get_current_processor()] = 0;
-  _ISR_Disable_without_giant( isr_level );
-
   _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
-
-  _SMP_Multicast_action( set_size, cpu_set, test_cache_message, &ctx );
-
-  _ISR_Enable_without_giant( isr_level );
-
+  ( *test_cases[ i ] )( set_size, cpu_set, bs );
   _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
-
-  rtems_test_assert( ctx.count[rtems_get_current_processor()] ==
-      rtems_get_processor_count() );
 }
 
-static void test_func_giant_taken_test( size_t set_size, cpu_set_t *cpu_set,
-    SMP_barrier_State *bs )
+static void call_tests( size_t set_size,
+    const cpu_set_t *cpu_set, SMP_barrier_State *bs  )
 {
-  ctx.count[rtems_get_current_processor()] = 0;
+  size_t i;
 
-  if ( rtems_get_current_processor() == 0)
-    _Thread_Disable_dispatch();
+  for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
+    call_test( set_size, cpu_set, bs, i );
+  }
+}
 
-  _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
+static void call_tests_isr_disabled( size_t set_size,
+    const cpu_set_t *cpu_set, SMP_barrier_State *bs  )
+{
+  size_t i;
 
-  _SMP_Multicast_action( set_size, cpu_set, test_cache_message, &ctx );
+  for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
+    ISR_Level isr_level;
 
-  _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
+    _ISR_Disable_without_giant( isr_level );
 
-  rtems_test_assert( ctx.count[rtems_get_current_processor()] ==
-      rtems_get_processor_count() );
+    call_test( set_size, cpu_set, bs, i );
 
-  if ( rtems_get_current_processor() == 0)
-    _Thread_Enable_dispatch();
+    _ISR_Enable_without_giant( isr_level );
+  }
+}
+
+static void call_tests_with_giant_acquired( size_t set_size,
+    const cpu_set_t *cpu_set, SMP_barrier_State *bs )
+{
+  size_t i;
+
+  for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
+    if ( rtems_get_current_processor() == 0)
+      _Thread_Disable_dispatch();
+
+    call_test( set_size, cpu_set, bs, i );
+
+    if ( rtems_get_current_processor() == 0)
+      _Thread_Enable_dispatch();
+  }
 }
 
 static void cmlog(  const char* str )
@@ -165,55 +198,21 @@ static void all_tests( void )
   /* Send message to all available CPUs */
   CPU_FILL_S( set_size, cpu_set );
 
-  /* Call SMP cache manager functions */
-  cmlog( "Calling standard SMP cache functions. " );
-  _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count );
-  standard_funcs_test( set_size, cpu_set );
-  _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count );
+  /* Call test cases */
+  cmlog( "Calling test cases. " );
+  call_tests( set_size, cpu_set, &bs );
   cmlog( "Done!\n");
 
-  /* Call SMP cache manager functions with ISR disabled */
-  cmlog( "Calling standard SMP cache functions with ISR disabled. " );
-  _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count );
-  standard_funcs_isrdisabled_test( set_size, cpu_set, &bs );
-  _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count );
+  /* Call test cases with ISR disabled */
+  cmlog( "Calling test cases with ISR disabled. " );
+  call_tests_isr_disabled( set_size, cpu_set, &bs );
   cmlog( "Done!\n" );
 
-  /* Call SMP cache manager functions with core 0 holding the giant lock */
-  cmlog( "Calling standard SMP cache functions with CPU0 holding "
+  /* Call test cases with core 0 holding the giant lock */
+  cmlog( "Calling test cases with CPU0 holding "
       "the giant lock. " );
-  _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count );
-  standard_funcs_giant_taken_test( set_size, cpu_set, &bs );
-  _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count );
+  call_tests_with_giant_acquired( set_size, cpu_set, &bs );
   cmlog( "Done!\n");
-
-  /* Call a test function using SMP cache manager and verify that all
-   * cores invoke the function */
-  cmlog( "Calling a test function using the SMP cache manager to "
-      "verify that all CPUs receive the SMP message. " );
-  _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count );
-  test_func_test( set_size, cpu_set, &bs );
-  _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count );
-  cmlog( "Done!\n");
-
-  /* Call a test function using SMP cache manager and verify that all
-   * cores invoke the function. ISR disabled. */
-  cmlog( "Calling a test function using the SMP cache manager to "
-      "verify that all CPUs receive the SMP message. With ISR disabled. " );
-  _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count );
-  test_func_isrdisabled_test( set_size, cpu_set, &bs );
-  _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count );
-  cmlog( "Done!\n" );
-
-  /* Call a test function using SMP cache manager and verify that all
-   * cores invoke the function. Core 0 holding giant lock. */
-  cmlog( "Calling a test function using the SMP cache manager to "
-      "verify that all CPUs receive the SMP message. With CPU0 "
-      "holding the giant lock. " );
-  _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count );
-  test_func_giant_taken_test( set_size, cpu_set, &bs );
-  _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count );
-  cmlog( "Done!\n" );
 
   /* Done. Free up memory. */
   _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count);
