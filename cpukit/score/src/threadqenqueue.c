@@ -67,7 +67,7 @@ void _Thread_queue_Enqueue_critical(
   ( *operations->enqueue )( the_thread_queue, the_thread );
 
   _Thread_Wait_flags_set( the_thread, THREAD_QUEUE_INTEND_TO_BLOCK );
-  cpu_self = _Thread_Dispatch_disable_critical();
+  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Thread_queue_Release( the_thread_queue, lock_context );
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -138,7 +138,7 @@ void _Thread_queue_Unblock_critical(
   if ( unblock ) {
     Per_CPU_Control *cpu_self;
 
-    cpu_self = _Thread_Dispatch_disable_critical();
+    cpu_self = _Thread_Dispatch_disable_critical( lock_context );
     _Thread_queue_Release( the_thread_queue, lock_context );
 
     _Thread_queue_Unblock( the_thread );

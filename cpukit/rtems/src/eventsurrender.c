@@ -107,7 +107,7 @@ void _Event_Surrender(
   if ( unblock ) {
     Per_CPU_Control *cpu_self;
 
-    cpu_self = _Thread_Dispatch_disable_critical();
+    cpu_self = _Thread_Dispatch_disable_critical( lock_context );
     _Thread_Lock_release_default( the_thread, lock_context );
     _Giant_Acquire( cpu_self );
 

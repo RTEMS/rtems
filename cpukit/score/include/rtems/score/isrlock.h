@@ -68,6 +68,12 @@ typedef struct {
 #else
   ISR_Level isr_level;
 #endif
+#if defined( RTEMS_PROFILING )
+  /**
+   * @brief The last interrupt disable instant in CPU counter ticks.
+   */
+  CPU_Counter_ticks ISR_disable_instant;
+#endif
 } ISR_lock_Context;
 
 /**
@@ -304,6 +310,13 @@ typedef struct {
     _ISR_Flash( ( _context )->isr_level )
 #endif
 
+#if defined( RTEMS_PROFILING )
+  #define _ISR_lock_ISR_disable_profile( _context ) \
+    ( _context )->ISR_disable_instant = _CPU_Counter_read();
+#else
+  #define _ISR_lock_ISR_disable_profile( _context )
+#endif
+
 /**
  * @brief Disables interrupts and saves the previous interrupt state in the ISR
  * lock context.
@@ -316,10 +329,16 @@ typedef struct {
  */
 #if defined( RTEMS_SMP )
   #define _ISR_lock_ISR_disable( _context ) \
-    _ISR_Disable_without_giant( ( _context )->Lock_context.isr_level )
+    do { \
+      _ISR_Disable_without_giant( ( _context )->Lock_context.isr_level ); \
+      _ISR_lock_ISR_disable_profile( _context ) \
+    } while ( 0 )
 #else
   #define _ISR_lock_ISR_disable( _context ) \
-    _ISR_Disable( ( _context )->isr_level )
+    do { \
+      _ISR_Disable( ( _context )->isr_level ); \
+      _ISR_lock_ISR_disable_profile( _context ) \
+    } while ( 0 )
 #endif
 
 /**

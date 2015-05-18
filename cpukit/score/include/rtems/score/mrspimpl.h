@@ -102,7 +102,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Claim_ownership(
   mrsp->initial_priority_of_owner = initial_priority;
   _Scheduler_Thread_change_help_state( new_owner, SCHEDULER_HELP_ACTIVE_OWNER );
 
-  cpu_self = _Thread_Dispatch_disable_critical();
+  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _ISR_lock_Release_and_ISR_enable( &mrsp->Lock, lock_context );
 
   _Thread_Raise_priority( new_owner, ceiling_priority );
@@ -230,7 +230,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
 
   _MRSP_Giant_release( &giant_lock_context );
 
-  cpu_self = _Thread_Dispatch_disable_critical();
+  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _ISR_lock_Release_and_ISR_enable( &mrsp->Lock, lock_context );
 
   _Thread_Raise_priority( executing, ceiling_priority );
@@ -388,7 +388,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Release(
 
   _MRSP_Giant_release( &giant_lock_context );
 
-  cpu_self = _Thread_Dispatch_disable_critical();
+  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _ISR_lock_Release_and_ISR_enable( &mrsp->Lock, lock_context );
 
   _MRSP_Restore_priority( executing, initial_priority );

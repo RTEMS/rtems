@@ -24,6 +24,7 @@
 #define _RTEMS_SCORE_PROFILING
 
 #include <rtems/score/percpu.h>
+#include <rtems/score/isrlock.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -52,6 +53,26 @@ static inline void _Profiling_Thread_dispatch_disable(
 #else
   (void) cpu;
   (void) previous_thread_dispatch_disable_level;
+#endif
+}
+
+static inline void _Profiling_Thread_dispatch_disable_critical(
+  Per_CPU_Control        *cpu,
+  uint32_t                previous_thread_dispatch_disable_level,
+  const ISR_lock_Context *lock_context
+)
+{
+#if defined( RTEMS_PROFILING )
+  if ( previous_thread_dispatch_disable_level == 0 ) {
+    Per_CPU_Stats *stats = &cpu->Stats;
+
+    stats->thread_dispatch_disabled_instant = lock_context->ISR_disable_instant;
+    ++stats->thread_dispatch_disabled_count;
+  }
+#else
+  (void) cpu;
+  (void) previous_thread_dispatch_disable_level;
+  (void) lock_context;
 #endif
 }
 

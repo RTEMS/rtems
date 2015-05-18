@@ -84,7 +84,7 @@ void _Event_Seize(
   executing->Wait.return_argument = event_out;
   _Thread_Wait_flags_set( executing, intend_to_block );
 
-  cpu_self = _Thread_Dispatch_disable_critical();
+  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Thread_Lock_release_default( executing, lock_context );
   _Giant_Acquire( cpu_self );
 
