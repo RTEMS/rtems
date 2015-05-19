@@ -1,5 +1,10 @@
 *** BEGIN OF TEST SPCONTEXT 1 ***
-Both tasks did not use FPU: done
-One task used the FPU: done
-Both tasks used the FPU: done
+Test configuration 0 0 0... done
+Test configuration 0 0 1... done
+Test configuration 0 1 0... done
+Test configuration 0 1 1... done
+Test configuration 1 0 0... done
+Test configuration 1 0 1... done
+Test configuration 1 1 0... done
+Test configuration 1 1 1... done
 *** END OF TEST SPCONTEXT 1 ***
