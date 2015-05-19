@@ -46,8 +46,10 @@ Gedare Bloom               gedare@rtems.org
 Write After Approval
 ====================
 Daniel Hellstrom           daniel@gaisler.com
+Ben Gras                   beng@rtems.org
 
 Localized Write Permission
 ==========================
 sparc                      Daniel Hellstrom (daniel@gaisler.com)
+beagle                     Ben Gras (beng@rtems.org)
 
