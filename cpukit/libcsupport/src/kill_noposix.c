@@ -9,7 +9,6 @@
  *
  *    + kill
  *    + _kill_r
- *    + __kill
  *    + sleep
  */
 
@@ -45,9 +44,4 @@ int _kill_r( struct _reent *ptr, pid_t pid, int sig )
   return 0;
 }
 #endif
-
-int __kill( pid_t pid, int sig )
-{
-  return 0;
-}
 #endif
