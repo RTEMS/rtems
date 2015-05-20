@@ -1,4 +1,4 @@
-/*	
+/*
  *  DCHP client for RTEMS
  *  Andrew Bythell, <abythell@nortelnetworks.com>
  *  based on and uses subroutines from c/src/libnetworking/nfs/bootp_subr.c
@@ -544,6 +544,20 @@ dhcp_discover_req (struct dhcp_packet* call,
   call->vend[len++] = DHCP_DISCOVER;
 
   /*
+   * If a host name is set add it to the request.
+   */
+  if (rtems_bsdnet_config.hostname && \
+      (strlen (rtems_bsdnet_config.hostname) > 1) &&
+      (strlen (rtems_bsdnet_config.hostname) < 32)) {
+    call->vend[len++] = DHCP_HOST;
+    call->vend[len++] = strlen (rtems_bsdnet_config.hostname);
+    memcpy (&call->vend[len],
+            rtems_bsdnet_config.hostname,
+            strlen (rtems_bsdnet_config.hostname));
+    len += strlen (rtems_bsdnet_config.hostname);
+  }
+
+  /*
    * DHCP Parameter request list
    */
   call->vend[len++] = DHCP_PARAMETERS;
@@ -880,7 +894,7 @@ dhcp_init (int update_files)
   struct proc          *procp = NULL;
 
   clean_dns_entries();
-  
+
   /*
    * If we are to update the files create the root
    * file structure.
