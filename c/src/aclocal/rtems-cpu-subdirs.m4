@@ -12,6 +12,7 @@ AC_DEFUN([RTEMS_CPU_SUBDIRS],
 case $RTEMS_CPU in
 _RTEMS_CPU_SUBDIR([arm],[$1]);;
 _RTEMS_CPU_SUBDIR([bfin],[$1]);;
+_RTEMS_CPU_SUBDIR([epiphany],[$1]);;
 _RTEMS_CPU_SUBDIR([avr],[$1]);;
 _RTEMS_CPU_SUBDIR([h8300],[$1]);;
 _RTEMS_CPU_SUBDIR([i386],[$1]);;
