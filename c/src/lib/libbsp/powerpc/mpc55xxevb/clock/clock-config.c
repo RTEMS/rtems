@@ -86,7 +86,6 @@ static void mpc55xx_clock_handler_install(rtems_isr_entry isr)
 
 static void mpc55xx_clock_initialize(void)
 {
-  uint32_t mask;
   volatile struct EMIOS_CH_tag *regs = &EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL];
   union EMIOS_CCR_tag ccr = MPC55XX_ZERO_FLAGS;
   union EMIOS_CSR_tag csr = MPC55XX_ZERO_FLAGS;
@@ -208,7 +207,6 @@ static void mpc55xx_clock_handler_install(rtems_isr_entry isr)
 
 static void mpc55xx_clock_initialize(void)
 {
-  uint32_t mask;
   volatile PIT_RTI_CHANNEL_tag *channel =
     &PIT_RTI.CHANNEL [MPC55XX_CLOCK_PIT_CHANNEL];
   uint64_t reference_clock = bsp_clock_speed;
