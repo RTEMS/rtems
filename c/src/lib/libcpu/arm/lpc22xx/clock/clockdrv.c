@@ -101,7 +101,6 @@ rtems_irq_connect_data clock_isr_data = {
  */
 #define Clock_driver_support_initialize_hardware() \
   do { \
-    uint32_t mask; \
     /* disable and clear timer 0, set to  */ \
     T0TCR &= 0;                              \
     /* TC is incremented on every pclk.*/    \
