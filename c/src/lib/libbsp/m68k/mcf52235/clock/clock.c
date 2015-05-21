@@ -68,7 +68,6 @@ static void Clock_driver_support_shutdown_hardware(void)
  */
 static void Clock_driver_support_initialize_hardware(void)
 {
-  uint32_t mask;
   int level;
   uint32_t pmr;
   uint32_t preScaleCode = 0;
