@@ -67,7 +67,6 @@ static void lpc_clock_handler_install(void)
 
 static void lpc_clock_initialize(void)
 {
-  uint32_t mask;
   uint64_t interval = ((uint64_t) LPC_CLOCK_REFERENCE
     * (uint64_t) rtems_configuration_get_microseconds_per_tick()) / 1000000;
 
