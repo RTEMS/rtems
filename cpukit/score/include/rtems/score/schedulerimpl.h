@@ -693,54 +693,6 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Is_priority_higher_than(
   return _Scheduler_Priority_compare( scheduler, p1,  p2 ) > 0;
 }
 
-/**
- * @brief Returns the priority encoding @a p1 or @a p2 with the higher priority
- * in the intuitive sense of priority.
- */
-RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Highest_priority_of_two(
-  const Scheduler_Control *scheduler,
-  Priority_Control         p1,
-  Priority_Control         p2
-)
-{
-  return _Scheduler_Is_priority_higher_than( scheduler, p1, p2 ) ? p1 : p2;
-}
-
-/**
- * @brief Sets the thread priority to @a priority if it is higher than the
- * current priority of the thread in the intuitive sense of priority.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Set_priority_if_higher(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  Priority_Control         priority
-)
-{
-  Priority_Control current = the_thread->current_priority;
-
-  if ( _Scheduler_Is_priority_higher_than( scheduler, priority, current ) ) {
-    _Thread_Set_priority( the_thread, priority );
-  }
-}
-
-/**
- * @brief Changes the thread priority to @a priority if it is higher than the
- * current priority of the thread in the intuitive sense of priority.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority_if_higher(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  Priority_Control         priority,
-  bool                     prepend_it
-)
-{
-  Priority_Control current = the_thread->current_priority;
-
-  if ( _Scheduler_Is_priority_higher_than( scheduler, priority, current ) ) {
-    _Thread_Change_priority( the_thread, priority, prepend_it );
-  }
-}
-
 RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_processor_count(
   const Scheduler_Control *scheduler
 )

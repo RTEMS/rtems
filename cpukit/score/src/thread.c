@@ -28,11 +28,11 @@
   )
 
 THREAD_OFFSET_ASSERT( Object );
-THREAD_OFFSET_ASSERT( RBNode );
 THREAD_OFFSET_ASSERT( current_state );
 THREAD_OFFSET_ASSERT( current_priority );
 THREAD_OFFSET_ASSERT( real_priority );
-THREAD_OFFSET_ASSERT( Priority );
+THREAD_OFFSET_ASSERT( priority_generation );
+THREAD_OFFSET_ASSERT( priority_restore_hint );
 THREAD_OFFSET_ASSERT( resource_count );
 THREAD_OFFSET_ASSERT( Wait );
 THREAD_OFFSET_ASSERT( Timer );

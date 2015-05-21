@@ -33,7 +33,6 @@ void _CORE_semaphore_Initialize(
   _Thread_queue_Initialize(
     &the_semaphore->Wait_queue,
     _CORE_semaphore_Is_priority( the_semaphore_attributes ) ?
-              THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
-    CORE_SEMAPHORE_TIMEOUT
+              THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO
   );
 }

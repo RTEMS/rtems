@@ -102,7 +102,8 @@ rtems_status_code _Region_MP_Send_request_packet (
       return (rtems_status_code) _MPCI_Send_request_packet(
           _Objects_Get_node( region_id ),
           &the_packet->Prefix,
-          STATES_READY      /* Not used */
+          STATES_READY,     /* Not used */
+          RTEMS_TIMEOUT
         );
       break;
 
@@ -195,7 +196,7 @@ void _Region_MP_Process_packet (
       the_thread = _Thread_MP_Find_proxy( the_packet->proxy_id );
 
       if ( ! _Thread_Is_null( the_thread ) )
-        _Thread_queue_Extract( the_thread->Wait.queue, the_thread );
+        _Thread_queue_Extract( the_thread );
 
       _MPCI_Return_packet( the_packet_prefix );
       break;

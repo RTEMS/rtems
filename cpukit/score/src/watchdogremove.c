@@ -18,19 +18,69 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
 #include <rtems/score/watchdogimpl.h>
+#include <rtems/score/assert.h>
+
+static void _Watchdog_Remove_it(
+  Watchdog_Header   *header,
+  Watchdog_Control  *the_watchdog
+)
+{
+  Chain_Node        *next;
+  Watchdog_Interval  delta;
+  const Chain_Node  *iterator_tail;
+  Chain_Node        *iterator_node;
+
+  _Assert(
+    the_watchdog->state == WATCHDOG_ACTIVE
+      || the_watchdog->state == WATCHDOG_REMOVE_IT
+  );
+
+  the_watchdog->state = WATCHDOG_INACTIVE;
+  the_watchdog->stop_time = _Watchdog_Ticks_since_boot;
+
+  next = _Chain_Next( &the_watchdog->Node );
+  delta = the_watchdog->delta_interval;
+
+  if ( next != _Chain_Tail( &header->Watchdogs ) ) {
+    Watchdog_Control *next_watchdog;
+
+    next_watchdog = (Watchdog_Control *) next;
+    next_watchdog->delta_interval += delta;
+  }
+
+  _Chain_Extract_unprotected( &the_watchdog->Node );
+
+  iterator_node = _Chain_First( &header->Iterators );
+  iterator_tail = _Chain_Immutable_tail( &header->Iterators );
+
+  while ( iterator_node != iterator_tail ) {
+    Watchdog_Iterator *iterator;
+
+    iterator = (Watchdog_Iterator *) iterator_node;
+
+    if ( iterator->current == next ) {
+      iterator->delta_interval += delta;
+    }
+
+    if ( iterator->current == &the_watchdog->Node ) {
+      iterator->current = _Chain_Previous( &the_watchdog->Node );
+    }
+
+    iterator_node = _Chain_Next( iterator_node );
+  }
+}
 
 Watchdog_States _Watchdog_Remove(
+  Watchdog_Header  *header,
   Watchdog_Control *the_watchdog
 )
 {
-  ISR_Level         level;
+  ISR_lock_Context  lock_context;
   Watchdog_States   previous_state;
-  Watchdog_Control *next_watchdog;
+  Watchdog_Interval now;
 
-  _ISR_Disable( level );
+  _Watchdog_Acquire( header, &lock_context );
   previous_state = the_watchdog->state;
   switch ( previous_state ) {
     case WATCHDOG_INACTIVE:
@@ -43,25 +93,82 @@ Watchdog_States _Watchdog_Remove(
        *  the Insert operation we interrupted will be aborted.
        */
       the_watchdog->state = WATCHDOG_INACTIVE;
+      now = _Watchdog_Ticks_since_boot;
+      the_watchdog->start_time = now;
+      the_watchdog->stop_time = now;
       break;
 
     case WATCHDOG_ACTIVE:
     case WATCHDOG_REMOVE_IT:
-
-      the_watchdog->state = WATCHDOG_INACTIVE;
-      next_watchdog = _Watchdog_Next( the_watchdog );
-
-      if ( _Watchdog_Next(next_watchdog) )
-        next_watchdog->delta_interval += the_watchdog->delta_interval;
-
-      if ( _Watchdog_Sync_count )
-        _Watchdog_Sync_level = _ISR_Nest_level;
-
-      _Chain_Extract_unprotected( &the_watchdog->Node );
+      _Watchdog_Remove_it( header, the_watchdog );
       break;
   }
-  the_watchdog->stop_time = _Watchdog_Ticks_since_boot;
 
-  _ISR_Enable( level );
+  _Watchdog_Release( header, &lock_context );
   return( previous_state );
+}
+
+void _Watchdog_Tickle(
+  Watchdog_Header *header
+)
+{
+  ISR_lock_Context lock_context;
+
+  _Watchdog_Acquire( header, &lock_context );
+
+  if ( !_Watchdog_Is_empty( header ) ) {
+    Watchdog_Control  *first;
+    Watchdog_Interval  delta;
+
+    first = _Watchdog_First( header );
+    delta = first->delta_interval;
+
+    /*
+     * Although it is forbidden to insert watchdogs with a delta interval of
+     * zero it is possible to observe watchdogs with a delta interval of zero
+     * at this point.  For example lets have a watchdog chain of one watchdog
+     * with a delta interval of one and insert a new one with an initial value
+     * of one.  At the start of the insert procedure it will advance one step
+     * and reduce its delta interval by one yielding zero.  Now a tick happens.
+     * This will remove the watchdog on the chain and update the insert
+     * iterator.  Now the insert operation continues and will insert the new
+     * watchdog with a delta interval of zero.
+     */
+    if ( delta > 0 ) {
+      --delta;
+      first->delta_interval = delta;
+    }
+
+    while ( delta == 0 ) {
+      bool                            run;
+      Watchdog_Service_routine_entry  routine;
+      Objects_Id                      id;
+      void                           *user_data;
+
+      run = ( first->state == WATCHDOG_ACTIVE );
+
+      _Watchdog_Remove_it( header, first );
+
+      routine = first->routine;
+      id = first->id;
+      user_data = first->user_data;
+
+      _Watchdog_Release( header, &lock_context );
+
+      if ( run ) {
+        (*routine)( id, user_data );
+      }
+
+      _Watchdog_Acquire( header, &lock_context );
+
+      if ( _Watchdog_Is_empty( header ) ) {
+        break;
+      }
+
+      first = _Watchdog_First( header );
+      delta = first->delta_interval;
+    }
+  }
+
+  _Watchdog_Release( header, &lock_context );
 }

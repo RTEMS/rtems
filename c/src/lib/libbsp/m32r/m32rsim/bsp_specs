@@ -10,4 +10,4 @@
 %{!qrtems: %(old_link)} %{qrtems: -dc -dp -N}
 
 *endfile:
-%{!qrtems: *(old_endfiles)} %{qrtems: crtend.o%s crtfini.o%s }
+%{!qrtems: %(old_endfiles)} %{qrtems: crtend.o%s crtfini.o%s }

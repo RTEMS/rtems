@@ -130,5 +130,8 @@ static int clock_isr_is_on(const rtems_irq_connect_data *irq)
   return MC9328MXL_TMR1_TCTL & MC9328MXL_TMR_TCTL_IRQEN;
 }
 
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
+
 /* Make sure to include this, and only at the end of the file */
+
 #include "../../../../libbsp/shared/clockdrv_shell.h"

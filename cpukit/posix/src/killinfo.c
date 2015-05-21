@@ -146,7 +146,7 @@ int killinfo(
         !_Chain_Is_tail( the_chain, the_node ) ;
         the_node = the_node->next ) {
 
-    the_thread = (Thread_Control *)the_node;
+    the_thread = THREAD_CHAIN_NODE_TO_THREAD( the_node );
     api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
     #if defined(DEBUG_SIGNAL_PROCESSING)

@@ -14,47 +14,36 @@
 #include <tmacros.h>
 #include <intrcritical.h>
 
-#include <rtems/rtems/semimpl.h>
+#include <rtems/score/threadimpl.h>
 
 const char rtems_test_name[] = "SPINTRCRITICAL 16";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_timer_service_routine test_release_from_isr(rtems_id  timer, void *arg);
-Thread_blocking_operation_States getState(void);
+static Thread_Control *Main_TCB;
 
-Thread_Control *Main_TCB;
-rtems_id        Semaphore;
-volatile bool   case_hit = false;
+static rtems_id Semaphore;
 
-Thread_blocking_operation_States getState(void)
+static bool case_hit;
+
+static bool interrupts_blocking_op(void)
 {
-  Objects_Locations  location;
-  Semaphore_Control *sem;
+  Thread_Wait_flags flags = _Thread_Wait_flags_get( Main_TCB );
 
-  sem = (Semaphore_Control *)_Objects_Get(
-    &_Semaphore_Information, Semaphore, &location );
-  if ( location != OBJECTS_LOCAL ) {
-    puts( "Bad object lookup" );
-    rtems_test_exit(0);
-  }
-  _Thread_Unnest_dispatch();
-
-  return sem->Core_control.semaphore.Wait_queue.sync_state;
+  return
+    flags == ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
 }
 
-rtems_timer_service_routine test_release_from_isr(
+static rtems_timer_service_routine test_release_from_isr(
   rtems_id  timer,
   void     *arg
 )
 {
-  if ( getState() == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
+  if ( interrupts_blocking_op() ) {
     case_hit = true;
     (void) rtems_semaphore_release( Semaphore );
   }
 
   if ( Main_TCB->Wait.queue != NULL ) {
-    _Thread_queue_Process_timeout( Main_TCB );
+    _Thread_Timeout( 0, Main_TCB );
   }
 }
 
@@ -70,7 +59,7 @@ static bool test_body( void *arg )
   return case_hit;
 }
 
-rtems_task Init(
+static rtems_task Init(
   rtems_task_argument ignored
 )
 {

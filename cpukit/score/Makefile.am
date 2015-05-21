@@ -5,6 +5,15 @@ SUBDIRS = cpu
 
 ## include
 
+include_sysdir = $(includedir)/sys
+
+include_sys_HEADERS =
+include_sys_HEADERS += include/sys/_ffcounter.h
+include_sys_HEADERS += include/sys/timeffc.h
+include_sys_HEADERS += include/sys/timepps.h
+include_sys_HEADERS += include/sys/timetc.h
+include_sys_HEADERS += include/sys/timex.h
+
 include_rtemsdir = $(includedir)/rtems
 
 include_rtems_HEADERS = include/rtems/debug.h
@@ -82,10 +91,10 @@ include_rtems_score_HEADERS += include/rtems/score/threadimpl.h
 include_rtems_score_HEADERS += include/rtems/score/threaddispatch.h
 include_rtems_score_HEADERS += include/rtems/score/threadq.h
 include_rtems_score_HEADERS += include/rtems/score/threadqimpl.h
-include_rtems_score_HEADERS += include/rtems/score/threadsync.h
 include_rtems_score_HEADERS += include/rtems/score/timespec.h
 include_rtems_score_HEADERS += include/rtems/score/timestamp.h
-include_rtems_score_HEADERS += include/rtems/score/timestamp64.h
+include_rtems_score_HEADERS += include/rtems/score/timecounter.h
+include_rtems_score_HEADERS += include/rtems/score/timecounterimpl.h
 include_rtems_score_HEADERS += include/rtems/score/tls.h
 include_rtems_score_HEADERS += include/rtems/score/tod.h
 include_rtems_score_HEADERS += include/rtems/score/todimpl.h
@@ -139,6 +148,7 @@ libscore_a_SOURCES += src/schedulerprioritysmp.c
 libscore_a_SOURCES += src/schedulersimplesmp.c
 libscore_a_SOURCES += src/schedulersmpdebug.c
 libscore_a_SOURCES += src/smp.c
+libscore_a_SOURCES += src/smplock.c
 libscore_a_SOURCES += src/smpmulticastaction.c
 libscore_a_SOURCES += src/cpuset.c
 libscore_a_SOURCES += src/cpusetprintsupport.c
@@ -159,7 +169,7 @@ libscore_a_SOURCES += src/corebarrier.c src/corebarrierrelease.c \
 ## CORE_MESSAGE_QUEUE_C_FILES
 libscore_a_SOURCES += src/coremsg.c src/coremsgbroadcast.c \
     src/coremsgclose.c src/coremsgflush.c src/coremsgflushwait.c \
-    src/coremsginsert.c src/coremsgflushsupp.c src/coremsgseize.c \
+    src/coremsginsert.c src/coremsgseize.c \
     src/coremsgsubmit.c
 
 ## CORE_MUTEX_C_FILES
@@ -178,8 +188,7 @@ libscore_a_SOURCES += src/corerwlock.c src/corerwlockobtainread.c \
 endif
 
 ## CORE_SEMAPHORE_C_FILES
-libscore_a_SOURCES += src/coresem.c src/coresemflush.c src/coresemseize.c \
-    src/coresemsurrender.c
+libscore_a_SOURCES += src/coresem.c
 
 ## CORE_SPINLOCK_C_FILES
 if HAS_PTHREADS
@@ -281,7 +290,7 @@ libscore_a_SOURCES += src/rbtree.c \
 ## THREAD_C_FILES
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadclearstate.c src/threadcreateidle.c \
-    src/threaddelayended.c src/threaddispatch.c \
+    src/threaddispatch.c \
     src/threadenabledispatch.c src/threaddisabledispatch.c \
     src/threadget.c src/threadhandler.c src/threadinitialize.c \
     src/threadloadenv.c \
@@ -290,6 +299,7 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
     src/threadstartmultitasking.c src/iterateoverthreads.c
 libscore_a_SOURCES += src/threadglobalconstruction.c
+libscore_a_SOURCES += src/threadtimeout.c
 libscore_a_SOURCES += src/threadyield.c
 
 if HAS_SMP
@@ -300,7 +310,8 @@ endif
 libscore_a_SOURCES += src/threadq.c \
     src/threadqenqueue.c \
     src/threadqextractwithproxy.c src/threadqfirst.c \
-    src/threadqflush.c src/threadqprocesstimeout.c src/threadqtimeout.c
+    src/threadqflush.c
+libscore_a_SOURCES += src/threadqops.c
 
 ## TIMESPEC_C_FILES
 libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \
@@ -308,24 +319,16 @@ libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \
     src/timespecsubtract.c src/timespectoticks.c src/timespecdivide.c \
     src/timespecdividebyinteger.c src/timespecgetasnanoseconds.c
 
-## TIMESTAMP_INT64_C_FILES
-libscore_a_SOURCES += src/ts64addto.c \
-    src/ts64divide.c src/ts64equalto.c \
-    src/ts64getnanoseconds.c src/ts64getseconds.c \
-    src/ts64lessthan.c \
-    src/ts64set.c src/ts64settozero.c src/ts64subtract.c \
-    src/ts64totimespec.c src/ts64totimeval.c
-
 ## TOD_C_FILES
-libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodget.c \
-    src/coretodgetuptimetimespec.c src/coretodtickle.c \
-    src/coretodsecondssinceepoch.c src/coretodtickspersec.c \
+libscore_a_SOURCES += src/coretod.c src/coretodset.c \
+    src/coretodtickle.c \
+    src/coretodtickspersec.c \
     src/coretodadjust.c
 
 ## WATCHDOG_C_FILES
 libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c \
-    src/watchdogadjusttochain.c src/watchdoginsert.c src/watchdogremove.c \
-    src/watchdogtickle.c
+    src/watchdoginsert.c src/watchdogremove.c
+libscore_a_SOURCES += src/watchdogtick.c
 libscore_a_SOURCES += src/watchdogtickssinceboot.c
 
 ## USEREXT_C_FILES
@@ -344,6 +347,7 @@ libscore_a_SOURCES += src/profilingisrentryexit.c
 libscore_a_SOURCES += src/once.c
 libscore_a_SOURCES += src/resourceiterate.c
 libscore_a_SOURCES += src/smpbarrierwait.c
+libscore_a_SOURCES += src/kern_tc.c
 
 EXTRA_DIST = src/Unlimited.txt
 

@@ -3,6 +3,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/timecounter.h>
 #include <bsp.h>
 
 /*
@@ -10,34 +11,37 @@
  */
 #define CLOCK_VECTOR (64+56)
 
-static uint32_t s_pcntrAtTick = 0;
-static uint32_t s_nanoScale = 0;
+static rtems_timecounter_simple mcf52235_tc;
 
-/*
- * Provide nanosecond extension
- * Interrupts are disabled when this is called
- */
-static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
+static uint32_t mcf52235_tc_get(rtems_timecounter_simple *tc)
 {
-  uint32_t i;
-
-  if (MCF_PIT1_PCSR & MCF_PIT_PCSR_PIF) {
-    i = s_pcntrAtTick + (MCF_PIT1_PMR - MCF_PIT1_PCNTR);
-  }
-  else {
-    i = s_pcntrAtTick - MCF_PIT1_PCNTR;
-  }
-  return i * s_nanoScale;
+  return MCF_PIT1_PCNTR;
 }
 
-#define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
+static bool mcf52235_tc_is_pending(rtems_timecounter_simple *tc)
+{
+  return (MCF_PIT1_PCSR & MCF_PIT_PCSR_PIF) != 0;
+}
+
+static uint32_t mcf52235_tc_get_timecount(struct timecounter *tc)
+{
+  return rtems_timecounter_simple_downcounter_get(
+    tc,
+    mcf52235_tc_get,
+    mcf52235_tc_is_pending
+  );
+}
+
+static void mcf52235_tc_tick(void)
+{
+  rtems_timecounter_simple_downcounter_tick(&mcf52235_tc, mcf52235_tc_get);
+}
 
 /*
  * Periodic interval timer interrupt handler
  */
 #define Clock_driver_support_at_tick()             \
     do {                                           \
-        s_pcntrAtTick = MCF_PIT1_PCNTR;            \
         MCF_PIT1_PCSR |= MCF_PIT_PCSR_PIF;         \
     } while (0)                                    \
 
@@ -76,7 +80,6 @@ static void Clock_driver_support_initialize_hardware(void)
       break;
     preScaleCode++;
   }
-  s_nanoScale = 1000000000 / (clk >> preScaleCode);
 
   MCF_INTC0_ICR56 = MCF_INTC_ICR_IL(PIT3_IRQ_LEVEL) |
     MCF_INTC_ICR_IP(PIT3_IRQ_PRIORITY);
@@ -90,7 +93,15 @@ static void Clock_driver_support_initialize_hardware(void)
   MCF_PIT1_PMR = pmr;
   MCF_PIT1_PCSR = MCF_PIT_PCSR_PRE(preScaleCode) |
     MCF_PIT_PCSR_PIE | MCF_PIT_PCSR_RLD | MCF_PIT_PCSR_EN;
-  s_pcntrAtTick = MCF_PIT1_PCNTR;
+
+  rtems_timecounter_simple_install(
+    &mcf52235_tc,
+    clk >> preScaleCode,
+    pmr,
+    mcf52235_tc_get_timecount
+  );
 }
+
+#define Clock_driver_timecounter_tick() mcf52235_tc_tick()
 
 #include "../../../shared/clockdrv_shell.h"

@@ -1,0 +1,6 @@
+This BSP is intended to run on epiphany-*-run simulator.
+
+From command line type:
+
+$ epiphany-rtems4.11-run -e=on --memory-region 0x8e000000,0x2000000 \
+  $PATH_TO_RTEMS_EXE

@@ -67,7 +67,7 @@ rtems_status_code rtems_timer_reset(
             return RTEMS_INCORRECT_STATE;
           }
         #endif
-        _Watchdog_Remove( &the_timer->Ticker );
+        (*timer_server->cancel)( timer_server, the_timer );
         (*timer_server->schedule_operation)( timer_server, the_timer );
       } else {
         /*

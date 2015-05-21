@@ -67,12 +67,12 @@ on_EINTR:
          _Thread_Clear_state( the_thread, STATES_WAITING_FOR_JOIN_AT_EXIT );
       } else {
         executing->Wait.return_argument = &return_pointer;
-        _Thread_queue_Enter_critical_section( &api->Join_List );
         _Thread_queue_Enqueue(
           &api->Join_List,
           executing,
           STATES_WAITING_FOR_JOIN | STATES_INTERRUPTIBLE_BY_SIGNAL,
-          WATCHDOG_NO_TIMEOUT
+          WATCHDOG_NO_TIMEOUT,
+          0
         );
       }
       _Objects_Put( &the_thread->Object );

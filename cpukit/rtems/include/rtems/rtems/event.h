@@ -319,6 +319,11 @@ rtems_status_code rtems_event_receive (
 #define RTEMS_EVENT_SYSTEM_NETWORK_CLOSE RTEMS_EVENT_26
 
 /**
+ * @brief Reserved system event for the timer server.
+ */
+#define RTEMS_EVENT_SYSTEM_TIMER_SERVER RTEMS_EVENT_30
+
+/**
  * @brief Reserved system event for transient usage.
  */
 #define RTEMS_EVENT_SYSTEM_TRANSIENT RTEMS_EVENT_31

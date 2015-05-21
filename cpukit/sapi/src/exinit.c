@@ -44,6 +44,7 @@
 #include <rtems/score/priority.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/smpimpl.h>
+#include <rtems/score/timecounter.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/userextimpl.h>

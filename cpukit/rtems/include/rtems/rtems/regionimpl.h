@@ -20,6 +20,7 @@
 #include <rtems/rtems/region.h>
 #include <rtems/score/heapimpl.h>
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/debug.h>
 
 #ifdef __cplusplus
@@ -84,6 +85,7 @@ RTEMS_INLINE_ROUTINE void _Region_Free (
   Region_Control *the_region
 )
 {
+  _Thread_queue_Destroy( &the_region->Wait_queue );
   _Objects_Free( &_Region_Information, &the_region->Object );
 }
 

@@ -87,7 +87,7 @@ CORE_RWLock_Status _CORE_RWLock_Release(
            next->Wait.option == CORE_RWLOCK_THREAD_WAITING_FOR_WRITE )
         return CORE_RWLOCK_SUCCESSFUL;
       the_rwlock->number_of_readers += 1;
-      _Thread_queue_Extract( &the_rwlock->Wait_queue, next );
+      _Thread_queue_Extract( next );
     }
   }
 

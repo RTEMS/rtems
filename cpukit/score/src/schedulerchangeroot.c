@@ -61,9 +61,6 @@ void _Scheduler_Thread_change_resource_root(
   Thread_Control *offers_help = top;
   Scheduler_Node *offers_help_node;
   Thread_Control *offers_help_too;
-  ISR_Level level;
-
-  _ISR_Disable( level );
 
   offers_help_node = _Scheduler_Thread_get_node( offers_help );
   offers_help_too = _Scheduler_Node_get_owner( offers_help_node );
@@ -80,6 +77,4 @@ void _Scheduler_Thread_change_resource_root(
   if ( ctx.needs_help != NULL ) {
     _Scheduler_Ask_for_help( ctx.needs_help );
   }
-
-  _ISR_Enable( level );
 }

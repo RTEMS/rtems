@@ -33,7 +33,7 @@
 #include <rtems/posix/sigset.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/isrlock.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/threadqimpl.h>
 
 #define _States_Is_interruptible_signal( _states ) \
   ( ((_states) & \
@@ -54,8 +54,6 @@
 /*
  *  Variables
  */
-
-extern ISR_lock_Control _POSIX_signals_Lock;
 
 extern sigset_t  _POSIX_signals_Pending;
 
@@ -79,10 +77,10 @@ extern Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
 void _POSIX_signals_Manager_Initialization(void);
 
 #define _POSIX_signals_Acquire( lock_context ) \
-  _ISR_lock_ISR_disable_and_acquire( &_POSIX_signals_Lock, lock_context )
+  _Thread_queue_Acquire( &_POSIX_signals_Wait_queue, lock_context )
 
 #define _POSIX_signals_Release( lock_context ) \
-  _ISR_lock_Release_and_ISR_enable( &_POSIX_signals_Lock, lock_context )
+  _Thread_queue_Release( &_POSIX_signals_Wait_queue, lock_context )
 
 void _POSIX_signals_Action_handler(
   Thread_Control  *executing,

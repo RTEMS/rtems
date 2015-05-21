@@ -42,37 +42,17 @@
 
 #include <sys/time.h>
 
-#include <rtems/score/cpu.h>
+#include <rtems/score/basedefs.h>
 #include <rtems/score/timespec.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#if ! ( ( CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE \
-    && CPU_TIMESTAMP_USE_INT64 == FALSE \
-    && CPU_TIMESTAMP_USE_INT64_INLINE == FALSE ) \
-  || ( CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == FALSE \
-    && CPU_TIMESTAMP_USE_INT64 == TRUE \
-    && CPU_TIMESTAMP_USE_INT64_INLINE == FALSE ) \
-  || ( CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == FALSE \
-    && CPU_TIMESTAMP_USE_INT64 == FALSE \
-    && CPU_TIMESTAMP_USE_INT64_INLINE == TRUE ) )
-  #error "Invalid SuperCore Timestamp implementations selection."
-#endif
-
-#if CPU_TIMESTAMP_USE_INT64 == TRUE || CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
-  #include <rtems/score/timestamp64.h>
-#endif
-
 /**
  *   Define the Timestamp control type.
  */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  typedef struct timespec Timestamp_Control;
-#else
-  typedef Timestamp64_Control Timestamp_Control;
-#endif
+typedef struct bintime Timestamp_Control;
 
 /**
  *  @brief Set timestamp to specified seconds and nanoseconds.
@@ -84,13 +64,19 @@ extern "C" {
  *  @param[in] _seconds is the seconds portion of the timestamp
  *  @param[in] _nanoseconds is the nanoseconds portion of the timestamp
  */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_Set( _time, _seconds, _nanoseconds ) \
-          _Timespec_Set( _time, _seconds, _nanoseconds )
-#else
-  #define _Timestamp_Set( _time, _seconds, _nanoseconds ) \
-	  _Timestamp64_Set( _time, _seconds, _nanoseconds )
-#endif
+RTEMS_INLINE_ROUTINE void _Timestamp_Set(
+  Timestamp_Control *_time,
+  time_t             _seconds,
+  long               _nanoseconds
+)
+{
+  struct timespec _ts;
+
+  _ts.tv_sec = _seconds;
+  _ts.tv_nsec = _nanoseconds;
+
+  timespec2bintime( &_ts, _time );
+}
 
 /**
  *  @brief Sets the timestamp to zero.
@@ -100,13 +86,14 @@ extern "C" {
  *
  *  @param[in] _time points to the timestamp instance to zero.
  */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_Set_to_zero( _time ) \
-          _Timespec_Set_to_zero( _time )
-#else
-  #define _Timestamp_Set_to_zero( _time ) \
-	  _Timestamp64_Set_to_zero( _time )
-#endif
+
+RTEMS_INLINE_ROUTINE void _Timestamp_Set_to_zero(
+  Timestamp_Control *_time
+)
+{
+  _time->sec = 0;
+  _time->frac = 0;
+}
 
 /**
  *  @brief Less than operator for timestamps.
@@ -119,13 +106,20 @@ extern "C" {
  *  @retval This method returns true if @a _lhs is less than the @a _rhs and
  *          false otherwise.
  */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_Less_than( _lhs, _rhs ) \
-          _Timespec_Less_than( _lhs, _rhs )
-#else
-  #define _Timestamp_Less_than( _lhs, _rhs ) \
-	  _Timestamp64_Less_than( _lhs, _rhs )
-#endif
+
+RTEMS_INLINE_ROUTINE bool _Timestamp_Less_than(
+  const Timestamp_Control *_lhs,
+  const Timestamp_Control *_rhs
+)
+{
+  if ( _lhs->sec < _rhs->sec )
+    return true;
+
+  if ( _lhs->sec > _rhs->sec )
+    return false;
+
+  return _lhs->frac < _rhs->frac;
+}
 
 /**
  *  @brief Greater than operator for timestamps.
@@ -138,8 +132,20 @@ extern "C" {
  *  @retval This method returns true if @a _lhs is greater than the @a _rhs and
  *          false otherwise.
  */
-#define _Timestamp_Greater_than( _lhs, _rhs ) \
-  _Timestamp_Less_than( _rhs, _lhs )
+
+RTEMS_INLINE_ROUTINE bool _Timestamp_Greater_than(
+  const Timestamp_Control *_lhs,
+  const Timestamp_Control *_rhs
+)
+{
+  if ( _lhs->sec > _rhs->sec )
+    return true;
+
+  if ( _lhs->sec < _rhs->sec )
+    return false;
+
+  return _lhs->frac > _rhs->frac;
+}
 
 /**
  *  @brief Equal to than operator for timestamps.
@@ -152,13 +158,14 @@ extern "C" {
  *  @retval This method returns true if @a _lhs is equal to  @a _rhs and
  *          false otherwise.
  */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_Equal_to( _lhs, _rhs ) \
-          _Timespec_Equal_to( _lhs, _rhs )
-#else
-  #define _Timestamp_Equal_to( _lhs, _rhs ) \
-	  _Timestamp64_Equal_to( _lhs, _rhs )
-#endif
+
+RTEMS_INLINE_ROUTINE bool _Timestamp_Equal_to(
+  const Timestamp_Control *_lhs,
+  const Timestamp_Control *_rhs
+)
+{
+  return _lhs->sec == _rhs->sec && _lhs->frac == _rhs->frac;
+}
 
 /**
  *  @brief Adds two timestamps.
@@ -171,13 +178,17 @@ extern "C" {
  *
  *  @retval This method returns the number of seconds @a time increased by.
  */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_Add_to( _time, _add ) \
-          _Timespec_Add_to( _time, _add )
-#else
-  #define _Timestamp_Add_to( _time, _add ) \
-	  _Timestamp64_Add_to( _time, _add )
-#endif
+RTEMS_INLINE_ROUTINE time_t _Timestamp_Add_to(
+  Timestamp_Control *_time,
+  const Timestamp_Control *_add
+)
+{
+  time_t seconds = _time->sec;
+
+  bintime_add( _time, _add );
+
+  return _time->sec - seconds;
+}
 
 /**
  *  @brief Subtracts two timestamps.
@@ -192,13 +203,17 @@ extern "C" {
  *
  *  @retval This method fills in @a _result.
  */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_Subtract( _start, _end, _result ) \
-          _Timespec_Subtract( _start, _end, _result )
-#else
-  #define _Timestamp_Subtract( _start, _end, _result ) \
-	  _Timestamp64_Subtract( _start, _end, _result )
-#endif
+RTEMS_INLINE_ROUTINE void _Timestamp_Subtract(
+  const Timestamp_Control *_start,
+  const Timestamp_Control *_end,
+  Timestamp_Control       *_result
+)
+{
+  _result->sec = _end->sec;
+  _result->frac = _end->frac;
+
+  bintime_sub( _result, _start );
+}
 
 /**
  *  @brief Divides a timestamp by another timestamp.
@@ -213,13 +228,26 @@ extern "C" {
  *
  *  @retval This method fills in @a result.
  */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_Divide( _lhs, _rhs, _ival_percentage, _fval_percentage ) \
-          _Timespec_Divide( _lhs, _rhs, _ival_percentage, _fval_percentage )
-#else
-  #define _Timestamp_Divide( _lhs, _rhs, _ival_percentage, _fval_percentage ) \
-          _Timestamp64_Divide( _lhs, _rhs, _ival_percentage, _fval_percentage )
-#endif
+RTEMS_INLINE_ROUTINE void _Timestamp_Divide(
+  const Timestamp_Control *_lhs,
+  const Timestamp_Control *_rhs,
+  uint32_t                *_ival_percentage,
+  uint32_t                *_fval_percentage
+)
+{
+  struct timespec _ts_left;
+  struct timespec _ts_right;
+
+  bintime2timespec( _lhs, &_ts_left );
+  bintime2timespec( _rhs, &_ts_right );
+
+  _Timespec_Divide(
+    &_ts_left,
+    &_ts_right,
+    _ival_percentage,
+    _fval_percentage
+  );
+}
 
 /**
  *  @brief Get seconds portion of timestamp.
@@ -230,13 +258,12 @@ extern "C" {
  *
  *  @retval The seconds portion of @a _time.
  */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_Get_seconds( _time ) \
-          _Timespec_Get_seconds( _time )
-#else
-  #define _Timestamp_Get_seconds( _time ) \
-	  _Timestamp64_Get_seconds( _time )
-#endif
+RTEMS_INLINE_ROUTINE time_t _Timestamp_Get_seconds(
+  const Timestamp_Control *_time
+)
+{
+  return _time->sec;
+}
 
 /**
  *  @brief Get nanoseconds portion of timestamp.
@@ -247,13 +274,16 @@ extern "C" {
  *
  *  @retval The nanoseconds portion of @a _time.
  */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_Get_nanoseconds( _time ) \
-          _Timespec_Get_nanoseconds( _time )
-#else
-  #define _Timestamp_Get_nanoseconds( _time ) \
-	  _Timestamp64_Get_nanoseconds( _time )
-#endif
+RTEMS_INLINE_ROUTINE uint32_t _Timestamp_Get_nanoseconds(
+  const Timestamp_Control *_time
+)
+{
+  struct timespec _ts;
+
+  bintime2timespec( _time, &_ts );
+
+  return _ts.tv_nsec;
+}
 
 /**
  *  @brief Get the timestamp as nanoseconds.
@@ -264,13 +294,16 @@ extern "C" {
  *
  *  @retval The time in nanoseconds.
  */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_Get_As_nanoseconds( _timestamp, _nanoseconds ) \
-          _Timespec_Get_As_nanoseconds( _timestamp, _nanoseconds )
-#else
-  #define _Timestamp_Get_As_nanoseconds( _timestamp, _nanoseconds ) \
-	  _Timestamp64_Get_As_nanoseconds( _timestamp, _nanoseconds )
-#endif
+RTEMS_INLINE_ROUTINE uint64_t _Timestamp_Get_as_nanoseconds(
+  const Timestamp_Control *_time
+)
+{
+  struct timespec _ts;
+
+  bintime2timespec( _time, &_ts );
+
+  return _Timespec_Get_as_nanoseconds( &_ts );
+}
 
 /**
  *  @brief Convert timestamp to struct timespec.
@@ -280,14 +313,13 @@ extern "C" {
  *  @param[in] _timestamp points to the timestamp
  *  @param[in] _timespec points to the timespec
  */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  /* in this case we know they are the same type so use simple assignment */
-  #define _Timestamp_To_timespec( _timestamp, _timespec  ) \
-          *(_timespec) = *(_timestamp)
-#else
-  #define _Timestamp_To_timespec( _timestamp, _timespec  ) \
-	  _Timestamp64_To_timespec( _timestamp, _timespec  )
-#endif
+RTEMS_INLINE_ROUTINE void _Timestamp_To_timespec(
+  const Timestamp_Control *_timestamp,
+  struct timespec         *_timespec
+)
+{
+  bintime2timespec( _timestamp, _timespec );
+}
 
 /**
  *  @brief Convert timestamp to struct timeval.
@@ -295,16 +327,13 @@ extern "C" {
  *  @param[in] _timestamp points to the timestamp
  *  @param[in] _timeval points to the timeval
  */
-#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
-  #define _Timestamp_To_timeval( _timestamp, _timeval  ) \
-    do { \
-      (_timeval)->tv_sec = (_timestamp)->tv_sec; \
-      (_timeval)->tv_usec = (_timestamp)->tv_nsec / 1000; \
-    } while (0)
-#else
-  #define _Timestamp_To_timeval( _timestamp, _timeval  ) \
-	  _Timestamp64_To_timeval( _timestamp, _timeval  )
-#endif
+RTEMS_INLINE_ROUTINE void _Timestamp_To_timeval(
+  const Timestamp_Control *_timestamp,
+  struct timeval          *_timeval
+)
+{
+  bintime2timeval( _timestamp, _timeval );
+}
 
 #ifdef __cplusplus
 }

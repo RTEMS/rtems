@@ -14,7 +14,6 @@
  *
  * - set the current date and time
  * - obtain the current date and time
- * - set the nanoseconds since last clock tick handler
  * - announce a clock tick
  * - obtain the system uptime
  */
@@ -35,6 +34,7 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 #include <rtems/config.h>
+#include <rtems/score/timecounterimpl.h>
 
 #include <sys/time.h> /* struct timeval */
 
@@ -67,12 +67,6 @@ typedef enum {
   /** This value indicates obtain the TOD in struct timeval format. */
   RTEMS_CLOCK_GET_TIME_VALUE
 } rtems_clock_get_options;
-
-/**
- *  Type for the nanoseconds since last tick BSP extension.
- */
-typedef TOD_Nanoseconds_since_last_tick_routine
-  rtems_nanoseconds_extension_routine;
 
 /**
  * @brief Obtain Current Time of Day
@@ -279,24 +273,6 @@ rtems_status_code rtems_clock_set(
 rtems_status_code rtems_clock_tick( void );
 
 /**
- * @brief Set the BSP specific Nanoseconds Extension
- *
- * Clock Manager
- *
- * This directive sets the BSP provided nanoseconds since last tick
- * extension.
- *
- * @param[in] routine is a pointer to the extension routine
- *
- * @return This method returns RTEMS_SUCCESSFUL if there was not an
- *         error. Otherwise, a status code is returned indicating the
- *         source of the error.
- */
-rtems_status_code rtems_clock_set_nanoseconds_extension(
-  rtems_nanoseconds_extension_routine routine
-);
-
-/**
  * @brief Obtain the System Uptime
  *
  * This directive returns the system uptime.
@@ -328,7 +304,10 @@ void rtems_clock_get_uptime_timeval( struct timeval *uptime );
  *
  * @retval The system uptime in seconds.
  */
-time_t rtems_clock_get_uptime_seconds( void );
+RTEMS_INLINE_ROUTINE time_t rtems_clock_get_uptime_seconds( void )
+{
+  return _Timecounter_Time_uptime - 1;
+}
 
 /**
  * @brief Returns the system uptime in nanoseconds.

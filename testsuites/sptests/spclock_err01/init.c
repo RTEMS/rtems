@@ -115,14 +115,6 @@ rtems_task Init(
     puts( "TA1 - rtems_clock_get_tod_timeval - RTEMS_NOT_DEFINED" );
   }
 
-  puts( "TA1 - rtems_clock_set_nanoseconds_extension - RTEMS_INVALID_ADDRESS" );
-  status = rtems_clock_set_nanoseconds_extension( NULL );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_ADDRESS,
-    "rtems_clock_set_nanoseconds_extension NULL param"
-  );
-
   /* NULL parameter */
   status = rtems_clock_set( NULL );
   fatal_directive_status(

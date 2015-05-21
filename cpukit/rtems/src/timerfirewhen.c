@@ -51,7 +51,7 @@ rtems_status_code rtems_timer_fire_when(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      (void) _Watchdog_Remove( &the_timer->Ticker );
+      _Timer_Cancel( the_timer );
       the_timer->the_class = TIMER_TIME_OF_DAY;
       _Watchdog_Initialize( &the_timer->Ticker, routine, id, user_data );
       _Watchdog_Insert_seconds(

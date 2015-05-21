@@ -21,6 +21,7 @@
 
 #include <rtems/score/watchdog.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/isrlock.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,30 +46,49 @@ extern "C" {
   }
 
 /**
+ * @brief Iterator item to synchronize concurrent insert, remove and tickle
+ * operations.
+ */
+typedef struct {
+  /**
+   * @brief A node for a Watchdog_Header::Iterators chain.
+   */
+  Chain_Node Node;
+
+  /**
+   * @brief The current delta interval of the new watchdog to insert.
+   */
+  Watchdog_Interval delta_interval;
+
+  /**
+   * @brief The current watchdog of the chain on the way to insert the new
+   * watchdog.
+   */
+  Chain_Node *current;
+} Watchdog_Iterator;
+
+/**
  * @brief Watchdog header.
  */
 typedef struct {
   /**
+   * @brief ISR lock to protect this watchdog chain.
+   */
+  ISR_LOCK_MEMBER( Lock )
+
+  /**
    * @brief The chain of active or transient watchdogs.
    */
   Chain_Control Watchdogs;
+
+  /**
+   * @brief Currently active iterators.
+   *
+   * The iterators are registered in _Watchdog_Insert() and updated in case the
+   * watchdog chain changes.
+   */
+  Chain_Control Iterators;
 } Watchdog_Header;
-
-/**
- *  @brief Watchdog synchronization level.
- *
- *  This used for synchronization purposes
- *  during an insert on a watchdog delta chain.
- */
-SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_level;
-
-/**
- *  @brief Watchdog synchronization count.
- *
- *  This used for synchronization purposes
- *  during an insert on a watchdog delta chain.
- */
-SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_count;
 
 /**
  *  @brief Watchdog chain which is managed at ticks.
@@ -84,6 +104,30 @@ SCORE_EXTERN Watchdog_Header _Watchdog_Ticks_header;
  */
 SCORE_EXTERN Watchdog_Header _Watchdog_Seconds_header;
 
+RTEMS_INLINE_ROUTINE void _Watchdog_Acquire(
+  Watchdog_Header  *header,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_ISR_disable_and_acquire( &header->Lock, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Release(
+  Watchdog_Header  *header,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Release_and_ISR_enable( &header->Lock, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Flash(
+  Watchdog_Header  *header,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Flash( &header->Lock, lock_context );
+}
+
 /**
  *  @brief Initialize the watchdog handler.
  *
@@ -94,15 +138,24 @@ SCORE_EXTERN Watchdog_Header _Watchdog_Seconds_header;
 void _Watchdog_Handler_initialization( void );
 
 /**
+ *  @brief Triggers a watchdog tick.
+ *
+ *  This routine executes TOD, watchdog and scheduler ticks.
+ */
+void _Watchdog_Tick( void );
+
+/**
  *  @brief Removes @a the_watchdog from the watchdog chain.
  *
  *  This routine removes @a the_watchdog from the watchdog chain on which
  *  it resides and returns the state @a the_watchdog timer was in.
  *
+ *  @param[in] header The watchdog chain.
  *  @param[in] the_watchdog will be removed
  *  @retval the state in which @a the_watchdog was in when removed
  */
 Watchdog_States _Watchdog_Remove (
+  Watchdog_Header  *header,
   Watchdog_Control *the_watchdog
 );
 
@@ -114,6 +167,22 @@ Watchdog_States _Watchdog_Remove (
  *  @param[in] units The units of ticks to adjust.
  */
 void _Watchdog_Adjust_backward(
+  Watchdog_Header   *header,
+  Watchdog_Interval  units
+);
+
+/**
+ * @brief Adjusts the watchdogs in backward direction in a locked context.
+ *
+ * The caller must be the owner of the watchdog lock and will be the owner
+ * after the call.
+ *
+ * @param[in] header The watchdog header.
+ * @param[in] units The units of ticks to adjust.
+ *
+ * @see _Watchdog_Adjust_forward().
+ */
+void _Watchdog_Adjust_backward_locked(
   Watchdog_Header   *header,
   Watchdog_Interval  units
 );
@@ -133,24 +202,22 @@ void _Watchdog_Adjust_forward(
 );
 
 /**
- *  @brief Adjusts the @a header watchdog chain in the forward
- *  @a direction for @a units_arg ticks.
+ * @brief Adjusts the watchdogs in forward direction in a locked context.
  *
- *  This routine adjusts the @a header watchdog chain in the forward
- *  @a direction for @a units_arg ticks.
+ * The caller must be the owner of the watchdog lock and will be the owner
+ * after the call.  This function may release and acquire the watchdog lock
+ * internally.
  *
- *  @param[in] header is the watchdog chain to adjust
- *  @param[in] units_arg is the number of units to adjust @a header
- *  @param[in] to_fire is a pointer to an initialized Chain_Control to which
- *             all watchdog instances that are to be fired will be placed.
+ * @param[in] header The watchdog header.
+ * @param[in] units The units of ticks to adjust.
+ * @param[in] lock_context The lock context.
  *
- *  @note This always adjusts forward.
+ * @see _Watchdog_Adjust_forward().
  */
-void _Watchdog_Adjust_to_chain(
+void _Watchdog_Adjust_forward_locked(
   Watchdog_Header   *header,
-  Watchdog_Interval  units_arg,
-  Chain_Control     *to_fire
-
+  Watchdog_Interval  units,
+  ISR_lock_Context  *lock_context
 );
 
 /**
@@ -167,6 +234,25 @@ void _Watchdog_Adjust_to_chain(
 void _Watchdog_Insert (
   Watchdog_Header  *header,
   Watchdog_Control *the_watchdog
+);
+
+/**
+ * @brief Inserts the watchdog in a locked context.
+ *
+ * The caller must be the owner of the watchdog lock and will be the owner
+ * after the call.  This function may release and acquire the watchdog lock
+ * internally.
+ *
+ * @param[in] header The watchdog header.
+ * @param[in] the_watchdog The watchdog.
+ * @param[in] lock_context The lock context.
+ *
+ * @see _Watchdog_Insert().
+ */
+void _Watchdog_Insert_locked(
+  Watchdog_Header  *header,
+  Watchdog_Control *the_watchdog,
+  ISR_lock_Context *lock_context
 );
 
 /**
@@ -306,6 +392,20 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Insert_seconds(
 
 }
 
+RTEMS_INLINE_ROUTINE Watchdog_States _Watchdog_Remove_ticks(
+  Watchdog_Control *the_watchdog
+)
+{
+  return _Watchdog_Remove( &_Watchdog_Ticks_header, the_watchdog );
+}
+
+RTEMS_INLINE_ROUTINE Watchdog_States _Watchdog_Remove_seconds(
+  Watchdog_Control *the_watchdog
+)
+{
+  return _Watchdog_Remove( &_Watchdog_Seconds_header, the_watchdog );
+}
+
 /**
  * This routine resets THE_WATCHDOG timer to its state at INSERT
  * time.  This routine is valid only on interval watchdog timers
@@ -318,7 +418,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Reset_ticks(
 )
 {
 
-  (void) _Watchdog_Remove( the_watchdog );
+  _Watchdog_Remove_ticks( the_watchdog );
 
   _Watchdog_Insert( &_Watchdog_Ticks_header, the_watchdog );
 
@@ -391,7 +491,9 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Header_initialize(
   Watchdog_Header *header
 )
 {
+  _ISR_lock_Initialize( &header->Lock, "Watchdog" );
   _Chain_Initialize_empty( &header->Watchdogs );
+  _Chain_Initialize_empty( &header->Iterators );
 }
 
 /** @} */

@@ -38,7 +38,7 @@ rtems_status_code rtems_timer_delete(
 
     case OBJECTS_LOCAL:
       _Objects_Close( &_Timer_Information, &the_timer->Object );
-      (void) _Watchdog_Remove( &the_timer->Ticker );
+      _Timer_Cancel( the_timer );
       _Objects_Put( &the_timer->Object );
       _Timer_Free( the_timer );
       _Objects_Allocator_unlock();

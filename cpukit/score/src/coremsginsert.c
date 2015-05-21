@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/score/coremsgimpl.h>
-#include <rtems/score/isrlevel.h>
 
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
 static bool _CORE_message_queue_Order(
@@ -45,15 +44,12 @@ void _CORE_message_queue_Insert_message(
 )
 {
   Chain_Control *pending_messages;
-  ISR_Level      level;
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
   bool           notify;
 #endif
 
   _CORE_message_queue_Set_message_priority( the_message, submit_type );
   pending_messages = &the_message_queue->Pending_messages;
-
-  _ISR_Disable( level );
 
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
   notify = ( the_message_queue->number_of_pending_messages == 0 );
@@ -73,8 +69,6 @@ void _CORE_message_queue_Insert_message(
   } else {
     _Chain_Prepend_unprotected( pending_messages, &the_message->Node );
   }
-
-  _ISR_Enable( level );
 
   #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
     /*

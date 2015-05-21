@@ -50,7 +50,10 @@ wait for a message to arrive at a queue.  Also, a task may poll
 a queue for the arrival of a message.
 
 The maximum length message which can be sent is set
-on a per message queue basis.
+on a per message queue basis.  The message content must be copied in general
+to/from an internal buffer of the message queue or directly to a peer in
+certain cases.  This copy operation is performed with interrupts disabled.  So
+it is advisable to keep the messages as short as possible.
 
 @subsection Building a Message Queue Attribute Set
 

@@ -25,8 +25,6 @@
 
 void _Watchdog_Handler_initialization( void )
 {
-  _Watchdog_Sync_count = 0;
-  _Watchdog_Sync_level = 0;
   _Watchdog_Ticks_since_boot = 0;
 
   _Watchdog_Header_initialize( &_Watchdog_Ticks_header );

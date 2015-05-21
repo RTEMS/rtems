@@ -24,10 +24,37 @@
 
 #include <bsp.h>
 #include <bspopts.h>
+#include <rtems/timecounter.h>
 
 #if SIMSPARC_FAST_IDLE==1
 #define CLOCK_DRIVER_USE_FAST_IDLE 1
 #endif
+
+static rtems_timecounter_simple leon2_tc;
+
+static uint32_t leon2_tc_get( rtems_timecounter_simple *tc )
+{
+  return LEON_REG.Timer_Counter_1;
+}
+
+static bool leon2_tc_is_pending( rtems_timecounter_simple *tc )
+{
+  return LEON_Is_interrupt_pending( LEON_INTERRUPT_TIMER1 );
+}
+
+static uint32_t leon2_tc_get_timecount( struct timecounter *tc )
+{
+  return rtems_timecounter_simple_downcounter_get(
+    tc,
+    leon2_tc_get,
+    leon2_tc_is_pending
+  );
+}
+
+static void leon2_tc_tick( void )
+{
+  rtems_timecounter_simple_downcounter_tick( &leon2_tc, leon2_tc_get );
+}
 
 /*
  *  The Real Time Clock Counter Timer uses this trap type.
@@ -54,6 +81,12 @@ extern int CLOCK_SPEED;
         LEON_REG_TIMER_COUNTER_RELOAD_AT_ZERO | \
         LEON_REG_TIMER_COUNTER_LOAD_COUNTER  \
     ); \
+    rtems_timecounter_simple_install( \
+      &leon2_tc, \
+      1000000, \
+      rtems_configuration_get_microseconds_per_tick(), \
+      leon2_tc_get_timecount \
+    ); \
   } while (0)
 
 #define Clock_driver_support_shutdown_hardware() \
@@ -62,23 +95,6 @@ extern int CLOCK_SPEED;
     LEON_REG.Timer_Control_1 = 0; \
   } while (0)
 
-static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
-{
-  uint32_t clicks;
-  uint32_t usecs;
-
-  clicks = LEON_REG.Timer_Counter_1;
-
-  if ( LEON_Is_interrupt_pending( LEON_INTERRUPT_TIMER1 ) ) {
-    clicks = LEON_REG.Timer_Counter_1;
-    usecs = (2*rtems_configuration_get_microseconds_per_tick() - clicks);
-  } else {
-    usecs = (rtems_configuration_get_microseconds_per_tick() - clicks);
-  }
-  return usecs * 1000;
-}
-
-#define Clock_driver_nanoseconds_since_last_tick \
-    bsp_clock_nanoseconds_since_last_tick
+#define Clock_driver_timecounter_tick() leon2_tc_tick()
 
 #include "../../../shared/clockdrv_shell.h"

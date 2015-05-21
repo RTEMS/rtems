@@ -30,6 +30,7 @@
 #include <rtems/score/resourceimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/config.h>
 
@@ -77,8 +78,11 @@ SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
 SCORE_EXTERN struct _reent **_Thread_libc_reent;
 #endif
 
+#define THREAD_CHAIN_NODE_TO_THREAD( node ) \
+  RTEMS_CONTAINER_OF( node, Thread_Control, Wait.Node.Chain )
+
 #define THREAD_RBTREE_NODE_TO_THREAD( node ) \
-  RTEMS_CONTAINER_OF( node, Thread_Control, RBNode )
+  RTEMS_CONTAINER_OF( node, Thread_Control, Wait.Node.RBTree )
 
 #if defined(RTEMS_SMP)
 #define THREAD_RESOURCE_NODE_TO_THREAD( node ) \
@@ -329,31 +333,117 @@ void _Thread_Delay_ended(
 );
 
 /**
- *  @brief Change the priority of a thread.
- *
- *  This routine changes the current priority of @a the_thread to
- *  @a new_priority.  It performs any necessary scheduling operations
- *  including the selection of a new heir thread.
- *
- *  @param[in] the_thread is the thread to change
- *  @param[in] new_priority is the priority to set @a the_thread to
- *  @param[in] prepend_it is a switch to prepend the thread
+ * @brief Returns true if the left thread priority is less than the right
+ * thread priority in the intuitive sense of priority and false otherwise.
  */
-void _Thread_Change_priority (
+RTEMS_INLINE_ROUTINE bool _Thread_Priority_less_than(
+  Priority_Control left,
+  Priority_Control right
+)
+{
+  return left > right;
+}
+
+/**
+ * @brief Returns the highest priority of the left and right thread priorities
+ * in the intuitive sense of priority.
+ */
+RTEMS_INLINE_ROUTINE Priority_Control _Thread_Priority_highest(
+  Priority_Control left,
+  Priority_Control right
+)
+{
+  return _Thread_Priority_less_than( left, right ) ? right : left;
+}
+
+/**
+ * @brief Filters a thread priority change.
+ *
+ * Called by _Thread_Change_priority() under the protection of the thread lock.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in, out] new_priority The new priority of the thread.  The filter may
+ * alter this value.
+ * @param[in] arg The argument passed to _Thread_Change_priority().
+ *
+ * @retval true Change the current priority.
+ * @retval false Otherwise.
+ */
+typedef bool ( *Thread_Change_priority_filter )(
   Thread_Control   *the_thread,
-  Priority_Control  new_priority,
-  bool              prepend_it
+  Priority_Control *new_priority,
+  void             *arg
 );
 
 /**
- *  @brief Set thread priority.
+ * @brief Changes the priority of a thread if allowed by the filter function.
  *
- *  This routine updates the priority related fields in the_thread
- *  control block to indicate the current priority is now new_priority.
+ * It changes current priority of the thread to the new priority in case the
+ * filter function returns true.  In this case the scheduler is notified of the
+ * priority change as well.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_priority The new priority of the thread.
+ * @param[in] arg The argument for the filter function.
+ * @param[in] filter The filter function to determine if a priority change is
+ * allowed and optionally perform other actions under the protection of the
+ * thread lock simultaneously with the update of the current priority.
+ * @param[in] prepend_it In case this is true, then the thread is prepended to
+ * its priority group in its scheduler instance, otherwise it is appended.
+ */
+void _Thread_Change_priority(
+  Thread_Control                *the_thread,
+  Priority_Control               new_priority,
+  void                          *arg,
+  Thread_Change_priority_filter  filter,
+  bool                           prepend_it
+);
+
+/**
+ * @brief Raises the priority of a thread.
+ *
+ * It changes the current priority of the thread to the new priority if the new
+ * priority is higher than the current priority.  In this case the thread is
+ * appended to its new priority group in its scheduler instance.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_priority The new priority of the thread.
+ *
+ * @see _Thread_Change_priority().
+ */
+void _Thread_Raise_priority(
+  Thread_Control   *the_thread,
+  Priority_Control  new_priority
+);
+
+/**
+ * @brief Sets the current to the real priority of a thread.
+ *
+ * Sets the priority restore hint to false.
+ */
+void _Thread_Restore_priority( Thread_Control *the_thread );
+
+/**
+ * @brief Sets the priority of a thread.
+ *
+ * It sets the real priority of the thread.  In addition it changes the current
+ * priority of the thread if the new priority is higher than the current
+ * priority or the thread owns no resources.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_priority The new priority of the thread.
+ * @param[out] old_priority The old real priority of the thread.  This pointer
+ * must not be @c NULL.
+ * @param[in] prepend_it In case this is true, then the thread is prepended to
+ * its priority group in its scheduler instance, otherwise it is appended.
+ *
+ * @see _Thread_Change_priority().
  */
 void _Thread_Set_priority(
   Thread_Control   *the_thread,
-  Priority_Control  new_priority
+  Priority_Control  new_priority,
+  Priority_Control *old_priority,
+  bool              prepend_it
 );
 
 /**
@@ -1078,41 +1168,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_restore_default(
   do { } while ( 0 )
 #endif
 
-void _Thread_Priority_change_do_nothing(
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority,
-  void             *context
-);
-
-/**
- * @brief Sets the thread priority change handler and its context.
- *
- * @param[in] the_thread The thread.
- * @param[in] new_handler The new handler.
- * @param[in] new_context The new handler context.
- */
-RTEMS_INLINE_ROUTINE void _Thread_Priority_set_change_handler(
-  Thread_Control                 *the_thread,
-  Thread_Priority_change_handler  new_handler,
-  void                           *new_context
-)
-{
-  the_thread->Priority.change_handler = new_handler;
-  the_thread->Priority.change_handler_context = new_context;
-}
-
-/**
- * @brief Restores the thread priority change default handler and its context.
- *
- * @param[in] the_thread The thread.
- */
-RTEMS_INLINE_ROUTINE void _Thread_Priority_restore_default_change_handler(
-  Thread_Control *the_thread
-)
-{
-  the_thread->Priority.change_handler = _Thread_Priority_change_do_nothing;
-}
-
 /**
  * @brief The initial thread wait flags value set by _Thread_Initialize().
  */
@@ -1138,28 +1193,11 @@ RTEMS_INLINE_ROUTINE void _Thread_Priority_restore_default_change_handler(
 #define THREAD_WAIT_STATE_BLOCKED 0x2U
 
 /**
- * @brief Indicates that the thread progress condition is satisfied and it is
- * ready to resume execution.
+ * @brief Indicates that a condition to end the thread wait occurred.
+ *
+ * This could be a timeout, a signal, an event or a resource availability.
  */
-#define THREAD_WAIT_STATE_SATISFIED 0x4U
-
-/**
- * @brief Indicates that a timeout occurred and the thread is ready to resume
- * execution.
- */
-#define THREAD_WAIT_STATE_TIMEOUT 0x8U
-
-/**
- * @brief Indicates that the thread progress condition was satisfied during the
- * blocking operation and it is ready to resume execution.
- */
-#define THREAD_WAIT_STATE_INTERRUPT_SATISFIED 0x10U
-
-/**
- * @brief Indicates that a timeout occurred during the blocking operation and
- * the thread is ready to resume execution.
- */
-#define THREAD_WAIT_STATE_INTERRUPT_TIMEOUT 0x20U
+#define THREAD_WAIT_STATE_READY_AGAIN 0x4U
 
 /**
  * @brief Mask to get the thread wait class flags.
@@ -1273,6 +1311,80 @@ RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change(
 
   return success;
 }
+
+/**
+ * @brief Sets the thread queue.
+ *
+ * The caller must be the owner of the thread lock.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_queue The new queue.
+ *
+ * @see _Thread_Lock_set().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_set_queue(
+  Thread_Control       *the_thread,
+  Thread_queue_Control *new_queue
+)
+{
+  the_thread->Wait.queue = new_queue;
+}
+
+/**
+ * @brief Sets the thread queue operations.
+ *
+ * The caller must be the owner of the thread lock.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] new_operations The new queue operations.
+ *
+ * @see _Thread_Lock_set() and _Thread_Wait_restore_default_operations().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_set_operations(
+  Thread_Control                *the_thread,
+  const Thread_queue_Operations *new_operations
+)
+{
+  the_thread->Wait.operations = new_operations;
+}
+
+/**
+ * @brief Restores the default thread queue operations.
+ *
+ * The caller must be the owner of the thread lock.
+ *
+ * @param[in] the_thread The thread.
+ *
+ * @see _Thread_Wait_set_operations().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_restore_default_operations(
+  Thread_Control *the_thread
+)
+{
+  the_thread->Wait.operations = &_Thread_queue_Operations_default;
+}
+
+/**
+ * @brief Sets the thread wait timeout code.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] timeout_code The new thread wait timeout code.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_set_timeout_code(
+  Thread_Control *the_thread,
+  uint32_t        timeout_code
+)
+{
+  the_thread->Wait.timeout_code = timeout_code;
+}
+
+/**
+ * @brief General purpose thread wait timeout.
+ *
+ * @param[in] id Unused.
+ * @param[in] arg The thread.
+ */
+void _Thread_Timeout( Objects_Id id, void *arg );
 
 RTEMS_INLINE_ROUTINE void _Thread_Debug_set_real_processor(
   Thread_Control  *the_thread,

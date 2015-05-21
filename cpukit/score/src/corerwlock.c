@@ -36,7 +36,6 @@ void _CORE_RWLock_Initialize(
 
   _Thread_queue_Initialize(
     &the_rwlock->Wait_queue,
-    THREAD_QUEUE_DISCIPLINE_FIFO,
-    CORE_RWLOCK_TIMEOUT
+    THREAD_QUEUE_DISCIPLINE_FIFO
   );
 }

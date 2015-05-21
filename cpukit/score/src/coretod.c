@@ -20,24 +20,16 @@
 
 #include <rtems/score/todimpl.h>
 
-static uint32_t _TOD_Nanoseconds_since_tick_default_handler( void )
-{
-  return 0;
-}
-
 void _TOD_Handler_initialization(void)
 {
-  TOD_Control *tod = &_TOD;
+  struct timespec ts;
 
-  _ISR_lock_Initialize( &tod->lock, "TOD" );
+  _Timecounter_Initialize();
 
-  _Timestamp_Set( &tod->now, TOD_SECONDS_1970_THROUGH_1988, 0 );
-
-  _Timestamp_Set_to_zero( &tod->uptime );
-
-  tod->nanoseconds_since_last_tick =
-    _TOD_Nanoseconds_since_tick_default_handler;
+  ts.tv_sec = TOD_SECONDS_1970_THROUGH_1988;
+  ts.tv_nsec = 0;
+  _Timecounter_Set_clock( &ts );
 
   /* TOD has not been set */
-  tod->is_set = false;
+  _TOD.is_set = false;
 }

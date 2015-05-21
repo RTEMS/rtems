@@ -22,6 +22,10 @@ $(PROJECT_INCLUDE)/rtems/confdefs.h: include/confdefs.h $(PROJECT_INCLUDE)/rtems
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/confdefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/confdefs.h
 
+$(PROJECT_INCLUDE)/rtems/bsd.h: include/rtems/bsd.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bsd.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bsd.h
+
 $(PROJECT_INCLUDE)/rtems/chain.h: include/rtems/chain.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/chain.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/chain.h
@@ -81,6 +85,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/scheduler.h
 $(PROJECT_INCLUDE)/rtems/sptables.h: include/rtems/sptables.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sptables.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sptables.h
+
+$(PROJECT_INCLUDE)/rtems/timecounter.h: include/rtems/timecounter.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/timecounter.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/timecounter.h
 
 $(PROJECT_INCLUDE)/rtems/timespec.h: include/rtems/timespec.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/timespec.h

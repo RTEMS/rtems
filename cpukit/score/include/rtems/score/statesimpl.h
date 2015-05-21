@@ -105,19 +105,14 @@ extern "C" {
                                  STATES_WAITING_FOR_BSD_WAKEUP         | \
                                  STATES_WAITING_FOR_RWLOCK             )
 
-/** This macro corresponds to a task waiting which is blocked on
- *  a thread queue. */
-#define STATES_WAITING_ON_THREAD_QUEUE \
-                               ( STATES_LOCALLY_BLOCKED         | \
-                                 STATES_WAITING_FOR_RPC_REPLY   )
-
 /** This macro corresponds to a task waiting which is blocked. */
 #define STATES_BLOCKED         ( STATES_DELAYING                | \
+                                 STATES_LOCALLY_BLOCKED         | \
                                  STATES_WAITING_FOR_TIME        | \
                                  STATES_WAITING_FOR_PERIOD      | \
                                  STATES_WAITING_FOR_EVENT       | \
+                                 STATES_WAITING_FOR_RPC_REPLY   | \
                                  STATES_WAITING_FOR_SYSTEM_EVENT | \
-                                 STATES_WAITING_ON_THREAD_QUEUE | \
                                  STATES_INTERRUPTIBLE_BY_SIGNAL )
 
 /** All state bits set to one (provided for _Thread_Ready()) */
@@ -412,23 +407,6 @@ RTEMS_INLINE_ROUTINE bool _States_Is_locally_blocked (
 )
 {
    return (the_states & STATES_LOCALLY_BLOCKED);
-}
-
-/**
- * This function returns true if one of the states which indicates
- * that a task is blocked waiting for a local resource is set in
- * the_states, and false otherwise.
- *
- * @param[in] the_states is the task state set to test
- *
- * @return This method returns true if the state indicates that the
- *         assocated thread is waiting on a thread queue.
- */
-RTEMS_INLINE_ROUTINE bool _States_Is_waiting_on_thread_queue (
-  States_Control the_states
-)
-{
-   return (the_states & STATES_WAITING_ON_THREAD_QUEUE);
 }
 
 /**

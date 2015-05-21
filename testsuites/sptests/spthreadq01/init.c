@@ -18,38 +18,31 @@
 
 const char rtems_test_name[] = "SPTHREADQ 1";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void threadq_first_empty(
-  const char               *discipline_string,
-  Thread_queue_Disciplines  discipline
-);
+static Thread_queue_Control fifo_queue =
+  THREAD_QUEUE_FIFO_INITIALIZER( fifo_queue, "FIFO" );
 
-void threadq_first_empty(
-  const char               *discipline_string,
-  Thread_queue_Disciplines  discipline
-)
-{
-  Thread_queue_Control tq;
+static Thread_queue_Control prio_queue =
+  THREAD_QUEUE_PRIORIY_INITIALIZER( prio_queue, "Prio" );
 
-  printf( "Init - initialize thread queue for %s\n", discipline_string );
-  _Thread_queue_Initialize( &tq, discipline, 3 );
-
-  puts( "Init - _Thread_queue_Extract - thread not blocked on a thread queue" );
-  _Thread_Disable_dispatch();
-  _Thread_queue_Extract( &tq, _Thread_Executing );
-  _Thread_Enable_dispatch();
-  /* is there more to check? */
-}
-
-rtems_task Init(
+static rtems_task Init(
   rtems_task_argument ignored
 )
 {
   TEST_BEGIN();
 
-  threadq_first_empty( "FIFO", THREAD_QUEUE_DISCIPLINE_FIFO );
-  threadq_first_empty( "Priority", THREAD_QUEUE_DISCIPLINE_PRIORITY );
+  puts( "Init - _Thread_queue_Extract - thread not blocked on a thread queue" );
+  _Thread_Disable_dispatch();
+  _Thread_queue_Extract( _Thread_Executing );
+  _Thread_Enable_dispatch();
+  /* is there more to check? */
+
+  rtems_test_assert( _Chain_Is_empty( &fifo_queue.Queues.Fifo ) );
+  rtems_test_assert( fifo_queue.operations == &_Thread_queue_Operations_FIFO );
+
+  rtems_test_assert( _RBTree_Is_empty( &fifo_queue.Queues.Priority ) );
+  rtems_test_assert(
+    prio_queue.operations == &_Thread_queue_Operations_priority
+  );
 
   TEST_END();
   rtems_test_exit(0);

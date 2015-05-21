@@ -15,7 +15,7 @@
 #define _RTEMS_SCORE_THREADDISPATCH_H
 
 #include <rtems/score/percpu.h>
-#include <rtems/score/smplock.h>
+#include <rtems/score/isrlock.h>
 #include <rtems/score/profiling.h>
 
 #ifdef __cplusplus
@@ -242,16 +242,25 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level );
  *
  * This function does not acquire the Giant lock.
  *
+ * @param[in] lock_context The lock context of the corresponding
+ * _ISR_lock_ISR_disable() that started the critical section.
+ *
  * @return The current processor.
  */
-RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable_critical( void )
+RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable_critical(
+  const ISR_lock_Context *lock_context
+)
 {
   Per_CPU_Control *cpu_self;
   uint32_t         disable_level;
 
   cpu_self = _Per_CPU_Get();
   disable_level = cpu_self->thread_dispatch_disable_level;
-  _Profiling_Thread_dispatch_disable( cpu_self, disable_level );
+  _Profiling_Thread_dispatch_disable_critical(
+    cpu_self,
+    disable_level,
+    lock_context
+  );
   cpu_self->thread_dispatch_disable_level = disable_level + 1;
 
   return cpu_self;
@@ -266,18 +275,17 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable_critical( void )
  */
 RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable( void )
 {
-  Per_CPU_Control *cpu_self;
+  Per_CPU_Control  *cpu_self;
+  ISR_lock_Context  lock_context;
 
 #if defined( RTEMS_SMP ) || defined( RTEMS_PROFILING )
-  ISR_Level level;
-
-  _ISR_Disable_without_giant( level );
+  _ISR_lock_ISR_disable( &lock_context );
 #endif
 
-  cpu_self = _Thread_Dispatch_disable_critical();
+  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
 
 #if defined( RTEMS_SMP ) || defined( RTEMS_PROFILING )
-  _ISR_Enable_without_giant( level );
+  _ISR_lock_ISR_enable( &lock_context );
 #endif
 
   return cpu_self;

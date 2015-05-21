@@ -57,7 +57,7 @@ POSIX_Absolute_timeout_conversion_results_t _POSIX_Absolute_timeout_to_ticks(
   /*
    *  Is the absolute time in the past?
    */
-  _TOD_Get( &current_time );
+  _TOD_Get_as_timespec( &current_time );
 
   if ( _Timespec_Less_than( abstime, &current_time ) )
     return POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST;

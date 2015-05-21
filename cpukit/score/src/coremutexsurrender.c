@@ -89,11 +89,12 @@ CORE_mutex_Status _CORE_mutex_Surrender(
   CORE_mutex_Control                *the_mutex,
 #if defined(RTEMS_MULTIPROCESSING)
   Objects_Id                         id,
-  CORE_mutex_API_mp_support_callout  api_mutex_mp_support
+  CORE_mutex_API_mp_support_callout  api_mutex_mp_support,
 #else
   Objects_Id                         id __attribute__((unused)),
-  CORE_mutex_API_mp_support_callout  api_mutex_mp_support __attribute__((unused))
+  CORE_mutex_API_mp_support_callout  api_mutex_mp_support __attribute__((unused)),
 #endif
+  ISR_lock_Context                  *lock_context
 )
 {
   Thread_Control *the_thread;
@@ -110,14 +111,20 @@ CORE_mutex_Status _CORE_mutex_Surrender(
    */
 
   if ( the_mutex->Attributes.only_owner_release ) {
-    if ( !_Thread_Is_executing( holder ) )
+    if ( !_Thread_Is_executing( holder ) ) {
+      _ISR_lock_ISR_enable( lock_context );
       return CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE;
+    }
   }
+
+  _Thread_queue_Acquire_critical( &the_mutex->Wait_queue, lock_context );
 
   /* XXX already unlocked -- not right status */
 
-  if ( !the_mutex->nest_count )
+  if ( !the_mutex->nest_count ) {
+    _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
     return CORE_MUTEX_STATUS_SUCCESSFUL;
+  }
 
   the_mutex->nest_count--;
 
@@ -130,10 +137,12 @@ CORE_mutex_Status _CORE_mutex_Surrender(
     #if defined(RTEMS_DEBUG)
       switch ( the_mutex->Attributes.lock_nesting_behavior ) {
         case CORE_MUTEX_NESTING_ACQUIRES:
+          _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
           return CORE_MUTEX_STATUS_SUCCESSFUL;
         #if defined(RTEMS_POSIX_API)
           case CORE_MUTEX_NESTING_IS_ERROR:
             /* should never occur */
+            _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
             return CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
         #endif
         case CORE_MUTEX_NESTING_BLOCKS:
@@ -141,6 +150,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
           break;
       }
     #else
+      _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
       /* must be CORE_MUTEX_NESTING_ACQUIRES or we wouldn't be here */
       return CORE_MUTEX_STATUS_SUCCESSFUL;
     #endif
@@ -155,20 +165,12 @@ CORE_mutex_Status _CORE_mutex_Surrender(
     CORE_mutex_Status pop_status =
       _CORE_mutex_Pop_priority( the_mutex, holder );
 
-    if ( pop_status != CORE_MUTEX_STATUS_SUCCESSFUL )
+    if ( pop_status != CORE_MUTEX_STATUS_SUCCESSFUL ) {
+      _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
       return pop_status;
+    }
 
     holder->resource_count--;
-
-    /*
-     *  Whether or not someone is waiting for the mutex, an
-     *  inherited priority must be lowered if this is the last
-     *  mutex (i.e. resource) this task has.
-     */
-    if ( !_Thread_Owns_resources( holder ) &&
-         holder->real_priority != holder->current_priority ) {
-      _Thread_Change_priority( holder, holder->real_priority, true );
-    }
   }
   the_mutex->holder = NULL;
 
@@ -176,20 +178,21 @@ CORE_mutex_Status _CORE_mutex_Surrender(
    *  Now we check if another thread was waiting for this mutex.  If so,
    *  transfer the mutex to that thread.
    */
-  if ( ( the_thread = _Thread_queue_Dequeue( &the_mutex->Wait_queue ) ) ) {
+  if ( ( the_thread = _Thread_queue_First_locked( &the_mutex->Wait_queue ) ) ) {
+    /*
+     * We must extract the thread now since this will restore its default
+     * thread lock.  This is necessary to avoid a deadlock in the
+     * _Thread_Change_priority() below due to a recursive thread queue lock
+     * acquire.
+     */
+    _Thread_queue_Extract_locked( &the_mutex->Wait_queue, the_thread );
 
 #if defined(RTEMS_MULTIPROCESSING)
-    if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
+    _Thread_Dispatch_disable();
 
-      the_mutex->holder     = NULL;
-      the_mutex->nest_count = 1;
-
-      ( *api_mutex_mp_support)( the_thread, id );
-
-    } else
+    if ( _Objects_Is_local_id( the_thread->Object.id ) )
 #endif
     {
-
       the_mutex->holder     = the_thread;
       the_mutex->nest_count = 1;
 
@@ -204,16 +207,54 @@ CORE_mutex_Status _CORE_mutex_Surrender(
         case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
           _CORE_mutex_Push_priority( the_mutex, the_thread );
           the_thread->resource_count++;
-          if (the_mutex->Attributes.priority_ceiling <
-              the_thread->current_priority){
-              _Thread_Change_priority(
-                the_thread,
-                the_mutex->Attributes.priority_ceiling,
-                false
-              );
-          }
+          _Thread_Raise_priority(
+            the_thread,
+            the_mutex->Attributes.priority_ceiling
+          );
           break;
       }
+    }
+
+    _Thread_queue_Unblock_critical(
+      &the_mutex->Wait_queue,
+      the_thread,
+      lock_context
+    );
+
+#if defined(RTEMS_MULTIPROCESSING)
+    if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
+
+      the_mutex->holder     = NULL;
+      the_mutex->nest_count = 1;
+
+      ( *api_mutex_mp_support)( the_thread, id );
+
+    }
+
+    _Thread_Dispatch_enable( _Per_CPU_Get() );
+#endif
+  } else {
+    _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+  }
+
+  /*
+   *  Whether or not someone is waiting for the mutex, an
+   *  inherited priority must be lowered if this is the last
+   *  mutex (i.e. resource) this task has.
+   */
+  if ( !_Thread_Owns_resources( holder ) ) {
+    /*
+     * Ensure that the holder resource count is visible to all other processors
+     * and that we read the latest priority restore hint.
+     */
+    _Atomic_Fence( ATOMIC_ORDER_ACQ_REL );
+
+    if ( holder->priority_restore_hint ) {
+      Per_CPU_Control *cpu_self;
+
+      cpu_self = _Thread_Dispatch_disable();
+      _Thread_Restore_priority( holder );
+      _Thread_Dispatch_enable( cpu_self );
     }
   }
 

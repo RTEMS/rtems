@@ -21,9 +21,38 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/thread.h>
 #include <rtems/rtems/timerimpl.h>
 #include <rtems/score/watchdogimpl.h>
+
+void _Timer_Cancel( Timer_Control *the_timer )
+{
+  Timer_server_Control *timer_server;
+  ISR_Level level;
+
+  /* The timer class must not change during the cancel operation */
+  _ISR_Disable( level );
+
+  switch ( the_timer->the_class ) {
+    case TIMER_INTERVAL:
+      _Watchdog_Remove_ticks( &the_timer->Ticker );
+      break;
+    case TIMER_TIME_OF_DAY:
+      _Watchdog_Remove_seconds( &the_timer->Ticker );
+      break;
+    case TIMER_INTERVAL_ON_TASK:
+    case TIMER_TIME_OF_DAY_ON_TASK:
+      timer_server = _Timer_server;
+      (*timer_server->cancel)( timer_server, the_timer );
+      break;
+    default:
+      _Assert( the_timer->the_class == TIMER_DORMANT );
+      break;
+  }
+
+  _ISR_Enable( level );
+}
 
 rtems_status_code rtems_timer_create(
   rtems_name  name,

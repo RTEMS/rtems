@@ -82,7 +82,6 @@ rtems_status_code rtems_region_return_segment(
 
 #if defined(RTEMS_MULTIPROCESSING)
       case OBJECTS_REMOTE:        /* this error cannot be returned */
-        break;
 #endif
 
       case OBJECTS_ERROR:

@@ -34,6 +34,119 @@ static void test_watchdog_routine( Objects_Id id, void *arg )
   rtems_test_assert( 0 );
 }
 
+static void init_watchdogs(
+  Watchdog_Header *header,
+  Watchdog_Control watchdogs[3]
+)
+{
+  Watchdog_Control *a = &watchdogs[0];
+  Watchdog_Control *b = &watchdogs[1];
+  Watchdog_Control *c = &watchdogs[2];
+  Watchdog_Control *d = &watchdogs[3];
+
+  _Watchdog_Header_initialize( header );
+  rtems_test_assert( _Watchdog_Is_empty( header ) );
+  rtems_test_assert( _Chain_Is_empty( &header->Iterators ) );
+
+  _Watchdog_Initialize( c, NULL, 0, NULL );
+  c->initial = 6;
+  _Watchdog_Insert( header, c );
+  rtems_test_assert( c->delta_interval == 6 );
+
+  rtems_test_assert( !_Watchdog_Is_empty( header ) );
+  rtems_test_assert( _Chain_Is_empty( &header->Iterators ) );
+
+  _Watchdog_Initialize( a, NULL, 0, NULL );
+  a->initial = 2;
+  _Watchdog_Insert( header, a );
+  rtems_test_assert( a->delta_interval == 2 );
+  rtems_test_assert( c->delta_interval == 4 );
+
+  _Watchdog_Initialize( b, NULL, 0, NULL );
+  b->initial = 4;
+  _Watchdog_Insert( header, b );
+  rtems_test_assert( a->delta_interval == 2 );
+  rtems_test_assert( b->delta_interval == 2 );
+  rtems_test_assert( c->delta_interval == 2 );
+
+  _Watchdog_Initialize( d, NULL, 0, NULL );
+}
+
+static void destroy_watchdogs(
+  Watchdog_Header *header
+)
+{
+  _ISR_lock_Destroy( &header->Lock );
+}
+
+static void add_iterator(
+  Watchdog_Header *header,
+  Watchdog_Iterator *i,
+  Watchdog_Control *w
+)
+{
+  _Chain_Append_unprotected( &header->Iterators, &i->Node );
+  i->delta_interval = 2;
+  i->current = &w->Node;
+}
+
+static void test_watchdog_insert_and_remove( void )
+{
+  Watchdog_Header header;
+  Watchdog_Control watchdogs[4];
+  Watchdog_Control *a = &watchdogs[0];
+  Watchdog_Control *b = &watchdogs[1];
+  Watchdog_Control *c = &watchdogs[2];
+  Watchdog_Control *d = &watchdogs[3];
+  Watchdog_Iterator i;
+
+  init_watchdogs( &header, watchdogs );
+  add_iterator( &header, &i, c );
+
+  /* Remove next watchdog of iterator */
+  _Watchdog_Remove( &header, c );
+  rtems_test_assert( i.delta_interval == 2 );
+  rtems_test_assert( i.current == &b->Node );
+
+  /* Remove watchdog before the current watchdog of iterator */
+  _Watchdog_Remove( &header, a );
+  rtems_test_assert( i.delta_interval == 4 );
+  rtems_test_assert( i.current == &b->Node );
+
+  /* Remove current (= last) watchdog of iterator */
+  _Watchdog_Remove( &header, b );
+  rtems_test_assert( i.delta_interval == 4 );
+  rtems_test_assert( i.current == _Chain_Head( &header.Watchdogs ) );
+
+  /* Insert first watchdog */
+  a->initial = 1;
+  _Watchdog_Insert( &header, a );
+  rtems_test_assert( i.delta_interval == 4 );
+  rtems_test_assert( i.current == _Chain_Head( &header.Watchdogs ) );
+
+  destroy_watchdogs( &header );
+  init_watchdogs( &header, watchdogs );
+  add_iterator( &header, &i, b );
+
+  /* Insert right before current watchdog of iterator */
+  d->initial = 3;
+  _Watchdog_Insert( &header, d );
+  rtems_test_assert( i.delta_interval == 1 );
+  rtems_test_assert( i.current == &b->Node );
+
+  destroy_watchdogs( &header );
+  init_watchdogs( &header, watchdogs );
+  add_iterator( &header, &i, b );
+
+  /* Insert right after current watchdog of iterator */
+  d->initial = 5;
+  _Watchdog_Insert( &header, d );
+  rtems_test_assert( i.delta_interval == 2 );
+  rtems_test_assert( i.current == &b->Node );
+
+  destroy_watchdogs( &header );
+}
+
 static void test_watchdog_static_init( void )
 {
   #if defined(RTEMS_USE_16_BIT_OBJECT)
@@ -70,6 +183,7 @@ rtems_task Init(
   TEST_BEGIN();
 
   test_watchdog_static_init();
+  test_watchdog_insert_and_remove();
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
 

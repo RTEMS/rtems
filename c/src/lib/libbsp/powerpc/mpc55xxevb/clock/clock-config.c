@@ -26,13 +26,39 @@
 
 #include <mpc55xx/regs.h>
 
+#include <rtems/timecounter.h>
+
 void Clock_isr(void *arg);
 
-static uint64_t mpc55xx_clock_factor;
+static rtems_timecounter_simple mpc55xx_tc;
 
 #if defined(MPC55XX_CLOCK_EMIOS_CHANNEL)
 
 #include <mpc55xx/emios.h>
+
+static uint32_t mpc55xx_tc_get(rtems_timecounter_simple *tc)
+{
+  return EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL].CCNTR.R;
+}
+
+static bool mpc55xx_tc_is_pending(rtems_timecounter_simple *tc)
+{
+  return EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL].CSR.B.FLAG != 0;
+}
+
+static uint32_t mpc55xx_tc_get_timecount(struct timecounter *tc)
+{
+  return rtems_timecounter_simple_upcounter_get(
+    tc,
+    mpc55xx_tc_get,
+    mpc55xx_tc_is_pending
+  );
+}
+
+static void mpc55xx_tc_tick(void)
+{
+  rtems_timecounter_simple_upcounter_tick(&mpc55xx_tc, mpc55xx_tc_get);
+}
 
 static void mpc55xx_clock_at_tick(void)
 {
@@ -67,8 +93,6 @@ static void mpc55xx_clock_initialize(void)
   uint64_t reference_clock = bsp_clock_speed;
   uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
   uint64_t interval = (reference_clock * us_per_tick) / 1000000;
-
-  mpc55xx_clock_factor = (1000000000ULL << 32) / reference_clock;
 
   /* Apply prescaler */
   if (prescaler > 0) {
@@ -110,6 +134,13 @@ static void mpc55xx_clock_initialize(void)
   ccr.B.FEN = 1;
   ccr.B.FREN = 1;
   regs->CCR.R = ccr.R;
+
+  rtems_timecounter_simple_install(
+    &mpc55xx_tc,
+    reference_clock,
+    interval,
+    mpc55xx_tc_get_timecount
+  );
 }
 
 static void mpc55xx_clock_cleanup(void)
@@ -122,21 +153,31 @@ static void mpc55xx_clock_cleanup(void)
   regs->CCR.R = ccr.R;
 }
 
-static uint32_t mpc55xx_clock_nanoseconds_since_last_tick(void)
+#elif defined(MPC55XX_CLOCK_PIT_CHANNEL)
+
+static uint32_t mpc55xx_tc_get(rtems_timecounter_simple *tc)
 {
-  volatile struct EMIOS_CH_tag *regs = &EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL];
-  uint64_t c = regs->CCNTR.R;
-  union EMIOS_CSR_tag csr = { .R = regs->CSR.R };
-  uint64_t k = mpc55xx_clock_factor;
-
-  if (csr.B.FLAG != 0) {
-    c = regs->CCNTR.R + regs->CADR.R + 1;
-  }
-
-  return (uint32_t) ((c * k) >> 32);
+  return PIT_RTI.CHANNEL [MPC55XX_CLOCK_PIT_CHANNEL].CVAL.R;
 }
 
-#elif defined(MPC55XX_CLOCK_PIT_CHANNEL)
+static bool mpc55xx_tc_is_pending(rtems_timecounter_simple *tc)
+{
+  return PIT_RTI.CHANNEL [MPC55XX_CLOCK_PIT_CHANNEL].TFLG.B.TIF != 0;
+}
+
+static uint32_t mpc55xx_tc_get_timecount(struct timecounter *tc)
+{
+  return rtems_timecounter_simple_downcounter_get(
+    tc,
+    mpc55xx_tc_get,
+    mpc55xx_tc_is_pending
+  );
+}
+
+static void mpc55xx_tc_tick(void)
+{
+  rtems_timecounter_simple_downcounter_tick(&mpc55xx_tc, mpc55xx_tc_get);
+}
 
 static void mpc55xx_clock_at_tick(void)
 {
@@ -174,11 +215,16 @@ static void mpc55xx_clock_initialize(void)
   PIT_RTI_PITMCR_32B_tag pitmcr = { .B = { .FRZ = 1 } };
   PIT_RTI_TCTRL_32B_tag tctrl = { .B = { .TIE = 1, .TEN = 1 } };
 
-  mpc55xx_clock_factor = (1000000000ULL << 32) / reference_clock;
-
   PIT_RTI.PITMCR.R = pitmcr.R;
   channel->LDVAL.R = interval;
   channel->TCTRL.R = tctrl.R;
+
+  rtems_timecounter_simple_install(
+    &mpc55xx_tc,
+    reference_clock,
+    interval,
+    mpc55xx_tc_get_timecount
+  );
 }
 
 static void mpc55xx_clock_cleanup(void)
@@ -189,23 +235,9 @@ static void mpc55xx_clock_cleanup(void)
   channel->TCTRL.R = 0;
 }
 
-static uint32_t mpc55xx_clock_nanoseconds_since_last_tick(void)
-{
-  volatile PIT_RTI_CHANNEL_tag *channel =
-    &PIT_RTI.CHANNEL [MPC55XX_CLOCK_PIT_CHANNEL];
-  uint32_t c = channel->CVAL.R;
-  uint32_t i = channel->LDVAL.R;
-  uint64_t k = mpc55xx_clock_factor;
-
-  if (channel->TFLG.B.TIF != 0) {
-    c = channel->CVAL.R - i;
-  }
-
-  return (uint32_t) (((i - c) * k) >> 32);
-}
-
 #endif
 
+#define Clock_driver_timecounter_tick() mpc55xx_tc_tick()
 #define Clock_driver_support_at_tick() \
   mpc55xx_clock_at_tick()
 #define Clock_driver_support_initialize_hardware() \
@@ -217,8 +249,6 @@ static uint32_t mpc55xx_clock_nanoseconds_since_last_tick(void)
   } while (0)
 #define Clock_driver_support_shutdown_hardware() \
   mpc55xx_clock_cleanup()
-#define Clock_driver_nanoseconds_since_last_tick \
-  mpc55xx_clock_nanoseconds_since_last_tick
 
 /* Include shared source clock driver code */
 #include "../../../../libbsp/shared/clockdrv_shell.h"

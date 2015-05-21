@@ -64,6 +64,7 @@ int _POSIX_Message_queue_Send_support(
   CORE_message_queue_Status       msg_status;
   bool                            do_wait;
   Thread_Control                 *executing;
+  ISR_lock_Context                lock_context;
 
   /*
    * Validate the priority.
@@ -73,12 +74,16 @@ int _POSIX_Message_queue_Send_support(
   if ( msg_prio > MQ_PRIO_MAX )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
+  the_mq_fd = _POSIX_Message_queue_Get_fd_interrupt_disable(
+    mqdes,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
       if ( (the_mq_fd->oflag & O_ACCMODE) == O_RDONLY ) {
-        _Objects_Put( &the_mq_fd->Object );
+        _ISR_lock_ISR_enable( &lock_context );
         rtems_set_errno_and_return_minus_one( EBADF );
       }
 
@@ -105,10 +110,9 @@ int _POSIX_Message_queue_Send_support(
         NULL,
         _POSIX_Message_queue_Priority_to_core( msg_prio ),
         do_wait,
-        timeout    /* no timeout */
+        timeout,   /* no timeout */
+        &lock_context
       );
-
-      _Objects_Put( &the_mq_fd->Object );
 
       /*
        *  If we had to block, then this is where the task returns

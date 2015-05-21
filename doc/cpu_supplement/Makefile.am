@@ -15,6 +15,7 @@ GENERATED_FILES += general.texi
 GENERATED_FILES += arm.texi
 GENERATED_FILES += avr.texi
 GENERATED_FILES += bfin.texi
+GENERATED_FILES += epiphany.texi
 GENERATED_FILES += h8300.texi
 GENERATED_FILES += i386.texi
 GENERATED_FILES += lm32.texi
@@ -58,6 +59,11 @@ avr.texi: avr.t
 	    -n "" < $< > $@
 
 bfin.texi: bfin.t
+	$(BMENU2) -p "" \
+	    -u "Top" \
+	    -n "" < $< > $@
+
+epiphany.texi: epiphany.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@

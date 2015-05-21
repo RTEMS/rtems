@@ -390,18 +390,13 @@ uninitialized =
 
 /*timerimpl.h*/ (sizeof _Timer_Information)               +
 
-/*tod.h*/       (sizeof _TOD.now)                         +
-                (sizeof _TOD.uptime)                      +
-
 /*tqdata.h*/    0                                         +
 
 /*types.h*/     0                                         +
 
 /*userext.h*/   (sizeof _User_extensions_List)            +
 
-/*watchdog.h*/  (sizeof _Watchdog_Sync_level)             +
-                (sizeof _Watchdog_Sync_count)             +
-                (sizeof _Watchdog_Ticks_since_boot)       +
+/*watchdog.h*/  (sizeof _Watchdog_Ticks_since_boot)       +
                 (sizeof _Watchdog_Ticks_header)           +
                 (sizeof _Watchdog_Seconds_header)         +
 

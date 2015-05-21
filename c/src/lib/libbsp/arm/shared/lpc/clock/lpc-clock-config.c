@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -21,6 +21,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/timecounter.h>
 
 #include <bsp/lpc-clock-config.h>
 #include <bsp/lpc-timer.h>
@@ -32,6 +33,16 @@ void Clock_isr(rtems_irq_hdl_param arg);
 
 static volatile lpc_timer *const lpc_clock =
   (volatile lpc_timer *) LPC_CLOCK_TIMER_BASE;
+
+static volatile lpc_timer *const lpc_timecounter =
+  (volatile lpc_timer *) LPC_CLOCK_TIMECOUNTER_BASE;
+
+static struct timecounter lpc_clock_tc;
+
+static uint32_t lpc_clock_tc_get_timecount(struct timecounter *tc)
+{
+  return lpc_timecounter->tc;
+}
 
 static void lpc_clock_at_tick(void)
 {
@@ -85,6 +96,13 @@ static void lpc_clock_initialize(void)
 
   /* Enable timer */
   lpc_clock->tcr = LPC_TIMER_TCR_EN;
+
+  /* Install timecounter */
+  lpc_clock_tc.tc_get_timecount = lpc_clock_tc_get_timecount;
+  lpc_clock_tc.tc_counter_mask = 0xffffffff;
+  lpc_clock_tc.tc_frequency = LPC_CLOCK_REFERENCE;
+  lpc_clock_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+  rtems_timecounter_install(&lpc_clock_tc);
 }
 
 static void lpc_clock_cleanup(void)
@@ -105,18 +123,6 @@ static void lpc_clock_cleanup(void)
   }
 }
 
-static uint32_t lpc_clock_nanoseconds_since_last_tick(void)
-{
-  uint64_t k = (1000000000ULL << 32) / LPC_CLOCK_REFERENCE;
-  uint64_t c = lpc_clock->tc;
-
-  if ((lpc_clock->ir & LPC_TIMER_IR_MR0) != 0) {
-    c = lpc_clock->tc + lpc_clock->mr0;
-  }
-
-  return (uint32_t) ((c * k) >> 32);
-}
-
 #define Clock_driver_support_at_tick() lpc_clock_at_tick()
 #define Clock_driver_support_initialize_hardware() lpc_clock_initialize()
 #define Clock_driver_support_install_isr(isr, old_isr) \
@@ -126,8 +132,6 @@ static uint32_t lpc_clock_nanoseconds_since_last_tick(void)
   } while (0)
 
 #define Clock_driver_support_shutdown_hardware() lpc_clock_cleanup()
-#define Clock_driver_nanoseconds_since_last_tick \
-  lpc_clock_nanoseconds_since_last_tick
 
 /* Include shared source clock driver code */
 #include "../../../../shared/clockdrv_shell.h"

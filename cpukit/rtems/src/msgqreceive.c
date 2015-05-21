@@ -42,6 +42,7 @@ rtems_status_code rtems_message_queue_receive(
   Objects_Locations               location;
   bool                            wait;
   Thread_Control                 *executing;
+  ISR_lock_Context                lock_context;
 
   if ( !buffer )
     return RTEMS_INVALID_ADDRESS;
@@ -49,7 +50,11 @@ rtems_status_code rtems_message_queue_receive(
   if ( !size )
     return RTEMS_INVALID_ADDRESS;
 
-  the_message_queue = _Message_queue_Get( id, &location );
+  the_message_queue = _Message_queue_Get_interrupt_disable(
+    id,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
@@ -66,9 +71,9 @@ rtems_status_code rtems_message_queue_receive(
         buffer,
         size,
         wait,
-        timeout
+        timeout,
+        &lock_context
       );
-      _Objects_Put( &the_message_queue->Object );
       return _Message_queue_Translate_core_message_queue_return_code(
         executing->Wait.return_code
       );

@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2014 embedded brains GmbH.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -22,141 +23,91 @@
 
 const char rtems_test_name[] = "SPINTRCRITICAL 17";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+typedef struct {
+  rtems_id timer1;
+  rtems_id timer2;
+  bool done;
+} test_context;
 
-#define TIMER_COUNT 4
+static test_context ctx_instance;
 
-#define TIMER_TRIGGER 0
-#define TIMER_RESET 1
-#define TIMER_NEVER_INTERVAL 2
-#define TIMER_NEVER_TOD 3
-
-static rtems_id timer [TIMER_COUNT];
-
-static rtems_time_of_day tod;
-
-static volatile bool case_hit;
-
-static void never_callback(rtems_id timer, void *arg)
+static void never(rtems_id timer_id, void *arg)
 {
-  rtems_test_assert(false);
+  rtems_test_assert(0);
 }
 
-static void reset_tod_timer(void)
+static void fire(rtems_id timer_id, void *arg)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  /* The arg is NULL */
+  test_context *ctx = &ctx_instance;
+  rtems_status_code sc;
 
-  sc = rtems_timer_server_fire_when(
-    timer [TIMER_NEVER_TOD],
-    &tod,
-    never_callback,
-    NULL
-  );
-  directive_failed_with_level(sc, "rtems_timer_server_fire_after", -1);
-}
+  if (!ctx->done) {
+    ctx->done =
+      _Timer_server->Interval_watchdogs.system_watchdog_helper != NULL;
 
-static void reset_callback(rtems_id timer_id, void *arg)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-
-  sc = rtems_timer_reset(timer [TIMER_RESET]);
-  directive_failed_with_level(sc, "rtems_timer_reset", -1);
-
-  sc = rtems_timer_reset(timer [TIMER_NEVER_INTERVAL]);
-  directive_failed_with_level(sc, "rtems_timer_reset", -1);
-
-  reset_tod_timer();
-
-  if (!case_hit) {
-    case_hit = _Timer_server->insert_chain != NULL;
+    if (ctx->done) {
+      sc = rtems_timer_server_fire_after(ctx->timer2, 100, never, NULL);
+      rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    }
   }
 }
 
-static void trigger_callback(rtems_id timer_id, void *arg)
+static bool test_body(void *arg)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  test_context *ctx = arg;
+  rtems_status_code sc;
 
-  if (case_hit) {
-    TEST_END();
+  sc = rtems_timer_reset(ctx->timer1);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    rtems_test_exit(0);
-  } else if (interrupt_critical_section_test_support_delay()) {
-    puts("test case not hit, give up");
-
-    rtems_test_exit(0);
-  }
-
-  sc = rtems_timer_reset(timer [TIMER_TRIGGER]);
-  directive_failed(sc, "rtems_timer_reset");
+  return ctx->done;
 }
 
-rtems_task Init( rtems_task_argument ignored )
+static void Init(rtems_task_argument ignored)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  size_t i = 0;
+  test_context *ctx = &ctx_instance;
+  rtems_status_code sc;
 
   TEST_BEGIN();
 
-  build_time(&tod, 4, 12, 2009, 9, 34, 11, 0);
-  sc = rtems_clock_set(&tod);
-  directive_failed(sc, "rtems_clock_set");
+  sc = rtems_timer_create(
+    rtems_build_name('T', 'I', 'M', '1'),
+    &ctx->timer1
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  ++tod.year;
-
-  for (i = 0; i < TIMER_COUNT; ++i) {
-    sc = rtems_timer_create(
-      rtems_build_name('T', 'I', 'M', '0' + i),
-      &timer [i]
-    );
-    directive_failed(sc, "rtems_timer_create");
-  }
+  sc = rtems_timer_create(
+    rtems_build_name('T', 'I', 'M', '2'),
+    &ctx->timer2
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_timer_initiate_server(
     RTEMS_MINIMUM_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES
   );
-  directive_failed(sc, "rtems_timer_initiate_server");
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_timer_server_fire_after(
-    timer [TIMER_NEVER_INTERVAL],
-    2,
-    never_callback,
-    NULL
-  );
-  directive_failed(sc, "rtems_timer_server_fire_after");
+  sc = rtems_timer_server_fire_after(ctx->timer1, 1000, never, NULL);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  reset_tod_timer();
+  interrupt_critical_section_test(test_body, ctx, fire);
+  rtems_test_assert(ctx->done);
 
-  sc = rtems_timer_fire_after(
-    timer [TIMER_RESET],
-    1,
-    reset_callback,
-    NULL
-  );
-  directive_failed(sc, "rtems_timer_fire_after");
-
-  sc = rtems_timer_server_fire_after(
-    timer [TIMER_TRIGGER],
-    1,
-    trigger_callback,
-    NULL
-  );
-  directive_failed(sc, "rtems_timer_server_fire_after");
-
-  interrupt_critical_section_test_support_initialize(NULL);
-
-  rtems_task_delete(RTEMS_SELF);
+  TEST_END();
+  rtems_test_exit(0);
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MICROSECONDS_PER_TICK 2000
+#define CONFIGURE_MICROSECONDS_PER_TICK 1000
 
 #define CONFIGURE_MAXIMUM_TASKS 2
-#define CONFIGURE_MAXIMUM_TIMERS 4
+#define CONFIGURE_MAXIMUM_TIMERS 3
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

@@ -78,7 +78,7 @@ static void any_satisfy_before_timeout(rtems_id timer, void *arg)
     );
     rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
 
-    _Event_Timeout(0, thread);
+    _Thread_Timeout(0, thread);
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == GREEN
@@ -88,7 +88,7 @@ static void any_satisfy_before_timeout(rtems_id timer, void *arg)
     if (ctx->hit) {
       rtems_test_assert(
         _Thread_Wait_flags_get(thread)
-          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_INTERRUPT_SATISFIED)
+          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_READY_AGAIN)
       );
     }
 
@@ -175,7 +175,7 @@ static void all_satisfy_before_timeout(rtems_id timer, void *arg)
     );
     rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
 
-    _Event_Timeout(0, thread);
+    _Thread_Timeout(0, thread);
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == EVENTS
@@ -185,7 +185,7 @@ static void all_satisfy_before_timeout(rtems_id timer, void *arg)
     if (ctx->hit) {
       rtems_test_assert(
         _Thread_Wait_flags_get(thread)
-          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_INTERRUPT_SATISFIED)
+          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_READY_AGAIN)
       );
     }
 
@@ -251,7 +251,7 @@ static void timeout_before_satisfied(rtems_id timer, void *arg)
     );
     rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
 
-    _Event_Timeout(0, thread);
+    _Thread_Timeout(0, thread);
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == DEADBEEF
@@ -269,7 +269,7 @@ static void timeout_before_satisfied(rtems_id timer, void *arg)
     if (ctx->hit) {
       rtems_test_assert(
         _Thread_Wait_flags_get(thread)
-          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_INTERRUPT_TIMEOUT)
+          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_READY_AGAIN)
       );
     }
 

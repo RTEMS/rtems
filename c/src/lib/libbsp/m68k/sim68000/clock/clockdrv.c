@@ -48,4 +48,6 @@ static void Clock_driver_support_shutdown_hardware(void)
   t->cr  = 0xA0;  /* initialize with timer disabled */
 }
 
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
+
 #include "../../../shared/clockdrv_shell.h"

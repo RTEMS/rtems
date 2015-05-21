@@ -82,8 +82,7 @@ void _MPCI_Handler_initialization(
 
   _Thread_queue_Initialize(
     &_MPCI_Remote_blocked_threads,
-    THREAD_QUEUE_DISCIPLINE_FIFO,
-    timeout_status
+    THREAD_QUEUE_DISCIPLINE_FIFO
   );
 }
 
@@ -188,7 +187,8 @@ void _MPCI_Send_process_packet (
 uint32_t   _MPCI_Send_request_packet (
   uint32_t            destination,
   MP_packet_Prefix   *the_packet,
-  States_Control      extra_state
+  States_Control      extra_state,
+  uint32_t            timeout_code
 )
 {
   Thread_Control *executing = _Thread_Executing;
@@ -206,8 +206,6 @@ uint32_t   _MPCI_Send_request_packet (
 
     (*_MPCI_table->send_packet)( destination, the_packet );
 
-    _Thread_queue_Enter_critical_section( &_MPCI_Remote_blocked_threads );
-
     /*
      *  See if we need a default timeout
      */
@@ -219,7 +217,8 @@ uint32_t   _MPCI_Send_request_packet (
       &_MPCI_Remote_blocked_threads,
       executing,
       STATES_WAITING_FOR_RPC_REPLY | extra_state,
-      the_packet->timeout
+      the_packet->timeout,
+      timeout_code
     );
 
   _Thread_Enable_dispatch();
@@ -262,7 +261,7 @@ Thread_Control *_MPCI_Process_response (
       the_thread = NULL;          /* IMPOSSIBLE */
       break;
     case OBJECTS_LOCAL:
-      _Thread_queue_Extract( &_MPCI_Remote_blocked_threads, the_thread );
+      _Thread_queue_Extract( the_thread );
       the_thread->Wait.return_code = the_packet->return_code;
       _Objects_Put_without_thread_dispatch( &the_thread->Object );
     break;
@@ -284,6 +283,7 @@ Thread _MPCI_Receive_server(
   MP_packet_Prefix         *the_packet;
   MPCI_Packet_processor     the_function;
   Thread_Control           *executing;
+  ISR_lock_Context          lock_context;
 
   executing = _Thread_Get_executing();
 
@@ -291,15 +291,15 @@ Thread _MPCI_Receive_server(
 
     executing->receive_packet = NULL;
 
-    _Thread_Disable_dispatch();
+    _ISR_lock_ISR_disable( &lock_context );
     _CORE_semaphore_Seize(
       &_MPCI_Semaphore,
       executing,
       0,
       true,
-      WATCHDOG_NO_TIMEOUT
+      WATCHDOG_NO_TIMEOUT,
+      &lock_context
     );
-    _Thread_Enable_dispatch();
 
     for ( ; ; ) {
       the_packet = _MPCI_Receive_packet();
@@ -330,9 +330,10 @@ Thread _MPCI_Receive_server(
 
 void _MPCI_Announce ( void )
 {
-  _Thread_Disable_dispatch();
-  (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, 0, 0 );
-  _Thread_Enable_dispatch();
+  ISR_lock_Context lock_context;
+
+  _ISR_lock_ISR_disable( &lock_context );
+  (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, 0, 0, &lock_context );
 }
 
 void _MPCI_Internal_packets_Send_process_packet (

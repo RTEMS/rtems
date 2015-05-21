@@ -84,12 +84,17 @@ void _Event_Seize(
   executing->Wait.return_argument = event_out;
   _Thread_Wait_flags_set( executing, intend_to_block );
 
-  cpu_self = _Thread_Dispatch_disable_critical();
+  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Thread_Lock_release_default( executing, lock_context );
-  _Giant_Acquire( cpu_self );
 
   if ( ticks ) {
-    _Watchdog_Initialize( &executing->Timer, _Event_Timeout, 0, executing );
+    _Thread_Wait_set_timeout_code( executing, RTEMS_TIMEOUT );
+    _Watchdog_Initialize(
+      &executing->Timer,
+      _Thread_Timeout,
+      0,
+      executing
+    );
     _Watchdog_Insert_ticks( &executing->Timer, ticks );
   }
 
@@ -101,10 +106,9 @@ void _Event_Seize(
     wait_class | THREAD_WAIT_STATE_BLOCKED
   );
   if ( !success ) {
-    _Watchdog_Remove( &executing->Timer );
+    _Watchdog_Remove_ticks( &executing->Timer );
     _Thread_Unblock( executing );
   }
 
-  _Giant_Release( cpu_self );
   _Thread_Dispatch_enable( cpu_self );
 }

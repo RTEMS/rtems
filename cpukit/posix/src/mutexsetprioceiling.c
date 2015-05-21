@@ -41,6 +41,7 @@ int pthread_mutex_setprioceiling(
   register POSIX_Mutex_Control *the_mutex;
   Objects_Locations             location;
   Priority_Control              the_priority;
+  ISR_lock_Context              lock_context;
 
   if ( !old_ceiling )
     return EINVAL;
@@ -64,7 +65,11 @@ int pthread_mutex_setprioceiling(
    *  NOTE: This makes it easier to get 100% binary coverage since the
    *        bad Id case is handled by the switch.
    */
-  the_mutex = _POSIX_Mutex_Get( mutex, &location );
+  the_mutex = _POSIX_Mutex_Get_interrupt_disable(
+    mutex,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
@@ -78,9 +83,9 @@ int pthread_mutex_setprioceiling(
       _CORE_mutex_Surrender(
         &the_mutex->Mutex,
         the_mutex->Object.id,
-        NULL
+        NULL,
+        &lock_context
       );
-      _Objects_Put( &the_mutex->Object );
 
       return 0;
 

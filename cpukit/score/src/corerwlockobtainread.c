@@ -32,7 +32,7 @@ void _CORE_RWLock_Obtain_for_reading(
   CORE_RWLock_API_mp_support_callout   api_rwlock_mp_support
 )
 {
-  ISR_Level       level;
+  ISR_lock_Context lock_context;
 
   /*
    *  If unlocked, then OK to read.
@@ -40,21 +40,21 @@ void _CORE_RWLock_Obtain_for_reading(
    *  If any thread is waiting, then we wait.
    */
 
-  _ISR_Disable( level );
+  _Thread_queue_Acquire( &the_rwlock->Wait_queue, &lock_context );
     switch ( the_rwlock->current_state ) {
       case CORE_RWLOCK_UNLOCKED:
 	the_rwlock->current_state = CORE_RWLOCK_LOCKED_FOR_READING;
 	the_rwlock->number_of_readers += 1;
-	_ISR_Enable( level );
+	_Thread_queue_Release( &the_rwlock->Wait_queue, &lock_context );
 	executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
 	return;
 
       case CORE_RWLOCK_LOCKED_FOR_READING: {
         Thread_Control *waiter;
-        waiter = _Thread_queue_First( &the_rwlock->Wait_queue );
+        waiter = _Thread_queue_First_locked( &the_rwlock->Wait_queue );
         if ( !waiter ) {
 	  the_rwlock->number_of_readers += 1;
-	  _ISR_Enable( level );
+	  _Thread_queue_Release( &the_rwlock->Wait_queue, &lock_context );
 	  executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
           return;
         }
@@ -69,7 +69,7 @@ void _CORE_RWLock_Obtain_for_reading(
      */
 
     if ( !wait ) {
-      _ISR_Enable( level );
+      _Thread_queue_Release( &the_rwlock->Wait_queue, &lock_context );
       executing->Wait.return_code = CORE_RWLOCK_UNAVAILABLE;
       return;
     }
@@ -78,18 +78,17 @@ void _CORE_RWLock_Obtain_for_reading(
      *  We need to wait to enter this critical section
      */
 
-    _Thread_queue_Enter_critical_section( &the_rwlock->Wait_queue );
-    executing->Wait.queue       = &the_rwlock->Wait_queue;
     executing->Wait.id          = id;
     executing->Wait.option      = CORE_RWLOCK_THREAD_WAITING_FOR_READ;
     executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
-    _ISR_Enable( level );
 
-    _Thread_queue_Enqueue(
+    _Thread_queue_Enqueue_critical(
        &the_rwlock->Wait_queue,
        executing,
        STATES_WAITING_FOR_RWLOCK,
-       timeout
+       timeout,
+       CORE_RWLOCK_TIMEOUT,
+       &lock_context
     );
 
     /* return to API level so it can dispatch and we block */

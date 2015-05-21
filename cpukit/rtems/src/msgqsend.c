@@ -62,11 +62,16 @@ rtems_status_code rtems_message_queue_send(
   Message_queue_Control           *the_message_queue;
   Objects_Locations                location;
   CORE_message_queue_Status        status;
+  ISR_lock_Context                 lock_context;
 
   if ( !buffer )
     return RTEMS_INVALID_ADDRESS;
 
-  the_message_queue = _Message_queue_Get( id, &location );
+  the_message_queue = _Message_queue_Get_interrupt_disable(
+    id,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
@@ -77,10 +82,9 @@ rtems_status_code rtems_message_queue_send(
         id,
         MESSAGE_QUEUE_MP_HANDLER,
         false,   /* sender does not block */
-        0        /* no timeout */
+        0,       /* no timeout */
+        &lock_context
       );
-
-      _Objects_Put( &the_message_queue->Object );
 
       /*
        *  Since this API does not allow for blocking sends, we can directly

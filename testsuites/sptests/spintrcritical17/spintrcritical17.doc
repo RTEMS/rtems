@@ -1,4 +1,4 @@
-#  Copyright (c) 2009 embedded brains GmbH.
+#  Copyright (c) 2009-2015 embedded brains GmbH.
 #
 #  The license and distribution terms for this file may be
 #  found in the file LICENSE in this distribution or at
@@ -11,9 +11,7 @@ test set name:  spintrcritical17
 
 directives:
 
-  _Timer_server_Get_watchdogs_that_fire_now
-  _Timer_server_Schedule_operation_method
-  _Timer_server_Process_insertions
+  _Timer_server_Update_system_watchdog
 
 concepts:
 

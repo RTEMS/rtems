@@ -72,6 +72,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Free(
   POSIX_Mutex_Control *the_mutex
 )
 {
+  _CORE_mutex_Destroy( &the_mutex->Mutex );
   _Objects_Free( &_POSIX_Mutex_Information, &the_mutex->Object );
 }
 

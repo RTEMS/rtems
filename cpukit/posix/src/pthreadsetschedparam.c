@@ -44,6 +44,7 @@ int pthread_setschedparam(
   Thread_CPU_budget_algorithm_callout  budget_callout;
   Objects_Locations                    location;
   int                                  rc;
+  Priority_Control                     unused;
 
   /*
    *  Check all the parameters
@@ -70,7 +71,7 @@ int pthread_setschedparam(
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
       if ( api->schedpolicy == SCHED_SPORADIC )
-        (void) _Watchdog_Remove( &api->Sporadic_timer );
+        _Watchdog_Remove_ticks( &api->Sporadic_timer );
 
       api->schedpolicy = policy;
       api->schedparam  = *param;
@@ -87,19 +88,17 @@ int pthread_setschedparam(
           the_thread->cpu_time_budget =
             rtems_configuration_get_ticks_per_timeslice();
 
-          the_thread->real_priority =
-            _POSIX_Priority_To_core( api->schedparam.sched_priority );
-
-          _Thread_Change_priority(
-             the_thread,
-             the_thread->real_priority,
-             true
+          _Thread_Set_priority(
+            the_thread,
+            _POSIX_Priority_To_core( api->schedparam.sched_priority ),
+            &unused,
+            true
           );
           break;
 
         case SCHED_SPORADIC:
           api->ss_high_priority = api->schedparam.sched_priority;
-          _Watchdog_Remove( &api->Sporadic_timer );
+          _Watchdog_Remove_ticks( &api->Sporadic_timer );
           _POSIX_Threads_Sporadic_budget_TSR( 0, the_thread );
           break;
       }

@@ -15,7 +15,7 @@
 /*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2009 embedded brains GmbH.
+ *  Copyright (c) 2009-2015 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -26,188 +26,129 @@
 #include "config.h"
 #endif
 
+#include <rtems.h>
 #include <rtems/rtems/timerimpl.h>
 #include <rtems/rtems/tasksimpl.h>
-#include <rtems/score/isrlevel.h>
-#include <rtems/score/threadimpl.h>
+#include <rtems/score/apimutex.h>
 #include <rtems/score/todimpl.h>
 
 static Timer_server_Control _Timer_server_Default;
 
-static void _Timer_server_Stop_interval_system_watchdog(
-  Timer_server_Control *ts
+static void _Timer_server_Cancel_method(
+  Timer_server_Control *ts,
+  Timer_Control *timer
 )
 {
-  _Watchdog_Remove( &ts->Interval_watchdogs.System_watchdog );
-}
-
-static void _Timer_server_Reset_interval_system_watchdog(
-  Timer_server_Control *ts
-)
-{
-  ISR_Level level;
-
-  _Timer_server_Stop_interval_system_watchdog( ts );
-
-  _ISR_Disable( level );
-  if ( !_Watchdog_Is_empty( &ts->Interval_watchdogs.Header ) ) {
-    Watchdog_Interval delta_interval =
-      _Watchdog_First( &ts->Interval_watchdogs.Header )->delta_interval;
-    _ISR_Enable( level );
-
-    /*
-     *  The unit is TICKS here.
-     */
-    _Watchdog_Insert_ticks(
-      &ts->Interval_watchdogs.System_watchdog,
-      delta_interval
-    );
-  } else {
-    _ISR_Enable( level );
+  if ( timer->the_class == TIMER_INTERVAL_ON_TASK ) {
+    _Watchdog_Remove( &ts->Interval_watchdogs.Header, &timer->Ticker );
+  } else if ( timer->the_class == TIMER_TIME_OF_DAY_ON_TASK ) {
+    _Watchdog_Remove( &ts->TOD_watchdogs.Header, &timer->Ticker );
   }
 }
 
-static void _Timer_server_Stop_tod_system_watchdog(
-  Timer_server_Control *ts
-)
+static Watchdog_Interval _Timer_server_Get_ticks( void )
 {
-  _Watchdog_Remove( &ts->TOD_watchdogs.System_watchdog );
+  return _Watchdog_Ticks_since_boot;
 }
 
-static void _Timer_server_Reset_tod_system_watchdog(
-  Timer_server_Control *ts
+static Watchdog_Interval _Timer_server_Get_seconds( void )
+{
+  return _TOD_Seconds_since_epoch();
+}
+
+static void _Timer_server_Update_system_watchdog(
+  Timer_server_Watchdogs *watchdogs,
+  Watchdog_Header *system_header
 )
 {
-  ISR_Level level;
+  ISR_lock_Context lock_context;
 
-  _Timer_server_Stop_tod_system_watchdog( ts );
+  _Watchdog_Acquire( &watchdogs->Header, &lock_context );
 
-  _ISR_Disable( level );
-  if ( !_Watchdog_Is_empty( &ts->TOD_watchdogs.Header ) ) {
-    Watchdog_Interval delta_interval =
-      _Watchdog_First( &ts->TOD_watchdogs.Header )->delta_interval;
-    _ISR_Enable( level );
+  if ( watchdogs->system_watchdog_helper == NULL ) {
+    Thread_Control *executing;
+    uint32_t my_generation;
 
-    /*
-     *  The unit is SECONDS here.
-     */
-    _Watchdog_Insert_seconds(
-      &ts->TOD_watchdogs.System_watchdog,
-      delta_interval
-    );
-  } else {
-    _ISR_Enable( level );
+    executing = _Thread_Executing;
+    watchdogs->system_watchdog_helper = executing;
+
+    do {
+      my_generation = watchdogs->generation;
+
+      if ( !_Watchdog_Is_empty( &watchdogs->Header ) ) {
+        Watchdog_Control *first;
+        Watchdog_Interval delta;
+
+        first = _Watchdog_First( &watchdogs->Header );
+        delta = first->delta_interval;
+
+        if (
+          watchdogs->System_watchdog.state == WATCHDOG_INACTIVE
+            || delta != watchdogs->system_watchdog_delta
+        ) {
+          watchdogs->system_watchdog_delta = delta;
+          _Watchdog_Release( &watchdogs->Header, &lock_context );
+
+          _Watchdog_Remove( system_header, &watchdogs->System_watchdog );
+          watchdogs->System_watchdog.initial = delta;
+          _Watchdog_Insert( system_header, &watchdogs->System_watchdog );
+
+          _Watchdog_Acquire( &watchdogs->Header, &lock_context );
+        }
+      }
+    } while ( watchdogs->generation != my_generation );
+
+    watchdogs->system_watchdog_helper = NULL;
   }
+
+  _Watchdog_Release( &watchdogs->Header, &lock_context );
 }
 
 static void _Timer_server_Insert_timer(
-  Timer_server_Control *ts,
-  Timer_Control *timer
+  Timer_server_Watchdogs *watchdogs,
+  Timer_Control *timer,
+  Watchdog_Header *system_header,
+  Watchdog_Interval (*get_ticks)( void )
 )
 {
-  if ( timer->the_class == TIMER_INTERVAL_ON_TASK ) {
-    _Watchdog_Insert( &ts->Interval_watchdogs.Header, &timer->Ticker );
-  } else if ( timer->the_class == TIMER_TIME_OF_DAY_ON_TASK ) {
-    _Watchdog_Insert( &ts->TOD_watchdogs.Header, &timer->Ticker );
-  }
-}
-
-static void _Timer_server_Insert_timer_and_make_snapshot(
-  Timer_server_Control *ts,
-  Timer_Control *timer
-)
-{
-  Watchdog_Control *first_watchdog;
-  Watchdog_Interval delta_interval;
-  Watchdog_Interval last_snapshot;
-  Watchdog_Interval snapshot;
+  ISR_lock_Context lock_context;
+  Watchdog_Interval now;
   Watchdog_Interval delta;
-  ISR_Level level;
 
-  /*
-   *  We have to update the time snapshots here, because otherwise we may have
-   *  problems with the integer range of the delta values.  The time delta DT
-   *  from the last snapshot to now may be arbitrarily long.  The last snapshot
-   *  is the reference point for the delta chain.  Thus if we do not update the
-   *  reference point we have to add DT to the initial delta of the watchdog
-   *  being inserted.  This could result in an integer overflow.
-   */
+  _Watchdog_Acquire( &watchdogs->Header, &lock_context );
 
-  _Thread_Disable_dispatch();
+  now = (*get_ticks)();
+  delta = now - watchdogs->last_snapshot;
+  watchdogs->last_snapshot = now;
+  watchdogs->current_snapshot = now;
 
-  if ( timer->the_class == TIMER_INTERVAL_ON_TASK ) {
-    /*
-     *  We have to advance the last known ticks value of the server and update
-     *  the watchdog chain accordingly.
-     */
-    _ISR_Disable( level );
-    snapshot = _Watchdog_Ticks_since_boot;
-    last_snapshot = ts->Interval_watchdogs.last_snapshot;
-    if ( !_Watchdog_Is_empty( &ts->Interval_watchdogs.Header ) ) {
-      first_watchdog = _Watchdog_First( &ts->Interval_watchdogs.Header );
+  if ( watchdogs->system_watchdog_delta > delta ) {
+    watchdogs->system_watchdog_delta -= delta;
+  } else {
+    watchdogs->system_watchdog_delta = 0;
+  }
 
-      /*
-       *  We assume adequate unsigned arithmetic here.
-       */
-      delta = snapshot - last_snapshot;
+  if ( !_Watchdog_Is_empty( &watchdogs->Header ) ) {
+    Watchdog_Control *first = _Watchdog_First( &watchdogs->Header );
 
-      delta_interval = first_watchdog->delta_interval;
-      if (delta_interval > delta) {
-        delta_interval -= delta;
-      } else {
-        delta_interval = 0;
-      }
-      first_watchdog->delta_interval = delta_interval;
-    }
-    ts->Interval_watchdogs.last_snapshot = snapshot;
-    _ISR_Enable( level );
-
-    _Watchdog_Insert( &ts->Interval_watchdogs.Header, &timer->Ticker );
-
-    if ( !ts->active ) {
-      _Timer_server_Reset_interval_system_watchdog( ts );
-    }
-  } else if ( timer->the_class == TIMER_TIME_OF_DAY_ON_TASK ) {
-    /*
-     *  We have to advance the last known seconds value of the server and update
-     *  the watchdog chain accordingly.
-     */
-    _ISR_Disable( level );
-    snapshot = (Watchdog_Interval) _TOD_Seconds_since_epoch();
-    last_snapshot = ts->TOD_watchdogs.last_snapshot;
-    if ( !_Watchdog_Is_empty( &ts->TOD_watchdogs.Header ) ) {
-      first_watchdog = _Watchdog_First( &ts->TOD_watchdogs.Header );
-      delta_interval = first_watchdog->delta_interval;
-      if ( snapshot > last_snapshot ) {
-        /*
-         *  We advanced in time.
-         */
-        delta = snapshot - last_snapshot;
-        if (delta_interval > delta) {
-          delta_interval -= delta;
-        } else {
-          delta_interval = 0;
-        }
-      } else {
-        /*
-         *  Someone put us in the past.
-         */
-        delta = last_snapshot - snapshot;
-        delta_interval += delta;
-      }
-      first_watchdog->delta_interval = delta_interval;
-    }
-    ts->TOD_watchdogs.last_snapshot = snapshot;
-    _ISR_Enable( level );
-
-    _Watchdog_Insert( &ts->TOD_watchdogs.Header, &timer->Ticker );
-
-    if ( !ts->active ) {
-      _Timer_server_Reset_tod_system_watchdog( ts );
+    if ( first->delta_interval > delta ) {
+      first->delta_interval -= delta;
+    } else {
+      first->delta_interval = 0;
     }
   }
 
-  _Thread_Enable_dispatch();
+  _Watchdog_Insert_locked(
+    &watchdogs->Header,
+    &timer->Ticker,
+    &lock_context
+  );
+
+  ++watchdogs->generation;
+
+  _Watchdog_Release( &watchdogs->Header, &lock_context );
+
+  _Timer_server_Update_system_watchdog( watchdogs, system_header );
 }
 
 static void _Timer_server_Schedule_operation_method(
@@ -215,143 +156,71 @@ static void _Timer_server_Schedule_operation_method(
   Timer_Control *timer
 )
 {
-  if ( ts->insert_chain == NULL ) {
-    _Timer_server_Insert_timer_and_make_snapshot( ts, timer );
-  } else {
-    /*
-     *  We interrupted a critical section of the timer server.  The timer
-     *  server is not preemptible, so we must be in interrupt context here.  No
-     *  thread dispatch will happen until the timer server finishes its
-     *  critical section.  We have to use the protected chain methods because
-     *  we may be interrupted by a higher priority interrupt.
-     */
-    _Chain_Append( ts->insert_chain, &timer->Object.Node );
-  }
-}
-
-static void _Timer_server_Process_interval_watchdogs(
-  Timer_server_Watchdogs *watchdogs,
-  Chain_Control *fire_chain
-)
-{
-  Watchdog_Interval snapshot = _Watchdog_Ticks_since_boot;
-
-  /*
-   *  We assume adequate unsigned arithmetic here.
-   */
-  Watchdog_Interval delta = snapshot - watchdogs->last_snapshot;
-
-  watchdogs->last_snapshot = snapshot;
-
-  _Watchdog_Adjust_to_chain( &watchdogs->Header, delta, fire_chain );
-}
-
-static void _Timer_server_Process_tod_watchdogs(
-  Timer_server_Watchdogs *watchdogs,
-  Chain_Control *fire_chain
-)
-{
-  Watchdog_Interval snapshot = (Watchdog_Interval) _TOD_Seconds_since_epoch();
-  Watchdog_Interval last_snapshot = watchdogs->last_snapshot;
-  Watchdog_Interval delta;
-
-  /*
-   *  Process the seconds chain.  Start by checking that the Time
-   *  of Day (TOD) has not been set backwards.  If it has then
-   *  we want to adjust the watchdogs->Header to indicate this.
-   */
-  if ( snapshot > last_snapshot ) {
-    /*
-     *  This path is for normal forward movement and cases where the
-     *  TOD has been set forward.
-     */
-    delta = snapshot - last_snapshot;
-    _Watchdog_Adjust_to_chain( &watchdogs->Header, delta, fire_chain );
-
-  } else if ( snapshot < last_snapshot ) {
-     /*
-      *  The current TOD is before the last TOD which indicates that
-      *  TOD has been set backwards.
-      */
-     delta = last_snapshot - snapshot;
-     _Watchdog_Adjust_backward( &watchdogs->Header, delta );
-  }
-
-  watchdogs->last_snapshot = snapshot;
-}
-
-static void _Timer_server_Process_insertions( Timer_server_Control *ts )
-{
-  while ( true ) {
-    Timer_Control *timer = (Timer_Control *) _Chain_Get( ts->insert_chain );
-
-    if ( timer == NULL ) {
-      break;
-    }
-
-    _Timer_server_Insert_timer( ts, timer );
-  }
-}
-
-static void _Timer_server_Get_watchdogs_that_fire_now(
-  Timer_server_Control *ts,
-  Chain_Control *insert_chain,
-  Chain_Control *fire_chain
-)
-{
-  /*
-   *  Afterwards all timer inserts are directed to this chain and the interval
-   *  and TOD chains will be no more modified by other parties.
-   */
-  ts->insert_chain = insert_chain;
-
-  while ( true ) {
-    ISR_Level level;
-
-    /*
-     *  Remove all the watchdogs that need to fire so we can invoke them.
-     */
-    _Timer_server_Process_interval_watchdogs(
+  if ( timer->the_class == TIMER_INTERVAL_ON_TASK ) {
+    _Timer_server_Insert_timer(
       &ts->Interval_watchdogs,
-      fire_chain
+      timer,
+      &_Watchdog_Ticks_header,
+      _Timer_server_Get_ticks
     );
-    _Timer_server_Process_tod_watchdogs( &ts->TOD_watchdogs, fire_chain );
-
-    /*
-     *  The insertions have to take place here, because they reference the
-     *  current time.  The previous process methods take a snapshot of the
-     *  current time.  In case someone inserts a watchdog with an initial value
-     *  of zero it will be processed in the next iteration of the timer server
-     *  body loop.
-     */
-    _Timer_server_Process_insertions( ts );
-
-    _ISR_Disable( level );
-    if ( _Chain_Is_empty( insert_chain ) ) {
-      ts->insert_chain = NULL;
-      _ISR_Enable( level );
-
-      break;
-    } else {
-      _ISR_Enable( level );
-    }
+  } else if ( timer->the_class == TIMER_TIME_OF_DAY_ON_TASK ) {
+    _Timer_server_Insert_timer(
+      &ts->TOD_watchdogs,
+      timer,
+      &_Watchdog_Seconds_header,
+      _Timer_server_Get_seconds
+    );
   }
 }
 
-/* FIXME: This locking approach for SMP is improvable! */
-
-static void _Timer_server_SMP_lock_aquire( void )
+static void _Timer_server_Update_current_snapshot(
+  Timer_server_Watchdogs *watchdogs,
+  Watchdog_Interval (*get_ticks)( void )
+)
 {
-#if defined( RTEMS_SMP )
-  _Thread_Disable_dispatch();
-#endif
+  ISR_lock_Context lock_context;
+
+  _Watchdog_Acquire( &watchdogs->Header, &lock_context );
+  watchdogs->current_snapshot = (*get_ticks)();
+  watchdogs->system_watchdog_delta = 0;
+  _Watchdog_Release( &watchdogs->Header, &lock_context );
 }
 
-static void _Timer_server_SMP_lock_release( void )
+static void _Timer_server_Tickle(
+  Timer_server_Watchdogs *watchdogs,
+  Watchdog_Header *system_header,
+  Watchdog_Interval (*get_ticks)( void ),
+  bool ticks
+)
 {
-#if defined( RTEMS_SMP )
-  _Thread_Enable_dispatch();
-#endif
+  ISR_lock_Context lock_context;
+  Watchdog_Interval now;
+  Watchdog_Interval last;
+
+  _Watchdog_Acquire( &watchdogs->Header, &lock_context );
+
+  now = watchdogs->current_snapshot;
+  last = watchdogs->last_snapshot;
+  watchdogs->last_snapshot = now;
+
+  if ( ticks || now >= last ) {
+    _Watchdog_Adjust_forward_locked(
+      &watchdogs->Header,
+      now - last,
+      &lock_context
+    );
+  } else {
+    _Watchdog_Adjust_backward_locked(
+      &watchdogs->Header,
+      last - now
+    );
+  }
+
+  ++watchdogs->generation;
+
+  _Watchdog_Release( &watchdogs->Header, &lock_context );
+
+  _Timer_server_Update_system_watchdog( watchdogs, system_header );
 }
 
 /**
@@ -368,81 +237,73 @@ static rtems_task _Timer_server_Body(
 )
 {
   Timer_server_Control *ts = (Timer_server_Control *) arg;
-  Chain_Control insert_chain;
-  Chain_Control fire_chain;
-
-  _Chain_Initialize_empty( &insert_chain );
-  _Chain_Initialize_empty( &fire_chain );
-
-  _Timer_server_SMP_lock_aquire();
 
   while ( true ) {
-    _Timer_server_Get_watchdogs_that_fire_now( ts, &insert_chain, &fire_chain );
+    rtems_event_set events;
 
-    if ( !_Chain_Is_empty( &fire_chain ) ) {
-      /*
-       *  Fire the watchdogs.
-       */
-      while ( true ) {
-        Watchdog_Control *watchdog;
-        ISR_Level level;
+    _Timer_server_Tickle(
+      &ts->Interval_watchdogs,
+      &_Watchdog_Ticks_header,
+      _Timer_server_Get_ticks,
+      true
+    );
 
-        /*
-         *  It is essential that interrupts are disable here since an interrupt
-         *  service routine may remove a watchdog from the chain.
-         */
-        _ISR_Disable( level );
-        watchdog = (Watchdog_Control *) _Chain_Get_unprotected( &fire_chain );
-        if ( watchdog != NULL ) {
-          watchdog->state = WATCHDOG_INACTIVE;
-          _ISR_Enable( level );
-        } else {
-          _ISR_Enable( level );
+    _Timer_server_Tickle(
+      &ts->TOD_watchdogs,
+      &_Watchdog_Seconds_header,
+      _Timer_server_Get_seconds,
+      false
+    );
 
-          break;
-        }
-
-        _Timer_server_SMP_lock_release();
-
-        /*
-         *  The timer server may block here and wait for resources or time.
-         *  The system watchdogs are inactive and will remain inactive since
-         *  the active flag of the timer server is true.
-         */
-        (*watchdog->routine)( watchdog->id, watchdog->user_data );
-
-        _Timer_server_SMP_lock_aquire();
-      }
-    } else {
-      ts->active = false;
-
-      /*
-       *  Block until there is something to do.
-       */
-#if !defined( RTEMS_SMP )
-      _Thread_Disable_dispatch();
-#endif
-        _Thread_Set_state( ts->thread, STATES_DELAYING );
-        _Timer_server_Reset_interval_system_watchdog( ts );
-        _Timer_server_Reset_tod_system_watchdog( ts );
-#if !defined( RTEMS_SMP )
-      _Thread_Enable_dispatch();
-#endif
-
-      _Timer_server_SMP_lock_release();
-      _Timer_server_SMP_lock_aquire();
-
-      ts->active = true;
-
-      /*
-       *  Maybe an interrupt did reset the system timers, so we have to stop
-       *  them here.  Since we are active now, there will be no more resets
-       *  until we are inactive again.
-       */
-      _Timer_server_Stop_interval_system_watchdog( ts );
-      _Timer_server_Stop_tod_system_watchdog( ts );
-    }
+    (void) rtems_event_system_receive(
+      RTEMS_EVENT_SYSTEM_TIMER_SERVER,
+      RTEMS_EVENT_ALL | RTEMS_WAIT,
+      RTEMS_NO_TIMEOUT,
+      &events
+    );
   }
+}
+
+static void _Timer_server_Wakeup(
+  Objects_Id  id,
+  void       *arg
+)
+{
+  Timer_server_Control *ts = arg;
+
+  _Timer_server_Update_current_snapshot(
+    &ts->Interval_watchdogs,
+    _Timer_server_Get_ticks
+  );
+
+  _Timer_server_Update_current_snapshot(
+    &ts->TOD_watchdogs,
+    _Timer_server_Get_seconds
+  );
+
+  (void) rtems_event_system_send( id, RTEMS_EVENT_SYSTEM_TIMER_SERVER );
+}
+
+static void _Timer_server_Initialize_watchdogs(
+  Timer_server_Control *ts,
+  rtems_id id,
+  Timer_server_Watchdogs *watchdogs,
+  Watchdog_Interval (*get_ticks)( void )
+)
+{
+  Watchdog_Interval now;
+
+  now = (*get_ticks)();
+  watchdogs->last_snapshot = now;
+  watchdogs->current_snapshot = now;
+
+  _Watchdog_Header_initialize( &watchdogs->Header );
+  _Watchdog_Initialize(
+    &watchdogs->System_watchdog,
+    _Timer_server_Wakeup,
+    id,
+    ts
+  );
 }
 
 /**
@@ -486,10 +347,10 @@ rtems_status_code rtems_timer_initiate_server(
   /*
    *  Just to make sure this is only called once.
    */
-  _Thread_Disable_dispatch();
+  _Once_Lock();
     tmpInitialized  = initialized;
     initialized = true;
-  _Thread_Enable_dispatch();
+  _Once_Unlock();
 
   if ( tmpInitialized )
     return RTEMS_INCORRECT_STATE;
@@ -530,49 +391,26 @@ rtems_status_code rtems_timer_initiate_server(
    *  Timer Server so we do not have to have a critical section.
    */
 
-  /*
-   *  We work with the TCB pointer, not the ID, so we need to convert
-   *  to a TCB pointer from here out.
-   */
-  ts->thread = (Thread_Control *)_Objects_Get_local_object(
-    &_RTEMS_tasks_Information,
-    _Objects_Get_index(id)
+  _Timer_server_Initialize_watchdogs(
+    ts,
+    id,
+    &ts->Interval_watchdogs,
+    _Timer_server_Get_ticks
+  );
+
+  _Timer_server_Initialize_watchdogs(
+    ts,
+    id,
+    &ts->TOD_watchdogs,
+    _Timer_server_Get_seconds
   );
 
   /*
-   *  Initialize the timer lists that the server will manage.
-   */
-  _Watchdog_Header_initialize( &ts->Interval_watchdogs.Header );
-  _Watchdog_Header_initialize( &ts->TOD_watchdogs.Header );
-
-  /*
-   *  Initialize the timers that will be used to control when the
-   *  Timer Server wakes up and services the task-based timers.
-   */
-  _Watchdog_Initialize(
-    &ts->Interval_watchdogs.System_watchdog,
-    _Thread_Delay_ended,
-    0,
-    ts->thread
-  );
-  _Watchdog_Initialize(
-    &ts->TOD_watchdogs.System_watchdog,
-    _Thread_Delay_ended,
-    0,
-    ts->thread
-  );
-
-  /*
-   *  Initialize the pointer to the timer schedule method so applications that
+   *  Initialize the pointer to the timer server methods so applications that
    *  do not use the Timer Server do not have to pull it in.
    */
+  ts->cancel = _Timer_server_Cancel_method;
   ts->schedule_operation = _Timer_server_Schedule_operation_method;
-
-  ts->Interval_watchdogs.last_snapshot = _Watchdog_Ticks_since_boot;
-  ts->TOD_watchdogs.last_snapshot = (Watchdog_Interval) _TOD_Seconds_since_epoch();
-
-  ts->insert_chain = NULL;
-  ts->active = false;
 
   /*
    * The default timer server is now available.

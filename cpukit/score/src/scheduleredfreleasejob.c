@@ -29,6 +29,7 @@ void _Scheduler_EDF_Release_job(
 )
 {
   Priority_Control new_priority;
+  Priority_Control unused;
 
   (void) scheduler;
 
@@ -42,6 +43,5 @@ void _Scheduler_EDF_Release_job(
     new_priority = the_thread->Start.initial_priority;
   }
 
-  the_thread->real_priority = new_priority;
-  _Thread_Change_priority(the_thread, new_priority, true);
+  _Thread_Set_priority( the_thread, new_priority, &unused, true );
 }

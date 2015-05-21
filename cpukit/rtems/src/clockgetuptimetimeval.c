@@ -30,6 +30,6 @@ void rtems_clock_get_uptime_timeval( struct timeval *uptime )
 {
   Timestamp_Control snapshot_as_timestamp;
 
-  _TOD_Get_uptime( &snapshot_as_timestamp );
+  _TOD_Get_zero_based_uptime( &snapshot_as_timestamp );
   _Timestamp_To_timeval( &snapshot_as_timestamp, uptime );
 }

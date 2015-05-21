@@ -17,11 +17,38 @@
 #include <bsp/irq.h>
 #include <lpc22xx.h>
 #include <rtems/bspIo.h>  /* for printk */
+#include <rtems/timecounter.h>
 
 void Clock_isr(rtems_irq_hdl_param arg);
 static void clock_isr_on(const rtems_irq_connect_data *unused);
 static void clock_isr_off(const rtems_irq_connect_data *unused);
 static int clock_isr_is_on(const rtems_irq_connect_data *irq);
+
+static rtems_timecounter_simple lpc22xx_tc;
+
+static uint32_t lpc22xx_tc_get(rtems_timecounter_simple *tc)
+{
+  return T0TC;
+}
+
+static bool lpc22xx_tc_is_pending(rtems_timecounter_simple *tc)
+{
+  return (T0IR & 0x1) != 0;
+}
+
+static uint32_t lpc22xx_tc_get_timecount(struct timecounter *tc)
+{
+  return rtems_timecounter_simple_upcounter_get(
+    tc,
+    lpc22xx_tc_get,
+    lpc22xx_tc_is_pending
+  );
+}
+
+static void lpc22xx_tc_tick(void)
+{
+  rtems_timecounter_simple_upcounter_tick(&lpc22xx_tc, lpc22xx_tc_get);
+}
 
 /* Replace the first value with the clock's interrupt name. */
 rtems_irq_connect_data clock_isr_data = {
@@ -76,7 +103,7 @@ rtems_irq_connect_data clock_isr_data = {
   do { \
     /* disable and clear timer 0, set to  */ \
     T0TCR &= 0;                              \
-    /* TC is incrementet on every pclk.*/    \
+    /* TC is incremented on every pclk.*/    \
     T0PC   = 0;                              \
     /* initialize the timer period and prescaler */  \
     T0MR0  = ((LPC22xx_Fpclk/1000 *          \
@@ -89,6 +116,13 @@ rtems_irq_connect_data clock_isr_data = {
     T0TCR = 1;              \
     /* enable interrupt, skyeye will check this*/ \
     T0IR |= 0x01; \
+    /* install timecounter */ \
+    rtems_timecounter_simple_install( \
+      &lpc22xx_tc, \
+      LPC22xx_Fpclk, \
+      T0MR0, \
+      lpc22xx_tc_get_timecount \
+    ); \
   } while (0)
 
 /**
@@ -103,20 +137,6 @@ rtems_irq_connect_data clock_isr_data = {
     T0TCR&=~0x02; \
     BSP_remove_rtems_irq_handler(&clock_isr_data);                  \
   } while (0)
-
-static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
-{
-  uint32_t clicks;
-  uint32_t microseconds;
-
-  clicks = T0TC;  /* T0TC is the 32bit time counter 0 */
-
-  microseconds = (rtems_configuration_get_microseconds_per_tick() - clicks);
-  return microseconds * 1000;
-}
-
-#define Clock_driver_nanoseconds_since_last_tick \
-        bsp_clock_nanoseconds_since_last_tick
 
 /**
  * Enables clock interrupt.
@@ -148,6 +168,8 @@ static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
   return T0IR & 0x01;  /* MR0 mask */
 }
+
+#define Clock_driver_timecounter_tick() lpc22xx_tc_tick()
 
 /* Make sure to include this, and only at the end of the file */
 #include "../../../../libbsp/shared/clockdrv_shell.h"

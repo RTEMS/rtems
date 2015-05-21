@@ -453,6 +453,7 @@ score/cpu/Makefile
 score/cpu/arm/Makefile
 score/cpu/bfin/Makefile
 score/cpu/avr/Makefile
+score/cpu/epiphany/Makefile
 score/cpu/h8300/Makefile
 score/cpu/i386/Makefile
 score/cpu/lm32/Makefile

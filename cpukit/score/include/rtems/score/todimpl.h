@@ -19,8 +19,8 @@
 #define _RTEMS_SCORE_TODIMPL_H
 
 #include <rtems/score/tod.h>
-#include <rtems/score/isrlock.h>
 #include <rtems/score/timestamp.h>
+#include <rtems/score/timecounterimpl.h>
 
 #include <sys/time.h>
 #include <time.h>
@@ -131,25 +131,6 @@ extern "C" {
  */
 typedef struct {
   /**
-   * @brief Current time of day value.
-   *
-   * This field is protected by the lock.
-   */
-  Timestamp_Control now;
-
-  /**
-   * @brief System uptime.
-   *
-   * This field is protected by the lock.
-   */
-  Timestamp_Control uptime;
-
-  /**
-   * @brief Lock to protect the now and uptime fields.
-   */
-  ISR_lock_Control lock;
-
-  /**
    * @brief Time of day seconds trigger.
    *
    * This value specifies the nanoseconds since the last time of day second.
@@ -157,13 +138,6 @@ typedef struct {
    * _TOD_Set_with_timestamp().
    */
   uint32_t seconds_trigger;
-
-  /**
-   * @brief The current nanoseconds since last tick handler.
-   *
-   * This field must not be NULL after initialization.
-   */
-  TOD_Nanoseconds_since_last_tick_routine nanoseconds_since_last_tick;
 
   /**
    *  @brief Indicates if the time of day is set.
@@ -175,12 +149,6 @@ typedef struct {
 } TOD_Control;
 
 SCORE_EXTERN TOD_Control _TOD;
-
-#define _TOD_Acquire( _tod, lock_context ) \
-  _ISR_lock_ISR_disable_and_acquire( &( _tod )->lock, lock_context )
-
-#define _TOD_Release( _tod, lock_context ) \
-  _ISR_lock_Release_and_ISR_enable( &( _tod )->lock, lock_context )
 
 /**
  *  @brief Initializes the time of day handler.
@@ -201,6 +169,18 @@ void _TOD_Set_with_timestamp(
   const Timestamp_Control *tod_as_timestamp
 );
 
+/**
+ *  @brief Sets the time of day from timespec.
+ *
+ *  The @a tod_as_timestamp timestamp represents the time since UNIX epoch.
+ *  The watchdog seconds chain will be adjusted.
+ *
+ *  In the process the input given as timespec will be transformed to FreeBSD
+ *  bintime format to guarantee the right format for later setting it with a
+ *  timestamp.
+ *
+ *  @param[in] tod_as_timespec is the constant of the time of day as a timespec
+ */
 static inline void _TOD_Set(
   const struct timespec *tod_as_timespec
 )
@@ -216,31 +196,27 @@ static inline void _TOD_Set(
 }
 
 /**
- *  @brief Returns a snapshot of a clock.
+ *  @brief Gets the current time in the bintime format.
  *
- *  This function invokes the nanoseconds extension.
- *
- *  @param[out] snapshot points to an area that will contain the current
- *              TOD plus the BSP nanoseconds since last tick adjustment
- *  @param[in] clock contains the current TOD
- *
- *  @retval @a snapshot
+ *  @param[out] time is the value gathered by the bintime request
  */
-Timestamp_Control *_TOD_Get_with_nanoseconds(
-  Timestamp_Control *snapshot,
-  const Timestamp_Control *clock
-);
-
 static inline void _TOD_Get(
-  struct timespec *tod_as_timespec
+  Timestamp_Control *time
 )
 {
-  Timestamp_Control  tod_as_timestamp;
-  Timestamp_Control *tod_as_timestamp_ptr;
+  _Timecounter_Bintime(time);
+}
 
-  tod_as_timestamp_ptr =
-    _TOD_Get_with_nanoseconds( &tod_as_timestamp, &_TOD.now );
-  _Timestamp_To_timespec( tod_as_timestamp_ptr, tod_as_timespec );
+/**
+ *  @brief Gets the current time in the timespec format.
+ *
+ *  @param[out] time is the value gathered by the nanotime request
+ */
+static inline void _TOD_Get_as_timespec(
+  struct timespec *time
+)
+{
+  _Timecounter_Nanotime(time);
 }
 
 /**
@@ -248,6 +224,8 @@ static inline void _TOD_Get(
  *
  *  This routine returns the system uptime with potential accuracy
  *  to the nanosecond.
+ *
+ *  The initial uptime value is undefined.
  *
  *  @param[in] time is a pointer to the uptime to be returned
  */
@@ -255,20 +233,39 @@ static inline void _TOD_Get_uptime(
   Timestamp_Control *time
 )
 {
-  _TOD_Get_with_nanoseconds( time, &_TOD.uptime );
+  _Timecounter_Binuptime( time );
+}
+
+/**
+ *  @brief Gets the system uptime with potential accuracy to the nanosecond.
+ *  to the nanosecond.
+ *
+ *  The initial uptime value is zero.
+ *
+ *  @param[in] time is a pointer to the uptime to be returned
+ */
+static inline void _TOD_Get_zero_based_uptime(
+  Timestamp_Control *time
+)
+{
+  _Timecounter_Binuptime( time );
+  --time->sec;
 }
 
 /**
  *  @brief Gets the system uptime with potential accuracy to the nanosecond.
  *
- *  This routine returns the system uptime with potential accuracy
- *  to the nanosecond.
+ *  The initial uptime value is zero.
  *
  *  @param[in] time is a pointer to the uptime to be returned
  */
-void _TOD_Get_uptime_as_timespec(
+static inline void _TOD_Get_zero_based_uptime_as_timespec(
   struct timespec *time
-);
+)
+{
+  _Timecounter_Nanouptime( time );
+  --time->tv_sec;
+}
 
 /**
  *  @brief Number of seconds Since RTEMS epoch.
@@ -276,7 +273,10 @@ void _TOD_Get_uptime_as_timespec(
  *  The following contains the number of seconds from 00:00:00
  *  January 1, TOD_BASE_YEAR until the current time of day.
  */
-uint32_t _TOD_Seconds_since_epoch( void );
+static inline uint32_t _TOD_Seconds_since_epoch( void )
+{
+  return (uint32_t) _Timecounter_Time_second;
+}
 
 /**
  *  @brief Increments time of day at each clock tick.
@@ -314,12 +314,7 @@ RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
   struct timeval *time
 )
 {
-  Timestamp_Control  snapshot_as_timestamp;
-  Timestamp_Control *snapshot_as_timestamp_ptr;
-
-  snapshot_as_timestamp_ptr =
-    _TOD_Get_with_nanoseconds( &snapshot_as_timestamp, &_TOD.now );
-  _Timestamp_To_timeval( snapshot_as_timestamp_ptr, time );
+  _Timecounter_Microtime( time );
 }
 
 /**
@@ -333,18 +328,6 @@ RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
 void _TOD_Adjust(
   const Timestamp_Control timestamp
 );
-
-/**
- * @brief Install the BSP's nanoseconds since clock tick handler
- *
- * @param[in] routine is the BSP's nanoseconds since clock tick method 
- */
-RTEMS_INLINE_ROUTINE void _TOD_Set_nanoseconds_since_last_tick_handler(
-  TOD_Nanoseconds_since_last_tick_routine routine
-)
-{
-  _TOD.nanoseconds_since_last_tick = routine;
-}
 
 /**
  * @brief Check if the TOD is Set

@@ -64,8 +64,7 @@ int pthread_cond_init(
 
   _Thread_queue_Initialize(
     &the_cond->Wait_queue,
-    THREAD_QUEUE_DISCIPLINE_FIFO,
-    ETIMEDOUT
+    THREAD_QUEUE_DISCIPLINE_FIFO
   );
 
   _Objects_Open_u32(

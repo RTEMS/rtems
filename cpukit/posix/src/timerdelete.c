@@ -54,7 +54,7 @@ int timer_delete(
     case OBJECTS_LOCAL:
       _Objects_Close( &_POSIX_Timer_Information, &ptimer->Object );
       ptimer->state = POSIX_TIMER_STATE_FREE;
-      (void) _Watchdog_Remove( &ptimer->Timer );
+      _Watchdog_Remove_ticks( &ptimer->Timer );
       _Objects_Put( &ptimer->Object );
       _POSIX_Timer_Free( ptimer );
       _Objects_Allocator_unlock();

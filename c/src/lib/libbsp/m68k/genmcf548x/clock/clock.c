@@ -98,5 +98,7 @@
     MCF548X_SLT_SCR0 |= (MCF548X_SLT_SCR_TEN | MCF548X_SLT_SCR_RUN | MCF548X_SLT_SCR_IEN); \
   } while (0)
 
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
+
 #include "../../../shared/clockdrv_shell.h"
 

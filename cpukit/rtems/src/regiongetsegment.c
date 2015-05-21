@@ -79,18 +79,16 @@ rtems_status_code rtems_region_get_segment(
             _Thread_Disable_dispatch();
             _RTEMS_Unlock_allocator();
 
-            executing->Wait.queue           = &the_region->Wait_queue;
             executing->Wait.id              = id;
             executing->Wait.count           = size;
             executing->Wait.return_argument = segment;
-
-            _Thread_queue_Enter_critical_section( &the_region->Wait_queue );
 
             _Thread_queue_Enqueue(
               &the_region->Wait_queue,
               executing,
               STATES_WAITING_FOR_SEGMENT,
-              timeout
+              timeout,
+              RTEMS_TIMEOUT
             );
 
             _Objects_Put( &the_region->Object );
@@ -102,7 +100,6 @@ rtems_status_code rtems_region_get_segment(
 
 #if defined(RTEMS_MULTIPROCESSING)
       case OBJECTS_REMOTE:        /* this error cannot be returned */
-        break;
 #endif
 
       case OBJECTS_ERROR:

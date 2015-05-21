@@ -42,6 +42,28 @@ static Thread_Zombie_control _Thread_Zombies = {
   .Lock = ISR_LOCK_INITIALIZER( "thread zombies" )
 };
 
+static bool _Thread_Raise_real_priority_filter(
+  Thread_Control   *the_thread,
+  Priority_Control *new_priority_ptr,
+  void             *arg
+)
+{
+  Priority_Control real_priority;
+  Priority_Control new_priority;
+  Priority_Control current_priority;
+
+  real_priority = the_thread->real_priority;
+  new_priority = *new_priority_ptr;
+  current_priority = the_thread->current_priority;
+
+  new_priority = _Thread_Priority_highest( real_priority, new_priority );
+  *new_priority_ptr = new_priority;
+
+  the_thread->real_priority = new_priority;
+
+  return _Thread_Priority_less_than( current_priority, new_priority );
+}
+
 static void _Thread_Make_zombie( Thread_Control *the_thread )
 {
   ISR_lock_Context lock_context;
@@ -62,7 +84,7 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
 
   _Thread_Set_state( the_thread, STATES_ZOMBIE );
   _Thread_queue_Extract_with_proxy( the_thread );
-  _Watchdog_Remove( &the_thread->Timer );
+  _Watchdog_Remove_ticks( &the_thread->Timer );
 
   _ISR_lock_ISR_disable_and_acquire( &zombies->Lock, &lock_context );
   _Chain_Append_unprotected( &zombies->Chain, &the_thread->Object.Node );
@@ -231,12 +253,17 @@ static void _Thread_Start_life_change(
   the_thread->is_preemptible   = the_thread->Start.is_preemptible;
   the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
   the_thread->budget_callout   = the_thread->Start.budget_callout;
-  the_thread->real_priority    = priority;
 
   _Thread_Set_state( the_thread, STATES_RESTARTING );
   _Thread_queue_Extract_with_proxy( the_thread );
-  _Watchdog_Remove( &the_thread->Timer );
-  _Scheduler_Set_priority_if_higher( scheduler, the_thread, priority );
+  _Watchdog_Remove_ticks( &the_thread->Timer );
+  _Thread_Change_priority(
+    the_thread,
+    priority,
+    NULL,
+    _Thread_Raise_real_priority_filter,
+    false
+  );
   _Thread_Add_post_switch_action( the_thread, &the_thread->Life.Action );
   _Thread_Ready( the_thread );
 }
@@ -260,9 +287,9 @@ static void _Thread_Request_life_change(
 
   scheduler = _Scheduler_Get( the_thread );
   if ( the_thread == executing ) {
-    executing->real_priority = priority;
+    Priority_Control unused;
 
-    _Scheduler_Set_priority_if_higher( scheduler, the_thread, priority );
+    _Thread_Set_priority( the_thread, priority, &unused, true );
     _Thread_Start_life_change_for_executing( executing );
   } else if ( previous_life_state == THREAD_LIFE_NORMAL ) {
     _Thread_Start_life_change( the_thread, scheduler, priority );
@@ -270,16 +297,11 @@ static void _Thread_Request_life_change(
     _Thread_Clear_state( the_thread, STATES_SUSPENDED );
 
     if ( _Thread_Is_life_terminating( additional_life_state ) ) {
-      the_thread->real_priority = _Scheduler_Highest_priority_of_two(
-        scheduler,
-        the_thread->real_priority,
-        priority
-      );
-
-      _Scheduler_Change_priority_if_higher(
-        scheduler,
+      _Thread_Change_priority(
         the_thread,
         priority,
+        NULL,
+        _Thread_Raise_real_priority_filter,
         false
       );
     }

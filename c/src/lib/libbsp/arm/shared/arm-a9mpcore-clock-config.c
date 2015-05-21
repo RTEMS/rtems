@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -17,14 +17,11 @@
 #include <bsp/irq.h>
 #include <bsp/arm-a9mpcore-regs.h>
 #include <bsp/arm-a9mpcore-clock.h>
+#include <rtems/timecounter.h>
 
 #define A9MPCORE_GT ((volatile a9mpcore_gt *) BSP_ARM_A9MPCORE_GT_BASE)
 
-static uint64_t a9mpcore_clock_last_tick_k;
-
-static uint32_t a9mpcore_clock_last_tick_cmpvallower;
-
-static uint32_t a9mpcore_clock_autoinc;
+static struct timecounter a9mpcore_tc;
 
 /* This is defined in clockdrv_shell.h */
 void Clock_isr(rtems_irq_hdl_param arg);
@@ -38,13 +35,6 @@ __attribute__ ((weak)) uint32_t a9mpcore_clock_periphclk(void)
 static void a9mpcore_clock_at_tick(void)
 {
   volatile a9mpcore_gt *gt = A9MPCORE_GT;
-
-  /*
-   * FIXME: Now the _TOD_Get_with_nanoseconds() yields wrong values until
-   * _TOD_Tickle_ticks() managed to update the uptime.  See also PR2180.
-   */
-  a9mpcore_clock_last_tick_cmpvallower =
-    gt->cmpvallower - a9mpcore_clock_autoinc;
 
   gt->irqst = A9MPCORE_GT_IRQST_EFLG;
 }
@@ -80,6 +70,13 @@ static uint64_t a9mpcore_clock_get_counter(volatile a9mpcore_gt *gt)
   return ((uint64_t) cu2 << 32) | cl;
 }
 
+static uint32_t a9mpcore_clock_get_timecount(struct timecounter *tc)
+{
+  volatile a9mpcore_gt *gt = A9MPCORE_GT;
+
+  return gt->cntrlower;
+}
+
 static void a9mpcore_clock_initialize(void)
 {
   volatile a9mpcore_gt *gt = A9MPCORE_GT;
@@ -98,14 +95,16 @@ static void a9mpcore_clock_initialize(void)
   gt->cmpvalupper = (uint32_t) (cmpval >> 32);
   gt->autoinc = interval;
 
-  a9mpcore_clock_last_tick_k = (UINT64_C(1000000000) << 32) / periphclk;
-  a9mpcore_clock_last_tick_cmpvallower = (uint32_t) cmpval - interval;
-  a9mpcore_clock_autoinc = interval;
-
   gt->ctrl = A9MPCORE_GT_CTRL_AUTOINC_EN
     | A9MPCORE_GT_CTRL_IRQ_EN
     | A9MPCORE_GT_CTRL_COMP_EN
     | A9MPCORE_GT_CTRL_TMR_EN;
+
+  a9mpcore_tc.tc_get_timecount = a9mpcore_clock_get_timecount;
+  a9mpcore_tc.tc_counter_mask = 0xffffffff;
+  a9mpcore_tc.tc_frequency = periphclk;
+  a9mpcore_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+  rtems_timecounter_install(&a9mpcore_tc);
 }
 
 CPU_Counter_ticks _CPU_Counter_read(void)
@@ -147,16 +146,6 @@ static void a9mpcore_clock_cleanup(void)
   }
 }
 
-static uint32_t a9mpcore_clock_nanoseconds_since_last_tick(void)
-{
-  volatile a9mpcore_gt *gt = A9MPCORE_GT;
-  uint64_t k = a9mpcore_clock_last_tick_k;
-  uint32_t n = a9mpcore_clock_last_tick_cmpvallower;
-  uint32_t c = gt->cntrlower;
-
-  return (uint32_t) (((c - n) * k) >> 32);
-}
-
 #define Clock_driver_support_at_tick() \
   a9mpcore_clock_at_tick()
 
@@ -165,15 +154,12 @@ static uint32_t a9mpcore_clock_nanoseconds_since_last_tick(void)
 
 #define Clock_driver_support_install_isr(isr, old_isr) \
   do { \
-    a9mpcore_clock_handler_install();	\
+    a9mpcore_clock_handler_install(); \
     old_isr = NULL; \
   } while (0)
 
 #define Clock_driver_support_shutdown_hardware() \
   a9mpcore_clock_cleanup()
-
-#define Clock_driver_nanoseconds_since_last_tick \
-  a9mpcore_clock_nanoseconds_since_last_tick
 
 /* Include shared source clock driver code */
 #include "../../shared/clockdrv_shell.h"

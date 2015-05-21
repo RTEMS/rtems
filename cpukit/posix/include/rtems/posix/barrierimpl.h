@@ -80,6 +80,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Barrier_Free (
   POSIX_Barrier_Control *the_barrier
 )
 {
+  _CORE_barrier_Destroy( &the_barrier->Barrier );
   _Objects_Free( &_POSIX_Barrier_Information, &the_barrier->Object );
 }
 

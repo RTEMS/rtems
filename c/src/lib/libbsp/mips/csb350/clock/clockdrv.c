@@ -88,4 +88,6 @@ void au1x00_clock_init(void)
 
 #define Clock_driver_support_shutdown_hardware()
 
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
+
 #include "../../../shared/clockdrv_shell.h"

@@ -21,7 +21,6 @@
 #include <sys/stat.h>
 
 #include <rtems/libio_.h>
-#include <rtems/score/threaddispatch.h>
 
 /**
  *  POSIX 1003.1b 5.3.3 - Set File Creation Mask
@@ -30,14 +29,10 @@ mode_t umask( mode_t cmask )
 {
   mode_t old_mask;
 
-  /*
-   * We must use the same protection mechanism as in
-   * rtems_libio_set_private_env().
-   */
-  _Thread_Disable_dispatch();
+  rtems_libio_lock();
   old_mask = rtems_filesystem_umask;
   rtems_filesystem_umask = cmask & (S_IRWXU | S_IRWXG | S_IRWXO);
-  _Thread_Enable_dispatch();
+  rtems_libio_unlock();
 
   return old_mask;
 }

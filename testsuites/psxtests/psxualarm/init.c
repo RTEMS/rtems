@@ -86,9 +86,9 @@ void *POSIX_Init(
   act.sa_handler = Signal_handler;
   act.sa_flags   = 0;
   sigaction( SIGALRM, &act, NULL );
-  puts( "Init: ualarm in 1 us" );
+  puts( "Init: ualarm in 100000 us" );
   sleep(3);
-  result = ualarm(1,0);
+  result = ualarm(100000,0);
   rtems_test_assert( result == 0 );
   
   status = sleep(10);

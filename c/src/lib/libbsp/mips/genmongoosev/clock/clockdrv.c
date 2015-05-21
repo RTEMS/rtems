@@ -54,4 +54,6 @@
 #define Clock_driver_support_shutdown_hardware() \
   MONGOOSEV_WRITE_REGISTER( CLOCK_BASE, MONGOOSEV_TIMER_CONTROL_REGISTER, 0 )
 
+#define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
+
 #include "../../../shared/clockdrv_shell.h"

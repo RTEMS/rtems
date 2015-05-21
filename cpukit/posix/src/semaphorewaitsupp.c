@@ -40,8 +40,13 @@ int _POSIX_Semaphore_Wait_support(
   POSIX_Semaphore_Control *the_semaphore;
   Objects_Locations        location;
   Thread_Control          *executing;
+  ISR_lock_Context         lock_context;
 
-  the_semaphore = _POSIX_Semaphore_Get( sem, &location );
+  the_semaphore = _POSIX_Semaphore_Get_interrupt_disable(
+    sem,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
@@ -51,9 +56,9 @@ int _POSIX_Semaphore_Wait_support(
         executing,
         the_semaphore->Object.id,
         blocking,
-        timeout
+        timeout,
+        &lock_context
       );
-      _Objects_Put( &the_semaphore->Object );
 
       if ( !executing->Wait.return_code )
         return 0;

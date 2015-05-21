@@ -25,5 +25,6 @@ monitor02
 paranoia
 pppd
 spstkalloc02
+syscall01
 tmfine01
 utf8proc01

@@ -50,7 +50,7 @@ rtems_status_code rtems_timer_server_fire_after(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      (void) _Watchdog_Remove( &the_timer->Ticker );
+      _Timer_Cancel( the_timer );
 
       _ISR_Disable( level );
 

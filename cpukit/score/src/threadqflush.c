@@ -31,14 +31,30 @@ void _Thread_queue_Flush(
   uint32_t                    status
 )
 {
-  Thread_Control *the_thread;
+  ISR_lock_Context  lock_context;
+  Thread_Control   *the_thread;
 
-  while ( (the_thread = _Thread_queue_Dequeue( the_thread_queue )) ) {
+  _Thread_queue_Acquire( the_thread_queue, &lock_context );
+
+  while ( (the_thread = _Thread_queue_First_locked( the_thread_queue ) ) ) {
+#if defined(RTEMS_MULTIPROCESSING)
+    if ( _Objects_Is_local_id( the_thread->Object.id ) )
+#endif
+      the_thread->Wait.return_code = status;
+
+    _Thread_queue_Extract_critical(
+      the_thread_queue,
+      the_thread,
+      &lock_context
+    );
+
 #if defined(RTEMS_MULTIPROCESSING)
     if ( !_Objects_Is_local_id( the_thread->Object.id ) )
       ( *remote_extract_callout )( the_thread );
-    else
 #endif
-      the_thread->Wait.return_code = status;
+
+    _Thread_queue_Acquire( the_thread_queue, &lock_context );
   }
+
+  _Thread_queue_Release( the_thread_queue, &lock_context );
 }
