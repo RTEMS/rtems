@@ -63,7 +63,6 @@ rtems_irq_connect_data clock_isr_data = {
   do { \
         uint32_t cr; \
         uint32_t freq; \
-        uint32_t mask; \
         /* set MUX for Timer4 to 1/16 */ \
         cr=rTCFG1 & 0xFFF0FFFF; \
         rTCFG1=(cr | (3<<16)); \
