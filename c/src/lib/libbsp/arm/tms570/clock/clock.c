@@ -34,7 +34,7 @@
 
 static struct timecounter tms570_rti_tc;
 
-static uint32_t tms570_rti_get_timecount(struct timecounter tc)
+static uint32_t tms570_rti_get_timecount(struct timecounter *tc)
 {
   return TMS570_RTI.RTIFRC0;
 }
