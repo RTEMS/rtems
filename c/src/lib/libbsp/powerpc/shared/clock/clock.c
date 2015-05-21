@@ -185,7 +185,6 @@ rtems_device_driver Clock_initialize(
   uint64_t frequency = bsp_time_base_frequency;
   uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
   uint32_t interval = (uint32_t) ((frequency * us_per_tick) / 1000000);
-  uint32_t mask;
 
   /*
    * Set default ticker.
