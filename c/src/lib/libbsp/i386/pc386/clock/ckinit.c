@@ -38,7 +38,6 @@ uint32_t pc386_clock_click_count;
 
 /* forward declaration */
 void Clock_isr(void *param);
-static void Clock_driver_support_at_tick_empty(void);
 static void clockOff(void);
 static void Clock_isr_handler(void *param);
 
