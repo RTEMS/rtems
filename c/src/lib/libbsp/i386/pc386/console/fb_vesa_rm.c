@@ -19,8 +19,14 @@
  *
  * Driver reads parameter from multiboot command line to setup video:
  * "--video=<resX>x<resY>[-<bpp>]"
- * If cmdline parameter is not specified an attempt for obtaining
- * resolution from display attached is made.
+ * "--video=auto" - try EDID to find mode that fits the display attached best
+ * "--video=none" / "--video=off" - do not initialize the driver
+ * If cmdline parameter is not specified the rtems_fb_default_mode
+ * variable content is tested (see doc below).
+ * Command line option has higher priority. rtems_fb_default_mode is probed
+ * only if cmdline "--video=" is not specified at all.
+ *
+ * If neither of the above options is specified the driver is not initialized.
  */
 
 /*
@@ -31,13 +37,14 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.org/license/LICENSE.
  *
- * The code for rtems_buffer_* functions were greatly
+ * The code for rtems_buffer_* functions was greatly
  * inspired or coppied from:
  *   - RTEMS fb_cirrus.c - Alexandru-Sever Horin (alex.sever.h@gmail.com)
  */
 
 #include <bsp.h>
 
+#include <bsp/fb_default_mode.h>
 #include <bsp/fb_vesa.h>
 #include <bsp/realmode_int.h>
 
@@ -51,6 +58,22 @@
 #include <stdlib.h>
 
 #define FB_VESA_NAME    "FB_VESA_RM"
+
+/**
+ * @brief Allows to enable initialization of VESA real mode driver from
+ * an application by setting the value of this variable to non null value in
+ * user's module. The value of this variable will be then updated
+ * when linked with application's object.
+ *
+ * Further the value should point to string in the following format:
+ * "<resX>x<resY>[-<bpp>]" - e.g. "1024x768-32"
+ * "auto" - try EDID to find mode that fits the display attached best
+ * "none" / "off" - do not initialize the driver
+ * the given parameters are used if applicable.
+ *
+ * Command line argument "--video=" has priority over this string.
+ */
+const char * const rtems_fb_default_mode;
 
 /**
  * @brief Initializes VBE framebuffer during bootup.
@@ -70,7 +93,7 @@ static pthread_mutex_t vesa_mutex = PTHREAD_MUTEX_INITIALIZER;
 static struct fb_var_screeninfo fb_var;
 static struct fb_fix_screeninfo fb_fix;
 
-static uint16_t vbe_used_mode;
+static int32_t vbe_used_mode;
 
 uint32_t VBE_controller_information( VBE_vbe_info_block *info_block,
                                             uint16_t queried_VBE_Version)
@@ -212,6 +235,14 @@ typedef struct {
     uint8_t bpp;
 } Mode_params;
 
+typedef enum {
+    NO_SUITABLE_MODE    = -1,
+    BAD_FORMAT          = -2,
+    AUTO_SELECT         = -3,
+    DONT_INIT           = -4,
+    NO_MODE_REQ         = -5,
+} mode_err_ret_val;
+
 /**
  * @brief Find mode by resolution in the given list of modes
  *
@@ -229,7 +260,7 @@ typedef struct {
  * @retval mode number satisfying given parameters
  * @retval -1 no suitable mode found
  */
-static uint16_t find_mode_by_resolution(Mode_params *mode_list,
+static int32_t find_mode_by_resolution(Mode_params *mode_list,
                                         uint8_t list_length,
                                         Mode_params *searched_resolution)
 {
@@ -249,37 +280,48 @@ static uint16_t find_mode_by_resolution(Mode_params *mode_list,
         }
         i++;
     }
-    return -1;
+    return NO_SUITABLE_MODE;
 }
 
 /**
- * @brief Find mode given within command line.
+ * @brief Find mode given in string format.
  *
- * Parse command line option "--video=" if available.
  *  expected format
- *  --video=<resX>x<resY>[-<bpp>]
+ *  <resX>x<resY>[-<bpp>]
  *  numbers <resX>, <resY> and <bpp> are decadic
  *
  * @param[in] mode_list list of modes to be searched
  * @param[in] list_length number of modes in the list
+ * @param[in] video_string string to be parsed
  * @retval video mode number to be set
- * @retval -1 on parsing error or when no suitable mode found
+ * @retval -1 no suitable mode found
+ * @retval -2 bad format of the video_string
+ * @retval -3 automatic mode selection requested
+ * @retval -4 request to not initialize graphics
+ * @retval -5 no mode requested/empty video string
  */
-static uint16_t find_mode_using_cmdline(Mode_params *mode_list,
-                                        uint8_t list_length)
+static int32_t find_mode_from_string(Mode_params *mode_list,
+                                      uint8_t list_length,
+                                      const char *video_string)
 {
     const char* opt;
     Mode_params cmdline_mode;
     char* endptr;
-    cmdline_mode.bpp = 0;
-    opt = bsp_cmdline_arg("--video=");
+    cmdline_mode.bpp = 16; /* default bpp */
+    opt = video_string;
     if (opt)
     {
-        opt += sizeof("--video=")-1;
+        if (strncmp(opt, "auto", 4) == 0)
+            return AUTO_SELECT;
+        if (strncmp(opt, "none", 4) == 0 ||
+            strncmp(opt, "off", 3) == 0)
+        {
+            return DONT_INIT;
+        }
         cmdline_mode.resX = strtol(opt, &endptr, 10);
         if (*endptr != 'x')
         {
-            return -1;
+            return BAD_FORMAT;
         }
         opt = endptr+1;
         cmdline_mode.resY = strtol(opt, &endptr, 10);
@@ -294,21 +336,49 @@ static uint16_t find_mode_using_cmdline(Mode_params *mode_list,
                     cmdline_mode.bpp = strtol(opt, &endptr, 10);
                     if (*endptr != ' ')
                     {
-                        return -1;
+                        return BAD_FORMAT;
                     }
                 }
             case ' ':
             case 0:
                 break;
             default:
-                return -1;
+                return BAD_FORMAT;
         }
 
-        if (find_mode_by_resolution(mode_list, list_length, &cmdline_mode) !=
-            (uint16_t)-1)
-            return cmdline_mode.mode_number;
+        return find_mode_by_resolution(mode_list, list_length, &cmdline_mode);
     }
-    return -1;
+    return NO_MODE_REQ;
+}
+
+/**
+ * @brief Find mode given within command line.
+ *
+ * Parse command line option "--video=" if available.
+ *  expected format
+ *  --video=<resX>x<resY>[-<bpp>]
+ *  numbers <resX>, <resY> and <bpp> are decadic
+ *
+ * @param[in] mode_list list of modes to be searched
+ * @param[in] list_length number of modes in the list
+ * @retval video mode number to be set
+ * @retval -1 no suitable mode found
+ * @retval -2 bad format of the video_string
+ * @retval -3 automatic mode selection requested
+ * @retval -4 request to not initialize graphics
+ * @retval -5 no mode requested/empty video string
+ */
+static int32_t find_mode_using_cmdline(Mode_params *mode_list,
+                                        uint8_t list_length)
+{
+    const char* opt;
+    opt = bsp_cmdline_arg("--video=");
+    if (opt)
+    {
+        opt += sizeof("--video=")-1;
+        return find_mode_from_string(mode_list, list_length, opt);
+    }
+    return NO_MODE_REQ;
 }
 
 /**
@@ -319,7 +389,7 @@ static uint16_t find_mode_using_cmdline(Mode_params *mode_list,
  * @retval video mode number to be set
  * @retval -1 on parsing error or when no suitable mode found
  */
-static uint16_t find_mode_using_EDID( Mode_params *mode_list,
+static int32_t find_mode_using_EDID( Mode_params *mode_list,
                                       uint8_t list_length)
 {
     EDID_edid1 edid;
@@ -363,7 +433,7 @@ static uint16_t find_mode_using_EDID( Mode_params *mode_list,
             EDIDmode.resX = DTD_horizontal_active(&edid.dtd_md[0].dtd);
             EDIDmode.resY = DTD_vertical_active(&edid.dtd_md[0].dtd);
             if (find_mode_by_resolution(mode_list, list_length, &EDIDmode) !=
-                (uint16_t)-1)
+                -1)
                 return EDIDmode.mode_number;
 
             index++;
@@ -410,7 +480,7 @@ static uint16_t find_mode_using_EDID( Mode_params *mode_list,
                     }
                     EDIDmode.resX = (EDIDmode.resX/8)*8;
                     if (find_mode_by_resolution(
-                            mode_list, list_length, &EDIDmode) != (uint16_t)-1)
+                            mode_list, list_length, &EDIDmode) != -1)
                         return EDIDmode.mode_number;
 
                     j++;
@@ -450,7 +520,7 @@ static uint16_t find_mode_using_EDID( Mode_params *mode_list,
                     break;
             }
             if (find_mode_by_resolution(mode_list, list_length, &EDIDmode) !=
-                (uint16_t)-1)
+                -1)
                 return EDIDmode.mode_number;
 
             index++;
@@ -465,7 +535,7 @@ static uint16_t find_mode_using_EDID( Mode_params *mode_list,
             EDIDmode.resY = 1024;
             EDIDmode.bpp = 0;
             if (find_mode_by_resolution(mode_list, list_length, &EDIDmode) !=
-                (uint16_t)-1)
+                -1)
                 return EDIDmode.mode_number;
         }
         if (edid1_established_tim(&edid, EST_1152x870_75Hz))
@@ -474,7 +544,7 @@ static uint16_t find_mode_using_EDID( Mode_params *mode_list,
             EDIDmode.resY = 870;
             EDIDmode.bpp = 0;
             if (find_mode_by_resolution(mode_list, list_length, &EDIDmode) !=
-                (uint16_t)-1)
+                -1)
                 return EDIDmode.mode_number;
         }
         if (edid1_established_tim(&edid, EST_1024x768_75Hz) ||
@@ -486,7 +556,7 @@ static uint16_t find_mode_using_EDID( Mode_params *mode_list,
             EDIDmode.resY = 768;
             EDIDmode.bpp = 0;
             if (find_mode_by_resolution(mode_list, list_length, &EDIDmode) !=
-                (uint16_t)-1)
+                -1)
                 return EDIDmode.mode_number;
         }
         if (edid1_established_tim(&edid, EST_832x624_75Hz))
@@ -495,7 +565,7 @@ static uint16_t find_mode_using_EDID( Mode_params *mode_list,
             EDIDmode.resY = 624;
             EDIDmode.bpp = 0;
             if (find_mode_by_resolution(mode_list, list_length, &EDIDmode) !=
-                (uint16_t)-1)
+                -1)
                 return EDIDmode.mode_number;
         }
         if (edid1_established_tim(&edid, EST_800x600_60Hz) ||
@@ -507,7 +577,7 @@ static uint16_t find_mode_using_EDID( Mode_params *mode_list,
             EDIDmode.resY = 600;
             EDIDmode.bpp = 0;
             if (find_mode_by_resolution(mode_list, list_length, &EDIDmode) !=
-                (uint16_t)-1)
+                -1)
                 return EDIDmode.mode_number;
         }
         if (edid1_established_tim(&edid, EST_720x400_88Hz) ||
@@ -517,7 +587,7 @@ static uint16_t find_mode_using_EDID( Mode_params *mode_list,
             EDIDmode.resY = 400;
             EDIDmode.bpp = 0;
             if (find_mode_by_resolution(mode_list, list_length, &EDIDmode) !=
-                (uint16_t)-1)
+                -1)
                 return EDIDmode.mode_number;
         }
         if (edid1_established_tim(&edid, EST_640x480_75Hz) ||
@@ -529,13 +599,13 @@ static uint16_t find_mode_using_EDID( Mode_params *mode_list,
             EDIDmode.resY = 480;
             EDIDmode.bpp = 0;
             if (find_mode_by_resolution(mode_list, list_length, &EDIDmode) !=
-                (uint16_t)-1)
+                -1)
                 return EDIDmode.mode_number;
         }
     }
     else
         printk(FB_VESA_NAME " error reading EDID: unsupported version\n");
-    return (uint16_t)-1;
+    return -1;
 }
 
 void vesa_realmode_bootup_init(void)
@@ -569,6 +639,7 @@ void vesa_realmode_bootup_init(void)
     uint16_t *modeNOPtr = (uint16_t*)
         i386_Real_to_physical(*(vmpSegOff+1), *vmpSegOff);
     uint16_t iterator = 0;
+
     if (*(uint16_t*)vib->VideoModePtr == VBE_STUB_VideoModeList)
     {
         printk(FB_VESA_NAME " VBE Core not implemented!\n");
@@ -618,6 +689,40 @@ void vesa_realmode_bootup_init(void)
     sorted_mode_params[nextFilteredMode].mode_number = 0;
 
     uint8_t number_of_modes = nextFilteredMode;
+
+    /* first search for video argument in multiboot options */
+    vbe_used_mode = find_mode_using_cmdline(sorted_mode_params,
+                                            number_of_modes);
+
+    if (vbe_used_mode == NO_MODE_REQ) {
+        vbe_used_mode = find_mode_from_string(sorted_mode_params,
+                            number_of_modes, rtems_fb_default_mode);
+        if (vbe_used_mode != NO_MODE_REQ) {
+            printk(FB_VESA_NAME " using application option to select"
+                " video mode\n");
+        }
+    }
+    else
+    {
+        printk(FB_VESA_NAME " using command line option '--video='"
+            "to select video mode\n");
+    }
+
+    switch (vbe_used_mode) {
+        case NO_SUITABLE_MODE:
+            printk(FB_VESA_NAME " requested mode not found\n");
+            return;
+        case BAD_FORMAT:
+            printk(FB_VESA_NAME " bad format of video requested\n");
+            return;
+        case DONT_INIT:
+            printk(FB_VESA_NAME " selected not to initialize graphics\n");
+            return;
+        case NO_MODE_REQ:
+            printk(FB_VESA_NAME " not initialized, no video selected\n");
+            return;
+    }
+
     /* sort filtered modes */
     Mode_params modeXchgPlace;
     iterator = 0;
@@ -657,17 +762,14 @@ void vesa_realmode_bootup_init(void)
         iterator++;
     }
 
-    /* first search for video argument in multiboot options */
-    vbe_used_mode = find_mode_using_cmdline(sorted_mode_params,
-                                            number_of_modes);
-    if (vbe_used_mode == (uint16_t)-1)
+    if (vbe_used_mode == AUTO_SELECT)
     {
-        printk(FB_VESA_NAME " video on command line not provided"
+        printk(FB_VESA_NAME " auto video mode selected"
             "\n\ttrying EDID ...\n");
         /* second search monitor for good resolution */
         vbe_used_mode = find_mode_using_EDID(sorted_mode_params,
                                              number_of_modes);
-        if (vbe_used_mode == (uint16_t)-1)
+        if (vbe_used_mode == -1)
         {
             printk(FB_VESA_NAME" monitor's EDID video parameters not supported"
                                "\n\tusing mode with highest resolution, bpp\n");

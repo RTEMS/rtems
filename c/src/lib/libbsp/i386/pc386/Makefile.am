@@ -96,6 +96,7 @@ libbsp_a_SOURCES += console/vt.c
 libbsp_a_SOURCES += console/videoAsm.S
 libbsp_a_SOURCES += console/kbd_parser.c
 libbsp_a_SOURCES += console/vgacons.c
+include_bsp_HEADERS += console/fb_default_mode.h
 if USE_VBE_RM
 include_bsp_HEADERS += include/vbe3.h
 include_HEADERS += include/edid.h

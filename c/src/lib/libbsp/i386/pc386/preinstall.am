@@ -140,6 +140,10 @@ $(PROJECT_INCLUDE)/rtems/vgacons.h: console/vgacons.h $(PROJECT_INCLUDE)/rtems/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/vgacons.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/vgacons.h
 
+$(PROJECT_INCLUDE)/bsp/fb_default_mode.h: console/fb_default_mode.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/fb_default_mode.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/fb_default_mode.h
+
 if USE_VBE_RM
 $(PROJECT_INCLUDE)/bsp/vbe3.h: include/vbe3.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vbe3.h
