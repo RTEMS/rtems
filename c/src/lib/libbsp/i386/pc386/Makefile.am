@@ -97,17 +97,17 @@ libbsp_a_SOURCES += console/videoAsm.S
 libbsp_a_SOURCES += console/kbd_parser.c
 libbsp_a_SOURCES += console/vgacons.c
 include_bsp_HEADERS += console/fb_default_mode.h
+if USE_VGA
+libbsp_a_SOURCES += console/fb_vga.c
+endif
+if USE_CIRRUS_GD5446
+libbsp_a_SOURCES += console/fb_cirrus.c
+endif
 if USE_VBE_RM
 include_bsp_HEADERS += include/vbe3.h
 include_HEADERS += include/edid.h
 include_bsp_HEADERS += include/fb_vesa.h
 libbsp_a_SOURCES += console/fb_vesa_rm.c
-else
-if USE_CIRRUS_GD5446
-libbsp_a_SOURCES += console/fb_cirrus.c
-else
-libbsp_a_SOURCES += console/fb_vga.c
-endif
 endif
 endif
 
