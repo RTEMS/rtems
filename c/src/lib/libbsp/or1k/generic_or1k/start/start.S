@@ -180,10 +180,3 @@ _end_clear_bss:
 
 unhandled_exception:
   l.nop
-
-/* Make C++ compiler happy */
-.section .data
-.global __dso_handle
-.weak   __dso_handle
-__dso_handle:
-.long 0
