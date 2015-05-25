@@ -42,4 +42,4 @@
 #define OR1K_BSP_UART_REG_INT_ENABLE_MSI  (0x08)
 
 #endif /* ASM */
-#endif /* LIBBSP_GENEIRC_OR1K_IRQ_H */
+#endif /* LIBBSP_GENERIC_OR1K_IRQ_H */
