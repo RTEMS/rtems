@@ -372,8 +372,6 @@ dont_do_the_window:
          *  %l5 directly into the ISF below.
          */
 
-save_isf:
-
         /*
          *  Save the state of the interrupted task -- especially the global
          *  registers -- in the Interrupt Stack Frame.  Note that the ISF
@@ -474,7 +472,6 @@ dont_fix_pil:
         or       %g5, SPARC_PSR_PIL_MASK, %g5
 pil_fixed:
         wr       %g5, SPARC_PSR_ET_MASK, %psr ! **** ENABLE TRAPS ****
-dont_fix_pil2:
 
         /*
          *  Vector to user's handler.
@@ -609,7 +606,6 @@ isr_dispatch:
         ta      SPARC_SWTRAP_IRQEN   ! syscall (enable interrupts to same level)
 
         ! No, then clear out and return
-allow_nest_again:
 
         ! Zero out ISR stack nesting prevention flag
         st       %g0, [%g6 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
