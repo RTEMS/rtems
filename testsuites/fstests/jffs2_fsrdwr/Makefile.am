@@ -7,6 +7,7 @@ jffs2_fsrdwr_SOURCES += ../support/fstest.h
 jffs2_fsrdwr_SOURCES += ../../psxtests/include/pmacros.h
 jffs2_fsrdwr_SOURCES += ../jffs2_support/fs_support.c
 jffs2_fsrdwr_SOURCES += ../jffs2_support/fs_config.h
+jffs2_fsrdwr_LDADD = -ljffs2
 
 dist_rtems_tests_DATA = jffs2_fsrdwr.scn
 #dist_rtems_tests_DATA += jffs2_fsrdwr.doc
@@ -21,7 +22,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/jffs2_support
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
 
-LINK_OBJS = $(jffs2_fsrdwr_OBJECTS)
+LINK_OBJS = $(jffs2_fsrdwr_OBJECTS) $(jffs2_fsrdwr_LDADD)
 LINK_LIBS = $(jffs2_fsrdwr_LDLIBS)
 
 jffs2_fsrdwr$(EXEEXT): $(jffs2_fsrdwr_OBJECTS) $(jffs2_fsrdwr_DEPENDENCIES)

@@ -7,6 +7,7 @@ jffs2_fserror_SOURCES += ../support/fstest.h
 jffs2_fserror_SOURCES += ../../psxtests/include/pmacros.h
 jffs2_fserror_SOURCES += ../jffs2_support/fs_support.c
 jffs2_fserror_SOURCES += ../jffs2_support/fs_config.h
+jffs2_fserror_LDADD = -ljffs2
 
 dist_rtems_tests_DATA = jffs2_fserror.scn
 #dist_rtems_tests_DATA += jffs2_fserror.doc
@@ -21,7 +22,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/jffs2_support
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
 
-LINK_OBJS = $(jffs2_fserror_OBJECTS)
+LINK_OBJS = $(jffs2_fserror_OBJECTS) $(jffs2_fserror_LDADD)
 LINK_LIBS = $(jffs2_fserror_LDLIBS)
 
 jffs2_fserror$(EXEEXT): $(jffs2_fserror_OBJECTS) $(jffs2_fserror_DEPENDENCIES)

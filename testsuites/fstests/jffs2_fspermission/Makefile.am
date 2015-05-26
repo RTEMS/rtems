@@ -7,6 +7,7 @@ jffs2_fspermission_SOURCES += ../support/fstest.h
 jffs2_fspermission_SOURCES += ../../psxtests/include/pmacros.h
 jffs2_fspermission_SOURCES += ../jffs2_support/fs_support.c
 jffs2_fspermission_SOURCES += ../jffs2_support/fs_config.h
+jffs2_fspermission_LDADD = -ljffs2
 
 dist_rtems_tests_DATA = jffs2_fspermission.scn
 #dist_rtems_tests_DATA += jffs2_fspermission.doc
@@ -21,7 +22,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/jffs2_support
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
 
-LINK_OBJS = $(jffs2_fspermission_OBJECTS)
+LINK_OBJS = $(jffs2_fspermission_OBJECTS) $(jffs2_fspermission_LDADD)
 LINK_LIBS = $(jffs2_fspermission_LDLIBS)
 
 jffs2_fspermission$(EXEEXT): $(jffs2_fspermission_OBJECTS) $(jffs2_fspermission_DEPENDENCIES)

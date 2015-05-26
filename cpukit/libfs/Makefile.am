@@ -109,7 +109,7 @@ librfs_a_SOURCES = \
     src/rfs/rtems-rfs-trace.c
 
 # JFFS2
-noinst_LIBRARIES += libjffs2.a
+project_lib_LIBRARIES = libjffs2.a
 libjffs2_a_SOURCES =
 libjffs2_a_SOURCES += src/jffs2/src/build.c
 libjffs2_a_SOURCES += src/jffs2/src/compat-crc32.c
