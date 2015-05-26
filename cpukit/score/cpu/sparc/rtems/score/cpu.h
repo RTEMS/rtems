@@ -701,8 +701,6 @@ typedef struct {
  */
 
 /** This macro defines an offset into the ISF for use in assembly. */
-#define ISF_STACK_FRAME_OFFSET 0x00
-/** This macro defines an offset into the ISF for use in assembly. */
 #define ISF_PSR_OFFSET         CPU_MINIMUM_STACK_FRAME_SIZE + 0x00
 /** This macro defines an offset into the ISF for use in assembly. */
 #define ISF_PC_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x04
