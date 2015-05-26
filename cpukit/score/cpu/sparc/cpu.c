@@ -97,6 +97,11 @@ SPARC_ASSERT_ISF_OFFSET(i7, I7);
 SPARC_ASSERT_ISF_OFFSET(y, Y);
 SPARC_ASSERT_ISF_OFFSET(tpc, TPC);
 
+RTEMS_STATIC_ASSERT(
+  sizeof(CPU_Interrupt_frame) == CONTEXT_CONTROL_INTERRUPT_FRAME_SIZE,
+  CPU_Interrupt_frame_size
+);
+
 /* https://devel.rtems.org/ticket/2352 */
 RTEMS_STATIC_ASSERT(
   sizeof(CPU_Interrupt_frame) % CPU_ALIGNMENT == 0,
