@@ -547,9 +547,6 @@ typedef struct {
   #define SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 0x58
 #endif
 
-/** This defines the size of the context area for use in assembly. */
-#define CONTEXT_CONTROL_SIZE 0x68
-
 #ifndef ASM
 /**
  * @brief SPARC basic context.
@@ -700,8 +697,6 @@ typedef struct {
  *  Offsets of fields with CPU_Interrupt_frame for assembly routines.
  */
 
-/** This macro defines an offset into the ISF for use in assembly. */
-#define ISF_STACK_FRAME_OFFSET 0x00
 /** This macro defines an offset into the ISF for use in assembly. */
 #define ISF_PSR_OFFSET         CPU_MINIMUM_STACK_FRAME_SIZE + 0x00
 /** This macro defines an offset into the ISF for use in assembly. */

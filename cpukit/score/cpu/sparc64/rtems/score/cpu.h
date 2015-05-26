@@ -388,8 +388,6 @@ typedef struct {
 #define ISR_DISPATCH_DISABLE_STACK_OFFSET 0xF8
 #define ISR_PAD_OFFSET 0xFC
 
-#define CONTEXT_CONTROL_SIZE 0x100
-
 /*
  *  The floating point context area.
  */
@@ -518,7 +516,6 @@ typedef struct {
  *  Offsets of fields with CPU_Interrupt_frame for assembly routines.
  */
 
-#define ISF_STACK_FRAME_OFFSET 0x00
 #define ISF_TSTATE_OFFSET      CPU_MINIMUM_STACK_FRAME_SIZE + 0x00
 #define ISF_TPC_OFFSET         CPU_MINIMUM_STACK_FRAME_SIZE + 0x08
 #define ISF_TNPC_OFFSET        CPU_MINIMUM_STACK_FRAME_SIZE + 0x10

@@ -8,7 +8,7 @@
 #ifndef _RTEMS_ENDIAN_H
 #define _RTEMS_ENDIAN_H
 
-#include <rtems.h>
+#include <rtems/score/cpu.h>
 
 /*
  * BSD-style endian declaration
@@ -95,7 +95,7 @@ static inline uint16_t htons( uint16_t _x )
 static inline uint16_t rtems_uint16_from_little_endian( const uint8_t *data)
 {
   uint16_t value = 0;
-  ssize_t i = 0;
+  int i;
 
   for (i = 1; i >= 0; --i) {
     value = (uint16_t) ((value << 8) + data [i]);
@@ -107,7 +107,7 @@ static inline uint16_t rtems_uint16_from_little_endian( const uint8_t *data)
 static inline uint32_t rtems_uint32_from_little_endian( const uint8_t *data)
 {
   uint32_t value = 0;
-  ssize_t i = 0;
+  int i;
 
   for (i = 3; i >= 0; --i) {
     value = (value << 8) + data [i];
@@ -119,7 +119,7 @@ static inline uint32_t rtems_uint32_from_little_endian( const uint8_t *data)
 static inline uint64_t rtems_uint64_from_little_endian( const uint8_t *data)
 {
   uint64_t value = 0;
-  ssize_t i = 0;
+  int i;
 
   for (i = 7; i >= 0; --i) {
     value = (value << 8) + (uint64_t) data [i];
@@ -131,7 +131,7 @@ static inline uint64_t rtems_uint64_from_little_endian( const uint8_t *data)
 static inline uint16_t rtems_uint16_from_big_endian( const uint8_t *data)
 {
   uint16_t value = 0;
-  size_t i = 0;
+  int i;
 
   for (i = 0; i < 2; ++i) {
     value = (uint16_t) ((value << 8) + data [i]);
@@ -143,7 +143,7 @@ static inline uint16_t rtems_uint16_from_big_endian( const uint8_t *data)
 static inline uint32_t rtems_uint32_from_big_endian( const uint8_t *data)
 {
   uint32_t value = 0;
-  size_t i = 0;
+  int i;
 
   for (i = 0; i < 4; ++i) {
     value = (value << 8) + (uint32_t) data [i];
@@ -155,7 +155,7 @@ static inline uint32_t rtems_uint32_from_big_endian( const uint8_t *data)
 static inline uint64_t rtems_uint64_from_big_endian( const uint8_t *data)
 {
   uint64_t value = 0;
-  size_t i = 0;
+  int i;
 
   for (i = 0; i < 8; ++i) {
     value = (value << 8) + (uint64_t) data [i];
@@ -166,7 +166,7 @@ static inline uint64_t rtems_uint64_from_big_endian( const uint8_t *data)
 
 static inline void rtems_uint16_to_little_endian( uint16_t value, uint8_t *data)
 {
-  size_t i = 0;
+  int i;
 
   for (i = 0; i < 2; ++i) {
     data [i] = (uint8_t) value;
@@ -176,7 +176,7 @@ static inline void rtems_uint16_to_little_endian( uint16_t value, uint8_t *data)
 
 static inline void rtems_uint32_to_little_endian( uint32_t value, uint8_t *data)
 {
-  size_t i = 0;
+  int i;
 
   for (i = 0; i < 4; ++i) {
     data [i] = (uint8_t) value;
@@ -186,7 +186,7 @@ static inline void rtems_uint32_to_little_endian( uint32_t value, uint8_t *data)
 
 static inline void rtems_uint64_to_little_endian( uint64_t value, uint8_t *data)
 {
-  size_t i = 0;
+  int i;
 
   for (i = 0; i < 8; ++i) {
     data [i] = (uint8_t) value;
@@ -196,7 +196,7 @@ static inline void rtems_uint64_to_little_endian( uint64_t value, uint8_t *data)
 
 static inline void rtems_uint16_to_big_endian( uint16_t value, uint8_t *data)
 {
-  ssize_t i = 0;
+  int i;
 
   for (i = 1; i >= 0; --i) {
     data [i] = (uint8_t) value;
@@ -206,7 +206,7 @@ static inline void rtems_uint16_to_big_endian( uint16_t value, uint8_t *data)
 
 static inline void rtems_uint32_to_big_endian( uint32_t value, uint8_t *data)
 {
-  ssize_t i = 0;
+  int i;
 
   for (i = 3; i >= 0; --i) {
     data [i] = (uint8_t) value;
@@ -216,7 +216,7 @@ static inline void rtems_uint32_to_big_endian( uint32_t value, uint8_t *data)
 
 static inline void rtems_uint64_to_big_endian( uint64_t value, uint8_t *data)
 {
-  ssize_t i = 0;
+  int i;
 
   for (i = 7; i >= 0; --i) {
     data [i] = (uint8_t) value;

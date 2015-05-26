@@ -259,8 +259,8 @@ SYM(_CPU_Context_restore):
         save    %sp, -CPU_MINIMUM_STACK_FRAME_SIZE, %sp
         rd      %psr, %o2
 #if defined(RTEMS_SMP)
-	! On SPARC the restore path needs also a valid executing context on SMP
-	! to update the is executing indicator.
+        ! On SPARC the restore path needs also a valid executing context on SMP
+        ! to update the is executing indicator.
         mov     %i0, %o0
 #endif
         ba      SYM(_CPU_Context_restore_heir)
@@ -372,8 +372,6 @@ dont_do_the_window:
          *  %l5 directly into the ISF below.
          */
 
-save_isf:
-
         /*
          *  Save the state of the interrupted task -- especially the global
          *  registers -- in the Interrupt Stack Frame.  Note that the ISF
@@ -441,7 +439,7 @@ save_isf:
          nop
 #endif
 
-	ld       [%g6 + PER_CPU_INTERRUPT_STACK_HIGH], %sp
+        ld       [%g6 + PER_CPU_INTERRUPT_STACK_HIGH], %sp
 
 dont_switch_stacks:
         /*
@@ -460,7 +458,7 @@ dont_switch_stacks:
          */
 
         mov      %l0, %g5
-	and	 %l3, 0x0ff, %g4
+        and      %l3, 0x0ff, %g4
         subcc    %g4, 0x11, %g0
         bl       dont_fix_pil
         subcc    %g4, 0x1f, %g0
@@ -474,7 +472,6 @@ dont_fix_pil:
         or       %g5, SPARC_PSR_PIL_MASK, %g5
 pil_fixed:
         wr       %g5, SPARC_PSR_ET_MASK, %psr ! **** ENABLE TRAPS ****
-dont_fix_pil2:
 
         /*
          *  Vector to user's handler.
@@ -609,7 +606,6 @@ isr_dispatch:
         ta      SPARC_SWTRAP_IRQEN   ! syscall (enable interrupts to same level)
 
         ! No, then clear out and return
-allow_nest_again:
 
         ! Zero out ISR stack nesting prevention flag
         st       %g0, [%g6 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
@@ -717,7 +713,7 @@ simple_return:
 good_task_window:
 
         mov     %l0, %psr                  !  **** DISABLE TRAPS ****
-	nop; nop; nop
+        nop; nop; nop
                                            !  and restore condition codes.
         ld      [%g1 + ISF_G1_OFFSET], %g1 ! restore g1
         jmp     %l1                        ! transfer control and

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -30,7 +30,7 @@ const char rtems_test_name[] = "SPCONTEXT 1";
 
 typedef struct {
   rtems_id control_task;
-  rtems_id validate_tasks[2];
+  rtems_id validate_tasks[3];
   rtems_id timer;
   size_t task_index;
   int iteration_counter;
@@ -90,22 +90,22 @@ static void switch_priorities(test_context *self)
 {
   rtems_status_code sc;
   size_t index = self->task_index;
-  size_t next = (index + 1) & 0x1;
-  size_t task_high = index;
-  size_t task_low = next;
+  size_t next = (index + 1) % RTEMS_ARRAY_SIZE(self->validate_tasks);
+  size_t task_current_high = index;
+  size_t task_next_high = next;
   rtems_task_priority priority;
 
   self->task_index = next;
 
   sc = rtems_task_set_priority(
-    self->validate_tasks[task_high],
+    self->validate_tasks[task_next_high],
     PRIORITY_HIGH,
     &priority
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_set_priority(
-    self->validate_tasks[task_low],
+    self->validate_tasks[task_current_high],
     PRIORITY_LOW,
     &priority
   );
@@ -149,11 +149,17 @@ static void wait_for_finish(void)
   rtems_test_assert(out == FINISH_EVENT);
 }
 
-static void test(test_context *self, bool task_0_fpu, bool task_1_fpu)
+static void test(
+  test_context *self,
+  bool task_0_fpu,
+  bool task_1_fpu,
+  bool task_2_fpu
+)
 {
   rtems_status_code sc;
   uintptr_t pattern_0 = (uintptr_t) 0xaaaaaaaaaaaaaaaaU;
   uintptr_t pattern_1 = (uintptr_t) 0x5555555555555555U;
+  uintptr_t pattern_2 = (uintptr_t) 0x0000000000000000U;
 
   memset(self, 0, sizeof(*self));
 
@@ -161,14 +167,20 @@ static void test(test_context *self, bool task_0_fpu, bool task_1_fpu)
   start_validate_task(
     &self->validate_tasks[0],
     pattern_0,
-    PRIORITY_LOW,
+    PRIORITY_HIGH,
     task_0_fpu
   );
   start_validate_task(
     &self->validate_tasks[1],
     pattern_1,
-    PRIORITY_HIGH,
+    PRIORITY_LOW,
     task_1_fpu
+  );
+  start_validate_task(
+    &self->validate_tasks[2],
+    pattern_2,
+    PRIORITY_LOW,
+    task_2_fpu
   );
   start_timer(self);
   wait_for_finish();
@@ -177,6 +189,9 @@ static void test(test_context *self, bool task_0_fpu, bool task_1_fpu)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_delete(self->validate_tasks[1]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(self->validate_tasks[2]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_timer_delete(self->timer);
@@ -226,16 +241,23 @@ static void test_context_is_executing(void)
 static void Init(rtems_task_argument arg)
 {
   test_context *self = &test_instance;
+  int i;
+  int j;
+  int k;
 
   TEST_BEGIN();
 
   test_context_is_executing();
-  test(self, false, false);
-  printf("Both tasks did not use FPU: done\n");
-  test(self, false, true);
-  printf("One task used the FPU: done\n");
-  test(self, true, true);
-  printf("Both tasks used the FPU: done\n");
+
+  for (i = 0; i < 2; ++i) {
+    for (j = 0; j < 2; ++j) {
+      for (k = 0; k < 2; ++k) {
+        printf("Test configuration %d %d %d... ", i, j, k);
+        test(self, i == 0, j == 0, k == 0);
+        printf("done\n");
+      }
+    }
+  }
 
   TEST_END();
 
@@ -247,7 +269,7 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS 3
+#define CONFIGURE_MAXIMUM_TASKS 4
 #define CONFIGURE_MAXIMUM_TIMERS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
