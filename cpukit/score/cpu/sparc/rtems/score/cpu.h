@@ -547,9 +547,6 @@ typedef struct {
   #define SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 0x58
 #endif
 
-/** This defines the size of the context area for use in assembly. */
-#define CONTEXT_CONTROL_SIZE 0x68
-
 #ifndef ASM
 /**
  * @brief SPARC basic context.

@@ -388,8 +388,6 @@ typedef struct {
 #define ISR_DISPATCH_DISABLE_STACK_OFFSET 0xF8
 #define ISR_PAD_OFFSET 0xFC
 
-#define CONTEXT_CONTROL_SIZE 0x100
-
 /*
  *  The floating point context area.
  */
