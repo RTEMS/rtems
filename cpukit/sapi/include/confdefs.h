@@ -27,6 +27,7 @@
  */
 #include <rtems.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/heapimpl.h>
 #include <rtems/score/wkspace.h>
 
 #ifdef CONFIGURE_DISABLE_BSP_SETTINGS
@@ -2945,6 +2946,14 @@ const rtems_libio_helper rtems_fs_init_helper =
 #endif
 
 /*
+ * We must be able to split the free block used for the second last allocation
+ * into two parts so that we have a free block for the last allocation.  See
+ * _Heap_Block_split().
+ */
+#define CONFIGURE_HEAP_HANDLER_OVERHEAD \
+  _Configure_Align_up( HEAP_ALLOC_BONUS, CPU_HEAP_ALIGNMENT )
+
+/*
  *  Calculate the RAM size based on the maximum number of objects configured.
  */
 #ifndef CONFIGURE_EXECUTIVE_RAM_SIZE
@@ -3106,7 +3115,7 @@ const rtems_libio_helper rtems_fs_init_helper =
  * This is an internal parameter.
  */
 #define CONFIGURE_EXECUTIVE_RAM_SIZE \
-(( \
+( \
    CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD + \
    CONFIGURE_MEMORY_FOR_TASKS( \
      CONFIGURE_TASKS, CONFIGURE_TASKS) + \
@@ -3121,8 +3130,9 @@ const rtems_libio_helper rtems_fs_init_helper =
    CONFIGURE_MEMORY_FOR_MP + \
    CONFIGURE_MEMORY_FOR_SMP + \
    CONFIGURE_MESSAGE_BUFFER_MEMORY + \
-   (CONFIGURE_MEMORY_OVERHEAD * 1024) \
-) & ~0x7)
+   (CONFIGURE_MEMORY_OVERHEAD * 1024) + \
+   CONFIGURE_HEAP_HANDLER_OVERHEAD \
+)
 
 /*
  *  Now account for any extra memory that initialization tasks or threads
@@ -3253,7 +3263,8 @@ const rtems_libio_helper rtems_fs_init_helper =
     CONFIGURE_ADA_TASKS_STACK + \
     CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK + \
     CONFIGURE_LIBBLOCK_TASK_EXTRA_STACKS + \
-    CONFIGURE_EXTRA_TASK_STACKS \
+    CONFIGURE_EXTRA_TASK_STACKS + \
+    CONFIGURE_HEAP_HANDLER_OVERHEAD \
   )
 
 #ifdef CONFIGURE_INIT
