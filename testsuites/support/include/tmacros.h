@@ -70,30 +70,23 @@ extern "C" {
 #endif
 
 /*
- *  Check that that the allocator mutex is not locked. It should never
- *  be locked unless inside a service which is allocating a resource.
- *
- *  This test is only valid when in a non-SMP system.  In an SMP system
- *  another cpu may be allocating a resource while we are computing.
+ *  Check that that the allocator mutex is not owned by the executing thread.
  */
-#if defined SMPTEST
-  #define check_if_allocator_mutex_is_unlocked() 
-#else
-  #include <rtems/score/apimutex.h>
-  #define check_if_allocator_mutex_is_unlocked() \
-    do { \
-      if ( _RTEMS_Check_if_allocator_is_locked() ) { \
-        printk( \
-          "\nRTEMS Allocator Mutex is locked and should not be.\n" \
-          "Detected at %s:%d\n", \
-          __FILE__, \
-          __LINE__ \
-        ); \
-        FLUSH_OUTPUT(); \
-        rtems_test_exit( 1 ); \
-      } \
-    } while ( 0 )
-#endif
+#include <rtems/score/apimutex.h>
+#define check_if_allocator_mutex_is_not_owned() \
+  do { \
+    if ( _RTEMS_Allocator_is_owner() ) { \
+      printk( \
+        "\nRTEMS Allocator Mutex is owned by executing thread " \
+          "and should not be.\n" \
+        "Detected at %s:%d\n", \
+        __FILE__, \
+        __LINE__ \
+      ); \
+      FLUSH_OUTPUT(); \
+      rtems_test_exit( 1 ); \
+    } \
+  } while ( 0 )
 
 /*
  *  These macros properly report errors within the Classic API
@@ -121,7 +114,7 @@ extern "C" {
 #define fatal_directive_status_with_level( _stat, _desired, _msg, _level ) \
   do { \
     check_dispatch_disable_level( _level ); \
-    check_if_allocator_mutex_is_unlocked(); \
+    check_if_allocator_mutex_is_not_owned(); \
     fatal_directive_check_status_only( _stat, _desired, _msg ); \
   } while ( 0 )
 
@@ -139,7 +132,7 @@ extern "C" {
   if ( (_stat != -1) && (errno) != (_desired) ) { \
     long statx = _stat; \
     check_dispatch_disable_level( 0 ); \
-    check_if_allocator_mutex_is_unlocked(); \
+    check_if_allocator_mutex_is_not_owned(); \
     printf( "\n%s FAILED -- expected (%d - %s) got (%ld %d - %s)\n", \
 	    (_msg), _desired, strerror(_desired), \
             statx, errno, strerror(errno) ); \
@@ -153,7 +146,7 @@ extern "C" {
 #define fatal_posix_service_status_with_level( _stat, _desired, _msg, _level ) \
   do { \
     check_dispatch_disable_level( _level ); \
-    check_if_allocator_mutex_is_unlocked(); \
+    check_if_allocator_mutex_is_not_owned(); \
     if ( (_stat) != (_desired) ) { \
       printf( "\n%s FAILED -- expected (%d - %s) got (%d - %s)\n", \
               (_msg), _desired, strerror(_desired), _stat, strerror(_stat) ); \

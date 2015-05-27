@@ -1,8 +1,6 @@
 /**
  * @file
  *
- * @brief Check if the specified API mutex is locked.
- *
  * @ingroup ScoreAPIMutex
  */
 
@@ -20,9 +18,9 @@
 #endif
 
 #include <rtems/score/apimutex.h>
-#include <rtems/score/coremuteximpl.h>
+#include <rtems/score/threadimpl.h>
 
-bool _API_Mutex_Is_locked( const API_Mutex_Control *the_mutex )
+bool _API_Mutex_Is_owner( const API_Mutex_Control *the_mutex )
 {
-  return _CORE_mutex_Is_locked( &the_mutex->Mutex );
+  return the_mutex->Mutex.holder == _Thread_Get_executing();
 }
