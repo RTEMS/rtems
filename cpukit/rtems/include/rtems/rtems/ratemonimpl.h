@@ -201,46 +201,30 @@ void _Rate_monotonic_Initiate_statistics(
  *
  *  This method resets the statistics information for a period instance.
  */
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #define _Rate_monotonic_Reset_wall_time_statistics( _the_period ) \
-     do { \
-        /* set the minimums to a large value */ \
-        _Timestamp_Set( \
-          &(_the_period)->Statistics.min_wall_time, \
-          0x7fffffff, \
-          0x7fffffff \
-        ); \
-     } while (0)
-#else
-  #define _Rate_monotonic_Reset_wall_time_statistics( _the_period ) \
-     do { \
-        /* set the minimum to a large value */ \
-        (_the_period)->Statistics.min_wall_time = 0xffffffff; \
-     } while (0)
-#endif
+#define _Rate_monotonic_Reset_wall_time_statistics( _the_period ) \
+   do { \
+      /* set the minimums to a large value */ \
+      _Timestamp_Set( \
+	&(_the_period)->Statistics.min_wall_time, \
+	0x7fffffff, \
+	0x7fffffff \
+      ); \
+   } while (0)
 
 /**
  *  @brief Rate_monotonic_Reset_cpu_use_statistics
  *
  *  This helper method resets the period CPU usage statistics structure.
  */
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #define _Rate_monotonic_Reset_cpu_use_statistics( _the_period ) \
-     do { \
-        /* set the minimums to a large value */ \
-        _Timestamp_Set( \
-          &(_the_period)->Statistics.min_cpu_time, \
-          0x7fffffff, \
-          0x7fffffff \
-        ); \
-     } while (0)
-#else
-  #define _Rate_monotonic_Reset_cpu_use_statistics( _the_period ) \
-     do { \
-        /* set the minimum to a large value */ \
-        (_the_period)->Statistics.min_cpu_time = 0xffffffff; \
-     } while (0)
-#endif
+#define _Rate_monotonic_Reset_cpu_use_statistics( _the_period ) \
+   do { \
+      /* set the minimums to a large value */ \
+      _Timestamp_Set( \
+	&(_the_period)->Statistics.min_cpu_time, \
+	0x7fffffff, \
+	0x7fffffff \
+      ); \
+   } while (0)
 
 /**
  *  @brief Rate_monotonic_Reset_statistics

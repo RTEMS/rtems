@@ -31,13 +31,6 @@ void _Scheduler_default_Tick(
 {
   (void) scheduler;
 
-  #ifdef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    /*
-     *  Increment the number of ticks this thread has been executing
-     */
-    executing->cpu_time_used++;
-  #endif
-
   /*
    *  If the thread is not preemptible or is not ready, then
    *  just return.

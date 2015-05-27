@@ -46,21 +46,12 @@ rtems_status_code rtems_rate_monotonic_get_statistics(
       src = &the_period->Statistics;
       dst->count        = src->count;
       dst->missed_count = src->missed_count;
-      #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-        _Timestamp_To_timespec( &src->min_cpu_time,   &dst->min_cpu_time );
-        _Timestamp_To_timespec( &src->max_cpu_time,   &dst->max_cpu_time );
-        _Timestamp_To_timespec( &src->total_cpu_time, &dst->total_cpu_time );
-        _Timestamp_To_timespec( &src->min_wall_time,   &dst->min_wall_time );
-        _Timestamp_To_timespec( &src->max_wall_time,   &dst->max_wall_time );
-        _Timestamp_To_timespec( &src->total_wall_time, &dst->total_wall_time );
-      #else
-        dst->min_cpu_time    = src->min_cpu_time;
-        dst->max_cpu_time    = src->max_cpu_time;
-        dst->total_cpu_time  = src->total_cpu_time;
-        dst->min_wall_time   = src->min_wall_time;
-        dst->max_wall_time   = src->max_wall_time;
-        dst->total_wall_time = src->total_wall_time;
-      #endif
+      _Timestamp_To_timespec( &src->min_cpu_time,   &dst->min_cpu_time );
+      _Timestamp_To_timespec( &src->max_cpu_time,   &dst->max_cpu_time );
+      _Timestamp_To_timespec( &src->total_cpu_time, &dst->total_cpu_time );
+      _Timestamp_To_timespec( &src->min_wall_time,   &dst->min_wall_time );
+      _Timestamp_To_timespec( &src->max_wall_time,   &dst->max_wall_time );
+      _Timestamp_To_timespec( &src->total_wall_time, &dst->total_wall_time );
 
       _Objects_Put( &the_period->Object );
       return RTEMS_SUCCESSFUL;

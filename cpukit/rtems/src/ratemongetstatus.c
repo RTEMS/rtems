@@ -24,10 +24,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/rtems/ratemonimpl.h>
 #include <rtems/score/thread.h>
-
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #include <rtems/score/timespec.h>
-#endif
+#include <rtems/score/timespec.h>
 
 rtems_status_code rtems_rate_monotonic_get_status(
   rtems_id                            id,
@@ -54,14 +51,8 @@ rtems_status_code rtems_rate_monotonic_get_status(
        *  If the period is inactive, there is no information.
        */
       if ( status->state == RATE_MONOTONIC_INACTIVE ) {
-        #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-          _Timespec_Set_to_zero( &status->since_last_period );
-          _Timespec_Set_to_zero( &status->executed_since_last_period );
-        #else
-          status->since_last_period = 0;
-          status->executed_since_last_period = 0;
-        #endif
-
+	_Timespec_Set_to_zero( &status->since_last_period );
+	_Timespec_Set_to_zero( &status->executed_since_last_period );
       } else {
 
         /*
@@ -76,17 +67,12 @@ rtems_status_code rtems_rate_monotonic_get_status(
           return RTEMS_NOT_DEFINED;
         }
 
-        #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-          _Timestamp_To_timespec(
-            &since_last_period, &status->since_last_period
-          );
-          _Timestamp_To_timespec(
-            &executed, &status->executed_since_last_period
-          );
-        #else
-          status->since_last_period = since_last_period;
-          status->executed_since_last_period = executed;
-        #endif
+	_Timestamp_To_timespec(
+	  &since_last_period, &status->since_last_period
+	);
+	_Timestamp_To_timespec(
+	  &executed, &status->executed_since_last_period
+	);
       }
 
       _Objects_Put( &the_period->Object );

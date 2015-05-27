@@ -240,11 +240,6 @@ RTEMS_CPUOPT([RTEMS_VERSION],
   ["]_RTEMS_VERSION["],
   [RTEMS version string])
 
-RTEMS_CPUOPT([__RTEMS_USE_TICKS_FOR_STATISTICS__],
-  [test x"${USE_TICKS_FOR_STATISTICS}" = x"1"],
-  [1],
-  [disable nanosecond granularity for statistics])
-
 ## Header file differences that need to be known in .h after install
 RTEMS_CPUOPT([__RTEMS_HAVE_SYS_CPUSET_H__],
   [test x"${ac_cv_header_sys_cpuset_h}" = x"yes"],

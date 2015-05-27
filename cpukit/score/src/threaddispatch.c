@@ -99,17 +99,10 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
     _ISR_Enable( level );
 #endif
 
-    #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-      _Thread_Update_cpu_time_used(
-        executing,
-        &cpu_self->time_of_last_context_switch
-      );
-    #else
-      {
-        _TOD_Get_uptime( &cpu_self->time_of_last_context_switch );
-        heir->cpu_time_used++;
-      }
-    #endif
+    _Thread_Update_cpu_time_used(
+      executing,
+      &cpu_self->time_of_last_context_switch
+    );
 
 #if !defined(__DYNAMIC_REENT__)
     /*

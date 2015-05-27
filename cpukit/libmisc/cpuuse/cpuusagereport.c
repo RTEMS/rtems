@@ -44,12 +44,8 @@ void rtems_cpu_usage_report_with_plugin(
   Objects_Information *information;
   char                 name[13];
   uint32_t             ival, fval;
-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    Timestamp_Control  uptime, total, ran, uptime_at_last_reset;
-    uint32_t seconds, nanoseconds;
-  #else
-    uint32_t           total_units = 0;
-  #endif
+  Timestamp_Control  uptime, total, ran, uptime_at_last_reset;
+  uint32_t seconds, nanoseconds;
 
   if ( !print )
     return;
@@ -59,38 +55,15 @@ void rtems_cpu_usage_report_with_plugin(
    *  the number of "ticks" we gave credit for to give the user a rough
    *  guideline as to what each number means proportionally.
    */
-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    _Timestamp_Set_to_zero( &total );
-    uptime_at_last_reset = CPU_usage_Uptime_at_last_reset;
-  #else
-    for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
-      #if !defined(RTEMS_POSIX_API) || defined(RTEMS_DEBUG)
-        if ( !_Objects_Information_table[ api_index ] )
-          continue;
-      #endif
-
-      information = _Objects_Information_table[ api_index ][ 1 ];
-      if ( information ) {
-        for ( i=1 ; i <= information->maximum ; i++ ) {
-          the_thread = (Thread_Control *)information->local_table[ i ];
-
-          if ( the_thread )
-            total_units += the_thread->cpu_time_used;
-        }
-      }
-    }
-  #endif
+  _Timestamp_Set_to_zero( &total );
+  uptime_at_last_reset = CPU_usage_Uptime_at_last_reset;
 
   (*print)(
      context,
      "-------------------------------------------------------------------------------\n"
      "                              CPU USAGE BY THREAD\n"
      "------------+----------------------------------------+---------------+---------\n"
-     #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-       " ID         | NAME                                   | SECONDS       | PERCENT\n"
-     #else
-       " ID         | NAME                                   | TICKS         | PERCENT\n"
-     #endif
+     " ID         | NAME                                   | SECONDS       | PERCENT\n"
      "------------+----------------------------------------+---------------+---------\n"
   );
 
@@ -117,7 +90,6 @@ void rtems_cpu_usage_report_with_plugin(
           name
         );
 
-        #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
         {
           Timestamp_Control last;
 
@@ -150,52 +122,20 @@ void rtems_cpu_usage_report_with_plugin(
             ival, fval
           );
         }
-        #else
-         if (total_units) {
-            uint64_t ival_64;
-
-            ival_64 = the_thread->cpu_time_used;
-            ival_64 *= 100000;
-            ival = ival_64 / total_units;
-          } else {
-            ival = 0;
-          }
-
-          fval = ival % 1000;
-          ival /= 1000;
-          (*print)( context,
-            "%14" PRIu32 " |%4" PRIu32 ".%03" PRIu32 "\n",
-            the_thread->cpu_time_used,
-            ival,
-            fval
-          );
-        #endif
       }
     }
   }
 
-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    seconds = _Timestamp_Get_seconds( &total );
-    nanoseconds = _Timestamp_Get_nanoseconds( &total ) /
-      TOD_NANOSECONDS_PER_MICROSECOND;
-    (*print)(
-       context,
-       "------------+----------------------------------------+---------------+---------\n"
-       " TIME SINCE LAST CPU USAGE RESET IN SECONDS:                    %7" PRIu32 ".%06" PRIu32 "\n"
-       "-------------------------------------------------------------------------------\n",
-       seconds, nanoseconds
-    );
-  #else
-    (*print)(
-       context,
-       "------------+----------------------------------------+---------------+---------\n"
-       " TICKS SINCE LAST SYSTEM RESET:                                 %14" PRIu32 "\n"
-       " TOTAL UNITS:                                                   %14" PRIu32 "\n"
-       "-------------------------------------------------------------------------------\n",
-       _Watchdog_Ticks_since_boot - CPU_usage_Ticks_at_last_reset,
-       total_units
-    );
-  #endif
+  seconds = _Timestamp_Get_seconds( &total );
+  nanoseconds = _Timestamp_Get_nanoseconds( &total ) /
+    TOD_NANOSECONDS_PER_MICROSECOND;
+  (*print)(
+     context,
+     "------------+----------------------------------------+---------------+---------\n"
+     " TIME SINCE LAST CPU USAGE RESET IN SECONDS:                    %7" PRIu32 ".%06" PRIu32 "\n"
+     "-------------------------------------------------------------------------------\n",
+     seconds, nanoseconds
+  );
 }
 
 void rtems_cpu_usage_report( void )

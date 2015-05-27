@@ -217,11 +217,7 @@ bool _Thread_Initialize(
   /*
    *  Initialize the CPU usage statistics
    */
-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    _Timestamp_Set_to_zero( &the_thread->cpu_time_used );
-  #else
-    the_thread->cpu_time_used = 0;
-  #endif
+  _Timestamp_Set_to_zero( &the_thread->cpu_time_used );
 
   /*
    * initialize thread's key vaule node chain

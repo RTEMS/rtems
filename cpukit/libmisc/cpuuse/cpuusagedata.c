@@ -22,8 +22,4 @@
 
 #include <rtems/cpuuse.h>
 
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  Timestamp_Control  CPU_usage_Uptime_at_last_reset;
-#else
-  uint32_t           CPU_usage_Ticks_at_last_reset;
-#endif
+Timestamp_Control  CPU_usage_Uptime_at_last_reset;

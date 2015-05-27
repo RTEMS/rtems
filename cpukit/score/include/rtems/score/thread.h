@@ -83,13 +83,9 @@ extern "C" {
  *  The user can define this at configure time and go back to ticks
  *  resolution.
  */
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #include <rtems/score/timestamp.h>
+#include <rtems/score/timestamp.h>
 
-  typedef Timestamp_Control Thread_CPU_usage_t;
-#else
-  typedef uint32_t Thread_CPU_usage_t;
-#endif
+typedef Timestamp_Control Thread_CPU_usage_t;
 
 /**
  *  The following defines the "return type" of a thread.

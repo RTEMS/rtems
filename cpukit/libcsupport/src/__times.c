@@ -31,9 +31,7 @@
 #include <errno.h>
 #include <rtems/seterr.h>
 #include <rtems/score/todimpl.h>
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #include <rtems/score/timestamp.h>
-#endif
+#include <rtems/score/timestamp.h>
 #include <rtems/score/threadimpl.h>
 
 /**
@@ -63,41 +61,35 @@ clock_t _times(
    *  of ticks since boot and the number of ticks executed by this
    *  this thread.
    */
+  {
+    Timestamp_Control  per_tick;
+    uint32_t           ticks_of_executing;
+    uint32_t           fractional_ticks;
+    Per_CPU_Control   *cpu_self;
 
-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    {
-      Timestamp_Control  per_tick;
-      uint32_t           ticks_of_executing;
-      uint32_t           fractional_ticks;
-      Per_CPU_Control   *cpu_self;
+    _Timestamp_Set(
+      &per_tick,
+      rtems_configuration_get_microseconds_per_tick() /
+	  TOD_MICROSECONDS_PER_SECOND,
+      (rtems_configuration_get_nanoseconds_per_tick() %
+	  TOD_NANOSECONDS_PER_SECOND)
+    );
 
-      _Timestamp_Set(
-        &per_tick,
-        rtems_configuration_get_microseconds_per_tick() /
-            TOD_MICROSECONDS_PER_SECOND,
-        (rtems_configuration_get_nanoseconds_per_tick() %
-            TOD_NANOSECONDS_PER_SECOND)
-      );
-
-      cpu_self = _Thread_Dispatch_disable();
-      executing = _Thread_Executing;
-      _Thread_Update_cpu_time_used(
-        executing,
-        &_Thread_Time_of_last_context_switch
-      );
-      _Timestamp_Divide(
-        &executing->cpu_time_used,
-        &per_tick,
-        &ticks_of_executing,
-        &fractional_ticks
-      );
-      _Thread_Dispatch_enable( cpu_self );
-      ptms->tms_utime = ticks_of_executing * us_per_tick;
-    }
-  #else
-    executing = _Thread_Get_executing();
-    ptms->tms_utime  = executing->cpu_time_used * us_per_tick;
-  #endif
+    cpu_self = _Thread_Dispatch_disable();
+    executing = _Thread_Executing;
+    _Thread_Update_cpu_time_used(
+      executing,
+      &_Thread_Time_of_last_context_switch
+    );
+    _Timestamp_Divide(
+      &executing->cpu_time_used,
+      &per_tick,
+      &ticks_of_executing,
+      &fractional_ticks
+    );
+    _Thread_Dispatch_enable( cpu_self );
+    ptms->tms_utime = ticks_of_executing * us_per_tick;
+  }
   ptms->tms_stime  = ticks * us_per_tick;
   ptms->tms_cutime = 0;
   ptms->tms_cstime = 0;

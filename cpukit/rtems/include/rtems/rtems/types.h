@@ -124,11 +124,7 @@ typedef Watchdog_Interval rtems_interval;
  * When using nanoseconds granularity timing, RTEMS may internally use a
  * variety of representations.
  */
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  typedef struct timespec rtems_thread_cpu_usage_t;
-#else
-  typedef uint32_t rtems_thread_cpu_usage_t;
-#endif
+typedef struct timespec rtems_thread_cpu_usage_t;
 
 /**
  * @brief Data structure to manage and manipulate calendar

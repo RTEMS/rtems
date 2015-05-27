@@ -144,31 +144,14 @@ static inline bool less_than_uint32_t( uint32_t * lhs, uint32_t * rhs )
     return false;
 }
 
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #define CPU_usage_Equal_to( _lhs, _rhs ) \
-          _Timestamp_Equal_to( _lhs, _rhs )
-#else
-  #define CPU_usage_Equal_to( _lhs, _rhs ) \
-          equal_to_uint32_t( _lhs, _rhs )
-#endif
+#define CPU_usage_Equal_to( _lhs, _rhs ) \
+	_Timestamp_Equal_to( _lhs, _rhs )
 
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #define CPU_usage_Set_to_zero( _time ) \
-         _Timestamp_Set_to_zero( _time )
-#else
-  #define CPU_usage_Set_to_zero( _time ) \
-       do { \
-         *_time = 0; \
-       } while (0)
-#endif
+#define CPU_usage_Set_to_zero( _time ) \
+       _Timestamp_Set_to_zero( _time )
 
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #define CPU_usage_Less_than( _lhs, _rhs ) \
-        _Timestamp_Less_than( _lhs, _rhs )
-#else
-  #define CPU_usage_Less_than( _lhs, _rhs ) \
-         less_than_uint32_t( _lhs, _rhs )
-#endif
+#define CPU_usage_Less_than( _lhs, _rhs ) \
+      _Timestamp_Less_than( _lhs, _rhs )
 
 static void
 print_memsize(rtems_cpu_usage_data* data, const uint32_t size, const char* label)
@@ -581,11 +564,6 @@ void rtems_cpu_usage_top_with_plugin(
   rtems_printk_plugin_t  print
 )
 {
-#ifdef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  if ( !print )
-    return;
-  (*print)(context, "error: tick kernels not supported\n");
-#else
   rtems_status_code      sc;
   rtems_task_priority    priority;
   rtems_name             name;
@@ -714,7 +692,6 @@ void rtems_cpu_usage_top_with_plugin(
       rtems_event_send(id, RTEMS_EVENT_1);
     }
   }
-#endif
 }
 
 void rtems_cpu_usage_top( void )

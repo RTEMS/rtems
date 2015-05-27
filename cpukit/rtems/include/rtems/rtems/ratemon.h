@@ -62,25 +62,17 @@ extern "C" {
  *  This is the public type used for the rate monotonic timing
  *  statistics.
  */
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #include <rtems/score/timespec.h>
+#include <rtems/score/timespec.h>
 
-  typedef struct timespec rtems_rate_monotonic_period_time_t;
-#else
-  typedef uint32_t rtems_rate_monotonic_period_time_t;
-#endif
+typedef struct timespec rtems_rate_monotonic_period_time_t;
 
 /**
  *  This is the internal type used for the rate monotonic timing
  *  statistics.
  */
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #include <rtems/score/timestamp.h>
+#include <rtems/score/timestamp.h>
 
-  typedef Timestamp_Control Rate_monotonic_Period_time_t;
-#else
-  typedef uint32_t Rate_monotonic_Period_time_t;
-#endif
+typedef Timestamp_Control Rate_monotonic_Period_time_t;
 
 /**
  *  The following enumerated type defines the states in which a

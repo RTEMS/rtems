@@ -25,9 +25,7 @@
 #include <rtems.h>
 #include <rtems/bspIo.h>
 
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #include <rtems/score/timestamp.h>
-#endif
+#include <rtems/score/timestamp.h>
 
 /**
  *  @defgroup libmisc_cpuuse CPU Usage
@@ -39,11 +37,7 @@
 extern "C" {
 #endif
 
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  extern Timestamp_Control  CPU_usage_Uptime_at_last_reset;
-#else
-  extern uint32_t           CPU_usage_Ticks_at_last_reset;
-#endif
+extern Timestamp_Control  CPU_usage_Uptime_at_last_reset;
 
 /*
  * rtems_cpu_usage_report_with_handler
