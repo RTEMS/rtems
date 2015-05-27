@@ -27,7 +27,6 @@
  */
 #include <rtems.h>
 #include <rtems/score/apimutex.h>
-#include <rtems/score/heapimpl.h>
 #include <rtems/score/wkspace.h>
 
 #ifdef CONFIGURE_DISABLE_BSP_SETTINGS
@@ -2951,7 +2950,7 @@ const rtems_libio_helper rtems_fs_init_helper =
  * _Heap_Block_split().
  */
 #define CONFIGURE_HEAP_HANDLER_OVERHEAD \
-  _Configure_Align_up( HEAP_ALLOC_BONUS, CPU_HEAP_ALIGNMENT )
+  _Configure_Align_up( HEAP_BLOCK_HEADER_SIZE, CPU_HEAP_ALIGNMENT )
 
 /*
  *  Calculate the RAM size based on the maximum number of objects configured.
