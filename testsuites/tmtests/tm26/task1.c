@@ -439,6 +439,9 @@ rtems_task Low_task(
   thread_disable_dispatch();
 
   benchmark_timer_initialize();
+#if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
+    _Context_Restore_fp( &_Thread_Get_executing()->fp_context );
+#endif
     _Context_Switch(
       &executing->Registers,
       &_Thread_Get_executing()->Registers
