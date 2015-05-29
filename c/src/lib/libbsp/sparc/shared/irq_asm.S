@@ -7,7 +7,7 @@
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2014 embedded brains GmbH
+ *  Copyright (c) 2014-2015 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -423,6 +423,14 @@ dont_do_the_window:
         add      %l6, 1, %l6
         st       %l6, [%g6 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
+#if SPARC_HAS_FPU == 1
+        /*
+         * We cannot use an intermediate value for operations with the PSR[EF]
+         * bit since they use a 13-bit sign extension and PSR[EF] is bit 12.
+         */
+        sethi    %hi(SPARC_PSR_EF_MASK), %l5
+#endif
+
         /*
          *  If ISR nest level was zero (now 1), then switch stack.
          */
@@ -440,6 +448,22 @@ dont_do_the_window:
 #endif
 
         ld       [%g6 + PER_CPU_INTERRUPT_STACK_HIGH], %sp
+
+#if SPARC_HAS_FPU == 1
+        /*
+         * Test if the interrupted thread uses the floating point unit
+         * (PSR[EF] == 1).  In case it uses the floating point unit, then store
+         * the floating point status register.  This has the side-effect that
+         * all pending floating point operations complete before the store
+         * completes.  The PSR[EF] bit is restored after the call to the
+         * interrupt handler.  Thus post-switch actions (e.g. signal handlers)
+         * and context switch extensions may still corrupt the floating point
+         * context.
+         */
+        andcc    %l0, %l5, %g0
+        bne,a    dont_switch_stacks
+         st      %fsr, [%g6 + SPARC_PER_CPU_FSR_OFFSET]
+#endif
 
 dont_switch_stacks:
         /*
@@ -471,6 +495,15 @@ dont_switch_stacks:
 dont_fix_pil:
         or       %g5, SPARC_PSR_PIL_MASK, %g5
 pil_fixed:
+
+#if SPARC_HAS_FPU == 1
+        /*
+         * Clear the PSR[EF] bit of the interrupted context to ensure that
+         * interrupt service routines cannot corrupt the floating point context.
+         */
+        andn     %g5, %l5, %g5
+#endif
+
         wr       %g5, SPARC_PSR_ET_MASK, %psr ! **** ENABLE TRAPS ****
 
         /*

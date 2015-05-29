@@ -341,13 +341,25 @@ typedef struct {
 /** This defines the size of the minimum stack frame. */
 #define CPU_MINIMUM_STACK_FRAME_SIZE          0x60
 
-#define CPU_PER_CPU_CONTROL_SIZE 4
+#if ( SPARC_HAS_FPU == 1 )
+  #define CPU_PER_CPU_CONTROL_SIZE 8
+#else
+  #define CPU_PER_CPU_CONTROL_SIZE 4
+#endif
 
 /**
  * @brief Offset of the CPU_Per_CPU_control::isr_dispatch_disable field
  * relative to the Per_CPU_Control begin.
  */
 #define SPARC_PER_CPU_ISR_DISPATCH_DISABLE 0
+
+#if ( SPARC_HAS_FPU == 1 )
+  /**
+   * @brief Offset of the CPU_Per_CPU_control::fsr field relative to the
+   * Per_CPU_Control begin.
+   */
+  #define SPARC_PER_CPU_FSR_OFFSET 4
+#endif
 
 /**
  * @defgroup Contexts SPARC Context Structures
@@ -380,6 +392,17 @@ typedef struct {
    * attempts on a previously interrupted thread's stack.
    */
   uint32_t isr_dispatch_disable;
+
+#if ( SPARC_HAS_FPU == 1 )
+  /**
+   * @brief Memory location to store the FSR register during interrupt
+   * processing.
+   *
+   * This is a write-only field.  The FSR is written to force a completion of
+   * floating point operations in progress.
+   */
+  uint32_t fsr;
+#endif
 } CPU_Per_CPU_control;
 
 /**

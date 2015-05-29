@@ -29,6 +29,14 @@ RTEMS_STATIC_ASSERT(
   SPARC_PER_CPU_ISR_DISPATCH_DISABLE
 );
 
+#if SPARC_HAS_FPU == 1
+  RTEMS_STATIC_ASSERT(
+    offsetof( Per_CPU_Control, cpu_per_cpu.fsr)
+      == SPARC_PER_CPU_FSR_OFFSET,
+    SPARC_PER_CPU_FSR_OFFSET
+  );
+#endif
+
 #define SPARC_ASSERT_OFFSET(field, off) \
   RTEMS_STATIC_ASSERT( \
     offsetof(Context_Control, field) == off ## _OFFSET, \
