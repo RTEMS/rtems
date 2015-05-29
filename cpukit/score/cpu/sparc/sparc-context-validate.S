@@ -19,8 +19,10 @@
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 
-#define FRAME_OFFSET_BUFFER (CPU_MINIMUM_STACK_FRAME_SIZE)
-#define FRAME_OFFSET_L0 (FRAME_OFFSET_BUFFER + 0x04)
+#define FRAME_OFFSET_BUFFER_0 (CPU_MINIMUM_STACK_FRAME_SIZE)
+#define FRAME_OFFSET_BUFFER_1 (FRAME_OFFSET_BUFFER_0 + 0x04)
+#define FRAME_OFFSET_BUFFER_2 (FRAME_OFFSET_BUFFER_1 + 0x04)
+#define FRAME_OFFSET_L0 (FRAME_OFFSET_BUFFER_2 + 0x04)
 #define FRAME_OFFSET_L1 (FRAME_OFFSET_L0 + 0x04)
 #define FRAME_OFFSET_L2 (FRAME_OFFSET_L1 + 0x04)
 #define FRAME_OFFSET_L3 (FRAME_OFFSET_L2 + 0x04)
@@ -36,8 +38,7 @@
 #define FRAME_OFFSET_I5 (FRAME_OFFSET_I4 + 0x04)
 #define FRAME_OFFSET_I6 (FRAME_OFFSET_I5 + 0x04)
 #define FRAME_OFFSET_I7 (FRAME_OFFSET_I6 + 0x04)
-#define FRAME_OFFSET_SP (FRAME_OFFSET_I7 + 0x04)
-#define FRAME_END (FRAME_OFFSET_SP + 0x04)
+#define FRAME_END (FRAME_OFFSET_I7 + 0x04)
 #define FRAME_SIZE \
   ((FRAME_END + CPU_STACK_ALIGNMENT - 1) & ~(CPU_STACK_ALIGNMENT - 1))
 
@@ -50,23 +51,9 @@
 
 .macro check_float_register reg
 	sub	%g1, 1, %g1
-	st	\reg, [%sp + FRAME_OFFSET_BUFFER]
-	ld	[%sp + FRAME_OFFSET_BUFFER], %o1
+	st	\reg, [%sp + FRAME_OFFSET_BUFFER_0]
+	ld	[%sp + FRAME_OFFSET_BUFFER_0], %o1
 	cmp	%g1, %o1
-	bne	restore_registers
-	 nop
-.endm
-
-.macro check_fsr_register reg
-	st	\reg, [%sp + FRAME_OFFSET_BUFFER]
-	ld	[%sp + FRAME_OFFSET_BUFFER], %o1
-	sub	%g1, 1, %g1
-	clr	%g3
-	sethi	%hi(0xCF800000), %g3
-	or	%g3, %lo(0x0FFF), %g3
-	and	%g1, %g3, %g3
-	and	%o1, %g3, %o1
-	cmp	%o1, %g3
 	bne	restore_registers
 	 nop
 .endm
@@ -78,26 +65,8 @@
 
 .macro write_float_register reg
 	add	%g1, 1, %g1
-	st	%g1, [%sp + FRAME_OFFSET_BUFFER]
-	ld	[%sp + FRAME_OFFSET_BUFFER], \reg
-.endm
-
-.macro write_fsr_register reg
-	st	\reg, [%sp + FRAME_OFFSET_BUFFER]
-	ld	[%sp + FRAME_OFFSET_BUFFER], %o1
-	add	%g1, 1, %g1
-	clr	%g3
-
-	/*
-	 * FSR is masked with undefined, reserved or system-specific values
-	 * (e.g. FPU architecture version, FP queue).
-	 */
-	sethi	%hi(0xCF800000), %g3
-	or	%g3, %lo(0x0FFF), %g3
-	and	%g1, %g3, %g3
-	or	%o1, %g3, %g3
-	st	%g3, [%sp + FRAME_OFFSET_BUFFER]
-	ld	[%sp + FRAME_OFFSET_BUFFER], \reg
+	st	%g1, [%sp + FRAME_OFFSET_BUFFER_0]
+	ld	[%sp + FRAME_OFFSET_BUFFER_0], \reg
 .endm
 
         .align 4
@@ -136,7 +105,6 @@ SYM(_CPU_Context_validate):
 	st	%i5, [%sp + FRAME_OFFSET_I5]
 	st	%i6, [%sp + FRAME_OFFSET_I6]
 	st	%i7, [%sp + FRAME_OFFSET_I7]
-	st	%sp, [%sp + FRAME_OFFSET_SP]
 
 	cmp	%g4, 0
 	bne	write_locals_and_outputs
@@ -146,8 +114,10 @@ SYM(_CPU_Context_validate):
 
 new_check_cycle:
 	clr	%g4
-	sub	%g1, 1, %g1
-
+	add	%g4, 1, %g4
+	ld	[%sp + FRAME_OFFSET_BUFFER_1], %g1
+	b	switch_to_next_window
+	 nop
 	/* Write pattern values into registers */
 
 check_for_fp:
@@ -155,7 +125,20 @@ check_for_fp:
 	be	write_y
 	 nop
 
-	write_fsr_register	%fsr
+	/*
+	 * Write pattern to FSR.  FSR is masked with undefined, reserved or
+	 * system-specific values (e.g. FPU architecture version, FP queue).
+	 */
+	st	%fsr, [%sp + FRAME_OFFSET_BUFFER_0]
+	ld	[%sp + FRAME_OFFSET_BUFFER_0], %o1
+	add	%g1, 1, %g1
+	sethi	%hi(0xCF800000), %g3
+	or	%g3, %lo(0x0FFF), %g3
+	and	%g1, %g3, %g3
+	or	%o1, %g3, %g3
+	st	%g3, [%sp + FRAME_OFFSET_BUFFER_0]
+	ld	[%sp + FRAME_OFFSET_BUFFER_0], %fsr
+
 	write_float_register	%f0
 	write_float_register	%f1
 	write_float_register	%f2
@@ -224,6 +207,12 @@ write_locals_and_outputs:
 	/* Don't write register $o7 => return address */
 
 	add	%g4, 1, %g4
+	cmp	%g4, 1
+	bne	no_store
+	 nop
+	st	%g1, [%sp + FRAME_OFFSET_BUFFER_1]
+
+no_store:
 	cmp	%g4, SPARC_NUMBER_OF_REGISTER_WINDOWS
 	bne	switch_to_next_window
 	 nop
@@ -284,12 +273,15 @@ dont_check_i0:
 
 	/* Check Y register */
 y_checking:
+	st	%o1, [%sp + FRAME_OFFSET_BUFFER_2]
 	mov	%y, %o1
 	check_register	%o1
+	ld	[%sp + FRAME_OFFSET_BUFFER_2], %o1
 	cmp	%g2, 0
 	be	new_check_cycle
 	 nop
 
+	st	%o1, [%sp + FRAME_OFFSET_BUFFER_2]
 	/* Check floating point registers */
 	check_float_register	%f31
 	check_float_register	%f30
@@ -323,9 +315,20 @@ y_checking:
 	check_float_register	%f2
 	check_float_register	%f1
 	check_float_register	%f0
-	check_fsr_register	%fsr
 
-	be	new_check_cycle
+	st	%fsr, [%sp + FRAME_OFFSET_BUFFER_0]
+	ld	[%sp + FRAME_OFFSET_BUFFER_0], %o1
+	sub	%g1, 1, %g1
+	clr	%g3
+	sethi	%hi(0xCF800000), %g3
+	or	%g3, %lo(0x0FFF), %g3
+	and	%g1, %g3, %g3
+	and	%o1, %g3, %o1
+	cmp	%o1, %g3
+	bne	restore_registers
+	 ld	[%sp + FRAME_OFFSET_BUFFER_2], %o1
+
+	b	new_check_cycle
 	 nop
 
 	/****** RESTORE STARTS HERE *******/
