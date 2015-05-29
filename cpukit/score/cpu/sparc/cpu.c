@@ -125,6 +125,11 @@ void _CPU_Initialize(void)
 {
 #if (SPARC_HAS_FPU == 1)
   Context_Control_fp *pointer;
+  uint32_t            psr;
+
+  sparc_get_psr( psr );
+  psr |= SPARC_PSR_EF_MASK;
+  sparc_set_psr( psr );
 
   /*
    *  This seems to be the most appropriate way to obtain an initial

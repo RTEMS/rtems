@@ -44,17 +44,7 @@
         .align 4
         PUBLIC(_CPU_Context_save_fp)
 SYM(_CPU_Context_save_fp):
-        /*
-         *  The following enables the floating point unit.
-         */
-
-        mov     %psr, %o1
-        sethi   %hi(SPARC_PSR_EF_MASK), %o2
-        or      %o2, %lo(SPARC_PSR_EF_MASK), %o2
-        or      %o1, %o2, %o1
-        mov     %o1, %psr                  ! **** ENABLE FLOAT ACCESS ****
-	nop; nop; nop;			   ! Need three nops before EF is
-        ld      [%o0], %o1		   ! active due to pipeline delay!!!
+        ld      [%o0], %o1
         std     %f0, [%o1 + FO_F1_OFFSET]
         std     %f2, [%o1 + F2_F3_OFFSET]
         std     %f4, [%o1 + F4_F5_OFFSET]
@@ -90,17 +80,7 @@ SYM(_CPU_Context_save_fp):
         .align 4
         PUBLIC(_CPU_Context_restore_fp)
 SYM(_CPU_Context_restore_fp):
-        /*
-         *  The following enables the floating point unit.
-         */
-
-        mov     %psr, %o1
-        sethi   %hi(SPARC_PSR_EF_MASK), %o2
-        or      %o2, %lo(SPARC_PSR_EF_MASK), %o2
-        or      %o1, %o2, %o1
-        mov     %o1, %psr                  ! **** ENABLE FLOAT ACCESS ****
-	nop; nop; nop;			   ! Need three nops before EF is
-        ld      [%o0], %o1		   ! active due to pipeline delay!!!
+        ld      [%o0], %o1
         ldd     [%o1 + FO_F1_OFFSET], %f0
         ldd     [%o1 + F2_F3_OFFSET], %f2
         ldd     [%o1 + F4_F5_OFFSET], %f4
