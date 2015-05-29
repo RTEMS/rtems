@@ -248,7 +248,7 @@ rtems_device_driver Clock_initialize(
 
   Clock_TC.tc_get_timecount = Clock_Get_timecount;
   Clock_TC.tc_counter_mask = 0xffffffff;
-  Clock_TC.tc_frequency = (1000 * BSP_bus_frequency) / BSP_time_base_divisor;
+  Clock_TC.tc_frequency = (UINT64_C(1000) * BSP_bus_frequency) / BSP_time_base_divisor;
   Clock_TC.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
   rtems_timecounter_install(&Clock_TC);
 
