@@ -43,7 +43,6 @@ int clock_gettime(
 #ifdef CLOCK_MONOTONIC
   if ( clock_id == CLOCK_MONOTONIC ) {
     _TOD_Get_zero_based_uptime_as_timespec( tp );
-    --tp->tv_sec;
     return 0;
   }
 #endif
@@ -51,7 +50,6 @@ int clock_gettime(
 #ifdef _POSIX_CPUTIME
   if ( clock_id == CLOCK_PROCESS_CPUTIME_ID ) {
     _TOD_Get_zero_based_uptime_as_timespec( tp );
-    --tp->tv_sec;
     return 0;
   }
 #endif
