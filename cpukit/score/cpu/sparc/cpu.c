@@ -131,7 +131,7 @@ RTEMS_STATIC_ASSERT(
 
 void _CPU_Initialize(void)
 {
-#if (SPARC_HAS_FPU == 1)
+#if (SPARC_HAS_FPU == 1) && !defined(SPARC_USE_SAFE_FP_SUPPORT)
   Context_Control_fp *pointer;
   uint32_t            psr;
 

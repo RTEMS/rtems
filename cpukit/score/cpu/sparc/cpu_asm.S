@@ -26,7 +26,7 @@
 #include <rtems/asm.h>
 #include <rtems/system.h>
 
-#if (SPARC_HAS_FPU == 1)
+#if (SPARC_HAS_FPU == 1) && !defined(SPARC_USE_SAFE_FP_SUPPORT)
 
 /*
  *  void _CPU_Context_save_fp(

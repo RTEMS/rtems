@@ -25,6 +25,27 @@
 #include <rtems/score/percpu.h>
 #include <bspopts.h>
 
+#if SPARC_HAS_FPU == 1 && defined(SPARC_USE_SAFE_FP_SUPPORT)
+  #define FP_FRAME_OFFSET_FO_F1 (CPU_MINIMUM_STACK_FRAME_SIZE + 0)
+  #define FP_FRAME_OFFSET_F2_F3 (FP_FRAME_OFFSET_FO_F1 + 8)
+  #define FP_FRAME_OFFSET_F4_F5 (FP_FRAME_OFFSET_F2_F3 + 8)
+  #define FP_FRAME_OFFSET_F6_F7 (FP_FRAME_OFFSET_F4_F5 + 8)
+  #define FP_FRAME_OFFSET_F8_F9 (FP_FRAME_OFFSET_F6_F7 + 8)
+  #define FP_FRAME_OFFSET_F1O_F11 (FP_FRAME_OFFSET_F8_F9 + 8)
+  #define FP_FRAME_OFFSET_F12_F13 (FP_FRAME_OFFSET_F1O_F11 + 8)
+  #define FP_FRAME_OFFSET_F14_F15 (FP_FRAME_OFFSET_F12_F13 + 8)
+  #define FP_FRAME_OFFSET_F16_F17 (FP_FRAME_OFFSET_F14_F15 + 8)
+  #define FP_FRAME_OFFSET_F18_F19 (FP_FRAME_OFFSET_F16_F17 + 8)
+  #define FP_FRAME_OFFSET_F2O_F21 (FP_FRAME_OFFSET_F18_F19 + 8)
+  #define FP_FRAME_OFFSET_F22_F23 (FP_FRAME_OFFSET_F2O_F21 + 8)
+  #define FP_FRAME_OFFSET_F24_F25 (FP_FRAME_OFFSET_F22_F23 + 8)
+  #define FP_FRAME_OFFSET_F26_F27 (FP_FRAME_OFFSET_F24_F25 + 8)
+  #define FP_FRAME_OFFSET_F28_F29 (FP_FRAME_OFFSET_F26_F27 + 8)
+  #define FP_FRAME_OFFSET_F3O_F31 (FP_FRAME_OFFSET_F28_F29 + 8)
+  #define FP_FRAME_OFFSET_FSR (FP_FRAME_OFFSET_F3O_F31 + 8)
+  #define FP_FRAME_SIZE (FP_FRAME_OFFSET_FSR + 8)
+#endif
+
 /*
  *  void _CPU_Context_switch(
  *    Context_Control  *run,
@@ -613,8 +634,72 @@ profiling_not_outer_most_exit:
         nop
         nop
 isr_dispatch:
+
+#if SPARC_HAS_FPU == 1 && defined(SPARC_USE_SAFE_FP_SUPPORT)
+        /* Test if we interrupted a floating point thread (PSR[EF] == 1) */
+        andcc   %l0, %l5, %g0
+        be      non_fp_thread_dispatch
+         nop
+
+        /*
+         * Yes, this is a floating point thread, then save the floating point
+         * context to a new stack frame.  Then do the thread dispatch.
+         * Post-switch actions (e.g. signal handlers) and context switch
+         * extensions may safely use the floating point unit.
+         */
+        sub     %sp, FP_FRAME_SIZE, %sp
+        std     %f0, [%sp + FP_FRAME_OFFSET_FO_F1]
+        std     %f2, [%sp + FP_FRAME_OFFSET_F2_F3]
+        std     %f4, [%sp + FP_FRAME_OFFSET_F4_F5]
+        std     %f6, [%sp + FP_FRAME_OFFSET_F6_F7]
+        std     %f8, [%sp + FP_FRAME_OFFSET_F8_F9]
+        std     %f10, [%sp + FP_FRAME_OFFSET_F1O_F11]
+        std     %f12, [%sp + FP_FRAME_OFFSET_F12_F13]
+        std     %f14, [%sp + FP_FRAME_OFFSET_F14_F15]
+        std     %f16, [%sp + FP_FRAME_OFFSET_F16_F17]
+        std     %f18, [%sp + FP_FRAME_OFFSET_F18_F19]
+        std     %f20, [%sp + FP_FRAME_OFFSET_F2O_F21]
+        std     %f22, [%sp + FP_FRAME_OFFSET_F22_F23]
+        std     %f24, [%sp + FP_FRAME_OFFSET_F24_F25]
+        std     %f26, [%sp + FP_FRAME_OFFSET_F26_F27]
+        std     %f28, [%sp + FP_FRAME_OFFSET_F28_F29]
+        std     %f30, [%sp + FP_FRAME_OFFSET_F3O_F31]
+        call    SYM(_Thread_Dispatch), 0
+         st     %fsr, [%sp + FP_FRAME_OFFSET_FSR]
+
+        /*
+         * Restore the floating point context from stack frame and release the
+         * stack frame.
+         */
+        ldd     [%sp + FP_FRAME_OFFSET_FO_F1], %f0
+        ldd     [%sp + FP_FRAME_OFFSET_F2_F3], %f2
+        ldd     [%sp + FP_FRAME_OFFSET_F4_F5], %f4
+        ldd     [%sp + FP_FRAME_OFFSET_F6_F7], %f6
+        ldd     [%sp + FP_FRAME_OFFSET_F8_F9], %f8
+        ldd     [%sp + FP_FRAME_OFFSET_F1O_F11], %f10
+        ldd     [%sp + FP_FRAME_OFFSET_F12_F13], %f12
+        ldd     [%sp + FP_FRAME_OFFSET_F14_F15], %f14
+        ldd     [%sp + FP_FRAME_OFFSET_F16_F17], %f16
+        ldd     [%sp + FP_FRAME_OFFSET_F18_F19], %f18
+        ldd     [%sp + FP_FRAME_OFFSET_F2O_F21], %f20
+        ldd     [%sp + FP_FRAME_OFFSET_F22_F23], %f22
+        ldd     [%sp + FP_FRAME_OFFSET_F24_F25], %f24
+        ldd     [%sp + FP_FRAME_OFFSET_F26_F27], %f26
+        ldd     [%sp + FP_FRAME_OFFSET_F28_F29], %f28
+        ldd     [%sp + FP_FRAME_OFFSET_F3O_F31], %f30
+        ld      [%sp + FP_FRAME_OFFSET_FSR], %fsr
+        ba      thread_dispatch_done
+         add    %sp, FP_FRAME_SIZE, %sp
+
+non_fp_thread_dispatch:
+#endif
+
         call    SYM(_Thread_Dispatch), 0
          nop
+
+#if SPARC_HAS_FPU == 1 && defined(SPARC_USE_SAFE_FP_SUPPORT)
+thread_dispatch_done:
+#endif
 
         /*
          *  We invoked _Thread_Dispatch in a state similar to the interrupted
