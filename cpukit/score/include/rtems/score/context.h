@@ -43,7 +43,11 @@ extern "C" {
  *  This constant defines the number of bytes required
  *  to store a full floating point context.
  */
-#define CONTEXT_FP_SIZE CPU_CONTEXT_FP_SIZE
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+  #define CONTEXT_FP_SIZE CPU_CONTEXT_FP_SIZE
+#else
+  #define CONTEXT_FP_SIZE 0
+#endif
 
 /**
  *  @brief Initialize context area.
