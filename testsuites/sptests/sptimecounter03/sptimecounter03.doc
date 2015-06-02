@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: sptimecounter03
+
+directives:
+
+  - rtems_bsd_binuptime
+
+concepts:
+
+  - Ensure that the binuptime is monotonic within a certain time frame.
