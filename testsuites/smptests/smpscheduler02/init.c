@@ -61,6 +61,7 @@ static void test(void)
   cpu_set_t first_cpu;
   cpu_set_t second_cpu;
   cpu_set_t all_cpus;
+  uint32_t cpu_count;
 
   main_task_id = rtems_task_self();
 
@@ -74,14 +75,18 @@ static void test(void)
   CPU_SET(0, &all_cpus);
   CPU_SET(1, &all_cpus);
 
+  cpu_count = rtems_get_processor_count();
+
   rtems_test_assert(rtems_get_current_processor() == 0);
 
   sc = rtems_scheduler_ident(SCHED_A, &scheduler_a_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_scheduler_ident(SCHED_B, &scheduler_b_id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(scheduler_a_id != scheduler_b_id);
+  if (cpu_count > 1) {
+    sc = rtems_scheduler_ident(SCHED_B, &scheduler_b_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    rtems_test_assert(scheduler_a_id != scheduler_b_id);
+  }
 
   sc = rtems_scheduler_ident(SCHED_C, &scheduler_c_id);
   rtems_test_assert(sc == RTEMS_UNSATISFIED);
@@ -95,14 +100,16 @@ static void test(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   rtems_test_assert(CPU_EQUAL(&cpuset, &first_cpu));
 
-  CPU_ZERO(&cpuset);
-  sc = rtems_scheduler_get_processor_set(
-    scheduler_b_id,
-    sizeof(cpuset),
-    &cpuset
-  );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(CPU_EQUAL(&cpuset, &second_cpu));
+  if (cpu_count > 1) {
+    CPU_ZERO(&cpuset);
+    sc = rtems_scheduler_get_processor_set(
+      scheduler_b_id,
+      sizeof(cpuset),
+      &cpuset
+    );
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    rtems_test_assert(CPU_EQUAL(&cpuset, &second_cpu));
+  }
 
   sc = rtems_task_create(
     rtems_build_name('T', 'A', 'S', 'K'),
@@ -123,46 +130,48 @@ static void test(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   rtems_test_assert(CPU_EQUAL(&cpuset, &first_cpu));
 
-  sc = rtems_task_set_scheduler(task_id, scheduler_b_id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  if (cpu_count > 1) {
+    sc = rtems_task_set_scheduler(task_id, scheduler_b_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_scheduler(task_id, scheduler_b_id + 1);
-  rtems_test_assert(sc == RTEMS_INVALID_ID);
+    sc = rtems_task_set_scheduler(task_id, scheduler_b_id + 1);
+    rtems_test_assert(sc == RTEMS_INVALID_ID);
 
-  sc = rtems_task_get_scheduler(task_id, &scheduler_id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(scheduler_id == scheduler_b_id);
+    sc = rtems_task_get_scheduler(task_id, &scheduler_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    rtems_test_assert(scheduler_id == scheduler_b_id);
 
-  CPU_ZERO(&cpuset);
-  sc = rtems_task_get_affinity(task_id, sizeof(cpuset), &cpuset);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(CPU_EQUAL(&cpuset, &second_cpu));
+    CPU_ZERO(&cpuset);
+    sc = rtems_task_get_affinity(task_id, sizeof(cpuset), &cpuset);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    rtems_test_assert(CPU_EQUAL(&cpuset, &second_cpu));
 
-  sc = rtems_task_set_affinity(task_id, sizeof(all_cpus), &all_cpus);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    sc = rtems_task_set_affinity(task_id, sizeof(all_cpus), &all_cpus);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_affinity(task_id, sizeof(first_cpu), &first_cpu);
-  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+    sc = rtems_task_set_affinity(task_id, sizeof(first_cpu), &first_cpu);
+    rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
 
-  sc = rtems_task_get_scheduler(task_id, &scheduler_id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(scheduler_id == scheduler_b_id);
+    sc = rtems_task_get_scheduler(task_id, &scheduler_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    rtems_test_assert(scheduler_id == scheduler_b_id);
 
-  sc = rtems_task_set_affinity(task_id, sizeof(second_cpu), &second_cpu);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    sc = rtems_task_set_affinity(task_id, sizeof(second_cpu), &second_cpu);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_get_scheduler(task_id, &scheduler_id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(scheduler_id == scheduler_b_id);
+    sc = rtems_task_get_scheduler(task_id, &scheduler_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    rtems_test_assert(scheduler_id == scheduler_b_id);
 
-  sc = rtems_task_start(task_id, task, 0);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    sc = rtems_task_start(task_id, task, 0);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_scheduler(task_id, scheduler_b_id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    sc = rtems_task_set_scheduler(task_id, scheduler_b_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  }
 
   sc = rtems_task_delete(task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -221,7 +230,7 @@ RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(c);
 
 #define CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS \
   RTEMS_SCHEDULER_ASSIGN(0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY), \
-  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY), \
+  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL), \
   RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER, RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER, \
   RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER, RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER, \
   RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER, RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER, \
