@@ -37,17 +37,20 @@ bool _POSIX_Timer_Insert_helper(
   void                           *arg
 )
 {
-  ISR_Level            level;
+  ISR_lock_Context  lock_context;
+  Watchdog_Header  *header;
 
   _Watchdog_Remove_ticks( timer );
-  _ISR_Disable( level );
+
+  header = &_Watchdog_Ticks_header;
+  _Watchdog_Acquire( header, &lock_context );
 
     /*
      *  Check to see if the watchdog has just been inserted by a
      *  higher priority interrupt.  If so, abandon this insert.
      */
     if ( timer->state != WATCHDOG_INACTIVE ) {
-      _ISR_Enable( level );
+      _Watchdog_Release( header, &lock_context );
       return false;
     }
 
@@ -56,7 +59,8 @@ bool _POSIX_Timer_Insert_helper(
      *  so we can atomically initialize it as in use.
      */
     _Watchdog_Initialize( timer, TSR, id, arg );
-    _Watchdog_Insert_ticks( timer, ticks );
-  _ISR_Enable( level );
+    timer->initial = ticks;
+    _Watchdog_Insert_locked( header, timer, &lock_context );
+  _Watchdog_Release( header, &lock_context );
   return true;
 }
