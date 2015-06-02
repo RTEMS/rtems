@@ -98,8 +98,6 @@ void _CPU_Context_Initialize(
   }
 
 #ifdef PPC_MULTILIB_FPU
-  msr_value |= MSR_FP;
-#else
   /*
    *  The FP bit of the MSR should only be enabled if this is a floating
    *  point task.  Unfortunately, the vfprintf_r routine in newlib
@@ -108,21 +106,7 @@ void _CPU_Context_Initialize(
    *  of vfprintf.c will be required to avoid this behavior.  At this
    *  time (7 July 1997), this restructuring is not being done.
    */
-
-  /* Make sure integer tasks have no FPU access in order to
-   * catch violations. Gcc may implicitely use the FPU and
-   * data corruption may happen.
-   * Since we set the_contex->msr using our current MSR,
-   * we must make sure MSR_FP is off if (!is_fp)...
-   * Unfortunately, this means that users of vfprintf_r have to use FP
-   * tasks or fix vfprintf. Furthermore, users of int-only tasks
-   * must prevent gcc from using the FPU (currently -msoft-float is the
-   * only way...)
-   */
-  if ( is_fp )
-    msr_value |= PPC_MSR_FP;
-  else
-    msr_value &= ~PPC_MSR_FP;
+  msr_value |= MSR_FP;
 #endif
 
 #ifdef PPC_MULTILIB_ALTIVEC

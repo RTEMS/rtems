@@ -159,6 +159,7 @@ bool _Thread_Initialize(
    *  General initialization
    */
 
+  the_thread->is_fp                  = is_fp;
   the_thread->Start.isr_level        = isr_level;
   the_thread->Start.is_preemptible   = is_preemptible;
   the_thread->Start.budget_algorithm = budget_algorithm;

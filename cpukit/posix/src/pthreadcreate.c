@@ -155,11 +155,7 @@ int pthread_create(
    *  Currently all POSIX threads are floating point if the hardware
    *  supports it.
    */
-  #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-    is_fp = true;
-  #else
-    is_fp = false;
-  #endif
+  is_fp = true;
 
   /*
    *  Allocate the thread control block.

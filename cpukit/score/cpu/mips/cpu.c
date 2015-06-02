@@ -179,6 +179,7 @@ void _CPU_Context_Initialize(
 {
   uintptr_t             stack_tmp;
   __MIPS_REGISTER_TYPE  intlvl = new_level & 0xff;
+  __MIPS_REGISTER_TYPE  c0_sr;
 
   stack_tmp  = (uintptr_t)stack_base;
   stack_tmp += ((size) - CPU_STACK_ALIGNMENT);
@@ -187,11 +188,18 @@ void _CPU_Context_Initialize(
   the_context->sp = (__MIPS_REGISTER_TYPE) stack_tmp;
   the_context->fp = (__MIPS_REGISTER_TYPE) stack_tmp;
   the_context->ra = (__MIPS_REGISTER_TYPE) (uintptr_t)entry_point;
-  the_context->c0_sr =
+
+  c0_sr =
     ((intlvl==0)? (mips_interrupt_mask() | 0x300 | _INTON):
       ( ((intlvl<<9) & mips_interrupt_mask()) | 0x300 |
       ((intlvl & 1)?_INTON:0)) ) |
-      SR_CU0 | ((is_fp)?SR_CU1:0) | _EXTRABITS;
+      SR_CU0 | _EXTRABITS;
+#if MIPS_HAS_FPU == 1
+  if ( is_fp ) {
+    c0_sr |= SR_CU1;
+  }
+#endif
+  the_context->c0_sr = c0_sr;
 }
 /*
  *  _CPU_Internal_threads_Idle_thread_body

@@ -750,6 +750,8 @@ struct Thread_Control_struct {
 #endif
   /** This field is true if the thread is preemptible. */
   bool                                  is_preemptible;
+  /** This field is true if the thread uses the floating point unit. */
+  bool                                  is_fp;
 
   /**
    * @brief Scheduler related control.
