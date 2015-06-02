@@ -16,6 +16,8 @@
   #include "config.h"
 #endif
 
+#include <sys/param.h>
+
 #include <stdio.h>
 #include <inttypes.h>
 
@@ -1836,7 +1838,7 @@ static void Init(rtems_task_argument arg)
 
   ctx->main_task_id = rtems_task_self();
 
-  for (cpu_index = 0; cpu_index < 2; ++cpu_index) {
+  for (cpu_index = 0; cpu_index < MIN(2, cpu_count); ++cpu_index) {
     sc = rtems_scheduler_ident(cpu_index, &ctx->scheduler_ids[cpu_index]);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
@@ -1855,12 +1857,15 @@ static void Init(rtems_task_argument arg)
   test_mrsp_unlock_order_error();
   test_mrsp_deadlock_error(ctx);
   test_mrsp_multiple_obtain();
-  test_mrsp_various_block_and_unblock(ctx);
-  test_mrsp_obtain_after_migration(ctx);
-  test_mrsp_obtain_and_sleep_and_release(ctx);
-  test_mrsp_obtain_and_release_with_help(ctx);
-  test_mrsp_obtain_and_release(ctx);
-  test_mrsp_load(ctx);
+
+  if (cpu_count > 1) {
+    test_mrsp_various_block_and_unblock(ctx);
+    test_mrsp_obtain_after_migration(ctx);
+    test_mrsp_obtain_and_sleep_and_release(ctx);
+    test_mrsp_obtain_and_release_with_help(ctx);
+    test_mrsp_obtain_and_release(ctx);
+    test_mrsp_load(ctx);
+  }
 
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
 
@@ -1925,7 +1930,7 @@ RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(16);
 
 #define CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS \
   RTEMS_SCHEDULER_ASSIGN(0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY), \
-  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY), \
+  RTEMS_SCHEDULER_ASSIGN(1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL), \
   RTEMS_SCHEDULER_ASSIGN(2, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL), \
   RTEMS_SCHEDULER_ASSIGN(2, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL), \
   RTEMS_SCHEDULER_ASSIGN(3, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL), \
