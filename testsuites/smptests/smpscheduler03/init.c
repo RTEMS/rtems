@@ -195,9 +195,9 @@ static Thread_Control *change_priority_op(
 {
   const Scheduler_Control *scheduler = _Scheduler_Get(thread);
   Thread_Control *needs_help;
-  ISR_Level level;
+  ISR_lock_Context lock_context;
 
-  _ISR_Disable( level );
+  _Scheduler_Acquire(thread, &lock_context);
   thread->current_priority = new_priority;
   needs_help = (*scheduler->Operations.change_priority)(
     scheduler,
@@ -205,7 +205,7 @@ static Thread_Control *change_priority_op(
     new_priority,
     prepend_it
   );
-  _ISR_Enable( level );
+  _Scheduler_Release(thread, &lock_context);
 
   return needs_help;
 }
@@ -430,22 +430,22 @@ static void test_yield_op(void)
 static void block_op(Thread_Control *thread)
 {
   const Scheduler_Control *scheduler = _Scheduler_Get(thread);
-  ISR_Level level;
+  ISR_lock_Context lock_context;
 
-  _ISR_Disable( level );
+  _Scheduler_Acquire(thread, &lock_context);
   (*scheduler->Operations.block)(scheduler, thread);
-  _ISR_Enable( level );
+  _Scheduler_Release(thread, &lock_context);
 }
 
 static Thread_Control *unblock_op(Thread_Control *thread)
 {
   const Scheduler_Control *scheduler = _Scheduler_Get(thread);
   Thread_Control *needs_help;
-  ISR_Level level;
+  ISR_lock_Context lock_context;
 
-  _ISR_Disable( level );
+  _Scheduler_Acquire(thread, &lock_context);
   needs_help = (*scheduler->Operations.unblock)(scheduler, thread);
-  _ISR_Enable( level );
+  _Scheduler_Release(thread, &lock_context);
 
   return needs_help;
 }
