@@ -238,6 +238,16 @@ static void test_context_is_executing(void)
 #endif
 }
 
+static bool is_fp(int i)
+{
+  return i != 0;
+}
+
+static const char *desc(int i)
+{
+  return is_fp(i) ? "F" : "N";
+}
+
 static void Init(rtems_task_argument arg)
 {
   test_context *self = &test_instance;
@@ -252,8 +262,8 @@ static void Init(rtems_task_argument arg)
   for (i = 0; i < 2; ++i) {
     for (j = 0; j < 2; ++j) {
       for (k = 0; k < 2; ++k) {
-        printf("Test configuration %d %d %d... ", i, j, k);
-        test(self, i == 0, j == 0, k == 0);
+        printf("Test configuration %s %s %s... ", desc(i), desc(j), desc(k));
+        test(self, is_fp(i), is_fp(j), is_fp(k));
         printf("done\n");
       }
     }
