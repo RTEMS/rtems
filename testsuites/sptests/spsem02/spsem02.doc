@@ -13,11 +13,11 @@ Task 1 has priority 36. Task 2 has priority 34. Task 3 has priority 32.
 6. Task 3 preempts Task 1.
 7. Task 3 blocks on S1. Task 1 inherits priority 32.
 8. Task 1 resumes. Task 1 releases S2. Task 1 continues with priority 32.
-9. Task 1 releases S0.
+9. Task 1 releases S1.
 10. Task 3 resumes.
-11. Task 3 releases S0 and exits.
+11. Task 3 releases S1 and exits.
 12. Task 2 resumes.
-13. Task 2 releases S1 and exits.
+13. Task 2 releases S2 and exits.
 14. Task 1 resumes.
 15. Task 1 exits.
 
