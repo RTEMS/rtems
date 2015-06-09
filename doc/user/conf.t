@@ -2114,7 +2114,7 @@ necessary for RTEMS but is often assumed by support libraries.
 
 @table @b
 @item CONSTANT:
-@code{CONFIGURED_STACK_CHECKER_ENABLED}
+@code{CONFIGURE_STACK_CHECKER_ENABLED}
 
 @item DATA TYPE:
 Boolean feature macro.
