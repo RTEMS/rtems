@@ -55,6 +55,8 @@
 #include <rtems/fb.h>
 #include <rtems/framebuffer.h>
 
+#include <rtems/score/atomic.h>
+
 #include <stdlib.h>
 
 #define FB_VESA_NAME    "FB_VESA_RM"
@@ -84,8 +86,8 @@ const char * const rtems_fb_default_mode;
  */
 void vesa_realmode_bootup_init(void);
 
-/* mutex for protection against multiple opens, when called frame_buffer_open */
-static pthread_mutex_t vesa_mutex = PTHREAD_MUTEX_INITIALIZER;
+/* flag to limit driver to protect against multiple opens */
+static Atomic_Flag driver_mutex;
 
 /* screen information for the VGA driver
  * standard structures - from RTEMS fb interface
@@ -840,9 +842,9 @@ frame_buffer_initialize(
 
     printk(FB_VESA_NAME " frame buffer -- driver initializing..\n" );
 
-/*
- * Register the device.
- */
+   /*
+    * Register the device.
+    */
     status = rtems_io_register_name(FRAMEBUFFER_DEVICE_0_NAME, major, 0);
     if (status != RTEMS_SUCCESSFUL)
     {
@@ -850,6 +852,8 @@ frame_buffer_initialize(
         " - " FB_VESA_NAME " frame buffer device!\n");
         rtems_fatal_error_occurred( status );
     }
+
+    _Atomic_Flag_clear(&driver_mutex, ATOMIC_ORDER_RELEASE);
 
     return RTEMS_SUCCESSFUL;
 }
@@ -866,7 +870,7 @@ frame_buffer_open(
 {
     printk( FB_VESA_NAME " open device\n" );
 
-    if (pthread_mutex_trylock(&vesa_mutex) != 0)
+    if (_Atomic_Flag_test_and_set(&driver_mutex, ATOMIC_ORDER_ACQUIRE) != 0 )
     {
         printk( FB_VESA_NAME " could not lock vesa_mutex\n" );
 
@@ -888,17 +892,13 @@ frame_buffer_close(
 )
 {
   printk( FB_VESA_NAME " close device\n" );
-  if (pthread_mutex_unlock(&vesa_mutex) == 0)
-  {
-      /* restore previous state.  for VGA this means return to text mode.
-       * leave out if graphics hardware has been initialized in
-       * frame_buffer_initialize() */
+  _Atomic_Flag_clear(&driver_mutex, ATOMIC_ORDER_RELEASE);
+  /* restore previous state.  for VGA this means return to text mode.
+   * leave out if graphics hardware has been initialized in
+   * frame_buffer_initialize() */
 
-      printk(FB_VESA_NAME ": close called.\n" );
-      return RTEMS_SUCCESSFUL;
-  }
-
-  return RTEMS_UNSATISFIED;
+  printk(FB_VESA_NAME ": close called.\n" );
+  return RTEMS_SUCCESSFUL;
 }
 
 /*

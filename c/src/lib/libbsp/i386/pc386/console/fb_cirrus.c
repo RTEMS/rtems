@@ -27,9 +27,10 @@
 
 #include <rtems/fb.h>
 #include <rtems/framebuffer.h>
+#include <rtems/score/atomic.h>
 
-/* mutex to limit driver to protect against multiple opens */
-static pthread_mutex_t cirrus_mutex = PTHREAD_MUTEX_INITIALIZER;
+/* flag to limit driver to protect against multiple opens */
+static Atomic_Flag driver_mutex;
 
 /* screen information for the VGA driver
  * standard structures
@@ -332,6 +333,8 @@ frame_buffer_initialize(
           rtems_fatal_error_occurred( status );
       }
 
+      _Atomic_Flag_clear(&driver_mutex, ATOMIC_ORDER_RELEASE);
+
       return RTEMS_SUCCESSFUL;
   }
 }
@@ -591,8 +594,8 @@ frame_buffer_open(
   int r;
   uint32_t smem_start, regs_start;
 
-  if (pthread_mutex_trylock(&cirrus_mutex)!= 0){
-      printk( "FB_CIRRUS could not lock cirrus_mutex\n" );
+  if (_Atomic_Flag_test_and_set(&driver_mutex, ATOMIC_ORDER_ACQUIRE) != 0 ) {
+      printk( "FB_CIRRUS could not lock driver_mutex\n" );
 
       return RTEMS_UNSATISFIED;
   }
@@ -662,19 +665,17 @@ frame_buffer_close(
     void                      *arg
 )
 {
-  if (pthread_mutex_unlock(&cirrus_mutex) == 0){
-      /* restore previous state.  for VGA this means return to text mode.
-       * leave out if graphics hardware has been initialized in
-       * frame_buffer_initialize() */
+  _Atomic_Flag_clear(&driver_mutex, ATOMIC_ORDER_RELEASE);
 
-      /* VGA text mode */
-      fb_cirrus_write_gdc_reg(&cirrus_board_info, 0x06, 0x00);
+  /* restore previous state.  for VGA this means return to text mode.
+   * leave out if graphics hardware has been initialized in
+   * frame_buffer_initialize() */
 
-      printk( "FB_CIRRUS: close called.\n" );
-      return RTEMS_SUCCESSFUL;
-  }
+  /* VGA text mode */
+  fb_cirrus_write_gdc_reg(&cirrus_board_info, 0x06, 0x00);
 
-  return RTEMS_UNSATISFIED;
+  printk( "FB_CIRRUS: close called.\n" );
+  return RTEMS_SUCCESSFUL;
 }
 
 /*
