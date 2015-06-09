@@ -274,6 +274,13 @@ static void Init(rtems_task_argument arg)
   rtems_test_exit(0);
 }
 
+static void switch_extension(Thread_Control *executing, Thread_Control *heir)
+{
+  uintptr_t pattern = (uintptr_t) 0xffffffffffffffffU;
+
+  _CPU_Context_volatile_clobber(pattern);
+}
+
 #define CONFIGURE_MICROSECONDS_PER_TICK 1000
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -282,7 +289,9 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_TASKS 4
 #define CONFIGURE_MAXIMUM_TIMERS 1
 
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .thread_switch = switch_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
