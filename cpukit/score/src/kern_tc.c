@@ -1962,6 +1962,11 @@ _Timecounter_Tick(void)
 #endif /* __rtems__ */
 }
 #ifdef __rtems__
+#ifndef RTEMS_SMP
+/*
+ * This function is a hack to support legacy clock drivers and hardware.  It
+ * makes no sense on SMP configurations since here ten timehands are active.
+ */
 void
 _Timecounter_Tick_simple(uint32_t delta, uint32_t offset)
 {
@@ -2001,6 +2006,7 @@ _Timecounter_Tick_simple(uint32_t delta, uint32_t offset)
 
 	_Watchdog_Tick();
 }
+#endif /* RTEMS_SMP */
 #endif /* __rtems__ */
 
 #ifndef __rtems__
