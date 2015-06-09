@@ -233,7 +233,7 @@ RTEMS_INLINE_ROUTINE bool rtems_clock_tick_before(
  * This routine implements the rtems_clock_get_ticks_per_second
  * directive.
  *
- * @retval This method returns the number of ticks since boot. It cannot
+ * @retval This method returns the number of ticks per second. It cannot
  *         fail since RTEMS is always configured to know the number of
  *         ticks per second.
  */
