@@ -12,6 +12,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/timecounter.h>
 #include <stdlib.h>
 #include <bsp.h>
 #include <bsp/tlib.h>
@@ -52,6 +53,47 @@ unsigned int Clock_basefreq;
 void Clock_exit(void);
 void Clock_isr(void *arg_unused);
 
+static rtems_timecounter_simple tlib_tc;
+
+static uint32_t tlib_tc_get(rtems_timecounter_simple *tc)
+{
+  unsigned int clicks = 0;
+
+  if (Clock_handle != NULL) {
+    tlib_get_counter(Clock_handle, &clicks);
+  }
+
+  return clicks;
+}
+
+static bool tlib_tc_is_pending(rtems_timecounter_simple *tc)
+{
+  bool pending = false;
+
+  if (Clock_handle != NULL) {
+    pending = tlib_interrupt_pending(Clock_handle, 0) != 0;
+  }
+
+  return pending;
+}
+
+static uint32_t tlib_tc_get_timecount(struct timecounter *tc)
+{
+  return rtems_timecounter_simple_downcounter_get(
+    tc,
+    tlib_tc_get,
+    tlib_tc_is_pending
+  );
+}
+
+static void tlib_tc_tick(void)
+{
+  rtems_timecounter_simple_downcounter_tick(
+    &tlib_tc,
+    tlib_tc_get
+  );
+}
+
 /*
  *  Clock_isr
  *
@@ -70,8 +112,7 @@ void Clock_isr(void *arg_unused)
 {
   /*
    * Support for shared interrupts. Ack IRQ at source, only handle 
-   * interrupts generated from the tick-timer. Clearing pending bit
-   * is also needed for Clock_nanoseconds_since_last_tick() to work.
+   * interrupts generated from the tick-timer.
    */
   if ( tlib_interrupt_pending(Clock_handle, 1) == 0 )
     return;
@@ -84,7 +125,7 @@ void Clock_isr(void *arg_unused)
 
 #ifdef CLOCK_DRIVER_USE_FAST_IDLE
   do {
-    rtems_clock_tick();
+    tlib_tc_tick();
   } while ( _Thread_Executing == _Thread_Idle &&
           _Thread_Heir == _Thread_Executing);
 
@@ -105,7 +146,7 @@ void Clock_isr(void *arg_unused)
 
   if ( !Clock_driver_isrs ) {
 
-    rtems_clock_tick();
+    tlib_tc_tick();
 
     Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK;
   }
@@ -115,7 +156,7 @@ void Clock_isr(void *arg_unused)
   /*
    *  The driver is one ISR per clock tick.
    */
-  rtems_clock_tick();
+  tlib_tc_tick();
 #endif
 #endif
 }
@@ -146,36 +187,6 @@ void Clock_exit( void )
   }
 }
 
-static uint32_t Clock_nanoseconds_since_last_tick(void)
-{
-  uint32_t clicks;
-  int ip;
-
-  if ( !Clock_handle )
-    return 0;
-
-  tlib_get_counter(Clock_handle, (unsigned int *)&clicks);
-  /* protect against timer counter underflow/overflow */
-  ip = tlib_interrupt_pending(Clock_handle, 0);
-  if (ip)
-    tlib_get_counter(Clock_handle, (unsigned int *)&clicks);
-
-#ifdef CLOCK_DRIVER_DONT_ASSUME_PRESCALER_1MHZ
-  {
-    /* Down counter. Calc from BaseFreq. */
-    uint64_t tmp;
-    if (ip)
-      clicks += Clock_basefreq;
-    tmp = ((uint64_t)clicks * 1000000000) / ((uint64_t)Clock_basefreq);
-    return (uint32_t)tmp;
-  }
-#else
-  /* Down counter. Timer base frequency is initialized to 1 MHz */
-  return (uint32_t)
-     ((rtems_configuration_get_microseconds_per_tick() << ip) - clicks) * 1000;
-#endif
-}
-
 /*
  *  Clock_initialize
  *
@@ -198,6 +209,7 @@ rtems_device_driver Clock_initialize(
   void *pargp
 )
 {
+  uint64_t frequency;
   unsigned int tick_hz;
 
   /*
@@ -228,17 +240,23 @@ rtems_device_driver Clock_initialize(
 
     tlib_get_freq(Clock_handle, &Clock_basefreq, NULL);
 
-    tmp = (uint64_t)Clock_basefreq;
-    tmp = tmp * (uint64_t)rtems_configuration_get_microseconds_per_tick();
+    frequency = Clock_basefreq
+    tmp = frequency * (uint64_t)rtems_configuration_get_microseconds_per_tick();
     tick_hz = tmp / 1000000;
   }
 #else
+  frequency = 1000000;
   tick_hz = rtems_configuration_get_microseconds_per_tick();
 #endif
 
   tlib_set_freq(Clock_handle, tick_hz);
 
-  rtems_clock_set_nanoseconds_extension(Clock_nanoseconds_since_last_tick);
+  rtems_timecounter_simple_install(
+    &tlib_tc,
+    frequency,
+    tick_hz,
+    tlib_tc_get_timecount
+  );
 
   /*
    *  IRQ and Frequency is setup, now we start the Timer. IRQ is still
