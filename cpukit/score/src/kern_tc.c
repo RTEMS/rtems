@@ -62,7 +62,6 @@ __FBSDID("$FreeBSD r284178 2015-06-09T11:49:56Z$");
 #include <sys/timex.h>
 #ifndef __rtems__
 #include <sys/vdso.h>
-#include <machine/atomic.h>
 #endif /* __rtems__ */
 #ifdef __rtems__
 #include <limits.h>
@@ -278,7 +277,7 @@ tc_delta(struct timehands *th)
 	    tc->tc_counter_mask);
 }
 
-static u_int
+static inline u_int
 tc_getgen(struct timehands *th)
 {
 
@@ -297,7 +296,7 @@ tc_getgen(struct timehands *th)
 #endif /* __rtems__ */
 }
 
-static void
+static inline void
 tc_setgen(struct timehands *th, u_int newgen)
 {
 
