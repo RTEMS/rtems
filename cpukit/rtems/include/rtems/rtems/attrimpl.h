@@ -39,11 +39,7 @@ extern "C" {
  *  This attribute constant indicates the attributes that are not
  *  supportable given the hardware configuration.
  */
-#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 #define ATTRIBUTES_NOT_SUPPORTED       0
-#else
-#define ATTRIBUTES_NOT_SUPPORTED       RTEMS_FLOATING_POINT
-#endif
 
 /**
  *  This attribute constant indicates the attributes that are
