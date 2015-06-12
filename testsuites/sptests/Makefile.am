@@ -37,6 +37,7 @@ if HAS_SMP
 else
 _SUBDIRS += sp29
 endif
+_SUBDIRS += sptasknopreempt01
 _SUBDIRS += spintrcritical23
 _SUBDIRS += sptimecounter01
 _SUBDIRS += sptimecounter02

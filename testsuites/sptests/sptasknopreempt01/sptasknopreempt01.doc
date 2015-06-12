@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: sptasknopreempt01
+
+directives:
+
+  - _Scheduler_priority_Unblock()
+
+concepts:
+
+  - Shows that the no-preempt attribute is broken due to pseude interrupt
+    tasks.
