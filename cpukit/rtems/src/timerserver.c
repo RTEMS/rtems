@@ -298,6 +298,7 @@ static void _Timer_server_Initialize_watchdogs(
   watchdogs->current_snapshot = now;
 
   _Watchdog_Header_initialize( &watchdogs->Header );
+  _Watchdog_Preinitialize( &watchdogs->System_watchdog );
   _Watchdog_Initialize(
     &watchdogs->System_watchdog,
     _Timer_server_Wakeup,

@@ -241,6 +241,7 @@ static bool _POSIX_Threads_Create_extension(
 
   _Thread_queue_Initialize( &api->Join_List, THREAD_QUEUE_DISCIPLINE_FIFO );
 
+  _Watchdog_Preinitialize( &api->Sporadic_timer );
   _Watchdog_Initialize(
     &api->Sporadic_timer,
     _POSIX_Threads_Sporadic_budget_TSR,

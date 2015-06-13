@@ -65,7 +65,7 @@ rtems_status_code rtems_rate_monotonic_create(
   the_period->owner = _Thread_Get_executing();
   the_period->state = RATE_MONOTONIC_INACTIVE;
 
-  _Watchdog_Initialize( &the_period->Timer, NULL, 0, NULL );
+  _Watchdog_Preinitialize( &the_period->Timer );
 
   _Rate_monotonic_Reset_statistics( the_period );
 

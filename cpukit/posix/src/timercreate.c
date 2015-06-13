@@ -92,7 +92,7 @@ int timer_create(
   ptimer->timer_data.it_interval.tv_sec  = 0;
   ptimer->timer_data.it_interval.tv_nsec = 0;
 
-  _Watchdog_Initialize( &ptimer->Timer, NULL, 0, NULL );
+  _Watchdog_Preinitialize( &ptimer->Timer );
   _Objects_Open_u32(&_POSIX_Timer_Information, &ptimer->Object, 0);
 
   *timerid  = ptimer->Object.id;

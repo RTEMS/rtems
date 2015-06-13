@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_WATCHDOGIMPL_H
 
 #include <rtems/score/watchdog.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/isrlock.h>
 
@@ -270,6 +271,26 @@ void _Watchdog_Tickle (
 );
 
 /**
+ * @brief Pre-initializes a watchdog.
+ *
+ * This routine must be called before a watchdog is used in any way.  The
+ * exception are statically initialized watchdogs via WATCHDOG_INITIALIZER().
+ *
+ * @param[in] the_watchdog The uninitialized watchdog.
+ */
+RTEMS_INLINE_ROUTINE void _Watchdog_Preinitialize(
+  Watchdog_Control *the_watchdog
+)
+{
+  the_watchdog->state = WATCHDOG_INACTIVE;
+#if defined(RTEMS_DEBUG)
+  the_watchdog->routine = NULL;
+  the_watchdog->id = 0;
+  the_watchdog->user_data = NULL;
+#endif
+}
+
+/**
  * This routine initializes the specified watchdog.  The watchdog is
  * made inactive, the watchdog id and handler routine are set to the
  * specified values.
@@ -282,7 +303,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Initialize(
   void                           *user_data
 )
 {
-  the_watchdog->state     = WATCHDOG_INACTIVE;
+  _Assert( the_watchdog->state == WATCHDOG_INACTIVE );
   the_watchdog->routine   = routine;
   the_watchdog->id        = id;
   the_watchdog->user_data = user_data;

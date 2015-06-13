@@ -75,7 +75,7 @@ rtems_status_code rtems_timer_create(
   }
 
   the_timer->the_class = TIMER_DORMANT;
-  _Watchdog_Initialize( &the_timer->Ticker, NULL, 0, NULL );
+  _Watchdog_Preinitialize( &the_timer->Ticker );
 
   _Objects_Open(
     &_Timer_Information,

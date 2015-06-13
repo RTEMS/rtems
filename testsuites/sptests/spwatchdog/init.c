@@ -48,7 +48,7 @@ static void init_watchdogs(
   rtems_test_assert( _Watchdog_Is_empty( header ) );
   rtems_test_assert( _Chain_Is_empty( &header->Iterators ) );
 
-  _Watchdog_Initialize( c, NULL, 0, NULL );
+  _Watchdog_Preinitialize( c );
   c->initial = 6;
   _Watchdog_Insert( header, c );
   rtems_test_assert( c->delta_interval == 6 );
@@ -56,20 +56,20 @@ static void init_watchdogs(
   rtems_test_assert( !_Watchdog_Is_empty( header ) );
   rtems_test_assert( _Chain_Is_empty( &header->Iterators ) );
 
-  _Watchdog_Initialize( a, NULL, 0, NULL );
+  _Watchdog_Preinitialize( a );
   a->initial = 2;
   _Watchdog_Insert( header, a );
   rtems_test_assert( a->delta_interval == 2 );
   rtems_test_assert( c->delta_interval == 4 );
 
-  _Watchdog_Initialize( b, NULL, 0, NULL );
+  _Watchdog_Preinitialize( b );
   b->initial = 4;
   _Watchdog_Insert( header, b );
   rtems_test_assert( a->delta_interval == 2 );
   rtems_test_assert( b->delta_interval == 2 );
   rtems_test_assert( c->delta_interval == 2 );
 
-  _Watchdog_Initialize( d, NULL, 0, NULL );
+  _Watchdog_Preinitialize( d );
 }
 
 static void destroy_watchdogs(

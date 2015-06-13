@@ -137,7 +137,7 @@ bool _Thread_Initialize(
   /*
    *  Initialize the thread timer
    */
-  _Watchdog_Initialize( &the_thread->Timer, NULL, 0, NULL );
+  _Watchdog_Preinitialize( &the_thread->Timer );
 
   #ifdef __RTEMS_STRICT_ORDER_MUTEX__
     /* Initialize the head of chain of held mutexes */
