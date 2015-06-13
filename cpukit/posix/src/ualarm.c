@@ -73,7 +73,7 @@ useconds_t ualarm(
   _Thread_Disable_dispatch();
 
   state = _Watchdog_Remove_ticks( the_timer );
-  if ( (state == WATCHDOG_ACTIVE) || (state == WATCHDOG_REMOVE_IT) ) {
+  if ( state == WATCHDOG_ACTIVE ) {
     /*
      *  The stop_time and start_time fields are snapshots of ticks since
      *  boot.  Since alarm() is dealing in seconds, we must account for

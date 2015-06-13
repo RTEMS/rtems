@@ -86,11 +86,7 @@ typedef enum {
    */
   WATCHDOG_BEING_INSERTED,
   /** This is the state when the watchdog is on a chain, and allowed to fire. */
-  WATCHDOG_ACTIVE,
-  /** This is the state when the watchdog is on a chain, but we should
-   *  remove without firing if it expires.
-   */
-  WATCHDOG_REMOVE_IT
+  WATCHDOG_ACTIVE
 } Watchdog_States;
 
 /**

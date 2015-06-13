@@ -31,10 +31,7 @@ static void _Watchdog_Remove_it(
   const Chain_Node  *iterator_tail;
   Chain_Node        *iterator_node;
 
-  _Assert(
-    the_watchdog->state == WATCHDOG_ACTIVE
-      || the_watchdog->state == WATCHDOG_REMOVE_IT
-  );
+  _Assert( the_watchdog->state == WATCHDOG_ACTIVE );
 
   the_watchdog->state = WATCHDOG_INACTIVE;
   the_watchdog->stop_time = _Watchdog_Ticks_since_boot;
@@ -99,7 +96,6 @@ Watchdog_States _Watchdog_Remove(
       break;
 
     case WATCHDOG_ACTIVE:
-    case WATCHDOG_REMOVE_IT:
       _Watchdog_Remove_it( header, the_watchdog );
       break;
   }

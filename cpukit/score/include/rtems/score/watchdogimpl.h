@@ -317,20 +317,6 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Activate(
 }
 
 /**
- * This routine deactivates THE_WATCHDOG timer which will remain
- * on a watchdog chain.
- */
-
-RTEMS_INLINE_ROUTINE void _Watchdog_Deactivate(
-  Watchdog_Control *the_watchdog
-)
-{
-
-  the_watchdog->state = WATCHDOG_REMOVE_IT;
-
-}
-
-/**
  * This routine is invoked at each clock tick to update the ticks
  * watchdog chain.
  */
