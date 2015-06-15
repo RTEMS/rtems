@@ -1,4 +1,4 @@
-@c  COPYRIGHT (c) 1988-2013.
+@c  COPYRIGHT (c) 1988-2015.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
@@ -471,15 +471,15 @@ is only responsible for enabling unlimited objects and specifying the
 allocation size.
 
 @c
-@c === CONFIGURE_OBJECTS_UNLIMITED ===
+@c === CONFIGURE_UNLIMITED_OBJECTS ===
 @c
 @subsection Enable Unlimited Object Instances
 
-@findex CONFIGURE_OBJECTS_UNLIMITED
+@findex CONFIGURE_UNLIMITED_OBJECTS
 
 @table @b
 @item CONSTANT:
-@code{CONFIGURE_OBJECTS_UNLIMITED}
+@code{CONFIGURE_UNLIMITED_OBJECTS}
 
 @item DATA TYPE:
 Boolean feature macro.
@@ -493,7 +493,7 @@ This is not defined by default.
 @end table
 
 @subheading DESCRIPTION:
-@code{CONFIGURE_OBJECTS_UNLIMITED} enables @code{rtems_resource_unlimited}
+@code{CONFIGURE_UNLIMITED_OBJECTS} enables @code{rtems_resource_unlimited}
 mode for Classic API and POSIX API objects that do not already have a
 specific maximum limit defined.
 
@@ -503,13 +503,13 @@ When using unlimited objects, it is common practice to also specify
 pool of memory for both RTEMS and application memory allocations.
 
 @c
-@c === CONFIGURE_OBJECTS_ALLOCATION_SIZE ===
+@c === CONFIGURE_UNLIMITED_ALLOCATION_SIZE ===
 @c
 @subsection Specify Unlimited Objects Allocation Size
 
 @table @b
 @item CONSTANT:
-@code{CONFIGURE_OBJECTS_ALLOCATION_SIZE}
+@code{CONFIGURE_UNLIMITED_ALLOCATION_SIZE}
 
 @item DATA TYPE:
 Unsigned integer (@code{uint32_t}).
@@ -518,26 +518,26 @@ Unsigned integer (@code{uint32_t}).
 Positive.
 
 @item DEFAULT VALUE:
-If not defined and @code{CONFIGURE_OBJECTS_UNLIMITED} is defined, the
+If not defined and @code{CONFIGURE_UNLIMITED_OBJECTS} is defined, the
 default value is eight (8).
 
 @end table
 
 @subheading DESCRIPTION:
-@code{CONFIGURE_OBJECTS_ALLOCATION_SIZE} provides an
+@code{CONFIGURE_UNLIMITED_ALLOCATION_SIZE} provides an
 allocation size to use for @code{rtems_resource_unlimited} when using
-@code{CONFIGURE_OBJECTS_UNLIMITED}.
+@code{CONFIGURE_UNLIMITED_OBJECTS}.
 
 @subheading NOTES:
 By allowing users to declare all resources as being unlimited
 the user can avoid identifying and limiting the resources used.
-@code{CONFIGURE_OBJECTS_UNLIMITED} does not support varying the allocation
+@code{CONFIGURE_UNLIMITED_OBJECTS} does not support varying the allocation
 sizes for different objects; users who want that much control can define
 the @code{rtems_resource_unlimited} macros themselves.
 
 @example
-#define CONFIGURE_OBJECTS_UNLIMITED
-#define CONFIGURE_OBJECTS_ALLOCATION_SIZE 5
+#define CONFIGURE_UNLIMITED_OBJECTS
+#define CONFIGURE_UNLIMITED_ALLOCATION_SIZE 5
 @end example
 
 @c
