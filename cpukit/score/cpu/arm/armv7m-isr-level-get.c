@@ -5,10 +5,10 @@
  */
 
 /*
- * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
+ * Copyright (c) 2011-2015 Sebastian Huber.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -28,7 +28,7 @@
 
 uint32_t _CPU_ISR_Get_level( void )
 {
-  return 0;
+  return _ARMV7M_Get_basepri() != 0;
 }
 
 #endif /* ARM_MULTILIB_ARCH_V7M */
