@@ -224,11 +224,10 @@ rtems_task Task_2(
   rtems_task_argument argument
 )
 {
+  Thread_Control *executing = _Thread_Get_executing();
   Scheduler_priority_Context *scheduler_context =
-    _Scheduler_priority_Get_context( _Scheduler_Get( _Thread_Get_executing() ) );
-#if defined(RTEMS_SMP)
-  rtems_interrupt_level level;
-#endif
+    _Scheduler_priority_Get_context( _Scheduler_Get( executing ) );
+  ISR_lock_Context lock_context;
 
 #if (MUST_WAIT_FOR_INTERRUPT == 1)
   while ( Interrupt_occurred == 0 );
@@ -257,18 +256,14 @@ rtems_task Task_2(
    *  Switch back to the other task to exit the test.
    */
 
-#if defined(RTEMS_SMP)
-  rtems_interrupt_disable(level);
-#endif
+  _Scheduler_Acquire( executing, &lock_context );
 
   _Thread_Executing =
         (Thread_Control *) _Chain_First(&scheduler_context->Ready[LOW_PRIORITY]);
 
   _Thread_Dispatch_necessary = 1;
 
-#if defined(RTEMS_SMP)
-  rtems_interrupt_enable(level);
-#endif
+  _Scheduler_Release( executing, &lock_context );
 
   _Thread_Dispatch();
 
