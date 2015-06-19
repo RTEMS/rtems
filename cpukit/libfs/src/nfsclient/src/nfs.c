@@ -210,6 +210,14 @@ static struct timeval _nfscalltimeout = { 10, 0 };	/* {secs, us } */
 #define UNLOCK(s)	do { rtems_semaphore_release((s)); \
 					} while (0)
 
+RTEMS_INTERRUPT_LOCK_DEFINE(static, nfs_global_lock, "NFS")
+
+#define NFS_GLOBAL_ACQUIRE(lock_context) \
+    rtems_interrupt_lock_acquire(&nfs_global_lock, lock_context)
+
+#define NFS_GLOBAL_RELEASE(lock_context) \
+    rtems_interrupt_lock_release(&nfs_global_lock, lock_context)
+
 static inline char *
 nfs_dupname(const char *name, size_t namelen)
 {
@@ -886,7 +894,7 @@ static NfsNode
 nfsNodeCreate(Nfs nfs, fhandle *fh)
 {
 NfsNode	rval = malloc(sizeof(*rval));
-unsigned long flags;
+rtems_interrupt_lock_context lock_context;
 
 #if DEBUG & DEBUG_TRACK_NODES
 	fprintf(stderr,"NFS: creating a node\n");
@@ -895,9 +903,9 @@ unsigned long flags;
 	if (rval) {
 		if (fh)
 			memcpy( &SERP_FILE(rval), fh, sizeof(*fh) );
-		rtems_interrupt_disable(flags);
+		NFS_GLOBAL_ACQUIRE(&lock_context);
 			nfs->nodesInUse++;
-		rtems_interrupt_enable(flags);
+		NFS_GLOBAL_RELEASE(&lock_context);
 		rval->nfs       = nfs;
 		rval->str		= 0;
 	} else {
@@ -911,7 +919,7 @@ unsigned long flags;
 static void
 nfsNodeDestroy(NfsNode node)
 {
-unsigned long flags;
+rtems_interrupt_lock_context lock_context;
 
 #if DEBUG & DEBUG_TRACK_NODES
 	fprintf(stderr,"NFS: destroying a node\n");
@@ -923,13 +931,13 @@ unsigned long flags;
   	xdr_free(xdr_serporid, &node->serporid);
 #endif
 
-	rtems_interrupt_disable(flags);
+	NFS_GLOBAL_ACQUIRE(&lock_context);
 		node->nfs->nodesInUse--;
 #if DEBUG & DEBUG_COUNT_NODES
 		if (node->str)
 			node->nfs->stringsInUse--;
 #endif
-	rtems_interrupt_enable(flags);
+	NFS_GLOBAL_RELEASE(&lock_context);
 
 	if (node->str)
 		free(node->str);
@@ -969,10 +977,10 @@ NfsNode rval = nfsNodeCreate(node->nfs, 0);
 				return 0;
 			}
 #if DEBUG & DEBUG_COUNT_NODES
-			{ unsigned long flags;
-			rtems_interrupt_disable(flags);
+			{ rtems_interrupt_lock_context lock_context;
+			NFS_GLOBAL_ACQUIRE(&lock_context);
 				node->nfs->stringsInUse++;
-			rtems_interrupt_enable(flags);
+			NFS_GLOBAL_RELEASE(&lock_context);
 			}
 #endif
 		}
@@ -1518,10 +1526,10 @@ static int nfs_move_node(NfsNode dst, const NfsNode src, const char *part)
 
 	if (dst->str != NULL) {
 #if DEBUG & DEBUG_COUNT_NODES
-		rtems_interrupt_level flags;
-		rtems_interrupt_disable(flags);
+		rtems_interrupt_lock_context lock_context;
+		NFS_GLOBAL_ACQUIRE(&lock_context);
 			dst->nfs->stringsInUse--;
-		rtems_interrupt_enable(flags);
+		NFS_GLOBAL_RELEASE(&lock_context);
 #endif
 		free(dst->str);
 	}
@@ -1531,10 +1539,10 @@ static int nfs_move_node(NfsNode dst, const NfsNode src, const char *part)
 	dst->str = dst->args.name = strdup(part);
 	if (dst->str != NULL) {
 #if DEBUG & DEBUG_COUNT_NODES
-		rtems_interrupt_level flags;
-		rtems_interrupt_disable(flags);
+		rtems_interrupt_lock_context lock_context;
+		NFS_GLOBAL_ACQUIRE(&lock_context);
 			dst->nfs->stringsInUse++;
-		rtems_interrupt_enable(flags);
+		NFS_GLOBAL_RELEASE(&lock_context);
 #endif
 	} else {
 		rv = -1;
@@ -3158,7 +3166,7 @@ cleanup:
 int
 nfsSetTimeout(uint32_t timeout_ms)
 {
-rtems_interrupt_level k;
+rtems_interrupt_lock_context lock_context;
 uint32_t	          s,us;
 
 	if ( timeout_ms > 100000 ) {
@@ -3169,10 +3177,10 @@ uint32_t	          s,us;
 	s  = timeout_ms/1000;
 	us = (timeout_ms % 1000) * 1000;
 
-	rtems_interrupt_disable(k);
+	NFS_GLOBAL_ACQUIRE(&lock_context);
 	_nfscalltimeout.tv_sec  = s;
 	_nfscalltimeout.tv_usec = us;
-	rtems_interrupt_enable(k);
+	NFS_GLOBAL_RELEASE(&lock_context);
 
 	return 0;
 }
@@ -3180,11 +3188,11 @@ uint32_t	          s,us;
 uint32_t
 nfsGetTimeout( void )
 {
-rtems_interrupt_level k;
+rtems_interrupt_lock_context lock_context;
 uint32_t              s,us;
-	rtems_interrupt_disable(k);
+	NFS_GLOBAL_ACQUIRE(&lock_context);
 	s  = _nfscalltimeout.tv_sec;
 	us = _nfscalltimeout.tv_usec;
-	rtems_interrupt_enable(k);
+	NFS_GLOBAL_RELEASE(&lock_context);
 	return s*1000 + us/1000;
 }
