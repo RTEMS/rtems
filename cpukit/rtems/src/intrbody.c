@@ -23,6 +23,8 @@
 #include <rtems/score/isr.h>
 #include <rtems/rtems/intr.h>
 
+#if !defined(RTEMS_SMP)
+
 /*
  *  Undefine all of these is normally a macro and we want a real body in
  *  the library for other language bindings.
@@ -30,7 +32,6 @@
 #undef rtems_interrupt_disable
 #undef rtems_interrupt_enable
 #undef rtems_interrupt_flash
-#undef rtems_interrupt_is_in_progress
 
 /*
  *  Prototype them to avoid warnings
@@ -38,7 +39,6 @@
 rtems_interrupt_level rtems_interrupt_disable( void );
 void rtems_interrupt_enable( rtems_interrupt_level previous_level );
 void rtems_interrupt_flash( rtems_interrupt_level previous_level );
-bool rtems_interrupt_is_in_progress( void );
 
 /*
  *  Now define real bodies
@@ -65,6 +65,11 @@ void rtems_interrupt_flash(
 {
   _ISR_Flash( previous_level );
 }
+
+#endif /* RTEMS_SMP */
+
+#undef rtems_interrupt_is_in_progress
+bool rtems_interrupt_is_in_progress( void );
 
 bool rtems_interrupt_is_in_progress( void )
 {

@@ -21,6 +21,8 @@ directive:
 @item @code{@value{DIRPREFIX}interrupt_disable} - Disable Interrupts
 @item @code{@value{DIRPREFIX}interrupt_enable} - Enable Interrupts
 @item @code{@value{DIRPREFIX}interrupt_flash} - Flash Interrupt
+@item @code{@value{DIRPREFIX}interrupt_local_disable} - Disable Interrupts on Current Processor
+@item @code{@value{DIRPREFIX}interrupt_local_enable} - Enable Interrupts on Current Processor
 @item @code{@value{DIRPREFIX}interrupt_lock_initialize} - Initialize an ISR Lock
 @item @code{@value{DIRPREFIX}interrupt_lock_acquire} - Acquire an ISR Lock
 @item @code{@value{DIRPREFIX}interrupt_lock_release} - Release an ISR Lock
@@ -397,6 +399,10 @@ This directive will not cause the calling task to be preempted.
 parameter.}
 @end ifset
 
+This directive is only available on uni-processor configurations.  The
+directive @code{@value{DIRPREFIX}interrupt_local_disable} is available on all
+configurations.
+
 @c
 @c
 @c
@@ -441,6 +447,9 @@ and will be enabled when this directive returns to the caller.
 
 This directive will not cause the calling task to be preempted.
 
+This directive is only available on uni-processor configurations.  The
+directive @code{@value{DIRPREFIX}interrupt_local_enable} is available on all
+configurations.
 
 @c
 @c
@@ -481,6 +490,91 @@ which was returned by a previous call to
 Immediately prior to invoking this directive, maskable interrupts should
 be disabled by a call to @code{@value{DIRPREFIX}interrupt_disable}
 and will be redisabled when this directive returns to the caller.
+
+@subheading NOTES:
+
+This directive will not cause the calling task to be preempted.
+
+This directive is only available on uni-processor configurations.  The
+directives @code{@value{DIRPREFIX}interrupt_local_disable} and
+@code{@value{DIRPREFIX}interrupt_local_enable} is available on all
+configurations.
+
+@c
+@c
+@c
+@page
+@subsection INTERRUPT_LOCAL_DISABLE - Disable Interrupts on Current Processor
+
+@cindex disable interrupts
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_interrupt_local_disable
+@example
+void rtems_interrupt_local_disable(
+  rtems_interrupt_level  level
+);
+
+/* this is implemented as a macro and sets level as a side-effect */
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+This directive disables all maskable interrupts and returns
+the previous @code{level}.  A later invocation of the
+@code{@value{DIRPREFIX}interrupt_local_enable} directive should be used to
+restore the interrupt level.
+
+@subheading NOTES:
+
+This directive will not cause the calling task to be preempted.
+
+@ifset is-C
+@b{This directive is implemented as a macro which modifies the @code{level}
+parameter.}
+@end ifset
+
+On SMP configurations this will not ensure system wide mutual exclusion.  Use
+interrupt locks instead.
+
+@c
+@c
+@c
+@page
+@subsection INTERRUPT_LOCAL_ENABLE - Enable Interrupts on Current Processor
+
+@cindex enable interrupts
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_interrupt_local_enable
+@example
+void rtems_interrupt_local_enable(
+  rtems_interrupt_level  level
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+This directive enables maskable interrupts to the @code{level}
+which was returned by a previous call to
+@code{@value{DIRPREFIX}interrupt_local_disable}.
+Immediately prior to invoking this directive, maskable interrupts should
+be disabled by a call to @code{@value{DIRPREFIX}interrupt_local_disable}
+and will be enabled when this directive returns to the caller.
 
 @subheading NOTES:
 

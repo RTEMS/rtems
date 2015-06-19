@@ -94,12 +94,12 @@ static void test_system_not_up(void)
 
   puts( "start with a system state != SYSTEM_STATE_UP" );
 
-  rtems_interrupt_disable( level );
+  rtems_interrupt_local_disable( level );
   System_state_Codes state = _System_state_Get();
   _System_state_Set( SYSTEM_STATE_TERMINATED );
   test_call_heap_walk( true );
   _System_state_Set( state );
-  rtems_interrupt_enable( level );
+  rtems_interrupt_local_enable( level );
 }
 
 static void test_check_control(void)

@@ -18,7 +18,10 @@ endif
 if NETTESTS
 ## loopback tests a network loopback interface
 _SUBDIRS += loopback
+if HAS_SMP
+else
 _SUBDIRS += pppd
+endif
 endif
 
 include $(top_srcdir)/../automake/test-subdirs.am

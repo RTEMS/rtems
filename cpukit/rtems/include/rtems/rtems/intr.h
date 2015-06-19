@@ -89,10 +89,15 @@ rtems_status_code rtems_interrupt_catch(
 );
 #endif
 
+#if !defined(RTEMS_SMP)
+
 /**
  *  @brief Disable RTEMS Interrupt
  *
  *  @note The interrupt level shall be of type @ref rtems_interrupt_level.
+ *
+ *  This macro is only available on uni-processor configurations.  The macro
+ *  rtems_interrupt_local_disable() is available on all configurations.
  */
 #define rtems_interrupt_disable( _isr_cookie ) \
     _ISR_Disable(_isr_cookie)
@@ -101,6 +106,9 @@ rtems_status_code rtems_interrupt_catch(
  *  @brief Enable RTEMS Interrupt
  *
  *  @note The interrupt level shall be of type @ref rtems_interrupt_level.
+ *
+ *  This macro is only available on uni-processor configurations.  The macro
+ *  rtems_interrupt_local_enable() is available on all configurations.
  */
 #define rtems_interrupt_enable( _isr_cookie ) \
     _ISR_Enable(_isr_cookie)
@@ -109,9 +117,39 @@ rtems_status_code rtems_interrupt_catch(
  *  @brief Flash RTEMS Interrupt
  *
  *  @note The interrupt level shall be of type @ref rtems_interrupt_level.
+ *
+ *  This macro is only available on uni-processor configurations.  The macro
+ *  rtems_interrupt_local_disable() and rtems_interrupt_local_enable() is
+ *  available on all configurations.
  */
 #define rtems_interrupt_flash( _isr_cookie ) \
     _ISR_Flash(_isr_cookie)
+
+#endif /* RTEMS_SMP */
+
+/**
+ * @brief This macro disables the interrupts on the current processor.
+ *
+ * On SMP configurations this will not ensure system wide mutual exclusion.
+ * Use interrupt locks instead.
+ *
+ * @param[in] _isr_cookie The previous interrupt level is returned.  The type
+ *   of this variable must be rtems_interrupt_level.
+ *
+ * @see rtems_interrupt_local_enable().
+ */
+#define rtems_interrupt_local_disable( _isr_cookie ) \
+  _ISR_Disable_without_giant( _isr_cookie )
+
+/**
+ * @brief This macro restores the previous interrupt level on the current
+ * processor.
+ *
+ * @param[in] _isr_cookie The previous interrupt level returned by
+ *   rtems_interrupt_local_disable().
+ */
+#define rtems_interrupt_local_enable( _isr_cookie ) \
+  _ISR_Enable_without_giant( _isr_cookie )
 
 /**
  *  @brief RTEMS Interrupt Is in Progress

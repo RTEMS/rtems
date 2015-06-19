@@ -341,15 +341,20 @@ rtems_task High_task(
   _Thread_Disable_dispatch();
 
   benchmark_timer_initialize();
-    rtems_interrupt_disable( level );
+    rtems_interrupt_local_disable( level );
   isr_disable_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
+#if defined(RTEMS_SMP)
+    rtems_interrupt_local_enable( level );
+    rtems_interrupt_local_disable( level );
+#else
     rtems_interrupt_flash( level );
+#endif
   isr_flash_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    rtems_interrupt_enable( level );
+    rtems_interrupt_local_enable( level );
   isr_enable_time = benchmark_timer_read();
 
   _Thread_Enable_dispatch();

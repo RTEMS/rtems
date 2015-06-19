@@ -42,16 +42,14 @@ static rtems_driver_address_table test_driver = {
 
 #define test_interrupt_context_enter( level ) \
   do { \
-    _Thread_Disable_dispatch(); \
-    rtems_interrupt_disable( level ); \
+    rtems_interrupt_local_disable( level ); \
     ++_ISR_Nest_level; \
   } while (0)
 
 #define test_interrupt_context_leave( level ) \
   do { \
     --_ISR_Nest_level; \
-    rtems_interrupt_enable( level ); \
-    _Thread_Enable_dispatch(); \
+    rtems_interrupt_local_enable( level ); \
   } while (0)
 
 rtems_task Init(

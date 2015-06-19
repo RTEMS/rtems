@@ -72,7 +72,7 @@ void boot_card(
    *  Make sure interrupts are disabled.
    */
   (void) bsp_isr_level;
-  rtems_interrupt_disable( bsp_isr_level );
+  rtems_interrupt_local_disable( bsp_isr_level );
 
   bsp_boot_cmdline = cmdline;
 

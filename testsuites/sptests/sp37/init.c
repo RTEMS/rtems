@@ -243,8 +243,7 @@ static void test_clock_tick_functions( void )
   rtems_interrupt_level level;
   Watchdog_Interval saved_ticks;
 
-  _Thread_Disable_dispatch();
-  rtems_interrupt_disable( level );
+  rtems_interrupt_local_disable( level );
 
   saved_ticks = _Watchdog_Ticks_since_boot;
 
@@ -287,16 +286,19 @@ static void test_clock_tick_functions( void )
 
   _Watchdog_Ticks_since_boot = saved_ticks;
 
-  rtems_interrupt_enable( level );
-  _Thread_Enable_dispatch();
+  rtems_interrupt_local_enable( level );
 }
 
 void test_interrupt_inline(void)
 {
   rtems_interrupt_level level;
+  rtems_interrupt_level level_1;
   rtems_mode            level_mode_body;
   rtems_mode            level_mode_macro;
   bool                  in_isr;
+  uint32_t              isr_level_0;
+  uint32_t              isr_level_1;
+  uint32_t              isr_level_2;
 
   puts( "interrupt is in progress (use body)" );
   in_isr = rtems_interrupt_is_in_progress();
@@ -305,20 +307,33 @@ void test_interrupt_inline(void)
     rtems_test_exit( 0 );
   }
 
+#if !defined(RTEMS_SMP)
   puts( "interrupt disable (use inline)" );
-  _Thread_Disable_dispatch();
   rtems_interrupt_disable( level );
-  _Thread_Enable_dispatch();
 
   puts( "interrupt flash (use inline)" );
-  _Thread_Disable_dispatch();
   rtems_interrupt_flash( level );
-  _Thread_Enable_dispatch();
 
   puts( "interrupt enable (use inline)" );
-  _Thread_Disable_dispatch();
   rtems_interrupt_enable( level );
-  _Thread_Enable_dispatch();
+#endif /* RTEMS_SMP */
+
+  isr_level_0 = _ISR_Get_level();
+  rtems_test_assert( isr_level_0 == 0 );
+
+  rtems_interrupt_local_disable( level );
+  isr_level_1 = _ISR_Get_level();
+  rtems_test_assert( isr_level_1 != isr_level_0 );
+
+  rtems_interrupt_local_disable( level_1 );
+  isr_level_2 = _ISR_Get_level();
+  rtems_test_assert( isr_level_2 == isr_level_1 );
+
+  rtems_interrupt_local_enable( level_1 );
+  rtems_test_assert( _ISR_Get_level() == isr_level_1 );
+
+  rtems_interrupt_local_enable( level );
+  rtems_test_assert( _ISR_Get_level() == isr_level_0 );
 
   puts( "interrupt level mode (use inline)" );
   level_mode_body = rtems_interrupt_level_body( level );
@@ -329,30 +344,12 @@ void test_interrupt_inline(void)
 }
 
 volatile int isr_in_progress_body;
+
 volatile int isr_in_progress_inline;
 
 void check_isr_in_progress_inline(void)
 {
   isr_in_progress_inline = rtems_interrupt_is_in_progress() ? 1 : 2;
-}
-
-#undef rtems_interrupt_disable
-extern rtems_interrupt_level rtems_interrupt_disable(void);
-#undef rtems_interrupt_enable
-extern void rtems_interrupt_enable(rtems_interrupt_level previous_level);
-#undef rtems_interrupt_flash
-extern void rtems_interrupt_flash(rtems_interrupt_level previous_level);
-#undef rtems_interrupt_is_in_progress
-extern bool rtems_interrupt_is_in_progress(void);
-
-rtems_timer_service_routine test_isr_in_progress(
-  rtems_id  timer,
-  void     *arg
-)
-{
-  check_isr_in_progress_inline();
-
-  isr_in_progress_body = rtems_interrupt_is_in_progress() ? 1 : 2;
 }
 
 void check_isr_worked(
@@ -429,16 +426,70 @@ rtems_timer_service_routine test_unblock_task(
   directive_failed( status, "rtems_task_resume" );
 }
 
+#undef rtems_interrupt_disable
+extern rtems_interrupt_level rtems_interrupt_disable(void);
+#undef rtems_interrupt_enable
+extern void rtems_interrupt_enable(rtems_interrupt_level previous_level);
+#undef rtems_interrupt_flash
+extern void rtems_interrupt_flash(rtems_interrupt_level previous_level);
+#undef rtems_interrupt_is_in_progress
+extern bool rtems_interrupt_is_in_progress(void);
+
+static void test_interrupt_body(void)
+{
+#if !defined(RTEMS_SMP)
+  rtems_interrupt_level level;
+  rtems_mode            level_mode_body;
+  rtems_mode            level_mode_macro;
+  bool                  in_isr;
+
+  puts( "interrupt disable (use body)" );
+  level = rtems_interrupt_disable();
+
+  puts( "interrupt disable (use body)" );
+  level = rtems_interrupt_disable();
+
+  puts( "interrupt flash (use body)" );
+  rtems_interrupt_flash( level );
+
+  puts( "interrupt enable (use body)" );
+  rtems_interrupt_enable( level );
+
+  puts( "interrupt level mode (use body)" );
+  level_mode_body = rtems_interrupt_level_body( level );
+  level_mode_macro = RTEMS_INTERRUPT_LEVEL(level);
+  if ( level_mode_macro == level_mode_body ) {
+    puts("test seems to work");
+  }
+
+  /*
+   *  Test interrupt bodies
+   */
+  puts( "interrupt is in progress (use body)" );
+  in_isr = rtems_interrupt_is_in_progress();
+  if ( in_isr ) {
+    puts( "interrupt reported to be is in progress (body)" );
+    rtems_test_exit( 0 );
+  }
+#endif /* RTEMS_SMP */
+}
+
+rtems_timer_service_routine test_isr_in_progress(
+  rtems_id  timer,
+  void     *arg
+)
+{
+  check_isr_in_progress_inline();
+
+  isr_in_progress_body = rtems_interrupt_is_in_progress() ? 1 : 2;
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
 {
   rtems_time_of_day     time;
   rtems_status_code     status;
-  rtems_interrupt_level level;
-  rtems_mode            level_mode_body;
-  rtems_mode            level_mode_macro;
-  bool                  in_isr;
   rtems_id              timer;
   int                   i;
 
@@ -523,47 +574,8 @@ rtems_task Init(
        break;
   }
 
-  /*
-   *  Test interrupt inline versions
-   */
   test_interrupt_inline();
-
-  /*
-   *  Test interrupt bodies
-   */
-  puts( "interrupt is in progress (use body)" );
-  in_isr = rtems_interrupt_is_in_progress();
-  if ( in_isr ) {
-    puts( "interrupt reported to be is in progress (body)" );
-    rtems_test_exit( 0 );
-  }
-
-  puts( "interrupt disable (use body)" );
-  _Thread_Disable_dispatch();
-  level = rtems_interrupt_disable();
-  _Thread_Enable_dispatch();
-
-  puts( "interrupt disable (use body)" );
-  _Thread_Disable_dispatch();
-  level = rtems_interrupt_disable();
-  _Thread_Enable_dispatch();
-
-  puts( "interrupt flash (use body)" );
-  _Thread_Disable_dispatch();
-  rtems_interrupt_flash( level );
-  _Thread_Enable_dispatch();
-
-  puts( "interrupt enable (use body)" );
-  _Thread_Disable_dispatch();
-  rtems_interrupt_enable( level );
-  _Thread_Enable_dispatch();
-
-  puts( "interrupt level mode (use body)" );
-  level_mode_body = rtems_interrupt_level_body( level );
-  level_mode_macro = RTEMS_INTERRUPT_LEVEL(level);
-  if ( level_mode_macro == level_mode_body ) {
-    puts("test seems to work");
-  }
+  test_interrupt_body();
 
   /*
    * Test ISR in progress from actual ISR
