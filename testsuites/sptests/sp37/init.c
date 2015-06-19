@@ -333,10 +333,7 @@ volatile int isr_in_progress_inline;
 
 void check_isr_in_progress_inline(void)
 {
-  bool in_isr;
-
-  in_isr = rtems_interrupt_is_in_progress();
-  isr_in_progress_inline = ( in_isr ) ? 1 : 2;
+  isr_in_progress_inline = rtems_interrupt_is_in_progress() ? 1 : 2;
 }
 
 #undef rtems_interrupt_disable
@@ -353,12 +350,9 @@ rtems_timer_service_routine test_isr_in_progress(
   void     *arg
 )
 {
-  bool in_isr;
-
   check_isr_in_progress_inline();
 
-  in_isr = rtems_interrupt_is_in_progress();
-  isr_in_progress_body = ( in_isr ) ? 1 : 2;
+  isr_in_progress_body = rtems_interrupt_is_in_progress() ? 1 : 2;
 }
 
 void check_isr_worked(
@@ -367,13 +361,14 @@ void check_isr_worked(
 )
 {
   switch (result) {
-    case -1:
+    case 0:
       printf( "isr_in_progress(%s) timer did not fire\n", s );
+      rtems_test_exit(0);
       break;
     case 1:
       printf( "isr_in_progress(%s) from ISR -- OK\n", s );
       break;
-    case 2:
+    default:
       printf( "isr_in_progress(%s) from ISR -- returned bad value\n", s);
       rtems_test_exit(0);
       break;
@@ -573,16 +568,13 @@ rtems_task Init(
   /*
    * Test ISR in progress from actual ISR
    */
-  isr_in_progress_body   = -1;
-  isr_in_progress_inline = -1;
-
   status = rtems_timer_fire_after( timer, 10, test_isr_in_progress, NULL );
   directive_failed( status, "timer_fire_after failed" );
 
-  status = rtems_task_wake_after( 100 );
+  status = rtems_task_wake_after( 11 );
   directive_failed( status, "wake_after failed" );
 
-  check_isr_worked( "inline", isr_in_progress_body );
+  check_isr_worked( "inline", isr_in_progress_inline );
 
   check_isr_worked( "body", isr_in_progress_body );
 
