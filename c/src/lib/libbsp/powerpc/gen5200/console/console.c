@@ -327,11 +327,6 @@ static void mpc5200_psc_interrupt_handler(rtems_irq_hdl_param handle)
   if (isr & ISR_TX_RDY & channel_info[minor].shadow_imr) {
     channel_info[minor].tx_interrupts++;
 
-    /*
-     * mask interrupt
-     */
-    psc->isr_imr = channel_info[minor].shadow_imr &= ~(IMR_TX_RDY);
-
     if (ttyp[minor] != NULL) {
       #ifndef SINGLE_CHAR_MODE
         rtems_termios_dequeue_characters(
@@ -581,11 +576,12 @@ static ssize_t mpc5200_uart_write(
   size_t len
 )
 {
+  struct mpc5200_psc *psc =
+    (struct mpc5200_psc *)(&mpc5200.psc[psc_minor_to_regset[minor]]);
+
   if (len > 0) {
     int frame_len = len;
     const char *frame_buf = buf;
-    struct mpc5200_psc *psc =
-      (struct mpc5200_psc *)(&mpc5200.psc[psc_minor_to_regset[minor]]);
 
    /*
     * Check tx fifo space
@@ -609,6 +605,11 @@ static ssize_t mpc5200_uart_write(
     * unmask interrupt
     */
     psc->isr_imr = channel_info[minor].shadow_imr |= IMR_TX_RDY;
+  } else {
+    /*
+     * mask interrupt
+     */
+    psc->isr_imr = channel_info[minor].shadow_imr &= ~(IMR_TX_RDY);
   }
 
   return 0;
