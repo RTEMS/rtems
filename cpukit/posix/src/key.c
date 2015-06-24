@@ -92,49 +92,24 @@ static uint32_t _POSIX_Keys_Get_initial_keypool_size( void )
   return _Objects_Maximum_per_allocation( max );
 }
 
-static bool _POSIX_Keys_Keypool_extend( Freechain_Control *keypool )
-{
-  size_t bump_count = _POSIX_Keys_Get_keypool_bump_count();
-  bool ok = bump_count > 0;
-
-  if ( ok ) {
-    size_t size = bump_count * sizeof( POSIX_Keys_Key_value_pair );
-    POSIX_Keys_Key_value_pair *nodes = _Workspace_Allocate( size );
-
-    ok = nodes != NULL;
-
-    if ( ok ) {
-      _Chain_Initialize(
-        &keypool->Freechain,
-        nodes,
-        bump_count,
-        sizeof( *nodes )
-      );
-    }
-  }
-
-  return ok;
-}
-
 static void _POSIX_Keys_Initialize_keypool( void )
 {
-  Freechain_Control *keypool = &_POSIX_Keys_Keypool;
-  size_t initial_count = _POSIX_Keys_Get_initial_keypool_size();
+  _Freechain_Initialize(
+    &_POSIX_Keys_Keypool,
+    _Workspace_Allocate_or_fatal_error,
+    _POSIX_Keys_Get_initial_keypool_size(),
+    sizeof( POSIX_Keys_Key_value_pair )
+  );
+}
 
-  _Freechain_Initialize( keypool, _POSIX_Keys_Keypool_extend );
-
-  if ( initial_count > 0 ) {
-    size_t size = initial_count * sizeof( POSIX_Keys_Key_value_pair );
-    POSIX_Keys_Key_value_pair *nodes =
-      _Workspace_Allocate_or_fatal_error( size );
-
-    _Chain_Initialize(
-      &keypool->Freechain,
-      nodes,
-      initial_count,
-      sizeof( *nodes )
-    );
-  }
+POSIX_Keys_Key_value_pair * _POSIX_Keys_Key_value_pair_allocate( void )
+{
+  return (POSIX_Keys_Key_value_pair *) _Freechain_Get(
+    &_POSIX_Keys_Keypool,
+    _Workspace_Allocate,
+    _POSIX_Keys_Get_keypool_bump_count(),
+    sizeof( POSIX_Keys_Key_value_pair )
+  );
 }
 
 /**

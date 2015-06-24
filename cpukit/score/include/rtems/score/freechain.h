@@ -16,8 +16,7 @@
 #ifndef _RTEMS_SCORE_FREECHAIN_H
 #define _RTEMS_SCORE_FREECHAIN_H
 
-#include <stdbool.h>
-
+#include <rtems/score/basedefs.h>
 #include <rtems/score/chain.h>
 
 #ifdef __cplusplus
@@ -36,27 +35,20 @@ extern "C" {
  * @{
  */
 
-typedef struct Freechain_Control Freechain_Control;
+/**
+ * @brief Allocator function.
+ */
+typedef void *( *Freechain_Allocator )( size_t size );
 
 /**
- * @brief Extends the freechain.
- *
- * @param[in] freechain The freechain control.
- *
- * @retval true The freechain contains now at least one node.
- * @retval false Otherwise.
+ * @brief The freechain control.
  */
-typedef bool ( *Freechain_Extend )( Freechain_Control *freechain );
-
-/**
- * @typedef Freechain_Control
- *
- * This is used to manage freechain's nodes.
- */
-struct Freechain_Control {
-  Chain_Control     Freechain;
-  Freechain_Extend  extend;
-};
+typedef struct {
+  /**
+   * @brief Chain of free nodes.
+   */
+  Chain_Control Free;
+} Freechain_Control;
 
 /**
  * @brief Initializes a freechain.
@@ -65,32 +57,42 @@ struct Freechain_Control {
  * of nodes.  In case the freechain is empty the extend handler is called to
  * get more nodes.
  *
- * @param[in,out] freechain The freechain control to initialize.
- * @param[in] extend The extend handler.  It is called by _Freechain_Get() in
- * case the freechain is empty.
+ * @param[in] freechain The freechain control to initialize.
+ * @param[in] allocator The allocator function.
+ * @param[in] number_nodes The initial number of nodes.
+ * @param[in] node_size The node size.
  */
 void _Freechain_Initialize(
-  Freechain_Control *freechain,
-  Freechain_Extend   extend
+  Freechain_Control   *freechain,
+  Freechain_Allocator  allocator,
+  size_t               number_nodes,
+  size_t               node_size
 );
 
 /**
  * @brief Gets a node from the freechain.
  *
- * @param[in,out] freechain The freechain control.
+ * @param[in] freechain The freechain control.
+ * @param[in] allocator The allocator function.
+ * @param[in] number_nodes_to_extend The number of nodes in case an extend is
+ *   necessary due to an empty freechain.
+ * @param[in] node_size The node size.
  *
  * @retval NULL The freechain is empty and the extend operation failed.
  * @retval otherwise Pointer to a node.  The node ownership passes to the
  * caller.
  */
 void *_Freechain_Get(
-  Freechain_Control *freechain
+  Freechain_Control   *freechain,
+  Freechain_Allocator  allocator,
+  size_t               number_nodes_to_extend,
+  size_t               node_size
 );
 
 /**
  * @brief Puts a node back onto the freechain.
  *
- * @param[in,out] freechain The freechain control.
+ * @param[in] freechain The freechain control.
  * @param[in] node The node to put back.
  */
 void _Freechain_Put(

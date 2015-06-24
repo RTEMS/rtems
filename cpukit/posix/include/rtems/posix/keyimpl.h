@@ -156,11 +156,7 @@ RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get (
     _Objects_Get( &_POSIX_Keys_Information, (Objects_Id) id, location );
 }
 
-RTEMS_INLINE_ROUTINE POSIX_Keys_Key_value_pair *
-_POSIX_Keys_Key_value_pair_allocate( void )
-{
-  return (POSIX_Keys_Key_value_pair *) _Freechain_Get( &_POSIX_Keys_Keypool );
-}
+POSIX_Keys_Key_value_pair * _POSIX_Keys_Key_value_pair_allocate( void );
 
 RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_pair_free(
   POSIX_Keys_Key_value_pair *key_value_pair
