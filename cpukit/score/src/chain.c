@@ -19,10 +19,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/address.h>
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/isr.h>
+#include <rtems/score/address.h>
+#include <rtems/score/assert.h>
 
 void _Chain_Initialize(
   Chain_Control *the_chain,
@@ -36,6 +35,8 @@ void _Chain_Initialize(
   Chain_Node *tail = _Chain_Tail( the_chain );
   Chain_Node *current = head;
   Chain_Node *next = starting_address;
+
+  _Assert( node_size >= sizeof( *next ) );
 
   head->previous = NULL;
 
