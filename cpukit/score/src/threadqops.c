@@ -21,70 +21,70 @@
 #include <rtems/score/rbtreeimpl.h>
 
 static void _Thread_queue_Do_nothing_priority_change(
-  Thread_Control       *the_thread,
-  Priority_Control      new_priority,
-  Thread_queue_Control *the_thread_queue
+  Thread_Control     *the_thread,
+  Priority_Control    new_priority,
+  Thread_queue_Queue *queue
 )
 {
   /* Do nothing */
 }
 
 static void _Thread_queue_Do_nothing_extract(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
+  Thread_queue_Queue *queue,
+  Thread_Control    *the_thread
 )
 {
   /* Do nothing */
 }
 
 static void _Thread_queue_FIFO_initialize(
-  Thread_queue_Control *the_thread_queue
+  Thread_queue_Queue *queue
 )
 {
-  _Chain_Initialize_empty( &the_thread_queue->Queues.Fifo );
+  _Chain_Initialize_empty( &queue->Heads.Fifo );
 }
 
 static void _Thread_queue_FIFO_enqueue(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
+  Thread_queue_Queue *queue,
+  Thread_Control     *the_thread
 )
 {
   _Chain_Append_unprotected(
-    &the_thread_queue->Queues.Fifo,
+    &queue->Heads.Fifo,
     &the_thread->Wait.Node.Chain
   );
 }
 
 static void _Thread_queue_FIFO_extract(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
+  Thread_queue_Queue *queue,
+  Thread_Control     *the_thread
 )
 {
   _Chain_Extract_unprotected( &the_thread->Wait.Node.Chain );
 }
 
 static Thread_Control *_Thread_queue_FIFO_first(
-  Thread_queue_Control *the_thread_queue
+  Thread_queue_Queue *queue
 )
 {
-  Chain_Control *fifo = &the_thread_queue->Queues.Fifo;
+  Chain_Control *fifo = &queue->Heads.Fifo;
 
   return _Chain_Is_empty( fifo ) ?
     NULL : THREAD_CHAIN_NODE_TO_THREAD( _Chain_First( fifo ) );
 }
 
 static void _Thread_queue_Priority_priority_change(
-  Thread_Control       *the_thread,
-  Priority_Control      new_priority,
-  Thread_queue_Control *the_thread_queue
+  Thread_Control     *the_thread,
+  Priority_Control    new_priority,
+  Thread_queue_Queue *queue
 )
 {
   _RBTree_Extract(
-    &the_thread_queue->Queues.Priority,
+    &queue->Heads.Priority,
     &the_thread->Wait.Node.RBTree
   );
   _RBTree_Insert(
-    &the_thread_queue->Queues.Priority,
+    &queue->Heads.Priority,
     &the_thread->Wait.Node.RBTree,
     _Thread_queue_Compare_priority,
     false
@@ -92,19 +92,19 @@ static void _Thread_queue_Priority_priority_change(
 }
 
 static void _Thread_queue_Priority_initialize(
-  Thread_queue_Control *the_thread_queue
+  Thread_queue_Queue *queue
 )
 {
-  _RBTree_Initialize_empty( &the_thread_queue->Queues.Priority );
+  _RBTree_Initialize_empty( &queue->Heads.Priority );
 }
 
 static void _Thread_queue_Priority_enqueue(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
+  Thread_queue_Queue *queue,
+  Thread_Control     *the_thread
 )
 {
   _RBTree_Insert(
-    &the_thread_queue->Queues.Priority,
+    &queue->Heads.Priority,
     &the_thread->Wait.Node.RBTree,
     _Thread_queue_Compare_priority,
     false
@@ -112,23 +112,23 @@ static void _Thread_queue_Priority_enqueue(
 }
 
 static void _Thread_queue_Priority_extract(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
+  Thread_queue_Queue *queue,
+  Thread_Control     *the_thread
 )
 {
   _RBTree_Extract(
-    &the_thread_queue->Queues.Priority,
+    &queue->Heads.Priority,
     &the_thread->Wait.Node.RBTree
   );
 }
 
 static Thread_Control *_Thread_queue_Priority_first(
-  Thread_queue_Control *the_thread_queue
+  Thread_queue_Queue *queue
 )
 {
   RBTree_Node *first;
 
-  first = _RBTree_First( &the_thread_queue->Queues.Priority, RBT_LEFT );
+  first = _RBTree_First( &queue->Heads.Priority, RBT_LEFT );
 
   return first != NULL ? THREAD_RBTREE_NODE_TO_THREAD( first ) : NULL;
 }

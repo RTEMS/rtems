@@ -140,7 +140,7 @@ int killinfo(
 
   /* XXX violation of visibility -- need to define thread queue support */
 
-  the_chain = &_POSIX_signals_Wait_queue.Queues.Fifo;
+  the_chain = &_POSIX_signals_Wait_queue.Queue.Heads.Fifo;
 
   for ( the_node = _Chain_First( the_chain );
         !_Chain_Is_tail( the_chain, the_node ) ;

@@ -156,7 +156,8 @@ int sigtimedwait(
     executing->Wait.option          = *set;
     executing->Wait.return_argument = the_info;
     _Thread_queue_Enqueue_critical(
-      &_POSIX_signals_Wait_queue,
+      &_POSIX_signals_Wait_queue.Queue,
+      _POSIX_signals_Wait_queue.operations,
       executing,
       STATES_WAITING_FOR_SIGNAL | STATES_INTERRUPTIBLE_BY_SIGNAL,
       interval,

@@ -33,12 +33,31 @@ extern "C" {
  */
 /**@{*/
 
+RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_acquire_critical(
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+)
+{
+  _ISR_lock_Acquire( &queue->Lock, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_release(
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+)
+{
+  _ISR_lock_Release_and_ISR_enable( &queue->Lock, lock_context );
+}
+
 RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire_critical(
   Thread_queue_Control *the_thread_queue,
   ISR_lock_Context     *lock_context
 )
 {
-  _ISR_lock_Acquire( &the_thread_queue->Lock, lock_context );
+  _Thread_queue_Queue_acquire_critical(
+    &the_thread_queue->Queue,
+    lock_context
+  );
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire(
@@ -55,7 +74,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Release(
   ISR_lock_Context     *lock_context
 )
 {
-  _ISR_lock_Release_and_ISR_enable( &the_thread_queue->Lock, lock_context );
+  _Thread_queue_Queue_release( &the_thread_queue->Queue, lock_context );
 }
 
 /**
@@ -120,7 +139,8 @@ Thread_Control *_Thread_queue_Dequeue(
  *     _Thread_queue_Release( &mutex->Queue, &lock_context );
  *   } else {
  *     _Thread_queue_Enqueue_critical(
- *       &mutex->Queue,
+ *       &mutex->Queue.Queue,
+ *       mutex->Queue.operations,
  *       executing,
  *       STATES_WAITING_FOR_MUTEX,
  *       WATCHDOG_NO_TIMEOUT,
@@ -131,7 +151,8 @@ Thread_Control *_Thread_queue_Dequeue(
  * }
  * @endcode
  *
- * @param[in] the_thread_queue The thread queue.
+ * @param[in] queue The actual thread queue.
+ * @param[in] operations The thread queue operations.
  * @param[in] the_thread The thread to enqueue.
  * @param[in] state The new state of the thread.
  * @param[in] timeout Interval to wait.  Use WATCHDOG_NO_TIMEOUT to block
@@ -140,12 +161,13 @@ Thread_Control *_Thread_queue_Dequeue(
  * @param[in] lock_context The lock context of the lock acquire.
  */
 void _Thread_queue_Enqueue_critical(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread,
-  States_Control        state,
-  Watchdog_Interval     timeout,
-  uint32_t              timeout_code,
-  ISR_lock_Context     *lock_context
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *the_thread,
+  States_Control                 state,
+  Watchdog_Interval              timeout,
+  uint32_t                       timeout_code,
+  ISR_lock_Context              *lock_context
 );
 
 /**
@@ -164,7 +186,8 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
 
   _Thread_queue_Acquire( the_thread_queue, &lock_context );
   _Thread_queue_Enqueue_critical(
-    the_thread_queue,
+    &the_thread_queue->Queue,
+    the_thread_queue->operations,
     the_thread,
     state,
     timeout,
@@ -180,12 +203,14 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
  * The caller must be the owner of the thread queue lock.  The thread queue
  * lock is not released.
  *
- * @param[in] the_thread_queue The thread queue.
+ * @param[in] queue The actual thread queue.
+ * @param[in] operations The thread queue operations.
  * @param[in] the_thread The thread to extract.
  */
 void _Thread_queue_Extract_locked(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *the_thread
 );
 
 /**
@@ -196,14 +221,14 @@ void _Thread_queue_Extract_locked(
  * thread queue lock is released and an unblock is necessary.  Thread
  * dispatching is enabled once the sequence to unblock the thread is complete.
  *
- * @param[in] the_thread_queue The thread queue.
+ * @param[in] queue The actual thread queue.
  * @param[in] the_thread The thread to extract.
  * @param[in] lock_context The lock context of the lock acquire.
  */
 void _Thread_queue_Unblock_critical(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread,
-  ISR_lock_Context     *lock_context
+  Thread_queue_Queue *queue,
+  Thread_Control     *the_thread,
+  ISR_lock_Context   *lock_context
 );
 
 /**
@@ -238,21 +263,24 @@ void _Thread_queue_Unblock_critical(
  *
  *   if ( first != NULL ) {
  *     _Thread_queue_Extract_critical(
- *       &mutex->Queue,
+ *       &mutex->Queue.Queue,
+ *       mutex->Queue.operations,
  *       first,
  *       &lock_context
  *   );
  * }
  * @endcode
  *
- * @param[in] the_thread_queue The thread queue.
+ * @param[in] queue The actual thread queue.
+ * @param[in] operations The thread queue operations.
  * @param[in] the_thread The thread to extract.
  * @param[in] lock_context The lock context of the lock acquire.
  */
 void _Thread_queue_Extract_critical(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread,
-  ISR_lock_Context     *lock_context
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *the_thread,
+  ISR_lock_Context              *lock_context
 );
 
 /**
@@ -294,7 +322,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_queue_First_locked(
   Thread_queue_Control *the_thread_queue
 )
 {
-  return ( *the_thread_queue->operations->first )( the_thread_queue );
+  return ( *the_thread_queue->operations->first )( &the_thread_queue->Queue );
 }
 
 /**
@@ -346,31 +374,43 @@ void _Thread_queue_Initialize(
 
 #if defined(RTEMS_SMP)
   #define THREAD_QUEUE_FIFO_INITIALIZER( designator, name ) { \
-      .Queues = { \
-        .Fifo = CHAIN_INITIALIZER_EMPTY( designator.Queues.Fifo ) \
-      }, \
-      .operations = &_Thread_queue_Operations_FIFO, \
-      .Lock = ISR_LOCK_INITIALIZER( name ) \
-    }
-
-  #define THREAD_QUEUE_PRIORITY_INITIALIZER( designator, name ) { \
-      .Queues = { \
-        .Priority = RBTREE_INITIALIZER_EMPTY( designator.Queues.Priority ) \
-      }, \
-      .operations = &_Thread_queue_Operations_priority, \
-      .Lock = ISR_LOCK_INITIALIZER( name ) \
-    }
-#else
-  #define THREAD_QUEUE_FIFO_INITIALIZER( designator, name ) { \
-      .Queues = { \
-        .Fifo = CHAIN_INITIALIZER_EMPTY( designator.Queues.Fifo ) \
+      .Queue = { \
+        .Heads = { \
+          .Fifo = CHAIN_INITIALIZER_EMPTY( designator.Queue.Heads.Fifo ) \
+        }, \
+        .Lock = ISR_LOCK_INITIALIZER( name ), \
       }, \
       .operations = &_Thread_queue_Operations_FIFO \
     }
 
   #define THREAD_QUEUE_PRIORITY_INITIALIZER( designator, name ) { \
-      .Queues = { \
-        .Priority = RBTREE_INITIALIZER_EMPTY( designator.Queues.Priority ) \
+      .Queue = { \
+        .Heads = { \
+          .Priority = RBTREE_INITIALIZER_EMPTY( \
+            designator.Queue.Heads.Priority \
+          ) \
+        }, \
+        .Lock = ISR_LOCK_INITIALIZER( name ), \
+      }, \
+      .operations = &_Thread_queue_Operations_priority \
+    }
+#else
+  #define THREAD_QUEUE_FIFO_INITIALIZER( designator, name ) { \
+      .Queue = { \
+        .Heads = { \
+          .Fifo = CHAIN_INITIALIZER_EMPTY( designator.Queue.Heads.Fifo ) \
+        } \
+      }, \
+      .operations = &_Thread_queue_Operations_FIFO \
+    }
+
+  #define THREAD_QUEUE_PRIORITY_INITIALIZER( designator, name ) { \
+      .Queue = { \
+        .Heads = { \
+          .Priority = RBTREE_INITIALIZER_EMPTY( \
+            designator.Queue.Heads.Priority \
+          ) \
+        } \
       }, \
       .operations = &_Thread_queue_Operations_priority \
     }
@@ -380,7 +420,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Destroy(
   Thread_queue_Control *the_thread_queue
 )
 {
-  _ISR_lock_Destroy( &the_thread_queue->Lock );
+  _ISR_lock_Destroy( &the_thread_queue->Queue.Lock );
 }
 
 /**

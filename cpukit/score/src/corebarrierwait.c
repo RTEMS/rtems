@@ -50,7 +50,8 @@ void _CORE_barrier_Wait(
   executing->Wait.id = id;
 
   _Thread_queue_Enqueue_critical(
-    &the_barrier->Wait_queue,
+    &the_barrier->Wait_queue.Queue,
+    the_barrier->Wait_queue.operations,
     executing,
     STATES_WAITING_FOR_BARRIER,
     timeout,

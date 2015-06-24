@@ -599,7 +599,8 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_message_queue_Dequeue_receiver(
   );
 
   _Thread_queue_Extract_critical(
-    &the_message_queue->Wait_queue,
+    &the_message_queue->Wait_queue.Queue,
+    the_message_queue->Wait_queue.operations,
     the_thread,
     lock_context
   );

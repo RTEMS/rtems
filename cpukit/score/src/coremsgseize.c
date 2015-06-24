@@ -107,7 +107,8 @@ void _CORE_message_queue_Seize(
          _CORE_message_queue_Get_message_priority( the_message )
       );
       _Thread_queue_Extract_critical(
-        &the_message_queue->Wait_queue,
+        &the_message_queue->Wait_queue.Queue,
+        the_message_queue->Wait_queue.operations,
         the_thread,
         lock_context
       );
@@ -131,7 +132,8 @@ void _CORE_message_queue_Seize(
   /* Wait.count will be filled in with the message priority */
 
   _Thread_queue_Enqueue_critical(
-    &the_message_queue->Wait_queue,
+    &the_message_queue->Wait_queue.Queue,
+    the_message_queue->Wait_queue.operations,
     executing,
     STATES_WAITING_FOR_MESSAGE,
     timeout,

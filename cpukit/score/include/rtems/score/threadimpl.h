@@ -1368,8 +1368,8 @@ RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change(
  * @see _Thread_Lock_set().
  */
 RTEMS_INLINE_ROUTINE void _Thread_Wait_set_queue(
-  Thread_Control       *the_thread,
-  Thread_queue_Control *new_queue
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *new_queue
 )
 {
   the_thread->Wait.queue = new_queue;

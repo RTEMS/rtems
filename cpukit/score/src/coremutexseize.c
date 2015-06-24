@@ -83,7 +83,8 @@ void _CORE_mutex_Seize_interrupt_blocking(
   }
 
   _Thread_queue_Enqueue_critical(
-    &the_mutex->Wait_queue,
+    &the_mutex->Wait_queue.Queue,
+    the_mutex->Wait_queue.operations,
     executing,
     STATES_WAITING_FOR_MUTEX,
     timeout,

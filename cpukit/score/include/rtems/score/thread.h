@@ -329,7 +329,7 @@ typedef struct {
    *
    * @see _Thread_Lock_set() and _Thread_Wait_set_queue().
    */
-  Thread_queue_Control *queue;
+  Thread_queue_Queue *queue;
 
   /**
    * @brief This field contains several flags used to control the wait class

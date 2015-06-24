@@ -83,7 +83,8 @@ void _CORE_RWLock_Obtain_for_reading(
     executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
 
     _Thread_queue_Enqueue_critical(
-       &the_rwlock->Wait_queue,
+       &the_rwlock->Wait_queue.Queue,
+       the_rwlock->Wait_queue.operations,
        executing,
        STATES_WAITING_FOR_RWLOCK,
        timeout,

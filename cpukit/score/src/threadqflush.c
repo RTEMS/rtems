@@ -43,7 +43,8 @@ void _Thread_queue_Flush(
       the_thread->Wait.return_code = status;
 
     _Thread_queue_Extract_critical(
-      the_thread_queue,
+      &the_thread_queue->Queue,
+      the_thread_queue->operations,
       the_thread,
       &lock_context
     );

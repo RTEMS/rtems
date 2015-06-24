@@ -140,7 +140,8 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Surrender(
 #endif
 
     _Thread_queue_Extract_critical(
-      &the_semaphore->Wait_queue,
+      &the_semaphore->Wait_queue.Queue,
+      the_semaphore->Wait_queue.operations,
       the_thread,
       lock_context
     );
@@ -263,7 +264,8 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize(
 
   executing->Wait.id = id;
   _Thread_queue_Enqueue_critical(
-    &the_semaphore->Wait_queue,
+    &the_semaphore->Wait_queue.Queue,
+    the_semaphore->Wait_queue.operations,
     executing,
     STATES_WAITING_FOR_SEMAPHORE,
     timeout,

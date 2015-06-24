@@ -132,7 +132,8 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     executing->Wait.count = submit_type;
 
     _Thread_queue_Enqueue_critical(
-      &the_message_queue->Wait_queue,
+      &the_message_queue->Wait_queue.Queue,
+      the_message_queue->Wait_queue.operations,
       executing,
       STATES_WAITING_FOR_MESSAGE,
       timeout,
