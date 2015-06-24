@@ -30,7 +30,7 @@
 #include <rtems/config.h>
 
 bool _Thread_Initialize(
-  Objects_Information                  *information,
+  Thread_Information                   *information,
   Thread_Control                       *the_thread,
   const Scheduler_Control              *scheduler,
   void                                 *stack_area,
@@ -76,6 +76,7 @@ bool _Thread_Initialize(
   #endif
 
   the_thread->Start.tls_area = NULL;
+  the_thread->Wait.spare_heads = NULL;
 
   /*
    *  Allocate and Initialize the stack for this thread.
@@ -133,6 +134,20 @@ bool _Thread_Initialize(
     the_thread->fp_context       = fp_area;
     the_thread->Start.fp_context = fp_area;
   #endif
+
+  /*
+   *  Get thread queue heads
+   */
+  the_thread->Wait.spare_heads = _Freechain_Get(
+    &information->Free_thread_queue_heads,
+    _Workspace_Allocate,
+    _Objects_Extend_size( &information->Objects ),
+    sizeof( *the_thread->Wait.spare_heads )
+  );
+  if ( the_thread->Wait.spare_heads == NULL ) {
+    goto failed;
+  }
+  _Chain_Initialize_empty( &the_thread->Wait.spare_heads->Free_chain );
 
   /*
    *  Initialize the thread timer
@@ -239,7 +254,7 @@ bool _Thread_Initialize(
   /*
    *  Open the object
    */
-  _Objects_Open( information, &the_thread->Object, name );
+  _Objects_Open( &information->Objects, &the_thread->Object, name );
 
   /*
    *  We assume the Allocator Mutex is locked and dispatching is
@@ -259,6 +274,11 @@ failed:
   }
 
   _Workspace_Free( the_thread->Start.tls_area );
+
+  _Freechain_Put(
+    &information->Free_thread_queue_heads,
+    the_thread->Wait.spare_heads
+  );
 
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
     _Workspace_Free( fp_area );

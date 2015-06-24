@@ -718,6 +718,13 @@ Objects_Maximum _Objects_Active_count(
   const Objects_Information *information
 );
 
+RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Extend_size(
+  const Objects_Information *information
+)
+{
+  return information->auto_extend ? information->allocation_size : 0;
+}
+
 /**
  * This function returns true if the api is valid.
  *

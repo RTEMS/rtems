@@ -204,19 +204,17 @@ User_extensions_Control _RTEMS_tasks_User_extensions = {
 
 void _RTEMS_tasks_Manager_initialization(void)
 {
-  _Objects_Initialize_information(
+  _Thread_Initialize_information(
     &_RTEMS_tasks_Information, /* object information table */
     OBJECTS_CLASSIC_API,       /* object API */
     OBJECTS_RTEMS_TASKS,       /* object class */
     Configuration_RTEMS_API.maximum_tasks,
                                /* maximum objects of this class */
-    _Thread_Control_size,      /* size of this object's control block */
     false,                     /* true if the name is a string */
     RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
-    true,                      /* true if this is a global object class */
-    NULL                       /* Proxy extraction support callout */
+    true                       /* true if this is a global object class */
 #endif
   );
 

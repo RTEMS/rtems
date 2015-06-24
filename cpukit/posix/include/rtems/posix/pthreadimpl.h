@@ -44,7 +44,7 @@ extern "C" {
  * The following defines the information control block used to manage
  * this class of objects.
  */
-POSIX_EXTERN Objects_Information  _POSIX_Threads_Information;
+POSIX_EXTERN Thread_Information  _POSIX_Threads_Information;
 
 /**
  * This variable contains the default POSIX Thread attributes.
@@ -171,7 +171,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate(void)
   _Thread_Kill_zombies();
 
   return (Thread_Control *)
-    _Objects_Allocate_unprotected( &_POSIX_Threads_Information );
+    _Objects_Allocate_unprotected( &_POSIX_Threads_Information.Objects );
 }
 
 /*
@@ -200,7 +200,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Free (
   Thread_Control *the_pthread
 )
 {
-  _Objects_Free( &_POSIX_Threads_Information, &the_pthread->Object );
+  _Objects_Free( &_POSIX_Threads_Information.Objects, &the_pthread->Object );
 }
 
 /*

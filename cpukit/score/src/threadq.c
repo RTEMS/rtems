@@ -50,8 +50,6 @@ void _Thread_queue_Initialize(
 {
   const Thread_queue_Operations *operations;
 
-  _ISR_lock_Initialize( &the_thread_queue->Queue.Lock, "Thread Queue" );
-
   if ( the_discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY ) {
     operations = &_Thread_queue_Operations_priority;
   } else {
@@ -60,5 +58,6 @@ void _Thread_queue_Initialize(
   }
 
   the_thread_queue->operations = operations;
-  ( *operations->initialize )( &the_thread_queue->Queue );
+
+  _Thread_queue_Queue_initialize( &the_thread_queue->Queue );
 }

@@ -75,7 +75,7 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  info      = &_RTEMS_tasks_Information;
+  info      = &_RTEMS_tasks_Information.Objects;
   main_task = rtems_task_self();
 
   puts( "Init - _Objects_Get_next - NULL object information" );

@@ -44,7 +44,12 @@ rtems_status_code rtems_task_ident(
     return RTEMS_SUCCESSFUL;
    }
 
-  status = _Objects_Name_to_id_u32( &_RTEMS_tasks_Information, name, node, id );
+  status = _Objects_Name_to_id_u32(
+    &_RTEMS_tasks_Information.Objects,
+    name,
+    node,
+    id
+  );
 
   return _Status_Object_name_errors_to_status[ status ];
 }

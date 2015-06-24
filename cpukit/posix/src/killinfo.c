@@ -70,11 +70,11 @@ int killinfo(
   Thread_Control              *the_thread;
   Thread_Control              *interested;
   Priority_Control             interested_priority;
-  Chain_Control               *the_chain;
   Chain_Node                  *the_node;
   siginfo_t                    siginfo_struct;
   siginfo_t                   *siginfo;
   POSIX_signals_Siginfo_node  *psiginfo;
+  Thread_queue_Heads          *heads;
 
   /*
    *  Only supported for the "calling process" (i.e. this node).
@@ -140,32 +140,35 @@ int killinfo(
 
   /* XXX violation of visibility -- need to define thread queue support */
 
-  the_chain = &_POSIX_signals_Wait_queue.Queue.Heads.Fifo;
+  heads = _POSIX_signals_Wait_queue.Queue.heads;
+  if ( heads != NULL ) {
+    Chain_Control *the_chain = &heads->Heads.Fifo;
 
-  for ( the_node = _Chain_First( the_chain );
-        !_Chain_Is_tail( the_chain, the_node ) ;
-        the_node = the_node->next ) {
+    for ( the_node = _Chain_First( the_chain );
+          !_Chain_Is_tail( the_chain, the_node ) ;
+          the_node = the_node->next ) {
 
-    the_thread = THREAD_CHAIN_NODE_TO_THREAD( the_node );
-    api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+      the_thread = THREAD_CHAIN_NODE_TO_THREAD( the_node );
+      api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-    #if defined(DEBUG_SIGNAL_PROCESSING)
-      printk( "Waiting Thread=%p option=0x%08x mask=0x%08x blocked=0x%08x\n",
-        the_thread, the_thread->Wait.option, mask, api->signals_blocked);
-    #endif
+      #if defined(DEBUG_SIGNAL_PROCESSING)
+        printk( "Waiting Thread=%p option=0x%08x mask=0x%08x blocked=0x%08x\n",
+          the_thread, the_thread->Wait.option, mask, api->signals_blocked);
+      #endif
 
-    /*
-     * Is this thread is actually blocked waiting for the signal?
-     */
-    if (the_thread->Wait.option & mask)
-      goto process_it;
+      /*
+       * Is this thread is actually blocked waiting for the signal?
+       */
+      if (the_thread->Wait.option & mask)
+        goto process_it;
 
-    /*
-     * Is this thread is blocked waiting for another signal but has
-     * not blocked this one?
-     */
-    if (~api->signals_blocked & mask)
-      goto process_it;
+      /*
+       * Is this thread is blocked waiting for another signal but has
+       * not blocked this one?
+       */
+      if (~api->signals_blocked & mask)
+        goto process_it;
+    }
   }
 
   /*

@@ -38,7 +38,10 @@ rtems_status_code rtems_task_delete(
     case OBJECTS_LOCAL:
       #if defined(RTEMS_MULTIPROCESSING)
         if ( the_thread->is_global ) {
-          _Objects_MP_Close( &_RTEMS_tasks_Information, the_thread->Object.id );
+          _Objects_MP_Close(
+            &_RTEMS_tasks_Information.Objects,
+            the_thread->Object.id
+          );
           _RTEMS_tasks_MP_Send_process_packet(
             RTEMS_TASKS_MP_ANNOUNCE_DELETE,
             the_thread->Object.id,

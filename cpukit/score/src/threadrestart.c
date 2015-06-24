@@ -93,6 +93,9 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
 
 static void _Thread_Free( Thread_Control *the_thread )
 {
+  Thread_Information *information = (Thread_Information *)
+    _Objects_Get_information_id( the_thread->Object.id );
+
   _User_extensions_Thread_delete( the_thread );
 
   /*
@@ -112,6 +115,11 @@ static void _Thread_Free( Thread_Control *the_thread )
   _Workspace_Free( the_thread->Start.fp_context );
 #endif
 
+  _Freechain_Put(
+    &information->Free_thread_queue_heads,
+    the_thread->Wait.spare_heads
+  );
+
   /*
    *  Free the rest of the memory associated with this task
    *  and set the associated pointers to NULL for safety.
@@ -124,10 +132,7 @@ static void _Thread_Free( Thread_Control *the_thread )
   _ISR_lock_Destroy( &the_thread->Lock.Default );
 #endif
 
-  _Objects_Free(
-    _Objects_Get_information_id( the_thread->Object.id ),
-    &the_thread->Object
-  );
+  _Objects_Free( &information->Objects, &the_thread->Object );
 }
 
 static void _Thread_Wait_for_execution_stop( Thread_Control *the_thread )

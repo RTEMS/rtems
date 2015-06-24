@@ -75,7 +75,7 @@ static const rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_dump_fn)        rtems_monitor_init_task_dump,
     },
     { RTEMS_MONITOR_OBJECT_TASK,
-      (void *) &_RTEMS_tasks_Information,
+      (void *) &_RTEMS_tasks_Information.Objects,
       sizeof(rtems_monitor_task_t),
       (rtems_monitor_object_next_fn)        rtems_monitor_manager_next,
       (rtems_monitor_object_canonical_fn)   rtems_monitor_task_canonical,
@@ -132,7 +132,7 @@ static const rtems_monitor_object_info_t rtems_monitor_object_info[] =
     },
 #if defined(RTEMS_POSIX_API)
     { RTEMS_MONITOR_OBJECT_PTHREAD,
-      (void *) &_POSIX_Threads_Information,
+      (void *) &_POSIX_Threads_Information.Objects,
       sizeof(rtems_monitor_task_t),
       (rtems_monitor_object_next_fn)        rtems_monitor_manager_next,
       (rtems_monitor_object_canonical_fn)   rtems_monitor_task_canonical,

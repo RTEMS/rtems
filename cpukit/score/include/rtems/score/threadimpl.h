@@ -32,6 +32,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/todimpl.h>
+#include <rtems/score/freechain.h>
 #include <rtems/config.h>
 
 #ifdef __cplusplus
@@ -54,11 +55,17 @@ extern "C" {
  */
 SCORE_EXTERN void *rtems_ada_self;
 
+typedef struct {
+  Objects_Information Objects;
+
+  Freechain_Control Free_thread_queue_heads;
+} Thread_Information;
+
 /**
  *  The following defines the information control block used to
  *  manage this class of objects.
  */
-SCORE_EXTERN Objects_Information _Thread_Internal_information;
+SCORE_EXTERN Thread_Information _Thread_Internal_information;
 
 /**
  *  The following points to the thread whose floating point
@@ -88,6 +95,19 @@ SCORE_EXTERN struct _reent **_Thread_libc_reent;
 #define THREAD_RESOURCE_NODE_TO_THREAD( node ) \
   RTEMS_CONTAINER_OF( node, Thread_Control, Resource_node )
 #endif
+
+void _Thread_Initialize_information(
+  Thread_Information  *information,
+  Objects_APIs         the_api,
+  uint16_t             the_class,
+  uint32_t             maximum,
+  bool                 is_string,
+  uint32_t             maximum_name_length
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  bool                 supports_global
+#endif
+);
 
 /**
  *  @brief Initialize thread handler.
@@ -154,7 +174,7 @@ void _Thread_Stack_Free(
  *        guaranteed to be of at least minimum size.
  */
 bool _Thread_Initialize(
-  Objects_Information                  *information,
+  Thread_Information                   *information,
   Thread_Control                       *the_thread,
   const struct Scheduler_Control       *scheduler,
   void                                 *stack_area,
@@ -736,7 +756,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Thread_Get_maximum_internal_threads(void)
 RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Internal_allocate( void )
 {
   return (Thread_Control *)
-    _Objects_Allocate_unprotected( &_Thread_Internal_information );
+    _Objects_Allocate_unprotected( &_Thread_Internal_information.Objects );
 }
 
 /**

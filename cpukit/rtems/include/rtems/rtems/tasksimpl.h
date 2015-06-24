@@ -49,7 +49,7 @@ extern "C" {
  *  The following instantiates the information control block used to
  *  manage this class of objects.
  */
-RTEMS_TASKS_EXTERN Objects_Information _RTEMS_tasks_Information;
+RTEMS_TASKS_EXTERN Thread_Information _RTEMS_tasks_Information;
 
 /**
  *  @brief RTEMS Task Manager Initialization
@@ -88,7 +88,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_RTEMS_tasks_Allocate(void)
   _Thread_Kill_zombies();
 
   return (Thread_Control *)
-    _Objects_Allocate_unprotected( &_RTEMS_tasks_Information );
+    _Objects_Allocate_unprotected( &_RTEMS_tasks_Information.Objects );
 }
 
 /**

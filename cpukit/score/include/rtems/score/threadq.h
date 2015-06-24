@@ -52,6 +52,14 @@ typedef struct {
     RBTree_Control Priority;
   } Heads;
 
+  Chain_Control Free_chain;
+
+  Chain_Node Free_node;
+} Thread_queue_Heads;
+
+typedef struct {
+  Thread_queue_Heads *heads;
+
   /**
    * @brief Lock to protect this thread queue.
    *
@@ -76,17 +84,6 @@ typedef struct {
 typedef void ( *Thread_queue_Priority_change_operation )(
   Thread_Control     *the_thread,
   Priority_Control    new_priority,
-  Thread_queue_Queue *queue
-);
-
-/**
- * @brief Thread queue initialize operation.
- *
- * @param[in] queue The actual thread queue.
- *
- * @see _Thread_Wait_set_operations().
- */
-typedef void ( *Thread_queue_Initialize_operation )(
   Thread_queue_Queue *queue
 );
 
@@ -119,7 +116,7 @@ typedef void ( *Thread_queue_Extract_operation )(
 /**
  * @brief Thread queue first operation.
  *
- * @param[in] queue The actual thread queue.
+ * @param[in] heads The thread queue heads.
  *
  * @retval NULL No thread is present on the thread queue.
  * @retval first The first thread of the thread queue according to the insert
@@ -128,7 +125,7 @@ typedef void ( *Thread_queue_Extract_operation )(
  * @see _Thread_Wait_set_operations().
  */
 typedef Thread_Control *( *Thread_queue_First_operation )(
-  Thread_queue_Queue *queue
+  Thread_queue_Heads *heads
 );
 
 /**
@@ -148,13 +145,6 @@ typedef struct {
    * to be done during a priority change.
    */
   Thread_queue_Priority_change_operation priority_change;
-
-  /**
-   * @brief Thread queue initialize operation.
-   *
-   * Called by object initialization routines.
-   */
-  Thread_queue_Initialize_operation initialize;
 
   /**
    * @brief Thread queue enqueue operation.

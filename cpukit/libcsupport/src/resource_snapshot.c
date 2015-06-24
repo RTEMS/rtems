@@ -63,7 +63,7 @@ static const Objects_Information *const objects_info_table[] = {
   &_Dual_ported_memory_Information,
   &_Region_Information,
   &_Semaphore_Information,
-  &_RTEMS_tasks_Information,
+  &_RTEMS_tasks_Information.Objects,
   &_Timer_Information
   #ifdef RTEMS_POSIX_API
     ,
@@ -75,7 +75,7 @@ static const Objects_Information *const objects_info_table[] = {
     &_POSIX_RWLock_Information,
     &_POSIX_Semaphore_Information,
     &_POSIX_Spinlock_Information,
-    &_POSIX_Threads_Information,
+    &_POSIX_Threads_Information.Objects,
     &_POSIX_Timer_Information
   #endif
 };

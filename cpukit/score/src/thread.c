@@ -20,6 +20,7 @@
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/interr.h>
+#include <rtems/score/wkspace.h>
 
 #define THREAD_OFFSET_ASSERT( field ) \
   RTEMS_STATIC_ASSERT( \
@@ -39,6 +40,42 @@ THREAD_OFFSET_ASSERT( Timer );
 #if defined(RTEMS_MULTIPROCESSING)
 THREAD_OFFSET_ASSERT( receive_packet );
 #endif
+
+void _Thread_Initialize_information(
+  Thread_Information  *information,
+  Objects_APIs         the_api,
+  uint16_t             the_class,
+  uint32_t             maximum,
+  bool                 is_string,
+  uint32_t             maximum_name_length
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  bool                 supports_global
+#endif
+)
+{
+  _Objects_Initialize_information(
+    &information->Objects,
+    the_api,
+    the_class,
+    maximum,
+    _Thread_Control_size,
+    is_string,
+    maximum_name_length
+    #if defined(RTEMS_MULTIPROCESSING)
+      ,
+      supports_global,
+      NULL
+    #endif
+  );
+
+  _Freechain_Initialize(
+    &information->Free_thread_queue_heads,
+    _Workspace_Allocate_or_fatal_error,
+    _Objects_Maximum_per_allocation( maximum ),
+    sizeof( Thread_queue_Heads )
+  );
+}
 
 void _Thread_Handler_initialization(void)
 {
@@ -69,18 +106,16 @@ void _Thread_Handler_initialization(void)
    *  per CPU in an SMP system.  In addition, if this is a loosely
    *  coupled multiprocessing system, account for the MPCI Server Thread.
    */
-  _Objects_Initialize_information(
+  _Thread_Initialize_information(
     &_Thread_Internal_information,
     OBJECTS_INTERNAL_API,
     OBJECTS_INTERNAL_THREADS,
     _Thread_Get_maximum_internal_threads(),
-    _Thread_Control_size,       /* size of this object's control block */
     false,                      /* true if names for this object are strings */
     8                           /* maximum length of each object's name */
     #if defined(RTEMS_MULTIPROCESSING)
       ,
-      false,                      /* true if this is a global object class */
-      NULL                        /* Proxy extraction support callout */
+      false                       /* true if this is a global object class */
     #endif
   );
 

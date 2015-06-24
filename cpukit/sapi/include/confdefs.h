@@ -2969,6 +2969,8 @@ const rtems_libio_helper rtems_fs_init_helper =
 #define CONFIGURE_MEMORY_FOR_TASKS(_tasks, _number_FP_tasks) \
   ( \
     _Configure_Object_RAM(_tasks, sizeof(Configuration_Thread_control)) \
+      + _Configure_From_workspace(_Configure_Max_Objects(_tasks) \
+        * sizeof(Thread_queue_Heads)) \
       + _Configure_Max_Objects(_number_FP_tasks) \
         * _Configure_From_workspace(CONTEXT_FP_SIZE) \
   )

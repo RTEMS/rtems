@@ -177,7 +177,7 @@ rtems_status_code rtems_task_create(
   if ( is_global ) {
 
     _Objects_MP_Open(
-      &_RTEMS_tasks_Information,
+      &_RTEMS_tasks_Information.Objects,
       the_global_object,
       name,
       the_thread->Object.id

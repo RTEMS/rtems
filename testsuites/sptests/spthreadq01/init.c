@@ -36,10 +36,10 @@ static rtems_task Init(
   _Thread_Enable_dispatch();
   /* is there more to check? */
 
-  rtems_test_assert( _Chain_Is_empty( &fifo_queue.Queue.Heads.Fifo ) );
+  rtems_test_assert( fifo_queue.Queue.heads == NULL );
   rtems_test_assert( fifo_queue.operations == &_Thread_queue_Operations_FIFO );
 
-  rtems_test_assert( _RBTree_Is_empty( &fifo_queue.Queue.Heads.Priority ) );
+  rtems_test_assert( prio_queue.Queue.heads == NULL );
   rtems_test_assert(
     prio_queue.operations == &_Thread_queue_Operations_priority
   );

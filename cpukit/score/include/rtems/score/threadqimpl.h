@@ -33,6 +33,14 @@ extern "C" {
  */
 /**@{*/
 
+RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_initialize(
+  Thread_queue_Queue *queue
+)
+{
+  queue->heads = NULL;
+  _ISR_lock_Initialize( &queue->Lock, "Thread Queue" );
+}
+
 RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_acquire_critical(
   Thread_queue_Queue *queue,
   ISR_lock_Context   *lock_context
@@ -322,7 +330,13 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_queue_First_locked(
   Thread_queue_Control *the_thread_queue
 )
 {
-  return ( *the_thread_queue->operations->first )( &the_thread_queue->Queue );
+  Thread_queue_Heads *heads = the_thread_queue->Queue.heads;
+
+  if ( heads != NULL ) {
+    return ( *the_thread_queue->operations->first )( heads );
+  } else {
+    return NULL;
+  }
 }
 
 /**
@@ -375,9 +389,7 @@ void _Thread_queue_Initialize(
 #if defined(RTEMS_SMP)
   #define THREAD_QUEUE_FIFO_INITIALIZER( designator, name ) { \
       .Queue = { \
-        .Heads = { \
-          .Fifo = CHAIN_INITIALIZER_EMPTY( designator.Queue.Heads.Fifo ) \
-        }, \
+        .heads = NULL, \
         .Lock = ISR_LOCK_INITIALIZER( name ), \
       }, \
       .operations = &_Thread_queue_Operations_FIFO \
@@ -385,33 +397,19 @@ void _Thread_queue_Initialize(
 
   #define THREAD_QUEUE_PRIORITY_INITIALIZER( designator, name ) { \
       .Queue = { \
-        .Heads = { \
-          .Priority = RBTREE_INITIALIZER_EMPTY( \
-            designator.Queue.Heads.Priority \
-          ) \
-        }, \
+        .heads = NULL, \
         .Lock = ISR_LOCK_INITIALIZER( name ), \
       }, \
       .operations = &_Thread_queue_Operations_priority \
     }
 #else
   #define THREAD_QUEUE_FIFO_INITIALIZER( designator, name ) { \
-      .Queue = { \
-        .Heads = { \
-          .Fifo = CHAIN_INITIALIZER_EMPTY( designator.Queue.Heads.Fifo ) \
-        } \
-      }, \
+      .Queue = { .heads = NULL }, \
       .operations = &_Thread_queue_Operations_FIFO \
     }
 
   #define THREAD_QUEUE_PRIORITY_INITIALIZER( designator, name ) { \
-      .Queue = { \
-        .Heads = { \
-          .Priority = RBTREE_INITIALIZER_EMPTY( \
-            designator.Queue.Heads.Priority \
-          ) \
-        } \
-      }, \
+      .Queue = { .heads = NULL }, \
       .operations = &_Thread_queue_Operations_priority \
     }
 #endif

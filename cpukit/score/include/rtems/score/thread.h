@@ -349,6 +349,8 @@ typedef struct {
    * @see _Thread_Lock_set() and _Thread_Wait_set_operations().
    */
   const Thread_queue_Operations *operations;
+
+  Thread_queue_Heads *spare_heads;
 }   Thread_Wait_information;
 
 /**
