@@ -41,6 +41,7 @@
 
 #include <rtems/bspIo.h>
 #include <rtems/stackchk.h>
+#include <rtems/score/percpu.h>
 #include "internal.h"
 
 /*

@@ -24,7 +24,7 @@
 
 #include <stdbool.h> /* bool */
 
-#include <rtems/score/percpu.h> /* Thread_Control */
+#include <rtems/score/thread.h> /* Thread_Control */
 #include <rtems/bspIo.h>
 
 /**
