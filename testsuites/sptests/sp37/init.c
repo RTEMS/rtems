@@ -161,8 +161,8 @@ static void test_isr_level( void )
 
 #if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
 static const size_t lock_size =
-  offsetof( ISR_lock_Control, Lock.ticket_lock.Stats.name )
-    + sizeof( ((ISR_lock_Control *) 0)->Lock.ticket_lock.Stats.name );
+  offsetof( ISR_lock_Control, Lock.Stats.name )
+    + sizeof( ((ISR_lock_Control *) 0)->Lock.Stats.name );
 #else
 static const size_t lock_size = sizeof( ISR_lock_Control );
 #endif

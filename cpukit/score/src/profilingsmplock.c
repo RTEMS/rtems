@@ -21,19 +21,19 @@
 #if defined( RTEMS_PROFILING )
 SMP_lock_Stats_control _SMP_lock_Stats_control = {
   .Lock = {
-    .ticket_lock = {
+    .Ticket_lock = {
       .next_ticket = ATOMIC_INITIALIZER_UINT( 0U ),
-      .now_serving = ATOMIC_INITIALIZER_UINT( 0U ),
-      .Stats = {
-        .Node = CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN(
-          &_SMP_lock_Stats_control.Stats_chain
-        ),
-        .name = "SMP lock stats"
-      }
+      .now_serving = ATOMIC_INITIALIZER_UINT( 0U )
+    },
+    .Stats = {
+      .Node = CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN(
+        &_SMP_lock_Stats_control.Stats_chain
+      ),
+      .name = "SMP Lock Stats"
     }
   },
   .Stats_chain = CHAIN_INITIALIZER_ONE_NODE(
-    &_SMP_lock_Stats_control.Lock.ticket_lock.Stats.Node
+    &_SMP_lock_Stats_control.Lock.Stats.Node
   ),
   .Iterator_chain = CHAIN_INITIALIZER_EMPTY(
     _SMP_lock_Stats_control.Iterator_chain

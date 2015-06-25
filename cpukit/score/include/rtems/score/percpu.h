@@ -319,10 +319,17 @@ typedef struct Per_CPU_Control {
      */
     SMP_ticket_lock_Control Lock;
 
-    /**
-     * @brief Lock statistics context for the per-CPU lock.
-     */
-    SMP_lock_Stats_context Lock_stats_context;
+    #if defined( RTEMS_PROFILING )
+      /**
+       * @brief Lock statistics for the per-CPU lock.
+       */
+      SMP_lock_Stats Lock_stats;
+
+      /**
+       * @brief Lock statistics context for the per-CPU lock.
+       */
+      SMP_lock_Stats_context Lock_stats_context;
+    #endif
 
     /**
      * @brief Context for the Giant lock acquire and release pair of this
@@ -385,6 +392,7 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 #define _Per_CPU_Acquire( cpu ) \
   _SMP_ticket_lock_Acquire( \
     &( cpu )->Lock, \
+    &( cpu )->Lock_stats, \
     &( cpu )->Lock_stats_context \
   )
 #else
@@ -398,6 +406,7 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 #define _Per_CPU_Release( cpu ) \
   _SMP_ticket_lock_Release( \
     &( cpu )->Lock, \
+    &( cpu )->Lock_stats, \
     &( cpu )->Lock_stats_context \
   )
 #else
