@@ -19,6 +19,7 @@
 #define _RTEMS_SCORE_HEAP_H
 
 #include <rtems/score/cpu.h>
+#include <rtems/score/thread.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -135,8 +136,6 @@ typedef struct Heap_Block Heap_Block;
 #ifndef HEAP_PROTECTION
   #define HEAP_PROTECTION_HEADER_SIZE 0
 #else
-  #include <rtems/score/thread.h>
-
   #define HEAP_PROTECTOR_COUNT 2
 
   #define HEAP_BEGIN_PROTECTOR_0 ((uintptr_t) 0xfd75a98f)
