@@ -73,10 +73,6 @@ struct Scheduler_Context;
 
 #if defined( RTEMS_SMP )
 
-#if CPU_USE_DEFERRED_FP_SWITCH == TRUE
-  #error "deferred FP switch not implemented for SMP"
-#endif
-
 /**
  * @brief State of a processor.
  *
