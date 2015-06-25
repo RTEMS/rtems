@@ -21,10 +21,8 @@
 
 #include <rtems/score/chain.h>
 #include <rtems/score/isrlock.h>
-#include <rtems/score/percpu.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/rbtree.h>
-#include <rtems/score/states.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,6 +38,8 @@ extern "C" {
  *  discipline.
  */
 /**@{*/
+
+typedef struct Thread_Control Thread_Control;
 
 typedef struct Thread_queue_Control Thread_queue_Control;
 

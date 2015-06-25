@@ -28,7 +28,6 @@
 #endif
 #include <rtems/score/isrlock.h>
 #include <rtems/score/object.h>
-#include <rtems/score/percpu.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/resource.h>
 #include <rtems/score/stack.h>
@@ -39,6 +38,8 @@
 #if defined(RTEMS_SMP)
   #include <rtems/score/cpuset.h>
 #endif
+
+struct Per_CPU_Control;
 
 struct Scheduler_Control;
 
@@ -453,10 +454,10 @@ typedef struct Thread_Action Thread_Action;
  * @param[in] level The ISR level for _Thread_Action_release_and_ISR_enable().
  */
 typedef void ( *Thread_Action_handler )(
-  Thread_Control  *thread,
-  Thread_Action   *action,
-  Per_CPU_Control *cpu,
-  ISR_Level        level
+  Thread_Control         *thread,
+  Thread_Action          *action,
+  struct Per_CPU_Control *cpu,
+  ISR_Level               level
 );
 
 /**
@@ -611,14 +612,14 @@ typedef struct {
   /**
    * @brief The processor assigned by the current scheduler.
    */
-  Per_CPU_Control *cpu;
+  struct Per_CPU_Control *cpu;
 
 #if defined(RTEMS_DEBUG)
   /**
    * @brief The processor on which this thread executed the last time or is
    * executing.
    */
-  Per_CPU_Control *debug_real_cpu;
+  struct Per_CPU_Control *debug_real_cpu;
 #endif
 #endif
 } Thread_Scheduler_control;
@@ -667,7 +668,7 @@ typedef struct {
 /**
  *  This structure defines the Thread Control Block (TCB).
  */
-struct Thread_Control_struct {
+struct Thread_Control {
   /** This field is the object management structure for each thread. */
   Objects_Control          Object;
   /** This field is the current execution state of this thread. */
@@ -849,34 +850,6 @@ typedef void (*rtems_per_thread_routine)( Thread_Control * );
 void rtems_iterate_over_all_threads(
   rtems_per_thread_routine routine
 );
-
-/**
- * @brief Returns the thread control block of the executing thread.
- *
- * This function can be called in any context.  On SMP configurations
- * interrupts are disabled to ensure that the processor index is used
- * consistently.
- *
- * @return The thread control block of the executing thread.
- */
-RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get_executing( void )
-{
-  Thread_Control *executing;
-
-  #if defined( RTEMS_SMP )
-    ISR_Level level;
-
-    _ISR_Disable_without_giant( level );
-  #endif
-
-  executing = _Thread_Executing;
-
-  #if defined( RTEMS_SMP )
-    _ISR_Enable_without_giant( level );
-  #endif
-
-  return executing;
-}
 
 /**
  * @brief Thread control add-on.

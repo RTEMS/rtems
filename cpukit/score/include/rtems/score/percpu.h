@@ -51,10 +51,7 @@ extern "C" {
 
 #if !defined( ASM )
 
-#ifndef __THREAD_CONTROL_DEFINED__
-#define __THREAD_CONTROL_DEFINED__
-typedef struct Thread_Control_struct Thread_Control;
-#endif
+struct Thread_Control;
 
 struct Scheduler_Context;
 
@@ -276,7 +273,7 @@ typedef struct Per_CPU_Control {
    * configurations use _Thread_Is_executing_on_a_processor() to figure out if
    * a thread context is executing on a processor.
    */
-  Thread_Control *executing;
+  struct Thread_Control *executing;
 
   /**
    * @brief This is the heir thread for this processor.
@@ -290,7 +287,7 @@ typedef struct Per_CPU_Control {
    *
    * @see _Thread_Get_heir_and_make_it_executing().
    */
-  Thread_Control *heir;
+  struct Thread_Control *heir;
 
   /**
    * @brief This is set to true when this processor needs to run the
@@ -594,6 +591,34 @@ bool _Per_CPU_State_wait_for_non_initial_state(
   _Per_CPU_Get()->dispatch_necessary
 #define _Thread_Time_of_last_context_switch \
   _Per_CPU_Get()->time_of_last_context_switch
+
+/**
+ * @brief Returns the thread control block of the executing thread.
+ *
+ * This function can be called in any context.  On SMP configurations
+ * interrupts are disabled to ensure that the processor index is used
+ * consistently.
+ *
+ * @return The thread control block of the executing thread.
+ */
+RTEMS_INLINE_ROUTINE struct Thread_Control *_Thread_Get_executing( void )
+{
+  struct Thread_Control *executing;
+
+  #if defined( RTEMS_SMP )
+    ISR_Level level;
+
+    _ISR_Disable_without_giant( level );
+  #endif
+
+  executing = _Thread_Executing;
+
+  #if defined( RTEMS_SMP )
+    _ISR_Enable_without_giant( level );
+  #endif
+
+  return executing;
+}
 
 /**@}*/
 

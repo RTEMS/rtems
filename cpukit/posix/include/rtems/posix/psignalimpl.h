@@ -33,6 +33,7 @@
 #include <rtems/posix/sigset.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/isrlock.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/threadqimpl.h>
 
 #define _States_Is_interruptible_signal( _states ) \

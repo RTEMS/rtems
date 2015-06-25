@@ -18,6 +18,7 @@
 #define _RTEMS_RTEMS_SIGNALIMPL_H
 
 #include <rtems/rtems/signal.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/thread.h>
 
 #ifdef __cplusplus
