@@ -14,6 +14,7 @@
 #include <rtems.h>
 #include <stdlib.h>
 #include <rtems/libio.h>
+#include <rtems/score/percpu.h>
 #include <bsp.h>
 
 #include <libcpu/cecRegs.h>

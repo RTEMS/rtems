@@ -18,6 +18,7 @@
 
 #include <rtems/profiling.h>
 #include <rtems/counter.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/smplock.h>
 #include <rtems.h>
 

@@ -27,6 +27,7 @@
  */
 #include <rtems.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/wkspace.h>
 
 #ifdef CONFIGURE_DISABLE_BSP_SETTINGS

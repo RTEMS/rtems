@@ -16,9 +16,9 @@
   #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/nios2-utility.h>
+#include <rtems/score/percpu.h>
 
 bool _ISR_Is_in_progress( void )
 {

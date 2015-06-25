@@ -19,6 +19,7 @@
 
 #include <bsp.h>
 #include <rtems/clockdrv.h>
+#include <rtems/score/percpu.h>
 
 #ifdef Clock_driver_nanoseconds_since_last_tick
 #error "Update driver to use the timecounter instead of nanoseconds extension"

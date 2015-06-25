@@ -30,6 +30,7 @@
 #include <rtems/bspIo.h>                /* for printk() */
 #include <libcpu/powerpc-utility.h>
 #include <rtems/timecounter.h>
+#include <rtems/score/percpu.h>
 
 #include <bspopts.h>   /* for CLOCK_DRIVER_USE_FAST_IDLE */
 

@@ -24,6 +24,7 @@
 #include <rtems/score/idtr.h>
 
 #include <rtems/bspIo.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/thread.h>
 
 #define I386_ASSERT_OFFSET(field, off) \

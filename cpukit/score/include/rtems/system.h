@@ -20,7 +20,7 @@
 #ifndef _RTEMS_SYSTEM_H
 #define _RTEMS_SYSTEM_H
 
-#include <rtems/score/percpu.h>
+#include <rtems/score/cpu.h>
 
 /**
  *  @defgroup ScoreSystem System Information

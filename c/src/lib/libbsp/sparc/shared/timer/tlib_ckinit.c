@@ -13,6 +13,7 @@
 
 #include <rtems.h>
 #include <rtems/timecounter.h>
+#include <rtems/score/percpu.h>
 #include <stdlib.h>
 #include <bsp.h>
 #include <bsp/tlib.h>

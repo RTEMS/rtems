@@ -18,8 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/corespinlockimpl.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
 

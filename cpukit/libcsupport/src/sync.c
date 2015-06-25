@@ -29,6 +29,7 @@ int fdatasync(int);        /* still not always prototyped */
 #include <stdio.h>
 
 #include <rtems.h>
+#include <rtems/score/percpu.h>
 
 /* XXX check standards -- Linux version appears to be void */
 void _fwalk(struct _reent *, void *);

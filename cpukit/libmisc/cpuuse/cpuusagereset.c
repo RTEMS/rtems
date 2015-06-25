@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/cpuuse.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 

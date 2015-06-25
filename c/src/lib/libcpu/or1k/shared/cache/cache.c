@@ -12,6 +12,7 @@
 #include <rtems/score/cpu.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/or1k-utility.h>
+#include <rtems/score/percpu.h>
 #include <libcpu/cache.h>
 
 static inline void _CPU_OR1K_Cache_enable_data(void)

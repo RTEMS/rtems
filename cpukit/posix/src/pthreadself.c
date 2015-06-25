@@ -21,9 +21,8 @@
 #endif
 
 #include <pthread.h>
-#include <errno.h>
 
-#include <rtems/system.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/thread.h>
 
 pthread_t pthread_self( void )

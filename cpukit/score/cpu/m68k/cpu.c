@@ -17,8 +17,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/tls.h>
 
 #if defined( __mcoldfire__ ) && ( M68K_HAS_FPU == 1 )

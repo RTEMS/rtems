@@ -52,6 +52,7 @@
 #include <libcpu/spr.h>
 #include <bsp/pci.h>
 #include <rtems/bspIo.h>
+#include <rtems/score/percpu.h>
 
 #include <bsp/bspException.h>
 

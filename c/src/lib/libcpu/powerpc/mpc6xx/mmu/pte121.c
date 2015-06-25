@@ -63,6 +63,7 @@
 #ifndef DEBUG_MAIN
 #include <rtems.h>
 #include <rtems/bspIo.h>
+#include <rtems/score/percpu.h>
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
 #ifdef	DEBUG_EXC

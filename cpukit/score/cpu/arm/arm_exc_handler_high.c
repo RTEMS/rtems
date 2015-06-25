@@ -32,6 +32,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/cpu.h>
 
 #ifdef ARM_MULTILIB_ARCH_V4

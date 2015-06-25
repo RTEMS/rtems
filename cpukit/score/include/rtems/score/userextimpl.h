@@ -20,6 +20,7 @@
 
 #include <rtems/score/userext.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/percpu.h>
 
 #ifdef __cplusplus
 extern "C" {
