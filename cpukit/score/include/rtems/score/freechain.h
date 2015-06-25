@@ -93,7 +93,8 @@ void *_Freechain_Get(
  * @brief Puts a node back onto the freechain.
  *
  * @param[in] freechain The freechain control.
- * @param[in] node The node to put back.
+ * @param[in] node The node to put back.  The node may be @c NULL, in this case
+ *   the function does nothing.
  */
 void _Freechain_Put(
   Freechain_Control *freechain,

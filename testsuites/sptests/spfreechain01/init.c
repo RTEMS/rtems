@@ -40,6 +40,8 @@ static rtems_task Init(rtems_task_argument ignored)
 
     /* check whether freechain put and get works correctly*/
 
+    _Freechain_Put(&fc, NULL);
+
     puts( "INIT - Get node from freechain - OK" );
     node = _Freechain_Get(&fc, malloc, 1, sizeof(test_node));
     node->x = 1;
