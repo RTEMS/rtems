@@ -115,7 +115,7 @@ typedef struct {
 void _Scheduler_SMP_Start_idle(
   const Scheduler_Control *scheduler,
   Thread_Control *thread,
-  Per_CPU_Control *cpu
+  struct Per_CPU_Control *cpu
 );
 
 /** @} */

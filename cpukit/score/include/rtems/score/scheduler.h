@@ -19,7 +19,6 @@
 #ifndef _RTEMS_SCORE_SCHEDULER_H
 #define _RTEMS_SCORE_SCHEDULER_H
 
-#include <rtems/score/percpu.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/thread.h>
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
@@ -29,6 +28,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+struct Per_CPU_Control;
 
 /**
  *  @defgroup ScoreScheduler Scheduler Handler
@@ -148,7 +149,7 @@ typedef struct {
   void ( *start_idle )(
     const Scheduler_Control *,
     Thread_Control *,
-    Per_CPU_Control *
+    struct Per_CPU_Control *
   );
 
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
@@ -505,7 +506,7 @@ void _Scheduler_default_Tick(
 void _Scheduler_default_Start_idle(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
-  Per_CPU_Control         *cpu
+  struct Per_CPU_Control  *cpu
 );
 
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
