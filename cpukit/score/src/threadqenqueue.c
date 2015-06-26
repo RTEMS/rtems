@@ -168,7 +168,7 @@ void _Thread_queue_Extract_critical(
 void _Thread_queue_Extract( Thread_Control *the_thread )
 {
   ISR_lock_Context    lock_context;
-  ISR_lock_Control   *lock;
+  void               *lock;
   Thread_queue_Queue *queue;
 
   lock = _Thread_Lock_acquire( the_thread, &lock_context );

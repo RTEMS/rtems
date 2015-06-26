@@ -60,4 +60,7 @@ void _Thread_queue_Initialize(
   the_thread_queue->operations = operations;
 
   _Thread_queue_Queue_initialize( &the_thread_queue->Queue );
+#if defined(RTEMS_SMP)
+  _SMP_lock_Stats_initialize( &the_thread_queue->Lock_stats, "Thread Queue" );
+#endif
 }

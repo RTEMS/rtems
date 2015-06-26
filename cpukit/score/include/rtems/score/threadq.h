@@ -75,7 +75,9 @@ typedef struct {
    * @see _Thread_queue_Acquire(), _Thread_queue_Acquire_critical() and
    * _Thread_queue_Release().
    */
-  ISR_LOCK_MEMBER( Lock )
+#if defined(RTEMS_SMP)
+  SMP_ticket_lock_Control Lock;
+#endif
 } Thread_queue_Queue;
 
 /**
@@ -190,6 +192,10 @@ typedef struct {
    * @brief The actual thread queue.
    */
   Thread_queue_Queue Queue;
+
+#if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
+  SMP_lock_Stats Lock_stats;
+#endif
 
   /**
    * @brief The operations for the actual thread queue.

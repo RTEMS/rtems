@@ -38,23 +38,53 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_initialize(
 )
 {
   queue->heads = NULL;
-  _ISR_lock_Initialize( &queue->Lock, "Thread Queue" );
+#if defined(RTEMS_SMP)
+  _SMP_ticket_lock_Initialize( &queue->Lock );
+#endif
 }
 
-RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_acquire_critical(
+RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_do_acquire_critical(
   Thread_queue_Queue *queue,
+#if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
+  SMP_lock_Stats     *lock_stats,
+#endif
   ISR_lock_Context   *lock_context
 )
 {
-  _ISR_lock_Acquire( &queue->Lock, lock_context );
+#if defined(RTEMS_SMP)
+  _SMP_ticket_lock_Acquire(
+    &queue->Lock,
+    lock_stats,
+    &lock_context->Lock_context.Stats_context
+  );
+#else
+  (void) queue;
+  (void) lock_context;
+#endif
 }
+
+#if defined(RTEMS_SMP) && defined( RTEMS_PROFILING )
+  #define \
+    _Thread_queue_Queue_acquire_critical( queue, lock_stats, lock_context ) \
+    _Thread_queue_Queue_do_acquire_critical( queue, lock_stats, lock_context )
+#else
+  #define \
+    _Thread_queue_Queue_acquire_critical( queue, lock_stats, lock_context ) \
+    _Thread_queue_Queue_do_acquire_critical( queue, lock_context )
+#endif
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_release(
   Thread_queue_Queue *queue,
   ISR_lock_Context   *lock_context
 )
 {
-  _ISR_lock_Release_and_ISR_enable( &queue->Lock, lock_context );
+#if defined(RTEMS_SMP)
+  _SMP_ticket_lock_Release(
+    &queue->Lock,
+    &lock_context->Lock_context.Stats_context
+  );
+#endif
+  _ISR_lock_ISR_enable( lock_context );
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire_critical(
@@ -64,6 +94,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire_critical(
 {
   _Thread_queue_Queue_acquire_critical(
     &the_thread_queue->Queue,
+    &the_thread_queue->Lock_stats,
     lock_context
   );
 }
@@ -82,7 +113,10 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Release(
   ISR_lock_Context     *lock_context
 )
 {
-  _Thread_queue_Queue_release( &the_thread_queue->Queue, lock_context );
+  _Thread_queue_Queue_release(
+    &the_thread_queue->Queue,
+    lock_context
+  );
 }
 
 /**
@@ -397,11 +431,29 @@ void _Thread_queue_Initialize(
   Thread_queue_Disciplines  the_discipline
 );
 
-#if defined(RTEMS_SMP)
+#if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
   #define THREAD_QUEUE_FIFO_INITIALIZER( designator, name ) { \
       .Queue = { \
         .heads = NULL, \
-        .Lock = ISR_LOCK_INITIALIZER( name ), \
+        .Lock = SMP_TICKET_LOCK_INITIALIZER, \
+      }, \
+      .Lock_stats = SMP_LOCK_STATS_INITIALIZER( name ), \
+      .operations = &_Thread_queue_Operations_FIFO \
+    }
+
+  #define THREAD_QUEUE_PRIORITY_INITIALIZER( designator, name ) { \
+      .Queue = { \
+        .heads = NULL, \
+        .Lock = SMP_TICKET_LOCK_INITIALIZER, \
+      }, \
+      .Lock_stats = SMP_LOCK_STATS_INITIALIZER( name ), \
+      .operations = &_Thread_queue_Operations_priority \
+    }
+#elif defined(RTEMS_SMP)
+  #define THREAD_QUEUE_FIFO_INITIALIZER( designator, name ) { \
+      .Queue = { \
+        .heads = NULL, \
+        .Lock = SMP_TICKET_LOCK_INITIALIZER, \
       }, \
       .operations = &_Thread_queue_Operations_FIFO \
     }
@@ -409,7 +461,7 @@ void _Thread_queue_Initialize(
   #define THREAD_QUEUE_PRIORITY_INITIALIZER( designator, name ) { \
       .Queue = { \
         .heads = NULL, \
-        .Lock = ISR_LOCK_INITIALIZER( name ), \
+        .Lock = SMP_TICKET_LOCK_INITIALIZER, \
       }, \
       .operations = &_Thread_queue_Operations_priority \
     }
@@ -429,7 +481,10 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Destroy(
   Thread_queue_Control *the_thread_queue
 )
 {
-  _ISR_lock_Destroy( &the_thread_queue->Queue.Lock );
+#if defined(RTEMS_SMP)
+  _SMP_ticket_lock_Destroy( &the_thread_queue->Queue.Lock );
+  _SMP_lock_Stats_destroy( &the_thread_queue->Lock_stats );
+#endif
 }
 
 /**

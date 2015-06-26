@@ -36,7 +36,7 @@ static void _Thread_Do_timeout( Thread_Control *the_thread )
 void _Thread_Timeout( Objects_Id id, void *arg )
 {
   Thread_Control    *the_thread;
-  ISR_lock_Control  *thread_lock;
+  void              *thread_lock;
   ISR_lock_Context   lock_context;
   Thread_Wait_flags  wait_flags;
   Thread_Wait_flags  wait_class;

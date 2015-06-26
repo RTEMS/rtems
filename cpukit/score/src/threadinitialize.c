@@ -204,7 +204,8 @@ bool _Thread_Initialize(
   _Resource_Node_initialize( &the_thread->Resource_node );
   _CPU_Context_Set_is_executing( &the_thread->Registers, false );
   the_thread->Lock.current = &the_thread->Lock.Default;
-  _ISR_lock_Initialize( &the_thread->Lock.Default, "Thread Lock Default");
+  _SMP_ticket_lock_Initialize( &the_thread->Lock.Default );
+  _SMP_lock_Stats_initialize( &the_thread->Lock.Stats, "Thread Lock" );
   _SMP_lock_Stats_initialize( &the_thread->Potpourri_stats, "Thread Potpourri" );
   _Atomic_Init_uint(&the_thread->Lock.generation, 0);
 #endif

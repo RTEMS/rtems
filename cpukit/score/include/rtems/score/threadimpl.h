@@ -970,6 +970,34 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
 }
 
 /**
+ * @brief Acquires the default thread lock inside a critical section
+ * (interrupts disabled).
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] lock_context The lock context used for the corresponding lock
+ * release.
+ *
+ * @see _Thread_Lock_release_default().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Lock_acquire_default_critical(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _Assert( _ISR_Get_level() != 0 );
+#if defined(RTEMS_SMP)
+  _SMP_ticket_lock_Acquire(
+    &the_thread->Lock.Default,
+    &_Thread_Executing->Lock.Stats,
+    &lock_context->Lock_context.Stats_context
+  );
+#else
+  (void) the_thread;
+  (void) lock_context;
+#endif
+}
+
+/**
  * @brief Acquires the default thread lock and returns the executing thread.
  *
  * @param[in] lock_context The lock context used for the corresponding lock
@@ -987,28 +1015,9 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Lock_acquire_default_for_executing(
 
   _ISR_lock_ISR_disable( lock_context );
   executing = _Thread_Executing;
-  _ISR_lock_Acquire( &executing->Lock.Default, lock_context );
+  _Thread_Lock_acquire_default_critical( executing, lock_context );
 
   return executing;
-}
-
-/**
- * @brief Acquires the default thread lock inside a critical section
- * (interrupts disabled).
- *
- * @param[in] the_thread The thread.
- * @param[in] lock_context The lock context used for the corresponding lock
- * release.
- *
- * @see _Thread_Lock_release_default().
- */
-RTEMS_INLINE_ROUTINE void _Thread_Lock_acquire_default_critical(
-  Thread_Control   *the_thread,
-  ISR_lock_Context *lock_context
-)
-{
-  _Assert( _ISR_Get_level() != 0 );
-  _ISR_lock_Acquire( &the_thread->Lock.Default, lock_context );
 }
 
 /**
@@ -1025,7 +1034,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_acquire_default(
   ISR_lock_Context *lock_context
 )
 {
-  _ISR_lock_ISR_disable_and_acquire( &the_thread->Lock.Default, lock_context );
+  _ISR_lock_ISR_disable( lock_context );
+  _Thread_Lock_acquire_default_critical( the_thread, lock_context );
 }
 
 /**
@@ -1039,11 +1049,19 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_acquire_default(
  * acquire.
  */
 RTEMS_INLINE_ROUTINE void _Thread_Lock_release_critical(
-  ISR_lock_Control *lock,
+  void             *lock,
   ISR_lock_Context *lock_context
 )
 {
-  _ISR_lock_Release( lock, lock_context );
+#if defined(RTEMS_SMP)
+  _SMP_ticket_lock_Release(
+    lock,
+    &lock_context->Lock_context.Stats_context
+  );
+#else
+  (void) lock;
+  (void) lock_context;
+#endif
 }
 
 /**
@@ -1053,7 +1071,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_release_critical(
  * @param[in] lock_context The lock context used for _Thread_Lock_acquire().
  */
 RTEMS_INLINE_ROUTINE void _Thread_Lock_release(
-  ISR_lock_Control *lock,
+  void             *lock,
   ISR_lock_Context *lock_context
 )
 {
@@ -1110,13 +1128,13 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_release_default(
  *
  * @return The lock required by _Thread_Lock_release().
  */
-RTEMS_INLINE_ROUTINE ISR_lock_Control *_Thread_Lock_acquire(
+RTEMS_INLINE_ROUTINE void *_Thread_Lock_acquire(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
 {
 #if defined(RTEMS_SMP)
-  ISR_lock_Control *lock;
+  SMP_ticket_lock_Control *lock;
 
   while ( true ) {
     uint32_t my_generation;
@@ -1131,7 +1149,11 @@ RTEMS_INLINE_ROUTINE ISR_lock_Control *_Thread_Lock_acquire(
     _Atomic_Fence( ATOMIC_ORDER_ACQUIRE );
 
     lock = the_thread->Lock.current;
-    _ISR_lock_Acquire( lock, lock_context );
+    _SMP_ticket_lock_Acquire(
+      lock,
+      &_Thread_Executing->Lock.Stats,
+      &lock_context->Lock_context.Stats_context
+    );
 
     /*
      * Ensure that we read the second lock generation after we obtained our
@@ -1160,8 +1182,8 @@ RTEMS_INLINE_ROUTINE ISR_lock_Control *_Thread_Lock_acquire(
  * instead.
  */
 RTEMS_INLINE_ROUTINE void _Thread_Lock_set_unprotected(
-  Thread_Control   *the_thread,
-  ISR_lock_Control *new_lock
+  Thread_Control          *the_thread,
+  SMP_ticket_lock_Control *new_lock
 )
 {
   the_thread->Lock.current = new_lock;
@@ -1196,8 +1218,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_set_unprotected(
  */
 #if defined(RTEMS_SMP)
 RTEMS_INLINE_ROUTINE void _Thread_Lock_set(
-  Thread_Control   *the_thread,
-  ISR_lock_Control *new_lock
+  Thread_Control          *the_thread,
+  SMP_ticket_lock_Control *new_lock
 )
 {
   ISR_lock_Context lock_context;

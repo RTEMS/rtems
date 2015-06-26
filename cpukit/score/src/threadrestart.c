@@ -129,7 +129,8 @@ static void _Thread_Free( Thread_Control *the_thread )
   _Workspace_Free( the_thread->Start.tls_area );
 
 #if defined(RTEMS_SMP)
-  _ISR_lock_Destroy( &the_thread->Lock.Default );
+  _SMP_ticket_lock_Destroy( &the_thread->Lock.Default );
+  _SMP_lock_Stats_destroy( &the_thread->Lock.Stats );
   _SMP_lock_Stats_destroy( &the_thread->Potpourri_stats );
 #endif
 

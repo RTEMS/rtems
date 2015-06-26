@@ -651,14 +651,30 @@ typedef struct  {
 typedef struct {
   /**
    * @brief The current thread lock.
+   *
+   * This is a plain ticket lock without SMP lock statistics support.  This
+   * enables external libraries to use thread locks since they are independent
+   * of the actual RTEMS build configuration, e.g. profiling enabled or
+   * disabled.
    */
-  ISR_lock_Control *current;
+  SMP_ticket_lock_Control *current;
 
   /**
    * @brief The default thread lock in case the thread is not blocked on a
    * resource.
    */
-  ISR_lock_Control Default;
+  SMP_ticket_lock_Control Default;
+
+#if defined(RTEMS_PROFILING)
+  /**
+   * @brief The thread lock statistics.
+   *
+   * These statistics are used by the executing thread in case it acquires a
+   * thread lock.  Thus the statistics are an aggregation of acquire and
+   * release operations of diffent locks.
+   */
+  SMP_lock_Stats Stats;
+#endif
 
   /**
    * @brief Generation number to invalidate stale locks.
