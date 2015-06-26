@@ -9,10 +9,10 @@
 
 This chapter discusses the
 @uref{http://en.wikipedia.org/wiki/ARM_architecture,ARM architecture}
-dependencies in this port of RTEMS.  The ARM family has a wide variety of
-implementations by a wide range of vendors.  Consequently, there are many, many
-CPU models within it.  Currently the ARMv5 (and compatible) architecture
-version as defined in the @code{ARMv5 Architecture Reference Manual} is supported by RTEMS.
+dependencies in this port of RTEMS.  The ARMv4T (and compatible), ARMv7-A,
+ARMv7-R and ARMv7-M architecture versions are supported by RTEMS.  Processors
+with a MMU use a static configuration which is set up during system start.  SMP
+is supported.
 
 @subheading Architecture Documents
 
@@ -121,7 +121,7 @@ care about the MMU if necessary.
 
 @section Interrupt Processing
 
-The ARMv5 (and compatible) architecture has seven exception types:
+The ARMv4T (and compatible) architecture has seven exception types:
 
 @itemize @bullet
 
@@ -139,6 +139,16 @@ Of these types only the IRQ has explicit operating system support.  It is
 intentional that the FIQ is not supported by the operating system.  Without
 operating system support for the FIQ it is not necessary to disable them during
 critical sections of the system.
+
+The ARMv7-M architecture has a completely different exception model.  Here
+interrupts are disabled with a write of 0x80 to the @code{basepri_max}
+register.  This means that all exceptions and interrupts with a priority value
+of greater than or equal to 0x80 are disabled.  Thus exceptions and interrupts
+with a priority value of less than 0x80 are non-maskable with respect to the
+operating system and therefore must not use operating system services.  Several
+support libraries of chip vendors implicitly shift the priority value somehow
+before the value is written to the NVIC IPR register.  This can easily lead to
+confusion.
 
 @subsection Interrupt Levels
 
