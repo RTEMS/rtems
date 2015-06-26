@@ -32,7 +32,7 @@ void arm_cp15_set_exception_handler(
       uint32_t ctrl;
       rtems_interrupt_level level;
 
-      rtems_interrupt_disable(level);
+      rtems_interrupt_local_disable(level);
 
       ctrl = arm_cp15_mmu_disable(cls);
 
@@ -50,7 +50,7 @@ void arm_cp15_set_exception_handler(
 
       arm_cp15_set_control(ctrl);
 
-      rtems_interrupt_enable(level);
+      rtems_interrupt_local_enable(level);
     }
   }
 }
