@@ -155,6 +155,11 @@ typedef struct {
    * This value is used to measure the lock section time.
    */
   CPU_Counter_ticks acquire_instant;
+
+  /**
+   * @brief The lock stats used for the last lock acquire.
+   */
+  SMP_lock_Stats *stats;
 } SMP_lock_Stats_context;
 
 /**
@@ -188,13 +193,11 @@ static inline void _SMP_lock_Stats_initialize(
 static inline void _SMP_lock_Stats_destroy( SMP_lock_Stats *stats );
 
 /**
- * @brief Destroys an SMP lock statistics block.
+ * @brief Updates an SMP lock statistics block during a lock release.
  *
- * @param[in] stats The SMP lock statistics block.
  * @param[in] stats_context The SMP lock statistics context.
  */
 static inline void _SMP_lock_Stats_release_update(
-  SMP_lock_Stats *stats,
   const SMP_lock_Stats_context *stats_context
 );
 
@@ -308,6 +311,8 @@ static inline void _SMP_ticket_lock_Do_acquire(
     initial_queue_length = SMP_LOCK_STATS_CONTENTION_COUNTS - 1;
   }
   ++stats->contention_counts[initial_queue_length];
+
+  stats_context->stats = stats;
 #endif
 }
 
@@ -334,7 +339,6 @@ static inline void _SMP_ticket_lock_Do_release(
   SMP_ticket_lock_Control *lock
 #if defined( RTEMS_PROFILING )
   ,
-  SMP_lock_Stats *stats,
   const SMP_lock_Stats_context *stats_context
 #endif
 )
@@ -344,7 +348,7 @@ static inline void _SMP_ticket_lock_Do_release(
   unsigned int next_ticket = current_ticket + 1U;
 
 #if defined( RTEMS_PROFILING )
-  _SMP_lock_Stats_release_update( stats, stats_context );
+  _SMP_lock_Stats_release_update( stats_context );
 #endif
 
   _Atomic_Store_uint( &lock->now_serving, next_ticket, ATOMIC_ORDER_RELEASE );
@@ -354,14 +358,13 @@ static inline void _SMP_ticket_lock_Do_release(
  * @brief Releases an SMP ticket lock.
  *
  * @param[in] lock The SMP ticket lock control.
- * @param[in] stats The SMP lock statistics.
  * @param[in] stats_context The SMP lock statistics context.
  */
 #if defined( RTEMS_PROFILING )
-  #define _SMP_ticket_lock_Release( lock, stats, stats_context ) \
-    _SMP_ticket_lock_Do_release( lock, stats, stats_context )
+  #define _SMP_ticket_lock_Release( lock, stats_context ) \
+    _SMP_ticket_lock_Do_release( lock, stats_context )
 #else
-  #define _SMP_ticket_lock_Release( lock, stats, stats_context ) \
+  #define _SMP_ticket_lock_Release( lock, stats_context ) \
     _SMP_ticket_lock_Do_release( lock )
 #endif
 
@@ -502,7 +505,6 @@ static inline void _SMP_lock_Release(
   (void) context;
   _SMP_ticket_lock_Release(
     &lock->Ticket_lock,
-    &lock->Stats,
     &context->Stats_context
   );
 }
@@ -677,10 +679,10 @@ static inline void _SMP_lock_Stats_destroy( SMP_lock_Stats *stats )
 }
 
 static inline void _SMP_lock_Stats_release_update(
-  SMP_lock_Stats *stats,
   const SMP_lock_Stats_context *stats_context
 )
 {
+  SMP_lock_Stats *stats = stats_context->stats;
   CPU_Counter_ticks first = stats_context->acquire_instant;
   CPU_Counter_ticks second = _CPU_Counter_read();
   CPU_Counter_ticks delta = _CPU_Counter_difference( second, first );

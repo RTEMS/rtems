@@ -406,7 +406,6 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 #define _Per_CPU_Release( cpu ) \
   _SMP_ticket_lock_Release( \
     &( cpu )->Lock, \
-    &( cpu )->Lock_stats, \
     &( cpu )->Lock_stats_context \
   )
 #else
