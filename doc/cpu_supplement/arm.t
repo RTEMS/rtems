@@ -152,10 +152,9 @@ confusion.
 
 @subsection Interrupt Levels
 
-The RTEMS interrupt level mapping scheme for the ARM is not a numeric level as
-on most RTEMS ports.  It is a bit mapping that corresponds the enable bit
-postions in the Current Program Status Register (CPSR).  There are only two
-levels: IRQ enabled and IRQ disabled.
+There are exactly two interrupt levels on ARM with respect to RTEMS.  Level
+zero corresponds to interrupts enabled.  Level one corresponds to interrupts
+disabled.
  
 @subsection Interrupt Stack
 
