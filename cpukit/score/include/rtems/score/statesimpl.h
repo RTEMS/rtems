@@ -86,6 +86,8 @@ extern "C" {
 #define STATES_RESTARTING                      0x800000
 /** This macro corresponds to a task waiting for a join. */
 #define STATES_WAITING_FOR_JOIN                0x1000000
+/** This macro corresponds to a task waiting for a <sys/lock.h> mutex. */
+#define STATES_WAITING_FOR_SYS_LOCK_MUTEX      0x2000000
 
 /** This macro corresponds to a task which is in an interruptible
  *  blocking state.
@@ -103,6 +105,7 @@ extern "C" {
                                  STATES_WAITING_FOR_SIGNAL             | \
                                  STATES_WAITING_FOR_BARRIER            | \
                                  STATES_WAITING_FOR_BSD_WAKEUP         | \
+                                 STATES_WAITING_FOR_SYS_LOCK_MUTEX     | \
                                  STATES_WAITING_FOR_RWLOCK             )
 
 /** This macro corresponds to a task waiting which is blocked. */

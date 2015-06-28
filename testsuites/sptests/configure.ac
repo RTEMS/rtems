@@ -30,6 +30,9 @@ AM_CONDITIONAL([HAS_CPLUSPLUS],[test $HAS_CPLUSPLUS = "yes"])
 # FIXME: We should get rid of this. It's a cludge.
 AC_CHECK_SIZEOF([time_t])
 
+AC_CHECK_TYPES([struct _Thread_queue_Queue],[],[],[#include <sys/lock.h>])
+AM_CONDITIONAL(HAS__THREAD_QUEUE_QUEUE,test x"${ac_cv_type_struct__Thread_queue_Queue}" = x"yes")
+
 # Added to newlib pthreads for RTEMS SMP (np), may not be present
 AC_CHECK_HEADERS([sys/cpuset.h])
 AM_CONDITIONAL(HAS_CPUSET,test x"${ac_cv_header_sys_cpuset_h}" = x"yes")
@@ -40,6 +43,7 @@ AM_CONDITIONAL(HAS_SMP,test "$rtems_cv_RTEMS_SMP" = "yes")
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+spsyslock01/Makefile
 sptasknopreempt01/Makefile
 spintrcritical23/Makefile
 sptimecounter01/Makefile

@@ -37,6 +37,9 @@ if HAS_SMP
 else
 _SUBDIRS += sp29
 endif
+if HAS__THREAD_QUEUE_QUEUE
+_SUBDIRS += spsyslock01
+endif
 _SUBDIRS += sptasknopreempt01
 _SUBDIRS += spintrcritical23
 _SUBDIRS += sptimecounter01

@@ -346,6 +346,7 @@ libscore_a_SOURCES += src/apiext.c src/chain.c src/chainappend.c \
 libscore_a_SOURCES += src/isrisinprogress.c
 libscore_a_SOURCES += src/debugisownerofallocator.c
 libscore_a_SOURCES += src/profilingisrentryexit.c
+libscore_a_SOURCES += src/mutex.c
 libscore_a_SOURCES += src/once.c
 libscore_a_SOURCES += src/resourceiterate.c
 libscore_a_SOURCES += src/smpbarrierwait.c
