@@ -733,6 +733,18 @@ struct _Thread_Control {
   Thread_Lock_control Lock;
 #endif
 
+#if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
+  /**
+   * @brief Potpourri lock statistics.
+   *
+   * These SMP lock statistics are used for all lock objects that lack a
+   * storage space for the statistics.  Examples are lock objects used in
+   * external libraries which are independent of the actual RTEMS build
+   * configuration.
+   */
+  SMP_lock_Stats Potpourri_stats;
+#endif
+
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
   /** This field is the head of queue of priority inheritance mutex
    *  held by the thread.

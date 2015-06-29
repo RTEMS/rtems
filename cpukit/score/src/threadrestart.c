@@ -130,6 +130,7 @@ static void _Thread_Free( Thread_Control *the_thread )
 
 #if defined(RTEMS_SMP)
   _ISR_lock_Destroy( &the_thread->Lock.Default );
+  _SMP_lock_Stats_destroy( &the_thread->Potpourri_stats );
 #endif
 
   _Objects_Free( &information->Objects, &the_thread->Object );
