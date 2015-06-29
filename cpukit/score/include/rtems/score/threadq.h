@@ -41,7 +41,13 @@ extern "C" {
 
 typedef struct _Thread_Control Thread_Control;
 
-typedef struct {
+/**
+ * @brief Thread queue heads.
+ *
+ * Uses a leading underscore in the structure name to allow forward
+ * declarations in standard header files provided by Newlib and GCC.
+ */
+typedef struct _Thread_queue_Heads {
   /** This union contains the data structures used to manage the blocked
    *  set of tasks which varies based upon the discipline.
    */
