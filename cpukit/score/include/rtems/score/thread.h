@@ -669,8 +669,11 @@ typedef struct {
 
 /**
  *  This structure defines the Thread Control Block (TCB).
+ *
+ *  Uses a leading underscore in the structure name to allow forward
+ *  declarations in standard header files provided by Newlib and GCC.
  */
-struct Thread_Control {
+struct _Thread_Control {
   /** This field is the object management structure for each thread. */
   Objects_Control          Object;
   /** This field is the current execution state of this thread. */

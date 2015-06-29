@@ -51,7 +51,7 @@ extern "C" {
 
 #if !defined( ASM )
 
-struct Thread_Control;
+struct _Thread_Control;
 
 struct Scheduler_Context;
 
@@ -273,7 +273,7 @@ typedef struct Per_CPU_Control {
    * configurations use _Thread_Is_executing_on_a_processor() to figure out if
    * a thread context is executing on a processor.
    */
-  struct Thread_Control *executing;
+  struct _Thread_Control *executing;
 
   /**
    * @brief This is the heir thread for this processor.
@@ -287,7 +287,7 @@ typedef struct Per_CPU_Control {
    *
    * @see _Thread_Get_heir_and_make_it_executing().
    */
-  struct Thread_Control *heir;
+  struct _Thread_Control *heir;
 
   /**
    * @brief This is set to true when this processor needs to run the
@@ -609,9 +609,9 @@ bool _Per_CPU_State_wait_for_non_initial_state(
  *
  * @return The thread control block of the executing thread.
  */
-RTEMS_INLINE_ROUTINE struct Thread_Control *_Thread_Get_executing( void )
+RTEMS_INLINE_ROUTINE struct _Thread_Control *_Thread_Get_executing( void )
 {
-  struct Thread_Control *executing;
+  struct _Thread_Control *executing;
 
   #if defined( RTEMS_SMP )
     ISR_Level level;

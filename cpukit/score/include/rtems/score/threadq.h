@@ -39,7 +39,7 @@ extern "C" {
  */
 /**@{*/
 
-typedef struct Thread_Control Thread_Control;
+typedef struct _Thread_Control Thread_Control;
 
 typedef struct {
   /** This union contains the data structures used to manage the blocked
