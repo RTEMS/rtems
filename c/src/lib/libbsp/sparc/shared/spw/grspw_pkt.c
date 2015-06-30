@@ -1599,7 +1599,7 @@ void *grspw_dma_open(void *d, int chan_no)
 	struct grspw_dma_priv *dma;
 	int size;
 
-	if ((chan_no < 0) && (priv->hwsup.ndma_chans <= chan_no))
+	if ((chan_no < 0) || (priv->hwsup.ndma_chans <= chan_no))
 		return NULL;
 
 	dma = &priv->dma[chan_no];
