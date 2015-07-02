@@ -349,6 +349,7 @@ libscore_a_SOURCES += src/profilingisrentryexit.c
 libscore_a_SOURCES += src/mutex.c
 libscore_a_SOURCES += src/once.c
 libscore_a_SOURCES += src/resourceiterate.c
+libscore_a_SOURCES += src/semaphore.c
 libscore_a_SOURCES += src/smpbarrierwait.c
 libscore_a_SOURCES += src/kern_tc.c
 

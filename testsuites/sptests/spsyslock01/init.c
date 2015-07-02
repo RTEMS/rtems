@@ -40,12 +40,15 @@ const char rtems_test_name[] = "SPSYSLOCK 1";
 
 #define EVENT_REC_MTX_PRIO_INV RTEMS_EVENT_6
 
+#define EVENT_SEM_WAIT RTEMS_EVENT_7
+
 typedef struct {
   rtems_id high[2];
   rtems_id mid;
   rtems_id low;
   struct _Mutex_Control mtx;
   struct _Mutex_recursive_Control rec_mtx;
+  struct _Semaphore_Control sem;
   int generation[2];
   int current_generation[2];
 } test_context;
@@ -83,15 +86,19 @@ static void test_initialization(test_context *ctx)
 {
   struct _Mutex_Control mtx = _MUTEX_INITIALIZER;
   struct _Mutex_recursive_Control rec_mtx = _MUTEX_RECURSIVE_INITIALIZER;
+  struct _Semaphore_Control sem = _SEMAPHORE_INITIALIZER(1);
 
   _Mutex_Initialize(&ctx->mtx);
   _Mutex_recursive_Initialize(&ctx->rec_mtx);
+  _Semaphore_Initialize(&ctx->sem, 1);
 
   rtems_test_assert(memcmp(&mtx, &ctx->mtx, sizeof(mtx)) == 0);
   rtems_test_assert(memcmp(&rec_mtx, &ctx->rec_mtx, sizeof(rec_mtx)) == 0);
+  rtems_test_assert(memcmp(&sem, &ctx->sem, sizeof(sem)) == 0);
 
   _Mutex_Destroy(&mtx);
   _Mutex_recursive_Destroy(&rec_mtx);
+  _Semaphore_Destroy(&sem);
 }
 
 static void test_recursive_acquire_normal(test_context *ctx)
@@ -269,6 +276,51 @@ static void test_mtx_timeout_recursive(test_context *ctx)
   send_event(ctx, idx, EVENT_REC_MTX_RELEASE);
 }
 
+static void test_sem(test_context *ctx)
+{
+  struct _Semaphore_Control *sem = &ctx->sem;
+  size_t idx = 0;
+  int gen;
+
+  _Semaphore_Wait(sem);
+  gen = ctx->generation[idx];
+  send_event(ctx, idx, EVENT_SEM_WAIT);
+  rtems_test_assert(ctx->generation[idx] == gen);
+  _Semaphore_Post(sem);
+  rtems_test_assert(ctx->generation[idx] == gen + 1);
+  _Semaphore_Post(sem);
+}
+
+static void test_sem_prio_wait_order(test_context *ctx)
+{
+  struct _Semaphore_Control *sem = &ctx->sem;
+  size_t a = 0;
+  size_t b = 1;
+  int gen_a;
+  int gen_b;
+
+  _Semaphore_Wait(sem);
+
+  gen_a = ctx->generation[a];
+  gen_b = ctx->generation[b];
+
+  send_event(ctx, b, EVENT_SEM_WAIT);
+  send_event(ctx, a, EVENT_SEM_WAIT);
+
+  rtems_test_assert(ctx->generation[a] == gen_a);
+  rtems_test_assert(ctx->generation[b] == gen_b);
+
+  _Semaphore_Post(sem);
+
+  rtems_test_assert(ctx->generation[a] == gen_a + 1);
+  rtems_test_assert(ctx->generation[b] == gen_b);
+
+  _Semaphore_Post(sem);
+
+  rtems_test_assert(ctx->generation[a] == gen_a + 1);
+  rtems_test_assert(ctx->generation[b] == gen_b + 1);
+}
+
 static void mid_task(rtems_task_argument arg)
 {
   rtems_test_assert(0);
@@ -345,6 +397,11 @@ static void high_task(rtems_task_argument idx)
       sc = rtems_task_suspend(ctx->mid);
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
     }
+
+    if ((events & EVENT_SEM_WAIT) != 0) {
+      _Semaphore_Wait(&ctx->sem);
+      ctx->generation[idx] = generation(ctx, idx);
+    }
   }
 }
 
@@ -400,11 +457,14 @@ static void test(void)
   test_prio_inv_recursive(ctx);
   test_mtx_timeout_normal(ctx);
   test_mtx_timeout_recursive(ctx);
+  test_sem(ctx);
+  test_sem_prio_wait_order(ctx);
 
   send_event(ctx, 0, EVENT_MTX_DEADLOCK);
 
   _Mutex_Destroy(&ctx->mtx);
   _Mutex_recursive_Destroy(&ctx->rec_mtx);
+  _Semaphore_Destroy(&ctx->sem);
 }
 
 static void Init(rtems_task_argument arg)

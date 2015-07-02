@@ -14,7 +14,12 @@ directives:
   - _Mutex_recursive_Try_acquire()
   - _Mutex_recursive_Release()
   - _Mutex_recursive_Destroy()
+  - _Semaphore_Initialize()
+  - _Semaphore_Wait()
+  - _Semaphore_Post()
+  - _Semaphore_Destroy()
 
 concepts:
 
   - Ensure that self-contained mutexes and recursive mutexes work.
+  - Ensure that self-contained semaphores work.
