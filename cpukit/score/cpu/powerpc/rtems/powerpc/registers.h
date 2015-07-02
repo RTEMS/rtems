@@ -450,6 +450,8 @@ lidate */
 /* Freescale Book E Implementation Standards (EIS): Branch Operations */
 
 #define FSL_EIS_BUCSR 1013
+#define FSL_EIS_BUCSR_STAC_EN (1 << (63 - 39))
+#define FSL_EIS_BUCSR_LS_EN (1 << (63 - 41))
 #define FSL_EIS_BUCSR_BBFI (1 << (63 - 54))
 #define FSL_EIS_BUCSR_BALLOC_ALL (0x0 << (63 - 59))
 #define FSL_EIS_BUCSR_BALLOC_FORWARD (0x1 << (63 - 59))
