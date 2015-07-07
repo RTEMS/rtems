@@ -50,8 +50,10 @@ static void raspberrypi_clock_handler_install(void)
 static void raspberrypi_clock_initialize(void)
 {
    BCM2835_REG(BCM2835_TIMER_CTL) = 0x003E0000;
-   BCM2835_REG(BCM2835_TIMER_LOD) = 10000 - 1;
-   BCM2835_REG(BCM2835_TIMER_RLD) = 10000 - 1;
+   BCM2835_REG(BCM2835_TIMER_LOD) =
+                rtems_configuration_get_microseconds_per_tick() - 1;
+   BCM2835_REG(BCM2835_TIMER_RLD) =
+                rtems_configuration_get_microseconds_per_tick() - 1;
    BCM2835_REG(BCM2835_TIMER_DIV) = BCM2835_TIMER_PRESCALE;
    BCM2835_REG(BCM2835_TIMER_CLI) = 0;
    BCM2835_REG(BCM2835_TIMER_CTL) = 0x003E00A2;
