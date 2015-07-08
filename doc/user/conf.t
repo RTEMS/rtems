@@ -4417,7 +4417,8 @@ This is not defined by default.
 application.
 
 @subheading NOTES:
-This define may go away in the future in case all RTEMS components are SMP ready.
+This define may go away in the future in case all RTEMS components are SMP
+ready.  This configuration define is ignored on uni-processor configurations.
 
 @c
 @c === CONFIGURE_SMP_MAXIMUM_PROCESSORS ===
@@ -4447,7 +4448,7 @@ processors in the SMP configuration.
 
 @subheading NOTES:
 If there are more processors available than configured, the rest will be
-ignored.
+ignored.  This configuration define is ignored on uni-processor configurations.
 
 @c
 @c === Device Driver Table ===
