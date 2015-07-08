@@ -34,6 +34,7 @@
 #define	time_uptime _Timecounter_Time_uptime
 #define	boottimebin _Timecounter_Boottimebin
 #include <rtems/score/timecounterimpl.h>
+#include <rtems/score/atomic.h>
 #include <rtems/score/smp.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
@@ -82,6 +83,34 @@ builtin_fls(int x)
 #define fls(x) builtin_fls(x)
 /* FIXME: https://devel.rtems.org/ticket/2348 */
 #define ntp_update_second(a, b) do { (void) a; (void) b; } while (0)
+
+static inline void
+atomic_thread_fence_acq(void)
+{
+
+	_Atomic_Fence(ATOMIC_ORDER_ACQUIRE);
+}
+
+static inline void
+atomic_thread_fence_rel(void)
+{
+
+	_Atomic_Fence(ATOMIC_ORDER_RELEASE);
+}
+
+static inline u_int
+atomic_load_acq_int(Atomic_Uint *i)
+{
+
+	return (_Atomic_Load_uint(i, ATOMIC_ORDER_ACQUIRE));
+}
+
+static inline void
+atomic_store_rel_int(Atomic_Uint *i, u_int val)
+{
+
+	_Atomic_Store_uint(i, val, ATOMIC_ORDER_RELEASE);
+}
 #endif /* __rtems__ */
 
 /*
@@ -127,7 +156,7 @@ struct timehands {
 #ifndef __rtems__
 	u_int			th_generation;
 #else /* __rtems__ */
-	Atomic_Ulong		th_generation;
+	Atomic_Uint		th_generation;
 #endif /* __rtems__ */
 	struct timehands	*th_next;
 };
@@ -277,41 +306,6 @@ tc_delta(struct timehands *th)
 	    tc->tc_counter_mask);
 }
 
-static inline u_int
-tc_getgen(struct timehands *th)
-{
-
-#ifndef __rtems__
-#ifdef SMP
-	return (atomic_load_acq_int(&th->th_generation));
-#else
-	u_int gen;
-
-	gen = th->th_generation;
-	__compiler_membar();
-	return (gen);
-#endif
-#else /* __rtems__ */
-	return (_Atomic_Load_ulong(&th->th_generation, ATOMIC_ORDER_ACQUIRE));
-#endif /* __rtems__ */
-}
-
-static inline void
-tc_setgen(struct timehands *th, u_int newgen)
-{
-
-#ifndef __rtems__
-#ifdef SMP
-	atomic_store_rel_int(&th->th_generation, newgen);
-#else
-	__compiler_membar();
-	th->th_generation = newgen;
-#endif
-#else /* __rtems__ */
-	_Atomic_Store_ulong(&th->th_generation, newgen, ATOMIC_ORDER_RELEASE);
-#endif /* __rtems__ */
-}
-
 /*
  * Functions for reading the time.  We have to loop until we are sure that
  * the timehands that we operated on was not updated under our feet.  See
@@ -327,10 +321,11 @@ fbclock_binuptime(struct bintime *bt)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		*bt = th->th_offset;
 		bintime_addx(bt, th->th_scale * tc_delta(th));
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 }
 
 void
@@ -385,9 +380,10 @@ fbclock_getbinuptime(struct bintime *bt)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		*bt = th->th_offset;
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 }
 
 void
@@ -398,9 +394,10 @@ fbclock_getnanouptime(struct timespec *tsp)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		bintime2timespec(&th->th_offset, tsp);
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 }
 
 void
@@ -411,9 +408,10 @@ fbclock_getmicrouptime(struct timeval *tvp)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		bintime2timeval(&th->th_offset, tvp);
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 }
 
 void
@@ -424,9 +422,10 @@ fbclock_getbintime(struct bintime *bt)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		*bt = th->th_offset;
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 	bintime_add(bt, &boottimebin);
 }
 
@@ -438,9 +437,10 @@ fbclock_getnanotime(struct timespec *tsp)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		*tsp = th->th_nanotime;
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 }
 
 void
@@ -451,9 +451,10 @@ fbclock_getmicrotime(struct timeval *tvp)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		*tvp = th->th_microtime;
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 }
 #else /* !FFCLOCK */
 void
@@ -464,10 +465,11 @@ binuptime(struct bintime *bt)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		*bt = th->th_offset;
 		bintime_addx(bt, th->th_scale * tc_delta(th));
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 }
 #ifdef __rtems__
 sbintime_t
@@ -479,10 +481,11 @@ _Timecounter_Sbinuptime(void)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		sbt = bttosbt(th->th_offset);
 		sbt += (th->th_scale * tc_delta(th)) >> 32;
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 
 	return (sbt);
 }
@@ -540,9 +543,10 @@ getbinuptime(struct bintime *bt)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		*bt = th->th_offset;
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 }
 
 void
@@ -553,9 +557,10 @@ getnanouptime(struct timespec *tsp)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		bintime2timespec(&th->th_offset, tsp);
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 }
 
 void
@@ -566,9 +571,10 @@ getmicrouptime(struct timeval *tvp)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		bintime2timeval(&th->th_offset, tvp);
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 }
 
 void
@@ -579,9 +585,10 @@ getbintime(struct bintime *bt)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		*bt = th->th_offset;
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 	bintime_add(bt, &boottimebin);
 }
 
@@ -593,9 +600,10 @@ getnanotime(struct timespec *tsp)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		*tsp = th->th_nanotime;
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 }
 
 void
@@ -606,9 +614,10 @@ getmicrotime(struct timeval *tvp)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		*tvp = th->th_microtime;
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 }
 #endif /* FFCLOCK */
 
@@ -1021,11 +1030,12 @@ ffclock_read_counter(ffcounter *ffcount)
 	 */
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		ffth = fftimehands;
 		delta = tc_delta(th);
 		*ffcount = ffth->tick_ffcount;
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 
 	*ffcount += delta;
 }
@@ -1130,9 +1140,10 @@ dtrace_getnanotime(struct timespec *tsp)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		*tsp = th->th_nanotime;
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 }
 #endif /* __rtems__ */
 
@@ -1174,7 +1185,7 @@ sysclock_getsnapshot(struct sysclock_snap *clock_snap, int fast)
 
 	do {
 		th = timehands;
-		gen = tc_getgen(th);
+		gen = atomic_load_acq_int(&th->th_generation);
 		fbi->th_scale = th->th_scale;
 		fbi->tick_time = th->th_offset;
 #ifdef FFCLOCK
@@ -1188,7 +1199,8 @@ sysclock_getsnapshot(struct sysclock_snap *clock_snap, int fast)
 #endif
 		if (!fast)
 			delta = tc_delta(th);
-	} while (gen == 0 || gen != tc_getgen(th));
+		atomic_thread_fence_acq();
+	} while (gen == 0 || gen != th->th_generation);
 
 	clock_snap->delta = delta;
 #ifdef FFCLOCK
@@ -1437,9 +1449,13 @@ _Timecounter_Windup(ISR_lock_Context *lock_context)
 	time_t t;
 
 	/*
-	 * Make the next timehands a copy of the current one, but do not
-	 * overwrite the generation or next pointer.  While we update
-	 * the contents, the generation must be zero.
+	 * Make the next timehands a copy of the current one, but do
+	 * not overwrite the generation or next pointer.  While we
+	 * update the contents, the generation must be zero.  We need
+	 * to ensure that the zero generation is visible before the
+	 * data updates become visible, which requires release fence.
+	 * For similar reasons, re-reading of the generation after the
+	 * data is read should use acquire fence.
 	 */
 	tho = timehands;
 #if defined(RTEMS_SMP)
@@ -1448,7 +1464,8 @@ _Timecounter_Windup(ISR_lock_Context *lock_context)
 	th = tho;
 #endif
 	ogen = th->th_generation;
-	tc_setgen(th, 0);
+	th->th_generation = 0;
+	atomic_thread_fence_rel();
 #if defined(RTEMS_SMP)
 	bcopy(tho, th, offsetof(struct timehands, th_generation));
 #endif
@@ -1571,7 +1588,7 @@ _Timecounter_Windup(ISR_lock_Context *lock_context)
 	 */
 	if (++ogen == 0)
 		ogen = 1;
-	tc_setgen(th, ogen);
+	atomic_store_rel_int(&th->th_generation, ogen);
 
 	/* Go live with the new struct timehands. */
 #ifdef FFCLOCK
@@ -1855,13 +1872,14 @@ pps_capture(struct pps_state *pps)
 
 	KASSERT(pps != NULL, ("NULL pps pointer in pps_capture"));
 	th = timehands;
-	pps->capgen = tc_getgen(th);
+	pps->capgen = atomic_load_acq_int(&th->th_generation);
 	pps->capth = th;
 #ifdef FFCLOCK
 	pps->capffth = fftimehands;
 #endif
 	pps->capcount = th->th_counter->tc_get_timecount(th->th_counter);
-	if (pps->capgen != tc_getgen(th))
+	atomic_thread_fence_acq();
+	if (pps->capgen != th->th_generation)
 		pps->capgen = 0;
 }
 
@@ -1881,7 +1899,8 @@ pps_event(struct pps_state *pps, int event)
 
 	KASSERT(pps != NULL, ("NULL pps pointer in pps_event"));
 	/* If the timecounter was wound up underneath us, bail out. */
-	if (pps->capgen == 0 || pps->capgen != tc_getgen(pps->capth))
+	if (pps->capgen == 0 || pps->capgen !=
+	    atomic_load_acq_int(&pps->capth->th_generation))
 		return;
 
 	/* Things would be easier with arrays. */
@@ -1931,7 +1950,8 @@ pps_event(struct pps_state *pps, int event)
 	bintime2timespec(&bt, &ts);
 
 	/* If the timecounter was wound up underneath us, bail out. */
-	if (pps->capgen != tc_getgen(pps->capth))
+	atomic_thread_fence_acq();
+	if (pps->capgen != pps->capth->th_generation)
 		return;
 
 	*pcount = pps->capcount;
