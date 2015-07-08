@@ -345,6 +345,9 @@ system_call:
 	li	r4, 15
 	b	ppc_exc_wrap_nopush_std
 
+/* Symbol provided for debugging and tracing */
+bsp_exc_vector_end:
+
 	/* Start stack area */
 	.section ".bsp_rwextra", "aw", @nobits
 	.align 4

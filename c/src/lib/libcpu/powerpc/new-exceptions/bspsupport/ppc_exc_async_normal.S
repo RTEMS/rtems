@@ -447,3 +447,6 @@ thread_dispatching_done:
 
 	/* Return */
 	rfi
+
+/* Symbol provided for debugging and tracing */
+ppc_exc_wrap_async_normal_end:
