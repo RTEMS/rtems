@@ -7,14 +7,16 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
-extern void *__rtems_end;
+#include <libcpu/powerpc-utility.h>
+
+LINKER_SYMBOL(__rtems_end)
 
 void bsp_work_area_initialize(void)
 {
   uintptr_t work_size;
   uintptr_t work_area;
 
-  work_area = (uintptr_t)&__rtems_end +
+  work_area = (uintptr_t)__rtems_end +
               rtems_configuration_get_interrupt_stack_size();
   work_size = (uintptr_t)BSP_mem_size - work_area;
 
