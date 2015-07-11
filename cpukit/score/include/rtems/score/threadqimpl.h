@@ -353,7 +353,7 @@ void _Thread_queue_Initialize(
       .Lock = ISR_LOCK_INITIALIZER( name ) \
     }
 
-  #define THREAD_QUEUE_PRIORIY_INITIALIZER( designator, name ) { \
+  #define THREAD_QUEUE_PRIORITY_INITIALIZER( designator, name ) { \
       .Queues = { \
         .Priority = RBTREE_INITIALIZER_EMPTY( designator.Queues.Priority ) \
       }, \
@@ -368,7 +368,7 @@ void _Thread_queue_Initialize(
       .operations = &_Thread_queue_Operations_FIFO \
     }
 
-  #define THREAD_QUEUE_PRIORIY_INITIALIZER( designator, name ) { \
+  #define THREAD_QUEUE_PRIORITY_INITIALIZER( designator, name ) { \
       .Queues = { \
         .Priority = RBTREE_INITIALIZER_EMPTY( designator.Queues.Priority ) \
       }, \

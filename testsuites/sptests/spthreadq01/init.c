@@ -22,7 +22,7 @@ static Thread_queue_Control fifo_queue =
   THREAD_QUEUE_FIFO_INITIALIZER( fifo_queue, "FIFO" );
 
 static Thread_queue_Control prio_queue =
-  THREAD_QUEUE_PRIORIY_INITIALIZER( prio_queue, "Prio" );
+  THREAD_QUEUE_PRIORITY_INITIALIZER( prio_queue, "Prio" );
 
 static rtems_task Init(
   rtems_task_argument ignored
