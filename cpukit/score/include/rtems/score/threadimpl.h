@@ -1009,7 +1009,65 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_acquire_default(
 }
 
 /**
- * @brief Release the default thread lock.
+ * @brief Releases the thread lock inside a critical section (interrupts
+ * disabled).
+ *
+ * The previous interrupt status is not restored.
+ *
+ * @param[in] lock The lock.
+ * @param[in] lock_context The lock context used for the corresponding lock
+ * acquire.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Lock_release_critical(
+  ISR_lock_Control *lock,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Release( lock, lock_context );
+}
+
+/**
+ * @brief Releases the thread lock.
+ *
+ * @param[in] lock The lock returned by _Thread_Lock_acquire().
+ * @param[in] lock_context The lock context used for _Thread_Lock_acquire().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Lock_release(
+  ISR_lock_Control *lock,
+  ISR_lock_Context *lock_context
+)
+{
+  _Thread_Lock_release_critical( lock, lock_context );
+  _ISR_lock_ISR_enable( lock_context );
+}
+
+/**
+ * @brief Releases the default thread lock inside a critical section
+ * (interrupts disabled).
+ *
+ * The previous interrupt status is not restored.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] lock_context The lock context used for the corresponding lock
+ * acquire.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Lock_release_default_critical(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _Thread_Lock_release_critical(
+#if defined(RTEMS_SMP)
+    &the_thread->Lock.Default,
+#else
+    NULL,
+#endif
+    lock_context
+  );
+}
+
+/**
+ * @brief Releases the default thread lock.
  *
  * @param[in] the_thread The thread.
  * @param[in] lock_context The lock context used for the corresponding lock
@@ -1020,21 +1078,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_release_default(
   ISR_lock_Context *lock_context
 )
 {
-  _ISR_lock_Release_and_ISR_enable( &the_thread->Lock.Default, lock_context );
-}
-
-/**
- * @brief Release the thread lock.
- *
- * @param[in] lock The lock returned by _Thread_Lock_acquire().
- * @param[in] lock_context The lock context used for _Thread_Lock_acquire().
- */
-RTEMS_INLINE_ROUTINE void _Thread_Lock_release(
-  ISR_lock_Control *lock,
-  ISR_lock_Context *lock_context
-)
-{
-  _ISR_lock_Release_and_ISR_enable( lock, lock_context );
+  _Thread_Lock_release_default_critical( the_thread, lock_context );
+  _ISR_lock_ISR_enable( lock_context );
 }
 
 /**
@@ -1135,12 +1180,12 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_set(
   ISR_lock_Control *new_lock
 )
 {
-  ISR_lock_Control *lock;
-  ISR_lock_Context  lock_context;
+  ISR_lock_Context lock_context;
 
-  lock = _Thread_Lock_acquire( the_thread, &lock_context );
+  _Thread_Lock_acquire_default_critical( the_thread, &lock_context );
+  _Assert( the_thread->Lock.current == &the_thread->Lock.Default );
   _Thread_Lock_set_unprotected( the_thread, new_lock );
-  _Thread_Lock_release( lock, &lock_context );
+  _Thread_Lock_release_default_critical( the_thread, &lock_context );
 }
 #else
 #define _Thread_Lock_set( the_thread, new_lock ) \
