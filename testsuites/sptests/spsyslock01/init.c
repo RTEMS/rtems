@@ -19,6 +19,8 @@
 #include "tmacros.h"
 
 #include <sys/lock.h>
+#include <errno.h>
+#include <limits.h>
 #include <string.h>
 #include <time.h>
 
@@ -42,6 +44,8 @@ const char rtems_test_name[] = "SPSYSLOCK 1";
 
 #define EVENT_SEM_WAIT RTEMS_EVENT_7
 
+#define EVENT_FUTEX_WAIT RTEMS_EVENT_8
+
 typedef struct {
   rtems_id high[2];
   rtems_id mid;
@@ -49,6 +53,9 @@ typedef struct {
   struct _Mutex_Control mtx;
   struct _Mutex_recursive_Control rec_mtx;
   struct _Semaphore_Control sem;
+  struct _Futex_Control futex;
+  int val;
+  int eno[2];
   int generation[2];
   int current_generation[2];
 } test_context;
@@ -87,18 +94,22 @@ static void test_initialization(test_context *ctx)
   struct _Mutex_Control mtx = _MUTEX_INITIALIZER;
   struct _Mutex_recursive_Control rec_mtx = _MUTEX_RECURSIVE_INITIALIZER;
   struct _Semaphore_Control sem = _SEMAPHORE_INITIALIZER(1);
+  struct _Futex_Control futex = _FUTEX_INITIALIZER;
 
   _Mutex_Initialize(&ctx->mtx);
   _Mutex_recursive_Initialize(&ctx->rec_mtx);
   _Semaphore_Initialize(&ctx->sem, 1);
+  _Futex_Initialize(&ctx->futex);
 
   rtems_test_assert(memcmp(&mtx, &ctx->mtx, sizeof(mtx)) == 0);
   rtems_test_assert(memcmp(&rec_mtx, &ctx->rec_mtx, sizeof(rec_mtx)) == 0);
   rtems_test_assert(memcmp(&sem, &ctx->sem, sizeof(sem)) == 0);
+  rtems_test_assert(memcmp(&futex, &ctx->futex, sizeof(futex)) == 0);
 
   _Mutex_Destroy(&mtx);
   _Mutex_recursive_Destroy(&rec_mtx);
   _Semaphore_Destroy(&sem);
+  _Futex_Destroy(&futex);
 }
 
 static void test_recursive_acquire_normal(test_context *ctx)
@@ -321,6 +332,63 @@ static void test_sem_prio_wait_order(test_context *ctx)
   rtems_test_assert(ctx->generation[b] == gen_b + 1);
 }
 
+static void test_futex(test_context *ctx)
+{
+  struct _Futex_Control *futex = &ctx->futex;
+  size_t a = 0;
+  size_t b = 1;
+  int eno;
+  int woken;
+
+  eno = _Futex_Wait(futex, &ctx->val, 1);
+  rtems_test_assert(eno == EWOULDBLOCK);
+
+  woken = _Futex_Wake(futex, 0);
+  rtems_test_assert(woken == 0);
+
+  woken = _Futex_Wake(futex, 1);
+  rtems_test_assert(woken == 0);
+
+  ctx->val = 1;
+
+  ctx->eno[a] = -1;
+  send_event(ctx, a, EVENT_FUTEX_WAIT);
+  rtems_test_assert(ctx->eno[a] == -1);
+
+  woken = _Futex_Wake(futex, INT_MAX);
+  rtems_test_assert(woken == 1);
+  rtems_test_assert(ctx->eno[a] == 0);
+
+  ctx->eno[a] = -1;
+  ctx->eno[b] = -1;
+  send_event(ctx, a, EVENT_FUTEX_WAIT);
+  send_event(ctx, b, EVENT_FUTEX_WAIT);
+  rtems_test_assert(ctx->eno[a] == -1);
+  rtems_test_assert(ctx->eno[b] == -1);
+
+  woken = _Futex_Wake(futex, 1);
+  rtems_test_assert(woken == 1);
+  rtems_test_assert(ctx->eno[a] == 0);
+  rtems_test_assert(ctx->eno[b] == -1);
+
+  woken = _Futex_Wake(futex, 1);
+  rtems_test_assert(woken == 1);
+  rtems_test_assert(ctx->eno[a] == 0);
+  rtems_test_assert(ctx->eno[b] == 0);
+
+  ctx->eno[a] = -1;
+  ctx->eno[b] = -1;
+  send_event(ctx, a, EVENT_FUTEX_WAIT);
+  send_event(ctx, b, EVENT_FUTEX_WAIT);
+  rtems_test_assert(ctx->eno[a] == -1);
+  rtems_test_assert(ctx->eno[b] == -1);
+
+  woken = _Futex_Wake(futex, 2);
+  rtems_test_assert(woken == 2);
+  rtems_test_assert(ctx->eno[a] == 0);
+  rtems_test_assert(ctx->eno[b] == 0);
+}
+
 static void mid_task(rtems_task_argument arg)
 {
   rtems_test_assert(0);
@@ -402,6 +470,10 @@ static void high_task(rtems_task_argument idx)
       _Semaphore_Wait(&ctx->sem);
       ctx->generation[idx] = generation(ctx, idx);
     }
+
+    if ((events & EVENT_FUTEX_WAIT) != 0) {
+      ctx->eno[idx] = _Futex_Wait(&ctx->futex, &ctx->val, 1);
+    }
   }
 }
 
@@ -459,12 +531,14 @@ static void test(void)
   test_mtx_timeout_recursive(ctx);
   test_sem(ctx);
   test_sem_prio_wait_order(ctx);
+  test_futex(ctx);
 
   send_event(ctx, 0, EVENT_MTX_DEADLOCK);
 
   _Mutex_Destroy(&ctx->mtx);
   _Mutex_recursive_Destroy(&ctx->rec_mtx);
   _Semaphore_Destroy(&ctx->sem);
+  _Futex_Destroy(&ctx->futex);
 }
 
 static void Init(rtems_task_argument arg)

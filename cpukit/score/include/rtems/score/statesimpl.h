@@ -90,6 +90,8 @@ extern "C" {
 #define STATES_WAITING_FOR_SYS_LOCK_MUTEX      0x2000000
 /** This macro corresponds to a task waiting for a <sys/lock.h> semaphore. */
 #define STATES_WAITING_FOR_SYS_LOCK_SEMAPHORE  0x4000000
+/** This macro corresponds to a task waiting for a <sys/lock.h> futex. */
+#define STATES_WAITING_FOR_SYS_LOCK_FUTEX      0x8000000
 
 /** This macro corresponds to a task which is in an interruptible
  *  blocking state.
@@ -109,6 +111,7 @@ extern "C" {
                                  STATES_WAITING_FOR_BSD_WAKEUP         | \
                                  STATES_WAITING_FOR_SYS_LOCK_MUTEX     | \
                                  STATES_WAITING_FOR_SYS_LOCK_SEMAPHORE | \
+                                 STATES_WAITING_FOR_SYS_LOCK_FUTEX     | \
                                  STATES_WAITING_FOR_RWLOCK             )
 
 /** This macro corresponds to a task waiting which is blocked. */

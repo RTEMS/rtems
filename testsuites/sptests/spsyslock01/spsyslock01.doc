@@ -18,8 +18,13 @@ directives:
   - _Semaphore_Wait()
   - _Semaphore_Post()
   - _Semaphore_Destroy()
+  - _Futex_Initialize()
+  - _Futex_Wait()
+  - _Futex_Wake()
+  - _Futex_Destroy()
 
 concepts:
 
   - Ensure that self-contained mutexes and recursive mutexes work.
   - Ensure that self-contained semaphores work.
+  - Ensure that self-contained futexes work.
