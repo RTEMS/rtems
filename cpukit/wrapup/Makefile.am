@@ -21,6 +21,7 @@ endif
 
 TMP_LIBS += ../libcrypt/libcrypt.a
 TMP_LIBS += ../libcsupport/libcsupport.a
+TMP_LIBS += ../libcsupport/libcalloc.a
 TMP_LIBS += ../libblock/libblock.a
 if LIBDOSFS
 TMP_LIBS += ../libfs/libdosfs.a

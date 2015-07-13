@@ -1,8 +1,9 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-noinst_LIBRARIES = libcsupport.a
+noinst_LIBRARIES = libcsupport.a libcalloc.a
 libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS)
+libcalloc_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = include/console.h
@@ -79,7 +80,7 @@ ID_C_FILES = src/getegid.c src/geteuid.c src/getgid.c src/getgroups.c \
     src/seteuid.c src/setgid.c src/setuid.c src/setegid.c src/setpgid.c \
     src/setsid.c
 
-MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
+MALLOC_C_FILES = src/malloc_initialize.c src/malloc.c \
     src/realloc.c src/_calloc_r.c src/_malloc_r.c \
     src/free.c src/_free_r.c \
     src/_realloc_r.c src/mallocfreespace.c \
@@ -137,6 +138,9 @@ libcsupport_a_SOURCES += $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(TERMIOS_C_FILES) src/getpagesize.c src/getrusage.c
 
 libcsupport_a_SOURCES += src/flockfile.c src/funlockfile.c src/ftrylockfile.c
+
+libcalloc_a_SOURCES = src/calloc.c
+libcalloc_a_CFLAGS = -fno-builtin
 
 EXTRA_DIST = src/TODO src/CASES src/README
 
