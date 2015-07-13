@@ -214,8 +214,16 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
  * @param[in] queue The actual thread queue.
  * @param[in] operations The thread queue operations.
  * @param[in] the_thread The thread to extract.
+ *
+ * @return Returns the unblock indicator for _Thread_queue_Unblock_critical().
+ * True indicates, that this thread must be unblocked by the scheduler later in
+ * _Thread_queue_Unblock_critical(), and false otherwise.  In case false is
+ * returned, then the thread queue enqueue procedure was interrupted.  Thus it
+ * will unblock itself and the thread wait information is no longer accessible,
+ * since this thread may already block on another resource in an SMP
+ * configuration.
  */
-void _Thread_queue_Extract_locked(
+bool _Thread_queue_Extract_locked(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread
@@ -229,11 +237,14 @@ void _Thread_queue_Extract_locked(
  * thread queue lock is released and an unblock is necessary.  Thread
  * dispatching is enabled once the sequence to unblock the thread is complete.
  *
+ * @param[in] unblock The unblock indicator returned by
+ * _Thread_queue_Extract_locked().
  * @param[in] queue The actual thread queue.
  * @param[in] the_thread The thread to extract.
  * @param[in] lock_context The lock context of the lock acquire.
  */
 void _Thread_queue_Unblock_critical(
+  bool                unblock,
   Thread_queue_Queue *queue,
   Thread_Control     *the_thread,
   ISR_lock_Context   *lock_context

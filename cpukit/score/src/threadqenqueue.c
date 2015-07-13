@@ -100,27 +100,20 @@ void _Thread_queue_Enqueue_critical(
   _Thread_Dispatch_enable( cpu_self );
 }
 
-void _Thread_queue_Extract_locked(
+bool _Thread_queue_Extract_locked(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread
 )
 {
+  bool success;
+  bool unblock;
+
   ( *operations->extract )( queue, the_thread );
 
   _Thread_Wait_set_queue( the_thread, NULL );
   _Thread_Wait_restore_default_operations( the_thread );
   _Thread_Lock_restore_default( the_thread );
-}
-
-void _Thread_queue_Unblock_critical(
-  Thread_queue_Queue *queue,
-  Thread_Control     *the_thread,
-  ISR_lock_Context   *lock_context
-)
-{
-  bool success;
-  bool unblock;
 
   success = _Thread_Wait_flags_try_change_critical(
     the_thread,
@@ -135,6 +128,16 @@ void _Thread_queue_Unblock_critical(
     unblock = true;
   }
 
+  return unblock;
+}
+
+void _Thread_queue_Unblock_critical(
+  bool                unblock,
+  Thread_queue_Queue *queue,
+  Thread_Control     *the_thread,
+  ISR_lock_Context   *lock_context
+)
+{
   if ( unblock ) {
     Per_CPU_Control *cpu_self;
 
@@ -156,8 +159,10 @@ void _Thread_queue_Extract_critical(
   ISR_lock_Context              *lock_context
 )
 {
-  _Thread_queue_Extract_locked( queue, operations, the_thread );
-  _Thread_queue_Unblock_critical( queue, the_thread, lock_context );
+  bool unblock;
+
+  unblock = _Thread_queue_Extract_locked( queue, operations, the_thread );
+  _Thread_queue_Unblock_critical( unblock, queue, the_thread, lock_context );
 }
 
 void _Thread_queue_Extract( Thread_Control *the_thread )
