@@ -838,7 +838,7 @@ static inline CPU_Counter_ticks _CPU_Counter_read( void )
 {
   CPU_Counter_ticks value;
 
-#if defined(ppc8540) || defined(__PPC_CPU_E6500__)
+#if defined(__PPC_CPU_E6500__)
   /* Use Alternate Time Base */
   __asm__ volatile( "mfspr %0, 526" : "=r" (value) );
 #else

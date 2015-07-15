@@ -90,7 +90,13 @@ void bsp_start(void)
     BSP_bus_frequency = bsp_uboot_board_info.bi_busfreq
       / QORIQ_BUS_CLOCK_DIVIDER;
     bsp_clicks_per_usec = BSP_bus_frequency / 8000000;
-    rtems_counter_initialize_converter(bsp_uboot_board_info.bi_intfreq);
+    rtems_counter_initialize_converter(
+      #ifdef __PPC_CPU_E6500__
+        bsp_uboot_board_info.bi_intfreq
+      #else
+        BSP_bus_frequency / 8
+      #endif
+    );
   #endif /* HAS_UBOOT */
 
   /* Initialize some console parameters */
