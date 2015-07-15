@@ -842,7 +842,7 @@ static inline CPU_Counter_ticks _CPU_Counter_read( void )
   /* Use Alternate Time Base */
   __asm__ volatile( "mfspr %0, 526" : "=r" (value) );
 #else
-  __asm__ volatile( "mftb %0" : "=r" (value) );
+  __asm__ volatile( "mfspr %0, 268" : "=r" (value) );
 #endif
 
   return value;
