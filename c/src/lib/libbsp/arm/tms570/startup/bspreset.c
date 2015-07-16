@@ -25,22 +25,23 @@ static void handle_esm_errors(uint32_t esm_irq_channel)
 {
    /* ESMR3 errors don't generate interrupts. */
    if (esm_irq_channel < 0x20u) {
-     ESMSR1 = 1 << esm_irq_channel;
+     TMS570_ESM.SR[0] = 1 << esm_irq_channel;
    } else if (esm_irq_channel < 0x40u) {
-     ESMSR2 = 1 << (esm_irq_channel - 32u);
+     TMS570_ESM.SR[1] = 1 << (esm_irq_channel - 32u);
    } else if (esm_irq_channel < 0x60u) {
-     ESMSR4 = 1 << (esm_irq_channel - 64u);
+     TMS570_ESM.SR4 = 1 << (esm_irq_channel - 64u);
    }
 }
 
 void bsp_reset(void)
 {
-   uint32_t esm_irq_channel = ESMIOFFHR - 1;
+   uint32_t esm_irq_channel = TMS570_ESM.IOFFHR - 1;
 
    if (esm_irq_channel) {
      handle_esm_errors(esm_irq_channel);
    }
 
    /* Reset the board */
-   SYSECR = SYSECR_RESET;
+   /* write of value other than 1 cause system reset */
+   TMS570_SYS1.SYSECR = TMS570_SYS1_SYSECR_RESET(2);
 }

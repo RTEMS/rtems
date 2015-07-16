@@ -33,6 +33,11 @@ $(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
+$(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/bsp/ti_herc
+	@: > $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+
 $(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
 PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
@@ -108,6 +113,150 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tms570-sci-driver.h
 $(PROJECT_INCLUDE)/bsp/system-clocks.h: include/system-clocks.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/system-clocks.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/system-clocks.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_adc.h: include/ti_herc/reg_adc.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_adc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_adc.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_ccmsr.h: include/ti_herc/reg_ccmsr.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_ccmsr.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_ccmsr.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_crc.h: include/ti_herc/reg_crc.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_crc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_crc.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_dcan.h: include/ti_herc/reg_dcan.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_dcan.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_dcan.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_dcc.h: include/ti_herc/reg_dcc.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_dcc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_dcc.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_dma.h: include/ti_herc/reg_dma.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_dma.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_dma.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_dmm.h: include/ti_herc/reg_dmm.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_dmm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_dmm.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_efuse.h: include/ti_herc/reg_efuse.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_efuse.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_efuse.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_emac.h: include/ti_herc/reg_emac.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_emac.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_emac.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_emacm.h: include/ti_herc/reg_emacm.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_emacm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_emacm.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_emif.h: include/ti_herc/reg_emif.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_emif.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_emif.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_esm.h: include/ti_herc/reg_esm.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_esm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_esm.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_flash.h: include/ti_herc/reg_flash.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_flash.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_flash.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_flex_ray.h: include/ti_herc/reg_flex_ray.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_flex_ray.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_flex_ray.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_gio.h: include/ti_herc/reg_gio.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_gio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_gio.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_htu.h: include/ti_herc/reg_htu.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_htu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_htu.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_i2c.h: include/ti_herc/reg_i2c.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_i2c.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_i2c.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_iomm.h: include/ti_herc/reg_iomm.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_iomm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_iomm.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_lin.h: include/ti_herc/reg_lin.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_lin.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_lin.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_mdio.h: include/ti_herc/reg_mdio.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_mdio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_mdio.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_n2het.h: include/ti_herc/reg_n2het.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_n2het.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_n2het.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_pbist.h: include/ti_herc/reg_pbist.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_pbist.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_pbist.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_pll.h: include/ti_herc/reg_pll.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_pll.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_pll.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_pmm.h: include/ti_herc/reg_pmm.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_pmm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_pmm.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_rti.h: include/ti_herc/reg_rti.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_rti.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_rti.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_rtp.h: include/ti_herc/reg_rtp.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_rtp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_rtp.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_sci.h: include/ti_herc/reg_sci.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_sci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_sci.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_tcr.h: include/ti_herc/reg_tcr.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_tcr.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_tcr.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_tcram.h: include/ti_herc/reg_tcram.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_tcram.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_tcram.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_vim.h: include/ti_herc/reg_vim.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_vim.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_vim.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_pom.h: include/ti_herc/reg_pom.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_pom.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_pom.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_spi.h: include/ti_herc/reg_spi.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_spi.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_spi.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_stc.h: include/ti_herc/reg_stc.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_stc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_stc.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_sys.h: include/ti_herc/reg_sys.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_sys.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_sys.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_sys2.h: include/ti_herc/reg_sys2.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_sys2.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_sys2.h
+
+$(PROJECT_INCLUDE)/bsp/ti_herc/reg_pcr.h: include/ti_herc/reg_pcr.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_pcr.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_pcr.h
 
 $(PROJECT_INCLUDE)/tm27.h: ../../shared/include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h

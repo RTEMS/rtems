@@ -41,10 +41,10 @@ static void tms570_putc(char ch)
   rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
-  while ( ( driver_context_table[0].regs->SCIFLR & 0x100 ) == 0) {
+  while ( ( driver_context_table[0].regs->FLR & 0x100 ) == 0) {
     rtems_interrupt_flash(level);
   }
-  driver_context_table[0].regs->SCITD = ch;
+  driver_context_table[0].regs->TD = ch;
   rtems_interrupt_enable(level);
 }
 
@@ -74,8 +74,8 @@ static void tms570_uart_output(char c)
  */
 static int tms570_uart_input( void )
 {
-  if ( driver_context_table[0].regs->SCIFLR & (1<<9) ) {
-      return driver_context_table[0].regs->SCIRD;
+  if ( driver_context_table[0].regs->FLR & (1<<9) ) {
+      return driver_context_table[0].regs->RD;
   } else {
       return -1;
   }

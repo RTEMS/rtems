@@ -44,13 +44,16 @@ tms570_sci_context driver_context_table[] = {
   {
     .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("TMS570 SCI1"),
     .device_name = "/dev/console",
-    .regs = &TMS570_SCI,
+    /* TMS570 UART peripheral use subset of LIN registers which are equivalent
+     * to SCI ones
+     */
+    .regs = (volatile tms570_sci_t *) &TMS570_LIN,
     .irq = TMS570_IRQ_SCI_LEVEL_0,
   },
   {
     .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("TMS570 SCI2"),
     .device_name = "/dev/ttyS1",
-    .regs = &TMS570_SCI2,
+    .regs = &TMS570_SCI,
     .irq = TMS570_IRQ_SCI2_LEVEL_0,
   }
 };
@@ -134,8 +137,8 @@ static int tms570_sci_read_received_chars(
   if ( N < 1 ) {
     return 0;
   }
-  if ( ctx->regs->SCIRD != 0 ) {
-     buf[0] = ctx->regs->SCIRD;
+  if ( ctx->regs->RD != 0 ) {
+     buf[0] = ctx->regs->RD;
     return 1;
   }
   return 0;
@@ -152,7 +155,7 @@ static int tms570_sci_read_received_chars(
  */
 static void tms570_sci_enable_interrupts(tms570_sci_context * ctx)
 {
-  ctx->regs->SCISETINT = (1<<9);
+  ctx->regs->SETINT = (1<<9);
 }
 
 /**
@@ -166,7 +169,7 @@ static void tms570_sci_enable_interrupts(tms570_sci_context * ctx)
  */
 static void tms570_sci_disable_interrupts(tms570_sci_context * ctx)
 {
-  ctx->regs->SCICLEARINT = (1<<9);
+  ctx->regs->CLEARINT = (1<<9);
 }
 
 /**
@@ -213,29 +216,29 @@ static bool tms570_sci_set_attributes(
 
   rtems_termios_device_lock_acquire(base, &lock_context);
 
-  ctx->regs->SCIGCR1 &= ~( (1<<7) | (1<<25) | (1<<24) );
+  ctx->regs->GCR1 &= ~( (1<<7) | (1<<25) | (1<<24) );
 
-  ctx->regs->SCIGCR1 &= ~(1<<4);    /*one stop bit*/
-  ctx->regs->SCIFORMAT = 0x7;
+  ctx->regs->GCR1 &= ~(1<<4);    /*one stop bit*/
+  ctx->regs->FORMAT = 0x7;
 
   switch ( t->c_cflag & ( PARENB|PARODD ) ) {
     case ( PARENB|PARODD ):
       /* Odd parity */
-      ctx->regs->SCIGCR1 &= ~(1<<3);
-      ctx->regs->SCIGCR1 |= (1<<2);
+      ctx->regs->GCR1 &= ~(1<<3);
+      ctx->regs->GCR1 |= (1<<2);
       break;
 
     case PARENB:
       /* Even parity */
-      ctx->regs->SCIGCR1 |= (1<<3);
-      ctx->regs->SCIGCR1 |= (1<<2);
+      ctx->regs->GCR1 |= (1<<3);
+      ctx->regs->GCR1 |= (1<<2);
       break;
 
     default:
     case 0:
     case PARODD:
       /* No Parity */
-      ctx->regs->SCIGCR1 &= ~(1<<2);
+      ctx->regs->GCR1 &= ~(1<<2);
   }
 
   /* Baud rate */
@@ -244,7 +247,7 @@ static bool tms570_sci_set_attributes(
   bauddiv = (BSP_PLL_OUT_CLOCK + baudrate / 2) / baudrate;
   ctx->regs->BRS = bauddiv;
 
-  ctx->regs->SCIGCR1 |= (1<<7) | (1<<25) | (1<<24);
+  ctx->regs->GCR1 |= (1<<7) | (1<<25) | (1<<24);
 
   rtems_termios_device_lock_release(base, &lock_context);
 
@@ -271,7 +274,7 @@ static void tms570_sci_interrupt_handler(void * arg)
   /*
    * Check if we have received something.
    */
-   if ( (ctx->regs->SCIFLR & (1<<9) ) == (1<<9) ) {
+   if ( (ctx->regs->FLR & (1<<9) ) == (1<<9) ) {
       n = tms570_sci_read_received_chars(ctx, buf, TMS570_SCI_BUFFER_SIZE);
       if ( n > 0 ) {
         /* Hand the data over to the Termios infrastructure */
@@ -281,7 +284,7 @@ static void tms570_sci_interrupt_handler(void * arg)
   /*
    * Check if we have something transmitted.
    */
-  if ( (ctx->regs->SCIFLR & (1<<8) ) == (1<<8) ) {
+  if ( (ctx->regs->FLR & (1<<8) ) == (1<<8) ) {
     n = tms570_sci_transmitted_chars(ctx);
     if ( n > 0 ) {
       /*
@@ -316,15 +319,15 @@ static void tms570_sci_interrupt_write(
 
   if ( len > 0 ) {
     /* start UART TX, this will result in an interrupt when done */
-    ctx->regs->SCITD = *buf;
+    ctx->regs->TD = *buf;
     /* character written - raise count*/
     ctx->tx_chars_in_hw = 1;
     /* Enable TX interrupt (interrupt is edge-triggered) */
-    ctx->regs->SCISETINT = (1<<8);
+    ctx->regs->SETINT = (1<<8);
 
   } else {
     /* No more to send, disable TX interrupts */
-    ctx->regs->SCICLEARINT = (1<<8);
+    ctx->regs->CLEARINT = (1<<8);
     /* Tell close that we sent everything */
   }
 }
@@ -352,10 +355,10 @@ static void tms570_sci_poll_write(
   /* Write */
 
   for ( i = 0; i < n; ++i ) {
-    while ( (ctx->regs->SCIFLR & (1<<11) ) == 0) {
+    while ( (ctx->regs->FLR & (1<<11) ) == 0) {
       ;
     }
-    ctx->regs->SCITD = buf[i];
+    ctx->regs->TD = buf[i];
   }
 }
 
@@ -372,7 +375,7 @@ static int TMS570_sci_can_read_char(
   tms570_sci_context * ctx
 )
 {
-  return ctx->regs->SCIFLR & (1<<9);
+  return ctx->regs->FLR & (1<<9);
 }
 
 /**
@@ -387,7 +390,7 @@ static char TMS570_sci_read_char(
   tms570_sci_context * ctx
 )
 {
-  return ctx->regs->SCIRD;
+  return ctx->regs->RD;
 }
 
 /**
@@ -468,7 +471,7 @@ static bool tms570_sci_interrupt_first_open(
   if ( ret == false ) {
     return false;
   }
-  ctx->regs->SCISETINTLVL = 0;
+  ctx->regs->SETINTLVL = 0;
   /* Register Interrupt handler */
   sc = rtems_interrupt_handler_install(ctx->irq,
       ctx->device_name,
@@ -527,7 +530,7 @@ static void tms570_sci_interrupt_last_close(
   rtems_termios_device_lock_release(base, &lock_context);
 
   /* Flush device */
-  while ( ( ctx->regs->SCIFLR & (1<<11) ) > 0 ) {
+  while ( ( ctx->regs->FLR & (1<<11) ) > 0 ) {
     ;/* Wait until all data has been sent */
   }
 

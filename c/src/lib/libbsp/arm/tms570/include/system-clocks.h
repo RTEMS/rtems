@@ -49,7 +49,7 @@ extern "C" {
  */
 static inline unsigned tms570_timer(void)
 {
-  uint32_t actual_fcr0 = TMS570_RTI.RTIFRC0;
+  uint32_t actual_fcr0 = TMS570_RTI.CNT[0].FRCx;
   return actual_fcr0;
 }
 
