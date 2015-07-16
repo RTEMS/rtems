@@ -14,8 +14,8 @@
  * http://www.rtems.org/license
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_BFIN_TLL6527M_BSP_H
+#define LIBBSP_BFIN_TLL6527M_BSP_H
 
 #ifndef ASM
 

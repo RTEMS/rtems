@@ -19,8 +19,8 @@
  *  Copyright (c) 1998, National Research Council of Canada
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_M68K_MVME167_BSP_H
+#define LIBBSP_M68K_MVME167_BSP_H
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>

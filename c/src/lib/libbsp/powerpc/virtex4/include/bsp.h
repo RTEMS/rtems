@@ -39,8 +39,8 @@
  *
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_POWERPC_VIRTEX4_BSP_H
+#define LIBBSP_POWERPC_VIRTEX4_BSP_H
 
 #include <bspopts.h>
 

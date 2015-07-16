@@ -2,8 +2,8 @@
  *  mcf5235 BSP header file
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_M68K_MCF5235_BSP_H
+#define LIBBSP_M68K_MCF5235_BSP_H
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>

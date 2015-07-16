@@ -15,8 +15,8 @@
  *
  *  Adapted for the mvme3100 BSP by T. Straumann, 2007.
  */
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_POWERPC_MVME3100_BSP_H
+#define LIBBSP_POWERPC_MVME3100_BSP_H
 
 #ifndef ASM
 

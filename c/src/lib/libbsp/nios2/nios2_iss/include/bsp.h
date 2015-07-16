@@ -12,8 +12,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_NIOS2_NIOS2_ISS_BSP_H
+#define LIBBSP_NIOS2_NIOS2_ISS_BSP_H
 
 #include <stdint.h>
 #include <bspopts.h>

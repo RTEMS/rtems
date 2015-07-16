@@ -8,8 +8,8 @@
  *  (C) S. Kate Feng 2003-2007 : Modified it to support the mvme5500 BSP.
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_POWERPC_MVME5500_BSP_H
+#define LIBBSP_POWERPC_MVME5500_BSP_H
 
 #ifndef ASM
 

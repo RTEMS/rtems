@@ -21,8 +21,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_POWERPC_TQM8XX_BSP_H
+#define LIBBSP_POWERPC_TQM8XX_BSP_H
 
 /*
  * indicate, that BSP is booted via TQMMon

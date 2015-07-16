@@ -14,8 +14,8 @@
  *  May 1996
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_M68K_MVME147S_BSP_H
+#define LIBBSP_M68K_MVME147S_BSP_H
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>

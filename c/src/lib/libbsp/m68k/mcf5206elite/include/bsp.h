@@ -11,8 +11,8 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_M68K_MCF5206ELITE_BSP_H
+#define LIBBSP_M68K_MCF5206ELITE_BSP_H
 
 #include "mcf5206/mcf5206e.h"
 

@@ -22,8 +22,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_SH_GENSH1_BSP_H
+#define LIBBSP_SH_GENSH1_BSP_H
 
 #include <rtems.h>
 #include <rtems/clockdrv.h>

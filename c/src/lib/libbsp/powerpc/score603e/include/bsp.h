@@ -11,8 +11,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_POWERPC_SCORE603E_BSP_H
+#define LIBBSP_POWERPC_SCORE603E_BSP_H
 
 #define BSP_ZERO_WORKSPACE_AUTOMATICALLY TRUE
 

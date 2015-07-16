@@ -37,8 +37,8 @@
  *  by the authors or by TGA Technologies.
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_SH_GENSH4_BSP_H
+#define LIBBSP_SH_GENSH4_BSP_H
 
 #include <rtems.h>
 #include <rtems/clockdrv.h>

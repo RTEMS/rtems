@@ -12,8 +12,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_ARM_GUMSTIX_BSP_H
+#define LIBBSP_ARM_GUMSTIX_BSP_H
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>

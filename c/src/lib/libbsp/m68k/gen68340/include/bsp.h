@@ -23,8 +23,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_M68K_GEN68340_BSP_H
+#define LIBBSP_M68K_GEN68340_BSP_H
 
 #ifndef ASM
 

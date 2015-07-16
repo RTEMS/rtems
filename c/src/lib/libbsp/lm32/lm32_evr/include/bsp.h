@@ -18,8 +18,8 @@
  *  Micro-Research Finland Oy
  */
 
-#ifndef _BSP_H
-#define _BSP_H
+#ifndef LIBBSP_LM32_LM32_EVR_BSP_H
+#define LIBBSP_LM32_LM32_EVR_BSP_H
 
 #include <stdint.h>
 #include <bspopts.h>
