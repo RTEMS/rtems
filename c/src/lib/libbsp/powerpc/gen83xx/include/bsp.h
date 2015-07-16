@@ -18,8 +18,8 @@
 \*===============================================================*/
 
 
-#ifndef __GEN83xx_BSP_h
-#define __GEN83xx_BSP_h
+#ifndef LIBBSP_POWERPC_GEN83XX_BSP_H
+#define LIBBSP_POWERPC_GEN83XX_BSP_H
 
 #define BSP_FEATURE_IRQ_EXTENSION
 

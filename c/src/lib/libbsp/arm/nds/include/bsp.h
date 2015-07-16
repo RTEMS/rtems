@@ -7,8 +7,8 @@
  * http://www.rtems.org/license/LICENSE
  */
 
-#ifndef __BSP_H_
-#define __BSP_H_
+#ifndef LIBBSP_ARM_NDS_H
+#define LIBBSP_ARM_NDS_H
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>

@@ -18,8 +18,8 @@
  * @brief AV5282 support.
  */
 
-#ifndef __SBav5282_BSP_H
-#define __SBav5282_BSP_H
+#ifndef LIBBSP_M68K_AV5282_BSP_H
+#define LIBBSP_M68K_AV5282_BSP_H
 
 #ifndef ASM
 

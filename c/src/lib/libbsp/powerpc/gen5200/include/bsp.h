@@ -20,8 +20,8 @@
 | this file contains board specific definitions                   |
 \*===============================================================*/
 
-#ifndef __GEN5200_BSP_h
-#define __GEN5200_BSP_h
+#ifndef LIBBSP_POWERPC_GEN5200_BSP_H
+#define LIBBSP_POWERPC_GEN5200_BSP_H
 
 #include <bspopts.h>
 

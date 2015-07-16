@@ -11,8 +11,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#ifndef __BSVC_SIM
-#define __BSVC_SIM
+#ifndef LIBBSP_M68K_SIM68000_BSP_H
+#define LIBBSP_M68K_SIM68000_BSP_H
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>

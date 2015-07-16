@@ -51,8 +51,8 @@
 |                                                                 |
 \*===============================================================*/
 
-#ifndef __GENMCF548X_BSP_H
-#define __GENMCF548X_BSP_H
+#ifndef LIBBSP_M68K_GENMCF548X_BSP_H
+#define LIBBSP_M68K_GENMCF548X_BSP_H
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
