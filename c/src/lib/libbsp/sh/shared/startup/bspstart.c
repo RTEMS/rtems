@@ -20,6 +20,7 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#include <rtems/score/percpu.h>
 
 uint32_t bsp_clicks_per_second;
 
@@ -51,8 +52,8 @@ void bsp_start( void )
    *  initialize the interrupt stack for this BSP
    */
   #if ( CPU_ALLOCATE_INTERRUPT_STACK == FALSE )
-    _CPU_Interrupt_stack_low = &CPU_Interrupt_stack_low ;
-    _CPU_Interrupt_stack_high = &CPU_Interrupt_stack_high ;
+    _CPU_Interrupt_stack_low = &CPU_Interrupt_stack_low;
+    _CPU_Interrupt_stack_high = &CPU_Interrupt_stack_high;
   #endif
 
   /*
