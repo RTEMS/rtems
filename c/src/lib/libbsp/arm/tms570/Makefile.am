@@ -11,6 +11,8 @@ include $(top_srcdir)/../../../../automake/compile.am
 
 include_bspdir = $(includedir)/bsp
 
+include_bsp_ti_herculesdir = $(includedir)/bsp/ti_herc
+
 dist_project_lib_DATA = bsp_specs
 
 # ----------------------------
@@ -39,6 +41,43 @@ include_bsp_HEADERS += include/tms570-vim.h
 include_bsp_HEADERS += include/tms570-pom.h
 include_bsp_HEADERS += include/tms570-sci-driver.h
 include_bsp_HEADERS += include/system-clocks.h
+
+include_bsp_ti_hercules_HEADERS = include/ti_herc/reg_adc.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_ccmsr.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_crc.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_dcan.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_dcc.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_dma.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_dmm.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_efuse.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_emac.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_emacm.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_emif.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_esm.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_flash.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_flex_ray.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_gio.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_htu.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_i2c.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_iomm.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_lin.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_mdio.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_n2het.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_pbist.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_pll.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_pmm.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_rti.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_rtp.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_sci.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_tcr.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_tcram.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_vim.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_pom.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_spi.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_stc.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_sys.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_sys2.h
+include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_pcr.h
 
 include_HEADERS += ../../shared/include/tm27.h
 
