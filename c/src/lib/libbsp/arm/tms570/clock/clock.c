@@ -39,6 +39,17 @@ static uint32_t tms570_rti_get_timecount(struct timecounter *tc)
   return TMS570_RTI.RTIFRC0;
 }
 
+#ifndef TMS570_PREFERRED_TC_FREQUENCY
+/*
+ * Define preferred main time base counter frequency
+ * The value of 1MHz is the best matching RTEMS
+ * timing system because then there is no need
+ * to scale RTEMS configuration microseconds_per_tick
+ * parameter
+ */
+#define TMS570_PREFERRED_TC_FREQUENCY 1000000
+#endif /* TMS570_PREFERRED_TC_FREQUENCY */
+
 /**
  *  @brief Initialize the HW peripheral for clock driver
  *
@@ -49,13 +60,31 @@ static uint32_t tms570_rti_get_timecount(struct timecounter *tc)
 static void tms570_clock_driver_support_initialize_hardware( void )
 {
 
-  uint32_t microsec_per_tick = rtems_configuration_get_microseconds_per_tick();
+  uint32_t microsec_per_tick;
+  uint32_t tc_frequency;
+  uint32_t tc_prescaler;
+  uint32_t tc_increments_per_tick;
+
+  microsec_per_tick = rtems_configuration_get_microseconds_per_tick();
+  tc_frequency = TMS570_PREFERRED_TC_FREQUENCY;
 
   rtems_counter_initialize_converter(BSP_PLL_OUT_CLOCK);
 
+  tc_prescaler = (BSP_PLL_OUT_CLOCK + tc_frequency) / (tc_frequency * 2);
+
+  /* Recompute actual most close frequency which can be realized */
+  tc_frequency = (BSP_PLL_OUT_CLOCK + tc_prescaler) / (tc_prescaler * 2);
+
+  /*
+   * Recompute tick period to adjust for configurable or exact
+   * preferred time base 1 usec resolution.
+   */
+  tc_increments_per_tick = ((uint64_t)microsec_per_tick * tc_frequency +
+                           500000) / 1000000;
+
   /* Hardware specific initialize */
   TMS570_RTI.RTIGCTRL = 0;
-  TMS570_RTI.RTICPUC0 = BSP_PLL_OUT_CLOCK /1000000 / 2; /* prescaler */
+  TMS570_RTI.RTICPUC0 = tc_prescaler - 1;
   TMS570_RTI.RTITBCTRL = 2;
   TMS570_RTI.RTICAPCTRL = 0;
   TMS570_RTI.RTICOMPCTRL = 0;
@@ -66,9 +95,9 @@ static void tms570_clock_driver_support_initialize_hardware( void )
   TMS570_RTI.RTICLEARINTENA = 0x00070f0f;
   TMS570_RTI.RTIINTFLAG = 0x0007000f;
   /* set timer */
-  TMS570_RTI.RTICOMP0 = TMS570_RTI.RTIFRC0 + microsec_per_tick;
-  TMS570_RTI.RTICOMP0CLR = TMS570_RTI.RTICOMP0 + microsec_per_tick / 2;
-  TMS570_RTI.RTIUDCP0 = microsec_per_tick;
+  TMS570_RTI.RTICOMP0 = TMS570_RTI.RTIFRC0 + tc_increments_per_tick;
+  TMS570_RTI.RTICOMP0CLR = TMS570_RTI.RTICOMP0 + tc_increments_per_tick / 2;
+  TMS570_RTI.RTIUDCP0 = tc_increments_per_tick;
   /* enable interupt */
   TMS570_RTI.RTISETINTENA = 0x1;
   /* enable timer */
@@ -76,7 +105,7 @@ static void tms570_clock_driver_support_initialize_hardware( void )
   /* set timecounter */
   tms570_rti_tc.tc_get_timecount = tms570_rti_get_timecount;
   tms570_rti_tc.tc_counter_mask = 0xffffffff;
-  tms570_rti_tc.tc_frequency = BSP_PLL_OUT_CLOCK;
+  tms570_rti_tc.tc_frequency = tc_frequency;
   tms570_rti_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
   rtems_timecounter_install(&tms570_rti_tc);
 }
