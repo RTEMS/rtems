@@ -549,22 +549,6 @@ typedef struct {
 SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
 
 /*
- *  This stack is allocated by the Interrupt Manager and the switch
- *  is performed in _ISR_Handler.  These variables contain pointers
- *  to the lowest and highest addresses in the chunk of memory allocated
- *  for the interrupt stack.  Since it is unknown whether the stack
- *  grows up or down (in general), this give the CPU dependent
- *  code the option of picking the version it wants to use.  Thus
- *  both must be present if either is.
- *
- *  The SPARC supports a software based interrupt stack and these
- *  are required.
- */
-/*
-SCORE_EXTERN void *_CPU_Interrupt_stack_low;
-SCORE_EXTERN void *_CPU_Interrupt_stack_high;
-*/
-/*
  *  This flag is context switched with each thread.  It indicates
  *  that THIS thread has an _ISR_Dispatch stack frame on its stack.
  *  By using this flag, we can avoid nesting more interrupt dispatching
