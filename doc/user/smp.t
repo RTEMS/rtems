@@ -371,6 +371,75 @@ architecture please consult the @cite{RTEMS CPU Architecture Supplement}.
 The only remaining user of task variables in the RTEMS code base is the Ada
 support.  So basically Ada is not available on RTEMS SMP.
 
+@subsection Thread Dispatch Details
+
+This section gives background information to developers interested in the
+interrupt latencies introduced by thread dispatching.  A thread dispatch
+consists of all work which must be done to stop the currently executing thread
+on a processor and hand over this processor to an heir thread.
+
+On SMP systems, scheduling decisions on one processor must be propagated to
+other processors through inter-processor interrupts.  So, a thread dispatch
+which must be carried out on another processor happens not instantaneous.  Thus
+several thread dispatch requests might be in the air and it is possible that
+some of them may be out of date before the corresponding processor has time to
+deal with them.  The thread dispatch mechanism uses three per-processor
+variables,
+@itemize @bullet
+@item the executing thread,
+@item the heir thread, and
+@item an boolean flag indicating if a thread dispatch is necessary or not.
+@end itemize
+Updates of the heir thread and the thread dispatch necessary indicator are
+synchronized via explicit memory barriers without the use of locks.  A thread
+can be an heir thread on at most one processor in the system.  The thread context
+is protected by a TTAS lock embedded in the context to ensure that it is used
+on at most one processor at a time.  The thread post-switch actions use a
+per-processor lock.  This implementation turned out to be quite efficient and
+no lock contention was observed in the test suite.
+
+The current implementation of thread dispatching has some implications with
+respect to the interrupt latency.  It is crucial to preserve the system
+invariant that a thread can execute on at most one processor in the system at a
+time.  This is accomplished with a boolean indicator in the thread context.
+The processor architecture specific context switch code will mark that a thread
+context is no longer executing and waits that the heir context stopped
+execution before it restores the heir context and resumes execution of the heir
+thread (the boolean indicator is basically a TTAS lock).  So, there is one
+point in time in which a processor is without a thread.  This is essential to
+avoid cyclic dependencies in case multiple threads migrate at once.  Otherwise
+some supervising entity is necessary to prevent deadlocks.  Such a global
+supervisor would lead to scalability problems so this approach is not used.
+Currently the context switch is performed with interrupts disabled.  Thus in
+case the heir thread is currently executing on another processor, the time of
+disabled interrupts is prolonged since one processor has to wait for another
+processor to make progress.
+
+It is difficult to avoid this issue with the interrupt latency since interrupts
+normally store the context of the interrupted thread on its stack.  In case a
+thread is marked as not executing, we must not use its thread stack to store
+such an interrupt context.  We cannot use the heir stack before it stopped
+execution on another processor.  If we enable interrupts during this
+transition, then we have to provide an alternative thread independent stack for
+interrupts in this time frame.  This issue needs further investigation.
+
+The problematic situation occurs in case we have a thread which executes with
+thread dispatching disabled and should execute on another processor (e.g. it is
+an heir thread on another processor).  In this case the interrupts on this
+other processor are disabled until the thread enables thread dispatching and
+starts the thread dispatch sequence.  The scheduler (an exception is the
+scheduler with thread processor affinity support) tries to avoid such a
+situation and checks if a new scheduled thread already executes on a processor.
+In case the assigned processor differs from the processor on which the thread
+already executes and this processor is a member of the processor set managed by
+this scheduler instance, it will reassign the processors to keep the already
+executing thread in place.  Therefore normal scheduler requests will not lead
+to such a situation.  Explicit thread migration requests, however, can lead to
+this situation.  Explicit thread migrations may occur due to the scheduler
+helping protocol or explicit scheduler instance changes.  The situation can
+also be provoked by interrupts which suspend and resume threads multiple times
+and produce stale asynchronous thread dispatch requests in the system.
+
 @c
 @c
 @c
