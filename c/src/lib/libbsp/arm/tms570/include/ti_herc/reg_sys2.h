@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_SYS2
-#define LIBBSP_ARM_tms570_SYS2
+#ifndef LIBBSP_ARM_TMS570_SYS2
+#define LIBBSP_ARM_TMS570_SYS2
 
 #include <bsp/utility.h>
 
@@ -61,7 +61,7 @@ typedef struct{
 } tms570_sys2_t;
 
 
-/*---------------------TMS570_SYS2PLLCTL3---------------------*/
+/*--------------------TMS570_SYS2_PLLCTL3--------------------*/
 /* field: ODPLL2 - Internal PLL Output Divider */
 #define TMS570_SYS2_PLLCTL3_ODPLL2(val) BSP_FLD32(val,29, 31)
 #define TMS570_SYS2_PLLCTL3_ODPLL2_GET(reg) BSP_FLD32GET(reg,29, 31)
@@ -83,19 +83,19 @@ typedef struct{
 #define TMS570_SYS2_PLLCTL3_PLLMUL2_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_SYS2STCCLKDIV--------------------*/
+/*-------------------TMS570_SYS2_STCCLKDIV-------------------*/
 /* field: CLKDIV - Clock divider/prescaler for CPU clock during logic BIST */
 #define TMS570_SYS2_STCCLKDIV_CLKDIV(val) BSP_FLD32(val,24, 26)
 #define TMS570_SYS2_STCCLKDIV_CLKDIV_GET(reg) BSP_FLD32GET(reg,24, 26)
 #define TMS570_SYS2_STCCLKDIV_CLKDIV_SET(reg,val) BSP_FLD32SET(reg, val,24, 26)
 
 
-/*---------------------TMS570_SYS2ECPCNTL---------------------*/
+/*--------------------TMS570_SYS2_ECPCNTL--------------------*/
 /* field: ECPSSEL - This bit allows the selection between VCLK and OSCIN as the clock source for ECLK. */
-#define TMS570_SYS2_ECPCNTL_ECPSSEL BSP_FLD32(24)
+#define TMS570_SYS2_ECPCNTL_ECPSSEL BSP_BIT32(24)
 
 /* field: ECPCOS - ECP continue on suspend. */
-#define TMS570_SYS2_ECPCNTL_ECPCOS BSP_FLD32(23)
+#define TMS570_SYS2_ECPCNTL_ECPCOS BSP_BIT32(23)
 
 /* field: ECPINSEL - Select ECP input clock source. */
 #define TMS570_SYS2_ECPCNTL_ECPINSEL(val) BSP_FLD32(val,6, 17)
@@ -108,21 +108,21 @@ typedef struct{
 #define TMS570_SYS2_ECPCNTL_ECPDIV_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_SYS2CLK2CNTRL--------------------*/
+/*-------------------TMS570_SYS2_CLK2CNTRL-------------------*/
 /* field: VCLK3R - VBUS clock3 ratio. */
 #define TMS570_SYS2_CLK2CNTRL_VCLK3R(val) BSP_FLD32(val,0, 3)
 #define TMS570_SYS2_CLK2CNTRL_VCLK3R_GET(reg) BSP_FLD32GET(reg,0, 3)
 #define TMS570_SYS2_CLK2CNTRL_VCLK3R_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*--------------------TMS570_SYS2VCLKACON1--------------------*/
+/*-------------------TMS570_SYS2_VCLKACON1-------------------*/
 /* field: VCLKA4R - Clock divider for the VCLKA4 source. Output will be present on VCLKA4_DIVR. */
 #define TMS570_SYS2_VCLKACON1_VCLKA4R(val) BSP_FLD32(val,24, 26)
 #define TMS570_SYS2_VCLKACON1_VCLKA4R_GET(reg) BSP_FLD32GET(reg,24, 26)
 #define TMS570_SYS2_VCLKACON1_VCLKA4R_SET(reg,val) BSP_FLD32SET(reg, val,24, 26)
 
 /* field: VCLKA4_DIV_CDDIS - Disable the VCLKA4 divider output. */
-#define TMS570_SYS2_VCLKACON1_VCLKA4_DIV_CDDIS BSP_FLD32(20)
+#define TMS570_SYS2_VCLKACON1_VCLKA4_DIV_CDDIS BSP_BIT32(20)
 
 /* field: VCLKA4S - Peripheral asynchronous clock4 source. */
 #define TMS570_SYS2_VCLKACON1_VCLKA4S(val) BSP_FLD32(val,16, 19)
@@ -135,7 +135,7 @@ typedef struct{
 #define TMS570_SYS2_VCLKACON1_VCLKA3R_SET(reg,val) BSP_FLD32SET(reg, val,8, 10)
 
 /* field: VCLKA3_DIV_CDDIS - Disable the VCLKA3 divider output. */
-#define TMS570_SYS2_VCLKACON1_VCLKA3_DIV_CDDIS BSP_FLD32(4)
+#define TMS570_SYS2_VCLKACON1_VCLKA3_DIV_CDDIS BSP_BIT32(4)
 
 /* field: VCLKA3S - Peripheral asynchronous clock3 source. */
 #define TMS570_SYS2_VCLKACON1_VCLKA3S(val) BSP_FLD32(val,0, 3)
@@ -143,7 +143,7 @@ typedef struct{
 #define TMS570_SYS2_VCLKACON1_VCLKA3S_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*---------------------TMS570_SYS2CLKSLIP---------------------*/
+/*--------------------TMS570_SYS2_CLKSLIP--------------------*/
 /* field: PLL1_SLIP_FILTER_COUNT - Configure the count for the filtered PLL slip. Count is on 10M clock. */
 #define TMS570_SYS2_CLKSLIP_PLL1_SLIP_FILTER_COUNT(val) BSP_FLD32(val,8, 13)
 #define TMS570_SYS2_CLKSLIP_PLL1_SLIP_FILTER_COUNT_GET(reg) BSP_FLD32GET(reg,8, 13)
@@ -155,19 +155,16 @@ typedef struct{
 #define TMS570_SYS2_CLKSLIP_PLL1_SLIP_FILTER_KEY_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*-------------------TMS570_SYS2EFC_CTLREG-------------------*/
+/*-------------------TMS570_SYS2_EFC_CTLREG-------------------*/
 /* field: EFC_INSTR_WEN - Enable user write of 4 EFUSE controller instructions. */
 #define TMS570_SYS2_EFC_CTLREG_EFC_INSTR_WEN(val) BSP_FLD32(val,0, 3)
 #define TMS570_SYS2_EFC_CTLREG_EFC_INSTR_WEN_GET(reg) BSP_FLD32GET(reg,0, 3)
 #define TMS570_SYS2_EFC_CTLREG_EFC_INSTR_WEN_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*-------------------TMS570_SYS2DIEDL_REG0-------------------*/
+/*-----------------------TMS570_SYS2_x-----------------------*/
 /* field: DIE - This read-only register contains the lower/upper word (31:0) of the die ID information. */
-#define TMS570_SYS2_DIEDL_REG0_DIE(val) BSP_FLD32(val,0, 31)
-#define TMS570_SYS2_DIEDL_REG0_DIE_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_SYS2_DIEDL_REG0_DIE_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
 
-
-#endif /* LIBBSP_ARM_tms570_SYS2 */
+#endif /* LIBBSP_ARM_TMS570_SYS2 */

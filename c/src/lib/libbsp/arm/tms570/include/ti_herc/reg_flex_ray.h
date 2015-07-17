@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_FLEX_RAY
-#define LIBBSP_ARM_tms570_FLEX_RAY
+#ifndef LIBBSP_ARM_TMS570_FLEX_RAY
+#define LIBBSP_ARM_TMS570_FLEX_RAY
 
 #include <bsp/utility.h>
 
@@ -121,7 +121,7 @@ typedef struct{
 } tms570_flex_ray_t;
 
 
-/*--------------------TMS570_FLEX_RAYGSN0--------------------*/
+/*--------------------TMS570_FLEX_RAY_GSN0--------------------*/
 /* field: Data_A - Data_A(15-0) */
 #define TMS570_FLEX_RAY_GSN0_Data_A(val) BSP_FLD32(val,16, 31)
 #define TMS570_FLEX_RAY_GSN0_Data_A_GET(reg) BSP_FLD32GET(reg,16, 31)
@@ -133,7 +133,7 @@ typedef struct{
 #define TMS570_FLEX_RAY_GSN0_Data_B_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_FLEX_RAYGSN1--------------------*/
+/*--------------------TMS570_FLEX_RAY_GSN1--------------------*/
 /* field: Data_C - Data_C(15-0) */
 #define TMS570_FLEX_RAY_GSN1_Data_C(val) BSP_FLD32(val,16, 31)
 #define TMS570_FLEX_RAY_GSN1_Data_C_GET(reg) BSP_FLD32GET(reg,16, 31)
@@ -145,12 +145,12 @@ typedef struct{
 #define TMS570_FLEX_RAY_GSN1_Data_D_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_FLEX_RAYGCS---------------------*/
+/*--------------------TMS570_FLEX_RAY_GCS--------------------*/
 /* field: ENDVBM - Endianness Correction on VBusp Master */
-#define TMS570_FLEX_RAY_GCS_ENDVBM BSP_FLD32(31)
+#define TMS570_FLEX_RAY_GCS_ENDVBM BSP_BIT32(31)
 
 /* field: ENDVBS - Endianness correction on VBusp Slave */
-#define TMS570_FLEX_RAY_GCS_ENDVBS BSP_FLD32(30)
+#define TMS570_FLEX_RAY_GCS_ENDVBS BSP_BIT32(30)
 
 /* field: ENDRx - Endianness Correction for No (header or payload) Data Sink Access */
 #define TMS570_FLEX_RAY_GCS_ENDRx(val) BSP_FLD32(val,28, 29)
@@ -168,10 +168,10 @@ typedef struct{
 #define TMS570_FLEX_RAY_GCS_ENDPx_SET(reg,val) BSP_FLD32SET(reg, val,24, 25)
 
 /* field: PRIO - Transfer Priority */
-#define TMS570_FLEX_RAY_GCS_PRIO BSP_FLD32(21)
+#define TMS570_FLEX_RAY_GCS_PRIO BSP_BIT32(21)
 
 /* field: PEFT - Parity for Test */
-#define TMS570_FLEX_RAY_GCS_PEFT BSP_FLD32(20)
+#define TMS570_FLEX_RAY_GCS_PEFT BSP_BIT32(20)
 
 /* field: PELx - Parity Lock */
 #define TMS570_FLEX_RAY_GCS_PELx(val) BSP_FLD32(val,16, 19)
@@ -179,36 +179,36 @@ typedef struct{
 #define TMS570_FLEX_RAY_GCS_PELx_SET(reg,val) BSP_FLD32SET(reg, val,16, 19)
 
 /* field: CETESM - Clear ETESM Register */
-#define TMS570_FLEX_RAY_GCS_CETESM BSP_FLD32(14)
+#define TMS570_FLEX_RAY_GCS_CETESM BSP_BIT32(14)
 
 /* field: CTTCC - Clear TTCC Register */
-#define TMS570_FLEX_RAY_GCS_CTTCC BSP_FLD32(13)
+#define TMS570_FLEX_RAY_GCS_CTTCC BSP_BIT32(13)
 
 /* field: CTTSM - Clear TTSM Register */
-#define TMS570_FLEX_RAY_GCS_CTTSM BSP_FLD32(12)
+#define TMS570_FLEX_RAY_GCS_CTTSM BSP_BIT32(12)
 
 /* field: ETSM - Enable Transfer Status Mirrored */
-#define TMS570_FLEX_RAY_GCS_ETSM BSP_FLD32(8)
+#define TMS570_FLEX_RAY_GCS_ETSM BSP_BIT32(8)
 
 /* field: SILE - Status Interrupt Line Enable */
-#define TMS570_FLEX_RAY_GCS_SILE BSP_FLD32(5)
+#define TMS570_FLEX_RAY_GCS_SILE BSP_BIT32(5)
 
 /* field: EILE - Error Interrupt Line Enable */
-#define TMS570_FLEX_RAY_GCS_EILE BSP_FLD32(4)
+#define TMS570_FLEX_RAY_GCS_EILE BSP_BIT32(4)
 
 /* field: TUH - Transfer Unit Halted */
-#define TMS570_FLEX_RAY_GCS_TUH BSP_FLD32(1)
+#define TMS570_FLEX_RAY_GCS_TUH BSP_BIT32(1)
 
 /* field: TUE - Transfer Unit Enabled */
-#define TMS570_FLEX_RAY_GCS_TUE BSP_FLD32(0)
+#define TMS570_FLEX_RAY_GCS_TUE BSP_BIT32(0)
 
 
-/*---------------------TMS570_FLEX_RAYGCR---------------------*/
+/*--------------------TMS570_FLEX_RAY_GCR--------------------*/
 /* field: ENDVBM - Endianness Correction on VBusp Master */
-#define TMS570_FLEX_RAY_GCR_ENDVBM BSP_FLD32(31)
+#define TMS570_FLEX_RAY_GCR_ENDVBM BSP_BIT32(31)
 
 /* field: ENDVBS - Endianness correction on VBusp Slave */
-#define TMS570_FLEX_RAY_GCR_ENDVBS BSP_FLD32(30)
+#define TMS570_FLEX_RAY_GCR_ENDVBS BSP_BIT32(30)
 
 /* field: ENDRx - Endianness Correction for No (header or payload) Data Sink Access */
 #define TMS570_FLEX_RAY_GCR_ENDRx(val) BSP_FLD32(val,28, 29)
@@ -226,10 +226,10 @@ typedef struct{
 #define TMS570_FLEX_RAY_GCR_ENDPx_SET(reg,val) BSP_FLD32SET(reg, val,24, 25)
 
 /* field: PRIO - Transfer Priority */
-#define TMS570_FLEX_RAY_GCR_PRIO BSP_FLD32(21)
+#define TMS570_FLEX_RAY_GCR_PRIO BSP_BIT32(21)
 
 /* field: PEFT - Parity for Test */
-#define TMS570_FLEX_RAY_GCR_PEFT BSP_FLD32(20)
+#define TMS570_FLEX_RAY_GCR_PEFT BSP_BIT32(20)
 
 /* field: PELx - Parity Lock */
 #define TMS570_FLEX_RAY_GCR_PELx(val) BSP_FLD32(val,16, 19)
@@ -237,41 +237,41 @@ typedef struct{
 #define TMS570_FLEX_RAY_GCR_PELx_SET(reg,val) BSP_FLD32SET(reg, val,16, 19)
 
 /* field: CETESM - Clear ETESM Register */
-#define TMS570_FLEX_RAY_GCR_CETESM BSP_FLD32(14)
+#define TMS570_FLEX_RAY_GCR_CETESM BSP_BIT32(14)
 
 /* field: CTTCC - Clear TTCC Register */
-#define TMS570_FLEX_RAY_GCR_CTTCC BSP_FLD32(13)
+#define TMS570_FLEX_RAY_GCR_CTTCC BSP_BIT32(13)
 
 /* field: CTTSM - Clear TTSM Register */
-#define TMS570_FLEX_RAY_GCR_CTTSM BSP_FLD32(12)
+#define TMS570_FLEX_RAY_GCR_CTTSM BSP_BIT32(12)
 
 /* field: ETSM - Enable Transfer Status Mirrored */
-#define TMS570_FLEX_RAY_GCR_ETSM BSP_FLD32(8)
+#define TMS570_FLEX_RAY_GCR_ETSM BSP_BIT32(8)
 
 /* field: SILE - Status Interrupt Line Enable */
-#define TMS570_FLEX_RAY_GCR_SILE BSP_FLD32(5)
+#define TMS570_FLEX_RAY_GCR_SILE BSP_BIT32(5)
 
 /* field: EILE - Error Interrupt Line Enable */
-#define TMS570_FLEX_RAY_GCR_EILE BSP_FLD32(4)
+#define TMS570_FLEX_RAY_GCR_EILE BSP_BIT32(4)
 
 /* field: TUH - Transfer Unit Halted */
-#define TMS570_FLEX_RAY_GCR_TUH BSP_FLD32(1)
+#define TMS570_FLEX_RAY_GCR_TUH BSP_BIT32(1)
 
 /* field: TUE - Transfer Unit Enabled */
-#define TMS570_FLEX_RAY_GCR_TUE BSP_FLD32(0)
+#define TMS570_FLEX_RAY_GCR_TUE BSP_BIT32(0)
 
 
-/*--------------------TMS570_FLEX_RAYTSCB--------------------*/
+/*--------------------TMS570_FLEX_RAY_TSCB--------------------*/
 /* field: TSMS - Transfer State Machine Status */
 #define TMS570_FLEX_RAY_TSCB_TSMS(val) BSP_FLD32(val,16, 20)
 #define TMS570_FLEX_RAY_TSCB_TSMS_GET(reg) BSP_FLD32GET(reg,16, 20)
 #define TMS570_FLEX_RAY_TSCB_TSMS_SET(reg,val) BSP_FLD32SET(reg, val,16, 20)
 
 /* field: STUH - Status of Transfer Unit State Machine for Halt Detection */
-#define TMS570_FLEX_RAY_TSCB_STUH BSP_FLD32(12)
+#define TMS570_FLEX_RAY_TSCB_STUH BSP_BIT32(12)
 
 /* field: IDLE - Detects Transfer State Machine State IDLE */
-#define TMS570_FLEX_RAY_TSCB_IDLE BSP_FLD32(8)
+#define TMS570_FLEX_RAY_TSCB_IDLE BSP_BIT32(8)
 
 /* field: BN - Buffer Number */
 #define TMS570_FLEX_RAY_TSCB_BN(val) BSP_FLD32(val,0, 6)
@@ -279,114 +279,75 @@ typedef struct{
 #define TMS570_FLEX_RAY_TSCB_BN_SET(reg,val) BSP_FLD32SET(reg, val,0, 6)
 
 
-/*--------------------TMS570_FLEX_RAYLTBCC--------------------*/
+/*-------------------TMS570_FLEX_RAY_LTBCC-------------------*/
 /* field: BN - Buffer number. */
 #define TMS570_FLEX_RAY_LTBCC_BN(val) BSP_FLD32(val,0, 6)
 #define TMS570_FLEX_RAY_LTBCC_BN_GET(reg) BSP_FLD32GET(reg,0, 6)
 #define TMS570_FLEX_RAY_LTBCC_BN_SET(reg,val) BSP_FLD32SET(reg, val,0, 6)
 
 
-/*--------------------TMS570_FLEX_RAYLTBSM--------------------*/
+/*-------------------TMS570_FLEX_RAY_LTBSM-------------------*/
 /* field: BN - Buffer number. */
 #define TMS570_FLEX_RAY_LTBSM_BN(val) BSP_FLD32(val,0, 6)
 #define TMS570_FLEX_RAY_LTBSM_BN_GET(reg) BSP_FLD32GET(reg,0, 6)
 #define TMS570_FLEX_RAY_LTBSM_BN_SET(reg,val) BSP_FLD32SET(reg, val,0, 6)
 
 
-/*---------------------TMS570_FLEX_RAYTBA---------------------*/
+/*--------------------TMS570_FLEX_RAY_TBA--------------------*/
 /* field: TBA - Transfer Base Address. */
-#define TMS570_FLEX_RAY_TBA_TBA(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TBA_TBA_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TBA_TBA_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_FLEX_RAYNTBA--------------------*/
+/*--------------------TMS570_FLEX_RAY_NTBA--------------------*/
 /* field: nTBA - nTBA(31-0) */
-#define TMS570_FLEX_RAY_NTBA_nTBA(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_NTBA_nTBA_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_NTBA_nTBA_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_FLEX_RAYBAMS--------------------*/
+/*--------------------TMS570_FLEX_RAY_BAMS--------------------*/
 /* field: BAMS - Base Address of Mirrored Status32-bit base pointer, 2 LSB are not significant (32-bit */
-#define TMS570_FLEX_RAY_BAMS_BAMS(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_BAMS_BAMS_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_BAMS_BAMS_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_FLEX_RAYSAMP--------------------*/
+/*--------------------TMS570_FLEX_RAY_SAMP--------------------*/
 /* field: SAMP - Start Address Memory Protection. */
-#define TMS570_FLEX_RAY_SAMP_SAMP(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_SAMP_SAMP_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_SAMP_SAMP_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_FLEX_RAYEAMP--------------------*/
+/*--------------------TMS570_FLEX_RAY_EAMP--------------------*/
 /* field: EAMP - End Address Memory Protection. */
-#define TMS570_FLEX_RAY_EAMP_EAMP(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_EAMP_EAMP_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_EAMP_EAMP_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_FLEX_RAYTSMO1--------------------*/
+/*-------------------TMS570_FLEX_RAY_TSMO1-------------------*/
 /* field: TSMO1 - Transfer to System Memory Occurred Register 1. */
-#define TMS570_FLEX_RAY_TSMO1_TSMO1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TSMO1_TSMO1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TSMO1_TSMO1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_FLEX_RAYTSMO2--------------------*/
+/*-------------------TMS570_FLEX_RAY_TSMO2-------------------*/
 /* field: TSMO1 - Transfer to System Memory Occurred Register 1. */
-#define TMS570_FLEX_RAY_TSMO2_TSMO1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TSMO2_TSMO1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TSMO2_TSMO1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_FLEX_RAYTSMO3--------------------*/
+/*-------------------TMS570_FLEX_RAY_TSMO3-------------------*/
 /* field: TSMO1 - Transfer to System Memory Occurred Register 1. */
-#define TMS570_FLEX_RAY_TSMO3_TSMO1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TSMO3_TSMO1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TSMO3_TSMO1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_FLEX_RAYTSMO4--------------------*/
+/*-------------------TMS570_FLEX_RAY_TSMO4-------------------*/
 /* field: TSMO1 - Transfer to System Memory Occurred Register 1. */
-#define TMS570_FLEX_RAY_TSMO4_TSMO1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TSMO4_TSMO1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TSMO4_TSMO1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_FLEX_RAYTCCO1--------------------*/
+/*-------------------TMS570_FLEX_RAY_TCCO1-------------------*/
 /* field: TCCO1 - Transfer to Communication Controller Occurred Register 1. */
-#define TMS570_FLEX_RAY_TCCO1_TCCO1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TCCO1_TCCO1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TCCO1_TCCO1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_FLEX_RAYTCCO2--------------------*/
+/*-------------------TMS570_FLEX_RAY_TCCO2-------------------*/
 /* field: TCCO1 - Transfer to Communication Controller Occurred Register 1. */
-#define TMS570_FLEX_RAY_TCCO2_TCCO1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TCCO2_TCCO1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TCCO2_TCCO1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_FLEX_RAYTCCO3--------------------*/
+/*-------------------TMS570_FLEX_RAY_TCCO3-------------------*/
 /* field: TCCO1 - Transfer to Communication Controller Occurred Register 1. */
-#define TMS570_FLEX_RAY_TCCO3_TCCO1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TCCO3_TCCO1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TCCO3_TCCO1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_FLEX_RAYTCCO4--------------------*/
+/*-------------------TMS570_FLEX_RAY_TCCO4-------------------*/
 /* field: TCCO1 - Transfer to Communication Controller Occurred Register 1. */
-#define TMS570_FLEX_RAY_TCCO4_TCCO1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TCCO4_TCCO1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TCCO4_TCCO1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_FLEX_RAYTOOFF--------------------*/
+/*-------------------TMS570_FLEX_RAY_TOOFF-------------------*/
 /* field: TDIR - Transfer Direction. */
-#define TMS570_FLEX_RAY_TOOFF_TDIR BSP_FLD32(8)
+#define TMS570_FLEX_RAY_TOOFF_TDIR BSP_BIT32(8)
 
 /* field: OFF - Offset Vector */
 #define TMS570_FLEX_RAY_TOOFF_OFF(val) BSP_FLD32(val,0, 7)
@@ -394,19 +355,19 @@ typedef struct{
 #define TMS570_FLEX_RAY_TOOFF_OFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*--------------------TMS570_FLEX_RAYPEADR--------------------*/
+/*-------------------TMS570_FLEX_RAY_PEADR-------------------*/
 /* field: ADR - Address of failing TCR location. */
 #define TMS570_FLEX_RAY_PEADR_ADR(val) BSP_FLD32(val,0, 8)
 #define TMS570_FLEX_RAY_PEADR_ADR_GET(reg) BSP_FLD32GET(reg,0, 8)
 #define TMS570_FLEX_RAY_PEADR_ADR_SET(reg,val) BSP_FLD32SET(reg, val,0, 8)
 
 
-/*--------------------TMS570_FLEX_RAYTEIF--------------------*/
+/*--------------------TMS570_FLEX_RAY_TEIF--------------------*/
 /* field: MPV - Memory Protection Violation. */
-#define TMS570_FLEX_RAY_TEIF_MPV BSP_FLD32(17)
+#define TMS570_FLEX_RAY_TEIF_MPV BSP_BIT32(17)
 
 /* field: PE - Parity Error. The flag signals a parity error to the host. */
-#define TMS570_FLEX_RAY_TEIF_PE BSP_FLD32(16)
+#define TMS570_FLEX_RAY_TEIF_PE BSP_BIT32(16)
 
 /* field: RSTAT - Status of VBUS on read transfers. */
 #define TMS570_FLEX_RAY_TEIF_RSTAT(val) BSP_FLD32(val,8, 10)
@@ -419,13 +380,13 @@ typedef struct{
 #define TMS570_FLEX_RAY_TEIF_WSTAT_SET(reg,val) BSP_FLD32SET(reg, val,4, 6)
 
 /* field: TNR - Transfer Not Ready. */
-#define TMS570_FLEX_RAY_TEIF_TNR BSP_FLD32(1)
+#define TMS570_FLEX_RAY_TEIF_TNR BSP_BIT32(1)
 
 /* field: FAC - Forbidden Access. */
-#define TMS570_FLEX_RAY_TEIF_FAC BSP_FLD32(0)
+#define TMS570_FLEX_RAY_TEIF_FAC BSP_BIT32(0)
 
 
-/*-------------------TMS570_FLEX_RAYTEIRES-------------------*/
+/*-------------------TMS570_FLEX_RAY_TEIRES-------------------*/
 /* field: RSTATE - Read Error Interrupt Generation (interrupt generation on VBUS read transfer errors). */
 #define TMS570_FLEX_RAY_TEIRES_RSTATE(val) BSP_FLD32(val,8, 10)
 #define TMS570_FLEX_RAY_TEIRES_RSTATE_GET(reg) BSP_FLD32GET(reg,8, 10)
@@ -437,13 +398,13 @@ typedef struct{
 #define TMS570_FLEX_RAY_TEIRES_WSTATE_SET(reg,val) BSP_FLD32SET(reg, val,4, 6)
 
 /* field: TNRE - Transfer Not Ready Enable. */
-#define TMS570_FLEX_RAY_TEIRES_TNRE BSP_FLD32(1)
+#define TMS570_FLEX_RAY_TEIRES_TNRE BSP_BIT32(1)
 
 /* field: FACE - Forbidden Access Enable. */
-#define TMS570_FLEX_RAY_TEIRES_FACE BSP_FLD32(0)
+#define TMS570_FLEX_RAY_TEIRES_FACE BSP_BIT32(0)
 
 
-/*-------------------TMS570_FLEX_RAYTEIRER-------------------*/
+/*-------------------TMS570_FLEX_RAY_TEIRER-------------------*/
 /* field: RSTATE - Read Error Interrupt Generation (interrupt generation on VBUS read transfer errors). */
 #define TMS570_FLEX_RAY_TEIRER_RSTATE(val) BSP_FLD32(val,8, 10)
 #define TMS570_FLEX_RAY_TEIRER_RSTATE_GET(reg) BSP_FLD32GET(reg,8, 10)
@@ -455,347 +416,203 @@ typedef struct{
 #define TMS570_FLEX_RAY_TEIRER_WSTATE_SET(reg,val) BSP_FLD32SET(reg, val,4, 6)
 
 /* field: TNRE - Transfer Not Ready Enable. */
-#define TMS570_FLEX_RAY_TEIRER_TNRE BSP_FLD32(1)
+#define TMS570_FLEX_RAY_TEIRER_TNRE BSP_BIT32(1)
 
 /* field: FACE - Forbidden Access Enable. */
-#define TMS570_FLEX_RAY_TEIRER_FACE BSP_FLD32(0)
+#define TMS570_FLEX_RAY_TEIRER_FACE BSP_BIT32(0)
 
 
-/*-------------------TMS570_FLEX_RAYTTSMS1-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTSMS1-------------------*/
 /* field: TTSMS1 - Trigger Transfer to System Memory Set 1. */
-#define TMS570_FLEX_RAY_TTSMS1_TTSMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTSMS1_TTSMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTSMS1_TTSMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTSMR1-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTSMR1-------------------*/
 /* field: TTSMS1 - Trigger Transfer to System Memory Set 1. */
-#define TMS570_FLEX_RAY_TTSMR1_TTSMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTSMR1_TTSMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTSMR1_TTSMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTSMS2-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTSMS2-------------------*/
 /* field: TTSMS1 - Trigger Transfer to System Memory Set 1. */
-#define TMS570_FLEX_RAY_TTSMS2_TTSMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTSMS2_TTSMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTSMS2_TTSMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTSMR2-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTSMR2-------------------*/
 /* field: TTSMS1 - Trigger Transfer to System Memory Set 1. */
-#define TMS570_FLEX_RAY_TTSMR2_TTSMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTSMR2_TTSMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTSMR2_TTSMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTSMS3-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTSMS3-------------------*/
 /* field: TTSMS1 - Trigger Transfer to System Memory Set 1. */
-#define TMS570_FLEX_RAY_TTSMS3_TTSMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTSMS3_TTSMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTSMS3_TTSMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTSMR3-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTSMR3-------------------*/
 /* field: TTSMS1 - Trigger Transfer to System Memory Set 1. */
-#define TMS570_FLEX_RAY_TTSMR3_TTSMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTSMR3_TTSMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTSMR3_TTSMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTSMS4-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTSMS4-------------------*/
 /* field: TTSMS1 - Trigger Transfer to System Memory Set 1. */
-#define TMS570_FLEX_RAY_TTSMS4_TTSMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTSMS4_TTSMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTSMS4_TTSMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTSMR4-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTSMR4-------------------*/
 /* field: TTSMS1 - Trigger Transfer to System Memory Set 1. */
-#define TMS570_FLEX_RAY_TTSMR4_TTSMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTSMR4_TTSMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTSMR4_TTSMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTCCS1-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTCCS1-------------------*/
 /* field: TTCCS1 - Trigger Transfer to Communication Controller Set 1. */
-#define TMS570_FLEX_RAY_TTCCS1_TTCCS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTCCS1_TTCCS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTCCS1_TTCCS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTCCR1-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTCCR1-------------------*/
 /* field: TTCCS1 - Trigger Transfer to Communication Controller Set 1. */
-#define TMS570_FLEX_RAY_TTCCR1_TTCCS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTCCR1_TTCCS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTCCR1_TTCCS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTCCS2-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTCCS2-------------------*/
 /* field: TTCCS1 - Trigger Transfer to Communication Controller Set 1. */
-#define TMS570_FLEX_RAY_TTCCS2_TTCCS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTCCS2_TTCCS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTCCS2_TTCCS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTCCR2-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTCCR2-------------------*/
 /* field: TTCCS1 - Trigger Transfer to Communication Controller Set 1. */
-#define TMS570_FLEX_RAY_TTCCR2_TTCCS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTCCR2_TTCCS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTCCR2_TTCCS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTCCS3-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTCCS3-------------------*/
 /* field: TTCCS1 - Trigger Transfer to Communication Controller Set 1. */
-#define TMS570_FLEX_RAY_TTCCS3_TTCCS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTCCS3_TTCCS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTCCS3_TTCCS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTCCR3-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTCCR3-------------------*/
 /* field: TTCCS1 - Trigger Transfer to Communication Controller Set 1. */
-#define TMS570_FLEX_RAY_TTCCR3_TTCCS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTCCR3_TTCCS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTCCR3_TTCCS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTCCS4-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTCCS4-------------------*/
 /* field: TTCCS1 - Trigger Transfer to Communication Controller Set 1. */
-#define TMS570_FLEX_RAY_TTCCS4_TTCCS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTCCS4_TTCCS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTCCS4_TTCCS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTTCCR4-------------------*/
+/*-------------------TMS570_FLEX_RAY_TTCCR4-------------------*/
 /* field: TTCCS1 - Trigger Transfer to Communication Controller Set 1. */
-#define TMS570_FLEX_RAY_TTCCR4_TTCCS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TTCCR4_TTCCS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TTCCR4_TTCCS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYETESMS1-------------------*/
+/*------------------TMS570_FLEX_RAY_ETESMS1------------------*/
 /* field: ETESMS1 - Enable Transfer on Event to System Memory Set 1. */
-#define TMS570_FLEX_RAY_ETESMS1_ETESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_ETESMS1_ETESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_ETESMS1_ETESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYETESMR1-------------------*/
+/*------------------TMS570_FLEX_RAY_ETESMR1------------------*/
 /* field: ETESMS1 - Enable Transfer on Event to System Memory Set 1. */
-#define TMS570_FLEX_RAY_ETESMR1_ETESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_ETESMR1_ETESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_ETESMR1_ETESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYETESMS2-------------------*/
+/*------------------TMS570_FLEX_RAY_ETESMS2------------------*/
 /* field: ETESMS1 - Enable Transfer on Event to System Memory Set 1. */
-#define TMS570_FLEX_RAY_ETESMS2_ETESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_ETESMS2_ETESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_ETESMS2_ETESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYETESMR2-------------------*/
+/*------------------TMS570_FLEX_RAY_ETESMR2------------------*/
 /* field: ETESMS1 - message buffers 0 to 31. */
-#define TMS570_FLEX_RAY_ETESMR2_ETESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_ETESMR2_ETESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_ETESMR2_ETESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYETESMS3-------------------*/
+/*------------------TMS570_FLEX_RAY_ETESMS3------------------*/
 /* field: ETESMS1 - Enable Transfer on Event to System Memory Set 1. */
-#define TMS570_FLEX_RAY_ETESMS3_ETESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_ETESMS3_ETESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_ETESMS3_ETESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYETESMR3-------------------*/
+/*------------------TMS570_FLEX_RAY_ETESMR3------------------*/
 /* field: ETESMS1 - Enable Transfer on Event to System Memory Set 1. */
-#define TMS570_FLEX_RAY_ETESMR3_ETESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_ETESMR3_ETESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_ETESMR3_ETESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYETESMS4-------------------*/
+/*------------------TMS570_FLEX_RAY_ETESMS4------------------*/
 /* field: ETESMS1 - Enable Transfer on Event to System Memory Set 1. */
-#define TMS570_FLEX_RAY_ETESMS4_ETESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_ETESMS4_ETESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_ETESMS4_ETESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYETESMR4-------------------*/
+/*------------------TMS570_FLEX_RAY_ETESMR4------------------*/
 /* field: ETESMS1 - message buffers 0 to 31. */
-#define TMS570_FLEX_RAY_ETESMR4_ETESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_ETESMR4_ETESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_ETESMR4_ETESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYCESMS1-------------------*/
+/*-------------------TMS570_FLEX_RAY_CESMS1-------------------*/
 /* field: CESMS1 - Clear on Event to System Memory Set 1. */
-#define TMS570_FLEX_RAY_CESMS1_CESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_CESMS1_CESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_CESMS1_CESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYCESMR1-------------------*/
+/*-------------------TMS570_FLEX_RAY_CESMR1-------------------*/
 /* field: CESMS1 - Clear on Event to System Memory Set 1. */
-#define TMS570_FLEX_RAY_CESMR1_CESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_CESMR1_CESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_CESMR1_CESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYCESMS2-------------------*/
+/*-------------------TMS570_FLEX_RAY_CESMS2-------------------*/
 /* field: CESMS1 - Clear on Event to System Memory Set 1. */
-#define TMS570_FLEX_RAY_CESMS2_CESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_CESMS2_CESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_CESMS2_CESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYCESMR2-------------------*/
+/*-------------------TMS570_FLEX_RAY_CESMR2-------------------*/
 /* field: CESMS1 - Clear on Event to System Memory Set 1. */
-#define TMS570_FLEX_RAY_CESMR2_CESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_CESMR2_CESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_CESMR2_CESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYCESMS3-------------------*/
+/*-------------------TMS570_FLEX_RAY_CESMS3-------------------*/
 /* field: CESMS1 - Clear on Event to System Memory Set 1. */
-#define TMS570_FLEX_RAY_CESMS3_CESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_CESMS3_CESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_CESMS3_CESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYCESMR3-------------------*/
+/*-------------------TMS570_FLEX_RAY_CESMR3-------------------*/
 /* field: CESMS1 - CESMS1(31-0) */
-#define TMS570_FLEX_RAY_CESMR3_CESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_CESMR3_CESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_CESMR3_CESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYCESMS4-------------------*/
+/*-------------------TMS570_FLEX_RAY_CESMS4-------------------*/
 /* field: CESMS1 - Clear on Event to System Memory Set 1. */
-#define TMS570_FLEX_RAY_CESMS4_CESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_CESMS4_CESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_CESMS4_CESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYCESMR4-------------------*/
+/*-------------------TMS570_FLEX_RAY_CESMR4-------------------*/
 /* field: CESMS1 - Clear on Event to System Memory Set 1. */
-#define TMS570_FLEX_RAY_CESMR4_CESMS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_CESMR4_CESMS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_CESMR4_CESMS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTSMIES1-------------------*/
+/*------------------TMS570_FLEX_RAY_TSMIES1------------------*/
 /* field: TTSMIES1 - Transfer to System Memory Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TSMIES1_TTSMIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TSMIES1_TTSMIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TSMIES1_TTSMIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTSMIER1-------------------*/
+/*------------------TMS570_FLEX_RAY_TSMIER1------------------*/
 /* field: TTSMIES1 - Transfer to System Memory Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TSMIER1_TTSMIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TSMIER1_TTSMIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TSMIER1_TTSMIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTSMIES2-------------------*/
+/*------------------TMS570_FLEX_RAY_TSMIES2------------------*/
 /* field: TTSMIES1 - Transfer to System Memory Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TSMIES2_TTSMIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TSMIES2_TTSMIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TSMIES2_TTSMIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTSMIER2-------------------*/
+/*------------------TMS570_FLEX_RAY_TSMIER2------------------*/
 /* field: TTSMIES1 - Transfer to System Memory Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TSMIER2_TTSMIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TSMIER2_TTSMIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TSMIER2_TTSMIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTSMIES3-------------------*/
+/*------------------TMS570_FLEX_RAY_TSMIES3------------------*/
 /* field: TTSMIES1 - Transfer to System Memory Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TSMIES3_TTSMIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TSMIES3_TTSMIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TSMIES3_TTSMIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTSMIER3-------------------*/
+/*------------------TMS570_FLEX_RAY_TSMIER3------------------*/
 /* field: TTSMIES1 - Transfer to System Memory Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TSMIER3_TTSMIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TSMIER3_TTSMIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TSMIER3_TTSMIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTSMIES4-------------------*/
+/*------------------TMS570_FLEX_RAY_TSMIES4------------------*/
 /* field: TTSMIES1 - Transfer to System Memory Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TSMIES4_TTSMIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TSMIES4_TTSMIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TSMIES4_TTSMIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTSMIER4-------------------*/
+/*------------------TMS570_FLEX_RAY_TSMIER4------------------*/
 /* field: TTSMIES1 - Transfer to System Memory Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TSMIER4_TTSMIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TSMIER4_TTSMIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TSMIER4_TTSMIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTCCIES1-------------------*/
+/*------------------TMS570_FLEX_RAY_TCCIES1------------------*/
 /* field: TCCIES1 - Transfer to Communication Controller Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TCCIES1_TCCIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TCCIES1_TCCIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TCCIES1_TCCIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTCCIER1-------------------*/
+/*------------------TMS570_FLEX_RAY_TCCIER1------------------*/
 /* field: TCCIES1 - Transfer to Communication Controller Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TCCIER1_TCCIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TCCIER1_TCCIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TCCIER1_TCCIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTCCIES2-------------------*/
+/*------------------TMS570_FLEX_RAY_TCCIES2------------------*/
 /* field: TCCIES1 - Transfer to Communication Controller Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TCCIES2_TCCIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TCCIES2_TCCIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TCCIES2_TCCIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTCCIER2-------------------*/
+/*------------------TMS570_FLEX_RAY_TCCIER2------------------*/
 /* field: TCCIES1 - to message buffers 0 to 31. */
-#define TMS570_FLEX_RAY_TCCIER2_TCCIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TCCIER2_TCCIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TCCIER2_TCCIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTCCIES3-------------------*/
+/*------------------TMS570_FLEX_RAY_TCCIES3------------------*/
 /* field: TCCIES1 - Transfer to Communication Controller Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TCCIES3_TCCIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TCCIES3_TCCIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TCCIES3_TCCIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTCCIER3-------------------*/
+/*------------------TMS570_FLEX_RAY_TCCIER3------------------*/
 /* field: TCCIES1 - Transfer to Communication Controller Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TCCIER3_TCCIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TCCIER3_TCCIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TCCIER3_TCCIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTCCIES4-------------------*/
+/*------------------TMS570_FLEX_RAY_TCCIES4------------------*/
 /* field: TCCIES1 - Transfer to Communication Controller Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TCCIES4_TCCIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TCCIES4_TCCIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TCCIES4_TCCIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_FLEX_RAYTCCIER4-------------------*/
+/*------------------TMS570_FLEX_RAY_TCCIER4------------------*/
 /* field: TCCIES1 - Transfer to Communication Controller Interrupt Enable Set 1. */
-#define TMS570_FLEX_RAY_TCCIER4_TCCIES1(val) BSP_FLD32(val,0, 31)
-#define TMS570_FLEX_RAY_TCCIER4_TCCIES1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_FLEX_RAY_TCCIER4_TCCIES1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
 
-
-#endif /* LIBBSP_ARM_tms570_FLEX_RAY */
+#endif /* LIBBSP_ARM_TMS570_FLEX_RAY */

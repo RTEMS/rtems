@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_VIM
-#define LIBBSP_ARM_tms570_VIM
+#ifndef LIBBSP_ARM_TMS570_VIM
+#define LIBBSP_ARM_TMS570_VIM
 
 #include <bsp/utility.h>
 
@@ -70,14 +70,14 @@ typedef struct{
 } tms570_vim_t;
 
 
-/*----------------------TMS570_VIMPARFLG----------------------*/
+/*---------------------TMS570_VIM_PARFLG---------------------*/
 /* field: PARFLG - The PARFLG indicates that a parity error has been found and that theInterrupt Vector Table is */
-#define TMS570_VIM_PARFLG_PARFLG BSP_FLD32(0)
+#define TMS570_VIM_PARFLG_PARFLG BSP_BIT32(0)
 
 
-/*----------------------TMS570_VIMPARCTL----------------------*/
+/*---------------------TMS570_VIM_PARCTL---------------------*/
 /* field: TEST - This bit maps the parity bits into the Interrupt Vector Table frame to make them accessible by the */
-#define TMS570_VIM_PARCTL_TEST BSP_FLD32(8)
+#define TMS570_VIM_PARCTL_TEST BSP_BIT32(8)
 
 /* field: PARENA - VIM parity enable. */
 #define TMS570_VIM_PARCTL_PARENA(val) BSP_FLD32(val,0, 3)
@@ -85,7 +85,7 @@ typedef struct{
 #define TMS570_VIM_PARCTL_PARENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*----------------------TMS570_VIMADDERR----------------------*/
+/*---------------------TMS570_VIM_ADDERR---------------------*/
 /* field: Interrupt_Vector_Table - Interrupt Vector Table offset. */
 #define TMS570_VIM_ADDERR_Interrupt_Vector_Table(val) BSP_FLD32(val,9, 31)
 #define TMS570_VIM_ADDERR_Interrupt_Vector_Table_GET(reg) BSP_FLD32GET(reg,9, 31)
@@ -102,84 +102,57 @@ typedef struct{
 #define TMS570_VIM_ADDERR_Word_offset_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*---------------------TMS570_VIMFBPARERR---------------------*/
+/*--------------------TMS570_VIM_FBPARERR--------------------*/
 /* field: FBPARERR - Fall back address parity error. */
-#define TMS570_VIM_FBPARERR_FBPARERR(val) BSP_FLD32(val,0, 31)
-#define TMS570_VIM_FBPARERR_FBPARERR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_VIM_FBPARERR_FBPARERR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_VIMIRQINDEX---------------------*/
+/*--------------------TMS570_VIM_IRQINDEX--------------------*/
 /* field: IRQINDEX - IRQ index vector. */
 #define TMS570_VIM_IRQINDEX_IRQINDEX(val) BSP_FLD32(val,0, 7)
 #define TMS570_VIM_IRQINDEX_IRQINDEX_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_VIM_IRQINDEX_IRQINDEX_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*---------------------TMS570_VIMFIQINDEX---------------------*/
+/*--------------------TMS570_VIM_FIQINDEX--------------------*/
 /* field: FIQINDEX - FIQ index offset vector. */
 #define TMS570_VIM_FIQINDEX_FIQINDEX(val) BSP_FLD32(val,0, 7)
 #define TMS570_VIM_FIQINDEX_FIQINDEX_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_VIM_FIQINDEX_FIQINDEX_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*----------------------TMS570_VIMFIRQPR----------------------*/
+/*---------------------TMS570_VIM_FIRQPR---------------------*/
 /* field: FIRQPRx - FIQ/IRQ program control bits. 96 bit register. 0-1 bits reserved. */
-#define TMS570_VIM_FIRQPR_FIRQPRx(val) BSP_FLD32(val,0, 31)
-#define TMS570_VIM_FIRQPR_FIRQPRx_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_VIM_FIRQPR_FIRQPRx_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_VIMINTREQ----------------------*/
+/*---------------------TMS570_VIM_INTREQ---------------------*/
 /* field: INTREQx - Pending interrupt bits. 96 bit register. */
-#define TMS570_VIM_INTREQ_INTREQx(val) BSP_FLD32(val,0, 31)
-#define TMS570_VIM_INTREQ_INTREQx_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_VIM_INTREQ_INTREQx_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_VIMREQENASET--------------------*/
+/*--------------------TMS570_VIM_REQENASET--------------------*/
 /* field: REQENASETx - Request enable set bits. 96 bit register. 0-1 bits reserved. */
-#define TMS570_VIM_REQENASET_REQENASETx(val) BSP_FLD32(val,0, 31)
-#define TMS570_VIM_REQENASET_REQENASETx_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_VIM_REQENASET_REQENASETx_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_VIMREQENACLR--------------------*/
+/*--------------------TMS570_VIM_REQENACLR--------------------*/
 /* field: REQENACLRx - Request enable clear bits. 96 bit register. 0-1 bits reserved. */
-#define TMS570_VIM_REQENACLR_REQENACLRx(val) BSP_FLD32(val,0, 31)
-#define TMS570_VIM_REQENACLR_REQENACLRx_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_VIM_REQENACLR_REQENACLRx_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_VIMWAKEENASET--------------------*/
+/*-------------------TMS570_VIM_WAKEENASET-------------------*/
 /* field: WAKEENASETx - Wake-up enable set bits. This vector determines whether the wake-up interrupt line is enabled. */
-#define TMS570_VIM_WAKEENASET_WAKEENASETx(val) BSP_FLD32(val,0, 31)
-#define TMS570_VIM_WAKEENASET_WAKEENASETx_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_VIM_WAKEENASET_WAKEENASETx_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_VIMWAKEENACLR--------------------*/
+/*-------------------TMS570_VIM_WAKEENACLR-------------------*/
 /* field: WAKEENACLRx - Wake-up enable clear bits. This vector determines whether the wake-up interrupt line is enabled. */
-#define TMS570_VIM_WAKEENACLR_WAKEENACLRx(val) BSP_FLD32(val,0, 31)
-#define TMS570_VIM_WAKEENACLR_WAKEENACLRx_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_VIM_WAKEENACLR_WAKEENACLRx_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_VIMIRQVECREG--------------------*/
+/*--------------------TMS570_VIM_IRQVECREG--------------------*/
 /* field: IRQVECREG - IRQ interrupt vector register. */
-#define TMS570_VIM_IRQVECREG_IRQVECREG(val) BSP_FLD32(val,0, 31)
-#define TMS570_VIM_IRQVECREG_IRQVECREG_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_VIM_IRQVECREG_IRQVECREG_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_VIMFIQVECREG--------------------*/
+/*--------------------TMS570_VIM_FIQVECREG--------------------*/
 /* field: FIQVECREG - FIQ interrupt vector register. */
-#define TMS570_VIM_FIQVECREG_FIQVECREG(val) BSP_FLD32(val,0, 31)
-#define TMS570_VIM_FIQVECREG_FIQVECREG_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_VIM_FIQVECREG_FIQVECREG_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_VIMCAPEVT----------------------*/
+/*---------------------TMS570_VIM_CAPEVT---------------------*/
 /* field: CAPEVTSRC1 - Capture event source 1 mapping control. */
 #define TMS570_VIM_CAPEVT_CAPEVTSRC1(val) BSP_FLD32(val,16, 22)
 #define TMS570_VIM_CAPEVT_CAPEVTSRC1_GET(reg) BSP_FLD32GET(reg,16, 22)
@@ -191,7 +164,7 @@ typedef struct{
 #define TMS570_VIM_CAPEVT_CAPEVTSRC0_SET(reg,val) BSP_FLD32SET(reg, val,0, 6)
 
 
-/*---------------------TMS570_VIMCHANCTRL---------------------*/
+/*--------------------TMS570_VIM_CHANCTRL--------------------*/
 /* field: CHANMAPx0 - CHANMAPx 0(6-0). Interrupt CHANx 0 mapping control. */
 #define TMS570_VIM_CHANCTRL_CHANMAPx0(val) BSP_FLD32(val,24, 30)
 #define TMS570_VIM_CHANCTRL_CHANMAPx0_GET(reg) BSP_FLD32GET(reg,24, 30)
@@ -214,4 +187,4 @@ typedef struct{
 
 
 
-#endif /* LIBBSP_ARM_tms570_VIM */
+#endif /* LIBBSP_ARM_TMS570_VIM */

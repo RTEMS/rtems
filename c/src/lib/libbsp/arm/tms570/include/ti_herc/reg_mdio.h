@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_MDIO
-#define LIBBSP_ARM_tms570_MDIO
+#ifndef LIBBSP_ARM_TMS570_MDIO
+#define LIBBSP_ARM_TMS570_MDIO
 
 #include <bsp/utility.h>
 
@@ -61,19 +61,16 @@ typedef struct{
 } tms570_mdio_t;
 
 
-/*----------------------TMS570_MDIOREVID----------------------*/
+/*---------------------TMS570_MDIO_REVID---------------------*/
 /* field: REV - Identifies the MDIO Module revision. */
-#define TMS570_MDIO_REVID_REV(val) BSP_FLD32(val,0, 31)
-#define TMS570_MDIO_REVID_REV_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_MDIO_REVID_REV_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_MDIOCONTROL---------------------*/
+/*--------------------TMS570_MDIO_CONTROL--------------------*/
 /* field: IDLE - State machine IDLE status bit. */
-#define TMS570_MDIO_CONTROL_IDLE BSP_FLD32(31)
+#define TMS570_MDIO_CONTROL_IDLE BSP_BIT32(31)
 
 /* field: ENABLE - State machine enable control bit. */
-#define TMS570_MDIO_CONTROL_ENABLE BSP_FLD32(30)
+#define TMS570_MDIO_CONTROL_ENABLE BSP_BIT32(30)
 
 /* field: HIGHEST_USER_CHANNEL - Highest user channel that is available in the module. It is currently set to 1. */
 #define TMS570_MDIO_CONTROL_HIGHEST_USER_CHANNEL(val) BSP_FLD32(val,24, 28)
@@ -81,13 +78,13 @@ typedef struct{
 #define TMS570_MDIO_CONTROL_HIGHEST_USER_CHANNEL_SET(reg,val) BSP_FLD32SET(reg, val,24, 28)
 
 /* field: PREAMBLE - Preamble disable */
-#define TMS570_MDIO_CONTROL_PREAMBLE BSP_FLD32(20)
+#define TMS570_MDIO_CONTROL_PREAMBLE BSP_BIT32(20)
 
 /* field: FAULT - Fault indicator. */
-#define TMS570_MDIO_CONTROL_FAULT BSP_FLD32(19)
+#define TMS570_MDIO_CONTROL_FAULT BSP_BIT32(19)
 
 /* field: FAULTENB - Fault detect enable. */
-#define TMS570_MDIO_CONTROL_FAULTENB BSP_FLD32(18)
+#define TMS570_MDIO_CONTROL_FAULTENB BSP_BIT32(18)
 
 /* field: CLKDIV - Clock Divider bits. */
 #define TMS570_MDIO_CONTROL_CLKDIV(val) BSP_FLD32(val,0, 15)
@@ -95,77 +92,71 @@ typedef struct{
 #define TMS570_MDIO_CONTROL_CLKDIV_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*----------------------TMS570_MDIOALIVE----------------------*/
+/*---------------------TMS570_MDIO_ALIVE---------------------*/
 /* field: ALIVE - MDIO Alive bits. */
-#define TMS570_MDIO_ALIVE_ALIVE(val) BSP_FLD32(val,0, 31)
-#define TMS570_MDIO_ALIVE_ALIVE_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_MDIO_ALIVE_ALIVE_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_MDIOLINK----------------------*/
+/*----------------------TMS570_MDIO_LINK----------------------*/
 /* field: LINK - MDIO Link state bits. This register is updated after a read of the generic status register of a PHY. */
-#define TMS570_MDIO_LINK_LINK(val) BSP_FLD32(val,0, 31)
-#define TMS570_MDIO_LINK_LINK_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_MDIO_LINK_LINK_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_MDIOLINKINTRAW-------------------*/
+/*-------------------TMS570_MDIO_LINKINTRAW-------------------*/
 /* field: USERPHY1 - MDIO Link change event, raw value. */
-#define TMS570_MDIO_LINKINTRAW_USERPHY1 BSP_FLD32(1)
+#define TMS570_MDIO_LINKINTRAW_USERPHY1 BSP_BIT32(1)
 
 /* field: USERPHY0 - MDIO Link change event, raw value. */
-#define TMS570_MDIO_LINKINTRAW_USERPHY0 BSP_FLD32(0)
+#define TMS570_MDIO_LINKINTRAW_USERPHY0 BSP_BIT32(0)
 
 
-/*------------------TMS570_MDIOLINKINTMASKED------------------*/
+/*-----------------TMS570_MDIO_LINKINTMASKED-----------------*/
 /* field: USERPHY1 - MDIO Link change interrupt, masked value. */
-#define TMS570_MDIO_LINKINTMASKED_USERPHY1 BSP_FLD32(1)
+#define TMS570_MDIO_LINKINTMASKED_USERPHY1 BSP_BIT32(1)
 
 /* field: USERPHY0 - MDIO Link change interrupt, masked value. */
-#define TMS570_MDIO_LINKINTMASKED_USERPHY0 BSP_FLD32(0)
+#define TMS570_MDIO_LINKINTMASKED_USERPHY0 BSP_BIT32(0)
 
 
-/*-------------------TMS570_MDIOUSERINTRAW-------------------*/
+/*-------------------TMS570_MDIO_USERINTRAW-------------------*/
 /* field: USERACCESS1 - MDIO User command complete event bit. */
-#define TMS570_MDIO_USERINTRAW_USERACCESS1 BSP_FLD32(1)
+#define TMS570_MDIO_USERINTRAW_USERACCESS1 BSP_BIT32(1)
 
 /* field: USERACCESS0 - MDIO User command complete event bit. */
-#define TMS570_MDIO_USERINTRAW_USERACCESS0 BSP_FLD32(0)
+#define TMS570_MDIO_USERINTRAW_USERACCESS0 BSP_BIT32(0)
 
 
-/*------------------TMS570_MDIOUSERINTMASKED------------------*/
+/*-----------------TMS570_MDIO_USERINTMASKED-----------------*/
 /* field: USERACCESS1 - Masked value of MDIO User command complete interrupt. */
-#define TMS570_MDIO_USERINTMASKED_USERACCESS1 BSP_FLD32(1)
+#define TMS570_MDIO_USERINTMASKED_USERACCESS1 BSP_BIT32(1)
 
 /* field: USERACCESS0 - Masked value of MDIO User command complete interrupt. */
-#define TMS570_MDIO_USERINTMASKED_USERACCESS0 BSP_FLD32(0)
+#define TMS570_MDIO_USERINTMASKED_USERACCESS0 BSP_BIT32(0)
 
 
-/*-----------------TMS570_MDIOUSERINTMASKSET-----------------*/
+/*-----------------TMS570_MDIO_USERINTMASKSET-----------------*/
 /* field: USERACCESS1 - MDIO user interrupt mask set for USERINTMASKED[1]. */
-#define TMS570_MDIO_USERINTMASKSET_USERACCESS1 BSP_FLD32(1)
+#define TMS570_MDIO_USERINTMASKSET_USERACCESS1 BSP_BIT32(1)
 
 /* field: USERACCESS0 - MDIO user interrupt mask set for USERINTMASKED[0]. */
-#define TMS570_MDIO_USERINTMASKSET_USERACCESS0 BSP_FLD32(0)
+#define TMS570_MDIO_USERINTMASKSET_USERACCESS0 BSP_BIT32(0)
 
 
-/*----------------TMS570_MDIOUSERINTMASKCLEAR----------------*/
+/*----------------TMS570_MDIO_USERINTMASKCLEAR----------------*/
 /* field: USERACCESS1 - MDIO user command complete interrupt mask clear for USERINTMASKED[1]. */
-#define TMS570_MDIO_USERINTMASKCLEAR_USERACCESS1 BSP_FLD32(1)
+#define TMS570_MDIO_USERINTMASKCLEAR_USERACCESS1 BSP_BIT32(1)
 
 /* field: USERACCESS0 - MDIO user command complete interrupt mask clear for USERINTMASKED[0]. */
-#define TMS570_MDIO_USERINTMASKCLEAR_USERACCESS0 BSP_FLD32(0)
+#define TMS570_MDIO_USERINTMASKCLEAR_USERACCESS0 BSP_BIT32(0)
 
 
-/*-------------------TMS570_MDIOUSERACCESS0-------------------*/
+/*------------------TMS570_MDIO_USERACCESS0------------------*/
 /* field: GO - Go bit. */
-#define TMS570_MDIO_USERACCESS0_GO BSP_FLD32(31)
+#define TMS570_MDIO_USERACCESS0_GO BSP_BIT32(31)
 
 /* field: WRITE - Write enable bit. */
-#define TMS570_MDIO_USERACCESS0_WRITE BSP_FLD32(30)
+#define TMS570_MDIO_USERACCESS0_WRITE BSP_BIT32(30)
 
 /* field: ACK - Acknowledge bit. This bit is set if the PHY acknowledged the read transaction. */
-#define TMS570_MDIO_USERACCESS0_ACK BSP_FLD32(29)
+#define TMS570_MDIO_USERACCESS0_ACK BSP_BIT32(29)
 
 /* field: REGADR - Register address bits. */
 #define TMS570_MDIO_USERACCESS0_REGADR(val) BSP_FLD32(val,21, 25)
@@ -183,12 +174,12 @@ typedef struct{
 #define TMS570_MDIO_USERACCESS0_DATA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-------------------TMS570_MDIOUSERPHYSEL0-------------------*/
+/*------------------TMS570_MDIO_USERPHYSEL0------------------*/
 /* field: LINKSEL - Link status determination select bit. */
-#define TMS570_MDIO_USERPHYSEL0_LINKSEL BSP_FLD32(7)
+#define TMS570_MDIO_USERPHYSEL0_LINKSEL BSP_BIT32(7)
 
 /* field: LINKINTENB - Link change interrupt enable. */
-#define TMS570_MDIO_USERPHYSEL0_LINKINTENB BSP_FLD32(6)
+#define TMS570_MDIO_USERPHYSEL0_LINKINTENB BSP_BIT32(6)
 
 /* field: PHYADRMON - PHY address whose link status is to be monitored. */
 #define TMS570_MDIO_USERPHYSEL0_PHYADRMON(val) BSP_FLD32(val,0, 4)
@@ -196,15 +187,15 @@ typedef struct{
 #define TMS570_MDIO_USERPHYSEL0_PHYADRMON_SET(reg,val) BSP_FLD32SET(reg, val,0, 4)
 
 
-/*-------------------TMS570_MDIOUSERACCESS1-------------------*/
+/*------------------TMS570_MDIO_USERACCESS1------------------*/
 /* field: GO - Go bit. */
-#define TMS570_MDIO_USERACCESS1_GO BSP_FLD32(31)
+#define TMS570_MDIO_USERACCESS1_GO BSP_BIT32(31)
 
 /* field: WRITE - Write enable bit. */
-#define TMS570_MDIO_USERACCESS1_WRITE BSP_FLD32(30)
+#define TMS570_MDIO_USERACCESS1_WRITE BSP_BIT32(30)
 
 /* field: ACK - Acknowledge bit. This bit is set if the PHY acknowledged the read transaction. */
-#define TMS570_MDIO_USERACCESS1_ACK BSP_FLD32(29)
+#define TMS570_MDIO_USERACCESS1_ACK BSP_BIT32(29)
 
 /* field: REGADR - Register address bits. */
 #define TMS570_MDIO_USERACCESS1_REGADR(val) BSP_FLD32(val,21, 25)
@@ -222,12 +213,12 @@ typedef struct{
 #define TMS570_MDIO_USERACCESS1_DATA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-------------------TMS570_MDIOUSERPHYSEL1-------------------*/
+/*------------------TMS570_MDIO_USERPHYSEL1------------------*/
 /* field: LINKSEL - Link status determination select bit. */
-#define TMS570_MDIO_USERPHYSEL1_LINKSEL BSP_FLD32(7)
+#define TMS570_MDIO_USERPHYSEL1_LINKSEL BSP_BIT32(7)
 
 /* field: LINKINTENB - Link change interrupt enable. */
-#define TMS570_MDIO_USERPHYSEL1_LINKINTENB BSP_FLD32(6)
+#define TMS570_MDIO_USERPHYSEL1_LINKINTENB BSP_BIT32(6)
 
 /* field: PHYADRMON - PHY address whose link status is to be monitored. */
 #define TMS570_MDIO_USERPHYSEL1_PHYADRMON(val) BSP_FLD32(val,0, 4)
@@ -236,4 +227,4 @@ typedef struct{
 
 
 
-#endif /* LIBBSP_ARM_tms570_MDIO */
+#endif /* LIBBSP_ARM_TMS570_MDIO */

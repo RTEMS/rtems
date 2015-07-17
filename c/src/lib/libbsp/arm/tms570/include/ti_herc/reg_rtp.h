@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_RTP
-#define LIBBSP_ARM_tms570_RTP
+#ifndef LIBBSP_ARM_TMS570_RTP
+#define LIBBSP_ARM_TMS570_RTP
 
 #include <bsp/utility.h>
 
@@ -66,9 +66,9 @@ typedef struct{
 } tms570_rtp_t;
 
 
-/*---------------------TMS570_RTPGLBCTRL---------------------*/
+/*---------------------TMS570_RTP_GLBCTRL---------------------*/
 /* field: TEST - By setting the bit, the FIFO RAM will be mapped into the SYSTEM Peripheral frame starting at */
-#define TMS570_RTP_GLBCTRL_TEST BSP_FLD32(24)
+#define TMS570_RTP_GLBCTRL_TEST BSP_BIT32(24)
 
 /* field: PRESCALER - The prescaler divides HCLK down to the desired RTPCLK frequency. */
 #define TMS570_RTP_GLBCTRL_PRESCALER(val) BSP_FLD32(val,16, 18)
@@ -81,10 +81,10 @@ typedef struct{
 #define TMS570_RTP_GLBCTRL_DDM_WIDTH_SET(reg,val) BSP_FLD32SET(reg, val,12, 13)
 
 /* field: DDM_RW -  */
-#define TMS570_RTP_GLBCTRL_DDM_RW BSP_FLD32(11)
+#define TMS570_RTP_GLBCTRL_DDM_RW BSP_BIT32(11)
 
 /* field: TM_DDM - Trace Mode or Direct Data Mode */
-#define TMS570_RTP_GLBCTRL_TM_DDM BSP_FLD32(10)
+#define TMS570_RTP_GLBCTRL_TM_DDM BSP_BIT32(10)
 
 /* field: PW - Port width. This bit field configures the RTP to the desired port width. */
 #define TMS570_RTP_GLBCTRL_PW(val) BSP_FLD32(val,8, 9)
@@ -92,16 +92,16 @@ typedef struct{
 #define TMS570_RTP_GLBCTRL_PW_SET(reg,val) BSP_FLD32SET(reg, val,8, 9)
 
 /* field: RESET - This bit resets the state machine and the registers to their reset value. */
-#define TMS570_RTP_GLBCTRL_RESET BSP_FLD32(7)
+#define TMS570_RTP_GLBCTRL_RESET BSP_BIT32(7)
 
 /* field: CONTCLK - Continuous RTPCLK enable. */
-#define TMS570_RTP_GLBCTRL_CONTCLK BSP_FLD32(6)
+#define TMS570_RTP_GLBCTRL_CONTCLK BSP_BIT32(6)
 
 /* field: HOVF - Halt on overflow. */
-#define TMS570_RTP_GLBCTRL_HOVF BSP_FLD32(5)
+#define TMS570_RTP_GLBCTRL_HOVF BSP_BIT32(5)
 
 /* field: INV_RGN - Trace inside or outside of defined trace regions. */
-#define TMS570_RTP_GLBCTRL_INV_RGN BSP_FLD32(4)
+#define TMS570_RTP_GLBCTRL_INV_RGN BSP_BIT32(4)
 
 /* field: ON_OFF - ON/Off switch. */
 #define TMS570_RTP_GLBCTRL_ON_OFF(val) BSP_FLD32(val,0, 3)
@@ -109,122 +109,119 @@ typedef struct{
 #define TMS570_RTP_GLBCTRL_ON_OFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*----------------------TMS570_RTPTRENA----------------------*/
+/*----------------------TMS570_RTP_TRENA----------------------*/
 /* field: ENA4 - Enable tracing for peripherals. */
-#define TMS570_RTP_TRENA_ENA4 BSP_FLD32(24)
+#define TMS570_RTP_TRENA_ENA4 BSP_BIT32(24)
 
 /* field: ENA2 - Enable tracing for RAM block 2. */
-#define TMS570_RTP_TRENA_ENA2 BSP_FLD32(8)
+#define TMS570_RTP_TRENA_ENA2 BSP_BIT32(8)
 
 /* field: ENA1 -  */
-#define TMS570_RTP_TRENA_ENA1 BSP_FLD32(0)
+#define TMS570_RTP_TRENA_ENA1 BSP_BIT32(0)
 
 
-/*-----------------------TMS570_RTPGSR-----------------------*/
+/*-----------------------TMS570_RTP_GSR-----------------------*/
 /* field: EMPTYSER - Serializer empty. This bit determines if there is data left in the serializer. */
-#define TMS570_RTP_GSR_EMPTYSER BSP_FLD32(12)
+#define TMS570_RTP_GSR_EMPTYSER BSP_BIT32(12)
 
 /* field: EMPTYPER - Peripheral FIFO empty. This bit determines if there are entries left in the FIFO. */
-#define TMS570_RTP_GSR_EMPTYPER BSP_FLD32(11)
+#define TMS570_RTP_GSR_EMPTYPER BSP_BIT32(11)
 
 /* field: EMPTY2 - RAM block 2 FIFO empty. This bit determines if there are entries left in the FIFO. */
-#define TMS570_RTP_GSR_EMPTY2 BSP_FLD32(9)
+#define TMS570_RTP_GSR_EMPTY2 BSP_BIT32(9)
 
 /* field: EMPTY1 - RAM block 1 FIFO empty. This bit determines if there are entries left in the FIFO. */
-#define TMS570_RTP_GSR_EMPTY1 BSP_FLD32(8)
+#define TMS570_RTP_GSR_EMPTY1 BSP_BIT32(8)
 
 /* field: OVFPER - Overflow peripheral FIFO. */
-#define TMS570_RTP_GSR_OVFPER BSP_FLD32(3)
+#define TMS570_RTP_GSR_OVFPER BSP_BIT32(3)
 
 /* field: OVF2 - Overflow RAM block 2 FIFO. */
-#define TMS570_RTP_GSR_OVF2 BSP_FLD32(1)
+#define TMS570_RTP_GSR_OVF2 BSP_BIT32(1)
 
 /* field: OVF1 - Overflow RAM block 1 FIFO. */
-#define TMS570_RTP_GSR_OVF1 BSP_FLD32(0)
+#define TMS570_RTP_GSR_OVF1 BSP_BIT32(0)
 
 
-/*---------------------TMS570_RTPRAM1REG1---------------------*/
+/*--------------------TMS570_RTP_RAM1REGx--------------------*/
 /* field: CPU_DMA - CPU and/or other master access. */
-#define TMS570_RTP_RAM1REG1_CPU_DMA(val) BSP_FLD32(val,29, 30)
-#define TMS570_RTP_RAM1REG1_CPU_DMA_GET(reg) BSP_FLD32GET(reg,29, 30)
-#define TMS570_RTP_RAM1REG1_CPU_DMA_SET(reg,val) BSP_FLD32SET(reg, val,29, 30)
+#define TMS570_RTP_RAM1REGx_CPU_DMA(val) BSP_FLD32(val,29, 30)
+#define TMS570_RTP_RAM1REGx_CPU_DMA_GET(reg) BSP_FLD32GET(reg,29, 30)
+#define TMS570_RTP_RAM1REGx_CPU_DMA_SET(reg,val) BSP_FLD32SET(reg, val,29, 30)
 
 /* field: RW - Read/Write. */
-#define TMS570_RTP_RAM1REG1_RW BSP_FLD32(28)
+#define TMS570_RTP_RAM1REGx_RW BSP_BIT32(28)
 
 /* field: BLOCKSIZE - These bits define the length of the trace region. */
-#define TMS570_RTP_RAM1REG1_BLOCKSIZE(val) BSP_FLD32(val,24, 27)
-#define TMS570_RTP_RAM1REG1_BLOCKSIZE_GET(reg) BSP_FLD32GET(reg,24, 27)
-#define TMS570_RTP_RAM1REG1_BLOCKSIZE_SET(reg,val) BSP_FLD32SET(reg, val,24, 27)
+#define TMS570_RTP_RAM1REGx_BLOCKSIZE(val) BSP_FLD32(val,24, 27)
+#define TMS570_RTP_RAM1REGx_BLOCKSIZE_GET(reg) BSP_FLD32GET(reg,24, 27)
+#define TMS570_RTP_RAM1REGx_BLOCKSIZE_SET(reg,val) BSP_FLD32SET(reg, val,24, 27)
 
 /* field: STARTADDR - These bits define the starting address of the address region that should be traced. */
-#define TMS570_RTP_RAM1REG1_STARTADDR(val) BSP_FLD32(val,0, 17)
-#define TMS570_RTP_RAM1REG1_STARTADDR_GET(reg) BSP_FLD32GET(reg,0, 17)
-#define TMS570_RTP_RAM1REG1_STARTADDR_SET(reg,val) BSP_FLD32SET(reg, val,0, 17)
+#define TMS570_RTP_RAM1REGx_STARTADDR(val) BSP_FLD32(val,0, 17)
+#define TMS570_RTP_RAM1REGx_STARTADDR_GET(reg) BSP_FLD32GET(reg,0, 17)
+#define TMS570_RTP_RAM1REGx_STARTADDR_SET(reg,val) BSP_FLD32SET(reg, val,0, 17)
 
 
-/*---------------------TMS570_RTPRAM2REG1---------------------*/
+/*--------------------TMS570_RTP_RAM2REGx--------------------*/
 /* field: CPU_DMA - CPU and/or other master access. */
-#define TMS570_RTP_RAM2REG1_CPU_DMA(val) BSP_FLD32(val,29, 30)
-#define TMS570_RTP_RAM2REG1_CPU_DMA_GET(reg) BSP_FLD32GET(reg,29, 30)
-#define TMS570_RTP_RAM2REG1_CPU_DMA_SET(reg,val) BSP_FLD32SET(reg, val,29, 30)
+#define TMS570_RTP_RAM2REGx_CPU_DMA(val) BSP_FLD32(val,29, 30)
+#define TMS570_RTP_RAM2REGx_CPU_DMA_GET(reg) BSP_FLD32GET(reg,29, 30)
+#define TMS570_RTP_RAM2REGx_CPU_DMA_SET(reg,val) BSP_FLD32SET(reg, val,29, 30)
 
 /* field: RW - Read/Write. */
-#define TMS570_RTP_RAM2REG1_RW BSP_FLD32(28)
+#define TMS570_RTP_RAM2REGx_RW BSP_BIT32(28)
 
 /* field: BLOCKSIZE - These bits define the length of the trace region. */
-#define TMS570_RTP_RAM2REG1_BLOCKSIZE(val) BSP_FLD32(val,24, 27)
-#define TMS570_RTP_RAM2REG1_BLOCKSIZE_GET(reg) BSP_FLD32GET(reg,24, 27)
-#define TMS570_RTP_RAM2REG1_BLOCKSIZE_SET(reg,val) BSP_FLD32SET(reg, val,24, 27)
+#define TMS570_RTP_RAM2REGx_BLOCKSIZE(val) BSP_FLD32(val,24, 27)
+#define TMS570_RTP_RAM2REGx_BLOCKSIZE_GET(reg) BSP_FLD32GET(reg,24, 27)
+#define TMS570_RTP_RAM2REGx_BLOCKSIZE_SET(reg,val) BSP_FLD32SET(reg, val,24, 27)
 
 /* field: STARTADDR - These bits define the starting address of the address region that should be traced. */
-#define TMS570_RTP_RAM2REG1_STARTADDR(val) BSP_FLD32(val,0, 23)
-#define TMS570_RTP_RAM2REG1_STARTADDR_GET(reg) BSP_FLD32GET(reg,0, 23)
-#define TMS570_RTP_RAM2REG1_STARTADDR_SET(reg,val) BSP_FLD32SET(reg, val,0, 23)
+#define TMS570_RTP_RAM2REGx_STARTADDR(val) BSP_FLD32(val,0, 23)
+#define TMS570_RTP_RAM2REGx_STARTADDR_GET(reg) BSP_FLD32GET(reg,0, 23)
+#define TMS570_RTP_RAM2REGx_STARTADDR_SET(reg,val) BSP_FLD32SET(reg, val,0, 23)
 
 
-/*---------------------TMS570_RTPPERREG1---------------------*/
+/*---------------------TMS570_RTP_PERREGx---------------------*/
 /* field: CPU_DMA - CPU and/or other master access. */
-#define TMS570_RTP_PERREG1_CPU_DMA(val) BSP_FLD32(val,29, 30)
-#define TMS570_RTP_PERREG1_CPU_DMA_GET(reg) BSP_FLD32GET(reg,29, 30)
-#define TMS570_RTP_PERREG1_CPU_DMA_SET(reg,val) BSP_FLD32SET(reg, val,29, 30)
+#define TMS570_RTP_PERREGx_CPU_DMA(val) BSP_FLD32(val,29, 30)
+#define TMS570_RTP_PERREGx_CPU_DMA_GET(reg) BSP_FLD32GET(reg,29, 30)
+#define TMS570_RTP_PERREGx_CPU_DMA_SET(reg,val) BSP_FLD32SET(reg, val,29, 30)
 
 /* field: RW - Read/Write. */
-#define TMS570_RTP_PERREG1_RW BSP_FLD32(28)
+#define TMS570_RTP_PERREGx_RW BSP_BIT32(28)
 
 /* field: BLOCKSIZE - These bits define the length of the trace region. */
-#define TMS570_RTP_PERREG1_BLOCKSIZE(val) BSP_FLD32(val,24, 27)
-#define TMS570_RTP_PERREG1_BLOCKSIZE_GET(reg) BSP_FLD32GET(reg,24, 27)
-#define TMS570_RTP_PERREG1_BLOCKSIZE_SET(reg,val) BSP_FLD32SET(reg, val,24, 27)
+#define TMS570_RTP_PERREGx_BLOCKSIZE(val) BSP_FLD32(val,24, 27)
+#define TMS570_RTP_PERREGx_BLOCKSIZE_GET(reg) BSP_FLD32GET(reg,24, 27)
+#define TMS570_RTP_PERREGx_BLOCKSIZE_SET(reg,val) BSP_FLD32SET(reg, val,24, 27)
 
 /* field: STARTADDR - These bits define the starting address of the address region that should be traced. */
-#define TMS570_RTP_PERREG1_STARTADDR(val) BSP_FLD32(val,0, 23)
-#define TMS570_RTP_PERREG1_STARTADDR_GET(reg) BSP_FLD32GET(reg,0, 23)
-#define TMS570_RTP_PERREG1_STARTADDR_SET(reg,val) BSP_FLD32SET(reg, val,0, 23)
+#define TMS570_RTP_PERREGx_STARTADDR(val) BSP_FLD32(val,0, 23)
+#define TMS570_RTP_PERREGx_STARTADDR_GET(reg) BSP_FLD32GET(reg,0, 23)
+#define TMS570_RTP_PERREGx_STARTADDR_SET(reg,val) BSP_FLD32SET(reg, val,0, 23)
 
 
-/*-----------------------TMS570_RTPDDMW-----------------------*/
+/*----------------------TMS570_RTP_DDMW----------------------*/
 /* field: DATA - This register must be written to in a Direct Data Mode write operation to store the data into */
-#define TMS570_RTP_DDMW_DATA(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTP_DDMW_DATA_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTP_DDMW_DATA_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_RTPPC0-----------------------*/
+/*-----------------------TMS570_RTP_PCx-----------------------*/
 /* field: ENAFUNC - Functional mode of RTPENA pin. */
-#define TMS570_RTP_PC0_ENAFUNC BSP_FLD32(18)
+#define TMS570_RTP_PCx_ENAFUNC BSP_BIT32(18)
 
 /* field: CLKFUNC - Functional mode of RTPCLK pin. */
-#define TMS570_RTP_PC0_CLKFUNC BSP_FLD32(17)
+#define TMS570_RTP_PCx_CLKFUNC BSP_BIT32(17)
 
 /* field: SYNCFUNC - Functional mode of RTPSYNC pin. */
-#define TMS570_RTP_PC0_SYNCFUNC BSP_FLD32(16)
+#define TMS570_RTP_PCx_SYNCFUNC BSP_BIT32(16)
 
 /* field: DATAFUNC - Functional mode of RTPDATA[15:0] pins. */
-#define TMS570_RTP_PC0_DATAFUNC(val) BSP_FLD32(val,0, 15)
-#define TMS570_RTP_PC0_DATAFUNC_GET(reg) BSP_FLD32GET(reg,0, 15)
-#define TMS570_RTP_PC0_DATAFUNC_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
+#define TMS570_RTP_PCx_DATAFUNC(val) BSP_FLD32(val,0, 15)
+#define TMS570_RTP_PCx_DATAFUNC_GET(reg) BSP_FLD32GET(reg,0, 15)
+#define TMS570_RTP_PCx_DATAFUNC_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
 
-#endif /* LIBBSP_ARM_tms570_RTP */
+#endif /* LIBBSP_ARM_TMS570_RTP */

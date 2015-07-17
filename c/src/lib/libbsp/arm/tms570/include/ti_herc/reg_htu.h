@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_HTU
-#define LIBBSP_ARM_tms570_HTU
+#ifndef LIBBSP_ARM_TMS570_HTU
+#define LIBBSP_ARM_TMS570_HTU
 
 #include <bsp/utility.h>
 
@@ -75,114 +75,114 @@ typedef struct{
 } tms570_htu_t;
 
 
-/*------------------------TMS570_HTUGC------------------------*/
+/*-----------------------TMS570_HTU_GC-----------------------*/
 /* field: VBUSHOLD - Hold the VBUS bus */
-#define TMS570_HTU_GC_VBUSHOLD BSP_FLD32(24)
+#define TMS570_HTU_GC_VBUSHOLD BSP_BIT32(24)
 
 /* field: HTUEN - Transfer Unit Enable Bit */
-#define TMS570_HTU_GC_HTUEN BSP_FLD32(16)
+#define TMS570_HTU_GC_HTUEN BSP_BIT32(16)
 
 /* field: DEBM - Debug Mode */
-#define TMS570_HTU_GC_DEBM BSP_FLD32(8)
+#define TMS570_HTU_GC_DEBM BSP_BIT32(8)
 
 /* field: HTURES - HTU Software Reset Request */
-#define TMS570_HTU_GC_HTURES BSP_FLD32(0)
+#define TMS570_HTU_GC_HTURES BSP_BIT32(0)
 
 
-/*----------------------TMS570_HTUCPENA----------------------*/
+/*----------------------TMS570_HTU_CPENA----------------------*/
 /* field: CPENA - CP Enable Bits */
 #define TMS570_HTU_CPENA_CPENA(val) BSP_FLD32(val,0, 15)
 #define TMS570_HTU_CPENA_CPENA_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_HTU_CPENA_CPENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*----------------------TMS570_HTUBUSY0----------------------*/
+/*----------------------TMS570_HTU_BUSY0----------------------*/
 /* field: BUSY0A - Busy Flag for CP A of DCP 0 */
-#define TMS570_HTU_BUSY0_BUSY0A BSP_FLD32(24)
+#define TMS570_HTU_BUSY0_BUSY0A BSP_BIT32(24)
 
 /* field: BUSY0B - Busy Flag for CP B of DCP 0 */
-#define TMS570_HTU_BUSY0_BUSY0B BSP_FLD32(16)
+#define TMS570_HTU_BUSY0_BUSY0B BSP_BIT32(16)
 
 /* field: BUSY1A - Busy Flag for CP A of DCP 1 */
-#define TMS570_HTU_BUSY0_BUSY1A BSP_FLD32(8)
+#define TMS570_HTU_BUSY0_BUSY1A BSP_BIT32(8)
 
 /* field: BUSY1B - Busy Flag for CP B of DCP 1 */
-#define TMS570_HTU_BUSY0_BUSY1B BSP_FLD32(0)
+#define TMS570_HTU_BUSY0_BUSY1B BSP_BIT32(0)
 
 
-/*----------------------TMS570_HTUBUSY1----------------------*/
+/*----------------------TMS570_HTU_BUSY1----------------------*/
 /* field: BUSY2A - Busy Flag for CP A of DCP 2 */
-#define TMS570_HTU_BUSY1_BUSY2A BSP_FLD32(24)
+#define TMS570_HTU_BUSY1_BUSY2A BSP_BIT32(24)
 
 /* field: BUSY2B - Busy Flag for CP B of DCP 2 */
-#define TMS570_HTU_BUSY1_BUSY2B BSP_FLD32(16)
+#define TMS570_HTU_BUSY1_BUSY2B BSP_BIT32(16)
 
 /* field: BUSY3A - Busy Flag for CP A of DCP 3 */
-#define TMS570_HTU_BUSY1_BUSY3A BSP_FLD32(8)
+#define TMS570_HTU_BUSY1_BUSY3A BSP_BIT32(8)
 
 /* field: BUSY3B - Busy Flag for CP B of DCP 3 */
-#define TMS570_HTU_BUSY1_BUSY3B BSP_FLD32(0)
+#define TMS570_HTU_BUSY1_BUSY3B BSP_BIT32(0)
 
 
-/*----------------------TMS570_HTUBUSY2----------------------*/
+/*----------------------TMS570_HTU_BUSY2----------------------*/
 /* field: BUSY4A - Busy Flag for CP A of DCP 4 */
-#define TMS570_HTU_BUSY2_BUSY4A BSP_FLD32(24)
+#define TMS570_HTU_BUSY2_BUSY4A BSP_BIT32(24)
 
 /* field: BUSY4B - Busy Flag for CP B of DCP 4 */
-#define TMS570_HTU_BUSY2_BUSY4B BSP_FLD32(16)
+#define TMS570_HTU_BUSY2_BUSY4B BSP_BIT32(16)
 
 /* field: BUSY5A - Busy Flag for CP A of DCP 5 */
-#define TMS570_HTU_BUSY2_BUSY5A BSP_FLD32(8)
+#define TMS570_HTU_BUSY2_BUSY5A BSP_BIT32(8)
 
 /* field: BUSY5B - Busy Flag for CP B of DCP 5 */
-#define TMS570_HTU_BUSY2_BUSY5B BSP_FLD32(0)
+#define TMS570_HTU_BUSY2_BUSY5B BSP_BIT32(0)
 
 
-/*----------------------TMS570_HTUBUSY3----------------------*/
+/*----------------------TMS570_HTU_BUSY3----------------------*/
 /* field: BUSY6A - Busy Flag for CP A of DCP 6 */
-#define TMS570_HTU_BUSY3_BUSY6A BSP_FLD32(24)
+#define TMS570_HTU_BUSY3_BUSY6A BSP_BIT32(24)
 
 /* field: BUSY6B - Busy Flag for CP B of DCP 6 */
-#define TMS570_HTU_BUSY3_BUSY6B BSP_FLD32(16)
+#define TMS570_HTU_BUSY3_BUSY6B BSP_BIT32(16)
 
 /* field: BUSY7A - Busy Flag for CP A of DCP 7 */
-#define TMS570_HTU_BUSY3_BUSY7A BSP_FLD32(8)
+#define TMS570_HTU_BUSY3_BUSY7A BSP_BIT32(8)
 
 /* field: BUSY7B - Busy Flag for CP B of DCP 7 */
-#define TMS570_HTU_BUSY3_BUSY7B BSP_FLD32(0)
+#define TMS570_HTU_BUSY3_BUSY7B BSP_BIT32(0)
 
 
-/*-----------------------TMS570_HTUACPE-----------------------*/
+/*----------------------TMS570_HTU_ACPE----------------------*/
 /* field: ERRF - Error Flag */
-#define TMS570_HTU_ACPE_ERRF BSP_FLD32(31)
+#define TMS570_HTU_ACPE_ERRF BSP_BIT32(31)
 
 
-/*---------------------TMS570_HTURLBECTRL---------------------*/
+/*--------------------TMS570_HTU_RLBECTRL--------------------*/
 /* field: BERINTENA - Bus Error Interrupt Enable Bit */
-#define TMS570_HTU_RLBECTRL_BERINTENA BSP_FLD32(16)
+#define TMS570_HTU_RLBECTRL_BERINTENA BSP_BIT32(16)
 
 /* field: CORL - Continue On Request Lost Error */
-#define TMS570_HTU_RLBECTRL_CORL BSP_FLD32(8)
+#define TMS570_HTU_RLBECTRL_CORL BSP_BIT32(8)
 
 /* field: RLINTENA - Request Lost Interrupt Enable Bit */
-#define TMS570_HTU_RLBECTRL_RLINTENA BSP_FLD32(0)
+#define TMS570_HTU_RLBECTRL_RLINTENA BSP_BIT32(0)
 
 
-/*----------------------TMS570_HTUBFINTS----------------------*/
+/*---------------------TMS570_HTU_BFINTS---------------------*/
 /* field: BFINTENA - Bus Full Interrupt Enable Bits. */
 #define TMS570_HTU_BFINTS_BFINTENA(val) BSP_FLD32(val,0, 15)
 #define TMS570_HTU_BFINTS_BFINTENA_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_HTU_BFINTS_BFINTENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*----------------------TMS570_HTUBFINTC----------------------*/
+/*---------------------TMS570_HTU_BFINTC---------------------*/
 /* field: BFINTDIS -  */
 #define TMS570_HTU_BFINTC_BFINTDIS(val) BSP_FLD32(val,0, 15)
 #define TMS570_HTU_BFINTC_BFINTDIS_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_HTU_BFINTC_BFINTDIS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_HTUINTOFF0---------------------*/
+/*---------------------TMS570_HTU_INTOFF0---------------------*/
 /* field: INTTYPE0 - Interrupt Type of Interrupt Line 0. */
 #define TMS570_HTU_INTOFF0_INTTYPE0(val) BSP_FLD32(val,8, 10)
 #define TMS570_HTU_INTOFF0_INTTYPE0_GET(reg) BSP_FLD32GET(reg,8, 10)
@@ -194,7 +194,7 @@ typedef struct{
 #define TMS570_HTU_INTOFF0_CPOFF0_SET(reg,val) BSP_FLD32SET(reg, val,0, 4)
 
 
-/*---------------------TMS570_HTUINTOFF1---------------------*/
+/*---------------------TMS570_HTU_INTOFF1---------------------*/
 /* field: INTTYPE1 - INTTYPE1 Interrupt Type of Interrupt Line 1. */
 #define TMS570_HTU_INTOFF1_INTTYPE1(val) BSP_FLD32(val,8, 10)
 #define TMS570_HTU_INTOFF1_INTTYPE1_GET(reg) BSP_FLD32GET(reg,8, 10)
@@ -206,76 +206,64 @@ typedef struct{
 #define TMS570_HTU_INTOFF1_CPOFF1_SET(reg,val) BSP_FLD32SET(reg, val,0, 4)
 
 
-/*-----------------------TMS570_HTUBIM-----------------------*/
+/*-----------------------TMS570_HTU_BIM-----------------------*/
 /* field: BIM - Buffer Initialization Mode */
 #define TMS570_HTU_BIM_BIM(val) BSP_FLD32(val,0, 7)
 #define TMS570_HTU_BIM_BIM_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_HTU_BIM_BIM_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*---------------------TMS570_HTURLOSTFL---------------------*/
+/*---------------------TMS570_HTU_RLOSTFL---------------------*/
 /* field: CPRLFL - CP Request Lost Flags */
 #define TMS570_HTU_RLOSTFL_CPRLFL(val) BSP_FLD32(val,0, 15)
 #define TMS570_HTU_RLOSTFL_CPRLFL_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_HTU_RLOSTFL_CPRLFL_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_HTUBFINTFL---------------------*/
+/*---------------------TMS570_HTU_BFINTFL---------------------*/
 /* field: BFINTFL - Buffer Full Interrupt Flags */
 #define TMS570_HTU_BFINTFL_BFINTFL(val) BSP_FLD32(val,0, 15)
 #define TMS570_HTU_BFINTFL_BFINTFL_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_HTU_BFINTFL_BFINTFL_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_HTUBERINTFL---------------------*/
+/*--------------------TMS570_HTU_BERINTFL--------------------*/
 /* field: BERINTFL - Bus Error Interrupt Flags */
 #define TMS570_HTU_BERINTFL_BERINTFL(val) BSP_FLD32(val,0, 15)
 #define TMS570_HTU_BERINTFL_BERINTFL_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_HTU_BERINTFL_BERINTFL_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-----------------------TMS570_HTUMP1S-----------------------*/
+/*----------------------TMS570_HTU_MP1S----------------------*/
 /* field: STARTADDRESS1 - he start address defines at which main memory address the region begins. */
-#define TMS570_HTU_MP1S_STARTADDRESS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_HTU_MP1S_STARTADDRESS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_HTU_MP1S_STARTADDRESS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_HTUMP1E-----------------------*/
+/*----------------------TMS570_HTU_MP1E----------------------*/
 /* field: ENDADDRESS1 - The end address defines at which address the region ends. */
-#define TMS570_HTU_MP1E_ENDADDRESS1(val) BSP_FLD32(val,0, 31)
-#define TMS570_HTU_MP1E_ENDADDRESS1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_HTU_MP1E_ENDADDRESS1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_HTUDCTRL----------------------*/
+/*----------------------TMS570_HTU_DCTRL----------------------*/
 /* field: CPNUM - CP Number. These bit fields indicate the CP which should cause the watch point to match. */
 #define TMS570_HTU_DCTRL_CPNUM(val) BSP_FLD32(val,24, 27)
 #define TMS570_HTU_DCTRL_CPNUM_GET(reg) BSP_FLD32GET(reg,24, 27)
 #define TMS570_HTU_DCTRL_CPNUM_SET(reg,val) BSP_FLD32SET(reg, val,24, 27)
 
 /* field: HTUDBGS - HTU Debug Status. */
-#define TMS570_HTU_DCTRL_HTUDBGS BSP_FLD32(16)
+#define TMS570_HTU_DCTRL_HTUDBGS BSP_BIT32(16)
 
 /* field: DBREN - Debug Request Enable */
-#define TMS570_HTU_DCTRL_DBREN BSP_FLD32(0)
+#define TMS570_HTU_DCTRL_DBREN BSP_BIT32(0)
 
 
-/*-----------------------TMS570_HTUWPR-----------------------*/
+/*-----------------------TMS570_HTU_WPR-----------------------*/
 /* field: WP - Watch Point Register */
-#define TMS570_HTU_WPR_WP(val) BSP_FLD32(val,0, 31)
-#define TMS570_HTU_WPR_WP_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_HTU_WPR_WP_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_HTUWMR-----------------------*/
+/*-----------------------TMS570_HTU_WMR-----------------------*/
 /* field: WM - Watch Mask Register */
-#define TMS570_HTU_WMR_WM(val) BSP_FLD32(val,0, 31)
-#define TMS570_HTU_WMR_WM_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_HTU_WMR_WM_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------------TMS570_HTUID------------------------*/
+/*-----------------------TMS570_HTU_ID-----------------------*/
 /* field: CLASS - Module Class */
 #define TMS570_HTU_ID_CLASS(val) BSP_FLD32(val,16, 23)
 #define TMS570_HTU_ID_CLASS_GET(reg) BSP_FLD32GET(reg,16, 23)
@@ -292,12 +280,12 @@ typedef struct{
 #define TMS570_HTU_ID_REV_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_HTUPCR-----------------------*/
+/*-----------------------TMS570_HTU_PCR-----------------------*/
 /* field: COPE - Continue on Parity Error */
-#define TMS570_HTU_PCR_COPE BSP_FLD32(16)
+#define TMS570_HTU_PCR_COPE BSP_BIT32(16)
 
 /* field: TEST - Test. */
-#define TMS570_HTU_PCR_TEST BSP_FLD32(8)
+#define TMS570_HTU_PCR_TEST BSP_BIT32(8)
 
 /* field: PARITY_ENA - Enable/Disable Parity Checking. */
 #define TMS570_HTU_PCR_PARITY_ENA(val) BSP_FLD32(val,0, 3)
@@ -305,9 +293,9 @@ typedef struct{
 #define TMS570_HTU_PCR_PARITY_ENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*-----------------------TMS570_HTUPAR-----------------------*/
+/*-----------------------TMS570_HTU_PAR-----------------------*/
 /* field: PEFT - Parity Error Fault Flag. */
-#define TMS570_HTU_PAR_PEFT BSP_FLD32(16)
+#define TMS570_HTU_PAR_PEFT BSP_BIT32(16)
 
 /* field: PAOFF - PAOFF */
 #define TMS570_HTU_PAR_PAOFF(val) BSP_FLD32(val,0, 8)
@@ -315,17 +303,17 @@ typedef struct{
 #define TMS570_HTU_PAR_PAOFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 8)
 
 
-/*-----------------------TMS570_HTUMPCS-----------------------*/
+/*----------------------TMS570_HTU_MPCS----------------------*/
 /* field: CPNUM0 - Control Packet Number for single memory protection region configuration. */
 #define TMS570_HTU_MPCS_CPNUM0(val) BSP_FLD32(val,24, 27)
 #define TMS570_HTU_MPCS_CPNUM0_GET(reg) BSP_FLD32GET(reg,24, 27)
 #define TMS570_HTU_MPCS_CPNUM0_SET(reg,val) BSP_FLD32SET(reg, val,24, 27)
 
 /* field: MPEFT1 - MPEFT1 */
-#define TMS570_HTU_MPCS_MPEFT1 BSP_FLD32(17)
+#define TMS570_HTU_MPCS_MPEFT1 BSP_BIT32(17)
 
 /* field: MPEFT0 - Memory Protection Error Fault Flag 0. */
-#define TMS570_HTU_MPCS_MPEFT0 BSP_FLD32(16)
+#define TMS570_HTU_MPCS_MPEFT0 BSP_BIT32(16)
 
 /* field: CPNUM1 - Control Packet Number for single memory protection region configuration. */
 #define TMS570_HTU_MPCS_CPNUM1(val) BSP_FLD32(val,8, 11)
@@ -333,19 +321,13 @@ typedef struct{
 #define TMS570_HTU_MPCS_CPNUM1_SET(reg,val) BSP_FLD32SET(reg, val,8, 11)
 
 
-/*-----------------------TMS570_HTUMP0S-----------------------*/
+/*----------------------TMS570_HTU_MP0S----------------------*/
 /* field: ISTARTADDRESS0 - The start address defines at which main memory address the region begins. */
-#define TMS570_HTU_MP0S_ISTARTADDRESS0(val) BSP_FLD32(val,0, 31)
-#define TMS570_HTU_MP0S_ISTARTADDRESS0_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_HTU_MP0S_ISTARTADDRESS0_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_HTUMP0E-----------------------*/
+/*----------------------TMS570_HTU_MP0E----------------------*/
 /* field: ENDADDRESS0 - The end address defines at which address the region ends. */
-#define TMS570_HTU_MP0E_ENDADDRESS0(val) BSP_FLD32(val,0, 31)
-#define TMS570_HTU_MP0E_ENDADDRESS0_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_HTU_MP0E_ENDADDRESS0_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
 
-
-#endif /* LIBBSP_ARM_tms570_HTU */
+#endif /* LIBBSP_ARM_TMS570_HTU */

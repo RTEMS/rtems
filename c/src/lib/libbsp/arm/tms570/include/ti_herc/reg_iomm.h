@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_IOMM
-#define LIBBSP_ARM_tms570_IOMM
+#ifndef LIBBSP_ARM_TMS570_IOMM
+#define LIBBSP_ARM_TMS570_IOMM
 
 #include <bsp/utility.h>
 
@@ -96,29 +96,29 @@ typedef struct{
 } tms570_iomm_t;
 
 
-/*---------------------TMS570_IOMMPINMMR0---------------------*/
+/*--------------------TMS570_IOMM_PINMMRx--------------------*/
 /* field: PINMMRx24To31 - Each of these byte-fields control the functionality on a given ball/pin. */
-#define TMS570_IOMM_PINMMR0_PINMMRx24To31(val) BSP_FLD32(val,24, 31)
-#define TMS570_IOMM_PINMMR0_PINMMRx24To31_GET(reg) BSP_FLD32GET(reg,24, 31)
-#define TMS570_IOMM_PINMMR0_PINMMRx24To31_SET(reg,val) BSP_FLD32SET(reg, val,24, 31)
+#define TMS570_IOMM_PINMMRx_PINMMRx24To31(val) BSP_FLD32(val,24, 31)
+#define TMS570_IOMM_PINMMRx_PINMMRx24To31_GET(reg) BSP_FLD32GET(reg,24, 31)
+#define TMS570_IOMM_PINMMRx_PINMMRx24To31_SET(reg,val) BSP_FLD32SET(reg, val,24, 31)
 
 /* field: PINMMRx16To23 - Each of these byte-fields control the functionality on a given ball/pin. */
-#define TMS570_IOMM_PINMMR0_PINMMRx16To23(val) BSP_FLD32(val,16, 23)
-#define TMS570_IOMM_PINMMR0_PINMMRx16To23_GET(reg) BSP_FLD32GET(reg,16, 23)
-#define TMS570_IOMM_PINMMR0_PINMMRx16To23_SET(reg,val) BSP_FLD32SET(reg, val,16, 23)
+#define TMS570_IOMM_PINMMRx_PINMMRx16To23(val) BSP_FLD32(val,16, 23)
+#define TMS570_IOMM_PINMMRx_PINMMRx16To23_GET(reg) BSP_FLD32GET(reg,16, 23)
+#define TMS570_IOMM_PINMMRx_PINMMRx16To23_SET(reg,val) BSP_FLD32SET(reg, val,16, 23)
 
 /* field: PINMMRx8To16 - Each of these byte-fields control the functionality on a given ball/pin. */
-#define TMS570_IOMM_PINMMR0_PINMMRx8To16(val) BSP_FLD32(val,8, 15)
-#define TMS570_IOMM_PINMMR0_PINMMRx8To16_GET(reg) BSP_FLD32GET(reg,8, 15)
-#define TMS570_IOMM_PINMMR0_PINMMRx8To16_SET(reg,val) BSP_FLD32SET(reg, val,8, 15)
+#define TMS570_IOMM_PINMMRx_PINMMRx8To16(val) BSP_FLD32(val,8, 15)
+#define TMS570_IOMM_PINMMRx_PINMMRx8To16_GET(reg) BSP_FLD32GET(reg,8, 15)
+#define TMS570_IOMM_PINMMRx_PINMMRx8To16_SET(reg,val) BSP_FLD32SET(reg, val,8, 15)
 
 /* field: PINMMRx0To7 - Each of these byte-fields control the functionality on a given ball/pin. */
-#define TMS570_IOMM_PINMMR0_PINMMRx0To7(val) BSP_FLD32(val,0, 7)
-#define TMS570_IOMM_PINMMR0_PINMMRx0To7_GET(reg) BSP_FLD32GET(reg,0, 7)
-#define TMS570_IOMM_PINMMR0_PINMMRx0To7_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
+#define TMS570_IOMM_PINMMRx_PINMMRx0To7(val) BSP_FLD32(val,0, 7)
+#define TMS570_IOMM_PINMMRx_PINMMRx0To7_GET(reg) BSP_FLD32GET(reg,0, 7)
+#define TMS570_IOMM_PINMMRx_PINMMRx0To7_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*------------------TMS570_IOMMREVISION_REG------------------*/
+/*------------------TMS570_IOMM_REVISION_REG------------------*/
 /* field: REV_SCHEME - Revision Scheme */
 #define TMS570_IOMM_REVISION_REG_REV_SCHEME(val) BSP_FLD32(val,30, 31)
 #define TMS570_IOMM_REVISION_REG_REV_SCHEME_GET(reg) BSP_FLD32GET(reg,30, 31)
@@ -150,65 +150,56 @@ typedef struct{
 #define TMS570_IOMM_REVISION_REG_REV_MINOR_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*-------------------TMS570_IOMMENDIAN_REG-------------------*/
+/*-------------------TMS570_IOMM_ENDIAN_REG-------------------*/
 /* field: ENDIAN - Device endianness */
-#define TMS570_IOMM_ENDIAN_REG_ENDIAN BSP_FLD32(0)
+#define TMS570_IOMM_ENDIAN_REG_ENDIAN BSP_BIT32(0)
 
 
-/*--------------------TMS570_IOMMKICK_REG0--------------------*/
+/*-------------------TMS570_IOMM_KICK_REG0-------------------*/
 /* field: KICK0 - Kicker 0 Register. */
-#define TMS570_IOMM_KICK_REG0_KICK0(val) BSP_FLD32(val,0, 31)
-#define TMS570_IOMM_KICK_REG0_KICK0_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_IOMM_KICK_REG0_KICK0_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_IOMMKICK_REG1--------------------*/
+/*-------------------TMS570_IOMM_KICK_REG1-------------------*/
 /* field: KICK1 - Kicker 1 Register. */
-#define TMS570_IOMM_KICK_REG1_KICK1(val) BSP_FLD32(val,0, 31)
-#define TMS570_IOMM_KICK_REG1_KICK1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_IOMM_KICK_REG1_KICK1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------TMS570_IOMMERR_RAW_STATUS_REG---------------*/
+/*---------------TMS570_IOMM_ERR_RAW_STATUS_REG---------------*/
 /* field: ADDR_ERR - Addressing Error Status and Error Signaling Enable. */
-#define TMS570_IOMM_ERR_RAW_STATUS_REG_ADDR_ERR BSP_FLD32(1)
+#define TMS570_IOMM_ERR_RAW_STATUS_REG_ADDR_ERR BSP_BIT32(1)
 
 /* field: PROT_ERR - register inside the IOMM is written in the CPU's user mode of operation. */
-#define TMS570_IOMM_ERR_RAW_STATUS_REG_PROT_ERR BSP_FLD32(0)
+#define TMS570_IOMM_ERR_RAW_STATUS_REG_PROT_ERR BSP_BIT32(0)
 
 
-/*-------------TMS570_IOMMERR_ENABLED_STATUS_REG-------------*/
+/*-------------TMS570_IOMM_ERR_ENABLED_STATUS_REG-------------*/
 /* field: ENABLED_ADDR_ERR - Addressing Error Signaling Enable Status and Status Clear */
-#define TMS570_IOMM_ERR_ENABLED_STATUS_REG_ENABLED_ADDR_ERR BSP_FLD32(1)
+#define TMS570_IOMM_ERR_ENABLED_STATUS_REG_ENABLED_ADDR_ERR BSP_BIT32(1)
 
 /* field: ENABLED_PROT_ERR - Protection Error Signaling Enable Status and Status Clear */
-#define TMS570_IOMM_ERR_ENABLED_STATUS_REG_ENABLED_PROT_ERR BSP_FLD32(0)
+#define TMS570_IOMM_ERR_ENABLED_STATUS_REG_ENABLED_PROT_ERR BSP_BIT32(0)
 
 
-/*-----------------TMS570_IOMMERR_ENABLE_REG-----------------*/
+/*-----------------TMS570_IOMM_ERR_ENABLE_REG-----------------*/
 /* field: ADDR_ERR_EN - Addressing Error Signaling Enable */
-#define TMS570_IOMM_ERR_ENABLE_REG_ADDR_ERR_EN BSP_FLD32(1)
+#define TMS570_IOMM_ERR_ENABLE_REG_ADDR_ERR_EN BSP_BIT32(1)
 
 /* field: PROT_ERR_EN - Protection ErrorSignaling Enable */
-#define TMS570_IOMM_ERR_ENABLE_REG_PROT_ERR_EN BSP_FLD32(0)
+#define TMS570_IOMM_ERR_ENABLE_REG_PROT_ERR_EN BSP_BIT32(0)
 
 
-/*---------------TMS570_IOMMERR_ENABLE_CLR_REG---------------*/
+/*---------------TMS570_IOMM_ERR_ENABLE_CLR_REG---------------*/
 /* field: ADDR_ERR_EN_CLR - Addressing Error Signaling Enable Clear */
-#define TMS570_IOMM_ERR_ENABLE_CLR_REG_ADDR_ERR_EN_CLR BSP_FLD32(1)
+#define TMS570_IOMM_ERR_ENABLE_CLR_REG_ADDR_ERR_EN_CLR BSP_BIT32(1)
 
 /* field: PROT_ERR_EN_CLR - Protection Error Signaling Enable Clear */
-#define TMS570_IOMM_ERR_ENABLE_CLR_REG_PROT_ERR_EN_CLR BSP_FLD32(0)
+#define TMS570_IOMM_ERR_ENABLE_CLR_REG_PROT_ERR_EN_CLR BSP_BIT32(0)
 
 
-/*----------------TMS570_IOMMFAULT_ADDRESS_REG----------------*/
+/*---------------TMS570_IOMM_FAULT_ADDRESS_REG---------------*/
 /* field: FAULT_ADDR - Fault Address. */
-#define TMS570_IOMM_FAULT_ADDRESS_REG_FAULT_ADDR(val) BSP_FLD32(val,0, 31)
-#define TMS570_IOMM_FAULT_ADDRESS_REG_FAULT_ADDR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_IOMM_FAULT_ADDRESS_REG_FAULT_ADDR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------TMS570_IOMMFAULT_STATUS_REG----------------*/
+/*----------------TMS570_IOMM_FAULT_STATUS_REG----------------*/
 /* field: FAULT_ID - Faulting Transaction ID */
 #define TMS570_IOMM_FAULT_STATUS_REG_FAULT_ID(val) BSP_FLD32(val,24, 27)
 #define TMS570_IOMM_FAULT_STATUS_REG_FAULT_ID_GET(reg) BSP_FLD32GET(reg,24, 27)
@@ -230,15 +221,15 @@ typedef struct{
 #define TMS570_IOMM_FAULT_STATUS_REG_FAULT_TYPE_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*-----------------TMS570_IOMMFAULT_CLEAR_REG-----------------*/
+/*----------------TMS570_IOMM_FAULT_CLEAR_REG----------------*/
 /* field: FAULT_CLEAR - Fault Clear */
-#define TMS570_IOMM_FAULT_CLEAR_REG_FAULT_CLEAR BSP_FLD32(0)
+#define TMS570_IOMM_FAULT_CLEAR_REG_FAULT_CLEAR BSP_BIT32(0)
 
 
-/*---------------------TMS570_IOMMPINMUX---------------------*/
+/*---------------------TMS570_IOMM_PINMUX---------------------*/
 /* field: FAULT_CLEAR - Fault Clear */
-#define TMS570_IOMM_PINMUX_FAULT_CLEAR BSP_FLD32(0)
+#define TMS570_IOMM_PINMUX_FAULT_CLEAR BSP_BIT32(0)
 
 
 
-#endif /* LIBBSP_ARM_tms570_IOMM */
+#endif /* LIBBSP_ARM_TMS570_IOMM */

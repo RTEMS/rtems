@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_I2C
-#define LIBBSP_ARM_tms570_I2C
+#ifndef LIBBSP_ARM_TMS570_I2C
+#define LIBBSP_ARM_TMS570_I2C
 
 #include <bsp/utility.h>
 
@@ -72,155 +72,155 @@ typedef struct{
 } tms570_i2c_t;
 
 
-/*-----------------------TMS570_I2COAR-----------------------*/
+/*-----------------------TMS570_I2C_OAR-----------------------*/
 /* field: OA - Own address */
 #define TMS570_I2C_OAR_OA(val) BSP_FLD32(val,0, 9)
 #define TMS570_I2C_OAR_OA_GET(reg) BSP_FLD32GET(reg,0, 9)
 #define TMS570_I2C_OAR_OA_SET(reg,val) BSP_FLD32SET(reg, val,0, 9)
 
 
-/*-----------------------TMS570_I2CIMR-----------------------*/
+/*-----------------------TMS570_I2C_IMR-----------------------*/
 /* field: AASEN - Address As Slave Interrupt Enable */
-#define TMS570_I2C_IMR_AASEN BSP_FLD32(6)
+#define TMS570_I2C_IMR_AASEN BSP_BIT32(6)
 
 /* field: SCDEN - Stop Condition Interrupt Enable */
-#define TMS570_I2C_IMR_SCDEN BSP_FLD32(5)
+#define TMS570_I2C_IMR_SCDEN BSP_BIT32(5)
 
 /* field: TXRDYEN - Transmit Data Ready Interrupt Enable */
-#define TMS570_I2C_IMR_TXRDYEN BSP_FLD32(4)
+#define TMS570_I2C_IMR_TXRDYEN BSP_BIT32(4)
 
 /* field: RXRDYEN - Receive Data Ready Interrupt Enable */
-#define TMS570_I2C_IMR_RXRDYEN BSP_FLD32(3)
+#define TMS570_I2C_IMR_RXRDYEN BSP_BIT32(3)
 
 /* field: ARDYEN - Register Access Ready Interrupt Enable */
-#define TMS570_I2C_IMR_ARDYEN BSP_FLD32(2)
+#define TMS570_I2C_IMR_ARDYEN BSP_BIT32(2)
 
 /* field: NACKEN - No Acknowledgement Interrupt Enable */
-#define TMS570_I2C_IMR_NACKEN BSP_FLD32(1)
+#define TMS570_I2C_IMR_NACKEN BSP_BIT32(1)
 
 /* field: ALEN - Arbitration Lost Interrupt Enable */
-#define TMS570_I2C_IMR_ALEN BSP_FLD32(0)
+#define TMS570_I2C_IMR_ALEN BSP_BIT32(0)
 
 
-/*-----------------------TMS570_I2CSTR-----------------------*/
+/*-----------------------TMS570_I2C_STR-----------------------*/
 /* field: SDIR - Slave direction */
-#define TMS570_I2C_STR_SDIR BSP_FLD32(14)
+#define TMS570_I2C_STR_SDIR BSP_BIT32(14)
 
 /* field: NACKSNT - No acknowledge sent */
-#define TMS570_I2C_STR_NACKSNT BSP_FLD32(13)
+#define TMS570_I2C_STR_NACKSNT BSP_BIT32(13)
 
 /* field: BB - Bus busy */
-#define TMS570_I2C_STR_BB BSP_FLD32(12)
+#define TMS570_I2C_STR_BB BSP_BIT32(12)
 
 /* field: RSFULL - Receiver shift full */
-#define TMS570_I2C_STR_RSFULL BSP_FLD32(11)
+#define TMS570_I2C_STR_RSFULL BSP_BIT32(11)
 
 /* field: XSMT - XSMT */
-#define TMS570_I2C_STR_XSMT BSP_FLD32(10)
+#define TMS570_I2C_STR_XSMT BSP_BIT32(10)
 
 /* field: AAS - Address as slave */
-#define TMS570_I2C_STR_AAS BSP_FLD32(9)
+#define TMS570_I2C_STR_AAS BSP_BIT32(9)
 
 /* field: AD0 - Address zero status */
-#define TMS570_I2C_STR_AD0 BSP_FLD32(8)
+#define TMS570_I2C_STR_AD0 BSP_BIT32(8)
 
 /* field: SCD - SCD */
-#define TMS570_I2C_STR_SCD BSP_FLD32(5)
+#define TMS570_I2C_STR_SCD BSP_BIT32(5)
 
 /* field: TXRDY - Transmit data ready interrupt flag */
-#define TMS570_I2C_STR_TXRDY BSP_FLD32(4)
+#define TMS570_I2C_STR_TXRDY BSP_BIT32(4)
 
 /* field: RXRDY - Receive data ready interrupt flag */
-#define TMS570_I2C_STR_RXRDY BSP_FLD32(3)
+#define TMS570_I2C_STR_RXRDY BSP_BIT32(3)
 
 /* field: ARDY - Register access ready interrupt flag */
-#define TMS570_I2C_STR_ARDY BSP_FLD32(2)
+#define TMS570_I2C_STR_ARDY BSP_BIT32(2)
 
 /* field: NACK - No acknowledgement interrupt */
-#define TMS570_I2C_STR_NACK BSP_FLD32(1)
+#define TMS570_I2C_STR_NACK BSP_BIT32(1)
 
 /* field: AL - Arbitration lost interrupt flag */
-#define TMS570_I2C_STR_AL BSP_FLD32(0)
+#define TMS570_I2C_STR_AL BSP_BIT32(0)
 
 
-/*-----------------------TMS570_I2CCKL-----------------------*/
+/*-----------------------TMS570_I2C_CKL-----------------------*/
 /* field: CLKL - Low time clock division factor */
 #define TMS570_I2C_CKL_CLKL(val) BSP_FLD32(val,0, 15)
 #define TMS570_I2C_CKL_CLKL_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_I2C_CKL_CLKL_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-----------------------TMS570_I2CCKH-----------------------*/
+/*-----------------------TMS570_I2C_CKH-----------------------*/
 /* field: CLKH - High time clock division factor */
 #define TMS570_I2C_CKH_CLKH(val) BSP_FLD32(val,0, 15)
 #define TMS570_I2C_CKH_CLKH_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_I2C_CKH_CLKH_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-----------------------TMS570_I2CCNT-----------------------*/
+/*-----------------------TMS570_I2C_CNT-----------------------*/
 /* field: CNT - Data counter */
 #define TMS570_I2C_CNT_CNT(val) BSP_FLD32(val,0, 15)
 #define TMS570_I2C_CNT_CNT_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_I2C_CNT_CNT_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-----------------------TMS570_I2CDRR-----------------------*/
+/*-----------------------TMS570_I2C_DRR-----------------------*/
 /* field: DATARX - Receive data */
 #define TMS570_I2C_DRR_DATARX(val) BSP_FLD32(val,0, 7)
 #define TMS570_I2C_DRR_DATARX_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_I2C_DRR_DATARX_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_I2CSAR-----------------------*/
+/*-----------------------TMS570_I2C_SAR-----------------------*/
 /* field: SA - 7- or 10-bit programmable slave address */
 #define TMS570_I2C_SAR_SA(val) BSP_FLD32(val,0, 9)
 #define TMS570_I2C_SAR_SA_GET(reg) BSP_FLD32GET(reg,0, 9)
 #define TMS570_I2C_SAR_SA_SET(reg,val) BSP_FLD32SET(reg, val,0, 9)
 
 
-/*-----------------------TMS570_I2CDXR-----------------------*/
+/*-----------------------TMS570_I2C_DXR-----------------------*/
 /* field: DATATX - Transmit data */
 #define TMS570_I2C_DXR_DATATX(val) BSP_FLD32(val,0, 7)
 #define TMS570_I2C_DXR_DATATX_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_I2C_DXR_DATATX_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_I2CMDR-----------------------*/
+/*-----------------------TMS570_I2C_MDR-----------------------*/
 /* field: NACKMOD - No-acknowledge (NACK) mode */
-#define TMS570_I2C_MDR_NACKMOD BSP_FLD32(15)
+#define TMS570_I2C_MDR_NACKMOD BSP_BIT32(15)
 
 /* field: FREE - Free running bit */
-#define TMS570_I2C_MDR_FREE BSP_FLD32(14)
+#define TMS570_I2C_MDR_FREE BSP_BIT32(14)
 
 /* field: STT - Start condition */
-#define TMS570_I2C_MDR_STT BSP_FLD32(13)
+#define TMS570_I2C_MDR_STT BSP_BIT32(13)
 
 /* field: STP - Stop condition */
-#define TMS570_I2C_MDR_STP BSP_FLD32(11)
+#define TMS570_I2C_MDR_STP BSP_BIT32(11)
 
 /* field: MST - Master/slave mode bit */
-#define TMS570_I2C_MDR_MST BSP_FLD32(10)
+#define TMS570_I2C_MDR_MST BSP_BIT32(10)
 
 /* field: TRX - Transmit/receive bit */
-#define TMS570_I2C_MDR_TRX BSP_FLD32(9)
+#define TMS570_I2C_MDR_TRX BSP_BIT32(9)
 
 /* field: XA - Expand address enable bit */
-#define TMS570_I2C_MDR_XA BSP_FLD32(8)
+#define TMS570_I2C_MDR_XA BSP_BIT32(8)
 
 /* field: RM - RM */
-#define TMS570_I2C_MDR_RM BSP_FLD32(7)
+#define TMS570_I2C_MDR_RM BSP_BIT32(7)
 
 /* field: DLB - Digital loop back enable bit */
-#define TMS570_I2C_MDR_DLB BSP_FLD32(6)
+#define TMS570_I2C_MDR_DLB BSP_BIT32(6)
 
 /* field: nIRS - I2C reset enable bit */
-#define TMS570_I2C_MDR_nIRS BSP_FLD32(5)
+#define TMS570_I2C_MDR_nIRS BSP_BIT32(5)
 
 /* field: STB - Start byte mode enable bit (Master mode only) */
-#define TMS570_I2C_MDR_STB BSP_FLD32(4)
+#define TMS570_I2C_MDR_STB BSP_BIT32(4)
 
 /* field: FDF - Free data format enable bit */
-#define TMS570_I2C_MDR_FDF BSP_FLD32(3)
+#define TMS570_I2C_MDR_FDF BSP_BIT32(3)
 
 /* field: BC - Bit count */
 #define TMS570_I2C_MDR_BC(val) BSP_FLD32(val,0, 2)
@@ -228,7 +228,7 @@ typedef struct{
 #define TMS570_I2C_MDR_BC_SET(reg,val) BSP_FLD32SET(reg, val,0, 2)
 
 
-/*-----------------------TMS570_I2CIVR-----------------------*/
+/*-----------------------TMS570_I2C_IVR-----------------------*/
 /* field: TESTMD - Reserved for internal testing. */
 #define TMS570_I2C_IVR_TESTMD(val) BSP_FLD32(val,8, 11)
 #define TMS570_I2C_IVR_TESTMD_GET(reg) BSP_FLD32GET(reg,8, 11)
@@ -240,22 +240,22 @@ typedef struct{
 #define TMS570_I2C_IVR_INTCODE_SET(reg,val) BSP_FLD32SET(reg, val,0, 2)
 
 
-/*-----------------------TMS570_I2CEMDR-----------------------*/
+/*----------------------TMS570_I2C_EMDR----------------------*/
 /* field: IGNACK - Ignore NACK mode */
-#define TMS570_I2C_EMDR_IGNACK BSP_FLD32(1)
+#define TMS570_I2C_EMDR_IGNACK BSP_BIT32(1)
 
 /* field: BCM - Backwards compatibility mode */
-#define TMS570_I2C_EMDR_BCM BSP_FLD32(0)
+#define TMS570_I2C_EMDR_BCM BSP_BIT32(0)
 
 
-/*-----------------------TMS570_I2CPSC-----------------------*/
+/*-----------------------TMS570_I2C_PSC-----------------------*/
 /* field: PSC - Prescale */
 #define TMS570_I2C_PSC_PSC(val) BSP_FLD32(val,0, 7)
 #define TMS570_I2C_PSC_PSC_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_I2C_PSC_PSC_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*----------------------TMS570_I2CPID11----------------------*/
+/*----------------------TMS570_I2C_PID11----------------------*/
 /* field: CLASS - Peripheral class */
 #define TMS570_I2C_PID11_CLASS(val) BSP_FLD32(val,8, 15)
 #define TMS570_I2C_PID11_CLASS_GET(reg) BSP_FLD32GET(reg,8, 15)
@@ -267,97 +267,97 @@ typedef struct{
 #define TMS570_I2C_PID11_REVISION_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*----------------------TMS570_I2CPID12----------------------*/
+/*----------------------TMS570_I2C_PID12----------------------*/
 /* field: TYPE - Peripheral type */
 #define TMS570_I2C_PID12_TYPE(val) BSP_FLD32(val,0, 7)
 #define TMS570_I2C_PID12_TYPE_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_I2C_PID12_TYPE_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*----------------------TMS570_I2CDMACR----------------------*/
+/*----------------------TMS570_I2C_DMACR----------------------*/
 /* field: TXDMAEN - Transmitter DMA enable */
-#define TMS570_I2C_DMACR_TXDMAEN BSP_FLD32(1)
+#define TMS570_I2C_DMACR_TXDMAEN BSP_BIT32(1)
 
 /* field: RXDMAEN - Receive DMA enable */
-#define TMS570_I2C_DMACR_RXDMAEN BSP_FLD32(0)
+#define TMS570_I2C_DMACR_RXDMAEN BSP_BIT32(0)
 
 
-/*-----------------------TMS570_I2CPFNC-----------------------*/
+/*----------------------TMS570_I2C_PFNC----------------------*/
 /* field: PINFUNC - SDA and SCL Pin Function */
-#define TMS570_I2C_PFNC_PINFUNC BSP_FLD32(0)
+#define TMS570_I2C_PFNC_PINFUNC BSP_BIT32(0)
 
 
-/*-----------------------TMS570_I2CDIR-----------------------*/
+/*-----------------------TMS570_I2C_DIR-----------------------*/
 /* field: SDADIR - SDA direction */
-#define TMS570_I2C_DIR_SDADIR BSP_FLD32(1)
+#define TMS570_I2C_DIR_SDADIR BSP_BIT32(1)
 
 /* field: SCLDIR - SCL direction */
-#define TMS570_I2C_DIR_SCLDIR BSP_FLD32(0)
+#define TMS570_I2C_DIR_SCLDIR BSP_BIT32(0)
 
 
-/*-----------------------TMS570_I2CDIN-----------------------*/
+/*-----------------------TMS570_I2C_DIN-----------------------*/
 /* field: SDAIN - Serial data in */
-#define TMS570_I2C_DIN_SDAIN BSP_FLD32(1)
+#define TMS570_I2C_DIN_SDAIN BSP_BIT32(1)
 
 /* field: SCLIN - Serial clock data in */
-#define TMS570_I2C_DIN_SCLIN BSP_FLD32(0)
+#define TMS570_I2C_DIN_SCLIN BSP_BIT32(0)
 
 
-/*-----------------------TMS570_I2CDOUT-----------------------*/
+/*----------------------TMS570_I2C_DOUT----------------------*/
 /* field: SDAOUT - SDA Data Output */
-#define TMS570_I2C_DOUT_SDAOUT BSP_FLD32(1)
+#define TMS570_I2C_DOUT_SDAOUT BSP_BIT32(1)
 
 /* field: SCLOUT - SCL Data Output */
-#define TMS570_I2C_DOUT_SCLOUT BSP_FLD32(0)
+#define TMS570_I2C_DOUT_SCLOUT BSP_BIT32(0)
 
 
-/*-----------------------TMS570_I2CSET-----------------------*/
+/*-----------------------TMS570_I2C_SET-----------------------*/
 /* field: SDASET - Serial Data Set */
-#define TMS570_I2C_SET_SDASET BSP_FLD32(1)
+#define TMS570_I2C_SET_SDASET BSP_BIT32(1)
 
 /* field: SCLSET - Serial Clock Set */
-#define TMS570_I2C_SET_SCLSET BSP_FLD32(0)
+#define TMS570_I2C_SET_SCLSET BSP_BIT32(0)
 
 
-/*-----------------------TMS570_I2CCLR-----------------------*/
+/*-----------------------TMS570_I2C_CLR-----------------------*/
 /* field: SDACLR - Serial Data Clear */
-#define TMS570_I2C_CLR_SDACLR BSP_FLD32(1)
+#define TMS570_I2C_CLR_SDACLR BSP_BIT32(1)
 
 /* field: SCLCLR - Serial Clock Clear */
-#define TMS570_I2C_CLR_SCLCLR BSP_FLD32(0)
+#define TMS570_I2C_CLR_SCLCLR BSP_BIT32(0)
 
 
-/*-----------------------TMS570_I2CPDR-----------------------*/
+/*-----------------------TMS570_I2C_PDR-----------------------*/
 /* field: SDAPDR - SDA pin open drain enable */
-#define TMS570_I2C_PDR_SDAPDR BSP_FLD32(1)
+#define TMS570_I2C_PDR_SDAPDR BSP_BIT32(1)
 
 /* field: SCLPDR - SCL pin open drain enable */
-#define TMS570_I2C_PDR_SCLPDR BSP_FLD32(0)
+#define TMS570_I2C_PDR_SCLPDR BSP_BIT32(0)
 
 
-/*-----------------------TMS570_I2CPDIS-----------------------*/
+/*----------------------TMS570_I2C_PDIS----------------------*/
 /* field: SDAPDIS - SDA pull disable */
-#define TMS570_I2C_PDIS_SDAPDIS BSP_FLD32(1)
+#define TMS570_I2C_PDIS_SDAPDIS BSP_BIT32(1)
 
 /* field: SCLPDIS - SCL pull disable */
-#define TMS570_I2C_PDIS_SCLPDIS BSP_FLD32(0)
+#define TMS570_I2C_PDIS_SCLPDIS BSP_BIT32(0)
 
 
-/*-----------------------TMS570_I2CPSEL-----------------------*/
+/*----------------------TMS570_I2C_PSEL----------------------*/
 /* field: SDAPSEL - SDA pull select */
-#define TMS570_I2C_PSEL_SDAPSEL BSP_FLD32(1)
+#define TMS570_I2C_PSEL_SDAPSEL BSP_BIT32(1)
 
 /* field: SCLPSEL - SCL pull select */
-#define TMS570_I2C_PSEL_SCLPSEL BSP_FLD32(0)
+#define TMS570_I2C_PSEL_SCLPSEL BSP_BIT32(0)
 
 
-/*-----------------------TMS570_I2CpSRS-----------------------*/
+/*----------------------TMS570_I2C_pSRS----------------------*/
 /* field: SDASRS - SDA Slew Rate select */
-#define TMS570_I2C_pSRS_SDASRS BSP_FLD32(1)
+#define TMS570_I2C_pSRS_SDASRS BSP_BIT32(1)
 
 /* field: SCLSRS - SCL Slew Rate select */
-#define TMS570_I2C_pSRS_SCLSRS BSP_FLD32(0)
+#define TMS570_I2C_pSRS_SCLSRS BSP_BIT32(0)
 
 
 
-#endif /* LIBBSP_ARM_tms570_I2C */
+#endif /* LIBBSP_ARM_TMS570_I2C */

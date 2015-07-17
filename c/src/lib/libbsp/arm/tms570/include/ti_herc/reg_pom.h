@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_POM
-#define LIBBSP_ARM_tms570_POM
+#ifndef LIBBSP_ARM_TMS570_POM
+#define LIBBSP_ARM_TMS570_POM
 
 #include <bsp/utility.h>
 
@@ -82,28 +82,28 @@ typedef struct{
 } tms570_pom_t;
 
 
-/*--------------------TMS570_POMPROGSTART--------------------*/
+/*--------------------TMS570_POM_PROGSTART--------------------*/
 /* field: STARTADDRESS - Defines the start address of the program memory region. */
 #define TMS570_POM_PROGSTART_STARTADDRESS(val) BSP_FLD32(val,0, 22)
 #define TMS570_POM_PROGSTART_STARTADDRESS_GET(reg) BSP_FLD32GET(reg,0, 22)
 #define TMS570_POM_PROGSTART_STARTADDRESS_SET(reg,val) BSP_FLD32SET(reg, val,0, 22)
 
 
-/*---------------------TMS570_POMOVLSTART---------------------*/
+/*--------------------TMS570_POM_OVLSTART--------------------*/
 /* field: STARTADDRESS - Defines the start address of the overlay memory region. */
 #define TMS570_POM_OVLSTART_STARTADDRESS(val) BSP_FLD32(val,0, 22)
 #define TMS570_POM_OVLSTART_STARTADDRESS_GET(reg) BSP_FLD32GET(reg,0, 22)
 #define TMS570_POM_OVLSTART_STARTADDRESS_SET(reg,val) BSP_FLD32SET(reg, val,0, 22)
 
 
-/*---------------------TMS570_POMREGSIZE---------------------*/
+/*---------------------TMS570_POM_REGSIZE---------------------*/
 /* field: SIZE - Region size */
 #define TMS570_POM_REGSIZE_SIZE(val) BSP_FLD32(val,0, 3)
 #define TMS570_POM_REGSIZE_SIZE_GET(reg) BSP_FLD32GET(reg,0, 3)
 #define TMS570_POM_REGSIZE_SIZE_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*---------------------TMS570_POMGLBCTRL---------------------*/
+/*---------------------TMS570_POM_GLBCTRL---------------------*/
 /* field: OTADDR - Overlay target Address. */
 #define TMS570_POM_GLBCTRL_OTADDR(val) BSP_FLD32(val,23, 31)
 #define TMS570_POM_GLBCTRL_OTADDR_GET(reg) BSP_FLD32GET(reg,23, 31)
@@ -120,7 +120,7 @@ typedef struct{
 #define TMS570_POM_GLBCTRL_ON_OFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*-----------------------TMS570_POMREV-----------------------*/
+/*-----------------------TMS570_POM_REV-----------------------*/
 /* field: SCHEME - Used to distinguish between different ID schemes. */
 #define TMS570_POM_REV_SCHEME(val) BSP_FLD32(val,30, 31)
 #define TMS570_POM_REV_SCHEME_GET(reg) BSP_FLD32GET(reg,30, 31)
@@ -152,68 +152,53 @@ typedef struct{
 #define TMS570_POM_REV_5_0_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*---------------------TMS570_POMCLKCTRL---------------------*/
+/*---------------------TMS570_POM_CLKCTRL---------------------*/
 /* field: CLK_GATE_OFF - Do not modify this bit. Leave it in its reset state. */
-#define TMS570_POM_CLKCTRL_CLK_GATE_OFF BSP_FLD32(0)
+#define TMS570_POM_CLKCTRL_CLK_GATE_OFF BSP_BIT32(0)
 
 
-/*-----------------------TMS570_POMFLG-----------------------*/
+/*-----------------------TMS570_POM_FLG-----------------------*/
 /* field: TO - Timeout. */
-#define TMS570_POM_FLG_TO BSP_FLD32(0)
+#define TMS570_POM_FLG_TO BSP_BIT32(0)
 
 
-/*----------------------TMS570_POMITCTRL----------------------*/
+/*---------------------TMS570_POM_ITCTRL---------------------*/
 /* field: Reserved - Read returns 0. Writes have no effect. */
-#define TMS570_POM_ITCTRL_Reserved(val) BSP_FLD32(val,0, 31)
-#define TMS570_POM_ITCTRL_Reserved_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_POM_ITCTRL_Reserved_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_POMCLAIMSET---------------------*/
+/*--------------------TMS570_POM_CLAIMSET--------------------*/
 /* field: SET1 - The module is claimed */
-#define TMS570_POM_CLAIMSET_SET1 BSP_FLD32(1)
+#define TMS570_POM_CLAIMSET_SET1 BSP_BIT32(1)
 
 /* field: SET0 - The module is claimed */
-#define TMS570_POM_CLAIMSET_SET0 BSP_FLD32(0)
+#define TMS570_POM_CLAIMSET_SET0 BSP_BIT32(0)
 
 
-/*---------------------TMS570_POMCLAIMCLR---------------------*/
+/*--------------------TMS570_POM_CLAIMCLR--------------------*/
 /* field: CLR1 - The module is claimed */
-#define TMS570_POM_CLAIMCLR_CLR1 BSP_FLD32(1)
+#define TMS570_POM_CLAIMCLR_CLR1 BSP_BIT32(1)
 
 /* field: CLR0 - The module is claimed */
-#define TMS570_POM_CLAIMCLR_CLR0 BSP_FLD32(0)
+#define TMS570_POM_CLAIMCLR_CLR0 BSP_BIT32(0)
 
 
-/*--------------------TMS570_POMLOCKACCESS--------------------*/
+/*-------------------TMS570_POM_LOCKACCESS-------------------*/
 /* field: Reserved - Read returns 0. Writes have no effect. */
-#define TMS570_POM_LOCKACCESS_Reserved(val) BSP_FLD32(val,0, 31)
-#define TMS570_POM_LOCKACCESS_Reserved_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_POM_LOCKACCESS_Reserved_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_POMLOCKSTATUS--------------------*/
+/*-------------------TMS570_POM_LOCKSTATUS-------------------*/
 /* field: Reserved - Read returns 0. Writes have no effect. */
-#define TMS570_POM_LOCKSTATUS_Reserved(val) BSP_FLD32(val,0, 31)
-#define TMS570_POM_LOCKSTATUS_Reserved_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_POM_LOCKSTATUS_Reserved_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_POMAUTHSTATUS--------------------*/
+/*-------------------TMS570_POM_AUTHSTATUS-------------------*/
 /* field: Reserved - Read returns 0. Writes have no effect. */
-#define TMS570_POM_AUTHSTATUS_Reserved(val) BSP_FLD32(val,0, 31)
-#define TMS570_POM_AUTHSTATUS_Reserved_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_POM_AUTHSTATUS_Reserved_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_POMDEVID----------------------*/
+/*----------------------TMS570_POM_DEVID----------------------*/
 /* field: Reserved - Read returns 0. Writes have no effect. */
-#define TMS570_POM_DEVID_Reserved(val) BSP_FLD32(val,0, 31)
-#define TMS570_POM_DEVID_Reserved_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_POM_DEVID_Reserved_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_POMDEVTYPE---------------------*/
+/*---------------------TMS570_POM_DEVTYPE---------------------*/
 /* field: Sub_Type - Other */
 #define TMS570_POM_DEVTYPE_Sub_Type(val) BSP_FLD32(val,4, 7)
 #define TMS570_POM_DEVTYPE_Sub_Type_GET(reg) BSP_FLD32GET(reg,4, 7)
@@ -225,7 +210,7 @@ typedef struct{
 #define TMS570_POM_DEVTYPE_Major_Type_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*------------------TMS570_POMPERIPHERALID4------------------*/
+/*------------------TMS570_POM_PERIPHERALID4------------------*/
 /* field: 4KB_Count - Only 4KB implemented */
 #define TMS570_POM_PERIPHERALID4_4KB_Count(val) BSP_FLD32(val,4, 7)
 #define TMS570_POM_PERIPHERALID4_4KB_Count_GET(reg) BSP_FLD32GET(reg,4, 7)
@@ -237,35 +222,26 @@ typedef struct{
 #define TMS570_POM_PERIPHERALID4_JEP_Continuation_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*------------------TMS570_POMPERIPHERALID5------------------*/
+/*------------------TMS570_POM_PERIPHERALID5------------------*/
 /* field: Reserved - Read returns 0. Writes have no effect. */
-#define TMS570_POM_PERIPHERALID5_Reserved(val) BSP_FLD32(val,0, 31)
-#define TMS570_POM_PERIPHERALID5_Reserved_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_POM_PERIPHERALID5_Reserved_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------TMS570_POMPERIPHERALID6------------------*/
+/*------------------TMS570_POM_PERIPHERALID6------------------*/
 /* field: Reserved - Read returns 0. Writes have no effect. */
-#define TMS570_POM_PERIPHERALID6_Reserved(val) BSP_FLD32(val,0, 31)
-#define TMS570_POM_PERIPHERALID6_Reserved_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_POM_PERIPHERALID6_Reserved_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------TMS570_POMPERIPHERALID7------------------*/
+/*------------------TMS570_POM_PERIPHERALID7------------------*/
 /* field: Reserved - Read returns 0. Writes have no effect. */
-#define TMS570_POM_PERIPHERALID7_Reserved(val) BSP_FLD32(val,0, 31)
-#define TMS570_POM_PERIPHERALID7_Reserved_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_POM_PERIPHERALID7_Reserved_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------TMS570_POMPERIPHERALID0------------------*/
+/*------------------TMS570_POM_PERIPHERALID0------------------*/
 /* field: Part_Number - Reads 0, since POMREV defines the module */
 #define TMS570_POM_PERIPHERALID0_Part_Number(val) BSP_FLD32(val,0, 7)
 #define TMS570_POM_PERIPHERALID0_Part_Number_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_POM_PERIPHERALID0_Part_Number_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*------------------TMS570_POMPERIPHERALID1------------------*/
+/*------------------TMS570_POM_PERIPHERALID1------------------*/
 /* field: JEP106_Identity - Part of TI JEDEC number */
 #define TMS570_POM_PERIPHERALID1_JEP106_Identity(val) BSP_FLD32(val,4, 7)
 #define TMS570_POM_PERIPHERALID1_JEP106_Identity_GET(reg) BSP_FLD32GET(reg,4, 7)
@@ -277,14 +253,14 @@ typedef struct{
 #define TMS570_POM_PERIPHERALID1_Part_Number_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*------------------TMS570_POMPERIPHERALID2------------------*/
+/*------------------TMS570_POM_PERIPHERALID2------------------*/
 /* field: Revision - Reads 0, since POMREV defines the module */
 #define TMS570_POM_PERIPHERALID2_Revision(val) BSP_FLD32(val,4, 7)
 #define TMS570_POM_PERIPHERALID2_Revision_GET(reg) BSP_FLD32GET(reg,4, 7)
 #define TMS570_POM_PERIPHERALID2_Revision_SET(reg,val) BSP_FLD32SET(reg, val,4, 7)
 
 /* field: JEDEC - Indicates JEDEC assigned value */
-#define TMS570_POM_PERIPHERALID2_JEDEC BSP_FLD32(3)
+#define TMS570_POM_PERIPHERALID2_JEDEC BSP_BIT32(3)
 
 /* field: JEP106_Identity - JEDEC+JEP106 Identity Code (POMPERIPHERALID2)+JEP106 Identity Code */
 #define TMS570_POM_PERIPHERALID2_JEP106_Identity(val) BSP_FLD32(val,0, 2)
@@ -292,21 +268,18 @@ typedef struct{
 #define TMS570_POM_PERIPHERALID2_JEP106_Identity_SET(reg,val) BSP_FLD32SET(reg, val,0, 2)
 
 
-/*------------------TMS570_POMPERIPHERALID3------------------*/
+/*------------------TMS570_POM_PERIPHERALID3------------------*/
 /* field: Reserved - Read returns 0. Writes have no effect. */
-#define TMS570_POM_PERIPHERALID3_Reserved(val) BSP_FLD32(val,0, 31)
-#define TMS570_POM_PERIPHERALID3_Reserved_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_POM_PERIPHERALID3_Reserved_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_POMCOMPONENTID0-------------------*/
+/*------------------TMS570_POM_COMPONENTID0------------------*/
 /* field: Preamble - Preamble */
 #define TMS570_POM_COMPONENTID0_Preamble(val) BSP_FLD32(val,0, 7)
 #define TMS570_POM_COMPONENTID0_Preamble_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_POM_COMPONENTID0_Preamble_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-------------------TMS570_POMCOMPONENTID1-------------------*/
+/*------------------TMS570_POM_COMPONENTID1------------------*/
 /* field: Component_Class - CoreSight Component */
 #define TMS570_POM_COMPONENTID1_Component_Class(val) BSP_FLD32(val,4, 7)
 #define TMS570_POM_COMPONENTID1_Component_Class_GET(reg) BSP_FLD32GET(reg,4, 7)
@@ -318,14 +291,14 @@ typedef struct{
 #define TMS570_POM_COMPONENTID1_Preamble_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*-------------------TMS570_POMCOMPONENTID2-------------------*/
+/*------------------TMS570_POM_COMPONENTID2------------------*/
 /* field: Preamble - Preamble */
 #define TMS570_POM_COMPONENTID2_Preamble(val) BSP_FLD32(val,0, 7)
 #define TMS570_POM_COMPONENTID2_Preamble_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_POM_COMPONENTID2_Preamble_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-------------------TMS570_POMCOMPONENTID3-------------------*/
+/*------------------TMS570_POM_COMPONENTID3------------------*/
 /* field: Preamble - Preamble */
 #define TMS570_POM_COMPONENTID3_Preamble(val) BSP_FLD32(val,0, 7)
 #define TMS570_POM_COMPONENTID3_Preamble_GET(reg) BSP_FLD32GET(reg,0, 7)
@@ -333,4 +306,4 @@ typedef struct{
 
 
 
-#endif /* LIBBSP_ARM_tms570_POM */
+#endif /* LIBBSP_ARM_TMS570_POM */

@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_PCR
-#define LIBBSP_ARM_tms570_PCR
+#ifndef LIBBSP_ARM_TMS570_PCR
+#define LIBBSP_ARM_TMS570_PCR
 
 #include <bsp/utility.h>
 
@@ -76,75 +76,45 @@ typedef struct{
 } tms570_pcr_t;
 
 
-/*--------------------TMS570_PCRPMPROTSET0--------------------*/
+/*-------------------TMS570_PCR_PMPROTSET0-------------------*/
 /* field: PCSPROTSET - Peripheral memory frame protection set. */
-#define TMS570_PCR_PMPROTSET0_PCSPROTSET(val) BSP_FLD32(val,0, 31)
-#define TMS570_PCR_PMPROTSET0_PCSPROTSET_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PCR_PMPROTSET0_PCSPROTSET_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_PCRPMPROTSET1--------------------*/
+/*-------------------TMS570_PCR_PMPROTSET1-------------------*/
 /* field: PCSPROTSET - Peripheral memory frame protection set. */
-#define TMS570_PCR_PMPROTSET1_PCSPROTSET(val) BSP_FLD32(val,0, 31)
-#define TMS570_PCR_PMPROTSET1_PCSPROTSET_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PCR_PMPROTSET1_PCSPROTSET_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_PCRPMPROTCLR0--------------------*/
+/*-------------------TMS570_PCR_PMPROTCLR0-------------------*/
 /* field: PCSPROTCLR - Peripheral memory frame protection clear. */
-#define TMS570_PCR_PMPROTCLR0_PCSPROTCLR(val) BSP_FLD32(val,0, 31)
-#define TMS570_PCR_PMPROTCLR0_PCSPROTCLR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PCR_PMPROTCLR0_PCSPROTCLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_PCRPMPROTCLR1--------------------*/
+/*-------------------TMS570_PCR_PMPROTCLR1-------------------*/
 /* field: PCSPROTCLR - Peripheral memory frame protection clear. */
-#define TMS570_PCR_PMPROTCLR1_PCSPROTCLR(val) BSP_FLD32(val,0, 31)
-#define TMS570_PCR_PMPROTCLR1_PCSPROTCLR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PCR_PMPROTCLR1_PCSPROTCLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_PCRPPROTSET0--------------------*/
+/*--------------------TMS570_PCR_PPROTSETx--------------------*/
 /* field: PROTSET - Peripheral select quadrant protection set. */
-#define TMS570_PCR_PPROTSET0_PROTSET(val) BSP_FLD32(val,0, 31)
-#define TMS570_PCR_PPROTSET0_PROTSET_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PCR_PPROTSET0_PROTSET_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_PCRPPROTCLR0--------------------*/
+/*--------------------TMS570_PCR_PPROTCLRx--------------------*/
 /* field: PROTCLR - Peripheral select quadrant protection clear. */
-#define TMS570_PCR_PPROTCLR0_PROTCLR(val) BSP_FLD32(val,0, 31)
-#define TMS570_PCR_PPROTCLR0_PROTCLR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PCR_PPROTCLR0_PROTCLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------TMS570_PCRPCSPWRDWNSET0------------------*/
+/*------------------TMS570_PCR_PCSPWRDWNSETx------------------*/
 /* field: PWRDNSET - Peripheral memory clock power-down set. */
-#define TMS570_PCR_PCSPWRDWNSET0_PWRDNSET(val) BSP_FLD32(val,0, 31)
-#define TMS570_PCR_PCSPWRDWNSET0_PWRDNSET_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PCR_PCSPWRDWNSET0_PWRDNSET_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------TMS570_PCRPCSPWRDWNCLR0------------------*/
+/*------------------TMS570_PCR_PCSPWRDWNCLRx------------------*/
 /* field: PWRDNCLR - Peripheral memory clock power-down clear. */
-#define TMS570_PCR_PCSPWRDWNCLR0_PWRDNCLR(val) BSP_FLD32(val,0, 31)
-#define TMS570_PCR_PCSPWRDWNCLR0_PWRDNCLR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PCR_PCSPWRDWNCLR0_PWRDNCLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_PCRPSPWRDWNSET0-------------------*/
+/*------------------TMS570_PCR_PSPWRDWNSETx------------------*/
 /* field: PWRDWNSET - Peripheral select quadrant clock power-down set. */
-#define TMS570_PCR_PSPWRDWNSET0_PWRDWNSET(val) BSP_FLD32(val,0, 31)
-#define TMS570_PCR_PSPWRDWNSET0_PWRDWNSET_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PCR_PSPWRDWNSET0_PWRDWNSET_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_PCRPSPWRDWNCLR0-------------------*/
+/*------------------TMS570_PCR_PSPWRDWNCLRx------------------*/
 /* field: PWRDWNCLR - Peripheral select quadrant clock power-down clear. */
-#define TMS570_PCR_PSPWRDWNCLR0_PWRDWNCLR(val) BSP_FLD32(val,0, 31)
-#define TMS570_PCR_PSPWRDWNCLR0_PWRDWNCLR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PCR_PSPWRDWNCLR0_PWRDWNCLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
 
-
-#endif /* LIBBSP_ARM_tms570_PCR */
+#endif /* LIBBSP_ARM_TMS570_PCR */

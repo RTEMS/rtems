@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_RTI
-#define LIBBSP_ARM_tms570_RTI
+#ifndef LIBBSP_ARM_TMS570_RTI
+#define LIBBSP_ARM_TMS570_RTI
 
 #include <bsp/utility.h>
 
@@ -85,275 +85,239 @@ typedef struct{
 } tms570_rti_t;
 
 
-/*----------------------TMS570_RTICOMPx----------------------*/
+/*----------------------TMS570_RTI_COMPx----------------------*/
 /* field: COMPx - Compare x. */
-#define TMS570_RTI_COMPx_COMPx(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_COMPx_COMPx_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_COMPx_COMPx_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_RTIUDCPx----------------------*/
+/*----------------------TMS570_RTI_UDCPx----------------------*/
 /* field: UDCPx - Update compare x. */
-#define TMS570_RTI_UDCPx_UDCPx(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_UDCPx_UDCPx_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_UDCPx_UDCPx_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_RTIFRCx-----------------------*/
+/*----------------------TMS570_RTI_FRCx----------------------*/
 /* field: FRC0 - FRC0 */
-#define TMS570_RTI_FRCx_FRC0(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_FRCx_FRC0_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_FRCx_FRC0_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_RTIUCx-----------------------*/
+/*-----------------------TMS570_RTI_UCx-----------------------*/
 /* field: UC0 - Up counter 0. */
-#define TMS570_RTI_UCx_UC0(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_UCx_UC0_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_UCx_UC0_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_RTICPUCx----------------------*/
+/*----------------------TMS570_RTI_CPUCx----------------------*/
 /* field: CPUC0 - Compare up counter 0. This register holds the value that is compared with the up counter 0. */
-#define TMS570_RTI_CPUCx_CPUC0(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_CPUCx_CPUC0_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_CPUCx_CPUC0_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_RTICAFRCx----------------------*/
+/*---------------------TMS570_RTI_CAFRCx---------------------*/
 /* field: CAFRC0 - Capture free running counter 0. */
-#define TMS570_RTI_CAFRCx_CAFRC0(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_CAFRCx_CAFRC0_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_CAFRCx_CAFRC0_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_RTICAUCx----------------------*/
+/*----------------------TMS570_RTI_CAUCx----------------------*/
 /* field: CAUC0 - Capture up counter 0. */
-#define TMS570_RTI_CAUCx_CAUC0(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_CAUCx_CAUC0_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_CAUCx_CAUC0_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_RTIrsvd-----------------------*/
+/*----------------------TMS570_RTI_rsvd----------------------*/
 /* field: CAUC0 - Capture up counter 0. */
-#define TMS570_RTI_rsvd_CAUC0(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_rsvd_CAUC0_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_rsvd_CAUC0_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_RTIGCTRL----------------------*/
+/*----------------------TMS570_RTI_GCTRL----------------------*/
 /* field: NTUSEL - Select NTU signal. */
 #define TMS570_RTI_GCTRL_NTUSEL(val) BSP_FLD32(val,16, 19)
 #define TMS570_RTI_GCTRL_NTUSEL_GET(reg) BSP_FLD32GET(reg,16, 19)
 #define TMS570_RTI_GCTRL_NTUSEL_SET(reg,val) BSP_FLD32SET(reg, val,16, 19)
 
 /* field: COS - Continue on suspend. */
-#define TMS570_RTI_GCTRL_COS BSP_FLD32(15)
+#define TMS570_RTI_GCTRL_COS BSP_BIT32(15)
 
 /* field: CNT1EN - Counter 1 enable. This bit starts and stops counter block 1 (RTIUC1 and RTIFRC1). */
-#define TMS570_RTI_GCTRL_CNT1EN BSP_FLD32(1)
+#define TMS570_RTI_GCTRL_CNT1EN BSP_BIT32(1)
 
 /* field: CNT0EN - Counter 0 enable. This bit starts and stops counter block 0 (RTIUC0 and RTIFRC0). */
-#define TMS570_RTI_GCTRL_CNT0EN BSP_FLD32(0)
+#define TMS570_RTI_GCTRL_CNT0EN BSP_BIT32(0)
 
 
-/*----------------------TMS570_RTITBCTRL----------------------*/
+/*---------------------TMS570_RTI_TBCTRL---------------------*/
 /* field: INC - Increment free running counter 0. */
-#define TMS570_RTI_TBCTRL_INC BSP_FLD32(1)
+#define TMS570_RTI_TBCTRL_INC BSP_BIT32(1)
 
 /* field: TBEXT - Timebase external. */
-#define TMS570_RTI_TBCTRL_TBEXT BSP_FLD32(0)
+#define TMS570_RTI_TBCTRL_TBEXT BSP_BIT32(0)
 
 
-/*---------------------TMS570_RTICAPCTRL---------------------*/
+/*---------------------TMS570_RTI_CAPCTRL---------------------*/
 /* field: CAPCNTR1 - Capture counter 1. */
-#define TMS570_RTI_CAPCTRL_CAPCNTR1 BSP_FLD32(1)
+#define TMS570_RTI_CAPCTRL_CAPCNTR1 BSP_BIT32(1)
 
 /* field: CAPCNTR0 - Capture counter 0. */
-#define TMS570_RTI_CAPCTRL_CAPCNTR0 BSP_FLD32(0)
+#define TMS570_RTI_CAPCTRL_CAPCNTR0 BSP_BIT32(0)
 
 
-/*---------------------TMS570_RTICOMPCTRL---------------------*/
+/*--------------------TMS570_RTI_COMPCTRL--------------------*/
 /* field: COMPSEL3 - Compare select 3. */
-#define TMS570_RTI_COMPCTRL_COMPSEL3 BSP_FLD32(12)
+#define TMS570_RTI_COMPCTRL_COMPSEL3 BSP_BIT32(12)
 
 /* field: COMPSEL2 - Compare select 2. */
-#define TMS570_RTI_COMPCTRL_COMPSEL2 BSP_FLD32(8)
+#define TMS570_RTI_COMPCTRL_COMPSEL2 BSP_BIT32(8)
 
 /* field: COMPSEL1 - Compare select 1. */
-#define TMS570_RTI_COMPCTRL_COMPSEL1 BSP_FLD32(4)
+#define TMS570_RTI_COMPCTRL_COMPSEL1 BSP_BIT32(4)
 
 /* field: COMPSEL0 - Compare select 0. */
-#define TMS570_RTI_COMPCTRL_COMPSEL0 BSP_FLD32(0)
+#define TMS570_RTI_COMPCTRL_COMPSEL0 BSP_BIT32(0)
 
 
-/*---------------------TMS570_RTITBLCOMP---------------------*/
+/*---------------------TMS570_RTI_TBLCOMP---------------------*/
 /* field: TBLCOMP - Timebase low compare value. */
-#define TMS570_RTI_TBLCOMP_TBLCOMP(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_TBLCOMP_TBLCOMP_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_TBLCOMP_TBLCOMP_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_RTITBHCOMP---------------------*/
+/*---------------------TMS570_RTI_TBHCOMP---------------------*/
 /* field: TBHCOMP - Timebase high compare value. */
-#define TMS570_RTI_TBHCOMP_TBHCOMP(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_TBHCOMP_TBHCOMP_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_TBHCOMP_TBHCOMP_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_RTISETINTENA--------------------*/
+/*--------------------TMS570_RTI_SETINTENA--------------------*/
 /* field: SETOVL1INT - Set free running counter 1 overflow interrupt. */
-#define TMS570_RTI_SETINTENA_SETOVL1INT BSP_FLD32(18)
+#define TMS570_RTI_SETINTENA_SETOVL1INT BSP_BIT32(18)
 
 /* field: SETOVL0INT - Set free running counter 0 overflow interrupt. */
-#define TMS570_RTI_SETINTENA_SETOVL0INT BSP_FLD32(17)
+#define TMS570_RTI_SETINTENA_SETOVL0INT BSP_BIT32(17)
 
 /* field: SETTBINT - Set timebase interrupt. */
-#define TMS570_RTI_SETINTENA_SETTBINT BSP_FLD32(16)
+#define TMS570_RTI_SETINTENA_SETTBINT BSP_BIT32(16)
 
 /* field: SETDMA3 - Set compare DMA request 3. */
-#define TMS570_RTI_SETINTENA_SETDMA3 BSP_FLD32(11)
+#define TMS570_RTI_SETINTENA_SETDMA3 BSP_BIT32(11)
 
 /* field: SETDMA2 - Set compare DMA request 2. */
-#define TMS570_RTI_SETINTENA_SETDMA2 BSP_FLD32(10)
+#define TMS570_RTI_SETINTENA_SETDMA2 BSP_BIT32(10)
 
 /* field: SETDMA1 - Set compare DMA request 1. */
-#define TMS570_RTI_SETINTENA_SETDMA1 BSP_FLD32(9)
+#define TMS570_RTI_SETINTENA_SETDMA1 BSP_BIT32(9)
 
 /* field: SETDMA0 - Set compare DMA request 0. */
-#define TMS570_RTI_SETINTENA_SETDMA0 BSP_FLD32(8)
+#define TMS570_RTI_SETINTENA_SETDMA0 BSP_BIT32(8)
 
 /* field: SETINT3 - Set compare interrupt 3. */
-#define TMS570_RTI_SETINTENA_SETINT3 BSP_FLD32(3)
+#define TMS570_RTI_SETINTENA_SETINT3 BSP_BIT32(3)
 
 /* field: SETINT2 - Set compare interrupt 2. */
-#define TMS570_RTI_SETINTENA_SETINT2 BSP_FLD32(2)
+#define TMS570_RTI_SETINTENA_SETINT2 BSP_BIT32(2)
 
 /* field: SETINT1 - Set compare interrupt 1. */
-#define TMS570_RTI_SETINTENA_SETINT1 BSP_FLD32(1)
+#define TMS570_RTI_SETINTENA_SETINT1 BSP_BIT32(1)
 
 /* field: SETINT0 - Set compare interrupt 0. */
-#define TMS570_RTI_SETINTENA_SETINT0 BSP_FLD32(0)
+#define TMS570_RTI_SETINTENA_SETINT0 BSP_BIT32(0)
 
 
-/*-------------------TMS570_RTICLEARINTENA-------------------*/
+/*-------------------TMS570_RTI_CLEARINTENA-------------------*/
 /* field: CLEAROVL1INT - Clear free running counter 1 overflow interrupt. */
-#define TMS570_RTI_CLEARINTENA_CLEAROVL1INT BSP_FLD32(18)
+#define TMS570_RTI_CLEARINTENA_CLEAROVL1INT BSP_BIT32(18)
 
 /* field: CLEAROVL0INT - Clear free running counter 0 overflow interrupt. */
-#define TMS570_RTI_CLEARINTENA_CLEAROVL0INT BSP_FLD32(17)
+#define TMS570_RTI_CLEARINTENA_CLEAROVL0INT BSP_BIT32(17)
 
 /* field: CLEARTBINT - Clear timebase interrupt. */
-#define TMS570_RTI_CLEARINTENA_CLEARTBINT BSP_FLD32(16)
+#define TMS570_RTI_CLEARINTENA_CLEARTBINT BSP_BIT32(16)
 
 /* field: CLEARDMA3 - Clear compare DMA request 3. */
-#define TMS570_RTI_CLEARINTENA_CLEARDMA3 BSP_FLD32(11)
+#define TMS570_RTI_CLEARINTENA_CLEARDMA3 BSP_BIT32(11)
 
 /* field: CLEARDMA2 - Clear compare DMA request 2. */
-#define TMS570_RTI_CLEARINTENA_CLEARDMA2 BSP_FLD32(10)
+#define TMS570_RTI_CLEARINTENA_CLEARDMA2 BSP_BIT32(10)
 
 /* field: CLEARDMA1 - Clear compare DMA request 1. */
-#define TMS570_RTI_CLEARINTENA_CLEARDMA1 BSP_FLD32(9)
+#define TMS570_RTI_CLEARINTENA_CLEARDMA1 BSP_BIT32(9)
 
 /* field: CLEARDMA0 - Clear compare DMA request 0. */
-#define TMS570_RTI_CLEARINTENA_CLEARDMA0 BSP_FLD32(8)
+#define TMS570_RTI_CLEARINTENA_CLEARDMA0 BSP_BIT32(8)
 
 /* field: CLEARINT3 - Clear compare interrupt 3. */
-#define TMS570_RTI_CLEARINTENA_CLEARINT3 BSP_FLD32(3)
+#define TMS570_RTI_CLEARINTENA_CLEARINT3 BSP_BIT32(3)
 
 /* field: CLEARINT2 - Clear compare interrupt 2. */
-#define TMS570_RTI_CLEARINTENA_CLEARINT2 BSP_FLD32(2)
+#define TMS570_RTI_CLEARINTENA_CLEARINT2 BSP_BIT32(2)
 
 /* field: CLEARINT1 - Clear compare interrupt 1. */
-#define TMS570_RTI_CLEARINTENA_CLEARINT1 BSP_FLD32(1)
+#define TMS570_RTI_CLEARINTENA_CLEARINT1 BSP_BIT32(1)
 
 /* field: CLEARINT0 - Clear compare interrupt 0. */
-#define TMS570_RTI_CLEARINTENA_CLEARINT0 BSP_FLD32(0)
+#define TMS570_RTI_CLEARINTENA_CLEARINT0 BSP_BIT32(0)
 
 
-/*---------------------TMS570_RTIINTFLAG---------------------*/
+/*---------------------TMS570_RTI_INTFLAG---------------------*/
 /* field: OVL1INT - Free running counter 1 overflow interrupt flag. This bit determines if an interrupt is pending. */
-#define TMS570_RTI_INTFLAG_OVL1INT BSP_FLD32(18)
+#define TMS570_RTI_INTFLAG_OVL1INT BSP_BIT32(18)
 
 /* field: OVL0INT - Free running counter 0 overflow interrupt flag. This bit determines if an interrupt is pending. */
-#define TMS570_RTI_INTFLAG_OVL0INT BSP_FLD32(17)
+#define TMS570_RTI_INTFLAG_OVL0INT BSP_BIT32(17)
 
 /* field: TBINT - Timebase interrupt flag. */
-#define TMS570_RTI_INTFLAG_TBINT BSP_FLD32(16)
+#define TMS570_RTI_INTFLAG_TBINT BSP_BIT32(16)
 
 /* field: INT3 - Interrupt flag 3. These bits determine if an interrupt due to a Compare 3 match is pending. */
-#define TMS570_RTI_INTFLAG_INT3 BSP_FLD32(3)
+#define TMS570_RTI_INTFLAG_INT3 BSP_BIT32(3)
 
 /* field: INT2 - Interrupt flag 2. These bits determine if an interrupt due to a Compare 2 match is pending. */
-#define TMS570_RTI_INTFLAG_INT2 BSP_FLD32(2)
+#define TMS570_RTI_INTFLAG_INT2 BSP_BIT32(2)
 
 /* field: INT1 - Interrupt flag 1. These bits determine if an interrupt due to a Compare 1 match is pending. */
-#define TMS570_RTI_INTFLAG_INT1 BSP_FLD32(1)
+#define TMS570_RTI_INTFLAG_INT1 BSP_BIT32(1)
 
 /* field: INT0 - Interrupt flag 0. These bits determine if an interrupt due to a Compare 0 match is pending. */
-#define TMS570_RTI_INTFLAG_INT0 BSP_FLD32(0)
+#define TMS570_RTI_INTFLAG_INT0 BSP_BIT32(0)
 
 
-/*---------------------TMS570_RTIDWDCTRL---------------------*/
+/*---------------------TMS570_RTI_DWDCTRL---------------------*/
 /* field: DWDCTRL - DWDCTRL Digital Watchdog Control. */
-#define TMS570_RTI_DWDCTRL_DWDCTRL(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_DWDCTRL_DWDCTRL_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_DWDCTRL_DWDCTRL_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_RTIDWDPRLD---------------------*/
+/*---------------------TMS570_RTI_DWDPRLD---------------------*/
 /* field: DWDPRLD - Digital Watchdog Preload Value. */
 #define TMS570_RTI_DWDPRLD_DWDPRLD(val) BSP_FLD32(val,0, 15)
 #define TMS570_RTI_DWDPRLD_DWDPRLD_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_RTI_DWDPRLD_DWDPRLD_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_RTIWDSTATUS---------------------*/
+/*--------------------TMS570_RTI_WDSTATUS--------------------*/
 /* field: DWWD_ST - Windowed Watchdog Status */
-#define TMS570_RTI_WDSTATUS_DWWD_ST BSP_FLD32(5)
+#define TMS570_RTI_WDSTATUS_DWWD_ST BSP_BIT32(5)
 
 /* field: END_TIME_VIOL - Windowed Watchdog End Time Violation Status. */
-#define TMS570_RTI_WDSTATUS_END_TIME_VIOL BSP_FLD32(4)
+#define TMS570_RTI_WDSTATUS_END_TIME_VIOL BSP_BIT32(4)
 
 /* field: START_TIME_VIOL - Windowed Watchdog Start Time Violation Status. */
-#define TMS570_RTI_WDSTATUS_START_TIME_VIOL BSP_FLD32(3)
+#define TMS570_RTI_WDSTATUS_START_TIME_VIOL BSP_BIT32(3)
 
 /* field: KEY_ST - Watchdog key status. */
-#define TMS570_RTI_WDSTATUS_KEY_ST BSP_FLD32(2)
+#define TMS570_RTI_WDSTATUS_KEY_ST BSP_BIT32(2)
 
 /* field: DWD_ST - DWD status. */
-#define TMS570_RTI_WDSTATUS_DWD_ST BSP_FLD32(1)
+#define TMS570_RTI_WDSTATUS_DWD_ST BSP_BIT32(1)
 
 
-/*----------------------TMS570_RTIWDKEY----------------------*/
+/*----------------------TMS570_RTI_WDKEY----------------------*/
 /* field: WDKEY - Watchdog key. These bits provide the key sequence location. */
 #define TMS570_RTI_WDKEY_WDKEY(val) BSP_FLD32(val,0, 15)
 #define TMS570_RTI_WDKEY_WDKEY_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_RTI_WDKEY_WDKEY_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_RTIDWDCNTR---------------------*/
+/*---------------------TMS570_RTI_DWDCNTR---------------------*/
 /* field: DWDCNTR - DWD down counter. */
 #define TMS570_RTI_DWDCNTR_DWDCNTR(val) BSP_FLD32(val,0, 24)
 #define TMS570_RTI_DWDCNTR_DWDCNTR_GET(reg) BSP_FLD32GET(reg,0, 24)
 #define TMS570_RTI_DWDCNTR_DWDCNTR_SET(reg,val) BSP_FLD32SET(reg, val,0, 24)
 
 
-/*--------------------TMS570_RTIWWDRXNCTRL--------------------*/
+/*-------------------TMS570_RTI_WWDRXNCTRL-------------------*/
 /* field: WWDRXN - The DWWD reaction */
 #define TMS570_RTI_WWDRXNCTRL_WWDRXN(val) BSP_FLD32(val,0, 3)
 #define TMS570_RTI_WWDRXNCTRL_WWDRXN_GET(reg) BSP_FLD32GET(reg,0, 3)
 #define TMS570_RTI_WWDRXNCTRL_WWDRXN_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*-------------------TMS570_RTIWWDSIZECTRL-------------------*/
+/*-------------------TMS570_RTI_WWDSIZECTRL-------------------*/
 /* field: WWDSIZE - The DWWD window size */
-#define TMS570_RTI_WWDSIZECTRL_WWDSIZE(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_WWDSIZECTRL_WWDSIZE_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_WWDSIZECTRL_WWDSIZE_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_RTIINTCLRENABLE-------------------*/
+/*------------------TMS570_RTI_INTCLRENABLE------------------*/
 /* field: INTCLRENABLE3 - Enables the auto-clear functionality on the compare 3 interrupt. */
 #define TMS570_RTI_INTCLRENABLE_INTCLRENABLE3(val) BSP_FLD32(val,24, 27)
 #define TMS570_RTI_INTCLRENABLE_INTCLRENABLE3_GET(reg) BSP_FLD32GET(reg,24, 27)
@@ -375,33 +339,21 @@ typedef struct{
 #define TMS570_RTI_INTCLRENABLE_INTCLRENABLE0_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*---------------------TMS570_RTICOMP0CLR---------------------*/
+/*--------------------TMS570_RTI_COMP0CLR--------------------*/
 /* field: CMP0CLR - Compare 0 clear. */
-#define TMS570_RTI_COMP0CLR_CMP0CLR(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_COMP0CLR_CMP0CLR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_COMP0CLR_CMP0CLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_RTICOMP1CLR---------------------*/
+/*--------------------TMS570_RTI_COMP1CLR--------------------*/
 /* field: CMP0CLR - Compare 1 clear. */
-#define TMS570_RTI_COMP1CLR_CMP0CLR(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_COMP1CLR_CMP0CLR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_COMP1CLR_CMP0CLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_RTICOMP2CLR---------------------*/
+/*--------------------TMS570_RTI_COMP2CLR--------------------*/
 /* field: CMP2CLR - Compare 2 clear. */
-#define TMS570_RTI_COMP2CLR_CMP2CLR(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_COMP2CLR_CMP2CLR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_COMP2CLR_CMP2CLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_RTICOMP3CLR---------------------*/
+/*--------------------TMS570_RTI_COMP3CLR--------------------*/
 /* field: CMP3CLR - Compare 3 clear. */
-#define TMS570_RTI_COMP3CLR_CMP3CLR(val) BSP_FLD32(val,0, 31)
-#define TMS570_RTI_COMP3CLR_CMP3CLR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_RTI_COMP3CLR_CMP3CLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
 
-
-#endif /* LIBBSP_ARM_tms570_RTI */
+#endif /* LIBBSP_ARM_TMS570_RTI */

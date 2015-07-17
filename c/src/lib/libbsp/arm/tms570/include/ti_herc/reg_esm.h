@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_ESM
-#define LIBBSP_ARM_tms570_ESM
+#ifndef LIBBSP_ARM_TMS570_ESM
+#define LIBBSP_ARM_TMS570_ESM
 
 #include <bsp/utility.h>
 
@@ -66,150 +66,105 @@ typedef struct{
 } tms570_esm_t;
 
 
-/*---------------------TMS570_ESMEEPAPR1---------------------*/
+/*---------------------TMS570_ESM_EEPAPR1---------------------*/
 /* field: IEPSET - Enable ERROR Pin Action/Response on Group 1. */
-#define TMS570_ESM_EEPAPR1_IEPSET(val) BSP_FLD32(val,0, 31)
-#define TMS570_ESM_EEPAPR1_IEPSET_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_ESM_EEPAPR1_IEPSET_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_ESMDEPAPR1---------------------*/
+/*---------------------TMS570_ESM_DEPAPR1---------------------*/
 /* field: IEPCLR - Disable ERROR Pin Action/Response on Group 1. */
-#define TMS570_ESM_DEPAPR1_IEPCLR(val) BSP_FLD32(val,0, 31)
-#define TMS570_ESM_DEPAPR1_IEPCLR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_ESM_DEPAPR1_IEPCLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_ESMIESR1----------------------*/
+/*----------------------TMS570_ESM_IESR1----------------------*/
 /* field: INTENSET - Set interrupt Enable */
-#define TMS570_ESM_IESR1_INTENSET(val) BSP_FLD32(val,0, 31)
-#define TMS570_ESM_IESR1_INTENSET_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_ESM_IESR1_INTENSET_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_ESMIECR1----------------------*/
+/*----------------------TMS570_ESM_IECR1----------------------*/
 /* field: INTENCLR - Clear Interrupt Enable */
-#define TMS570_ESM_IECR1_INTENCLR(val) BSP_FLD32(val,0, 31)
-#define TMS570_ESM_IECR1_INTENCLR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_ESM_IECR1_INTENCLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_ESMILSR1----------------------*/
+/*----------------------TMS570_ESM_ILSR1----------------------*/
 /* field: INTLVLSET - Set Interrupt Priority */
-#define TMS570_ESM_ILSR1_INTLVLSET(val) BSP_FLD32(val,0, 31)
-#define TMS570_ESM_ILSR1_INTLVLSET_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_ESM_ILSR1_INTLVLSET_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_ESMILCR1----------------------*/
+/*----------------------TMS570_ESM_ILCR1----------------------*/
 /* field: INTLVLCLR - Clear Interrupt Priority. */
-#define TMS570_ESM_ILCR1_INTLVLCLR(val) BSP_FLD32(val,0, 31)
-#define TMS570_ESM_ILCR1_INTLVLCLR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_ESM_ILCR1_INTLVLCLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------------TMS570_ESMSR------------------------*/
+/*-----------------------TMS570_ESM_SR-----------------------*/
 /* field: ESF - Error Status Flag. Provides status information on a pending error. */
-#define TMS570_ESM_SR_ESF(val) BSP_FLD32(val,0, 31)
-#define TMS570_ESM_SR_ESF_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_ESM_SR_ESF_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_ESMEPSR-----------------------*/
+/*----------------------TMS570_ESM_EPSR----------------------*/
 /* field: EPSF - ERROR Pin Status Flag. Provides status information for the ERROR Pin. */
-#define TMS570_ESM_EPSR_EPSF BSP_FLD32(0)
+#define TMS570_ESM_EPSR_EPSF BSP_BIT32(0)
 
 
-/*----------------------TMS570_ESMIOFFHR----------------------*/
+/*---------------------TMS570_ESM_IOFFHR---------------------*/
 /* field: INTOFFH - Offset High Level Interrupt. */
 #define TMS570_ESM_IOFFHR_INTOFFH(val) BSP_FLD32(val,0, 6)
 #define TMS570_ESM_IOFFHR_INTOFFH_GET(reg) BSP_FLD32GET(reg,0, 6)
 #define TMS570_ESM_IOFFHR_INTOFFH_SET(reg,val) BSP_FLD32SET(reg, val,0, 6)
 
 
-/*----------------------TMS570_ESMIOFFLR----------------------*/
+/*---------------------TMS570_ESM_IOFFLR---------------------*/
 /* field: INTOFFL - Offset Low Level Interrupt. */
 #define TMS570_ESM_IOFFLR_INTOFFL(val) BSP_FLD32(val,0, 6)
 #define TMS570_ESM_IOFFLR_INTOFFL_GET(reg) BSP_FLD32GET(reg,0, 6)
 #define TMS570_ESM_IOFFLR_INTOFFL_SET(reg,val) BSP_FLD32SET(reg, val,0, 6)
 
 
-/*-----------------------TMS570_ESMLTCR-----------------------*/
+/*----------------------TMS570_ESM_LTCR----------------------*/
 /* field: LTC - ERROR Pin Low-Time Counter */
 #define TMS570_ESM_LTCR_LTC(val) BSP_FLD32(val,0, 15)
 #define TMS570_ESM_LTCR_LTC_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_ESM_LTCR_LTC_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*----------------------TMS570_ESMLTCPR----------------------*/
+/*----------------------TMS570_ESM_LTCPR----------------------*/
 /* field: LTCP - ERROR Pin Low-Time Counter Pre-load Value */
 #define TMS570_ESM_LTCPR_LTCP(val) BSP_FLD32(val,0, 15)
 #define TMS570_ESM_LTCPR_LTCP_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_ESM_LTCPR_LTCP_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-----------------------TMS570_ESMEKR-----------------------*/
+/*-----------------------TMS570_ESM_EKR-----------------------*/
 /* field: EKEY - Error Key. The key to reset the ERROR pin or to force an error on the ERROR pin. */
 #define TMS570_ESM_EKR_EKEY(val) BSP_FLD32(val,0, 3)
 #define TMS570_ESM_EKR_EKEY_GET(reg) BSP_FLD32GET(reg,0, 3)
 #define TMS570_ESM_EKR_EKEY_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*-----------------------TMS570_ESMSSR2-----------------------*/
+/*----------------------TMS570_ESM_SSR2----------------------*/
 /* field: ESF - Error Status Flag. Shadow register for status information on pending error. */
-#define TMS570_ESM_SSR2_ESF(val) BSP_FLD32(val,0, 31)
-#define TMS570_ESM_SSR2_ESF_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_ESM_SSR2_ESF_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_ESMIEPSR4----------------------*/
+/*---------------------TMS570_ESM_IEPSR4---------------------*/
 /* field: IEPSET - Set Influence on ERROR Pin */
-#define TMS570_ESM_IEPSR4_IEPSET(val) BSP_FLD32(val,32, 63)
-#define TMS570_ESM_IEPSR4_IEPSET_GET(reg) BSP_FLD32GET(reg,32, 63)
-#define TMS570_ESM_IEPSR4_IEPSET_SET(reg,val) BSP_FLD32SET(reg, val,32, 63)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_ESMIEPCR4----------------------*/
+/*---------------------TMS570_ESM_IEPCR4---------------------*/
 /* field: IEPCLR - Clear Influence on ERROR Pin */
-#define TMS570_ESM_IEPCR4_IEPCLR(val) BSP_FLD32(val,32, 63)
-#define TMS570_ESM_IEPCR4_IEPCLR_GET(reg) BSP_FLD32GET(reg,32, 63)
-#define TMS570_ESM_IEPCR4_IEPCLR_SET(reg,val) BSP_FLD32SET(reg, val,32, 63)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_ESMIESR4----------------------*/
+/*----------------------TMS570_ESM_IESR4----------------------*/
 /* field: INTENSET - Set Interrupt Enable */
-#define TMS570_ESM_IESR4_INTENSET(val) BSP_FLD32(val,32, 63)
-#define TMS570_ESM_IESR4_INTENSET_GET(reg) BSP_FLD32GET(reg,32, 63)
-#define TMS570_ESM_IESR4_INTENSET_SET(reg,val) BSP_FLD32SET(reg, val,32, 63)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_ESMIECR4----------------------*/
+/*----------------------TMS570_ESM_IECR4----------------------*/
 /* field: INTENCLR - Clear Interrupt Enable */
-#define TMS570_ESM_IECR4_INTENCLR(val) BSP_FLD32(val,32, 63)
-#define TMS570_ESM_IECR4_INTENCLR_GET(reg) BSP_FLD32GET(reg,32, 63)
-#define TMS570_ESM_IECR4_INTENCLR_SET(reg,val) BSP_FLD32SET(reg, val,32, 63)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_ESMILSR4----------------------*/
+/*----------------------TMS570_ESM_ILSR4----------------------*/
 /* field: INTLVLSET - Set Interrupt Level */
-#define TMS570_ESM_ILSR4_INTLVLSET(val) BSP_FLD32(val,32, 63)
-#define TMS570_ESM_ILSR4_INTLVLSET_GET(reg) BSP_FLD32GET(reg,32, 63)
-#define TMS570_ESM_ILSR4_INTLVLSET_SET(reg,val) BSP_FLD32SET(reg, val,32, 63)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_ESMILCR4----------------------*/
+/*----------------------TMS570_ESM_ILCR4----------------------*/
 /* field: INTLVLCLR - Clear Interrupt Level */
-#define TMS570_ESM_ILCR4_INTLVLCLR(val) BSP_FLD32(val,32, 63)
-#define TMS570_ESM_ILCR4_INTLVLCLR_GET(reg) BSP_FLD32GET(reg,32, 63)
-#define TMS570_ESM_ILCR4_INTLVLCLR_SET(reg,val) BSP_FLD32SET(reg, val,32, 63)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_ESMSR4-----------------------*/
+/*-----------------------TMS570_ESM_SR4-----------------------*/
 /* field: ESF - Error Status Flag. Provides status information on a pending error. */
-#define TMS570_ESM_SR4_ESF(val) BSP_FLD32(val,32, 63)
-#define TMS570_ESM_SR4_ESF_GET(reg) BSP_FLD32GET(reg,32, 63)
-#define TMS570_ESM_SR4_ESF_SET(reg,val) BSP_FLD32SET(reg, val,32, 63)
+/* Whole 32 bits */
 
 
-
-#endif /* LIBBSP_ARM_tms570_ESM */
+#endif /* LIBBSP_ARM_TMS570_ESM */

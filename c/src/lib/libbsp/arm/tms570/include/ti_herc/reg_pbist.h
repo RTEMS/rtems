@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_PBIST
-#define LIBBSP_ARM_tms570_PBIST
+#ifndef LIBBSP_ARM_TMS570_PBIST
+#define LIBBSP_ARM_TMS570_PBIST
 
 #include <bsp/utility.h>
 
@@ -67,14 +67,11 @@ typedef struct{
 } tms570_pbist_t;
 
 
-/*----------------------TMS570_PBISTDNW----------------------*/
+/*----------------------TMS570_PBIST_DNW----------------------*/
 /* field: Reserved - Do not write */
-#define TMS570_PBIST_DNW_Reserved(val) BSP_FLD32(val,0, 31)
-#define TMS570_PBIST_DNW_Reserved_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PBIST_DNW_Reserved_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_PBISTRAMT----------------------*/
+/*---------------------TMS570_PBIST_RAMT---------------------*/
 /* field: RGS - Ram Group Select. Refer Table 2-5 for information on the RGS value for each memory. */
 #define TMS570_PBIST_RAMT_RGS(val) BSP_FLD32(val,24, 31)
 #define TMS570_PBIST_RAMT_RGS_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -106,108 +103,93 @@ typedef struct{
 #define TMS570_PBIST_RAMT_RLS_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*----------------------TMS570_PBISTDLR----------------------*/
+/*----------------------TMS570_PBIST_DLR----------------------*/
 /* field: DLR4 - Config access: setting this bit allows the host processor to configure the PBIST controller registers */
-#define TMS570_PBIST_DLR_DLR4 BSP_FLD32(4)
+#define TMS570_PBIST_DLR_DLR4 BSP_BIT32(4)
 
 /* field: DLR2 - ROM-based testing: setting this bit enables the PBIST controller to execute test algorithms that are */
-#define TMS570_PBIST_DLR_DLR2 BSP_FLD32(2)
+#define TMS570_PBIST_DLR_DLR2 BSP_BIT32(2)
 
 
-/*----------------------TMS570_PBISTPACT----------------------*/
+/*---------------------TMS570_PBIST_PACT---------------------*/
 /* field: PACT1 - PBIST Activate */
-#define TMS570_PBIST_PACT_PACT1 BSP_FLD32(1)
+#define TMS570_PBIST_PACT_PACT1 BSP_BIT32(1)
 
 /* field: PACT0 - ROM Clock Enable Register */
-#define TMS570_PBIST_PACT_PACT0 BSP_FLD32(0)
+#define TMS570_PBIST_PACT_PACT0 BSP_BIT32(0)
 
 
-/*--------------------TMS570_PBISTPBISTID--------------------*/
+/*--------------------TMS570_PBIST_PBISTID--------------------*/
 /* field: PBIST_ID - This is a unique ID assigned to each PBIST controller in a device with multiple PBIST controllers. */
 #define TMS570_PBIST_PBISTID_PBIST_ID(val) BSP_FLD32(val,0, 7)
 #define TMS570_PBIST_PBISTID_PBIST_ID_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_PBIST_PBISTID_PBIST_ID_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*----------------------TMS570_PBISTOVER----------------------*/
+/*---------------------TMS570_PBIST_OVER---------------------*/
 /* field: OVER0 - RINFO Override Bit */
-#define TMS570_PBIST_OVER_OVER0 BSP_FLD32(0)
+#define TMS570_PBIST_OVER_OVER0 BSP_BIT32(0)
 
 
-/*---------------------TMS570_PBISTFSRF0---------------------*/
+/*---------------------TMS570_PBIST_FSRF0---------------------*/
 /* field: FSRF0 - Fail Status 0. */
-#define TMS570_PBIST_FSRF0_FSRF0 BSP_FLD32(0)
+#define TMS570_PBIST_FSRF0_FSRF0 BSP_BIT32(0)
 
 
-/*---------------------TMS570_PBISTFSRC0---------------------*/
+/*---------------------TMS570_PBIST_FSRC0---------------------*/
 /* field: FSRC0 - Fail Status Count 0. Indicates the number of failures on port 0. */
 #define TMS570_PBIST_FSRC0_FSRC0(val) BSP_FLD32(val,0, 7)
 #define TMS570_PBIST_FSRC0_FSRC0_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_PBIST_FSRC0_FSRC0_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*---------------------TMS570_PBISTFSRC1---------------------*/
+/*---------------------TMS570_PBIST_FSRC1---------------------*/
 /* field: FSRC1 - Fail Status Count 1. Indicates the number of failures on port 1. */
 #define TMS570_PBIST_FSRC1_FSRC1(val) BSP_FLD32(val,0, 7)
 #define TMS570_PBIST_FSRC1_FSRC1_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_PBIST_FSRC1_FSRC1_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*---------------------TMS570_PBISTFSRA0---------------------*/
+/*---------------------TMS570_PBIST_FSRA0---------------------*/
 /* field: FSRA0 - Fail Status Address 0. Contains the address of the first failure. */
 #define TMS570_PBIST_FSRA0_FSRA0(val) BSP_FLD32(val,0, 15)
 #define TMS570_PBIST_FSRA0_FSRA0_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_PBIST_FSRA0_FSRA0_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_PBISTFSRA1---------------------*/
+/*---------------------TMS570_PBIST_FSRA1---------------------*/
 /* field: FSRA1 - Fail Status Address 1. Contains the address of the first failure. */
 #define TMS570_PBIST_FSRA1_FSRA1(val) BSP_FLD32(val,0, 15)
 #define TMS570_PBIST_FSRA1_FSRA1_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_PBIST_FSRA1_FSRA1_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_PBISTFSRDL0---------------------*/
+/*--------------------TMS570_PBIST_FSRDL0--------------------*/
 /* field: FSRDL1 - Failure data on port 1 */
-#define TMS570_PBIST_FSRDL0_FSRDL1(val) BSP_FLD32(val,0, 31)
-#define TMS570_PBIST_FSRDL0_FSRDL1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PBIST_FSRDL0_FSRDL1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_PBISTFSRDL1---------------------*/
+/*--------------------TMS570_PBIST_FSRDL1--------------------*/
 /* field: FSRDL1 - Failure data on port 1 */
-#define TMS570_PBIST_FSRDL1_FSRDL1(val) BSP_FLD32(val,0, 31)
-#define TMS570_PBIST_FSRDL1_FSRDL1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PBIST_FSRDL1_FSRDL1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_PBISTROM----------------------*/
+/*----------------------TMS570_PBIST_ROM----------------------*/
 /* field: ROM - ROM Mask */
 #define TMS570_PBIST_ROM_ROM(val) BSP_FLD32(val,0, 1)
 #define TMS570_PBIST_ROM_ROM_GET(reg) BSP_FLD32GET(reg,0, 1)
 #define TMS570_PBIST_ROM_ROM_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*----------------------TMS570_PBISTALGO----------------------*/
+/*---------------------TMS570_PBIST_ALGO---------------------*/
 /* field: ROM_ALG_MASK - Each bit corresponds to a specific algorithm */
-#define TMS570_PBIST_ALGO_ROM_ALG_MASK(val) BSP_FLD32(val,0, 31)
-#define TMS570_PBIST_ALGO_ROM_ALG_MASK_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PBIST_ALGO_ROM_ALG_MASK_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_PBISTRINFOL---------------------*/
+/*--------------------TMS570_PBIST_RINFOL--------------------*/
 /* field: RAM_ALG_MASK_LOW - Each bit corresponds to a specific algorithm */
-#define TMS570_PBIST_RINFOL_RAM_ALG_MASK_LOW(val) BSP_FLD32(val,0, 31)
-#define TMS570_PBIST_RINFOL_RAM_ALG_MASK_LOW_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PBIST_RINFOL_RAM_ALG_MASK_LOW_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_PBISTRINFOUL--------------------*/
+/*--------------------TMS570_PBIST_RINFOUL--------------------*/
 /* field: RAM_ALG_MASK_UP - Each bit corresponds to a specific algorithm */
-#define TMS570_PBIST_RINFOUL_RAM_ALG_MASK_UP(val) BSP_FLD32(val,0, 31)
-#define TMS570_PBIST_RINFOUL_RAM_ALG_MASK_UP_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PBIST_RINFOUL_RAM_ALG_MASK_UP_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
 
-
-#endif /* LIBBSP_ARM_tms570_PBIST */
+#endif /* LIBBSP_ARM_TMS570_PBIST */

@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_PMM
-#define LIBBSP_ARM_tms570_PMM
+#ifndef LIBBSP_ARM_TMS570_PMM
+#define LIBBSP_ARM_TMS570_PMM
 
 #include <bsp/utility.h>
 
@@ -66,7 +66,7 @@ typedef struct{
 } tms570_pmm_t;
 
 
-/*-----------------TMS570_PMMLOGICPDPWRCTRL0-----------------*/
+/*-----------------TMS570_PMM_LOGICPDPWRCTRL0-----------------*/
 /* field: LOGICPDON0 - Read in User and Privileged Mode. Write in Privileged Mode only. */
 #define TMS570_PMM_LOGICPDPWRCTRL0_LOGICPDON0(val) BSP_FLD32(val,24, 27)
 #define TMS570_PMM_LOGICPDPWRCTRL0_LOGICPDON0_GET(reg) BSP_FLD32GET(reg,24, 27)
@@ -88,7 +88,7 @@ typedef struct{
 #define TMS570_PMM_LOGICPDPWRCTRL0_LOGICPDON3_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*------------------TMS570_PMMMEMPDPWRCTRL0------------------*/
+/*------------------TMS570_PMM_MEMPDPWRCTRL0------------------*/
 /* field: MEMPDON0 - Read in User and Privileged Mode. Write in Privileged Mode only. */
 #define TMS570_PMM_MEMPDPWRCTRL0_MEMPDON0(val) BSP_FLD32(val,24, 27)
 #define TMS570_PMM_MEMPDPWRCTRL0_MEMPDON0_GET(reg) BSP_FLD32GET(reg,24, 27)
@@ -105,57 +105,57 @@ typedef struct{
 #define TMS570_PMM_MEMPDPWRCTRL0_MEMPDON2_SET(reg,val) BSP_FLD32SET(reg, val,8, 11)
 
 
-/*-------------------TMS570_PMMPDCLKDISREG-------------------*/
+/*-------------------TMS570_PMM_PDCLKDISREG-------------------*/
 /* field: PDCLK_DIS_3 - Read in User and Privileged Mode returns the current value of PDCLK_DIS[3]. */
-#define TMS570_PMM_PDCLKDISREG_PDCLK_DIS_3 BSP_FLD32(3)
+#define TMS570_PMM_PDCLKDISREG_PDCLK_DIS_3 BSP_BIT32(3)
 
 /* field: PDCLK_DIS_2 - Read in User and Privileged Mode returns the current value of PDCLK_DIS[2]. */
-#define TMS570_PMM_PDCLKDISREG_PDCLK_DIS_2 BSP_FLD32(2)
+#define TMS570_PMM_PDCLKDISREG_PDCLK_DIS_2 BSP_BIT32(2)
 
 /* field: PDCLK_DIS_1 - ead in User and Privileged Mode returns the current value of PDCLK_DIS[1]. */
-#define TMS570_PMM_PDCLKDISREG_PDCLK_DIS_1 BSP_FLD32(1)
+#define TMS570_PMM_PDCLKDISREG_PDCLK_DIS_1 BSP_BIT32(1)
 
 /* field: PDCLK_DIS_0 - Read in User and Privileged Mode returns the current value of PDCLK_DIS[0]. */
-#define TMS570_PMM_PDCLKDISREG_PDCLK_DIS_0 BSP_FLD32(0)
+#define TMS570_PMM_PDCLKDISREG_PDCLK_DIS_0 BSP_BIT32(0)
 
 
-/*------------------TMS570_PMMPDCLKDISSETREG------------------*/
+/*-----------------TMS570_PMM_PDCLKDISSETREG-----------------*/
 /* field: PDCLK_DISSET_3 - Read in User and Privileged Mode returns the current value of PDCLK_DISSET[3]. */
-#define TMS570_PMM_PDCLKDISSETREG_PDCLK_DISSET_3 BSP_FLD32(3)
+#define TMS570_PMM_PDCLKDISSETREG_PDCLK_DISSET_3 BSP_BIT32(3)
 
 /* field: PDCLK_DISSET_2 - Privileged Mode only. */
-#define TMS570_PMM_PDCLKDISSETREG_PDCLK_DISSET_2 BSP_FLD32(2)
+#define TMS570_PMM_PDCLKDISSETREG_PDCLK_DISSET_2 BSP_BIT32(2)
 
 /* field: PDCLK_DISSET_1 - Read in User and Privileged Mode returns the current value of PDCLK_DISSET[1]. */
-#define TMS570_PMM_PDCLKDISSETREG_PDCLK_DISSET_1 BSP_FLD32(1)
+#define TMS570_PMM_PDCLKDISSETREG_PDCLK_DISSET_1 BSP_BIT32(1)
 
 /* field: PDCLK_DISSET_0 - Read in User and Privileged Mode returns the current value of PDCLK_DISSET[0]. */
-#define TMS570_PMM_PDCLKDISSETREG_PDCLK_DISSET_0 BSP_FLD32(0)
+#define TMS570_PMM_PDCLKDISSETREG_PDCLK_DISSET_0 BSP_BIT32(0)
 
 
-/*------------------TMS570_PMMPDCLKDISCLRREG------------------*/
+/*-----------------TMS570_PMM_PDCLKDISCLRREG-----------------*/
 /* field: PDCLK_DISCLR_3 - PDCLK_DISCLR[3] */
-#define TMS570_PMM_PDCLKDISCLRREG_PDCLK_DISCLR_3 BSP_FLD32(3)
+#define TMS570_PMM_PDCLKDISCLRREG_PDCLK_DISCLR_3 BSP_BIT32(3)
 
 /* field: PDCLK_DISCLR_2 - Read in User and Privileged Mode returns the current value of PDCLK_DIS[2]. */
-#define TMS570_PMM_PDCLKDISCLRREG_PDCLK_DISCLR_2 BSP_FLD32(2)
+#define TMS570_PMM_PDCLKDISCLRREG_PDCLK_DISCLR_2 BSP_BIT32(2)
 
 /* field: PDCLK_DISCLR_1 - Read in User and Privileged Mode returns the current value of PDCLK_DIS[1]. */
-#define TMS570_PMM_PDCLKDISCLRREG_PDCLK_DISCLR_1 BSP_FLD32(1)
+#define TMS570_PMM_PDCLKDISCLRREG_PDCLK_DISCLR_1 BSP_BIT32(1)
 
 /* field: PDCLK_DISCLR_0 - Read in User and Privileged Mode returns the current value of PDCLK_DIS[0]. */
-#define TMS570_PMM_PDCLKDISCLRREG_PDCLK_DISCLR_0 BSP_FLD32(0)
+#define TMS570_PMM_PDCLKDISCLRREG_PDCLK_DISCLR_0 BSP_BIT32(0)
 
 
-/*------------------TMS570_PMMLOGICPDPWRSTAT------------------*/
+/*-----------------TMS570_PMM_LOGICPDPWRSTAT-----------------*/
 /* field: LOGIC_IN_TRANS0 - Logic in transition status for power domain PD2. */
-#define TMS570_PMM_LOGICPDPWRSTAT_LOGIC_IN_TRANS0 BSP_FLD32(24)
+#define TMS570_PMM_LOGICPDPWRSTAT_LOGIC_IN_TRANS0 BSP_BIT32(24)
 
 /* field: MEM_IN_TRANS0 - Memory in transition status for power domain PD2. */
-#define TMS570_PMM_LOGICPDPWRSTAT_MEM_IN_TRANS0 BSP_FLD32(16)
+#define TMS570_PMM_LOGICPDPWRSTAT_MEM_IN_TRANS0 BSP_BIT32(16)
 
 /* field: DOMAIN_ON0 - Current state of power domain PD2. */
-#define TMS570_PMM_LOGICPDPWRSTAT_DOMAIN_ON0 BSP_FLD32(8)
+#define TMS570_PMM_LOGICPDPWRSTAT_DOMAIN_ON0 BSP_BIT32(8)
 
 /* field: LOGICPDPWR_STAT0 - Logic power domain PD2 power state. */
 #define TMS570_PMM_LOGICPDPWRSTAT_LOGICPDPWR_STAT0(val) BSP_FLD32(val,0, 1)
@@ -163,15 +163,15 @@ typedef struct{
 #define TMS570_PMM_LOGICPDPWRSTAT_LOGICPDPWR_STAT0_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*-------------------TMS570_PMMMEMPDPWRSTAT-------------------*/
+/*------------------TMS570_PMM_MEMPDPWRSTAT------------------*/
 /* field: LOGIC_IN_TRANS0 - Logic in transition status for power domain RAM_PD1. */
-#define TMS570_PMM_MEMPDPWRSTAT_LOGIC_IN_TRANS0 BSP_FLD32(24)
+#define TMS570_PMM_MEMPDPWRSTAT_LOGIC_IN_TRANS0 BSP_BIT32(24)
 
 /* field: MEM_IN_TRANS0 - Memory in transition status for power domain RAM_PD1. */
-#define TMS570_PMM_MEMPDPWRSTAT_MEM_IN_TRANS0 BSP_FLD32(16)
+#define TMS570_PMM_MEMPDPWRSTAT_MEM_IN_TRANS0 BSP_BIT32(16)
 
 /* field: DOMAIN_ON0 - Current state of power domain RAM_PD1. */
-#define TMS570_PMM_MEMPDPWRSTAT_DOMAIN_ON0 BSP_FLD32(8)
+#define TMS570_PMM_MEMPDPWRSTAT_DOMAIN_ON0 BSP_BIT32(8)
 
 /* field: MEMPDPWR_STAT0 - Memory power domain RAM_PD1 power state. */
 #define TMS570_PMM_MEMPDPWRSTAT_MEMPDPWR_STAT0(val) BSP_FLD32(val,0, 1)
@@ -179,27 +179,27 @@ typedef struct{
 #define TMS570_PMM_MEMPDPWRSTAT_MEMPDPWR_STAT0_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*-------------------TMS570_PMMGLOBALCTRL1-------------------*/
+/*-------------------TMS570_PMM_GLOBALCTRL1-------------------*/
 /* field: PMCTRL_PWRDN - PMC/PSCON Power Down */
-#define TMS570_PMM_GLOBALCTRL1_PMCTRL_PWRDN BSP_FLD32(8)
+#define TMS570_PMM_GLOBALCTRL1_PMCTRL_PWRDN BSP_BIT32(8)
 
 /* field: AUTO_CLK_WAKE_ENA - Automatic Clock Enable on Wake Up */
-#define TMS570_PMM_GLOBALCTRL1_AUTO_CLK_WAKE_ENA BSP_FLD32(0)
+#define TMS570_PMM_GLOBALCTRL1_AUTO_CLK_WAKE_ENA BSP_BIT32(0)
 
 
-/*--------------------TMS570_PMMGLOBALSTAT--------------------*/
+/*-------------------TMS570_PMM_GLOBALSTAT-------------------*/
 /* field: PMCTRL_IDLE - State of PMC and all PSCONs. */
-#define TMS570_PMM_GLOBALSTAT_PMCTRL_IDLE BSP_FLD32(0)
+#define TMS570_PMM_GLOBALSTAT_PMCTRL_IDLE BSP_BIT32(0)
 
 
-/*--------------------TMS570_PMMPRCKEYREG--------------------*/
+/*--------------------TMS570_PMM_PRCKEYREG--------------------*/
 /* field: MKEY - Diagnostic PSCON Mode Key. The mode key is applied to all individual PSCON compare units. */
 #define TMS570_PMM_PRCKEYREG_MKEY(val) BSP_FLD32(val,0, 3)
 #define TMS570_PMM_PRCKEYREG_MKEY_GET(reg) BSP_FLD32GET(reg,0, 3)
 #define TMS570_PMM_PRCKEYREG_MKEY_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*--------------------TMS570_PMMLPDDCSTAT1--------------------*/
+/*-------------------TMS570_PMM_LPDDCSTAT1-------------------*/
 /* field: LCMPE - Logic Power Domain Compare Error */
 #define TMS570_PMM_LPDDCSTAT1_LCMPE(val) BSP_FLD32(val,16, 19)
 #define TMS570_PMM_LPDDCSTAT1_LCMPE_GET(reg) BSP_FLD32GET(reg,16, 19)
@@ -211,7 +211,7 @@ typedef struct{
 #define TMS570_PMM_LPDDCSTAT1_LSTC_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*--------------------TMS570_PMMLPDDCSTAT2--------------------*/
+/*-------------------TMS570_PMM_LPDDCSTAT2-------------------*/
 /* field: LSTET - Logic Power Domain Self-test Error Type */
 #define TMS570_PMM_LPDDCSTAT2_LSTET(val) BSP_FLD32(val,16, 19)
 #define TMS570_PMM_LPDDCSTAT2_LSTET_GET(reg) BSP_FLD32GET(reg,16, 19)
@@ -223,7 +223,7 @@ typedef struct{
 #define TMS570_PMM_LPDDCSTAT2_LSTE_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*--------------------TMS570_PMMMPDDCSTAT1--------------------*/
+/*-------------------TMS570_PMM_MPDDCSTAT1-------------------*/
 /* field: MCMPE - Memory Power Domain Compare Error */
 #define TMS570_PMM_MPDDCSTAT1_MCMPE(val) BSP_FLD32(val,16, 18)
 #define TMS570_PMM_MPDDCSTAT1_MCMPE_GET(reg) BSP_FLD32GET(reg,16, 18)
@@ -235,7 +235,7 @@ typedef struct{
 #define TMS570_PMM_MPDDCSTAT1_MSTC_SET(reg,val) BSP_FLD32SET(reg, val,0, 2)
 
 
-/*--------------------TMS570_PMMMPDDCSTAT2--------------------*/
+/*-------------------TMS570_PMM_MPDDCSTAT2-------------------*/
 /* field: MSTET - Memory Power Domain Self-test Error Type */
 #define TMS570_PMM_MPDDCSTAT2_MSTET(val) BSP_FLD32(val,16, 18)
 #define TMS570_PMM_MPDDCSTAT2_MSTET_GET(reg) BSP_FLD32GET(reg,16, 18)
@@ -247,7 +247,7 @@ typedef struct{
 #define TMS570_PMM_MPDDCSTAT2_MSTE_SET(reg,val) BSP_FLD32SET(reg, val,0, 2)
 
 
-/*-------------------TMS570_PMMISODIAGSTAT-------------------*/
+/*-------------------TMS570_PMM_ISODIAGSTAT-------------------*/
 /* field: ISO_DIAG - Isolation Diagnostic */
 #define TMS570_PMM_ISODIAGSTAT_ISO_DIAG(val) BSP_FLD32(val,0, 3)
 #define TMS570_PMM_ISODIAGSTAT_ISO_DIAG_GET(reg) BSP_FLD32GET(reg,0, 3)
@@ -255,4 +255,4 @@ typedef struct{
 
 
 
-#endif /* LIBBSP_ARM_tms570_PMM */
+#endif /* LIBBSP_ARM_TMS570_PMM */
