@@ -1,5 +1,5 @@
 @c
-@c  COPYRIGHT (c) 1988-2014.
+@c  COPYRIGHT (c) 1988-2015.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
@@ -14,7 +14,7 @@
 @end tex
 
 @vskip 0pt plus 1filll
-COPYRIGHT @copyright{} 1988 - 2014.@*
+COPYRIGHT @copyright{} 1988 - 2015.@*
 On-Line Applications Research Corporation (OAR).@*
 
 The authors have used their best efforts in preparing
