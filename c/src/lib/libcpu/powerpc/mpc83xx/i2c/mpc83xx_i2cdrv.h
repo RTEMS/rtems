@@ -24,7 +24,7 @@
 
 #include <bsp.h>
 
-#ifdef __GEN83xx_BSP_h
+#ifdef LIBBSP_POWERPC_GEN83XX_BSP_H
   #include <mpc83xx/mpc83xx.h>
 #endif
 

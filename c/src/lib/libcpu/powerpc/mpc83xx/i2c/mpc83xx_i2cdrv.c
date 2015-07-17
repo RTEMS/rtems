@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <bsp.h>
 #include <bsp/irq.h>
-#if defined(__GEN83xx_BSP_h)
+#if defined(LIBBSP_POWERPC_GEN83XX_BSP_H)
   #include <mpc83xx/mpc83xx_i2cdrv.h>
 #elif defined(LIBBSP_POWERPC_MPC55XXEVB_BSP_H)
   #include <bsp/mpc83xx_i2cdrv.h>
@@ -31,7 +31,7 @@
 
 #undef DEBUG
 
-#if defined(__GEN83xx_BSP_h)
+#if defined(LIBBSP_POWERPC_GEN83XX_BSP_H)
   #define I2CCR_MEN  (1 << 7)   /* module enable */
 #elif defined(LIBBSP_POWERPC_MPC55XXEVB_BSP_H)
   #define I2CCR_MDIS (1 << 7)   /* module disable */
@@ -78,7 +78,7 @@ static rtems_status_code mpc83xx_i2c_find_clock_divider
     int divider;
     int fdr_val;
   } dividers[] ={
-#if defined(__GEN83xx_BSP_h)
+#if defined(LIBBSP_POWERPC_GEN83XX_BSP_H)
     {  256,0x20 }, {  288,0x21 }, {  320,0x22 }, {  352,0x23 },
     {  384,0x00 }, {  416,0x01 }, {  448,0x25 }, {  480,0x02 },
     {  512,0x26 }, {  576,0x03 }, {  640,0x04 }, {  704,0x05 },
@@ -203,7 +203,7 @@ static void mpc83xx_i2c_irq_handler
   /*
    * clear IRQ flag
    */
-  #if defined(__GEN83xx_BSP_h)
+  #if defined(LIBBSP_POWERPC_GEN83XX_BSP_H)
     softc_ptr->reg_ptr->i2csr &= ~I2CSR_MIF;
   #elif defined(LIBBSP_POWERPC_MPC55XXEVB_BSP_H)
     softc_ptr->reg_ptr->i2csr = I2CSR_MIF;
@@ -376,7 +376,7 @@ static rtems_status_code mpc83xx_i2c_init
   /*
    * set control register to module enable
    */
-  #if defined(__GEN83xx_BSP_h)
+  #if defined(LIBBSP_POWERPC_GEN83XX_BSP_H)
     softc_ptr->reg_ptr->i2ccr = I2CCR_MEN;
   #elif defined(LIBBSP_POWERPC_MPC55XXEVB_BSP_H)
     softc_ptr->reg_ptr->i2ccr = 0;
