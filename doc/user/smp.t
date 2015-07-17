@@ -237,17 +237,70 @@ In general, applications must use proper operating system provided mutual
 exclusion mechanisms to ensure correct behavior. This primarily means
 the use of binary semaphores or mutexes to implement critical sections.
 
-@subsubsection Disable Interrupts
+@subsubsection Disable Interrupts and Interrupt Locks
 
-Again on a uniprocessor system, there is only a single processor which
-logically executes a single task and takes interrupts. On an SMP system,
-each processor may take an interrupt. When the application disables
-interrupts, it generally does so by altering a processor register to
-mask interrupts and later to re-enable them. On a uniprocessor system,
-changing this in the single processor is sufficient. However, on an SMP
-system, this register in @strong{ALL} processors must be changed. There
-are no comparable capabilities in an SMP system to disable all interrupts
-across all processors.
+A low overhead means to ensure mutual exclusion in uni-processor configurations
+is to disable interrupts around a critical section.  This is commonly used in
+device driver code and throughout the operating system core.  On SMP
+configurations, however, disabling the interrupts on one processor has no
+effect on other processors.  So, this is insufficient to ensure system wide
+mutual exclusion.  The macros
+@itemize @bullet
+@item @code{rtems_interrupt_disable()},
+@item @code{rtems_interrupt_enable()}, and
+@item @code{rtems_interrupt_flush()}
+@end itemize
+are disabled on SMP configurations and its use will lead to compiler warnings
+and linker errors.  In the unlikely case that interrupts must be disabled on
+the current processor, then the
+@itemize @bullet
+@item @code{rtems_interrupt_local_disable()}, and
+@item @code{rtems_interrupt_local_enable()}
+@end itemize
+macros are now available in all configurations.
+
+Since disabling of interrupts is not enough to ensure system wide mutual
+exclusion on SMP, a new low-level synchronization primitive was added - the
+interrupt locks.  They are a simple API layer on top of the SMP locks used for
+low-level synchronization in the operating system core.  Currently they are
+implemented as a ticket lock.  On uni-processor configurations they degenerate
+to simple interrupt disable/enable sequences.  It is disallowed to acquire a
+single interrupt lock in a nested way.  This will result in an infinite loop
+with interrupts disabled.  While converting legacy code to interrupt locks care
+must be taken to avoid this situation.
+
+@example
+@group
+void legacy_code_with_interrupt_disable_enable( void )
+@{
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable( level );
+  /* Some critical stuff */
+  rtems_interrupt_enable( level );
+@}
+
+RTEMS_INTERRUPT_LOCK_DEFINE( static, lock, "Name" )
+
+void smp_ready_code_with_interrupt_lock( void )
+@{
+  rtems_interrupt_lock_context lock_context;
+
+  rtems_interrupt_lock_acquire( &lock, &lock_context );
+  /* Some critical stuff */
+  rtems_interrupt_lock_release( &lock, &lock_context );
+@}
+@end group
+@end example
+
+The @code{rtems_interrupt_lock} structure is empty on uni-processor
+configurations.  Empty structures have a different size in C
+(implementation-defined, zero in case of GCC) and C++ (implementation-defined
+non-zero value, one in case of GCC).  Thus the
+@code{RTEMS_INTERRUPT_LOCK_DECLARE()}, @code{RTEMS_INTERRUPT_LOCK_DEFINE()},
+@code{RTEMS_INTERRUPT_LOCK_MEMBER()}, and
+@code{RTEMS_INTERRUPT_LOCK_REFERENCE()} macros are provided to ensure ABI
+compatibility.
 
 @subsubsection Highest Priority Task Assumption
 
