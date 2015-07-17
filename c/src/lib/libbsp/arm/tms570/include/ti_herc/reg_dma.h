@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_DMA
-#define LIBBSP_ARM_tms570_DMA
+#ifndef LIBBSP_ARM_TMS570_DMA
+#define LIBBSP_ARM_TMS570_DMA
 
 #include <bsp/utility.h>
 
@@ -140,26 +140,20 @@ typedef struct{
 } tms570_dma_t;
 
 
-/*---------------------TMS570_DMASTARTADD---------------------*/
+/*--------------------TMS570_DMA_STARTADD--------------------*/
 /* field: STARTADDRESS - Start Address defines the address at which the region begins. */
-#define TMS570_DMA_STARTADD_STARTADDRESS(val) BSP_FLD32(val,0, 31)
-#define TMS570_DMA_STARTADD_STARTADDRESS_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_DMA_STARTADD_STARTADDRESS_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_DMAENDADD----------------------*/
+/*---------------------TMS570_DMA_ENDADD---------------------*/
 /* field: ENDADDRESS - End Address defines the address at which the region ends. */
-#define TMS570_DMA_ENDADD_ENDADDRESS(val) BSP_FLD32(val,0, 31)
-#define TMS570_DMA_ENDADD_ENDADDRESS_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_DMA_ENDADD_ENDADDRESS_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_DMAGCTRL----------------------*/
+/*----------------------TMS570_DMA_GCTRL----------------------*/
 /* field: DMA_EN - DMA enable bit. */
-#define TMS570_DMA_GCTRL_DMA_EN BSP_FLD32(16)
+#define TMS570_DMA_GCTRL_DMA_EN BSP_BIT32(16)
 
 /* field: BUS_BUSY - This bit indicates status of DMA external AHB bus status. */
-#define TMS570_DMA_GCTRL_BUS_BUSY BSP_FLD32(14)
+#define TMS570_DMA_GCTRL_BUS_BUSY BSP_BIT32(14)
 
 /* field: DEBUG_MODE - Debug Mode. */
 #define TMS570_DMA_GCTRL_DEBUG_MODE(val) BSP_FLD32(val,8, 9)
@@ -167,80 +161,80 @@ typedef struct{
 #define TMS570_DMA_GCTRL_DEBUG_MODE_SET(reg,val) BSP_FLD32SET(reg, val,8, 9)
 
 /* field: DMA_RES - DMA software reset */
-#define TMS570_DMA_GCTRL_DMA_RES BSP_FLD32(0)
+#define TMS570_DMA_GCTRL_DMA_RES BSP_BIT32(0)
 
 
-/*-----------------------TMS570_DMAPEND-----------------------*/
+/*----------------------TMS570_DMA_PEND----------------------*/
 /* field: PEND - Channel pending register. */
 #define TMS570_DMA_PEND_PEND(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_PEND_PEND_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_PEND_PEND_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMADMASTAT---------------------*/
+/*---------------------TMS570_DMA_DMASTAT---------------------*/
 /* field: STCH - Status of DMA channels. */
 #define TMS570_DMA_DMASTAT_STCH(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_DMASTAT_STCH_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_DMASTAT_STCH_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMAHWCHENAS---------------------*/
+/*--------------------TMS570_DMA_HWCHENAS--------------------*/
 /* field: HWCHENA - Hardware channel enable bit. */
 #define TMS570_DMA_HWCHENAS_HWCHENA(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_HWCHENAS_HWCHENA_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_HWCHENAS_HWCHENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMAHWCHENAR---------------------*/
+/*--------------------TMS570_DMA_HWCHENAR--------------------*/
 /* field: HWCHDIS - HW channel disable bit. */
 #define TMS570_DMA_HWCHENAR_HWCHDIS(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_HWCHENAR_HWCHDIS_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_HWCHENAR_HWCHDIS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMASWCHENAS---------------------*/
+/*--------------------TMS570_DMA_SWCHENAS--------------------*/
 /* field: SWCHENA - SW channel enable bit. */
 #define TMS570_DMA_SWCHENAS_SWCHENA(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_SWCHENAS_SWCHENA_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_SWCHENAS_SWCHENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMASWCHENAR---------------------*/
+/*--------------------TMS570_DMA_SWCHENAR--------------------*/
 /* field: SWCHDIS - SW channel disable bit. */
 #define TMS570_DMA_SWCHENAR_SWCHDIS(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_SWCHENAR_SWCHDIS_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_SWCHENAR_SWCHDIS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMACHPRIOS---------------------*/
+/*---------------------TMS570_DMA_CHPRIOS---------------------*/
 /* field: CPS - Channel priority set bit. */
 #define TMS570_DMA_CHPRIOS_CPS(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_CHPRIOS_CPS_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_CHPRIOS_CPS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMACHPRIOR---------------------*/
+/*---------------------TMS570_DMA_CHPRIOR---------------------*/
 /* field: CPR - Channel priority reset bit. */
 #define TMS570_DMA_CHPRIOR_CPR(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_CHPRIOR_CPR_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_CHPRIOR_CPR_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMAGCHIENAS---------------------*/
+/*--------------------TMS570_DMA_GCHIENAS--------------------*/
 /* field: GCHIE - Global channel interrupt enable bit. */
 #define TMS570_DMA_GCHIENAS_GCHIE(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_GCHIENAS_GCHIE_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_GCHIENAS_GCHIE_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMAGCHIENAR---------------------*/
+/*--------------------TMS570_DMA_GCHIENAR--------------------*/
 /* field: GCHID - Global channel interrupt disable bit. */
 #define TMS570_DMA_GCHIENAR_GCHID(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_GCHIENAR_GCHID_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_GCHIENAR_GCHID_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMADREQASI---------------------*/
+/*---------------------TMS570_DMA_DREQASI---------------------*/
 /* field: CH0ASI - Channel 0 assignment. This bit field chooses the DMA request assignment for channel 0. */
 #define TMS570_DMA_DREQASI_CH0ASI(val) BSP_FLD32(val,24, 29)
 #define TMS570_DMA_DREQASI_CH0ASI_GET(reg) BSP_FLD32GET(reg,24, 29)
@@ -262,7 +256,7 @@ typedef struct{
 #define TMS570_DMA_DREQASI_CH3ASI_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*-----------------------TMS570_DMAPAR0-----------------------*/
+/*----------------------TMS570_DMA_PAR0----------------------*/
 /* field: CH0PA - These bit fields determine to which port channel 0 is assigned. */
 #define TMS570_DMA_PAR0_CH0PA(val) BSP_FLD32(val,28, 30)
 #define TMS570_DMA_PAR0_CH0PA_GET(reg) BSP_FLD32GET(reg,28, 30)
@@ -304,7 +298,7 @@ typedef struct{
 #define TMS570_DMA_PAR0_CH7PA_SET(reg,val) BSP_FLD32SET(reg, val,0, 2)
 
 
-/*-----------------------TMS570_DMAPAR1-----------------------*/
+/*----------------------TMS570_DMA_PAR1----------------------*/
 /* field: CH8PA - These bit fields determine to which port channel 8 is assigned. */
 #define TMS570_DMA_PAR1_CH8PA(val) BSP_FLD32(val,28, 30)
 #define TMS570_DMA_PAR1_CH8PA_GET(reg) BSP_FLD32GET(reg,28, 30)
@@ -346,140 +340,140 @@ typedef struct{
 #define TMS570_DMA_PAR1_CH15PA_SET(reg,val) BSP_FLD32SET(reg, val,0, 2)
 
 
-/*----------------------TMS570_DMAFTCMAP----------------------*/
+/*---------------------TMS570_DMA_FTCMAP---------------------*/
 /* field: FTCAB - Frame transfer complete (FTC) interrupt to Group A or Group B. */
 #define TMS570_DMA_FTCMAP_FTCAB(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_FTCMAP_FTCAB_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_FTCMAP_FTCAB_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*----------------------TMS570_DMALFSMAP----------------------*/
+/*---------------------TMS570_DMA_LFSMAP---------------------*/
 /* field: LFSAB - Last frame started (LFS) interrupt to Group A or Group B. */
 #define TMS570_DMA_LFSMAP_LFSAB(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_LFSMAP_LFSAB_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_LFSMAP_LFSAB_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*----------------------TMS570_DMAHBCMAP----------------------*/
+/*---------------------TMS570_DMA_HBCMAP---------------------*/
 /* field: HBCAB - Half block complete (HBC) interrupt to Group A or Group B. */
 #define TMS570_DMA_HBCMAP_HBCAB(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_HBCMAP_HBCAB_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_HBCMAP_HBCAB_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*----------------------TMS570_DMABTCMAP----------------------*/
+/*---------------------TMS570_DMA_BTCMAP---------------------*/
 /* field: BTCAB - Block transfer complete (BTC) interrupt to Group A or Group B */
 #define TMS570_DMA_BTCMAP_BTCAB(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_BTCMAP_BTCAB_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_BTCMAP_BTCAB_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*----------------------TMS570_DMABERMAP----------------------*/
+/*---------------------TMS570_DMA_BERMAP---------------------*/
 /* field: BERAB - Bus error (BER) interrupt to Group A or Group B. */
 #define TMS570_DMA_BERMAP_BERAB(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_BERMAP_BERAB_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_BERMAP_BERAB_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_DMAFTCINTENAS--------------------*/
+/*-------------------TMS570_DMA_FTCINTENAS-------------------*/
 /* field: FTCINTENA - Frame transfer complete (FTC) interrupt enable. */
 #define TMS570_DMA_FTCINTENAS_FTCINTENA(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_FTCINTENAS_FTCINTENA_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_FTCINTENAS_FTCINTENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_DMAFTCINTENAR--------------------*/
+/*-------------------TMS570_DMA_FTCINTENAR-------------------*/
 /* field: FTCINTDIS - Frame transfer complete (FTC) interrupt disable. */
 #define TMS570_DMA_FTCINTENAR_FTCINTDIS(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_FTCINTENAR_FTCINTDIS_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_FTCINTENAR_FTCINTDIS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_DMALFSINTENAS--------------------*/
+/*-------------------TMS570_DMA_LFSINTENAS-------------------*/
 /* field: LFSINTENA - Last frame started (LFS) interrupt enable. */
 #define TMS570_DMA_LFSINTENAS_LFSINTENA(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_LFSINTENAS_LFSINTENA_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_LFSINTENAS_LFSINTENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_DMALFSINTENAR--------------------*/
+/*-------------------TMS570_DMA_LFSINTENAR-------------------*/
 /* field: LFSINTDIS - Last frame started (LFS) interrupt disable. */
 #define TMS570_DMA_LFSINTENAR_LFSINTDIS(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_LFSINTENAR_LFSINTDIS_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_LFSINTENAR_LFSINTDIS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_DMAHBCINTENAS--------------------*/
+/*-------------------TMS570_DMA_HBCINTENAS-------------------*/
 /* field: HBCINTENA - Half block complete (HBC) interrupt enable. */
 #define TMS570_DMA_HBCINTENAS_HBCINTENA(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_HBCINTENAS_HBCINTENA_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_HBCINTENAS_HBCINTENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_DMAHBCINTENAR--------------------*/
+/*-------------------TMS570_DMA_HBCINTENAR-------------------*/
 /* field: HBCINTDIS - Half block complete (HBC) interrupt disable. */
 #define TMS570_DMA_HBCINTENAR_HBCINTDIS(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_HBCINTENAR_HBCINTDIS_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_HBCINTENAR_HBCINTDIS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_DMABTCINTENAS--------------------*/
+/*-------------------TMS570_DMA_BTCINTENAS-------------------*/
 /* field: BTCINTENA - Block transfer complete (BTC) interrupt enable. */
 #define TMS570_DMA_BTCINTENAS_BTCINTENA(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_BTCINTENAS_BTCINTENA_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_BTCINTENAS_BTCINTENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_DMABTCINTENAR--------------------*/
+/*-------------------TMS570_DMA_BTCINTENAR-------------------*/
 /* field: BTCINTDIS - Block transfer complete (BTC) interurpt disable. */
 #define TMS570_DMA_BTCINTENAR_BTCINTDIS(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_BTCINTENAR_BTCINTDIS_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_BTCINTENAR_BTCINTDIS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMAGINTFLAG---------------------*/
+/*--------------------TMS570_DMA_GINTFLAG--------------------*/
 /* field: GINT - Global interrupt flags. */
 #define TMS570_DMA_GINTFLAG_GINT(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_GINTFLAG_GINT_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_GINTFLAG_GINT_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMAFTCFLAG---------------------*/
+/*---------------------TMS570_DMA_FTCFLAG---------------------*/
 /* field: FTCI - Frame transfer complete (FTC) flags. */
 #define TMS570_DMA_FTCFLAG_FTCI(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_FTCFLAG_FTCI_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_FTCFLAG_FTCI_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMALFSFLAG---------------------*/
+/*---------------------TMS570_DMA_LFSFLAG---------------------*/
 /* field: LFSI - Last frame started (LFS) flags. */
 #define TMS570_DMA_LFSFLAG_LFSI(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_LFSFLAG_LFSI_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_LFSFLAG_LFSI_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMAHBCFLAG---------------------*/
+/*---------------------TMS570_DMA_HBCFLAG---------------------*/
 /* field: HBCI - Half block transfer (HBC) complete flags. */
 #define TMS570_DMA_HBCFLAG_HBCI(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_HBCFLAG_HBCI_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_HBCFLAG_HBCI_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMABTCFLAG---------------------*/
+/*---------------------TMS570_DMA_BTCFLAG---------------------*/
 /* field: BTCI - Block transfer complete (BTC) flags. */
 #define TMS570_DMA_BTCFLAG_BTCI(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_BTCFLAG_BTCI_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_BTCFLAG_BTCI_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DMABERFLAG---------------------*/
+/*---------------------TMS570_DMA_BERFLAG---------------------*/
 /* field: BERI - Bus error (BER) flags. */
 #define TMS570_DMA_BERFLAG_BERI(val) BSP_FLD32(val,0, 15)
 #define TMS570_DMA_BERFLAG_BERI_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DMA_BERFLAG_BERI_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_DMAFTCAOFFSET--------------------*/
+/*-------------------TMS570_DMA_FTCAOFFSET-------------------*/
 /* field: sbz - These bits should always be programmed as zero. */
 #define TMS570_DMA_FTCAOFFSET_sbz(val) BSP_FLD32(val,6, 7)
 #define TMS570_DMA_FTCAOFFSET_sbz_GET(reg) BSP_FLD32GET(reg,6, 7)
@@ -491,130 +485,118 @@ typedef struct{
 #define TMS570_DMA_FTCAOFFSET_FTCA_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*--------------------TMS570_DMALFSAOFFSET--------------------*/
+/*-------------------TMS570_DMA_LFSAOFFSET-------------------*/
 /* field: LFSA - Channel causing LFS interrupt Group A. */
 #define TMS570_DMA_LFSAOFFSET_LFSA(val) BSP_FLD32(val,0, 5)
 #define TMS570_DMA_LFSAOFFSET_LFSA_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_DMA_LFSAOFFSET_LFSA_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*--------------------TMS570_DMAHBCAOFFSET--------------------*/
+/*-------------------TMS570_DMA_HBCAOFFSET-------------------*/
 /* field: HBCA - Channel causing HBC interrupt Group A. */
 #define TMS570_DMA_HBCAOFFSET_HBCA(val) BSP_FLD32(val,0, 5)
 #define TMS570_DMA_HBCAOFFSET_HBCA_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_DMA_HBCAOFFSET_HBCA_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*--------------------TMS570_DMABTCAOFFSET--------------------*/
+/*-------------------TMS570_DMA_BTCAOFFSET-------------------*/
 /* field: BTCA - Channel causing BTC interrupt Group A. */
 #define TMS570_DMA_BTCAOFFSET_BTCA(val) BSP_FLD32(val,0, 5)
 #define TMS570_DMA_BTCAOFFSET_BTCA_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_DMA_BTCAOFFSET_BTCA_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*--------------------TMS570_DMABERAOFFSET--------------------*/
+/*-------------------TMS570_DMA_BERAOFFSET-------------------*/
 /* field: BERA - Channel causing BER interrupt Group A. */
 #define TMS570_DMA_BERAOFFSET_BERA(val) BSP_FLD32(val,0, 5)
 #define TMS570_DMA_BERAOFFSET_BERA_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_DMA_BERAOFFSET_BERA_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*--------------------TMS570_DMAFTCBOFFSET--------------------*/
+/*-------------------TMS570_DMA_FTCBOFFSET-------------------*/
 /* field: FTCB - Channel causing FTC interrupt Group B. */
 #define TMS570_DMA_FTCBOFFSET_FTCB(val) BSP_FLD32(val,0, 5)
 #define TMS570_DMA_FTCBOFFSET_FTCB_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_DMA_FTCBOFFSET_FTCB_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*--------------------TMS570_DMALFSBOFFSET--------------------*/
+/*-------------------TMS570_DMA_LFSBOFFSET-------------------*/
 /* field: LFSB - Channel causing LFS interrupt Group B. */
 #define TMS570_DMA_LFSBOFFSET_LFSB(val) BSP_FLD32(val,0, 5)
 #define TMS570_DMA_LFSBOFFSET_LFSB_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_DMA_LFSBOFFSET_LFSB_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*--------------------TMS570_DMAHBCBOFFSET--------------------*/
+/*-------------------TMS570_DMA_HBCBOFFSET-------------------*/
 /* field: HBCB - Channel causing HBC interrupt Group B. */
 #define TMS570_DMA_HBCBOFFSET_HBCB(val) BSP_FLD32(val,0, 5)
 #define TMS570_DMA_HBCBOFFSET_HBCB_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_DMA_HBCBOFFSET_HBCB_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*--------------------TMS570_DMABTCBOFFSET--------------------*/
+/*-------------------TMS570_DMA_BTCBOFFSET-------------------*/
 /* field: BTCB - interrupt for Group B if the corresponding interrupt enable is set. */
 #define TMS570_DMA_BTCBOFFSET_BTCB(val) BSP_FLD32(val,0, 5)
 #define TMS570_DMA_BTCBOFFSET_BTCB_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_DMA_BTCBOFFSET_BTCB_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*--------------------TMS570_DMABERBOFFSET--------------------*/
+/*-------------------TMS570_DMA_BERBOFFSET-------------------*/
 /* field: BERB - Channel causing BER interrupt Group B. */
 #define TMS570_DMA_BERBOFFSET_BERB(val) BSP_FLD32(val,0, 5)
 #define TMS570_DMA_BERBOFFSET_BERB_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_DMA_BERBOFFSET_BERB_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*----------------------TMS570_DMAPTCRL----------------------*/
+/*----------------------TMS570_DMA_PTCRL----------------------*/
 /* field: PENDB - Transfers pending for Port B. This flag determines if transfers are ongoing on port B. */
-#define TMS570_DMA_PTCRL_PENDB BSP_FLD32(24)
+#define TMS570_DMA_PTCRL_PENDB BSP_BIT32(24)
 
 /* field: BYB - Bypass FIFO B. */
-#define TMS570_DMA_PTCRL_BYB BSP_FLD32(18)
+#define TMS570_DMA_PTCRL_BYB BSP_BIT32(18)
 
 /* field: PSFRHQPB - Priority scheme fix or rotate for high priority queue of Port B. */
-#define TMS570_DMA_PTCRL_PSFRHQPB BSP_FLD32(17)
+#define TMS570_DMA_PTCRL_PSFRHQPB BSP_BIT32(17)
 
 /* field: PSFRLQPB - Priority scheme fix or rotate for low priority queue of Port B. */
-#define TMS570_DMA_PTCRL_PSFRLQPB BSP_FLD32(16)
+#define TMS570_DMA_PTCRL_PSFRLQPB BSP_BIT32(16)
 
 
-/*----------------------TMS570_DMARTCTRL----------------------*/
+/*---------------------TMS570_DMA_RTCTRL---------------------*/
 /* field: RTC - RAM Test Control. */
-#define TMS570_DMA_RTCTRL_RTC BSP_FLD32(0)
+#define TMS570_DMA_RTCTRL_RTC BSP_BIT32(0)
 
 
-/*----------------------TMS570_DMADCTRL----------------------*/
+/*----------------------TMS570_DMA_DCTRL----------------------*/
 /* field: CHNUM - Channel Number. */
 #define TMS570_DMA_DCTRL_CHNUM(val) BSP_FLD32(val,24, 28)
 #define TMS570_DMA_DCTRL_CHNUM_GET(reg) BSP_FLD32GET(reg,24, 28)
 #define TMS570_DMA_DCTRL_CHNUM_SET(reg,val) BSP_FLD32SET(reg, val,24, 28)
 
 /* field: DMADBGS - DMA debug status. */
-#define TMS570_DMA_DCTRL_DMADBGS BSP_FLD32(16)
+#define TMS570_DMA_DCTRL_DMADBGS BSP_BIT32(16)
 
 /* field: DBGEN - Debug Enable. */
-#define TMS570_DMA_DCTRL_DBGEN BSP_FLD32(0)
+#define TMS570_DMA_DCTRL_DBGEN BSP_BIT32(0)
 
 
-/*-----------------------TMS570_DMAWPR-----------------------*/
+/*-----------------------TMS570_DMA_WPR-----------------------*/
 /* field: WP - Watch point. */
-#define TMS570_DMA_WPR_WP(val) BSP_FLD32(val,0, 31)
-#define TMS570_DMA_WPR_WP_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_DMA_WPR_WP_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_DMAWMR-----------------------*/
+/*-----------------------TMS570_DMA_WMR-----------------------*/
 /* field: WM - Watch mask. */
-#define TMS570_DMA_WMR_WM(val) BSP_FLD32(val,0, 31)
-#define TMS570_DMA_WMR_WM_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_DMA_WMR_WM_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_DMAPBACSADDR--------------------*/
+/*--------------------TMS570_DMA_PBACSADDR--------------------*/
 /* field: PBACSA - Port B Active Channel Source Address. */
-#define TMS570_DMA_PBACSADDR_PBACSA(val) BSP_FLD32(val,0, 31)
-#define TMS570_DMA_PBACSADDR_PBACSA_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_DMA_PBACSADDR_PBACSA_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_DMAPBACDADDR--------------------*/
+/*--------------------TMS570_DMA_PBACDADDR--------------------*/
 /* field: PBACDA - address of the active channel as broadcasted in Section 16.3.1.3 for Port B. */
-#define TMS570_DMA_PBACDADDR_PBACDA(val) BSP_FLD32(val,0, 31)
-#define TMS570_DMA_PBACDADDR_PBACDA_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_DMA_PBACDADDR_PBACDA_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_DMAPBACTC----------------------*/
+/*---------------------TMS570_DMA_PBACTC---------------------*/
 /* field: PBFTCOUNT - Port B active channel frame count. */
 #define TMS570_DMA_PBACTC_PBFTCOUNT(val) BSP_FLD32(val,16, 28)
 #define TMS570_DMA_PBACTC_PBFTCOUNT_GET(reg) BSP_FLD32GET(reg,16, 28)
@@ -626,12 +608,12 @@ typedef struct{
 #define TMS570_DMA_PBACTC_PBETCOUNT_SET(reg,val) BSP_FLD32SET(reg, val,0, 12)
 
 
-/*----------------------TMS570_DMADMAPCR----------------------*/
+/*---------------------TMS570_DMA_DMAPCR---------------------*/
 /* field: ERRA - Error action. */
-#define TMS570_DMA_DMAPCR_ERRA BSP_FLD32(16)
+#define TMS570_DMA_DMAPCR_ERRA BSP_BIT32(16)
 
 /* field: TEST - When this bit is set, the parity bits are memory mapped to make them accessible by the CPU. */
-#define TMS570_DMA_DMAPCR_TEST BSP_FLD32(8)
+#define TMS570_DMA_DMAPCR_TEST BSP_BIT32(8)
 
 /* field: PARITY_ENA - Parity error detection enable. */
 #define TMS570_DMA_DMAPCR_PARITY_ENA(val) BSP_FLD32(val,0, 3)
@@ -639,9 +621,9 @@ typedef struct{
 #define TMS570_DMA_DMAPCR_PARITY_ENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*----------------------TMS570_DMADMAPAR----------------------*/
+/*---------------------TMS570_DMA_DMAPAR---------------------*/
 /* field: EDFLAG - Parity Error Detection Flag. */
-#define TMS570_DMA_DMAPAR_EDFLAG BSP_FLD32(24)
+#define TMS570_DMA_DMAPAR_EDFLAG BSP_BIT32(24)
 
 /* field: ERRORADDRESS - Error address. These bits hold the address of the first parity error generated in the RAM. */
 #define TMS570_DMA_DMAPAR_ERRORADDRESS(val) BSP_FLD32(val,0, 11)
@@ -649,12 +631,12 @@ typedef struct{
 #define TMS570_DMA_DMAPAR_ERRORADDRESS_SET(reg,val) BSP_FLD32SET(reg, val,0, 11)
 
 
-/*--------------------TMS570_DMADMAMPCTRL--------------------*/
+/*--------------------TMS570_DMA_DMAMPCTRL--------------------*/
 /* field: INT3AB - Interrupt assignment of region 3 to Group A or Group B. */
-#define TMS570_DMA_DMAMPCTRL_INT3AB BSP_FLD32(28)
+#define TMS570_DMA_DMAMPCTRL_INT3AB BSP_BIT32(28)
 
 /* field: INT3ENA - Interrupt enable of region 3. */
-#define TMS570_DMA_DMAMPCTRL_INT3ENA BSP_FLD32(27)
+#define TMS570_DMA_DMAMPCTRL_INT3ENA BSP_BIT32(27)
 
 /* field: REG3AP - Region 3 access permission. */
 #define TMS570_DMA_DMAMPCTRL_REG3AP(val) BSP_FLD32(val,25, 26)
@@ -662,13 +644,13 @@ typedef struct{
 #define TMS570_DMA_DMAMPCTRL_REG3AP_SET(reg,val) BSP_FLD32SET(reg, val,25, 26)
 
 /* field: REG3ENA - Region 3 enable. */
-#define TMS570_DMA_DMAMPCTRL_REG3ENA BSP_FLD32(24)
+#define TMS570_DMA_DMAMPCTRL_REG3ENA BSP_BIT32(24)
 
 /* field: INT2AB - Interrupt assignment of region 2 to Group A or Group B. */
-#define TMS570_DMA_DMAMPCTRL_INT2AB BSP_FLD32(20)
+#define TMS570_DMA_DMAMPCTRL_INT2AB BSP_BIT32(20)
 
 /* field: INT2ENA - Interrupt enable of region 2. */
-#define TMS570_DMA_DMAMPCTRL_INT2ENA BSP_FLD32(19)
+#define TMS570_DMA_DMAMPCTRL_INT2ENA BSP_BIT32(19)
 
 /* field: REG2AP - Region 2 access permission. These bits determine the access permission for region 2. */
 #define TMS570_DMA_DMAMPCTRL_REG2AP(val) BSP_FLD32(val,17, 18)
@@ -676,13 +658,13 @@ typedef struct{
 #define TMS570_DMA_DMAMPCTRL_REG2AP_SET(reg,val) BSP_FLD32SET(reg, val,17, 18)
 
 /* field: REG2ENA - Region 2 enable. */
-#define TMS570_DMA_DMAMPCTRL_REG2ENA BSP_FLD32(16)
+#define TMS570_DMA_DMAMPCTRL_REG2ENA BSP_BIT32(16)
 
 /* field: INT1AB - Interrupt assignment of region 1 to Group A or Group B. */
-#define TMS570_DMA_DMAMPCTRL_INT1AB BSP_FLD32(12)
+#define TMS570_DMA_DMAMPCTRL_INT1AB BSP_BIT32(12)
 
 /* field: INT1ENA - Interrupt enable of region 1. */
-#define TMS570_DMA_DMAMPCTRL_INT1ENA BSP_FLD32(11)
+#define TMS570_DMA_DMAMPCTRL_INT1ENA BSP_BIT32(11)
 
 /* field: REG1AP - Region 1 access permission. */
 #define TMS570_DMA_DMAMPCTRL_REG1AP(val) BSP_FLD32(val,9, 10)
@@ -690,13 +672,13 @@ typedef struct{
 #define TMS570_DMA_DMAMPCTRL_REG1AP_SET(reg,val) BSP_FLD32SET(reg, val,9, 10)
 
 /* field: REG1ENA - Region 1 enable. */
-#define TMS570_DMA_DMAMPCTRL_REG1ENA BSP_FLD32(8)
+#define TMS570_DMA_DMAMPCTRL_REG1ENA BSP_BIT32(8)
 
 /* field: INT0AB - Interrupt assignment of region 0 to Group A or Group B. */
-#define TMS570_DMA_DMAMPCTRL_INT0AB BSP_FLD32(4)
+#define TMS570_DMA_DMAMPCTRL_INT0AB BSP_BIT32(4)
 
 /* field: INT0ENA - Interrupt enable of region 0. */
-#define TMS570_DMA_DMAMPCTRL_INT0ENA BSP_FLD32(3)
+#define TMS570_DMA_DMAMPCTRL_INT0ENA BSP_BIT32(3)
 
 /* field: REG0AP - Region 0 access permission. These bits determine the access permission for region 0. */
 #define TMS570_DMA_DMAMPCTRL_REG0AP(val) BSP_FLD32(val,1, 2)
@@ -704,29 +686,26 @@ typedef struct{
 #define TMS570_DMA_DMAMPCTRL_REG0AP_SET(reg,val) BSP_FLD32SET(reg, val,1, 2)
 
 /* field: REG0ENA - Region 0 enable. */
-#define TMS570_DMA_DMAMPCTRL_REG0ENA BSP_FLD32(0)
+#define TMS570_DMA_DMAMPCTRL_REG0ENA BSP_BIT32(0)
 
 
-/*---------------------TMS570_DMADMAMPST---------------------*/
+/*---------------------TMS570_DMA_DMAMPST---------------------*/
 /* field: REG3FT - Region 3 fault. */
-#define TMS570_DMA_DMAMPST_REG3FT BSP_FLD32(24)
+#define TMS570_DMA_DMAMPST_REG3FT BSP_BIT32(24)
 
 /* field: REG2FT - Region 2 fault. */
-#define TMS570_DMA_DMAMPST_REG2FT BSP_FLD32(16)
+#define TMS570_DMA_DMAMPST_REG2FT BSP_BIT32(16)
 
 /* field: REG1FT - Region 1 fault. */
-#define TMS570_DMA_DMAMPST_REG1FT BSP_FLD32(8)
+#define TMS570_DMA_DMAMPST_REG1FT BSP_BIT32(8)
 
 /* field: REG0FT - Region 0 fault. */
-#define TMS570_DMA_DMAMPST_REG0FT BSP_FLD32(0)
+#define TMS570_DMA_DMAMPST_REG0FT BSP_BIT32(0)
 
 
-/*---------------------TMS570_DMADMAMPROS---------------------*/
+/*--------------------TMS570_DMA_DMAMPROS--------------------*/
 /* field: STARTADDRESS - Start Address defines the address at which the region begins. */
-#define TMS570_DMA_DMAMPROS_STARTADDRESS(val) BSP_FLD32(val,0, 31)
-#define TMS570_DMA_DMAMPROS_STARTADDRESS_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_DMA_DMAMPROS_STARTADDRESS_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
 
-
-#endif /* LIBBSP_ARM_tms570_DMA */
+#endif /* LIBBSP_ARM_TMS570_DMA */

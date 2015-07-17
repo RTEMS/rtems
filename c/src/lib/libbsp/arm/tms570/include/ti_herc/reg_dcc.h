@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_DCC
-#define LIBBSP_ARM_tms570_DCC
+#ifndef LIBBSP_ARM_TMS570_DCC
+#define LIBBSP_ARM_TMS570_DCC
 
 #include <bsp/utility.h>
 
@@ -56,7 +56,7 @@ typedef struct{
 } tms570_dcc_t;
 
 
-/*----------------------TMS570_DCCGCTRL----------------------*/
+/*----------------------TMS570_DCC_GCTRL----------------------*/
 /* field: DONE_INT_ENA - Done Interrupt Enable. */
 #define TMS570_DCC_GCTRL_DONE_INT_ENA(val) BSP_FLD32(val,12, 15)
 #define TMS570_DCC_GCTRL_DONE_INT_ENA_GET(reg) BSP_FLD32GET(reg,12, 15)
@@ -78,7 +78,7 @@ typedef struct{
 #define TMS570_DCC_GCTRL_DCC_ENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*-----------------------TMS570_DCCREV-----------------------*/
+/*-----------------------TMS570_DCC_REV-----------------------*/
 /* field: SCHEME - Reads return 01, writes have no effect. */
 #define TMS570_DCC_REV_SCHEME(val) BSP_FLD32(val,30, 31)
 #define TMS570_DCC_REV_SCHEME_GET(reg) BSP_FLD32GET(reg,30, 31)
@@ -110,57 +110,57 @@ typedef struct{
 #define TMS570_DCC_REV_MINOR_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*---------------------TMS570_DCCCNT0SEED---------------------*/
+/*--------------------TMS570_DCC_CNT0SEED--------------------*/
 /* field: COUNT0_SEED - Seed value for DCC Counter0. */
 #define TMS570_DCC_CNT0SEED_COUNT0_SEED(val) BSP_FLD32(val,0, 19)
 #define TMS570_DCC_CNT0SEED_COUNT0_SEED_GET(reg) BSP_FLD32GET(reg,0, 19)
 #define TMS570_DCC_CNT0SEED_COUNT0_SEED_SET(reg,val) BSP_FLD32SET(reg, val,0, 19)
 
 
-/*--------------------TMS570_DCCVALID0SEED--------------------*/
+/*-------------------TMS570_DCC_VALID0SEED-------------------*/
 /* field: VALID0_SEED - XXX */
 #define TMS570_DCC_VALID0SEED_VALID0_SEED(val) BSP_FLD32(val,0, 15)
 #define TMS570_DCC_VALID0SEED_VALID0_SEED_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DCC_VALID0SEED_VALID0_SEED_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_DCCCNT1SEED---------------------*/
+/*--------------------TMS570_DCC_CNT1SEED--------------------*/
 /* field: COUNT1_SEED - Seed value for DCC Counter1. */
 #define TMS570_DCC_CNT1SEED_COUNT1_SEED(val) BSP_FLD32(val,0, 19)
 #define TMS570_DCC_CNT1SEED_COUNT1_SEED_GET(reg) BSP_FLD32GET(reg,0, 19)
 #define TMS570_DCC_CNT1SEED_COUNT1_SEED_SET(reg,val) BSP_FLD32SET(reg, val,0, 19)
 
 
-/*-----------------------TMS570_DCCSTAT-----------------------*/
+/*----------------------TMS570_DCC_STAT----------------------*/
 /* field: DONE_FLG - Single-Shot Sequence Done flag. */
-#define TMS570_DCC_STAT_DONE_FLG BSP_FLD32(1)
+#define TMS570_DCC_STAT_DONE_FLG BSP_BIT32(1)
 
 /* field: ERR_FLG - Error flag. Indicates that a DCC error has occurred. */
-#define TMS570_DCC_STAT_ERR_FLG BSP_FLD32(0)
+#define TMS570_DCC_STAT_ERR_FLG BSP_BIT32(0)
 
 
-/*-----------------------TMS570_DCCCNT0-----------------------*/
+/*----------------------TMS570_DCC_CNT0----------------------*/
 /* field: COUNT0 - Current value of DCC Counter0. */
 #define TMS570_DCC_CNT0_COUNT0(val) BSP_FLD32(val,0, 19)
 #define TMS570_DCC_CNT0_COUNT0_GET(reg) BSP_FLD32GET(reg,0, 19)
 #define TMS570_DCC_CNT0_COUNT0_SET(reg,val) BSP_FLD32SET(reg, val,0, 19)
 
 
-/*----------------------TMS570_DCCVALID0----------------------*/
+/*---------------------TMS570_DCC_VALID0---------------------*/
 /* field: VALID0 - Current value for DCC Valid0. */
 #define TMS570_DCC_VALID0_VALID0(val) BSP_FLD32(val,0, 15)
 #define TMS570_DCC_VALID0_VALID0_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_DCC_VALID0_VALID0_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-----------------------TMS570_DCCCNT1-----------------------*/
+/*----------------------TMS570_DCC_CNT1----------------------*/
 /* field: COUNT1 - Current value for DCC Counter1. */
 #define TMS570_DCC_CNT1_COUNT1(val) BSP_FLD32(val,0, 19)
 #define TMS570_DCC_CNT1_COUNT1_GET(reg) BSP_FLD32GET(reg,0, 19)
 #define TMS570_DCC_CNT1_COUNT1_SET(reg,val) BSP_FLD32SET(reg, val,0, 19)
 
 
-/*--------------------TMS570_DCCCNT1CLKSRC--------------------*/
+/*-------------------TMS570_DCC_CNT1CLKSRC-------------------*/
 /* field: KEY - Key to enable clock source selection for Counter1. */
 #define TMS570_DCC_CNT1CLKSRC_KEY(val) BSP_FLD32(val,12, 15)
 #define TMS570_DCC_CNT1CLKSRC_KEY_GET(reg) BSP_FLD32GET(reg,12, 15)
@@ -172,7 +172,7 @@ typedef struct{
 #define TMS570_DCC_CNT1CLKSRC_CNT1_CLKSRC_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*--------------------TMS570_DCCCNT0CLKSRC--------------------*/
+/*-------------------TMS570_DCC_CNT0CLKSRC-------------------*/
 /* field: CNT0_CLKSRC - Clock Source for Counter0 */
 #define TMS570_DCC_CNT0CLKSRC_CNT0_CLKSRC(val) BSP_FLD32(val,0, 3)
 #define TMS570_DCC_CNT0CLKSRC_CNT0_CLKSRC_GET(reg) BSP_FLD32GET(reg,0, 3)
@@ -180,4 +180,4 @@ typedef struct{
 
 
 
-#endif /* LIBBSP_ARM_tms570_DCC */
+#endif /* LIBBSP_ARM_TMS570_DCC */

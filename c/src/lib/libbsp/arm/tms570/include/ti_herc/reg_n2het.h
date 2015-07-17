@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_NHET
-#define LIBBSP_ARM_tms570_NHET
+#ifndef LIBBSP_ARM_TMS570_NHET
+#define LIBBSP_ARM_TMS570_NHET
 
 #include <bsp/utility.h>
 
@@ -82,9 +82,9 @@ typedef struct{
 } tms570_nhet_t;
 
 
-/*-----------------------TMS570_NHETGCR-----------------------*/
+/*----------------------TMS570_NHET_GCR----------------------*/
 /* field: HET_PIN_ENA - Enables the output buffers of the pin structures depending on the value of nDIS and DIR. */
-#define TMS570_NHET_GCR_HET_PIN_ENA BSP_FLD32(24)
+#define TMS570_NHET_GCR_HET_PIN_ENA BSP_BIT32(24)
 
 /* field: MP - Master Priority */
 #define TMS570_NHET_GCR_MP(val) BSP_FLD32(val,21, 22)
@@ -92,16 +92,16 @@ typedef struct{
 #define TMS570_NHET_GCR_MP_SET(reg,val) BSP_FLD32SET(reg, val,21, 22)
 
 /* field: PPF - Protect Program Fields */
-#define TMS570_NHET_GCR_PPF BSP_FLD32(18)
+#define TMS570_NHET_GCR_PPF BSP_BIT32(18)
 
 /* field: IS - Ignore Suspend */
-#define TMS570_NHET_GCR_IS BSP_FLD32(17)
+#define TMS570_NHET_GCR_IS BSP_BIT32(17)
 
 /* field: CMS - Clk_master/slave */
-#define TMS570_NHET_GCR_CMS BSP_FLD32(16)
+#define TMS570_NHET_GCR_CMS BSP_BIT32(16)
 
 
-/*-----------------------TMS570_NHETPFR-----------------------*/
+/*----------------------TMS570_NHET_PFR----------------------*/
 /* field: LRPFC - oop Resolution Pre-scale Factor Code */
 #define TMS570_NHET_PFR_LRPFC(val) BSP_FLD32(val,8, 10)
 #define TMS570_NHET_PFR_LRPFC_GET(reg) BSP_FLD32GET(reg,8, 10)
@@ -113,125 +113,113 @@ typedef struct{
 #define TMS570_NHET_PFR_HRPFC_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*----------------------TMS570_NHETADDR----------------------*/
+/*----------------------TMS570_NHET_ADDR----------------------*/
 /* field: HETADDR - N2HET Current Address */
 #define TMS570_NHET_ADDR_HETADDR(val) BSP_FLD32(val,0, 8)
 #define TMS570_NHET_ADDR_HETADDR_GET(reg) BSP_FLD32GET(reg,0, 8)
 #define TMS570_NHET_ADDR_HETADDR_SET(reg,val) BSP_FLD32SET(reg, val,0, 8)
 
 
-/*----------------------TMS570_NHETOFF1----------------------*/
+/*----------------------TMS570_NHET_OFF1----------------------*/
 /* field: OFFSET1 - HETOFF1[5:0] indexes the currently pending high-priority interrupt. */
 #define TMS570_NHET_OFF1_OFFSET1(val) BSP_FLD32(val,0, 5)
 #define TMS570_NHET_OFF1_OFFSET1_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_NHET_OFF1_OFFSET1_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*----------------------TMS570_NHETOFF2----------------------*/
+/*----------------------TMS570_NHET_OFF2----------------------*/
 /* field: OFFSET2 - HETOFF2[5:0] indexes the currently pending low-priority interrupt. */
 #define TMS570_NHET_OFF2_OFFSET2(val) BSP_FLD32(val,0, 5)
 #define TMS570_NHET_OFF2_OFFSET2_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_NHET_OFF2_OFFSET2_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*---------------------TMS570_NHETINTENAS---------------------*/
+/*--------------------TMS570_NHET_INTENAS--------------------*/
 /* field: HETINTENAS - Interrupt Enable Set bits. HETINTENAS is readable and writable in any operation mode. */
-#define TMS570_NHET_INTENAS_HETINTENAS(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_INTENAS_HETINTENAS_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_INTENAS_HETINTENAS_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_NHETINTENAC---------------------*/
+/*--------------------TMS570_NHET_INTENAC--------------------*/
 /* field: HETINTENAC - Interrupt Enable Clear bits. HETINTENAC is readable and writable in any operation mode. */
-#define TMS570_NHET_INTENAC_HETINTENAC(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_INTENAC_HETINTENAC_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_INTENAC_HETINTENAC_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_NHETEXC1----------------------*/
+/*----------------------TMS570_NHET_EXC1----------------------*/
 /* field: APCNT_OVRFL_ENA - APCNT Overflow Enable */
-#define TMS570_NHET_EXC1_APCNT_OVRFL_ENA BSP_FLD32(24)
+#define TMS570_NHET_EXC1_APCNT_OVRFL_ENA BSP_BIT32(24)
 
 /* field: APCNT_UNRFL_ENA - APCNT Underflow Enable */
-#define TMS570_NHET_EXC1_APCNT_UNRFL_ENA BSP_FLD32(16)
+#define TMS570_NHET_EXC1_APCNT_UNRFL_ENA BSP_BIT32(16)
 
 /* field: PRGM_OVRFL_ENA - Program Overflow Enable */
-#define TMS570_NHET_EXC1_PRGM_OVRFL_ENA BSP_FLD32(8)
+#define TMS570_NHET_EXC1_PRGM_OVRFL_ENA BSP_BIT32(8)
 
 /* field: APCNT_OVRFL_PRY - APCNT Overflow Exception Interrupt Priority */
-#define TMS570_NHET_EXC1_APCNT_OVRFL_PRY BSP_FLD32(2)
+#define TMS570_NHET_EXC1_APCNT_OVRFL_PRY BSP_BIT32(2)
 
 /* field: APCNT_UNRFL_PRY - APCNT Underflow Exception Interrupt Priority */
-#define TMS570_NHET_EXC1_APCNT_UNRFL_PRY BSP_FLD32(1)
+#define TMS570_NHET_EXC1_APCNT_UNRFL_PRY BSP_BIT32(1)
 
 /* field: PRGM_OVRFL_PRY - ProgramOverflow Exception Interrupt Priority */
-#define TMS570_NHET_EXC1_PRGM_OVRFL_PRY BSP_FLD32(0)
+#define TMS570_NHET_EXC1_PRGM_OVRFL_PRY BSP_BIT32(0)
 
 
-/*----------------------TMS570_NHETEXC2----------------------*/
+/*----------------------TMS570_NHET_EXC2----------------------*/
 /* field: DEBUG_STATUS_FLAG - Debug Status Flag. */
-#define TMS570_NHET_EXC2_DEBUG_STATUS_FLAG BSP_FLD32(8)
+#define TMS570_NHET_EXC2_DEBUG_STATUS_FLAG BSP_BIT32(8)
 
 /* field: APCNT_OVRFL_FLAG - APCNT Overflow Flag */
-#define TMS570_NHET_EXC2_APCNT_OVRFL_FLAG BSP_FLD32(2)
+#define TMS570_NHET_EXC2_APCNT_OVRFL_FLAG BSP_BIT32(2)
 
 /* field: APCNT_UNDFL_FLAG - APCNT Underflow Flag */
-#define TMS570_NHET_EXC2_APCNT_UNDFL_FLAG BSP_FLD32(1)
+#define TMS570_NHET_EXC2_APCNT_UNDFL_FLAG BSP_BIT32(1)
 
 /* field: PRGM_OVERFL_FLAG - Program Overflow Flag */
-#define TMS570_NHET_EXC2_PRGM_OVERFL_FLAG BSP_FLD32(0)
+#define TMS570_NHET_EXC2_PRGM_OVERFL_FLAG BSP_BIT32(0)
 
 
-/*-----------------------TMS570_NHETPRY-----------------------*/
+/*----------------------TMS570_NHET_PRY----------------------*/
 /* field: HETPRY - HET Interrupt Priority Level bits */
-#define TMS570_NHET_PRY_HETPRY(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_PRY_HETPRY_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_PRY_HETPRY_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_NHETFLG-----------------------*/
+/*----------------------TMS570_NHET_FLG----------------------*/
 /* field: HETFLAG - Interrupt Flag Register Bits */
-#define TMS570_NHET_FLG_HETFLAG(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_FLG_HETFLAG_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_FLG_HETFLAG_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_NHETAND-----------------------*/
+/*----------------------TMS570_NHET_AND----------------------*/
 /* field: AND_SHARE - AND Share Enable */
 #define TMS570_NHET_AND_AND_SHARE(val) BSP_FLD32(val,0, 15)
 #define TMS570_NHET_AND_AND_SHARE_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_NHET_AND_AND_SHARE_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*----------------------TMS570_NHETHRSH----------------------*/
+/*----------------------TMS570_NHET_HRSH----------------------*/
 /* field: HR_SHARE - HR Share Bits */
 #define TMS570_NHET_HRSH_HR_SHARE(val) BSP_FLD32(val,0, 15)
 #define TMS570_NHET_HRSH_HR_SHARE_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_NHET_HRSH_HR_SHARE_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-----------------------TMS570_NHETXOR-----------------------*/
+/*----------------------TMS570_NHET_XOR----------------------*/
 /* field: XOR_SHARE - XOR Share Enable */
 #define TMS570_NHET_XOR_XOR_SHARE(val) BSP_FLD32(val,0, 15)
 #define TMS570_NHET_XOR_XOR_SHARE_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_NHET_XOR_XOR_SHARE_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_NHETREQENS---------------------*/
+/*---------------------TMS570_NHET_REQENS---------------------*/
 /* field: REQ_ENA_n - Request Enable Bits */
 #define TMS570_NHET_REQENS_REQ_ENA_n(val) BSP_FLD32(val,0, 7)
 #define TMS570_NHET_REQENS_REQ_ENA_n_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_NHET_REQENS_REQ_ENA_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*---------------------TMS570_NHETREQENC---------------------*/
+/*---------------------TMS570_NHET_REQENC---------------------*/
 /* field: REQ_DIS_n - Request Disable Bits */
 #define TMS570_NHET_REQENC_REQ_DIS_n(val) BSP_FLD32(val,0, 7)
 #define TMS570_NHET_REQENC_REQ_DIS_n_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_NHET_REQENC_REQ_DIS_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*----------------------TMS570_NHETREQDS----------------------*/
+/*---------------------TMS570_NHET_REQDS---------------------*/
 /* field: TDBS_n - HTU, DMA or Both Select Bits */
 #define TMS570_NHET_REQDS_TDBS_n(val) BSP_FLD32(val,16, 23)
 #define TMS570_NHET_REQDS_TDBS_n_GET(reg) BSP_FLD32GET(reg,16, 23)
@@ -243,65 +231,41 @@ typedef struct{
 #define TMS570_NHET_REQDS_TDS_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_NHETDIR-----------------------*/
+/*----------------------TMS570_NHET_DIR----------------------*/
 /* field: HETDIR_n - Data direction of NHET pins */
-#define TMS570_NHET_DIR_HETDIR_n(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_DIR_HETDIR_n_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_DIR_HETDIR_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_NHETDIN-----------------------*/
+/*----------------------TMS570_NHET_DIN----------------------*/
 /* field: HETDIN_n - Data input. This bit displays the logic state of the pin. */
-#define TMS570_NHET_DIN_HETDIN_n(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_DIN_HETDIN_n_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_DIN_HETDIN_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_NHETDOUT----------------------*/
+/*----------------------TMS570_NHET_DOUT----------------------*/
 /* field: HETDOUT_n - Data out write. Writes to this bit will only take effect when the pin is configured as an output. */
-#define TMS570_NHET_DOUT_HETDOUT_n(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_DOUT_HETDOUT_n_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_DOUT_HETDOUT_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_NHETDSET----------------------*/
+/*----------------------TMS570_NHET_DSET----------------------*/
 /* field: HETDSET_n - This register allows bits of HETDOUT to be set while avoiding the pitfalls of a readmodify- write */
-#define TMS570_NHET_DSET_HETDSET_n(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_DSET_HETDSET_n_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_DSET_HETDSET_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_NHETDCLR----------------------*/
+/*----------------------TMS570_NHET_DCLR----------------------*/
 /* field: HETDCLR_n - This register allows bits of HETDOUT to be cleared while avoiding the pitfalls of a read-modifywrite */
-#define TMS570_NHET_DCLR_HETDCLR_n(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_DCLR_HETDCLR_n_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_DCLR_HETDCLR_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_NHETPDR-----------------------*/
+/*----------------------TMS570_NHET_PDR----------------------*/
 /* field: HETPDR_n - Open drain control for HET[n] pins */
-#define TMS570_NHET_PDR_HETPDR_n(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_PDR_HETPDR_n_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_PDR_HETPDR_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_NHETPULDIS---------------------*/
+/*---------------------TMS570_NHET_PULDIS---------------------*/
 /* field: HETPULDIS_n - Pull disable for N2HET pins */
-#define TMS570_NHET_PULDIS_HETPULDIS_n(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_PULDIS_HETPULDIS_n_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_PULDIS_HETPULDIS_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_NHETPSL-----------------------*/
+/*----------------------TMS570_NHET_PSL----------------------*/
 /* field: HETPSL_n - Pull select for NHET pins */
-#define TMS570_NHET_PSL_HETPSL_n(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_PSL_HETPSL_n_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_PSL_HETPSL_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-----------------------TMS570_NHETPCR-----------------------*/
+/*----------------------TMS570_NHET_PCR----------------------*/
 /* field: TEST - Test Bit. */
-#define TMS570_NHET_PCR_TEST BSP_FLD32(8)
+#define TMS570_NHET_PCR_TEST BSP_BIT32(8)
 
 /* field: PARITY_ENA - Enable/disable parity checking. */
 #define TMS570_NHET_PCR_PARITY_ENA(val) BSP_FLD32(val,0, 3)
@@ -309,21 +273,18 @@ typedef struct{
 #define TMS570_NHET_PCR_PARITY_ENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*-----------------------TMS570_NHETPAR-----------------------*/
+/*----------------------TMS570_NHET_PAR----------------------*/
 /* field: PAOFF - Parity Error Address Offset. */
 #define TMS570_NHET_PAR_PAOFF(val) BSP_FLD32(val,2, 12)
 #define TMS570_NHET_PAR_PAOFF_GET(reg) BSP_FLD32GET(reg,2, 12)
 #define TMS570_NHET_PAR_PAOFF_SET(reg,val) BSP_FLD32SET(reg, val,2, 12)
 
 
-/*-----------------------TMS570_NHETPPR-----------------------*/
+/*----------------------TMS570_NHET_PPR----------------------*/
 /* field: HETPPR_n - NHET Parity Pin Select Bits - Allows HET[n] pins to be configured to drive to a known state when */
-#define TMS570_NHET_PPR_HETPPR_n(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_PPR_HETPPR_n_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_PPR_HETPPR_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_NHETSFPRLD---------------------*/
+/*---------------------TMS570_NHET_SFPRLD---------------------*/
 /* field: CCDIV - Counter Clock Divider */
 #define TMS570_NHET_SFPRLD_CCDIV(val) BSP_FLD32(val,16, 17)
 #define TMS570_NHET_SFPRLD_CCDIV_GET(reg) BSP_FLD32GET(reg,16, 17)
@@ -335,14 +296,11 @@ typedef struct{
 #define TMS570_NHET_SFPRLD_CPRLD_SET(reg,val) BSP_FLD32SET(reg, val,0, 9)
 
 
-/*----------------------TMS570_NHETSFENA----------------------*/
+/*---------------------TMS570_NHET_SFENA---------------------*/
 /* field: HETSFENA_n - Suppression Filter Enable Bits */
-#define TMS570_NHET_SFENA_HETSFENA_n(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_SFENA_HETSFENA_n_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_SFENA_HETSFENA_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_NHETLBPSEL---------------------*/
+/*---------------------TMS570_NHET_LBPSEL---------------------*/
 /* field: LBPTYPE - Loop Back Pair Type Select Bits */
 #define TMS570_NHET_LBPSEL_LBPTYPE(val) BSP_FLD32(val,16, 31)
 #define TMS570_NHET_LBPSEL_LBPTYPE_GET(reg) BSP_FLD32GET(reg,16, 31)
@@ -354,7 +312,7 @@ typedef struct{
 #define TMS570_NHET_LBPSEL_LBPSEL_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_NHETLBPDIR---------------------*/
+/*---------------------TMS570_NHET_LBPDIR---------------------*/
 /* field: LBPTSTENA - Loopback Test Enable Key */
 #define TMS570_NHET_LBPDIR_LBPTSTENA(val) BSP_FLD32(val,16, 19)
 #define TMS570_NHET_LBPDIR_LBPTSTENA_GET(reg) BSP_FLD32GET(reg,16, 19)
@@ -366,12 +324,9 @@ typedef struct{
 #define TMS570_NHET_LBPDIR_LBPDIR_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_NHETPINDIS---------------------*/
+/*---------------------TMS570_NHET_PINDIS---------------------*/
 /* field: HETPINDIS_n - N2HET Pin Disable Bits */
-#define TMS570_NHET_PINDIS_HETPINDIS_n(val) BSP_FLD32(val,0, 31)
-#define TMS570_NHET_PINDIS_HETPINDIS_n_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_NHET_PINDIS_HETPINDIS_n_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
 
-
-#endif /* LIBBSP_ARM_tms570_NHET */
+#endif /* LIBBSP_ARM_TMS570_NHET */

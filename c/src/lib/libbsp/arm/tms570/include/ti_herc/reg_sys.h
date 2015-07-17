@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_SYS1
-#define LIBBSP_ARM_tms570_SYS1
+#ifndef LIBBSP_ARM_TMS570_SYS1
+#define LIBBSP_ARM_TMS570_SYS1
 
 #include <bsp/utility.h>
 
@@ -105,12 +105,12 @@ typedef struct{
 } tms570_sys1_t;
 
 
-/*---------------------TMS570_SYS1SYSPC1---------------------*/
+/*---------------------TMS570_SYS1_SYSPCx---------------------*/
 /* field: ECPCLKFUN - ECLK function. This bit changes the function of the ECLK pin. */
-#define TMS570_SYS1_SYSPC1_ECPCLKFUN BSP_FLD32(0)
+#define TMS570_SYS1_SYSPCx_ECPCLKFUN BSP_BIT32(0)
 
 
-/*----------------------TMS570_SYS1CSDIS----------------------*/
+/*---------------------TMS570_SYS1_CSDIS---------------------*/
 /* field: CLKSROFF - Clock source[7-3] off. */
 #define TMS570_SYS1_CSDIS_CLKSROFF(val) BSP_FLD32(val,3, 7)
 #define TMS570_SYS1_CSDIS_CLKSROFF_GET(reg) BSP_FLD32GET(reg,3, 7)
@@ -122,7 +122,7 @@ typedef struct{
 #define TMS570_SYS1_CSDIS_CLKSROFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*--------------------TMS570_SYS1CSDISSET--------------------*/
+/*--------------------TMS570_SYS1_CSDISSET--------------------*/
 /* field: SETCLKSR_OFF - Set clock source[7-3] to the disabled state. */
 #define TMS570_SYS1_CSDISSET_SETCLKSR_OFF(val) BSP_FLD32(val,3, 7)
 #define TMS570_SYS1_CSDISSET_SETCLKSR_OFF_GET(reg) BSP_FLD32GET(reg,3, 7)
@@ -134,7 +134,7 @@ typedef struct{
 #define TMS570_SYS1_CSDISSET_SETCLKSR_OFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*--------------------TMS570_SYS1CSDISCLR--------------------*/
+/*--------------------TMS570_SYS1_CSDISCLR--------------------*/
 /* field: CLRCLKSR_OFF - Enables clock source[7-3]. */
 #define TMS570_SYS1_CSDISCLR_CLRCLKSR_OFF(val) BSP_FLD32(val,3, 7)
 #define TMS570_SYS1_CSDISCLR_CLRCLKSR_OFF_GET(reg) BSP_FLD32GET(reg,3, 7)
@@ -146,17 +146,17 @@ typedef struct{
 #define TMS570_SYS1_CSDISCLR_CLRCLKSR_OFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*----------------------TMS570_SYS1CDDIS----------------------*/
+/*---------------------TMS570_SYS1_CDDIS---------------------*/
 /* field: VCLKAOFF - VCLKA[4-3] domain off. */
 #define TMS570_SYS1_CDDIS_VCLKAOFF(val) BSP_FLD32(val,10, 11)
 #define TMS570_SYS1_CDDIS_VCLKAOFF_GET(reg) BSP_FLD32GET(reg,10, 11)
 #define TMS570_SYS1_CDDIS_VCLKAOFF_SET(reg,val) BSP_FLD32SET(reg, val,10, 11)
 
 /* field: VCLK3OFF - VCLK3 domain off. */
-#define TMS570_SYS1_CDDIS_VCLK3OFF BSP_FLD32(8)
+#define TMS570_SYS1_CDDIS_VCLK3OFF BSP_BIT32(8)
 
 /* field: RTICLK1OFF - RTICLK1 domain off. */
-#define TMS570_SYS1_CDDIS_RTICLK1OFF BSP_FLD32(6)
+#define TMS570_SYS1_CDDIS_RTICLK1OFF BSP_BIT32(6)
 
 /* field: VCLKAOFF - VCLKA[2-1] domain off. */
 #define TMS570_SYS1_CDDIS_VCLKAOFF(val) BSP_FLD32(val,4, 5)
@@ -164,84 +164,84 @@ typedef struct{
 #define TMS570_SYS1_CDDIS_VCLKAOFF_SET(reg,val) BSP_FLD32SET(reg, val,4, 5)
 
 /* field: VCLK2OFF - VCLK2 domain off. */
-#define TMS570_SYS1_CDDIS_VCLK2OFF BSP_FLD32(3)
+#define TMS570_SYS1_CDDIS_VCLK2OFF BSP_BIT32(3)
 
 /* field: VCLKPOFF - VCLK_periph domain off. */
-#define TMS570_SYS1_CDDIS_VCLKPOFF BSP_FLD32(2)
+#define TMS570_SYS1_CDDIS_VCLKPOFF BSP_BIT32(2)
 
 /* field: HCLKOFF - HCLK and VCLK_sys domains off. */
-#define TMS570_SYS1_CDDIS_HCLKOFF BSP_FLD32(1)
+#define TMS570_SYS1_CDDIS_HCLKOFF BSP_BIT32(1)
 
 /* field: GCLKOFF - GCLK domain off. */
-#define TMS570_SYS1_CDDIS_GCLKOFF BSP_FLD32(0)
+#define TMS570_SYS1_CDDIS_GCLKOFF BSP_BIT32(0)
 
 
-/*--------------------TMS570_SYS1CDDISSET--------------------*/
+/*--------------------TMS570_SYS1_CDDISSET--------------------*/
 /* field: SETVCLKA_OFF - Set VCLKA[4-3] domain. */
 #define TMS570_SYS1_CDDISSET_SETVCLKA_OFF(val) BSP_FLD32(val,10, 11)
 #define TMS570_SYS1_CDDISSET_SETVCLKA_OFF_GET(reg) BSP_FLD32GET(reg,10, 11)
 #define TMS570_SYS1_CDDISSET_SETVCLKA_OFF_SET(reg,val) BSP_FLD32SET(reg, val,10, 11)
 
 /* field: SETVCLK3OFF - Set VCLK3 domain. */
-#define TMS570_SYS1_CDDISSET_SETVCLK3OFF BSP_FLD32(8)
+#define TMS570_SYS1_CDDISSET_SETVCLK3OFF BSP_BIT32(8)
 
 /* field: SETRTI1CLKOFF - Set RTICLK1 domain. */
-#define TMS570_SYS1_CDDISSET_SETRTI1CLKOFF BSP_FLD32(6)
+#define TMS570_SYS1_CDDISSET_SETRTI1CLKOFF BSP_BIT32(6)
 
 /* field: SETTVCLKA2OFF - Set VCLKA2 domain. */
-#define TMS570_SYS1_CDDISSET_SETTVCLKA2OFF BSP_FLD32(5)
+#define TMS570_SYS1_CDDISSET_SETTVCLKA2OFF BSP_BIT32(5)
 
 /* field: SETVCLKA1OFF - Set VCLKA1 domain. */
-#define TMS570_SYS1_CDDISSET_SETVCLKA1OFF BSP_FLD32(4)
+#define TMS570_SYS1_CDDISSET_SETVCLKA1OFF BSP_BIT32(4)
 
 /* field: SETVCLK2OFF - Set VCLK2 domain. */
-#define TMS570_SYS1_CDDISSET_SETVCLK2OFF BSP_FLD32(3)
+#define TMS570_SYS1_CDDISSET_SETVCLK2OFF BSP_BIT32(3)
 
 /* field: SETVCLKPOFF - Set VCLK_periph domain. */
-#define TMS570_SYS1_CDDISSET_SETVCLKPOFF BSP_FLD32(2)
+#define TMS570_SYS1_CDDISSET_SETVCLKPOFF BSP_BIT32(2)
 
 /* field: SETHCLKOFF - Set HCLK and VCLK_sys domains. */
-#define TMS570_SYS1_CDDISSET_SETHCLKOFF BSP_FLD32(1)
+#define TMS570_SYS1_CDDISSET_SETHCLKOFF BSP_BIT32(1)
 
 /* field: SETGCLKOFF - Set GCLK domain. */
-#define TMS570_SYS1_CDDISSET_SETGCLKOFF BSP_FLD32(0)
+#define TMS570_SYS1_CDDISSET_SETGCLKOFF BSP_BIT32(0)
 
 
-/*--------------------TMS570_SYS1CDDISCLR--------------------*/
+/*--------------------TMS570_SYS1_CDDISCLR--------------------*/
 /* field: CLRVCLKAOFF - Clear VCLKA[4-3] domain. */
 #define TMS570_SYS1_CDDISCLR_CLRVCLKAOFF(val) BSP_FLD32(val,10, 11)
 #define TMS570_SYS1_CDDISCLR_CLRVCLKAOFF_GET(reg) BSP_FLD32GET(reg,10, 11)
 #define TMS570_SYS1_CDDISCLR_CLRVCLKAOFF_SET(reg,val) BSP_FLD32SET(reg, val,10, 11)
 
 /* field: Reserved - Reserved */
-#define TMS570_SYS1_CDDISCLR_Reserved BSP_FLD32(9)
+#define TMS570_SYS1_CDDISCLR_Reserved BSP_BIT32(9)
 
 /* field: CLRVCLK3OFF - Clear VCLK3 domain. */
-#define TMS570_SYS1_CDDISCLR_CLRVCLK3OFF BSP_FLD32(8)
+#define TMS570_SYS1_CDDISCLR_CLRVCLK3OFF BSP_BIT32(8)
 
 /* field: CLRRTI1CLKOFF - Clear RTICLK1 domain. */
-#define TMS570_SYS1_CDDISCLR_CLRRTI1CLKOFF BSP_FLD32(6)
+#define TMS570_SYS1_CDDISCLR_CLRRTI1CLKOFF BSP_BIT32(6)
 
 /* field: CLRTVCLKA2OFF - Clear VCLKA2 domain. */
-#define TMS570_SYS1_CDDISCLR_CLRTVCLKA2OFF BSP_FLD32(5)
+#define TMS570_SYS1_CDDISCLR_CLRTVCLKA2OFF BSP_BIT32(5)
 
 /* field: CLRVCLKA1OFF - Clear VCLKA1 domain. */
-#define TMS570_SYS1_CDDISCLR_CLRVCLKA1OFF BSP_FLD32(4)
+#define TMS570_SYS1_CDDISCLR_CLRVCLKA1OFF BSP_BIT32(4)
 
 /* field: CLRVCLK2OFF - Clear VCLK2 domain. */
-#define TMS570_SYS1_CDDISCLR_CLRVCLK2OFF BSP_FLD32(3)
+#define TMS570_SYS1_CDDISCLR_CLRVCLK2OFF BSP_BIT32(3)
 
 /* field: CLRVCLKPOFF - CLRVCLKPOFF */
-#define TMS570_SYS1_CDDISCLR_CLRVCLKPOFF BSP_FLD32(2)
+#define TMS570_SYS1_CDDISCLR_CLRVCLKPOFF BSP_BIT32(2)
 
 /* field: CLRHCLKOFF - Clear HCLK and VCLK_sys domains. */
-#define TMS570_SYS1_CDDISCLR_CLRHCLKOFF BSP_FLD32(1)
+#define TMS570_SYS1_CDDISCLR_CLRHCLKOFF BSP_BIT32(1)
 
 /* field: CLRGCLKOFF - Clear GCLK domain. */
-#define TMS570_SYS1_CDDISCLR_CLRGCLKOFF BSP_FLD32(0)
+#define TMS570_SYS1_CDDISCLR_CLRGCLKOFF BSP_BIT32(0)
 
 
-/*---------------------TMS570_SYS1GHVSRC---------------------*/
+/*---------------------TMS570_SYS1_GHVSRC---------------------*/
 /* field: GHVWAKE - GCLK, HCLK, VCLK, VCLK2 source on wakeup. */
 #define TMS570_SYS1_GHVSRC_GHVWAKE(val) BSP_FLD32(val,24, 27)
 #define TMS570_SYS1_GHVSRC_GHVWAKE_GET(reg) BSP_FLD32GET(reg,24, 27)
@@ -258,7 +258,7 @@ typedef struct{
 #define TMS570_SYS1_GHVSRC_GHVSRC_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*--------------------TMS570_SYS1VCLKASRC--------------------*/
+/*--------------------TMS570_SYS1_VCLKASRC--------------------*/
 /* field: VCLKA2S - Peripheral asynchronous clock2 source. */
 #define TMS570_SYS1_VCLKASRC_VCLKA2S(val) BSP_FLD32(val,8, 11)
 #define TMS570_SYS1_VCLKASRC_VCLKA2S_GET(reg) BSP_FLD32GET(reg,8, 11)
@@ -270,7 +270,7 @@ typedef struct{
 #define TMS570_SYS1_VCLKASRC_VCLKA1S_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*---------------------TMS570_SYS1RCLKSRC---------------------*/
+/*--------------------TMS570_SYS1_RCLKSRC--------------------*/
 /* field: RTI1DIV - RTI clock1 Divider. */
 #define TMS570_SYS1_RCLKSRC_RTI1DIV(val) BSP_FLD32(val,8, 9)
 #define TMS570_SYS1_RCLKSRC_RTI1DIV_GET(reg) BSP_FLD32GET(reg,8, 9)
@@ -282,7 +282,7 @@ typedef struct{
 #define TMS570_SYS1_RCLKSRC_RTI1SRC_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*---------------------TMS570_SYS1CSVSTAT---------------------*/
+/*--------------------TMS570_SYS1_CSVSTAT--------------------*/
 /* field: CLKSRV - Clock source[7-0] valid. */
 #define TMS570_SYS1_CSVSTAT_CLKSRV(val) BSP_FLD32(val,3, 7)
 #define TMS570_SYS1_CSVSTAT_CLKSRV_GET(reg) BSP_FLD32GET(reg,3, 7)
@@ -294,7 +294,7 @@ typedef struct{
 #define TMS570_SYS1_CSVSTAT_CLKSR_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*---------------------TMS570_SYS1MSTGCR---------------------*/
+/*---------------------TMS570_SYS1_MSTGCR---------------------*/
 /* field: ROM_DIV - Prescaler divider bits for ROM clock source. */
 #define TMS570_SYS1_MSTGCR_ROM_DIV(val) BSP_FLD32(val,8, 9)
 #define TMS570_SYS1_MSTGCR_ROM_DIV_GET(reg) BSP_FLD32GET(reg,8, 9)
@@ -306,38 +306,32 @@ typedef struct{
 #define TMS570_SYS1_MSTGCR_MSTGENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*--------------------TMS570_SYS1MINITGCR--------------------*/
+/*--------------------TMS570_SYS1_MINITGCR--------------------*/
 /* field: MINITGENA - Memory hardware initialization global enable key. */
 #define TMS570_SYS1_MINITGCR_MINITGENA(val) BSP_FLD32(val,0, 3)
 #define TMS570_SYS1_MINITGCR_MINITGENA_GET(reg) BSP_FLD32GET(reg,0, 3)
 #define TMS570_SYS1_MINITGCR_MINITGENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*---------------------TMS570_SYS1MSIENA---------------------*/
+/*---------------------TMS570_SYS1_MSIENA---------------------*/
 /* field: MSIENA - PBIST controller and memory initialization enable register. */
-#define TMS570_SYS1_MSIENA_MSIENA(val) BSP_FLD32(val,0, 31)
-#define TMS570_SYS1_MSIENA_MSIENA_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_SYS1_MSIENA_MSIENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_SYS1MSTCGSTAT--------------------*/
+/*-------------------TMS570_SYS1_MSTCGSTAT-------------------*/
 /* field: MINIDONE - Memory hardware initialization complete status. */
-#define TMS570_SYS1_MSTCGSTAT_MINIDONE BSP_FLD32(8)
+#define TMS570_SYS1_MSTCGSTAT_MINIDONE BSP_BIT32(8)
 
 /* field: MSTDONE - Memory self-test run complete status. */
-#define TMS570_SYS1_MSTCGSTAT_MSTDONE BSP_FLD32(0)
+#define TMS570_SYS1_MSTCGSTAT_MSTDONE BSP_BIT32(0)
 
 
-/*--------------------TMS570_SYS1MINISTAT--------------------*/
+/*--------------------TMS570_SYS1_MINISTAT--------------------*/
 /* field: MIDONE - Memory hardware initialization status bit. */
-#define TMS570_SYS1_MINISTAT_MIDONE(val) BSP_FLD32(val,0, 31)
-#define TMS570_SYS1_MINISTAT_MIDONE_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_SYS1_MINISTAT_MIDONE_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_SYS1PLLCTL1---------------------*/
+/*--------------------TMS570_SYS1_PLLCTL1--------------------*/
 /* field: ROS - Reset on PLL Slip */
-#define TMS570_SYS1_PLLCTL1_ROS BSP_FLD32(31)
+#define TMS570_SYS1_PLLCTL1_ROS BSP_BIT32(31)
 
 /* field: MASK_SLIP - Mask detection of PLL slip */
 #define TMS570_SYS1_PLLCTL1_MASK_SLIP(val) BSP_FLD32(val,29, 30)
@@ -350,7 +344,7 @@ typedef struct{
 #define TMS570_SYS1_PLLCTL1_PLLDIV_SET(reg,val) BSP_FLD32SET(reg, val,24, 28)
 
 /* field: ROF - Reset on Oscillator Fail */
-#define TMS570_SYS1_PLLCTL1_ROF BSP_FLD32(23)
+#define TMS570_SYS1_PLLCTL1_ROF BSP_BIT32(23)
 
 /* field: REFCLKDIV - Reference Clock Divider */
 #define TMS570_SYS1_PLLCTL1_REFCLKDIV(val) BSP_FLD32(val,16, 21)
@@ -363,9 +357,9 @@ typedef struct{
 #define TMS570_SYS1_PLLCTL1_PLLMUL_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_SYS1PLLCTL2---------------------*/
+/*--------------------TMS570_SYS1_PLLCTL2--------------------*/
 /* field: FMENA - Frequency Modulation Enable. */
-#define TMS570_SYS1_PLLCTL2_FMENA BSP_FLD32(31)
+#define TMS570_SYS1_PLLCTL2_FMENA BSP_BIT32(31)
 
 /* field: SPREADINGRATE - NS = SPREADINGRATE + 1 */
 #define TMS570_SYS1_PLLCTL2_SPREADINGRATE(val) BSP_FLD32(val,22, 30)
@@ -388,12 +382,12 @@ typedef struct{
 #define TMS570_SYS1_PLLCTL2_SPR_AMOUNT_SET(reg,val) BSP_FLD32SET(reg, val,0, 8)
 
 
-/*---------------------TMS570_SYS1SYSPC10---------------------*/
+/*--------------------TMS570_SYS1_SYSPC10--------------------*/
 /* field: ECPCLK_SLEW - ECPCLK slew control. This bit controls between the fast or slow slew mode. */
-#define TMS570_SYS1_SYSPC10_ECPCLK_SLEW BSP_FLD32(0)
+#define TMS570_SYS1_SYSPC10_ECPCLK_SLEW BSP_BIT32(0)
 
 
-/*---------------------TMS570_SYS1DIEIDL---------------------*/
+/*---------------------TMS570_SYS1_DIEIDL---------------------*/
 /* field: LOT - These read only bits contain the lower 10 bits of the device lot number. */
 #define TMS570_SYS1_DIEIDL_LOT(val) BSP_FLD32(val,22, 31)
 #define TMS570_SYS1_DIEIDL_LOT_GET(reg) BSP_FLD32GET(reg,22, 31)
@@ -415,19 +409,19 @@ typedef struct{
 #define TMS570_SYS1_DIEIDL_X_WAFER_COORDINATE_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*---------------------TMS570_SYS1DIEIDH---------------------*/
+/*---------------------TMS570_SYS1_DIEIDH---------------------*/
 /* field: LOT - This read-only register contains the upper 14 bits of the device lot number. */
 #define TMS570_SYS1_DIEIDH_LOT(val) BSP_FLD32(val,0, 13)
 #define TMS570_SYS1_DIEIDH_LOT_GET(reg) BSP_FLD32GET(reg,0, 13)
 #define TMS570_SYS1_DIEIDH_LOT_SET(reg,val) BSP_FLD32SET(reg, val,0, 13)
 
 
-/*--------------------TMS570_SYS1LPOMONCTL--------------------*/
+/*-------------------TMS570_SYS1_LPOMONCTL-------------------*/
 /* field: BIAS_ENABLE - Bias enable. */
-#define TMS570_SYS1_LPOMONCTL_BIAS_ENABLE BSP_FLD32(24)
+#define TMS570_SYS1_LPOMONCTL_BIAS_ENABLE BSP_BIT32(24)
 
 /* field: OSCFRQCONFIGCNT - Configures the counter based on OSC frequency. */
-#define TMS570_SYS1_LPOMONCTL_OSCFRQCONFIGCNT BSP_FLD32(16)
+#define TMS570_SYS1_LPOMONCTL_OSCFRQCONFIGCNT BSP_BIT32(16)
 
 /* field: HFTRIM - High frequency oscillator trim value. */
 #define TMS570_SYS1_LPOMONCTL_HFTRIM(val) BSP_FLD32(val,8, 12)
@@ -435,15 +429,15 @@ typedef struct{
 #define TMS570_SYS1_LPOMONCTL_HFTRIM_SET(reg,val) BSP_FLD32SET(reg, val,8, 12)
 
 
-/*---------------------TMS570_SYS1CLKTEST---------------------*/
+/*--------------------TMS570_SYS1_CLKTEST--------------------*/
 /* field: ALTLIMPCLOCKENABLE - This bit selects a clock driven by the GIOB[0] pin as an alternate limp clock to the clock */
-#define TMS570_SYS1_CLKTEST_ALTLIMPCLOCKENABLE BSP_FLD32(26)
+#define TMS570_SYS1_CLKTEST_ALTLIMPCLOCKENABLE BSP_BIT32(26)
 
 /* field: RANGEDETCTRL - Range detection control. */
-#define TMS570_SYS1_CLKTEST_RANGEDETCTRL BSP_FLD32(25)
+#define TMS570_SYS1_CLKTEST_RANGEDETCTRL BSP_BIT32(25)
 
 /* field: RANGEDETENASSEL - Selects range detection enable. This bit resets asynchronously on power on reset. */
-#define TMS570_SYS1_CLKTEST_RANGEDETENASSEL BSP_FLD32(24)
+#define TMS570_SYS1_CLKTEST_RANGEDETENASSEL BSP_BIT32(24)
 
 /* field: CLK_TEST_EN - Clock test enable. This bit enables the clock going to the ECLK pin. */
 #define TMS570_SYS1_CLKTEST_CLK_TEST_EN(val) BSP_FLD32(val,16, 19)
@@ -461,7 +455,7 @@ typedef struct{
 #define TMS570_SYS1_CLKTEST_SEL_ECP_PIN_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*-------------------TMS570_SYS1DFTCTRLREG1-------------------*/
+/*------------------TMS570_SYS1_DFTCTRLREG1------------------*/
 /* field: DFTWRITE - DFT logic access. */
 #define TMS570_SYS1_DFTCTRLREG1_DFTWRITE(val) BSP_FLD32(val,12, 13)
 #define TMS570_SYS1_DFTCTRLREG1_DFTWRITE_GET(reg) BSP_FLD32GET(reg,12, 13)
@@ -478,7 +472,7 @@ typedef struct{
 #define TMS570_SYS1_DFTCTRLREG1_TEST_MODE_KEY_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*-------------------TMS570_SYS1DFTCTRLREG2-------------------*/
+/*------------------TMS570_SYS1_DFTCTRLREG2------------------*/
 /* field: IMPDF - DFT Implementation defined bits. */
 #define TMS570_SYS1_DFTCTRLREG2_IMPDF(val) BSP_FLD32(val,4, 31)
 #define TMS570_SYS1_DFTCTRLREG2_IMPDF_GET(reg) BSP_FLD32GET(reg,4, 31)
@@ -490,9 +484,9 @@ typedef struct{
 #define TMS570_SYS1_DFTCTRLREG2_TEST_MODE_KEY_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*---------------------TMS570_SYS1GPREG1---------------------*/
+/*---------------------TMS570_SYS1_GPREG1---------------------*/
 /* field: EMIF_FUNC - Enable EMIF functions to be output. */
-#define TMS570_SYS1_GPREG1_EMIF_FUNC BSP_FLD32(31)
+#define TMS570_SYS1_GPREG1_EMIF_FUNC BSP_BIT32(31)
 
 /* field: PLL1_FBSLIP_FILTER__COUNT - FBSLIP down counter programmed value. */
 #define TMS570_SYS1_GPREG1_PLL1_FBSLIP_FILTER__COUNT(val) BSP_FLD32(val,20, 25)
@@ -510,56 +504,53 @@ typedef struct{
 #define TMS570_SYS1_GPREG1_OUTPUT_BUFFER_LOW_EMI_MODE_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_SYS1IMPFASTS--------------------*/
+/*--------------------TMS570_SYS1_IMPFASTS--------------------*/
 /* field: ECPCLKFUN - ECLK function. This bit changes the function of the ECLK pin. */
-#define TMS570_SYS1_IMPFASTS_ECPCLKFUN BSP_FLD32(0)
+#define TMS570_SYS1_IMPFASTS_ECPCLKFUN BSP_BIT32(0)
 
 
-/*--------------------TMS570_SYS1IMPFTADD--------------------*/
+/*--------------------TMS570_SYS1_IMPFTADD--------------------*/
 /* field: IMPFTADD - These bits contain the fault address when an imprecise abort occurs. */
-#define TMS570_SYS1_IMPFTADD_IMPFTADD(val) BSP_FLD32(val,0, 31)
-#define TMS570_SYS1_IMPFTADD_IMPFTADD_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_SYS1_IMPFTADD_IMPFTADD_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_SYS1SSIR1----------------------*/
+/*---------------------TMS570_SYS1_SSIRx---------------------*/
 /* field: SSKEY1 - System software interrupt request key. A 075h written to these bits initiates IRQ/FIQ interrupts. */
-#define TMS570_SYS1_SSIR1_SSKEY1(val) BSP_FLD32(val,8, 15)
-#define TMS570_SYS1_SSIR1_SSKEY1_GET(reg) BSP_FLD32GET(reg,8, 15)
-#define TMS570_SYS1_SSIR1_SSKEY1_SET(reg,val) BSP_FLD32SET(reg, val,8, 15)
+#define TMS570_SYS1_SSIRx_SSKEY1(val) BSP_FLD32(val,8, 15)
+#define TMS570_SYS1_SSIRx_SSKEY1_GET(reg) BSP_FLD32GET(reg,8, 15)
+#define TMS570_SYS1_SSIRx_SSKEY1_SET(reg,val) BSP_FLD32SET(reg, val,8, 15)
 
 /* field: SSDATA1 - System software interrupt data. These bits contain user read/write register bits. */
-#define TMS570_SYS1_SSIR1_SSDATA1(val) BSP_FLD32(val,0, 7)
-#define TMS570_SYS1_SSIR1_SSDATA1_GET(reg) BSP_FLD32GET(reg,0, 7)
-#define TMS570_SYS1_SSIR1_SSDATA1_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
+#define TMS570_SYS1_SSIRx_SSDATA1(val) BSP_FLD32(val,0, 7)
+#define TMS570_SYS1_SSIRx_SSDATA1_GET(reg) BSP_FLD32GET(reg,0, 7)
+#define TMS570_SYS1_SSIRx_SSDATA1_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*---------------------TMS570_SYS1RAMGCR---------------------*/
+/*---------------------TMS570_SYS1_RAMGCR---------------------*/
 /* field: RAM_DFT_EN - Functional mode RAM DFT (Design For Test) port enable key. */
 #define TMS570_SYS1_RAMGCR_RAM_DFT_EN(val) BSP_FLD32(val,16, 19)
 #define TMS570_SYS1_RAMGCR_RAM_DFT_EN_GET(reg) BSP_FLD32GET(reg,16, 19)
 #define TMS570_SYS1_RAMGCR_RAM_DFT_EN_SET(reg,val) BSP_FLD32SET(reg, val,16, 19)
 
 /* field: WST_AENA0 - eSRAM data phase wait state enable bit. */
-#define TMS570_SYS1_RAMGCR_WST_AENA0 BSP_FLD32(2)
+#define TMS570_SYS1_RAMGCR_WST_AENA0 BSP_BIT32(2)
 
 /* field: WST_DENA0 - eSRAM data phase wait state enable bit. */
-#define TMS570_SYS1_RAMGCR_WST_DENA0 BSP_FLD32(0)
+#define TMS570_SYS1_RAMGCR_WST_DENA0 BSP_BIT32(0)
 
 
-/*---------------------TMS570_SYS1BMMCR1---------------------*/
+/*---------------------TMS570_SYS1_BMMCR1---------------------*/
 /* field: MEMSW - Memory swap key. */
 #define TMS570_SYS1_BMMCR1_MEMSW(val) BSP_FLD32(val,0, 3)
 #define TMS570_SYS1_BMMCR1_MEMSW_GET(reg) BSP_FLD32GET(reg,0, 3)
 #define TMS570_SYS1_BMMCR1_MEMSW_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*--------------------TMS570_SYS1CPURSTCR--------------------*/
+/*--------------------TMS570_SYS1_CPURSTCR--------------------*/
 /* field: CPU_RESET - CPU Reset. */
-#define TMS570_SYS1_CPURSTCR_CPU_RESET BSP_FLD32(0)
+#define TMS570_SYS1_CPURSTCR_CPU_RESET BSP_BIT32(0)
 
 
-/*---------------------TMS570_SYS1CLKCNTL---------------------*/
+/*--------------------TMS570_SYS1_CLKCNTL--------------------*/
 /* field: VCLK2R - VBUS clock2 ratio. */
 #define TMS570_SYS1_CLKCNTL_VCLK2R(val) BSP_FLD32(val,24, 27)
 #define TMS570_SYS1_CLKCNTL_VCLK2R_GET(reg) BSP_FLD32GET(reg,24, 27)
@@ -571,15 +562,15 @@ typedef struct{
 #define TMS570_SYS1_CLKCNTL_VCLKR_SET(reg,val) BSP_FLD32SET(reg, val,16, 19)
 
 /* field: PENA - Peripheral enable bit. */
-#define TMS570_SYS1_CLKCNTL_PENA BSP_FLD32(8)
+#define TMS570_SYS1_CLKCNTL_PENA BSP_BIT32(8)
 
 
-/*---------------------TMS570_SYS1ECPCNTL---------------------*/
+/*--------------------TMS570_SYS1_ECPCNTL--------------------*/
 /* field: ECPSSEL - This bit allows the selection between VCLK and OSCIN as the clock source for ECLK. */
-#define TMS570_SYS1_ECPCNTL_ECPSSEL BSP_FLD32(24)
+#define TMS570_SYS1_ECPCNTL_ECPSSEL BSP_BIT32(24)
 
 /* field: ECPCOS - ECP continue on suspend. */
-#define TMS570_SYS1_ECPCNTL_ECPCOS BSP_FLD32(23)
+#define TMS570_SYS1_ECPCNTL_ECPCOS BSP_BIT32(23)
 
 /* field: ECPINSEL - Select ECP input clock source. */
 #define TMS570_SYS1_ECPCNTL_ECPINSEL(val) BSP_FLD32(val,6, 17)
@@ -592,64 +583,64 @@ typedef struct{
 #define TMS570_SYS1_ECPCNTL_ECPDIV_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_SYS1DEVCR1---------------------*/
+/*---------------------TMS570_SYS1_DEVCR1---------------------*/
 /* field: DEVPARSEL - Device parity select bit key. */
 #define TMS570_SYS1_DEVCR1_DEVPARSEL(val) BSP_FLD32(val,0, 3)
 #define TMS570_SYS1_DEVCR1_DEVPARSEL_GET(reg) BSP_FLD32GET(reg,0, 3)
 #define TMS570_SYS1_DEVCR1_DEVPARSEL_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*---------------------TMS570_SYS1SYSECR---------------------*/
+/*---------------------TMS570_SYS1_SYSECR---------------------*/
 /* field: RESET - Software reset bits. Setting RESET1 or clearing RESET0 causes a system software reset. */
 #define TMS570_SYS1_SYSECR_RESET(val) BSP_FLD32(val,14, 15)
 #define TMS570_SYS1_SYSECR_RESET_GET(reg) BSP_FLD32GET(reg,14, 15)
 #define TMS570_SYS1_SYSECR_RESET_SET(reg,val) BSP_FLD32SET(reg, val,14, 15)
 
 
-/*---------------------TMS570_SYS1SYSESR---------------------*/
+/*---------------------TMS570_SYS1_SYSESR---------------------*/
 /* field: PORST - Power-up reset. This bit is set when VCCOR (VCC Out of Range) is detected. */
-#define TMS570_SYS1_SYSESR_PORST BSP_FLD32(15)
+#define TMS570_SYS1_SYSESR_PORST BSP_BIT32(15)
 
 /* field: OSCRST - Reset caused by an oscillator failure or PLL cycle slip. */
-#define TMS570_SYS1_SYSESR_OSCRST BSP_FLD32(14)
+#define TMS570_SYS1_SYSESR_OSCRST BSP_BIT32(14)
 
 /* field: WDRST - Watchdog reset flag. */
-#define TMS570_SYS1_SYSESR_WDRST BSP_FLD32(13)
+#define TMS570_SYS1_SYSESR_WDRST BSP_BIT32(13)
 
 /* field: CPURST - CPU reset flag. This bit is set when the CPU is reset. */
-#define TMS570_SYS1_SYSESR_CPURST BSP_FLD32(5)
+#define TMS570_SYS1_SYSESR_CPURST BSP_BIT32(5)
 
 /* field: SWRST - Software reset flag. This bit is set when a software system reset has occurred. */
-#define TMS570_SYS1_SYSESR_SWRST BSP_FLD32(4)
+#define TMS570_SYS1_SYSESR_SWRST BSP_BIT32(4)
 
 /* field: EXTRST - External reset flag. This bit is set when a reset is caused by the external reset pin nRST. */
-#define TMS570_SYS1_SYSESR_EXTRST BSP_FLD32(3)
+#define TMS570_SYS1_SYSESR_EXTRST BSP_BIT32(3)
 
 /* field: MPMODE - This indicates the current memory protection unit (MPU) mode. */
-#define TMS570_SYS1_SYSESR_MPMODE BSP_FLD32(0)
+#define TMS570_SYS1_SYSESR_MPMODE BSP_BIT32(0)
 
 
-/*---------------------TMS570_SYS1SYSTASR---------------------*/
+/*--------------------TMS570_SYS1_SYSTASR--------------------*/
 /* field: EFUSE_Abort - Test Abort status flag. */
 #define TMS570_SYS1_SYSTASR_EFUSE_Abort(val) BSP_FLD32(val,0, 4)
 #define TMS570_SYS1_SYSTASR_EFUSE_Abort_GET(reg) BSP_FLD32GET(reg,0, 4)
 #define TMS570_SYS1_SYSTASR_EFUSE_Abort_SET(reg,val) BSP_FLD32SET(reg, val,0, 4)
 
 
-/*---------------------TMS570_SYS1GLBSTAT---------------------*/
+/*--------------------TMS570_SYS1_GLBSTAT--------------------*/
 /* field: FBSLIP - PLL over cycle slip detection. */
-#define TMS570_SYS1_GLBSTAT_FBSLIP BSP_FLD32(9)
+#define TMS570_SYS1_GLBSTAT_FBSLIP BSP_BIT32(9)
 
 /* field: RFSLIP - PLL under cycle slip detection. */
-#define TMS570_SYS1_GLBSTAT_RFSLIP BSP_FLD32(8)
+#define TMS570_SYS1_GLBSTAT_RFSLIP BSP_BIT32(8)
 
 /* field: OSCFAIL - Oscillator fail flag bit. */
-#define TMS570_SYS1_GLBSTAT_OSCFAIL BSP_FLD32(0)
+#define TMS570_SYS1_GLBSTAT_OSCFAIL BSP_BIT32(0)
 
 
-/*----------------------TMS570_SYS1DEVID----------------------*/
+/*---------------------TMS570_SYS1_DEVID---------------------*/
 /* field: CP15 - CP15 CPU. This bit indicates whether the CPU has a coprocessor 15 (CP15). */
-#define TMS570_SYS1_DEVID_CP15 BSP_FLD32(31)
+#define TMS570_SYS1_DEVID_CP15 BSP_BIT32(31)
 
 /* field: TECH - These bits define the process technology by which the device was manufactured. */
 #define TMS570_SYS1_DEVID_TECH(val) BSP_FLD32(val,13, 16)
@@ -657,10 +648,10 @@ typedef struct{
 #define TMS570_SYS1_DEVID_TECH_SET(reg,val) BSP_FLD32SET(reg, val,13, 16)
 
 /* field: I_O_VOLTAGE - Input/output voltage. This bit defines the I/O voltage of the device. */
-#define TMS570_SYS1_DEVID_I_O_VOLTAGE BSP_FLD32(12)
+#define TMS570_SYS1_DEVID_I_O_VOLTAGE BSP_BIT32(12)
 
 /* field: PERIPHERAL_PARITY - The peripheral memories have no parity. */
-#define TMS570_SYS1_DEVID_PERIPHERAL_PARITY BSP_FLD32(11)
+#define TMS570_SYS1_DEVID_PERIPHERAL_PARITY BSP_BIT32(11)
 
 /* field: FLASH_ECC - These bits indicate which parity is present for the program memory. */
 #define TMS570_SYS1_DEVID_FLASH_ECC(val) BSP_FLD32(val,9, 10)
@@ -668,7 +659,7 @@ typedef struct{
 #define TMS570_SYS1_DEVID_FLASH_ECC_SET(reg,val) BSP_FLD32SET(reg, val,9, 10)
 
 /* field: RAM_ECC - RAM ECC. This bit indicates whether or not RAM memory ECC is present. */
-#define TMS570_SYS1_DEVID_RAM_ECC BSP_FLD32(8)
+#define TMS570_SYS1_DEVID_RAM_ECC BSP_BIT32(8)
 
 /* field: VERSION - Version. These bits provide the revision of the device. */
 #define TMS570_SYS1_DEVID_VERSION(val) BSP_FLD32(val,3, 7)
@@ -681,7 +672,7 @@ typedef struct{
 #define TMS570_SYS1_DEVID_PLATFORM_ID_SET(reg,val) BSP_FLD32SET(reg, val,0, 2)
 
 
-/*---------------------TMS570_SYS1SSIVEC---------------------*/
+/*---------------------TMS570_SYS1_SSIVEC---------------------*/
 /* field: SSIDATA - System software interrupt data key. */
 #define TMS570_SYS1_SSIVEC_SSIDATA(val) BSP_FLD32(val,8, 15)
 #define TMS570_SYS1_SSIVEC_SSIDATA_GET(reg) BSP_FLD32GET(reg,8, 15)
@@ -693,7 +684,7 @@ typedef struct{
 #define TMS570_SYS1_SSIVEC_SSIVECT_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*----------------------TMS570_SYS1SSIF----------------------*/
+/*----------------------TMS570_SYS1_SSIF----------------------*/
 /* field: SSI_FLAG - System software interrupt flag[4-1]. */
 #define TMS570_SYS1_SSIF_SSI_FLAG(val) BSP_FLD32(val,0, 3)
 #define TMS570_SYS1_SSIF_SSI_FLAG_GET(reg) BSP_FLD32GET(reg,0, 3)
@@ -701,4 +692,4 @@ typedef struct{
 
 
 
-#endif /* LIBBSP_ARM_tms570_SYS1 */
+#endif /* LIBBSP_ARM_TMS570_SYS1 */

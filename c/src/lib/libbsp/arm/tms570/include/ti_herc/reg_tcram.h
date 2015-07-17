@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_TCRAM
-#define LIBBSP_ARM_tms570_TCRAM
+#ifndef LIBBSP_ARM_TMS570_TCRAM
+#define LIBBSP_ARM_TMS570_TCRAM
 
 #include <bsp/utility.h>
 
@@ -58,9 +58,9 @@ typedef struct{
 } tms570_tcram_t;
 
 
-/*--------------------TMS570_TCRAMRAMCTRL--------------------*/
+/*--------------------TMS570_TCRAM_RAMCTRL--------------------*/
 /* field: EMU_TRACE_DIS - Emulation Mode Trace Disable. */
-#define TMS570_TCRAM_RAMCTRL_EMU_TRACE_DIS BSP_FLD32(30)
+#define TMS570_TCRAM_RAMCTRL_EMU_TRACE_DIS BSP_BIT32(30)
 
 /* field: ADDR_PARITY_OVERRIDE - Address Parity Override. */
 #define TMS570_TCRAM_RAMCTRL_ADDR_PARITY_OVERRIDE(val) BSP_FLD32(val,24, 27)
@@ -73,7 +73,7 @@ typedef struct{
 #define TMS570_TCRAM_RAMCTRL_ADDR_PARITY_DISABLE_SET(reg,val) BSP_FLD32SET(reg, val,16, 19)
 
 /* field: ECC_WR_EN - ECC Memory Write Enable. */
-#define TMS570_TCRAM_RAMCTRL_ECC_WR_EN BSP_FLD32(8)
+#define TMS570_TCRAM_RAMCTRL_ECC_WR_EN BSP_BIT32(8)
 
 /* field: ECC_DETECT_EN - ECC Detect Enable. */
 #define TMS570_TCRAM_RAMCTRL_ECC_DETECT_EN(val) BSP_FLD32(val,0, 3)
@@ -81,62 +81,62 @@ typedef struct{
 #define TMS570_TCRAM_RAMCTRL_ECC_DETECT_EN_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*------------------TMS570_TCRAMRAMTHRESHOLD------------------*/
+/*-----------------TMS570_TCRAM_RAMTHRESHOLD-----------------*/
 /* field: THRESHOLD - Single-bit Error Threshold Count. */
 #define TMS570_TCRAM_RAMTHRESHOLD_THRESHOLD(val) BSP_FLD32(val,0, 15)
 #define TMS570_TCRAM_RAMTHRESHOLD_THRESHOLD_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_TCRAM_RAMTHRESHOLD_THRESHOLD_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_TCRAMRAMOCCUR--------------------*/
+/*-------------------TMS570_TCRAM_RAMOCCUR-------------------*/
 /* field: SINGLE_ERROR - Single-bit Error Correction Occurrences. */
 #define TMS570_TCRAM_RAMOCCUR_SINGLE_ERROR(val) BSP_FLD32(val,0, 15)
 #define TMS570_TCRAM_RAMOCCUR_SINGLE_ERROR_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_TCRAM_RAMOCCUR_SINGLE_ERROR_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-------------------TMS570_TCRAMRAMINTCTRL-------------------*/
+/*------------------TMS570_TCRAM_RAMINTCTRL------------------*/
 /* field: SERR_EN - Single-bit Error Correction Interrupt Enable. */
-#define TMS570_TCRAM_RAMINTCTRL_SERR_EN BSP_FLD32(0)
+#define TMS570_TCRAM_RAMINTCTRL_SERR_EN BSP_BIT32(0)
 
 
-/*------------------TMS570_TCRAMRAMERRSTATUS------------------*/
+/*-----------------TMS570_TCRAM_RAMERRSTATUS-----------------*/
 /* field: WADDR_PAR_FAIL - This bit indicates a Write Address Parity Failure. */
-#define TMS570_TCRAM_RAMERRSTATUS_WADDR_PAR_FAIL BSP_FLD32(9)
+#define TMS570_TCRAM_RAMERRSTATUS_WADDR_PAR_FAIL BSP_BIT32(9)
 
 /* field: RADDR_PAR_FAIL - This bit indicates a Read Address Parity Failure. */
-#define TMS570_TCRAM_RAMERRSTATUS_RADDR_PAR_FAIL BSP_FLD32(8)
+#define TMS570_TCRAM_RAMERRSTATUS_RADDR_PAR_FAIL BSP_BIT32(8)
 
 /* field: DERR - This bit indicates a multi-bit error detected by the Cortex-R4F SECDED logic. */
-#define TMS570_TCRAM_RAMERRSTATUS_DERR BSP_FLD32(5)
+#define TMS570_TCRAM_RAMERRSTATUS_DERR BSP_BIT32(5)
 
 /* field: ADDR_COMP_LOGIC_FAIL - Address decode logic element failed. */
-#define TMS570_TCRAM_RAMERRSTATUS_ADDR_COMP_LOGIC_FAIL BSP_FLD32(4)
+#define TMS570_TCRAM_RAMERRSTATUS_ADDR_COMP_LOGIC_FAIL BSP_BIT32(4)
 
 /* field: ADDR_DEC_FAIL - Address decode failed. */
-#define TMS570_TCRAM_RAMERRSTATUS_ADDR_DEC_FAIL BSP_FLD32(2)
+#define TMS570_TCRAM_RAMERRSTATUS_ADDR_DEC_FAIL BSP_BIT32(2)
 
 /* field: SERR - Single Error Status. */
-#define TMS570_TCRAM_RAMERRSTATUS_SERR BSP_FLD32(0)
+#define TMS570_TCRAM_RAMERRSTATUS_SERR BSP_BIT32(0)
 
 
-/*------------------TMS570_TCRAMRAMSERRADDR------------------*/
+/*------------------TMS570_TCRAM_RAMSERRADDR------------------*/
 /* field: SINGLE_ERROR_ADDRESS - This register captures the bits 17-3 of the address for which the Cortex-R4F CPU */
 #define TMS570_TCRAM_RAMSERRADDR_SINGLE_ERROR_ADDRESS(val) BSP_FLD32(val,3, 17)
 #define TMS570_TCRAM_RAMSERRADDR_SINGLE_ERROR_ADDRESS_GET(reg) BSP_FLD32GET(reg,3, 17)
 #define TMS570_TCRAM_RAMSERRADDR_SINGLE_ERROR_ADDRESS_SET(reg,val) BSP_FLD32SET(reg, val,3, 17)
 
 
-/*------------------TMS570_TCRAMRAMUERRADDR------------------*/
+/*------------------TMS570_TCRAM_RAMUERRADDR------------------*/
 /* field: UNCORRECTABLE - address parity error. */
 #define TMS570_TCRAM_RAMUERRADDR_UNCORRECTABLE(val) BSP_FLD32(val,3, 22)
 #define TMS570_TCRAM_RAMUERRADDR_UNCORRECTABLE_GET(reg) BSP_FLD32GET(reg,3, 22)
 #define TMS570_TCRAM_RAMUERRADDR_UNCORRECTABLE_SET(reg,val) BSP_FLD32SET(reg, val,3, 22)
 
 
-/*--------------------TMS570_TCRAMRAMTEST--------------------*/
+/*--------------------TMS570_TCRAM_RAMTEST--------------------*/
 /* field: TRIGGER - Test Trigger. */
-#define TMS570_TCRAM_RAMTEST_TRIGGER BSP_FLD32(8)
+#define TMS570_TCRAM_RAMTEST_TRIGGER BSP_BIT32(8)
 
 /* field: TEST_MODE - Test Mode. This field selects either equality of inequality testing schemes. */
 #define TMS570_TCRAM_RAMTEST_TEST_MODE(val) BSP_FLD32(val,6, 7)
@@ -149,9 +149,9 @@ typedef struct{
 #define TMS570_TCRAM_RAMTEST_TEST_ENABLE_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*-----------------TMS570_TCRAMRAMADDRDECVECT-----------------*/
+/*----------------TMS570_TCRAM_RAMADDRDECVECT----------------*/
 /* field: ECC_SELECT - ECC Select. */
-#define TMS570_TCRAM_RAMADDRDECVECT_ECC_SELECT BSP_FLD32(26)
+#define TMS570_TCRAM_RAMADDRDECVECT_ECC_SELECT BSP_BIT32(26)
 
 /* field: RAM_CHIP_SELECT - RAM Chip Select. */
 #define TMS570_TCRAM_RAMADDRDECVECT_RAM_CHIP_SELECT(val) BSP_FLD32(val,0, 15)
@@ -159,7 +159,7 @@ typedef struct{
 #define TMS570_TCRAM_RAMADDRDECVECT_RAM_CHIP_SELECT_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-------------------TMS570_TCRAMRAMPERADDR-------------------*/
+/*------------------TMS570_TCRAM_RAMPERADDR------------------*/
 /* field: ADDRESS_PARITY - Parity Error Address. */
 #define TMS570_TCRAM_RAMPERADDR_ADDRESS_PARITY(val) BSP_FLD32(val,3, 22)
 #define TMS570_TCRAM_RAMPERADDR_ADDRESS_PARITY_GET(reg) BSP_FLD32GET(reg,3, 22)
@@ -167,4 +167,4 @@ typedef struct{
 
 
 
-#endif /* LIBBSP_ARM_tms570_TCRAM */
+#endif /* LIBBSP_ARM_TMS570_TCRAM */

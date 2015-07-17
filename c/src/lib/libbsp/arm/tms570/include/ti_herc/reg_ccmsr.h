@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_CCMSR
-#define LIBBSP_ARM_tms570_CCMSR
+#ifndef LIBBSP_ARM_TMS570_CCMSR
+#define LIBBSP_ARM_TMS570_CCMSR
 
 #include <bsp/utility.h>
 
@@ -47,21 +47,21 @@ typedef struct{
 } tms570_ccmsr_t;
 
 
-/*---------------------TMS570_CCMSRCCMSR---------------------*/
+/*---------------------TMS570_CCMSR_CCMSR---------------------*/
 /* field: CMPE - Compare Error */
-#define TMS570_CCMSR_CCMSR_CMPE BSP_FLD32(16)
+#define TMS570_CCMSR_CCMSR_CMPE BSP_BIT32(16)
 
 /* field: STC - Self-test Complete */
-#define TMS570_CCMSR_CCMSR_STC BSP_FLD32(8)
+#define TMS570_CCMSR_CCMSR_STC BSP_BIT32(8)
 
 /* field: STET - Self-test Error Type */
-#define TMS570_CCMSR_CCMSR_STET BSP_FLD32(1)
+#define TMS570_CCMSR_CCMSR_STET BSP_BIT32(1)
 
 /* field: STE - Self-test Error */
-#define TMS570_CCMSR_CCMSR_STE BSP_FLD32(0)
+#define TMS570_CCMSR_CCMSR_STE BSP_BIT32(0)
 
 
-/*--------------------TMS570_CCMSRCCMKEYR--------------------*/
+/*--------------------TMS570_CCMSR_CCMKEYR--------------------*/
 /* field: MKEY - Mode Key */
 #define TMS570_CCMSR_CCMKEYR_MKEY(val) BSP_FLD32(val,0, 3)
 #define TMS570_CCMSR_CCMKEYR_MKEY_GET(reg) BSP_FLD32GET(reg,0, 3)
@@ -69,4 +69,4 @@ typedef struct{
 
 
 
-#endif /* LIBBSP_ARM_tms570_CCMSR */
+#endif /* LIBBSP_ARM_TMS570_CCMSR */

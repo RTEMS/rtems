@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_SPI
-#define LIBBSP_ARM_tms570_SPI
+#ifndef LIBBSP_ARM_TMS570_SPI
+#define LIBBSP_ARM_TMS570_SPI
 
 #include <bsp/utility.h>
 
@@ -95,92 +95,92 @@ typedef struct{
 } tms570_spi_t;
 
 
-/*-----------------------TMS570_SPIGCR0-----------------------*/
+/*----------------------TMS570_SPI_GCR0----------------------*/
 /* field: nRESET - This is the local reset control for the module. */
-#define TMS570_SPI_GCR0_nRESET BSP_FLD32(0)
+#define TMS570_SPI_GCR0_nRESET BSP_BIT32(0)
 
 
-/*-----------------------TMS570_SPIGCR1-----------------------*/
+/*----------------------TMS570_SPI_GCR1----------------------*/
 /* field: SPIEN - SPI enable. This bit enables SPI transfers. */
-#define TMS570_SPI_GCR1_SPIEN BSP_FLD32(24)
+#define TMS570_SPI_GCR1_SPIEN BSP_BIT32(24)
 
 /* field: LOOPBACK - Internal loop-back test mode. The internal self-test option can be enabled by setting this bit. */
-#define TMS570_SPI_GCR1_LOOPBACK BSP_FLD32(16)
+#define TMS570_SPI_GCR1_LOOPBACK BSP_BIT32(16)
 
 /* field: POWERDOWN - When active, the SPI state machine enters a power-down state. */
-#define TMS570_SPI_GCR1_POWERDOWN BSP_FLD32(8)
+#define TMS570_SPI_GCR1_POWERDOWN BSP_BIT32(8)
 
 /* field: CLKMOD - Clock mode. This bit selects either an internal or external clock source. */
-#define TMS570_SPI_GCR1_CLKMOD BSP_FLD32(1)
+#define TMS570_SPI_GCR1_CLKMOD BSP_BIT32(1)
 
 /* field: MASTER - SPISIMO/SPISOMI pin direction determination. */
-#define TMS570_SPI_GCR1_MASTER BSP_FLD32(0)
+#define TMS570_SPI_GCR1_MASTER BSP_BIT32(0)
 
 
-/*-----------------------TMS570_SPIINT0-----------------------*/
+/*----------------------TMS570_SPI_INT0----------------------*/
 /* field: ENABLEHIGHZ - SPIENA pin high-impedance enable. */
-#define TMS570_SPI_INT0_ENABLEHIGHZ BSP_FLD32(24)
+#define TMS570_SPI_INT0_ENABLEHIGHZ BSP_BIT32(24)
 
 /* field: DMAREQEN - DMA request enable. */
-#define TMS570_SPI_INT0_DMAREQEN BSP_FLD32(16)
+#define TMS570_SPI_INT0_DMAREQEN BSP_BIT32(16)
 
 
-/*-----------------------TMS570_SPILVL-----------------------*/
+/*-----------------------TMS570_SPI_LVL-----------------------*/
 /* field: TXINTLVL - Transmit interrupt level. */
-#define TMS570_SPI_LVL_TXINTLVL BSP_FLD32(9)
+#define TMS570_SPI_LVL_TXINTLVL BSP_BIT32(9)
 
 /* field: RXINTLVL - Receive interrupt level. */
-#define TMS570_SPI_LVL_RXINTLVL BSP_FLD32(8)
+#define TMS570_SPI_LVL_RXINTLVL BSP_BIT32(8)
 
 /* field: RXOVRNINTLVL - Receive overrun interrupt level. */
-#define TMS570_SPI_LVL_RXOVRNINTLVL BSP_FLD32(6)
+#define TMS570_SPI_LVL_RXOVRNINTLVL BSP_BIT32(6)
 
 /* field: BITERRLVL - Bit error interrupt level. */
-#define TMS570_SPI_LVL_BITERRLVL BSP_FLD32(4)
+#define TMS570_SPI_LVL_BITERRLVL BSP_BIT32(4)
 
 /* field: DESYNCLVL - Desynchronized slave interrupt level. (master mode only). */
-#define TMS570_SPI_LVL_DESYNCLVL BSP_FLD32(3)
+#define TMS570_SPI_LVL_DESYNCLVL BSP_BIT32(3)
 
 /* field: PARERRLVL - Parity error interrupt level. */
-#define TMS570_SPI_LVL_PARERRLVL BSP_FLD32(2)
+#define TMS570_SPI_LVL_PARERRLVL BSP_BIT32(2)
 
 /* field: TIMEOUTLVL - SPIENA pin time-out interrupt level. */
-#define TMS570_SPI_LVL_TIMEOUTLVL BSP_FLD32(1)
+#define TMS570_SPI_LVL_TIMEOUTLVL BSP_BIT32(1)
 
 /* field: DLENERRLVL - Data length error interrupt level (line) select. */
-#define TMS570_SPI_LVL_DLENERRLVL BSP_FLD32(0)
+#define TMS570_SPI_LVL_DLENERRLVL BSP_BIT32(0)
 
 
-/*-----------------------TMS570_SPIFLG-----------------------*/
+/*-----------------------TMS570_SPI_FLG-----------------------*/
 /* field: BUFINITACTIVE - Indicates the status of multi-buffer initialization process. */
-#define TMS570_SPI_FLG_BUFINITACTIVE BSP_FLD32(24)
+#define TMS570_SPI_FLG_BUFINITACTIVE BSP_BIT32(24)
 
 /* field: TXINTFLG - Transmitter-empty interrupt flag. */
-#define TMS570_SPI_FLG_TXINTFLG BSP_FLD32(9)
+#define TMS570_SPI_FLG_TXINTFLG BSP_BIT32(9)
 
 /* field: RXINTFLG - Receiver-full interrupt flag. */
-#define TMS570_SPI_FLG_RXINTFLG BSP_FLD32(8)
+#define TMS570_SPI_FLG_RXINTFLG BSP_BIT32(8)
 
 /* field: RXOVRNINTFLG - Receiver overrun flag. */
-#define TMS570_SPI_FLG_RXOVRNINTFLG BSP_FLD32(6)
+#define TMS570_SPI_FLG_RXOVRNINTFLG BSP_BIT32(6)
 
 /* field: BITERRFLG - Mismatch of internal transmit data and transmitted data. */
-#define TMS570_SPI_FLG_BITERRFLG BSP_FLD32(4)
+#define TMS570_SPI_FLG_BITERRFLG BSP_BIT32(4)
 
 /* field: DESYNCFLG - Desynchronization of slave device. */
-#define TMS570_SPI_FLG_DESYNCFLG BSP_FLD32(3)
+#define TMS570_SPI_FLG_DESYNCFLG BSP_BIT32(3)
 
 /* field: PARITYERRFLG - Calculated parity differs from received parity bit. */
-#define TMS570_SPI_FLG_PARITYERRFLG BSP_FLD32(2)
+#define TMS570_SPI_FLG_PARITYERRFLG BSP_BIT32(2)
 
 /* field: TIMEOUTFLG - Time-out caused by nonactivation of ENA signal. */
-#define TMS570_SPI_FLG_TIMEOUTFLG BSP_FLD32(1)
+#define TMS570_SPI_FLG_TIMEOUTFLG BSP_BIT32(1)
 
 /* field: DLENERRFLG - Data-length error flag. */
-#define TMS570_SPI_FLG_DLENERRFLG BSP_FLD32(0)
+#define TMS570_SPI_FLG_DLENERRFLG BSP_BIT32(0)
 
 
-/*-----------------------TMS570_SPIPC0-----------------------*/
+/*-----------------------TMS570_SPI_PC0-----------------------*/
 /* field: SOMIFUN - Slave out, master in function. */
 #define TMS570_SPI_PC0_SOMIFUN(val) BSP_FLD32(val,24, 31)
 #define TMS570_SPI_PC0_SOMIFUN_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -192,16 +192,16 @@ typedef struct{
 #define TMS570_SPI_PC0_SIMOFUN_SET(reg,val) BSP_FLD32SET(reg, val,16, 23)
 
 /* field: SOMIFUN0 - SOMIFUN0 */
-#define TMS570_SPI_PC0_SOMIFUN0 BSP_FLD32(11)
+#define TMS570_SPI_PC0_SOMIFUN0 BSP_BIT32(11)
 
 /* field: SIMOFUN0 - Slave in, master out function. */
-#define TMS570_SPI_PC0_SIMOFUN0 BSP_FLD32(10)
+#define TMS570_SPI_PC0_SIMOFUN0 BSP_BIT32(10)
 
 /* field: CLKFUN - CLKFUN */
-#define TMS570_SPI_PC0_CLKFUN BSP_FLD32(9)
+#define TMS570_SPI_PC0_CLKFUN BSP_BIT32(9)
 
 /* field: ENAFUN - SPIENA function. */
-#define TMS570_SPI_PC0_ENAFUN BSP_FLD32(8)
+#define TMS570_SPI_PC0_ENAFUN BSP_BIT32(8)
 
 /* field: SCSFUN - SPISCSx function. */
 #define TMS570_SPI_PC0_SCSFUN(val) BSP_FLD32(val,0, 7)
@@ -209,7 +209,7 @@ typedef struct{
 #define TMS570_SPI_PC0_SCSFUN_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_SPIPC1-----------------------*/
+/*-----------------------TMS570_SPI_PC1-----------------------*/
 /* field: SOMIDIR - SPISOMIx direction. Controls the direction of SPISOMIx when used for general-purpose I/O. */
 #define TMS570_SPI_PC1_SOMIDIR(val) BSP_FLD32(val,24, 31)
 #define TMS570_SPI_PC1_SOMIDIR_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -221,16 +221,16 @@ typedef struct{
 #define TMS570_SPI_PC1_SIMODIR_SET(reg,val) BSP_FLD32SET(reg, val,16, 23)
 
 /* field: SOMIDIR0 - PISOMI0 direction. */
-#define TMS570_SPI_PC1_SOMIDIR0 BSP_FLD32(11)
+#define TMS570_SPI_PC1_SOMIDIR0 BSP_BIT32(11)
 
 /* field: SIMODIR0 - SPISIMO0 direction. */
-#define TMS570_SPI_PC1_SIMODIR0 BSP_FLD32(10)
+#define TMS570_SPI_PC1_SIMODIR0 BSP_BIT32(10)
 
 /* field: CLKDIR - SPICLK direction. */
-#define TMS570_SPI_PC1_CLKDIR BSP_FLD32(9)
+#define TMS570_SPI_PC1_CLKDIR BSP_BIT32(9)
 
 /* field: ENADIR - SPIENA direction. */
-#define TMS570_SPI_PC1_ENADIR BSP_FLD32(8)
+#define TMS570_SPI_PC1_ENADIR BSP_BIT32(8)
 
 /* field: SCSDIR - SPISCSx direction. */
 #define TMS570_SPI_PC1_SCSDIR(val) BSP_FLD32(val,0, 7)
@@ -238,7 +238,7 @@ typedef struct{
 #define TMS570_SPI_PC1_SCSDIR_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_SPIPC2-----------------------*/
+/*-----------------------TMS570_SPI_PC2-----------------------*/
 /* field: SOMIDIN - SPISOMIx data in. The value of the SPISOMIx pins. */
 #define TMS570_SPI_PC2_SOMIDIN(val) BSP_FLD32(val,24, 31)
 #define TMS570_SPI_PC2_SOMIDIN_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -250,16 +250,16 @@ typedef struct{
 #define TMS570_SPI_PC2_SIMODIN_SET(reg,val) BSP_FLD32SET(reg, val,16, 23)
 
 /* field: SOMIDIN0 - SPISOMI0 data in. The value of the SPISOMI0 pin. */
-#define TMS570_SPI_PC2_SOMIDIN0 BSP_FLD32(11)
+#define TMS570_SPI_PC2_SOMIDIN0 BSP_BIT32(11)
 
 /* field: SIMODIN0 - SPISIMO0 data in. The value of the SPISIMO0 pin. */
-#define TMS570_SPI_PC2_SIMODIN0 BSP_FLD32(10)
+#define TMS570_SPI_PC2_SIMODIN0 BSP_BIT32(10)
 
 /* field: CLKDIN - Clock data in. The value of the SPICLK pin. pin. */
-#define TMS570_SPI_PC2_CLKDIN BSP_FLD32(9)
+#define TMS570_SPI_PC2_CLKDIN BSP_BIT32(9)
 
 /* field: ENADIN - SPIENA data in. The the value of the SPIENA pin. */
-#define TMS570_SPI_PC2_ENADIN BSP_FLD32(8)
+#define TMS570_SPI_PC2_ENADIN BSP_BIT32(8)
 
 /* field: SCSDIN - SPISCSx data in. The value of the SPISCSx pin. */
 #define TMS570_SPI_PC2_SCSDIN(val) BSP_FLD32(val,0, 7)
@@ -267,7 +267,7 @@ typedef struct{
 #define TMS570_SPI_PC2_SCSDIN_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_SPIPC3-----------------------*/
+/*-----------------------TMS570_SPI_PC3-----------------------*/
 /* field: SOMIDOUT - SPISOMIx data out write. */
 #define TMS570_SPI_PC3_SOMIDOUT(val) BSP_FLD32(val,24, 31)
 #define TMS570_SPI_PC3_SOMIDOUT_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -279,16 +279,16 @@ typedef struct{
 #define TMS570_SPI_PC3_SIMODOUT_SET(reg,val) BSP_FLD32SET(reg, val,16, 23)
 
 /* field: SOMIDOUT0 - SPISOMI0 data out write. */
-#define TMS570_SPI_PC3_SOMIDOUT0 BSP_FLD32(11)
+#define TMS570_SPI_PC3_SOMIDOUT0 BSP_BIT32(11)
 
 /* field: SIMODOUT0 - SPISIMO0 data out write. */
-#define TMS570_SPI_PC3_SIMODOUT0 BSP_FLD32(10)
+#define TMS570_SPI_PC3_SIMODOUT0 BSP_BIT32(10)
 
 /* field: CLKDOUT - SPICLK data out write. */
-#define TMS570_SPI_PC3_CLKDOUT BSP_FLD32(9)
+#define TMS570_SPI_PC3_CLKDOUT BSP_BIT32(9)
 
 /* field: ENADOUT - SPIENA data out write. */
-#define TMS570_SPI_PC3_ENADOUT BSP_FLD32(8)
+#define TMS570_SPI_PC3_ENADOUT BSP_BIT32(8)
 
 /* field: SCSDOUT - SPISCSx data out write. */
 #define TMS570_SPI_PC3_SCSDOUT(val) BSP_FLD32(val,0, 7)
@@ -296,7 +296,7 @@ typedef struct{
 #define TMS570_SPI_PC3_SCSDOUT_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_SPIPC4-----------------------*/
+/*-----------------------TMS570_SPI_PC4-----------------------*/
 /* field: SOMISET - SPISOMIx data out set. */
 #define TMS570_SPI_PC4_SOMISET(val) BSP_FLD32(val,24, 31)
 #define TMS570_SPI_PC4_SOMISET_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -308,16 +308,16 @@ typedef struct{
 #define TMS570_SPI_PC4_SIMOSET_SET(reg,val) BSP_FLD32SET(reg, val,16, 23)
 
 /* field: SOMISET0 - SPISOMI0 data out set. */
-#define TMS570_SPI_PC4_SOMISET0 BSP_FLD32(11)
+#define TMS570_SPI_PC4_SOMISET0 BSP_BIT32(11)
 
 /* field: SIMOSET0 - purpose */
-#define TMS570_SPI_PC4_SIMOSET0 BSP_FLD32(10)
+#define TMS570_SPI_PC4_SIMOSET0 BSP_BIT32(10)
 
 /* field: CLKSET - SPICLK data out set. */
-#define TMS570_SPI_PC4_CLKSET BSP_FLD32(9)
+#define TMS570_SPI_PC4_CLKSET BSP_BIT32(9)
 
 /* field: ENASET - SPIENA data out set. */
-#define TMS570_SPI_PC4_ENASET BSP_FLD32(8)
+#define TMS570_SPI_PC4_ENASET BSP_BIT32(8)
 
 /* field: SCSSET - SPISCSx data out set. */
 #define TMS570_SPI_PC4_SCSSET(val) BSP_FLD32(val,0, 7)
@@ -325,7 +325,7 @@ typedef struct{
 #define TMS570_SPI_PC4_SCSSET_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_SPIPC5-----------------------*/
+/*-----------------------TMS570_SPI_PC5-----------------------*/
 /* field: SOMICLR - SPISOMIx data out clear. */
 #define TMS570_SPI_PC5_SOMICLR(val) BSP_FLD32(val,24, 31)
 #define TMS570_SPI_PC5_SOMICLR_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -337,16 +337,16 @@ typedef struct{
 #define TMS570_SPI_PC5_SIMOCLR_SET(reg,val) BSP_FLD32SET(reg, val,16, 23)
 
 /* field: SOMICLR0 - SPISOMI0 data out cleart. */
-#define TMS570_SPI_PC5_SOMICLR0 BSP_FLD32(11)
+#define TMS570_SPI_PC5_SOMICLR0 BSP_BIT32(11)
 
 /* field: SIMOCLR0 - SPISIMO0 data out clear. */
-#define TMS570_SPI_PC5_SIMOCLR0 BSP_FLD32(10)
+#define TMS570_SPI_PC5_SIMOCLR0 BSP_BIT32(10)
 
 /* field: CLKCLR - SPICLK data out clear. */
-#define TMS570_SPI_PC5_CLKCLR BSP_FLD32(9)
+#define TMS570_SPI_PC5_CLKCLR BSP_BIT32(9)
 
 /* field: ENACLR - SPIENA data out clear. */
-#define TMS570_SPI_PC5_ENACLR BSP_FLD32(8)
+#define TMS570_SPI_PC5_ENACLR BSP_BIT32(8)
 
 /* field: SCSCLR - SPISCSx data out clear. */
 #define TMS570_SPI_PC5_SCSCLR(val) BSP_FLD32(val,0, 7)
@@ -354,7 +354,7 @@ typedef struct{
 #define TMS570_SPI_PC5_SCSCLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_SPIPC6-----------------------*/
+/*-----------------------TMS570_SPI_PC6-----------------------*/
 /* field: SOMIPDR - SPISOMIx open drain enable. */
 #define TMS570_SPI_PC6_SOMIPDR(val) BSP_FLD32(val,24, 31)
 #define TMS570_SPI_PC6_SOMIPDR_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -366,16 +366,16 @@ typedef struct{
 #define TMS570_SPI_PC6_SIMOPDR_SET(reg,val) BSP_FLD32SET(reg, val,16, 23)
 
 /* field: SOMIPDR0 - SOMI0 open-drain enable. */
-#define TMS570_SPI_PC6_SOMIPDR0 BSP_FLD32(11)
+#define TMS570_SPI_PC6_SOMIPDR0 BSP_BIT32(11)
 
 /* field: SIMOPDR0 - SPISIMO0 open-drain enable. */
-#define TMS570_SPI_PC6_SIMOPDR0 BSP_FLD32(10)
+#define TMS570_SPI_PC6_SIMOPDR0 BSP_BIT32(10)
 
 /* field: CLKPDR - CLK open drain enable. */
-#define TMS570_SPI_PC6_CLKPDR BSP_FLD32(9)
+#define TMS570_SPI_PC6_CLKPDR BSP_BIT32(9)
 
 /* field: ENAPDR - SPIENA pin open drain enable. */
-#define TMS570_SPI_PC6_ENAPDR BSP_FLD32(8)
+#define TMS570_SPI_PC6_ENAPDR BSP_BIT32(8)
 
 /* field: SCSPDR - SPISCSx open drain enable. */
 #define TMS570_SPI_PC6_SCSPDR(val) BSP_FLD32(val,0, 7)
@@ -383,7 +383,7 @@ typedef struct{
 #define TMS570_SPI_PC6_SCSPDR_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_SPIPC7-----------------------*/
+/*-----------------------TMS570_SPI_PC7-----------------------*/
 /* field: SOMIDIS - SOMIx pull control enable/disable. */
 #define TMS570_SPI_PC7_SOMIDIS(val) BSP_FLD32(val,24, 31)
 #define TMS570_SPI_PC7_SOMIDIS_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -395,16 +395,16 @@ typedef struct{
 #define TMS570_SPI_PC7_SIMODIS_SET(reg,val) BSP_FLD32SET(reg, val,16, 23)
 
 /* field: SOMIPDIS0 - SPISOMI0 pull control enable/disable. */
-#define TMS570_SPI_PC7_SOMIPDIS0 BSP_FLD32(11)
+#define TMS570_SPI_PC7_SOMIPDIS0 BSP_BIT32(11)
 
 /* field: SIMOPDIS0 - SPISIMO0 pull control enable/disable. */
-#define TMS570_SPI_PC7_SIMOPDIS0 BSP_FLD32(10)
+#define TMS570_SPI_PC7_SIMOPDIS0 BSP_BIT32(10)
 
 /* field: CLKPDIS - CLK pull control enable/disable. */
-#define TMS570_SPI_PC7_CLKPDIS BSP_FLD32(9)
+#define TMS570_SPI_PC7_CLKPDIS BSP_BIT32(9)
 
 /* field: ENAPDIS - ENAPDIS ENABLE pull control enable/disable. */
-#define TMS570_SPI_PC7_ENAPDIS BSP_FLD32(8)
+#define TMS570_SPI_PC7_ENAPDIS BSP_BIT32(8)
 
 /* field: SCSPDIS - SCSx pull control enable/disable. */
 #define TMS570_SPI_PC7_SCSPDIS(val) BSP_FLD32(val,0, 7)
@@ -412,7 +412,7 @@ typedef struct{
 #define TMS570_SPI_PC7_SCSPDIS_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_SPIPC8-----------------------*/
+/*-----------------------TMS570_SPI_PC8-----------------------*/
 /* field: SOMIPSEL - SPISOMIx pull select. This bit selects the type of pull logic at the SOMIx pin. */
 #define TMS570_SPI_PC8_SOMIPSEL(val) BSP_FLD32(val,24, 31)
 #define TMS570_SPI_PC8_SOMIPSEL_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -424,16 +424,16 @@ typedef struct{
 #define TMS570_SPI_PC8_SIMOPSEL_SET(reg,val) BSP_FLD32SET(reg, val,16, 23)
 
 /* field: SOMIPSEL0 - SOMI pull select. This bit selects the type of pull logic at the SOMI pin. */
-#define TMS570_SPI_PC8_SOMIPSEL0 BSP_FLD32(11)
+#define TMS570_SPI_PC8_SOMIPSEL0 BSP_BIT32(11)
 
 /* field: SIMOPSEL0 - SPISIMO pull select. This bit selects the type of pull logic at the SPISIMO pin. */
-#define TMS570_SPI_PC8_SIMOPSEL0 BSP_FLD32(10)
+#define TMS570_SPI_PC8_SIMOPSEL0 BSP_BIT32(10)
 
 /* field: CLKPSEL - CLK pull select. This bit selects the type of pull logic at the CLK pin. */
-#define TMS570_SPI_PC8_CLKPSEL BSP_FLD32(9)
+#define TMS570_SPI_PC8_CLKPSEL BSP_BIT32(9)
 
 /* field: ENAPSEL - ENABLE pull select. This bit selects the type of pull logic at the ENABLE pin. */
-#define TMS570_SPI_PC8_ENAPSEL BSP_FLD32(8)
+#define TMS570_SPI_PC8_ENAPSEL BSP_BIT32(8)
 
 /* field: SCSPSEL - SCSx pull select. This bit selects the type of pull logic at the SCSx pin. */
 #define TMS570_SPI_PC8_SCSPSEL(val) BSP_FLD32(val,0, 7)
@@ -441,19 +441,19 @@ typedef struct{
 #define TMS570_SPI_PC8_SCSPSEL_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_SPIDAT0-----------------------*/
+/*----------------------TMS570_SPI_DAT0----------------------*/
 /* field: TXDATA - SPI transmit data. When written, these bits will be copied to the shift register if it is empty. */
 #define TMS570_SPI_DAT0_TXDATA(val) BSP_FLD32(val,0, 15)
 #define TMS570_SPI_DAT0_TXDATA_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_SPI_DAT0_TXDATA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-----------------------TMS570_SPIDAT1-----------------------*/
+/*----------------------TMS570_SPI_DAT1----------------------*/
 /* field: CSHOLD - Chip select hold mode. */
-#define TMS570_SPI_DAT1_CSHOLD BSP_FLD32(28)
+#define TMS570_SPI_DAT1_CSHOLD BSP_BIT32(28)
 
 /* field: WDEL - Enable the delay counter at the end of the current transaction. */
-#define TMS570_SPI_DAT1_WDEL BSP_FLD32(26)
+#define TMS570_SPI_DAT1_WDEL BSP_BIT32(26)
 
 /* field: DFSEL - Data word format select */
 #define TMS570_SPI_DAT1_DFSEL(val) BSP_FLD32(val,24, 25)
@@ -471,30 +471,30 @@ typedef struct{
 #define TMS570_SPI_DAT1_TXDATA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-----------------------TMS570_SPIBUF-----------------------*/
+/*-----------------------TMS570_SPI_BUF-----------------------*/
 /* field: RXEMPTY - Receive data buffer empty. */
-#define TMS570_SPI_BUF_RXEMPTY BSP_FLD32(31)
+#define TMS570_SPI_BUF_RXEMPTY BSP_BIT32(31)
 
 /* field: RXOVR - Receive data buffer overrun. */
-#define TMS570_SPI_BUF_RXOVR BSP_FLD32(30)
+#define TMS570_SPI_BUF_RXOVR BSP_BIT32(30)
 
 /* field: TXFULL - Transmit data buffer full.This flag is a read-only flag. */
-#define TMS570_SPI_BUF_TXFULL BSP_FLD32(29)
+#define TMS570_SPI_BUF_TXFULL BSP_BIT32(29)
 
 /* field: BITERR - Bit error.There was a mismatch of internal transmit data and transmitted data. */
-#define TMS570_SPI_BUF_BITERR BSP_FLD32(28)
+#define TMS570_SPI_BUF_BITERR BSP_BIT32(28)
 
 /* field: DESYNC - Desynchronization of slave device.This bit is valid in master mode only. */
-#define TMS570_SPI_BUF_DESYNC BSP_FLD32(27)
+#define TMS570_SPI_BUF_DESYNC BSP_BIT32(27)
 
 /* field: PARITYERR - Parity error.The calculated parity differs from the received parity bit. */
-#define TMS570_SPI_BUF_PARITYERR BSP_FLD32(26)
+#define TMS570_SPI_BUF_PARITYERR BSP_BIT32(26)
 
 /* field: TIMEOUT - Time-out because of non-activation of ENA pin. */
-#define TMS570_SPI_BUF_TIMEOUT BSP_FLD32(25)
+#define TMS570_SPI_BUF_TIMEOUT BSP_BIT32(25)
 
 /* field: DLENERR - Data length error flag. */
-#define TMS570_SPI_BUF_DLENERR BSP_FLD32(24)
+#define TMS570_SPI_BUF_DLENERR BSP_BIT32(24)
 
 /* field: LCSNR - control field. It contains the chip select number that was activated during the last word transfer. */
 #define TMS570_SPI_BUF_LCSNR(val) BSP_FLD32(val,16, 23)
@@ -507,14 +507,14 @@ typedef struct{
 #define TMS570_SPI_BUF_RXDATA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-----------------------TMS570_SPIEMU-----------------------*/
+/*-----------------------TMS570_SPI_EMU-----------------------*/
 /* field: EMU_RXDATA - SPI receive data. The SPI emulation register is a mirror of the SPIBUF register. */
 #define TMS570_SPI_EMU_EMU_RXDATA(val) BSP_FLD32(val,0, 15)
 #define TMS570_SPI_EMU_EMU_RXDATA_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_SPI_EMU_EMU_RXDATA_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*----------------------TMS570_SPIDELAY----------------------*/
+/*----------------------TMS570_SPI_DELAY----------------------*/
 /* field: C2TDELAY - Chip-select-active to transmit-start delay. See Figure 25-45 for an example. */
 #define TMS570_SPI_DELAY_C2TDELAY(val) BSP_FLD32(val,24, 31)
 #define TMS570_SPI_DELAY_C2TDELAY_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -536,77 +536,77 @@ typedef struct{
 #define TMS570_SPI_DELAY_C2EDELAY_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_SPIDEF-----------------------*/
+/*-----------------------TMS570_SPI_DEF-----------------------*/
 /* field: CDEF - Chip select default pattern. Master-mode only. */
 #define TMS570_SPI_DEF_CDEF(val) BSP_FLD32(val,0, 7)
 #define TMS570_SPI_DEF_CDEF_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_SPI_DEF_CDEF_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_SPIFMT0-----------------------*/
+/*----------------------TMS570_SPI_FMTx----------------------*/
 /* field: WDELAY - Delay in between transmissions for data format x (x= 0,1,2,3). */
-#define TMS570_SPI_FMT0_WDELAY(val) BSP_FLD32(val,24, 31)
-#define TMS570_SPI_FMT0_WDELAY_GET(reg) BSP_FLD32GET(reg,24, 31)
-#define TMS570_SPI_FMT0_WDELAY_SET(reg,val) BSP_FLD32SET(reg, val,24, 31)
+#define TMS570_SPI_FMTx_WDELAY(val) BSP_FLD32(val,24, 31)
+#define TMS570_SPI_FMTx_WDELAY_GET(reg) BSP_FLD32GET(reg,24, 31)
+#define TMS570_SPI_FMTx_WDELAY_SET(reg,val) BSP_FLD32SET(reg, val,24, 31)
 
 /* field: PARPOL - Parity polarity: even or odd. PARPOLx can be modified in privilege mode only. */
-#define TMS570_SPI_FMT0_PARPOL BSP_FLD32(23)
+#define TMS570_SPI_FMTx_PARPOL BSP_BIT32(23)
 
 /* field: PARITYENA - Parity enable for data format x. */
-#define TMS570_SPI_FMT0_PARITYENA BSP_FLD32(22)
+#define TMS570_SPI_FMTx_PARITYENA BSP_BIT32(22)
 
 /* field: WAITENA - The master waits for the ENA signal from slave for data format x. */
-#define TMS570_SPI_FMT0_WAITENA BSP_FLD32(21)
+#define TMS570_SPI_FMTx_WAITENA BSP_BIT32(21)
 
 /* field: SHIFTDIR - Shift direction for data format x. */
-#define TMS570_SPI_FMT0_SHIFTDIR BSP_FLD32(20)
+#define TMS570_SPI_FMTx_SHIFTDIR BSP_BIT32(20)
 
 /* field: HDUPLEX_ENAx - Half Duplex transfer mode enable for Data Format x. */
-#define TMS570_SPI_FMT0_HDUPLEX_ENAx BSP_FLD32(19)
+#define TMS570_SPI_FMTx_HDUPLEX_ENAx BSP_BIT32(19)
 
 /* field: DIS_CS_TIMERS - Disable chip-select timers for this format. */
-#define TMS570_SPI_FMT0_DIS_CS_TIMERS BSP_FLD32(18)
+#define TMS570_SPI_FMTx_DIS_CS_TIMERS BSP_BIT32(18)
 
 /* field: POLARITY - POLARITY */
-#define TMS570_SPI_FMT0_POLARITY BSP_FLD32(17)
+#define TMS570_SPI_FMTx_POLARITY BSP_BIT32(17)
 
 /* field: PHASE - SPI data format x clock delay. PHASEx defines the clock delay of data format x. */
-#define TMS570_SPI_FMT0_PHASE BSP_FLD32(16)
+#define TMS570_SPI_FMTx_PHASE BSP_BIT32(16)
 
 /* field: PRESCALE - SPI data format x prescaler. */
-#define TMS570_SPI_FMT0_PRESCALE(val) BSP_FLD32(val,8, 15)
-#define TMS570_SPI_FMT0_PRESCALE_GET(reg) BSP_FLD32GET(reg,8, 15)
-#define TMS570_SPI_FMT0_PRESCALE_SET(reg,val) BSP_FLD32SET(reg, val,8, 15)
+#define TMS570_SPI_FMTx_PRESCALE(val) BSP_FLD32(val,8, 15)
+#define TMS570_SPI_FMTx_PRESCALE_GET(reg) BSP_FLD32GET(reg,8, 15)
+#define TMS570_SPI_FMTx_PRESCALE_SET(reg,val) BSP_FLD32SET(reg, val,8, 15)
 
 /* field: CHARLEN - SPI data format x data-word length. CHARLENx defines the word length of data format x. */
-#define TMS570_SPI_FMT0_CHARLEN(val) BSP_FLD32(val,0, 4)
-#define TMS570_SPI_FMT0_CHARLEN_GET(reg) BSP_FLD32GET(reg,0, 4)
-#define TMS570_SPI_FMT0_CHARLEN_SET(reg,val) BSP_FLD32SET(reg, val,0, 4)
+#define TMS570_SPI_FMTx_CHARLEN(val) BSP_FLD32(val,0, 4)
+#define TMS570_SPI_FMTx_CHARLEN_GET(reg) BSP_FLD32GET(reg,0, 4)
+#define TMS570_SPI_FMTx_CHARLEN_SET(reg,val) BSP_FLD32SET(reg, val,0, 4)
 
 
-/*---------------------TMS570_SPIINTVECT0---------------------*/
+/*--------------------TMS570_SPI_INTVECT0--------------------*/
 /* field: INTVECT0 - INTVECT0. Interrupt vector for interrupt line INT0. */
 #define TMS570_SPI_INTVECT0_INTVECT0(val) BSP_FLD32(val,1, 5)
 #define TMS570_SPI_INTVECT0_INTVECT0_GET(reg) BSP_FLD32GET(reg,1, 5)
 #define TMS570_SPI_INTVECT0_INTVECT0_SET(reg,val) BSP_FLD32SET(reg, val,1, 5)
 
 /* field: SUSPEND0 - Transfer suspended / Transfer finished interrupt flag. */
-#define TMS570_SPI_INTVECT0_SUSPEND0 BSP_FLD32(0)
+#define TMS570_SPI_INTVECT0_SUSPEND0 BSP_BIT32(0)
 
 
-/*---------------------TMS570_SPIINTVECT1---------------------*/
+/*--------------------TMS570_SPI_INTVECT1--------------------*/
 /* field: INTVECT1 - INTVECT1. Interrupt vector for interrupt line INT1. */
 #define TMS570_SPI_INTVECT1_INTVECT1(val) BSP_FLD32(val,1, 5)
 #define TMS570_SPI_INTVECT1_INTVECT1_GET(reg) BSP_FLD32GET(reg,1, 5)
 #define TMS570_SPI_INTVECT1_INTVECT1_SET(reg,val) BSP_FLD32SET(reg, val,1, 5)
 
 /* field: SUSPEND1 - Transfer suspended / Transfer finished interrupt flag. */
-#define TMS570_SPI_INTVECT1_SUSPEND1 BSP_FLD32(0)
+#define TMS570_SPI_INTVECT1_SUSPEND1 BSP_BIT32(0)
 
 
-/*----------------------TMS570_SPIPMCTRL----------------------*/
+/*---------------------TMS570_SPI_PMCTRL---------------------*/
 /* field: MOD_CLK_POL_3 - Modulo mode SPICLK polarity. */
-#define TMS570_SPI_PMCTRL_MOD_CLK_POL_3 BSP_FLD32(29)
+#define TMS570_SPI_PMCTRL_MOD_CLK_POL_3 BSP_BIT32(29)
 
 /* field: MMODE_3 - These bits determine whether the SPI/MibSPI operates with 1, 2, 4, 5, or 6 data lines (if */
 #define TMS570_SPI_PMCTRL_MMODE_3(val) BSP_FLD32(val,26, 28)
@@ -619,7 +619,7 @@ typedef struct{
 #define TMS570_SPI_PMCTRL_PMODE_3_SET(reg,val) BSP_FLD32SET(reg, val,24, 25)
 
 /* field: MOD_CLK_POL_2 - Modulo mode SPICLK polarity. */
-#define TMS570_SPI_PMCTRL_MOD_CLK_POL_2 BSP_FLD32(21)
+#define TMS570_SPI_PMCTRL_MOD_CLK_POL_2 BSP_BIT32(21)
 
 /* field: MMODE_2 - These bits determine whether the SPI/MibSPI operates with 1, 2, 4, 5, or 6 data lines (if */
 #define TMS570_SPI_PMCTRL_MMODE_2(val) BSP_FLD32(val,18, 20)
@@ -632,7 +632,7 @@ typedef struct{
 #define TMS570_SPI_PMCTRL_PMODE_2_SET(reg,val) BSP_FLD32SET(reg, val,16, 17)
 
 /* field: MOD_CLK_POL_1 - Modulo mode SPICLK polarity. */
-#define TMS570_SPI_PMCTRL_MOD_CLK_POL_1 BSP_FLD32(13)
+#define TMS570_SPI_PMCTRL_MOD_CLK_POL_1 BSP_BIT32(13)
 
 /* field: MMODE_1 - These bits determine whether the SPI/MibSPI operates with 1, 2, 4, 5, or 6 data lines (if */
 #define TMS570_SPI_PMCTRL_MMODE_1(val) BSP_FLD32(val,10, 12)
@@ -645,7 +645,7 @@ typedef struct{
 #define TMS570_SPI_PMCTRL_PMODE_1_SET(reg,val) BSP_FLD32SET(reg, val,8, 9)
 
 /* field: MOD_CLK_POL_0 - Modulo mode SPICLK polarity. */
-#define TMS570_SPI_PMCTRL_MOD_CLK_POL_0 BSP_FLD32(5)
+#define TMS570_SPI_PMCTRL_MOD_CLK_POL_0 BSP_BIT32(5)
 
 /* field: MMODE_0 - These bits determine whether the SPI/MibSPI operates with 1, 2, 4, 5, or 6 data lines (if */
 #define TMS570_SPI_PMCTRL_MMODE_0(val) BSP_FLD32(val,2, 4)
@@ -658,15 +658,15 @@ typedef struct{
 #define TMS570_SPI_PMCTRL_PMODE_0_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*---------------------TMS570_SPIMIBSPIE---------------------*/
+/*---------------------TMS570_SPI_MIBSPIE---------------------*/
 /* field: RXRAM_ACCESS - Receive-RAM access control. */
-#define TMS570_SPI_MIBSPIE_RXRAM_ACCESS BSP_FLD32(16)
+#define TMS570_SPI_MIBSPIE_RXRAM_ACCESS BSP_BIT32(16)
 
 /* field: MSPIENA - Multi-buffer mode enable. */
-#define TMS570_SPI_MIBSPIE_MSPIENA BSP_FLD32(0)
+#define TMS570_SPI_MIBSPIE_MSPIENA BSP_BIT32(0)
 
 
-/*---------------------TMS570_SPITGITENST---------------------*/
+/*--------------------TMS570_SPI_TGITENST--------------------*/
 /* field: SET_INTENRDY - TG interrupt set (enable) when transfer finished. */
 #define TMS570_SPI_TGITENST_SET_INTENRDY(val) BSP_FLD32(val,16, 31)
 #define TMS570_SPI_TGITENST_SET_INTENRDY_GET(reg) BSP_FLD32GET(reg,16, 31)
@@ -678,7 +678,7 @@ typedef struct{
 #define TMS570_SPI_TGITENST_SET_INTENSUS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_SPITGITENCR---------------------*/
+/*--------------------TMS570_SPI_TGITENCR--------------------*/
 /* field: CLR_INTENRDY - TG interrupt clear (disabled) when transfer finished. */
 #define TMS570_SPI_TGITENCR_CLR_INTENRDY(val) BSP_FLD32(val,16, 31)
 #define TMS570_SPI_TGITENCR_CLR_INTENRDY_GET(reg) BSP_FLD32GET(reg,16, 31)
@@ -690,7 +690,7 @@ typedef struct{
 #define TMS570_SPI_TGITENCR_CLR_INTENSUS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_SPITGITLVST---------------------*/
+/*--------------------TMS570_SPI_TGITLVST--------------------*/
 /* field: SET_INTLVLRDY - Transfer-group completed interrupt level set. */
 #define TMS570_SPI_TGITLVST_SET_INTLVLRDY(val) BSP_FLD32(val,16, 31)
 #define TMS570_SPI_TGITLVST_SET_INTLVLRDY_GET(reg) BSP_FLD32GET(reg,16, 31)
@@ -702,7 +702,7 @@ typedef struct{
 #define TMS570_SPI_TGITLVST_SET_INTLVLSUS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_SPITGITLVCR---------------------*/
+/*--------------------TMS570_SPI_TGITLVCR--------------------*/
 /* field: CLR_INTLVLRDY - Transfer-group completed interrupt level clear. */
 #define TMS570_SPI_TGITLVCR_CLR_INTLVLRDY(val) BSP_FLD32(val,16, 31)
 #define TMS570_SPI_TGITLVCR_CLR_INTLVLRDY_GET(reg) BSP_FLD32GET(reg,16, 31)
@@ -714,7 +714,7 @@ typedef struct{
 #define TMS570_SPI_TGITLVCR_CLR_INTLVLSUS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_SPITGINTFLG---------------------*/
+/*--------------------TMS570_SPI_TGINTFLG--------------------*/
 /* field: INTFLGRDY - Transfer-group interrupt flag for a transfer-completed interrupt. */
 #define TMS570_SPI_TGINTFLG_INTFLGRDY(val) BSP_FLD32(val,16, 31)
 #define TMS570_SPI_TGINTFLG_INTFLGRDY_GET(reg) BSP_FLD32GET(reg,16, 31)
@@ -726,12 +726,12 @@ typedef struct{
 #define TMS570_SPI_TGINTFLG_INTFLGSUS_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_SPITICKCNT---------------------*/
+/*---------------------TMS570_SPI_TICKCNT---------------------*/
 /* field: TICKENA - Tick counter enable. */
-#define TMS570_SPI_TICKCNT_TICKENA BSP_FLD32(31)
+#define TMS570_SPI_TICKCNT_TICKENA BSP_BIT32(31)
 
 /* field: RELOAD - Pre-load the tick counter. */
-#define TMS570_SPI_TICKCNT_RELOAD BSP_FLD32(30)
+#define TMS570_SPI_TICKCNT_RELOAD BSP_BIT32(30)
 
 /* field: CLKCTRL - Tick counter clock source control. */
 #define TMS570_SPI_TICKCNT_CLKCTRL(val) BSP_FLD32(val,28, 29)
@@ -744,7 +744,7 @@ typedef struct{
 #define TMS570_SPI_TICKCNT_TICKVALUE_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_SPILTGPEND---------------------*/
+/*---------------------TMS570_SPI_LTGPEND---------------------*/
 /* field: TG_IN_SERVICE - The TG number currently being serviced by the sequencer. */
 #define TMS570_SPI_LTGPEND_TG_IN_SERVICE(val) BSP_FLD32(val,24, 28)
 #define TMS570_SPI_LTGPEND_TG_IN_SERVICE_GET(reg) BSP_FLD32GET(reg,24, 28)
@@ -756,23 +756,23 @@ typedef struct{
 #define TMS570_SPI_LTGPEND_LPEND_SET(reg,val) BSP_FLD32SET(reg, val,8, 14)
 
 
-/*----------------------TMS570_SPITGCTRL----------------------*/
+/*---------------------TMS570_SPI_TGCTRL---------------------*/
 /* field: TGENA - TGx enable. */
-#define TMS570_SPI_TGCTRL_TGENA BSP_FLD32(31)
+#define TMS570_SPI_TGCTRL_TGENA BSP_BIT32(31)
 
 /* field: ONESHOTx - Single transfer for TGx. */
-#define TMS570_SPI_TGCTRL_ONESHOTx BSP_FLD32(30)
+#define TMS570_SPI_TGCTRL_ONESHOTx BSP_BIT32(30)
 
 /* field: PRSTx - TGx pointer reset mode. Configures the way to resolve trigger events during an ongoing transfer. */
-#define TMS570_SPI_TGCTRL_PRSTx BSP_FLD32(29)
+#define TMS570_SPI_TGCTRL_PRSTx BSP_BIT32(29)
 
 /* field: TGTDx - TG triggered. */
-#define TMS570_SPI_TGCTRL_TGTDx BSP_FLD32(28)
+#define TMS570_SPI_TGCTRL_TGTDx BSP_BIT32(28)
 
 
-/*---------------------TMS570_SPIDMACTRL---------------------*/
+/*---------------------TMS570_SPI_DMACTRL---------------------*/
 /* field: ONESHOT - Auto-disable of DMA channel after ICOUNT+1 transfers. */
-#define TMS570_SPI_DMACTRL_ONESHOT BSP_FLD32(31)
+#define TMS570_SPI_DMACTRL_ONESHOT BSP_BIT32(31)
 
 /* field: BUFIDx - Buffer utilized for DMA transfer. */
 #define TMS570_SPI_DMACTRL_BUFIDx(val) BSP_FLD32(val,24, 30)
@@ -790,13 +790,13 @@ typedef struct{
 #define TMS570_SPI_DMACTRL_TXDMA_MAPx_SET(reg,val) BSP_FLD32SET(reg, val,16, 19)
 
 /* field: RXDMAENAx - Receive data DMA channel enable. */
-#define TMS570_SPI_DMACTRL_RXDMAENAx BSP_FLD32(15)
+#define TMS570_SPI_DMACTRL_RXDMAENAx BSP_BIT32(15)
 
 /* field: TXDAMENAx - Transmit data DMA channel enable. */
-#define TMS570_SPI_DMACTRL_TXDAMENAx BSP_FLD32(14)
+#define TMS570_SPI_DMACTRL_TXDAMENAx BSP_BIT32(14)
 
 /* field: NOBRKx - Non-interleaved DMA block transfer. This bit is available in master mode only. */
-#define TMS570_SPI_DMACTRL_NOBRKx BSP_FLD32(13)
+#define TMS570_SPI_DMACTRL_NOBRKx BSP_BIT32(13)
 
 /* field: ICOUNTx - Initial count of DMA transfers. */
 #define TMS570_SPI_DMACTRL_ICOUNTx(val) BSP_FLD32(val,8, 12)
@@ -804,7 +804,7 @@ typedef struct{
 #define TMS570_SPI_DMACTRL_ICOUNTx_SET(reg,val) BSP_FLD32SET(reg, val,8, 12)
 
 /* field: COUNT_BIT17x - The 17th bit of the COUNT field of DMAxCOUNT register. */
-#define TMS570_SPI_DMACTRL_COUNT_BIT17x BSP_FLD32(6)
+#define TMS570_SPI_DMACTRL_COUNT_BIT17x BSP_BIT32(6)
 
 /* field: COUNTx - Actual number of remaining DMA transfers. */
 #define TMS570_SPI_DMACTRL_COUNTx(val) BSP_FLD32(val,0, 5)
@@ -812,7 +812,7 @@ typedef struct{
 #define TMS570_SPI_DMACTRL_COUNTx_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*---------------------TMS570_SPIDMACOUNT---------------------*/
+/*--------------------TMS570_SPI_DMACOUNT--------------------*/
 /* field: ICOUNTx - Every time COUNTx hits zero, it is reloaded with ICOUNTx. */
 #define TMS570_SPI_DMACOUNT_ICOUNTx(val) BSP_FLD32(val,16, 31)
 #define TMS570_SPI_DMACOUNT_ICOUNTx_GET(reg) BSP_FLD32GET(reg,16, 31)
@@ -824,14 +824,14 @@ typedef struct{
 #define TMS570_SPI_DMACOUNT_COUNTx_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_SPIDMACNTLEN--------------------*/
+/*--------------------TMS570_SPI_DMACNTLEN--------------------*/
 /* field: LARGE_COUNT - Select either the 16-bit DMAxCOUNT counters or the smaller counters in DMAxCTRL. */
-#define TMS570_SPI_DMACNTLEN_LARGE_COUNT BSP_FLD32(0)
+#define TMS570_SPI_DMACNTLEN_LARGE_COUNT BSP_BIT32(0)
 
 
-/*---------------------TMS570_SPIUERRCTRL---------------------*/
+/*--------------------TMS570_SPI_UERRCTRL--------------------*/
 /* field: PTESTEN - Parity memory test enable. */
-#define TMS570_SPI_UERRCTRL_PTESTEN BSP_FLD32(8)
+#define TMS570_SPI_UERRCTRL_PTESTEN BSP_BIT32(8)
 
 /* field: EDEN - Error detection enable. These bits enable parity error detection. */
 #define TMS570_SPI_UERRCTRL_EDEN(val) BSP_FLD32(val,0, 3)
@@ -839,53 +839,53 @@ typedef struct{
 #define TMS570_SPI_UERRCTRL_EDEN_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*---------------------TMS570_SPIUERRSTAT---------------------*/
+/*--------------------TMS570_SPI_UERRSTAT--------------------*/
 /* field: EDFLG1 - RXRAM. */
-#define TMS570_SPI_UERRSTAT_EDFLG1 BSP_FLD32(1)
+#define TMS570_SPI_UERRSTAT_EDFLG1 BSP_BIT32(1)
 
 /* field: EDFLG0 - Uncorrectable parity error detection flag. */
-#define TMS570_SPI_UERRSTAT_EDFLG0 BSP_FLD32(0)
+#define TMS570_SPI_UERRSTAT_EDFLG0 BSP_BIT32(0)
 
 
-/*--------------------TMS570_SPIUERRADDRRX--------------------*/
+/*-------------------TMS570_SPI_UERRADDRRX-------------------*/
 /* field: OVERADDR1 - Uncorrectable parity error address for RXRAM. */
 #define TMS570_SPI_UERRADDRRX_OVERADDR1(val) BSP_FLD32(val,0, 9)
 #define TMS570_SPI_UERRADDRRX_OVERADDR1_GET(reg) BSP_FLD32GET(reg,0, 9)
 #define TMS570_SPI_UERRADDRRX_OVERADDR1_SET(reg,val) BSP_FLD32SET(reg, val,0, 9)
 
 
-/*--------------------TMS570_SPIUERRADDRTX--------------------*/
+/*-------------------TMS570_SPI_UERRADDRTX-------------------*/
 /* field: UERRADDR0 - a parity error is generated while reading from TXRAM. */
 #define TMS570_SPI_UERRADDRTX_UERRADDR0(val) BSP_FLD32(val,0, 8)
 #define TMS570_SPI_UERRADDRTX_UERRADDR0_GET(reg) BSP_FLD32GET(reg,0, 8)
 #define TMS570_SPI_UERRADDRTX_UERRADDR0_SET(reg,val) BSP_FLD32SET(reg, val,0, 8)
 
 
-/*-----------------TMS570_SPIRXOVRN_BUF_ADDR-----------------*/
+/*-----------------TMS570_SPI_RXOVRN_BUF_ADDR-----------------*/
 /* field: RXOVRN_BUF_ADDR - Address in RXRAM at which an overwrite occurred. */
 #define TMS570_SPI_RXOVRN_BUF_ADDR_RXOVRN_BUF_ADDR(val) BSP_FLD32(val,0, 9)
 #define TMS570_SPI_RXOVRN_BUF_ADDR_RXOVRN_BUF_ADDR_GET(reg) BSP_FLD32GET(reg,0, 9)
 #define TMS570_SPI_RXOVRN_BUF_ADDR_RXOVRN_BUF_ADDR_SET(reg,val) BSP_FLD32SET(reg, val,0, 9)
 
 
-/*-------------------TMS570_SPIIOLPBKTSTCR-------------------*/
+/*-------------------TMS570_SPI_IOLPBKTSTCR-------------------*/
 /* field: SCS_FAIL_FLG - Bit indicating a failure on SPISCS pin compare during analog loopback. */
-#define TMS570_SPI_IOLPBKTSTCR_SCS_FAIL_FLG BSP_FLD32(24)
+#define TMS570_SPI_IOLPBKTSTCR_SCS_FAIL_FLG BSP_BIT32(24)
 
 /* field: CTRL_BITERR - Controls inducing of BITERR during I/O loopback test mode. */
-#define TMS570_SPI_IOLPBKTSTCR_CTRL_BITERR BSP_FLD32(20)
+#define TMS570_SPI_IOLPBKTSTCR_CTRL_BITERR BSP_BIT32(20)
 
 /* field: CTRL_DESYNC - Controls inducing of the desync error during I/O loopback test mode. */
-#define TMS570_SPI_IOLPBKTSTCR_CTRL_DESYNC BSP_FLD32(19)
+#define TMS570_SPI_IOLPBKTSTCR_CTRL_DESYNC BSP_BIT32(19)
 
 /* field: CTRL_PARERR - Controls inducing of the parity errors during I/O loopback test mode. */
-#define TMS570_SPI_IOLPBKTSTCR_CTRL_PARERR BSP_FLD32(18)
+#define TMS570_SPI_IOLPBKTSTCR_CTRL_PARERR BSP_BIT32(18)
 
 /* field: CTRL_TIMEOUT - Controls inducing of the timeout error during I/O loopback test mode. */
-#define TMS570_SPI_IOLPBKTSTCR_CTRL_TIMEOUT BSP_FLD32(17)
+#define TMS570_SPI_IOLPBKTSTCR_CTRL_TIMEOUT BSP_BIT32(17)
 
 /* field: CTRL_DLENERR - Controls inducing of the data length error during I/O loopback test mode. */
-#define TMS570_SPI_IOLPBKTSTCR_CTRL_DLENERR BSP_FLD32(16)
+#define TMS570_SPI_IOLPBKTSTCR_CTRL_DLENERR BSP_BIT32(16)
 
 /* field: IOLPBKSTENA - Module I/O loopback test enable key. */
 #define TMS570_SPI_IOLPBKTSTCR_IOLPBKSTENA(val) BSP_FLD32(val,8, 11)
@@ -898,21 +898,21 @@ typedef struct{
 #define TMS570_SPI_IOLPBKTSTCR_ERR_SCS_PIN_SET(reg,val) BSP_FLD32SET(reg, val,3, 5)
 
 /* field: CTRL_SCS_PIN - Enable/disable the injection of an error on the SPISCS[3:0] pins. */
-#define TMS570_SPI_IOLPBKTSTCR_CTRL_SCS_PIN BSP_FLD32(2)
+#define TMS570_SPI_IOLPBKTSTCR_CTRL_SCS_PIN BSP_BIT32(2)
 
 /* field: LPBK_TYPE - Module I/O loopback type (analog/digital). */
-#define TMS570_SPI_IOLPBKTSTCR_LPBK_TYPE BSP_FLD32(1)
+#define TMS570_SPI_IOLPBKTSTCR_LPBK_TYPE BSP_BIT32(1)
 
 /* field: RXP_ENA - Enable analog loopback through the receive pin. */
-#define TMS570_SPI_IOLPBKTSTCR_RXP_ENA BSP_FLD32(0)
+#define TMS570_SPI_IOLPBKTSTCR_RXP_ENA BSP_BIT32(0)
 
 
-/*------------------TMS570_SPIEXT_PRESCALE1------------------*/
-/* field: EPRESCALE_FMT1 - EPRESCALE_FMT1. Extended Prescale value for SPIFMT1. */
-#define TMS570_SPI_EXT_PRESCALE1_EPRESCALE_FMT1(val) BSP_FLD32(val,16, 26)
-#define TMS570_SPI_EXT_PRESCALE1_EPRESCALE_FMT1_GET(reg) BSP_FLD32GET(reg,16, 26)
-#define TMS570_SPI_EXT_PRESCALE1_EPRESCALE_FMT1_SET(reg,val) BSP_FLD32SET(reg, val,16, 26)
+/*------------------TMS570_SPI_EXT_PRESCALEx------------------*/
+/* field: EPRESCALE_FMTx - EPRESCALE_FMTx. Extended Prescale value for SPIFMTx. */
+#define TMS570_SPI_EXT_PRESCALEx_EPRESCALE_FMTx(val) BSP_FLD32(val,16, 26)
+#define TMS570_SPI_EXT_PRESCALEx_EPRESCALE_FMTx_GET(reg) BSP_FLD32GET(reg,16, 26)
+#define TMS570_SPI_EXT_PRESCALEx_EPRESCALE_FMTx_SET(reg,val) BSP_FLD32SET(reg, val,16, 26)
 
 
 
-#endif /* LIBBSP_ARM_tms570_SPI */
+#endif /* LIBBSP_ARM_TMS570_SPI */

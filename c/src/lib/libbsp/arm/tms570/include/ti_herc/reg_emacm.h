@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_EMACM
-#define LIBBSP_ARM_tms570_EMACM
+#ifndef LIBBSP_ARM_TMS570_EMACM
+#define LIBBSP_ARM_TMS570_EMACM
 
 #include <bsp/utility.h>
 
@@ -102,160 +102,154 @@ typedef struct{
 } tms570_emacm_t;
 
 
-/*--------------------TMS570_EMACMTXREVID--------------------*/
+/*--------------------TMS570_EMACM_TXREVID--------------------*/
 /* field: TXREV - Transmit module revision */
-#define TMS570_EMACM_TXREVID_TXREV(val) BSP_FLD32(val,0, 31)
-#define TMS570_EMACM_TXREVID_TXREV_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_EMACM_TXREVID_TXREV_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_EMACMTXCONTROL-------------------*/
+/*-------------------TMS570_EMACM_TXCONTROL-------------------*/
 /* field: TXEN - Transmit enable */
-#define TMS570_EMACM_TXCONTROL_TXEN BSP_FLD32(0)
+#define TMS570_EMACM_TXCONTROL_TXEN BSP_BIT32(0)
 
 
-/*-------------------TMS570_EMACMTXTEARDOWN-------------------*/
+/*------------------TMS570_EMACM_TXTEARDOWN------------------*/
 /* field: TXTDNCH - Transmit teardown channel. */
 #define TMS570_EMACM_TXTEARDOWN_TXTDNCH(val) BSP_FLD32(val,0, 2)
 #define TMS570_EMACM_TXTEARDOWN_TXTDNCH_GET(reg) BSP_FLD32GET(reg,0, 2)
 #define TMS570_EMACM_TXTEARDOWN_TXTDNCH_SET(reg,val) BSP_FLD32SET(reg, val,0, 2)
 
 
-/*--------------------TMS570_EMACMRXREVID--------------------*/
+/*--------------------TMS570_EMACM_RXREVID--------------------*/
 /* field: RXREV - Receive module revision */
-#define TMS570_EMACM_RXREVID_RXREV(val) BSP_FLD32(val,0, 31)
-#define TMS570_EMACM_RXREVID_RXREV_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_EMACM_RXREVID_RXREV_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*-------------------TMS570_EMACMRXCONTROL-------------------*/
+/*-------------------TMS570_EMACM_RXCONTROL-------------------*/
 /* field: RXEN - Receive enable */
-#define TMS570_EMACM_RXCONTROL_RXEN BSP_FLD32(0)
+#define TMS570_EMACM_RXCONTROL_RXEN BSP_BIT32(0)
 
 
-/*-------------------TMS570_EMACMRXTEARDOWN-------------------*/
+/*------------------TMS570_EMACM_RXTEARDOWN------------------*/
 /* field: RXTDNCH - Receive teardown channel. */
 #define TMS570_EMACM_RXTEARDOWN_RXTDNCH(val) BSP_FLD32(val,0, 2)
 #define TMS570_EMACM_RXTEARDOWN_RXTDNCH_GET(reg) BSP_FLD32GET(reg,0, 2)
 #define TMS570_EMACM_RXTEARDOWN_RXTDNCH_SET(reg,val) BSP_FLD32SET(reg, val,0, 2)
 
 
-/*------------------TMS570_EMACMTXINTSTATRAW------------------*/
+/*-----------------TMS570_EMACM_TXINTSTATRAW-----------------*/
 /* field: TX7PEND - TX7PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_TXINTSTATRAW_TX7PEND BSP_FLD32(7)
+#define TMS570_EMACM_TXINTSTATRAW_TX7PEND BSP_BIT32(7)
 
 /* field: TX6PEND - TX6PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_TXINTSTATRAW_TX6PEND BSP_FLD32(6)
+#define TMS570_EMACM_TXINTSTATRAW_TX6PEND BSP_BIT32(6)
 
 /* field: TX5PEND - TX5PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_TXINTSTATRAW_TX5PEND BSP_FLD32(5)
+#define TMS570_EMACM_TXINTSTATRAW_TX5PEND BSP_BIT32(5)
 
 /* field: TX4PEND - X4PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_TXINTSTATRAW_TX4PEND BSP_FLD32(4)
+#define TMS570_EMACM_TXINTSTATRAW_TX4PEND BSP_BIT32(4)
 
 /* field: TX3PEND - TX3PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_TXINTSTATRAW_TX3PEND BSP_FLD32(3)
+#define TMS570_EMACM_TXINTSTATRAW_TX3PEND BSP_BIT32(3)
 
 /* field: TX2PEND - TX2PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_TXINTSTATRAW_TX2PEND BSP_FLD32(2)
+#define TMS570_EMACM_TXINTSTATRAW_TX2PEND BSP_BIT32(2)
 
 /* field: TX1PEND - TX1PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_TXINTSTATRAW_TX1PEND BSP_FLD32(1)
+#define TMS570_EMACM_TXINTSTATRAW_TX1PEND BSP_BIT32(1)
 
 /* field: TX0PEND - TX0PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_TXINTSTATRAW_TX0PEND BSP_FLD32(0)
+#define TMS570_EMACM_TXINTSTATRAW_TX0PEND BSP_BIT32(0)
 
 
-/*----------------TMS570_EMACMTXINTSTATMASKED----------------*/
+/*----------------TMS570_EMACM_TXINTSTATMASKED----------------*/
 /* field: TX7PEND - TX7PEND masked interrupt read */
-#define TMS570_EMACM_TXINTSTATMASKED_TX7PEND BSP_FLD32(7)
+#define TMS570_EMACM_TXINTSTATMASKED_TX7PEND BSP_BIT32(7)
 
 /* field: TX6PEND - TX6PEND masked interrupt read */
-#define TMS570_EMACM_TXINTSTATMASKED_TX6PEND BSP_FLD32(6)
+#define TMS570_EMACM_TXINTSTATMASKED_TX6PEND BSP_BIT32(6)
 
 /* field: TX5PEND - TX5PEND masked interrupt read */
-#define TMS570_EMACM_TXINTSTATMASKED_TX5PEND BSP_FLD32(5)
+#define TMS570_EMACM_TXINTSTATMASKED_TX5PEND BSP_BIT32(5)
 
 /* field: TX4PEND - TX4PEND masked interrupt read */
-#define TMS570_EMACM_TXINTSTATMASKED_TX4PEND BSP_FLD32(4)
+#define TMS570_EMACM_TXINTSTATMASKED_TX4PEND BSP_BIT32(4)
 
 /* field: TX3PEND - TX3PEND masked interrupt read */
-#define TMS570_EMACM_TXINTSTATMASKED_TX3PEND BSP_FLD32(3)
+#define TMS570_EMACM_TXINTSTATMASKED_TX3PEND BSP_BIT32(3)
 
 /* field: TX2PEND - TX2PEND masked interrupt read */
-#define TMS570_EMACM_TXINTSTATMASKED_TX2PEND BSP_FLD32(2)
+#define TMS570_EMACM_TXINTSTATMASKED_TX2PEND BSP_BIT32(2)
 
 /* field: TX1PEND - TX1PEND masked interrupt read */
-#define TMS570_EMACM_TXINTSTATMASKED_TX1PEND BSP_FLD32(1)
+#define TMS570_EMACM_TXINTSTATMASKED_TX1PEND BSP_BIT32(1)
 
 /* field: TX0PEND - TX0PEND masked interrupt read */
-#define TMS570_EMACM_TXINTSTATMASKED_TX0PEND BSP_FLD32(0)
+#define TMS570_EMACM_TXINTSTATMASKED_TX0PEND BSP_BIT32(0)
 
 
-/*------------------TMS570_EMACMTXINTMASKSET------------------*/
+/*-----------------TMS570_EMACM_TXINTMASKSET-----------------*/
 /* field: TX7MASK - Transmit channel 7 interrupt mask set bit. Write 1 to enable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKSET_TX7MASK BSP_FLD32(7)
+#define TMS570_EMACM_TXINTMASKSET_TX7MASK BSP_BIT32(7)
 
 /* field: TX6MASK - Transmit channel 6 interrupt mask set bit. Write 1 to enable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKSET_TX6MASK BSP_FLD32(6)
+#define TMS570_EMACM_TXINTMASKSET_TX6MASK BSP_BIT32(6)
 
 /* field: TX5MASK - Transmit channel 5 interrupt mask set bit. Write 1 to enable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKSET_TX5MASK BSP_FLD32(5)
+#define TMS570_EMACM_TXINTMASKSET_TX5MASK BSP_BIT32(5)
 
 /* field: TX4MASK - Transmit channel 4 interrupt mask set bit. Write 1 to enable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKSET_TX4MASK BSP_FLD32(4)
+#define TMS570_EMACM_TXINTMASKSET_TX4MASK BSP_BIT32(4)
 
 /* field: TX3MASK - Transmit channel 3 interrupt mask set bit. Write 1 to enable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKSET_TX3MASK BSP_FLD32(3)
+#define TMS570_EMACM_TXINTMASKSET_TX3MASK BSP_BIT32(3)
 
 /* field: TX2MASK - Transmit channel 2 interrupt mask set bit. Write 1 to enable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKSET_TX2MASK BSP_FLD32(2)
+#define TMS570_EMACM_TXINTMASKSET_TX2MASK BSP_BIT32(2)
 
 /* field: TX1MASK - Transmit channel 1 interrupt mask set bit. Write 1 to enable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKSET_TX1MASK BSP_FLD32(1)
+#define TMS570_EMACM_TXINTMASKSET_TX1MASK BSP_BIT32(1)
 
 /* field: TX0MASK - Transmit channel 0 interrupt mask set bit. Write 1 to enable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKSET_TX0MASK BSP_FLD32(0)
+#define TMS570_EMACM_TXINTMASKSET_TX0MASK BSP_BIT32(0)
 
 
-/*-----------------TMS570_EMACMTXINTMASKCLEAR-----------------*/
+/*----------------TMS570_EMACM_TXINTMASKCLEAR----------------*/
 /* field: TX7MASK - Transmit channel 7 interrupt mask clear bit. Write 1 to disable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKCLEAR_TX7MASK BSP_FLD32(7)
+#define TMS570_EMACM_TXINTMASKCLEAR_TX7MASK BSP_BIT32(7)
 
 /* field: TX6MASK - Transmit channel 6 interrupt mask clear bit. Write 1 to disable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKCLEAR_TX6MASK BSP_FLD32(6)
+#define TMS570_EMACM_TXINTMASKCLEAR_TX6MASK BSP_BIT32(6)
 
 /* field: TX5MASK - Transmit channel 5 interrupt mask clear bit. Write 1 to disable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKCLEAR_TX5MASK BSP_FLD32(5)
+#define TMS570_EMACM_TXINTMASKCLEAR_TX5MASK BSP_BIT32(5)
 
 /* field: TX4MASK - Transmit channel 4 interrupt mask clear bit. Write 1 to disable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKCLEAR_TX4MASK BSP_FLD32(4)
+#define TMS570_EMACM_TXINTMASKCLEAR_TX4MASK BSP_BIT32(4)
 
 /* field: TX3MASK - Transmit channel 3 interrupt mask clear bit. Write 1 to disable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKCLEAR_TX3MASK BSP_FLD32(3)
+#define TMS570_EMACM_TXINTMASKCLEAR_TX3MASK BSP_BIT32(3)
 
 /* field: TX2MASK - Transmit channel 2 interrupt mask clear bit. Write 1 to disable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKCLEAR_TX2MASK BSP_FLD32(2)
+#define TMS570_EMACM_TXINTMASKCLEAR_TX2MASK BSP_BIT32(2)
 
 /* field: TX1MASK - Transmit channel 1 interrupt mask clear bit. Write 1 to disable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKCLEAR_TX1MASK BSP_FLD32(1)
+#define TMS570_EMACM_TXINTMASKCLEAR_TX1MASK BSP_BIT32(1)
 
 /* field: TX0MASK - Transmit channel 0 interrupt mask clear bit. Write 1 to disable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_TXINTMASKCLEAR_TX0MASK BSP_FLD32(0)
+#define TMS570_EMACM_TXINTMASKCLEAR_TX0MASK BSP_BIT32(0)
 
 
-/*------------------TMS570_EMACMMACINVECTOR------------------*/
+/*------------------TMS570_EMACM_MACINVECTOR------------------*/
 /* field: STATPEND - EMAC module statistics interrupt (STATPEND) pending status bit */
-#define TMS570_EMACM_MACINVECTOR_STATPEND BSP_FLD32(27)
+#define TMS570_EMACM_MACINVECTOR_STATPEND BSP_BIT32(27)
 
 /* field: HOSTPEND - EMAC module host error interrupt (HOSTPEND) pending status bit */
-#define TMS570_EMACM_MACINVECTOR_HOSTPEND BSP_FLD32(26)
+#define TMS570_EMACM_MACINVECTOR_HOSTPEND BSP_BIT32(26)
 
 /* field: LINKINT0 - MDIO module USERPHYSEL0 (LINKINT0) status bit */
-#define TMS570_EMACM_MACINVECTOR_LINKINT0 BSP_FLD32(25)
+#define TMS570_EMACM_MACINVECTOR_LINKINT0 BSP_BIT32(25)
 
 /* field: USERINT0 - MDIO module USERACCESS0 (USERINT0) status bit */
-#define TMS570_EMACM_MACINVECTOR_USERINT0 BSP_FLD32(24)
+#define TMS570_EMACM_MACINVECTOR_USERINT0 BSP_BIT32(24)
 
 /* field: TXPEND - Transmit channels 0-7 interrupt (TXnPEND) pending status. Bit 16 is TX0PEND. */
 #define TMS570_EMACM_MACINVECTOR_TXPEND(val) BSP_FLD32(val,16, 23)
@@ -273,266 +267,266 @@ typedef struct{
 #define TMS570_EMACM_MACINVECTOR_RXPEND_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*------------------TMS570_EMACMMACEOIVECTOR------------------*/
+/*-----------------TMS570_EMACM_MACEOIVECTOR-----------------*/
 /* field: INTVECT - Acknowledge EMAC Control Module Interrupts */
 #define TMS570_EMACM_MACEOIVECTOR_INTVECT(val) BSP_FLD32(val,0, 4)
 #define TMS570_EMACM_MACEOIVECTOR_INTVECT_GET(reg) BSP_FLD32GET(reg,0, 4)
 #define TMS570_EMACM_MACEOIVECTOR_INTVECT_SET(reg,val) BSP_FLD32SET(reg, val,0, 4)
 
 
-/*------------------TMS570_EMACMRXINTSTATRAW------------------*/
+/*-----------------TMS570_EMACM_RXINTSTATRAW-----------------*/
 /* field: RX7THRESHPEND - RX7THRESHPEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX7THRESHPEND BSP_FLD32(15)
+#define TMS570_EMACM_RXINTSTATRAW_RX7THRESHPEND BSP_BIT32(15)
 
 /* field: RX6THRESHPEND - RX6THRESHPEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX6THRESHPEND BSP_FLD32(14)
+#define TMS570_EMACM_RXINTSTATRAW_RX6THRESHPEND BSP_BIT32(14)
 
 /* field: RX5THRESHPEND - RX5THRESHPEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX5THRESHPEND BSP_FLD32(13)
+#define TMS570_EMACM_RXINTSTATRAW_RX5THRESHPEND BSP_BIT32(13)
 
 /* field: RX4THRESHPEND - RX4THRESHPEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX4THRESHPEND BSP_FLD32(12)
+#define TMS570_EMACM_RXINTSTATRAW_RX4THRESHPEND BSP_BIT32(12)
 
 /* field: RX3THRESHPEND - RX3THRESHPEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX3THRESHPEND BSP_FLD32(11)
+#define TMS570_EMACM_RXINTSTATRAW_RX3THRESHPEND BSP_BIT32(11)
 
 /* field: RX2THRESHPEND - RX2THRESHPEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX2THRESHPEND BSP_FLD32(10)
+#define TMS570_EMACM_RXINTSTATRAW_RX2THRESHPEND BSP_BIT32(10)
 
 /* field: RX1THRESHPEND - RX1THRESHPEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX1THRESHPEND BSP_FLD32(9)
+#define TMS570_EMACM_RXINTSTATRAW_RX1THRESHPEND BSP_BIT32(9)
 
 /* field: RX0THRESHPEND - RX0THRESHPEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX0THRESHPEND BSP_FLD32(8)
+#define TMS570_EMACM_RXINTSTATRAW_RX0THRESHPEND BSP_BIT32(8)
 
 /* field: RX7PEND - RX7PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX7PEND BSP_FLD32(7)
+#define TMS570_EMACM_RXINTSTATRAW_RX7PEND BSP_BIT32(7)
 
 /* field: RX6PEND - RX6PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX6PEND BSP_FLD32(6)
+#define TMS570_EMACM_RXINTSTATRAW_RX6PEND BSP_BIT32(6)
 
 /* field: RX5PEND - RX5PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX5PEND BSP_FLD32(5)
+#define TMS570_EMACM_RXINTSTATRAW_RX5PEND BSP_BIT32(5)
 
 /* field: RX4PEND - RX4PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX4PEND BSP_FLD32(4)
+#define TMS570_EMACM_RXINTSTATRAW_RX4PEND BSP_BIT32(4)
 
 /* field: RX3PEND - RX3PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX3PEND BSP_FLD32(3)
+#define TMS570_EMACM_RXINTSTATRAW_RX3PEND BSP_BIT32(3)
 
 /* field: RX2PEND - RX2PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX2PEND BSP_FLD32(2)
+#define TMS570_EMACM_RXINTSTATRAW_RX2PEND BSP_BIT32(2)
 
 /* field: RX1PEND - RX1PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX1PEND BSP_FLD32(1)
+#define TMS570_EMACM_RXINTSTATRAW_RX1PEND BSP_BIT32(1)
 
 /* field: RX0PEND - RX0PEND raw interrupt read (before mask) */
-#define TMS570_EMACM_RXINTSTATRAW_RX0PEND BSP_FLD32(0)
+#define TMS570_EMACM_RXINTSTATRAW_RX0PEND BSP_BIT32(0)
 
 
-/*----------------TMS570_EMACMRXINTSTATMASKED----------------*/
+/*----------------TMS570_EMACM_RXINTSTATMASKED----------------*/
 /* field: RX7THRESHPEND - RX7THRESHPEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX7THRESHPEND BSP_FLD32(15)
+#define TMS570_EMACM_RXINTSTATMASKED_RX7THRESHPEND BSP_BIT32(15)
 
 /* field: RX6THRESHPEND - RX6THRESHPEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX6THRESHPEND BSP_FLD32(14)
+#define TMS570_EMACM_RXINTSTATMASKED_RX6THRESHPEND BSP_BIT32(14)
 
 /* field: RX5THRESHPEND - RX5THRESHPEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX5THRESHPEND BSP_FLD32(13)
+#define TMS570_EMACM_RXINTSTATMASKED_RX5THRESHPEND BSP_BIT32(13)
 
 /* field: RX4THRESHPEND - RX4THRESHPEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX4THRESHPEND BSP_FLD32(12)
+#define TMS570_EMACM_RXINTSTATMASKED_RX4THRESHPEND BSP_BIT32(12)
 
 /* field: RX3THRESHPEND - RX3THRESHPEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX3THRESHPEND BSP_FLD32(11)
+#define TMS570_EMACM_RXINTSTATMASKED_RX3THRESHPEND BSP_BIT32(11)
 
 /* field: RX2THRESHPEND - RX2THRESHPEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX2THRESHPEND BSP_FLD32(10)
+#define TMS570_EMACM_RXINTSTATMASKED_RX2THRESHPEND BSP_BIT32(10)
 
 /* field: RX1THRESHPEND - RX1THRESHPEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX1THRESHPEND BSP_FLD32(9)
+#define TMS570_EMACM_RXINTSTATMASKED_RX1THRESHPEND BSP_BIT32(9)
 
 /* field: RX0THRESHPEND - RX0THRESHPEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX0THRESHPEND BSP_FLD32(8)
+#define TMS570_EMACM_RXINTSTATMASKED_RX0THRESHPEND BSP_BIT32(8)
 
 /* field: RX7PEND - RX7PEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX7PEND BSP_FLD32(7)
+#define TMS570_EMACM_RXINTSTATMASKED_RX7PEND BSP_BIT32(7)
 
 /* field: RX6PEND - RX6PEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX6PEND BSP_FLD32(6)
+#define TMS570_EMACM_RXINTSTATMASKED_RX6PEND BSP_BIT32(6)
 
 /* field: RX5PEND - RX5PEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX5PEND BSP_FLD32(5)
+#define TMS570_EMACM_RXINTSTATMASKED_RX5PEND BSP_BIT32(5)
 
 /* field: RX4PEND - RX4PEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX4PEND BSP_FLD32(4)
+#define TMS570_EMACM_RXINTSTATMASKED_RX4PEND BSP_BIT32(4)
 
 /* field: RX3PEND - RX3PEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX3PEND BSP_FLD32(3)
+#define TMS570_EMACM_RXINTSTATMASKED_RX3PEND BSP_BIT32(3)
 
 /* field: RX2PEND - RX2PEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX2PEND BSP_FLD32(2)
+#define TMS570_EMACM_RXINTSTATMASKED_RX2PEND BSP_BIT32(2)
 
 /* field: RX1PEND - RX1PEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX1PEND BSP_FLD32(1)
+#define TMS570_EMACM_RXINTSTATMASKED_RX1PEND BSP_BIT32(1)
 
 /* field: RX0PEND - RX0PEND masked interrupt read */
-#define TMS570_EMACM_RXINTSTATMASKED_RX0PEND BSP_FLD32(0)
+#define TMS570_EMACM_RXINTSTATMASKED_RX0PEND BSP_BIT32(0)
 
 
-/*------------------TMS570_EMACMRXINTMASKSET------------------*/
+/*-----------------TMS570_EMACM_RXINTMASKSET-----------------*/
 /* field: RX7THRESHMASK - Receive channel 7 threshold mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX7THRESHMASK BSP_FLD32(15)
+#define TMS570_EMACM_RXINTMASKSET_RX7THRESHMASK BSP_BIT32(15)
 
 /* field: RX6THRESHMASK - Receive channel 6 threshold mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX6THRESHMASK BSP_FLD32(14)
+#define TMS570_EMACM_RXINTMASKSET_RX6THRESHMASK BSP_BIT32(14)
 
 /* field: RX5THRESHMASK - Receive channel 5 threshold mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX5THRESHMASK BSP_FLD32(13)
+#define TMS570_EMACM_RXINTMASKSET_RX5THRESHMASK BSP_BIT32(13)
 
 /* field: RX4THRESHMASK - Receive channel 4 threshold mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX4THRESHMASK BSP_FLD32(12)
+#define TMS570_EMACM_RXINTMASKSET_RX4THRESHMASK BSP_BIT32(12)
 
 /* field: RX3THRESHMASK - Receive channel 3 threshold mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX3THRESHMASK BSP_FLD32(11)
+#define TMS570_EMACM_RXINTMASKSET_RX3THRESHMASK BSP_BIT32(11)
 
 /* field: RX2THRESHMASK - Receive channel 2 threshold mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX2THRESHMASK BSP_FLD32(10)
+#define TMS570_EMACM_RXINTMASKSET_RX2THRESHMASK BSP_BIT32(10)
 
 /* field: RX1THRESHMASK - Receive channel 1 threshold mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX1THRESHMASK BSP_FLD32(9)
+#define TMS570_EMACM_RXINTMASKSET_RX1THRESHMASK BSP_BIT32(9)
 
 /* field: RX0THRESHMASK - Receive channel 0 threshold mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX0THRESHMASK BSP_FLD32(8)
+#define TMS570_EMACM_RXINTMASKSET_RX0THRESHMASK BSP_BIT32(8)
 
 /* field: RX7MASK - Receive channel 7 mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX7MASK BSP_FLD32(7)
+#define TMS570_EMACM_RXINTMASKSET_RX7MASK BSP_BIT32(7)
 
 /* field: RX6MASK - Receive channel 6 mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX6MASK BSP_FLD32(6)
+#define TMS570_EMACM_RXINTMASKSET_RX6MASK BSP_BIT32(6)
 
 /* field: RX5MASK - Receive channel 5 mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX5MASK BSP_FLD32(5)
+#define TMS570_EMACM_RXINTMASKSET_RX5MASK BSP_BIT32(5)
 
 /* field: RX4MASK - Receive channel 4 mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX4MASK BSP_FLD32(4)
+#define TMS570_EMACM_RXINTMASKSET_RX4MASK BSP_BIT32(4)
 
 /* field: RX3MASK - Receive channel 3 mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX3MASK BSP_FLD32(3)
+#define TMS570_EMACM_RXINTMASKSET_RX3MASK BSP_BIT32(3)
 
 /* field: RX2MASK - Receive channel 2 mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX2MASK BSP_FLD32(2)
+#define TMS570_EMACM_RXINTMASKSET_RX2MASK BSP_BIT32(2)
 
 /* field: RX1MASK - Receive channel 1 mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX1MASK BSP_FLD32(1)
+#define TMS570_EMACM_RXINTMASKSET_RX1MASK BSP_BIT32(1)
 
 /* field: RX0MASK - Receive channel 0 mask set bit. Write 1 to enable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKSET_RX0MASK BSP_FLD32(0)
+#define TMS570_EMACM_RXINTMASKSET_RX0MASK BSP_BIT32(0)
 
 
-/*-----------------TMS570_EMACMRXINTMASKCLEAR-----------------*/
+/*----------------TMS570_EMACM_RXINTMASKCLEAR----------------*/
 /* field: RX7THRESHMASK - Receive channel 7 threshold mask clear bit. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX7THRESHMASK BSP_FLD32(15)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX7THRESHMASK BSP_BIT32(15)
 
 /* field: RX6THRESHMASK - Receive channel 6 threshold mask clear bit. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX6THRESHMASK BSP_FLD32(14)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX6THRESHMASK BSP_BIT32(14)
 
 /* field: RX5THRESHMASK - Receive channel 5 threshold mask clear bit. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX5THRESHMASK BSP_FLD32(13)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX5THRESHMASK BSP_BIT32(13)
 
 /* field: RX4THRESHMASK - Receive channel 4 threshold mask clear bit. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX4THRESHMASK BSP_FLD32(12)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX4THRESHMASK BSP_BIT32(12)
 
 /* field: RX3THRESHMASK - Receive channel 3 threshold mask clear bit. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX3THRESHMASK BSP_FLD32(11)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX3THRESHMASK BSP_BIT32(11)
 
 /* field: RX2THRESHMASK - Receive channel 2 threshold mask clear bit. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX2THRESHMASK BSP_FLD32(10)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX2THRESHMASK BSP_BIT32(10)
 
 /* field: RX1THRESHMASK - Receive channel 1 threshold mask clear bit. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX1THRESHMASK BSP_FLD32(9)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX1THRESHMASK BSP_BIT32(9)
 
 /* field: RX0THRESHMASK - Receive channel 0 threshold mask clear bit. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX0THRESHMASK BSP_FLD32(8)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX0THRESHMASK BSP_BIT32(8)
 
 /* field: RX7MASK - Receive channel 7 mask clear bit. Write 1 to disable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX7MASK BSP_FLD32(7)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX7MASK BSP_BIT32(7)
 
 /* field: RX6MASK - Receive channel 6 mask clear bit. Write 1 to disable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX6MASK BSP_FLD32(6)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX6MASK BSP_BIT32(6)
 
 /* field: RX5MASK - Receive channel 5 mask clear bit. Write 1 to disable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX5MASK BSP_FLD32(5)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX5MASK BSP_BIT32(5)
 
 /* field: RX4MASK - Receive channel 4 mask clear bit. Write 1 to disable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX4MASK BSP_FLD32(4)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX4MASK BSP_BIT32(4)
 
 /* field: RX3MASK - Receive channel 3 mask clear bit. Write 1 to disable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX3MASK BSP_FLD32(3)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX3MASK BSP_BIT32(3)
 
 /* field: RX2MASK - Receive channel 2 mask clear bit. Write 1 to disable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX2MASK BSP_FLD32(2)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX2MASK BSP_BIT32(2)
 
 /* field: RX1MASK - Receive channel 1 mask clear bit. Write 1 to disable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX1MASK BSP_FLD32(1)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX1MASK BSP_BIT32(1)
 
 /* field: RX0MASK - Receive channel 0 mask clear bit. Write 1 to disable interrupt; a write of 0 has no effect. */
-#define TMS570_EMACM_RXINTMASKCLEAR_RX0MASK BSP_FLD32(0)
+#define TMS570_EMACM_RXINTMASKCLEAR_RX0MASK BSP_BIT32(0)
 
 
-/*-----------------TMS570_EMACMMACINTSTATRAW-----------------*/
+/*-----------------TMS570_EMACM_MACINTSTATRAW-----------------*/
 /* field: HOSTPEND - Host pending interrupt (HOSTPEND); raw interrupt read (before mask). */
-#define TMS570_EMACM_MACINTSTATRAW_HOSTPEND BSP_FLD32(1)
+#define TMS570_EMACM_MACINTSTATRAW_HOSTPEND BSP_BIT32(1)
 
 /* field: STATPEND - Statistics pending interrupt (STATPEND); raw interrupt read (before mask). */
-#define TMS570_EMACM_MACINTSTATRAW_STATPEND BSP_FLD32(0)
+#define TMS570_EMACM_MACINTSTATRAW_STATPEND BSP_BIT32(0)
 
 
-/*----------------TMS570_EMACMMACINTSTATMASKED----------------*/
+/*---------------TMS570_EMACM_MACINTSTATMASKED---------------*/
 /* field: HOSTPEND - Host pending interrupt (HOSTPEND); masked interrupt read. */
-#define TMS570_EMACM_MACINTSTATMASKED_HOSTPEND BSP_FLD32(1)
+#define TMS570_EMACM_MACINTSTATMASKED_HOSTPEND BSP_BIT32(1)
 
 /* field: STATPEND - Statistics pending interrupt (STATPEND); masked interrupt read. */
-#define TMS570_EMACM_MACINTSTATMASKED_STATPEND BSP_FLD32(0)
+#define TMS570_EMACM_MACINTSTATMASKED_STATPEND BSP_BIT32(0)
 
 
-/*-----------------TMS570_EMACMMACINTMASKSET-----------------*/
+/*-----------------TMS570_EMACM_MACINTMASKSET-----------------*/
 /* field: HOSTMASK - Host error interrupt mask set bit. Write 1 to enable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_MACINTMASKSET_HOSTMASK BSP_FLD32(1)
+#define TMS570_EMACM_MACINTMASKSET_HOSTMASK BSP_BIT32(1)
 
 /* field: STATMASK - Statistics interrupt mask set bit. Write 1 to enable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_MACINTMASKSET_STATMASK BSP_FLD32(0)
+#define TMS570_EMACM_MACINTMASKSET_STATMASK BSP_BIT32(0)
 
 
-/*----------------TMS570_EMACMMACINTMASKCLEAR----------------*/
+/*----------------TMS570_EMACM_MACINTMASKCLEAR----------------*/
 /* field: HOSTMASK - Host error interrupt mask clear bit. Write 1 to disable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_MACINTMASKCLEAR_HOSTMASK BSP_FLD32(1)
+#define TMS570_EMACM_MACINTMASKCLEAR_HOSTMASK BSP_BIT32(1)
 
 /* field: STATMASK - Statistics interrupt mask clear bit. Write 1 to disable interrupt, a write of 0 has no effect. */
-#define TMS570_EMACM_MACINTMASKCLEAR_STATMASK BSP_FLD32(0)
+#define TMS570_EMACM_MACINTMASKCLEAR_STATMASK BSP_BIT32(0)
 
 
-/*------------------TMS570_EMACMRXMBPENABLE------------------*/
+/*------------------TMS570_EMACM_RXMBPENABLE------------------*/
 /* field: RXPASSCRC - Pass receive CRC enable bit */
-#define TMS570_EMACM_RXMBPENABLE_RXPASSCRC BSP_FLD32(30)
+#define TMS570_EMACM_RXMBPENABLE_RXPASSCRC BSP_BIT32(30)
 
 /* field: RXQOSEN - Receive quality of service enable bit */
-#define TMS570_EMACM_RXMBPENABLE_RXQOSEN BSP_FLD32(29)
+#define TMS570_EMACM_RXMBPENABLE_RXQOSEN BSP_BIT32(29)
 
 /* field: RXNOCHAIN - Receive no buffer chaining bit */
-#define TMS570_EMACM_RXMBPENABLE_RXNOCHAIN BSP_FLD32(28)
+#define TMS570_EMACM_RXMBPENABLE_RXNOCHAIN BSP_BIT32(28)
 
 /* field: RXCMFEN - Receive copy MAC control frames enable bit. */
-#define TMS570_EMACM_RXMBPENABLE_RXCMFEN BSP_FLD32(24)
+#define TMS570_EMACM_RXMBPENABLE_RXCMFEN BSP_BIT32(24)
 
 /* field: RXCSFEN - Receive copy short frames enable bit. */
-#define TMS570_EMACM_RXMBPENABLE_RXCSFEN BSP_FLD32(23)
+#define TMS570_EMACM_RXMBPENABLE_RXCSFEN BSP_BIT32(23)
 
 /* field: RXCEFEN - Receive copy error frames enable bit. */
-#define TMS570_EMACM_RXMBPENABLE_RXCEFEN BSP_FLD32(22)
+#define TMS570_EMACM_RXMBPENABLE_RXCEFEN BSP_BIT32(22)
 
 /* field: RXCAFEN - Receive copy all frames enable bit. */
-#define TMS570_EMACM_RXMBPENABLE_RXCAFEN BSP_FLD32(21)
+#define TMS570_EMACM_RXMBPENABLE_RXCAFEN BSP_BIT32(21)
 
 /* field: RXPROMCH - Receive promiscuous channel select */
 #define TMS570_EMACM_RXMBPENABLE_RXPROMCH(val) BSP_FLD32(val,16, 18)
@@ -540,7 +534,7 @@ typedef struct{
 #define TMS570_EMACM_RXMBPENABLE_RXPROMCH_SET(reg,val) BSP_FLD32SET(reg, val,16, 18)
 
 /* field: RXBROADEN - Receive broadcast enable. */
-#define TMS570_EMACM_RXMBPENABLE_RXBROADEN BSP_FLD32(13)
+#define TMS570_EMACM_RXMBPENABLE_RXBROADEN BSP_BIT32(13)
 
 /* field: RXBROADCH - Receive broadcast channel select */
 #define TMS570_EMACM_RXMBPENABLE_RXBROADCH(val) BSP_FLD32(val,8, 10)
@@ -548,137 +542,137 @@ typedef struct{
 #define TMS570_EMACM_RXMBPENABLE_RXBROADCH_SET(reg,val) BSP_FLD32SET(reg, val,8, 10)
 
 /* field: RXMULTEN - RX multicast enable. */
-#define TMS570_EMACM_RXMBPENABLE_RXMULTEN BSP_FLD32(5)
+#define TMS570_EMACM_RXMBPENABLE_RXMULTEN BSP_BIT32(5)
 
 
-/*------------------TMS570_EMACMRXUNICASTSET------------------*/
+/*-----------------TMS570_EMACM_RXUNICASTSET-----------------*/
 /* field: RXCH7EN - Receive channel 7 unicast enable set bit. Write 1 to set the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTSET_RXCH7EN BSP_FLD32(7)
+#define TMS570_EMACM_RXUNICASTSET_RXCH7EN BSP_BIT32(7)
 
 /* field: RXCH6EN - Receive channel 6 unicast enable set bit. Write 1 to set the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTSET_RXCH6EN BSP_FLD32(6)
+#define TMS570_EMACM_RXUNICASTSET_RXCH6EN BSP_BIT32(6)
 
 /* field: RXCH5EN - Receive channel 5 unicast enable set bit. Write 1 to set the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTSET_RXCH5EN BSP_FLD32(5)
+#define TMS570_EMACM_RXUNICASTSET_RXCH5EN BSP_BIT32(5)
 
 /* field: RXCH4EN - Receive channel 4 unicast enable set bit. Write 1 to set the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTSET_RXCH4EN BSP_FLD32(4)
+#define TMS570_EMACM_RXUNICASTSET_RXCH4EN BSP_BIT32(4)
 
 /* field: RXCH3EN - Receive channel 3 unicast enable set bit. Write 1 to set the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTSET_RXCH3EN BSP_FLD32(3)
+#define TMS570_EMACM_RXUNICASTSET_RXCH3EN BSP_BIT32(3)
 
 /* field: RXCH2EN - Receive channel 2 unicast enable set bit. Write 1 to set the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTSET_RXCH2EN BSP_FLD32(2)
+#define TMS570_EMACM_RXUNICASTSET_RXCH2EN BSP_BIT32(2)
 
 /* field: RXCH1EN - Receive channel 1 unicast enable set bit. Write 1 to set the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTSET_RXCH1EN BSP_FLD32(1)
+#define TMS570_EMACM_RXUNICASTSET_RXCH1EN BSP_BIT32(1)
 
 /* field: RXCH0EN - Receive channel 0 unicast enable set bit. Write 1 to set the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTSET_RXCH0EN BSP_FLD32(0)
+#define TMS570_EMACM_RXUNICASTSET_RXCH0EN BSP_BIT32(0)
 
 
-/*-----------------TMS570_EMACMRXUNICASTCLEAR-----------------*/
+/*----------------TMS570_EMACM_RXUNICASTCLEAR----------------*/
 /* field: RXCH7EN - Receive channel 7 unicast enable clear bit. Write 1 to clear the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTCLEAR_RXCH7EN BSP_FLD32(7)
+#define TMS570_EMACM_RXUNICASTCLEAR_RXCH7EN BSP_BIT32(7)
 
 /* field: RXCH6EN - Receive channel 6 unicast enable clear bit. Write 1 to clear the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTCLEAR_RXCH6EN BSP_FLD32(6)
+#define TMS570_EMACM_RXUNICASTCLEAR_RXCH6EN BSP_BIT32(6)
 
 /* field: RXCH5EN - Receive channel 5 unicast enable clear bit. Write 1 to clear the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTCLEAR_RXCH5EN BSP_FLD32(5)
+#define TMS570_EMACM_RXUNICASTCLEAR_RXCH5EN BSP_BIT32(5)
 
 /* field: RXCH4EN - Receive channel 4 unicast enable clear bit. Write 1 to clear the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTCLEAR_RXCH4EN BSP_FLD32(4)
+#define TMS570_EMACM_RXUNICASTCLEAR_RXCH4EN BSP_BIT32(4)
 
 /* field: RXCH3EN - Receive channel 3 unicast enable clear bit. Write 1 to clear the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTCLEAR_RXCH3EN BSP_FLD32(3)
+#define TMS570_EMACM_RXUNICASTCLEAR_RXCH3EN BSP_BIT32(3)
 
 /* field: RXCH2EN - Receive channel 2 unicast enable clear bit. Write 1 to clear the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTCLEAR_RXCH2EN BSP_FLD32(2)
+#define TMS570_EMACM_RXUNICASTCLEAR_RXCH2EN BSP_BIT32(2)
 
 /* field: RXCH1EN - Receive channel 1 unicast enable clear bit. Write 1 to clear the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTCLEAR_RXCH1EN BSP_FLD32(1)
+#define TMS570_EMACM_RXUNICASTCLEAR_RXCH1EN BSP_BIT32(1)
 
 /* field: RXCH0EN - Receive channel 0 unicast enable clear bit. Write 1 to clear the enable, a write of 0 has no effect. */
-#define TMS570_EMACM_RXUNICASTCLEAR_RXCH0EN BSP_FLD32(0)
+#define TMS570_EMACM_RXUNICASTCLEAR_RXCH0EN BSP_BIT32(0)
 
 
-/*--------------------TMS570_EMACMRXMAXLEN--------------------*/
+/*-------------------TMS570_EMACM_RXMAXLEN-------------------*/
 /* field: RXMAXLEN - Receive maximum frame length. These bits determine the maximum length of a received frame. */
 #define TMS570_EMACM_RXMAXLEN_RXMAXLEN(val) BSP_FLD32(val,0, 15)
 #define TMS570_EMACM_RXMAXLEN_RXMAXLEN_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_EMACM_RXMAXLEN_RXMAXLEN_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-----------------TMS570_EMACMRXBUFFEROFFSET-----------------*/
+/*----------------TMS570_EMACM_RXBUFFEROFFSET----------------*/
 /* field: RXBUFFEROFFSET - Receive buffer offset value. */
 #define TMS570_EMACM_RXBUFFEROFFSET_RXBUFFEROFFSET(val) BSP_FLD32(val,0, 15)
 #define TMS570_EMACM_RXBUFFEROFFSET_RXBUFFEROFFSET_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_EMACM_RXBUFFEROFFSET_RXBUFFEROFFSET_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------TMS570_EMACMRXFILTERLOWTHRESH---------------*/
+/*---------------TMS570_EMACM_RXFILTERLOWTHRESH---------------*/
 /* field: RXFILTERTHRESH - Receive filter low threshold. */
 #define TMS570_EMACM_RXFILTERLOWTHRESH_RXFILTERTHRESH(val) BSP_FLD32(val,0, 7)
 #define TMS570_EMACM_RXFILTERLOWTHRESH_RXFILTERTHRESH_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_EMACM_RXFILTERLOWTHRESH_RXFILTERTHRESH_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*------------------TMS570_EMACMRXFLOWTHRESH------------------*/
+/*-----------------TMS570_EMACM_RXFLOWTHRESH-----------------*/
 /* field: RXnFLOWTHRESH - Receive flow threshold. */
 #define TMS570_EMACM_RXFLOWTHRESH_RXnFLOWTHRESH(val) BSP_FLD32(val,0, 7)
 #define TMS570_EMACM_RXFLOWTHRESH_RXnFLOWTHRESH_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_EMACM_RXFLOWTHRESH_RXnFLOWTHRESH_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*------------------TMS570_EMACMRXFREEBUFFER------------------*/
+/*-----------------TMS570_EMACM_RXFREEBUFFER-----------------*/
 /* field: RXnFREEBUF - Receive free buffer count. These bits contain the count of free buffers available. */
 #define TMS570_EMACM_RXFREEBUFFER_RXnFREEBUF(val) BSP_FLD32(val,0, 15)
 #define TMS570_EMACM_RXFREEBUFFER_RXnFREEBUF_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_EMACM_RXFREEBUFFER_RXnFREEBUF_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-------------------TMS570_EMACMMACCONTROL-------------------*/
+/*------------------TMS570_EMACM_MACCONTROL------------------*/
 /* field: RMIISPEED - RMII interface transmit and receive speed select. */
-#define TMS570_EMACM_MACCONTROL_RMIISPEED BSP_FLD32(15)
+#define TMS570_EMACM_MACCONTROL_RMIISPEED BSP_BIT32(15)
 
 /* field: RXOFFLENBLOCK - Receive offset / length word write block. */
-#define TMS570_EMACM_MACCONTROL_RXOFFLENBLOCK BSP_FLD32(14)
+#define TMS570_EMACM_MACCONTROL_RXOFFLENBLOCK BSP_BIT32(14)
 
 /* field: RXOWNERSHIP - Receive ownership write bit value. */
-#define TMS570_EMACM_MACCONTROL_RXOWNERSHIP BSP_FLD32(13)
+#define TMS570_EMACM_MACCONTROL_RXOWNERSHIP BSP_BIT32(13)
 
 /* field: CMDIDLE - Command Idle bit */
-#define TMS570_EMACM_MACCONTROL_CMDIDLE BSP_FLD32(11)
+#define TMS570_EMACM_MACCONTROL_CMDIDLE BSP_BIT32(11)
 
 /* field: TXSHORTGAPEN - Transmit Short Gap Enable */
-#define TMS570_EMACM_MACCONTROL_TXSHORTGAPEN BSP_FLD32(10)
+#define TMS570_EMACM_MACCONTROL_TXSHORTGAPEN BSP_BIT32(10)
 
 /* field: TXPTYPE - Transmit queue priority type */
-#define TMS570_EMACM_MACCONTROL_TXPTYPE BSP_FLD32(9)
+#define TMS570_EMACM_MACCONTROL_TXPTYPE BSP_BIT32(9)
 
 /* field: TXPACE - Transmit pacing enable bit */
-#define TMS570_EMACM_MACCONTROL_TXPACE BSP_FLD32(6)
+#define TMS570_EMACM_MACCONTROL_TXPACE BSP_BIT32(6)
 
 /* field: GMIIEN - GMII enable bit */
-#define TMS570_EMACM_MACCONTROL_GMIIEN BSP_FLD32(5)
+#define TMS570_EMACM_MACCONTROL_GMIIEN BSP_BIT32(5)
 
 /* field: TXFLOWEN - Transmit flow control enable bit. */
-#define TMS570_EMACM_MACCONTROL_TXFLOWEN BSP_FLD32(4)
+#define TMS570_EMACM_MACCONTROL_TXFLOWEN BSP_BIT32(4)
 
 /* field: RXBUFFERFLOWEN - Receive buffer flow control enable bit */
-#define TMS570_EMACM_MACCONTROL_RXBUFFERFLOWEN BSP_FLD32(3)
+#define TMS570_EMACM_MACCONTROL_RXBUFFERFLOWEN BSP_BIT32(3)
 
 /* field: LOOPBACK - Loopback mode. The loopback mode forces internal full-duplex mode regardless of the FULLDUPLEX bit. */
-#define TMS570_EMACM_MACCONTROL_LOOPBACK BSP_FLD32(1)
+#define TMS570_EMACM_MACCONTROL_LOOPBACK BSP_BIT32(1)
 
 /* field: FULLDUPLEX - Full duplex mode. */
-#define TMS570_EMACM_MACCONTROL_FULLDUPLEX BSP_FLD32(0)
+#define TMS570_EMACM_MACCONTROL_FULLDUPLEX BSP_BIT32(0)
 
 
-/*-------------------TMS570_EMACMMACSTATUS-------------------*/
+/*-------------------TMS570_EMACM_MACSTATUS-------------------*/
 /* field: IDLE - EMAC idle bit. This bit is cleared to 0 at reset; one clock after reset, it goes to 1. */
-#define TMS570_EMACM_MACSTATUS_IDLE BSP_FLD32(31)
+#define TMS570_EMACM_MACSTATUS_IDLE BSP_BIT32(31)
 
 /* field: TXERRCODE - Transmit host error code. These bits indicate that EMAC detected transmit DMA related host errors. */
 #define TMS570_EMACM_MACSTATUS_TXERRCODE(val) BSP_FLD32(val,20, 23)
@@ -701,31 +695,31 @@ typedef struct{
 #define TMS570_EMACM_MACSTATUS_RXERRCH_SET(reg,val) BSP_FLD32SET(reg, val,8, 10)
 
 /* field: RXQOSACT - Receive Quality of Service (QOS) active bit. */
-#define TMS570_EMACM_MACSTATUS_RXQOSACT BSP_FLD32(2)
+#define TMS570_EMACM_MACSTATUS_RXQOSACT BSP_BIT32(2)
 
 /* field: RXFLOWACT - Receive flow control active bit. */
-#define TMS570_EMACM_MACSTATUS_RXFLOWACT BSP_FLD32(1)
+#define TMS570_EMACM_MACSTATUS_RXFLOWACT BSP_BIT32(1)
 
 /* field: TXFLOWACT - Transmit flow control active bit. */
-#define TMS570_EMACM_MACSTATUS_TXFLOWACT BSP_FLD32(0)
+#define TMS570_EMACM_MACSTATUS_TXFLOWACT BSP_BIT32(0)
 
 
-/*-------------------TMS570_EMACMEMCONTROL-------------------*/
+/*-------------------TMS570_EMACM_EMCONTROL-------------------*/
 /* field: SOFT - Emulation soft bit. */
-#define TMS570_EMACM_EMCONTROL_SOFT BSP_FLD32(1)
+#define TMS570_EMACM_EMCONTROL_SOFT BSP_BIT32(1)
 
 /* field: FREE - Emulation free bit. */
-#define TMS570_EMACM_EMCONTROL_FREE BSP_FLD32(0)
+#define TMS570_EMACM_EMCONTROL_FREE BSP_BIT32(0)
 
 
-/*------------------TMS570_EMACMFIFOCONTROL------------------*/
+/*------------------TMS570_EMACM_FIFOCONTROL------------------*/
 /* field: TXCELLTHRESH - Transmit FIFO cell threshold. */
 #define TMS570_EMACM_FIFOCONTROL_TXCELLTHRESH(val) BSP_FLD32(val,0, 1)
 #define TMS570_EMACM_FIFOCONTROL_TXCELLTHRESH_GET(reg) BSP_FLD32GET(reg,0, 1)
 #define TMS570_EMACM_FIFOCONTROL_TXCELLTHRESH_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*-------------------TMS570_EMACMMACCONFIG-------------------*/
+/*-------------------TMS570_EMACM_MACCONFIG-------------------*/
 /* field: TXCELLDEPTH - Transmit cell depth. These bits indicate the number of cells in the transmit FIFO. */
 #define TMS570_EMACM_MACCONFIG_TXCELLDEPTH(val) BSP_FLD32(val,24, 31)
 #define TMS570_EMACM_MACCONFIG_TXCELLDEPTH_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -747,12 +741,12 @@ typedef struct{
 #define TMS570_EMACM_MACCONFIG_MACCFIG_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-------------------TMS570_EMACMSOFTRESET-------------------*/
+/*-------------------TMS570_EMACM_SOFTRESET-------------------*/
 /* field: SOFTRESET - Software reset. Writing a 1 to this bit causes the EMAC logic to be reset. */
-#define TMS570_EMACM_SOFTRESET_SOFTRESET BSP_FLD32(0)
+#define TMS570_EMACM_SOFTRESET_SOFTRESET BSP_BIT32(0)
 
 
-/*------------------TMS570_EMACMMACSRCADDRLO------------------*/
+/*-----------------TMS570_EMACM_MACSRCADDRLO-----------------*/
 /* field: MACSRCADDR0 - MAC source address lower 8-0 bits (byte 0) */
 #define TMS570_EMACM_MACSRCADDRLO_MACSRCADDR0(val) BSP_FLD32(val,8, 15)
 #define TMS570_EMACM_MACSRCADDRLO_MACSRCADDR0_GET(reg) BSP_FLD32GET(reg,8, 15)
@@ -764,7 +758,7 @@ typedef struct{
 #define TMS570_EMACM_MACSRCADDRLO_MACSRCADDR1_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*------------------TMS570_EMACMMACSRCADDRHI------------------*/
+/*-----------------TMS570_EMACM_MACSRCADDRHI-----------------*/
 /* field: MACSRCADDR2 - MAC source address bits 23-16 (byte 2) */
 #define TMS570_EMACM_MACSRCADDRHI_MACSRCADDR2(val) BSP_FLD32(val,24, 31)
 #define TMS570_EMACM_MACSRCADDRHI_MACSRCADDR2_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -786,21 +780,15 @@ typedef struct{
 #define TMS570_EMACM_MACSRCADDRHI_MACSRCADDR5_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*--------------------TMS570_EMACMMACHASH1--------------------*/
+/*-------------------TMS570_EMACM_MACHASH1-------------------*/
 /* field: MACHASH1 - Least-significant 32 bits of the hash table corresponding to hash values 0 to 31. */
-#define TMS570_EMACM_MACHASH1_MACHASH1(val) BSP_FLD32(val,0, 31)
-#define TMS570_EMACM_MACHASH1_MACHASH1_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_EMACM_MACHASH1_MACHASH1_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_EMACMMACHASH2--------------------*/
+/*-------------------TMS570_EMACM_MACHASH2-------------------*/
 /* field: MACHASH2 - Most-significant 32 bits of the hash table corresponding to hash values 32 to 63. */
-#define TMS570_EMACM_MACHASH2_MACHASH2(val) BSP_FLD32(val,0, 31)
-#define TMS570_EMACM_MACHASH2_MACHASH2_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_EMACM_MACHASH2_MACHASH2_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_EMACMBOFFTEST--------------------*/
+/*-------------------TMS570_EMACM_BOFFTEST-------------------*/
 /* field: RNDNUM - Backoff random number generator. */
 #define TMS570_EMACM_BOFFTEST_RNDNUM(val) BSP_FLD32(val,16, 25)
 #define TMS570_EMACM_BOFFTEST_RNDNUM_GET(reg) BSP_FLD32GET(reg,16, 25)
@@ -817,33 +805,33 @@ typedef struct{
 #define TMS570_EMACM_BOFFTEST_TXBACKOFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 9)
 
 
-/*-------------------TMS570_EMACMTPACETEST-------------------*/
+/*-------------------TMS570_EMACM_TPACETEST-------------------*/
 /* field: PACEVAL - Pacing register current value. A nonzero value in this field indicates that transmit pacing is active. */
 #define TMS570_EMACM_TPACETEST_PACEVAL(val) BSP_FLD32(val,0, 4)
 #define TMS570_EMACM_TPACETEST_PACEVAL_GET(reg) BSP_FLD32GET(reg,0, 4)
 #define TMS570_EMACM_TPACETEST_PACEVAL_SET(reg,val) BSP_FLD32SET(reg, val,0, 4)
 
 
-/*--------------------TMS570_EMACMRXPAUSE--------------------*/
+/*--------------------TMS570_EMACM_RXPAUSE--------------------*/
 /* field: PAUSETIMER - Receive pause timer value. */
 #define TMS570_EMACM_RXPAUSE_PAUSETIMER(val) BSP_FLD32(val,0, 15)
 #define TMS570_EMACM_RXPAUSE_PAUSETIMER_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_EMACM_RXPAUSE_PAUSETIMER_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*--------------------TMS570_EMACMTXPAUSE--------------------*/
+/*--------------------TMS570_EMACM_TXPAUSE--------------------*/
 /* field: PAUSETIMER - Transmit pause timer value. */
 #define TMS570_EMACM_TXPAUSE_PAUSETIMER(val) BSP_FLD32(val,0, 15)
 #define TMS570_EMACM_TXPAUSE_PAUSETIMER_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_EMACM_TXPAUSE_PAUSETIMER_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*-------------------TMS570_EMACMMACADDRLO-------------------*/
+/*-------------------TMS570_EMACM_MACADDRLO-------------------*/
 /* field: VALID - Address valid bit. */
-#define TMS570_EMACM_MACADDRLO_VALID BSP_FLD32(20)
+#define TMS570_EMACM_MACADDRLO_VALID BSP_BIT32(20)
 
 /* field: MATCHFILT - Match or filter bit */
-#define TMS570_EMACM_MACADDRLO_MATCHFILT BSP_FLD32(19)
+#define TMS570_EMACM_MACADDRLO_MATCHFILT BSP_BIT32(19)
 
 /* field: CHANNEL - Channel select. Determines which receive channel a valid address match will be transferred to. */
 #define TMS570_EMACM_MACADDRLO_CHANNEL(val) BSP_FLD32(val,16, 18)
@@ -861,7 +849,7 @@ typedef struct{
 #define TMS570_EMACM_MACADDRLO_MACADDR1_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-------------------TMS570_EMACMMACADDRHI-------------------*/
+/*-------------------TMS570_EMACM_MACADDRHI-------------------*/
 /* field: MACADDR2 - MAC source address bits 23-16 (byte 2) */
 #define TMS570_EMACM_MACADDRHI_MACADDR2(val) BSP_FLD32(val,24, 31)
 #define TMS570_EMACM_MACADDRHI_MACADDR2_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -883,40 +871,28 @@ typedef struct{
 #define TMS570_EMACM_MACADDRHI_MACADDR5_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*--------------------TMS570_EMACMMACINDEX--------------------*/
+/*-------------------TMS570_EMACM_MACINDEX-------------------*/
 /* field: MACINDEX - MAC address index. All eight addresses share the upper 40 bits. */
 #define TMS570_EMACM_MACINDEX_MACINDEX(val) BSP_FLD32(val,0, 2)
 #define TMS570_EMACM_MACINDEX_MACINDEX_GET(reg) BSP_FLD32GET(reg,0, 2)
 #define TMS570_EMACM_MACINDEX_MACINDEX_SET(reg,val) BSP_FLD32SET(reg, val,0, 2)
 
 
-/*---------------------TMS570_EMACMTXHDP---------------------*/
+/*---------------------TMS570_EMACM_TXHDP---------------------*/
 /* field: TXnHDP - Transmit channel n DMA Head Descriptor pointer. */
-#define TMS570_EMACM_TXHDP_TXnHDP(val) BSP_FLD32(val,0, 31)
-#define TMS570_EMACM_TXHDP_TXnHDP_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_EMACM_TXHDP_TXnHDP_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_EMACMRXHDP---------------------*/
+/*---------------------TMS570_EMACM_RXHDP---------------------*/
 /* field: RXnHDP - Receive channel n DMA Head Descriptor pointer. */
-#define TMS570_EMACM_RXHDP_RXnHDP(val) BSP_FLD32(val,0, 31)
-#define TMS570_EMACM_RXHDP_RXnHDP_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_EMACM_RXHDP_RXnHDP_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_EMACMTXCP----------------------*/
+/*---------------------TMS570_EMACM_TXCP---------------------*/
 /* field: TXnCP - Transmit channel n completion pointer register is written by the host with the buffer descriptor */
-#define TMS570_EMACM_TXCP_TXnCP(val) BSP_FLD32(val,0, 31)
-#define TMS570_EMACM_TXCP_TXnCP_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_EMACM_TXCP_TXnCP_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_EMACMRXCP----------------------*/
+/*---------------------TMS570_EMACM_RXCP---------------------*/
 /* field: RXnCP - Receive channel n completion pointer register is written by the host with the buffer descriptor */
-#define TMS570_EMACM_RXCP_RXnCP(val) BSP_FLD32(val,0, 31)
-#define TMS570_EMACM_RXCP_RXnCP_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_EMACM_RXCP_RXnCP_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
 
-
-#endif /* LIBBSP_ARM_tms570_EMACM */
+#endif /* LIBBSP_ARM_TMS570_EMACM */

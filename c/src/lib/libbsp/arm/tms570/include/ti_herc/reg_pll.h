@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_PLL
-#define LIBBSP_ARM_tms570_PLL
+#ifndef LIBBSP_ARM_TMS570_PLL
+#define LIBBSP_ARM_TMS570_PLL
 
 #include <bsp/utility.h>
 
@@ -67,7 +67,7 @@ typedef struct{
 } tms570_pll_t;
 
 
-/*---------------------TMS570_PLLPLLCTL3---------------------*/
+/*---------------------TMS570_PLL_PLLCTL3---------------------*/
 /* field: ODPLL2 - Internal PLL Output Divider */
 #define TMS570_PLL_PLLCTL3_ODPLL2(val) BSP_FLD32(val,29, 31)
 #define TMS570_PLL_PLLCTL3_ODPLL2_GET(reg) BSP_FLD32GET(reg,29, 31)
@@ -89,7 +89,7 @@ typedef struct{
 #define TMS570_PLL_PLLCTL3_PLLMUL2_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_PLLCLKSLIP---------------------*/
+/*---------------------TMS570_PLL_CLKSLIP---------------------*/
 /* field: PLL1_SLIP_FILTER_COUNT - Configure the count for the filtered PLL slip. Count is on 10M clock. */
 #define TMS570_PLL_CLKSLIP_PLL1_SLIP_FILTER_COUNT(val) BSP_FLD32(val,8, 13)
 #define TMS570_PLL_CLKSLIP_PLL1_SLIP_FILTER_COUNT_GET(reg) BSP_FLD32GET(reg,8, 13)
@@ -101,20 +101,20 @@ typedef struct{
 #define TMS570_PLL_CLKSLIP_PLL1_SLIP_FILTER_KEY_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*---------------------TMS570_PLLSSWPLL1---------------------*/
+/*---------------------TMS570_PLL_SSWPLL1---------------------*/
 /* field: CAPTURE_WINDOW_INDEX - The capture counter present in the PLL wrapper will count the PLL clock edges when */
 #define TMS570_PLL_SSWPLL1_CAPTURE_WINDOW_INDEX(val) BSP_FLD32(val,8, 15)
 #define TMS570_PLL_SSWPLL1_CAPTURE_WINDOW_INDEX_GET(reg) BSP_FLD32GET(reg,8, 15)
 #define TMS570_PLL_SSWPLL1_CAPTURE_WINDOW_INDEX_SET(reg,val) BSP_FLD32SET(reg, val,8, 15)
 
 /* field: COUNTER_READ_READY - Counter read ready. */
-#define TMS570_PLL_SSWPLL1_COUNTER_READ_READY BSP_FLD32(6)
+#define TMS570_PLL_SSWPLL1_COUNTER_READ_READY BSP_BIT32(6)
 
 /* field: COUNTER_RESET - Counter reset. */
-#define TMS570_PLL_SSWPLL1_COUNTER_RESET BSP_FLD32(5)
+#define TMS570_PLL_SSWPLL1_COUNTER_RESET BSP_BIT32(5)
 
 /* field: COUNTER_EN - Counter enable. */
-#define TMS570_PLL_SSWPLL1_COUNTER_EN BSP_FLD32(4)
+#define TMS570_PLL_SSWPLL1_COUNTER_EN BSP_BIT32(4)
 
 /* field: TAP_COUNTER_DIS - The value in this register is used to program a particular bit in CLKOUT counter. */
 #define TMS570_PLL_SSWPLL1_TAP_COUNTER_DIS(val) BSP_FLD32(val,1, 3)
@@ -122,24 +122,18 @@ typedef struct{
 #define TMS570_PLL_SSWPLL1_TAP_COUNTER_DIS_SET(reg,val) BSP_FLD32SET(reg, val,1, 3)
 
 /* field: EXT_COUNTER_EN - Modulation Depth Measurement mode */
-#define TMS570_PLL_SSWPLL1_EXT_COUNTER_EN BSP_FLD32(0)
+#define TMS570_PLL_SSWPLL1_EXT_COUNTER_EN BSP_BIT32(0)
 
 
-/*---------------------TMS570_PLLSSWPLL2---------------------*/
+/*---------------------TMS570_PLL_SSWPLL2---------------------*/
 /* field: SSW_CAPTURE_COUNT - Capture count. This register returns the value of the capture count. */
-#define TMS570_PLL_SSWPLL2_SSW_CAPTURE_COUNT(val) BSP_FLD32(val,0, 31)
-#define TMS570_PLL_SSWPLL2_SSW_CAPTURE_COUNT_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PLL_SSWPLL2_SSW_CAPTURE_COUNT_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_PLLSSWPLL3---------------------*/
+/*---------------------TMS570_PLL_SSWPLL3---------------------*/
 /* field: SSW_CAPTURE_COUNT - Value of CLKout count register. */
-#define TMS570_PLL_SSWPLL3_SSW_CAPTURE_COUNT(val) BSP_FLD32(val,0, 31)
-#define TMS570_PLL_SSWPLL3_SSW_CAPTURE_COUNT_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_PLL_SSWPLL3_SSW_CAPTURE_COUNT_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*----------------------TMS570_PLLCSDIS----------------------*/
+/*----------------------TMS570_PLL_CSDIS----------------------*/
 /* field: CLKSR_7_3_OFF - Clock source[7-3] off. */
 #define TMS570_PLL_CSDIS_CLKSR_7_3_OFF(val) BSP_FLD32(val,3, 7)
 #define TMS570_PLL_CSDIS_CLKSR_7_3_OFF_GET(reg) BSP_FLD32GET(reg,3, 7)
@@ -151,7 +145,7 @@ typedef struct{
 #define TMS570_PLL_CSDIS_CLKSR_1_0_OFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*---------------------TMS570_PLLCSDISSET---------------------*/
+/*--------------------TMS570_PLL_CSDISSET--------------------*/
 /* field: SETCLKSR_7_3_OFF - Set clock source[7-3] to the disabled state. */
 #define TMS570_PLL_CSDISSET_SETCLKSR_7_3_OFF(val) BSP_FLD32(val,3, 7)
 #define TMS570_PLL_CSDISSET_SETCLKSR_7_3_OFF_GET(reg) BSP_FLD32GET(reg,3, 7)
@@ -163,7 +157,7 @@ typedef struct{
 #define TMS570_PLL_CSDISSET_SETCLKSR_1_0_OFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*---------------------TMS570_PLLCSDISCLR---------------------*/
+/*--------------------TMS570_PLL_CSDISCLR--------------------*/
 /* field: CLRCLKSR_7_3_OFF - Enables clock source[7-3]. */
 #define TMS570_PLL_CSDISCLR_CLRCLKSR_7_3_OFF(val) BSP_FLD32(val,3, 7)
 #define TMS570_PLL_CSDISCLR_CLRCLKSR_7_3_OFF_GET(reg) BSP_FLD32GET(reg,3, 7)
@@ -175,7 +169,7 @@ typedef struct{
 #define TMS570_PLL_CSDISCLR_CLRCLKSR_1_0_OFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*---------------------TMS570_PLLCSVSTAT---------------------*/
+/*---------------------TMS570_PLL_CSVSTAT---------------------*/
 /* field: CLKSR_7_3V - Clock source[7-0] valid. */
 #define TMS570_PLL_CSVSTAT_CLKSR_7_3V(val) BSP_FLD32(val,3, 7)
 #define TMS570_PLL_CSVSTAT_CLKSR_7_3V_GET(reg) BSP_FLD32GET(reg,3, 7)
@@ -187,9 +181,9 @@ typedef struct{
 #define TMS570_PLL_CSVSTAT_CLKSR_1_0V_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
 
 
-/*---------------------TMS570_PLLPLLCTL1---------------------*/
+/*---------------------TMS570_PLL_PLLCTL1---------------------*/
 /* field: ROS - Reset on PLL Slip */
-#define TMS570_PLL_PLLCTL1_ROS BSP_FLD32(31)
+#define TMS570_PLL_PLLCTL1_ROS BSP_BIT32(31)
 
 /* field: MASK_SLIP - Mask detection of PLL slip */
 #define TMS570_PLL_PLLCTL1_MASK_SLIP(val) BSP_FLD32(val,29, 30)
@@ -202,7 +196,7 @@ typedef struct{
 #define TMS570_PLL_PLLCTL1_PLLDIV_SET(reg,val) BSP_FLD32SET(reg, val,24, 28)
 
 /* field: ROF - Reset on Oscillator Fail */
-#define TMS570_PLL_PLLCTL1_ROF BSP_FLD32(23)
+#define TMS570_PLL_PLLCTL1_ROF BSP_BIT32(23)
 
 /* field: REFCLKDIV - Reference Clock Divider */
 #define TMS570_PLL_PLLCTL1_REFCLKDIV(val) BSP_FLD32(val,16, 21)
@@ -215,9 +209,9 @@ typedef struct{
 #define TMS570_PLL_PLLCTL1_PLLMUL_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_PLLPLLCTL2---------------------*/
+/*---------------------TMS570_PLL_PLLCTL2---------------------*/
 /* field: FMENA - Frequency Modulation Enable. */
-#define TMS570_PLL_PLLCTL2_FMENA BSP_FLD32(31)
+#define TMS570_PLL_PLLCTL2_FMENA BSP_BIT32(31)
 
 /* field: SPREADINGRATE - NS = SPREADINGRATE + 1 */
 #define TMS570_PLL_PLLCTL2_SPREADINGRATE(val) BSP_FLD32(val,22, 30)
@@ -240,12 +234,12 @@ typedef struct{
 #define TMS570_PLL_PLLCTL2_SPR_AMOUNT_SET(reg,val) BSP_FLD32SET(reg, val,0, 8)
 
 
-/*--------------------TMS570_PLLLPOMONCTL--------------------*/
+/*--------------------TMS570_PLL_LPOMONCTL--------------------*/
 /* field: BIAS_ENABLE - Bias enable. */
-#define TMS570_PLL_LPOMONCTL_BIAS_ENABLE BSP_FLD32(24)
+#define TMS570_PLL_LPOMONCTL_BIAS_ENABLE BSP_BIT32(24)
 
 /* field: OSCFRQCONFIGCNT - Configures the counter based on OSC frequency. */
-#define TMS570_PLL_LPOMONCTL_OSCFRQCONFIGCNT BSP_FLD32(16)
+#define TMS570_PLL_LPOMONCTL_OSCFRQCONFIGCNT BSP_BIT32(16)
 
 /* field: HFTRIM - High frequency oscillator trim value. */
 #define TMS570_PLL_LPOMONCTL_HFTRIM(val) BSP_FLD32(val,8, 12)
@@ -253,15 +247,15 @@ typedef struct{
 #define TMS570_PLL_LPOMONCTL_HFTRIM_SET(reg,val) BSP_FLD32SET(reg, val,8, 12)
 
 
-/*---------------------TMS570_PLLCLKTEST---------------------*/
+/*---------------------TMS570_PLL_CLKTEST---------------------*/
 /* field: ALTLIMPCLOCKENABLE - This bit selects a clock driven by the GIOB[0] pin as an alternate limp clock to the clock */
-#define TMS570_PLL_CLKTEST_ALTLIMPCLOCKENABLE BSP_FLD32(26)
+#define TMS570_PLL_CLKTEST_ALTLIMPCLOCKENABLE BSP_BIT32(26)
 
 /* field: RANGEDETCTRL - Range detection control. */
-#define TMS570_PLL_CLKTEST_RANGEDETCTRL BSP_FLD32(25)
+#define TMS570_PLL_CLKTEST_RANGEDETCTRL BSP_BIT32(25)
 
 /* field: RANGEDETENASSEL - Selects range detection enable. This bit resets asynchronously on power on reset. */
-#define TMS570_PLL_CLKTEST_RANGEDETENASSEL BSP_FLD32(24)
+#define TMS570_PLL_CLKTEST_RANGEDETENASSEL BSP_BIT32(24)
 
 /* field: CLK_TEST_EN - Clock test enable. This bit enables the clock going to the ECLK pin. */
 #define TMS570_PLL_CLKTEST_CLK_TEST_EN(val) BSP_FLD32(val,16, 19)
@@ -269,9 +263,9 @@ typedef struct{
 #define TMS570_PLL_CLKTEST_CLK_TEST_EN_SET(reg,val) BSP_FLD32SET(reg, val,16, 19)
 
 
-/*----------------------TMS570_PLLGPREG1----------------------*/
+/*---------------------TMS570_PLL_GPREG1---------------------*/
 /* field: EMIF_FUNC - Enable EMIF functions to be output. */
-#define TMS570_PLL_GPREG1_EMIF_FUNC BSP_FLD32(31)
+#define TMS570_PLL_GPREG1_EMIF_FUNC BSP_BIT32(31)
 
 /* field: PLL1_FBSLIP_FILTER__COUNT - FBSLIP down counter programmed value. */
 #define TMS570_PLL_GPREG1_PLL1_FBSLIP_FILTER__COUNT(val) BSP_FLD32(val,20, 25)
@@ -289,16 +283,16 @@ typedef struct{
 #define TMS570_PLL_GPREG1_OUTPUT_BUFFER_LOW_EMI_MODE_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_PLLGLBSTAT---------------------*/
+/*---------------------TMS570_PLL_GLBSTAT---------------------*/
 /* field: FBSLIP - PLL over cycle slip detection. */
-#define TMS570_PLL_GLBSTAT_FBSLIP BSP_FLD32(9)
+#define TMS570_PLL_GLBSTAT_FBSLIP BSP_BIT32(9)
 
 /* field: RFSLIP - PLL under cycle slip detection. */
-#define TMS570_PLL_GLBSTAT_RFSLIP BSP_FLD32(8)
+#define TMS570_PLL_GLBSTAT_RFSLIP BSP_BIT32(8)
 
 /* field: OSCFAIL - Oscillator fail flag bit. */
-#define TMS570_PLL_GLBSTAT_OSCFAIL BSP_FLD32(0)
+#define TMS570_PLL_GLBSTAT_OSCFAIL BSP_BIT32(0)
 
 
 
-#endif /* LIBBSP_ARM_tms570_PLL */
+#endif /* LIBBSP_ARM_TMS570_PLL */

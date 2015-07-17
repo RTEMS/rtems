@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_GIO
-#define LIBBSP_ARM_tms570_GIO
+#ifndef LIBBSP_ARM_TMS570_GIO
+#define LIBBSP_ARM_TMS570_GIO
 
 #include <bsp/utility.h>
 
@@ -70,68 +70,68 @@ typedef struct{
 } tms570_gio_t;
 
 
-/*-----------------------TMS570_GIODIR-----------------------*/
+/*-----------------------TMS570_GIO_DIR-----------------------*/
 /* field: GIODIR - GIO data direction, pins [7:0] */
 #define TMS570_GIO_DIR_GIODIR(val) BSP_FLD32(val,0, 7)
 #define TMS570_GIO_DIR_GIODIR_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_GIO_DIR_GIODIR_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_GIODIN-----------------------*/
+/*-----------------------TMS570_GIO_DIN-----------------------*/
 /* field: GIODIN - GIO data input, pins [7:0] */
 #define TMS570_GIO_DIN_GIODIN(val) BSP_FLD32(val,0, 7)
 #define TMS570_GIO_DIN_GIODIN_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_GIO_DIN_GIODIN_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_GIODOUT-----------------------*/
+/*----------------------TMS570_GIO_DOUT----------------------*/
 /* field: GIODOUT - IO data output, pins[7:0]. */
 #define TMS570_GIO_DOUT_GIODOUT(val) BSP_FLD32(val,0, 7)
 #define TMS570_GIO_DOUT_GIODOUT_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_GIO_DOUT_GIODOUT_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_GIODSET-----------------------*/
+/*----------------------TMS570_GIO_DSET----------------------*/
 /* field: GIODSET - GIO data set, pins[7:0]. This bit drives the output of GIO pin high. */
 #define TMS570_GIO_DSET_GIODSET(val) BSP_FLD32(val,0, 7)
 #define TMS570_GIO_DSET_GIODSET_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_GIO_DSET_GIODSET_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_GIODCLR-----------------------*/
+/*----------------------TMS570_GIO_DCLR----------------------*/
 /* field: GIODCLR - GIO data clear, pins[7:0]. This bit drives the output of GIO pin low. */
 #define TMS570_GIO_DCLR_GIODCLR(val) BSP_FLD32(val,0, 7)
 #define TMS570_GIO_DCLR_GIODCLR_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_GIO_DCLR_GIODCLR_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_GIOPDR-----------------------*/
+/*-----------------------TMS570_GIO_PDR-----------------------*/
 /* field: 7_0 - GIOPDRH GIO open drain, pins[7:0] */
 #define TMS570_GIO_PDR_7_0(val) BSP_FLD32(val,0, 7)
 #define TMS570_GIO_PDR_7_0_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_GIO_PDR_7_0_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*----------------------TMS570_GIOPULDIS----------------------*/
+/*---------------------TMS570_GIO_PULDIS---------------------*/
 /* field: GIOPULDIS - GIO pull disable, pins[7:0]. */
 #define TMS570_GIO_PULDIS_GIOPULDIS(val) BSP_FLD32(val,0, 7)
 #define TMS570_GIO_PULDIS_GIOPULDIS_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_GIO_PULDIS_GIOPULDIS_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_GIOPSL-----------------------*/
+/*-----------------------TMS570_GIO_PSL-----------------------*/
 /* field: GIOPSL - GIO pull select, pins[7:0] */
 #define TMS570_GIO_PSL_GIOPSL(val) BSP_FLD32(val,0, 7)
 #define TMS570_GIO_PSL_GIOPSL_GET(reg) BSP_FLD32GET(reg,0, 7)
 #define TMS570_GIO_PSL_GIOPSL_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_GIOGCR0-----------------------*/
+/*----------------------TMS570_GIO_GCR0----------------------*/
 /* field: RESET - GIO reset. */
-#define TMS570_GIO_GCR0_RESET BSP_FLD32(0)
+#define TMS570_GIO_GCR0_RESET BSP_BIT32(0)
 
 
-/*----------------------TMS570_GIOINTDET----------------------*/
+/*---------------------TMS570_GIO_INTDET---------------------*/
 /* field: GIOINTDET_3 - Interrupt detection select for pins GIOD[7:0] */
 #define TMS570_GIO_INTDET_GIOINTDET_3(val) BSP_FLD32(val,24, 31)
 #define TMS570_GIO_INTDET_GIOINTDET_3_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -153,7 +153,7 @@ typedef struct{
 #define TMS570_GIO_INTDET_GIOINTDET_0_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_GIOPOL-----------------------*/
+/*-----------------------TMS570_GIO_POL-----------------------*/
 /* field: GIOPOL_3 - Interrupt polarity select for pins GIOD[7:0] */
 #define TMS570_GIO_POL_GIOPOL_3(val) BSP_FLD32(val,24, 31)
 #define TMS570_GIO_POL_GIOPOL_3_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -175,7 +175,7 @@ typedef struct{
 #define TMS570_GIO_POL_GIOPOL_0_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*----------------------TMS570_GIOENASET----------------------*/
+/*---------------------TMS570_GIO_ENASET---------------------*/
 /* field: GIOENASET_3 - nterrupt enable for pins GIOD[7:0] */
 #define TMS570_GIO_ENASET_GIOENASET_3(val) BSP_FLD32(val,24, 31)
 #define TMS570_GIO_ENASET_GIOENASET_3_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -197,7 +197,7 @@ typedef struct{
 #define TMS570_GIO_ENASET_GIOENASET_0_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*----------------------TMS570_GIOENACLR----------------------*/
+/*---------------------TMS570_GIO_ENACLR---------------------*/
 /* field: GIOENACLR_3 - Interrupt enable for pins GIOD[7:0] */
 #define TMS570_GIO_ENACLR_GIOENACLR_3(val) BSP_FLD32(val,24, 31)
 #define TMS570_GIO_ENACLR_GIOENACLR_3_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -219,7 +219,7 @@ typedef struct{
 #define TMS570_GIO_ENACLR_GIOENACLR_0_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*----------------------TMS570_GIOLVLSET----------------------*/
+/*---------------------TMS570_GIO_LVLSET---------------------*/
 /* field: GIOLVLSET_3 - GIO high priority interrupt for pins GIOD[7:0]. */
 #define TMS570_GIO_LVLSET_GIOLVLSET_3(val) BSP_FLD32(val,24, 31)
 #define TMS570_GIO_LVLSET_GIOLVLSET_3_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -241,7 +241,7 @@ typedef struct{
 #define TMS570_GIO_LVLSET_GIOLVLSET_0_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*----------------------TMS570_GIOLVLCLR----------------------*/
+/*---------------------TMS570_GIO_LVLCLR---------------------*/
 /* field: GIOLVLCLR_3 - GIO low priority interrupt for pins GIOD[7:0] */
 #define TMS570_GIO_LVLCLR_GIOLVLCLR_3(val) BSP_FLD32(val,24, 31)
 #define TMS570_GIO_LVLCLR_GIOLVLCLR_3_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -263,7 +263,7 @@ typedef struct{
 #define TMS570_GIO_LVLCLR_GIOLVLCLR_0_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_GIOFLG-----------------------*/
+/*-----------------------TMS570_GIO_FLG-----------------------*/
 /* field: GIOFLG_3 - GIO flag for pins GIOD[7:0]. */
 #define TMS570_GIO_FLG_GIOFLG_3(val) BSP_FLD32(val,24, 31)
 #define TMS570_GIO_FLG_GIOFLG_3_GET(reg) BSP_FLD32GET(reg,24, 31)
@@ -285,35 +285,35 @@ typedef struct{
 #define TMS570_GIO_FLG_GIOFLG_0_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 
-/*-----------------------TMS570_GIOOFF1-----------------------*/
+/*----------------------TMS570_GIO_OFF1----------------------*/
 /* field: GIOOFF1 - GIO offset 1. These bits index the currently pending high-priority interrupt. */
 #define TMS570_GIO_OFF1_GIOOFF1(val) BSP_FLD32(val,0, 5)
 #define TMS570_GIO_OFF1_GIOOFF1_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_GIO_OFF1_GIOOFF1_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*-----------------------TMS570_GIOOFF2-----------------------*/
+/*----------------------TMS570_GIO_OFF2----------------------*/
 /* field: GIOOFF2 - GIO offset 2. These bits index the currently pending low-priority interrupt. */
 #define TMS570_GIO_OFF2_GIOOFF2(val) BSP_FLD32(val,0, 5)
 #define TMS570_GIO_OFF2_GIOOFF2_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_GIO_OFF2_GIOOFF2_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*-----------------------TMS570_GIOEMU1-----------------------*/
+/*----------------------TMS570_GIO_EMU1----------------------*/
 /* field: GIOEMU1 - GIO offset emulation 1. These bits index the currently pending high-priority interrupt. */
 #define TMS570_GIO_EMU1_GIOEMU1(val) BSP_FLD32(val,0, 5)
 #define TMS570_GIO_EMU1_GIOEMU1_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_GIO_EMU1_GIOEMU1_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*-----------------------TMS570_GIOEMU2-----------------------*/
+/*----------------------TMS570_GIO_EMU2----------------------*/
 /* field: GIOEMU2 - GIO offset emulation 2. These bits index the currently pending low-priority interrupt. */
 #define TMS570_GIO_EMU2_GIOEMU2(val) BSP_FLD32(val,0, 5)
 #define TMS570_GIO_EMU2_GIOEMU2_GET(reg) BSP_FLD32GET(reg,0, 5)
 #define TMS570_GIO_EMU2_GIOEMU2_SET(reg,val) BSP_FLD32SET(reg, val,0, 5)
 
 
-/*----------------------TMS570_GIOports----------------------*/
+/*----------------------TMS570_GIO_ports----------------------*/
 /* field: GIOEMU2 - GIO offset emulation 2. These bits index the currently pending low-priority interrupt. */
 #define TMS570_GIO_ports_GIOEMU2(val) BSP_FLD32(val,0, 5)
 #define TMS570_GIO_ports_GIOEMU2_GET(reg) BSP_FLD32GET(reg,0, 5)
@@ -321,4 +321,4 @@ typedef struct{
 
 
 
-#endif /* LIBBSP_ARM_tms570_GIO */
+#endif /* LIBBSP_ARM_TMS570_GIO */

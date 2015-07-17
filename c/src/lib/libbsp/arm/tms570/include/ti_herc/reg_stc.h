@@ -36,8 +36,8 @@
  * of the authors and should not be interpreted as representing official policies,
  * either expressed or implied, of the FreeBSD Project.
 */
-#ifndef LIBBSP_ARM_tms570_STC
-#define LIBBSP_ARM_tms570_STC
+#ifndef LIBBSP_ARM_TMS570_STC
+#define LIBBSP_ARM_TMS570_STC
 
 #include <bsp/utility.h>
 
@@ -61,122 +61,92 @@ typedef struct{
 } tms570_stc_t;
 
 
-/*---------------------TMS570_STCSTCGCR0---------------------*/
+/*---------------------TMS570_STC_STCGCR0---------------------*/
 /* field: INTCOUNT - Number of intervals of self-test run */
 #define TMS570_STC_STCGCR0_INTCOUNT(val) BSP_FLD32(val,16, 31)
 #define TMS570_STC_STCGCR0_INTCOUNT_GET(reg) BSP_FLD32GET(reg,16, 31)
 #define TMS570_STC_STCGCR0_INTCOUNT_SET(reg,val) BSP_FLD32SET(reg, val,16, 31)
 
 /* field: RS_CNT - Restart or Continue */
-#define TMS570_STC_STCGCR0_RS_CNT BSP_FLD32(0)
+#define TMS570_STC_STCGCR0_RS_CNT BSP_BIT32(0)
 
 
-/*---------------------TMS570_STCSTCGCR1---------------------*/
+/*---------------------TMS570_STC_STCGCR1---------------------*/
 /* field: STC_ENA - Self-test run enable key */
 #define TMS570_STC_STCGCR1_STC_ENA(val) BSP_FLD32(val,0, 3)
 #define TMS570_STC_STCGCR1_STC_ENA_GET(reg) BSP_FLD32GET(reg,0, 3)
 #define TMS570_STC_STCGCR1_STC_ENA_SET(reg,val) BSP_FLD32SET(reg, val,0, 3)
 
 
-/*----------------------TMS570_STCSTCTPR----------------------*/
+/*---------------------TMS570_STC_STCTPR---------------------*/
 /* field: RTOD - Self-test timeout count preload */
-#define TMS570_STC_STCTPR_RTOD(val) BSP_FLD32(val,0, 31)
-#define TMS570_STC_STCTPR_RTOD_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_STC_STCTPR_RTOD_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*--------------------TMS570_STCSTC_CADDR--------------------*/
+/*--------------------TMS570_STC_STC_CADDR--------------------*/
 /* field: ADDR - Current ROM Address */
-#define TMS570_STC_STC_CADDR_ADDR(val) BSP_FLD32(val,0, 31)
-#define TMS570_STC_STC_CADDR_ADDR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_STC_STC_CADDR_ADDR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_STCSTCCICR---------------------*/
+/*---------------------TMS570_STC_STCCICR---------------------*/
 /* field: N - Interval Number */
 #define TMS570_STC_STCCICR_N(val) BSP_FLD32(val,0, 15)
 #define TMS570_STC_STCCICR_N_GET(reg) BSP_FLD32GET(reg,0, 15)
 #define TMS570_STC_STCCICR_N_SET(reg,val) BSP_FLD32SET(reg, val,0, 15)
 
 
-/*---------------------TMS570_STCSTCGSTAT---------------------*/
+/*--------------------TMS570_STC_STCGSTAT--------------------*/
 /* field: TEST_FAIL - Test Fail */
-#define TMS570_STC_STCGSTAT_TEST_FAIL BSP_FLD32(1)
+#define TMS570_STC_STCGSTAT_TEST_FAIL BSP_BIT32(1)
 
 /* field: TEST_DONE - Test Done */
-#define TMS570_STC_STCGSTAT_TEST_DONE BSP_FLD32(0)
+#define TMS570_STC_STCGSTAT_TEST_DONE BSP_BIT32(0)
 
 
-/*---------------------TMS570_STCSTCFSTAT---------------------*/
+/*--------------------TMS570_STC_STCFSTAT--------------------*/
 /* field: TO_ERR - Timeout Error */
-#define TMS570_STC_STCFSTAT_TO_ERR BSP_FLD32(2)
+#define TMS570_STC_STCFSTAT_TO_ERR BSP_BIT32(2)
 
 /* field: CPU2_FAIL - CPU2 failure info */
-#define TMS570_STC_STCFSTAT_CPU2_FAIL BSP_FLD32(1)
+#define TMS570_STC_STCFSTAT_CPU2_FAIL BSP_BIT32(1)
 
 /* field: CPU1_FAIL - CPU1 failure info */
-#define TMS570_STC_STCFSTAT_CPU1_FAIL BSP_FLD32(0)
+#define TMS570_STC_STCFSTAT_CPU1_FAIL BSP_BIT32(0)
 
 
-/*------------------TMS570_STCCPU1_CURMISR3------------------*/
+/*------------------TMS570_STC_CPU1_CURMISR3------------------*/
 /* field: MISR - MISR data from CPU1 */
-#define TMS570_STC_CPU1_CURMISR3_MISR(val) BSP_FLD32(val,0, 31)
-#define TMS570_STC_CPU1_CURMISR3_MISR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_STC_CPU1_CURMISR3_MISR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------TMS570_STCCPU1_CURMISR2------------------*/
+/*------------------TMS570_STC_CPU1_CURMISR2------------------*/
 /* field: MISR - MISR data from CPU1 */
-#define TMS570_STC_CPU1_CURMISR2_MISR(val) BSP_FLD32(val,0, 31)
-#define TMS570_STC_CPU1_CURMISR2_MISR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_STC_CPU1_CURMISR2_MISR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------TMS570_STCCPU1_CURMISR1------------------*/
+/*------------------TMS570_STC_CPU1_CURMISR1------------------*/
 /* field: MISR - MISR data from CPU1 */
-#define TMS570_STC_CPU1_CURMISR1_MISR(val) BSP_FLD32(val,0, 31)
-#define TMS570_STC_CPU1_CURMISR1_MISR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_STC_CPU1_CURMISR1_MISR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------TMS570_STCCPU1_CURMISR0------------------*/
+/*------------------TMS570_STC_CPU1_CURMISR0------------------*/
 /* field: MISR - MISR data from CPU1 */
-#define TMS570_STC_CPU1_CURMISR0_MISR(val) BSP_FLD32(val,0, 31)
-#define TMS570_STC_CPU1_CURMISR0_MISR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_STC_CPU1_CURMISR0_MISR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------TMS570_STCCPU2_CURMISR3------------------*/
+/*------------------TMS570_STC_CPU2_CURMISR3------------------*/
 /* field: MISR - MISR data from CPU2 */
-#define TMS570_STC_CPU2_CURMISR3_MISR(val) BSP_FLD32(val,0, 31)
-#define TMS570_STC_CPU2_CURMISR3_MISR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_STC_CPU2_CURMISR3_MISR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------TMS570_STCCPU2_CURMISR2------------------*/
+/*------------------TMS570_STC_CPU2_CURMISR2------------------*/
 /* field: MISR - MISR data from CPU2 */
-#define TMS570_STC_CPU2_CURMISR2_MISR(val) BSP_FLD32(val,0, 31)
-#define TMS570_STC_CPU2_CURMISR2_MISR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_STC_CPU2_CURMISR2_MISR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------TMS570_STCCPU2_CURMISR1------------------*/
+/*------------------TMS570_STC_CPU2_CURMISR1------------------*/
 /* field: MISR - MISR data from CPU2 */
-#define TMS570_STC_CPU2_CURMISR1_MISR(val) BSP_FLD32(val,0, 31)
-#define TMS570_STC_CPU2_CURMISR1_MISR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_STC_CPU2_CURMISR1_MISR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*------------------TMS570_STCCPU2_CURMISR0------------------*/
+/*------------------TMS570_STC_CPU2_CURMISR0------------------*/
 /* field: MISR - MISR data from CPU2 */
-#define TMS570_STC_CPU2_CURMISR0_MISR(val) BSP_FLD32(val,0, 31)
-#define TMS570_STC_CPU2_CURMISR0_MISR_GET(reg) BSP_FLD32GET(reg,0, 31)
-#define TMS570_STC_CPU2_CURMISR0_MISR_SET(reg,val) BSP_FLD32SET(reg, val,0, 31)
+/* Whole 32 bits */
 
-
-/*---------------------TMS570_STCSTCSCSCR---------------------*/
+/*--------------------TMS570_STC_STCSCSCR--------------------*/
 /* field: FAULT_INS - Enable / Disable fault insertion. */
-#define TMS570_STC_STCSCSCR_FAULT_INS BSP_FLD32(4)
+#define TMS570_STC_STCSCSCR_FAULT_INS BSP_BIT32(4)
 
 /* field: SELF_CHECK_KEY - Signature compare logic self-check enable key */
 #define TMS570_STC_STCSCSCR_SELF_CHECK_KEY(val) BSP_FLD32(val,0, 3)
@@ -185,4 +155,4 @@ typedef struct{
 
 
 
-#endif /* LIBBSP_ARM_tms570_STC */
+#endif /* LIBBSP_ARM_TMS570_STC */
