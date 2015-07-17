@@ -307,16 +307,16 @@ The Classic API provides three directives to support per task variables. These a
 @item @code{@value{DIRPREFIX}task_variable_delete} - Remove per task variable
 @end itemize
 
-As task variables are unsafe for use on SMP systems, the use of these
-services should be eliminated in all software that is to be used in
-an SMP environment. It is recommended that the application developer
-consider the use of POSIX Keys or Thread Local Storage (TLS). POSIX Keys
-are not enabled in all RTEMS configurations.
+As task variables are unsafe for use on SMP systems, the use of these services
+must be eliminated in all software that is to be used in an SMP environment.
+The task variables API is disabled on SMP. Its use will lead to compile-time
+and link-time errors. It is recommended that the application developer consider
+the use of POSIX Keys or Thread Local Storage (TLS). POSIX Keys are available
+in all RTEMS configurations.  For the availablity of TLS on a particular
+architecture please consult the @cite{RTEMS CPU Architecture Supplement}.
 
-@b{STATUS}: As of March 2014, some support services in the
-@code{rtems/cpukit} use per task variables. When these uses are
-eliminated, the per task variable directives will be disabled when
-building RTEMS in SMP configuration.
+The only remaining user of task variables in the RTEMS code base is the Ada
+support.  So basically Ada is not available on RTEMS SMP.
 
 @c
 @c
