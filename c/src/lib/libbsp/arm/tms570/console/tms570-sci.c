@@ -155,7 +155,7 @@ static int tms570_sci_read_received_chars(
  */
 static void tms570_sci_enable_interrupts(tms570_sci_context * ctx)
 {
-  ctx->regs->SETINT = (1<<9);
+  ctx->regs->SETINT = TMS570_SCI_SETINT_SET_RX_INT;
 }
 
 /**
@@ -169,7 +169,7 @@ static void tms570_sci_enable_interrupts(tms570_sci_context * ctx)
  */
 static void tms570_sci_disable_interrupts(tms570_sci_context * ctx)
 {
-  ctx->regs->CLEARINT = (1<<9);
+  ctx->regs->CLEARINT = TMS570_SCI_CLEARINT_CLR_RX_INT;
 }
 
 /**
@@ -216,29 +216,30 @@ static bool tms570_sci_set_attributes(
 
   rtems_termios_device_lock_acquire(base, &lock_context);
 
-  ctx->regs->GCR1 &= ~( (1<<7) | (1<<25) | (1<<24) );
+  ctx->regs->GCR1 &= ~( TMS570_SCI_GCR1_SWnRST | TMS570_SCI_GCR1_TXENA |
+                        TMS570_SCI_GCR1_RXENA );
 
-  ctx->regs->GCR1 &= ~(1<<4);    /*one stop bit*/
-  ctx->regs->FORMAT = 0x7;
+  ctx->regs->GCR1 &= ~TMS570_SCI_GCR1_STOP;    /*one stop bit*/
+  ctx->regs->FORMAT = TMS570_SCI_FORMAT_CHAR(0x7);
 
   switch ( t->c_cflag & ( PARENB|PARODD ) ) {
     case ( PARENB|PARODD ):
       /* Odd parity */
-      ctx->regs->GCR1 &= ~(1<<3);
-      ctx->regs->GCR1 |= (1<<2);
+      ctx->regs->GCR1 &= ~TMS570_SCI_GCR1_PARITY;
+      ctx->regs->GCR1 |= TMS570_SCI_GCR1_PARITY_ENA;
       break;
 
     case PARENB:
       /* Even parity */
-      ctx->regs->GCR1 |= (1<<3);
-      ctx->regs->GCR1 |= (1<<2);
+      ctx->regs->GCR1 |= TMS570_SCI_GCR1_PARITY;
+      ctx->regs->GCR1 |= TMS570_SCI_GCR1_PARITY_ENA;
       break;
 
     default:
     case 0:
     case PARODD:
       /* No Parity */
-      ctx->regs->GCR1 &= ~(1<<2);
+      ctx->regs->GCR1 &= ~TMS570_SCI_GCR1_PARITY_ENA;
   }
 
   /* Baud rate */
@@ -247,7 +248,8 @@ static bool tms570_sci_set_attributes(
   bauddiv = (BSP_PLL_OUT_CLOCK + baudrate / 2) / baudrate;
   ctx->regs->BRS = bauddiv;
 
-  ctx->regs->GCR1 |= (1<<7) | (1<<25) | (1<<24);
+  ctx->regs->GCR1 |= TMS570_SCI_GCR1_SWnRST | TMS570_SCI_GCR1_TXENA |
+                     TMS570_SCI_GCR1_RXENA;
 
   rtems_termios_device_lock_release(base, &lock_context);
 
@@ -274,7 +276,7 @@ static void tms570_sci_interrupt_handler(void * arg)
   /*
    * Check if we have received something.
    */
-   if ( (ctx->regs->FLR & (1<<9) ) == (1<<9) ) {
+   if ( (ctx->regs->FLR & TMS570_SCI_FLR_RXRDY ) == TMS570_SCI_FLR_RXRDY ) {
       n = tms570_sci_read_received_chars(ctx, buf, TMS570_SCI_BUFFER_SIZE);
       if ( n > 0 ) {
         /* Hand the data over to the Termios infrastructure */
@@ -284,7 +286,7 @@ static void tms570_sci_interrupt_handler(void * arg)
   /*
    * Check if we have something transmitted.
    */
-  if ( (ctx->regs->FLR & (1<<8) ) == (1<<8) ) {
+  if ( (ctx->regs->FLR & TMS570_SCI_FLR_TXRDY ) == TMS570_SCI_FLR_TXRDY ) {
     n = tms570_sci_transmitted_chars(ctx);
     if ( n > 0 ) {
       /*
@@ -355,7 +357,7 @@ static void tms570_sci_poll_write(
   /* Write */
 
   for ( i = 0; i < n; ++i ) {
-    while ( (ctx->regs->FLR & (1<<11) ) == 0) {
+    while ( (ctx->regs->FLR & TMS570_SCI_FLR_TX_EMPTY ) == 0) {
       ;
     }
     ctx->regs->TD = buf[i];
@@ -375,7 +377,7 @@ static int TMS570_sci_can_read_char(
   tms570_sci_context * ctx
 )
 {
-  return ctx->regs->FLR & (1<<9);
+  return ctx->regs->FLR & TMS570_SCI_FLR_RXRDY;
 }
 
 /**
@@ -530,7 +532,7 @@ static void tms570_sci_interrupt_last_close(
   rtems_termios_device_lock_release(base, &lock_context);
 
   /* Flush device */
-  while ( ( ctx->regs->FLR & (1<<11) ) > 0 ) {
+  while ( ( ctx->regs->FLR & TMS570_SCI_FLR_TX_EMPTY ) > 0 ) {
     ;/* Wait until all data has been sent */
   }
 

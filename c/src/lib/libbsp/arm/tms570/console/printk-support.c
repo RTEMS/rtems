@@ -41,7 +41,7 @@ static void tms570_putc(char ch)
   rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
-  while ( ( driver_context_table[0].regs->FLR & 0x100 ) == 0) {
+  while ( ( driver_context_table[0].regs->FLR & TMS570_SCI_FLR_TXRDY ) == 0) {
     rtems_interrupt_flash(level);
   }
   driver_context_table[0].regs->TD = ch;
@@ -74,7 +74,7 @@ static void tms570_uart_output(char c)
  */
 static int tms570_uart_input( void )
 {
-  if ( driver_context_table[0].regs->FLR & (1<<9) ) {
+  if ( driver_context_table[0].regs->FLR & TMS570_SCI_FLR_RXRDY ) {
       return driver_context_table[0].regs->RD;
   } else {
       return -1;
