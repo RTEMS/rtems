@@ -22,9 +22,14 @@ directives:
   - _Futex_Wait()
   - _Futex_Wake()
   - _Futex_Destroy()
+  - _Sched_Count()
+  - _Sched_Index()
+  - _Sched_Name_to_index()
+  - _Sched_Processor_count()
 
 concepts:
 
   - Ensure that self-contained mutexes and recursive mutexes work.
   - Ensure that self-contained semaphores work.
   - Ensure that self-contained futexes work.
+  - Ensure that <sys/lock.h> scheduler support works.

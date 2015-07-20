@@ -389,6 +389,20 @@ static void test_futex(test_context *ctx)
   rtems_test_assert(ctx->eno[b] == 0);
 }
 
+static void test_sched(void)
+{
+  rtems_test_assert(_Sched_Index() == 0);
+  rtems_test_assert(_Sched_Name_to_index("", 0) == -1);
+  rtems_test_assert(_Sched_Name_to_index("b", 1) == -1);
+  rtems_test_assert(_Sched_Name_to_index("bl", 2) == -1);
+  rtems_test_assert(_Sched_Name_to_index("blu", 3) == -1);
+  rtems_test_assert(_Sched_Name_to_index("blue", 4) == 0);
+  rtems_test_assert(_Sched_Name_to_index("blueX", 5) == 0);
+  rtems_test_assert(_Sched_Processor_count(-1) == 0);
+  rtems_test_assert(_Sched_Processor_count(0) == 1);
+  rtems_test_assert(_Sched_Processor_count(1) == 0);
+}
+
 static void mid_task(rtems_task_argument arg)
 {
   rtems_test_assert(0);
@@ -532,6 +546,7 @@ static void test(void)
   test_sem(ctx);
   test_sem_prio_wait_order(ctx);
   test_futex(ctx);
+  test_sched();
 
   send_event(ctx, 0, EVENT_MTX_DEADLOCK);
 
@@ -566,6 +581,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_SCHEDULER_NAME rtems_build_name('b', 'l', 'u', 'e')
 
 #define CONFIGURE_INIT
 
