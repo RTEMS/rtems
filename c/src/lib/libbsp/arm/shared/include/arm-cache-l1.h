@@ -377,13 +377,13 @@ static inline size_t arm_cache_l1_get_data_cache_size( void )
   uint32_t associativity = 0;
   uint32_t num_sets      = 0;
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_local_disable(level);
 
   arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_DATA );
   arm_cache_l1_properties( &line_size, &associativity,
                            &num_sets );
 
-  rtems_interrupt_enable(level);
+  rtems_interrupt_local_enable(level);
 
   size = (1 << line_size) * associativity * num_sets;
 
@@ -398,13 +398,13 @@ static inline size_t arm_cache_l1_get_instruction_cache_size( void )
   uint32_t associativity = 0;
   uint32_t num_sets      = 0;
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_local_disable(level);
 
   arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_INSTRUCTION );
   arm_cache_l1_properties( &line_size, &associativity,
                            &num_sets );
 
-  rtems_interrupt_enable(level);
+  rtems_interrupt_local_enable(level);
 
   size = (1 << line_size) * associativity * num_sets;
   
