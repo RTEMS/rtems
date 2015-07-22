@@ -8,6 +8,7 @@
 
 #include <rtems.h>
 #include <rtems/monitor.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 
 #include <stdio.h>
@@ -28,6 +29,7 @@ rtems_monitor_task_canonical(
     canonical_task->argument = rtems_thread->Start.numeric_argument;
     canonical_task->stack = rtems_thread->Start.Initial_stack.area;
     canonical_task->stack_size = rtems_thread->Start.Initial_stack.size;
+    canonical_task->cpu = _Per_CPU_Get_index( _Thread_Get_CPU( rtems_thread ) );
     canonical_task->priority = rtems_thread->current_priority;
     canonical_task->state = rtems_thread->current_state;
     canonical_task->wait_id = rtems_thread->Wait.id;
@@ -57,8 +59,8 @@ rtems_monitor_task_dump_header(
 )
 {
     fprintf(stdout,"\
-ID         NAME           PRI STATE  MODES    EVENTS WAITID   WAITQUEUE\n"); /*
-0a010004   SHLL           100 READY  P:T:nA     NONE 00000000 00000000 [DFLT] */
+ID         NAME       CPU PRI STATE  MODES    EVENTS WAITID   WAITQUEUE\n"); /*
+0a010004   SHLL         0 100 READY  P:T:nA     NONE 00000000 00000000 [DFLT] */
 
     rtems_monitor_separator();
 }
@@ -77,6 +79,8 @@ rtems_monitor_task_dump(
     length += rtems_monitor_dump_id(monitor_task->id);
     length += rtems_monitor_pad(11, length);
     length += rtems_monitor_dump_name(monitor_task->id);
+    length += rtems_monitor_pad(21, length);
+    length += rtems_monitor_dump_decimal(monitor_task->cpu);
     length += rtems_monitor_pad(26, length);
     length += rtems_monitor_dump_priority(monitor_task->priority);
     length += rtems_monitor_pad(30, length);

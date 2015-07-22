@@ -99,6 +99,7 @@ typedef struct {
     Thread_Entry_numeric_type  argument;
     void                      *stack;
     uint32_t                   stack_size;
+    uint32_t                   cpu;
     rtems_task_priority        priority;
     States_Control             state;
     rtems_event_set            events;
