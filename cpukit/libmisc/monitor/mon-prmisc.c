@@ -47,9 +47,9 @@ rtems_monitor_dump_decimal(uint32_t   num)
 }
 
 int
-rtems_monitor_dump_addr(void *addr)
+rtems_monitor_dump_addr(const void *addr)
 {
-    return fprintf(stdout,"0x%p", addr);
+    return fprintf(stdout,"%08" PRIxPTR, (intptr_t) addr);
 }
 
 int
