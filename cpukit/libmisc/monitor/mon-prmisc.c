@@ -248,19 +248,3 @@ rtems_monitor_dump_events(rtems_event_set events)
 
     return fprintf(stdout,"%08" PRIx32, events);
 }
-
-int
-rtems_monitor_dump_notepad(uint32_t   *notepad)
-{
-    int   length = 0;
-
-    if (rtems_configuration_get_notepads_enabled()) {
-      int i;
-
-      for (i=0; i < RTEMS_NUMBER_NOTEPADS; i++)
-          if (notepad[i])
-              length += fprintf(stdout,"%d: 0x%" PRIx32, i, notepad[i]);
-    }
-
-    return length;
-}

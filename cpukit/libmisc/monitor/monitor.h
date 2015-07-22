@@ -104,8 +104,6 @@ typedef struct {
     rtems_event_set            events;
     rtems_mode                 modes;
     rtems_attribute            attributes;
-    uint32_t                   notepad[RTEMS_NUMBER_NOTEPADS]
-                                            RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
     rtems_id                   wait_id;
     uint32_t                   wait_args;
     uint32_t                   ticks;
@@ -413,7 +411,6 @@ int        rtems_monitor_dump_state(States_Control state);
 int        rtems_monitor_dump_modes(rtems_mode modes);
 int        rtems_monitor_dump_attributes(rtems_attribute attributes);
 int        rtems_monitor_dump_events(rtems_event_set events);
-int        rtems_monitor_dump_notepad(uint32_t   *notepad);
 
 /* object.c */
 rtems_id   rtems_monitor_id_fixup(rtems_id, uint32_t  , rtems_monitor_object_type_t);
