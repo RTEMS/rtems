@@ -105,7 +105,8 @@ typedef struct {
     rtems_mode                 modes;
     rtems_attribute            attributes;
     rtems_id                   wait_id;
-    uint32_t                   wait_args;
+    const void                *wait_queue;
+    const void                *wait_operations;
     uint32_t                   ticks;
 } rtems_monitor_task_t;
 

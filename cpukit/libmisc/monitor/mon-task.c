@@ -8,6 +8,7 @@
 
 #include <rtems.h>
 #include <rtems/monitor.h>
+#include <rtems/score/threadqimpl.h>
 
 #include <stdio.h>
 #include <string.h>    /* memcpy() */
@@ -30,6 +31,8 @@ rtems_monitor_task_canonical(
     canonical_task->priority = rtems_thread->current_priority;
     canonical_task->state = rtems_thread->current_state;
     canonical_task->wait_id = rtems_thread->Wait.id;
+    canonical_task->wait_queue = rtems_thread->Wait.queue;
+    canonical_task->wait_operations = rtems_thread->Wait.operations;
     canonical_task->events = api->Event.pending_events;
     /*
      * FIXME: make this optionally cpu_time_executed
@@ -45,11 +48,6 @@ rtems_monitor_task_canonical(
 /* XXX if they are important enough to include anymore.   */
     canonical_task->modes = 0; /* XXX FIX ME.... rtems_thread->current_modes; */
     canonical_task->attributes = 0 /* XXX FIX ME rtems_thread->API_Extensions[ THREAD_API_RTEMS ]->attribute_set */;
-
-/* XXX more to fix */
-/*
-    (void) memcpy(&canonical_task->wait_args, &rtems_thread->Wait.Extra, sizeof(canonical_task->wait_args));
-*/
 }
 
 
@@ -59,10 +57,8 @@ rtems_monitor_task_dump_header(
 )
 {
     fprintf(stdout,"\
-  ID       NAME           PRI  STATE MODES   EVENTS    WAITID  WAITARG\n\
-");
-/*23456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
-0         1         2         3         4         5         6         7       */
+ID         NAME           PRI STATE  MODES    EVENTS WAITID   WAITQUEUE\n"); /*
+0a010004   SHLL           100 READY  P:T:nA     NONE 00000000 00000000 [DFLT] */
 
     rtems_monitor_separator();
 }
@@ -83,18 +79,24 @@ rtems_monitor_task_dump(
     length += rtems_monitor_dump_name(monitor_task->id);
     length += rtems_monitor_pad(26, length);
     length += rtems_monitor_dump_priority(monitor_task->priority);
-    length += rtems_monitor_pad(29, length);
+    length += rtems_monitor_pad(30, length);
     length += rtems_monitor_dump_state(monitor_task->state);
     length += rtems_monitor_pad(37, length);
     length += rtems_monitor_dump_modes(monitor_task->modes);
-    length += rtems_monitor_pad(45, length);
+    length += rtems_monitor_pad(44, length);
     length += rtems_monitor_dump_events(monitor_task->events);
-    if (monitor_task->wait_id)
-    {
-        length += rtems_monitor_pad(54, length);
-        length += rtems_monitor_dump_id(monitor_task->wait_id);
-        length += rtems_monitor_pad(63, length);
-        length += rtems_monitor_dump_hex(monitor_task->wait_args);
+    length += rtems_monitor_pad(53, length);
+    length += rtems_monitor_dump_id(monitor_task->wait_id);
+    length += rtems_monitor_pad(62, length);
+    length += rtems_monitor_dump_addr(monitor_task->wait_queue);
+    if (monitor_task->wait_operations == &_Thread_queue_Operations_default) {
+        length += fprintf(stdout, " [DFLT]");
+    } else if (monitor_task->wait_operations == &_Thread_queue_Operations_FIFO) {
+        length += fprintf(stdout, " [FIFO]");
+    } else if (monitor_task->wait_operations == &_Thread_queue_Operations_priority) {
+        length += fprintf(stdout, " [PRIO]");
+    } else {
+        length += fprintf(stdout, " [?]");
     }
 
     fprintf(stdout,"\n");
