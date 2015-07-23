@@ -71,6 +71,7 @@ typedef struct {
 
 typedef struct {
   test_device base;
+  bool eio;
   unsigned current_address;
   uint8_t data[EEPROM_SIZE];
 } test_device_eeprom;
@@ -197,6 +198,10 @@ static int test_eeprom_transfer(
   test_device_eeprom *dev = (test_device_eeprom *) base;
   i2c_msg *msg = &msgs[0];
   uint32_t i;
+
+  if (dev->eio) {
+    return -EIO;
+  }
 
   if (msg_count > 0 && (msg->flags & I2C_M_RD) == 0) {
     if (msg->len < 1) {
@@ -406,7 +411,7 @@ static void test_gpio_nxp_pca9535(void)
   rtems_test_assert(rv == 0);
 }
 
-static void test_eeprom(void)
+static void test_eeprom(test_bus *bus)
 {
   int rv;
   int fd_in;
@@ -441,6 +446,20 @@ static void test_eeprom(void)
   rtems_test_assert(st.st_size == sizeof(out));
 
   memset(&out[0], 0, sizeof(out));
+
+  bus->eeprom.eio = true;
+
+  errno = 0;
+  n = read(fd_in, &in[0], 1);
+  rtems_test_assert(n == -1);
+  rtems_test_assert(errno == EIO);
+
+  errno = 0;
+  n = write(fd_out, &out[0], 1);
+  rtems_test_assert(n == -1);
+  rtems_test_assert(errno == EIO);
+
+  bus->eeprom.eio = false;
 
   n = read(fd_in, &in[0], sizeof(in) + 1);
   rtems_test_assert(n == (ssize_t) sizeof(in));
@@ -608,7 +627,7 @@ static void test(void)
   rtems_test_assert(bus->base.timeout == 0);
 
   test_simple_read_write(bus, fd);
-  test_eeprom();
+  test_eeprom(bus);
   test_gpio_nxp_pca9535();
   test_switch_nxp_pca9548a();
 
