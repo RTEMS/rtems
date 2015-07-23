@@ -43,11 +43,13 @@ static ssize_t i2c_dev_read(
   ssize_t n;
 
   n = (*dev->read)(dev, buffer, count, iop->offset);
-  if (n > 0) {
+  if (n >= 0) {
     iop->offset += n;
-  }
 
-  return n;
+    return n;
+  } else {
+    rtems_set_errno_and_return_minus_one(-n);
+  }
 }
 
 static ssize_t i2c_dev_write(
@@ -60,11 +62,13 @@ static ssize_t i2c_dev_write(
   ssize_t n;
 
   n = (*dev->write)(dev, buffer, count, iop->offset);
-  if (n > 0) {
+  if (n >= 0) {
     iop->offset += n;
-  }
 
-  return n;
+    return n;
+  } else {
+    rtems_set_errno_and_return_minus_one(-n);
+  }
 }
 
 static int i2c_dev_ioctl(
