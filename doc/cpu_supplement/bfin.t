@@ -130,6 +130,10 @@ actions:
 simulate a halt processor instruction.
 @end itemize
 
+@section Symmetric Multiprocessing
+
+SMP is not supported.
+
 @section Thread-Local Storage
 
 Thread-local storage is not implemented.

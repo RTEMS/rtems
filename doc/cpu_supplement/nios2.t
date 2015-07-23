@@ -2,6 +2,10 @@
 
 @chapter Altera Nios II Specific Information
 
+@section Symmetric Multiprocessing
+
+SMP is not supported.
+
 @section Thread-Local Storage
 
 Thread-local storage is not implemented.

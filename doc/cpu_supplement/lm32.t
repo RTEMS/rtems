@@ -163,6 +163,10 @@ interrupts and halts the processor.
 In each of the architecture specific chapters, this describes the precise
 operations of the default CPU specific fatal error handler.
 
+@section Symmetric Multiprocessing
+
+SMP is not supported.
+
 @section Thread-Local Storage
 
 Thread-local storage is not implemented.

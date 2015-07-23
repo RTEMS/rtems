@@ -266,6 +266,10 @@ The default fatal error handler for this architecture disables processor
 interrupts, places the error code in EAX, and executes a HLT instruction
 to halt the processor.
 
+@section Symmetric Multiprocessing
+
+SMP is not supported.
+
 @section Thread-Local Storage
 
 Thread-local storage is not implemented.

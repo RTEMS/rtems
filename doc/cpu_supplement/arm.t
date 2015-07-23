@@ -172,6 +172,11 @@ following actions:
 @item executes an infinite loop to simulate a halt processor instruction.
 @end itemize
 
+@section Symmetric Multiprocessing
+
+SMP is supported on ARMv7-A.  Available platforms are the Altera Cyclone V and
+the Xilinx Zynq.
+
 @section Thread-Local Storage
 
 Thread-local storage is supported.

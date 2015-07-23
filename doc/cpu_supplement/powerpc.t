@@ -657,6 +657,11 @@ If the Program Exception returns, then the following actions are performed:
 
 @end itemize
 
+@section Symmetric Multiprocessing
+
+SMP is supported.  Available platforms are the Freescale QorIQ P series (e.g.
+P1020) and T series (e.g. T2080, T4240).
+
 @section Thread-Local Storage
 
 Thread-local storage is supported.
