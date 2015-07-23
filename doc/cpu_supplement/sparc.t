@@ -969,6 +969,11 @@ error source in register @code{g2}, and the error code in register
 @code{g3}. It will then generate a system error which will
 hand over control to the debugger, simulator, etc.
 
+@section Symmetric Multiprocessing
+
+SMP is supported.  Available platforms are the Cobham Gaisler GR712RC and
+GR740.
+
 @section Thread-Local Storage
 
 Thread-local storage is supported.

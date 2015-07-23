@@ -344,6 +344,11 @@ interrupts and halts the processor.
 In each of the architecture specific chapters, this describes the precise
 operations of the default CPU specific fatal error handler.
 
+@section Symmetric Multiprocessing
+
+This section contains information about the Symmetric Multiprocessing (SMP)
+status of a particular architecture.
+
 @section Thread-Local Storage
 
 In order to support thread-local storage (TLS) the CPU port must implement the

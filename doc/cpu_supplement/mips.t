@@ -122,6 +122,10 @@ The default fatal error handler for this target architecture disables
 processor interrupts, places the error code in @b{XXX}, and executes a
 @code{XXX} instruction to simulate a halt processor instruction.
 
+@section Symmetric Multiprocessing
+
+SMP is not supported.
+
 @section Thread-Local Storage
 
 Thread-local storage is not implemented.

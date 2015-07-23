@@ -357,6 +357,10 @@ The default fatal error handler for this architecture disables processor
 interrupts to level 7, places the error code in D0, and executes a
 @code{stop} instruction to simulate a halt processor instruction.
 
+@section Symmetric Multiprocessing
+
+SMP is not supported.
+
 @section Thread-Local Storage
 
 Thread-local storage is supported.
