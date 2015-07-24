@@ -1224,6 +1224,11 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_restore_default(
   Thread_Control *the_thread
 )
 {
+  /*
+   * Ensures that the stores to the wait queue and operations completed before
+   * the default lock is restored.  See _Thread_Wait_set_queue() and
+   * _Thread_Wait_restore_default_operations().
+   */
   _Atomic_Fence( ATOMIC_ORDER_RELEASE );
 
   _Thread_Lock_set_unprotected( the_thread, &the_thread->Lock.Default );
