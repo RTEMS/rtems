@@ -512,8 +512,9 @@ static int rtems_tftp_eval_path(
         size_t pathlen = pathnamelen;
         size_t len = currentlen + pathlen;
 
-        current = realloc (current, len + 1);
+        current = malloc (len + 1);
         if (current != NULL) {
+            memcpy (current, currentloc->node_access, currentlen);
             memcpy (current + currentlen, path, pathlen);
             current [len] = '\0';
             if (!rtems_tftp_is_directory (current, len)) {
