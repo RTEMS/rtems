@@ -913,7 +913,9 @@ static int rtems_tftp_close(
         rtems_task_wake_after (1 + ticksPerSecond / 10);
     }
     releaseStream (fs, iop->data0);
-    rtems_set_errno_and_return_minus_one (e);
+    if (e)
+        rtems_set_errno_and_return_minus_one (e);
+    return 0;
 }
 
 static ssize_t rtems_tftp_write(
