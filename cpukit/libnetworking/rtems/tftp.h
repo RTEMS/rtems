@@ -36,7 +36,8 @@ extern "C" {
 /*
  * Filesystem Mount table entry.
  */
-int rtems_tftpfs_initialize(rtems_filesystem_mount_table_entry_t *temp_mt_entry);
+int rtems_tftpfs_initialize(rtems_filesystem_mount_table_entry_t *temp_mt_entry,
+                            const void *data);
 
 #ifdef __cplusplus
 }

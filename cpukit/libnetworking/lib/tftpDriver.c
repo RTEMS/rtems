@@ -203,9 +203,10 @@ int rtems_tftpfs_initialize(
   fs->tftpStreams = 0;
   
   mt_entry->fs_info = fs;
-  mt_entry->mt_fs_root->location.node_access = root_path;
-  mt_entry->mt_fs_root->location.handlers = &rtems_tftp_handlers;
-  mt_entry->ops = &rtems_tftp_ops;
+  mt_entry->mt_fs_root.node_access = root_path;
+  mt_entry->mt_fs_root.node_access_2 = root_path;
+  mt_entry->mt_fs_root.handlers = &rtems_tftp_handlers;
+  mt_entry->mt_fs_root.ops = &rtems_tftp_ops;
   
   /*
    *  Now allocate a semaphore for mutual exclusion.
@@ -264,7 +265,7 @@ releaseStream (tftpfs_info_t *fs, int s)
     rtems_semaphore_release (fs->tftp_mutex);
 }
 
-static void
+static int
 rtems_tftpfs_shutdown (rtems_filesystem_mount_table_entry_t* mt_entry)
 {
   tftpfs_info_t *fs = tftpfs_info_mount_table (mt_entry);
@@ -273,7 +274,8 @@ rtems_tftpfs_shutdown (rtems_filesystem_mount_table_entry_t* mt_entry)
       releaseStream (fs, s);
   rtems_semaphore_delete (fs->tftp_mutex);
   free (fs);
-  free (mt_entry->mt_fs_root->location.node_access);
+  free (mt_entry->mt_fs_root.node_access);
+  return 0;
 }
 
 /*
@@ -428,6 +430,17 @@ sendAck (struct tftpStream *tp)
     return 0;
 }
 
+static int rtems_tftp_evaluate_for_make(
+   const char                         *path __attribute__((unused)),       /* IN     */
+   rtems_filesystem_location_info_t   *pathloc,    /* IN/OUT */
+   const char                        **name __attribute__((unused))        /* OUT    */
+)
+{
+  pathloc->node_access = NULL;
+  pathloc->node_access_2 = NULL;
+  rtems_set_errno_and_return_minus_one (EIO);
+}
+
 /*
  * Convert a path to canonical form
  */
@@ -482,40 +495,50 @@ fixPath (char *path)
     return;
 }
 
-static void rtems_tftp_eval_path(rtems_filesystem_eval_path_context_t *self)
+static int rtems_tftp_eval_path(
+  const char                        *pathname,     /* IN     */
+  size_t                             pathnamelen,  /* IN     */
+  int                                flags,        /* IN     */
+  rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
+)
 {
-    int eval_flags = rtems_filesystem_eval_path_get_flags (self);
+    const int rw = RTEMS_LIBIO_PERMS_READ | RTEMS_LIBIO_PERMS_WRITE;
 
-    if ((eval_flags & RTEMS_FS_MAKE) == 0) {
-        int rw = RTEMS_FS_PERMS_READ | RTEMS_FS_PERMS_WRITE;
+    if ((flags & rw) != rw) {
+        rtems_filesystem_location_info_t *currentloc = pathloc;
+        char *current = currentloc->node_access;
+        size_t currentlen = strlen (current);
+        const char *path = pathname;
+        size_t pathlen = pathnamelen;
+        size_t len = currentlen + pathlen;
 
-        if ((eval_flags & rw) != rw) {
-            rtems_filesystem_location_info_t *currentloc =
-                rtems_filesystem_eval_path_get_currentloc (self);
-            char *current = currentloc->node_access;
-            size_t currentlen = strlen (current);
-            const char *path = rtems_filesystem_eval_path_get_path (self);
-            size_t pathlen = rtems_filesystem_eval_path_get_pathlen (self);
-            size_t len = currentlen + pathlen;
-
-            rtems_filesystem_eval_path_clear_path (self);
-
-            current = realloc (current, len + 1);
-            if (current != NULL) {
-                memcpy (current + currentlen, path, pathlen);
-                current [len] = '\0';
-                if (!rtems_tftp_is_directory (current, len)) {
-                    fixPath (current);
-                }
+        current = realloc (current, len + 1);
+        if (current != NULL) {
+            memcpy (current + currentlen, path, pathlen);
+            current [len] = '\0';
+            if (!rtems_tftp_is_directory (current, len)) {
+                fixPath (current);
                 currentloc->node_access = current;
+                currentloc->node_access_2 = current;
             } else {
-                rtems_filesystem_eval_path_error (self, ENOMEM);
+                /* this directory might be the FS root,
+                 * and unmount() compares the pointer
+                 */
+                if (strcmp(current, currentloc->mt_entry->mt_fs_root.node_access)==0) {
+                    free(current);
+                    currentloc->node_access = currentloc->mt_entry->mt_fs_root.node_access;
+                    currentloc->node_access_2 = NULL;
+                } else {
+                    currentloc->node_access = current;
+                    currentloc->node_access_2 = current;
+                }
             }
+            return 0;
         } else {
-            rtems_filesystem_eval_path_error (self, EINVAL);
+            rtems_set_errno_and_return_minus_one (ENOMEM);
         }
     } else {
-        rtems_filesystem_eval_path_error (self, EIO);
+        rtems_set_errno_and_return_minus_one (EINVAL);
     }
 }
 
@@ -525,7 +548,8 @@ static void rtems_tftp_eval_path(rtems_filesystem_eval_path_context_t *self)
 static int rtems_tftp_open_worker(
     rtems_libio_t *iop,
     char          *full_path_name,
-    int            oflag
+    uint32_t       flags,
+    uint32_t       mode __attribute__((unused))
 )
 {
     tftpfs_info_t        *fs;
@@ -572,6 +596,8 @@ static int rtems_tftp_open_worker(
         if (he == NULL)
             return ENOENT;
         memcpy (&farAddress, he->h_addr, sizeof (farAddress));
+    } else {
+        return ENOENT; /* TODO, can remove? */
     }
     
     /*
@@ -653,7 +679,7 @@ static int rtems_tftp_open_worker(
     tp->farAddress.sin_port = htons (69);
 
     if (fs->flags & TFTPFS_VERBOSE) {
-        printf("TFTPFS: %d %s %s from %08lx\n", flags,
+        printf("TFTPFS: %d %s %s from %08lx\n", (unsigned)flags,
                ((flags & O_ACCMODE) == O_RDONLY)?"read":"write",
                remoteFilename, ntohl(farAddress.s_addr));
     }
@@ -666,7 +692,7 @@ static int rtems_tftp_open_worker(
         /*
          * Create the request
          */
-        if ((oflag & O_ACCMODE) == O_RDONLY) {
+        if ((flags & O_ACCMODE) == O_RDONLY) {
             tp->writing = 0;
             tp->pkbuf.tftpRWRQ.opcode = htons (TFTP_OPCODE_RRQ);
         }
@@ -740,8 +766,8 @@ static int rtems_tftp_open_worker(
 static int rtems_tftp_open(
     rtems_libio_t *iop,
     const char    *new_name,
-    int            oflag,
-    mode_t         mode
+    uint32_t      oflag,
+    uint32_t      mode
 )
 {
     tftpfs_info_t *fs;
@@ -762,7 +788,7 @@ static int rtems_tftp_open(
     if (fs->flags & TFTPFS_VERBOSE)
       printf ("TFTPFS: %s\n", full_path_name);
 
-    err = rtems_tftp_open_worker (iop, full_path_name, oflag);
+    err = rtems_tftp_open_worker (iop, full_path_name, oflag, mode);
     if (err != 0) {
        rtems_set_errno_and_return_minus_one (err);
     }
@@ -984,8 +1010,18 @@ static int rtems_tftp_ftruncate(
     return 0;
 }
 
+static rtems_filesystem_node_types_t rtems_tftp_node_type(
+     rtems_filesystem_location_info_t        *pathloc                 /* IN */
+)
+{
+    const char * path = pathloc->node_access;
+    if (!rtems_tftp_is_directory(path, strlen(path)))
+        return RTEMS_FILESYSTEM_MEMORY_FILE;
+    return RTEMS_FILESYSTEM_DIRECTORY;
+}
+
 static int rtems_tftp_fstat(
-    const rtems_filesystem_location_info_t *loc,
+    rtems_filesystem_location_info_t *loc,
     struct stat                            *buf
 )
 {
@@ -998,57 +1034,21 @@ static int rtems_tftp_fstat(
     return 0;
 }
 
-static int rtems_tftp_clone(
+static int rtems_tftp_free_node_info(
     rtems_filesystem_location_info_t *loc
 )
 {
-    int rv = 0;
-
-    loc->node_access = strdup (loc->node_access);
-
-    if (loc->node_access == NULL) {
-        errno = ENOMEM;
-        rv = -1;
-    }
-
-    return rv;
-}
-
-static void rtems_tftp_free_node_info(
-    const rtems_filesystem_location_info_t *loc
-)
-{
-    free (loc->node_access);
-}
-
-static bool rtems_tftp_are_nodes_equal(
-  const rtems_filesystem_location_info_t *a,
-  const rtems_filesystem_location_info_t *b
-)
-{
-  return strcmp (a->node_access, b->node_access) == 0;
+    free (loc->node_access_2);
+    return 0;
 }
 
 static const rtems_filesystem_operations_table  rtems_tftp_ops = {
-    .lock_h = rtems_filesystem_default_lock,
-    .unlock_h = rtems_filesystem_default_unlock,
-    .eval_path_h = rtems_tftp_eval_path,
-    .link_h = rtems_filesystem_default_link,
-    .are_nodes_equal_h = rtems_tftp_are_nodes_equal,
-    .mknod_h = rtems_filesystem_default_mknod,
-    .rmnod_h = rtems_filesystem_default_rmnod,
-    .fchmod_h = rtems_filesystem_default_fchmod,
-    .chown_h = rtems_filesystem_default_chown,
-    .clonenod_h = rtems_tftp_clone,
+    .evalpath_h = rtems_tftp_eval_path,
+    .evalformake_h = rtems_tftp_evaluate_for_make,
+    .node_type_h = rtems_tftp_node_type,
     .freenod_h = rtems_tftp_free_node_info,
-    .mount_h = rtems_filesystem_default_mount,
-    .unmount_h = rtems_filesystem_default_unmount,
+    .fsmount_me_h = rtems_tftpfs_initialize,
     .fsunmount_me_h = rtems_tftpfs_shutdown,
-    .utime_h = rtems_filesystem_default_utime,
-    .symlink_h = rtems_filesystem_default_symlink,
-    .readlink_h = rtems_filesystem_default_readlink,
-    .rename_h = rtems_filesystem_default_rename,
-    .statvfs_h = rtems_filesystem_default_statvfs
 };
 
 static const rtems_filesystem_file_handlers_r rtems_tftp_handlers = {
@@ -1056,15 +1056,6 @@ static const rtems_filesystem_file_handlers_r rtems_tftp_handlers = {
    .close_h = rtems_tftp_close,
    .read_h = rtems_tftp_read,
    .write_h = rtems_tftp_write,
-   .ioctl_h = rtems_filesystem_default_ioctl,
-   .lseek_h = rtems_filesystem_default_lseek,
    .fstat_h = rtems_tftp_fstat,
    .ftruncate_h = rtems_tftp_ftruncate,
-   .fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
-   .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
-   .fcntl_h = rtems_filesystem_default_fcntl,
-   .kqfilter_h = rtems_filesystem_default_kqfilter,
-   .poll_h = rtems_filesystem_default_poll,
-   .readv_h = rtems_filesystem_default_readv,
-   .writev_h = rtems_filesystem_default_writev
 };
