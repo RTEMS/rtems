@@ -30,3 +30,7 @@ $(PROJECT_INCLUDE)/bsp/console-termios.h: shared/include/console-termios.h $(PRO
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/console-termios.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/console-termios.h
 
+$(PROJECT_INCLUDE)/bsp/gpio.h: shared/include/gpio.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/gpio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/gpio.h
+

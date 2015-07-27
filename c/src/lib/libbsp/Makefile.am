@@ -9,7 +9,7 @@ EXTRA_DIST = MERGE.PROCEDURE bsp.am
 EXTRA_DIST += shared/bootcard.c shared/bspclean.c \
     shared/bsplibc.c shared/bsppost.c shared/console-polled.c \
     shared/console.c shared/gnatinstallhandler.c shared/sbrk.c \
-    shared/tod.c
+    shared/tod.c shared/gpio.c
 EXTRA_DIST += shared/vmeUniverse/vmeUniverse.c \
     shared/vmeUniverse/vmeUniverse.h \
     shared/vmeUniverse/vmeUniverseDMA.h \
@@ -35,6 +35,7 @@ include_bsp_HEADERS =
 include_bsp_HEADERS += shared/include/default-initial-extension.h
 include_bsp_HEADERS += shared/include/fatal.h
 include_bsp_HEADERS += shared/include/console-termios.h
+include_bsp_HEADERS += shared/include/gpio.h
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/subdirs.am
