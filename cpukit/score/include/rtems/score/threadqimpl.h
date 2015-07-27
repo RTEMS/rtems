@@ -33,6 +33,24 @@ extern "C" {
  */
 /**@{*/
 
+/**
+ * @brief Thread queue with a layout compatible to struct _Thread_queue_Queue
+ * defined in Newlib <sys/lock.h>.
+ */
+typedef struct {
+  Thread_queue_Queue Queue;
+
+#if !defined(RTEMS_SMP)
+  /*
+   * The struct _Thread_queue_Queue definition is independent of the RTEMS
+   * build configuration.  Thus, the storage space for the SMP lock is always
+   * present.  In SMP configurations, the SMP lock is contained in the
+   * Thread_queue_Queue.
+   */
+  unsigned int reserved[2];
+#endif
+} Thread_queue_Syslock_queue;
+
 RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_initialize(
   Thread_queue_Queue *queue
 )

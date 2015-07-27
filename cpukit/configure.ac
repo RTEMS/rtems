@@ -71,6 +71,7 @@ AC_CHECK_DECLS([ftrylockfile],[AC_CHECK_FUNCS([ftrylockfile])],,[#include <stdio
 AC_CHECK_HEADERS([envlock.h])
 AC_CHECK_DECLS([__env_lock],,,[#include <envlock.h>])
 AC_CHECK_DECLS([__env_unlock],,,[#include <envlock.h>])
+AC_CHECK_TYPES([struct _Thread_queue_Queue],[],[],[#include <sys/lock.h>])
 
 # Mandated by POSIX, older newlibs bogusly provided CLOCK_PROCESS_CPUTIME+CLOCK_THREAD_CPUTIME
 AC_CHECK_DECL([CLOCK_PROCESS_CPUTIME_ID],[],[AC_MSG_ERROR([missing define CLOCK_PROCESS_CPUTIME_ID])],[#include <time.h>])

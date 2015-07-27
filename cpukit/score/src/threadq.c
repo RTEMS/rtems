@@ -22,6 +22,42 @@
 #include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/threadimpl.h>
 
+#if HAVE_STRUCT__THREAD_QUEUE_QUEUE
+
+RTEMS_STATIC_ASSERT(
+  offsetof( Thread_queue_Syslock_queue, Queue.heads )
+    == offsetof( struct _Thread_queue_Queue, _heads ),
+  THREAD_QUEUE_SYSLOCK_QUEUE_HEADS
+);
+
+RTEMS_STATIC_ASSERT(
+#if defined(RTEMS_SMP)
+  offsetof( Thread_queue_Syslock_queue, Queue.Lock.next_ticket )
+#else
+  offsetof( Thread_queue_Syslock_queue, reserved[ 0 ] )
+#endif
+    == offsetof( struct _Thread_queue_Queue, _Lock._next_ticket ),
+  THREAD_QUEUE_SYSLOCK_QUEUE_NEXT_TICKET
+);
+
+RTEMS_STATIC_ASSERT(
+#if defined(RTEMS_SMP)
+  offsetof( Thread_queue_Syslock_queue, Queue.Lock.now_serving )
+#else
+  offsetof( Thread_queue_Syslock_queue, reserved[ 1 ] )
+#endif
+    == offsetof( struct _Thread_queue_Queue, _Lock._now_serving ),
+  THREAD_QUEUE_SYSLOCK_QUEUE_NOW_SERVING
+);
+
+RTEMS_STATIC_ASSERT(
+  sizeof( Thread_queue_Syslock_queue )
+    == sizeof( struct _Thread_queue_Queue ),
+  THREAD_QUEUE_SYSLOCK_QUEUE_SIZE
+);
+
+#endif /* HAVE_STRUCT__THREAD_QUEUE_QUEUE */
+
 RBTree_Compare_result _Thread_queue_Compare_priority(
   const RBTree_Node *left,
   const RBTree_Node *right
