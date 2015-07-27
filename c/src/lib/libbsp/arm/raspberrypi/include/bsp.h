@@ -33,6 +33,10 @@ extern "C" {
 
 #define BSP_FEATURE_IRQ_EXTENSION
 
+#define BSP_GPIO_PIN_COUNT 32
+#define BSP_GPIO_PINS_PER_BANK 32
+#define BSP_GPIO_PINS_PER_SELECT_BANK 10
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

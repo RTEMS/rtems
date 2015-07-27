@@ -130,6 +130,10 @@ $(PROJECT_INCLUDE)/bsp/raspberrypi.h: include/raspberrypi.h $(PROJECT_INCLUDE)/b
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/raspberrypi.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/raspberrypi.h
 
+$(PROJECT_INCLUDE)/bsp/rpi-gpio.h: include/rpi-gpio.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/rpi-gpio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/rpi-gpio.h
+
 $(PROJECT_INCLUDE)/libcpu/cache_.h: ../../../libcpu/arm/shared/include/cache_.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache_.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache_.h
