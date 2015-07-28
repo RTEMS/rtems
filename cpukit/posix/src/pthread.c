@@ -39,7 +39,6 @@
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/keyimpl.h>
-#include <rtems/posix/time.h>
 #include <rtems/score/timespec.h>
 #include <rtems/score/cpusetimpl.h>
 #include <rtems/score/assert.h>

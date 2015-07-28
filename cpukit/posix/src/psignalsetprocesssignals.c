@@ -30,7 +30,6 @@
 #include <rtems/posix/threadsup.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthreadimpl.h>
-#include <rtems/posix/time.h>
 #include <stdio.h>
 
 void _POSIX_signals_Set_process_signals(

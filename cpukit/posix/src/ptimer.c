@@ -27,7 +27,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
 
-#include <rtems/posix/time.h>
 
 /************************************/
 /* These includes are now necessary */

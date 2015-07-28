@@ -27,10 +27,9 @@
 #include <mqueue.h>
 
 #include <rtems/system.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
-#include <rtems/posix/time.h>
 
 int mq_timedsend(
   mqd_t                  mqdes,
@@ -42,7 +41,7 @@ int mq_timedsend(
 {
   Watchdog_Interval                            ticks;
   bool                                         do_wait = true;
-  POSIX_Absolute_timeout_conversion_results_t  status;
+  TOD_Absolute_timeout_conversion_results  status;
 
   /*
    *  POSIX requires that blocking calls with timeouts that take
@@ -53,12 +52,12 @@ int mq_timedsend(
    *  then we do a polling operation and convert the UNSATISFIED
    *  status into the appropriate error.
    *
-   *  If the status is POSIX_ABSOLUTE_TIMEOUT_INVALID,
-   *  POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST, or POSIX_ABSOLUTE_TIMEOUT_IS_NOW,
+   *  If the status is TOD_ABSOLUTE_TIMEOUT_INVALID,
+   *  TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST, or TOD_ABSOLUTE_TIMEOUT_IS_NOW,
    *  then we should not wait.
    */
-  status = _POSIX_Absolute_timeout_to_ticks( abstime, &ticks );
-  if ( status != POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE )
+  status = _TOD_Absolute_timeout_to_ticks( abstime, &ticks );
+  if ( status != TOD_ABSOLUTE_TIMEOUT_IS_IN_FUTURE )
     do_wait = false;
 
   return _POSIX_Message_queue_Send_support(

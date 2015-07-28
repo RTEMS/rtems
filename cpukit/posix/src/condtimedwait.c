@@ -22,9 +22,8 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/posix/condimpl.h>
-#include <rtems/posix/time.h>
 #include <rtems/posix/muteximpl.h>
 
 /*
@@ -39,7 +38,7 @@ int pthread_cond_timedwait(
 {
   Watchdog_Interval                            ticks;
   bool                                         already_timedout;
-  POSIX_Absolute_timeout_conversion_results_t  status;
+  TOD_Absolute_timeout_conversion_results  status;
 
   /*
    *  POSIX requires that blocking calls with timeouts that take
@@ -51,12 +50,12 @@ int pthread_cond_timedwait(
    *  status into the appropriate error.
    */
   already_timedout = false;
-  status = _POSIX_Absolute_timeout_to_ticks(abstime, &ticks);
-  if ( status == POSIX_ABSOLUTE_TIMEOUT_INVALID )
+  status = _TOD_Absolute_timeout_to_ticks(abstime, &ticks);
+  if ( status == TOD_ABSOLUTE_TIMEOUT_INVALID )
     return EINVAL;
 
-  if ( status == POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
-       status == POSIX_ABSOLUTE_TIMEOUT_IS_NOW )
+  if ( status == TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
+       status == TOD_ABSOLUTE_TIMEOUT_IS_NOW )
     already_timedout = true;
 
   return _POSIX_Condition_variables_Wait_support(

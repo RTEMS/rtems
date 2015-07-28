@@ -125,10 +125,6 @@ $(PROJECT_INCLUDE)/rtems/posix/threadsup.h: include/rtems/posix/threadsup.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/threadsup.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/threadsup.h
 
-$(PROJECT_INCLUDE)/rtems/posix/time.h: include/rtems/posix/time.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/time.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/time.h
-
 $(PROJECT_INCLUDE)/rtems/posix/timer.h: include/rtems/posix/timer.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/timer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/timer.h

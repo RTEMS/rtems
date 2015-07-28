@@ -28,7 +28,6 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/priorityimpl.h>
-#include <rtems/posix/time.h>
 
 /*
  *  _POSIX_Mutex_Manager_initialization

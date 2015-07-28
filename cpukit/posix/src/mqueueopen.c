@@ -41,7 +41,6 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/mqueueimpl.h>
-#include <rtems/posix/time.h>
 #include <rtems/seterr.h>
 
 #define MQ_OPEN_FAILED ((mqd_t) -1)

@@ -47,7 +47,6 @@ include_rtems_posix_HEADERS += include/rtems/posix/ptimer.h
 include_rtems_posix_HEADERS += include/rtems/posix/semaphore.h
 include_rtems_posix_HEADERS += include/rtems/posix/semaphoreimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/threadsup.h
-include_rtems_posix_HEADERS += include/rtems/posix/time.h
 include_rtems_posix_HEADERS += include/rtems/posix/timer.h
 include_rtems_posix_HEADERS += include/rtems/posix/timerimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/barrier.h
@@ -195,7 +194,7 @@ libposix_a_SOURCES += src/pspin.c src/pspindestroy.c src/pspininit.c \
     src/pspinunlock.c
 
 ## TIME_C_FILES
-libposix_a_SOURCES += src/adjtime.c src/posixtimespecabsolutetimeout.c \
+libposix_a_SOURCES += src/adjtime.c \
     src/clockgetcpuclockid.c src/clockgetenableattr.c src/clocksetenableattr.c
 
 ## TIMER_C_FILES

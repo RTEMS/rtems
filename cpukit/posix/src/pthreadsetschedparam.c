@@ -27,7 +27,6 @@
 
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>
-#include <rtems/posix/time.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/config.h>

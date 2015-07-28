@@ -31,7 +31,6 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
-#include <rtems/posix/time.h>
 
 /*
  *  _POSIX_Message_queue_Manager_initialization

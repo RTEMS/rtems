@@ -30,7 +30,6 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
-#include <rtems/posix/time.h>
 
 ssize_t mq_receive(
   mqd_t         mqdes,

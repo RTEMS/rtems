@@ -31,7 +31,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
-#include <rtems/posix/time.h>
 #if defined(RTEMS_DEBUG)
   #include <rtems/bspIo.h>
 #endif

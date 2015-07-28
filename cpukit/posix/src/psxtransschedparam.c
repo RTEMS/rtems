@@ -24,7 +24,6 @@
 #include <rtems/system.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>
-#include <rtems/posix/time.h>
 
 int _POSIX_Thread_Translate_sched_param(
   int                                  policy,

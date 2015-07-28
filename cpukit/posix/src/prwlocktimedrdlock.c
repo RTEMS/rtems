@@ -22,8 +22,8 @@
 #include <errno.h>
 
 #include <rtems/posix/rwlockimpl.h>
-#include <rtems/posix/time.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/todimpl.h>
 
 /*
  *  pthread_rwlock_timedrdlock
@@ -47,7 +47,7 @@ int pthread_rwlock_timedrdlock(
   Objects_Locations                            location;
   Watchdog_Interval                            ticks;
   bool                                         do_wait = true;
-  POSIX_Absolute_timeout_conversion_results_t  status;
+  TOD_Absolute_timeout_conversion_results  status;
   Thread_Control                              *executing;
 
   /*
@@ -59,12 +59,12 @@ int pthread_rwlock_timedrdlock(
    *  then we do a polling operation and convert the UNSATISFIED
    *  status into the appropriate error.
    *
-   *  If the status is POSIX_ABSOLUTE_TIMEOUT_INVALID,
-   *  POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST, or POSIX_ABSOLUTE_TIMEOUT_IS_NOW,
+   *  If the status is TOD_ABSOLUTE_TIMEOUT_INVALID,
+   *  TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST, or TOD_ABSOLUTE_TIMEOUT_IS_NOW,
    *  then we should not wait.
    */
-  status = _POSIX_Absolute_timeout_to_ticks( abstime, &ticks );
-  if ( status != POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE )
+  status = _TOD_Absolute_timeout_to_ticks( abstime, &ticks );
+  if ( status != TOD_ABSOLUTE_TIMEOUT_IS_IN_FUTURE )
     do_wait = false;
 
   the_rwlock = _POSIX_RWLock_Get( rwlock, &location );
@@ -85,10 +85,10 @@ int pthread_rwlock_timedrdlock(
       _Objects_Put( &the_rwlock->Object );
       if ( !do_wait ) {
         if ( executing->Wait.return_code == CORE_RWLOCK_UNAVAILABLE ) {
-          if ( status == POSIX_ABSOLUTE_TIMEOUT_INVALID )
+          if ( status == TOD_ABSOLUTE_TIMEOUT_INVALID )
             return EINVAL;
-          if ( status == POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
-               status == POSIX_ABSOLUTE_TIMEOUT_IS_NOW )
+          if ( status == TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
+               status == TOD_ABSOLUTE_TIMEOUT_IS_NOW )
             return ETIMEDOUT;
         }
       }

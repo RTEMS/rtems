@@ -324,6 +324,7 @@ libscore_a_SOURCES += src/coretod.c src/coretodset.c \
     src/coretodtickle.c \
     src/coretodtickspersec.c \
     src/coretodadjust.c
+libscore_a_SOURCES += src/coretodabsolutetimeout.c
 
 ## WATCHDOG_C_FILES
 libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c \

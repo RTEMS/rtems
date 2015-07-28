@@ -27,7 +27,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/priorityimpl.h>
-#include <rtems/posix/time.h>
 
 int sched_setparam(
   pid_t                     pid __attribute__((unused)),

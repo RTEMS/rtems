@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Convert Absolute Timeout to Ticks
- * @ingroup POSIX_TIMETYPES Time Types
+ * @ingroup ScoreTOD
  */
 
 /*
@@ -18,23 +18,12 @@
 #include "config.h"
 #endif
 
-#include <stdarg.h>
-
-#include <errno.h>
-#include <fcntl.h>
-#include <pthread.h>
-#include <semaphore.h>
-#include <limits.h>
-
-#include <rtems/posix/semaphoreimpl.h>
-#include <rtems/posix/time.h>
 #include <rtems/score/todimpl.h>
-#include <rtems/seterr.h>
 
 /*
  *  The abstime is a walltime.  We turn it into an interval.
  */
-POSIX_Absolute_timeout_conversion_results_t _POSIX_Absolute_timeout_to_ticks(
+TOD_Absolute_timeout_conversion_results _TOD_Absolute_timeout_to_ticks(
   const struct timespec *abstime,
   Watchdog_Interval     *ticks_out
 )
@@ -52,7 +41,7 @@ POSIX_Absolute_timeout_conversion_results_t _POSIX_Absolute_timeout_to_ticks(
    *  Is the absolute time even valid?
    */
   if ( !_Timespec_Is_valid(abstime) )
-    return POSIX_ABSOLUTE_TIMEOUT_INVALID;
+    return TOD_ABSOLUTE_TIMEOUT_INVALID;
 
   /*
    *  Is the absolute time in the past?
@@ -60,7 +49,7 @@ POSIX_Absolute_timeout_conversion_results_t _POSIX_Absolute_timeout_to_ticks(
   _TOD_Get_as_timespec( &current_time );
 
   if ( _Timespec_Less_than( abstime, &current_time ) )
-    return POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST;
+    return TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST;
 
   /*
    *  How long until the requested absolute time?
@@ -77,12 +66,12 @@ POSIX_Absolute_timeout_conversion_results_t _POSIX_Absolute_timeout_to_ticks(
    *  we better wear shades.
    */
   if ( !*ticks_out )
-    return POSIX_ABSOLUTE_TIMEOUT_IS_NOW;
+    return TOD_ABSOLUTE_TIMEOUT_IS_NOW;
 
   /*
    *  This is the case we were expecting and it took this long to
    *  get here.
    */
-  return POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE;
+  return TOD_ABSOLUTE_TIMEOUT_IS_IN_FUTURE;
 }
 

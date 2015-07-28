@@ -24,7 +24,6 @@
 #include <pthread.h>
 #include <signal.h>
 
-#include <rtems/posix/time.h>
 #include <rtems/posix/ptimer.h>
 #include <rtems/posix/timerimpl.h>
 #include <rtems/score/todimpl.h>

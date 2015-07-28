@@ -26,7 +26,6 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/priorityimpl.h>
-#include <rtems/posix/time.h>
 
 /**
  * 11.3.3 Locking and Unlocking a Mutex, P1003.1c/Draft 10, p. 93

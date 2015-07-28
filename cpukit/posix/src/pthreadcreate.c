@@ -27,7 +27,6 @@
 
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/pthreadimpl.h>
-#include <rtems/posix/time.h>
 #include <rtems/score/cpusetimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/apimutex.h>

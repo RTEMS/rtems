@@ -33,7 +33,6 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/config.h>
-#include <rtems/posix/time.h>
 #include <rtems/rtems/config.h>
 
 void _POSIX_Threads_Initialize_user_threads_body(void)

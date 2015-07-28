@@ -26,7 +26,6 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/priorityimpl.h>
-#include <rtems/posix/time.h>
 
 /*
  *  13.6.2 Change the Priority Ceiling of a Mutex, P1003.1c/Draft 10, p. 131

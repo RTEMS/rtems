@@ -42,7 +42,6 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
-#include <rtems/posix/time.h>
 
 /*
  *  15.2.8 Get Message Queue Attributes, P1003.1b-1993, p. 283

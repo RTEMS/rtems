@@ -31,7 +31,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
-#include <rtems/posix/time.h>
 
 /*
  *  15.2.2 Remove a Message Queue, P1003.1b-1993, p. 276

@@ -26,7 +26,6 @@
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/seterr.h>
-#include <rtems/posix/time.h>
 #include <rtems/score/isr.h>
 
 static int _POSIX_signals_Get_lowest(

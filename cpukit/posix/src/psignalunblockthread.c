@@ -32,7 +32,6 @@
 #include <rtems/posix/threadsup.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthreadimpl.h>
-#include <rtems/posix/time.h>
 #include <stdio.h>
 
 static bool _POSIX_signals_Unblock_thread_done(

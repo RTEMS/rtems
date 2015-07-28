@@ -43,7 +43,6 @@
 #include <rtems/posix/timerimpl.h>
 #include <rtems/posix/semaphoreimpl.h>
 #include <rtems/posix/spinlockimpl.h>
-#include <rtems/posix/time.h>
 #endif
 
 void _POSIX_Fatal_error( POSIX_Fatal_domain domain, int eno )

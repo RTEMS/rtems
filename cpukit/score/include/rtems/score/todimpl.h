@@ -21,6 +21,7 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/timestamp.h>
 #include <rtems/score/timecounterimpl.h>
+#include <rtems/score/watchdog.h>
 
 #include <sys/time.h>
 #include <time.h>
@@ -338,6 +339,44 @@ RTEMS_INLINE_ROUTINE bool _TOD_Is_set( void )
 {
   return _TOD.is_set;
 }
+
+/**
+ * @brief Absolute timeout conversion results.
+ *
+ * This enumeration defines the possible results of converting
+ * an absolute time used for timeouts to POSIX blocking calls to
+ * a number of ticks for example.
+ */
+typedef enum {
+  /** The timeout is invalid. */
+  TOD_ABSOLUTE_TIMEOUT_INVALID,
+  /** The timeout represents a time that is in the past. */
+  TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST,
+  /** The timeout represents a time that is equal to the current time. */
+  TOD_ABSOLUTE_TIMEOUT_IS_NOW,
+  /** The timeout represents a time that is in the future. */
+  TOD_ABSOLUTE_TIMEOUT_IS_IN_FUTURE,
+} TOD_Absolute_timeout_conversion_results;
+
+/**
+ * @brief Convert absolute timeout to ticks.
+ *
+ * This method takes an absolute time being used as a timeout
+ * to a blocking directive, validates it and returns the number
+ * of corresponding clock ticks for use by the SuperCore.
+ *
+ * @param[in] abstime is a pointer to the timeout
+ * @param[out] ticks_out will contain the number of ticks
+ *
+ * @return This method returns the number of ticks in @a ticks_out
+ *         and a status value indicating whether the absolute time
+ *         is valid, in the past, equal to the current time or in
+ *         the future as it should be.
+ */
+TOD_Absolute_timeout_conversion_results _TOD_Absolute_timeout_to_ticks(
+  const struct timespec *abstime,
+  Watchdog_Interval     *ticks_out
+);
 
 /**@}*/
 

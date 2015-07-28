@@ -25,7 +25,6 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/posix/condimpl.h>
-#include <rtems/posix/time.h>
 #include <rtems/posix/muteximpl.h>
 
 int _POSIX_Condition_variables_Wait_support(

@@ -31,7 +31,6 @@
 #include <rtems/posix/threadsup.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthreadimpl.h>
-#include <rtems/posix/time.h>
 #include <rtems/config.h>
 #include <rtems/seterr.h>
 
