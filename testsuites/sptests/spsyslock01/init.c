@@ -46,12 +46,17 @@ const char rtems_test_name[] = "SPSYSLOCK 1";
 
 #define EVENT_FUTEX_WAIT RTEMS_EVENT_8
 
+#define EVENT_CONDITION_WAIT RTEMS_EVENT_9
+
+#define EVENT_CONDITION_WAIT_REC RTEMS_EVENT_10
+
 typedef struct {
   rtems_id high[2];
   rtems_id mid;
   rtems_id low;
   struct _Mutex_Control mtx;
   struct _Mutex_recursive_Control rec_mtx;
+  struct _Condition_Control cond;
   struct _Semaphore_Control sem;
   struct _Futex_Control futex;
   int val;
@@ -93,21 +98,25 @@ static void test_initialization(test_context *ctx)
 {
   struct _Mutex_Control mtx = _MUTEX_INITIALIZER;
   struct _Mutex_recursive_Control rec_mtx = _MUTEX_RECURSIVE_INITIALIZER;
+  struct _Condition_Control cond = _CONDITION_INITIALIZER;
   struct _Semaphore_Control sem = _SEMAPHORE_INITIALIZER(1);
   struct _Futex_Control futex = _FUTEX_INITIALIZER;
 
   _Mutex_Initialize(&ctx->mtx);
   _Mutex_recursive_Initialize(&ctx->rec_mtx);
+  _Condition_Initialize(&ctx->cond);
   _Semaphore_Initialize(&ctx->sem, 1);
   _Futex_Initialize(&ctx->futex);
 
   rtems_test_assert(memcmp(&mtx, &ctx->mtx, sizeof(mtx)) == 0);
   rtems_test_assert(memcmp(&rec_mtx, &ctx->rec_mtx, sizeof(rec_mtx)) == 0);
+  rtems_test_assert(memcmp(&cond, &ctx->cond, sizeof(cond)) == 0);
   rtems_test_assert(memcmp(&sem, &ctx->sem, sizeof(sem)) == 0);
   rtems_test_assert(memcmp(&futex, &ctx->futex, sizeof(futex)) == 0);
 
   _Mutex_Destroy(&mtx);
   _Mutex_recursive_Destroy(&rec_mtx);
+  _Condition_Destroy(&cond);
   _Semaphore_Destroy(&sem);
   _Futex_Destroy(&futex);
 }
@@ -285,6 +294,80 @@ static void test_mtx_timeout_recursive(test_context *ctx)
   rtems_test_assert(eno == ETIMEDOUT);
 
   send_event(ctx, idx, EVENT_REC_MTX_RELEASE);
+}
+
+static void test_condition(test_context *ctx)
+{
+  struct _Condition_Control *cond = &ctx->cond;
+  size_t a = 0;
+  size_t b = 1;
+  int gen_a;
+  int gen_b;
+
+  gen_a = ctx->generation[a];
+  gen_b = ctx->generation[b];
+
+  _Condition_Signal(cond);
+  _Condition_Broadcast(cond);
+
+  send_event(ctx, a, EVENT_CONDITION_WAIT);
+  send_event(ctx, b, EVENT_CONDITION_WAIT_REC);
+
+  rtems_test_assert(ctx->generation[a] == gen_a + 1);
+  rtems_test_assert(ctx->generation[b] == gen_b + 1);
+
+  _Condition_Signal(cond);
+
+  rtems_test_assert(ctx->generation[a] == gen_a + 2);
+  rtems_test_assert(ctx->generation[b] == gen_b + 1);
+
+  _Condition_Signal(cond);
+
+  rtems_test_assert(ctx->generation[a] == gen_a + 2);
+  rtems_test_assert(ctx->generation[b] == gen_b + 2);
+
+  send_event(ctx, a, EVENT_CONDITION_WAIT);
+  send_event(ctx, b, EVENT_CONDITION_WAIT_REC);
+
+  rtems_test_assert(ctx->generation[a] == gen_a + 3);
+  rtems_test_assert(ctx->generation[b] == gen_b + 3);
+
+  _Condition_Broadcast(cond);
+
+  rtems_test_assert(ctx->generation[a] == gen_a + 4);
+  rtems_test_assert(ctx->generation[b] == gen_b + 4);
+}
+
+static void test_condition_timeout(test_context *ctx)
+{
+  struct timespec to;
+  int eno;
+
+  _Mutex_Acquire(&ctx->mtx);
+  memset(&to, 0x00, sizeof(to));
+  eno = _Condition_Wait_timed(&ctx->cond, &ctx->mtx, &to);
+  rtems_test_assert(eno == ETIMEDOUT);
+  memset(&to, 0xff, sizeof(to));
+  eno = _Condition_Wait_timed(&ctx->cond, &ctx->mtx, &to);
+  rtems_test_assert(eno == EINVAL);
+  get_abs_timeout(&to);
+  eno = _Condition_Wait_timed(&ctx->cond, &ctx->mtx, &to);
+  rtems_test_assert(eno == ETIMEDOUT);
+  _Mutex_Release(&ctx->mtx);
+
+  _Mutex_recursive_Acquire(&ctx->rec_mtx);
+  _Mutex_recursive_Acquire(&ctx->rec_mtx);
+  memset(&to, 0x00, sizeof(to));
+  eno = _Condition_Wait_recursive_timed(&ctx->cond, &ctx->rec_mtx, &to);
+  rtems_test_assert(eno == ETIMEDOUT);
+  memset(&to, 0xff, sizeof(to));
+  eno = _Condition_Wait_recursive_timed(&ctx->cond, &ctx->rec_mtx, &to);
+  rtems_test_assert(eno == EINVAL);
+  get_abs_timeout(&to);
+  eno = _Condition_Wait_recursive_timed(&ctx->cond, &ctx->rec_mtx, &to);
+  rtems_test_assert(eno == ETIMEDOUT);
+  _Mutex_recursive_Release(&ctx->rec_mtx);
+  _Mutex_recursive_Release(&ctx->rec_mtx);
 }
 
 static void test_sem(test_context *ctx)
@@ -488,6 +571,24 @@ static void high_task(rtems_task_argument idx)
     if ((events & EVENT_FUTEX_WAIT) != 0) {
       ctx->eno[idx] = _Futex_Wait(&ctx->futex, &ctx->val, 1);
     }
+
+    if ((events & EVENT_CONDITION_WAIT) != 0) {
+      _Mutex_Acquire(&ctx->mtx);
+      ctx->generation[idx] = generation(ctx, idx);
+      _Condition_Wait(&ctx->cond, &ctx->mtx);
+      ctx->generation[idx] = generation(ctx, idx);
+      _Mutex_Release(&ctx->mtx);
+    }
+
+    if ((events & EVENT_CONDITION_WAIT_REC) != 0) {
+      _Mutex_recursive_Acquire(&ctx->rec_mtx);
+      _Mutex_recursive_Acquire(&ctx->rec_mtx);
+      ctx->generation[idx] = generation(ctx, idx);
+      _Condition_Wait_recursive(&ctx->cond, &ctx->rec_mtx);
+      ctx->generation[idx] = generation(ctx, idx);
+      _Mutex_recursive_Release(&ctx->rec_mtx);
+      _Mutex_recursive_Release(&ctx->rec_mtx);
+    }
   }
 }
 
@@ -543,6 +644,8 @@ static void test(void)
   test_prio_inv_recursive(ctx);
   test_mtx_timeout_normal(ctx);
   test_mtx_timeout_recursive(ctx);
+  test_condition(ctx);
+  test_condition_timeout(ctx);
   test_sem(ctx);
   test_sem_prio_wait_order(ctx);
   test_futex(ctx);
@@ -552,6 +655,7 @@ static void test(void)
 
   _Mutex_Destroy(&ctx->mtx);
   _Mutex_recursive_Destroy(&ctx->rec_mtx);
+  _Condition_Destroy(&ctx->cond);
   _Semaphore_Destroy(&ctx->sem);
   _Futex_Destroy(&ctx->futex);
 }

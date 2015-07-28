@@ -97,6 +97,8 @@ extern "C" {
  *  blocking state.
  */
 #define STATES_INTERRUPTIBLE_BY_SIGNAL         0x10000000
+/** This macro corresponds to a task waiting for a <sys/lock.h> condition. */
+#define STATES_WAITING_FOR_SYS_LOCK_CONDITION  0x20000000
 
 /** This macro corresponds to a task waiting for a local object operation. */
 #define STATES_LOCALLY_BLOCKED ( STATES_WAITING_FOR_BUFFER             | \
@@ -112,6 +114,7 @@ extern "C" {
                                  STATES_WAITING_FOR_SYS_LOCK_MUTEX     | \
                                  STATES_WAITING_FOR_SYS_LOCK_SEMAPHORE | \
                                  STATES_WAITING_FOR_SYS_LOCK_FUTEX     | \
+                                 STATES_WAITING_FOR_SYS_LOCK_CONDITION | \
                                  STATES_WAITING_FOR_RWLOCK             )
 
 /** This macro corresponds to a task waiting which is blocked. */

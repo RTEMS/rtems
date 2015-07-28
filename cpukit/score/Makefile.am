@@ -344,6 +344,7 @@ libscore_a_SOURCES += src/apiext.c src/chain.c src/chainappend.c \
     src/debugisthreaddispatchingallowed.c \
     src/interr.c src/isr.c src/wkspace.c src/wkstringduplicate.c
 libscore_a_SOURCES += src/isrisinprogress.c
+libscore_a_SOURCES += src/condition.c
 libscore_a_SOURCES += src/debugisownerofallocator.c
 libscore_a_SOURCES += src/futex.c
 libscore_a_SOURCES += src/profilingisrentryexit.c

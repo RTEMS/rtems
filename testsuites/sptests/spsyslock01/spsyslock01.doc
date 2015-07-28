@@ -14,6 +14,14 @@ directives:
   - _Mutex_recursive_Try_acquire()
   - _Mutex_recursive_Release()
   - _Mutex_recursive_Destroy()
+  - _Condition_Initialize()
+  - _Condition_Wait()
+  - _Condition_Wait_timed()
+  - _Condition_Wait_recursive()
+  - _Condition_Wait_recursive_timed()
+  - _Condition_Signal()
+  - _Condition_Broadcast()
+  - _Condition_Destroy()
   - _Semaphore_Initialize()
   - _Semaphore_Wait()
   - _Semaphore_Post()
@@ -30,6 +38,7 @@ directives:
 concepts:
 
   - Ensure that self-contained mutexes and recursive mutexes work.
+  - Ensure that self-contained conditions work.
   - Ensure that self-contained semaphores work.
   - Ensure that self-contained futexes work.
   - Ensure that <sys/lock.h> scheduler support works.
