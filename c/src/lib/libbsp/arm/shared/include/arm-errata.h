@@ -30,31 +30,24 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#if defined( __ARM_ARCH_7A__ )
-static arm_release_id arm_errata_get_processor_release(
-  void
-)
+static inline arm_release_id arm_errata_get_processor_release(void)
 {
   const uint32_t MIDR          = arm_cp15_get_id_code();
   const uint8_t  REVISION      = (MIDR & 0xF00000U) >> 20;
   const uint8_t  PATCH_LEVEL   = (MIDR & 0xFU);
-  
+
   return ARM_RELEASE_ID_FROM_NUMBER_AND_PATCH_LEVEL(
     REVISION,
     PATCH_LEVEL
   );
 }
-#endif /* #if defined( __ARM_ARCH_7A__ ) */
 
-#if defined( __ARM_ARCH_7A__ )
-#if ( defined( RTEMS_SMP ) )
-static bool arm_errata_is_applicable_processor_errata_764369(
-  void
-)
+static bool inline arm_errata_is_applicable_processor_errata_764369(void)
 {
+#if defined(RTEMS_SMP)
   const arm_release_id RELEASE       = arm_errata_get_processor_release();
   bool                 is_applicable = false;
-  
+
   /* Errata information for Cortex-A9 processors.
    * Information taken from ARMs
    * "Cortex-A series processors
@@ -64,7 +57,7 @@ static bool arm_errata_is_applicable_processor_errata_764369(
    * - ARM Cortex-A9 processors r4 release Software Developers Errata Notice"
    * The corresponding link is: http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0360f/BABJFIBA.html
    * Please see this document for more information on these erratas */
-  
+
   switch( RELEASE ) {
     case ARM_RELEASE_ID_R4_P1:
     case ARM_RELEASE_ID_R4_P4:
@@ -82,22 +75,18 @@ static bool arm_errata_is_applicable_processor_errata_764369(
       is_applicable = false;
     break;
   }
-  
-  return is_applicable;
-}
-#else
-  #define arm_errata_is_applicable_processor_errata_764369() false
-#endif /*  ( defined( RTEMS_SMP ) ) */
-#endif /* #if defined( __ARM_ARCH_7A__ ) */
 
-#if defined( __ARM_ARCH_7A__ )
-static bool arm_errata_is_applicable_processor_errata_775420(
-  void
-)
+  return is_applicable;
+#else
+  return false;
+#endif
+}
+
+static inline bool arm_errata_is_applicable_processor_errata_775420(void)
 {
   const arm_release_id RELEASE       = arm_errata_get_processor_release();
   bool                 is_applicable = false;
-  
+
   /* Errata information for Cortex-A9 processors.
   * Information taken from ARMs
   * "Cortex-A series processors
@@ -107,7 +96,7 @@ static bool arm_errata_is_applicable_processor_errata_775420(
   * - ARM Cortex-A9 processors r4 release Software Developers Errata Notice"
   * The corresponding link is: http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0360f/BABJFIBA.html
   * Please see this document for more information on these erratas */
-  
+
   switch( RELEASE ) {
     case ARM_RELEASE_ID_R2_P10:
     case ARM_RELEASE_ID_R2_P8:
@@ -120,10 +109,9 @@ static bool arm_errata_is_applicable_processor_errata_775420(
       is_applicable = false;
     break;
   }
-  
+
   return is_applicable;
 }
-#endif /* #if defined( __ARM_ARCH_7A__ ) */
 
 #ifdef __cplusplus
 }
