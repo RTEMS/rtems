@@ -28,7 +28,7 @@
 @ifset use-ascii
 @dircategory RTEMS On-Line Manual
 @direntry
-* RTEMS C User: (C Users Guide).              The C User's Guide.
+* RTEMS C User: (c_user).              The C User's Guide.
 @end direntry
 @end ifset
 
