@@ -69,6 +69,7 @@
 #include <rtems/seterr.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <sys/stat.h>
@@ -2451,6 +2452,20 @@ static ssize_t nfs_file_read(
 	uint32_t offset = iop->offset;
 	char *in = buffer;
 
+	if (iop->offset < 0) {
+		errno = EINVAL;
+		return -1;
+	}
+
+	if ((uintmax_t) iop->offset >= UINT32_MAX) {
+		errno = EFBIG;
+		return -1;
+	}
+
+	if (count > UINT32_MAX - offset) {
+		count = UINT32_MAX - offset;
+	}
+
 	do {
 		size_t chunk = count <= NFS_MAXDATA ? count : NFS_MAXDATA;
 		ssize_t done = nfs_file_read_chunk(node, offset, in, chunk);
@@ -2550,15 +2565,32 @@ Nfs			nfs  = node->nfs;
 		count = NFS_MAXDATA;
 
 
-	SERP_ARGS(node).writearg.beginoffset   = UINT32_C(0xdeadbeef);
+	SERP_ARGS(node).writearg.beginoffset = UINT32_C(0xdeadbeef);
 	if ( LIBIO_FLAGS_APPEND & iop->flags ) {
 		if ( updateAttr(node, 0) ) {
 			return -1;
 		}
-		SERP_ARGS(node).writearg.offset	  	   = SERP_ATTR(node).size;
+		if (SERP_ATTR(node).size >= UINT32_MAX) {
+			errno = EFBIG;
+			return -1;
+		}
+		SERP_ARGS(node).writearg.offset = SERP_ATTR(node).size;
 	} else {
-		SERP_ARGS(node).writearg.offset	  	   = iop->offset;
+		if (iop->offset < 0) {
+			errno = EINVAL;
+			return -1;
+		}
+		if ((uintmax_t) iop->offset >= UINT32_MAX) {
+			errno = EFBIG;
+			return -1;
+		}
+		SERP_ARGS(node).writearg.offset = iop->offset;
 	}
+
+	if (count > UINT32_MAX - SERP_ARGS(node).writearg.offset) {
+		count = UINT32_MAX - SERP_ARGS(node).writearg.offset;
+	}
+
 	SERP_ARGS(node).writearg.totalcount	   = UINT32_C(0xdeadbeef);
 	SERP_ARGS(node).writearg.data.data_len = count;
 	SERP_ARGS(node).writearg.data.data_val = (void*)buffer;
@@ -2816,6 +2848,16 @@ static int nfs_file_ftruncate(
 )
 {
 sattr					arg;
+
+	if (length < 0) {
+		errno = EINVAL;
+		return -1;
+	}
+
+	if ((uintmax_t) length > UINT32_MAX) {
+		errno = EFBIG;
+		return -1;
+	}
 
 	arg.size = length;
 	/* must not modify any other attribute; if we are not the owner
