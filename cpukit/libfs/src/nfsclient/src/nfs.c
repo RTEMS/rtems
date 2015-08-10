@@ -1019,7 +1019,7 @@ rtems_status_code status;
 	initialised = 1;
 
 	fprintf(stderr,
-          "RTEMS-NFS $Release$, "                       \
+          "RTEMS-NFS, " \
           "Till Straumann, Stanford/SLAC/SSRL 2002, " \
           "See LICENSE file for licensing info.\n");
 
