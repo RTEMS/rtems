@@ -958,7 +958,7 @@ int			noblock = 1;
 struct sockwakeup	wkup;
 
 	if (ourSock < 0) {
-    fprintf(stderr,"RTEMS-RPCIOD $Release$, " \
+    fprintf(stderr,"RTEMS-RPCIOD, " \
             "Till Straumann, Stanford/SLAC/SSRL 2002, " \
             "See LICENSE file for licensing info.\n");
 
