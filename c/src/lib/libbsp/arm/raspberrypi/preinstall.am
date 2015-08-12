@@ -150,6 +150,10 @@ $(PROJECT_INCLUDE)/bsp/mailbox.h: include/mailbox.h $(PROJECT_INCLUDE)/bsp/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mailbox.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mailbox.h
 
+$(PROJECT_INCLUDE)/bsp/vc.h: include/vc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vc.h
+
 $(PROJECT_INCLUDE)/libcpu/cache_.h: ../../../libcpu/arm/shared/include/cache_.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache_.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache_.h
