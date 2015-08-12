@@ -50,6 +50,7 @@ include_bsp_HEADERS += include/i2c.h
 include_bsp_HEADERS += include/spi.h
 include_bsp_HEADERS += include/mailbox.h
 include_bsp_HEADERS += include/vc.h
+include_bsp_HEADERS += include/rpi-fb.h
 
 include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/cache_.h \
     ../../../libcpu/arm/shared/include/arm-cp15.h
@@ -114,6 +115,7 @@ libbsp_a_SOURCES += ../../shared/console_select.c
 libbsp_a_SOURCES += ../../shared/console_write.c
 libbsp_a_SOURCES += console/console-config.c
 libbsp_a_SOURCES += console/usart.c
+libbsp_a_SOURCES += console/fb.c
 
 # Mailbox
 libbsp_a_SOURCES += misc/mailbox.c
