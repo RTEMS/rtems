@@ -9,6 +9,7 @@
 /*
  *  Copyright (c) 2014-2015 Andre Marques <andre.lousa.marques at gmail.com>
  *  Copyright (c) 2013 Alan Cudmore.
+ *  Copyright (c) 2015 Yang Qiao
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -286,6 +287,54 @@
 #define BCM2835_EMMC_BASE              (RPI_PERIPHERAL_BASE + 0x300000)
 
 /** @} */
+
+/**
+* @name Mailbox Registers
+*
+* @{
+*/
+
+#define BCM2835_MBOX_BASE   (RPI_PERIPHERAL_BASE+0xB880)
+
+#define BCM2835_MBOX_PEEK   (BCM2835_MBOX_BASE+0x10)
+#define BCM2835_MBOX_READ   (BCM2835_MBOX_BASE+0x00)
+#define BCM2835_MBOX_WRITE  (BCM2835_MBOX_BASE+0x20)
+#define BCM2835_MBOX_STATUS (BCM2835_MBOX_BASE+0x18)
+#define BCM2835_MBOX_SENDER (BCM2835_MBOX_BASE+0x14)
+#define BCM2835_MBOX_CONFIG (BCM2835_MBOX_BASE+0x1C)
+
+#define BCM2835_MBOX_FULL   0x80000000
+#define BCM2835_MBOX_EMPTY  0x40000000
+
+/** @} */
+
+/**
+* @name Mailbox Channels
+*
+* @{
+*/
+
+/* Power Manager channel */
+#define BCM2835_MBOX_CHANNEL_PM         0
+/* Framebuffer channel */
+#define BCM2835_MBOX_CHANNEL_FB         1
+ /* Virtual UART channel */
+#define BCM2835_MBOX_CHANNEL_VUART      2
+ /* VCHIQ channel */
+#define BCM2835_MBOX_CHANNEL_VCHIQ      3
+ /* LEDs channel */
+#define BCM2835_MBOX_CHANNEL_LED        4
+ /* Button channel */
+#define BCM2835_MBOX_CHANNEL_BUTTON     5
+ /* Touch screen channel */
+#define BCM2835_MBOX_CHANNEL_TOUCHS     6
+/* Property tags (ARM <-> VC) channel */
+#define BCM2835_MBOX_CHANNEL_PROP_AVC   8
+ /* Property tags (VC <-> ARM) channel */
+#define BCM2835_MBOX_CHANNEL_PROP_VCA   9
+
+/** @} */
+
 
 /** @} */
 

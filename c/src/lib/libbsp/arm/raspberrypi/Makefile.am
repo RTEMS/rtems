@@ -48,6 +48,7 @@ include_bsp_HEADERS += include/raspberrypi.h
 include_bsp_HEADERS += include/rpi-gpio.h
 include_bsp_HEADERS += include/i2c.h
 include_bsp_HEADERS += include/spi.h
+include_bsp_HEADERS += include/mailbox.h
 
 include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/cache_.h \
     ../../../libcpu/arm/shared/include/arm-cp15.h
@@ -111,6 +112,9 @@ libbsp_a_SOURCES += ../../shared/console_select.c
 libbsp_a_SOURCES += ../../shared/console_write.c
 libbsp_a_SOURCES += console/console-config.c
 libbsp_a_SOURCES += console/usart.c
+
+# Mailbox
+libbsp_a_SOURCES += misc/mailbox.c
 
 # clock
 libbsp_a_SOURCES += clock/clockdrv.c ../../../shared/clockdrv_shell.h
