@@ -7,6 +7,8 @@
  */
 
 /*
+ * Copyright (c) 2015 Yang Qiao
+ * based on work by:
  * Copyright (c) 2013 Alan Cudmore
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +26,7 @@
 #include <bsp/irq.h>
 #include <bsp/usart.h>
 #include <bsp/raspberrypi.h>
+#include <bsp/fbcons.h>
 
 console_tbl Console_Configuration_Ports [] = {
     {
@@ -36,7 +39,14 @@ console_tbl Console_Configuration_Ports [] = {
       .ulCtrlPort2 = 0,
       .ulClock = USART0_DEFAULT_BAUD,
       .ulIntVector = BCM2835_IRQ_ID_UART
-    }
+    },
+    {
+      .sDeviceName ="/dev/fbcons",
+      .deviceType = SERIAL_CUSTOM,
+      .pDeviceFns = &fbcons_fns,
+      .deviceProbe = fbcons_probe,
+      .pDeviceFlow = NULL,
+    },
 };
 
 #define PORT_COUNT \

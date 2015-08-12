@@ -158,6 +158,10 @@ $(PROJECT_INCLUDE)/bsp/rpi-fb.h: include/rpi-fb.h $(PROJECT_INCLUDE)/bsp/$(dirst
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/rpi-fb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/rpi-fb.h
 
+$(PROJECT_INCLUDE)/bsp/fbcons.h: console/fbcons.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/fbcons.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/fbcons.h
+
 $(PROJECT_INCLUDE)/libcpu/cache_.h: ../../../libcpu/arm/shared/include/cache_.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache_.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache_.h
