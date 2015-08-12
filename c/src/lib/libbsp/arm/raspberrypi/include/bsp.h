@@ -43,6 +43,10 @@ const char *rpi_cmdline_get_cached(void);
 const char *rpi_cmdline_get_raw(void);
 const char *rpi_cmdline_get_arg(const char* arg);
 
+void  rpi_video_init(void);
+void  rpi_fb_outch  (char);
+int rpi_video_is_initialized(void);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

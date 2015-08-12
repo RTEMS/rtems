@@ -26,6 +26,8 @@ nodist_include_HEADERS = ../../shared/include/coverhd.h \
 
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 
+noinst_HEADERS = console/font_data.h
+
 include_bsp_HEADERS =
 include_bsp_HEADERS += ../../../libbsp/shared/include/mm.h
 include_bsp_HEADERS += ../../shared/include/utility.h
@@ -116,6 +118,7 @@ libbsp_a_SOURCES += ../../shared/console_write.c
 libbsp_a_SOURCES += console/console-config.c
 libbsp_a_SOURCES += console/usart.c
 libbsp_a_SOURCES += console/fb.c
+libbsp_a_SOURCES += console/outch.c
 
 # Mailbox
 libbsp_a_SOURCES += misc/mailbox.c
