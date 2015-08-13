@@ -60,6 +60,19 @@ extern "C" {
   Chain_Control name = CHAIN_INITIALIZER_EMPTY(name)
 
 /**
+*  @brief Calculates the address of type from its member
+*/
+#define typeaddr(node, type, member) \
+  (type *)((char *)(node) - offsetof(type, member))
+
+/**
+*  @brief Calculates the offset of member for given type
+*/
+
+#define offsetof(type, member) \
+  ((uint32_t)((char *)&((type *)(0))->member - (char *)0))
+
+/**
  *  @brief Initialize a chain header.
  *
  *  This routine initializes @a the_chain structure to manage the

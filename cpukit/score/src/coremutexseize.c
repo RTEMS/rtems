@@ -75,7 +75,11 @@ void _CORE_mutex_Seize_interrupt_blocking(
     _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
 #endif
 
+#if defined(RTEMS_SMP)
     _Thread_Raise_priority( holder, executing->current_priority );
+#else
+    _Thread_Change_priority_UP( holder, the_mutex, executing->current_priority);    
+#endif
 
 #if !defined(RTEMS_SMP)
     _Thread_queue_Acquire( &the_mutex->Wait_queue, lock_context );

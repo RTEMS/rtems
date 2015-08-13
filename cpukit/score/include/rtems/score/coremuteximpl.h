@@ -459,6 +459,9 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
          _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ){
 
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
+/* Doesn't this lead to data race. If the executing thread is holder os some other mutex and its priority is promoted by other
+thread. What is meaning of unprotected
+*/
        _Chain_Prepend_unprotected( &executing->lock_mutex,
                                    &the_mutex->queue.lock_queue );
        the_mutex->queue.priority_before = executing->current_priority;
