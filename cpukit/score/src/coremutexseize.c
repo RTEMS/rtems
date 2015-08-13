@@ -78,7 +78,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
 #if defined(RTEMS_SMP)
     _Thread_Raise_priority( holder, executing->current_priority );
 #else
-    _Thread_Change_priority_UP( holder, the_mutex, executing->current_priority);    
+    _Thread_Change_priority_UP( holder, the_mutex, executing->current_priority, false);    
 #endif
 
 #if !defined(RTEMS_SMP)

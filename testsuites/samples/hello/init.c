@@ -28,7 +28,7 @@ rtems_task Init(
 )
 {
   rtems_test_begin();
-  printf( "Hello World\n" );
+  printf( "Hello World - Saurabh\n" );
   rtems_test_end();
   exit( 0 );
 }

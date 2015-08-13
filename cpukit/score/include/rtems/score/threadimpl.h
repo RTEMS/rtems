@@ -378,14 +378,16 @@ typedef bool ( *Thread_Change_priority_filter )(
 void _Thread_Change_priority_UP(
   Thread_Control   *holder,
   CORE_mutex_Control  *the_mutex,
-  Priority_Control  new_priority
+  Priority_Control  new_priority,
+  bool prepend_it
 );
 
 void _Thread_Update_Priority_UP(
   Thread_Control   *holder,
   CORE_mutex_order_list  *queue,
   Priority_Control  new_priority,
-  ISR_lock_Context    *lock_context
+  ISR_lock_Context    *lock_context,
+  bool prepend_it
 );
 
 int _Thread_Update_Rec_Priority_UP(

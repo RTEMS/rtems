@@ -58,7 +58,8 @@ void _Thread_Update_Priority_UP(
   Thread_Control   *holder,
   CORE_mutex_order_list  *queue,
   Priority_Control  new_priority,
-  ISR_lock_Context    *lock_context
+  ISR_lock_Context    *lock_context,
+  bool prepend_it
 )
 {
   if(_Thread_Update_Rec_Priority_UP(holder, queue, new_priority))
@@ -78,7 +79,7 @@ void _Thread_Update_Priority_UP(
     if ( holder->priority_generation == my_generation ) {
       if ( _States_Is_ready( holder->current_state ) ) {
         _Scheduler_Change_priority(
-          the_thread,
+          holder,
           new_priority,
           prepend_it
         );
@@ -89,9 +90,12 @@ void _Thread_Update_Priority_UP(
 
   _Scheduler_Release( holder, lock_context );
 
-  Thread_queue_Control *queue = typeaddr(holder->Wait.queue, Thread_queue_Control, Queue);
-  CORE_mutex_Control *the_mutex= typeaddr(queue, CORE_mutex_Control, Wait_queue);
-  _Thread_Update_Priority_UP(the_mutex->holder, &the_mutex->queue, holder->current_priority, lock_context);
+  if(holder->Wait.queue!=NULL)
+  {
+      CORE_mutex_Control *the_mutex= typeaddr(holder->Wait.queue, CORE_mutex_Control, Wait_queue);
+      _Thread_Update_Priority_UP(the_mutex->holder, &the_mutex->queue, holder->current_priority, lock_context, prepend_it);  
+  }
+  
   }
     
 }
@@ -99,16 +103,17 @@ void _Thread_Update_Priority_UP(
 void _Thread_Change_priority_UP(
   Thread_Control   *holder,
   CORE_mutex_Control  *the_mutex,
-  Priority_Control  new_priority
+  Priority_Control  new_priority,
+  bool prepend_it
 )
 {
   ISR_lock_Context  lock_context;
   ISR_lock_Control *lock;
 
   lock = _Thread_Lock_acquire( holder, &lock_context );
-  the_thread->priority_restore_hint = true;
+  holder->priority_restore_hint = true;
   _Atomic_Fence( ATOMIC_ORDER_ACQ_REL );
-  _Thread_Update_Priority_UP(holder, &the_mutex->queue, new_priority, &lock_context)
+  _Thread_Update_Priority_UP(holder, &the_mutex->queue, new_priority, &lock_context, prepend_it);
   _Thread_Lock_release( lock, &lock_context );
 
 }

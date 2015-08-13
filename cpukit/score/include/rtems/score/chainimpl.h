@@ -69,9 +69,9 @@ extern "C" {
 *  @brief Calculates the offset of member for given type
 */
 
-#define offsetof(type, member) \
+/*#define offsetof(type, member) \
   ((uint32_t)((char *)&((type *)(0))->member - (char *)0))
-
+*/
 /**
  *  @brief Initialize a chain header.
  *
