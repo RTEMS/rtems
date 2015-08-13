@@ -22,6 +22,102 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
+int _Thread_Update_Rec_Priority_UP(
+  Thread_Control   *holder,
+  CORE_mutex_order_list  *queue,
+  Priority_Control  new_priority
+)
+{
+  /*Operations to be performed
+    0. Should call this function if the_mutex->queue.priority_before > new_proirity
+    1. Search for the the_mutex->queue.lock_queue.
+    2. Traverse the chain node till the head
+    3. If new_node->priority_before
+
+  */
+  uint32_t change_current_priority = 1;
+  Chain_Node *start = &queue->lock_queue;
+  Chain_Node *head = _Chain_Head(&holder->lock_mutex);
+  Chain_Node *check = start->previous;
+  while(check!=head)
+  {
+    queue = typeaddr(check, CORE_mutex_order_list, lock_queue);
+    if(!(queue->priority_before > new_priority))
+    {
+      change_current_priority = 0;
+      break;
+    }
+    queue->priority_before = new_priority;
+    check = check->previous;
+  }
+  return change_current_priority;
+}
+
+
+void _Thread_Update_Priority_UP(
+  Thread_Control   *holder,
+  CORE_mutex_order_list  *queue,
+  Priority_Control  new_priority,
+  ISR_lock_Context    *lock_context,
+  bool prepend_it
+)
+{
+  if(_Thread_Update_Rec_Priority_UP(holder, queue, new_priority))
+  {
+    uint32_t my_generation;
+    my_generation = holder->priority_generation + 1;
+    holder->current_priority = new_priority;
+    holder->priority_generation = my_generation;
+    ( *holder->Wait.operations->priority_change )(
+      holder,
+      new_priority,
+      holder->Wait.queue
+    );
+    
+    _Scheduler_Acquire( holder, lock_context );
+
+    if ( holder->priority_generation == my_generation ) {
+      if ( _States_Is_ready( holder->current_state ) ) {
+        _Scheduler_Change_priority(
+          holder,
+          new_priority,
+          prepend_it
+        );
+      } else {
+        _Scheduler_Update_priority( holder, new_priority );
+      }
+    }
+
+  _Scheduler_Release( holder, lock_context );
+
+  if(holder->Wait.queue!=NULL)
+  {
+      CORE_mutex_Control *the_mutex= typeaddr(holder->Wait.queue, CORE_mutex_Control, Wait_queue);
+      _Thread_Update_Priority_UP(the_mutex->holder, &the_mutex->queue, holder->current_priority, lock_context, prepend_it);  
+  }
+  
+  }
+    
+}
+
+void _Thread_Change_priority_UP(
+  Thread_Control   *holder,
+  CORE_mutex_Control  *the_mutex,
+  Priority_Control  new_priority,
+  bool prepend_it
+)
+{
+  ISR_lock_Context  lock_context;
+  ISR_lock_Control *lock;
+
+  lock = _Thread_Lock_acquire( holder, &lock_context );
+  holder->priority_restore_hint = true;
+  _Atomic_Fence( ATOMIC_ORDER_ACQ_REL );
+  _Thread_Update_Priority_UP(holder, &the_mutex->queue, new_priority, &lock_context, prepend_it);
+  _Thread_Lock_release( lock, &lock_context );
+
+}
+
 void _Thread_Change_priority(
   Thread_Control                *the_thread,
   Priority_Control               new_priority,
