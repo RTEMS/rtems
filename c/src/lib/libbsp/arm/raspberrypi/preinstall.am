@@ -86,6 +86,10 @@ $(PROJECT_INCLUDE)/bsp/uart-output-char.h: ../../shared/include/uart-output-char
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/uart-output-char.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart-output-char.h
 
+$(PROJECT_INCLUDE)/bsp/gpio.h: ../../shared/include/gpio.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/gpio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/gpio.h
+
 $(PROJECT_INCLUDE)/bsp/linker-symbols.h: ../shared/include/linker-symbols.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/linker-symbols.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/linker-symbols.h
