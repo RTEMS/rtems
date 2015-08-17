@@ -57,6 +57,8 @@ extern "C" {
 #define INTERRUPT_SERVER_MODES RTEMS_TIMESLICE | RTEMS_PREEMPT
 #define INTERRUPT_SERVER_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
 
+#define GPIO_INPUT_ERROR ~0
+
 /**
  * @name GPIO data structures
  *
@@ -310,7 +312,7 @@ extern rtems_status_code rtems_gpio_write_group(
  *
  * @retval The function returns a 32-bit bitmask with the group's input pins
  *         current logical values.
- * @retval 0xDEADBEEF Group has no input pins.
+ * @retval GPIO_INPUT_ERROR Group has no input pins.
  */
 extern uint32_t rtems_gpio_read_group(rtems_gpio_group *group);
 
@@ -402,7 +404,7 @@ extern rtems_status_code rtems_gpio_multi_clear(
  *
  * @retval Bitmask with the values of the corresponding pins.
  *         0 for logical low and 1 for logical high.
- * @retval 0xDEADBEEF Could not read at least one pin level.
+ * @retval GPIO_INPUT_ERROR Could not read at least one pin level.
  */
 extern uint32_t rtems_gpio_multi_read(
   uint32_t *pin_numbers,
@@ -444,7 +446,7 @@ extern rtems_status_code rtems_gpio_clear(uint32_t pin_number);
  *         logical value.
  * @retval -1 Pin number is invalid, or not a digital input pin.
  */
-extern uint8_t rtems_gpio_get_value(uint32_t pin_number);
+extern int rtems_gpio_get_value(uint32_t pin_number);
 
 /**
  * @brief Requests multiple GPIO pin configurations. If the BSP provides
@@ -724,7 +726,7 @@ extern rtems_status_code rtems_gpio_bsp_multi_clear(
  *
  * @retval The function must return a bitmask with the values of the
  *         corresponding pins. 0 for logical low and 1 for logical high.
- * @retval 0xDEADBEEF Could not read at least one pin level.
+ * @retval GPIO_INPUT_ERROR Could not read at least one pin level.
  */
 extern uint32_t rtems_gpio_bsp_multi_read(uint32_t bank, uint32_t bitmask);
 
@@ -802,11 +804,11 @@ extern rtems_status_code rtems_gpio_bsp_clear(uint32_t bank, uint32_t pin);
  * @param[in] bank GPIO bank number.
  * @param[in] pin GPIO pin number within the given bank.
  *
- * @retval The function must return 0 or 1 depending on the pin current
- *         logical value.
- * @retval -1 Could not read the pin level.
+ * @retval The function must return 0 if the pin level is a logical low,
+ *         or non zero if it has a logical high.
+ * @retval GPIO_INPUT_ERROR Could not read the pin level.
  */
-extern uint8_t rtems_gpio_bsp_get_value(uint32_t bank, uint32_t pin);
+extern uint32_t rtems_gpio_bsp_get_value(uint32_t bank, uint32_t pin);
 
 /**
  * @brief Assigns the digital input function to the given pin.

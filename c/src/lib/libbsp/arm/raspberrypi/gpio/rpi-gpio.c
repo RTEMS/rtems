@@ -98,7 +98,7 @@ rtems_status_code rtems_gpio_bsp_clear(uint32_t bank, uint32_t pin)
   return RTEMS_SUCCESSFUL;
 }
 
-uint8_t rtems_gpio_bsp_get_value(uint32_t bank, uint32_t pin)
+uint32_t rtems_gpio_bsp_get_value(uint32_t bank, uint32_t pin)
 {
   return (BCM2835_REG(BCM2835_GPIO_GPLEV0) & (1 << pin));
 }

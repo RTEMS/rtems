@@ -911,7 +911,7 @@ uint32_t rtems_gpio_read_group(rtems_gpio_group *group)
   uint8_t i;
 
   if ( group->input_count == 0 ) {
-    return 0xDEADBEEF;
+    return GPIO_INPUT_ERROR;
   }
 
   bank = group->digital_input_bank;
@@ -1158,7 +1158,7 @@ uint32_t rtems_gpio_multi_read(
   sc = get_pin_bitmask(pin_numbers, pin_count, &bank, &bitmask, DIGITAL_INPUT);
 
   if ( sc != RTEMS_SUCCESSFUL ) {
-    return 0xDEADBEEF;
+    return GPIO_INPUT_ERROR;
   }
 
   ACQUIRE_LOCK(gpio_bank_state[bank].lock);
@@ -1250,11 +1250,11 @@ rtems_status_code rtems_gpio_clear(uint32_t pin_number)
   return sc;
 }
 
-uint8_t rtems_gpio_get_value(uint32_t pin_number)
+int rtems_gpio_get_value(uint32_t pin_number)
 {
   uint32_t bank;
   uint32_t pin;
-  int rv;
+  uint32_t rv;
 
   if ( pin_number < 0 || pin_number >= BSP_GPIO_PIN_COUNT ) {
     return -1;
@@ -1280,7 +1280,13 @@ uint8_t rtems_gpio_get_value(uint32_t pin_number)
 
   rv = rtems_gpio_bsp_get_value(bank, pin);
 
-  if ( gpio_pin_state[pin_number].logic_invert && rv > 0 ) {
+  if ( rv == GPIO_INPUT_ERROR ) {
+    RELEASE_LOCK(gpio_bank_state[bank].lock);
+
+    return -1;
+  }
+
+  if ( gpio_pin_state[pin_number].logic_invert ) {
     RELEASE_LOCK(gpio_bank_state[bank].lock);
 
     return !rv;
@@ -1288,7 +1294,7 @@ uint8_t rtems_gpio_get_value(uint32_t pin_number)
 
   RELEASE_LOCK(gpio_bank_state[bank].lock);
 
-  return ( rv > 0 ) ? 1 : rv;
+  return rv > 0;
 }
 
 rtems_status_code rtems_gpio_request_pin(
