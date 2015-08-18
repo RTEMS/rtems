@@ -388,31 +388,6 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_root(
 }
 
 /**
- * @brief Finds the red-black tree control given a node in the tree.
- *
- * In case the node is not a node of a tree, then this function yields
- * unpredictable results.
- *
- * @param[in] the_node The node of interest.
- *
- * @return The red-black tree control of the node.
- */
-RTEMS_INLINE_ROUTINE RBTree_Control *_RBTree_Find_control(
-  const RBTree_Node *the_node
-)
-{
-  RBTree_Node    *parent = the_node->parent;
-  RBTree_Control *rbtree;
-
-  do {
-    rbtree = (RBTree_Control *) parent;
-    parent = parent->parent;
-  } while ( parent != NULL );
-
-  return rbtree;
-}
-
-/**
  * @brief Initialize this RBTree as empty.
  *
  * This routine initializes @a the_rbtree to contain zero nodes.
