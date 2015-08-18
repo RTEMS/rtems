@@ -39,6 +39,8 @@ include_bsp_HEADERS += ../shared/include/arm-release-id.h
 include_bsp_HEADERS += ../shared/include/start.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/i2c.h
+include_bsp_HEADERS += include/beagleboneblack.h
+include_bsp_HEADERS += include/bbb-gpio.h
 
 include_libcpu_HEADERS =
 include_libcpu_HEADERS += ../../../libcpu/arm/shared/include/arm-cp15.h
@@ -82,6 +84,7 @@ libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
 libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 libbsp_a_SOURCES += ../../shared/sbrk.c
 libbsp_a_SOURCES += ../../shared/src/stackalloc.c
+libbsp_a_SOURCES += ../../shared/gpio.c
 libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 libbsp_a_SOURCES += ../../shared/timerstub.c
 libbsp_a_SOURCES += ../../shared/cpucounterread.c
@@ -113,6 +116,9 @@ libbsp_a_SOURCES += ../../shared/console.c \
 
 # I2C
 libbsp_a_SOURCES += misc/i2c.c
+
+# GPIO
+libbsp_a_SOURCES += gpio/bbb-gpio.c
 
 #RTC
 libbsp_a_SOURCES += rtc.c

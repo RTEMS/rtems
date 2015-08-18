@@ -31,6 +31,7 @@
 #include <stdint.h>
 #include <bsp/start.h>
 #include <bsp/default-initial-extension.h>
+#include <bsp/beagleboneblack.h>
 
 #include <rtems.h>
 #include <rtems/irq-extension.h>
@@ -167,6 +168,17 @@ static inline void flush_data_cache(void)
 #define BEAGLE_BASE_UART_1      0x4806A000
 #define BEAGLE_BASE_UART_2      0x4806C000
 #define BEAGLE_BASE_UART_3      0x49020000
+#endif
+
+/* GPIO pin config */
+#if IS_AM335X
+#define BSP_GPIO_PIN_COUNT 128
+#define BSP_GPIO_PINS_PER_BANK 32
+#endif
+
+#if IS_DM3730
+#define BSP_GPIO_PIN_COUNT 192
+#define BSP_GPIO_PINS_PER_BANK 32
 #endif
 
 /* i2c stuff */
