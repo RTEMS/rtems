@@ -210,13 +210,17 @@ static rtems_rbheap_chunk *find(rtems_rbtree_control *chunk_tree, uintptr_t key)
   );
 }
 
-static rtems_rbheap_chunk *get_next(
-  const rtems_rbheap_chunk *chunk,
-  RBTree_Direction dir
-)
+static rtems_rbheap_chunk *pred(const rtems_rbheap_chunk *chunk)
 {
   return rtems_rbheap_chunk_of_node(
-    _RBTree_Next(&chunk->tree_node, dir)
+    rtems_rbtree_predecessor(&chunk->tree_node)
+  );
+}
+
+static rtems_rbheap_chunk *succ(const rtems_rbheap_chunk *chunk)
+{
+  return rtems_rbheap_chunk_of_node(
+    rtems_rbtree_successor(&chunk->tree_node)
   );
 }
 
@@ -253,12 +257,9 @@ rtems_status_code rtems_rbheap_free(rtems_rbheap_control *control, void *ptr)
 
     if (chunk != NULL_PAGE) {
       if (!rtems_rbheap_is_chunk_free(chunk)) {
-        rtems_rbheap_chunk *pred = get_next(chunk, RBT_LEFT);
-        rtems_rbheap_chunk *succ = get_next(chunk, RBT_RIGHT);
-
-        check_and_merge(free_chain, chunk_tree, chunk, succ);
+        check_and_merge(free_chain, chunk_tree, chunk, succ(chunk));
         add_to_chain(free_chain, chunk);
-        check_and_merge(free_chain, chunk_tree, chunk, pred);
+        check_and_merge(free_chain, chunk_tree, chunk, pred(chunk));
       } else {
         sc = RTEMS_INCORRECT_STATE;
       }
