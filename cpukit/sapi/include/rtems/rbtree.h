@@ -356,16 +356,6 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_max(
 }
 
 /**
- * @copydoc _RBTree_Find_control()
- */
-RTEMS_INLINE_ROUTINE rtems_rbtree_control *rtems_rbtree_find_control(
-  const rtems_rbtree_node *the_node
-)
-{
-  return _RBTree_Find_control( the_node );
-}
-
-/**
  * @copydoc _RBTree_Insert()
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_insert(

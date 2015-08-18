@@ -39,7 +39,6 @@ heap memory. The Red-Black Tree API provided by RTEMS is:
 @item @code{@value{DIRPREFIX}rtems_rbtree_get_max} - Remove the maximum node from the red-black tree
 @item @code{@value{DIRPREFIX}rtems_rbtree_peek_min} - Returns the minimum node from the red-black tree
 @item @code{@value{DIRPREFIX}rtems_rbtree_peek_max} - Returns the maximum node from the red-black tree
-@item @code{@value{DIRPREFIX}rtems_rbtree_find_control} - Returns the control node of a red-black tree given a node in the tree.
 @item @code{@value{DIRPREFIX}rtems_rbtree_insert} - Add the node to the red-black tree
 @end itemize
 
