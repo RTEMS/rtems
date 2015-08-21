@@ -82,19 +82,23 @@ typedef RBTree_Compare rtems_rbtree_compare;
  * This routine initializes @a the_rbtree structure to manage the
  * contiguous array of @a number_nodes nodes which starts at
  * @a starting_address.  Each node is of @a node_size bytes.
+ *
+ * @param[in] the_rbtree is the pointer to rbtree header
+ * @param[in] compare The node compare function.
+ * @param[in] starting_address is the starting address of first node
+ * @param[in] number_nodes is the number of nodes in rbtree
+ * @param[in] node_size is the size of node in bytes
+ * @param[in] is_unique If true, then reject nodes with a duplicate key, else
+ *   otherwise.
  */
-RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize(
+void rtems_rbtree_initialize(
   rtems_rbtree_control *the_rbtree,
   rtems_rbtree_compare  compare,
   void                 *starting_address,
   size_t                number_nodes,
   size_t                node_size,
   bool                  is_unique
-)
-{
-  _RBTree_Initialize( the_rbtree, compare, starting_address,
-    number_nodes, node_size, is_unique);
-}
+);
 
 /**
  * @brief Initialize this RBTree as Empty
