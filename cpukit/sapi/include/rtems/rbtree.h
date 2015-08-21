@@ -224,7 +224,7 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_min(
   const rtems_rbtree_node *the_node
 )
 {
-  return _RBTree_Is_first( the_rbtree, the_node, RBT_LEFT );
+  return rtems_rbtree_min( the_rbtree ) == the_node;
 }
 
 /**
@@ -238,7 +238,7 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_max(
   const rtems_rbtree_node *the_node
 )
 {
-  return _RBTree_Is_first( the_rbtree, the_node, RBT_RIGHT );
+  return rtems_rbtree_max( the_rbtree ) == the_node;
 }
 
 /**

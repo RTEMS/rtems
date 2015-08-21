@@ -402,26 +402,6 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_empty(
 }
 
 /**
- * @brief Is this the first node on the RBTree.
- *
- * This function returns true if @a the_node is the first node on
- * @a the_rbtree and false otherwise. @a dir specifies whether first means
- * minimum (0) or maximum (1).
- *
- * @retval true @a the_node is the first node on @a the_rbtree.
- * @retval false @a the_node is not the first node on @a the_rbtree.
- *
- */
-RTEMS_INLINE_ROUTINE bool _RBTree_Is_first(
-  const RBTree_Control *the_rbtree,
-  const RBTree_Node *the_node,
-  RBTree_Direction dir
-)
-{
-  return (the_node == _RBTree_First(the_rbtree, dir));
-}
-
-/**
  * @brief Returns true if this node is the root node of a red-black tree, and
  * false otherwise.
  *
