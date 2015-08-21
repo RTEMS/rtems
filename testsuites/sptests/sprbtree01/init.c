@@ -1653,9 +1653,9 @@ static void test_rbtree_random_ops( void )
 
   puts( "INIT - Random operations" );
 
-  for ( n = 1; n < RTEMS_ARRAY_SIZE( random_ops_trees ); ++n ) {
-    random_ops( n, true );
-    random_ops( n, false );
+  for ( n = 0; n < RTEMS_ARRAY_SIZE( random_ops_trees ); ++n ) {
+    random_ops( n + 1, true );
+    random_ops( n + 1, false );
   }
 }
 
