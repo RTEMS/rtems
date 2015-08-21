@@ -37,11 +37,11 @@ void _POSIX_Keys_Free_memory(
   /**
    * find the smallest thread_id node in the rbtree.
    */
-  next = _RBTree_Next( iter, RBT_LEFT );
+  next = _RBTree_Predecessor( iter );
   p = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( next );
   while ( next != NULL && p->key == key_id) {
     iter = next;
-    next = _RBTree_Next( iter, RBT_LEFT );
+    next = _RBTree_Predecessor( iter );
     p = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( next );
   }
 
@@ -50,7 +50,7 @@ void _POSIX_Keys_Free_memory(
    */
   p = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( iter );
   while ( iter != NULL && p->key == key_id ) {
-    next = _RBTree_Next( iter, RBT_RIGHT );
+    next = _RBTree_Successor( iter );
 
     _POSIX_Keys_Free_key_value_pair( p );
 
