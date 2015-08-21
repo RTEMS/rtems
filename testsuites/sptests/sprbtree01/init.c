@@ -814,7 +814,6 @@ typedef struct {
 
 static bool visit_nodes(
   const RBTree_Node *node,
-  RBTree_Direction   dir,
   void              *visitor_arg
 )
 {
@@ -1655,7 +1654,7 @@ static void random_ops( size_t n, bool unique )
     v = simple_random( v );
   }
 
-  _RBTree_Iterate( &tree, RBT_RIGHT, visit_nodes, &ctx );
+  _RBTree_Iterate( &tree, visit_nodes, &ctx );
   rtems_test_assert( ctx.current == ctx.count );
 }
 
@@ -2071,7 +2070,7 @@ rtems_task Init( rtems_task_argument ignored )
     node_array[i].key = numbers[i];
     rb_insert_unique( &rbtree1, &node_array[i].Node );
 
-    _RBTree_Iterate( &rbtree1, RBT_RIGHT, visit_nodes, &ctx );
+    _RBTree_Iterate( &rbtree1, visit_nodes, &ctx );
     rtems_test_assert( ctx.current == ctx.count );
 
     if (!rb_assert(rtems_rbtree_root(&rbtree1)) )
@@ -2098,7 +2097,7 @@ rtems_task Init( rtems_task_argument ignored )
     if ( id < 19 ) {
       visitor_context ctx = { 0, 20 - id - 1, test_remove_trees[ id ] };
 
-      _RBTree_Iterate( &rbtree1, RBT_RIGHT, visit_nodes, &ctx );
+      _RBTree_Iterate( &rbtree1, visit_nodes, &ctx );
       rtems_test_assert( ctx.current == ctx.count );
     }
   }

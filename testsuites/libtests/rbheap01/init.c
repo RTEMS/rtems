@@ -75,7 +75,6 @@ typedef struct {
 
 static bool chunk_visitor(
   const RBTree_Node *node,
-  RBTree_Direction dir,
   void *visitor_arg
 )
 {
@@ -175,7 +174,6 @@ static void test_chunk_tree(
 
   _RBTree_Iterate(
     &control->chunk_tree,
-    RBT_RIGHT,
     chunk_visitor,
     &context
   );

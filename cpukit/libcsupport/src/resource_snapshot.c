@@ -107,14 +107,12 @@ static void get_heap_info(Heap_Control *heap, Heap_Information_block *info)
 
 static bool count_posix_key_value_pairs(
   const RBTree_Node *node,
-  RBTree_Direction dir,
   void *visitor_arg
 )
 {
   uint32_t *count = visitor_arg;
 
   (void) node;
-  (void) dir;
 
   ++(*count);
 
@@ -128,7 +126,6 @@ static uint32_t get_active_posix_key_value_pairs(void)
   _Thread_Disable_dispatch();
   _RBTree_Iterate(
     &_POSIX_Keys_Key_value_lookup_tree,
-    RBT_LEFT,
     count_posix_key_value_pairs,
     &count
   );

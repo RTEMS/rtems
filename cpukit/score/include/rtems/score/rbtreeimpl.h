@@ -37,7 +37,6 @@ extern "C" {
  * @brief Red-black tree visitor.
  *
  * @param[in] node The node.
- * @param[in] dir The direction.
  * @param[in] visitor_arg The visitor argument.
  *
  * @retval true Stop the iteration.
@@ -47,7 +46,6 @@ extern "C" {
  */
 typedef bool (*RBTree_Visitor)(
   const RBTree_Node *node,
-  RBTree_Direction dir,
   void *visitor_arg
 );
 
@@ -55,13 +53,11 @@ typedef bool (*RBTree_Visitor)(
  * @brief Red-black tree iteration.
  *
  * @param[in] rbtree The red-black tree.
- * @param[in] dir The direction.
  * @param[in] visitor The visitor.
  * @param[in] visitor_arg The visitor argument.
  */
 void _RBTree_Iterate(
   const RBTree_Control *rbtree,
-  RBTree_Direction dir,
   RBTree_Visitor visitor,
   void *visitor_arg
 );
