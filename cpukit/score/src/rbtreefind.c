@@ -26,12 +26,11 @@ RBTree_Node *_RBTree_Find(
   bool                  is_unique
 )
 {
-  RBTree_Node *iter_node = the_rbtree->root;
+  RBTree_Node *iter_node = _RBTree_Root( the_rbtree );
   RBTree_Node *found = NULL;
 
   while ( iter_node != NULL ) {
     RBTree_Compare_result compare_result = ( *compare )( the_node, iter_node );
-    RBTree_Direction      dir;
 
     if ( _RBTree_Is_equal( compare_result ) ) {
       found = iter_node;
@@ -40,8 +39,11 @@ RBTree_Node *_RBTree_Find(
         break;
     }
 
-    dir = (RBTree_Direction) _RBTree_Is_greater( compare_result );
-    iter_node = iter_node->child[ dir ];
+    if ( _RBTree_Is_greater( compare_result ) ) {
+      iter_node = _RBTree_Right( iter_node );
+    } else {
+      iter_node = _RBTree_Left( iter_node );
+    }
   }
 
   return found;

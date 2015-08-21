@@ -25,39 +25,30 @@
 #endif
 
 #include <rtems/score/rbtreeimpl.h>
-#include <rtems/score/isr.h>
+#include <rtems/score/basedefs.h>
 
-RBTree_Node *_RBTree_Next(
-  const RBTree_Node *node,
-  RBTree_Direction   dir
-)
+RB_GENERATE_MINMAX( RBTree_Control, RBTree_Node, Node, static )
+
+RB_GENERATE_NEXT( RBTree_Control, RBTree_Node, Node, static )
+
+RB_GENERATE_PREV( RBTree_Control, RBTree_Node, Node, static )
+
+RBTree_Node *_RBTree_Minimum( const RBTree_Control *tree )
 {
-  RBTree_Direction opp_dir = _RBTree_Opposite_direction( dir );
-  RBTree_Node     *current = node->child[ dir ];
-  RBTree_Node     *next = NULL;
+  return RB_MIN( RBTree_Control, RTEMS_DECONST( RBTree_Control *, tree ) );
+}
 
-  if ( current != NULL ) {
-    next = current;
+RBTree_Node *_RBTree_Maximum( const RBTree_Control *tree )
+{
+  return RB_MAX( RBTree_Control, RTEMS_DECONST( RBTree_Control *, tree ) );
+}
 
-    while ( ( current = current->child[ opp_dir ] ) != NULL ) {
-      next = current;
-    }
-  } else {
-    RBTree_Node *parent = node->parent;
+RBTree_Node *_RBTree_Successor( const RBTree_Node *node )
+{
+  return RB_NEXT( RBTree_Control, NULL, RTEMS_DECONST( RBTree_Node *, node ) );
+}
 
-    if ( parent->parent && node == parent->child[ opp_dir ] ) {
-      next = parent;
-    } else {
-      while ( parent->parent && node == parent->child[ dir ] ) {
-        node = parent;
-        parent = parent->parent;
-      }
-
-      if ( parent->parent ) {
-        next = parent;
-      }
-    }
-  }
-
-  return next;
+RBTree_Node *_RBTree_Predecessor( const RBTree_Node *node )
+{
+  return RB_PREV( RBTree_Control, NULL, RTEMS_DECONST( RBTree_Node *, node ) );
 }
