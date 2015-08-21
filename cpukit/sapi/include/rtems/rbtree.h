@@ -296,31 +296,53 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_extract(
 }
 
 /**
- * @brief Obtain the min node on a rbtree.
+ * @brief Gets a node with the minimum key value from the red-black tree.
  *
- * This function removes the min node from @a the_rbtree and returns
- * a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
+ * This function extracts a node with the minimum key value from
+ * tree and returns a pointer to that node if it exists.  In case multiple
+ * nodes with a minimum key value exist, then they are extracted in FIFO order.
+ *
+ * @param[in] the_rbtree The red-black tree control.
+ *
+ * @retval NULL The tree is empty.
+ * @retval node A node with the minimal key value on the tree.
  */
-
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_min(
   rtems_rbtree_control *the_rbtree
 )
 {
-  return _RBTree_Get( the_rbtree, RBT_LEFT );
+  rtems_rbtree_node *the_node = rtems_rbtree_min( the_rbtree );
+
+  if ( the_node != NULL ) {
+    rtems_rbtree_extract( the_rbtree, the_node );
+  }
+
+  return the_node;
 }
 
 /**
- * @brief Obtain the max node on a rbtree.
+ * @brief Gets a node with the maximal key value from the red-black tree.
  *
- * This function removes the max node from @a the_rbtree and returns
- * a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
+ * This function extracts a node with the maximum key value from tree and
+ * returns a pointer to that node if it exists.  In case multiple nodes with a
+ * maximum key value exist, then they are extracted in LIFO order.
+ *
+ * @param[in] the_rbtree The red-black tree control.
+ *
+ * @retval NULL The tree is empty.
+ * @retval node A node with the maximal key value on the tree.
  */
-
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_max(
   rtems_rbtree_control *the_rbtree
 )
 {
-  return _RBTree_Get( the_rbtree, RBT_RIGHT );
+  rtems_rbtree_node *the_node = rtems_rbtree_max( the_rbtree );
+
+  if ( the_node != NULL ) {
+    rtems_rbtree_extract( the_rbtree, the_node );
+  }
+
+  return the_node;
 }
 
 /**

@@ -522,37 +522,6 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor(
   return _RBTree_Next( node, RBT_RIGHT );
 }
 
-/**
- * @brief Gets a node with an extremal key value from the red-black tree.
- *
- * This function extracts a node with the minimum or maximum key value from
- * tree and returns a pointer to that node if it exists.  In case multiple
- * nodes with a minimum key value exist, then they are extracted in FIFO order.
- * In case multiple nodes with a maximum key value exist, then they are
- * extracted in LIFO order.
- *
- * @param[in] the_rbtree The red-black tree control.
- * @param[in] dir Specifies whether to get a node with the minimum (RBT_LEFT)
- *   or maximum (RBT_RIGHT) key value.
- *
- * @retval NULL The tree is empty.
- * @retval extremal_node A node with a minimal or maximal key value on the
- *   tree.
- */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Get(
-  RBTree_Control *the_rbtree,
-  RBTree_Direction dir
-)
-{
-  RBTree_Node *the_node = the_rbtree->first[ dir ];
-
-  if ( the_node != NULL ) {
-    _RBTree_Extract( the_rbtree, the_node );
-  }
-
-  return the_node;
-}
-
 /**@}*/
 
 #ifdef __cplusplus
