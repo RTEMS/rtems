@@ -157,18 +157,6 @@ typedef struct {
   RBTree_Control name = RBTREE_INITIALIZER_EMPTY( name )
 
 /**
- *  @brief RBTree_Node initializer for an empty node with designator @a name.
- */
-#define RBTREE_NODE_INITIALIZER_EMPTY( name ) \
-  { NULL, { NULL, NULL }, RBT_RED }
-
-/**
- *  @brief RBTree definition for an empty rbtree with designator @a name.
- */
-#define RBTREE_NODE_DEFINE_EMPTY( name ) \
-  RBTree_Node name = RBTREE_NODE_INITIALIZER_EMPTY( name )
-
-/**
  * @brief Tries to find a node for the specified key in the tree.
  *
  * @param[in] the_rbtree The red-black tree control.
