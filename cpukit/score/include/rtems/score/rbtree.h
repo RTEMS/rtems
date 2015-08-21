@@ -484,6 +484,36 @@ RTEMS_INLINE_ROUTINE void _RBTree_Initialize_empty(
 }
 
 /**
+ * @brief Returns the minimum node of the red-black tree.
+ *
+ * @param[in] the_rbtree The red-black tree control.
+ *
+ * @retval NULL The red-black tree is empty.
+ * @retval node The minimum node.
+ */
+RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Minimum(
+  const RBTree_Control *the_rbtree
+)
+{
+  return _RBTree_First( the_rbtree, RBT_LEFT );
+}
+
+/**
+ * @brief Returns the maximum node of the red-black tree.
+ *
+ * @param[in] the_rbtree The red-black tree control.
+ *
+ * @retval NULL The red-black tree is empty.
+ * @retval node The maximum node.
+ */
+RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Maximum(
+  const RBTree_Control *the_rbtree
+)
+{
+  return _RBTree_First( the_rbtree, RBT_RIGHT );
+}
+
+/**
  * @brief Returns the predecessor of a node.
  *
  * @param[in] node is the node.

@@ -87,7 +87,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Schedule_body(
 {
   Scheduler_EDF_Context *context =
     _Scheduler_EDF_Get_context( scheduler );
-  RBTree_Node *first = _RBTree_First( &context->Ready, RBT_LEFT );
+  RBTree_Node *first = _RBTree_Minimum( &context->Ready );
   Scheduler_EDF_Node *node =
     RTEMS_CONTAINER_OF( first, Scheduler_EDF_Node, Node );
   Thread_Control *heir = node->thread;

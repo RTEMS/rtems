@@ -147,27 +147,23 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_root(
 }
 
 /**
- * @brief Return pointer to RBTree Minimum
- *
- * This function returns a pointer to the minimum node of @a the_rbtree.
+ * @copydoc _RBTree_Minimum()
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_min(
   const rtems_rbtree_control *the_rbtree
 )
 {
-  return _RBTree_First( the_rbtree, RBT_LEFT );
+  return _RBTree_Minimum( the_rbtree );
 }
 
 /**
- * @brief Return pointer to RBTree maximum.
- *
- * This function returns a pointer to the maximum node of @a the_rbtree.
+ * @copydoc _RBTree_Maximum()
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_max(
   const rtems_rbtree_control *the_rbtree
 )
 {
-  return _RBTree_First( the_rbtree, RBT_RIGHT );
+  return _RBTree_Maximum( the_rbtree );
 }
 
 /**
@@ -338,7 +334,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_min(
   const rtems_rbtree_control *the_rbtree
 )
 {
-  return _RBTree_First( the_rbtree, RBT_LEFT );
+  return rtems_rbtree_min( the_rbtree );
 }
 
 /**
@@ -352,7 +348,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_max(
   const rtems_rbtree_control *the_rbtree
 )
 {
-  return _RBTree_First( the_rbtree, RBT_RIGHT );
+  return rtems_rbtree_max( the_rbtree );
 }
 
 /**

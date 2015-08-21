@@ -231,7 +231,7 @@ static Thread_Control *_Thread_queue_Priority_first(
 {
   RBTree_Node *first;
 
-  first = _RBTree_First( &heads->Heads.Priority, RBT_LEFT );
+  first = _RBTree_Minimum( &heads->Heads.Priority );
 
   return first != NULL ? THREAD_RBTREE_NODE_TO_THREAD( first ) : NULL;
 }
