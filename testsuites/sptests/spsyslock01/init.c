@@ -125,32 +125,32 @@ static void test_recursive_acquire_normal(test_context *ctx)
 {
   struct _Mutex_Control *mtx = &ctx->mtx;
   size_t idx = 0;
-  int success;
+  int eno;
 
-  success = _Mutex_Try_acquire(mtx);
-  rtems_test_assert(success == 1);
+  eno = _Mutex_Try_acquire(mtx);
+  rtems_test_assert(eno == 0);
 
-  success = _Mutex_Try_acquire(mtx);
-  rtems_test_assert(success == 0);
+  eno = _Mutex_Try_acquire(mtx);
+  rtems_test_assert(eno == EBUSY);
 
   _Mutex_Release(mtx);
 
-  success = _Mutex_Try_acquire(mtx);
-  rtems_test_assert(success == 1);
+  eno = _Mutex_Try_acquire(mtx);
+  rtems_test_assert(eno == 0);
 
   _Mutex_Release(mtx);
 
   _Mutex_Acquire(mtx);
 
-  success = _Mutex_Try_acquire(mtx);
-  rtems_test_assert(success == 0);
+  eno = _Mutex_Try_acquire(mtx);
+  rtems_test_assert(eno == EBUSY);
 
   _Mutex_Release(mtx);
 
   send_event(ctx, idx, EVENT_MTX_ACQUIRE);
 
-  success = _Mutex_Try_acquire(mtx);
-  rtems_test_assert(success == 0);
+  eno = _Mutex_Try_acquire(mtx);
+  rtems_test_assert(eno == EBUSY);
 
   send_event(ctx, idx, EVENT_MTX_RELEASE);
 }
@@ -159,15 +159,15 @@ static void test_recursive_acquire_recursive(test_context *ctx)
 {
   struct _Mutex_recursive_Control *mtx = &ctx->rec_mtx;
   size_t idx = 0;
-  int success;
+  int eno;
 
-  success = _Mutex_recursive_Try_acquire(mtx);
-  rtems_test_assert(success == 1);
+  eno = _Mutex_recursive_Try_acquire(mtx);
+  rtems_test_assert(eno == 0);
 
   _Mutex_recursive_Acquire(mtx);
 
-  success = _Mutex_recursive_Try_acquire(mtx);
-  rtems_test_assert(success == 1);
+  eno = _Mutex_recursive_Try_acquire(mtx);
+  rtems_test_assert(eno == 0);
 
   _Mutex_recursive_Release(mtx);
   _Mutex_recursive_Release(mtx);
@@ -175,8 +175,8 @@ static void test_recursive_acquire_recursive(test_context *ctx)
 
   send_event(ctx, idx, EVENT_REC_MTX_ACQUIRE);
 
-  success = _Mutex_recursive_Try_acquire(mtx);
-  rtems_test_assert(success == 0);
+  eno = _Mutex_recursive_Try_acquire(mtx);
+  rtems_test_assert(eno == EBUSY);
 
   send_event(ctx, idx, EVENT_REC_MTX_RELEASE);
 }

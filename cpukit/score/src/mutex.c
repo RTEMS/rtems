@@ -268,7 +268,7 @@ int _Mutex_Try_acquire( struct _Mutex_Control *_mutex )
   ISR_lock_Context  lock_context;
   Thread_Control   *executing;
   Thread_Control   *owner;
-  int               success;
+  int               eno;
 
   mutex = _Mutex_Get( _mutex );
   executing = _Mutex_Queue_acquire( mutex, &lock_context );
@@ -278,14 +278,14 @@ int _Mutex_Try_acquire( struct _Mutex_Control *_mutex )
   if ( __predict_true( owner == NULL ) ) {
     mutex->owner = executing;
     ++executing->resource_count;
-    success = 1;
+    eno = 0;
   } else {
-    success = 0;
+    eno = EBUSY;
   }
 
   _Mutex_Queue_release( mutex, &lock_context );
 
-  return success;
+  return eno;
 }
 
 void _Mutex_Release( struct _Mutex_Control *_mutex )
@@ -393,7 +393,7 @@ int _Mutex_recursive_Try_acquire( struct _Mutex_recursive_Control *_mutex )
   ISR_lock_Context         lock_context;
   Thread_Control          *executing;
   Thread_Control          *owner;
-  int success;
+  int                      eno;
 
   mutex = _Mutex_recursive_Get( _mutex );
   executing = _Mutex_Queue_acquire( &mutex->Mutex, &lock_context );
@@ -403,17 +403,17 @@ int _Mutex_recursive_Try_acquire( struct _Mutex_recursive_Control *_mutex )
   if ( __predict_true( owner == NULL ) ) {
     mutex->Mutex.owner = executing;
     ++executing->resource_count;
-    success = 1;
+    eno = 0;
   } else if ( owner == executing ) {
     ++mutex->nest_level;
-    success = 1;
+    eno = 0;
   } else {
-    success = 0;
+    eno = EBUSY;
   }
 
   _Mutex_Queue_release( &mutex->Mutex, &lock_context );
 
-  return success;
+  return eno;
 }
 
 void _Mutex_recursive_Release( struct _Mutex_recursive_Control *_mutex )
