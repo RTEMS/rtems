@@ -113,7 +113,6 @@ project_lib_LIBRARIES = libjffs2.a
 libjffs2_a_SOURCES =
 libjffs2_a_SOURCES += src/jffs2/src/build.c
 libjffs2_a_SOURCES += src/jffs2/src/compat-crc32.c
-libjffs2_a_SOURCES += src/jffs2/src/compat-rbtree.c
 libjffs2_a_SOURCES += src/jffs2/src/compr.c
 libjffs2_a_SOURCES += src/jffs2/src/compr_rtime.c
 libjffs2_a_SOURCES += src/jffs2/src/compr_zlib.c
