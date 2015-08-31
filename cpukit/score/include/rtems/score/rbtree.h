@@ -470,6 +470,19 @@ RBTree_Node *_RBTree_Predecessor( const RBTree_Node *node );
  */
 RBTree_Node *_RBTree_Successor( const RBTree_Node *node );
 
+/**
+ * @brief Replaces a node in the red-black tree without a rebalance.
+ *
+ * @param[in] the_rbtree The red-black tree control.
+ * @param[in] victim The victim node.
+ * @param[in] replacement The replacement node.
+ */
+void _RBTree_Replace_node(
+  RBTree_Control *the_rbtree,
+  RBTree_Node    *victim,
+  RBTree_Node    *replacement
+);
+
 /**@}*/
 
 #ifdef __cplusplus

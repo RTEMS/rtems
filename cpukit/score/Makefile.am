@@ -286,6 +286,7 @@ libscore_a_SOURCES += src/freechain.c
 libscore_a_SOURCES += \
     src/rbtreeextract.c src/rbtreefind.c \
     src/rbtreeinsert.c src/rbtreeiterate.c src/rbtreenext.c
+libscore_a_SOURCES += src/rbtreereplace.c
 
 ## THREAD_C_FILES
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
