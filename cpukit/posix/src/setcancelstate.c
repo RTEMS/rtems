@@ -50,9 +50,6 @@ int pthread_setcancelstate(
   if ( _ISR_Is_in_progress() )
     return EPROTO;
 
-  if ( !oldstate )
-    return EINVAL;
-
   if ( state != PTHREAD_CANCEL_ENABLE && state != PTHREAD_CANCEL_DISABLE )
     return EINVAL;
 
@@ -61,7 +58,9 @@ int pthread_setcancelstate(
     executing = _Thread_Executing;
     thread_support =  executing ->API_Extensions[ THREAD_API_POSIX ];
 
-    *oldstate = thread_support->cancelability_state;
+    if (oldstate != NULL)
+      *oldstate = thread_support->cancelability_state;
+
     thread_support->cancelability_state = state;
 
     _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch( executing );

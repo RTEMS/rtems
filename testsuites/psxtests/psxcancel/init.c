@@ -95,17 +95,17 @@ void *countTaskAsync(void *ignored)
   TEST_BEGIN();
 
   /* generate some error conditions */
-  puts( "Init - pthread_setcancelstate - NULL oldstate - EINVAL" );
+  puts( "Init - pthread_setcancelstate - NULL oldstate" );
   sc = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
-  fatal_posix_service_status( sc, EINVAL, "cancel state EINVAL" );
+  fatal_posix_service_status( sc, 0, "cancel state NULL" );
 
   puts( "Init - pthread_setcancelstate - bad state - EINVAL" );
   sc = pthread_setcancelstate(12, &old);
   fatal_posix_service_status( sc, EINVAL, "cancel state EINVAL" );
 
-  puts( "Init - pthread_setcanceltype - NULL oldtype - EINVAL" );
+  puts( "Init - pthread_setcanceltype - NULL oldtype" );
   sc = pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
-  fatal_posix_service_status( sc, EINVAL, "cancel type EINVAL" );
+  fatal_posix_service_status( sc, 0, "cancel type NULL" );
 
   puts( "Init - pthread_setcanceltype - bad type - EINVAL" );
   sc = pthread_setcanceltype(12, &old);

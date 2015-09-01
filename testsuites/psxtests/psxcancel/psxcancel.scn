@@ -1,7 +1,7 @@
-*** POSIX CANCEL TEST ***
-Init - pthread_setcancelstate - NULL oldstate - EINVAL
+*** BEGIN OF TEST PSXCANCEL ***
+Init - pthread_setcancelstate - NULL oldstate
 Init - pthread_setcancelstate - bad state - EINVAL
-Init - pthread_setcanceltype - NULL oldtype - EINVAL
+Init - pthread_setcanceltype - NULL oldtype
 Init - pthread_setcanceltype - bad type - EINVAL
 Init - pthread_cancel - bad ID - EINVAL
 countTaskDeferred: elapsed time (second):  0

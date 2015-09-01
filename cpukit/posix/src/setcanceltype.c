@@ -50,9 +50,6 @@ int pthread_setcanceltype(
   if ( _ISR_Is_in_progress() )
     return EPROTO;
 
-  if ( !oldtype )
-    return EINVAL;
-
   if ( type != PTHREAD_CANCEL_DEFERRED && type != PTHREAD_CANCEL_ASYNCHRONOUS )
     return EINVAL;
 
@@ -61,7 +58,9 @@ int pthread_setcanceltype(
     executing = _Thread_Executing;
     thread_support =  executing ->API_Extensions[ THREAD_API_POSIX ];
 
-    *oldtype = thread_support->cancelability_type;
+    if ( oldtype != NULL )
+      *oldtype = thread_support->cancelability_type;
+
     thread_support->cancelability_type = type;
 
     _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch( executing );
