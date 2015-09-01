@@ -8,7 +8,7 @@
  *  This include file contains information pertaining to the ARM
  *  processor.
  *
- *  Copyright (c) 2009-2014 embedded brains GmbH.
+ *  Copyright (c) 2009-2015 embedded brains GmbH.
  *
  *  Copyright (c) 2007 Ray Xu <Rayx.cn@gmail.com>
  *
@@ -301,6 +301,8 @@ static inline void _ARM_Data_memory_barrier( void )
 {
 #ifdef ARM_MULTILIB_HAS_BARRIER_INSTRUCTIONS
   __asm__ volatile ( "dmb" : : : "memory" );
+#else
+  RTEMS_COMPILER_MEMORY_BARRIER();
 #endif
 }
 
@@ -308,6 +310,8 @@ static inline void _ARM_Data_synchronization_barrier( void )
 {
 #ifdef ARM_MULTILIB_HAS_BARRIER_INSTRUCTIONS
   __asm__ volatile ( "dsb" : : : "memory" );
+#else
+  RTEMS_COMPILER_MEMORY_BARRIER();
 #endif
 }
 
@@ -315,6 +319,8 @@ static inline void _ARM_Instruction_synchronization_barrier( void )
 {
 #ifdef ARM_MULTILIB_HAS_BARRIER_INSTRUCTIONS
   __asm__ volatile ( "isb" : : : "memory" );
+#else
+  RTEMS_COMPILER_MEMORY_BARRIER();
 #endif
 }
 
