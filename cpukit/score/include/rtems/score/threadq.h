@@ -44,6 +44,13 @@ typedef struct _Thread_Control Thread_Control;
 /**
  * @brief Thread queue heads.
  *
+ * Each thread is equipped with spare thread queue heads in case it is not
+ * enqueued on a thread queue.  The first thread enqueued on a thread queue
+ * will give its spare thread queue heads to that thread queue.  The threads
+ * arriving at the queue will add their thread queue heads to the free chain of
+ * the queue heads provided by the first thread enqueued.  Once a thread is
+ * dequeued it use the free chain to get new spare thread queue heads.
+ *
  * Uses a leading underscore in the structure name to allow forward
  * declarations in standard header files provided by Newlib and GCC.
  */
@@ -52,18 +59,38 @@ typedef struct _Thread_queue_Heads {
    *  set of tasks which varies based upon the discipline.
    */
   union {
-    /** This is the FIFO discipline list. */
+    /**
+     * @brief This is the FIFO discipline list.
+     */
     Chain_Control Fifo;
-    /** This is the set of threads for priority discipline waiting. */
+
+    /**
+     * @brief This is the set of threads for priority discipline waiting.
+     */
     RBTree_Control Priority;
   } Heads;
 
+  /**
+   * @brief A chain with free thread queue heads providing the spare thread
+   * queue heads for a thread once it is dequeued.
+   */
   Chain_Control Free_chain;
 
+  /**
+   * @brief A chain node to add these thread queue heads to the free chain of
+   * the thread queue heads dedicated to the thread queue of an object.
+   */
   Chain_Node Free_node;
 } Thread_queue_Heads;
 
 typedef struct {
+  /**
+   * @brief The thread queue heads.
+   *
+   * This pointer is NULL, if and only if no threads are enqueued.  The first
+   * thread to enqueue will give its spare thread queue heads to this thread
+   * queue.
+   */
   Thread_queue_Heads *heads;
 
   /**
