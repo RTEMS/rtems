@@ -41,9 +41,14 @@ void *countTaskDeferred(void *ignored)
 {
   int i=0;
   int type,state;
+  int sc;
 
-  pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &type);
-  pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &state);
+  sc = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &type);
+  fatal_posix_service_status( sc, 0, "cancel state deferred" );
+  rtems_test_assert( type == PTHREAD_CANCEL_ENABLE );
+  sc = pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &state);
+  fatal_posix_service_status( sc, 0, "cancel type deferred" );
+  rtems_test_assert( state == PTHREAD_CANCEL_DEFERRED );
   while (1) {
     printf("countTaskDeferred: elapsed time (second): %2d\n", i++ );
     sleep(1);
@@ -55,9 +60,14 @@ void *countTaskAsync(void *ignored)
 {
   int i=0;
   int type,state;
+  int sc;
 
-  pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &type);
-  pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &state);
+  sc = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &type);
+  fatal_posix_service_status( sc, 0, "cancel state async" );
+  rtems_test_assert( type == PTHREAD_CANCEL_ENABLE );
+  sc = pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &state);
+  fatal_posix_service_status( sc, 0, "cancel type async" );
+  rtems_test_assert( state == PTHREAD_CANCEL_DEFERRED );
   pthread_cleanup_push(countTask_cancel_handler, NULL);
   while (1) {
     printf("countTaskAsync: elapsed time (second): %2d\n", i++ );
@@ -114,8 +124,10 @@ void *countTaskAsync(void *ignored)
     }
     /* sleep for 5 seconds, then cancel it */
     sleep(5);
-    pthread_cancel(task);
-    pthread_join(task, NULL);
+    sc = pthread_cancel(task);
+    fatal_posix_service_status( sc, 0, "cancel deferred" );
+    sc = pthread_join(task, NULL);
+    fatal_posix_service_status( sc, 0, "join deferred" );
   }
 
   /* Start countTask asynchronous */
@@ -127,8 +139,10 @@ void *countTaskAsync(void *ignored)
     }
     /* sleep for 5 seconds, then cancel it */
     sleep(5);
-    pthread_cancel(task);
-    pthread_join(task, NULL);
+    sc = pthread_cancel(task);
+    fatal_posix_service_status( sc, 0, "cancel async" );
+    sc = pthread_join(task, NULL);
+    fatal_posix_service_status( sc, 0, "join async" );
   }
 
 
