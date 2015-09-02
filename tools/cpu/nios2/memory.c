@@ -18,7 +18,8 @@ memory_desc *find_memory(device_desc *devices)
 {
   struct ptf *p;
   struct ptf_item pi;
-  memory_desc *tmd, *memory;
+  memory_desc *tmd;
+  memory_desc *memory = NULL;
 
   /********************************************************/
   /* Check which of the devices are memory, sort by size */
@@ -28,8 +29,6 @@ memory_desc *find_memory(device_desc *devices)
     struct ptf *p, *s;
     struct ptf_item pi;
     device_desc *dd;
-
-    memory = NULL;
 
     for(dd = devices; dd; dd=dd->next)
     {
