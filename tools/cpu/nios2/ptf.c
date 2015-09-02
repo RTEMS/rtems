@@ -567,17 +567,21 @@ void ptf_printf(FILE *s, struct ptf *tree, char *prefix)
           new_prefix_len += strlen(leaf->value) + 1;
         };
         new_prefix = (char *)malloc(new_prefix_len);
-        strcpy(new_prefix, prefix);
-        strcat(new_prefix, leaf->name);
-        if(leaf->value != NULL && leaf->value[0] != 0)
+        if (new_prefix != NULL)
         {
-          strcat(new_prefix, ":");
-          strcat(new_prefix, leaf->value);
-        };
-        strcat(new_prefix, "/");
-        fputs(new_prefix, s);
-        fputs("\n", s);
-        ptf_printf(s, leaf->sub, new_prefix);
+          strcpy(new_prefix, prefix);
+          strcat(new_prefix, leaf->name);
+          if(leaf->value != NULL && leaf->value[0] != 0)
+          {
+            strcat(new_prefix, ":");
+            strcat(new_prefix, leaf->value);
+          };
+          strcat(new_prefix, "/");
+          fputs(new_prefix, s);
+          fputs("\n", s);
+          ptf_printf(s, leaf->sub, new_prefix);
+          free(new_prefix);
+        }
         break;
       };
 
