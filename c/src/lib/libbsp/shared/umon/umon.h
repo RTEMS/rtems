@@ -61,4 +61,8 @@ int rtems_initialize_tfs_filesystem(
  */
 int umoncons_poll_read(int minor);
 
+#ifdef __cplusplus
+}
 #endif
+
+#endif /* __rtems_umon_h */

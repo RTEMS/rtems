@@ -87,6 +87,9 @@ int timer_getoverrun(
   timer_t   timerid
 );
 
+#ifdef __cplusplus
+}
+#endif
 /** @} */
 
-#endif
+#endif /* _RTEMS_POSIX_PTIMER_H */
