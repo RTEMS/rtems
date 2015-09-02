@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1997-2007.
+ *  COPYRIGHT (c) 1997-2015.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may in
@@ -24,62 +24,91 @@
 #include <rtems/dumpbuf.h>
 #include <rtems/bspIo.h>
 
+#define HEX_FMT_LENGTH 3   /* Length of the formatted hex string. */
+#define ASCII_FMT_LENGTH 1 /* Length of the formatted ASCII string. */
+#define BYTES_PER_ROW 16    /* Amount of bytes from buffer shown in each row. */
+#define BARS 2             /* Amount of bars in each row. */
+/* Max length of each row string. */
+#define ROW_LENGTH (BYTES_PER_ROW * (HEX_FMT_LENGTH + ASCII_FMT_LENGTH) + BARS)
+
 /*
  *  Put the body below rtems_print_buffer so it won't get inlined.
  */
 
-static inline void Dump_Line(
-  const unsigned char *buffer,
-  int                  length
-);
+static void Dump_Line(const unsigned char *buffer, const unsigned int length);
 
-void rtems_print_buffer(
-  const unsigned char *buffer,
-  int                  length
-)
+/**
+ * @brief Print \p length bytes from \p buffer, both in hex and ASCII.
+ * Printing will be done in rows, each showing BYTES_PER_ROW bytes.
+ * @details Non-printable chars will appear as dots.
+ *
+ * @param buffer The buffer we'll print.
+ * @param length Amount of bytes from \p buffer we'll print. This can't be
+ * unsigned because we don't have a way to check if we're erroneously getting
+ * a negative \p length.
+ */
+void rtems_print_buffer(const unsigned char *buffer, const int length)
 {
+  unsigned int i, mod, max;
 
-  int i, mod, max;
+  if (length > 0) {
+    mod = length % BYTES_PER_ROW;
 
-  if ( !length ) return;
+    max = length - mod;
 
-  mod = length % 16;
+    /* Print length / BYTES_PER_ROW rows. */
+    for (i = 0; i < max; i += BYTES_PER_ROW) {
+      Dump_Line(&buffer[i], BYTES_PER_ROW);
+    }
 
-  max = length - mod;
-
-  for ( i=0 ; i<max ; i+=16 )
-    Dump_Line( &buffer[ i ], 16 );
-
-  if ( mod )
-    Dump_Line( &buffer[ max ], mod );
+    /* Print another row with the remaining bytes. */
+    if (mod > 0) {
+      Dump_Line(&buffer[max], mod);
+    }
+  } else {
+    printk("Error: length must be greater than zero.");
+  }
 }
 
-static inline void Dump_Line(
-  const unsigned char *buffer,
-  int                  length
-)
+/**
+ * @brief Print \p length bytes from \p buffer, both in hex and ASCII.
+ * @details Non-printable chars will appear as dots.
+ *
+ * @param buffer The buffer we'll print.
+ * @param length Amount of bytes from \p buffer we'll print.
+ */
+static void Dump_Line(const unsigned char *buffer, const unsigned int length)
 {
+  unsigned int i;
+  static unsigned char line_buffer[ROW_LENGTH] = "";
+  size_t tmp_len;
 
-  int  i;
-  char line_buffer[120];
+  /* Output the hex value of each byte. */
+  for (i = 0; i < length; ++i) {
+    snprintf(&line_buffer[i * HEX_FMT_LENGTH], HEX_FMT_LENGTH + 1,
+             "%02x ", buffer[i]);
+  }
 
-  line_buffer[0] = '\0';
+  /* Fill the remaining space with whitespace (if necessary). */
+  for (; i < BYTES_PER_ROW; ++i) {
+    strncat(line_buffer, "   ", HEX_FMT_LENGTH);
+  }
 
-  for( i=0 ; i<length ; i++ )
-    sprintf( line_buffer, "%s%02x ", line_buffer, buffer[ i ] );
+  /* Append a bar. */
+  strncat(line_buffer, "|", 1);
+  tmp_len = strnlen(line_buffer, ROW_LENGTH);
 
-  for( ; i<16 ; i++ )
-    strcat( line_buffer, "   " );
+  /* Now output the ASCII glyphs of printable chars. */
+  for (i = 0; i < length; ++i) {
+    snprintf(&line_buffer[tmp_len + i], ASCII_FMT_LENGTH + 1,
+             "%c", isprint(buffer[i]) ? buffer[i] : '.');
+  }
 
-  strcat( line_buffer, "|" );
-  for( i=0 ; i<length ; i++ )
-    sprintf( line_buffer, "%s%c", line_buffer,
-             isprint( buffer[ i ] ) ? buffer[ i ] : '.' );
+  /* Fill the remaining space with whitespace (if necessary). */
+  for(; i < BYTES_PER_ROW; i++) {
+    strncat(line_buffer, " ", ASCII_FMT_LENGTH);
+  }
 
-  for( ; i<16 ; i++ )
-    strcat( line_buffer, " " );
-
-  strcat( line_buffer, "|\n" );
-
-  printk( line_buffer );
+  /* Append another bar and print the resulting string. */
+  printk("%s|\n", line_buffer);
 }
