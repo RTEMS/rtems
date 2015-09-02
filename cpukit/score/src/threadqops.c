@@ -142,9 +142,12 @@ static Thread_Control *_Thread_queue_FIFO_first(
 )
 {
   Chain_Control *fifo = &heads->Heads.Fifo;
+  Chain_Node    *first;
 
-  return _Chain_Is_empty( fifo ) ?
-    NULL : THREAD_CHAIN_NODE_TO_THREAD( _Chain_First( fifo ) );
+  _Assert( !_Chain_Is_empty( fifo ) );
+  first = _Chain_First( fifo );
+
+  return THREAD_CHAIN_NODE_TO_THREAD( first );
 }
 
 static void _Thread_queue_Priority_priority_change(
@@ -229,11 +232,13 @@ static Thread_Control *_Thread_queue_Priority_first(
   Thread_queue_Heads *heads
 )
 {
-  RBTree_Node *first;
+  RBTree_Control *priority_queue = &heads->Heads.Priority;
+  RBTree_Node    *first;
 
-  first = _RBTree_Minimum( &heads->Heads.Priority );
+  _Assert( !_RBTree_Is_empty( priority_queue ) );
+  first = _RBTree_Minimum( priority_queue );
 
-  return first != NULL ? THREAD_RBTREE_NODE_TO_THREAD( first ) : NULL;
+  return THREAD_RBTREE_NODE_TO_THREAD( first );
 }
 
 const Thread_queue_Operations _Thread_queue_Operations_default = {
