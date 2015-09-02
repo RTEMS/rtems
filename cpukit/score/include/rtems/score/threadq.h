@@ -42,6 +42,26 @@ extern "C" {
 typedef struct _Thread_Control Thread_Control;
 
 /**
+ * @brief Thread priority queue.
+ */
+typedef struct {
+#if defined(RTEMS_SMP)
+  /**
+   * @brief Node to enqueue this queue in the FIFO chain of the corresponding
+   * heads structure.
+   *
+   * @see Thread_queue_Heads::Heads::Fifo.
+   */
+  Chain_Node Node;
+#endif
+
+  /**
+   * @brief The actual thread priority queue.
+   */
+  RBTree_Control Queue;
+} Thread_queue_Priority_queue;
+
+/**
  * @brief Thread queue heads.
  *
  * Each thread is equipped with spare thread queue heads in case it is not
@@ -61,13 +81,19 @@ typedef struct _Thread_queue_Heads {
   union {
     /**
      * @brief This is the FIFO discipline list.
+     *
+     * On SMP configurations this FIFO is used to enqueue the per scheduler
+     * instance priority queues of this structure.  This ensures FIFO fairness
+     * among the highest priority thread of each scheduler instance.
      */
     Chain_Control Fifo;
 
+#if !defined(RTEMS_SMP)
     /**
      * @brief This is the set of threads for priority discipline waiting.
      */
-    RBTree_Control Priority;
+    Thread_queue_Priority_queue Priority;
+#endif
   } Heads;
 
   /**
@@ -81,7 +107,23 @@ typedef struct _Thread_queue_Heads {
    * the thread queue heads dedicated to the thread queue of an object.
    */
   Chain_Node Free_node;
+
+#if defined(RTEMS_SMP)
+  /**
+   * @brief One priority queue per scheduler instance.
+   */
+  Thread_queue_Priority_queue Priority[ RTEMS_ZERO_LENGTH_ARRAY ];
+#endif
 } Thread_queue_Heads;
+
+#if defined(RTEMS_SMP)
+  #define THREAD_QUEUE_HEADS_SIZE( scheduler_count ) \
+    ( sizeof( Thread_queue_Heads ) \
+      + ( scheduler_count ) * sizeof( Thread_queue_Priority_queue ) )
+#else
+  #define THREAD_QUEUE_HEADS_SIZE( scheduler_count ) \
+    sizeof( Thread_queue_Heads )
+#endif
 
 typedef struct {
   /**

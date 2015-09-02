@@ -1008,9 +1008,10 @@ const rtems_libio_helper rtems_fs_init_helper =
     CONFIGURE_SCHEDULER_CONTROLS
   };
 
+  #define CONFIGURE_SCHEDULER_COUNT RTEMS_ARRAY_SIZE( _Scheduler_Table )
+
   #if defined(RTEMS_SMP)
-    const size_t _Scheduler_Count =
-      RTEMS_ARRAY_SIZE( _Scheduler_Table );
+    const size_t _Scheduler_Count = CONFIGURE_SCHEDULER_COUNT;
 
     const Scheduler_Assignment _Scheduler_Assignments[] = {
       #if defined(CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS)
@@ -2970,7 +2971,7 @@ const rtems_libio_helper rtems_fs_init_helper =
   ( \
     _Configure_Object_RAM(_tasks, sizeof(Configuration_Thread_control)) \
       + _Configure_From_workspace(_Configure_Max_Objects(_tasks) \
-        * sizeof(Thread_queue_Heads)) \
+        * THREAD_QUEUE_HEADS_SIZE(CONFIGURE_SCHEDULER_COUNT)) \
       + _Configure_Max_Objects(_number_FP_tasks) \
         * _Configure_From_workspace(CONTEXT_FP_SIZE) \
   )

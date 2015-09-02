@@ -20,6 +20,7 @@
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/interr.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/wkspace.h>
 
 #define THREAD_OFFSET_ASSERT( field ) \
@@ -73,7 +74,7 @@ void _Thread_Initialize_information(
     &information->Free_thread_queue_heads,
     _Workspace_Allocate_or_fatal_error,
     _Objects_Maximum_per_allocation( maximum ),
-    sizeof( Thread_queue_Heads )
+    THREAD_QUEUE_HEADS_SIZE( _Scheduler_Count )
   );
 }
 

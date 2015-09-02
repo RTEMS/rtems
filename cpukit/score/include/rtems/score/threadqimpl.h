@@ -22,6 +22,7 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/rbtreeimpl.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/thread.h>
 
 #ifdef __cplusplus
@@ -50,6 +51,21 @@ typedef struct {
   unsigned int reserved[2];
 #endif
 } Thread_queue_Syslock_queue;
+
+RTEMS_INLINE_ROUTINE void _Thread_queue_Heads_initialize(
+  Thread_queue_Heads *heads
+)
+{
+#if defined(RTEMS_SMP)
+  size_t i;
+
+  for ( i = 0; i < _Scheduler_Count; ++i ) {
+    _RBTree_Initialize_empty( &heads->Priority[ i ].Queue );
+  }
+#endif
+
+  _Chain_Initialize_empty( &heads->Free_chain );
+}
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_initialize(
   Thread_queue_Queue *queue

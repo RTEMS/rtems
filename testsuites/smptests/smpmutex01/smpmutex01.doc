@@ -1,0 +1,14 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpmutex01
+
+directives:
+
+  - _Thread_queue_Priority_do_enqueue()
+  - _Thread_queue_Priority_do_extract()
+  - _Thread_queue_Priority_first()
+
+concepts:
+
+  - Ensure that the thread queue priority discipline enforces FIFO fairness
+    among the highest priority thread of each scheduler instance.

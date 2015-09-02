@@ -142,12 +142,12 @@ bool _Thread_Initialize(
     &information->Free_thread_queue_heads,
     _Workspace_Allocate,
     _Objects_Extend_size( &information->Objects ),
-    sizeof( *the_thread->Wait.spare_heads )
+    THREAD_QUEUE_HEADS_SIZE( _Scheduler_Count )
   );
   if ( the_thread->Wait.spare_heads == NULL ) {
     goto failed;
   }
-  _Chain_Initialize_empty( &the_thread->Wait.spare_heads->Free_chain );
+  _Thread_queue_Heads_initialize( the_thread->Wait.spare_heads );
 
   /*
    *  Initialize the thread timer

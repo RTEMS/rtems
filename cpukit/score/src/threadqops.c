@@ -20,6 +20,7 @@
 #include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/rbtreeimpl.h>
+#include <rtems/score/schedulerimpl.h>
 
 static void _Thread_queue_Do_nothing_priority_change(
   Thread_Control     *the_thread,
@@ -150,22 +151,41 @@ static Thread_Control *_Thread_queue_FIFO_first(
   return THREAD_CHAIN_NODE_TO_THREAD( first );
 }
 
+static Thread_queue_Priority_queue *_Thread_queue_Priority_queue(
+  Thread_queue_Heads   *heads,
+  const Thread_Control *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  return &heads->Priority[
+    _Scheduler_Get_index( _Scheduler_Get_own( the_thread ) )
+  ];
+#else
+  (void) the_thread;
+
+  return &heads->Heads.Priority;
+#endif
+}
+
 static void _Thread_queue_Priority_priority_change(
   Thread_Control     *the_thread,
   Priority_Control    new_priority,
   Thread_queue_Queue *queue
 )
 {
-  Thread_queue_Heads *heads = queue->heads;
+  Thread_queue_Heads          *heads = queue->heads;
+  Thread_queue_Priority_queue *priority_queue;
 
   _Assert( heads != NULL );
 
+  priority_queue = _Thread_queue_Priority_queue( heads, the_thread );
+
   _RBTree_Extract(
-    &heads->Heads.Priority,
+    &priority_queue->Queue,
     &the_thread->Wait.Node.RBTree
   );
   _RBTree_Insert(
-    &heads->Heads.Priority,
+    &priority_queue->Queue,
     &the_thread->Wait.Node.RBTree,
     _Thread_queue_Compare_priority,
     false
@@ -176,7 +196,11 @@ static void _Thread_queue_Priority_do_initialize(
   Thread_queue_Heads *heads
 )
 {
+#if defined(RTEMS_SMP)
+  _Chain_Initialize_empty( &heads->Heads.Fifo );
+#else
   _RBTree_Initialize_empty( &heads->Heads.Priority );
+#endif
 }
 
 static void _Thread_queue_Priority_do_enqueue(
@@ -184,8 +208,17 @@ static void _Thread_queue_Priority_do_enqueue(
   Thread_Control     *the_thread
 )
 {
+  Thread_queue_Priority_queue *priority_queue =
+    _Thread_queue_Priority_queue( heads, the_thread );
+
+#if defined(RTEMS_SMP)
+  if ( _RBTree_Is_empty( &priority_queue->Queue ) ) {
+    _Chain_Append_unprotected( &heads->Heads.Fifo, &priority_queue->Node );
+  }
+#endif
+
   _RBTree_Insert(
-    &heads->Heads.Priority,
+    &priority_queue->Queue,
     &the_thread->Wait.Node.RBTree,
     _Thread_queue_Compare_priority,
     false
@@ -197,10 +230,21 @@ static void _Thread_queue_Priority_do_extract(
   Thread_Control     *the_thread
 )
 {
+  Thread_queue_Priority_queue *priority_queue =
+    _Thread_queue_Priority_queue( heads, the_thread );
+
   _RBTree_Extract(
-    &heads->Heads.Priority,
+    &priority_queue->Queue,
     &the_thread->Wait.Node.RBTree
   );
+
+#if defined(RTEMS_SMP)
+  _Chain_Extract_unprotected( &priority_queue->Node );
+
+  if ( !_RBTree_Is_empty( &priority_queue->Queue ) ) {
+    _Chain_Append_unprotected( &heads->Heads.Fifo, &priority_queue->Node );
+  }
+#endif
 }
 
 static void _Thread_queue_Priority_enqueue(
@@ -232,11 +276,19 @@ static Thread_Control *_Thread_queue_Priority_first(
   Thread_queue_Heads *heads
 )
 {
-  RBTree_Control *priority_queue = &heads->Heads.Priority;
-  RBTree_Node    *first;
+  Thread_queue_Priority_queue *priority_queue;
+  RBTree_Node                 *first;
 
-  _Assert( !_RBTree_Is_empty( priority_queue ) );
-  first = _RBTree_Minimum( priority_queue );
+#if defined(RTEMS_SMP)
+  _Assert( !_Chain_Is_empty( &heads->Heads.Fifo ) );
+  priority_queue = (Thread_queue_Priority_queue *)
+    _Chain_First( &heads->Heads.Fifo );
+#else
+  priority_queue = &heads->Heads.Priority;
+#endif
+
+  _Assert( !_RBTree_Is_empty( &priority_queue->Queue ) );
+  first = _RBTree_Minimum( &priority_queue->Queue );
 
   return THREAD_RBTREE_NODE_TO_THREAD( first );
 }
