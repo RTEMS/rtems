@@ -20,6 +20,10 @@
 #include <rtems/rtems/dpmem.h>
 #include <rtems/score/objectimpl.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @defgroup ClassicDPMEMImpl Dual Ported Memory Manager Implementation
  *
@@ -104,5 +108,5 @@ RTEMS_INLINE_ROUTINE Dual_ported_memory_Control *_Dual_ported_memory_Get (
 }
 #endif
 
-#endif
+#endif /* _RTEMS_RTEMS_DPMEM_INL */
 /* end of include file */
