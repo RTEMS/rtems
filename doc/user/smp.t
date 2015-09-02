@@ -147,6 +147,45 @@ another processor.  So if we enable interrupts during this transition we have
 to provide an alternative task independent stack for this time frame.  This
 issue needs further investigation.
 
+@subsection Clustered Scheduling
+
+We have clustered scheduling in case the set of processors of a system is
+partitioned into non-empty pairwise-disjoint subsets. These subsets are called
+clusters.  Clusters with a cardinality of one are partitions.  Each cluster is
+owned by exactly one scheduler instance.
+
+Clustered scheduling helps to control the worst-case latencies in
+multi-processor systems, see @cite{Brandenburg, Björn B.: Scheduling and
+Locking in Multiprocessor Real-Time Operating Systems. PhD thesis, 2011.
+@uref{http://www.cs.unc.edu/~bbb/diss/brandenburg-diss.pdf}}.  The goal is to
+reduce the amount of shared state in the system and thus prevention of lock
+contention. Modern multi-processor systems tend to have several layers of data
+and instruction caches.  With clustered scheduling it is possible to honour the
+cache topology of a system and thus avoid expensive cache synchronization
+traffic.  It is easy to implement.  The problem is to provide synchronization
+primitives for inter-cluster synchronization (more than one cluster is involved
+in the synchronization process). In RTEMS there are currently three means
+available
+
+@itemize @bullet
+@item events,
+@item message queues, and
+@item semaphores using the @ref{Semaphore Manager Multiprocessor Resource
+Sharing Protocol} (MrsP).
+@end itemize
+
+The clustered scheduling approach enables separation of functions with
+real-time requirements and functions that profit from fairness and high
+throughput provided the scheduler instances are fully decoupled and adequate
+inter-cluster synchronization primitives are used.  This is work in progress.
+
+For the configuration of clustered schedulers see @ref{Configuring a System
+Configuring Clustered Schedulers}.
+
+To set the scheduler of a task see @ref{Symmetric Multiprocessing Services
+SCHEDULER_IDENT - Get ID of a scheduler} and @ref{Symmetric Multiprocessing
+Services TASK_SET_SCHEDULER - Set scheduler of a task}.
+
 @subsection Scheduler Helping Protocol
 
 The scheduler provides a helping protocol to support locking protocols like
