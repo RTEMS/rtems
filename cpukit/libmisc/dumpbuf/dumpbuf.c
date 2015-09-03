@@ -80,7 +80,7 @@ void rtems_print_buffer(const unsigned char *buffer, const int length)
 static void Dump_Line(const unsigned char *buffer, const unsigned int length)
 {
   unsigned int i;
-  static unsigned char line_buffer[ROW_LENGTH] = "";
+  static char line_buffer[ROW_LENGTH] = "";
   size_t tmp_len;
 
   /* Output the hex value of each byte. */
