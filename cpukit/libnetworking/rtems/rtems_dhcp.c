@@ -405,7 +405,7 @@ process_options (unsigned char *optbuf, int optbufSize)
             strncpy (dhcp_hostname, p, len);
           } else {  /* realloc failed */
             printf ("dhcpc: realloc failed (%s:%d)", __FILE__, __LINE__);
-            free (dhcp_hostname);
+            free (dhcp_hostname, 0);
             dhcp_hostname = NULL;
           }
         } else { /* dhcp_hostname == NULL */
