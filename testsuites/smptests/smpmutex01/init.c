@@ -26,7 +26,7 @@ const char rtems_test_name[] = "SMPMUTEX 1";
 
 #define PART_COUNT 2
 
-#define TASK_COUNT 8
+#define TASK_COUNT 9
 
 typedef enum {
   REQ_WAKE_UP_MASTER = RTEMS_EVENT_0,
@@ -43,7 +43,8 @@ typedef enum {
   B_4,
   B_5_0,
   B_5_1,
-  H,
+  H_A,
+  H_B,
   NONE
 } task_id;
 
@@ -111,13 +112,19 @@ static rtems_event_set wait_for_events(void)
   return events;
 }
 
-static void sync_with_helper(test_context *ctx)
+static void sync_with_helper_by_id(test_context *ctx, task_id id)
 {
   rtems_event_set events;
 
-  send_event(ctx, H, REQ_WAKE_UP_HELPER);
+  send_event(ctx, id, REQ_WAKE_UP_HELPER);
   events = wait_for_events();
   rtems_test_assert(events == REQ_WAKE_UP_MASTER);
+}
+
+static void sync_with_helper(test_context *ctx)
+{
+  sync_with_helper_by_id(ctx, H_A);
+  sync_with_helper_by_id(ctx, H_B);
 }
 
 static void request(test_context *ctx, task_id id, request_id req)
@@ -157,6 +164,24 @@ static void check_generations(test_context *ctx, task_id a, task_id b)
   for (i = 0; i < TASK_COUNT; ++i) {
     rtems_test_assert(ctx->generation[i] == ctx->expected_generation[i]);
   }
+}
+
+static void assert_prio(
+  test_context *ctx,
+  task_id id,
+  rtems_task_priority expected
+)
+{
+  rtems_task_priority actual;
+  rtems_status_code sc;
+
+  sc = rtems_task_set_priority(
+    ctx->tasks[id],
+    RTEMS_CURRENT_PRIORITY,
+    &actual
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(expected == actual);
 }
 
 static void helper(rtems_task_argument arg)
@@ -202,7 +227,8 @@ static void test(void)
   start_task(ctx, B_4, worker, 4, SCHED_B);
   start_task(ctx, B_5_0, worker, 5, SCHED_B);
   start_task(ctx, B_5_1, worker, 5, SCHED_B);
-  start_task(ctx, H, helper, 6, SCHED_B);
+  start_task(ctx, H_A, helper, 3, SCHED_A);
+  start_task(ctx, H_B, helper, 6, SCHED_B);
 
   sc = rtems_semaphore_create(
     rtems_build_name(' ', 'M', 'T', 'X'),
@@ -216,8 +242,10 @@ static void test(void)
   obtain(ctx);
   request(ctx, A_1, REQ_MTX_OBTAIN);
   check_generations(ctx, NONE, NONE);
+  assert_prio(ctx, M, 1);
   release(ctx);
   check_generations(ctx, A_1, NONE);
+  assert_prio(ctx, M, 3);
   request(ctx, A_1, REQ_MTX_RELEASE);
   check_generations(ctx, A_1, NONE);
 
@@ -226,8 +254,11 @@ static void test(void)
   request(ctx, A_1, REQ_MTX_OBTAIN);
   request(ctx, A_2_1, REQ_MTX_OBTAIN);
   check_generations(ctx, NONE, NONE);
+  assert_prio(ctx, M, 1);
   release(ctx);
   check_generations(ctx, A_1, NONE);
+  assert_prio(ctx, M, 3);
+  assert_prio(ctx, A_1, 1);
   request(ctx, A_1, REQ_MTX_RELEASE);
   check_generations(ctx, A_1, A_2_0);
   request(ctx, A_2_0, REQ_MTX_RELEASE);
@@ -240,8 +271,10 @@ static void test(void)
   request(ctx, B_4, REQ_MTX_OBTAIN);
   request(ctx, B_5_1, REQ_MTX_OBTAIN);
   check_generations(ctx, NONE, NONE);
+  assert_prio(ctx, M, 0);
   release(ctx);
   sync_with_helper(ctx);
+  assert_prio(ctx, M, 3);
   check_generations(ctx, B_4, NONE);
   request(ctx, B_4, REQ_MTX_RELEASE);
   check_generations(ctx, B_4, B_5_0);
@@ -252,26 +285,44 @@ static void test(void)
 
   obtain(ctx);
   request(ctx, A_2_0, REQ_MTX_OBTAIN);
+  check_generations(ctx, NONE, NONE);
+  assert_prio(ctx, M, 2);
   request(ctx, B_5_0, REQ_MTX_OBTAIN);
+  check_generations(ctx, NONE, NONE);
+  assert_prio(ctx, M, 0);
   request(ctx, B_5_1, REQ_MTX_OBTAIN);
   request(ctx, B_4, REQ_MTX_OBTAIN);
   request(ctx, A_2_1, REQ_MTX_OBTAIN);
   request(ctx, A_1, REQ_MTX_OBTAIN);
   check_generations(ctx, NONE, NONE);
   release(ctx);
+  sync_with_helper(ctx);
   check_generations(ctx, A_1, NONE);
+  assert_prio(ctx, M, 3);
+  assert_prio(ctx, A_1, 0);
   request(ctx, A_1, REQ_MTX_RELEASE);
   check_generations(ctx, A_1, B_4);
+  assert_prio(ctx, A_1, 1);
+  assert_prio(ctx, B_4, 0);
   request(ctx, B_4, REQ_MTX_RELEASE);
   check_generations(ctx, B_4, A_2_0);
+  assert_prio(ctx, B_4, 4);
+  assert_prio(ctx, A_2_0, 0);
   request(ctx, A_2_0, REQ_MTX_RELEASE);
   check_generations(ctx, A_2_0, B_5_0);
+  assert_prio(ctx, A_2_0, 2);
+  assert_prio(ctx, B_5_0, 0);
   request(ctx, B_5_0, REQ_MTX_RELEASE);
   check_generations(ctx, B_5_0, A_2_1);
+  assert_prio(ctx, B_5_0, 5);
+  assert_prio(ctx, A_2_1, 0);
   request(ctx, A_2_1, REQ_MTX_RELEASE);
   check_generations(ctx, A_2_1, B_5_1);
+  assert_prio(ctx, A_2_1, 2);
+  assert_prio(ctx, B_5_1, 5);
   request(ctx, B_5_1, REQ_MTX_RELEASE);
   check_generations(ctx, B_5_1, NONE);
+  assert_prio(ctx, B_5_1, 5);
 }
 
 static void Init(rtems_task_argument arg)

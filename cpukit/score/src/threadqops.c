@@ -293,6 +293,28 @@ static Thread_Control *_Thread_queue_Priority_first(
   return THREAD_RBTREE_NODE_TO_THREAD( first );
 }
 
+#if defined(RTEMS_SMP)
+void _Thread_queue_Boost_priority(
+  Thread_queue_Queue *queue,
+  Thread_Control     *the_thread
+)
+{
+  Thread_queue_Heads *heads = queue->heads;
+
+  if (
+    heads != NULL
+      && (
+        !_Chain_Has_only_one_node( &heads->Heads.Fifo )
+          || _RBTree_Is_empty(
+            &_Thread_queue_Priority_queue( heads, the_thread )->Queue
+          )
+      )
+  ) {
+    _Thread_Raise_priority( the_thread, PRIORITY_PSEUDO_ISR );
+  }
+}
+#endif
+
 const Thread_queue_Operations _Thread_queue_Operations_default = {
   .priority_change = _Thread_queue_Do_nothing_priority_change,
   .extract = _Thread_queue_Do_nothing_extract

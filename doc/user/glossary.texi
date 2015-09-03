@@ -505,6 +505,12 @@ A mechanism used to represent the relative
 importance of an element in a set of items.  RTEMS uses priority
 to determine which task should execute.
 
+@item priority boosting
+A simple approach to extend the priority inheritance protocol for clustered
+scheduling is @dfn{priority boosting}.  In case a mutex is owned by a task of
+another cluster, then the priority of the owner task is raised to an
+artificially high priority, the pseudo-interrupt priority.
+
 @item priority inheritance
 An algorithm that calls for
 the lower priority task holding a resource to have its priority

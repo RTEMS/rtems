@@ -112,9 +112,7 @@ static void _Mutex_Acquire_slow(
   ISR_lock_Context  *lock_context
 )
 {
-  /* Priority inheritance */
-  _Thread_Raise_priority( owner, executing->current_priority );
-
+  _Thread_Inherit_priority( owner, executing );
   _Thread_queue_Enqueue_critical(
     &mutex->Queue.Queue,
     MUTEX_TQ_OPERATIONS,
@@ -136,15 +134,22 @@ static void _Mutex_Release_slow(
 {
   if (heads != NULL) {
     const Thread_queue_Operations *operations;
-    Thread_Control *first;
+    Thread_Control                *first;
+    bool                           unblock;
 
     operations = MUTEX_TQ_OPERATIONS;
     first = ( *operations->first )( heads );
 
     mutex->owner = first;
-    _Thread_queue_Extract_critical(
+    unblock = _Thread_queue_Extract_locked(
       &mutex->Queue.Queue,
       operations,
+      first
+    );
+    _Thread_queue_Boost_priority( &mutex->Queue.Queue, first );
+    _Thread_queue_Unblock_critical(
+      unblock,
+      &mutex->Queue.Queue,
       first,
       lock_context
     );

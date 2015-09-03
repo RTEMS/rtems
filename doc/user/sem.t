@@ -115,6 +115,11 @@ for that resource.  Each time a task blocks attempting to obtain
 the resource, the task holding the resource may have its
 priority increased.
 
+On SMP configurations, in case the task holding the resource and the task that
+blocks attempting to obtain the resource are in different scheduler instances,
+the priority of the holder is raised to the pseudo-interrupt priority (priority
+boosting).  The pseudo-interrupt priority is the highest priority.
+
 RTEMS supports priority inheritance for local, binary
 semaphores that use the priority task wait queue blocking
 discipline.   When a task of higher priority than the task

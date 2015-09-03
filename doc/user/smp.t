@@ -164,12 +164,14 @@ and instruction caches.  With clustered scheduling it is possible to honour the
 cache topology of a system and thus avoid expensive cache synchronization
 traffic.  It is easy to implement.  The problem is to provide synchronization
 primitives for inter-cluster synchronization (more than one cluster is involved
-in the synchronization process). In RTEMS there are currently three means
+in the synchronization process). In RTEMS there are currently four means
 available
 
 @itemize @bullet
 @item events,
-@item message queues, and
+@item message queues,
+@item semaphores using the @ref{Semaphore Manager Priority Inheritance}
+protocol (priority boosting), and
 @item semaphores using the @ref{Semaphore Manager Multiprocessor Resource
 Sharing Protocol} (MrsP).
 @end itemize

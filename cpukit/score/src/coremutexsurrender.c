@@ -209,6 +209,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
         case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
           _CORE_mutex_Push_priority( the_mutex, the_thread );
           the_thread->resource_count++;
+          _Thread_queue_Boost_priority( &the_mutex->Wait_queue.Queue, the_thread );
           break;
         case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
           _CORE_mutex_Push_priority( the_mutex, the_thread );

@@ -522,6 +522,31 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Destroy(
 }
 
 /**
+ * @brief Boosts the priority of the thread if threads of another scheduler
+ * instance are enqueued on the thread queue.
+ *
+ * The thread queue must use the priority waiting discipline.
+ *
+ * @param[in] queue The actual thread queue.
+ * @param[in] the_thread The thread to boost the priority if necessary.
+ */
+#if defined(RTEMS_SMP)
+void _Thread_queue_Boost_priority(
+  Thread_queue_Queue *queue,
+  Thread_Control     *the_thread
+);
+#else
+RTEMS_INLINE_ROUTINE void _Thread_queue_Boost_priority(
+  Thread_queue_Queue *queue,
+  Thread_Control     *the_thread
+)
+{
+  (void) queue;
+  (void) the_thread;
+}
+#endif
+
+/**
  * @brief Compare two thread's priority for RBTree Insertion.
  *
  * @param[in] left points to the left thread's RBnode

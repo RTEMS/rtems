@@ -110,6 +110,40 @@ void _Thread_Raise_priority(
   );
 }
 
+#if defined(RTEMS_SMP)
+static bool _Thread_Inherit_priority_filter(
+  Thread_Control   *inheritor,
+  Priority_Control *new_priority,
+  void             *arg
+)
+{
+  Thread_Control *ancestor = arg;
+
+  if ( _Scheduler_Get_own( inheritor ) == _Scheduler_Get_own( ancestor ) ) {
+    *new_priority = ancestor->current_priority;
+  }
+
+  return _Thread_Priority_less_than(
+    inheritor->current_priority,
+    *new_priority
+  );
+}
+
+void _Thread_Inherit_priority(
+  Thread_Control *inheritor,
+  Thread_Control *ancestor
+)
+{
+  _Thread_Change_priority(
+    inheritor,
+    PRIORITY_PSEUDO_ISR,
+    ancestor,
+    _Thread_Inherit_priority_filter,
+    false
+  );
+}
+#endif
+
 static bool _Thread_Restore_priority_filter(
   Thread_Control   *the_thread,
   Priority_Control *new_priority,

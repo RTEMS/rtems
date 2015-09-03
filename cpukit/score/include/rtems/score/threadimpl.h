@@ -437,6 +437,37 @@ void _Thread_Raise_priority(
 );
 
 /**
+ * @brief Inherit the priority of a thread.
+ *
+ * It changes the current priority of the inheritor thread to the current priority
+ * of the ancestor thread if it is higher than the current priority of the inheritor
+ * thread.  In this case the inheritor thread is appended to its new priority group
+ * in its scheduler instance.
+ *
+ * On SMP configurations, the priority is changed to PRIORITY_PSEUDO_ISR in
+ * case the own schedulers of the inheritor and ancestor thread differ (priority
+ * boosting).
+ *
+ * @param[in] inheritor The thread to inherit the priority.
+ * @param[in] ancestor The thread to bequeath its priority to the inheritor
+ *   thread.
+ */
+#if defined(RTEMS_SMP)
+void _Thread_Inherit_priority(
+  Thread_Control *inheritor,
+  Thread_Control *ancestor
+);
+#else
+RTEMS_INLINE_ROUTINE void _Thread_Inherit_priority(
+  Thread_Control *inheritor,
+  Thread_Control *ancestor
+)
+{
+  _Thread_Raise_priority( inheritor, ancestor->current_priority );
+}
+#endif
+
+/**
  * @brief Sets the current to the real priority of a thread.
  *
  * Sets the priority restore hint to false.
