@@ -466,6 +466,71 @@ architecture please consult the @cite{RTEMS CPU Architecture Supplement}.
 The only remaining user of task variables in the RTEMS code base is the Ada
 support.  So basically Ada is not available on RTEMS SMP.
 
+@subsection OpenMP
+
+OpenMP support for RTEMS is available via the GCC provided libgomp.  There is
+libgomp support for RTEMS in the POSIX configuration of libgomp since GCC 4.9
+(requires a Newlib snapshot after 2015-03-12). In GCC 6.1 or later (requires a
+Newlib snapshot after 2015-07-30 for <sys/lock.h> provided self-contained
+synchronization objects) there is a specialized libgomp configuration for RTEMS
+which offers a significantly better performance compared to the POSIX
+configuration of libgomp.  In addition application configurable thread pools
+for each scheduler instance are available in GCC 6.1 or later.
+
+The run-time configuration of libgomp is done via environment variables
+documented in the @uref{https://gcc.gnu.org/onlinedocs/libgomp/, libgomp
+manual}.  The environment variables are evaluated in a constructor function
+which executes in the context of the first initialization task before the
+actual initialization task function is called (just like a global C++
+constructor).  To set application specific values, a higher priority
+constructor function must be used to set up the environment variables.
+
+@example
+@group
+#include <stdlib.h>
+
+void __attribute__((constructor(1000))) config_libgomp( void )
+@{
+  setenv( "OMP_DISPLAY_ENV", "VERBOSE", 1 );
+  setenv( "GOMP_SPINCOUNT", "30000", 1 );
+  setenv( "GOMP_RTEMS_THREAD_POOLS", "1$2@@SCHD", 1 );
+@}
+@end group
+@end example
+
+The environment variable @env{GOMP_RTEMS_THREAD_POOLS} is RTEMS specific.  It
+determines the thread pools for each scheduler instance.  The format for
+@env{GOMP_RTEMS_THREAD_POOLS} is a list of optional
+@code{<thread-pool-count>[$<priority>]@@<scheduler-name>} configurations
+separated by @code{:} where:
+
+@itemize @bullet
+@item @code{<thread-pool-count>} is the thread pool count for this scheduler
+instance.
+@item @code{$<priority>} is an optional priority for the worker threads of a
+thread pool according to @code{pthread_setschedparam}.  In case a priority
+value is omitted, then a worker thread will inherit the priority of the OpenMP
+master thread that created it.  The priority of the worker thread is not
+changed by libgomp after creation, even if a new OpenMP master thread using the
+worker has a different priority.
+@item @code{@@<scheduler-name>} is the scheduler instance name according to the
+RTEMS application configuration.
+@end itemize
+
+In case no thread pool configuration is specified for a scheduler instance,
+then each OpenMP master thread of this scheduler instance will use its own
+dynamically allocated thread pool.  To limit the worker thread count of the
+thread pools, each OpenMP master thread must call @code{omp_set_num_threads}.
+
+Lets suppose we have three scheduler instances @code{IO}, @code{WRK0}, and
+@code{WRK1} with @env{GOMP_RTEMS_THREAD_POOLS} set to
+@code{"1@@WRK0:3$4@@WRK1"}.  Then there are no thread pool restrictions for
+scheduler instance @code{IO}.  In the scheduler instance @code{WRK0} there is
+one thread pool available.  Since no priority is specified for this scheduler
+instance, the worker thread inherits the priority of the OpenMP master thread
+that created it.  In the scheduler instance @code{WRK1} there are three thread
+pools available and their worker threads run at priority four.
+
 @subsection Thread Dispatch Details
 
 This section gives background information to developers interested in the
