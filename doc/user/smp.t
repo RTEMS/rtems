@@ -589,8 +589,8 @@ the processor set of this scheduler is empty
 @subheading DESCRIPTION:
 
 Identifies a scheduler by its name.  The scheduler name is determined by the
-scheduler configuration.  @xref{Configuring a System Configuring
-Clustered/Partitioned Schedulers}.
+scheduler configuration.  @xref{Configuring a System Configuring Clustered
+Schedulers}.
 
 @subheading NOTES:
 

@@ -92,7 +92,8 @@ array in that it is not limited to a predefined size.
 @item cluster
 We have clustered scheduling in case the set of processors of a system is
 partitioned into non-empty pairwise disjoint subsets.  These subsets are called
-@dfn{clusters}.  Each cluster is owned by exactly one scheduler instance.
+@dfn{clusters}.  Clusters with a cardinality of one are partitions.  Each
+cluster is owned by exactly one scheduler instance.
 
 @item coalesce
 The process of merging adjacent holes into
@@ -647,7 +648,7 @@ A @dfn{scheduler instance} is a scheduling algorithm with a corresponding
 context to store its internal state.  Each processor in the system is owned by
 at most one scheduler instance.  The processor to scheduler instance assignment
 is determined at application configuration time.  @xref{Configuring a System
-Configuring Clustered/Partitioned Schedulers}.
+Configuring Clustered Schedulers}.
 
 @item segments
 Variable sized memory blocks allocated

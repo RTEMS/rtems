@@ -4203,26 +4203,26 @@ guidance.  For guidance on the configuration macros, please examine
 Deterministic Priority Scheduler.
 
 @c
-@c === Configuring Clustered/Partitioned Schedulers ===
+@c === Configuring Clustered Schedulers ===
 @c
-@subsection Configuring Clustered/Partitioned Schedulers
+@subsection Configuring Clustered Schedulers
 
-Clustered/partitioned scheduling helps to control the worst-case latencies in
-the system.  The goal is to reduce the amount of shared state in the system and
-thus prevention of lock contention.  Modern multi-processor systems tend to
-have several layers of data and instruction caches.  With clustered/partitioned
-scheduling it is possible to honour the cache topology of a system and thus
-avoid expensive cache synchronization traffic.
+Clustered scheduling helps to control the worst-case latencies in a
+multi-processor system.  The goal is to reduce the amount of shared state in
+the system and thus prevention of lock contention.  Modern multi-processor
+systems tend to have several layers of data and instruction caches.  With
+clustered scheduling it is possible to honour the cache topology of a system
+and thus avoid expensive cache synchronization traffic.
 
 We have clustered scheduling in case the set of processors of a system is
 partitioned into non-empty pairwise-disjoint subsets.  These subsets are called
 clusters.  Clusters with a cardinality of one are partitions.  Each cluster is
-owned by exactly one scheduler instance.  In order to use clustered/partitioned
+owned by exactly one scheduler instance.  In order to use clustered
 scheduling the application designer has to answer two questions.
 
 @enumerate
-@item How is the set of processors partitioned into clusters/partitions?
-@item Which scheduler is used for which cluster/partition?
+@item How is the set of processors partitioned into clusters?
+@item Which scheduler is used for which cluster?
 @end enumerate
 
 @subheading CONFIGURATION:
