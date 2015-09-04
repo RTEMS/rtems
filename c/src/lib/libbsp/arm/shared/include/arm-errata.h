@@ -42,7 +42,7 @@ static inline arm_release_id arm_errata_get_processor_release(void)
   );
 }
 
-static bool inline arm_errata_is_applicable_processor_errata_764369(void)
+static inline bool arm_errata_is_applicable_processor_errata_764369(void)
 {
 #if defined(RTEMS_SMP)
   const arm_release_id RELEASE       = arm_errata_get_processor_release();
