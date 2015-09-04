@@ -498,7 +498,7 @@ void __attribute__((constructor(1000))) config_libgomp( void )
 @end group
 @end example
 
-The environment variable @env{GOMP_RTEMS_THREAD_POOLS} is RTEMS specific.  It
+The environment variable @env{GOMP_RTEMS_THREAD_POOLS} is RTEMS-specific.  It
 determines the thread pools for each scheduler instance.  The format for
 @env{GOMP_RTEMS_THREAD_POOLS} is a list of optional
 @code{<thread-pool-count>[$<priority>]@@<scheduler-name>} configurations
