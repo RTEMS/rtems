@@ -24,13 +24,17 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 RTEMS_BSPOPTS_SET([BSP_START_RESET_VECTOR],[*],[])
 RTEMS_BSPOPTS_HELP([BSP_START_RESET_VECTOR],[reset vector address for BSP start])
 
+RTEMS_BSPOPTS_SET([I2C_IO_MODE],[*],[1])
+RTEMS_BSPOPTS_HELP([I2C_IO_MODE],[Define to 1 to use interrupt-driven I/O with the Raspberry Pi I2C bus. If defined to other value the access will be polled-driven.])
+
+RTEMS_BSPOPTS_SET([SPI_IO_MODE],[*],[1])
+RTEMS_BSPOPTS_HELP([SPI_IO_MODE],[Define to 1 to use interrupt-driven I/O with the Raspberry Pi SPI bus. If defined to other value the access will be polled-driven.])
+
 # Is this a Raspberry Pi 2?
 RTEMS_BSPOPTS_SET([BSP_IS_RPI2],[raspberrypi2],[1])
 RTEMS_BSPOPTS_SET([BSP_IS_RPI2],[*],[0])
 RTEMS_BSPOPTS_HELP([BSP_IS_RPI2],[Set if the BSP variant is Raspberry Pi 2.])
 AM_CONDITIONAL(RTEMS_RPI2,[test "$BSP_IS_RPI2" = "1"])
-
-
 
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 RTEMS_BSP_LINKCMDS

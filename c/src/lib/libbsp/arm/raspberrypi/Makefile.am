@@ -46,6 +46,8 @@ include_bsp_HEADERS += include/mmu.h
 include_bsp_HEADERS += include/usart.h
 include_bsp_HEADERS += include/raspberrypi.h
 include_bsp_HEADERS += include/rpi-gpio.h
+include_bsp_HEADERS += include/i2c.h
+include_bsp_HEADERS += include/spi.h
 
 include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/cache_.h \
     ../../../libcpu/arm/shared/include/arm-cp15.h
@@ -128,6 +130,10 @@ libbsp_a_SOURCES += gpio/rpi-gpio.c
 # SSP
 
 # I2C
+libbsp_a_SOURCES += i2c/i2c.c
+
+# SPI
+libbsp_a_SOURCES += spi/spi.c
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
