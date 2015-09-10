@@ -16,6 +16,7 @@ SUBDIRS += libmisc
 SUBDIRS += libmd
 SUBDIRS += libgnat
 SUBDIRS += libdl
+SUBDIRS += libstdthreads
 SUBDIRS += wrapup
 
 SUBDIRS += zlib

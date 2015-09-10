@@ -26,14 +26,11 @@
  * $FreeBSD r279318 2015-02-26T09:42:03Z$
  */
 
-#include <sys/cdefs.h>
-__FBSDID("$FreeBSD$");
-
+#include <threads.h>
 #include <pthread.h>
+#include <sched.h>
 #include <stdint.h>
 #include <stdlib.h>
-
-#include "threads.h"
 
 struct thrd_param {
 	thrd_start_t	 func;
@@ -124,5 +121,5 @@ void
 thrd_yield(void)
 {
 
-	pthread_yield();
+	sched_yield();
 }

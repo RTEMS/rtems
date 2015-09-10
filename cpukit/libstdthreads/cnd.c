@@ -1,5 +1,6 @@
 /*-
  * Copyright (c) 2011 Ed Schouten <ed@FreeBSD.org>
+ * Copyright (c) 2015 embedded brains GmbH <info@embedded-brains.de>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,20 +27,14 @@
  * $FreeBSD r228904 2011-12-26T21:51:53Z$
  */
 
-#include <sys/cdefs.h>
-__FBSDID("$FreeBSD$");
-
+#include <threads.h>
 #include <errno.h>
-#include <pthread.h>
-
-#include "threads.h"
 
 int
 cnd_broadcast(cnd_t *cond)
 {
 
-	if (pthread_cond_broadcast(cond) != 0)
-		return (thrd_error);
+	_Condition_Broadcast(cond);
 	return (thrd_success);
 }
 
@@ -47,29 +42,22 @@ void
 cnd_destroy(cnd_t *cond)
 {
 
-	(void)pthread_cond_destroy(cond);
+	_Condition_Destroy(cond);
 }
 
 int
 cnd_init(cnd_t *cond)
 {
 
-	switch (pthread_cond_init(cond, NULL)) {
-	case 0:
-		return (thrd_success);
-	case ENOMEM:
-		return (thrd_nomem);
-	default:
-		return (thrd_error);
-	}
+	_Condition_Initialize(cond);
+	return (thrd_success);
 }
 
 int
 cnd_signal(cnd_t *cond)
 {
 
-	if (pthread_cond_signal(cond) != 0)
-		return (thrd_error);
+	_Condition_Signal(cond);
 	return (thrd_success);
 }
 
@@ -78,7 +66,7 @@ cnd_timedwait(cnd_t *restrict cond, mtx_t *restrict mtx,
     const struct timespec *restrict ts)
 {
 
-	switch (pthread_cond_timedwait(cond, mtx, ts)) {
+	switch (_Condition_Wait_recursive_timed(cond, mtx, ts)) {
 	case 0:
 		return (thrd_success);
 	case ETIMEDOUT:
@@ -92,7 +80,6 @@ int
 cnd_wait(cnd_t *cond, mtx_t *mtx)
 {
 
-	if (pthread_cond_wait(cond, mtx) != 0)
-		return (thrd_error);
+	_Condition_Wait_recursive(cond, mtx);
 	return (thrd_success);
 }

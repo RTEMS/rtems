@@ -141,6 +141,9 @@ AS_IF([test -n "$rtems_missing_header"],
 AC_CHECK_HEADERS([semaphore.h])
 AM_CONDITIONAL([HAVE_SEMAPHORE_H],[test x"$ac_cv_header_semaphore_h" = x"yes"])
 
+AC_CHECK_HEADERS([threads.h])
+AM_CONDITIONAL([HAVE_THREADS_H],[test x"$ac_cv_header_threads_h" = x"yes"])
+
 ## error out if libc doesn't provide stdint.h
 AS_IF([test x"${ac_cv_header_stdint_h}" != xyes],
 [AC_MSG_ERROR([Required header stdint.h not found])])
@@ -481,6 +484,7 @@ libmisc/Makefile
 libi2c/Makefile
 libmd/Makefile
 libdl/Makefile
+libstdthreads/Makefile
 zlib/Makefile
 ftpd/Makefile
 telnetd/Makefile

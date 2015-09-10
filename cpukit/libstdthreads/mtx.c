@@ -1,5 +1,6 @@
 /*-
  * Copyright (c) 2011 Ed Schouten <ed@FreeBSD.org>
+ * Copyright (c) 2015 embedded brains GmbH <info@embedded-brains.de>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,46 +27,23 @@
  * $FreeBSD r279326 2015-02-26T16:39:57Z$
  */
 
-#include <sys/cdefs.h>
-__FBSDID("$FreeBSD$");
-
+#include <threads.h>
+#include <sys/lock.h>
 #include <errno.h>
-#include <pthread.h>
-
-#include "threads.h"
 
 void
 mtx_destroy(mtx_t *mtx)
 {
 
-	(void)pthread_mutex_destroy(mtx);
+	_Mutex_recursive_Destroy(mtx);
 }
 
 int
 mtx_init(mtx_t *mtx, int type)
 {
-	pthread_mutexattr_t attr;
-	int mt;
 
-	switch (type) {
-	case mtx_plain:
-	case mtx_timed:
-		mt = PTHREAD_MUTEX_NORMAL;
-		break;
-	case mtx_plain | mtx_recursive:
-	case mtx_timed | mtx_recursive:
-		mt = PTHREAD_MUTEX_RECURSIVE;
-		break;
-	default:
-		return (thrd_error);
-	}
-
-	if (pthread_mutexattr_init(&attr) != 0)
-		return (thrd_error);
-	if (pthread_mutexattr_settype(&attr, mt) != 0)
-		return (thrd_error);
-	if (pthread_mutex_init(mtx, &attr) != 0)
-		return (thrd_error);
+	(void)type;
+	_Mutex_recursive_Initialize(mtx);
 	return (thrd_success);
 }
 
@@ -73,8 +51,7 @@ int
 mtx_lock(mtx_t *mtx)
 {
 
-	if (pthread_mutex_lock(mtx) != 0)
-		return (thrd_error);
+	_Mutex_recursive_Acquire(mtx);
 	return (thrd_success);
 }
 
@@ -82,7 +59,7 @@ int
 mtx_timedlock(mtx_t *restrict mtx, const struct timespec *restrict ts)
 {
 
-	switch (pthread_mutex_timedlock(mtx, ts)) {
+	switch (_Mutex_recursive_Acquire_timed(mtx, ts)) {
 	case 0:
 		return (thrd_success);
 	case ETIMEDOUT:
@@ -96,13 +73,11 @@ int
 mtx_trylock(mtx_t *mtx)
 {
 
-	switch (pthread_mutex_trylock(mtx)) {
+	switch (_Mutex_recursive_Try_acquire(mtx)) {
 	case 0:
 		return (thrd_success);
-	case EBUSY:
-		return (thrd_busy);
 	default:
-		return (thrd_error);
+		return (thrd_busy);
 	}
 }
 
@@ -110,7 +85,6 @@ int
 mtx_unlock(mtx_t *mtx)
 {
 
-	if (pthread_mutex_unlock(mtx) != 0)
-		return (thrd_error);
+	_Mutex_recursive_Release(mtx);
 	return (thrd_success);
 }

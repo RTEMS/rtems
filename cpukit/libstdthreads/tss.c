@@ -26,12 +26,9 @@
  * $FreeBSD r228904 2011-12-26T21:51:53Z$
  */
 
-#include <sys/cdefs.h>
-__FBSDID("$FreeBSD$");
-
+#include <threads.h>
+#include <limits.h>
 #include <pthread.h>
-
-#include "threads.h"
 
 int
 tss_create(tss_t *key, tss_dtor_t dtor)

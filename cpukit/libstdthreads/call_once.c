@@ -26,12 +26,8 @@
  * $FreeBSD r228904 2011-12-26T21:51:53Z$
  */
 
-#include <sys/cdefs.h>
-__FBSDID("$FreeBSD$");
-
+#include <threads.h>
 #include <pthread.h>
-
-#include "threads.h"
 
 void
 call_once(once_flag *flag, void (*func)(void))
