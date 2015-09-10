@@ -111,7 +111,13 @@ static inline void isb(void)
 /* flush data cache */
 static inline void flush_data_cache(void)
 {
-    asm volatile("mov r0, #0; mcr p15, #0, r0, c7, c10, #4" : : : "memory");
+    asm volatile(
+        "mov r0, #0\n"
+        "mcr p15, #0, r0, c7, c10, #4\n"
+        : /* No outputs */
+        : /* No inputs */
+        : "r0","memory"
+    );
 }
 
 #define __arch_getb(a)      (*(volatile unsigned char *)(a))
