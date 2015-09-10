@@ -30,6 +30,7 @@ loopback
 math
 mathf
 mdosfs_fserror
+mdosfs_fsscandir01
 mghttpd01
 monitor
 monitor02
