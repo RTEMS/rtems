@@ -171,6 +171,11 @@ static void test_chunk_tree(
     .chunk_end = chunk_begin + chunk_count
   };
 
+  rtems_test_assert(
+    rtems_chain_node_count_unprotected(&control->spare_descriptor_chain)
+      == PAGE_COUNT - chunk_count
+  );
+
   _RBTree_Iterate(
     &control->chunk_tree,
     RBT_RIGHT,

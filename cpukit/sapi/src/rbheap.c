@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -221,24 +221,17 @@ static rtems_rbheap_chunk *get_next(
 }
 
 static void check_and_merge(
-  rtems_chain_control *free_chain,
-  rtems_rbtree_control *chunk_tree,
+  rtems_rbheap_control *control,
   rtems_rbheap_chunk *a,
-  rtems_rbheap_chunk *b
+  rtems_rbheap_chunk *b,
+  rtems_rbheap_chunk *c
 )
 {
-  if (b != NULL_PAGE && rtems_rbheap_is_chunk_free(b)) {
-    if (b->begin < a->begin) {
-      rtems_rbheap_chunk *t = a;
-
-      a = b;
-      b = t;
-    }
-
+  if (c != NULL_PAGE && rtems_rbheap_is_chunk_free(c)) {
     a->size += b->size;
     rtems_chain_extract_unprotected(&b->chain_node);
-    add_to_chain(free_chain, b);
-    rtems_rbtree_extract(chunk_tree, &b->tree_node);
+    rtems_rbheap_add_to_spare_descriptor_chain(control, b);
+    rtems_rbtree_extract(&control->chunk_tree, &b->tree_node);
   }
 }
 
@@ -247,18 +240,17 @@ rtems_status_code rtems_rbheap_free(rtems_rbheap_control *control, void *ptr)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   if (ptr != NULL) {
-    rtems_chain_control *free_chain = &control->free_chunk_chain;
-    rtems_rbtree_control *chunk_tree = &control->chunk_tree;
-    rtems_rbheap_chunk *chunk = find(chunk_tree, (uintptr_t) ptr);
+    rtems_rbheap_chunk *chunk = find(&control->chunk_tree, (uintptr_t) ptr);
 
     if (chunk != NULL_PAGE) {
       if (!rtems_rbheap_is_chunk_free(chunk)) {
-        rtems_rbheap_chunk *pred = get_next(chunk, RBT_LEFT);
-        rtems_rbheap_chunk *succ = get_next(chunk, RBT_RIGHT);
+        rtems_rbheap_chunk *other;
 
-        check_and_merge(free_chain, chunk_tree, chunk, succ);
-        add_to_chain(free_chain, chunk);
-        check_and_merge(free_chain, chunk_tree, chunk, pred);
+        add_to_chain(&control->free_chunk_chain, chunk);
+        other = get_next(chunk, RBT_RIGHT);
+        check_and_merge(control, chunk, other, other);
+        other = get_next(chunk, RBT_LEFT);
+        check_and_merge(control, other, chunk, other);
       } else {
         sc = RTEMS_INCORRECT_STATE;
       }
