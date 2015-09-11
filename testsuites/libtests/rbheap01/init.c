@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -67,10 +67,13 @@ static uintptr_t idx(const rtems_rbheap_chunk *chunk)
 }
 
 typedef struct {
-  const uintptr_t *index_current;
-  const uintptr_t *index_end;
-  const bool *free_current;
-  const bool *free_end;
+  uintptr_t index;
+  bool free;
+} chunk_descriptor;
+
+typedef struct {
+  const chunk_descriptor *chunk_current;
+  const chunk_descriptor *chunk_end;
 } chunk_visitor_context;
 
 static bool chunk_visitor(
@@ -81,15 +84,14 @@ static bool chunk_visitor(
 {
   rtems_rbheap_chunk *chunk = rtems_rbheap_chunk_of_node(node);
   chunk_visitor_context *context = visitor_arg;
+  const chunk_descriptor *current = context->chunk_current;
 
-  rtems_test_assert(context->index_current != context->index_end);
-  rtems_test_assert(context->free_current != context->free_end);
+  rtems_test_assert(current != context->chunk_end);
 
-  rtems_test_assert(idx(chunk) == *context->index_current);
-  rtems_test_assert(rtems_rbheap_is_chunk_free(chunk) == *context->free_current);
+  rtems_test_assert(idx(chunk) == current->index);
+  rtems_test_assert(rtems_rbheap_is_chunk_free(chunk) == current->free);
 
-  ++context->index_current;
-  ++context->free_current;
+  context->chunk_current = current + 1;
 
   return false;
 }
@@ -160,17 +162,13 @@ static void test_init_empty_descriptors(void)
 
 static void test_chunk_tree(
   const rtems_rbheap_control *control,
-  const uintptr_t *index_begin,
-  const uintptr_t *index_end,
-  const bool *free_begin,
-  const bool *free_end
+  const chunk_descriptor *chunk_begin,
+  size_t chunk_count
 )
 {
   chunk_visitor_context context = {
-    .index_current = index_begin,
-    .index_end = index_end,
-    .free_current = free_begin,
-    .free_end = free_end
+    .chunk_current = chunk_begin,
+    .chunk_end = chunk_begin + chunk_count
   };
 
   _RBTree_Iterate(
@@ -181,22 +179,17 @@ static void test_chunk_tree(
   );
 }
 
-#define TEST_PAGE_TREE(control, indices, frees) \
+#define TEST_PAGE_TREE(control, chunks) \
   test_chunk_tree( \
     control, \
-    indices, \
-    &indices [sizeof(indices) / sizeof(indices [0])], \
-    frees, \
-    &frees [sizeof(frees) / sizeof(frees [0])] \
+    chunks, \
+    RTEMS_ARRAY_SIZE(chunks) \
   )
 
 static void test_init_successful(rtems_rbheap_control *control)
 {
-  static const uintptr_t indices [] = {
-    0
-  };
-  static const bool frees [] = {
-    true
+  static const chunk_descriptor chunks [] = {
+    { 0, true }
   };
 
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -211,24 +204,17 @@ static void test_init_successful(rtems_rbheap_control *control)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  TEST_PAGE_TREE(control, indices, frees);
+  TEST_PAGE_TREE(control, chunks);
 }
 
 static void test_alloc_and_free_one(void)
 {
-  static const uintptr_t indices_0 [] = {
-    0,
-    PAGE_COUNT - 1
+  static const chunk_descriptor chunks_0 [] = {
+    { 0, true },
+    { PAGE_COUNT - 1, false }
   };
-  static const bool frees_0 [] = {
-    true,
-    false
-  };
-  static const uintptr_t indices_1 [] = {
-    0
-  };
-  static const bool frees_1 [] = {
-    true,
+  static const chunk_descriptor chunks_1 [] = {
+    { 0, true }
   };
 
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -240,21 +226,18 @@ static void test_alloc_and_free_one(void)
   ptr = rtems_rbheap_allocate(&control, PAGE_SIZE);
   rtems_test_assert(ptr != NULL);
 
-  TEST_PAGE_TREE(&control, indices_0, frees_0);
+  TEST_PAGE_TREE(&control, chunks_0);
 
   sc = rtems_rbheap_free(&control, ptr);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  TEST_PAGE_TREE(&control, indices_1, frees_1);
+  TEST_PAGE_TREE(&control, chunks_1);
 }
 
 static void test_alloc_zero(void)
 {
-  static const uintptr_t indices [] = {
-    0
-  };
-  static const bool frees [] = {
-    true
+  static const chunk_descriptor chunks [] = {
+    { 0, true }
   };
 
   rtems_rbheap_control control;
@@ -265,16 +248,13 @@ static void test_alloc_zero(void)
   ptr = rtems_rbheap_allocate(&control, 0);
   rtems_test_assert(ptr == NULL);
 
-  TEST_PAGE_TREE(&control, indices, frees);
+  TEST_PAGE_TREE(&control, chunks);
 }
 
 static void test_alloc_huge_chunk(void)
 {
-  static const uintptr_t indices [] = {
-    0
-  };
-  static const bool frees [] = {
-    true
+  static const chunk_descriptor chunks [] = {
+    { 0, true }
   };
 
   rtems_rbheap_control control;
@@ -285,22 +265,16 @@ static void test_alloc_huge_chunk(void)
   ptr = rtems_rbheap_allocate(&control, (PAGE_COUNT + 1) * PAGE_SIZE);
   rtems_test_assert(ptr == NULL);
 
-  TEST_PAGE_TREE(&control, indices, frees);
+  TEST_PAGE_TREE(&control, chunks);
 }
 
 static void test_alloc_one_chunk(void)
 {
-  static const uintptr_t indices_0 [] = {
-    0
+  static const chunk_descriptor chunks_0 [] = {
+    { 0, false }
   };
-  static const bool frees_0 [] = {
-    false
-  };
-  static const uintptr_t indices_1 [] = {
-    0
-  };
-  static const bool frees_1 [] = {
-    true,
+  static const chunk_descriptor chunks_1 [] = {
+    { 0, true },
   };
 
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -312,41 +286,28 @@ static void test_alloc_one_chunk(void)
   ptr = rtems_rbheap_allocate(&control, PAGE_COUNT * PAGE_SIZE);
   rtems_test_assert(ptr != NULL);
 
-  TEST_PAGE_TREE(&control, indices_0, frees_0);
+  TEST_PAGE_TREE(&control, chunks_0);
 
   sc = rtems_rbheap_free(&control, ptr);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  TEST_PAGE_TREE(&control, indices_1, frees_1);
+  TEST_PAGE_TREE(&control, chunks_1);
 }
 
 static void test_alloc_many_chunks(void)
 {
-  static const uintptr_t indices_0 [] = {
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7
+  static const chunk_descriptor chunks_0 [] = {
+    { 0, false },
+    { 1, false },
+    { 2, false },
+    { 3, false },
+    { 4, false },
+    { 5, false },
+    { 6, false },
+    { 7, false }
   };
-  static const bool frees_0 [] = {
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  };
-  static const uintptr_t indices_1 [] = {
-    0
-  };
-  static const bool frees_1 [] = {
-    true,
+  static const chunk_descriptor chunks_1 [] = {
+    { 0, true }
   };
 
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -362,19 +323,19 @@ static void test_alloc_many_chunks(void)
     rtems_test_assert(ptr [i] != NULL);
   }
 
-  TEST_PAGE_TREE(&control, indices_0, frees_0);
+  TEST_PAGE_TREE(&control, chunks_0);
 
   null = rtems_rbheap_allocate(&control, PAGE_SIZE);
   rtems_test_assert(null == NULL);
 
-  TEST_PAGE_TREE(&control, indices_0, frees_0);
+  TEST_PAGE_TREE(&control, chunks_0);
 
   for (i = 0; i < PAGE_COUNT; ++i) {
     sc = rtems_rbheap_free(&control, ptr [i]);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
 
-  TEST_PAGE_TREE(&control, indices_1, frees_1);
+  TEST_PAGE_TREE(&control, chunks_1);
 }
 
 static void test_alloc_misaligned(void)
@@ -466,81 +427,43 @@ enum {
 
 static void test_free_merge_left_or_right(bool left)
 {
-  static const uintptr_t indices_0 [] = {
-    0,
-    3,
-    4,
-    5,
-    6,
-    7
+  static const chunk_descriptor chunks_0 [] = {
+    { 0, true },
+    { 3, false },
+    { 4, false },
+    { 5, false },
+    { 6, false },
+    { 7, false }
   };
-  static const bool frees_0 [] = {
-    true,
-    false,
-    false,
-    false,
-    false,
-    false
+  static const chunk_descriptor chunks_1_left [] = {
+    { 0, true },
+    { 3, false },
+    { 4, true },
+    { 5, false },
+    { 6, false },
+    { 7, false }
   };
-  static const uintptr_t indices_1_left [] = {
-    0,
-    3,
-    4,
-    5,
-    6,
-    7
+  static const chunk_descriptor chunks_1_right [] = {
+    { 0, true },
+    { 3, false },
+    { 4, false },
+    { 5, false },
+    { 6, true },
+    { 7, false }
   };
-  static const bool frees_1_left [] = {
-    true,
-    false,
-    true,
-    false,
-    false,
-    false
+  static const chunk_descriptor chunks_2_left [] = {
+    { 0, true },
+    { 3, false },
+    { 4, true },
+    { 6, false },
+    { 7, false }
   };
-  static const uintptr_t indices_1_right [] = {
-    0,
-    3,
-    4,
-    5,
-    6,
-    7
-  };
-  static const bool frees_1_right [] = {
-    true,
-    false,
-    false,
-    false,
-    true,
-    false
-  };
-  static const uintptr_t indices_2_left [] = {
-    0,
-    3,
-    4,
-    6,
-    7
-  };
-  static const bool frees_2_left [] = {
-    true,
-    false,
-    true,
-    false,
-    false
-  };
-  static const uintptr_t indices_2_right [] = {
-    0,
-    3,
-    4,
-    5,
-    7
-  };
-  static const bool frees_2_right [] = {
-    true,
-    false,
-    false,
-    true,
-    false
+  static const chunk_descriptor chunks_2_right [] = {
+    { 0, true },
+    { 3, false },
+    { 4, false },
+    { 5, true },
+    { 7, false }
   };
 
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -556,24 +479,24 @@ static void test_free_merge_left_or_right(bool left)
     rtems_test_assert(ptr [i] != NULL);
   }
 
-  TEST_PAGE_TREE(&control, indices_0, frees_0);
+  TEST_PAGE_TREE(&control, chunks_0);
 
   sc = rtems_rbheap_free(&control, ptr [dir]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   if (left) {
-    TEST_PAGE_TREE(&control, indices_1_left, frees_1_left);
+    TEST_PAGE_TREE(&control, chunks_1_left);
   } else {
-    TEST_PAGE_TREE(&control, indices_1_right, frees_1_right);
+    TEST_PAGE_TREE(&control, chunks_1_right);
   }
 
   sc = rtems_rbheap_free(&control, ptr [MIDDLE]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   if (left) {
-    TEST_PAGE_TREE(&control, indices_2_left, frees_2_left);
+    TEST_PAGE_TREE(&control, chunks_2_left);
   } else {
-    TEST_PAGE_TREE(&control, indices_2_right, frees_2_right);
+    TEST_PAGE_TREE(&control, chunks_2_right);
   }
 }
 
