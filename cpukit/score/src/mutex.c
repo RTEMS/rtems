@@ -141,6 +141,7 @@ static void _Mutex_Release_slow(
     first = ( *operations->first )( heads );
 
     mutex->owner = first;
+    ++first->resource_count;
     unblock = _Thread_queue_Extract_locked(
       &mutex->Queue.Queue,
       operations,
@@ -214,10 +215,10 @@ void _Mutex_Acquire( struct _Mutex_Control *_mutex )
   executing = _Mutex_Queue_acquire( mutex, &lock_context );
 
   owner = mutex->owner;
-  ++executing->resource_count;
 
   if ( __predict_true( owner == NULL ) ) {
     mutex->owner = executing;
+    ++executing->resource_count;
     _Mutex_Queue_release( mutex, &lock_context );
   } else {
     _Mutex_Acquire_slow( mutex, owner, executing, 0, &lock_context );
@@ -238,10 +239,10 @@ int _Mutex_Acquire_timed(
   executing = _Mutex_Queue_acquire( mutex, &lock_context );
 
   owner = mutex->owner;
-  ++executing->resource_count;
 
   if ( __predict_true( owner == NULL ) ) {
     mutex->owner = executing;
+    ++executing->resource_count;
     _Mutex_Queue_release( mutex, &lock_context );
 
     return 0;

@@ -21,6 +21,7 @@
 #include <sys/lock.h>
 #include <errno.h>
 #include <limits.h>
+#include <pthread.h>
 #include <string.h>
 #include <time.h>
 
@@ -55,6 +56,7 @@ typedef struct {
   rtems_id mid;
   rtems_id low;
   struct _Mutex_Control mtx;
+  struct _Mutex_Control deadlock_mtx;
   struct _Mutex_recursive_Control rec_mtx;
   struct _Condition_Control cond;
   struct _Semaphore_Control sem;
@@ -491,6 +493,19 @@ static void mid_task(rtems_task_argument arg)
   rtems_test_assert(0);
 }
 
+static void deadlock_cleanup(void *arg)
+{
+  struct _Mutex_Control *deadlock_mtx = arg;
+
+  /*
+   * The thread terminate procedure will dequeue us from the wait queue.  So,
+   * one release is sufficient.
+   */
+
+  _Mutex_Release(deadlock_mtx);
+  _Mutex_Destroy(deadlock_mtx);
+}
+
 static void high_task(rtems_task_argument idx)
 {
   test_context *ctx = &test_instance;
@@ -537,10 +552,15 @@ static void high_task(rtems_task_argument idx)
     }
 
     if ((events & EVENT_MTX_DEADLOCK) != 0) {
-      struct _Mutex_Control dead = _MUTEX_INITIALIZER;
+      struct _Mutex_Control *deadlock_mtx = &ctx->deadlock_mtx;
 
-      _Mutex_Acquire(&dead);
-      _Mutex_Acquire(&dead);
+      pthread_cleanup_push(deadlock_cleanup, deadlock_mtx);
+
+      _Mutex_Initialize(deadlock_mtx);
+      _Mutex_Acquire(deadlock_mtx);
+      _Mutex_Acquire(deadlock_mtx);
+
+      pthread_cleanup_pop(0);
     }
 
     if ((events & EVENT_REC_MTX_ACQUIRE) != 0) {
@@ -652,6 +672,15 @@ static void test(void)
   test_sched();
 
   send_event(ctx, 0, EVENT_MTX_DEADLOCK);
+
+  sc = rtems_task_delete(ctx->mid);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(ctx->high[0]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(ctx->high[1]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   _Mutex_Destroy(&ctx->mtx);
   _Mutex_recursive_Destroy(&ctx->rec_mtx);
