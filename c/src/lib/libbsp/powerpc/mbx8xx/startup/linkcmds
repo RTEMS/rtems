@@ -125,6 +125,7 @@ SECTIONS
     *(.shdata)
     *(.rodata*)
     *(.rodata1)
+    KEEP (*(SORT(.rtemsroset.*)))
     *(.descriptors)
     *(rom_ver)
     _erodata = .;
@@ -207,6 +208,7 @@ SECTIONS
     
     *(.data)
     *(.data.*)
+    KEEP (*(SORT(.rtemsrwset.*)))
     *(.data1)
     
     PROVIDE (__EXCEPT_START__ = .);

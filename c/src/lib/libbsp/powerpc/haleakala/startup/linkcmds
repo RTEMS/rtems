@@ -37,6 +37,7 @@ SECTIONS
      *(.text*)
      *(.rodata*)
      *(.rodata1)
+     KEEP (*(SORT(.rtemsroset.*)))
 
      /*
       * Special FreeBSD sysctl sections.
@@ -208,6 +209,7 @@ SECTIONS
       data.start = .;
       *(.data)
       *(.data1)
+      KEEP (*(SORT(.rtemsrwset.*)))
       *(.data.* .gnu.linkonce.d.*)
       data.end = .;
     } > RAM

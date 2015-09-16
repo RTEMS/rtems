@@ -142,7 +142,7 @@ SECTIONS
   .fini    .  : { KEEP(*(.fini))    } > ram =0
   .ctors   .  : { KEEP(*(.ctors))    } > ram =0
   .dtors   .  : { KEEP(*(.dtors))    } > ram =0
-  .rodata  .  : { *(.rodata*) *(.gnu.linkonce.r*) } > ram
+  .rodata  .  : { *(.rodata*) KEEP (*(SORT(.rtemsroset.*))) *(.gnu.linkonce.r*) } > ram
   .rodata1 .  : { *(.rodata1) } > ram
   .tdata : {
     __TLS_Data_begin = .;
@@ -166,6 +166,7 @@ SECTIONS
   .data  .  :
   {
     *(.data*)
+    KEEP (*(SORT(.rtemsrwset.*)))
     *(.gcc_exc*)
     ___EH_FRAME_BEGIN__ = .;
     *(.eh_fram*)

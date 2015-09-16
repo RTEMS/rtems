@@ -130,6 +130,7 @@ SECTIONS
 	   . = ALIGN (16);
 	   _rodata_start = .;
 	   *(.rodata*)
+           KEEP (*(SORT(.rtemsroset.*)))
 	   *(.gnu.linkonce.r*)
 
 	   . = ALIGN (16);
@@ -161,6 +162,7 @@ SECTIONS
            *(.shdata)
            . = ALIGN (0x10);
            *(.data*)
+           KEEP (*(SORT(.rtemsrwset.*)))
            . = ALIGN (0x10);
            *(.gcc_exc)
            *(.gcc_except_table*)

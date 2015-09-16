@@ -50,6 +50,8 @@ SECTIONS
   {
     data_start = .;
     *(.data)
+    KEEP (*(SORT(.rtemsroset.*)))
+    KEEP (*(SORT(.rtemsrwset.*)))
     edata = .;
   }
   .bss (ADDR(.data) + SIZEOF(.data)) :

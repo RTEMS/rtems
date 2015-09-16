@@ -77,7 +77,7 @@ SECTIONS
 
   .fini		  : { _fini = .; KEEP(*(.fini))	} > CODE
 
-  .rodata         : { *(.rodata*) *(.gnu.linkonce.r*) }	> CODE
+  .rodata         : { *(.rodata*) KEEP (*(SORT(.rtemsroset.*))) *(.gnu.linkonce.r*) }	> CODE
   .rodata1        : { *(.rodata1) }	> CODE
 
   .tdata : {
@@ -157,6 +157,7 @@ SECTIONS
     */
 	PROVIDE(__DATA_START__ = ABSOLUTE(.) );
     *(.data .data.* .gnu.linkonce.d*)	
+    KEEP (*(SORT(.rtemsrwset.*)))
     SORT(CONSTRUCTORS)
   } > CODE
   .data1   : { *(.data1) }	> CODE

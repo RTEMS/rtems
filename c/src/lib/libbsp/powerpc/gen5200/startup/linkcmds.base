@@ -87,6 +87,7 @@ SECTIONS {
 		 * BSP: Moved into .text from .*
 		 */
 		*(.rodata .rodata.* .gnu.linkonce.r.*)
+		KEEP (*(SORT(.rtemsroset.*)))
 		*(.rodata1)
 		*(.interp)
 		*(.note.gnu.build-id)
@@ -223,6 +224,7 @@ SECTIONS {
 		PROVIDE_HIDDEN (__fini_array_end = .);
 
 		*(.data .data.* .gnu.linkonce.d.*)
+		KEEP (*(SORT(.rtemsrwset.*)))
 		KEEP (*(.gnu.linkonce.d.*personality*))
 		SORT(CONSTRUCTORS)
 

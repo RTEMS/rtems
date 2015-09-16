@@ -125,6 +125,7 @@ SECTIONS
     *(.shdata)
     *(.rodata)
     *(.rodata1)
+    KEEP (*(SORT(.rtemsroset.*)))
     *(.descriptors)
     *(rom_ver)
     _erodata = .;
@@ -269,6 +270,7 @@ SECTIONS
       *(.data)
       *(.data1)
       *(.data.* .gnu.linkonce.d.*)
+      KEEP (*(SORT(.rtemsrwset.*)))
       PROVIDE (__SDATA_START__ = .);
       *(.sdata .sdata.* .gnu.linkonce.s.*)
       data.end = .;

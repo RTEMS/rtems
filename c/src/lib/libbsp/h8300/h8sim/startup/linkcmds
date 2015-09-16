@@ -56,6 +56,7 @@ SECTIONS
         . = ALIGN (16);
         PROVIDE(_rodata_start = . );
         *(.rodata*)
+        KEEP (*(SORT(.rtemsroset.*)))
         *(.gnu.linkonce.r*)
         PROVIDE(_erodata = . );
 
@@ -88,6 +89,7 @@ SECTIONS
     .data SIZEOF(.tors) + ADDR(.tors):
     {
  	*(.data*)
+        KEEP (*(SORT(.rtemsrwset.*)))
         *(.gcc_exc*)
 	CONSTRUCTORS
 	 _edata = .;

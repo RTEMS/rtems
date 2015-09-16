@@ -91,7 +91,7 @@ SECTIONS
                     } > RAM
 
   /* Miscellaneous read-only data */
-  .rodata         : { *(.rodata.* .gnu.linkonce.r*)                    } > RAM
+  .rodata         : { *(.rodata.* KEEP (*(SORT(.rtemsroset.*))) .gnu.linkonce.r*) } > RAM
   .rodata1        : { *(.rodata1)                                      } > RAM
 
   .tdata : {
@@ -139,6 +139,7 @@ SECTIONS
   .data           : { PROVIDE(__DATA_START__ = ABSOLUTE(.) );
                       *(.data)
                       *(.data.*)
+                      KEEP (*(SORT(.rtemsrwset.*)))
                       *(.gnu.linkonce.d*)
                     } > RAM
 

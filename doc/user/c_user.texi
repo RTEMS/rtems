@@ -116,6 +116,7 @@
 * Timespec Helpers::
 * Constant Bandwidth Server Scheduler API::
 * Directive Status Codes::
+* Linker Sets::
 * Example Application::
 * Glossary::
 * Command and Variable Index::
@@ -162,6 +163,7 @@
 @include timespec.texi
 @include cbs.texi
 @include dirstat.texi
+@include linkersets.texi
 @include example.texi
 @include glossary.texi
 

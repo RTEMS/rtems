@@ -172,8 +172,10 @@ SECTIONS
   {
     *(.data)
     *(.data*)
+    KEEP (*(SORT(.rtemsrwset.*)))
     *(.rodata)  /* We need to include .rodata here if gcc is used */
     *(.rodata*) /* with -fdata-sections.  */
+    KEEP (*(SORT(.rtemsroset.*)))
     *(.gnu.linkonce.d*)
     . = ALIGN(2);
      _edata = . ;

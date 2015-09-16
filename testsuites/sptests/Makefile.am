@@ -43,6 +43,7 @@ endif
 if HAS_THREADS_H
 _SUBDIRS += spstdthreads01
 endif
+_SUBDIRS += splinkersets01
 _SUBDIRS += sptasknopreempt01
 _SUBDIRS += spintrcritical23
 _SUBDIRS += sptimecounter01

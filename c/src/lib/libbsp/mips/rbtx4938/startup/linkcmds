@@ -97,6 +97,7 @@ SECTIONS
     *(.rdata)
     *(.rodata)
     *(.rodata.*)
+    KEEP (*(SORT(.rtemsroset.*)))
     *(.gnu.linkonce.r*)
   }
 
@@ -124,6 +125,7 @@ SECTIONS
   .data : {
     *(.data)
     *(.data.*)
+    KEEP (*(SORT(.rtemsrwset.*)))
     *(.gnu.linkonce.d*)
     SORT(CONSTRUCTORS)
   }

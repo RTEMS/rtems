@@ -137,6 +137,7 @@ SECTIONS {
 		. = ALIGN (16);
 		_rodata_start = . ;
 		*(.rodata*)
+		KEEP (*(SORT(.rtemsroset.*)))
 		*(.gnu.linkonce.r*)
 
                  . = ALIGN (16);
@@ -165,6 +166,7 @@ SECTIONS {
         .data : {
                 PROVIDE (_copy_start = .);
                 *(.data*)
+                KEEP (*(SORT(.rtemsrwset.*)))
 		*(.gnu.linkonce.d*)
 		*(.gcc_except_table*)
 		*(.jcr)

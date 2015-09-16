@@ -93,7 +93,7 @@ SECTIONS
   }  > CODE
 
   .fini			  : { _fini = .; *(.fini)	} >CODE
-  .rodata         : { *(.rodata*) *(.gnu.linkonce.r*) }	> CODE
+  .rodata         : { *(.rodata*) KEEP (*(SORT(.rtemsroset.*))) *(.gnu.linkonce.r*) }	> CODE
   .rodata1        : { *(.rodata1) }	> CODE
   .tdata : {
     _TLS_Data_begin = .;
@@ -142,6 +142,7 @@ SECTIONS
   {
 	PROVIDE(__DATA_START__ = ABSOLUTE(.) );
     *(.data)
+    KEEP (*(SORT(.rtemsrwset.*)))
     *(.gnu.linkonce.d*)	
     CONSTRUCTORS
   } > CODE

@@ -90,6 +90,7 @@ SECTIONS
     .data :
     {
         *(.data)
+        KEEP (*(SORT(.rtemsrwset.*)))
         *(.jcr)
         *(.gnu.linkonce.d*)
         CONSTRUCTORS
@@ -105,6 +106,7 @@ SECTIONS
     {
         *(.rodata)
         *(.rodata.*)
+        KEEP (*(SORT(.rtemsroset.*)))
         *(.gnu.linkonce.r*)
     } > sdram
 

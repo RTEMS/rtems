@@ -140,7 +140,7 @@ SECTIONS
   _etext = .;
   PROVIDE (etext = .);
   .fini    .  : { *(.fini)    } > ram =0
-  .rodata  .  : { *(.rodata) *(.gnu.linkonce.r*) } > ram
+  .rodata  .  : { *(.rodata) KEEP (*(SORT(.rtemsroset.*))) *(.gnu.linkonce.r*) } > ram
   .rodata1 .  : { *(.rodata1) } > ram
   .tdata : {
     __TLS_Data_begin = .;
@@ -164,6 +164,7 @@ SECTIONS
   .data  .  :
   {
     *(.data)
+    KEEP (*(SORT(.rtemsrwset.*)))
     *(.gnu.linkonce.d*)
     CONSTRUCTORS
   } > ram

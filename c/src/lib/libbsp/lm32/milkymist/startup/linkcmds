@@ -76,7 +76,7 @@ SECTIONS
 
   .fini		  : { _fini = .; KEEP(*(.fini))	} > sdram
 
-  .rodata         : { *(.rodata*) *(.gnu.linkonce.r*) }	> sdram
+  .rodata         : { *(.rodata*) KEEP (*(SORT(.rtemsroset.*))) *(.gnu.linkonce.r*) }	> sdram
   .rodata1        : { *(.rodata1) }	> sdram
   .tdata : {
     _TLS_Data_begin = .;
@@ -153,6 +153,7 @@ SECTIONS
     */
 	PROVIDE(__DATA_START__ = ABSOLUTE(.) );
     *(.data .data.* .gnu.linkonce.d*)	
+    KEEP (*(SORT(.rtemsrwset.*)))
     SORT(CONSTRUCTORS)
   } > sdram
   .data1   : { *(.data1) }	> sdram

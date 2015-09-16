@@ -130,7 +130,7 @@ SECTIONS
   {
     KEEP (*(.fini))
   } =0
-  .rodata   : { *(.rodata) *(.rodata.*) *(.gnu.linkonce.r*) }
+  .rodata   : { *(.rodata) *(.rodata.*) KEEP (*(SORT(.rtemsroset.*))) *(.gnu.linkonce.r*) }
   .rodata1   : { *(.rodata1) }
   .tdata : {
     _TLS_Data_begin = .;
@@ -156,6 +156,7 @@ SECTIONS
   {
     *(.data)
     *(.data.*)
+    KEEP (*(SORT(.rtemsrwset.*)))
     *(.gnu.linkonce.d*)
     SORT(CONSTRUCTORS)
   }

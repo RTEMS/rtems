@@ -78,7 +78,7 @@ SECTIONS
   PROVIDE (__etext = .);
   PROVIDE (_etext = .);
   PROVIDE (etext = .);
-  .rodata         : { *(.rodata .rodata.* .gnu.linkonce.r.*) }
+  .rodata         : { *(.rodata .rodata.* KEEP (*(SORT(.rtemsroset.*))) .gnu.linkonce.r.*) }
   .rodata1        : { *(.rodata1) }
   .tdata : {
     _TLS_Data_begin = .;
@@ -168,6 +168,7 @@ SECTIONS
   .data           :
   {
     *(.data .data.* .gnu.linkonce.d.*)
+    KEEP (*(SORT(.rtemsrwset.*)))
     SORT(CONSTRUCTORS)
   }
   .data1          : { *(.data1) }

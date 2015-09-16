@@ -15,7 +15,7 @@ GENERATED_FILES = overview.texi concepts.texi datatypes.texi init.texi \
     signal.texi part.texi region.texi dpmem.texi io.texi fatal.texi \
     schedule.texi rtmon.texi barrier.texi bsp.texi userext.texi conf.texi \
     mp.texi stackchk.texi cpuuse.texi object.texi chains.texi rbtree.texi \
-    timespec.texi cbs.texi dirstat.texi smp.texi libpci.texi
+    timespec.texi cbs.texi dirstat.texi smp.texi libpci.texi linkersets.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
@@ -211,12 +211,17 @@ cbs.texi: cbs.t
 dirstat.texi: dirstat.t
 	$(BMENU2) -p "Constant Bandwidth Server Scheduler API CBS_GET_APPROVED_BUDGET - Get scheduler approved execution time" \
 	    -u "Top" \
+	    -n "Linker Sets" < $< > $@
+
+linkersets.texi: linkersets.t
+	$(BMENU2) -p "Directive Status Codes STATUS_TEXT - Returns the enumeration name for a status code" \
+	    -u "Top" \
 	    -n "Example Application" < $< > $@
 
 EXTRA_DIST = bsp.t cbs.t clock.t chains.t concepts.t cpuuse.t datatypes.t conf.t \
     dpmem.t event.t fatal.t init.t intr.t io.t mp.t msg.t overview.t \
     part.t rbtree.t region.t rtmon.t sem.t schedule.t signal.t stackchk.t \
     task.t timer.t userext.t dirstat.t $(TXT_FILES) $(PNG_FILES) $(EPS_IMAGES) \
-    $(noinst_DATA)
+    $(noinst_DATA) linkersets.t
 
 CLEANFILES += c_user.info c_user.info-? c_user.info-??

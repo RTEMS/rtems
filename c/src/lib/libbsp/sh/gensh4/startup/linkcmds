@@ -87,6 +87,7 @@ SECTIONS
   { 
     *(.rodata) 
     *(.rodata.*) 
+    KEEP (*(SORT(.rtemsroset.*)))
     *(.gnu.linkonce.r*) 
   } > ram
   .tdata : {
@@ -113,6 +114,7 @@ SECTIONS
   {
     copy_start = .;
     *(.data*)
+    KEEP (*(SORT(.rtemsrwset.*)))
     *(.gcc_exc*)
     ___EH_FRAME_BEGIN__ = .;
     *(.eh_fram*)

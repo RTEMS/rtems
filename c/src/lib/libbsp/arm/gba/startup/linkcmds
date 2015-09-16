@@ -135,6 +135,7 @@ SECTIONS
     *(.rodata1)
     *(EXCLUDE_FILE(*.rodata.* *.ewram.o *.iwram.o) .rodata)
     *(.rodata.* .gnu.linkonce.r*)
+    KEEP (*(SORT(.rtemsroset.*)))
     *(.roda) /* deprecated: for compatibility with objcopyroda */
     SORT(CONSTRUCTORS)
     . = ALIGN(4);
@@ -302,6 +303,7 @@ SECTIONS
     *(EXCLUDE_FILE(*.rodata.* *.ewram.o *.iwram.o) .data)
     *(.data.* .gnu.linkonce.d.*)
     *(.data1)
+    KEEP (*(SORT(.rtemsrwset.*)))
     *(.sdata .sdata.* .gnu.linkonce.s.*)
     . = ALIGN(4);
   } =0xFF

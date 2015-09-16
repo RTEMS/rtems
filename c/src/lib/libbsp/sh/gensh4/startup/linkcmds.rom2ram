@@ -89,6 +89,7 @@ SECTIONS
   { 
     *(.rodata) 
     *(.rodata.*) 
+    KEEP (*(SORT(.rtemsroset.*)))
     *(.gnu.linkonce.r*) 
     . = ALIGN(32);
   } > ram
@@ -147,6 +148,7 @@ SECTIONS
   {
     *(.data)
     *(.data.*)
+    KEEP (*(SORT(.rtemsrwset.*)))
     *(.gnu.linkonce.d*)
     SORT(CONSTRUCTORS)
     copy_end = .;

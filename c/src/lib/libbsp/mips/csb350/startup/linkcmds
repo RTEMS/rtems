@@ -111,6 +111,7 @@ SECTIONS
     *(.rdata)
     *(.rodata)
     *(.rodata.*)
+    KEEP (*(SORT(.rtemsroset.*)))
     *(.gnu.linkonce.r*)
   } >ram  
 
@@ -139,6 +140,7 @@ SECTIONS
 
     *(.data)
     *(.data.*)
+    KEEP (*(SORT(.rtemsrwset.*)))
     *(.gnu.linkonce.d*)
   } >ram  
 

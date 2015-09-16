@@ -1,0 +1,25 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: splinkersets01
+
+directives:
+
+  - RTEMS_LINKER_SET_BEGIN()
+  - RTEMS_LINKER_SET_END()
+  - RTEMS_LINKER_SET_SIZE()
+  - RTEMS_LINKER_ROSET_DECLARE()
+  - RTEMS_LINKER_ROSET()
+  - RTEMS_LINKER_ROSET_ITEM_DECLARE()
+  - RTEMS_LINKER_ROSET_ITEM_REFERENCE()
+  - RTEMS_LINKER_ROSET_ITEM()
+  - RTEMS_LINKER_ROSET_ITEM_ORDERED()
+  - RTEMS_LINKER_RWSET_DECLARE()
+  - RTEMS_LINKER_RWSET()
+  - RTEMS_LINKER_RWSET_ITEM_DECLARE()
+  - RTEMS_LINKER_RWSET_ITEM_REFERENCE()
+  - RTEMS_LINKER_RWSET_ITEM()
+  - RTEMS_LINKER_RWSET_ITEM_ORDERED()
+
+concepts:
+
+  - Ensure that the RTEMS linker sets work.
