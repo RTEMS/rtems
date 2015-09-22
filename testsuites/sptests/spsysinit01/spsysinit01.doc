@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spsysinit01
+
+directives:
+
+  - rtems_initialize_executive()
+
+concepts:
+
+  - Ensures that each initialization step is performed in the right order.
+  - Ensures that each initialization step performs the intended
+    initializations.

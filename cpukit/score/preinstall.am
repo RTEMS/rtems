@@ -47,6 +47,10 @@ $(PROJECT_INCLUDE)/rtems/linkersets.h: include/rtems/linkersets.h $(PROJECT_INCL
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/linkersets.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/linkersets.h
 
+$(PROJECT_INCLUDE)/rtems/sysinit.h: include/rtems/sysinit.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sysinit.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sysinit.h
+
 $(PROJECT_INCLUDE)/rtems/system.h: include/rtems/system.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/system.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/system.h

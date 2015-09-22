@@ -31,6 +31,7 @@
 #include <rtems/config.h>
 #include <rtems/extensionimpl.h>
 #include <rtems/init.h>
+#include <rtems/sysinit.h>
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/apiext.h>
@@ -62,7 +63,7 @@
 
 Objects_Information *_Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
 
-void rtems_initialize_data_structures(void)
+static void rtems_initialize_data_structures(void)
 {
   /*
    *  Dispatching and interrupts are disabled until the end of the
@@ -152,7 +153,7 @@ void rtems_initialize_data_structures(void)
    */
 }
 
-void rtems_initialize_before_drivers(void)
+static void rtems_initialize_before_drivers(void)
 {
   #ifdef RTEMS_DRVMGR_STARTUP
   _DRV_Manager_initialization();
@@ -163,7 +164,7 @@ void rtems_initialize_before_drivers(void)
   #endif
 }
 
-void rtems_initialize_device_drivers(void)
+static void rtems_initialize_device_drivers(void)
 {
   /*
    *  Initialize all the device drivers and initialize the MPCI layer.
@@ -246,8 +247,37 @@ void rtems_initialize_device_drivers(void)
   _API_extensions_Run_postdriver();
 }
 
-void rtems_initialize_start_multitasking(void)
+RTEMS_LINKER_ROSET( _Sysinit, rtems_sysinit_item );
+
+RTEMS_SYSINIT_ITEM(
+  rtems_initialize_data_structures,
+  RTEMS_SYSINIT_DATA_STRUCTURES,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+RTEMS_SYSINIT_ITEM(
+  rtems_initialize_before_drivers,
+  RTEMS_SYSINIT_BEFORE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+RTEMS_SYSINIT_ITEM(
+  rtems_initialize_device_drivers,
+  RTEMS_SYSINIT_DEVICE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+void rtems_initialize_executive(void)
 {
+  const volatile rtems_sysinit_item *cur = RTEMS_LINKER_SET_BEGIN(_Sysinit );
+  const volatile rtems_sysinit_item *end = RTEMS_LINKER_SET_END( _Sysinit );
+
+  /* Invoke the registered system initialization handlers */
+  while ( cur != end ) {
+    ( *cur->handler )();
+    ++cur;
+  }
+
   _System_state_Set( SYSTEM_STATE_UP );
 
   _SMP_Request_start_multitasking();

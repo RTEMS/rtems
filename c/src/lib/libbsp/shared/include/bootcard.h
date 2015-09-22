@@ -71,26 +71,8 @@ void bsp_reset(void);
  * assembly language initialization file usually called @c start.S which does
  * the basic CPU setup (stack, C runtime environment, zero BSS, load other
  * sections) and calls afterwards boot_card().  The boot card function provides
- * the framework for the BSP initialization sequence.  The basic flow of
- * initialization is:
- *
- * - disable interrupts, interrupts will be enabled during the first context
- *   switch
- * - bsp_work_area_initialize() - initialize the RTEMS Workspace and the C
- *   Program Heap
- * - bsp_start() - more advanced initialization
- * - rtems_initialize_data_structures()
- * - initialize C Library
- * - rtems_initialize_before_drivers()
- * - bsp_predriver_hook()
- * - rtems_initialize_device_drivers()
- *   - initialization of all device drivers
- * - bsp_postdriver_hook()
- * - rtems_initialize_start_multitasking()
- *   - 1st task executes C++ global constructors
- *   - .... application runs ...
- *   - exit
- * - will not return to here
+ * the framework for the BSP initialization sequence.  For the basic flow of
+ * initialization see RTEMS C User's Guide, Initialization Manager.
  *
  * This style of initialization ensures that the C++ global constructors are
  * executed after RTEMS is initialized.
