@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -189,24 +189,57 @@ static void test_simple_atomic_exchange_body(test_context *ctx)
 
 static void test_simple_atomic_compare_exchange_body(test_context *ctx)
 {
-  unsigned int ia = 8, ib = 4;
-  unsigned int ic;
-  unsigned long a = 2, b = 1;
-  unsigned long c;
+  unsigned int ei;
+  unsigned int vi;
+  unsigned long el;
+  unsigned long vl;
+  bool success;
 
   puts("=== atomic simple compare exchange test case ===");
 
-  _Atomic_Store_uint(&ctx->atomic_int_value, ia, ATOMIC_ORDER_RELAXED);
-  _Atomic_Compare_exchange_uint(&ctx->atomic_int_value, &ia, ib,
-    ATOMIC_ORDER_RELAXED, ATOMIC_ORDER_RELAXED);
-  ic = _Atomic_Load_uint(&ctx->atomic_int_value, ATOMIC_ORDER_RELAXED);
-  rtems_test_assert(ic == ib);
+  _Atomic_Store_uint(&ctx->atomic_int_value, 1, ATOMIC_ORDER_RELAXED);
+  ei = 2;
+  success = _Atomic_Compare_exchange_uint(
+    &ctx->atomic_int_value,
+    &ei,
+    3,
+    ATOMIC_ORDER_RELAXED,
+    ATOMIC_ORDER_RELAXED
+  );
+  rtems_test_assert(!success);
+  rtems_test_assert(ei == 1);
+  success = _Atomic_Compare_exchange_uint(
+    &ctx->atomic_int_value,
+    &ei,
+    3,
+    ATOMIC_ORDER_RELAXED,
+    ATOMIC_ORDER_RELAXED
+  );
+  rtems_test_assert(success);
+  vi = _Atomic_Load_uint(&ctx->atomic_int_value, ATOMIC_ORDER_RELAXED);
+  rtems_test_assert(vi == 3);
 
-  _Atomic_Store_ulong(&ctx->atomic_value, a, ATOMIC_ORDER_RELAXED);
-  _Atomic_Compare_exchange_ulong(&ctx->atomic_value, &a, b,
-    ATOMIC_ORDER_RELAXED, ATOMIC_ORDER_RELAXED);
-  c = _Atomic_Load_ulong(&ctx->atomic_value, ATOMIC_ORDER_RELAXED);
-  rtems_test_assert(c == b);
+  _Atomic_Store_ulong(&ctx->atomic_value, 10, ATOMIC_ORDER_RELAXED);
+  el = 11;
+  success = _Atomic_Compare_exchange_ulong(
+    &ctx->atomic_value,
+    &el,
+    12,
+    ATOMIC_ORDER_RELAXED,
+    ATOMIC_ORDER_RELAXED
+  );
+  rtems_test_assert(!success);
+  rtems_test_assert(el == 10);
+  success = _Atomic_Compare_exchange_ulong(
+    &ctx->atomic_value,
+    &el,
+    12,
+    ATOMIC_ORDER_RELAXED,
+    ATOMIC_ORDER_RELAXED
+  );
+  rtems_test_assert(success);
+  vl = _Atomic_Load_ulong(&ctx->atomic_value, ATOMIC_ORDER_RELAXED);
+  rtems_test_assert(vl == 12);
 }
 
 static const simple_test_body simple_test_bodies[] = {

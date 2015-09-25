@@ -577,13 +577,17 @@ static inline bool _CPU_atomic_Compare_exchange_uint( CPU_atomic_Uint *obj, unsi
 #else
   bool success;
   ISR_Level level;
+  unsigned int actual;
 
   (void) succ;
   (void) fail;
   _ISR_Disable( level );
-  success = *obj == *expected;
+  actual = *obj;
+  success = ( actual == *expected );
   if ( success ) {
     *obj = desired;
+  } else {
+    *expected = actual;
   }
   _ISR_Enable( level );
 
@@ -600,13 +604,17 @@ static inline bool _CPU_atomic_Compare_exchange_ulong( CPU_atomic_Ulong *obj, un
 #else
   bool success;
   ISR_Level level;
+  unsigned long actual;
 
   (void) succ;
   (void) fail;
   _ISR_Disable( level );
-  success = *obj == *expected;
+  actual = *obj;
+  success = ( actual == *expected );
   if ( success ) {
     *obj = desired;
+  } else {
+    *expected = actual;
   }
   _ISR_Enable( level );
 
@@ -623,13 +631,17 @@ static inline bool _CPU_atomic_Compare_exchange_ptr( CPU_atomic_Pointer *obj, vo
 #else
   bool success;
   ISR_Level level;
+  uintptr_t actual;
 
   (void) succ;
   (void) fail;
   _ISR_Disable( level );
-  success = *obj == (uintptr_t) *expected;
+  actual = *obj;
+  success = ( actual == (uintptr_t) *expected );
   if ( success ) {
     *obj = (uintptr_t) desired;
+  } else {
+    *expected = (void *) actual;
   }
   _ISR_Enable( level );
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -118,12 +118,16 @@ bool __atomic_compare_exchange_4(
 {
   bool equal;
   ISR_Level level;
+  uint32_t actual;
 
   level = _SPARCV8_Acquire_the_one_lock();
 
-  equal = *mem == *expected;
+  actual = *mem;
+  equal = ( actual == *expected );
   if ( equal ) {
     *mem = desired;
+  } else {
+    *expected = actual;
   }
 
   _SPARCV8_Release_the_one_lock( level );
