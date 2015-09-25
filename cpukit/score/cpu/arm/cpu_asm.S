@@ -19,7 +19,7 @@
  *  COPYRIGHT (c) 2000 Canon Research Centre France SA.
  *  Emmanuel Raguet, mailto:raguet@crf.canon.fr
  *
- *  Copyright (c) 2013-2014 embedded brains GmbH
+ *  Copyright (c) 2013-2015 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -80,13 +80,13 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 	add	r3, r1, #ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET
 	ldrexb	r4, [r3]
 	cmp	r4, #0
-	bne	.L_check_thread_dispatch_necessary
+	bne	.L_get_potential_new_heir
 
 	/* Try to update the is executing indicator of the heir context */
 	mov	r4, #1
 	strexb	r5, r4, [r3]
 	cmp	r5, #0
-	bne	.L_check_thread_dispatch_necessary
+	bne	.L_get_potential_new_heir
 	dmb
 #endif
 
@@ -126,25 +126,22 @@ DEFINE_FUNCTION_ARM(_CPU_Context_restore)
         b       .L_restore
 
 #ifdef RTEMS_SMP
-.L_check_thread_dispatch_necessary:
+.L_get_potential_new_heir:
 
 	GET_SELF_CPU_CONTROL	r2, r3
 
-	/* Check if a thread dispatch is necessary */
-	ldrb	r4, [r2, #PER_CPU_DISPATCH_NEEDED]
-	cmp	r4, #0
-	beq	.L_check_is_executing
-
-	/* We have a new heir */
-
-	/* Clear the thread dispatch necessary flag */
-	mov	r4, #0
-	strb	r4, [r2, #PER_CPU_DISPATCH_NEEDED]
-	dmb
+	/* We may have a new heir */
 
 	/* Read the executing and heir */
 	ldr	r4, [r2, #PER_CPU_OFFSET_EXECUTING]
 	ldr	r5, [r2, #PER_CPU_OFFSET_HEIR]
+
+	/*
+	 * Update the executing only if necessary to avoid cache line
+	 * monopolization.
+	 */
+	cmp	r4, r5
+	beq	.L_check_is_executing
 
 	/* Calculate the heir context pointer */
 	sub	r4, r1, r4

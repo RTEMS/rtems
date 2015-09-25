@@ -201,7 +201,6 @@ static void delay_ipi_task(rtems_task_argument variant)
   ISR_Level level;
 
   _ISR_Disable_without_giant(level);
-  (void) level;
 
   /* (C) */
   barrier(ctx, &ctx->worker_barrier_state);
@@ -215,6 +214,8 @@ static void delay_ipi_task(rtems_task_argument variant)
   if (variant != 0) {
     _Thread_Disable_dispatch();
   }
+
+  _ISR_Enable_without_giant(level);
 
   /*
    * We get deleted as a side effect of enabling the thread life protection or

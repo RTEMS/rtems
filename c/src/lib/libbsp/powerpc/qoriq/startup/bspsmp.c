@@ -235,5 +235,10 @@ void _CPU_SMP_Prepare_start_multitasking(void)
 
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
 {
+#ifdef __PPC_CPU_E6500__
+  ppc_light_weight_synchronize();
+#else
+  ppc_synchronize_data();
+#endif
   qoriq.pic.ipidr [IPI_INDEX].reg = 1U << target_processor_index;
 }

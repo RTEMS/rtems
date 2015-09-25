@@ -146,6 +146,12 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
 {
   Per_CPU_Control *cpu_self = _Per_CPU_Get();
 
+  /*
+   * In the common case the inter-processor interrupt is issued to carry out a
+   * thread dispatch.
+   */
+  cpu_self->dispatch_necessary = true;
+
   if ( _Atomic_Load_ulong( &cpu_self->message, ATOMIC_ORDER_RELAXED ) != 0 ) {
     unsigned long message = _Atomic_Exchange_ulong(
       &cpu_self->message,

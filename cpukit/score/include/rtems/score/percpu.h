@@ -279,9 +279,11 @@ typedef struct Per_CPU_Control {
    * @brief This is the heir thread for this processor.
    *
    * This field is not protected by a lock.  The only writer after multitasking
-   * start is the scheduler owning this processor.  This processor will set the
-   * dispatch necessary indicator to false, before it reads the heir.  This
-   * field is used in combination with the dispatch necessary indicator.
+   * start is the scheduler owning this processor.  It is assumed that stores
+   * to pointers are atomic on all supported SMP architectures.  The CPU port
+   * specific code (inter-processor interrupt handling and
+   * _CPU_SMP_Send_interrupt()) must guarantee that this processor observes the
+   * last value written.
    *
    * A thread can be a heir on at most one processor in the system.
    *
@@ -290,16 +292,15 @@ typedef struct Per_CPU_Control {
   struct _Thread_Control *heir;
 
   /**
-   * @brief This is set to true when this processor needs to run the
+   * @brief This is set to true when this processor needs to run the thread
    * dispatcher.
    *
    * It is volatile since interrupts may alter this flag.
    *
-   * This field is not protected by a lock.  There are two writers after
-   * multitasking start.  The scheduler owning this processor sets this
-   * indicator to true, after it updated the heir field.  This processor sets
-   * this indicator to false, before it reads the heir.  This field is used in
-   * combination with the heir field.
+   * This field is not protected by a lock and must be accessed only by this
+   * processor.  Code (e.g. scheduler and post-switch action requests) running
+   * on another processors must use an inter-processor interrupt to set the
+   * thread dispatch necessary indicator to true.
    *
    * @see _Thread_Get_heir_and_make_it_executing().
    */

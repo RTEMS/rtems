@@ -236,23 +236,17 @@ check_is_executing:
         beq     try_update_is_executing
          mov    1, %g1
 
-        ! Check if a thread dispatch is necessary
-        ldub    [%g6 + PER_CPU_DISPATCH_NEEDED], %g1
-        cmp     %g1, 0
-        beq     check_is_executing
-         nop
-
-        ! We have a new heir
-
-        ! Clear the thread dispatch necessary flag
-        stub    %g0, [%g6 + PER_CPU_DISPATCH_NEEDED]
-
-        ! Here we assume a strong memory order, otherwise a memory barrier must
-        ! be inserted here
+        ! We may have a new heir
 
         ! Read the executing and heir
         ld      [%g6 + PER_CPU_OFFSET_EXECUTING], %g1
         ld      [%g6 + PER_CPU_OFFSET_HEIR], %g2
+
+        ! Update the executing only if necessary to avoid cache line
+        ! monopolization.
+        cmp     %g1, %g2
+        beq     try_update_is_executing
+         mov    1, %g1
 
         ! Calculate the heir context pointer
         sub     %o1, %g1, %g1

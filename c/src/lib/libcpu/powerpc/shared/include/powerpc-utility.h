@@ -8,7 +8,7 @@
  */
 
 /*
- * Copyright (c) 2008-2014 embedded brains GmbH.
+ * Copyright (c) 2008-2015 embedded brains GmbH.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -204,6 +204,13 @@ static inline void ppc_synchronize_data(void)
   RTEMS_COMPILER_MEMORY_BARRIER();
 
   __asm__ volatile ("sync");
+}
+
+static inline void ppc_light_weight_synchronize(void)
+{
+  RTEMS_COMPILER_MEMORY_BARRIER();
+
+  __asm__ volatile ("lwsync");
 }
 
 static inline void ppc_synchronize_instructions(void)

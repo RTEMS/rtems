@@ -559,34 +559,41 @@ typedef struct {
      *
      * This field must be updated during a context switch.  The context switch
      * to the heir must wait until the heir context indicates that it is no
-     * longer executing on a processor.  The context switch must also check if
-     * a thread dispatch is necessary to honor updates of the heir thread for
-     * this processor.  This indicator must be updated using an atomic test and
-     * set operation to ensure that at most one processor uses the heir
-     * context at the same time.
+     * longer executing on a processor.  This indicator must be updated using
+     * an atomic test and set operation to ensure that at most one processor
+     * uses the heir context at the same time.  The context switch must also
+     * check for a potential new heir thread for this processor in case the
+     * heir context is not immediately available.  Update the executing thread
+     * for this processor only if necessary to avoid a cache line
+     * monopolization.
      *
      * @code
      * void _CPU_Context_switch(
-     *   Context_Control *executing,
-     *   Context_Control *heir
+     *   Context_Control *executing_context,
+     *   Context_Control *heir_context
      * )
      * {
-     *   save( executing );
+     *   save( executing_context );
      *
-     *   executing->is_executing = false;
+     *   executing_context->is_executing = false;
      *   memory_barrier();
      *
-     *   if ( test_and_set( &heir->is_executing ) ) {
+     *   if ( test_and_set( &heir_context->is_executing ) ) {
      *     do {
      *       Per_CPU_Control *cpu_self = _Per_CPU_Get_snapshot();
+     *       Thread_Control *executing = cpu_self->executing;
+     *       Thread_Control *heir = cpu_self->heir;
      *
-     *       if ( cpu_self->dispatch_necessary ) {
-     *         heir = _Thread_Get_heir_and_make_it_executing( cpu_self );
+     *       if ( heir != executing ) {
+     *         cpu_self->executing = heir;
+     *         heir_context = (Context_Control *)
+     *           ((uintptr_t) heir + (uintptr_t) executing_context
+     *             - (uintptr_t) executing)
      *       }
-     *     } while ( test_and_set( &heir->is_executing ) );
+     *     } while ( test_and_set( &heir_context->is_executing ) );
      *   }
      *
-     *   restore( heir );
+     *   restore( heir_context );
      * }
      * @endcode
      */
@@ -1577,6 +1584,10 @@ register struct Per_CPU_Control *_CPU_Per_CPU_current asm( "rX" );
   /**
    * @brief Sends an inter-processor interrupt to the specified target
    * processor.
+   *
+   * This interrupt send and the corresponding inter-processor interrupt must
+   * act as an release/acquire barrier so that all values written by the
+   * sending processor are visible to the target processor.
    *
    * This operation is undefined for target processor indices out of range.
    *

@@ -11,7 +11,7 @@
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2014 embedded brains GmbH.
+ *  Copyright (c) 2014-2015 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -793,7 +793,8 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Internal_allocate( void )
 /**
  * @brief Gets the heir of the processor and makes it executing.
  *
- * The thread dispatch necessary indicator is cleared as a side-effect.
+ * Must be called with interrupts disabled.  The thread dispatch necessary
+ * indicator is cleared as a side-effect.
  *
  * @return The heir thread.
  *
@@ -806,18 +807,8 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get_heir_and_make_it_executing(
 {
   Thread_Control *heir;
 
-  cpu_self->dispatch_necessary = false;
-
-#if defined( RTEMS_SMP )
-  /*
-   * It is critical that we first update the dispatch necessary and then the
-   * read the heir so that we don't miss an update by
-   * _Thread_Dispatch_update_heir().
-   */
-  _Atomic_Fence( ATOMIC_ORDER_SEQ_CST );
-#endif
-
   heir = cpu_self->heir;
+  cpu_self->dispatch_necessary = false;
   cpu_self->executing = heir;
 
   return heir;
@@ -832,23 +823,10 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_update_heir(
 {
   cpu_for_heir->heir = heir;
 
-  /*
-   * It is critical that we first update the heir and then the dispatch
-   * necessary so that _Thread_Get_heir_and_make_it_executing() cannot miss an
-   * update.
-   */
-  _Atomic_Fence( ATOMIC_ORDER_SEQ_CST );
-
-  /*
-   * Only update the dispatch necessary indicator if not already set to
-   * avoid superfluous inter-processor interrupts.
-   */
-  if ( !cpu_for_heir->dispatch_necessary ) {
-    cpu_for_heir->dispatch_necessary = true;
-
-    if ( cpu_for_heir != cpu_self ) {
-      _Per_CPU_Send_interrupt( cpu_for_heir );
-    }
+  if ( cpu_for_heir == cpu_self ) {
+    cpu_self->dispatch_necessary = true;
+  } else {
+    _Per_CPU_Send_interrupt( cpu_for_heir );
   }
 }
 #endif
@@ -930,12 +908,15 @@ RTEMS_INLINE_ROUTINE void _Thread_Add_post_switch_action(
   ISR_Level        level;
 
   cpu_of_thread = _Thread_Action_ISR_disable_and_acquire( thread, &level );
-  cpu_of_thread->dispatch_necessary = true;
 
 #if defined(RTEMS_SMP)
-  if ( _Per_CPU_Get() != cpu_of_thread ) {
+  if ( _Per_CPU_Get() == cpu_of_thread ) {
+    cpu_of_thread->dispatch_necessary = true;
+  } else {
     _Per_CPU_Send_interrupt( cpu_of_thread );
   }
+#else
+  cpu_of_thread->dispatch_necessary = true;
 #endif
 
   _Chain_Append_if_is_off_chain_unprotected(

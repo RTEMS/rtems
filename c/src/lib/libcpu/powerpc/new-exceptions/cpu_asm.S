@@ -413,12 +413,12 @@ check_is_executing:
 	addi	r6, r5, PPC_CONTEXT_OFFSET_IS_EXECUTING
 	lwarx	r7, r0, r6
 	cmpwi	r7, 0
-	bne	check_thread_dispatch_necessary
+	bne	get_potential_new_heir
 
 	/* Try to update the is executing indicator of the heir context */
 	li	r7, 1
 	stwcx.	r7, r0, r6
-	bne	check_thread_dispatch_necessary
+	bne	get_potential_new_heir
 	isync
 #endif
 
@@ -536,25 +536,22 @@ PROC (_CPU_Context_restore):
 	b	restore_context
 
 #ifdef RTEMS_SMP
-check_thread_dispatch_necessary:
+get_potential_new_heir:
 
 	GET_SELF_CPU_CONTROL	r6
 
-	/* Check if a thread dispatch is necessary */
-	lbz	r7, PER_CPU_DISPATCH_NEEDED(r6)
-	cmpwi	r7, 0
-	beq	check_is_executing
-
-	/* We have a new heir */
-
-	/* Clear the thread dispatch necessary flag */
-	li	r7, 0
-	stb	r7, PER_CPU_DISPATCH_NEEDED(r6)
-	msync
+	/* We may have a new heir */
 
 	/* Read the executing and heir */
 	lwz	r7, PER_CPU_OFFSET_EXECUTING(r6)
 	lwz	r8, PER_CPU_OFFSET_HEIR(r6)
+
+	/*
+	 * Update the executing only if necessary to avoid cache line
+	 * monopolization.
+	 */
+	cmpw	r7, r8
+	beq	check_is_executing
 
 	/* Calculate the heir context pointer */
 	sub	r7, r4, r7
