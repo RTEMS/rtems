@@ -4,32 +4,17 @@ test set name: smpatomic01
 
 directives:
 
-  - ATOMIC_INITIALIZER_FLAG
-  - ATOMIC_INITIALIZER_PTR()
-  - ATOMIC_INITIALIZER_UINT()
-  - ATOMIC_INITIALIZER_ULONG()
-  - _Atomic_Compare_exchange_uint()
   - _Atomic_Compare_exchange_ulong()
-  - _Atomic_Exchange_uint()
   - _Atomic_Exchange_ulong()
   - _Atomic_Fence()
-  - _Atomic_Fetch_add_uint()
   - _Atomic_Fetch_add_ulong()
-  - _Atomic_Fetch_and_uint()
   - _Atomic_Fetch_and_ulong()
-  - _Atomic_Fetch_or_uint()
   - _Atomic_Fetch_or_ulong()
-  - _Atomic_Fetch_sub_uint()
   - _Atomic_Fetch_sub_ulong()
   - _Atomic_Flag_clear()
   - _Atomic_Flag_test_and_set()
-  - _Atomic_Init_ptr()
-  - _Atomic_Init_uint()
   - _Atomic_Init_ulong()
-  - _Atomic_Load_ptr()
-  - _Atomic_Load_uint()
   - _Atomic_Load_ulong()
-  - _Atomic_Store_uint()
   - _Atomic_Store_ulong()
 
 concepts:

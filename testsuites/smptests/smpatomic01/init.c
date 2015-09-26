@@ -36,7 +36,6 @@ const char rtems_test_name[] = "SMPATOMIC 1";
 
 typedef struct {
   rtems_test_parallel_context base;
-  Atomic_Uint atomic_int_value;
   Atomic_Ulong atomic_value;
   unsigned long per_worker_value[CPU_COUNT];
   unsigned long normal_value;

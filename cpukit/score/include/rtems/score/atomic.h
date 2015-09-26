@@ -38,7 +38,7 @@ typedef CPU_atomic_Uint Atomic_Uint;
 
 typedef CPU_atomic_Ulong Atomic_Ulong;
 
-typedef CPU_atomic_Pointer Atomic_Pointer;
+typedef CPU_atomic_Uintptr Atomic_Uintptr;
 
 typedef CPU_atomic_Flag Atomic_Flag;
 
@@ -58,7 +58,7 @@ typedef CPU_atomic_Order Atomic_Order;
 
 #define ATOMIC_INITIALIZER_ULONG( value ) CPU_ATOMIC_INITIALIZER_ULONG( value )
 
-#define ATOMIC_INITIALIZER_PTR( value ) CPU_ATOMIC_INITIALIZER_PTR( value )
+#define ATOMIC_INITIALIZER_UINTPTR( value ) CPU_ATOMIC_INITIALIZER_UINTPTR( value )
 
 #define ATOMIC_INITIALIZER_FLAG CPU_ATOMIC_INITIALIZER_FLAG
 
@@ -70,8 +70,8 @@ typedef CPU_atomic_Order Atomic_Order;
 #define _Atomic_Init_ulong( obj, desired ) \
   _CPU_atomic_Init_ulong( obj, desired )
 
-#define _Atomic_Init_ptr( obj, desired ) \
-  _CPU_atomic_Init_ptr( obj, desired )
+#define _Atomic_Init_uintptr( obj, desired ) \
+  _CPU_atomic_Init_uintptr( obj, desired )
 
 #define _Atomic_Load_uint( obj, order ) \
   _CPU_atomic_Load_uint( obj, order )
@@ -79,8 +79,8 @@ typedef CPU_atomic_Order Atomic_Order;
 #define _Atomic_Load_ulong( obj, order ) \
   _CPU_atomic_Load_ulong( obj, order )
 
-#define _Atomic_Load_ptr( obj, order ) \
-  _CPU_atomic_Load_ptr( obj, order )
+#define _Atomic_Load_uintptr( obj, order ) \
+  _CPU_atomic_Load_uintptr( obj, order )
 
 #define _Atomic_Store_uint( obj, desr, order ) \
   _CPU_atomic_Store_uint( obj, desr, order )
@@ -88,8 +88,8 @@ typedef CPU_atomic_Order Atomic_Order;
 #define _Atomic_Store_ulong( obj, desr, order ) \
   _CPU_atomic_Store_ulong( obj, desr, order )
 
-#define _Atomic_Store_ptr( obj, desr, order ) \
-  _CPU_atomic_Store_ptr( obj, desr, order )
+#define _Atomic_Store_uintptr( obj, desr, order ) \
+  _CPU_atomic_Store_uintptr( obj, desr, order )
 
 #define _Atomic_Fetch_add_uint( obj, arg, order ) \
   _CPU_atomic_Fetch_add_uint( obj, arg, order )
@@ -97,8 +97,8 @@ typedef CPU_atomic_Order Atomic_Order;
 #define _Atomic_Fetch_add_ulong( obj, arg, order ) \
   _CPU_atomic_Fetch_add_ulong( obj, arg, order )
 
-#define _Atomic_Fetch_add_ptr( obj, arg, order ) \
-  _CPU_atomic_Fetch_add_ptr( obj, arg, order )
+#define _Atomic_Fetch_add_uintptr( obj, arg, order ) \
+  _CPU_atomic_Fetch_add_uintptr( obj, arg, order )
 
 #define _Atomic_Fetch_sub_uint( obj, arg, order ) \
   _CPU_atomic_Fetch_sub_uint( obj, arg, order )
@@ -106,8 +106,8 @@ typedef CPU_atomic_Order Atomic_Order;
 #define _Atomic_Fetch_sub_ulong( obj, arg, order ) \
   _CPU_atomic_Fetch_sub_ulong( obj, arg, order )
 
-#define _Atomic_Fetch_sub_ptr( obj, arg, order ) \
-  _CPU_atomic_Fetch_sub_ptr( obj, arg, order )
+#define _Atomic_Fetch_sub_uintptr( obj, arg, order ) \
+  _CPU_atomic_Fetch_sub_uintptr( obj, arg, order )
 
 #define _Atomic_Fetch_or_uint( obj, arg, order ) \
   _CPU_atomic_Fetch_or_uint( obj, arg, order )
@@ -115,8 +115,8 @@ typedef CPU_atomic_Order Atomic_Order;
 #define _Atomic_Fetch_or_ulong( obj, arg, order ) \
   _CPU_atomic_Fetch_or_ulong( obj, arg, order )
 
-#define _Atomic_Fetch_or_ptr( obj, arg, order ) \
-  _CPU_atomic_Fetch_or_ptr( obj, arg, order )
+#define _Atomic_Fetch_or_uintptr( obj, arg, order ) \
+  _CPU_atomic_Fetch_or_uintptr( obj, arg, order )
 
 #define _Atomic_Fetch_and_uint( obj, arg, order ) \
   _CPU_atomic_Fetch_and_uint( obj, arg, order )
@@ -124,8 +124,8 @@ typedef CPU_atomic_Order Atomic_Order;
 #define _Atomic_Fetch_and_ulong( obj, arg, order ) \
   _CPU_atomic_Fetch_and_ulong( obj, arg, order )
 
-#define _Atomic_Fetch_and_ptr( obj, arg, order ) \
-  _CPU_atomic_Fetch_and_ptr( obj, arg, order )
+#define _Atomic_Fetch_and_uintptr( obj, arg, order ) \
+  _CPU_atomic_Fetch_and_uintptr( obj, arg, order )
 
 #define _Atomic_Exchange_uint( obj, desr, order ) \
   _CPU_atomic_Exchange_uint( obj, desr, order )
@@ -133,8 +133,8 @@ typedef CPU_atomic_Order Atomic_Order;
 #define _Atomic_Exchange_ulong( obj, desr, order ) \
   _CPU_atomic_Exchange_ulong( obj, desr, order )
 
-#define _Atomic_Exchange_ptr( obj, desr, order ) \
-  _CPU_atomic_Exchange_ptr( obj, desr, order )
+#define _Atomic_Exchange_uintptr( obj, desr, order ) \
+  _CPU_atomic_Exchange_uintptr( obj, desr, order )
 
 #define _Atomic_Compare_exchange_uint( obj, expected, desired, succ, fail ) \
   _CPU_atomic_Compare_exchange_uint( obj, expected, desired, succ, fail )
@@ -142,8 +142,8 @@ typedef CPU_atomic_Order Atomic_Order;
 #define _Atomic_Compare_exchange_ulong( obj, expected, desired, succ, fail ) \
   _CPU_atomic_Compare_exchange_ulong( obj, expected, desired, succ, fail )
 
-#define _Atomic_Compare_exchange_ptr( obj, expected, desired, succ, fail ) \
-  _CPU_atomic_Compare_exchange_ptr( obj, expected, desired, succ, fail )
+#define _Atomic_Compare_exchange_uintptr( obj, expected, desired, succ, fail ) \
+  _CPU_atomic_Compare_exchange_uintptr( obj, expected, desired, succ, fail )
 
 #define _Atomic_Flag_clear( obj, order ) \
   _CPU_atomic_Flag_clear( obj, order )
