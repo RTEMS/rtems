@@ -1168,16 +1168,19 @@ RTEMS_INLINE_ROUTINE void *_Thread_Lock_acquire(
   SMP_ticket_lock_Control *lock;
 
   while ( true ) {
-    uint32_t my_generation;
+    unsigned int first_generation;
+    unsigned int second_generation;
 
     _ISR_lock_ISR_disable( lock_context );
-    my_generation = the_thread->Lock.generation;
 
     /*
-     * Ensure that we read the initial lock generation before we obtain our
-     * current lock.
+     * Ensure that we read our first lock generation before we obtain our
+     * current lock.  See _Thread_Lock_set_unprotected().
      */
-    _Atomic_Fence( ATOMIC_ORDER_ACQUIRE );
+    first_generation = _Atomic_Load_uint(
+      &the_thread->Lock.generation,
+      ATOMIC_ORDER_ACQUIRE
+    );
 
     lock = the_thread->Lock.current;
     _SMP_ticket_lock_Acquire(
@@ -1187,19 +1190,22 @@ RTEMS_INLINE_ROUTINE void *_Thread_Lock_acquire(
     );
 
     /*
-     * Ensure that we read the second lock generation after we obtained our
-     * current lock.
+     * The C11 memory model doesn't guarantee that we read the latest
+     * generation here.  For this a read-modify-write operation would be
+     * necessary.  We read at least the new generation set up by the owner of
+     * our current thread lock, and so on.
      */
-    _Atomic_Fence( ATOMIC_ORDER_ACQUIRE );
+    second_generation = _Atomic_Load_uint(
+      &the_thread->Lock.generation,
+      ATOMIC_ORDER_ACQUIRE
+    );
 
-    if ( the_thread->Lock.generation == my_generation ) {
-      break;
+    if ( first_generation == second_generation ) {
+      return lock;
     }
 
     _Thread_Lock_release( lock, lock_context );
   }
-
-  return lock;
 #else
   _ISR_Disable( lock_context->isr_level );
 
@@ -1220,20 +1226,19 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_set_unprotected(
   the_thread->Lock.current = new_lock;
 
   /*
-   * Ensure that the new lock is visible before we update the generation
-   * number.  Otherwise someone would be able to read an up to date generation
-   * number and an old lock.
-   */
-  _Atomic_Fence( ATOMIC_ORDER_RELEASE );
-
-  /*
+   * The generation release corresponds to the generation acquire in
+   * _Thread_Lock_acquire() and ensures that the new lock and other fields are
+   * visible to the next thread lock owner.  Otherwise someone would be able to
+   * read an up to date generation number and an old lock.  See
+   * _Thread_Wait_set_queue() and _Thread_Wait_restore_default_operations().
+   *
    * Since we set a new lock right before, this increment is not protected by a
    * lock and thus must be an atomic operation.
    */
   _Atomic_Fetch_add_uint(
     &the_thread->Lock.generation,
     1,
-    ATOMIC_ORDER_RELAXED
+    ATOMIC_ORDER_RELEASE
   );
 }
 #endif
@@ -1277,13 +1282,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_restore_default(
   Thread_Control *the_thread
 )
 {
-  /*
-   * Ensures that the stores to the wait queue and operations completed before
-   * the default lock is restored.  See _Thread_Wait_set_queue() and
-   * _Thread_Wait_restore_default_operations().
-   */
-  _Atomic_Fence( ATOMIC_ORDER_RELEASE );
-
   _Thread_Lock_set_unprotected( the_thread, &the_thread->Lock.Default );
 }
 #else
