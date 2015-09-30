@@ -214,7 +214,9 @@ nested:
 	cmp       ecx, 16               /* is this a PIC IRQ? */
 	jge       .dont_restore_i8259
 
+	movw      SYM (i8259s_super_imr), dx
 	movl      MSK_OFF(esp), eax
+	orw       dx, ax
 	movw      ax, SYM (i8259s_cache)
 	outb	  $PIC_MASTER_IMR_IO_PORT
 	movb	  ah, al

@@ -55,6 +55,7 @@ int      i;
  * This cache is initialized in ldseg.s
  */
 rtems_i8259_masks i8259s_cache = 0xFFFB;
+rtems_i8259_masks i8259s_super_imr = 0xFFFB;
 
 /*-------------------------------------------------------------------------+
 |         Function:  BSP_irq_disable_at_i8259s
@@ -77,6 +78,7 @@ int BSP_irq_disable_at_i8259s    (const rtems_irq_number irqLine)
 
   mask = 1 << irqLine;
   i8259s_cache |= mask;
+  i8259s_super_imr |= mask;
 
   if (irqLine < 8)
   {
@@ -112,6 +114,7 @@ int BSP_irq_enable_at_i8259s    (const rtems_irq_number irqLine)
 
   mask = ~(1 << irqLine);
   i8259s_cache &= mask;
+  i8259s_super_imr &= mask;
 
   if (irqLine < 8)
   {

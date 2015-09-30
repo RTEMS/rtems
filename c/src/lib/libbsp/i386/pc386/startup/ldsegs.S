@@ -147,16 +147,16 @@ next_step:
 	outb	al, $0xA1
 	call	SYM(pc386_delay)
 
+	/*
+	 * The IMR values must correspond to the initial value of i8259s_cache.
+	 */
 	movb	$0xFF, al		/* mask off all interrupts for now  */
 	outb	al, $0xA1
 	call	SYM(pc386_delay)
 	movb	$0xFB, al		/* mask all irq's but irq2 which    */
 	outb	al, $0x21		/* is cascaded                      */
 	call	SYM(pc386_delay)
-
-	movw	$0xFFFB, SYM(i8259s_cache) /* set up same values in cache */
-
-  #endif
+#endif
 	jmp	SYM (_establish_stack)	# return to the bsp entry code
 
 /*-------------------------------------------------------------------------+

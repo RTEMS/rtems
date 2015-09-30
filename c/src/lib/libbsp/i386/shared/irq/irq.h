@@ -80,7 +80,19 @@ extern "C" {
  */
 typedef unsigned short rtems_i8259_masks;
 
-extern  rtems_i8259_masks i8259s_cache;
+/**
+ * @brief Contains the current IMR of both i8259s.
+ */
+extern rtems_i8259_masks i8259s_cache;
+
+/**
+ * @brief Contains the super IMR of both i8259s to overrule i8259s_cache during
+ * interrupt exit.
+ *
+ * This enables a bsp_interrupt_vector_disable() in interrupt handlers.  This
+ * is required for the interrupt server support used by the new network stack.
+ */
+extern rtems_i8259_masks i8259s_super_imr;
 
 /*-------------------------------------------------------------------------+
 | Function Prototypes.
