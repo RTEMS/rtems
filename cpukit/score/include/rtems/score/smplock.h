@@ -277,7 +277,7 @@ static inline void _SMP_ticket_lock_Do_acquire(
 #endif
 
   my_ticket =
-    _Atomic_Fetch_add_uint( &lock->next_ticket, 1U, ATOMIC_ORDER_ACQ_REL );
+    _Atomic_Fetch_add_uint( &lock->next_ticket, 1U, ATOMIC_ORDER_RELAXED );
 
 #if defined( RTEMS_PROFILING )
   now_serving =
