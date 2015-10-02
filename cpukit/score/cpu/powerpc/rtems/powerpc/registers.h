@@ -620,6 +620,14 @@ static inline uint32_t ppc_interrupt_get_disable_mask( void )
 static inline uint32_t ppc_interrupt_disable( void )
 {
   uint32_t level;
+
+#if defined(__PPC_CPU_E6500__)
+  __asm__ volatile (
+    "mfmsr %0;"
+    "wrteei 0"
+    : "=r" (level)
+  );
+#else
   uint32_t mask;
 
   __asm__ volatile (
@@ -630,17 +638,26 @@ static inline uint32_t ppc_interrupt_disable( void )
     "mtmsr %1"
     : "=r" (level), "=r" (mask)
   );
+#endif
 
   return level;
 }
 
 static inline void ppc_interrupt_enable( uint32_t level )
 {
+#if defined(__PPC_CPU_E6500__)
+  __asm__ volatile (
+    "wrtee %0"
+    :
+    : "r" (level)
+  );
+#else
   __asm__ volatile (
     "mtmsr %0"
     :
     : "r" (level)
   );
+#endif
 }
 
 static inline void ppc_interrupt_flash( uint32_t level )
