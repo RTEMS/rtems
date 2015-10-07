@@ -66,13 +66,6 @@ _start:
 	ori	r0, INITIAL_MSR, MSR_IS | MSR_DS
 	mtmsr	r0
 
-#ifdef QORIQ_INITIAL_BUCSR
-	/* BUCSR initialization */
-	LWI	r0, QORIQ_INITIAL_BUCSR
-	mtspr	FSL_EIS_BUCSR, r0
-	isync
-#endif
-
 	/* Initialize start stack */
 	LWI	r1, start_stack_end - PPC_MINIMUM_STACK_FRAME_SIZE
 	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
@@ -167,6 +160,13 @@ _start:
 	mtspr	FSL_EIS_SPEFSCR, r0
 #endif
 
+#ifdef QORIQ_INITIAL_BUCSR
+	/* BUCSR initialization */
+	LWI	r0, QORIQ_INITIAL_BUCSR
+	mtspr	FSL_EIS_BUCSR, r0
+	isync
+#endif
+
 	/* Set small-data anchors */
 	LA	r2, _SDA2_BASE_
 	LA	r13, _SDA_BASE_
@@ -216,13 +216,6 @@ _start_secondary_processor:
 	LWI	INITIAL_MSR, QORIQ_INITIAL_MSR
 	ori	r0, INITIAL_MSR, MSR_IS | MSR_DS
 	mtmsr	r0
-
-#ifdef QORIQ_INITIAL_BUCSR
-	/* BUCSR initialization */
-	LWI	r0, QORIQ_INITIAL_BUCSR
-	mtspr	FSL_EIS_BUCSR, r0
-	isync
-#endif
 
 	/* Initialize start stack */
 	subi	r1, r1, PPC_MINIMUM_STACK_FRAME_SIZE
