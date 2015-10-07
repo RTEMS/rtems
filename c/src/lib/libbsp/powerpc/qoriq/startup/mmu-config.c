@@ -71,6 +71,14 @@ typedef struct {
 	.mas7 = QORIQ_MMU_DEVICE_MAS7 \
 }
 
+#define ENTRY_DEV_CACHED(b, s) { \
+	.begin = (uint32_t) b, \
+	.size = (uint32_t) s, \
+	.mas2 = ENTRY_RW_MAS2, \
+	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW, \
+	.mas7 = QORIQ_MMU_DEVICE_MAS7 \
+}
+
 static const entry DATA config [] = {
 	#if defined(QORIQ_INTERCOM_AREA_BEGIN) && defined(QORIQ_INTERCOM_AREA_SIZE)
 		{
@@ -95,6 +103,14 @@ static const entry DATA config [] = {
 	ENTRY_RW(bsp_section_rwextra_begin, bsp_section_rwextra_size),
 	ENTRY_RW(bsp_section_work_begin, bsp_section_work_size),
 	ENTRY_RW(bsp_section_stack_begin, bsp_section_stack_size),
+#if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
+	/* BMan Portals */
+	ENTRY_DEV_CACHED(0xf4000000, 0x01000000),
+	ENTRY_DEV(0xf5000000, 0x01000000),
+	/* QMan Portals */
+	ENTRY_DEV_CACHED(0xf6000000, 0x01000000),
+	ENTRY_DEV(0xf7000000, 0x01000000),
+#endif
 	ENTRY_DEV(&qoriq, sizeof(qoriq))
 };
 
