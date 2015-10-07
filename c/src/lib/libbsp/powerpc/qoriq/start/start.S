@@ -28,6 +28,10 @@
 
 #include <bsp/vectors.h>
 
+#if (QORIQ_INITIAL_MSR & MSR_FP) != 0
+#define INITIALIZE_FPU
+#endif
+
 #define FIRST_TLB 0
 #define SCRATCH_TLB QORIQ_TLB1_ENTRY_COUNT - 1
 #define INITIAL_MSR r14
@@ -71,6 +75,10 @@ _start:
 	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
 	li	r0, 0
 	stw	r0, 0(r1)
+
+#ifdef INITIALIZE_FPU
+	bl	.Linitfpu
+#endif
 
 	/* Copy fast text */
 	LWI	r3, bsp_section_fast_text_begin
@@ -173,6 +181,51 @@ _start:
 
 	blr
 
+#ifdef INITIALIZE_FPU
+	/*
+	 * Write a value to the FPRs to initialize the hidden tag bits.  See
+	 * also "Core Software Initialization Requirements" of the e500mc
+	 * reference manual for example.
+	 */
+.Linitfpu:
+	li	r0, 0
+	stw	r0, 0(r1)
+	stw	r0, 4(r1)
+	lfd	f0, 0(r1)
+	fmr	f1, f0
+	fmr	f2, f0
+	fmr	f3, f0
+	fmr	f4, f0
+	fmr	f5, f0
+	fmr	f6, f0
+	fmr	f7, f0
+	fmr	f8, f0
+	fmr	f9, f0
+	fmr	f10, f0
+	fmr	f11, f0
+	fmr	f12, f0
+	fmr	f13, f0
+	fmr	f14, f0
+	fmr	f15, f0
+	fmr	f16, f0
+	fmr	f17, f0
+	fmr	f18, f0
+	fmr	f19, f0
+	fmr	f20, f0
+	fmr	f21, f0
+	fmr	f22, f0
+	fmr	f23, f0
+	fmr	f24, f0
+	fmr	f25, f0
+	fmr	f26, f0
+	fmr	f27, f0
+	fmr	f28, f0
+	fmr	f29, f0
+	fmr	f30, f0
+	fmr	f31, f0
+	blr
+#endif
+
 #ifdef RTEMS_SMP
 #if QORIQ_THREAD_COUNT > 1
 _start_thread:
@@ -222,6 +275,10 @@ _start_secondary_processor:
 	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
 	li	r0, 0
 	stw	r0, 0(r1)
+
+#ifdef INITIALIZE_FPU
+	bl	.Linitfpu
+#endif
 
 	/* Configure MMU */
 	li	r3, FIRST_TLB
