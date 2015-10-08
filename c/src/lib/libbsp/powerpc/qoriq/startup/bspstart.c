@@ -141,6 +141,11 @@ void bsp_start(void)
   /* Initalize interrupt support */
   bsp_interrupt_initialize();
 
+  rtems_cache_coherent_add_area(
+    bsp_section_nocacheheap_begin,
+    (uintptr_t) bsp_section_nocacheheap_size
+  );
+
   /* Disable boot page translation */
 #if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
   qoriq.lcc.bstar &= ~LCC_BSTAR_EN;

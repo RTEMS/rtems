@@ -63,6 +63,13 @@ typedef struct {
 	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW \
 }
 
+#define ENTRY_IO(b, s) { \
+	.begin = (uint32_t) b, \
+	.size = (uint32_t) s, \
+	.mas2 = FSL_EIS_MAS2_I | FSL_EIS_MAS2_G, \
+	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW \
+}
+
 #define ENTRY_DEV(b, s) { \
 	.begin = (uint32_t) b, \
 	.size = (uint32_t) s, \
@@ -103,6 +110,8 @@ static const entry DATA config [] = {
 	ENTRY_RW(bsp_section_rwextra_begin, bsp_section_rwextra_size),
 	ENTRY_RW(bsp_section_work_begin, bsp_section_work_size),
 	ENTRY_RW(bsp_section_stack_begin, bsp_section_stack_size),
+	ENTRY_IO(bsp_section_nocache_begin, bsp_section_nocache_size),
+	ENTRY_IO(bsp_section_nocacheheap_begin, bsp_section_nocacheheap_size),
 #if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
 	/* BMan Portals */
 	ENTRY_DEV_CACHED(0xf4000000, 0x01000000),
