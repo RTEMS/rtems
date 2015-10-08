@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2008-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -400,15 +400,18 @@ SECTIONS {
 	.nocache : ALIGN_WITH_INPUT {
 		bsp_section_nocache_begin = .;
 		*(SORT(.bsp_nocache*))
-		bsp_nocache_heap_begin = .;
-		. += ORIGIN (REGION_NOCACHE) + LENGTH (REGION_NOCACHE) - ABSOLUTE (.);
-		bsp_nocache_heap_end = .;
 		bsp_section_nocache_end = .;
 	} > REGION_NOCACHE AT > REGION_NOCACHE_LOAD
-	bsp_nocache_heap_size = bsp_nocache_heap_end - bsp_nocache_heap_begin;
 	bsp_section_nocache_size = bsp_section_nocache_end - bsp_section_nocache_begin;
 	bsp_section_nocache_load_begin = LOADADDR (.nocache);
 	bsp_section_nocache_load_end = bsp_section_nocache_load_begin + bsp_section_nocache_size;
+
+	.nocacheheap (NOLOAD) : ALIGN_WITH_INPUT {
+		bsp_section_nocacheheap_begin = .;
+		. += ORIGIN (REGION_NOCACHE) + LENGTH (REGION_NOCACHE) - ABSOLUTE (.);
+		bsp_section_nocacheheap_end = .;
+	} > REGION_NOCACHE AT > REGION_NOCACHE
+	bsp_section_nocacheheap_size = bsp_section_nocacheheap_end - bsp_section_nocacheheap_begin;
 
 	/* FIXME */
 	RamBase = ORIGIN (REGION_WORK);

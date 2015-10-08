@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -119,6 +119,10 @@ LINKER_SYMBOL(bsp_section_nocache_size)
 LINKER_SYMBOL(bsp_section_nocache_load_begin)
 LINKER_SYMBOL(bsp_section_nocache_load_end)
 
+LINKER_SYMBOL(bsp_section_nocacheheap_begin)
+LINKER_SYMBOL(bsp_section_nocacheheap_end)
+LINKER_SYMBOL(bsp_section_nocacheheap_size)
+
 LINKER_SYMBOL(bsp_vector_table_begin)
 LINKER_SYMBOL(bsp_vector_table_end)
 LINKER_SYMBOL(bsp_vector_table_size)
@@ -129,10 +133,6 @@ LINKER_SYMBOL(bsp_start_vector_table_size)
 
 LINKER_SYMBOL(bsp_translation_table_base)
 LINKER_SYMBOL(bsp_translation_table_end)
-
-LINKER_SYMBOL(bsp_nocache_heap_begin)
-LINKER_SYMBOL(bsp_nocache_heap_end)
-LINKER_SYMBOL(bsp_nocache_heap_size)
 
 #define BSP_FAST_TEXT_SECTION __attribute__((section(".bsp_fast_text")))
 

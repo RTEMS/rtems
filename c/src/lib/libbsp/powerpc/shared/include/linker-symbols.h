@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2010-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Donrierstr. 4
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -98,6 +98,10 @@ LINKER_SYMBOL(bsp_section_nocache_end)
 LINKER_SYMBOL(bsp_section_nocache_size)
 LINKER_SYMBOL(bsp_section_nocache_load_begin)
 LINKER_SYMBOL(bsp_section_nocache_load_end)
+
+LINKER_SYMBOL(bsp_section_nocacheheap_begin)
+LINKER_SYMBOL(bsp_section_nocacheheap_end)
+LINKER_SYMBOL(bsp_section_nocacheheap_size)
 
 LINKER_SYMBOL(bsp_section_nvram_begin)
 LINKER_SYMBOL(bsp_section_nvram_end)

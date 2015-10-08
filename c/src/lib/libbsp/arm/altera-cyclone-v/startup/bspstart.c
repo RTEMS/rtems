@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -22,7 +22,7 @@ void bsp_start( void )
   a9mpcore_clock_initialize_early();
   bsp_interrupt_initialize();
   rtems_cache_coherent_add_area(
-    bsp_nocache_heap_begin,
-    (uintptr_t) bsp_nocache_heap_size
+    bsp_section_nocacheheap_begin,
+    (uintptr_t) bsp_section_nocacheheap_size
   );
 }
