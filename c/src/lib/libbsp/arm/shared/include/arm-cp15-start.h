@@ -84,6 +84,10 @@ typedef struct {
     .begin = (uint32_t) bsp_section_nocache_begin, \
     .end = (uint32_t) bsp_section_nocache_end, \
     .flags = ARMV7_MMU_DEVICE \
+  }, { \
+    .begin = (uint32_t) bsp_section_nocacheheap_begin, \
+    .end = (uint32_t) bsp_section_nocacheheap_end, \
+    .flags = ARMV7_MMU_DEVICE \
   }
 
 BSP_START_DATA_SECTION extern const arm_cp15_start_section_config
