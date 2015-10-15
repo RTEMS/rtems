@@ -69,6 +69,7 @@ _start:
 	LWI	INITIAL_MSR, QORIQ_INITIAL_MSR
 	ori	r0, INITIAL_MSR, MSR_IS | MSR_DS
 	mtmsr	r0
+	isync
 
 	/* Initialize start stack */
 	LWI	r1, start_stack_end - PPC_MINIMUM_STACK_FRAME_SIZE
@@ -123,6 +124,7 @@ _start:
 	li	r4, SCRATCH_TLB
 	bl	qoriq_mmu_config
 	mtmsr	INITIAL_MSR
+	isync
 	li	r3, SCRATCH_TLB
 	bl	qoriq_tlb1_invalidate
 
@@ -269,6 +271,7 @@ _start_secondary_processor:
 	LWI	INITIAL_MSR, QORIQ_INITIAL_MSR
 	ori	r0, INITIAL_MSR, MSR_IS | MSR_DS
 	mtmsr	r0
+	isync
 
 	/* Initialize start stack */
 	subi	r1, r1, PPC_MINIMUM_STACK_FRAME_SIZE
@@ -285,6 +288,7 @@ _start_secondary_processor:
 	li	r4, SCRATCH_TLB
 	bl	qoriq_mmu_config
 	mtmsr	INITIAL_MSR
+	isync
 	li	r3, SCRATCH_TLB
 	bl	qoriq_tlb1_invalidate
 
