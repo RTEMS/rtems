@@ -79,6 +79,7 @@ AM_CONDITIONAL(DLTESTS,[test x"$TEST_LIBDL" = x"yes"])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+libfdt01/Makefile
 defaultconfig01/Makefile
 pwdgrp02/Makefile
 shell01/Makefile

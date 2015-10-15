@@ -1,0 +1,54 @@
+/*
+ * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
+/dts-v1/;
+
+/ {
+	compatible = "a,b";
+	#address-cells = <1>;
+	#size-cells = <2>;
+	model = "c";
+
+	d {
+		e = "f";
+		g;
+
+		h@0 {
+		};
+
+		h@1 {
+			w = <123>;
+		};
+	};
+
+	aliases {
+		k = "/m@1248";
+	};
+
+	l: m@1248 {
+		n = <0xdeadbeef 0x12345678>;
+
+		o {
+			p;
+		};
+
+		q {
+			r = "s";
+		};
+	};
+
+	t {
+		u = <&l>;
+	};
+};

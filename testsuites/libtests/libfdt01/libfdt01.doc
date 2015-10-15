@@ -1,0 +1,20 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: libfdt01
+
+directives:
+
+  - fdt_address_cells()
+  - fdt_check_header()
+  - fdt_get_alias()
+  - fdt_getprop()
+  - fdt_node_check_compatible()
+  - fdt_node_offset_by_phandle()
+  - fdt_path_offset()
+  - fdt_size_cells()
+  - fdt_subnode_offset()
+  - fdt_totalsize()
+
+concepts:
+
+  - Ensure that some libfdt functions work as expected.

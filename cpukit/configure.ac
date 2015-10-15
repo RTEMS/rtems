@@ -445,6 +445,7 @@ AC_CONFIG_FILES([
 Doxyfile
 Makefile
 dev/Makefile
+dtc/libfdt/Makefile
 rtems/Makefile
 sapi/Makefile
 score/Makefile
