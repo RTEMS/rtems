@@ -10,7 +10,7 @@
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2010 embedded brains GmbH.
+ *  Copyright (c) 2010-2015 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -187,6 +187,25 @@
 #endif
 
 /**
+ * @brief Instructs the compiler to place a specific variable or function in
+ * the specified section.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_SECTION( _section ) __attribute__((__section__(_section)))
+#else
+  #define RTEMS_SECTION( _section )
+#endif
+
+/**
+ * @brief Instructs the compiler that a specific variable or function is used.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_USED __attribute__((__used__))
+#else
+  #define RTEMS_USED
+#endif
+
+/**
  *  Instructs the compiler that a specific variable is deliberately unused.
  *  This can occur when reading volatile device memory or skipping arguments
  *  in a variable argument method.
@@ -315,6 +334,26 @@ extern void RTEMS_DEQUALIFY_types_not_compatible(void);
 
 #endif /*RTEMS_DEQUALIFY_DEPTHX*/
 #endif /*RTEMS_DEQUALIFY*/
+
+/**
+ * @brief Concatenates _x and _y without expanding.
+ */
+#define RTEMS_CONCAT( _x, _y ) _x##_y
+
+/**
+ * @brief Concatenates expansion of _x and expansion of _y.
+ */
+#define RTEMS_XCONCAT( _x, _y ) RTEMS_CONCAT( _x, _y )
+
+/**
+ * @brief Stringifies _x  without expanding.
+ */
+#define RTEMS_STRING( _x ) #_x
+
+/**
+ * @brief Stringifies expansion of _x.
+ */
+#define RTEMS_XSTRING( _x ) RTEMS_STRING( _x )
 
 #ifndef ASM
   #ifdef RTEMS_DEPRECATED_TYPES
