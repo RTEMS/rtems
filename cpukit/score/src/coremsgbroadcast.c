@@ -29,8 +29,8 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
     Objects_Id                                 id,
     CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
   #else
-    Objects_Id                                 id __attribute__((unused)),
-    CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support __attribute__((unused)),
+    Objects_Id                                 id RTEMS_UNUSED,
+    CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support RTEMS_UNUSED,
   #endif
   uint32_t                                  *count,
   ISR_lock_Context                          *lock_context

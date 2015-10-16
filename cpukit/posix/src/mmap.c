@@ -18,13 +18,19 @@
 #include <sys/mman.h>
 
 void *mmap(
-  void   *addr __attribute__((unused)),
-  size_t  lenhth __attribute__((unused)),
-  int     prot __attribute__((unused)),
-  int     flags __attribute__((unused)),
-  int     fildes __attribute__((unused)),
+  void   *addr,
+  size_t  lenhth,
+  int     prot,
+  int     flags,
+  int     fildes,
   off_t   off
 )
 {
+  (void) addr;
+  (void) lenhth;
+  (void) prot;
+  (void) flags;
+  (void) fildes;
+  (void) off;
   return MAP_FAILED;
 }

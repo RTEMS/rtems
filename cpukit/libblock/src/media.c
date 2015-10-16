@@ -646,7 +646,7 @@ static rtems_status_code attach_and_mount_partitions(
 static rtems_status_code partition_inquiry_worker(
   rtems_media_state state,
   const char *src,
-  char **dest __attribute__((unused)),
+  char **dest RTEMS_UNUSED,
   void *worker_arg
 )
 {
@@ -749,8 +749,8 @@ static rtems_status_code do_disk_attach(
 static rtems_status_code unmount_worker(
   rtems_media_state state,
   const char *src,
-  char **dest __attribute__((unused)),
-  void *worker_arg __attribute__((unused))
+  char **dest RTEMS_UNUSED,
+  void *worker_arg RTEMS_UNUSED
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -795,8 +795,8 @@ static rtems_status_code do_unmount(
 static rtems_status_code disk_detach_worker(
   rtems_media_state state,
   const char *src,
-  char **dest __attribute__((unused)),
-  void *worker_arg __attribute__((unused))
+  char **dest RTEMS_UNUSED,
+  void *worker_arg RTEMS_UNUSED
 )
 {
   rtems_status_code rsc = RTEMS_SUCCESSFUL;

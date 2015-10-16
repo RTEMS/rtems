@@ -17,8 +17,9 @@
 #include <errno.h>
 
 /* This is a non-functional stub */
-int ftrylockfile(FILE* file __attribute__((unused)))
+int ftrylockfile(FILE* file)
 {
+  (void) file;
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }
 

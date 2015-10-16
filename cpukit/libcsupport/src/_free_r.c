@@ -23,10 +23,11 @@
 #include <stdlib.h>
 
 void _free_r(
-  struct _reent *ignored __attribute__((unused)),
+  struct _reent *ignored,
   void          *ptr
 )
 {
+  (void) ignored;
   free( ptr );
 }
 #endif

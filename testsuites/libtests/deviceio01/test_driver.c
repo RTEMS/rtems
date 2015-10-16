@@ -35,8 +35,8 @@ static char initialized;
  */
 rtems_device_driver testDriver_initialize(
   rtems_device_major_number major,
-  rtems_device_minor_number minor __attribute__((unused)),
-  void *pargp __attribute__((unused))
+  rtems_device_minor_number minor RTEMS_UNUSED,
+  void *pargp RTEMS_UNUSED
 )
 {
   rtems_device_driver status;
@@ -72,9 +72,9 @@ rtems_device_driver testDriver_initialize(
  *    rval       - RTEMS_SUCCESSFUL
  */
 rtems_device_driver testDriver_open(
-  rtems_device_major_number major __attribute__((unused)),
-  rtems_device_minor_number minor __attribute__((unused)),
-  void *pargp __attribute__((unused))
+  rtems_device_major_number major RTEMS_UNUSED,
+  rtems_device_minor_number minor RTEMS_UNUSED,
+  void *pargp RTEMS_UNUSED
 )
 {
   return RTEMS_SUCCESSFUL;
@@ -93,9 +93,9 @@ rtems_device_driver testDriver_open(
  *    rval       - RTEMS_SUCCESSFUL
  */
 rtems_device_driver testDriver_close(
-  rtems_device_major_number major __attribute__((unused)),
-  rtems_device_minor_number minor __attribute__((unused)),
-  void *pargp __attribute__((unused))
+  rtems_device_major_number major RTEMS_UNUSED,
+  rtems_device_minor_number minor RTEMS_UNUSED,
+  void *pargp RTEMS_UNUSED
 )
 {
   return RTEMS_SUCCESSFUL;
@@ -114,8 +114,8 @@ rtems_device_driver testDriver_close(
  *    rval       - RTEMS_SUCCESSFUL
  */
 rtems_device_driver testDriver_read(
-  rtems_device_major_number major __attribute__((unused)),
-  rtems_device_minor_number minor __attribute__((unused)),
+  rtems_device_major_number major RTEMS_UNUSED,
+  rtems_device_minor_number minor RTEMS_UNUSED,
   void *pargp
 )
 {
@@ -146,8 +146,8 @@ rtems_device_driver testDriver_read(
  *    rval       - RTEMS_SUCCESSFUL
  */
 rtems_device_driver testDriver_write(
-  rtems_device_major_number major __attribute__((unused)),
-  rtems_device_minor_number minor __attribute__((unused)),
+  rtems_device_major_number major RTEMS_UNUSED,
+  rtems_device_minor_number minor RTEMS_UNUSED,
   void *pargp
 )
 {
@@ -179,9 +179,9 @@ rtems_device_driver testDriver_write(
  */
 
 rtems_device_driver testDriver_control(
-  rtems_device_major_number major __attribute__((unused)),
-  rtems_device_minor_number minor __attribute__((unused)),
-  void *pargp __attribute__((unused))
+  rtems_device_major_number major RTEMS_UNUSED,
+  rtems_device_minor_number minor RTEMS_UNUSED,
+  void *pargp RTEMS_UNUSED
 )
 {
   return RTEMS_NOT_IMPLEMENTED;

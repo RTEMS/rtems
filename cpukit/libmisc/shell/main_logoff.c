@@ -21,8 +21,8 @@
 #include "internal.h"
 
 static int rtems_shell_main_logoff(
-  int   argc __attribute__((unused)),
-  char *argv[] __attribute__((unused))
+  int   argc RTEMS_UNUSED,
+  char *argv[] RTEMS_UNUSED
 )
 {
   rtems_shell_env_t *env = rtems_shell_get_current_env();

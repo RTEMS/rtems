@@ -37,7 +37,7 @@
 #include <rtems/monitor.h>
 #include <rtems/cpuuse.h>
 #
-#define RC_UNUSED __attribute__((unused))
+#define RC_UNUSED RTEMS_UNUSED
 
 #define RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS (20)
 

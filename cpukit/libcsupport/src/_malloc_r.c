@@ -18,10 +18,11 @@
 #include <stdlib.h>
 
 void *_malloc_r(
-  struct _reent *ignored __attribute__((unused)),
+  struct _reent *ignored,
   size_t         size
 )
 {
+  (void) ignored;
   return malloc( size );
 }
 #endif

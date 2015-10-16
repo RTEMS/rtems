@@ -239,7 +239,7 @@ int fcntl(
 #include <reent.h>
 
 int _fcntl_r(
-  struct _reent *ptr __attribute__((unused)),
+  struct _reent *ptr RTEMS_UNUSED,
   int fd,
   int cmd,
   int arg

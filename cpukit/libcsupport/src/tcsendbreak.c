@@ -30,8 +30,8 @@
 #include <rtems/libio.h>
 
 int tcsendbreak (
-  int fd __attribute__((unused)),
-  int duration __attribute__((unused)) )
+  int fd RTEMS_UNUSED,
+  int duration RTEMS_UNUSED )
 {
   return 0;
 }

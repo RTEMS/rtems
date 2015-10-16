@@ -30,8 +30,8 @@
  */
 rtems_device_driver
 rtems_blkdev_generic_read(
-    rtems_device_major_number major __attribute__((unused)),
-    rtems_device_minor_number minor __attribute__((unused)),
+    rtems_device_major_number major RTEMS_UNUSED,
+    rtems_device_minor_number minor RTEMS_UNUSED,
     void                    * arg)
 {
     rtems_status_code rc = RTEMS_SUCCESSFUL;
@@ -77,8 +77,8 @@ rtems_blkdev_generic_read(
  */
 rtems_device_driver
 rtems_blkdev_generic_write(
-    rtems_device_major_number major __attribute__((unused)),
-    rtems_device_minor_number minor __attribute__((unused)),
+    rtems_device_major_number major RTEMS_UNUSED,
+    rtems_device_minor_number minor RTEMS_UNUSED,
     void                    * arg)
 {
     rtems_status_code rc = RTEMS_SUCCESSFUL;
@@ -152,8 +152,8 @@ rtems_blkdev_generic_open(
  */
 rtems_device_driver
 rtems_blkdev_generic_close(
-    rtems_device_major_number major __attribute__((unused)),
-    rtems_device_minor_number minor __attribute__((unused)),
+    rtems_device_major_number major RTEMS_UNUSED,
+    rtems_device_minor_number minor RTEMS_UNUSED,
     void                    * arg)
 {
   rtems_libio_open_close_args_t *oc = arg;
@@ -170,8 +170,8 @@ rtems_blkdev_generic_close(
  */
 rtems_device_driver
 rtems_blkdev_generic_ioctl(
-    rtems_device_major_number major __attribute__((unused)),
-    rtems_device_minor_number minor __attribute__((unused)),
+    rtems_device_major_number major RTEMS_UNUSED,
+    rtems_device_minor_number minor RTEMS_UNUSED,
     void                    * arg)
 {
     rtems_libio_ioctl_args_t *args = arg;

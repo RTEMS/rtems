@@ -53,7 +53,7 @@ ssize_t read(
  *  This is the Newlib dependent reentrant version of read().
  */
 ssize_t _read_r(
-  struct _reent *ptr __attribute__((unused)),
+  struct _reent *ptr RTEMS_UNUSED,
   int            fd,
   void          *buf,
   size_t         nbytes

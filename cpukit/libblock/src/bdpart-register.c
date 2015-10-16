@@ -142,7 +142,7 @@ rtems_status_code rtems_bdpart_register_from_disk( const char *disk_name)
 
 rtems_status_code rtems_bdpart_unregister(
   const char *disk_name,
-  const rtems_bdpart_partition *pt __attribute__((unused)),
+  const rtems_bdpart_partition *pt RTEMS_UNUSED,
   size_t count
 )
 {

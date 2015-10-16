@@ -29,8 +29,8 @@ uint32_t _CORE_barrier_Release(
   Objects_Id                           id,
   CORE_barrier_API_mp_support_callout  api_barrier_mp_support
 #else
-  Objects_Id                           id __attribute__((unused)),
-  CORE_barrier_API_mp_support_callout  api_barrier_mp_support __attribute__((unused))
+  Objects_Id                           id RTEMS_UNUSED,
+  CORE_barrier_API_mp_support_callout  api_barrier_mp_support RTEMS_UNUSED
 #endif
 )
 {

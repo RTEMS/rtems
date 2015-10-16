@@ -23,11 +23,12 @@
 #include <stdlib.h>
 
 void *_realloc_r(
-  struct _reent *ignored __attribute__((unused)),
+  struct _reent *ignored,
   void          *ptr,
   size_t         size
 )
 {
+  (void) ignored;
   return realloc( ptr, size );
 }
 #endif

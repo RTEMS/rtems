@@ -30,7 +30,7 @@ pid_t getpid( void )
  *  This is the Newlib dependent reentrant version of getpid().
  */
 pid_t _getpid_r(
-  struct _reent *ptr __attribute__((unused))
+  struct _reent *ptr RTEMS_UNUSED
 )
 {
   return getpid();

@@ -34,7 +34,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
   #if defined(RTEMS_MULTIPROCESSING)
     CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
   #else
-    CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support  __attribute__((unused)),
+    CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support  RTEMS_UNUSED,
   #endif
   CORE_message_queue_Submit_types            submit_type,
   bool                                       wait,

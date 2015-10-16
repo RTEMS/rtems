@@ -111,7 +111,7 @@ done:
 
 void
 rtems_monitor_server_task(
-    rtems_task_argument monitor_flags __attribute__((unused))
+    rtems_task_argument monitor_flags RTEMS_UNUSED
 )
 {
     rtems_monitor_server_request_t  request;
@@ -214,7 +214,7 @@ rtems_monitor_server_kill(void)
 
 void
 rtems_monitor_server_init(
-    uint32_t   monitor_flags __attribute__((unused))
+    uint32_t   monitor_flags RTEMS_UNUSED
 )
 {
     #if defined(RTEMS_MULTIPROCESSING)

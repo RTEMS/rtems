@@ -115,7 +115,7 @@ clock_t times(
  *  This is the Newlib dependent reentrant version of times().
  */
 clock_t _times_r(
-   struct _reent *ptr __attribute__((unused)),
+   struct _reent *ptr RTEMS_UNUSED,
    struct tms  *ptms
 )
 {

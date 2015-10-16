@@ -55,7 +55,7 @@ sem_t *sem_open(
    * have it because we have to work through the variable
    * arguments to get to attr.
    */
-  mode_t                     mode RTEMS_COMPILER_UNUSED_ATTRIBUTE;
+  mode_t                     mode RTEMS_UNUSED;
 
   va_list                    arg;
   unsigned int               value = 0;

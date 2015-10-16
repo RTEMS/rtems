@@ -161,7 +161,7 @@ int open( const char *path, int oflag, ... )
  *  This is the Newlib dependent reentrant version of open().
  */
 int _open_r(
-  struct _reent *ptr __attribute__((unused)),
+  struct _reent *ptr RTEMS_UNUSED,
   const char    *buf,
   int            oflag,
   int            mode

@@ -27,10 +27,10 @@
 #include <rtems/score/heapimpl.h>
 
 uintptr_t _Heap_No_extend(
-  Heap_Control *unused_0 __attribute__((unused)),
-  void *unused_1 __attribute__((unused)),
-  uintptr_t unused_2 __attribute__((unused)),
-  uintptr_t unused_3 __attribute__((unused))
+  Heap_Control *unused_0 RTEMS_UNUSED,
+  void *unused_1 RTEMS_UNUSED,
+  uintptr_t unused_2 RTEMS_UNUSED,
+  uintptr_t unused_3 RTEMS_UNUSED
 )
 {
   return 0;

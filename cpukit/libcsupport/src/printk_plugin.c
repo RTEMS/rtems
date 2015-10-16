@@ -22,12 +22,14 @@
 #include <rtems/bspIo.h>
 
 int printk_plugin(
-  void *ignored __attribute__((unused)),
+  void *ignored,
   const char *format,
   ...
 )
 {
   va_list arg_pointer;
+
+  (void) ignored;
 
   va_start (arg_pointer, format);
 

@@ -28,8 +28,8 @@
 #include <rtems/monitor.h>
 
 void mon_ifconfig(int argc, char *argv[],
-  uint32_t command_arg __attribute__((unused)),
-  bool verbose __attribute__((unused)))
+  uint32_t command_arg RTEMS_UNUSED,
+  bool verbose RTEMS_UNUSED)
 {
     struct sockaddr_in  ipaddr;
     struct sockaddr_in  dstaddr;
@@ -233,8 +233,8 @@ void mon_ifconfig(int argc, char *argv[],
 
 
 void mon_route(int argc, char *argv[],
-  uint32_t command_arg __attribute__((unused)),
-  bool verbose __attribute__((unused)))
+  uint32_t command_arg RTEMS_UNUSED,
+  bool verbose RTEMS_UNUSED)
 {
     int                cmd;
     struct sockaddr_in dst;

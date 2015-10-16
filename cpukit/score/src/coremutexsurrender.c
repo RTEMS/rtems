@@ -91,8 +91,8 @@ CORE_mutex_Status _CORE_mutex_Surrender(
   Objects_Id                         id,
   CORE_mutex_API_mp_support_callout  api_mutex_mp_support,
 #else
-  Objects_Id                         id __attribute__((unused)),
-  CORE_mutex_API_mp_support_callout  api_mutex_mp_support __attribute__((unused)),
+  Objects_Id                         id RTEMS_UNUSED,
+  CORE_mutex_API_mp_support_callout  api_mutex_mp_support RTEMS_UNUSED,
 #endif
   ISR_lock_Context                  *lock_context
 )

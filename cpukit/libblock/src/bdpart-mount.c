@@ -32,7 +32,7 @@
 
 rtems_status_code rtems_bdpart_mount(
   const char *disk_name,
-  const rtems_bdpart_partition *pt __attribute__((unused)),
+  const rtems_bdpart_partition *pt RTEMS_UNUSED,
   size_t count,
   const char *mount_base
 )
@@ -118,7 +118,7 @@ cleanup:
 
 rtems_status_code rtems_bdpart_unmount(
   const char *disk_name,
-  const rtems_bdpart_partition *pt __attribute__((unused)),
+  const rtems_bdpart_partition *pt RTEMS_UNUSED,
   size_t count,
   const char *mount_base
 )

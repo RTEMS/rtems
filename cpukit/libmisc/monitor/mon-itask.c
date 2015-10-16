@@ -35,7 +35,7 @@ rtems_monitor_init_task_canonical(
 
 const void *
 rtems_monitor_init_task_next(
-    void                  *object_info __attribute__((unused)),
+    void                  *object_info RTEMS_UNUSED,
     rtems_monitor_init_task_t *canonical_init_task,
     rtems_id              *next_id
 )
@@ -68,7 +68,7 @@ failed:
 
 void
 rtems_monitor_init_task_dump_header(
-    bool verbose __attribute__((unused))
+    bool verbose RTEMS_UNUSED
 )
 {
     fprintf(stdout,"\

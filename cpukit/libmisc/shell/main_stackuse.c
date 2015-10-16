@@ -21,8 +21,8 @@
 #include "internal.h"
 
 static int rtems_shell_main_stackuse(
-  int   argc __attribute__((unused)),
-  char *argv[] __attribute__((unused))
+  int   argc RTEMS_UNUSED,
+  char *argv[] RTEMS_UNUSED
 )
 {
   rtems_stack_checker_report_usage_with_plugin(

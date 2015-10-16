@@ -1990,7 +1990,7 @@ session(rtems_task_argument arg)
  *   NONE
  */
 static void
-daemon(rtems_task_argument args __attribute__((unused)))
+daemon(rtems_task_argument args RTEMS_UNUSED)
 {
   int                 s;
   socklen_t	      addrLen;

@@ -55,7 +55,7 @@ rtems_monitor_task_canonical(
 
 void
 rtems_monitor_task_dump_header(
-    bool verbose __attribute__((unused))
+    bool verbose RTEMS_UNUSED
 )
 {
     fprintf(stdout,"\
@@ -71,7 +71,7 @@ ID         NAME       CPU PRI STATE  MODES    EVENTS WAITID   WAITQUEUE\n"); /*
 void
 rtems_monitor_task_dump(
     rtems_monitor_task_t *monitor_task,
-    bool                  verbose __attribute__((unused))
+    bool                  verbose RTEMS_UNUSED
 )
 {
     int length = 0;

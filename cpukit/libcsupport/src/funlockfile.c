@@ -24,8 +24,9 @@
 /**
  * This is a non-functional stub 
  */
-void funlockfile(FILE* file __attribute__((unused)))
+void funlockfile(FILE* file)
 {
+  (void) file;
 }
 
 #endif

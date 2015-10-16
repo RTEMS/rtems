@@ -105,13 +105,13 @@ __env_unlock(struct _reent *r)
 #include <rtems/libio_.h>
 
 void
-__env_lock(struct _reent *r __attribute__((unused)))
+__env_lock(struct _reent *r RTEMS_UNUSED)
 {
   rtems_libio_lock();
 }
 
 void
-__env_unlock(struct _reent *r __attribute__((unused)))
+__env_unlock(struct _reent *r RTEMS_UNUSED)
 {
   rtems_libio_unlock();
 }

@@ -22,7 +22,7 @@ rtems_assoc_name_bad(
 #ifdef RTEMS_DEBUG
     uint32_t   bad_value
 #else
-    uint32_t   bad_value __attribute((unused))
+    uint32_t   bad_value RTEMS_UNUSED
 #endif
 )
 {

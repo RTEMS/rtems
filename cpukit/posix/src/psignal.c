@@ -47,7 +47,7 @@ RTEMS_STATIC_ASSERT(
 sigset_t  _POSIX_signals_Pending;
 
 void _POSIX_signals_Abnormal_termination_handler(
-  int signo __attribute__((unused)) )
+  int signo RTEMS_UNUSED )
 {
   exit( 1 );
 }

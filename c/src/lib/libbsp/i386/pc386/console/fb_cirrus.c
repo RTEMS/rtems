@@ -277,7 +277,7 @@ fb_cirrus_write_hdr_reg (
     const struct cirrus_board_str *fbst,
     unsigned int val)
 {
-  volatile unsigned int dummy __attribute__((unused));
+  volatile unsigned int dummy RTEMS_UNUSED;
   dummy = fb_cirrus_read_reg8(fbst, VGA_DAC_MASK);
   dummy = fb_cirrus_read_reg8(fbst, VGA_DAC_MASK);
   dummy = fb_cirrus_read_reg8(fbst, VGA_DAC_MASK);

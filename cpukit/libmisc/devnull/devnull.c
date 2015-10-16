@@ -44,8 +44,8 @@ static char initialized;
 
 rtems_device_driver null_initialize(
   rtems_device_major_number major,
-  rtems_device_minor_number minor __attribute__((unused)),
-  void *pargp __attribute__((unused))
+  rtems_device_minor_number minor RTEMS_UNUSED,
+  void *pargp RTEMS_UNUSED
 )
 {
   rtems_device_driver status;
@@ -82,9 +82,9 @@ rtems_device_driver null_initialize(
  */
 
 rtems_device_driver null_open(
-  rtems_device_major_number major __attribute__((unused)),
-  rtems_device_minor_number minor __attribute__((unused)),
-  void *pargp __attribute__((unused))
+  rtems_device_major_number major RTEMS_UNUSED,
+  rtems_device_minor_number minor RTEMS_UNUSED,
+  void *pargp RTEMS_UNUSED
 )
 {
   return NULL_SUCCESSFUL;
@@ -105,9 +105,9 @@ rtems_device_driver null_open(
  */
 
 rtems_device_driver null_close(
-  rtems_device_major_number major __attribute__((unused)),
-  rtems_device_minor_number minor __attribute__((unused)),
-  void *pargp __attribute__((unused))
+  rtems_device_major_number major RTEMS_UNUSED,
+  rtems_device_minor_number minor RTEMS_UNUSED,
+  void *pargp RTEMS_UNUSED
 )
 {
   return NULL_SUCCESSFUL;
@@ -128,9 +128,9 @@ rtems_device_driver null_close(
  */
 
 rtems_device_driver null_read(
-  rtems_device_major_number major __attribute__((unused)),
-  rtems_device_minor_number minor __attribute__((unused)),
-  void *pargp __attribute__((unused))
+  rtems_device_major_number major RTEMS_UNUSED,
+  rtems_device_minor_number minor RTEMS_UNUSED,
+  void *pargp RTEMS_UNUSED
 )
 {
   return NULL_SUCCESSFUL;
@@ -151,8 +151,8 @@ rtems_device_driver null_read(
  */
 
 rtems_device_driver null_write(
-  rtems_device_major_number major __attribute__((unused)),
-  rtems_device_minor_number minor __attribute__((unused)),
+  rtems_device_major_number major RTEMS_UNUSED,
+  rtems_device_minor_number minor RTEMS_UNUSED,
   void *pargp
 )
 {
@@ -179,9 +179,9 @@ rtems_device_driver null_write(
  */
 
 rtems_device_driver null_control(
-  rtems_device_major_number major __attribute__((unused)),
-  rtems_device_minor_number minor __attribute__((unused)),
-  void *pargp __attribute__((unused))
+  rtems_device_major_number major RTEMS_UNUSED,
+  rtems_device_minor_number minor RTEMS_UNUSED,
+  void *pargp RTEMS_UNUSED
 )
 {
   return NULL_SUCCESSFUL;

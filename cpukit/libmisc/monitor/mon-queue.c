@@ -24,7 +24,7 @@ rtems_monitor_queue_canonical(
 
 void
 rtems_monitor_queue_dump_header(
-    bool verbose __attribute__((unused))
+    bool verbose RTEMS_UNUSED
 )
 {
     fprintf(stdout,"\
@@ -44,7 +44,7 @@ rtems_monitor_queue_dump_header(
 void
 rtems_monitor_queue_dump(
     rtems_monitor_queue_t *monitor_queue,
-    bool  verbose __attribute__((unused))
+    bool  verbose RTEMS_UNUSED
 )
 {
     uint32_t              length = 0;

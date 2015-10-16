@@ -1127,7 +1127,7 @@ static uint32_t lpc_eth_mdio_read_anlpar(int phy)
 
 static int lpc_eth_mdio_read(
   int phy,
-  void *arg __attribute__((unused)),
+  void *arg RTEMS_UNUSED,
   unsigned reg,
   uint32_t *val
 )
@@ -1152,7 +1152,7 @@ static int lpc_eth_mdio_read(
 
 static int lpc_eth_mdio_write(
   int phy,
-  void *arg __attribute__((unused)),
+  void *arg RTEMS_UNUSED,
   unsigned reg,
   uint32_t val
 )
@@ -1811,7 +1811,7 @@ cleanup:
 }
 
 static int lpc_eth_detach(
-  struct rtems_bsdnet_ifconfig *config __attribute__((unused))
+  struct rtems_bsdnet_ifconfig *config RTEMS_UNUSED
 )
 {
   /* FIXME: Detach the interface from the upper layers? */

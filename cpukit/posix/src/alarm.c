@@ -33,8 +33,8 @@
  *  _POSIX_signals_Alarm_TSR
  */
 static void _POSIX_signals_Alarm_TSR(
-  Objects_Id      id __attribute__((unused)),
-  void           *argument __attribute__((unused))
+  Objects_Id      id RTEMS_UNUSED,
+  void           *argument RTEMS_UNUSED
 )
 {
   #if defined(RTEMS_DEBUG)

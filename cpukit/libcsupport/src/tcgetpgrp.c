@@ -26,8 +26,9 @@
 /**
  *  POSIX 1003.1b 7.2.3 - Get Foreground Process Group ID
  */
-pid_t tcgetpgrp(int fd __attribute__((unused)))
+pid_t tcgetpgrp(int fd)
 {
+  (void) fd;
   return getpid();
 }
 

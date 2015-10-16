@@ -41,6 +41,7 @@
 
 #include <sys/cdefs.h>
 #include <setjmp.h>
+#include <rtems.h>
 
 #define major(d) rtems_filesystem_dev_major_t(d)
 #define minor(d) rtems_filesystem_dev_minor_t(d)

@@ -802,7 +802,7 @@ BSP_uart_termios_isr_com2(void *ignored)
 }
 
 /* ================= GDB support     ===================*/
-int BSP_uart_dbgisr_com_regsav[4] __attribute__ ((unused));
+int BSP_uart_dbgisr_com_regsav[4] RTEMS_UNUSED;
 
 /*
  * Interrupt service routine for COM1 - all,

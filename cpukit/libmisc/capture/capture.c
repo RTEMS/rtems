@@ -563,7 +563,7 @@ rtems_capture_trigger (rtems_tcb* ft,
  * buffer. It is assumed we have a working heap at stage of initialization.
  */
 rtems_status_code
-rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribute__((unused)))
+rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp RTEMS_UNUSED)
 {
   rtems_status_code       sc = RTEMS_SUCCESSFUL;
   size_t                  count;

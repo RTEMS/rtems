@@ -28,10 +28,11 @@
 #include <sys/stat.h>
 
 int _isatty_r(
-  struct _reent *ptr __attribute__((unused)),
+  struct _reent *ptr,
   int            fd
 )
 {
+  (void) ptr;
   return isatty( fd );
 }
 #endif

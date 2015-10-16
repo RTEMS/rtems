@@ -51,7 +51,7 @@ int close(
 #include <reent.h>
 
 int _close_r(
-  struct _reent *ptr __attribute__((unused)),
+  struct _reent *ptr RTEMS_UNUSED,
   int            fd
 )
 {

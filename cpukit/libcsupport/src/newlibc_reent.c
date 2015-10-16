@@ -31,7 +31,7 @@
 #include <rtems/score/wkspace.h>
 
 bool newlib_create_hook(
-  rtems_tcb *current_task __attribute__((unused)),
+  rtems_tcb *current_task RTEMS_UNUSED,
   rtems_tcb *creating_task
 )
 {

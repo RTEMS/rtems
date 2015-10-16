@@ -218,18 +218,18 @@ static char *get_posix_name(char a, char b, char c, int i)
 }
 
 #if !defined(RTEMS_SMP)
-static void task_var_dtor(void *var __attribute__((unused)))
+static void task_var_dtor(void *var RTEMS_UNUSED)
 {
   /* Do nothing */
 }
 #endif
 
-static void *posix_thread(void *arg __attribute__((unused)))
+static void *posix_thread(void *arg RTEMS_UNUSED)
 {
   rtems_test_assert(0);
 }
 
-static void posix_key_dtor(void *key __attribute__((unused)))
+static void posix_key_dtor(void *key RTEMS_UNUSED)
 {
   /* Do nothing */
 }

@@ -65,7 +65,7 @@ int unlink( const char *path )
  *  This is the Newlib dependent reentrant version of unlink().
  */
 int _unlink_r(
-  struct _reent *ptr __attribute__((unused)),
+  struct _reent *ptr RTEMS_UNUSED,
   const char    *path
 )
 {

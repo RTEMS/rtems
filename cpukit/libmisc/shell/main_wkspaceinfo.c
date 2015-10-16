@@ -30,8 +30,8 @@ void rtems_shell_print_unified_work_area_message(void)
 }
 
 static int rtems_shell_main_wkspace_info(
-  int   argc __attribute__((unused)),
-  char *argv[] __attribute__((unused))
+  int   argc RTEMS_UNUSED,
+  char *argv[] RTEMS_UNUSED
 )
 {
   Heap_Information_block info;

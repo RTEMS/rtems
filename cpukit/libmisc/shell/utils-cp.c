@@ -85,7 +85,7 @@ set_utimes(const char *file, struct stat *fs)
 }
 
 int
-copy_file(rtems_shell_cp_globals* cp_globals __attribute__((unused)), FTSENT *entp, int dne)
+copy_file(rtems_shell_cp_globals* cp_globals RTEMS_UNUSED, FTSENT *entp, int dne)
 {
 #define MAX_READ max_read
   int max_read;
@@ -415,7 +415,7 @@ setfile(rtems_shell_cp_globals* cp_globals, struct stat *fs, int fd)
 }
 
 int
-preserve_fd_acls(int source_fd __attribute__((unused)), int dest_fd __attribute__((unused)))
+preserve_fd_acls(int source_fd RTEMS_UNUSED, int dest_fd RTEMS_UNUSED)
 {
 #if 0
 	struct acl *aclp;
@@ -441,7 +441,7 @@ preserve_fd_acls(int source_fd __attribute__((unused)), int dest_fd __attribute_
 }
 
 int
-preserve_dir_acls(struct stat *fs __attribute__((unused)), char *source_dir __attribute__((unused)), char *dest_dir __attribute__((unused)))
+preserve_dir_acls(struct stat *fs RTEMS_UNUSED, char *source_dir RTEMS_UNUSED, char *dest_dir RTEMS_UNUSED)
 {
 #if 0
 	acl_t (*aclgetf)(const char *, acl_type_t);

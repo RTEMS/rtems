@@ -247,7 +247,7 @@
            Empty_directive()
 
 #if defined(__GNUC__)
-#define RTEMS_GCC_NOWARN_UNUSED	__attribute__((unused))
+#define RTEMS_GCC_NOWARN_UNUSED	RTEMS_UNUSED
 #else
 #define RTEMS_GCC_NOWARN_UNUSED
 #endif

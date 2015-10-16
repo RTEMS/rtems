@@ -69,7 +69,7 @@ int _STAT_NAME( const char *path, struct stat *buf )
  *  Prototype to avoid warnings
  */
 int _STAT_R_NAME(
-  struct _reent *ptr __attribute__((unused)),
+  struct _reent *ptr RTEMS_UNUSED,
   const char    *path,
   struct stat   *buf
 );
@@ -78,7 +78,7 @@ int _STAT_R_NAME(
  *  This is the Newlib dependent reentrant version of stat() and lstat().
  */
 int _STAT_R_NAME(
-  struct _reent *ptr __attribute__((unused)),
+  struct _reent *ptr RTEMS_UNUSED,
   const char    *path,
   struct stat   *buf
 )

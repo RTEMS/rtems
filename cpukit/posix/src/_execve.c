@@ -28,10 +28,13 @@
 #include <sys/unistd.h>
 
 int _execve(
-  const char *path __attribute__((unused)),
-  char *const argv[] __attribute__((unused)),
-  char *const envp[] __attribute__((unused))
+  const char *path,
+  char *const argv[],
+  char *const envp[]
 )
 {
+  (void) path;
+  (void) argv;
+  (void) envp;
   rtems_set_errno_and_return_minus_one( ENOSYS );
 }

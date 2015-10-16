@@ -24,7 +24,7 @@
 #include <rtems/score/heapimpl.h>
 
 static bool _Heap_Get_information_visitor(
-  const Heap_Block *block __attribute__((unused)),
+  const Heap_Block *block RTEMS_UNUSED,
   uintptr_t block_size,
   bool block_is_used,
   void *visitor_arg

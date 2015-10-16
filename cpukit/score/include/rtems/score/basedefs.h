@@ -217,10 +217,13 @@
  *  in a variable argument method.
  */
 #if defined(__GNUC__)
-  #define RTEMS_COMPILER_UNUSED_ATTRIBUTE __attribute__((unused))
+  #define RTEMS_UNUSED __attribute__((__unused__))
 #else
-  #define RTEMS_COMPILER_UNUSED_ATTRIBUTE
+  #define RTEMS_UNUSED
 #endif
+
+/* Provided for backward compatibility */
+#define RTEMS_COMPILER_UNUSED_ATTRIBUTE RTEMS_UNUSED
 
 /**
  *  Instructs the compiler that a specific structure or union members will be

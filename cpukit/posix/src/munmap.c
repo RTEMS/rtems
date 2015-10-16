@@ -18,9 +18,11 @@
 #include <sys/mman.h>
 
 int munmap(
-  void   *addr __attribute__((unused)),
-  size_t  length __attribute__((unused))
+  void   *addr,
+  size_t  length
 )
 {
+  (void) addr;
+  (void) length;
   return -1;
 }

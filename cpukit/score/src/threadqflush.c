@@ -26,7 +26,7 @@ void _Thread_queue_Flush(
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_Flush_callout  remote_extract_callout,
 #else
-  Thread_queue_Flush_callout  remote_extract_callout __attribute__((unused)),
+  Thread_queue_Flush_callout  remote_extract_callout RTEMS_UNUSED,
 #endif
   uint32_t                    status
 )

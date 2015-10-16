@@ -24,8 +24,8 @@
 rtems_device_driver
 ramdisk_initialize(
     rtems_device_major_number major,
-    rtems_device_minor_number minor __attribute__((unused)),
-    void *arg __attribute__((unused)))
+    rtems_device_minor_number minor RTEMS_UNUSED,
+    void *arg RTEMS_UNUSED)
 {
     rtems_device_minor_number i;
     rtems_ramdisk_config *c = rtems_ramdisk_configuration;

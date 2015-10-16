@@ -20,8 +20,8 @@
 #include "internal.h"
 
 static int rtems_shell_main_shutdown(
-  int   argc __attribute__((unused)),
-  char *argv[] __attribute__((unused))
+  int   argc RTEMS_UNUSED,
+  char *argv[] RTEMS_UNUSED
 )
 {
   fprintf(stdout, "System shutting down at user request\n");

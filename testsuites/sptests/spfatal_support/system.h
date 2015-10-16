@@ -42,9 +42,9 @@ void force_error(void);
 /* need some prototypes for test cases */
 
 rtems_device_driver consume_semaphores_initialize(
-  rtems_device_major_number major __attribute__((unused)),
-  rtems_device_minor_number minor __attribute__((unused)),
-  void *pargp __attribute__((unused))
+  rtems_device_major_number major RTEMS_UNUSED,
+  rtems_device_minor_number minor RTEMS_UNUSED,
+  void *pargp RTEMS_UNUSED
 );
 
 #define CONSUME_SEMAPHORE_DRIVERS \

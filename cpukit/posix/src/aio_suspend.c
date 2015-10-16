@@ -27,9 +27,9 @@
 #include <rtems/seterr.h>
 
 int aio_suspend(
-  const struct aiocb  * const list[] __attribute__((unused)),
-  int                     nent __attribute__((unused)),
-  const struct timespec  *timeout __attribute__((unused))
+  const struct aiocb  * const list[] RTEMS_UNUSED,
+  int                     nent RTEMS_UNUSED,
+  const struct timespec  *timeout RTEMS_UNUSED
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );

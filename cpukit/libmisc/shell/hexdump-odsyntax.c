@@ -62,7 +62,7 @@ __FBSDID("$FreeBSD: src/usr.bin/hexdump/odsyntax.c,v 1.17 2004/07/22 13:14:42 jo
 #define PADDING	"         "
 
 #ifndef __unused
-#define __unused __attribute((__unused__))
+#define __unused RTEMS_UNUSED
 #endif
 
 #if RTEMS_REMOVED

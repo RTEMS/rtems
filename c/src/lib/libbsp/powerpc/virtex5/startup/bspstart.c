@@ -151,7 +151,7 @@ void BSP_ask_for_reset(void)
 
 void BSP_panic(char *s)
 {
-  __attribute__((unused)) rtems_interrupt_level level;
+  RTEMS_UNUSED rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
 
@@ -163,7 +163,7 @@ void BSP_panic(char *s)
 
 void _BSP_Fatal_error(unsigned int v)
 {
-  __attribute__((unused)) rtems_interrupt_level level;
+  RTEMS_UNUSED rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
 

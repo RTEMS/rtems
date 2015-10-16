@@ -774,7 +774,7 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_local_id(
 #if defined(RTEMS_MULTIPROCESSING)
   Objects_Id id
 #else
-  Objects_Id id __attribute__((unused))
+  Objects_Id id RTEMS_UNUSED
 #endif
 )
 {

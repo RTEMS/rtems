@@ -434,7 +434,7 @@ static rtems_device_driver grcan_start(struct grcan_priv *pDev)
    * tmp is set but never used. GCC gives a warning for this
    * and we need to tell GCC not to complain.
    */
-  unsigned int tmp RTEMS_COMPILER_UNUSED_ATTRIBUTE;
+  unsigned int tmp RTEMS_UNUSED;
 
   IRQ_GLOBAL_PREPARE(oldLevel);
 

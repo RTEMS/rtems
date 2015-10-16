@@ -43,7 +43,7 @@ int termios_printk_fd = -1;
 struct rtems_termios_tty *termios_printk_tty;
 
 static void _termios_printk_null_char(
-	char c __attribute__((unused)))
+	char c RTEMS_UNUSED)
 {
   return;
 }

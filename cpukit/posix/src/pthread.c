@@ -103,7 +103,7 @@ static bool _POSIX_Threads_Sporadic_budget_TSR_filter(
  *  _POSIX_Threads_Sporadic_budget_TSR
  */
 void _POSIX_Threads_Sporadic_budget_TSR(
-  Objects_Id      id __attribute__((unused)),
+  Objects_Id      id RTEMS_UNUSED,
   void           *argument
 )
 {
@@ -186,7 +186,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
  */
 
 static bool _POSIX_Threads_Create_extension(
-  Thread_Control *executing __attribute__((unused)),
+  Thread_Control *executing RTEMS_UNUSED,
   Thread_Control *created
 )
 {

@@ -30,7 +30,7 @@ rtems_monitor_part_canonical(
 
 void
 rtems_monitor_part_dump_header(
-    bool verbose __attribute__((unused))
+    bool verbose RTEMS_UNUSED
 )
 {
     printf("\
@@ -47,7 +47,7 @@ rtems_monitor_part_dump_header(
 void
 rtems_monitor_part_dump(
     rtems_monitor_part_t *monitor_part,
-    bool  verbose __attribute__((unused))
+    bool  verbose RTEMS_UNUSED
 )
 {
     int length = 0;

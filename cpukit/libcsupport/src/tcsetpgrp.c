@@ -33,8 +33,8 @@
  *  POSIX 1003.1b 7.2.4 - Set Foreground Process Group ID
  */
 int tcsetpgrp(
-  int fd __attribute__((unused)),
-  pid_t pid __attribute__((unused)) )
+  int fd RTEMS_UNUSED,
+  pid_t pid RTEMS_UNUSED )
 {
   return 0;
 }

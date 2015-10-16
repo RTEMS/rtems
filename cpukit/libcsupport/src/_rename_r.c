@@ -31,7 +31,7 @@
  *  POSIX 1003.1b - 5.3.4 - Rename a file
  */
 int _rename_r(
-  struct _reent *ptr __attribute__((unused)),
+  struct _reent *ptr RTEMS_UNUSED,
   const char    *old,
   const char    *new
 )

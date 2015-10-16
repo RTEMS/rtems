@@ -80,7 +80,7 @@ RTEMS_INLINE_ROUTINE void _System_state_Handler_initialization (
 #if defined(RTEMS_MULTIPROCESSING)
   bool  is_multiprocessing
 #else
-  bool  is_multiprocessing __attribute__((unused))
+  bool  is_multiprocessing RTEMS_UNUSED
 #endif
 )
 {

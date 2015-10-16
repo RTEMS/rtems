@@ -40,8 +40,8 @@ static Watchdog_Control _POSIX_signals_Ualarm_timer = WATCHDOG_INITIALIZER(
  */
 
 static void _POSIX_signals_Ualarm_TSR(
-  Objects_Id      id __attribute__((unused)),
-  void           *argument __attribute__((unused))
+  Objects_Id      id RTEMS_UNUSED,
+  void           *argument RTEMS_UNUSED
 )
 {
   /*

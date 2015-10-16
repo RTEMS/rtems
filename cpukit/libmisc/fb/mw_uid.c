@@ -36,7 +36,7 @@ static int       open_count = 0;
 /* open a message queue with the kernel */
 int uid_open_queue(
   const char *q_name,
-  int         flags __attribute__((unused)),
+  int         flags RTEMS_UNUSED,
   size_t      max_msgs
 )
 {

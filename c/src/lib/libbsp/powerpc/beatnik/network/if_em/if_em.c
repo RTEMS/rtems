@@ -761,7 +761,7 @@ em_start_locked(struct ifnet *ifp)
 static void
 em_start(struct ifnet *ifp)
 {
-	struct adapter *adapter __attribute__((unused)) = ifp->if_softc;
+	struct adapter *adapter RTEMS_UNUSED = ifp->if_softc;
 
 	EM_LOCK(adapter);
 	em_start_locked(ifp);

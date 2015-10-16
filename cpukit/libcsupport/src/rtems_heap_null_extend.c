@@ -19,8 +19,8 @@
 #include <rtems/malloc.h>
 
 void *rtems_heap_null_extend(
-  Heap_Control *heap __attribute__((unused)),
-  size_t alloc_size __attribute__((unused))
+  Heap_Control *heap RTEMS_UNUSED,
+  size_t alloc_size RTEMS_UNUSED
 )
 {
   return NULL;

@@ -32,7 +32,7 @@
  *  This is the operation that is run when a timer expires
  */
 void _POSIX_Timer_TSR(
-  Objects_Id timer __attribute__((unused)),
+  Objects_Id timer RTEMS_UNUSED,
   void *data)
 {
   POSIX_Timer_Control *ptimer;

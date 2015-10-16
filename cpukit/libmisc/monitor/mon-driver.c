@@ -58,7 +58,7 @@ rtems_monitor_driver_canonical(
 
 const void *
 rtems_monitor_driver_next(
-    void                  *object_info __attribute__((unused)),
+    void                  *object_info RTEMS_UNUSED,
     rtems_monitor_driver_t *canonical_driver,
     rtems_id              *next_id
 )
@@ -88,7 +88,7 @@ failed:
 
 void
 rtems_monitor_driver_dump_header(
-    bool verbose __attribute__((unused))
+    bool verbose RTEMS_UNUSED
 )
 {
     fprintf(stdout,"\

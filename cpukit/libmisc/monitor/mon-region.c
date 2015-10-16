@@ -31,7 +31,7 @@ rtems_monitor_region_canonical(
 
 void
 rtems_monitor_region_dump_header(
-    bool verbose __attribute__((unused))
+    bool verbose RTEMS_UNUSED
 )
 {
     printf("\
@@ -48,7 +48,7 @@ rtems_monitor_region_dump_header(
 void
 rtems_monitor_region_dump(
     rtems_monitor_region_t *monitor_region,
-    bool  verbose __attribute__((unused))
+    bool  verbose RTEMS_UNUSED
 )
 {
     int length = 0;

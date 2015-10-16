@@ -42,7 +42,7 @@ static RTEMS_CHAIN_DEFINE_EMPTY(message_chain);
 
 static rtems_id server_id = RTEMS_ID_NONE;
 
-static void media_server(rtems_task_argument arg __attribute__((unused)))
+static void media_server(rtems_task_argument arg RTEMS_UNUSED)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
