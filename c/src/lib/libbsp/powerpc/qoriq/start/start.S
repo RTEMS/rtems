@@ -247,6 +247,10 @@ _start_thread:
 	li	r0, 0
 	stw	r0, 0(r1)
 
+#ifdef INITIALIZE_FPU
+	bl	.Linitfpu
+#endif
+
 	b	qoriq_start_thread
 #endif
 _start_secondary_processor:
