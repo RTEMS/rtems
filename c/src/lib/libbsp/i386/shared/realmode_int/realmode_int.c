@@ -70,7 +70,7 @@ typedef struct {
         to 32bit protected mode */
     uint16_t pm_code_selector;
     /* if this struct is to be modified update offset definitions as well */
-} RTEMS_COMPILER_PACKED_ATTRIBUTE rm_int_regs_bkp_param;
+} RTEMS_PACKED rm_int_regs_bkp_param;
 
 /* offsets to \a pm_bkp_and_param */
 #define BKP_IDTR_LIM    "0x00"
@@ -113,7 +113,7 @@ typedef struct {
     uint16_t rm_stack_pointer;
     /** data segment for real mode */
     uint16_t rm_data_segment;
-} RTEMS_COMPILER_PACKED_ATTRIBUTE pm_bkp_and_param;
+} RTEMS_PACKED pm_bkp_and_param;
 
 /* addresses where we are going to put Interrupt buffer,
  * parameter/returned/preserved values, stack and copy code

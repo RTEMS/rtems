@@ -230,10 +230,13 @@
  *  placed so that the least memory is used.
  */
 #if defined(__GNUC__)
-  #define RTEMS_COMPILER_PACKED_ATTRIBUTE __attribute__((packed))
+  #define RTEMS_PACKED __attribute__((__packed__))
 #else
-  #define RTEMS_COMPILER_PACKED_ATTRIBUTE
+  #define RTEMS_PACKED
 #endif
+
+/* Provided for backward compatibility */
+#define RTEMS_COMPILER_PACKED_ATTRIBUTE RTEMS_PACKED
 
 #if __cplusplus >= 201103L
   #define RTEMS_STATIC_ASSERT(cond, msg) \

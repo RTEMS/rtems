@@ -260,7 +260,7 @@ typedef struct {
   unsigned int operation_size		: 1;
   unsigned int granularity		: 1;
   unsigned int base_address_31_24	: 8;
-} RTEMS_COMPILER_PACKED_ATTRIBUTE segment_descriptors;
+} RTEMS_PACKED segment_descriptors;
 
 /*
  * C callable function enabling to get easilly usable info from

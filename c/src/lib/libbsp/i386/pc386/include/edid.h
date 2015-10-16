@@ -87,7 +87,7 @@ typedef struct {
     uint8_t HorizontalBorder;
     uint8_t VerticalBorder;
     uint8_t Flags;
-} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_detailed_timing_descriptor;
+} RTEMS_PACKED EDID_detailed_timing_descriptor;
 
 EDID_INLINE_ROUTINE uint16_t DTD_horizontal_active (
     EDID_detailed_timing_descriptor *dtd)
@@ -165,7 +165,7 @@ typedef struct {
     uint8_t ColorPointWhite_x;
     uint8_t ColorPointWhite_y;
     uint8_t ColorPointWhiteGamma;
-} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_color_point_data;
+} RTEMS_PACKED EDID_color_point_data;
 
 /* Basic Display Parameters */
 /* Monitor Descriptor - Data Type Tag */
@@ -183,7 +183,7 @@ typedef struct {
 /* see  VESA, Generalized Timing Formula Standard - GTF
         Version 1.0, December 18, 1996 */
     uint8_t GTFStandard[8];
-} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_monitor_range_limits;
+} RTEMS_PACKED EDID_monitor_range_limits;
 
 #define EDID_DTT_MonitorName                0xFC
 
@@ -225,11 +225,11 @@ typedef struct {
     uint8_t AddressableLinesLow;
     uint8_t AspectRatio_AddressableLinesHigh;
     uint8_t VerticalRate_PreferredVerticalRate;
-} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_CVT_3_byte_code_descriptor;
+} RTEMS_PACKED EDID_CVT_3_byte_code_descriptor;
 typedef struct {
     uint8_t VersionNumber;
     EDID_CVT_3_byte_code_descriptor cvt[4];
-} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_CVT_timing_codes_3B;
+} RTEMS_PACKED EDID_CVT_timing_codes_3B;
 
 EDID_INLINE_ROUTINE uint16_t edid1_CVT_addressable_lines_high (
     EDID_CVT_3_byte_code_descriptor *cvt)
@@ -251,7 +251,7 @@ EDID_INLINE_ROUTINE uint8_t edid1_CVT_aspect_ratio (
 typedef struct {
     uint8_t RevisionNumber;
     uint8_t EST_III[12];
-} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_established_timings_III;
+} RTEMS_PACKED EDID_established_timings_III;
 enum EST_III {
     EST_1152x864_75Hz   = 0,
     EST_1024x768_85Hz   = 1,
@@ -313,12 +313,12 @@ typedef struct {
     uint8_t DataTypeTag;
     uint8_t Flag2;
     uint8_t DescriptorData[13];
-} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_monitor_descriptor;
+} RTEMS_PACKED EDID_monitor_descriptor;
 
 union EDID_DTD_MD {
     EDID_detailed_timing_descriptor dtd;
     EDID_monitor_descriptor md;
-} RTEMS_COMPILER_PACKED_ATTRIBUTE;
+} RTEMS_PACKED;
 
 #define EDID1_STI_ImageAspectRatioOff           0
 #define EDID1_STI_ImageAspectRatioMask          0x3
@@ -333,7 +333,7 @@ union EDID_DTD_MD {
 typedef struct {
     uint8_t HorizontalActivePixels;
     uint8_t ImageAspectRatio_RefreshRate;
-} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_standard_timing_identification;
+} RTEMS_PACKED EDID_standard_timing_identification;
 
 /* Video Input Definition */
 /* Analog = 0, Digital = 1 */
@@ -446,7 +446,7 @@ typedef struct {
     union EDID_DTD_MD dtd_md[4];
     uint8_t ExtensionFlag;
     uint8_t Checksum;
-} RTEMS_COMPILER_PACKED_ATTRIBUTE EDID_edid1;
+} RTEMS_PACKED EDID_edid1;
 
 EDID_INLINE_ROUTINE uint16_t edid1_RedX (EDID_edid1 *edid) {
     return (edid->RedXHigh<<2) | (edid->GreenRedLow>>6);

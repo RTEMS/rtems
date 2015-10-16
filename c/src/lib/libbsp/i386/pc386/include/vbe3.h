@@ -179,7 +179,7 @@ typedef struct {
     /** @brief Selector or Segment depending on whether this is used from 16bit
         protected mode or from real mode. */
     uint16_t selector;
-} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_far_pointer;
+} RTEMS_PACKED VBE_far_pointer;
 
 /**
  * @brief Protected mode info block as defined by VBE standard.
@@ -205,7 +205,7 @@ typedef struct {
     uint8_t   InProtectMode;
     /** Checksum byte for structure. Sum over all structure bytes gives 0. */
     uint8_t   Checksum;
-} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_protected_mode_info_block;
+} RTEMS_PACKED VBE_protected_mode_info_block;
 
 /** General VBE signature */
 #define VBE_SIGNATURE "VESA"
@@ -243,7 +243,7 @@ typedef struct {
     uint8_t   Reserved[222];
     /** Data Area for OEM Strings */
     uint8_t   OemData[256];
-} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_vbe_info_block;
+} RTEMS_PACKED VBE_vbe_info_block;
 
 /**
  * @brief Describes graphic's mode parameter.
@@ -345,7 +345,7 @@ typedef struct {
     uint32_t  MaxPixelClock;
     /** remainder of VBE_mode_info_block */
     uint8_t   Reserved3[189];
-} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_mode_info_block;
+} RTEMS_PACKED VBE_mode_info_block;
 
 /**
  * @brief Describes monitor synchronization.
@@ -371,7 +371,7 @@ typedef struct {
     uint16_t  RefreshRate;
     /** remainder of VBE_mode_info_block */
     uint8_t   Reserved[40];
-} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_CRTC_info_block;
+} RTEMS_PACKED VBE_CRTC_info_block;
 
 /**
  * @brief Describes palette entry.
@@ -385,7 +385,7 @@ typedef struct {
     uint8_t   Red;
     /** DWORD alignment byte (unused) */
     uint8_t   Alignment;
-} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_palette_entry;
+} RTEMS_PACKED VBE_palette_entry;
 
 /**
  * @brief Supplemental VBE info block.
@@ -409,7 +409,7 @@ typedef struct {
     uint8_t  *OemStringPtr;
     /** Reserved for description strings and future expansion */
     uint8_t   Reserved[221];
-} RTEMS_COMPILER_PACKED_ATTRIBUTE VBE_supplemental_vbe_info_block;
+} RTEMS_PACKED VBE_supplemental_vbe_info_block;
 
 /* VBE_vbe_info_block Capabilities */
 /** VBE Info Block - Capabilities\n

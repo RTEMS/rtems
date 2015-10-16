@@ -51,7 +51,7 @@ typedef struct {
     uint16_t reg_es;
     uint16_t reg_fs;
     uint16_t reg_gs;
-} RTEMS_COMPILER_PACKED_ATTRIBUTE i386_realmode_interrupt_registers;
+} RTEMS_PACKED i386_realmode_interrupt_registers;
 
 /**
  * @brief Returns buffer and its size usable with real mode interrupt call.
