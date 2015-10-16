@@ -35,6 +35,8 @@
 #define FIRST_TLB 0
 #define SCRATCH_TLB QORIQ_TLB1_ENTRY_COUNT - 1
 #define INITIAL_MSR r14
+#define START_STACK r15
+#define SAVED_LINK_REGISTER r16
 
 	.globl _start
 #ifdef RTEMS_SMP
@@ -48,38 +50,16 @@
 	.section ".bsp_start_text", "ax"
 
 _start:
-	bl	.Linit
+	bl	.Linitearly
 
 #ifdef HAS_UBOOT
 	bl	bsp_uboot_copy_board_info
 #endif /* HAS_UBOOT */
 
-	/* Initial MMU setup */
-	bl	qoriq_tlb1_ts_0_only
-	li	r3, SCRATCH_TLB
-	li	r4, FSL_EIS_MAS1_TS
-	li	r5, FSL_EIS_MAS2_I
-	li	r6, FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW | FSL_EIS_MAS3_SX
-	li	r7, 0
-	li	r8, 0
-	li	r9, 11
-	bl	qoriq_tlb1_write
+	/* Get start stack */
+	LWI	START_STACK, start_stack_end
 
-	/* MSR initialization */
-	LWI	INITIAL_MSR, QORIQ_INITIAL_MSR
-	ori	r0, INITIAL_MSR, MSR_IS | MSR_DS
-	mtmsr	r0
-	isync
-
-	/* Initialize start stack */
-	LWI	r1, start_stack_end - PPC_MINIMUM_STACK_FRAME_SIZE
-	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
-	li	r0, 0
-	stw	r0, 0(r1)
-
-#ifdef INITIALIZE_FPU
-	bl	.Linitfpu
-#endif
+	bl	.Linitmore
 
 	/* Copy fast text */
 	LWI	r3, bsp_section_fast_text_begin
@@ -119,14 +99,7 @@ _start:
 	bdnz	.Lnull_area_setup_loop
 .Lnull_area_setup_done:
 
-	/* Configure MMU */
-	li	r3, FIRST_TLB
-	li	r4, SCRATCH_TLB
-	bl	qoriq_mmu_config
-	mtmsr	INITIAL_MSR
-	isync
-	li	r3, SCRATCH_TLB
-	bl	qoriq_tlb1_invalidate
+	bl	.Linitmmu
 
 	/* Clear SBSS */
 	LWI	r3, bsp_section_sbss_begin
@@ -152,7 +125,7 @@ _start:
 	b	memcpy
 
 	/* Do not use r3 here, since this could be the U-Boot board info */
-.Linit:
+.Linitearly:
 	/* Reset time base */
 	li	r0, 0
 	mtspr	TBWU, r0
@@ -182,6 +155,55 @@ _start:
 	LA	r13, _SDA_BASE_
 
 	blr
+
+.Linitmore:
+	mflr	SAVED_LINK_REGISTER
+
+	/* Initial MMU setup */
+	bl	qoriq_tlb1_ts_0_only
+	li	r3, SCRATCH_TLB
+	li	r4, FSL_EIS_MAS1_TS
+	li	r5, FSL_EIS_MAS2_I
+	li	r6, FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW | FSL_EIS_MAS3_SX
+	li	r7, 0
+	li	r8, 0
+	li	r9, 11
+	bl	qoriq_tlb1_write
+
+	/* MSR initialization */
+	LWI	INITIAL_MSR, QORIQ_INITIAL_MSR
+	ori	r0, INITIAL_MSR, MSR_IS | MSR_DS
+	mtmsr	r0
+	isync
+
+	/* Initialize start stack */
+	subi	r1, START_STACK, PPC_MINIMUM_STACK_FRAME_SIZE
+	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
+	li	r0, 0
+	stw	r0, 0(r1)
+
+#ifdef INITIALIZE_FPU
+	bl	.Linitfpu
+#endif
+
+	mtlr	SAVED_LINK_REGISTER
+	blr
+
+.Linitmmu:
+	mflr	SAVED_LINK_REGISTER
+
+	/* Configure MMU */
+	li	r3, FIRST_TLB
+	li	r4, SCRATCH_TLB
+	bl	qoriq_mmu_config
+	mtmsr	INITIAL_MSR
+	isync
+	li	r3, SCRATCH_TLB
+	bl	qoriq_tlb1_invalidate
+
+	mtlr	SAVED_LINK_REGISTER
+	blr
+
 
 #ifdef INITIALIZE_FPU
 	/*
@@ -237,7 +259,7 @@ _start_thread:
 	ori	r0, r0, 1
 	mtspr	BOOKE_PIR, r0
 
-	bl	.Linit
+	bl	.Linitearly
 
 	/* Initialize start stack */
 	GET_SELF_CPU_CONTROL	r3
@@ -254,48 +276,13 @@ _start_thread:
 	b	qoriq_start_thread
 #endif
 _start_secondary_processor:
-
-	bl	.Linit
+	bl	.Linitearly
 
 	/* Get start stack */
-	mr	r1, r3
+	mr	START_STACK, r3
 
-	/* Initial MMU setup */
-	bl	qoriq_tlb1_ts_0_only
-	li	r3, SCRATCH_TLB
-	li	r4, FSL_EIS_MAS1_TS
-	li	r5, FSL_EIS_MAS2_I
-	li	r6, FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW | FSL_EIS_MAS3_SX
-	li	r7, 0
-	li	r8, 0
-	li	r9, 11
-	bl	qoriq_tlb1_write
-
-	/* MSR initialization */
-	LWI	INITIAL_MSR, QORIQ_INITIAL_MSR
-	ori	r0, INITIAL_MSR, MSR_IS | MSR_DS
-	mtmsr	r0
-	isync
-
-	/* Initialize start stack */
-	subi	r1, r1, PPC_MINIMUM_STACK_FRAME_SIZE
-	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
-	li	r0, 0
-	stw	r0, 0(r1)
-
-#ifdef INITIALIZE_FPU
-	bl	.Linitfpu
-#endif
-
-	/* Configure MMU */
-	li	r3, FIRST_TLB
-	li	r4, SCRATCH_TLB
-	bl	qoriq_mmu_config
-	mtmsr	INITIAL_MSR
-	isync
-	li	r3, SCRATCH_TLB
-	bl	qoriq_tlb1_invalidate
-
+	bl	.Linitmore
+	bl	.Linitmmu
 	b	bsp_start_on_secondary_processor
 #endif /* RTEMS_SMP */
 
