@@ -223,7 +223,7 @@ void rtems_stack_checker_begin_extension(
 void Stack_check_report_blown_task(
   Thread_Control *running,
   bool pattern_ok
-) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+) RTEMS_NO_RETURN;
 
 void Stack_check_report_blown_task(Thread_Control *running, bool pattern_ok)
 {

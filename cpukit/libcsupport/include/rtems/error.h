@@ -130,7 +130,7 @@ int rtems_verror(
 void rtems_panic(
   const char *printf_format,
   ...
-) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+) RTEMS_NO_RETURN;
 
 extern int rtems_panic_in_progress;
 

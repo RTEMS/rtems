@@ -16,7 +16,7 @@
 #ifndef _RTEMS_FATAL_H
 #define _RTEMS_FATAL_H
 
-#include <rtems/score/basedefs.h> /* RTEMS_COMPILER_NO_RETURN_ATTRIBUTE */
+#include <rtems/score/basedefs.h> /* RTEMS_NO_RETURN */
 #include <rtems/extension.h>
 
 #ifdef __cplusplus
@@ -70,7 +70,7 @@ static inline void rtems_exception_frame_print(
  */
 void rtems_fatal_error_occurred(
   uint32_t   the_error
-) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+) RTEMS_NO_RETURN;
 
 /**
  * @brief Invokes the internal error handler with is internal set to false.
@@ -83,7 +83,7 @@ void rtems_fatal_error_occurred(
 void rtems_fatal(
   rtems_fatal_source source,
   rtems_fatal_code error
-) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+) RTEMS_NO_RETURN;
 
 /**
  * @brief Returns a text for a fatal source.

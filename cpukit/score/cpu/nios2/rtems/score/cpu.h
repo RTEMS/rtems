@@ -306,7 +306,7 @@ void _CPU_Context_Initialize(
   _CPU_Context_restore( (_the_context) );
 
 void _CPU_Fatal_halt( uint32_t _source, uint32_t _error )
-  RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+  RTEMS_NO_RETURN;
 
 /**
  * @brief CPU initialization.
@@ -335,7 +335,7 @@ void _CPU_Context_switch( Context_Control *run, Context_Control *heir );
 
 void _CPU_Context_restore(
   Context_Control *new_context
-) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+) RTEMS_NO_RETURN;
 
 void _CPU_Context_volatile_clobber( uintptr_t pattern );
 

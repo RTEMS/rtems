@@ -115,7 +115,7 @@ static inline void _SMP_Fatal( SMP_Fatal_code code )
  * This function does not return to the caller.
  */
 void _SMP_Start_multitasking_on_secondary_processor( void )
-  RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+  RTEMS_NO_RETURN;
 
 typedef void ( *SMP_Test_message_handler )( Per_CPU_Control *cpu_self );
 

@@ -154,13 +154,15 @@
  *  rtems_fatal_error_occurred and _Terminate.
  */
 #if defined(RTEMS_SCHEDSIM)
-  #define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE
+  #define RTEMS_NO_RETURN
 #elif defined(__GNUC__)
-  #define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE \
-      __attribute__ ((noreturn))
+  #define RTEMS_NO_RETURN __attribute__((__noreturn__))
 #else
-  #define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE
+  #define RTEMS_NO_RETURN
 #endif
+
+/* Provided for backward compatibility */
+#define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE RTEMS_NO_RETURN
 
 /**
  *  The following defines a compiler specific attribute which informs

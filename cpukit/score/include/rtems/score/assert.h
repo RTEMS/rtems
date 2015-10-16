@@ -61,7 +61,7 @@ extern "C" {
     /* normal build is newlib. */
 
     void __assert_func(const char *, int, const char *, const char *)
-      RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+      RTEMS_NO_RETURN;
 
     #define _Assert( _e ) \
        ( ( _e ) ? \

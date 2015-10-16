@@ -86,7 +86,7 @@ void rtems_initialize_device_drivers(void);
  * This directive does not return.
  */
 void rtems_initialize_start_multitasking(void)
-  RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+  RTEMS_NO_RETURN;
 
 /**
  * @brief Shutdown the RTEMS environment.
@@ -99,7 +99,7 @@ void rtems_initialize_start_multitasking(void)
  */
 void rtems_shutdown_executive(
   uint32_t   result
-) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+) RTEMS_NO_RETURN;
 
 #ifdef __cplusplus
 }

@@ -840,7 +840,7 @@ void _CPU_Context_Initialize(
  */
 void _CPU_Context_Restart_self(
   Context_Control  *the_context
-) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+) RTEMS_NO_RETURN;
 
 /**
  * @ingroup CPUContext
@@ -1145,7 +1145,7 @@ void _CPU_Context_switch(
  */
 void _CPU_Context_restore(
   Context_Control *new_context
-) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+) RTEMS_NO_RETURN;
 
 /**
  * This routine saves the floating point context passed to it.

@@ -120,7 +120,7 @@ typedef enum {
   QORIQ_FATAL_FDT_NO_TIMEBASE_FREQUENCY
 } bsp_fatal_code;
 
-RTEMS_COMPILER_NO_RETURN_ATTRIBUTE static inline void
+RTEMS_NO_RETURN static inline void
 bsp_fatal( bsp_fatal_code code )
 {
   rtems_fatal( RTEMS_FATAL_SOURCE_BSP, (rtems_fatal_code) code );

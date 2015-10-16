@@ -353,7 +353,7 @@ static inline void sparc_enable_interrupts(uint32_t psr)
  * @param[in] exitcode2 Primary exit code stored in CPU g3 register after exit
  */
 void sparc_syscall_exit(uint32_t exitcode1, uint32_t exitcode2)
-  RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+  RTEMS_NO_RETURN;
 
 /**
  * @brief SPARC flash processor interrupts.

@@ -228,7 +228,7 @@ void _Terminate(
   Internal_errors_Source  the_source,
   bool                    is_internal,
   Internal_errors_t       the_error
-) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+) RTEMS_NO_RETURN;
 
 #ifdef __cplusplus
 }

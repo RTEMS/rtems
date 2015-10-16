@@ -100,7 +100,7 @@ void bsp_reset(void);
  * This style of initialization ensures that the C++ global constructors are
  * executed after RTEMS is initialized.
  */
-void boot_card(const char *cmdline) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+void boot_card(const char *cmdline) RTEMS_NO_RETURN;
 
 #ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
   /**

@@ -132,7 +132,7 @@ void _Thread_Create_idle(void);
  *  part of initialization and its invocation is the last act of
  *  the non-multitasking part of the system initialization.
  */
-void _Thread_Start_multitasking( void ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+void _Thread_Start_multitasking( void ) RTEMS_NO_RETURN;
 
 /**
  *  @brief Allocate the requested stack space for the thread.
