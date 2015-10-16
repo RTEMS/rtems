@@ -91,7 +91,7 @@ typedef enum {
 rtems_status_code rtems_clock_get(
   rtems_clock_get_options  option,
   void                    *time_buffer
-) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+) RTEMS_DEPRECATED;
 
 /**
  * @brief Obtain Current Time of Day (Classic TOD)

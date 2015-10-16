@@ -127,9 +127,9 @@ public:
 
   // notepad control
   const rtems_status_code get_note(const uint32_t notepad,
-                                   uint32_t& note) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+                                   uint32_t& note) RTEMS_DEPRECATED;
   const rtems_status_code set_note(const uint32_t notepad,
-                                   const uint32_t note) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+                                   const uint32_t note) RTEMS_DEPRECATED;
 
   // object id, and name
   const rtems_id id_is() const { return id; }

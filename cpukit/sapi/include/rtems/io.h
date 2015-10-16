@@ -248,7 +248,7 @@ typedef struct {
 rtems_status_code rtems_io_lookup_name(
     const char           *name,
     rtems_driver_name_t  *device_info
-) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+) RTEMS_DEPRECATED;
 
 extern const size_t _IO_Number_of_drivers;
 

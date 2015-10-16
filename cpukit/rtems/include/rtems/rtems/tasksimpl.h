@@ -78,7 +78,7 @@ void _RTEMS_tasks_Initialize_user_tasks( void );
 void _RTEMS_Tasks_Invoke_task_variable_dtor(
   Thread_Control        *the_thread,
   rtems_task_variable_t *tvp
-) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+) RTEMS_DEPRECATED;
 #endif
 
 RTEMS_INLINE_ROUTINE Thread_Control *_RTEMS_tasks_Allocate(void)

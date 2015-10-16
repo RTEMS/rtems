@@ -184,11 +184,13 @@
  *  with this attribute will be used.
  */
 #ifdef __GNUC__
-  #define RTEMS_COMPILER_DEPRECATED_ATTRIBUTE \
-     __attribute__ ((deprecated))
+  #define RTEMS_DEPRECATED __attribute__((__deprecated__))
 #else
-  #define RTEMS_COMPILER_DEPRECATED_ATTRIBUTE
+  #define RTEMS_DEPRECATED
 #endif
+
+/* Provided for backward compatibility */
+#define RTEMS_COMPILER_DEPRECATED_ATTRIBUTE RTEMS_DEPRECATED
 
 /**
  * @brief Instructs the compiler to place a specific variable or function in

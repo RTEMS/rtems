@@ -167,7 +167,7 @@ extern "C" {
  */
 void rtems_ide_part_table_free(
   rtems_disk_desc_t *disk_desc
-) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+) RTEMS_DEPRECATED;
 
 
 /*
@@ -188,7 +188,7 @@ void rtems_ide_part_table_free(
 rtems_status_code rtems_ide_part_table_get(
   const char *dev_name,
   rtems_disk_desc_t *disk_desc
-) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+) RTEMS_DEPRECATED;
 
 
 /*
@@ -206,7 +206,7 @@ rtems_status_code rtems_ide_part_table_get(
  */
 rtems_status_code rtems_ide_part_table_initialize(
   const char *dev_name
-) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+) RTEMS_DEPRECATED;
 
 #ifdef __cplusplus
 }

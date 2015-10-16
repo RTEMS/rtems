@@ -287,7 +287,7 @@ rtems_status_code rtems_task_get_note(
   rtems_id    id,
   uint32_t    notepad,
   uint32_t   *note
-) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+) RTEMS_DEPRECATED;
 
 /**
  * @brief RTEMS Set Task Note
@@ -310,7 +310,7 @@ rtems_status_code rtems_task_set_note(
   rtems_id   id,
   uint32_t   notepad,
   uint32_t   note
-) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+) RTEMS_DEPRECATED;
 
 /**
  * @brief RTEMS Task Mode
@@ -472,7 +472,7 @@ rtems_status_code rtems_task_variable_add(
   rtems_id  tid,
   void    **ptr,
   void    (*dtor)(void *)
-) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+) RTEMS_DEPRECATED;
 
 /**
  *  @brief Get a per-task variable
@@ -487,7 +487,7 @@ rtems_status_code rtems_task_variable_get(
   rtems_id tid,
   void **ptr,
   void **result
-) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+) RTEMS_DEPRECATED;
 
 /**
  *  @brief RTEMS Delete Task Variable
@@ -501,7 +501,7 @@ rtems_status_code rtems_task_variable_get(
 rtems_status_code rtems_task_variable_delete(
   rtems_id  tid,
   void    **ptr
-) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+) RTEMS_DEPRECATED;
 #endif
 
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
@@ -678,7 +678,7 @@ typedef struct {
    *
    *  @note MUST BE LAST ENTRY.
    */
-  uint32_t Notepads[ RTEMS_ZERO_LENGTH_ARRAY ] RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+  uint32_t Notepads[ RTEMS_ZERO_LENGTH_ARRAY ] RTEMS_DEPRECATED;
 }  RTEMS_API_Control;
 
 /**

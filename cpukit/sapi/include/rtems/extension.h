@@ -31,7 +31,7 @@ typedef struct {
 }   Extension_Control;
 
 typedef User_extensions_routine
-  rtems_extension RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+  rtems_extension RTEMS_DEPRECATED;
 
 /**
  * @defgroup ClassicUserExtensions User Extensions

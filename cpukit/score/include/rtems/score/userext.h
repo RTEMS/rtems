@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-typedef void User_extensions_routine RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+typedef void User_extensions_routine RTEMS_DEPRECATED;
 
 /**
  * @defgroup ScoreUserExt User Extension Handler

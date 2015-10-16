@@ -3302,7 +3302,7 @@ const rtems_libio_helper rtems_fs_init_helper =
     } Scheduler;
     RTEMS_API_Control API_RTEMS;
     #if defined(CONFIGURE_ENABLE_CLASSIC_API_NOTEPADS)
-      uint32_t Notepads[ RTEMS_NUMBER_NOTEPADS ] RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
+      uint32_t Notepads[ RTEMS_NUMBER_NOTEPADS ] RTEMS_DEPRECATED;
     #endif
     #ifdef RTEMS_POSIX_API
       POSIX_API_Control API_POSIX;
