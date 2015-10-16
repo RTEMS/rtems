@@ -171,11 +171,13 @@
  *  variables.
  */
 #ifdef __GNUC__
-  #define RTEMS_COMPILER_PURE_ATTRIBUTE \
-     __attribute__ ((pure))
+  #define RTEMS_PURE __attribute__((__pure__))
 #else
-  #define RTEMS_COMPILER_PURE_ATTRIBUTE
+  #define RTEMS_PURE
 #endif
+
+/* Provided for backward compatibility */
+#define RTEMS_COMPILER_PURE_ATTRIBUTE RTEMS_PURE
 
 /**
  *  Instructs the compiler to issue a warning whenever a variable or function
