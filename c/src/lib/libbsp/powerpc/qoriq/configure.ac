@@ -52,38 +52,48 @@ RTEMS_BSPOPTS_HELP([BSP_CONSOLE_BAUD],[default baud for console and other serial
 RTEMS_BSPOPTS_SET([BSP_USE_UART_INTERRUPTS],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_USE_UART_INTERRUPTS],[enable usage of interrupts for the UART modules])
 
+RTEMS_BSPOPTS_SET([U_BOOT_USE_FDT],[qoriq_t*],[1])
+RTEMS_BSPOPTS_SET([U_BOOT_USE_FDT],[*],[])
+RTEMS_BSPOPTS_HELP([U_BOOT_USE_FDT],[enables U-Boot support using FDT])
+
+RTEMS_BSPOPTS_SET([BSP_FDT_BLOB_SIZE_MAX],[qoriq_t*],[131072])
+RTEMS_BSPOPTS_SET([BSP_FDT_BLOB_SIZE_MAX],[*],[])
+RTEMS_BSPOPTS_HELP([BSP_FDT_BLOB_SIZE_MAX],[maximum size of the FDT blob in bytes])
+
+RTEMS_BSPOPTS_SET([BSP_FDT_BLOB_READ_ONLY],[qoriq_t*],[1])
+RTEMS_BSPOPTS_SET([BSP_FDT_BLOB_READ_ONLY],[*],[])
+RTEMS_BSPOPTS_HELP([BSP_FDT_BLOB_READ_ONLY],[place the FDT blob into the read-only data area])
+
+RTEMS_BSPOPTS_SET([HAS_UBOOT],[qoriq_t*],[])
 RTEMS_BSPOPTS_SET([HAS_UBOOT],[*],[1])
-RTEMS_BSPOPTS_HELP([HAS_UBOOT],[enables U-Boot support])
+RTEMS_BSPOPTS_HELP([HAS_UBOOT],[enables legacy U-Boot support without FDT])
 
 RTEMS_BSPOPTS_SET([U_BOOT_64_BIT_PHYS_SIZE],[qoriq_t*],[1])
 RTEMS_BSPOPTS_SET([U_BOOT_64_BIT_PHYS_SIZE],[*],[])
-RTEMS_BSPOPTS_HELP([U_BOOT_64_BIT_PHYS_SIZE],[if defined, then use uint64_t for phys_size_t])
+RTEMS_BSPOPTS_HELP([U_BOOT_64_BIT_PHYS_SIZE],[if defined, then use uint64_t for phys_size_t (only used by legacy U-Boot support)])
 
 RTEMS_BSPOPTS_SET([U_BOOT_GENERIC_BOARD_INFO],[qoriq_t*],[1])
 RTEMS_BSPOPTS_SET([U_BOOT_GENERIC_BOARD_INFO],[*],[])
-RTEMS_BSPOPTS_HELP([U_BOOT_GENERIC_BOARD_INFO],[if defined, then use the generic bd_t structure])
+RTEMS_BSPOPTS_HELP([U_BOOT_GENERIC_BOARD_INFO],[if defined, then use the generic bd_t structure (only used by legacy U-Boot support)])
 
 RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_BEGIN],[qoriq_p2020*],[0x3fff0000])
-RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_BEGIN],[qoriq_t2080*],[0x7fef4000])
-RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_BEGIN],[qoriq_t4240*],[0x7ff33000])
+RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_BEGIN],[qoriq_t*],[])
 RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_BEGIN],[*],[0x1fff0000])
-RTEMS_BSPOPTS_HELP([U_BOOT_BOOT_PAGE_BEGIN],[the begin address of the boot page set up by U-Boot])
+RTEMS_BSPOPTS_HELP([U_BOOT_BOOT_PAGE_BEGIN],[the begin address of the boot page set up by U-Boot (only used by legacy U-Boot support)])
 
 RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_LAST],[qoriq_p2020*],[0x3fffffff])
-RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_LAST],[qoriq_t2080*],[0x7fef4fff])
-RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_LAST],[qoriq_t4240*],[0x7ff33fff])
+RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_LAST],[qoriq_t*],[])
 RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_LAST],[*],[0x1fffffff])
-RTEMS_BSPOPTS_HELP([U_BOOT_BOOT_PAGE_LAST],[the last address of the boot page set up by U-Boot])
+RTEMS_BSPOPTS_HELP([U_BOOT_BOOT_PAGE_LAST],[the last address of the boot page set up by U-Boot (only used by legacy U-Boot support)])
 
 RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_SPIN_OFFSET],[qoriq_p2020*],[0xf240])
-RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_SPIN_OFFSET],[qoriq_t*],[0x0200])
+RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_SPIN_OFFSET],[qoriq_t*],[])
 RTEMS_BSPOPTS_SET([U_BOOT_BOOT_PAGE_SPIN_OFFSET],[*],[0xf2a0])
-RTEMS_BSPOPTS_HELP([U_BOOT_BOOT_PAGE_SPIN_OFFSET],[the offset to the spin table in the boot page set up by U-Boot])
+RTEMS_BSPOPTS_HELP([U_BOOT_BOOT_PAGE_SPIN_OFFSET],[the offset to the spin table in the boot page set up by U-Boot (only used by legacy U-Boot support)])
 
-RTEMS_BSPOPTS_SET([QORIQ_CPU_COUNT],[qoriq_t2080*],[8])
-RTEMS_BSPOPTS_SET([QORIQ_CPU_COUNT],[qoriq_t4240*],[24])
+RTEMS_BSPOPTS_SET([QORIQ_CPU_COUNT],[qoriq_t*],[24])
 RTEMS_BSPOPTS_SET([QORIQ_CPU_COUNT],[*],[2])
-RTEMS_BSPOPTS_HELP([QORIQ_CPU_COUNT],[virtual processor count])
+RTEMS_BSPOPTS_HELP([QORIQ_CPU_COUNT],[maximum virtual processor count])
 
 RTEMS_BSPOPTS_SET([QORIQ_THREAD_COUNT],[qoriq_t*],[2])
 RTEMS_BSPOPTS_SET([QORIQ_THREAD_COUNT],[*],[1])

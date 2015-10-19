@@ -14,9 +14,12 @@
 
 #include <rtems/score/smpimpl.h>
 
+#include <libfdt.h>
+
 #include <libcpu/powerpc-utility.h>
 
 #include <bsp.h>
+#include <bsp/fdt.h>
 #include <bsp/mmu.h>
 #include <bsp/fatal.h>
 #include <bsp/qoriq.h>
@@ -41,13 +44,15 @@ void _start_secondary_processor(void);
 
 #define TLB_COUNT (TLB_END - TLB_BEGIN)
 
-/*
- * These values can be obtained with the debugger or a look into the
- * U-Boot sources (arch/powerpc/cpu/mpc85xx/release.S).
- */
-#define BOOT_BEGIN U_BOOT_BOOT_PAGE_BEGIN
-#define BOOT_LAST U_BOOT_BOOT_PAGE_LAST
-#define SPIN_TABLE (BOOT_BEGIN + U_BOOT_BOOT_PAGE_SPIN_OFFSET)
+#ifdef HAS_UBOOT
+  /*
+   * These values can be obtained with the debugger or a look into the U-Boot
+   * sources (arch/powerpc/cpu/mpc85xx/release.S).
+   */
+  #define BOOT_BEGIN U_BOOT_BOOT_PAGE_BEGIN
+  #define BOOT_LAST U_BOOT_BOOT_PAGE_LAST
+  #define SPIN_TABLE (BOOT_BEGIN + U_BOOT_BOOT_PAGE_SPIN_OFFSET)
+#endif
 
 typedef struct {
   uint32_t addr_upper;
@@ -138,16 +143,71 @@ static void bsp_inter_processor_interrupt(void *arg)
   _SMP_Inter_processor_interrupt_handler();
 }
 
+#ifdef U_BOOT_USE_FDT
+static uboot_spin_table *spin_table_addr[QORIQ_CPU_COUNT / QORIQ_THREAD_COUNT];
+#endif
+
+static uint32_t discover_processors(uint32_t *boot_begin, uint32_t *boot_last)
+{
+#if defined(HAS_UBOOT)
+  *boot_begin = BOOT_BEGIN;
+  *boot_last = BOOT_LAST;
+
+  return QORIQ_CPU_COUNT;
+#elif defined(U_BOOT_USE_FDT)
+  const void *fdt = bsp_fdt_get();
+  int cpus = fdt_path_offset(fdt, "/cpus");
+  int node = fdt_first_subnode(fdt, cpus);
+  uint32_t cpu = 0;
+  uintptr_t last = 0;
+  uintptr_t begin = last - 1;
+
+  while (node >= 0) {
+    int len;
+    fdt64_t *addr_fdt = (fdt64_t *)
+      fdt_getprop(fdt, node, "cpu-release-addr", &len);
+
+    if (addr_fdt != NULL && cpu < RTEMS_ARRAY_SIZE(spin_table_addr)) {
+      uintptr_t addr = (uintptr_t) fdt64_to_cpu(*addr_fdt);
+
+      if (addr < begin) {
+        begin = addr;
+      }
+
+      if (addr > last) {
+        last = addr;
+      }
+
+      spin_table_addr[cpu] = (uboot_spin_table *) addr;
+      ++cpu;
+    }
+
+    node = fdt_next_subnode(fdt, node);
+  }
+
+  *boot_begin = begin;
+  *boot_last = last;
+
+  return cpu * QORIQ_THREAD_COUNT;
+#endif
+}
+
 uint32_t _CPU_SMP_Initialize(void)
 {
+  uint32_t cpu_count = 1;
+
   if (rtems_configuration_get_maximum_processors() > 0) {
     qoriq_mmu_context mmu_context;
+    uint32_t boot_begin;
+    uint32_t boot_last;
+
+    cpu_count = discover_processors(&boot_begin, &boot_last);
 
     qoriq_mmu_context_init(&mmu_context);
     qoriq_mmu_add(
       &mmu_context,
-      BOOT_BEGIN,
-      BOOT_LAST,
+      boot_begin,
+      boot_last,
       0,
       0,
       FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW,
@@ -159,7 +219,7 @@ uint32_t _CPU_SMP_Initialize(void)
 
   start_thread_if_necessary(0);
 
-  return QORIQ_CPU_COUNT;
+  return cpu_count;
 }
 
 static void release_processor(uboot_spin_table *spin_table, uint32_t cpu_index)
@@ -175,12 +235,24 @@ static void release_processor(uboot_spin_table *spin_table, uint32_t cpu_index)
   rtems_cache_flush_multiple_data_lines(spin_table, sizeof(*spin_table));
 }
 
+static uboot_spin_table *get_spin_table(uint32_t cpu_index)
+{
+#if defined(HAS_UBOOT)
+#if QORIQ_THREAD_COUNT > 1
+  return &((uboot_spin_table *) SPIN_TABLE)[cpu_index / 2 - 1];
+#else
+  return (uboot_spin_table *) SPIN_TABLE;
+#endif
+#elif defined(U_BOOT_USE_FDT)
+  return spin_table_addr[cpu_index / 2];
+#endif
+}
+
 bool _CPU_SMP_Start_processor(uint32_t cpu_index)
 {
 #if QORIQ_THREAD_COUNT > 1
   if (is_started_by_u_boot(cpu_index)) {
-    uboot_spin_table *spin_table =
-      &((uboot_spin_table *) SPIN_TABLE)[cpu_index / 2 - 1];
+    uboot_spin_table *spin_table = get_spin_table(cpu_index);
 
     release_processor(spin_table, cpu_index);
 
@@ -189,7 +261,7 @@ bool _CPU_SMP_Start_processor(uint32_t cpu_index)
     return _SMP_Should_start_processor(cpu_index - 1);
   }
 #else
-  uboot_spin_table *spin_table = (uboot_spin_table *) SPIN_TABLE;
+  uboot_spin_table *spin_table = get_spin_table(cpu_index);
 
   release_processor(spin_table, cpu_index);
 

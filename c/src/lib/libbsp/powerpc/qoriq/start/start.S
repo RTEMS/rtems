@@ -56,6 +56,10 @@ _start:
 	bl	bsp_uboot_copy_board_info
 #endif /* HAS_UBOOT */
 
+#ifdef U_BOOT_USE_FDT
+	bl	bsp_fdt_copy
+#endif /* U_BOOT_USE_FDT */
+
 	/* Get start stack */
 	LWI	START_STACK, start_stack_end
 

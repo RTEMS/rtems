@@ -2,4 +2,15 @@ Board support package for the Freescale QorIQ platform:
 
   http://en.wikipedia.org/wiki/QorIQ
 
-Development board P1020RDB.
+Development boards P1020RDB, T2080RDB and T4240RDB.
+
+For the T series boot via U-Boot is mandatory since the FDT is used.  Use
+
+  mkimage -A ppc -O linux -T kernel -a 0x4000 -e 0x4000 -n RTEMS -d app.bin.gz app.img
+
+to create a bootable image.  You must use the "linux" image type.  Boot it for
+example via the
+
+  bootm 0xe9000000 - 0xe8800000
+
+U-Boot command.
