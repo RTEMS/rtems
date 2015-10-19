@@ -1,6 +1,5 @@
 rtems_tests_PROGRAMS = libfdt01
 libfdt01_SOURCES = init.c some.c
-libfdt01_LDADD = -lfdt
 
 dist_rtems_tests_DATA = libfdt01.scn libfdt01.doc
 
@@ -10,7 +9,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(libfdt01_OBJECTS) $(libfdt01_LDADD)
+LINK_OBJS = $(libfdt01_OBJECTS)
 LINK_LIBS = $(libfdt01_LDLIBS)
 
 libfdt01$(EXEEXT): $(libfdt01_OBJECTS) $(libfdt01_DEPENDENCIES)

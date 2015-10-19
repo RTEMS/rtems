@@ -13,16 +13,6 @@ all-am: $(PREINSTALL_FILES)
 PREINSTALL_FILES =
 CLEANFILES = $(PREINSTALL_FILES)
 
-all-local: $(TMPINSTALL_FILES)
-
-TMPINSTALL_FILES =
-CLEANFILES += $(TMPINSTALL_FILES)
-
-$(PROJECT_LIB)/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_LIB)
-	@: > $(PROJECT_LIB)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
-
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
@@ -39,8 +29,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libfdt.h
 $(PROJECT_INCLUDE)/libfdt_env.h: libfdt_env.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libfdt_env.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libfdt_env.h
-
-$(PROJECT_LIB)/libfdt.a: libfdt.a $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/libfdt.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/libfdt.a
 

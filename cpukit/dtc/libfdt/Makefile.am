@@ -2,7 +2,7 @@ include $(top_srcdir)/automake/compile.am
 
 include_HEADERS = fdt.h libfdt.h libfdt_env.h
 
-project_lib_LIBRARIES = libfdt.a
+noinst_LIBRARIES = libfdt.a
 
 libfdt_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)
 libfdt_a_SOURCES =
