@@ -59,16 +59,16 @@ extern int grspw_work_task_priority;
 #define TXPKT_FLAG_NOCRC_LENe 0x0000000e
 #define TXPKT_FLAG_NOCRC_LENf 0x0000000f
 
-/* Marks if packet was transmitted or not */
-#define TXPKT_FLAG_TX 0x8000
-
 #define TXPKT_FLAG_INPUT_MASK (TXPKT_FLAG_NOCRC_MASK | TXPKT_FLAG_IE | \
 				TXPKT_FLAG_HCRC | TXPKT_FLAG_DCRC)
 
-/* Link Error */
-#define TXPKT_FLAG_LINKERR 0x4000
+/* Marks if packet was transmitted or not */
+#define TXPKT_FLAG_TX 0x4000
 
-#define TXPKT_FLAG_OUTPUT_MASK (TXPKT_FLAG_LINKERR)
+/* Link Error */
+#define TXPKT_FLAG_LINKERR 0x8000
+
+#define TXPKT_FLAG_OUTPUT_MASK (TXPKT_FLAG_TX | TXPKT_FLAG_LINKERR)
 
 /*** RX Packet Flags ***/
 
