@@ -44,14 +44,9 @@ int syscon_uart_index __attribute__((weak)) = 0;
 static struct apbuart_context apbuarts[BSP_NUMBER_OF_TERMIOS_PORTS];
 static int uarts = 0;
 
-static rtems_termios_device_context *leon3_console_get_context(int minor)
+static rtems_termios_device_context *leon3_console_get_context(int index)
 {
-  struct apbuart_context *uart;
-
-  if (minor == 0)
-    uart = &apbuarts[syscon_uart_index];
-  else
-    uart = &apbuarts[minor - 1];
+  struct apbuart_context *uart = &apbuarts[index];
 
   rtems_termios_device_context_initialize(&uart->base, "APBUART");
 
@@ -159,7 +154,7 @@ rtems_device_driver console_initialize(
       minor,
       handler,
       NULL,
-      leon3_console_get_context(syscon_uart_index)
+      leon3_console_get_context(i)
     );
   }
 
