@@ -21,7 +21,7 @@ AC_MSG_CHECKING([for old moxie assembly syntax])
 AC_COMPILE_IFELSE(
   [AC_LANG_PROGRAM(
     [],
-    [asm("sub.l $r0, $r0");])],
+    [asm("sub.l \$r0, \$r0");])],
   [HAVE_OLD_MOXIE_ASM=yes],
   [HAVE_OLD_MOXIE_ASM=no])
 AC_MSG_RESULT([$HAVE_OLD_MOXIE_ASM])
