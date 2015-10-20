@@ -8,4 +8,5 @@ include: testdata/disable-mrfs-tests.tcfg
 
 fsbdpart01
 fsdosfsformat01
+fsdosfsname01
 fsdosfswrite01
