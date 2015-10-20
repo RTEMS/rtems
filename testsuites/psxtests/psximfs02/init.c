@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2014.
+ *  COPYRIGHT (c) 1989-2015.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -211,7 +211,7 @@ rtems_task Init(
 #define CONFIGURE_FILESYSTEM_IMFS
 
 #define CONFIGURE_MAXIMUM_TASKS                  1
-#define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK   15
+#define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK   16
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

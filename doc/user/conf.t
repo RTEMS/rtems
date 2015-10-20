@@ -2749,6 +2749,61 @@ options will be defined as well
 @end itemize
 
 @c
+@c === CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK ===
+@c
+@subsection Specify Block Size for IMFS
+
+@findex CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK}
+
+@item DATA TYPE:
+Boolean feature macro.
+
+@item RANGE:
+Valid values for this configuration parameter are a power of two (2)
+between 16 and 512 inclusive.  In other words, valid values are 16,
+32, 64, 128, 256,and 512.
+
+@item DEFAULT VALUE:
+The default IMFS block size is 128 bytes.
+
+@end table
+
+@subheading DESCRIPTION:
+This configuration parameter specifies the block size for in-memory files
+managed by the IMFS. The configured block size has two impacts. The first
+is the average amount of unused memory in the last block of each file. For
+example, when the block size is 512, on average one-half of the last block
+of each file will remain unused and the memory is wasted. In contrast,
+when the block size is 16, the average unused memory per file is only
+8 bytes. However, it requires more allocations for the same size file
+and thus more overhead per block for the dynamic memory management.
+
+Second, the block size has an impact on the maximum size file that can
+be stored in the IMFS. With smaller block size, the maximum file size
+is correspondingly smaller. The following shows the maximum file size
+possible based on the configured block size:
+
+@itemize @bullet
+@item when the block size is 16 bytes, the maximum file size is 1,328
+bytes.
+@item when the block size is 32 bytes, the maximum file size is 18,656
+bytes.
+@item when the block size is 64 bytes, the maximum file size is 279,488
+bytes.
+@item when the block size is 128 bytes, the maximum file size is
+4,329,344 bytes.
+@item when the block size is 256 bytes, the maximum file size is
+68,173,568 bytes.
+@item when the block size is 512 bytes, the maximum file size is
+1,082,195,456 bytes.
+@end itemize
+
+
+@c
 @c === CONFIGURE_IMFS_DISABLE_CHOWN ===
 @c
 @subsection Disable Change Owner Support of Root IMFS
