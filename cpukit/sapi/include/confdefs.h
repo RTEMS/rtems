@@ -3823,5 +3823,19 @@ const rtems_libio_helper rtems_fs_init_helper =
   #endif
 #endif
 
+/*
+ * IMFS block size for in memory files (memfiles) must be a power of
+ * two between 16 and 512 inclusive.
+ */
+#if ((CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK != 16) && \
+     (CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK != 32) && \
+     (CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK != 64) && \
+     (CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK != 128) && \
+     (CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK != 256) && \
+     (CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK != 512))
+  #error "IMFS Memfile block size must be a power of 2 between 16 and 512"
+#endif
+
+
 #endif
 /* end of include file */
