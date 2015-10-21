@@ -183,7 +183,7 @@ uint32_t rtems_gpio_bsp_interrupt_line(rtems_vector_number vector)
   return event_status;
 }
 
-rtems_status_code rtems_bsp_enable_interrupt(
+rtems_status_code rtems_gpio_bsp_enable_interrupt(
   uint32_t bank,
   uint32_t pin,
   rtems_gpio_interrupt interrupt
@@ -227,7 +227,7 @@ rtems_status_code rtems_bsp_enable_interrupt(
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code rtems_bsp_disable_interrupt(
+rtems_status_code rtems_gpio_bsp_disable_interrupt(
   uint32_t bank,
   uint32_t pin,
   rtems_gpio_interrupt interrupt

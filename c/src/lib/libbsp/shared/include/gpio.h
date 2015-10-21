@@ -736,12 +736,16 @@ extern uint32_t rtems_gpio_bsp_multi_read(uint32_t bank, uint32_t bitmask);
  *        does not support the feature, by returning RTEMS_NOT_DEFINED.
  *
  * @param[in] bank GPIO bank number.
- * @param[in] bitmask Bitmask of GPIO pins to clear in the given bank.
+ * @param[in] pins Array filled with BSP specific pin numbers. All pins belong
+ *                 to the same select bank.
+ * @param[in] pin_count Number of pin configurations in the @var pins array.
+ * @param[in] arg Pointer to a BSP defined structure with BSP-specific
+ *                data. This field is handled by the BSP.
  *
- * @retval RTEMS_SUCCESSFUL All pins were cleared successfully.
- * @retval RTEMS_NOT_DEFINED The BSP does not support BSP specific operations
- *                           for groups.
- * @retval RTEMS_UNSATISFIED Could not clear at least one of the pins.
+ * @retval RTEMS_SUCCESSFUL Operation completed with success.
+ * @retval RTEMS_NOT_DEFINED Group has no BSP specific pins, or the BSP does not
+ *                           support BSP specific operations for groups.
+ * @retval RTEMS_UNSATISFIED Could not operate on at least one of the pins.
  */
 extern rtems_status_code rtems_gpio_bsp_specific_group_operation(
   uint32_t bank,
@@ -859,7 +863,7 @@ extern rtems_status_code rtems_gpio_bsp_select_output(
  * @retval RTEMS_SUCCESSFUL Function was assigned successfully.
  * @retval RTEMS_UNSATISFIED Could not assign the function to the pin.
  */
-extern rtems_status_code rtems_bsp_select_specific_io(
+extern rtems_status_code rtems_gpio_bsp_select_specific_io(
   uint32_t bank,
   uint32_t pin,
   uint32_t function,
@@ -918,7 +922,7 @@ extern rtems_vector_number rtems_gpio_bsp_get_vector(uint32_t bank);
  * @retval RTEMS_SUCCESSFUL Interrupt successfully enabled for this pin.
  * @retval RTEMS_UNSATISFIED Could not enable the interrupt on the pin.
  */
-extern rtems_status_code rtems_bsp_enable_interrupt(
+extern rtems_status_code rtems_gpio_bsp_enable_interrupt(
   uint32_t bank,
   uint32_t pin,
   rtems_gpio_interrupt interrupt
@@ -935,7 +939,7 @@ extern rtems_status_code rtems_bsp_enable_interrupt(
  * @retval RTEMS_SUCCESSFUL Interrupt successfully disabled for this pin.
  * @retval RTEMS_UNSATISFIED Could not disable interrupts on this pin.
  */
-extern rtems_status_code rtems_bsp_disable_interrupt(
+extern rtems_status_code rtems_gpio_bsp_disable_interrupt(
   uint32_t bank,
   uint32_t pin,
   rtems_gpio_interrupt interrupt

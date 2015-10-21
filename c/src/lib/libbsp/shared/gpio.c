@@ -1341,7 +1341,7 @@ rtems_status_code rtems_gpio_request_pin(
         return RTEMS_UNSATISFIED;
       }
 
-      sc = rtems_bsp_select_specific_io(
+      sc = rtems_gpio_bsp_select_specific_io(
              bank,
              pin,
              bsp_data->io_function,
@@ -1805,7 +1805,7 @@ rtems_status_code rtems_gpio_enable_interrupt(
     }
   }
 
-  sc = rtems_bsp_enable_interrupt(bank, pin, interrupt);
+  sc = rtems_gpio_bsp_enable_interrupt(bank, pin, interrupt);
 
   if ( sc != RTEMS_SUCCESSFUL ) {
     RELEASE_LOCK(gpio_bank_state[bank].lock);
@@ -1919,7 +1919,7 @@ rtems_status_code rtems_gpio_disable_interrupt(uint32_t pin_number)
     return RTEMS_NOT_CONFIGURED;
   }
 
-  sc = rtems_bsp_disable_interrupt(bank, pin, interrupt_state->active_interrupt);
+  sc = rtems_gpio_bsp_disable_interrupt(bank, pin, interrupt_state->active_interrupt);
 
   if ( sc != RTEMS_SUCCESSFUL ) {
     RELEASE_LOCK(gpio_bank_state[bank].lock);
