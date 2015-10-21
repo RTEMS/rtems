@@ -1326,6 +1326,8 @@ rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t* mt_entry,
   rc = rtems_rfs_fs_open (mt_entry->dev, rtems, flags, max_held_buffers, &fs);
   if (rc)
   {
+    rtems_rfs_mutex_unlock (&rtems->access);
+    rtems_rfs_mutex_destroy (&rtems->access);
     free (rtems);
     return rtems_rfs_rtems_error ("initialise: open", rc);
   }
