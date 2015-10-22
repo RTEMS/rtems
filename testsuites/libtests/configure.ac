@@ -30,7 +30,11 @@ RTEMS_CHECK_CPUOPTS([RTEMS_NETWORKING])
 RTEMS_CHECK_CPUOPTS([RTEMS_POSIX_API])
 
 AC_PROG_LN_S
-AC_PATH_PROG([PAX],[pax])
+AC_PATH_PROG([PAX],[pax],no)
+
+AS_IF([test "x$PAX" = "xno"],[
+	AC_MSG_ERROR([pax is missing.])
+])
 
 AC_CHECK_HEADERS([complex.h])
 
