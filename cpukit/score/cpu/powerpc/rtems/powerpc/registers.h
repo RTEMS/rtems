@@ -550,7 +550,17 @@ lidate */
 #define FSL_EIS_L1CFG0 515
 #define FSL_EIS_L1CFG1 516
 #define FSL_EIS_L1CSR0 1010
+#define FSL_EIS_L1CSR0_CFI (1 << (63 - 62))
 #define FSL_EIS_L1CSR1 1011
+#define FSL_EIS_L1CSR1_ICFI (1 << (63 - 62))
+
+/* Freescale Book E Implementation Standards (EIS): L2 Cache */
+
+#define FSL_EIS_L2CFG0 519
+#define FSL_EIS_L2CSR0 1017
+#define FSL_EIS_L2CSR0_L2FI (1 << (63 - 42))
+#define FSL_EIS_L2CSR0_L2FL (1 << (63 - 52))
+#define FSL_EIS_L2CSR1 1018
 
 /* Freescale Book E Implementation Standards (EIS): Timer */
 
