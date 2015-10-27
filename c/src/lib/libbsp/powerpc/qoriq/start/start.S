@@ -80,6 +80,29 @@ _start:
 	bne	1b
 	isync
 
+#ifdef QORIQ_L2CSR0
+	/* Flush L2 cache of first cluster */
+	LWI	r4, QORIQ_L2CSR0
+	lwz	r3, 0(r4)
+	oris	r3, r3, FSL_EIS_L2CSR0_L2FL >> 16
+	stw	r3, 0(r4)
+1:
+	lwz	r3, 0(r4)
+	andis.	r3, r3, FSL_EIS_L2CSR0_L2FL >> 16
+	bne	1b
+	isync
+
+	/* Invalidate L2 cache of first cluster */
+	lwz	r3, 0(r4)
+	oris	r3, r3, FSL_EIS_L2CSR0_L2FI >> 16
+	stw	r3, 0(r4)
+1:
+	lwz	r3, 0(r4)
+	andis.	r3, r3, FSL_EIS_L2CSR0_L2FI >> 16
+	bne	1b
+	isync
+#endif
+
 	/* Get start stack */
 	LWI	START_STACK, start_stack_end
 
