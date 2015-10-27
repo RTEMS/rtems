@@ -271,6 +271,18 @@ typedef struct {
 } qoriq_law;
 
 typedef struct {
+  QORIQ_RESERVE(0x0000, 0x1000);
+} qoriq_bman;
+
+typedef struct {
+  QORIQ_RESERVE(0x0000, 0x1000);
+} qoriq_qman;
+
+typedef struct {
+  QORIQ_RESERVE(0x000000, 0x100000);
+} qoriq_fman;
+
+typedef struct {
   qoriq_lcc lcc;
   QORIQ_FILL(0x000000, 0x000c00, qoriq_lcc);
   qoriq_law law [32];
@@ -293,7 +305,14 @@ typedef struct {
   QORIQ_RESERVE(0x11e000, 0x210000);
   qoriq_usb usb_1;
   QORIQ_FILL(0x210000, 0x211000, qoriq_usb);
-  QORIQ_RESERVE(0x211000, 0x2000000);
+  QORIQ_RESERVE(0x211000, 0x318000);
+  qoriq_qman qman;
+  QORIQ_RESERVE(0x319000, 0x31a000);
+  qoriq_bman bman;
+  QORIQ_RESERVE(0x31b000, 0x400000);
+  qoriq_fman fman_0;
+  qoriq_fman fman_1;
+  QORIQ_RESERVE(0x600000, 0x2000000);
 } qoriq_ccsr;
 
 #else /* QORIQ_CHIP_VARIANT */
