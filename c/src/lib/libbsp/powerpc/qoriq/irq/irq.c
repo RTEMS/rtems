@@ -20,6 +20,8 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#include <sys/param.h>
+
 #include <rtems.h>
 
 #include <libcpu/powerpc-utility.h>
@@ -49,112 +51,66 @@
 
 RTEMS_INTERRUPT_LOCK_DEFINE(static, lock, "QorIQ IRQ")
 
-static const uint16_t vpr_and_dr_offsets [] = {
-	[0] = 0x10200 >> 4,
-	[1] = 0x10220 >> 4,
-	[2] = 0x10240 >> 4,
-	[3] = 0x10260 >> 4,
-	[4] = 0x10280 >> 4,
-	[5] = 0x102a0 >> 4,
-	[6] = 0x102c0 >> 4,
-	[7] = 0x102e0 >> 4,
-	[8] = 0x10300 >> 4,
-	[9] = 0x10320 >> 4,
-	[10] = 0x10340 >> 4,
-	[11] = 0x10360 >> 4,
-	[12] = 0x10380 >> 4,
-	[13] = 0x103a0 >> 4,
-	[14] = 0x103c0 >> 4,
-	[15] = 0x103e0 >> 4,
-	[16] = 0x10400 >> 4,
-	[17] = 0x10420 >> 4,
-	[18] = 0x10440 >> 4,
-	[19] = 0x10460 >> 4,
-	[20] = 0x10480 >> 4,
-	[21] = 0x104a0 >> 4,
-	[22] = 0x104c0 >> 4,
-	[23] = 0x104e0 >> 4,
-	[24] = 0x10500 >> 4,
-	[25] = 0x10520 >> 4,
-	[26] = 0x10540 >> 4,
-	[27] = 0x10560 >> 4,
-	[28] = 0x10580 >> 4,
-	[29] = 0x105a0 >> 4,
-	[30] = 0x105c0 >> 4,
-	[31] = 0x105e0 >> 4,
-	[32] = 0x10600 >> 4,
-	[33] = 0x10620 >> 4,
-	[34] = 0x10640 >> 4,
-	[35] = 0x10660 >> 4,
-	[36] = 0x10680 >> 4,
-	[37] = 0x106a0 >> 4,
-	[38] = 0x106c0 >> 4,
-	[39] = 0x106e0 >> 4,
-	[40] = 0x10700 >> 4,
-	[41] = 0x10720 >> 4,
-	[42] = 0x10740 >> 4,
-	[43] = 0x10760 >> 4,
-	[44] = 0x10780 >> 4,
-	[45] = 0x107a0 >> 4,
-	[46] = 0x107c0 >> 4,
-	[47] = 0x107e0 >> 4,
-	[48] = 0x10800 >> 4,
-	[49] = 0x10820 >> 4,
-	[50] = 0x10840 >> 4,
-	[51] = 0x10860 >> 4,
-	[52] = 0x10880 >> 4,
-	[53] = 0x108a0 >> 4,
-	[54] = 0x108c0 >> 4,
-	[55] = 0x108e0 >> 4,
-	[56] = 0x10900 >> 4,
-	[57] = 0x10920 >> 4,
-	[58] = 0x10940 >> 4,
-	[59] = 0x10960 >> 4,
-	[60] = 0x10980 >> 4,
-	[61] = 0x109a0 >> 4,
-	[62] = 0x109c0 >> 4,
-	[63] = 0x109e0 >> 4,
-	[QORIQ_IRQ_EXT_0] = 0x10000 >> 4,
-	[QORIQ_IRQ_EXT_1] = 0x10020 >> 4,
-	[QORIQ_IRQ_EXT_2] = 0x10040 >> 4,
-	[QORIQ_IRQ_EXT_3] = 0x10060 >> 4,
-	[QORIQ_IRQ_EXT_4] = 0x10080 >> 4,
-	[QORIQ_IRQ_EXT_5] = 0x100a0 >> 4,
-	[QORIQ_IRQ_EXT_6] = 0x100c0 >> 4,
-	[QORIQ_IRQ_EXT_7] = 0x100e0 >> 4,
-	[QORIQ_IRQ_EXT_8] = 0x10100 >> 4,
-	[QORIQ_IRQ_EXT_9] = 0x10120 >> 4,
-	[QORIQ_IRQ_EXT_10] = 0x10140 >> 4,
-	[QORIQ_IRQ_EXT_11] = 0x10160 >> 4,
-	[QORIQ_IRQ_IPI_0] = 0x010a0 >> 4,
-	[QORIQ_IRQ_IPI_1] = 0x010b0 >> 4,
-	[QORIQ_IRQ_IPI_2] = 0x010c0 >> 4,
-	[QORIQ_IRQ_IPI_3] = 0x010d0 >> 4,
-	[QORIQ_IRQ_MI_0] = 0x11600 >> 4,
-	[QORIQ_IRQ_MI_1] = 0x11620 >> 4,
-	[QORIQ_IRQ_MI_2] = 0x11640 >> 4,
-	[QORIQ_IRQ_MI_3] = 0x11660 >> 4,
-	[QORIQ_IRQ_MI_4] = 0x11680 >> 4,
-	[QORIQ_IRQ_MI_5] = 0x116a0 >> 4,
-	[QORIQ_IRQ_MI_6] = 0x116c0 >> 4,
-	[QORIQ_IRQ_MI_7] = 0x116e0 >> 4,
-	[QORIQ_IRQ_MSI_0] = 0x11c00 >> 4,
-	[QORIQ_IRQ_MSI_1] = 0x11c20 >> 4,
-	[QORIQ_IRQ_MSI_2] = 0x11c40 >> 4,
-	[QORIQ_IRQ_MSI_3] = 0x11c60 >> 4,
-	[QORIQ_IRQ_MSI_4] = 0x11c80 >> 4,
-	[QORIQ_IRQ_MSI_5] = 0x11ca0 >> 4,
-	[QORIQ_IRQ_MSI_6] = 0x11cc0 >> 4,
-	[QORIQ_IRQ_MSI_7] = 0x11ce0 >> 4,
-	[QORIQ_IRQ_GT_A_0] = 0x01120 >> 4,
-	[QORIQ_IRQ_GT_A_1] = 0x01160 >> 4,
-	[QORIQ_IRQ_GT_A_2] = 0x011a0 >> 4,
-	[QORIQ_IRQ_GT_A_3] = 0x011e0 >> 4,
-	[QORIQ_IRQ_GT_B_0] = 0x02120 >> 4,
-	[QORIQ_IRQ_GT_B_1] = 0x02160 >> 4,
-	[QORIQ_IRQ_GT_B_2] = 0x021a0 >> 4,
-	[QORIQ_IRQ_GT_B_3] = 0x021e0 >> 4
+#define SRC_CFG_IDX(i) ((i) - QORIQ_IRQ_EXT_BASE)
+
+static const uint16_t src_cfg_offsets [] = {
+	[SRC_CFG_IDX(QORIQ_IRQ_EXT_0)] = 0x10000 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_EXT_1)] = 0x10020 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_EXT_2)] = 0x10040 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_EXT_3)] = 0x10060 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_EXT_4)] = 0x10080 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_EXT_5)] = 0x100a0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_EXT_6)] = 0x100c0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_EXT_7)] = 0x100e0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_EXT_8)] = 0x10100 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_EXT_9)] = 0x10120 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_EXT_10)] = 0x10140 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_EXT_11)] = 0x10160 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_IPI_0)] = 0x010a0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_IPI_1)] = 0x010b0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_IPI_2)] = 0x010c0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_IPI_3)] = 0x010d0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MI_0)] = 0x11600 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MI_1)] = 0x11620 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MI_2)] = 0x11640 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MI_3)] = 0x11660 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MI_4)] = 0x11680 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MI_5)] = 0x116a0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MI_6)] = 0x116c0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MI_7)] = 0x116e0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MSI_0)] = 0x11c00 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MSI_1)] = 0x11c20 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MSI_2)] = 0x11c40 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MSI_3)] = 0x11c60 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MSI_4)] = 0x11c80 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MSI_5)] = 0x11ca0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MSI_6)] = 0x11cc0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_MSI_7)] = 0x11ce0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_GT_A_0)] = 0x01120 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_GT_A_1)] = 0x01160 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_GT_A_2)] = 0x011a0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_GT_A_3)] = 0x011e0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_GT_B_0)] = 0x02120 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_GT_B_1)] = 0x02160 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_GT_B_2)] = 0x021a0 >> 4,
+	[SRC_CFG_IDX(QORIQ_IRQ_GT_B_3)] = 0x021e0 >> 4
 };
+
+static volatile qoriq_pic_src_cfg *get_src_cfg(rtems_vector_number vector)
+{
+	uint32_t n = MIN(RTEMS_ARRAY_SIZE(qoriq.pic.ii_0), QORIQ_IRQ_EXT_BASE);
+
+	if (vector < n) {
+		return &qoriq.pic.ii_0 [vector];
+	} else if (vector < QORIQ_IRQ_EXT_BASE) {
+		return &qoriq.pic.ii_1 [vector - n];
+	} else {
+		uint32_t offs = ((uint32_t)
+			src_cfg_offsets [vector - QORIQ_IRQ_EXT_BASE]) << 4;
+
+		return (volatile qoriq_pic_src_cfg *) ((uint32_t) &qoriq.pic + offs);
+	}
+}
 
 rtems_status_code qoriq_pic_set_priority(
 	rtems_vector_number vector,
@@ -166,18 +122,17 @@ rtems_status_code qoriq_pic_set_priority(
 	uint32_t old_vpr = 0;
 
 	if (bsp_interrupt_is_valid_vector(vector)) {
-		int offs = vpr_and_dr_offsets [vector] << 2;
-		volatile uint32_t *vpr = (volatile uint32_t *) &qoriq.pic + offs;
+		volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(vector);
 
 		if (QORIQ_PIC_PRIORITY_IS_VALID(new_priority)) {
 			rtems_interrupt_lock_context lock_context;
 
 			rtems_interrupt_lock_acquire(&lock, &lock_context);
-			old_vpr = *vpr;
-			*vpr = VPR_PRIORITY_SET(old_vpr, (uint32_t) new_priority);
+			old_vpr = src_cfg->vpr;
+			src_cfg->vpr = VPR_PRIORITY_SET(old_vpr, (uint32_t) new_priority);
 			rtems_interrupt_lock_release(&lock, &lock_context);
 		} else if (new_priority < 0) {
-			old_vpr = *vpr;
+			old_vpr = src_cfg->vpr;
 		} else {
 			sc = RTEMS_INVALID_PRIORITY;
 		}
@@ -201,10 +156,9 @@ rtems_status_code qoriq_pic_set_affinity(
 
 	if (bsp_interrupt_is_valid_vector(vector)) {
 		if (processor_index <= 1) {
-			int offs = (vpr_and_dr_offsets [vector] << 2) + 4;
-			volatile uint32_t *dr = (volatile uint32_t *) &qoriq.pic + offs;
+			volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(vector);
 
-			*dr = BSP_BIT32(processor_index);
+			src_cfg->dr = BSP_BIT32(processor_index);
 		} else {
 			sc = RTEMS_INVALID_NUMBER;
 		}
@@ -220,12 +174,11 @@ static rtems_status_code pic_vector_enable(rtems_vector_number vector, uint32_t 
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 
 	if (bsp_interrupt_is_valid_vector(vector)) {
-		int offs = vpr_and_dr_offsets [vector] << 2;
-		volatile uint32_t *vpr = (volatile uint32_t *) &qoriq.pic + offs;
+		volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(vector);
 		rtems_interrupt_lock_context lock_context;
 
 		rtems_interrupt_lock_acquire(&lock, &lock_context);
-		*vpr = (*vpr & ~VPR_MSK) | msk;
+		src_cfg->vpr = (src_cfg->vpr & ~VPR_MSK) | msk;
 		rtems_interrupt_lock_release(&lock, &lock_context);
 	}
 
@@ -317,16 +270,12 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 		pic_reset();
 
 		for (i = BSP_INTERRUPT_VECTOR_MIN; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
-			volatile uint32_t *base = (volatile uint32_t *) &qoriq.pic;
-			int offs = vpr_and_dr_offsets [i] << 2;
-			volatile uint32_t *vpr = base + offs;
+			volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(i);
 
-			*vpr = VPR_MSK | VPR_P | VPR_PRIORITY(1) | VPR_VECTOR(i);
+			src_cfg->vpr = VPR_MSK | VPR_P | VPR_PRIORITY(1) | VPR_VECTOR(i);
 
 			if (!pic_is_ipi(i)) {
-				volatile uint32_t *dr = base + offs + 4;
-
-				*dr = 0x1;
+				src_cfg->dr = 0x1;
 			}
 		}
 

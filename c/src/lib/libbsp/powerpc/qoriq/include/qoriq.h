@@ -148,12 +148,13 @@ typedef struct {
   QORIQ_FILL(0x02510, 0x10000, uint32_t);
   qoriq_pic_src_cfg ei [12];
   QORIQ_RESERVE(0x10180, 0x10200);
-  qoriq_pic_src_cfg ii [64];
-  QORIQ_RESERVE(0x10a00, 0x11600);
+  qoriq_pic_src_cfg ii_0 [160];
   qoriq_pic_src_cfg mi [8];
   QORIQ_RESERVE(0x11700, 0x11c00);
   qoriq_pic_src_cfg msi [8];
-  QORIQ_RESERVE(0x11d00, 0x20000);
+  QORIQ_RESERVE(0x11d00, 0x13000);
+  qoriq_pic_src_cfg ii_1 [96];
+  QORIQ_RESERVE(0x13c00, 0x20000);
   qoriq_pic_per_cpu per_cpu [2];
 } qoriq_pic;
 
