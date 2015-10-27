@@ -2209,6 +2209,7 @@ int grspw_dma_start(void *c)
 	struct grspw_dma_priv *dma = c;
 	struct grspw_dma_regs *dregs = dma->regs;
 	unsigned int ctrl;
+	IRQFLAGS_TYPE irqflags;
 
 	if (dma->started)
 		return 0;
@@ -2264,7 +2265,10 @@ int grspw_dma_start(void *c)
 		ctrl |= GRSPW_DMACTRL_RI;
 	if (dma->cfg.tx_irq_en_cnt != 0)
 		ctrl |= GRSPW_DMACTRL_TI;
+	SPIN_LOCK_IRQ(&dma->core->devlock, irqflags);
+	ctrl |= REG_READ(&dma->regs->ctrl) & GRSPW_DMACTRL_EN;
 	REG_WRITE(&dregs->ctrl, ctrl);
+	SPIN_UNLOCK_IRQ(&dma->core->devlock, irqflags);
 
 	dma->started = 1; /* open up other DMA interfaces */
 
