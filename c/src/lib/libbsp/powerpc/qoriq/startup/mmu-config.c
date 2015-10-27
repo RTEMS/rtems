@@ -87,7 +87,9 @@ typedef struct {
 }
 
 static const entry DATA config [] = {
-	#if defined(QORIQ_INTERCOM_AREA_BEGIN) && defined(QORIQ_INTERCOM_AREA_SIZE)
+	#if defined(RTEMS_MULTIPROCESSING) && \
+	    defined(QORIQ_INTERCOM_AREA_BEGIN) && \
+	    defined(QORIQ_INTERCOM_AREA_SIZE)
 		{
 			.begin = QORIQ_INTERCOM_AREA_BEGIN,
 			.size = QORIQ_INTERCOM_AREA_SIZE,
