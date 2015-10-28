@@ -81,7 +81,7 @@ typedef struct {
 #define ENTRY_DEV_CACHED(b, s) { \
 	.begin = (uint32_t) b, \
 	.size = (uint32_t) s, \
-	.mas2 = ENTRY_RW_MAS2, \
+	.mas2 = 0, \
 	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW, \
 	.mas7 = QORIQ_MMU_DEVICE_MAS7 \
 }
