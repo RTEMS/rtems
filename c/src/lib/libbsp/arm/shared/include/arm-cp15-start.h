@@ -85,8 +85,8 @@ typedef struct {
     .end = (uint32_t) bsp_section_nocache_end, \
     .flags = ARMV7_MMU_DEVICE \
   }, { \
-    .begin = (uint32_t) bsp_section_nocacheheap_begin, \
-    .end = (uint32_t) bsp_section_nocacheheap_end, \
+    .begin = (uint32_t) bsp_section_nocachenoload_begin, \
+    .end = (uint32_t) bsp_section_nocachenoload_end, \
     .flags = ARMV7_MMU_DEVICE \
   }
 

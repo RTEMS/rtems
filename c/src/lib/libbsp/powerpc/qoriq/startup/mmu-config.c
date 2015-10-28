@@ -111,7 +111,7 @@ static const entry DATA config [] = {
 	ENTRY_RW(bsp_section_work_begin, bsp_section_work_size),
 	ENTRY_RW(bsp_section_stack_begin, bsp_section_stack_size),
 	ENTRY_IO(bsp_section_nocache_begin, bsp_section_nocache_size),
-	ENTRY_IO(bsp_section_nocacheheap_begin, bsp_section_nocacheheap_size),
+	ENTRY_IO(bsp_section_nocachenoload_begin, bsp_section_nocachenoload_size),
 #if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
 	/* BMan Portals */
 	ENTRY_DEV_CACHED(0xf4000000, 0x01000000),

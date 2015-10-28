@@ -342,12 +342,16 @@ SECTIONS {
 	bsp_section_nocache_load_begin = LOADADDR (.nocache);
 	bsp_section_nocache_load_end = bsp_section_nocache_load_begin + bsp_section_nocache_size;
 
-	.nocacheheap (NOLOAD) : ALIGN_WITH_INPUT {
+	.nocachenoload (NOLOAD) : ALIGN_WITH_INPUT {
+		bsp_section_nocachenoload_begin = .;
+		*(SORT(.bsp_noload_nocache*))
 		bsp_section_nocacheheap_begin = .;
 		. += ORIGIN (REGION_NOCACHE) + LENGTH (REGION_NOCACHE) - ABSOLUTE (.);
 		bsp_section_nocacheheap_end = .;
+		bsp_section_nocachenoload_end = .;
 	} > REGION_NOCACHE AT > REGION_NOCACHE
 	bsp_section_nocacheheap_size = bsp_section_nocacheheap_end - bsp_section_nocacheheap_begin;
+	bsp_section_nocachenoload_size = bsp_section_nocachenoload_end - bsp_section_nocachenoload_begin;
 
 	.nvram (NOLOAD) : ALIGN_WITH_INPUT {
 		bsp_section_nvram_begin = .;
