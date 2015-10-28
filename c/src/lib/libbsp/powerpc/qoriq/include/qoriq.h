@@ -497,6 +497,11 @@ typedef struct {
 
 extern volatile qoriq_ccsr qoriq;
 
+#if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
+extern uint8_t qoriq_bman_portal[2][16777216];
+extern uint8_t qoriq_qman_portal[2][16777216];
+#endif
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

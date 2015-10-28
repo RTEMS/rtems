@@ -114,11 +114,11 @@ static const entry DATA config [] = {
 	ENTRY_IO(bsp_section_nocachenoload_begin, bsp_section_nocachenoload_size),
 #if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
 	/* BMan Portals */
-	ENTRY_DEV_CACHED(0xf4000000, 0x01000000),
-	ENTRY_DEV(0xf5000000, 0x01000000),
+	ENTRY_DEV_CACHED(&qoriq_bman_portal[0][0], sizeof(qoriq_bman_portal[0])),
+	ENTRY_DEV(&qoriq_bman_portal[1][0], sizeof(qoriq_bman_portal[1])),
 	/* QMan Portals */
-	ENTRY_DEV_CACHED(0xf6000000, 0x01000000),
-	ENTRY_DEV(0xf7000000, 0x01000000),
+	ENTRY_DEV_CACHED(&qoriq_qman_portal[0][0], sizeof(qoriq_qman_portal[0])),
+	ENTRY_DEV(&qoriq_qman_portal[1][0], sizeof(qoriq_qman_portal[1])),
 #endif
 	ENTRY_DEV(&qoriq, sizeof(qoriq))
 };
