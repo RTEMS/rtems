@@ -8,6 +8,7 @@
 #include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/posix/pthreadimpl.h>
+#include <rtems/score/stackimpl.h>
 
 /*
  *  _ada_pthread_minimum_stack_size
