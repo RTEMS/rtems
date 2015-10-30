@@ -203,7 +203,9 @@ static media_item *get_media_item(
 
     if (
       (disk_path == NULL || strcmp(disk_path, item->disk_path) == 0)
-        && (mount_path == NULL || strcmp(mount_path, item->mount_path) == 0)
+        && (mount_path == NULL
+          || (item->mount_path != NULL
+            && strcmp(mount_path, item->mount_path) == 0))
     ) {
       return item;
     }
