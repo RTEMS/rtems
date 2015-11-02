@@ -345,6 +345,9 @@ rtems_status_code rtems_blkdev_create_partition(
  */
 void rtems_blkdev_print_stats(
   const rtems_blkdev_stats *stats,
+  uint32_t media_block_size,
+  uint32_t media_block_count,
+  uint32_t block_size,
   rtems_printk_plugin_t print,
   void *print_arg
 );

@@ -155,7 +155,7 @@ static void test_actions(rtems_disk_device *dd)
     );
   }
 
-  rtems_blkdev_print_stats(&dd->stats, rtems_printf_plugin, NULL);
+  rtems_blkdev_print_stats(&dd->stats, 0, 1, 2, rtems_printf_plugin, NULL);
 }
 
 static void test(void)
