@@ -255,7 +255,7 @@ rtems_status_code rtems_gpio_bsp_select_output(
   return bbb_select_pin_function(bank, pin, BBB_DIGITAL_OUT);
 }
 
-rtems_status_code rtems_bsp_select_specific_io(
+rtems_status_code rtems_gpio_bsp_select_specific_io(
   uint32_t bank,
   uint32_t pin,
   uint32_t function,
@@ -501,7 +501,7 @@ rtems_status_code rtems_gpio_bsp_select_output(
   return RTEMS_NOT_DEFINED;
 }
 
-rtems_status_code rtems_bsp_select_specific_io(
+rtems_status_code rtems_gpio_bsp_select_specific_io(
   uint32_t bank,
   uint32_t pin,
   uint32_t function,

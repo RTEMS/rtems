@@ -119,7 +119,7 @@ rtems_status_code rtems_gpio_bsp_select_output(
   return rpi_select_pin_function(bank, pin, RPI_DIGITAL_OUT);
 }
 
-rtems_status_code rtems_bsp_select_specific_io(
+rtems_status_code rtems_gpio_bsp_select_specific_io(
   uint32_t bank,
   uint32_t pin,
   uint32_t function,
