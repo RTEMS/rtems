@@ -274,6 +274,12 @@ static inline void bsp_interrupt_handler_dispatch(rtems_vector_number vector)
 
 /** @} */
 
+/* For internal use only */
+void bsp_interrupt_lock(void);
+
+/* For internal use only */
+void bsp_interrupt_unlock(void);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

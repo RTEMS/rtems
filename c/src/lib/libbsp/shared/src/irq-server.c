@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009, 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -24,6 +24,7 @@
 
 #include <rtems.h>
 #include <rtems/chain.h>
+#include <rtems/score/assert.h>
 
 #include <bsp/irq-generic.h>
 
@@ -33,11 +34,16 @@ RTEMS_INTERRUPT_LOCK_DEFINE(
   "Interrupt Server"
 )
 
-typedef struct bsp_interrupt_server_entry {
-  rtems_chain_node node;
-  rtems_vector_number vector;
+typedef struct bsp_interrupt_server_action {
+  struct bsp_interrupt_server_action *next;
   rtems_interrupt_handler handler;
   void *arg;
+} bsp_interrupt_server_action;
+
+typedef struct {
+  rtems_chain_node node;
+  rtems_vector_number vector;
+  bsp_interrupt_server_action *actions;
 } bsp_interrupt_server_entry;
 
 static rtems_id bsp_interrupt_server_id = RTEMS_ID_NONE;
@@ -75,6 +81,43 @@ static void bsp_interrupt_server_trigger(void *arg)
   rtems_event_system_send(bsp_interrupt_server_id, RTEMS_EVENT_SYSTEM_SERVER);
 }
 
+typedef struct {
+  bsp_interrupt_server_action *action;
+  bsp_interrupt_server_action **link;
+  rtems_id task;
+} bsp_interrupt_server_helper_data;
+
+static void bsp_interrupt_server_helper(void *arg)
+{
+  bsp_interrupt_server_helper_data *hd = arg;
+
+  *hd->link = hd->action;
+  rtems_event_transient_send(hd->task);
+}
+
+static void bsp_interrupt_server_call_helper(
+  bsp_interrupt_server_action *action,
+  bsp_interrupt_server_action **link
+)
+{
+  bsp_interrupt_server_helper_data hd = {
+    .action = action,
+    .link = link,
+    .task = rtems_task_self()
+  };
+  bsp_interrupt_server_action a = {
+    .handler = bsp_interrupt_server_helper,
+    .arg = &hd
+  };
+  bsp_interrupt_server_entry e = {
+    .vector = BSP_INTERRUPT_VECTOR_MAX + 1,
+    .actions = &a
+  };
+
+  bsp_interrupt_server_trigger(&e);
+  rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+}
+
 static bsp_interrupt_server_entry *bsp_interrupt_server_get_entry(void)
 {
   rtems_interrupt_lock_context lock_context;
@@ -99,36 +142,35 @@ static bsp_interrupt_server_entry *bsp_interrupt_server_get_entry(void)
 
 static void bsp_interrupt_server_task(rtems_task_argument arg)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-
   while (true) {
-    rtems_event_set events = 0;
-    bsp_interrupt_server_entry *e = NULL;
+    rtems_event_set events;
+    bsp_interrupt_server_entry *e;
 
-    sc = rtems_event_system_receive(
+    rtems_event_system_receive(
       RTEMS_EVENT_SYSTEM_SERVER,
       RTEMS_EVENT_ALL | RTEMS_WAIT,
       RTEMS_NO_TIMEOUT,
       &events
     );
-    if (sc != RTEMS_SUCCESSFUL) {
-      break;
-    }
 
     while ((e = bsp_interrupt_server_get_entry()) != NULL) {
-      (*e->handler)(e->arg);
+      bsp_interrupt_server_action *action = e->actions;
+      rtems_vector_number vector = e->vector;
 
-      bsp_interrupt_vector_enable(e->vector);
+      do {
+        bsp_interrupt_server_action *current = action;
+        action = action->next;
+        (*current->handler)(current->arg);
+      } while (action != NULL);
+
+      bsp_interrupt_vector_enable(vector);
     }
   }
-
-  rtems_task_delete(RTEMS_SELF);
 }
 
 typedef struct {
-  rtems_interrupt_handler handler;
-  void *arg;
   bsp_interrupt_server_entry *entry;
+  rtems_option *options;
 } bsp_interrupt_server_iterate_entry;
 
 static void bsp_interrupt_server_per_handler_routine(
@@ -139,14 +181,31 @@ static void bsp_interrupt_server_per_handler_routine(
   void *handler_arg
 )
 {
-  bsp_interrupt_server_iterate_entry *ie = iterate_arg;
-  bsp_interrupt_server_entry *e = handler_arg;
-
   if (handler == bsp_interrupt_server_trigger) {
-    if (e->handler == ie->handler && e->arg == ie->arg) {
-      ie->entry = e;
-    }
+    bsp_interrupt_server_iterate_entry *ie = iterate_arg;
+
+    ie->entry = handler_arg;
+    *ie->options = options;
   }
+}
+
+static bsp_interrupt_server_entry *bsp_interrupt_server_query_entry(
+  rtems_vector_number vector,
+  rtems_option *trigger_options
+)
+{
+  bsp_interrupt_server_iterate_entry ie = {
+    .entry = NULL,
+    .options = trigger_options
+  };
+
+  rtems_interrupt_handler_iterate(
+    vector,
+    bsp_interrupt_server_per_handler_routine,
+    &ie
+  );
+
+  return ie.entry;
 }
 
 rtems_status_code rtems_interrupt_server_handler_install(
@@ -158,8 +217,10 @@ rtems_status_code rtems_interrupt_server_handler_install(
   void *arg
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  bsp_interrupt_server_entry *e = NULL;
+  rtems_status_code sc;
+  bsp_interrupt_server_entry *e;
+  bsp_interrupt_server_action *a;
+  rtems_option trigger_options;
 
   sc = bsp_interrupt_server_is_initialized();
   if (sc != RTEMS_SUCCESSFUL) {
@@ -170,33 +231,66 @@ rtems_status_code rtems_interrupt_server_handler_install(
     return RTEMS_NOT_IMPLEMENTED;
   }
 
-  if (RTEMS_INTERRUPT_IS_SHARED(options)) {
-    return RTEMS_NOT_IMPLEMENTED;
-  }
-
-  e = calloc(1, sizeof(*e));
-  if (e == NULL) {
+  a = calloc(1, sizeof(*a));
+  if (a == NULL) {
     return RTEMS_NO_MEMORY;
   }
 
-  e->vector = vector;
-  e->handler = handler;
-  e->arg = arg;
+  a->handler = handler;
+  a->arg = arg;
 
-  sc = rtems_interrupt_handler_install(
-    vector,
-    info,
-    options,
-    bsp_interrupt_server_trigger,
-    e
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    free(e);
+  bsp_interrupt_lock();
 
-    return sc;
+  e = bsp_interrupt_server_query_entry(vector, &trigger_options);
+  if (e == NULL) {
+    e = calloc(1, sizeof(*e));
+    if (e != NULL) {
+      e->vector = vector;
+      e->actions = a;
+
+      sc = rtems_interrupt_handler_install(
+        vector,
+        "IRQS",
+        options & RTEMS_INTERRUPT_UNIQUE,
+        bsp_interrupt_server_trigger,
+        e
+      );
+      if (sc != RTEMS_SUCCESSFUL) {
+        free(e);
+      }
+    } else {
+      sc = RTEMS_NO_MEMORY;
+    }
+  } else if (
+    RTEMS_INTERRUPT_IS_UNIQUE(options)
+      || RTEMS_INTERRUPT_IS_UNIQUE(trigger_options)
+  ) {
+    sc = RTEMS_RESOURCE_IN_USE;
+  } else {
+    bsp_interrupt_server_action **link = &e->actions;
+    bsp_interrupt_server_action *c;
+
+    while ((c = *link) != NULL) {
+      if (c->handler == handler && c->arg == arg) {
+        sc = RTEMS_TOO_MANY;
+        break;
+      }
+
+      link = &c->next;
+    }
+
+    if (sc == RTEMS_SUCCESSFUL) {
+      bsp_interrupt_server_call_helper(a, link);
+    }
   }
 
-  return RTEMS_SUCCESSFUL;
+  bsp_interrupt_unlock();
+
+  if (sc != RTEMS_SUCCESSFUL) {
+    free(a);
+  }
+
+  return sc;
 }
 
 rtems_status_code rtems_interrupt_server_handler_remove(
@@ -206,12 +300,9 @@ rtems_status_code rtems_interrupt_server_handler_remove(
   void *arg
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  bsp_interrupt_server_iterate_entry ie = {
-    .handler = handler,
-    .arg = arg,
-    .entry = NULL
-  };
+  rtems_status_code sc;
+  bsp_interrupt_server_entry *e;
+  rtems_option trigger_options;
 
   sc = bsp_interrupt_server_is_initialized();
   if (sc != RTEMS_SUCCESSFUL) {
@@ -222,30 +313,48 @@ rtems_status_code rtems_interrupt_server_handler_remove(
     return RTEMS_NOT_IMPLEMENTED;
   }
 
-  /* Query corresponding interrupt server entry */
-  sc = rtems_interrupt_handler_iterate(
-    vector,
-    bsp_interrupt_server_per_handler_routine,
-    &ie
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    return sc;
-  } else if (ie.entry == NULL) {
-    return RTEMS_INVALID_ID;
+  bsp_interrupt_lock();
+
+  e = bsp_interrupt_server_query_entry(vector, &trigger_options);
+  if (e != NULL) {
+    bsp_interrupt_server_action **link = &e->actions;
+    bsp_interrupt_server_action *c;
+
+    while ((c = *link) != NULL) {
+      if (c->handler == handler && c->arg == arg) {
+        break;
+      }
+
+      link = &c->next;
+    }
+
+    if (c != NULL) {
+      bool remove_last = e->actions->next == NULL;
+
+      if (remove_last) {
+        rtems_interrupt_handler_remove(
+          vector,
+          bsp_interrupt_server_trigger,
+          e
+        );
+      }
+
+      bsp_interrupt_server_call_helper(c->next, link);
+      free(c);
+
+      if (remove_last) {
+        free(e);
+      }
+    } else {
+      sc = RTEMS_UNSATISFIED;
+    }
+  } else {
+    sc = RTEMS_INVALID_ID;
   }
 
-  sc = rtems_interrupt_handler_remove(
-    vector,
-    bsp_interrupt_server_trigger,
-    ie.entry
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    return sc;
-  }
+  bsp_interrupt_unlock();
 
-  free(ie.entry);
-
-  return RTEMS_SUCCESSFUL;
+  return sc;
 }
 
 rtems_status_code rtems_interrupt_server_initialize(
@@ -279,13 +388,7 @@ rtems_status_code rtems_interrupt_server_initialize(
     bsp_interrupt_server_task,
     0
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    /* In this case we could also panic */
-    rtems_task_delete(bsp_interrupt_server_id);
-    bsp_interrupt_server_id = RTEMS_ID_NONE;
-
-    return RTEMS_TOO_MANY;
-  }
+  _Assert(sc == RTEMS_SUCCESSFUL);
 
   return RTEMS_SUCCESSFUL;
 }

@@ -9,7 +9,7 @@
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
- * Copyright (c) 2008-2014 embedded brains GmbH.
+ * Copyright (c) 2008, 2016 embedded brains GmbH.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -224,8 +224,9 @@ rtems_status_code rtems_interrupt_handler_iterate(
  * @retval RTEMS_SUCCESSFUL Shall be returned in case of success.
  * @retval RTEMS_INCORRECT_STATE If the default server is already initialized
  * this shall be returned.
- * @retval RTEMS_IO_ERROR Reserved for board support package specific error
- * conditions.
+ * @retval RTEMS_TOO_MANY No free task available to create the server task.
+ * @retval RTEMS_UNSATISFIED Task stack size too large.
+ * @retval RTEMS_INVALID_PRIORITY Invalid task priority.
  */
 rtems_status_code rtems_interrupt_server_initialize(
   rtems_task_priority priority,

@@ -153,14 +153,14 @@ static void bsp_interrupt_free_handler_entry(bsp_interrupt_handler_entry *e)
   #endif
 }
 
-static void bsp_interrupt_lock(void)
+void bsp_interrupt_lock(void)
 {
   if (_System_state_Is_up(_System_state_Get())) {
     _RTEMS_Lock_allocator();
   }
 }
 
-static void bsp_interrupt_unlock(void)
+void bsp_interrupt_unlock(void)
 {
   if (_System_state_Is_up(_System_state_Get())) {
     _RTEMS_Unlock_allocator();
