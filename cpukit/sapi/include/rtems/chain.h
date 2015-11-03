@@ -624,6 +624,16 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_get_unprotected(
 }
 
 /**
+ * @brief See _Chain_Get_first_unprotected().
+ */
+RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_get_first_unprotected(
+  rtems_chain_control *the_chain
+)
+{
+  return _Chain_Get_first_unprotected( the_chain );
+}
+
+/**
  * @brief Insert a node on a chain
  *
  * This routine inserts @a the_node on a chain immediately following

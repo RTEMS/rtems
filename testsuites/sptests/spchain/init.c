@@ -117,6 +117,13 @@ static void test_chain_first_and_last(void)
   puts( "INIT - Verify rtems_chain_is_last" );
   cnode = rtems_chain_last(&chain);
   rtems_test_assert( rtems_chain_is_last( cnode ) );
+
+  cnode = rtems_chain_get_first_unprotected( &chain );
+  rtems_test_assert( cnode == &node1 );
+  cnode = rtems_chain_first( &chain );
+  rtems_test_assert( cnode == &node2 );
+  cnode = rtems_chain_last( &chain );
+  rtems_test_assert( cnode == &node2 );
 }
 
 static void test_chain_with_notification(void)

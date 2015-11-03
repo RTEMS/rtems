@@ -35,6 +35,7 @@ provided by RTEMS is:
 @item @code{@value{DIRPREFIX}chain_extract_unprotected} - Extract the node from the chain (unprotected)
 @item @code{@value{DIRPREFIX}chain_get} - Return the first node on the chain
 @item @code{@value{DIRPREFIX}chain_get_unprotected} - Return the first node on the chain (unprotected)
+@item @code{@value{DIRPREFIX}chain_get_first_unprotected} - Get the first node on the chain (unprotected)
 @item @code{@value{DIRPREFIX}chain_insert} - Insert the node into the chain
 @item @code{@value{DIRPREFIX}chain_insert_unprotected} - Insert the node into the chain (unprotected)
 @item @code{@value{DIRPREFIX}chain_append} - Append the node to chain
@@ -656,6 +657,38 @@ atomicity of the operation.
 
 Use @code{@value{DIRPREFIX}chain_get_unprotected()} to avoid disabling of
 interrupts.
+
+@c
+@c
+@c
+@page
+@subsection Get the First Node (unprotected)
+
+@cindex chain get first node
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex @value{DIRPREFIX}chain_get_first_unprotected
+@example
+@value{DIRPREFIX}chain_node *@value{DIRPREFIX}chain_get_first_unprotected(
+  @value{DIRPREFIX}chain_control *the_chain
+);
+@end example
+@end ifset
+
+@subheading RETURNS:
+
+A pointer to the former first node is returned.
+
+@subheading DESCRIPTION:
+
+Removes the first node from the chain and returns a pointer to it.  In case the
+chain was empty, then the results are unpredictable.
+
+@subheading NOTES:
+
+The function does nothing to ensure the atomicity of the operation.
 
 @c
 @c
