@@ -63,7 +63,7 @@ static void bsp_interrupt_server_trigger(void *arg)
 
   bsp_interrupt_vector_disable(e->vector);
 
-  if (e->node.next == NULL) {
+  if (rtems_chain_is_node_off_chain(&e->node)) {
     rtems_interrupt_lock_context lock_context;
 
     rtems_interrupt_lock_acquire(&bsp_interrupt_server_lock, &lock_context);
@@ -80,13 +80,17 @@ static bsp_interrupt_server_entry *bsp_interrupt_server_get_entry(void)
 {
   rtems_interrupt_lock_context lock_context;
   bsp_interrupt_server_entry *e;
+  rtems_chain_control *chain;
 
   rtems_interrupt_lock_acquire(&bsp_interrupt_server_lock, &lock_context);
+  chain = &bsp_interrupt_server_chain;
 
-  e = (bsp_interrupt_server_entry *)
-    rtems_chain_get_unprotected(&bsp_interrupt_server_chain);
-  if (e != NULL) {
-    e->node.next = NULL;
+  if (!rtems_chain_is_empty(chain)) {
+    e = (bsp_interrupt_server_entry *)
+      rtems_chain_get_first_unprotected(chain);
+    rtems_chain_set_off_chain(&e->node);
+  } else {
+    e = NULL;
   }
 
   rtems_interrupt_lock_release(&bsp_interrupt_server_lock, &lock_context);
