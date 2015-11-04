@@ -81,7 +81,7 @@ rtems_task Init(
   TEST_BEGIN();
 
   status = _Objects_Name_to_id_u32(
-    &_Thread_Internal_information,
+    &_Thread_Internal_information.Objects,
     rtems_build_name( 'I', 'D', 'L', 'E' ),
     RTEMS_SEARCH_LOCAL_NODE,
     &Idle_id
