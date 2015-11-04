@@ -199,7 +199,7 @@ static void _Thread_queue_Priority_do_initialize(
 #if defined(RTEMS_SMP)
   _Chain_Initialize_empty( &heads->Heads.Fifo );
 #else
-  _RBTree_Initialize_empty( &heads->Heads.Priority );
+  _RBTree_Initialize_empty( &heads->Heads.Priority.Queue );
 #endif
 }
 
