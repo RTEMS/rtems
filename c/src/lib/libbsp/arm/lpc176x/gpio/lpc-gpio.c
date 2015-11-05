@@ -1,5 +1,5 @@
 /**
- * @file gpio.c
+ * @file lpc-gpio.c
  *
  * @ingroup lpc176x
  *
@@ -22,7 +22,7 @@
 #include <assert.h>
 #include <bsp/irq.h>
 #include <bsp/io.h>
-#include <bsp/gpio.h>
+#include <bsp/lpc-gpio.h>
 #include <rtems/status-checks.h>
 
 static uint32_t                              function_vector_size = 0u;

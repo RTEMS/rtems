@@ -1,5 +1,5 @@
 /**
- * @file gpio.h
+ * @file lpc-gpio.h
  *
  * @ingroup lpc176x
  *

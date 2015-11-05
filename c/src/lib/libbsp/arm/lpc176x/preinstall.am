@@ -113,9 +113,9 @@ $(PROJECT_INCLUDE)/bsp/gpio-defs.h: include/gpio-defs.h $(PROJECT_INCLUDE)/bsp/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/gpio-defs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/gpio-defs.h
 
-$(PROJECT_INCLUDE)/bsp/gpio.h: include/gpio.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/gpio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/gpio.h
+$(PROJECT_INCLUDE)/bsp/lpc-gpio.h: include/lpc-gpio.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc-gpio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc-gpio.h
 
 $(PROJECT_INCLUDE)/bsp/can.h: include/can.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/can.h

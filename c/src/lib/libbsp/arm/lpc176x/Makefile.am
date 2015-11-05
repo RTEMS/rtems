@@ -41,7 +41,7 @@ include_bsp_HEADERS += include/io-defs.h
 include_bsp_HEADERS += include/io.h
 include_bsp_HEADERS += include/common-types.h
 include_bsp_HEADERS += include/gpio-defs.h
-include_bsp_HEADERS += include/gpio.h
+include_bsp_HEADERS += include/lpc-gpio.h
 include_bsp_HEADERS += include/can.h
 include_bsp_HEADERS += include/can-defs.h
 include_bsp_HEADERS += include/pwmout.h
@@ -131,7 +131,7 @@ libbsp_a_SOURCES += ../../shared/tod.c \
 			rtc/rtc-config.c
 
 # GPIO
-libbsp_a_SOURCES += gpio/gpio.c
+libbsp_a_SOURCES += gpio/lpc-gpio.c
 
 # CAN
 libbsp_a_SOURCES += can/can.c
