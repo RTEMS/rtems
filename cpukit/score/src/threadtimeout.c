@@ -39,35 +39,44 @@ void _Thread_Timeout( Objects_Id id, void *arg )
   ISR_lock_Control  *thread_lock;
   ISR_lock_Context   lock_context;
   Thread_Wait_flags  wait_flags;
-  Thread_Wait_flags  wait_class;
-  Thread_Wait_flags  intend_to_block;
-  Thread_Wait_flags  blocked;
-  bool               success;
   bool               unblock;
 
   the_thread = arg;
   thread_lock = _Thread_Lock_acquire( the_thread, &lock_context );
 
   wait_flags = _Thread_Wait_flags_get( the_thread );
-  wait_class = wait_flags & THREAD_WAIT_CLASS_MASK;
-  intend_to_block = wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK;
-  blocked = wait_class | THREAD_WAIT_STATE_BLOCKED;
-  success = _Thread_Wait_flags_try_change_critical(
-    the_thread,
-    intend_to_block,
-    wait_class | THREAD_WAIT_STATE_READY_AGAIN
-  );
 
-  if ( success ) {
+  if ( ( wait_flags & THREAD_WAIT_STATE_READY_AGAIN ) == 0 ) {
+    Thread_Wait_flags wait_class;
+    Thread_Wait_flags ready_again;
+    bool              success;
+
     _Thread_Do_timeout( the_thread );
-    unblock = false;
-  } else if ( _Thread_Wait_flags_get( the_thread ) == blocked ) {
-    _Thread_Wait_flags_set(
+
+    /*
+     * This fence is only necessary for the events, see _Event_Seize().  The
+     * thread queues use the thread lock for synchronization.
+     */
+    _Atomic_Fence( ATOMIC_ORDER_RELEASE );
+
+    wait_class = wait_flags & THREAD_WAIT_CLASS_MASK;
+    ready_again = wait_class | THREAD_WAIT_STATE_READY_AGAIN;
+    success = _Thread_Wait_flags_try_change_critical(
       the_thread,
-      wait_class | THREAD_WAIT_STATE_READY_AGAIN
+      wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK,
+      ready_again
     );
-    _Thread_Do_timeout( the_thread );
-    unblock = true;
+
+    if ( success ) {
+      unblock = false;
+    } else {
+      _Assert(
+        _Thread_Wait_flags_get( the_thread )
+          == wait_class | THREAD_WAIT_STATE_BLOCKED
+      );
+      _Thread_Wait_flags_set( the_thread, ready_again );
+      unblock = true;
+    }
   } else {
     unblock = false;
   }
