@@ -27,8 +27,6 @@
 
 #include <bsp/irq-generic.h>
 
-#define BSP_INTERRUPT_EVENT RTEMS_EVENT_13
-
 RTEMS_INTERRUPT_LOCK_DEFINE(
   static,
   bsp_interrupt_server_lock,
@@ -73,7 +71,7 @@ static void bsp_interrupt_server_trigger(void *arg)
     ++bsp_interrupt_server_errors;
   }
 
-  rtems_event_send(bsp_interrupt_server_id, BSP_INTERRUPT_EVENT);
+  rtems_event_system_send(bsp_interrupt_server_id, RTEMS_EVENT_SYSTEM_SERVER);
 }
 
 static bsp_interrupt_server_entry *bsp_interrupt_server_get_entry(void)
@@ -106,8 +104,8 @@ static void bsp_interrupt_server_task(rtems_task_argument arg)
     rtems_event_set events = 0;
     bsp_interrupt_server_entry *e = NULL;
 
-    sc = rtems_event_receive(
-      BSP_INTERRUPT_EVENT,
+    sc = rtems_event_system_receive(
+      RTEMS_EVENT_SYSTEM_SERVER,
       RTEMS_EVENT_ALL | RTEMS_WAIT,
       RTEMS_NO_TIMEOUT,
       &events

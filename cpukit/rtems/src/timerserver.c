@@ -256,7 +256,7 @@ static rtems_task _Timer_server_Body(
     );
 
     (void) rtems_event_system_receive(
-      RTEMS_EVENT_SYSTEM_TIMER_SERVER,
+      RTEMS_EVENT_SYSTEM_SERVER,
       RTEMS_EVENT_ALL | RTEMS_WAIT,
       RTEMS_NO_TIMEOUT,
       &events
@@ -281,7 +281,7 @@ static void _Timer_server_Wakeup(
     _Timer_server_Get_seconds
   );
 
-  (void) rtems_event_system_send( id, RTEMS_EVENT_SYSTEM_TIMER_SERVER );
+  (void) rtems_event_system_send( id, RTEMS_EVENT_SYSTEM_SERVER );
 }
 
 static void _Timer_server_Initialize_watchdogs(
