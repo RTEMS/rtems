@@ -57,19 +57,20 @@ static unsigned bsp_interrupt_server_errors;
 
 static void bsp_interrupt_server_trigger(void *arg)
 {
+  rtems_interrupt_lock_context lock_context;
   bsp_interrupt_server_entry *e = arg;
 
   bsp_interrupt_vector_disable(e->vector);
 
-  if (rtems_chain_is_node_off_chain(&e->node)) {
-    rtems_interrupt_lock_context lock_context;
+  rtems_interrupt_lock_acquire(&bsp_interrupt_server_lock, &lock_context);
 
-    rtems_interrupt_lock_acquire(&bsp_interrupt_server_lock, &lock_context);
+  if (rtems_chain_is_node_off_chain(&e->node)) {
     rtems_chain_append_unprotected(&bsp_interrupt_server_chain, &e->node);
-    rtems_interrupt_lock_release(&bsp_interrupt_server_lock, &lock_context);
   } else {
     ++bsp_interrupt_server_errors;
   }
+
+  rtems_interrupt_lock_release(&bsp_interrupt_server_lock, &lock_context);
 
   rtems_event_system_send(bsp_interrupt_server_id, RTEMS_EVENT_SYSTEM_SERVER);
 }
