@@ -46,7 +46,7 @@
 #include <bsp/ti_herc/reg_dma.h>
 #include <bsp/ti_herc/reg_dmm.h>
 #include <bsp/ti_herc/reg_efuse.h>
-#include <bsp/ti_herc/reg_emac.h>
+#include <bsp/ti_herc/reg_emacc.h>
 #include <bsp/ti_herc/reg_emacm.h>
 #include <bsp/ti_herc/reg_emif.h>
 #include <bsp/ti_herc/reg_esm.h>
@@ -87,7 +87,7 @@
 #define TMS570_DMA (*(volatile tms570_dma_t*)0xFFFFF000)
 #define TMS570_DMM (*(volatile tms570_dmm_t*)0xFFFFF700)
 #define TMS570_EFUSE (*(volatile tms570_efuse_t*)0XFFF8C01C)
-#define TMS570_EMAC (*(volatile tms570_emac_t*)0xFCF78900)
+#define TMS570_EMACC (*(volatile tms570_emacc_t*)0xFCF78800)
 #define TMS570_EMACM (*(volatile tms570_emacm_t*)0xFCF78000)
 #define TMS570_EMIF (*(volatile tms570_emif_t*)0xFCFFE800)
 #define TMS570_ESM (*(volatile tms570_esm_t*)0XFFFFF500)
