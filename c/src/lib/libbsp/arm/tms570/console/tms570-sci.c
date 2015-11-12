@@ -531,9 +531,11 @@ static void tms570_sci_interrupt_last_close(
   tms570_sci_disable_interrupts(ctx);
   rtems_termios_device_lock_release(base, &lock_context);
 
-  /* Flush device */
-  while ( ( ctx->regs->FLR & TMS570_SCI_FLR_TX_EMPTY ) > 0 ) {
-    ;/* Wait until all data has been sent */
+  if ( 0 /* for flush on close */ ) {
+    /* Flush device */
+    while ( ( ctx->regs->FLR & TMS570_SCI_FLR_TX_EMPTY ) == 0 ) {
+      ;/* Wait until all data has been sent */
+    }
   }
 
   /* uninstall ISR */
