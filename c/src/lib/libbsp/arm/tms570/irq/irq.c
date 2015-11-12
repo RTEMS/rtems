@@ -201,6 +201,29 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
    * can be provided by VIM hardware
    */
   sctlr &= ~(1 << 24);
+  #if 0
+    /*
+     * Option to enable exception table bypass for interrupts
+     *
+     * Because RTEMS requires all interrupts to be serviced through
+     * common _ARMV4_Exception_interrupt handler to allow task switching
+     * on exit from interrupt working correctly, vim_vec cannot point
+     * directly to individual vector handlers and need to point
+     * to single entry path. But if TMS570_VIM.IRQINDEX is then used
+     * to target execution to corresponding service then for some
+     * peripherals (i.e. EMAC) interrupt is already acknowledged
+     * by VIM and IRQINDEX is read as zero which leads to spurious
+     * interrupt and peripheral not serviced/blocked.
+     *
+     * To analyze this behavior we used trampolines which setup
+     * bsp_interrupt_vector_inject and pass execution to
+     * _ARMV4_Exception_interrupt. It works but is more ugly than
+     * use of POM remap for these cases where application does not
+     * start at address 0x00000000. If RTEMS image is placed at
+     * memory space beginning then no of these constructs is necessary.
+     */
+    sctlr |= 1 << 24;
+  #endif
   asm volatile ("mcr p15, 0, %0, c1, c0, 0\n": : "r" (sctlr));
 
   return RTEMS_SUCCESSFUL;

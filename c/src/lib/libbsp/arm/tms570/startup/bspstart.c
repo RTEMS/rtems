@@ -27,13 +27,49 @@
 #include <bsp/irq-generic.h>
 #include <bsp/start.h>
 #include <bsp/bootcard.h>
+#include <bsp/linker-symbols.h>
+#include <rtems/endian.h>
 
 void bsp_start( void )
 {
-  /* set the cpu mode to supervisor and big endian */
-  arm_cpu_mode = 0x213;
+  #if BYTE_ORDER == BIG_ENDIAN
+    /*
+     * If CPU is big endian (TMS570 family variant)
+     * set the CPU mode to supervisor and big endian.
+     * Do not set mode if CPU is little endian
+     * (RM48 family variant) for which default mode 0x13
+     * defined in cpukit/score/cpu/arm/cpu.c
+     * is right.
+     */
+    arm_cpu_mode = 0x213;
+  #endif
 
-  tms570_pom_remap();
+  tms570_initialize_and_clear();
+
+  /*
+   * If RTEMS image does not start at address 0x00000000
+   * then first level exception table at memory begin has
+   * to be replaced to point to RTEMS handlers addresses.
+   *
+   * There is no VBAR or other option because Cortex-R
+   * does provides only fixed address 0x00000000 for exceptions
+   * (0xFFFF0000-0xFFFF001C alternative SCTLR.V = 1 cannot
+   * be used because target area corersponds to PMM peripheral
+   * registers on TMS570).
+   *
+   * Alternative is to use jumps over SRAM based trampolines
+   * but that is not compatible with
+   *   Check TCRAM1 ECC error detection logic
+   * which intentionally introduces data abort during startup
+   * to check SRAM and if exception processing goes through
+   * SRAM then it leads to CPU error halt.
+   *
+   * So use of POM to replace jumps to vectors target
+   * addresses seems to be the best option.
+   */
+  if ( (uintptr_t)bsp_start_vector_table_begin != 0 ) {
+    tms570_pom_remap();
+  }
 
   /* Interrupts */
   bsp_interrupt_initialize();

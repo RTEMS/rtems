@@ -48,8 +48,7 @@ extern "C" {
 
 #define TMS570_POM_REGADDRMASK    ((1<<23)-1)
 
-
-int mem_dump(void *buf, unsigned long start, unsigned long len, int blen);
+void tms570_initialize_and_clear(void);
 void tms570_pom_remap(void);
 
 /** @} */
