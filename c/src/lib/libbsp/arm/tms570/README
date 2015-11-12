@@ -11,6 +11,9 @@ Drivers:
 BSP variants:
   tms570ls3137_hdk_intram - place code and data into internal SRAM
   tms570ls3137_hdk_sdram - place code into external SDRAM and data to SRAM
+  tms570ls3137_hdk_with_loader - reserve 256kB at Flash start for loader
+                                 and place RTEMS application from address
+                                 0x00040000
   tms570ls3137_hdk - variant prepared for stand-alone RTEMS application
                       stored and running directly from flash. Not working yet.
 
