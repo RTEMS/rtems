@@ -41,6 +41,7 @@ include_bsp_HEADERS += include/tms570-vim.h
 include_bsp_HEADERS += include/tms570-pom.h
 include_bsp_HEADERS += include/tms570-sci-driver.h
 include_bsp_HEADERS += include/system-clocks.h
+include_bsp_HEADERS += include/tms570-pinmux.h
 
 include_bsp_ti_hercules_HEADERS = include/ti_herc/reg_adc.h
 include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_ccmsr.h
@@ -151,7 +152,7 @@ libbsp_a_SOURCES += clock/benchmark_timer.c
 # RTC
 
 # GPIO
-
+libbsp_a_SOURCES += pinmux/pinmux.c
 # Timer
 
 # Benchmark Timer

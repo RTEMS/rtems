@@ -114,6 +114,10 @@ $(PROJECT_INCLUDE)/bsp/system-clocks.h: include/system-clocks.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/system-clocks.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/system-clocks.h
 
+$(PROJECT_INCLUDE)/bsp/tms570-pinmux.h: include/tms570-pinmux.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tms570-pinmux.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tms570-pinmux.h
+
 $(PROJECT_INCLUDE)/bsp/ti_herc/reg_adc.h: include/ti_herc/reg_adc.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_adc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_adc.h
