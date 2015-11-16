@@ -356,6 +356,9 @@ void _CPU_Context_Initialize(
     tmp_psr |= (new_level << 8) & SPARC_PSR_PIL_MASK;
     tmp_psr &= ~SPARC_PSR_EF_MASK;      /* disabled by default */
 
+    /* _CPU_Context_restore_heir() relies on this */
+    _Assert( ( tmp_psr & SPARC_PSR_ET_MASK ) != 0 );
+
 #if (SPARC_HAS_FPU == 1)
     /*
      *  If this bit is not set, then a task gets a fault when it accesses

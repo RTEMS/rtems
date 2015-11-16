@@ -127,14 +127,9 @@ SYM(_CPU_Context_restore_heir):
          *      g5 = scratch
          */
 
-        ld      [%o1 + PSR_OFFSET], %g1       ! g1 = saved psr
-
         and     %o2, SPARC_PSR_CWP_MASK, %g3  ! g3 = CWP
-                                              ! g1 = psr w/o cwp
-        andn    %g1, SPARC_PSR_ET_MASK | SPARC_PSR_CWP_MASK, %g1
-        or      %g1, %g3, %g1                 ! g1 = heirs psr
-        mov     %g1, %psr                     ! restore status register and
-                                              ! **** DISABLE TRAPS ****
+        andn    %o2, SPARC_PSR_ET_MASK, %g1   ! g1 = psr with traps disabled
+        mov     %g1, %psr                     ! **** DISABLE TRAPS ****
         mov     %wim, %g2                     ! g2 = wim
         mov     1, %g4
         sll     %g4, %g3, %g4                 ! g4 = WIM mask for CW invalid
@@ -173,18 +168,14 @@ save_frame_loop:
 
 done_flushing:
 
-        add     %g3, 1, %g3                   ! calculate desired WIM
-        and     %g3, SPARC_NUMBER_OF_REGISTER_WINDOWS - 1, %g3
+        ! Wait three instructions after the write to PSR before using
+        ! non-global registers or instructions affecting the CWP
+        mov     %g1, %psr                     ! restore cwp
+        add     %g3, 1, %g2                   ! calculate desired WIM
+        and     %g2, SPARC_NUMBER_OF_REGISTER_WINDOWS - 1, %g2
         mov     1, %g4
-        sll     %g4, %g3, %g4                 ! g4 = new WIM
+        sll     %g4, %g2, %g4                 ! g4 = new WIM
         mov     %g4, %wim
-
-        or      %g1, SPARC_PSR_ET_MASK, %g1
-        mov     %g1, %psr                     ! **** ENABLE TRAPS ****
-                                              !   and restore CWP
-        nop
-        nop
-        nop
 
 #if defined(RTEMS_SMP)
         ! The executing context no longer executes on this processor
@@ -201,6 +192,12 @@ try_update_is_executing:
 
         ! The next load is in a delay slot, which is all right
 #endif
+
+        ld      [%o1 + PSR_OFFSET], %g1       ! g1 = heir psr with traps enabled
+        andn    %g1, SPARC_PSR_CWP_MASK, %g1  ! g1 = heir psr w/o cwp
+        or      %g1, %g3, %g1                 ! g1 = heir psr with cwp
+        mov     %g1, %psr                     ! restore status register and
+                                              ! **** ENABLE TRAPS ****
 
         ld      [%o1 + G5_OFFSET], %g5        ! restore the global registers
         ld      [%o1 + G7_OFFSET], %g7
