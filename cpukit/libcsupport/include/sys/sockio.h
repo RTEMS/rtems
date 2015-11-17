@@ -27,11 +27,10 @@
  * SUCH DAMAGE.
  *
  *	@(#)sockio.h	8.1 (Berkeley) 3/28/94
- * $FreeBSD: src/sys/sys/sockio.h,v 1.31 2006/07/09 06:04:00 sam Exp $
+ * $FreeBSD r283364 2015-05-24T11:24:14Z$
  */
 
-
-#ifndef	_SYS_SOCKIO_H_
+#ifndef _SYS_SOCKIO_H_
 #define	_SYS_SOCKIO_H_
 
 #include <sys/ioccom.h>
@@ -71,6 +70,18 @@
 #define	SIOCDIFADDR	 _IOW('i', 25, struct ifreq)	/* delete IF addr */
 #define	SIOCAIFADDR	 _IOW('i', 26, struct ifaliasreq)/* add/chg IF alias */
 
+#define	SIOCALIFADDR	 _IOW('i', 27, struct if_laddrreq) /* add IF addr */
+#define	SIOCGLIFADDR	_IOWR('i', 28, struct if_laddrreq) /* get IF addr */
+#define	SIOCDLIFADDR	 _IOW('i', 29, struct if_laddrreq) /* delete IF addr */
+#define	SIOCSIFCAP	 _IOW('i', 30, struct ifreq)	/* set IF features */
+#define	SIOCGIFCAP	_IOWR('i', 31, struct ifreq)	/* get IF features */
+#define	SIOCGIFINDEX	_IOWR('i', 32, struct ifreq)	/* get IF index */
+#define	SIOCGIFMAC	_IOWR('i', 38, struct ifreq)	/* get IF MAC label */
+#define	SIOCSIFMAC	 _IOW('i', 39, struct ifreq)	/* set IF MAC label */
+#define	SIOCSIFNAME	 _IOW('i', 40, struct ifreq)	/* set IF name */
+#define	SIOCSIFDESCR	 _IOW('i', 41, struct ifreq)	/* set ifnet descr */ 
+#define	SIOCGIFDESCR	_IOWR('i', 42, struct ifreq)	/* get ifnet descr */ 
+
 #define	SIOCADDMULTI	 _IOW('i', 49, struct ifreq)	/* add m'cast addr */
 #define	SIOCDELMULTI	 _IOW('i', 50, struct ifreq)	/* del m'cast addr */
 #define	SIOCGIFMTU	_IOWR('i', 51, struct ifreq)	/* get IF mtu */
@@ -80,10 +91,47 @@
 #define	SIOCSIFMEDIA	_IOWR('i', 55, struct ifreq)	/* set net media */
 #define	SIOCGIFMEDIA	_IOWR('i', 56, struct ifmediareq) /* get net media */
 
+#define	SIOCSIFGENERIC	 _IOW('i', 57, struct ifreq)	/* generic IF set op */
+#define	SIOCGIFGENERIC	_IOWR('i', 58, struct ifreq)	/* generic IF get op */
+
+#define	SIOCGIFSTATUS	_IOWR('i', 59, struct ifstat)	/* get IF status */
+#define	SIOCSIFLLADDR	 _IOW('i', 60, struct ifreq)	/* set linklevel addr */
+
+#define	SIOCSIFPHYADDR	 _IOW('i', 70, struct ifaliasreq) /* set gif addres */
+#define	SIOCGIFPSRCADDR	_IOWR('i', 71, struct ifreq)	/* get gif psrc addr */
+#define	SIOCGIFPDSTADDR	_IOWR('i', 72, struct ifreq)	/* get gif pdst addr */
+#define	SIOCDIFPHYADDR	 _IOW('i', 73, struct ifreq)	/* delete gif addrs */
+#define	SIOCSLIFPHYADDR	 _IOW('i', 74, struct if_laddrreq) /* set gif addrs */
+#define	SIOCGLIFPHYADDR	_IOWR('i', 75, struct if_laddrreq) /* get gif addrs */
+
+#define	SIOCGPRIVATE_0	_IOWR('i', 80, struct ifreq)	/* device private 0 */
+#define	SIOCGPRIVATE_1	_IOWR('i', 81, struct ifreq)	/* device private 1 */
+
 /*
  * RTEMS additions for setting/getting `tap' function on incoming packets.
  */
-#define SIOCSIFTAP	_IOW('i', 80, struct ifreq)	/* set tap function */
-#define SIOCGIFTAP	_IOW('i', 81, struct ifreq)	/* get tap function */
+#define	SIOCSIFTAP	_IOW('i', 88, struct ifreq)	/* set tap function */
+#define	SIOCGIFTAP	_IOW('i', 89, struct ifreq)	/* get tap function */
+
+#define	SIOCSIFVNET	_IOWR('i', 90, struct ifreq)	/* move IF jail/vnet */
+#define	SIOCSIFRVNET	_IOWR('i', 91, struct ifreq)	/* reclaim vnet IF */
+
+#define	SIOCGIFFIB	_IOWR('i', 92, struct ifreq)	/* get IF fib */
+#define	SIOCSIFFIB	 _IOW('i', 93, struct ifreq)	/* set IF fib */
+
+#define	SIOCSDRVSPEC	_IOW('i', 123, struct ifdrv)	/* set driver-specific
+								  parameters */
+#define	SIOCGDRVSPEC	_IOWR('i', 123, struct ifdrv)	/* get driver-specific
+								  parameters */
+
+#define	SIOCIFCREATE	_IOWR('i', 122, struct ifreq)	/* create clone if */
+#define	SIOCIFCREATE2	_IOWR('i', 124, struct ifreq)	/* create clone if */
+#define	SIOCIFDESTROY	 _IOW('i', 121, struct ifreq)	/* destroy clone if */
+#define	SIOCIFGCLONERS	_IOWR('i', 120, struct if_clonereq) /* get cloners */
+
+#define	SIOCAIFGROUP	 _IOW('i', 135, struct ifgroupreq) /* add an ifgroup */
+#define	SIOCGIFGROUP	_IOWR('i', 136, struct ifgroupreq) /* get ifgroups */
+#define	SIOCDIFGROUP	 _IOW('i', 137, struct ifgroupreq) /* delete ifgroup */
+#define	SIOCGIFGMEMB	_IOWR('i', 138, struct ifgroupreq) /* get members */
 
 #endif /* !_SYS_SOCKIO_H_ */
