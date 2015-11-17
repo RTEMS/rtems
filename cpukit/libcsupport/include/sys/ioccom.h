@@ -80,16 +80,6 @@ typedef uint32_t ioctl_command_t;
 #define       RTEMS_IO_SNDWAKEUP      5
 #define       RTEMS_IO_TCFLUSH        6
 
-/* copied from libnetworking/sys/filio.h and commented out there */
-/* Generic file-descriptor ioctl's. */
-#define FIOCLEX          _IO('f', 1)            /* set close on exec on fd */
-#define FIONCLEX         _IO('f', 2)            /* remove close on exec */
-#define FIONREAD        _IOR('f', 127, int)     /* get # bytes to read */
-#define FIONBIO         _IOW('f', 126, int)     /* set/clear non-blocking i/o */
-#define FIOASYNC        _IOW('f', 125, int)     /* set/clear async i/o */
-#define FIOSETOWN       _IOW('f', 124, int)     /* set owner */
-#define FIOGETOWN       _IOR('f', 123, int)     /* get owner */
-
 #ifdef _KERNEL
 
 #if defined(COMPAT_FREEBSD6) || defined(COMPAT_FREEBSD5) || \
