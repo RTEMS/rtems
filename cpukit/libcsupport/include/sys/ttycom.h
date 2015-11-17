@@ -15,10 +15,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -36,6 +32,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ttycom.h	8.1 (Berkeley) 3/28/94
+ * $FreeBSD r231095 2012-02-06T18:15:46Z$
  */
 
 #ifndef	_SYS_TTYCOM_H_
@@ -59,42 +56,65 @@ struct winsize {
 	unsigned short	ws_ypixel;	/* vertical size, pixels */
 };
 
-#define	TIOCMODG	_IOR('t', 3, int)	/* get modem control state */
-#define	TIOCMODS	_IOW('t', 4, int)	/* set modem control state */
-#define		TIOCM_LE	0001		/* line enable */
-#define		TIOCM_DTR	0002		/* data terminal ready */
-#define		TIOCM_RTS	0004		/* request to send */
-#define		TIOCM_ST	0010		/* secondary transmit */
-#define		TIOCM_SR	0020		/* secondary receive */
-#define		TIOCM_CTS	0040		/* clear to send */
-#define		TIOCM_CAR	0100		/* carrier detect */
-#define		TIOCM_CD	TIOCM_CAR
-#define		TIOCM_RNG	0200		/* ring */
-#define		TIOCM_RI	TIOCM_RNG
-#define		TIOCM_DSR	0400		/* data set ready */
+						/* 0-2 compat */
+						/* 3-7 unused */
 						/* 8-10 compat */
+						/* 11-12 unused */
 #define	TIOCEXCL	 _IO('t', 13)		/* set exclusive use of tty */
 #define	TIOCNXCL	 _IO('t', 14)		/* reset exclusive use of tty */
-						/* 15 unused */
+#define	TIOCGPTN	_IOR('t', 15, int)	/* Get pts number. */
 #define	TIOCFLUSH	_IOW('t', 16, int)	/* flush buffers */
 						/* 17-18 compat */
 #define	TIOCGETA	_IOR('t', 19, struct termios) /* get termios struct */
 #define	TIOCSETA	_IOW('t', 20, struct termios) /* set termios struct */
 #define	TIOCSETAW	_IOW('t', 21, struct termios) /* drain output, set */
 #define	TIOCSETAF	_IOW('t', 22, struct termios) /* drn out, fls in, set */
+						/* 23-25 unused */
 #define	TIOCGETD	_IOR('t', 26, int)	/* get line discipline */
 #define	TIOCSETD	_IOW('t', 27, int)	/* set line discipline */
-						/* 127-124 compat */
-#define	TIOCSBRK	 _IO('t', 123)		/* set break bit */
-#define	TIOCCBRK	 _IO('t', 122)		/* clear break bit */
-#define	TIOCSDTR	 _IO('t', 121)		/* set data terminal ready */
-#define	TIOCCDTR	 _IO('t', 120)		/* clear data terminal ready */
-#define	TIOCGPGRP	_IOR('t', 119, int)	/* get pgrp of tty */
-#define	TIOCSPGRP	_IOW('t', 118, int)	/* set pgrp of tty */
-						/* 117-116 compat */
-#define	TIOCOUTQ	_IOR('t', 115, int)	/* output queue size */
-#define	TIOCSTI		_IOW('t', 114, char)	/* simulate terminal input */
-#define	TIOCNOTTY	 _IO('t', 113)		/* void tty association */
+#define	TIOCPTMASTER	 _IO('t', 28)		/* pts master validation */
+						/* 29-85 unused */
+#define	TIOCGDRAINWAIT	_IOR('t', 86, int)	/* get ttywait timeout */
+#define	TIOCSDRAINWAIT	_IOW('t', 87, int)	/* set ttywait timeout */
+						/* 88 unused */
+						/* 89-91 conflicts: tun and tap */
+#define	TIOCTIMESTAMP	_IOR('t', 89, struct timeval)	/* enable/get timestamp
+						 * of last input event */
+#define	TIOCMGDTRWAIT	_IOR('t', 90, int)	/* modem: get wait on close */
+#define	TIOCMSDTRWAIT	_IOW('t', 91, int)	/* modem: set wait on close */
+						/* 92-93 tun and tap */
+						/* 94-97 conflicts: tun and tap */
+#define	TIOCDRAIN	 _IO('t', 94)		/* wait till output drained */
+#define	TIOCSIG		_IOWINT('t', 95)	/* pty: generate signal */
+#define	TIOCEXT		_IOW('t', 96, int)	/* pty: external processing */
+#define	TIOCSCTTY	 _IO('t', 97)		/* become controlling tty */
+#define	TIOCCONS	_IOW('t', 98, int)	/* become virtual console */
+#define	TIOCGSID	_IOR('t', 99, int)	/* get session id */
+						/* 100 unused */
+#define	TIOCSTAT	 _IO('t', 101)		/* simulate ^T status message */
+#define	TIOCUCNTL	_IOW('t', 102, int)	/* pty: set/clr usr cntl mode */
+#define		UIOCCMD(n)	_IO('u', n)	/* usr cntl op "n" */
+#define	TIOCSWINSZ	_IOW('t', 103, struct winsize)	/* set window size */
+#define	TIOCGWINSZ	_IOR('t', 104, struct winsize)	/* get window size */
+						/* 105 unused */
+#define	TIOCMGET	_IOR('t', 106, int)	/* get all modem bits */
+#define		TIOCM_LE	0001		/* line enable */
+#define		TIOCM_DTR	0002		/* data terminal ready */
+#define		TIOCM_RTS	0004		/* request to send */
+#define		TIOCM_ST	0010		/* secondary transmit */
+#define		TIOCM_SR	0020		/* secondary receive */
+#define		TIOCM_CTS	0040		/* clear to send */
+#define		TIOCM_DCD	0100		/* data carrier detect */
+#define		TIOCM_RI 	0200		/* ring indicate */
+#define		TIOCM_DSR	0400		/* data set ready */
+#define		TIOCM_CD	TIOCM_DCD
+#define		TIOCM_CAR	TIOCM_DCD
+#define		TIOCM_RNG	TIOCM_RI
+#define	TIOCMBIC	_IOW('t', 107, int)	/* bic modem bits */
+#define	TIOCMBIS	_IOW('t', 108, int)	/* bis modem bits */
+#define	TIOCMSET	_IOW('t', 109, int)	/* set all modem bits */
+#define	TIOCSTART	 _IO('t', 110)		/* start output, like ^Q */
+#define	TIOCSTOP	 _IO('t', 111)		/* stop output, like ^S */
 #define	TIOCPKT		_IOW('t', 112, int)	/* pty: set/clear packet mode */
 #define		TIOCPKT_DATA		0x00	/* data packet */
 #define		TIOCPKT_FLUSHREAD	0x01	/* flush packet */
@@ -104,37 +124,22 @@ struct winsize {
 #define		TIOCPKT_NOSTOP		0x10	/* no more ^S, ^Q */
 #define		TIOCPKT_DOSTOP		0x20	/* now do ^S ^Q */
 #define		TIOCPKT_IOCTL		0x40	/* state change of pty driver */
-#define	TIOCSTOP	 _IO('t', 111)		/* stop output, like ^S */
-#define	TIOCSTART	 _IO('t', 110)		/* start output, like ^Q */
-#define	TIOCMSET	_IOW('t', 109, int)	/* set all modem bits */
-#define	TIOCMBIS	_IOW('t', 108, int)	/* bis modem bits */
-#define	TIOCMBIC	_IOW('t', 107, int)	/* bic modem bits */
-#define	TIOCMGET	_IOR('t', 106, int)	/* get all modem bits */
-#define	TIOCREMOTE	_IOW('t', 105, int)	/* remote input editing */
-#define	TIOCGWINSZ	_IOR('t', 104, struct winsize)	/* get window size */
-#define	TIOCSWINSZ	_IOW('t', 103, struct winsize)	/* set window size */
-#define	TIOCUCNTL	_IOW('t', 102, int)	/* pty: set/clr usr cntl mode */
-#define	TIOCSTAT	 _IO('t', 101)		/* simulate ^T status message */
-#define		UIOCCMD(n)	_IO('u', n)	/* usr cntl op "n" */
-#define	TIOCCONS	_IOW('t', 98, int)	/* become virtual console */
-#define	TIOCSCTTY	 _IO('t', 97)		/* become controlling tty */
-#define	TIOCEXT		_IOW('t', 96, int)	/* pty: external processing */
-#define	TIOCSIG		 _IO('t', 95)		/* pty: generate signal */
-#define	TIOCDRAIN	 _IO('t', 94)		/* wait till output drained */
-#define	TIOCMSDTRWAIT	_IOW('t', 91, int)	/* modem: set wait on close */
-#define	TIOCMGDTRWAIT	_IOR('t', 90, int)	/* modem: get wait on close */
-#define	TIOCTIMESTAMP	_IOR('t', 89, struct timeval)	/* enable/get timestamp
-						 * of last input event */
-#define	TIOCDCDTIMESTAMP _IOR('t', 88, struct timeval)	/* enable/get timestamp
-						 * of last DCd rise */
-#define	TIOCSDRAINWAIT	_IOW('t', 87, int)	/* set ttywait timeout */
-#define	TIOCGDRAINWAIT	_IOR('t', 86, int)	/* get ttywait timeout */
-#define	TIOCDSIMICROCODE _IO('t', 85)		/* download microcode to
-						 * DSI Softmodem */
+#define	TIOCNOTTY	 _IO('t', 113)		/* void tty association */
+#define	TIOCSTI		_IOW('t', 114, char)	/* simulate terminal input */
+#define	TIOCOUTQ	_IOR('t', 115, int)	/* output queue size */
+						/* 116-117 compat */
+#define	TIOCSPGRP	_IOW('t', 118, int)	/* set pgrp of tty */
+#define	TIOCGPGRP	_IOR('t', 119, int)	/* get pgrp of tty */
+#define	TIOCCDTR	 _IO('t', 120)		/* clear data terminal ready */
+#define	TIOCSDTR	 _IO('t', 121)		/* set data terminal ready */
+#define	TIOCCBRK	 _IO('t', 122)		/* clear break bit */
+#define	TIOCSBRK	 _IO('t', 123)		/* set break bit */
+						/* 124-127 compat */
 
 #define	TTYDISC		0		/* termios tty line discipline */
-#define	TABLDISC	3		/* tablet discipline */
 #define	SLIPDISC	4		/* serial IP discipline */
 #define	PPPDISC		5		/* PPP discipline */
+#define	NETGRAPHDISC	6		/* Netgraph tty node discipline */
+#define	H4DISC		7		/* Netgraph Bluetooth H4 discipline */
 
 #endif /* !_SYS_TTYCOM_H_ */
