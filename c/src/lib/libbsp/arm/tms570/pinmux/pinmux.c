@@ -31,7 +31,7 @@
  * entries array. Predefined values for pins are in a format
  * TMS570_BALL_<column><row> (for example TMS570_BALL_N19).
  * The multiplexer allows to interconnect one pin to multiple
- * signal sources/sings in the theory but it is usually bad choice.
+ * signal sources/sinks in the theory but it is usually bad choice.
  * The function sets only specified function and clears all other
  * connections.
  *
@@ -45,16 +45,12 @@ void
 tms570_bsp_pin_set_function(int pin_num, int pin_fnc)
 {
   unsigned int pin_shift;
-  typeof(TMS570_IOMM.PINMUX.PINMMR0) *pinmmrx;
+  volatile uint32_t *pinmmrx;
 
   if ( pin_fnc == TMS570_PIN_FNC_AUTO ) {
     pin_fnc = (pin_num & TMS570_PIN_FNC_MASK) >> TMS570_PIN_FNC_SHIFT;
   }
-  pin_num = (pin_num & TMS570_PIN_NUM_MASK) >> TMS570_PIN_NUM_SHIFT;
-
-  pinmmrx = &TMS570_IOMM.PINMUX.PINMMR0;
-  pinmmrx += (pin_num >> 2);
-  pin_shift = (pin_num & 0x3)*8;
+  tms570_bsp_pin_to_pinmmrx(&pinmmrx, &pin_shift, pin_num);
   *pinmmrx = (*pinmmrx & ~(0xff << pin_shift)) | (1 << (pin_fnc + pin_shift));
 }
 
@@ -74,15 +70,11 @@ void
 tms570_bsp_pin_clear_function(int pin_num, int pin_fnc)
 {
   unsigned int pin_shift;
-  typeof(TMS570_IOMM.PINMUX.PINMMR0) *pinmmrx;
+  volatile uint32_t *pinmmrx;
 
   if ( pin_fnc == TMS570_PIN_FNC_AUTO ) {
     pin_fnc = (pin_num & TMS570_PIN_FNC_MASK) >> TMS570_PIN_FNC_SHIFT;
   }
-  pin_num = (pin_num & TMS570_PIN_NUM_MASK) >> TMS570_PIN_NUM_SHIFT;
-
-  pinmmrx = &TMS570_IOMM.PINMUX.PINMMR0;
-  pinmmrx += (pin_num >> 2);
-  pin_shift = (pin_num & 0x3)*8;
+  tms570_bsp_pin_to_pinmmrx(&pinmmrx, &pin_shift, pin_num);
   *pinmmrx = *pinmmrx & ~(1 << (pin_fnc+pin_shift));
 }

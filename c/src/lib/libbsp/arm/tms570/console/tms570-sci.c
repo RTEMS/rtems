@@ -525,17 +525,19 @@ static void tms570_sci_interrupt_last_close(
 {
   tms570_sci_context *ctx = (tms570_sci_context *) base;
   rtems_interrupt_lock_context lock_context;
+  rtems_interval tw;
+  int32_t baudrate;
 
   /* Turn off RX interrupts */
   rtems_termios_device_lock_acquire(base, &lock_context);
   tms570_sci_disable_interrupts(ctx);
   rtems_termios_device_lock_release(base, &lock_context);
 
-  if ( 0 /* for flush on close */ ) {
-    /* Flush device */
-    while ( ( ctx->regs->FLR & TMS570_SCI_FLR_TX_EMPTY ) == 0 ) {
-      ;/* Wait until all data has been sent */
-    }
+  tw = rtems_clock_get_ticks_per_second();
+  baudrate = rtems_termios_baud_to_number(cfgetospeed(&tty->termios));
+  tw = tw * 10 / baudrate + 1;
+  while ( ( ctx->regs->FLR & TMS570_SCI_FLR_TX_EMPTY ) == 0 ) {
+     rtems_task_wake_after(tw);
   }
 
   /* uninstall ISR */
