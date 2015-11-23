@@ -103,8 +103,24 @@ int rtems_tarfs_load(
         strcat(full_filename, "/");
       ++len;
       strncat(full_filename, filename, 256-len-1);
-      rv = mkdir(full_filename, S_IRWXU | S_IRWXG | S_IRWXO);
+      if ( mkdir(full_filename, S_IRWXU | S_IRWXG | S_IRWXO) != 0 ) {
+        if (errno == EEXIST) {
+          struct stat stat_buf;
+          if ( stat(full_filename, &stat_buf) == 0 ) {
+            if (  S_ISDIR(stat_buf.st_mode) ) {
+              continue;
+            } else {
+              if ( unlink(full_filename) != -1 ) {
+                if ( mkdir(full_filename, S_IRWXU | S_IRWXG | S_IRWXO) == 0 )
+                  continue;
+              }
+            }
+          }
+        }
+        rv = -1;
+      }
     }
+
     /*
      * Create a LINEAR_FILE node
      */
