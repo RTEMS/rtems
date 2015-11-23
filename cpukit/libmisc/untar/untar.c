@@ -28,6 +28,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <rtems/untar.h>
@@ -203,6 +204,19 @@ Untar_FromMemory(
       }
     } else if (linkflag == DIRTYPE) {
       if ( mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO) != 0 ) {
+        if (errno == EEXIST) {
+          struct stat stat_buf;
+          if ( stat(fname, &stat_buf) == 0 ) {
+            if (  S_ISDIR(stat_buf.st_mode) ) {
+              continue;
+            } else {
+              if ( unlink(fname) != -1 ) {
+                if ( mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO) == 0 )
+                  continue;
+              }
+            }
+          }
+        }
         printk("Untar: failed to create directory %s\n", fname);
         retval = UNTAR_FAIL;
         break;
@@ -319,7 +333,21 @@ Untar_FromFile(
         close(out_fd);
       }
     } else if (linkflag == DIRTYPE) {
-      (void) mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO);
+      if ( mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO) != 0 ) {
+        if (errno == EEXIST) {
+          struct stat stat_buf;
+          if ( stat(fname, &stat_buf) == 0 ) {
+            if (  S_ISDIR(stat_buf.st_mode) ) {
+              continue;
+            } else {
+              if ( unlink(fname) != -1 ) {
+                if ( mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO) == 0 )
+                  continue;
+              }
+            }
+          }
+        }
+      }
     }
   }
   free(bufr);
