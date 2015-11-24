@@ -311,8 +311,7 @@ typedef struct {
   QORIQ_RESERVE(0x319000, 0x31a000);
   qoriq_bman bman;
   QORIQ_RESERVE(0x31b000, 0x400000);
-  qoriq_fman fman_0;
-  qoriq_fman fman_1;
+  qoriq_fman fman[2];
   QORIQ_RESERVE(0x600000, 0x2000000);
 } qoriq_ccsr;
 
