@@ -85,16 +85,10 @@ typedef struct {
   int                     cancelability_type;
   /** This indicates if a cancelation has been requested. */
   int                     cancelation_requested;
-#ifndef HAVE_STRUCT__PTHREAD_CLEANUP_CONTEXT
-  /** This is the set of cancelation handlers. */
-  Chain_Control           Cancellation_Handlers;
-#else /* HAVE_STRUCT__PTHREAD_CLEANUP_CONTEXT */
   /**
    * @brief LIFO list of cleanup contexts.
    */
   struct _pthread_cleanup_context *last_cleanup_context;
-#endif /* HAVE_STRUCT__PTHREAD_CLEANUP_CONTEXT */
-
 } POSIX_API_Control;
 
 /**
