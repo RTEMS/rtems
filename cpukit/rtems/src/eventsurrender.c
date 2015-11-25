@@ -106,7 +106,7 @@ void _Event_Surrender(
     } else {
       _Assert(
         _Thread_Wait_flags_get( the_thread )
-          == wait_class | THREAD_WAIT_STATE_BLOCKED
+          == ( wait_class | THREAD_WAIT_STATE_BLOCKED )
       );
       _Thread_Wait_flags_set( the_thread, ready_again );
       unblock = true;
