@@ -57,7 +57,6 @@ void malloc_set_heap_pointer(Heap_Control *new_heap);
  * This routine is primarily used for debugging. 
  */
 Heap_Control *malloc_get_heap_pointer( void );
-extern void libc_init(void);
 extern int  host_errno(void);
 extern void fix_syscall_errno(void);
 

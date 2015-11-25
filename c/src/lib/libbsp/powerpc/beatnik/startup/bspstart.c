@@ -334,8 +334,6 @@ void bsp_start( void )
 
   /*
    * Set up our hooks
-   * Make sure libc_init is done before drivers initialized so that
-   * they can use atexit()
    */
 
   bsp_clicks_per_usec = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
