@@ -75,16 +75,6 @@ SCORE_EXTERN Thread_Information _Thread_Internal_information;
 SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
 #endif
 
-#if !defined(__DYNAMIC_REENT__)
-/**
- * The C library re-enter-rant global pointer. Some C library implementations
- * such as newlib have a single global pointer that changed during a context
- * switch. The pointer points to that global pointer. The Thread control block
- * holds a pointer to the task specific data.
- */
-SCORE_EXTERN struct _reent **_Thread_libc_reent;
-#endif
-
 #define THREAD_CHAIN_NODE_TO_THREAD( node ) \
   RTEMS_CONTAINER_OF( node, Thread_Control, Wait.Node.Chain )
 
@@ -1500,28 +1490,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Debug_set_real_processor(
   (void) cpu;
 #endif
 }
-
-#if !defined(__DYNAMIC_REENT__)
-/**
- * This routine returns the C library re-enterant pointer.
- */
-
-RTEMS_INLINE_ROUTINE struct _reent **_Thread_Get_libc_reent( void )
-{
-  return _Thread_libc_reent;
-}
-
-/**
- * This routine set the C library re-enterant pointer.
- */
-
-RTEMS_INLINE_ROUTINE void _Thread_Set_libc_reent (
-  struct _reent **libc_reent
-)
-{
-  _Thread_libc_reent = libc_reent;
-}
-#endif
 
 /** @}*/
 

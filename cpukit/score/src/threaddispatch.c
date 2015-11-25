@@ -104,16 +104,6 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
       &cpu_self->time_of_last_context_switch
     );
 
-#if !defined(__DYNAMIC_REENT__)
-    /*
-     * Switch libc's task specific data.
-     */
-    if ( _Thread_libc_reent ) {
-      executing->libc_reent = *_Thread_libc_reent;
-      *_Thread_libc_reent = heir->libc_reent;
-    }
-#endif
-
     _User_extensions_Thread_switch( executing, heir );
     _Thread_Save_fp( executing );
     _Context_Switch( &executing->Registers, &heir->Registers );

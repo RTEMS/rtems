@@ -180,6 +180,10 @@ AC_CHECK_HEADER([signal.h],[
   AC_CHECK_TYPES([sighandler_t])
 ])
 
+if test x"$RTEMS_USE_NEWLIB" = xyes ; then
+  AC_CHECK_DECLS([__getreent],[],[AC_MSG_ERROR([__getreent() in <sys/reent.h> is mandatory])],[#include <sys/reent.h>])
+fi
+
 RTEMS_CHECK_MULTIPROCESSING
 RTEMS_CHECK_POSIX_API
 RTEMS_CHECK_NETWORKING

@@ -2417,7 +2417,7 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS 0
 #endif
 
-#if defined(RTEMS_NEWLIB) && defined(__DYNAMIC_REENT__)
+#if defined(RTEMS_NEWLIB)
   struct _reent *__getreent(void)
   {
     #ifdef CONFIGURE_DISABLE_NEWLIB_REENTRANCY

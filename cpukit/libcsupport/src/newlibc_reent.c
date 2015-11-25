@@ -35,15 +35,6 @@ bool newlib_create_hook(
   rtems_tcb *creating_task
 )
 {
-#if !defined(__DYNAMIC_REENT__)
-  if (_Thread_libc_reent == 0)
-  {
-    _REENT = _GLOBAL_REENT;
-
-    _Thread_Set_libc_reent (&_REENT);
-  }
-#endif
-
   _REENT_INIT_PTR((creating_task->libc_reent)); /* GCC extension: structure constants */
 
   return true;
