@@ -402,12 +402,6 @@ void region_error_tests(void)
  *  is subject to change if the heap code changes.
  */
 
-  puts( "TA1 - rtems_debug_disable - RTEMS_DEBUG_REGION" );
-  rtems_debug_disable( RTEMS_DEBUG_REGION );
-
-  puts( "TA1 - rtems_debug_enable - RTEMS_DEBUG_REGION" );
-  rtems_debug_enable( RTEMS_DEBUG_REGION );
-
   status = rtems_region_extend(
     100,
     Region_good_area,

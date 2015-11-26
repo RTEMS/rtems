@@ -84,8 +84,6 @@ void bsp_reset(void);
  * - rtems_initialize_data_structures()
  * - initialize C Library
  * - bsp_pretasking_hook()
- * - if defined( RTEMS_DEBUG )
- *   - rtems_debug_enable( RTEMS_DEBUG_ALL_MASK )
  * - rtems_initialize_before_drivers()
  * - bsp_predriver_hook()
  * - rtems_initialize_device_drivers()

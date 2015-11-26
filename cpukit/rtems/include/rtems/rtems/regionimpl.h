@@ -21,7 +21,6 @@
 #include <rtems/score/heapimpl.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/threadqimpl.h>
-#include <rtems/debug.h>
 
 #ifdef __cplusplus
 extern "C" {

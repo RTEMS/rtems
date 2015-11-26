@@ -24,8 +24,6 @@ extern "C" {
 #endif
 
 #include <rtems/config.h>
-
-#include <rtems/debug.h>
 #include <rtems/fatal.h>
 #include <rtems/init.h>
 #include <rtems/io.h>

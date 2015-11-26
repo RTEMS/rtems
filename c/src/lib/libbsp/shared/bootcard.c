@@ -18,8 +18,6 @@
  *      + allocate memory to C Program Heap
  *      + initialize C Library and C Program Heap
  *      + bsp_pretasking_hook
- *      + if defined( RTEMS_DEBUG )
- *        - rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
  *      + rtems_initialize_before_drivers
  *      + bsp_predriver_hook
  *      + rtems_initialize_device_drivers
@@ -106,17 +104,6 @@ void boot_card(
    *  framework, this routine can be empty.
    */
   bsp_pretasking_hook();
-
-  /*
-   *  If debug is enabled, then enable all dynamic RTEMS debug
-   *  capabilities.
-   *
-   *  NOTE: Most debug features are conditionally compiled in
-   *        or enabled via configure time plugins.
-   */
-  #ifdef RTEMS_DEBUG
-    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
-  #endif
 
   /*
    *  Let RTEMS perform initialization it requires before drivers

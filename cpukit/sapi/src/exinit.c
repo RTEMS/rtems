@@ -29,7 +29,6 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
-#include <rtems/debug.h>
 #include <rtems/extensionimpl.h>
 #include <rtems/init.h>
 #include <rtems/score/sysstate.h>
@@ -101,12 +100,6 @@ void rtems_initialize_data_structures(void)
   #if defined(RTEMS_MULTIPROCESSING)
     _Objects_MP_Handler_early_initialization();
   #endif
-
-  /*
-   *  Do this as early as possible to ensure no debugging output
-   *  is even attempted to be printed.
-   */
-  _Debug_Manager_initialization();
 
   _API_extensions_Initialization();
 

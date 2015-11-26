@@ -264,8 +264,6 @@ uninitialized =
 
 /*copyrt.h*/    0                                         +
 
-/*debug.h*/     (sizeof _Debug_Level)                     +
-
 /*dpmemimpl.h*/ (sizeof _Dual_ported_memory_Information)  +
 
 #if defined(RTEMS_MULTIPROCESSING)

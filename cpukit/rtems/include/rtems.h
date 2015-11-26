@@ -31,7 +31,6 @@
 #include <rtems/rtems/types.h>
 
 #include <rtems/config.h>
-#include <rtems/debug.h>
 #include <rtems/init.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/tasks.h>
