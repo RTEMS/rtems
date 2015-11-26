@@ -57,11 +57,7 @@ rtems_status_code rtems_region_get_segment(
           return_status = RTEMS_INVALID_SIZE;
 
         else {
-          _Region_Debug_Walk( the_region, 1 );
-
           the_segment = _Region_Allocate_segment( the_region, size );
-
-          _Region_Debug_Walk( the_region, 2 );
 
           if ( the_segment ) {
             the_region->number_of_used_blocks += 1;

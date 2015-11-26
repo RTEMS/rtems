@@ -49,9 +49,6 @@ rtems_status_code rtems_region_resize_segment(
     switch ( location ) {
 
       case OBJECTS_LOCAL:
-
-        _Region_Debug_Walk( the_region, 7 );
-
         status = _Heap_Resize_block(
           &the_region->Memory,
           segment,
@@ -60,8 +57,6 @@ rtems_status_code rtems_region_resize_segment(
           &avail_size
         );
         *old_size = (uint32_t) osize;
-
-        _Region_Debug_Walk( the_region, 8 );
 
         if ( status == HEAP_RESIZE_SUCCESSFUL )
           /* unlocks allocator */

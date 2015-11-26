@@ -53,9 +53,6 @@ rtems_status_code rtems_region_return_segment(
     switch ( location ) {
 
       case OBJECTS_LOCAL:
-
-        _Region_Debug_Walk( the_region, 3 );
-
 #ifdef RTEMS_REGION_FREE_SHRED_PATTERN
         if ( !_Heap_Size_of_alloc_area( &the_region->Memory, segment, &size ) )
           return_status = RTEMS_INVALID_ADDRESS;
@@ -63,8 +60,6 @@ rtems_status_code rtems_region_return_segment(
           memset( segment, (RTEMS_REGION_FREE_SHRED_PATTERN & 0xFF), size );
 #endif
           status = _Region_Free_segment( the_region, segment );
-
-          _Region_Debug_Walk( the_region, 4 );
 
           if ( !status )
             return_status = RTEMS_INVALID_ADDRESS;

@@ -40,7 +40,6 @@ rtems_status_code rtems_region_delete(
     switch ( location ) {
 
       case OBJECTS_LOCAL:
-        _Region_Debug_Walk( the_region, 5 );
         if ( the_region->number_of_used_blocks != 0 )
           return_status = RTEMS_RESOURCE_IN_USE;
         else {

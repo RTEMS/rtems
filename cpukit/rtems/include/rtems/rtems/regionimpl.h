@@ -146,26 +146,6 @@ RTEMS_INLINE_ROUTINE bool _Region_Free_segment (
  */
 extern void _Region_Process_queue(Region_Control *the_region);
 
-/**
- *  @brief _Region_Debug_Walk
- *
- *  This routine is invoked to verify the integrity of a heap associated
- *  with the_region.
- */
-#ifdef RTEMS_DEBUG
-
-#define _Region_Debug_Walk( _the_region, _source ) \
-  do { \
-    if ( rtems_debug_is_enabled( RTEMS_DEBUG_REGION ) ) \
-      _Heap_Walk( &(_the_region)->Memory, _source, false ); \
-  } while ( 0 )
-
-#else
-
-#define _Region_Debug_Walk( _the_region, _source )
-
-#endif
-
 /**@}*/
 
 #ifdef __cplusplus
