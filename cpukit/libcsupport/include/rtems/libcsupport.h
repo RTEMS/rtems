@@ -57,8 +57,6 @@ void malloc_set_heap_pointer(Heap_Control *new_heap);
  * This routine is primarily used for debugging. 
  */
 Heap_Control *malloc_get_heap_pointer( void );
-extern int  host_errno(void);
-extern void fix_syscall_errno(void);
 
 /**
  * @brief Get free malloc information.
@@ -82,8 +80,6 @@ bool newlib_create_hook(
   rtems_tcb *creating_task
 );
 
-#define __RTEMS_NEWLIB_BEGIN 0
-
 void newlib_terminate_hook(
   rtems_tcb *current_task
 );
@@ -95,7 +91,7 @@ void newlib_terminate_hook(
   0,                      /* rtems_task_restart */ \
   0,                      /* rtems_task_delete  */ \
   0,                      /* task_switch  */ \
-  __RTEMS_NEWLIB_BEGIN,   /* task_begin   */ \
+  0,                      /* task_begin   */ \
   0,                      /* task_exitted */ \
   0,                      /* fatal        */ \
   newlib_terminate_hook   /* thread terminate */ \
