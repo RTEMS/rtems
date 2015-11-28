@@ -32,6 +32,9 @@
 
 void bsp_start( void )
 {
+  void *need_remap_ptr;
+  unsigned int need_remap_int;
+
   #if BYTE_ORDER == BIG_ENDIAN
     /*
      * If CPU is big endian (TMS570 family variant)
@@ -65,9 +68,16 @@ void bsp_start( void )
    * SRAM then it leads to CPU error halt.
    *
    * So use of POM to replace jumps to vectors target
-   * addresses seems to be the best option.
+   * addresses seems to be the best option for now.
+   *
+   * The passing of linker symbol (represented as start address
+   * of global array) through dummy asm block ensures that C compiler
+   * cannot optimize comparison out on premise that reference cannot
+   * evaluate to NULL definition in standard.
    */
-  if ( (uintptr_t)bsp_start_vector_table_begin != 0 ) {
+  need_remap_ptr = bsp_start_vector_table_begin;
+  asm volatile ("\n": "=r" (need_remap_int): "0" (need_remap_ptr));
+  if ( need_remap_int != 0 ) {
     tms570_pom_remap();
   }
 
