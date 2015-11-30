@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -22,6 +22,11 @@
 	.globl bsp_exc_vector_base
 
 	.section ".bsp_start_text", "ax"
+
+	/* Primitive NULL pointer protection */
+.rept 1024
+	sc
+.endr
 
 _start:
 	/* Enable time base */
