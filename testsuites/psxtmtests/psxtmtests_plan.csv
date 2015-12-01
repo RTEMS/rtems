@@ -55,7 +55,7 @@
 "pthread_getcpuclockid"
 
 "pthread_barrier_init: only case","psxtmbarrier01","psxtmtest_init_destroy","Yes"
-: only case"pthread_barrier_destroy","psxtmbarrier01","psxtmtest_init_destroy","Yes"
+"pthread_barrier_destroy: only case","psxtmbarrier01","psxtmtest_init_destroy","Yes"
 "pthread_barrier_wait: blocking","psxtmbarrier02","psxtmtest_blocking","Yes"
 "pthread_barrier_wait: releasing: no preempt","psxtmbarrier03","psxtmtest_unblocking_nopreempt","Yes"
 "pthread_barrier_wait: releasing: preempt","psxtmbarrier04","psxtmtest_unblocking_preempt","Yes"
