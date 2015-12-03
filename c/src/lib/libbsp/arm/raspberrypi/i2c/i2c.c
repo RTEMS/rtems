@@ -92,6 +92,7 @@ static int rpi_i2c_bus_transfer(rpi_i2c_bus *bus)
 
       /* Sleep until the TX FIFO has free space for a new write. */
       if (
+          bus->task_id = rtems_task_self();
           rtems_event_transient_receive(RTEMS_WAIT, bus->base.timeout) !=
           RTEMS_SUCCESSFUL
       ) {
