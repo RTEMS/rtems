@@ -22,7 +22,6 @@
   l.j     _ISR_Handler; \
   l.nop
 
-  .extern bsp_start
   .extern boot_card
   .extern bsp_section_bss_begin
   .extern bsp_section_bss_end
