@@ -172,9 +172,6 @@ the C Library.  Usually the default implementation in
 @item It invokes the BSP specific routine @code{bsp_pretasking_hook}. On
 most BSPs which utilize the framework, this routine does nothing.
 
-@item If @code{RTEMS_DEBUG} is enabled, then the RTEMS debug mask level
-is inialized appropriately.
-
 @item It invokes the RTEMS directive
 @code{rtems_initialize_before_drivers()} to initialize the MPCI Server
 thread in a multiprocessor configuration and execute API specific
