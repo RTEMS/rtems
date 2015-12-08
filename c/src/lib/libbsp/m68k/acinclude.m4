@@ -28,8 +28,6 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([mcf5329]);;
   mrm332 )
     AC_CONFIG_SUBDIRS([mrm332]);;
-  mvme136 )
-    AC_CONFIG_SUBDIRS([mvme136]);;
   mvme147 )
     AC_CONFIG_SUBDIRS([mvme147]);;
   mvme147s )
