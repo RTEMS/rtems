@@ -30,8 +30,6 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([qemuppc]);;
   qoriq )
     AC_CONFIG_SUBDIRS([qoriq]);;
-  score603e )
-    AC_CONFIG_SUBDIRS([score603e]);;
   ss555 )
     AC_CONFIG_SUBDIRS([ss555]);;
   t32mppc )
