@@ -1,9 +1,0 @@
-BSP for the BSVC 68000 simulator.  This is definitely under construction. 
-The initialization/setup script for BSVC is the part that likely needs
-work.  I have written the timer based on the timer sample included with
-bsvc 2.1.  
-
-At this point, hello does not even print.
-
---joel
-1 August 2000

@@ -1,8 +1,0 @@
-BSVC Simulator Setup File
-
-UI_VERSION {2.0}
-SIMULATOR {sim68000}
-COMMAND {AttachDevice 0 RAM {BaseAddress = 0 Size = 40000}}
-COMMAND {AttachDevice 0 RAM {BaseAddress = 40000 Size = 20000}}
-COMMAND {AttachDevice 0 M68681 {BaseAddress = 71001 OffsetToFirstRegister = 0 OffsetBetweenRegisters = 2 InterruptLevel = 4 PortAStandardInputOutputFlag = 0 PortBStandardInputOutputFlag = 0 PortACommand = xterm -T "M68681 Port A" -132 -fn fixed -e /usr3/tmp/bsvc-2.1/bin/xtermpipe PortBCommand = }}
-COMMAND {AttachDevice 0 Timer {BaseAddress = 72001 IRQ = 5}}
