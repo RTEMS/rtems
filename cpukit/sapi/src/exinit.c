@@ -101,8 +101,6 @@ void rtems_initialize_data_structures(void)
     _Objects_MP_Handler_early_initialization();
   #endif
 
-  _API_extensions_Initialization();
-
   _Thread_Dispatch_initialization();
 
   _User_extensions_Handler_initialization();

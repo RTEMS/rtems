@@ -79,18 +79,6 @@ typedef struct {
 }  API_extensions_Control;
 
 /**
- *  This is the list of API extensions to the system initialization.
- */
-SCORE_EXTERN Chain_Control _API_extensions_List;
-
-/**
- *  @brief Initialize the API extensions handler.
- *
- *  This routine initializes the API extension handler.
- */
-void _API_extensions_Initialization( void );
-
-/**
  *  @brief Add extension set to the active set.
  *
  *  This routine adds @a the_extension to the active set of API extensions.

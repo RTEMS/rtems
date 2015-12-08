@@ -19,13 +19,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/apiext.h>
 
-void _API_extensions_Initialization( void )
-{
- _Chain_Initialize_empty( &_API_extensions_List );
-}
+static CHAIN_DEFINE_EMPTY( _API_extensions_List );
 
 void _API_extensions_Add(
   API_extensions_Control *the_extension

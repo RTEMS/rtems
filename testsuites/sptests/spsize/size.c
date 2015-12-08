@@ -243,8 +243,6 @@ sys_req = SYSTEM_TASKS        +     /* MPCI Receive Server and IDLE */
 uninitialized =
 /*address.h*/   0                                         +
 
-/*apiext.h*/    (sizeof _API_extensions_List)             +
-
 /*asr.h*/       0                                         +
 
 /*attr.h*/      0                                         +
