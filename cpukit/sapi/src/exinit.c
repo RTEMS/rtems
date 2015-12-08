@@ -84,12 +84,9 @@ void rtems_initialize_data_structures(void)
     if ( _Configuration_MP_table == NULL ) {
       _Configuration_MP_table =
 	(void *)&_Initialization_Default_multiprocessing_table;
-      _System_state_Handler_initialization( FALSE );
     } else {
-      _System_state_Handler_initialization( TRUE );
+      _System_state_Is_multiprocessing = true;
     }
-  #else
-    _System_state_Handler_initialization( FALSE );
   #endif
 
   /*

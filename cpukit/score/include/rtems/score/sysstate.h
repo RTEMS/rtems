@@ -76,20 +76,6 @@ RTEMS_INLINE_ROUTINE void _System_state_Set (
   _System_state_Current = state;
 }
 
-RTEMS_INLINE_ROUTINE void _System_state_Handler_initialization (
-#if defined(RTEMS_MULTIPROCESSING)
-  bool  is_multiprocessing
-#else
-  bool  is_multiprocessing RTEMS_UNUSED
-#endif
-)
-{
-  _System_state_Set( SYSTEM_STATE_BEFORE_INITIALIZATION );
-#if defined(RTEMS_MULTIPROCESSING)
-    _System_state_Is_multiprocessing = is_multiprocessing;
-#endif
-}
-
 RTEMS_INLINE_ROUTINE System_state_Codes _System_state_Get ( void )
 {
   return _System_state_Current;
