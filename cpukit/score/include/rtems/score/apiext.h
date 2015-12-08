@@ -19,7 +19,6 @@
 #define _RTEMS_SCORE_APIEXT_H
 
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/thread.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,13 +38,6 @@ extern "C" {
  */
 /**@{*/
 
-#if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-  /**
-   *  This type defines the prototype of the Predriver Hook.
-   */
-  typedef void (*API_extensions_Predriver_hook)(void);
-#endif
-
 /**
  *  This type defines the prototype of the Postdriver Hook.
  */
@@ -58,16 +50,7 @@ typedef void (*API_extensions_Postdriver_hook)(void);
 typedef struct {
   /** This field allows this structure to be used with the Chain Handler. */
   Chain_Node                      Node;
-  #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-    /**
-     * This field is the callout invoked during RTEMS initialization after
-     * RTEMS data structures are initialized before device driver initialization
-     * has occurred.
-     *
-     * @note If this field is NULL, no extension is invoked.
-     */
-    API_extensions_Predriver_hook   predriver_hook;
-  #endif
+
   /**
    * This field is the callout invoked during RTEMS initialization after
    * RTEMS data structures and device driver initialization has occurred
@@ -88,15 +71,6 @@ typedef struct {
 void _API_extensions_Add(
   API_extensions_Control *the_extension
 );
-
-#if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-/**
- *  @brief Execute all pre-driver extensions.
- *
- *  This routine executes all of the predriver callouts.
- */
-  void _API_extensions_Run_predriver( void );
-#endif
 
 /**
  *  @brief Execute all post-driver extensions.

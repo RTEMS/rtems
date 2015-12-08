@@ -30,25 +30,6 @@ void _API_extensions_Add(
   _Chain_Append( &_API_extensions_List, &the_extension->Node );
 }
 
-#if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-
-  void _API_extensions_Run_predriver( void )
-  {
-    Chain_Node             *the_node;
-    API_extensions_Control *the_extension;
-
-    for ( the_node = _Chain_First( &_API_extensions_List );
-	  !_Chain_Is_tail( &_API_extensions_List, the_node ) ;
-	  the_node = the_node->next ) {
-
-      the_extension = (API_extensions_Control *) the_node;
-
-      if ( the_extension->predriver_hook )
-	(*the_extension->predriver_hook)();
-    }
-  }
-#endif
-
 void _API_extensions_Run_postdriver( void )
 {
   Chain_Node             *the_node;
@@ -63,9 +44,6 @@ void _API_extensions_Run_postdriver( void )
     /*
      *  Currently all APIs configure this hook so it is always non-NULL.
      */
-#if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-    if ( the_extension->postdriver_hook )
-#endif
-      (*the_extension->postdriver_hook)();
+    (*the_extension->postdriver_hook)();
   }
 }
