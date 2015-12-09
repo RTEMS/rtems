@@ -201,13 +201,6 @@ BSP_calc_freqs( void )
   printk("CPU Clock Freq:                    %10u Hz\n", BSP_processor_frequency);
 }
 
-void
-bsp_predriver_hook(void)
-{
-  /* Some drivers (RTC) may need i2c */
-  BSP_i2c_initialize();
-}
-
 /*
  *  bsp_start
  *

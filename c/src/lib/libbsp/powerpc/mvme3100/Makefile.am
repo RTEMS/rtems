@@ -51,10 +51,11 @@ libbsp_a_SOURCES =
 # startup
 libbsp_a_SOURCES += startup/bspstart.c \
     startup/misc.c ../../powerpc/shared/startup/bspgetworkarea.c \
-    ../../powerpc/shared/startup/pretaskinghook.c \
+    ../../powerpc/shared/startup/bsppredriverhook.c \
     ../../powerpc/shared/startup/zerobss.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     ../../shared/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
+    ../../shared/bsppretaskinghook.c \
     ../../shared/gnatinstallhandler.c
 # tod
 libbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c

@@ -58,7 +58,7 @@ EXTRA_DIST += shared/start/start.S shared/start/rtems_crti.S \
 ## shared/startup
 EXTRA_DIST += shared/startup/bspstart.c shared/startup/pgtbl_setup.c \
     shared/startup/pgtbl_activate.c shared/startup/linkcmds \
-	shared/startup/zerobss.c shared/startup/pretaskinghook.c
+	shared/startup/zerobss.c shared/startup/bsppredriverhook.c
 
 ## shared/tod
 EXTRA_DIST += shared/tod/todcfg.c

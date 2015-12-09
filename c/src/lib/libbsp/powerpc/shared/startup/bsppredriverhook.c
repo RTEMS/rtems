@@ -1,6 +1,6 @@
 /*
- *  bsp_pretasking_hook().
- *  Initializes the heap, libc and VME.
+ *  bsp_predriver_hook().
+ *  Optionally initializes I2C and VME.
  */
 
 /*
@@ -28,10 +28,10 @@
 #endif
 
 /*
- *  bsp_pretasking_hook
+ *  bsp_predriver_hook
  *
  *  Description:
- *      BSP pretasking hook.  Called just before drivers are initialized.
+ *      BSP predriver hook.  Called just before drivers are initialized.
  *
  *  NOTES:
  *      Must not use libc (to do io) from here, since drivers are
@@ -39,8 +39,13 @@
  *
  */
 
-void bsp_pretasking_hook(void)
+void bsp_predriver_hook(void)
 {
+#ifdef BSP_PREDRIVER_I2C_INIT
+  /* Some drivers (RTC) may need i2c */
+  BSP_i2c_initialize();
+#endif
+
   /* Note that VME support may be omitted also by
    * providing a no-op  BSP_vme_config routine
    */
@@ -60,6 +65,6 @@ void bsp_pretasking_hook(void)
 #endif
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-  printk("Leaving bsp_pretasking_hook\n");
+  printk("Leaving bsp_predriver_hook\n");
 #endif
 }

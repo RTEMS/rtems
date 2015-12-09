@@ -61,13 +61,13 @@ libbsp_a_SOURCES += startup/bspstart.c \
     ../../powerpc/shared/startup/panic.c \
     ../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/probeMemEnd.c \
-    ../../powerpc/shared/startup/pretaskinghook.c \
+    ../../powerpc/shared/startup/bsppredriverhook.c \
     ../../powerpc/shared/startup/zerobss.c \
     ../../powerpc/shared/startup/pgtbl_setup.c \
     ../../powerpc/shared/startup/pgtbl_activate.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     startup/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/bsppredriverhook.c \
+    ../../shared/bsppretaskinghook.c \
     ../../shared/gnatinstallhandler.c
 
 include_bsp_HEADERS += ../shared/motorola/vpd.h

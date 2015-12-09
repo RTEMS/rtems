@@ -144,14 +144,14 @@ void _BSP_Fatal_error(unsigned int v)
  *
  * 0..RTEMS..__rtems_end | INIT_STACK | IRQ_STACK | ...... | workspace | TOP
  *
- * and later calls our pretasking_hook() which ends up initializing
+ * and later calls our bsp_predriver_hook() which ends up initializing
  * libc which in turn initializes the heap
  *
  * 0..RTEMS..__rtems_end | INIT_STACK | IRQ_STACK | heap | workspace | TOP
  *
  * The idea here is to first move the commandline to the future 'heap' area
- * from where it will be picked up by our pretasking_hook().
- * pretasking_hook() then moves it either to INIT_STACK or the workspace
+ * from where it will be picked up by our bsp_predriver_hook().
+ * bsp_predriver_hook() then moves it either to INIT_STACK or the workspace
  * area using proper allocation, initializes libc and finally moves
  * the data to the environment / malloced areas...
  */
