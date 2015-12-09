@@ -129,12 +129,6 @@ char BSP_enetAddr1[7] = {0};
 
 char *rtems_progname;
 
-/*
- *  Use the shared implementations of the following routines
- */
- 
-extern void bsp_pretasking_hook(void); 
-
 #define CMDLINE_BUF_SIZE	2048
 
 static char cmdline_buf[CMDLINE_BUF_SIZE];
