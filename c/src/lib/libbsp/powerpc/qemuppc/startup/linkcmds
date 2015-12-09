@@ -95,8 +95,9 @@ SECTIONS
 
   .rodata :
   {
-    *(.rodata .rodata.* KEEP (*(SORT(.rtemsroset.*))) .gnu.linkonce.r.*)
+    *(.rodata .rodata.* .gnu.linkonce.r.*)
     *(.rodata1)
+    KEEP (*(SORT(.rtemsroset.*)))
     . = ALIGN (bsp_section_align);
     __rodata_end = .;
   } >ROM =0

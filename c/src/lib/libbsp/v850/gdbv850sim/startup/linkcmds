@@ -89,7 +89,7 @@ SECTIONS
     *(.call_table_text)
   }
   .fini		: { KEEP (*(.fini)) } =0
-  .rodata	: { *(.rodata .rodata.* KEEP (*(SORT(.rtemsroset.*))) .gnu.linkonce.r.*) }
+  .rodata	: { *(.rodata .rodata.* .gnu.linkonce.r.*) KEEP (*(SORT(.rtemsroset.*))) }
   .rodata1	: { *(.rodata1) }
   .tdata : {
     __TLS_Data_begin = .;

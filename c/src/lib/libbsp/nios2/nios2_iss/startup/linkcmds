@@ -193,8 +193,9 @@ SECTIONS
     {
         PROVIDE (__ram_rodata_start = ABSOLUTE(.));
         . = ALIGN(32 / 8);
-        *(.rodata .rodata.* KEEP (*(SORT(.rtemsroset.*))) .gnu.linkonce.r.*)
+        *(.rodata .rodata.* .gnu.linkonce.r.*)
         *(.rodata1)
+        KEEP (*(SORT(.rtemsroset.*)))
     } > onchip_memory_0
 
     .tdata : {
