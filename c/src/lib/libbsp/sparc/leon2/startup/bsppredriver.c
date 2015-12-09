@@ -85,6 +85,8 @@ void bsp_driver_level_hook( int level )
  */
 void bsp_predriver_hook( void )
 {
+  bsp_spurious_initialize();
+
   /* Initialize shared interrupt handling, must be done after IRQ
    * controller has been found and initialized.
    */
