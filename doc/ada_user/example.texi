@@ -3,7 +3,7 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
-@node Example Application, Glossary, Directive Status Codes STATUS_TEXT - Returns the enumeration name for a status code, Top
+@node Example Application, Glossary, Linker Sets RTEMS_LINKER_RWSET_ITEM_ORDERED - Defines an ordered read-write linker set item, Top
 @chapter Example Application
 
 @example
