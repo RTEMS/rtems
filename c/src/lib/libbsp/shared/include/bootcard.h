@@ -78,9 +78,9 @@ void bsp_reset(void);
  *
  * - disable interrupts, interrupts will be enabled during the first context
  *   switch
- * - bsp_start() - more advanced initialization
  * - bsp_work_area_initialize() - initialize the RTEMS Workspace and the C
  *   Program Heap
+ * - bsp_start() - more advanced initialization
  * - rtems_initialize_data_structures()
  * - initialize C Library
  * - bsp_pretasking_hook()

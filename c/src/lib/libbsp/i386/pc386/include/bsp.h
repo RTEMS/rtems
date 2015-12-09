@@ -187,8 +187,6 @@ void Calibrate_loop_1ms(void);           /* from 'timer.c'  */
 
 void rtems_irq_mngt_init(void);          /* from 'irq_init.c' */
 
-void bsp_size_memory(void);              /* from 'bspstart.c' */
-
 #if (BSP_IS_EDISON == 0)
   void Clock_driver_install_handler(void);             /* from 'ckinit.c'  */
   void Clock_driver_support_initialize_hardware(void); /* from 'ckinit.c'  */

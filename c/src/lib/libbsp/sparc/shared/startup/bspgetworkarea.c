@@ -20,9 +20,6 @@
 /* Tells us where to put the workspace in case remote debugger is present.  */
 extern uint32_t rdb_start;
 
-/* Must be aligned to 8, _end is aligned to 8 */
-unsigned int early_mem = (unsigned int)&end;
-
 /*
  *  This method returns the base address and size of the area which
  *  is to be allocated between the RTEMS Workspace and the C Program
@@ -34,10 +31,9 @@ void bsp_work_area_initialize(void)
   #define STACK_SIZE (16 * 1024)
 
   /* Early dynamic memory allocator is placed just above _end  */
-  void *work_area_start = (void *)early_mem;
+  void *work_area_start = (void *)&end;
   uintptr_t work_area_size  =
-    (uintptr_t)rdb_start - (uintptr_t)early_mem - STACK_SIZE;
-  early_mem        = ~0; /* Signal bsp_early_malloc not to be used anymore */
+    (uintptr_t)rdb_start - (uintptr_t)&end - STACK_SIZE;
 
   /*
    *  The following may be helpful in debugging what goes wrong when

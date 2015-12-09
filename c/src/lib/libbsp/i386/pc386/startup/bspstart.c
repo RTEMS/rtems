@@ -58,11 +58,6 @@ static void bsp_pci_initialize_helper(void)
 static void bsp_start_default( void )
 {
   /*
-   *  We need to determine how much memory there is in the system.
-   */
-  bsp_size_memory();
-
-  /*
    * Turn off watchdog
    */
 #if (BSP_IS_EDISON == 1)

@@ -38,8 +38,7 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c \
     ../../shared/bsppretaskinghook.c startup/bsppredriver.c \
     ../../sparc/shared/startup/bspgetworkarea.c ../../shared/sbrk.c \
     startup/setvec.c \
-    startup/spurious.c startup/bspidle.S startup/bspdelay.c \
-    ../../sparc/shared/startup/early_malloc.c
+    startup/spurious.c startup/bspidle.S startup/bspdelay.c
 libbsp_a_SOURCES += startup/cpucounter.c
 libbsp_a_SOURCES += ../../sparc/shared/startup/bsp_fatal_exit.c
 libbsp_a_SOURCES += startup/bsp_fatal_halt.c

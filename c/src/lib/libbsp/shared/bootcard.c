@@ -75,14 +75,14 @@ void boot_card(
   bsp_boot_cmdline = cmdline;
 
   /*
-   * Invoke Board Support Package initialization routine written in C.
-   */
-  bsp_start();
-
-  /*
    *  Initialize the RTEMS Workspace and the C Program Heap.
    */
   bsp_work_area_initialize();
+
+  /*
+   * Invoke Board Support Package initialization routine written in C.
+   */
+  bsp_start();
 
   /*
    *  Initialize RTEMS data structures

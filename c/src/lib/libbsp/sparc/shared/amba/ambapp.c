@@ -23,18 +23,16 @@
 /* Allocate one AMBA device */
 static struct ambapp_dev *ambapp_alloc_dev_struct(int dev_type)
 {
-  int size = sizeof(struct ambapp_dev);
   struct ambapp_dev *dev;
+  size_t size = sizeof(*dev);
 
   if (dev_type == DEV_APB_SLV)
     size += sizeof(struct ambapp_apb_info);
   else
     size += sizeof(struct ambapp_ahb_info); /* AHB */
-  dev = (struct ambapp_dev *)bsp_early_malloc(size);
-  if (dev == NULL)
-    return NULL;
-  memset(dev, 0 , size);
-  dev->dev_type = dev_type;
+  dev = (struct ambapp_dev *)calloc(1, size);
+  if (dev != NULL)
+    dev->dev_type = dev_type;
   return dev;
 }
 

@@ -96,6 +96,7 @@ libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/bspgetworkarea.c \
 	../../shared/bsplibc.c \
 	../../shared/bsppost.c \
+	../../shared/bsppretaskinghook.c \
 	../../shared/bsppredriverhook.c \
 	../../shared/gnatinstallhandler.c \
 	../../shared/sbrk.c \

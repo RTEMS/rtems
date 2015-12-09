@@ -42,7 +42,7 @@ LINKER_SYMBOL( lpc176x_region_heap_1_end );
 extern Heap_Control *RTEMS_Malloc_Heap;
 #endif
 
-void bsp_pretasking_hook( void )
+static void heap_extend( void )
 {
 #ifdef LPC176X_HEAP_EXTEND
   _Heap_Extend( RTEMS_Malloc_Heap,
@@ -86,4 +86,6 @@ void bsp_start( void )
 
   /* DMA */
   lpc176x_dma_initialize();
+
+  heap_extend();
 }

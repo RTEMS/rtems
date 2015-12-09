@@ -43,7 +43,7 @@
   extern Heap_Control *RTEMS_Malloc_Heap;
 #endif
 
-void bsp_pretasking_hook(void)
+static void heap_extend(void)
 {
   #ifdef LPC24XX_HEAP_EXTEND
     _Heap_Extend(
@@ -91,4 +91,6 @@ void bsp_start(void)
 
   /* DMA */
   lpc24xx_dma_initialize();
+
+  heap_extend();
 }

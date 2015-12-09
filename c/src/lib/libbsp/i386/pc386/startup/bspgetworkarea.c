@@ -52,7 +52,7 @@ uint32_t bsp_mem_size = 0;
 /* Size of stack used during initialization. Defined in 'start.s'.  */
 extern uint32_t _stack_size;
 
-void bsp_size_memory(void)
+static void bsp_size_memory(void)
 {
   uintptr_t topAddr;
 
@@ -126,8 +126,15 @@ void bsp_size_memory(void)
 
 void bsp_work_area_initialize(void)
 {
-  void *area_start = (void *) rtemsWorkAreaStart;
-  uintptr_t area_size  = (uintptr_t) bsp_mem_size - (uintptr_t) rtemsWorkAreaStart;
+  void *area_start;
+  uintptr_t area_size;
 
+  /*
+   *  We need to determine how much memory there is in the system.
+   */
+  bsp_size_memory();
+
+  area_start = (void *) rtemsWorkAreaStart;
+  area_size  = (uintptr_t) bsp_mem_size - (uintptr_t) rtemsWorkAreaStart;
   bsp_work_area_initialize_default( area_start, area_size );
 }
