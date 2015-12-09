@@ -32,6 +32,7 @@ libbsp_a_SOURCES = startup/bspclean.c \
                    ../shared/startup/zerobss.c \
                    ../../shared/bsplibc.c \
                    ../../shared/bspgetworkarea.c \
+                   ../../shared/bsppretaskinghook.c \
                    ../../shared/bsppost.c \
                    startup/bspstart.c \
                    ../../shared/bootcard.c \

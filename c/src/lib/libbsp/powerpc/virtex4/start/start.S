@@ -284,7 +284,7 @@ startupBL:
         * PowerPC EABI.
         *
         * boot_card() supervises the initialization of RTEMS and the C
-        * library.  It calls bsp_start(), bsp_pretasking_hook(), etc.
+        * library.  It calls bsp_start(), bsp_predriver_hook(), etc.
         *------------------------------------------------------------------*/
         lwz     r2,toc_pointer-base_addr(r1)        /* set r2 to toc */
         lwz     r1,stack_top-base_addr(r1)          /* set r1 to stack_top */

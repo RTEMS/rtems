@@ -109,9 +109,6 @@ static void _noopfun(void) {}
 void app_bsp_start(void)
 __attribute__(( weak, alias("_noopfun") ));
 
-void app_bsp_pretasking_hook(void)
-__attribute__(( weak, alias("_noopfun") ));
-
 void app_bsp_predriver_hook(void)
 __attribute__(( weak, alias("_noopfun") ));
 
@@ -231,20 +228,6 @@ void bsp_start(void)
 
   /* Continue with application-specific initialization */
   app_bsp_start();
-}
-
-
-/*
- *  BSP pretasking hook.  Called just before drivers are initialized.
- *  Used to setup libc and install any BSP extensions.
- *
- *  Must not use libc (to do io) from here, since drivers are not yet
- *  initialized.
- */
-
-void bsp_pretasking_hook(void)
-{
-  app_bsp_pretasking_hook();
 }
 
 
