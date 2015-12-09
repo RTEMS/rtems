@@ -44,7 +44,6 @@ libbsp_a_SOURCES += ../../powerpc/shared/startup/bspstart.c \
  	../../powerpc/shared/startup/bspgetworkarea.c \
  	../../powerpc/shared/showbats.c \
     ../../powerpc/shared/startup/bsppredriverhook.c \
-        ../../shared/bsppretaskinghook.c \
  	../../powerpc/shared/startup/zerobss.c \
     ../../powerpc/shared/startup/pgtbl_setup.c \
     ../../powerpc/shared/startup/pgtbl_activate.c \

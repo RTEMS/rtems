@@ -38,7 +38,7 @@ libbsp_a_CPPFLAGS =
 # startup
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c  \
   ../../shared/bsppost.c ../../shared/bspgetworkarea.c \
-  ../../shared/bspreset_loop.c ../../shared/bsppretaskinghook.c \
+  ../../shared/bspreset_loop.c \
   ../../shared/bsppredriverhook.c startup/init548x.c startup/bspstart.c \
   ../../shared/bootcard.c ../../shared/sbrk.c ../../shared/setvec.c \
   ../../shared/gnatinstallhandler.c

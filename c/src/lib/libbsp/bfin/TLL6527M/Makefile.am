@@ -27,7 +27,7 @@ dist_project_lib_DATA += startup/linkcmds
 noinst_LIBRARIES += libbsp.a
 
 libbsp_a_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
-	../../shared/bsppretaskinghook.c startup/bspstart.c \
+	startup/bspstart.c \
 	../../shared/bspclean.c ../../shared/sbrk.c ../../shared/setvec.c \
 	../../shared/bootcard.c ../../shared/gnatinstallhandler.c \
 	../../shared/bspgetworkarea.c

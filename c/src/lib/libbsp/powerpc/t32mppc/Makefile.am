@@ -45,7 +45,6 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += ../../shared/bsplibc.c \
 	../../shared/bsppost.c \
 	../../shared/bootcard.c \
-	../../shared/bsppretaskinghook.c \
 	../../shared/bsppredriverhook.c \
 	../../shared/sbrk.c \
 	../../shared/gnatinstallhandler.c \

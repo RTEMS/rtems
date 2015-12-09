@@ -67,7 +67,6 @@ libbsp_a_SOURCES += startup/bspstart.c \
     ../../powerpc/shared/startup/pgtbl_activate.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     startup/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/bsppretaskinghook.c \
     ../../shared/gnatinstallhandler.c
 
 include_bsp_HEADERS += ../shared/motorola/vpd.h

@@ -28,7 +28,7 @@ libbsp_a_SOURCES =
 # startup
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c ../../shared/bspreset_loop.c \
-    ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
+    ../../shared/bspgetworkarea.c \
     startup/init5329.c startup/bspstart.c startup/cfinit.c\
     ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../shared/setvec.c \

@@ -34,7 +34,6 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c
 libbsp_a_SOURCES += ../../shared/bsppost.c
 libbsp_a_SOURCES += startup/bsppredriver.c
 libbsp_a_SOURCES += startup/bspstart.c
-libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
 libbsp_a_SOURCES += ../../sparc/shared/startup/bspgetworkarea.c
 libbsp_a_SOURCES += ../../shared/bootcard.c
 libbsp_a_SOURCES += ../../shared/sbrk.c

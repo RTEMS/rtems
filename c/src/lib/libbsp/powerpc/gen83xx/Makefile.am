@@ -55,7 +55,6 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c \
 	../../shared/bsppost.c \
 	../../shared/bootcard.c \
 	../../shared/bsppredriverhook.c \
-	../../shared/bsppretaskinghook.c \
 	../../shared/sbrk.c \
 	../../shared/gnatinstallhandler.c \
 	../shared/src/tictac.c \

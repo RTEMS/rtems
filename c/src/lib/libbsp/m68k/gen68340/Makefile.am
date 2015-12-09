@@ -34,7 +34,7 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppost.c ../../shared/bspstart.c startup/init68340.c \
-    ../../shared/bootcard.c ../../shared/bsppretaskinghook.c \
+    ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../shared/setvec.c \
     startup/dumpanic.c ../../shared/gnatinstallhandler.c
 # clock

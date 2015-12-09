@@ -171,9 +171,6 @@ void * sbrk(size_t increment)
 
 The @code{increment} amount is based upon the @code{sbrk_amount}
 parameter passed to the @code{bsp_libc_init} during system initialization.
-Historically initialization of the C Library was done as part of the
-BSP's Pretasking Hook but now the BSP Boot Card Framework can perform
-this operation.
 
 @findex CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
 If your BSP does not want to support dynamic heap extension, then you do not have to do anything special.  However, if you want to support @code{sbrk}, you must provide an implementation of this method and define @code{CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK} in @code{bsp.h}.  This informs @code{rtems/confdefs.h} to configure the Malloc Family Extensions which support @code{sbrk}.

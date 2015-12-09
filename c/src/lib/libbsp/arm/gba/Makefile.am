@@ -33,7 +33,7 @@ libbsp_a_SOURCES =
 
 # startup
 libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
-    startup/bspgetworkarea.c ../../shared/bsppretaskinghook.c \
+    startup/bspgetworkarea.c \
     ../../shared/bsppredriverhook.c ../../shared/bspclean.c \
     startup/bspreset.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c \

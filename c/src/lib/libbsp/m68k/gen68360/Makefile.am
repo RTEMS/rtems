@@ -27,7 +27,7 @@ libbsp_a_SOURCES =
 
 # startup
 libbsp_a_SOURCES += startup/alloc360.c ../../shared/bspclean.c \
-    ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
+    ../../shared/bsppredriverhook.c \
     ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bspgetworkarea.c ../../shared/bspstart.c \
     startup/init68360.c ../../shared/bootcard.c \

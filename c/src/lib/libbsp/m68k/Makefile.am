@@ -8,7 +8,7 @@ include_bsp_HEADERS = shared/include/linker-symbols.h
 
 dist_project_lib_DATA = shared/startup/linkcmds.base
 
-EXTRA_DIST = shared/m68kpretaskinghook.c
+EXTRA_DIST =
 EXTRA_DIST += ../shared/setvec.c
 EXTRA_DIST += shared/start.S
 

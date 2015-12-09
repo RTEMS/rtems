@@ -31,7 +31,7 @@ libbsp_a_SOURCES =
 include_HEADERS += ../../arm/shared/comm/uart.h
 # startup
 libbsp_a_SOURCES += ../../shared/bsppost.c ../../shared/bsplibc.c \
-    ../../shared/bspgetworkarea.c ../../shared/bsppretaskinghook.c \
+    ../../shared/bspgetworkarea.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c \
     ../../shared/bspclean.c ../../shared/bootcard.c ../../shared/sbrk.c \
     startup/bspreset.c ../../shared/gnatinstallhandler.c

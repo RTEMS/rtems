@@ -29,7 +29,6 @@ libbsp_a_SOURCES = \
     ../../shared/bsppredriverhook.c \
     ../../shared/bsplibc.c \
     ../../shared/bsppost.c \
-    ../../shared/bsppretaskinghook.c \
     ../../shared/bspgetworkarea.c \
     startup/init5225x.c startup/bspstart.c \
     ../../shared/bootcard.c \

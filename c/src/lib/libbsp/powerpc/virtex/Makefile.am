@@ -45,7 +45,7 @@ libbsp_a_LIBADD =
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bspgetworkarea.c \
     ../../shared/bspreset_loop.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
+    ../../shared/bsppredriverhook.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
 libbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
 

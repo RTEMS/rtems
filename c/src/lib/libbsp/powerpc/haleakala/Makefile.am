@@ -30,7 +30,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bspreset_loop.c ../../shared/bsppost.c \
     startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
-    ../../shared/bsppretaskinghook.c ../../shared/sbrk.c \
+    ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c mmu/mmu_405.c mmu/mmu_405asm.S 
 
 # dlentry

@@ -171,9 +171,6 @@ enabled.
 the C Library.  Usually the default implementation in
 @code{c/src/lib/libbsp/shared/bsplibc.c} should be sufficient.
 
-@item It invokes the BSP specific routine @code{bsp_pretasking_hook}. On
-most BSPs which utilize the framework, this routine does nothing.
-
 @item It invokes the RTEMS directive
 @code{rtems_initialize_before_drivers()} to initialize the MPCI Server
 thread in a multiprocessor configuration and execute API specific
@@ -244,22 +241,11 @@ After completing execution, this routine returns to the @code{boot_card()}
 routine.  In case of errors, the initialization should be terminated via
 @code{bsp_fatal()}.
 
-@subsection RTEMS Pretasking Callback
+@subsection bsp_predriver_hook() - BSP Specific Predriver Hook
 
-The method @code{bsp_pretasking_hook()} is the BSP specific routine invoked
-once RTEMS API initialization is complete but before interrupts and tasking are
-enabled.  The idle thread exists at this time.  The pretasking hook is optional
-and the user may use the shared version.
-
-The @code{bsp_pretasking_hook()} routine is the appropriate place to initialize
-any BSP specific support components which depend on the RTEMS APIs.
-
-@subsection RTEMS Predriver Callback
-
-The @code{bsp_predriver_hook()} method is the BSP specific routine that
-is is invoked immediately before the the device drivers and MPCI are
-initialized. RTEMS initialization is complete but interrupts and tasking
-are disabled.
+The @code{bsp_predriver_hook()} method is the BSP specific routine that is
+invoked immediately before the the device drivers are initialized. RTEMS
+initialization is complete but interrupts and tasking are disabled.
 
 The BSP may use the shared version of this routine which is empty.
 Most BSPs do not provide a specific implementation of this callback.

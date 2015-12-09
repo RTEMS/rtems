@@ -52,7 +52,7 @@ libbsp_a_SOURCES += ide/idecfg.c ide/pcmcia_ide.c
 # startup
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
-    ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
+    ../../shared/bspgetworkarea.c \
     startup/bspstart.c ../../shared/bootcard.c \
     startup/imbx8xx.c startup/mmutlbtab.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c

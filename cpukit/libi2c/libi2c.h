@@ -133,7 +133,7 @@ extern const rtems_driver_address_table rtems_libi2c_io_ops;
  * 'rtems_libi2c_register_bus' and
  * 'rtems_libi2c_register_drv' and/or
  * 'mknod' (for 'raw' device nodes)
- * from the 'pretasking_hook'.
+ * from the 'bsp_predriver_hook'.
  */
 #define RTEMS_LIBI2C_DRIVER_TABLE_ENTRY   \
 {                                         \

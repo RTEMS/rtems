@@ -17,7 +17,6 @@
  *      + rtems_initialize_data_structures
  *      + allocate memory to C Program Heap
  *      + initialize C Library and C Program Heap
- *      + bsp_pretasking_hook
  *      + rtems_initialize_before_drivers
  *      + bsp_predriver_hook
  *      + rtems_initialize_device_drivers
@@ -94,16 +93,6 @@ void boot_card(
    *  framework.
    */
   bsp_libc_init();
-
-  /*
-   *  Let the BSP do any required initialization now that RTEMS
-   *  data structures are initialized.  In older BSPs or those
-   *  which do not use the shared framework, this is the typical
-   *  time when the C Library is initialized so malloc()
-   *  can be called by device drivers.  For BSPs using the shared
-   *  framework, this routine can be empty.
-   */
-  bsp_pretasking_hook();
 
   /*
    *  Let RTEMS perform initialization it requires before drivers

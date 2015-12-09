@@ -53,8 +53,6 @@ extern const char *bsp_boot_cmdline;
 
 void bsp_start(void);
 
-void bsp_pretasking_hook(void);
-
 void bsp_predriver_hook(void);
 
 void bsp_driver_level_hook( int level );
@@ -83,7 +81,6 @@ void bsp_reset(void);
  * - bsp_start() - more advanced initialization
  * - rtems_initialize_data_structures()
  * - initialize C Library
- * - bsp_pretasking_hook()
  * - rtems_initialize_before_drivers()
  * - bsp_predriver_hook()
  * - rtems_initialize_device_drivers()
