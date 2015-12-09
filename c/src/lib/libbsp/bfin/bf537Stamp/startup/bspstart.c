@@ -70,9 +70,9 @@ static void initEBIU(void);
 static void initGPIO(void);
 
 /*
- *  BSP pretasking hook.
+ *  BSP predriver hook.
  */
-void bsp_pretasking_hook(void)
+void bsp_predriver_hook(void)
 {
   bfin_interrupt_init();
 }

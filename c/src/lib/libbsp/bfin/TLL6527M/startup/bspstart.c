@@ -122,9 +122,9 @@ static void Init_Flags(void)
 }
 
 /*
- *  bsp_pretasking_hook
+ *  bsp_predriver_hook
  */
-void bsp_pretasking_hook(void)
+void bsp_predriver_hook(void)
 {
   bfin_interrupt_init();
 }

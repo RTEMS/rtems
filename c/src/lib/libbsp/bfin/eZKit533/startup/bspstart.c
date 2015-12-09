@@ -118,10 +118,10 @@ static void Init_Flags(void)
 }
 
 /*
- * BSP pretasking hook.  Called just before drivers are initialized.
+ * BSP predriver hook.  Called just before drivers are initialized.
  * Used to setup libc and install any BSP extensions.
  */
-void bsp_pretasking_hook(void)
+void bsp_predriver_hook(void)
 {
   bfin_interrupt_init();
 }
