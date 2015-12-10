@@ -172,6 +172,10 @@ Multiprocessor Communications Interface (MPCI) Table.
 Initializes the @ref{User Extensions Manager} in case it is used by the
 application.
 
+@item RTEMS_SYSINIT_CPU_SET
+Initializes the global CPU set on SMP configurations in case the application
+uses this information.
+
 @item RTEMS_SYSINIT_BSP_LIBC
 Depending on the application configuration the IO library and root filesystem
 is initialized.  This step is mandatory.

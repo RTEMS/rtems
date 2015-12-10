@@ -123,18 +123,6 @@ static inline void _CPU_set_Set(
 }
 #endif
 
-/**
- * @brief Initialize the CPU Set Handler
- *
- * This routine validates a cpuset sets at least one valid cpu and that
- * it does not set any invalid cpus.
- */
-#if __RTEMS_HAVE_SYS_CPUSET_H__ && defined( RTEMS_SMP )
-void _CPU_set_Handler_initialization(void);
-#else
-#define _CPU_set_Handler_initialization()  do { } while ( 0 )
-#endif
-
 /**@}*/
 
 #ifdef __cplusplus

@@ -30,6 +30,7 @@ extern "C" {
 #define RTEMS_SYSINIT_BSP_START                  000200
 #define RTEMS_SYSINIT_INITIAL_EXTENSIONS         000300
 #define RTEMS_SYSINIT_DATA_STRUCTURES            000301
+#define RTEMS_SYSINIT_CPU_SET                    00030d
 #define RTEMS_SYSINIT_USER_EXTENSIONS            000320
 #define RTEMS_SYSINIT_CLASSIC_TASKS              000340
 #define RTEMS_SYSINIT_CLASSIC_TIMER              000341

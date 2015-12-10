@@ -37,7 +37,6 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/copyrt.h>
-#include <rtems/score/cpusetimpl.h>
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
@@ -129,8 +128,6 @@ static void rtems_initialize_data_structures(void)
   #endif
 
   _SMP_Handler_initialize();
-
-  _CPU_set_Handler_initialization();
 
 /* MANAGERS */
 

@@ -21,6 +21,7 @@
 
 #ifdef __RTEMS_HAVE_SYS_CPUSET_H__
 #include <sys/cpuset.h>
+#include <rtems/sysinit.h>
 #include <rtems/score/cpusetimpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/percpu.h>
@@ -30,7 +31,7 @@ static CPU_set_Control cpuset_default;
 /*
  * _CPU_set_Handler_initialization
  */
-void _CPU_set_Handler_initialization()
+static void _CPU_set_Handler_initialization()
 {
   uint32_t cpu_count;
   uint32_t cpu_index;
@@ -49,6 +50,12 @@ void _CPU_set_Handler_initialization()
   for ( cpu_index=0; cpu_index<cpu_count; cpu_index++ )
     CPU_SET_S( (int) cpu_index, cpuset_default.setsize, cpuset_default.set );
 }
+
+RTEMS_SYSINIT_ITEM(
+  _CPU_set_Handler_initialization,
+  RTEMS_SYSINIT_CPU_SET,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
 
 /**
  * _CPU_set_Is_valid
