@@ -168,6 +168,10 @@ upon the information in the Configuration Table, User Initialization Tasks
 Table, Device Driver Table, Multiprocessor Configuration Table, and the
 Multiprocessor Communications Interface (MPCI) Table.
 
+@item RTEMS_SYSINIT_USER_EXTENSIONS
+Initializes the @ref{User Extensions Manager} in case it is used by the
+application.
+
 @item RTEMS_SYSINIT_BSP_LIBC
 Depending on the application configuration the IO library and root filesystem
 is initialized.  This step is mandatory.

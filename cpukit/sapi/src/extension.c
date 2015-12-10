@@ -21,13 +21,13 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/thread.h>
 #include <rtems/extensionimpl.h>
+#include <rtems/config.h>
+#include <rtems/sysinit.h>
 
-void _Extension_Manager_initialization(void)
+Objects_Information _Extension_Information;
+
+static void _Extension_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_Extension_Information,
@@ -44,3 +44,9 @@ void _Extension_Manager_initialization(void)
 #endif
   );
 }
+
+RTEMS_SYSINIT_ITEM(
+  _Extension_Manager_initialization,
+  RTEMS_SYSINIT_USER_EXTENSIONS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

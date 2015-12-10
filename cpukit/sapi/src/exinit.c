@@ -137,8 +137,6 @@ static void rtems_initialize_data_structures(void)
 
   _RTEMS_API_Initialize();
 
-  _Extension_Manager_initialization();
-
   _POSIX_API_Initialize();
 }
 

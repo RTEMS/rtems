@@ -25,18 +25,7 @@
 extern "C" {
 #endif
 
-#ifndef SAPI_EXT_EXTERN
-#define SAPI_EXT_EXTERN extern
-#endif
-
-SAPI_EXT_EXTERN Objects_Information  _Extension_Information;
-
-/**
- *  @brief Initialize extension manager.
- *
- *  This routine initializes all extension manager related data structures.
- */
-void _Extension_Manager_initialization(void);
+extern Objects_Information  _Extension_Information;
 
 RTEMS_INLINE_ROUTINE Extension_Control *_Extension_Allocate( void )
 {
