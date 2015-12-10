@@ -1204,7 +1204,7 @@ void _CPU_Context_restore(
  */
 register struct Per_CPU_Control *_SPARC_Per_CPU_current __asm__( "g6" );
 
-#define _CPU_Get_current_per_CPU_control() ( _SPARC_Per_CPU_current )
+#define _CPU_Get_current_per_CPU_control() _SPARC_Per_CPU_current
 
 #if defined(RTEMS_SMP)
   uint32_t _CPU_SMP_Initialize( void );
