@@ -1,5 +1,0 @@
-#
-# The GDB M32R Simulator does not have a tick interrupt.
-#
-
-include: testdata/require-tick-isr.tcfg
