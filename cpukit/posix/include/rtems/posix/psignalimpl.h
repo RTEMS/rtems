@@ -72,11 +72,6 @@ extern Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
  *  Internal routines
  */
 
-/**
- * @brief POSIX signals manager initialization.
- */
-void _POSIX_signals_Manager_Initialization(void);
-
 #define _POSIX_signals_Acquire( lock_context ) \
   _Thread_queue_Acquire( &_POSIX_signals_Wait_queue, lock_context )
 

@@ -17,6 +17,7 @@
 #endif
 
 #include <assert.h>
+#include <string.h>
 #include <stdlib.h>
 
 #include <rtems.h>
@@ -25,6 +26,9 @@
 #include <rtems/test.h>
 
 #include <rtems/extensionimpl.h>
+#ifdef RTEMS_POSIX_API
+#include <rtems/posix/psignalimpl.h>
+#endif /* RTEMS_POSIX_API */
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/dpmemimpl.h>
 #include <rtems/rtems/messageimpl.h>
@@ -74,6 +78,10 @@ typedef enum {
   CLASSIC_RATE_MONOTONIC_POST,
   CLASSIC_BARRIER_PRE,
   CLASSIC_BARRIER_POST,
+#ifdef RTEMS_POSIX_API
+  POSIX_SIGNALS_PRE,
+  POSIX_SIGNALS_POST,
+#endif /* RTEMS_POSIX_API */
   IDLE_THREADS_PRE,
   IDLE_THREADS_POST,
   BSP_LIBC_PRE,
@@ -308,6 +316,34 @@ LAST(RTEMS_SYSINIT_CLASSIC_BARRIER)
   assert(_Barrier_Information.maximum != 0);
   next_step(CLASSIC_BARRIER_POST);
 }
+
+#ifdef RTEMS_POSIX_API
+
+FIRST(RTEMS_SYSINIT_POSIX_SIGNALS)
+{
+  assert(
+    memcmp(
+      &_POSIX_signals_Vectors,
+      _POSIX_signals_Default_vectors,
+      sizeof(_POSIX_signals_Vectors)
+    ) != 0
+  );
+  next_step(POSIX_SIGNALS_PRE);
+}
+
+LAST(RTEMS_SYSINIT_POSIX_SIGNALS)
+{
+  assert(
+    memcmp(
+      &_POSIX_signals_Vectors,
+      _POSIX_signals_Default_vectors,
+      sizeof(_POSIX_signals_Vectors)
+    ) == 0
+  );
+  next_step(POSIX_SIGNALS_POST);
+}
+
+#endif /* RTEMS_POSIX_API */
 
 FIRST(RTEMS_SYSINIT_IDLE_THREADS)
 {

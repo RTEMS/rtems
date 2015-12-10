@@ -33,6 +33,7 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/config.h>
 #include <rtems/seterr.h>
+#include <rtems/sysinit.h>
 
 /*
  *  Ensure we have the same number of vectors and default vector entries
@@ -166,7 +167,7 @@ void _POSIX_signals_Action_handler(
   executing->Wait.return_code = hold_errno;
 }
 
-void _POSIX_signals_Manager_Initialization(void)
+static void _POSIX_signals_Manager_Initialization(void)
 {
   uint32_t   signo;
   uint32_t   maximum_queued_signals;
@@ -213,3 +214,9 @@ void _POSIX_signals_Manager_Initialization(void)
     _Chain_Initialize_empty( &_POSIX_signals_Inactive_siginfo );
   }
 }
+
+RTEMS_SYSINIT_ITEM(
+  _POSIX_signals_Manager_Initialization,
+  RTEMS_SYSINIT_POSIX_SIGNALS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

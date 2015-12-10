@@ -64,7 +64,6 @@ void _POSIX_API_Initialize(void)
   _POSIX_Key_Manager_initialization();
 
   #ifdef RTEMS_POSIX_API
-    _POSIX_signals_Manager_Initialization();
     _POSIX_Threads_Manager_initialization();
     _POSIX_Condition_variables_Manager_initialization();
     _POSIX_Mutex_Manager_initialization();
