@@ -78,8 +78,9 @@ SECTIONS {
 		/*
 		 * BSP: Moved into .text from .*
 		 */
-		*(.rodata .rodata.* KEEP (*(SORT(.rtemsroset.*))) .gnu.linkonce.r.*)
+		*(.rodata .rodata.* .gnu.linkonce.r.*)
 		*(.rodata1)
+		KEEP (*(SORT(.rtemsroset.*)))
 		*(.interp)
 		*(.note.gnu.build-id)
 		*(.hash)
