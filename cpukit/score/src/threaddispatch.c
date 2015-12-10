@@ -30,6 +30,8 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
 
+CHAIN_DEFINE_EMPTY( _User_extensions_Switches_list );
+
 static Thread_Action *_Thread_Get_post_switch_action(
   Thread_Control *executing
 )

@@ -26,8 +26,10 @@
  * Include the executive's configuration
  */
 #include <rtems.h>
+#include <rtems/sysinit.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 
 #ifdef CONFIGURE_DISABLE_BSP_SETTINGS
@@ -2394,6 +2396,12 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_INITIAL_EXTENSION_TABLE Configuration_Initial_Extensions
   #define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS \
     RTEMS_ARRAY_SIZE(Configuration_Initial_Extensions)
+
+  RTEMS_SYSINIT_ITEM(
+    _User_extensions_Handler_initialization,
+    RTEMS_SYSINIT_INITIAL_EXTENSIONS,
+    RTEMS_SYSINIT_ORDER_MIDDLE
+  );
 #else
   #define CONFIGURE_INITIAL_EXTENSION_TABLE NULL
   #define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS 0

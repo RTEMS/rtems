@@ -47,7 +47,6 @@
 #include <rtems/score/timecounter.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/todimpl.h>
-#include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 
@@ -113,7 +112,6 @@ static void rtems_initialize_data_structures(void)
 
   _Thread_Dispatch_initialization();
 
-  _User_extensions_Handler_initialization();
   _ISR_Handler_initialization();
 
   _API_Mutex_Initialization( 2 );

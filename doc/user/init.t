@@ -157,12 +157,16 @@ initialized by the Board Support Package.  This step is mandatory.
 Basic initialization step provided by the Board Support Package.  This step is
 mandatory.
 
+@item RTEMS_SYSINIT_INITIAL_EXTENSIONS
+Initializes the initial extensions if at least one is configured by the Board
+Support Package or application.
+
 @item RTEMS_SYSINIT_DATA_STRUCTURES
 This directive is called when the Board Support Package has completed its basic
 initialization and allows RTEMS to initialize the application environment based
 upon the information in the Configuration Table, User Initialization Tasks
-Table, Device Driver Table, User Extension Table, Multiprocessor Configuration
-Table, and the Multiprocessor Communications Interface (MPCI) Table.
+Table, Device Driver Table, Multiprocessor Configuration Table, and the
+Multiprocessor Communications Interface (MPCI) Table.
 
 @item RTEMS_SYSINIT_BSP_LIBC
 Depending on the application configuration the IO library and root filesystem

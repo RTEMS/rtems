@@ -26,6 +26,7 @@
 
 #include <rtems/score/apimutex.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 
 const char rtems_test_name[] = "SPSYSINIT 1";
@@ -35,6 +36,8 @@ typedef enum {
   BSP_WORK_AREAS_POST,
   BSP_START_PRE,
   BSP_START_POST,
+  INITIAL_EXTENSIONS_PRE,
+  INITIAL_EXTENSIONS_POST,
   DATA_STRUCTURES_PRE,
   DATA_STRUCTURES_POST,
   IDLE_THREADS_PRE,
@@ -104,6 +107,18 @@ FIRST(RTEMS_SYSINIT_BSP_START)
 LAST(RTEMS_SYSINIT_BSP_START)
 {
   next_step(BSP_START_POST);
+}
+
+FIRST(RTEMS_SYSINIT_INITIAL_EXTENSIONS)
+{
+  assert(_Chain_Is_empty(&_User_extensions_Switches_list));
+  next_step(INITIAL_EXTENSIONS_PRE);
+}
+
+LAST(RTEMS_SYSINIT_INITIAL_EXTENSIONS)
+{
+  assert(!_Chain_Is_empty(&_User_extensions_Switches_list));
+  next_step(INITIAL_EXTENSIONS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_DATA_STRUCTURES)
@@ -204,6 +219,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_STACK_CHECKER_ENABLED
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
