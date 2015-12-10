@@ -124,7 +124,7 @@ printlong(rtems_shell_ls_globals* globals, DISPLAY *dp)
 		} else {
 #endif
 			(void)printf("total %llu\n",
-			    (long long)(howmany(dp->btotal, blocksize)));
+			    (unsigned long long)(howmany(dp->btotal, blocksize)));
 #if RTEMS_REMOVED
 		}
 #endif
@@ -138,7 +138,7 @@ printlong(rtems_shell_ls_globals* globals, DISPLAY *dp)
 			(void)printf("%*lu ", dp->s_inode, sp->st_ino);
 		if (f_size && !f_humanize) {
 			(void)printf("%*llu ", dp->s_block,
-			    (long long)howmany(sp->st_blocks, blocksize));
+			    (unsigned long long)howmany(sp->st_blocks, blocksize));
 		}
 		(void)strmode(sp->st_mode, buf);
 		np = p->fts_pointer;
@@ -254,7 +254,7 @@ printcol(rtems_shell_ls_globals* globals, DISPLAY *dp)
 		} else {
 #endif
 			(void)printf("total %llu\n",
-			    (long long)(howmany(dp->btotal, blocksize)));
+			    (unsigned long long)(howmany(dp->btotal, blocksize)));
 #if RTEMS_REMOVED
 		}
 #endif
@@ -313,7 +313,7 @@ printacol(rtems_shell_ls_globals* globals, DISPLAY *dp)
 		} else {
 #endif
 			(void)printf("total %llu\n",
-			    (long long)(howmany(dp->btotal, blocksize)));
+			    (unsigned long long)(howmany(dp->btotal, blocksize)));
 #if RTEMS_REMOVED
 		}
 #endif
@@ -397,7 +397,7 @@ printaname(rtems_shell_ls_globals* globals,
 		} else {
 #endif
 			chcnt += printf("%*llu ", sizefield,
-			    (long long)howmany(sp->st_blocks, blocksize));
+			    (unsigned long long)howmany(sp->st_blocks, blocksize));
 #if RTEMS_REMOVED
 		}
 #endif

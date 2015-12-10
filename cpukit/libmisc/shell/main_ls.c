@@ -58,6 +58,7 @@ __RCSID("$NetBSD: ls.c,v 1.58 2005/10/26 02:24:22 jschauma Exp $");
 #define __need_getopt_newlib
 #include <getopt.h>
 
+#include <sys/param.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
@@ -660,7 +661,7 @@ display(rtems_shell_ls_globals* globals, FTSENT *p, FTSENT *list)
 			d.s_block = 4; /* min buf length for humanize_number */
 		} else {
 			(void)snprintf(buf, sizeof(buf), "%llu",
-			    (long long)howmany(maxblock, blocksize));
+			    (unsigned long long)howmany(maxblock, blocksize));
 			d.s_block = strlen(buf);
 		}
 		d.s_flags = maxflags;
