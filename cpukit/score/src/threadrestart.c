@@ -176,6 +176,17 @@ void _Thread_Kill_zombies( void )
   _ISR_lock_Release_and_ISR_enable( &zombies->Lock, &lock_context );
 }
 
+static void _Thread_Add_life_change_action(
+  Thread_Control *the_thread
+)
+{
+  _Thread_Add_post_switch_action(
+    the_thread,
+    &the_thread->Life.Action,
+    _Thread_Life_action_handler
+  );
+}
+
 static void _Thread_Start_life_change_for_executing(
   Thread_Control *executing
 )
@@ -186,7 +197,7 @@ static void _Thread_Start_life_change_for_executing(
       || executing->current_state == STATES_SUSPENDED
   );
 
-  _Thread_Add_post_switch_action( executing, &executing->Life.Action );
+  _Thread_Add_life_change_action( executing );
 }
 
 void _Thread_Life_action_handler(
@@ -271,7 +282,7 @@ static void _Thread_Start_life_change(
     _Thread_Raise_real_priority_filter,
     false
   );
-  _Thread_Add_post_switch_action( the_thread, &the_thread->Life.Action );
+  _Thread_Add_life_change_action( the_thread );
   _Thread_Ready( the_thread );
 }
 

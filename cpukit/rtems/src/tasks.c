@@ -55,7 +55,7 @@ static bool _RTEMS_tasks_Create_extension(
   api = created->API_Extensions[ THREAD_API_RTEMS ];
 
   _ASR_Create( &api->Signal );
-  _Thread_Action_initialize( &api->Signal_action, _Signal_Action_handler );
+  _Thread_Action_initialize( &api->Signal_action );
 #if !defined(RTEMS_SMP)
   created->task_variables = NULL;
 #endif

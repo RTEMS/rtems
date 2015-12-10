@@ -49,7 +49,8 @@ rtems_status_code rtems_signal_send(
           _ASR_Post_signals( asr, signal_set, &asr->signals_posted );
           _Thread_Add_post_switch_action(
             the_thread,
-            &api->Signal_action
+            &api->Signal_action,
+            _Signal_Action_handler
           );
         } else {
           _ASR_Post_signals( asr, signal_set, &asr->signals_pending );

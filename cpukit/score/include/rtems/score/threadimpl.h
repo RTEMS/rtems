@@ -847,11 +847,9 @@ RTEMS_INLINE_ROUTINE void _Thread_Action_control_initialize(
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_Action_initialize(
-  Thread_Action         *action,
-  Thread_Action_handler  handler
+  Thread_Action *action
 )
 {
-  action->handler = handler;
   _Chain_Set_off_chain( &action->Node );
 }
 
@@ -890,14 +888,17 @@ RTEMS_INLINE_ROUTINE void _Thread_Action_release_and_ISR_enable(
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_Add_post_switch_action(
-  Thread_Control *thread,
-  Thread_Action  *action
+  Thread_Control        *thread,
+  Thread_Action         *action,
+  Thread_Action_handler  handler
 )
 {
   Per_CPU_Control *cpu_of_thread;
   ISR_Level        level;
 
   cpu_of_thread = _Thread_Action_ISR_disable_and_acquire( thread, &level );
+
+  action->handler = handler;
 
 #if defined(RTEMS_SMP)
   if ( _Per_CPU_Get() == cpu_of_thread ) {

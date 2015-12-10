@@ -21,6 +21,7 @@
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/modesimpl.h>
+#include <rtems/rtems/signalimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/config.h>
@@ -103,7 +104,8 @@ rtems_status_code rtems_task_mode(
         needs_asr_dispatching = true;
         _Thread_Add_post_switch_action(
           executing,
-          &api->Signal_action
+          &api->Signal_action,
+          _Signal_Action_handler
         );
       }
     }

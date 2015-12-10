@@ -40,7 +40,11 @@ static bool _POSIX_signals_Unblock_thread_done(
   bool               status
 )
 {
-  _Thread_Add_post_switch_action( the_thread, &api->Signal_action );
+  _Thread_Add_post_switch_action(
+    the_thread,
+    &api->Signal_action,
+    _POSIX_signals_Action_handler
+  );
 
   return status;
 }
