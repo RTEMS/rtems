@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -33,10 +29,10 @@
  *	@(#)select.h	8.2 (Berkeley) 1/4/94
  */
 
-#ifndef _SYS_SELECT_H_
-#define	_SYS_SELECT_H_
+#ifndef _SYS_SELINFO_H_
+#define	_SYS_SELINFO_H_
 
-#include <sys/time.h> /* struct timeval */
+#include <sys/types.h> /* pid_t */
 
 #ifdef __cplusplus
 extern "C" {
@@ -52,18 +48,8 @@ struct selinfo {
 };
 #define	SI_COLL	0x0001		/* collision occurred */
 
-/* Check the first NFDS descriptors each in READFDS (if not NULL) for read
-   readiness, in WRITEFDS (if not NULL) for write readiness, and in EXCEPTFDS
-   (if not NULL) for exceptional conditions.  If TIMEOUT is not NULL, time out
-   after waiting the interval specified therein.  Returns the number of ready
-   descriptors, or -1 for errors.  */
-extern int select (int __nfds, fd_set *__restrict __readfds,
-                   fd_set *__restrict __writefds,
-                   fd_set *__restrict __exceptfds,
-                   struct timeval *__restrict __timeout);
-
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* !_SYS_SELECT_H_ */
+#endif /* !_SYS_SELINFO_H_ */

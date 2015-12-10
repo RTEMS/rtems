@@ -53,6 +53,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc.c,v 1.14 1999/08/28 00:00:4
 #endif
 #include <stdlib.h>
 #include <sys/errno.h>
+#include <sys/param.h>
 #include <rpc/rpc.h>
 #include <rpc/pmap_clnt.h>
 

@@ -43,6 +43,7 @@
 #include <sys/cdefs.h>
 #include <rpc/types.h>
 #include <rpc/xdr.h> /* xdrproc_t */
+#include <sys/select.h> /* fd_set */
 #include <sys/socket.h> /* socklen_t */
 #include <netinet/in.h> /* struct sockaddr_in */
 #include <rpc/auth.h> /* auth_stat */

@@ -367,9 +367,9 @@ $(PROJECT_INCLUDE)/sys/resourcevar.h: sys/resourcevar.h $(PROJECT_INCLUDE)/sys/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/resourcevar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/resourcevar.h
 
-$(PROJECT_INCLUDE)/sys/select.h: sys/select.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/select.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/select.h
+$(PROJECT_INCLUDE)/sys/selinfo.h: sys/selinfo.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/selinfo.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/selinfo.h
 
 $(PROJECT_INCLUDE)/sys/signalvar.h: sys/signalvar.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/signalvar.h

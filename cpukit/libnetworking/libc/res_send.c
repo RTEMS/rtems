@@ -79,6 +79,9 @@
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/time.h>
+#ifndef NOSELECT
+#include <sys/select.h>
+#endif
 #include <sys/socket.h>
 #include <sys/uio.h>
 
