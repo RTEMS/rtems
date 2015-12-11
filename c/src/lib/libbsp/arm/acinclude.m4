@@ -12,8 +12,6 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([csb337]);;
   edb7312 )
     AC_CONFIG_SUBDIRS([edb7312]);;
-  gba )
-    AC_CONFIG_SUBDIRS([gba]);;
   gdbarmsim )
     AC_CONFIG_SUBDIRS([gdbarmsim]);;
   gp32 )
