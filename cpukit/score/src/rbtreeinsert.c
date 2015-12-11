@@ -55,7 +55,7 @@ RBTree_Node *_RBTree_Insert(
   return NULL;
 }
 
-RB_GENERATE_INSERT_COLOR( RBTree_Control, RBTree_Node, Node, static )
+RB_GENERATE_INSERT_COLOR( RBTree_Control, RBTree_Node, Node, static inline )
 
 void _RBTree_Insert_color(
   RBTree_Control *the_rbtree,
