@@ -37,7 +37,7 @@ RTEMS Device Address Table.
 
 A @b{minor} number is associated with each device instance
 managed by a particular device driver.  An RTEMS minor number 
-is an @code{unsigned32} entity.  Convention calls 
+is an @code{unsigned32} entity.  Convention calls for
 dividing the bits in the minor number down into categories
 like the following:
 
