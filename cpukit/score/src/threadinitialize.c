@@ -61,22 +61,18 @@ bool _Thread_Initialize(
   }
 #endif
 
+  memset(
+    &the_thread->current_state,
+    0,
+    information->Objects.size - offsetof( Thread_Control, current_state )
+  );
+
   for ( i = 0 ; i < _Thread_Control_add_on_count ; ++i ) {
     const Thread_Control_add_on *add_on = &_Thread_Control_add_ons[ i ];
 
     *(void **) ( (char *) the_thread + add_on->destination_offset ) =
       (char *) the_thread + add_on->source_offset;
   }
-
-  /*
-   *  Initialize the Ada self pointer
-   */
-  #if __RTEMS_ADA__
-    the_thread->rtems_ada_self = NULL;
-  #endif
-
-  the_thread->Start.tls_area = NULL;
-  the_thread->Wait.spare_heads = NULL;
 
   /*
    *  Allocate and Initialize the stack for this thread.
@@ -149,26 +145,10 @@ bool _Thread_Initialize(
   }
   _Thread_queue_Heads_initialize( the_thread->Wait.spare_heads );
 
-  /*
-   *  Initialize the thread timer
-   */
-  _Watchdog_Preinitialize( &the_thread->Timer );
-
   #ifdef __RTEMS_STRICT_ORDER_MUTEX__
     /* Initialize the head of chain of held mutexes */
     _Chain_Initialize_empty(&the_thread->lock_mutex);
   #endif
-
-  /*
-   * Clear the extensions area so extension users can determine
-   * if they are linked to the thread. An extension user may
-   * create the extension long after tasks have been created
-   * so they cannot rely on the thread create user extension
-   * call.  The object index starts with one, so the first extension context is
-   * unused.
-   */
-  for ( i = 1 ; i <= rtems_configuration_get_maximum_extensions() ; ++i )
-    the_thread->extensions[ i ] = NULL;
 
   /*
    *  General initialization
@@ -197,17 +177,15 @@ bool _Thread_Initialize(
   }
 
 #if defined(RTEMS_SMP)
-  the_thread->Scheduler.state = THREAD_SCHEDULER_BLOCKED;
+  RTEMS_STATIC_ASSERT( THREAD_SCHEDULER_BLOCKED == 0, Scheduler_state );
   the_thread->Scheduler.own_control = scheduler;
   the_thread->Scheduler.control = scheduler;
   the_thread->Scheduler.own_node = the_thread->Scheduler.node;
   _Resource_Node_initialize( &the_thread->Resource_node );
-  _CPU_Context_Set_is_executing( &the_thread->Registers, false );
   the_thread->Lock.current = &the_thread->Lock.Default;
   _SMP_ticket_lock_Initialize( &the_thread->Lock.Default );
   _SMP_lock_Stats_initialize( &the_thread->Lock.Stats, "Thread Lock" );
   _SMP_lock_Stats_initialize( &the_thread->Potpourri_stats, "Thread Potpourri" );
-  _Atomic_Init_uint(&the_thread->Lock.generation, 0);
 #endif
 
   _Thread_Debug_set_real_processor( the_thread, cpu );
@@ -216,25 +194,17 @@ bool _Thread_Initialize(
   _Thread_Set_CPU( the_thread, cpu );
 
   the_thread->current_state           = STATES_DORMANT;
-  the_thread->Wait.queue              = NULL;
   the_thread->Wait.operations         = &_Thread_queue_Operations_default;
-  the_thread->resource_count          = 0;
   the_thread->current_priority        = priority;
   the_thread->real_priority           = priority;
-  the_thread->priority_generation     = 0;
   the_thread->Start.initial_priority  = priority;
 
-  _Thread_Wait_flags_set( the_thread, THREAD_WAIT_FLAGS_INITIAL );
+  RTEMS_STATIC_ASSERT( THREAD_WAIT_FLAGS_INITIAL == 0, Wait_flags );
 
   _Scheduler_Node_initialize( scheduler, the_thread );
   scheduler_node_initialized = true;
 
   _Scheduler_Update_priority( the_thread, priority );
-
-  /*
-   *  Initialize the CPU usage statistics
-   */
-  _Timestamp_Set_to_zero( &the_thread->cpu_time_used );
 
   /*
    * initialize thread's key vaule node chain
@@ -243,12 +213,7 @@ bool _Thread_Initialize(
 
   _Thread_Action_control_initialize( &the_thread->Post_switch_actions );
 
-  _Thread_Action_initialize( &the_thread->Life.Action );
-  the_thread->Life.state = THREAD_LIFE_NORMAL;
-  the_thread->Life.terminator = NULL;
-
-  the_thread->Capture.flags = 0;
-  the_thread->Capture.control = NULL;
+  RTEMS_STATIC_ASSERT( THREAD_LIFE_NORMAL == 0, Life_state );
 
   /*
    *  Open the object

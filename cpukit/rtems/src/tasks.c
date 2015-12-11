@@ -55,21 +55,6 @@ static bool _RTEMS_tasks_Create_extension(
   api = created->API_Extensions[ THREAD_API_RTEMS ];
 
   _ASR_Create( &api->Signal );
-  _Thread_Action_initialize( &api->Signal_action );
-#if !defined(RTEMS_SMP)
-  created->task_variables = NULL;
-#endif
-
-  /*
-   * We know this is deprecated and don't want a warning on every BSP built.
-   */
-  #pragma GCC diagnostic push
-  #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-  if ( rtems_configuration_get_notepads_enabled() ) {
-    for (i=0; i < RTEMS_NUMBER_NOTEPADS; i++)
-      api->Notepads[i] = 0;
-  }
-  #pragma GCC diagnostic pop
 
   return true;
 }

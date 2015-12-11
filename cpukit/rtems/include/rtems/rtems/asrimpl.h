@@ -51,7 +51,7 @@ RTEMS_INLINE_ROUTINE void _ASR_Initialize (
 RTEMS_INLINE_ROUTINE void _ASR_Create( ASR_Information *asr )
 {
   _ISR_lock_Initialize( &asr->Lock, "ASR" );
-  _ASR_Initialize( asr );
+  RTEMS_STATIC_ASSERT( RTEMS_DEFAULT_MODES == 0, _ASR_Create_mode_set );
 }
 
 RTEMS_INLINE_ROUTINE void _ASR_Destroy( ASR_Information *asr )

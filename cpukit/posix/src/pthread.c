@@ -206,10 +206,8 @@ static bool _POSIX_Threads_Create_extension(
   /*
    *  POSIX 1003.1 1996, 18.2.2.2
    */
-  api->cancelation_requested = 0;
-  api->cancelability_state = PTHREAD_CANCEL_ENABLE;
-  api->cancelability_type = PTHREAD_CANCEL_DEFERRED;
-  api->last_cleanup_context = NULL;
+  RTEMS_STATIC_ASSERT( PTHREAD_CANCEL_ENABLE == 0, cancelability_state );
+  RTEMS_STATIC_ASSERT( PTHREAD_CANCEL_DEFERRED == 0, cancelability_type );
 
   /*
    *  If the thread is not a posix thread, then all posix signals are blocked
@@ -217,7 +215,7 @@ static bool _POSIX_Threads_Create_extension(
    *
    *  The check for class == 1 is debug.  Should never really happen.
    */
-  api->signals_pending = SIGNAL_EMPTY_MASK;
+  RTEMS_STATIC_ASSERT( SIGNAL_EMPTY_MASK == 0, signals_pending );
   if ( _Objects_Get_API( created->Object.id ) == OBJECTS_POSIX_API
        #if defined(RTEMS_DEBUG)
          && _Objects_Get_class( created->Object.id ) == 1
@@ -229,10 +227,8 @@ static bool _POSIX_Threads_Create_extension(
     api->signals_blocked = SIGNAL_ALL_MASK;
   }
 
-  _Thread_Action_initialize( &api->Signal_action );
   _Thread_queue_Initialize( &api->Join_List, THREAD_QUEUE_DISCIPLINE_FIFO );
 
-  _Watchdog_Preinitialize( &api->Sporadic_timer );
   _Watchdog_Initialize(
     &api->Sporadic_timer,
     _POSIX_Threads_Sporadic_budget_TSR,
