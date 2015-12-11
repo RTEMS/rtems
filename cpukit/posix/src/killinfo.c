@@ -198,16 +198,8 @@ int killinfo(
       continue;
 
     the_info = _Objects_Information_table[ the_api ][ 1 ];
-
-    #if defined(RTEMS_DEBUG)
-      /*
-       *  This cannot happen in the current (as of June 2009) implementation
-       *  of initialization but at some point, the object information
-       *  structure for a particular manager may not be installed.
-       */
-      if ( !the_info )
-        continue;
-    #endif
+    if ( !the_info )
+      continue;
 
     maximum = the_info->maximum;
     object_table = the_info->local_table;

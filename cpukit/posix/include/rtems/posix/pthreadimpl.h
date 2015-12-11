@@ -44,7 +44,7 @@ extern "C" {
  * The following defines the information control block used to manage
  * this class of objects.
  */
-POSIX_EXTERN Thread_Information  _POSIX_Threads_Information;
+extern Thread_Information _POSIX_Threads_Information;
 
 /**
  * This variable contains the default POSIX Thread attributes.
@@ -59,13 +59,6 @@ extern pthread_attr_t _POSIX_Threads_Default_attributes;
  *       application requirements.
  */
 extern void (*_POSIX_Threads_Initialize_user_threads_p)(void);
-
-/**
- * @brief POSIX threads manager initialization.
- *
- * This routine performs the initialization necessary for this manager.
- */
-void _POSIX_Threads_Manager_initialization(void);
 
 /**
  * @brief Copy POSIX Thread attribute structure.

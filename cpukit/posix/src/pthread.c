@@ -26,6 +26,7 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
+#include <rtems/sysinit.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/threadimpl.h>
@@ -42,6 +43,8 @@
 #include <rtems/score/timespec.h>
 #include <rtems/score/cpusetimpl.h>
 #include <rtems/score/assert.h>
+
+Thread_Information _POSIX_Threads_Information;
 
 /*
  *  The default pthreads attributes structure.
@@ -338,7 +341,7 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
  *
  *  This routine initializes all threads manager related data structures.
  */
-void _POSIX_Threads_Manager_initialization(void)
+static void _POSIX_Threads_Manager_initialization(void)
 {
   #if defined(RTEMS_SMP) && defined(__RTEMS_HAVE_SYS_CPUSET_H__)
     const CPU_set_Control *affinity;
@@ -381,3 +384,9 @@ void _POSIX_Threads_Manager_initialization(void)
    *       Register the MP Process Packet routine.
    */
 }
+
+RTEMS_SYSINIT_ITEM(
+  _POSIX_Threads_Manager_initialization,
+  RTEMS_SYSINIT_POSIX_THREADS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

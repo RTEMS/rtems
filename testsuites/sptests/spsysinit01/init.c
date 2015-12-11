@@ -28,6 +28,7 @@
 #include <rtems/extensionimpl.h>
 #ifdef RTEMS_POSIX_API
 #include <rtems/posix/psignalimpl.h>
+#include <rtems/posix/pthreadimpl.h>
 #endif /* RTEMS_POSIX_API */
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/dpmemimpl.h>
@@ -81,6 +82,8 @@ typedef enum {
 #ifdef RTEMS_POSIX_API
   POSIX_SIGNALS_PRE,
   POSIX_SIGNALS_POST,
+  POSIX_THREADS_PRE,
+  POSIX_THREADS_POST,
 #endif /* RTEMS_POSIX_API */
   IDLE_THREADS_PRE,
   IDLE_THREADS_POST,
@@ -343,6 +346,18 @@ LAST(RTEMS_SYSINIT_POSIX_SIGNALS)
   next_step(POSIX_SIGNALS_POST);
 }
 
+FIRST(RTEMS_SYSINIT_POSIX_THREADS)
+{
+  assert(_POSIX_Threads_Information.Objects.maximum == 0);
+  next_step(POSIX_THREADS_PRE);
+}
+
+LAST(RTEMS_SYSINIT_POSIX_THREADS)
+{
+  assert(_POSIX_Threads_Information.Objects.maximum != 0);
+  next_step(POSIX_THREADS_POST);
+}
+
 #endif /* RTEMS_POSIX_API */
 
 FIRST(RTEMS_SYSINIT_IDLE_THREADS)
@@ -447,6 +462,12 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_MAXIMUM_TIMERS 1
+
+#ifdef RTEMS_POSIX_API
+
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
+
+#endif /* RTEMS_POSIX_API */
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
