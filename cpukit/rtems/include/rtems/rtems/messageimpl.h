@@ -33,16 +33,6 @@ extern "C" {
  */
 
 /**
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
- */
-#ifndef RTEMS_MESSAGE_EXTERN
-#define RTEMS_MESSAGE_EXTERN extern
-#endif
-
-/**
  *  The following enumerated type details the modes in which a message
  *  may be submitted to a message queue.  The message may be posted
  *  in a send or urgent fashion.
@@ -64,14 +54,7 @@ typedef enum {
  *  The following defines the information control block used to
  *  manage this class of objects.
  */
-RTEMS_MESSAGE_EXTERN Objects_Information  _Message_queue_Information;
-
-/**
- *  @brief Message Queue Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _Message_queue_Manager_initialization(void);
+extern Objects_Information _Message_queue_Information;
 
 /**
  *  @brief Message_queue_Submit

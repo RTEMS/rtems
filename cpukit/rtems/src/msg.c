@@ -20,18 +20,16 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/coremsgimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/sysinit.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 
-void _Message_queue_Manager_initialization(void)
+Objects_Information _Message_queue_Information;
+
+static void _Message_queue_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_Message_queue_Information,  /* object information table */
@@ -63,3 +61,9 @@ void _Message_queue_Manager_initialization(void)
 #endif
 
 }
+
+RTEMS_SYSINIT_ITEM(
+  _Message_queue_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

@@ -25,6 +25,7 @@
 #include <rtems/test.h>
 
 #include <rtems/extensionimpl.h>
+#include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/rtems/timerimpl.h>
 #include <rtems/score/apimutex.h>
@@ -53,6 +54,8 @@ typedef enum {
   CLASSIC_SIGNAL_POST,
   CLASSIC_EVENT_PRE,
   CLASSIC_EVENT_POST,
+  CLASSIC_MESSAGE_QUEUE_PRE,
+  CLASSIC_MESSAGE_QUEUE_POST,
   IDLE_THREADS_PRE,
   IDLE_THREADS_POST,
   BSP_LIBC_PRE,
@@ -204,6 +207,18 @@ LAST(RTEMS_SYSINIT_CLASSIC_EVENT)
   next_step(CLASSIC_EVENT_POST);
 }
 
+FIRST(RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE)
+{
+  assert(_Message_queue_Information.maximum == 0);
+  next_step(CLASSIC_MESSAGE_QUEUE_PRE);
+}
+
+LAST(RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE)
+{
+  assert(_Message_queue_Information.maximum != 0);
+  next_step(CLASSIC_MESSAGE_QUEUE_POST);
+}
+
 FIRST(RTEMS_SYSINIT_IDLE_THREADS)
 {
   assert(_System_state_Is_before_initialization(_System_state_Get()));
@@ -288,6 +303,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
+
+#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 

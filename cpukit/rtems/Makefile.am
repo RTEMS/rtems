@@ -184,7 +184,6 @@ librtems_a_SOURCES += src/msgqreceive.c
 librtems_a_SOURCES += src/msgqsend.c
 librtems_a_SOURCES += src/msgqtranslatereturncode.c
 librtems_a_SOURCES += src/msgqurgent.c
-librtems_a_SOURCES += src/msgdata.c
 
 ## SEMAPHORE_C_FILES
 librtems_a_SOURCES += src/sem.c
