@@ -63,8 +63,8 @@ typedef struct {
    */
   Watchdog_Control        Sporadic_timer;
 
-  /** This is the set of signals which are currently blocked. */
-  sigset_t                signals_blocked;
+  /** This is the set of signals which are currently unblocked. */
+  sigset_t                signals_unblocked;
   /** This is the set of signals which are currently pending. */
   sigset_t                signals_pending;
 

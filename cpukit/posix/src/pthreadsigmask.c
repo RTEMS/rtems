@@ -45,20 +45,20 @@ int pthread_sigmask(
   api = _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ];
 
   if ( oset )
-    *oset = api->signals_blocked;
+    *oset = ~api->signals_unblocked;
 
   if ( !set )
     return 0;
 
   switch ( how ) {
     case SIG_BLOCK:
-      api->signals_blocked |= *set;
+      api->signals_unblocked &= ~*set;
       break;
     case SIG_UNBLOCK:
-      api->signals_blocked &= ~*set;
+      api->signals_unblocked |= *set;
       break;
     case SIG_SETMASK:
-      api->signals_blocked = *set;
+      api->signals_unblocked = ~*set;
       break;
     default:
       rtems_set_errno_and_return_minus_one( EINVAL );
@@ -68,7 +68,7 @@ int pthread_sigmask(
 
   /* XXX evaluate the new set */
 
-  if ( ~api->signals_blocked &
+  if ( api->signals_unblocked &
        (api->signals_pending | _POSIX_signals_Pending) ) {
     _Thread_Dispatch();
   }

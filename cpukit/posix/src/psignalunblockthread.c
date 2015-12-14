@@ -69,7 +69,7 @@ bool _POSIX_signals_Unblock_thread(
 
   if ( _States_Is_interruptible_signal( the_thread->current_state ) ) {
 
-    if ( (the_thread->Wait.option & mask) || (~api->signals_blocked & mask) ) {
+    if ( (the_thread->Wait.option & mask) || (api->signals_unblocked & mask) ) {
       the_thread->Wait.return_code = EINTR;
 
       the_info = (siginfo_t *) the_thread->Wait.return_argument;
@@ -96,7 +96,7 @@ bool _POSIX_signals_Unblock_thread(
   /*
    *  Thread is not waiting due to a sigwait.
    */
-  if ( ~api->signals_blocked & mask ) {
+  if ( api->signals_unblocked & mask ) {
 
     /*
      *  The thread is interested in this signal.  We are going

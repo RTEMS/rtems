@@ -43,7 +43,7 @@ bool    _POSIX_signals_Check_signal(
 )
 {
   siginfo_t                   siginfo_struct;
-  sigset_t                    saved_signals_blocked;
+  sigset_t                    saved_signals_unblocked;
   Thread_Wait_information     stored_thread_wait_information;
   Thread_Control             *executing;
 
@@ -69,8 +69,8 @@ bool    _POSIX_signals_Check_signal(
   /*
    *  Block the signals requested in sa_mask
    */
-  saved_signals_blocked = api->signals_blocked;
-  api->signals_blocked |= _POSIX_signals_Vectors[ signo ].sa_mask;
+  saved_signals_unblocked = api->signals_unblocked;
+  api->signals_unblocked &= ~_POSIX_signals_Vectors[ signo ].sa_mask;
 
   executing = _Thread_Get_executing();
 
@@ -105,9 +105,9 @@ bool    _POSIX_signals_Check_signal(
           sizeof( executing->Wait ));
 
   /*
-   *  Restore the previous set of blocked signals
+   *  Restore the previous set of unblocked signals
    */
-  api->signals_blocked = saved_signals_blocked;
+  api->signals_unblocked = saved_signals_unblocked;
 
   return true;
 }

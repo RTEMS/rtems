@@ -222,9 +222,7 @@ static bool _POSIX_Threads_Create_extension(
        #endif
   ) {
     executing_api = _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ];
-    api->signals_blocked = executing_api->signals_blocked;
-  } else {
-    api->signals_blocked = SIGNAL_ALL_MASK;
+    api->signals_unblocked = executing_api->signals_unblocked;
   }
 
   _Thread_queue_Initialize( &api->Join_List, THREAD_QUEUE_DISCIPLINE_FIFO );

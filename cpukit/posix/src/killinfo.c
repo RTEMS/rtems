@@ -52,7 +52,7 @@
  */
 
 #define _POSIX_signals_Is_interested( _api, _mask ) \
-  ( ~(_api)->signals_blocked & (_mask) )
+  ( (_api)->signals_unblocked & (_mask) )
 
 int killinfo(
   pid_t               pid,
@@ -153,7 +153,7 @@ int killinfo(
 
       #if defined(DEBUG_SIGNAL_PROCESSING)
         printk( "Waiting Thread=%p option=0x%08x mask=0x%08x blocked=0x%08x\n",
-          the_thread, the_thread->Wait.option, mask, api->signals_blocked);
+          the_thread, the_thread->Wait.option, mask, ~api->signals_unblocked);
       #endif
 
       /*
@@ -166,7 +166,7 @@ int killinfo(
        * Is this thread is blocked waiting for another signal but has
        * not blocked this one?
        */
-      if (~api->signals_blocked & mask)
+      if (api->signals_unblocked & mask)
         goto process_it;
     }
   }

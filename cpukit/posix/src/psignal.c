@@ -144,7 +144,7 @@ void _POSIX_signals_Action_handler(
    */
   while (1) {
     _POSIX_signals_Acquire( &lock_context );
-      if ( !(~api->signals_blocked &
+      if ( !(api->signals_unblocked &
             (api->signals_pending | _POSIX_signals_Pending)) ) {
        _POSIX_signals_Release( &lock_context );
        break;
