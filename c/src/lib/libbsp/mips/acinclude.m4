@@ -4,8 +4,6 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
   case "$1" in
   csb350 )
     AC_CONFIG_SUBDIRS([csb350]);;
-  genmongoosev )
-    AC_CONFIG_SUBDIRS([genmongoosev]);;
   hurricane )
     AC_CONFIG_SUBDIRS([hurricane]);;
   jmr3904 )
