@@ -237,7 +237,6 @@ librtems_a_SOURCES += src/dpmemdelete.c
 librtems_a_SOURCES += src/dpmemexternal2internal.c
 librtems_a_SOURCES += src/dpmemident.c
 librtems_a_SOURCES += src/dpmeminternal2external.c
-librtems_a_SOURCES += src/dpmemdata.c
 
 ## WORKSPACE_FILES
 librtems_a_SOURCES += src/workspace.c

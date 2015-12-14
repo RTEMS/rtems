@@ -33,27 +33,10 @@ extern "C" {
  */
 
 /**
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
- */
-#ifndef RTEMS_DPMEM_EXTERN
-#define RTEMS_DPMEM_EXTERN extern
-#endif
-
-/**
  *  @brief Define the internal Dual Ported Memory information
  *  The following define the internal Dual Ported Memory information.
  */
-RTEMS_DPMEM_EXTERN Objects_Information  _Dual_ported_memory_Information;
-
-/**
- *  @brief Dual Ported Memory Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _Dual_ported_memory_Manager_initialization(void);
+extern Objects_Information _Dual_ported_memory_Information;
 
 /**
  *  @brief Allocates a port control block from the inactive chain

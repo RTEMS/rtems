@@ -25,6 +25,7 @@
 #include <rtems/test.h>
 
 #include <rtems/extensionimpl.h>
+#include <rtems/rtems/dpmemimpl.h>
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/regionimpl.h>
@@ -65,6 +66,8 @@ typedef enum {
   CLASSIC_PARTITION_POST,
   CLASSIC_REGION_PRE,
   CLASSIC_REGION_POST,
+  CLASSIC_DUAL_PORTED_MEMORY_PRE,
+  CLASSIC_DUAL_PORTED_MEMORY_POST,
   IDLE_THREADS_PRE,
   IDLE_THREADS_POST,
   BSP_LIBC_PRE,
@@ -264,6 +267,18 @@ LAST(RTEMS_SYSINIT_CLASSIC_REGION)
   next_step(CLASSIC_REGION_POST);
 }
 
+FIRST(RTEMS_SYSINIT_CLASSIC_DUAL_PORTED_MEMORY)
+{
+  assert(_Dual_ported_memory_Information.maximum == 0);
+  next_step(CLASSIC_DUAL_PORTED_MEMORY_PRE);
+}
+
+LAST(RTEMS_SYSINIT_CLASSIC_DUAL_PORTED_MEMORY)
+{
+  assert(_Dual_ported_memory_Information.maximum != 0);
+  next_step(CLASSIC_DUAL_PORTED_MEMORY_POST);
+}
+
 FIRST(RTEMS_SYSINIT_IDLE_THREADS)
 {
   assert(_System_state_Is_before_initialization(_System_state_Get()));
@@ -352,6 +367,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
 
 #define CONFIGURE_MAXIMUM_PARTITIONS 1
+
+#define CONFIGURE_MAXIMUM_PORTS 1
 
 #define CONFIGURE_MAXIMUM_REGIONS 1
 

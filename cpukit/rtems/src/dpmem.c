@@ -20,13 +20,14 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
+#include <rtems/sysinit.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/score/address.h>
 #include <rtems/rtems/dpmemimpl.h>
-#include <rtems/score/thread.h>
 
-void _Dual_ported_memory_Manager_initialization(void)
+Objects_Information _Dual_ported_memory_Information;
+
+static void _Dual_ported_memory_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_Dual_ported_memory_Information, /* object information table */
@@ -45,3 +46,9 @@ void _Dual_ported_memory_Manager_initialization(void)
 #endif
   );
 }
+
+RTEMS_SYSINIT_ITEM(
+  _Dual_ported_memory_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_DUAL_PORTED_MEMORY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
