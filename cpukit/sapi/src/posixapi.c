@@ -34,7 +34,6 @@
 #include <rtems/posix/config.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/psignalimpl.h>
-#include <rtems/posix/spinlockimpl.h>
 #endif
 
 void _POSIX_Fatal_error( POSIX_Fatal_domain domain, int eno )
@@ -54,8 +53,4 @@ void _POSIX_API_Initialize(void)
    */
 
   _POSIX_Key_Manager_initialization();
-
-  #ifdef RTEMS_POSIX_API
-    _POSIX_Spinlock_Manager_initialization();
-  #endif
 }

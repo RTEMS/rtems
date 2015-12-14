@@ -21,12 +21,15 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
+#include <rtems/sysinit.h>
 #include <rtems/posix/spinlockimpl.h>
+
+Objects_Information _POSIX_Spinlock_Information;
 
 /**
  *  @brief _POSIX_Spinlock_Manager_initialization
  */
-void _POSIX_Spinlock_Manager_initialization(void)
+static void _POSIX_Spinlock_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_POSIX_Spinlock_Information,    /* object information table */
@@ -44,3 +47,9 @@ void _POSIX_Spinlock_Manager_initialization(void)
 #endif
   );
 }
+
+RTEMS_SYSINIT_ITEM(
+  _POSIX_Spinlock_Manager_initialization,
+  RTEMS_SYSINIT_POSIX_SPINLOCK,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
