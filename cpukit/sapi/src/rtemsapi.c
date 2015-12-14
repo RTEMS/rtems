@@ -26,10 +26,8 @@
 #include <rtems/rtems/rtemsapi.h>
 
 #include <rtems/rtems/intr.h>
-#include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/clock.h>
 
 void _RTEMS_API_Initialize(void)
 {
-  _Barrier_Manager_initialization();
 }

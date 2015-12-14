@@ -20,14 +20,17 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
+#include <rtems/sysinit.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/barrierimpl.h>
 
+Objects_Information _Barrier_Information;
+
 /**
  *  @brief _Barrier_Manager_initialization
  */
-void _Barrier_Manager_initialization(void)
+static void _Barrier_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_Barrier_Information,         /* object information table */
@@ -45,3 +48,9 @@ void _Barrier_Manager_initialization(void)
 #endif
   );
 }
+
+RTEMS_SYSINIT_ITEM(
+  _Barrier_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_BARRIER,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

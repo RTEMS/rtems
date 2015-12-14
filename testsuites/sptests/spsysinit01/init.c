@@ -25,6 +25,7 @@
 #include <rtems/test.h>
 
 #include <rtems/extensionimpl.h>
+#include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/dpmemimpl.h>
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/partimpl.h>
@@ -71,6 +72,8 @@ typedef enum {
   CLASSIC_DUAL_PORTED_MEMORY_POST,
   CLASSIC_RATE_MONOTONIC_PRE,
   CLASSIC_RATE_MONOTONIC_POST,
+  CLASSIC_BARRIER_PRE,
+  CLASSIC_BARRIER_POST,
   IDLE_THREADS_PRE,
   IDLE_THREADS_POST,
   BSP_LIBC_PRE,
@@ -294,6 +297,18 @@ LAST(RTEMS_SYSINIT_CLASSIC_RATE_MONOTONIC)
   next_step(CLASSIC_RATE_MONOTONIC_POST);
 }
 
+FIRST(RTEMS_SYSINIT_CLASSIC_BARRIER)
+{
+  assert(_Barrier_Information.maximum == 0);
+  next_step(CLASSIC_BARRIER_PRE);
+}
+
+LAST(RTEMS_SYSINIT_CLASSIC_BARRIER)
+{
+  assert(_Barrier_Information.maximum != 0);
+  next_step(CLASSIC_BARRIER_POST);
+}
+
 FIRST(RTEMS_SYSINIT_IDLE_THREADS)
 {
   assert(_System_state_Is_before_initialization(_System_state_Get()));
@@ -378,6 +393,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
+
+#define CONFIGURE_MAXIMUM_BARRIERS 1
 
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
 

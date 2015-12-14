@@ -141,7 +141,6 @@ librtems_a_SOURCES += src/barrierident.c
 librtems_a_SOURCES += src/barriertranslatereturncode.c
 librtems_a_SOURCES += src/barrierrelease.c
 librtems_a_SOURCES += src/barrierwait.c
-librtems_a_SOURCES += src/barrierdata.c
 
 ## CLOCK_C_FILES
 librtems_a_SOURCES += src/clockget.c
