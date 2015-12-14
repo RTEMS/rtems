@@ -27,38 +27,16 @@ extern "C" {
 #endif
 
 /**
- * @brief Instantiate Semaphore Data
- *
- * Semaphore Manager -- Data Instantiation
- *
- * This constant is defined to extern most of the time when using
- * this header file. However by defining it to nothing, the data
- * declared in this header file can be instantiated. This is done
- * in a single per manager file.
- *
- */
-#ifndef RTEMS_SEM_EXTERN
-#define RTEMS_SEM_EXTERN extern
-#endif
-
-/**
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
-RTEMS_SEM_EXTERN Objects_Information  _Semaphore_Information;
+extern Objects_Information _Semaphore_Information;
 
 extern const rtems_status_code
   _Semaphore_Translate_core_mutex_return_code_[];
 
 extern const rtems_status_code
   _Semaphore_Translate_core_semaphore_return_code_[];
-
-/**
- *  @brief Semaphore Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _Semaphore_Manager_initialization(void);
 
 /**
  * @brief Semaphore Translate Core Mutex Return Code

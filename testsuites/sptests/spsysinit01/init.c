@@ -26,6 +26,7 @@
 
 #include <rtems/extensionimpl.h>
 #include <rtems/rtems/messageimpl.h>
+#include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/rtems/timerimpl.h>
 #include <rtems/score/apimutex.h>
@@ -56,6 +57,8 @@ typedef enum {
   CLASSIC_EVENT_POST,
   CLASSIC_MESSAGE_QUEUE_PRE,
   CLASSIC_MESSAGE_QUEUE_POST,
+  CLASSIC_SEMAPHORE_PRE,
+  CLASSIC_SEMAPHORE_POST,
   IDLE_THREADS_PRE,
   IDLE_THREADS_POST,
   BSP_LIBC_PRE,
@@ -219,6 +222,18 @@ LAST(RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE)
   next_step(CLASSIC_MESSAGE_QUEUE_POST);
 }
 
+FIRST(RTEMS_SYSINIT_CLASSIC_SEMAPHORE)
+{
+  assert(_Semaphore_Information.maximum == 0);
+  next_step(CLASSIC_SEMAPHORE_PRE);
+}
+
+LAST(RTEMS_SYSINIT_CLASSIC_SEMAPHORE)
+{
+  assert(_Semaphore_Information.maximum != 0);
+  next_step(CLASSIC_SEMAPHORE_POST);
+}
+
 FIRST(RTEMS_SYSINIT_IDLE_THREADS)
 {
   assert(_System_state_Is_before_initialization(_System_state_Get()));
@@ -305,6 +320,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
+
+#define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 

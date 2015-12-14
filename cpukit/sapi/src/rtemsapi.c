@@ -32,11 +32,9 @@
 #include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/ratemonimpl.h>
 #include <rtems/rtems/regionimpl.h>
-#include <rtems/rtems/semimpl.h>
 
 void _RTEMS_API_Initialize(void)
 {
-  _Semaphore_Manager_initialization();
   _Partition_Manager_initialization();
   _Region_Manager_initialization();
   _Dual_ported_memory_Manager_initialization();

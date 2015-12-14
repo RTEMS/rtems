@@ -20,19 +20,16 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
+#include <rtems/sysinit.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/attrimpl.h>
-#include <rtems/score/isr.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/semimpl.h>
-#include <rtems/score/coremuteximpl.h>
-#include <rtems/score/coresemimpl.h>
-#include <rtems/score/thread.h>
 
-#include <rtems/score/interr.h>
+Objects_Information _Semaphore_Information;
 
-void _Semaphore_Manager_initialization(void)
+static void _Semaphore_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_Semaphore_Information,     /* object information table */
@@ -62,3 +59,9 @@ void _Semaphore_Manager_initialization(void)
 #endif
 
 }
+
+RTEMS_SYSINIT_ITEM(
+  _Semaphore_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_SEMAPHORE,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
