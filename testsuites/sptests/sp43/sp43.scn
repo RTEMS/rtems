@@ -1,5 +1,5 @@
-*** TEST 43 ***
-RTEMS Version: rtems-4.10.99.0(SPARC/w/FPU/sis)
+*** BEGIN OF TEST SP 43 ***
+RTEMS Version: rtems-4.11.99.0(SPARC/w/FPU/sis)
 rtems_object_get_classic_name - INVALID_ADDRESS
 rtems_object_get_classic_name - INVALID_ID (bad index)
 rtems_object_get_classic_name - INVALID_ID (unallocated index)
@@ -29,8 +29,8 @@ rtems_object_set_name - change name of init task to (N)
 N    - name returned by rtems_object_get_classic_name
 rtems_object_get_name returned (N   ) for init task
 rtems_object_set_name - change name of init task to ()
-*    - name returned by rtems_object_get_classic_name
-rtems_object_get_name returned () for init task
+     - name returned by rtems_object_get_classic_name
+rtems_object_get_name returned (    ) for init task
 rtems_object_set_name - change name of init task to (N-0x07-0x09-1)
 N**1 - name returned by rtems_object_get_classic_name
 rtems_object_get_name returned (N**1) for init task
@@ -91,4 +91,4 @@ rtems_task_set_priority - use valid Idle thread id again
 rtems_task_set_priority - restore internal thread class info
 rtems_semaphore_obtain - good but uncreated ID - INVALID_ID - OK
 rtems_object_get_classic_name - bad API pointer - INVALID_ID
-*** END OF TEST 43 ***
+*** END OF TEST SP 43 ***

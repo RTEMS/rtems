@@ -171,7 +171,6 @@ librtems_a_SOURCES += src/timerreset.c
 librtems_a_SOURCES += src/timerserver.c
 librtems_a_SOURCES += src/timerserverfireafter.c
 librtems_a_SOURCES += src/timerserverfirewhen.c
-librtems_a_SOURCES += src/rtemstimerdata.c
 
 ## MESSAGE_QUEUE_C_FILES
 librtems_a_SOURCES += src/msg.c

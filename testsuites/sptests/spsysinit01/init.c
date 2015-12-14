@@ -26,6 +26,7 @@
 
 #include <rtems/extensionimpl.h>
 #include <rtems/rtems/tasksimpl.h>
+#include <rtems/rtems/timerimpl.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userextimpl.h>
@@ -46,6 +47,8 @@ typedef enum {
   USER_EXTENSIONS_POST,
   CLASSIC_TASKS_PRE,
   CLASSIC_TASKS_POST,
+  CLASSIC_TIMER_PRE,
+  CLASSIC_TIMER_POST,
   IDLE_THREADS_PRE,
   IDLE_THREADS_POST,
   BSP_LIBC_PRE,
@@ -163,6 +166,18 @@ LAST(RTEMS_SYSINIT_CLASSIC_TASKS)
   next_step(CLASSIC_TASKS_POST);
 }
 
+FIRST(RTEMS_SYSINIT_CLASSIC_TIMER)
+{
+  assert(_Timer_Information.maximum == 0);
+  next_step(CLASSIC_TIMER_PRE);
+}
+
+LAST(RTEMS_SYSINIT_CLASSIC_TIMER)
+{
+  assert(_Timer_Information.maximum != 0);
+  next_step(CLASSIC_TIMER_POST);
+}
+
 FIRST(RTEMS_SYSINIT_IDLE_THREADS)
 {
   assert(_System_state_Is_before_initialization(_System_state_Get()));
@@ -249,6 +264,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_MAXIMUM_TIMERS 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

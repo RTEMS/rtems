@@ -412,6 +412,12 @@ rtems_task Init(
   print_class_info( OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TASKS, &info );
 
   puts( "rtems_object_get_class_information - Classic Timers - OK" );
+  sc = rtems_timer_create(0, NULL);
+  fatal_directive_status(
+    sc,
+    RTEMS_INVALID_NAME,
+    "rtems_timer_create"
+  );
   sc = rtems_object_get_class_information(
              OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TIMERS, &info );
   directive_failed( sc, "rtems_object_get_class_information" );

@@ -36,11 +36,9 @@
 #include <rtems/rtems/regionimpl.h>
 #include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/signalimpl.h>
-#include <rtems/rtems/timerimpl.h>
 
 void _RTEMS_API_Initialize(void)
 {
-  _Timer_Manager_initialization();
   _Signal_Manager_initialization();
   _Event_Manager_initialization();
   _Message_queue_Manager_initialization();

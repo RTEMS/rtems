@@ -35,18 +35,6 @@ extern "C" {
  * @{
  */
 
-/**
- *  @brief Instantiate RTEMS Timer Data
- *
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
- */
-#ifndef RTEMS_TIMER_EXTERN
-#define RTEMS_TIMER_EXTERN extern
-#endif
-
 typedef struct Timer_server_Control Timer_server_Control;
 
 /**
@@ -128,20 +116,13 @@ struct Timer_server_Control {
  *
  * This value is @c NULL when the default timer server is not initialized.
  */
-RTEMS_TIMER_EXTERN Timer_server_Control *volatile _Timer_server;
+extern Timer_server_Control *volatile _Timer_server;
 
 /**
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
-RTEMS_TIMER_EXTERN Objects_Information  _Timer_Information;
-
-/**
- *  @brief Timer Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _Timer_Manager_initialization(void);
+extern Objects_Information  _Timer_Information;
 
 /**
  *  @brief Timer_Allocate
