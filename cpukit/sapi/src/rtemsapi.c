@@ -32,9 +32,6 @@
 #include <rtems/rtems/dpmemimpl.h>
 #include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/messageimpl.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/rtems/mp.h>
-#endif
 #include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/ratemonimpl.h>
 #include <rtems/rtems/regionimpl.h>
@@ -51,10 +48,6 @@ void _RTEMS_API_Initialize(void)
    * various managers.
    */
   _Objects_Information_table[OBJECTS_CLASSIC_API] = _RTEMS_Objects;
-
-  #if defined(RTEMS_MULTIPROCESSING)
-    _Multiprocessing_Manager_initialization();
-  #endif
 
   _RTEMS_tasks_Manager_initialization();
   _Timer_Manager_initialization();

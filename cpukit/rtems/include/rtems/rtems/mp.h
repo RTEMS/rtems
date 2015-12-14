@@ -36,13 +36,6 @@ extern "C" {
 #endif
 
 /**
- *  @brief Multiprocessing Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _Multiprocessing_Manager_initialization ( void );
-
-/**
  *  @brief RTEMS Multiprocessing Announce
  *
  *  This routine implements the MULTIPROCESSING_ANNOUNCE directive.

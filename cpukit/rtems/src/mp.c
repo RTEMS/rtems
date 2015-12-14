@@ -21,10 +21,6 @@
 #include <rtems/rtems/mp.h>
 #include <rtems/score/mpciimpl.h>
 
-void _Multiprocessing_Manager_initialization ( void )
-{
-}
-
 void rtems_multiprocessing_announce ( void )
 {
   _MPCI_Announce();
