@@ -221,7 +221,6 @@ librtems_a_SOURCES += src/regiongetinfo.c
 librtems_a_SOURCES += src/regiongetfreeinfo.c
 librtems_a_SOURCES += src/regionresizesegment.c
 librtems_a_SOURCES += src/regionprocessqueue.c
-librtems_a_SOURCES += src/regiondata.c
 
 ## PARTITION_C_FILES
 librtems_a_SOURCES += src/part.c

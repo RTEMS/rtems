@@ -35,33 +35,10 @@ extern "C" {
  */
 
 /**
- *  @brief Instantiate RTEMS Region Data
- *
- *  Region Manager -- Instantiate Data
- *
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
- */
-#ifndef RTEMS_REGION_EXTERN
-#define RTEMS_REGION_EXTERN extern
-#endif
-
-/**
  *  The following defines the information control block used to
  *  manage this class of objects.
  */
-RTEMS_REGION_EXTERN Objects_Information _Region_Information;
-
-/**
- *  @brief _Region_Manager_initialization
- *
- *  Region Manager
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _Region_Manager_initialization(void);
+extern Objects_Information _Region_Information;
 
 /**
  *  @brief Region_Allocate

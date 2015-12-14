@@ -20,12 +20,13 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
+#include <rtems/sysinit.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/regionimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/apimutex.h>
+
+Objects_Information _Region_Information;
 
 /*
  *  _Region_Manager_initialization
@@ -37,7 +38,7 @@
  *  Output parameters:  NONE
  */
 
-void _Region_Manager_initialization(void)
+static void _Region_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_Region_Information,      /* object information table */
@@ -67,3 +68,9 @@ void _Region_Manager_initialization(void)
 #endif
 
 }
+
+RTEMS_SYSINIT_ITEM(
+  _Region_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_REGION,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
