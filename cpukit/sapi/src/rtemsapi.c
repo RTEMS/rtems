@@ -28,7 +28,6 @@
 #include <rtems/rtems/intr.h>
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/clock.h>
-#include <rtems/rtems/tasksimpl.h>
 #include <rtems/rtems/dpmemimpl.h>
 #include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/messageimpl.h>
@@ -41,7 +40,6 @@
 
 void _RTEMS_API_Initialize(void)
 {
-  _RTEMS_tasks_Manager_initialization();
   _Timer_Manager_initialization();
   _Signal_Manager_initialization();
   _Event_Manager_initialization();

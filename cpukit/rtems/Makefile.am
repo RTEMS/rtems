@@ -112,7 +112,6 @@ librtems_a_SOURCES += src/taskvariabledelete.c
 librtems_a_SOURCES += src/taskvariableget.c
 librtems_a_SOURCES += src/taskvariable_invoke_dtor.c
 endif
-librtems_a_SOURCES += src/taskdata.c
 librtems_a_SOURCES += src/schedulergetprocessorset.c
 librtems_a_SOURCES += src/schedulerident.c
 

@@ -25,6 +25,7 @@
 #include <rtems/test.h>
 
 #include <rtems/extensionimpl.h>
+#include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userextimpl.h>
@@ -43,6 +44,8 @@ typedef enum {
   DATA_STRUCTURES_POST,
   USER_EXTENSIONS_PRE,
   USER_EXTENSIONS_POST,
+  CLASSIC_TASKS_PRE,
+  CLASSIC_TASKS_POST,
   IDLE_THREADS_PRE,
   IDLE_THREADS_POST,
   BSP_LIBC_PRE,
@@ -146,6 +149,18 @@ LAST(RTEMS_SYSINIT_USER_EXTENSIONS)
 {
   assert(_Extension_Information.maximum != 0);
   next_step(USER_EXTENSIONS_POST);
+}
+
+FIRST(RTEMS_SYSINIT_CLASSIC_TASKS)
+{
+  assert(_RTEMS_tasks_Information.Objects.maximum == 0);
+  next_step(CLASSIC_TASKS_PRE);
+}
+
+LAST(RTEMS_SYSINIT_CLASSIC_TASKS)
+{
+  assert(_RTEMS_tasks_Information.Objects.maximum != 0);
+  next_step(CLASSIC_TASKS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_IDLE_THREADS)

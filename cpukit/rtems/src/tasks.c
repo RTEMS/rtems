@@ -20,6 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
+#include <rtems/sysinit.h>
 #include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/signalimpl.h>
@@ -33,6 +34,8 @@
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
+
+Thread_Information _RTEMS_tasks_Information;
 
 /*
  *  _RTEMS_tasks_Create_extension
@@ -186,7 +189,7 @@ User_extensions_Control _RTEMS_tasks_User_extensions = {
   }
 };
 
-void _RTEMS_tasks_Manager_initialization(void)
+static void _RTEMS_tasks_Manager_initialization(void)
 {
   _Thread_Initialize_information(
     &_RTEMS_tasks_Information, /* object information table */
@@ -228,3 +231,9 @@ void _RTEMS_tasks_Initialize_user_tasks( void )
   if ( _RTEMS_tasks_Initialize_user_tasks_p )
     (*_RTEMS_tasks_Initialize_user_tasks_p)();
 }
+
+RTEMS_SYSINIT_ITEM(
+  _RTEMS_tasks_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_TASKS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

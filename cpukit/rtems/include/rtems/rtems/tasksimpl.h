@@ -34,29 +34,10 @@ extern "C" {
  */
 
 /**
- *  @brief Instantiate RTEMS Classic API Tasks Data
- *
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
- */
-#ifndef RTEMS_TASKS_EXTERN
-#define RTEMS_TASKS_EXTERN extern
-#endif
-
-/**
  *  The following instantiates the information control block used to
  *  manage this class of objects.
  */
-RTEMS_TASKS_EXTERN Thread_Information _RTEMS_tasks_Information;
-
-/**
- *  @brief RTEMS Task Manager Initialization
- *
- *  This routine initializes all Task Manager related data structures.
- */
-void _RTEMS_tasks_Manager_initialization(void);
+extern Thread_Information _RTEMS_tasks_Information;
 
 /**
  *  @brief RTEMS User Task Initialization
