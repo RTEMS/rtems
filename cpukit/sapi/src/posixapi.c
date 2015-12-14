@@ -33,7 +33,6 @@
 #include <rtems/config.h>
 #include <rtems/posix/barrierimpl.h>
 #include <rtems/posix/config.h>
-#include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/rwlockimpl.h>
@@ -61,7 +60,6 @@ void _POSIX_API_Initialize(void)
   _POSIX_Key_Manager_initialization();
 
   #ifdef RTEMS_POSIX_API
-    _POSIX_Message_queue_Manager_initialization();
     _POSIX_Semaphore_Manager_initialization();
     _POSIX_Timer_Manager_initialization();
     _POSIX_Barrier_Manager_initialization();

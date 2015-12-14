@@ -28,9 +28,14 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
+#include <rtems/sysinit.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
+
+Objects_Information _POSIX_Message_queue_Information;
+
+Objects_Information _POSIX_Message_queue_Information_fds;
 
 /*
  *  _POSIX_Message_queue_Manager_initialization
@@ -42,7 +47,7 @@
  *  Output parameters:  NONE
  */
 
-void _POSIX_Message_queue_Manager_initialization(void)
+static void _POSIX_Message_queue_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_POSIX_Message_queue_Information, /* object information table */
@@ -76,3 +81,9 @@ void _POSIX_Message_queue_Manager_initialization(void)
 #endif
   );
 }
+
+RTEMS_SYSINIT_ITEM(
+  _POSIX_Message_queue_Manager_initialization,
+  RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

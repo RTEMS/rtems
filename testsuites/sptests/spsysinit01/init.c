@@ -29,6 +29,7 @@
 #include <rtems/extensionimpl.h>
 #ifdef RTEMS_POSIX_API
 #include <rtems/posix/condimpl.h>
+#include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthreadimpl.h>
@@ -92,6 +93,8 @@ typedef enum {
   POSIX_CONDITION_VARIABLE_POST,
   POSIX_MUTEX_PRE,
   POSIX_MUTEX_POST,
+  POSIX_MESSAGE_QUEUE_PRE,
+  POSIX_MESSAGE_QUEUE_POST,
   POSIX_CLEANUP_PRE,
   POSIX_CLEANUP_POST,
 #endif /* RTEMS_POSIX_API */
@@ -392,6 +395,18 @@ LAST(RTEMS_SYSINIT_POSIX_MUTEX)
   next_step(POSIX_MUTEX_POST);
 }
 
+FIRST(RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE)
+{
+  assert(_POSIX_Message_queue_Information.maximum == 0);
+  next_step(POSIX_MESSAGE_QUEUE_PRE);
+}
+
+LAST(RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE)
+{
+  assert(_POSIX_Message_queue_Information.maximum != 0);
+  next_step(POSIX_MESSAGE_QUEUE_POST);
+}
+
 static size_t user_extensions_pre_posix_cleanup;
 
 FIRST(RTEMS_SYSINIT_POSIX_CLEANUP)
@@ -520,6 +535,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_TIMERS 1
 
 #ifdef RTEMS_POSIX_API
+
+#define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 1
 
 #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 1
 

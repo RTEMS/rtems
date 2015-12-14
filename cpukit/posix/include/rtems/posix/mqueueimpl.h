@@ -31,32 +31,13 @@ extern "C" {
  *  This defines the information control block used to manage
  *  this class of objects.
  */
-POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information;
+extern Objects_Information _POSIX_Message_queue_Information;
 
 /**
  *  The is used to manage the set of "file descriptors" associated with
  *  the message queues.
  */
-POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information_fds;
-
-/**
- * @brief Initialize message_queue manager related data structures.
- *
- * This routine performs the initialization necessary for this manager.
- *
- * @note The structure of the routines is identical to that of POSIX
- *       Message_queues to leave the option of having unnamed message
- *       queues at a future date.  They are currently not part of the
- *       POSIX standard but unnamed message_queues are.  This is also
- *       the reason for the apparently unnecessary tracking of
- *       the process_shared attribute.  [In addition to the fact that
- *       it would be trivial to add pshared to the mq_attr structure
- *       and have process private message queues.]
- *
- * @note This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open time.
- *
- */
-void _POSIX_Message_queue_Manager_initialization(void);
+extern Objects_Information _POSIX_Message_queue_Information_fds;
 
 /**
  *  @brief POSIX Message Queue Create Support
