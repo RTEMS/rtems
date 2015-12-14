@@ -128,7 +128,6 @@ librtems_a_SOURCES += src/ratemonreportstatistics.c
 librtems_a_SOURCES += src/ratemonident.c
 librtems_a_SOURCES += src/ratemonperiod.c
 librtems_a_SOURCES += src/ratemontimeout.c
-librtems_a_SOURCES += src/ratemondata.c
 
 ## INTR_C_FILES
 librtems_a_SOURCES += src/intrbody.c

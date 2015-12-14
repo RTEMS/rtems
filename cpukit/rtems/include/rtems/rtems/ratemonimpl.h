@@ -35,31 +35,12 @@ extern "C" {
  */
 
 /**
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
- */
-#ifndef RTEMS_RATEMON_EXTERN
-#define RTEMS_RATEMON_EXTERN extern
-#endif
-
-/**
  *  @brief Rate Monotonic Period Class Management Structure
  *
  *  This instance of Objects_Information is used to manage the
  *  set of rate monotonic period instances.
  */
-RTEMS_RATEMON_EXTERN Objects_Information _Rate_monotonic_Information;
-
-/**
- *  @brief Rate Monotonic Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- *
- *  @note The Rate Monotonic Manager is built on top of the Watchdog Handler
- */
-void _Rate_monotonic_Manager_initialization(void);
+extern Objects_Information _Rate_monotonic_Information;
 
 /**
  *  @brief Allocates a period control block from

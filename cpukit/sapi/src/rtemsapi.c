@@ -28,10 +28,8 @@
 #include <rtems/rtems/intr.h>
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/clock.h>
-#include <rtems/rtems/ratemonimpl.h>
 
 void _RTEMS_API_Initialize(void)
 {
-  _Rate_monotonic_Manager_initialization();
   _Barrier_Manager_initialization();
 }
