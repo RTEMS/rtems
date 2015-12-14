@@ -36,19 +36,12 @@ extern "C" {
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
-POSIX_EXTERN Objects_Information  _POSIX_Condition_variables_Information;
+extern Objects_Information _POSIX_Condition_variables_Information;
 
 /**
  *  The default condition variable attributes structure.
  */
 extern const pthread_condattr_t _POSIX_Condition_variables_Default_attributes;
-
-/**
- *  @brief POSIX Condition Variable Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _POSIX_Condition_variables_Manager_initialization(void);
 
 /**
  *  @brief POSIX Condition Variable Allocate
