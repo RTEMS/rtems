@@ -53,7 +53,6 @@
 #include <rtems/sptables.h>
 
 
-#include <rtems/rtems/rtemsapi.h>
 #include <rtems/posix/posixapi.h>
 
 #ifdef RTEMS_DRVMGR_STARTUP
@@ -134,8 +133,6 @@ static void rtems_initialize_data_structures(void)
   _CPU_set_Handler_initialization();
 
 /* MANAGERS */
-
-  _RTEMS_API_Initialize();
 
   _POSIX_API_Initialize();
 }

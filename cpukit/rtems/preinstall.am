@@ -135,10 +135,6 @@ $(PROJECT_INCLUDE)/rtems/rtems/regionimpl.h: include/rtems/rtems/regionimpl.h $(
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/regionimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/regionimpl.h
 
-$(PROJECT_INCLUDE)/rtems/rtems/rtemsapi.h: include/rtems/rtems/rtemsapi.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/rtemsapi.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/rtemsapi.h
-
 $(PROJECT_INCLUDE)/rtems/rtems/sem.h: include/rtems/rtems/sem.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/sem.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/sem.h

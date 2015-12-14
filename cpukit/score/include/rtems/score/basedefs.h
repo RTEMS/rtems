@@ -101,20 +101,6 @@
  *  or the initialization file for the appropriate API.  It is
  *  referenced as "external" in every other file.
  */
-#ifdef RTEMS_API_INIT
-  #undef  RTEMS_EXTERN
-  #define RTEMS_EXTERN
-#else
-  #undef  RTEMS_EXTERN
-  #define RTEMS_EXTERN  extern
-#endif
-
-/**
- *  The following ensures that all data is declared in the space
- *  of the initialization routine for either the Initialization Manager
- *  or the initialization file for the appropriate API.  It is
- *  referenced as "external" in every other file.
- */
 #ifdef POSIX_API_INIT
   #undef  POSIX_EXTERN
   #define POSIX_EXTERN
