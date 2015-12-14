@@ -17,13 +17,16 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
+#include <rtems/sysinit.h>
 #include <rtems/posix/rwlockimpl.h>
+
+Objects_Information _POSIX_RWLock_Information;
 
 /**
  *  @brief _POSIX_RWLock_Manager_initialization
  */
 
-void _POSIX_RWLock_Manager_initialization(void)
+static void _POSIX_RWLock_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_POSIX_RWLock_Information,     /* object information table */
@@ -41,3 +44,9 @@ void _POSIX_RWLock_Manager_initialization(void)
 #endif
   );
 }
+
+RTEMS_SYSINIT_ITEM(
+  _POSIX_RWLock_Manager_initialization,
+  RTEMS_SYSINIT_POSIX_RWLOCK,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

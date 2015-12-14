@@ -34,6 +34,7 @@
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthreadimpl.h>
+#include <rtems/posix/rwlockimpl.h>
 #include <rtems/posix/semaphoreimpl.h>
 #include <rtems/posix/timerimpl.h>
 #endif /* RTEMS_POSIX_API */
@@ -104,6 +105,8 @@ typedef enum {
   POSIX_TIMER_POST,
   POSIX_BARRIER_PRE,
   POSIX_BARRIER_POST,
+  POSIX_RWLOCK_PRE,
+  POSIX_RWLOCK_POST,
   POSIX_CLEANUP_PRE,
   POSIX_CLEANUP_POST,
 #endif /* RTEMS_POSIX_API */
@@ -452,6 +455,18 @@ LAST(RTEMS_SYSINIT_POSIX_BARRIER)
   next_step(POSIX_BARRIER_POST);
 }
 
+FIRST(RTEMS_SYSINIT_POSIX_RWLOCK)
+{
+  assert(_POSIX_RWLock_Information.maximum == 0);
+  next_step(POSIX_RWLOCK_PRE);
+}
+
+LAST(RTEMS_SYSINIT_POSIX_RWLOCK)
+{
+  assert(_POSIX_RWLock_Information.maximum != 0);
+  next_step(POSIX_RWLOCK_POST);
+}
+
 static size_t user_extensions_pre_posix_cleanup;
 
 FIRST(RTEMS_SYSINIT_POSIX_CLEANUP)
@@ -588,6 +603,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 1
 
 #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES 1
+
+#define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 1
 
 #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 1
 

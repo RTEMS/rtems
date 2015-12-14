@@ -50,6 +50,7 @@ extern "C" {
 #define RTEMS_SYSINIT_POSIX_SEMAPHORE            000365
 #define RTEMS_SYSINIT_POSIX_TIMER                000366
 #define RTEMS_SYSINIT_POSIX_BARRIER              000367
+#define RTEMS_SYSINIT_POSIX_RWLOCK               000368
 #define RTEMS_SYSINIT_POSIX_CLEANUP              00036a
 #define RTEMS_SYSINIT_IDLE_THREADS               000380
 #define RTEMS_SYSINIT_BSP_LIBC                   000400
