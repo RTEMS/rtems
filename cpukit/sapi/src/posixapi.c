@@ -52,8 +52,6 @@ void _POSIX_Fatal_error( POSIX_Fatal_domain domain, int eno )
   _Terminate( INTERNAL_ERROR_POSIX_API, false, code );
 }
 
-Objects_Information *_POSIX_Objects[ OBJECTS_POSIX_CLASSES_LAST + 1 ];
-
 void _POSIX_API_Initialize(void)
 {
   /*
@@ -62,12 +60,6 @@ void _POSIX_API_Initialize(void)
    *
    * Currently, there are no none type size assumptions.
    */
-
-  /*
-   * Install our API Object Management Table and initialize the
-   * various managers.
-   */
-  _Objects_Information_table[OBJECTS_POSIX_API] = _POSIX_Objects;
 
   _POSIX_Key_Manager_initialization();
 

@@ -39,16 +39,8 @@
 #include <rtems/rtems/signalimpl.h>
 #include <rtems/rtems/timerimpl.h>
 
-Objects_Information *_RTEMS_Objects[ OBJECTS_RTEMS_CLASSES_LAST + 1 ];
-
 void _RTEMS_API_Initialize(void)
 {
-  /*
-   * Install our API Object Management Table and initialize the
-   * various managers.
-   */
-  _Objects_Information_table[OBJECTS_CLASSIC_API] = _RTEMS_Objects;
-
   _RTEMS_tasks_Manager_initialization();
   _Timer_Manager_initialization();
   _Signal_Manager_initialization();

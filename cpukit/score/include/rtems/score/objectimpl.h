@@ -197,7 +197,7 @@ SCORE_EXTERN uint16_t    _Objects_Maximum_nodes;
  *  class.  From the ID, we can go to one of these information blocks,
  *  and obtain a pointer to the appropriate object control block.
  */
-SCORE_EXTERN Objects_Information
+extern Objects_Information
     **_Objects_Information_table[OBJECTS_APIS_LAST + 1];
 
 /**

@@ -61,7 +61,19 @@
   #include <drvmgr/drvmgr.h>
 #endif
 
-Objects_Information *_Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
+static Objects_Information *
+_Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
+
+static Objects_Information *_RTEMS_Objects[ OBJECTS_RTEMS_CLASSES_LAST + 1 ];
+
+static Objects_Information *_POSIX_Objects[ OBJECTS_POSIX_CLASSES_LAST + 1 ];
+
+Objects_Information **_Objects_Information_table[ OBJECTS_APIS_LAST + 1 ] = {
+  NULL,
+  &_Internal_Objects[ 0 ],
+  &_RTEMS_Objects[ 0 ],
+  &_POSIX_Objects[ 0 ]
+};
 
 static void rtems_initialize_data_structures(void)
 {
@@ -103,11 +115,6 @@ static void rtems_initialize_data_structures(void)
 
   _User_extensions_Handler_initialization();
   _ISR_Handler_initialization();
-
-  /*
-   * Initialize the internal support API and allocator Mutex
-   */
-  _Objects_Information_table[OBJECTS_INTERNAL_API] = _Internal_Objects;
 
   _API_Mutex_Initialization( 2 );
   _API_Mutex_Allocate( &_RTEMS_Allocator_Mutex );
