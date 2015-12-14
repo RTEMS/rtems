@@ -240,15 +240,6 @@ static bool _POSIX_Threads_Create_extension(
   return true;
 }
 
-static void _POSIX_Threads_Restart_extension(
-  Thread_Control *executing,
-  Thread_Control *restarted
-)
-{
-  (void) executing;
-  _POSIX_Threads_cancel_run( restarted );
-}
-
 static void _POSIX_Threads_Terminate_extension(
   Thread_Control *executing
 )
@@ -258,11 +249,6 @@ static void _POSIX_Threads_Terminate_extension(
   void              **value_ptr;
 
   api = executing->API_Extensions[ THREAD_API_POSIX ];
-
-  /*
-   *  Run the POSIX cancellation handlers
-   */
-  _POSIX_Threads_cancel_run( executing );
 
   _Thread_Disable_dispatch();
 
@@ -326,7 +312,7 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
   { { NULL, NULL }, NULL },
   { _POSIX_Threads_Create_extension,          /* create */
     NULL,                                     /* start */
-    _POSIX_Threads_Restart_extension,         /* restart */
+    NULL,                                     /* restart */
     NULL,                                     /* delete */
     NULL,                                     /* switch */
     NULL,                                     /* begin */

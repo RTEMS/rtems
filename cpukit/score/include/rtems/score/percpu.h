@@ -516,6 +516,13 @@ static inline uint32_t _Per_CPU_Get_index( const Per_CPU_Control *cpu )
   return ( uint32_t ) ( per_cpu_envelope - &_Per_CPU_Information[ 0 ] );
 }
 
+static inline struct _Thread_Control *_Per_CPU_Get_executing(
+  const Per_CPU_Control *cpu
+)
+{
+  return cpu->executing;
+}
+
 static inline bool _Per_CPU_Is_processor_started(
   const Per_CPU_Control *cpu
 )

@@ -85,10 +85,6 @@ typedef struct {
   int                     cancelability_type;
   /** This indicates if a cancelation has been requested. */
   int                     cancelation_requested;
-  /**
-   * @brief LIFO list of cleanup contexts.
-   */
-  struct _pthread_cleanup_context *last_cleanup_context;
 } POSIX_API_Control;
 
 /**

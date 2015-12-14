@@ -22,19 +22,6 @@
 #include <rtems/posix/threadsup.h>
 
 /**
- * @brief POSIX run thread cancelation.
- *
- * This support routine runs through the chain of cancel handlers that
- * have been registered and executes them.
- *
- * @param[in] the_thread is a pointer to the thread whose cancelation handlers
- *            should be run
- */
-void _POSIX_Threads_cancel_run(
-  Thread_Control *the_thread
-);
-
-/**
  * @brief POSIX evaluate thread cancelation and enable dispatch. 
  *
  * This routine separates a piece of code that existed as part of

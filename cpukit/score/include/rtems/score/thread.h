@@ -39,6 +39,8 @@
   #include <rtems/score/cpuset.h>
 #endif
 
+struct _pthread_cleanup_context;
+
 struct Per_CPU_Control;
 
 struct Scheduler_Control;
@@ -849,6 +851,11 @@ struct _Thread_Control {
   Thread_Life_control                   Life;
 
   Thread_Capture_control                Capture;
+
+  /**
+   * @brief LIFO list of POSIX cleanup contexts.
+   */
+  struct _pthread_cleanup_context *last_cleanup_context;
 
   /**
    * @brief Variable length array of user extension pointers.

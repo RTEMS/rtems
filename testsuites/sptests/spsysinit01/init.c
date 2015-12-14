@@ -17,6 +17,7 @@
 #endif
 
 #include <assert.h>
+#include <pthread.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -40,6 +41,7 @@
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/rtems/timerimpl.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/chainimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
@@ -84,6 +86,8 @@ typedef enum {
   POSIX_SIGNALS_POST,
   POSIX_THREADS_PRE,
   POSIX_THREADS_POST,
+  POSIX_CLEANUP_PRE,
+  POSIX_CLEANUP_POST,
 #endif /* RTEMS_POSIX_API */
   IDLE_THREADS_PRE,
   IDLE_THREADS_POST,
@@ -358,6 +362,24 @@ LAST(RTEMS_SYSINIT_POSIX_THREADS)
   next_step(POSIX_THREADS_POST);
 }
 
+static size_t user_extensions_pre_posix_cleanup;
+
+FIRST(RTEMS_SYSINIT_POSIX_CLEANUP)
+{
+  user_extensions_pre_posix_cleanup =
+    _Chain_Node_count_unprotected(&_User_extensions_List);
+  next_step(POSIX_CLEANUP_PRE);
+}
+
+LAST(RTEMS_SYSINIT_POSIX_CLEANUP)
+{
+  assert(
+    user_extensions_pre_posix_cleanup + 1 ==
+      _Chain_Node_count_unprotected(&_User_extensions_List)
+  );
+  next_step(POSIX_CLEANUP_POST);
+}
+
 #endif /* RTEMS_POSIX_API */
 
 FIRST(RTEMS_SYSINIT_IDLE_THREADS)
@@ -435,6 +457,10 @@ LAST(RTEMS_SYSINIT_BSP_POST_DRIVERS)
 
 static void Init(rtems_task_argument arg)
 {
+#ifdef RTEMS_POSIX_API
+  pthread_cleanup_push(NULL, NULL);
+  pthread_cleanup_pop(0);
+#endif /* RTEMS_POSIX_API */
   next_step(INIT_TASK);
   rtems_test_endk();
   exit(0);

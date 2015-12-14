@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @brief Establishing Cancellation Handlers
+ * @brief POSIX Cleanup Support
  * @ingroup POSIXAPI
  */
 
@@ -20,9 +20,10 @@
 
 #include <pthread.h>
 
+#include <rtems/sysinit.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threaddispatch.h>
-#include <rtems/posix/threadsup.h>
+#include <rtems/score/userextimpl.h>
 
 void _pthread_cleanup_push(
   struct _pthread_cleanup_context   *context,
@@ -30,7 +31,8 @@ void _pthread_cleanup_push(
   void                              *arg
 )
 {
-  POSIX_API_Control *thread_support;
+  Per_CPU_Control *cpu_self;
+  Thread_Control  *executing;
 
   context->_routine = routine;
   context->_arg = arg;
@@ -38,11 +40,72 @@ void _pthread_cleanup_push(
   /* This value is unused, just provide a deterministic value */
   context->_canceltype = -1;
 
-  _Thread_Disable_dispatch();
+  cpu_self = _Thread_Dispatch_disable();
 
-  thread_support = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
-  context->_previous = thread_support->last_cleanup_context;
-  thread_support->last_cleanup_context = context;
+  executing = _Per_CPU_Get_executing( cpu_self );
+  context->_previous = executing->last_cleanup_context;
+  executing->last_cleanup_context = context;
 
-  _Thread_Enable_dispatch();
+  _Thread_Dispatch_enable( cpu_self );
 }
+
+void _pthread_cleanup_pop(
+  struct _pthread_cleanup_context *context,
+  int                              execute
+)
+{
+  Per_CPU_Control *cpu_self;
+  Thread_Control  *executing;
+
+  if ( execute != 0 ) {
+    ( *context->_routine )( context->_arg );
+  }
+
+  cpu_self = _Thread_Dispatch_disable();
+
+  executing = _Per_CPU_Get_executing( cpu_self );
+  executing->last_cleanup_context = context->_previous;
+
+  _Thread_Dispatch_enable( cpu_self );
+}
+
+static void _POSIX_Cleanup_terminate_extension( Thread_Control *the_thread )
+{
+  struct _pthread_cleanup_context *context;
+
+  context = the_thread->last_cleanup_context;
+  the_thread->last_cleanup_context = NULL;
+
+  while ( context != NULL ) {
+    ( *context->_routine )( context->_arg );
+
+    context = context->_previous;
+  }
+}
+
+static void _POSIX_Cleanup_restart_extension(
+  Thread_Control *executing,
+  Thread_Control *the_thread
+)
+{
+  (void) executing;
+  _POSIX_Cleanup_terminate_extension( the_thread );
+}
+
+static User_extensions_Control _POSIX_Cleanup_extensions = {
+  .Callouts = {
+    .thread_restart = _POSIX_Cleanup_restart_extension,
+    .thread_terminate = _POSIX_Cleanup_terminate_extension
+  }
+};
+
+static void _POSIX_Cleanup_initialization( void )
+{
+  _User_extensions_Add_API_set( &_POSIX_Cleanup_extensions );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _POSIX_Cleanup_initialization,
+  RTEMS_SYSINIT_POSIX_CLEANUP,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
