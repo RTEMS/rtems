@@ -29,13 +29,11 @@
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/rtems/dpmemimpl.h>
-#include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/ratemonimpl.h>
 #include <rtems/rtems/regionimpl.h>
 
 void _RTEMS_API_Initialize(void)
 {
-  _Partition_Manager_initialization();
   _Region_Manager_initialization();
   _Dual_ported_memory_Manager_initialization();
   _Rate_monotonic_Manager_initialization();

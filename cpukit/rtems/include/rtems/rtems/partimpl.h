@@ -34,29 +34,10 @@ extern "C" {
  */
 
 /**
- * This constant is defined to extern most of the time when using
- * this header file. However by defining it to nothing, the data
- * declared in this header file can be instantiated. This is done
- * in a single per manager file.
- *
- * Partition Manager -- Instantiate Data
- */
-#ifndef RTEMS_PART_EXTERN
-#define RTEMS_PART_EXTERN extern
-#endif
-
-/**
  *  The following defines the information control block used to
  *  manage this class of objects.
  */
-RTEMS_PART_EXTERN Objects_Information _Partition_Information;
-
-/**
- *  @brief Partition Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _Partition_Manager_initialization(void);
+extern Objects_Information _Partition_Information;
 
 /**
  *  @brief Allocate a buffer from the_partition.

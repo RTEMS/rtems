@@ -26,6 +26,7 @@
 
 #include <rtems/extensionimpl.h>
 #include <rtems/rtems/messageimpl.h>
+#include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/rtems/timerimpl.h>
@@ -59,6 +60,8 @@ typedef enum {
   CLASSIC_MESSAGE_QUEUE_POST,
   CLASSIC_SEMAPHORE_PRE,
   CLASSIC_SEMAPHORE_POST,
+  CLASSIC_PARTITION_PRE,
+  CLASSIC_PARTITION_POST,
   IDLE_THREADS_PRE,
   IDLE_THREADS_POST,
   BSP_LIBC_PRE,
@@ -234,6 +237,18 @@ LAST(RTEMS_SYSINIT_CLASSIC_SEMAPHORE)
   next_step(CLASSIC_SEMAPHORE_POST);
 }
 
+FIRST(RTEMS_SYSINIT_CLASSIC_PARTITION)
+{
+  assert(_Partition_Information.maximum == 0);
+  next_step(CLASSIC_PARTITION_PRE);
+}
+
+LAST(RTEMS_SYSINIT_CLASSIC_PARTITION)
+{
+  assert(_Partition_Information.maximum != 0);
+  next_step(CLASSIC_PARTITION_POST);
+}
+
 FIRST(RTEMS_SYSINIT_IDLE_THREADS)
 {
   assert(_System_state_Is_before_initialization(_System_state_Get()));
@@ -320,6 +335,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
+
+#define CONFIGURE_MAXIMUM_PARTITIONS 1
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 

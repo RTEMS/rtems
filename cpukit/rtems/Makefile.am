@@ -230,7 +230,6 @@ librtems_a_SOURCES += src/partdelete.c
 librtems_a_SOURCES += src/partgetbuffer.c
 librtems_a_SOURCES += src/partident.c
 librtems_a_SOURCES += src/partreturnbuffer.c
-librtems_a_SOURCES += src/partdata.c
 
 ## DPMEM_C_FILES
 librtems_a_SOURCES += src/dpmem.c

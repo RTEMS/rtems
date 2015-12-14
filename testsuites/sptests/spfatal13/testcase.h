@@ -23,4 +23,5 @@
 void force_error()
 {
   /* we should not run this far */
+  rtems_partition_create(0, NULL, 0, 0, 0, NULL);
 }
