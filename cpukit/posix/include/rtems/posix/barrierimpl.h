@@ -34,15 +34,7 @@ extern "C" {
  *  this class of objects.
  */
 
-POSIX_EXTERN Objects_Information  _POSIX_Barrier_Information;
-
-/**
- * @brief POSIX barrier manager initialization.
- *
- * This routine performs the initialization necessary for this manager.
- */
-
-void _POSIX_Barrier_Manager_initialization(void);
+extern Objects_Information _POSIX_Barrier_Information;
 
 /**
  * @brief POSIX translate barrier return code.

@@ -28,6 +28,7 @@
 
 #include <rtems/extensionimpl.h>
 #ifdef RTEMS_POSIX_API
+#include <rtems/posix/barrierimpl.h>
 #include <rtems/posix/condimpl.h>
 #include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/muteximpl.h>
@@ -101,6 +102,8 @@ typedef enum {
   POSIX_SEMAPHORE_POST,
   POSIX_TIMER_PRE,
   POSIX_TIMER_POST,
+  POSIX_BARRIER_PRE,
+  POSIX_BARRIER_POST,
   POSIX_CLEANUP_PRE,
   POSIX_CLEANUP_POST,
 #endif /* RTEMS_POSIX_API */
@@ -437,6 +440,18 @@ LAST(RTEMS_SYSINIT_POSIX_TIMER)
   next_step(POSIX_TIMER_POST);
 }
 
+FIRST(RTEMS_SYSINIT_POSIX_BARRIER)
+{
+  assert(_POSIX_Barrier_Information.maximum == 0);
+  next_step(POSIX_BARRIER_PRE);
+}
+
+LAST(RTEMS_SYSINIT_POSIX_BARRIER)
+{
+  assert(_POSIX_Barrier_Information.maximum != 0);
+  next_step(POSIX_BARRIER_POST);
+}
+
 static size_t user_extensions_pre_posix_cleanup;
 
 FIRST(RTEMS_SYSINIT_POSIX_CLEANUP)
@@ -565,6 +580,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_TIMERS 1
 
 #ifdef RTEMS_POSIX_API
+
+#define CONFIGURE_MAXIMUM_POSIX_BARRIERS 1
 
 #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 1
 
