@@ -33,20 +33,13 @@ extern "C" {
  *  This defines the information control block used to manage
  *  this class of objects.
  */
-POSIX_EXTERN Objects_Information  _POSIX_Semaphore_Information;
+extern Objects_Information _POSIX_Semaphore_Information;
 
 /**
  *  This defines the mapping from Score status codes to POSIX return codes.
  */
 extern const int
   _POSIX_Semaphore_Return_codes[CORE_SEMAPHORE_STATUS_LAST + 1];
-
-/**
- *  @brief POSIX Semaphore Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _POSIX_Semaphore_Manager_initialization(void);
 
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *
   _POSIX_Semaphore_Allocate_unprotected( void )

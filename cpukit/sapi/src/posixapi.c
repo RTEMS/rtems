@@ -37,7 +37,6 @@
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/rwlockimpl.h>
 #include <rtems/posix/timerimpl.h>
-#include <rtems/posix/semaphoreimpl.h>
 #include <rtems/posix/spinlockimpl.h>
 #endif
 
@@ -60,7 +59,6 @@ void _POSIX_API_Initialize(void)
   _POSIX_Key_Manager_initialization();
 
   #ifdef RTEMS_POSIX_API
-    _POSIX_Semaphore_Manager_initialization();
     _POSIX_Timer_Manager_initialization();
     _POSIX_Barrier_Manager_initialization();
     _POSIX_RWLock_Manager_initialization();
