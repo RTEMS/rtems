@@ -31,25 +31,18 @@ extern "C" {
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
-POSIX_EXTERN Objects_Information  _POSIX_Mutex_Information;
+extern Objects_Information _POSIX_Mutex_Information;
 
 /**
  *  The default mutex attributes structure.
  */
-POSIX_EXTERN pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
+extern pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
 
 /**
  *  This array contains a mapping from Score Mutex return codes to
  *  POSIX return codes.
  */
 extern const int _POSIX_Mutex_Return_codes[CORE_MUTEX_STATUS_LAST + 1];
-
-/**
- *  @brief POSIX Mutex Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _POSIX_Mutex_Manager_initialization(void);
 
 /**
  *  @brief POSIX Mutex Allocate

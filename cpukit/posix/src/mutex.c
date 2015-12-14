@@ -24,10 +24,15 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
+#include <rtems/sysinit.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/priorityimpl.h>
+
+Objects_Information _POSIX_Mutex_Information;
+
+pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
 
 /*
  *  _POSIX_Mutex_Manager_initialization
@@ -40,7 +45,7 @@
  *  Output parameters:  NONE
  */
 
-void _POSIX_Mutex_Manager_initialization(void)
+static void _POSIX_Mutex_Manager_initialization(void)
 {
   pthread_mutexattr_t *default_attr = &_POSIX_Mutex_Default_attributes;
 
@@ -77,3 +82,9 @@ void _POSIX_Mutex_Manager_initialization(void)
 #endif
   );
 }
+
+RTEMS_SYSINIT_ITEM(
+  _POSIX_Mutex_Manager_initialization,
+  RTEMS_SYSINIT_POSIX_MUTEX,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
