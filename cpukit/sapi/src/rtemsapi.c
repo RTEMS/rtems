@@ -35,11 +35,9 @@
 #include <rtems/rtems/ratemonimpl.h>
 #include <rtems/rtems/regionimpl.h>
 #include <rtems/rtems/semimpl.h>
-#include <rtems/rtems/signalimpl.h>
 
 void _RTEMS_API_Initialize(void)
 {
-  _Signal_Manager_initialization();
   _Event_Manager_initialization();
   _Message_queue_Manager_initialization();
   _Semaphore_Manager_initialization();

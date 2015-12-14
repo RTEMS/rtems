@@ -18,6 +18,7 @@
 #include "config.h"
 #endif
 
+#include <rtems/sysinit.h>
 #include <rtems/rtems/signalimpl.h>
 #include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/tasks.h>
@@ -89,3 +90,19 @@ rtems_status_code rtems_signal_catch(
   _Thread_Enable_dispatch();
   return RTEMS_SUCCESSFUL;
 }
+
+#if defined(RTEMS_MULTIPROCESSING)
+static void _Signal_Manager_initialization( void )
+{
+  _MPCI_Register_packet_processor(
+    MP_PACKET_SIGNAL,
+    _Signal_MP_Process_packet
+  );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Signal_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_SIGNAL,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+#endif

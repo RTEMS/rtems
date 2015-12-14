@@ -208,7 +208,6 @@ librtems_a_SOURCES += src/systemeventsend.c
 librtems_a_SOURCES += src/systemeventreceive.c
 
 ## SIGNAL_C_FILES
-librtems_a_SOURCES += src/signal.c
 librtems_a_SOURCES += src/signalcatch.c
 librtems_a_SOURCES += src/signalsend.c
 

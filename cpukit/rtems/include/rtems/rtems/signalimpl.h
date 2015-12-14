@@ -32,15 +32,6 @@ extern "C" {
  */
 /**@{*/
 
-/**
- *  @brief Signal Manager Initialization
- *
- *  Signal Manager
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _Signal_Manager_initialization( void );
-
 void _Signal_Action_handler(
   Thread_Control *thread,
   Thread_Action *action,
