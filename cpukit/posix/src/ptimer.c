@@ -33,6 +33,7 @@
 /************************************/
 
 #include <unistd.h>
+#include <rtems/sysinit.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/timer.h>
@@ -44,6 +45,8 @@
 
 #include <rtems/posix/timerimpl.h>
 
+Objects_Information _POSIX_Timer_Information;
+
 /*
  * _POSIX_Timer_Manager_initialization
  *
@@ -53,7 +56,7 @@
  *  the timers are stored
  */
 
-void _POSIX_Timer_Manager_initialization(void)
+static void _POSIX_Timer_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_POSIX_Timer_Information,  /* object information table */
@@ -72,3 +75,9 @@ void _POSIX_Timer_Manager_initialization(void)
 #endif
   );
 }
+
+RTEMS_SYSINIT_ITEM(
+  _POSIX_Timer_Manager_initialization,
+  RTEMS_SYSINIT_POSIX_TIMER,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

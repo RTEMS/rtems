@@ -48,6 +48,7 @@ extern "C" {
 #define RTEMS_SYSINIT_POSIX_MUTEX                000363
 #define RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE        000364
 #define RTEMS_SYSINIT_POSIX_SEMAPHORE            000365
+#define RTEMS_SYSINIT_POSIX_TIMER                000366
 #define RTEMS_SYSINIT_POSIX_CLEANUP              00036a
 #define RTEMS_SYSINIT_IDLE_THREADS               000380
 #define RTEMS_SYSINIT_BSP_LIBC                   000400

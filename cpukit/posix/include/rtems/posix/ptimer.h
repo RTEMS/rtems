@@ -36,13 +36,6 @@ extern "C" {
 #include <rtems/posix/config.h>
 
 /**
- *  @brief POSIX Timer Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _POSIX_Timer_Manager_initialization(void);
-
-/**
  *  @brief Create a Per-Process Timer
  */
 int timer_create(

@@ -51,13 +51,6 @@ extern "C" {
 #endif
 
 /**
- *  @brief POSIX Timer Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _POSIX_Timer_Manager_initialization(void);
-
-/**
  *  @brief POSIX Timer Manager Timer Service Routine Helper
  *
  *  This is the operation that is run when a timer expires.
@@ -79,7 +72,7 @@ bool _POSIX_Timer_Insert_helper(
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
-POSIX_EXTERN Objects_Information  _POSIX_Timer_Information;
+extern Objects_Information _POSIX_Timer_Information;
 
 /**
  *  @brief POSIX Timer Allocate

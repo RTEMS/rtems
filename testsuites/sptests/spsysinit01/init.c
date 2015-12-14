@@ -34,6 +34,7 @@
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/semaphoreimpl.h>
+#include <rtems/posix/timerimpl.h>
 #endif /* RTEMS_POSIX_API */
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/dpmemimpl.h>
@@ -98,6 +99,8 @@ typedef enum {
   POSIX_MESSAGE_QUEUE_POST,
   POSIX_SEMAPHORE_PRE,
   POSIX_SEMAPHORE_POST,
+  POSIX_TIMER_PRE,
+  POSIX_TIMER_POST,
   POSIX_CLEANUP_PRE,
   POSIX_CLEANUP_POST,
 #endif /* RTEMS_POSIX_API */
@@ -422,6 +425,18 @@ LAST(RTEMS_SYSINIT_POSIX_SEMAPHORE)
   next_step(POSIX_SEMAPHORE_POST);
 }
 
+FIRST(RTEMS_SYSINIT_POSIX_TIMER)
+{
+  assert(_POSIX_Timer_Information.maximum == 0);
+  next_step(POSIX_TIMER_PRE);
+}
+
+LAST(RTEMS_SYSINIT_POSIX_TIMER)
+{
+  assert(_POSIX_Timer_Information.maximum != 0);
+  next_step(POSIX_TIMER_POST);
+}
+
 static size_t user_extensions_pre_posix_cleanup;
 
 FIRST(RTEMS_SYSINIT_POSIX_CLEANUP)
@@ -558,6 +573,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES 1
 
 #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 1
+
+#define CONFIGURE_MAXIMUM_POSIX_TIMERS 1
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 
