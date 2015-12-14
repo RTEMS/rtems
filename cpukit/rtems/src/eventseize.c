@@ -18,6 +18,7 @@
   #include "config.h"
 #endif
 
+#include <rtems/sysinit.h>
 #include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/optionsimpl.h>
 #include <rtems/score/threadimpl.h>
@@ -118,3 +119,16 @@ void _Event_Seize(
 
   _Thread_Dispatch_enable( cpu_self );
 }
+
+#if defined(RTEMS_MULTIPROCESSING)
+static void _Event_Manager_initialization( void )
+{
+  _MPCI_Register_packet_processor( MP_PACKET_EVENT, _Event_MP_Process_packet );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Event_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_EVENT,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+#endif

@@ -44,18 +44,6 @@ extern "C" {
  */
 #define EVENT_SETS_NONE_PENDING 0
 
-/**
- *  @brief Event Manager Initialization
- *
- *  Event Manager
- *
- *  This routine performs the initialization necessary for this manager.
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-void _Event_Manager_initialization( void );
-
 void _Event_Seize(
   rtems_event_set    event_in,
   rtems_option       option_set,

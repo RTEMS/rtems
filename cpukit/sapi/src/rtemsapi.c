@@ -29,7 +29,6 @@
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/rtems/dpmemimpl.h>
-#include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/ratemonimpl.h>
@@ -38,7 +37,6 @@
 
 void _RTEMS_API_Initialize(void)
 {
-  _Event_Manager_initialization();
   _Message_queue_Manager_initialization();
   _Semaphore_Manager_initialization();
   _Partition_Manager_initialization();

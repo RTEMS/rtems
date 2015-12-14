@@ -199,7 +199,6 @@ librtems_a_SOURCES += src/semdata.c
 librtems_a_SOURCES += src/semsetpriority.c
 
 ## EVENT_C_FILES
-librtems_a_SOURCES += src/event.c
 librtems_a_SOURCES += src/eventreceive.c
 librtems_a_SOURCES += src/eventseize.c
 librtems_a_SOURCES += src/eventsend.c

@@ -34,6 +34,7 @@ extern "C" {
 #define RTEMS_SYSINIT_CLASSIC_TASKS              000340
 #define RTEMS_SYSINIT_CLASSIC_TIMER              000341
 #define RTEMS_SYSINIT_CLASSIC_SIGNAL             000342
+#define RTEMS_SYSINIT_CLASSIC_EVENT              000343
 #define RTEMS_SYSINIT_IDLE_THREADS               000380
 #define RTEMS_SYSINIT_BSP_LIBC                   000400
 #define RTEMS_SYSINIT_BEFORE_DRIVERS             000500
