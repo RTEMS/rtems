@@ -96,20 +96,6 @@
 #endif
 
 /**
- *  The following ensures that all data is declared in the space
- *  of the initialization routine for either the Initialization Manager
- *  or the initialization file for the appropriate API.  It is
- *  referenced as "external" in every other file.
- */
-#ifdef POSIX_API_INIT
-  #undef  POSIX_EXTERN
-  #define POSIX_EXTERN
-#else
-  #undef  POSIX_EXTERN
-  #define POSIX_EXTERN  extern
-#endif
-
-/**
  *  The following (in conjunction with compiler arguments) are used
  *  to choose between the use of static inline functions and macro
  *  functions.   The static inline implementation allows better

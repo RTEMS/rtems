@@ -51,9 +51,6 @@
 
 #include <rtems/sptables.h>
 
-
-#include <rtems/posix/posixapi.h>
-
 #ifdef RTEMS_DRVMGR_STARTUP
   #include <drvmgr/drvmgr.h>
 #endif
@@ -128,10 +125,6 @@ static void rtems_initialize_data_structures(void)
   #endif
 
   _SMP_Handler_initialize();
-
-/* MANAGERS */
-
-  _POSIX_API_Initialize();
 }
 
 static void rtems_initialize_before_drivers(void)

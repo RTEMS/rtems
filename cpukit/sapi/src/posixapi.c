@@ -19,35 +19,11 @@
 #include "config.h"
 #endif
 
-#define POSIX_API_INIT
-
-#include <rtems/system.h>    /* include this before checking RTEMS_POSIX_API */
-
-#include <rtems/config.h>
 #include <rtems/posix/posixapi.h>
-
-#ifdef RTEMS_POSIX_API
-#include <sys/types.h>
-#include <mqueue.h>
-#include <rtems/config.h>
-#include <rtems/posix/config.h>
-#include <rtems/posix/priorityimpl.h>
-#include <rtems/posix/psignalimpl.h>
-#endif
 
 void _POSIX_Fatal_error( POSIX_Fatal_domain domain, int eno )
 {
   uint32_t code = ( domain << 8 ) | ( ( uint32_t ) eno & 0xffU );
 
   _Terminate( INTERNAL_ERROR_POSIX_API, false, code );
-}
-
-void _POSIX_API_Initialize(void)
-{
-  /*
-   * If there are any type size assumptions in the POSIX API, this is
-   * the appropriate place to place them.
-   *
-   * Currently, there are no none type size assumptions.
-   */
 }

@@ -49,14 +49,6 @@ typedef enum {
 void _POSIX_Fatal_error( POSIX_Fatal_domain domain, int eno );
 
 /**
- * @brief Initialize POSIX API.
- *
- * This method is responsible for initializing each of the POSIX
- * API managers.
- */
-void _POSIX_API_Initialize(void);
-
-/**
  * @brief Queries the object identifier @a id for a @a name.
  *
  * @param[in] information Object information.
