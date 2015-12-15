@@ -360,7 +360,7 @@ rtems_status_code rtems_gpio_bsp_disable_interrupt(
   rtems_gpio_interrupt interrupt
 ) {
   /* Clear IRQ generation for the specific pin */
-  mmio_set(bbb_reg(bank, AM335X_GPIO_IRQSTATUS_CLR_0), BIT(pin));
+  mmio_write(bbb_reg(bank, AM335X_GPIO_IRQSTATUS_CLR_0), BIT(pin));
 
   switch ( interrupt ) {
     case FALLING_EDGE:
