@@ -24,7 +24,6 @@
 #include <rtems/system.h>    /* include this before checking RTEMS_POSIX_API */
 
 #include <rtems/config.h>
-#include <rtems/posix/keyimpl.h>
 #include <rtems/posix/posixapi.h>
 
 #ifdef RTEMS_POSIX_API
@@ -51,6 +50,4 @@ void _POSIX_API_Initialize(void)
    *
    * Currently, there are no none type size assumptions.
    */
-
-  _POSIX_Key_Manager_initialization();
 }

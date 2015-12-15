@@ -38,7 +38,7 @@ extern "C" {
 /**
  * @brief The information control block used to manage this class of objects.
  */
-POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
+extern Objects_Information _POSIX_Keys_Information;
 
 /**
  * @brief The rbtree control block used to manage all key values
@@ -48,17 +48,10 @@ extern RBTree_Control _POSIX_Keys_Key_value_lookup_tree;
 /**
  * @brief This freechain is used as a memory pool for POSIX_Keys_Key_value_pair.
  */
-POSIX_EXTERN Freechain_Control _POSIX_Keys_Keypool;
+extern Freechain_Control _POSIX_Keys_Keypool;
 
 #define POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node ) \
   RTEMS_CONTAINER_OF( node, POSIX_Keys_Key_value_pair, Key_value_lookup_node )
-
-/**
- * @brief POSIX key manager initialization.
- *
- * This routine performs the initialization necessary for this manager.
- */
-void _POSIX_Key_Manager_initialization(void);
 
 /**
  * @brief POSIX keys Red-Black tree node comparison.
@@ -68,22 +61,6 @@ void _POSIX_Key_Manager_initialization(void);
 RBTree_Compare_result _POSIX_Keys_Key_value_compare(
   const RBTree_Node *node1,
   const RBTree_Node *node2
-);
-
-/**
- * @brief Create thread-specific data POSIX key.
- *
- * This function executes all the destructors associated with the thread's
- * keys.  This function will execute until all values have been set to NULL.
- *
- * @param[in] thread is a pointer to the thread whose keys should have
- *            all their destructors run.
- *
- * NOTE: This is the routine executed when a thread exits to
- *       run through all the keys and do the destructor action.
- */
-void _POSIX_Keys_Run_destructors(
-  Thread_Control *thread
 );
 
 /**

@@ -39,6 +39,7 @@
 #include <rtems/posix/spinlockimpl.h>
 #include <rtems/posix/timerimpl.h>
 #endif /* RTEMS_POSIX_API */
+#include <rtems/posix/keyimpl.h>
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/dpmemimpl.h>
 #include <rtems/rtems/messageimpl.h>
@@ -115,6 +116,8 @@ typedef enum {
   POSIX_CLEANUP_PRE,
   POSIX_CLEANUP_POST,
 #endif /* RTEMS_POSIX_API */
+  POSIX_KEYS_PRE,
+  POSIX_KEYS_POST,
   IDLE_THREADS_PRE,
   IDLE_THREADS_POST,
   BSP_LIBC_PRE,
@@ -515,6 +518,18 @@ LAST(RTEMS_SYSINIT_POSIX_CLEANUP)
 
 #endif /* RTEMS_POSIX_API */
 
+FIRST(RTEMS_SYSINIT_POSIX_KEYS)
+{
+  assert(_POSIX_Keys_Information.maximum == 0);
+  next_step(POSIX_KEYS_PRE);
+}
+
+LAST(RTEMS_SYSINIT_POSIX_KEYS)
+{
+  assert(_POSIX_Keys_Information.maximum != 0);
+  next_step(POSIX_KEYS_POST);
+}
+
 FIRST(RTEMS_SYSINIT_IDLE_THREADS)
 {
   assert(_System_state_Is_before_initialization(_System_state_Get()));
@@ -643,6 +658,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 
 #endif /* RTEMS_POSIX_API */
+
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
