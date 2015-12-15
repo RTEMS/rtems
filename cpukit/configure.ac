@@ -388,8 +388,7 @@ AM_CONDITIONAL([RPCTOOLS],[test "$RPCGEN" = rpcgen \
 # reloc backends
 AC_MSG_CHECKING([whether CPU supports libdl])
 case $RTEMS_CPU in
-  arm | i386 | m32r | m68k | mips | \
-  moxie | powerpc | sparc)
+  arm | i386 | m68k | mips | moxie | powerpc | sparc)
    HAVE_LIBDL=yes ;;
   # bfin has an issue to resolve with libdl. See ticket #2252
   bfin)
@@ -463,7 +462,6 @@ score/cpu/i386/Makefile
 score/cpu/lm32/Makefile
 score/cpu/m68k/Makefile
 score/cpu/m32c/Makefile
-score/cpu/m32r/Makefile
 score/cpu/mips/Makefile
 score/cpu/moxie/Makefile
 score/cpu/nios2/Makefile

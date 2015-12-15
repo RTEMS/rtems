@@ -70,7 +70,6 @@
 * Intel/AMD x86 Specific Information::
 * Lattice Mico32 Specific Information::
 * Renesas M32C Specific Information::
-* Renesas M32R Specific Information::
 * M68xxx and Coldfire Specific Information::
 * Xilinx MicroBlaze Specific Information::
 * MIPS Specific Information::
@@ -95,7 +94,6 @@
 @include i386.texi
 @include lm32.texi
 @include m32c.texi
-@include m32r.texi
 @include m68k.texi
 @include microblaze.texi
 @include mips.texi

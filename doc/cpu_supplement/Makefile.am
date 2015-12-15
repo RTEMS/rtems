@@ -1,5 +1,5 @@
 #
-#  COPYRIGHT (c) 1988-2012.
+#  COPYRIGHT (c) 1988-2015.
 #  On-Line Applications Research Corporation (OAR).
 #  All rights reserved.
 
@@ -20,7 +20,6 @@ GENERATED_FILES += h8300.texi
 GENERATED_FILES += i386.texi
 GENERATED_FILES += lm32.texi
 GENERATED_FILES += m32c.texi
-GENERATED_FILES += m32r.texi
 GENERATED_FILES += m68k.texi
 GENERATED_FILES += microblaze.texi
 GENERATED_FILES += mips.texi
@@ -79,11 +78,6 @@ i386.texi: i386.t
 	    -n "" < $< > $@
 
 m32c.texi: m32c.t
-	$(BMENU2) -p "" \
-	    -u "Top" \
-	    -n "" < $< > $@
-
-m32r.texi: m32r.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@
