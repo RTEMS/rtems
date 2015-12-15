@@ -1,0 +1,4 @@
+*** BEGIN OF TEST PSXCLEANUP 2 ***
+cleanup
+destroy
+*** END OF TEST PSXCLEANUP 2 ***

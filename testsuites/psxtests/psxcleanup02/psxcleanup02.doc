@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: psxcleanup02
+
+directives:
+
+  - pthread_key_create()
+  - pthread_cleanup_push()
+
+concepts:
+
+  - Ensures that the POSIX cleanup handler are called before the POSIX key
+    destructors.
