@@ -67,6 +67,7 @@ __FBSDID("$FreeBSD r284178 2015-06-09T11:49:56Z$");
 ISR_LOCK_DEFINE(static, _Timecounter_Lock, "Timecounter");
 #define hz rtems_clock_get_ticks_per_second()
 #define printf(...)
+#define bcopy(x, y, z) memcpy(y, x, z);
 #define log(...)
 static inline int
 fls(int x)
