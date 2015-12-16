@@ -25,6 +25,9 @@ fixed priority scheduler, see also @ref{Configuring a System Configuring
 Clustered Schedulers}.  For example applications see
 @file{testsuites/smptests}.
 
+@strong{WARNING: The SMP support in RTEMS is work in progress.  Before you
+start using this RTEMS version for SMP ask on the RTEMS mailing list.}
+
 This chapter describes the services related to Symmetric Multiprocessing
 provided by RTEMS.
 
