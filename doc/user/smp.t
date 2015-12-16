@@ -8,6 +8,23 @@
 
 @section Introduction
 
+The Symmetric Multiprocessing (SMP) support of the RTEMS @value{VERSION} is
+available on
+
+@itemize @bullet
+@item ARM,
+@item PowerPC, and
+@item SPARC.
+@end itemize
+
+It must be explicitly enabled via the @code{--enable-smp} configure command
+line option.  To enable SMP in the application configuration see
+@ref{Configuring a System Enable SMP Support for Applications}.  The default
+scheduler for SMP applications supports up to 32 processors and is a global
+fixed priority scheduler, see also @ref{Configuring a System Configuring
+Clustered Schedulers}.  For example applications see
+@file{testsuites/smptests}.
+
 This chapter describes the services related to Symmetric Multiprocessing
 provided by RTEMS.
 
