@@ -5,13 +5,12 @@ base_e=$(echo ${base} | sed -e 's/\//\\\//g')
 
 last_arch=""
 
-cfg_list=$(LANG=C LC_COLLATE=C find ${base} -name \*.cfg -depth 5 | sort)
+cfg_list=$(LANG=C LC_COLLATE=C find ${base} -depth 5 -name \*.cfg | sort)
 
 max_bsp_len=0
 arch_count=0
 bsp_count=0
 
-#set -x
 for bsp_path in ${cfg_list};
 do
   arch=$(echo ${bsp_path} | sed -e "s/${base_e}*\///" -e 's/\/.*//')
