@@ -25,6 +25,15 @@ fixed priority scheduler, see also @ref{Configuring a System Configuring
 Clustered/Partitioned Schedulers}.  For example applications see
 @file{testsuites/smptests}.
 
+@strong{WARNING: The SMP support in RTEMS 4.11 is highly experimental and
+incomplete.  Due to the use of the Giant lock and other implementation
+shortcomings it is unsuitable for systems that need a predictable timing
+behaviour.  Some issues are already fixed in the development version of RTEMS
+4.12.  There are no plans to fix them in RTEMS 4.11.  Before you start using
+this RTEMS version for SMP ask on the RTEMS mailing list.  The SMP support in
+4.11 is good enough for simple demonstration purposes.  It is work in progress
+and a future version of RTEMS will provide proper SMP support.}
+
 This chapter describes the services related to Symmetric Multiprocessing
 provided by RTEMS.
 
