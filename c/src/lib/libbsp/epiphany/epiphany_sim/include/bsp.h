@@ -1,5 +1,12 @@
-/*
+/**
+ * @defgroup bsp_epiphany Epiphany
  *
+ * @ingroup bsp_epiphany
+ *
+ * @brief Epiphany Support Package
+ */
+
+/*
  * Copyright (c) 2015 University of York.
  * Hesham ALMatary <hmka501@york.ac.uk>
  *
@@ -44,12 +51,17 @@
 extern "C" {
 #endif
 
-/* Constants */
+/**
+ * @name Constants
+ *
+ * @{
+ */
 Thread clock_driver_sim_idle_body(uintptr_t);
 #define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
+/** @} */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* LIBBSP_EPIPHANY_PARALLELLA_H */
+#endif /* LIBBSP_EPIPHANY_EPIPHANY_SIM_H */

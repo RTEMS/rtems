@@ -1,3 +1,9 @@
+/**
+ * @ingroup bsp_epiphany
+ *
+ * @brief Epiphany Time Test 27 Routines
+ */
+
 /*
  *
  * Copyright (c) 2015 University of York.
@@ -32,11 +38,12 @@
 #error "This is an RTEMS internal file you must not include directly."
 #endif
 
-#ifndef __tm27_h
-#define __tm27_h
+#ifndef LIBBSP_EPIPHANY_EPIPHANY_SIM_TM27_H
+#define LIBBSP_EPIPHANY_EPIPHANY_SIM_TM27_H
 
 /**
  * @name Interrupt mechanisms for Time Test 27
+ *
  * @{
  */
 
@@ -50,4 +57,6 @@
 
 #define Lower_tm27_intr() /* empty */
 
-#endif
+/** @} */
+
+#endif /* LIBBSP_EPIPHANY_EPIPHANY_SIM_TM27_H */
