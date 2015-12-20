@@ -36,7 +36,7 @@ static void test_watchdog_routine( Objects_Id id, void *arg )
 
 static void init_watchdogs(
   Watchdog_Header *header,
-  Watchdog_Control watchdogs[3]
+  Watchdog_Control watchdogs[4]
 )
 {
   Watchdog_Control *a = &watchdogs[0];
@@ -105,23 +105,23 @@ static void test_watchdog_insert_and_remove( void )
 
   /* Remove next watchdog of iterator */
   _Watchdog_Remove( &header, c );
-  rtems_test_assert( i.delta_interval == 2 );
+  rtems_test_assert( i.delta_interval == 4 );
   rtems_test_assert( i.current == &b->Node );
 
   /* Remove watchdog before the current watchdog of iterator */
   _Watchdog_Remove( &header, a );
-  rtems_test_assert( i.delta_interval == 4 );
+  rtems_test_assert( i.delta_interval == 6 );
   rtems_test_assert( i.current == &b->Node );
 
   /* Remove current (= last) watchdog of iterator */
   _Watchdog_Remove( &header, b );
-  rtems_test_assert( i.delta_interval == 4 );
+  rtems_test_assert( i.delta_interval == 6 );
   rtems_test_assert( i.current == _Chain_Head( &header.Watchdogs ) );
 
   /* Insert first watchdog */
   a->initial = 1;
   _Watchdog_Insert( &header, a );
-  rtems_test_assert( i.delta_interval == 4 );
+  rtems_test_assert( i.delta_interval == 6 );
   rtems_test_assert( i.current == _Chain_Head( &header.Watchdogs ) );
 
   destroy_watchdogs( &header );
@@ -143,6 +143,57 @@ static void test_watchdog_insert_and_remove( void )
   _Watchdog_Insert( &header, d );
   rtems_test_assert( i.delta_interval == 2 );
   rtems_test_assert( i.current == &b->Node );
+
+  destroy_watchdogs( &header );
+}
+
+static void init_watchdogs_remove_second_and_insert_first(
+  Watchdog_Header *header,
+  Watchdog_Control watchdogs[3]
+)
+{
+  Watchdog_Control *a = &watchdogs[0];
+  Watchdog_Control *b = &watchdogs[1];
+  Watchdog_Control *c = &watchdogs[2];
+
+  _Watchdog_Preinitialize( a );
+  _Watchdog_Preinitialize( b );
+  _Watchdog_Preinitialize( c );
+
+  _Watchdog_Header_initialize( header );
+
+  a->initial = 6;
+  _Watchdog_Insert( header, a );
+  rtems_test_assert( a->delta_interval == 6 );
+
+  b->initial = 8;
+  _Watchdog_Insert( header, b );
+  rtems_test_assert( a->delta_interval == 6 );
+  rtems_test_assert( b->delta_interval == 2 );
+}
+
+static void test_watchdog_remove_second_and_insert_first( void )
+{
+  Watchdog_Header header;
+  Watchdog_Control watchdogs[3];
+  Watchdog_Control *a = &watchdogs[0];
+  Watchdog_Control *b = &watchdogs[1];
+  Watchdog_Control *c = &watchdogs[2];
+  Watchdog_Iterator i;
+
+  init_watchdogs_remove_second_and_insert_first( &header, watchdogs );
+  add_iterator( &header, &i, b );
+
+  _Watchdog_Remove( &header, b );
+  rtems_test_assert( i.delta_interval == 8 );
+  rtems_test_assert( i.current == &a->Node );
+
+  c->initial = 4;
+  _Watchdog_Insert( &header, c );
+  rtems_test_assert( a->delta_interval == 2 );
+  rtems_test_assert( c->delta_interval == 4 );
+  rtems_test_assert( i.delta_interval == 4 );
+  rtems_test_assert( i.current == &a->Node );
 
   destroy_watchdogs( &header );
 }
@@ -184,6 +235,7 @@ rtems_task Init(
 
   test_watchdog_static_init();
   test_watchdog_insert_and_remove();
+  test_watchdog_remove_second_and_insert_first();
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
 
