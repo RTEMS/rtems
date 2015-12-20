@@ -61,7 +61,16 @@ static void _Watchdog_Remove_it(
     }
 
     if ( iterator->current == &the_watchdog->Node ) {
-      iterator->current = _Chain_Previous( &the_watchdog->Node );
+      Chain_Node *previous = _Chain_Previous( &the_watchdog->Node );
+
+      iterator->current = previous;
+
+      if ( previous != _Chain_Head( &header->Watchdogs ) ) {
+        Watchdog_Control *previous_watchdog;
+
+        previous_watchdog = (Watchdog_Control *) previous;
+        iterator->delta_interval += previous_watchdog->delta_interval;
+      }
     }
 
     iterator_node = _Chain_Next( iterator_node );
