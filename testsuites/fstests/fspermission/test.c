@@ -441,6 +441,26 @@ static void  test_premission02(void )
   rtems_test_assert(user_id==statbuf.st_uid);
   rtems_test_assert(group_id==statbuf.st_gid);
 
+  status = seteuid(user_id - 1);
+  rtems_test_assert(status == 0);
+
+  errno = 0;
+  status = chown(file01, user_id, group_id);
+  rtems_test_assert(status == -1);
+  rtems_test_assert(errno == EPERM);
+
+  status = seteuid(user_id);
+  rtems_test_assert(status == 0);
+
+  status = chown(file01, user_id, group_id);
+  rtems_test_assert(status == 0);
+
+  status = seteuid(0);
+  rtems_test_assert(status == 0);
+
+  status = chown(file01, user_id, group_id);
+  rtems_test_assert(status == 0);
+
   status=mkdir(directory01,mode);
   rtems_test_assert(status==0);
   status=stat(directory01,&statbuf);

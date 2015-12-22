@@ -274,9 +274,6 @@ rtems_rfs_rtems_chown (const rtems_filesystem_location_info_t *pathloc,
   rtems_rfs_file_system* fs = rtems_rfs_rtems_pathloc_dev (pathloc);
   rtems_rfs_ino          ino = rtems_rfs_rtems_get_pathloc_ino (pathloc);
   rtems_rfs_inode_handle inode;
-#if defined (RTEMS_POSIX_API)
-  uid_t                  uid;
-#endif
   int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_CHOWN))
@@ -288,20 +285,6 @@ rtems_rfs_rtems_chown (const rtems_filesystem_location_info_t *pathloc,
   {
     return rtems_rfs_rtems_error ("chown: opening inode", rc);
   }
-
-  /*
-   *  Verify I am the owner of the node or the super user.
-   */
-
-#if defined (RTEMS_POSIX_API)
-  uid = geteuid();
-
-  if ((uid != rtems_rfs_inode_get_uid (&inode)) && (uid != 0))
-  {
-    rtems_rfs_inode_close (fs, &inode);
-    return rtems_rfs_rtems_error ("chown: not able", EPERM);
-  }
-#endif
 
   rtems_rfs_inode_set_uid_gid (&inode, owner, group);
 

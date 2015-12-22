@@ -30,23 +30,9 @@ int IMFS_chown(
   gid_t group
 )
 {
-  IMFS_jnode_t  *jnode;
-#if defined(RTEMS_POSIX_API)
-  uid_t          st_uid;
-#endif
+  IMFS_jnode_t *jnode;
 
   jnode = (IMFS_jnode_t *) loc->node_access;
-
-  /*
-   *  Verify I am the owner of the node or the super user.
-   */
-
-#if defined(RTEMS_POSIX_API)
-  st_uid = geteuid();
-
-  if ( ( st_uid != jnode->st_uid ) && ( st_uid != 0 ) )
-    rtems_set_errno_and_return_minus_one( EPERM );
-#endif
 
   jnode->st_uid = owner;
   jnode->st_gid = group;
