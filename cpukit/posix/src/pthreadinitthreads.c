@@ -35,6 +35,15 @@
 #include <rtems/posix/config.h>
 #include <rtems/rtems/config.h>
 
+static void *_POSIX_Global_construction( void *arg )
+{
+  Thread_Entry entry_point = (Thread_Entry) Configuration_POSIX_API
+    .User_initialization_threads_table[ 0 ].thread_entry;
+
+  (void) arg;
+  _Thread_Global_construction( entry_point );
+}
+
 void _POSIX_Threads_Initialize_user_threads_body(void)
 {
   int                                 eno;
@@ -84,7 +93,7 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
 
     if ( register_global_construction ) {
       register_global_construction = false;
-      thread_entry = (void *(*)(void *)) _Thread_Global_construction;
+      thread_entry = _POSIX_Global_construction;
     }
 
     eno = pthread_create(

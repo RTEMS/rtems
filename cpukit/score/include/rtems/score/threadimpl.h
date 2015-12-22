@@ -325,7 +325,7 @@ void _Thread_Handler( void );
  * the first POSIX initialization thread in case no RTEMS initialization tasks
  * are present.
  */
-void *_Thread_Global_construction( void );
+void _Thread_Global_construction( Thread_Entry entry_point ) RTEMS_NO_RETURN;
 
 /**
  *  @brief Ended the delay of a thread.

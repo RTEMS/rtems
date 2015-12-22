@@ -31,6 +31,15 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
 
+static void _RTEMS_Global_construction( rtems_task_argument arg )
+{
+  Thread_Entry entry_point = (Thread_Entry)
+    Configuration_RTEMS_API.User_initialization_tasks_table[ 0 ].entry_point;
+
+  (void) arg;
+  _Thread_Global_construction( entry_point );
+}
+
 /*
  *  _RTEMS_tasks_Initialize_user_tasks_body
  *
@@ -92,7 +101,7 @@ void _RTEMS_tasks_Initialize_user_tasks_body( void )
 
     if ( register_global_construction ) {
       register_global_construction = false;
-      entry_point = (rtems_task_entry) _Thread_Global_construction;
+      entry_point = _RTEMS_Global_construction;
     }
 
     return_value = rtems_task_start(
