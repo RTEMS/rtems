@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Donierstr. 4
@@ -35,7 +35,9 @@ static void test_internal_error_text(void)
     puts( text );
   } while ( text != text_last );
 
-  rtems_test_assert( error - 3 == INTERNAL_ERROR_RESOURCE_IN_USE );
+  rtems_test_assert(
+    error - 3 == INTERNAL_ERROR_POSIX_INIT_THREAD_ENTRY_IS_NULL
+  );
 }
 
 static void test_fatal_source_text(void)

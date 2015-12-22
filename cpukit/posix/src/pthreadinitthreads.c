@@ -74,8 +74,15 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
     _Assert( eno == 0 );
 
     thread_entry = user_threads[ index ].thread_entry;
+    if ( thread_entry == NULL ) {
+      _Terminate(
+        INTERNAL_ERROR_CORE,
+        false,
+        INTERNAL_ERROR_POSIX_INIT_THREAD_ENTRY_IS_NULL
+      );
+    }
 
-    if ( register_global_construction && thread_entry != NULL ) {
+    if ( register_global_construction ) {
       register_global_construction = false;
       thread_entry = (void *(*)(void *)) _Thread_Global_construction;
     }

@@ -27,9 +27,10 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #define FATAL_ERROR_TEST_NAME            "1"
 #define FATAL_ERROR_DESCRIPTION \
         "POSIX API Init thread create failure - NULL entry"
-#define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_POSIX_API
+#define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
-#define FATAL_ERROR_EXPECTED_ERROR       ((POSIX_FD_PTHREAD << 8) | EFAULT)
+#define FATAL_ERROR_EXPECTED_ERROR \
+  INTERNAL_ERROR_POSIX_INIT_THREAD_ENTRY_IS_NULL
 
 void force_error(void)
 {

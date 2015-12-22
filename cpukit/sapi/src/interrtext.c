@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2012-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012-2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -52,7 +52,9 @@ static const char *const internal_error_text[] = {
   "INTERNAL_ERROR_GXX_MUTEX_INIT_FAILED",
   "INTERNAL_ERROR_NO_MEMORY_FOR_HEAP",
   "INTERNAL_ERROR_CPU_ISR_INSTALL_VECTOR",
-  "INTERNAL_ERROR_RESOURCE_IN_USE"
+  "INTERNAL_ERROR_RESOURCE_IN_USE",
+  "INTERNAL_ERROR_RTEMS_INIT_TASK_ENTRY_IS_NULL",
+  "INTERNAL_ERROR_POSIX_INIT_THREAD_ENTRY_IS_NULL"
 };
 
 const char *rtems_internal_error_text( rtems_fatal_code error )
