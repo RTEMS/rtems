@@ -1,15 +1,23 @@
 /**
- * @file rtems/motorola/mc68681.h
+ *  @file rtems/motorola/mc68681.h
  *
+ *  @ingroup idp_mc68681
  *
- * mc68681-duart.h -- Low level support code for the Motorola mc68681
- *                   DUART.
+ *  @brief Low level support code for the Motorola mc68681 DUART.
  */
 
 /*
  *
  *  Originally written by rob@cygnus.com (Rob Savoye) for the libgloss
- *    IDP support.
+ *  IDP support.
+ */
+
+/**
+ *  @defgroup idp_mc68681 Motorola MC68681
+ *
+ *  @ingroup m68k_idp
+ *
+ *  @brief Support code for Motorola MC68681 DUART
  */
 
 #ifndef _RTEMS_MOTOROLA_MC68681_H
@@ -31,7 +39,7 @@
 #define __MC68681_REG(_R) ((_R) * MC68681_OFFSET_MULTIPLIER)
 
 /*
- * mc68681 register offsets Read/Write Addresses
+ *  mc68681 register offsets Read/Write Addresses
  */
 #define MC68681_MODE_REG_1A  __MC68681_REG(0)  /* MR1A-MR Prior to Read */
 #define MC68681_MODE_REG_2A  __MC68681_REG(0)  /* MR2A-MR After Read    */

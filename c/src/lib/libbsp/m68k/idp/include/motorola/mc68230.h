@@ -1,15 +1,17 @@
 /**
- * @file rtems/motorola/mc68230.h
+ *  @file rtems/motorola/mc68230.h
  *
- * Low level support code for the Motorola 68230 Parallel
- * Interface/Timer (PIT)
+ *  @ingroup idp_m68230
+ *
+ *  @brief Low level support code for the Motorola 68230 Parallel 
+ *  Interface/Timer (PIT)
  */
 
 /*
- * Modified by Doug McBride, Colorado Space Grant College
+ *  Modified by Doug McBride, Colorado Space Grant College
  *
- * Format taken partly from RTEMS code and mostly from Motorola IDP user's
- * manual.  RTEMS copyright information below.
+ *  Format taken partly from RTEMS code and mostly from Motorola IDP user's
+ *  manual.  RTEMS copyright information below.
  *
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
@@ -19,6 +21,13 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+/**
+ *  @defgroup idp_mc68230 Motorola MC68230
+ *   
+ *  @ingroup m68k_idp
+ *  
+ *  @brief Support code for Motorola MC68230 PIT
+ */
 #ifndef _RTEMS_MOTOROLA_MC68230_H
 #define _RTEMS_MOTOROLA_MC68230_H
 
