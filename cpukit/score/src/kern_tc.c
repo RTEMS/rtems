@@ -65,7 +65,9 @@ __FBSDID("$FreeBSD r284178 2015-06-09T11:49:56Z$");
 #ifdef __rtems__
 #include <limits.h>
 #include <rtems.h>
-ISR_LOCK_DEFINE(static, _Timecounter_Lock, "Timecounter");
+ISR_LOCK_DEFINE(, _Timecounter_Lock, "Timecounter")
+#define _Timecounter_Release(lock_context) \
+  _ISR_lock_Release_and_ISR_enable(&_Timecounter_Lock, lock_context)
 #define hz rtems_clock_get_ticks_per_second()
 #define printf(...)
 #define bcopy(x, y, z) memcpy(y, x, z);
@@ -1400,7 +1402,7 @@ tc_windup(void)
 #ifdef __rtems__
 	ISR_lock_Context lock_context;
 
-	_ISR_lock_ISR_disable_and_acquire(&_Timecounter_Lock, &lock_context);
+	_Timecounter_Acquire(&lock_context);
 #endif /* __rtems__ */
 
 	/*
@@ -1555,7 +1557,7 @@ tc_windup(void)
 	timekeep_push_vdso();
 #endif /* __rtems__ */
 #ifdef __rtems__
-	_ISR_lock_Release_and_ISR_enable(&_Timecounter_Lock, &lock_context);
+	_Timecounter_Release(&lock_context);
 #endif /* __rtems__ */
 }
 
@@ -1980,14 +1982,12 @@ _Timecounter_Tick(void)
 }
 #ifdef __rtems__
 void
-_Timecounter_Tick_simple(uint32_t delta, uint32_t offset)
+_Timecounter_Tick_simple(uint32_t delta, uint32_t offset,
+    ISR_lock_Context *lock_context)
 {
 	struct bintime bt;
 	struct timehands *th;
 	uint32_t ogen;
-	ISR_lock_Context lock_context;
-
-	_ISR_lock_ISR_disable_and_acquire(&_Timecounter_Lock, &lock_context);
 
 	th = timehands;
 	ogen = th->th_generation;
@@ -2014,7 +2014,7 @@ _Timecounter_Tick_simple(uint32_t delta, uint32_t offset)
 	time_second = th->th_microtime.tv_sec;
 	time_uptime = th->th_offset.sec;
 
-	_ISR_lock_Release_and_ISR_enable(&_Timecounter_Lock, &lock_context);
+	_Timecounter_Release(lock_context);
 
 	_Watchdog_Tick();
 }

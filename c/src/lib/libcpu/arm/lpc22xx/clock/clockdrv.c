@@ -45,9 +45,26 @@ static uint32_t lpc22xx_tc_get_timecount(struct timecounter *tc)
   );
 }
 
+/**
+ * When we get the clock interrupt
+ *    - clear the interrupt bit?
+ *    - restart the timer?
+ */
+static void lpc22xx_tc_at_tick(rtems_timecounter_simple *tc)
+{
+  if (!(T0IR & 0x01))
+    return;
+  T0IR = 0x01;
+  VICVectAddr = 0x00;
+}
+
 static void lpc22xx_tc_tick(void)
 {
-  rtems_timecounter_simple_upcounter_tick(&lpc22xx_tc, lpc22xx_tc_get);
+  rtems_timecounter_simple_upcounter_tick(
+    &lpc22xx_tc,
+    lpc22xx_tc_get,
+    lpc22xx_tc_at_tick
+  );
 }
 
 /* Replace the first value with the clock's interrupt name. */
@@ -61,19 +78,6 @@ rtems_irq_connect_data clock_isr_data = {
 };
 
 /* use the /shared/clockdrv_shell.h code template */
-
-/**
- * When we get the clock interrupt
- *    - clear the interrupt bit?
- *    - restart the timer?
- */
-#define Clock_driver_support_at_tick() \
- do {                                  \
-   if (!(T0IR & 0x01))                 \
-     return;                           \
-   T0IR = 0x01;                        \
-   VICVectAddr = 0x00;                 \
- } while(0)
 
 /**
  * Installs the clock ISR. You shouldn't need to change this.

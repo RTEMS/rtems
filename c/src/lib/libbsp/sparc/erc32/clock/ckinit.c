@@ -36,8 +36,6 @@
  */
 #define CLOCK_VECTOR ERC32_TRAP_TYPE( ERC32_INTERRUPT_REAL_TIME_CLOCK )
 
-#define Clock_driver_support_at_tick()
-
 #define Clock_driver_support_install_isr( _new, _old ) \
   do { \
     _old = set_vector( _new, CLOCK_VECTOR, 1 ); \
@@ -66,11 +64,17 @@ static uint32_t erc32_tc_get_timecount( struct timecounter *tc )
   );
 }
 
+static void erc32_tc_at_tick( rtems_timecounter_simple *tc )
+{
+  /* Nothing to do */
+}
+
 static void erc32_tc_tick( void )
 {
   rtems_timecounter_simple_downcounter_tick(
     &erc32_tc,
-    erc32_tc_get
+    erc32_tc_get,
+    erc32_tc_at_tick
   );
 }
 

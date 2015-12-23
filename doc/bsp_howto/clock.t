@@ -89,6 +89,13 @@ static uint32_t some_tc_get( rtems_timecounter_simple *tc )
   return some.counter;
 @}
 
+static void some_tc_at_tick( rtems_timecounter_simple *tc )
+@{
+  /*
+   * Do work necessary at the clock tick interrupt, e.g. clear a pending flag.
+   */
+@}
+
 static bool some_tc_is_pending( rtems_timecounter_simple *tc )
 @{
   return some.is_pending;
@@ -105,7 +112,11 @@ static uint32_t some_tc_get_timecount( struct timecounter *tc )
 
 static void some_tc_tick( void )
 @{
-  rtems_timecounter_simple_downcounter_tick( &some_tc, some_tc_get );
+  rtems_timecounter_simple_downcounter_tick(
+    &some_tc,
+    some_tc_get,
+    some_tc_at_tick
+  );
 @}
 
 static void some_support_initialize_hardware( void )

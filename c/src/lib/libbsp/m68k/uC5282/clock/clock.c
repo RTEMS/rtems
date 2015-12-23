@@ -17,6 +17,17 @@
 #include <mcf5282/mcf5282.h>
 
 /*
+ * CPU load counters
+ * Place in static RAM so updates don't hit the SDRAM
+ */
+#define IDLE_COUNTER    __SRAMBASE.idle_counter
+#define FILTERED_IDLE   __SRAMBASE.filtered_idle
+#define MAX_IDLE_COUNT  __SRAMBASE.max_idle_count
+#define PITC_PER_TICK   __SRAMBASE.pitc_per_tick
+#define NSEC_PER_PITC   __SRAMBASE.nsec_per_pitc
+#define FILTER_SHIFT    6
+
+/*
  * Use INTC0 base
  */
 #define CLOCK_VECTOR (64+58)
@@ -42,34 +53,24 @@ static uint32_t uC5282_tc_get_timecount(struct timecounter *tc)
   );
 }
 
-static void uC5282_tc_tick(void)
+static void uC5282_tc_at_tick(rtems_timecounter_simple *tc)
 {
-  rtems_timecounter_simple_downcounter_tick(&uC5282_tc, uC5282_tc_get);
+  unsigned idle = IDLE_COUNTER;
+  IDLE_COUNTER = 0;
+  if (idle > MAX_IDLE_COUNT)
+    MAX_IDLE_COUNT = idle;
+  FILTERED_IDLE = idle + FILTERED_IDLE - (FILTERED_IDLE>>FILTER_SHIFT);
+  MCF5282_PIT3_PCSR |= MCF5282_PIT_PCSR_PIF;
 }
 
-/*
- * CPU load counters
- * Place in static RAM so updates don't hit the SDRAM
- */
-#define IDLE_COUNTER    __SRAMBASE.idle_counter
-#define FILTERED_IDLE   __SRAMBASE.filtered_idle
-#define MAX_IDLE_COUNT  __SRAMBASE.max_idle_count
-#define PITC_PER_TICK   __SRAMBASE.pitc_per_tick
-#define NSEC_PER_PITC   __SRAMBASE.nsec_per_pitc
-#define FILTER_SHIFT    6
-
-/*
- * Periodic interval timer interrupt handler
- */
-#define Clock_driver_support_at_tick()                                       \
-    do {                                                                     \
-        unsigned idle = IDLE_COUNTER;                                        \
-        IDLE_COUNTER = 0;                                                    \
-        if (idle > MAX_IDLE_COUNT)                                           \
-            MAX_IDLE_COUNT = idle;                                           \
-        FILTERED_IDLE = idle + FILTERED_IDLE - (FILTERED_IDLE>>FILTER_SHIFT);\
-        MCF5282_PIT3_PCSR |= MCF5282_PIT_PCSR_PIF;                           \
-    } while (0)
+static void uC5282_tc_tick(void)
+{
+  rtems_timecounter_simple_downcounter_tick(
+    &uC5282_tc,
+    uC5282_tc_get,
+    uC5282_tc_at_tick
+  );
+}
 
 /*
  * Attach clock interrupt handler
