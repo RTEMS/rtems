@@ -2,8 +2,6 @@
 "rtems_barrier_delete: only case",tm30,NA,Yes
 "rtems_barrier_ident: only case",tm30,NA,Yes
 ,,,
-"rtems_clock_get_tod: only case",tm08,NA,Yes
-"rtems_clock_set: only case",tm08,NA,Yes
 "rtems_clock_tick: only case",tm25,NA,Yes
 ,,,
 "rtems_event_receive: available",tm15,NA,Yes
@@ -124,12 +122,7 @@
 "rtems_task_delete: calling task",tm18,NA,Yes
 "rtems_task_delete: ready task",tm06,NA,Yes
 "rtems_task_delete: suspended task",tm04,NA,Yes
-"rtems_task_get_note: only case",tm08,NA,Yes
 "rtems_task_ident: only case",tm21,NA,Yes
-"rtems_task_mode: no reschedule",tm08,NA,Yes
-"rtems_task_mode: obtain current mode",tm08,NA,Yes
-"rtems_task_mode: reschedule returns to caller",tm08,NA,Yes
-"rtems_task_mode: reschedule",tm08,NA,Yes
 "rtems_task_restart: blocked task preempts caller",tm04,NA,Yes
 "rtems_task_restart: blocked task",tm04,NA,Yes
 "rtems_task_restart: calling task",tm06,NA,Yes
@@ -139,10 +132,7 @@
 "rtems_task_restart: suspended task",tm04,NA,Yes
 "rtems_task_resume: task readied preempts caller",tm05,NA,Yes
 "rtems_task_resume: task readied returns to caller",tm06,NA,Yes
-"rtems_task_set_note: only case",tm08,NA,Yes
-"rtems_task_set_priority: obtain current priority",tm08,NA,Yes
 "rtems_task_set_priority: preempts caller",tm17,NA,Yes
-"rtems_task_set_priority: returns to caller",tm08,NA,Yes
 "rtems_task_start: only case",tm04,NA,Yes
 "rtems_task_suspend: calling task",tm05,NA,Yes
 "rtems_task_suspend: returns to caller",tm06,NA,Yes

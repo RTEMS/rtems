@@ -88,6 +88,5 @@ Sample output from 'task' command
         no ASRS
 
     It has no events.
-    It has a notepad value for notepad 15 which is 0x40606348
     (this is the libc thread state)
 

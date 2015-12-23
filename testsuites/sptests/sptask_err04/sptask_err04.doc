@@ -12,8 +12,8 @@ This file describes the directives and concepts tested by this test set.
 test set name:  sptask_err04
 
 directives:
-  t_delete, t_getnote, t_ident, t_restart, t_resume, t_setpriority, 
-  t_mode, t_start, t_suspend,
+  t_delete, t_ident, t_restart, t_resume, t_setpriority, t_mode,
+  t_start, t_suspend,
  
 
 concepts:

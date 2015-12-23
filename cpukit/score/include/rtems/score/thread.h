@@ -907,9 +907,9 @@ typedef struct {
  *
  * The thread control block contains fields that point to application
  * configuration dependent memory areas, like the scheduler information, the
- * API control blocks, the user extension context table, the RTEMS notepads and
- * the Newlib re-entrancy support.  Account for these areas in the
- * configuration and avoid extra workspace allocations for these areas.
+ * API control blocks, the user extension context table, and the Newlib
+ * re-entrancy support.  Account for these areas in the configuration and
+ * avoid extra workspace allocations for these areas.
  *
  * This array is provided via <rtems/confdefs.h>.
  *

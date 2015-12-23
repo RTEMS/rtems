@@ -53,8 +53,6 @@ Column B: Data & instruction caches enabled (UPM/A: new burst r/w values) (2000-
    rtems_task_mode: no reschedule                                       62	  9
    rtems_task_mode: reschedule -- returns to caller                     66	 25
    rtems_task_mode: reschedule -- preempts caller                      246	 69
-   rtems_task_set_note                                                  99	 11
-   rtems_task_get_note                                                 100	 23
    rtems_clock_set                                                     222	 35
    rtems_clock_get                                                       6	  1
 

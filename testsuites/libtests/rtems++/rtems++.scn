@@ -44,21 +44,6 @@ SELF - self object get priority - RTEMS[00] successful completion, priority is 1
 SELF - self object set priority to 512 - RTEMS[19] invalid thread priority
 SELF - self object set priority to 25 - RTEMS[00] successful completion
 SELF - self object set priority to original - RTEMS[00] successful completion, priority was 25
-TA1  - get note - RTEMS[00] successful completion, note is 0
-TA1  - get with bad notepad number - RTEMS[10] number was invalid, note is 0
-TA1  - set note to 0xDEADBEEF - RTEMS[00] successful completion
-TA1  - get note - RTEMS[00] successful completion, note is 0xDEADBEEF
-TA1  - set note to original value - RTEMS[00] successful completion
-TA1  - connected object get note - RTEMS[00] successful completion, notepad is 0
-TA1  - connected object get with bad notepad number - RTEMS[10] number was invalid, note is 0
-TA1  - connected object set note to 0xDEADBEEF - RTEMS[00] successful completion
-TA1  - connected object get note - RTEMS[00] successful completion, note is 0xDEADBEEF
-TA1  - connected object set note to original value - RTEMS[00] successful completion
-SELF - self object get note - RTEMS[00] successful completion, note is 0
-SELF - self object get with bad notepad number - RTEMS[10] number was invalid, note is 0
-SELF - self object set note to 0xDEADBEEF - RTEMS[00] successful completion
-SELF - self object get note - RTEMS[00] successful completion, notepad is 0xDEADBEEF
-SELF - self object set note to original value - RTEMS[00] successful completion
  END Task Class test
 <pause - screen 3>
  START TaskMode Class test

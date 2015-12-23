@@ -11,7 +11,6 @@ done <<EOF
 ./sptests/sp17/sp17.scn
 ./sptests/sp19/sp19.scn
 ./sptests/sp09/sp09.scn
-./sptests/sp07/sp07.scn
 ./sptests/sp12/sp12.scn
 ./sptests/sp14/sp14.scn
 ./sptests/sp03/sp03.scn

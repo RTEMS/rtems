@@ -229,16 +229,6 @@ package body SPTEST is
 
       Flush_Task_Event_Log;
 
-      RTEMS.TASKS.SET_NOTE( SPTEST.TASK_ID( 1 ), 8, 4, STATUS );
-      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_NOTE OF TA1" );
-      TEXT_IO.PUT( "INIT - task_set_note - set TA1's NOTEPAD_8" ); 
-      TEXT_IO.PUT_LINE( " to TA1's initial priority:  4" );
-      
-      RTEMS.TASKS.SET_NOTE( SPTEST.TASK_ID( 2 ), 8, 4, STATUS );
-      TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_NOTE OF TA2" );
-      TEXT_IO.PUT( "INIT - task_set_note - set TA2's NOTEPAD_8" ); 
-      TEXT_IO.PUT_LINE( " to TA2's initial priority:  4" );
-
       RTEMS.TASKS.DELETE( RTEMS.SELF, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
@@ -273,13 +263,6 @@ package body SPTEST is
 
       loop
 
-         RTEMS.TASKS.GET_NOTE( RTEMS.SELF, 8, THE_PRIORITY, STATUS );
-         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_GET_NOTE" );
-         TEXT_IO.PUT( "TA1 - task_get_note - "); 
-         TEXT_IO.PUT( "get NOTEPAD_8 - current priority: " );
-         UNSIGNED32_IO.PUT( THE_PRIORITY, BASE => 10, WIDTH => 2 );
-         TEXT_IO.NEW_LINE;
-
          THE_PRIORITY := THE_PRIORITY - 1;
 
          if THE_PRIORITY = 0 then
@@ -304,17 +287,6 @@ package body SPTEST is
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
          end if;
-
-         TEXT_IO.PUT( "TA1 - task_set_note - set TA2's NOTEPAD_8: " );
-         UNSIGNED32_IO.PUT( THE_PRIORITY, BASE => 10, WIDTH => 2 );
-         TEXT_IO.NEW_LINE;
-         RTEMS.TASKS.SET_NOTE( 
-            SPTEST.TASK_ID( 2 ), 
-            8, 
-            THE_PRIORITY, 
-            STATUS
-         );
-         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_NOTE" );
 
          TEXT_IO.PUT("TA1 - task_set_priority - set TA2's priority: ");
          UNSIGNED32_IO.PUT( THE_PRIORITY, BASE => 10, WIDTH => 2 );
@@ -345,13 +317,6 @@ package body SPTEST is
    begin
 
       loop
-
-         RTEMS.TASKS.GET_NOTE( RTEMS.SELF, 8, THE_PRIORITY, STATUS );
-         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_GET_NOTE" );
-         TEXT_IO.PUT( "TA2 - task_get_note - ");
-         TEXT_IO.PUT( "get NOTEPAD_8 - current priority: " );
-         UNSIGNED32_IO.PUT( THE_PRIORITY, BASE => 10, WIDTH => 2 );
-         TEXT_IO.NEW_LINE;
 
          THE_PRIORITY := THE_PRIORITY - 1;
 
@@ -386,17 +351,6 @@ package body SPTEST is
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF SELF" );
 
          else
-
-            TEXT_IO.PUT( "TA2 - task_set_note - set TA1's NOTEPAD_8: " );
-            UNSIGNED32_IO.PUT( THE_PRIORITY, BASE => 10, WIDTH => 2 );
-            TEXT_IO.NEW_LINE;
-            RTEMS.TASKS.SET_NOTE( 
-               SPTEST.TASK_ID( 1 ), 
-               8, 
-               THE_PRIORITY, 
-               STATUS
-            );
-            TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SET_NOTE" );
 
             TEXT_IO.PUT( "TA2 - task_set_priority - "); 
             TEXT_IO.PUT( "set TA1's priority: ");

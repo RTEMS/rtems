@@ -66,8 +66,6 @@ lookup rtems_task_mode: obtain current mode
 lookup rtems_task_mode: no reschedule
 lookup rtems_task_mode: reschedule -- returns to caller
 lookup rtems_task_mode: reschedule -- preempts caller
-lookup rtems_task_get_note
-lookup rtems_task_set_note
 lookup rtems_task_wake_after: yield -- returns to caller
 lookup rtems_task_wake_after: yields -- preempts caller
 lookup rtems_task_wake_when

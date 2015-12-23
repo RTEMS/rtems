@@ -10,7 +10,7 @@ Overview of newlib support (newlib is from CYGNUS)
     This is implemented by a reentrancy data structure for each task.
 
     When a task is "started" (in RTEMS sense) the reentrancy structure
-    is allocated.  Its address is stored in notepad[NOTEPAD_LAST].
+    is allocated.
 
     When task is switched to, the value of global variable _impure_ptr
     is changed to the value of the new tasks reentrancy structure.

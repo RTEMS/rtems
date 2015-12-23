@@ -54,12 +54,6 @@ typedef struct {
   uint32_t                    maximum_tasks;
 
   /**
-   * This field indicates whether Classic API notepads are
-   * enabled or disabled.
-   */
-  bool                        notepads_enabled;
-
-  /**
    * This field contains the maximum number of Classic API
    * Timers which are configured for this application.
    */
@@ -131,13 +125,6 @@ typedef struct {
 extern rtems_api_configuration_table Configuration_RTEMS_API;
 
 /**@}*/
-
-/**
- *  This macro returns the value of the notepads enabled field
- *  in the Classic API configuration table.
- */
-#define rtems_configuration_get_notepads_enabled() \
-        rtems_configuration_get_rtems_api_configuration()->notepads_enabled
 
 /**
  *  This macro returns the number of Classic API semaphores configured.

@@ -130,7 +130,6 @@ package body TMTEST is
       IN_MODE        : RTEMS.MODE;
       MASK           : RTEMS.MODE;
       OUT_MODE       : RTEMS.MODE;
-      NOTE           : RTEMS.UNSIGNED32;
       TIME           : RTEMS.TIME_OF_DAY;
       TIMEOUT        : RTEMS.INTERVAL;
       SIGNALS        : RTEMS.SIGNAL_SET;
@@ -325,40 +324,6 @@ package body TMTEST is
 
       TIME_TEST_SUPPORT.PUT_TIME( 
          "TASK_MODE",
-         TMTEST.END_TIME, 
-         TIME_TEST_SUPPORT.OPERATION_COUNT, 
-         OVERHEAD,
-         0
-      );
-
--- TASK_GET_NOTE
-
-      TIMER_DRIVER.INITIALIZE;
-         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
-         loop
-            DUMMY_RTEMS.TASK_GET_NOTE( ID, 1, NOTE, STATUS );
-         end loop;
-      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
-
-      TIME_TEST_SUPPORT.PUT_TIME( 
-         "TASK_GET_NOTE",
-         TMTEST.END_TIME, 
-         TIME_TEST_SUPPORT.OPERATION_COUNT, 
-         OVERHEAD,
-         0
-      );
-
--- TASK_SET_NOTE
-
-      TIMER_DRIVER.INITIALIZE;
-         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
-         loop
-            DUMMY_RTEMS.TASK_SET_NOTE( ID, 1, NOTE, STATUS );
-         end loop;
-      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
-
-      TIME_TEST_SUPPORT.PUT_TIME( 
-         "TASK_SET_NOTE",
          TMTEST.END_TIME, 
          TIME_TEST_SUPPORT.OPERATION_COUNT, 
          OVERHEAD,

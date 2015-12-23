@@ -184,8 +184,6 @@ Timing tests:
 	rtems_task_mode: no reschedule 6
 	rtems_task_mode: reschedule -- returns to caller 15
 	rtems_task_mode: reschedule -- preempts caller 43
-	rtems_task_get_note 13
-	rtems_task_set_note 12
 	rtems_task_wake_after: yield -- returns to caller 8
 	rtems_task_wake_after: yields -- preempts caller 30
 	rtems_task_wake_when: 49

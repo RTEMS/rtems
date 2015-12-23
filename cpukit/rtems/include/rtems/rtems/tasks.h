@@ -21,8 +21,6 @@
  * - resume a task
  * - set a task's priority
  * - change the current task's mode
- * - get a task notepad entry
- * - set a task notepad entry
  * - wake up after interval
  * - wake up when specified
  */
@@ -109,46 +107,6 @@ typedef Priority_Control rtems_task_priority;
  *  caller wants to obtain the current priority.
  */
 #define RTEMS_CURRENT_PRIORITY      PRIORITY_MINIMUM
-
-/** This is used to indicate the lowest numbered notepad */
-#define RTEMS_NOTEPAD_FIRST 0
-/** This is used to indicate the notepad location 0. */
-#define RTEMS_NOTEPAD_0    0
-/** This is used to indicate the notepad location 1. */
-#define RTEMS_NOTEPAD_1    1
-/** This is used to indicate the notepad location 2. */
-#define RTEMS_NOTEPAD_2    2
-/** This is used to indicate the notepad location 3. */
-#define RTEMS_NOTEPAD_3    3
-/** This is used to indicate the notepad location 4. */
-#define RTEMS_NOTEPAD_4    4
-/** This is used to indicate the notepad location 5. */
-#define RTEMS_NOTEPAD_5    5
-/** This is used to indicate the notepad location 6. */
-#define RTEMS_NOTEPAD_6    6
-/** This is used to indicate the notepad location 7. */
-#define RTEMS_NOTEPAD_7    7
-/** This is used to indicate the notepad location 8. */
-#define RTEMS_NOTEPAD_8    8
-/** This is used to indicate the notepad location 9. */
-#define RTEMS_NOTEPAD_9    9
-/** This is used to indicate the notepad location 10. */
-#define RTEMS_NOTEPAD_10   10
-/** This is used to indicate the notepad location 11. */
-#define RTEMS_NOTEPAD_11   11
-/** This is used to indicate the notepad location 12. */
-#define RTEMS_NOTEPAD_12   12
-/** This is used to indicate the notepad location 13. */
-#define RTEMS_NOTEPAD_13   13
-/** This is used to indicate the notepad location 14. */
-#define RTEMS_NOTEPAD_14   14
-/** This is used to indicate the notepad location 15. */
-#define RTEMS_NOTEPAD_15   15
-/** This is used to indicate the highest numbered notepad. */
-#define RTEMS_NOTEPAD_LAST RTEMS_NOTEPAD_15
-
-/** This is used to indicate the number of notepads available. */
-#define RTEMS_NUMBER_NOTEPADS  (RTEMS_NOTEPAD_LAST+1)
 
 /**
  *  External API name for Thread_Control
@@ -267,50 +225,6 @@ rtems_status_code rtems_task_ident(
 rtems_status_code rtems_task_delete(
   rtems_id   id
 );
-
-/**
- * @brief RTEMS Get Task Node
- *
- * @deprecated Notepads are deprecated and will be removed.
- *
- * This routine implements the rtems_task_get_note directive. The
- * value of the indicated notepad for the task associated with ID
- * is returned in note.
- *
- * @param[in] id is the thread id
- * @param[in] notepad is the notepad number
- * @param[out] note is the pointer to note
- *
- * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
- */
-rtems_status_code rtems_task_get_note(
-  rtems_id    id,
-  uint32_t    notepad,
-  uint32_t   *note
-) RTEMS_DEPRECATED;
-
-/**
- * @brief RTEMS Set Task Note
- *
- * @deprecated Notepads are deprecated and will be removed.
- *
- * This routine implements the rtems_task_set_note directive. The
- * value of the indicated notepad for the task associated with ID
- * is returned in note.
- *
- * @param[in] id is the thread id
- * @param[in] notepad is the notepad number
- * @param[in] note is the note value
- *
- * @return This method returns RTEMS_SUCCESSFUL if there was not an
- *         error. Otherwise, a status code is returned indicating the
- *         source of the error.
- */
-rtems_status_code rtems_task_set_note(
-  rtems_id   id,
-  uint32_t   notepad,
-  uint32_t   note
-) RTEMS_DEPRECATED;
 
 /**
  * @brief RTEMS Task Mode
@@ -654,9 +568,6 @@ rtems_status_code rtems_scheduler_get_processor_set(
  *  This is the API specific information required by each thread for
  *  the RTEMS API to function correctly.
  *
- *  @note Notepads must be the last entry in the structure and memory
- *        will be taken away from this structure when allocated if
- *        notespads are disabled by the application configuration.
  */
 typedef struct {
   /** This field contains the event control for this task. */
@@ -670,15 +581,6 @@ typedef struct {
    * @brief Signal post-switch action in case signals are pending.
    */
   Thread_Action            Signal_action;
-
-  /**
-   *  This field contains the notepads for this task.
-   * 
-   *  @deprecated Notepads are deprecated and will be removed.
-   *
-   *  @note MUST BE LAST ENTRY.
-   */
-  uint32_t Notepads[ RTEMS_ZERO_LENGTH_ARRAY ] RTEMS_DEPRECATED;
 }  RTEMS_API_Control;
 
 /**

@@ -25,8 +25,6 @@ by the task manager are:
 @item @code{@value{DIRPREFIX}task_is_suspended} - Determine if a task is suspended
 @item @code{@value{DIRPREFIX}task_set_priority} - Set task priority 
 @item @code{@value{DIRPREFIX}task_mode} - Change current task's mode 
-@item @code{@value{DIRPREFIX}task_get_note} - Get task notepad entry 
-@item @code{@value{DIRPREFIX}task_set_note} - Set task notepad entry 
 @item @code{@value{DIRPREFIX}task_wake_after} - Wake up after interval 
 @item @code{@value{DIRPREFIX}task_wake_when} - Wake up when specified  
 @item @code{@value{DIRPREFIX}iterate_over_all_threads} - Iterate Over Tasks
@@ -81,9 +79,9 @@ by the application in response to external and internal stimuli.
 TCBs are the only RTEMS internal data structure that can be
 accessed by an application via user extension routines.  The TCB
 contains a task's name, ID, current priority, current and
-starting states, execution mode, set of notepad locations, TCB
-user extension pointer, scheduling control structures, as well
-as data required by a blocked task. 
+starting states, execution mode, TCB user extension pointer,
+scheduling control structures, as well as data required by a
+blocked task.
 
 A task's context is stored in the TCB when a task switch occurs.
 When the task regains control of the processor, its context is
@@ -635,22 +633,6 @@ set the task's interrupt level.
 The @code{@value{DIRPREFIX}task_restart}
 directive resets the mode of a task to its
 original value.
-
-@subsection Notepad Locations
-
-RTEMS provides sixteen notepad locations for each task.  Each
-notepad location may contain a note consisting of four bytes of
-information.  RTEMS provides two directives,
-@code{@value{DIRPREFIX}task_set_note} and
-@code{@value{DIRPREFIX}task_get_note}, that enable a user
-to access and change the
-notepad locations.  The @code{@value{DIRPREFIX}task_set_note}
-directive enables the user
-to set a task's notepad entry to a specified note.  The
-@code{@value{DIRPREFIX}task_get_note}
-directive allows the user to obtain the note
-contained in any one of the sixteen notepads of a specified task.
-Notepads are deprecated and will be removed.
 
 @subsection Task Deletion
 
@@ -1479,123 +1461,6 @@ mask constant is provided in the following table:
 </CENTER>
 @end html
 @end ifset
-
-@page
-
-@subsection TASK_GET_NOTE - Get task notepad entry
-
-@cindex get task notepad entry
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@findex rtems_task_get_note
-@example
-rtems_status_code rtems_task_get_note(
-  rtems_id  id,
-  uint32_t  notepad,
-  uint32_t *note
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@example
-procedure Task_Get_Note (
-   ID      : in     RTEMS.ID;
-   Notepad : in     RTEMS.Notepad_Index;
-   Note    :    out RTEMS.Unsigned32;
-   Result  :    out RTEMS.Status_Codes
-);
-@end example
-@end ifset
-
-@subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} - note obtained successfully@*
-@code{@value{RPREFIX}INVALID_ADDRESS} - @code{note} is NULL@*
-@code{@value{RPREFIX}INVALID_ID} - invalid task id@*
-@code{@value{RPREFIX}INVALID_NUMBER} - invalid notepad location
-
-@subheading DESCRIPTION:
-This directive returns the note contained in the notepad
-location of the task specified by id.
-
-@subheading NOTES:
-This directive is deprecated and will be removed.
-
-This directive will not cause the running task to be preempted.
-
-If id is set to @code{@value{RPREFIX}SELF},
-the calling task accesses its own notepad.
-
-@c This version of the paragraph avoids the overfull hbox error.
-@c The constants NOTEPAD_0 through NOTEPAD_15 can be used to access the
-@c sixteen notepad locations.
-
-The sixteen notepad locations can be accessed using the constants
-@code{@value{RPREFIX}NOTEPAD_0} through @code{@value{RPREFIX}NOTEPAD_15}.
-
-Getting a note of a global task which does not reside on the
-local node will generate a request to the remote node to obtain
-the notepad entry of the specified task.
-
-@page
-
-@subsection TASK_SET_NOTE - Set task notepad entry
-
-@cindex set task notepad entry
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@findex rtems_task_set_note
-@example
-rtems_status_code rtems_task_set_note(
-  rtems_id  id,
-  uint32_t  notepad,
-  uint32_t  note
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@example
-procedure Task_Set_Note (
-   ID      : in     RTEMS.ID;
-   Notepad : in     RTEMS.Notepad_Index;
-   Note    : in     RTEMS.Unsigned32;
-   Result  :    out RTEMS.Status_Codes
-);
-@end example
-@end ifset
-
-@subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} - task's note set successfully@*
-@code{@value{RPREFIX}INVALID_ID} - invalid task id@*
-@code{@value{RPREFIX}INVALID_NUMBER} - invalid notepad location
-
-@subheading DESCRIPTION:
-This directive is deprecated and will be removed.
-
-This directive sets the notepad entry for the task specified by
-id to the value note.
-
-@subheading NOTES:
-If id is set to @code{@value{RPREFIX}SELF}, the calling
-task accesses its own notepad locations.
-
-This directive will not cause the running task to be preempted.
-
-@c This version of the paragraph avoids the overfull hbox error.
-@c The constants NOTEPAD_0 through NOTEPAD_15 can be used to access the
-@c sixteen notepad locations.
-
-The sixteen notepad locations can be accessed using the constants
-@code{@value{RPREFIX}NOTEPAD_0} through @code{@value{RPREFIX}NOTEPAD_15}.
-
-Setting a notepad location of a global task which does not
-reside on the local node will generate a request to the remote
-node to set the specified notepad entry.
 
 @page
 

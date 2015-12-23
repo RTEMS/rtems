@@ -2,8 +2,6 @@
 INIT - task_create - INVALID_PRIORITY
 INIT - task_restart - INCORRECT_STATE
 TA1 - task_delete - INVALID_ID
-TA1 - task_get_note - INVALID_NUMBER
-TA1 - task_get_note - INVALID_ID
 TA1 - task_ident - current task SUCCESSFUL
 TA1 - task_ident - global INVALID_NAME
 TA1 - task_ident - local INVALID_NAME
@@ -13,8 +11,6 @@ TA1 - task_resume - INVALID_ID
 TA1 - task_resume - INCORRECT_STATE
 TA1 - task_set_priority - INVALID_PRIORITY
 TA1 - task_set_priority - INVALID_ID
-TA1 - task_set_note - INVALID_NUMBER
-TA1 - task_set_note - INVALID_ID
 TA1 - task_start - INVALID_ID
 TA1 - task_start - INCORRECT_STATE
 TA1 - task_suspend - INVALID_ID

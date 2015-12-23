@@ -20,7 +20,7 @@ sp02 - Gets through some tests, then attempts to execute code at
 location 0.
 sp04 - hangs at end of tests.
 sp06 - rtems_task_restart of TA3 FAILED -- expected (0) got (4)
-sp07, sp14 - hang in middle of tests
+sp14 - hang in middle of tests
 sp13, sp15 - terminate properly, but output at end is missing.
 sp16 - _Internal_error_Occurred.
 sp19 - rtems_clock_get FAILED -- expected (0) got (11), and hangs in  

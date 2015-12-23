@@ -87,20 +87,6 @@ package DUMMY_RTEMS is
       RESULT            :    out RTEMS.STATUS_CODES
    );
 
-   procedure TASK_GET_NOTE (
-      ID      : in     RTEMS.ID;
-      NOTEPAD : in     RTEMS.NOTEPAD_INDEX;
-      NOTE    :    out RTEMS.UNSIGNED32;
-      RESULT  :    out RTEMS.STATUS_CODES
-   );
-
-   procedure TASK_SET_NOTE (
-      ID      : in     RTEMS.ID;
-      NOTEPAD : in     RTEMS.NOTEPAD_INDEX;
-      NOTE    : in     RTEMS.UNSIGNED32;
-      RESULT  :    out RTEMS.STATUS_CODES
-   );
-
    procedure TASK_WAKE_WHEN (
       TIME_BUFFER : in     RTEMS.TIME_OF_DAY;
       RESULT      :    out RTEMS.STATUS_CODES

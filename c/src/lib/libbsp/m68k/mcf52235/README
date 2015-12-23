@@ -26,7 +26,6 @@ you need for this BSP!
 In you project before you include confdefs.h, define some or all of the
 following:
 
-#define CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS
 #define CONFIGURE_INIT_TASK_STACK_SIZE x
 #define CONFIGURE_MINIMUM_TASK_STACK_SIZE x
 #define CONFIGURE_INTERRUPT_STACK_SIZE x
@@ -88,8 +87,6 @@ rtems_task_suspend 0
 rtems_task_resume 0
 rtems_task_set_priority 0
 rtems_task_mode 0
-rtems_task_get_note 0
-rtems_task_set_note 0
 rtems_task_wake_when 0
 rtems_task_wake_after 0
 rtems_interrupt_catch 0

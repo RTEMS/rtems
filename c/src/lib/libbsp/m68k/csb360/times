@@ -51,8 +51,6 @@ Instruction cache is enabled.
  8 rtems_task_mode: no reschedule                                    6
  8 rtems_task_mode: reschedule -- returns to caller                  13
  8 rtems_task_mode: reschedule -- preempts caller                    35
- 8 rtems_task_set_note                                               12
- 8 rtems_task_get_note                                               13
  8 rtems_clock_set                                                   32
  8 rtems_clock_get                                                   3
 

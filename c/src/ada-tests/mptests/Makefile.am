@@ -1,6 +1,5 @@
 SUBDIRS =
 SUBDIRS += mp01
-SUBDIRS += mp02
 SUBDIRS += mp03
 SUBDIRS += mp04
 SUBDIRS += mp05

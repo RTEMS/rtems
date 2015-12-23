@@ -148,7 +148,6 @@ package body SPTEST is
 
    procedure SCREEN_1
    is
-      NOTEPAD_VALUE     : RTEMS.UNSIGNED32 := 0;
       SELF_ID           : RTEMS.ID;
       PREVIOUS_PRIORITY : RTEMS.TASKS.PRIORITY;
       STATUS            : RTEMS.STATUS_CODES;
@@ -161,38 +160,6 @@ package body SPTEST is
          "TASK_DELETE WITH ILLEGAL ID"
       );
       TEXT_IO.PUT_LINE( "TA1 - task_delete - INVALID_ID" );
-
-      begin
-        RTEMS.TASKS.GET_NOTE( RTEMS.SELF, 
-                             RTEMS.NOTEPAD_INDEX'LAST + 10, 
-                             NOTEPAD_VALUE, 
-                             STATUS 
-        );
-        TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-           STATUS,
-           RTEMS.INVALID_NUMBER,
-           "TASK_GET_NOTE WITH ILLEGAL NOTEPAD"
-        );
-        TEXT_IO.PUT_LINE( "TA1 - task_get_note - INVALID_NUMBER" );
-      exception
-         when others =>
-            TEXT_IO.PUT_LINE(
-               "TA1 - task_get_note - INVALID_NUMBER -- constraint error"
-            );
-      end;
-
-      RTEMS.TASKS.GET_NOTE( 
-         100, 
-         RTEMS.NOTEPAD_INDEX'LAST, 
-         NOTEPAD_VALUE, 
-         STATUS 
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.INVALID_ID,
-         "TASK_GET_NOTE WITH ILLEGAL ID"
-      );
-      TEXT_IO.PUT_LINE( "TA1 - task_get_note - INVALID_ID" );
 
       RTEMS.TASKS.IDENT(
          RTEMS.SELF,
@@ -294,38 +261,6 @@ package body SPTEST is
          "TASK_SET_PRIORITY WITH ILLEGAL ID"
       );
       TEXT_IO.PUT_LINE( "TA1 - task_set_priority - INVALID_ID" );
-
-      begin
-         RTEMS.TASKS.SET_NOTE( RTEMS.SELF, 
-                              RTEMS.NOTEPAD_INDEX'LAST + 10, 
-                              NOTEPAD_VALUE, 
-                              STATUS 
-         );
-         TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-            STATUS,
-            RTEMS.INVALID_NUMBER,
-            "TASK_SET_NOTE WITH ILLEGAL NOTEPAD"
-         );
-         TEXT_IO.PUT_LINE( "TA1 - task_set_note - INVALID_NUMBER" );
-      exception
-         when others =>
-            TEXT_IO.PUT_LINE(
-               "TA1 - task_set_note - INVALID_NUMBER -- constraint error"
-            );
-      end;
-
-      RTEMS.TASKS.SET_NOTE( 
-         100, 
-         RTEMS.NOTEPAD_INDEX'LAST, 
-         NOTEPAD_VALUE, 
-         STATUS 
-      );
-      TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
-         STATUS,
-         RTEMS.INVALID_ID,
-         "TASK_SET_NOTE WITH ILLEGAL ID"
-      );
-      TEXT_IO.PUT_LINE( "TA1 - task_set_note - INVALID_ID" );
 
       RTEMS.TASKS.START( 100, SPTEST.TASK_1'ACCESS, 0, STATUS );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(

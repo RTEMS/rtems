@@ -2085,24 +2085,6 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_TASKS \
     (CONFIGURE_MAXIMUM_TASKS + CONFIGURE_LIBBLOCK_TASKS)
 
-  /*
-   * Classic API notepads are a deprecated feature and will be removed
-   * in a future release of RTEMS. Warn the user who uses them.
-   */
-  #if defined(CONFIGURE_DISABLE_CLASSIC_API_NOTEPADS)
-    #warning "Classic API Notepads are deprecated and will be removed."
-  #endif
-  #if defined(CONFIGURE_ENABLE_CLASSIC_API_NOTEPADS)
-    #warning "Classic API Notepads are deprecated and will be removed."
-  #endif
-
-  /** This configuration parameter enables/disables Classic API notepads. */
-  #ifdef CONFIGURE_ENABLE_CLASSIC_API_NOTEPADS
-    #define CONFIGURE_NOTEPADS_ENABLED           TRUE
-  #else
-    #define CONFIGURE_NOTEPADS_ENABLED           FALSE
-  #endif
-
   /**
    * This macro calculates the memory required for task variables.
    *
@@ -3301,9 +3283,6 @@ const rtems_libio_helper rtems_fs_init_helper =
       #endif
     } Scheduler;
     RTEMS_API_Control API_RTEMS;
-    #if defined(CONFIGURE_ENABLE_CLASSIC_API_NOTEPADS)
-      uint32_t Notepads[ RTEMS_NUMBER_NOTEPADS ] RTEMS_DEPRECATED;
-    #endif
     #ifdef RTEMS_POSIX_API
       POSIX_API_Control API_POSIX;
     #endif
@@ -3354,7 +3333,6 @@ const rtems_libio_helper rtems_fs_init_helper =
    */
   rtems_api_configuration_table Configuration_RTEMS_API = {
     CONFIGURE_TASKS,
-    CONFIGURE_NOTEPADS_ENABLED,
     CONFIGURE_MAXIMUM_TIMERS + CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER,
     CONFIGURE_SEMAPHORES,
     CONFIGURE_MAXIMUM_MESSAGE_QUEUES,

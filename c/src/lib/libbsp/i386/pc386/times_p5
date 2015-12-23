@@ -58,8 +58,6 @@ Column Y:             unused
    rtems_task_mode: no reschedule                                      114
    rtems_task_mode: reschedule -- returns to caller                    264
    rtems_task_mode: reschedule -- preempts caller                      836
-   rtems_task_set_note                                                 236
-   rtems_task_get_note                                                 232
    rtems_clock_set                                                     569
    rtems_clock_get                                                     107
 

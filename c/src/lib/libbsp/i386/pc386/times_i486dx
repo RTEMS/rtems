@@ -53,8 +53,6 @@ Column B:             3.5.17 pre-release
    rtems_task_mode: no reschedule                                        4    4
    rtems_task_mode: reschedule -- returns to caller                     20   17
    rtems_task_mode: reschedule -- preempts caller                       39   37
-   rtems_task_set_note                                                   7    5
-   rtems_task_get_note                                                   7    5
    rtems_clock_set                                                      17   16
    rtems_clock_get                                                       2    1
 

@@ -30,8 +30,6 @@ rtems_task_mode: obtain current mode 4
 rtems_task_mode: no reschedule 5
 rtems_task_mode: reschedule -- returns to caller 11
 rtems_task_mode: reschedule -- preempts caller 27
-rtems_task_set_note 9
-rtems_task_get_note 10
 rtems_task_set_priority: preempts caller 36
 rtems_task_delete: calling task 92
 rtems_task_ident 115

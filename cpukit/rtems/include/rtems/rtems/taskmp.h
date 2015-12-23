@@ -54,10 +54,6 @@ typedef enum {
   RTEMS_TASKS_MP_RESUME_RESPONSE       =  5,
   RTEMS_TASKS_MP_SET_PRIORITY_REQUEST  =  6,
   RTEMS_TASKS_MP_SET_PRIORITY_RESPONSE =  7,
-  RTEMS_TASKS_MP_GET_NOTE_REQUEST      =  8,
-  RTEMS_TASKS_MP_GET_NOTE_RESPONSE     =  9,
-  RTEMS_TASKS_MP_SET_NOTE_REQUEST      = 10,
-  RTEMS_TASKS_MP_SET_NOTE_RESPONSE     = 11
 }   RTEMS_tasks_MP_Remote_operations;
 
 /**
@@ -69,8 +65,6 @@ typedef struct {
   RTEMS_tasks_MP_Remote_operations  operation;
   rtems_name                        name;
   rtems_task_priority               the_priority;
-  uint32_t                          notepad;
-  uint32_t                          note;
 }   RTEMS_tasks_MP_Packet;
 
 /**
@@ -96,9 +90,7 @@ void _RTEMS_tasks_MP_Send_process_packet (
 rtems_status_code _RTEMS_tasks_MP_Send_request_packet (
   RTEMS_tasks_MP_Remote_operations operation,
   Objects_Id                       task_id,
-  rtems_task_priority                 the_priority,
-  uint32_t                         notepad,
-  uint32_t                         note
+  rtems_task_priority              the_priority
 );
 
 /**

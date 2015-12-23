@@ -99,7 +99,6 @@ package body TMTEST is
       OVERHEAD     : RTEMS.UNSIGNED32;
       OLD_PRIORITY : RTEMS.TASKS.PRIORITY;
       OLD_MODE     : RTEMS.MODE;
-      OLD_NOTE     : RTEMS.NOTEPAD_INDEX;
       TIME         : RTEMS.TIME_OF_DAY;
       STATUS       : RTEMS.STATUS_CODES;
    begin
@@ -231,44 +230,6 @@ package body TMTEST is
          RTEMS.PREEMPT_MASK,
          OLD_MODE,
          STATUS
-      );
-
-      TIMER_DRIVER.INITIALIZE;
-         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
-         loop
-            RTEMS.TASKS.SET_NOTE( 
-               TMTEST.TASK_ID,
-               8,
-               10,
-               STATUS
-            );
-         end loop;
-      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
-      TIME_TEST_SUPPORT.PUT_TIME( 
-         "TASK_SET_NOTE ",
-         TMTEST.END_TIME, 
-         TIME_TEST_SUPPORT.OPERATION_COUNT, 
-         OVERHEAD,
-         RTEMS_CALLING_OVERHEAD.TASK_SET_NOTE
-      );
-
-      TIMER_DRIVER.INITIALIZE;
-         for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
-         loop
-            RTEMS.TASKS.GET_NOTE( 
-               TMTEST.TASK_ID,
-               8,
-               OLD_NOTE,
-               STATUS
-            );
-         end loop;
-      TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
-      TIME_TEST_SUPPORT.PUT_TIME( 
-         "TASK_GET_NOTE ",
-         TMTEST.END_TIME, 
-         TIME_TEST_SUPPORT.OPERATION_COUNT, 
-         OVERHEAD,
-         RTEMS_CALLING_OVERHEAD.TASK_GET_NOTE
       );
 
       TIME := (1988, 1, 1, 0, 0, 0, 0 );

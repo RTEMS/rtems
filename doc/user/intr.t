@@ -189,8 +189,6 @@ to the interrupted task.  Most of the time, it is an application
 implementation error to use RTEMS_SELF from an ISR.
 
 @itemize
-@item rtems_task_get_note
-@item rtems_task_set_note
 @item rtems_task_suspend
 @item rtems_task_resume
 @end itemize

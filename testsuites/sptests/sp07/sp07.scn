@@ -10,20 +10,11 @@ rtems_extension_ident -- OK
 rtems_extension_ident - bad name -- RTEMS_INVALID_NAME
 rtems_extension_ident - bad name -- RTEMS_INVALID_ADDRESS
 rtems_extension_create - harmless -- OK
-INIT - rtems_task_set_note - set TA1's RTEMS_NOTEPAD_8 to TA1's priority: 04
-INIT - rtems_task_set_note - set TA2's RTEMS_NOTEPAD_8 to TA2's priority: 04
 <pause>
 TA1 - rtems_task_set_priority - get initial priority of self: 04
-TA1 - rtems_task_get_note - get RTEMS_NOTEPAD_8 - current priority: 04
-TA1 - rtems_task_set_note - set TA2's RTEMS_NOTEPAD_8: 03
 TA1 - rtems_task_set_priority - set TA2's priority: 03
-TA2 - rtems_task_get_note - get RTEMS_NOTEPAD_8 - current priority: 03
-TA2 - rtems_task_set_note - set TA1's RTEMS_NOTEPAD_8: 02
 TA2 - rtems_task_set_priority - set TA1's priority: 02
-TA1 - rtems_task_get_note - get RTEMS_NOTEPAD_8 - current priority: 02
-TA1 - rtems_task_set_note - set TA2's RTEMS_NOTEPAD_8: 01
 TA1 - rtems_task_set_priority - set TA2's priority: 01
-TA2 - rtems_task_get_note - get RTEMS_NOTEPAD_8 - current priority: 01
 TA2 - rtems_task_suspend - suspend TA1
 TA2 - rtems_task_set_priority - set priority of TA1 ( blocked )
 TA4 - exitting task

@@ -18,8 +18,6 @@ directives:
 + rtems task resume
 + rtems task set priority
 + rtems task mode
-+ rtems task get note
-+ rtems task set note
 + rtems task wake when
 + rtems task wake after
 + rtems interrupt catch

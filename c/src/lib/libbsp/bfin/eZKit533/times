@@ -54,8 +54,6 @@ Column C: -o4 optimization
    rtems_task_mode: no reschedule                                       NC    6    6
    rtems_task_mode: reschedule -- returns to caller                     NC    8    8
    rtems_task_mode: reschedule -- preempts caller                       NC   31   30
-   rtems_task_set_note                                                  NC    8    8
-   rtems_task_get_note                                                  NC    9    8
    rtems_clock_set                                                      NC   25   25
    rtems_clock_get                                                      NC    2    2
 

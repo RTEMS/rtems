@@ -44,9 +44,7 @@ rtems_status_code rtems_task_suspend(
       return _RTEMS_tasks_MP_Send_request_packet(
         RTEMS_TASKS_MP_SUSPEND_REQUEST,
         id,
-        0,          /* Not used */
-        0,          /* Not used */
-        0           /* Not used */
+        0          /* Not used */
       );
 #endif
 

@@ -262,18 +262,6 @@ const rtems_status_code rtemsTask::set_priority(const rtems_task_priority priori
                                                  priority,
                                                  &old_priority));
 }
-  
-const rtems_status_code rtemsTask::get_note(const uint32_t notepad,
-                                            uint32_t& note)
-{
-  return set_status_code(rtems_task_get_note(id, notepad, &note));
-}
-
-const rtems_status_code rtemsTask::set_note(const uint32_t notepad,
-                                            const uint32_t note)
-{
-  return set_status_code(rtems_task_set_note(id, notepad, note));
-}
 
 void rtemsTask::body(rtems_task_argument )
 {

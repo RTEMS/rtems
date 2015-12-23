@@ -35,22 +35,8 @@ rtems_task_resume: task readied -- returns to caller 1
 rtems_task_delete: ready task 15
 *** END OF TEST 6 ***
 
+
 *** TIME TEST 7 ***
-
-
-*** TIME TEST 8 ***
-rtems_task_set_priority: obtain current priorityrtems_task_mode: reschedule -- preempts caller 0   
-rtems_task_set_priority: returns to caller  2
-rtems_task_mode: obtain current mode101 0
-rtems_task_mode: no reschedule 0
-rtems_task_mode: reschedule -- returns to caller
- 2
-rtems_task_set_note 1
-rtems_task_get_note 0
-rtems_clock_set 2
-rtems_clock_get_tod 12
-*** END OF TEST 8 ***
-
 
 *** TIME TEST 9 ***
 rtems_message_queue_create 43
@@ -173,4 +159,3 @@ rtems_rate_monotonic_delete: active 3
 rtems_rate_monotonic_period: conclude periods -- caller blocks 9
 *** END OF TEST 29 ***
 
-         

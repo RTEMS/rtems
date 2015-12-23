@@ -11,8 +11,6 @@ This test benchmarks the following operations:
   + rtems_clock_get_tod
   + rtems_clock_set
   + rtems_task_mode
-  + rtems_task_get_note
-  + rtems_task_set_note
   + rtems_task_set_priority
 
 For more information

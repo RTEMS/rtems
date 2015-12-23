@@ -685,9 +685,9 @@
  * application in response to external and internal stimuli. TCBs are the only
  * RTEMS internal data structure that can be accessed by an application via
  * user extension routines. The TCB contains a task's name, ID, current
- * priority, current and starting states, execution mode, set of notepad
- * locations, TCB user extension pointer, scheduling control structures, as
- * well as data required by a blocked task.
+ * priority, current and starting states, execution mode, TCB user extension
+ * pointer, scheduling control structures, as well as data required by a
+ * blocked task.
  *
  * A task's context is stored in the TCB when a task switch occurs. When the
  * task regains control of the processor, its context is restored from the TCB.

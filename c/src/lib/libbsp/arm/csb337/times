@@ -54,8 +54,6 @@ All tests were compiled with VARIANT=DEBUG
  8 rtems_task_mode: no reschedule                                       5998	 5995    2645    
  8 rtems_task_mode: reschedule -- returns to caller                     12110	 11764   6055    
  8 rtems_task_mode: reschedule -- preempts caller                       33043	 34773   18338   
- 8 rtems_task_set_note                                                  11869	 11871   4356    
- 8 rtems_task_get_note                                                  12092	 12087   4397    
  8 rtems_clock_set                                                      33141	 33145   10160   
  8 rtems_clock_get                                                      2920	 2921    811     
 

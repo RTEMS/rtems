@@ -1,10 +1,6 @@
 *** TEST TASK ERROR 04 ***
 TA1 - rtems_task_is_suspended - RTEMS_INVALID_ID
 TA1 - rtems_task_delete - RTEMS_INVALID_ID
-TA1 - rtems_task_get_note - RTEMS_INVALID_ADDRESS
-TA1 - rtems_task_get_note - RTEMS_INVALID_NUMBER
-TA1 - rtems_task_get_note - RTEMS_INVALID_ID
-TA1 - rtems_task_get_note - RTEMS_INVALID_ID
 TA1 - rtems_task_ident - RTEMS_INVALID_ADDRESS
 TA1 - rtems_task_ident - global RTEMS_INVALID_NAME
 TA1 - rtems_task_ident - local RTEMS_INVALID_NAME
@@ -15,8 +11,6 @@ TA1 - rtems_task_resume - RTEMS_INCORRECT_STATE
 TA1 - rtems_task_set_priority - RTEMS_INVALID_ADDRESS
 TA1 - rtems_task_set_priority - RTEMS_INVALID_PRIORITY
 TA1 - rtems_task_set_priority - RTEMS_INVALID_ID
-TA1 - rtems_task_set_note - RTEMS_INVALID_NUMBER
-TA1 - rtems_task_set_note - RTEMS_INVALID_ID
 TA1 - rtems_task_start - RTEMS_INVALID_ID
 TA1 - rtems_task_start - RTEMS_INCORRECT_STATE
 TA1 - rtems_task_suspend - RTEMS_INVALID_ID

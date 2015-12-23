@@ -203,44 +203,6 @@ package body RTEMS.Tasks is
 
    end Mode;
 
-   procedure Get_Note
-     (ID      : in RTEMS.ID;
-      Notepad : in RTEMS.Notepad_Index;
-      Note    : out RTEMS.Unsigned32;
-      Result  : out RTEMS.Status_Codes)
-   is
-      function Get_Note_Base
-        (ID      : RTEMS.ID;
-         Notepad : RTEMS.Notepad_Index;
-         Note    : access RTEMS.Unsigned32)
-         return    RTEMS.Status_Codes;
-      pragma Import (C, Get_Note_Base, "rtems_task_get_note");
-      Note_Base : aliased RTEMS.Unsigned32;
-   begin
-
-      Result := Get_Note_Base (ID, Notepad, Note_Base'Access);
-      Note   := Note_Base;
-
-   end Get_Note;
-
-   procedure Set_Note
-     (ID      : in RTEMS.ID;
-      Notepad : in RTEMS.Notepad_Index;
-      Note    : in RTEMS.Unsigned32;
-      Result  : out RTEMS.Status_Codes)
-   is
-      function Set_Note_Base
-        (ID      : RTEMS.ID;
-         Notepad : RTEMS.Notepad_Index;
-         Note    : RTEMS.Unsigned32)
-         return    RTEMS.Status_Codes;
-      pragma Import (C, Set_Note_Base, "rtems_task_set_note");
-   begin
-
-      Result := Set_Note_Base (ID, Notepad, Note);
-
-   end Set_Note;
-
    procedure Variable_Add
      (ID            : in RTEMS.ID;
       Task_Variable : in RTEMS.Address;

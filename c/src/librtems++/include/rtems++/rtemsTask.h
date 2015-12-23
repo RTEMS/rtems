@@ -47,8 +47,6 @@
 
   Mode control is through the rtemsTaskMode class.
 
-  The rtemsTask class reserved notepad register 31.
-
   ------------------------------------------------------------------------ */
 
 #if !defined(_rtemsTask_h_)
@@ -124,12 +122,6 @@ public:
   const rtems_status_code set_priority(const rtems_task_priority priority);
   const rtems_status_code set_priority(const rtems_task_priority priority,
                                        rtems_task_priority& old_priority);
-
-  // notepad control
-  const rtems_status_code get_note(const uint32_t notepad,
-                                   uint32_t& note) RTEMS_DEPRECATED;
-  const rtems_status_code set_note(const uint32_t notepad,
-                                   const uint32_t note) RTEMS_DEPRECATED;
 
   // object id, and name
   const rtems_id id_is() const { return id; }

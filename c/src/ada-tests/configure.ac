@@ -117,9 +117,6 @@ mptests/Makefile
 mptests/mp01/Makefile
 mptests/mp01/node1/Makefile
 mptests/mp01/node2/Makefile
-mptests/mp02/Makefile
-mptests/mp02/node1/Makefile
-mptests/mp02/node2/Makefile
 mptests/mp03/Makefile
 mptests/mp03/node1/Makefile
 mptests/mp03/node2/Makefile

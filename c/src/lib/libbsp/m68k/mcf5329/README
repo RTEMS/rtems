@@ -92,19 +92,6 @@ rtems_task_delete: ready task 19
 rtems_task_restart: suspended task -- preempts caller 15
 *** END OF TEST 7 ***
 
-*** TIME TEST 8 ***
-rtems_task_set_priority: obtain current priority 1
-rtems_task_set_priority: returns to caller 2
-rtems_task_mode: obtain current mode 0
-rtems_task_mode: no reschedule 0
-rtems_task_mode: reschedule -- returns to caller 1
-rtems_task_mode: reschedule -- preempts caller 13
-rtems_task_set_note 1
-rtems_task_get_note 1
-rtems_clock_set 1
-rtems_clock_get 4
-*** END OF TEST 8 ***
-
 *** TIME TEST 9 ***
 rtems_message_queue_create 45
 rtems_message_queue_send: no waiting tasks 2
@@ -289,8 +276,6 @@ rtems_task_suspend 0
 rtems_task_resume 0
 rtems_task_set_priority 0
 rtems_task_mode 0
-rtems_task_get_note 0
-rtems_task_set_note 0
 rtems_task_wake_when 0
 rtems_task_wake_after 0
 rtems_interrupt_catch 0

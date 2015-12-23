@@ -222,8 +222,6 @@ spmkdir/Makefile
 spmountmgr01/Makefile
 spmsgq_err01/Makefile
 spmsgq_err02/Makefile
-spnotepad01/Makefile
-spnotepad02/Makefile
 spnsext01/Makefile
 spobjgetnext/Makefile
 sppagesize/Makefile

@@ -54,8 +54,6 @@ Timer Source: Timer 2, 512KHz timer rate
    rtems_task_mode: no reschedule                                        2
    rtems_task_mode: reschedule -- returns to caller                     15
    rtems_task_mode: reschedule -- preempts caller                       52
-   rtems_task_set_note                                                   4
-   rtems_task_get_note                                                   4
    rtems_clock_set                                                      14
    rtems_clock_get                                                       1
 
@@ -186,4 +184,3 @@ Timer Source: Timer 2, 512KHz timer rate
    rtems_rate_monotonic_delete: inactive                                25
    rtems_rate_monotonic_delete: active                                  21
    rtems_rate_monotonic_period: conclude periods -- caller blocks       23
-  

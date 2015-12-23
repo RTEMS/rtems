@@ -101,6 +101,7 @@ int			quiet=0;
     } else {
     /* retrieve the notepad which possibly holds an extention pointer */
     if (RTEMS_SUCCESSFUL==rtems_task_ident(RTEMS_SELF,RTEMS_LOCAL,&id) &&
+// FIXME: Deprecated use of Notepads. #2503.
 #if 0
 /* Must not use a notepad due to unknown initial value (notepad memory is allocated from the
  * workspace)!

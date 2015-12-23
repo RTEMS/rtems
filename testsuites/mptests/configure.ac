@@ -35,9 +35,6 @@ AC_CONFIG_FILES([Makefile
 mp01/Makefile
 mp01/node1/Makefile
 mp01/node2/Makefile
-mp02/Makefile
-mp02/node1/Makefile
-mp02/node2/Makefile
 mp03/Makefile
 mp03/node1/Makefile
 mp03/node2/Makefile

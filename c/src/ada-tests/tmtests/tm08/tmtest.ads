@@ -69,8 +69,6 @@ package TMTEST is
 --    + TASK_MODE which does not require a reschedule
 --    + TASK_MODE which does require a reschedule
 --    + TASK_MODE which causes a preemption *** TEST_TASK1 executes 
---    + TASK_SET_NOTE
---    + TASK_GET_NOTE
 --    + CLOCK_SET
 --    + CLOCK_GET
 --

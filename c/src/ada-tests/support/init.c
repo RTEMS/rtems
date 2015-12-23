@@ -47,7 +47,7 @@ rtems_id tcb_to_id(
   Thread_Control *tcb
 )
 {
-  return tcb->Object.id; /* Only for sp04 and sp07 */
+  return tcb->Object.id; /* Only for sp04 */
 }
 
 uint32_t milliseconds_per_tick(void)
