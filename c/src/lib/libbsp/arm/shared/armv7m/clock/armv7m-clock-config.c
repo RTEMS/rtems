@@ -23,7 +23,12 @@
 /* This is defined in clockdrv_shell.h */
 static void Clock_isr(void *arg);
 
-static rtems_timecounter_simple _ARMV7M_TC;
+typedef struct {
+  rtems_timecounter_simple base;
+  bool countflag;
+} ARMV7M_Timecounter;
+
+static ARMV7M_Timecounter _ARMV7M_TC;
 
 static uint32_t _ARMV7M_TC_get(rtems_timecounter_simple *tc)
 {
@@ -32,11 +37,25 @@ static uint32_t _ARMV7M_TC_get(rtems_timecounter_simple *tc)
   return systick->cvr;
 }
 
-static bool _ARMV7M_TC_is_pending(rtems_timecounter_simple *tc)
+static bool _ARMV7M_TC_is_pending(rtems_timecounter_simple *base)
 {
-  volatile ARMV7M_SCB *scb = _ARMV7M_SCB;
+  ARMV7M_Timecounter *tc = (ARMV7M_Timecounter *) base;
+  rtems_interrupt_level level;
+  bool countflag;
 
-  return ((scb->icsr & ARMV7M_SCB_ICSR_PENDSTSET) != 0);
+  rtems_interrupt_disable(level);
+
+  countflag = tc->countflag;
+  if (!countflag) {
+    volatile ARMV7M_Systick *systick = _ARMV7M_Systick;
+
+    countflag = ((systick->csr & ARMV7M_SYSTICK_CSR_COUNTFLAG) != 0);
+    tc->countflag = countflag;
+  }
+
+  rtems_interrupt_enable(level);
+
+  return countflag;
 }
 
 static uint32_t _ARMV7M_TC_get_timecount(struct timecounter *tc)
@@ -48,17 +67,24 @@ static uint32_t _ARMV7M_TC_get_timecount(struct timecounter *tc)
   );
 }
 
-static void _ARMV7M_TC_tick(void)
+static void _ARMV7M_TC_at_tick(rtems_timecounter_simple *base)
 {
-  rtems_timecounter_simple_downcounter_tick(&_ARMV7M_TC, _ARMV7M_TC_get);
-}
-
-static void _ARMV7M_Systick_at_tick(void)
-{
+  ARMV7M_Timecounter *tc = (ARMV7M_Timecounter *) base;
   volatile ARMV7M_Systick *systick = _ARMV7M_Systick;
+
+  tc->countflag = false;
 
   /* Clear COUNTFLAG */
   systick->csr;
+}
+
+static void _ARMV7M_TC_tick(void)
+{
+  rtems_timecounter_simple_downcounter_tick(
+    &_ARMV7M_TC.base,
+    _ARMV7M_TC_get,
+    _ARMV7M_TC_at_tick
+  );
 }
 
 static void _ARMV7M_Systick_handler(void)
@@ -95,7 +121,7 @@ static void _ARMV7M_Systick_initialize(void)
     | ARMV7M_SYSTICK_CSR_CLKSOURCE;
 
   rtems_timecounter_simple_install(
-    &_ARMV7M_TC,
+    &_ARMV7M_TC.base,
     freq,
     interval,
     _ARMV7M_TC_get_timecount
@@ -110,9 +136,6 @@ static void _ARMV7M_Systick_cleanup(void)
 }
 
 #define Clock_driver_timecounter_tick() _ARMV7M_TC_tick()
-
-#define Clock_driver_support_at_tick() \
-  _ARMV7M_Systick_at_tick()
 
 #define Clock_driver_support_initialize_hardware() \
   _ARMV7M_Systick_initialize()

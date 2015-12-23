@@ -55,16 +55,20 @@ static uint32_t mpc55xx_tc_get_timecount(struct timecounter *tc)
   );
 }
 
-static void mpc55xx_tc_tick(void)
-{
-  rtems_timecounter_simple_upcounter_tick(&mpc55xx_tc, mpc55xx_tc_get);
-}
-
-static void mpc55xx_clock_at_tick(void)
+static void mpc55xx_tc_at_tick(rtems_timecounter_simple *tc)
 {
   union EMIOS_CSR_tag csr = MPC55XX_ZERO_FLAGS;
   csr.B.FLAG = 1;
   EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL].CSR.R = csr.R;
+}
+
+static void mpc55xx_tc_tick(void)
+{
+  rtems_timecounter_simple_upcounter_tick(
+    &mpc55xx_tc,
+    mpc55xx_tc_get,
+    mpc55xx_tc_at_tick
+  );
 }
 
 static void mpc55xx_clock_handler_install(rtems_isr_entry isr)
@@ -174,18 +178,22 @@ static uint32_t mpc55xx_tc_get_timecount(struct timecounter *tc)
   );
 }
 
-static void mpc55xx_tc_tick(void)
-{
-  rtems_timecounter_simple_downcounter_tick(&mpc55xx_tc, mpc55xx_tc_get);
-}
-
-static void mpc55xx_clock_at_tick(void)
+static void mpc55xx_tc_at_tick(rtems_timecounter_simple *tc)
 {
   volatile PIT_RTI_CHANNEL_tag *channel =
     &PIT_RTI.CHANNEL [MPC55XX_CLOCK_PIT_CHANNEL];
   PIT_RTI_TFLG_32B_tag tflg = { .B = { .TIF = 1 } };
 
   channel->TFLG.R = tflg.R;
+}
+
+static void mpc55xx_tc_tick(void)
+{
+  rtems_timecounter_simple_downcounter_tick(
+    &mpc55xx_tc,
+    mpc55xx_tc_get,
+    mpc55xx_tc_at_tick
+  );
 }
 
 static void mpc55xx_clock_handler_install(rtems_isr_entry isr)
@@ -238,8 +246,6 @@ static void mpc55xx_clock_cleanup(void)
 #endif
 
 #define Clock_driver_timecounter_tick() mpc55xx_tc_tick()
-#define Clock_driver_support_at_tick() \
-  mpc55xx_clock_at_tick()
 #define Clock_driver_support_initialize_hardware() \
   mpc55xx_clock_initialize()
 #define Clock_driver_support_install_isr(isr, old_isr) \

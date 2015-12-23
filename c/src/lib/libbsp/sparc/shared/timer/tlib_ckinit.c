@@ -29,7 +29,6 @@
 #undef CLOCK_DRIVER_ISRS_PER_TICK
 #undef CLOCK_DRIVER_USE_FAST_IDLE
 */
-#define Clock_driver_support_at_tick()
 
 /*
  *  Number of Clock ticks since initialization
@@ -87,11 +86,17 @@ static uint32_t tlib_tc_get_timecount(struct timecounter *tc)
   );
 }
 
+static void tlib_tc_at_tick(rtems_timecounter_simple *tc)
+{
+  /* Nothing to do? */
+}
+
 static void tlib_tc_tick(void)
 {
   rtems_timecounter_simple_downcounter_tick(
     &tlib_tc,
-    tlib_tc_get
+    tlib_tc_get,
+    tlib_tc_at_tick
   );
 }
 
@@ -130,15 +135,9 @@ void Clock_isr(void *arg_unused)
   } while ( _Thread_Executing == _Thread_Idle &&
           _Thread_Heir == _Thread_Executing);
 
-  Clock_driver_support_at_tick();
   return;
 
 #else
-
-  /*
-   * Add custom handling at every tick from bsp.h
-   */
-  Clock_driver_support_at_tick();
 
 #ifdef CLOCK_DRIVER_ISRS_PER_TICK
   /*

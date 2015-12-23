@@ -32,18 +32,19 @@ static uint32_t mcf5225x_tc_get_timecount(struct timecounter *tc)
   );
 }
 
-static void mcf5225x_tc_tick(void)
+static void mcf5225x_tc_at_tick(rtems_timecounter_simple *tc)
 {
-  rtems_timecounter_simple_downcounter_tick(&mcf5225x_tc, mcf5225x_tc_get);
+  MCF_PIT1_PCSR |= MCF_PIT_PCSR_PIF;
 }
 
-/*
- * Periodic interval timer interrupt handler
- */
-#define Clock_driver_support_at_tick()             \
-    do {                                           \
-        MCF_PIT1_PCSR |= MCF_PIT_PCSR_PIF;         \
-    } while (0)                                    \
+static void mcf5225x_tc_tick(void)
+{
+  rtems_timecounter_simple_downcounter_tick(
+    &mcf5225x_tc,
+    mcf5225x_tc_get,
+    mcf5225x_tc_at_tick
+  );
+}
 
 /*
  * Attach clock interrupt handler

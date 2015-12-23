@@ -69,15 +69,6 @@ static uint32_t leon3_tc_get_timecount_irqmp(struct timecounter *tc)
   return LEON3_IrqCtrl_Regs->timestamp[0].counter;
 }
 
-static void leon3_tc_tick(void)
-{
-  if (leon3_tc_use_irqmp) {
-    rtems_timecounter_tick();
-  } else {
-    rtems_timecounter_simple_downcounter_tick(&leon3_tc, leon3_tc_get);
-  }
-}
-
 static void leon3_clock_profiling_interrupt_delay(void)
 {
 #ifdef RTEMS_PROFILING
@@ -111,10 +102,24 @@ static void leon3_clock_profiling_interrupt_delay(void)
 #endif
 }
 
-#define Clock_driver_support_at_tick() \
-  do { \
-    leon3_clock_profiling_interrupt_delay(); \
-  } while (0)
+static void leon3_tc_at_tick( rtems_timecounter_simple *tc )
+{
+  leon3_clock_profiling_interrupt_delay();
+}
+
+static void leon3_tc_tick(void)
+{
+  if (leon3_tc_use_irqmp) {
+    leon3_clock_profiling_interrupt_delay();
+    rtems_timecounter_tick();
+  } else {
+    rtems_timecounter_simple_downcounter_tick(
+      &leon3_tc,
+      leon3_tc_get,
+      leon3_tc_at_tick
+    );
+  }
+}
 
 #define Adjust_clkirq_for_node() do { clkirq += LEON3_CLOCK_INDEX; } while(0)
 

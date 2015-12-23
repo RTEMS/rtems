@@ -94,6 +94,13 @@ typedef struct {
 } rtems_timecounter_simple;
 
 /**
+ * @brief At tick handling done under protection of the timecounter lock.
+ */
+typedef void rtems_timecounter_simple_at_tick(
+  rtems_timecounter_simple *tc
+);
+
+/**
  * @brief Returns the current value of a simple timecounter.
  */
 typedef uint32_t rtems_timecounter_simple_get(
@@ -199,20 +206,28 @@ RTEMS_INLINE_ROUTINE uint32_t rtems_timecounter_simple_scale(
  *
  * @param[in] tc The simple timecounter.
  * @param[in] get The method to get the value of the simple timecounter.
+ * @param[in] at_tick The method to perform work under timecounter lock
+ * protection at this tick, e.g. clear a pending flag.
  */
 RTEMS_INLINE_ROUTINE void rtems_timecounter_simple_downcounter_tick(
-  rtems_timecounter_simple     *tc,
-  rtems_timecounter_simple_get  get
+  rtems_timecounter_simple         *tc,
+  rtems_timecounter_simple_get      get,
+  rtems_timecounter_simple_at_tick  at_tick
 )
 {
+  ISR_lock_Context lock_context;
   uint32_t current;
+
+  _Timecounter_Acquire( &lock_context );
+
+  ( *at_tick )( tc );
 
   current = rtems_timecounter_simple_scale(
     tc,
     tc->real_interval - ( *get )( tc )
   );
 
-  _Timecounter_Tick_simple( tc->binary_interval, current );
+  _Timecounter_Tick_simple( tc->binary_interval, current, &lock_context );
 }
 
 /**
@@ -220,17 +235,25 @@ RTEMS_INLINE_ROUTINE void rtems_timecounter_simple_downcounter_tick(
  *
  * @param[in] tc The simple timecounter.
  * @param[in] get The method to get the value of the simple timecounter.
+ * @param[in] at_tick The method to perform work under timecounter lock
+ * protection at this tick, e.g. clear a pending flag.
  */
 RTEMS_INLINE_ROUTINE void rtems_timecounter_simple_upcounter_tick(
-  rtems_timecounter_simple     *tc,
-  rtems_timecounter_simple_get  get
+  rtems_timecounter_simple         *tc,
+  rtems_timecounter_simple_get      get,
+  rtems_timecounter_simple_at_tick  at_tick
 )
 {
+  ISR_lock_Context lock_context;
   uint32_t current;
+
+  _Timecounter_Acquire( &lock_context );
+
+  ( *at_tick )( tc );
 
   current = rtems_timecounter_simple_scale( tc, ( *get )( tc ) );
 
-  _Timecounter_Tick_simple( tc->binary_interval, current );
+  _Timecounter_Tick_simple( tc->binary_interval, current, &lock_context );
 }
 
 /**

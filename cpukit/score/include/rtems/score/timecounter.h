@@ -26,6 +26,8 @@
 #include <sys/time.h>
 #include <sys/timetc.h>
 
+#include <rtems/score/isrlock.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -161,6 +163,21 @@ void _Timecounter_Install( struct timecounter *tc );
 void _Timecounter_Tick( void );
 
 /**
+ * @brief Lock to protect the timecounter mechanic.
+ */
+ISR_LOCK_DECLARE( extern, _Timecounter_Lock )
+
+/**
+ * @brief Acquires the timecounter lock.
+ *
+ * @param[in] lock_context The lock context.
+ *
+ * See _Timecounter_Tick_simple().
+ */
+#define _Timecounter_Acquire( lock_context ) \
+  _ISR_lock_ISR_disable_and_acquire( &_Timecounter_Lock, lock_context )
+
+/**
  * @brief Performs a simple timecounter tick.
  *
  * This is a special purpose tick function for simple timecounter to support
@@ -169,8 +186,14 @@ void _Timecounter_Tick( void );
  * @param[in] delta The time in timecounter ticks elapsed since the last call
  * to _Timecounter_Tick_simple().
  * @param[in] offset The current value of the timecounter.
+ * @param[in] lock_context The lock context of the corresponding
+ * _Timecounter_Acquire().
  */
-void _Timecounter_Tick_simple( uint32_t delta, uint32_t offset );
+void _Timecounter_Tick_simple(
+  uint32_t delta,
+  uint32_t offset,
+  ISR_lock_Context *lock_context
+);
 
 /**
  * @brief The wall clock time in seconds.

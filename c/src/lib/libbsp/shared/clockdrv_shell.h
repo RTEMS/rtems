@@ -44,6 +44,13 @@
   #define Clock_driver_support_find_timer()
 #endif
 
+/**
+ * @brief Do nothing by default.
+ */
+#ifndef Clock_driver_support_at_tick
+  #define Clock_driver_support_at_tick()
+#endif
+
 /*
  * A specialized clock driver may use for example rtems_timecounter_tick_simple()
  * instead of the default.
@@ -108,7 +115,14 @@ rtems_isr Clock_isr(
           && _Thread_Executing->Start.entry_point
             == (Thread_Entry) rtems_configuration_get_idle_task()
       ) {
-        _Timecounter_Tick_simple(interval, (*tc->tc_get_timecount)(tc));
+        ISR_lock_Context lock_context;
+
+        _Timecounter_Acquire(&lock_context);
+        _Timecounter_Tick_simple(
+          interval,
+          (*tc->tc_get_timecount)(tc),
+          &lock_context
+        );
       }
 
       Clock_driver_support_at_tick();
