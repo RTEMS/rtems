@@ -661,6 +661,27 @@ task to delete itself by sending a "delete self" message, event,
 or signal, or by restarting the task with special arguments
 which instruct the task to delete itself.
 
+@subsection Transition Advice for Obsolete Directives
+
+@subsubsection Notepads
+@ifset is-C
+@findex rtems_task_get_note
+@findex rtems_task_set_note
+@end ifset
+
+Task notepads and the associated directives
+@code{@value{DIRPREFIX}task_get_note} and
+@code{@value{DIRPREFIX}task_set_note} were removed after the 4.11 Release
+Series. These were never thread-safe to access and subject to conflicting
+use of the notepad index by libraries which were designed independently.
+
+It is recommended that applications be modified to use services
+which are thread safe and not subject to issues with multiple applications
+conflicting over the key (e.g. notepad index) selection. For most 
+applications, POSIX Keys should be used. These are available in all RTEMS
+build configurations. It is also possible that Thread Local Storage is
+an option for some use cases. 
+
 @section Directives
 
 This section details the task manager's directives.  A
