@@ -29,7 +29,7 @@ void *Task_3(
   unsigned int  remaining;
   int           status;
   int           sig;
-  volatile union sigval  value; /* should be removed once the H8300 target is fixed */
+  volatile union sigval  value;
   sigset_t      mask;
   siginfo_t     info;
 

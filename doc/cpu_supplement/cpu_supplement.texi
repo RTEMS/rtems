@@ -66,7 +66,6 @@
 * Atmel AVR Specific Information::
 * Blackfin Specific Information::
 * Epiphany Specific Information::
-* Renesas H8/300 Specific Information::
 * Intel/AMD x86 Specific Information::
 * Lattice Mico32 Specific Information::
 * Renesas M32C Specific Information::
@@ -90,7 +89,6 @@
 @include avr.texi
 @include bfin.texi
 @include epiphany.texi
-@include h8300.texi
 @include i386.texi
 @include lm32.texi
 @include m32c.texi

@@ -8,7 +8,7 @@ AC_CACHE_CHECK([whether BSP supports networking],
   [dnl
     case "$RTEMS_CPU" in
     # do not have address space to hold BSD TCP/IP stack
-    avr*|h8300*|m32c*)
+    avr*|m32c*)
       rtems_cv_HAS_NETWORKING="no"
       ;;
     *)

@@ -150,9 +150,8 @@ The following persons/organizations have made contributions:
   it easier to support external interrupt controllers.
 
 + Joel Sherrill <joel@OARcorp.com> for the BSPs that work with 
-  numerous simulators including psim, c4xsim, h8sim, armulator,
-  sim68000, and simcpu32.  Most of these BSPs work with instruction
-  set simulators in gdb.
+  numerous simulators. Many work with instruction set simulators
+  in gdb.
 
 + Darlene Stewart <Darlene.Stewart@nrc.ca> and Charles Gauthier
   <Charles.Gauthier@nrc.ca> of the Institute for Information Technology
@@ -164,10 +163,6 @@ The following persons/organizations have made contributions:
   <Charles.Gauthier@nrc.ca> of the Institute for Information
   Technology for the National Research Council of Canada
   submitted the RTEMS Cache Manager.
-
-+ Philip Quaife <philip@qs.co.nz> of Q Solutions ported 
-  RTEMS to the Hitachi H8300H.  This effort was sponsored by
-  Comnet Technologies Ltd.
 
 + Joel Sherrill <joel@OARcorp.com> and Jennifer Averett <jennifer@OARcorp.com>
   for the Texas Instruments C3x/C4x port and c4xsim BSP that works

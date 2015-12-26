@@ -53,9 +53,6 @@ case $RTEMS_CPU in
   # bfin has an issue to resolve with libdl. See ticket #2252
   bfin)
    HAVE_LIBDL=no ;;
-  # h8300 has an issue to resolve with libdl. See ticket #2284
-  h8300)
-   HAVE_LIBDL=no ;;
   # lm32 has an issue to resolve with libdl. See ticket #2283
   lm32)
    HAVE_LIBDL=no ;;

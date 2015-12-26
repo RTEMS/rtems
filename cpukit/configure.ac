@@ -393,9 +393,6 @@ case $RTEMS_CPU in
   # bfin has an issue to resolve with libdl. See ticket #2252
   bfin)
    HAVE_LIBDL=no ;;
-  # h8300 has an issue to resolve with libdl. See ticket #2284
-  h8300)
-   HAVE_LIBDL=no ;;
   # lm32 has an issue to resolve with libdl. See ticket #2283
   lm32)
    HAVE_LIBDL=no ;;
@@ -457,7 +454,6 @@ score/cpu/arm/Makefile
 score/cpu/bfin/Makefile
 score/cpu/avr/Makefile
 score/cpu/epiphany/Makefile
-score/cpu/h8300/Makefile
 score/cpu/i386/Makefile
 score/cpu/lm32/Makefile
 score/cpu/m68k/Makefile
