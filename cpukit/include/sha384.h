@@ -26,35 +26,35 @@
  * $FreeBSD$
  */
 
-#ifndef _SHA512_H_
-#define _SHA512_H_
+#ifndef _SHA384_H_
+#define _SHA384_H_
 
 #ifndef _KERNEL
 #include <sys/types.h>
 #endif
 
-#define SHA512_BLOCK_LENGTH		128
-#define SHA512_DIGEST_LENGTH		64
-#define SHA512_DIGEST_STRING_LENGTH	(SHA512_DIGEST_LENGTH * 2 + 1)
+#define SHA384_BLOCK_LENGTH		128
+#define SHA384_DIGEST_LENGTH		48
+#define SHA384_DIGEST_STRING_LENGTH	(SHA384_DIGEST_LENGTH * 2 + 1)
 
-typedef struct SHA512Context {
+typedef struct SHA384Context {
 	uint64_t state[8];
 	uint64_t count[2];
-	uint8_t buf[SHA512_BLOCK_LENGTH];
-} SHA512_CTX;
+	uint8_t buf[SHA384_BLOCK_LENGTH];
+} SHA384_CTX;
 
 __BEGIN_DECLS
 
-void	SHA512_Init(SHA512_CTX *);
-void	SHA512_Update(SHA512_CTX *, const void *, size_t);
-void	SHA512_Final(unsigned char [SHA512_DIGEST_LENGTH], SHA512_CTX *);
+void	SHA384_Init(SHA384_CTX *);
+void	SHA384_Update(SHA384_CTX *, const void *, size_t);
+void	SHA384_Final(unsigned char [SHA384_DIGEST_LENGTH], SHA384_CTX *);
 #ifndef _KERNEL
-char   *SHA512_End(SHA512_CTX *, char *);
-char   *SHA512_Data(const void *, unsigned int, char *);
-char   *SHA512_File(const char *, char *);
-char   *SHA512_FileChunk(const char *, char *, off_t, off_t);
+char   *SHA384_End(SHA384_CTX *, char *);
+char   *SHA384_Data(const void *, unsigned int, char *);
+char   *SHA384_File(const char *, char *);
+char   *SHA384_FileChunk(const char *, char *, off_t, off_t);
 #endif
 
 __END_DECLS
 
-#endif /* !_SHA512_H_ */
+#endif /* !_SHA384_H_ */
