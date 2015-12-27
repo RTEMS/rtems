@@ -59,7 +59,7 @@ $PREFIX/bin/newfs_msdos -r 1 -m 0xf8 -c 4 -F16  -h 64 -u 32 -S 512 -s $FATSIZE -
 
 # Prepare the executable.
 base=`basename $executable`
-$PREFIX/bin/arm-rtems4.11-objcopy $executable -O binary $TMPDIR/$base.bin
+$PREFIX/bin/arm-rtems4.12-objcopy $executable -O binary $TMPDIR/$base.bin
 gzip -9 $TMPDIR/$base.bin
 $PREFIX/bin/mkimage -A arm -O rtems -T kernel -a 0x80000000 -e 0x80000000 -n RTEMS -d $TMPDIR/$base.bin.gz $TMPDIR/$app
 echo "setenv bootdelay 5
