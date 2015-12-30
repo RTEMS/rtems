@@ -91,8 +91,8 @@ static int rpi_i2c_bus_transfer(rpi_i2c_bus *bus)
       BCM2835_REG(BCM2835_I2C_C) |= (1 << 9);
 
       /* Sleep until the TX FIFO has free space for a new write. */
+      bus->task_id = rtems_task_self();
       if (
-          bus->task_id = rtems_task_self();
           rtems_event_transient_receive(RTEMS_WAIT, bus->base.timeout) !=
           RTEMS_SUCCESSFUL
       ) {
