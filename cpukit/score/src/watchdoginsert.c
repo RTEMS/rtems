@@ -22,14 +22,16 @@
 
 static void _Watchdog_Insert_fixup(
   Watchdog_Header   *header,
+  Watchdog_Control  *the_watchdog,
+  Watchdog_Interval  delta,
   Watchdog_Control  *next_watchdog,
-  Watchdog_Interval  delta
+  Watchdog_Interval  delta_next
 )
 {
   const Chain_Node *iterator_tail;
   Chain_Node       *iterator_node;
 
-  next_watchdog->delta_interval -= delta;
+  next_watchdog->delta_interval = delta_next - delta;
 
   iterator_node = _Chain_First( &header->Iterators );
   iterator_tail = _Chain_Immutable_tail( &header->Iterators );
@@ -40,7 +42,7 @@ static void _Watchdog_Insert_fixup(
     iterator = (Watchdog_Iterator *) iterator_node;
 
     if ( iterator->current == &next_watchdog->Node ) {
-      iterator->delta_interval -= delta;
+      iterator->current = &the_watchdog->Node;
     }
 
     iterator_node = _Chain_Next( iterator_node );
@@ -76,7 +78,13 @@ void _Watchdog_Insert_locked(
       delta_next = next_watchdog->delta_interval;
 
       if ( delta < delta_next ) {
-        _Watchdog_Insert_fixup( header, next_watchdog, delta );
+        _Watchdog_Insert_fixup(
+          header,
+          the_watchdog,
+          delta,
+          next_watchdog,
+          delta_next
+        );
         break;
       }
 
