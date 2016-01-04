@@ -13,11 +13,6 @@
 
 #include "system.h"
 
-/*
- * We know this is deprecated and don't want a warning on every BSP built.
- */
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
 rtems_task Task_2(
   rtems_task_argument argument
 )
@@ -25,6 +20,13 @@ rtems_task Task_2(
   rtems_status_code   status;
   rtems_task_priority the_priority;
   rtems_task_priority previous_priority;
+
+  status = rtems_task_set_priority(
+    RTEMS_SELF,
+    RTEMS_CURRENT_PRIORITY,
+    &the_priority
+  );
+  directive_failed( status, "rtems_task_set_priority" );
 
   while( FOREVER ) {
     if ( --the_priority == 0 ) {

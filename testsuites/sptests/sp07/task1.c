@@ -13,11 +13,6 @@
 
 #include "system.h"
 
-/*
- * We know this is deprecated and don't want a warning on every BSP built.
- */
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
 rtems_task Task_1(
   rtems_task_argument argument
 )
@@ -25,9 +20,6 @@ rtems_task Task_1(
   rtems_status_code   status;
   rtems_task_priority the_priority;
   rtems_task_priority previous_priority;
-  rtems_id            my_id;
-
-  my_id = rtems_task_self();
 
   rtems_test_pause();
 
