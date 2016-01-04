@@ -131,8 +131,8 @@ static void test_watchdog_insert_and_remove( void )
   /* Insert right before current watchdog of iterator */
   d->initial = 3;
   _Watchdog_Insert( &header, d );
-  rtems_test_assert( i.delta_interval == 1 );
-  rtems_test_assert( i.current == &b->Node );
+  rtems_test_assert( i.delta_interval == 2 );
+  rtems_test_assert( i.current == &d->Node );
 
   destroy_watchdogs( &header );
   init_watchdogs( &header, watchdogs );
@@ -192,8 +192,47 @@ static void test_watchdog_remove_second_and_insert_first( void )
   _Watchdog_Insert( &header, c );
   rtems_test_assert( a->delta_interval == 2 );
   rtems_test_assert( c->delta_interval == 4 );
-  rtems_test_assert( i.delta_interval == 4 );
-  rtems_test_assert( i.current == &a->Node );
+  rtems_test_assert( i.delta_interval == 8 );
+  rtems_test_assert( i.current == &c->Node );
+
+  destroy_watchdogs( &header );
+}
+
+static void init_watchdogs_insert_with_iterator(
+  Watchdog_Header *header,
+  Watchdog_Control watchdogs[2]
+)
+{
+  Watchdog_Control *a = &watchdogs[0];
+  Watchdog_Control *b = &watchdogs[1];
+
+  _Watchdog_Preinitialize( a );
+  _Watchdog_Preinitialize( b );
+
+  _Watchdog_Header_initialize( header );
+
+  a->initial = 6;
+  _Watchdog_Insert( header, a );
+  rtems_test_assert( a->delta_interval == 6 );
+}
+
+static void test_watchdog_insert_with_iterator( void )
+{
+  Watchdog_Header header;
+  Watchdog_Control watchdogs[2];
+  Watchdog_Control *a = &watchdogs[0];
+  Watchdog_Control *b = &watchdogs[1];
+  Watchdog_Iterator i;
+
+  init_watchdogs_insert_with_iterator( &header, watchdogs );
+  add_iterator( &header, &i, a );
+
+  b->initial = 4;
+  _Watchdog_Insert( &header, b );
+  rtems_test_assert( a->delta_interval == 2 );
+  rtems_test_assert( b->delta_interval == 4 );
+  rtems_test_assert( i.delta_interval == 2 );
+  rtems_test_assert( i.current == &b->Node );
 
   destroy_watchdogs( &header );
 }
@@ -236,6 +275,7 @@ rtems_task Init(
   test_watchdog_static_init();
   test_watchdog_insert_and_remove();
   test_watchdog_remove_second_and_insert_first();
+  test_watchdog_insert_with_iterator();
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
 
