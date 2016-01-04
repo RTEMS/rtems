@@ -16,7 +16,6 @@ preinstall-am: ${RTEMS_BSP}
 
 ## Pull in extra files intro the distribution
 EXTRA_DIST = ACKNOWLEDGEMENTS
-EXTRA_DIST += TOOL_TARGETS
 
 include $(top_srcdir)/../automake/host.am
 include $(top_srcdir)/../automake/subdirs.am
