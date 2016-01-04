@@ -1,4 +1,0 @@
-The source code in c/src/libnetworking/rtems_webserver is a port
-of the Go Ahead Software, Inc. WebServer.  Their copyright and 
-licensing terms apply.  See c/src/libnetworking/rtems_webserver/license.txt
-for details.
