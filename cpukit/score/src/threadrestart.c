@@ -356,15 +356,13 @@ void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
 }
 
 bool _Thread_Restart(
-  Thread_Control            *the_thread,
-  Thread_Control            *executing,
-  void                      *pointer_argument,
-  Thread_Entry_numeric_type  numeric_argument
+  Thread_Control                 *the_thread,
+  Thread_Control                 *executing,
+  const Thread_Entry_information *entry
 )
 {
   if ( !_States_Is_dormant( the_thread->current_state ) ) {
-    the_thread->Start.pointer_argument = pointer_argument;
-    the_thread->Start.numeric_argument = numeric_argument;
+    the_thread->Start.Entry = *entry;
 
     _Thread_Request_life_change(
       the_thread,

@@ -301,6 +301,9 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadsetstate.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
     src/threadstartmultitasking.c src/iterateoverthreads.c
+libscore_a_SOURCES += src/threadentryadaptoridle.c
+libscore_a_SOURCES += src/threadentryadaptornumeric.c
+libscore_a_SOURCES += src/threadentryadaptorpointer.c
 libscore_a_SOURCES += src/threadglobalconstruction.c
 libscore_a_SOURCES += src/threadtimeout.c
 libscore_a_SOURCES += src/threadyield.c

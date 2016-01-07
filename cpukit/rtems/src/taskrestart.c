@@ -28,12 +28,15 @@ rtems_status_code rtems_task_restart(
 {
   Thread_Control          *the_thread;
   Objects_Locations        location;
+  Thread_Entry_information entry;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      if ( _Thread_Restart( the_thread, _Thread_Executing, NULL, argument ) ) {
+      entry = the_thread->Start.Entry;
+      entry.Kinds.Numeric.argument = argument;
+      if ( _Thread_Restart( the_thread, _Thread_Executing, &entry ) ) {
         _Objects_Put( &the_thread->Object );
         return RTEMS_SUCCESSFUL;
       }

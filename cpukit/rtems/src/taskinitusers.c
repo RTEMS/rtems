@@ -33,11 +33,14 @@
 
 static void _RTEMS_Global_construction( rtems_task_argument arg )
 {
-  Thread_Entry entry_point = (Thread_Entry)
+  Thread_Control           *executing = _Thread_Get_executing();
+  Thread_Entry_information  entry = executing->Start.Entry;
+
+  entry.Kinds.Numeric.entry =
     Configuration_RTEMS_API.User_initialization_tasks_table[ 0 ].entry_point;
 
   (void) arg;
-  _Thread_Global_construction( entry_point );
+  _Thread_Global_construction( executing, &entry );
 }
 
 /*

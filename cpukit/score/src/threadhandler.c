@@ -90,41 +90,12 @@ void _Thread_Handler( void )
    *  thread/task prototype. The following code supports invoking the
    *  user thread entry point using the prototype expected.
    */
-  if ( executing->Start.prototype == THREAD_START_NUMERIC ) {
-    executing->Wait.return_argument =
-      (*(Thread_Entry_numeric) executing->Start.entry_point)(
-        executing->Start.numeric_argument
-      );
-  }
-  #if defined(RTEMS_POSIX_API)
-    else if ( executing->Start.prototype == THREAD_START_POINTER ) {
-      executing->Wait.return_argument =
-        (*(Thread_Entry_pointer) executing->Start.entry_point)(
-          executing->Start.pointer_argument
-        );
-    }
-  #endif
-  #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-    else if ( executing->Start.prototype == THREAD_START_BOTH_POINTER_FIRST ) {
-      executing->Wait.return_argument =
-         (*(Thread_Entry_both_pointer_first) executing->Start.entry_point)(
-           executing->Start.pointer_argument,
-           executing->Start.numeric_argument
-         );
-    }
-    else if ( executing->Start.prototype == THREAD_START_BOTH_NUMERIC_FIRST ) {
-      executing->Wait.return_argument =
-       (*(Thread_Entry_both_numeric_first) executing->Start.entry_point)(
-         executing->Start.numeric_argument,
-         executing->Start.pointer_argument
-       );
-    }
-  #endif
+  ( *executing->Start.Entry.adaptor )( executing );
 
   /*
-   *  In the switch above, the return code from the user thread body
-   *  was placed in return_argument.  This assumed that if it returned
-   *  anything (which is not supporting in all APIs), then it would be
+   *  In the call above, the return code from the user thread body which return
+   *  something was placed in return_argument.  This assumed that if it
+   *  returned anything (which is not supporting in all APIs), then it would be
    *  able to fit in a (void *).
    */
 

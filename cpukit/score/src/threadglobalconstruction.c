@@ -44,10 +44,11 @@
   #define EXECUTE_GLOBAL_CONSTRUCTORS
 #endif
 
-void _Thread_Global_construction( Thread_Entry entry_point )
+void _Thread_Global_construction(
+  Thread_Control                 *executing,
+  const Thread_Entry_information *entry
+)
 {
-  Thread_Control *executing;
-
 #if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
   /*
    *  _init could be a weak symbol and we SHOULD test it but it isn't
@@ -58,17 +59,7 @@ void _Thread_Global_construction( Thread_Entry entry_point )
 #endif
 
   _Thread_Disable_dispatch();
-
-  executing = _Thread_Executing;
-  executing->Start.entry_point = entry_point;
-
-  _Thread_Restart(
-    executing,
-    executing,
-    executing->Start.pointer_argument,
-    executing->Start.numeric_argument
-  );
-
+  _Thread_Restart( executing, executing, entry );
   _Thread_Enable_dispatch();
 
   _Assert_Not_reached();

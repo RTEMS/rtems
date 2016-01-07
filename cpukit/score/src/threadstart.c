@@ -25,22 +25,13 @@
 #include <rtems/score/userextimpl.h>
 
 bool _Thread_Start(
-  Thread_Control            *the_thread,
-  Thread_Start_types         the_prototype,
-  void                      *entry_point,
-  void                      *pointer_argument,
-  Thread_Entry_numeric_type  numeric_argument,
-  Per_CPU_Control           *cpu
+  Thread_Control                 *the_thread,
+  const Thread_Entry_information *entry,
+  Per_CPU_Control                *cpu
 )
 {
   if ( _States_Is_dormant( the_thread->current_state ) ) {
-
-    the_thread->Start.entry_point      = (Thread_Entry) entry_point;
-
-    the_thread->Start.prototype        = the_prototype;
-    the_thread->Start.pointer_argument = pointer_argument;
-    the_thread->Start.numeric_argument = numeric_argument;
-
+    the_thread->Start.Entry = *entry;
     _Thread_Load_environment( the_thread );
 
     if ( cpu == NULL ) {

@@ -175,8 +175,8 @@ bool interrupt_critical_section_test_support_delay(void)
 
 static bool is_idle( const Thread_Control *thread )
 {
-  return thread->Start.entry_point
-    == (Thread_Entry) rtems_configuration_get_idle_task();
+  return thread->Start.Entry.Kinds.Idle.entry
+    == rtems_configuration_get_idle_task();
 }
 
 static void thread_switch( Thread_Control *executing, Thread_Control *heir )

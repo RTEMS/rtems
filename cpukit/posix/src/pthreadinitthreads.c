@@ -37,11 +37,14 @@
 
 static void *_POSIX_Global_construction( void *arg )
 {
-  Thread_Entry entry_point = (Thread_Entry) Configuration_POSIX_API
+  Thread_Control           *executing = _Thread_Get_executing();
+  Thread_Entry_information  entry = executing->Start.Entry;
+
+  entry.Kinds.Pointer.entry = Configuration_POSIX_API
     .User_initialization_threads_table[ 0 ].thread_entry;
 
   (void) arg;
-  _Thread_Global_construction( entry_point );
+  _Thread_Global_construction( executing, &entry );
 }
 
 void _POSIX_Threads_Initialize_user_threads_body(void)

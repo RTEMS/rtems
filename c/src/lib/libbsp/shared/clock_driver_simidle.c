@@ -46,7 +46,7 @@ volatile bool clock_driver_enabled;
  *  fake time passing.  This will not let preemption from an
  *  interrupt work but is enough for many tests.
  */
-Thread clock_driver_sim_idle_body(
+void *clock_driver_sim_idle_body(
   uintptr_t   ignored
 )
 {

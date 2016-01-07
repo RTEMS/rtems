@@ -25,8 +25,7 @@ rtems_monitor_task_canonical(
 
     api = rtems_thread->API_Extensions[ THREAD_API_RTEMS ];
 
-    canonical_task->entry = rtems_thread->Start.entry_point;
-    canonical_task->argument = rtems_thread->Start.numeric_argument;
+    canonical_task->entry = rtems_thread->Start.Entry;
     canonical_task->stack = rtems_thread->Start.Initial_stack.area;
     canonical_task->stack_size = rtems_thread->Start.Initial_stack.size;
     canonical_task->cpu = _Per_CPU_Get_index( _Thread_Get_CPU( rtems_thread ) );

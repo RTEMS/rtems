@@ -52,6 +52,15 @@ int pthread_create(
   void                   *arg
 )
 {
+  Thread_Entry_information entry = {
+    .adaptor = _Thread_Entry_adaptor_pointer,
+    .Kinds = {
+      .Pointer = {
+        .entry = start_routine,
+        .argument = arg
+      }
+    }
+  };
   const pthread_attr_t               *the_attr;
   Priority_Control                    core_priority;
   Thread_CPU_budget_algorithms        budget_algorithm;
@@ -219,14 +228,7 @@ int pthread_create(
   /*
    *  POSIX threads are allocated and started in one operation.
    */
-  status = _Thread_Start(
-    the_thread,
-    THREAD_START_POINTER,
-    start_routine,
-    arg,
-    0,                    /* unused */
-    NULL
-  );
+  status = _Thread_Start( the_thread, &entry, NULL );
 
   #if defined(RTEMS_DEBUG)
     /*

@@ -88,15 +88,11 @@ extern "C" {
 
 typedef Timestamp_Control Thread_CPU_usage_t;
 
-/**
- *  The following defines the "return type" of a thread.
- *
- *  @note  This cannot always be right.  Some APIs have void
- *         tasks/threads, others return pointers, others may
- *         return a numeric value.  Hopefully a pointer is
- *         always at least as big as an uint32_t  . :)
+/*
+ * Only provided for backward compatiblity to not break application
+ * configurations.
  */
-typedef void *Thread;
+typedef void *Thread RTEMS_DEPRECATED;
 
 /**
  *  @brief Type of the numeric argument of a thread entry function with at
@@ -110,44 +106,52 @@ typedef void *Thread;
 typedef CPU_Uint32ptr Thread_Entry_numeric_type;
 
 /**
- *  The following defines the ways in which the entry point for a
- *  thread can be invoked.  Basically, it can be passed any
- *  combination/permutation of a pointer and an uint32_t   value.
- *
- *  @note For now, we are ignoring the return type.
+ * @brief Data for idle thread entry.
  */
-typedef enum {
-  THREAD_START_NUMERIC,
-  THREAD_START_POINTER,
-  #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-    THREAD_START_BOTH_POINTER_FIRST,
-    THREAD_START_BOTH_NUMERIC_FIRST
-  #endif
-} Thread_Start_types;
+typedef struct {
+  void *( *entry )( uintptr_t argument );
+} Thread_Entry_idle;
 
-/** This type corresponds to a very simple style thread entry point. */
-typedef Thread ( *Thread_Entry )( void );   /* basic type */
-
-/** This type corresponds to a thread entry point which takes a single
- *  unsigned thirty-two bit integer as an argument.
+/**
+ * @brief Data for thread entry with one numeric argument and no return value.
  */
-typedef Thread ( *Thread_Entry_numeric )( Thread_Entry_numeric_type );
+typedef struct {
+  void ( *entry )( Thread_Entry_numeric_type argument );
+  Thread_Entry_numeric_type argument;
+} Thread_Entry_numeric;
 
-/** This type corresponds to a thread entry point which takes a single
- *  untyped pointer as an argument.
+/**
+ * @brief Data for thread entry with one pointer argument and a pointer return
+ * value.
  */
-typedef Thread ( *Thread_Entry_pointer )( void * );
+typedef struct {
+  void *( *entry )( void *argument  );
+  void *argument;
+} Thread_Entry_pointer;
 
-/** This type corresponds to a thread entry point which takes a single
- *  untyped pointer and an unsigned thirty-two bit integer as arguments.
+/**
+ * @brief Thread entry information.
  */
-typedef Thread ( *Thread_Entry_both_pointer_first )( void *, Thread_Entry_numeric_type );
+typedef struct {
+  /**
+   * @brief Thread entry adaptor.
+   *
+   * Calls the corresponding thread entry with the right parameters.
+   *
+   * @param executing The executing thread.
+   */
+  void ( *adaptor )( Thread_Control *executing );
 
-/** This type corresponds to a thread entry point which takes a single
- *  unsigned thirty-two bit integer and an untyped pointer and an
- *  as arguments.
- */
-typedef Thread ( *Thread_Entry_both_numeric_first )( Thread_Entry_numeric_type, void * );
+  /**
+   * @brief Thread entry data used by the adaptor to call the thread entry
+   * function with the right parameters.
+   */
+  union {
+    Thread_Entry_idle Idle;
+    Thread_Entry_numeric Numeric;
+    Thread_Entry_pointer Pointer;
+  } Kinds;
+} Thread_Entry_information;
 
 /**
  *  The following lists the algorithms used to manage the thread cpu budget.
@@ -206,14 +210,8 @@ typedef struct {
  *  the starting state of a thread.
  */
 typedef struct {
-  /** This field is the starting address for the thread. */
-  Thread_Entry                         entry_point;
-  /** This field indicates the how task is invoked. */
-  Thread_Start_types                   prototype;
-  /** This field is the pointer argument passed at thread start. */
-  void                                *pointer_argument;
-  /** This field is the numeric argument passed at thread start. */
-  Thread_Entry_numeric_type            numeric_argument;
+  /** This field contains the thread entry information. */
+  Thread_Entry_information             Entry;
   /*-------------- initial execution modes ----------------- */
   /** This field indicates whether the thread was preemptible when
     * it started.

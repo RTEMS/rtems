@@ -25,6 +25,14 @@
 
 static void _Thread_Create_idle_for_cpu( Per_CPU_Control *cpu )
 {
+  Thread_Entry_information entry = {
+    .adaptor = _Thread_Entry_adaptor_idle,
+    .Kinds = {
+      .Idle = {
+        .entry = rtems_configuration_get_idle_task()
+      }
+    }
+  };
   Objects_Name    name;
   Thread_Control *idle;
 
@@ -59,14 +67,7 @@ static void _Thread_Create_idle_for_cpu( Per_CPU_Control *cpu )
   cpu->heir      =
   cpu->executing = idle;
 
-  _Thread_Start(
-    idle,
-    THREAD_START_NUMERIC,
-    rtems_configuration_get_idle_task(),
-    NULL,
-    0,
-    cpu
-  );
+  _Thread_Start( idle, &entry, cpu );
 }
 
 void _Thread_Create_idle( void )

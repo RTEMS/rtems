@@ -44,9 +44,18 @@ rtems_status_code rtems_task_start(
   rtems_task_argument	argument
 )
 {
-  Thread_Control          *the_thread;
-  Objects_Locations        location;
-  bool                     successfully_started;
+  Thread_Entry_information entry = {
+    .adaptor = _Thread_Entry_adaptor_numeric,
+    .Kinds = {
+      .Numeric = {
+        .entry = entry_point,
+        .argument = argument
+      }
+    }
+  };
+  Thread_Control    *the_thread;
+  Objects_Locations  location;
+  bool               successfully_started;
 
   if ( entry_point == NULL )
     return RTEMS_INVALID_ADDRESS;
@@ -55,14 +64,7 @@ rtems_status_code rtems_task_start(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      successfully_started = _Thread_Start(
-        the_thread,
-        THREAD_START_NUMERIC,
-        entry_point,
-        NULL,
-        argument,
-        NULL
-      );
+      successfully_started = _Thread_Start( the_thread, &entry, NULL );
 
       _Objects_Put( &the_thread->Object );
 

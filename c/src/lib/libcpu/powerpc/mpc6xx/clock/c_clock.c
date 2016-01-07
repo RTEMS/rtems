@@ -107,8 +107,8 @@ static void clockHandler(void)
 
     while (
       _Thread_Heir == _Thread_Executing
-        && _Thread_Executing->Start.entry_point
-          == (Thread_Entry) rtems_configuration_get_idle_task()
+        && _Thread_Executing->Start.Entry.Kinds.Idle.entry
+          == rtems_configuration_get_idle_task()
     ) {
       tb += Clock_Decrementer_value;
       ppc_set_time_base( tb );

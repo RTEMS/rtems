@@ -37,8 +37,8 @@ static rtems_isr clockISR(rtems_vector_number vector) {
     rtems_clock_tick();
   } while (
     _Thread_Heir == _Thread_Executing
-      && _Thread_Executing->Start.entry_point
-        == (Thread_Entry) rtems_configuration_get_idle_task()
+      && _Thread_Executing->Start.Entry.Kinds.Idle.entry
+        == rtems_configuration_get_idle_task()
   );
 #else
   rtems_clock_tick();

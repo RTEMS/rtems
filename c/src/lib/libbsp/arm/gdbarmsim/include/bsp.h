@@ -45,7 +45,7 @@ extern "C" {
 /**
  * @brief Support for simulated clock tick
  */
-Thread clock_driver_sim_idle_body(uintptr_t);
+void *clock_driver_sim_idle_body(uintptr_t);
 #define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
 
 /*

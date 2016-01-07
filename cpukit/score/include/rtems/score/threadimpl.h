@@ -185,29 +185,22 @@ bool _Thread_Initialize(
  *  and makes it ready to execute.  After this routine executes, the
  *  thread competes with all other threads for CPU time.
  *
- *  @param the_thread is the thread to be initialized
- *  @param the_prototype
- *  @param entry_point
- *  @param pointer_argument
- *  @param numeric_argument
+ *  @param the_thread The thread to be started.
+ *  @param entry The thread entry information.
  *  @param[in,out] cpu The processor if used to start an idle thread
  *  during system initialization.  Must be set to @c NULL to start a normal
  *  thread.
  */
 bool _Thread_Start(
-  Thread_Control            *the_thread,
-  Thread_Start_types         the_prototype,
-  void                      *entry_point,
-  void                      *pointer_argument,
-  Thread_Entry_numeric_type  numeric_argument,
-  Per_CPU_Control           *cpu
+  Thread_Control                 *the_thread,
+  const Thread_Entry_information *entry,
+  Per_CPU_Control                *cpu
 );
 
 bool _Thread_Restart(
-  Thread_Control            *the_thread,
-  Thread_Control            *executing,
-  void                      *pointer_argument,
-  Thread_Entry_numeric_type  numeric_argument
+  Thread_Control                 *the_thread,
+  Thread_Control                 *executing,
+  const Thread_Entry_information *entry
 );
 
 void _Thread_Yield( Thread_Control *executing );
@@ -300,6 +293,12 @@ void _Thread_Load_environment(
   Thread_Control *the_thread
 );
 
+void _Thread_Entry_adaptor_idle( Thread_Control *executing );
+
+void _Thread_Entry_adaptor_numeric( Thread_Control *executing );
+
+void _Thread_Entry_adaptor_pointer( Thread_Control *executing );
+
 /**
  *  @brief Wrapper function for all threads.
  *
@@ -325,7 +324,10 @@ void _Thread_Handler( void );
  * the first POSIX initialization thread in case no RTEMS initialization tasks
  * are present.
  */
-void _Thread_Global_construction( Thread_Entry entry_point ) RTEMS_NO_RETURN;
+void _Thread_Global_construction(
+  Thread_Control                 *executing,
+  const Thread_Entry_information *entry
+) RTEMS_NO_RETURN;
 
 /**
  *  @brief Ended the delay of a thread.

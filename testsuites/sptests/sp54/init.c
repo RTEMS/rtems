@@ -22,12 +22,7 @@
 
 const char rtems_test_name[] = "SP 54";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-
-rtems_task Init(
-  rtems_task_argument ignored
-)
+static void *Init( uintptr_t ignored )
 {
   rtems_status_code    status;
   rtems_task_priority  pri;
@@ -68,7 +63,7 @@ rtems_task Init(
  *  In this application, the initialization task performs the system
  *  initialization and then transforms itself into the idle task.
  */
-#define CONFIGURE_IDLE_TASK_BODY (Thread_Entry_numeric) Init
+#define CONFIGURE_IDLE_TASK_BODY Init
 #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
 
 /*

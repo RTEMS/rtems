@@ -484,7 +484,7 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
        */
       rtems_object_get_name(thread->Object.id, sizeof(name), name);
       if (name[0] == '\0')
-        snprintf(name, sizeof(name) - 1, "(%p)", thread->Start.entry_point);
+        snprintf(name, sizeof(name) - 1, "(%p)", thread->Start.Entry.Kinds.Numeric.entry);
 
       (*data->plugin.print)(data->plugin.context,
                             " 0x%08" PRIx32 " | %-19s |  %3" PRId32 " |  %3" PRId32 "   | ",

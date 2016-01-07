@@ -42,7 +42,7 @@ extern "C" {
   *  @brief Clock Tick Support Package
   */
 
-Thread clock_driver_sim_idle_body(uintptr_t);
+void *clock_driver_sim_idle_body(uintptr_t);
 #define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
 
 #ifdef __cplusplus
