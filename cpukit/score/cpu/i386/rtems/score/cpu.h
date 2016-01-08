@@ -529,15 +529,8 @@ uint32_t   _CPU_ISR_Get_level( void );
  *    + disable interrupts and halt the CPU
  */
 
-#define _CPU_Fatal_halt( _source, _error ) \
-  { \
-    uint32_t _error_lvalue = ( _error ); \
-    __asm__ volatile ( "cli ; \
-                    movl %0,%%eax ; \
-                    hlt" \
-                    : "=r" ((_error_lvalue)) : "0" ((_error_lvalue)) \
-    ); \
-  }
+extern void _CPU_Fatal_halt(uint32_t source, uint32_t error)
+  RTEMS_NO_RETURN;
 
 #endif /* ASM */
 
