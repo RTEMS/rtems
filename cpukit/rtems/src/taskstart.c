@@ -64,7 +64,7 @@ rtems_status_code rtems_task_start(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      successfully_started = _Thread_Start( the_thread, &entry, NULL );
+      successfully_started = _Thread_Start( the_thread, &entry );
 
       _Objects_Put( &the_thread->Object );
 

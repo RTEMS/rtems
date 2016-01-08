@@ -21,20 +21,14 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/stackimpl.h>
+#include <rtems/score/userextimpl.h>
 #include <rtems/config.h>
 
 static void _Thread_Create_idle_for_cpu( Per_CPU_Control *cpu )
 {
-  Thread_Entry_information entry = {
-    .adaptor = _Thread_Entry_adaptor_idle,
-    .Kinds = {
-      .Idle = {
-        .entry = rtems_configuration_get_idle_task()
-      }
-    }
-  };
-  Objects_Name    name;
-  Thread_Control *idle;
+  Objects_Name             name;
+  Thread_Control          *idle;
+  const Scheduler_Control *scheduler;
 
   name.name_u32 = _Objects_Build_name( 'I', 'D', 'L', 'E' );
 
@@ -67,7 +61,22 @@ static void _Thread_Create_idle_for_cpu( Per_CPU_Control *cpu )
   cpu->heir      =
   cpu->executing = idle;
 
-  _Thread_Start( idle, &entry, cpu );
+  idle->Start.Entry.adaptor = _Thread_Entry_adaptor_idle;
+  idle->Start.Entry.Kinds.Idle.entry = rtems_configuration_get_idle_task();
+
+  _Thread_Load_environment( idle );
+
+  scheduler = _Scheduler_Get_by_CPU( cpu );
+
+#if defined(RTEMS_SMP)
+  if (scheduler == NULL) {
+    return;
+  }
+#endif
+
+  idle->current_state = STATES_READY;
+  _Scheduler_Start_idle( scheduler, idle, cpu );
+  _User_extensions_Thread_start( idle );
 }
 
 void _Thread_Create_idle( void )

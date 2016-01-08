@@ -21,30 +21,17 @@
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/isrlevel.h>
-#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/userextimpl.h>
 
 bool _Thread_Start(
   Thread_Control                 *the_thread,
-  const Thread_Entry_information *entry,
-  Per_CPU_Control                *cpu
+  const Thread_Entry_information *entry
 )
 {
   if ( _States_Is_dormant( the_thread->current_state ) ) {
     the_thread->Start.Entry = *entry;
     _Thread_Load_environment( the_thread );
-
-    if ( cpu == NULL ) {
-      _Thread_Ready( the_thread );
-    } else {
-      const Scheduler_Control *scheduler = _Scheduler_Get_by_CPU( cpu );
-
-      if ( scheduler != NULL ) {
-        the_thread->current_state = STATES_READY;
-        _Scheduler_Start_idle( scheduler, the_thread, cpu );
-      }
-    }
-
+    _Thread_Ready( the_thread );
     _User_extensions_Thread_start( the_thread );
 
     return true;

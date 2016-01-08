@@ -228,7 +228,7 @@ int pthread_create(
   /*
    *  POSIX threads are allocated and started in one operation.
    */
-  status = _Thread_Start( the_thread, &entry, NULL );
+  status = _Thread_Start( the_thread, &entry );
 
   #if defined(RTEMS_DEBUG)
     /*

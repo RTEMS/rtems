@@ -187,14 +187,10 @@ bool _Thread_Initialize(
  *
  *  @param the_thread The thread to be started.
  *  @param entry The thread entry information.
- *  @param[in,out] cpu The processor if used to start an idle thread
- *  during system initialization.  Must be set to @c NULL to start a normal
- *  thread.
  */
 bool _Thread_Start(
   Thread_Control                 *the_thread,
-  const Thread_Entry_information *entry,
-  Per_CPU_Control                *cpu
+  const Thread_Entry_information *entry
 );
 
 bool _Thread_Restart(
