@@ -50,7 +50,6 @@ static bool _RTEMS_tasks_Create_extension(
 )
 {
   RTEMS_API_Control *api;
-  size_t             i;
 
   api = created->API_Extensions[ THREAD_API_RTEMS ];
 
