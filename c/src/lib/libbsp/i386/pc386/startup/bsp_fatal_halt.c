@@ -11,10 +11,9 @@
 
 void _CPU_Fatal_halt(uint32_t source, uint32_t error)
 {
-  uint32_t _error_lvalue = ( _error );
   __asm__ volatile (
          "cli ; movl %0,%%eax ; hlt"
-         : "=r" ((_error_lvalue))
-         : "0" ((_error_lvalue))
+         : "=r" ((error))
+         : "0" ((error))
   );
 }

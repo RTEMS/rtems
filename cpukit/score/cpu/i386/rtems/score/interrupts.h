@@ -33,7 +33,7 @@ typedef int  (*rtems_raw_irq_is_enabled)	(const struct __rtems_raw_irq_connect_d
  * 
  */
 /**@{**/
-
+#if !defined(RTEMS_PARAVIRT)
 #define i386_disable_interrupts( _level ) \
   { \
     __asm__ volatile ( "pushf ; \
@@ -71,6 +71,13 @@ typedef int  (*rtems_raw_irq_is_enabled)	(const struct __rtems_raw_irq_connect_d
     \
     _level = (_eflags & EFLAGS_INTR_ENABLE) ? 0 : 1; \
   } while (0)
+#else
+uint32_t i386_disable_interrupts( void );
+void i386_enable_interrupts(uint32_t level);
+void i386_flash_interrupts(uint32_t level);
+void i386_set_interrupt_level(uint32_t new_level);
+uint32_t i386_get_interrupt_level( void );
+#endif /* PARAVIRT */
 
 /** @} */
 

@@ -115,7 +115,11 @@ uint32_t   _CPU_ISR_Get_level( void )
 {
   uint32_t   level;
 
+#if !defined(RTEMS_PARAVIRT)
   i386_get_interrupt_level( level );
+#else
+  level = i386_get_interrupt_level();
+#endif
 
   return level;
 }

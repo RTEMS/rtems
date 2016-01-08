@@ -395,6 +395,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
  *     + set a particular level
  */
 
+#if !defined(RTEMS_PARAVIRT)
 #define _CPU_ISR_Disable( _level ) i386_disable_interrupts( _level )
 
 #define _CPU_ISR_Enable( _level )  i386_enable_interrupts( _level )
@@ -406,6 +407,12 @@ extern Context_Control_fp _CPU_Null_fp_context;
     if ( _new_level ) __asm__ volatile ( "cli" ); \
     else              __asm__ volatile ( "sti" ); \
   }
+#else
+#define _CPU_ISR_Disable( _level ) _level = i386_disable_interrupts( )
+#define _CPU_ISR_Enable( _level ) i386_enable_interrupts( _level )
+#define _CPU_ISR_Flash( _level ) i386_flash_interrupts( _level )
+#define _CPU_ISR_Set_level( _new_level ) i386_set_interrupt_level( _new_level)
+#endif
 
 uint32_t   _CPU_ISR_Get_level( void );
 
