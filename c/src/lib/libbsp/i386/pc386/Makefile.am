@@ -148,6 +148,7 @@ include_HEADERS += ../../i386/shared/comm/uart.h
 # startup
 libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 libbsp_a_SOURCES += startup/bspgetworkarea.c
+libbsp_a_SOURCES += startup/bspidle.S
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/bspcmdline.c
 libbsp_a_SOURCES += ../../shared/bspclean.c

@@ -117,7 +117,7 @@ extern "C" {
  *  not provide one.
  */
 
-#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
+#define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
 
 /*
  *  Define what is required to specify how the network to host conversion

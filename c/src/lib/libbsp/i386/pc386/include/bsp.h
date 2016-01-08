@@ -213,6 +213,9 @@ void rtems_irq_mngt_init(void);          /* from 'irq_init.c' */
     } while ( 0 )
 #endif /* edison */
 
+void *bsp_idle_thread( uintptr_t ignored );
+#define BSP_IDLE_TASK_BODY bsp_idle_thread
+
 void kbd_reset_setup(char *str, int *ints);   /* from 'pc_keyb.c' */
 size_t read_aux(char * buffer, size_t count); /* from 'ps2_mouse.c'  */
 

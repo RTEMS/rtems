@@ -120,14 +120,6 @@ uint32_t   _CPU_ISR_Get_level( void )
   return level;
 }
 
-void *_CPU_Thread_Idle_body( uintptr_t ignored )
-{
-  while(1){
-    __asm__ volatile ("hlt");
-  }
-  return NULL;
-}
-
 struct Frame_ {
 	struct Frame_  *up;
 	uintptr_t		pc;
