@@ -72,9 +72,6 @@ typedef int  (*rtems_raw_irq_is_enabled)	(const struct __rtems_raw_irq_connect_d
     _level = (_eflags & EFLAGS_INTR_ENABLE) ? 0 : 1; \
   } while (0)
 
-#define _CPU_ISR_Disable( _level ) i386_disable_interrupts( _level )
-#define _CPU_ISR_Enable( _level ) i386_enable_interrupts( _level )
-
 /** @} */
 
 #endif
