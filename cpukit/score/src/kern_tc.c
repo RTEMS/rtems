@@ -33,6 +33,7 @@
 #define time_second _Timecounter_Time_second
 #define time_uptime _Timecounter_Time_uptime
 #include <rtems/score/timecounterimpl.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #endif /* __rtems__ */
 #include <sys/cdefs.h>
@@ -144,8 +145,13 @@ static struct timehands th0 = {
 	(uint64_t)-1 / 1000000,
 	0,
 	{1, 0},
+#ifndef __rtems__
 	{0, 0},
 	{0, 0},
+#else /* __rtems__ */
+	{TOD_SECONDS_1970_THROUGH_1988, 0},
+	{TOD_SECONDS_1970_THROUGH_1988, 0},
+#endif /* __rtems__ */
 	1,
 #if defined(RTEMS_SMP)
 	&th1
@@ -162,10 +168,20 @@ static struct timecounter *timecounters = &dummy_timecounter;
 int tc_min_ticktock_freq = 1;
 #endif /* __rtems__ */
 
+#ifndef __rtems__
 volatile time_t time_second = 1;
+#else /* __rtems__ */
+volatile time_t time_second = TOD_SECONDS_1970_THROUGH_1988;
+#endif /* __rtems__ */
 volatile time_t time_uptime = 1;
 
+#ifndef __rtems__
 struct bintime boottimebin;
+#else /* __rtems__ */
+struct bintime boottimebin = {
+  .sec = TOD_SECONDS_1970_THROUGH_1988 - 1
+};
+#endif /* __rtems__ */
 #ifndef __rtems__
 struct timeval boottime;
 static int sysctl_kern_boottime(SYSCTL_HANDLER_ARGS);
@@ -2045,17 +2061,10 @@ sysctl_kern_timecounter_adjprecision(SYSCTL_HANDLER_ARGS)
 done:
 	return (0);
 }
-#endif /* __rtems__ */
 
-#ifndef __rtems__
 static void
 inittimecounter(void *dummy)
-#else /* __rtems__ */
-void
-_Timecounter_Initialize(void)
-#endif /* __rtems__ */
 {
-#ifndef __rtems__
 	u_int p;
 	int tick_rate;
 
@@ -2079,7 +2088,6 @@ _Timecounter_Initialize(void)
 	tc_tick_sbt = bttosbt(tc_tick_bt);
 	p = (tc_tick * 1000000) / hz;
 	printf("Timecounters tick every %d.%03u msec\n", p / 1000, p % 1000);
-#endif /* __rtems__ */
 
 #ifdef FFCLOCK
 	ffclock_init();
@@ -2090,11 +2098,8 @@ _Timecounter_Initialize(void)
 	tc_windup();
 }
 
-#ifndef __rtems__
 SYSINIT(timecounter, SI_SUB_CLOCKS, SI_ORDER_SECOND, inittimecounter, NULL);
-#endif /* __rtems__ */
 
-#ifndef __rtems__
 /* Cpu tick handling -------------------------------------------------*/
 
 static int cpu_tick_variable;

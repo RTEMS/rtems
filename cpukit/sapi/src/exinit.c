@@ -114,7 +114,6 @@ static void rtems_initialize_data_structures(void)
   _API_Mutex_Allocate( &_Once_Mutex );
 
   _Watchdog_Handler_initialization();
-  _TOD_Handler_initialization();
 
   _Thread_Handler_initialization();
 

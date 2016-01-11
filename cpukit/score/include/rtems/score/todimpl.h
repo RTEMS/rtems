@@ -149,14 +149,7 @@ typedef struct {
   bool is_set;
 } TOD_Control;
 
-SCORE_EXTERN TOD_Control _TOD;
-
-/**
- *  @brief Initializes the time of day handler.
- *
- *  Performs the initialization necessary for the Time Of Day handler.
- */
-void _TOD_Handler_initialization(void);
+extern TOD_Control _TOD;
 
 /**
  *  @brief Sets the time of day from timestamp.

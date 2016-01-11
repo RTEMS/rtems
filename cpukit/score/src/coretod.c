@@ -20,16 +20,4 @@
 
 #include <rtems/score/todimpl.h>
 
-void _TOD_Handler_initialization(void)
-{
-  struct timespec ts;
-
-  _Timecounter_Initialize();
-
-  ts.tv_sec = TOD_SECONDS_1970_THROUGH_1988;
-  ts.tv_nsec = 0;
-  _Timecounter_Set_clock( &ts );
-
-  /* TOD has not been set */
-  _TOD.is_set = false;
-}
+TOD_Control _TOD;
