@@ -7,8 +7,3 @@
 #  http://www.rtems.org/license/LICENSE.
 
 This directory contains the RTEMS SMP Test Suite.
-
-As of June 2011, these tests are known to run on only
-
-+ pcp4 BSP using qemu with 2-4 cores
-+ leon3 BSP using grsim with 4 cores
