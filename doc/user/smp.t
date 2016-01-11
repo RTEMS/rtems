@@ -17,11 +17,11 @@ available on
 @item SPARC.
 @end itemize
 
-It must be explicitly enabled via the @code{--enable-smp} configure command
-line option.  To enable SMP in the application configuration see
-@ref{Configuring a System Enable SMP Support for Applications}.  The default
-scheduler for SMP applications supports up to 32 processors and is a global
-fixed priority scheduler, see also @ref{Configuring a System Configuring
+It must be explicitly enabled via the @code{--enable-experimental-smp}
+configure command line option.  To enable SMP in the application configuration
+see @ref{Configuring a System Enable SMP Support for Applications}.  The
+default scheduler for SMP applications supports up to 32 processors and is a
+global fixed priority scheduler, see also @ref{Configuring a System Configuring
 Clustered/Partitioned Schedulers}.  For example applications see
 @file{testsuites/smptests}.
 
