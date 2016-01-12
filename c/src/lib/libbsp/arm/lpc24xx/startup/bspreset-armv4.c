@@ -27,6 +27,8 @@
 #include <bsp/lpc24xx.h>
 #include <bsp/start.h>
 
+#ifdef ARM_MULTILIB_ARCH_V4
+
 BSP_START_TEXT_SECTION __attribute__((flatten)) void bsp_reset(void)
 {
   rtems_interrupt_level level;
@@ -34,19 +36,16 @@ BSP_START_TEXT_SECTION __attribute__((flatten)) void bsp_reset(void)
   (void) level;
   rtems_interrupt_disable(level);
 
-  #if defined(ARM_MULTILIB_ARCH_V4)
-    /* Trigger watchdog reset */
-    WDCLKSEL = 0;
-    WDTC = 0xff;
-    WDMOD = 0x3;
-    WDFEED = 0xaa;
-    WDFEED = 0x55;
-  #elif defined(ARM_MULTILIB_ARCH_V7M)
-    _ARMV7M_SCB->aircr = ARMV7M_SCB_AIRCR_VECTKEY
-      | ARMV7M_SCB_AIRCR_SYSRESETREQ;
-  #endif
+  /* Trigger watchdog reset */
+  WDCLKSEL = 0;
+  WDTC = 0xff;
+  WDMOD = 0x3;
+  WDFEED = 0xaa;
+  WDFEED = 0x55;
 
   while (true) {
     /* Do nothing */
   }
 }
+
+#endif /* ARM_MULTILIB_ARCH_V4 */

@@ -74,9 +74,9 @@ libbsp_a_SOURCES += ../../shared/src/stackalloc.c
 
 # Startup
 libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+libbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/bspstarthook.c
-libbsp_a_SOURCES += startup/bspreset.c
 libbsp_a_SOURCES += startup/io.c
 libbsp_a_SOURCES += startup/syscon.c
 

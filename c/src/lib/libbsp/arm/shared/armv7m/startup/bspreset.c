@@ -1,16 +1,8 @@
-/**
- * @file
- *
- * @ingroup lpc176x
- *
- * @brief Reset code.
- */
-
 /*
- * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -24,20 +16,23 @@
 #include <rtems/score/armv7m.h>
 
 #include <bsp/bootcard.h>
-#include <bsp/lpc176x.h>
 #include <bsp/start.h>
 
-BSP_START_TEXT_SECTION __attribute__( ( flatten ) ) void bsp_reset( void )
+#ifdef ARM_MULTILIB_ARCH_V7M
+
+BSP_START_TEXT_SECTION __attribute__((flatten)) void bsp_reset(void)
 {
   rtems_interrupt_level level;
 
+  rtems_interrupt_local_disable(level);
   (void) level;
-  rtems_interrupt_disable( level );
 
-  _ARMV7M_SCB->aircr = ARMV7M_SCB_AIRCR_VECTKEY |
-                       ARMV7M_SCB_AIRCR_SYSRESETREQ;
+  _ARMV7M_SCB->aircr = ARMV7M_SCB_AIRCR_VECTKEY
+    | ARMV7M_SCB_AIRCR_SYSRESETREQ;
 
-  while ( true ) {
+  while (true) {
     /* Do nothing */
   }
 }
+
+#endif /* ARM_MULTILIB_ARCH_V7M */
