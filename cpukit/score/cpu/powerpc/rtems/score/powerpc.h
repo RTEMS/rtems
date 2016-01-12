@@ -72,8 +72,6 @@ extern "C" {
 #define CPU_MODEL_NAME "Generic (classic FPU)"
 #endif
 
-#define PPC_ALIGNMENT			8
-
 #ifdef __PPC_CPU_E6500__
 #define PPC_DEFAULT_CACHE_LINE_POWER 6
 #else
@@ -134,6 +132,12 @@ extern "C" {
 
 #if defined(__PPC_CPU_E6500__) && !defined(_SOFT_FLOAT)
 #define PPC_MULTILIB_FPU
+#endif
+
+#ifdef PPC_MULTILIB_ALTIVEC
+#define PPC_ALIGNMENT 16
+#else
+#define PPC_ALIGNMENT 8
 #endif
 
 /*
