@@ -29,7 +29,7 @@ extern "C" {
  */
 /**@{**/
 
-#if defined(__ARM_ARCH_7M__)
+#if defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7EM__)
   #define CPU_MODEL_NAME "ARMv7M"
   #define ARM_MULTILIB_ARCH_V7M
 #elif defined(__ARM_ARCH_6M__)
