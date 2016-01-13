@@ -42,11 +42,13 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   ARMV7M_Exception_handler *vector_table =
     (ARMV7M_Exception_handler *) bsp_vector_table_begin;
 
-  memcpy(
-    vector_table,
-    bsp_start_vector_table_begin,
-    (size_t) bsp_vector_table_size
-  );
+  if (bsp_vector_table_begin != bsp_start_vector_table_begin) {
+    memcpy(
+      vector_table,
+      bsp_start_vector_table_begin,
+      (size_t) bsp_vector_table_size
+    );
+  }
 
   for (i = BSP_INTERRUPT_VECTOR_MIN; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
     vector_table [ARMV7M_VECTOR_IRQ(i)] = _ARMV7M_NVIC_Interrupt_dispatch;
