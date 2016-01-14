@@ -121,6 +121,45 @@ BSP_START_TEXT_SECTION static inline void bsp_start_copy_sections(void)
   );
 }
 
+BSP_START_TEXT_SECTION static inline void
+bsp_start_memcpy_libc(void *dest, const void *src, size_t n)
+{
+  if (dest != src) {
+    memcpy(dest, src, n);
+  }
+}
+
+/**
+ * @brief Copies the .data, .fast_text and .fast_data sections from the load to
+ * the runtime area using the C library memcpy().
+ *
+ * Works only in case the .start, .text and .rodata sections reside in one
+ * memory region.
+ */
+BSP_START_TEXT_SECTION static inline void bsp_start_copy_sections_compact(void)
+{
+  /* Copy .data section */
+  bsp_start_memcpy_libc(
+    bsp_section_data_begin,
+    bsp_section_data_load_begin,
+    (size_t) bsp_section_data_size
+  );
+
+  /* Copy .fast_text section */
+  bsp_start_memcpy_libc(
+    bsp_section_fast_text_begin,
+    bsp_section_fast_text_load_begin,
+    (size_t) bsp_section_fast_text_size
+  );
+
+  /* Copy .fast_data section */
+  bsp_start_memcpy_libc(
+    bsp_section_fast_data_begin,
+    bsp_section_fast_data_load_begin,
+    (size_t) bsp_section_fast_data_size
+  );
+}
+
 BSP_START_TEXT_SECTION static inline void bsp_start_clear_bss(void)
 {
   memset(bsp_section_bss_begin, 0, (size_t) bsp_section_bss_size);

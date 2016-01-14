@@ -1,0 +1,59 @@
+Board support package for the Atmel SAM V71/V70/E70/S70 chip platform.
+
+The BSP is customized to a particular board/chip variant by means of configure
+command line options.
+
+Use --enable-chip=XYZ to select the chip variant where XYZ is one of same70j19,
+same70j20, same70j21, same70n19, same70n20, same70n21, same70q19, same70q20,
+same70q21, sams70j19, sams70j20, sams70j21, sams70n19, sams70n20, sams70n21,
+sams70q19, sams70q20, sams70q21, samv71j19, samv71j20, samv71j21, samv71n19,
+samv71n20, samv71n21, samv71q19, samv71q20 and samv71q21.  By default the BSP
+uses the ATSAMV71Q21 chip.  Not all variants are tested.
+
+Use BOARD_MAINOSC=XYZ to set the main oscillator frequency in Hz (default
+12MHz).
+
+Use BOARD_MCK=XYZ to set the Master Clock (MCK) frequency in Hz (default
+123MHz).  The default value enables operation of an external SDRAM, e.g. 150MHz
+would be too fast.
+
+Use ATSAM_CONSOLE_BAUD=XYZ to set the initial baud for console devices (default
+115200).
+
+Use ATSAM_CONSOLE_DEVICE_TYPE=XYZ to set the device type for /dev/console, use
+0 for USART and 1 for UART (default USART).
+
+Use ATSAM_CONSOLE_DEVICE_INDEX=XYZ to set the device index for /dev/console
+(default 1, e.g. USART1).
+
+Use ATSAM_CONSOLE_USE_INTERRUPTS=XYZ to set the use interrupt driven mode for
+console devices (used by default).
+
+Use ATSAM_MEMORY_TCM_SIZE=XYZ to set the size of tightly coupled memories (TCM)
+in bytes (default 0x00000000).
+
+Use ATSAM_MEMORY_INTFLASH_SIZE=XYZ to set the size of internal flash in bytes
+(default is derived from chip variant).
+
+Use ATSAM_MEMORY_INTSRAM_SIZE=XYZ to set the size of internal SRAM in bytes
+(default is derived from chip variant).
+
+Use ATSAM_MEMORY_SDRAM_SIZE=XYZ to set the size of external SDRAM in bytes
+(default 0x00200000).
+
+The pins may be configured by the application at link-time.  See
+<bsp/pin-config.h>.
+
+The clock driver uses the ARMv7-M Systick.
+
+The console driver supports the USART and UART devices.
+
+The default linker command file places the code into the internal flash.  Use
+"LDFLAGS += -qnolinkcmds -T linkcmds.sdram" to place the code into the external
+SDRAM.  Use "LDFLAGS += -qnolinkcmds -T linkcmds.intsram" to place the code
+into the internal SRAM.
+
+The fast text section uses the ITCM.  The fast data section uses the DTCM.
+
+Data and instruction cache are enabled during system start.  The RTEMS cache
+manager is supported with exception of the freeze functions.

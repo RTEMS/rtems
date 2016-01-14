@@ -1,0 +1,85 @@
+AC_PREREQ([2.69])
+AC_INIT([rtems-c-src-lib-libbsp-arm-atsam],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
+AC_CONFIG_SRCDIR([bsp_specs])
+RTEMS_TOP(../../../../../..)
+
+RTEMS_CANONICAL_TARGET_CPU
+AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
+RTEMS_BSP_CONFIGURE
+
+RTEMS_PROG_CC_FOR_TARGET
+RTEMS_CANONICALIZE_TOOLS
+RTEMS_PROG_CCAS
+
+RTEMS_CHECK_NETWORKING
+AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
+
+RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
+AC_ARG_ENABLE(
+[chip],
+[AS_HELP_STRING([--enable-chip],[select a chip variant (default samv71q21)])],
+[case "${enableval}" in
+  same70j19) AC_DEFINE([__SAME70J19__],[1],[chip variant]) INTFLASH=0x00080000 ; INTSRAM=0x00004000 ;;
+  same70j20) AC_DEFINE([__SAME70J20__],[1],[chip variant]) INTFLASH=0x00100000 ; INTSRAM=0x00006000 ;;
+  same70j21) AC_DEFINE([__SAME70J21__],[1],[chip variant]) INTFLASH=0x00200000 ; INTSRAM=0x00006000 ;;
+  same70n19) AC_DEFINE([__SAME70N19__],[1],[chip variant]) INTFLASH=0x00080000 ; INTSRAM=0x00004000 ;;
+  same70n20) AC_DEFINE([__SAME70N20__],[1],[chip variant]) INTFLASH=0x00100000 ; INTSRAM=0x00006000 ;;
+  same70n21) AC_DEFINE([__SAME70N21__],[1],[chip variant]) INTFLASH=0x00200000 ; INTSRAM=0x00006000 ;;
+  same70q19) AC_DEFINE([__SAME70Q19__],[1],[chip variant]) INTFLASH=0x00080000 ; INTSRAM=0x00004000 ;;
+  same70q20) AC_DEFINE([__SAME70Q20__],[1],[chip variant]) INTFLASH=0x00100000 ; INTSRAM=0x00006000 ;;
+  same70q21) AC_DEFINE([__SAME70Q21__],[1],[chip variant]) INTFLASH=0x00200000 ; INTSRAM=0x00006000 ;;
+  sams70j19) AC_DEFINE([__SAMS70J19__],[1],[chip variant]) INTFLASH=0x00080000 ; INTSRAM=0x00004000 ;;
+  sams70j20) AC_DEFINE([__SAMS70J20__],[1],[chip variant]) INTFLASH=0x00100000 ; INTSRAM=0x00006000 ;;
+  sams70j21) AC_DEFINE([__SAMS70J21__],[1],[chip variant]) INTFLASH=0x00200000 ; INTSRAM=0x00006000 ;;
+  sams70n19) AC_DEFINE([__SAMS70N19__],[1],[chip variant]) INTFLASH=0x00080000 ; INTSRAM=0x00004000 ;;
+  sams70n20) AC_DEFINE([__SAMS70N20__],[1],[chip variant]) INTFLASH=0x00100000 ; INTSRAM=0x00006000 ;;
+  sams70n21) AC_DEFINE([__SAMS70N21__],[1],[chip variant]) INTFLASH=0x00200000 ; INTSRAM=0x00006000 ;;
+  sams70q19) AC_DEFINE([__SAMS70Q19__],[1],[chip variant]) INTFLASH=0x00080000 ; INTSRAM=0x00004000 ;;
+  sams70q20) AC_DEFINE([__SAMS70Q20__],[1],[chip variant]) INTFLASH=0x00100000 ; INTSRAM=0x00006000 ;;
+  sams70q21) AC_DEFINE([__SAMS70Q21__],[1],[chip variant]) INTFLASH=0x00200000 ; INTSRAM=0x00006000 ;;
+  samv71j19) AC_DEFINE([__SAMV71J19__],[1],[chip variant]) INTFLASH=0x00080000 ; INTSRAM=0x00004000 ;;
+  samv71j20) AC_DEFINE([__SAMV71J20__],[1],[chip variant]) INTFLASH=0x00100000 ; INTSRAM=0x00006000 ;;
+  samv71j21) AC_DEFINE([__SAMV71J21__],[1],[chip variant]) INTFLASH=0x00200000 ; INTSRAM=0x00006000 ;;
+  samv71n19) AC_DEFINE([__SAMV71N19__],[1],[chip variant]) INTFLASH=0x00080000 ; INTSRAM=0x00004000 ;;
+  samv71n20) AC_DEFINE([__SAMV71N20__],[1],[chip variant]) INTFLASH=0x00100000 ; INTSRAM=0x00006000 ;;
+  samv71n21) AC_DEFINE([__SAMV71N21__],[1],[chip variant]) INTFLASH=0x00200000 ; INTSRAM=0x00006000 ;;
+  samv71q19) AC_DEFINE([__SAMV71Q19__],[1],[chip variant]) INTFLASH=0x00080000 ; INTSRAM=0x00004000 ;;
+  samv71q20) AC_DEFINE([__SAMV71Q20__],[1],[chip variant]) INTFLASH=0x00100000 ; INTSRAM=0x00006000 ;;
+  samv71q21) AC_DEFINE([__SAMV71Q21__],[1],[chip variant]) INTFLASH=0x00200000 ; INTSRAM=0x00006000 ;;
+  *) AC_MSG_ERROR([bad value ${enableval} for chip variant]) ;;
+esac],
+[AC_DEFINE([__SAMV71Q21__],[1],[chip variant]) INTFLASH=0x00200000 ; INTSRAM=0x00006000])
+
+RTEMS_BSPOPTS_SET([BOARD_MAINOSC],[*],[12000000])
+RTEMS_BSPOPTS_HELP([BOARD_MAINOSC],[Main oscillator frequency in Hz (default 12MHz)])
+
+RTEMS_BSPOPTS_SET([BOARD_MCK],[*],[123000000])
+RTEMS_BSPOPTS_HELP([BOARD_MCK],[Master Clock (MCK) frequency in Hz (default 123MHz)])
+
+RTEMS_BSPOPTS_SET([ATSAM_CONSOLE_BAUD],[*],[115200])
+RTEMS_BSPOPTS_HELP([ATSAM_CONSOLE_BAUD],[initial baud for console devices (default 115200)])
+
+RTEMS_BSPOPTS_SET([ATSAM_CONSOLE_DEVICE_TYPE],[*],[0])
+RTEMS_BSPOPTS_HELP([ATSAM_CONSOLE_DEVICE_TYPE],[device type for /dev/console, use 0 for USART and 1 for UART (default USART)])
+
+RTEMS_BSPOPTS_SET([ATSAM_CONSOLE_DEVICE_INDEX],[*],[1])
+RTEMS_BSPOPTS_HELP([ATSAM_CONSOLE_DEVICE_INDEX],[device index for /dev/console (default 1, e.g. USART1)])
+
+RTEMS_BSPOPTS_SET([ATSAM_CONSOLE_USE_INTERRUPTS],[*],[1])
+RTEMS_BSPOPTS_HELP([ATSAM_CONSOLE_USE_INTERRUPTS],[use interrupt driven mode for console devices (used by default)])
+
+AC_DEFUN([ATSAM_LINKCMD],[
+AC_ARG_VAR([$1],[$2])dnl
+[$1]=[$]{[$1]:-[$3]}
+])
+
+ATSAM_LINKCMD([ATSAM_MEMORY_TCM_SIZE],[size of tightly coupled memories (TCM) in bytes],[0x00000000])
+ATSAM_LINKCMD([ATSAM_MEMORY_INTFLASH_SIZE],[size of internal flash in bytes],[${INTFLASH}])
+ATSAM_LINKCMD([ATSAM_MEMORY_INTSRAM_SIZE],[size of internal SRAM in bytes],[${INTSRAM}])
+ATSAM_LINKCMD([ATSAM_MEMORY_SDRAM_SIZE],[size of external SDRAM in bytes],[0x00200000])
+
+AC_CONFIG_FILES([
+Makefile
+startup/linkcmds.memory
+])
+AC_OUTPUT
