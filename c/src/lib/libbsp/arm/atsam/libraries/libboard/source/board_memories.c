@@ -37,7 +37,12 @@
 /*----------------------------------------------------------------------------
  *        Headers
  *----------------------------------------------------------------------------*/
+#ifndef __rtems__
 #include "board.h"
+#else /* __rtems__ */
+#include <chip.h>
+#include <include/board_memories.h>
+#endif /* __rtems__ */
 
 /*----------------------------------------------------------------------------
  *        Exported functions
@@ -47,6 +52,7 @@
 #define SDRAM_BA1 (1 << 21)
 
 
+#ifndef __rtems__
 uint32_t BOARD_SdramValidation(uint32_t baseAddr, uint32_t size)
 {
 	uint32_t i;
@@ -135,6 +141,7 @@ uint32_t BOARD_SdramValidation(uint32_t baseAddr, uint32_t size)
 
 	return ret;
 }
+#endif /* __rtems__ */
 
 
 /**
@@ -144,12 +151,16 @@ uint32_t BOARD_SdramValidation(uint32_t baseAddr, uint32_t size)
 
 void BOARD_ConfigureSdram(void)
 {
+#ifndef __rtems__
 	const Pin pinsSdram[] = {BOARD_SDRAM_PINS};
+#endif /* __rtems__ */
 	volatile uint32_t i;
 	volatile uint8_t *pSdram = (uint8_t *) SDRAM_CS_ADDR;
 
 	/* Configure PIO */
+#ifndef __rtems__
 	PIO_Configure(pinsSdram, PIO_LISTSIZE(pinsSdram));
+#endif /* __rtems__ */
 	PMC_EnablePeripheral(ID_SDRAMC);
 	MATRIX->CCFG_SMCNFCS = CCFG_SMCNFCS_SDRAMEN;
 

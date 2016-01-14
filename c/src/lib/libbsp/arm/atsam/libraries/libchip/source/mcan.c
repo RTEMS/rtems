@@ -38,7 +38,9 @@
 /*----------------------------------------------------------------------------
  *        Headers
  *----------------------------------------------------------------------------*/
+#ifndef __rtems__
 #include "board.h"
+#endif /* __rtems__ */
 #include "chip.h"
 #include "mcan_config.h"
 #include <assert.h>
@@ -422,8 +424,10 @@
  *      Internal variables
  *---------------------------------------------------------------------------*/
 
+#ifndef __rtems__
 static const Pin pinsMcan0[] =  {PIN_MCAN0_TXD, PIN_MCAN0_RXD };
 static const Pin pinsMcan1[] =  {PIN_MCAN1_TXD, PIN_MCAN1_RXD };
+#endif /* __rtems__ */
 
 static uint32_t can0MsgRam[MCAN0_STD_FLTS_WRDS +
 						   MCAN0_EXT_FLTS_WRDS +
@@ -548,7 +552,9 @@ void MCAN_Init(const MCan_ConfigType *mcanConfig)
 	PMC->PMC_SCER = PMC_SCER_PCK5;
 
 	if (MCAN0 ==  mcan) {
+#ifndef __rtems__
 		PIO_Configure(pinsMcan0, PIO_LISTSIZE(pinsMcan0));
+#endif /* __rtems__ */
 		// Enable MCAN peripheral clock
 		PMC_EnablePeripheral(ID_MCAN0);
 		// Configure Message RAM Base Address
@@ -557,7 +563,9 @@ void MCAN_Init(const MCan_ConfigType *mcanConfig)
 							((uint32_t) mcanConfig->msgRam.pStdFilts & 0xFFFF0000);
 		mCanLine0Irq = MCAN0_IRQn;
 	} else if (MCAN1 ==  mcan) {
+#ifndef __rtems__
 		PIO_Configure(pinsMcan1, PIO_LISTSIZE(pinsMcan1));
+#endif /* __rtems__ */
 		// Enable MCAN peripheral clock
 		PMC_EnablePeripheral(ID_MCAN1);
 		// Configure Message RAM Base Address

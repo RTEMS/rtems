@@ -30,6 +30,9 @@
 #ifndef _BOARD_H_
 #define _BOARD_H_
 
+#ifdef __rtems__
+#include <bspopts.h>
+#endif /* __rtems__ */
 #if defined(BOARD_SAMV71_XULT)
 	#include "board_v71_xult.h"
 #elif defined(BOARD_SAME70_XPLD)

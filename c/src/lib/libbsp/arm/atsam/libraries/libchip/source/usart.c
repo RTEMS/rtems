@@ -68,6 +68,10 @@ void USART_SetBaudrate(Usart *pUsart,
 	/* Configure baudrate*/
 	BaudError = 10;
 	OverSamp = 0;
+#ifdef __rtems__
+	CD = 0;
+	FP = 0;
+#endif /* __rtems__ */
 
 	/*Asynchronous*/
 	if ((pUsart->US_MR & US_MR_SYNC) == 0) {

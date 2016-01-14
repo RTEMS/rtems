@@ -47,6 +47,9 @@
  *----------------------------------------------------------------------------*/
 
 #include "chip.h"
+#ifdef __rtems__
+#include "../../../utils/utility.h"
+#endif /* __rtems__ */
 
 /*----------------------------------------------------------------------------
  *        Definitions
@@ -555,10 +558,11 @@ uint32_t QSPID_ReadWriteQSPI(QspiDma_t *pQspidma, Access_t const ReadWrite)
 	if (ReadWrite == WriteAccess) {
 		chanNum =  pQspidma->TxChNum;
 		SCB_CleanDCache_by_Addr((uint32_t *)pBuffer->pDataTx, pBuffer->TxDataSize);
-	} else if (ReadWrite == ReadAccess)
+	} else {
+		if (ReadWrite != ReadAccess)
+			TRACE_ERROR("%s QSPI Access Error\n\r", __FUNCTION__);
 		chanNum =  pQspidma->RxChNum;
-	else
-		TRACE_ERROR("%s QSPI Access Error\n\r", __FUNCTION__);
+	}
 
 	/* Start DMA 0(RX) && 1(TX) */
 	if (XDMAD_StartTransfer(pQspidma->pXdmad, chanNum))

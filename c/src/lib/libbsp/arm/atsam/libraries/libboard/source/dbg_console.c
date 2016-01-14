@@ -38,7 +38,12 @@
  *        Headers
  *----------------------------------------------------------------------------*/
 
+#ifndef __rtems__
 #include "board.h"
+#else /* __rtems__ */
+#include <chip.h>
+#include <include/dbg_console.h>
+#endif /* __rtems__ */
 
 #include <stdio.h>
 #include <stdint.h>
@@ -50,6 +55,7 @@
 /** Console baud rate always using 115200. */
 
 
+#ifndef __rtems__
 #define CONSOLE_BAUDRATE    115200
 
 /** EDBG used USART1 as the console, but LON support on USART1 only */
@@ -102,14 +108,58 @@
 
 #define CONSOLE_ID        ID_USART1
 #endif
+#else /* __rtems__ */
+#define CONSOLE_BAUDRATE ATSAM_CONSOLE_BAUD
+#if ATSAM_CONSOLE_DEVICE_TYPE == 1
+  #define CONSOLE_ON_UART
+  #if ATSAM_CONSOLE_DEVICE_INDEX == 4
+    #define CONSOLE_UART UART4
+    #define CONSOLE_ID ID_UART4
+  #elif ATSAM_CONSOLE_DEVICE_INDEX == 3
+    #define CONSOLE_UART UART3
+    #define CONSOLE_ID ID_UART3
+  #elif ATSAM_CONSOLE_DEVICE_INDEX == 2
+    #define CONSOLE_UART UART2
+    #define CONSOLE_ID ID_UART2
+  #elif ATSAM_CONSOLE_DEVICE_INDEX == 1
+    #define CONSOLE_UART UART1
+    #define CONSOLE_ID ID_UART1
+  #else
+    #define CONSOLE_UART UART0
+    #define CONSOLE_ID ID_UART0
+  #endif
+#else
+  #define CONSOLE_ON_USART
+  #if ATSAM_CONSOLE_DEVICE_INDEX == 4
+    #define CONSOLE_Usart USART4
+    #define CONSOLE_ID ID_USART4
+  #elif ATSAM_CONSOLE_DEVICE_INDEX == 3
+    #define CONSOLE_Usart USART3
+    #define CONSOLE_ID ID_USART3
+  #elif ATSAM_CONSOLE_DEVICE_INDEX == 2
+    #define CONSOLE_Usart USART2
+    #define CONSOLE_ID ID_USART2
+  #elif ATSAM_CONSOLE_DEVICE_INDEX == 1
+    #define CONSOLE_Usart USART1
+    #define CONSOLE_ID ID_USART1
+  #else
+    #define CONSOLE_Usart USART0
+    #define CONSOLE_ID ID_USART0
+  #endif
+#endif
+#endif /* __rtems__ */
 
 
 /*----------------------------------------------------------------------------
  *        Variables
  *----------------------------------------------------------------------------*/
 
+#ifndef __rtems__
 /** Is Console Initialized. */
 static uint8_t _ucIsConsoleInitialized = 0;
+#else /* __rtems__ */
+#define _ucIsConsoleInitialized 1
+#endif /* __rtems__ */
 
 /**
  * \brief Configures an USART peripheral with the specified parameters.
@@ -120,11 +170,15 @@ static uint8_t _ucIsConsoleInitialized = 0;
 extern void DBG_Configure(uint32_t baudrate, uint32_t masterClock)
 {
 
+#ifndef __rtems__
 	const Pin pPins[] = CONSOLE_PINS;
+#endif /* __rtems__ */
 #if defined CONSOLE_ON_UART
 	Uart *pUart = CONSOLE_UART;
 	/* Configure PIO */
+#ifndef __rtems__
 	PIO_Configure(pPins, PIO_LISTSIZE(pPins));
+#endif /* __rtems__ */
 
 	// Reset & disable receiver and transmitter, disable interrupts
 	pUart->UART_CR = UART_CR_RSTRX | UART_CR_RSTTX | UART_CR_RSTSTA;
@@ -142,10 +196,12 @@ extern void DBG_Configure(uint32_t baudrate, uint32_t masterClock)
 #if defined CONSOLE_ON_USART
 	Usart *pUsart = CONSOLE_Usart;
 	// Disable the MATRIX registers write protection
+#ifndef __rtems__
 	MATRIX->MATRIX_WPMR  = MATRIX_WPMR_WPKEY_PASSWD;
 	MATRIX->CCFG_SYSIO |= CCFG_SYSIO_SYSIO4;
 
 	PIO_Configure(pPins, PIO_LISTSIZE(pPins));
+#endif /* __rtems__ */
 
 	// Reset & disable receiver and transmitter, disable interrupts
 	pUsart->US_CR = US_CR_RSTRX | US_CR_RSTTX | US_CR_RSTSTA;
@@ -161,12 +217,14 @@ extern void DBG_Configure(uint32_t baudrate, uint32_t masterClock)
 	// Enable receiver and transmitter
 	pUsart->US_CR = US_CR_RXEN | US_CR_TXEN;
 #endif
+#ifndef __rtems__
 	_ucIsConsoleInitialized = 1;
 
 	/* Disable buffering for printf(). */
 #if (defined (__GNUC__) && !defined (__SAMBA__))
 	setvbuf(stdout, (char *)NULL, _IONBF, 0);
 #endif
+#endif /* __rtems__ */
 }
 
 /**
@@ -269,6 +327,7 @@ extern uint32_t DBG_IsRxReady(void)
 #endif
 }
 
+#ifndef __rtems__
 /**
  *  Displays the content of the given frame on the UART0.
  *
@@ -502,3 +561,4 @@ extern WEAK char *gets(char *ptr)
 }
 
 
+#endif /* __rtems__ */

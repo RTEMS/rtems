@@ -27,7 +27,11 @@
 /* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                           */
 /* ---------------------------------------------------------------------------- */
 
+#ifndef __rtems__
 #include "samv71.h"
+#else /* __rtems__ */
+#include <chip.h>
+#endif /* __rtems__ */
 
 /* @cond 0 */
 /**INDENT-OFF**/
@@ -41,7 +45,7 @@ extern "C" {
 	/* Clock Settings (600MHz PLL VDDIO 3.3V and VDDCORE 1.2V) */
 	/* Clock Settings (300MHz HCLK, 150MHz MCK)=> PRESC = 2, MDIV = 2 */
 #define SYS_BOARD_OSCOUNT   (CKGR_MOR_MOSCXTST(0x8U))
-#ifdef MCK_123MHZ
+#if BOARD_MCK == 123000000
 	/* For example usb_video, PLLA/HCLK/MCK clock is set to 492/246/123MHz to achieve
 	   the maximum performance, for other examples the clock is set to 300/300/150MHz */
 	#define SYS_BOARD_PLLAR     (CKGR_PLLAR_ONE | CKGR_PLLAR_MULA(0x28U) | \
@@ -50,16 +54,20 @@ extern "C" {
 #define SYS_BOARD_MCKR_MDIV (PMC_MCKR_MDIV_PCK_DIV2)
 	#define SYS_BOARD_MCKR      (PMC_MCKR_PRES_CLK_2 | PMC_MCKR_CSS_PLLA_CLK \
 								 | SYS_BOARD_MCKR_MDIV)
-#else
+#elif BOARD_MCK == 150000000
 	#define SYS_BOARD_PLLAR     (CKGR_PLLAR_ONE | CKGR_PLLAR_MULA(0x18U) | \
 								 CKGR_PLLAR_PLLACOUNT(0x3fU) | CKGR_PLLAR_DIVA(0x1U))
 
 #define SYS_BOARD_MCKR_MDIV (PMC_MCKR_MDIV_PCK_DIV2)
 	#define SYS_BOARD_MCKR      (PMC_MCKR_PRES_CLK_1 | PMC_MCKR_CSS_PLLA_CLK \
 								 | SYS_BOARD_MCKR_MDIV)
+#else
+	#error "unexpected Main Clock (MCK) frequency"
 #endif
 
+#ifndef __rtems__
 	uint32_t SystemCoreClock = CHIP_FREQ_MAINCK_RC_4MHZ;
+#endif /* __rtems__ */
 #define USBCLK_DIV          10
 
 	/**
@@ -131,9 +139,12 @@ extern "C" {
 	while (!(PMC->PMC_SR & PMC_SR_MCKRDY)) {
 	}
 
+#ifndef __rtems__
 	SystemCoreClock = CHIP_FREQ_CPU_MAX;
+#endif /* __rtems__ */
 }
 
+#ifndef __rtems__
 void SystemCoreClockUpdate(void)
 {
 	/* Determine clock frequency according to clock register values */
@@ -213,6 +224,7 @@ void SystemCoreClockUpdate(void)
 	else
 		SystemCoreClock >>= ((PMC->PMC_MCKR & PMC_MCKR_PRES_Msk) >> PMC_MCKR_PRES_Pos);
 }
+#endif /* __rtems__ */
 /**
  * Initialize flash.
  */

@@ -74,7 +74,9 @@
 
 #include "chip.h"
 
+#ifndef __rtems__
 #include <../../../../utils/utility.h>
+#endif /* __rtems__ */
 #include <stdint.h>
 
 /*------------------------------------------------------------------------------

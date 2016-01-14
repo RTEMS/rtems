@@ -62,6 +62,9 @@
  *----------------------------------------------------------------------------*/
 
 #include "chip.h"
+#ifdef __rtems__
+#include "../../../utils/utility.h"
+#endif /* __rtems__ */
 #include <assert.h>
 static uint8_t xDmad_Initialized = 0;
 

@@ -110,9 +110,11 @@
 #include "include/image_sensor_inf.h"
 #include "include/iso7816_4.h"
 
+#ifndef __rtems__
 #if defined (__GNUC__)
 	#include "include/syscalls.h"
 #endif
+#endif /* __rtems__ */
 /*----------------------------------------------------------------------------
  *        Definitions
  *----------------------------------------------------------------------------*/
@@ -129,6 +131,7 @@
 /** Name of the board */
 #define BOARD_NAME "SAM V71 Xplained Ultra"
 #define NO_PUSHBUTTON
+#ifndef __rtems__
 /*----------------------------------------------------------------------------*/
 /**
  *  \page samv7_Xplained_ultra_opfreq "SAM V71 Xplained Ultra - Operating frequencies"
@@ -150,6 +153,7 @@
 #else
 	#define BOARD_MCK    150000000
 #endif
+#endif /* __rtems__ */
 
 #if (BOARD_MCK==123000000)
 

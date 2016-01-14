@@ -30,6 +30,9 @@
 #ifndef _SAMV71_
 #define _SAMV71_
 
+#ifdef __rtems__
+#include <bspopts.h>
+#endif /* __rtems__ */
 #if defined __SAMV71J19__
   #include "samv71j19.h"
 #elif defined __SAMV71J20__

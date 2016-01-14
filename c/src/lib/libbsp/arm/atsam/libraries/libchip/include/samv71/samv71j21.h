@@ -339,6 +339,7 @@ void XDMAC_Handler      ( void );
 #include "component/component_xdmac.h"
 /*@}*/
 
+#ifndef __rtems__
 /* ************************************************************************** */
 /*   REGISTER ACCESS DEFINITIONS FOR SAMV71J21 */
 /* ************************************************************************** */
@@ -394,6 +395,7 @@ void XDMAC_Handler      ( void );
 #include "instance/instance_uart3.h"
 #include "instance/instance_uart4.h"
 /*@}*/
+#endif /* __rtems__ */
 
 /* ************************************************************************** */
 /*   PERIPHERAL ID DEFINITIONS FOR SAMV71J21 */

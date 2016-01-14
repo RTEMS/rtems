@@ -70,7 +70,11 @@
  *         Headers
  *-----------------------------------------------------------------------------*/
 
+#ifndef __rtems__
 #include "board.h"
+#else /* __rtems__ */
+#include <chip.h>
+#endif /* __rtems__ */
 
 #include <assert.h>
 

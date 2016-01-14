@@ -37,7 +37,12 @@
  *        Headers
  *----------------------------------------------------------------------------*/
 
+#ifndef __rtems__
 #include "board.h"
+#else /* __rtems__ */
+#include <chip.h>
+#include <include/board_lowlevel.h>
+#endif /* __rtems__ */
 
 
 #if defined(ENABLE_TCM) && defined(__GNUC__)

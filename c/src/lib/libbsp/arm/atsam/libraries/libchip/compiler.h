@@ -30,12 +30,41 @@
 #ifndef _COMPILER_H_
 #define _COMPILER_H_
 
+#ifdef __rtems__
+#include <bspopts.h>
+#endif /* __rtems__ */
 /*
  * Peripherals registers definitions
  */
-#if defined(__SAMV71Q21__)
+#if defined __SAMV71J19__ \
+	|| defined __SAMV71J20__ \
+	|| defined __SAMV71J21__ \
+	|| defined __SAMV71N19__ \
+	|| defined __SAMV71N20__ \
+	|| defined __SAMV71N21__ \
+	|| defined __SAMV71Q19__ \
+	|| defined __SAMV71Q20__ \
+	|| defined __SAMV71Q21__
 	#include "include/samv71/samv71.h"
-#elif defined(__SAME70Q21__)
+#elif defined __SAMS70J19__ \
+	|| defined __SAMS70J20__ \
+	|| defined __SAMS70J21__ \
+	|| defined __SAMS70N19__ \
+	|| defined __SAMS70N20__ \
+	|| defined __SAMS70N21__ \
+	|| defined __SAMS70Q19__ \
+	|| defined __SAMS70Q20__ \
+	|| defined __SAMS70Q21__
+	#include "include/sams70/sams70.h"
+#elif defined __SAME70J19__ \
+	|| defined __SAME70J20__ \
+	|| defined __SAME70J21__ \
+	|| defined __SAME70N19__ \
+	|| defined __SAME70N20__ \
+	|| defined __SAME70N21__ \
+	|| defined __SAME70Q19__ \
+	|| defined __SAME70Q20__ \
+	|| defined __SAME70Q21__
 	#include "include/same70/same70.h"
 #else
 	#error "please define correct macro for the chip first!"
