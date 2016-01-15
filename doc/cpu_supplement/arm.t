@@ -73,6 +73,9 @@ with hard-float ABI VFP-D16 support
 integer division (SDIV/UDIV)
 @item @code{thumb/armv7-m/fpv4-sp-d16}: ARMv7-M, Thumb-2 instruction set with
 hardware integer division (SDIV/UDIV) and hard-float ABI FPv4-SP support
+@item @code{thumb/cortex-m7/fpv5-d16}: ARMv7M, Thumb-2 instruction set
+optimized for Cortex-M7 with hard-float ABI VFP-D16 support and support for the
+64-bit floating point unit
 @item @code{eb/thumb/armv7-r}: ARMv7-R, Big-endian Thumb-2 instruction set
 @item @code{eb/thumb/armv7-r/vfpv3-d16/hard}: ARMv7-R, Big-endian Thumb-2
 instruction set with hard-float ABI VFP-D16 support
@@ -82,15 +85,17 @@ Multilib 1. and 2. support the standard ARM7TDMI and ARM926EJ-S targets.
 
 Multilib 3. supports the Cortex-M0 and Cortex-M1 cores.
 
-Multilib 8. supports the Cortex-M3 and Cortex-M4 cores, which have a special
-hardware integer division instruction (this is not present in the A and R
-profiles).
+Multilib 8. supports the Cortex-M3, Cortex-M4 and Cortex-M7 cores, which have a
+special hardware integer division instruction (this is not present in the A and
+R profiles).
 
 Multilib 9. supports the Cortex-M4 cores with a floating point unit.
 
+Multilib 10. supports the Cortex-M7 core with a floating point unit.
+
 Multilib 4. and 5. support the Cortex-A processors.
 
-Multilib 6., 7., 10. and 11. support the Cortex-R processors.  Here also
+Multilib 6., 7., 11. and 12. support the Cortex-R processors.  Here also
 big-endian variants are available.
 
 Use for example the following GCC options
