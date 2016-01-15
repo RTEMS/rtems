@@ -467,6 +467,10 @@ static void test_interrupt_body(void)
    */
   puts( "interrupt is in progress (use body)" );
   in_isr = rtems_interrupt_is_in_progress();
+
+  puts( "interrupt enable (use body)" );
+  rtems_interrupt_enable( level );
+
   if ( in_isr ) {
     puts( "interrupt reported to be is in progress (body)" );
     rtems_test_exit( 0 );
