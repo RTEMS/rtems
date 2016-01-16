@@ -1,4 +1,4 @@
-*** TEST 37 ***
+*** BEGIN OF TEST SP 37 ***
 clock_tick from task level
 Blocking task... suspending self
 clock_tick from task level with preempt -- OK
@@ -6,15 +6,16 @@ interrupt is in progress (use body)
 interrupt disable (use inline)
 interrupt flash (use inline)
 interrupt enable (use inline)
-interrupt level attribute (use inline)
+interrupt level mode (use inline)
 test case working..
-interrupt is in progress (use body)
 interrupt disable (use body)
 interrupt disable (use body)
 interrupt flash (use body)
 interrupt enable (use body)
-interrupt level attribute (use body)
+interrupt level mode (use body)
 test seems to work
+interrupt is in progress (use body)
+interrupt enable (use body)
 isr_in_progress(inline) from ISR -- OK
 isr_in_progress(body) from ISR -- OK
-*** END OF TEST 37 ***
+*** END OF TEST SP 37 ***

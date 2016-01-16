@@ -5,10 +5,10 @@
  */
 
 /*
- * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
+ * Copyright (c) 2011, 2016 Sebastian Huber.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -23,6 +23,7 @@
 #endif
 
 #include <rtems/score/armv7m.h>
+#include <rtems/rtems/cache.h>
 
 #ifdef ARM_MULTILIB_ARCH_V7M
 
@@ -33,6 +34,14 @@ void _ARMV7M_Set_exception_handler(
 {
   if ( _ARMV7M_SCB->vtor [index] != handler ) {
     _ARMV7M_SCB->vtor [index] = handler;
+    rtems_cache_flush_multiple_data_lines(
+      &_ARMV7M_SCB->vtor [index],
+      sizeof(_ARMV7M_SCB->vtor [index])
+    );
+    rtems_cache_invalidate_multiple_instruction_lines(
+      &_ARMV7M_SCB->vtor [index],
+      sizeof(_ARMV7M_SCB->vtor [index])
+    );
   }
 }
 

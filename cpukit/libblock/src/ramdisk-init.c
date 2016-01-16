@@ -36,7 +36,7 @@ ramdisk *ramdisk_allocate(
   bool trace
 )
 {
-  struct ramdisk *rd = malloc(sizeof(struct ramdisk));
+  struct ramdisk *rd = calloc(1, sizeof(*rd));
 
   if (rd == NULL) {
     return NULL;
