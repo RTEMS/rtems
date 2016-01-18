@@ -438,26 +438,27 @@ extern bool rtems_interrupt_is_in_progress(void);
 static void test_interrupt_body(void)
 {
 #if !defined(RTEMS_SMP)
-  rtems_interrupt_level level;
+  rtems_interrupt_level level_0;
+  rtems_interrupt_level level_1;
   rtems_mode            level_mode_body;
   rtems_mode            level_mode_macro;
   bool                  in_isr;
 
   puts( "interrupt disable (use body)" );
-  level = rtems_interrupt_disable();
+  level_0 = rtems_interrupt_disable();
 
   puts( "interrupt disable (use body)" );
-  level = rtems_interrupt_disable();
+  level_1 = rtems_interrupt_disable();
 
   puts( "interrupt flash (use body)" );
-  rtems_interrupt_flash( level );
+  rtems_interrupt_flash( level_1 );
 
   puts( "interrupt enable (use body)" );
-  rtems_interrupt_enable( level );
+  rtems_interrupt_enable( level_1 );
 
   puts( "interrupt level mode (use body)" );
-  level_mode_body = rtems_interrupt_level_body( level );
-  level_mode_macro = RTEMS_INTERRUPT_LEVEL(level);
+  level_mode_body = rtems_interrupt_level_body( level_0 );
+  level_mode_macro = RTEMS_INTERRUPT_LEVEL( level_0 );
   if ( level_mode_macro == level_mode_body ) {
     puts("test seems to work");
   }
@@ -469,7 +470,7 @@ static void test_interrupt_body(void)
   in_isr = rtems_interrupt_is_in_progress();
 
   puts( "interrupt enable (use body)" );
-  rtems_interrupt_enable( level );
+  rtems_interrupt_enable( level_0 );
 
   if ( in_isr ) {
     puts( "interrupt reported to be is in progress (body)" );
