@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2014.
+ *  COPYRIGHT (c) 1989-2014,2016.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -102,19 +102,14 @@ rtems_status_code rtems_task_create(
 #endif
 
   /*
-   *  Make sure system is MP if this task is global
-   */
-
-  /*
    *  Allocate the thread control block and -- if the task is global --
    *  allocate a global object control block.
    *
    *  NOTE:  This routine does not use the combined allocate and open
-   *         global object routine because this results in a lack of
-   *         control over when memory is allocated and can be freed in
-   *         the event of an error.
+   *         global object routine (_Objects_MP_Allocate_and_open) because
+   *         this results in a lack of control over when memory is allocated
+   *         and can be freed in the event of an error.
    */
-
   the_thread = _RTEMS_tasks_Allocate();
 
   if ( !the_thread ) {
