@@ -70,10 +70,10 @@ static inline bool arm_errata_is_applicable_processor_errata_764369(void)
     case ARM_RELEASE_ID_R2_P2:
     case ARM_RELEASE_ID_R2_P0:
       is_applicable = true;
-    break;
+      break;
     default:
       is_applicable = false;
-    break;
+      break;
   }
 
   return is_applicable;
@@ -105,9 +105,10 @@ static inline bool arm_errata_is_applicable_processor_errata_775420(void)
     case ARM_RELEASE_ID_R2_P3:
     case ARM_RELEASE_ID_R2_P2:
       is_applicable = true;
+      break;
     default:
       is_applicable = false;
-    break;
+      break;
   }
 
   return is_applicable;
