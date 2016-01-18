@@ -194,8 +194,7 @@ libposix_a_SOURCES += src/pspin.c src/pspindestroy.c src/pspininit.c \
     src/pspinunlock.c
 
 ## TIME_C_FILES
-libposix_a_SOURCES += src/adjtime.c \
-    src/clockgetcpuclockid.c src/clockgetenableattr.c src/clocksetenableattr.c
+libposix_a_SOURCES += src/adjtime.c src/clockgetcpuclockid.c
 
 ## TIMER_C_FILES
 libposix_a_SOURCES += src/ptimer.c src/timercreate.c src/timerdelete.c \
