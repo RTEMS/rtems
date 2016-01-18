@@ -49,6 +49,7 @@ The following floating point units are supported.
 @item VFPv3-D32/NEON (for example available on Cortex-A processors)
 @item VFPv3-D16 (for example available on Cortex-R processors)
 @item FPv4-SP-D16 (for example available on Cortex-M processors)
+@item FPv5-D16 (for example available the Cortex-M7 processor)
 
 @end itemize
 
