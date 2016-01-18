@@ -20,7 +20,7 @@
  * - obtain status information on a period
  */
 
-/* COPYRIGHT (c) 1989-2009.
+/* COPYRIGHT (c) 1989-2009, 2016.
  * On-Line Applications Research Corporation (OAR).
  *
  * The license and distribution terms for this file may be
@@ -46,15 +46,14 @@ extern "C" {
  *
  *  @ingroup ClassicRTEMS
  *
- *  This encapsulates functionality related to the
- *  Classic API Rate Monotonic Manager.
+ *  This encapsulates functionality related to the Classic API Rate
+ *  Monotonic Manager.
  *
  *  Statistics are kept for each period and can be obtained or printed via
  *  API calls.  The statistics kept include minimum, maximum and average times
- *  for both cpu usage and wall time.  The statistics indicate the execution time
- *  used by the owning thread between successive calls to rtems_rate_monotonic_period.
- *
- *  Rate Monotonic Manager -- Reset Statistics for All Periods
+ *  for both cpu usage and wall time.  The statistics indicate the execution
+ *  and wall time used by the owning thread between successive calls to
+ *  rtems_rate_monotonic_period.
  */
 /**@{*/
 
