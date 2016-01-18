@@ -84,7 +84,6 @@ rtems_task Init(
 
 /* include an extra slot for registering the termios one dynamically */
 #define CONFIGURE_MAXIMUM_DRIVERS 3
-#define CONFIGURE_MAXIMUM_DEVICES 10
 
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
@@ -92,6 +91,9 @@ rtems_task Init(
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+/* Make sure that we have enough devices for all BSPs */
+#define CONFIGURE_MAXIMUM_DEVICES 64
 
 #define CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
 

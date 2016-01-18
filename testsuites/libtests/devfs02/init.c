@@ -99,6 +99,9 @@ rtems_task Init(
 
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
+/* Make sure that we have enough devices for all BSPs */
+#define CONFIGURE_MAXIMUM_DEVICES 64
+
 #define CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
 
 #define CONFIGURE_INIT
