@@ -22,7 +22,7 @@
  */
 
 /*
- * COPYRIGHT (c) 1989-2008.
+ * COPYRIGHT (c) 1989-2008, 2016.
  * On-Line Applications Research Corporation (OAR).
  *
  * The license and distribution terms for this file may be
@@ -107,8 +107,6 @@ typedef struct {
  *  the semaphore is count.  The attribute_set determines if
  *  the semaphore is global or local and the thread queue
  *  discipline.  It returns the id of the created semaphore in ID.
- *
- *  Semaphore Manager
  */
 rtems_status_code rtems_semaphore_create(
   rtems_name           name,
