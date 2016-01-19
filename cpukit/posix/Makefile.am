@@ -61,9 +61,7 @@ libposix_a_SOURCES += src/aio_cancel.c src/aio_error.c src/aio_fsync.c \
     src/aio_read.c src/aio_return.c src/aio_suspend.c src/aio_write.c \
     src/lio_listio.c src/aio_misc.c
 
-## ENOSYS_C_FILES
-libposix_a_SOURCES += src/_execve.c src/execl.c src/execle.c src/execlp.c \
-    src/execv.c src/execve.c src/execvp.c
+libposix_a_SOURCES += src/_execve.c
 endif
 
 libposix_a_SOURCES += src/fork.c src/vfork.c
