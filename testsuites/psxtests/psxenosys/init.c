@@ -67,14 +67,6 @@ void *POSIX_Init(
   sc = clock_getcpuclockid( 0, NULL );
   check_enosys( sc );
 
-  puts( "clock_getenable_attr -- ENOSYS" );
-  sc = clock_getenable_attr( 0, NULL );
-  check_enosys( sc );
-
-  puts( "clock_setenable_attr -- ENOSYS" );
-  sc = clock_setenable_attr( 0, 0 );
-  check_enosys( sc );
-
   puts( "execl -- ENOSYS" );
   sc = execl( NULL, NULL, (char*)0 );
   check_enosys( sc );

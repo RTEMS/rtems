@@ -21,8 +21,6 @@ directives:
   aio_suspend
   aio_fsync
   clock_getcpuclockid
-  clock_getenable_attr
-  clock_setenable_attr
   execl
   execle
   execlp

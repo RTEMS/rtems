@@ -1,9 +1,7 @@
-*** POSIX TEST -- ENOSYS ***
+*** BEGIN OF TEST PSXENOSYS ***
 lio_listio -- ENOSYS
 aio_suspend -- ENOSYS
 clock_getcpuclockid -- ENOSYS
-clock_getenable_attr -- ENOSYS
-clock_setenable_attr -- ENOSYS
 execl -- ENOSYS
 execle -- ENOSYS
 execlp -- ENOSYS
@@ -21,4 +19,4 @@ wait -- ENOSYS
 waitpid -- ENOSYS
 mprotect -- stub implementation - OK
 vfork -- stub implementation - OK
-*** END OF POSIX TEST ENOSYS ***
+*** END OF TEST PSXENOSYS ***
