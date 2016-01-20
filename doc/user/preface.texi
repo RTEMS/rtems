@@ -148,7 +148,6 @@ It has been ported to the following processor families:
 @itemize @bullet
 @item Altera NIOS II
 @item Analog Devices Blackfin
-@item Atmel AVR
 @item ARM
 @item Freescale (formerly Motorola) MC68xxx 
 @item Freescale (formerly Motorola) MC683xx

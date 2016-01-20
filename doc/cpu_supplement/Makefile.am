@@ -13,7 +13,6 @@ REPLACE2 = $(PERL) $(top_srcdir)/tools/word-replace2
 GENERATED_FILES =
 GENERATED_FILES += general.texi
 GENERATED_FILES += arm.texi
-GENERATED_FILES += avr.texi
 GENERATED_FILES += bfin.texi
 GENERATED_FILES += epiphany.texi
 GENERATED_FILES += i386.texi
@@ -47,11 +46,6 @@ general.texi: general.t
 	    -n "" < $< > $@
 
 arm.texi: arm.t
-	$(BMENU2) -p "" \
-	    -u "Top" \
-	    -n "" < $< > $@
-
-avr.texi: avr.t
 	$(BMENU2) -p "" \
 	    -u "Top" \
 	    -n "" < $< > $@

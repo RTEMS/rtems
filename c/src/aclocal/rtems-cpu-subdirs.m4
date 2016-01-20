@@ -10,7 +10,6 @@ AC_DEFUN([RTEMS_CPU_SUBDIRS],
 [
 ## EDIT: If adding a new cpu to RTEMS, add it to the case block below.
 case $RTEMS_CPU in
-_RTEMS_CPU_SUBDIR([arm],[$1]);;
 _RTEMS_CPU_SUBDIR([bfin],[$1]);;
 _RTEMS_CPU_SUBDIR([epiphany],[$1]);;
 _RTEMS_CPU_SUBDIR([avr],[$1]);;
