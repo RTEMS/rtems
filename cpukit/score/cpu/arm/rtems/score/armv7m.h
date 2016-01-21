@@ -75,6 +75,30 @@ typedef struct {
 } ARMV7M_Exception_frame;
 
 typedef struct {
+  uint32_t comp;
+  uint32_t mask;
+  uint32_t function;
+  uint32_t reserved;
+} ARMV7M_DWT_comparator;
+
+typedef struct {
+#define ARMV7M_DWT_CTRL_NOCYCCNT (1U << 25)
+#define ARMV7M_DWT_CTRL_CYCCNTENA (1U << 0)
+  uint32_t ctrl;
+  uint32_t cyccnt;
+  uint32_t cpicnt;
+  uint32_t exccnt;
+  uint32_t sleepcnt;
+  uint32_t lsucnt;
+  uint32_t foldcnt;
+  uint32_t pcsr;
+  ARMV7M_DWT_comparator comparator[249];
+  uint32_t reserved_e0001fb0[1];
+  uint32_t lar;
+  uint32_t lsr;
+} ARMV7M_DWT;
+
+typedef struct {
   uint32_t cpuid;
 
 #define ARMV7M_SCB_ICSR_NMIPENDSET (1U << 31)
@@ -323,6 +347,7 @@ typedef struct {
     0 \
   }
 
+#define ARMV7M_DWT_BASE 0xe0001000
 #define ARMV7M_SCS_BASE 0xe000e000
 #define ARMV7M_ICTAC_BASE (ARMV7M_SCS_BASE + 0x0)
 #define ARMV7M_SYSTICK_BASE (ARMV7M_SCS_BASE + 0x10)
@@ -330,6 +355,8 @@ typedef struct {
 #define ARMV7M_SCB_BASE (ARMV7M_SCS_BASE + 0xd00)
 #define ARMV7M_MPU_BASE (ARMV7M_SCS_BASE + 0xd90)
 
+#define _ARMV7M_DWT \
+  ((volatile ARMV7M_DWT *) ARMV7M_DWT_BASE)
 #define _ARMV7M_ICTAC \
   ((volatile ARMV7M_ICTAC *) ARMV7M_ICTAC_BASE)
 #define _ARMV7M_SCB \
