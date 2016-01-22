@@ -8,6 +8,7 @@
 #define kzalloc(x, y) calloc(1, x)
 #define kmalloc(x, y) malloc(x)
 #define kfree(x) free(x)
+#define kvfree(x) free(x)
 #define vmalloc(x) malloc(x)
 #define vfree(x) free(x)
 
