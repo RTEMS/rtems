@@ -34,8 +34,6 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([mvme162]);;
   mvme167 )
     AC_CONFIG_SUBDIRS([mvme167]);;
-  ods68302 )
-    AC_CONFIG_SUBDIRS([ods68302]);;
   uC5282 )
     AC_CONFIG_SUBDIRS([uC5282]);;
   *)

@@ -81,11 +81,6 @@ The following persons/organizations have made contributions:
   performance issues and licensing concerns, Eric followed this up
   by replacing the KA9Q TCP/IP stack with a port of the FreeBSD stack.
 
-+ Chris Johns (cjohns@plessey.com.au) submitted the ods68302 BSP which
-  offers easier configuration than its counterpart gen68302.  Chris
-  also submitted the RTEMS++ C++ class library and test code for
-  that library.
-
 + Katsutoshi Shibuya (shibuya@mxb.meshnet.or.jp) of BU-Denken Co., Ltd. 
   (Sapporo, Japan) submitted the extended console driver for the 
   MVME162LX BSP and the POSIX tcsetattr() and tcgetattr() routines.
