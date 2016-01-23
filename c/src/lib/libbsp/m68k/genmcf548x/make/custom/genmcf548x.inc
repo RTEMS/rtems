@@ -13,6 +13,9 @@ CPU_CFLAGS = -mcfv4e -Wa,-memac
 
 # optimize flag: typically -O2
 CFLAGS_OPTIMIZE_V = -O2 -g -fomit-frame-pointer 
+CFLAGS_OPTIMIZE_V += -ffunction-sections -fdata-sections
+
+LDFLAGS = -Wl,--gc-sections
 
 define bsp-post-link
 	$(OBJCOPY) -O binary --strip-all $(basename $@)$(EXEEXT) \
