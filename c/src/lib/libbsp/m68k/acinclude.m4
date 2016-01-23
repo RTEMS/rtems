@@ -12,8 +12,6 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([gen68360]);;
   genmcf548x )
     AC_CONFIG_SUBDIRS([genmcf548x]);;
-  idp )
-    AC_CONFIG_SUBDIRS([idp]);;
   mcf5206elite )
     AC_CONFIG_SUBDIRS([mcf5206elite]);;
   mcf52235 )
