@@ -13,28 +13,6 @@ The following persons/organizations have made contributions:
   Scientific Association submitted the BSP and other miscellaneous support
   for the Motorola MVME162 (M68040LC CPU) VMEbus single board computer.
 
-+ Greg Allen of Division Inc. of Chapel Hill, NC for 
-  porting RTEMS to HP-UX.  This port treats a UNIX computer as simply
-  another RTEMS target processor.  This port can be used to develop 
-  and test code which will ultimately run on the embedded platform.
-
-+ Doug McBride (mcbride@rodin.colorado.edu) of the Colorado Space Grant
-  College at the University of Colorado at Boulder submitted the BSP
-  for the Motorola IDP board (M68EC040 CPU) single board computer.  The
-  BSP leverages heavily off of the existing RTEMS BSP framework, the
-  examples in the back of the IDP user's manual, and the libgloss example
-  support for the IDP board from the newlib/libgloss distribution.
-
-+ Bryce Cogswell (cogswell@cs.uoregon.edu) submitted the support for MS-DOS 
-  as a development environment as well as djgpp/go32 as a target environment.
-
-+ Andy Bray (andy@chaos.org.uk) of I-CUBED Ltd. in Cambridge U.K.
-  for porting RTEMS to the PowerPC.  This effort included support for the
-  IBM 403 as well as the Motorola 601, 603, and 604 variants.  A special
-  thanks to Dom Latter (dom@i-cubed.demon.co.uk) for being an RTEMS
-  evangelist and promoting the use of RTEMS both at I-CUBED Ltd. as well  
-  as within the Internet community as a whole.
-
 + John S. Gwynne (jsg@coulomb.eng.ohio-state.edu) of Ohio State University 
   submitted the support for the Motorola MC68332 CPU as well as completing 
   the support for CPUs based on the MC68000 core.  Although the BSPs for
@@ -63,9 +41,6 @@ The following persons/organizations have made contributions:
   for porting RTEMS to the MIPS and AMD 29K architectures.  This submission
   includes complete support for the R4650 as well as partial support
   for the R4600.
-
-+ Erik Ivanenko (ccms@utcc.utoronto.ca) of the University of Toronto
-  for submitting the i386ex bsp.
 
 + Jiri Gaisler (jgais@wd.estec.esa.nl) converted RTEMS to using GNU
   autoconf.  This effort is greatly appreciated.
@@ -96,32 +71,13 @@ The following persons/organizations have made contributions:
   for the Hitachi SH port.  His contributions are too many to list but
   also include work on RPMs for RTEMS tools.
 
-+ Dario Alcocer <alcocer@connectnet.com> submitted a port of the
-  RTEMS port to FreeBSD.
-
 + David Fiddes <D.J.Fiddes@hw.ac.uk>, Rod Barman (rodb@ptgrey.com) and
   Stewart Kingdon (kingdon@ptgrey.com) submitted Motorola ColdFire
   support.  This work was supported in part by Real World Interface, Inc.
 
-+ Geoffroy Montel (g_montel@yahoo.com), for CNET/DSM (Rennes, France),
-  submitted the BSP for Motorola 68340/68349 based boards.
-
-+ Thomas Doerfler (td@imd.m.isar.de) of IMD in 
-  Puchheim,Germany submitted some improvements to the PPC403 
-  support and added the helas403 BSP.
-
-+ Jay Monkman (jmonkman@frasca.com) of Frasca International, Inc
-  submitted the support for the Motorola MPC860 CPU including the
-  'eth_comm' BSP
-
 + Charles Gauthier <Charles.Gauthier@iit.nrc.ca> of the Institute for
   Information Technology for the National Research Council of Canada
   submitted the Motorola MVME167 BSP.
-
-+ Tony Ambardar (tonya@ece.ubc.ca) at the University of British Columbia
-  ported RTEMS to the TS-1325 embedded PC from Technologic Systems
-  (http://www.t-systems.com), and provided patches to enable software
-  floating-point emulation for x86 targets. 
 
 + Jay Kulpinski (jskulpin@eng01.gdds.com) of General Dynamics Defense
   Systems (Pittsfield, MA) submitted a board support package for the
@@ -146,10 +102,6 @@ The following persons/organizations have made contributions:
   <Charles.Gauthier@nrc.ca> of the Institute for Information
   Technology for the National Research Council of Canada
   submitted the RTEMS Cache Manager.
-
-+ Joel Sherrill <joel@OARcorp.com> and Jennifer Averett <jennifer@OARcorp.com>
-  for the Texas Instruments C3x/C4x port and c4xsim BSP that works
-  with the C3x/C4X instruction set simulator in gdb.
 
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
