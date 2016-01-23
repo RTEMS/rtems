@@ -45,7 +45,9 @@ CPU_CFLAGS = -mcpu=$(8XX_CPU_TYPE) -Dmpc$(8XX_CPU_TYPE) -D$(RTEMS_MBX_MODEL) \
 
 # optimize flag: typically -O2
 CFLAGS_OPTIMIZE_V = -O2 -g -fno-keep-inline-functions
+CFLAGS_OPTIMIZE_V += -ffunction-sections -fdata-sections
 
+LDFLAGS = -Wl,--gc-sections
 LDFLAGS += $(MBX8xx_LDFLAGS)
 
 define bsp-post-link
