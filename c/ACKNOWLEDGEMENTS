@@ -25,12 +25,6 @@ The following persons/organizations have made contributions:
   examples in the back of the IDP user's manual, and the libgloss example
   support for the IDP board from the newlib/libgloss distribution.
 
-+ David Glessner (dwg@glenqcy.glenayre.com) of Glenayre Electronics
-  submitted the support for the Motorola MC68302 CPU.  This included 
-  the "gen68302" BSP which uses the on-chip peripherals on the MC68302 
-  as well as the modifications to the m68k dependent executive code to 
-  support m68k family members based on the mc68000 core.
-
 + Bryce Cogswell (cogswell@cs.uoregon.edu) submitted the support for MS-DOS 
   as a development environment as well as djgpp/go32 as a target environment.
 
