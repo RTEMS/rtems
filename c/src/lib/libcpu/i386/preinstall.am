@@ -18,9 +18,9 @@ $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
-$(PROJECT_INCLUDE)/libcpu/cpu.h: cpu.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cpu.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cpu.h
+$(PROJECT_INCLUDE)/libcpu/page.h: page.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/page.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/page.h
 
 $(PROJECT_INCLUDE)/libcpu/cpuModel.h: cpuModel.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cpuModel.h

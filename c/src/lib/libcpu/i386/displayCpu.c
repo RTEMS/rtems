@@ -20,7 +20,7 @@
  * Tell us the machine setup..
  */
 #include <stdio.h>
-#include <libcpu/cpu.h>
+#include <rtems/score/cpu.h>
 #include <string.h>
 #include <libcpu/cpuModel.h>
 #include <rtems/bspIo.h>

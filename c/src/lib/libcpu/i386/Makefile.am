@@ -6,7 +6,7 @@ include $(top_srcdir)/../../../automake/compile.am
 
 include_libcpudir = $(includedir)/libcpu
 
-include_libcpu_HEADERS = cpu.h cpuModel.h
+include_libcpu_HEADERS = page.h cpuModel.h
 include_libcpu_HEADERS += ../shared/include/cache.h
 include_libcpu_HEADERS += byteorder.h
 
@@ -22,7 +22,7 @@ score_rel_CPPFLAGS = $(AM_CPPFLAGS)
 score_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += page.rel
-page_rel_SOURCES = page.c cpu.h
+page_rel_SOURCES = page.c page.h
 page_rel_CPPFLAGS = $(AM_CPPFLAGS)
 page_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

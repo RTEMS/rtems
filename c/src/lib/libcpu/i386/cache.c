@@ -3,9 +3,9 @@
  */
 
 #include <rtems.h>
-#include <rtems/score/registers.h>
 #include "cache_.h"
-#include <libcpu/cpu.h>
+#include <rtems/score/cpu.h>
+#include <libcpu/page.h>
 
 void _CPU_disable_cache(void)
 {

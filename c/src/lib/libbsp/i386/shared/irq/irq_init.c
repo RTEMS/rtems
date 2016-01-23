@@ -16,7 +16,7 @@
 
 #include <rtems/bspIo.h>
 
-#include <libcpu/cpu.h>
+#include <rtems/score/cpu.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>

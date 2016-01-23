@@ -23,7 +23,7 @@
 #ifndef _REALMODE_INT_H
 #define _REALMODE_INT_H
 
-#include <libcpu/cpu.h>
+#include <rtems/score/cpu.h>
 #include <stdint.h>
 
 #ifndef ASM /* ASM */

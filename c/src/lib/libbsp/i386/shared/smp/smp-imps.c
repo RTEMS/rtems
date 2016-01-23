@@ -79,7 +79,7 @@
 #include <unistd.h>
 #include <rtems.h>
 #include <rtems/bspIo.h>
-#include <libcpu/cpu.h>
+#include <rtems/score/cpu.h>
 #include <assert.h>
 
 extern void _pc386_delay(void);

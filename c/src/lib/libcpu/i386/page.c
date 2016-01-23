@@ -21,7 +21,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <rtems.h>
-#include <libcpu/cpu.h>
+#include <rtems/score/cpu.h>
+#include <libcpu/page.h>
 
 #define MEMORY_SIZE 0x4000000 		/* 64Mo */
 

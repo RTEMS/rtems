@@ -16,7 +16,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <libcpu/cpu.h>
+#include <rtems/score/cpu.h>
 #include <bsp/irq.h>
 
 static rtems_raw_irq_connect_data* 	raw_irq_table;
