@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup m68k_mcf52235
+ *
+ * @brief Global BSP definitions
+ */
+
 /*
  *  mcf52235 BSP header file
  */
@@ -73,3 +81,11 @@ void Init52235(void);
 #endif
 
 #endif
+
+/**
+ * @defgroup m68k_mcf52235 MCF52235 Support
+ *
+ * @ingroup bsp_m68k
+ *
+ * @brief MCF52235 Support Package
+ */
