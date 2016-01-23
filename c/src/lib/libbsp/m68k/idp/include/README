@@ -1,9 +1,0 @@
-The following files really should be made generic and allowed to
-be shared between BSPs:
-
-  mc68230.h
-  mc68681.h
-  ringbuf.h
-
-However at the moment the BSP is not tested under 3.2.0 so it is 
-dangerous to do so.
