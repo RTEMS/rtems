@@ -66,8 +66,8 @@ SYM (start_around):
         | zero out uninitialized data area
         |
 zerobss:
-        moveal  # SYM (_clear_end),a0     | find end of .bss
-        moveal  # SYM (_clear_start),a1   | find beginning of .bss
+        moveal  # SYM (bsp_section_bss_end),a0     | find end of .bss
+        moveal  # SYM (bsp_section_bss_begin),a1   | find beginning of .bss
         movel   #0,d0
 
 loop:   movel   #0,a1@+                 | to zero out uninitialized
@@ -134,6 +134,13 @@ SYM (initial_usp):
          PUBLIC (initial_sr)
 SYM (initial_sr):
         .space  2
+
+	.align 16
+         PUBLIC (starting_stack)
+SYM (starting_stack):
+        .space  0x1000
+         PUBLIC (_stack_init)
+SYM (_stack_init):
 
 END_DATA
 #endif
