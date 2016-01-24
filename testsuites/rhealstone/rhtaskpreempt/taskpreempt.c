@@ -99,8 +99,8 @@ rtems_task Init( rtems_task_argument ignored )
 
   /* Find loop overhead */
   benchmark_timer_initialize();
-  for ( count1 = 0; count1 < ( BENCHMARKS * 2 ) - 1; count1++ ); {
-     /* rtems_task_resume( Task_id[1] ); */
+  for ( count1 = 0; count1 < ( BENCHMARKS * 2 ) - 1; count1++ ) {
+     /* no statement */ ;
   }
   tloop_overhead = benchmark_timer_read();
 
