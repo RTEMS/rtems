@@ -115,20 +115,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #include <rtems/libio_.h>
 
 #ifdef CONFIGURE_INIT
-const rtems_libio_helper rtems_libio_init_helper =
-  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-    rtems_libio_helper_null;
-  #else
-    rtems_libio_init;
-  #endif
-
-const rtems_libio_helper rtems_libio_post_driver_helper =
-  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-    rtems_libio_helper_null;
-  #else
-    rtems_libio_post_driver;
-  #endif
-
   #ifndef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
     RTEMS_SYSINIT_ITEM(
       rtems_filesystem_initialize,

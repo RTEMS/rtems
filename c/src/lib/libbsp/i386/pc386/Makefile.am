@@ -146,8 +146,6 @@ libbsp_a_SOURCES += ../../i386/shared/pci/pcibios.c \
 
 include_HEADERS += ../../i386/shared/comm/uart.h
 # startup
-libbsp_a_SOURCES += ../../shared/bsplibc.c
-libbsp_a_SOURCES += ../../shared/bsppost.c
 libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 libbsp_a_SOURCES += startup/bspgetworkarea.c
 libbsp_a_SOURCES += startup/bspstart.c

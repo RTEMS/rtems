@@ -26,8 +26,8 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += startup/bspclean.c ../../shared/bsplibc.c startup/bspreset.c \
-    ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
+libbsp_a_SOURCES += startup/bspclean.c startup/bspreset.c \
+    ../../shared/bsppredriverhook.c \
     ../../shared/bspgetworkarea.c \
     startup/init5282.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/sbrk.c ../../shared/setvec.c \

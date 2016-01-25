@@ -25,9 +25,9 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+startup_SOURCES = ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
-    ../../shared/bspgetworkarea.c ../../shared/bsppost.c \
+    ../../shared/bspgetworkarea.c \
     startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c startup/crtn.S
 clock_SOURCES = ../../shared/clock_driver_simidle.c

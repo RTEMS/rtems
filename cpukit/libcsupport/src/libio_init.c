@@ -32,6 +32,7 @@
 #include <stdlib.h>                     /* calloc() */
 
 #include <rtems/libio.h>                /* libio.h not pulled in by rtems */
+#include <rtems/sysinit.h>
 
 /*
  *  File descriptor Table Information
@@ -40,7 +41,7 @@
 rtems_id           rtems_libio_semaphore;
 rtems_libio_t     *rtems_libio_iop_freelist;
 
-void rtems_libio_init( void )
+static void rtems_libio_init( void )
 {
     rtems_status_code rc;
     uint32_t i;
@@ -81,3 +82,15 @@ void rtems_libio_init( void )
   if ( rc != RTEMS_SUCCESSFUL )
     rtems_fatal_error_occurred( rc );
 }
+
+RTEMS_SYSINIT_ITEM(
+  rtems_libio_init,
+  RTEMS_SYSINIT_LIBIO,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+RTEMS_SYSINIT_ITEM(
+  rtems_libio_post_driver,
+  RTEMS_SYSINIT_STD_FILE_DESCRIPTORS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

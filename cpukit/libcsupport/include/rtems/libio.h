@@ -1338,13 +1338,6 @@ typedef struct {
 /** @} */
 
 /**
- * @brief RTEMS LibIO Initialization
- *
- * Called by BSP startup code to initialize the libio subsystem.
- */
-void rtems_libio_init(void);
-
-/**
  * @name External I/O Handlers
  */
 /**@{**/
@@ -1480,14 +1473,6 @@ static inline rtems_device_minor_number rtems_filesystem_dev_minor_t(
  *  a single "/dev" directory in it.
  */
 void rtems_filesystem_initialize( void );
-
-typedef void (*rtems_libio_helper)(void);
-
-extern const rtems_libio_helper rtems_libio_init_helper;
-
-extern const rtems_libio_helper rtems_libio_post_driver_helper;
-
-void rtems_libio_helper_null(void);
 
 void rtems_libio_post_driver(void);
 

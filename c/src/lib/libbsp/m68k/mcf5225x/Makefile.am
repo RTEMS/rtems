@@ -27,8 +27,6 @@ libbsp_a_SOURCES = \
     ../../shared/bspclean.c \
     ../../shared/bspreset_loop.c \
     ../../shared/bsppredriverhook.c \
-    ../../shared/bsplibc.c \
-    ../../shared/bsppost.c \
     ../../shared/bspgetworkarea.c \
     startup/init5225x.c startup/bspstart.c \
     ../../shared/bootcard.c \

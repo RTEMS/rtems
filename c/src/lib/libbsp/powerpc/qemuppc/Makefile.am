@@ -28,9 +28,9 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds
 
 # startup
-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
+startup_SOURCES = ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
-    ../../shared/bspgetworkarea.c ../../shared/bsppost.c \
+    ../../shared/bspgetworkarea.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c \
     startup/cmain.c startup/bspstart.c startup/bsppanic.c

@@ -94,8 +94,6 @@ libbsp_a_LIBADD =
 libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/bspclean.c \
 	../../shared/bspgetworkarea.c \
-	../../shared/bsplibc.c \
-	../../shared/bsppost.c \
 	../../shared/bsppredriverhook.c \
 	../../shared/gnatinstallhandler.c \
 	../../shared/sbrk.c \

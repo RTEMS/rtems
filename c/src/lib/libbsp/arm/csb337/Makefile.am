@@ -50,7 +50,7 @@ EXTRA_DIST += README.kit637_v6
 noinst_LIBRARIES += libbsp.a
 
 # startup
-libbsp_a_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
+libbsp_a_SOURCES = \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     startup/bspstart.c \
     ../../shared/bspclean.c startup/bspreset.c \

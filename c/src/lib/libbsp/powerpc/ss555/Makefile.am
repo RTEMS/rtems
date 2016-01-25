@@ -33,8 +33,8 @@ libbsp_a_SOURCES += clock/p_clock.c
 # console
 libbsp_a_SOURCES += console/console.c
 # startup
-libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
+libbsp_a_SOURCES += ../../shared/bspclean.c \
+    ../../shared/bsppredriverhook.c \
     startup/bspstart.c ../../shared/bootcard.c startup/iss555.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c start/start.S \
     ../../shared/bspgetworkarea.c

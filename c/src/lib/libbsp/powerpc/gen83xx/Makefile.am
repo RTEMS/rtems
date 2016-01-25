@@ -51,8 +51,7 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bsplibc.c \
-	../../shared/bsppost.c \
+libbsp_a_SOURCES += \
 	../../shared/bootcard.c \
 	../../shared/bsppredriverhook.c \
 	../../shared/sbrk.c \

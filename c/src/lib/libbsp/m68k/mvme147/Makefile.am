@@ -30,8 +30,8 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += startup/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
+libbsp_a_SOURCES += startup/bspclean.c \
+    startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bspgetworkarea.c ../../shared/sbrk.c \
     ../../shared/setvec.c ../../shared/gnatinstallhandler.c

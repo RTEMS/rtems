@@ -55,8 +55,6 @@ void bsp_start(void);
 
 void bsp_predriver_hook(void);
 
-void bsp_postdriver_hook(void);
-
 void bsp_reset(void);
 
 /**
@@ -170,8 +168,6 @@ static inline void bsp_work_area_initialize_with_table(
 }
 
 void bsp_work_area_initialize(void);
-
-void bsp_libc_init(void);
 
 /**
  * @brief Standard start routine for secondary processors.

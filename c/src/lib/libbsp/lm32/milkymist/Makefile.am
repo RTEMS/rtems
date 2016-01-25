@@ -46,8 +46,6 @@ libbsp_a_LIBADD =
 
 # startup
 libbsp_a_SOURCES += startup/bspclean.c
-libbsp_a_SOURCES += ../../shared/bsplibc.c
-libbsp_a_SOURCES += ../../shared/bsppost.c
 libbsp_a_SOURCES += ../shared/startup/bspstart.c
 libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 libbsp_a_SOURCES += ../../shared/bootcard.c

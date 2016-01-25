@@ -56,8 +56,7 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # Startup
-libbsp_a_SOURCES += ../../shared/bsplibc.c \
-	../../shared/bsppost.c \
+libbsp_a_SOURCES += \
 	../../shared/bootcard.c \
 	../../shared/sbrk.c \
 	../../shared/gnatinstallhandler.c \

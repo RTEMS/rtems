@@ -33,8 +33,8 @@ libbsp_a_SOURCES =
 
 # startup
 libbsp_a_SOURCES += startup/bspclean.c
-libbsp_a_SOURCES += ../../shared/bsplibc.c \
-    ../../shared/bsppost.c ../../shared/bootcard.c startup/bspstart.c \
+libbsp_a_SOURCES += \
+    ../../shared/bootcard.c startup/bspstart.c \
     startup/bsppredriver.c \
     ../../sparc/shared/startup/bspgetworkarea.c ../../shared/sbrk.c \
     startup/setvec.c \

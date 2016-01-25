@@ -16,12 +16,14 @@
   #include "config.h"
 #endif
 
+#include <sys/types.h>
 #include <sys/stat.h>
 
 #include <assert.h>
 #include <pthread.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include <rtems.h>
 #include <rtems/libio_.h>
@@ -122,8 +124,8 @@ typedef enum {
   POSIX_KEYS_POST,
   IDLE_THREADS_PRE,
   IDLE_THREADS_POST,
-  BSP_LIBC_PRE,
-  BSP_LIBC_POST,
+  LIBIO_PRE,
+  LIBIO_POST,
   ROOT_FILESYSTEM_PRE,
   ROOT_FILESYSTEM_POST,
   BEFORE_DRIVERS_PRE,
@@ -132,8 +134,8 @@ typedef enum {
   BSP_PRE_DRIVERS_POST,
   DEVICE_DRIVERS_PRE,
   DEVICE_DRIVERS_POST,
-  BSP_POST_DRIVERS_PRE,
-  BSP_POST_DRIVERS_POST,
+  STD_FILE_DESCRIPTORS_PRE,
+  STD_FILE_DESCRIPTORS_POST,
   INIT_TASK,
   DONE
 } init_step;
@@ -546,16 +548,16 @@ LAST(RTEMS_SYSINIT_IDLE_THREADS)
   next_step(IDLE_THREADS_POST);
 }
 
-FIRST(RTEMS_SYSINIT_BSP_LIBC)
+FIRST(RTEMS_SYSINIT_LIBIO)
 {
   assert(rtems_libio_semaphore == 0);
-  next_step(BSP_LIBC_PRE);
+  next_step(LIBIO_PRE);
 }
 
-LAST(RTEMS_SYSINIT_BSP_LIBC)
+LAST(RTEMS_SYSINIT_LIBIO)
 {
   assert(rtems_libio_semaphore != 0);
-  next_step(BSP_LIBC_POST);
+  next_step(LIBIO_POST);
 }
 
 FIRST(RTEMS_SYSINIT_ROOT_FILESYSTEM)
@@ -615,16 +617,24 @@ LAST(RTEMS_SYSINIT_DEVICE_DRIVERS)
   next_step(DEVICE_DRIVERS_POST);
 }
 
-FIRST(RTEMS_SYSINIT_BSP_POST_DRIVERS)
+FIRST(RTEMS_SYSINIT_STD_FILE_DESCRIPTORS)
 {
-  assert(rtems_libio_iop_freelist != NULL);
-  next_step(BSP_POST_DRIVERS_PRE);
+  struct stat st;
+  int rv;
+
+  rv = fstat(0, &st);
+  assert(rv == -1);
+  next_step(STD_FILE_DESCRIPTORS_PRE);
 }
 
-LAST(RTEMS_SYSINIT_BSP_POST_DRIVERS)
+LAST(RTEMS_SYSINIT_STD_FILE_DESCRIPTORS)
 {
-  assert(rtems_libio_iop_freelist == NULL);
-  next_step(BSP_POST_DRIVERS_POST);
+  struct stat st;
+  int rv;
+
+  rv = fstat(0, &st);
+  assert(rv == 0);
+  next_step(STD_FILE_DESCRIPTORS_POST);
 }
 
 static void Init(rtems_task_argument arg)

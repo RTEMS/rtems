@@ -39,9 +39,7 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += ../shared/startup/linkcmds
 
 startup_SOURCES = startup/bspclean.c startup/m5op_sparc.S \
-    ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c \
-    ../../shared/bsppost.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/bspgetworkarea.c \
     ../../shared/bspstart.c \
