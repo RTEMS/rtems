@@ -16,6 +16,8 @@
   #include "config.h"
 #endif
 
+#include <sys/stat.h>
+
 #include <assert.h>
 #include <pthread.h>
 #include <string.h>
@@ -122,6 +124,8 @@ typedef enum {
   IDLE_THREADS_POST,
   BSP_LIBC_PRE,
   BSP_LIBC_POST,
+  ROOT_FILESYSTEM_PRE,
+  ROOT_FILESYSTEM_POST,
   BEFORE_DRIVERS_PRE,
   BEFORE_DRIVERS_POST,
   BSP_PRE_DRIVERS_PRE,
@@ -552,6 +556,26 @@ LAST(RTEMS_SYSINIT_BSP_LIBC)
 {
   assert(rtems_libio_semaphore != 0);
   next_step(BSP_LIBC_POST);
+}
+
+FIRST(RTEMS_SYSINIT_ROOT_FILESYSTEM)
+{
+  struct stat st;
+  int rv;
+
+  rv = stat("/", &st);
+  assert(rv == -1);
+  next_step(ROOT_FILESYSTEM_PRE);
+}
+
+LAST(RTEMS_SYSINIT_ROOT_FILESYSTEM)
+{
+  struct stat st;
+  int rv;
+
+  rv = stat("/", &st);
+  assert(rv == 0);
+  next_step(ROOT_FILESYSTEM_POST);
 }
 
 FIRST(RTEMS_SYSINIT_BEFORE_DRIVERS)

@@ -80,9 +80,4 @@ void rtems_libio_init( void )
   );
   if ( rc != RTEMS_SUCCESSFUL )
     rtems_fatal_error_occurred( rc );
-
-  /*
-   *  Initialize the base file system infrastructure.
-   */
-  (* rtems_fs_init_helper)();
 }

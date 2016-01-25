@@ -136,11 +136,12 @@ const rtems_libio_helper rtems_libio_exit_helper =
     rtems_libio_exit;
   #endif
 
-const rtems_libio_helper rtems_fs_init_helper =
-  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-    rtems_libio_helper_null;
-  #else
-    rtems_filesystem_initialize;
+  #ifndef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+    RTEMS_SYSINIT_ITEM(
+      rtems_filesystem_initialize,
+      RTEMS_SYSINIT_ROOT_FILESYSTEM,
+      RTEMS_SYSINIT_ORDER_MIDDLE
+    );
   #endif
 #endif
 #endif
