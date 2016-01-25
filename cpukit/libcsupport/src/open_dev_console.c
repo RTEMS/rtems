@@ -16,6 +16,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
 /*
  *  This is a replaceable stub which opens the console, if present.
@@ -45,5 +46,7 @@ void rtems_libio_post_driver(void)
 
   if ((stderr_fd = open("/dev/console", O_WRONLY, 0)) == -1)
     rtems_fatal_error_occurred( 0x55544432 );  /* error STD2 */
+
+  atexit(rtems_libio_exit);
 }
 

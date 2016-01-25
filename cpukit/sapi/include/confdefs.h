@@ -129,13 +129,6 @@ const rtems_libio_helper rtems_libio_post_driver_helper =
     rtems_libio_post_driver;
   #endif
 
-const rtems_libio_helper rtems_libio_exit_helper =
-  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-    rtems_libio_helper_null;
-  #else
-    rtems_libio_exit;
-  #endif
-
   #ifndef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
     RTEMS_SYSINIT_ITEM(
       rtems_filesystem_initialize,

@@ -14,8 +14,6 @@
 #include <rtems.h>
 
 #if defined(RTEMS_NEWLIB)
-#include <rtems/libio.h>
-
 #include <stdio.h>
 #include <unistd.h>
 
@@ -41,7 +39,6 @@ void _exit(int status)
     FINI_SYMBOL();
   #endif
 
-  (*rtems_libio_exit_helper)();
   rtems_shutdown_executive(status);
   /* does not return */
 }

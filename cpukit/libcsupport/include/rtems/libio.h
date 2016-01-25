@@ -1487,8 +1487,6 @@ extern const rtems_libio_helper rtems_libio_init_helper;
 
 extern const rtems_libio_helper rtems_libio_post_driver_helper;
 
-extern const rtems_libio_helper rtems_libio_exit_helper;
-
 void rtems_libio_helper_null(void);
 
 void rtems_libio_post_driver(void);
