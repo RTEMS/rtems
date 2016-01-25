@@ -544,7 +544,7 @@ typedef struct {
  *  context area during _CPU_Context_Initialize.
  */
 
-SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
+SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 /*
  *  This flag is context switched with each thread.  It indicates
