@@ -235,6 +235,15 @@
   #define RTEMS_PACKED
 #endif
 
+/**
+ * @brief Instructs the compiler to enforce the specified alignment.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_ALIGNED( _alignment ) __attribute__((__aligned__(_alignment)))
+#else
+  #define RTEMS_ALIGNED( _alignment )
+#endif
+
 /* Provided for backward compatibility */
 #define RTEMS_COMPILER_PACKED_ATTRIBUTE RTEMS_PACKED
 
