@@ -99,7 +99,11 @@ extern "C" {
 
 #define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
 #define CPU_STACK_GROWS_UP               FALSE
-#define CPU_STRUCTURE_ALIGNMENT          __attribute__ ((aligned (4)))
+
+/* FIXME: Is this the right value? */
+#define CPU_CACHE_LINE_BYTES 16
+
+#define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
 /*
  *  Define what is required to specify how the network to host conversion

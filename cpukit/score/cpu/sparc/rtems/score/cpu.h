@@ -210,17 +210,10 @@ extern "C" {
  */
 #define CPU_STACK_GROWS_UP               FALSE
 
-/**
- * The following is the variable attribute used to force alignment
- * of critical data structures.  On some processors it may make
- * sense to have these aligned on tighter boundaries than
- * the minimum requirements of the compiler in order to have as
- * much of the critical data area as possible in a cache line.
- *
- * The SPARC does not appear to have particularly strict alignment
- * requirements.  This value was chosen to take advantages of caches.
- */
-#define CPU_STRUCTURE_ALIGNMENT          __attribute__ ((aligned (32)))
+/* FIXME: Is this the right value? */
+#define CPU_CACHE_LINE_BYTES 32
+
+#define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
 /**
  * Define what is required to specify how the network to host conversion

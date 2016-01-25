@@ -64,7 +64,11 @@ extern "C" {
 
 #define CPU_STACK_GROWS_UP FALSE
 
-#define CPU_STRUCTURE_ALIGNMENT __attribute__((section(".sdata"), aligned(32)))
+/* FIXME: Is this the right value? */
+#define CPU_CACHE_LINE_BYTES 32
+
+#define CPU_STRUCTURE_ALIGNMENT \
+  RTEMS_SECTION( ".sdata" ) RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
 #define CPU_BIG_ENDIAN FALSE
 

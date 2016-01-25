@@ -311,30 +311,10 @@ extern "C" {
  */
 #define CPU_STACK_GROWS_UP               TRUE
 
-/**
- * The following is the variable attribute used to force alignment
- * of critical RTEMS structures.  On some processors it may make
- * sense to have these aligned on tighter boundaries than
- * the minimum requirements of the compiler in order to have as
- * much of the critical data area as possible in a cache line.
- *
- * The placement of this macro in the declaration of the variables
- * is based on the syntactically requirements of the GNU C
- * "__attribute__" extension.  For example with GNU C, use
- * the following to force a structures to a 32 byte boundary.
- *
- *     __attribute__ ((aligned (32)))
- *
- * NOTE: Currently only the Priority Bit Map table uses this feature.
- *       To benefit from using this, the data must be heavily
- *       used so it will stay in the cache and used frequently enough
- *       in the executive to justify turning this on.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define CPU_STRUCTURE_ALIGNMENT          __attribute__ ((aligned (2)))
+/* FIXME: Is this the right value? */
+#define CPU_CACHE_LINE_BYTES 2
+
+#define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
 /**
  * @defgroup CPUEndian Processor Dependent Endianness Support

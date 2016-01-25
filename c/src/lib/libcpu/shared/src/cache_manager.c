@@ -42,6 +42,14 @@
 #include <rtems.h>
 #include "cache_.h"
 
+#if CPU_DATA_CACHE_ALIGNMENT > CPU_CACHE_LINE_BYTES
+#error "CPU_DATA_CACHE_ALIGNMENT is greater than CPU_CACHE_LINE_BYTES"
+#endif
+
+#if CPU_INSTRUCTION_CACHE_ALIGNMENT > CPU_CACHE_LINE_BYTES
+#error "CPU_INSTRUCTION_CACHE_ALIGNMENT is greater than CPU_CACHE_LINE_BYTES"
+#endif
+
 #if defined(RTEMS_SMP)
 
 #include <rtems/score/smpimpl.h>

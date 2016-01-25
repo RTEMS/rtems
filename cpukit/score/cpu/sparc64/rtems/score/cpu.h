@@ -170,6 +170,9 @@ extern "C" {
 
 #define CPU_STACK_GROWS_UP               FALSE
 
+/* FIXME: Is this the right value? */
+#define CPU_CACHE_LINE_BYTES 32
+
 /*
  *  The following is the variable attribute used to force alignment
  *  of critical data structures.  On some processors it may make
@@ -184,7 +187,7 @@ extern "C" {
  *  and is 16 if quad-word fp instructions are available (e.g. LDQF).
  */
 
-#define CPU_STRUCTURE_ALIGNMENT          __attribute__ ((aligned (16)))
+#define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( 16 )
 
 /*
  *  Define what is required to specify how the network to host conversion
