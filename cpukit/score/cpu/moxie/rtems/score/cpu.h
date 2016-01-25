@@ -285,10 +285,6 @@ extern "C" {
  */
 #define CPU_STRUCTURE_ALIGNMENT
 
-#define CPU_TIMESTAMP_USE_STRUCT_TIMESPEC TRUE
-#define CPU_TIMESTAMP_USE_INT64 FALSE
-#define CPU_TIMESTAMP_USE_INT64_INLINE FALSE
-
 /*
  *  Define what is required to specify how the network to host conversion
  *  routines are handled.

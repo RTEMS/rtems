@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -27,9 +27,6 @@ const char rtems_test_name[] = "SP 2038";
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
-
-#define TEST_APPLICABLE \
-  (CPU_TIMESTAMP_USE_INT64 == TRUE || CPU_TIMESTAMP_USE_INT64_INLINE == TRUE)
 
 #define ASSERT_SC(sc) rtems_test_assert((sc) == RTEMS_SUCCESSFUL)
 
@@ -235,7 +232,6 @@ static void test_tod_to_seconds(void)
 
 static void test_problem_year(void)
 {
-#if TEST_APPLICABLE
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   time_t zero = 0;
   time_t one = 1;
@@ -268,7 +264,6 @@ static void test_problem_year(void)
     ASSERT_SC(sc);
     rtems_test_assert(memcmp(&now, problem, sizeof(now)) == 0);
   }
-#endif /* TEST_APPLICABLE */
 }
 
 static void test_leap_year(void)

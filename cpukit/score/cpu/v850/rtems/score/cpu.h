@@ -315,11 +315,6 @@ extern "C" {
 #define CPU_STRUCTURE_ALIGNMENT
 
 /**
- * The v850 should use 64-bit timestamps and inline them.
- */
-#define CPU_TIMESTAMP_USE_INT64_INLINE TRUE
-
-/**
  * @defgroup CPUEndian Processor Dependent Endianness Support
  *
  * This group assists in issues related to processor endianness.

@@ -336,8 +336,6 @@ extern "C" {
  */
 #define CPU_STRUCTURE_ALIGNMENT          __attribute__ ((aligned (2)))
 
-#define CPU_TIMESTAMP_USE_STRUCT_TIMESPEC TRUE
-
 /**
  * @defgroup CPUEndian Processor Dependent Endianness Support
  *
