@@ -792,7 +792,7 @@ typedef struct {
  * It is filled in by _CPU_Initialize and copied into the task's FP
  * context area during _CPU_Context_Initialize.
  */
-SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
+SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 /**
  * The following type defines an entry in the SPARC's trap table.
