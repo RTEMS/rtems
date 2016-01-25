@@ -29,6 +29,7 @@ extern "C" {
 #define RTEMS_SYSINIT_BSP_WORK_AREAS             000100
 #define RTEMS_SYSINIT_BSP_START                  000200
 #define RTEMS_SYSINIT_DATA_STRUCTURES            000300
+#define RTEMS_SYSINIT_IDLE_THREADS               000380
 #define RTEMS_SYSINIT_BSP_LIBC                   000400
 #define RTEMS_SYSINIT_BEFORE_DRIVERS             000500
 #define RTEMS_SYSINIT_BSP_PRE_DRIVERS            000600

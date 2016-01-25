@@ -21,6 +21,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/stackimpl.h>
+#include <rtems/score/sysstate.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/config.h>
 
@@ -83,6 +84,8 @@ void _Thread_Create_idle( void )
 {
   uint32_t cpu_count = _SMP_Get_processor_count();
   uint32_t cpu_index;
+
+  _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
 
   for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
     Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );

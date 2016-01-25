@@ -24,10 +24,34 @@
 #include <rtems/sysinit.h>
 #include <rtems/test.h>
 
+#include <rtems/score/apimutex.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/wkspace.h>
 
 const char rtems_test_name[] = "SPSYSINIT 1";
+
+typedef enum {
+  BSP_WORK_AREAS_PRE,
+  BSP_WORK_AREAS_POST,
+  BSP_START_PRE,
+  BSP_START_POST,
+  DATA_STRUCTURES_PRE,
+  DATA_STRUCTURES_POST,
+  IDLE_THREADS_PRE,
+  IDLE_THREADS_POST,
+  BSP_LIBC_PRE,
+  BSP_LIBC_POST,
+  BEFORE_DRIVERS_PRE,
+  BEFORE_DRIVERS_POST,
+  BSP_PRE_DRIVERS_PRE,
+  BSP_PRE_DRIVERS_POST,
+  DEVICE_DRIVERS_PRE,
+  DEVICE_DRIVERS_POST,
+  BSP_POST_DRIVERS_PRE,
+  BSP_POST_DRIVERS_POST,
+  INIT_TASK,
+  DONE
+} init_step;
 
 #define FIRST(x) \
   static void x##_first(void); \
@@ -47,9 +71,9 @@ const char rtems_test_name[] = "SPSYSINIT 1";
   ); \
   static void x##_last(void)
 
-static int step;
+static init_step step;
 
-static void next_step(int expected)
+static void next_step(init_step expected)
 {
   assert(step == expected);
   step = expected + 1;
@@ -59,13 +83,13 @@ FIRST(RTEMS_SYSINIT_BSP_WORK_AREAS)
 {
   rtems_test_begink();
   assert(_Workspace_Area.area_begin == 0);
-  next_step(0);
+  next_step(BSP_WORK_AREAS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_BSP_WORK_AREAS)
 {
   assert(_Workspace_Area.area_begin != 0);
-  next_step(1);
+  next_step(BSP_WORK_AREAS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_BSP_START)
@@ -74,47 +98,59 @@ FIRST(RTEMS_SYSINIT_BSP_START)
    * Since the work performed here is BSP-specific, there is no way to test pre
    * and post conditions.
    */
-  next_step(2);
+  next_step(BSP_START_PRE);
 }
 
 LAST(RTEMS_SYSINIT_BSP_START)
 {
-  next_step(3);
+  next_step(BSP_START_POST);
 }
 
 FIRST(RTEMS_SYSINIT_DATA_STRUCTURES)
 {
-  assert(_System_state_Is_before_initialization(_System_state_Get()));
-  next_step(4);
+  assert(_RTEMS_Allocator_Mutex == NULL);
+  next_step(DATA_STRUCTURES_PRE);
 }
 
 LAST(RTEMS_SYSINIT_DATA_STRUCTURES)
 {
+  assert(_RTEMS_Allocator_Mutex != NULL);
+  next_step(DATA_STRUCTURES_POST);
+}
+
+FIRST(RTEMS_SYSINIT_IDLE_THREADS)
+{
+  assert(_System_state_Is_before_initialization(_System_state_Get()));
+  next_step(IDLE_THREADS_PRE);
+}
+
+LAST(RTEMS_SYSINIT_IDLE_THREADS)
+{
   assert(_System_state_Is_before_multitasking(_System_state_Get()));
-  next_step(5);
+  next_step(IDLE_THREADS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_BSP_LIBC)
 {
   assert(rtems_libio_semaphore == 0);
-  next_step(6);
+  next_step(BSP_LIBC_PRE);
 }
 
 LAST(RTEMS_SYSINIT_BSP_LIBC)
 {
   assert(rtems_libio_semaphore != 0);
-  next_step(7);
+  next_step(BSP_LIBC_POST);
 }
 
 FIRST(RTEMS_SYSINIT_BEFORE_DRIVERS)
 {
   /* Omit test of build configuration specific pre and post conditions */
-  next_step(8);
+  next_step(BEFORE_DRIVERS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_BEFORE_DRIVERS)
 {
-  next_step(9);
+  next_step(BEFORE_DRIVERS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_BSP_PRE_DRIVERS)
@@ -123,41 +159,41 @@ FIRST(RTEMS_SYSINIT_BSP_PRE_DRIVERS)
    * Since the work performed here is BSP-specific, there is no way to test pre
    * and post conditions.
    */
-  next_step(10);
+  next_step(BSP_PRE_DRIVERS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_BSP_PRE_DRIVERS)
 {
-  next_step(11);
+  next_step(BSP_PRE_DRIVERS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_DEVICE_DRIVERS)
 {
   assert(!_IO_All_drivers_initialized);
-  next_step(12);
+  next_step(DEVICE_DRIVERS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_DEVICE_DRIVERS)
 {
   assert(_IO_All_drivers_initialized);
-  next_step(13);
+  next_step(DEVICE_DRIVERS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_BSP_POST_DRIVERS)
 {
   assert(rtems_libio_iop_freelist != NULL);
-  next_step(14);
+  next_step(BSP_POST_DRIVERS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_BSP_POST_DRIVERS)
 {
   assert(rtems_libio_iop_freelist == NULL);
-  next_step(15);
+  next_step(BSP_POST_DRIVERS_POST);
 }
 
 static void Init(rtems_task_argument arg)
 {
-  next_step(16);
+  next_step(INIT_TASK);
   rtems_test_endk();
   exit(0);
 }

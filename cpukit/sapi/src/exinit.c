@@ -142,21 +142,6 @@ static void rtems_initialize_data_structures(void)
   _Extension_Manager_initialization();
 
   _POSIX_API_Initialize();
-
-  _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
-
-  /*
-   *  No threads should be created before this point!!!
-   *  _Thread_Executing and _Thread_Heir are not set.
-   *
-   *  At this point all API extensions are in place.  After the call to
-   *  _Thread_Create_idle() _Thread_Executing and _Thread_Heir will be set.
-   */
-  _Thread_Create_idle();
-
-  /*
-   *  Scheduling can properly occur now as long as we avoid dispatching.
-   */
 }
 
 static void rtems_initialize_before_drivers(void)
@@ -258,6 +243,21 @@ RTEMS_LINKER_ROSET( _Sysinit, rtems_sysinit_item );
 RTEMS_SYSINIT_ITEM(
   rtems_initialize_data_structures,
   RTEMS_SYSINIT_DATA_STRUCTURES,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+/*
+ *  No threads should be created before this point!!!
+ *  _Thread_Executing and _Thread_Heir are not set.
+ *
+ *  At this point all API extensions are in place.  After the call to
+ *  _Thread_Create_idle() _Thread_Executing and _Thread_Heir will be set.
+ *
+ *  Scheduling can properly occur afterwards as long as we avoid dispatching.
+ */
+RTEMS_SYSINIT_ITEM(
+  _Thread_Create_idle,
+  RTEMS_SYSINIT_IDLE_THREADS,
   RTEMS_SYSINIT_ORDER_MIDDLE
 );
 
