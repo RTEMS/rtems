@@ -190,7 +190,6 @@ static void rtems_initialize_device_drivers(void)
    *   - Install extra memory.
    */
   _DRV_Manager_init_level(1);
-  bsp_driver_level_hook(1);
   #endif
 
   /* Initialize I/O drivers. 
@@ -211,7 +210,6 @@ static void rtems_initialize_device_drivers(void)
    * for the first time.
    */
   _DRV_Manager_init_level(2);
-  bsp_driver_level_hook(2);
 
   /* Init Drivers to Level 3 
    * 
@@ -220,13 +218,11 @@ static void rtems_initialize_device_drivers(void)
    * API inited in level 2
    */
   _DRV_Manager_init_level(3);
-  bsp_driver_level_hook(3);
 
   /* Init Drivers to Level 4,
    * Init drivers that depend on services initialized in Level 3
    */
   _DRV_Manager_init_level(4);
-  bsp_driver_level_hook(4);
   #endif
 
   #if defined(RTEMS_MULTIPROCESSING)
