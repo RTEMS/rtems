@@ -210,8 +210,8 @@ extern "C" {
  */
 #define CPU_STACK_GROWS_UP               FALSE
 
-/* FIXME: Is this the right value? */
-#define CPU_CACHE_LINE_BYTES 32
+/* LEON3 systems may use a cache line size of 64 */
+#define CPU_CACHE_LINE_BYTES 64
 
 #define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
