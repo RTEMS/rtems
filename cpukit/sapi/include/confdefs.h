@@ -3461,10 +3461,11 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #ifdef CONFIGURE_INIT
     #if defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) || \
         defined(CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE)
-      void (*_POSIX_Threads_Initialize_user_threads_p)(void) =
-                _POSIX_Threads_Initialize_user_threads_body;
-    #else
-      void (*_POSIX_Threads_Initialize_user_threads_p)(void) = NULL;
+      RTEMS_SYSINIT_ITEM(
+        _POSIX_Threads_Initialize_user_threads_body,
+        RTEMS_SYSINIT_POSIX_USER_THREADS,
+        RTEMS_SYSINIT_ORDER_MIDDLE
+      );
     #endif
   #endif
 #endif

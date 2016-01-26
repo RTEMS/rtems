@@ -134,6 +134,10 @@ typedef enum {
   DEVICE_DRIVERS_POST,
   CLASSIC_USER_TASKS_PRE,
   CLASSIC_USER_TASKS_POST,
+#ifdef RTEMS_POSIX_API
+  POSIX_USER_THREADS_PRE,
+  POSIX_USER_THREADS_POST,
+#endif /* RTEMS_POSIX_API */
   STD_FILE_DESCRIPTORS_PRE,
   STD_FILE_DESCRIPTORS_POST,
   INIT_TASK,
@@ -618,6 +622,22 @@ LAST(RTEMS_SYSINIT_CLASSIC_USER_TASKS)
   next_step(CLASSIC_USER_TASKS_POST);
 }
 
+#ifdef RTEMS_POSIX_API
+
+FIRST(RTEMS_SYSINIT_POSIX_USER_THREADS)
+{
+  assert(_Objects_Active_count(&_POSIX_Threads_Information.Objects) == 0);
+  next_step(POSIX_USER_THREADS_PRE);
+}
+
+LAST(RTEMS_SYSINIT_POSIX_USER_THREADS)
+{
+  assert(_Objects_Active_count(&_POSIX_Threads_Information.Objects) == 1);
+  next_step(POSIX_USER_THREADS_POST);
+}
+
+#endif /* RTEMS_POSIX_API */
+
 FIRST(RTEMS_SYSINIT_STD_FILE_DESCRIPTORS)
 {
   struct stat st;
@@ -648,6 +668,15 @@ static void Init(rtems_task_argument arg)
   rtems_test_endk();
   exit(0);
 }
+
+#ifdef RTEMS_POSIX_API
+
+static void *POSIX_Init(void *arg)
+{
+  return NULL;
+}
+
+#endif /* RTEMS_POSIX_API */
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
@@ -691,6 +720,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_POSIX_TIMERS 1
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 1
+
+#define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #endif /* RTEMS_POSIX_API */
 

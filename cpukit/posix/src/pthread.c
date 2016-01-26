@@ -285,28 +285,6 @@ static void _POSIX_Threads_Exitted_extension(
     pthread_exit( executing->Wait.return_argument );
 }
 
-/*
- *  _POSIX_Threads_Initialize_user_threads
- *
- *  This routine creates and starts all configured user
- *  initialization threads.
- */
-static void _POSIX_Threads_Initialize_user_threads( void )
-{
-  if ( _POSIX_Threads_Initialize_user_threads_p )
-    (*_POSIX_Threads_Initialize_user_threads_p)();
-}
-
-/*
- *  API Extension control structures
- */
-API_extensions_Control _POSIX_Threads_API_extensions = {
-  #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-    .predriver_hook = NULL,
-  #endif
-  .postdriver_hook = _POSIX_Threads_Initialize_user_threads
-};
-
 User_extensions_Control _POSIX_Threads_User_extensions = {
   { NULL, NULL },
   { { NULL, NULL }, NULL },
@@ -362,8 +340,6 @@ static void _POSIX_Threads_Manager_initialization(void)
    *  Add all the extensions for this API
    */
   _User_extensions_Add_API_set( &_POSIX_Threads_User_extensions );
-
-  _API_extensions_Add( &_POSIX_Threads_API_extensions );
 
   /*
    *  If we supported MP, then here we would ...
