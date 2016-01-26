@@ -20,11 +20,10 @@
 #endif
 
 /*
- *  SCORE_INIT and SAPI_INIT are defined so all of the super core and
- *  super API data will be included in this object file.
+ *  SCORE_INIT is defined so all of the super core
+ *  data will be included in this object file.
  */
 
-#define SAPI_INIT
 #define SCORE_INIT
 
 #include <rtems/system.h>
@@ -48,8 +47,6 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
-
-#include <rtems/sptables.h>
 
 static Objects_Information *
 _Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
@@ -76,30 +73,10 @@ static void rtems_initialize_data_structures(void)
    *           are disabled by boot_card().
    */
 
-  #if defined(RTEMS_MULTIPROCESSING)
-    /*
-     *  Initialize the system state based on whether this is an MP system.
-     *  In an MP configuration, internally we view single processor
-     *  systems as a very restricted multiprocessor system.
-     */
-    _Configuration_MP_table = rtems_configuration_get_user_multiprocessing_table();
-
-    if ( _Configuration_MP_table == NULL ) {
-      _Configuration_MP_table =
-	(void *)&_Initialization_Default_multiprocessing_table;
-    } else {
-      _System_state_Is_multiprocessing = true;
-    }
-  #endif
-
   /*
    * Initialize any target architecture specific support as early as possible
    */
   _CPU_Initialize();
-
-  #if defined(RTEMS_MULTIPROCESSING)
-    _Objects_MP_Handler_early_initialization();
-  #endif
 
   _Thread_Dispatch_initialization();
 
@@ -115,19 +92,7 @@ static void rtems_initialize_data_structures(void)
 
   _Scheduler_Handler_initialization();
 
-  #if defined(RTEMS_MULTIPROCESSING)
-    _Objects_MP_Handler_initialization();
-    _MPCI_Handler_initialization( RTEMS_TIMEOUT );
-  #endif
-
   _SMP_Handler_initialize();
-}
-
-static void rtems_initialize_before_drivers(void)
-{
-  #if defined(RTEMS_MULTIPROCESSING)
-    _MPCI_Create_server();
-  #endif
 }
 
 static void rtems_initialize_device_drivers(void)
@@ -145,15 +110,6 @@ static void rtems_initialize_device_drivers(void)
    * be initialized when registered in level 2,3 and 4.
    */
   _IO_Initialize_all_drivers();
-
-  #if defined(RTEMS_MULTIPROCESSING)
-    if ( _System_state_Is_multiprocessing ) {
-      _MPCI_Initialization();
-      _MPCI_Internal_packets_Send_process_packet(
-	MPCI_PACKETS_SYSTEM_VERIFY
-      );
-    }
-  #endif
 
   /*
    *  Run the APIs and BSPs postdriver hooks.
@@ -183,12 +139,6 @@ RTEMS_SYSINIT_ITEM(
 RTEMS_SYSINIT_ITEM(
   _Thread_Create_idle,
   RTEMS_SYSINIT_IDLE_THREADS,
-  RTEMS_SYSINIT_ORDER_MIDDLE
-);
-
-RTEMS_SYSINIT_ITEM(
-  rtems_initialize_before_drivers,
-  RTEMS_SYSINIT_BEFORE_DRIVERS,
   RTEMS_SYSINIT_ORDER_MIDDLE
 );
 

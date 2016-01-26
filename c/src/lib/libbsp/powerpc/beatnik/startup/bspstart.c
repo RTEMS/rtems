@@ -46,9 +46,6 @@
 #include <bsp/vectors.h>
 #include <bsp/vpd.h>
 
-/* for RTEMS_VERSION :-( I dont like the preassembled string */
-#include <rtems/sptables.h>
-
 #define SHOW_MORE_INIT_SETTINGS
 
 BSP_output_char_function_type     BSP_output_char = BSP_output_char_via_serial;

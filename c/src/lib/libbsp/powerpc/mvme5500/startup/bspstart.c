@@ -41,7 +41,6 @@
 
 #include <rtems/bspIo.h>
 #include <rtems/counter.h>
-#include <rtems/sptables.h>
 
 /*
 #define SHOW_MORE_INIT_SETTINGS

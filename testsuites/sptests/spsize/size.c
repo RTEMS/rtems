@@ -73,7 +73,6 @@ void print_formula(void);
  *
  * #include <rtems/copyrt.h>
  * #include <rtems/tables.h>
- * #include <rtems/sptables.h>
  */
 #define  HEAP_OVHD        16    /* wasted heap space per task stack */
 #define  NAME_PTR_SIZE     8    /* size of name and pointer table entries */
@@ -453,7 +452,7 @@ initialized +=
 /*copyrt.h*/    (strlen(_Copyright_Notice)+1)             +
 
 #if defined(RTEMS_MULTIPROCESSING)
-/*sptables.h*/  (sizeof _Initialization_Default_multiprocessing_table)  +
+                (sizeof _Initialization_Default_multiprocessing_table)  +
 #endif
                 (strlen(_RTEMS_version)+1);
 

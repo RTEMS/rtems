@@ -128,8 +128,6 @@ typedef enum {
   LIBIO_POST,
   ROOT_FILESYSTEM_PRE,
   ROOT_FILESYSTEM_POST,
-  BEFORE_DRIVERS_PRE,
-  BEFORE_DRIVERS_POST,
   BSP_PRE_DRIVERS_PRE,
   BSP_PRE_DRIVERS_POST,
   DEVICE_DRIVERS_PRE,
@@ -578,17 +576,6 @@ LAST(RTEMS_SYSINIT_ROOT_FILESYSTEM)
   rv = stat("/", &st);
   assert(rv == 0);
   next_step(ROOT_FILESYSTEM_POST);
-}
-
-FIRST(RTEMS_SYSINIT_BEFORE_DRIVERS)
-{
-  /* Omit test of build configuration specific pre and post conditions */
-  next_step(BEFORE_DRIVERS_PRE);
-}
-
-LAST(RTEMS_SYSINIT_BEFORE_DRIVERS)
-{
-  next_step(BEFORE_DRIVERS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_BSP_PRE_DRIVERS)

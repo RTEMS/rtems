@@ -29,8 +29,10 @@ extern "C" {
 #define RTEMS_SYSINIT_BSP_WORK_AREAS             000100
 #define RTEMS_SYSINIT_BSP_START                  000200
 #define RTEMS_SYSINIT_INITIAL_EXTENSIONS         000300
-#define RTEMS_SYSINIT_DATA_STRUCTURES            000301
+#define RTEMS_SYSINIT_MP_EARLY                   000301
+#define RTEMS_SYSINIT_DATA_STRUCTURES            000302
 #define RTEMS_SYSINIT_CPU_SET                    00030d
+#define RTEMS_SYSINIT_MP                         00030e
 #define RTEMS_SYSINIT_USER_EXTENSIONS            000320
 #define RTEMS_SYSINIT_CLASSIC_TASKS              000340
 #define RTEMS_SYSINIT_CLASSIC_TIMER              000341
@@ -59,13 +61,14 @@ extern "C" {
 #define RTEMS_SYSINIT_LIBIO                      000400
 #define RTEMS_SYSINIT_ROOT_FILESYSTEM            000401
 #define RTEMS_SYSINIT_DRVMGR                     000500
-#define RTEMS_SYSINIT_BEFORE_DRIVERS             000501
+#define RTEMS_SYSINIT_MP_SERVER                  000501
 #define RTEMS_SYSINIT_BSP_PRE_DRIVERS            000600
 #define RTEMS_SYSINIT_DRVMGR_LEVEL_1             000700
 #define RTEMS_SYSINIT_DEVICE_DRIVERS             000701
 #define RTEMS_SYSINIT_DRVMGR_LEVEL_2             000702
 #define RTEMS_SYSINIT_DRVMGR_LEVEL_3             000703
 #define RTEMS_SYSINIT_DRVMGR_LEVEL_4             000704
+#define RTEMS_SYSINIT_MP_FINALIZE                000705
 #define RTEMS_SYSINIT_STD_FILE_DESCRIPTORS       000800
 
 /*

@@ -100,33 +100,6 @@ SCORE_EXTERN MPCI_Packet_processor
                _MPCI_Packet_processors[MP_PACKET_CLASSES_LAST+1];
 
 /**
- *  @brief Initialize the MPCI handler.
- *
- *  This routine performs the initialization necessary for this handler.
- *
- *  @param[in] timeout_status is the value which should be returned to
- *             blocking threads when they timeout on a remote operation.
- */
-void _MPCI_Handler_initialization(
-  uint32_t   timeout_status
-);
-
-/**
- *  @brief Create the MPCI server thread.
- *
- *  This routine creates the packet receive server used in MP systems.
- */
-void _MPCI_Create_server( void );
-
-/**
- *  @brief Initialize the MPCI driver.
- *
- *  This routine initializes the MPCI driver by
- *  invoking the user provided MPCI initialization callout.
- */
-void _MPCI_Initialization ( void );
-
-/**
  *  This routine registers the MPCI packet processor for the
  *  designated object class.
  *

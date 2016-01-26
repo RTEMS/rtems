@@ -82,10 +82,6 @@ $(PROJECT_INCLUDE)/rtems/scheduler.h: include/rtems/scheduler.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/scheduler.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/scheduler.h
 
-$(PROJECT_INCLUDE)/rtems/sptables.h: include/rtems/sptables.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sptables.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sptables.h
-
 $(PROJECT_INCLUDE)/rtems/timecounter.h: include/rtems/timecounter.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/timecounter.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/timecounter.h

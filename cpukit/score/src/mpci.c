@@ -21,29 +21,64 @@
 #include <rtems/score/mpciimpl.h>
 #include <rtems/score/coresemimpl.h>
 #include <rtems/score/interr.h>
+#include <rtems/score/objectmp.h>
 #include <rtems/score/stackimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/config.h>
+#include <rtems/sysinit.h>
 
 RTEMS_STATIC_ASSERT(
   sizeof(MPCI_Internal_packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,
   MPCI_Internal_packet
 );
 
+rtems_multiprocessing_table *_Configuration_MP_table;
+
+const rtems_multiprocessing_table
+ _Initialization_Default_multiprocessing_table = {
+  1,                        /* local node number */
+  1,                        /* maximum number nodes in system */
+  0,                        /* maximum number global objects */
+  0,                        /* maximum number proxies */
+  STACK_MINIMUM_SIZE,       /* MPCI receive server stack size */
+  NULL                      /* pointer to MPCI address table */
+};
+
 /**
  *  This is the core semaphore which the MPCI Receive Server blocks on.
  */
 CORE_semaphore_Control _MPCI_Semaphore;
 
-void _MPCI_Handler_initialization(
-  uint32_t   timeout_status
-)
+static void _MPCI_Handler_early_initialization( void )
+{
+  /*
+   *  Initialize the system state based on whether this is an MP system.
+   *  In an MP configuration, internally we view single processor
+   *  systems as a very restricted multiprocessor system.
+   */
+  _Configuration_MP_table = rtems_configuration_get_user_multiprocessing_table();
+
+  if ( _Configuration_MP_table == NULL ) {
+    _Configuration_MP_table = RTEMS_DECONST(
+      rtems_multiprocessing_table *,
+      &_Initialization_Default_multiprocessing_table
+    );
+  } else {
+    _System_state_Is_multiprocessing = true;
+  }
+
+  _Objects_MP_Handler_early_initialization();
+}
+
+static void _MPCI_Handler_initialization( void )
 {
   CORE_semaphore_Attributes   attributes;
   MPCI_Control               *users_mpci_table;
+
+  _Objects_MP_Handler_initialization();
 
   users_mpci_table = _Configuration_MP_table->User_mpci_table;
 
@@ -86,7 +121,7 @@ void _MPCI_Handler_initialization(
   );
 }
 
-void _MPCI_Create_server( void )
+static void _MPCI_Create_server( void )
 {
   Thread_Entry_information entry = {
     .adaptor = _Thread_Entry_adaptor_numeric,
@@ -129,7 +164,7 @@ void _MPCI_Create_server( void )
   _Thread_Start( _MPCI_Receive_server_tcb, &entry );
 }
 
-void _MPCI_Initialization ( void )
+static void _MPCI_Initialization( void )
 {
   (*_MPCI_table->initialization)();
 }
@@ -428,5 +463,37 @@ MPCI_Internal_packet *_MPCI_Internal_packets_Get_packet ( void )
 {
   return ( (MPCI_Internal_packet *) _MPCI_Get_packet() );
 }
+
+static void _MPCI_Finalize( void )
+{
+  if ( _System_state_Is_multiprocessing ) {
+    _MPCI_Initialization();
+    _MPCI_Internal_packets_Send_process_packet( MPCI_PACKETS_SYSTEM_VERIFY );
+  }
+}
+
+RTEMS_SYSINIT_ITEM(
+  _MPCI_Handler_early_initialization,
+  RTEMS_SYSINIT_MP_EARLY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+RTEMS_SYSINIT_ITEM(
+  _MPCI_Handler_initialization,
+  RTEMS_SYSINIT_MP,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+RTEMS_SYSINIT_ITEM(
+  _MPCI_Create_server,
+  RTEMS_SYSINIT_MP_SERVER,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+RTEMS_SYSINIT_ITEM(
+  _MPCI_Finalize,
+  RTEMS_SYSINIT_MP_FINALIZE,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
 
 /* end of file */
