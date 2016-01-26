@@ -584,15 +584,6 @@ typedef struct {
 }  RTEMS_API_Control;
 
 /**
- *  When the user configures a set of Classic API initialization tasks,
- *  This variable will point to the method used to initialize them.
- *
- *  @note It is instantiated and initialized by confdefs.h based upon
- *        application requirements.
- */
-extern void (*_RTEMS_tasks_Initialize_user_tasks_p)(void);
-
-/**
  *  @brief _RTEMS_tasks_Initialize_user_tasks_body
  *
  *  This routine creates and starts all configured user

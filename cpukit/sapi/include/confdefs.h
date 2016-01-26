@@ -3445,10 +3445,11 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #ifdef CONFIGURE_INIT
   #if defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE) || \
       defined(CONFIGURE_HAS_OWN_INIT_TASK_TABLE)
-    void (*_RTEMS_tasks_Initialize_user_tasks_p)(void) =
-              _RTEMS_tasks_Initialize_user_tasks_body;
-  #else
-    void (*_RTEMS_tasks_Initialize_user_tasks_p)(void) = NULL;
+    RTEMS_SYSINIT_ITEM(
+      _RTEMS_tasks_Initialize_user_tasks_body,
+      RTEMS_SYSINIT_CLASSIC_USER_TASKS,
+      RTEMS_SYSINIT_ORDER_MIDDLE
+    );
   #endif
 #endif
 

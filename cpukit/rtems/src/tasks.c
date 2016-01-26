@@ -32,7 +32,6 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/score/apiext.h>
 
 Thread_Information _RTEMS_tasks_Information;
 
@@ -161,13 +160,6 @@ static void _RTEMS_tasks_Switch_extension(
 #define RTEMS_TASKS_SWITCH_EXTENSION NULL
 #endif
 
-API_extensions_Control _RTEMS_tasks_API_extensions = {
-  #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-    .predriver_hook = NULL,
-  #endif
-  .postdriver_hook = _RTEMS_tasks_Initialize_user_tasks
-};
-
 User_extensions_Control _RTEMS_tasks_User_extensions = {
   { NULL, NULL },
   { { NULL, NULL }, RTEMS_TASKS_SWITCH_EXTENSION },
@@ -205,8 +197,6 @@ static void _RTEMS_tasks_Manager_initialization(void)
 
   _User_extensions_Add_API_set( &_RTEMS_tasks_User_extensions );
 
-  _API_extensions_Add( &_RTEMS_tasks_API_extensions );
-
   /*
    *  Register the MP Process Packet routine.
    */
@@ -218,12 +208,6 @@ static void _RTEMS_tasks_Manager_initialization(void)
   );
 #endif
 
-}
-
-void _RTEMS_tasks_Initialize_user_tasks( void )
-{
-  if ( _RTEMS_tasks_Initialize_user_tasks_p )
-    (*_RTEMS_tasks_Initialize_user_tasks_p)();
 }
 
 RTEMS_SYSINIT_ITEM(

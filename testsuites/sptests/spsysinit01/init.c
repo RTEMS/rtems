@@ -132,6 +132,8 @@ typedef enum {
   BSP_PRE_DRIVERS_POST,
   DEVICE_DRIVERS_PRE,
   DEVICE_DRIVERS_POST,
+  CLASSIC_USER_TASKS_PRE,
+  CLASSIC_USER_TASKS_POST,
   STD_FILE_DESCRIPTORS_PRE,
   STD_FILE_DESCRIPTORS_POST,
   INIT_TASK,
@@ -602,6 +604,18 @@ LAST(RTEMS_SYSINIT_DEVICE_DRIVERS)
 {
   assert(_IO_All_drivers_initialized);
   next_step(DEVICE_DRIVERS_POST);
+}
+
+FIRST(RTEMS_SYSINIT_CLASSIC_USER_TASKS)
+{
+  assert(_Objects_Active_count(&_RTEMS_tasks_Information.Objects) == 0);
+  next_step(CLASSIC_USER_TASKS_PRE);
+}
+
+LAST(RTEMS_SYSINIT_CLASSIC_USER_TASKS)
+{
+  assert(_Objects_Active_count(&_RTEMS_tasks_Information.Objects) == 1);
+  next_step(CLASSIC_USER_TASKS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_STD_FILE_DESCRIPTORS)
