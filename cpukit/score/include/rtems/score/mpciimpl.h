@@ -247,8 +247,8 @@ Thread_Control *_MPCI_Process_response (
  *
  *  @param[in] ignored is the thread argument.  It is not used.
  */
-Thread _MPCI_Receive_server(
-  uint32_t   ignored
+void _MPCI_Receive_server(
+  Thread_Entry_numeric_type ignored
 );
 
 /**

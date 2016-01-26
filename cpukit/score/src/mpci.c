@@ -88,6 +88,14 @@ void _MPCI_Handler_initialization(
 
 void _MPCI_Create_server( void )
 {
+  Thread_Entry_information entry = {
+    .adaptor = _Thread_Entry_adaptor_numeric,
+    .Kinds = {
+      .Numeric = {
+        .entry = _MPCI_Receive_server
+      }
+    }
+  };
   Objects_Name name;
 
 
@@ -118,14 +126,7 @@ void _MPCI_Create_server( void )
     name
   );
 
-  _Thread_Start(
-    _MPCI_Receive_server_tcb,
-    THREAD_START_NUMERIC,
-    (void *) _MPCI_Receive_server,
-    NULL,
-    0,
-    NULL
-  );
+  _Thread_Start( _MPCI_Receive_server_tcb, &entry );
 }
 
 void _MPCI_Initialization ( void )
@@ -275,8 +276,8 @@ Thread_Control *_MPCI_Process_response (
  *
  */
 
-Thread _MPCI_Receive_server(
-  uint32_t   ignored
+void _MPCI_Receive_server(
+  Thread_Entry_numeric_type ignored
 )
 {
 
@@ -321,11 +322,9 @@ Thread _MPCI_Receive_server(
           INTERNAL_ERROR_BAD_PACKET
         );
 
-        (*the_function)( the_packet );
+       (*the_function)( the_packet );
     }
   }
-
-  return 0;   /* unreached - only to remove warnings */
 }
 
 void _MPCI_Announce ( void )
