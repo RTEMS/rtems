@@ -33,7 +33,6 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/apiext.h>
 #include <rtems/rtems/intr.h>
 #include <libcpu/io.h>
 #include <libcpu/byteorder.h>

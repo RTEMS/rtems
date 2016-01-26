@@ -27,7 +27,6 @@
 #include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/sysinit.h>
-#include <rtems/score/apiext.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>

@@ -21,7 +21,6 @@
 #endif
 
 #include <rtems/score/threaddispatch.h>
-#include <rtems/score/apiext.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/threadimpl.h>

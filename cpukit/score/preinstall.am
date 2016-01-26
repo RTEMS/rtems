@@ -68,10 +68,6 @@ $(PROJECT_INCLUDE)/rtems/score/address.h: include/rtems/score/address.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/address.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/address.h
 
-$(PROJECT_INCLUDE)/rtems/score/apiext.h: include/rtems/score/apiext.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/apiext.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/apiext.h
-
 $(PROJECT_INCLUDE)/rtems/score/apimutex.h: include/rtems/score/apimutex.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/apimutex.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/apimutex.h

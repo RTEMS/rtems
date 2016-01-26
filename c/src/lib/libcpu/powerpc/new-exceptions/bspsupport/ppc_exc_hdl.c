@@ -10,7 +10,6 @@
 
 #include <bsp/vectors.h>
 
-#include <rtems/score/apiext.h>
 #include <rtems/score/threaddispatch.h>
 
 /* Provide temp. storage space for a few registers.

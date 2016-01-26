@@ -25,7 +25,6 @@ include_rtems_HEADERS += include/rtems/seterr.h
 include_rtems_scoredir = $(includedir)/rtems/score
 
 include_rtems_score_HEADERS = include/rtems/score/address.h
-include_rtems_score_HEADERS += include/rtems/score/apiext.h
 include_rtems_score_HEADERS += include/rtems/score/apimutex.h
 include_rtems_score_HEADERS += include/rtems/score/assert.h
 include_rtems_score_HEADERS += include/rtems/score/atomic.h
@@ -343,7 +342,7 @@ libscore_a_SOURCES += src/userextaddset.c \
     src/userext.c src/userextremoveset.c src/userextiterate.c
 
 ## STD_C_FILES
-libscore_a_SOURCES += src/apiext.c src/chain.c src/chainappend.c \
+libscore_a_SOURCES += src/chain.c src/chainappend.c \
     src/chainextract.c src/chainget.c src/chaininsert.c \
     src/chainappendempty.c src/chainprependempty.c src/chaingetempty.c \
     src/chainnodecount.c \

@@ -16,7 +16,6 @@
 #include <bsp/irq-generic.h>
 
 #include <stdlib.h>
-#include <rtems/score/apiext.h>
 #include <stdio.h>
 #include <inttypes.h>
 

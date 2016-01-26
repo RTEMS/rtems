@@ -24,7 +24,6 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
-#include <rtems/score/apiext.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>

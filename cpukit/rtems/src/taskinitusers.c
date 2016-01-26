@@ -28,7 +28,6 @@
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/score/apiext.h>
 
 static void _RTEMS_Global_construction( rtems_task_argument arg )
 {

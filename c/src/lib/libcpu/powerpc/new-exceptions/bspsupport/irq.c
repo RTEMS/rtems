@@ -13,7 +13,6 @@
 
 #include <rtems.h>
 #include "irq_supp.h"
-#include <rtems/score/apiext.h>  /* for post ISR signal processing */
 #include <bsp/vectors.h>
 #include <stdlib.h>
 #include <rtems/bspIo.h> /* for printk */

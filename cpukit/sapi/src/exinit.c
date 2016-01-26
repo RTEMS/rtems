@@ -30,10 +30,10 @@
 #include <rtems/config.h>
 #include <rtems/extensionimpl.h>
 #include <rtems/init.h>
+#include <rtems/io.h>
 #include <rtems/sysinit.h>
 #include <rtems/score/sysstate.h>
 
-#include <rtems/score/apiext.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/copyrt.h>
 #include <rtems/score/heap.h>
@@ -95,30 +95,6 @@ static void rtems_initialize_data_structures(void)
   _SMP_Handler_initialize();
 }
 
-static void rtems_initialize_device_drivers(void)
-{
-  /*
-   *  Initialize all the device drivers and initialize the MPCI layer.
-   *
-   *  NOTE:  The MPCI may be build upon a device driver.
-   */
-
-  /* Initialize I/O drivers. 
-   *
-   * Driver Manager note:
-   * All drivers may not be registered yet. Drivers will dynamically
-   * be initialized when registered in level 2,3 and 4.
-   */
-  _IO_Initialize_all_drivers();
-
-  /*
-   *  Run the APIs and BSPs postdriver hooks.
-   *
-   *  The API extensions are supposed to create user initialization tasks.
-   */
-  _API_extensions_Run_postdriver();
-}
-
 RTEMS_LINKER_ROSET( _Sysinit, rtems_sysinit_item );
 
 RTEMS_SYSINIT_ITEM(
@@ -142,8 +118,14 @@ RTEMS_SYSINIT_ITEM(
   RTEMS_SYSINIT_ORDER_MIDDLE
 );
 
+/* Initialize I/O drivers.
+ *
+ * Driver Manager note:
+ * All drivers may not be registered yet. Drivers will dynamically
+ * be initialized when registered in level 2,3 and 4.
+ */
 RTEMS_SYSINIT_ITEM(
-  rtems_initialize_device_drivers,
+  _IO_Initialize_all_drivers,
   RTEMS_SYSINIT_DEVICE_DRIVERS,
   RTEMS_SYSINIT_ORDER_MIDDLE
 );

@@ -20,7 +20,6 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
-#include <rtems/score/apiext.h>
 #include <rtems/score/copyrt.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/rtems/tasksimpl.h>

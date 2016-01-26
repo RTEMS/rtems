@@ -16,7 +16,6 @@
  */
 
 #include <rtems.h>
-#include <rtems/score/apiext.h>
 #include <mpc5xx.h>
 #include <libcpu/vectors.h>
 #include <libcpu/raw_exception.h>

@@ -22,7 +22,6 @@
 #include <rtems/rtems/signalimpl.h>
 #include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/tasks.h>
-#include <rtems/score/apiext.h>
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadimpl.h>

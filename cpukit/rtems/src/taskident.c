@@ -26,7 +26,6 @@
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/score/apiext.h>
 
 rtems_status_code rtems_task_ident(
   rtems_name    name,
