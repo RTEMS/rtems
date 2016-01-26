@@ -493,6 +493,7 @@ static void mid_task(rtems_task_argument arg)
   rtems_test_assert(0);
 }
 
+#ifdef RTEMS_POSIX_API
 static void deadlock_cleanup(void *arg)
 {
   struct _Mutex_Control *deadlock_mtx = arg;
@@ -505,6 +506,7 @@ static void deadlock_cleanup(void *arg)
   _Mutex_Release(deadlock_mtx);
   _Mutex_Destroy(deadlock_mtx);
 }
+#endif
 
 static void high_task(rtems_task_argument idx)
 {
@@ -554,13 +556,17 @@ static void high_task(rtems_task_argument idx)
     if ((events & EVENT_MTX_DEADLOCK) != 0) {
       struct _Mutex_Control *deadlock_mtx = &ctx->deadlock_mtx;
 
+#ifdef RTEMS_POSIX_API
       pthread_cleanup_push(deadlock_cleanup, deadlock_mtx);
+#endif
 
       _Mutex_Initialize(deadlock_mtx);
       _Mutex_Acquire(deadlock_mtx);
       _Mutex_Acquire(deadlock_mtx);
 
+#ifdef RTEMS_POSIX_API
       pthread_cleanup_pop(0);
+#endif
     }
 
     if ((events & EVENT_REC_MTX_ACQUIRE) != 0) {
@@ -676,8 +682,10 @@ static void test(void)
   sc = rtems_task_delete(ctx->mid);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
+#ifdef RTEMS_POSIX_API
   sc = rtems_task_delete(ctx->high[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+#endif
 
   sc = rtems_task_delete(ctx->high[1]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
