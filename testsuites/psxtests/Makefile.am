@@ -1,7 +1,6 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 _SUBDIRS = psxclock
-_SUBDIRS += psxcleanup02
 if HAS_POSIX
 _SUBDIRS += psxhdrs psx01 psx02 psx03 psx04 psx05 psx06 psx07 psx08 psx09 \
     psx10 psx11 psx12 psx13 psx14 psx15 psx16 \
@@ -16,6 +15,7 @@ _SUBDIRS += psxhdrs psx01 psx02 psx03 psx04 psx05 psx06 psx07 psx08 psx09 \
     psxtime psxtimer01 psxtimer02 psxualarm psxusleep psxfatal01 psxfatal02 \
     psxintrcritical01 psxstack01 psxstack02 \
     psxeintr_join psxgetattrnp01 psxclock01
+_SUBDIRS += psxcleanup02
 if HAS_CPLUSPLUS
 _SUBDIRS += psxglobalcon01
 _SUBDIRS += psxglobalcon02
