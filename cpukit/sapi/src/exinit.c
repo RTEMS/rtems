@@ -51,10 +51,6 @@
 
 #include <rtems/sptables.h>
 
-#ifdef RTEMS_DRVMGR_STARTUP
-  #include <drvmgr/drvmgr.h>
-#endif
-
 static Objects_Information *
 _Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
 
@@ -129,10 +125,6 @@ static void rtems_initialize_data_structures(void)
 
 static void rtems_initialize_before_drivers(void)
 {
-  #ifdef RTEMS_DRVMGR_STARTUP
-  _DRV_Manager_initialization();
-  #endif
-
   #if defined(RTEMS_MULTIPROCESSING)
     _MPCI_Create_server();
   #endif
@@ -146,28 +138,6 @@ static void rtems_initialize_device_drivers(void)
    *  NOTE:  The MPCI may be build upon a device driver.
    */
 
-  #ifdef RTEMS_DRVMGR_STARTUP
-  /* BSPs has already registered their "root bus" driver in the
-   * bsp_predriver hook or so.
-   *
-   * Init Drivers to Level 1, constraints:
-   *   - Interrupts and system clock timer does not work.
-   *   - malloc() work, however other memory services may not
-   *     have been initialized yet.
-   *   - initializes most basic stuff
-   *
-   * Typical setup in Level 1:
-   *   - Find most devices in system, do PCI scan and configuration.
-   *   - Reset hardware if needed.
-   *   - Install IRQ driver
-   *   - Install Timer driver
-   *   - Install console driver and debug printk()
-   *   - Install extra memory.
-   */
-  _DRV_Manager_init_level(1);
-  bsp_driver_level_hook(1);
-  #endif
-
   /* Initialize I/O drivers. 
    *
    * Driver Manager note:
@@ -175,34 +145,6 @@ static void rtems_initialize_device_drivers(void)
    * be initialized when registered in level 2,3 and 4.
    */
   _IO_Initialize_all_drivers();
-
-  #ifdef RTEMS_DRVMGR_STARTUP
-  /* Init Drivers to Level 2, constraints:
-   *  - Interrupts can be registered and enabled.
-   *  - System Clock is running
-   *  - Console may be used.
-   *
-   * This is typically where drivers are initialized
-   * for the first time.
-   */
-  _DRV_Manager_init_level(2);
-  bsp_driver_level_hook(2);
-
-  /* Init Drivers to Level 3 
-   * 
-   * This is typically where normal drivers are initialized
-   * for the second time, they may depend on other drivers
-   * API inited in level 2
-   */
-  _DRV_Manager_init_level(3);
-  bsp_driver_level_hook(3);
-
-  /* Init Drivers to Level 4,
-   * Init drivers that depend on services initialized in Level 3
-   */
-  _DRV_Manager_init_level(4);
-  bsp_driver_level_hook(4);
-  #endif
 
   #if defined(RTEMS_MULTIPROCESSING)
     if ( _System_state_Is_multiprocessing ) {
