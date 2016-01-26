@@ -9,7 +9,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <bsp/bootcard.h>
+#include <drvmgr/drvmgr.h>
 
 void bsp_driver_level_hook( int level )
 {

@@ -16,6 +16,8 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
+#include <drvmgr/drvmgr.h>
+
 static void leon3_interrupt_common_init( void )
 {
   /* Initialize shared interrupt handling, must be done after IRQ

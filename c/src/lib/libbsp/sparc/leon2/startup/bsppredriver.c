@@ -25,6 +25,7 @@
  * the configuration and add custom cores in the RTEMS project.
  */
 #ifdef RTEMS_DRVMGR_STARTUP
+#include <drvmgr/drvmgr.h>
 #include <drvmgr/leon2_amba_bus.h>
 
 /* All drivers included by BSP, this is overridden by the user by including
