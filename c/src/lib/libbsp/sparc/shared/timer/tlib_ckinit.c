@@ -135,15 +135,9 @@ void Clock_isr(void *arg_unused)
   } while ( _Thread_Executing == _Thread_Idle &&
           _Thread_Heir == _Thread_Executing);
 
-  Clock_driver_support_at_tick();
   return;
 
 #else
-
-  /*
-   * Add custom handling at every tick from bsp.h
-   */
-  Clock_driver_support_at_tick();
 
 #ifdef CLOCK_DRIVER_ISRS_PER_TICK
   /*
