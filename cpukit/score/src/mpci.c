@@ -201,8 +201,6 @@ uint32_t   _MPCI_Send_request_packet (
 
   executing->Wait.id = the_packet->id;
 
-  executing->Wait.queue = &_MPCI_Remote_blocked_threads;
-
   _Thread_Disable_dispatch();
 
     (*_MPCI_table->send_packet)( destination, the_packet );
