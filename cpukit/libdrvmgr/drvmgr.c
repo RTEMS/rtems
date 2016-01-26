@@ -68,15 +68,14 @@ void _DRV_Manager_init_level(int level)
 {
 	struct drvmgr *mgr = &drvmgr;
 
-	if (mgr->level < level) {
-		/* Set new Level */
-		mgr->level = level;
+	if (mgr->level >= level)
+		return;
 
-		/* Initialize buses and devices into this new level */
-		drvmgr_init_update();
-	}
+	/* Set new Level */
+	mgr->level = level;
 
-	bsp_driver_level_hook(level);
+	/* Initialize buses and devices into this new level */
+	drvmgr_init_update();
 }
 
 /* Initialize Data structures of the driver manager and call driver
