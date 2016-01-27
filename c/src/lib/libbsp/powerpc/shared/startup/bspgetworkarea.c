@@ -9,9 +9,19 @@
 
 #include <libcpu/powerpc-utility.h>
 
+#include <rtems/sysinit.h>
+
 LINKER_SYMBOL(__rtems_end)
 
 void bsp_work_area_initialize(void)
+{
+  /*
+   * Cannot do work area initialization before bsp_start(), since BSP_mem_size
+   * and MMU is not set up.
+   */
+}
+
+static void bsp_work_area_initialize_later(void)
 {
   uintptr_t work_size;
   uintptr_t work_area;
@@ -22,3 +32,9 @@ void bsp_work_area_initialize(void)
 
   bsp_work_area_initialize_default((void *) work_area, work_size);
 }
+
+RTEMS_SYSINIT_ITEM(
+  bsp_work_area_initialize_later,
+  RTEMS_SYSINIT_BSP_START,
+  RTEMS_SYSINIT_ORDER_LAST
+);
