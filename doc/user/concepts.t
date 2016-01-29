@@ -43,7 +43,7 @@ the executive.
 @subsection Object Names
 
 @cindex object name
-@findex rtems_object_name
+@findex rtems_name
 
 An object name is an unsigned thirty-two bit entity
 associated with the object by the user.  The data type
@@ -60,7 +60,7 @@ The following example illustrates this:
 
 @ifset is-C
 @example
-rtems_object_name my_name;
+rtems_name my_name;
 
 my_name = rtems_build_name( 'L', 'I', 'T', 'E' );
 @end example
