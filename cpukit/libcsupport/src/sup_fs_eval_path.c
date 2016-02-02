@@ -136,8 +136,8 @@ void rtems_filesystem_eval_path_continue(
   }
 }
 
-static rtems_filesystem_location_info_t *
-eval_path_start(
+rtems_filesystem_location_info_t *
+rtems_filesystem_eval_path_start_with_root_and_current(
   rtems_filesystem_eval_path_context_t *ctx,
   const char *path,
   size_t pathlen,
@@ -167,25 +167,6 @@ eval_path_start(
 }
 
 rtems_filesystem_location_info_t *
-rtems_filesystem_eval_path_start_with_root_and_current(
-  rtems_filesystem_eval_path_context_t *ctx,
-  const char *path,
-  int eval_flags,
-  rtems_filesystem_global_location_t *const *global_root_ptr,
-  rtems_filesystem_global_location_t *const *global_current_ptr
-)
-{
-  return eval_path_start(
-    ctx,
-    path,
-    strlen(path),
-    eval_flags,
-    global_root_ptr,
-    global_current_ptr
-  );
-}
-
-rtems_filesystem_location_info_t *
 rtems_filesystem_eval_path_start(
   rtems_filesystem_eval_path_context_t *ctx,
   const char *path,
@@ -195,6 +176,7 @@ rtems_filesystem_eval_path_start(
   return rtems_filesystem_eval_path_start_with_root_and_current(
     ctx,
     path,
+    strlen(path),
     eval_flags,
     &rtems_filesystem_root,
     &rtems_filesystem_current
@@ -229,7 +211,7 @@ rtems_filesystem_eval_path_start_with_parent(
     }
   }
 
-  currentloc = eval_path_start(
+  currentloc = rtems_filesystem_eval_path_start_with_root_and_current(
     ctx,
     parentpath,
     parentpathlen,
