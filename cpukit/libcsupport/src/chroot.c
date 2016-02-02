@@ -44,6 +44,7 @@ int chroot( const char *path )
   rtems_filesystem_eval_path_start_with_root_and_current(
     &ctx,
     path,
+    strlen( path ),
     eval_flags,
     &rtems_global_user_env.root_directory,
     &rtems_global_user_env.current_directory
