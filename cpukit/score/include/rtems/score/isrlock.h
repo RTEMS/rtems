@@ -254,7 +254,8 @@ typedef struct {
       &( _context )->Lock_context \
     )
 #else
-  #define _ISR_lock_Acquire( _lock, _context )
+  #define _ISR_lock_Acquire( _lock, _context ) \
+    (void) _context;
 #endif
 
 /**
@@ -276,7 +277,8 @@ typedef struct {
       &( _context )->Lock_context \
     )
 #else
-  #define _ISR_lock_Release( _lock, _context )
+  #define _ISR_lock_Release( _lock, _context ) \
+    (void) _context;
 #endif
 
 /**
