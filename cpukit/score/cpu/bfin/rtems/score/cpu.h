@@ -463,18 +463,6 @@ typedef struct {
     /*uint32_t   special_interrupt_register;*/
 } CPU_Interrupt_frame;
 
-/**
- * This variable is optional.  It is used on CPUs on which it is difficult
- * to generate an "uninitialized" FP context.  It is filled in by
- * @ref _CPU_Initialize and copied into the task's FP context area during
- * @ref _CPU_Context_Initialize.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
-
 /** @} */
 
 /**
@@ -831,28 +819,8 @@ void _CPU_Context_Initialize(
 #define _CPU_Context_Fp_start( _base, _offset ) \
    ( (void *) _Addresses_Add_offset( (_base), (_offset) ) )
 
-/**
- * This routine initializes the FP context area passed to it to.
- * There are a few standard ways in which to initialize the
- * floating point context.  The code included for this macro assumes
- * that this is a CPU in which a "initial" FP context was saved into
- * @a _CPU_Null_fp_context and it simply copies it to the destination
- * context passed to it.
- *
- * Other floating point context save/restore models include:
- *   -# not doing anything, and
- *   -# putting a "null FP status word" in the correct place in the FP context.
- *
- * @param[in] _destination is the floating point context area
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
 #define _CPU_Context_Initialize_fp( _destination ) \
-  { \
-   *(*(_destination)) = _CPU_Null_fp_context; \
-  }
+  memset( *( _destination ), 0, CPU_CONTEXT_FP_SIZE );
 
 /* end of Context handler macros */
 
