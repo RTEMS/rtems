@@ -590,7 +590,7 @@ typedef CPU_Interrupt_frame CPU_Exception_frame;
  *  _CPU_Context_Initialize.
  */
 
-SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
+extern Context_Control_fp _CPU_Null_fp_context;
 
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.

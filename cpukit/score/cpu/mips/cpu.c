@@ -54,6 +54,10 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/wkspace.h>
 
+#if CPU_HARDWARE_FP
+Context_Control_fp _CPU_Null_fp_context;
+#endif
+
 /*
 ** Exception stack frame pointer used in cpu_asm to pass the exception stack frame
 ** address to the context switch code.
