@@ -371,18 +371,6 @@ typedef struct {
 } CPU_Interrupt_frame;
 
 /*
- *  This variable is optional.  It is used on CPUs on which it is difficult
- *  to generate an "uninitialized" FP context.  It is filled in by
- *  _CPU_Initialize and copied into the task's FP context area during
- *  _CPU_Context_Initialize.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
-
-/*
  *  Nothing prevents the porter from declaring more CPU specific variables.
  *
  *  MOXIE Specific Information:
@@ -666,25 +654,8 @@ uint32_t   _CPU_ISR_Get_level( void );
 #define _CPU_Context_Fp_start( _base, _offset ) \
    ( (void *) (_base) + (_offset) )
 
-/*
- *  This routine initializes the FP context area passed to it to.
- *  There are a few standard ways in which to initialize the
- *  floating point context.  The code included for this macro assumes
- *  that this is a CPU in which a "initial" FP context was saved into
- *  _CPU_Null_fp_context and it simply copies it to the destination
- *  context passed to it.
- *
- *  Other models include (1) not doing anything, and (2) putting
- *  a "null FP status word" in the correct place in the FP context.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
 #define _CPU_Context_Initialize_fp( _destination ) \
-  { \
-   *(*(_destination)) = _CPU_Null_fp_context; \
-  }
+  memset( *( _destination ), 0, CPU_CONTEXT_FP_SIZE );
 
 /* end of Context handler macros */
 
