@@ -391,7 +391,6 @@ typedef Context_Control CPU_Interrupt_frame;
  */
 
 #define CPU_CONTEXT_FP_SIZE  0
-SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 /*
  *  Amount of extra stack (above minimum stack size) required by
@@ -653,23 +652,8 @@ void _CPU_Context_Initialize(
 #define _CPU_Context_Fp_start( _base, _offset ) \
    ( (void *) _Addresses_Add_offset( (_base), (_offset) ) )
 
-/*
- *  This routine initializes the FP context area passed to it to.
- *  There are a few standard ways in which to initialize the
- *  floating point context.  The code included for this macro assumes
- *  that this is a CPU in which a "initial" FP context was saved into
- *  _CPU_Null_fp_context and it simply copies it to the destination
- *  context passed to it.
- *
- *  Other models include (1) not doing anything, and (2) putting
- *  a "null FP status word" in the correct place in the FP context.
- *
- */
-
 #define _CPU_Context_Initialize_fp( _destination ) \
-  { \
-   *(*(_destination)) = _CPU_Null_fp_context; \
-  }
+  memset( *( _destination ), 0, CPU_CONTEXT_FP_SIZE );
 
 /* end of Context handler macros */
 
