@@ -22,6 +22,12 @@
 #include <rtems/score/tls.h>
 #include <rtems/rtems/cache.h>
 
+#if (SPARC_HAS_FPU == 1)
+Context_Control_fp _CPU_Null_fp_context;
+#endif
+
+volatile uint32_t _CPU_ISR_Dispatch_disable;
+
 /*
  *  _CPU_Initialize
  *
