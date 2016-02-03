@@ -80,14 +80,14 @@ Thread_Control *_Thread_MP_Find_proxy (
  *
  * The following chain is used to manage the active set proxies.
  */
-SCORE_EXTERN Chain_Control _Thread_MP_Active_proxies;
+extern Chain_Control _Thread_MP_Active_proxies;
 
 /**
  *  @brief Manage the inactive set of MP proxies.
  *
  * The following chain is used to manage the inactive set of proxies.
  */
-SCORE_EXTERN Chain_Control _Thread_MP_Inactive_proxies;
+extern Chain_Control _Thread_MP_Inactive_proxies;
 
 /**
  * This function returns true if the thread in question is the

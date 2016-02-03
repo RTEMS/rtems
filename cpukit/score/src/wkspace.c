@@ -32,6 +32,8 @@
   #include <rtems/bspIo.h>
 #endif
 
+Heap_Control _Workspace_Area;
+
 static uint32_t _Get_maximum_thread_count(void)
 {
   uint32_t thread_count = 0;

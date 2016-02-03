@@ -173,13 +173,13 @@ void _Objects_MP_Is_remote (
 /**
  *  This is the maximum number of global objects configured.
  */
-SCORE_EXTERN uint32_t       _Objects_MP_Maximum_global_objects;
+extern uint32_t _Objects_MP_Maximum_global_objects;
 
 /**
  *  The following chain header is used to manage the set of
  *  inactive global object control blocks.
  */
-SCORE_EXTERN Chain_Control  _Objects_MP_Inactive_global_objects;
+extern Chain_Control _Objects_MP_Inactive_global_objects;
 
 /**
  * This function allocates a Global Object control block.

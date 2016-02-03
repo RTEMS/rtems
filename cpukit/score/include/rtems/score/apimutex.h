@@ -113,7 +113,7 @@ bool _API_Mutex_Is_owner( const API_Mutex_Control *mutex );
  *  This points to the API Mutex instance used to ensure that only
  *  one thread at a time is allocating or freeing memory.
  */
-SCORE_EXTERN API_Mutex_Control *_RTEMS_Allocator_Mutex;
+extern API_Mutex_Control *_RTEMS_Allocator_Mutex;
 
 static inline void _RTEMS_Lock_allocator( void )
 {
@@ -130,7 +130,7 @@ static inline bool _RTEMS_Allocator_is_owner( void )
   return _API_Mutex_Is_owner( _RTEMS_Allocator_Mutex );
 }
 
-SCORE_EXTERN API_Mutex_Control *_Once_Mutex;
+extern API_Mutex_Control *_Once_Mutex;
 
 static inline void _Once_Lock( void )
 {

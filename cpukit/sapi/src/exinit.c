@@ -19,13 +19,6 @@
 #include "config.h"
 #endif
 
-/*
- *  SCORE_INIT is defined so all of the super core
- *  data will be included in this object file.
- */
-
-#define SCORE_INIT
-
 #include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/extensionimpl.h>
@@ -48,6 +41,10 @@
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 
+const char _Copyright_Notice[] =
+"COPYRIGHT (c) 1989-2008.\n\
+On-Line Applications Research Corporation (OAR).\n";
+
 static Objects_Information *
 _Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
 
@@ -61,6 +58,10 @@ Objects_Information **_Objects_Information_table[ OBJECTS_APIS_LAST + 1 ] = {
   &_RTEMS_Objects[ 0 ],
   &_POSIX_Objects[ 0 ]
 };
+
+API_Mutex_Control *_RTEMS_Allocator_Mutex;
+
+API_Mutex_Control *_Once_Mutex;
 
 static void rtems_initialize_data_structures(void)
 {

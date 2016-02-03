@@ -75,13 +75,13 @@ typedef struct {
  *  The following thread queue is used to maintain a list of tasks
  *  which currently have outstanding remote requests.
  */
-SCORE_EXTERN Thread_queue_Control _MPCI_Remote_blocked_threads;
+extern Thread_queue_Control _MPCI_Remote_blocked_threads;
 
 /**
  *  The following define the internal pointers to the user's
  *  configuration information.
  */
-SCORE_EXTERN MPCI_Control *_MPCI_table;
+extern MPCI_Control *_MPCI_table;
 
 /**
  *  @brief Pointer to MP thread control block.
@@ -90,14 +90,14 @@ SCORE_EXTERN MPCI_Control *_MPCI_table;
  *  thread is executing so that a proxy can be allocated instead of
  *  blocking the multiprocessing receive thread.
  */
-SCORE_EXTERN Thread_Control *_MPCI_Receive_server_tcb;
+extern Thread_Control *_MPCI_Receive_server_tcb;
 
 /**
  *  The following table contains the process packet routines provided
  *  by each object that supports MP operations.
  */
-SCORE_EXTERN MPCI_Packet_processor
-               _MPCI_Packet_processors[MP_PACKET_CLASSES_LAST+1];
+extern MPCI_Packet_processor
+_MPCI_Packet_processors[ MP_PACKET_CLASSES_LAST + 1 ];
 
 /**
  *  This routine registers the MPCI packet processor for the

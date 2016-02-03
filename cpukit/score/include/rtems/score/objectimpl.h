@@ -178,7 +178,7 @@ typedef struct {
  *  The following is referenced to the node number of the local node.
  */
 #if defined(RTEMS_MULTIPROCESSING)
-SCORE_EXTERN uint16_t       _Objects_Local_node;
+extern uint16_t _Objects_Local_node;
 #else
 #define _Objects_Local_node ((uint16_t)1)
 #endif
@@ -187,7 +187,7 @@ SCORE_EXTERN uint16_t       _Objects_Local_node;
  *  The following is referenced to the number of nodes in the system.
  */
 #if defined(RTEMS_MULTIPROCESSING)
-SCORE_EXTERN uint16_t    _Objects_Maximum_nodes;
+extern uint16_t _Objects_Maximum_nodes;
 #else
 #define _Objects_Maximum_nodes 1
 #endif

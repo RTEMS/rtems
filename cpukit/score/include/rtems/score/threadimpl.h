@@ -53,7 +53,7 @@ extern "C" {
 /**
  *  Self for the GNU Ada Run-Time
  */
-SCORE_EXTERN void *rtems_ada_self;
+extern void *rtems_ada_self;
 
 typedef struct {
   Objects_Information Objects;
@@ -65,14 +65,14 @@ typedef struct {
  *  The following defines the information control block used to
  *  manage this class of objects.
  */
-SCORE_EXTERN Thread_Information _Thread_Internal_information;
+extern Thread_Information _Thread_Internal_information;
 
 /**
  *  The following points to the thread whose floating point
  *  context is currently loaded.
  */
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
+extern Thread_Control *_Thread_Allocated_fp;
 #endif
 
 #define THREAD_CHAIN_NODE_TO_THREAD( node ) \

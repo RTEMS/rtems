@@ -43,7 +43,7 @@ extern "C" {
  *  This is the heap control structure used to manage the RTEMS Executive
  *  Workspace.
  */
-SCORE_EXTERN Heap_Control _Workspace_Area;
+extern Heap_Control _Workspace_Area;
 
 /**
  * @brief Initilize workspace handler.

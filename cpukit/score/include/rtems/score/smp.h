@@ -35,7 +35,7 @@ extern "C" {
  */
 
 #if defined( RTEMS_SMP )
-  SCORE_EXTERN uint32_t _SMP_Processor_count;
+  extern uint32_t _SMP_Processor_count;
 
   static inline uint32_t _SMP_Get_processor_count( void )
   {

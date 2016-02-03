@@ -29,6 +29,14 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
 
+#if __RTEMS_ADA__
+void *rtems_ada_self;
+#endif
+
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+Thread_Control *_Thread_Allocated_fp;
+#endif
+
 CHAIN_DEFINE_EMPTY( _User_extensions_Switches_list );
 
 static Thread_Action *_Thread_Get_post_switch_action(

@@ -35,6 +35,8 @@ RTEMS_STATIC_ASSERT(
   MPCI_Internal_packet
 );
 
+bool _System_state_Is_multiprocessing;
+
 rtems_multiprocessing_table *_Configuration_MP_table;
 
 const rtems_multiprocessing_table
@@ -51,6 +53,14 @@ const rtems_multiprocessing_table
  *  This is the core semaphore which the MPCI Receive Server blocks on.
  */
 CORE_semaphore_Control _MPCI_Semaphore;
+
+Thread_queue_Control _MPCI_Remote_blocked_threads;
+
+MPCI_Control *_MPCI_table;
+
+Thread_Control *_MPCI_Receive_server_tcb;
+
+MPCI_Packet_processor _MPCI_Packet_processors[ MP_PACKET_CLASSES_LAST + 1 ];
 
 static void _MPCI_Handler_early_initialization( void )
 {

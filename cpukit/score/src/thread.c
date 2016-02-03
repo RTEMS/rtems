@@ -42,6 +42,8 @@ THREAD_OFFSET_ASSERT( Timer );
 THREAD_OFFSET_ASSERT( receive_packet );
 #endif
 
+Thread_Information _Thread_Internal_information;
+
 void _Thread_Initialize_information(
   Thread_Information  *information,
   Objects_APIs         the_api,

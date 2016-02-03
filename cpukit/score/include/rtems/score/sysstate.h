@@ -64,7 +64,7 @@ typedef enum {
 #define SYSTEM_STATE_CODES_LAST SYSTEM_STATE_TERMINATED
 
 #if defined(RTEMS_MULTIPROCESSING)
-SCORE_EXTERN bool _System_state_Is_multiprocessing;
+extern bool _System_state_Is_multiprocessing;
 #endif
 
 extern System_state_Codes _System_state_Current;

@@ -33,13 +33,7 @@ extern "C" {
 /**
  *  This is the copyright string for RTEMS.
  */
-#ifdef SCORE_INIT
-const char _Copyright_Notice[] =
-"COPYRIGHT (c) 1989-2008.\n\
-On-Line Applications Research Corporation (OAR).\n";
-#else
 extern const char _Copyright_Notice[];
-#endif
 
 #ifdef __cplusplus
 }

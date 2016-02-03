@@ -29,6 +29,8 @@
   #error "deferred FP switch not implemented for SMP"
 #endif
 
+uint32_t _SMP_Processor_count;
+
 static void _SMP_Start_processors( uint32_t cpu_count )
 {
   uint32_t cpu_index_self = _SMP_Get_current_processor();

@@ -96,14 +96,14 @@ typedef struct {
  *
  *  This is the watchdog chain which is managed at ticks.
  */
-SCORE_EXTERN Watchdog_Header _Watchdog_Ticks_header;
+extern Watchdog_Header _Watchdog_Ticks_header;
 
 /**
  *  @brief Watchdog chain which is managed at second boundaries.
  *
  *  This is the watchdog chain which is managed at second boundaries.
  */
-SCORE_EXTERN Watchdog_Header _Watchdog_Seconds_header;
+extern Watchdog_Header _Watchdog_Seconds_header;
 
 RTEMS_INLINE_ROUTINE void _Watchdog_Acquire(
   Watchdog_Header  *header,

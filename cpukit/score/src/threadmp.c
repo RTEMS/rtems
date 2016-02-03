@@ -22,6 +22,10 @@
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/wkspace.h>
 
+Chain_Control _Thread_MP_Active_proxies;
+
+Chain_Control _Thread_MP_Inactive_proxies;
+
 void _Thread_MP_Handler_initialization (
   uint32_t    maximum_proxies
 )

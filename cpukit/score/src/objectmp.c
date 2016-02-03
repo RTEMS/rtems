@@ -24,6 +24,14 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
 
+uint16_t _Objects_Local_node;
+
+uint16_t _Objects_Maximum_nodes;
+
+uint32_t _Objects_MP_Maximum_global_objects;
+
+Chain_Control _Objects_MP_Inactive_global_objects;
+
 void _Objects_MP_Handler_early_initialization(void)
 {
   uint32_t   node;

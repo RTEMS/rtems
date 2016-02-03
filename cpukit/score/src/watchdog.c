@@ -23,6 +23,10 @@
 
 #include <rtems/score/watchdogimpl.h>
 
+Watchdog_Header _Watchdog_Ticks_header;
+
+Watchdog_Header _Watchdog_Seconds_header;
+
 void _Watchdog_Handler_initialization( void )
 {
   _Watchdog_Ticks_since_boot = 0;
