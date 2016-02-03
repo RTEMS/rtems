@@ -577,7 +577,7 @@ typedef struct {
  *
  * XXX document implementation including references if appropriate
  */
-SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
+extern Context_Control_fp _CPU_Null_fp_context;
 
 /** @} */
 
