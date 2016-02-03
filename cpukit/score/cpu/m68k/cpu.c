@@ -21,6 +21,39 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/tls.h>
 
+#if ( M68K_HAS_VBR == 0 )
+
+/*
+ * Table of ISR handler entries that resides in RAM. The FORMAT/ID is
+ * pushed onto the stack. This is not is the same order as VBR processors.
+ * The ISR handler takes the format and uses it for dispatching the user
+ * handler.
+ */
+
+typedef struct {
+  uint16_t   move_a7;            /* move #FORMAT_ID,%a7@- */
+  uint16_t   format_id;
+  uint16_t   jmp;                /* jmp  _ISR_Handlers */
+  uint32_t   isr_handler;
+} _CPU_ISR_handler_entry;
+
+#define M68K_MOVE_A7 0x3F3C
+#define M68K_JMP     0x4EF9
+
+/* points to jsr-exception-table in targets wo/ VBR register */
+static _CPU_ISR_handler_entry
+_CPU_ISR_jump_table[ CPU_INTERRUPT_NUMBER_OF_VECTORS ];
+
+#endif /* M68K_HAS_VBR */
+
+#if (M68K_HAS_FPSP_PACKAGE == 1)
+int (*_FPSP_install_raw_handler)(
+  uint32_t   vector,
+  proc_ptr new_handler,
+  proc_ptr *old_handler
+);
+#endif
+
 #if defined( __mcoldfire__ ) && ( M68K_HAS_FPU == 1 )
   uint32_t _CPU_cacr_shadow;
 #endif

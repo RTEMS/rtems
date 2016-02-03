@@ -313,33 +313,6 @@ typedef struct {
 
 extern void*                     _VBR;
 
-#if ( M68K_HAS_VBR == 0 )
-
-/*
- * Table of ISR handler entries that resides in RAM. The FORMAT/ID is
- * pushed onto the stack. This is not is the same order as VBR processors.
- * The ISR handler takes the format and uses it for dispatching the user
- * handler.
- *
- * FIXME : should be moved to below CPU_INTERRUPT_NUMBER_OF_VECTORS
- *
- */
-
-typedef struct {
-  uint16_t   move_a7;            /* move #FORMAT_ID,%a7@- */
-  uint16_t   format_id;
-  uint16_t   jmp;                /* jmp  _ISR_Handlers */
-  uint32_t   isr_handler;
-} _CPU_ISR_handler_entry;
-
-#define M68K_MOVE_A7 0x3F3C
-#define M68K_JMP     0x4EF9
-
-      /* points to jsr-exception-table in targets wo/ VBR register */
-SCORE_EXTERN _CPU_ISR_handler_entry _CPU_ISR_jump_table[256];
-
-#endif /* M68K_HAS_VBR */
-
 #endif /* ASM */
 
 /* constants */
@@ -764,7 +737,7 @@ static inline CPU_Counter_ticks _CPU_Counter_difference(
 
 void M68KFPSPInstallExceptionHandlers (void);
 
-SCORE_EXTERN int (*_FPSP_install_raw_handler)(
+extern int (*_FPSP_install_raw_handler)(
   uint32_t   vector,
   proc_ptr new_handler,
   proc_ptr *old_handler
