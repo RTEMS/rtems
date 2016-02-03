@@ -45,6 +45,10 @@ I386_ASSERT_OFFSET(edi, EDI);
   I386_ASSERT_OFFSET(is_executing, IS_EXECUTING);
 #endif
 
+#if CPU_HARDWARE_FP
+Context_Control_fp _CPU_Null_fp_context;
+#endif
+
 void _CPU_Initialize(void)
 {
 #if CPU_HARDWARE_FP
