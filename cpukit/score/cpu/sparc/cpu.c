@@ -116,6 +116,10 @@ RTEMS_STATIC_ASSERT(
   CPU_Interrupt_frame_alignment
 );
 
+#if (SPARC_HAS_FPU == 1) && !defined(SPARC_USE_SAFE_FP_SUPPORT)
+Context_Control_fp _CPU_Null_fp_context;
+#endif
+
 /*
  *  _CPU_Initialize
  *
