@@ -43,6 +43,10 @@ proc_ptr vectab[256] ;
 
 extern proc_ptr _Hardware_isr_Table[];
 
+#if SH_HAS_FPU
+Context_Control_fp _CPU_Null_fp_context;
+#endif
+
 /*  _CPU_Initialize
  *
  *  This routine performs processor dependent initialization.
@@ -62,6 +66,7 @@ void _CPU_Initialize(void)
    */
 
   /* FP context initialization support goes here */
+#if SH_HAS_FPU
   /* FIXME: When not to use SH4_FPSCR_PR ? */
 #ifdef __SH4__
   _CPU_Null_fp_context.fpscr = SH4_FPSCR_DN | SH4_FPSCR_RM | SH4_FPSCR_PR;
@@ -69,6 +74,7 @@ void _CPU_Initialize(void)
 #ifdef __SH3E__
   /* FIXME: Wild guess :) */
   _CPU_Null_fp_context.fpscr = SH4_FPSCR_DN | SH4_FPSCR_RM;
+#endif
 #endif
 
   /* enable interrupts */

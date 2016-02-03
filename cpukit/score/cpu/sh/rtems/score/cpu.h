@@ -371,7 +371,7 @@ typedef struct {
  */
 
 #if SH_HAS_FPU
-SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
+extern Context_Control_fp _CPU_Null_fp_context;
 #endif
 
 /*
@@ -379,7 +379,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  */
 
 /* XXX: if needed, put more variables here */
-SCORE_EXTERN void CPU_delay( uint32_t   microseconds );
+void CPU_delay( uint32_t   microseconds );
 
 /*
  *  The size of the floating point context area.  On some CPUs this
@@ -558,7 +558,7 @@ uint32_t   _CPU_ISR_Get_level( void );
 /*
  * FIXME: defined as a function for debugging - should be a macro
  */
-SCORE_EXTERN void _CPU_Context_Initialize(
+void _CPU_Context_Initialize(
   Context_Control       *_the_context,
   void                  *_stack_base,
   uint32_t              _size,
