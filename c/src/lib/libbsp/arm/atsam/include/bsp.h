@@ -34,6 +34,31 @@ uint32_t atsam_systick_frequency(void);
 
 #define BSP_ARMV7M_SYSTICK_FREQUENCY atsam_systick_frequency()
 
+struct rtems_bsdnet_ifconfig;
+
+int if_atsam_attach(struct rtems_bsdnet_ifconfig *config, int attaching);
+
+#define RTEMS_BSP_NETWORK_DRIVER_NAME "atsam0"
+
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH if_atsam_attach
+
+/**
+ * @brief Interface driver configuration.
+ */
+typedef struct {
+  /**
+   * @brief Maximum retries for MDIO communication.
+   */
+  uint32_t mdio_retries;
+
+  /**
+   * @brief Address of PHY.
+   *
+   * Use -1 to search for a PHY.
+   */
+  int phy_addr;
+} if_atsam_config;
+
 /** @} */
 
 #ifdef __cplusplus

@@ -420,6 +420,11 @@ libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
 libbsp_a_SOURCES += ../shared/armv7m/include/cache_.h
 libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv7m/include
 
+# Network
+if HAS_NETWORKING
+libbsp_a_SOURCES += network/if_atsam.c
+endif
+
 # Includes
 libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/CMSIS/Include
 libbsp_a_CPPFLAGS += -I$(srcdir)/libraries/libboard
