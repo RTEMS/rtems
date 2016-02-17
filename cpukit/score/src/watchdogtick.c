@@ -12,8 +12,9 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#include <rtems/score/assert.h>
 #include <rtems/score/schedulerimpl.h>
-#include <rtems/score/threadimpl.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
@@ -23,12 +24,11 @@
 
 void _Watchdog_Tick( void )
 {
+  _Assert( !_Thread_Dispatch_is_enabled() );
+
   _TOD_Tickle_ticks();
 
   _Watchdog_Tickle_ticks();
 
   _Scheduler_Tick();
-
-  if ( _Thread_Dispatch_is_enabled() )
-    _Thread_Dispatch();
 }

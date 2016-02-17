@@ -20,6 +20,7 @@
 
 #include <rtems/rtems/clock.h>
 #include <rtems/score/timecounter.h>
+#include <rtems/score/threadimpl.h>
 
 rtems_status_code rtems_clock_tick( void )
 {
@@ -31,6 +32,10 @@ rtems_status_code rtems_clock_tick( void )
     0,
     &lock_context
   );
+
+  if ( _Thread_Dispatch_is_enabled() ) {
+    _Thread_Dispatch();
+  }
 
   return RTEMS_SUCCESSFUL;
 }
