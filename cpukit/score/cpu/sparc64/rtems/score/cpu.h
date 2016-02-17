@@ -209,6 +209,8 @@ extern "C" {
 
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
+#define CPU_MAXIMUM_PROCESSORS 32
+
 /*
  *  This structure represents the organization of the minimum stack frame
  *  for the SPARC.  More framing information is required in certain situaions

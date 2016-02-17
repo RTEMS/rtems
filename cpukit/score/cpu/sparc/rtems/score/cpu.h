@@ -363,6 +363,8 @@ typedef struct {
   #define CPU_PER_CPU_CONTROL_SIZE 4
 #endif
 
+#define CPU_MAXIMUM_PROCESSORS 32
+
 /**
  * @brief Offset of the CPU_Per_CPU_control::isr_dispatch_disable field
  * relative to the Per_CPU_Control begin.

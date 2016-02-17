@@ -788,6 +788,8 @@ typedef struct {
 #define CPU_SIZEOF_POINTER 4
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
+#define CPU_MAXIMUM_PROCESSORS 32
+
 #ifndef ASM
 typedef uint32_t CPU_Counter_ticks;
 typedef uint16_t Priority_bit_map_Word;

@@ -115,6 +115,8 @@ extern "C" {
 
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
+#define CPU_MAXIMUM_PROCESSORS 32
+
 #if ( CPU_HARDWARE_FP == TRUE ) && !defined( __mcoldfire__ )
   #if defined( __mc68060__ )
     #define M68K_FP_STATE_SIZE 16

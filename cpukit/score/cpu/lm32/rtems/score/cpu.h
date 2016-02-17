@@ -348,6 +348,8 @@ extern "C" {
 
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
+#define CPU_MAXIMUM_PROCESSORS 32
+
 /*
  *  Processor defined structures required for cpukit/score.
  *
