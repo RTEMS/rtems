@@ -61,6 +61,7 @@ include_rtems_score_HEADERS += include/rtems/score/priority.h
 include_rtems_score_HEADERS += include/rtems/score/prioritybitmap.h
 include_rtems_score_HEADERS += include/rtems/score/prioritybitmapimpl.h
 include_rtems_score_HEADERS += include/rtems/score/profiling.h
+include_rtems_score_HEADERS += include/rtems/score/processormask.h
 include_rtems_score_HEADERS += include/rtems/score/rbtree.h
 include_rtems_score_HEADERS += include/rtems/score/rbtreeimpl.h
 include_rtems_score_HEADERS += include/rtems/score/resource.h
