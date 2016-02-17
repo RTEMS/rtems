@@ -10,3 +10,6 @@ concepts:
 
   - Ensure that rtems_task_wake_after() works on multiple processors with some
     tasks using different intervals.
+  - Use a scheduler partition for processor 1, assign all remaining processors
+    to a cluster.  This highlights dependencies on the scheduler instance lock
+    in case this test is run with profiling enabled.
