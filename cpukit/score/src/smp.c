@@ -29,13 +29,14 @@
   #error "deferred FP switch not implemented for SMP"
 #endif
 
+Processor_mask _SMP_Online_processors;
+
 uint32_t _SMP_Processor_count;
 
 static void _SMP_Start_processors( uint32_t cpu_count )
 {
   uint32_t cpu_index_self = _SMP_Get_current_processor();
   uint32_t cpu_index;
-
 
   for ( cpu_index = 0 ; cpu_index < cpu_count; ++cpu_index ) {
     const Scheduler_Assignment *assignment =
@@ -69,6 +70,8 @@ static void _SMP_Start_processors( uint32_t cpu_count )
 
       ++context->processor_count;
       cpu->scheduler_context = context;
+
+      _Processor_mask_Set( _SMP_Online_processors, cpu_index );
     }
   }
 }

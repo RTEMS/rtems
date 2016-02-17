@@ -20,6 +20,7 @@
 
 #include <rtems/score/smp.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/processormask.h>
 #include <rtems/fatal.h>
 #include <rtems/rtems/cache.h>
 
@@ -89,6 +90,16 @@ static inline void _SMP_Fatal( SMP_Fatal_code code )
 #endif
 
 #if defined( RTEMS_SMP )
+
+/**
+ * @brief Set of online processors.
+ *
+ * A processor is online if was started during system initialization.  In this
+ * case its corresponding bit in the mask is set.
+ *
+ * @see _SMP_Handler_initialize().
+ */
+extern Processor_mask _SMP_Online_processors;
 
 /**
  * @brief Performs high-level initialization of a secondary processor and runs
