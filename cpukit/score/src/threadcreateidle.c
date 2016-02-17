@@ -90,7 +90,7 @@ void _Thread_Create_idle( void )
   for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
     Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
-    if ( _Per_CPU_Is_processor_started( cpu ) ) {
+    if ( _Per_CPU_Is_processor_online( cpu ) ) {
       _Thread_Create_idle_for_cpu( cpu );
     }
   }

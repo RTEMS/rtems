@@ -364,7 +364,7 @@ typedef struct Per_CPU_Control {
      * @brief Indicates if the processor has been successfully started via
      * _CPU_SMP_Start_processor().
      */
-    bool started;
+    bool online;
   #endif
 
   Per_CPU_Stats Stats;
@@ -523,12 +523,12 @@ static inline struct _Thread_Control *_Per_CPU_Get_executing(
   return cpu->executing;
 }
 
-static inline bool _Per_CPU_Is_processor_started(
+static inline bool _Per_CPU_Is_processor_online(
   const Per_CPU_Control *cpu
 )
 {
 #if defined( RTEMS_SMP )
-  return cpu->started;
+  return cpu->online;
 #else
   (void) cpu;
 
