@@ -19,9 +19,6 @@
 #endif
 
 #include <rtems/rtems/timerimpl.h>
-#include <rtems/rtems/clock.h>
-#include <rtems/score/todimpl.h>
-#include <rtems/score/watchdogimpl.h>
 
 rtems_status_code rtems_timer_fire_when(
   rtems_id                            id,
@@ -30,43 +27,12 @@ rtems_status_code rtems_timer_fire_when(
   void                               *user_data
 )
 {
-  Timer_Control       *the_timer;
-  Objects_Locations    location;
-  rtems_interval       seconds;
-
-  if ( !_TOD_Is_set() )
-    return RTEMS_NOT_DEFINED;
-
-  if ( !_TOD_Validate( wall_time ) )
-    return RTEMS_INVALID_CLOCK;
-
-  if ( !routine )
-    return RTEMS_INVALID_ADDRESS;
-
-  seconds = _TOD_To_seconds( wall_time );
-  if ( seconds <= _TOD_Seconds_since_epoch() )
-    return RTEMS_INVALID_CLOCK;
-
-  the_timer = _Timer_Get( id, &location );
-  switch ( location ) {
-
-    case OBJECTS_LOCAL:
-      _Timer_Cancel( the_timer );
-      the_timer->the_class = TIMER_TIME_OF_DAY;
-      _Watchdog_Initialize( &the_timer->Ticker, routine, id, user_data );
-      _Watchdog_Insert_seconds(
-         &the_timer->Ticker,
-         seconds - _TOD_Seconds_since_epoch()
-       );
-      _Objects_Put( &the_timer->Object );
-      return RTEMS_SUCCESSFUL;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:            /* should never return this */
-#endif
-    case OBJECTS_ERROR:
-      break;
-  }
-
-  return RTEMS_INVALID_ID;
+  return _Timer_Fire_when(
+    id,
+    wall_time,
+    routine,
+    user_data,
+    TIMER_TIME_OF_DAY,
+    _Timer_Routine_adaptor
+  );
 }

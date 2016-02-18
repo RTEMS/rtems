@@ -347,6 +347,15 @@ typedef struct {
 }   Thread_Wait_information;
 
 /**
+ * @brief Information required to manage a thread timer.
+ */
+typedef struct {
+  ISR_LOCK_MEMBER( Lock )
+  Watchdog_Header *header;
+  Watchdog_Control Watchdog;
+} Thread_Timer_information;
+
+/**
  *  The following defines the control block used to manage
  *  each thread proxy.
  *
@@ -400,7 +409,7 @@ typedef struct {
   /** This field is the blocking information for this proxy. */
   Thread_Wait_information  Wait;
   /** This field is the Watchdog used to manage proxy delays and timeouts. */
-  Watchdog_Control         Timer;
+  Thread_Timer_information Timer;
 #if defined(RTEMS_MULTIPROCESSING)
   /** This field is the received response packet in an MP system. */
   MP_packet_Prefix        *receive_packet;
@@ -728,7 +737,7 @@ struct _Thread_Control {
   /** This field is the blocking information for this thread. */
   Thread_Wait_information  Wait;
   /** This field is the Watchdog used to manage thread delays and timeouts. */
-  Watchdog_Control         Timer;
+  Thread_Timer_information Timer;
 #if defined(RTEMS_MULTIPROCESSING)
   /** This field is the received response packet in an MP system. */
   MP_packet_Prefix        *receive_packet;

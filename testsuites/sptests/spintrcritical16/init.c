@@ -43,7 +43,7 @@ static rtems_timer_service_routine test_release_from_isr(
   }
 
   if ( Main_TCB->Wait.queue != NULL ) {
-    _Thread_Timeout( 0, Main_TCB );
+    _Thread_Timeout( &Main_TCB->Timer.Watchdog );
   }
 }
 

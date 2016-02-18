@@ -42,31 +42,32 @@ int timer_gettime(
 {
   POSIX_Timer_Control *ptimer;
   Objects_Locations    location;
-  struct timespec      current_time;
-  Watchdog_Interval    left;
+  ISR_lock_Context     lock_context;
+  Per_CPU_Control     *cpu;
+  uint64_t             now;
+  uint32_t             remaining;
 
   if ( !value )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  /* Reads the current time */
-  _TOD_Get_as_timespec( &current_time );
-
-  ptimer = _POSIX_Timer_Get( timerid, &location );
+  ptimer = _POSIX_Timer_Get( timerid, &location, &lock_context );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
 
-      /* Calculates the time left before the timer finishes */
+      cpu = _POSIX_Timer_Acquire_critical( ptimer, &lock_context );
+      now = cpu->Watchdog.ticks;
 
-      left =
-        (ptimer->Timer.start_time + ptimer->Timer.initial) - /* expire */
-        _Watchdog_Ticks_since_boot;                          /* now */
+      if ( now < ptimer->Timer.expire ) {
+        remaining = (uint32_t) ( ptimer->Timer.expire - now );
+      } else {
+        remaining = 0;
+      }
 
-      _Timespec_From_ticks( left, &value->it_value );
+      _Timespec_From_ticks( remaining, &value->it_value );
+      value->it_interval = ptimer->timer_data.it_interval;
 
-      value->it_interval  = ptimer->timer_data.it_interval;
-
-      _Objects_Put( &ptimer->Object );
+      _POSIX_Timer_Release( cpu, &lock_context );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

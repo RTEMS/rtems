@@ -1971,6 +1971,7 @@ tc_ticktock(int cnt)
 		return;
 	count = 0;
 #else /* __rtems__ */
+#include <rtems/score/smp.h>
 void
 _Timecounter_Tick(void)
 {
@@ -2021,7 +2022,7 @@ _Timecounter_Tick_simple(uint32_t delta, uint32_t offset,
 
 	_Timecounter_Release(lock_context);
 
-	_Watchdog_Tick(_Per_CPU_Get());
+	_Watchdog_Tick(_Per_CPU_Get_snapshot());
 }
 #endif /* __rtems__ */
 

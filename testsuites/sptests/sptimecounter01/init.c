@@ -24,7 +24,6 @@
 
 #include <rtems/score/timecounterimpl.h>
 #include <rtems/score/todimpl.h>
-#include <rtems/score/watchdogimpl.h>
 #include <rtems/timecounter.h>
 #include <rtems/bsd.h>
 
@@ -56,8 +55,6 @@ void boot_card(const char *cmdline)
   struct timespec ts;
 
   rtems_test_begink();
-
-  _Watchdog_Handler_initialization();
 
   assert(time(NULL) == TOD_SECONDS_1970_THROUGH_1988);
 

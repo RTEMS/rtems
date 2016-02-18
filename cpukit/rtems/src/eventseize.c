@@ -90,13 +90,12 @@ void _Event_Seize(
 
   if ( ticks ) {
     _Thread_Wait_set_timeout_code( executing, RTEMS_TIMEOUT );
-    _Watchdog_Initialize(
-      &executing->Timer,
+    _Thread_Timer_insert_relative(
+      executing,
+      cpu_self,
       _Thread_Timeout,
-      0,
-      executing
+      ticks
     );
-    _Watchdog_Insert_ticks( &executing->Timer, ticks );
   }
 
   _Thread_Set_state( executing, block_state );
@@ -113,7 +112,7 @@ void _Event_Seize(
     wait_class | THREAD_WAIT_STATE_BLOCKED
   );
   if ( !success ) {
-    _Watchdog_Remove_ticks( &executing->Timer );
+    _Thread_Timer_remove( executing );
     _Thread_Unblock( executing );
   }
 

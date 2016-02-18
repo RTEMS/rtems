@@ -29,6 +29,7 @@ rtems_status_code rtems_rate_monotonic_delete(
 {
   Rate_monotonic_Control *the_period;
   Objects_Locations       location;
+  ISR_Level               level;
 
   _Objects_Allocator_lock();
   the_period = _Rate_monotonic_Get( id, &location );
@@ -37,7 +38,9 @@ rtems_status_code rtems_rate_monotonic_delete(
     case OBJECTS_LOCAL:
       _Scheduler_Release_job( the_period->owner, 0 );
       _Objects_Close( &_Rate_monotonic_Information, &the_period->Object );
-      _Watchdog_Remove_ticks( &the_period->Timer );
+      _ISR_Disable( level );
+      _Watchdog_Per_CPU_remove_relative( &the_period->Timer );
+      _ISR_Enable( level );
       the_period->state = RATE_MONOTONIC_INACTIVE;
       _Objects_Put( &the_period->Object );
       _Rate_monotonic_Free( the_period );

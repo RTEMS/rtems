@@ -281,7 +281,12 @@ void *POSIX_Init(
   puts( "Init: Wait 4 seconds for alarm" );
   remaining = sleep( 4 );
   printf( "Init: %d seconds left in sleep\n", remaining );
-  rtems_test_assert( remaining == 2 );
+
+  /*
+   * sleep() uses nanosleep() internally which discards the nanoseconds part,
+   * e.g. 1.99s -> 1s
+   */
+  rtems_test_assert( remaining == 1 || remaining == 2 );
 
   /* test SIG_SETMASK case and returning oset of pthread_sigmask */
 

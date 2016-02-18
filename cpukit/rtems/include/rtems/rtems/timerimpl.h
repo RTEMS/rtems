@@ -10,6 +10,8 @@
  * COPYRIGHT (c) 1989-2011.
  * On-Line Applications Research Corporation (OAR).
  *
+ * Copyright (c) 2016 embedded brains GmbH.
+ *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.org/license/LICENSE.
@@ -35,81 +37,13 @@ extern "C" {
  * @{
  */
 
-typedef struct Timer_server_Control Timer_server_Control;
+typedef struct Timer_server_Control {
+  ISR_LOCK_MEMBER( Lock )
 
-/**
- * @brief Method used for task based timers.
- */
-typedef void (*Timer_server_Method)(
-  Timer_server_Control *timer_server,
-  Timer_Control        *timer
-);
+  Chain_Control Pending;
 
-typedef struct {
-  /**
-   * @brief This watchdog that will be registered in the system tick mechanic
-   * for timer server wake-up.
-   */
-  Watchdog_Control System_watchdog;
-
-  /**
-   * @brief Remaining delta of the system watchdog.
-   */
-  Watchdog_Interval system_watchdog_delta;
-
-  /**
-   * @brief Unique identifier of the context which deals currently with the
-   * system watchdog.
-   */
-  Thread_Control *system_watchdog_helper;
-
-  /**
-   * @brief Each insert and tickle operation increases the generation count so
-   * that the system watchdog dealer notices updates of the watchdog chain.
-   */
-  uint32_t generation;
-
-  /**
-   * @brief Watchdog header managed by the timer server.
-   */
-  Watchdog_Header Header;
-
-  /**
-   * @brief Last time snapshot of the timer server.
-   *
-   * The units may be ticks or seconds.
-   */
-  Watchdog_Interval last_snapshot;
-
-  /**
-   * @brief Current time snapshot of the timer server.
-   *
-   * The units may be ticks or seconds.
-   */
-  Watchdog_Interval current_snapshot;
-} Timer_server_Watchdogs;
-
-struct Timer_server_Control {
-  /**
-   * @brief The cancel method of the timer server.
-   */
-  Timer_server_Method cancel;
-
-  /**
-   * @brief The schedule operation method of the timer server.
-   */
-  Timer_server_Method schedule_operation;
-
-  /**
-   * @brief Interval watchdogs triggered by the timer server.
-   */
-  Timer_server_Watchdogs Interval_watchdogs;
-
-  /**
-   * @brief TOD watchdogs triggered by the timer server.
-   */
-  Timer_server_Watchdogs TOD_watchdogs;
-};
+  Objects_Id server_id;
+} Timer_server_Control;
 
 /**
  * @brief Pointer to default timer server control block.
@@ -148,64 +82,124 @@ RTEMS_INLINE_ROUTINE void _Timer_Free (
   _Objects_Free( &_Timer_Information, &the_timer->Object );
 }
 
-/**
- *  @brief Timer_Get
- *
- *  This function maps timer IDs to timer control blocks.
- *  If ID corresponds to a local timer, then it returns
- *  the timer control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  Otherwise, location is set
- *  to OBJECTS_ERROR and the returned value is undefined.
- */
-RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Get (
+RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Get(
   Objects_Id         id,
-  Objects_Locations *location
+  Objects_Locations *location,
+  ISR_lock_Context  *lock_context
 )
 {
-  return (Timer_Control *)
-    _Objects_Get( &_Timer_Information, id, location );
+  return (Timer_Control *) _Objects_Get_isr_disable(
+    &_Timer_Information,
+    id,
+    location,
+    lock_context
+  );
 }
 
-/**
- *  @brief Timer_Is_interval_class
- *
- *  This function returns TRUE if the class is that of an INTERVAL
- *  timer, and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _Timer_Is_interval_class (
+RTEMS_INLINE_ROUTINE Per_CPU_Control *_Timer_Acquire_critical(
+  Timer_Control    *the_timer,
+  ISR_lock_Context *lock_context
+)
+{
+  Per_CPU_Control *cpu;
+
+  cpu = _Watchdog_Get_CPU( &the_timer->Ticker );
+  _Watchdog_Per_CPU_acquire_critical( cpu, lock_context );
+
+  return cpu;
+}
+
+RTEMS_INLINE_ROUTINE void _Timer_Release(
+  Per_CPU_Control  *cpu,
+  ISR_lock_Context *lock_context
+)
+{
+  _Watchdog_Per_CPU_release_critical( cpu, lock_context );
+  _ISR_lock_ISR_enable( lock_context );
+}
+
+RTEMS_INLINE_ROUTINE bool _Timer_Is_interval_class(
   Timer_Classes the_class
 )
 {
-  return (the_class == TIMER_INTERVAL) || (the_class == TIMER_INTERVAL_ON_TASK);
+  Timer_Classes mask =
+    TIMER_CLASS_BIT_NOT_DORMANT | TIMER_CLASS_BIT_TIME_OF_DAY;
+
+  return ( the_class & mask ) == TIMER_CLASS_BIT_NOT_DORMANT;
 }
 
-/**
- *  @brief Timer_Is_time_of_day_class
- *
- *  This function returns TRUE if the class is that of an INTERVAL
- *  timer, and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _Timer_Is_timer_of_day_class (
+RTEMS_INLINE_ROUTINE bool _Timer_Is_on_task_class(
   Timer_Classes the_class
 )
 {
-  return ( the_class == TIMER_TIME_OF_DAY );
+  Timer_Classes mask =
+    TIMER_CLASS_BIT_NOT_DORMANT | TIMER_CLASS_BIT_ON_TASK;
+
+  return ( the_class & mask ) == mask;
 }
 
-/**
- *  @brief Timer_Is_dormant_class
- *
- *  This function returns TRUE if the class is that of a DORMANT
- *  timer, and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _Timer_Is_dormant_class (
+RTEMS_INLINE_ROUTINE Per_CPU_Watchdog_index _Timer_Watchdog_header_index(
   Timer_Classes the_class
 )
 {
-  return ( the_class == TIMER_DORMANT );
+  return ( the_class & TIMER_CLASS_BIT_TIME_OF_DAY );
 }
 
-void _Timer_Cancel( Timer_Control *the_timer );
+RTEMS_INLINE_ROUTINE Watchdog_Interval _Timer_Get_CPU_ticks(
+  const Per_CPU_Control *cpu
+)
+{
+  return (Watchdog_Interval) cpu->Watchdog.ticks;
+}
+
+rtems_status_code _Timer_Fire(
+  rtems_id                           id,
+  rtems_interval                     interval,
+  rtems_timer_service_routine_entry  routine,
+  void                              *user_data,
+  Timer_Classes                      the_class,
+  Watchdog_Service_routine_entry     adaptor
+);
+
+rtems_status_code _Timer_Fire_after(
+  rtems_id                           id,
+  rtems_interval                     ticks,
+  rtems_timer_service_routine_entry  routine,
+  void                              *user_data,
+  Timer_Classes                      the_class,
+  Watchdog_Service_routine_entry     adaptor
+);
+
+rtems_status_code _Timer_Fire_when(
+  rtems_id                           id,
+  const rtems_time_of_day           *wall_time,
+  rtems_timer_service_routine_entry  routine,
+  void                              *user_data,
+  Timer_Classes                      the_class,
+  Watchdog_Service_routine_entry     adaptor
+);
+
+void _Timer_Cancel( Per_CPU_Control *cpu, Timer_Control *the_timer );
+
+void _Timer_Routine_adaptor( Watchdog_Control *the_watchdog );
+
+void _Timer_server_Routine_adaptor( Watchdog_Control *the_watchdog );
+
+RTEMS_INLINE_ROUTINE void _Timer_server_Acquire_critical(
+  Timer_server_Control *timer_server,
+  ISR_lock_Context     *lock_context
+)
+{
+  _ISR_lock_Acquire( &timer_server->Lock, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Timer_server_Release_critical(
+  Timer_server_Control *timer_server,
+  ISR_lock_Context     *lock_context
+)
+{
+  _ISR_lock_Release( &timer_server->Lock, lock_context );
+}
 
 /**@}*/
 

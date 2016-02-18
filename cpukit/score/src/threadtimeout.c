@@ -33,7 +33,7 @@ static void _Thread_Do_timeout( Thread_Control *the_thread )
   _Thread_Lock_restore_default( the_thread );
 }
 
-void _Thread_Timeout( Objects_Id id, void *arg )
+void _Thread_Timeout( Watchdog_Control *watchdog )
 {
   Thread_Control    *the_thread;
   void              *thread_lock;
@@ -41,7 +41,7 @@ void _Thread_Timeout( Objects_Id id, void *arg )
   Thread_Wait_flags  wait_flags;
   bool               unblock;
 
-  the_thread = arg;
+  the_thread = RTEMS_CONTAINER_OF( watchdog, Thread_Control, Timer.Watchdog );
   thread_lock = _Thread_Lock_acquire( the_thread, &lock_context );
 
   wait_flags = _Thread_Wait_flags_get( the_thread );

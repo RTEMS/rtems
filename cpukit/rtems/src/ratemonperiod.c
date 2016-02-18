@@ -77,12 +77,11 @@ bool _Rate_monotonic_Get_status(
   return true;
 }
 
-void _Rate_monotonic_Initiate_statistics(
-  Rate_monotonic_Control *the_period
-)
+void _Rate_monotonic_Restart( Rate_monotonic_Control *the_period )
 {
   Thread_Control    *owning_thread = the_period->owner;
   Timestamp_Control  uptime;
+  ISR_Level          level;
 
   _TOD_Get_uptime( &uptime );
 
@@ -113,7 +112,15 @@ void _Rate_monotonic_Initiate_statistics(
     _Timestamp_Add_to( &the_period->cpu_usage_period_initiated, &ran );
   }
 
-  _Scheduler_Release_job( the_period->owner, the_period->next_length );
+  _Scheduler_Release_job( owning_thread, the_period->next_length );
+
+  _ISR_Disable( level );
+  _Watchdog_Per_CPU_insert_relative(
+    &the_period->Timer,
+    _Per_CPU_Get(),
+    the_period->next_length
+  );
+  _ISR_Enable( level );
 }
 
 static void _Rate_monotonic_Update_statistics(
@@ -238,22 +245,9 @@ rtems_status_code rtems_rate_monotonic_period(
       if ( the_period->state == RATE_MONOTONIC_INACTIVE ) {
         _ISR_Enable( level );
 
-        the_period->next_length = length;
-
-        /*
-         *  Baseline statistics information for the beginning of a period.
-         */
-        _Rate_monotonic_Initiate_statistics( the_period );
-
         the_period->state = RATE_MONOTONIC_ACTIVE;
-        _Watchdog_Initialize(
-          &the_period->Timer,
-          _Rate_monotonic_Timeout,
-          id,
-          NULL
-        );
-
-        _Watchdog_Insert_ticks( &the_period->Timer, length );
+        the_period->next_length = length;
+        _Rate_monotonic_Restart( the_period );
         _Objects_Put( &the_period->Object );
         return RTEMS_SUCCESSFUL;
       }
@@ -308,7 +302,11 @@ rtems_status_code rtems_rate_monotonic_period(
         the_period->state = RATE_MONOTONIC_ACTIVE;
         the_period->next_length = length;
 
-        _Watchdog_Insert_ticks( &the_period->Timer, length );
+        _Watchdog_Per_CPU_insert_relative(
+          &the_period->Timer,
+          _Per_CPU_Get(),
+          length
+        );
         _Scheduler_Release_job( the_period->owner, the_period->next_length );
         _Objects_Put( &the_period->Object );
         return RTEMS_TIMEOUT;

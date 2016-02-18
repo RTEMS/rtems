@@ -452,19 +452,13 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Release_job(
  * scheduler which support standard RTEMS features, this includes
  * time-slicing management.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Tick( void )
+RTEMS_INLINE_ROUTINE void _Scheduler_Tick( const Per_CPU_Control *cpu )
 {
-  uint32_t cpu_count = _SMP_Get_processor_count();
-  uint32_t cpu_index;
+  const Scheduler_Control *scheduler = _Scheduler_Get_by_CPU( cpu );
+  Thread_Control *executing = cpu->executing;
 
-  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
-    const Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
-    const Scheduler_Control *scheduler = _Scheduler_Get_by_CPU( cpu );
-    Thread_Control *executing = cpu->executing;
-
-    if ( scheduler != NULL && executing != NULL ) {
-      ( *scheduler->Operations.tick )( scheduler, executing );
-    }
+  if ( scheduler != NULL && executing != NULL ) {
+    ( *scheduler->Operations.tick )( scheduler, executing );
   }
 }
 

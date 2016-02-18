@@ -84,7 +84,7 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
 
   _Thread_Set_state( the_thread, STATES_ZOMBIE );
   _Thread_queue_Extract_with_proxy( the_thread );
-  _Watchdog_Remove_ticks( &the_thread->Timer );
+  _Thread_Timer_remove( the_thread );
 
   _ISR_lock_ISR_disable_and_acquire( &zombies->Lock, &lock_context );
   _Chain_Append_unprotected( &zombies->Chain, &the_thread->Object.Node );
@@ -191,7 +191,9 @@ static void _Thread_Start_life_change_for_executing(
   Thread_Control *executing
 )
 {
-  _Assert( executing->Timer.state == WATCHDOG_INACTIVE );
+  _Assert(
+    _Watchdog_Get_state( &executing->Timer.Watchdog ) == WATCHDOG_INACTIVE
+  );
   _Assert(
     executing->current_state == STATES_READY
       || executing->current_state == STATES_SUSPENDED
@@ -246,7 +248,9 @@ void _Thread_Life_action_handler(
       /* Someone deleted us in the mean-time */
       _Thread_Start_life_change_for_executing( executing );
     } else {
-      _Assert( executing->Timer.state == WATCHDOG_INACTIVE );
+      _Assert(
+        _Watchdog_Get_state( &executing->Timer.Watchdog ) == WATCHDOG_INACTIVE
+      );
       _Assert(
         executing->current_state == STATES_READY
           || executing->current_state == STATES_SUSPENDED
@@ -274,7 +278,7 @@ static void _Thread_Start_life_change(
 
   _Thread_Set_state( the_thread, STATES_RESTARTING );
   _Thread_queue_Extract_with_proxy( the_thread );
-  _Watchdog_Remove_ticks( &the_thread->Timer );
+  _Thread_Timer_remove( the_thread );
   _Thread_Change_priority(
     the_thread,
     priority,

@@ -19,26 +19,6 @@
 #endif
 
 #include <rtems/rtems/timerimpl.h>
-#include <rtems/rtems/clock.h>
-#include <rtems/score/todimpl.h>
-#include <rtems/score/watchdogimpl.h>
-
-/*
- *  rtems_timer_server_fire_when
- *
- *  This directive allows a thread to start a timer which will by
- *  executed by the Timer Server when it fires.
- *
- *  Input parameters:
- *    id        - timer id
- *    wall_time - time of day to fire timer
- *    routine   - routine to schedule
- *    user_data - passed as argument to routine when it is fired
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_timer_server_fire_when(
   rtems_id                           id,
@@ -47,47 +27,19 @@ rtems_status_code rtems_timer_server_fire_when(
   void                              *user_data
 )
 {
-  Timer_Control        *the_timer;
-  Objects_Locations     location;
-  rtems_interval        seconds;
-  Timer_server_Control *timer_server = _Timer_server;
+  Timer_server_Control *timer_server;
+
+  timer_server = _Timer_server;
 
   if ( !timer_server )
     return RTEMS_INCORRECT_STATE;
 
-  if ( !_TOD_Is_set() )
-    return RTEMS_NOT_DEFINED;
-
-  if ( !routine )
-    return RTEMS_INVALID_ADDRESS;
-
-  if ( !_TOD_Validate( wall_time ) )
-    return RTEMS_INVALID_CLOCK;
-
-  seconds = _TOD_To_seconds( wall_time );
-  if ( seconds <= _TOD_Seconds_since_epoch() )
-    return RTEMS_INVALID_CLOCK;
-
-  the_timer = _Timer_Get( id, &location );
-  switch ( location ) {
-
-    case OBJECTS_LOCAL:
-      _Timer_Cancel( the_timer );
-      the_timer->the_class = TIMER_TIME_OF_DAY_ON_TASK;
-      _Watchdog_Initialize( &the_timer->Ticker, routine, id, user_data );
-      the_timer->Ticker.initial = seconds - _TOD_Seconds_since_epoch();
-
-      (*timer_server->schedule_operation)( timer_server, the_timer );
-
-      _Objects_Put( &the_timer->Object );
-      return RTEMS_SUCCESSFUL;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:            /* should never return this */
-#endif
-    case OBJECTS_ERROR:
-      break;
-  }
-
-  return RTEMS_INVALID_ID;
+  return _Timer_Fire_when(
+    id,
+    wall_time,
+    routine,
+    user_data,
+    TIMER_TIME_OF_DAY_ON_TASK,
+    _Timer_server_Routine_adaptor
+  );
 }

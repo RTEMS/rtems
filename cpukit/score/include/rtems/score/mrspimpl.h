@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -159,17 +159,12 @@ RTEMS_INLINE_ROUTINE void _MRSP_Set_ceiling_priority(
   mrsp->ceiling_priorities[ scheduler_index ] = ceiling_priority;
 }
 
-RTEMS_INLINE_ROUTINE void _MRSP_Timeout(
-  Objects_Id  id,
-  void       *arg
-)
+RTEMS_INLINE_ROUTINE void _MRSP_Timeout( Watchdog_Control *watchdog )
 {
-  MRSP_Rival *rival = arg;
+  MRSP_Rival *rival = RTEMS_CONTAINER_OF( watchdog, MRSP_Rival, Watchdog );
   MRSP_Control *mrsp = rival->resource;
   Thread_Control *thread = rival->thread;
   ISR_lock_Context lock_context;
-
-  (void) id;
 
   _ISR_lock_ISR_disable_and_acquire( &mrsp->Lock, &lock_context );
 
@@ -209,6 +204,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
   bool initial_life_protection;
   Per_CPU_Control *cpu_self;
   ISR_lock_Context giant_lock_context;
+  ISR_Level level;
 
   rival.thread = executing;
   rival.resource = mrsp;
@@ -236,13 +232,11 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
   _Thread_Raise_priority( executing, ceiling_priority );
 
   if ( timeout > 0 ) {
-    _Watchdog_Initialize(
-      &executing->Timer,
-      _MRSP_Timeout,
-      0,
-      &rival
-    );
-    _Watchdog_Insert_ticks( &executing->Timer, timeout );
+    _Watchdog_Preinitialize( &rival.Watchdog, cpu_self );
+    _Watchdog_Initialize( &rival.Watchdog, _MRSP_Timeout );
+    _ISR_Disable_without_giant( level );
+    _Watchdog_Per_CPU_insert_relative( &rival.Watchdog, cpu_self, timeout );
+    _ISR_Enable_without_giant( level );
   }
 
   initial_life_protection = _Thread_Set_life_protection( true );
@@ -258,7 +252,13 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
   _Thread_Set_life_protection( initial_life_protection );
 
   if ( timeout > 0 ) {
-    _Watchdog_Remove_ticks( &executing->Timer );
+    _ISR_Disable_without_giant( level );
+    _Watchdog_Per_CPU_remove(
+      &rival.Watchdog,
+      cpu_self,
+      &cpu_self->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ]
+    );
+    _ISR_Enable_without_giant( level );
 
     if ( status == MRSP_TIMEOUT ) {
       _MRSP_Restore_priority( executing, initial_priority );

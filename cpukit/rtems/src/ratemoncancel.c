@@ -29,6 +29,7 @@ rtems_status_code rtems_rate_monotonic_cancel(
 {
   Rate_monotonic_Control *the_period;
   Objects_Locations       location;
+  ISR_Level               level;
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
@@ -38,7 +39,9 @@ rtems_status_code rtems_rate_monotonic_cancel(
         _Objects_Put( &the_period->Object );
         return RTEMS_NOT_OWNER_OF_RESOURCE;
       }
-      _Watchdog_Remove_ticks( &the_period->Timer );
+      _ISR_Disable( level );
+      _Watchdog_Per_CPU_remove_relative( &the_period->Timer );
+      _ISR_Enable( level );
       the_period->state = RATE_MONOTONIC_INACTIVE;
       _Scheduler_Release_job( the_period->owner, 0 );
       _Objects_Put( &the_period->Object );

@@ -282,7 +282,7 @@ static int _Condition_Wake( struct _Condition_Control *_condition, int count )
 
       next = _Chain_Next( node );
       thread = THREAD_CHAIN_NODE_TO_THREAD( node );
-      _Watchdog_Remove_ticks( &thread->Timer );
+      _Thread_Timer_remove( thread );
       _Thread_Unblock( thread );
 
       node = next;

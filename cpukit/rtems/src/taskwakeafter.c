@@ -41,13 +41,12 @@ rtems_status_code rtems_task_wake_after(
     } else {
       _Thread_Set_state( executing, STATES_DELAYING );
       _Thread_Wait_flags_set( executing, THREAD_WAIT_STATE_BLOCKED );
-      _Watchdog_Initialize(
-        &executing->Timer,
+      _Thread_Timer_insert_relative(
+        executing,
+        cpu_self,
         _Thread_Timeout,
-        0,
-        executing
+        ticks
       );
-      _Watchdog_Insert_ticks( &executing->Timer, ticks );
     }
   _Thread_Dispatch_enable( cpu_self );
   return RTEMS_SUCCESSFUL;

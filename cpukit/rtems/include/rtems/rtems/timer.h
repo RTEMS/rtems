@@ -31,7 +31,7 @@
  * COPYRIGHT (c) 1989-2011.
  * On-Line Applications Research Corporation (OAR).
  *
- * Copyright (c) 2009 embedded brains GmbH.
+ * Copyright (c) 2009, 2016 embedded brains GmbH.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -43,6 +43,7 @@
 
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/status.h>
+#include <rtems/rtems/tasks.h>
 #include <rtems/rtems/types.h>
 
 #ifdef __cplusplus
@@ -63,39 +64,49 @@ extern "C" {
  */
 /**@{*/
 
+#define TIMER_CLASS_BIT_TIME_OF_DAY 0x1
+
+#define TIMER_CLASS_BIT_ON_TASK 0x2
+
+#define TIMER_CLASS_BIT_NOT_DORMANT 0x4
+
 /**
  *  The following enumerated type details the classes to which a timer
  *  may belong.
  */
 typedef enum {
   /**
-   * This value indicates the timer is currently in use as an interval
-   * timer which will fire in the clock tick ISR.
-   */
-  TIMER_INTERVAL,
-
-  /**
-   * This value indicates the timer is currently in use as an interval
-   * timer which will fire in the timer server task.
-   */
-  TIMER_INTERVAL_ON_TASK,
-
-  /**
-   * This value indicates the timer is currently in use as an time of day
-   * timer which will fire in the clock tick ISR.
-   */
-  TIMER_TIME_OF_DAY,
-
-  /**
-   * This value indicates the timer is currently in use as an time of day
-   * timer which will fire in the timer server task.
-   */
-  TIMER_TIME_OF_DAY_ON_TASK,
-
-  /**
    * This value indicates the timer is currently not in use.
    */
-  TIMER_DORMANT
+  TIMER_DORMANT,
+
+  /**
+   * This value indicates the timer is currently in use as an interval
+   * timer which will fire in the clock tick ISR.
+   */
+  TIMER_INTERVAL = TIMER_CLASS_BIT_NOT_DORMANT,
+
+  /**
+   * This value indicates the timer is currently in use as an interval
+   * timer which will fire in the timer server task.
+   */
+  TIMER_INTERVAL_ON_TASK =
+    TIMER_CLASS_BIT_NOT_DORMANT | TIMER_CLASS_BIT_ON_TASK,
+
+  /**
+   * This value indicates the timer is currently in use as an time of day
+   * timer which will fire in the clock tick ISR.
+   */
+  TIMER_TIME_OF_DAY =
+    TIMER_CLASS_BIT_NOT_DORMANT | TIMER_CLASS_BIT_TIME_OF_DAY,
+
+  /**
+   * This value indicates the timer is currently in use as an time of day
+   * timer which will fire in the timer server task.
+   */
+  TIMER_TIME_OF_DAY_ON_TASK =
+    TIMER_CLASS_BIT_NOT_DORMANT | TIMER_CLASS_BIT_TIME_OF_DAY |
+    TIMER_CLASS_BIT_ON_TASK
 } Timer_Classes;
 
 /**
@@ -124,6 +135,16 @@ typedef struct {
   Watchdog_Control Ticker;
   /** This field indicates what type of timer this currently is. */
   Timer_Classes    the_class;
+  /** This field is the timer service routine. */
+  rtems_timer_service_routine_entry routine;
+  /** This field is the timer service routine user data. */
+  void *user_data;
+  /** This field is the timer interval in ticks or seconds. */
+  Watchdog_Interval initial;
+  /** This field is the timer start time point in ticks. */
+  Watchdog_Interval start_time;
+  /** This field is the timer stop time point in ticks. */
+  Watchdog_Interval stop_time;
 }   Timer_Control;
 
 /**
@@ -296,16 +317,22 @@ rtems_status_code rtems_timer_reset(
 );
 
 /**
- *  @brief rtems_timer_initiate_server
+ *  @brief Initiates the timer server.
  *
- *  This routine implements the rtems_timer_initiate_server directive.
- *  It creates and starts the server that executes task-based timers.
+ *  This directive creates and starts the server for task-based timers.
  *  It must be invoked before any task-based timers can be initiated.
+ *
+ *  @param priority The timer server task priority.
+ *  @param stack_size The stack size in bytes for the timer server task.
+ *  @param attribute_set The timer server task attributes.
+ *
+ *  @return This method returns RTEMS_SUCCESSFUL if successful and an
+ *          error code otherwise.
  */
 rtems_status_code rtems_timer_initiate_server(
-  uint32_t             priority,
-  uint32_t             stack_size,
-  rtems_attribute      attribute_set
+  rtems_task_priority priority,
+  size_t              stack_size,
+  rtems_attribute     attribute_set
 );
 
 /**

@@ -132,15 +132,6 @@ extern "C" {
  */
 typedef struct {
   /**
-   * @brief Time of day seconds trigger.
-   *
-   * This value specifies the nanoseconds since the last time of day second.
-   * It is updated and evaluated in _TOD_Tickle_ticks().  It is set in
-   * _TOD_Set_with_timestamp().
-   */
-  uint32_t seconds_trigger;
-
-  /**
    *  @brief Indicates if the time of day is set.
    *
    *  This is true if the application has set the current
@@ -271,14 +262,6 @@ static inline uint32_t _TOD_Seconds_since_epoch( void )
 {
   return (uint32_t) _Timecounter_Time_second;
 }
-
-/**
- *  @brief Increments time of day at each clock tick.
- *
- *  This routine increments the ticks field of the current time of
- *  day at each clock tick.
- */
-void _TOD_Tickle_ticks( void );
 
 /**
  *  @brief Gets number of ticks in a second.

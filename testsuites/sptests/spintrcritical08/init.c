@@ -46,23 +46,21 @@ static rtems_timer_service_routine test_release_from_isr(
   void     *arg
 )
 {
-  Watchdog_Header *header = &_Watchdog_Ticks_header;
+  Per_CPU_Control *cpu = _Per_CPU_Get();
+  Watchdog_Header *header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ];
+  Watchdog_Control *watchdog = (Watchdog_Control *) header->first;
 
-  if ( !_Watchdog_Is_empty( header ) ) {
-    Watchdog_Control *watchdog = _Watchdog_First( header );
+  if (
+    watchdog != NULL
+      && watchdog->expire == cpu->Watchdog.ticks
+      && watchdog->routine == _Rate_monotonic_Timeout
+  ) {
+    _Watchdog_Per_CPU_remove_relative( watchdog );
 
-    if (
-      watchdog->delta_interval == 0
-        && watchdog->routine == _Rate_monotonic_Timeout
-    ) {
-      Watchdog_States state = _Watchdog_Remove_ticks( watchdog );
+    (*watchdog->routine)( watchdog );
 
-      rtems_test_assert( state == WATCHDOG_ACTIVE );
-      (*watchdog->routine)( watchdog->id, watchdog->user_data );
-
-      if ( getState() == RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING ) {
-        case_hit = true;
-      }
+    if ( getState() == RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING ) {
+      case_hit = true;
     }
   }
 }

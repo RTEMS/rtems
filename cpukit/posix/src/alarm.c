@@ -22,29 +22,18 @@
 #endif
 
 #include <unistd.h>
+#include <signal.h>
 
-#include <rtems/posix/pthreadimpl.h>
-#include <rtems/posix/psignalimpl.h>
-#include <rtems/score/threaddispatch.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
-/*
- *  _POSIX_signals_Alarm_TSR
- */
-static void _POSIX_signals_Alarm_TSR(
-  Objects_Id      id RTEMS_UNUSED,
-  void           *argument RTEMS_UNUSED
-)
-{
-  #if defined(RTEMS_DEBUG)
-    int status;
-    #define KILL_STATUS status =
-  #else
-    #define KILL_STATUS (void)
-  #endif
+ISR_LOCK_DEFINE( static, _POSIX_signals_Alarm_lock, "POSIX Alarm" )
 
-  KILL_STATUS kill( getpid(), SIGALRM );
+static void _POSIX_signals_Alarm_TSR( Watchdog_Control *the_watchdog )
+{
+  int status;
+
+  status = kill( getpid(), SIGALRM );
 
   #if defined(RTEMS_DEBUG)
     /*
@@ -52,43 +41,62 @@ static void _POSIX_signals_Alarm_TSR(
      *  cautious.
      */
     _Assert(status == 0);
+  #else
+    (void) status;
   #endif
 }
 
-static Watchdog_Control _POSIX_signals_Alarm_timer = WATCHDOG_INITIALIZER(
-  _POSIX_signals_Alarm_TSR,
-  0,
-  NULL
+static Watchdog_Control _POSIX_signals_Alarm_watchdog = WATCHDOG_INITIALIZER(
+  _POSIX_signals_Alarm_TSR
 );
 
 unsigned int alarm(
   unsigned int seconds
 )
 {
-  unsigned int      remaining = 0;
-  Watchdog_Control *the_timer;
-  Watchdog_States   state;
+  unsigned int      remaining;
+  Watchdog_Control *the_watchdog;
+  ISR_lock_Context  lock_context;
+  ISR_lock_Context  lock_context2;
+  Per_CPU_Control  *cpu;
+  uint64_t          now;
+  uint32_t          ticks_per_second;
+  uint32_t          ticks;
 
-  the_timer = &_POSIX_signals_Alarm_timer;
+  the_watchdog = &_POSIX_signals_Alarm_watchdog;
+  ticks_per_second = TOD_TICKS_PER_SECOND;
+  ticks = seconds * ticks_per_second;
 
-  _Thread_Disable_dispatch();
+  _ISR_lock_ISR_disable_and_acquire(
+    &_POSIX_signals_Alarm_lock,
+    &lock_context
+  );
 
-  state = _Watchdog_Remove_seconds( the_timer );
-  if ( state == WATCHDOG_ACTIVE ) {
-    /*
-     *  The stop_time and start_time fields are snapshots of ticks since
-     *  boot.  Since alarm() is dealing in seconds, we must account for
-     *  this.
-     */
+  cpu = _Watchdog_Get_CPU( the_watchdog );
+  _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context2 );
+  now = cpu->Watchdog.ticks;
 
-    remaining = the_timer->initial -
-      ((the_timer->stop_time - the_timer->start_time) / TOD_TICKS_PER_SECOND);
+  remaining = (unsigned long) _Watchdog_Cancel(
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+    the_watchdog,
+    now
+  );
+
+  if ( ticks != 0 ) {
+    cpu = _Per_CPU_Get();
+    _Watchdog_Set_CPU( the_watchdog, cpu );
+    _Watchdog_Insert(
+      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+      the_watchdog,
+      now + ticks
+    );
   }
 
-  if ( seconds )
-    _Watchdog_Insert_seconds( the_timer, seconds );
+  _Watchdog_Per_CPU_release_critical( cpu, &lock_context2 );
+  _ISR_lock_Release_and_ISR_enable(
+    &_POSIX_signals_Alarm_lock,
+    &lock_context
+  );
 
-  _Thread_Enable_dispatch();
-
-  return remaining;
+  return ( remaining + ticks_per_second - 1 ) / ticks_per_second;
 }

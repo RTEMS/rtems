@@ -114,10 +114,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
  * @param[in] argument is a pointer to the Thread_Control structure
  *            for the thread being replenished.
  */
-void _POSIX_Threads_Sporadic_budget_TSR(
-  Objects_Id      id,
-  void           *argument
-);
+void _POSIX_Threads_Sporadic_budget_TSR( Watchdog_Control *watchdog );
 
 /**
  * @brief Translate sched_param into SuperCore terms.

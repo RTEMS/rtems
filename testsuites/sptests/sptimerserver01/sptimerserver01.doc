@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: sptimerserver01
+
+directives:
+
+  - rtems_timer_cancel()
+
+concepts:
+
+  - Ensure that pending timer server timers are cancelled via
+    rtems_timer_cancel().

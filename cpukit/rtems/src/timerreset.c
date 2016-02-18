@@ -44,40 +44,29 @@ rtems_status_code rtems_timer_reset(
 {
   Timer_Control     *the_timer;
   Objects_Locations  location;
-  rtems_status_code  status = RTEMS_SUCCESSFUL;
+  ISR_lock_Context   lock_context;
+  Per_CPU_Control   *cpu;
+  rtems_status_code  status;
 
-  the_timer = _Timer_Get( id, &location );
+  the_timer = _Timer_Get( id, &location, &lock_context );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      if ( the_timer->the_class == TIMER_INTERVAL ) {
-        _Watchdog_Reset_ticks( &the_timer->Ticker );
-      } else if ( the_timer->the_class == TIMER_INTERVAL_ON_TASK ) {
-        Timer_server_Control *timer_server = _Timer_server;
+      cpu = _Timer_Acquire_critical( the_timer, &lock_context );
 
-        /*
-         *  There is no way for a timer to have this class unless
-         *  it was scheduled as a server fire.  That requires that
-         *  the Timer Server be initiated.  So this error cannot
-         *  occur unless something is internally wrong.
-         */
-        #if defined(RTEMS_DEBUG)
-          if ( !timer_server ) {
-            _Objects_Put( &the_timer->Object );
-            return RTEMS_INCORRECT_STATE;
-          }
-        #endif
-        (*timer_server->cancel)( timer_server, the_timer );
-        (*timer_server->schedule_operation)( timer_server, the_timer );
+      if ( _Timer_Is_interval_class( the_timer->the_class ) ) {
+        _Timer_Cancel( cpu, the_timer );
+        _Watchdog_Insert(
+          &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+          &the_timer->Ticker,
+          cpu->Watchdog.ticks + the_timer->initial
+        );
+        status = RTEMS_SUCCESSFUL;
       } else {
-        /*
-         *  Must be dormant or time of day timer (e.g. TIMER_DORMANT,
-         *  TIMER_TIME_OF_DAY, or TIMER_TIME_OF_DAY_ON_TASK).  We
-         *  can only reset active interval timers.
-         */
         status = RTEMS_NOT_DEFINED;
       }
-      _Objects_Put( &the_timer->Object );
+
+      _Timer_Release( cpu, &lock_context );
       return status;
 
 #if defined(RTEMS_MULTIPROCESSING)

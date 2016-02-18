@@ -20,7 +20,11 @@
 #ifndef _RTEMS_SCORE_WATCHDOG_H
 #define _RTEMS_SCORE_WATCHDOG_H
 
-#include <rtems/score/object.h>
+#include <rtems/score/basedefs.h>
+#include <rtems/score/chain.h>
+#include <rtems/score/rbtree.h>
+
+struct Per_CPU_Control;
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,6 +42,8 @@ extern "C" {
  *        timers.
  */
 /**@{*/
+
+typedef struct Watchdog_Control Watchdog_Control;
 
 /**
  *  @brief Type is used to specify the length of intervals.
@@ -58,10 +64,8 @@ typedef void Watchdog_Service_routine;
  *
  *  This type define a pointer to a watchdog service routine.
  */
-typedef Watchdog_Service_routine ( *Watchdog_Service_routine_entry )(
-                 Objects_Id,
-                 void *
-             );
+typedef Watchdog_Service_routine
+  ( *Watchdog_Service_routine_entry )( Watchdog_Control * );
 
 /**
  *  @brief The constant for indefinite wait.
@@ -72,22 +76,20 @@ typedef Watchdog_Service_routine ( *Watchdog_Service_routine_entry )(
 #define WATCHDOG_NO_TIMEOUT  0
 
 /**
- *  @brief Set of the states which a watchdog timer may be at any given time.
- *
- *  This enumerated type is the set of the states in which a
- *  watchdog timer may be at any given time.
+ * @brief The watchdog header to manage scheduled watchdogs.
  */
-
-typedef enum {
-  /** This is the state when the watchdog is off all chains */
-  WATCHDOG_INACTIVE,
-  /** This is the state when the watchdog is off all chains, but we are
-   *  currently searching for the insertion point.
+typedef struct {
+  /**
+   * @brief Red-black tree of scheduled watchdogs sorted by expiration time.
    */
-  WATCHDOG_BEING_INSERTED,
-  /** This is the state when the watchdog is on a chain, and allowed to fire. */
-  WATCHDOG_ACTIVE
-} Watchdog_States;
+  RBTree_Control Watchdogs;
+
+  /**
+   * @brief The scheduled watchdog with the earliest expiration time or NULL in
+   * case no watchdog is scheduled.
+   */
+  RBTree_Node *first;
+} Watchdog_Header;
 
 /**
  *  @brief The control block used to manage each watchdog timer.
@@ -95,30 +97,35 @@ typedef enum {
  *  The following record defines the control block used
  *  to manage each watchdog timer.
  */
-typedef struct {
-  /** This field is a Chain Node structure and allows this to be placed on
-   *  chains for set management.
+struct Watchdog_Control {
+  /**
+   * @brief Nodes for the watchdog.
    */
-  Chain_Node                      Node;
-  /** This field is the state of the watchdog. */
-  Watchdog_States                 state;
-  /** This field is the initially requested interval. */
-  Watchdog_Interval               initial;
-  /** This field is the remaining portion of the interval. */
-  Watchdog_Interval               delta_interval;
-  /** This field is the number of system clock ticks when this was scheduled. */
-  Watchdog_Interval               start_time;
-  /** This field is the number of system clock ticks when this was suspended. */
-  Watchdog_Interval               stop_time;
-  /** This field is the function to invoke. */
-  Watchdog_Service_routine_entry  routine;
-  /** This field is the Id to pass as an argument to the routine. */
-  Objects_Id                      id;
-  /** This field is an untyped pointer to user data that is passed to the
-   *  watchdog handler routine.
-   */
-  void                           *user_data;
-}   Watchdog_Control;
+  union {
+    /**
+     * @brief this field is a red-black tree node structure and allows this to
+     * be placed on a red-black tree used to manage the scheduled watchdogs.
+     */
+    RBTree_Node RBTree;
+
+    /**
+     * @brief this field is a chain node structure and allows this to be placed
+     * on a chain used to manage pending watchdogs by the timer server.
+     */
+    Chain_Node Chain;
+  } Node;
+
+#if defined(RTEMS_SMP)
+  /** @brief This field references the processor of this watchdog control. */
+  struct Per_CPU_Control *cpu;
+#endif
+
+  /** @brief This field is the function to invoke. */
+  Watchdog_Service_routine_entry routine;
+
+  /** @brief This field is the expiration time point. */
+  uint64_t expire;
+};
 
 /**
  * @brief The watchdog ticks counter.

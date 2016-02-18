@@ -74,6 +74,7 @@ int pthread_create(
   struct sched_param                  schedparam;
   Objects_Name                        name;
   int                                 rc;
+  ISR_Level                           level;
 
   if ( !start_routine )
     return EFAULT;
@@ -246,10 +247,13 @@ int pthread_create(
   #endif
 
   if ( schedpolicy == SCHED_SPORADIC ) {
-    _Watchdog_Insert_ticks(
+    _ISR_Disable( level );
+    _Watchdog_Per_CPU_insert_relative(
       &api->Sporadic_timer,
+      _Per_CPU_Get(),
       _Timespec_To_ticks( &api->schedparam.sched_ss_repl_period )
     );
+    _ISR_Enable( level );
   }
 
   _Thread_Enable_dispatch();

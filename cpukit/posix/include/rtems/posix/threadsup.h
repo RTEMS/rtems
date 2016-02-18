@@ -42,6 +42,8 @@ extern "C" {
  * each thread in a system with POSIX configured.
  */
 typedef struct {
+  /** Back pointer to thread of this POSIX API control. */
+  Thread_Control         *thread;
   /** This is the POSIX threads attribute set. */
   pthread_attr_t          Attributes;
   /** This indicates whether the thread is attached or detached. */

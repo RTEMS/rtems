@@ -38,7 +38,6 @@
 #include <rtems/score/timecounter.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/todimpl.h>
-#include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 
 const char _Copyright_Notice[] =
@@ -86,8 +85,6 @@ static void rtems_initialize_data_structures(void)
   _API_Mutex_Initialization( 2 );
   _API_Mutex_Allocate( &_RTEMS_Allocator_Mutex );
   _API_Mutex_Allocate( &_Once_Mutex );
-
-  _Watchdog_Handler_initialization();
 
   _Thread_Handler_initialization();
 

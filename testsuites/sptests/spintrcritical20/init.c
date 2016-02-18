@@ -91,7 +91,7 @@ static bool test_body(void *arg)
     ctx->thread_queue_was_null = true;
   }
 
-  _Thread_Timeout(0, ctx->semaphore_task_tcb);
+  _Thread_Timeout(&ctx->semaphore_task_tcb->Timer.Watchdog);
 
   switch (ctx->semaphore_task_tcb->Wait.return_code) {
     case CORE_SEMAPHORE_STATUS_SUCCESSFUL:

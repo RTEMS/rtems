@@ -35,7 +35,7 @@
 
 static void _Thread_queue_Unblock( Thread_Control *the_thread )
 {
-  _Watchdog_Remove_ticks( &the_thread->Timer );
+  _Thread_Timer_remove( the_thread );
   _Thread_Unblock( the_thread );
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -84,8 +84,12 @@ void _Thread_queue_Enqueue_critical(
    */
   if ( timeout != WATCHDOG_NO_TIMEOUT ) {
     _Thread_Wait_set_timeout_code( the_thread, timeout_code );
-    _Watchdog_Initialize( &the_thread->Timer, _Thread_Timeout, 0, the_thread );
-    _Watchdog_Insert_ticks( &the_thread->Timer, timeout );
+    _Thread_Timer_insert_relative(
+      the_thread,
+      cpu_self,
+      _Thread_Timeout,
+      timeout
+    );
   }
 
   success = _Thread_Wait_flags_try_change(

@@ -104,18 +104,15 @@ static bool _POSIX_Threads_Sporadic_budget_TSR_filter(
 /*
  *  _POSIX_Threads_Sporadic_budget_TSR
  */
-void _POSIX_Threads_Sporadic_budget_TSR(
-  Objects_Id      id RTEMS_UNUSED,
-  void           *argument
-)
+void _POSIX_Threads_Sporadic_budget_TSR( Watchdog_Control *watchdog )
 {
   uint32_t            ticks;
-  Thread_Control     *the_thread;
   POSIX_API_Control  *api;
+  Thread_Control     *the_thread;
+  ISR_Level           level;
 
-  the_thread = argument;
-
-  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+  api = RTEMS_CONTAINER_OF( watchdog, POSIX_API_Control, Sporadic_timer );
+  the_thread = api->thread;
 
   /* ticks is guaranteed to be at least one */
   ticks = _Timespec_To_ticks( &api->schedparam.sched_ss_init_budget );
@@ -133,7 +130,15 @@ void _POSIX_Threads_Sporadic_budget_TSR(
   /* ticks is guaranteed to be at least one */
   ticks = _Timespec_To_ticks( &api->schedparam.sched_ss_repl_period );
 
-  _Watchdog_Insert_ticks( &api->Sporadic_timer, ticks );
+  _Thread_Disable_dispatch();
+  _ISR_Disable( level );
+  _Watchdog_Per_CPU_insert_relative(
+    &api->Sporadic_timer,
+    _Per_CPU_Get(),
+    ticks
+  );
+  _ISR_Enable( level );
+  _Thread_Unnest_dispatch();
 }
 
 static bool _POSIX_Threads_Sporadic_budget_callout_filter(
@@ -198,6 +203,7 @@ static bool _POSIX_Threads_Create_extension(
   api = created->API_Extensions[ THREAD_API_POSIX ];
 
   /* XXX check all fields are touched */
+  api->thread = created;
   _POSIX_Threads_Initialize_attributes( &api->Attributes );
   api->detachstate = _POSIX_Threads_Default_attributes.detachstate;
   api->schedpolicy = _POSIX_Threads_Default_attributes.schedpolicy;
@@ -229,11 +235,10 @@ static bool _POSIX_Threads_Create_extension(
 
   _Thread_queue_Initialize( &api->Join_List, THREAD_QUEUE_DISCIPLINE_FIFO );
 
+  _Watchdog_Preinitialize( &api->Sporadic_timer, _Per_CPU_Get_by_index( 0 ) );
   _Watchdog_Initialize(
     &api->Sporadic_timer,
-    _POSIX_Threads_Sporadic_budget_TSR,
-    created->Object.id,
-    created
+    _POSIX_Threads_Sporadic_budget_TSR
   );
 
   return true;
@@ -260,7 +265,7 @@ static void _POSIX_Threads_Terminate_extension(
       *(void **)the_thread->Wait.return_argument = value_ptr;
 
   if ( api->schedpolicy == SCHED_SPORADIC )
-    _Watchdog_Remove_ticks( &api->Sporadic_timer );
+    _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
 
   _Thread_queue_Destroy( &api->Join_List );
 

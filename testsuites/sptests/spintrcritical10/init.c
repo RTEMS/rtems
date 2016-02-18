@@ -78,7 +78,7 @@ static void any_satisfy_before_timeout(rtems_id timer, void *arg)
     );
     rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
 
-    _Thread_Timeout(0, thread);
+    _Thread_Timeout(&thread->Timer.Watchdog);
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == GREEN
@@ -175,7 +175,7 @@ static void all_satisfy_before_timeout(rtems_id timer, void *arg)
     );
     rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
 
-    _Thread_Timeout(0, thread);
+    _Thread_Timeout(&thread->Timer.Watchdog);
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == EVENTS
@@ -251,7 +251,7 @@ static void timeout_before_satisfied(rtems_id timer, void *arg)
     );
     rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
 
-    _Thread_Timeout(0, thread);
+    _Thread_Timeout(&thread->Timer.Watchdog);
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == DEADBEEF

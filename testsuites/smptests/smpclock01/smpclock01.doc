@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpclock01
+
+directives:
+
+  - Clock driver interrupt
+
+concepts:
+
+  - Ensures that the clock interrupt is distributed to all online processors.

@@ -129,19 +129,13 @@ RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_expired (
 /**
  * @brief Rate Monotonic Timeout
  *
- * This routine is invoked when the period represented
- * by ID expires. If the thread which owns this period is blocked
- * waiting for the period to expire, then it is readied and the
- * period is restarted. If the owning thread is not waiting for the
- * period to expire, then the period is placed in the EXPIRED
- * state and not restarted.
- *
- * @param[in] id is the period id
+ * This routine is invoked when the period represented by the watchdog expires.
+ * If the thread which owns this period is blocked waiting for the period to
+ * expire, then it is readied and the period is restarted. If the owning thread
+ * is not waiting for the period to expire, then the period is placed in the
+ * EXPIRED state and not restarted.
  */
-void _Rate_monotonic_Timeout(
-  rtems_id    id,
-  void       *ignored
-);
+void _Rate_monotonic_Timeout( Watchdog_Control *watchdog );
 
 /**
  * @brief _Rate_monotonic_Get_status(
@@ -165,7 +159,7 @@ bool _Rate_monotonic_Get_status(
 );
 
 /**
- *  @brief Initiate Rate Monotonic Statistics
+ *  @brief Restart Rate Monotonic Period
  *
  *  This routine is invoked when a period is initiated via an explicit
  *  call to rtems_rate_monotonic_period for the period's first iteration
@@ -173,7 +167,7 @@ bool _Rate_monotonic_Get_status(
  *
  *  @param[in] the_period points to the period being operated upon.
  */
-void _Rate_monotonic_Initiate_statistics(
+void _Rate_monotonic_Restart(
   Rate_monotonic_Control *the_period
 );
 

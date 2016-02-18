@@ -14,6 +14,7 @@ SUBDIRS += smpatomic01
 SUBDIRS += smpcache01
 SUBDIRS += smpcapture01
 SUBDIRS += smpcapture02
+SUBDIRS += smpclock01
 SUBDIRS += smpfatal01
 SUBDIRS += smpfatal02
 SUBDIRS += smpfatal03

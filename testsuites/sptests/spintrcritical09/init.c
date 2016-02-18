@@ -15,6 +15,7 @@
 #include <intrcritical.h>
 
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
 const char rtems_test_name[] = "SPINTRCRITICAL 9";
@@ -37,23 +38,21 @@ static rtems_timer_service_routine test_release_from_isr(
   void     *arg
 )
 {
-  Watchdog_Header *header = &_Watchdog_Ticks_header;
+  Per_CPU_Control *cpu_self = _Per_CPU_Get();
+  Watchdog_Header *header = &cpu_self->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ];
+  Watchdog_Control *watchdog = (Watchdog_Control *) header->first;
 
-  if ( !_Watchdog_Is_empty( header ) ) {
-    Watchdog_Control *watchdog = _Watchdog_First( header );
+  if (
+    watchdog != NULL
+      && watchdog->expire == cpu_self->Watchdog.ticks
+      && watchdog->routine == _Thread_Timeout
+  ) {
+    _Watchdog_Per_CPU_remove( watchdog, cpu_self, header );
 
-    if (
-      watchdog->delta_interval == 0
-        && watchdog->routine == _Thread_Timeout
-    ) {
-      Watchdog_States state = _Watchdog_Remove_ticks( watchdog );
+    (*watchdog->routine)( watchdog );
 
-      rtems_test_assert( state == WATCHDOG_ACTIVE );
-      (*watchdog->routine)( watchdog->id, watchdog->user_data );
-
-      if ( is_interrupt_timeout() ) {
-        case_hit = true;
-      }
+    if ( is_interrupt_timeout() ) {
+      case_hit = true;
     }
   }
 }

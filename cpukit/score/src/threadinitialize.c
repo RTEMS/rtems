@@ -160,6 +160,10 @@ bool _Thread_Initialize(
   the_thread->Start.budget_algorithm = budget_algorithm;
   the_thread->Start.budget_callout   = budget_callout;
 
+  _ISR_lock_Initialize( &the_thread->Timer.Lock, "Thread Timer" );
+  the_thread->Timer.header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ];
+  _Watchdog_Preinitialize( &the_thread->Timer.Watchdog, cpu );
+
   switch ( budget_algorithm ) {
     case THREAD_CPU_BUDGET_ALGORITHM_NONE:
     case THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE:

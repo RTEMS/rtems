@@ -23,10 +23,11 @@
   #include <rtems/asm.h>
 #else
   #include <rtems/score/assert.h>
-  #include <rtems/score/isrlevel.h>
+  #include <rtems/score/isrlock.h>
   #include <rtems/score/smp.h>
   #include <rtems/score/smplock.h>
   #include <rtems/score/timestamp.h>
+  #include <rtems/score/watchdog.h>
 #endif
 
 #ifdef __cplusplus
@@ -41,7 +42,7 @@ extern "C" {
    * processor.
    */
   #if defined( RTEMS_PROFILING )
-    #define PER_CPU_CONTROL_SIZE_LOG2 8
+    #define PER_CPU_CONTROL_SIZE_LOG2 9
   #else
     #define PER_CPU_CONTROL_SIZE_LOG2 7
   #endif
@@ -226,6 +227,32 @@ typedef struct {
 } Per_CPU_Stats;
 
 /**
+ * @brief Per-CPU watchdog header index.
+ */
+typedef enum {
+  /**
+   * @brief Index for relative per-CPU watchdog header.
+   *
+   * The reference time point for this header is current ticks value
+   * during insert.  Time is measured in clock ticks.
+   */
+  PER_CPU_WATCHDOG_RELATIVE,
+
+  /**
+   * @brief Index for absolute per-CPU watchdog header.
+   *
+   * The reference time point for this header is the POSIX Epoch.  Time is
+   * measured in nanoseconds since POSIX Epoch.
+   */
+  PER_CPU_WATCHDOG_ABSOLUTE,
+
+  /**
+   * @brief Count of per-CPU watchdog headers.
+   */
+  PER_CPU_WATCHDOG_COUNT
+} Per_CPU_Watchdog_index;
+
+/**
  *  @brief Per CPU Core Structure
  *
  *  This structure is used to hold per core state information.
@@ -308,6 +335,28 @@ typedef struct Per_CPU_Control {
 
   /** This is the time of the last context switch on this CPU. */
   Timestamp_Control time_of_last_context_switch;
+
+  /**
+   * @brief Watchdog state for this processor.
+   */
+  struct {
+    /**
+     * @brief Protects all watchdog operations on this processor.
+     */
+    ISR_LOCK_MEMBER( Lock )
+
+    /**
+     * @brief Watchdog ticks on this processor used for relative watchdogs.
+     */
+    uint64_t ticks;
+
+    /**
+     * @brief Header for watchdogs.
+     *
+     * @see Per_CPU_Watchdog_index.
+     */
+    Watchdog_Header Header[ PER_CPU_WATCHDOG_COUNT ];
+  } Watchdog;
 
   #if defined( RTEMS_SMP )
     /**

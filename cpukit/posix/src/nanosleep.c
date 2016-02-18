@@ -46,6 +46,7 @@ int nanosleep(
   Per_CPU_Control *cpu_self;
 
   Watchdog_Interval  ticks;
+  Watchdog_Interval  start;
   Watchdog_Interval  elapsed;
 
 
@@ -81,6 +82,8 @@ int nanosleep(
     return 0;
   }
 
+  start = _Watchdog_Ticks_since_boot;
+
   /*
    *  Block for the desired amount of time
    */
@@ -96,7 +99,7 @@ int nanosleep(
    * Calculate the time that passed while we were sleeping and how
    * much remains from what we requested.
    */
-  elapsed = executing->Timer.stop_time - executing->Timer.start_time;
+  elapsed = _Watchdog_Ticks_since_boot - start;
   if ( elapsed >= ticks )
     ticks = 0;
   else

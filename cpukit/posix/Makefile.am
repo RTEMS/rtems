@@ -196,8 +196,7 @@ libposix_a_SOURCES += src/adjtime.c src/clockgetcpuclockid.c
 
 ## TIMER_C_FILES
 libposix_a_SOURCES += src/ptimer.c src/timercreate.c src/timerdelete.c \
-    src/timergetoverrun.c src/timergettime.c src/timersettime.c \
-    src/timertsr.c src/timerinserthelper.c
+    src/timergetoverrun.c src/timergettime.c src/timersettime.c
 
 ## ITIMER_C_FILES
 libposix_a_SOURCES += src/getitimer.c src/setitimer.c

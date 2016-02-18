@@ -91,7 +91,8 @@ int timer_create(
   ptimer->timer_data.it_interval.tv_sec  = 0;
   ptimer->timer_data.it_interval.tv_nsec = 0;
 
-  _Watchdog_Preinitialize( &ptimer->Timer );
+  _Watchdog_Preinitialize( &ptimer->Timer, _Per_CPU_Get_snapshot() );
+  _Watchdog_Initialize( &ptimer->Timer, _POSIX_Timer_TSR );
   _Objects_Open_u32(&_POSIX_Timer_Information, &ptimer->Object, 0);
 
   *timerid  = ptimer->Object.id;

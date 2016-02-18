@@ -21,6 +21,7 @@
 
 #include <rtems/posix/timer.h>
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/watchdogimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,24 +50,6 @@ extern "C" {
 #if (POSIX_TIMER_RELATIVE == TIMER_ABSTIME)
 #error "POSIX_TIMER_RELATIVE == TIMER_ABSTIME"
 #endif
-
-/**
- *  @brief POSIX Timer Manager Timer Service Routine Helper
- *
- *  This is the operation that is run when a timer expires.
- */
-void _POSIX_Timer_TSR(Objects_Id timer, void *data);
-
-/**
- *  @brief POSIX Timer Watchdog Insertion Helper
- */
-bool _POSIX_Timer_Insert_helper(
-  Watchdog_Control               *timer,
-  Watchdog_Interval               ticks,
-  Objects_Id                      id,
-  Watchdog_Service_routine_entry  TSR,
-  void                           *arg
-);
 
 /**
  *  The following defines the information control block used to manage
@@ -98,6 +81,8 @@ RTEMS_INLINE_ROUTINE void _POSIX_Timer_Free (
   _Objects_Free( &_POSIX_Timer_Information, &the_timer->Object );
 }
 
+void _POSIX_Timer_TSR( Watchdog_Control *the_watchdog );
+
 /**
  *  @brief POSIX Timer Get
  *
@@ -109,11 +94,38 @@ RTEMS_INLINE_ROUTINE void _POSIX_Timer_Free (
  */
 RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Get (
   timer_t            id,
-  Objects_Locations *location
+  Objects_Locations *location,
+  ISR_lock_Context  *lock_context
 )
 {
-  return (POSIX_Timer_Control *)
-    _Objects_Get( &_POSIX_Timer_Information, (Objects_Id) id, location );
+  return (POSIX_Timer_Control *) _Objects_Get_isr_disable(
+    &_POSIX_Timer_Information,
+    (Objects_Id) id,
+    location,
+    lock_context
+  );
+}
+
+RTEMS_INLINE_ROUTINE Per_CPU_Control *_POSIX_Timer_Acquire_critical(
+  POSIX_Timer_Control *ptimer,
+  ISR_lock_Context    *lock_context
+)
+{
+  Per_CPU_Control *cpu;
+
+  cpu = _Watchdog_Get_CPU( &ptimer->Timer );
+  _Watchdog_Per_CPU_acquire_critical( cpu, lock_context );
+
+  return cpu;
+}
+
+RTEMS_INLINE_ROUTINE void _POSIX_Timer_Release(
+  Per_CPU_Control  *cpu,
+  ISR_lock_Context *lock_context
+)
+{
+  _Watchdog_Per_CPU_release_critical( cpu, lock_context );
+  _ISR_lock_ISR_enable( lock_context );
 }
 
 #ifdef __cplusplus

@@ -21,9 +21,11 @@
 
 #include <rtems/score/watchdog.h>
 #include <rtems/score/assert.h>
-#include <rtems/score/chainimpl.h>
 #include <rtems/score/isrlock.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/rbtreeimpl.h>
+
+#include <sys/timespec.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,241 +37,116 @@ extern "C" {
  */
 
 /**
+ * @brief Watchdog states.
+ */
+typedef enum {
+  /**
+   * @brief The watchdog is scheduled and a black node in the red-black tree.
+   */
+  WATCHDOG_SCHEDULED_BLACK,
+
+  /**
+   * @brief The watchdog is scheduled and a red node in the red-black tree.
+   */
+  WATCHDOG_SCHEDULED_RED,
+
+  /**
+   * @brief The watchdog is inactive.
+   */
+  WATCHDOG_INACTIVE,
+
+  /**
+   * @brief The watchdog is on a chain of pending watchdogs.
+   *
+   * This state is used by the timer server for example.
+   */
+  WATCHDOG_PENDING
+} Watchdog_State;
+
+/**
  * @brief Watchdog initializer for static initialization.
  *
- * @see _Watchdog_Initialize().
- */
-#define WATCHDOG_INITIALIZER( routine, id, user_data ) \
-  { \
-    { NULL, NULL }, \
-    WATCHDOG_INACTIVE, \
-    0, 0, 0, 0, \
-    ( routine ), ( id ), ( user_data ) \
-  }
-
-/**
- * @brief Iterator item to synchronize concurrent insert, remove and tickle
- * operations.
- */
-typedef struct {
-  /**
-   * @brief A node for a Watchdog_Header::Iterators chain.
-   */
-  Chain_Node Node;
-
-  /**
-   * @brief The current delta interval of the new watchdog to insert.
-   */
-  Watchdog_Interval delta_interval;
-
-  /**
-   * @brief The current watchdog of the chain on the way to insert the new
-   * watchdog.
-   */
-  Chain_Node *current;
-} Watchdog_Iterator;
-
-/**
- * @brief Watchdog header.
- */
-typedef struct {
-  /**
-   * @brief ISR lock to protect this watchdog chain.
-   */
-  ISR_LOCK_MEMBER( Lock )
-
-  /**
-   * @brief The chain of active or transient watchdogs.
-   */
-  Chain_Control Watchdogs;
-
-  /**
-   * @brief Currently active iterators.
-   *
-   * The iterators are registered in _Watchdog_Insert() and updated in case the
-   * watchdog chain changes.
-   */
-  Chain_Control Iterators;
-} Watchdog_Header;
-
-/**
- *  @brief Watchdog chain which is managed at ticks.
+ * The processor of this watchdog is set to processor with index zero.
  *
- *  This is the watchdog chain which is managed at ticks.
+ * @see _Watchdog_Preinitialize().
  */
-extern Watchdog_Header _Watchdog_Ticks_header;
+#if defined(RTEMS_SMP)
+  #define WATCHDOG_INITIALIZER( routine ) \
+    { \
+      { { { NULL, NULL, NULL, WATCHDOG_INACTIVE } } }, \
+      &_Per_CPU_Information[ 0 ].per_cpu, \
+      ( routine ), \
+      0 \
+    }
+#else
+  #define WATCHDOG_INITIALIZER( routine ) \
+    { \
+      { { { NULL, NULL, NULL, WATCHDOG_INACTIVE } } }, \
+      ( routine ), \
+      0 \
+    }
+#endif
 
-/**
- *  @brief Watchdog chain which is managed at second boundaries.
- *
- *  This is the watchdog chain which is managed at second boundaries.
- */
-extern Watchdog_Header _Watchdog_Seconds_header;
-
-RTEMS_INLINE_ROUTINE void _Watchdog_Acquire(
-  Watchdog_Header  *header,
-  ISR_lock_Context *lock_context
+RTEMS_INLINE_ROUTINE void _Watchdog_Header_initialize(
+  Watchdog_Header *header
 )
 {
-  _ISR_lock_ISR_disable_and_acquire( &header->Lock, lock_context );
+  _RBTree_Initialize_empty( &header->Watchdogs );
+  header->first = NULL;
 }
 
-RTEMS_INLINE_ROUTINE void _Watchdog_Release(
-  Watchdog_Header  *header,
-  ISR_lock_Context *lock_context
+RTEMS_INLINE_ROUTINE void _Watchdog_Header_destroy(
+  Watchdog_Header *header
 )
 {
-  _ISR_lock_Release_and_ISR_enable( &header->Lock, lock_context );
+  /* Do nothing */
+  (void) header;
 }
-
-RTEMS_INLINE_ROUTINE void _Watchdog_Flash(
-  Watchdog_Header  *header,
-  ISR_lock_Context *lock_context
-)
-{
-  _ISR_lock_Flash( &header->Lock, lock_context );
-}
-
-/**
- *  @brief Initialize the watchdog handler.
- *
- *  This routine initializes the watchdog handler.  The watchdog
- *  synchronization flag is initialized and the watchdog chains are
- *  initialized and emptied.
- */
-void _Watchdog_Handler_initialization( void );
 
 /**
  *  @brief Performs a watchdog tick.
  *
  *  @param cpu The processor for this watchdog tick.
  */
-void _Watchdog_Tick( Per_CPU_Control *cpu );
+void _Watchdog_Tick( struct Per_CPU_Control *cpu );
 
-/**
- *  @brief Removes @a the_watchdog from the watchdog chain.
- *
- *  This routine removes @a the_watchdog from the watchdog chain on which
- *  it resides and returns the state @a the_watchdog timer was in.
- *
- *  @param[in] header The watchdog chain.
- *  @param[in] the_watchdog will be removed
- *  @retval the state in which @a the_watchdog was in when removed
- */
-Watchdog_States _Watchdog_Remove (
-  Watchdog_Header  *header,
-  Watchdog_Control *the_watchdog
-);
+RTEMS_INLINE_ROUTINE Watchdog_State _Watchdog_Get_state(
+  const Watchdog_Control *the_watchdog
+)
+{
+  return RB_COLOR( &the_watchdog->Node.RBTree, Node );
+}
 
-/**
- *  @brief Adjusts the header watchdog chain in the backward direction for
- *  units ticks.
- *
- *  @param[in] header The watchdog chain.
- *  @param[in] units The units of ticks to adjust.
- */
-void _Watchdog_Adjust_backward(
-  Watchdog_Header   *header,
-  Watchdog_Interval  units
-);
-
-/**
- * @brief Adjusts the watchdogs in backward direction in a locked context.
- *
- * The caller must be the owner of the watchdog lock and will be the owner
- * after the call.
- *
- * @param[in] header The watchdog header.
- * @param[in] units The units of ticks to adjust.
- *
- * @see _Watchdog_Adjust_forward().
- */
-void _Watchdog_Adjust_backward_locked(
-  Watchdog_Header   *header,
-  Watchdog_Interval  units
-);
-
-/**
- *  @brief Adjusts the header watchdog chain in the forward direction for units
- *  ticks.
- *
- *  This may lead to several _Watchdog_Tickle() invocations.
- *
- *  @param[in] header The watchdog chain.
- *  @param[in] units The units of ticks to adjust.
- */
-void _Watchdog_Adjust_forward(
-  Watchdog_Header   *header,
-  Watchdog_Interval  units
-);
-
-/**
- * @brief Adjusts the watchdogs in forward direction in a locked context.
- *
- * The caller must be the owner of the watchdog lock and will be the owner
- * after the call.  This function may release and acquire the watchdog lock
- * internally.
- *
- * @param[in] header The watchdog header.
- * @param[in] units The units of ticks to adjust.
- * @param[in] lock_context The lock context.
- *
- * @see _Watchdog_Adjust_forward().
- */
-void _Watchdog_Adjust_forward_locked(
-  Watchdog_Header   *header,
-  Watchdog_Interval  units,
-  ISR_lock_Context  *lock_context
-);
-
-/**
- *  @brief Inserts @a the_watchdog into the @a header watchdog chain
- *  for a time of @a units.
- *
- *  This routine inserts @a the_watchdog into the @a header watchdog chain
- *  for a time of @a units.
- *  Update the delta interval counters.
- *
- *  @param[in] header is @a the_watchdog list to insert @a the_watchdog on
- *  @param[in] the_watchdog is the watchdog to insert
- */
-void _Watchdog_Insert (
-  Watchdog_Header  *header,
-  Watchdog_Control *the_watchdog
-);
-
-/**
- * @brief Inserts the watchdog in a locked context.
- *
- * The caller must be the owner of the watchdog lock and will be the owner
- * after the call.  This function may release and acquire the watchdog lock
- * internally.
- *
- * @param[in] header The watchdog header.
- * @param[in] the_watchdog The watchdog.
- * @param[in] lock_context The lock context.
- *
- * @see _Watchdog_Insert().
- */
-void _Watchdog_Insert_locked(
-  Watchdog_Header  *header,
+RTEMS_INLINE_ROUTINE void _Watchdog_Set_state(
   Watchdog_Control *the_watchdog,
-  ISR_lock_Context *lock_context
-);
+  Watchdog_State    state
+)
+{
+  RB_COLOR( &the_watchdog->Node.RBTree, Node ) = state;
+}
 
-/**
- *  @brief This routine is invoked at appropriate intervals to update
- *  the @a header watchdog chain.
- *
- *  This routine is invoked at appropriate intervals to update
- *  the @a header watchdog chain.
- *  This routine decrements the delta counter in response to a tick.
- *
- *  @param[in] header is the watchdog chain to tickle
- */
-void _Watchdog_Tickle (
-  Watchdog_Header *header
-);
+RTEMS_INLINE_ROUTINE Per_CPU_Control *_Watchdog_Get_CPU(
+  const Watchdog_Control *the_watchdog
+)
+{
+#if defined(RTEMS_SMP)
+  return the_watchdog->cpu;
+#else
+  return _Per_CPU_Get_by_index( 0 );
+#endif
+}
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Set_CPU(
+  Watchdog_Control *the_watchdog,
+  Per_CPU_Control  *cpu
+)
+{
+#if defined(RTEMS_SMP)
+  the_watchdog->cpu = cpu;
+#else
+  (void) cpu;
+#endif
+}
 
 /**
  * @brief Pre-initializes a watchdog.
@@ -280,228 +157,284 @@ void _Watchdog_Tickle (
  * @param[in] the_watchdog The uninitialized watchdog.
  */
 RTEMS_INLINE_ROUTINE void _Watchdog_Preinitialize(
-  Watchdog_Control *the_watchdog
+  Watchdog_Control *the_watchdog,
+  Per_CPU_Control  *cpu
 )
 {
-  the_watchdog->state = WATCHDOG_INACTIVE;
+  _Watchdog_Set_CPU( the_watchdog, cpu );
+  _Watchdog_Set_state( the_watchdog, WATCHDOG_INACTIVE );
+
 #if defined(RTEMS_DEBUG)
   the_watchdog->routine = NULL;
-  the_watchdog->id = 0;
-  the_watchdog->user_data = NULL;
+  the_watchdog->expire = 0;
 #endif
 }
 
 /**
- * This routine initializes the specified watchdog.  The watchdog is
- * made inactive, the watchdog id and handler routine are set to the
- * specified values.
+ * @brief Initializes a watchdog with a new service routine.
+ *
+ * The watchdog must be inactive.
  */
-
 RTEMS_INLINE_ROUTINE void _Watchdog_Initialize(
   Watchdog_Control               *the_watchdog,
-  Watchdog_Service_routine_entry  routine,
-  Objects_Id                      id,
-  void                           *user_data
+  Watchdog_Service_routine_entry  routine
 )
 {
-  _Assert( the_watchdog->state == WATCHDOG_INACTIVE );
-  the_watchdog->routine   = routine;
-  the_watchdog->id        = id;
-  the_watchdog->user_data = user_data;
+  _Assert( _Watchdog_Get_state( the_watchdog ) == WATCHDOG_INACTIVE );
+  the_watchdog->routine = routine;
 }
 
-/**
- * This routine returns true if the watchdog timer is in the ACTIVE
- * state, and false otherwise.
- */
+void _Watchdog_Do_tickle(
+  Watchdog_Header  *header,
+  uint64_t          now,
+#if defined(RTEMS_SMP)
+  ISR_lock_Control *lock,
+#endif
+  ISR_lock_Context *lock_context
+);
 
-RTEMS_INLINE_ROUTINE bool _Watchdog_Is_active(
+#if defined(RTEMS_SMP)
+  #define _Watchdog_Tickle( header, now, lock, lock_context ) \
+    _Watchdog_Do_tickle( header, now, lock, lock_context )
+#else
+  #define _Watchdog_Tickle( header, now, lock, lock_context ) \
+    _Watchdog_Do_tickle( header, now, lock_context )
+#endif
+
+/**
+ * @brief Inserts a watchdog into the set of scheduled watchdogs according to
+ * the specified expiration time.
+ *
+ * The watchdog must be inactive.
+ */
+void _Watchdog_Insert(
+  Watchdog_Header  *header,
+  Watchdog_Control *the_watchdog,
+  uint64_t          expire
+);
+
+/**
+ * @brief In case the watchdog is scheduled, then it is removed from the set of
+ * scheduled watchdogs.
+ *
+ * The watchdog must be initialized before this call.
+ */
+void _Watchdog_Remove(
+  Watchdog_Header  *header,
+  Watchdog_Control *the_watchdog
+);
+
+/**
+ * @brief In case the watchdog is scheduled, then it is removed from the set of
+ * scheduled watchdogs.
+ *
+ * The watchdog must be initialized before this call.
+ *
+ * @retval 0 The now time is greater than or equal to the expiration time of
+ * the watchdog.
+ * @retval other The difference of the now and expiration time.
+ */
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Cancel(
+  Watchdog_Header  *header,
+  Watchdog_Control *the_watchdog,
+  uint64_t          now
+)
+{
+  uint64_t expire;
+  uint64_t remaining;
+
+  expire = the_watchdog->expire;
+
+  if ( now < expire ) {
+    remaining = expire - now;
+  } else {
+    remaining = 0;
+  }
+
+  _Watchdog_Remove( header, the_watchdog );
+
+  return remaining;
+}
+
+RTEMS_INLINE_ROUTINE bool _Watchdog_Is_scheduled(
+  const Watchdog_Control *the_watchdog
+)
+{
+  return _Watchdog_Get_state( the_watchdog ) < WATCHDOG_INACTIVE;
+}
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Next_first(
+  Watchdog_Header  *header,
   Watchdog_Control *the_watchdog
 )
 {
+  RBTree_Node *node = _RBTree_Right( &the_watchdog->Node.RBTree );
 
-  return ( the_watchdog->state == WATCHDOG_ACTIVE );
+  if ( node != NULL ) {
+    RBTree_Node *left;
 
+    while ( ( left = _RBTree_Left( node ) ) != NULL ) {
+      node = left;
+    }
+
+    header->first = node;
+  } else {
+    header->first = _RBTree_Parent( &the_watchdog->Node.RBTree );
+  }
 }
 
 /**
- * This routine activates THE_WATCHDOG timer which is already
- * on a watchdog chain.
+ * @brief The bits necessary to store 1000000000 nanoseconds.
+ *
+ * The expiration time is an unsigned 64-bit integer.  To store absolute
+ * timeouts we use 30 bits (2**30 == 1073741824) for the nanoseconds and 34
+ * bits for the seconds since UNIX Epoch.  This leads to a year 2514 problem.
  */
+#define WATCHDOG_BITS_FOR_1E9_NANOSECONDS 30
 
-RTEMS_INLINE_ROUTINE void _Watchdog_Activate(
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_seconds(
+  uint32_t seconds
+)
+{
+  uint64_t ticks = seconds;
+
+  ticks <<= WATCHDOG_BITS_FOR_1E9_NANOSECONDS;
+
+  return ticks;
+}
+
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_timespec(
+  const struct timespec *ts
+)
+{
+  /*
+   * The seconds are in time_t which is a signed integer.  Thus this cast is
+   * subject to the year 2038 problem in case time_t is a 32-bit integer.
+   */
+  uint64_t ticks = (uint64_t) ts->tv_sec;
+
+  _Assert( ticks < 0x400000000 );
+  _Assert( ts->tv_nsec >= 0 );
+  _Assert( ts->tv_nsec < 1000000000 );
+
+  ticks <<= WATCHDOG_BITS_FOR_1E9_NANOSECONDS;
+  ticks |= ts->tv_nsec;
+
+  return ticks;
+}
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_acquire_critical(
+  Per_CPU_Control  *cpu,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Acquire( &cpu->Watchdog.Lock, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_release_critical(
+  Per_CPU_Control  *cpu,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Release( &cpu->Watchdog.Lock, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_insert_relative(
+  Watchdog_Control *the_watchdog,
+  Per_CPU_Control  *cpu,
+  uint32_t          ticks
+)
+{
+  ISR_lock_Context lock_context;
+
+  _Watchdog_Set_CPU( the_watchdog, cpu );
+
+  _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context );
+  _Watchdog_Insert(
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+    the_watchdog,
+    cpu->Watchdog.ticks + ticks
+  );
+  _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_insert_absolute(
+  Watchdog_Control *the_watchdog,
+  Per_CPU_Control  *cpu,
+  uint64_t          expire
+)
+{
+  ISR_lock_Context lock_context;
+
+  _Watchdog_Set_CPU( the_watchdog, cpu );
+
+  _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context );
+  _Watchdog_Insert(
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_ABSOLUTE ],
+    the_watchdog,
+    expire
+  );
+  _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove(
+  Watchdog_Control *the_watchdog,
+  Per_CPU_Control  *cpu,
+  Watchdog_Header  *header
+)
+{
+  ISR_lock_Context lock_context;
+
+  _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context );
+  _Watchdog_Remove(
+    header,
+    the_watchdog
+  );
+  _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_relative(
   Watchdog_Control *the_watchdog
 )
 {
+  Per_CPU_Control *cpu;
 
-  the_watchdog->state = WATCHDOG_ACTIVE;
-
+  cpu = _Watchdog_Get_CPU( the_watchdog );
+  _Watchdog_Per_CPU_remove(
+    the_watchdog,
+    cpu,
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ]
+  );
 }
 
-/**
- * This routine is invoked at each clock tick to update the ticks
- * watchdog chain.
- */
-
-RTEMS_INLINE_ROUTINE void _Watchdog_Tickle_ticks( void )
-{
-
-  _Watchdog_Tickle( &_Watchdog_Ticks_header );
-
-}
-
-/**
- * This routine is invoked at each clock tick to update the seconds
- * watchdog chain.
- */
-
-RTEMS_INLINE_ROUTINE void _Watchdog_Tickle_seconds( void )
-{
-
-  _Watchdog_Tickle( &_Watchdog_Seconds_header );
-
-}
-
-/**
- * This routine inserts THE_WATCHDOG into the ticks watchdog chain
- * for a time of UNITS ticks.  The INSERT_MODE indicates whether
- * THE_WATCHDOG is to be activated automatically or later, explicitly
- * by the caller.
- */
-
-RTEMS_INLINE_ROUTINE void _Watchdog_Insert_ticks(
-  Watchdog_Control      *the_watchdog,
-  Watchdog_Interval      units
-)
-{
-
-  the_watchdog->initial = units;
-
-  _Watchdog_Insert( &_Watchdog_Ticks_header, the_watchdog );
-
-}
-
-/**
- * This routine inserts THE_WATCHDOG into the seconds watchdog chain
- * for a time of UNITS seconds.  The INSERT_MODE indicates whether
- * THE_WATCHDOG is to be activated automatically or later, explicitly
- * by the caller.
- */
-
-RTEMS_INLINE_ROUTINE void _Watchdog_Insert_seconds(
-  Watchdog_Control      *the_watchdog,
-  Watchdog_Interval      units
-)
-{
-
-  the_watchdog->initial = units;
-
-  _Watchdog_Insert( &_Watchdog_Seconds_header, the_watchdog );
-
-}
-
-RTEMS_INLINE_ROUTINE Watchdog_States _Watchdog_Remove_ticks(
+RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_absolute(
   Watchdog_Control *the_watchdog
 )
 {
-  return _Watchdog_Remove( &_Watchdog_Ticks_header, the_watchdog );
+  Per_CPU_Control *cpu;
+
+  cpu = _Watchdog_Get_CPU( the_watchdog );
+  _Watchdog_Per_CPU_remove(
+    the_watchdog,
+    cpu,
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_ABSOLUTE ]
+  );
 }
 
-RTEMS_INLINE_ROUTINE Watchdog_States _Watchdog_Remove_seconds(
-  Watchdog_Control *the_watchdog
+RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_tickle_absolute(
+  Per_CPU_Control *cpu,
+  uint64_t         now
 )
 {
-  return _Watchdog_Remove( &_Watchdog_Seconds_header, the_watchdog );
-}
+  ISR_lock_Context lock_context;
 
-/**
- * This routine resets THE_WATCHDOG timer to its state at INSERT
- * time.  This routine is valid only on interval watchdog timers
- * and is used to make an interval watchdog timer fire "every" so
- * many ticks.
- */
-
-RTEMS_INLINE_ROUTINE void _Watchdog_Reset_ticks(
-  Watchdog_Control *the_watchdog
-)
-{
-
-  _Watchdog_Remove_ticks( the_watchdog );
-
-  _Watchdog_Insert( &_Watchdog_Ticks_header, the_watchdog );
-
-}
-
-/**
- * This routine returns a pointer to the watchdog timer following
- * THE_WATCHDOG on the watchdog chain.
- */
-
-RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Next(
-  Watchdog_Control *the_watchdog
-)
-{
-
-  return ( (Watchdog_Control *) the_watchdog->Node.next );
-
-}
-
-/**
- * This routine returns a pointer to the watchdog timer preceding
- * THE_WATCHDOG on the watchdog chain.
- */
-
-RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Previous(
-  Watchdog_Control *the_watchdog
-)
-{
-
-  return ( (Watchdog_Control *) the_watchdog->Node.previous );
-
-}
-
-/**
- * This routine returns a pointer to the first watchdog timer
- * on the watchdog chain HEADER.
- */
-
-RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_First(
-  Watchdog_Header *header
-)
-{
-
-  return ( (Watchdog_Control *) _Chain_First( &header->Watchdogs ) );
-
-}
-
-/**
- * This routine returns a pointer to the last watchdog timer
- * on the watchdog chain HEADER.
- */
-
-RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Last(
-  Watchdog_Header *header
-)
-{
-
-  return ( (Watchdog_Control *) _Chain_Last( &header->Watchdogs ) );
-
-}
-
-RTEMS_INLINE_ROUTINE bool _Watchdog_Is_empty(
-  const Watchdog_Header *header
-)
-{
-  return _Chain_Is_empty( &header->Watchdogs );
-}
-
-RTEMS_INLINE_ROUTINE void _Watchdog_Header_initialize(
-  Watchdog_Header *header
-)
-{
-  _ISR_lock_Initialize( &header->Lock, "Watchdog" );
-  _Chain_Initialize_empty( &header->Watchdogs );
-  _Chain_Initialize_empty( &header->Iterators );
+  _ISR_lock_ISR_disable_and_acquire( &cpu->Watchdog.Lock, &lock_context );
+  _Watchdog_Tickle(
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_ABSOLUTE ],
+    now,
+    &cpu->Watchdog.Lock,
+    &lock_context
+  );
 }
 
 /** @} */

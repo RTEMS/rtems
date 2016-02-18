@@ -21,39 +21,62 @@
 #include <signal.h>
 #include <unistd.h>
 
-#include <rtems/posix/pthreadimpl.h>
-#include <rtems/posix/psignalimpl.h>
-#include <rtems/score/threaddispatch.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
+#include <rtems/config.h>
 
-static void _POSIX_signals_Ualarm_TSR( Objects_Id id, void *argument );
+ISR_LOCK_DEFINE( static, _POSIX_signals_Ualarm_lock, "POSIX Ualarm" )
 
-static Watchdog_Control _POSIX_signals_Ualarm_timer = WATCHDOG_INITIALIZER(
-  _POSIX_signals_Ualarm_TSR,
-  0,
-  NULL
-);
+static uint32_t _POSIX_signals_Ualarm_interval;
 
-/*
- *  _POSIX_signals_Ualarm_TSR
- */
-
-static void _POSIX_signals_Ualarm_TSR(
-  Objects_Id      id RTEMS_UNUSED,
-  void           *argument RTEMS_UNUSED
-)
+static void _POSIX_signals_Ualarm_TSR( Watchdog_Control *the_watchdog )
 {
-  /*
-   * Send a SIGALRM but if there is a problem, ignore it.
-   * It's OK, there isn't a way this should fail.
-   */
-  (void) kill( getpid(), SIGALRM );
+  int              status;
+  ISR_lock_Context lock_context;
+
+  status = kill( getpid(), SIGALRM );
+
+  #if defined(RTEMS_DEBUG)
+    /*
+     *  There is no reason to think this might fail but we should be
+     *  cautious.
+     */
+    _Assert(status == 0);
+  #else
+    (void) status;
+  #endif
+
+  _ISR_lock_ISR_disable_and_acquire(
+    &_POSIX_signals_Ualarm_lock,
+    &lock_context
+  );
 
   /*
    * If the reset interval is non-zero, reschedule ourselves.
    */
-  _Watchdog_Reset_ticks( &_POSIX_signals_Ualarm_timer );
+  if ( _POSIX_signals_Ualarm_interval != 0 ) {
+    _Watchdog_Per_CPU_insert_relative(
+      the_watchdog,
+      _Per_CPU_Get(),
+      _POSIX_signals_Ualarm_interval
+    );
+  }
+
+  _ISR_lock_Release_and_ISR_enable(
+    &_POSIX_signals_Ualarm_lock,
+    &lock_context
+  );
+}
+
+static Watchdog_Control _POSIX_signals_Ualarm_watchdog = WATCHDOG_INITIALIZER(
+  _POSIX_signals_Ualarm_TSR
+);
+
+static uint32_t _POSIX_signals_Ualarm_us_to_ticks( useconds_t us )
+{
+  uint32_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
+
+  return ( us + us_per_tick - 1 ) / us_per_tick;
 }
 
 useconds_t ualarm(
@@ -61,51 +84,53 @@ useconds_t ualarm(
   useconds_t interval
 )
 {
-  useconds_t        remaining = 0;
-  Watchdog_Control *the_timer;
-  Watchdog_Interval ticks;
-  Watchdog_States   state;
-  struct timespec   tp;
+  useconds_t        remaining;
+  Watchdog_Control *the_watchdog;
+  ISR_lock_Context  lock_context;
+  ISR_lock_Context  lock_context2;
+  Per_CPU_Control  *cpu;
+  uint64_t          now;
+  uint32_t          ticks_initial;
+  uint32_t          ticks_interval;
 
-  the_timer = &_POSIX_signals_Ualarm_timer;
+  the_watchdog = &_POSIX_signals_Ualarm_watchdog;
+  ticks_initial = _POSIX_signals_Ualarm_us_to_ticks( useconds );
+  ticks_interval = _POSIX_signals_Ualarm_us_to_ticks( interval );
 
-  _Thread_Disable_dispatch();
+  _ISR_lock_ISR_disable_and_acquire(
+    &_POSIX_signals_Ualarm_lock,
+    &lock_context
+  );
 
-  state = _Watchdog_Remove_ticks( the_timer );
-  if ( state == WATCHDOG_ACTIVE ) {
-    /*
-     *  The stop_time and start_time fields are snapshots of ticks since
-     *  boot.  Since alarm() is dealing in seconds, we must account for
-     *  this.
-     */
+  cpu = _Watchdog_Get_CPU( the_watchdog );
+  _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context2 );
+  now = cpu->Watchdog.ticks;
 
-    ticks = the_timer->initial;
-    ticks -= (the_timer->stop_time - the_timer->start_time);
-    /* remaining is now in ticks */
+  remaining = (useconds_t) _Watchdog_Cancel(
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+    the_watchdog,
+    now
+  );
 
-    _Timespec_From_ticks( ticks, &tp );
-    remaining  = tp.tv_sec * TOD_MICROSECONDS_PER_SECOND;
-    remaining += tp.tv_nsec / 1000;
+  if ( ticks_initial != 0 ) {
+    _POSIX_signals_Ualarm_interval = ticks_interval;
+
+    cpu = _Per_CPU_Get();
+    _Watchdog_Set_CPU( the_watchdog, cpu );
+    _Watchdog_Insert(
+      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+      the_watchdog,
+      now + ticks_initial
+    );
   }
 
-  /*
-   *  If useconds is non-zero, then the caller wants to schedule
-   *  the alarm repeatedly at that interval.  If the interval is
-   *  less than a single clock tick, then fudge it to a clock tick.
-   */
-  if ( useconds ) {
-    Watchdog_Interval ticks;
+  _Watchdog_Per_CPU_release_critical( cpu, &lock_context2 );
+  _ISR_lock_Release_and_ISR_enable(
+    &_POSIX_signals_Ualarm_lock,
+    &lock_context
+  );
 
-    tp.tv_sec = useconds / TOD_MICROSECONDS_PER_SECOND;
-    tp.tv_nsec = (useconds % TOD_MICROSECONDS_PER_SECOND) * 1000;
-    ticks = _Timespec_To_ticks( &tp );
-    if ( ticks == 0 )
-      ticks = 1;
-
-    _Watchdog_Insert_ticks( the_timer, _Timespec_To_ticks( &tp ) );
-  }
-
-  _Thread_Enable_dispatch();
+  remaining *= rtems_configuration_get_microseconds_per_tick();
 
   return remaining;
 }

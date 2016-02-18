@@ -87,6 +87,7 @@ void _SMP_Handler_initialize( void )
   for ( cpu_index = 0 ; cpu_index < cpu_max; ++cpu_index ) {
     Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
+    _ISR_lock_Initialize( &cpu->Watchdog.Lock, "Watchdog" );
     _SMP_ticket_lock_Initialize( &cpu->Lock );
     _SMP_lock_Stats_initialize( &cpu->Lock_stats, "Per-CPU" );
   }

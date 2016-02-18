@@ -327,14 +327,13 @@ libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \
 
 ## TOD_C_FILES
 libscore_a_SOURCES += src/coretod.c src/coretodset.c \
-    src/coretodtickle.c \
     src/coretodtickspersec.c \
     src/coretodadjust.c
 libscore_a_SOURCES += src/coretodabsolutetimeout.c
 
 ## WATCHDOG_C_FILES
-libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c \
-    src/watchdoginsert.c src/watchdogremove.c
+libscore_a_SOURCES += src/watchdoginsert.c
+libscore_a_SOURCES += src/watchdogremove.c
 libscore_a_SOURCES += src/watchdogtick.c
 libscore_a_SOURCES += src/watchdogtickssinceboot.c
 

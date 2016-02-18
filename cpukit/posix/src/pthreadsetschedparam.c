@@ -44,6 +44,7 @@ int pthread_setschedparam(
   Objects_Locations                    location;
   int                                  rc;
   Priority_Control                     unused;
+  ISR_Level                            level;
 
   /*
    *  Check all the parameters
@@ -69,8 +70,11 @@ int pthread_setschedparam(
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-      if ( api->schedpolicy == SCHED_SPORADIC )
-        _Watchdog_Remove_ticks( &api->Sporadic_timer );
+      if ( api->schedpolicy == SCHED_SPORADIC ) {
+        _ISR_Disable( level );
+        _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
+        _ISR_Enable( level );
+      }
 
       api->schedpolicy = policy;
       api->schedparam  = *param;
@@ -97,8 +101,10 @@ int pthread_setschedparam(
 
         case SCHED_SPORADIC:
           api->ss_high_priority = api->schedparam.sched_priority;
-          _Watchdog_Remove_ticks( &api->Sporadic_timer );
-          _POSIX_Threads_Sporadic_budget_TSR( 0, the_thread );
+          _ISR_Disable( level );
+          _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
+          _ISR_Enable( level );
+          _POSIX_Threads_Sporadic_budget_TSR( &api->Sporadic_timer );
           break;
       }
 

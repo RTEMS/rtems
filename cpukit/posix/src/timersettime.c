@@ -29,6 +29,76 @@
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/seterr.h>
 
+static void _POSIX_Timer_Insert(
+  POSIX_Timer_Control *ptimer,
+  Per_CPU_Control     *cpu,
+  Watchdog_Interval    ticks
+)
+{
+  ptimer->ticks = ticks;
+
+  /* The state really did not change but just to be safe */
+  ptimer->state = POSIX_TIMER_STATE_CREATE_RUN;
+
+  /* Store the time when the timer was started again */
+  _TOD_Get_as_timespec( &ptimer->time );
+
+  _Watchdog_Insert(
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+    &ptimer->Timer,
+    cpu->Watchdog.ticks + ticks
+  );
+}
+
+/*
+ *  This is the operation that is run when a timer expires
+ */
+void _POSIX_Timer_TSR( Watchdog_Control *the_watchdog )
+{
+  POSIX_Timer_Control *ptimer;
+  ISR_lock_Context     lock_context;
+  Per_CPU_Control     *cpu;
+
+  ptimer = RTEMS_CONTAINER_OF( the_watchdog, POSIX_Timer_Control, Timer );
+  _ISR_lock_ISR_disable( &lock_context );
+  cpu = _POSIX_Timer_Acquire_critical( ptimer, &lock_context );
+
+  /* Increment the number of expirations. */
+  ptimer->overrun = ptimer->overrun + 1;
+
+  /* The timer must be reprogrammed */
+  if ( ( ptimer->timer_data.it_interval.tv_sec  != 0 ) ||
+       ( ptimer->timer_data.it_interval.tv_nsec != 0 ) ) {
+    _POSIX_Timer_Insert( ptimer, cpu, ptimer->ticks );
+  } else {
+   /* Indicates that the timer is stopped */
+   ptimer->state = POSIX_TIMER_STATE_CREATE_STOP;
+  }
+
+  _POSIX_Timer_Release( cpu, &lock_context );
+
+  /*
+   * The sending of the signal to the process running the handling function
+   * specified for that signal is simulated
+   */
+
+  if ( pthread_kill ( ptimer->thread_id, ptimer->inf.sigev_signo ) ) {
+    _Assert( FALSE );
+    /*
+     * TODO: What if an error happens at run-time? This should never
+     *       occur because the timer should be canceled if the thread
+     *       is deleted. This method is being invoked from the Clock
+     *       Tick ISR so even if we decide to take action on an error,
+     *       we don't have many options. We shouldn't shut the system down.
+     */
+  }
+
+  /* After the signal handler returns, the count of expirations of the
+   * timer must be set to 0.
+   */
+  ptimer->overrun = 0;
+}
+
 int timer_settime(
   timer_t                  timerid,
   int                      flags,
@@ -38,7 +108,8 @@ int timer_settime(
 {
   POSIX_Timer_Control *ptimer;
   Objects_Locations    location;
-  bool                 activated;
+  ISR_lock_Context     lock_context;
+  Per_CPU_Control     *cpu;
   uint32_t             initial_period;
   struct itimerspec    normalize;
 
@@ -77,56 +148,47 @@ int timer_settime(
    * or start it again
    */
 
-  ptimer = _POSIX_Timer_Get( timerid, &location );
+  ptimer = _POSIX_Timer_Get( timerid, &location, &lock_context );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      cpu = _POSIX_Timer_Acquire_critical( ptimer, &lock_context );
+
+      /* Stop the timer */
+      _Watchdog_Remove(
+        &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+        &ptimer->Timer
+      );
+
       /* First, it verifies if the timer must be stopped */
       if ( normalize.it_value.tv_sec == 0 && normalize.it_value.tv_nsec == 0 ) {
-         /* Stop the timer */
-         _Watchdog_Remove_ticks( &ptimer->Timer );
-         /* The old data of the timer are returned */
-         if ( ovalue )
-           *ovalue = ptimer->timer_data;
-         /* The new data are set */
-         ptimer->timer_data = normalize;
-         /* Indicates that the timer is created and stopped */
-         ptimer->state = POSIX_TIMER_STATE_CREATE_STOP;
-         /* Returns with success */
-        _Objects_Put( &ptimer->Object );
+        /* The old data of the timer are returned */
+        if ( ovalue )
+          *ovalue = ptimer->timer_data;
+        /* The new data are set */
+        ptimer->timer_data = normalize;
+        /* Indicates that the timer is created and stopped */
+        ptimer->state = POSIX_TIMER_STATE_CREATE_STOP;
+        /* Returns with success */
+        _POSIX_Timer_Release( cpu, &lock_context );
         return 0;
-       }
+      }
 
-       /* Convert from seconds and nanoseconds to ticks */
-       ptimer->ticks  = _Timespec_To_ticks( &value->it_interval );
-       initial_period = _Timespec_To_ticks( &normalize.it_value );
+      /* Convert from seconds and nanoseconds to ticks */
+      ptimer->ticks  = _Timespec_To_ticks( &value->it_interval );
+      initial_period = _Timespec_To_ticks( &normalize.it_value );
 
+      _POSIX_Timer_Insert( ptimer, cpu, initial_period );
 
-       activated = _POSIX_Timer_Insert_helper(
-         &ptimer->Timer,
-         initial_period,
-         ptimer->Object.id,
-         _POSIX_Timer_TSR,
-         ptimer
-       );
-       if ( !activated ) {
-         _Objects_Put( &ptimer->Object );
-         return 0;
-       }
-
-       /*
-        * The timer has been started and is running.  So we return the
-        * old ones in "ovalue"
-        */
-       if ( ovalue )
-         *ovalue = ptimer->timer_data;
-       ptimer->timer_data = normalize;
-
-       /* Indicate that the time is running */
-       ptimer->state = POSIX_TIMER_STATE_CREATE_RUN;
-       _TOD_Get_as_timespec( &ptimer->time );
-      _Objects_Put( &ptimer->Object );
-       return 0;
+      /*
+       * The timer has been started and is running.  So we return the
+       * old ones in "ovalue"
+       */
+      if ( ovalue )
+        *ovalue = ptimer->timer_data;
+      ptimer->timer_data = normalize;
+      _POSIX_Timer_Release( cpu, &lock_context );
+      return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:

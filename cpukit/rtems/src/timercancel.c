@@ -14,39 +14,24 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/thread.h>
 #include <rtems/rtems/timerimpl.h>
-#include <rtems/score/watchdogimpl.h>
-
-/*
- *  rtems_timer_cancel
- *
- *  This directive allows a thread to cancel a timer.
- *
- *  Input parameters:
- *    id - timer id
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_timer_cancel(
   rtems_id id
 )
 {
-  Timer_Control   *the_timer;
-  Objects_Locations       location;
+  Timer_Control     *the_timer;
+  Objects_Locations  location;
+  ISR_lock_Context   lock_context;
+  Per_CPU_Control   *cpu;
 
-  the_timer = _Timer_Get( id, &location );
+  the_timer = _Timer_Get( id, &location, &lock_context );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      _Timer_Cancel( the_timer );
-      _Objects_Put( &the_timer->Object );
+      cpu = _Timer_Acquire_critical( the_timer, &lock_context );
+      _Timer_Cancel( cpu, the_timer );
+      _Timer_Release( cpu, &lock_context );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

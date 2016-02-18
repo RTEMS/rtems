@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -128,6 +128,11 @@ typedef struct {
    * MRSP_TIMEOUT.  State changes are protected by the MrsP control lock.
    */
   volatile MRSP_Status status;
+
+  /**
+   * @brief Watchdog for timeouts.
+   */
+  Watchdog_Control Watchdog;
 } MRSP_Rival;
 
 /**

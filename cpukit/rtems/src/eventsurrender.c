@@ -121,7 +121,7 @@ void _Event_Surrender(
     cpu_self = _Thread_Dispatch_disable_critical( lock_context );
     _Thread_Lock_release_default( the_thread, lock_context );
 
-    _Watchdog_Remove_ticks( &the_thread->Timer );
+    _Thread_Timer_remove( the_thread );
     _Thread_Unblock( the_thread );
 
     _Thread_Dispatch_enable( cpu_self );

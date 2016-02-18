@@ -33,6 +33,7 @@
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/freechain.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/config.h>
 
 #ifdef __cplusplus
@@ -1472,10 +1473,64 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_set_timeout_code(
 /**
  * @brief General purpose thread wait timeout.
  *
- * @param[in] id Unused.
- * @param[in] arg The thread.
+ * @param[in] watchdog The thread timer watchdog.
  */
-void _Thread_Timeout( Objects_Id id, void *arg );
+void _Thread_Timeout( Watchdog_Control *watchdog );
+
+RTEMS_INLINE_ROUTINE void _Thread_Timer_insert_relative(
+  Thread_Control                 *the_thread,
+  Per_CPU_Control                *cpu,
+  Watchdog_Service_routine_entry  routine,
+  Watchdog_Interval               ticks
+)
+{
+  ISR_lock_Context lock_context;
+
+  _ISR_lock_ISR_disable_and_acquire( &the_thread->Timer.Lock, &lock_context );
+
+  the_thread->Timer.header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ];
+  the_thread->Timer.Watchdog.routine = routine;
+  _Watchdog_Per_CPU_insert_relative( &the_thread->Timer.Watchdog, cpu, ticks );
+
+  _ISR_lock_Release_and_ISR_enable( &the_thread->Timer.Lock, &lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Timer_insert_absolute(
+  Thread_Control                 *the_thread,
+  Per_CPU_Control                *cpu,
+  Watchdog_Service_routine_entry  routine,
+  uint64_t                        expire
+)
+{
+  ISR_lock_Context lock_context;
+
+  _ISR_lock_ISR_disable_and_acquire( &the_thread->Timer.Lock, &lock_context );
+
+  the_thread->Timer.header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_ABSOLUTE ];
+  the_thread->Timer.Watchdog.routine = routine;
+  _Watchdog_Per_CPU_insert_absolute( &the_thread->Timer.Watchdog, cpu, expire );
+
+  _ISR_lock_Release_and_ISR_enable( &the_thread->Timer.Lock, &lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Timer_remove( Thread_Control *the_thread )
+{
+  ISR_lock_Context lock_context;
+
+  _ISR_lock_ISR_disable_and_acquire( &the_thread->Timer.Lock, &lock_context );
+
+  _Watchdog_Per_CPU_remove(
+    &the_thread->Timer.Watchdog,
+#if defined(RTEMS_SMP)
+    the_thread->Timer.Watchdog.cpu,
+#else
+    _Per_CPU_Get(),
+#endif
+    the_thread->Timer.header
+  );
+
+  _ISR_lock_Release_and_ISR_enable( &the_thread->Timer.Lock, &lock_context );
+}
 
 RTEMS_INLINE_ROUTINE void _Thread_Debug_set_real_processor(
   Thread_Control  *the_thread,

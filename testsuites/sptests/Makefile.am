@@ -25,7 +25,7 @@ _SUBDIRS = \
     spintrcritical05 spintrcritical06 spintrcritical07 spintrcritical08 \
     spintrcritical09 spintrcritical10 spintrcritical11 spintrcritical12 \
     spintrcritical13 spintrcritical14 spintrcritical15 spintrcritical16 \
-    spintrcritical17 spintrcritical18 spmkdir spmountmgr01 spheapprot \
+    spintrcritical18 spmkdir spmountmgr01 spheapprot \
     sppagesize spsem01 spsem02 spsimplesched01 spsimplesched02 \
     spsimplesched03 spnsext01 spedfsched01 spedfsched02 spedfsched03 \
     spcbssched01 spcbssched02 spcbssched03 spqreslib sptimespec01 \
@@ -77,6 +77,7 @@ _SUBDIRS += speventsystem01
 _SUBDIRS += spinternalerror01
 _SUBDIRS += spinternalerror02
 _SUBDIRS += sptimer_err01 sptimer_err02
+_SUBDIRS += sptimerserver01
 _SUBDIRS += spclock_err02
 
 if HAS_CPUSET
