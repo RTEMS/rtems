@@ -23,6 +23,7 @@
 #include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/isrlock.h>
+#include <rtems/score/percpu.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -139,11 +140,11 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Flash(
 void _Watchdog_Handler_initialization( void );
 
 /**
- *  @brief Triggers a watchdog tick.
+ *  @brief Performs a watchdog tick.
  *
- *  This routine executes TOD, watchdog and scheduler ticks.
+ *  @param cpu The processor for this watchdog tick.
  */
-void _Watchdog_Tick( void );
+void _Watchdog_Tick( Per_CPU_Control *cpu );
 
 /**
  *  @brief Removes @a the_watchdog from the watchdog chain.

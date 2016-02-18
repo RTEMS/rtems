@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -15,9 +15,11 @@
 #include <bsp.h>
 #include <bsp/fatal.h>
 #include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <bsp/arm-a9mpcore-regs.h>
 #include <bsp/arm-a9mpcore-clock.h>
 #include <rtems/timecounter.h>
+#include <rtems/score/smpimpl.h>
 
 #define A9MPCORE_GT ((volatile a9mpcore_gt *) BSP_ARM_A9MPCORE_GT_BASE)
 
@@ -77,6 +79,60 @@ static uint32_t a9mpcore_clock_get_timecount(struct timecounter *tc)
   return gt->cntrlower;
 }
 
+static void a9mpcore_clock_gt_init(
+  volatile a9mpcore_gt *gt,
+  uint64_t cmpval,
+  uint32_t interval
+)
+{
+  gt->cmpvallower = (uint32_t) cmpval;
+  gt->cmpvalupper = (uint32_t) (cmpval >> 32);
+  gt->autoinc = interval;
+  gt->ctrl = A9MPCORE_GT_CTRL_AUTOINC_EN
+    | A9MPCORE_GT_CTRL_IRQ_EN
+    | A9MPCORE_GT_CTRL_COMP_EN
+    | A9MPCORE_GT_CTRL_TMR_EN;
+}
+
+#ifdef RTEMS_SMP
+typedef struct {
+  uint64_t cmpval;
+  uint32_t interval;
+} a9mpcore_clock_init_data;
+
+static void a9mpcore_clock_secondary_action(void *arg)
+{
+  volatile a9mpcore_gt *gt = A9MPCORE_GT;
+  a9mpcore_clock_init_data *init_data = arg;
+
+  a9mpcore_clock_gt_init(gt, init_data->cmpval, init_data->interval);
+  bsp_interrupt_vector_enable(A9MPCORE_IRQ_GT);
+}
+#endif
+
+static void a9mpcore_clock_secondary_initialization(
+  volatile a9mpcore_gt *gt,
+  uint64_t cmpval,
+  uint32_t interval
+)
+{
+#ifdef RTEMS_SMP
+  a9mpcore_clock_init_data init_data = {
+    .cmpval = cmpval,
+    .interval = interval
+  };
+
+  _SMP_Before_multitasking_action_broadcast(
+    a9mpcore_clock_secondary_action,
+    &init_data
+  );
+
+  if (cmpval - a9mpcore_clock_get_counter(gt) >= interval) {
+    bsp_fatal(BSP_ARM_A9MPCORE_FATAL_CLOCK_SMP_INIT);
+  }
+#endif
+}
+
 static void a9mpcore_clock_initialize(void)
 {
   volatile a9mpcore_gt *gt = A9MPCORE_GT;
@@ -91,14 +147,8 @@ static void a9mpcore_clock_initialize(void)
   cmpval = a9mpcore_clock_get_counter(gt);
   cmpval += interval;
 
-  gt->cmpvallower = (uint32_t) cmpval;
-  gt->cmpvalupper = (uint32_t) (cmpval >> 32);
-  gt->autoinc = interval;
-
-  gt->ctrl = A9MPCORE_GT_CTRL_AUTOINC_EN
-    | A9MPCORE_GT_CTRL_IRQ_EN
-    | A9MPCORE_GT_CTRL_COMP_EN
-    | A9MPCORE_GT_CTRL_TMR_EN;
+  a9mpcore_clock_gt_init(gt, cmpval, interval);
+  a9mpcore_clock_secondary_initialization(gt, cmpval, interval);
 
   a9mpcore_tc.tc_get_timecount = a9mpcore_clock_get_timecount;
   a9mpcore_tc.tc_counter_mask = 0xffffffff;

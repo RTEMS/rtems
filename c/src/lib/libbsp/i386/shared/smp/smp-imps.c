@@ -744,13 +744,22 @@ static void smp_apic_ack(void)
   IMPS_LAPIC_WRITE(LAPIC_EOI, 0 );     /* ACK the interrupt */
 }
 
+/* FIXME: There should be a header file for this */
+void Clock_isr(void *arg);
+
 static void bsp_inter_processor_interrupt(void *arg)
 {
+  unsigned long message;
+
   (void) arg;
 
   smp_apic_ack();
 
-  _SMP_Inter_processor_interrupt_handler();
+  message = _SMP_Inter_processor_interrupt_handler();
+
+  if ((message & SMP_MESSAGE_CLOCK_TICK) != 0) {
+    Clock_isr(NULL);
+  }
 }
 
 static void ipi_install_irq(void)

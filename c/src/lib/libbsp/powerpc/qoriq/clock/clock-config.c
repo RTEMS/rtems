@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -55,6 +55,7 @@ static void qoriq_clock_handler_install(rtems_isr_entry *old_isr)
 
   *old_isr = NULL;
 
+#if defined(RTEMS_MULTIPROCESSING) && !defined(RTEMS_SMP)
   sc = qoriq_pic_set_affinity(
     CLOCK_INTERRUPT,
     ppc_processor_id()
@@ -62,6 +63,7 @@ static void qoriq_clock_handler_install(rtems_isr_entry *old_isr)
   if (sc != RTEMS_SUCCESSFUL) {
     rtems_fatal_error_occurred(0xdeadbeef);
   }
+#endif
 
   sc = qoriq_pic_set_priority(
     CLOCK_INTERRUPT,
@@ -126,8 +128,13 @@ static void qoriq_clock_cleanup(void)
 
 #define Clock_driver_support_initialize_hardware() \
   qoriq_clock_initialize()
+
 #define Clock_driver_support_install_isr(clock_isr, old_isr) \
   qoriq_clock_handler_install(&old_isr)
+
+#define Clock_driver_support_set_interrupt_affinity(online_processors) \
+  qoriq_pic_set_affinities(CLOCK_INTERRUPT, online_processors[0])
+
 #define Clock_driver_support_shutdown_hardware() \
   qoriq_clock_cleanup()
 

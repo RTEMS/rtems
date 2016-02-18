@@ -194,6 +194,24 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
     LEON3_IrqCtrl_Regs->iforce = (1 << (_source)); \
   } while (0)
 
+#define LEON_Enable_interrupt_broadcast( _source ) \
+  do { \
+    rtems_interrupt_lock_context _lock_context; \
+    uint32_t _mask = 1U << ( _source ); \
+    LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
+    LEON3_IrqCtrl_Regs->bcast |= _mask; \
+    LEON3_IRQCTRL_RELEASE( &_lock_context ); \
+  } while (0)
+
+#define LEON_Disable_interrupt_broadcast( _source ) \
+  do { \
+    rtems_interrupt_lock_context _lock_context; \
+    uint32_t _mask = 1U << ( _source ); \
+    LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
+    LEON3_IrqCtrl_Regs->bcast &= ~_mask; \
+    LEON3_IRQCTRL_RELEASE( &_lock_context ); \
+  } while (0)
+
 #define LEON_Is_interrupt_pending( _source ) \
   (LEON3_IrqCtrl_Regs->ipend & (1 << (_source)))
 

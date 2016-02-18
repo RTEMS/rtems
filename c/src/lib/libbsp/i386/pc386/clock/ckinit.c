@@ -65,11 +65,10 @@ extern volatile uint32_t Clock_driver_ticks;
   } while (0)
 
 
-/*
- *  Hooks which get swapped based upon which nanoseconds since last
- *  tick method is preferred.
- */
-#define Clock_driver_support_at_tick()
+#ifdef RTEMS_SMP
+#define Clock_driver_support_at_tick() \
+  _SMP_Send_message_broadcast(SMP_MESSAGE_CLOCK_TICK)
+#endif
 
 #define Clock_driver_support_install_isr( _new, _old ) \
   do { \
@@ -202,6 +201,12 @@ void Clock_driver_install_handler(void)
   assert(status == RTEMS_SUCCESSFUL);
   clockOn();
 }
+
+#define Clock_driver_support_set_interrupt_affinity(online_processors) \
+  do { \
+    /* FIXME: Is there a way to do this on x86? */ \
+    (void) online_processors; \
+  } while (0)
 
 void Clock_driver_support_initialize_hardware(void)
 {

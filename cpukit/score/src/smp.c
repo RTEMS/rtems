@@ -189,7 +189,10 @@ void _SMP_Send_message_broadcast( unsigned long message )
   _Assert( _Debug_Is_thread_dispatching_allowed() );
 
   for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
-    if ( cpu_index != cpu_index_self ) {
+    if (
+      cpu_index != cpu_index_self
+        && _Processor_mask_Is_set( _SMP_Online_processors, cpu_index )
+    ) {
       _SMP_Send_message( cpu_index, message );
     }
   }

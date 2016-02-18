@@ -41,6 +41,11 @@
     _old = set_vector( _new, CLOCK_VECTOR, 1 ); \
   } while(0)
 
+#define Clock_driver_support_set_interrupt_affinity( _online_processors ) \
+  do { \
+    (void) _online_processors; \
+  } while (0)
+
 extern int CLOCK_SPEED;
 
 static rtems_timecounter_simple erc32_tc;

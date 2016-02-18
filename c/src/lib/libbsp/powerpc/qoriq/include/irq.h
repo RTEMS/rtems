@@ -377,6 +377,11 @@ rtems_status_code qoriq_pic_set_affinity(
   uint32_t processor_index
 );
 
+rtems_status_code qoriq_pic_set_affinities(
+  rtems_vector_number vector,
+  uint32_t processor_affinities
+);
+
 /** @} */
 
 #ifdef __cplusplus

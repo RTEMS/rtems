@@ -20,6 +20,7 @@
 #include <bsp.h>
 #include <rtems/clockdrv.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/smpimpl.h>
 
 #ifdef Clock_driver_nanoseconds_since_last_tick
 #error "Update driver to use the timecounter instead of nanoseconds extension"
@@ -49,6 +50,13 @@
  */
 #ifndef Clock_driver_support_at_tick
   #define Clock_driver_support_at_tick()
+#endif
+
+/**
+ * @brief Do nothing by default.
+ */
+#ifndef Clock_driver_support_set_interrupt_affinity
+  #define Clock_driver_support_set_interrupt_affinity(online_processors)
 #endif
 
 /*
@@ -198,6 +206,10 @@ rtems_device_driver Clock_initialize(
    */
   (void) Old_ticker;
   Clock_driver_support_install_isr( Clock_isr, Old_ticker );
+
+  #ifdef RTEMS_SMP
+    Clock_driver_support_set_interrupt_affinity( _SMP_Online_processors );
+  #endif
 
   /*
    *  Now initialize the hardware that is the source of the tick ISR.

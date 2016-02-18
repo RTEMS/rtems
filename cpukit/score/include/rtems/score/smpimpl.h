@@ -60,6 +60,16 @@ extern "C" {
 #define SMP_MESSAGE_MULTICAST_ACTION 0x4UL
 
 /**
+ * @brief SMP message to request a clock tick.
+ *
+ * This message is provided for systems without a proper interrupt affinity
+ * support and may be used by the clock driver.
+ *
+ * @see _SMP_Send_message().
+ */
+#define SMP_MESSAGE_CLOCK_TICK 0x8UL
+
+/**
  * @brief SMP fatal codes.
  */
 typedef enum {
@@ -152,10 +162,13 @@ void _SMP_Multicast_actions_process( void );
 
 /**
  * @brief Interrupt handler for inter-processor interrupts.
+ *
+ * @return The received message.
  */
-static inline void _SMP_Inter_processor_interrupt_handler( void )
+static inline long unsigned _SMP_Inter_processor_interrupt_handler( void )
 {
   Per_CPU_Control *cpu_self = _Per_CPU_Get();
+  unsigned long message = 0;
 
   /*
    * In the common case the inter-processor interrupt is issued to carry out a
@@ -164,7 +177,7 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
   cpu_self->dispatch_necessary = true;
 
   if ( _Atomic_Load_ulong( &cpu_self->message, ATOMIC_ORDER_RELAXED ) != 0 ) {
-    unsigned long message = _Atomic_Exchange_ulong(
+    message = _Atomic_Exchange_ulong(
       &cpu_self->message,
       0UL,
       ATOMIC_ORDER_RELAXED
@@ -183,6 +196,8 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
       _SMP_Multicast_actions_process();
     }
   }
+
+  return message;
 }
 
 /**
@@ -197,7 +212,7 @@ static inline void _SMP_Inter_processor_interrupt_handler( void )
 bool _SMP_Should_start_processor( uint32_t cpu_index );
 
 /**
- *  @brief Sends a SMP message to a processor.
+ *  @brief Sends an SMP message to a processor.
  *
  *  The target processor may be the sending processor.
  *
@@ -207,21 +222,16 @@ bool _SMP_Should_start_processor( uint32_t cpu_index );
 void _SMP_Send_message( uint32_t cpu_index, unsigned long message );
 
 /**
- *  @brief Request of others CPUs.
+ *  @brief Sends an SMP message to all other online processors.
  *
- *  This method is invoked by RTEMS when it needs to make a request
- *  of the other CPUs.  It should be implemented using some type of
- *  interprocessor interrupt. CPUs not including the originating
- *  CPU should receive the message.
- *
- *  @param [in] message is message to send
+ *  @param[in] message The message.
  */
 void _SMP_Send_message_broadcast(
   unsigned long message
 );
 
 /**
- *  @brief Sends a SMP message to a set of processors.
+ *  @brief Sends an SMP message to a set of processors.
  *
  *  The sending processor may be part of the set.
  *
@@ -238,7 +248,7 @@ void _SMP_Send_message_multicast(
 typedef void ( *SMP_Action_handler )( void *arg );
 
 /**
- *  @brief Initiates a SMP multicast action to a set of processors.
+ *  @brief Initiates an SMP multicast action to a set of processors.
  *
  *  The current processor may be part of the set.
  *

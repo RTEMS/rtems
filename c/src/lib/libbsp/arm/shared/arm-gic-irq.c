@@ -164,3 +164,21 @@ rtems_status_code arm_gic_irq_get_priority(
 
   return sc;
 }
+
+rtems_status_code arm_gic_irq_set_affinity(
+  rtems_vector_number vector,
+  uint8_t targets
+)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+
+  if (bsp_interrupt_is_valid_vector(vector)) {
+    volatile gic_dist *dist = ARM_GIC_DIST;
+
+    gic_id_set_targets(dist, vector, targets);
+  } else {
+    sc = RTEMS_INVALID_ID;
+  }
+
+  return sc;
+}

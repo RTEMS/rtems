@@ -147,26 +147,30 @@ rtems_status_code qoriq_pic_set_priority(
 	return sc;
 }
 
-rtems_status_code qoriq_pic_set_affinity(
+rtems_status_code qoriq_pic_set_affinities(
 	rtems_vector_number vector,
-	uint32_t processor_index
+	uint32_t processor_affinities
 )
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 
 	if (bsp_interrupt_is_valid_vector(vector)) {
-		if (processor_index <= 1) {
-			volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(vector);
+		volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(vector);
 
-			src_cfg->dr = BSP_BIT32(processor_index);
-		} else {
-			sc = RTEMS_INVALID_NUMBER;
-		}
+		src_cfg->dr = processor_affinities;
 	} else {
 		sc = RTEMS_INVALID_ID;
 	}
 
 	return sc;
+}
+
+rtems_status_code qoriq_pic_set_affinity(
+	rtems_vector_number vector,
+	uint32_t processor_index
+)
+{
+	return qoriq_pic_set_affinities(vector, BSP_BIT32(processor_index));
 }
 
 static rtems_status_code pic_vector_enable(rtems_vector_number vector, uint32_t msk)

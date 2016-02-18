@@ -58,6 +58,11 @@ rtems_status_code arm_gic_irq_get_priority(
   uint8_t *priority
 );
 
+rtems_status_code arm_gic_irq_set_affinity(
+  rtems_vector_number vector,
+  uint8_t targets
+);
+
 typedef enum {
   ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_IN_LIST,
   ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_EXCEPT_SELF,

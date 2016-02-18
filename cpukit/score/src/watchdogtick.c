@@ -22,13 +22,15 @@
 #include "config.h"
 #endif
 
-void _Watchdog_Tick( void )
+void _Watchdog_Tick( Per_CPU_Control *cpu )
 {
   _Assert( !_Thread_Dispatch_is_enabled() );
 
-  _TOD_Tickle_ticks();
+  if ( _Per_CPU_Is_boot_processor( cpu ) ) {
+    _TOD_Tickle_ticks();
 
-  _Watchdog_Tickle_ticks();
+    _Watchdog_Tickle_ticks();
 
-  _Scheduler_Tick();
+    _Scheduler_Tick();
+  }
 }

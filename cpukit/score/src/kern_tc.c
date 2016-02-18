@@ -1974,10 +1974,15 @@ tc_ticktock(int cnt)
 void
 _Timecounter_Tick(void)
 {
+	Per_CPU_Control *cpu_self = _Per_CPU_Get();
+
+	if (_Per_CPU_Is_boot_processor(cpu_self)) {
 #endif /* __rtems__ */
 	tc_windup();
 #ifdef __rtems__
-	_Watchdog_Tick();
+	};
+
+	_Watchdog_Tick(cpu_self);
 #endif /* __rtems__ */
 }
 #ifdef __rtems__
@@ -2016,7 +2021,7 @@ _Timecounter_Tick_simple(uint32_t delta, uint32_t offset,
 
 	_Timecounter_Release(lock_context);
 
-	_Watchdog_Tick();
+	_Watchdog_Tick(_Per_CPU_Get());
 }
 #endif /* __rtems__ */
 
