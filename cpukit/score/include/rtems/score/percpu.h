@@ -365,6 +365,12 @@ typedef struct Per_CPU_Control {
      * _CPU_SMP_Start_processor().
      */
     bool online;
+
+    /**
+     * @brief Indicates if the processor is the one that performed the initial
+     * system initialization.
+     */
+    bool boot;
   #endif
 
   Per_CPU_Stats Stats;
@@ -529,6 +535,19 @@ static inline bool _Per_CPU_Is_processor_online(
 {
 #if defined( RTEMS_SMP )
   return cpu->online;
+#else
+  (void) cpu;
+
+  return true;
+#endif
+}
+
+static inline bool _Per_CPU_Is_boot_processor(
+  const Per_CPU_Control *cpu
+)
+{
+#if defined( RTEMS_SMP )
+  return cpu->boot;
 #else
   (void) cpu;
 

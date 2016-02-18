@@ -57,6 +57,8 @@ static void _SMP_Start_processors( uint32_t cpu_count )
     } else {
       started = true;
 
+      cpu->boot = true;
+
       if ( !_Scheduler_Should_start_processor( assignment ) ) {
         _SMP_Fatal( SMP_FATAL_BOOT_PROCESSOR_NOT_ASSIGNED_TO_SCHEDULER );
       }
