@@ -386,7 +386,8 @@ typedef struct {
 
 static inline bool _ARMV7M_Is_vector_an_irq( int vector )
 {
-  return vector >= 16;
+  /* External (i.e. non-system) IRQs start after the SysTick vector. */
+  return vector > ARMV7M_VECTOR_SYSTICK;
 }
 
 static inline uint32_t _ARMV7M_Get_basepri(void)
