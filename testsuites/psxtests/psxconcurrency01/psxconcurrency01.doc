@@ -1,0 +1,25 @@
+#  COPYRIGHT (c) 2016.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.org/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxconcurrency01
+
+directives:
+  pthread_getconcurrency
+  pthread_setconcurrency
+
+concepts:
+
++ This test exercises the pthread_getconcurrency() method.
++ This test exercises the pthread_setconcurrency() method.
+
+NOTE: These methods are of limited utility with any threading implementation
+      in which kernel threads and user threads are mapped 1:1. As of POSIX
+      Issue 7 (POSIX 2013), these are marked obsolete. But they are still
+      required for 2008 and Open Group FACE conformance.

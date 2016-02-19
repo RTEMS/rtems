@@ -143,6 +143,7 @@ psxcleanup01/Makefile
 psxcleanup02/Makefile
 psxclock/Makefile
 psxclock01/Makefile
+psxconcurrency01/Makefile
 psxcond01/Makefile
 psxconfig01/Makefile
 psxeintr_join/Makefile

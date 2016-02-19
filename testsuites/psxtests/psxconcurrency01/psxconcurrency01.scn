@@ -1,0 +1,5 @@
+*** BEGIN OF TEST PSXCONCURRENCY01 ***
+Init: pthread_getconcurrency - initial value of 0
+Init: pthread_setconcurrency - set value to 2
+Init: pthread_getconcurrency - confirm new value of 2
+*** END OF TEST PSXCONCURRENCY01 ***
