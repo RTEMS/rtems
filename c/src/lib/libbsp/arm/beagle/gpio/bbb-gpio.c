@@ -269,7 +269,7 @@ rtems_status_code rtems_gpio_bsp_set_resistor_mode(
   uint32_t pin,
   rtems_gpio_pull_mode mode
 ) {
-  /* TODO: Add support for setting up resistor moode */
+  /* TODO: Add support for setting up resistor mode */
   return RTEMS_NOT_DEFINED;
 }
 
