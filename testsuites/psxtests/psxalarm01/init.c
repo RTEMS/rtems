@@ -13,6 +13,7 @@
 
 #include <pmacros.h>
 
+#include <sys/time.h>
 #include <signal.h>
 #include <errno.h>
 
@@ -21,16 +22,9 @@ const char rtems_test_name[] = "PSXALARM 1";
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
-volatile int Signal_occurred;
 volatile int Signal_count;
-void Signal_handler( int signo );
-void Signal_info_handler(
-  int        signo,
-  siginfo_t *info,
-  void      *context
-);
 
-void Signal_handler(
+static void Signal_handler(
   int signo
 )
 {
@@ -41,26 +35,6 @@ void Signal_handler(
     pthread_self(),
     Signal_count
   );
-  Signal_occurred = 1;
-}
-
-void Signal_info_handler(
-  int        signo,
-  siginfo_t *info,
-  void      *context
-)
-{
-  Signal_count++;
-  printf(
-    "Signal_info: %d caught by 0x%" PRIxpthread_t " (%d) si_signo= %d si_code= %d value= %d\n",
-    signo,
-    pthread_self(),
-    Signal_count,
-    info->si_signo,
-    info->si_code,
-    info->si_value.sival_int
-  );
-  Signal_occurred = 1;
 }
 
 void *POSIX_Init(
@@ -71,6 +45,7 @@ void *POSIX_Init(
   int               sc;
   struct sigaction  act;
   sigset_t          mask;
+  struct timeval    delta;
 
   TEST_BEGIN();
 
@@ -104,10 +79,25 @@ void *POSIX_Init(
   puts( "Init: Wait for alarm" );
   sleep( 2 );
 
+  rtems_test_assert( Signal_count == 1 );
+
   puts( "Init: Cancel alarm" );
   remaining = alarm( 0 );
   printf( "Init: %d seconds left on previous alarm\n", remaining );
   rtems_test_assert( remaining == 0 );
+
+  remaining = alarm( 1 );
+  rtems_test_assert( remaining == 0 );
+
+  delta.tv_sec = 2;
+  delta.tv_usec = 0;
+  sc = adjtime( &delta, NULL );
+  rtems_test_assert( sc == 0 );
+
+  rtems_test_assert( Signal_count == 1 );
+
+  remaining = alarm( 0 );
+  rtems_test_assert( remaining == 1 );
 
   TEST_END();
   rtems_test_exit( 0 );
