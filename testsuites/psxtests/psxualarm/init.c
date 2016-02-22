@@ -14,26 +14,15 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <signal.h>
+#include <signal.h>
 #include <unistd.h>
 #include <errno.h>
 
 const char rtems_test_name[] = "PSXUALARM";
 
-/* forward declarations to avoid warnings */
-void Signal_handler(int signo);
-rtems_timer_service_routine Signal_duringISR_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
-);
-
-typedef void (*sighandler_t)(int);
-sighandler_t signal(int signum, sighandler_t handler);
-extern void _POSIX_signals_Abnormal_termination_handler( int signo );
-
-volatile int Signal_occurred;
 volatile int Signal_count;
 
-void Signal_handler(
+static void Signal_handler(
   int signo
 )
 {
@@ -44,20 +33,7 @@ void Signal_handler(
     pthread_self(),
     Signal_count
   );
-  Signal_occurred = 1;
 }
-
-rtems_timer_service_routine Signal_duringISR_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
-)
-{
-  int               status;
-
-  status = kill( getpid(), SIGUSR1 );
-  rtems_test_assert( status == 0 );
-}
-
 
 void *POSIX_Init(
   void *argument
@@ -79,20 +55,17 @@ void *POSIX_Init(
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08" PRIxpthread_t "\n", Init_id );
 
-  Signal_occurred = 0;
-  Signal_count = 0;
-
   /* Validate ualarm is ignored if signal not caught */
   act.sa_handler = Signal_handler;
   act.sa_flags   = 0;
   sigaction( SIGALRM, &act, NULL );
-  puts( "Init: ualarm in 100000 us" );
-  sleep(3);
-  result = ualarm(100000,0);
+  puts( "Init: ualarm in 500000 us" );
+  result = ualarm( 500000, 0 );
   rtems_test_assert( result == 0 );
-  
-  status = sleep(10);
+
+  status = sleep( 1 );
   rtems_test_assert( status == 0 );
+  rtems_test_assert( Signal_count == 0 );
 
   /* unblock Signal and see if it happened */
   status = sigemptyset( &mask );
@@ -102,12 +75,36 @@ void *POSIX_Init(
   puts( "Init: Unblock SIGALRM" );
   status = sigprocmask( SIG_UNBLOCK, &mask, NULL );
   rtems_test_assert( !status );
-  status = sleep(10);
+
+  status = sleep( 1 );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( Signal_count == 0 );
+
+  result = ualarm( 500000, 0 );
+  rtems_test_assert( result == 0 );
+
+  status = sleep( 1 );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( Signal_count == 1 );
 
   /* stop ularm */
-  puts( "Init: clear ualarm with 0,0" );
-  result = ualarm(0,0);
-  status = sleep(10);
+  puts( "Init: clear ualarm with 0, 0" );
+  result = ualarm( 0, 0 );
+  rtems_test_assert( result == 0 );
+
+  result = ualarm( 500000, 1000000 );
+  rtems_test_assert( result == 0 );
+
+  status = sleep( 1 );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( Signal_count == 2 );
+
+  status = sleep( 1 );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( Signal_count == 3 );
+
+  result = ualarm( 0, 0 );
+  rtems_test_assert( result == 1000000 );
 
   TEST_END();
   rtems_test_exit(0);
