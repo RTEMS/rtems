@@ -23,10 +23,10 @@
 
 #ifdef RTEMS_NEWLIB
 #include <stdlib.h>
-#include <errno.h>
 
 #include "malloc_p.h"
 
+#include <rtems/chain.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/threaddispatch.h>
 

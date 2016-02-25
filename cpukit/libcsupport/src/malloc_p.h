@@ -10,16 +10,12 @@
  */
 
 #include <rtems.h>
-#include <rtems/libcsupport.h>
 #include <rtems/score/protectedheap.h>
 #include <rtems/malloc.h>
 
-#ifdef RTEMS_NEWLIB
-#include <sys/reent.h>
-#endif
-
-#include <stdint.h>
-#include <rtems/chain.h>
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /*
  *  Process deferred free operations
@@ -27,3 +23,7 @@
 bool malloc_is_system_state_OK(void);
 void malloc_deferred_frees_process(void);
 void malloc_deferred_free(void *);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
