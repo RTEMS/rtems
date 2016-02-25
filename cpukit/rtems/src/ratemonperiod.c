@@ -81,51 +81,37 @@ void _Rate_monotonic_Initiate_statistics(
   Rate_monotonic_Control *the_period
 )
 {
-  Thread_Control *owning_thread = the_period->owner;
+  Thread_Control    *owning_thread = the_period->owner;
+  Timestamp_Control  uptime;
 
-  /*
-   *  If using nanosecond statistics, we need to obtain the uptime.
-   */
-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    Timestamp_Control  uptime;
-
-    _TOD_Get_uptime( &uptime );
-  #endif
+  _TOD_Get_uptime( &uptime );
 
   /*
    *  Set the starting point and the CPU time used for the statistics.
    */
-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    the_period->time_period_initiated = uptime;
-  #else
-    the_period->time_period_initiated = _Watchdog_Ticks_since_boot;
-  #endif
-
+  the_period->time_period_initiated = uptime;
   the_period->cpu_usage_period_initiated = owning_thread->cpu_time_used;
 
   /*
-   *  If using nanosecond statistics and the period's thread is currently
-   *  executing, then we need to take into account how much time the
+   *  We need to take into account how much time the
    *  executing thread has run since the last context switch.  When this
    *  routine is invoked from rtems_rate_monotonic_period, the owner will
    *  be the executing thread.  When this routine is invoked from
    *  _Rate_monotonic_Timeout, it will not.
    */
-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    if (owning_thread == _Thread_Executing) {
-      Timestamp_Control ran;
+  if (owning_thread == _Thread_Executing) {
+    Timestamp_Control ran;
 
-      /*
-       *  Adjust the CPU time used to account for the time since last
-       *  context switch.
-       */
-      _Timestamp_Subtract(
-        &_Thread_Time_of_last_context_switch, &uptime, &ran
-      );
+    /*
+     *  Adjust the CPU time used to account for the time since last
+     *  context switch.
+     */
+    _Timestamp_Subtract(
+      &_Thread_Time_of_last_context_switch, &uptime, &ran
+    );
 
-      _Timestamp_Add_to( &the_period->cpu_usage_period_initiated, &ran );
-    }
-  #endif
+    _Timestamp_Add_to( &the_period->cpu_usage_period_initiated, &ran );
+  }
 
   _Scheduler_Release_job( the_period->owner, the_period->next_length );
 }
