@@ -17,12 +17,15 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/*
- *  Process deferred free operations
- */
-bool malloc_is_system_state_OK(void);
-void malloc_deferred_frees_process(void);
-void malloc_deferred_free(void *);
+typedef enum {
+  MALLOC_SYSTEM_STATE_NORMAL,
+  MALLOC_SYSTEM_STATE_NO_PROTECTION,
+  MALLOC_SYSTEM_STATE_NO_ALLOCATION
+} Malloc_System_state;
+
+Malloc_System_state _Malloc_System_state( void );
+
+void _Malloc_Deferred_free( void * );
 
 #ifdef __cplusplus
 }

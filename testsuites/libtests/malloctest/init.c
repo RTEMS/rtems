@@ -2,7 +2,7 @@
  *  COPYRIGHT (c) 1989-2011, 2014.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2009, 2010 embedded brains GmbH.
+ *  Copyright (c) 2009, 2016 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -22,6 +22,7 @@
 #include <errno.h>
 #include <rtems/score/protectedheap.h>
 #include <rtems/malloc.h>
+#include <rtems/sysinit.h>
 
 const char rtems_test_name[] = "MALLOCTEST";
 
@@ -1369,3 +1370,27 @@ rtems_task Init(
   status = rtems_task_delete( RTEMS_SELF );
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
 }
+
+static void test_early_malloc( void )
+{
+  void *p;
+  char *q;
+
+  p = malloc( 1 );
+  rtems_test_assert( p != NULL );
+
+  free( p );
+
+  q = calloc( 1, 1 );
+  rtems_test_assert( q != NULL );
+  rtems_test_assert( p != q );
+  rtems_test_assert( q[0] == 0 );
+
+  free( q );
+}
+
+RTEMS_SYSINIT_ITEM(
+  test_early_malloc,
+  RTEMS_SYSINIT_INITIAL_EXTENSIONS,
+  RTEMS_SYSINIT_ORDER_FIRST
+);

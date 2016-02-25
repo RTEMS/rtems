@@ -87,7 +87,7 @@ MALLOC_C_FILES = src/malloc_initialize.c src/malloc.c \
     src/mallocinfo.c src/malloc_walk.c \
     src/posix_memalign.c \
     src/rtems_memalign.c src/malloc_deferred.c \
-    src/malloc_dirtier.c src/malloc_p.h src/rtems_malloc.c \
+    src/malloc_dirtier.c src/malloc_p.h \
     src/rtems_heap_extend_via_sbrk.c \
     src/rtems_heap_null_extend.c \
     src/rtems_heap_extend.c \

@@ -31,43 +31,16 @@ void *malloc(
   void        *return_this;
 
   /*
-   *  If some free's have been deferred, then do them now.
-   */
-  malloc_deferred_frees_process();
-
-  /*
    * Validate the parameters
    */
   if ( !size )
     return (void *) 0;
 
-  /*
-   *  Do not attempt to allocate memory if not in correct system state.
-   */
-  if ( !malloc_is_system_state_OK() )
-    return NULL;
-
-  /*
-   * Try to give a segment in the current heap if there is not
-   * enough space then try to grow the heap.
-   * If this fails then return a NULL pointer.
-   */
-
-  return_this = _Protected_heap_Allocate( RTEMS_Malloc_Heap, size );
-
+  return_this = rtems_heap_allocate_aligned_with_boundary( size, 0, 0 );
   if ( !return_this ) {
-    return_this = (*rtems_malloc_extend_handler)( RTEMS_Malloc_Heap, size );
-    if ( !return_this ) {
-      errno = ENOMEM;
-      return (void *) 0;
-    }
+    errno = ENOMEM;
+    return (void *) 0;
   }
-
-  /*
-   *  If the user wants us to dirty the allocated memory, then do it.
-   */
-  if ( rtems_malloc_dirty_helper )
-    (*rtems_malloc_dirty_helper)( return_this, size );
 
   return return_this;
 }

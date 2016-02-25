@@ -41,24 +41,9 @@ int rtems_memalign(
   *pointer = NULL;
 
   /*
-   *  Do not attempt to allocate memory if not in correct system state.
-   */
-  if ( !malloc_is_system_state_OK() )
-    return EINVAL;
-
-  /*
-   *  If some free's have been deferred, then do them now.
-   */
-  malloc_deferred_frees_process();
-
-  /*
    *  Perform the aligned allocation requested
    */
-  return_this = _Protected_heap_Allocate_aligned(
-    RTEMS_Malloc_Heap,
-    size,
-    alignment
-  );
+  return_this = rtems_heap_allocate_aligned_with_boundary( size, alignment, 0 );
   if ( !return_this )
     return ENOMEM;
 

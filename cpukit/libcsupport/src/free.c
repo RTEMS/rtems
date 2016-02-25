@@ -22,10 +22,6 @@
 #include "malloc_p.h"
 #include <stdlib.h>
 
-#include <rtems/score/sysstate.h>
-
-#include "malloc_p.h"
-
 void free(
   void *ptr
 )
@@ -36,8 +32,8 @@ void free(
   /*
    *  Do not attempt to free memory if in a critical section or ISR.
    */
-  if ( !malloc_is_system_state_OK() ) {
-      malloc_deferred_free(ptr);
+  if ( _Malloc_System_state() != MALLOC_SYSTEM_STATE_NORMAL ) {
+      _Malloc_Deferred_free(ptr);
       return;
   }
 

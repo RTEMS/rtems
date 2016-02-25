@@ -34,10 +34,21 @@ static RTEMS_CHAIN_DEFINE_EMPTY( _Malloc_GC_list );
 
 RTEMS_INTERRUPT_LOCK_DEFINE( static, _Malloc_GC_lock, "Malloc GC" )
 
-bool malloc_is_system_state_OK(void)
+Malloc_System_state _Malloc_System_state( void )
 {
-  return !_System_state_Is_up( _System_state_Get() )
-    || _Thread_Dispatch_is_enabled();
+  System_state_Codes state = _System_state_Get();
+
+  if ( _System_state_Is_up( state ) ) {
+    if ( _Thread_Dispatch_is_enabled() ) {
+      return MALLOC_SYSTEM_STATE_NORMAL;
+    } else {
+      return MALLOC_SYSTEM_STATE_NO_ALLOCATION;
+    }
+  } else if ( _System_state_Is_before_multitasking( state ) ) {
+    return MALLOC_SYSTEM_STATE_NORMAL;
+  } else {
+    return MALLOC_SYSTEM_STATE_NO_PROTECTION;
+  }
 }
 
 static void *_Malloc_Get_deferred_free( void )
@@ -52,7 +63,7 @@ static void *_Malloc_Get_deferred_free( void )
   return p;
 }
 
-void malloc_deferred_frees_process( void )
+static void _Malloc_Process_deferred_frees( void )
 {
   rtems_chain_node *to_be_freed;
 
@@ -64,7 +75,54 @@ void malloc_deferred_frees_process( void )
   }
 }
 
-void malloc_deferred_free( void *p )
+void *rtems_heap_allocate_aligned_with_boundary(
+  uintptr_t size,
+  uintptr_t alignment,
+  uintptr_t boundary
+)
+{
+  Heap_Control *heap = RTEMS_Malloc_Heap;
+  void *p;
+
+  switch ( _Malloc_System_state() ) {
+    case MALLOC_SYSTEM_STATE_NORMAL:
+      _Malloc_Process_deferred_frees();
+      p = _Protected_heap_Allocate_aligned_with_boundary(
+        heap,
+        size,
+        alignment,
+        boundary
+      );
+      break;
+    case MALLOC_SYSTEM_STATE_NO_PROTECTION:
+      p = _Heap_Allocate_aligned_with_boundary(
+        heap,
+        size,
+        alignment,
+        boundary
+      );
+      break;
+    default:
+      /*
+       *  Do not attempt to allocate memory if not in correct system state.
+       */
+      return NULL;
+  }
+
+  if ( p == NULL && alignment == 0 && boundary == 0 ) {
+    p = (*rtems_malloc_extend_handler)( heap, size );
+  }
+
+  /*
+   *  If the user wants us to dirty the allocated memory, then do it.
+   */
+  if ( p != NULL && rtems_malloc_dirty_helper != NULL )
+    (*rtems_malloc_dirty_helper)( p, size );
+
+  return p;
+}
+
+void _Malloc_Deferred_free( void *p )
 {
   rtems_interrupt_lock_context lock_context;
 
