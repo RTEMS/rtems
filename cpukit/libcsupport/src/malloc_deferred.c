@@ -30,7 +30,9 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/threaddispatch.h>
 
-RTEMS_CHAIN_DEFINE_EMPTY(RTEMS_Malloc_GC_list);
+static RTEMS_CHAIN_DEFINE_EMPTY( _Malloc_GC_list );
+
+RTEMS_INTERRUPT_LOCK_DEFINE( static, _Malloc_GC_lock, "Malloc GC" )
 
 bool malloc_is_system_state_OK(void)
 {
@@ -38,21 +40,36 @@ bool malloc_is_system_state_OK(void)
     || _Thread_Dispatch_is_enabled();
 }
 
-void malloc_deferred_frees_process(void)
+static void *_Malloc_Get_deferred_free( void )
 {
-  rtems_chain_node  *to_be_freed;
+  rtems_interrupt_lock_context lock_context;
+  void *p;
+
+  rtems_interrupt_lock_acquire( &_Malloc_GC_lock, &lock_context );
+  p = rtems_chain_get_unprotected( &_Malloc_GC_list );
+  rtems_interrupt_lock_release( &_Malloc_GC_lock, &lock_context );
+
+  return p;
+}
+
+void malloc_deferred_frees_process( void )
+{
+  rtems_chain_node *to_be_freed;
 
   /*
    *  If some free's have been deferred, then do them now.
    */
-  while ((to_be_freed = rtems_chain_get(&RTEMS_Malloc_GC_list)) != NULL)
-    free(to_be_freed);
+  while ( ( to_be_freed = _Malloc_Get_deferred_free() ) != NULL ) {
+    free( to_be_freed );
+  }
 }
 
-void malloc_deferred_free(
-  void *pointer
-)
+void malloc_deferred_free( void *p )
 {
-  rtems_chain_append(&RTEMS_Malloc_GC_list, (rtems_chain_node *)pointer);
+  rtems_interrupt_lock_context lock_context;
+
+  rtems_interrupt_lock_acquire( &_Malloc_GC_lock, &lock_context );
+  rtems_chain_append_unprotected( &_Malloc_GC_list, (rtems_chain_node *) p );
+  rtems_interrupt_lock_release( &_Malloc_GC_lock, &lock_context );
 }
 #endif
