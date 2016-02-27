@@ -72,7 +72,8 @@
 #define OMAP3_INTR_ILR(base,m) \
     (base + OMAP3_INTCPS_ILR0 + 0x4 * (m))
 
-#define OMAP3_INTR_ACTIVEIRQ_MASK 0x7f /* Active IRQ mask for SIR_IRQ */
+#define OMAP3_INTR_SPURIOUSIRQ_MASK (0x1FFFFFF << 7) /* Spurious IRQ mask for SIR_IRQ */
+#define OMAP3_INTR_ACTIVEIRQ_MASK 0x7F /* Active IRQ mask for SIR_IRQ */
 #define OMAP3_INTR_NEWIRQAGR      0x1  /* New IRQ Generation */
 
 #define OMAP3_DM337X_NR_IRQ_VECTORS    96

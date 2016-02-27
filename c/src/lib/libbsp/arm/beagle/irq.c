@@ -18,6 +18,7 @@
 #include <bsp.h>
 #include <bsp/irq-generic.h>
 #include <bsp/linker-symbols.h>
+#include <bsp/fatal.h>
 
 #include <rtems/score/armv4.h>
 
@@ -43,62 +44,65 @@ static struct omap_intr omap_intr = {
 };
 #endif
 
-static int irqs_enabled[BSP_INTERRUPT_VECTOR_MAX+1];
+/* Enables interrupts at the Interrupt Controller side. */
+static inline void omap_irq_ack(void)
+{
+  mmio_write(omap_intr.base + OMAP3_INTCPS_CONTROL, OMAP3_INTR_NEWIRQAGR);
 
-volatile static int level = 0;
+  /* Flush data cache to make sure all the previous writes are done
+     before re-enabling interrupts. */
+  flush_data_cache();
+}
 
 void bsp_interrupt_dispatch(void)
 {
-  /* get irq */
-  uint32_t reg = mmio_read(omap_intr.base + OMAP3_INTCPS_SIR_IRQ);
-  int irq;
-  irq = reg & OMAP3_INTR_ACTIVEIRQ_MASK;
+  const uint32_t reg = mmio_read(omap_intr.base + OMAP3_INTCPS_SIR_IRQ);
 
-  if(!irqs_enabled[irq]) {
-	/* Ignore spurious interrupt */
-  } else {
-    bsp_interrupt_vector_disable(irq);
+  if ((reg & OMAP3_INTR_SPURIOUSIRQ_MASK) != OMAP3_INTR_SPURIOUSIRQ_MASK) {
+    const rtems_vector_number irq = reg & OMAP3_INTR_ACTIVEIRQ_MASK;
 
-    /* enable new interrupts, and flush data cache to make sure
-     * it hits the intc
-     */
-    mmio_write(omap_intr.base + OMAP3_INTCPS_CONTROL, OMAP3_INTR_NEWIRQAGR);
-    flush_data_cache();
-    mmio_read(omap_intr.base + OMAP3_INTCPS_SIR_IRQ);
-    flush_data_cache();
-
-    /* keep current irq masked but enable unmasked ones */
-    uint32_t psr = _ARMV4_Status_irq_enable();
     bsp_interrupt_handler_dispatch(irq);
-
-    _ARMV4_Status_restore(psr);
-
-    bsp_interrupt_vector_enable(irq);
+  } else {
+    /* Ignore spurious interrupts. We'll still ACK it so new interrupts
+       can be generated. */
   }
+
+  omap_irq_ack();
 }
 
-static uint32_t get_mir_reg(int vector, uint32_t *mask)
+/* There are 4 32-bit interrupt mask registers for a total of 128 interrupts.
+   The IRQ number tells us which register to use. */
+static uint32_t omap_get_mir_reg(rtems_vector_number vector, uint32_t *const mask)
 {
-  *mask = 1UL << (vector % 32);
+  uint32_t mir_reg;
 
-  if(vector <   0) while(1) ;
-  if(vector <  32) return OMAP3_INTCPS_MIR0;
-  if(vector <  64) return OMAP3_INTCPS_MIR1;
-  if(vector <  96) return OMAP3_INTCPS_MIR2;
-  if(vector < 128) return OMAP3_INTCPS_MIR3;
-  while(1) ;
+  /* Select which bit to set/clear in the MIR register. */
+  *mask = 1ul << (vector % 32u);
+
+  if (vector < 32u) {
+    mir_reg = OMAP3_INTCPS_MIR0;
+  } else if (vector < 64u) {
+    mir_reg = OMAP3_INTCPS_MIR1;
+  } else if (vector < 96u) {
+    mir_reg = OMAP3_INTCPS_MIR2;
+  } else if (vector < 128u) {
+    mir_reg = OMAP3_INTCPS_MIR3;
+  } else {
+    /* Invalid IRQ number. This should never happen. */
+    bsp_fatal(0);
+  }
+
+  return mir_reg;
 }
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
   uint32_t mask, cur;
-  uint32_t mir_reg = get_mir_reg(vector, &mask);
+  uint32_t mir_reg = omap_get_mir_reg(vector, &mask);
 
   cur = mmio_read(omap_intr.base + mir_reg);
   mmio_write(omap_intr.base + mir_reg, cur & ~mask);
   flush_data_cache();
-
-  irqs_enabled[vector] = 1;
 
   return RTEMS_SUCCESSFUL;
 }
@@ -106,13 +110,11 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   uint32_t mask, cur;
-  uint32_t mir_reg = get_mir_reg(vector, &mask);
+  uint32_t mir_reg = omap_get_mir_reg(vector, &mask);
 
   cur = mmio_read(omap_intr.base + mir_reg);
   mmio_write(omap_intr.base + mir_reg, cur | mask);
   flush_data_cache();
-
-  irqs_enabled[vector] = 0;
 
   return RTEMS_SUCCESSFUL;
 }
