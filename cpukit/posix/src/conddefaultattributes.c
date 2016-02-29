@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2007, 2016.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,18 +19,17 @@
 #endif
 
 #include <pthread.h>
-#include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/posix/condimpl.h>
-#include <rtems/posix/muteximpl.h>
 
 /*
  *  The default condition variable attributes structure.
  */
 
 const pthread_condattr_t _POSIX_Condition_variables_Default_attributes = {
-  true,                      /* is_initialized */
-  PTHREAD_PROCESS_PRIVATE    /* process_shared */
+  .is_initialized = true,
+  .clock          = CLOCK_REALTIME,
+#if defined(_POSIX_THREAD_PROCESS_SHARED)
+  .process_shared = PTHREAD_PROCESS_PRIVATE
+#endif
 };
