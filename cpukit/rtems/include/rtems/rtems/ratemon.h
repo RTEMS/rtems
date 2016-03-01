@@ -156,11 +156,11 @@ typedef struct {
   uint32_t     missed_count;
 
   /** This field contains the least amount of CPU time used in a period. */
-  Thread_CPU_usage_t                   min_cpu_time;
+  Timestamp_Control                    min_cpu_time;
   /** This field contains the highest amount of CPU time used in a period. */
-  Thread_CPU_usage_t                   max_cpu_time;
+  Timestamp_Control                    max_cpu_time;
   /** This field contains the total amount of wall time used in a period. */
-  Thread_CPU_usage_t                   total_cpu_time;
+  Timestamp_Control                    total_cpu_time;
 
   /** This field contains the least amount of wall time used in a period. */
   Rate_monotonic_Period_time_t         min_wall_time;
@@ -226,7 +226,7 @@ typedef struct {
    * the period was initiated.  It is used to compute the period's
    * statistics.
    */
-  Thread_CPU_usage_t                      cpu_usage_period_initiated;
+  Timestamp_Control                       cpu_usage_period_initiated;
 
   /**
    * This field contains the wall time value when the period

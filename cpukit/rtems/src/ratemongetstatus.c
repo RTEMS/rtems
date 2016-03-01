@@ -31,7 +31,7 @@ rtems_status_code rtems_rate_monotonic_get_status(
   rtems_rate_monotonic_period_status *status
 )
 {
-  Thread_CPU_usage_t             executed;
+  Timestamp_Control              executed;
   Objects_Locations              location;
   Rate_monotonic_Period_time_t   since_last_period;
   Rate_monotonic_Control        *the_period;

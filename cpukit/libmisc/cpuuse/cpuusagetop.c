@@ -62,7 +62,7 @@ typedef struct
   volatile uint32_t      poll_rate_usecs;
   volatile uint32_t      show;
   rtems_cpu_usage_plugin plugin;
-  Thread_CPU_usage_t     zero;
+  Timestamp_Control      zero;
   Timestamp_Control      uptime;
   Timestamp_Control      last_uptime;
   Timestamp_Control      period;
@@ -71,9 +71,9 @@ typedef struct
   int                    task_size;         /* The size of the arrays */
   Thread_Control**       tasks;             /* List of tasks in this sample. */
   Thread_Control**       last_tasks;        /* List of tasks in the last sample. */
-  Thread_CPU_usage_t*    usage;             /* Usage of task's in this sample. */
-  Thread_CPU_usage_t*    last_usage;        /* Usage of task's in the last sample. */
-  Thread_CPU_usage_t*    current_usage;     /* Current usage for this sample. */
+  Timestamp_Control*     usage;             /* Usage of task's in this sample. */
+  Timestamp_Control*     last_usage;        /* Usage of task's in the last sample. */
+  Timestamp_Control*     current_usage;     /* Current usage for this sample. */
   Timestamp_Control      total;             /* Total run run, should equal the uptime. */
   Timestamp_Control      idle;              /* Time spent in idle. */
   Timestamp_Control      current;           /* Current time run in this period. */
@@ -218,8 +218,8 @@ static void
 task_usage(Thread_Control* thread, void* arg)
 {
   rtems_cpu_usage_data* data = (rtems_cpu_usage_data*) arg;
-  Thread_CPU_usage_t    usage = thread->cpu_time_used;
-  Thread_CPU_usage_t    current = data->zero;
+  Timestamp_Control     usage = thread->cpu_time_used;
+  Timestamp_Control     current = data->zero;
   int                   j;
 
   data->stack_size += thread->Start.Initial_stack.size;
@@ -333,7 +333,7 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
     rtems_iterate_over_all_threads_2(task_counter, data);
 
     tasks_size = sizeof(Thread_Control*) * (data->task_count + 1);
-    usage_size = sizeof(Thread_CPU_usage_t) * (data->task_count + 1);
+    usage_size = sizeof(Timestamp_Control) * (data->task_count + 1);
 
     if (data->task_count > data->task_size)
     {

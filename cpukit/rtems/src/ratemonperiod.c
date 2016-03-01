@@ -27,12 +27,12 @@
 bool _Rate_monotonic_Get_status(
   Rate_monotonic_Control        *the_period,
   Rate_monotonic_Period_time_t  *wall_since_last_period,
-  Thread_CPU_usage_t            *cpu_since_last_period
+  Timestamp_Control             *cpu_since_last_period
 )
 {
   Timestamp_Control        uptime;
   Thread_Control          *owning_thread = the_period->owner;
-  Thread_CPU_usage_t       used;
+  Timestamp_Control        used;
 
   /*
    *  Determine elapsed wall time since period initiated.
@@ -49,7 +49,7 @@ bool _Rate_monotonic_Get_status(
 
   if (owning_thread == _Thread_Executing) {
 
-    Thread_CPU_usage_t ran;
+    Timestamp_Control ran;
 
     /* How much time time since last context switch */
     _Timestamp_Subtract(
@@ -120,7 +120,7 @@ static void _Rate_monotonic_Update_statistics(
   Rate_monotonic_Control    *the_period
 )
 {
-  Thread_CPU_usage_t              executed;
+  Timestamp_Control               executed;
   Rate_monotonic_Period_time_t    since_last_period;
   Rate_monotonic_Statistics      *stats;
   bool                            valid_status;

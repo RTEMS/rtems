@@ -33,6 +33,7 @@
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
 #include <rtems/score/threadq.h>
+#include <rtems/score/timestamp.h>
 #include <rtems/score/watchdog.h>
 
 #if defined(RTEMS_SMP)
@@ -81,14 +82,6 @@ extern "C" {
 #if defined(RTEMS_POSIX_API)
   #define RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API
 #endif
-
-/*
- *  The user can define this at configure time and go back to ticks
- *  resolution.
- */
-#include <rtems/score/timestamp.h>
-
-typedef Timestamp_Control Thread_CPU_usage_t;
 
 /*
  * Only provided for backward compatiblity to not break application
@@ -807,7 +800,7 @@ struct _Thread_Control {
   /** This field is the amount of CPU time consumed by this thread
    *  since it was created.
    */
-  Thread_CPU_usage_t                    cpu_time_used;
+  Timestamp_Control                     cpu_time_used;
 
   /** This field contains information about the starting state of
    *  this thread.
