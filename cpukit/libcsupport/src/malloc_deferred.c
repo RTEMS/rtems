@@ -76,7 +76,7 @@ static void _Malloc_Process_deferred_frees( void )
 }
 
 void *rtems_heap_allocate_aligned_with_boundary(
-  uintptr_t size,
+  size_t    size,
   uintptr_t alignment,
   uintptr_t boundary
 )
