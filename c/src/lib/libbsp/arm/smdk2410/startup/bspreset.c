@@ -16,7 +16,10 @@ void bsp_reset(void)
 
   SKYEYE_MAGIC_ADDRESS = 0xff;
 #else
-  /* XXX TODO this code is copied from gp32.. move it to a shared place */
+  /* TODO: This code was initially copied from the gp32 BSP. That BSP has
+   * been obsoleted and removed but this code may still benefit from being
+   * in a shared place.
+   */
   rtems_interrupt_level level;
 
   (void) level;

@@ -37,11 +37,11 @@ $(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
 PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
 
-$(PROJECT_INCLUDE)/bsp.h: ../gp32/include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
 
-$(PROJECT_INCLUDE)/smc.h: ../gp32/smc/smc.h $(PROJECT_INCLUDE)/$(dirstamp)
+$(PROJECT_INCLUDE)/smc.h: smc/smc.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/smc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/smc.h
 

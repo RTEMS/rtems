@@ -6,8 +6,8 @@ include_bspdir = $(includedir)/bsp
 
 dist_project_lib_DATA = bsp_specs
 
-include_HEADERS = ../gp32/include/bsp.h
-include_HEADERS += ../gp32/smc/smc.h
+include_HEADERS = include/bsp.h
+include_HEADERS += smc/smc.h
 include_HEADERS += ../../shared/include/tm27.h
 
 include_bsp_HEADERS =
@@ -18,7 +18,7 @@ DISTCLEANFILES = include/bspopts.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 noinst_LIBRARIES = libbspstart.a
-libbspstart_a_SOURCES = ../gp32/start/start.S
+libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
@@ -27,19 +27,26 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += \
-    ../gp32/startup/bspstart.c ../gp32/startup/bspidle.c ../../shared/bspclean.c \
-    startup/bspreset.c startup/memmap.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
-    ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += startup/bspstart.c
+libbsp_a_SOURCES += startup/bspidle.c
+libbsp_a_SOURCES += ../../shared/bspclean.c
+libbsp_a_SOURCES += startup/bspreset.c
+libbsp_a_SOURCES += startup/memmap.c
+libbsp_a_SOURCES += ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/sbrk.c
+
+libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 libbsp_a_SOURCES += ../../shared/cpucounterread.c
 libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 # console
-libbsp_a_SOURCES += ../gp32/console/uart.c ../../shared/console.c \
-    ../../shared/console_select.c \
-    ../../shared/console_read.c ../../shared/console_write.c \
-    ../../shared/console_control.c
+libbsp_a_SOURCES += console/uart.c
+libbsp_a_SOURCES += ../../shared/console.c
+libbsp_a_SOURCES += ../../shared/console_select.c
+libbsp_a_SOURCES += ../../shared/console_read.c
+libbsp_a_SOURCES += ../../shared/console_write.c
+libbsp_a_SOURCES += ../../shared/console_control.c
 # IRQ
 include_bsp_HEADERS += ../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h
@@ -52,7 +59,8 @@ libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 # abort
 libbsp_a_SOURCES += ../shared/abort/abort.c
 # smc
-libbsp_a_SOURCES += ../gp32/smc/smc.c ../gp32/smc/smc.h
+libbsp_a_SOURCES += smc/smc.c
+libbsp_a_SOURCES += smc/smc.h
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c

@@ -1,19 +1,17 @@
 /**
  * @file
  * @ingroup arm_smdk2410
- * @brief Global BSP definitions.
+ * @brief Global BSP definitons.
  */
 
-/*-------------------------------------------------------------------------+
-| bsp.h - ARM BSP
-|
-| Copyright (c) Ray,Xu  mailto:ray.cn AT gmail dot com
-|
-|  The license and distribution terms for this file may be
-|  found in the file LICENSE in this distribution or at
-|  http://www.rtems.org/license/LICENSE.
-+--------------------------------------------------------------------------*/
-
+/*
+ *  Copyright (c) Canon Research France SA.]
+ *  Emmanuel Raguet, mailto:raguet@crf.canon.fr
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.org/license/LICENSE.
+ */
 
 #ifndef LIBBSP_ARM_SMDK2410_BSP_H
 #define LIBBSP_ARM_SMDK2410_BSP_H
@@ -21,22 +19,61 @@
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
+#include <rtems.h>
+#include <rtems/iosupp.h>
+#include <rtems/console.h>
+#include <rtems/clockdrv.h>
+#include <s3c24xx.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/**
- * @defgroup arm_smdk2410 SMDK2410 Support
- * @ingroup bsp_arm
- * @brief SMDK2410 Support Package
- */
+#define BSP_FEATURE_IRQ_EXTENSION
 
 /**
- *  This file will not be pre-installed because the smdk2410 BSP uses
- *  the bsp.h in gp32 currently.  This file is a placeholder. If you
- *  need to add something specical for your 2410 BSP please override
- *  this file with your own and change Makefile.am
+ * @brief functions to get the differents s3c2400 clks
+ * @{
  */
+
+uint32_t get_FCLK(void);
+uint32_t get_HCLK(void);
+uint32_t get_PCLK(void);
+uint32_t get_UCLK(void);
+
+/** @} */
+
+/* What is the input clock freq in hertz? */
+/** @brief 12 MHz oscillator */
+#define BSP_OSC_FREQ  12000000
+/** @brief FCLK=133Mhz */
+#define M_MDIV 81
+#define M_PDIV 2
+#define M_SDIV 1
+/** @brief HCLK=FCLK/2, PCLK=FCLK/2 */
+#define M_CLKDIVN 2
+/** @brief enable refresh */
+#define REFEN	0x1
+/** @brief CBR(CAS before RAS)/auto refresh */
+#define TREFMD	0x0
+/** @brief 2 clk */
+#define Trp	0x0
+/** @brief 7 clk */
+#define Trc	0x3
+/** @brief 3 clk */
+#define Tchr	0x2
+
+/**
+ * @brief This BSP provides its own IDLE thread to override the RTEMS one.
+ *
+ *  So we prototype it and define the constant confdefs.h expects
+ *  to configure a BSP specific one.
+ */
+void *bsp_idle_thread(uintptr_t ignored);
+
+/** @} */
+
+#define BSP_IDLE_TASK_BODY bsp_idle_thread
 
 #ifdef __cplusplus
 }
