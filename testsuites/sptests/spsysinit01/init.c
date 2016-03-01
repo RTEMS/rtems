@@ -612,13 +612,17 @@ LAST(RTEMS_SYSINIT_DEVICE_DRIVERS)
 
 FIRST(RTEMS_SYSINIT_CLASSIC_USER_TASKS)
 {
+  _Objects_Allocator_lock();
   assert(_Objects_Active_count(&_RTEMS_tasks_Information.Objects) == 0);
+  _Objects_Allocator_unlock();
   next_step(CLASSIC_USER_TASKS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_USER_TASKS)
 {
+  _Objects_Allocator_lock();
   assert(_Objects_Active_count(&_RTEMS_tasks_Information.Objects) == 1);
+  _Objects_Allocator_unlock();
   next_step(CLASSIC_USER_TASKS_POST);
 }
 
@@ -626,13 +630,17 @@ LAST(RTEMS_SYSINIT_CLASSIC_USER_TASKS)
 
 FIRST(RTEMS_SYSINIT_POSIX_USER_THREADS)
 {
+  _Objects_Allocator_lock();
   assert(_Objects_Active_count(&_POSIX_Threads_Information.Objects) == 0);
+  _Objects_Allocator_unlock();
   next_step(POSIX_USER_THREADS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_POSIX_USER_THREADS)
 {
+  _Objects_Allocator_lock();
   assert(_Objects_Active_count(&_POSIX_Threads_Information.Objects) == 1);
+  _Objects_Allocator_unlock();
   next_step(POSIX_USER_THREADS_POST);
 }
 
