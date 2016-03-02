@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: tmtimer01
+
+directives:
+
+  - rtems_timer_fire_after()
+  - rtems_timer_cancel()
+
+concepts:
+
+  - Measure the time to execute the timer fire after and cancel operations.
