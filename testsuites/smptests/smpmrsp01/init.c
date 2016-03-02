@@ -63,7 +63,7 @@ typedef struct {
   rtems_id mrsp_ids[MRSP_COUNT];
   rtems_id scheduler_ids[CPU_COUNT];
   rtems_id worker_ids[2 * CPU_COUNT];
-  volatile bool stop_worker[CPU_COUNT];
+  volatile bool stop_worker[2 * CPU_COUNT];
   counter counters[2 * CPU_COUNT];
   uint32_t migration_counters[CPU_COUNT];
   Thread_Control *worker_task;
