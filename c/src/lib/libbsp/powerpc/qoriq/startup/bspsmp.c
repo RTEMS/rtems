@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -147,12 +147,9 @@ static void bsp_inter_processor_interrupt(void *arg)
 static uboot_spin_table *spin_table_addr[QORIQ_CPU_COUNT / QORIQ_THREAD_COUNT];
 #endif
 
-static uint32_t discover_processors(uint32_t *boot_begin, uint32_t *boot_last)
+static uint32_t discover_processors(void)
 {
 #if defined(HAS_UBOOT)
-  *boot_begin = BOOT_BEGIN;
-  *boot_last = BOOT_LAST;
-
   return QORIQ_CPU_COUNT;
 #elif defined(U_BOOT_USE_FDT)
   const void *fdt = bsp_fdt_get();
@@ -185,9 +182,6 @@ static uint32_t discover_processors(uint32_t *boot_begin, uint32_t *boot_last)
     node = fdt_next_subnode(fdt, node);
   }
 
-  *boot_begin = begin;
-  *boot_last = last;
-
   return cpu * QORIQ_THREAD_COUNT;
 #endif
 }
@@ -197,24 +191,7 @@ uint32_t _CPU_SMP_Initialize(void)
   uint32_t cpu_count = 1;
 
   if (rtems_configuration_get_maximum_processors() > 0) {
-    qoriq_mmu_context mmu_context;
-    uint32_t boot_begin;
-    uint32_t boot_last;
-
-    cpu_count = discover_processors(&boot_begin, &boot_last);
-
-    qoriq_mmu_context_init(&mmu_context);
-    qoriq_mmu_add(
-      &mmu_context,
-      boot_begin,
-      boot_last,
-      0,
-      0,
-      FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW,
-      0
-    );
-    qoriq_mmu_partition(&mmu_context, TLB_COUNT);
-    qoriq_mmu_write_to_tlb1(&mmu_context, TLB_BEGIN);
+    cpu_count = discover_processors();
   }
 
   start_thread_if_necessary(0);
@@ -269,21 +246,8 @@ bool _CPU_SMP_Start_processor(uint32_t cpu_index)
 #endif
 }
 
-static void mmu_config_undo(void)
-{
-  int i;
-
-  for (i = TLB_BEGIN; i < TLB_END; ++i) {
-    qoriq_tlb1_invalidate(i);
-  }
-}
-
 void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
 {
-  if (rtems_configuration_get_maximum_processors() > 0) {
-    mmu_config_undo();
-  }
-
   if (cpu_count > 1) {
     rtems_status_code sc;
 
