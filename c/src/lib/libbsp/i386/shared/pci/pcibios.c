@@ -288,36 +288,6 @@ pci_bus_count(void)
 }
 
 /*
- * Generate Special Cycle
- */
-int
-pcib_special_cycle(int busNo, int data)
-{
-  if (!pcibInitialized) {
-    return PCIB_ERR_UNINITIALIZED;
-  }
-
-  pcibExchg[0] = pcibEntry;
-  pcibExchg[1] = busNo << 8;
-  pcibExchg[2] = data;
-
-  __asm__ ("    pusha");
-  __asm__ ("    movl pcibExchg, %edi");
-  __asm__ ("    movb $0xb1, %ah");
-  __asm__ ("    movb $0x06, %al");
-  __asm__ ("    movl pcibExchg+4, %ebx");
-  __asm__ ("    movl pcibExchg+8, %edx");
-  __asm__ ("    pushl %cs");
-  __asm__ ("    call *%edi");
-  __asm__ ("    movl %eax, pcibExchg");
-  __asm__ ("    movl %ebx, pcibExchg+4");
-  __asm__ ("    popa");
-
-  return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
-}
-
-
-/*
  * Read byte from config space
  */
 static int
