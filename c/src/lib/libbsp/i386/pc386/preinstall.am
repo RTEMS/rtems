@@ -166,10 +166,6 @@ $(PROJECT_INCLUDE)/rtems/console_private.h: ../../shared/console_private.h $(PRO
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/console_private.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/console_private.h
 
-$(PROJECT_INCLUDE)/pcibios.h: ../../i386/shared/pci/pcibios.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pcibios.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/pcibios.h
-
 $(PROJECT_INCLUDE)/uart.h: ../../i386/shared/comm/uart.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/uart.h

@@ -139,10 +139,8 @@ libbsp_a_SOURCES += ../../i386/shared/comm/gdb_glue.c
 # gnat
 libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 
-include_HEADERS += ../../i386/shared/pci/pcibios.h
 # pci
-libbsp_a_SOURCES += ../../i386/shared/pci/pcibios.c \
-    ../../i386/shared/pci/pcibios.h
+libbsp_a_SOURCES += ../../i386/shared/pci/pcibios.c
 
 include_HEADERS += ../../i386/shared/comm/uart.h
 # startup

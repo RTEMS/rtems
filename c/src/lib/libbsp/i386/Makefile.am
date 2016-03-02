@@ -21,7 +21,6 @@ EXTRA_DIST += shared/irq/idt.c
 EXTRA_DIST += shared/irq/irq_init.c
 
 # shared/pci
-EXTRA_DIST += shared/pci/pcibios.h
 EXTRA_DIST += shared/pci/pcibios.c
 
 include $(top_srcdir)/../../../automake/subdirs.am

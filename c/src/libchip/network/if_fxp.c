@@ -75,7 +75,6 @@
 #include <sys/malloc.h>
 #include <sys/systm.h>
 #include <bsp.h>
-#include <pcibios.h>
 #include <bsp/irq.h>
 #include <rtems/pci.h>
 
@@ -351,6 +350,48 @@ fxp_dma_wait(volatile u_int16_t *status, struct fxp_softc *sc)
 	if (i == 0)
 		device_printf(sc->dev, "DMA timeout\n");
 }
+
+/*
+ * These macros and instantiations define PCI Configuration Space accessors
+ * which use the legacy API based on the PCI BIOS only used by pc386.
+ * This was the only device driver using these.
+ *
+ * TBD: It may be worth it to fix this driver to use the current PCI API rather
+ *      than this legacy PC386 API.
+ */
+#define PCIB_DEVSIG_BUS(x) (((x)>>8) &0xff)
+#define PCIB_DEVSIG_DEV(x) (((x)>>3) & 0x1f)
+#define PCIB_DEVSIG_FUNC(x) ((x) & 0x7)
+#define PCIB_DEVSIG_MAKE(b,d,f) ((b<<8)|(d<<3)|(f))
+
+#define PCI_CONF_ACCESSOR(_confop, _baseop, _type) \
+  /* prototype before body */ \
+  static inline int _confop ( \
+    int signature, \
+    int offset, \
+    _type data ); \
+  \
+  static inline int _confop ( \
+    int signature, \
+    int offset, \
+    _type data ) \
+  { \
+    _baseop( \
+        PCIB_DEVSIG_BUS(signature), \
+        PCIB_DEVSIG_DEV(signature), \
+        PCIB_DEVSIG_FUNC(signature), \
+        offset, \
+        data \
+    ); \
+   return PCIB_ERR_SUCCESS; \
+  }
+
+PCI_CONF_ACCESSOR( pcib_conf_read8,   pci_read_config_byte,   uint8_t * );
+PCI_CONF_ACCESSOR( pcib_conf_read16,  pci_read_config_word,   uint16_t * );
+PCI_CONF_ACCESSOR( pcib_conf_read32,  pci_read_config_dword,  uint32_t * );
+PCI_CONF_ACCESSOR( pcib_conf_write8,  pci_write_config_byte,  uint8_t );
+PCI_CONF_ACCESSOR( pcib_conf_write16, pci_write_config_word,  uint16_t );
+PCI_CONF_ACCESSOR( pcib_conf_write32, pci_write_config_dword, uint32_t );
 
 static __inline unsigned int pci_get_vendor(struct fxp_softc *sc) {
   u_int16_t vendor;
