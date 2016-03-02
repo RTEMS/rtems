@@ -194,42 +194,6 @@ pci_find_device(
   return status ? -1 : 0;
 }
 
-/*
- * Find specified class code return device signature: combination
- * of bus number, device number and function number
- */
-int
-pcib_find_by_class(int classCode, int idx, int *sig)
-{
-  if (!pcibInitialized) {
-    return PCIB_ERR_UNINITIALIZED;
-  }
-
-  pcibExchg[0] = pcibEntry;
-  pcibExchg[1] = classCode;
-  pcibExchg[2] = idx;
-
-  __asm__ ("    pusha");
-  __asm__ ("    movl pcibExchg, %edi");
-  __asm__ ("    movb $0xb1, %ah");
-  __asm__ ("    movb $0x03, %al");
-  __asm__ ("    movl pcibExchg+4, %ecx");
-  __asm__ ("    movl pcibExchg+8, %esi");
-  __asm__ ("    pushl %cs");
-  __asm__ ("    call *%edi");
-  __asm__ ("    movl %eax, pcibExchg");
-  __asm__ ("    movl %ebx, pcibExchg+4");
-  __asm__ ("    popa");
-
-  if ((pcibExchg[0] & 0xff00) != 0) {
-    return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
-  }
-
-  *sig = pcibExchg[1] & 0xffff;
-
-  return PCIB_ERR_SUCCESS;
-}
-
 static uint8_t ucBusCount = 0xff;
 
 unsigned char
