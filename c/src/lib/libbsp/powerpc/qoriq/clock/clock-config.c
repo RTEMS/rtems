@@ -124,7 +124,6 @@ static void qoriq_clock_cleanup(void)
   }
 }
 
-#define Clock_driver_support_at_tick()
 #define Clock_driver_support_initialize_hardware() \
   qoriq_clock_initialize()
 #define Clock_driver_support_install_isr(clock_isr, old_isr) \

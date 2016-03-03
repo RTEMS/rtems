@@ -11,8 +11,6 @@
 
 #define CLOCK_VECTOR 0
 
-#define Clock_driver_support_at_tick()
-
 #define Clock_driver_support_install_isr( _new, _old ) \
   do { _old = 0; } while(0)
 
