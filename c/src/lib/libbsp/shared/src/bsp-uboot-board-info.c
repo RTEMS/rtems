@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -14,9 +14,8 @@
 
 #include <bsp/u-boot.h>
 
-#ifndef U_BOOT_BOARD_INFO_TEXT_SECTION
-#define U_BOOT_BOARD_INFO_TEXT_SECTION
-#endif
+#include <string.h>
+#include <rtems.h>
 
 #ifndef U_BOOT_BOARD_INFO_DATA_SECTION
 #define U_BOOT_BOARD_INFO_DATA_SECTION
@@ -24,14 +23,10 @@
 
 U_BOOT_BOARD_INFO_DATA_SECTION bd_t bsp_uboot_board_info;
 
-U_BOOT_BOARD_INFO_TEXT_SECTION void bsp_uboot_copy_board_info(const bd_t *src)
+void bsp_uboot_copy_board_info(const bd_t *src)
 {
-  const int *s = (const int *) src;
-  int *d = (int *) &bsp_uboot_board_info;
-  int i = 0;
-  int n = sizeof(*src) / sizeof(int);
+  bd_t *dst = &bsp_uboot_board_info;
 
-  for (i = 0; i < n; ++i) {
-    d [i] = s [i];
-  }
+  dst = memcpy(dst, src, sizeof(*dst));
+  rtems_cache_flush_multiple_data_lines(dst, sizeof(*dst));
 }

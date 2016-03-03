@@ -17,8 +17,6 @@
 
 #include <bspopts.h>
 
-#define U_BOOT_BOARD_INFO_TEXT_SECTION __attribute__((section(".bsp_start_text")))
-
 #define U_BOOT_BOARD_INFO_DATA_SECTION __attribute__((section(".bsp_start_data")))
 
 #define CONFIG_E500
