@@ -627,19 +627,6 @@ bool _Scheduler_Set_affinity(
 
 #endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
 
-RTEMS_INLINE_ROUTINE void _Scheduler_Update_heir(
-  Thread_Control *new_heir,
-  bool            force_dispatch
-)
-{
-  Thread_Control *heir = _Thread_Heir;
-
-  if ( heir != new_heir && ( heir->is_preemptible || force_dispatch ) ) {
-    _Thread_Heir = new_heir;
-    _Thread_Dispatch_necessary = true;
-  }
-}
-
 RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -1355,6 +1342,25 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Ask_blocked_node_for_help(
 #endif
 
 ISR_LOCK_DECLARE( extern, _Scheduler_Lock )
+
+RTEMS_INLINE_ROUTINE void _Scheduler_Update_heir(
+  Thread_Control *new_heir,
+  bool            force_dispatch
+)
+{
+  Thread_Control *heir = _Thread_Heir;
+
+  if ( heir != new_heir && ( heir->is_preemptible || force_dispatch ) ) {
+#if defined(RTEMS_SMP)
+    /* We need this state only for _Thread_Get_CPU_time_used() */
+    _Scheduler_Thread_change_state( heir, THREAD_SCHEDULER_BLOCKED );
+    _Scheduler_Thread_change_state( new_heir, THREAD_SCHEDULER_SCHEDULED );
+#endif
+    _Thread_Update_CPU_time_used( heir, _Thread_Get_CPU( heir ) );
+    _Thread_Heir = new_heir;
+    _Thread_Dispatch_necessary = true;
+  }
+}
 
 /**
  * @brief Acquires the scheduler instance of the thread.

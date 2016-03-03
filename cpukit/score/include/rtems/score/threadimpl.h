@@ -578,36 +578,6 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_executing_on_a_processor(
 #endif
 
 /**
- * @brief Returns @a true and sets time_of_context_switch to the
- * time of the last context switch when the thread is currently executing
- * in the system, otherwise @a false.
- */
-RTEMS_INLINE_ROUTINE bool _Thread_Get_time_of_last_context_switch(
-  Thread_Control    *the_thread,
-  Timestamp_Control *time_of_context_switch
-)
-{
-  bool retval = false;
-
-  _Thread_Disable_dispatch();
-  #ifndef RTEMS_SMP
-    if ( _Thread_Executing->Object.id == the_thread->Object.id ) {
-      *time_of_context_switch = _Thread_Time_of_last_context_switch;
-      retval = true;
-    }
-  #else
-    if ( _Thread_Is_executing_on_a_processor( the_thread ) ) {
-      *time_of_context_switch =
-        _Thread_Get_CPU( the_thread )->time_of_last_context_switch;
-      retval = true;
-    }
-  #endif
-  _Thread_Enable_dispatch();
-  return retval;
-}
-
-
-/**
  * This function returns true if the_thread is the heir
  * thread, and false otherwise.
  */
@@ -803,6 +773,20 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get_heir_and_make_it_executing(
   return heir;
 }
 
+RTEMS_INLINE_ROUTINE void _Thread_Update_CPU_time_used(
+  Thread_Control  *the_thread,
+  Per_CPU_Control *cpu
+)
+{
+  Timestamp_Control last;
+  Timestamp_Control ran;
+
+  last = cpu->cpu_usage_timestamp;
+  _TOD_Get_uptime( &cpu->cpu_usage_timestamp );
+  _Timestamp_Subtract( &last, &cpu->cpu_usage_timestamp, &ran );
+  _Timestamp_Add_to( &the_thread->cpu_time_used, &ran );
+}
+
 #if defined( RTEMS_SMP )
 RTEMS_INLINE_ROUTINE void _Thread_Dispatch_update_heir(
   Per_CPU_Control *cpu_self,
@@ -810,6 +794,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_update_heir(
   Thread_Control  *heir
 )
 {
+  _Thread_Update_CPU_time_used( cpu_for_heir->heir, cpu_for_heir );
+
   cpu_for_heir->heir = heir;
 
   if ( cpu_for_heir == cpu_self ) {
@@ -820,23 +806,10 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_update_heir(
 }
 #endif
 
-RTEMS_INLINE_ROUTINE void _Thread_Update_cpu_time_used(
-  Thread_Control *executing,
-  Timestamp_Control *time_of_last_context_switch
-)
-{
-  Timestamp_Control uptime;
-  Timestamp_Control ran;
-
-  _TOD_Get_uptime( &uptime );
-  _Timestamp_Subtract(
-    time_of_last_context_switch,
-    &uptime,
-    &ran
-  );
-  *time_of_last_context_switch = uptime;
-  _Timestamp_Add_to( &executing->cpu_time_used, &ran );
-}
+void _Thread_Get_CPU_time_used(
+  Thread_Control    *the_thread,
+  Timestamp_Control *cpu_time_used
+);
 
 RTEMS_INLINE_ROUTINE void _Thread_Action_control_initialize(
   Thread_Action_control *action_control

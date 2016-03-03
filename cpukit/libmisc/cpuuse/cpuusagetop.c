@@ -218,11 +218,13 @@ static void
 task_usage(Thread_Control* thread, void* arg)
 {
   rtems_cpu_usage_data* data = (rtems_cpu_usage_data*) arg;
-  Timestamp_Control     usage = thread->cpu_time_used;
+  Timestamp_Control     usage;
   Timestamp_Control     current = data->zero;
   int                   j;
 
   data->stack_size += thread->Start.Initial_stack.size;
+
+  _Thread_Get_CPU_time_used(thread, &usage);
 
   for (j = 0; j < data->last_task_count; j++)
   {
@@ -495,25 +497,6 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
 
       usage = data->usage[i];
       current_usage = data->current_usage[i];
-
-      /*
-       * If this is the currently executing thread, account for time since
-       * the last context switch.
-       */
-      if (_Thread_Get_time_of_last_context_switch(thread, &last))
-      {
-        Timestamp_Control used;
-        Timestamp_Control now;
-
-        /*
-         * Get the current uptime and assume we are not pre-empted to
-         * measure the time from the last switch this thread and now.
-         */
-        _TOD_Get_uptime(&now);
-        _Timestamp_Subtract(&last, &now, &used);
-        _Timestamp_Add_to(&usage, &used);
-        _Timestamp_Add_to(&current_usage, &used);
-      }
 
       /*
        * Print the information

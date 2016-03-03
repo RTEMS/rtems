@@ -305,6 +305,7 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
 libscore_a_SOURCES += src/threadentryadaptoridle.c
 libscore_a_SOURCES += src/threadentryadaptornumeric.c
 libscore_a_SOURCES += src/threadentryadaptorpointer.c
+libscore_a_SOURCES += src/threadgetcputimeused.c
 libscore_a_SOURCES += src/threadglobalconstruction.c
 libscore_a_SOURCES += src/threadtimeout.c
 libscore_a_SOURCES += src/threadyield.c

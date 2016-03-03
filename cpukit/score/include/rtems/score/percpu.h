@@ -333,8 +333,17 @@ typedef struct Per_CPU_Control {
    */
   volatile bool dispatch_necessary;
 
-  /** This is the time of the last context switch on this CPU. */
-  Timestamp_Control time_of_last_context_switch;
+  /**
+   * @brief The CPU usage timestamp contains the time point of the last heir
+   * thread change or last CPU usage update of the executing thread of this
+   * processor.
+   *
+   * Protected by the scheduler lock.
+   *
+   * @see _Scheduler_Update_heir(), _Thread_Dispatch_update_heir() and
+   * _Thread_Get_CPU_time_used().
+   */
+  Timestamp_Control cpu_usage_timestamp;
 
   /**
    * @brief Watchdog state for this processor.
@@ -681,8 +690,6 @@ bool _Per_CPU_State_wait_for_non_initial_state(
   _Per_CPU_Get()->interrupt_stack_high
 #define _Thread_Dispatch_necessary \
   _Per_CPU_Get()->dispatch_necessary
-#define _Thread_Time_of_last_context_switch \
-  _Per_CPU_Get()->time_of_last_context_switch
 
 /**
  * @brief Returns the thread control block of the executing thread.

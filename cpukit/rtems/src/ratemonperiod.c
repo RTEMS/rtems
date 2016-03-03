@@ -45,74 +45,39 @@ bool _Rate_monotonic_Get_status(
   /*
    *  Determine cpu usage since period initiated.
    */
-  used = owning_thread->cpu_time_used;
+  _Thread_Get_CPU_time_used( owning_thread, &used );
 
-  if (owning_thread == _Thread_Executing) {
+  /*
+   *  The cpu usage info was reset while executing.  Can't
+   *  determine a status.
+   */
+  if ( _Timestamp_Less_than( &used, &the_period->cpu_usage_period_initiated ) )
+    return false;
 
-    Timestamp_Control ran;
-
-    /* How much time time since last context switch */
-    _Timestamp_Subtract(
-      &_Thread_Time_of_last_context_switch, &uptime, &ran
-    );
-
-    /* cpu usage += ran */
-    _Timestamp_Add_to( &used, &ran );
-
-    /*
-     *  The cpu usage info was reset while executing.  Can't
-     *  determine a status.
-     */
-    if (_Timestamp_Less_than(&used, &the_period->cpu_usage_period_initiated))
-      return false;
-
-     /* used = current cpu usage - cpu usage at start of period */
-    _Timestamp_Subtract(
-       &the_period->cpu_usage_period_initiated,
-       &used,
-       cpu_since_last_period
-    );
-  }
+   /* used = current cpu usage - cpu usage at start of period */
+  _Timestamp_Subtract(
+    &the_period->cpu_usage_period_initiated,
+    &used,
+    cpu_since_last_period
+  );
 
   return true;
 }
 
 void _Rate_monotonic_Restart( Rate_monotonic_Control *the_period )
 {
-  Thread_Control    *owning_thread = the_period->owner;
-  Timestamp_Control  uptime;
-  ISR_Level          level;
-
-  _TOD_Get_uptime( &uptime );
+  ISR_Level level;
 
   /*
    *  Set the starting point and the CPU time used for the statistics.
    */
-  the_period->time_period_initiated = uptime;
-  the_period->cpu_usage_period_initiated = owning_thread->cpu_time_used;
+  _TOD_Get_uptime( &the_period->time_period_initiated );
+  _Thread_Get_CPU_time_used(
+    the_period->owner,
+    &the_period->cpu_usage_period_initiated
+  );
 
-  /*
-   *  We need to take into account how much time the
-   *  executing thread has run since the last context switch.  When this
-   *  routine is invoked from rtems_rate_monotonic_period, the owner will
-   *  be the executing thread.  When this routine is invoked from
-   *  _Rate_monotonic_Timeout, it will not.
-   */
-  if (owning_thread == _Thread_Executing) {
-    Timestamp_Control ran;
-
-    /*
-     *  Adjust the CPU time used to account for the time since last
-     *  context switch.
-     */
-    _Timestamp_Subtract(
-      &_Thread_Time_of_last_context_switch, &uptime, &ran
-    );
-
-    _Timestamp_Add_to( &the_period->cpu_usage_period_initiated, &ran );
-  }
-
-  _Scheduler_Release_job( owning_thread, the_period->next_length );
+  _Scheduler_Release_job( the_period->owner, the_period->next_length );
 
   _ISR_Disable( level );
   _Watchdog_Per_CPU_insert_relative(

@@ -108,11 +108,6 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
     _ISR_Enable( level );
 #endif
 
-    _Thread_Update_cpu_time_used(
-      executing,
-      &cpu_self->time_of_last_context_switch
-    );
-
     _User_extensions_Thread_switch( executing, heir );
     _Thread_Save_fp( executing );
     _Context_Switch( &executing->Registers, &heir->Registers );
