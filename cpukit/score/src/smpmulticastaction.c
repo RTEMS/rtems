@@ -17,7 +17,7 @@
 
 typedef struct {
   Chain_Node Node;
-  SMP_Multicast_action_handler handler;
+  SMP_Action_handler handler;
   void *arg;
   cpu_set_t *recipients;
   size_t setsize;
@@ -94,7 +94,7 @@ _SMP_Multicast_actions_try_process( void )
 void _SMP_Multicast_action(
   const size_t setsize,
   const cpu_set_t *cpus,
-  SMP_Multicast_action_handler handler,
+  SMP_Action_handler handler,
   void *arg
 )
 {
