@@ -29,6 +29,9 @@ EXTRA_DIST += shared/include/coverhd.h
 EXTRA_DIST += shared/gdbstub/rtems-stub-glue.c
 EXTRA_DIST += shared/include/bootcard.h
 
+EXTRA_DIST += shared/pci/pci_bus_count.c
+EXTRA_DIST += shared/pci/pci_find_device.c
+
 include_bspdir = $(includedir)/bsp
 
 include_bsp_HEADERS =

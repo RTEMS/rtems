@@ -40,16 +40,23 @@ static int pcib_convert_err(int err);
 #define PCIB_DEVSIG_BUS(x) (((x)>>8) &0xff)
 #define PCIB_DEVSIG_DEV(x) (((x)>>3) & 0x1f)
 #define PCIB_DEVSIG_FUNC(x) ((x) & 0x7)
+
 /*
- * Detects presense of PCI BIOS, returns
- * error code
+ * Forward reference. Initialized at bottom.
  */
-int
-pci_initialize(void)
+static const pci_config_access_functions pci_bios_indirect_functions;
+
+/* prototype before defining */
+const pci_config_access_functions *pci_bios_initialize(void);
+
+/*
+ * Detects presense of PCI BIOS, returns pointer to accessor methods.
+ */
+const pci_config_access_functions *pci_bios_initialize(void)
 {
   unsigned char *ucp;
-  unsigned char sum;
-  int      i;
+  unsigned char  sum;
+  int            i;
 
   pcibInitialized = 0;
 
@@ -80,7 +87,7 @@ pci_initialize(void)
 
   if (ucp >= (unsigned char *)0xFFFFF) {
     /* BIOS-32 not found */
-    return PCIB_ERR_NOTPRESENT;
+    return NULL;
   }
 
   /* BIOS-32 found, let us find PCI BIOS */
@@ -102,7 +109,7 @@ pci_initialize(void)
 
   if ((pcibExchg[0] & 0xff) != 0) {
     /* Not found */
-    return PCIB_ERR_NOTPRESENT;
+    return NULL;
   }
 
   /* Found PCI entry point */
@@ -125,130 +132,18 @@ pci_initialize(void)
 
   if ((pcibExchg[0] & 0xff00) != 0) {
     /* Not found */
-    return PCIB_ERR_NOTPRESENT;
+    return NULL;
   }
 
   if (pcibExchg[3] != 0x20494350) {
     /* Signature does not match */
-    return PCIB_ERR_NOTPRESENT;
+    return NULL;
   }
 
   /* Success */
-
   pcibInitialized = 1;
-  return PCIB_ERR_SUCCESS;
-}
 
-/*
- * Find specified device and return its signature: combination
- * of bus number, device number and function number
- */
-static int
-pcib_find_by_devid(int vendorId, int devId, int idx, int *sig)
-{
-  if (!pcibInitialized) {
-    return PCIB_ERR_UNINITIALIZED;
-  }
-
-  pcibExchg[0] = pcibEntry;
-  pcibExchg[1] = vendorId;
-  pcibExchg[2] = devId;
-  pcibExchg[3] = idx;
-
-  __asm__ ("    pusha");
-  __asm__ ("    movl pcibExchg, %edi");
-  __asm__ ("    movb $0xb1, %ah");
-  __asm__ ("    movb $0x02, %al");
-  __asm__ ("    movl pcibExchg+4, %edx");
-  __asm__ ("    movl pcibExchg+8, %ecx");
-  __asm__ ("    movl pcibExchg+12, %esi");
-  __asm__ ("    pushl %cs");
-  __asm__ ("    call *%edi");
-  __asm__ ("    movl %eax, pcibExchg");
-  __asm__ ("    movl %ebx, pcibExchg+4");
-  __asm__ ("    popa");
-
-  *sig = pcibExchg[1] & 0xffff;
-
-  return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
-}
-
-int
-pci_find_device(
-  unsigned short vendorid,
-  unsigned short deviceid,
-  int instance,
-  int *pbus,
-  int *pdev,
-  int *pfun
-)
-{
-  int status;
-  int sig = 0;
-
-  status = pcib_find_by_devid( vendorid, deviceid, instance, &sig );
-
-  *pbus = PCIB_DEVSIG_BUS(sig);
-  *pdev = PCIB_DEVSIG_DEV(sig);
-  *pfun = PCIB_DEVSIG_FUNC(sig);
-  return status ? -1 : 0;
-}
-
-static uint8_t ucBusCount = 0xff;
-
-unsigned char
-pci_bus_count(void)
-{
-  if ( ucBusCount == 0xff ) {
-    unsigned char bus;
-    unsigned char dev;
-    unsigned char fun;
-    unsigned char nfn;
-    unsigned char hd = 0;
-    uint32_t d = 0;
-
-    ucBusCount = 0;
-
-    for (bus=0; bus< 0xff; bus++) {
-      for (dev=0; dev<PCI_MAX_DEVICES; dev++) {
-        pci_read_config_dword(bus, dev, fun, PCI_VENDOR_ID, &d);
-
-        if ( -1 == d ) {
-          continue;
-        }
-
-        pci_read_config_byte(bus, dev, fun, PCI_HEADER_TYPE, &hd);
-        nfn = (hd & 0x80) ? PCI_MAX_FUNCTIONS : 1;
-
-        for ( fun=0; fun<nfn; fun++ ) {
-
-          pci_read_config_dword(bus, dev, fun, PCI_VENDOR_ID, &d);
-          if ( -1 == d )
-            continue;
-
-          pci_read_config_dword(bus, dev, fun, PCI_CLASS_REVISION, &d);
-
-          if ( (d >> 16) == PCI_CLASS_BRIDGE_PCI ) {
-            pci_read_config_byte(bus, dev, fun, PCI_SUBORDINATE_BUS, &hd);
-
-            if ( hd > ucBusCount )
-              ucBusCount = hd;
-          }
-
-        }
-      }
-    }
-
-    if ( ucBusCount == 0 ) {
-      printk("pci_bus_count() found 0 busses, assuming 1\n");
-      ucBusCount = 1;
-    } else if ( ucBusCount == 0xff ) {
-      printk("pci_bus_count() found 0xff busses, assuming 1\n");
-      ucBusCount = 1;
-    }
-  }
-
-  return ucBusCount;
+  return &pci_bios_indirect_functions;
 }
 
 /*
@@ -568,17 +463,11 @@ BSP_pci_write_config_dword(
   return PCIBIOS_SUCCESSFUL;
 }
 
-const pci_config_access_functions pci_indirect_functions = {
+static const pci_config_access_functions pci_bios_indirect_functions = {
   BSP_pci_read_config_byte,
   BSP_pci_read_config_word,
   BSP_pci_read_config_dword,
   BSP_pci_write_config_byte,
   BSP_pci_write_config_word,
   BSP_pci_write_config_dword
-};
-
-rtems_pci_config_t BSP_pci_configuration = {
-  (volatile unsigned char*)0,
-  (volatile unsigned char*)0,
-  &pci_indirect_functions
 };

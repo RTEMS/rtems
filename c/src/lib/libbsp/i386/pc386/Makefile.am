@@ -141,6 +141,9 @@ libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 
 # pci
 libbsp_a_SOURCES += ../../i386/shared/pci/pcibios.c
+libbsp_a_SOURCES += ../../i386/shared/pci/pci_io.c
+libbsp_a_SOURCES += ../../shared/pci/pci_bus_count.c
+libbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
 
 include_HEADERS += ../../i386/shared/comm/uart.h
 # startup

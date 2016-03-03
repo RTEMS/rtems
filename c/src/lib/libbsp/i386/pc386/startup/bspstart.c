@@ -34,17 +34,37 @@
 #include <libcpu/cpuModel.h>
 
 /*
+ * PCI Bus Configuration
+ */
+rtems_pci_config_t BSP_pci_configuration = {
+  (volatile unsigned char*)0,
+  (volatile unsigned char*)0,
+  NULL
+};
+
+/*
  * Helper to initialize the PCI Bus
  */
 static void bsp_pci_initialize_helper(void)
 {
 #if (BSP_IS_EDISON == 0)
-  int pci_init_retval;
+  const pci_config_access_functions *pci_accessors;
 
-  pci_init_retval = pci_initialize();
-  if (pci_init_retval != PCIB_ERR_SUCCESS) {
-      printk("PCI bus: could not initialize PCI BIOS interface\n");
+  pci_accessors = pci_bios_initialize();
+  if (pci_accessors != NULL) {
+    printk("PCI bus: using PCI BIOS interface\n");
+    BSP_pci_configuration.pci_functions = pci_accessors;
+    return;
   }
+
+  pci_accessors = pci_io_initialize();
+  if (pci_accessors != NULL) {
+    printk("PCI bus: using PCI I/O interface\n");
+    BSP_pci_configuration.pci_functions = pci_accessors;
+    return;
+  }
+
+  printk("PCI bus: could not initialize PCI BIOS interface\n");
 #endif
 }
 
@@ -64,7 +84,6 @@ static void bsp_start_default( void )
   volatile uint32_t *edison_wd = (volatile uint32_t *)0xff009000;
   *edison_wd = 0x11f8;
 #endif
-
 
   /*
    * Calibrate variable for 1ms-loop (see timer.c)
