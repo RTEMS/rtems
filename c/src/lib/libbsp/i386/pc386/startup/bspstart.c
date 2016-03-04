@@ -108,6 +108,11 @@ static void bsp_start_default( void )
   bsp_pci_initialize_helper();
 
   /*
+   * Probe for UARTs on PCI. One of these may end up as the console.
+   */
+  pci_uart_probe();
+
+  /*
    * Figure out where printk() and console IO is to be directed.
    * Do this after the PCI bus is initialized so we have a chance
    * for those devices to be added to the set in the console driver.

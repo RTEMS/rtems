@@ -287,6 +287,10 @@ const pci_config_access_functions *pci_io_initialize(void);
  */
 void pc386_parse_console_arguments(void);
 
+/*
+ * Dynamically probe for PCI UARTS
+ */
+void pci_uart_probe(void);
 
 #ifdef __cplusplus
 }

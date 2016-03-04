@@ -130,6 +130,7 @@ libbsp_a_SOURCES += console/conscfg.c
 libbsp_a_SOURCES += console/printk_support.c
 libbsp_a_SOURCES += console/exar17d15x.c
 libbsp_a_SOURCES += console/rtd316.c
+libbsp_a_SOURCES += console/uart_bus_pci.c
 
 # gdb
 libbsp_a_SOURCES += ../../i386/shared/comm/i386-stub.c
