@@ -50,11 +50,11 @@ void *clock_driver_sim_idle_body(
 {
   for( ; ; ) {
     if ( clock_driver_enabled ) {
-      _Thread_Disable_dispatch();
+      Per_CPU_Control *cpu = _Thread_Dispatch_disable();
       _ISR_Nest_level++;
-	rtems_clock_tick();
+      rtems_clock_tick();
       _ISR_Nest_level--;
-      _Thread_Enable_dispatch();
+      _Thread_Dispatch_enable( cpu );
       BSP_CLOCK_DRIVER_DELAY();
     }
   }
