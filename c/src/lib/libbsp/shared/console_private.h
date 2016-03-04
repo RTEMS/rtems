@@ -29,26 +29,6 @@ extern "C" {
 extern rtems_device_minor_number  BSPPrintkPort;
 
 /**
- *  @brief bsp_com_outch
- *
- *  This function puts a character out of the console port.
- *
- *  @param[in] ch specifies the character to write
- */
-extern void bsp_com_outch(char ch);
-
-/**
- *  @brief bsp_com_inch
- *
- *  This function gets a character from the console
- *  port.
- *
- *  @return This method returns the character that
- *    was retrieved from the console port.
- */
-extern int bsp_com_inch(void);
-
-/**
  *  @brief
  *
  *  This function
