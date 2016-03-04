@@ -31,11 +31,14 @@ extern rtems_device_minor_number  BSPPrintkPort;
 /**
  *  @brief
  *
- *  This function
+ *  This function is the ioctl() support for a VGA buffer driver.
  *
- *  @return This method returns
+ *  @return This method returns 0 on success.
  */
-int vt_ioctl( unsigned int cmd, unsigned long arg);
+int vt_ioctl(
+  unsigned int cmd,
+  unsigned long arg
+);
 
 /**
  *  @brief console_initialize_data
