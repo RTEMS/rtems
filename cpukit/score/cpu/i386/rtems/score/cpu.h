@@ -499,7 +499,8 @@ uint32_t   _CPU_ISR_Get_level( void );
 
   void _CPU_SMP_Finalize_initialization( uint32_t cpu_count );
 
-  void _CPU_SMP_Prepare_start_multitasking( void );
+  /* Nothing to do */
+  #define _CPU_SMP_Prepare_start_multitasking() do { } while ( 0 )
 
   uint32_t _CPU_SMP_Get_current_processor( void );
 
