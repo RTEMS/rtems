@@ -94,14 +94,12 @@ void _POSIX_Timer_TSR( Watchdog_Control *the_watchdog );
  */
 RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Get (
   timer_t            id,
-  Objects_Locations *location,
   ISR_lock_Context  *lock_context
 )
 {
-  return (POSIX_Timer_Control *) _Objects_Get_isr_disable(
+  return (POSIX_Timer_Control *) _Objects_Get_local(
     &_POSIX_Timer_Information,
     (Objects_Id) id,
-    location,
     lock_context
   );
 }

@@ -41,40 +41,31 @@ int timer_gettime(
 )
 {
   POSIX_Timer_Control *ptimer;
-  Objects_Locations    location;
   ISR_lock_Context     lock_context;
-  Per_CPU_Control     *cpu;
   uint64_t             now;
   uint32_t             remaining;
 
   if ( !value )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  ptimer = _POSIX_Timer_Get( timerid, &location, &lock_context );
-  switch ( location ) {
+  ptimer = _POSIX_Timer_Get( timerid, &lock_context );
+  if ( ptimer != NULL ) {
+    Per_CPU_Control *cpu;
 
-    case OBJECTS_LOCAL:
+    cpu = _POSIX_Timer_Acquire_critical( ptimer, &lock_context );
+    now = cpu->Watchdog.ticks;
 
-      cpu = _POSIX_Timer_Acquire_critical( ptimer, &lock_context );
-      now = cpu->Watchdog.ticks;
+    if ( now < ptimer->Timer.expire ) {
+      remaining = (uint32_t) ( ptimer->Timer.expire - now );
+    } else {
+      remaining = 0;
+    }
 
-      if ( now < ptimer->Timer.expire ) {
-        remaining = (uint32_t) ( ptimer->Timer.expire - now );
-      } else {
-        remaining = 0;
-      }
+    _Timespec_From_ticks( remaining, &value->it_value );
+    value->it_interval = ptimer->timer_data.it_interval;
 
-      _Timespec_From_ticks( remaining, &value->it_value );
-      value->it_interval = ptimer->timer_data.it_interval;
-
-      _POSIX_Timer_Release( cpu, &lock_context );
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+    _POSIX_Timer_Release( cpu, &lock_context );
+    return 0;
   }
 
   rtems_set_errno_and_return_minus_one( EINVAL );

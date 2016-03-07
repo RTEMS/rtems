@@ -44,33 +44,25 @@ int timer_delete(
   *       because rtems_timer_delete stops the timer before deleting it.
   */
   POSIX_Timer_Control *ptimer;
-  Objects_Locations    location;
   ISR_lock_Context     lock_context;
-  Per_CPU_Control     *cpu;
 
   _Objects_Allocator_lock();
-  ptimer = _POSIX_Timer_Get( timerid, &location, &lock_context );
-  switch ( location ) {
 
-    case OBJECTS_LOCAL:
-      _Objects_Close( &_POSIX_Timer_Information, &ptimer->Object );
-      cpu = _POSIX_Timer_Acquire_critical( ptimer, &lock_context );
-      ptimer->state = POSIX_TIMER_STATE_FREE;
-      _Watchdog_Remove(
-        &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
-        &ptimer->Timer
-      );
-      _POSIX_Timer_Release( cpu, &lock_context );
-      _POSIX_Timer_Free( ptimer );
-      _Objects_Allocator_unlock();
+  ptimer = _POSIX_Timer_Get( timerid, &lock_context );
+  if ( ptimer != NULL ) {
+    Per_CPU_Control *cpu;
 
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+    _Objects_Close( &_POSIX_Timer_Information, &ptimer->Object );
+    cpu = _POSIX_Timer_Acquire_critical( ptimer, &lock_context );
+    ptimer->state = POSIX_TIMER_STATE_FREE;
+    _Watchdog_Remove(
+      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+      &ptimer->Timer
+    );
+    _POSIX_Timer_Release( cpu, &lock_context );
+    _POSIX_Timer_Free( ptimer );
+    _Objects_Allocator_unlock();
+    return 0;
   }
 
   _Objects_Allocator_unlock();

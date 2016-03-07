@@ -559,6 +559,29 @@ Objects_Control *_Objects_Get_isr_disable(
 );
 
 /**
+ * @brief Maps the specified object identifier to the associated local object
+ * control block.
+ *
+ * In this function interrupts are disabled during the object lookup.  In case
+ * an associated object exists, then interrupts remain disabled, otherwise the
+ * previous interrupt state is restored.
+ *
+ * @param information The object class information block.
+ * @param[in] id The object identifier.
+ * @param[in] lock_context The interrupt lock context.
+ *
+ * @retval NULL No associated object exists.
+ * @retval other The pointer to the associated object control block.
+ * Interrupts are now disabled and must be restored using the specified lock
+ * context via _ISR_lock_ISR_enable() or _ISR_lock_Release_and_ISR_enable().
+ */
+Objects_Control *_Objects_Get_local(
+  const Objects_Information *information,
+  Objects_Id                 id,
+  ISR_lock_Context          *lock_context
+);
+
+/**
  *  @brief  Maps object ids to object control blocks.
  *
  *  This function maps object ids to object control blocks.

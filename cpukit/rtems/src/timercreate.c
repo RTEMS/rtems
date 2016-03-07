@@ -54,46 +54,38 @@ rtems_status_code _Timer_Fire(
   Watchdog_Service_routine_entry     adaptor
 )
 {
-  Timer_Control        *the_timer;
-  Objects_Locations     location;
-  ISR_lock_Context      lock_context;
-  Per_CPU_Control      *cpu;
+  Timer_Control    *the_timer;
+  ISR_lock_Context  lock_context;
 
-  the_timer = _Timer_Get( id, &location, &lock_context );
-  switch ( location ) {
+  the_timer = _Timer_Get( id, &lock_context );
+  if ( the_timer != NULL ) {
+    Per_CPU_Control *cpu;
 
-    case OBJECTS_LOCAL:
-      cpu = _Timer_Acquire_critical( the_timer, &lock_context );
-      _Timer_Cancel( cpu, the_timer );
-      _Watchdog_Initialize( &the_timer->Ticker, adaptor );
-      the_timer->the_class = the_class;
-      the_timer->routine = routine;
-      the_timer->user_data = user_data;
-      the_timer->initial = interval;
-      the_timer->start_time = _Timer_Get_CPU_ticks( cpu );
+    cpu = _Timer_Acquire_critical( the_timer, &lock_context );
+    _Timer_Cancel( cpu, the_timer );
+    _Watchdog_Initialize( &the_timer->Ticker, adaptor );
+    the_timer->the_class = the_class;
+    the_timer->routine = routine;
+    the_timer->user_data = user_data;
+    the_timer->initial = interval;
+    the_timer->start_time = _Timer_Get_CPU_ticks( cpu );
 
-      if ( _Timer_Is_interval_class( the_class ) ) {
-        _Watchdog_Insert(
-          &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
-          &the_timer->Ticker,
-          cpu->Watchdog.ticks + interval
-        );
-      } else {
-        _Watchdog_Insert(
-          &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_ABSOLUTE ],
-          &the_timer->Ticker,
-          _Watchdog_Ticks_from_seconds( interval )
-        );
-      }
+    if ( _Timer_Is_interval_class( the_class ) ) {
+      _Watchdog_Insert(
+        &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+        &the_timer->Ticker,
+        cpu->Watchdog.ticks + interval
+      );
+    } else {
+      _Watchdog_Insert(
+        &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_ABSOLUTE ],
+        &the_timer->Ticker,
+        _Watchdog_Ticks_from_seconds( interval )
+      );
+    }
 
-      _Timer_Release( cpu, &lock_context );
-      return RTEMS_SUCCESSFUL;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:            /* should never return this */
-#endif
-    case OBJECTS_ERROR:
-      break;
+    _Timer_Release( cpu, &lock_context );
+    return RTEMS_SUCCESSFUL;
   }
 
   return RTEMS_INVALID_ID;

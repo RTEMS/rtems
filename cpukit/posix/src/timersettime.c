@@ -107,9 +107,7 @@ int timer_settime(
 )
 {
   POSIX_Timer_Control *ptimer;
-  Objects_Locations    location;
   ISR_lock_Context     lock_context;
-  Per_CPU_Control     *cpu;
   uint32_t             initial_period;
   struct itimerspec    normalize;
 
@@ -148,53 +146,47 @@ int timer_settime(
    * or start it again
    */
 
-  ptimer = _POSIX_Timer_Get( timerid, &location, &lock_context );
-  switch ( location ) {
+  ptimer = _POSIX_Timer_Get( timerid, &lock_context );
+  if ( ptimer != NULL ) {
+    Per_CPU_Control *cpu;
 
-    case OBJECTS_LOCAL:
-      cpu = _POSIX_Timer_Acquire_critical( ptimer, &lock_context );
+    cpu = _POSIX_Timer_Acquire_critical( ptimer, &lock_context );
 
-      /* Stop the timer */
-      _Watchdog_Remove(
-        &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
-        &ptimer->Timer
-      );
+    /* Stop the timer */
+    _Watchdog_Remove(
+      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+      &ptimer->Timer
+    );
 
-      /* First, it verifies if the timer must be stopped */
-      if ( normalize.it_value.tv_sec == 0 && normalize.it_value.tv_nsec == 0 ) {
-        /* The old data of the timer are returned */
-        if ( ovalue )
-          *ovalue = ptimer->timer_data;
-        /* The new data are set */
-        ptimer->timer_data = normalize;
-        /* Indicates that the timer is created and stopped */
-        ptimer->state = POSIX_TIMER_STATE_CREATE_STOP;
-        /* Returns with success */
-        _POSIX_Timer_Release( cpu, &lock_context );
-        return 0;
-      }
-
-      /* Convert from seconds and nanoseconds to ticks */
-      ptimer->ticks  = _Timespec_To_ticks( &value->it_interval );
-      initial_period = _Timespec_To_ticks( &normalize.it_value );
-
-      _POSIX_Timer_Insert( ptimer, cpu, initial_period );
-
-      /*
-       * The timer has been started and is running.  So we return the
-       * old ones in "ovalue"
-       */
+    /* First, it verifies if the timer must be stopped */
+    if ( normalize.it_value.tv_sec == 0 && normalize.it_value.tv_nsec == 0 ) {
+      /* The old data of the timer are returned */
       if ( ovalue )
         *ovalue = ptimer->timer_data;
+      /* The new data are set */
       ptimer->timer_data = normalize;
+      /* Indicates that the timer is created and stopped */
+      ptimer->state = POSIX_TIMER_STATE_CREATE_STOP;
+      /* Returns with success */
       _POSIX_Timer_Release( cpu, &lock_context );
       return 0;
+    }
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+    /* Convert from seconds and nanoseconds to ticks */
+    ptimer->ticks  = _Timespec_To_ticks( &value->it_interval );
+    initial_period = _Timespec_To_ticks( &normalize.it_value );
+
+    _POSIX_Timer_Insert( ptimer, cpu, initial_period );
+
+    /*
+     * The timer has been started and is running.  So we return the
+     * old ones in "ovalue"
+     */
+    if ( ovalue )
+      *ovalue = ptimer->timer_data;
+    ptimer->timer_data = normalize;
+    _POSIX_Timer_Release( cpu, &lock_context );
+    return 0;
   }
 
   rtems_set_errno_and_return_minus_one( EINVAL );

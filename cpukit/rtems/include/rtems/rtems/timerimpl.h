@@ -84,14 +84,12 @@ RTEMS_INLINE_ROUTINE void _Timer_Free (
 
 RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Get(
   Objects_Id         id,
-  Objects_Locations *location,
   ISR_lock_Context  *lock_context
 )
 {
-  return (Timer_Control *) _Objects_Get_isr_disable(
+  return (Timer_Control *) _Objects_Get_local(
     &_Timer_Information,
     id,
-    location,
     lock_context
   );
 }
