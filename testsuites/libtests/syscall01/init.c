@@ -91,12 +91,23 @@ static void close_task(rtems_task_argument arg)
     rtems_status_code sc;
     int rv;
 
+    sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
     rv = close(ctx->fd);
     rtems_test_assert(rv == 0);
 
     sc = rtems_event_transient_send(ctx->main_task);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
+}
+
+static void request_close(test_context *ctx)
+{
+  rtems_status_code sc;
+
+  sc = rtems_event_transient_send(ctx->close_task);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
 static void wait_for_close_task(void)
@@ -119,6 +130,8 @@ static void test_accept_and_close(test_context *ctx)
 
   rv = listen(ctx->fd, 1);
   rtems_test_assert(rv == 0);
+
+  request_close(ctx);
 
   errno = 0;
   fd = accept(ctx->fd, (struct sockaddr *) &addr, &addrlen);
@@ -146,6 +159,8 @@ static void test_connect_and_close(test_context *ctx)
   addr.sin_family = AF_INET;
   addr.sin_port = htons(1234);
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+  request_close(ctx);
 
   errno = 0;
   rv = connect(ctx->fd, (struct sockaddr *) &addr, addrlen);
@@ -178,6 +193,8 @@ static void test_recv_and_close(test_context *ctx)
 
   rv = bind(ctx->fd, (struct sockaddr *) &addr, addrlen);
   rtems_test_assert(rv == 0);
+
+  request_close(ctx);
 
   errno = 0;
   n = recv(ctx->fd, &buf[0], sizeof(buf), 0);
@@ -214,6 +231,8 @@ static void test_select_and_close(test_context *ctx)
   nfds = ctx->fd + 1;
   FD_ZERO(&set);
   FD_SET(ctx->fd, &set);
+
+  request_close(ctx);
 
   errno = 0;
   rv = select(nfds, &set, NULL, NULL, NULL);
