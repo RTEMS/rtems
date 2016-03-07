@@ -188,7 +188,7 @@ int fdt_next_subnode(const void *fdt, int offset);
 #define __fdt_set_hdr(name) \
 	static inline void fdt_set_##name(void *fdt, uint32_t val) \
 	{ \
-		struct fdt_header *fdth = (struct fdt_header*)fdt; \
+		struct fdt_header *fdth = (struct fdt_header *)fdt; \
 		fdth->name = cpu_to_fdt32(val); \
 	}
 __fdt_set_hdr(magic);
