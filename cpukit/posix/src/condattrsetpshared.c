@@ -1,12 +1,12 @@
 /**
  * @file
  *
- * @brief Initialize Condition Variable Attributes
+ * @brief Set the Process-Shared Condition Variable Attributes
  * @ingroup POSIXAPI
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2007, 2016.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,16 +20,6 @@
 
 #include <pthread.h>
 #include <errno.h>
-
-#include <rtems/system.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/posix/condimpl.h>
-#include <rtems/posix/muteximpl.h>
-
-/*
- *  11.4.1 Condition Variable Initialization Attributes,
- *            P1003.1c/Draft 10, p. 96
- */
 
 int pthread_condattr_setpshared(
   pthread_condattr_t *attr,

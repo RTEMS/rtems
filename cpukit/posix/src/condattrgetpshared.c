@@ -1,8 +1,8 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Get the Process-Shared Condition Variable Attributes
- *  @ingroup POSIXAPI
+ * @brief Get the Process-Shared Condition Variable Attributes
+ * @ingroup POSIXAPI
  */
 
 /*
@@ -22,14 +22,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/posix/condimpl.h>
-#include <rtems/posix/muteximpl.h>
 
-/**
- *  11.4.1 Condition Variable Initialization Attributes,
- *            P1003.1c/Draft 10, p. 96
- */
 int pthread_condattr_getpshared(
   const pthread_condattr_t *attr,
   int                      *pshared
