@@ -68,8 +68,7 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel
 
 # pci
 libbsp_a_SOURCES += pci/pci.c
-libbsp_a_SOURCES += pci/pcifinddevice.c
-libbsp_a_SOURCES += pci/pcilistdevices.c
+libbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
 
 #isr
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c
