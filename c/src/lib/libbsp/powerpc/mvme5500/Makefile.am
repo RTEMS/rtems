@@ -49,8 +49,10 @@ libbsp_a_SOURCES += ../../powerpc/shared/console/uart.c \
 include_bsp_HEADERS += pci/gtpcireg.h
 include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
 # pci
-libbsp_a_SOURCES += pci/pci.c pci/pci_interface.c pci/detect_host_bridge.c \
-    pci/pcifinddevice.c
+libbsp_a_SOURCES += pci/pci.c
+libbsp_a_SOURCES += pci/pci_interface.c
+libbsp_a_SOURCES += pci/detect_host_bridge.c
+libbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
 
 include_bsp_HEADERS += irq/irq.h
 # irq
