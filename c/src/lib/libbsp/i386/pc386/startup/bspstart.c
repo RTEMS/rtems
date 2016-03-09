@@ -1,32 +1,30 @@
-/*-------------------------------------------------------------------------+
-| This file contains the PC386 BSP startup package. It includes application,
-| board, and monitor specific initialization and configuration. The generic CPU
-| dependent initialization has been performed before this routine is invoked.
-+--------------------------------------------------------------------------+
-| (C) Copyright 1997 -
-| - NavIST Group - Real-Time Distributed Systems and Industrial Automation
-|
-| http://pandora.ist.utl.pt
-|
-| Instituto Superior Tecnico * Lisboa * PORTUGAL
-+--------------------------------------------------------------------------+
-| Disclaimer:
-|
-| This file is provided "AS IS" without warranty of any kind, either
-| expressed or implied.
-+--------------------------------------------------------------------------+
-| This code is based on:
-|   bspstart.c,v 1.8 1996/05/28 13:12:40 joel Exp - go32 BSP
-| With the following copyright notice:
-| **************************************************************************
-| *  COPYRIGHT (c) 1989-2008.
-| *  On-Line Applications Research Corporation (OAR).
-| *
-| *  The license and distribution terms for this file may be
-| *  found in the file LICENSE in this distribution or at
-| *  http://www.rtems.org/license/LICENSE.
-| **************************************************************************
-+--------------------------------------------------------------------------*/
+/**
+ * @file
+ *
+ * This file contains the PC386 BSP startup package. It includes application,
+ * board, and monitor specific initialization and configuration.
+ */
+
+/*
+ * This file was initially written by Joel Sherrill as part of the go32 BSP.
+ * It was subsequently adapted as part of the pc386 BSP by developers from
+ * the NavIST Group in 1997.
+ *
+ * COPYRIGHT (c) 1989-2008, 2016.
+ * On-Line Applications Research Corporation (OAR).
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ *
+ * (C) Copyright 1997 -
+ * - NavIST Group - Real-Time Distributed Systems and Industrial Automation
+ * Instituto Superior Tecnico * Lisboa * PORTUGAL (http://pandora.ist.utl.pt)
+ *
+ * NavISY Disclaimer:
+ * This file is provided "AS IS" without warranty of any kind, either
+ * expressed or implied.
+ */
 
 #include <bsp.h>
 #include <bsp/irq.h>
