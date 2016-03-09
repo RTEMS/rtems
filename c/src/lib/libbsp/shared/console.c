@@ -117,12 +117,12 @@ void console_register_devices(
    */
   Console_Port_Data = realloc(
     Console_Port_Data,
-    Console_Port_Count * sizeof(console_tbl *)
+    Console_Port_Count * sizeof(console_data)
   );
   if ( Console_Port_Data == NULL ) {
     bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_2 );
   }
-  memset(&Console_Port_Data, '\0', Console_Port_Count * sizeof(console_tbl *));
+  memset(Console_Port_Data, '\0', Console_Port_Count * sizeof(console_data));
 
   /*
    *  Now add the new devices at the end.

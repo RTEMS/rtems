@@ -1,19 +1,19 @@
-/*
- *  This file contains the libchip configuration information
- *  to instantiate the libchip driver for the VGA console
- *  and serial ports on a PC.
+/**
+ * @file
+ *
+ * This file contains the libchip configuration information
+ * to instantiate the libchip driver for the VGA console
+ * and serial ports on a PC.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2014.
+ *  COPYRIGHT (c) 1989-2014, 2016.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
  */
-
-#include <unistd.h> /* write */
 
 #include <bsp.h>
 #include <libchip/serial.h>
@@ -23,7 +23,6 @@
 #endif
 #include <bsp/irq.h>
 #include <rtems/pci.h>
-#include <bsp/rtd316.h>
 
 #if BSP_ENABLE_VGA
 #define VGA_CONSOLE_FUNCTIONS  &vgacons_fns
@@ -49,7 +48,7 @@
   static uint8_t com_get_register(uint32_t addr, uint8_t i)
   {
     register uint8_t val;
-  
+
     inport_byte( (addr + i),val );
     return val;
   }
@@ -58,6 +57,8 @@
   {
     outport_byte( (addr + i),val );
   }
+
+  extern bool pc386_com1_com4_enabled(int);
 #endif
 
 #if (BSP_IS_EDISON == 1 )
@@ -68,7 +69,7 @@ console_tbl     Console_Configuration_Ports[] = {
 #if (BSP_IS_EDISON == 1)
   {
     "/dev/vgacons",                        /* sDeviceName */
-    -1,                                     /* deviceType */
+    -1,                                    /* deviceType */
     &edison_fns,                           /* pDeviceFns */
     NULL,                                  /* deviceProbe */
     NULL,                                  /* pDeviceFlow */
@@ -112,7 +113,7 @@ console_tbl     Console_Configuration_Ports[] = {
     "/dev/com1",                           /* sDeviceName */
     SERIAL_NS16550,                        /* deviceType */
     COM_CONSOLE_FUNCTIONS,                 /* pDeviceFns */
-    NULL,                                  /* deviceProbe, assume it is there */
+    pc386_com1_com4_enabled,               /* deviceProbe */
     NULL,                                  /* pDeviceFlow */
     16,                                    /* ulMargin */
     8,                                     /* ulHysteresis */
@@ -131,7 +132,7 @@ console_tbl     Console_Configuration_Ports[] = {
     "/dev/com2",                           /* sDeviceName */
     SERIAL_NS16550,                        /* deviceType */
     COM_CONSOLE_FUNCTIONS,                 /* pDeviceFns */
-    NULL,                                  /* deviceProbe, assume it is there */
+    pc386_com1_com4_enabled,               /* deviceProbe */
     NULL,                                  /* pDeviceFlow */
     16,                                    /* ulMargin */
     8,                                     /* ulHysteresis */
@@ -151,7 +152,7 @@ console_tbl     Console_Configuration_Ports[] = {
     "/dev/com3",                           /* sDeviceName */
     SERIAL_NS16550,                        /* deviceType */
     COM_CONSOLE_FUNCTIONS,                 /* pDeviceFns */
-    NULL,                                  /* deviceProbe, assume it is there */
+    pc386_com1_com4_enabled,               /* deviceProbe */
     NULL,                                  /* pDeviceFlow */
     16,                                    /* ulMargin */
     8,                                     /* ulHysteresis */
@@ -171,7 +172,7 @@ console_tbl     Console_Configuration_Ports[] = {
     "/dev/com4",                           /* sDeviceName */
     SERIAL_NS16550,                        /* deviceType */
     COM_CONSOLE_FUNCTIONS,                 /* pDeviceFns */
-    NULL,                                  /* deviceProbe, assume it is there */
+    pc386_com1_com4_enabled,               /* deviceProbe */
     NULL,                                  /* pDeviceFlow */
     16,                                    /* ulMargin */
     8,                                     /* ulHysteresis */

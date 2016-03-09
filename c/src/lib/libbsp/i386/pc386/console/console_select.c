@@ -32,6 +32,22 @@
 #endif
 
 /*
+ * Forward prototype
+ */
+extern bool pc386_com1_com4_enabled(int);
+
+/*
+ * This method is used to determine if COM1-COM4 are enabled based upon
+ * boot command line arguments.
+ */
+static bool are_com1_com4_enabled;
+
+bool pc386_com1_com4_enabled(int minor)
+{
+  return are_com1_com4_enabled;
+}
+
+/*
  * Method to return true if the device associated with the
  * minor number probs available.
  */
@@ -101,6 +117,22 @@ static bool bsp_find_console_entry(
   }
 
   return false;
+}
+
+static void parse_com1_com4_enable(void)
+{
+  static const char *opt;
+
+  /*
+   * Check the command line to see if com1-com4 are disabled.
+   */
+  opt = bsp_cmdline_arg("--disable-com1-com4");
+  if ( opt ) {
+    printk( "Disable COM1-COM4 per boot argument\n" );
+    are_com1_com4_enabled = false;
+  } else {
+    are_com1_com4_enabled = true;
+  }
 }
 
 static bool parse_printk_or_console(
@@ -196,6 +228,11 @@ void pc386_parse_console_arguments(void)
    * before we can iterate the table of devices for names.
    */
   console_initialize_data();
+
+  /*
+   * Determine if COM1-COM4 were disabled.
+   */
+  parse_com1_com4_enable();
 
   /*
    * Assume that if only --console is specified, that printk() should
