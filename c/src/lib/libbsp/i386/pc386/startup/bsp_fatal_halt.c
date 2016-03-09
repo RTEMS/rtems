@@ -18,4 +18,7 @@ void _CPU_Fatal_halt(uint32_t source, uint32_t error)
          : "=r" ((error))
          : "0" ((error))
   );
+  #ifdef __GNUC__
+    __builtin_unreachable();
+  #endif
 }
