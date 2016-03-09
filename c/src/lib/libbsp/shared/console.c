@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2011, 2016.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -46,13 +46,28 @@ void console_initialize_data(void)
   if ( Console_Port_Tbl )
     return;
 
+  /*
+   * Allocate memory for the table of device pointers.
+   */
   Console_Port_Count = Console_Configuration_Count;
   Console_Port_Tbl   = malloc( Console_Port_Count * sizeof( console_tbl * ) );
   if (Console_Port_Tbl == NULL)
     bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_0 );
 
-  for (i=0 ; i < Console_Port_Count ; i++)
+  /*
+   * Allocate memory for the table of device specific data pointers.
+   */
+  Console_Port_Data  = calloc( Console_Port_Count, sizeof( console_data ) );
+  if ( Console_Port_Data == NULL ) {
+    bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_3 );
+  }
+
+  /*
+   * Fill in the Console Table
+   */
+  for (i=0 ; i < Console_Port_Count ; i++) {
     Console_Port_Tbl[i] = &Console_Configuration_Ports[i];
+  }
 }
 
 /*
@@ -69,10 +84,13 @@ void console_register_devices(
   int  old_number_of_ports;
   int  i;
 
+  /*
+   * Initialize the console data elements
+   */
   console_initialize_data();
 
   /*
-   *  console_initialize has been invoked so it is now too late to
+   *  console_initialize() has been invoked so it is now too late to
    *  register devices.
    */
   if ( console_initialized ) {
@@ -86,23 +104,31 @@ void console_register_devices(
   Console_Port_Count += number_of_ports;
   Console_Port_Tbl = realloc(
     Console_Port_Tbl,
-    Console_Port_Count * sizeof( console_tbl * )
+    Console_Port_Count * sizeof(console_tbl *)
   );
   if ( Console_Port_Tbl == NULL ) {
     bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_1 );
   }
 
-  Console_Port_Data  = calloc( Console_Port_Count, sizeof( console_data ) );
+  /*
+   * Since we can only add devices before console_initialize(),
+   * the data area will contain no information and must be zero
+   * before it is used. So extend the area and zero it out.
+   */
+  Console_Port_Data = realloc(
+    Console_Port_Data,
+    Console_Port_Count * sizeof(console_tbl *)
+  );
   if ( Console_Port_Data == NULL ) {
     bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_2 );
   }
+  memset(&Console_Port_Data, '\0', Console_Port_Count * sizeof(console_tbl *));
 
   /*
    *  Now add the new devices at the end.
    */
-
   for (i=0 ; i < number_of_ports ; i++) {
-    Console_Port_Tbl[old_number_of_ports + i] = &new_ports[i];
+    Console_Port_Tbl[old_number_of_ports + i]  = &new_ports[i];
   }
 }
 
@@ -249,14 +275,11 @@ rtems_device_driver console_initialize(
 
   /*
    * If we have no devices which were registered earlier then we
-   * must still initialize pointers and set Console_Port_Data.
+   * must still initialize pointers for Console_Port_Tbl and
+   * Console_Port_Data.
    */
-  if ( ! Console_Port_Tbl ) {
+  if ( !Console_Port_Tbl ) {
     console_initialize_data();
-    Console_Port_Data  = calloc( Console_Port_Count, sizeof( console_data ) );
-    if ( Console_Port_Data == NULL ) {
-      bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_3 );
-    }
   }
 
   /*
