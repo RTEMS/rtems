@@ -83,7 +83,9 @@ libposix_a_SOURCES += src/cancel.c \
 
 ## CONDITION_VARIABLE_C_FILES
 libposix_a_SOURCES += src/cond.c src/condattrdestroy.c \
-    src/condattrgetpshared.c src/condattrinit.c src/condattrsetpshared.c \
+    src/condattrinit.c  \
+    src/condattrgetpshared.c src/condattrsetpshared.c \
+    src/condattrgetclock.c src/condattrsetclock.c \
     src/condbroadcast.c src/conddefaultattributes.c src/conddestroy.c \
     src/condinit.c src/condsignal.c src/condsignalsupp.c \
     src/condtimedwait.c src/condwait.c src/condwaitsupp.c src/condget.c

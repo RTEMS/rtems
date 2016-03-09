@@ -1,0 +1,12 @@
+*** BEGIN OF TEST PSXCOND 2 ***
+pthread_condattr_getclock (NULL attribute) - EINVAL
+pthread_condattr_getclock (NULL clock) - EINVAL
+pthread_condattr_setclock (NULL attribute) - EINVAL
+pthread_condattr_init - OK
+pthread_condattr_setclock (bad clock)- EINVAL
+pthread_condattr_setclock (CLOCK_PROCESS_CPUTIME_ID)- EINVAL
+pthread_condattr_setclock (CLOCK_THREAD_CPUTIME_ID)- EINVAL
+pthread_condattr_init - OK
+pthread_condattr_setclock (CLOCK_REALTIME)- OK
+pthread_condattr_setclock (CLOCK_MONOTONIC)- OK
+*** END OF TEST PSXCOND 2 ***

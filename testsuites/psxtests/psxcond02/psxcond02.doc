@@ -1,0 +1,27 @@
+#  COPYRIGHT (c) 2016
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.org/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxcond02
+
+directives:
+
+  pthread_condattr_init
+  pthread_condcondattr_getclock
+  pthread_condcondattr_setclock
+ 
+concepts:
+
++ Verify error conditions in pthread_condattr_getclock
+
++ Verify error conditions in pthread_condattr_setclock
+
++ Verify normal paths through pthread_condattr_getclock
+
++ Verify normal paths through pthread_condattr_setclock
