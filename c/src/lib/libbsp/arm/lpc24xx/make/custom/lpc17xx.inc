@@ -9,3 +9,7 @@ RTEMS_CPU = arm
 CPU_CFLAGS = -march=armv7-m -mthumb
 
 CFLAGS_OPTIMIZE_V = -O2 -g
+CFLAGS_OPTIMIZE_V += -ffunction-sections -fdata-sections
+
+LDFLAGS = -Wl,--gc-sections
+
