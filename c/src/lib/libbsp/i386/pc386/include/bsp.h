@@ -282,6 +282,12 @@ void C_dispatch_isr(int vector);
 const pci_config_access_functions *pci_bios_initialize(void);
 const pci_config_access_functions *pci_io_initialize(void);
 
+/*
+ * Helper to parse boot command line arguments related to the console driver
+ */
+void pc386_parse_console_arguments(void);
+
+
 #ifdef __cplusplus
 }
 #endif

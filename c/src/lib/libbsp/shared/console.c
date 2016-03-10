@@ -34,12 +34,12 @@ rtems_device_minor_number   Console_Port_Minor  = 0;
 static bool                 console_initialized = false;
 
 /*
- *  console_initialize_pointers
+ *  console_initialize_data
  *
  *  This method is used to initialize the table of pointers to the
  *  serial port configuration structure entries.
  */
-static void console_initialize_pointers(void)
+void console_initialize_data(void)
 {
   int i;
 
@@ -69,7 +69,7 @@ void console_register_devices(
   int  old_number_of_ports;
   int  i;
 
-  console_initialize_pointers();
+  console_initialize_data();
 
   /*
    *  console_initialize has been invoked so it is now too late to
@@ -252,7 +252,7 @@ rtems_device_driver console_initialize(
    * must still initialize pointers and set Console_Port_Data.
    */
   if ( ! Console_Port_Tbl ) {
-    console_initialize_pointers();
+    console_initialize_data();
     Console_Port_Data  = calloc( Console_Port_Count, sizeof( console_data ) );
     if ( Console_Port_Data == NULL ) {
       bsp_fatal( BSP_FATAL_CONSOLE_NO_MEMORY_3 );

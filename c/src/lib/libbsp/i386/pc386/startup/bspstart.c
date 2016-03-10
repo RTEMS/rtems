@@ -107,6 +107,15 @@ static void bsp_start_default( void )
    */
   bsp_pci_initialize_helper();
 
+  /*
+   * Figure out where printk() and console IO is to be directed.
+   * Do this after the PCI bus is initialized so we have a chance
+   * for those devices to be added to the set in the console driver.
+   * In general, Do it as early as possible so printk() has a chance
+   * to work early on devices found via PCI probe.
+   */
+  pc386_parse_console_arguments();
+
 #if (BSP_IS_EDISON == 0)
   Clock_driver_install_handler();
 #endif

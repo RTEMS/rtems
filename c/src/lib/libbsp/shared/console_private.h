@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2011, 2016.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -56,6 +56,16 @@ extern int bsp_com_inch(void);
  *  @return This method returns
  */
 int vt_ioctl( unsigned int cmd, unsigned long arg);
+
+/**
+ *  @brief console_initialize_data
+ *
+ *  This must be called before dynamic registration of devices can occur.
+ *  It is normally called as a side-effect of @a console_initialize() but
+ *  if a probe and dynamic registration occurs before that, then this method
+ *  should be explicitly invoked.
+ */
+void console_initialize_data(void);
 
 /**
  *  @brief console_register_devices
