@@ -1,0 +1,6 @@
+#
+# The ATSAMV BSP has too little memory for some tests.
+#
+
+fileio
+pppd
