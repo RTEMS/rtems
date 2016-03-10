@@ -7,6 +7,9 @@ include $(RTEMS_ROOT)/make/custom/default.cfg
 RTEMS_CPU = arm
 
 CFLAGS_OPTIMIZE_V ?= -O2 -g
+CFLAGS_OPTIMIZE_V += -ffunction-sections -fdata-sections
+
+LDFLAGS = -Wl,--gc-sections
 
 # This defines the operations performed on the linked executable.
 # is currently required.
