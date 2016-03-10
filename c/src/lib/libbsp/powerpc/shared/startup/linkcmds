@@ -13,7 +13,7 @@ SECTIONS
 {
   .entry_point_section :
   {
-	*(.entry_point_section)
+	KEEP(*(.entry_point_section))
   } > VECTORS
 
   /*
