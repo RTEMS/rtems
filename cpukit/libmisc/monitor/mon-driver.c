@@ -69,7 +69,7 @@ rtems_monitor_driver_next(
     if (n >= _IO_Number_of_drivers)
         goto failed;
 
-    _Thread_Disable_dispatch();
+    _Objects_Allocator_lock();
 
     /*
      * dummy up a fake id and name for this item

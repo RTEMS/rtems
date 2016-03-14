@@ -318,7 +318,7 @@ rtems_monitor_symbol_next(
     if (table->sorted == 0)
         rtems_symbol_sort(table);
 
-    _Thread_Disable_dispatch();
+    _Objects_Allocator_lock();
 
     *next_id += 1;
     return (const void *) (table->addresses + n);

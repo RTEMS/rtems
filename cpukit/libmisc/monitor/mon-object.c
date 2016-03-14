@@ -262,7 +262,7 @@ rtems_monitor_object_canonical_next(
 
      if (raw_item) {
        info->canonical(canonical, raw_item);
-       _Thread_Enable_dispatch();
+       _Objects_Allocator_unlock();
      }
   }
   return next_id;

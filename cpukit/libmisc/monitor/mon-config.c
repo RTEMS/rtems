@@ -66,7 +66,7 @@ rtems_monitor_config_next(
     if (n >= 1)
         goto failed;
 
-    _Thread_Disable_dispatch();
+    _Objects_Allocator_lock();
 
     *next_id += 1;
     return (const void *) c;

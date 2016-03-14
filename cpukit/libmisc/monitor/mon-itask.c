@@ -46,7 +46,7 @@ rtems_monitor_init_task_next(
     if (n >= Configuration_RTEMS_API.number_of_initialization_tasks)
         goto failed;
 
-    _Thread_Disable_dispatch();
+    _Objects_Allocator_lock();
 
     itask = Configuration_RTEMS_API.User_initialization_tasks_table + n;
 
