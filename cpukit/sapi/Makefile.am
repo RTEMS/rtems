@@ -27,7 +27,7 @@ EXTRA_DIST = include/rtems/README
 noinst_LIBRARIES = libsapi.a
 libsapi_a_SOURCES = src/extension.c src/extensioncreate.c \
     src/extensiondelete.c src/extensionident.c src/fatal.c src/exinit.c \
-    src/exshutdown.c src/io.c src/ioclose.c src/iocontrol.c src/iodata.c \
+    src/exshutdown.c src/io.c src/ioclose.c src/iocontrol.c \
     src/ioinitialize.c src/ioopen.c src/ioread.c src/ioregisterdriver.c \
     src/iounregisterdriver.c src/iowrite.c src/posixapi.c  \
     src/getversionstring.c \

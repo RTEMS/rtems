@@ -19,10 +19,6 @@
 #ifndef _RTEMS_IO_H
 #define _RTEMS_IO_H
 
-#ifndef SAPI_IO_EXTERN
-#define SAPI_IO_EXTERN extern
-#endif
-
 #include <rtems/rtems/status.h>
 
 #ifdef __cplusplus
