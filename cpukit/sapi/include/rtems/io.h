@@ -246,19 +246,6 @@ rtems_status_code rtems_io_lookup_name(
     rtems_driver_name_t  *device_info
 ) RTEMS_DEPRECATED;
 
-extern const size_t _IO_Number_of_drivers;
-
-extern rtems_driver_address_table _IO_Driver_address_table[];
-
-extern bool _IO_All_drivers_initialized;
-
-/**
- * @brief Initialization of all device drivers.
- *
- * Initializes all device drivers.
- */
-void _IO_Initialize_all_drivers( void );
-
 #ifdef __cplusplus
 }
 #endif

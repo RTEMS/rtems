@@ -26,6 +26,7 @@
  * Include the executive's configuration
  */
 #include <rtems.h>
+#include <rtems/ioimpl.h>
 #include <rtems/sysinit.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/percpu.h>

@@ -13,6 +13,7 @@ include_rtems_HEADERS += include/rtems/extensionimpl.h
 include_rtems_HEADERS += include/rtems/fatal.h
 include_rtems_HEADERS += include/rtems/init.h
 include_rtems_HEADERS += include/rtems/io.h
+include_rtems_HEADERS += include/rtems/ioimpl.h
 include_rtems_HEADERS += include/rtems/mptables.h
 include_rtems_HEADERS += include/rtems/cbs.h
 include_rtems_HEADERS += include/rtems/profiling.h

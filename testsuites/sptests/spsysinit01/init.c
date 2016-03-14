@@ -26,6 +26,7 @@
 #include <unistd.h>
 
 #include <rtems.h>
+#include <rtems/ioimpl.h>
 #include <rtems/libio_.h>
 #include <rtems/sysinit.h>
 #include <rtems/test.h>

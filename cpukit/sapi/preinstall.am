@@ -58,6 +58,10 @@ $(PROJECT_INCLUDE)/rtems/io.h: include/rtems/io.h $(PROJECT_INCLUDE)/rtems/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/io.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/io.h
 
+$(PROJECT_INCLUDE)/rtems/ioimpl.h: include/rtems/ioimpl.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ioimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ioimpl.h
+
 $(PROJECT_INCLUDE)/rtems/mptables.h: include/rtems/mptables.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mptables.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mptables.h

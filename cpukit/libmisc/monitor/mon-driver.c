@@ -22,6 +22,7 @@
 #endif
 
 #include <rtems.h>
+#include <rtems/ioimpl.h>
 #include <rtems/monitor.h>
 
 #include <stdio.h>

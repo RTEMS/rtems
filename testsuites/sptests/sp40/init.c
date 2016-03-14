@@ -17,6 +17,8 @@
 
 #include <tmacros.h>
 
+#include <rtems/ioimpl.h>
+
 const char rtems_test_name[] = "SP 40";
 
 /* forward declarations to avoid warnings */

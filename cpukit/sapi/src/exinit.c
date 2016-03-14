@@ -23,7 +23,7 @@
 #include <rtems/config.h>
 #include <rtems/extensionimpl.h>
 #include <rtems/init.h>
-#include <rtems/io.h>
+#include <rtems/ioimpl.h>
 #include <rtems/sysinit.h>
 #include <rtems/score/sysstate.h>
 
