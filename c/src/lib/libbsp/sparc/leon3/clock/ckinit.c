@@ -41,10 +41,11 @@
 /* LEON3 Timer system interrupt number */
 static int clkirq;
 
-static bool leon3_tc_use_irqmp;
+static void (*leon3_tc_tick)(void);
 
 static rtems_timecounter_simple leon3_tc;
 
+#ifndef RTEMS_SMP
 static uint32_t leon3_tc_get(rtems_timecounter_simple *tc)
 {
   return LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].value;
@@ -53,6 +54,11 @@ static uint32_t leon3_tc_get(rtems_timecounter_simple *tc)
 static bool leon3_tc_is_pending(rtems_timecounter_simple *tc)
 {
   return LEON_Is_interrupt_pending(clkirq);
+}
+
+static void leon3_tc_at_tick( rtems_timecounter_simple *tc )
+{
+  /* Nothing to do */
 }
 
 static uint32_t leon3_tc_get_timecount(struct timecounter *tc)
@@ -64,12 +70,29 @@ static uint32_t leon3_tc_get_timecount(struct timecounter *tc)
   );
 }
 
+static void leon3_tc_tick_simple(void)
+{
+  rtems_timecounter_simple_downcounter_tick(
+    &leon3_tc,
+    leon3_tc_get,
+    leon3_tc_at_tick
+  );
+}
+#endif
+
 static uint32_t leon3_tc_get_timecount_irqmp(struct timecounter *tc)
 {
   return LEON3_IrqCtrl_Regs->timestamp[0].counter;
 }
 
-static void leon3_clock_profiling_interrupt_delay(void)
+#ifdef RTEMS_SMP
+static uint32_t leon3_tc_get_timecount_second_timer(struct timecounter *tc)
+{
+  return 0xffffffff - LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX + 1].value;
+}
+#endif
+
+static void leon3_tc_tick_irqmp_timestamp(void)
 {
 #ifdef RTEMS_PROFILING
   /*
@@ -90,7 +113,7 @@ static void leon3_clock_profiling_interrupt_delay(void)
     irqmp_ts->control |= s1_s2;
 
     _Profiling_Update_max_interrupt_delay(_Per_CPU_Get(), second - first);
-  } else if (state == 1 && leon3_irqmp_has_timestamp(irqmp_ts)) {
+  } else if (state == 1) {
     unsigned int ks = 1U << 5;
 
     state = 0;
@@ -100,25 +123,20 @@ static void leon3_clock_profiling_interrupt_delay(void)
     state = 2;
   }
 #endif
+
+  rtems_timecounter_tick();
 }
 
-static void leon3_tc_at_tick( rtems_timecounter_simple *tc )
+#ifdef RTEMS_SMP
+static void leon3_tc_tick_second_timer(void)
 {
-  leon3_clock_profiling_interrupt_delay();
+  rtems_timecounter_tick();
 }
+#endif
 
-static void leon3_tc_tick(void)
+static void leon3_tc_do_tick(void)
 {
-  if (leon3_tc_use_irqmp) {
-    leon3_clock_profiling_interrupt_delay();
-    rtems_timecounter_tick();
-  } else {
-    rtems_timecounter_simple_downcounter_tick(
-      &leon3_tc,
-      leon3_tc_get,
-      leon3_tc_at_tick
-    );
-  }
+  (*leon3_tc_tick)();
 }
 
 #define Adjust_clkirq_for_node() do { clkirq += LEON3_CLOCK_INDEX; } while(0)
@@ -183,15 +201,32 @@ static void leon3_clock_initialize(void)
     leon3_tc.tc.tc_counter_mask = 0xffffffff;
     leon3_tc.tc.tc_frequency = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev);
     leon3_tc.tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
-    leon3_tc_use_irqmp = true;
+    leon3_tc_tick = leon3_tc_tick_irqmp_timestamp;
     rtems_timecounter_install(&leon3_tc.tc);
   } else {
+#ifdef RTEMS_SMP
+    /*
+     * The GR712RC for example has no timestamp unit in the interrupt
+     * controller.  At least on SMP configurations we must use a second timer
+     * in free running mode for the timecounter.
+     */
+    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX + 1].ctrl =
+      GPTIMER_TIMER_CTRL_EN | GPTIMER_TIMER_CTRL_IE;
+    leon3_tc.tc.tc_get_timecount = leon3_tc_get_timecount_second_timer;
+    leon3_tc.tc.tc_counter_mask = 0xffffffff;
+    leon3_tc.tc.tc_frequency = LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER;
+    leon3_tc.tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+    leon3_tc_tick = leon3_tc_tick_second_timer;
+    rtems_timecounter_install(&leon3_tc.tc);
+#else
+    leon3_tc_tick = leon3_tc_tick_simple;
     rtems_timecounter_simple_install(
       &leon3_tc,
       LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER,
       rtems_configuration_get_microseconds_per_tick(),
       leon3_tc_get_timecount
     );
+#endif
   }
 }
 
@@ -204,7 +239,7 @@ static void leon3_clock_initialize(void)
     LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].ctrl = 0; \
   } while (0)
 
-#define Clock_driver_timecounter_tick() leon3_tc_tick()
+#define Clock_driver_timecounter_tick() leon3_tc_do_tick()
 
 #include "../../../shared/clockdrv_shell.h"
 
