@@ -46,9 +46,7 @@ rtems_status_code rtems_extension_create(
     return RTEMS_TOO_MANY;
   }
 
-  _Thread_Disable_dispatch();
   _User_extensions_Add_set_with_table( &the_extension->Extension, extension_table );
-  _Thread_Enable_dispatch();
 
   _Objects_Open(
     &_Extension_Information,
