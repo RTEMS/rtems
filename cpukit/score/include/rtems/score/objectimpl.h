@@ -614,7 +614,10 @@ Objects_Control *_Objects_Get_no_protection(
 );
 
 /**
- *  Like @ref _Objects_Get, but is used to find "next" open object.
+ *  Like @ref _Objects_Get, but is used to find "next" open
+ *  object.
+ *
+ *  Locks the object allocator mutex in case a next object exists.
  *
  *  @param[in] information points to an object class information block.
  *  @param[in] id is the Id of the object whose name we are locating.

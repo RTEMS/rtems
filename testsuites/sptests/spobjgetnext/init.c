@@ -54,8 +54,6 @@ int scan_objects(
       break;
     /* XXX check dispatch level with macros */
 
-    _Thread_Enable_dispatch();
-
     /* XXX should be able to check that next Id is not one we have seen */
   }
   return i;
