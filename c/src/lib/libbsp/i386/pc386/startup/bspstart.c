@@ -27,6 +27,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bspimpl.h>
 #include <bsp/irq.h>
 #include <rtems/pci.h>
 #include <libcpu/cpuModel.h>

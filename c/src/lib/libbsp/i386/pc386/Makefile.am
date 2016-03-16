@@ -25,6 +25,7 @@ noinst_PROGRAMS =
 
 SUBDIRS = . tools
 
+nodist_include_bsp_HEADERS += include/bspimpl.h
 include_bsp_HEADERS  = ../../i386/shared/irq/irq.h
 include_bsp_HEADERS += ../../i386/shared/irq/irq_asm.h
 include_bsp_HEADERS += ../../i386/shared/comm/tty_drv.h

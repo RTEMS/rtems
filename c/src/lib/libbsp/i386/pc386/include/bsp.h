@@ -59,7 +59,6 @@
 #include <rtems/clockdrv.h>
 #include <rtems/score/cpu.h>
 #include <rtems/bspIo.h>
-#include <rtems/pci.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -275,22 +274,6 @@ uint32_t BSP_irq_count_dump(FILE *f);
  */
 void raw_idt_notify(void);
 void C_dispatch_isr(int vector);
-
-/*
- * PCI Support Methods
- */
-const pci_config_access_functions *pci_bios_initialize(void);
-const pci_config_access_functions *pci_io_initialize(void);
-
-/*
- * Helper to parse boot command line arguments related to the console driver
- */
-void pc386_parse_console_arguments(void);
-
-/*
- * Dynamically probe for PCI UARTS
- */
-void pci_uart_probe(void);
 
 #ifdef __cplusplus
 }

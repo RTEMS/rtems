@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * PCI Support when Configuration Space is accessed via BIOS
+ */
+
 /*
  * This software is Copyright (C) 1998 by T.sqware - all rights limited
  * It is provided in to the public domain "as is", can be freely modified

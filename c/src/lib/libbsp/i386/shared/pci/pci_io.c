@@ -1,6 +1,21 @@
+/**
+ * @file
+ *
+ * PCI Support when Configuration Space is in I/O
+ */
+
+/*
+ *  COPYRIGHT (c) 2016.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.org/license/LICENSE.
+ */
+
 #include <rtems.h>
-#include <rtems/pci.h>
 #include <bsp.h>
+#include <bsp/bspimpl.h>
 
 static int pci_io_initialized = 0;
 
