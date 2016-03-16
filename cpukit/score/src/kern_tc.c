@@ -1411,10 +1411,16 @@ tc_windup(void)
 	 * the contents, the generation must be zero.
 	 */
 	tho = timehands;
+#if defined(RTEMS_SMP)
 	th = tho->th_next;
+#else
+	th = tho;
+#endif
 	ogen = th->th_generation;
 	tc_setgen(th, 0);
+#if defined(RTEMS_SMP)
 	bcopy(tho, th, offsetof(struct timehands, th_generation));
+#endif
 
 	/*
 	 * Capture a timecounter delta on the current timecounter and if
@@ -1552,7 +1558,9 @@ tc_windup(void)
 	}
 #endif
 
+#if defined(RTEMS_SMP)
 	timehands = th;
+#endif
 #ifndef __rtems__
 	timekeep_push_vdso();
 #endif /* __rtems__ */
