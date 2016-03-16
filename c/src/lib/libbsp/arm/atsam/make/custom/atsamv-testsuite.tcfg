@@ -3,4 +3,23 @@
 #
 
 fileio
+flashdisk01
+fsdosfsname01
+ftp01
+jffs2_fserror
+jffs2_fslink
+jffs2_fspatheval
+jffs2_fspermission
+jffs2_fsrdwr
+jffs2_fsscandir01
+jffs2_fssymlink
+jffs2_fstime
+mghttpd01
 pppd
+psxconfig01
+sp16
+sp25
+sp48
+spregion_err01
+spstkalloc02
+tmfine01
