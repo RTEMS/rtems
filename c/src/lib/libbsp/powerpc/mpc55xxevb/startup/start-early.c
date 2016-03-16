@@ -170,6 +170,33 @@ static BSP_START_TEXT_SECTION void mpc55xx_start_ebi(void)
   #endif
 }
 
+#ifdef MPC55XX_NEEDS_LOW_LEVEL_INIT
+static BSP_START_TEXT_SECTION bool
+mpc55xx_start_is_in_internal_ram(const void *addr)
+{
+  return (size_t) addr - (size_t) bsp_ram_start < (size_t) bsp_ram_size;
+}
+#endif
+
+static BSP_START_TEXT_SECTION void mpc55xx_start_clear_bss(void)
+{
+  #ifdef MPC55XX_NEEDS_LOW_LEVEL_INIT
+    if (!mpc55xx_start_is_in_internal_ram(bsp_section_sbss_begin)) {
+      bsp_start_zero(
+        bsp_section_sbss_begin,
+        (size_t) bsp_section_sbss_size
+      );
+    }
+
+    if (!mpc55xx_start_is_in_internal_ram(bsp_section_bss_begin)) {
+      bsp_start_zero(
+        bsp_section_bss_begin,
+        (size_t) bsp_section_bss_size
+      );
+    }
+  #endif
+}
+
 BSP_START_TEXT_SECTION void mpc55xx_start_early(void)
 {
   mpc55xx_start_watchdog();
@@ -185,4 +212,5 @@ BSP_START_TEXT_SECTION void mpc55xx_start_early(void)
   mpc55xx_start_siu();
   mpc55xx_start_ebi_chip_select();
   mpc55xx_start_ebi();
+  mpc55xx_start_clear_bss();
 }

@@ -80,11 +80,6 @@ void bsp_start(void)
 	null_pointer_protection();
 
 	/*
-	 * make sure BSS/SBSS is cleared
-	 */
-	memset(&bsp_section_bss_begin [0], 0, (size_t) bsp_section_bss_size);
-
-	/*
 	 * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
 	 * function store the result in global variables so that it can be used
 	 * latter...
