@@ -49,13 +49,13 @@
   {
     register uint8_t val;
 
-    inport_byte( (addr + i),val );
+    inport_byte( (addr + i), val );
     return val;
   }
 
   static void com_set_register(uint32_t addr, uint8_t i, uint8_t val)
   {
-    outport_byte( (addr + i),val );
+    outport_byte( (addr + i), val );
   }
 
   extern bool pc386_com1_com4_enabled(int);
@@ -68,7 +68,7 @@
 console_tbl     Console_Configuration_Ports[] = {
 #if (BSP_IS_EDISON == 1)
   {
-    "/dev/vgacons",                        /* sDeviceName */
+    "/dev/com1",                           /* sDeviceName */
     -1,                                    /* deviceType */
     &edison_fns,                           /* pDeviceFns */
     NULL,                                  /* deviceProbe */
