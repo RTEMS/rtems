@@ -26,8 +26,10 @@
 
 int sched_yield( void )
 {
-  _Thread_Disable_dispatch();
-    _Thread_Yield( _Thread_Executing );
-  _Thread_Enable_dispatch();
+  Per_CPU_Control *cpu_self;
+
+  cpu_self = _Thread_Dispatch_disable();
+    _Thread_Yield( _Per_CPU_Get_executing( cpu_self ) );
+  _Thread_Dispatch_enable( cpu_self );
   return 0;
 }
