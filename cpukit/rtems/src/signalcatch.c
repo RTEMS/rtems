@@ -72,21 +72,22 @@ rtems_status_code rtems_signal_catch(
   Thread_Control     *executing;
   RTEMS_API_Control  *api;
   ASR_Information    *asr;
+  ISR_lock_Context    lock_context;
 
   executing = _Thread_Get_executing();
   api = (RTEMS_API_Control*)executing->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
 
-  _Thread_Disable_dispatch(); /* cannot reschedule while */
-                              /*   the thread is inconsistent */
+  _ASR_Acquire( asr, &lock_context );
 
   if ( !_ASR_Is_null_handler( asr_handler ) ) {
     asr->mode_set = mode_set;
     asr->handler = asr_handler;
-  }
-  else
+  } else {
     _ASR_Initialize( asr );
-  _Thread_Enable_dispatch();
+  }
+
+  _ASR_Release( asr, &lock_context );
   return RTEMS_SUCCESSFUL;
 }
 
