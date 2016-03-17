@@ -236,21 +236,21 @@ check_is_executing:
         ! We may have a new heir
 
         ! Read the executing and heir
-        ld      [%g6 + PER_CPU_OFFSET_EXECUTING], %g1
-        ld      [%g6 + PER_CPU_OFFSET_HEIR], %g2
+        ld      [%g6 + PER_CPU_OFFSET_EXECUTING], %g2
+        ld      [%g6 + PER_CPU_OFFSET_HEIR], %g4
 
         ! Update the executing only if necessary to avoid cache line
         ! monopolization.
-        cmp     %g1, %g2
+        cmp     %g2, %g4
         beq     try_update_is_executing
          mov    1, %g1
 
         ! Calculate the heir context pointer
-        sub     %o1, %g1, %g1
-        add     %g1, %g2, %o1
+        sub     %o1, %g2, %g2
+        add     %g2, %g4, %o1
 
         ! Update the executing
-        st      %g2, [%g6 + PER_CPU_OFFSET_EXECUTING]
+        st      %g4, [%g6 + PER_CPU_OFFSET_EXECUTING]
 
         ba      try_update_is_executing
          mov    1, %g1
