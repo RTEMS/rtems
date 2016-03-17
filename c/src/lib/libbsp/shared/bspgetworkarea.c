@@ -1,16 +1,20 @@
+/**
+ * @file
+ *
+ * This routine is an implementation of the bsp_work_area_initialize()
+ * that can be used by all BSPs following linkcmds conventions
+ * regarding heap, stack, and workspace allocation.
+ */
+
 /*
- *  This routine is an implementation of the bsp_work_area_initialize()
- *  that can be used by all BSPs following linkcmds conventions
- *  regarding heap, stack, and workspace allocation.
+ * COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+ * Copyright (c) 2011-2012 embedded brains GmbH.
  *
- *  Copyright (c) 2011-2012 embedded brains GmbH.
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <bsp.h>
