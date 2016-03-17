@@ -324,7 +324,7 @@ SYM(start):
     /*
      * Remainder of the startup code is handled by C code
      */
-    jmp SYM(Init5235)       | Start C code (which never returns)
+    jmp SYM(Init5235)               | Start C code (which never returns)
 
 /***************************************************************************
    Function : CopyDataClearBSSAndStart
@@ -336,49 +336,48 @@ SYM(start):
 
     PUBLIC (CopyDataClearBSSAndStart)
 SYM(CopyDataClearBSSAndStart):
-    lea SYM(_data_dest_start),a0        | Get start of DATA in RAM
+    lea SYM(_data_dest_start),a0    | Get start of DATA in RAM
     lea SYM(_data_src_start),a2     | Get start of DATA in ROM
     cmpl    a0,a2                   | Are they the same?
     beq.s   NODATACOPY              | Yes, no copy necessary
     lea SYM(_data_dest_end),a1      | Get end of DATA in RAM
-    bra.s   DATACOPYLOOPTEST            | Branch into copy loop
+    bra.s   DATACOPYLOOPTEST        | Branch into copy loop
 DATACOPYLOOP:
     movel   a2@+,a0@+               | Copy word from ROM to RAM
 DATACOPYLOOPTEST:
     cmpl    a1,a0                   | Done?
-    bcs.s   DATACOPYLOOP                | No, skip
+    bcs.s   DATACOPYLOOP            | No, skip
 NODATACOPY:
 
 /* Now, clear BSS */
-        lea _clear_start,a0     | Get start of BSS
-    lea _clear_end,a1       | Get end of BSS
-    clrl    d0          | Value to set
-    bra.s   ZEROLOOPTEST        | Branch into clear loop
+    lea _clear_start,a0             | Get start of BSS
+    lea _clear_end,a1               | Get end of BSS
+    clrl    d0                      | Value to set
+    bra.s   ZEROLOOPTEST            | Branch into clear loop
 ZEROLOOP:
-    movel   d0,a0@+         | Clear a word
+    movel   d0,a0@+                 | Clear a word
 ZEROLOOPTEST:
-    cmpl    a1,a0           | Done?
-    bcs.s   ZEROLOOP        | No, skip
+    cmpl    a1,a0                   | Done?
+    bcs.s   ZEROLOOP                | No, skip
 
 
     /*
      * Right : Now we're ready to boot RTEMS
      */
-    clrl    d0          | Pass in null to all boot_card() params
-    movel   d0,a7@-         | command line
-    jsr SYM(boot_card)      | Call C boot_card function to startup RTEMS
-        movel   a7@+,d0
+    clrl    d0                      | Pass in null to all boot_card() params
+    movel   d0,a7@-                 | command line
+    jsr SYM(boot_card)              | Call C boot_card function to startup RTEMS
+    movel   a7@+,d0
 MULTI_TASK_EXIT:
-        nop
-        nop
-        trap    #14
-        bra     MULTI_TASK_EXIT
-
+    nop
+    nop
+    trap    #14
+    bra     MULTI_TASK_EXIT
+    .align 2
 END_CODE
 
-        .align 2
 BEGIN_DATA_DCL
-        .align 2
+    .align 2
     PUBLIC (_M68kSpuriousInterruptCount)
 SYM (_M68kSpuriousInterruptCount):
     .long   0
