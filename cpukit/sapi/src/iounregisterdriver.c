@@ -20,6 +20,7 @@
 #endif
 
 #include <rtems/ioimpl.h>
+#include <rtems/rtems/intr.h>
 
 #include <string.h>
 

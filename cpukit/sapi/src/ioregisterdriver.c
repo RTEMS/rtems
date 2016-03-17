@@ -22,6 +22,7 @@
 #endif
 
 #include <rtems/ioimpl.h>
+#include <rtems/rtems/intr.h>
 
 ISR_LOCK_DEFINE( , _IO_Driver_registration_lock, "IO Driver Registration" )
 
