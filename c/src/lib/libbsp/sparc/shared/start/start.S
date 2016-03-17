@@ -66,7 +66,7 @@
   mov   %wim, %l3 ; \
   sethi %hi(_handler), %l4 ; \
   jmp   %l4+%lo(_handler); \
-   mov  %g0, %wim ! WIM = 0, so that we can restore regardless of WIM
+   sll  %l3, 1, %l4 ! l4 = WIM << 1
 
 /*
  *  Software trap. Treat as BAD_TRAP for the time being...
