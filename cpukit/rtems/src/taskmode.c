@@ -112,13 +112,14 @@ rtems_status_code rtems_task_mode(
   }
 
   if ( preempt_enabled || needs_asr_dispatching ) {
-    ISR_lock_Context lock_context;
+    Per_CPU_Control  *cpu_self;
+    ISR_lock_Context  lock_context;
 
-    _Thread_Disable_dispatch();
+    cpu_self = _Thread_Dispatch_disable();
     _Scheduler_Acquire( executing, &lock_context );
     _Scheduler_Schedule( executing );
     _Scheduler_Release( executing, &lock_context );
-    _Thread_Enable_dispatch();
+    _Thread_Dispatch_enable( cpu_self );
   }
 
   return RTEMS_SUCCESSFUL;
