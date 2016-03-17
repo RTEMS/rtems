@@ -8,6 +8,7 @@
 /*
  * COPYRIGHT (c) 1989-2010.
  * On-Line Applications Research Corporation (OAR).
+ * Copyright (c) 2016 embedded brains GmbH.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -18,15 +19,9 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
-#include <limits.h>
-#include <pthread.h>
-#include <string.h>
-
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
 #include <rtems/posix/keyimpl.h>
+
+#include <errno.h>
 
 /**
  *  17.1.1 Thread-Specific Data Key Create, P1003.1c/Draft 10, p. 163
@@ -46,6 +41,7 @@ int pthread_key_create(
   }
 
   the_key->destructor = destructor;
+  _Chain_Initialize_empty( &the_key->Key_value_pairs );
   _Objects_Open_u32( &_POSIX_Keys_Information, &the_key->Object, 0 );
   *key = the_key->Object.id;
   _Objects_Allocator_unlock();

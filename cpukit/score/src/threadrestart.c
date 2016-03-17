@@ -97,6 +97,7 @@ static void _Thread_Free( Thread_Control *the_thread )
     _Objects_Get_information_id( the_thread->Object.id );
 
   _User_extensions_Thread_delete( the_thread );
+  _ISR_lock_Destroy( &the_thread->Keys.Lock );
   _Scheduler_Node_destroy( _Scheduler_Get( the_thread ), the_thread );
   _ISR_lock_Destroy( &the_thread->Timer.Lock );
 

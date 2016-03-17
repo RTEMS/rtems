@@ -9,6 +9,7 @@
  * Copyright (c) 2012 Zhongwei Yao.
  * COPYRIGHT (c) 1989-2014.
  * On-Line Applications Research Corporation (OAR).
+ * Copyright (c) 2016 embedded brains GmbH.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -23,65 +24,12 @@
 #include <rtems/sysinit.h>
 
 #include <rtems/posix/keyimpl.h>
-#include <rtems/score/chainimpl.h>
-#include <rtems/score/objectimpl.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 
 Objects_Information _POSIX_Keys_Information;
 
-RBTREE_DEFINE_EMPTY( _POSIX_Keys_Key_value_lookup_tree );
-
 Freechain_Control _POSIX_Keys_Keypool;
-
-/**
- * @brief This routine compares the rbtree node by comparing POSIX key first
- * and comparing thread id second.
- *
- * if either of the input nodes's thread_id member is 0, then it will only
- * compare the pthread_key_t member. That is when we pass thread_id = 0 node
- * as a search node, the search is done only by pthread_key_t.
- *
- * @param[in] node1 The node to be compared
- * @param[in] node2 The node to be compared
- * @retval positive if first node has higher key than second
- * @retval negative if lower
- * @retval 0 if equal,and for all the thread id is unique, then return 0 is
- * impossible
- */
-
-RBTree_Compare_result _POSIX_Keys_Key_value_compare(
-  const RBTree_Node *node1,
-  const RBTree_Node *node2
-)
-{
-  POSIX_Keys_Key_value_pair *n1;
-  POSIX_Keys_Key_value_pair *n2;
-  Thread_Control *thread1;
-  Thread_Control *thread2;
-  RBTree_Compare_result diff;
-
-  n1 = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node1 );
-  n2 = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node2 );
-
-  diff = n1->key - n2->key;
-  if ( diff )
-    return diff;
-
-  thread1 = n1->thread;
-  thread2 = n2->thread;
-
-  /*
-   * If thread1 or thread2 equals to NULL, only key1 and key2 is valued.  It
-   * enables us search node only by pthread_key_t type key.  Exploit that the
-   * thread control alignment is at least two to avoid integer overflows.
-   */
-  if ( thread1 != NULL && thread2 != NULL )
-    return (RBTree_Compare_result) ( (uintptr_t) thread1 >> 1 )
-      - (RBTree_Compare_result) ( (uintptr_t) thread2 >> 1 );
-
-  return 0;
-}
 
 static uint32_t _POSIX_Keys_Get_keypool_bump_count( void )
 {
@@ -108,7 +56,7 @@ static void _POSIX_Keys_Initialize_keypool( void )
   );
 }
 
-POSIX_Keys_Key_value_pair * _POSIX_Keys_Key_value_pair_allocate( void )
+POSIX_Keys_Key_value_pair * _POSIX_Keys_Key_value_allocate( void )
 {
   return (POSIX_Keys_Key_value_pair *) _Freechain_Get(
     &_POSIX_Keys_Keypool,
@@ -118,50 +66,48 @@ POSIX_Keys_Key_value_pair * _POSIX_Keys_Key_value_pair_allocate( void )
   );
 }
 
-static void _POSIX_Keys_Run_destructors( Thread_Control *thread )
+static void _POSIX_Keys_Run_destructors( Thread_Control *the_thread )
 {
-  Chain_Control *chain;
-  POSIX_Keys_Key_value_pair *iter, *next;
-  void *value;
-  void (*destructor) (void *);
-  POSIX_Keys_Control *the_key;
-  Objects_Locations location;
+  while ( true ) {
+    ISR_lock_Context  lock_context;
+    RBTree_Node      *node;
 
-  chain = &thread->Key_Chain;
-  iter = (POSIX_Keys_Key_value_pair *) _Chain_First( chain );
-  while ( !_Chain_Is_tail( chain, &iter->Key_values_per_thread_node ) ) {
-    next = (POSIX_Keys_Key_value_pair *)
-      _Chain_Next( &iter->Key_values_per_thread_node );
+    _Objects_Allocator_lock();
+    _POSIX_Keys_Key_value_acquire( the_thread, &lock_context );
 
-    the_key = _POSIX_Keys_Get( iter->key, &location );
-    _Assert( location == OBJECTS_LOCAL );
+    node = _RBTree_Root( &the_thread->Keys.Key_value_pairs );
+    if ( node != NULL ) {
+      POSIX_Keys_Key_value_pair *key_value_pair;
+      pthread_key_t              key;
+      void                      *value;
+      POSIX_Keys_Control        *the_key;
+      void                    ( *destructor )( void * );
 
-    /**
-     * remove key from rbtree and chain.
-     * here Chain_Node *iter can be convert to POSIX_Keys_Key_value_pair *,
-     * because Chain_Node is the first member of POSIX_Keys_Key_value_pair
-     * structure.
-     */
-    _RBTree_Extract(
-        &_POSIX_Keys_Key_value_lookup_tree,
-        &iter->Key_value_lookup_node
-    );
-    _Chain_Extract_unprotected( &iter->Key_values_per_thread_node );
+      key_value_pair = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node );
+      key = key_value_pair->key;
+      value = key_value_pair->value;
+      _RBTree_Extract(
+        &the_thread->Keys.Key_value_pairs,
+        &key_value_pair->Lookup_node
+      );
 
-    destructor = the_key->destructor;
-    value = iter->value;
+      _POSIX_Keys_Key_value_release( the_thread, &lock_context );
+      _POSIX_Keys_Key_value_free( key_value_pair );
 
-    _POSIX_Keys_Key_value_pair_free( iter );
+      the_key = _POSIX_Keys_Get( key );
+      _Assert( the_key != NULL );
+      destructor = the_key->destructor;
 
-    _Objects_Put( &the_key->Object );
+      _Objects_Allocator_unlock();
 
-    /**
-     * run key value's destructor if destructor and value are both non-null.
-     */
-    if ( destructor != NULL && value != NULL )
-      (*destructor)( value );
-
-    iter = next;
+      if ( destructor != NULL && value != NULL ) {
+        ( *destructor )( value );
+      }
+    } else {
+      _POSIX_Keys_Key_value_release( the_thread, &lock_context );
+      _Objects_Allocator_unlock();
+      break;
+    }
   }
 }
 

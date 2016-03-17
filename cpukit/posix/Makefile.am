@@ -154,7 +154,7 @@ endif
 
 ## KEY_C_FILES
 libposix_a_SOURCES += src/key.c src/keycreate.c src/keydelete.c \
-    src/keygetspecific.c src/keyfreememory.c \
+    src/keygetspecific.c \
     src/keysetspecific.c
 
 ## ONCE_C_FILES

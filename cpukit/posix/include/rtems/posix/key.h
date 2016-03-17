@@ -11,6 +11,7 @@
  * Copyright (c) 2012 Zhongwei Yao.
  * COPYRIGHT (c) 1989-2011.
  * On-Line Applications Research Corporation (OAR).
+ * Copyright (c) 2016 embedded brains GmbH.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -44,24 +45,22 @@ extern "C" {
  */
 typedef struct {
   /**
-   * @brief The chain node for the per-thread value chain.
+   * @brief The chain node for the key value pairs chain in POSIX_Keys_Control.
    */
-  Chain_Node Key_values_per_thread_node;
+  Chain_Node Key_node;
 
   /**
-   * @brief The tree node for the lookup tree.
+   * @brief The tree node for the lookup tree in Thread_Keys_information.
    */
-  RBTree_Node Key_value_lookup_node;
+  RBTree_Node Lookup_node;
 
   /**
-   * @brief The POSIX key identifier used in combination with the thread
-   * pointer as the tree key.
+   * @brief The POSIX key identifier used as the tree key.
    */
   pthread_key_t key;
 
   /**
-   * @brief The thread pointer used in combination with the POSIX key
-   * identifier as the tree key.
+   * @brief The corresponding thread.
    */
   Thread_Control *thread;
 
@@ -79,6 +78,11 @@ typedef struct {
    Objects_Control     Object;
    /** This field is the data destructor. */
    void (*destructor) (void *);
+
+   /**
+    * @brief Key value pairs of this key.
+    */
+   Chain_Control Key_value_pairs;
  }  POSIX_Keys_Control;
 
 /** @} */

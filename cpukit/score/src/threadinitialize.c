@@ -210,10 +210,9 @@ bool _Thread_Initialize(
 
   _Scheduler_Update_priority( the_thread, priority );
 
-  /*
-   * initialize thread's key vaule node chain
-   */
-  _Chain_Initialize_empty( &the_thread->Key_Chain );
+  /* POSIX Keys */
+  _RBTree_Initialize_empty( &the_thread->Keys.Key_value_pairs );
+  _ISR_lock_Initialize( &the_thread->Keys.Lock, "POSIX Key Value Pairs" );
 
   _Thread_Action_control_initialize( &the_thread->Post_switch_actions );
 

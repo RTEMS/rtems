@@ -9,6 +9,7 @@
  * Copyright (c) 2012 Zhongwei Yao.
  * COPYRIGHT (c) 1989-2007.
  * On-Line Applications Research Corporation (OAR).
+ * Copyright (c) 2016 embedded brains GmbH.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -19,15 +20,6 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
-#include <limits.h>
-#include <pthread.h>
-#include <string.h>
-
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/score/rbtree.h>
 #include <rtems/posix/keyimpl.h>
 
 /*
@@ -38,34 +30,26 @@ void *pthread_getspecific(
   pthread_key_t  key
 )
 {
-  POSIX_Keys_Control          *the_key;
-  Objects_Locations            location;
-  RBTree_Node                 *p;
-  void                        *key_data;
-  POSIX_Keys_Key_value_pair   *value_pair_p;
+  Thread_Control   *executing;
+  ISR_lock_Context  lock_context;
+  RBTree_Node      *node;
+  void             *value;
 
-  the_key = _POSIX_Keys_Get( key, &location );
-  switch ( location ) {
+  executing = _Thread_Get_executing();
+  _POSIX_Keys_Key_value_acquire( executing, &lock_context );
 
-    case OBJECTS_LOCAL:
-      p = _POSIX_Keys_Find( key, _Thread_Executing );
-      if ( p != NULL ) {
-        value_pair_p = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( p );
-        key_data = value_pair_p->value;
-      } else {
-        key_data = NULL;
-      }
+  node = _POSIX_Keys_Key_value_find( key, executing );
 
-      _Objects_Put( &the_key->Object );
+  if ( node != NULL ) {
+    POSIX_Keys_Key_value_pair *key_value_pair;
 
-      return key_data;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:   /* should never happen */
-#endif
-    case OBJECTS_ERROR:
-      break;
+    key_value_pair = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node );
+    value = key_value_pair->value;
+  } else {
+    value = NULL;
   }
 
-  return NULL;
+  _POSIX_Keys_Key_value_release( executing, &lock_context );
+
+  return value;
 }

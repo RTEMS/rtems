@@ -8,6 +8,7 @@
 /*
  * COPYRIGHT (c) 1989-2007.
  * On-Line Applications Research Corporation (OAR).
+ * Copyright (c) 2016 embedded brains GmbH.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -18,15 +19,38 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
-#include <limits.h>
-#include <pthread.h>
-#include <string.h>
-
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
 #include <rtems/posix/keyimpl.h>
+
+#include <errno.h>
+
+static void _POSIX_Keys_Destroy( POSIX_Keys_Control *the_key )
+{
+  _Objects_Close( &_POSIX_Keys_Information, &the_key->Object );
+
+  while ( true ) {
+    POSIX_Keys_Key_value_pair *key_value_pair;
+    ISR_lock_Context           lock_context;
+    Thread_Control            *the_thread;
+
+    key_value_pair = (POSIX_Keys_Key_value_pair *)
+      _Chain_Get_unprotected( &the_key->Key_value_pairs );
+    if ( key_value_pair == NULL ) {
+      break;
+    }
+
+    the_thread = key_value_pair->thread;
+    _POSIX_Keys_Key_value_acquire( the_thread, &lock_context );
+    _RBTree_Extract(
+      &the_thread->Keys.Key_value_pairs,
+      &key_value_pair->Lookup_node
+    );
+    _POSIX_Keys_Key_value_release( the_thread, &lock_context );
+
+    _POSIX_Keys_Key_value_free( key_value_pair );
+  }
+
+  _Objects_Free( &_POSIX_Keys_Information, &the_key->Object );
+}
 
 /*
  *  17.1.3 Thread-Specific Data Key Deletion, P1003.1c/Draft 10, p. 167
@@ -36,32 +60,19 @@ int pthread_key_delete(
 )
 {
   POSIX_Keys_Control *the_key;
-  Objects_Locations   location;
+  int                 eno;
 
   _Objects_Allocator_lock();
-  the_key = _POSIX_Keys_Get( key, &location );
-  switch ( location ) {
 
-    case OBJECTS_LOCAL:
-      _POSIX_Keys_Free_memory( the_key );
-
-      /*
-       *  NOTE:  The destructor is not called and it is the responsibility
-       *         of the application to free the memory.
-       */
-      _POSIX_Keys_Free( the_key );
-      _Objects_Put(&the_key->Object);
-      _Objects_Allocator_unlock();
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:   /* should never happen */
-#endif
-    case OBJECTS_ERROR:
-      break;
+  the_key = _POSIX_Keys_Get( key );
+  if ( the_key != NULL ) {
+    _POSIX_Keys_Destroy( the_key );
+    eno = 0;
+  } else {
+    eno = EINVAL;
   }
 
   _Objects_Allocator_unlock();
 
-  return EINVAL;
+  return eno;
 }

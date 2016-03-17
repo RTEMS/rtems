@@ -487,6 +487,21 @@ struct Thread_Action {
 };
 
 /**
+ * @brief Per-thread information for POSIX Keys.
+ */
+typedef struct {
+  /**
+   * @brief Key value pairs registered for this thread.
+   */
+  RBTree_Control Key_value_pairs;
+
+  /**
+   * @brief Lock to protect the tree operations.
+   */
+  ISR_LOCK_MEMBER( Lock )
+} Thread_Keys_information;
+
+/**
  * @brief Control block to manage thread actions.
  *
  * Use _Thread_Action_control_initialize() to initialize this structure.
@@ -837,13 +852,9 @@ struct _Thread_Control {
 #endif
 
   /**
-   * This is the thread key value chain's control, which is used
-   * to track all key value for specific thread, and when thread
-   * exits, we can remove all key value for specific thread by
-   * iterating this chain, or we have to search a whole rbtree,
-   * which is inefficient.
+   * @brief The POSIX Keys information.
    */
-  Chain_Control           Key_Chain;
+  Thread_Keys_information               Keys;
 
   /**
    * @brief Thread life-cycle control.

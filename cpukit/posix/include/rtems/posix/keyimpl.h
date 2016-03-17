@@ -10,6 +10,7 @@
 /*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
+ *  Copyright (c) 2016 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -41,51 +42,12 @@ extern "C" {
 extern Objects_Information _POSIX_Keys_Information;
 
 /**
- * @brief The rbtree control block used to manage all key values
- */
-extern RBTree_Control _POSIX_Keys_Key_value_lookup_tree;
-
-/**
  * @brief This freechain is used as a memory pool for POSIX_Keys_Key_value_pair.
  */
 extern Freechain_Control _POSIX_Keys_Keypool;
 
 #define POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node ) \
-  RTEMS_CONTAINER_OF( node, POSIX_Keys_Key_value_pair, Key_value_lookup_node )
-
-/**
- * @brief POSIX keys Red-Black tree node comparison.
- *
- * This routine compares the rbtree node
- */
-RBTree_Compare_result _POSIX_Keys_Key_value_compare(
-  const RBTree_Node *node1,
-  const RBTree_Node *node2
-);
-
-/**
- * @brief Free a POSIX key table memory.
- *
- * This memory frees the key table memory associated with @a the_key.
- *
- * @param[in] the_key is a pointer to the POSIX key to free
- * the table memory of.
- */
-void _POSIX_Keys_Free_memory(
-  POSIX_Keys_Control *the_key
-);
-
-/**
- * @brief Free a POSIX keys control block.
- *
- * This routine frees a keys control block to the
- * inactive chain of free keys control blocks.
- *
- * @param[in] the_key is a pointer to the POSIX key to free.
- */
-RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
-  POSIX_Keys_Control *the_key
-);
+  RTEMS_CONTAINER_OF( node, POSIX_Keys_Key_value_pair, Lookup_node )
 
 /**
  * @brief Allocate a keys control block.
@@ -105,71 +67,111 @@ RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void )
  * This routine frees a keys control block to the
  * inactive chain of free keys control blocks.
  */
-RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
+RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free(
   POSIX_Keys_Control *the_key
 )
 {
   _Objects_Free( &_POSIX_Keys_Information, &the_key->Object );
 }
 
-/**
- * @brief Get a keys control block.
- *
- * This function maps key IDs to key control blocks.
- * If ID corresponds to a local keys, then it returns
- * the_key control pointer which maps to ID and location
- * is set to OBJECTS_LOCAL.  if the keys ID is global and
- * resides on a remote node, then location is set to OBJECTS_REMOTE,
- * and the_key is undefined.  Otherwise, location is set
- * to OBJECTS_ERROR and the_key is undefined.
- */
-
-RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get (
-  pthread_key_t      id,
-  Objects_Locations *location
-)
+RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get( pthread_key_t key )
 {
-  return (POSIX_Keys_Control *)
-    _Objects_Get( &_POSIX_Keys_Information, (Objects_Id) id, location );
+  Objects_Locations location;
+
+  return (POSIX_Keys_Control *) _Objects_Get_no_protection(
+    &_POSIX_Keys_Information,
+    (Objects_Id) key,
+    &location
+  );
 }
 
-POSIX_Keys_Key_value_pair * _POSIX_Keys_Key_value_pair_allocate( void );
+RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_acquire(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_ISR_disable_and_acquire( &the_thread->Keys.Lock, lock_context );
+}
 
-RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_pair_free(
+RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_release(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Release_and_ISR_enable( &the_thread->Keys.Lock, lock_context );
+}
+
+POSIX_Keys_Key_value_pair * _POSIX_Keys_Key_value_allocate( void );
+
+RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_free(
   POSIX_Keys_Key_value_pair *key_value_pair
 )
 {
+  _Chain_Extract_unprotected( &key_value_pair->Key_node );
   _Freechain_Put( &_POSIX_Keys_Keypool, key_value_pair );
 }
 
-RTEMS_INLINE_ROUTINE RBTree_Node *_POSIX_Keys_Find(
-  pthread_key_t   key,
-  Thread_Control *thread
+RTEMS_INLINE_ROUTINE RBTree_Node *_POSIX_Keys_Key_value_find(
+  pthread_key_t     key,
+  Thread_Control   *the_thread
 )
 {
-  POSIX_Keys_Key_value_pair search_node;
+  RBTree_Node **link;
+  RBTree_Node  *parent;
 
-  search_node.key = key;
-  search_node.thread = thread;
+  link = _RBTree_Root_reference( &the_thread->Keys.Key_value_pairs );
+  parent = NULL;
 
-  return _RBTree_Find(
-    &_POSIX_Keys_Key_value_lookup_tree,
-    &search_node.Key_value_lookup_node,
-    _POSIX_Keys_Key_value_compare,
-    true
-  );
+  while ( *link != NULL ) {
+    POSIX_Keys_Key_value_pair *parent_key_value_pair;
+    pthread_key_t              parent_key;
+
+    parent = *link;
+    parent_key_value_pair = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( parent );
+    parent_key = parent_key_value_pair->key;
+
+    if ( key == parent_key ) {
+      return parent;
+    } else if ( key < parent_key ) {
+      link = _RBTree_Left_reference( parent );
+    } else {
+      link = _RBTree_Right_reference( parent );
+    }
+  }
+
+  return NULL;
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free_key_value_pair(
-  POSIX_Keys_Key_value_pair *key_value_pair
+RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_insert(
+  pthread_key_t              key,
+  POSIX_Keys_Key_value_pair *key_value_pair,
+  Thread_Control            *the_thread
 )
 {
-  _RBTree_Extract(
-    &_POSIX_Keys_Key_value_lookup_tree,
-    &key_value_pair->Key_value_lookup_node
+  RBTree_Node **link;
+  RBTree_Node  *parent;
+
+  link = _RBTree_Root_reference( &the_thread->Keys.Key_value_pairs );
+  parent = NULL;
+
+  while ( *link != NULL ) {
+    POSIX_Keys_Key_value_pair *parent_key_value_pair;
+
+    parent = *link;
+    parent_key_value_pair = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( parent );
+
+    if ( key < parent_key_value_pair->key ) {
+      link = _RBTree_Left_reference( parent );
+    } else {
+      link = _RBTree_Right_reference( parent );
+    }
+  }
+
+  _RBTree_Add_child( &key_value_pair->Lookup_node, parent, link );
+  _RBTree_Insert_color(
+    &the_thread->Keys.Key_value_pairs,
+    &key_value_pair->Lookup_node
   );
-  _Chain_Extract_unprotected( &key_value_pair->Key_values_per_thread_node );
-  _POSIX_Keys_Key_value_pair_free( key_value_pair );
 }
 
 /** @} */
