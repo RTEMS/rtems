@@ -91,7 +91,9 @@ void _Objects_MP_Open (
   the_global_object->Object.id = the_id;
   the_global_object->name      = the_name;
 
-  _Chain_Prepend(
+  _Assert( _Objects_Allocator_is_owner() );
+
+  _Chain_Prepend_unprotected(
     &information->global_table[ _Objects_Get_node( the_id ) ],
     &the_global_object->Object.Node
   );
@@ -135,6 +137,8 @@ void _Objects_MP_Close (
   Chain_Node         *the_node;
   Objects_MP_Control *the_object;
 
+  _Assert( _Objects_Allocator_is_owner() );
+
   the_chain = &information->global_table[ _Objects_Get_node( the_id ) ];
 
   for ( the_node = _Chain_First( the_chain ) ;
@@ -145,7 +149,7 @@ void _Objects_MP_Close (
 
     if ( _Objects_Are_ids_equal( the_object->Object.id, the_id ) ) {
 
-      _Chain_Extract( the_node );
+      _Chain_Extract_unprotected( the_node );
       _Objects_MP_Free_global_object( the_object );
       return;
     }
@@ -191,7 +195,7 @@ Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
     high_node = nodes_to_search;
   }
 
-  _Thread_Disable_dispatch();
+  _Objects_Allocator_lock();
 
   for ( node_index = low_node ; node_index <= high_node ; node_index++ ) {
 
@@ -211,14 +215,14 @@ Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
 
         if ( the_object->name == name_to_use ) {
           *the_id = the_object->Object.id;
-          _Thread_Enable_dispatch();
+          _Objects_Allocator_unlock();
           return OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
         }
       }
     }
   }
 
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
   return OBJECTS_INVALID_NAME;
 }
 
@@ -254,7 +258,7 @@ void _Objects_MP_Is_remote (
     return;
   }
 
-  _Thread_Disable_dispatch();
+  _Objects_Allocator_lock();
 
   the_chain = &information->global_table[ node ];
 
@@ -272,7 +276,7 @@ void _Objects_MP_Is_remote (
     }
   }
 
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
   *location   = OBJECTS_ERROR;
   *the_object = NULL;
 
