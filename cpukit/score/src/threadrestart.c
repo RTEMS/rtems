@@ -97,11 +97,8 @@ static void _Thread_Free( Thread_Control *the_thread )
     _Objects_Get_information_id( the_thread->Object.id );
 
   _User_extensions_Thread_delete( the_thread );
-
-  /*
-   * Free the per-thread scheduling information.
-   */
   _Scheduler_Node_destroy( _Scheduler_Get( the_thread ), the_thread );
+  _ISR_lock_Destroy( &the_thread->Timer.Lock );
 
   /*
    *  The thread might have been FP.  So deal with that.
