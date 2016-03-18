@@ -237,16 +237,19 @@ uint32_t   _MPCI_Send_request_packet (
   uint32_t            timeout_code
 )
 {
-  Thread_Control *executing = _Thread_Executing;
+  Per_CPU_Control *cpu_self;
+  Thread_Control  *executing;
 
-  the_packet->source_tid      = executing->Object.id;
-  the_packet->source_priority = executing->current_priority;
-  the_packet->to_convert =
-     ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) / sizeof(uint32_t);
+  cpu_self = _Thread_Dispatch_disable();
 
-  executing->Wait.id = the_packet->id;
+    executing = _Per_CPU_Get_executing( cpu_self );
 
-  _Thread_Disable_dispatch();
+    the_packet->source_tid      = executing->Object.id;
+    the_packet->source_priority = executing->current_priority;
+    the_packet->to_convert =
+       ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) / sizeof(uint32_t);
+
+    executing->Wait.id = the_packet->id;
 
     (*_MPCI_table->send_packet)( destination, the_packet );
 
@@ -265,7 +268,7 @@ uint32_t   _MPCI_Send_request_packet (
       timeout_code
     );
 
-  _Thread_Enable_dispatch();
+  _Thread_Dispatch_enable( cpu_self );
 
   return executing->Wait.return_code;
 }
