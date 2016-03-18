@@ -197,8 +197,10 @@ _start:
 	isync
 #endif
 
-	/* Set small-data anchors */
-	LA	r2, _SDA2_BASE_
+	/* Invalidate TLS anchor */
+	li	r2, 0
+
+	/* Set small-data anchor */
 	LA	r13, _SDA_BASE_
 
 	blr
