@@ -8,7 +8,7 @@ include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
-AM_CXXFLAGS += -std=c++11 -ftls-model=local-exec
+AM_CXXFLAGS += -std=gnu++11 -ftls-model=local-exec
 
 LINK_OBJS = $(sptls02_OBJECTS)
 LINK_LIBS = $(sptls02_LDLIBS)
