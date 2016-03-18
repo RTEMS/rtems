@@ -67,11 +67,10 @@ mqd_t mq_open(
   va_list                         arg;
   struct mq_attr                 *attr = NULL;
   int                             status;
-  Objects_Id                      the_mq_id;
   POSIX_Message_queue_Control    *the_mq;
   POSIX_Message_queue_Control_fd *the_mq_fd;
-  Objects_Locations               location;
   size_t                          name_len;
+  Objects_Get_by_name_error       error;
 
   if ( oflag & O_CREAT ) {
     va_start(arg, oflag);
@@ -87,7 +86,7 @@ mqd_t mq_open(
   }
   the_mq_fd->oflag = oflag;
 
-  status = _POSIX_Message_queue_Name_to_id( name, &the_mq_id, &name_len );
+  the_mq = _POSIX_Message_queue_Get_by_name( name, &name_len, &error );
 
   /*
    *  If the name to id translation worked, then the message queue exists
@@ -95,15 +94,18 @@ mqd_t mq_open(
    *  need to check to see if this is a "message queue does not exist"
    *  or some other miscellaneous error on the name.
    */
-  if ( status ) {
+  if ( the_mq == NULL ) {
     /*
      * Unless provided a valid name that did not already exist
      * and we are willing to create then it is an error.
      */
-    if ( !( status == ENOENT && (oflag & O_CREAT) ) ) {
+    if ( !( error == OBJECTS_GET_BY_NAME_NO_OBJECT && (oflag & O_CREAT) ) ) {
       _POSIX_Message_queue_Free_fd( the_mq_fd );
       _Objects_Allocator_unlock();
-      rtems_set_errno_and_return_value( status, MQ_OPEN_FAILED );
+      rtems_set_errno_and_return_value(
+        _POSIX_Get_by_name_error( error ),
+        MQ_OPEN_FAILED
+      );
     }
 
   } else {                /* name -> ID translation succeeded */
@@ -120,7 +122,6 @@ mqd_t mq_open(
      * In this case we need to do an ID->pointer conversion to
      * check the mode.
      */
-    the_mq = _POSIX_Message_queue_Get( the_mq_id, &location );
     the_mq->open_count += 1;
     the_mq_fd->Queue = the_mq;
     _Objects_Open_string(
@@ -128,7 +129,6 @@ mqd_t mq_open(
       &the_mq_fd->Object,
       NULL
     );
-    _Thread_Enable_dispatch();
     _Objects_Allocator_unlock();
     return the_mq_fd->Object.id;
 
@@ -149,7 +149,7 @@ mqd_t mq_open(
   /*
    * errno was set by Create_support, so don't set it again.
    */
-  if ( status == -1 ) {
+  if ( status != 0 ) {
     _POSIX_Message_queue_Free_fd( the_mq_fd );
     _Objects_Allocator_unlock();
     return MQ_OPEN_FAILED;

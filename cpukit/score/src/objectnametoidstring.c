@@ -23,40 +23,53 @@
 #include <string.h>
 
 #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
-Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
-  Objects_Information *information,
-  const char          *name,
-  Objects_Id          *id
+Objects_Control *_Objects_Get_by_name(
+  const Objects_Information *information,
+  const char                *name,
+  size_t                    *name_length_p,
+  Objects_Get_by_name_error *error
 )
 {
-  Objects_Control           *the_object;
-  uint32_t                   index;
+  size_t   name_length;
+  size_t   max_name_length;
+  uint32_t index;
 
-  /* ASSERT: information->is_string == true */
+  _Assert( information->is_string );
+  _Assert( _Objects_Allocator_is_owner() );
 
-  if ( !id )
-    return OBJECTS_INVALID_ADDRESS;
+  if ( name == NULL ) {
+    *error = OBJECTS_GET_BY_NAME_INVALID_NAME;
+    return NULL;
+  }
 
-  if ( !name )
-    return OBJECTS_INVALID_NAME;
+  name_length = strnlen( name, information->name_length + 1 );
+  max_name_length = information->name_length;
+  if ( name_length > max_name_length ) {
+    *error = OBJECTS_GET_BY_NAME_NAME_TOO_LONG;
+    return NULL;
+  }
 
-  if ( information->maximum != 0 ) {
+  if ( name_length_p != NULL ) {
+    *name_length_p = name_length;
+  }
 
-    for ( index = 1; index <= information->maximum; index++ ) {
-      the_object = information->local_table[ index ];
-      if ( !the_object )
-        continue;
+  for ( index = 1; index <= information->maximum; index++ ) {
+    Objects_Control *the_object;
 
-      if ( !the_object->name.name_p )
-        continue;
+    the_object = information->local_table[ index ];
 
-      if (!strncmp( name, the_object->name.name_p, information->name_length)) {
-        *id = the_object->id;
-        return OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
-      }
+    if ( the_object == NULL )
+      continue;
+
+    if ( the_object->name.name_p == NULL )
+      continue;
+
+    if ( strncmp( name, the_object->name.name_p, max_name_length ) == 0 ) {
+      return the_object;
     }
   }
 
-  return OBJECTS_INVALID_NAME;
+  *error = OBJECTS_GET_BY_NAME_NO_OBJECT;
+  return NULL;
 }
 #endif

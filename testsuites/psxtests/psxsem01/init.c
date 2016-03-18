@@ -279,10 +279,10 @@ void *POSIX_Init(
   fatal_posix_service_status( status, -1, "sem_unlink error return status");
   fatal_posix_service_status( errno, EINVAL, "sem_unlink errno value");
 
-  puts( "Init: sem_unlink (\"\") - EINVAL" );
+  puts( "Init: sem_unlink (\"\") - ENOENT" );
   status = sem_unlink( "" );
   fatal_posix_service_status( status, -1, "sem_unlink error return status");
-  fatal_posix_service_status( errno, EINVAL, "sem_unlink errno value");
+  fatal_posix_service_status( errno, ENOENT, "sem_unlink errno value");
 
   /*
    * XXX - Cant' create location OBJECTS_ERROR or OBJECTS_REMOTE.

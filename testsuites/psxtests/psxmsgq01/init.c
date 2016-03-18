@@ -378,13 +378,13 @@ void validate_mq_unlink_error_codes(void)
   fatal_posix_service_status( errno, EINVAL, "mq_unlink errno value");
 
   /*
-   *  EINVAL - Unlink a queue with a null name
+   *  ENOENT - Unlink a queue with a zero length name
    */
 
-  puts( "Init: mq_unlink (\"\") - EINVAL" );
+  puts( "Init: mq_unlink (\"\") - ENOENT" );
   status = mq_unlink( "" );
   fatal_posix_service_status( status, -1, "mq_unlink error return status");
-  fatal_posix_service_status( errno, EINVAL, "mq_unlink errno value");
+  fatal_posix_service_status( errno, ENOENT, "mq_unlink errno value");
 }
 
 void validate_mq_close_error_codes(void)

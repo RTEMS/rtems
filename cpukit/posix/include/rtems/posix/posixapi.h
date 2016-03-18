@@ -20,6 +20,7 @@
 #define _RTEMS_POSIX_POSIXAPI_H
 
 #include <rtems/config.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/objectimpl.h>
 
 /**
@@ -48,27 +49,15 @@ typedef enum {
  */
 void _POSIX_Fatal_error( POSIX_Fatal_domain domain, int eno );
 
-/**
- * @brief Queries the object identifier @a id for a @a name.
- *
- * @param[in] information Object information.
- * @param[in] name Zero terminated name string to look up.
- * @param[out] id Pointer for identifier.  The pointer must be valid.
- * @param[out] len Pointer for string length.  The pointer must be valid.
- *
- * @retval 0 Successful operation.
- * @retval EINVAL The @a name pointer is @c NULL or the @a name string has
- * zero length.
- * @retval ENAMETOOLONG The @a name string length is greater than or equal to
- * @c NAME_MAX.
- * @retval ENOENT Found no corresponding identifier.
- */
-int _POSIX_Name_to_id(
-  Objects_Information *information,
-  const char          *name,
-  Objects_Id          *id,
-  size_t              *len
-);
+extern const int _POSIX_Get_by_name_error_table[ 3 ];
+
+RTEMS_INLINE_ROUTINE int _POSIX_Get_by_name_error(
+  Objects_Get_by_name_error error
+)
+{
+  _Assert( (size_t) error < RTEMS_ARRAY_SIZE( _POSIX_Get_by_name_error_table ) );
+  return _POSIX_Get_by_name_error_table[ error ];
+}
 
 /** @} */
 

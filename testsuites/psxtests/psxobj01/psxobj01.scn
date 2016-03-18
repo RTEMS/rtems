@@ -1,7 +1,6 @@
-*** POSIX OBJECT TEST 1 ***
-INIT - _Objects_Name_to_id_string - NULL name
-INIT - _Objects_Name_to_id_string - NULL ID
-INIT - _Objects_Name_to_id_string - name of non-existent object
+*** BEGIN OF TEST PSXOBJ 1 ***
+INIT - _Objects_Get_by_name - NULL name
+INIT - _Objects_Get_by_name - name too long
+INIT - _Objects_Get_by_name - name of non-existent object
 INIT - _Objects_Set_name fails - out of memory
-Allocate_majority_of_workspace: 
-*** END OF POSIX OBJECT TEST 1 ***
+*** END OF TEST PSXOBJ 1 ***

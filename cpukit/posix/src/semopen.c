@@ -60,10 +60,9 @@ sem_t *sem_open(
   va_list                    arg;
   unsigned int               value = 0;
   int                        status;
-  Objects_Id                 the_semaphore_id;
   POSIX_Semaphore_Control   *the_semaphore;
-  Objects_Locations          location;
   size_t                     name_len;
+  Objects_Get_by_name_error  error;
 
   if ( oflag & O_CREAT ) {
     va_start(arg, oflag);
@@ -73,7 +72,7 @@ sem_t *sem_open(
   }
 
   _Objects_Allocator_lock();
-  status = _POSIX_Semaphore_Name_to_id( name, &the_semaphore_id, &name_len );
+  the_semaphore = _POSIX_Semaphore_Get_by_name( name, &name_len, &error );
 
   /*
    *  If the name to id translation worked, then the semaphore exists
@@ -82,16 +81,19 @@ sem_t *sem_open(
    *  or some other miscellaneous error on the name.
    */
 
-  if ( status ) {
+  if ( the_semaphore == NULL ) {
 
     /*
      * Unless provided a valid name that did not already exist
      * and we are willing to create then it is an error.
      */
 
-    if ( !( status == ENOENT && (oflag & O_CREAT) ) ) {
+    if ( !( error == OBJECTS_GET_BY_NAME_NO_OBJECT && (oflag & O_CREAT) ) ) {
       _Objects_Allocator_unlock();
-      rtems_set_errno_and_return_value( status, SEM_FAILED );
+      rtems_set_errno_and_return_value(
+        _POSIX_Get_by_name_error( error ),
+        SEM_FAILED
+      );
     }
   } else {
 
@@ -104,9 +106,7 @@ sem_t *sem_open(
       rtems_set_errno_and_return_value( EEXIST, SEM_FAILED );
     }
 
-    the_semaphore = _POSIX_Semaphore_Get( (sem_t *) &the_semaphore_id, &location );
     the_semaphore->open_count += 1;
-    _Thread_Enable_dispatch();
     _Objects_Allocator_unlock();
     goto return_id;
   }
@@ -130,7 +130,7 @@ sem_t *sem_open(
 
   _Objects_Allocator_unlock();
 
-  if ( status == -1 )
+  if ( status != 0 )
     return SEM_FAILED;
 
 return_id:

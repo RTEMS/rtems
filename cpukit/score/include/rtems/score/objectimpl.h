@@ -448,25 +448,31 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
 );
 
 #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
+typedef enum {
+  OBJECTS_GET_BY_NAME_INVALID_NAME,
+  OBJECTS_GET_BY_NAME_NAME_TOO_LONG,
+  OBJECTS_GET_BY_NAME_NO_OBJECT
+} Objects_Get_by_name_error;
+
 /**
- *  @brief Converts an object name to an Id.
+ * @brief Gets an object control block identified by its name.
  *
- *  This method converts an object name to an Id.  It performs a look up
- *  using the object information block for this object class.
+ * The object information must use string names.
  *
- *  @param[in] information points to an object class information block.
- *  @param[in] name is the name of the object to find.
- *  @param[in] id will contain the Id if the search is successful.
+ * @param information The object information.  Must not be NULL.
+ * @param name The object name.
+ * @param name_length_p Optional parameter to return the name length.
+ * @param error The error indication in case of failure.  Must not be NULL.
  *
- *  @retval This method returns one of the values from the
- *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
- *          successful or failure.  On success @a id will contain the Id of
- *          the requested object.
+ * @retval NULL No object exists for this name or invalid parameters.
+ * @retval other The first object according to object index associated with
+ * this name.
  */
-Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
-  Objects_Information *information,
-  const char          *name,
-  Objects_Id          *id
+Objects_Control *_Objects_Get_by_name(
+  const Objects_Information *information,
+  const char                *name,
+  size_t                    *name_length_p,
+  Objects_Get_by_name_error *error
 );
 #endif
 
@@ -1052,6 +1058,11 @@ RTEMS_INLINE_ROUTINE void _Objects_Allocator_lock( void )
 RTEMS_INLINE_ROUTINE void _Objects_Allocator_unlock( void )
 {
   _RTEMS_Unlock_allocator();
+}
+
+RTEMS_INLINE_ROUTINE bool _Objects_Allocator_is_owner( void )
+{
+  return _RTEMS_Allocator_is_owner();
 }
 
 /** @} */

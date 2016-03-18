@@ -163,17 +163,19 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Namespace_remove (
   _Objects_Namespace_remove( 
     &_POSIX_Semaphore_Information, &the_semaphore->Object );
 }
- 
-/**
- * @see _POSIX_Name_to_id().
- */
-RTEMS_INLINE_ROUTINE int _POSIX_Semaphore_Name_to_id(
-  const char *name,
-  Objects_Id *id,
-  size_t     *len
+
+RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get_by_name(
+  const char                *name,
+  size_t                    *name_length_p,
+  Objects_Get_by_name_error *error
 )
 {
-  return _POSIX_Name_to_id( &_POSIX_Semaphore_Information, name, id, len );
+  return (POSIX_Semaphore_Control *) _Objects_Get_by_name(
+    &_POSIX_Semaphore_Information,
+    name,
+    name_length_p,
+    error
+  );
 }
 
 #ifdef __cplusplus

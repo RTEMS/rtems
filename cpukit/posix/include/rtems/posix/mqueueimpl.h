@@ -246,17 +246,20 @@ _POSIX_Message_queue_Get_fd_interrupt_disable(
     lock_context
   );
 }
- 
-/**
- * @see _POSIX_Name_to_id().
- */
-RTEMS_INLINE_ROUTINE int _POSIX_Message_queue_Name_to_id(
-  const char          *name,
-  Objects_Id          *id,
-  size_t              *len
+
+RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *
+_POSIX_Message_queue_Get_by_name(
+  const char                *name,
+  size_t                    *name_length_p,
+  Objects_Get_by_name_error *error
 )
 {
-  return _POSIX_Name_to_id( &_POSIX_Message_queue_Information, name, id, len );
+  return (POSIX_Message_queue_Control *) _Objects_Get_by_name(
+    &_POSIX_Message_queue_Information,
+    name,
+    name_length_p,
+    error
+  );
 }
 
 #ifdef __cplusplus
