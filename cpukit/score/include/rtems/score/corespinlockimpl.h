@@ -22,6 +22,8 @@
 #include <rtems/score/corespinlock.h>
 #include <rtems/score/watchdog.h>
 
+#include <string.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -78,12 +80,29 @@ typedef enum {
  *  This routine initializes the spinlock based on the parameters passed.
  *
  *  @param[in] the_spinlock is the spinlock control block to initialize
- *  @param[in] the_spinlock_attributes define the behavior of this instance
  */
-void _CORE_spinlock_Initialize(
-  CORE_spinlock_Control       *the_spinlock,
-  CORE_spinlock_Attributes    *the_spinlock_attributes
-);
+RTEMS_INLINE_ROUTINE void _CORE_spinlock_Initialize(
+  CORE_spinlock_Control *the_spinlock
+)
+{
+  memset( the_spinlock, 0, sizeof( *the_spinlock ) );
+}
+
+RTEMS_INLINE_ROUTINE void _CORE_spinlock_Acquire_critical(
+  CORE_spinlock_Control *the_spinlock,
+  ISR_lock_Context      *lock_context
+)
+{
+  _ISR_lock_Acquire( &the_spinlock->Lock, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _CORE_spinlock_Release(
+  CORE_spinlock_Control *the_spinlock,
+  ISR_lock_Context      *lock_context
+)
+{
+  _ISR_lock_Release_and_ISR_enable( &the_spinlock->Lock, lock_context );
+}
 
 /**
  *  @brief Wait for spinlock.
@@ -100,10 +119,11 @@ void _CORE_spinlock_Initialize(
  * @retval A status is returned which indicates the success or failure of
  *         this operation.
  */
-CORE_spinlock_Status _CORE_spinlock_Wait(
-  CORE_spinlock_Control  *the_spinlock,
-  bool                    wait,
-  Watchdog_Interval       timeout
+CORE_spinlock_Status _CORE_spinlock_Seize(
+  CORE_spinlock_Control *the_spinlock,
+  bool                   wait,
+  Watchdog_Interval      timeout,
+  ISR_lock_Context      *lock_context
 );
 
 /**
@@ -114,21 +134,10 @@ CORE_spinlock_Status _CORE_spinlock_Wait(
  *
  *  @param[in] the_spinlock is the spinlock to surrender
  */
-CORE_spinlock_Status _CORE_spinlock_Release(
-  CORE_spinlock_Control *the_spinlock
+CORE_spinlock_Status _CORE_spinlock_Surrender(
+  CORE_spinlock_Control *the_spinlock,
+  ISR_lock_Context      *lock_context
 );
-
-/**
- * This method is used to initialize core spinlock attributes.
- *
- * @param[in] the_attributes pointer to the attributes to initialize.
- */
-RTEMS_INLINE_ROUTINE void _CORE_spinlock_Initialize_attributes(
-  CORE_spinlock_Attributes *the_attributes
-)
-{
-  the_attributes->XXX = 0;
-}
 
 /**
  * This method is used to determine if the spinlock is available or not.

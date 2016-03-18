@@ -194,7 +194,7 @@ libscore_a_SOURCES += src/coresem.c
 
 ## CORE_SPINLOCK_C_FILES
 if HAS_PTHREADS
-libscore_a_SOURCES += src/corespinlock.c src/corespinlockrelease.c \
+libscore_a_SOURCES += src/corespinlockrelease.c \
     src/corespinlockwait.c
 endif
 

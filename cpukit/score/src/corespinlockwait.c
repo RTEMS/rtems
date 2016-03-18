@@ -18,48 +18,36 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/corespinlockimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threaddispatch.h>
+#include <rtems/score/percpu.h>
 
-/*
- *  _CORE_spinlock_Wait
- *
- *  This function waits for the spinlock to become available.  Optionally,
- *  a limit may be placed on the duration of the spin.
- *
- *  Input parameters:
- *    the_spinlock - the spinlock control block to initialize
- *    wait         - true if willing to wait
- *    timeout      - the maximum number of ticks to spin (0 is forever)
- *
- *  Output parameters:  NONE
- */
-
-CORE_spinlock_Status _CORE_spinlock_Wait(
-  CORE_spinlock_Control  *the_spinlock,
-  bool                    wait,
-  Watchdog_Interval       timeout
+CORE_spinlock_Status _CORE_spinlock_Seize(
+  CORE_spinlock_Control *the_spinlock,
+  bool                   wait,
+  Watchdog_Interval      timeout,
+  ISR_lock_Context      *lock_context
 )
 {
-  ISR_Level level;
+  Thread_Control *executing;
+
   #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
     Watchdog_Interval       limit = _Watchdog_Ticks_since_boot + timeout;
   #endif
 
-  _ISR_Disable( level );
-    if ( (the_spinlock->lock == CORE_SPINLOCK_LOCKED) &&
-         (the_spinlock->holder == _Thread_Executing->Object.id) ) {
-      _ISR_Enable( level );
+  executing = _Thread_Executing;
+
+  _CORE_spinlock_Acquire_critical( the_spinlock, lock_context );
+    if ( the_spinlock->lock == CORE_SPINLOCK_LOCKED &&
+         the_spinlock->holder == executing ) {
+      _CORE_spinlock_Release( the_spinlock, lock_context );
       return CORE_SPINLOCK_HOLDER_RELOCKING;
     }
     the_spinlock->users += 1;
     for ( ;; ) {
       if ( the_spinlock->lock == CORE_SPINLOCK_UNLOCKED ) {
         the_spinlock->lock = CORE_SPINLOCK_LOCKED;
-        the_spinlock->holder = _Thread_Executing->Object.id;
-        _ISR_Enable( level );
+        the_spinlock->holder = executing;
+        _CORE_spinlock_Release( the_spinlock, lock_context );
         return CORE_SPINLOCK_SUCCESSFUL;
       }
 
@@ -68,7 +56,7 @@ CORE_spinlock_Status _CORE_spinlock_Wait(
        */
       if ( !wait ) {
         the_spinlock->users -= 1;
-        _ISR_Enable( level );
+        _CORE_spinlock_Release( the_spinlock, lock_context );
         return CORE_SPINLOCK_UNAVAILABLE;
       }
 
@@ -78,7 +66,7 @@ CORE_spinlock_Status _CORE_spinlock_Wait(
          */
         if ( timeout && (limit <= _Watchdog_Ticks_since_boot) ) {
           the_spinlock->users -= 1;
-          _ISR_Enable( level );
+          _CORE_spinlock_Release( the_spinlock, lock_context );
           return CORE_SPINLOCK_TIMEOUT;
         }
       #endif
@@ -100,16 +88,15 @@ CORE_spinlock_Status _CORE_spinlock_Wait(
        *  safe from deletion.
        */
 
-       _ISR_Enable( level );
-       /* An ISR could occur here */
+       _CORE_spinlock_Release( the_spinlock, lock_context );
 
-       _Thread_Enable_dispatch();
-       /* Another thread could get dispatched here */
+       /*
+        * An ISR could occur here.  Another thread could get dispatched here.
+        * Reenter the critical sections so we can attempt the lock again.
+        */
 
-       /* Reenter the critical sections so we can attempt the lock again. */
-       _Thread_Disable_dispatch();
-
-       _ISR_Disable( level );
+       _ISR_lock_ISR_disable( lock_context );
+       _CORE_spinlock_Acquire_critical( the_spinlock, lock_context );
     }
 
 }

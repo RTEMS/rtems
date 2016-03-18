@@ -47,7 +47,6 @@ int pthread_spin_init(
 )
 {
   POSIX_Spinlock_Control   *the_spinlock;
-  CORE_spinlock_Attributes  attributes;
 
   if ( !spinlock )
     return EINVAL;
@@ -67,9 +66,7 @@ int pthread_spin_init(
     return EAGAIN;
   }
 
-  _CORE_spinlock_Initialize_attributes( &attributes );
-
-  _CORE_spinlock_Initialize( &the_spinlock->Spinlock, &attributes );
+  _CORE_spinlock_Initialize( &the_spinlock->Spinlock );
 
   _Objects_Open_u32( &_POSIX_Spinlock_Information, &the_spinlock->Object, 0 );
 

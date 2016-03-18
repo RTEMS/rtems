@@ -75,26 +75,19 @@ RTEMS_INLINE_ROUTINE void _POSIX_Spinlock_Free (
   _Objects_Free( &_POSIX_Spinlock_Information, &the_spinlock->Object );
 }
 
-/**
- * @brief Get a spinlock control block.
- *
- * This function maps spinlock IDs to spinlock control blocks.
- * If ID corresponds to a local spinlock, then it returns
- * the_spinlock control pointer which maps to ID and location
- * is set to OBJECTS_LOCAL.  if the spinlock ID is global and
- * resides on a remote node, then location is set to OBJECTS_REMOTE,
- * and the_spinlock is undefined.  Otherwise, location is set
- * to OBJECTS_ERROR and the_spinlock is undefined.
- */
-RTEMS_INLINE_ROUTINE POSIX_Spinlock_Control *_POSIX_Spinlock_Get (
+RTEMS_INLINE_ROUTINE POSIX_Spinlock_Control *_POSIX_Spinlock_Get(
   pthread_spinlock_t *spinlock,
-  Objects_Locations *location
+  ISR_lock_Context   *lock_context
 )
 {
-  return (POSIX_Spinlock_Control *) _Objects_Get(
-      &_POSIX_Spinlock_Information,
-      (Objects_Id) *spinlock,
-      location
+  if ( spinlock == NULL ) {
+    return NULL;
+  }
+
+  return (POSIX_Spinlock_Control *) _Objects_Get_local(
+    &_POSIX_Spinlock_Information,
+    *spinlock,
+    lock_context
   );
 }
 

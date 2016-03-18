@@ -18,58 +18,35 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
-#include <errno.h>
-
-#include <rtems/system.h>
 #include <rtems/posix/spinlockimpl.h>
 
-/**
- *  This directive allows a thread to delete a spinlock specified by
- *  the spinlock id.  The spinlock is freed back to the inactive
- *  spinlock chain.
- *
- *  @param[in] spinlock is the spinlock id
- *
- *  @return This method returns 0 if there was not an
- *  error. Otherwise, a status code is returned indicating the
- *  source of the error.
- */
-int pthread_spin_destroy(
-  pthread_spinlock_t *spinlock
-)
-{
-  POSIX_Spinlock_Control *the_spinlock = NULL;
-  Objects_Locations      location;
+#include <errno.h>
 
-  if ( !spinlock )
-    return EINVAL;
+int pthread_spin_destroy( pthread_spinlock_t *spinlock )
+{
+  POSIX_Spinlock_Control *the_spinlock;
+  ISR_lock_Context        lock_context;
 
   _Objects_Allocator_lock();
-  the_spinlock = _POSIX_Spinlock_Get( spinlock, &location );
-  switch ( location ) {
 
-    case OBJECTS_LOCAL:
-      if ( _CORE_spinlock_Is_busy( &the_spinlock->Spinlock ) ) {
-        _Objects_Put( &the_spinlock->Object );
-        return EBUSY;
-      }
-
-      _Objects_Close( &_POSIX_Spinlock_Information, &the_spinlock->Object );
-      _Objects_Put( &the_spinlock->Object );
-      _POSIX_Spinlock_Free( the_spinlock );
-      _Objects_Allocator_unlock();
-
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+  the_spinlock = _POSIX_Spinlock_Get( spinlock, &lock_context );
+  if ( the_spinlock == NULL ) {
+    _Objects_Allocator_unlock();
+    return EINVAL;
   }
 
-  _Objects_Allocator_unlock();
+  _CORE_spinlock_Acquire_critical( &the_spinlock->Spinlock, &lock_context );
 
-  return EINVAL;
+  if ( _CORE_spinlock_Is_busy( &the_spinlock->Spinlock ) ) {
+    _CORE_spinlock_Release( &the_spinlock->Spinlock, &lock_context );
+    _Objects_Allocator_unlock();
+    return EBUSY;
+  }
+
+  _CORE_spinlock_Release( &the_spinlock->Spinlock, &lock_context );
+
+  _Objects_Close( &_POSIX_Spinlock_Information, &the_spinlock->Object );
+  _POSIX_Spinlock_Free( the_spinlock );
+  _Objects_Allocator_unlock();
+  return 0;
 }
