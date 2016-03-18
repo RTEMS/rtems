@@ -1030,7 +1030,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_release_critical(
 {
 #if defined(RTEMS_SMP)
   _SMP_ticket_lock_Release(
-    lock,
+    (SMP_ticket_lock_Control *) lock,
     &lock_context->Lock_context.Stats_context
   );
 #else
