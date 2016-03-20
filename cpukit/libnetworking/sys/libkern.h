@@ -78,7 +78,9 @@ char	*index(const char *, int);
 char	*rindex(const char *, int);
 int	 scanc(u_int, const u_char *, const u_char *, int);
 int	 skpc(int, int, char *);
+#if !defined(__rtems__)
 void	 srandom(u_long);
+#endif
 char	*strcat(char * __restrict, const char * __restrict);
 int	 strcmp(const char *, const char *);
 char	*strdup(const char *s);
