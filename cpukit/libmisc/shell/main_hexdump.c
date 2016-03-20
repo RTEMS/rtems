@@ -35,11 +35,13 @@
 #include "config.h"
 #endif
 
+#ifndef __rtems__
 #ifndef lint
 static const char copyright[] =
 "@(#) Copyright (c) 1989, 1993\n\
 	The Regents of the University of California.  All rights reserved.\n";
 #endif /* not lint */
+#endif
 
 #ifndef lint
 #if 0
