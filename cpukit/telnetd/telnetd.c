@@ -482,18 +482,19 @@ telnetd_dflt_spawn(const char *name, unsigned int priority, unsigned int stackSi
 static __inline__ FILE *
 _stdin(void)  { return stdin; }
 #undef stdin
+FILE *stdin(void);
 FILE *stdin(void)  { return _stdin(); }
 #endif
 #ifdef stdout
-static __inline__ FILE *
-_stdout(void) { return stdout; }
+static __inline__ FILE * _stdout(void) { return stdout; }
 #undef stdout
+FILE *stdout(void);
 FILE *stdout(void) { return _stdout(); }
 #endif
 #ifdef stderr
-static __inline__ FILE *
-_stderr(void) { return stderr; }
+static __inline__ FILE * _stderr(void) { return stderr; }
 #undef stderr
+FILE *stderr(void);
 FILE *stderr(void) { return _stderr(); }
 #endif
 
