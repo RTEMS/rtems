@@ -208,42 +208,6 @@ rtems_monitor_dump_modes(rtems_mode modes)
     return length;
 }
 
-static const rtems_assoc_t rtems_monitor_events_assoc[] = {
-    { "0",   RTEMS_EVENT_0, 0 },
-    { "1",   RTEMS_EVENT_1, 0 },
-    { "2",   RTEMS_EVENT_2, 0 },
-    { "3",   RTEMS_EVENT_3, 0 },
-    { "4",   RTEMS_EVENT_4, 0 },
-    { "5",   RTEMS_EVENT_5, 0 },
-    { "6",   RTEMS_EVENT_6, 0 },
-    { "7",   RTEMS_EVENT_7, 0 },
-    { "8",   RTEMS_EVENT_8, 0 },
-    { "9",   RTEMS_EVENT_9, 0 },
-    { "10",  RTEMS_EVENT_10, 0 },
-    { "11",  RTEMS_EVENT_11, 0 },
-    { "12",  RTEMS_EVENT_12, 0 },
-    { "13",  RTEMS_EVENT_13, 0 },
-    { "14",  RTEMS_EVENT_14, 0 },
-    { "15",  RTEMS_EVENT_15, 0 },
-    { "16",  RTEMS_EVENT_16, 0 },
-    { "17",  RTEMS_EVENT_17, 0 },
-    { "18",  RTEMS_EVENT_18, 0 },
-    { "19",  RTEMS_EVENT_19, 0 },
-    { "20",  RTEMS_EVENT_20, 0 },
-    { "21",  RTEMS_EVENT_21, 0 },
-    { "22",  RTEMS_EVENT_22, 0 },
-    { "23",  RTEMS_EVENT_23, 0 },
-    { "24",  RTEMS_EVENT_24, 0 },
-    { "25",  RTEMS_EVENT_25, 0 },
-    { "26",  RTEMS_EVENT_26, 0 },
-    { "27",  RTEMS_EVENT_27, 0 },
-    { "28",  RTEMS_EVENT_28, 0 },
-    { "29",  RTEMS_EVENT_29, 0 },
-    { "30",  RTEMS_EVENT_30, 0 },
-    { "31",  RTEMS_EVENT_31, 0 },
-    { 0, 0, 0 },
-};
-
 int
 rtems_monitor_dump_events(rtems_event_set events)
 {
