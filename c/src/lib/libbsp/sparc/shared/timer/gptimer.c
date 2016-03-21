@@ -377,7 +377,8 @@ static void gptimer_tlib_reset(struct tlib_dev *hand)
 {
 	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
 
-	timer->tregs->ctrl = 0;
+	timer->tregs->ctrl = (timer->tregs->ctrl & timer->irq_ack_mask) &
+			     GPTIMER_CTRL_IP;
 	timer->tregs->reload = 0xffffffff;
 	timer->tregs->ctrl = GPTIMER_CTRL_LD;
 }
@@ -464,7 +465,8 @@ static void gptimer_tlib_start(struct tlib_dev *hand, int once)
 	ctrl = GPTIMER_CTRL_LD | GPTIMER_CTRL_EN;
 	if ( once == 0 )
 		ctrl |= GPTIMER_CTRL_RS; /* Restart Timer */
-	timer->tregs->ctrl |= ctrl;
+	timer->tregs->ctrl = ctrl | (timer->tregs->ctrl & timer->irq_ack_mask &
+			     ~GPTIMER_CTRL_RS);
 }
 
 static void gptimer_tlib_stop(struct tlib_dev *hand)
