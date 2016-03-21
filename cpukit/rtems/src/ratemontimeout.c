@@ -19,33 +19,50 @@
 #endif
 
 #include <rtems/rtems/ratemonimpl.h>
-#include <rtems/score/threadimpl.h>
-#include <rtems/score/watchdogimpl.h>
 
-void _Rate_monotonic_Timeout( Watchdog_Control *watchdog )
+void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
 {
   Rate_monotonic_Control *the_period;
-  Thread_Control         *the_thread;
+  Thread_Control         *owner;
+  ISR_lock_Context        lock_context;
+  Thread_Wait_flags       wait_flags;
 
-  /*
-   *  When we get here, the Timer is already off the chain so we do not
-   *  have to worry about that -- hence no _Watchdog_Remove().
-   */
-  the_period = RTEMS_CONTAINER_OF( watchdog, Rate_monotonic_Control, Timer );
-  the_thread = the_period->owner;
+  the_period = RTEMS_CONTAINER_OF( the_watchdog, Rate_monotonic_Control, Timer );
+  owner = the_period->owner;
 
-  _Thread_Disable_dispatch();
+  _ISR_lock_ISR_disable( &lock_context );
+  _Rate_monotonic_Acquire_critical( owner, &lock_context );
+  wait_flags = _Thread_Wait_flags_get( owner );
 
-  if ( _States_Is_waiting_for_period( the_thread->current_state ) &&
-        the_thread->Wait.id == the_period->Object.id ) {
-    _Thread_Unblock( the_thread );
-    _Rate_monotonic_Restart( the_period );
-  } else if ( the_period->state == RATE_MONOTONIC_OWNER_IS_BLOCKING ) {
-    the_period->state = RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING;
-    _Rate_monotonic_Restart( the_period );
+  if (
+    ( wait_flags & THREAD_WAIT_CLASS_PERIOD ) != 0
+      && owner->Wait.return_argument == the_period
+  ) {
+    bool unblock;
+    bool success;
+
+    owner->Wait.return_argument = NULL;
+
+    success = _Thread_Wait_flags_try_change_critical(
+      owner,
+      RATE_MONOTONIC_INTEND_TO_BLOCK,
+      RATE_MONOTONIC_READY_AGAIN
+    );
+    if ( success ) {
+      unblock = false;
+    } else {
+      _Assert( _Thread_Wait_flags_get( owner ) == RATE_MONOTONIC_BLOCKED );
+      _Thread_Wait_flags_set( owner, RATE_MONOTONIC_READY_AGAIN );
+      unblock = true;
+    }
+
+    _Rate_monotonic_Restart( the_period, owner, &lock_context );
+
+    if ( unblock ) {
+      _Thread_Unblock( owner );
+    }
   } else {
     the_period->state = RATE_MONOTONIC_EXPIRED;
+    _Rate_monotonic_Release( owner, &lock_context );
   }
-
-  _Thread_Unnest_dispatch();
 }

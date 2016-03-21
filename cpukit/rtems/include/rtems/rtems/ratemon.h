@@ -84,22 +84,10 @@ typedef enum {
 
   /**
    * This value indicates the period is on the watchdog chain, and
-   * the owner is blocked waiting on it.
-   */
-  RATE_MONOTONIC_OWNER_IS_BLOCKING,
-
-  /**
-   * This value indicates the period is on the watchdog chain, and
    * running.  The owner should be executed or blocked waiting on
    * another object.
    */
   RATE_MONOTONIC_ACTIVE,
-
-  /**
-   * This value indicates the period is on the watchdog chain, and
-   * has expired.  The owner should be blocked waiting for the next period.
-   */
-  RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING,
 
   /**
    * This value indicates the period is off the watchdog chain, and
@@ -194,8 +182,12 @@ typedef struct {
 }  rtems_rate_monotonic_period_status;
 
 /**
- *  The following structure defines the control block used to manage
- *  each period.
+ * @brief The following structure defines the control block used to manage each
+ * period.
+ *
+ * State changes are protected by the default thread lock of the owner thread.
+ * The owner thread is the thread that created the period object.  The owner
+ * thread field is immutable after object creation.
  */
 typedef struct {
   /** This field is the object management portion of a Period instance. */

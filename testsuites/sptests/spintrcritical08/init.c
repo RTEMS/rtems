@@ -25,20 +25,18 @@ static rtems_id Period;
 
 static volatile bool case_hit = false;
 
+static Thread_Control *thread;
+
 static rtems_rate_monotonic_period_states getState(void)
 {
-  Objects_Locations       location;
-  Rate_monotonic_Control *period;
+  Rate_monotonic_Control *the_period;
+  ISR_lock_Context        lock_context;
 
-  period = (Rate_monotonic_Control *)_Objects_Get(
-    &_Rate_monotonic_Information, Period, &location );
-  if ( location != OBJECTS_LOCAL ) {
-    puts( "Bad object lookup" );
-    rtems_test_exit(0);
-  }
-  _Thread_Unnest_dispatch();
+  the_period = _Rate_monotonic_Get( Period, &lock_context );
+  rtems_test_assert( the_period != NULL );
+  _ISR_lock_ISR_enable( &lock_context );
 
-  return period->state;
+  return the_period->state;
 }
 
 static rtems_timer_service_routine test_release_from_isr(
@@ -55,11 +53,19 @@ static rtems_timer_service_routine test_release_from_isr(
       && watchdog->expire == cpu->Watchdog.ticks
       && watchdog->routine == _Rate_monotonic_Timeout
   ) {
+    Thread_Wait_flags flags = _Thread_Wait_flags_get( thread );
+
     _Watchdog_Per_CPU_remove_relative( watchdog );
+
+    rtems_test_assert( getState() == RATE_MONOTONIC_ACTIVE );
 
     (*watchdog->routine)( watchdog );
 
-    if ( getState() == RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING ) {
+    if ( flags == RATE_MONOTONIC_INTEND_TO_BLOCK ) {
+      rtems_test_assert(
+        _Thread_Wait_flags_get( thread ) == RATE_MONOTONIC_READY_AGAIN
+      );
+      rtems_test_assert( getState() == RATE_MONOTONIC_ACTIVE );
       case_hit = true;
     }
   }
@@ -92,6 +98,8 @@ rtems_task Init(
   TEST_BEGIN();
 
   puts( "Init - Trying to generate period ending while blocking" );
+
+  thread = _Thread_Get_executing();
 
   puts( "Init - rtems_rate_monotonic_create - OK" );
   sc = rtems_rate_monotonic_create(

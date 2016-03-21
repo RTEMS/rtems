@@ -1280,9 +1280,14 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_restore_default(
 #define THREAD_WAIT_CLASS_SYSTEM_EVENT 0x200U
 
 /**
- * @brief Indicates that the thread waits for a object.
+ * @brief Indicates that the thread waits for an object.
  */
 #define THREAD_WAIT_CLASS_OBJECT 0x400U
+
+/**
+ * @brief Indicates that the thread waits for a period.
+ */
+#define THREAD_WAIT_CLASS_PERIOD 0x800U
 
 RTEMS_INLINE_ROUTINE void _Thread_Wait_flags_set(
   Thread_Control    *the_thread,
