@@ -123,49 +123,24 @@ static void _Rate_monotonic_Update_statistics(
   /*
    *  Update CPU time
    */
-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    _Timestamp_Add_to( &stats->total_cpu_time, &executed );
+  _Timestamp_Add_to( &stats->total_cpu_time, &executed );
 
-    if ( _Timestamp_Less_than( &executed, &stats->min_cpu_time ) )
-      stats->min_cpu_time = executed;
+  if ( _Timestamp_Less_than( &executed, &stats->min_cpu_time ) )
+    stats->min_cpu_time = executed;
 
-    if ( _Timestamp_Greater_than( &executed, &stats->max_cpu_time ) )
-      stats->max_cpu_time = executed;
-  #else
-    stats->total_cpu_time  += executed;
-
-    if ( executed < stats->min_cpu_time )
-      stats->min_cpu_time = executed;
-
-    if ( executed > stats->max_cpu_time )
-      stats->max_cpu_time = executed;
-  #endif
+  if ( _Timestamp_Greater_than( &executed, &stats->max_cpu_time ) )
+    stats->max_cpu_time = executed;
 
   /*
    *  Update Wall time
    */
-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-    _Timestamp_Add_to( &stats->total_wall_time, &since_last_period );
+  _Timestamp_Add_to( &stats->total_wall_time, &since_last_period );
 
-    if ( _Timestamp_Less_than( &since_last_period, &stats->min_wall_time ) )
-      stats->min_wall_time = since_last_period;
+  if ( _Timestamp_Less_than( &since_last_period, &stats->min_wall_time ) )
+    stats->min_wall_time = since_last_period;
 
-    if ( _Timestamp_Greater_than( &since_last_period, &stats->max_wall_time ) )
-      stats->max_wall_time = since_last_period;
-  #else
-
-    /* Sanity check wall time */
-    if ( since_last_period < executed )
-      since_last_period = executed;
-
-    stats->total_wall_time += since_last_period;
-
-    if ( since_last_period < stats->min_wall_time )
-      stats->min_wall_time = since_last_period;
-
-    if ( since_last_period > stats->max_wall_time )
-      stats->max_wall_time = since_last_period;
-  #endif
+  if ( _Timestamp_Greater_than( &since_last_period, &stats->max_wall_time ) )
+    stats->max_wall_time = since_last_period;
 }
 
 rtems_status_code rtems_rate_monotonic_period(
