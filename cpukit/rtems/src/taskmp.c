@@ -257,6 +257,8 @@ void _RTEMS_tasks_MP_Process_packet (
       _MPCI_Return_packet( the_packet_prefix );
       break;
   }
+
+  ignored; /* avoid set but not used warning */
 }
 
 /*

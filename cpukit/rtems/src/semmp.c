@@ -231,6 +231,8 @@ void _Semaphore_MP_Process_packet (
       );
       break;
   }
+
+  ignored; /* avoid set but not used warning */
 }
 
 void _Semaphore_MP_Send_object_was_deleted (

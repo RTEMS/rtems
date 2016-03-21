@@ -260,6 +260,8 @@ void _Partition_MP_Process_packet (
       break;
 
   }
+
+  ignored; /* avoid set but not used warning */
 }
 
 /*

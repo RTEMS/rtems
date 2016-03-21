@@ -113,7 +113,6 @@ void _Event_MP_Process_packet (
 )
 {
   Event_MP_Packet *the_packet;
-  Thread_Control  *the_thread;
 
   the_packet = (Event_MP_Packet *) the_packet_prefix;
 
@@ -132,13 +131,15 @@ void _Event_MP_Process_packet (
       );
       break;
 
-    case EVENT_MP_SEND_RESPONSE:
+    case EVENT_MP_SEND_RESPONSE: {
+      Thread_Control  *the_thread;
 
       the_thread = _MPCI_Process_response( the_packet_prefix );
 
       _MPCI_Return_packet( the_packet_prefix );
 
       break;
+    }
 
   }
 }

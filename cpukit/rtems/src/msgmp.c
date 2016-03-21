@@ -428,6 +428,8 @@ void _Message_queue_MP_Process_packet (
       break;
 
   }
+
+  ignored; /* avoid set but not used warning */
 }
 
 /*
