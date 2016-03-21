@@ -26,7 +26,7 @@
 #include <stdio.h>
 #endif
 
-void erc32_sonic_write_register(
+static void erc32_sonic_write_register(
   void       *base,
   uint32_t    regno,
   uint32_t    value
@@ -42,7 +42,7 @@ void erc32_sonic_write_register(
   p[regno] = 0x0ffff & value;
 }
 
-uint32_t   erc32_sonic_read_register(
+static uint32_t   erc32_sonic_read_register(
   void       *base,
   uint32_t    regno
 )
@@ -98,12 +98,12 @@ uint32_t   erc32_sonic_read_register(
 #define SONIC_VECTOR 0x1E
 
 sonic_configuration_t erc32_sonic_configuration = {
-  SONIC_BASE_ADDRESS,        /* base address */
-  SONIC_VECTOR,              /* vector number */
-  SONIC_DCR,                 /* DCR register value */
-  SONIC_DC2,                 /* DC2 register value */
-  TDA_COUNT,                 /* number of transmit descriptors */
-  RDA_COUNT,                 /* number of receive descriptors */
+  (void *)SONIC_BASE_ADDRESS, /* base address */
+  SONIC_VECTOR,               /* vector number */
+  SONIC_DCR,                  /* DCR register value */
+  SONIC_DC2,                  /* DC2 register value */
+  TDA_COUNT,                  /* number of transmit descriptors */
+  RDA_COUNT,                  /* number of receive descriptors */
   erc32_sonic_write_register,
   erc32_sonic_read_register
 };
