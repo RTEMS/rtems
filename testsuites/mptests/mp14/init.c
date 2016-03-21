@@ -28,7 +28,7 @@
 
 uint8_t   my_partition[0x30000] CPU_STRUCTURE_ALIGNMENT;
 
-rtems_timer_service_routine Stop_Test_TSR(
+static rtems_timer_service_routine Stop_Test_TSR(
   rtems_id  ignored_id,
   void     *ignored_address
 )

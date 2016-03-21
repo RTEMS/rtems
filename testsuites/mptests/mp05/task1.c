@@ -27,7 +27,7 @@
 
 #define SIGNALS_PER_DOT 15
 
-rtems_timer_service_routine Stop_Test_TSR(
+static rtems_timer_service_routine Stop_Test_TSR(
   rtems_id  ignored_id,
   void     *ignored_address
 )
