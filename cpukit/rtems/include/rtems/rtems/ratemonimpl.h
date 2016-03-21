@@ -171,51 +171,24 @@ void _Rate_monotonic_Restart(
   Rate_monotonic_Control *the_period
 );
 
-/**
- *  @brief _Rate_monotonic_Reset_wall_time_statistics
- *
- *  This method resets the statistics information for a period instance.
- */
-#define _Rate_monotonic_Reset_wall_time_statistics( _the_period ) \
-   do { \
-      /* set the minimums to a large value */ \
-      _Timestamp_Set( \
-	&(_the_period)->Statistics.min_wall_time, \
-	0x7fffffff, \
-	0x7fffffff \
-      ); \
-   } while (0)
+RTEMS_INLINE_ROUTINE void _Rate_monotonic_Reset_min_time(
+  Timestamp_Control *min_time
+)
+{
+  _Timestamp_Set( min_time, 0x7fffffff, 0x7fffffff );
+}
 
-/**
- *  @brief Rate_monotonic_Reset_cpu_use_statistics
- *
- *  This helper method resets the period CPU usage statistics structure.
- */
-#define _Rate_monotonic_Reset_cpu_use_statistics( _the_period ) \
-   do { \
-      /* set the minimums to a large value */ \
-      _Timestamp_Set( \
-	&(_the_period)->Statistics.min_cpu_time, \
-	0x7fffffff, \
-	0x7fffffff \
-      ); \
-   } while (0)
+RTEMS_INLINE_ROUTINE void _Rate_monotonic_Reset_statistics(
+  Rate_monotonic_Control *the_period
+)
+{
+  Rate_monotonic_Statistics *statistics;
 
-/**
- *  @brief Rate_monotonic_Reset_statistics
- *
- *  This helper method resets the period wall time statistics structure.
- */
-#define _Rate_monotonic_Reset_statistics( _the_period ) \
-  do { \
-    memset( \
-      &(_the_period)->Statistics, \
-      0, \
-      sizeof( rtems_rate_monotonic_period_statistics ) \
-    ); \
-    _Rate_monotonic_Reset_cpu_use_statistics( _the_period ); \
-    _Rate_monotonic_Reset_wall_time_statistics( _the_period ); \
-  } while (0)
+  statistics = &the_period->Statistics;
+  memset( statistics, 0, sizeof( *statistics ) );
+  _Rate_monotonic_Reset_min_time( &statistics->min_wall_time );
+  _Rate_monotonic_Reset_min_time( &statistics->min_cpu_time );
+}
 
 /**@}*/
 
