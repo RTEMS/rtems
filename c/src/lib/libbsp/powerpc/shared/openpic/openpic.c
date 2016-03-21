@@ -53,6 +53,11 @@ static          int openpic_src_offst = 0;
      */
 
 #if 1
+/* This software deliberately uses non-zero values to the method
+ * __builtin_return_address() and we want to avoid the GCC warning.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wframe-address"
 #define check_arg_ipi(ipi) \
     if (ipi < 0 || ipi >= OPENPIC_NUM_IPI) \
 	printk("openpic.c:%d: illegal ipi %d\n", __LINE__, ipi);
