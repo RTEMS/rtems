@@ -25,9 +25,9 @@
 #include <rtems/score/watchdogimpl.h>
 
 bool _Rate_monotonic_Get_status(
-  Rate_monotonic_Control        *the_period,
-  Rate_monotonic_Period_time_t  *wall_since_last_period,
-  Timestamp_Control             *cpu_since_last_period
+  const Rate_monotonic_Control *the_period,
+  Timestamp_Control            *wall_since_last_period,
+  Timestamp_Control            *cpu_since_last_period
 )
 {
   Timestamp_Control        uptime;
@@ -92,10 +92,10 @@ static void _Rate_monotonic_Update_statistics(
   Rate_monotonic_Control    *the_period
 )
 {
-  Timestamp_Control               executed;
-  Rate_monotonic_Period_time_t    since_last_period;
-  Rate_monotonic_Statistics      *stats;
-  bool                            valid_status;
+  Timestamp_Control          executed;
+  Timestamp_Control          since_last_period;
+  Rate_monotonic_Statistics *stats;
+  bool                       valid_status;
 
   /*
    *  Assume we are only called in states where it is appropriate

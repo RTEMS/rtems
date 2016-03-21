@@ -153,9 +153,9 @@ void _Rate_monotonic_Timeout( Watchdog_Control *watchdog );
  *         and false otherwise.
  */
 bool _Rate_monotonic_Get_status(
-  Rate_monotonic_Control        *the_period,
-  Rate_monotonic_Period_time_t  *wall_since_last_period,
-  Timestamp_Control             *cpu_since_last_period
+  const Rate_monotonic_Control *the_period,
+  Timestamp_Control            *wall_since_last_period,
+  Timestamp_Control            *cpu_since_last_period
 );
 
 /**

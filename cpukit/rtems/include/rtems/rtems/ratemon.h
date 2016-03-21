@@ -71,8 +71,6 @@ typedef struct timespec rtems_rate_monotonic_period_time_t;
  */
 #include <rtems/score/timestamp.h>
 
-typedef Timestamp_Control Rate_monotonic_Period_time_t;
-
 /**
  *  The following enumerated type defines the states in which a
  *  period may be.
@@ -156,18 +154,18 @@ typedef struct {
   uint32_t     missed_count;
 
   /** This field contains the least amount of CPU time used in a period. */
-  Timestamp_Control                    min_cpu_time;
+  Timestamp_Control min_cpu_time;
   /** This field contains the highest amount of CPU time used in a period. */
-  Timestamp_Control                    max_cpu_time;
+  Timestamp_Control max_cpu_time;
   /** This field contains the total amount of wall time used in a period. */
-  Timestamp_Control                    total_cpu_time;
+  Timestamp_Control total_cpu_time;
 
   /** This field contains the least amount of wall time used in a period. */
-  Rate_monotonic_Period_time_t         min_wall_time;
+  Timestamp_Control min_wall_time;
   /** This field contains the highest amount of wall time used in a period. */
-  Rate_monotonic_Period_time_t         max_wall_time;
+  Timestamp_Control max_wall_time;
   /** This field contains the total amount of CPU time used in a period. */
-  Rate_monotonic_Period_time_t         total_wall_time;
+  Timestamp_Control total_wall_time;
 }  Rate_monotonic_Statistics;
 
 /**
@@ -232,7 +230,7 @@ typedef struct {
    * This field contains the wall time value when the period
    * was initiated.  It is used to compute the period's statistics.
    */
-  Rate_monotonic_Period_time_t            time_period_initiated;
+  Timestamp_Control                       time_period_initiated;
 
   /**
    * This field contains the statistics maintained for the period.
