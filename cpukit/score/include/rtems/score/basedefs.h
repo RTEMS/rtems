@@ -191,6 +191,25 @@
 /* Provided for backward compatibility */
 #define RTEMS_COMPILER_PACKED_ATTRIBUTE RTEMS_PACKED
 
+#if defined(RTEMS_DEBUG) && !defined(RTEMS_SCHEDSIM)
+  #define _Assert_Unreachable() _Assert( 0 )
+#else
+  #define _Assert_Unreachable() do { } while ( 0 )
+#endif
+
+/**
+ * @brief Tells the compiler that this program point is unreachable.
+ */
+#if defined(__GNUC__) && !defined(RTEMS_SCHEDSIM)
+  #define RTEMS_UNREACHABLE() \
+    do { \
+      __builtin_unreachable(); \
+      _Assert_Unreachable(); \
+    } while ( 0 )
+#else
+  #define RTEMS_UNREACHABLE() _Assert_Unreachable()
+#endif
+
 #if __cplusplus >= 201103L
   #define RTEMS_STATIC_ASSERT(cond, msg) \
     static_assert(cond, # msg)

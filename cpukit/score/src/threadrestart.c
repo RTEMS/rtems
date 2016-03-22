@@ -237,8 +237,7 @@ void _Thread_Life_action_handler(
     }
 
     _Thread_Enable_dispatch();
-
-    _Assert_Not_reached();
+    RTEMS_UNREACHABLE();
   } else {
     _Assert( _Thread_Is_life_restarting( previous_life_state ) );
 
@@ -258,8 +257,7 @@ void _Thread_Life_action_handler(
 
       _Thread_Load_environment( executing );
       _Thread_Restart_self( executing );
-
-      _Assert_Not_reached();
+      RTEMS_UNREACHABLE();
     }
   }
 }

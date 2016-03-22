@@ -61,6 +61,5 @@ void _Thread_Global_construction(
   _Thread_Disable_dispatch();
   _Thread_Restart( executing, executing, entry );
   _Thread_Enable_dispatch();
-
-  _Assert_Not_reached();
+  RTEMS_UNREACHABLE();
 }

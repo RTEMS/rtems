@@ -120,15 +120,6 @@ extern "C" {
   bool _Debug_Is_owner_of_allocator( void );
 #endif
 
-/**
- * @brief Asserts that this point is not reached during run-time.
- */
-#if RTEMS_SCHEDSIM
-#define _Assert_Not_reached()
-#else
-#define _Assert_Not_reached() _Assert( 0 )
-#endif
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
