@@ -1352,9 +1352,14 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update_heir(
 
   if ( heir != new_heir && ( heir->is_preemptible || force_dispatch ) ) {
 #if defined(RTEMS_SMP)
-    /* We need this state only for _Thread_Get_CPU_time_used() */
-    _Scheduler_Thread_change_state( heir, THREAD_SCHEDULER_BLOCKED );
-    _Scheduler_Thread_change_state( new_heir, THREAD_SCHEDULER_SCHEDULED );
+    /*
+     * We need this state only for _Thread_Get_CPU_time_used().  Cannot use
+     * _Scheduler_Thread_change_state() since THREAD_SCHEDULER_BLOCKED to
+     * THREAD_SCHEDULER_BLOCKED state changes are illegal for the real SMP
+     * schedulers.
+     */
+    heir->Scheduler.state = THREAD_SCHEDULER_BLOCKED;
+    new_heir->Scheduler.state = THREAD_SCHEDULER_SCHEDULED;
 #endif
     _Thread_Update_CPU_time_used( heir, _Thread_Get_CPU( heir ) );
     _Thread_Heir = new_heir;
