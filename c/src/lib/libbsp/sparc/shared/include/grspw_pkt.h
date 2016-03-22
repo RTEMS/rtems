@@ -309,6 +309,8 @@ extern spw_link_state_t grspw_link_state(void *d);
 extern void grspw_link_ctrl(void *d, int *options, int *clkdiv);
 /* Read the current value of the status register */
 extern unsigned int grspw_link_status(void *d);
+/* Clear bits in the status register */
+extern void grspw_link_status_clr(void *d, unsigned int clearmask);
 
 /*** Time Code Interface ***/
 /* Generate Tick-In (increment Time Counter, Send Time Code) */

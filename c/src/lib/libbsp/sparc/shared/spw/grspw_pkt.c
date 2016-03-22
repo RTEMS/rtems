@@ -719,6 +719,14 @@ unsigned int grspw_link_status(void *d)
 	return REG_READ(&priv->regs->status);
 }
 
+/* Clear Status Register bits */
+void grspw_link_status_clr(void *d, unsigned int mask)
+{
+	struct grspw_priv *priv = d;
+
+	REG_WRITE(&priv->regs->status, mask);
+}
+
 /* Return Current Link State */
 spw_link_state_t grspw_link_state(void *d)
 {
