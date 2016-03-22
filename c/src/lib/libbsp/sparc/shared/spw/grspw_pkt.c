@@ -472,6 +472,9 @@ struct grspw_priv {
 	/* Bit mask representing events which shall cause link disable. */
 	unsigned int dis_link_on_err;
 
+	/* Bit mask for link status bits to clear by ISR */
+	unsigned int stscfg;
+
 	/* "Core Global" Statistics gathered, not dependent on DMA channel */
 	struct grspw_core_stats stats;
 };
@@ -538,6 +541,7 @@ void *grspw_open(int dev_no)
 	priv->tcisr_arg = NULL;
 	priv->icisr = NULL;
 	priv->icisr_arg = NULL;
+	priv->stscfg = LINKSTS_MASK;
 
 	grspw_stats_clr(priv);
 
@@ -745,7 +749,7 @@ static inline int grspw_is_irqsource_set(unsigned int ctrl, unsigned int icctrl)
 
 
 /* options and clkdiv [in/out]: set to -1 to only read current config */
-void grspw_link_ctrl(void *d, int *options, int *clkdiv)
+void grspw_link_ctrl(void *d, int *options, int *stscfg, int *clkdiv)
 {
 	struct grspw_priv *priv = d;
 	struct grspw_regs *regs = priv->regs;
@@ -781,6 +785,12 @@ void grspw_link_ctrl(void *d, int *options, int *clkdiv)
 		}
 		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 		*options = (ctrl & GRSPW_LINK_CFG) | priv->dis_link_on_err;
+	}
+	if (stscfg) {
+		if (*stscfg != -1) {
+			priv->stscfg = *stscfg & LINKSTS_MASK;
+		}
+		*stscfg = priv->stscfg;
 	}
 }
 
@@ -2494,7 +2504,7 @@ STATIC void grspw_isr(void *data)
 
 	/* Get Status from Hardware */
 	stat = REG_READ(&priv->regs->status);
-	stat_clrmsk = stat & (GRSPW_STS_TO | GRSPW_STAT_ERROR);
+	stat_clrmsk = stat & (GRSPW_STS_TO | GRSPW_STAT_ERROR) & priv->stscfg;
 
 	/* Make sure to put the timecode handling first in order to get the
 	 * smallest possible interrupt latency
@@ -2549,6 +2559,9 @@ STATIC void grspw_isr(void *data)
 
 		if (stat & GRSPW_STS_PE)
 			priv->stats.err_parity++;
+
+		if (stat & GRSPW_STS_DE)
+			priv->stats.err_disconnect++;
 
 		if (stat & GRSPW_STS_ER)
 			priv->stats.err_escape++;

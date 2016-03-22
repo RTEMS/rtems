@@ -184,6 +184,7 @@ struct grspw_core_stats {
 	int err_eeop;
 	int err_addr;
 	int err_parity;
+	int err_disconnect;
 	int err_escape;
 	int err_wsync; /* only in GRSPW1 */
 };
@@ -215,6 +216,15 @@ struct grspw_core_stats {
 					  * task will call dma_stop() for all
 					  * channels.
 					  */
+
+#define LINKSTS_CE		0x002	/* Credit error */
+#define LINKSTS_ER		0x004	/* Escape error */
+#define LINKSTS_DE		0x008	/* Disconnect error */
+#define LINKSTS_PE		0x010	/* Parity error */
+#define LINKSTS_WE		0x040	/* Write synchonization error (GRSPW1 only) */
+#define LINKSTS_IA		0x080	/* Invalid address */
+#define LINKSTS_EE		0x100	/* Early EOP/EEP */
+#define LINKSTS_MASK		0x1de
 
 
 /* grspw_tc_ctrl() options */
@@ -325,7 +335,7 @@ extern spw_link_state_t grspw_link_state(void *d);
  *  bits 7..0  : Clock Div RUN (only run-state)
  *  bits 15..8 : Clock Div During Startup (all link states except run-state)
  */
-extern void grspw_link_ctrl(void *d, int *options, int *clkdiv);
+extern void grspw_link_ctrl(void *d, int *options, int *stscfg, int *clkdiv);
 /* Read the current value of the status register */
 extern unsigned int grspw_link_status(void *d);
 /* Clear bits in the status register */
