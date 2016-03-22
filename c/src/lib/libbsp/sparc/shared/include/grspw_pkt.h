@@ -487,7 +487,7 @@ extern void grspw_dma_tx_count(void *c, int *send, int *sched, int *sent);
 
 #define GRSPW_OP_AND 0
 #define GRSPW_OP_OR 1
-/* Block until ready_cnt or fewer packets are Queued in "Send and Scheduled" Q,
+/* Block until send_cnt or fewer packets are Queued in "Send and Scheduled" Q,
  * op (AND or OR), sent_cnt or more packet "have been sent" (Sent Q) condition
  * is met.
  * If a link error occurs and the Stop on Link error is defined, this function
@@ -504,6 +504,7 @@ extern void grspw_dma_tx_count(void *c, int *send, int *sched, int *sent);
  *  0    Returing to caller because specified conditions are now fullfilled
  *  1    DMA stopped
  *  2    Timeout, conditions are not met
+ *  3    Another task is already waiting. Service is Busy.
  */
 extern int grspw_dma_tx_wait(void *c, int send_cnt, int op, int sent_cnt, int timeout);
 
@@ -565,7 +566,7 @@ extern void grspw_dma_rx_count(void *c, int *ready, int *sched, int *recv);
  * the other conditions. If timeout is zero, the function will wait forever
  * until the condition is satisfied.
  *
- * NOTE: if IRQ of TX descriptors are not enabled conditions are never
+ * NOTE: if IRQ of RX descriptors are not enabled conditions are never
  *       checked, this may hang infinitely unless a timeout has been specified
  *
  * Return Code
@@ -573,6 +574,7 @@ extern void grspw_dma_rx_count(void *c, int *ready, int *sched, int *recv);
  *  0    Returing to caller because specified conditions are now fullfilled
  *  1    DMA stopped
  *  2    Timeout, conditions are not met
+ *  3    Another task is already waiting. Service is Busy.
  */
 extern int grspw_dma_rx_wait(void *c, int recv_cnt, int op, int ready_cnt, int timeout);
 

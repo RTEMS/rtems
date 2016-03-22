@@ -1926,7 +1926,7 @@ static inline int grspw_tx_wait_eval(struct grspw_dma_priv *dma)
 int grspw_dma_tx_wait(void *c, int send_cnt, int op, int sent_cnt, int timeout)
 {
 	struct grspw_dma_priv *dma = c;
-	int ret, rc;
+	int ret, rc, initialized = 0;
 
 	if (timeout == 0)
 		timeout = RTEMS_NO_TIMEOUT;
@@ -1941,15 +1941,15 @@ check_condition:
 	/* Check so that no other thread is waiting, this driver only supports
 	 * one waiter at a time.
 	 */
-	if (dma->tx_wait.waiting) {
-		ret = -1;
-		goto out;
+	if (initialized == 0 && dma->tx_wait.waiting) {
+		ret = 3;
+		goto out_release;
 	}
 
-	/* Stop if link error or similar, abort */
+	/* Stop if link error or similar (DMA stopped), abort */
 	if (dma->started == 0) {
 		ret = 1;
-		goto out;
+		goto out_release;
 	}
 
 	/* Set up Condition */
@@ -1959,6 +1959,7 @@ check_condition:
 
 	if (grspw_tx_wait_eval(dma) == 0) {
 		/* Prepare Wait */
+		initialized = 1;
 		dma->tx_wait.waiting = 1;
 
 		/* Release DMA channel lock */
@@ -1970,27 +1971,34 @@ check_condition:
 		rc = rtems_semaphore_obtain(dma->tx_wait.sem_wait, RTEMS_WAIT,
 						timeout);
 		if (rc == RTEMS_TIMEOUT) {
-			dma->tx_wait.waiting = 0;
-			return 2;
+			ret = 2;
+			goto out;
 		} else if (rc == RTEMS_UNSATISFIED ||
 		           rc == RTEMS_OBJECT_WAS_DELETED) {
-			dma->tx_wait.waiting = 0;
-			return 1; /* sem was flushed/deleted, means DMA stop */
-		} else if (rc != RTEMS_SUCCESSFUL)
-		    	return -1;
+			ret = 1; /* sem was flushed/deleted, means DMA stop */
+			goto out;
+		} else if (rc != RTEMS_SUCCESSFUL) {
+			/* Unknown Error */
+			ret = -1;
+			goto out;
+		} else if (dma->started == 0) {
+			ret = 1;
+			goto out;
+		}
 
 		/* Check condition once more */
 		goto check_condition;
-	} else {
-		/* No Wait needed */
-		dma->tx_wait.waiting = 0;
 	}
 
 	ret = 0;
-out:
+
+out_release:
 	/* Unlock DMA channel */
 	rtems_semaphore_release(dma->sem_dma);
 
+out:
+	if (initialized)
+		dma->tx_wait.waiting = 0;
 	return ret;
 }
 
@@ -2132,7 +2140,7 @@ static inline int grspw_rx_wait_eval(struct grspw_dma_priv *dma)
 int grspw_dma_rx_wait(void *c, int recv_cnt, int op, int ready_cnt, int timeout)
 {
 	struct grspw_dma_priv *dma = c;
-	int ret, rc;
+	int ret, rc, initialized = 0;
 
 	if (timeout == 0)
 		timeout = RTEMS_NO_TIMEOUT;
@@ -2147,15 +2155,15 @@ check_condition:
 	/* Check so that no other thread is waiting, this driver only supports
 	 * one waiter at a time.
 	 */
-	if (dma->rx_wait.waiting) {
-		ret = -1;
-		goto out;
+	if (initialized == 0 && dma->rx_wait.waiting) {
+		ret = 3;
+		goto out_release;
 	}
 
-	/* Stop if link error or similar (MDA stopped) */
+	/* Stop if link error or similar (DMA stopped), abort */
 	if (dma->started == 0) {
 		ret = 1;
-		goto out;
+		goto out_release;
 	}
 
 	/* Set up Condition */
@@ -2165,6 +2173,7 @@ check_condition:
 
 	if (grspw_rx_wait_eval(dma) == 0) {
 		/* Prepare Wait */
+		initialized = 1;
 		dma->rx_wait.waiting = 1;
 
 		/* Release channel lock */
@@ -2176,27 +2185,34 @@ check_condition:
 		rc = rtems_semaphore_obtain(dma->rx_wait.sem_wait, RTEMS_WAIT,
 		                           timeout);
 		if (rc == RTEMS_TIMEOUT) {
-			dma->rx_wait.waiting = 0;
-			return 2;
+		    	ret = 2;
+			goto out;
 		} else if (rc == RTEMS_UNSATISFIED ||
 		           rc == RTEMS_OBJECT_WAS_DELETED) {
-			dma->rx_wait.waiting = 0;
-			return 1; /* sem was flushed/deleted, means DMA stop */
-		} else if (rc != RTEMS_SUCCESSFUL)
-		    	return -1;
+			ret = 1; /* sem was flushed/deleted, means DMA stop */
+			goto out;
+		} else if (rc != RTEMS_SUCCESSFUL) {
+		    	/* Unknown Error */
+			ret = -1;
+			goto out;
+		} else if (dma->started == 0) {
+			ret = 1;
+			goto out;
+		}
 
 		/* Check condition once more */
 		goto check_condition;
-	} else {
-		/* No Wait needed */
-		dma->rx_wait.waiting = 0;
 	}
+
 	ret = 0;
 
-out:
+out_release:
 	/* Unlock DMA channel */
 	rtems_semaphore_release(dma->sem_dma);
 
+out:
+	if (initialized)
+		dma->rx_wait.waiting = 0;
 	return ret;
 }
 
@@ -2398,8 +2414,8 @@ static void grspw_work_shutdown_func(struct grspw_priv *priv)
 	int i;
 
 	/* Link is down for some reason, and the user has configured
-	 * that we stop all DMA channels and throw out all blocked
-	 * threads.
+	 * that we stop all (open) DMA channels and throw out all their
+	 * blocked threads.
 	 */
 	for (i=0; i<priv->hwsup.ndma_chans; i++)
 		grspw_dma_stop(&priv->dma[i]);
@@ -2421,6 +2437,10 @@ static void grspw_work_dma_func(struct grspw_dma_priv *dma)
 	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
 		return;
+
+	/* If closing DMA channel or just shut down */
+	if (dma->started == 0)
+		goto out;
 
 	/* Look at cause we were woken up and clear source */
 	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
@@ -2448,26 +2468,21 @@ static void grspw_work_dma_func(struct grspw_dma_priv *dma)
 			/* Check to see if condition for waking blocked USER
 		 	 * task is fullfilled.
 			 */
-			if (dma->rx_wait.waiting) {
+			if (dma->rx_wait.waiting)
 				rx_cond_true = grspw_rx_wait_eval(dma);
-				if (rx_cond_true)
-					dma->rx_wait.waiting = 0;
-			}
 		}
 		if (ctrl & GRSPW_DMACTRL_PS) {
 			/* Do TX Work */
 			dma->stats.tx_work_cnt++;
 			grspw_tx_process_scheduled(dma);
 			dma->stats.tx_work_enabled += grspw_tx_schedule_send(dma);
-			if (dma->tx_wait.waiting) {
+			if (dma->tx_wait.waiting)
 				tx_cond_true = grspw_tx_wait_eval(dma);
-				if (tx_cond_true)
-					dma->tx_wait.waiting = 0;
-			}
 		}
 	} else
 		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
+out:
 	/* Release lock */
 	rtems_semaphore_release(dma->sem_dma);
 
