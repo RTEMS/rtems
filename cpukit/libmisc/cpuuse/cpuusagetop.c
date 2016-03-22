@@ -465,7 +465,6 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
     for (i = 0; i < data->task_count; i++)
     {
       Thread_Control*   thread = data->tasks[i];
-      Timestamp_Control last;
       Timestamp_Control usage;
       Timestamp_Control current_usage;
 
