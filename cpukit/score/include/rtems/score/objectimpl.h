@@ -447,7 +447,6 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   Objects_Id          *id
 );
 
-#if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
 typedef enum {
   OBJECTS_GET_BY_NAME_INVALID_NAME,
   OBJECTS_GET_BY_NAME_NAME_TOO_LONG,
@@ -474,7 +473,6 @@ Objects_Control *_Objects_Get_by_name(
   size_t                    *name_length_p,
   Objects_Get_by_name_error *error
 );
-#endif
 
 /**
  *  @brief Implements the common portion of the object Id to name directives.
