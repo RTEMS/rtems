@@ -184,8 +184,6 @@ rtems_status_code rtems_semaphore_obtain(
 /**
  *  @brief RTEMS Semaphore Release
  *
- *  Semaphore Manager
- *
  *  This routine implements the rtems_semaphore_release directive.  It
  *  frees a unit to the semaphore associated with ID.  If a task was
  *  blocked waiting for a unit from this semaphore, then that task will
