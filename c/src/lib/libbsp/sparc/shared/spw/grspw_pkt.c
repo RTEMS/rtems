@@ -545,6 +545,7 @@ void *grspw_open(int dev_no)
 	 * channels. Max-size descriptor area is allocated (or user assigned):
 	 *  - 128 RX descriptors per DMA Channel
 	 *  - 64 TX descriptors per DMA Channel
+	 * Specified address must be in CPU RAM.
  	 */
 	bdtabsize = 2 * BDTAB_SIZE * priv->hwsup.ndma_chans;
 	value = drvmgr_dev_key_get(priv->dev, "bdDmaArea", DRVMGR_KT_INT);
@@ -827,14 +828,14 @@ void grspw_tc_isr(void *d, void (*tcisr)(void *data, int tc), void *data)
  */
 void grspw_tc_time(void *d, int *time)
 {
-        struct grspw_priv *priv = d;
-        struct grspw_regs *regs = priv->regs;
+	struct grspw_priv *priv = d;
+	struct grspw_regs *regs = priv->regs;
 
-        if (time == NULL)
-                return;
-        if (*time != -1)
-                REG_WRITE(&regs->time, *time & (GRSPW_TIME_TCNT | GRSPW_TIME_CTRL));
-        *time = REG_READ(&regs->time) & (GRSPW_TIME_TCNT | GRSPW_TIME_CTRL);
+	if (time == NULL)
+		return;
+	if (*time != -1)
+		REG_WRITE(&regs->time, *time & (GRSPW_TIME_TCNT | GRSPW_TIME_CTRL));
+	*time = REG_READ(&regs->time) & (GRSPW_TIME_TCNT | GRSPW_TIME_CTRL);
 }
 
 /* Generate Tick-In for the given Interrupt-code and check for generation
@@ -1832,7 +1833,7 @@ int grspw_dma_tx_reclaim(void *c, int opts, struct grspw_list *pkts, int *count)
 	}
 
 	/* 3. Schedule as many packets as possible (SEND->SCHED) */
-	if ((started > 0 ) && ((opts & 2) == 0))
+	if ((started > 0) && ((opts & 2) == 0))
 		grspw_tx_schedule_send(dma);
 
 	/* Unlock DMA channel */
