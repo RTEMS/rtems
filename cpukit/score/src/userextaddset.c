@@ -20,13 +20,20 @@
 #endif
 
 #include <rtems/score/userextimpl.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/sysstate.h>
 
 void _User_extensions_Add_set(
   User_extensions_Control *the_extension
 )
 {
-  _Chain_Append( &_User_extensions_List, &the_extension->Node );
+  _Assert(
+    _Objects_Allocator_is_owner()
+      || _System_state_Is_before_multitasking( _System_state_Get() )
+  );
+
+  _Chain_Append_unprotected( &_User_extensions_List, &the_extension->Node );
 
   /*
    * If a switch handler is present, append it to the switch chain.

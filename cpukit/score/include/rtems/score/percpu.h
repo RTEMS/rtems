@@ -521,7 +521,7 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
   do { \
     uint32_t ncpus = _SMP_Get_processor_count(); \
     uint32_t cpu; \
-    _ISR_Disable( isr_cookie ); \
+    _ISR_Disable_without_giant( isr_cookie ); \
     for ( cpu = 0 ; cpu < ncpus ; ++cpu ) { \
       _Per_CPU_Acquire( _Per_CPU_Get_by_index( cpu ) ); \
     } \
@@ -539,7 +539,7 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
     for ( cpu = 0 ; cpu < ncpus ; ++cpu ) { \
       _Per_CPU_Release( _Per_CPU_Get_by_index( cpu ) ); \
     } \
-    _ISR_Enable( isr_cookie ); \
+    _ISR_Enable_without_giant( isr_cookie ); \
   } while ( 0 )
 #else
 #define _Per_CPU_Release_all( isr_cookie ) \
