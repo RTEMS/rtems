@@ -40,6 +40,7 @@
 #ifndef __rtems__
 #include "board.h"
 #else /* __rtems__ */
+#define MPU_HAS_NOCACHE_REGION
 #include <chip.h>
 #include <include/board_lowlevel.h>
 #endif /* __rtems__ */
