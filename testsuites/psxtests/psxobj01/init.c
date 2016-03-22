@@ -54,21 +54,28 @@ rtems_task Init(
     #endif
   );
 
+
   puts( "INIT - _Objects_Get_by_name - NULL name" );
+  _Objects_Allocator_lock();
   the_object = _Objects_Get_by_name( &TestClass, NULL, NULL, &error );
+  _Objects_Allocator_unlock();
   rtems_test_assert( the_object == NULL );
   rtems_test_assert( error == OBJECTS_GET_BY_NAME_INVALID_NAME );
 
   puts( "INIT - _Objects_Get_by_name - name too long" );
   strcpy( name, "TOOOOOOOOOOOOOOOOOO LONG" );
+  _Objects_Allocator_lock();
   the_object = _Objects_Get_by_name( &TestClass, name, NULL, &error );
+  _Objects_Allocator_unlock();
   rtems_test_assert( the_object == NULL );
   rtems_test_assert( error == OBJECTS_GET_BY_NAME_NAME_TOO_LONG );
 
   puts( "INIT - _Objects_Get_by_name - name of non-existent object" );
   strcpy( name, "NOT FOUND" );
   name_len = 123;
+  _Objects_Allocator_lock();
   the_object = _Objects_Get_by_name( &TestClass, name, &name_len, &error );
+  _Objects_Allocator_unlock();
   rtems_test_assert( the_object == NULL );
   rtems_test_assert( error == OBJECTS_GET_BY_NAME_NO_OBJECT );
   rtems_test_assert( name_len == 9 );
