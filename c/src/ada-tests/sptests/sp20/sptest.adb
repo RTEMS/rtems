@@ -241,14 +241,8 @@ package body SPTEST is
                );
 
                -- timestamp
-               RTEMS.CLOCK.GET(
-                  RTEMS.CLOCK.GET_TICKS_SINCE_BOOT,
-                  Time( INDEX )'ADDRESS,
-                  STATUS
-               );
-               TEST_SUPPORT.DIRECTIVE_FAILED(
-                  STATUS, "clock_get of TA6"
-               );
+               RTEMS.CLOCK.GET_TICKS_SINCE_BOOT( Time( INDEX ), STATUS );
+               TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "clock_get of TA6" );
             end loop;
 
             for INDEX in 1 .. 10 loop

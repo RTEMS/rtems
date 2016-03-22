@@ -197,7 +197,7 @@
 #define     rtems_task_suspend( tid ) \
            Empty_directive()
 
-#define     rtems_clock_get( options, time ) \
+#define     rtems_clock_get_tod( tod ) \
            Empty_directive()
 #define     rtems_clock_set( time ) \
            Empty_directive()

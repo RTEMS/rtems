@@ -53,47 +53,6 @@ extern "C" {
 #endif
 
 /**
- *  List of things which can be returned by the rtems_clock_get directive.
- */
-typedef enum {
-  /** This value indicates obtain TOD in Classic API format. */
-  RTEMS_CLOCK_GET_TOD,
-  /** This value indicates obtain the number of seconds since the epoch. */
-  RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH,
-  /** This value indicates obtain the number of ticks since system boot. */
-  RTEMS_CLOCK_GET_TICKS_SINCE_BOOT,
-  /** This value indicates obtain the number of ticks per second. */
-  RTEMS_CLOCK_GET_TICKS_PER_SECOND,
-  /** This value indicates obtain the TOD in struct timeval format. */
-  RTEMS_CLOCK_GET_TIME_VALUE
-} rtems_clock_get_options;
-
-/**
- * @brief Obtain Current Time of Day
- *
- * @deprecated rtems_clock_get() is deprecated. Use the more explicit
- * function calls rtems_clock_get_xxx().
- *
- * This routine implements the rtems_clock_get directive. It returns
- * one of the following:
- * + current time of day
- * + seconds since epoch
- * + ticks since boot
- * + ticks per second
- *
- * @param[in] option is the format of time to return
- * @param[in] time_buffer points to the output area
- *
- * @retval This method returns RTEMS_SUCCESSFUL if there was not an
- *         error. Otherwise, a status code is returned indicating the
- *         source of the error.
- */
-rtems_status_code rtems_clock_get(
-  rtems_clock_get_options  option,
-  void                    *time_buffer
-) RTEMS_DEPRECATED;
-
-/**
  * @brief Obtain Current Time of Day (Classic TOD)
  *
  * This routine implements the rtems_clock_get_tod directive. It returns

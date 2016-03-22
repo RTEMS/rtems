@@ -160,7 +160,6 @@ spcbssched01/Makefile
 spcbssched02/Makefile
 spcbssched03/Makefile
 spchain/Makefile
-spclockget/Makefile
 spclock_err01/Makefile
 spclock_err02/Makefile
 spcoverage/Makefile

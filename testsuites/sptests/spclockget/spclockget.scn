@@ -1,8 +1,0 @@
-*** TEST LEGACY RTEMS_CLOCK_GET ***
-Init - clock_set_time
-Init - rtems_clock_get - 09:00:00   12/31/1988
-Init - rtems_clock_get - Seconds Since Epoch = 599562000
-Init - rtems_clock_get - Ticks Since Boot = 0
-Init - rtems_clock_get - Ticks Per Second = 100
-Init - rtems_clock_get - Time Value = 599562000
-*** END OF TEST LEGACY RTEMS_CLOCK_GET ***

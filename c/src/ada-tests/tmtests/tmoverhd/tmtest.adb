@@ -396,12 +396,12 @@ package body TMTEST is
 --         0
 --      );
 
--- CLOCK_GET
+-- CLOCK_GET_TOD
 
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            DUMMY_RTEMS.CLOCK_GET( RTEMS.CLOCK.GET_TOD, TIME'ADDRESS, STATUS );
+            DUMMY_RTEMS.CLOCK_GET_TOD( TIME, STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 

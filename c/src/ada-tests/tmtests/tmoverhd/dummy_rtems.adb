@@ -189,18 +189,16 @@ package body DUMMY_RTEMS is
 
 -- Clock Manager
 
-   procedure CLOCK_GET (
-      OPTION      : in     RTEMS.CLOCK.GET_OPTIONS;
-      TIME_BUFFER : in     RTEMS.ADDRESS;
+   procedure CLOCK_GET_TOD (
+      TIME_BUFFER :    out RTEMS.ADDRESS;
       RESULT      :    out RTEMS.STATUS_CODES
    ) is
-      pragma Unreferenced(OPTION);
       pragma Unreferenced(TIME_BUFFER);
    begin
 
       RESULT := RTEMS.SUCCESSFUL;
 
-   end CLOCK_GET;
+   end CLOCK_GET_TOD;
 
    procedure CLOCK_SET (
       TIME_BUFFER : in     RTEMS.TIME_OF_DAY;

@@ -142,7 +142,6 @@ librtems_a_SOURCES += src/barrierrelease.c
 librtems_a_SOURCES += src/barrierwait.c
 
 ## CLOCK_C_FILES
-librtems_a_SOURCES += src/clockget.c
 librtems_a_SOURCES += src/clockgetsecondssinceepoch.c
 librtems_a_SOURCES += src/clockgettickspersecond.c
 librtems_a_SOURCES += src/clockgettod.c

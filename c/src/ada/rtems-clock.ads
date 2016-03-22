@@ -32,34 +32,12 @@ package RTEMS.Clock is
          Microseconds : RTEMS.Unsigned32;
       end record;
 
-   type Clock_Get_Options is (
-      Clock_Get_TOD,
-      Clock_Get_Seconds_Since_Epoch,
-      Clock_Get_Ticks_Since_Boot,
-      Clock_Get_Ticks_Per_Second,
-      Clock_Get_Time_Value
-   );
-
-   type Get_Options is (
-      Get_TOD,
-      Get_Seconds_Since_Epoch,
-      Get_Ticks_Since_Boot,
-      Get_Ticks_Per_Second,
-      Get_Time_Value
-   );
-
    --
    --  Clock Manager
    --
 
    procedure Set (
       Time_Buffer : in     RTEMS.Time_Of_Day;
-      Result      :    out RTEMS.Status_Codes
-   );
-
-   procedure Get (
-      Option      : in     RTEMS.Clock.Get_Options;
-      Time_Buffer : in     RTEMS.Address;
       Result      :    out RTEMS.Status_Codes
    );
 

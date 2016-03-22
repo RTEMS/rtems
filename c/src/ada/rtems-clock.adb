@@ -41,22 +41,6 @@ package body RTEMS.Clock is
 
    end Set;
 
-   procedure Get
-     (Option      : in RTEMS.Clock.Get_Options;
-      Time_Buffer : in RTEMS.Address;
-      Result      : out RTEMS.Status_Codes)
-   is
-      function Get_Base
-        (Option      : RTEMS.Clock.Get_Options;
-         Time_Buffer : RTEMS.Address)
-         return        RTEMS.Status_Codes;
-      pragma Import (C, Get_Base, "rtems_clock_get");
-   begin
-
-      Result := Get_Base (Option, Time_Buffer);
-
-   end Get;
-
    procedure Get_TOD
      (Time   : out RTEMS.Time_Of_Day;
       Result : out RTEMS.Status_Codes)
