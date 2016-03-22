@@ -35,9 +35,11 @@
 #include "config.h"
 #endif
 
+#ifndef __rtems__
 #ifndef lint
 static const char sccsid[] = "@(#)conv.c	8.1 (Berkeley) 6/6/93";
 #endif /* not lint */
+#endif
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD: src/usr.bin/hexdump/conv.c,v 1.9 2006/07/31 14:17:04 jkoshy Exp $");
 
