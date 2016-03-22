@@ -193,10 +193,29 @@ struct grspw_core_stats {
 #define LINKOPTS_DISABLE	0x0001
 #define LINKOPTS_START		0x0002
 #define LINKOPTS_AUTOSTART	0x0004
-#define LINKOPTS_DIS_ONERR	0x0008
+#define LINKOPTS_DIS_ONERR	0x0008	/* Disable DMA transmitter on link error
+					 * Controls LE bit in DMACTRL register.
+					 */
+#define LINKOPTS_DIS_ON_CE	0x0020000/* Disable Link on Credit error */
+#define LINKOPTS_DIS_ON_ER	0x0040000/* Disable Link on Escape error */
+#define LINKOPTS_DIS_ON_DE	0x0080000/* Disable Link on Disconnect error */
+#define LINKOPTS_DIS_ON_PE	0x0100000/* Disable Link on Parity error */
+#define LINKOPTS_DIS_ON_WE	0x0400000/* Disable Link on write synchonization
+					  * error (GRSPW1 only)
+					  */
+#define LINKOPTS_DIS_ON_EE	0x1000000/* Disable Link on Early EOP/EEP error*/
+
 /*#define LINKOPTS_TICK_OUT_IRQ	0x0100*//* Enable Tick-out IRQ */
-#define LINKOPTS_IRQ		0x0200	/* Enable Error Link IRQ */
-#define LINKOPTS_MASK		0x020f	/* All above options */
+#define LINKOPTS_EIRQ		0x0200	/* Enable Error Link IRQ */
+
+#define LINKOPTS_MASK		0x15e020f/* All above options */
+#define LINKOPTS_MASK_DIS_ON	0x15e0000/* All disable link on error options
+					  * On a certain error the link disable
+					  * bit will be written and the work
+					  * task will call dma_stop() for all
+					  * channels.
+					  */
+
 
 /* grspw_tc_ctrl() options */
 #define TCOPTS_EN_RXIRQ	0x0001	/* Tick-Out IRQ */

@@ -469,8 +469,8 @@ struct grspw_priv {
 	spwpkt_ic_isr_t icisr;
 	void *icisr_arg;
 
-	/* Disable Link on SpW Link error */
-	int dis_link_on_err;
+	/* Bit mask representing events which shall cause link disable. */
+	unsigned int dis_link_on_err;
 
 	/* "Core Global" Statistics gathered, not dependent on DMA channel */
 	struct grspw_core_stats stats;
@@ -772,10 +772,15 @@ void grspw_link_ctrl(void *d, int *options, int *clkdiv)
 				ctrl &= ~GRSPW_CTRL_IE;
 
 			REG_WRITE(&regs->ctrl, ctrl);
-			priv->dis_link_on_err = (*options & LINKOPTS_DIS_ONERR) >> 3;
+			/* Store the link disable events for use in
+			ISR. The LINKOPTS_DIS_ON_* options are actually the
+			corresponding bits in the status register, shifted
+			by 16. */
+			priv->dis_link_on_err = *options &
+				(LINKOPTS_MASK_DIS_ON | LINKOPTS_DIS_ONERR);
 		}
 		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
-		*options = (ctrl & GRSPW_LINK_CFG)|(priv->dis_link_on_err << 3);
+		*options = (ctrl & GRSPW_LINK_CFG) | priv->dis_link_on_err;
 	}
 }
 
@@ -2268,7 +2273,7 @@ int grspw_dma_start(void *c)
 	ctrl =  GRSPW_DMACTRL_AI | GRSPW_DMACTRL_PS | GRSPW_DMACTRL_PR |
 		GRSPW_DMACTRL_TA | GRSPW_DMACTRL_RA | GRSPW_DMACTRL_RE |
 		(dma->cfg.flags & DMAFLAG_MASK) << GRSPW_DMACTRL_NS_BIT;
-	if (dma->core->dis_link_on_err)
+	if (dma->core->dis_link_on_err & LINKOPTS_DIS_ONERR)
 		ctrl |= GRSPW_DMACTRL_LE;
 	if (dma->cfg.rx_irq_en_cnt != 0)
 		ctrl |= GRSPW_DMACTRL_RI;
@@ -2554,7 +2559,7 @@ STATIC void grspw_isr(void *data)
 		if (stat & GRSPW_STS_WE)
 			priv->stats.err_wsync++;
 
-		if (priv->dis_link_on_err) {
+		if ((priv->dis_link_on_err >> 16) & stat) {
 			/* Disable the link, no more transfers are expected
 			 * on any DMA channel.
 			 */
