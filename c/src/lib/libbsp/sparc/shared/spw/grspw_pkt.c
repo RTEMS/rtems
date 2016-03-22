@@ -1651,24 +1651,28 @@ void *grspw_dma_open(void *d, int chan_no)
 	dma->cfg.tx_irq_en_cnt = 0;
 	dma->cfg.flags = DMAFLAG_NO_SPILL;
 
+	/* set to NULL so that error exit works correctly */
+	dma->sem_dma = RTEMS_ID_NONE;
+	dma->rx_wait.sem_wait = RTEMS_ID_NONE;
+	dma->tx_wait.sem_wait = RTEMS_ID_NONE;
+	dma->rx_ring_base = NULL;
+
 	/* DMA Channel Semaphore created with count = 1 */
 	if (rtems_semaphore_create(
 	    rtems_build_name('S', 'D', '0' + priv->index, '0' + chan_no), 1,
 	    RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | \
 	    RTEMS_NO_INHERIT_PRIORITY | RTEMS_LOCAL | \
 	    RTEMS_NO_PRIORITY_CEILING, 0, &dma->sem_dma) != RTEMS_SUCCESSFUL) {
-		dma = NULL;
-		goto out;
+		dma->sem_dma = RTEMS_ID_NONE;
+		goto err;
 	}
 
 	/* Allocate memory for the two descriptor rings */
 	size = sizeof(struct grspw_ring) * (GRSPW_RXBD_NR + GRSPW_TXBD_NR);
 	dma->rx_ring_base = (struct grspw_rxring *)malloc(size);
 	dma->tx_ring_base = (struct grspw_txring *)&dma->rx_ring_base[GRSPW_RXBD_NR];
-	if (dma->rx_ring_base == NULL) {
-		dma = NULL;
-		goto out;
-	}
+	if (dma->rx_ring_base == NULL)
+		goto err;
 
 	/* Create DMA RX and TX Channel sempahore with count = 0 */
 	if (rtems_semaphore_create(
@@ -1676,16 +1680,16 @@ void *grspw_dma_open(void *d, int chan_no)
 	    RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | \
 	    RTEMS_NO_INHERIT_PRIORITY | RTEMS_LOCAL | \
 	    RTEMS_NO_PRIORITY_CEILING, 0, &dma->rx_wait.sem_wait) != RTEMS_SUCCESSFUL) {
-		dma = NULL;
-		goto out;
+		dma->rx_wait.sem_wait = RTEMS_ID_NONE;
+		goto err;
 	}
 	if (rtems_semaphore_create(
 	    rtems_build_name('S', 'T', '0' + priv->index, '0' + chan_no), 0,
 	    RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | \
 	    RTEMS_NO_INHERIT_PRIORITY | RTEMS_LOCAL | \
 	    RTEMS_NO_PRIORITY_CEILING, 0, &dma->tx_wait.sem_wait) != RTEMS_SUCCESSFUL) {
-		dma = NULL;
-		goto out;
+		dma->tx_wait.sem_wait = RTEMS_ID_NONE;
+		goto err;
 	}
 
 	/* Reset software structures */
@@ -1698,6 +1702,19 @@ out:
 	rtems_semaphore_release(grspw_sem);
 
 	return dma;
+
+	/* initialization error happended */
+err:
+	if (dma->sem_dma != RTEMS_ID_NONE)
+		rtems_semaphore_delete(dma->sem_dma);
+	if (dma->rx_wait.sem_wait != RTEMS_ID_NONE)
+		rtems_semaphore_delete(dma->rx_wait.sem_wait);
+	if (dma->tx_wait.sem_wait != RTEMS_ID_NONE)
+		rtems_semaphore_delete(dma->tx_wait.sem_wait);
+	if (dma->rx_ring_base)
+		free(dma->rx_ring_base);
+	dma = NULL;
+	goto out;
 }
 
 /* Initialize Software Structures:
@@ -1751,7 +1768,9 @@ void grspw_dma_close(void *c)
 	/* Free resources */
 	rtems_semaphore_delete(dma->rx_wait.sem_wait);
 	rtems_semaphore_delete(dma->tx_wait.sem_wait);
-	rtems_semaphore_delete(dma->sem_dma); /* Release and delete lock */
+	/* Release and delete lock. Operations requiring lock will fail */
+	rtems_semaphore_delete(dma->sem_dma);
+	dma->sem_dma = RTEMS_ID_NONE;
 
 	/* Free memory */
 	if (dma->rx_ring_base)
@@ -2941,7 +2960,7 @@ static int grspw_common_init(void)
 		if (rtems_task_start(grspw_work_task, grspw_work_func, 0) !=
 		    RTEMS_SUCCESSFUL)
 			return -1;
-	}
+}
 
 	grspw_initialized = 1;
 	return 0;
