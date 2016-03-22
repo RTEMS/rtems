@@ -18,11 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
 #include <rtems/rtems/ratemonimpl.h>
-#include <rtems/score/thread.h>
 
 /*
  *  rtems_rate_monotonic_reset_all_statistics
@@ -32,13 +28,10 @@ void rtems_rate_monotonic_reset_all_statistics( void )
   Objects_Id        id;
 
    /*
-    *  Prevent allocation or deallocation of any of the periods while
-    *  we are cycling.  Also this is an optimization which ensures that
-    *  we only disable/enable once.  The call to
-    *  rtems_rate_monotonic_reset_statistics will be in a nested dispatch
-    *  disabled critical section.
+    * Prevent allocation or deallocation of any of the periods while we are
+    * cycling.
     */
-  _Thread_Disable_dispatch();
+  _Objects_Allocator_lock();
 
     /*
      * Cycle through all possible ids and try to reset each one.  If it
@@ -50,8 +43,5 @@ void rtems_rate_monotonic_reset_all_statistics( void )
       (void) rtems_rate_monotonic_reset_statistics( id );
     }
 
-  /*
-   *  Done so exit thread dispatching disabled critical section.
-   */
-  _Thread_Enable_dispatch();
+  _Objects_Allocator_unlock();
 }
