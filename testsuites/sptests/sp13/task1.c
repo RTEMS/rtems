@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2011, 2016.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -339,28 +339,29 @@ rtems_test_pause();
       RTEMS_DEFAULT_OPTIONS,
       1 * rtems_clock_get_ticks_per_second()
     );
-   directive_failed(status, "rtems_message_queue_receive exact size");
-   if (size != queue_size) {
-     puts("TA1 - exact size size match failed");
-     rtems_test_exit(1);
-   }
-
-   if (memcmp(big_send_buffer, big_receive_buffer, size) != 0) {
-     puts("TA1 - exact size data match failed");
-     rtems_test_exit(1);
-   }
-
-   for (cp = (big_receive_buffer + size);
-        cp < (big_receive_buffer + sizeof(big_receive_buffer));
-        cp++)
-    if (*cp != 'Z') {
-      puts("TA1 - exact size overrun match failed");
+    directive_failed(status, "rtems_message_queue_receive exact size");
+    if (size != queue_size) {
+      puts("TA1 - exact size size match failed");
       rtems_test_exit(1);
     }
 
-    /* all done with this one; delete it */
-    status = rtems_message_queue_delete( Queue_id[ 1 ] );
-    directive_failed( status, "rtems_message_queue_delete" );
+    if (memcmp(big_send_buffer, big_receive_buffer, size) != 0) {
+      puts("TA1 - exact size data match failed");
+      rtems_test_exit(1);
+    }
+
+    for (cp = (big_receive_buffer + size);
+         cp < (big_receive_buffer + sizeof(big_receive_buffer));
+         cp++) {
+     if (*cp != 'Z') {
+       puts("TA1 - exact size overrun match failed");
+       rtems_test_exit(1);
+     }
+   }
+
+   /* all done with this one; delete it */
+   status = rtems_message_queue_delete( Queue_id[ 1 ] );
+   directive_failed( status, "rtems_message_queue_delete" );
   }
 
   TEST_END();
