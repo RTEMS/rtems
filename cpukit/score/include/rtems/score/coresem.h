@@ -50,15 +50,6 @@ typedef enum {
 }   CORE_semaphore_Disciplines;
 
 /**
- *  The following defines the control block used to manage the
- *  attributes of each semaphore.
- */
-typedef struct {
-  /** This element indicates the maximum count this semaphore may have. */
-  uint32_t                    maximum_count;
-}   CORE_semaphore_Attributes;
-
-/**
  *  The following defines the control block used to manage each
  *  counting semaphore.
  */
@@ -73,10 +64,6 @@ typedef struct {
    */
   const Thread_queue_Operations *operations;
 
-  /** This element is the set of attributes which define this instance's
-   *  behavior.
-   */
-  CORE_semaphore_Attributes   Attributes;
   /** This element contains the current count of this semaphore. */
   uint32_t                    count;
 }   CORE_semaphore_Control;

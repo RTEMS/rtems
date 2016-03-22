@@ -153,7 +153,6 @@ rtems_status_code rtems_semaphore_create(
     _CORE_semaphore_Initialize(
       &the_semaphore->Core_control.semaphore,
       semaphore_discipline,
-      0xFFFFFFFF,
       count
     );
 #if defined(RTEMS_SMP)

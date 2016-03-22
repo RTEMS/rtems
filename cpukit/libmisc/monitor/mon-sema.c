@@ -28,11 +28,8 @@ rtems_monitor_sema_canonical(
 
     if (_Attributes_Is_counting_semaphore(canonical_sema->attribute)) {
       /* we have a counting semaphore */
-      canonical_sema->cur_count  =
-	rtems_sema->Core_control.semaphore.count;
-
-      canonical_sema->max_count  =
-	rtems_sema->Core_control.semaphore.Attributes.maximum_count;
+      canonical_sema->cur_count  = rtems_sema->Core_control.semaphore.count;
+      canonical_sema->max_count  = UINT32_MAX;
     }
     else {
       /* we have a binary semaphore (mutex) */

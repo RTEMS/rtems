@@ -87,13 +87,11 @@ typedef void ( *CORE_semaphore_API_mp_support_callout )(
  *
  *  @param[in] the_semaphore is the semaphore to initialize
  *  @param[in] discipline the blocking discipline
- *  @param[in] maximum_count the maximum count
  *  @param[in] initial_value is the initial count of the semaphore
  */
 void _CORE_semaphore_Initialize(
   CORE_semaphore_Control     *the_semaphore,
   CORE_semaphore_Disciplines  discipline,
-  uint32_t                    maximum_count,
   uint32_t                    initial_value
 );
 
@@ -158,7 +156,7 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Surrender(
     _Thread_Dispatch_enable( _Per_CPU_Get() );
 #endif
   } else {
-    if ( the_semaphore->count < the_semaphore->Attributes.maximum_count )
+    if ( the_semaphore->count < UINT32_MAX )
       the_semaphore->count += 1;
     else
       status = CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED;

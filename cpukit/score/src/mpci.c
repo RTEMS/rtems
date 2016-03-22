@@ -120,7 +120,6 @@ static void _MPCI_Handler_initialization( void )
   _CORE_semaphore_Initialize(
     &_MPCI_Semaphore,
     CORE_SEMAPHORE_DISCIPLINES_FIFO,
-    0xffffffff,
     0                         /* initial_value */
   );
 }

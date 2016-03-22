@@ -95,7 +95,6 @@ int _POSIX_Semaphore_Create_support(
   _CORE_semaphore_Initialize(
     &the_semaphore->Semaphore,
     CORE_SEMAPHORE_DISCIPLINES_FIFO,
-    0xFFFFFFFF,
     value
   );
 
