@@ -75,4 +75,5 @@ void pthread_exit(
 )
 {
   _POSIX_Thread_Exit( _Thread_Get_executing(), value_ptr );
+  RTEMS_UNREACHABLE();
 }
