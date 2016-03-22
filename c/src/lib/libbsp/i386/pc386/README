@@ -1,60 +1,62 @@
 #
 # This board support package works with a target PC
 #
-# Decisions to be made a link-edit time are:
-#     - The size of the memory allocator heap.  The default value is
-#       64 kbytes.  If the network package is used the heap
-#       should be at least 256 kbytes.  If your network is large, or
-#       busy, the heap should be even larger.
-#       To choose a heap size of 256 kbytes,
-#       CFLAGS_LD += -Wl,--defsym -Wl,HeapSize=0x40000
 
-BSP NAME:           pc386
-BOARD:              PC 
-BUS:                none
-CPU FAMILY:         386, 486, 586, 686
-COPROCESSORS:       none
-MODE:               not applicable
+This BSP supports a standard Intel/AMD PC on i386 and up CPUs. If on
+a Pentium or above, the TSC register is used for timing calibration
+purposes rather than relying entirely on the i8254.
 
-DEBUG MONITOR:      
+Partial support is implemented for more modern PCs which do not have
+a complete complement of legacy peripherals. 
 
-PERIPHERALS
-===========
-TIMERS:             8254 Programmable Interval Timer
-RESOLUTION:         
-SERIAL PORTS:       COM1, COM2
-REAL-TIME CLOCK:
-DMA:                
-VIDEO:              VGA
-SCSI:               
-NETWORKING:         external Ethernet controller based on WD8003.
+Console/Printk Device Selection
+===============================
+The pc386 console device driver supports a variety of devices
+including the VGA/keyboard and a number of serial ports. The
+default console is selected based on which devices are present
+in the following order of priority:
 
-DRIVER INFORMATION
-==================
-CLOCK DRIVER:       8254 Programmable Interval Timer
-IOSUPP DRIVER:      
-SHMSUPP:            
-TIMER DRIVER:       
++ VGA and keyboard
++ COM1 through COM4aaa
 
-STDIO
-=====
-PORT:               
-ELECTRICAL:         
-BAUD:               
-BITS PER CHARACTER: 
-PARITY:             
-STOP BITS:          
++ Any COM devices on the PCI bus
 
-NOTES
-=====
+Beyond the dynamic probing for device presence, a combination of 
+configure and boot time options are available. By default, all devices
+are enabled. The configure time options are:
 
-Board description
------------------
-clock rate:     
-bus width:      
-ROM:            
-RAM:            
++ BSP_ENABLE_VGA - value of 1 to enable, 0 to disable
++ BSP_ENABLE_COM1_COM4 - value of 1 to enable, 0 to disable
++ BSP_USE_COM1_AS_CONSOLE - value of 1 forces console to COM1
 
-Host System
------------
-Linux
+An example of using these to force the console to COM1 is:
+
+../rtems/configure --target=i386-rtems4.12 \
+  USE_COM1_AS_CONSOLE=1 --enable-rtemsbsp=pc386 \
+  ... other arguments ...
+
+The --console and --printk options can be used to specify the
+device associated with stdin, stdout, and stderr as well as
+the device associated with kernel debug IO (e.g. printk()/getk()).
+Both take the name of a device without the "/dev/" prefix.
+
+The --console argument is interpreted first and assumed to
+specify the console and kernel debug IO device. The --printk
+is then interpreted to specify the debug kernel IO device.
+For example,
+
+--console=com1 --printk=vgacons
+
+specifies that com1 is to be used for stdin, stdout, and stderr
+while the VGA console is to be used for kernel debug IO.
+Note that the lower case com1 is intentional as this maps to
+the RTEMS device /dev/com1.
+
+The device name may be followed by a baud rate. The following
+example illustrates this:
+
+--console=com1,19200 --printk=vgacons
+
+If the specified device is not present, then a suitable fallback
+device is selected. The fallback order is based upon the probe
+order listed earlier.
