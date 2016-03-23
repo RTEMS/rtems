@@ -36,6 +36,7 @@ void _CORE_message_queue_Close(
 
   _Thread_queue_Flush(
     &the_message_queue->Wait_queue,
+    the_message_queue->operations,
     remote_extract_callout,
     status
   );

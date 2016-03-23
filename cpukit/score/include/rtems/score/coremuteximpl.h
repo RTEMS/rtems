@@ -392,7 +392,7 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_fifo(
  *
  */
 RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_priority(
-  CORE_mutex_Attributes *the_attribute
+  const CORE_mutex_Attributes *the_attribute
 )
 {
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_PRIORITY;
@@ -410,7 +410,7 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_priority(
  * @retval false The mutex is not using priority inheritance.
  */
 RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_inherit_priority(
-  CORE_mutex_Attributes *the_attribute
+  const CORE_mutex_Attributes *the_attribute
 )
 {
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
@@ -428,7 +428,7 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_inherit_priority(
  * @retval false The mutex is not using priority ceiling.
  */
 RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_priority_ceiling(
-  CORE_mutex_Attributes *the_attribute
+  const CORE_mutex_Attributes *the_attribute
 )
 {
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING;

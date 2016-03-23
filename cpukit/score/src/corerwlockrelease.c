@@ -64,7 +64,10 @@ CORE_RWLock_Status _CORE_RWLock_Release(
     the_rwlock->current_state = CORE_RWLOCK_UNLOCKED;
   _ISR_Enable( level );
 
-  next = _Thread_queue_Dequeue( &the_rwlock->Wait_queue );
+  next = _Thread_queue_Dequeue(
+    &the_rwlock->Wait_queue,
+    CORE_RWLOCK_TQ_OPERATIONS
+  );
 
   if ( next ) {
     if ( next->Wait.option == CORE_RWLOCK_THREAD_WAITING_FOR_WRITE ) {
@@ -82,7 +85,10 @@ CORE_RWLock_Status _CORE_RWLock_Release(
      * Now see if more readers can be let go.
      */
     while ( 1 ) {
-      next = _Thread_queue_First( &the_rwlock->Wait_queue );
+      next = _Thread_queue_First(
+        &the_rwlock->Wait_queue,
+        CORE_RWLOCK_TQ_OPERATIONS
+      );
       if ( !next ||
            next->Wait.option == CORE_RWLOCK_THREAD_WAITING_FOR_WRITE )
         return CORE_RWLOCK_SUCCESSFUL;

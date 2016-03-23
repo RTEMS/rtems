@@ -81,6 +81,7 @@ rtems_status_code rtems_region_get_segment(
 
             _Thread_queue_Enqueue(
               &the_region->Wait_queue,
+              the_region->wait_operations,
               executing,
               STATES_WAITING_FOR_SEGMENT,
               timeout,

@@ -46,7 +46,10 @@ void _Region_Process_queue(
    *        threads whose memory request is satisfied.
    */
   for ( ; ; ) {
-    the_thread = _Thread_queue_First( &the_region->Wait_queue );
+    the_thread = _Thread_queue_First(
+      &the_region->Wait_queue,
+      the_region->wait_operations
+    );
 
     if ( the_thread == NULL )
       break;

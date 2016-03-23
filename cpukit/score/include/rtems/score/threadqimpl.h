@@ -173,7 +173,8 @@ typedef void ( *Thread_queue_Flush_callout )(
  *    + single case
  */
 Thread_Control *_Thread_queue_Dequeue(
-  Thread_queue_Control *the_thread_queue
+  Thread_queue_Control          *the_thread_queue,
+  const Thread_queue_Operations *operations
 );
 
 /**
@@ -196,6 +197,8 @@ Thread_Control *_Thread_queue_Dequeue(
  * #include <rtems/score/threadqimpl.h>
  * #include <rtems/score/statesimpl.h>
  *
+ * #define MUTEX_TQ_OPERATIONS &_Thread_queue_Operations_priority
+ *
  * typedef struct {
  *   Thread_queue_Control  Queue;
  *   Thread_Control       *owner;
@@ -216,7 +219,7 @@ Thread_Control *_Thread_queue_Dequeue(
  *   } else {
  *     _Thread_queue_Enqueue_critical(
  *       &mutex->Queue.Queue,
- *       mutex->Queue.operations,
+ *       MUTEX_TQ_OPERATIONS,
  *       executing,
  *       STATES_WAITING_FOR_MUTEX,
  *       WATCHDOG_NO_TIMEOUT,
@@ -251,11 +254,12 @@ void _Thread_queue_Enqueue_critical(
  * _Thread_queue_Enqueue_critical().
  */
 RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
-  Thread_queue_Control *the_thread_queue,
-  Thread_Control       *the_thread,
-  States_Control        state,
-  Watchdog_Interval     timeout,
-  uint32_t              timeout_code
+  Thread_queue_Control          *the_thread_queue,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *the_thread,
+  States_Control                 state,
+  Watchdog_Interval              timeout,
+  uint32_t                       timeout_code
 )
 {
   ISR_lock_Context lock_context;
@@ -263,7 +267,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
   _Thread_queue_Acquire( the_thread_queue, &lock_context );
   _Thread_queue_Enqueue_critical(
     &the_thread_queue->Queue,
-    the_thread_queue->operations,
+    operations,
     the_thread,
     state,
     timeout,
@@ -400,19 +404,21 @@ void _Thread_queue_Extract_with_proxy(
  * lock is not released.
  *
  * @param[in] the_thread_queue The thread queue.
+ * @param[in] operations The thread queue operations.
  *
  * @retval NULL No thread is present on the thread queue.
  * @retval first The first thread on the thread queue according to the enqueue
  * order.
  */
 RTEMS_INLINE_ROUTINE Thread_Control *_Thread_queue_First_locked(
-  Thread_queue_Control *the_thread_queue
+  Thread_queue_Control          *the_thread_queue,
+  const Thread_queue_Operations *operations
 )
 {
   Thread_queue_Heads *heads = the_thread_queue->Queue.heads;
 
   if ( heads != NULL ) {
-    return ( *the_thread_queue->operations->first )( heads );
+    return ( *operations->first )( heads );
   } else {
     return NULL;
   }
@@ -429,7 +435,8 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_queue_First_locked(
  * order.
  */
 Thread_Control *_Thread_queue_First(
-  Thread_queue_Control *the_thread_queue
+  Thread_queue_Control          *the_thread_queue,
+  const Thread_queue_Operations *operations
 );
 
 /**
@@ -439,76 +446,41 @@ Thread_Control *_Thread_queue_First(
  *  and cancels any associated timeouts.
  *
  *  @param[in] the_thread_queue is the pointer to a threadq header
+ *  @param[in] operations The thread queue operations.
  *  @param[in] remote_extract_callout points to a method to invoke to 
  *             invoke when a remote thread is unblocked
  *  @param[in] status is the status which will be returned to
  *             all unblocked threads
  */
 void _Thread_queue_Flush(
-  Thread_queue_Control       *the_thread_queue,
-  Thread_queue_Flush_callout  remote_extract_callout,
-  uint32_t                    status
+  Thread_queue_Control          *the_thread_queue,
+  const Thread_queue_Operations *operations,
+  Thread_queue_Flush_callout     remote_extract_callout,
+  uint32_t                       status
 );
 
-/**
- *  @brief Initialize the_thread_queue.
- *
- *  This routine initializes the_thread_queue based on the
- *  discipline indicated in attribute_set.  The state set on
- *  threads which block on the_thread_queue is state.
- *
- *  @param[in] the_thread_queue is the pointer to a threadq header
- *  @param[in] the_discipline is the queueing discipline
- */
-void _Thread_queue_Initialize(
-  Thread_queue_Control     *the_thread_queue,
-  Thread_queue_Disciplines  the_discipline
-);
+void _Thread_queue_Initialize( Thread_queue_Control *the_thread_queue );
 
 #if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
-  #define THREAD_QUEUE_FIFO_INITIALIZER( designator, name ) { \
+  #define THREAD_QUEUE_INITIALIZER( name ) \
+    { \
       .Queue = { \
         .heads = NULL, \
         .Lock = SMP_TICKET_LOCK_INITIALIZER, \
       }, \
-      .Lock_stats = SMP_LOCK_STATS_INITIALIZER( name ), \
-      .operations = &_Thread_queue_Operations_FIFO \
-    }
-
-  #define THREAD_QUEUE_PRIORITY_INITIALIZER( designator, name ) { \
-      .Queue = { \
-        .heads = NULL, \
-        .Lock = SMP_TICKET_LOCK_INITIALIZER, \
-      }, \
-      .Lock_stats = SMP_LOCK_STATS_INITIALIZER( name ), \
-      .operations = &_Thread_queue_Operations_priority \
+      .Lock_stats = SMP_LOCK_STATS_INITIALIZER( name ) \
     }
 #elif defined(RTEMS_SMP)
-  #define THREAD_QUEUE_FIFO_INITIALIZER( designator, name ) { \
+  #define THREAD_QUEUE_INITIALIZER( name ) \
+    { \
       .Queue = { \
         .heads = NULL, \
         .Lock = SMP_TICKET_LOCK_INITIALIZER, \
-      }, \
-      .operations = &_Thread_queue_Operations_FIFO \
-    }
-
-  #define THREAD_QUEUE_PRIORITY_INITIALIZER( designator, name ) { \
-      .Queue = { \
-        .heads = NULL, \
-        .Lock = SMP_TICKET_LOCK_INITIALIZER, \
-      }, \
-      .operations = &_Thread_queue_Operations_priority \
+      } \
     }
 #else
-  #define THREAD_QUEUE_FIFO_INITIALIZER( designator, name ) { \
-      .Queue = { .heads = NULL }, \
-      .operations = &_Thread_queue_Operations_FIFO \
-    }
-
-  #define THREAD_QUEUE_PRIORITY_INITIALIZER( designator, name ) { \
-      .Queue = { .heads = NULL }, \
-      .operations = &_Thread_queue_Operations_priority \
-    }
+  #define THREAD_QUEUE_INITIALIZER( name ) \
+    { .Queue = { .heads = NULL } }
 #endif
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Destroy(

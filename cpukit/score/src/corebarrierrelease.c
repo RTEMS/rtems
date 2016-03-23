@@ -23,6 +23,16 @@
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/threadqimpl.h>
 
+static Thread_Control *_CORE_barrier_Dequeue(
+  CORE_barrier_Control *the_barrier
+)
+{
+  return _Thread_queue_Dequeue(
+    &the_barrier->Wait_queue,
+    CORE_BARRIER_TQ_OPERATIONS
+  );
+}
+
 uint32_t _CORE_barrier_Release(
   CORE_barrier_Control                *the_barrier,
 #if defined(RTEMS_MULTIPROCESSING)
@@ -38,7 +48,7 @@ uint32_t _CORE_barrier_Release(
   uint32_t        count;
 
   count = 0;
-  while ( (the_thread = _Thread_queue_Dequeue(&the_barrier->Wait_queue)) ) {
+  while ( ( the_thread = _CORE_barrier_Dequeue( the_barrier ) ) ) {
 #if defined(RTEMS_MULTIPROCESSING)
     if ( !_Objects_Is_local_id( the_thread->Object.id ) )
       (*api_barrier_mp_support) ( the_thread, id );

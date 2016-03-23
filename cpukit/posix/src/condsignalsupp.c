@@ -47,7 +47,10 @@ int _POSIX_Condition_variables_Signal_support(
 
     case OBJECTS_LOCAL:
       do {
-        the_thread = _Thread_queue_Dequeue( &the_cond->Wait_queue );
+        the_thread = _Thread_queue_Dequeue(
+          &the_cond->Wait_queue,
+          POSIX_CONDITION_VARIABLES_TQ_OPERATIONS
+        );
         if ( !the_thread )
           the_cond->Mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
       } while ( is_broadcast && the_thread );

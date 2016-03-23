@@ -54,7 +54,8 @@ const rtems_multiprocessing_table
  */
 CORE_semaphore_Control _MPCI_Semaphore;
 
-Thread_queue_Control _MPCI_Remote_blocked_threads;
+Thread_queue_Control _MPCI_Remote_blocked_threads =
+  THREAD_QUEUE_INITIALIZER( "MPCI Remote Blocked Threads" );
 
 MPCI_Control *_MPCI_table;
 
@@ -85,7 +86,6 @@ static void _MPCI_Handler_early_initialization( void )
 
 static void _MPCI_Handler_initialization( void )
 {
-  CORE_semaphore_Attributes   attributes;
   MPCI_Control               *users_mpci_table;
 
   _Objects_MP_Handler_initialization();
@@ -117,17 +117,11 @@ static void _MPCI_Handler_initialization( void )
    *  Create the counting semaphore used by the MPCI Receive Server.
    */
 
-  attributes.discipline = CORE_SEMAPHORE_DISCIPLINES_FIFO;
-
   _CORE_semaphore_Initialize(
     &_MPCI_Semaphore,
-    &attributes,              /* the_semaphore_attributes */
+    CORE_SEMAPHORE_DISCIPLINES_FIFO,
+    0xffffffff,
     0                         /* initial_value */
-  );
-
-  _Thread_queue_Initialize(
-    &_MPCI_Remote_blocked_threads,
-    THREAD_QUEUE_DISCIPLINE_FIFO
   );
 }
 
@@ -262,6 +256,7 @@ uint32_t   _MPCI_Send_request_packet (
 
     _Thread_queue_Enqueue(
       &_MPCI_Remote_blocked_threads,
+      &_Thread_queue_Operations_FIFO,
       executing,
       STATES_WAITING_FOR_RPC_REPLY | extra_state,
       the_packet->timeout,

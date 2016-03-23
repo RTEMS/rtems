@@ -79,6 +79,7 @@ int _POSIX_Condition_variables_Wait_support(
 
         _Thread_queue_Enqueue(
           &the_cond->Wait_queue,
+          POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
           executing,
           STATES_WAITING_FOR_CONDITION_VARIABLE
             | STATES_INTERRUPTIBLE_BY_SIGNAL,

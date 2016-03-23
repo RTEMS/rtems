@@ -92,7 +92,8 @@ const struct sigaction _POSIX_signals_Default_vectors[ SIG_ARRAY_MAX ] = {
 
 struct sigaction _POSIX_signals_Vectors[ SIG_ARRAY_MAX ];
 
-Thread_queue_Control _POSIX_signals_Wait_queue;
+Thread_queue_Control _POSIX_signals_Wait_queue =
+  THREAD_QUEUE_INITIALIZER( "POSIX Signals" );
 
 Chain_Control _POSIX_signals_Inactive_siginfo;
 Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
@@ -184,14 +185,6 @@ static void _POSIX_signals_Manager_Initialization(void)
    *  Initialize the set of pending signals for the entire process
    */
   sigemptyset( &_POSIX_signals_Pending );
-
-  /*
-   *  Initialize the queue we use to block for signals
-   */
-  _Thread_queue_Initialize(
-    &_POSIX_signals_Wait_queue,
-    THREAD_QUEUE_DISCIPLINE_FIFO
-  );
 
   /* XXX status codes */
 

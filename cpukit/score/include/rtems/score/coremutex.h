@@ -151,6 +151,12 @@ typedef struct {
    *  which are blocked waiting to lock the mutex.
    */
   Thread_queue_Control    Wait_queue;
+
+  /**
+   * @brief The thread queue operations according to the blocking discipline.
+   */
+  const Thread_queue_Operations *operations;
+
   /** This element is the set of attributes which define this instance's
    *  behavior.
    */

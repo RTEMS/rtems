@@ -59,6 +59,7 @@ extern "C" {
 typedef struct {
   Objects_Control       Object;
   Thread_queue_Control  Wait_queue;            /* waiting threads        */
+  const Thread_queue_Operations *wait_operations;
   void                 *starting_address;      /* physical start addr    */
   uintptr_t             length;                /* physical length(bytes) */
   uintptr_t             page_size;             /* in bytes               */

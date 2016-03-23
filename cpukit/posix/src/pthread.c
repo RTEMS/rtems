@@ -233,7 +233,7 @@ static bool _POSIX_Threads_Create_extension(
     api->signals_unblocked = executing_api->signals_unblocked;
   }
 
-  _Thread_queue_Initialize( &api->Join_List, THREAD_QUEUE_DISCIPLINE_FIFO );
+  _Thread_queue_Initialize( &api->Join_List );
 
   _Watchdog_Preinitialize( &api->Sporadic_timer, _Per_CPU_Get_by_index( 0 ) );
   _Watchdog_Initialize(
@@ -261,8 +261,9 @@ static void _POSIX_Threads_Terminate_extension(
    */
   value_ptr = (void **) executing->Wait.return_argument;
 
-  while ( (the_thread = _Thread_queue_Dequeue( &api->Join_List )) )
-      *(void **)the_thread->Wait.return_argument = value_ptr;
+  while ( ( the_thread = _POSIX_Threads_Join_dequeue( api ) ) ) {
+    *(void **)the_thread->Wait.return_argument = value_ptr;
+  }
 
   if ( api->schedpolicy == SCHED_SPORADIC )
     _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );

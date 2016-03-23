@@ -31,6 +31,7 @@ void _CORE_mutex_Flush(
 {
   _Thread_queue_Flush(
     &the_mutex->Wait_queue,
+    the_mutex->operations,
     remote_extract_callout,
     status
   );

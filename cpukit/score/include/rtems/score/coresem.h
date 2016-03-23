@@ -56,10 +56,6 @@ typedef enum {
 typedef struct {
   /** This element indicates the maximum count this semaphore may have. */
   uint32_t                    maximum_count;
-  /** This field indicates whether threads waiting on the semaphore block in
-   *  FIFO or priority order.
-   */
-  CORE_semaphore_Disciplines  discipline;
 }   CORE_semaphore_Attributes;
 
 /**
@@ -71,6 +67,12 @@ typedef struct {
    *  which are blocked waiting to obtain the semaphore.
    */
   Thread_queue_Control        Wait_queue;
+
+  /**
+   * @brief The thread queue operations according to the blocking discipline.
+   */
+  const Thread_queue_Operations *operations;
+
   /** This element is the set of attributes which define this instance's
    *  behavior.
    */

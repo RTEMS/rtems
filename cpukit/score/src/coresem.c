@@ -21,18 +21,21 @@
 #include <rtems/score/coresemimpl.h>
 
 void _CORE_semaphore_Initialize(
-  CORE_semaphore_Control          *the_semaphore,
-  const CORE_semaphore_Attributes *the_semaphore_attributes,
-  uint32_t                         initial_value
+  CORE_semaphore_Control     *the_semaphore,
+  CORE_semaphore_Disciplines  discipline,
+  uint32_t                    maximum_count,
+  uint32_t                    initial_value
 )
 {
 
-  the_semaphore->Attributes = *the_semaphore_attributes;
-  the_semaphore->count      = initial_value;
+  the_semaphore->Attributes.maximum_count = maximum_count;
+  the_semaphore->count = initial_value;
 
-  _Thread_queue_Initialize(
-    &the_semaphore->Wait_queue,
-    _CORE_semaphore_Is_priority( the_semaphore_attributes ) ?
-              THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO
-  );
+  _Thread_queue_Initialize( &the_semaphore->Wait_queue );
+
+  if ( discipline == CORE_SEMAPHORE_DISCIPLINES_PRIORITY ) {
+    the_semaphore->operations = &_Thread_queue_Operations_priority;
+  } else {
+    the_semaphore->operations = &_Thread_queue_Operations_FIFO;
+  }
 }

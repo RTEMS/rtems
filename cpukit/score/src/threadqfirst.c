@@ -21,14 +21,15 @@
 #include <rtems/score/threadqimpl.h>
 
 Thread_Control *_Thread_queue_First(
-  Thread_queue_Control *the_thread_queue
+  Thread_queue_Control          *the_thread_queue,
+  const Thread_queue_Operations *operations
 )
 {
   Thread_Control   *the_thread;
   ISR_lock_Context  lock_context;
 
   _Thread_queue_Acquire( the_thread_queue, &lock_context );
-  the_thread = _Thread_queue_First_locked( the_thread_queue );
+  the_thread = _Thread_queue_First_locked( the_thread_queue, operations );
   _Thread_queue_Release( the_thread_queue, &lock_context );
 
   return the_thread;

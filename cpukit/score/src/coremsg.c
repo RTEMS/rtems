@@ -43,10 +43,10 @@ static inline bool size_t_mult32_with_overflow(
 }
 
 bool _CORE_message_queue_Initialize(
-  CORE_message_queue_Control    *the_message_queue,
-  CORE_message_queue_Attributes *the_message_queue_attributes,
-  uint32_t                       maximum_pending_messages,
-  size_t                         maximum_message_size
+  CORE_message_queue_Control     *the_message_queue,
+  CORE_message_queue_Disciplines  discipline,
+  uint32_t                        maximum_pending_messages,
+  size_t                          maximum_message_size
 )
 {
   size_t message_buffering_required = 0;
@@ -108,11 +108,13 @@ bool _CORE_message_queue_Initialize(
 
   _Chain_Initialize_empty( &the_message_queue->Pending_messages );
 
-  _Thread_queue_Initialize(
-    &the_message_queue->Wait_queue,
-    _CORE_message_queue_Is_priority( the_message_queue_attributes ) ?
-       THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO
-  );
+  _Thread_queue_Initialize( &the_message_queue->Wait_queue );
+
+  if ( discipline == CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY ) {
+    the_message_queue->operations = &_Thread_queue_Operations_priority;
+  } else {
+    the_message_queue->operations = &_Thread_queue_Operations_FIFO;
+  }
 
   return true;
 }

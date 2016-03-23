@@ -122,8 +122,7 @@ typedef void ( *CORE_message_queue_API_mp_support_callout )(
  *      based on the parameters passed.
  *
  *  @param[in] the_message_queue points to the message queue to initialize
- *  @param[in] the_message_queue_attributes points to the attributes that
- *         will be used with this message queue instance
+ *  @param[in] discipline the blocking discipline
  *  @param[in] maximum_pending_messages is the maximum number of messages
  *         that will be allowed to pend at any given time
  *  @param[in] maximum_message_size is the size of largest message that
@@ -134,10 +133,10 @@ typedef void ( *CORE_message_queue_API_mp_support_callout )(
  *         messages cannot be allocated.
  */
 bool _CORE_message_queue_Initialize(
-  CORE_message_queue_Control    *the_message_queue,
-  CORE_message_queue_Attributes *the_message_queue_attributes,
-  uint32_t                       maximum_pending_messages,
-  size_t                         maximum_message_size
+  CORE_message_queue_Control     *the_message_queue,
+  CORE_message_queue_Disciplines  discipline,
+  uint32_t                        maximum_pending_messages,
+  size_t                          maximum_message_size
 );
 
 /**
@@ -513,18 +512,6 @@ RTEMS_INLINE_ROUTINE
     _Chain_Get_unprotected( &the_message_queue->Pending_messages );
 }
 
-/**
- * This function returns true if the priority attribute is
- * enabled in the attribute_set and false otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _CORE_message_queue_Is_priority(
-  CORE_message_queue_Attributes *the_attribute
-)
-{
-  return
-    (the_attribute->discipline == CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY);
-}
-
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
   /**
    * This function returns true if notification is enabled on this message
@@ -584,7 +571,10 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_message_queue_Dequeue_receiver(
    *  There must be no pending messages if there is a thread waiting to
    *  receive a message.
    */
-  the_thread = _Thread_queue_First_locked( &the_message_queue->Wait_queue );
+  the_thread = _Thread_queue_First_locked(
+    &the_message_queue->Wait_queue,
+    the_message_queue->operations
+  );
   if ( the_thread == NULL ) {
     return NULL;
   }
@@ -600,7 +590,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_message_queue_Dequeue_receiver(
 
   _Thread_queue_Extract_critical(
     &the_message_queue->Wait_queue.Queue,
-    the_message_queue->Wait_queue.operations,
+    the_message_queue->operations,
     the_thread,
     lock_context
   );

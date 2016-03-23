@@ -51,7 +51,10 @@ void _CORE_RWLock_Obtain_for_reading(
 
       case CORE_RWLOCK_LOCKED_FOR_READING: {
         Thread_Control *waiter;
-        waiter = _Thread_queue_First_locked( &the_rwlock->Wait_queue );
+        waiter = _Thread_queue_First_locked(
+          &the_rwlock->Wait_queue,
+          CORE_RWLOCK_TQ_OPERATIONS
+        );
         if ( !waiter ) {
 	  the_rwlock->number_of_readers += 1;
 	  _Thread_queue_Release( &the_rwlock->Wait_queue, &lock_context );
@@ -84,7 +87,7 @@ void _CORE_RWLock_Obtain_for_reading(
 
     _Thread_queue_Enqueue_critical(
        &the_rwlock->Wait_queue.Queue,
-       the_rwlock->Wait_queue.operations,
+       CORE_RWLOCK_TQ_OPERATIONS,
        executing,
        STATES_WAITING_FOR_RWLOCK,
        timeout,

@@ -43,7 +43,12 @@ int pthread_cond_destroy(
 
     case OBJECTS_LOCAL:
 
-      if ( _Thread_queue_First( &the_cond->Wait_queue ) ) {
+      if (
+        _Thread_queue_First(
+          &the_cond->Wait_queue,
+          POSIX_CONDITION_VARIABLES_TQ_OPERATIONS
+        )
+      ) {
         _Objects_Put( &the_cond->Object );
         _Objects_Allocator_unlock();
         return EBUSY;

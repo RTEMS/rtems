@@ -71,11 +71,13 @@ rtems_status_code rtems_region_create(
       return_status = RTEMS_TOO_MANY;
 
     else {
-      _Thread_queue_Initialize(
-        &the_region->Wait_queue,
-        _Attributes_Is_priority( attribute_set ) ?
-           THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO
-      );
+      _Thread_queue_Initialize( &the_region->Wait_queue );
+
+      if ( _Attributes_Is_priority( attribute_set ) ) {
+        the_region->wait_operations = &_Thread_queue_Operations_priority;
+      } else {
+        the_region->wait_operations = &_Thread_queue_Operations_FIFO;
+      }
 
       the_region->maximum_segment_size = _Heap_Initialize(
         &the_region->Memory, starting_address, length, page_size

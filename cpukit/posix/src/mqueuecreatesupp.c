@@ -55,7 +55,6 @@ int _POSIX_Message_queue_Create_support(
 )
 {
   POSIX_Message_queue_Control   *the_mq;
-  CORE_message_queue_Attributes *the_mq_attr;
   struct mq_attr                 attr;
   char                          *name;
 
@@ -111,12 +110,9 @@ int _POSIX_Message_queue_Create_support(
    *  Joel: Cite POSIX or OpenGroup on above statement so we can determine
    *        if it is a real requirement.
    */
-  the_mq_attr = &the_mq->Message_queue.Attributes;
-  the_mq_attr->discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
-
   if ( !_CORE_message_queue_Initialize(
            &the_mq->Message_queue,
-           the_mq_attr,
+           CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO,
            attr.mq_maxmsg,
            attr.mq_msgsize
       ) ) {

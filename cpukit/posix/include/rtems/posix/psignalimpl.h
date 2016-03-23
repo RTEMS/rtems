@@ -35,6 +35,8 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/threadqimpl.h>
 
+#define POSIX_SIGNALS_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
+
 #define _States_Is_interruptible_signal( _states ) \
   ( ((_states) & \
     (STATES_WAITING_FOR_SIGNAL|STATES_INTERRUPTIBLE_BY_SIGNAL)) == \

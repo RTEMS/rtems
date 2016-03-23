@@ -74,7 +74,7 @@ void _CORE_RWLock_Obtain_for_writing(
 
     _Thread_queue_Enqueue_critical(
        &the_rwlock->Wait_queue.Queue,
-       the_rwlock->Wait_queue.operations,
+       CORE_RWLOCK_TQ_OPERATIONS,
        executing,
        STATES_WAITING_FOR_RWLOCK,
        timeout,

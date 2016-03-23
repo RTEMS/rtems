@@ -178,7 +178,13 @@ CORE_mutex_Status _CORE_mutex_Surrender(
    *  Now we check if another thread was waiting for this mutex.  If so,
    *  transfer the mutex to that thread.
    */
-  if ( ( the_thread = _Thread_queue_First_locked( &the_mutex->Wait_queue ) ) ) {
+  if (
+    ( the_thread = _Thread_queue_First_locked(
+        &the_mutex->Wait_queue,
+        the_mutex->operations
+      )
+    )
+  ) {
     bool unblock;
 
     /*
@@ -189,7 +195,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
      */
     unblock = _Thread_queue_Extract_locked(
       &the_mutex->Wait_queue.Queue,
-      the_mutex->Wait_queue.operations,
+      the_mutex->operations,
       the_thread
     );
 

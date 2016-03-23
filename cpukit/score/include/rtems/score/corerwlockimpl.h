@@ -33,6 +33,8 @@ extern "C" {
  */
 /**@{**/
 
+#define CORE_RWLOCK_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
+
 /**
  *  The following type defines the callout which the API provides
  *  to support global/multiprocessor operations on RWLocks.

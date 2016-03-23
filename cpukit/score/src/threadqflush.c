@@ -22,13 +22,14 @@
 #include <rtems/score/objectimpl.h>
 
 void _Thread_queue_Flush(
-  Thread_queue_Control       *the_thread_queue,
+  Thread_queue_Control          *the_thread_queue,
+  const Thread_queue_Operations *operations,
 #if defined(RTEMS_MULTIPROCESSING)
-  Thread_queue_Flush_callout  remote_extract_callout,
+  Thread_queue_Flush_callout     remote_extract_callout,
 #else
-  Thread_queue_Flush_callout  remote_extract_callout RTEMS_UNUSED,
+  Thread_queue_Flush_callout     remote_extract_callout RTEMS_UNUSED,
 #endif
-  uint32_t                    status
+  uint32_t                       status
 )
 {
   ISR_lock_Context  lock_context;
@@ -36,7 +37,14 @@ void _Thread_queue_Flush(
 
   _Thread_queue_Acquire( the_thread_queue, &lock_context );
 
-  while ( (the_thread = _Thread_queue_First_locked( the_thread_queue ) ) ) {
+  while (
+    (
+      the_thread = _Thread_queue_First_locked(
+        the_thread_queue,
+        operations
+      )
+    )
+  ) {
 #if defined(RTEMS_MULTIPROCESSING)
     if ( _Objects_Is_local_id( the_thread->Object.id ) )
 #endif
@@ -44,7 +52,7 @@ void _Thread_queue_Flush(
 
     _Thread_queue_Extract_critical(
       &the_thread_queue->Queue,
-      the_thread_queue->operations,
+      operations,
       the_thread,
       &lock_context
     );

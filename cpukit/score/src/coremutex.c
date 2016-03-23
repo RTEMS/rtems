@@ -86,11 +86,13 @@ CORE_mutex_Status _CORE_mutex_Initialize(
     the_mutex->holder     = NULL;
   }
 
-  _Thread_queue_Initialize(
-    &the_mutex->Wait_queue,
-    _CORE_mutex_Is_fifo( the_mutex_attributes ) ?
-      THREAD_QUEUE_DISCIPLINE_FIFO : THREAD_QUEUE_DISCIPLINE_PRIORITY
-  );
+  _Thread_queue_Initialize( &the_mutex->Wait_queue );
+
+  if ( _CORE_mutex_Is_priority( the_mutex_attributes ) ) {
+    the_mutex->operations = &_Thread_queue_Operations_priority;
+  } else {
+    the_mutex->operations = &_Thread_queue_Operations_FIFO;
+  }
 
   return CORE_MUTEX_STATUS_SUCCESSFUL;
 }

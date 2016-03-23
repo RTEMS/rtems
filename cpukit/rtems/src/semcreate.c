@@ -62,7 +62,7 @@ rtems_status_code rtems_semaphore_create(
 {
   Semaphore_Control          *the_semaphore;
   CORE_mutex_Attributes       the_mutex_attr;
-  CORE_semaphore_Attributes   the_semaphore_attr;
+  CORE_semaphore_Disciplines  semaphore_discipline;
   CORE_mutex_Status           mutex_status;
 
   if ( !rtems_is_name_valid( name ) )
@@ -139,15 +139,10 @@ rtems_status_code rtems_semaphore_create(
    *  Initialize it as a counting semaphore.
    */
   if ( _Attributes_Is_counting_semaphore( attribute_set ) ) {
-    /*
-     *  This effectively disables limit checking.
-     */
-    the_semaphore_attr.maximum_count = 0xFFFFFFFF;
-
     if ( _Attributes_Is_priority( attribute_set ) )
-      the_semaphore_attr.discipline = CORE_SEMAPHORE_DISCIPLINES_PRIORITY;
+      semaphore_discipline = CORE_SEMAPHORE_DISCIPLINES_PRIORITY;
     else
-      the_semaphore_attr.discipline = CORE_SEMAPHORE_DISCIPLINES_FIFO;
+      semaphore_discipline = CORE_SEMAPHORE_DISCIPLINES_FIFO;
 
     /*
      *  The following are just to make Purify happy.
@@ -157,7 +152,8 @@ rtems_status_code rtems_semaphore_create(
 
     _CORE_semaphore_Initialize(
       &the_semaphore->Core_control.semaphore,
-      &the_semaphore_attr,
+      semaphore_discipline,
+      0xFFFFFFFF,
       count
     );
 #if defined(RTEMS_SMP)

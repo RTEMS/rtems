@@ -35,6 +35,8 @@ extern "C" {
  */
 /**@{**/
 
+#define POSIX_THREAD_JOIN_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
+
 /**
  * The following sets the minimum stack size for POSIX threads.
  */
@@ -207,6 +209,16 @@ RTEMS_INLINE_ROUTINE bool _POSIX_Threads_Is_null (
 )
 {
   return !the_pthread;
+}
+
+RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Join_dequeue(
+  POSIX_API_Control *api
+)
+{
+  return _Thread_queue_Dequeue(
+    &api->Join_List,
+    POSIX_THREAD_JOIN_TQ_OPERATIONS
+  );
 }
 
 /** @} */

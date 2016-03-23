@@ -28,7 +28,7 @@
 #include <rtems/score/watchdogimpl.h>
 
 static Thread_queue_Control _Nanosleep_Pseudo_queue =
-  THREAD_QUEUE_FIFO_INITIALIZER( _Nanosleep_Pseudo_queue, "Nanosleep" );
+  THREAD_QUEUE_INITIALIZER( "Nanosleep" );
 
 /*
  *  14.2.5 High Resolution Sleep, P1003.1b-1993, p. 269
@@ -89,6 +89,7 @@ int nanosleep(
    */
   _Thread_queue_Enqueue(
     &_Nanosleep_Pseudo_queue,
+    &_Thread_queue_Operations_FIFO,
     executing,
     STATES_DELAYING | STATES_INTERRUPTIBLE_BY_SIGNAL,
     ticks,

@@ -74,7 +74,8 @@ void _CORE_message_queue_Seize(
        *  then we can avoid this dequeue.
        */
       the_thread = _Thread_queue_First_locked(
-        &the_message_queue->Wait_queue
+        &the_message_queue->Wait_queue,
+        the_message_queue->operations
       );
       if ( the_thread == NULL ) {
         _CORE_message_queue_Free_message_buffer(
@@ -108,7 +109,7 @@ void _CORE_message_queue_Seize(
       );
       _Thread_queue_Extract_critical(
         &the_message_queue->Wait_queue.Queue,
-        the_message_queue->Wait_queue.operations,
+        the_message_queue->operations,
         the_thread,
         lock_context
       );
@@ -133,7 +134,7 @@ void _CORE_message_queue_Seize(
 
   _Thread_queue_Enqueue_critical(
     &the_message_queue->Wait_queue.Queue,
-    the_message_queue->Wait_queue.operations,
+    the_message_queue->operations,
     executing,
     STATES_WAITING_FOR_MESSAGE,
     timeout,

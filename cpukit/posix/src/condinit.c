@@ -61,10 +61,7 @@ int pthread_cond_init(
 
   the_cond->Mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
 
-  _Thread_queue_Initialize(
-    &the_cond->Wait_queue,
-    THREAD_QUEUE_DISCIPLINE_FIFO
-  );
+  _Thread_queue_Initialize( &the_cond->Wait_queue );
 
   _Objects_Open_u32(
     &_POSIX_Condition_variables_Information,

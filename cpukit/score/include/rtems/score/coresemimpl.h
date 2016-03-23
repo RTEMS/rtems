@@ -86,13 +86,15 @@ typedef void ( *CORE_semaphore_API_mp_support_callout )(
  *  This routine initializes the semaphore based on the parameters passed.
  *
  *  @param[in] the_semaphore is the semaphore to initialize
- *  @param[in] the_semaphore_attributes define the behavior of this instance
+ *  @param[in] discipline the blocking discipline
+ *  @param[in] maximum_count the maximum count
  *  @param[in] initial_value is the initial count of the semaphore
  */
 void _CORE_semaphore_Initialize(
-  CORE_semaphore_Control          *the_semaphore,
-  const CORE_semaphore_Attributes *the_semaphore_attributes,
-  uint32_t                         initial_value
+  CORE_semaphore_Control     *the_semaphore,
+  CORE_semaphore_Disciplines  discipline,
+  uint32_t                    maximum_count,
+  uint32_t                    initial_value
 );
 
 RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
@@ -133,7 +135,10 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Surrender(
 
   _Thread_queue_Acquire_critical( &the_semaphore->Wait_queue, lock_context );
 
-  the_thread = _Thread_queue_First_locked( &the_semaphore->Wait_queue );
+  the_thread = _Thread_queue_First_locked(
+    &the_semaphore->Wait_queue,
+    the_semaphore->operations
+  );
   if ( the_thread != NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
     _Thread_Dispatch_disable();
@@ -141,7 +146,7 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Surrender(
 
     _Thread_queue_Extract_critical(
       &the_semaphore->Wait_queue.Queue,
-      the_semaphore->Wait_queue.operations,
+      the_semaphore->operations,
       the_thread,
       lock_context
     );
@@ -187,24 +192,10 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Flush(
 {
   _Thread_queue_Flush(
     &the_semaphore->Wait_queue,
+    the_semaphore->operations,
     remote_extract_callout,
     status
   );
-}
-
-/**
- * This function returns true if the priority attribute is
- * enabled in the @a attribute_set and false otherwise.
- *
- * @param[in] the_attribute is the attribute set to test
- *
- * @return true if the priority attribute is enabled
- */
-RTEMS_INLINE_ROUTINE bool _CORE_semaphore_Is_priority(
-  const CORE_semaphore_Attributes *the_attribute
-)
-{
-   return ( the_attribute->discipline == CORE_SEMAPHORE_DISCIPLINES_PRIORITY );
 }
 
 /**
@@ -265,7 +256,7 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize(
   executing->Wait.id = id;
   _Thread_queue_Enqueue_critical(
     &the_semaphore->Wait_queue.Queue,
-    the_semaphore->Wait_queue.operations,
+    the_semaphore->operations,
     executing,
     STATES_WAITING_FOR_SEMAPHORE,
     timeout,

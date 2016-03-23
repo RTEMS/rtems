@@ -40,7 +40,7 @@ rtems_status_code rtems_message_queue_create(
 )
 {
   Message_queue_Control          *the_message_queue;
-  CORE_message_queue_Attributes   the_msgq_attributes;
+  CORE_message_queue_Disciplines  discipline;
 #if defined(RTEMS_MULTIPROCESSING)
   bool                            is_global;
 #endif
@@ -101,13 +101,13 @@ rtems_status_code rtems_message_queue_create(
   the_message_queue->attribute_set = attribute_set;
 
   if (_Attributes_Is_priority( attribute_set ) )
-    the_msgq_attributes.discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY;
+    discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY;
   else
-    the_msgq_attributes.discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
+    discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
 
   if ( ! _CORE_message_queue_Initialize(
            &the_message_queue->message_queue,
-           &the_msgq_attributes,
+           discipline,
            count,
            max_message_size
          ) ) {

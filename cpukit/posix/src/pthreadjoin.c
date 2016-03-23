@@ -69,6 +69,7 @@ on_EINTR:
         executing->Wait.return_argument = &return_pointer;
         _Thread_queue_Enqueue(
           &api->Join_List,
+          POSIX_THREAD_JOIN_TQ_OPERATIONS,
           executing,
           STATES_WAITING_FOR_JOIN | STATES_INTERRUPTIBLE_BY_SIGNAL,
           WATCHDOG_NO_TIMEOUT,

@@ -62,6 +62,8 @@ typedef enum {
  */
 #define CORE_BARRIER_STATUS_LAST CORE_BARRIER_TIMEOUT
 
+#define CORE_BARRIER_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
+
 /**
  *  The following type defines the callout which the API provides
  *  to support global/multiprocessor operations on barriers.
@@ -150,6 +152,7 @@ uint32_t _CORE_barrier_Release(
 #define _CORE_barrier_Flush( _the_barrier, _remote_extract_callout, _status) \
   _Thread_queue_Flush( \
     &((_the_barrier)->Wait_queue), \
+    CORE_BARRIER_TQ_OPERATIONS, \
     (_remote_extract_callout), \
     (_status) \
   )

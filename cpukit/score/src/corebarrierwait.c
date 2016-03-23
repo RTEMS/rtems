@@ -51,7 +51,7 @@ void _CORE_barrier_Wait(
 
   _Thread_queue_Enqueue_critical(
     &the_barrier->Wait_queue.Queue,
-    the_barrier->Wait_queue.operations,
+    CORE_BARRIER_TQ_OPERATIONS,
     executing,
     STATES_WAITING_FOR_BARRIER,
     timeout,

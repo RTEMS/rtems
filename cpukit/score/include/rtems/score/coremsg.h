@@ -109,17 +109,6 @@ typedef enum {
   CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY
 }   CORE_message_queue_Disciplines;
 
-/**
- *  @brief Control block used to manage the attributes of each message queue.
- *
- *  The following defines the control block used to manage the
- *  attributes of each message queue.
- */
-typedef struct {
-  /** This field specifies the order in which blocking tasks will be ordered. */
-  CORE_message_queue_Disciplines  discipline;
-}   CORE_message_queue_Attributes;
-
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
   /**
    *  @brief Type for a notification handler.
@@ -142,10 +131,12 @@ typedef struct {
    *  which are blocked waiting to receive a message from this queue.
    */
   Thread_queue_Control               Wait_queue;
-  /** This element is the set of attributes which define this instance's
-   *  behavior.
+
+  /**
+   * @brief The thread queue operations according to the blocking discipline.
    */
-  CORE_message_queue_Attributes      Attributes;
+  const Thread_queue_Operations     *operations;
+
   /** This element is maximum number of messages which may be pending
    *  at any given time.
    */

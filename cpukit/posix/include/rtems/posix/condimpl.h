@@ -32,6 +32,8 @@ extern "C" {
  */
 #define POSIX_CONDITION_VARIABLES_NO_MUTEX 0
 
+#define POSIX_CONDITION_VARIABLES_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
+
 /**
  *  The following defines the information control block used to manage
  *  this class of objects.

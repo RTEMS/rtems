@@ -244,15 +244,6 @@ typedef struct {
 } Thread_queue_Operations;
 
 /**
- *  The following enumerated type details all of the disciplines
- *  supported by the Thread Queue Handler.
- */
-typedef enum {
-  THREAD_QUEUE_DISCIPLINE_FIFO,     /* FIFO queue discipline */
-  THREAD_QUEUE_DISCIPLINE_PRIORITY  /* PRIORITY queue discipline */
-}   Thread_queue_Disciplines;
-
-/**
  *  This is the structure used to manage sets of tasks which are blocked
  *  waiting to acquire a resource.
  */
@@ -265,11 +256,6 @@ typedef struct {
 #if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
   SMP_lock_Stats Lock_stats;
 #endif
-
-  /**
-   * @brief The operations for the actual thread queue.
-   */
-  const Thread_queue_Operations *operations;
 } Thread_queue_Control;
 
 /**@}*/

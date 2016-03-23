@@ -49,7 +49,12 @@ int pthread_rwlock_destroy(
       /*
        *  If there is at least one thread waiting, then do not delete it.
        */
-      if ( _Thread_queue_First( &the_rwlock->RWLock.Wait_queue ) != NULL ) {
+      if (
+        _Thread_queue_First(
+          &the_rwlock->RWLock.Wait_queue,
+          CORE_RWLOCK_TQ_OPERATIONS
+        ) != NULL
+      ) {
         _Objects_Put( &the_rwlock->Object );
         _Objects_Allocator_unlock();
         return EBUSY;

@@ -193,21 +193,24 @@ void _Thread_queue_Extract( Thread_Control *the_thread )
   }
 }
 
-Thread_Control *_Thread_queue_Dequeue( Thread_queue_Control *the_thread_queue )
+Thread_Control *_Thread_queue_Dequeue(
+  Thread_queue_Control          *the_thread_queue,
+  const Thread_queue_Operations *operations
+)
 {
   ISR_lock_Context  lock_context;
   Thread_Control   *the_thread;
 
   _Thread_queue_Acquire( the_thread_queue, &lock_context );
 
-  the_thread = _Thread_queue_First_locked( the_thread_queue );
+  the_thread = _Thread_queue_First_locked( the_thread_queue, operations );
 
   if ( the_thread != NULL ) {
     _SMP_Assert( the_thread->Lock.current == &the_thread_queue->Queue.Lock );
 
     _Thread_queue_Extract_critical(
       &the_thread_queue->Queue,
-      the_thread_queue->operations,
+      operations,
       the_thread,
       &lock_context
     );

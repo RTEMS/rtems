@@ -79,22 +79,8 @@ RBTree_Compare_result _Thread_queue_Compare_priority(
   return ( left_prio > right_prio ) - ( left_prio < right_prio );
 }
 
-void _Thread_queue_Initialize(
-  Thread_queue_Control     *the_thread_queue,
-  Thread_queue_Disciplines  the_discipline
-)
+void _Thread_queue_Initialize( Thread_queue_Control *the_thread_queue )
 {
-  const Thread_queue_Operations *operations;
-
-  if ( the_discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY ) {
-    operations = &_Thread_queue_Operations_priority;
-  } else {
-    _Assert( the_discipline == THREAD_QUEUE_DISCIPLINE_FIFO );
-    operations = &_Thread_queue_Operations_FIFO;
-  }
-
-  the_thread_queue->operations = operations;
-
   _Thread_queue_Queue_initialize( &the_thread_queue->Queue );
 #if defined(RTEMS_SMP)
   _SMP_lock_Stats_initialize( &the_thread_queue->Lock_stats, "Thread Queue" );

@@ -48,11 +48,11 @@ void _POSIX_Thread_Exit(
    * Process join
    */
   if ( api->detachstate == PTHREAD_CREATE_JOINABLE ) {
-    unblocked = _Thread_queue_Dequeue( &api->Join_List );
+    unblocked = _POSIX_Threads_Join_dequeue( api );
     if ( unblocked ) {
       do {
         *(void **)unblocked->Wait.return_argument = value_ptr;
-      } while ( (unblocked = _Thread_queue_Dequeue( &api->Join_List )) );
+      } while ( ( unblocked = _POSIX_Threads_Join_dequeue( api ) ) );
     } else {
       _Thread_Set_state( the_thread, STATES_WAITING_FOR_JOIN_AT_EXIT );
       _Thread_Enable_dispatch();
