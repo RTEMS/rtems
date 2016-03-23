@@ -118,14 +118,14 @@ extern int grspw_work_task_priority;
  *   type (RX/TX). See XXPKT_FLAG_* options above.
  */
 struct grspw_pkt {
-	struct grspw_pkt *next;
-	unsigned int pkt_id;	/* User assigned ID */
-	unsigned short flags;	/* RX/TX Options */
+	struct grspw_pkt *next;	/* Next packet in list. NULL if last packet */
+	unsigned int pkt_id;	/* User assigned ID (not touched by driver) */
+	unsigned short flags;	/* RX/TX Options and status */
 	unsigned char reserved;	/* Reserved, must be zero */
-	unsigned char hlen;	/* Length of Header Buffer */
+	unsigned char hlen;	/* Length of Header Buffer (only TX) */
 	unsigned int dlen;	/* Length of Data Buffer */
 	void *data;	/* 4-byte or byte aligned depends on HW */
-	void *hdr;	/* 4-byte or byte aligned depends on HW */
+	void *hdr;	/* 4-byte or byte aligned depends on HW (only TX) */
 };
 
 /* GRSPW SpaceWire Packet List */
@@ -226,7 +226,6 @@ struct grspw_core_stats {
 #define LINKSTS_EE		0x100	/* Early EOP/EEP */
 #define LINKSTS_MASK		0x1de
 
-
 /* grspw_tc_ctrl() options */
 #define TCOPTS_EN_RXIRQ	0x0001	/* Tick-Out IRQ */
 #define TCOPTS_EN_TX	0x0004
@@ -264,8 +263,7 @@ struct grspw_core_stats {
 #define DMAFLAG_MASK	(DMAFLAG_NO_SPILL|DMAFLAG_STRIP_ADR|DMAFLAG_STRIP_PID)
 
 struct grspw_dma_config {
-	int flags;
-
+	int flags;		/* DMA config flags, see DMAFLAG_* options */
 	int rxmaxlen;		/* RX Max Packet Length */
 	int rx_irq_en_cnt;	/* Enable RX IRQ every cnt descriptors */
 	int tx_irq_en_cnt;	/* Enable TX IRQ every cnt descriptors */
