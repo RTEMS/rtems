@@ -82,7 +82,12 @@ can be used with unbundled/libbsdport drivers])
 
 I use networking with a 'tap' interface on the host machine
 and can then communicate with the emulated target in any
-desired way.
+desired way.  The Ethernet address specified in the RTEMS network interface
+configuration and the Qemu command line must match, otherwise uni-cast frames
+are not received.  It is best to use a NULL pointer in the RTEMS network
+interface configuration for the Ethernet address, so that the default from Qemu
+is used.  Make sure that your firewall settings allow communication between
+different Qemu instances and your host.
 
 On (linux) host:
 
