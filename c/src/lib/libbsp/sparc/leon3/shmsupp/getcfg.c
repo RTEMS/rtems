@@ -17,38 +17,6 @@
 #include <bsp.h>
 #include <shm_driver.h>
 
-/* multiprocessor communications interface (MPCI) table */
-
-extern rtems_mpci_entry Shm_Get_packet(
-  rtems_packet_prefix **
-);
-
-rtems_mpci_entry Shm_Initialization( void );
-
-extern rtems_mpci_entry Shm_Receive_packet(
-  rtems_packet_prefix **
-);
-
-extern rtems_mpci_entry Shm_Return_packet(
-  rtems_packet_prefix *
-);
-
-extern rtems_mpci_entry Shm_Send_packet(
-  uint32_t,
-  rtems_packet_prefix *
-);
-
-
-/*
- *  configured if currently polling or interrupt driven
- *
- *  NOTE: Code in mpisr.c is commented out. Fix when interrupt mode
- *        is added.
- */
-
-#define INTERRUPT 0        /* XXX: */
-#define POLLING   1        /* XXX: fix me -- is polling ONLY!!! */
-
 /* Let user override this configuration by declaring this a weak variable */
 shm_config_table BSP_shm_cfgtbl __attribute__((weak)) =
 {
