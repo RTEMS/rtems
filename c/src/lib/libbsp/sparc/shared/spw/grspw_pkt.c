@@ -623,7 +623,7 @@ out:
 	return priv;
 }
 
-void grspw_close(void *d)
+int grspw_close(void *d)
 {
 	struct grspw_priv *priv = d;
 	int i;
@@ -631,21 +631,24 @@ void grspw_close(void *d)
 	/* Take GRSPW lock - Wait until we get semaphore */
 	if (rtems_semaphore_obtain(grspw_sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
-		return;
+		return -1;
 
-	/* Stop Hardware from doing DMA, put HW into "startup-state",
-	 * Stop hardware from generating IRQ.
+	/* Check that user has stopped and closed all DMA channels
+	 * appropriately. At this point the Hardware shall not be doing DMA
+	 * or generating Interrupts. We want HW in a "startup-state".
 	 */
-	for (i=0; i<priv->hwsup.ndma_chans; i++)
-		grspw_dma_close(&priv->dma[i]);
+	for (i=0; i<priv->hwsup.ndma_chans; i++) {
+		if (priv->dma[i].open) {
+			rtems_semaphore_release(grspw_sem);
+			return 1;
+		}
+	}
 	grspw_hw_stop(priv);
 
 	/* Mark not open */
 	priv->open = 0;
-
 	rtems_semaphore_release(grspw_sem);
-
-	/* Check that all threads are out? */
+	return 0;
 }
 
 void grspw_hw_support(void *d, struct grspw_hw_sup *hw)
@@ -1751,19 +1754,25 @@ STATIC void grspw_dma_reset(struct grspw_dma_priv *dma)
 	grspw_dma_stats_clr(dma);
 }
 
-void grspw_dma_close(void *c)
+int grspw_dma_close(void *c)
 {
 	struct grspw_dma_priv *dma = c;
 
 	if (!dma->open)
-		return;
+		return 0;
 
 	/* Take device lock - Wait until we get semaphore */
 	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
-		return;
+		return -1;
 
-	grspw_dma_stop_locked(dma);
+	/* Can not close active DMA channel. User must stop DMA and make sure
+	 * no threads are active/blocked within driver.
+	 */
+	if (dma->started || dma->rx_wait.waiting || dma->tx_wait.waiting) {
+		rtems_semaphore_release(dma->sem_dma);
+		return 1;
+	}
 
 	/* Free resources */
 	rtems_semaphore_delete(dma->rx_wait.sem_wait);
@@ -1779,6 +1788,7 @@ void grspw_dma_close(void *c)
 	dma->tx_ring_base = NULL;
 
 	dma->open = 0;
+	return 0;
 }
 
 /* Schedule List of packets for transmission at some point in
@@ -2398,6 +2408,10 @@ void grspw_dma_stop(void *c)
 {
 	struct grspw_dma_priv *dma = c;
 
+	/* If DMA channel is closed we should not access the semaphore */
+	if (!dma->open)
+		return;
+
 	/* Take DMA Channel lock */
 	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
@@ -2428,6 +2442,10 @@ static void grspw_work_dma_func(struct grspw_dma_priv *dma)
 	int tx_cond_true, rx_cond_true;
 	unsigned int ctrl;
 	IRQFLAGS_TYPE irqflags;
+
+	/* If DMA channel is closed we should not access the semaphore */
+	if (dma->open == 0)
+		return;
 
 	rx_cond_true = 0;
 	tx_cond_true = 0;

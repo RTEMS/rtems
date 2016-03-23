@@ -312,7 +312,7 @@ extern void grspw_initialize_user(
 	);
 extern int grspw_dev_count(void);
 extern void *grspw_open(int dev_no);
-extern void grspw_close(void *d);
+extern int grspw_close(void *d);
 extern void grspw_hw_support(void *d, struct grspw_hw_sup *hw);
 extern void grspw_stats_read(void *d, struct grspw_core_stats *sts);
 extern void grspw_stats_clr(void *d);
@@ -422,7 +422,7 @@ extern int grspw_port_active(void *d);
 
 /*** DMA Interface ***/
 extern void *grspw_dma_open(void *d, int chan_no);
-extern void grspw_dma_close(void *c);
+extern int grspw_dma_close(void *c);
 
 extern int grspw_dma_start(void *c);
 extern void grspw_dma_stop(void *c);
