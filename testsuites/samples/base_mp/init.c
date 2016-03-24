@@ -35,10 +35,14 @@ rtems_task Init(
   task_name = rtems_build_name( 'T', 'A', '1', ' ' );
   status = rtems_task_create( task_name, 1, RTEMS_MINIMUM_STACK_SIZE,
              RTEMS_INTERRUPT_LEVEL(0), RTEMS_DEFAULT_ATTRIBUTES, &tid );
+  rtems_test_assert(status == RTEMS_SUCCESSFUL);
+
   status = rtems_task_start(
     tid,
     Application_task,
     Multiprocessing_configuration.node
   );
-  status = rtems_task_delete( RTEMS_SELF );
+  rtems_test_assert(status == RTEMS_SUCCESSFUL);
+
+  rtems_task_delete( RTEMS_SELF );
 }
