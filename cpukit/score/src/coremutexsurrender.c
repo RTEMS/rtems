@@ -187,6 +187,9 @@ CORE_mutex_Status _CORE_mutex_Surrender(
   ) {
     bool unblock;
 
+    the_mutex->holder     = the_thread;
+    the_mutex->nest_count = 1;
+
     /*
      * We must extract the thread now since this will restore its default
      * thread lock.  This is necessary to avoid a deadlock in the
@@ -205,9 +208,6 @@ CORE_mutex_Status _CORE_mutex_Surrender(
     if ( _Objects_Is_local_id( the_thread->Object.id ) )
 #endif
     {
-      the_mutex->holder     = the_thread;
-      the_mutex->nest_count = 1;
-
       switch ( the_mutex->Attributes.discipline ) {
         case CORE_MUTEX_DISCIPLINES_FIFO:
         case CORE_MUTEX_DISCIPLINES_PRIORITY:
@@ -237,12 +237,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
 #if defined(RTEMS_MULTIPROCESSING)
     if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
-
-      the_mutex->holder     = NULL;
-      the_mutex->nest_count = 1;
-
       ( *api_mutex_mp_support)( the_thread, id );
-
     }
 
     _Thread_Dispatch_enable( _Per_CPU_Get() );
