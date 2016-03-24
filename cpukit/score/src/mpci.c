@@ -343,6 +343,8 @@ void _MPCI_Receive_server(
     );
 
     for ( ; ; ) {
+      executing->receive_packet = NULL;
+
       the_packet = _MPCI_Receive_packet();
 
       if ( !the_packet )
