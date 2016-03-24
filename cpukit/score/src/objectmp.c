@@ -269,7 +269,7 @@ void _Objects_MP_Is_remote (
     the_global_object = (Objects_MP_Control *) the_node;
 
     if ( _Objects_Are_ids_equal( the_global_object->Object.id, the_id ) ) {
-      _Thread_Unnest_dispatch();
+      _Objects_Allocator_unlock();
       *location   = OBJECTS_REMOTE;
       *the_object = (Objects_Control *) the_global_object;
       return;
