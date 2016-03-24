@@ -284,7 +284,16 @@ rtems_bsdnet_initialize (void)
 	 */
 	if (rtems_bsdnet_config.network_task_priority == 0)
 		networkDaemonPriority = 100;
+#ifdef RTEMS_MULTIPROCESSING
+	/*
+	 * Allow network tasks to run with priority 0 (PRIORITY_PSEUDO_ISR) using
+	 * UINT32_MAX for the network task priority in the network configuration.
+	 * This enables MPCI via a TCP/IP network.
+	 */
+	else if (rtems_bsdnet_config.network_task_priority != UINT32_MAX)
+#else
 	else
+#endif
 		networkDaemonPriority = rtems_bsdnet_config.network_task_priority;
 
 	/*
@@ -694,6 +703,9 @@ rtems_bsdnet_newproc (char *name, int stacksize, void(*entry)(void *), void *arg
 		networkDaemonPriority,
 		stacksize,
 		RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
+#ifdef RTEMS_MULTIPROCESSING
+		RTEMS_SYSTEM_TASK |
+#endif
 		RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
 		&tid);
 	if (sc != RTEMS_SUCCESSFUL)
