@@ -31,7 +31,6 @@
 #include <rtems.h>
 #include <rtems/iosupp.h>
 #include <erc32.h>
-#include <rtems/clockdrv.h>
 #include <rtems/console.h>
 #include <rtems/irq-extension.h>
 
