@@ -27,7 +27,6 @@
 #ifndef ASM
 
 #include <rtems.h>
-#include <rtems/clockdrv.h>
 #include <rtems/console.h>
 
 #include <bspopts.h>
