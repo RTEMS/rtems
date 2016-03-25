@@ -144,7 +144,7 @@ static void uC5282_tc_tick(void)
 /*
  * Provide our own version of the idle task
  */
-Thread bsp_idle_thread(uint32_t ignored)
+void * bsp_idle_thread(uint32_t ignored)
 {
   /* Atomic increment */
   for(;;)
