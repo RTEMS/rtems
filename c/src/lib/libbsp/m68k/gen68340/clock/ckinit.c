@@ -27,6 +27,7 @@
 #include <stdlib.h>       /* for atexit() */
 #include <bsp.h>
 #include <m68340.h>
+#include <rtems/clockdrv.h>
 
 #define CLOCK_VECTOR     120 /* clock isr routine vector in the vbr */
 #define CLOCK_IRQ_LEVEL  6   /* clock isr level */
