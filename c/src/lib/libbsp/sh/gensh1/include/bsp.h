@@ -26,7 +26,6 @@
 #define LIBBSP_SH_GENSH1_BSP_H
 
 #include <rtems.h>
-#include <rtems/clockdrv.h>
 #include <rtems/console.h>
 #include <termios.h> /* for tcflag_t */
 
