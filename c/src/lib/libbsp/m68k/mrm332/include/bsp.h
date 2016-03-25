@@ -20,7 +20,6 @@
 
 #include <rtems.h>
 #include <rtems/bspIo.h>
-#include <rtems/clockdrv.h>
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
 #include <mrm332.h>

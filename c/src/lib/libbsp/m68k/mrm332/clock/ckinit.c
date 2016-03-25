@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <bsp.h>
 #include <mrm332.h>
+#include <rtems/clockdrv.h>
 #include <rtems/m68k/sim.h>
 
 #define CLOCK_VECTOR   MRM_PIV
