@@ -26,7 +26,6 @@
 
 #include <rtems.h>
 #include <rtems/console.h>
-#include <rtems/clockdrv.h>
 #include <mpc5xx.h>
 #include <mpc5xx/console.h>
 #include <libcpu/vectors.h>
