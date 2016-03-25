@@ -40,7 +40,6 @@
 #include <rtems.h>
 #include <rtems/console.h>
 #include <libcpu/io.h>
-#include <rtems/clockdrv.h>
 #include <rtems/iosupp.h>
 #include <bsp/vectors.h>
 #include <bsp/default-initial-extension.h>
