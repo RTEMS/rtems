@@ -25,7 +25,6 @@
 #include <rtems.h>
 #include <rtems/console.h>
 #include <libcpu/io.h>
-#include <rtems/clockdrv.h>
 #include <bsp/vectors.h>
 
 #ifdef __cplusplus
