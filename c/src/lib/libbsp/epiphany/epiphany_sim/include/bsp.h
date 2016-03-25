@@ -39,7 +39,6 @@
 #define LIBBSP_EPIPHANY_EPIPHANY_SIM_H
 
 #include <rtems.h>
-#include <rtems/clockdrv.h>
 #include <rtems/console.h>
 
 #include <bspopts.h>
