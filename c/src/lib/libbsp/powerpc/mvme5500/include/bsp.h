@@ -18,7 +18,6 @@
 
 #include <rtems.h>
 #include <rtems/console.h>
-#include <rtems/clockdrv.h>
 #include <libcpu/io.h>
 #include <bsp/vectors.h>
 
