@@ -20,7 +20,6 @@
 #include <bspopts.h>
 #include <rtems.h>
 #include <rtems/console.h>
-#include <rtems/clockdrv.h>
 #include <bsp/generic_or1k.h>
 
 #include <bsp/default-initial-extension.h>
