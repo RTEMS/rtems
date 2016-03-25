@@ -37,7 +37,6 @@
 #define LIBBSP_SH_GENSH2_BSP_H
 
 #include <rtems.h>
-#include <rtems/clockdrv.h>
 #include <rtems/console.h>
 
 #include <bspopts.h>
