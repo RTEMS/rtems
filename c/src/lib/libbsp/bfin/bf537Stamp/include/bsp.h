@@ -22,7 +22,6 @@
 
 #include <rtems.h>
 #include <rtems/console.h>
-#include <rtems/clockdrv.h>
 
 #include <libcpu/bf537.h>
 #include <libcpu/memoryRegs.h>
