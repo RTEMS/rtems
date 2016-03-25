@@ -43,6 +43,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <rtems/clockdrv.h>
 
 extern uint32_t bsp_clicks_per_microsecond;
 
