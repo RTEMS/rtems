@@ -143,7 +143,6 @@ LINKER_SYMBOL(MBAR);
 
 #include <rtems.h>
 #include <rtems/console.h>
-#include <rtems/clockdrv.h>
 #include <rtems/rtc.h>
 #include <i2cdrv.h>
 #include <bsp/irq.h>
