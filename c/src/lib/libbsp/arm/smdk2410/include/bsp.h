@@ -22,7 +22,6 @@
 #include <rtems.h>
 #include <rtems/iosupp.h>
 #include <rtems/console.h>
-#include <rtems/clockdrv.h>
 #include <s3c24xx.h>
 
 #ifdef __cplusplus
