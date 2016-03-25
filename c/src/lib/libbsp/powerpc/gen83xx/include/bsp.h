@@ -65,7 +65,6 @@ LINKER_SYMBOL(IMMRBAR);
 
 #include <rtems.h>
 #include <rtems/console.h>
-#include <rtems/clockdrv.h>
 #include <bsp/vectors.h>
 #include <bsp/irq.h>
 #include <bsp/default-initial-extension.h>
