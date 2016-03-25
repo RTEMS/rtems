@@ -25,7 +25,6 @@
 #include <rtems.h>
 #include <rtems/iosupp.h>
 #include <rtems/console.h>
-#include <rtems/clockdrv.h>
 #include <mc9328mxl.h>
 
 #ifdef __cplusplus
