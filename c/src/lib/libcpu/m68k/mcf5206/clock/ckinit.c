@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <bsp.h>
 #include <rtems/libio.h>
+#include <rtems/clockdrv.h>
 #include "mcf5206/mcf5206e.h"
 
 /*
