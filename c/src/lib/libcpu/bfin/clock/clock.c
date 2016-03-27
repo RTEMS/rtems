@@ -16,6 +16,8 @@
 #include <rtems/libio.h>
 #include <rtems/score/percpu.h>
 #include <bsp.h>
+#include <rtems/clockdrv.h>
+
 
 #include <libcpu/cecRegs.h>
 #include <libcpu/coreTimerRegs.h>
