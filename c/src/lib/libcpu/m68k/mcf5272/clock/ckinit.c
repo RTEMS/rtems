@@ -28,6 +28,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <mcf5272/mcf5272.h>
+#include <rtems/clockdrv.h>
 
 /*
  * Clock_driver_ticks is a monotonically increasing counter of the
