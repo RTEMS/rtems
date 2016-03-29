@@ -1893,7 +1893,9 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
         #define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS     32
       #endif
       #define CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(_global_objects) \
-        _Configure_Object_RAM((_global_objects), sizeof(Objects_MP_Control))
+        _Configure_From_workspace( \
+          (_global_objects) * sizeof(Objects_MP_Control) \
+        )
 
       #ifndef CONFIGURE_MP_MAXIMUM_PROXIES
         #define CONFIGURE_MP_MAXIMUM_PROXIES            32
