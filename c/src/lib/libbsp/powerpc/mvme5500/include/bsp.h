@@ -17,7 +17,6 @@
 #include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
-#include <rtems/console.h>
 #include <libcpu/io.h>
 #include <bsp/vectors.h>
 
