@@ -6,12 +6,14 @@
 
 #include <stdio.h>
 #include <fcntl.h>
-#include <rtems/libio.h>
-#include <rtems/termiostypes.h>
 #include <termios.h>
-#include <bsp.h>
 #include <malloc.h>
+
+#include <rtems/libio.h>
+#include <rtems/console.h>
+#include <rtems/termiostypes.h>
 #include <rtems/mw_uid.h>
+#include <bsp.h>
 
 #include <rtems/bspIo.h>
 
