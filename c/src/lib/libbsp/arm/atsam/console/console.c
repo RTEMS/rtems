@@ -15,6 +15,7 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/fatal.h>
+#include <rtems/console.h>
 
 #include <rtems/termiostypes.h>
 
