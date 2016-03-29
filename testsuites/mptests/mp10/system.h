@@ -42,6 +42,8 @@ rtems_task Test_task3(
 #define CONFIGURE_MAXIMUM_TASKS               1
 #define CONFIGURE_MAXIMUM_SEMAPHORES          1
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY \
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 3, 16 )
 #else
 #define CONFIGURE_MAXIMUM_TASKS               4
 #endif
