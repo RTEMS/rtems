@@ -19,6 +19,7 @@
 #include <assert.h>
 
 #include <bsp/console-polled.h>
+#include <rtems/console.h>
 
 /*
  *  Prototypes
