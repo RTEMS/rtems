@@ -15,7 +15,6 @@
 #include <termios.h>
 #include <bsp.h>
 #include <malloc.h>
-#include <rtems/mw_uid.h>
 
 #include <rtems/bspIo.h>
 
