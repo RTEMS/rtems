@@ -10,14 +10,15 @@
 
 #include <stdio.h>
 #include <fcntl.h>
+#include <termios.h>
+#include <malloc.h>
+
 #include <rtems/libio.h>
 #include <rtems/termiostypes.h>
-#include <termios.h>
-#include <bsp.h>
-#include <malloc.h>
-#include <rtems/mw_uid.h>
-
+#include <rtems/console.h>
 #include <rtems/bspIo.h>
+#include <rtems/mw_uid.h>
+#include <bsp.h>
 
 #define UART_INTC0_IRQ_VECTOR(x) (64+13+(x))
 
