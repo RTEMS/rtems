@@ -17,6 +17,7 @@
 #include <termios.h>
 #include <bsp.h>
 #include <rtems/libio.h>
+#include <rtems/console.h>
 #include "mcf5206/mcf5206e.h"
 #include "mcf5206/mcfuart.h"
 
