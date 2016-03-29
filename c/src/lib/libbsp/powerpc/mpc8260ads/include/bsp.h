@@ -18,7 +18,6 @@
 #include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
-#include <rtems/console.h>
 #include <mpc8260.h>
 #include <mpc8260/cpm.h>
 #include <mpc8260/mmu.h>
