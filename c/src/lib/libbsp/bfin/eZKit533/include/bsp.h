@@ -29,7 +29,6 @@
 #include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
-#include <rtems/console.h>
 #include <rtems/score/bfin.h>
 #include <rtems/bfin/bf533.h>
 
