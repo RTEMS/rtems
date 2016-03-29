@@ -11,7 +11,6 @@
 
 #include <rtems/libio.h>
 #include <rtems/termiostypes.h>
-#include <rtems/mw_uid.h>
 #include <rtems/bspIo.h>
 #include <rtems/console.h>
 #include <bsp.h>
