@@ -334,6 +334,8 @@ struct grspw_txbd {
 /* GRSPW Constants */
 #define GRSPW_TXBD_NR 64	/* Maximum number of TX Descriptors */
 #define GRSPW_RXBD_NR 128	/* Maximum number of RX Descriptors */
+#define GRSPW_TXBD_SIZE 16	/* Size in bytes of one TX descriptor */
+#define GRSPW_RXBD_SIZE 8	/* Size in bytes of one RX descriptor */
 #define BDTAB_SIZE 0x400	/* BD Table Size (RX or TX) */
 #define BDTAB_ALIGN 0x400	/* BD Table Alignment Requirement */
 
@@ -1894,16 +1896,49 @@ int grspw_dma_tx_reclaim(void *c, int opts, struct grspw_list *pkts, int *count)
 	return (~started) & 1; /* signal DMA has been stopped */
 }
 
-void grspw_dma_tx_count(void *c, int *send, int *sched, int *sent)
+void grspw_dma_tx_count(void *c, int *send, int *sched, int *sent, int *hw)
 {
 	struct grspw_dma_priv *dma = c;
+	int sched_cnt, diff;
+	unsigned int hwbd;
+	struct grspw_txbd *tailbd;
+
+	/* Take device lock - Wait until we get semaphore.
+	 * The lock is taken so that the counters are in sync with each other
+	 * and that DMA descriptor table and tx_ring_tail is not being updated
+	 * during HW counter processing in this function.
+	 */
+	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	    != RTEMS_SUCCESSFUL)
+		return;
 
 	if (send)
 		*send = dma->send_cnt;
+	sched_cnt = dma->tx_sched_cnt;
 	if (sched)
-		*sched = dma->tx_sched_cnt;
+		*sched = sched_cnt;
 	if (sent)
 		*sent = dma->sent_cnt;
+	if (hw) {
+		/* Calculate number of descriptors (processed by HW) between
+		 * HW pointer and oldest SW pointer.
+		 */
+		hwbd = REG_READ(&dma->regs->txdesc);
+		tailbd = dma->tx_ring_tail->bd;
+		diff = ((hwbd - (unsigned int)tailbd) / GRSPW_TXBD_SIZE) &
+			(GRSPW_TXBD_NR - 1);
+		/* Handle special case when HW and SW pointers are equal
+		 * because all TX descriptors have been processed by HW.
+		 */
+		if ((diff == 0) && (sched_cnt == GRSPW_TXBD_NR) &&
+		    ((BD_READ(&tailbd->ctrl) & GRSPW_TXBD_EN) == 0)) {
+			diff = GRSPW_TXBD_NR;
+		}
+		*hw = diff;
+	}
+
+	/* Unlock DMA channel */
+	rtems_semaphore_release(dma->sem_dma);
 }
 
 static inline int grspw_tx_wait_eval(struct grspw_dma_priv *dma)
@@ -2108,16 +2143,49 @@ out:
 	return ret;
 }
 
-void grspw_dma_rx_count(void *c, int *ready, int *sched, int *recv)
+void grspw_dma_rx_count(void *c, int *ready, int *sched, int *recv, int *hw)
 {
 	struct grspw_dma_priv *dma = c;
+	int sched_cnt, diff;
+	unsigned int hwbd;
+	struct grspw_rxbd *tailbd;
+
+	/* Take device lock - Wait until we get semaphore.
+	 * The lock is taken so that the counters are in sync with each other
+	 * and that DMA descriptor table and rx_ring_tail is not being updated
+	 * during HW counter processing in this function.
+	 */
+	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	    != RTEMS_SUCCESSFUL)
+		return;
 
 	if (ready)
 		*ready = dma->ready_cnt;
+	sched_cnt = dma->rx_sched_cnt;
 	if (sched)
-		*sched = dma->rx_sched_cnt;
+		*sched = sched_cnt;
 	if (recv)
 		*recv = dma->recv_cnt;
+	if (hw) {
+		/* Calculate number of descriptors (processed by HW) between
+		 * HW pointer and oldest SW pointer.
+		 */
+		hwbd = REG_READ(&dma->regs->rxdesc);
+		tailbd = dma->rx_ring_tail->bd;
+		diff = ((hwbd - (unsigned int)tailbd) / GRSPW_RXBD_SIZE) &
+			(GRSPW_RXBD_NR - 1);
+		/* Handle special case when HW and SW pointers are equal
+		 * because all RX descriptors have been processed by HW.
+		 */
+		if ((diff == 0) && (sched_cnt == GRSPW_RXBD_NR) &&
+		    ((BD_READ(&tailbd->ctrl) & GRSPW_RXBD_EN) == 0)) {
+			diff = GRSPW_RXBD_NR;
+		}
+		*hw = diff;
+	}
+
+	/* Unlock DMA channel */
+	rtems_semaphore_release(dma->sem_dma);
 }
 
 static inline int grspw_rx_wait_eval(struct grspw_dma_priv *dma)

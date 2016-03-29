@@ -481,7 +481,7 @@ extern int grspw_dma_tx_send(void *c, int opts, struct grspw_list *pkts, int cou
 extern int grspw_dma_tx_reclaim(void *c, int opts, struct grspw_list *pkts, int *count);
 
 /* Get current number of Packets in respective TX Queue. */
-extern void grspw_dma_tx_count(void *c, int *send, int *sched, int *sent);
+extern void grspw_dma_tx_count(void *c, int *send, int *sched, int *sent, int *hw);
 
 #define GRSPW_OP_AND 0
 #define GRSPW_OP_OR 1
@@ -553,7 +553,7 @@ extern int grspw_dma_rx_recv(void *c, int opts, struct grspw_list *pkts, int *co
 extern int grspw_dma_rx_prepare(void *c, int opts, struct grspw_list *pkts, int count);
 
 /* Get current number of Packets in respective RX Queue. */
-extern void grspw_dma_rx_count(void *c, int *ready, int *sched, int *recv);
+extern void grspw_dma_rx_count(void *c, int *ready, int *sched, int *recv, int *hw);
 
 /* Block until recv_cnt or more packets are Queued in RECV Q, op (AND or OR), 
  * ready_cnt or fewer packet buffers are available in the "READY and Scheduled" Q,
