@@ -18,6 +18,7 @@
 
 #include <bsp.h>
 #include <rtems/libio.h>
+#include <rtems/console.h>
 
 /*  console_initialize
  *
