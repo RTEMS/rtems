@@ -130,9 +130,11 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <termios.h>
+
+#include <rtems/console.h>
+#include <rtems/libio.h>
 #include <rtems/termiostypes.h>
 #include <bsp.h>                /* Must be before libio.h */
-#include <rtems/libio.h>
 
 /* Utility functions */
 void cd2401_udelay( unsigned long delay );
