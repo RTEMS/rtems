@@ -21,7 +21,6 @@
 #include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
-#include <rtems/console.h>
 
 #include <libcpu/bf537.h>
 #include <libcpu/memoryRegs.h>

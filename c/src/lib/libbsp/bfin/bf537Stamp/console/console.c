@@ -15,6 +15,7 @@
 #include <rtems/libio.h>
 #include <bsp.h>
 #include <rtems/bspIo.h>
+#include <rtems/console.h>
 
 #include <libcpu/bf537.h>
 #include <libcpu/interrupt.h>
