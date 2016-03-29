@@ -96,15 +96,16 @@
 /***********************************************************************/
 
 #include <assert.h>
+#include <string.h>
 
 #include <rtems.h>
 #include "../include/mpc5200.h"
 #include <bsp.h>
 #include <bsp/irq.h>
 
+#include <rtems/console.h>
 #include <rtems/bspIo.h>
 #include <rtems/libio.h>
-#include <string.h>
 #include <rtems/termiostypes.h>
 
 
