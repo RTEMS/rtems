@@ -33,7 +33,6 @@
 
 #include <rtems.h>
 #include <leon.h>
-#include <rtems/console.h>
 #include <rtems/irq-extension.h>
 
 #ifdef __cplusplus

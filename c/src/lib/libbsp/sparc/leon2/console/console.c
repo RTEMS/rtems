@@ -15,11 +15,13 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <bsp.h>
-#include <rtems/libio.h>
 #include <stdlib.h>
 #include <assert.h>
+
+#include <rtems/console.h>
+#include <rtems/libio.h>
 #include <rtems/bspIo.h>
+#include <bsp.h>
 
 /*
  *  console_outbyte_polled
