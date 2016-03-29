@@ -71,10 +71,12 @@
  */
 #include <stdarg.h>
 #include <stdio.h>
-#include <bsp.h>                /* Must be before libio.h */
+#include <termios.h>
+
+#include <rtems/console.h>
 #include <rtems/bspIo.h>
 #include <rtems/libio.h>
-#include <termios.h>
+#include <bsp.h>                /* Must be before libio.h */
 
 static void _BSP_output_char( char c );
 static rtems_status_code do_poll_read( rtems_device_major_number major, rtems_device_minor_number minor, void * arg);

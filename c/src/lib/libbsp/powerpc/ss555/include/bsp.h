@@ -25,7 +25,6 @@
 #include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
-#include <rtems/console.h>
 #include <mpc5xx.h>
 #include <mpc5xx/console.h>
 #include <libcpu/vectors.h>
