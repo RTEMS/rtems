@@ -28,9 +28,11 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <bsp.h>
-#include <rtems/libio.h>
 #include <ctype.h>
+
+#include <rtems/console.h>
+#include <rtems/libio.h>
+#include <bsp.h>
 
 #include "yamon_api.h"
 
