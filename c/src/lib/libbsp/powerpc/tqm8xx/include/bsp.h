@@ -64,7 +64,6 @@ LINKER_SYMBOL( bsp_work_area_start);
 #include <bspopts.h>
 
 #include <rtems.h>
-#include <rtems/console.h>
 #include <rtems/irq.h>
 #include <mpc8xx.h>
 #include <mpc8xx/cpm.h>

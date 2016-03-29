@@ -46,19 +46,22 @@
  *  http://www.OARcorp.com/rtems/license.html.
  */
 
-#include <rtems.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <bsp.h>
-#include <mpc8xx.h>
-#include <rtems/irq.h>
-#include <bsp/irq.h>
-#include <rtems/libio.h>
 #include <termios.h>
 #include <unistd.h>
+
+#include <rtems.h>
+#include <rtems/console.h>
+#include <rtems/libio.h>
 #include <rtems/termiostypes.h>
 #include <rtems/bspIo.h>
 #include <rtems/error.h>
+#include <rtems/irq.h>
+
+#include <bsp.h>
+#include <mpc8xx.h>
+#include <bsp/irq.h>
 
 /*
  * Interrupt-driven input buffer
