@@ -49,8 +49,6 @@
 
 #else
 #include <rtems.h>
-#include <rtems/console.h>
-#include <rtems/console.h>
 #include <rtems/iosupp.h>
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
