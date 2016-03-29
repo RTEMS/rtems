@@ -26,6 +26,7 @@
 #include <termios.h>
 #include <bsp.h>
 #include <rtems/libio.h>
+#include <rtems/console.h>
 #include <rtems/termiostypes.h>
 #include <rtems/m68k/m68360.h>
 
