@@ -18,6 +18,7 @@
 #include <rtems/irq.h>
 #include <bsp/irq.h>
 #include <mc9328mxl.h>
+#include <rtems/console.h>
 
 /* Define this to use interrupt driver UART driver */
 #define USE_INTERRUPTS 1
