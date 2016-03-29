@@ -12,10 +12,12 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <termios.h>
+
+#include <rtems/console.h>
+#include <rtems/libio.h>
 #include <bsp.h>
 
-#include <termios.h>
-#include <rtems/libio.h>
 #include "sh/sh4uart.h"
 
 /* Descriptor structures for two on-chip UART channels */

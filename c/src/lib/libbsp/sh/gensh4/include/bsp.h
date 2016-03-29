@@ -41,7 +41,6 @@
 #define LIBBSP_SH_GENSH4_BSP_H
 
 #include <rtems.h>
-#include <rtems/console.h>
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
