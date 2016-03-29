@@ -22,7 +22,6 @@
 
 #include <rtems.h>
 #include <rtems/iosupp.h>
-#include <rtems/console.h>
 #include <libcpu/au1x00.h>
 
 #ifdef __cplusplus
