@@ -55,7 +55,6 @@
 
 #include <rtems.h>
 #include <rtems/iosupp.h>
-#include <rtems/console.h>
 #include <rtems/score/cpu.h>
 #include <rtems/bspIo.h>
 

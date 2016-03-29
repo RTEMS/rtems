@@ -18,14 +18,16 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <bsp.h>
-#include <rtems/libio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <termios.h>
 
-#include <rtems/termiostypes.h>
+#include <bsp.h>
 #include <libchip/serial.h>
+#include <rtems/libio.h>
+#include <rtems/console.h>
+#include <rtems/termiostypes.h>
+#include <bsp/bspimpl.h>
+
 #include "../../../shared/console_private.h"
 #ifdef RTEMS_RUNTIME_CONSOLE_SELECT
   #include <crt.h>
