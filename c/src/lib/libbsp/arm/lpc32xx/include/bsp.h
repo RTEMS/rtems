@@ -30,7 +30,6 @@
 #ifndef ASM
 
 #include <rtems.h>
-#include <rtems/console.h>
 
 #include <bsp/lpc32xx.h>
 #include <bsp/default-initial-extension.h>
