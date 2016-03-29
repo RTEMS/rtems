@@ -24,6 +24,7 @@
 #include <rtems/libio.h>
 #include <bsp.h>
 #include <rtems/bspIo.h>
+#include <rtems/console.h>
 
 #include <bsp/interrupt.h>
 #include <libcpu/uart.h>
