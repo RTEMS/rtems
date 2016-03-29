@@ -19,7 +19,6 @@
 
 #include <rtems.h>
 #include <rtems/iosupp.h>
-#include <rtems/console.h>
 #include <bsp/default-initial-extension.h>
 
 #ifdef __cplusplus
