@@ -26,6 +26,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/iosupp.h>
+#include <rtems/console.h>
 
 #include <sys/stat.h>
 
