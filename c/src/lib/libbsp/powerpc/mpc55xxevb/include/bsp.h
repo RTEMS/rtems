@@ -35,7 +35,6 @@
 #ifndef ASM
 
 #include <rtems.h>
-#include <rtems/console.h>
 
 #include <libcpu/powerpc-utility.h>
 
