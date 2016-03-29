@@ -29,6 +29,7 @@
 #include <bsp.h>
 #include <bsp/fatal.h>
 #include <bsp/apbuart_termios.h>
+#include <rtems/console.h>
 
 /* The LEON3 BSP UART driver can rely on the Driver Manager if the
  * DrvMgr is initialized during startup. Otherwise the classic driver
