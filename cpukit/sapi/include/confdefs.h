@@ -1921,13 +1921,19 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
       #define CONFIGURE_MULTIPROCESSING_TABLE    &Multiprocessing_configuration
 
+      #define CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 1
+
     #endif /* CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE */
 
   #else
 
     #define CONFIGURE_MULTIPROCESSING_TABLE    NULL
 
+    #define CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
+
   #endif /* CONFIGURE_MP_APPLICATION */
+#else
+  #define CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
 #endif /* RTEMS_MULTIPROCESSING */
 /**@}*/ /* end of Multiprocessing Configuration */
 
@@ -2958,10 +2964,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #ifdef CONFIGURE_MP_APPLICATION
   #define CONFIGURE_MEMORY_FOR_MP \
     (CONFIGURE_MEMORY_FOR_PROXIES(CONFIGURE_MP_MAXIMUM_PROXIES) + \
-     CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS( \
-             CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS) + \
-     CONFIGURE_MEMORY_FOR_TASKS(1, 1) \
-  )
+     CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS))
 #else
   #define CONFIGURE_MEMORY_FOR_MP  0
 #endif
@@ -3021,24 +3024,29 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
 /**
  * This defines the formula used to compute the amount of memory
- * reserved for IDLE task control structures.
+ * reserved for internal task control structures.
  */
 #if CPU_IDLE_TASK_IS_FP == TRUE
-  #define CONFIGURE_MEMORY_FOR_IDLE_TASK \
+  #define CONFIGURE_MEMORY_FOR_INTERNAL_TASKS \
     CONFIGURE_MEMORY_FOR_TASKS( \
-      CONFIGURE_IDLE_TASKS_COUNT, CONFIGURE_IDLE_TASKS_COUNT)
+      CONFIGURE_IDLE_TASKS_COUNT + CONFIGURE_MPCI_RECEIVE_SERVER_COUNT, \
+      CONFIGURE_IDLE_TASKS_COUNT + CONFIGURE_MPCI_RECEIVE_SERVER_COUNT \
+    )
 #else
-  #define CONFIGURE_MEMORY_FOR_IDLE_TASK \
-    CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_IDLE_TASKS_COUNT, 0)
+  #define CONFIGURE_MEMORY_FOR_INTERNAL_TASKS \
+    CONFIGURE_MEMORY_FOR_TASKS( \
+      CONFIGURE_IDLE_TASKS_COUNT + CONFIGURE_MPCI_RECEIVE_SERVER_COUNT, \
+      CONFIGURE_MPCI_RECEIVE_SERVER_COUNT \
+    )
 #endif
 
 /**
  * This macro accounts for general RTEMS system overhead.
  */
 #define CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD \
-  ( CONFIGURE_MEMORY_FOR_IDLE_TASK +                /* IDLE and stack */ \
-    CONFIGURE_INTERRUPT_STACK_MEMORY +             /* interrupt stack */ \
-    CONFIGURE_API_MUTEX_MEMORY                     /* allocation mutex */ \
+  ( CONFIGURE_MEMORY_FOR_INTERNAL_TASKS + \
+    CONFIGURE_INTERRUPT_STACK_MEMORY + \
+    CONFIGURE_API_MUTEX_MEMORY \
   )
 
 /**
@@ -3165,6 +3173,16 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     _Configure_From_stackspace( CONFIGURE_IDLE_TASK_STACK_SIZE ) )
 
 /**
+ * This macro is calculated to specify the stack memory required for the MPCI
+ * task.
+ *
+ * This is an internal parameter.
+ */
+#define CONFIGURE_MPCI_RECEIVE_SERVER_STACK \
+  (CONFIGURE_MPCI_RECEIVE_SERVER_COUNT * \
+    _Configure_From_stackspace(CONFIGURE_MINIMUM_TASK_STACK_SIZE))
+
+/**
  * This macro is calculated to specify the memory required for
  * the stacks of all tasks.
  *
@@ -3207,6 +3225,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #else /* CONFIGURE_EXECUTIVE_RAM_SIZE */
 
 #define CONFIGURE_IDLE_TASKS_STACK 0
+#define CONFIGURE_MPCI_RECEIVE_SERVER_STACK 0
 #define CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS 0
 #define CONFIGURE_TASKS_STACK 0
 #define CONFIGURE_POSIX_THREADS_STACK 0
@@ -3232,6 +3251,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #define CONFIGURE_STACK_SPACE_SIZE \
   ( \
     CONFIGURE_IDLE_TASKS_STACK + \
+    CONFIGURE_MPCI_RECEIVE_SERVER_STACK + \
     CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS + \
     CONFIGURE_TASKS_STACK + \
     CONFIGURE_POSIX_THREADS_STACK + \
@@ -3606,7 +3626,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
     /* System overhead pieces */
     CONFIGURE_INTERRUPT_STACK_MEMORY,
-    CONFIGURE_MEMORY_FOR_IDLE_TASK,
+    CONFIGURE_MEMORY_FOR_INTERNAL_TASKS,
 
     /* Classic API Pieces */
     CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS, 0),
