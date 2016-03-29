@@ -21,16 +21,18 @@
  */
 
 #include <termios.h>
-#include <bsp.h>
-#include <rtems/libio.h>
-#include <m68340.h>
-#include <m340uart.h>
-#include <m340timer.h>
 
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include <bsp.h>
+#include <rtems/libio.h>
 #include <rtems/termiostypes.h>
+#include <rtems/console.h>
+#include <m68340.h>
+#include <m340uart.h>
+#include <m340timer.h>
 
 #define CONSOLE_VECTOR 121
 #define CONSOLE_IRQ_LEVEL 3
