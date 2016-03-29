@@ -23,7 +23,6 @@
 #include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
-#include <rtems/console.h>
 
 #ifdef __cplusplus
 extern "C" {
