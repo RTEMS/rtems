@@ -17,7 +17,6 @@
 #include <rtems/termiostypes.h>
 #include <rtems/console.h>
 #include <rtems/bspIo.h>
-#include <rtems/mw_uid.h>
 #include <bsp.h>
 
 #define UART_INTC0_IRQ_VECTOR(x) (64+13+(x))
