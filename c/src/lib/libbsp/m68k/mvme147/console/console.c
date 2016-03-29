@@ -19,9 +19,10 @@
 
 #define M147_INIT
 
-#include <bsp.h>
+#include <rtems/console.h>
 #include <rtems/libio.h>
 #include <rtems/zilog/z8530.h>
+#include <bsp.h>
 
 /*  console_initialize
  *
