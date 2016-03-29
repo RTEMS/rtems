@@ -1899,7 +1899,9 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
         #define CONFIGURE_MP_MAXIMUM_PROXIES            32
       #endif
       #define CONFIGURE_MEMORY_FOR_PROXIES(_proxies) \
-        _Configure_Object_RAM((_proxies) + 1, sizeof(Thread_Proxy_control) )
+        _Configure_From_workspace((_proxies) \
+          * (sizeof(Thread_Proxy_control) \
+            + THREAD_QUEUE_HEADS_SIZE(CONFIGURE_SCHEDULER_COUNT)))
 
       #ifndef CONFIGURE_MP_MPCI_TABLE_POINTER
         #include <mpci.h>

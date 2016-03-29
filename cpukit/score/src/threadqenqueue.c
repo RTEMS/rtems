@@ -58,6 +58,12 @@ void _Thread_queue_Enqueue_critical(
   Per_CPU_Control *cpu_self;
   bool             success;
 
+#if defined(RTEMS_MULTIPROCESSING)
+  if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet ) {
+    the_thread = _Thread_MP_Allocate_proxy( state );
+  }
+#endif
+
   _Thread_Lock_set( the_thread, &queue->Lock );
 
   _Thread_Wait_set_queue( the_thread, queue );
@@ -69,11 +75,6 @@ void _Thread_queue_Enqueue_critical(
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Thread_queue_Queue_release( queue, lock_context );
 
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet )
-    the_thread = _Thread_MP_Allocate_proxy( state );
-  else
-#endif
   /*
    *  Set the blocking state for this thread queue in the thread.
    */

@@ -1455,6 +1455,16 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_set_timeout_code(
  */
 void _Thread_Timeout( Watchdog_Control *watchdog );
 
+RTEMS_INLINE_ROUTINE void _Thread_Timer_initialize(
+  Thread_Timer_information *timer,
+  Per_CPU_Control          *cpu
+)
+{
+  _ISR_lock_Initialize( &timer->Lock, "Thread Timer" );
+  timer->header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ];
+  _Watchdog_Preinitialize( &timer->Watchdog, cpu );
+}
+
 RTEMS_INLINE_ROUTINE void _Thread_Timer_insert_relative(
   Thread_Control                 *the_thread,
   Per_CPU_Control                *cpu,

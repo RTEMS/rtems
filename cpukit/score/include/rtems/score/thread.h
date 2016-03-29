@@ -417,6 +417,15 @@ typedef struct {
      /****************** end of common block ********************/
   /** This field is used to manage the set of proxies in the system. */
   Chain_Node               Active;
+
+  /**
+   * @brief Provide thread queue heads for this thread proxy.
+   *
+   * The actual size of the thread queue heads depends on the application
+   * configuration.  Since thread proxies are never destroyed we can use the
+   * same storage place for the thread queue heads.
+   */
+  Thread_queue_Heads       Thread_queue_heads[ RTEMS_ZERO_LENGTH_ARRAY ];
 }   Thread_Proxy_control;
 
 /**

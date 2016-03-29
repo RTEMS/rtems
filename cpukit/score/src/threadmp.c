@@ -22,6 +22,8 @@
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/wkspace.h>
 
+#include <string.h>
+
 Chain_Control _Thread_MP_Active_proxies;
 
 Chain_Control _Thread_MP_Inactive_proxies;
@@ -30,6 +32,10 @@ void _Thread_MP_Handler_initialization (
   uint32_t    maximum_proxies
 )
 {
+  size_t    proxy_size;
+  size_t    alloc_size;
+  char     *proxies;
+  uint32_t  i;
 
   _Chain_Initialize_empty( &_Thread_MP_Active_proxies );
 
@@ -38,16 +44,29 @@ void _Thread_MP_Handler_initialization (
     return;
   }
 
+  proxy_size = sizeof( Thread_Proxy_control )
+    + THREAD_QUEUE_HEADS_SIZE( _Scheduler_Count );
+  alloc_size = maximum_proxies * proxy_size;
+  proxies = _Workspace_Allocate_or_fatal_error( alloc_size );
+  memset( proxies, 0, alloc_size );
 
   _Chain_Initialize(
     &_Thread_MP_Inactive_proxies,
-    _Workspace_Allocate_or_fatal_error(
-      maximum_proxies * sizeof( Thread_Proxy_control )
-    ),
+    proxies,
     maximum_proxies,
-    sizeof( Thread_Proxy_control )
+    proxy_size
   );
 
+  for ( i = 0 ; i < maximum_proxies ; ++i ) {
+    Thread_Proxy_control *proxy;
+
+    proxy = (Thread_Proxy_control *) ( proxies + i * proxy_size );
+
+    _Thread_Timer_initialize( &proxy->Timer, _Per_CPU_Get_by_index( 0 ) );
+
+    proxy->Wait.spare_heads = &proxy->Thread_queue_heads[ 0 ];
+    _Thread_queue_Heads_initialize( proxy->Wait.spare_heads );
+  }
 }
 
 Thread_Control *_Thread_MP_Allocate_proxy (
@@ -60,10 +79,12 @@ Thread_Control *_Thread_MP_Allocate_proxy (
   the_thread = (Thread_Control *)_Chain_Get( &_Thread_MP_Inactive_proxies );
 
   if ( !_Thread_Is_null( the_thread ) ) {
+    Thread_Control *executing;
 
+    executing = _Thread_Executing;
     the_proxy = (Thread_Proxy_control *) the_thread;
 
-    _Thread_Executing->Wait.return_code = THREAD_STATUS_PROXY_BLOCKING;
+    executing->Wait.return_code = THREAD_STATUS_PROXY_BLOCKING;
 
     the_proxy->receive_packet = _MPCI_Receive_server_tcb->receive_packet;
 
@@ -74,7 +95,13 @@ Thread_Control *_Thread_MP_Allocate_proxy (
 
     the_proxy->current_state = _States_Set( STATES_DORMANT, the_state );
 
-    the_proxy->Wait = _Thread_Executing->Wait;
+    the_proxy->Wait.id                      = executing->Wait.id;
+    the_proxy->Wait.count                   = executing->Wait.count;
+    the_proxy->Wait.return_argument         = executing->Wait.return_argument;
+    the_proxy->Wait.return_argument_second  = executing->Wait.return_argument_second;
+    the_proxy->Wait.option                  = executing->Wait.option;
+    the_proxy->Wait.return_code             = executing->Wait.return_code;
+    the_proxy->Wait.timeout_code            = executing->Wait.timeout_code;
 
     _Chain_Append( &_Thread_MP_Active_proxies, &the_proxy->Active );
 
