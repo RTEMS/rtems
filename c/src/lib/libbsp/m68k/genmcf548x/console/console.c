@@ -54,7 +54,6 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <malloc.h>
-#include <rtems/mw_uid.h>
 
 #include <bsp.h>
 #include <bsp/irq-generic.h>
