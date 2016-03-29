@@ -28,9 +28,11 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <bsp.h>
-#include <rtems/libio.h>
 #include <ctype.h>
+
+#include <rtems/console.h>
+#include <rtems/libio.h>
+#include <bsp.h>
 
 /* PMON entry points */
 int mon_read(int fd, char *buf, int cnt);    /* stdin is fd=0 */
