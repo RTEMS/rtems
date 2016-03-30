@@ -153,13 +153,20 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Release(
   );
 }
 
+#if defined(RTEMS_MULTIPROCESSING)
 /**
- *  The following type defines the callout used when a remote task
- *  is extracted from a local thread queue.
+ * @brief Multiprocessing (MP) support callout for thread queue operations.
+ *
+ * @param the_proxy The thread proxy of the thread queue operation.  A thread
+ *   control is actually a thread proxy if and only if
+ *   _Objects_Is_local_id( the_proxy->Object.id ) is false.
+ * @param mp_id Object identifier of the object containing the thread queue.
  */
-typedef void ( *Thread_queue_Flush_callout )(
-                  Thread_Control *
-             );
+typedef void ( *Thread_queue_MP_callout )(
+  Thread_Control *the_proxy,
+  Objects_Id      mp_id
+);
+#endif
 
 /**
  *  @brief Gets a pointer to a thread waiting on the_thread_queue.
@@ -439,25 +446,59 @@ Thread_Control *_Thread_queue_First(
   const Thread_queue_Operations *operations
 );
 
-/**
- *  @brief Unblocks all threads blocked on the_thread_queue.
- *
- *  This routine unblocks all threads blocked on the_thread_queue
- *  and cancels any associated timeouts.
- *
- *  @param[in] the_thread_queue is the pointer to a threadq header
- *  @param[in] operations The thread queue operations.
- *  @param[in] remote_extract_callout points to a method to invoke to 
- *             invoke when a remote thread is unblocked
- *  @param[in] status is the status which will be returned to
- *             all unblocked threads
- */
-void _Thread_queue_Flush(
+void _Thread_queue_Do_flush(
   Thread_queue_Control          *the_thread_queue,
   const Thread_queue_Operations *operations,
-  Thread_queue_Flush_callout     remote_extract_callout,
   uint32_t                       status
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  Thread_queue_MP_callout        mp_callout,
+  Objects_Id                     mp_id
+#endif
 );
+
+/**
+ * @brief Unblocks all threads blocked on the thread queue.
+ *
+ * The thread timers of the threads are cancelled.
+ *
+ * @param the_thread_queue The thread queue.
+ * @param operations The thread queue operations.
+ * @param status The return status for the threads.
+ * @param mp_callout Callout to extract the proxy of a remote thread.  This
+ *   parameter is only used on multiprocessing configurations.
+ * @param mp_id Object identifier of the object containing the thread queue.
+ *   This parameter is only used on multiprocessing configurations.
+ */
+#if defined(RTEMS_MULTIPROCESSING)
+  #define _Thread_queue_Flush( \
+    the_thread_queue, \
+    operations, \
+    status, \
+    mp_callout, \
+    mp_id \
+  ) \
+    _Thread_queue_Do_flush( \
+      the_thread_queue, \
+      operations, \
+      status, \
+      mp_callout, \
+      mp_id \
+    )
+#else
+  #define _Thread_queue_Flush( \
+    the_thread_queue, \
+    operations, \
+    status, \
+    mp_callout, \
+    mp_id \
+  ) \
+    _Thread_queue_Do_flush( \
+      the_thread_queue, \
+      operations, \
+      status \
+    )
+#endif
 
 void _Thread_queue_Initialize( Thread_queue_Control *the_thread_queue );
 

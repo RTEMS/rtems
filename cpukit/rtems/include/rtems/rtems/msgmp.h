@@ -152,7 +152,8 @@ void _Message_queue_MP_Process_packet (
  *  the remote node must be informed of this.
  */
 void _Message_queue_MP_Send_object_was_deleted (
-  Thread_Control *the_proxy
+  Thread_Control *the_proxy,
+  Objects_Id      mp_id
 );
 
 /**

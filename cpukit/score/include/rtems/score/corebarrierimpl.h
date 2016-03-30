@@ -140,21 +140,19 @@ uint32_t _CORE_barrier_Release(
   CORE_barrier_API_mp_support_callout  api_barrier_mp_support
 );
 
-/**
- *  This routine assists in the deletion of a barrier by flushing the
- *  associated wait queue.
- *
- *  @param[in] _the_barrier is the barrier to flush
- *  @param[in] _remote_extract_callout is the routine to invoke if the
- *         thread unblocked is remote
- *  @param[in] _status is the status to be returned to the unblocked thread
- */
-#define _CORE_barrier_Flush( _the_barrier, _remote_extract_callout, _status) \
+/* Must be a macro due to the multiprocessing dependent parameters */
+#define _CORE_barrier_Flush( \
+  the_barrier, \
+  status, \
+  mp_callout, \
+  mp_id \
+) \
   _Thread_queue_Flush( \
-    &((_the_barrier)->Wait_queue), \
+    &( the_barrier )->Wait_queue, \
     CORE_BARRIER_TQ_OPERATIONS, \
-    (_remote_extract_callout), \
-    (_status) \
+    status, \
+    mp_callout, \
+    mp_id \
   )
 
 /**

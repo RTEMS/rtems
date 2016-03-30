@@ -167,34 +167,20 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Surrender(
   return status;
 }
 
-/**
- *  @brief Core semaphore flush.
- *
- *  This package is the implementation of the CORE Semaphore Handler.
- *  This core object utilizes standard Dijkstra counting semaphores to provide
- *  synchronization and mutual exclusion capabilities.
- *
- *  This routine assists in the deletion of a semaphore by flushing the
- *  associated wait queue.
- *
- *  @param[in] the_semaphore is the semaphore to flush
- *  @param[in] remote_extract_callout is the routine to invoke if the
- *         thread unblocked is remote
- *  @param[in] status is the status to be returned to the unblocked thread
- */
-RTEMS_INLINE_ROUTINE void _CORE_semaphore_Flush(
-  CORE_semaphore_Control         *the_semaphore,
-  Thread_queue_Flush_callout      remote_extract_callout,
-  uint32_t                        status
-)
-{
-  _Thread_queue_Flush(
-    &the_semaphore->Wait_queue,
-    the_semaphore->operations,
-    remote_extract_callout,
-    status
-  );
-}
+/* Must be a macro due to the multiprocessing dependent parameters */
+#define _CORE_semaphore_Flush( \
+  the_semaphore, \
+  status, \
+  mp_callout, \
+  mp_id \
+) \
+  _Thread_queue_Flush( \
+    &( the_semaphore )->Wait_queue, \
+    ( the_semaphore )->operations, \
+    status, \
+    mp_callout, \
+    mp_id \
+  )
 
 /**
  * This routine returns the current count associated with the semaphore.

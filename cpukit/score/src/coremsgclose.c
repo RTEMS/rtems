@@ -21,10 +21,14 @@
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/wkspace.h>
 
-void _CORE_message_queue_Close(
+void _CORE_message_queue_Do_close(
   CORE_message_queue_Control *the_message_queue,
-  Thread_queue_Flush_callout  remote_extract_callout,
   uint32_t                    status
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  Thread_queue_MP_callout     mp_callout,
+  Objects_Id                  mp_id
+#endif
 )
 {
   ISR_lock_Context lock_context;
@@ -37,8 +41,9 @@ void _CORE_message_queue_Close(
   _Thread_queue_Flush(
     &the_message_queue->Wait_queue,
     the_message_queue->operations,
-    remote_extract_callout,
-    status
+    status,
+    mp_callout,
+    mp_id
   );
 
   /*

@@ -139,6 +139,16 @@ bool _CORE_message_queue_Initialize(
   size_t                          maximum_message_size
 );
 
+void _CORE_message_queue_Do_close(
+  CORE_message_queue_Control *the_message_queue,
+  uint32_t                    status
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  Thread_queue_MP_callout     mp_callout,
+  Objects_Id                  mp_id
+#endif
+);
+
 /**
  *  @brief Close a message queue.
  *
@@ -150,16 +160,37 @@ bool _CORE_message_queue_Initialize(
  *  flushing @a the_message_queue's task wait queue.
  *
  *  @param[in] the_message_queue points to the message queue to close
- *  @param[in] remote_extract_callout is the routine to call for each thread
- *         that is extracted from the set of waiting threads
  *  @param[in] status is the status that each waiting thread will return
  *         from it's blocking service
+ *  @param[in] mp_callout is the routine to call for each thread
+ *         that is extracted from the set of waiting threads
+ *  @param[in] mp_id the object identifier of the message queue object
  */
-void _CORE_message_queue_Close(
-  CORE_message_queue_Control *the_message_queue,
-  Thread_queue_Flush_callout  remote_extract_callout,
-  uint32_t                    status
-);
+#if defined(RTEMS_MULTIPROCESSING)
+  #define _CORE_message_queue_Close( \
+    the_message_queue, \
+    status, \
+    mp_callout, \
+    mp_id \
+  ) \
+    _CORE_message_queue_Do_close( \
+      the_message_queue, \
+      status, \
+      mp_callout, \
+      mp_id \
+    )
+#else
+  #define _CORE_message_queue_Close( \
+    the_message_queue, \
+    status, \
+    mp_callout, \
+    mp_id \
+  ) \
+    _CORE_message_queue_Do_close( \
+      the_message_queue, \
+      status \
+    )
+#endif
 
 /**
  *  @brief Flush pending messages.

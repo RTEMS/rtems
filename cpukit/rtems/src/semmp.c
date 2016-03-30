@@ -233,14 +233,15 @@ void _Semaphore_MP_Process_packet (
 }
 
 void _Semaphore_MP_Send_object_was_deleted (
-  Thread_Control *the_proxy
+  Thread_Control *the_proxy,
+  Objects_Id      mp_id
 )
 {
   the_proxy->receive_packet->return_code = RTEMS_OBJECT_WAS_DELETED;
 
   _Semaphore_MP_Send_response_packet(
     SEMAPHORE_MP_OBTAIN_RESPONSE,
-    the_proxy->Wait.id,
+    mp_id,
     the_proxy
   );
 

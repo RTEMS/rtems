@@ -55,7 +55,7 @@ int pthread_mutex_destroy(
       }
 
       _Objects_Close( &_POSIX_Mutex_Information, &the_mutex->Object );
-      _CORE_mutex_Flush( &the_mutex->Mutex, NULL, EINVAL );
+      _CORE_mutex_Flush( &the_mutex->Mutex, EINVAL, NULL, 0 );
       _Objects_Put( &the_mutex->Object );
       _POSIX_Mutex_Free( the_mutex );
       _Objects_Allocator_unlock();

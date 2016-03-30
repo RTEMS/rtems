@@ -175,7 +175,7 @@ libscore_a_SOURCES += src/coremsg.c src/coremsgbroadcast.c \
     src/coremsgsubmit.c
 
 ## CORE_MUTEX_C_FILES
-libscore_a_SOURCES += src/coremutex.c src/coremutexflush.c \
+libscore_a_SOURCES += src/coremutex.c \
     src/coremutexseize.c src/coremutexsurrender.c \
     src/coremutexseizeintr.c
 

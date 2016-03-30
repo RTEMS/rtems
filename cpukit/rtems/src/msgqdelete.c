@@ -47,12 +47,9 @@ rtems_status_code rtems_message_queue_delete(
 
       _CORE_message_queue_Close(
         &the_message_queue->message_queue,
-        #if defined(RTEMS_MULTIPROCESSING)
-          _Message_queue_MP_Send_object_was_deleted,
-        #else
-          NULL,
-        #endif
-        CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED
+        CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED,
+        _Message_queue_MP_Send_object_was_deleted,
+        id
       );
 
 #if defined(RTEMS_MULTIPROCESSING)

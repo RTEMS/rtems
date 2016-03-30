@@ -35,8 +35,9 @@ rtems_status_code rtems_barrier_delete(
     case OBJECTS_LOCAL:
       _CORE_barrier_Flush(
         &the_barrier->Barrier,
+        CORE_BARRIER_WAS_DELETED,
         NULL,
-        CORE_BARRIER_WAS_DELETED
+        id
       );
 
       _Objects_Close( &_Barrier_Information, &the_barrier->Object );

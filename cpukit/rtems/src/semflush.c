@@ -31,12 +31,6 @@
 
 #include <rtems/score/interr.h>
 
-#if defined(RTEMS_MULTIPROCESSING)
-#define SEND_OBJECT_WAS_DELETED _Semaphore_MP_Send_object_was_deleted
-#else
-#define SEND_OBJECT_WAS_DELETED NULL
-#endif
-
 rtems_status_code rtems_semaphore_flush(
   rtems_id        id
 )
@@ -59,14 +53,16 @@ rtems_status_code rtems_semaphore_flush(
       if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
         _CORE_mutex_Flush(
           &the_semaphore->Core_control.mutex,
-          SEND_OBJECT_WAS_DELETED,
-          CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT
+          CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT,
+          _Semaphore_MP_Send_object_was_deleted,
+          id
         );
       } else {
         _CORE_semaphore_Flush(
           &the_semaphore->Core_control.semaphore,
-          SEND_OBJECT_WAS_DELETED,
-          CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT
+          CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT,
+          _Semaphore_MP_Send_object_was_deleted,
+          id
         );
       }
       _Objects_Put( &the_semaphore->Object );

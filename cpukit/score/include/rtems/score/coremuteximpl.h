@@ -324,23 +324,20 @@ CORE_mutex_Status _CORE_mutex_Surrender(
   ISR_lock_Context                  *lock_context
 );
 
-/**
- *  @brief Flush all waiting threads.
- *
- *  This routine assists in the deletion of a mutex by flushing the associated
- *  wait queue.
- *
- *  @param[in] the_mutex is the mutex to flush
- *  @param[in] remote_extract_callout is the routine to invoke when a remote
- *         thread is extracted
- *  @param[in] status is the status value which each unblocked thread will
- *         return to its caller.
- */
-void _CORE_mutex_Flush(
-  CORE_mutex_Control         *the_mutex,
-  Thread_queue_Flush_callout  remote_extract_callout,
-  uint32_t                    status
-);
+/* Must be a macro due to the multiprocessing dependent parameters */
+#define _CORE_mutex_Flush( \
+  the_mutex, \
+  status, \
+  mp_callout, \
+  mp_id \
+) \
+  _Thread_queue_Flush( \
+    &( the_mutex )->Wait_queue, \
+    ( the_mutex )->operations, \
+    status, \
+    mp_callout, \
+    mp_id \
+  )
 
 /**
  * @brief Is mutex locked.
