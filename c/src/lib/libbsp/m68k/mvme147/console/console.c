@@ -22,6 +22,7 @@
 #include <rtems/console.h>
 #include <rtems/libio.h>
 #include <rtems/zilog/z8530.h>
+#include <rtems/iosupp.h>
 #include <bsp.h>
 
 /*  console_initialize
