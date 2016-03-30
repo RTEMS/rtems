@@ -263,7 +263,6 @@ void _Message_queue_MP_Process_packet (
 {
   Message_queue_MP_Packet *the_packet;
   Thread_Control          *the_thread;
-  bool                     ignored;
 
   the_packet = (Message_queue_MP_Packet *) the_packet_prefix;
 
@@ -271,12 +270,12 @@ void _Message_queue_MP_Process_packet (
 
     case MESSAGE_QUEUE_MP_ANNOUNCE_CREATE:
 
-      ignored = _Objects_MP_Allocate_and_open(
-                  &_Message_queue_Information,
-                  the_packet->name,
-                  the_packet->Prefix.id,
-                  true
-                );
+      _Objects_MP_Allocate_and_open(
+        &_Message_queue_Information,
+        the_packet->name,
+        the_packet->Prefix.id,
+        true
+      );
 
       _MPCI_Return_packet( the_packet_prefix );
       break;
@@ -428,8 +427,6 @@ void _Message_queue_MP_Process_packet (
       break;
 
   }
-
-  ignored; /* avoid set but not used warning */
 }
 
 /*
