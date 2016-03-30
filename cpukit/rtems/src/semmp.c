@@ -247,14 +247,13 @@ void _Semaphore_MP_Send_object_was_deleted (
 }
 
 void _Semaphore_MP_Send_extract_proxy (
-  void           *argument
+  Thread_Control *the_thread,
+  Objects_Id      id
 )
 {
-  Thread_Control *the_thread = (Thread_Control *)argument;
-
   _Semaphore_MP_Send_process_packet(
     SEMAPHORE_MP_EXTRACT_PROXY,
-    the_thread->Wait.id,
+    id,
     (rtems_name) 0,
     the_thread->Object.id
   );

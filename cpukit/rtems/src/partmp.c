@@ -275,14 +275,13 @@ void _Partition_MP_Process_packet (
  */
 
 void _Partition_MP_Send_extract_proxy (
-  void           *argument
+  Thread_Control *the_thread,
+  Objects_Id      id
 )
 {
-  Thread_Control *the_thread = (Thread_Control *)argument;
-
   _Partition_MP_Send_process_packet(
     PARTITION_MP_EXTRACT_PROXY,
-    the_thread->Wait.id,
+    id,
     (rtems_name) 0,
     the_thread->Object.id
   );

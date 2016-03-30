@@ -127,7 +127,10 @@ typedef enum {
  *  is extracted from a remote thread queue (i.e. it's proxy must
  *  extracted from the remote queue).
  */
-typedef void ( *Objects_Thread_queue_Extract_callout )( void * );
+typedef void ( *Objects_Thread_queue_Extract_callout )(
+  Thread_Control *,
+  Objects_Id
+);
 
 /**
  *  The following defines the structure for the information used to

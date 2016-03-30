@@ -163,7 +163,8 @@ void _Message_queue_MP_Send_object_was_deleted (
  *  the remote node must be informed of this.
  */
 void _Message_queue_MP_Send_extract_proxy (
-  void           *argument
+  Thread_Control *the_thread,
+  Objects_Id      id
 );
 
 /**

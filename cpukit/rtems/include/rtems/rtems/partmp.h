@@ -133,7 +133,8 @@ void _Partition_MP_Process_packet (
  *  the remote node must be informed of this.
  */
 void _Partition_MP_Send_extract_proxy (
-  void           *argument
+  Thread_Control *the_thread,
+  Objects_Id      id
 );
 
 /**
