@@ -173,7 +173,6 @@ void _RTEMS_tasks_MP_Process_packet (
 {
   RTEMS_tasks_MP_Packet *the_packet;
   Thread_Control   *the_thread;
-  bool           ignored;
 
   the_packet = (RTEMS_tasks_MP_Packet *) the_packet_prefix;
 
@@ -181,12 +180,12 @@ void _RTEMS_tasks_MP_Process_packet (
 
     case RTEMS_TASKS_MP_ANNOUNCE_CREATE:
 
-      ignored = _Objects_MP_Allocate_and_open(
-                  &_RTEMS_tasks_Information.Objects,
-                  the_packet->name,
-                  the_packet->Prefix.id,
-                  true
-                );
+      _Objects_MP_Allocate_and_open(
+        &_RTEMS_tasks_Information.Objects,
+        the_packet->name,
+        the_packet->Prefix.id,
+        true
+      );
 
       _MPCI_Return_packet( the_packet_prefix );
       break;
@@ -257,8 +256,6 @@ void _RTEMS_tasks_MP_Process_packet (
       _MPCI_Return_packet( the_packet_prefix );
       break;
   }
-
-  ignored; /* avoid set but not used warning */
 }
 
 /*
