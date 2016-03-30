@@ -261,9 +261,19 @@ struct grspw_core_stats {
 #define DMAFLAG_STRIP_PID	0x0008	/* See HW doc DMA-CTRL SP bit */
 #define DMAFLAG_RESV2		0x0010	/* HAS NO EFFECT */
 #define DMAFLAG_MASK	(DMAFLAG_NO_SPILL|DMAFLAG_STRIP_ADR|DMAFLAG_STRIP_PID)
+/* grspw_dma_config.flags misc options (not shifted internally) */
+#define DMAFLAG2_TXIE	0x00100000	/* See HW doc DMA-CTRL TI bit. 
+					 * Used to enable TX DMA interrupt
+					 * when tx_irq_en_cnt=0.
+					 */
+#define DMAFLAG2_RXIE	0x00200000	/* See HW doc DMA-CTRL RI bit.
+					 * Used to enable RX DMA interrupt
+					 * when rx_irq_en_cnt=0.
+					 */
+#define DMAFLAG2_MASK	(DMAFLAG2_TXIE | DMAFLAG2_RXIE)
 
 struct grspw_dma_config {
-	int flags;		/* DMA config flags, see DMAFLAG_* options */
+	int flags;		/* DMA config flags, see DMAFLAG1&2_* options */
 	int rxmaxlen;		/* RX Max Packet Length */
 	int rx_irq_en_cnt;	/* Enable RX IRQ every cnt descriptors */
 	int tx_irq_en_cnt;	/* Enable TX IRQ every cnt descriptors */

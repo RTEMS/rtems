@@ -2301,7 +2301,7 @@ int grspw_dma_config(void *c, struct grspw_dma_config *cfg)
 	if (dma->started || !cfg)
 		return -1;
 
-	if (cfg->flags & ~DMAFLAG_MASK)
+	if (cfg->flags & ~(DMAFLAG_MASK | DMAFLAG2_MASK))
 		return -1;
 
 	/* Update Configuration */
@@ -2398,9 +2398,9 @@ int grspw_dma_start(void *c)
 		(dma->cfg.flags & DMAFLAG_MASK) << GRSPW_DMACTRL_NS_BIT;
 	if (dma->core->dis_link_on_err & LINKOPTS_DIS_ONERR)
 		ctrl |= GRSPW_DMACTRL_LE;
-	if (dma->cfg.rx_irq_en_cnt != 0)
+	if (dma->cfg.rx_irq_en_cnt != 0 || dma->cfg.flags & DMAFLAG2_RXIE)
 		ctrl |= GRSPW_DMACTRL_RI;
-	if (dma->cfg.tx_irq_en_cnt != 0)
+	if (dma->cfg.tx_irq_en_cnt != 0 || dma->cfg.flags & DMAFLAG2_TXIE)
 		ctrl |= GRSPW_DMACTRL_TI;
 	SPIN_LOCK_IRQ(&dma->core->devlock, irqflags);
 	ctrl |= REG_READ(&dma->regs->ctrl) & GRSPW_DMACTRL_EN;
@@ -2540,9 +2540,11 @@ static void grspw_work_dma_func(struct grspw_dma_priv *dma)
 	} else if (ctrl & (GRSPW_DMACTRL_PR | GRSPW_DMACTRL_PS)) {
 		/* DMA has finished a TX/RX packet */
 		ctrl &= ~GRSPW_DMACTRL_AT;
-		if (dma->cfg.rx_irq_en_cnt != 0)
+		if (dma->cfg.rx_irq_en_cnt != 0 ||
+		    (dma->cfg.flags & DMAFLAG2_RXIE))
 			ctrl |= GRSPW_DMACTRL_RI;
-		if (dma->cfg.tx_irq_en_cnt != 0)
+		if (dma->cfg.tx_irq_en_cnt != 0 ||
+		    (dma->cfg.flags & DMAFLAG2_TXIE))
 			ctrl |= GRSPW_DMACTRL_TI;
 		REG_WRITE(&dma->regs->ctrl, ctrl);
 		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
