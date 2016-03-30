@@ -22,7 +22,6 @@
 #include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
-#include <rtems/iosupp.h>
 #include <libcpu/tx4938.h>
 
 #ifdef __cplusplus
