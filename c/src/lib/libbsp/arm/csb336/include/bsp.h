@@ -23,7 +23,6 @@
 #include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
-#include <rtems/iosupp.h>
 #include <mc9328mxl.h>
 
 #ifdef __cplusplus
