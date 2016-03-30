@@ -21,7 +21,6 @@
 #include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
-#include <rtems/iosupp.h>
 #include <libcpu/au1x00.h>
 
 #ifdef __cplusplus
