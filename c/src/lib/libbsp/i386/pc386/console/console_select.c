@@ -33,6 +33,8 @@
   #include <crt.h>
 #endif
 
+#include <bsp/bspimpl.h>
+
 /*
  * Forward prototype
  */
@@ -142,9 +144,12 @@ static bool parse_printk_or_console(
   rtems_device_minor_number *minor_out
 )
 {
-  static const char *opt;
-  char               working[64] = "";
-  char              *p;
+  static const char         *opt;
+  const char                *option;
+  const char                *comma;
+  size_t                     length;
+  size_t                     index;
+  rtems_device_minor_number  minor;
 
   /*
    * Check the command line for the type of mode the console is.
@@ -155,30 +160,43 @@ static bool parse_printk_or_console(
   }
 
   /*
-   * bsp_cmdline_arg() returns pointer to a string. It may not be the
-   * last string on the command line.
+   * Fine the length, there can be more command line visible.
    */
-  strncpy( working, opt, sizeof(working) );
-  p = strchr( working, ' ' );
-  if ( p ) {
-    *p = '\0';
+  length = 0;
+  while ((opt[length] != ' ') && (opt[length] != '\0')) {
+    ++length;
+    if (length > NAME_MAX) {
+      printk("invalid option (%s): too long\n", param);
+      return false;
+    }
   }
-
-  const char                *comma;
-  size_t                     length = NAME_MAX;
-  rtems_device_minor_number  minor;
-  char                      *option = working;
 
   /*
    * Only match up to a comma or NULL
    */
-  comma = strchr (option, ',');
-
-  if ( comma ) {
-    length = comma - option;
+  index = 0;
+  while ((opt[index] != '=') && (index < length)) {
+    ++index;
   }
 
-  option += strnlen(param, 32);
+  if (opt[index] != '=') {
+    printk("invalid option (%s): no equals\n", param);
+    return false;
+  }
+
+  ++index;
+  option = &opt[index];
+
+  while ((opt[index] != ',') && (index < length)) {
+    ++index;
+  }
+
+  if (opt[index] == ',')
+    comma = &opt[index];
+  else
+    comma = NULL;
+
+  length = &opt[index] - option;
 
   if ( !bsp_find_console_entry( option, length, &minor ) ) {
     return false;
@@ -186,10 +204,10 @@ static bool parse_printk_or_console(
 
   *minor_out = minor;
   if (comma) {
-    console_tbl *conscfg;
+    console_tbl *conscfg = &Console_Configuration_Ports[minor];
 
-    comma += 1;
-    conscfg = &Console_Configuration_Ports[minor];
+    option = comma + 1;
+
     if (strncmp (option, "115200", sizeof ("115200") - 1) == 0)
       conscfg->pDeviceParams = (void *)115200;
     else if (strncmp (option, "57600", sizeof ("57600") - 1) == 0)
