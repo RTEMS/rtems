@@ -54,7 +54,6 @@
 #include <bsp/tblsizes.h>
 
 #include <rtems.h>
-#include <rtems/iosupp.h>
 #include <rtems/score/cpu.h>
 #include <rtems/bspIo.h>
 
