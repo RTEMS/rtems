@@ -45,10 +45,7 @@ void _Thread_queue_Do_flush(
       )
     )
   ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    if ( _Objects_Is_local_id( the_thread->Object.id ) )
-#endif
-      the_thread->Wait.return_code = status;
+    the_thread->Wait.return_code = status;
 
     _Thread_queue_Extract_critical(
       &the_thread_queue->Queue,
