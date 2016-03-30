@@ -26,7 +26,6 @@
 #include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
-#include <rtems/iosupp.h>
 #include <rtems/bspIo.h>
 
 #include <mvme16x_hw.h>
