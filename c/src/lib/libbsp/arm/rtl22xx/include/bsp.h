@@ -27,7 +27,6 @@
  */
 
 #include <rtems.h>
-#include <rtems/iosupp.h>
 
 #ifdef __cplusplus
 extern "C" {
