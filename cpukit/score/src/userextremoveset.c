@@ -20,13 +20,16 @@
 #endif
 
 #include <rtems/score/userextimpl.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/percpu.h>
 
 void _User_extensions_Remove_set (
   User_extensions_Control  *the_extension
 )
 {
-  _Chain_Extract( &the_extension->Node );
+  _Assert( _Objects_Allocator_is_owner() );
+
+  _Chain_Extract_unprotected( &the_extension->Node );
 
   /*
    * If a switch handler is present, remove it.
