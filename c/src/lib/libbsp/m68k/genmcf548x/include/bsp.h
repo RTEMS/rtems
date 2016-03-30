@@ -66,8 +66,6 @@
  */
 
 #include <rtems.h>
-#include <rtems/iosupp.h>
-#include <rtems/iosupp.h>
 #include <rtems/bspIo.h>
 
 /***************************************************************************/
