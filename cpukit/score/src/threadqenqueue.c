@@ -116,10 +116,10 @@ bool _Thread_queue_Extract_locked(
 
   ( *operations->extract )( queue, the_thread );
 
-  _Thread_Wait_set_queue( the_thread, NULL );
-  _Thread_Wait_restore_default_operations( the_thread );
-  _Thread_Lock_restore_default( the_thread );
-
+  /*
+   * We must update the wait flags under protection of the current thread lock,
+   * otherwise a _Thread_Timeout() running on another processor may interfere.
+   */
   success = _Thread_Wait_flags_try_change_critical(
     the_thread,
     THREAD_QUEUE_INTEND_TO_BLOCK,
@@ -132,6 +132,10 @@ bool _Thread_queue_Extract_locked(
     _Thread_Wait_flags_set( the_thread, THREAD_QUEUE_READY_AGAIN );
     unblock = true;
   }
+
+  _Thread_Wait_set_queue( the_thread, NULL );
+  _Thread_Wait_restore_default_operations( the_thread );
+  _Thread_Lock_restore_default( the_thread );
 
   return unblock;
 }
