@@ -159,7 +159,6 @@ void _Semaphore_MP_Process_packet (
 {
   Semaphore_MP_Packet *the_packet;
   Thread_Control      *the_thread;
-  bool                 ignored;
 
   the_packet = (Semaphore_MP_Packet *) the_packet_prefix;
 
@@ -167,12 +166,12 @@ void _Semaphore_MP_Process_packet (
 
     case SEMAPHORE_MP_ANNOUNCE_CREATE:
 
-      ignored = _Objects_MP_Allocate_and_open(
-                  &_Semaphore_Information,
-                  the_packet->name,
-                  the_packet->Prefix.id,
-                  true
-                );
+      _Objects_MP_Allocate_and_open(
+        &_Semaphore_Information,
+        the_packet->name,
+        the_packet->Prefix.id,
+        true
+      );
 
       _MPCI_Return_packet( the_packet_prefix );
       break;
@@ -231,8 +230,6 @@ void _Semaphore_MP_Process_packet (
       );
       break;
   }
-
-  ignored; /* avoid set but not used warning */
 }
 
 void _Semaphore_MP_Send_object_was_deleted (
