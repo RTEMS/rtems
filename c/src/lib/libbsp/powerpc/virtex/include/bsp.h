@@ -49,7 +49,6 @@
 
 #else
 #include <rtems.h>
-#include <rtems/iosupp.h>
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
 #include <bsp/default-initial-extension.h>
