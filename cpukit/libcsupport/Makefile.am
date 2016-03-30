@@ -6,12 +6,8 @@ libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS)
 libcalloc_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include_rtemsdir = $(includedir)/rtems
-include_rtems_HEADERS = include/console.h
-include_rtems_HEADERS += include/clockdrv.h
-include_rtems_HEADERS += include/rtems/framebuffer.h
-include_rtems_HEADERS += include/iosupp.h
+include_rtems_HEADERS  = include/iosupp.h
 include_rtems_HEADERS += include/ringbuf.h
-include_rtems_HEADERS += include/rtc.h
 include_rtems_HEADERS += include/rtems/tod.h
 include_rtems_HEADERS += include/spurious.h
 include_rtems_HEADERS += include/vmeintr.h

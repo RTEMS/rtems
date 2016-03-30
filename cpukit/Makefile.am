@@ -105,8 +105,14 @@ endif
 include_rtems_HEADERS += include/rtems/concat.h
 include_rtems_HEADERS += include/rtems/status-checks.h
 
-include_rtems_HEADERS += include/rtems/btimer.h
 include_rtems_HEADERS += include/rtems/endian.h
+
+include_rtems_HEADERS += include/rtems/btimer.h
+include_rtems_HEADERS += include/rtems/console.h
+include_rtems_HEADERS += include/rtems/clockdrv.h
+include_rtems_HEADERS += include/rtems/framebuffer.h
+include_rtems_HEADERS += include/rtems/rtc.h
+include_rtems_HEADERS += include/rtems/watchdogdrv.h
 
 ## should be conditional and only installed for PowerPC, x86, and ARM
 include_rtems_HEADERS += include/rtems/irq.h

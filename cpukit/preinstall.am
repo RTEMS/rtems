@@ -245,13 +245,33 @@ $(PROJECT_INCLUDE)/rtems/status-checks.h: include/rtems/status-checks.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/status-checks.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/status-checks.h
 
+$(PROJECT_INCLUDE)/rtems/endian.h: include/rtems/endian.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/endian.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/endian.h
+
 $(PROJECT_INCLUDE)/rtems/btimer.h: include/rtems/btimer.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/btimer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/btimer.h
 
-$(PROJECT_INCLUDE)/rtems/endian.h: include/rtems/endian.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/endian.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/endian.h
+$(PROJECT_INCLUDE)/rtems/console.h: include/rtems/console.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/console.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/console.h
+
+$(PROJECT_INCLUDE)/rtems/clockdrv.h: include/rtems/clockdrv.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/clockdrv.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/clockdrv.h
+
+$(PROJECT_INCLUDE)/rtems/framebuffer.h: include/rtems/framebuffer.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/framebuffer.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/framebuffer.h
+
+$(PROJECT_INCLUDE)/rtems/rtc.h: include/rtems/rtc.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtc.h
+
+$(PROJECT_INCLUDE)/rtems/watchdogdrv.h: include/rtems/watchdogdrv.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/watchdogdrv.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/watchdogdrv.h
 
 $(PROJECT_INCLUDE)/rtems/irq.h: include/rtems/irq.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/irq.h
