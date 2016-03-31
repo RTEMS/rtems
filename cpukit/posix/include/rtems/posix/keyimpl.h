@@ -111,35 +111,45 @@ RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_free(
   _Freechain_Put( &_POSIX_Keys_Keypool, key_value_pair );
 }
 
+RTEMS_INLINE_ROUTINE bool _POSIX_Keys_Key_value_equal(
+  const void        *left,
+  const RBTree_Node *right
+)
+{
+  const pthread_key_t             *the_left;
+  const POSIX_Keys_Key_value_pair *the_right;
+
+  the_left = left;
+  the_right = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( right );
+
+  return *the_left == the_right->key;
+}
+
+RTEMS_INLINE_ROUTINE bool _POSIX_Keys_Key_value_less(
+  const void        *left,
+  const RBTree_Node *right
+)
+{
+  const pthread_key_t             *the_left;
+  const POSIX_Keys_Key_value_pair *the_right;
+
+  the_left = left;
+  the_right = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( right );
+
+  return *the_left < the_right->key;
+}
+
 RTEMS_INLINE_ROUTINE RBTree_Node *_POSIX_Keys_Key_value_find(
   pthread_key_t     key,
   Thread_Control   *the_thread
 )
 {
-  RBTree_Node **link;
-  RBTree_Node  *parent;
-
-  link = _RBTree_Root_reference( &the_thread->Keys.Key_value_pairs );
-  parent = NULL;
-
-  while ( *link != NULL ) {
-    POSIX_Keys_Key_value_pair *parent_key_value_pair;
-    pthread_key_t              parent_key;
-
-    parent = *link;
-    parent_key_value_pair = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( parent );
-    parent_key = parent_key_value_pair->key;
-
-    if ( key == parent_key ) {
-      return parent;
-    } else if ( key < parent_key ) {
-      link = _RBTree_Left_reference( parent );
-    } else {
-      link = _RBTree_Right_reference( parent );
-    }
-  }
-
-  return NULL;
+  return _RBTree_Find_inline(
+    &the_thread->Keys.Key_value_pairs,
+    &key,
+    _POSIX_Keys_Key_value_equal,
+    _POSIX_Keys_Key_value_less
+  );
 }
 
 RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_insert(

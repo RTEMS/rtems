@@ -483,6 +483,47 @@ void _RBTree_Replace_node(
   RBTree_Node    *replacement
 );
 
+/**
+ * @brief Finds a node in the red-black tree with the specified key.
+ *
+ * @param the_rbtree The red-black tree control.
+ * @param key The key to look after.
+ * @param equal Must return true if the specified key equals the key of the
+ *   node, otherwise false.
+ * @param less Must return true if the specified key is less than the key of
+ *   the node, otherwise false.
+ *
+ * @retval node A node with the specified key.
+ * @retval NULL No node with the specified key exists in the red-black tree.
+ */
+RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Find_inline(
+  RBTree_Control *the_rbtree,
+  const void     *key,
+  bool         ( *equal )( const void *, const RBTree_Node * ),
+  bool         ( *less )( const void *, const RBTree_Node * )
+)
+{
+  RBTree_Node **link;
+  RBTree_Node  *parent;
+
+  link = _RBTree_Root_reference( the_rbtree );
+  parent = NULL;
+
+  while ( *link != NULL ) {
+    parent = *link;
+
+    if ( ( *equal )( key, parent ) ) {
+      return parent;
+    } else if ( ( *less )( key, parent ) ) {
+      link = _RBTree_Left_reference( parent );
+    } else {
+      link = _RBTree_Right_reference( parent );
+    }
+  }
+
+  return NULL;
+}
+
 /**@}*/
 
 #ifdef __cplusplus
