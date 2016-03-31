@@ -484,6 +484,46 @@ void _RBTree_Replace_node(
 );
 
 /**
+ * @brief Inserts the node into the red-black tree.
+ *
+ * @param the_rbtree The red-black tree control.
+ * @param the_node The node to insert.
+ * @param key The key of the node to insert.  This key must be equal to the key
+ *   stored in the node to insert.  The separate key parameter is provided for
+ *   two reasons.  Firstly, it allows to share the less operator with
+ *   _RBTree_Find_inline().  Secondly, the compiler may generate better code if
+ *   the key is stored in a local variable.
+ * @param less Must return true if the specified key is less than the key of
+ *   the node, otherwise false.
+ */
+RTEMS_INLINE_ROUTINE void _RBTree_Insert_inline(
+  RBTree_Control *the_rbtree,
+  RBTree_Node    *the_node,
+  const void     *key,
+  bool         ( *less )( const void *, const RBTree_Node * )
+)
+{
+  RBTree_Node **link;
+  RBTree_Node  *parent;
+
+  link = _RBTree_Root_reference( the_rbtree );
+  parent = NULL;
+
+  while ( *link != NULL ) {
+    parent = *link;
+
+    if ( ( *less )( key, parent ) ) {
+      link = _RBTree_Left_reference( parent );
+    } else {
+      link = _RBTree_Right_reference( parent );
+    }
+  }
+
+  _RBTree_Add_child( the_node, parent, link );
+  _RBTree_Insert_color( the_rbtree, the_node );
+}
+
+/**
  * @brief Finds a node in the red-black tree with the specified key.
  *
  * @param the_rbtree The red-black tree control.
