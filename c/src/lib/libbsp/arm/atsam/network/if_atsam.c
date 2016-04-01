@@ -195,7 +195,7 @@ static struct mbuf *if_atsam_new_mbuf(struct ifnet *ifp)
 	MGETHDR(m, M_DONTWAIT, MT_DATA);
 	if (m != NULL) {
 		MCLGET(m, M_DONTWAIT);
-		if ((m->m_flags & M_PKTHDR) != 0) {
+		if ((m->m_flags & M_EXT) != 0) {
 			m->m_pkthdr.rcvif = ifp;
 			m->m_data = mtod(m, char *);
 		} else {
