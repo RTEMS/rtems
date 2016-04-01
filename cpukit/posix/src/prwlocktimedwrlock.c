@@ -78,10 +78,8 @@ int pthread_rwlock_timedwrlock(
       _CORE_RWLock_Obtain_for_writing(
         &the_rwlock->RWLock,
         executing,
-        *rwlock,
         do_wait,
-        ticks,
-        NULL
+        ticks
       );
 
       _Objects_Put( &the_rwlock->Object );

@@ -54,10 +54,8 @@ int pthread_rwlock_trywrlock(
       _CORE_RWLock_Obtain_for_writing(
         &the_rwlock->RWLock,
         executing,
-        *rwlock,
         false,                 /* we are not willing to wait */
-        0,
-        NULL
+        0
       );
 
       _Objects_Put( &the_rwlock->Object );

@@ -54,10 +54,8 @@ int pthread_rwlock_tryrdlock(
       _CORE_RWLock_Obtain_for_reading(
         &the_rwlock->RWLock,
         executing,
-        *rwlock,
         false,                  /* do not wait for the rwlock */
-        0,
-        NULL
+        0
       );
 
 

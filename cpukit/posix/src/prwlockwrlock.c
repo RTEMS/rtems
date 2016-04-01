@@ -58,10 +58,8 @@ int pthread_rwlock_wrlock(
       _CORE_RWLock_Obtain_for_writing(
         &the_rwlock->RWLock,
         executing,
-        *rwlock,
         true,          /* do not timeout -- wait forever */
-        0,
-        NULL
+        0
       );
 
       _Objects_Put( &the_rwlock->Object );

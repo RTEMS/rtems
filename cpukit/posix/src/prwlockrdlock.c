@@ -50,10 +50,8 @@ int pthread_rwlock_rdlock(
       _CORE_RWLock_Obtain_for_reading(
         &the_rwlock->RWLock,
         executing,
-        *rwlock,
         true,                 /* we are willing to wait forever */
-        0,
-        NULL
+        0
       );
 
       _Objects_Put( &the_rwlock->Object );

@@ -36,15 +36,6 @@ extern "C" {
 #define CORE_RWLOCK_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
 
 /**
- *  The following type defines the callout which the API provides
- *  to support global/multiprocessor operations on RWLocks.
- */
-typedef void ( *CORE_RWLock_API_mp_support_callout )(
-                 Thread_Control *,
-                 Objects_Id
-             );
-
-/**
  *  Core RWLock handler return statuses.
  */
 typedef enum {
@@ -103,23 +94,18 @@ RTEMS_INLINE_ROUTINE void _CORE_RWLock_Destroy(
  *  This routine attempts to obtain the RWLock for read access.
  *
  *  @param[in] the_rwlock is the RWLock to wait for
- *  @param[in] id is the id of the object being waited upon
  *  @param[in] wait is true if the calling thread is willing to wait
  *  @param[in] timeout is the number of ticks the calling thread is willing
  *         to wait if @a wait is true.
- *  @param[in] api_rwlock_mp_support is the routine to invoke if the
- *         thread unblocked is remote
  *
  * @note Status is returned via the thread control block.
  */
 
 void _CORE_RWLock_Obtain_for_reading(
-  CORE_RWLock_Control                 *the_rwlock,
-  Thread_Control                      *executing,
-  Objects_Id                           id,
-  bool                                 wait,
-  Watchdog_Interval                    timeout,
-  CORE_RWLock_API_mp_support_callout   api_rwlock_mp_support
+  CORE_RWLock_Control *the_rwlock,
+  Thread_Control      *executing,
+  bool                 wait,
+  Watchdog_Interval    timeout
 );
 
 /**
@@ -128,22 +114,17 @@ void _CORE_RWLock_Obtain_for_reading(
  *  This routine attempts to obtain the RWLock for write exclusive access.
  *
  *  @param[in] the_rwlock is the RWLock to wait for
- *  @param[in] id is the id of the object being waited upon
  *  @param[in] wait is true if the calling thread is willing to wait
  *  @param[in] timeout is the number of ticks the calling thread is willing
  *         to wait if @a wait is true.
- *  @param[in] api_rwlock_mp_support is the routine to invoke if the
- *         thread unblocked is remote
  *
  * @note Status is returned via the thread control block.
  */
 void _CORE_RWLock_Obtain_for_writing(
-  CORE_RWLock_Control                 *the_rwlock,
-  Thread_Control                      *executing,
-  Objects_Id                           id,
-  bool                                 wait,
-  Watchdog_Interval                    timeout,
-  CORE_RWLock_API_mp_support_callout   api_rwlock_mp_support
+  CORE_RWLock_Control *the_rwlock,
+  Thread_Control      *executing,
+  bool                 wait,
+  Watchdog_Interval    timeout
 );
 
 /**

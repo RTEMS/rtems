@@ -24,12 +24,10 @@
 #include <rtems/score/watchdog.h>
 
 void _CORE_RWLock_Obtain_for_reading(
-  CORE_RWLock_Control                 *the_rwlock,
-  Thread_Control                      *executing,
-  Objects_Id                           id,
-  bool                                 wait,
-  Watchdog_Interval                    timeout,
-  CORE_RWLock_API_mp_support_callout   api_rwlock_mp_support
+  CORE_RWLock_Control *the_rwlock,
+  Thread_Control      *executing,
+  bool                 wait,
+  Watchdog_Interval    timeout
 )
 {
   ISR_lock_Context lock_context;
