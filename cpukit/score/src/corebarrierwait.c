@@ -23,13 +23,16 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadqimpl.h>
 
-void _CORE_barrier_Wait(
-  CORE_barrier_Control                *the_barrier,
-  Thread_Control                      *executing,
-  Objects_Id                           id,
-  bool                                 wait,
-  Watchdog_Interval                    timeout,
-  CORE_barrier_API_mp_support_callout  api_barrier_mp_support
+void _CORE_barrier_Do_wait(
+  CORE_barrier_Control    *the_barrier,
+  Thread_Control          *executing,
+  bool                     wait,
+  Watchdog_Interval        timeout
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  Thread_queue_MP_callout  mp_callout,
+  Objects_Id               mp_id
+#endif
 )
 {
   ISR_lock_Context lock_context;
@@ -42,7 +45,7 @@ void _CORE_barrier_Wait(
 	 the_barrier->Attributes.maximum_count) {
       executing->Wait.return_code = CORE_BARRIER_STATUS_AUTOMATICALLY_RELEASED;
       _Thread_queue_Release( &the_barrier->Wait_queue, &lock_context );
-      _CORE_barrier_Release( the_barrier, id, api_barrier_mp_support );
+      _CORE_barrier_Release( the_barrier, mp_callout, mp_id );
       return;
     }
   }

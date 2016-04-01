@@ -21,6 +21,7 @@
 
 #include <rtems/score/chain.h>
 #include <rtems/score/isrlock.h>
+#include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/rbtree.h>
 
@@ -40,6 +41,21 @@ extern "C" {
 /**@{*/
 
 typedef struct _Thread_Control Thread_Control;
+
+#if defined(RTEMS_MULTIPROCESSING)
+/**
+ * @brief Multiprocessing (MP) support callout for thread queue operations.
+ *
+ * @param the_proxy The thread proxy of the thread queue operation.  A thread
+ *   control is actually a thread proxy if and only if
+ *   _Objects_Is_local_id( the_proxy->Object.id ) is false.
+ * @param mp_id Object identifier of the object containing the thread queue.
+ */
+typedef void ( *Thread_queue_MP_callout )(
+  Thread_Control *the_proxy,
+  Objects_Id      mp_id
+);
+#endif
 
 /**
  * @brief Thread priority queue.

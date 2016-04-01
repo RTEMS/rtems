@@ -43,10 +43,10 @@ rtems_status_code rtems_barrier_wait(
       _CORE_barrier_Wait(
         &the_barrier->Barrier,
         executing,
-        id,
         true,
         timeout,
-        NULL
+        NULL,
+        0
       );
       _Objects_Put( &the_barrier->Object );
       return _Barrier_Translate_core_barrier_return_code(

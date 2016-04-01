@@ -68,15 +68,6 @@ typedef enum {
 #define CORE_SEMAPHORE_STATUS_LAST CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED
 
 /**
- *  The following type defines the callout which the API provides
- *  to support global/multiprocessor operations on semaphores.
- */
-typedef void ( *CORE_semaphore_API_mp_support_callout )(
-                 Thread_Control *,
-                 Objects_Id
-             );
-
-/**
  *  @brief Initialize the semaphore based on the parameters passed.
  *
  *  This package is the implementation of the CORE Semaphore Handler.
@@ -102,28 +93,13 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
   _Thread_queue_Destroy( &the_semaphore->Wait_queue );
 }
 
-/**
- *  @brief Surrender a unit to a semaphore.
- *
- *  This routine frees a unit to the semaphore.  If a task was blocked waiting
- *  for a unit from this semaphore, then that task will be readied and the unit
- *  given to that task.  Otherwise, the unit will be returned to the semaphore.
- *
- *  @param[in] the_semaphore is the semaphore to surrender
- *  @param[in] id is the Id of the API level Semaphore object associated
- *         with this instance of a SuperCore Semaphore
- *  @param[in] api_semaphore_mp_support is the routine to invoke if the
- *         thread unblocked is remote
- *  @param[in] lock_context is a temporary variable used to contain the ISR
- *        disable level cookie
- *
- *  @retval an indication of whether the routine succeeded or failed
- */
-RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Surrender(
-  CORE_semaphore_Control                *the_semaphore,
-  Objects_Id                             id,
-  CORE_semaphore_API_mp_support_callout  api_semaphore_mp_support,
-  ISR_lock_Context                      *lock_context
+RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Do_surrender(
+  CORE_semaphore_Control  *the_semaphore,
+#if defined(RTEMS_MULTIPROCESSING)
+  Thread_queue_MP_callout  mp_callout,
+  Objects_Id               mp_id,
+#endif
+  ISR_lock_Context        *lock_context
 )
 {
   Thread_Control *the_thread;
@@ -138,23 +114,14 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Surrender(
     the_semaphore->operations
   );
   if ( the_thread != NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    _Thread_Dispatch_disable();
-#endif
-
     _Thread_queue_Extract_critical(
       &the_semaphore->Wait_queue.Queue,
       the_semaphore->operations,
       the_thread,
+      mp_callout,
+      mp_id,
       lock_context
     );
-
-#if defined(RTEMS_MULTIPROCESSING)
-    if ( !_Objects_Is_local_id( the_thread->Object.id ) )
-      (*api_semaphore_mp_support) ( the_thread, id );
-
-    _Thread_Dispatch_enable( _Per_CPU_Get() );
-#endif
   } else {
     if ( the_semaphore->count < UINT32_MAX )
       the_semaphore->count += 1;
@@ -166,6 +133,49 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Surrender(
 
   return status;
 }
+
+/**
+ *  @brief Surrender a unit to a semaphore.
+ *
+ *  This routine frees a unit to the semaphore.  If a task was blocked waiting
+ *  for a unit from this semaphore, then that task will be readied and the unit
+ *  given to that task.  Otherwise, the unit will be returned to the semaphore.
+ *
+ *  @param[in] the_semaphore is the semaphore to surrender
+ *  @param[in] mp_callout is the routine to invoke if the
+ *         thread unblocked is remote
+ *  @param[in] mp_id is the Id of the API level Semaphore object associated
+ *         with this instance of a SuperCore Semaphore
+ *  @param[in] lock_context is a temporary variable used to contain the ISR
+ *        disable level cookie
+ *
+ *  @retval an indication of whether the routine succeeded or failed
+ */
+#if defined(RTEMS_MULTIPROCESSING)
+  #define _CORE_semaphore_Surrender( \
+    the_semaphore, \
+    mp_callout, \
+    mp_id, \
+    lock_context \
+  ) \
+    _CORE_semaphore_Do_surrender( \
+      the_semaphore, \
+      mp_callout, \
+      mp_id, \
+      lock_context \
+    )
+#else
+  #define _CORE_semaphore_Surrender( \
+    the_semaphore, \
+    mp_callout, \
+    mp_id, \
+    lock_context \
+  ) \
+    _CORE_semaphore_Do_surrender( \
+      the_semaphore, \
+      lock_context \
+    )
+#endif
 
 /* Must be a macro due to the multiprocessing dependent parameters */
 #define _CORE_semaphore_Flush( \

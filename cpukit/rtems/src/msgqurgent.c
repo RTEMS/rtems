@@ -30,12 +30,6 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 
-#if defined(RTEMS_MULTIPROCESSING)
-#define MESSAGE_QUEUE_MP_HANDLER _Message_queue_Core_message_queue_mp_support
-#else
-#define MESSAGE_QUEUE_MP_HANDLER NULL
-#endif
-
 rtems_status_code rtems_message_queue_urgent(
   rtems_id    id,
   const void *buffer,
@@ -62,8 +56,8 @@ rtems_status_code rtems_message_queue_urgent(
         &the_message_queue->message_queue,
         buffer,
         size,
+        _Message_queue_Core_message_queue_mp_support,
         id,
-        MESSAGE_QUEUE_MP_HANDLER,
         false,   /* sender does not block */
         0,       /* no timeout */
         &lock_context

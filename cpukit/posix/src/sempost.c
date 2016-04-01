@@ -48,12 +48,8 @@ int sem_post(
     case OBJECTS_LOCAL:
       _CORE_semaphore_Surrender(
         &the_semaphore->Semaphore,
-        the_semaphore->Object.id,
-#if defined(RTEMS_MULTIPROCESSING)
-        NULL,        /* POSIX Semaphores are local only */
-#else
         NULL,
-#endif
+        0,
         &lock_context
       );
       return 0;

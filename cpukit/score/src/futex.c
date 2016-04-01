@@ -133,7 +133,9 @@ static __attribute__((noinline)) int _Futex_Wake_slow(
     do_unblock = _Thread_queue_Extract_locked(
       &futex->Queue.Queue,
       operations,
-      first
+      first,
+      NULL,
+      0
     );
     if (do_unblock) {
       _Chain_Append_unprotected( &unblock, &first->Wait.Node.Chain );

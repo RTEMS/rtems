@@ -33,18 +33,6 @@
 #define THREAD_QUEUE_READY_AGAIN \
   (THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_READY_AGAIN)
 
-static void _Thread_queue_Unblock( Thread_Control *the_thread )
-{
-  _Thread_Timer_remove( the_thread );
-  _Thread_Unblock( the_thread );
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
-    _Thread_MP_Free_proxy( the_thread );
-  }
-#endif
-}
-
 void _Thread_queue_Enqueue_critical(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
@@ -99,20 +87,55 @@ void _Thread_queue_Enqueue_critical(
     THREAD_QUEUE_BLOCKED
   );
   if ( !success ) {
-    _Thread_queue_Unblock( the_thread );
+    _Thread_Timer_remove( the_thread );
+
+#if defined(RTEMS_MULTIPROCESSING)
+    if ( _Objects_Is_local_id( the_thread->Object.id ) ) {
+      _Thread_Unblock( the_thread );
+    } else {
+      Thread_Proxy_control *the_proxy;
+
+      the_proxy = (Thread_Proxy_control *) the_thread;
+      ( *the_proxy->thread_queue_callout )(
+        the_thread,
+        the_proxy->thread_queue_id
+      );
+
+      _Thread_MP_Free_proxy( the_thread );
+    }
+#else
+    _Thread_Unblock( the_thread );
+#endif
   }
 
   _Thread_Dispatch_enable( cpu_self );
 }
 
-bool _Thread_queue_Extract_locked(
+bool _Thread_queue_Do_extract_locked(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  Thread_queue_MP_callout        mp_callout,
+  Objects_Id                     mp_id
+#endif
 )
 {
   bool success;
   bool unblock;
+
+#if defined(RTEMS_MULTIPROCESSING)
+  if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
+    Thread_Proxy_control *the_proxy;
+
+    _Assert( mp_callout != NULL );
+
+    the_proxy = (Thread_Proxy_control *) the_thread;
+    the_proxy->thread_queue_callout = mp_callout;
+    the_proxy->thread_queue_id = mp_id;
+  }
+#endif
 
   ( *operations->extract )( queue, the_thread );
 
@@ -140,11 +163,15 @@ bool _Thread_queue_Extract_locked(
   return unblock;
 }
 
-void _Thread_queue_Unblock_critical(
-  bool                unblock,
-  Thread_queue_Queue *queue,
-  Thread_Control     *the_thread,
-  ISR_lock_Context   *lock_context
+void _Thread_queue_Do_unblock_critical(
+  bool                     unblock,
+  Thread_queue_Queue      *queue,
+  Thread_Control          *the_thread,
+#if defined(RTEMS_MULTIPROCESSING)
+  Thread_queue_MP_callout  mp_callout,
+  Objects_Id               mp_id,
+#endif
+  ISR_lock_Context        *lock_context
 )
 {
   if ( unblock ) {
@@ -153,7 +180,18 @@ void _Thread_queue_Unblock_critical(
     cpu_self = _Thread_Dispatch_disable_critical( lock_context );
     _Thread_queue_Queue_release( queue, lock_context );
 
-    _Thread_queue_Unblock( the_thread );
+    _Thread_Timer_remove( the_thread );
+
+#if defined(RTEMS_MULTIPROCESSING)
+    if ( _Objects_Is_local_id( the_thread->Object.id ) ) {
+      _Thread_Unblock( the_thread );
+    } else {
+      ( *mp_callout )( the_thread, mp_id );
+      _Thread_MP_Free_proxy( the_thread );
+    }
+#else
+    _Thread_Unblock( the_thread );
+#endif
 
     _Thread_Dispatch_enable( cpu_self );
   } else {
@@ -161,17 +199,35 @@ void _Thread_queue_Unblock_critical(
   }
 }
 
-void _Thread_queue_Extract_critical(
+void _Thread_queue_Do_extract_critical(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread,
+#if defined(RTEMS_MULTIPROCESSING)
+  Thread_queue_MP_callout        mp_callout,
+  Objects_Id                     mp_id,
+#endif
   ISR_lock_Context              *lock_context
 )
 {
   bool unblock;
 
-  unblock = _Thread_queue_Extract_locked( queue, operations, the_thread );
-  _Thread_queue_Unblock_critical( unblock, queue, the_thread, lock_context );
+  unblock = _Thread_queue_Extract_locked(
+    queue,
+    operations,
+    the_thread,
+    mp_callout,
+    mp_id
+  );
+
+  _Thread_queue_Unblock_critical(
+    unblock,
+    queue,
+    the_thread,
+    mp_callout,
+    mp_id,
+    lock_context
+  );
 }
 
 void _Thread_queue_Extract( Thread_Control *the_thread )
@@ -191,6 +247,8 @@ void _Thread_queue_Extract( Thread_Control *the_thread )
       queue,
       the_thread->Wait.operations,
       the_thread,
+      _Thread_queue_MP_callout_do_nothing,
+      0,
       &lock_context
     );
   } else {
@@ -198,9 +256,14 @@ void _Thread_queue_Extract( Thread_Control *the_thread )
   }
 }
 
-Thread_Control *_Thread_queue_Dequeue(
+Thread_Control *_Thread_queue_Do_dequeue(
   Thread_queue_Control          *the_thread_queue,
   const Thread_queue_Operations *operations
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  Thread_queue_MP_callout        mp_callout,
+  Objects_Id                     mp_id
+#endif
 )
 {
   ISR_lock_Context  lock_context;
@@ -217,6 +280,8 @@ Thread_Control *_Thread_queue_Dequeue(
       &the_thread_queue->Queue,
       operations,
       the_thread,
+      mp_callout,
+      mp_id,
       &lock_context
     );
   } else {

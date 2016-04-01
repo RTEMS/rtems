@@ -427,8 +427,8 @@ rtems_bsdnet_semaphore_release (void)
         _ISR_lock_ISR_disable(&lock_context);
 	status = _CORE_mutex_Surrender (
 		&the_networkSemaphore->Core_control.mutex,
-		networkSemaphore,
 		NULL,
+		0,
                 &lock_context
 		);
 	if (status != CORE_MUTEX_STATUS_SUCCESSFUL)

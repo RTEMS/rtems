@@ -34,17 +34,6 @@ extern "C" {
 /**@{**/
 
 /**
- *  @brief Callout which provides to support global/multiprocessor operations.
- *
- *  The following type defines the callout which the API provides
- *  to support global/multiprocessor operations on mutexes.
- */
-typedef void ( *CORE_mutex_API_mp_support_callout )(
-                 Thread_Control *,
-                 Objects_Id
-             );
-
-/**
  *  @brief The possible Mutex handler return statuses.
  *
  *  This enumerated type defines the possible Mutex handler return statuses.
@@ -302,27 +291,40 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
          _the_mutex, _executing, _id, _wait, _timeout, _lock_context )
 #endif
 
-/**
- *  @brief Frees a unit to the mutex.
- *
- *  This routine frees a unit to the mutex.  If a task was blocked waiting for
- *  a unit from this mutex, then that task will be readied and the unit
- *  given to that task.  Otherwise, the unit will be returned to the mutex.
- *
- *  @param[in] the_mutex is the mutex to surrender
- *  @param[in] id is the id of the RTEMS Object associated with this mutex
- *  @param[in] api_mutex_mp_support is the routine that will be called when
- *         unblocking a remote mutex
- *  @param[in] lock_context is the interrupt level
- *
- *  @retval an indication of whether the routine succeeded or failed
- */
-CORE_mutex_Status _CORE_mutex_Surrender(
-  CORE_mutex_Control                *the_mutex,
-  Objects_Id                         id,
-  CORE_mutex_API_mp_support_callout  api_mutex_mp_support,
-  ISR_lock_Context                  *lock_context
+CORE_mutex_Status _CORE_mutex_Do_surrender(
+  CORE_mutex_Control      *the_mutex,
+#if defined(RTEMS_MULTIPROCESSING)
+  Thread_queue_MP_callout  mp_callout,
+  Objects_Id               mp_id,
+#endif
+  ISR_lock_Context        *lock_context
 );
+
+#if defined(RTEMS_MULTIPROCESSING)
+  #define _CORE_mutex_Surrender( \
+    the_mutex, \
+    mp_callout, \
+    mp_id, \
+    lock_context \
+  ) \
+    _CORE_mutex_Do_surrender( \
+      the_mutex, \
+      mp_callout, \
+      mp_id, \
+      lock_context \
+    )
+#else
+  #define _CORE_mutex_Surrender( \
+    the_mutex, \
+    mp_callout, \
+    mp_id, \
+    lock_context \
+  ) \
+    _CORE_mutex_Do_surrender( \
+      the_mutex, \
+      lock_context \
+    )
+#endif
 
 /* Must be a macro due to the multiprocessing dependent parameters */
 #define _CORE_mutex_Flush( \

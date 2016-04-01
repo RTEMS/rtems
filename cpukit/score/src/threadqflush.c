@@ -51,13 +51,10 @@ void _Thread_queue_Do_flush(
       &the_thread_queue->Queue,
       operations,
       the_thread,
+      mp_callout,
+      mp_id,
       &lock_context
     );
-
-#if defined(RTEMS_MULTIPROCESSING)
-    if ( !_Objects_Is_local_id( the_thread->Object.id ) )
-      ( *mp_callout )( the_thread, mp_id );
-#endif
 
     _Thread_queue_Acquire( the_thread_queue, &lock_context );
   }

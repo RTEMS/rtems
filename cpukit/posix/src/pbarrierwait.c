@@ -55,10 +55,10 @@ int pthread_barrier_wait(
       _CORE_barrier_Wait(
         &the_barrier->Barrier,
         executing,
-        the_barrier->Object.id,
         true,
         0,
-        NULL
+        NULL,
+        0
       );
       _Objects_Put( &the_barrier->Object );
       return _POSIX_Barrier_Translate_core_barrier_return_code(

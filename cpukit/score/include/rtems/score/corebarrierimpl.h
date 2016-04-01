@@ -65,15 +65,6 @@ typedef enum {
 #define CORE_BARRIER_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
 
 /**
- *  The following type defines the callout which the API provides
- *  to support global/multiprocessor operations on barriers.
- */
-typedef void ( *CORE_barrier_API_mp_support_callout )(
-                 Thread_Control *,
-                 Objects_Id
-             );
-
-/**
  *  @brief Initialize core barrier.
  *
  *  This routine initializes the barrier based on the parameters passed.
@@ -93,6 +84,18 @@ RTEMS_INLINE_ROUTINE void _CORE_barrier_Destroy(
   _Thread_queue_Destroy( &the_barrier->Wait_queue );
 }
 
+void _CORE_barrier_Do_wait(
+  CORE_barrier_Control    *the_barrier,
+  Thread_Control          *executing,
+  bool                     wait,
+  Watchdog_Interval        timeout
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  Thread_queue_MP_callout  mp_callout,
+  Objects_Id               mp_id
+#endif
+);
+
 /**
  *  @brief Wait for the barrier.
  *
@@ -103,22 +106,56 @@ RTEMS_INLINE_ROUTINE void _CORE_barrier_Destroy(
  *
  *  @param[in] the_barrier is the barrier to wait for
  *  @param[in,out] executing The currently executing thread.
- *  @param[in] id is the id of the object being waited upon
  *  @param[in] wait is true if the calling thread is willing to wait
  *  @param[in] timeout is the number of ticks the calling thread is willing
  *         to wait if @a wait is true.
- *  @param[in] api_barrier_mp_support is the routine to invoke if the
+ *  @param[in] mp_callout is the routine to invoke if the
  *         thread unblocked is remote
+ *  @param[in] mp_id is the id of the object being waited upon
  *
  * @note Status is returned via the thread control block.
  */
-void _CORE_barrier_Wait(
-  CORE_barrier_Control                *the_barrier,
-  Thread_Control                      *executing,
-  Objects_Id                           id,
-  bool                                 wait,
-  Watchdog_Interval                    timeout,
-  CORE_barrier_API_mp_support_callout  api_barrier_mp_support
+#if defined(RTEMS_MULTIPROCESSING)
+  #define _CORE_barrier_Wait( \
+    the_barrier, \
+    executing, \
+    wait, \
+    timeout, \
+    mp_callout, \
+    mp_id \
+  ) \
+    _CORE_barrier_Do_wait( \
+      the_barrier, \
+      executing, \
+      wait, \
+      timeout, \
+      mp_callout, \
+      mp_id \
+    )
+#else
+  #define _CORE_barrier_Wait( \
+    the_barrier, \
+    executing, \
+    wait, \
+    timeout, \
+    mp_callout, \
+    mp_id \
+  ) \
+    _CORE_barrier_Do_wait( \
+      the_barrier, \
+      executing, \
+      wait, \
+      timeout \
+    )
+#endif
+
+uint32_t _CORE_barrier_Do_release(
+  CORE_barrier_Control    *the_barrier
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  Thread_queue_MP_callout  mp_callout,
+  Objects_Id               mp_id
+#endif
 );
 
 /**
@@ -128,17 +165,33 @@ void _CORE_barrier_Wait(
  *  for the barrier will be readied.
  *
  *  @param[in] the_barrier is the barrier to surrender
- *  @param[in] id is the id of the object for a remote unblock
- *  @param[in] api_barrier_mp_support is the routine to invoke if the
+ *  @param[in] mp_callout is the routine to invoke if the
  *         thread unblocked is remote
+ *  @param[in] mp_id is the id of the object for a remote unblock
  *
  *  @retval the number of unblocked threads
  */
-uint32_t _CORE_barrier_Release(
-  CORE_barrier_Control                *the_barrier,
-  Objects_Id                           id,
-  CORE_barrier_API_mp_support_callout  api_barrier_mp_support
-);
+#if defined(RTEMS_MULTIPROCESSING)
+  #define _CORE_barrier_Release( \
+    the_barrier, \
+    mp_callout, \
+    mp_id \
+  ) \
+    _CORE_barrier_Do_release( \
+      the_barrier, \
+      mp_callout, \
+      mp_id \
+    )
+#else
+  #define _CORE_barrier_Release( \
+    the_barrier, \
+    mp_callout, \
+    mp_id \
+  ) \
+    _CORE_barrier_Do_release( \
+      the_barrier \
+    )
+#endif
 
 /* Must be a macro due to the multiprocessing dependent parameters */
 #define _CORE_barrier_Flush( \

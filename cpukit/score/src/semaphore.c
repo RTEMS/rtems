@@ -133,6 +133,8 @@ void _Semaphore_Post( struct _Semaphore_Control *_sem )
       &sem->Queue.Queue,
       operations,
       first,
+      NULL,
+      0,
       &lock_context
     );
   }

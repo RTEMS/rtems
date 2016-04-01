@@ -25,21 +25,19 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/wkspace.h>
 
-CORE_message_queue_Status _CORE_message_queue_Submit(
-  CORE_message_queue_Control                *the_message_queue,
-  Thread_Control                            *executing,
-  const void                                *buffer,
-  size_t                                     size,
-  Objects_Id                                 id,
-  #if defined(RTEMS_MULTIPROCESSING)
-    CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
-  #else
-    CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support  RTEMS_UNUSED,
-  #endif
-  CORE_message_queue_Submit_types            submit_type,
-  bool                                       wait,
-  Watchdog_Interval                          timeout,
-  ISR_lock_Context                          *lock_context
+CORE_message_queue_Status _CORE_message_queue_Do_submit(
+  CORE_message_queue_Control       *the_message_queue,
+  Thread_Control                   *executing,
+  const void                       *buffer,
+  size_t                            size,
+#if defined(RTEMS_MULTIPROCESSING)
+  Thread_queue_MP_callout           mp_callout,
+  Objects_Id                        mp_id,
+#endif
+  CORE_message_queue_Submit_types   submit_type,
+  bool                              wait,
+  Watchdog_Interval                 timeout,
+  ISR_lock_Context                 *lock_context
 )
 {
   CORE_message_queue_Buffer_control *the_message;
@@ -60,16 +58,12 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     the_message_queue,
     buffer,
     size,
+    mp_callout,
+    mp_id,
     submit_type,
     lock_context
   );
   if ( the_thread != NULL ) {
-    #if defined(RTEMS_MULTIPROCESSING)
-      if ( !_Objects_Is_local_id( the_thread->Object.id ) )
-        (*api_message_queue_mp_support) ( the_thread, id );
-
-      _Thread_Dispatch_enable( _Per_CPU_Get() );
-    #endif
     return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
   }
 
@@ -139,10 +133,6 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
       CORE_MESSAGE_QUEUE_STATUS_TIMEOUT,
       lock_context
     );
-    #if defined(RTEMS_MULTIPROCESSING)
-      _Thread_Dispatch_enable( _Per_CPU_Get() );
-    #endif
-
     return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT;
   #endif
 }

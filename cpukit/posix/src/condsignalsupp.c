@@ -49,7 +49,9 @@ int _POSIX_Condition_variables_Signal_support(
       do {
         the_thread = _Thread_queue_Dequeue(
           &the_cond->Wait_queue,
-          POSIX_CONDITION_VARIABLES_TQ_OPERATIONS
+          POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
+          NULL,
+          0
         );
         if ( !the_thread )
           the_cond->Mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;

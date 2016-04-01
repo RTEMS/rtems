@@ -66,7 +66,9 @@ CORE_RWLock_Status _CORE_RWLock_Release(
 
   next = _Thread_queue_Dequeue(
     &the_rwlock->Wait_queue,
-    CORE_RWLOCK_TQ_OPERATIONS
+    CORE_RWLOCK_TQ_OPERATIONS,
+    NULL,
+    0
   );
 
   if ( next ) {

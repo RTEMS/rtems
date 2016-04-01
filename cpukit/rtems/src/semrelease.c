@@ -31,27 +31,7 @@
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/coresemimpl.h>
 #include <rtems/score/thread.h>
-
 #include <rtems/score/interr.h>
-
-/*
- *  rtems_semaphore_release
- *
- *  This directive allows a thread to release a semaphore.
- *
- *  Input parameters:
- *    id - semaphore id
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
-
-#if defined(RTEMS_MULTIPROCESSING)
-#define MUTEX_MP_SUPPORT _Semaphore_Core_mutex_mp_support
-#else
-#define MUTEX_MP_SUPPORT NULL
-#endif
 
 rtems_status_code rtems_semaphore_release(
   rtems_id   id
@@ -88,16 +68,16 @@ rtems_status_code rtems_semaphore_release(
       if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
         mutex_status = _CORE_mutex_Surrender(
           &the_semaphore->Core_control.mutex,
+          _Semaphore_Core_mutex_mp_support,
           id,
-          MUTEX_MP_SUPPORT,
           &lock_context
         );
         return _Semaphore_Translate_core_mutex_return_code( mutex_status );
       } else {
         semaphore_status = _CORE_semaphore_Surrender(
           &the_semaphore->Core_control.semaphore,
+          _Semaphore_Core_mutex_mp_support,
           id,
-          MUTEX_MP_SUPPORT,
           &lock_context
         );
         return

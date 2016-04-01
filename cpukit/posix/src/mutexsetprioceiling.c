@@ -81,8 +81,8 @@ int pthread_mutex_setprioceiling(
        */
       _CORE_mutex_Surrender(
         &the_mutex->Mutex,
-        the_mutex->Object.id,
         NULL,
+        0,
         &lock_context
       );
 

@@ -257,7 +257,9 @@ static int _Condition_Wake( struct _Condition_Control *_condition, int count )
     do_unblock = _Thread_queue_Extract_locked(
       &condition->Queue.Queue,
       operations,
-      first
+      first,
+      NULL,
+      0
     );
     if (do_unblock) {
       _Chain_Append_unprotected( &unblock, &first->Wait.Node.Chain );

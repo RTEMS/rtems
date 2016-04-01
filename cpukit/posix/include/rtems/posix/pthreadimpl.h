@@ -217,7 +217,9 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Join_dequeue(
 {
   return _Thread_queue_Dequeue(
     &api->Join_List,
-    POSIX_THREAD_JOIN_TQ_OPERATIONS
+    POSIX_THREAD_JOIN_TQ_OPERATIONS,
+    NULL,
+    0
   );
 }
 

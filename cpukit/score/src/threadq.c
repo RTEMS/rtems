@@ -86,3 +86,13 @@ void _Thread_queue_Initialize( Thread_queue_Control *the_thread_queue )
   _SMP_lock_Stats_initialize( &the_thread_queue->Lock_stats, "Thread Queue" );
 #endif
 }
+
+#if defined(RTEMS_MULTIPROCESSING)
+void _Thread_queue_MP_callout_do_nothing(
+  Thread_Control *the_proxy,
+  Objects_Id      mp_id
+)
+{
+  /* Do nothing */
+}
+#endif

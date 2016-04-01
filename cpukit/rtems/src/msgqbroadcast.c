@@ -60,12 +60,8 @@ rtems_status_code rtems_message_queue_broadcast(
                       &the_message_queue->message_queue,
                       buffer,
                       size,
+                      _Message_queue_Core_message_queue_mp_support,
                       id,
-                      #if defined(RTEMS_MULTIPROCESSING)
-                        _Message_queue_Core_message_queue_mp_support,
-                      #else
-                        NULL,
-                      #endif
                       count,
                       &lock_context
                     );

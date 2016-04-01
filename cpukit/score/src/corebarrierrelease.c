@@ -23,24 +23,12 @@
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/threadqimpl.h>
 
-static Thread_Control *_CORE_barrier_Dequeue(
-  CORE_barrier_Control *the_barrier
-)
-{
-  return _Thread_queue_Dequeue(
-    &the_barrier->Wait_queue,
-    CORE_BARRIER_TQ_OPERATIONS
-  );
-}
-
-uint32_t _CORE_barrier_Release(
-  CORE_barrier_Control                *the_barrier,
+uint32_t _CORE_barrier_Do_release(
+  CORE_barrier_Control    *the_barrier
 #if defined(RTEMS_MULTIPROCESSING)
-  Objects_Id                           id,
-  CORE_barrier_API_mp_support_callout  api_barrier_mp_support
-#else
-  Objects_Id                           id RTEMS_UNUSED,
-  CORE_barrier_API_mp_support_callout  api_barrier_mp_support RTEMS_UNUSED
+  ,
+  Thread_queue_MP_callout  mp_callout,
+  Objects_Id               mp_id
 #endif
 )
 {
@@ -48,11 +36,16 @@ uint32_t _CORE_barrier_Release(
   uint32_t        count;
 
   count = 0;
-  while ( ( the_thread = _CORE_barrier_Dequeue( the_barrier ) ) ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    if ( !_Objects_Is_local_id( the_thread->Object.id ) )
-      (*api_barrier_mp_support) ( the_thread, id );
-#endif
+  while (
+    (
+      the_thread = _Thread_queue_Dequeue(
+        &the_barrier->Wait_queue,
+        CORE_BARRIER_TQ_OPERATIONS,
+        mp_callout,
+        mp_id
+      )
+    )
+  ) {
     count++;
   }
   the_barrier->number_of_waiting_threads = 0;

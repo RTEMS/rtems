@@ -102,6 +102,8 @@ Thread_Control *_Thread_MP_Allocate_proxy (
     the_proxy->Wait.return_code             = executing->Wait.return_code;
     the_proxy->Wait.timeout_code            = executing->Wait.timeout_code;
 
+    the_proxy->thread_queue_callout = _Thread_queue_MP_callout_do_nothing;
+
     _Chain_Append( &_Thread_MP_Active_proxies, &the_proxy->Active );
 
     return the_thread;

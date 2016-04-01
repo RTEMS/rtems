@@ -21,19 +21,16 @@
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/objectimpl.h>
 
-CORE_message_queue_Status _CORE_message_queue_Broadcast(
-  CORE_message_queue_Control                *the_message_queue,
-  const void                                *buffer,
-  size_t                                     size,
-  #if defined(RTEMS_MULTIPROCESSING)
-    Objects_Id                                 id,
-    CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
-  #else
-    Objects_Id                                 id RTEMS_UNUSED,
-    CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support RTEMS_UNUSED,
-  #endif
-  uint32_t                                  *count,
-  ISR_lock_Context                          *lock_context
+CORE_message_queue_Status _CORE_message_queue_Do_broadcast(
+  CORE_message_queue_Control *the_message_queue,
+  const void                 *buffer,
+  size_t                      size,
+#if defined(RTEMS_MULTIPROCESSING)
+  Thread_queue_MP_callout     mp_callout,
+  Objects_Id                  mp_id,
+#endif
+  uint32_t                   *count,
+  ISR_lock_Context           *lock_context
 )
 {
   Thread_Control             *the_thread;
@@ -54,17 +51,14 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
         the_message_queue,
         buffer,
         size,
+        mp_callout,
+        mp_id,
         0,
         lock_context
       )
     )
   ) {
     number_broadcasted += 1;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    if ( !_Objects_Is_local_id( the_thread->Object.id ) )
-      (*api_message_queue_mp_support) ( the_thread, id );
-#endif
 
     _CORE_message_queue_Acquire( the_message_queue, lock_context );
   }

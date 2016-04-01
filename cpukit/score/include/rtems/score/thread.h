@@ -418,8 +418,19 @@ typedef struct {
 #if defined(RTEMS_MULTIPROCESSING)
   /** This field is the received response packet in an MP system. */
   MP_packet_Prefix        *receive_packet;
-#endif
      /****************** end of common block ********************/
+
+  /**
+   * @brief Thread queue callout for _Thread_queue_Enqueue_critical().
+   */
+  Thread_queue_MP_callout  thread_queue_callout;
+
+  /**
+   * @brief Thread queue object identifier for
+   * _Thread_queue_Enqueue_critical().
+   */
+  Objects_Id               thread_queue_id;
+
   /** This field is used to manage the set of proxies in the system. */
   Chain_Node               Active;
 
@@ -431,6 +442,7 @@ typedef struct {
    * same storage place for the thread queue heads.
    */
   Thread_queue_Heads       Thread_queue_heads[ RTEMS_ZERO_LENGTH_ARRAY ];
+#endif
 }   Thread_Proxy_control;
 
 /**

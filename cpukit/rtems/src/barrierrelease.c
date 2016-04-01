@@ -54,7 +54,7 @@ rtems_status_code rtems_barrier_release(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      *released = _CORE_barrier_Release( &the_barrier->Barrier, id, NULL );
+      *released = _CORE_barrier_Release( &the_barrier->Barrier, NULL, 0 );
       _Objects_Put( &the_barrier->Object );
       return RTEMS_SUCCESSFUL;
 

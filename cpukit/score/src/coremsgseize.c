@@ -27,14 +27,14 @@
 #include <rtems/score/wkspace.h>
 
 void _CORE_message_queue_Seize(
-  CORE_message_queue_Control      *the_message_queue,
-  Thread_Control                  *executing,
-  Objects_Id                       id,
-  void                            *buffer,
-  size_t                          *size_p,
-  bool                             wait,
-  Watchdog_Interval                timeout,
-  ISR_lock_Context                *lock_context
+  CORE_message_queue_Control *the_message_queue,
+  Thread_Control             *executing,
+  Objects_Id                  id,
+  void                       *buffer,
+  size_t                     *size_p,
+  bool                        wait,
+  Watchdog_Interval           timeout,
+  ISR_lock_Context           *lock_context
 )
 {
   CORE_message_queue_Buffer_control *the_message;
@@ -111,11 +111,10 @@ void _CORE_message_queue_Seize(
         &the_message_queue->Wait_queue.Queue,
         the_message_queue->operations,
         the_thread,
+        NULL,
+        0,
         lock_context
       );
-      #if defined(RTEMS_MULTIPROCESSING)
-        _Thread_Dispatch_enable( _Per_CPU_Get() );
-      #endif
       return;
     }
     #endif
@@ -140,7 +139,4 @@ void _CORE_message_queue_Seize(
     CORE_MESSAGE_QUEUE_STATUS_TIMEOUT,
     lock_context
   );
-  #if defined(RTEMS_MULTIPROCESSING)
-    _Thread_Dispatch_enable( _Per_CPU_Get() );
-  #endif
 }

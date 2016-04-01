@@ -35,8 +35,8 @@ void _API_Mutex_Unlock( API_Mutex_Control *the_mutex )
   _ISR_lock_ISR_disable( &lock_context );
   _CORE_mutex_Surrender(
     &the_mutex->Mutex,
-    the_mutex->Object.id,
     NULL,
+    0,
     &lock_context
   );
 

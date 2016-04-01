@@ -145,13 +145,17 @@ static void _Mutex_Release_slow(
     unblock = _Thread_queue_Extract_locked(
       &mutex->Queue.Queue,
       operations,
-      first
+      first,
+      NULL,
+      0
     );
     _Thread_queue_Boost_priority( &mutex->Queue.Queue, first );
     _Thread_queue_Unblock_critical(
       unblock,
       &mutex->Queue.Queue,
       first,
+      NULL,
+      0,
       lock_context
     );
   } else {

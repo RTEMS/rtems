@@ -153,20 +153,15 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Release(
   );
 }
 
+Thread_Control *_Thread_queue_Do_dequeue(
+  Thread_queue_Control          *the_thread_queue,
+  const Thread_queue_Operations *operations
 #if defined(RTEMS_MULTIPROCESSING)
-/**
- * @brief Multiprocessing (MP) support callout for thread queue operations.
- *
- * @param the_proxy The thread proxy of the thread queue operation.  A thread
- *   control is actually a thread proxy if and only if
- *   _Objects_Is_local_id( the_proxy->Object.id ) is false.
- * @param mp_id Object identifier of the object containing the thread queue.
- */
-typedef void ( *Thread_queue_MP_callout )(
-  Thread_Control *the_proxy,
-  Objects_Id      mp_id
-);
+  ,
+  Thread_queue_MP_callout        mp_callout,
+  Objects_Id                     mp_id
 #endif
+);
 
 /**
  *  @brief Gets a pointer to a thread waiting on the_thread_queue.
@@ -179,10 +174,31 @@ typedef void ( *Thread_queue_MP_callout )(
  *  - INTERRUPT LATENCY:
  *    + single case
  */
-Thread_Control *_Thread_queue_Dequeue(
-  Thread_queue_Control          *the_thread_queue,
-  const Thread_queue_Operations *operations
-);
+#if defined(RTEMS_MULTIPROCESSING)
+  #define _Thread_queue_Dequeue( \
+    the_thread_queue, \
+    operations, \
+    mp_callout, \
+    mp_id \
+  ) \
+    _Thread_queue_Do_dequeue( \
+      the_thread_queue, \
+      operations, \
+      mp_callout, \
+      mp_id \
+    )
+#else
+  #define _Thread_queue_Dequeue( \
+    the_thread_queue, \
+    operations, \
+    mp_callout, \
+    mp_id \
+  ) \
+    _Thread_queue_Do_dequeue( \
+      the_thread_queue, \
+      operations \
+    )
+#endif
 
 /**
  * @brief Blocks the thread and places it on the thread queue.
@@ -283,6 +299,17 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
   );
 }
 
+bool _Thread_queue_Do_extract_locked(
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *the_thread
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  Thread_queue_MP_callout        mp_callout,
+  Objects_Id                     mp_id
+#endif
+);
+
 /**
  * @brief Extracts the thread from the thread queue, restores the default wait
  * operations and restores the default thread lock.
@@ -293,6 +320,11 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
  * @param[in] queue The actual thread queue.
  * @param[in] operations The thread queue operations.
  * @param[in] the_thread The thread to extract.
+ * @param[in] mp_callout Callout to unblock the thread in case it is actually a
+ *   thread proxy.  This parameter is only used on multiprocessing
+ *   configurations.
+ * @param[in] mp_id Object identifier of the object containing the thread
+ *   queue.  This parameter is only used on multiprocessing configurations.
  *
  * @return Returns the unblock indicator for _Thread_queue_Unblock_critical().
  * True indicates, that this thread must be unblocked by the scheduler later in
@@ -302,10 +334,45 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
  * since this thread may already block on another resource in an SMP
  * configuration.
  */
-bool _Thread_queue_Extract_locked(
-  Thread_queue_Queue            *queue,
-  const Thread_queue_Operations *operations,
-  Thread_Control                *the_thread
+#if defined(RTEMS_MULTIPROCESSING)
+  #define _Thread_queue_Extract_locked( \
+    unblock, \
+    queue, \
+    the_thread, \
+    mp_callout, \
+    mp_id \
+  ) \
+    _Thread_queue_Do_extract_locked( \
+      unblock, \
+      queue, \
+      the_thread, \
+      mp_callout, \
+      mp_id \
+    )
+#else
+  #define _Thread_queue_Extract_locked( \
+    unblock, \
+    queue, \
+    the_thread, \
+    mp_callout, \
+    mp_id \
+  ) \
+    _Thread_queue_Do_extract_locked( \
+      unblock, \
+      queue, \
+      the_thread \
+    )
+#endif
+
+void _Thread_queue_Do_unblock_critical(
+  bool                     unblock,
+  Thread_queue_Queue      *queue,
+  Thread_Control          *the_thread,
+#if defined(RTEMS_MULTIPROCESSING)
+  Thread_queue_MP_callout  mp_callout,
+  Objects_Id               mp_id,
+#endif
+  ISR_lock_Context        *lock_context
 );
 
 /**
@@ -320,13 +387,56 @@ bool _Thread_queue_Extract_locked(
  * _Thread_queue_Extract_locked().
  * @param[in] queue The actual thread queue.
  * @param[in] the_thread The thread to extract.
+ * @param[in] mp_callout Callout to unblock the thread in case it is actually a
+ *   thread proxy.  This parameter is only used on multiprocessing
+ *   configurations.
+ * @param[in] mp_id Object identifier of the object containing the thread
+ *   queue.  This parameter is only used on multiprocessing configurations.
  * @param[in] lock_context The lock context of the lock acquire.
  */
-void _Thread_queue_Unblock_critical(
-  bool                unblock,
-  Thread_queue_Queue *queue,
-  Thread_Control     *the_thread,
-  ISR_lock_Context   *lock_context
+#if defined(RTEMS_MULTIPROCESSING)
+  #define _Thread_queue_Unblock_critical( \
+    unblock, \
+    queue, \
+    the_thread, \
+    mp_callout, \
+    mp_id, \
+    lock_context \
+  ) \
+    _Thread_queue_Do_unblock_critical( \
+      unblock, \
+      queue, \
+      the_thread, \
+      mp_callout, \
+      mp_id, \
+      lock_context \
+    )
+#else
+  #define _Thread_queue_Unblock_critical( \
+    unblock, \
+    queue, \
+    the_thread, \
+    mp_callout, \
+    mp_id, \
+    lock_context \
+  ) \
+    _Thread_queue_Do_unblock_critical( \
+      unblock, \
+      queue, \
+      the_thread, \
+      lock_context \
+    )
+#endif
+
+void _Thread_queue_Do_extract_critical(
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *the_thread,
+#if defined(RTEMS_MULTIPROCESSING)
+  Thread_queue_MP_callout        mp_callout,
+  Objects_Id                     mp_id,
+#endif
+  ISR_lock_Context              *lock_context
 );
 
 /**
@@ -364,6 +474,8 @@ void _Thread_queue_Unblock_critical(
  *       &mutex->Queue.Queue,
  *       mutex->Queue.operations,
  *       first,
+ *       NULL,
+ *       0,
  *       &lock_context
  *   );
  * }
@@ -372,14 +484,46 @@ void _Thread_queue_Unblock_critical(
  * @param[in] queue The actual thread queue.
  * @param[in] operations The thread queue operations.
  * @param[in] the_thread The thread to extract.
+ * @param[in] mp_callout Callout to unblock the thread in case it is actually a
+ *   thread proxy.  This parameter is only used on multiprocessing
+ *   configurations.
+ * @param[in] mp_id Object identifier of the object containing the thread
+ *   queue.  This parameter is only used on multiprocessing configurations.
  * @param[in] lock_context The lock context of the lock acquire.
  */
-void _Thread_queue_Extract_critical(
-  Thread_queue_Queue            *queue,
-  const Thread_queue_Operations *operations,
-  Thread_Control                *the_thread,
-  ISR_lock_Context              *lock_context
-);
+#if defined(RTEMS_MULTIPROCESSING)
+  #define _Thread_queue_Extract_critical( \
+    queue, \
+    operations, \
+    the_thread, \
+    mp_callout, \
+    mp_id, \
+    lock_context \
+  ) \
+    _Thread_queue_Do_extract_critical( \
+      queue, \
+      operations, \
+      the_thread, \
+      mp_callout, \
+      mp_id, \
+      lock_context \
+    )
+#else
+  #define _Thread_queue_Extract_critical( \
+    queue, \
+    operations, \
+    the_thread, \
+    mp_callout, \
+    mp_id, \
+    lock_context \
+  ) \
+    _Thread_queue_Do_extract_critical( \
+      queue, \
+      operations, \
+      the_thread, \
+      lock_context \
+    )
+#endif
 
 /**
  *  @brief Extracts thread from thread queue.
@@ -573,6 +717,13 @@ RBTree_Compare_result _Thread_queue_Compare_priority(
   const RBTree_Node *left,
   const RBTree_Node *right
 );
+
+#if defined(RTEMS_MULTIPROCESSING)
+void _Thread_queue_MP_callout_do_nothing(
+  Thread_Control *the_proxy,
+  Objects_Id      mp_id
+);
+#endif
 
 extern const Thread_queue_Operations _Thread_queue_Operations_default;
 

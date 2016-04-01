@@ -68,33 +68,13 @@
     CORE_MUTEX_STATUS_SUCCESSFUL
 #endif
 
-/*
- *  _CORE_mutex_Surrender
- *
- *  This routine frees a unit to the mutex.  If a task was blocked waiting for
- *  a unit from this mutex, then that task will be readied and the unit
- *  given to that task.  Otherwise, the unit will be returned to the mutex.
- *
- *  Input parameters:
- *    the_mutex            - the mutex to be flushed
- *    id                   - id of parent mutex
- *    api_mutex_mp_support - api dependent MP support actions
- *
- *  Output parameters:
- *    CORE_MUTEX_STATUS_SUCCESSFUL - if successful
- *    core error code              - if unsuccessful
- */
-
-CORE_mutex_Status _CORE_mutex_Surrender(
-  CORE_mutex_Control                *the_mutex,
+CORE_mutex_Status _CORE_mutex_Do_surrender(
+  CORE_mutex_Control      *the_mutex,
 #if defined(RTEMS_MULTIPROCESSING)
-  Objects_Id                         id,
-  CORE_mutex_API_mp_support_callout  api_mutex_mp_support,
-#else
-  Objects_Id                         id RTEMS_UNUSED,
-  CORE_mutex_API_mp_support_callout  api_mutex_mp_support RTEMS_UNUSED,
+  Thread_queue_MP_callout  mp_callout,
+  Objects_Id               mp_id,
 #endif
-  ISR_lock_Context                  *lock_context
+  ISR_lock_Context        *lock_context
 )
 {
   Thread_Control *the_thread;
@@ -199,12 +179,12 @@ CORE_mutex_Status _CORE_mutex_Surrender(
     unblock = _Thread_queue_Extract_locked(
       &the_mutex->Wait_queue.Queue,
       the_mutex->operations,
-      the_thread
+      the_thread,
+      mp_callout,
+      mp_id
     );
 
 #if defined(RTEMS_MULTIPROCESSING)
-    _Thread_Dispatch_disable();
-
     if ( _Objects_Is_local_id( the_thread->Object.id ) )
 #endif
     {
@@ -232,16 +212,10 @@ CORE_mutex_Status _CORE_mutex_Surrender(
       unblock,
       &the_mutex->Wait_queue.Queue,
       the_thread,
+      mp_callout,
+      mp_id,
       lock_context
     );
-
-#if defined(RTEMS_MULTIPROCESSING)
-    if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
-      ( *api_mutex_mp_support)( the_thread, id );
-    }
-
-    _Thread_Dispatch_enable( _Per_CPU_Get() );
-#endif
   } else {
     _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
   }
