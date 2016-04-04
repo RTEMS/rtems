@@ -793,25 +793,6 @@ RTEMS_INLINE_ROUTINE void _Chain_Prepend_unprotected(
 }
 
 /**
- * @brief Prepend a node (protected).
- *
- * This routine prepends the_node onto the front of the_chain.
- *
- * @param[in] the_chain is the chain to be operated upon.
- * @param[in] the_node is the node to be prepended.
- *
- * @note It disables interrupts to ensure the atomicity of the
- *       prepend operation.
- */
-RTEMS_INLINE_ROUTINE void _Chain_Prepend(
-  Chain_Control *the_chain,
-  Chain_Node    *the_node
-)
-{
-  _Chain_Insert(_Chain_Head(the_chain), the_node);
-}
-
-/**
  * @brief Append a node and check if the chain was empty before (unprotected).
  *
  * This routine appends the_node onto the end of the_chain.

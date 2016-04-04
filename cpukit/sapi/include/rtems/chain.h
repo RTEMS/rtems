@@ -718,20 +718,10 @@ RTEMS_INLINE_ROUTINE void rtems_chain_append_unprotected(
  * NOTE: It disables interrupts to ensure the atomicity of the
  *       prepend operation.
  */
-#if defined( RTEMS_SMP )
 void rtems_chain_prepend(
   rtems_chain_control *the_chain,
   rtems_chain_node    *the_node
 );
-#else
-RTEMS_INLINE_ROUTINE void rtems_chain_prepend(
-  rtems_chain_control *the_chain,
-  rtems_chain_node    *the_node
-)
-{
-  _Chain_Prepend( the_chain, the_node );
-}
-#endif
 
 /** 
  * @brief Prepend a node (unprotected).
