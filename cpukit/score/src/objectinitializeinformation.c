@@ -42,9 +42,6 @@ void _Objects_Initialize_information(
   static Objects_Control *null_local_table = NULL;
   uint32_t                minimum_index;
   Objects_Maximum         maximum_per_allocation;
-  #if defined(RTEMS_MULTIPROCESSING)
-    uint32_t              index;
-  #endif
 
   information->the_api            = the_api;
   information->the_class          = the_class;
@@ -131,18 +128,7 @@ void _Objects_Initialize_information(
    */
   #if defined(RTEMS_MULTIPROCESSING)
     information->extract = extract;
-
-    if ( (supports_global == true) && _System_state_Is_multiprocessing ) {
-
-      information->global_table =
-        (Chain_Control *) _Workspace_Allocate_or_fatal_error(
-          (_Objects_Maximum_nodes + 1) * sizeof(Chain_Control)
-        );
-
-      for ( index=1; index <= _Objects_Maximum_nodes ; index++ )
-        _Chain_Initialize_empty( &information->global_table[ index ] );
-     }
-     else
-       information->global_table = NULL;
+    _RBTree_Initialize_empty( &information->Global_by_id );
+    _RBTree_Initialize_empty( &information->Global_by_name );
   #endif
 }

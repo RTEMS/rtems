@@ -20,9 +20,20 @@
 
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/interr.h>
-#include <rtems/score/threaddispatch.h>
+#include <rtems/score/isrlock.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
+
+#define OBJECTS_MP_CONTROL_OF_ID_LOOKUP_NODE( node ) \
+  RTEMS_CONTAINER_OF( node, Objects_MP_Control, Nodes.Active.Id_lookup )
+
+#define OBJECTS_MP_CONTROL_OF_NAME_LOOKUP_NODE( node ) \
+  RTEMS_CONTAINER_OF( node, Objects_MP_Control, Nodes.Active.Name_lookup )
+
+typedef struct {
+  uint32_t name;
+  uint32_t node;
+} Objects_MP_Name_and_node;
 
 uint16_t _Objects_Local_node;
 
@@ -30,7 +41,120 @@ uint16_t _Objects_Maximum_nodes;
 
 uint32_t _Objects_MP_Maximum_global_objects;
 
-Chain_Control _Objects_MP_Inactive_global_objects;
+static CHAIN_DEFINE_EMPTY( _Objects_MP_Inactive_global_objects );
+
+ISR_LOCK_DEFINE( static, _Objects_MP_Global_lock, "MP Objects" )
+
+static void _Objects_MP_Global_acquire( ISR_lock_Context *lock_context )
+{
+  _ISR_lock_ISR_disable_and_acquire( &_Objects_MP_Global_lock, lock_context );
+}
+
+static void _Objects_MP_Global_release( ISR_lock_Context *lock_context )
+{
+  _ISR_lock_Release_and_ISR_enable( &_Objects_MP_Global_lock, lock_context );
+}
+
+static bool _Objects_MP_Id_equal(
+  const void        *left,
+  const RBTree_Node *right
+)
+{
+  const Objects_Id         *the_left;
+  const Objects_MP_Control *the_right;
+
+  the_left = left;
+  the_right = OBJECTS_MP_CONTROL_OF_ID_LOOKUP_NODE( right );
+
+  return *the_left == the_right->id;
+}
+
+static bool _Objects_MP_Id_less(
+  const void        *left,
+  const RBTree_Node *right
+)
+{
+  const Objects_Id         *the_left;
+  const Objects_MP_Control *the_right;
+
+  the_left = left;
+  the_right = OBJECTS_MP_CONTROL_OF_ID_LOOKUP_NODE( right );
+
+  return *the_left < the_right->id;
+}
+
+static void *_Objects_MP_Id_map( RBTree_Node *node )
+{
+  return OBJECTS_MP_CONTROL_OF_ID_LOOKUP_NODE( node );
+}
+
+static bool _Objects_MP_Name_equal(
+  const void        *left,
+  const RBTree_Node *right
+)
+{
+  const uint32_t           *the_left;
+  const Objects_MP_Control *the_right;
+
+  the_left = left;
+  the_right = OBJECTS_MP_CONTROL_OF_NAME_LOOKUP_NODE( right );
+
+  return *the_left == the_right->name;
+}
+
+static bool _Objects_MP_Name_less(
+  const void        *left,
+  const RBTree_Node *right
+)
+{
+  const uint32_t           *the_left;
+  const Objects_MP_Control *the_right;
+
+  the_left = left;
+  the_right = OBJECTS_MP_CONTROL_OF_NAME_LOOKUP_NODE( right );
+
+  return *the_left < the_right->name;
+}
+
+static void *_Objects_MP_Name_map( RBTree_Node *node )
+{
+  return OBJECTS_MP_CONTROL_OF_NAME_LOOKUP_NODE( node );
+}
+
+static bool _Objects_MP_Name_and_node_equal(
+  const void        *left,
+  const RBTree_Node *right
+)
+{
+  const Objects_MP_Name_and_node *the_left;
+  const Objects_MP_Control       *the_right;
+
+  the_left = left;
+  the_right = OBJECTS_MP_CONTROL_OF_NAME_LOOKUP_NODE( right );
+
+  return the_left->name == the_right->name
+    && the_left->node == _Objects_Get_node( the_right->id );
+}
+
+static bool _Objects_MP_Name_and_node_less(
+  const void        *left,
+  const RBTree_Node *right
+)
+{
+  const Objects_MP_Name_and_node *the_left;
+  const Objects_MP_Control       *the_right;
+
+  the_left = left;
+  the_right = OBJECTS_MP_CONTROL_OF_NAME_LOOKUP_NODE( right );
+
+  /*
+   * Use > for the node to find smaller numbered nodes first in case of equal
+   * names.
+   */
+  return the_left->name < the_right->name
+    || ( the_left->name == the_right->name
+      && the_left->node > _Objects_Get_node( the_right->id ) );
+}
 
 void _Objects_MP_Handler_early_initialization(void)
 {
@@ -51,22 +175,15 @@ void _Objects_MP_Handler_early_initialization(void)
   _Objects_Maximum_nodes = maximum_nodes;
 }
 
-/*
- *  _Objects_MP_Handler_initialization
- *
- */
-
-void _Objects_MP_Handler_initialization(void)
+void _Objects_MP_Handler_initialization( void )
 {
-
-  uint32_t   maximum_global_objects;
+  uint32_t maximum_global_objects;
 
   maximum_global_objects = _Configuration_MP_table->maximum_global_objects;
 
   _Objects_MP_Maximum_global_objects = maximum_global_objects;
 
   if ( maximum_global_objects == 0 ) {
-    _Chain_Initialize_empty( &_Objects_MP_Inactive_global_objects );
     return;
   }
 
@@ -78,7 +195,6 @@ void _Objects_MP_Handler_initialization(void)
     maximum_global_objects,
     sizeof( Objects_MP_Control )
   );
-
 }
 
 void _Objects_MP_Open (
@@ -88,16 +204,31 @@ void _Objects_MP_Open (
   Objects_Id           the_id
 )
 {
-  the_global_object->Object.id = the_id;
-  the_global_object->name      = the_name;
+  Objects_MP_Name_and_node name_and_node;
+  ISR_lock_Context         lock_context;
 
-  _Assert( _Objects_Allocator_is_owner() );
+  the_global_object->id = the_id;
+  the_global_object->name = the_name;
 
-  _Chain_Prepend_unprotected(
-    &information->global_table[ _Objects_Get_node( the_id ) ],
-    &the_global_object->Object.Node
+  name_and_node.name = the_name;
+  name_and_node.node = _Objects_Get_node( the_id );
+
+  _Objects_MP_Global_acquire( &lock_context );
+
+  _RBTree_Insert_inline(
+    &information->Global_by_id,
+    &the_global_object->Nodes.Active.Id_lookup,
+    &the_id,
+    _Objects_MP_Id_less
+  );
+  _RBTree_Insert_inline(
+    &information->Global_by_name,
+    &the_global_object->Nodes.Active.Name_lookup,
+    &name_and_node,
+    _Objects_MP_Name_and_node_less
   );
 
+  _Objects_MP_Global_release( &lock_context );
 }
 
 bool _Objects_MP_Allocate_and_open (
@@ -133,152 +264,144 @@ void _Objects_MP_Close (
   Objects_Id           the_id
 )
 {
-  Chain_Control      *the_chain;
-  Chain_Node         *the_node;
-  Objects_MP_Control *the_object;
+  Objects_MP_Control *the_global_object;
+  ISR_lock_Context    lock_context;
 
-  _Assert( _Objects_Allocator_is_owner() );
+  _Objects_MP_Global_acquire( &lock_context );
 
-  the_chain = &information->global_table[ _Objects_Get_node( the_id ) ];
-
-  for ( the_node = _Chain_First( the_chain ) ;
-        !_Chain_Is_tail( the_chain, the_node ) ;
-        the_node = _Chain_Next( the_node ) ) {
-
-    the_object = (Objects_MP_Control *) the_node;
-
-    if ( _Objects_Are_ids_equal( the_object->Object.id, the_id ) ) {
-
-      _Chain_Extract_unprotected( the_node );
-      _Objects_MP_Free_global_object( the_object );
-      return;
-    }
-
-  }
-
-  _Terminate(
-    INTERNAL_ERROR_CORE,
-    true,
-    INTERNAL_ERROR_INVALID_GLOBAL_ID
+  the_global_object = _RBTree_Find_inline(
+    &information->Global_by_id,
+    &the_id,
+    _Objects_MP_Id_equal,
+    _Objects_MP_Id_less,
+    _Objects_MP_Id_map
   );
+
+  if ( the_global_object != NULL ) {
+    _RBTree_Extract(
+      &information->Global_by_id,
+      &the_global_object->Nodes.Active.Id_lookup
+    );
+    _RBTree_Extract(
+      &information->Global_by_name,
+      &the_global_object->Nodes.Active.Name_lookup
+    );
+    _Objects_MP_Free_global_object( the_global_object );
+    _Objects_MP_Global_release( &lock_context );
+  } else {
+    _Objects_MP_Global_release( &lock_context );
+
+    _Terminate(
+      INTERNAL_ERROR_CORE,
+      true,
+      INTERNAL_ERROR_INVALID_GLOBAL_ID
+    );
+  }
 }
 
-Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
+Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search(
   Objects_Information *information,
   Objects_Name         the_name,
   uint32_t             nodes_to_search,
   Objects_Id          *the_id
 )
 {
-  uint32_t            low_node;
-  uint32_t            high_node;
-  uint32_t            node_index;
-  Chain_Control      *the_chain;
-  Chain_Node         *the_node;
-  Objects_MP_Control *the_object;
-  uint32_t            name_to_use;
+  Objects_Name_or_id_lookup_errors  status;
+  Objects_MP_Control               *the_global_object;
+  ISR_lock_Context                  lock_context;
 
-  name_to_use = the_name.name_u32;  /* XXX only fixed length names */
-
-  if ( nodes_to_search > _Objects_Maximum_nodes )
+  if ( nodes_to_search > _Objects_Maximum_nodes ) {
     return OBJECTS_INVALID_NODE;
+  }
 
-  if ( information->global_table == NULL )
-    return OBJECTS_INVALID_NAME;
+  _Objects_MP_Global_acquire( &lock_context );
 
-  if ( nodes_to_search == OBJECTS_SEARCH_ALL_NODES ||
-       nodes_to_search == OBJECTS_SEARCH_OTHER_NODES ) {
-    low_node = 1;
-    high_node = _Objects_Maximum_nodes;
+  if ( nodes_to_search == OBJECTS_SEARCH_ALL_NODES ) {
+    the_global_object = _RBTree_Find_inline(
+      &information->Global_by_name,
+      &the_name.name_u32,
+      _Objects_MP_Name_equal,
+      _Objects_MP_Name_less,
+      _Objects_MP_Name_map
+    );
   } else {
-    low_node  =
-    high_node = nodes_to_search;
+    Objects_MP_Name_and_node name_and_node;
+
+    name_and_node.name = the_name.name_u32;
+    name_and_node.node = nodes_to_search;
+
+    the_global_object = _RBTree_Find_inline(
+      &information->Global_by_name,
+      &name_and_node,
+      _Objects_MP_Name_and_node_equal,
+      _Objects_MP_Name_and_node_less,
+      _Objects_MP_Name_map
+    );
   }
 
-  _Objects_Allocator_lock();
-
-  for ( node_index = low_node ; node_index <= high_node ; node_index++ ) {
-
-    /*
-     *  NOTE: The local node was search (if necessary) by
-     *        _Objects_Name_to_id_XXX before this was invoked.
-     */
-
-    if ( !_Objects_Is_local_node( node_index ) ) {
-      the_chain = &information->global_table[ node_index ];
-
-      for ( the_node = _Chain_First( the_chain ) ;
-            !_Chain_Is_tail( the_chain, the_node ) ;
-            the_node = _Chain_Next( the_node ) ) {
-
-        the_object = (Objects_MP_Control *) the_node;
-
-        if ( the_object->name == name_to_use ) {
-          *the_id = the_object->Object.id;
-          _Objects_Allocator_unlock();
-          return OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
-        }
-      }
-    }
+  if ( the_global_object != NULL ) {
+    *the_id = the_global_object->id;
+    status = OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
+  } else {
+    status = OBJECTS_INVALID_NAME;
   }
 
-  _Objects_Allocator_unlock();
-  return OBJECTS_INVALID_NAME;
+  _Objects_MP_Global_release( &lock_context );
+
+  return status;
 }
 
-void _Objects_MP_Is_remote (
-  Objects_Information  *information,
-  Objects_Id            the_id,
-  Objects_Locations    *location,
-  Objects_Control     **the_object
+Objects_Locations _Objects_MP_Is_remote(
+  Objects_Information *information,
+  Objects_Id           the_id
 )
 {
-  uint32_t            node;
-  Chain_Control      *the_chain;
-  Chain_Node         *the_node;
   Objects_MP_Control *the_global_object;
+  ISR_lock_Context    lock_context;
 
-  node = _Objects_Get_node( the_id );
+  _Objects_MP_Global_acquire( &lock_context );
 
-  /*
-   *  NOTE: The local node was search (if necessary) by
-   *        _Objects_Name_to_id_XXX before this was invoked.
-   *
-   *        The NODE field of an object id cannot be 0
-   *        because 0 is an invalid node number.
-   */
+  the_global_object = _RBTree_Find_inline(
+    &information->Global_by_id,
+    &the_id,
+    _Objects_MP_Id_equal,
+    _Objects_MP_Id_less,
+    _Objects_MP_Id_map
+  );
 
-  if ( node == 0 ||
-       _Objects_Is_local_node( node ) ||
-       node > _Objects_Maximum_nodes ||
-       information->global_table == NULL ) {
+  _Objects_MP_Global_release( &lock_context );
 
-    *location   = OBJECTS_ERROR;
-    *the_object = NULL;
-    return;
+  if ( the_global_object != NULL ) {
+    return OBJECTS_REMOTE;
+  } else {
+    return OBJECTS_ERROR;
   }
-
-  _Objects_Allocator_lock();
-
-  the_chain = &information->global_table[ node ];
-
-  for ( the_node = _Chain_First( the_chain ) ;
-        !_Chain_Is_tail( the_chain, the_node ) ;
-        the_node = _Chain_Next( the_node ) ) {
-
-    the_global_object = (Objects_MP_Control *) the_node;
-
-    if ( _Objects_Are_ids_equal( the_global_object->Object.id, the_id ) ) {
-      _Objects_Allocator_unlock();
-      *location   = OBJECTS_REMOTE;
-      *the_object = (Objects_Control *) the_global_object;
-      return;
-    }
-  }
-
-  _Objects_Allocator_unlock();
-  *location   = OBJECTS_ERROR;
-  *the_object = NULL;
-
 }
 
+Objects_MP_Control *_Objects_MP_Allocate_global_object( void )
+{
+  Objects_MP_Control *the_global_object;
+  ISR_lock_Context    lock_context;
+
+  _Objects_MP_Global_acquire( &lock_context );
+
+  the_global_object = (Objects_MP_Control *)
+    _Chain_Get_unprotected( &_Objects_MP_Inactive_global_objects );
+
+  _Objects_MP_Global_release( &lock_context );
+  return the_global_object;
+}
+
+void _Objects_MP_Free_global_object( Objects_MP_Control *the_global_object )
+{
+  ISR_lock_Context lock_context;
+
+  _Objects_MP_Global_acquire( &lock_context );
+
+  _Chain_Append_unprotected(
+    &_Objects_MP_Inactive_global_objects,
+    &the_global_object->Nodes.Inactive
+  );
+
+  _Objects_MP_Global_release( &lock_context );
+}

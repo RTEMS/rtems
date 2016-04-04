@@ -315,11 +315,6 @@ uninitialized =
                 (sizeof _Objects_Maximum_nodes)           +
                 (sizeof _Objects_Information_table)       +
 
-#if defined(RTEMS_MULTIPROCESSING)
-/*objectmp.h*/  (sizeof _Objects_MP_Maximum_global_objects) +
-                (sizeof _Objects_MP_Inactive_global_objects) +
-#endif
-
 /*options.h*/   0                                         +
 
 /*partimpl.h*/  (sizeof _Partition_Information)           +

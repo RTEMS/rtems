@@ -172,8 +172,20 @@ typedef struct {
   #if defined(RTEMS_MULTIPROCESSING)
     /** This is this object class' method called when extracting a thread. */
     Objects_Thread_queue_Extract_callout extract;
-    /** This is this object class' pointer to the global name table */
-    Chain_Control    *global_table;
+
+    /**
+     * @brief The global objects of this object information sorted by object
+     * identifier.
+     */
+    RBTree_Control   Global_by_id;
+
+    /**
+     * @brief The global objects of this object information sorted by object
+     * name.
+     *
+     * Objects with the same name are sorted according to their identifier.
+     */
+    RBTree_Control   Global_by_name;
   #endif
 }   Objects_Information;
 

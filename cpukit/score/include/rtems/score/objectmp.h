@@ -147,27 +147,16 @@ Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
  *  @brief Searches the Global Object Table managed
  *  by information for the object indicated by ID.
  *
- *  This function searches the Global Object Table managed
- *  by information for the object indicated by ID.  If the object
- *  is found, then location is set to objects_remote, otherwise
- *  location is set to objects_error.  In both cases, the_object
- *  is undefined.
- *
  *  @param[in] information points to the object information table for this
  *             object class.
  *  @param[in] the_id is the Id of the object being opened.
- *  @param[in] location will contain the location of the object.
- *  @param[in] the_object will contain a pointer to the object.
  *
- *  @retval This method fills in @a location to indicate successful location
- *          of the object or error.  On success, @a the_object will be
- *          filled in.
+ *  @retval OBJECTS_REMOTE A remote objects with this object identifier exits.
+ *  @retval OBJECTS_ERROR Otherwise.
  */
-void _Objects_MP_Is_remote (
-  Objects_Information  *information,
-  Objects_Id            the_id,
-  Objects_Locations    *location,
-  Objects_Control     **the_object
+Objects_Locations _Objects_MP_Is_remote(
+  Objects_Information *information,
+  Objects_Id           the_id
 );
 
 /**
@@ -176,36 +165,16 @@ void _Objects_MP_Is_remote (
 extern uint32_t _Objects_MP_Maximum_global_objects;
 
 /**
- *  The following chain header is used to manage the set of
- *  inactive global object control blocks.
- */
-extern Chain_Control _Objects_MP_Inactive_global_objects;
-
-/**
  * This function allocates a Global Object control block.
  */
 
-RTEMS_INLINE_ROUTINE Objects_MP_Control *_Objects_MP_Allocate_global_object (
-  void
-)
-{
-  return (Objects_MP_Control *)
-           _Chain_Get( &_Objects_MP_Inactive_global_objects );
-}
+Objects_MP_Control *_Objects_MP_Allocate_global_object( void );
 
 /**
  * This routine deallocates a Global Object control block.
  */
 
-RTEMS_INLINE_ROUTINE void _Objects_MP_Free_global_object (
-  Objects_MP_Control *the_object
-)
-{
-  _Chain_Append(
-    &_Objects_MP_Inactive_global_objects,
-    &the_object->Object.Node
-  );
-}
+void _Objects_MP_Free_global_object( Objects_MP_Control *the_object );
 
 /**
  * This function returns whether the global object is NULL or not.

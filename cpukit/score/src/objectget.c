@@ -69,12 +69,12 @@ Objects_Control *_Objects_Get(
    *  it may be global in a multiprocessing system.  But it is clearly
    *  invalid on a single processor system.
    */
-  *location = OBJECTS_ERROR;
 
 #if defined(RTEMS_MULTIPROCESSING)
-  _Objects_MP_Is_remote( information, id, location, &the_object );
-  return the_object;
+  *location = _Objects_MP_Is_remote( information, id );
 #else
-  return NULL;
+  *location = OBJECTS_ERROR;
 #endif
+
+  return NULL;
 }

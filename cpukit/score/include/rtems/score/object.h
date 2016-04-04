@@ -23,6 +23,7 @@
 #include <rtems/score/basedefs.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/chain.h>
+#include <rtems/score/rbtree.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -240,18 +241,45 @@ typedef struct {
 
 #if defined( RTEMS_MULTIPROCESSING )
 /**
- *  This defines the Global Object Control Block used to manage
- *  objects resident on other nodes.  It is derived from Object.
+ * @brief This defines the Global Object Control Block used to manage objects
+ * resident on other nodes.
  */
 typedef struct {
-  /** This is an object control structure. */
-  Objects_Control Object;
-  /** This is the name of the object.  Using an unsigned thirty two
-   *  bit value is broken but works.  If any API is MP with variable
-   *  length names .. BOOM!!!!
+  /**
+   * @brief Nodes to manage active and inactive global objects.
    */
-  uint32_t        name;
-}   Objects_MP_Control;
+  union {
+    /**
+     * @brief Inactive global objects reside on a chain.
+     */
+    Chain_Node Inactive;
+
+    struct {
+      /**
+       * @brief Node to lookup an active global object by identifier.
+       */
+      RBTree_Node Id_lookup;
+
+      /**
+       * @brief Node to lookup an active global object by name.
+       */
+      RBTree_Node Name_lookup;
+    } Active;
+  } Nodes;
+
+  /**
+   * @brief The global object identifier.
+   */
+  Objects_Id id;
+
+  /**
+   * @brief The global object name.
+   *
+   * Using an unsigned thirty two bit value is broken but works.  If any API is
+   * MP with variable length names .. BOOM!!!!
+   */
+  uint32_t name;
+} Objects_MP_Control;
 #endif
 
 /**
