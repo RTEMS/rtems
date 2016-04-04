@@ -30,20 +30,17 @@ void *pthread_getspecific(
   pthread_key_t  key
 )
 {
-  Thread_Control   *executing;
-  ISR_lock_Context  lock_context;
-  RBTree_Node      *node;
-  void             *value;
+  Thread_Control            *executing;
+  ISR_lock_Context           lock_context;
+  POSIX_Keys_Key_value_pair *key_value_pair;
+  void                      *value;
 
   executing = _Thread_Get_executing();
   _POSIX_Keys_Key_value_acquire( executing, &lock_context );
 
-  node = _POSIX_Keys_Key_value_find( key, executing );
+  key_value_pair = _POSIX_Keys_Key_value_find( key, executing );
 
-  if ( node != NULL ) {
-    POSIX_Keys_Key_value_pair *key_value_pair;
-
-    key_value_pair = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node );
+  if ( key_value_pair != NULL ) {
     value = key_value_pair->value;
   } else {
     value = NULL;

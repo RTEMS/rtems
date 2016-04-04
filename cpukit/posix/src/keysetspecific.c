@@ -24,11 +24,11 @@
 
 #include <errno.h>
 
-static int _POSIX_Keys_Set_value( RBTree_Node *node, const void *value )
+static int _POSIX_Keys_Set_value(
+  POSIX_Keys_Key_value_pair *key_value_pair,
+  const void                *value
+)
 {
-  POSIX_Keys_Key_value_pair *key_value_pair;
-
-  key_value_pair = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node );
   key_value_pair->value = RTEMS_DECONST( void *, value );
 
   return 0;
@@ -91,16 +91,13 @@ static int _POSIX_Keys_Delete_value(
 
   the_key = _POSIX_Keys_Get( key );
   if ( the_key != NULL ) {
-    ISR_lock_Context  lock_context;
-    RBTree_Node      *node;
+    POSIX_Keys_Key_value_pair *key_value_pair;
+    ISR_lock_Context           lock_context;
 
     _POSIX_Keys_Key_value_acquire( executing, &lock_context );
 
-    node = _POSIX_Keys_Key_value_find( key, executing );
-    if ( node != NULL ) {
-      POSIX_Keys_Key_value_pair *key_value_pair;
-
-      key_value_pair = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node );
+    key_value_pair = _POSIX_Keys_Key_value_find( key, executing );
+    if ( key_value_pair != NULL ) {
       _RBTree_Extract(
         &executing->Keys.Key_value_pairs,
         &key_value_pair->Lookup_node
@@ -138,14 +135,14 @@ int pthread_setspecific(
   executing = _Thread_Get_executing();
 
   if ( value != NULL ) {
-    ISR_lock_Context  lock_context;
-    RBTree_Node      *node;
+    ISR_lock_Context           lock_context;
+    POSIX_Keys_Key_value_pair *key_value_pair;
 
     _POSIX_Keys_Key_value_acquire( executing, &lock_context );
 
-    node = _POSIX_Keys_Key_value_find( key, executing );
-    if ( node != NULL ) {
-      eno = _POSIX_Keys_Set_value( node, value );
+    key_value_pair = _POSIX_Keys_Key_value_find( key, executing );
+    if ( key_value_pair != NULL ) {
+      eno = _POSIX_Keys_Set_value( key_value_pair, value );
       _POSIX_Keys_Key_value_release( executing, &lock_context );
     } else {
       _POSIX_Keys_Key_value_release( executing, &lock_context );

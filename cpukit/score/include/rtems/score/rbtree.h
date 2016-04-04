@@ -524,7 +524,7 @@ RTEMS_INLINE_ROUTINE void _RBTree_Insert_inline(
 }
 
 /**
- * @brief Finds a node in the red-black tree with the specified key.
+ * @brief Finds an object in the red-black tree with the specified key.
  *
  * @param the_rbtree The red-black tree control.
  * @param key The key to look after.
@@ -532,15 +532,21 @@ RTEMS_INLINE_ROUTINE void _RBTree_Insert_inline(
  *   node, otherwise false.
  * @param less Must return true if the specified key is less than the key of
  *   the node, otherwise false.
+ * @param map In case a node with the specified key is found, then this
+ *   function is called to map the node to the object returned.  Usually it
+ *   performs some offset operation via RTEMS_CONTAINER_OF() to map the node to
+ *   its containing object.  Thus, the return type is a void pointer and not a
+ *   red-black tree node.
  *
- * @retval node A node with the specified key.
- * @retval NULL No node with the specified key exists in the red-black tree.
+ * @retval object An object with the specified key.
+ * @retval NULL No object with the specified key exists in the red-black tree.
  */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Find_inline(
+RTEMS_INLINE_ROUTINE void *_RBTree_Find_inline(
   RBTree_Control *the_rbtree,
   const void     *key,
   bool         ( *equal )( const void *, const RBTree_Node * ),
-  bool         ( *less )( const void *, const RBTree_Node * )
+  bool         ( *less )( const void *, const RBTree_Node * ),
+  void        *( *map )( RBTree_Node * )
 )
 {
   RBTree_Node **link;
@@ -553,7 +559,7 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Find_inline(
     parent = *link;
 
     if ( ( *equal )( key, parent ) ) {
-      return parent;
+      return ( *map )( parent );
     } else if ( ( *less )( key, parent ) ) {
       link = _RBTree_Left_reference( parent );
     } else {

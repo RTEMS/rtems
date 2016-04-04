@@ -139,16 +139,22 @@ RTEMS_INLINE_ROUTINE bool _POSIX_Keys_Key_value_less(
   return *the_left < the_right->key;
 }
 
-RTEMS_INLINE_ROUTINE RBTree_Node *_POSIX_Keys_Key_value_find(
-  pthread_key_t     key,
-  Thread_Control   *the_thread
+RTEMS_INLINE_ROUTINE void *_POSIX_Keys_Key_value_map( RBTree_Node *node )
+{
+  return POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node );
+}
+
+RTEMS_INLINE_ROUTINE POSIX_Keys_Key_value_pair *_POSIX_Keys_Key_value_find(
+  pthread_key_t   key,
+  Thread_Control *the_thread
 )
 {
   return _RBTree_Find_inline(
     &the_thread->Keys.Key_value_pairs,
     &key,
     _POSIX_Keys_Key_value_equal,
-    _POSIX_Keys_Key_value_less
+    _POSIX_Keys_Key_value_less,
+    _POSIX_Keys_Key_value_map
   );
 }
 
