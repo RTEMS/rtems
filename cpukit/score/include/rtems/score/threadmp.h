@@ -69,25 +69,11 @@ Thread_Control *_Thread_MP_Allocate_proxy (
  *  id from the active chain of proxy control blocks.
  *
  *  This function removes the proxy control block for the specified
- *  id from the active chain of proxy control blocks.
+ *  id from the active red-black tree of proxy control blocks.
  */
 Thread_Control *_Thread_MP_Find_proxy (
   Objects_Id the_id
 );
-
-/**
- *  @brief Manage the active set MP proxies.
- *
- * The following chain is used to manage the active set proxies.
- */
-extern Chain_Control _Thread_MP_Active_proxies;
-
-/**
- *  @brief Manage the inactive set of MP proxies.
- *
- * The following chain is used to manage the inactive set of proxies.
- */
-extern Chain_Control _Thread_MP_Inactive_proxies;
 
 /**
  * This function returns true if the thread in question is the
@@ -103,19 +89,8 @@ extern Chain_Control _Thread_MP_Inactive_proxies;
  * This routine frees a proxy control block to the
  * inactive chain of free proxy control blocks.
  */
+void _Thread_MP_Free_proxy( Thread_Control *the_thread );
 
-RTEMS_INLINE_ROUTINE void _Thread_MP_Free_proxy (
-  Thread_Control *the_thread
-)
-{
-  Thread_Proxy_control *the_proxy;
-
-  the_proxy = (Thread_Proxy_control *) the_thread;
-
-  _Chain_Extract( &the_proxy->Active );
-
-  _Chain_Append( &_Thread_MP_Inactive_proxies, &the_thread->Object.Node );
-}
 
 /**@}*/
 

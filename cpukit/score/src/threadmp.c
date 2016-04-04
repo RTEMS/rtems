@@ -19,14 +19,26 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/isrlevel.h>
+#include <rtems/score/isrlock.h>
 #include <rtems/score/wkspace.h>
 
 #include <string.h>
 
-Chain_Control _Thread_MP_Active_proxies;
+static RBTREE_DEFINE_EMPTY( _Thread_MP_Active_proxies );
 
-Chain_Control _Thread_MP_Inactive_proxies;
+static CHAIN_DEFINE_EMPTY( _Thread_MP_Inactive_proxies );
+
+ISR_LOCK_DEFINE( static, _Thread_MP_Proxies_lock, "Thread MP Proxies" )
+
+static void _Thread_MP_Proxies_acquire( ISR_lock_Context *lock_context )
+{
+  _ISR_lock_ISR_disable_and_acquire( &_Thread_MP_Proxies_lock, lock_context );
+}
+
+static void _Thread_MP_Proxies_release( ISR_lock_Context *lock_context )
+{
+  _ISR_lock_Release_and_ISR_enable( &_Thread_MP_Proxies_lock, lock_context );
+}
 
 void _Thread_MP_Handler_initialization (
   uint32_t    maximum_proxies
@@ -37,10 +49,7 @@ void _Thread_MP_Handler_initialization (
   char     *proxies;
   uint32_t  i;
 
-  _Chain_Initialize_empty( &_Thread_MP_Active_proxies );
-
   if ( maximum_proxies == 0 ) {
-    _Chain_Initialize_empty( &_Thread_MP_Inactive_proxies );
     return;
   }
 
@@ -69,30 +78,67 @@ void _Thread_MP_Handler_initialization (
   }
 }
 
+#define THREAD_MP_PROXY_OF_ACTIVE_NODE( the_node ) \
+  RTEMS_CONTAINER_OF( the_node, Thread_Proxy_control, Active )
+
+static bool _Thread_MP_Proxy_equal(
+  const void        *left,
+  const RBTree_Node *right
+)
+{
+  const Objects_Id           *the_left;
+  const Thread_Proxy_control *the_right;
+
+  the_left = left;
+  the_right = THREAD_MP_PROXY_OF_ACTIVE_NODE( right );
+
+  return *the_left == the_right->Object.id;
+}
+
+static bool _Thread_MP_Proxy_less(
+  const void        *left,
+  const RBTree_Node *right
+)
+{
+  const Objects_Id           *the_left;
+  const Thread_Proxy_control *the_right;
+
+  the_left = left;
+  the_right = THREAD_MP_PROXY_OF_ACTIVE_NODE( right );
+
+  return *the_left < the_right->Object.id;
+}
+
+static void *_Thread_MP_Proxy_map( RBTree_Node *node )
+{
+  return THREAD_MP_PROXY_OF_ACTIVE_NODE( node );
+}
+
 Thread_Control *_Thread_MP_Allocate_proxy (
   States_Control  the_state
 )
 {
-  Thread_Control       *the_thread;
   Thread_Proxy_control *the_proxy;
+  ISR_lock_Context      lock_context;
 
-  the_thread = (Thread_Control *)_Chain_Get( &_Thread_MP_Inactive_proxies );
+  _Thread_MP_Proxies_acquire( &lock_context );
 
-  if ( !_Thread_Is_null( the_thread ) ) {
-    Thread_Control *executing;
+  the_proxy = (Thread_Proxy_control *)
+    _Chain_Get_unprotected( &_Thread_MP_Inactive_proxies );
+  if ( the_proxy != NULL ) {
+    Thread_Control   *executing;
+    MP_packet_Prefix *receive_packet;
+    Objects_Id        source_tid;
 
     executing = _Thread_Executing;
-    the_proxy = (Thread_Proxy_control *) the_thread;
+    receive_packet = _MPCI_Receive_server_tcb->receive_packet;
+    source_tid = receive_packet->source_tid;
 
     executing->Wait.return_code = THREAD_STATUS_PROXY_BLOCKING;
 
-    the_proxy->receive_packet = _MPCI_Receive_server_tcb->receive_packet;
-
-    the_proxy->Object.id = _MPCI_Receive_server_tcb->receive_packet->source_tid;
-
-    the_proxy->current_priority =
-      _MPCI_Receive_server_tcb->receive_packet->source_priority;
-
+    the_proxy->receive_packet = receive_packet;
+    the_proxy->Object.id = source_tid;
+    the_proxy->current_priority = receive_packet->source_priority;
     the_proxy->current_state = _States_Set( STATES_DORMANT, the_state );
 
     the_proxy->Wait.count                   = executing->Wait.count;
@@ -104,10 +150,19 @@ Thread_Control *_Thread_MP_Allocate_proxy (
 
     the_proxy->thread_queue_callout = _Thread_queue_MP_callout_do_nothing;
 
-    _Chain_Append( &_Thread_MP_Active_proxies, &the_proxy->Active );
+    _RBTree_Insert_inline(
+      &_Thread_MP_Active_proxies,
+      &the_proxy->Active,
+      &source_tid,
+      _Thread_MP_Proxy_less
+    );
 
-    return the_thread;
+    _Thread_MP_Proxies_release( &lock_context );
+
+    return (Thread_Control *) the_proxy;
   }
+
+  _Thread_MP_Proxies_release( &lock_context );
 
   _Terminate(
     INTERNAL_ERROR_CORE,
@@ -123,59 +178,42 @@ Thread_Control *_Thread_MP_Allocate_proxy (
   return NULL;
 }
 
-/*
- *  The following macro provides the offset of the Active element
- *  in the Thread_Proxy_control structure.  This is the logical
- *  equivalent of the POSITION attribute in Ada.
- */
-
-#define _Thread_MP_Proxy_Active_offset \
-     ((uint32_t)&(((Thread_Proxy_control *)0))->Active)
-
 Thread_Control *_Thread_MP_Find_proxy (
   Objects_Id  the_id
 )
 {
+  Thread_Proxy_control *the_proxy;
+  ISR_lock_Context      lock_context;
 
-  Chain_Node           *proxy_node;
-  Thread_Control       *the_thread;
-  ISR_Level             level;
+  _Thread_MP_Proxies_acquire( &lock_context );
 
-restart:
+  the_proxy = _RBTree_Find_inline(
+    &_Thread_MP_Active_proxies,
+    &the_id,
+    _Thread_MP_Proxy_equal,
+    _Thread_MP_Proxy_less,
+    _Thread_MP_Proxy_map
+  );
 
-  _ISR_Disable( level );
+  _Thread_MP_Proxies_release( &lock_context );
 
-    for (  proxy_node = _Chain_First( &_Thread_MP_Active_proxies );
-           !_Chain_Is_tail( &_Thread_MP_Active_proxies, proxy_node ) ;
-        ) {
+  return (Thread_Control *) the_proxy;
+}
 
-      the_thread = (Thread_Control *) _Addresses_Subtract_offset(
-                     proxy_node,
-                     _Thread_MP_Proxy_Active_offset
-                   );
+void _Thread_MP_Free_proxy( Thread_Control *the_thread )
+{
+  Thread_Proxy_control *the_proxy;
+  ISR_lock_Context      lock_context;
 
-      if ( _Objects_Are_ids_equal( the_thread->Object.id, the_id ) ) {
-        _ISR_Enable( level );
-        return the_thread;
-      }
+  the_proxy = (Thread_Proxy_control *) the_thread;
 
-      _ISR_Flash( level );
+  _Thread_MP_Proxies_acquire( &lock_context );
 
-      proxy_node = _Chain_Next( proxy_node );
+  _RBTree_Extract( &_Thread_MP_Active_proxies, &the_proxy->Active );
+  _Chain_Append_unprotected(
+    &_Thread_MP_Inactive_proxies,
+    &the_proxy->Object.Node
+  );
 
-      /*
-       *  A proxy which is only dormant is not in a blocking state.
-       *  Therefore, we are looking at proxy which has been moved from
-       *  active to inactive chain (by an ISR) and need to restart
-       *  the search.
-       */
-
-      if ( _States_Is_only_dormant( the_thread->current_state ) ) {
-        _ISR_Enable( level );
-        goto restart;
-      }
-    }
-
-  _ISR_Enable( level );
-  return NULL;
+  _Thread_MP_Proxies_release( &lock_context );
 }

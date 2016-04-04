@@ -431,8 +431,10 @@ typedef struct {
    */
   Objects_Id               thread_queue_id;
 
-  /** This field is used to manage the set of proxies in the system. */
-  Chain_Node               Active;
+  /**
+   * @brief This field is used to manage the set of active proxies in the system.
+   */
+  RBTree_Node              Active;
 
   /**
    * @brief Provide thread queue heads for this thread proxy.
