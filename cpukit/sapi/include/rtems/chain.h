@@ -591,18 +591,9 @@ RTEMS_INLINE_ROUTINE void rtems_chain_extract_unprotected(
  *
  *  NOTE: It disables interrupts to ensure the atomicity of the get operation.
  */
-#if defined( RTEMS_SMP )
 rtems_chain_node *rtems_chain_get(
   rtems_chain_control *the_chain
 );
-#else
-RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_get(
-  rtems_chain_control *the_chain
-)
-{
-  return _Chain_Get( the_chain );
-}
-#endif
 
 /**
  * @brief See _Chain_Get_unprotected().

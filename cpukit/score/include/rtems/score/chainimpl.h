@@ -80,22 +80,6 @@ void _Chain_Initialize(
 );
 
 /**
- *  @brief Obtain the first node on a chain.
- *
- *  This function removes the first node from @a the_chain and returns
- *  a pointer to that node.  If @a the_chain is empty, then NULL is returned.
- *
- *  @retval This method returns a pointer a node.  If a node was removed,
- *          then a pointer to that node is returned.  If @a the_chain was
- *          empty, then NULL is returned.
- *
- *  @note It disables interrupts to ensure the atomicity of the get operation.
- */
-Chain_Node *_Chain_Get(
-  Chain_Control *the_chain
-);
-
-/**
  *  @brief Append a node on the end of a chain.
  *
  *  This routine appends @a the_node onto the end of @a the_chain.
