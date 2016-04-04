@@ -14,47 +14,31 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/address.h>
 #include <rtems/rtems/partimpl.h>
-#include <rtems/score/thread.h>
-
-/*
- *  rtems_partition_return_buffer
- *
- *  This directive will return the given buffer to the specified
- *  buffer partition.
- *
- *  Input parameters:
- *    id     - partition id
- *    buffer - pointer to buffer address
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
- */
 
 rtems_status_code rtems_partition_return_buffer(
   rtems_id  id,
   void     *buffer
 )
 {
-   Partition_Control           *the_partition;
-  Objects_Locations           location;
+  Partition_Control *the_partition;
+  Objects_Locations  location;
+  ISR_lock_Context   lock_context;
 
-  the_partition = _Partition_Get( id, &location );
+  the_partition = _Partition_Get( id, &location, &lock_context );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      _Partition_Acquire_critical( the_partition, &lock_context );
+
       if ( _Partition_Is_buffer_valid( buffer, the_partition ) ) {
         _Partition_Free_buffer( the_partition, buffer );
         the_partition->number_of_used_blocks -= 1;
-        _Objects_Put( &the_partition->Object );
+        _Partition_Release( the_partition, &lock_context );
         return RTEMS_SUCCESSFUL;
       }
-      _Objects_Put( &the_partition->Object );
+
+      _Partition_Release( the_partition, &lock_context );
       return RTEMS_INVALID_ADDRESS;
 
 #if defined(RTEMS_MULTIPROCESSING)

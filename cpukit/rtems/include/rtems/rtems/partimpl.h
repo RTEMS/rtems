@@ -50,7 +50,7 @@ RTEMS_INLINE_ROUTINE void *_Partition_Allocate_buffer (
    Partition_Control *the_partition
 )
 {
-  return _Chain_Get( &the_partition->Memory );
+  return _Chain_Get_unprotected( &the_partition->Memory );
 }
 
 /**
@@ -63,7 +63,7 @@ RTEMS_INLINE_ROUTINE void _Partition_Free_buffer (
   Chain_Node        *the_buffer
 )
 {
-  _Chain_Append( &the_partition->Memory, the_buffer );
+  _Chain_Append_unprotected( &the_partition->Memory, the_buffer );
 }
 
 /**
@@ -136,6 +136,37 @@ RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Allocate ( void )
   return (Partition_Control *) _Objects_Allocate( &_Partition_Information );
 }
 
+RTEMS_INLINE_ROUTINE void _Partition_Initialize(
+  Partition_Control *the_partition,
+  void              *starting_address,
+  uint32_t           length,
+  uint32_t           buffer_size,
+  rtems_attribute    attribute_set
+)
+{
+  the_partition->starting_address      = starting_address;
+  the_partition->length                = length;
+  the_partition->buffer_size           = buffer_size;
+  the_partition->attribute_set         = attribute_set;
+  the_partition->number_of_used_blocks = 0;
+
+  _Chain_Initialize(
+    &the_partition->Memory,
+    starting_address,
+    length / buffer_size,
+    buffer_size
+  );
+
+  _ISR_lock_Initialize( &the_partition->Lock, "Partition" );
+}
+
+RTEMS_INLINE_ROUTINE void _Partition_Destroy(
+  Partition_Control *the_partition
+)
+{
+  _ISR_lock_Destroy( &the_partition->Lock );
+}
+
 /**
  *  @brief Frees a partition control block to the
  *  inactive chain of free partition control blocks.
@@ -150,24 +181,34 @@ RTEMS_INLINE_ROUTINE void _Partition_Free (
   _Objects_Free( &_Partition_Information, &the_partition->Object );
 }
 
-/**
- *  @brief Maps partition IDs to partition control blocks.
- *
- *  This function maps partition IDs to partition control blocks.
- *  If ID corresponds to a local partition, then it returns
- *  the_partition control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  If the partition ID is global and
- *  resides on a remote node, then location is set to OBJECTS_REMOTE,
- *  and the_partition is undefined.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_partition is undefined.
- */
 RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Get (
   Objects_Id         id,
-  Objects_Locations *location
+  Objects_Locations *location,
+  ISR_lock_Context  *lock_context
 )
 {
-  return (Partition_Control *)
-    _Objects_Get( &_Partition_Information, id, location );
+  return (Partition_Control *) _Objects_Get_isr_disable(
+    &_Partition_Information,
+    id,
+    location,
+    lock_context
+  );
+}
+
+RTEMS_INLINE_ROUTINE void _Partition_Acquire_critical(
+  Partition_Control *the_partition,
+  ISR_lock_Context  *lock_context
+)
+{
+  _ISR_lock_Acquire( &the_partition->Lock, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Partition_Release(
+  Partition_Control *the_partition,
+  ISR_lock_Context  *lock_context
+)
+{
+  _ISR_lock_Release_and_ISR_enable( &the_partition->Lock, lock_context );
 }
 
 /**@}*/

@@ -18,37 +18,36 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/address.h>
 #include <rtems/rtems/partimpl.h>
-#include <rtems/score/thread.h>
 
 rtems_status_code rtems_partition_get_buffer(
   rtems_id   id,
   void     **buffer
 )
 {
-   Partition_Control           *the_partition;
-  Objects_Locations           location;
-  void                       *the_buffer;
+  Partition_Control *the_partition;
+  Objects_Locations  location;
+  ISR_lock_Context   lock_context;
+  void              *the_buffer;
 
   if ( !buffer )
     return RTEMS_INVALID_ADDRESS;
 
-  the_partition = _Partition_Get( id, &location );
+  the_partition = _Partition_Get( id, &location, &lock_context );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      _Partition_Acquire_critical( the_partition, &lock_context );
+
       the_buffer = _Partition_Allocate_buffer( the_partition );
-      if ( the_buffer ) {
+      if ( the_buffer != NULL ) {
         the_partition->number_of_used_blocks += 1;
-        _Objects_Put( &the_partition->Object );
+        _Partition_Release( the_partition, &lock_context );
         *buffer = the_buffer;
         return RTEMS_SUCCESSFUL;
       }
-      _Objects_Put( &the_partition->Object );
+
+      _Partition_Release( the_partition, &lock_context );
       return RTEMS_UNSATISFIED;
 
 #if defined(RTEMS_MULTIPROCESSING)

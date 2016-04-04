@@ -20,20 +20,22 @@
 
 #include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/attrimpl.h>
-#include <rtems/score/threaddispatch.h>
 
 rtems_status_code rtems_partition_delete(
   rtems_id id
 )
 {
-   Partition_Control           *the_partition;
-  Objects_Locations           location;
+  Partition_Control *the_partition;
+  Objects_Locations  location;
+  ISR_lock_Context   lock_context;
 
   _Objects_Allocator_lock();
-  the_partition = _Partition_Get( id, &location );
+  the_partition = _Partition_Get( id, &location, &lock_context );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      _Partition_Acquire_critical( the_partition, &lock_context );
+
       if ( the_partition->number_of_used_blocks == 0 ) {
         _Objects_Close( &_Partition_Information, &the_partition->Object );
 #if defined(RTEMS_MULTIPROCESSING)
@@ -53,12 +55,14 @@ rtems_status_code rtems_partition_delete(
         }
 #endif
 
-        _Objects_Put( &the_partition->Object );
+        _Partition_Release( the_partition, &lock_context );
+        _Partition_Destroy( the_partition );
         _Partition_Free( the_partition );
         _Objects_Allocator_unlock();
         return RTEMS_SUCCESSFUL;
       }
-      _Objects_Put( &the_partition->Object );
+
+      _Partition_Release( the_partition, &lock_context );
       _Objects_Allocator_unlock();
       return RTEMS_RESOURCE_IN_USE;
 

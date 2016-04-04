@@ -34,6 +34,7 @@
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+#include <rtems/score/isrlock.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,6 +56,8 @@ extern "C" {
 typedef struct {
   /** This field is the object management portion of a Partition instance. */
   Objects_Control     Object;
+  /** This field is the lock of the Partition. */
+  ISR_LOCK_MEMBER(    Lock )
   /** This field is the physical starting address of the Partition. */
   void               *starting_address;
   /** This field is the size of the Partition in bytes. */
