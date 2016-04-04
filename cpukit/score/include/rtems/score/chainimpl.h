@@ -80,21 +80,6 @@ void _Chain_Initialize(
 );
 
 /**
- *  @brief Extract the specified node from a chain.
- *
- *  This routine extracts @a the_node from the chain on which it resides.
- *  It disables interrupts to ensure the atomicity of the extract operation.
- *
- *  @param[in] the_node is the node to be extracted
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-void _Chain_Extract(
-  Chain_Node *the_node
-);
-
-/**
  *  @brief Obtain the first node on a chain.
  *
  *  This function removes the first node from @a the_chain and returns

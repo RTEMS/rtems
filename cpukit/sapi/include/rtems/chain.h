@@ -560,18 +560,9 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_tail(
  *
  * @arg the_node specifies the node to extract
  */
-#if defined( RTEMS_SMP )
 void rtems_chain_extract(
   rtems_chain_node *the_node
 );
-#else
-RTEMS_INLINE_ROUTINE void rtems_chain_extract(
-  rtems_chain_node *the_node
-)
-{
-  _Chain_Extract( the_node );
-}
-#endif
 
 /**
  * @brief Extract the specified node from a chain (unprotected).

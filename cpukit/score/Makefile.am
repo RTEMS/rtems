@@ -346,7 +346,7 @@ libscore_a_SOURCES += src/userextaddset.c \
 
 ## STD_C_FILES
 libscore_a_SOURCES += src/chain.c src/chainappend.c \
-    src/chainextract.c src/chainget.c \
+    src/chainget.c \
     src/chainnodecount.c \
     src/debugisthreaddispatchingallowed.c \
     src/interr.c src/isr.c src/wkspace.c src/wkstringduplicate.c

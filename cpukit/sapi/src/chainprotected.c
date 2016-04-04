@@ -31,8 +31,6 @@ static void chain_release( rtems_interrupt_lock_context *lock_context )
   rtems_interrupt_lock_release( &chain_lock, lock_context );
 }
 
-#if defined( RTEMS_SMP )
-
 void rtems_chain_extract( rtems_chain_node *node )
 {
   rtems_interrupt_lock_context lock_context;
@@ -41,6 +39,8 @@ void rtems_chain_extract( rtems_chain_node *node )
   _Chain_Extract_unprotected( node );
   chain_release( &lock_context );
 }
+
+#if defined( RTEMS_SMP )
 
 rtems_chain_node *rtems_chain_get( rtems_chain_control *chain )
 {
