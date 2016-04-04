@@ -75,6 +75,7 @@ int killinfo(
   siginfo_t                   *siginfo;
   POSIX_signals_Siginfo_node  *psiginfo;
   Thread_queue_Heads          *heads;
+  ISR_lock_Context             lock_context;
 
   /*
    *  Only supported for the "calling process" (i.e. this node).
@@ -331,20 +332,27 @@ post_process_signal:
    */
   _POSIX_signals_Set_process_signals( mask );
 
+  _POSIX_signals_Acquire( &lock_context );
+
   if ( _POSIX_signals_Vectors[ sig ].sa_flags == SA_SIGINFO ) {
 
     psiginfo = (POSIX_signals_Siginfo_node *)
-               _Chain_Get( &_POSIX_signals_Inactive_siginfo );
+      _Chain_Get_unprotected( &_POSIX_signals_Inactive_siginfo );
     if ( !psiginfo ) {
+      _POSIX_signals_Release( &lock_context );
       _Thread_Enable_dispatch();
       rtems_set_errno_and_return_minus_one( EAGAIN );
     }
 
     psiginfo->Info = *siginfo;
 
-    _Chain_Append( &_POSIX_signals_Siginfo[ sig ], &psiginfo->Node );
+    _Chain_Append_unprotected(
+      &_POSIX_signals_Siginfo[ sig ],
+      &psiginfo->Node
+    );
   }
 
+  _POSIX_signals_Release( &lock_context );
   DEBUG_STEP("\n");
   _Thread_Enable_dispatch();
   return 0;
