@@ -750,20 +750,10 @@ RTEMS_INLINE_ROUTINE void rtems_chain_prepend_unprotected(
  * @retval true The chain was empty before the append.
  * @retval false The chain contained at least one node before the append.
  */
-#if defined( RTEMS_SMP )
 bool rtems_chain_append_with_empty_check(
   rtems_chain_control *chain,
   rtems_chain_node *node
 );
-#else
-RTEMS_INLINE_ROUTINE bool rtems_chain_append_with_empty_check(
-  rtems_chain_control *chain,
-  rtems_chain_node *node
-)
-{
-  return _Chain_Append_with_empty_check( chain, node );
-}
-#endif
 
 /**
  * @brief Checks if the @a chain is empty and prepends the @a node.

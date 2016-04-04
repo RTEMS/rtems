@@ -89,8 +89,6 @@ void rtems_chain_prepend(
   chain_release( &lock_context );
 }
 
-#if defined( RTEMS_SMP )
-
 bool rtems_chain_append_with_empty_check(
   rtems_chain_control *chain,
   rtems_chain_node *node
@@ -105,6 +103,8 @@ bool rtems_chain_append_with_empty_check(
 
   return was_empty;
 }
+
+#if defined( RTEMS_SMP )
 
 bool rtems_chain_prepend_with_empty_check(
   rtems_chain_control *chain,
