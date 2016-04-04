@@ -642,20 +642,10 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_get_first_unprotected(
  * NOTE: It disables interrupts to ensure the atomicity
  * of the extract operation.
  */
-#if defined( RTEMS_SMP )
 void rtems_chain_insert(
   rtems_chain_node *after_node,
   rtems_chain_node *the_node
 );
-#else
-RTEMS_INLINE_ROUTINE void rtems_chain_insert(
-  rtems_chain_node *after_node,
-  rtems_chain_node *the_node
-)
-{
-  _Chain_Insert( after_node, the_node );
-}
-#endif
 
 /**
  * @brief See _Chain_Insert_unprotected().

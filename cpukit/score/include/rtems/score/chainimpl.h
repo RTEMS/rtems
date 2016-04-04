@@ -111,27 +111,6 @@ Chain_Node *_Chain_Get(
 );
 
 /**
- *  @brief Insert a node on a chain.
- *
- *  This routine inserts @a the_node on a chain immediately following
- *  @a after_node.
- *
- *  @param[in] after_node is the pointer to the node in chain to be
- *             inserted after
- *  @param[in] the_node is the pointer to the node to be inserted
- *
- *  @note It disables interrupts to ensure the atomicity
- *  of the insert operation.
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-void _Chain_Insert(
-  Chain_Node *after_node,
-  Chain_Node *the_node
-);
-
-/**
  *  @brief Append a node on the end of a chain.
  *
  *  This routine appends @a the_node onto the end of @a the_chain.
