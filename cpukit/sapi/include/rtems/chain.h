@@ -763,20 +763,10 @@ bool rtems_chain_append_with_empty_check(
  * @retval true The chain was empty before the prepend.
  * @retval false The chain contained at least one node before the prepend.
  */
-#if defined( RTEMS_SMP )
 bool rtems_chain_prepend_with_empty_check(
   rtems_chain_control *chain,
   rtems_chain_node *node
 );
-#else
-RTEMS_INLINE_ROUTINE bool rtems_chain_prepend_with_empty_check(
-  rtems_chain_control *chain,
-  rtems_chain_node *node
-)
-{
-  return _Chain_Prepend_with_empty_check( chain, node );
-}
-#endif
 
 /**
  * @brief Tries to get the first @a node and check if the @a chain is empty

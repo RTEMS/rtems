@@ -145,25 +145,6 @@ void _Chain_Append(
 );
 
 /**
- * @brief Prepend a node and check if the chain was empty before.
- *
- * This routine prepends the_node onto the front of the_chain.
- *
- * @param[in] the_chain is the chain to be operated upon.
- * @param[in] the_node is the node to be prepended.
- *
- * @note It disables interrupts to ensure the atomicity of the append
- * operation.
- *
- * @retval true The chain was empty before.
- * @retval false The chain contained at least one node before.
- */
-bool _Chain_Prepend_with_empty_check(
-  Chain_Control *the_chain,
-  Chain_Node    *the_node
-);
-
-/**
  * @brief Get the first node and check if the chain is empty afterwards.
  *
  * This function removes the first node from the_chain and returns
