@@ -61,8 +61,6 @@ void rtems_chain_insert( rtems_chain_node *after_node, rtems_chain_node *node )
   chain_release( &lock_context );
 }
 
-#if defined( RTEMS_SMP )
-
 void rtems_chain_append(
   rtems_chain_control *chain,
   rtems_chain_node *node
@@ -74,8 +72,6 @@ void rtems_chain_append(
   _Chain_Append_unprotected( chain, node );
   chain_release( &lock_context );
 }
-
-#endif /* defined( RTEMS_SMP ) */
 
 void rtems_chain_prepend(
   rtems_chain_control *chain,

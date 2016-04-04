@@ -80,19 +80,6 @@ void _Chain_Initialize(
 );
 
 /**
- *  @brief Append a node on the end of a chain.
- *
- *  This routine appends @a the_node onto the end of @a the_chain.
- *
- *  @note It disables interrupts to ensure the atomicity of the
- *  append operation.
- */
-void _Chain_Append(
-  Chain_Control *the_chain,
-  Chain_Node    *the_node
-);
-
-/**
  * @brief Returns the node count of the chain.
  *
  * @param[in] chain The chain.

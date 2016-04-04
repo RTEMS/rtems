@@ -648,20 +648,10 @@ RTEMS_INLINE_ROUTINE void rtems_chain_insert_unprotected(
  * NOTE: It disables interrupts to ensure the atomicity of the
  * append operation.
  */
-#if defined( RTEMS_SMP )
 void rtems_chain_append(
   rtems_chain_control *the_chain,
   rtems_chain_node    *the_node
 );
-#else
-RTEMS_INLINE_ROUTINE void rtems_chain_append(
-  rtems_chain_control *the_chain,
-  rtems_chain_node    *the_node
-)
-{
-  _Chain_Append( the_chain, the_node );
-}
-#endif
 
 /**
  * @brief Append a node on the end of a chain (unprotected).

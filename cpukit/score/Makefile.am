@@ -345,7 +345,7 @@ libscore_a_SOURCES += src/userextaddset.c \
     src/userext.c src/userextremoveset.c src/userextiterate.c
 
 ## STD_C_FILES
-libscore_a_SOURCES += src/chain.c src/chainappend.c \
+libscore_a_SOURCES += src/chain.c \
     src/chainnodecount.c \
     src/debugisthreaddispatchingallowed.c \
     src/interr.c src/isr.c src/wkspace.c src/wkstringduplicate.c
