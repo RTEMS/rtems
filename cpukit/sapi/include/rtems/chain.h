@@ -780,20 +780,10 @@ bool rtems_chain_prepend_with_empty_check(
  * @retval true The chain is empty after the node removal.
  * @retval false The chain contained at least one node after the node removal.
  */
-#if defined( RTEMS_SMP )
 bool rtems_chain_get_with_empty_check(
   rtems_chain_control *chain,
   rtems_chain_node **node
 );
-#else
-RTEMS_INLINE_ROUTINE bool rtems_chain_get_with_empty_check(
-  rtems_chain_control *chain,
-  rtems_chain_node **node
-)
-{
-  return _Chain_Get_with_empty_check( chain, node );
-}
-#endif
 
 /**
  * @brief Returns the node count of the chain.

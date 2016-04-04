@@ -145,31 +145,6 @@ void _Chain_Append(
 );
 
 /**
- * @brief Get the first node and check if the chain is empty afterwards.
- *
- * This function removes the first node from the_chain and returns
- * a pointer to that node in @a the_node.  If the_chain is empty, then NULL is
- * returned.
- *
- * @param[in] the_chain is the chain to attempt to get the first node from.
- * @param[out] the_node is the first node on the chain or NULL if the chain is
- * empty.
- *
- * @note It disables interrupts to ensure the atomicity of the append
- * operation.
- *
- * @retval true The chain is empty now.
- * @retval false The chain contains at least one node now.
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-bool _Chain_Get_with_empty_check(
-  Chain_Control *the_chain,
-  Chain_Node **the_node
-);
-
-/**
  * @brief Returns the node count of the chain.
  *
  * @param[in] chain The chain.
