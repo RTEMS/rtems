@@ -42,11 +42,11 @@ extern "C" {
 
 typedef struct {
    Objects_Control         Object;
+   CORE_semaphore_Control  Semaphore;
    int                     process_shared;
    bool                    named;
    bool                    linked;
    uint32_t                open_count;
-   CORE_semaphore_Control  Semaphore;
    /*
     *  sem_t is 32-bit.  If Object_Id is 16-bit, then they are not
     *  interchangeable.  We have to be able to return a pointer to

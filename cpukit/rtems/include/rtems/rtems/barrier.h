@@ -55,10 +55,10 @@ extern "C" {
 typedef struct {
   /** This is used to manage a barrier as an object. */
   Objects_Control          Object;
-  /** This is used to specify the attributes of a barrier. */
-  rtems_attribute          attribute_set;
   /** This is used to implement the barrier. */
   CORE_barrier_Control     Barrier;
+  /** This is used to specify the attributes of a barrier. */
+  rtems_attribute          attribute_set;
 }   Barrier_Control;
 
 /**

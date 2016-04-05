@@ -53,10 +53,10 @@ extern "C" {
 typedef struct {
   /** This field is the inherited object characteristics. */
   Objects_Control             Object;
-  /** This field is the attribute set as defined by the API. */
-  rtems_attribute             attribute_set;
   /** This field is the instance of the SuperCore Message Queue. */
   CORE_message_queue_Control  message_queue;
+  /** This field is the attribute set as defined by the API. */
+  rtems_attribute             attribute_set;
 }   Message_queue_Control;
 
 /**

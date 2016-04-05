@@ -291,8 +291,13 @@ typedef struct {
     RBTree_Node RBTree;
   } Node;
 
-  /** This field is the Id of the object this thread is waiting upon. */
-  Objects_Id            id;
+#if defined(RTEMS_MULTIPROCESSING)
+  /*
+   * @brief This field is the identifier of the remote object this thread is
+   * waiting upon.
+   */
+  Objects_Id            remote_id;
+#endif
   /** This field is used to return an integer while when blocked. */
   uint32_t              count;
   /** This field is for a pointer to a user return argument. */

@@ -65,13 +65,6 @@ typedef struct {
   Objects_Control          Object;
 
   /**
-   *  This is the Classic API attribute provided to the create directive.
-   *  It is translated into behavioral attributes on the SuperCore Semaphore
-   *  or Mutex instance.
-   */
-  rtems_attribute          attribute_set;
-
-  /**
    *  This contains the memory associated with the SuperCore Semaphore or
    *  Mutex instance that provides the primary functionality of each
    *  Classic API Semaphore instance.  The structure used is dependent
@@ -97,6 +90,13 @@ typedef struct {
     MRSP_Control mrsp;
 #endif
   } Core_control;
+
+  /**
+   *  This is the Classic API attribute provided to the create directive.
+   *  It is translated into behavioral attributes on the SuperCore Semaphore
+   *  or Mutex instance.
+   */
+  rtems_attribute          attribute_set;
 }   Semaphore_Control;
 
 /**

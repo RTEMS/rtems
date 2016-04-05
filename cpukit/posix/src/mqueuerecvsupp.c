@@ -28,8 +28,14 @@
 
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
+
+THREAD_WAIT_QUEUE_OBJECT_ASSERT(
+  POSIX_Message_queue_Control,
+  Message_queue.Wait_queue
+);
 
 /*
  *  _POSIX_Message_queue_Receive_support

@@ -24,8 +24,11 @@
 #include <rtems/system.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/priorityimpl.h>
+
+THREAD_WAIT_QUEUE_OBJECT_ASSERT( POSIX_Mutex_Control, Mutex.Wait_queue );
 
 /*
  *  _POSIX_Mutex_Lock_support

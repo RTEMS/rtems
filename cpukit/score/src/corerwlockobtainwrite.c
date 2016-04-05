@@ -68,7 +68,6 @@ void _CORE_RWLock_Obtain_for_writing(
      *  We need to wait to enter this critical section
      */
 
-    executing->Wait.id          = id;
     executing->Wait.option      = CORE_RWLOCK_THREAD_WAITING_FOR_WRITE;
     executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
 

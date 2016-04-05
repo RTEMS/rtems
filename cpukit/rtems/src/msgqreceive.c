@@ -22,13 +22,18 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/coremsgimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/optionsimpl.h>
 #include <rtems/rtems/support.h>
+
+THREAD_WAIT_QUEUE_OBJECT_ASSERT(
+  Message_queue_Control,
+  message_queue.Wait_queue
+);
 
 rtems_status_code rtems_message_queue_receive(
   rtems_id        id,

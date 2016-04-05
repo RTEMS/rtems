@@ -27,9 +27,19 @@
 #include <rtems/rtems/semimpl.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/coresemimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 
 #include <rtems/score/interr.h>
+
+THREAD_WAIT_QUEUE_OBJECT_ASSERT(
+  Semaphore_Control,
+  Core_control.mutex.Wait_queue
+);
+
+THREAD_WAIT_QUEUE_OBJECT_ASSERT(
+  Semaphore_Control,
+  Core_control.semaphore.Wait_queue
+);
 
 rtems_status_code rtems_semaphore_obtain(
   rtems_id        id,

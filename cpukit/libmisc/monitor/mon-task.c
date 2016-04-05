@@ -14,26 +14,46 @@
 #include <stdio.h>
 #include <string.h>    /* memcpy() */
 
+static void
+rtems_monitor_task_wait_info(
+    rtems_monitor_task_t *canonical_task,
+    Thread_Control       *rtems_thread
+)
+{
+    ISR_lock_Context  lock_context;
+    void             *lock;
+
+    lock = _Thread_Lock_acquire( rtems_thread, &lock_context );
+
+    canonical_task->state = rtems_thread->current_state;
+    canonical_task->wait_id = _Thread_Wait_get_id( rtems_thread );
+    canonical_task->wait_queue = rtems_thread->Wait.queue;
+    canonical_task->wait_operations = rtems_thread->Wait.operations;
+
+    _Thread_Lock_release( lock, &lock_context );
+}
+
 void
 rtems_monitor_task_canonical(
     rtems_monitor_task_t  *canonical_task,
     const void            *thread_void
 )
 {
-    const Thread_Control *rtems_thread = (const Thread_Control *) thread_void;
-    RTEMS_API_Control    *api;
+    Thread_Control    *rtems_thread;
+    RTEMS_API_Control *api;
+
+    rtems_thread =
+      RTEMS_DECONST( Thread_Control *, (const Thread_Control *) thread_void );
 
     api = rtems_thread->API_Extensions[ THREAD_API_RTEMS ];
+
+    rtems_monitor_task_wait_info( canonical_task, rtems_thread );
 
     canonical_task->entry = rtems_thread->Start.Entry;
     canonical_task->stack = rtems_thread->Start.Initial_stack.area;
     canonical_task->stack_size = rtems_thread->Start.Initial_stack.size;
     canonical_task->cpu = _Per_CPU_Get_index( _Thread_Get_CPU( rtems_thread ) );
     canonical_task->priority = rtems_thread->current_priority;
-    canonical_task->state = rtems_thread->current_state;
-    canonical_task->wait_id = rtems_thread->Wait.id;
-    canonical_task->wait_queue = rtems_thread->Wait.queue;
-    canonical_task->wait_operations = rtems_thread->Wait.operations;
     canonical_task->events = api->Event.pending_events;
     /*
      * FIXME: make this optionally cpu_time_executed

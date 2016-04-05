@@ -42,8 +42,8 @@ extern "C" {
 
 typedef struct {
    Objects_Control     Object;
-   int                 process_shared;
    CORE_mutex_Control  Mutex;
+   int                 process_shared;
 }  POSIX_Mutex_Control;
 
 /** @} */

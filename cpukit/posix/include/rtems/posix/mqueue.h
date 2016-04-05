@@ -54,11 +54,11 @@ extern "C" {
 
 typedef struct {
    Objects_Control             Object;
+   CORE_message_queue_Control  Message_queue;
    int                         process_shared;
    bool                        named;
    bool                        linked;
    uint32_t                    open_count;
-   CORE_message_queue_Control  Message_queue;
    struct sigevent             notification;
 }  POSIX_Message_queue_Control;
 

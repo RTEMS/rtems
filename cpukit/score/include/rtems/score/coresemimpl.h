@@ -251,7 +251,6 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize(
     return;
   }
 
-  executing->Wait.id = id;
   _Thread_queue_Enqueue_critical(
     &the_semaphore->Wait_queue.Queue,
     the_semaphore->operations,

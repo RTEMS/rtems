@@ -47,8 +47,6 @@ void _CORE_barrier_Wait(
     }
   }
 
-  executing->Wait.id = id;
-
   _Thread_queue_Enqueue_critical(
     &the_barrier->Wait_queue.Queue,
     CORE_BARRIER_TQ_OPERATIONS,

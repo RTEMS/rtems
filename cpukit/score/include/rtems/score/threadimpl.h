@@ -1449,6 +1449,42 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_set_timeout_code(
 }
 
 /**
+ * @brief Helper structure to ensure that all objects containing a thread queue
+ * have the right layout.
+ *
+ * @see _Thread_Wait_get_id() and THREAD_WAIT_QUEUE_OBJECT_ASSERT().
+ */
+typedef struct {
+  Objects_Control      Object;
+  Thread_queue_Control Wait_queue;
+} Thread_Wait_queue_object;
+
+#define THREAD_WAIT_QUEUE_OBJECT_ASSERT( object_type, wait_queue_member ) \
+  RTEMS_STATIC_ASSERT( \
+    offsetof( object_type, wait_queue_member ) \
+      == offsetof( Thread_Wait_queue_object, Wait_queue ) \
+    && ( &( ( (object_type *) 0 )->wait_queue_member ) \
+      == ( &( (Thread_Wait_queue_object *) 0 )->Wait_queue ) ), \
+    object_type \
+  )
+
+/**
+ * @brief Returns the object identifier of the object containing the current
+ * thread wait queue.
+ *
+ * This function may be used for debug and system information purposes.  The
+ * caller must be the owner of the thread lock.
+ *
+ * @retval 0 The thread waits on no thread queue currently, the thread wait
+ *   queue is not contained in an object, or the current thread state provides
+ *   insufficient information, e.g. the thread is in the middle of a blocking
+ *   operation.
+ * @retval other The object identifier of the object containing the thread wait
+ *   queue.
+ */
+Objects_Id _Thread_Wait_get_id( const Thread_Control *the_thread );
+
+/**
  * @brief General purpose thread wait timeout.
  *
  * @param[in] watchdog The thread timer watchdog.

@@ -242,7 +242,7 @@ uint32_t   _MPCI_Send_request_packet (
     the_packet->to_convert =
        ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) / sizeof(uint32_t);
 
-    executing->Wait.id = the_packet->id;
+    executing->Wait.remote_id = the_packet->id;
 
     (*_MPCI_table->send_packet)( destination, the_packet );
 

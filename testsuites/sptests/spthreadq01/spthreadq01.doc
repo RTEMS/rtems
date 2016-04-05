@@ -12,9 +12,15 @@ test set name:  spthreadq01
 
 directives:
 
-  _Threadq_Extract
+  - THREAD_QUEUE_INITIALIZER()
+  - _Thread_queue_Extract()
+  - _Thread_Wait_get_id()
 
 concepts:
 
-+ Ensure that when an attempt is made to extract a thread which is not blocked
-  on a thread queue, that the behavior is as expected.
+ - Ensure that the thread queue initializer correctly initializes the thread
+   queue.
+ - Ensure that when an attempt is made to extract a thread which is not blocked
+   on a thread queue, that the behavior is as expected.
+ - Ensure that _Thread_Wait_get_id() returns the right object identifier for
+   various high-level objects.

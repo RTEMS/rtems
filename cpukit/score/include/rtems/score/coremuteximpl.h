@@ -265,7 +265,6 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
       executing->Wait.return_code =
         CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT;
     } else {
-      executing->Wait.id = id;
       _CORE_mutex_Seize_interrupt_blocking(
         the_mutex,
         executing,

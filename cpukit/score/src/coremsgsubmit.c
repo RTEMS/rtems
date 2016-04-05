@@ -126,7 +126,6 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
      *  it as a variable.  Doing this emphasizes how dangerous it
      *  would be to use this variable prior to here.
      */
-    executing->Wait.id = id;
     executing->Wait.return_argument_second.immutable_object = buffer;
     executing->Wait.option = (uint32_t) size;
     executing->Wait.count = submit_type;

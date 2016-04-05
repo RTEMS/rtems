@@ -27,8 +27,14 @@
 #include <limits.h>
 
 #include <rtems/system.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/posix/semaphoreimpl.h>
 #include <rtems/seterr.h>
+
+THREAD_WAIT_QUEUE_OBJECT_ASSERT(
+  POSIX_Semaphore_Control,
+  Semaphore.Wait_queue
+);
 
 int _POSIX_Semaphore_Wait_support(
   sem_t             *sem,

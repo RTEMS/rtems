@@ -75,7 +75,6 @@ rtems_status_code rtems_region_get_segment(
             _Thread_Disable_dispatch();
             _RTEMS_Unlock_allocator();
 
-            executing->Wait.id              = id;
             executing->Wait.count           = size;
             executing->Wait.return_argument = segment;
 

@@ -95,7 +95,6 @@ Thread_Control *_Thread_MP_Allocate_proxy (
 
     the_proxy->current_state = _States_Set( STATES_DORMANT, the_state );
 
-    the_proxy->Wait.id                      = executing->Wait.id;
     the_proxy->Wait.count                   = executing->Wait.count;
     the_proxy->Wait.return_argument         = executing->Wait.return_argument;
     the_proxy->Wait.return_argument_second  = executing->Wait.return_argument_second;

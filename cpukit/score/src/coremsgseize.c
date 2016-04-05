@@ -127,7 +127,6 @@ void _CORE_message_queue_Seize(
     return;
   }
 
-  executing->Wait.id = id;
   executing->Wait.return_argument_second.mutable_object = buffer;
   executing->Wait.return_argument = size_p;
   /* Wait.count will be filled in with the message priority */
