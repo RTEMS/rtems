@@ -113,10 +113,8 @@ static void _POSIX_signals_Check_signal(
   bool                is_global
 )
 {
-  siginfo_t                   siginfo_struct;
-  sigset_t                    saved_signals_unblocked;
-  Thread_Wait_information     stored_thread_wait_information;
-  Thread_Control             *executing;
+  siginfo_t siginfo_struct;
+  sigset_t  saved_signals_unblocked;
 
   if ( ! _POSIX_signals_Clear_signals( api, signo, &siginfo_struct,
                                        is_global, true, true ) )
@@ -143,16 +141,6 @@ static void _POSIX_signals_Check_signal(
   saved_signals_unblocked = api->signals_unblocked;
   api->signals_unblocked &= ~_POSIX_signals_Vectors[ signo ].sa_mask;
 
-  executing = _Thread_Get_executing();
-
-  /*
-   *  We have to save the blocking information of the current wait queue
-   *  because the signal handler may subsequently go on and put the thread
-   *  on a wait queue, for its own purposes.
-   */
-  memcpy( &stored_thread_wait_information, &executing->Wait,
-          sizeof( stored_thread_wait_information ));
-
   /*
    *  Here, the signal handler function executes
    */
@@ -168,12 +156,6 @@ static void _POSIX_signals_Check_signal(
       (*_POSIX_signals_Vectors[ signo ].sa_handler)( signo );
       break;
   }
-
-  /*
-   *  Restore the blocking information
-   */
-  memcpy( &executing->Wait, &stored_thread_wait_information,
-          sizeof( executing->Wait ));
 
   /*
    *  Restore the previous set of unblocked signals
@@ -209,6 +191,15 @@ void _POSIX_signals_Action_handler(
    */
   if ( !api )
     return;
+
+  /*
+   *  In case the executing thread is blocked or about to block on something
+   *  that uses the thread wait information, then this is a kernel bug.
+   */
+  _Assert(
+    ( _Thread_Wait_flags_get( executing )
+      & ( THREAD_WAIT_STATE_BLOCKED | THREAD_WAIT_STATE_INTEND_TO_BLOCK ) ) == 0
+  );
 
   /*
    *  If we invoke any user code, there is the possibility that
