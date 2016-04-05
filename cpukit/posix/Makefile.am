@@ -147,7 +147,7 @@ endif
 ## PSIGNAL_C_FILES
 libposix_a_SOURCES += src/psignal.c src/alarm.c src/kill.c src/killinfo.c \
     src/kill_r.c src/pause.c src/psignalclearprocesssignals.c \
-    src/psignalsetprocesssignals.c src/psignalchecksignal.c \
+    src/psignalsetprocesssignals.c \
     src/psignalclearsignals.c src/psignalunblockthread.c src/pthreadkill.c \
     src/pthreadsigmask.c src/sigaction.c
 endif

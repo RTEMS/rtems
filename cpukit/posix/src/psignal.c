@@ -107,6 +107,80 @@ Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
     (STATES_WAITING_FOR_SIGNAL|STATES_INTERRUPTIBLE_BY_SIGNAL)) == \
       (STATES_WAITING_FOR_SIGNAL|STATES_INTERRUPTIBLE_BY_SIGNAL))
 
+static void _POSIX_signals_Check_signal(
+  POSIX_API_Control  *api,
+  int                 signo,
+  bool                is_global
+)
+{
+  siginfo_t                   siginfo_struct;
+  sigset_t                    saved_signals_unblocked;
+  Thread_Wait_information     stored_thread_wait_information;
+  Thread_Control             *executing;
+
+  if ( ! _POSIX_signals_Clear_signals( api, signo, &siginfo_struct,
+                                       is_global, true, true ) )
+    return;
+
+  /*
+   *  Since we made a union of these, only one test is necessary but this is
+   *  safer.
+   */
+  #if defined(RTEMS_DEBUG)
+    assert( _POSIX_signals_Vectors[ signo ].sa_handler ||
+            _POSIX_signals_Vectors[ signo ].sa_sigaction );
+  #endif
+
+  /*
+   *  Just to prevent sending a signal which is currently being ignored.
+   */
+  if ( _POSIX_signals_Vectors[ signo ].sa_handler == SIG_IGN )
+    return;
+
+  /*
+   *  Block the signals requested in sa_mask
+   */
+  saved_signals_unblocked = api->signals_unblocked;
+  api->signals_unblocked &= ~_POSIX_signals_Vectors[ signo ].sa_mask;
+
+  executing = _Thread_Get_executing();
+
+  /*
+   *  We have to save the blocking information of the current wait queue
+   *  because the signal handler may subsequently go on and put the thread
+   *  on a wait queue, for its own purposes.
+   */
+  memcpy( &stored_thread_wait_information, &executing->Wait,
+          sizeof( stored_thread_wait_information ));
+
+  /*
+   *  Here, the signal handler function executes
+   */
+  switch ( _POSIX_signals_Vectors[ signo ].sa_flags ) {
+    case SA_SIGINFO:
+      (*_POSIX_signals_Vectors[ signo ].sa_sigaction)(
+        signo,
+        &siginfo_struct,
+        NULL        /* context is undefined per 1003.1b-1993, p. 66 */
+      );
+      break;
+    default:
+      (*_POSIX_signals_Vectors[ signo ].sa_handler)( signo );
+      break;
+  }
+
+  /*
+   *  Restore the blocking information
+   */
+  memcpy( &executing->Wait, &stored_thread_wait_information,
+          sizeof( executing->Wait ));
+
+  /*
+   *  Restore the previous set of unblocked signals
+   */
+  api->signals_unblocked = saved_signals_unblocked;
+}
+
 void _POSIX_signals_Action_handler(
   Thread_Control  *executing,
   Thread_Action   *action,

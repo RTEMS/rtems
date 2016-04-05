@@ -96,15 +96,6 @@ bool _POSIX_signals_Unblock_thread(
 );
 
 /**
- *  @brief Check POSIX signal.
- */
-bool _POSIX_signals_Check_signal(
-  POSIX_API_Control  *api,
-  int                 signo,
-  bool                is_global
-);
-
-/**
  * @brief Clear POSIX signals.
  */
 bool _POSIX_signals_Clear_signals(
