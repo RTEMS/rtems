@@ -17,8 +17,6 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#define RCSID	"$Id$"
-
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -67,8 +65,6 @@
 #ifdef AT_CHANGE
 #include "atcp.h"
 #endif
-
-static const char rcsid[] = RCSID;
 
 /* interface vars */
 char ifname[32];		/* Interface name */

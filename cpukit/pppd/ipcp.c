@@ -17,8 +17,6 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#define RCSID	"$Id$"
-
 /*
  * TODO:
  */
@@ -39,8 +37,6 @@
 #include "pathnames.h"
 
 #include <rtems/bsdnet/servers.h>
-
-static const char rcsid[] = RCSID;
 
 /* global vars */
 ipcp_options ipcp_wantoptions[NUM_PPP];	/* Options that we want to request */

@@ -17,8 +17,6 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#define RCSID	"$Id$"
-
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -43,8 +41,6 @@
 #endif
 
 #include "pppd.h"
-
-static const char rcsid[] = RCSID;
 
 static void pr_log(void *, char *, ...);
 static void logit(int, char *, va_list);

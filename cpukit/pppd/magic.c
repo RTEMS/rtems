@@ -17,8 +17,6 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#define RCSID	"$Id$"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -27,8 +25,6 @@
 
 #include "pppd.h"
 #include "magic.h"
-
-static const char rcsid[] = RCSID;
 
 /*
  * magic_init - Initialize the magic number generator.

@@ -17,8 +17,6 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#define RCSID	"$Id$"
-
 #include <ctype.h>
 #include <stdio.h>
 #include <errno.h>
@@ -52,8 +50,6 @@
 #include "ccp.h"
 
 #include <net/ppp_comp.h>
-
-static const char rcsid[] = RCSID;
 
 /*
  * Option variables and default values.

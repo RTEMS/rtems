@@ -17,8 +17,6 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#define RCSID	"$Id$"
-
 /*
  * TODO:
  */
@@ -28,8 +26,6 @@
 
 #include "pppd.h"
 #include "upap.h"
-
-static const char rcsid[] = RCSID;
 
 static bool hide_password = true;
 
