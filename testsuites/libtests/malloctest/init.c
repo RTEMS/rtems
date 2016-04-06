@@ -1375,6 +1375,9 @@ static void test_early_malloc( void )
 {
   void *p;
   char *q;
+  void *r;
+  void *s;
+  void *t;
 
   p = malloc( 1 );
   rtems_test_assert( p != NULL );
@@ -1387,6 +1390,20 @@ static void test_early_malloc( void )
   rtems_test_assert( q[0] == 0 );
 
   free( q );
+
+  r = realloc( q, 128 );
+  rtems_test_assert( r == q );
+
+  s = malloc( 1 );
+  rtems_test_assert( s != NULL );
+
+  free( s );
+
+  t = realloc( r, 256 );
+  rtems_test_assert( t != NULL );
+  rtems_test_assert( t != r );
+
+  free( t );
 }
 
 RTEMS_SYSINIT_ITEM(

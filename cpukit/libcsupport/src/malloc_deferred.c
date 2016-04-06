@@ -63,7 +63,7 @@ static void *_Malloc_Get_deferred_free( void )
   return p;
 }
 
-static void _Malloc_Process_deferred_frees( void )
+void _Malloc_Process_deferred_frees( void )
 {
   rtems_chain_node *to_be_freed;
 

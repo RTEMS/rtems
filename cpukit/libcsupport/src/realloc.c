@@ -19,53 +19,15 @@
 #endif
 
 #ifdef RTEMS_NEWLIB
-#include "malloc_p.h"
-#include <stdlib.h>
 #include <errno.h>
+#include <stdlib.h>
 #include <string.h>
 
-#include <rtems/score/sysstate.h>
-#include <rtems/score/objectimpl.h>
+#include "malloc_p.h"
 
-void *realloc(
-  void *ptr,
-  size_t size
-)
+static void *new_alloc( void *old_ptr, size_t new_size, size_t old_size )
 {
-  uintptr_t old_size;
-  char    *new_area;
-
-  /*
-   *  Do not attempt to allocate memory if in a critical section or ISR.
-   */
-
-  if (_System_state_Is_up(_System_state_Get())) {
-    if (!_Thread_Dispatch_is_enabled())
-      return (void *) 0;
-  }
-
-  /*
-   * Continue with realloc().
-   */
-  if ( !ptr )
-    return malloc( size );
-
-  if ( !size ) {
-    free( ptr );
-    return (void *) 0;
-  }
-
-  if ( !_Protected_heap_Get_block_size(RTEMS_Malloc_Heap, ptr, &old_size) ) {
-    errno = EINVAL;
-    return (void *) 0;
-  }
-
-  /*
-   *  Now resize it.
-   */
-  if ( _Protected_heap_Resize_block( RTEMS_Malloc_Heap, ptr, size ) ) {
-    return ptr;
-  }
+  void *new_ptr;
 
   /*
    *  There used to be a free on this error case but it is wrong to
@@ -73,16 +35,57 @@ void *realloc(
    *  and the C Standard.
    */
 
-  new_area = malloc( size );
-
-  if ( !new_area ) {
-    return (void *) 0;
+  new_ptr = malloc( new_size );
+  if ( new_ptr == NULL ) {
+    return NULL;
   }
 
-  memcpy( new_area, ptr, (size < old_size) ? size : old_size );
-  free( ptr );
+  memcpy( new_ptr, old_ptr, ( new_size < old_size ) ? new_size : old_size );
+  free( old_ptr );
 
-  return new_area;
+  return new_ptr;
+}
 
+void *realloc( void *ptr, size_t size )
+{
+  Heap_Control       *heap;
+  Heap_Resize_status  status;
+  uintptr_t           old_size;
+  uintptr_t           avail_size;
+
+  if ( size == 0 ) {
+    free( ptr );
+    return NULL;
+  }
+
+  if ( ptr == NULL ) {
+    return malloc( size );
+  }
+
+  heap = RTEMS_Malloc_Heap;
+
+  switch ( _Malloc_System_state() ) {
+    case MALLOC_SYSTEM_STATE_NORMAL:
+      _RTEMS_Lock_allocator();
+      _Malloc_Process_deferred_frees();
+      status = _Heap_Resize_block( heap, ptr, size, &old_size, &avail_size );
+      _RTEMS_Unlock_allocator();
+      break;
+    case MALLOC_SYSTEM_STATE_NO_PROTECTION:
+      status = _Heap_Resize_block( heap, ptr, size, &old_size, &avail_size );
+      break;
+    default:
+      return NULL;
+  }
+
+  switch ( status ) {
+    case HEAP_RESIZE_SUCCESSFUL:
+      return ptr;
+    case HEAP_RESIZE_UNSATISFIED:
+      return new_alloc( ptr, size, old_size );
+    default:
+      errno = EINVAL;
+      return NULL;
+  }
 }
 #endif
