@@ -44,7 +44,8 @@ int pthread_setschedparam(
   Objects_Locations                    location;
   int                                  rc;
   Priority_Control                     unused;
-  ISR_Level                            level;
+  ISR_lock_Context                     lock_context;
+  Priority_Control                     new_priority;
 
   /*
    *  Check all the parameters
@@ -70,10 +71,10 @@ int pthread_setschedparam(
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
+      _POSIX_Threads_Scheduler_acquire( api, &lock_context );
+
       if ( api->schedpolicy == SCHED_SPORADIC ) {
-        _ISR_Disable( level );
         _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
-        _ISR_Enable( level );
       }
 
       api->schedpolicy = policy;
@@ -84,26 +85,31 @@ int pthread_setschedparam(
       the_thread->budget_algorithm = budget_algorithm;
       the_thread->budget_callout   = budget_callout;
 
-      switch ( api->schedpolicy ) {
+      switch ( policy ) {
         case SCHED_OTHER:
         case SCHED_FIFO:
         case SCHED_RR:
           the_thread->cpu_time_budget =
             rtems_configuration_get_ticks_per_timeslice();
-
-          _Thread_Set_priority(
-            the_thread,
-            _POSIX_Priority_To_core( api->schedparam.sched_priority ),
-            &unused,
-            true
-          );
+	  new_priority =
+            _POSIX_Priority_To_core( api->schedparam.sched_priority );
           break;
 
         case SCHED_SPORADIC:
           api->ss_high_priority = api->schedparam.sched_priority;
-          _ISR_Disable( level );
-          _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
-          _ISR_Enable( level );
+          break;
+      }
+
+      _POSIX_Threads_Scheduler_release( api, &lock_context );
+
+      switch ( policy ) {
+        case SCHED_OTHER:
+        case SCHED_FIFO:
+        case SCHED_RR:
+          _Thread_Set_priority( the_thread, new_priority, &unused, true );
+          break;
+
+        case SCHED_SPORADIC:
           _POSIX_Threads_Sporadic_budget_TSR( &api->Sporadic_timer );
           break;
       }

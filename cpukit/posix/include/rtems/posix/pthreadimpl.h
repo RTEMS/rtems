@@ -223,6 +223,23 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Join_dequeue(
   );
 }
 
+RTEMS_INLINE_ROUTINE void _POSIX_Threads_Scheduler_acquire(
+  POSIX_API_Control *api,
+  ISR_lock_Context  *lock_context
+)
+{
+  _ISR_lock_ISR_disable_and_acquire( &api->Scheduler_lock, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _POSIX_Threads_Scheduler_release(
+  POSIX_API_Control *api,
+  ISR_lock_Context  *lock_context
+)
+{
+  _ISR_lock_Release_and_ISR_enable( &api->Scheduler_lock, lock_context );
+}
+
+
 /** @} */
 
 #ifdef __cplusplus

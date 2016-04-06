@@ -247,13 +247,13 @@ int pthread_create(
   #endif
 
   if ( schedpolicy == SCHED_SPORADIC ) {
-    _ISR_Disable( level );
+    _ISR_Disable_without_giant( level );
     _Watchdog_Per_CPU_insert_relative(
       &api->Sporadic_timer,
       _Per_CPU_Get(),
       _Timespec_To_ticks( &api->schedparam.sched_ss_repl_period )
     );
-    _ISR_Enable( level );
+    _ISR_Enable_without_giant( level );
   }
 
   _Thread_Enable_dispatch();

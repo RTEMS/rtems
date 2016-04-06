@@ -19,6 +19,7 @@
 #define _RTEMS_POSIX_THREADSUP_H
 
 #include <rtems/score/coresem.h>
+#include <rtems/score/isrlock.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/watchdog.h>
@@ -50,6 +51,8 @@ typedef struct {
   int                     detachstate;
   /** This is the set of threads waiting for the thread to exit. */
   Thread_queue_Control    Join_List;
+  /** This is the thread's current scheduling policy. */
+  ISR_LOCK_MEMBER(        Scheduler_lock )
   /** This is the thread's current scheduling policy. */
   int                     schedpolicy;
   /** This is the thread's current set of scheduling parameters. */

@@ -106,39 +106,37 @@ static bool _POSIX_Threads_Sporadic_budget_TSR_filter(
  */
 void _POSIX_Threads_Sporadic_budget_TSR( Watchdog_Control *watchdog )
 {
-  uint32_t            ticks;
   POSIX_API_Control  *api;
   Thread_Control     *the_thread;
-  ISR_Level           level;
+  ISR_lock_Context    lock_context;
+  Priority_Control    new_priority;
 
   api = RTEMS_CONTAINER_OF( watchdog, POSIX_API_Control, Sporadic_timer );
   the_thread = api->thread;
 
-  /* ticks is guaranteed to be at least one */
-  ticks = _Timespec_To_ticks( &api->schedparam.sched_ss_init_budget );
+  _POSIX_Threads_Scheduler_acquire( api, &lock_context );
 
-  the_thread->cpu_time_budget = ticks;
+  the_thread->cpu_time_budget =
+    _Timespec_To_ticks( &api->schedparam.sched_ss_init_budget );
+
+  _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
+  _Watchdog_Per_CPU_insert_relative(
+    &api->Sporadic_timer,
+    _Per_CPU_Get(),
+    _Timespec_To_ticks( &api->schedparam.sched_ss_repl_period )
+  );
+
+  new_priority = _POSIX_Priority_To_core( api->schedparam.sched_priority );
+
+  _POSIX_Threads_Scheduler_release( api, &lock_context );
 
   _Thread_Change_priority(
     the_thread,
-    _POSIX_Priority_To_core( api->schedparam.sched_priority ),
+    new_priority,
     NULL,
     _POSIX_Threads_Sporadic_budget_TSR_filter,
     true
   );
-
-  /* ticks is guaranteed to be at least one */
-  ticks = _Timespec_To_ticks( &api->schedparam.sched_ss_repl_period );
-
-  _Thread_Disable_dispatch();
-  _ISR_Disable( level );
-  _Watchdog_Per_CPU_insert_relative(
-    &api->Sporadic_timer,
-    _Per_CPU_Get(),
-    ticks
-  );
-  _ISR_Enable( level );
-  _Thread_Unnest_dispatch();
 }
 
 static bool _POSIX_Threads_Sporadic_budget_callout_filter(
@@ -202,6 +200,8 @@ static bool _POSIX_Threads_Create_extension(
 
   api = created->API_Extensions[ THREAD_API_POSIX ];
 
+  _ISR_lock_Initialize( &api->Scheduler_lock, "POSIX Threads Scheduler" );
+
   /* XXX check all fields are touched */
   api->thread = created;
   _POSIX_Threads_Initialize_attributes( &api->Attributes );
@@ -244,12 +244,26 @@ static bool _POSIX_Threads_Create_extension(
   return true;
 }
 
+static void _POSIX_Threads_Delete_extension(
+  Thread_Control *executing,
+  Thread_Control *deleted
+)
+{
+  POSIX_API_Control *api;
+
+  api = deleted->API_Extensions[ THREAD_API_POSIX ];
+
+  _ISR_lock_Destroy( &api->Scheduler_lock );
+  _Thread_queue_Destroy( &api->Join_List );
+}
+
 static void _POSIX_Threads_Terminate_extension(
   Thread_Control *executing
 )
 {
   Thread_Control     *the_thread;
   POSIX_API_Control  *api;
+  ISR_lock_Context    lock_context;
   void              **value_ptr;
 
   api = executing->API_Extensions[ THREAD_API_POSIX ];
@@ -265,12 +279,15 @@ static void _POSIX_Threads_Terminate_extension(
     *(void **)the_thread->Wait.return_argument = value_ptr;
   }
 
-  if ( api->schedpolicy == SCHED_SPORADIC )
-    _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
-
-  _Thread_queue_Destroy( &api->Join_List );
-
   _Thread_Enable_dispatch();
+
+  _POSIX_Threads_Scheduler_acquire( api, &lock_context );
+
+  if ( api->schedpolicy == SCHED_SPORADIC ) {
+    _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
+  }
+
+  _POSIX_Threads_Scheduler_release( api, &lock_context );
 }
 
 /*
@@ -296,7 +313,7 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
   { _POSIX_Threads_Create_extension,          /* create */
     NULL,                                     /* start */
     NULL,                                     /* restart */
-    NULL,                                     /* delete */
+    _POSIX_Threads_Delete_extension,          /* delete */
     NULL,                                     /* switch */
     NULL,                                     /* begin */
     _POSIX_Threads_Exitted_extension,         /* exitted */
