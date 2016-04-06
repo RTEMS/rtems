@@ -209,6 +209,13 @@ extern volatile time_t _Timecounter_Time_second;
 extern volatile time_t _Timecounter_Time_uptime;
 
 /**
+ * @brief The binary boot time.
+ *
+ * The boot time changes via _Timecounter_Set_clock().
+ */
+extern struct bintime _Timecounter_Boottimebin;
+
+/**
  * @brief The current timecounter.
  */
 extern struct timecounter *_Timecounter;
