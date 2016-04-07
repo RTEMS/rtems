@@ -3063,7 +3063,7 @@ static int grspw_common_init(void)
 		if (rtems_task_start(grspw_work_task, grspw_work_func, 0) !=
 		    RTEMS_SUCCESSFUL)
 			return -1;
-}
+	}
 
 	grspw_initialized = 1;
 	return 0;
