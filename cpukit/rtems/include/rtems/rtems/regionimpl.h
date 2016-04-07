@@ -67,23 +67,11 @@ RTEMS_INLINE_ROUTINE void _Region_Free (
   _Objects_Free( &_Region_Information, &the_region->Object );
 }
 
-/**
- *  @brief Region_Get
- *
- *  This function maps region IDs to region control blocks.
- *  If ID corresponds to a local region, then it returns
- *  the_region control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_region is undefined.
- */
-RTEMS_INLINE_ROUTINE Region_Control *_Region_Get (
-  Objects_Id         id,
-  Objects_Locations *location
-)
+RTEMS_INLINE_ROUTINE Region_Control *_Region_Get( Objects_Id id )
 {
   _Assert( _RTEMS_Allocator_is_owner() );
   return (Region_Control *)
-    _Objects_Get_no_protection( &_Region_Information, id, location );
+    _Objects_Get_no_protection( &_Region_Information, id );
 }
 
 /**

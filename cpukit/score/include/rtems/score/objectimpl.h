@@ -614,7 +614,6 @@ Objects_Control *_Objects_Get_local(
  *
  *  @param[in] information points to an object class information block.
  *  @param[in] id is the Id of the object whose name we are locating.
- *  @param[in] location will contain an indication of success or failure.
  *
  *  @retval This method returns one of the values from the
  *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
@@ -627,9 +626,8 @@ Objects_Control *_Objects_Get_local(
  *  objects.
  */
 Objects_Control *_Objects_Get_no_protection(
-  Objects_Information *information,
-  Objects_Id           id,
-  Objects_Locations   *location
+  const Objects_Information *information,
+  Objects_Id                 id
 );
 
 /**

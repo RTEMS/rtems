@@ -18,50 +18,33 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/options.h>
 #include <rtems/rtems/regionimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/apimutex.h>
 
 rtems_status_code rtems_region_delete(
   rtems_id id
 )
 {
-  Objects_Locations   location;
-  rtems_status_code   return_status;
-  Region_Control     *the_region;
+  rtems_status_code  status;
+  Region_Control    *the_region;
 
   _Objects_Allocator_lock();
   _RTEMS_Lock_allocator();
 
-    the_region = _Region_Get( id, &location );
-    switch ( location ) {
+  the_region = _Region_Get( id );
 
-      case OBJECTS_LOCAL:
-        if ( the_region->number_of_used_blocks != 0 )
-          return_status = RTEMS_RESOURCE_IN_USE;
-        else {
-          _Objects_Close( &_Region_Information, &the_region->Object );
-          _Region_Free( the_region );
-          return_status = RTEMS_SUCCESSFUL;
-        }
-        break;
-
-#if defined(RTEMS_MULTIPROCESSING)
-      case OBJECTS_REMOTE:        /* this error cannot be returned */
-#endif
-
-      case OBJECTS_ERROR:
-      default:
-        return_status = RTEMS_INVALID_ID;
-        break;
+  if ( the_region != NULL ) {
+    if ( the_region->number_of_used_blocks != 0 ) {
+      status = RTEMS_RESOURCE_IN_USE;
+    } else {
+      _Objects_Close( &_Region_Information, &the_region->Object );
+      _Region_Free( the_region );
+      status = RTEMS_SUCCESSFUL;
     }
+  } else {
+    status = RTEMS_INVALID_ID;
+  }
 
   _RTEMS_Unlock_allocator();
   _Objects_Allocator_unlock();
-
-  return return_status;
+  return status;
 }

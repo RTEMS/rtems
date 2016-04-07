@@ -28,7 +28,7 @@ _Objects_Get_next(
     Objects_Id          *next_id_p
 )
 {
-    Objects_Control *object;
+    Objects_Control *the_object;
     Objects_Id       next_id;
 
     if ( !information )
@@ -58,12 +58,13 @@ _Objects_Get_next(
         }
 
         /* try to grab one */
-        object = _Objects_Get_no_protection(information, next_id, location_p);
+        the_object = _Objects_Get_no_protection( information, next_id );
 
         next_id++;
 
-    } while (*location_p != OBJECTS_LOCAL);
+    } while ( the_object == NULL );
 
+    *location_p = OBJECTS_LOCAL;
     *next_id_p = next_id;
-    return object;
+    return the_object;
 }
