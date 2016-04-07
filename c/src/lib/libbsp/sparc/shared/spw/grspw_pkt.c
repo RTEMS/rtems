@@ -376,7 +376,8 @@ struct grspw_dma_priv {
 	int index;			/* DMA Channel Index @ GRSPW core */
 	int open;			/* DMA Channel opened by user */
 	int started;			/* DMA Channel activity (start|stop) */
-	rtems_id sem_dma;		/* DMA Channel Semaphore */
+	rtems_id sem_rxdma;		/* DMA Channel RX Semaphore */
+	rtems_id sem_txdma;		/* DMA Channel TX Semaphore */
 	struct grspw_dma_stats stats;	/* DMA Channel Statistics */
 	struct grspw_dma_config cfg;	/* DMA Channel Configuration */
 
@@ -1657,18 +1658,27 @@ void *grspw_dma_open(void *d, int chan_no)
 	dma->cfg.flags = DMAFLAG_NO_SPILL;
 
 	/* set to NULL so that error exit works correctly */
-	dma->sem_dma = RTEMS_ID_NONE;
+	dma->sem_rxdma = RTEMS_ID_NONE;
+	dma->sem_txdma = RTEMS_ID_NONE;
 	dma->rx_wait.sem_wait = RTEMS_ID_NONE;
 	dma->tx_wait.sem_wait = RTEMS_ID_NONE;
 	dma->rx_ring_base = NULL;
 
 	/* DMA Channel Semaphore created with count = 1 */
 	if (rtems_semaphore_create(
-	    rtems_build_name('S', 'D', '0' + priv->index, '0' + chan_no), 1,
+	    rtems_build_name('S', 'D', '0' + priv->index, '0' + chan_no*2), 1,
 	    RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | \
 	    RTEMS_NO_INHERIT_PRIORITY | RTEMS_LOCAL | \
-	    RTEMS_NO_PRIORITY_CEILING, 0, &dma->sem_dma) != RTEMS_SUCCESSFUL) {
-		dma->sem_dma = RTEMS_ID_NONE;
+	    RTEMS_NO_PRIORITY_CEILING, 0, &dma->sem_rxdma) != RTEMS_SUCCESSFUL) {
+		dma->sem_rxdma = RTEMS_ID_NONE;
+		goto err;
+	}
+	if (rtems_semaphore_create(
+	    rtems_build_name('S', 'D', '0' + priv->index, '0' + chan_no*2+1), 1,
+	    RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | \
+	    RTEMS_NO_INHERIT_PRIORITY | RTEMS_LOCAL | \
+	    RTEMS_NO_PRIORITY_CEILING, 0, &dma->sem_txdma) != RTEMS_SUCCESSFUL) {
+		dma->sem_txdma = RTEMS_ID_NONE;
 		goto err;
 	}
 
@@ -1710,8 +1720,10 @@ out:
 
 	/* initialization error happended */
 err:
-	if (dma->sem_dma != RTEMS_ID_NONE)
-		rtems_semaphore_delete(dma->sem_dma);
+	if (dma->sem_rxdma != RTEMS_ID_NONE)
+		rtems_semaphore_delete(dma->sem_rxdma);
+	if (dma->sem_txdma != RTEMS_ID_NONE)
+		rtems_semaphore_delete(dma->sem_txdma);
 	if (dma->rx_wait.sem_wait != RTEMS_ID_NONE)
 		rtems_semaphore_delete(dma->rx_wait.sem_wait);
 	if (dma->tx_wait.sem_wait != RTEMS_ID_NONE)
@@ -1764,15 +1776,21 @@ int grspw_dma_close(void *c)
 		return 0;
 
 	/* Take device lock - Wait until we get semaphore */
-	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	if (rtems_semaphore_obtain(dma->sem_rxdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
 		return -1;
+	if (rtems_semaphore_obtain(dma->sem_txdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	    != RTEMS_SUCCESSFUL) {
+	    	rtems_semaphore_release(dma->sem_rxdma);
+		return -1;
+	}
 
 	/* Can not close active DMA channel. User must stop DMA and make sure
 	 * no threads are active/blocked within driver.
 	 */
 	if (dma->started || dma->rx_wait.waiting || dma->tx_wait.waiting) {
-		rtems_semaphore_release(dma->sem_dma);
+	    	rtems_semaphore_release(dma->sem_txdma);
+		rtems_semaphore_release(dma->sem_rxdma);
 		return 1;
 	}
 
@@ -1780,8 +1798,10 @@ int grspw_dma_close(void *c)
 	rtems_semaphore_delete(dma->rx_wait.sem_wait);
 	rtems_semaphore_delete(dma->tx_wait.sem_wait);
 	/* Release and delete lock. Operations requiring lock will fail */
-	rtems_semaphore_delete(dma->sem_dma);
-	dma->sem_dma = RTEMS_ID_NONE;
+	rtems_semaphore_delete(dma->sem_txdma);
+	rtems_semaphore_delete(dma->sem_rxdma);
+	dma->sem_txdma = RTEMS_ID_NONE;
+	dma->sem_rxdma = RTEMS_ID_NONE;
 
 	/* Free memory */
 	if (dma->rx_ring_base)
@@ -1806,7 +1826,7 @@ int grspw_dma_tx_send(void *c, int opts, struct grspw_list *pkts, int count)
 	int ret;
 
 	/* Take DMA channel lock */
-	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	if (rtems_semaphore_obtain(dma->sem_txdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
 		return -1;
 
@@ -1834,7 +1854,7 @@ int grspw_dma_tx_send(void *c, int opts, struct grspw_list *pkts, int count)
 
 out:
 	/* Unlock DMA channel */
-	rtems_semaphore_release(dma->sem_dma);
+	rtems_semaphore_release(dma->sem_txdma);
 
 	return ret;
 }
@@ -1846,7 +1866,7 @@ int grspw_dma_tx_reclaim(void *c, int opts, struct grspw_list *pkts, int *count)
 	int cnt, started;
 
 	/* Take DMA channel lock */
-	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	if (rtems_semaphore_obtain(dma->sem_txdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
 		return -1;
 
@@ -1891,7 +1911,7 @@ int grspw_dma_tx_reclaim(void *c, int opts, struct grspw_list *pkts, int *count)
 		grspw_tx_schedule_send(dma);
 
 	/* Unlock DMA channel */
-	rtems_semaphore_release(dma->sem_dma);
+	rtems_semaphore_release(dma->sem_txdma);
 
 	return (~started) & 1; /* signal DMA has been stopped */
 }
@@ -1908,7 +1928,7 @@ void grspw_dma_tx_count(void *c, int *send, int *sched, int *sent, int *hw)
 	 * and that DMA descriptor table and tx_ring_tail is not being updated
 	 * during HW counter processing in this function.
 	 */
-	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	if (rtems_semaphore_obtain(dma->sem_txdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
 		return;
 
@@ -1938,7 +1958,7 @@ void grspw_dma_tx_count(void *c, int *send, int *sched, int *sent, int *hw)
 	}
 
 	/* Unlock DMA channel */
-	rtems_semaphore_release(dma->sem_dma);
+	rtems_semaphore_release(dma->sem_txdma);
 }
 
 static inline int grspw_tx_wait_eval(struct grspw_dma_priv *dma)
@@ -1979,7 +1999,7 @@ int grspw_dma_tx_wait(void *c, int send_cnt, int op, int sent_cnt, int timeout)
 check_condition:
 
 	/* Take DMA channel lock */
-	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	if (rtems_semaphore_obtain(dma->sem_txdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
 		return -1;
 
@@ -2008,7 +2028,7 @@ check_condition:
 		dma->tx_wait.waiting = 1;
 
 		/* Release DMA channel lock */
-		rtems_semaphore_release(dma->sem_dma);
+		rtems_semaphore_release(dma->sem_txdma);
 
 		/* Try to take Wait lock, if this fail link may have gone down
 		 * or user stopped this DMA channel
@@ -2039,7 +2059,7 @@ check_condition:
 
 out_release:
 	/* Unlock DMA channel */
-	rtems_semaphore_release(dma->sem_dma);
+	rtems_semaphore_release(dma->sem_txdma);
 
 out:
 	if (initialized)
@@ -2054,7 +2074,7 @@ int grspw_dma_rx_recv(void *c, int opts, struct grspw_list *pkts, int *count)
 	int cnt, started;
 
 	/* Take DMA channel lock */
-	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	if (rtems_semaphore_obtain(dma->sem_rxdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
 		return -1;
 
@@ -2099,7 +2119,7 @@ int grspw_dma_rx_recv(void *c, int opts, struct grspw_list *pkts, int *count)
 		grspw_rx_schedule_ready(dma);
 
 	/* Unlock DMA channel */
-	rtems_semaphore_release(dma->sem_dma);
+	rtems_semaphore_release(dma->sem_rxdma);
 
 	return (~started) & 1;
 }
@@ -2110,7 +2130,7 @@ int grspw_dma_rx_prepare(void *c, int opts, struct grspw_list *pkts, int count)
 	int ret;
 
 	/* Take DMA channel lock */
-	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	if (rtems_semaphore_obtain(dma->sem_rxdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
 		return -1;
 
@@ -2138,7 +2158,7 @@ int grspw_dma_rx_prepare(void *c, int opts, struct grspw_list *pkts, int count)
 	ret = 0;
 out:
 	/* Unlock DMA channel */
-	rtems_semaphore_release(dma->sem_dma);
+	rtems_semaphore_release(dma->sem_rxdma);
 
 	return ret;
 }
@@ -2155,7 +2175,7 @@ void grspw_dma_rx_count(void *c, int *ready, int *sched, int *recv, int *hw)
 	 * and that DMA descriptor table and rx_ring_tail is not being updated
 	 * during HW counter processing in this function.
 	 */
-	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	if (rtems_semaphore_obtain(dma->sem_rxdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
 		return;
 
@@ -2185,7 +2205,7 @@ void grspw_dma_rx_count(void *c, int *ready, int *sched, int *recv, int *hw)
 	}
 
 	/* Unlock DMA channel */
-	rtems_semaphore_release(dma->sem_dma);
+	rtems_semaphore_release(dma->sem_rxdma);
 }
 
 static inline int grspw_rx_wait_eval(struct grspw_dma_priv *dma)
@@ -2226,7 +2246,7 @@ int grspw_dma_rx_wait(void *c, int recv_cnt, int op, int ready_cnt, int timeout)
 check_condition:
 
 	/* Take DMA channel lock */
-	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	if (rtems_semaphore_obtain(dma->sem_rxdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
 		return -1;
 
@@ -2255,7 +2275,7 @@ check_condition:
 		dma->rx_wait.waiting = 1;
 
 		/* Release channel lock */
-		rtems_semaphore_release(dma->sem_dma);
+		rtems_semaphore_release(dma->sem_rxdma);
 
 		/* Try to take Wait lock, if this fail link may have gone down
 		 * or user stopped this DMA channel
@@ -2286,7 +2306,7 @@ check_condition:
 
 out_release:
 	/* Unlock DMA channel */
-	rtems_semaphore_release(dma->sem_dma);
+	rtems_semaphore_release(dma->sem_rxdma);
 
 out:
 	if (initialized)
@@ -2481,13 +2501,19 @@ void grspw_dma_stop(void *c)
 		return;
 
 	/* Take DMA Channel lock */
-	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	if (rtems_semaphore_obtain(dma->sem_rxdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
 	    != RTEMS_SUCCESSFUL)
 		return;
+	if (rtems_semaphore_obtain(dma->sem_txdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+	    != RTEMS_SUCCESSFUL) {
+		rtems_semaphore_release(dma->sem_rxdma);
+		return;
+	}
 
 	grspw_dma_stop_locked(dma);
 
-	rtems_semaphore_release(dma->sem_dma);
+	rtems_semaphore_release(dma->sem_txdma);
+	rtems_semaphore_release(dma->sem_rxdma);
 }
 
 /* Do general work, invoked indirectly from ISR */
@@ -2519,24 +2545,19 @@ static void grspw_work_dma_func(struct grspw_dma_priv *dma)
 	tx_cond_true = 0;
 	dma->stats.irq_cnt++;
 
-	/* Take DMA channel lock */
-	if (rtems_semaphore_obtain(dma->sem_dma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
-	    != RTEMS_SUCCESSFUL)
-		return;
-
-	/* If closing DMA channel or just shut down */
-	if (dma->started == 0)
-		goto out;
-
 	/* Look at cause we were woken up and clear source */
 	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+	if (dma->started == 0) {
+		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+		return;
+	}
 	ctrl = REG_READ(&dma->regs->ctrl);
 
 	/* Read/Write DMA error ? */
 	if (ctrl & GRSPW_DMA_STATUS_ERROR) {
 		/* DMA error -> Stop DMA channel (both RX and TX) */
 		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
-		grspw_dma_stop_locked(dma);
+		grspw_dma_stop(dma);
 	} else if (ctrl & (GRSPW_DMACTRL_PR | GRSPW_DMACTRL_PS)) {
 		/* DMA has finished a TX/RX packet */
 		ctrl &= ~GRSPW_DMACTRL_AT;
@@ -2550,29 +2571,48 @@ static void grspw_work_dma_func(struct grspw_dma_priv *dma)
 		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 		if (ctrl & GRSPW_DMACTRL_PR) {
 			/* Do RX Work */
+
+			/* Take DMA channel RX lock */
+			if (rtems_semaphore_obtain(dma->sem_rxdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			    != RTEMS_SUCCESSFUL)
+				return;
+
 			dma->stats.rx_work_cnt++;
 			grspw_rx_process_scheduled(dma);
-			dma->stats.rx_work_enabled += grspw_rx_schedule_ready(dma);
-			/* Check to see if condition for waking blocked USER
-		 	 * task is fullfilled.
-			 */
-			if (dma->rx_wait.waiting)
-				rx_cond_true = grspw_rx_wait_eval(dma);
+			if (dma->started) {
+				dma->stats.rx_work_enabled +=
+					grspw_rx_schedule_ready(dma);
+				/* Check to see if condition for waking blocked
+			 	 * USER task is fullfilled.
+				 */
+				if (dma->rx_wait.waiting)
+					rx_cond_true = grspw_rx_wait_eval(dma);
+			}
+			rtems_semaphore_release(dma->sem_rxdma);
 		}
 		if (ctrl & GRSPW_DMACTRL_PS) {
 			/* Do TX Work */
+
+			/* Take DMA channel TX lock */
+			if (rtems_semaphore_obtain(dma->sem_txdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			    != RTEMS_SUCCESSFUL)
+				return;
+
 			dma->stats.tx_work_cnt++;
 			grspw_tx_process_scheduled(dma);
-			dma->stats.tx_work_enabled += grspw_tx_schedule_send(dma);
-			if (dma->tx_wait.waiting)
-				tx_cond_true = grspw_tx_wait_eval(dma);
+			if (dma->started) {
+				dma->stats.tx_work_enabled +=
+					grspw_tx_schedule_send(dma);
+				/* Check to see if condition for waking blocked
+			 	 * USER task is fullfilled.
+				 */
+				if (dma->tx_wait.waiting)
+					tx_cond_true = grspw_tx_wait_eval(dma);
+			}
+			rtems_semaphore_release(dma->sem_txdma);
 		}
 	} else
 		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
-
-out:
-	/* Release lock */
-	rtems_semaphore_release(dma->sem_dma);
 
 	if (rx_cond_true)
 		rtems_semaphore_release(dma->rx_wait.sem_wait);
