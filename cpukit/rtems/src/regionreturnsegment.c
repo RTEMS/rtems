@@ -18,14 +18,6 @@
 #include "config.h"
 #endif
 
-#ifdef RTEMS_REGION_SHRED_ON_FREE
-#include <string.h>
-
-#ifndef RTEMS_REGION_FREE_SHRED_PATTERN
-#define RTEMS_REGION_FREE_SHRED_PATTERN 0x00
-#endif
-#endif
-
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
@@ -41,9 +33,6 @@ rtems_status_code rtems_region_return_segment(
 {
   Objects_Locations        location;
   rtems_status_code        return_status;
-#ifdef RTEMS_REGION_FREE_SHRED_PATTERN
-  uint32_t                 size;
-#endif
   int                      status;
   Region_Control          *the_region;
 
@@ -53,12 +42,6 @@ rtems_status_code rtems_region_return_segment(
     switch ( location ) {
 
       case OBJECTS_LOCAL:
-#ifdef RTEMS_REGION_FREE_SHRED_PATTERN
-        if ( !_Heap_Size_of_alloc_area( &the_region->Memory, segment, &size ) )
-          return_status = RTEMS_INVALID_ADDRESS;
-        else {
-          memset( segment, (RTEMS_REGION_FREE_SHRED_PATTERN & 0xFF), size );
-#endif
           status = _Region_Free_segment( the_region, segment );
 
           if ( !status )
@@ -70,9 +53,6 @@ rtems_status_code rtems_region_return_segment(
 
             return RTEMS_SUCCESSFUL;
           }
-#ifdef RTEMS_REGION_FREE_SHRED_PATTERN
-        }
-#endif
         break;
 
 #if defined(RTEMS_MULTIPROCESSING)
