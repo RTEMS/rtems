@@ -33,6 +33,7 @@
 #include <limits.h>
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <inttypes.h>
 #include <pthread.h>

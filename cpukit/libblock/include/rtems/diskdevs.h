@@ -17,7 +17,6 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/chain.h>
-#include <stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {
