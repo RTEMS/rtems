@@ -26,6 +26,7 @@
  */
 #undef free
 #undef malloc
+#undef random
 #include <stdlib.h>
 
 /*
