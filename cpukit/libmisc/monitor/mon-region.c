@@ -19,13 +19,14 @@ rtems_monitor_region_canonical(
 )
 {
     const Region_Control *rtems_region = (const Region_Control *) region_void;
+    const Heap_Control *heap = &rtems_region->Memory;
 
     canonical_region->attribute = rtems_region->attribute_set;
     canonical_region->start_addr = rtems_region->starting_address;
     canonical_region->length = rtems_region->length;
     canonical_region->page_size = rtems_region->page_size;
     canonical_region->max_seg_size = rtems_region->maximum_segment_size;
-    canonical_region->used_blocks = rtems_region->number_of_used_blocks;
+    canonical_region->used_blocks = heap->stats.used_blocks;
 }
 
 

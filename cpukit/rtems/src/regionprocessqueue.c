@@ -64,7 +64,6 @@ void _Region_Process_queue(
       break;
 
     *(void **)the_thread->Wait.return_argument = the_segment;
-    the_region->number_of_used_blocks += 1;
     _Thread_queue_Extract( the_thread );
     the_thread->Wait.return_code = RTEMS_SUCCESSFUL;
   }

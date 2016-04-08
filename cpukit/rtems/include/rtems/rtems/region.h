@@ -65,7 +65,6 @@ typedef struct {
   uintptr_t             page_size;             /* in bytes               */
   uintptr_t             maximum_segment_size;  /* in bytes               */
   rtems_attribute       attribute_set;
-  uint32_t              number_of_used_blocks; /* blocks allocated       */
   Heap_Control          Memory;
 }  Region_Control;
 

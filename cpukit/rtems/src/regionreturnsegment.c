@@ -34,8 +34,6 @@ rtems_status_code rtems_region_return_segment(
   }
 
   if ( _Region_Free_segment( the_region, segment ) ) {
-    the_region->number_of_used_blocks -= 1;
-
     /* Unlocks allocator */
     _Region_Process_queue( the_region );
     return RTEMS_SUCCESSFUL;

@@ -58,7 +58,6 @@ rtems_status_code rtems_region_get_segment(
     the_segment = _Region_Allocate_segment( the_region, size );
 
     if ( the_segment != NULL ) {
-      the_region->number_of_used_blocks += 1;
       *segment = the_segment;
       status = RTEMS_SUCCESSFUL;
     } else if ( _Options_Is_no_wait( option_set ) ) {

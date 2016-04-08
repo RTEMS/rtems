@@ -36,7 +36,9 @@ rtems_status_code rtems_region_delete(
     return RTEMS_INVALID_ID;
   }
 
-  if ( the_region->number_of_used_blocks != 0 ) {
+  _Heap_Protection_free_all_delayed_blocks( &the_region->Memory );
+
+  if ( the_region->Memory.stats.used_blocks != 0 ) {
     status = RTEMS_RESOURCE_IN_USE;
   } else {
     _Objects_Close( &_Region_Information, &the_region->Object );
