@@ -1,5 +1,5 @@
 /*
- *  This file is an extension of the generic console driver 
+ *  This file is an extension of the generic console driver
  *  shell used by all console drivers using libchip, it contains
  *  the console_control routine,  This bsp needs its own version
  *  of this method to handle the keyboard and mouse as a single
@@ -44,27 +44,28 @@ rtems_device_driver console_control(
 )
 {
 #if BSP_ENABLE_VGA
-  rtems_libio_ioctl_args_t *args = arg;
+  if (minor == 0) {
+    rtems_libio_ioctl_args_t *args = arg;
 
-  switch (args->command) {
-    default:
-      if( vt_ioctl( args->command, (unsigned long)args->buffer ) != 0 )
-        return rtems_termios_ioctl (arg);
-      break;
+    switch (args->command) {
+      default:
+        if( vt_ioctl( args->command, (unsigned long)args->buffer ) != 0 )
+          return rtems_termios_ioctl (arg);
+        break;
 
-    case MW_UID_REGISTER_DEVICE:
-      printk( "SerialMouse: reg=%s\n", args->buffer );
-      register_kbd_msg_queue( args->buffer, 0 );
-      break;
+      case MW_UID_REGISTER_DEVICE:
+        printk( "SerialMouse: reg=%s\n", args->buffer );
+        register_kbd_msg_queue( args->buffer, 0 );
+        break;
 
-    case MW_UID_UNREGISTER_DEVICE:
-      unregister_kbd_msg_queue( 0 );
-      break;
+      case MW_UID_UNREGISTER_DEVICE:
+        unregister_kbd_msg_queue( 0 );
+        break;
+    }
+
+    args->ioctl_return = 0;
+    return RTEMS_SUCCESSFUL;
   }
- 
-  args->ioctl_return = 0;
-  return RTEMS_SUCCESSFUL;
-#else
-  return rtems_termios_ioctl (arg);
 #endif
+  return rtems_termios_ioctl (arg);
 }

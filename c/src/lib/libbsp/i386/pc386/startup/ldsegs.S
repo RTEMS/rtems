@@ -110,7 +110,6 @@ next_step:
 	movw ax, fs
 	movw ax, gs
 
-#if (BSP_IS_EDISON == 0)
 /*---------------------------------------------------------------------+
 | Now we have to reprogram the interrupts :-(. We put them right after
 | the intel-reserved hardware interrupts, at int 0x20-0x2F. There they
@@ -121,6 +120,7 @@ next_step:
 | it isn't fun.
 +---------------------------------------------------------------------*/
 
+#if (BSP_IS_EDISON == 0)
 	movb	$0x11, al		/* initialization sequence          */
 	outb	al, $0x20		/* send it to 8259A-1               */
 	call	SYM(pc386_delay)

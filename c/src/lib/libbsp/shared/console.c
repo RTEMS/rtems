@@ -34,6 +34,45 @@ rtems_device_minor_number   Console_Port_Minor  = 0;
 static bool                 console_initialized = false;
 
 /*
+ *  console_find_console_entry
+ *
+ *  This method is used to search the console entries for a
+ *  specific device entry.
+ */
+console_tbl* console_find_console_entry(
+  const char                *match,
+  size_t                     length,
+  rtems_device_minor_number *match_minor
+)
+{
+  rtems_device_minor_number  minor;
+
+  /*
+   * The the match name is NULL get the minor number entry.
+   */
+  if (match == NULL) {
+    if (*match_minor < Console_Port_Count)
+      return Console_Port_Tbl[*match_minor];
+    return NULL;
+  }
+
+  for (minor=0; minor < Console_Port_Count ; minor++) {
+    console_tbl  *cptr = Console_Port_Tbl[minor];
+
+    /*
+     * Console table entries include /dev/ prefix, device names passed
+     * in on command line do not.
+     */
+    if ( !strncmp( cptr->sDeviceName, match, length ) ) {
+      *match_minor = minor;
+      return cptr;
+    }
+  }
+
+  return NULL;
+}
+
+/*
  *  console_initialize_data
  *
  *  This method is used to initialize the table of pointers to the
@@ -278,9 +317,7 @@ rtems_device_driver console_initialize(
    * must still initialize pointers for Console_Port_Tbl and
    * Console_Port_Data.
    */
-  if ( !Console_Port_Tbl ) {
-    console_initialize_data();
-  }
+  console_initialize_data();
 
   /*
    *  console_initialize has been invoked so it is now too late to

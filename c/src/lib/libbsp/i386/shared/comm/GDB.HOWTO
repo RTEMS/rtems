@@ -1,30 +1,31 @@
-1. Add GDB initilization to your target's code:
+i386/pc386 GDB Stub
 
-a) include file:
+The i386 GDB stub has been updated to use the libchip drivers for the
+NS16550. Make sure you have detect the device and you have added a console
+entry. On the PC the legacy and PCI boards are supported.
 
-#include <uart.h>
+This GDB stub glue code is specific to the UART protocol defined in libbchip.
 
-b) declare this variable:   
+The pc386 BSP has boot command line options to manage GDB support.
 
-extern int BSPConsolePort;
+a) Find the minor number of the console device:
 
-c) To start-up GDB, run this:
+  #include <console_private.h>
 
- /* Init GDB glue  */
+  rtems_device_minor_number minor = 0;
 
-  if(BSPConsolePort != BSP_UART_COM2)
-    {
-      /*
-       * If com2 is not used as console use it for
-       * debugging
-       */
-      i386_stub_glue_init(BSP_UART_COM2);
-    }
-  else
-    {
-      /* Otherwise use com1 */
-      i386_stub_glue_init(BSP_UART_COM1);
-    }
+  if (console_find_console_entry("/dev/com1",
+                                 strlen("/dev/com1") - 1, &minor) == NULL)
+    error("driver not found\n");
+
+Note, this call is part of the private console API and may change.
+
+b) To start GDB stub, run this:
+
+  #include <bsp.h>
+
+  /* Init GDB glue  */
+  i386_stub_glue_init(minor);
 
   /* Init GDB stub itself */
   set_debug_traps();
@@ -39,54 +40,45 @@ c) To start-up GDB, run this:
   /* Put breakpoint in */
   breakpoint();
 
-d) This is all you need to do for the target.
+c) To run use GDB:
 
-2. Edit cmds: specify path to current directory and device used for debugging
-   example of cmds is attached below.  Make sure your paths are correct.
-3. type 'make'
-4. Boot o-pc386/<test>.exe on target computer, where <test> has the code from step 1. ( I modified and recompiled base_sp as the <test> )
-5. run 'i396-rtems-gdb --nx --command=./cmds o-pc386/<test>.coff
+  $ i386-rtems4.12-gdb hello.exe
+  GNU gdb (GDB) 7.11
+  Copyright (C) 2016 Free Software Foundation, Inc.
+  License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+  This is free software: you are free to change and redistribute it.
+  There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+  and "show warranty" for details.
+  This GDB was configured as "--host=x86_64-freebsd10.1 --target=i386-rtems4.12".
+  Type "show configuration" for configuration details.
+  For bug reporting instructions, please see:
+  <http://www.gnu.org/software/gdb/bugs/>.
+  Find the GDB manual and other documentation resources online at:
+  <http://www.gnu.org/software/gdb/documentation/>.
+  For help, type "help".
+  Type "apropos word" to search for commands related to "word"...
+  Reading symbols from hello.exe...done.
+  (gdb) target remote /dev/cuaU5
+  Remote debugging using /dev/cuaU5
+  0x00103fda in breakpoint () at i386-stub.c:1004
+  1004          BREAKPOINT ();
+  (gdb) b Init
+  Breakpoint 1 at 0x1001e0: file init.c, line 29.
+  (gdb) c
+  Continuing.
 
-=========================== example cmds ==============================
-/usr1/rtems/work/rtems/cpukit/ada
-/usr1/rtems/work/rtems/cpukit/libblock/src
-/usr1/rtems/work/rtems/cpukit/libcsupport/src
-/usr1/rtems/work/rtems/cpukit/libfs/src/dosfs
-/usr1/rtems/work/rtems/cpukit/libfs/src/imfs
-/usr1/rtems/work/rtems/cpukit/libmisc/capture
-/usr1/rtems/work/rtems/cpukit/libmisc/cpuuse
-/usr1/rtems/work/rtems/cpukit/libmisc/devnull
-/usr1/rtems/work/rtems/cpukit/libmisc/dummy
-/usr1/rtems/work/rtems/cpukit/libmisc/dumpbuf
-/usr1/rtems/work/rtems/cpukit/libmisc/monitor
-/usr1/rtems/work/rtems/cpukit/libmisc/mw-fb
-/usr1/rtems/work/rtems/cpukit/libmisc/rtmonuse
-/usr1/rtems/work/rtems/cpukit/libmisc/serdbg
-/usr1/rtems/work/rtems/cpukit/libmisc/shell
-/usr1/rtems/work/rtems/cpukit/libmisc/stackchk
-/usr1/rtems/work/rtems/cpukit/libmisc/untar
-/usr1/rtems/work/rtems/cpukit/libnetworking/arpa
-/usr1/rtems/work/rtems/cpukit/libnetworking/kern
-/usr1/rtems/work/rtems/cpukit/libnetworking/lib
-/usr1/rtems/work/rtems/cpukit/libnetworking/libc
-/usr1/rtems/work/rtems/cpukit/libnetworking/machine
-/usr1/rtems/work/rtems/cpukit/libnetworking/net
-/usr1/rtems/work/rtems/cpukit/libnetworking/netinet
-/usr1/rtems/work/rtems/cpukit/libnetworking/nfs
-/usr1/rtems/work/rtems/cpukit/libnetworking/rtems
-/usr1/rtems/work/rtems/cpukit/libnetworking/sys
-/usr1/rtems/work/rtems/cpukit/libnetworking/vm
-/usr1/rtems/work/rtems/cpukit/librpc/src/rpc
-/usr1/rtems/work/rtems/cpukit/librpc/src/xdr
-/usr1/rtems/work/rtems/cpukit/posix/src
-/usr1/rtems/work/rtems/cpukit/posix/inline/rtems/posix
-/usr1/rtems/work/rtems/cpukit/rtems/inline/rtems/rtems
-/usr1/rtems/work/rtems/cpukit/rtems/src
-/usr1/rtems/work/rtems/cpukit/sapi/inline/rtems
-/usr1/rtems/work/rtems/cpukit/sapi/src
-/usr1/rtems/work/rtems/cpukit/score/cpu/i386
-/usr1/rtems/work/rtems/cpukit/score/cpu/i386/rtems/score
-/usr1/rtems/work/rtems/cpukit/score/src
-/usr1/rtems/work/rtems/cpukit/score/inline/rtems/score
-set remotebaud 38400
-target remote /dev/ttyS1
+  Breakpoint 1, Init (ignored=1269800) at init.c:29
+  29      {
+  (gdb)
+
+Pressing ^C works and if running the board should halt when GDB connects.
+
+e) Use ser2net to provide reomve access over a network to a board. Install the
+ser2net package and add a configuration for the port GDB connects to. For
+example:
+
+ 0005:raw:0:/dev/cuaU5:115200
+
+Start ser2net running then connect GDB using:
+
+ (gdb) target remote myhost:30005

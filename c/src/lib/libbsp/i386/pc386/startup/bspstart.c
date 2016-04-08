@@ -10,6 +10,9 @@
  * It was subsequently adapted as part of the pc386 BSP by developers from
  * the NavIST Group in 1997.
  *
+ * Copyright (c) 2016.
+ * Chris Johns <chrisj@rtems.org>
+ *
  * COPYRIGHT (c) 1989-2008, 2016.
  * On-Line Applications Research Corporation (OAR).
  *
@@ -107,16 +110,29 @@ static void bsp_start_default( void )
   bsp_pci_initialize_helper();
 
   /*
-   * Probe for UARTs on PCI. One of these may end up as the console.
+   * Probe for legacy UARTs.
+   */
+  legacy_uart_probe();
+
+  /*
+   * Probe for UARTs on PCI.
    */
   pci_uart_probe();
 
   /*
-   * Figure out where printk() and console IO is to be directed.
-   * Do this after the PCI bus is initialized so we have a chance
-   * for those devices to be added to the set in the console driver.
-   * In general, Do it as early as possible so printk() has a chance
-   * to work early on devices found via PCI probe.
+   * Parse the GDB arguments and flag a serial port as not valid. This stops
+   * the console from claming the port.
+   */
+#if BSP_GDB_STUB
+  pc386_parse_gdb_arguments();
+#endif
+
+  /*
+   * Figure out where printk() and console IO is to be directed.  Do this after
+   * the legacy and PCI bus probes so we have a chance for those devices to be
+   * added to the set in the console driver.  In general, do it as early as
+   * possible so printk() has a chance to work early on devices found via PCI
+   * probe.
    */
   pc386_parse_console_arguments();
 
@@ -127,7 +143,6 @@ static void bsp_start_default( void )
 #if BSP_ENABLE_IDE
   bsp_ide_cmdline_init();
 #endif
-
 } /* bsp_start_default */
 
 /*

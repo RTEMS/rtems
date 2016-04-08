@@ -197,7 +197,7 @@ void rtems_irq_mngt_init(void);          /* from 'irq_init.c' */
    */
    void *clock_driver_sim_idle_body(uintptr_t);
    #define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
-  /*  
+  /*
    * hack to kill some time. Hopefully hitting a hardware register is slower
    * than an empty loop.
    */
@@ -255,6 +255,7 @@ void bsp_ide_cmdline_init(void);
 void init_remote_gdb( void );
 void i386_stub_glue_init(int uart);
 void i386_stub_glue_init_breakin(void);
+int i386_stub_glue_uart(void);
 void breakpoint(void);
 
 #define BSP_MAXIMUM_DEVICES 6

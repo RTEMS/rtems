@@ -314,85 +314,88 @@ void pci_uart_probe(void)
         &fun
       );
       if ( status == PCIB_ERR_SUCCESS ) {
+	uint8_t  irq;
+	uint32_t base;
+
         boards++;
         conf[instance].found = true;
         conf[instance].clock =  pci_ns8250_ids[i].rclk;
         conf[instance].ports = 1;
         total_ports += conf[instance].ports;
-        break;
+
+	pci_read_config_byte( bus, dev, fun, PCI_INTERRUPT_LINE, &irq );
+	pci_read_config_dword( bus, dev, fun, PCI_BASE_ADDRESS_0, &base );
+
+	conf[instance].irq  = irq;
+	conf[instance].base = base;
+
+        printk(
+          "Found %s #%d at 0x%08x IRQ %d with %d clock\n",
+	  pci_ns8250_ids[i].desc,
+	  instance,
+	  conf[instance].base,
+	  conf[instance].irq,
+	  conf[instance].clock
+        );
       }
     }
-
-    if ( status != PCIB_ERR_SUCCESS )
-      continue;
-
-    uint8_t  irq;
-    uint32_t base;
-
-    pci_read_config_byte( bus, dev, fun, PCI_INTERRUPT_LINE, &irq );
-    pci_read_config_dword( bus, dev, fun, PCI_BASE_ADDRESS_0, &base );
-
-    conf[instance].irq  = irq;
-    conf[instance].base = base;
-
-    printk(
-      "Found %s #%d at 0x%08x IRQ %d with %d clock\n",
-      pci_ns8250_ids[i].desc,
-      instance,
-      conf[instance].base,
-      conf[instance].irq,
-      conf[instance].clock
-    );
   }
 
   /*
    *  Now allocate array of device structures and fill them in
    */
-  int device_instance;
-  ports = calloc( total_ports, sizeof( console_tbl ) );
-  port_p = ports;
-  device_instance = 1;
-  for ( b=0 ; b<MAX_BOARDS ; b++ ) {
-    if ( conf[b].found == false )
-      continue;
-    char name[32];
+  if (boards) {
+    int device_instance;
 
-    sprintf( name, "/dev/pcicom%d", device_instance++ );
-    port_p->sDeviceName   = strdup( name );
-    port_p->deviceType    = SERIAL_NS16550;
-    if ( conf[b].irq <= 15 ) {
-      port_p->pDeviceFns    = &ns16550_fns;
-    } else {
-      printk(
-        "%s IRQ=%d >= 16 requires APIC support, using polling\n",
-        name,
-        conf[b].irq <= 15
-      );
-      port_p->pDeviceFns    = &ns16550_fns_polled;
+    ports = calloc( total_ports, sizeof( console_tbl ) );
+    if (ports != NULL) {
+      port_p = ports;
+      device_instance = 1;
+      for (b = 0; b < MAX_BOARDS; b++) {
+	char name[32];
+	if ( conf[b].found == false )
+	  continue;
+	sprintf( name, "/dev/pcicom%d", device_instance++ );
+	port_p->sDeviceName   = strdup( name );
+	port_p->deviceType    = SERIAL_NS16550;
+	if ( conf[b].irq <= 15 ) {
+	  port_p->pDeviceFns    = &ns16550_fns;
+	} else {
+	  printk(
+            "%s IRQ=%d >= 16 requires APIC support, using polling\n",
+	    name,
+	    conf[b].irq
+          );
+	  port_p->pDeviceFns    = &ns16550_fns_polled;
+	}
+
+	port_p->deviceProbe   = NULL;
+	port_p->pDeviceFlow   = NULL;
+	port_p->ulMargin      = 16;
+	port_p->ulHysteresis  = 8;
+	port_p->pDeviceParams = (void *) 9600;
+	port_p->ulCtrlPort1   = conf[b].base;
+	port_p->ulCtrlPort2   = 0;                   /* NA */
+	port_p->ulDataPort    = 0;                   /* NA */
+	port_p->getRegister   = pci_ns16550_get_register;
+	port_p->setRegister   = pci_ns16550_set_register;
+	port_p->getData       = NULL;                /* NA */
+	port_p->setData       = NULL;                /* NA */
+	port_p->ulClock       = conf[b].clock;
+	port_p->ulIntVector   = conf[b].irq;
+
+	port_p++;
+      }    /* end boards */
+
+      /*
+       *  Register the devices
+       */
+      console_register_devices( ports, total_ports );
+
+      /*
+       *  Do not free the ports memory, the console hold this memory for-ever.
+       */
     }
-
-    port_p->deviceProbe   = NULL;
-    port_p->pDeviceFlow   = NULL;
-    port_p->ulMargin      = 16;
-    port_p->ulHysteresis  = 8;
-    port_p->pDeviceParams = (void *) 9600;
-    port_p->ulCtrlPort1   = conf[b].base;
-    port_p->ulCtrlPort2   = 0;                   /* NA */
-    port_p->ulDataPort    = 0;                   /* NA */
-    port_p->getRegister   = pci_ns16550_get_register;
-    port_p->setRegister   = pci_ns16550_set_register;
-    port_p->getData       = NULL;                /* NA */
-    port_p->setData       = NULL;                /* NA */
-    port_p->ulClock       = conf[b].clock;
-    port_p->ulIntVector   = conf[b].irq;
-
-    port_p++;
-  }    /* end boards */
-
-  /*
-   *  Register the devices
-   */
-  if ( boards )
-    console_register_devices( ports, total_ports );
+  }
 }
 #endif

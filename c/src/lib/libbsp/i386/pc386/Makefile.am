@@ -132,6 +132,7 @@ libbsp_a_SOURCES += console/printk_support.c
 libbsp_a_SOURCES += console/exar17d15x.c
 libbsp_a_SOURCES += console/rtd316.c
 libbsp_a_SOURCES += console/uart_bus_pci.c
+libbsp_a_SOURCES += console/gdb_select.c
 
 # gdb
 libbsp_a_SOURCES += ../../i386/shared/comm/i386-stub.c
@@ -181,8 +182,8 @@ libbsp_a_SOURCES += ide/idecfg.c
 endif
 
 if HAS_SMP
-libbsp_a_SOURCES += ../../i386/shared/smp/getcpuid.c 
-libbsp_a_SOURCES += ../../i386/shared/smp/smp-imps.c 
+libbsp_a_SOURCES += ../../i386/shared/smp/getcpuid.c
+libbsp_a_SOURCES += ../../i386/shared/smp/smp-imps.c
 
 project_lib_DATA += appstart.$(OBJEXT)
 appcpustart.$(OBJEXT): start/start16.S

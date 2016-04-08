@@ -3,7 +3,7 @@
  *
  * @ingroup Console
  *
- * @brief pc397 console select
+ * @brief pc386 console select
  *
  * This file contains a routine to select the console based upon a number
  * of criteria.
@@ -32,24 +32,6 @@
 #ifdef RTEMS_RUNTIME_CONSOLE_SELECT
   #include <crt.h>
 #endif
-
-#include <bsp/bspimpl.h>
-
-/*
- * Forward prototype
- */
-extern bool pc386_com1_com4_enabled(int);
-
-/*
- * This method is used to determine if COM1-COM4 are enabled based upon
- * boot command line arguments.
- */
-static bool are_com1_com4_enabled;
-
-bool pc386_com1_com4_enabled(int minor)
-{
-  return are_com1_com4_enabled;
-}
 
 /*
  * Method to return true if the device associated with the
@@ -97,48 +79,6 @@ static rtems_device_minor_number bsp_First_Available_Device( void )
   rtems_fatal_error_occurred(RTEMS_IO_ERROR);
 }
 
-static bool bsp_find_console_entry(
-  const char                *match,
-  size_t                     length,
-  rtems_device_minor_number *match_minor
-)
-{
-  rtems_device_minor_number  minor;
-  const char                *name;
-
-  for (minor=0; minor < Console_Port_Count ; minor++) {
-    console_tbl  *cptr = Console_Port_Tbl[minor];
-
-    /*
-     * Console table entries include /dev/ prefix, device names passed
-     * in on command line do not.
-     */
-    name = cptr->sDeviceName  + sizeof("/dev");
-    if ( !strncmp( name, match, length ) ) {
-      *match_minor = minor;
-      return true;
-    }
-  }
-
-  return false;
-}
-
-static void parse_com1_com4_enable(void)
-{
-  static const char *opt;
-
-  /*
-   * Check the command line to see if com1-com4 are disabled.
-   */
-  opt = bsp_cmdline_arg("--disable-com1-com4");
-  if ( opt ) {
-    printk( "Disable COM1-COM4 per boot argument\n" );
-    are_com1_com4_enabled = false;
-  } else {
-    are_com1_com4_enabled = true;
-  }
-}
-
 static bool parse_printk_or_console(
   const char                *param,
   rtems_device_minor_number *minor_out
@@ -150,6 +90,7 @@ static bool parse_printk_or_console(
   size_t                     length;
   size_t                     index;
   rtems_device_minor_number  minor;
+  console_tbl               *conscfg;
 
   /*
    * Check the command line for the type of mode the console is.
@@ -198,16 +139,14 @@ static bool parse_printk_or_console(
 
   length = &opt[index] - option;
 
-  if ( !bsp_find_console_entry( option, length, &minor ) ) {
+  conscfg = console_find_console_entry( option, length, &minor );
+  if ( conscfg == NULL ) {
     return false;
   }
 
   *minor_out = minor;
   if (comma) {
-    console_tbl *conscfg = &Console_Configuration_Ports[minor];
-
     option = comma + 1;
-
     if (strncmp (option, "115200", sizeof ("115200") - 1) == 0)
       conscfg->pDeviceParams = (void *)115200;
     else if (strncmp (option, "57600", sizeof ("57600") - 1) == 0)
@@ -241,39 +180,34 @@ static inline const char *get_name(
  */
 void pc386_parse_console_arguments(void)
 {
-  rtems_device_minor_number  minor;
-
-  /*
-   * The console device driver must have its data structures initialized
-   * before we can iterate the table of devices for names.
-   */
-  console_initialize_data();
-
-  /*
-   * Determine if COM1-COM4 were disabled.
-   */
-  parse_com1_com4_enable();
+  rtems_device_minor_number minor;
+  rtems_device_minor_number minor_console = 0;
+  rtems_device_minor_number minor_printk = 0;
 
   /*
    * Assume that if only --console is specified, that printk() should
    * follow that selection by default.
    */
   if ( parse_printk_or_console( "--console=", &minor ) ) {
-    Console_Port_Minor = minor;
-    BSPPrintkPort = minor;
+    minor_console = minor;
+    minor_printk = minor;
   }
 
   /*
    * But if explicitly specified, attempt to honor it.
    */
   if ( parse_printk_or_console( "--printk=",  &minor ) ) {
-    BSPPrintkPort = minor;
+    minor_printk = minor;
   }
 
-#if 0
-  printk( "Console device: %s\n", get_name(Console_Port_Minor) );
-  printk( "printk device:  %s\n", get_name(BSPPrintkPort) );
-#endif
+  printk( "Console: %s printk: %s\n",
+          get_name(minor_console),get_name(minor_printk) );
+
+  /*
+   * Any output after this can cause problems until termios is initialised.
+   */
+  Console_Port_Minor = minor_console;
+  BSPPrintkPort = minor_printk;
 }
 
 /*
@@ -283,6 +217,10 @@ void pc386_parse_console_arguments(void)
 void bsp_console_select(void)
 {
   #ifdef RTEMS_RUNTIME_CONSOLE_SELECT
+    /*
+     * WARNING: This code is really needed any more and should be removed.
+     *          references to COM1 and COM2 like they are wrong.
+     */
     if ( BSP_runtime_console_select )
       BSP_runtime_console_select(&BSPPrintkPort, &Console_Port_Minor);
 

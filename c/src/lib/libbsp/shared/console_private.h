@@ -41,6 +41,19 @@ int vt_ioctl(
 );
 
 /**
+ *  @brief console_find_console_entry
+ *
+ *  This method is used to search the console entries for a
+ *  specific device entry and return it. If match is NULL the
+ *  minor number provided is matched.
+ */
+console_tbl* console_find_console_entry(
+  const char                *match,
+  size_t                     length,
+  rtems_device_minor_number *match_minor
+);
+
+/**
  *  @brief console_initialize_data
  *
  *  This must be called before dynamic registration of devices can occur.

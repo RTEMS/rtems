@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * BSP specific helpers 
+ * BSP specific helpers
  */
 
 /*
@@ -28,6 +28,16 @@ const pci_config_access_functions *pci_io_initialize(void);
  * Helper to parse boot command line arguments related to the console driver
  */
 void pc386_parse_console_arguments(void);
+
+/*
+ * Helper to parse boot command line arguments related to gdb
+ */
+void pc386_parse_gdb_arguments(void);
+
+/*
+ * Dynamically probe for Legacy UARTS
+ */
+void legacy_uart_probe(void);
 
 /*
  * Dynamically probe for PCI UARTS
