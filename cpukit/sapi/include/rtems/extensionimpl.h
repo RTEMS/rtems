@@ -39,13 +39,10 @@ RTEMS_INLINE_ROUTINE void _Extension_Free (
   _Objects_Free( &_Extension_Information, &the_extension->Object );
 }
 
-RTEMS_INLINE_ROUTINE Extension_Control *_Extension_Get (
-  Objects_Id         id,
-  Objects_Locations *location
-)
+RTEMS_INLINE_ROUTINE Extension_Control *_Extension_Get( Objects_Id id )
 {
   return (Extension_Control *)
-    _Objects_Get( &_Extension_Information, id, location );
+    _Objects_Get_no_protection( &_Extension_Information, id );
 }
 
 #ifdef __cplusplus
