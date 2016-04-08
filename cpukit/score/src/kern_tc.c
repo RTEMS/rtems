@@ -14,24 +14,24 @@
  */
 
 #ifdef __rtems__
-#define _KERNEL
-#define bintime _Timecounter_Bintime
-#define binuptime _Timecounter_Binuptime
-#define boottimebin _Timecounter_Boottimebin
-#define getbintime _Timecounter_Getbintime
-#define getbinuptime _Timecounter_Getbinuptime
-#define getmicrotime _Timecounter_Getmicrotime
-#define getmicrouptime _Timecounter_Getmicrouptime
-#define getnanotime _Timecounter_Getnanotime
-#define getnanouptime _Timecounter_Getnanouptime
-#define microtime _Timecounter_Microtime
-#define microuptime _Timecounter_Microuptime
-#define nanotime _Timecounter_Nanotime
-#define nanouptime _Timecounter_Nanouptime
-#define tc_init _Timecounter_Install
-#define timecounter _Timecounter
-#define time_second _Timecounter_Time_second
-#define time_uptime _Timecounter_Time_uptime
+#define	_KERNEL
+#define	binuptime(_bt) _Timecounter_Binuptime(_bt)
+#define	nanouptime(_tsp) _Timecounter_Nanouptime(_tsp)
+#define	microuptime(_tvp) _Timecounter_Microuptime(_tvp)
+#define	bintime(_bt) _Timecounter_Bintime(_bt)
+#define	nanotime(_tsp) _Timecounter_Nanotime(_tsp)
+#define	microtime(_tvp) _Timecounter_Microtime(_tvp)
+#define	getbinuptime(_bt) _Timecounter_Getbinuptime(_bt)
+#define	getnanouptime(_tsp) _Timecounter_Getnanouptime(_tsp)
+#define	getmicrouptime(_tvp) _Timecounter_Getmicrouptime(_tvp)
+#define	getbintime(_bt) _Timecounter_Getbintime(_bt)
+#define	getnanotime(_tsp) _Timecounter_Getnanotime(_tsp)
+#define	getmicrotime(_tvp) _Timecounter_Getmicrotime(_tvp)
+#define	tc_init _Timecounter_Install
+#define	timecounter _Timecounter
+#define	time_second _Timecounter_Time_second
+#define	time_uptime _Timecounter_Time_uptime
+#define	boottimebin _Timecounter_Boottimebin
 #include <rtems/score/timecounterimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
