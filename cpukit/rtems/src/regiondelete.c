@@ -35,6 +35,7 @@ rtems_status_code rtems_region_delete(
   Region_Control     *the_region;
 
   _Objects_Allocator_lock();
+  _RTEMS_Lock_allocator();
 
     the_region = _Region_Get( id, &location );
     switch ( location ) {
@@ -59,6 +60,7 @@ rtems_status_code rtems_region_delete(
         break;
     }
 
+  _RTEMS_Unlock_allocator();
   _Objects_Allocator_unlock();
 
   return return_status;

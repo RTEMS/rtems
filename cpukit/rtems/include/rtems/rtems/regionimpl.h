@@ -18,6 +18,8 @@
 #define _RTEMS_RTEMS_REGIONIMPL_H
 
 #include <rtems/rtems/region.h>
+#include <rtems/score/apimutex.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/heapimpl.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/threadqimpl.h>
@@ -79,6 +81,7 @@ RTEMS_INLINE_ROUTINE Region_Control *_Region_Get (
   Objects_Locations *location
 )
 {
+  _Assert( _RTEMS_Allocator_is_owner() );
   return (Region_Control *)
     _Objects_Get_no_protection( &_Region_Information, id, location );
 }
