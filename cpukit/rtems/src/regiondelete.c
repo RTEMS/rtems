@@ -28,23 +28,23 @@ rtems_status_code rtems_region_delete(
   Region_Control    *the_region;
 
   _Objects_Allocator_lock();
-  _RTEMS_Lock_allocator();
 
-  the_region = _Region_Get( id );
+  the_region = _Region_Get_and_lock( id );
 
-  if ( the_region != NULL ) {
-    if ( the_region->number_of_used_blocks != 0 ) {
-      status = RTEMS_RESOURCE_IN_USE;
-    } else {
-      _Objects_Close( &_Region_Information, &the_region->Object );
-      _Region_Free( the_region );
-      status = RTEMS_SUCCESSFUL;
-    }
-  } else {
-    status = RTEMS_INVALID_ID;
+  if ( the_region == NULL ) {
+    _Objects_Allocator_unlock();
+    return RTEMS_INVALID_ID;
   }
 
-  _RTEMS_Unlock_allocator();
+  if ( the_region->number_of_used_blocks != 0 ) {
+    status = RTEMS_RESOURCE_IN_USE;
+  } else {
+    _Objects_Close( &_Region_Information, &the_region->Object );
+    _Region_Free( the_region );
+    status = RTEMS_SUCCESSFUL;
+  }
+
+  _Region_Unlock( the_region );
   _Objects_Allocator_unlock();
   return status;
 }

@@ -19,7 +19,6 @@
 
 #include <rtems/rtems/region.h>
 #include <rtems/score/apimutex.h>
-#include <rtems/score/assert.h>
 #include <rtems/score/heapimpl.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/threadqimpl.h>
@@ -67,11 +66,28 @@ RTEMS_INLINE_ROUTINE void _Region_Free (
   _Objects_Free( &_Region_Information, &the_region->Object );
 }
 
-RTEMS_INLINE_ROUTINE Region_Control *_Region_Get( Objects_Id id )
+RTEMS_INLINE_ROUTINE Region_Control *_Region_Get_and_lock( Objects_Id id )
 {
-  _Assert( _RTEMS_Allocator_is_owner() );
-  return (Region_Control *)
+  Region_Control *the_region;
+
+  _RTEMS_Lock_allocator();
+
+  the_region = (Region_Control *)
     _Objects_Get_no_protection( &_Region_Information, id );
+
+  if ( the_region != NULL ) {
+    /* Keep allocator lock */
+    return the_region;
+  }
+
+  _RTEMS_Unlock_allocator();
+  return NULL;
+}
+
+RTEMS_INLINE_ROUTINE void _Region_Unlock( Region_Control *the_region )
+{
+  (void) the_region;
+  _RTEMS_Unlock_allocator();
 }
 
 /**

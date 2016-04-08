@@ -25,27 +25,22 @@ rtems_status_code rtems_region_return_segment(
   void     *segment
 )
 {
-  rtems_status_code  status;
-  Region_Control    *the_region;
+  Region_Control *the_region;
 
-  _RTEMS_Lock_allocator();
+  the_region = _Region_Get_and_lock( id );
 
-  the_region = _Region_Get( id );
-
-  if ( the_region != NULL ) {
-     if ( _Region_Free_segment( the_region, segment ) ) {
-       the_region->number_of_used_blocks -= 1;
-
-       /* Unlocks allocator */
-       _Region_Process_queue( the_region );
-       return RTEMS_SUCCESSFUL;
-     } else {
-       status = RTEMS_INVALID_ADDRESS;
-     }
-  } else {
-    status = RTEMS_INVALID_ID;
+  if ( the_region == NULL ) {
+    return RTEMS_INVALID_ID;
   }
 
-  _RTEMS_Unlock_allocator();
-  return status;
+  if ( _Region_Free_segment( the_region, segment ) ) {
+    the_region->number_of_used_blocks -= 1;
+
+    /* Unlocks allocator */
+    _Region_Process_queue( the_region );
+    return RTEMS_SUCCESSFUL;
+  }
+
+  _Region_Unlock( the_region );
+  return RTEMS_INVALID_ADDRESS;
 }

@@ -37,38 +37,36 @@ rtems_status_code rtems_region_resize_segment(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  _RTEMS_Lock_allocator();
+  the_region = _Region_Get_and_lock( id );
 
-  the_region = _Region_Get( id );
-
-  if ( the_region != NULL ) {
-    resize_status = _Heap_Resize_block(
-      &the_region->Memory,
-      segment,
-      (uint32_t) size,
-      &osize,
-      &avail_size
-    );
-    *old_size = (uint32_t) osize;
-
-    switch ( resize_status ) {
-      case HEAP_RESIZE_SUCCESSFUL:
-        /* Unlocks allocator */
-        _Region_Process_queue( the_region );
-        return RTEMS_SUCCESSFUL;
-
-      case HEAP_RESIZE_UNSATISFIED:
-        status = RTEMS_UNSATISFIED;
-        break;
-
-      default:
-        status = RTEMS_INVALID_ADDRESS;
-        break;
-    }
-  } else {
-    status = RTEMS_INVALID_ID;
+  if ( the_region == NULL ) {
+    return RTEMS_INVALID_ID;
   }
 
-  _RTEMS_Unlock_allocator();
+  resize_status = _Heap_Resize_block(
+    &the_region->Memory,
+    segment,
+    (uint32_t) size,
+    &osize,
+    &avail_size
+  );
+  *old_size = (uint32_t) osize;
+
+  switch ( resize_status ) {
+    case HEAP_RESIZE_SUCCESSFUL:
+      /* Unlocks allocator */
+      _Region_Process_queue( the_region );
+      return RTEMS_SUCCESSFUL;
+
+    case HEAP_RESIZE_UNSATISFIED:
+      status = RTEMS_UNSATISFIED;
+      break;
+
+    default:
+      status = RTEMS_INVALID_ADDRESS;
+      break;
+  }
+
+  _Region_Unlock( the_region );
   return status;
 }

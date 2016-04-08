@@ -40,7 +40,7 @@ void _Region_Process_queue(
    *        switch could occur.
    */
   cpu_self = _Thread_Dispatch_disable();
-  _RTEMS_Unlock_allocator();
+  _Region_Unlock( the_region );
 
   /*
    *  NOTE: The following loop is O(n) where n is the number of

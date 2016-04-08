@@ -25,24 +25,20 @@ rtems_status_code rtems_region_get_information(
   Heap_Information_block *the_info
 )
 {
-  rtems_status_code  status;
-  Region_Control    *the_region;
+  Region_Control *the_region;
 
   if ( the_info == NULL ) {
     return RTEMS_INVALID_ADDRESS;
   }
 
-  _RTEMS_Lock_allocator();
+  the_region = _Region_Get_and_lock( id );
 
-  the_region = _Region_Get( id );
-
-  if ( the_region != NULL ) {
-    _Heap_Get_information( &the_region->Memory, the_info );
-    status = RTEMS_SUCCESSFUL;
-  } else {
-    status = RTEMS_INVALID_ID;
+  if ( the_region == NULL ) {
+    return RTEMS_INVALID_ID;
   }
 
-  _RTEMS_Unlock_allocator();
-  return status;
+  _Heap_Get_information( &the_region->Memory, the_info );
+
+  _Region_Unlock( the_region );
+  return RTEMS_SUCCESSFUL;
 }

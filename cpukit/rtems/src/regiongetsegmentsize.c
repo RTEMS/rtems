@@ -37,20 +37,18 @@ rtems_status_code rtems_region_get_segment_size(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  _RTEMS_Lock_allocator();
+  the_region = _Region_Get_and_lock( id );
 
-  the_region = _Region_Get( id );
-
-  if ( the_region != NULL ) {
-    if ( _Heap_Size_of_alloc_area( &the_region->Memory, segment, size ) ) {
-      status = RTEMS_SUCCESSFUL;
-    } else {
-      status = RTEMS_INVALID_ADDRESS;
-    }
-  } else {
-    status = RTEMS_INVALID_ID;
+  if ( the_region == NULL ) {
+    return RTEMS_INVALID_ID;
   }
 
-  _RTEMS_Unlock_allocator();
+  if ( _Heap_Size_of_alloc_area( &the_region->Memory, segment, size ) ) {
+    status = RTEMS_SUCCESSFUL;
+  } else {
+    status = RTEMS_INVALID_ADDRESS;
+  }
+
+  _Region_Unlock( the_region );
   return status;
 }
