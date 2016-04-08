@@ -24,7 +24,7 @@ rtems_monitor_region_canonical(
     canonical_region->attribute = rtems_region->attribute_set;
     canonical_region->start_addr = (void *) heap->area_begin;
     canonical_region->length = heap->area_end - heap->area_begin;
-    canonical_region->page_size = rtems_region->page_size;
+    canonical_region->page_size = heap->page_size;
     canonical_region->max_seg_size = rtems_region->maximum_segment_size;
     canonical_region->used_blocks = heap->stats.used_blocks;
 }
