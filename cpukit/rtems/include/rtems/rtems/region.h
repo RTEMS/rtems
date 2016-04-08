@@ -60,7 +60,6 @@ typedef struct {
   Objects_Control       Object;
   Thread_queue_Control  Wait_queue;            /* waiting threads        */
   const Thread_queue_Operations *wait_operations;
-  uintptr_t             length;                /* physical length(bytes) */
   uintptr_t             page_size;             /* in bytes               */
   uintptr_t             maximum_segment_size;  /* in bytes               */
   rtems_attribute       attribute_set;

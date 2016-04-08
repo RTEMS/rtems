@@ -87,7 +87,6 @@ rtems_status_code rtems_region_create(
         _Region_Free( the_region );
         return_status = RTEMS_INVALID_SIZE;
       } else {
-        the_region->length        = length;
         the_region->page_size     = page_size;
         the_region->attribute_set = attribute_set;
 
