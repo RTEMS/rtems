@@ -2666,7 +2666,8 @@ STATIC void grspw_isr(void *data)
 
 	/* Get Status from Hardware */
 	stat = REG_READ(&priv->regs->status);
-	stat_clrmsk = stat & (GRSPW_STS_TO | GRSPW_STAT_ERROR) & priv->stscfg;
+	stat_clrmsk = stat & (GRSPW_STS_TO | GRSPW_STAT_ERROR) &
+			(GRSPW_STS_TO | priv->stscfg);
 
 	/* Make sure to put the timecode handling first in order to get the
 	 * smallest possible interrupt latency
