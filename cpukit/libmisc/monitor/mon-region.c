@@ -22,7 +22,7 @@ rtems_monitor_region_canonical(
     const Heap_Control *heap = &rtems_region->Memory;
 
     canonical_region->attribute = rtems_region->attribute_set;
-    canonical_region->start_addr = rtems_region->starting_address;
+    canonical_region->start_addr = (void *) heap->area_begin;
     canonical_region->length = rtems_region->length;
     canonical_region->page_size = rtems_region->page_size;
     canonical_region->max_seg_size = rtems_region->maximum_segment_size;
