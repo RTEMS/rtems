@@ -54,9 +54,9 @@ typedef struct {
   /**
    * @brief Address of PHY.
    *
-   * Use -1 to search for a PHY.
+   * Use 0xff to search for a PHY.
    */
-  int phy_addr;
+  uint8_t phy_addr;
 } if_atsam_config;
 
 /** @} */

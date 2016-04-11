@@ -32,19 +32,20 @@
 #include <libchip/chip.h>
 #include <libchip/include/gmacd.h>
 #include <libchip/include/pio.h>
-#include <libchip/include/timetick.h>
 
 #define __INSIDE_RTEMS_BSD_TCPIP_STACK__	1
 #define __BSD_VISIBLE				1
 
 #include <bsp.h>
+#include <bsp/irq.h>
+
 #include <stdio.h>
-#include <errno.h>
 
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/rtems_mii_ioctl.h>
 
+#include <sys/types.h>
 #include <sys/ioctl.h>
 #include <sys/param.h>
 #include <sys/mbuf.h>
@@ -57,13 +58,10 @@
 
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
-#include <bsp/irq.h>
 
-#include <sys/types.h>
-#include <sys/socket.h>
 #include <arpa/inet.h>
 
-#include <time.h>
+#include <dev/mii/mii.h>
 
 /*
  * Number of interfaces supported by the driver
@@ -94,16 +92,6 @@
 							  PIO_OUTPUT_1,	   \
 							  PIO_PULLUP }
 
-#define GMII_BMCR				0x0             // Basic Mode Control Register
-#define GMII_PHYID1R				0x2             // PHY Identifier Register 1
-#define GMII_PHYID2R				0x3             // PHY Identifier Register 2
-
-#define GMII_RESET				(1 << 15)       // 1= Software Reset; 0=Normal Operation
-/** definitions: MII_PHYID1 */
-#define GMII_OUI_MSB				0x0022
-/** definitions: MII_PHYID2 */
-#define GMII_OUI_LSB				0x1572 // KSZ8061 PHY Id2
-
 /** Multicast Enable */
 #define GMAC_MC_ENABLE				(1u << 6)
 #define HASH_INDEX_AMOUNT			6
@@ -129,8 +117,6 @@
 #define GMAC_TX_SET_USED			(1u << 31)
 
 #define GMAC_DESCRIPTOR_ALIGNMENT		8
-/** IEEE defined Registers */
-#define GMII_ANLPAR				0x5 // Auto_negotiation Link Partner Ability Register
 
 /** Events */
 #define ATSAMV7_ETH_EVENT_INTERRUPT		RTEMS_EVENT_1
@@ -223,7 +209,7 @@ static uint8_t if_atsam_wait_phy(Gmac *pHw, uint32_t retry)
 		if (retry_count >= retry) {
 			return (1);
 		}
-		usleep(100);
+		rtems_task_wake_after(1);
 	}
 
 	return (0);
@@ -267,42 +253,41 @@ static void atsamv7_find_valid_phy(if_atsam_gmac *gmac_inst)
 	uint32_t value = 0;
 	uint8_t rc;
 	uint8_t phy_address;
-	uint8_t cnt;
 
 	TRACE_DEBUG("GMACB_FindValidPhy\n\r");
 
 	phy_address = gmac_inst->phy_address;
 	retry_max = gmac_inst->retries;
 
-	if (phy_address != -1) {
+	if (phy_address != 0xFF) {
 		return;
 	}
+
 	/* Find another one */
-	if (value != GMII_OUI_MSB) {
-		rc = 0xFF;
+	rc = 0xFF;
 
-		for (cnt = 0; cnt < 32; cnt++) {
-			phy_address = (phy_address + 1) & 0x1F;
+	for (phy_address = 0; phy_address < 32; ++phy_address) {
+		int rv;
 
-			if (if_atsam_read_phy(pHw, phy_address, GMII_PHYID1R,
-			    &value, retry_max) == 1) {
-				TRACE_ERROR("MACB PROBLEM\n\r");
-			}
+		rv = if_atsam_read_phy(pHw, phy_address, MII_PHYIDR1,
+		    &value, retry_max);
+		if (rv == 0 && value != 0 && value >= 0xffff) {
 			TRACE_DEBUG("_PHYID1  : 0x%X, addr: %d\n\r", value,
 			    phy_address);
-			if (value == GMII_OUI_MSB) {
-				rc = phy_address;
-				break;
-			}
+			rc = phy_address;
+			break;
+		} else {
+			TRACE_ERROR("MACB PROBLEM\n\r");
 		}
 	}
+
 	if (rc != 0xFF) {
 		TRACE_DEBUG("** Valid PHY Found: %d\n\r", rc);
-		if_atsam_read_phy(pHw, phy_address, GMII_PHYID1R, &value,
+		if_atsam_read_phy(pHw, phy_address, MII_PHYIDR1, &value,
 		    retry_max);
 		TRACE_DEBUG("_PHYID1R  : 0x%X, addr: %d\n\r", value,
 		    phy_address);
-		if_atsam_read_phy(pHw, phy_address, GMII_PHYID2R, &value,
+		if_atsam_read_phy(pHw, phy_address, MII_PHYIDR2, &value,
 		    retry_max);
 		TRACE_DEBUG("_EMSR  : 0x%X, addr: %d\n\r", value, phy_address);
 		gmac_inst->phy_address = phy_address;
@@ -313,7 +298,7 @@ static void atsamv7_find_valid_phy(if_atsam_gmac *gmac_inst)
 static uint8_t if_atsam_reset_phy(if_atsam_gmac *gmac_inst)
 {
 	uint32_t retry_max;
-	uint32_t bmcr = GMII_RESET;
+	uint32_t bmcr;
 	uint8_t phy_address;
 	uint32_t timeout = 10;
 	uint8_t ret = 0;
@@ -325,13 +310,13 @@ static uint8_t if_atsam_reset_phy(if_atsam_gmac *gmac_inst)
 	phy_address = gmac_inst->phy_address;
 	retry_max = gmac_inst->retries;
 
-	bmcr = GMII_RESET;
-	if_atsam_write_phy(pHw, phy_address, GMII_BMCR, bmcr, retry_max);
+	bmcr = BMCR_RESET;
+	if_atsam_write_phy(pHw, phy_address, MII_BMCR, bmcr, retry_max);
 	do {
-		if_atsam_read_phy(pHw, phy_address, GMII_BMCR, &bmcr,
+		if_atsam_read_phy(pHw, phy_address, MII_BMCR, &bmcr,
 		    retry_max);
 		timeout--;
-	} while ((bmcr & GMII_RESET) && timeout);
+	} while ((bmcr & BMCR_RESET) && timeout);
 
 	if (!timeout) {
 		ret = 1;
@@ -356,7 +341,7 @@ if_atsam_init_phy(if_atsam_gmac *gmac_inst, uint32_t mck,
 		PIO_Configure(pResetPins, nbResetPins);
 		TRACE_DEBUG(" Hard Reset of GMACD Phy\n\r");
 		PIO_Clear(pResetPins);
-		usleep(100);
+		rtems_task_wake_after(1);
 		PIO_Set(pResetPins);
 	}
 	/* Configure GMAC runtime pins */
@@ -376,48 +361,41 @@ if_atsam_init_phy(if_atsam_gmac *gmac_inst, uint32_t mck,
 	return (rc);
 }
 
+static bool if_atsam_is_valid_phy(int phy)
+{
+	return phy >= 0 && phy <= 31;
+}
 
 static int if_atsam_mdio_read(int phy, void *arg, unsigned reg, uint32_t *pval)
 {
 	if_atsam_softc *sc = (if_atsam_softc *)arg;
-	int err;
 
 	TRACE_DEBUG("Mdio read\n\r");
 	TRACE_DEBUG("%i\n", phy);
 
-	if ((phy <= 0) || (phy >= 31)) {
-		/*
-		 * invalid phy number
-		 */
-		TRACE_ERROR("Mdio read error\n\r");
+	if (!if_atsam_is_valid_phy(phy)) {
+		TRACE_ERROR("Mdio read invalid phy\n\r");
 		return (EINVAL);
-	} else {
-		err = if_atsam_read_phy(sc->Gmac_inst.gGmacd.pHw,
-			(uint8_t)phy, (uint8_t)reg, pval, 1);
 	}
-	return (err);
+
+	return (if_atsam_read_phy(sc->Gmac_inst.gGmacd.pHw,
+	    (uint8_t)phy, (uint8_t)reg, pval, sc->Gmac_inst.retries));
 }
 
 
 static int if_atsam_mdio_write(int phy, void *arg, unsigned reg, uint32_t pval)
 {
 	if_atsam_softc *sc = (if_atsam_softc *)arg;
-	int err = 0;
 
 	TRACE_DEBUG("Mdio write\n\r");
 
-	if ((phy <= 0) && (phy <= 31)) {
-		/*
-		 * invalid phy number
-		 */
-		TRACE_DEBUG("%i\n", phy);
-		TRACE_ERROR("Mdio write error\n\r");
+	if (!if_atsam_is_valid_phy(phy)) {
+		TRACE_ERROR("Mdio write invalid phy\n\r");
 		return (EINVAL);
-	} else {
-		err = if_atsam_write_phy(sc->Gmac_inst.gGmacd.pHw,
-			(uint8_t)phy, (uint8_t)reg, pval, 1);
 	}
-	return (err);
+
+	return if_atsam_write_phy(sc->Gmac_inst.gGmacd.pHw,
+	    (uint8_t)phy, (uint8_t)reg, pval, sc->Gmac_inst.retries);
 }
 
 
@@ -855,7 +833,7 @@ static void if_atsam_interface_watchdog(struct ifnet *ifp)
 
 	TRACE_DEBUG("Entered Watchdog\n\r");
 
-	if (if_atsam_read_phy(pHw, phy, GMII_ANLPAR, &anlpar, retries)) {
+	if (if_atsam_read_phy(pHw, phy, MII_ANLPAR, &anlpar, retries)) {
 		anlpar = 0;
 	}
 	if (sc->anlpar != anlpar) {
@@ -900,6 +878,7 @@ static void if_atsam_init(void *arg)
 	if_atsam_softc *sc = (if_atsam_softc *)arg;
 	struct ifnet *ifp = &sc->arpcom.ac_if;
 	uint32_t dmac_cfg = 0;
+	uint32_t gmii_val = 0;
 
 	if (sc->arpcom.ac_if.if_flags & IFF_RUNNING) {
 		return;
@@ -935,6 +914,12 @@ static void if_atsam_init(void *arg)
 	/* Set Link Speed */
 	sc->anlpar = 0xFFFFFFFF;
 	if_atsam_interface_watchdog(ifp);
+
+	/* Enable autonegotation */
+	if_atsam_read_phy(sc->Gmac_inst.gGmacd.pHw, sc->Gmac_inst.phy_address,
+	    MII_BMCR, &gmii_val, sc->Gmac_inst.retries);
+	if_atsam_write_phy(sc->Gmac_inst.gGmacd.pHw, sc->Gmac_inst.phy_address,
+	    MII_BMCR, (gmii_val | BMCR_AUTOEN), sc->Gmac_inst.retries);
 
 	/* Configuration of DMAC */
 	dmac_cfg = (GMAC_DCFGR_DRBS(GMAC_RX_BUFFER_SIZE >> 6)) |
@@ -1231,7 +1216,7 @@ static int if_atsam_driver_attach(struct rtems_bsdnet_ifconfig *config)
 {
 	if_atsam_softc *sc = &if_atsam_softc_inst;
 	struct ifnet *ifp = &sc->arpcom.ac_if;
-	if_atsam_config *conf = config->drv_ctrl;
+	const if_atsam_config *conf = config->drv_ctrl;
 	int unitNumber;
 	char *unitName;
 
@@ -1240,7 +1225,7 @@ static int if_atsam_driver_attach(struct rtems_bsdnet_ifconfig *config)
 		sc->Gmac_inst.phy_address = conf->phy_addr;
 	} else {
 		sc->Gmac_inst.retries = 10;
-		sc->Gmac_inst.phy_address = -1;
+		sc->Gmac_inst.phy_address = 0xFF;
 	}
 
 	/* The MAC address used */
