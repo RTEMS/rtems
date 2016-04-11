@@ -800,6 +800,245 @@ RTEMS_INLINE_ROUTINE void _Chain_Insert_ordered_unprotected(
   _Chain_Insert_unprotected( _Chain_Previous( next ), to_insert );
 }
 
+/**
+ * @brief The chain iterator direction.
+ */
+typedef enum {
+  /**
+   * @brief Iteration from head to tail.
+   */
+  CHAIN_ITERATOR_FORWARD,
+
+  /**
+   * @brief Iteration from tail to head.
+   */
+  CHAIN_ITERATOR_BACKWARD
+} Chain_Iterator_direction;
+
+/**
+ * @brief A chain iterator which is updated during node extraction if it is
+ * properly registered.
+ *
+ * @see _Chain_Iterator_initialize().
+ */
+typedef struct {
+  /**
+   * @brief Node for registration.
+   *
+   * Used during _Chain_Iterator_initialize() and _Chain_Iterator_destroy().
+   */
+  Chain_Node Registry_node;
+
+  /**
+   * @brief The direction of this iterator.
+   *
+   * Immutable after initialization via _Chain_Iterator_initialize().
+   */
+  Chain_Iterator_direction  direction;
+
+  /**
+   * @brief The current position of this iterator.
+   *
+   * The position is initialized via _Chain_Iterator_initialize().  It must be
+   * explicitly set after one valid iteration step, e.g. in case a next node in
+   * the iterator direction existed.  It is updated through the registration in
+   * case a node is extracted via _Chain_Iterator_registry_update().
+   */
+  Chain_Node *position;
+} Chain_Iterator;
+
+/**
+ * @brief A registry for chain iterators.
+ *
+ * Should be attached to a chain control to enable safe iteration through a
+ * chain in case of concurrent node extractions.
+ */
+typedef struct {
+  Chain_Control Iterators;
+} Chain_Iterator_registry;
+
+/**
+ * @brief Chain iterator registry initializer for static initialization.
+ *
+ * @param name The designator of the chain iterator registry.
+ */
+#define CHAIN_ITERATOR_REGISTRY_INITIALIZER( name ) \
+  { CHAIN_INITIALIZER_EMPTY( name.Iterators ) }
+
+/**
+ * @brief Initializes a chain iterator registry.
+ */
+RTEMS_INLINE_ROUTINE void _Chain_Iterator_registry_initialize(
+  Chain_Iterator_registry *the_registry
+)
+{
+  _Chain_Initialize_empty( &the_registry->Iterators );
+}
+
+/**
+ * @brief Updates all iterators present in the chain iterator registry in case
+ * of a node extraction.
+ *
+ * Must be called before _Chain_Extract_unprotected().
+ *
+ * @warning This function will look at all registered chain iterators to
+ *   determine if an update is necessary.
+ */
+RTEMS_INLINE_ROUTINE void _Chain_Iterator_registry_update(
+  Chain_Iterator_registry *the_registry,
+  Chain_Node              *the_node_to_extract
+)
+{
+  Chain_Node *iter_node;
+  Chain_Node *iter_tail;
+
+  iter_node = _Chain_Head( &the_registry->Iterators );
+  iter_tail = _Chain_Tail( &the_registry->Iterators );
+
+  while ( ( iter_node = _Chain_Next( iter_node ) ) != iter_tail ) {
+    Chain_Iterator *iter;
+
+    iter = (Chain_Iterator *) iter_node;
+
+    if ( iter->position == the_node_to_extract ) {
+      if ( iter->direction == CHAIN_ITERATOR_FORWARD ) {
+        iter->position = _Chain_Previous( the_node_to_extract );
+      } else {
+        iter->position = _Chain_Next( the_node_to_extract );
+      }
+    }
+  }
+}
+
+/**
+ * @brief Initializes the chain iterator.
+ *
+ * In the following example nodes inserted during the iteration are visited in
+ * case they are inserted after the current position in iteration order.
+ *
+ * @code
+ * #include <rtems/score/chainimpl.h>
+ * #include <rtems/score/isrlock.h>
+ *
+ * typedef struct {
+ *   Chain_Control           Chain;
+ *   Chain_Iterator_registry Iterators;
+ *   ISR_LOCK_MEMBER(        Lock )
+ * } Some_Control;
+ *
+ * void iterate(
+ *   Some_Control   *the_some,
+ *   void         ( *visitor )( Chain_Node * )
+ * )
+ * {
+ *   ISR_lock_Context  lock_context;
+ *   Chain_Iterator    iter;
+ *   Chain_Node       *node;
+ *   const Chain_Node *end;
+ *
+ *   end = _Chain_Immutable_tail( &the_some->Chain );
+ *
+ *   _ISR_lock_ISR_disable_and_acquire( &the_some->Lock, &lock_context );
+ *
+ *   _Chain_Iterator_initialize(
+ *     &the_some->Chain,
+ *     &the_some->Iterators,
+ *     &iter,
+ *     CHAIN_ITERATOR_FORWARD
+ *   );
+ *
+ *   while ( ( node = _Chain_Iterator_next( &iter ) ) != end ) {
+ *     _Chain_Iterator_set_position( &iter, node );
+ *     _ISR_lock_Release_and_ISR_enable( &the_some->Lock, &lock_context );
+ *     ( *visitor )( node );
+ *     _ISR_lock_ISR_disable_and_acquire( &the_some->Lock, &lock_context );
+ *   }
+ *
+ *   _Chain_Iterator_destroy( &iter );
+ *   _ISR_lock_Release_and_ISR_enable( &the_some->Lock, &lock_context );
+ * }
+ * @endcode
+ *
+ * @param the_chain The chain to iterate.
+ * @param the_registry The registry for the chain iterator.
+ * @param the_iterator The chain iterator to initialize.
+ * @param direction The iteration direction.
+ *
+ * @see _Chain_Iterator_next(), _Chain_Iterator_set_position() and
+ * Chain_Iterator_destroy().
+ *
+ * @warning Think twice before you use a chain iterator.  Its current
+ *   implementation is unfit for use in performance relevant components, due to
+ *   the linear time complexity in _Chain_Iterator_registry_update().
+ */
+RTEMS_INLINE_ROUTINE void _Chain_Iterator_initialize(
+  Chain_Control            *the_chain,
+  Chain_Iterator_registry  *the_registry,
+  Chain_Iterator           *the_iterator,
+  Chain_Iterator_direction  direction
+)
+{
+  _Chain_Append_unprotected(
+    &the_registry->Iterators,
+    &the_iterator->Registry_node
+  );
+
+  the_iterator->direction = direction;
+
+  if ( direction == CHAIN_ITERATOR_FORWARD ) {
+    the_iterator->position = _Chain_Head( the_chain );
+  } else {
+    the_iterator->position = _Chain_Tail( the_chain );
+  }
+}
+
+/**
+ * @brief Returns the next node in the iterator direction.
+ *
+ * In case a next node exists, then the iterator should be updated via
+ * _Chain_Iterator_set_position() to continue with the next iteration step.
+ *
+ * @param the_iterator The chain iterator.
+ */
+RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Iterator_next(
+  const Chain_Iterator *the_iterator
+)
+{
+  if ( the_iterator->direction == CHAIN_ITERATOR_FORWARD ) {
+    return _Chain_Next( the_iterator->position );
+  } else {
+    return _Chain_Previous( the_iterator->position );
+  }
+}
+
+/**
+ * @brief Sets the iterator position.
+ *
+ * @param the_iterator The chain iterator.
+ * @param the_node The new iterator position.
+ */
+RTEMS_INLINE_ROUTINE void _Chain_Iterator_set_position(
+  Chain_Iterator *the_iterator,
+  Chain_Node     *the_node
+)
+{
+  the_iterator->position = the_node;
+}
+
+/**
+ * @brief Destroys the iterator.
+ *
+ * Removes the iterator from its registry.
+ *
+ * @param the_iterator The chain iterator.
+ */
+RTEMS_INLINE_ROUTINE void _Chain_Iterator_destroy(
+  Chain_Iterator *the_iterator
+)
+{
+  _Chain_Extract_unprotected( &the_iterator->Registry_node );
+}
+
 /** @} */
 
 #ifdef __cplusplus

@@ -16,6 +16,124 @@
 
 const char rtems_test_name[] = "SPCHAIN";
 
+static void update_registry_and_extract(
+  Chain_Iterator_registry *reg,
+  Chain_Node *n
+)
+{
+  _Chain_Iterator_registry_update( reg, n );
+  _Chain_Extract_unprotected( n );
+}
+
+static Chain_Iterator_registry static_reg =
+  CHAIN_ITERATOR_REGISTRY_INITIALIZER( static_reg );
+
+static void test_chain_iterator( void )
+{
+  Chain_Control chain;
+  Chain_Iterator_registry reg;
+  Chain_Iterator fit;
+  Chain_Iterator bit;
+  Chain_Node a;
+  Chain_Node b;
+  Chain_Node c;
+
+  puts( "INIT - Verify Chain_Iterator" );
+
+  rtems_test_assert( _Chain_Is_empty( &static_reg.Iterators ));
+
+  _Chain_Initialize_empty( &chain );
+  _Chain_Iterator_registry_initialize( &reg );
+  _Chain_Iterator_initialize( &chain, &reg, &fit, CHAIN_ITERATOR_FORWARD );
+  _Chain_Iterator_initialize( &chain, &reg, &bit, CHAIN_ITERATOR_BACKWARD );
+
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == _Chain_Tail( &chain ));
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == _Chain_Head( &chain ));
+
+  _Chain_Iterator_set_position( &fit, _Chain_Head( &chain ) );
+  _Chain_Iterator_set_position( &bit, _Chain_Tail( &chain ) );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == _Chain_Tail( &chain ));
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == _Chain_Head( &chain ));
+
+  _Chain_Append_unprotected( &chain, &a );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &a );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &a );
+
+  _Chain_Append_unprotected( &chain, &b );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &a );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &b );
+
+  _Chain_Append_unprotected( &chain, &c );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &a );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &c );
+
+  update_registry_and_extract( &reg, &b );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &a );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &c );
+
+  _Chain_Insert_unprotected( &a, &b );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &a );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &c );
+
+  update_registry_and_extract( &reg, &c );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &a );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &b );
+
+  _Chain_Append_unprotected( &chain, &c );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &a );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &c );
+
+  update_registry_and_extract( &reg, &a );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &b );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &c );
+
+  _Chain_Prepend_unprotected( &chain, &a );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &a );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &c );
+
+  update_registry_and_extract( &reg, &a );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &b );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &c );
+
+  update_registry_and_extract( &reg, &b );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &c );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &c );
+
+  update_registry_and_extract( &reg, &c );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == _Chain_Tail( &chain ));
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == _Chain_Head( &chain ));
+
+  _Chain_Append_unprotected( &chain, &a );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &a );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &a );
+
+  _Chain_Append_unprotected( &chain, &b );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &a );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &b );
+
+  _Chain_Append_unprotected( &chain, &c );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &a );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &c );
+
+  update_registry_and_extract( &reg, &c );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &a );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &b );
+
+  update_registry_and_extract( &reg, &b );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == &a );
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == &a );
+
+  update_registry_and_extract( &reg, &a );
+  rtems_test_assert( _Chain_Iterator_next( &fit ) == _Chain_Tail( &chain ));
+  rtems_test_assert( _Chain_Iterator_next( &bit ) == _Chain_Head( &chain ));
+
+  rtems_test_assert( !_Chain_Is_empty( &reg.Iterators ));
+  _Chain_Iterator_destroy( &fit );
+  rtems_test_assert( !_Chain_Is_empty( &reg.Iterators ));
+  _Chain_Iterator_destroy( &bit );
+  rtems_test_assert( _Chain_Is_empty( &reg.Iterators ));
+}
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
@@ -341,6 +459,7 @@ rtems_task Init(
   test_chain_control_initializer();
   test_chain_node_count();
   test_chain_insert_ordered();
+  test_chain_iterator();
 
   TEST_END();
   rtems_test_exit(0);

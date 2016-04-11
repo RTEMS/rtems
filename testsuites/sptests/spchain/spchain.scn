@@ -1,4 +1,4 @@
-*** TEST OF RTEMS CHAIN API ***
+*** BEGIN OF TEST SPCHAIN ***
 Init - Initialize chain empty
 INIT - Verify rtems_chain_insert
 INIT - Verify rtems_chain_is_first
@@ -14,4 +14,5 @@ INIT - Verify rtems_chain_control layout
 INIT - Verify rtems_chain_control initializer
 INIT - Verify rtems_chain_node_count_unprotected
 INIT - Verify _Chain_Insert_ordered_unprotected
-*** END OF RTEMS CHAIN API TEST ***
+INIT - Verify Chain_Iterator
+*** END OF TEST SPCHAIN ***
