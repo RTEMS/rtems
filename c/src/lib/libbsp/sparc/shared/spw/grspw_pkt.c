@@ -1841,7 +1841,7 @@ int grspw_dma_tx_send(void *c, int opts, struct grspw_list *pkts, int count)
 		grspw_tx_process_scheduled(dma);
 
 	/* 2. Add the requested packets to the SEND List (USER->SEND) */
-	if (pkts) {
+	if (pkts && (count > 0)) {
 		grspw_list_append_list(&dma->send, pkts);
 		dma->send_cnt += count;
 		if (dma->stats.send_cnt_max < dma->send_cnt)
@@ -3104,7 +3104,7 @@ static int grspw_common_init(void)
 		if (rtems_task_start(grspw_work_task, grspw_work_func, 0) !=
 		    RTEMS_SUCCESSFUL)
 			return -1;
-	}
+}
 
 	grspw_initialized = 1;
 	return 0;

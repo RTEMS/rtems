@@ -648,6 +648,9 @@ grspw_list_prepend(struct grspw_list *list, struct grspw_pkt *pkt)
 static inline void
 grspw_list_append_list(struct grspw_list *list, struct grspw_list *alist)
 {
+	if (grspw_list_is_empty(alist)) {
+		return;
+	}
 	alist->tail->next = NULL;
 	if ( list->tail == NULL ) {
 		list->head = alist->head;
@@ -660,6 +663,9 @@ grspw_list_append_list(struct grspw_list *list, struct grspw_list *alist)
 static inline void
 grspw_list_prepend_list(struct grspw_list *list, struct grspw_list *alist)
 {
+	if (grspw_list_is_empty(alist)) {
+		return;
+	}
 	if ( list->head == NULL ) {
 		list->tail = alist->tail;
 		alist->tail->next = NULL;
@@ -673,6 +679,9 @@ grspw_list_prepend_list(struct grspw_list *list, struct grspw_list *alist)
 static inline void
 grspw_list_remove_head_list(struct grspw_list *list, struct grspw_list *dlist)
 {
+	if (grspw_list_is_empty(dlist)) {
+		return;
+	}
 	list->head = dlist->tail->next;
 	if ( list->head == NULL ) {
 		list->tail = NULL;
