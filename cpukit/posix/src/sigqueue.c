@@ -31,5 +31,5 @@ int sigqueue(
   const union sigval  value
 )
 {
-  return killinfo( pid, signo, &value );
+  return _POSIX_signals_Send( pid, signo, &value );
 }

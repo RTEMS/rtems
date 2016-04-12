@@ -54,7 +54,7 @@
 #define _POSIX_signals_Is_interested( _api, _mask ) \
   ( (_api)->signals_unblocked & (_mask) )
 
-int killinfo(
+int _POSIX_signals_Send(
   pid_t               pid,
   int                 sig,
   const union sigval *value

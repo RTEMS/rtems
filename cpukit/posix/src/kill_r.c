@@ -37,6 +37,6 @@ int _kill_r(
   int            sig
 )
 {
-  return killinfo( pid, sig, NULL );
+  return _POSIX_signals_Send( pid, sig, NULL );
 }
 #endif

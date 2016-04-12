@@ -107,7 +107,7 @@ bool _POSIX_signals_Clear_signals(
   bool                do_signals_acquire_release
 );
 
-int killinfo(
+int _POSIX_signals_Send(
   pid_t               pid,
   int                 sig,
   const union sigval *value
