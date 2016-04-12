@@ -80,6 +80,7 @@ extern rtems_shell_cmd_t rtems_shell_MD5_Command;
 extern rtems_shell_cmd_t rtems_shell_RTC_Command;
 
 extern rtems_shell_cmd_t rtems_shell_SHUTDOWN_Command;
+extern rtems_shell_cmd_t rtems_shell_CPUINFO_Command;
 extern rtems_shell_cmd_t rtems_shell_CPUUSE_Command;
 extern rtems_shell_cmd_t rtems_shell_TOP_Command;
 extern rtems_shell_cmd_t rtems_shell_STACKUSE_Command;
@@ -429,6 +430,11 @@ extern rtems_shell_alias_t * const rtems_shell_Initial_aliases[];
          !defined(CONFIGURE_SHELL_NO_COMMAND_SHUTDOWN)) || \
         defined(CONFIGURE_SHELL_COMMAND_SHUTDOWN)
       &rtems_shell_SHUTDOWN_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_CPUINFO)) || \
+        defined(CONFIGURE_SHELL_COMMAND_CPUINFO)
+      &rtems_shell_CPUINFO_Command,
     #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_CPUUSE)) || \

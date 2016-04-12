@@ -30,6 +30,7 @@ EXTRA_DIST += cpuuse/README
 noinst_LIBRARIES += libcpuuse.a
 libcpuuse_a_SOURCES = cpuuse/cpuusagereport.c cpuuse/cpuusagereset.c \
      cpuuse/cpuuse.h cpuuse/cpuusagedata.c cpuuse/cpuusagetop.c
+libcpuuse_a_SOURCES += cpuuse/cpuinforeport.c
 
 ## devnull
 noinst_LIBRARIES += libdevnull.a
@@ -114,6 +115,7 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
 libshell_a_SOURCES += shell/main_cmdls.c
 libshell_a_SOURCES += shell/main_cmdchown.c
 libshell_a_SOURCES += shell/main_cmdchmod.c
+libshell_a_SOURCES += shell/main_cpuinfo.c
 libshell_a_SOURCES += shell/main_profreport.c
 
 if LIBDRVMGR

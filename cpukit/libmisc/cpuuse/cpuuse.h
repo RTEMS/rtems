@@ -73,6 +73,13 @@ void rtems_cpu_usage_top( void );
 
 void rtems_cpu_usage_reset( void );
 
+/**
+ * @brief Reports per-processor information.
+ *
+ * @return The number of characters printed.
+ */
+int rtems_cpu_info_report( const rtems_printer *printer );
+
 #ifdef __cplusplus
 }
 #endif
