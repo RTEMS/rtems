@@ -537,6 +537,8 @@ lidate */
 
 #define FSL_EIS_MAS7 944
 
+#define FSL_EIS_MAS8 341
+
 #define FSL_EIS_MMUCFG 1015
 #define FSL_EIS_MMUCSR0 1012
 #define FSL_EIS_PID0 48
