@@ -19,6 +19,7 @@
 #define _RTEMS_SCORE_USEREXTIMPL_H
 
 #include <rtems/score/userext.h>
+#include <rtems/score/isrlock.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/percpu.h>
 
@@ -36,9 +37,41 @@ extern "C" {
 /**@{**/
 
 /**
+ * @brief Chain iterator for dynamic user extensions.
+ *
+ * Since user extensions may delete or restart the executing thread, we must
+ * clean up registered iterators.
+ *
+ * @see _User_extensions_Iterate(), _User_extensions_Destroy_iterators() and
+ *   Thread_Control::last_user_extensions_iterator.
+ */
+typedef struct User_extensions_Iterator {
+  Chain_Iterator                   Iterator;
+  struct User_extensions_Iterator *previous;
+} User_extensions_Iterator;
+
+typedef struct {
+  /**
+   * @brief Active dynamically added user extensions.
+   */
+  Chain_Control Active;
+
+  /**
+   * @brief Chain iterator registration.
+   */
+  Chain_Iterator_registry Iterators;
+
+  /**
+   * @brief Lock to protect User_extensions_List::Active and
+   * User_extensions_List::Iterators.
+   */
+  ISR_LOCK_MEMBER( Lock )
+} User_extensions_List;
+
+/**
  * @brief List of active extensions.
  */
-extern Chain_Control _User_extensions_List;
+extern User_extensions_List _User_extensions_List;
 
 /**
  * @brief List of active task switch extensions.
@@ -153,11 +186,13 @@ void _User_extensions_Thread_terminate_visitor(
  * @brief Iterates through all user extensions and calls the visitor for each.
  *
  * @param[in, out] arg The argument passed to the visitor.
- * @param[in] visitor is the visitor for each extension.
+ * @param[in] visitor The visitor for each extension.
+ * @param[in] direction The iteration direction for dynamic extensions.
  */
 void _User_extensions_Iterate(
-  void                    *arg,
-  User_extensions_Visitor  visitor
+  void                     *arg,
+  User_extensions_Visitor   visitor,
+  Chain_Iterator_direction  direction
 );
 
 /** @} */
@@ -171,7 +206,11 @@ static inline bool _User_extensions_Thread_create( Thread_Control *created )
 {
   User_extensions_Thread_create_context ctx = { created, true };
 
-  _User_extensions_Iterate( &ctx, _User_extensions_Thread_create_visitor );
+  _User_extensions_Iterate(
+    &ctx,
+    _User_extensions_Thread_create_visitor,
+    CHAIN_ITERATOR_FORWARD
+  );
 
   return ctx.ok;
 }
@@ -180,7 +219,8 @@ static inline void _User_extensions_Thread_delete( Thread_Control *deleted )
 {
   _User_extensions_Iterate(
     deleted,
-    _User_extensions_Thread_delete_visitor
+    _User_extensions_Thread_delete_visitor,
+    CHAIN_ITERATOR_BACKWARD
   );
 }
 
@@ -188,7 +228,8 @@ static inline void _User_extensions_Thread_start( Thread_Control *started )
 {
   _User_extensions_Iterate(
     started,
-    _User_extensions_Thread_start_visitor
+    _User_extensions_Thread_start_visitor,
+    CHAIN_ITERATOR_FORWARD
   );
 }
 
@@ -196,7 +237,8 @@ static inline void _User_extensions_Thread_restart( Thread_Control *restarted )
 {
   _User_extensions_Iterate(
     restarted,
-    _User_extensions_Thread_restart_visitor
+    _User_extensions_Thread_restart_visitor,
+    CHAIN_ITERATOR_FORWARD
   );
 }
 
@@ -204,7 +246,8 @@ static inline void _User_extensions_Thread_begin( Thread_Control *executing )
 {
   _User_extensions_Iterate(
     executing,
-    _User_extensions_Thread_begin_visitor
+    _User_extensions_Thread_begin_visitor,
+    CHAIN_ITERATOR_FORWARD
   );
 }
 
@@ -239,7 +282,8 @@ static inline void _User_extensions_Thread_exitted( Thread_Control *executing )
 {
   _User_extensions_Iterate(
     executing,
-    _User_extensions_Thread_exitted_visitor
+    _User_extensions_Thread_exitted_visitor,
+    CHAIN_ITERATOR_FORWARD
   );
 }
 
@@ -251,7 +295,11 @@ static inline void _User_extensions_Fatal(
 {
   User_extensions_Fatal_context ctx = { source, is_internal, error };
 
-  _User_extensions_Iterate( &ctx, _User_extensions_Fatal_visitor );
+  _User_extensions_Iterate(
+    &ctx,
+    _User_extensions_Fatal_visitor,
+    CHAIN_ITERATOR_BACKWARD
+  );
 }
 
 static inline void _User_extensions_Thread_terminate(
@@ -260,8 +308,44 @@ static inline void _User_extensions_Thread_terminate(
 {
   _User_extensions_Iterate(
     executing,
-    _User_extensions_Thread_terminate_visitor
+    _User_extensions_Thread_terminate_visitor,
+    CHAIN_ITERATOR_FORWARD
   );
+}
+
+static inline void _User_extensions_Acquire( ISR_lock_Context *lock_context )
+{
+  _ISR_lock_ISR_disable_and_acquire(
+    &_User_extensions_List.Lock,
+    lock_context
+  );
+}
+
+static inline void _User_extensions_Release( ISR_lock_Context *lock_context )
+{
+  _ISR_lock_Release_and_ISR_enable(
+    &_User_extensions_List.Lock,
+    lock_context
+  );
+}
+
+static inline void _User_extensions_Destroy_iterators(
+  Thread_Control *the_thread
+)
+{
+  ISR_lock_Context          lock_context;
+  User_extensions_Iterator *iter;
+
+  _User_extensions_Acquire( &lock_context );
+
+  iter = the_thread->last_user_extensions_iterator;
+
+  while ( iter != NULL ) {
+    _Chain_Iterator_destroy( &iter->Iterator );
+    iter = iter->previous;
+  }
+
+  _User_extensions_Release( &lock_context );
 }
 
 /** @} */

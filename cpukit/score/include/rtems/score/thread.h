@@ -48,6 +48,8 @@ struct Scheduler_Control;
 
 struct Scheduler_Node;
 
+struct User_extensions_Iterator;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -897,6 +899,11 @@ struct _Thread_Control {
    * @brief LIFO list of POSIX cleanup contexts.
    */
   struct _pthread_cleanup_context *last_cleanup_context;
+
+  /**
+   * @brief LIFO list of user extensions iterators.
+   */
+  struct User_extensions_Iterator *last_user_extensions_iterator;
 
   /**
    * @brief Variable length array of user extension pointers.

@@ -97,6 +97,7 @@ static void _Thread_Free( Thread_Control *the_thread )
     _Objects_Get_information_id( the_thread->Object.id );
 
   _User_extensions_Thread_delete( the_thread );
+  _User_extensions_Destroy_iterators( the_thread );
   _ISR_lock_Destroy( &the_thread->Keys.Lock );
   _Scheduler_Node_destroy( _Scheduler_Get( the_thread ), the_thread );
   _ISR_lock_Destroy( &the_thread->Timer.Lock );
@@ -255,6 +256,7 @@ void _Thread_Life_action_handler(
 
       executing->Life.state = THREAD_LIFE_NORMAL;
 
+      _User_extensions_Destroy_iterators( executing );
       _Thread_Load_environment( executing );
       _Thread_Restart_self( executing );
       RTEMS_UNREACHABLE();

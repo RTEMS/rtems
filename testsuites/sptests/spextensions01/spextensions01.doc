@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spextensions01
+
+directives:
+
+  - rtems_extension_create()
+  - _User_extensions_Iterate()
+
+concepts:
+
+  - Ensure that the user extensions are called in the right order.
