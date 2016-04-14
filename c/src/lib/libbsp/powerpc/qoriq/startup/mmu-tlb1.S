@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -19,6 +19,8 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.org/license/LICENSE.
  */
+
+#include <bspopts.h>
 
 #include <libcpu/powerpc-utility.h>
 
@@ -42,6 +44,10 @@ qoriq_tlb1_write:
 	or	r6, r8, r6
 	mtspr	FSL_EIS_MAS3, r6
 	mtspr	FSL_EIS_MAS7, r7
+#ifdef QORIQ_HAS_HYPERVISOR_MODE
+	li	r0, 0
+	mtspr	FSL_EIS_MAS8, r0
+#endif
 	tlbwe
 	sync
 	isync
@@ -56,6 +62,9 @@ qoriq_tlb1_invalidate:
 	mtspr	FSL_EIS_MAS2, r0
 	mtspr	FSL_EIS_MAS3, r0
 	mtspr	FSL_EIS_MAS7, r0
+#ifdef QORIQ_HAS_HYPERVISOR_MODE
+	mtspr	FSL_EIS_MAS8, r0
+#endif
 	tlbwe
 	sync
 	isync
