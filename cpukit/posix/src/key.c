@@ -111,8 +111,18 @@ static void _POSIX_Keys_Run_destructors( Thread_Control *the_thread )
   }
 }
 
+static void _POSIX_Keys_Restart_run_destructors(
+  Thread_Control *executing,
+  Thread_Control *the_thread
+)
+{
+  (void) executing;
+  _POSIX_Keys_Run_destructors( the_thread );
+}
+
 static User_extensions_Control _POSIX_Keys_Extensions = {
   .Callouts = {
+    .thread_restart = _POSIX_Keys_Restart_run_destructors,
     .thread_terminate = _POSIX_Keys_Run_destructors
   }
 };

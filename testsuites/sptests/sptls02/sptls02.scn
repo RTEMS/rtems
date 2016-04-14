@@ -1,4 +1,4 @@
-*** TEST SPTLS 2 ***
+*** BEGIN OF TEST SPTLS 2 ***
 A::globalCounter() = 0
 A::globalCounter() = 3
 *** END OF TEST SPTLS 2 ***

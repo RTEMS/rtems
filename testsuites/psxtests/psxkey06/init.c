@@ -19,16 +19,34 @@
 
 const char rtems_test_name[] = "PSXKEY 6";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_task Test_Thread1(rtems_task_argument argument);
-rtems_task Test_Thread2(rtems_task_argument argument);
+static int Data_array[4] = {1, 2, 3, 4};
 
-int Data_array[4] = {1, 2, 3, 4};
+static pthread_key_t key1, key2, key3;
 
-pthread_key_t key1, key2;
+static rtems_id Thread_Master;
 
-rtems_task Test_Thread1( rtems_task_argument argument )
+static int Key3_Destructor_Counter;
+
+static void Wake_Up_Master(void)
+{
+  rtems_status_code rc;
+
+  rc = rtems_event_transient_send( Thread_Master );
+  rtems_test_assert( rc == RTEMS_SUCCESSFUL );
+}
+
+static void Wait_For_Worker(void)
+{
+  rtems_status_code rc;
+
+  rc = rtems_event_transient_receive(
+    RTEMS_WAIT,
+    RTEMS_NO_TIMEOUT
+  );
+  rtems_test_assert( rc == RTEMS_SUCCESSFUL );
+}
+
+static rtems_task Test_Thread1( rtems_task_argument argument )
 {
   int sc;
   int *value;
@@ -59,7 +77,7 @@ rtems_task Test_Thread1( rtems_task_argument argument )
   rtems_task_delete( RTEMS_SELF );
 }
 
-rtems_task Test_Thread2( rtems_task_argument argument )
+static rtems_task Test_Thread2( rtems_task_argument argument )
 {
   int sc;
   int *value;
@@ -83,15 +101,48 @@ rtems_task Test_Thread2( rtems_task_argument argument )
   rtems_task_delete( RTEMS_SELF );
 }
 
-rtems_task Init( rtems_task_argument ignored )
+static void Key3_Destructor( void *value )
+{
+  rtems_test_assert( value == &Thread_Master );
+  ++Key3_Destructor_Counter;
+}
+
+static rtems_task Test_Thread3( rtems_task_argument argument )
+{
+  int   sc;
+  void *value;
+
+  puts( "Test_Thread 3 - key3 pthread_getspecific - OK" );
+  value = pthread_getspecific( key3 );
+  rtems_test_assert( value == NULL );
+
+  puts( "Test_Thread 3 - key3 pthread_setspecific - OK" );
+  sc = pthread_setspecific( key3, &Thread_Master );
+  rtems_test_assert( sc == 0 );
+
+  if ( argument == 0 ) {
+    puts( "Test_Thread 3 - restart self - OK" );
+    rtems_task_restart( RTEMS_SELF, 1 );
+  } else if ( argument == 1 ) {
+    Wake_Up_Master();
+    rtems_task_delete( RTEMS_SELF );
+  }
+
+  rtems_test_assert( false );
+}
+
+static rtems_task Init( rtems_task_argument ignored )
 {
   rtems_id          thread1;
   rtems_id          thread2;
+  rtems_id          thread3;
   rtems_status_code rc;
   int               sc;
   struct timespec   delay_request;
 
   TEST_BEGIN();
+
+  Thread_Master = rtems_task_self();
 
   puts( "Init - pthread key1 create - OK" );
   sc = pthread_key_create( &key1, NULL );
@@ -141,6 +192,33 @@ rtems_task Init( rtems_task_argument ignored )
 
   puts( "Init - pthread key2 delete - OK" );
   sc = pthread_key_delete( key2 );
+  rtems_test_assert( sc == 0 );
+
+  puts( "Init - pthread key3 create - OK" );
+  sc = pthread_key_create( &key3, Key3_Destructor );
+  rtems_test_assert( sc == 0 );
+
+  puts( "Init - thread3 create - OK" );
+  rc = rtems_task_create(
+    rtems_build_name( 'R', 'E', 'S', 'T' ),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &thread3
+  );
+  rtems_test_assert( rc == RTEMS_SUCCESSFUL );
+
+  puts( "Init - thread3 start - OK" );
+  rc = rtems_task_start( thread3, Test_Thread3, 0 );
+  rtems_test_assert( rc == RTEMS_SUCCESSFUL );
+
+  Wait_For_Worker();
+
+  rtems_test_assert( Key3_Destructor_Counter == 2 );
+
+  puts( "Init - pthread key3 delete - OK" );
+  sc = pthread_key_delete( key3 );
   rtems_test_assert( sc == 0 );
 
   TEST_END();
