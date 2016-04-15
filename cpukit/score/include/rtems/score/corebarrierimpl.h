@@ -193,19 +193,33 @@ uint32_t _CORE_barrier_Do_release(
     )
 #endif
 
+Thread_Control *_CORE_barrier_Was_deleted(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+);
+
 /* Must be a macro due to the multiprocessing dependent parameters */
 #define _CORE_barrier_Flush( \
   the_barrier, \
   mp_callout, \
   mp_id \
 ) \
-  _Thread_queue_Flush( \
-    &( the_barrier )->Wait_queue, \
-    CORE_BARRIER_TQ_OPERATIONS, \
-    CORE_BARRIER_WAS_DELETED, \
-    mp_callout, \
-    mp_id \
-  )
+  do { \
+    ISR_lock_Context _core_barrier_flush_lock_context; \
+    _Thread_queue_Acquire( \
+      &( the_barrier )->Wait_queue, \
+      &_core_barrier_flush_lock_context \
+    ); \
+    _Thread_queue_Flush_critical( \
+      &( the_barrier )->Wait_queue.Queue, \
+      CORE_BARRIER_TQ_OPERATIONS, \
+      _CORE_barrier_Was_deleted, \
+      mp_callout, \
+      mp_id, \
+      &_core_barrier_flush_lock_context \
+    ); \
+  } while ( 0 )
 
 /**
  * This function returns true if the automatic release attribute is

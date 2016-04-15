@@ -92,7 +92,7 @@ rtems_status_code rtems_semaphore_delete(
       if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
         _CORE_mutex_Flush(
           &the_semaphore->Core_control.mutex,
-          CORE_MUTEX_WAS_DELETED,
+          _CORE_mutex_Was_deleted,
           _Semaphore_MP_Send_object_was_deleted,
           id
         );

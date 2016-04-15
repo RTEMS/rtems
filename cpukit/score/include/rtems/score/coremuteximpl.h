@@ -338,20 +338,40 @@ CORE_mutex_Status _CORE_mutex_Do_surrender(
     )
 #endif
 
+Thread_Control *_CORE_mutex_Was_deleted(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+);
+
+Thread_Control *_CORE_mutex_Unsatisfied_nowait(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+);
+
 /* Must be a macro due to the multiprocessing dependent parameters */
 #define _CORE_mutex_Flush( \
   the_mutex, \
-  status, \
+  filter, \
   mp_callout, \
   mp_id \
 ) \
-  _Thread_queue_Flush( \
-    &( the_mutex )->Wait_queue, \
-    ( the_mutex )->operations, \
-    status, \
-    mp_callout, \
-    mp_id \
-  )
+  do { \
+    ISR_lock_Context _core_mutex_flush_lock_context; \
+    _Thread_queue_Acquire( \
+      &( the_mutex )->Wait_queue, \
+      &_core_mutex_flush_lock_context \
+    ); \
+    _Thread_queue_Flush_critical( \
+      &( the_mutex )->Wait_queue.Queue, \
+      ( the_mutex )->operations, \
+      filter, \
+      mp_callout, \
+      mp_id, \
+      &_core_mutex_flush_lock_context \
+    ); \
+  } while ( 0 )
 
 /**
  * @brief Is mutex locked.

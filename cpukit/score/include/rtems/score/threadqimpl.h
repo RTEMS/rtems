@@ -590,57 +590,96 @@ Thread_Control *_Thread_queue_First(
   const Thread_queue_Operations *operations
 );
 
-void _Thread_queue_Do_flush(
-  Thread_queue_Control          *the_thread_queue,
+/**
+ * @brief Thread queue flush filter function.
+ *
+ * Called under protection of the thread queue lock by
+ * _Thread_queue_Flush_critical() to optionally alter the thread wait
+ * information and control the iteration.
+ *
+ * @param the_thread The thread to extract.  This is the first parameter to
+ *   optimize for architectures that use the same register for the first
+ *   parameter and the return value.
+ * @param queue The actual thread queue.
+ * @param lock_context The lock context of the lock acquire.  May be used to
+ *   pass additional data to the filter function via an overlay structure.  The
+ *   filter function should not release or acquire the thread queue lock.
+ *
+ * @retval the_thread Extract this thread.
+ * @retval NULL Do not extract this thread and stop the thread queue flush
+ *   operation.  Threads that are already extracted will complete the flush
+ *   operation.
+ */
+typedef Thread_Control *( *Thread_queue_Flush_filter )(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+);
+
+size_t _Thread_queue_Do_flush_critical(
+  Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
-  uint32_t                       status
+  Thread_queue_Flush_filter      filter,
 #if defined(RTEMS_MULTIPROCESSING)
-  ,
   Thread_queue_MP_callout        mp_callout,
-  Objects_Id                     mp_id
+  Objects_Id                     mp_id,
 #endif
+  ISR_lock_Context              *lock_context
 );
 
 /**
- * @brief Unblocks all threads blocked on the thread queue.
+ * @brief Unblocks all threads enqueued on the thread queue.
  *
- * The thread timers of the threads are cancelled.
+ * This function iteratively extracts the first enqueued thread of the thread
+ * queue until the thread queue is empty or the filter function indicates a
+ * stop.  The thread timers of the extracted threads are cancelled.  The
+ * extracted threads are unblocked.
  *
- * @param the_thread_queue The thread queue.
+ * @param queue The actual thread queue.
  * @param operations The thread queue operations.
- * @param status The return status for the threads.
+ * @param filter The filter functions is called for each thread to extract from
+ *   the thread queue.  It may be used to alter the thread under protection of
+ *   the thread queue lock, for example to set the thread wait return code.
+ *   The return value of the filter function controls if the thread queue flush
+ *   operation should stop or continue.
  * @param mp_callout Callout to extract the proxy of a remote thread.  This
  *   parameter is only used on multiprocessing configurations.
  * @param mp_id Object identifier of the object containing the thread queue.
  *   This parameter is only used on multiprocessing configurations.
+ *
+ * @return The count of extracted threads.
  */
 #if defined(RTEMS_MULTIPROCESSING)
-  #define _Thread_queue_Flush( \
-    the_thread_queue, \
+  #define _Thread_queue_Flush_critical( \
+    queue, \
     operations, \
-    status, \
+    filter, \
     mp_callout, \
-    mp_id \
+    mp_id, \
+    lock_context \
   ) \
-    _Thread_queue_Do_flush( \
-      the_thread_queue, \
+    _Thread_queue_Do_flush_critical( \
+      queue, \
       operations, \
-      status, \
+      filter, \
       mp_callout, \
-      mp_id \
+      mp_id, \
+      lock_context \
     )
 #else
-  #define _Thread_queue_Flush( \
-    the_thread_queue, \
+  #define _Thread_queue_Flush_critical( \
+    queue, \
     operations, \
-    status, \
+    filter, \
     mp_callout, \
-    mp_id \
+    mp_id, \
+    lock_context \
   ) \
-    _Thread_queue_Do_flush( \
-      the_thread_queue, \
+    _Thread_queue_Do_flush_critical( \
+      queue, \
       operations, \
-      status \
+      filter, \
+      lock_context \
     )
 #endif
 

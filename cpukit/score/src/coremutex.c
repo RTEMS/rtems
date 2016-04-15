@@ -96,3 +96,25 @@ CORE_mutex_Status _CORE_mutex_Initialize(
 
   return CORE_MUTEX_STATUS_SUCCESSFUL;
 }
+
+Thread_Control *_CORE_mutex_Was_deleted(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+)
+{
+  the_thread->Wait.return_code = CORE_MUTEX_WAS_DELETED;
+
+  return the_thread;
+}
+
+Thread_Control *_CORE_mutex_Unsatisfied_nowait(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+)
+{
+  the_thread->Wait.return_code = CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT;
+
+  return the_thread;
+}

@@ -21,6 +21,17 @@
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/wkspace.h>
 
+static Thread_Control *_CORE_message_queue_Was_deleted(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+)
+{
+  the_thread->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED;
+
+  return the_thread;
+}
+
 void _CORE_message_queue_Do_close(
   CORE_message_queue_Control *the_message_queue
 #if defined(RTEMS_MULTIPROCESSING)
@@ -30,17 +41,21 @@ void _CORE_message_queue_Do_close(
 #endif
 )
 {
+  ISR_lock_Context lock_context;
+
   /*
    *  This will flush blocked threads whether they were blocked on
    *  a send or receive.
    */
 
-  _Thread_queue_Flush(
-    &the_message_queue->Wait_queue,
+  _CORE_message_queue_Acquire( the_message_queue, &lock_context );
+  _Thread_queue_Flush_critical(
+    &the_message_queue->Wait_queue.Queue,
     the_message_queue->operations,
-    CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED,
+    _CORE_message_queue_Was_deleted,
     mp_callout,
-    mp_id
+    mp_id,
+    &lock_context
   );
 
   (void) _Workspace_Free( the_message_queue->message_buffers );

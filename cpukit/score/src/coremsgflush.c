@@ -41,7 +41,7 @@ uint32_t   _CORE_message_queue_Flush(
    *
    *  (1) The thread queue of pending senders is a logical extension
    *  of the pending message queue.  In this case, it should be
-   *  flushed using the _Thread_queue_Flush() service with a status
+   *  flushed using the _Thread_queue_Flush_critical() service with a status
    *  such as CORE_MESSAGE_QUEUE_SENDER_FLUSHED (which currently does
    *  not exist).  This can be implemented without changing the "big-O"
    *  of the message flushing part of the routine.

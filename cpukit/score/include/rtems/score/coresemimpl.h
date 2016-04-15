@@ -86,18 +86,36 @@ void _CORE_semaphore_Initialize(
   uint32_t                    initial_value
 );
 
+Thread_Control *_CORE_semaphore_Was_deleted(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+);
+
+Thread_Control *_CORE_semaphore_Unsatisfied_nowait(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+);
+
 #define _CORE_semaphore_Destroy( \
   the_semaphore, \
   mp_callout, \
   mp_id \
 ) \
   do { \
-    _Thread_queue_Flush( \
+    ISR_lock_Context _core_semaphore_destroy_lock_context; \
+    _Thread_queue_Acquire( \
       &( the_semaphore )->Wait_queue, \
+      &_core_semaphore_destroy_lock_context \
+    ); \
+    _Thread_queue_Flush_critical( \
+      &( the_semaphore )->Wait_queue.Queue, \
       ( the_semaphore )->operations, \
-      CORE_SEMAPHORE_WAS_DELETED, \
+      _CORE_semaphore_Was_deleted, \
       mp_callout, \
-      mp_id \
+      mp_id, \
+      &_core_semaphore_destroy_lock_context \
     ); \
     _Thread_queue_Destroy( &( the_semaphore )->Wait_queue ); \
   } while ( 0 )
@@ -192,13 +210,21 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Do_surrender(
   mp_callout, \
   mp_id \
 ) \
-  _Thread_queue_Flush( \
-    &( the_semaphore )->Wait_queue, \
-    ( the_semaphore )->operations, \
-    CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT, \
-    mp_callout, \
-    mp_id \
-  )
+  do { \
+    ISR_lock_Context _core_semaphore_flush_lock_context; \
+    _Thread_queue_Acquire( \
+      &( the_semaphore )->Wait_queue, \
+      &_core_semaphore_flush_lock_context \
+    ); \
+    _Thread_queue_Flush_critical( \
+      &( the_semaphore )->Wait_queue.Queue, \
+      ( the_semaphore )->operations, \
+      _CORE_semaphore_Unsatisfied_nowait, \
+      mp_callout, \
+      mp_id, \
+      &_core_semaphore_flush_lock_context \
+    ); \
+  } while ( 0 )
 
 /**
  * This routine returns the current count associated with the semaphore.

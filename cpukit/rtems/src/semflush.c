@@ -53,7 +53,7 @@ rtems_status_code rtems_semaphore_flush(
       if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
         _CORE_mutex_Flush(
           &the_semaphore->Core_control.mutex,
-          CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT,
+          _CORE_mutex_Unsatisfied_nowait,
           _Semaphore_MP_Send_object_was_deleted,
           id
         );
