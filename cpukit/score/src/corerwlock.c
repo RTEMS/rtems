@@ -22,15 +22,9 @@
 #include <rtems/score/threadqimpl.h>
 
 void _CORE_RWLock_Initialize(
-  CORE_RWLock_Control       *the_rwlock,
-  CORE_RWLock_Attributes    *the_rwlock_attributes
+  CORE_RWLock_Control *the_rwlock
 )
 {
-
-  the_rwlock->Attributes                = *the_rwlock_attributes;
-/*
-  the_rwlock->number_of_waiting_threads = 0;
-*/
   the_rwlock->number_of_readers = 0;
   the_rwlock->current_state = CORE_RWLOCK_UNLOCKED;
 

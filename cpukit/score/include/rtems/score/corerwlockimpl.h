@@ -74,11 +74,9 @@ typedef enum {
  *  This routine initializes the RWLock based on the parameters passed.
  *
  *  @param[in] the_rwlock is the RWLock to initialize
- *  @param[in] the_rwlock_attributes define the behavior of this instance
  */
 void _CORE_RWLock_Initialize(
-  CORE_RWLock_Control       *the_rwlock,
-  CORE_RWLock_Attributes    *the_rwlock_attributes
+  CORE_RWLock_Control *the_rwlock
 );
 
 RTEMS_INLINE_ROUTINE void _CORE_RWLock_Destroy(
@@ -141,18 +139,6 @@ CORE_RWLock_Status _CORE_RWLock_Release(
   CORE_RWLock_Control *the_rwlock,
   Thread_Control      *executing
 );
-
-/**
- * This method is used to initialize core rwlock attributes.
- *
- * @param[in] the_attributes pointer to the attributes to initialize.
- */
-RTEMS_INLINE_ROUTINE void _CORE_RWLock_Initialize_attributes(
-  CORE_RWLock_Attributes *the_attributes
-)
-{
-  the_attributes->XXX = 0;
-}
 
 /** @} */
 

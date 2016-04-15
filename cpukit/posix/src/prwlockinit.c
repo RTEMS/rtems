@@ -97,7 +97,6 @@ int pthread_rwlock_init(
 )
 {
   POSIX_RWLock_Control        *the_rwlock;
-  CORE_RWLock_Attributes       the_attributes;
   pthread_rwlockattr_t         default_attr;
   const pthread_rwlockattr_t  *the_attr;
 
@@ -131,13 +130,6 @@ int pthread_rwlock_init(
       return EINVAL;
   }
 
-  /*
-   * Convert from POSIX attributes to Core RWLock attributes
-   * 
-   * NOTE: Currently there are no core rwlock attributes
-   */
-  _CORE_RWLock_Initialize_attributes( &the_attributes );
-
   the_rwlock = _POSIX_RWLock_Allocate();
 
   if ( !the_rwlock ) {
@@ -145,7 +137,7 @@ int pthread_rwlock_init(
     return EAGAIN;
   }
 
-  _CORE_RWLock_Initialize( &the_rwlock->RWLock, &the_attributes );
+  _CORE_RWLock_Initialize( &the_rwlock->RWLock );
 
   _Objects_Open_u32(
     &_POSIX_RWLock_Information,

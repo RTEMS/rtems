@@ -51,16 +51,6 @@ typedef enum {
 }   CORE_RWLock_States;
 
 /**
- *  The following defines the control block used to manage the
- *  attributes of each RWLock.
- */
-typedef struct {
-  /** This field indicates XXX.
-   */
-  int XXX;
-}   CORE_RWLock_Attributes;
-
-/**
  *  The following defines the control block used to manage each
  *  RWLock.
  */
@@ -69,10 +59,6 @@ typedef struct {
    *  which are blocked waiting for the RWLock to be released.
    */
   Thread_queue_Control     Wait_queue;
-  /** This element is the set of attributes which define this instance's
-   *  behavior.
-   */
-  CORE_RWLock_Attributes  Attributes;
   /** This element is the current state of the RWLock.
    */
   CORE_RWLock_States       current_state;
