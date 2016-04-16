@@ -473,6 +473,14 @@ EDID_INLINE_ROUTINE uint16_t edid1_WhiteY (EDID_edid1 *edid) {
     return (edid->WhiteYHigh<<2) | (edid->WhiteBlueLow&0x3);
 }
 
+EDID_INLINE_ROUTINE int edid1_STI_is_unused (
+      const EDID_standard_timing_identification *edid_sti) {
+    return (edid_sti->HorizontalActivePixels ==
+                  (uint8_t)EDID_STI_DescriptorUnused) &&
+           (edid_sti->ImageAspectRatio_RefreshRate ==
+                  (uint8_t)(EDID_STI_DescriptorUnused >> 8));
+}
+
 enum edid1_established_timings {
 /*  Established Timings I */
     EST_800x600_60Hz    = 0,

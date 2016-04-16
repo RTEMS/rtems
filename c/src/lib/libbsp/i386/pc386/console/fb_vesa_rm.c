@@ -499,7 +499,7 @@ static int32_t find_mode_using_EDID( Mode_params *mode_list,
         while (index < 8)
         {
             /* check if descriptor is unused */
-            if (*(uint16_t*)&edid.STI[index] == EDID_STI_DescriptorUnused)
+            if (edid1_STI_is_unused(&edid.STI[index]))
             {
                 index++;
                 continue;
