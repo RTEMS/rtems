@@ -22,8 +22,7 @@
 #include <rtems/score/wkspace.h>
 
 void _CORE_message_queue_Do_close(
-  CORE_message_queue_Control *the_message_queue,
-  uint32_t                    status
+  CORE_message_queue_Control *the_message_queue
 #if defined(RTEMS_MULTIPROCESSING)
   ,
   Thread_queue_MP_callout     mp_callout,
@@ -39,7 +38,7 @@ void _CORE_message_queue_Do_close(
   _Thread_queue_Flush(
     &the_message_queue->Wait_queue,
     the_message_queue->operations,
-    status,
+    CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED,
     mp_callout,
     mp_id
   );

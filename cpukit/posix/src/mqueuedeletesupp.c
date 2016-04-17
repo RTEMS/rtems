@@ -59,7 +59,6 @@ void _POSIX_Message_queue_Delete(
 
       _CORE_message_queue_Close(
         &the_mq->Message_queue,
-        CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED,
         NULL,        /* no MP support */
         0
       );

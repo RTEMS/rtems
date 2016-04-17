@@ -129,8 +129,7 @@ bool _CORE_message_queue_Initialize(
 );
 
 void _CORE_message_queue_Do_close(
-  CORE_message_queue_Control *the_message_queue,
-  uint32_t                    status
+  CORE_message_queue_Control *the_message_queue
 #if defined(RTEMS_MULTIPROCESSING)
   ,
   Thread_queue_MP_callout     mp_callout,
@@ -149,8 +148,6 @@ void _CORE_message_queue_Do_close(
  *  flushing @a the_message_queue's task wait queue.
  *
  *  @param[in] the_message_queue points to the message queue to close
- *  @param[in] status is the status that each waiting thread will return
- *         from it's blocking service
  *  @param[in] mp_callout is the routine to call for each thread
  *         that is extracted from the set of waiting threads
  *  @param[in] mp_id the object identifier of the message queue object
@@ -158,26 +155,22 @@ void _CORE_message_queue_Do_close(
 #if defined(RTEMS_MULTIPROCESSING)
   #define _CORE_message_queue_Close( \
     the_message_queue, \
-    status, \
     mp_callout, \
     mp_id \
   ) \
     _CORE_message_queue_Do_close( \
       the_message_queue, \
-      status, \
       mp_callout, \
       mp_id \
     )
 #else
   #define _CORE_message_queue_Close( \
     the_message_queue, \
-    status, \
     mp_callout, \
     mp_id \
   ) \
     _CORE_message_queue_Do_close( \
-      the_message_queue, \
-      status \
+      the_message_queue \
     )
 #endif
 
