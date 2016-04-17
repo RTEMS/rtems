@@ -196,14 +196,13 @@ uint32_t _CORE_barrier_Do_release(
 /* Must be a macro due to the multiprocessing dependent parameters */
 #define _CORE_barrier_Flush( \
   the_barrier, \
-  status, \
   mp_callout, \
   mp_id \
 ) \
   _Thread_queue_Flush( \
     &( the_barrier )->Wait_queue, \
     CORE_BARRIER_TQ_OPERATIONS, \
-    status, \
+    CORE_BARRIER_WAS_DELETED, \
     mp_callout, \
     mp_id \
   )
