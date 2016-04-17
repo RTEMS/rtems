@@ -33,8 +33,8 @@ rtems_status_code rtems_barrier_delete(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      _CORE_barrier_Flush( &the_barrier->Barrier, NULL, 0 );
       _Objects_Close( &_Barrier_Information, &the_barrier->Object );
+      _CORE_barrier_Flush( &the_barrier->Barrier, NULL, 0 );
       _Objects_Put( &the_barrier->Object );
       _Barrier_Free( the_barrier );
       _Objects_Allocator_unlock();
