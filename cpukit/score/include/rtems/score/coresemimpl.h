@@ -86,12 +86,21 @@ void _CORE_semaphore_Initialize(
   uint32_t                    initial_value
 );
 
-RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
-  CORE_semaphore_Control *the_semaphore
-)
-{
-  _Thread_queue_Destroy( &the_semaphore->Wait_queue );
-}
+#define _CORE_semaphore_Destroy( \
+  the_semaphore, \
+  mp_callout, \
+  mp_id \
+) \
+  do { \
+    _Thread_queue_Flush( \
+      &( the_semaphore )->Wait_queue, \
+      ( the_semaphore )->operations, \
+      CORE_SEMAPHORE_WAS_DELETED, \
+      mp_callout, \
+      mp_id \
+    ); \
+    _Thread_queue_Destroy( &( the_semaphore )->Wait_queue ); \
+  } while ( 0 )
 
 RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Do_surrender(
   CORE_semaphore_Control  *the_semaphore,
@@ -180,14 +189,13 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Do_surrender(
 /* Must be a macro due to the multiprocessing dependent parameters */
 #define _CORE_semaphore_Flush( \
   the_semaphore, \
-  status, \
   mp_callout, \
   mp_id \
 ) \
   _Thread_queue_Flush( \
     &( the_semaphore )->Wait_queue, \
     ( the_semaphore )->operations, \
-    status, \
+    CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT, \
     mp_callout, \
     mp_id \
   )

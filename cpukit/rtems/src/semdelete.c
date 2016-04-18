@@ -73,13 +73,11 @@ rtems_status_code rtems_semaphore_delete(
         );
         _CORE_mutex_Destroy( &the_semaphore->Core_control.mutex );
       } else {
-        _CORE_semaphore_Flush(
+        _CORE_semaphore_Destroy(
           &the_semaphore->Core_control.semaphore,
-          CORE_SEMAPHORE_WAS_DELETED,
           _Semaphore_MP_Send_object_was_deleted,
           id
         );
-        _CORE_semaphore_Destroy( &the_semaphore->Core_control.semaphore );
       }
 
       _Objects_Close( &_Semaphore_Information, &the_semaphore->Object );

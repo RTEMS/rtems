@@ -36,7 +36,7 @@ void _POSIX_Semaphore_Delete(
 {
   if ( !the_semaphore->linked && !the_semaphore->open_count ) {
     _Objects_Close( &_POSIX_Semaphore_Information, &the_semaphore->Object );
-    _CORE_semaphore_Flush( &the_semaphore->Semaphore, -1, NULL, 0 );
+    _CORE_semaphore_Destroy( &the_semaphore->Semaphore, NULL, 0 );
     _POSIX_Semaphore_Free( the_semaphore );
   }
 }

@@ -60,7 +60,6 @@ rtems_status_code rtems_semaphore_flush(
       } else {
         _CORE_semaphore_Flush(
           &the_semaphore->Core_control.semaphore,
-          CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT,
           _Semaphore_MP_Send_object_was_deleted,
           id
         );
