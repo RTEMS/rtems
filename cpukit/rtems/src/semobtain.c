@@ -83,7 +83,6 @@ rtems_status_code rtems_semaphore_obtain(
         _CORE_mutex_Seize(
           &the_semaphore->Core_control.mutex,
           executing,
-          id,
           wait,
           timeout,
           &lock_context

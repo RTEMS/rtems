@@ -28,7 +28,6 @@
 void _CORE_mutex_Seize(
   CORE_mutex_Control  *_the_mutex,
   Thread_Control      *_executing,
-  Objects_Id           _id,
   bool                 _wait,
   Watchdog_Interval    _timeout,
   ISR_Level            _level
@@ -37,7 +36,6 @@ void _CORE_mutex_Seize(
   _CORE_mutex_Seize_body(
     _the_mutex,
     _executing,
-    _id,
     _wait,
     _timeout,
     _level

@@ -212,7 +212,6 @@ void _CORE_mutex_Seize_interrupt_blocking(
  *  support routine @a _Core_mutex_Seize_interrupt_blocking.
  *
  *  @param[in] the_mutex is the mutex to attempt to lock
- *  @param[in] id is the Id of the owning API level Semaphore object
  *  @param[in] wait is true if the thread is willing to wait
  *  @param[in] timeout is the maximum number of ticks to block
  *  @param[in] lock_context is a temporary variable used to contain the ISR
@@ -234,7 +233,6 @@ void _CORE_mutex_Seize_interrupt_blocking(
 RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
   CORE_mutex_Control  *the_mutex,
   Thread_Control      *executing,
-  Objects_Id           id,
   bool                 wait,
   Watchdog_Interval    timeout,
   ISR_lock_Context    *lock_context
@@ -269,7 +267,6 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
  *
  *  @param[in] _the_mutex is the mutex to attempt to lock
  *  @param[in] _executing The currently executing thread.
- *  @param[in] _id is the Id of the owning API level Semaphore object
  *  @param[in] _wait is true if the thread is willing to wait
  *  @param[in] _timeout is the maximum number of ticks to block
  *  @param[in] _lock_context is a temporary variable used to contain the ISR
@@ -279,16 +276,15 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
   void _CORE_mutex_Seize(
     CORE_mutex_Control  *_the_mutex,
     Thread_Control      *_executing,
-    Objects_Id           _id,
     bool                 _wait,
     Watchdog_Interval    _timeout,
     ISR_lock_Context    *_lock_context
   );
 #else
   #define _CORE_mutex_Seize( \
-      _the_mutex, _executing, _id, _wait, _timeout, _lock_context ) \
+      _the_mutex, _executing, _wait, _timeout, _lock_context ) \
        _CORE_mutex_Seize_body( \
-         _the_mutex, _executing, _id, _wait, _timeout, _lock_context )
+         _the_mutex, _executing, _wait, _timeout, _lock_context )
 #endif
 
 CORE_mutex_Status _CORE_mutex_Do_surrender(

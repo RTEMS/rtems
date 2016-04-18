@@ -60,7 +60,6 @@ int _POSIX_Mutex_Lock_support(
       _CORE_mutex_Seize(
         &the_mutex->Mutex,
         executing,
-        the_mutex->Object.id,
         blocking,
         timeout,
         &lock_context

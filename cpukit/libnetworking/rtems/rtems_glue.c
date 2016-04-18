@@ -394,7 +394,6 @@ rtems_bsdnet_semaphore_obtain (void)
 	_CORE_mutex_Seize (
 		&the_networkSemaphore->Core_control.mutex,
 		executing,
-		networkSemaphore,
 		1,		/* wait */
 		0,		/* forever */
 		&lock_context
