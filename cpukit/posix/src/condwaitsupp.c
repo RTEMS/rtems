@@ -40,19 +40,11 @@ int _POSIX_Condition_variables_Wait_support(
   bool                       already_timedout
 )
 {
-  POSIX_Condition_variables_Control          *the_cond;
-  POSIX_Mutex_Control                        *the_mutex;
-  Objects_Locations                           location;
-  int                                         status;
-  int                                         mutex_status;
-  Thread_Control                             *executing;
-
-  the_mutex = _POSIX_Mutex_Get( mutex, &location );
-  if ( !the_mutex ) {
-     return EINVAL;
-  }
-
-  _Objects_Put_without_thread_dispatch( &the_mutex->Object );
+  POSIX_Condition_variables_Control *the_cond;
+  Objects_Locations                  location;
+  int                                status;
+  int                                mutex_status;
+  Thread_Control                    *executing;
 
   the_cond = _POSIX_Condition_variables_Get( cond, &location );
   switch ( location ) {
