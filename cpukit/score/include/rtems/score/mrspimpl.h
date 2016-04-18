@@ -398,16 +398,19 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Release(
   return MRSP_SUCCESSFUL;
 }
 
-RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Destroy( MRSP_Control *mrsp )
+RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Can_destroy( MRSP_Control *mrsp )
 {
   if ( _Resource_Get_owner( &mrsp->Resource ) != NULL ) {
     return MRSP_RESOUCE_IN_USE;
   }
 
+  return MRSP_SUCCESSFUL;
+}
+
+RTEMS_INLINE_ROUTINE void _MRSP_Destroy( MRSP_Control *mrsp )
+{
   _ISR_lock_Destroy( &mrsp->Lock );
   _Workspace_Free( mrsp->ceiling_priorities );
-
-  return MRSP_SUCCESSFUL;
 }
 
 /** @} */
