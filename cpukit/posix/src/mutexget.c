@@ -68,20 +68,21 @@ POSIX_Mutex_Control *_POSIX_Mutex_Get (
     _Objects_Get( &_POSIX_Mutex_Information, (Objects_Id) *mutex, location );
 }
 
-POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable (
-  pthread_mutex_t   *mutex,
-  Objects_Locations *location,
-  ISR_lock_Context  *lock_context
+POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable(
+  pthread_mutex_t  *mutex,
+  ISR_lock_Context *lock_context
 )
 {
-  if ( !_POSIX_Mutex_Check_id_and_auto_init( mutex, location ) ) {
+  Objects_Locations location;
+
+  if ( !_POSIX_Mutex_Check_id_and_auto_init( mutex, &location ) ) {
     return NULL;
   }
 
   return (POSIX_Mutex_Control *) _Objects_Get_isr_disable(
     &_POSIX_Mutex_Information,
     (Objects_Id) *mutex,
-    location,
+    &location,
     lock_context
   );
 }

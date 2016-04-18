@@ -15,13 +15,14 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#ifndef _RTEMS_POSIX_MUTEXIMPL_H
+#define _RTEMS_POSIX_MUTEXIMPL_H
+
 #include <rtems/posix/mutex.h>
 #include <rtems/score/coremuteximpl.h>
 
 #include <errno.h>
-
-#ifndef _RTEMS_POSIX_MUTEXIMPL_H
-#define _RTEMS_POSIX_MUTEXIMPL_H
+#include <pthread.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -139,10 +140,9 @@ POSIX_Mutex_Control *_POSIX_Mutex_Get (
  *
  *  @note: This version of the method uses an interrupt critical section.
  */
-POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable (
-  pthread_mutex_t   *mutex,
-  Objects_Locations *location,
-  ISR_lock_Context  *lock_context
+POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable(
+  pthread_mutex_t  *mutex,
+  ISR_lock_Context *lock_context
 );
 
 #ifdef __cplusplus

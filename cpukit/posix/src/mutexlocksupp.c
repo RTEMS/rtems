@@ -18,62 +18,35 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
-#include <pthread.h>
-
-#include <rtems/system.h>
-#include <rtems/score/coremuteximpl.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/score/threadimpl.h>
 #include <rtems/posix/muteximpl.h>
-#include <rtems/posix/priorityimpl.h>
 
 THREAD_WAIT_QUEUE_OBJECT_ASSERT( POSIX_Mutex_Control, Mutex.Wait_queue );
 
-/*
- *  _POSIX_Mutex_Lock_support
- *
- *  A support routine which implements guts of the blocking, non-blocking, and
- *  timed wait version of mutex lock.
- */
-
 int _POSIX_Mutex_Lock_support(
-  pthread_mutex_t           *mutex,
-  bool                       blocking,
-  Watchdog_Interval          timeout
+  pthread_mutex_t   *mutex,
+  bool               blocking,
+  Watchdog_Interval  timeout
 )
 {
-  POSIX_Mutex_Control          *the_mutex;
-  Objects_Locations             location;
-  ISR_lock_Context              lock_context;
-  Thread_Control               *executing;
+  POSIX_Mutex_Control *the_mutex;
+  ISR_lock_Context     lock_context;
+  Thread_Control      *executing;
 
-  the_mutex = _POSIX_Mutex_Get_interrupt_disable(
-    mutex,
-    &location,
-    &lock_context
-  );
-  switch ( location ) {
+  the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &lock_context );
 
-    case OBJECTS_LOCAL:
-      executing = _Thread_Executing;
-      _CORE_mutex_Seize(
-        &the_mutex->Mutex,
-        executing,
-        blocking,
-        timeout,
-        &lock_context
-      );
-      return _POSIX_Mutex_Translate_core_mutex_return_code(
-        (CORE_mutex_Status) executing->Wait.return_code
-      );
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( the_mutex == NULL ) {
+    return EINVAL;
   }
 
-  return EINVAL;
+  executing = _Thread_Executing;
+  _CORE_mutex_Seize(
+    &the_mutex->Mutex,
+    executing,
+    blocking,
+    timeout,
+    &lock_context
+  );
+  return _POSIX_Mutex_Translate_core_mutex_return_code(
+    (CORE_mutex_Status) executing->Wait.return_code
+  );
 }

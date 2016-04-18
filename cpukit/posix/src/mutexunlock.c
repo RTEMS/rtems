@@ -18,14 +18,7 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
-#include <pthread.h>
-
-#include <rtems/system.h>
-#include <rtems/score/coremuteximpl.h>
-#include <rtems/score/watchdog.h>
 #include <rtems/posix/muteximpl.h>
-#include <rtems/posix/priorityimpl.h>
 
 /*
  *  11.3.3 Locking and Unlocking a Mutex, P1003.1c/Draft 10, p. 93
@@ -37,33 +30,21 @@ int pthread_mutex_unlock(
   pthread_mutex_t           *mutex
 )
 {
-  register POSIX_Mutex_Control *the_mutex;
-  Objects_Locations             location;
-  CORE_mutex_Status             status;
-  ISR_lock_Context              lock_context;
+  POSIX_Mutex_Control *the_mutex;
+  CORE_mutex_Status    status;
+  ISR_lock_Context     lock_context;
 
-  the_mutex = _POSIX_Mutex_Get_interrupt_disable(
-    mutex,
-    &location,
-    &lock_context
-  );
-  switch ( location ) {
+  the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &lock_context );
 
-    case OBJECTS_LOCAL:
-      status = _CORE_mutex_Surrender(
-        &the_mutex->Mutex,
-        NULL,
-        0,
-        &lock_context
-      );
-      return _POSIX_Mutex_Translate_core_mutex_return_code( status );
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( the_mutex == NULL ) {
+    return EINVAL;
   }
 
-  return EINVAL;
+  status = _CORE_mutex_Surrender(
+    &the_mutex->Mutex,
+    NULL,
+    0,
+    &lock_context
+  );
+  return _POSIX_Mutex_Translate_core_mutex_return_code( status );
 }

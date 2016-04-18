@@ -18,14 +18,7 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
-#include <pthread.h>
-
-#include <rtems/system.h>
-#include <rtems/score/coremuteximpl.h>
-#include <rtems/score/watchdog.h>
 #include <rtems/posix/muteximpl.h>
-#include <rtems/posix/priorityimpl.h>
 
 /*
  *  13.6.2 Change the Priority Ceiling of a Mutex, P1003.1c/Draft 10, p. 131
@@ -38,7 +31,6 @@ int pthread_mutex_setprioceiling(
 )
 {
   register POSIX_Mutex_Control *the_mutex;
-  Objects_Locations             location;
   Priority_Control              the_priority;
   ISR_lock_Context              lock_context;
 
@@ -64,36 +56,25 @@ int pthread_mutex_setprioceiling(
    *  NOTE: This makes it easier to get 100% binary coverage since the
    *        bad Id case is handled by the switch.
    */
-  the_mutex = _POSIX_Mutex_Get_interrupt_disable(
-    mutex,
-    &location,
-    &lock_context
-  );
-  switch ( location ) {
+  the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &lock_context );
 
-    case OBJECTS_LOCAL:
-      *old_ceiling = _POSIX_Priority_From_core(
-        the_mutex->Mutex.Attributes.priority_ceiling
-      );
-      the_mutex->Mutex.Attributes.priority_ceiling = the_priority;
-      /*
-       *  We are required to unlock the mutex before we return.
-       */
-      _CORE_mutex_Surrender(
-        &the_mutex->Mutex,
-        NULL,
-        0,
-        &lock_context
-      );
-
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:  /* impossible to get here */
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( the_mutex == NULL ) {
+    return EINVAL;
   }
 
-  return EINVAL;
+  *old_ceiling = _POSIX_Priority_From_core(
+    the_mutex->Mutex.Attributes.priority_ceiling
+  );
+  the_mutex->Mutex.Attributes.priority_ceiling = the_priority;
+
+  /*
+   *  We are required to unlock the mutex before we return.
+   */
+  _CORE_mutex_Surrender(
+    &the_mutex->Mutex,
+    NULL,
+    0,
+    &lock_context
+  );
+  return 0;
 }
