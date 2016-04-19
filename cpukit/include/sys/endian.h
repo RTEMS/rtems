@@ -30,31 +30,41 @@
 #define _SYS_ENDIAN_H_
 
 #include <sys/cdefs.h>
-#include <rtems/endian.h>
+#include <sys/_types.h>
+#include <machine/endian.h>
+
+#ifndef _UINT8_T_DECLARED
+typedef	__uint8_t	uint8_t;
+#define	_UINT8_T_DECLARED
+#endif
+ 
+#ifndef _UINT16_T_DECLARED
+typedef	__uint16_t	uint16_t;
+#define	_UINT16_T_DECLARED
+#endif
+ 
+#ifndef _UINT32_T_DECLARED
+typedef	__uint32_t	uint32_t;
+#define	_UINT32_T_DECLARED
+#endif
+ 
+#ifndef _UINT64_T_DECLARED
+typedef	__uint64_t	uint64_t;
+#define	_UINT64_T_DECLARED
+#endif
  
 /*
  * General byte order swapping functions.
  */
-#define	bswap16(x)	CPU_swap_u16(x)
-#define	bswap32(x)	CPU_swap_u32(x)
-static __inline uint64_t
-bswap64(uint64_t v)
-{
-#ifdef __GNUC__
-	return __builtin_bswap64(v);
-#else
-	return ((v >> 56) | ((v >> 40) & 0xff00) | ((v >> 24) & 0xff0000) |
-	    ((v >> 8) & 0xff000000) | ((v << 8) & ((uint64_t)0xff << 32)) |
-	    ((v << 24) & ((uint64_t)0xff << 40)) |
-	    ((v << 40) & ((uint64_t)0xff << 48)) | ((v << 56)));
-#endif
-}
+#define	bswap16(x)	__bswap16(x)
+#define	bswap32(x)	__bswap32(x)
+#define	bswap64(x)	__bswap64(x)
 
 /*
  * Host to big endian, host to little endian, big endian to host, and little
  * endian to host byte order functions as detailed in byteorder(9).
  */
-#if BYTE_ORDER == LITTLE_ENDIAN
+#if _BYTE_ORDER == _LITTLE_ENDIAN
 #define	htobe16(x)	bswap16((x))
 #define	htobe32(x)	bswap32((x))
 #define	htobe64(x)	bswap64((x))
@@ -68,7 +78,7 @@ bswap64(uint64_t v)
 #define	le16toh(x)	((uint16_t)(x))
 #define	le32toh(x)	((uint32_t)(x))
 #define	le64toh(x)	((uint64_t)(x))
-#else /* BYTE_ORDER != LITTLE_ENDIAN */
+#else /* _BYTE_ORDER != _LITTLE_ENDIAN */
 #define	htobe16(x)	((uint16_t)(x))
 #define	htobe32(x)	((uint32_t)(x))
 #define	htobe64(x)	((uint64_t)(x))
@@ -82,7 +92,7 @@ bswap64(uint64_t v)
 #define	le16toh(x)	bswap16((x))
 #define	le32toh(x)	bswap32((x))
 #define	le64toh(x)	bswap64((x))
-#endif /* BYTE_ORDER == LITTLE_ENDIAN */
+#endif /* _BYTE_ORDER == _LITTLE_ENDIAN */
 
 /* Alignment-agnostic encode/decode bytestream to/from little/big endian. */
 
