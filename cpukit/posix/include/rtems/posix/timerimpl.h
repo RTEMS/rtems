@@ -98,8 +98,8 @@ RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Get (
 )
 {
   return (POSIX_Timer_Control *) _Objects_Get_local(
-    &_POSIX_Timer_Information,
     (Objects_Id) id,
+    &_POSIX_Timer_Information,
     lock_context
   );
 }

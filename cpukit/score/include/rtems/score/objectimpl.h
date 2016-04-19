@@ -629,9 +629,10 @@ Objects_Control *_Objects_Get_isr_disable(
  * an associated object exists, then interrupts remain disabled, otherwise the
  * previous interrupt state is restored.
  *
+ * @param id The object identifier.  This is the first parameter since usual
+ *   callers get the object identifier as the first parameter themself.
  * @param information The object class information block.
- * @param[in] id The object identifier.
- * @param[in] lock_context The interrupt lock context.
+ * @param lock_context The interrupt lock context.
  *
  * @retval NULL No associated object exists.
  * @retval other The pointer to the associated object control block.
@@ -639,8 +640,8 @@ Objects_Control *_Objects_Get_isr_disable(
  * context via _ISR_lock_ISR_enable() or _ISR_lock_Release_and_ISR_enable().
  */
 Objects_Control *_Objects_Get_local(
-  const Objects_Information *information,
   Objects_Id                 id,
+  const Objects_Information *information,
   ISR_lock_Context          *lock_context
 );
 
