@@ -361,6 +361,7 @@ libscore_a_SOURCES += src/sched.c
 libscore_a_SOURCES += src/semaphore.c
 libscore_a_SOURCES += src/smpbarrierwait.c
 libscore_a_SOURCES += src/kern_tc.c
+libscore_a_SOURCES += src/libatomic.c
 
 EXTRA_DIST = src/Unlimited.txt
 
