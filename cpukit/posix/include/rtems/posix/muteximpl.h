@@ -66,7 +66,6 @@ RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Free(
   POSIX_Mutex_Control *the_mutex
 )
 {
-  _CORE_mutex_Destroy( &the_mutex->Mutex );
   _Objects_Free( &_POSIX_Mutex_Information, &the_mutex->Object );
 }
 
@@ -118,19 +117,6 @@ RTEMS_INLINE_ROUTINE int _POSIX_Mutex_Translate_core_mutex_return_code(
   #endif
   return _POSIX_Mutex_Return_codes[the_mutex_status];
 }
-
-/**
- *  @brief POSIX Mutex Get (Thread Dispatch Disable)
- *
- *  A support routine which translates the mutex id into a local pointer.
- *  As a side-effect, it may create the mutex.
- *
- *  @note This version of the method uses a dispatching critical section.
- */
-POSIX_Mutex_Control *_POSIX_Mutex_Get (
-  pthread_mutex_t   *mutex,
-  Objects_Locations *location
-);
 
 /**
  *  @brief POSIX Mutex Get (Interrupt Disable)

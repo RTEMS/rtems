@@ -18,12 +18,6 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
-#include <pthread.h>
-
-#include <rtems/system.h>
-#include <rtems/score/coremuteximpl.h>
-#include <rtems/score/watchdog.h>
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/priorityimpl.h>
 
@@ -36,28 +30,26 @@ int pthread_mutex_getprioceiling(
   int               *prioceiling
 )
 {
-  register POSIX_Mutex_Control *the_mutex;
-  Objects_Locations             location;
+  POSIX_Mutex_Control *the_mutex;
+  ISR_lock_Context     lock_context;
 
-  if ( !prioceiling )
+  if ( prioceiling == NULL ) {
     return EINVAL;
-
-  the_mutex = _POSIX_Mutex_Get( mutex, &location );
-  switch ( location ) {
-
-    case OBJECTS_LOCAL:
-      *prioceiling = _POSIX_Priority_From_core(
-        the_mutex->Mutex.Attributes.priority_ceiling
-      );
-      _Objects_Put( &the_mutex->Object );
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
   }
 
-  return EINVAL;
+  the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &lock_context );
+
+  if ( the_mutex == NULL ) {
+    return EINVAL;
+  }
+
+  _CORE_mutex_Acquire_critical( &the_mutex->Mutex, &lock_context );
+
+  *prioceiling = _POSIX_Priority_From_core(
+    the_mutex->Mutex.Attributes.priority_ceiling
+  );
+
+  _CORE_mutex_Release( &the_mutex->Mutex, &lock_context );
+
+  return 0;
 }

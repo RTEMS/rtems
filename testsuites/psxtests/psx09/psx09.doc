@@ -23,3 +23,4 @@ concepts:
 + thread priority no longer gets adjusted after obtaining mutex
 + thread priority gets locked at the ceiling level
 + unlocks mutex and thread priority is set to low priority successfully
++ lock returns proper status if deleted during lock operation

@@ -49,6 +49,50 @@ void print_schedparam(
 #endif
 }
 
+static void *mutex_lock_task(void *arg)
+{
+  pthread_mutex_t *mtx;
+  int              eno;
+
+  mtx = arg;
+
+  eno = pthread_mutex_lock( mtx );
+  rtems_test_assert( eno == 0 );
+
+  sched_yield();
+
+  eno = pthread_mutex_unlock( mtx );
+  rtems_test_assert( eno == 0 );
+
+  return NULL;
+}
+
+static void test_destroy_locked_mutex(void)
+{
+  pthread_mutex_t mtx;
+  pthread_t       th;
+  int             eno;
+
+  eno = pthread_mutex_init( &mtx, NULL );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_create( &th, NULL, mutex_lock_task, &mtx );
+  rtems_test_assert( eno == 0 );
+
+  sched_yield();
+
+  eno = pthread_mutex_destroy( &mtx );
+  rtems_test_assert( eno == EBUSY );
+
+  sched_yield();
+
+  eno = pthread_mutex_destroy( &mtx );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_join( th, NULL );
+  rtems_test_assert( eno == 0 );
+}
+
 void *POSIX_Init(
   void *argument
 )
@@ -64,6 +108,8 @@ void *POSIX_Init(
   time_t               now;
 
   TEST_BEGIN();
+
+  test_destroy_locked_mutex();
 
   /* set the time of day, and print our buffer in multiple ways */
 

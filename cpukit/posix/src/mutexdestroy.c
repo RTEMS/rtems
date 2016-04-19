@@ -18,14 +18,7 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
-#include <pthread.h>
-
-#include <rtems/system.h>
-#include <rtems/score/coremuteximpl.h>
-#include <rtems/score/watchdog.h>
 #include <rtems/posix/muteximpl.h>
-#include <rtems/posix/priorityimpl.h>
 
 /*
  *  11.3.2 Initializing and Destroying a Mutex, P1003.1c/Draft 10, p. 87
@@ -35,41 +28,36 @@ int pthread_mutex_destroy(
   pthread_mutex_t           *mutex
 )
 {
-  register POSIX_Mutex_Control *the_mutex;
-  Objects_Locations             location;
+  POSIX_Mutex_Control *the_mutex;
+  ISR_lock_Context     lock_context;
+  int                  eno;
 
   _Objects_Allocator_lock();
-  the_mutex = _POSIX_Mutex_Get( mutex, &location );
-  switch ( location ) {
 
-    case OBJECTS_LOCAL:
-       /*
-        * XXX: There is an error for the mutex being locked
-        *  or being in use by a condition variable.
-        */
+  the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &lock_context );
 
-      if ( _CORE_mutex_Is_locked( &the_mutex->Mutex ) ) {
-        _Objects_Put( &the_mutex->Object );
-        _Objects_Allocator_unlock();
-        return EBUSY;
-      }
+  if ( the_mutex != NULL ) {
+    _CORE_mutex_Acquire_critical( &the_mutex->Mutex, &lock_context );
 
+    /*
+     * XXX: There is an error for the mutex being locked
+     *  or being in use by a condition variable.
+     */
+
+    if ( !_CORE_mutex_Is_locked( &the_mutex->Mutex ) ) {
       _Objects_Close( &_POSIX_Mutex_Information, &the_mutex->Object );
-      _CORE_mutex_Flush( &the_mutex->Mutex, EINVAL, NULL, 0 );
-      _Objects_Put( &the_mutex->Object );
+      _CORE_mutex_Release( &the_mutex->Mutex, &lock_context );
+      _CORE_mutex_Destroy( &the_mutex->Mutex );
       _POSIX_Mutex_Free( the_mutex );
-      _Objects_Allocator_unlock();
-
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+      eno = 0;
+    } else {
+      _CORE_mutex_Release( &the_mutex->Mutex, &lock_context );
+      eno = EBUSY;
+    }
+  } else {
+    eno = EINVAL;
   }
 
   _Objects_Allocator_unlock();
-
-  return EINVAL;
+  return eno;
 }

@@ -21,14 +21,9 @@
 #include <rtems/posix/muteximpl.h>
 #include <rtems/score/apimutex.h>
 
-static bool _POSIX_Mutex_Check_id_and_auto_init(
-  pthread_mutex_t   *mutex,
-  Objects_Locations *location
-)
+static bool _POSIX_Mutex_Check_id_and_auto_init( pthread_mutex_t *mutex )
 {
   if ( mutex == NULL ) {
-    *location = OBJECTS_ERROR;
-
     return false;
   }
 
@@ -46,26 +41,11 @@ static bool _POSIX_Mutex_Check_id_and_auto_init(
     _Once_Unlock();
 
     if ( eno != 0 ) {
-      *location = OBJECTS_ERROR;
-
       return false;
     }
   }
 
   return true;
-}
-
-POSIX_Mutex_Control *_POSIX_Mutex_Get (
-  pthread_mutex_t   *mutex,
-  Objects_Locations *location
-)
-{
-  if ( !_POSIX_Mutex_Check_id_and_auto_init( mutex, location ) ) {
-    return NULL;
-  }
-
-  return (POSIX_Mutex_Control *)
-    _Objects_Get( &_POSIX_Mutex_Information, (Objects_Id) *mutex, location );
 }
 
 POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable(
@@ -75,7 +55,7 @@ POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable(
 {
   Objects_Locations location;
 
-  if ( !_POSIX_Mutex_Check_id_and_auto_init( mutex, &location ) ) {
+  if ( !_POSIX_Mutex_Check_id_and_auto_init( mutex ) ) {
     return NULL;
   }
 
