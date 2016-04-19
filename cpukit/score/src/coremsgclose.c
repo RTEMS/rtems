@@ -31,8 +31,6 @@ void _CORE_message_queue_Do_close(
 #endif
 )
 {
-  ISR_lock_Context lock_context;
-
   /*
    *  This will flush blocked threads whether they were blocked on
    *  a send or receive.
@@ -45,15 +43,6 @@ void _CORE_message_queue_Do_close(
     mp_callout,
     mp_id
   );
-
-  /*
-   *  This removes all messages from the pending message queue.  Since
-   *  we just flushed all waiting threads, we don't have to worry about
-   *  the flush satisfying any blocked senders as a side-effect.
-   */
-
-  _ISR_lock_ISR_disable( &lock_context );
-  (void) _CORE_message_queue_Flush( the_message_queue, &lock_context );
 
   (void) _Workspace_Free( the_message_queue->message_buffers );
 
