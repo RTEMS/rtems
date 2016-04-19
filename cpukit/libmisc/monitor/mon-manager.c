@@ -26,7 +26,6 @@ rtems_monitor_manager_next(
     Objects_Information     *table = table_void;
     rtems_monitor_generic_t *copy;
     Objects_Control         *object = 0;
-    Objects_Locations        location;
 
     /*
      * When we are called, it must be local
@@ -37,7 +36,7 @@ rtems_monitor_manager_next(
         goto done;
 #endif
 
-    object = _Objects_Get_next(table, *next_id, &location, next_id);
+    object = _Objects_Get_next(*next_id, table, next_id);
 
     if (object)
     {

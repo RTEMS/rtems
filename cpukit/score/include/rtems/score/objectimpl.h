@@ -680,19 +680,19 @@ Objects_Control *_Objects_Get_no_protection(
  *
  *  Locks the object allocator mutex in case a next object exists.
  *
- *  @param[in] information points to an object class information block.
  *  @param[in] id is the Id of the object whose name we are locating.
- *  @param[in] location_p will contain an indication of success or failure.
+ *    This is the first parameter since usual callers get the object identifier
+ *    as the first parameter themself.
+ *  @param[in] information points to an object class information block.
  *  @param[in] next_id_p is the Id of the next object we will look at.
  *
  *  @retval This method returns the pointer to the object located or
  *          NULL on error.
  */
 Objects_Control *_Objects_Get_next(
-    Objects_Information *information,
-    Objects_Id           id,
-    Objects_Locations   *location_p,
-    Objects_Id          *next_id_p
+  Objects_Id                 id,
+  const Objects_Information *information,
+  Objects_Id                *next_id_p
 );
 
 /**
