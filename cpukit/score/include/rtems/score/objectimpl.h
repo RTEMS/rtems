@@ -656,8 +656,10 @@ Objects_Control *_Objects_Get_local(
  *  is undefined.  Otherwise, location is set to OBJECTS_ERROR
  *  and the_object is undefined.
  *
- *  @param[in] information points to an object class information block.
  *  @param[in] id is the Id of the object whose name we are locating.
+ *    This is the first parameter since usual callers get the object identifier
+ *    as the first parameter themself.
+ *  @param[in] information points to an object class information block.
  *
  *  @retval This method returns one of the values from the
  *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
@@ -670,8 +672,8 @@ Objects_Control *_Objects_Get_local(
  *  objects.
  */
 Objects_Control *_Objects_Get_no_protection(
-  const Objects_Information *information,
-  Objects_Id                 id
+  Objects_Id                 id,
+  const Objects_Information *information
 );
 
 /**

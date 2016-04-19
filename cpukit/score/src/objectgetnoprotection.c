@@ -21,8 +21,8 @@
 #include <rtems/score/objectimpl.h>
 
 Objects_Control *_Objects_Get_no_protection(
-  const Objects_Information *information,
-  Objects_Id                 id
+  Objects_Id                 id,
+  const Objects_Information *information
 )
 {
   Objects_Control *the_object;

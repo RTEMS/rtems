@@ -73,7 +73,7 @@ RTEMS_INLINE_ROUTINE Region_Control *_Region_Get_and_lock( Objects_Id id )
   _RTEMS_Lock_allocator();
 
   the_region = (Region_Control *)
-    _Objects_Get_no_protection( &_Region_Information, id );
+    _Objects_Get_no_protection( id, &_Region_Information );
 
   if ( the_region != NULL ) {
     /* Keep allocator lock */

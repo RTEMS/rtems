@@ -77,7 +77,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free(
 RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get( pthread_key_t key )
 {
   return (POSIX_Keys_Control *)
-    _Objects_Get_no_protection( &_POSIX_Keys_Information, (Objects_Id) key );
+    _Objects_Get_no_protection( (Objects_Id) key, &_POSIX_Keys_Information );
 }
 
 RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_acquire(

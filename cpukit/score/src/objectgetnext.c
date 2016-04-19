@@ -52,7 +52,7 @@ Objects_Control *_Objects_Get_next(
         }
 
         /* try to grab one */
-        the_object = _Objects_Get_no_protection( information, next_id );
+        the_object = _Objects_Get_no_protection( next_id, information );
 
         next_id++;
 
