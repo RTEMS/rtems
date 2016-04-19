@@ -57,7 +57,7 @@ rtems_status_code rtems_semaphore_release(
       if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
         MRSP_Status mrsp_status;
 
-        mrsp_status = _MRSP_Release(
+        mrsp_status = _MRSP_Surrender(
           &the_semaphore->Core_control.mrsp,
           _Thread_Executing,
           &lock_context

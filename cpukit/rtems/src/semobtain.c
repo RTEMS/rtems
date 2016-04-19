@@ -69,7 +69,7 @@ rtems_status_code rtems_semaphore_obtain(
       if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
         MRSP_Status mrsp_status;
 
-        mrsp_status = _MRSP_Obtain(
+        mrsp_status = _MRSP_Seize(
           &the_semaphore->Core_control.mrsp,
           executing,
           wait,

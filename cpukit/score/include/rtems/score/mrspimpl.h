@@ -268,7 +268,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
   return status;
 }
 
-RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Obtain(
+RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Seize(
   MRSP_Control      *mrsp,
   Thread_Control    *executing,
   bool               wait,
@@ -326,7 +326,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Obtain(
   return status;
 }
 
-RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Release(
+RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Surrender(
   MRSP_Control     *mrsp,
   Thread_Control   *executing,
   ISR_lock_Context *lock_context
