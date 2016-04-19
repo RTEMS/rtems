@@ -24,7 +24,7 @@
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdog.h>
 
-CORE_RWLock_Status _CORE_RWLock_Release(
+CORE_RWLock_Status _CORE_RWLock_Surrender(
   CORE_RWLock_Control *the_rwlock,
   Thread_Control      *executing
 )

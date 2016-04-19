@@ -47,7 +47,7 @@ int pthread_rwlock_rdlock(
     case OBJECTS_LOCAL:
 
       executing = _Thread_Executing;
-      _CORE_RWLock_Obtain_for_reading(
+      _CORE_RWLock_Seize_for_reading(
         &the_rwlock->RWLock,
         executing,
         true,                 /* we are willing to wait forever */

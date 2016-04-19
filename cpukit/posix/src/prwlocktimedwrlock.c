@@ -75,7 +75,7 @@ int pthread_rwlock_timedwrlock(
     case OBJECTS_LOCAL:
 
       executing = _Thread_Executing;
-      _CORE_RWLock_Obtain_for_writing(
+      _CORE_RWLock_Seize_for_writing(
         &the_rwlock->RWLock,
         executing,
         do_wait,

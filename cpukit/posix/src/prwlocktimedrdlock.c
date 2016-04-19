@@ -73,7 +73,7 @@ int pthread_rwlock_timedrdlock(
     case OBJECTS_LOCAL:
 
       executing = _Thread_Executing;
-      _CORE_RWLock_Obtain_for_reading(
+      _CORE_RWLock_Seize_for_reading(
         &the_rwlock->RWLock,
         executing,
         do_wait,

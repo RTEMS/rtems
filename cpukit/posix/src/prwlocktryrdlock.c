@@ -51,7 +51,7 @@ int pthread_rwlock_tryrdlock(
     case OBJECTS_LOCAL:
 
       executing = _Thread_Executing;
-      _CORE_RWLock_Obtain_for_reading(
+      _CORE_RWLock_Seize_for_reading(
         &the_rwlock->RWLock,
         executing,
         false,                  /* do not wait for the rwlock */

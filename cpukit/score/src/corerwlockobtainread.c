@@ -23,7 +23,7 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/watchdog.h>
 
-void _CORE_RWLock_Obtain_for_reading(
+void _CORE_RWLock_Seize_for_reading(
   CORE_RWLock_Control *the_rwlock,
   Thread_Control      *executing,
   bool                 wait,

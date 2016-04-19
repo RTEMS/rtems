@@ -99,7 +99,7 @@ RTEMS_INLINE_ROUTINE void _CORE_RWLock_Destroy(
  * @note Status is returned via the thread control block.
  */
 
-void _CORE_RWLock_Obtain_for_reading(
+void _CORE_RWLock_Seize_for_reading(
   CORE_RWLock_Control *the_rwlock,
   Thread_Control      *executing,
   bool                 wait,
@@ -118,7 +118,7 @@ void _CORE_RWLock_Obtain_for_reading(
  *
  * @note Status is returned via the thread control block.
  */
-void _CORE_RWLock_Obtain_for_writing(
+void _CORE_RWLock_Seize_for_writing(
   CORE_RWLock_Control *the_rwlock,
   Thread_Control      *executing,
   bool                 wait,
@@ -135,7 +135,7 @@ void _CORE_RWLock_Obtain_for_writing(
  *
  *  @retval Status is returned to indicate successful or failure.
  */
-CORE_RWLock_Status _CORE_RWLock_Release(
+CORE_RWLock_Status _CORE_RWLock_Surrender(
   CORE_RWLock_Control *the_rwlock,
   Thread_Control      *executing
 );
