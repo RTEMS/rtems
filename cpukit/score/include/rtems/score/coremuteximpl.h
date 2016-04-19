@@ -113,6 +113,22 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Destroy( CORE_mutex_Control *the_mutex )
   _Thread_queue_Destroy( &the_mutex->Wait_queue );
 }
 
+RTEMS_INLINE_ROUTINE void _CORE_mutex_Acquire_critical(
+  CORE_mutex_Control *the_mutex,
+  ISR_lock_Context   *lock_context
+)
+{
+  _Thread_queue_Acquire_critical( &the_mutex->Wait_queue, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _CORE_mutex_Release(
+  CORE_mutex_Control *the_mutex,
+  ISR_lock_Context   *lock_context
+)
+{
+  _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+}
+
 /**
  *  @brief Attempt to receive a unit from the_mutex.
  *
@@ -245,10 +261,10 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
       INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE
     );
   }
-  _Thread_queue_Acquire_critical( &the_mutex->Wait_queue, lock_context );
+  _CORE_mutex_Acquire_critical( the_mutex, lock_context );
   if ( _CORE_mutex_Seize_interrupt_trylock( the_mutex, executing, lock_context ) ) {
     if ( !wait ) {
-      _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+      _CORE_mutex_Release( the_mutex, lock_context );
       executing->Wait.return_code =
         CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT;
     } else {
@@ -462,7 +478,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
     }
 
     if ( !_CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
-      _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+      _CORE_mutex_Release( the_mutex, lock_context );
       return 0;
     } /* else must be CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING
        *
@@ -476,7 +492,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
       ceiling = the_mutex->Attributes.priority_ceiling;
       current = executing->current_priority;
       if ( current == ceiling ) {
-        _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+        _CORE_mutex_Release( the_mutex, lock_context );
         return 0;
       }
 
@@ -484,7 +500,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
         Per_CPU_Control *cpu_self;
 
         cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-        _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+        _CORE_mutex_Release( the_mutex, lock_context );
         _Thread_Raise_priority( executing, ceiling );
         _Thread_Dispatch_enable( cpu_self );
         return 0;
@@ -494,7 +510,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
         the_mutex->holder = NULL;
         the_mutex->nest_count = 0;     /* undo locking above */
         executing->resource_count--;   /* undo locking above */
-        _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+        _CORE_mutex_Release( the_mutex, lock_context );
         return 0;
       }
     }
@@ -510,12 +526,12 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
     switch ( the_mutex->Attributes.lock_nesting_behavior ) {
       case CORE_MUTEX_NESTING_ACQUIRES:
         the_mutex->nest_count++;
-        _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+        _CORE_mutex_Release( the_mutex, lock_context );
         return 0;
       #if defined(RTEMS_POSIX_API)
         case CORE_MUTEX_NESTING_IS_ERROR:
           executing->Wait.return_code = CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
-          _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+          _CORE_mutex_Release( the_mutex, lock_context );
           return 0;
       #endif
       case CORE_MUTEX_NESTING_BLOCKS:
