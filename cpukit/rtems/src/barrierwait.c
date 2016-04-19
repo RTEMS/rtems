@@ -40,7 +40,7 @@ rtems_status_code rtems_barrier_wait(
 
     case OBJECTS_LOCAL:
       executing = _Thread_Executing;
-      _CORE_barrier_Wait(
+      _CORE_barrier_Seize(
         &the_barrier->Barrier,
         executing,
         true,

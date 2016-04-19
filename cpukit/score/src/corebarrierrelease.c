@@ -23,7 +23,7 @@
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/threadqimpl.h>
 
-uint32_t _CORE_barrier_Do_release(
+uint32_t _CORE_barrier_Do_surrender(
   CORE_barrier_Control    *the_barrier
 #if defined(RTEMS_MULTIPROCESSING)
   ,

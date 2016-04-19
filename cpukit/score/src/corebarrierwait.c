@@ -23,7 +23,7 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadqimpl.h>
 
-void _CORE_barrier_Do_wait(
+void _CORE_barrier_Do_seize(
   CORE_barrier_Control    *the_barrier,
   Thread_Control          *executing,
   bool                     wait,
@@ -45,7 +45,7 @@ void _CORE_barrier_Do_wait(
 	 the_barrier->Attributes.maximum_count) {
       executing->Wait.return_code = CORE_BARRIER_STATUS_AUTOMATICALLY_RELEASED;
       _Thread_queue_Release( &the_barrier->Wait_queue, &lock_context );
-      _CORE_barrier_Release( the_barrier, mp_callout, mp_id );
+      _CORE_barrier_Surrender( the_barrier, mp_callout, mp_id );
       return;
     }
   }

@@ -84,7 +84,7 @@ RTEMS_INLINE_ROUTINE void _CORE_barrier_Destroy(
   _Thread_queue_Destroy( &the_barrier->Wait_queue );
 }
 
-void _CORE_barrier_Do_wait(
+void _CORE_barrier_Do_seize(
   CORE_barrier_Control    *the_barrier,
   Thread_Control          *executing,
   bool                     wait,
@@ -116,7 +116,7 @@ void _CORE_barrier_Do_wait(
  * @note Status is returned via the thread control block.
  */
 #if defined(RTEMS_MULTIPROCESSING)
-  #define _CORE_barrier_Wait( \
+  #define _CORE_barrier_Seize( \
     the_barrier, \
     executing, \
     wait, \
@@ -124,7 +124,7 @@ void _CORE_barrier_Do_wait(
     mp_callout, \
     mp_id \
   ) \
-    _CORE_barrier_Do_wait( \
+    _CORE_barrier_Do_seize( \
       the_barrier, \
       executing, \
       wait, \
@@ -133,7 +133,7 @@ void _CORE_barrier_Do_wait(
       mp_id \
     )
 #else
-  #define _CORE_barrier_Wait( \
+  #define _CORE_barrier_Seize( \
     the_barrier, \
     executing, \
     wait, \
@@ -141,7 +141,7 @@ void _CORE_barrier_Do_wait(
     mp_callout, \
     mp_id \
   ) \
-    _CORE_barrier_Do_wait( \
+    _CORE_barrier_Do_seize( \
       the_barrier, \
       executing, \
       wait, \
@@ -149,7 +149,7 @@ void _CORE_barrier_Do_wait(
     )
 #endif
 
-uint32_t _CORE_barrier_Do_release(
+uint32_t _CORE_barrier_Do_surrender(
   CORE_barrier_Control    *the_barrier
 #if defined(RTEMS_MULTIPROCESSING)
   ,
@@ -172,23 +172,23 @@ uint32_t _CORE_barrier_Do_release(
  *  @retval the number of unblocked threads
  */
 #if defined(RTEMS_MULTIPROCESSING)
-  #define _CORE_barrier_Release( \
+  #define _CORE_barrier_Surrender( \
     the_barrier, \
     mp_callout, \
     mp_id \
   ) \
-    _CORE_barrier_Do_release( \
+    _CORE_barrier_Do_surrender( \
       the_barrier, \
       mp_callout, \
       mp_id \
     )
 #else
-  #define _CORE_barrier_Release( \
+  #define _CORE_barrier_Surrender( \
     the_barrier, \
     mp_callout, \
     mp_id \
   ) \
-    _CORE_barrier_Do_release( \
+    _CORE_barrier_Do_surrender( \
       the_barrier \
     )
 #endif
