@@ -36,12 +36,8 @@ static void _Extension_Manager_initialization(void)
     rtems_configuration_get_maximum_extensions(),
     sizeof( Extension_Control ),
     false,                     /* true if the name is a string */
-    RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
-#if defined(RTEMS_MULTIPROCESSING)
-    ,
-    false,                     /* true if this is a global object class */
+    RTEMS_MAXIMUM_NAME_LENGTH, /* maximum length of an object name */
     NULL                       /* Proxy extraction support callout */
-#endif
   );
 }
 

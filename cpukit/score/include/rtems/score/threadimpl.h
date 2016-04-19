@@ -94,10 +94,6 @@ void _Thread_Initialize_information(
   uint32_t             maximum,
   bool                 is_string,
   uint32_t             maximum_name_length
-#if defined(RTEMS_MULTIPROCESSING)
-  ,
-  bool                 supports_global
-#endif
 );
 
 /**

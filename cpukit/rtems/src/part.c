@@ -37,12 +37,8 @@ static void _Partition_Manager_initialization(void)
                                  /* maximum objects of this class */
     sizeof( Partition_Control ), /* size of this object's control block */
     false,                       /* true if the name is a string */
-    RTEMS_MAXIMUM_NAME_LENGTH    /* maximum length of an object name */
-#if defined(RTEMS_MULTIPROCESSING)
-    ,
-    true,                        /* true if this is a global object class */
+    RTEMS_MAXIMUM_NAME_LENGTH,   /* maximum length of an object name */
     _Partition_MP_Send_extract_proxy  /* Proxy extraction support callout */
-#endif
   );
 
   /*

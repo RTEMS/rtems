@@ -122,6 +122,7 @@ typedef enum {
   OBJECTS_ERROR  = 1          /* id was invalid */
 } Objects_Locations;
 
+#if defined(RTEMS_MULTIPROCESSING)
 /**
  *  The following type defines the callout used when a local task
  *  is extracted from a remote thread queue (i.e. it's proxy must
@@ -131,6 +132,7 @@ typedef void ( *Objects_Thread_queue_Extract_callout )(
   Thread_Control *,
   Objects_Id
 );
+#endif
 
 /**
  *  The following defines the structure for the information used to
@@ -238,6 +240,20 @@ void _Objects_Shrink_information(
   Objects_Information *information
 );
 
+void _Objects_Do_initialize_information(
+  Objects_Information *information,
+  Objects_APIs         the_api,
+  uint16_t             the_class,
+  uint32_t             maximum,
+  uint16_t             size,
+  bool                 is_string,
+  uint32_t             maximum_name_length
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  Objects_Thread_queue_Extract_callout extract
+#endif
+);
+
 /**
  *  @brief Initialize object Information
  *
@@ -259,20 +275,48 @@ void _Objects_Shrink_information(
  *  @param[in] is_string is true if this object uses string style names.
  *  @param[in] maximum_name_length is the maximum length of object names.
  */
-void _Objects_Initialize_information (
-  Objects_Information *information,
-  Objects_APIs         the_api,
-  uint16_t             the_class,
-  uint32_t             maximum,
-  uint16_t             size,
-  bool                 is_string,
-  uint32_t             maximum_name_length
 #if defined(RTEMS_MULTIPROCESSING)
-  ,
-  bool                 supports_global,
-  Objects_Thread_queue_Extract_callout extract
+  #define _Objects_Initialize_information( \
+    information, \
+    the_api, \
+    the_class, \
+    maximum, \
+    size, \
+    is_string, \
+    maximum_name_length, \
+    extract \
+  ) \
+    _Objects_Do_initialize_information( \
+      information, \
+      the_api, \
+      the_class, \
+      maximum, \
+      size, \
+      is_string, \
+      maximum_name_length, \
+      extract \
+    )
+#else
+  #define _Objects_Initialize_information( \
+    information, \
+    the_api, \
+    the_class, \
+    maximum, \
+    size, \
+    is_string, \
+    maximum_name_length, \
+    extract \
+  ) \
+    _Objects_Do_initialize_information( \
+      information, \
+      the_api, \
+      the_class, \
+      maximum, \
+      size, \
+      is_string, \
+      maximum_name_length \
+    )
 #endif
-);
 
 /**
  *  @brief Object API Maximum Class

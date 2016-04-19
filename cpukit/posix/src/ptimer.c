@@ -67,12 +67,8 @@ static void _POSIX_Timer_Manager_initialization(void)
     sizeof( POSIX_Timer_Control ),
                                 /* size of this object's control block */
     true,                       /* true if names for this object are strings */
-    _POSIX_PATH_MAX             /* maximum length of each object's name */
-#if defined(RTEMS_MULTIPROCESSING)
-    ,
-    false,                      /* true if this is a global object class */
+    _POSIX_PATH_MAX,            /* maximum length of each object's name */
     NULL                        /* Proxy extraction support callout */
-#endif
   );
 }
 

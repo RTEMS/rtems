@@ -352,10 +352,6 @@ static void _POSIX_Threads_Manager_initialization(void)
                                  /* maximum objects of this class */
     true,                        /* true if names for this object are strings */
     _POSIX_PATH_MAX              /* maximum length of each object's name */
-#if defined(RTEMS_MULTIPROCESSING)
-    ,
-    false                        /* true if this is a global object class */
-#endif
   );
 
   /*

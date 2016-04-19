@@ -40,13 +40,9 @@ static void _Message_queue_Manager_initialization(void)
     sizeof( Message_queue_Control ),
                                   /* size of this object's control block */
     false,                        /* true if names of this object are strings */
-    RTEMS_MAXIMUM_NAME_LENGTH     /* maximum length of each object's name */
-#if defined(RTEMS_MULTIPROCESSING)
-    ,
-    true,                         /* true if this is a global object class */
+    RTEMS_MAXIMUM_NAME_LENGTH,    /* maximum length of each object's name */
     _Message_queue_MP_Send_extract_proxy
                                   /* Proxy extraction support callout */
-#endif
   );
 
   /*

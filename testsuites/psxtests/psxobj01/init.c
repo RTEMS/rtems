@@ -46,12 +46,8 @@ rtems_task Init(
     0,           /* maximum */
     4,           /* size */
     true,        /* is_string */
-    10           /* maximum_name_length */
-    #if defined(RTEMS_MULTIPROCESSING)
-      ,
-      false,       /* supports_global */
-      NULL         /* Objects_Thread_queue_Extract_callout extract */
-    #endif
+    10,          /* maximum_name_length */
+    NULL         /* Objects_Thread_queue_Extract_callout extract */
   );
 
 

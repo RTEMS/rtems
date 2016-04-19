@@ -24,7 +24,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/wkspace.h>
 
-void _Objects_Initialize_information(
+void _Objects_Do_initialize_information(
   Objects_Information *information,
   Objects_APIs         the_api,
   uint16_t             the_class,
@@ -34,7 +34,6 @@ void _Objects_Initialize_information(
   uint32_t             maximum_name_length
 #if defined(RTEMS_MULTIPROCESSING)
   ,
-  bool                 supports_global,
   Objects_Thread_queue_Extract_callout extract
 #endif
 )

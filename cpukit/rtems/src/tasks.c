@@ -185,10 +185,6 @@ static void _RTEMS_tasks_Manager_initialization(void)
                                /* maximum objects of this class */
     false,                     /* true if the name is a string */
     RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
-#if defined(RTEMS_MULTIPROCESSING)
-    ,
-    true                       /* true if this is a global object class */
-#endif
   );
 
   /*
