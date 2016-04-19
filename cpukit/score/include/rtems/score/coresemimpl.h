@@ -86,6 +86,22 @@ void _CORE_semaphore_Initialize(
   uint32_t                    initial_value
 );
 
+RTEMS_INLINE_ROUTINE void _CORE_semaphore_Acquire_critical(
+  CORE_semaphore_Control *the_semaphore,
+  ISR_lock_Context       *lock_context
+)
+{
+  _Thread_queue_Acquire_critical( &the_semaphore->Wait_queue, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _CORE_semaphore_Release(
+  CORE_semaphore_Control *the_semaphore,
+  ISR_lock_Context       *lock_context
+)
+{
+  _Thread_queue_Release( &the_semaphore->Wait_queue, lock_context );
+}
+
 Thread_Control *_CORE_semaphore_Was_deleted(
   Thread_Control     *the_thread,
   Thread_queue_Queue *queue,
@@ -101,21 +117,17 @@ Thread_Control *_CORE_semaphore_Unsatisfied_nowait(
 #define _CORE_semaphore_Destroy( \
   the_semaphore, \
   mp_callout, \
-  mp_id \
+  mp_id, \
+  lock_context \
 ) \
   do { \
-    ISR_lock_Context _core_semaphore_destroy_lock_context; \
-    _Thread_queue_Acquire( \
-      &( the_semaphore )->Wait_queue, \
-      &_core_semaphore_destroy_lock_context \
-    ); \
     _Thread_queue_Flush_critical( \
       &( the_semaphore )->Wait_queue.Queue, \
       ( the_semaphore )->operations, \
       _CORE_semaphore_Was_deleted, \
       mp_callout, \
       mp_id, \
-      &_core_semaphore_destroy_lock_context \
+      lock_context \
     ); \
     _Thread_queue_Destroy( &( the_semaphore )->Wait_queue ); \
   } while ( 0 )
@@ -134,7 +146,7 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Do_surrender(
 
   status = CORE_SEMAPHORE_STATUS_SUCCESSFUL;
 
-  _Thread_queue_Acquire_critical( &the_semaphore->Wait_queue, lock_context );
+  _CORE_semaphore_Acquire_critical( the_semaphore, lock_context );
 
   the_thread = _Thread_queue_First_locked(
     &the_semaphore->Wait_queue,
@@ -155,7 +167,7 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Do_surrender(
     else
       status = CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED;
 
-    _Thread_queue_Release( &the_semaphore->Wait_queue, lock_context );
+    _CORE_semaphore_Release( the_semaphore, lock_context );
   }
 
   return status;
@@ -208,21 +220,17 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Do_surrender(
 #define _CORE_semaphore_Flush( \
   the_semaphore, \
   mp_callout, \
-  mp_id \
+  mp_id, \
+  lock_context \
 ) \
   do { \
-    ISR_lock_Context _core_semaphore_flush_lock_context; \
-    _Thread_queue_Acquire( \
-      &( the_semaphore )->Wait_queue, \
-      &_core_semaphore_flush_lock_context \
-    ); \
     _Thread_queue_Flush_critical( \
       &( the_semaphore )->Wait_queue.Queue, \
       ( the_semaphore )->operations, \
       _CORE_semaphore_Unsatisfied_nowait, \
       mp_callout, \
       mp_id, \
-      &_core_semaphore_flush_lock_context \
+      lock_context \
     ); \
   } while ( 0 )
 
@@ -268,15 +276,15 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize(
   /* disabled when you get here */
 
   executing->Wait.return_code = CORE_SEMAPHORE_STATUS_SUCCESSFUL;
-  _Thread_queue_Acquire_critical( &the_semaphore->Wait_queue, lock_context );
+  _CORE_semaphore_Acquire_critical( the_semaphore, lock_context );
   if ( the_semaphore->count != 0 ) {
     the_semaphore->count -= 1;
-    _Thread_queue_Release( &the_semaphore->Wait_queue, lock_context );
+    _CORE_semaphore_Release( the_semaphore, lock_context );
     return;
   }
 
   if ( !wait ) {
-    _Thread_queue_Release( &the_semaphore->Wait_queue, lock_context );
+    _CORE_semaphore_Release( the_semaphore, lock_context );
     executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
     return;
   }

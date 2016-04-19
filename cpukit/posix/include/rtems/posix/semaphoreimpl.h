@@ -22,8 +22,7 @@
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/posixapi.h>
 #include <rtems/score/coresemimpl.h>
-
-#include <errno.h>
+#include <rtems/seterr.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,26 +60,6 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
   _Objects_Free( &_POSIX_Semaphore_Information, &the_semaphore->Object );
 }
 
-/**
- *  @brief POSIX Semaphore Get
- *
- *  This function maps semaphore IDs to semaphore control blocks.
- *  If ID corresponds to a local semaphore, then it returns
- *  the_semaphore control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  if the semaphore ID is global and
- *  resides on a remote node, then location is set to OBJECTS_REMOTE,
- *  and the_semaphore is undefined.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_semaphore is undefined.
- */
-RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
-  sem_t             *id,
-  Objects_Locations *location
-)
-{
-  return (POSIX_Semaphore_Control *)
-    _Objects_Get( &_POSIX_Semaphore_Information, (Objects_Id)*id, location );
-}
-
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *
 _POSIX_Semaphore_Get_interrupt_disable(
   sem_t             *id,
@@ -116,7 +95,8 @@ int _POSIX_Semaphore_Create_support(
  * This routine supports the sem_close and sem_unlink routines.
  */
 void _POSIX_Semaphore_Delete(
-  POSIX_Semaphore_Control *the_semaphore
+  POSIX_Semaphore_Control *the_semaphore,
+  ISR_lock_Context        *lock_context
 );
 
 /**

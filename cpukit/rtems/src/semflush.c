@@ -37,39 +37,52 @@ rtems_status_code rtems_semaphore_flush(
 {
   Semaphore_Control          *the_semaphore;
   Objects_Locations           location;
+  ISR_lock_Context            lock_context;
   rtems_attribute             attribute_set;
 
-  the_semaphore = _Semaphore_Get( id, &location );
+  the_semaphore = _Semaphore_Get_interrupt_disable(
+    id,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
       attribute_set = the_semaphore->attribute_set;
 #if defined(RTEMS_SMP)
       if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-        _Objects_Put( &the_semaphore->Object );
+        _ISR_lock_ISR_enable( &lock_context );
         return RTEMS_NOT_DEFINED;
       } else
 #endif
       if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
+        _CORE_mutex_Acquire_critical(
+          &the_semaphore->Core_control.mutex,
+          &lock_context
+        );
         _CORE_mutex_Flush(
           &the_semaphore->Core_control.mutex,
           _CORE_mutex_Unsatisfied_nowait,
           _Semaphore_MP_Send_object_was_deleted,
-          id
+          id,
+          &lock_context
         );
       } else {
+        _CORE_semaphore_Acquire_critical(
+          &the_semaphore->Core_control.semaphore,
+          &lock_context
+        );
         _CORE_semaphore_Flush(
           &the_semaphore->Core_control.semaphore,
           _Semaphore_MP_Send_object_was_deleted,
-          id
+          id,
+          &lock_context
         );
       }
-      _Objects_Put( &the_semaphore->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
-      _Thread_Dispatch();
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
 #endif
 

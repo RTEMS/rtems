@@ -37,11 +37,16 @@ rtems_status_code rtems_semaphore_delete(
 {
   Semaphore_Control          *the_semaphore;
   Objects_Locations           location;
+  ISR_lock_Context            lock_context;
   rtems_attribute             attribute_set;
 
   _Objects_Allocator_lock();
 
-  the_semaphore = _Semaphore_Get( id, &location );
+  the_semaphore = _Semaphore_Get_interrupt_disable(
+    id,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
@@ -50,43 +55,50 @@ rtems_status_code rtems_semaphore_delete(
       if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
         MRSP_Status mrsp_status;
 
+        _MRSP_Acquire_critical(
+          &the_semaphore->Core_control.mrsp,
+          &lock_context
+        );
         mrsp_status = _MRSP_Can_destroy( &the_semaphore->Core_control.mrsp );
         if ( mrsp_status != MRSP_SUCCESSFUL ) {
-          _Objects_Put( &the_semaphore->Object );
+          _MRSP_Release(
+            &the_semaphore->Core_control.mrsp,
+            &lock_context
+          );
           _Objects_Allocator_unlock();
           return _Semaphore_Translate_MRSP_status_code( mrsp_status );
         }
       } else
 #endif
-      if (
-        !_Attributes_Is_counting_semaphore( attribute_set )
-          && _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex )
-          && !_Attributes_Is_simple_binary_semaphore( attribute_set )
-      ) {
-        _Objects_Put( &the_semaphore->Object );
-        _Objects_Allocator_unlock();
-        return RTEMS_RESOURCE_IN_USE;
+      if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
+        _CORE_mutex_Acquire_critical(
+          &the_semaphore->Core_control.mutex,
+          &lock_context
+        );
+
+        if (
+          _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex )
+            && !_Attributes_Is_simple_binary_semaphore( attribute_set )
+        ) {
+          _CORE_mutex_Release(
+            &the_semaphore->Core_control.mutex,
+            &lock_context
+          );
+          _Objects_Allocator_unlock();
+          return RTEMS_RESOURCE_IN_USE;
+        }
+      } else {
+        _CORE_semaphore_Acquire_critical(
+          &the_semaphore->Core_control.semaphore,
+          &lock_context
+        );
       }
 
       _Objects_Close( &_Semaphore_Information, &the_semaphore->Object );
 
-#if defined(RTEMS_MULTIPROCESSING)
-      if ( _Attributes_Is_global( attribute_set ) ) {
-
-        _Objects_MP_Close( &_Semaphore_Information, the_semaphore->Object.id );
-
-        _Semaphore_MP_Send_process_packet(
-          SEMAPHORE_MP_ANNOUNCE_DELETE,
-          the_semaphore->Object.id,
-          0,                         /* Not used */
-          0                          /* Not used */
-        );
-      }
-#endif
-
 #if defined(RTEMS_SMP)
       if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-        _MRSP_Destroy( &the_semaphore->Core_control.mrsp );
+        _MRSP_Destroy( &the_semaphore->Core_control.mrsp, &lock_context );
       } else
 #endif
       if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
@@ -94,18 +106,33 @@ rtems_status_code rtems_semaphore_delete(
           &the_semaphore->Core_control.mutex,
           _CORE_mutex_Was_deleted,
           _Semaphore_MP_Send_object_was_deleted,
-          id
+          id,
+          &lock_context
         );
         _CORE_mutex_Destroy( &the_semaphore->Core_control.mutex );
       } else {
         _CORE_semaphore_Destroy(
           &the_semaphore->Core_control.semaphore,
           _Semaphore_MP_Send_object_was_deleted,
-          id
+          id,
+          &lock_context
         );
       }
 
-      _Objects_Put( &the_semaphore->Object );
+#if defined(RTEMS_MULTIPROCESSING)
+      if ( _Attributes_Is_global( attribute_set ) ) {
+
+        _Objects_MP_Close( &_Semaphore_Information, id );
+
+        _Semaphore_MP_Send_process_packet(
+          SEMAPHORE_MP_ANNOUNCE_DELETE,
+          id,
+          0,                         /* Not used */
+          0                          /* Not used */
+        );
+      }
+#endif
+
       _Semaphore_Free( the_semaphore );
       _Objects_Allocator_unlock();
       return RTEMS_SUCCESSFUL;

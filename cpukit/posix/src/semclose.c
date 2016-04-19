@@ -18,17 +18,9 @@
 #include "config.h"
 #endif
 
-#include <stdarg.h>
-
-#include <errno.h>
-#include <fcntl.h>
-#include <pthread.h>
 #include <semaphore.h>
-#include <limits.h>
 
-#include <rtems/system.h>
 #include <rtems/posix/semaphoreimpl.h>
-#include <rtems/seterr.h>
 
 int sem_close(
   sem_t *sem
@@ -36,15 +28,23 @@ int sem_close(
 {
   POSIX_Semaphore_Control          *the_semaphore;
   Objects_Locations                 location;
+  ISR_lock_Context                  lock_context;
 
   _Objects_Allocator_lock();
-  the_semaphore = _POSIX_Semaphore_Get( sem, &location );
+  the_semaphore = _POSIX_Semaphore_Get_interrupt_disable(
+    sem,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      _CORE_semaphore_Acquire_critical(
+        &the_semaphore->Semaphore,
+        &lock_context
+      );
       the_semaphore->open_count -= 1;
-      _POSIX_Semaphore_Delete( the_semaphore );
-      _Objects_Put( &the_semaphore->Object );
+      _POSIX_Semaphore_Delete( the_semaphore, &lock_context );
       _Objects_Allocator_unlock();
       return 0;
 

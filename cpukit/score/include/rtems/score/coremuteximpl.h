@@ -355,23 +355,17 @@ Thread_Control *_CORE_mutex_Unsatisfied_nowait(
   the_mutex, \
   filter, \
   mp_callout, \
-  mp_id \
+  mp_id, \
+  lock_context \
 ) \
-  do { \
-    ISR_lock_Context _core_mutex_flush_lock_context; \
-    _Thread_queue_Acquire( \
-      &( the_mutex )->Wait_queue, \
-      &_core_mutex_flush_lock_context \
-    ); \
-    _Thread_queue_Flush_critical( \
-      &( the_mutex )->Wait_queue.Queue, \
-      ( the_mutex )->operations, \
-      filter, \
-      mp_callout, \
-      mp_id, \
-      &_core_mutex_flush_lock_context \
-    ); \
-  } while ( 0 )
+  _Thread_queue_Flush_critical( \
+    &( the_mutex )->Wait_queue.Queue, \
+    ( the_mutex )->operations, \
+    filter, \
+    mp_callout, \
+    mp_id, \
+    lock_context \
+  )
 
 /**
  * @brief Is mutex locked.

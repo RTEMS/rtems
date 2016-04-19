@@ -21,7 +21,6 @@
 #include <semaphore.h>
 
 #include <rtems/posix/semaphoreimpl.h>
-#include <rtems/seterr.h>
 
 int sem_unlink(
   const char *name
@@ -29,6 +28,7 @@ int sem_unlink(
 {
   POSIX_Semaphore_Control   *the_semaphore;
   Objects_Get_by_name_error  error;
+  ISR_lock_Context           lock_context;
 
   _Objects_Allocator_lock();
 
@@ -38,9 +38,12 @@ int sem_unlink(
     rtems_set_errno_and_return_minus_one( _POSIX_Get_by_name_error( error ) );
   }
 
-  the_semaphore->linked = false;
   _POSIX_Semaphore_Namespace_remove( the_semaphore );
-  _POSIX_Semaphore_Delete( the_semaphore );
+
+  _ISR_lock_ISR_disable( &lock_context );
+  _CORE_semaphore_Acquire_critical( &the_semaphore->Semaphore, &lock_context );
+  the_semaphore->linked = false;
+  _POSIX_Semaphore_Delete( the_semaphore, &lock_context );
 
   _Objects_Allocator_unlock();
   return 0;
