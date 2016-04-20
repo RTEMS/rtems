@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -219,83 +219,57 @@ int _Condition_Wait_recursive_timed(
   return eno;
 }
 
-static int _Condition_Wake( struct _Condition_Control *_condition, int count )
+typedef struct {
+  ISR_lock_Context Base;
+  int              count;
+} Condition_Lock_context;
+
+static Thread_Control *_Condition_Flush_filter(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+)
 {
-  Condition_Control  *condition;
-  ISR_lock_Context    lock_context;
-  Thread_queue_Heads *heads;
-  Chain_Control       unblock;
-  Chain_Node         *node;
-  Chain_Node         *tail;
-  int                 woken;
+  Condition_Lock_context *condition_lock_context;
+
+  condition_lock_context = (Condition_Lock_context *) lock_context;
+
+  if ( condition_lock_context->count <= 0 ) {
+    return NULL;
+  }
+
+  --condition_lock_context->count;
+
+  return the_thread;
+}
+
+static void _Condition_Wake( struct _Condition_Control *_condition, int count )
+{
+  Condition_Control      *condition;
+  Condition_Lock_context  lock_context;
 
   condition = _Condition_Get( _condition );
-  _ISR_lock_ISR_disable( &lock_context );
-  _Condition_Queue_acquire_critical( condition, &lock_context );
+  _ISR_lock_ISR_disable( &lock_context.Base );
+  _Condition_Queue_acquire_critical( condition, &lock_context.Base );
 
   /*
    * In common uses cases of condition variables there are normally no threads
    * on the queue, so check this condition early.
    */
-  heads = condition->Queue.Queue.heads;
-  if ( __predict_true( heads == NULL ) ) {
-    _Condition_Queue_release( condition, &lock_context );
-
-    return 0;
+  if ( __predict_true( _Thread_queue_Is_empty( &condition->Queue.Queue ) ) ) {
+    _Condition_Queue_release( condition, &lock_context.Base );
+    return;
   }
 
-  woken = 0;
-  _Chain_Initialize_empty( &unblock );
-  while ( count > 0 && heads != NULL ) {
-    const Thread_queue_Operations *operations;
-    Thread_Control                *first;
-    bool                           do_unblock;
-
-    operations = CONDITION_TQ_OPERATIONS;
-    first = ( *operations->first )( heads );
-
-    do_unblock = _Thread_queue_Extract_locked(
-      &condition->Queue.Queue,
-      operations,
-      first,
-      NULL,
-      0
-    );
-    if (do_unblock) {
-      _Chain_Append_unprotected( &unblock, &first->Wait.Node.Chain );
-    }
-
-    ++woken;
-    --count;
-    heads = condition->Queue.Queue.heads;
-  }
-
-  node = _Chain_First( &unblock );
-  tail = _Chain_Tail( &unblock );
-  if ( node != tail ) {
-    Per_CPU_Control *cpu_self;
-
-    cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
-    _Condition_Queue_release( condition, &lock_context );
-
-    do {
-      Thread_Control *thread;
-      Chain_Node     *next;
-
-      next = _Chain_Next( node );
-      thread = THREAD_CHAIN_NODE_TO_THREAD( node );
-      _Thread_Timer_remove( thread );
-      _Thread_Unblock( thread );
-
-      node = next;
-    } while ( node != tail );
-
-    _Thread_Dispatch_enable( cpu_self );
-  } else {
-    _Condition_Queue_release( condition, &lock_context );
-  }
-
-  return woken;
+  lock_context.count = count;
+  _Thread_queue_Flush_critical(
+    &condition->Queue.Queue,
+    CONDITION_TQ_OPERATIONS,
+    _Condition_Flush_filter,
+    NULL,
+    0,
+    &lock_context.Base
+  );
 }
 
 void _Condition_Signal( struct _Condition_Control *_condition )
