@@ -60,17 +60,14 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
   _Objects_Free( &_POSIX_Semaphore_Information, &the_semaphore->Object );
 }
 
-RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *
-_POSIX_Semaphore_Get_interrupt_disable(
-  sem_t             *id,
-  Objects_Locations *location,
+RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get(
+  const sem_t       *id,
   ISR_lock_Context  *lock_context
 )
 {
-  return (POSIX_Semaphore_Control *) _Objects_Get_isr_disable(
+  return (POSIX_Semaphore_Control *) _Objects_Get_local(
+    (Objects_Id) *id,
     &_POSIX_Semaphore_Information,
-    (Objects_Id)*id,
-    location,
     lock_context
   );
 }

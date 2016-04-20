@@ -26,44 +26,31 @@ int sem_destroy(
   sem_t *sem
 )
 {
-  POSIX_Semaphore_Control          *the_semaphore;
-  Objects_Locations                 location;
-  ISR_lock_Context                  lock_context;
+  POSIX_Semaphore_Control *the_semaphore;
+  ISR_lock_Context         lock_context;
 
   _Objects_Allocator_lock();
-  the_semaphore = _POSIX_Semaphore_Get_interrupt_disable(
-    sem,
-    &location,
-    &lock_context
-  );
-  switch ( location ) {
+  the_semaphore = _POSIX_Semaphore_Get( sem, &lock_context );
 
-    case OBJECTS_LOCAL:
-      _CORE_semaphore_Acquire_critical(
-        &the_semaphore->Semaphore,
-        &lock_context
-      );
-
-      /*
-       *  Undefined operation on a named semaphore. Release the object
-       *  and fall to the EINVAL return at the bottom.
-       */
-      if ( the_semaphore->named ) {
-        _CORE_semaphore_Release( &the_semaphore->Semaphore, &lock_context );
-      } else {
-        _POSIX_Semaphore_Delete( the_semaphore, &lock_context );
-        _Objects_Allocator_unlock();
-        return 0;
-      }
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( the_semaphore == NULL ) {
+    _Objects_Allocator_unlock();
+    rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  _Objects_Allocator_unlock();
+  _CORE_semaphore_Acquire_critical(
+    &the_semaphore->Semaphore,
+    &lock_context
+  );
 
-  rtems_set_errno_and_return_minus_one( EINVAL );
+  if ( the_semaphore->named ) {
+    /* Undefined operation on a named semaphore */
+    _CORE_semaphore_Release( &the_semaphore->Semaphore, &lock_context );
+    _Objects_Allocator_unlock();
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+
+  _POSIX_Semaphore_Delete( the_semaphore, &lock_context );
+
+  _Objects_Allocator_unlock();
+  return 0;
 }
