@@ -23,6 +23,7 @@
 #include <rtems/score/corebarrierimpl.h>
 #include <rtems/score/objectimpl.h>
 
+#include <errno.h>
 #include <pthread.h>
 
 #ifdef __cplusplus
@@ -76,26 +77,15 @@ RTEMS_INLINE_ROUTINE void _POSIX_Barrier_Free (
   _Objects_Free( &_POSIX_Barrier_Information, &the_barrier->Object );
 }
 
-/**
- * @brief Get a barrier control block.
- *
- * This function maps barrier IDs to barrier control blocks.
- * If ID corresponds to a local barrier, then it returns
- * the_barrier control pointer which maps to ID and location
- * is set to OBJECTS_LOCAL.  if the barrier ID is global and
- * resides on a remote node, then location is set to OBJECTS_REMOTE,
- * and the_barrier is undefined.  Otherwise, location is set
- * to OBJECTS_ERROR and the_barrier is undefined.
- */
 RTEMS_INLINE_ROUTINE POSIX_Barrier_Control *_POSIX_Barrier_Get (
-  pthread_barrier_t *barrier,
-  Objects_Locations *location
+  const pthread_barrier_t *barrier,
+  ISR_lock_Context        *lock_context
 )
 {
-  return (POSIX_Barrier_Control *) _Objects_Get(
-      &_POSIX_Barrier_Information,
-      (Objects_Id) *barrier,
-      location
+  return (POSIX_Barrier_Control *) _Objects_Get_local(
+    (Objects_Id) *barrier,
+    &_POSIX_Barrier_Information,
+    lock_context
   );
 }
 

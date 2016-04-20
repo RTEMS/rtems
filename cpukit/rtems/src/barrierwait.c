@@ -18,9 +18,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/score/threadimpl.h>
 
@@ -31,33 +28,27 @@ rtems_status_code rtems_barrier_wait(
   rtems_interval  timeout
 )
 {
-  Barrier_Control   *the_barrier;
-  Objects_Locations  location;
-  Thread_Control    *executing;
+  Barrier_Control  *the_barrier;
+  ISR_lock_Context  lock_context;
+  Thread_Control   *executing;
 
-  the_barrier = _Barrier_Get( id, &location );
-  switch ( location ) {
+  the_barrier = _Barrier_Get( id, &lock_context );
 
-    case OBJECTS_LOCAL:
-      executing = _Thread_Executing;
-      _CORE_barrier_Seize(
-        &the_barrier->Barrier,
-        executing,
-        true,
-        timeout,
-        NULL,
-        0
-      );
-      _Objects_Put( &the_barrier->Object );
-      return _Barrier_Translate_core_barrier_return_code(
-                executing->Wait.return_code );
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( the_barrier == NULL ) {
+    return RTEMS_INVALID_ID;
   }
 
-  return RTEMS_INVALID_ID;
+  executing = _Thread_Executing;
+  _CORE_barrier_Seize(
+    &the_barrier->Barrier,
+    executing,
+    true,
+    timeout,
+    NULL,
+    0,
+    &lock_context
+  );
+  return _Barrier_Translate_core_barrier_return_code(
+    executing->Wait.return_code
+  );
 }

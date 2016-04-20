@@ -20,9 +20,7 @@
 #define _RTEMS_SCORE_COREBARRIERIMPL_H
 
 #include <rtems/score/corebarrier.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/threadqimpl.h>
-#include <rtems/score/watchdog.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -84,16 +82,32 @@ RTEMS_INLINE_ROUTINE void _CORE_barrier_Destroy(
   _Thread_queue_Destroy( &the_barrier->Wait_queue );
 }
 
+RTEMS_INLINE_ROUTINE void _CORE_barrier_Acquire_critical(
+  CORE_barrier_Control *the_barrier,
+  ISR_lock_Context     *lock_context
+)
+{
+  _Thread_queue_Acquire_critical( &the_barrier->Wait_queue, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _CORE_barrier_Release(
+  CORE_barrier_Control *the_barrier,
+  ISR_lock_Context     *lock_context
+)
+{
+  _Thread_queue_Release( &the_barrier->Wait_queue, lock_context );
+}
+
 void _CORE_barrier_Do_seize(
   CORE_barrier_Control    *the_barrier,
   Thread_Control          *executing,
   bool                     wait,
-  Watchdog_Interval        timeout
+  Watchdog_Interval        timeout,
 #if defined(RTEMS_MULTIPROCESSING)
-  ,
   Thread_queue_MP_callout  mp_callout,
-  Objects_Id               mp_id
+  Objects_Id               mp_id,
 #endif
+  ISR_lock_Context        *lock_context
 );
 
 /**
@@ -122,7 +136,8 @@ void _CORE_barrier_Do_seize(
     wait, \
     timeout, \
     mp_callout, \
-    mp_id \
+    mp_id, \
+    lock_context \
   ) \
     _CORE_barrier_Do_seize( \
       the_barrier, \
@@ -130,7 +145,8 @@ void _CORE_barrier_Do_seize(
       wait, \
       timeout, \
       mp_callout, \
-      mp_id \
+      mp_id, \
+      lock_context \
     )
 #else
   #define _CORE_barrier_Seize( \
@@ -139,23 +155,26 @@ void _CORE_barrier_Do_seize(
     wait, \
     timeout, \
     mp_callout, \
-    mp_id \
+    mp_id, \
+    lock_context \
   ) \
     _CORE_barrier_Do_seize( \
       the_barrier, \
       executing, \
       wait, \
-      timeout \
+      timeout, \
+      lock_context \
     )
 #endif
 
 uint32_t _CORE_barrier_Do_surrender(
-  CORE_barrier_Control    *the_barrier
+  CORE_barrier_Control      *the_barrier,
+  Thread_queue_Flush_filter  filter,
 #if defined(RTEMS_MULTIPROCESSING)
-  ,
-  Thread_queue_MP_callout  mp_callout,
-  Objects_Id               mp_id
+  Thread_queue_MP_callout    mp_callout,
+  Objects_Id                 mp_id,
 #endif
+  ISR_lock_Context          *lock_context
 );
 
 /**
@@ -175,21 +194,27 @@ uint32_t _CORE_barrier_Do_surrender(
   #define _CORE_barrier_Surrender( \
     the_barrier, \
     mp_callout, \
-    mp_id \
+    mp_id, \
+    lock_context \
   ) \
     _CORE_barrier_Do_surrender( \
       the_barrier, \
       mp_callout, \
-      mp_id \
+      mp_id, \
+      _Thread_queue_Flush_default_filter, \
+      lock_context \
     )
 #else
   #define _CORE_barrier_Surrender( \
     the_barrier, \
     mp_callout, \
-    mp_id \
+    mp_id, \
+    lock_context \
   ) \
     _CORE_barrier_Do_surrender( \
-      the_barrier \
+      the_barrier, \
+      _Thread_queue_Flush_default_filter, \
+      lock_context \
     )
 #endif
 
@@ -200,26 +225,33 @@ Thread_Control *_CORE_barrier_Was_deleted(
 );
 
 /* Must be a macro due to the multiprocessing dependent parameters */
-#define _CORE_barrier_Flush( \
-  the_barrier, \
-  mp_callout, \
-  mp_id \
-) \
-  do { \
-    ISR_lock_Context _core_barrier_flush_lock_context; \
-    _Thread_queue_Acquire( \
-      &( the_barrier )->Wait_queue, \
-      &_core_barrier_flush_lock_context \
-    ); \
-    _Thread_queue_Flush_critical( \
-      &( the_barrier )->Wait_queue.Queue, \
-      CORE_BARRIER_TQ_OPERATIONS, \
+#if defined(RTEMS_MULTIPROCESSING)
+  #define _CORE_barrier_Flush( \
+    the_barrier, \
+    mp_callout, \
+    mp_id, \
+    lock_context \
+  ) \
+    _CORE_barrier_Do_surrender( \
+      the_barrier, \
       _CORE_barrier_Was_deleted, \
       mp_callout, \
       mp_id, \
-      &_core_barrier_flush_lock_context \
-    ); \
-  } while ( 0 )
+      lock_context \
+    )
+#else
+  #define _CORE_barrier_Flush( \
+    the_barrier, \
+    mp_callout, \
+    mp_id, \
+    lock_context \
+  ) \
+    _CORE_barrier_Do_surrender( \
+      the_barrier, \
+      _CORE_barrier_Was_deleted, \
+      lock_context \
+    )
+#endif
 
 /**
  * This function returns true if the automatic release attribute is

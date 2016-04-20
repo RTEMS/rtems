@@ -69,24 +69,13 @@ RTEMS_INLINE_ROUTINE void _Barrier_Free (
   _Objects_Free( &_Barrier_Information, &the_barrier->Object );
 }
 
-/**
- *  @brief _Barrier_Get
- *
- *  This function maps barrier IDs to barrier control blocks.
- *  If ID corresponds to a local barrier, then it returns
- *  the_barrier control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  if the barrier ID is global and
- *  resides on a remote node, then location is set to OBJECTS_REMOTE,
- *  and the_barrier is undefined.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_barrier is undefined.
- */
-RTEMS_INLINE_ROUTINE Barrier_Control *_Barrier_Get (
-  Objects_Id         id,
-  Objects_Locations *location
+RTEMS_INLINE_ROUTINE Barrier_Control *_Barrier_Get(
+  Objects_Id        id,
+  ISR_lock_Context *lock_context
 )
 {
   return (Barrier_Control *)
-    _Objects_Get( &_Barrier_Information, id, location );
+    _Objects_Get_local( id, &_Barrier_Information, lock_context );
 }
 
 /**

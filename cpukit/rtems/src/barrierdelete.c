@@ -19,35 +19,26 @@
 #endif
 
 #include <rtems/rtems/barrierimpl.h>
-#include <rtems/score/threadqimpl.h>
 
 rtems_status_code rtems_barrier_delete(
   rtems_id   id
 )
 {
-  Barrier_Control   *the_barrier;
-  Objects_Locations  location;
+  Barrier_Control  *the_barrier;
+  ISR_lock_Context  lock_context;
 
   _Objects_Allocator_lock();
-  the_barrier = _Barrier_Get( id, &location );
-  switch ( location ) {
+  the_barrier = _Barrier_Get( id, &lock_context );
 
-    case OBJECTS_LOCAL:
-      _Objects_Close( &_Barrier_Information, &the_barrier->Object );
-      _CORE_barrier_Flush( &the_barrier->Barrier, NULL, 0 );
-      _Objects_Put( &the_barrier->Object );
-      _Barrier_Free( the_barrier );
-      _Objects_Allocator_unlock();
-      return RTEMS_SUCCESSFUL;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( the_barrier == NULL ) {
+    _Objects_Allocator_unlock();
+    return RTEMS_INVALID_ID;
   }
 
+  _CORE_barrier_Acquire_critical( &the_barrier->Barrier, &lock_context );
+  _Objects_Close( &_Barrier_Information, &the_barrier->Object );
+  _CORE_barrier_Flush( &the_barrier->Barrier, NULL, 0, &lock_context );
+  _Barrier_Free( the_barrier );
   _Objects_Allocator_unlock();
-
-  return RTEMS_INVALID_ID;
+  return RTEMS_SUCCESSFUL;
 }

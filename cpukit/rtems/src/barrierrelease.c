@@ -18,52 +18,32 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
 #include <rtems/rtems/barrierimpl.h>
-#include <rtems/score/thread.h>
-
-/*
- *  rtems_barrier_release
- *
- *  This directive releases all threads waiting at a barrier.
- *
- *  Input parameters:
- *    id         - barrier id
- *    released   - pointer to number of threads unblocked
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- *    *released        - number of threads unblocked
- */
 
 rtems_status_code rtems_barrier_release(
   rtems_id          id,
   uint32_t         *released
 )
 {
-  Barrier_Control   *the_barrier;
-  Objects_Locations  location;
+  Barrier_Control  *the_barrier;
+  ISR_lock_Context  lock_context;
 
-  if ( !released )
+  if ( released == NULL ) {
     return RTEMS_INVALID_ADDRESS;
-
-  the_barrier = _Barrier_Get( id, &location );
-  switch ( location ) {
-
-    case OBJECTS_LOCAL:
-      *released = _CORE_barrier_Surrender( &the_barrier->Barrier, NULL, 0 );
-      _Objects_Put( &the_barrier->Object );
-      return RTEMS_SUCCESSFUL;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
   }
 
-  return RTEMS_INVALID_ID;
+  the_barrier = _Barrier_Get( id, &lock_context );
+
+  if ( the_barrier == NULL ) {
+    return RTEMS_INVALID_ID;
+  }
+
+  _CORE_barrier_Acquire_critical( &the_barrier->Barrier, &lock_context );
+  *released = _CORE_barrier_Surrender(
+    &the_barrier->Barrier,
+    NULL,
+    0,
+    &lock_context
+  );
+  return RTEMS_SUCCESSFUL;
 }

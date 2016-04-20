@@ -18,9 +18,6 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
-#include <errno.h>
-
 #include <rtems/posix/barrierimpl.h>
 #include <rtems/score/threadimpl.h>
 
@@ -40,36 +37,31 @@ int pthread_barrier_wait(
   pthread_barrier_t *barrier
 )
 {
-  POSIX_Barrier_Control   *the_barrier = NULL;
-  Objects_Locations        location;
-  Thread_Control          *executing;
+  POSIX_Barrier_Control *the_barrier;
+  ISR_lock_Context       lock_context;
+  Thread_Control        *executing;
 
-  if ( !barrier )
+  if ( barrier == NULL ) {
     return EINVAL;
-
-  the_barrier = _POSIX_Barrier_Get( barrier, &location );
-  switch ( location ) {
-
-    case OBJECTS_LOCAL:
-      executing = _Thread_Executing;
-      _CORE_barrier_Seize(
-        &the_barrier->Barrier,
-        executing,
-        true,
-        0,
-        NULL,
-        0
-      );
-      _Objects_Put( &the_barrier->Object );
-      return _POSIX_Barrier_Translate_core_barrier_return_code(
-                executing->Wait.return_code );
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
   }
 
-  return EINVAL;
+  the_barrier = _POSIX_Barrier_Get( barrier, &lock_context );
+
+  if ( the_barrier == NULL ) {
+    return EINVAL;
+  }
+
+  executing = _Thread_Executing;
+  _CORE_barrier_Seize(
+    &the_barrier->Barrier,
+    executing,
+    true,
+    0,
+    NULL,
+    0,
+    &lock_context
+  );
+  return _POSIX_Barrier_Translate_core_barrier_return_code(
+    executing->Wait.return_code
+  );
 }
