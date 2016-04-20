@@ -36,6 +36,7 @@
 #ifdef __rtems__
 #include <stddef.h>
 #include <stdint.h>
+#include <i386_io.h>
 #else
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD$");
@@ -54,6 +55,7 @@ __FBSDID("$FreeBSD$");
 
 #include <dev/uart/uart.h>
 #include <dev/uart/uart_bus.h>
+
 #endif
 
 #define	DEFAULT_RCLK	1843200
@@ -225,11 +227,11 @@ DRIVER_MODULE(uart, pci, uart_pci_driver, uart_devclass, NULL, NULL);
 #ifdef __rtems__
 
 #include <bsp.h>
-// #include <termios.h>
+#include <bsp/bspimpl.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 
-// #include <rtems/termiostypes.h>
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>
 #include <rtems/bspIo.h>
@@ -242,34 +244,56 @@ DRIVER_MODULE(uart, pci, uart_pci_driver, uart_devclass, NULL, NULL);
  * Information saved from PCI scan
  */
 typedef struct {
-  bool      found;
-  uint32_t  base;
-  uint8_t   irq;
-  uint8_t   bus;
-  uint8_t   slot;
-  int       ports;
-  uint32_t  clock;
+  bool        found;
+  const char* desc;
+  uint32_t    base;
+  uint8_t     irq;
+  uint8_t     bus;
+  uint8_t     slot;
+  int         ports;
+  uint32_t    clock;
 } port_instance_conf_t;
 
 /*
- *  Register Access Routines
+ *  Memory Mapped Register Access Routines
  */
-static uint8_t pci_ns16550_get_register(uint32_t addr, uint8_t i)
+
+#define UART_PCI_IO (0)
+
+static uint8_t pci_ns16550_mem_get_register(uint32_t addr, uint8_t i)
 {
   uint8_t          val = 0;
   volatile uint32_t *reg = (volatile uint32_t *)(addr + (i*4));
-
   val = *reg;
-  /* printk( "RD(%p -> 0x%02x) ", reg, val ); */
+  if (UART_PCI_IO)
+    printk( "RD(%p -> 0x%02x) ", reg, val );
   return val;
 }
 
-static void pci_ns16550_set_register(uint32_t addr, uint8_t i, uint8_t val)
+static void pci_ns16550_mem_set_register(uint32_t addr, uint8_t i, uint8_t val)
 {
   volatile uint32_t *reg = (volatile uint32_t *)(addr + (i*4));
-
-  /* printk( "WR(%p <- 0x%02x) ", reg, val ); */
+  if (UART_PCI_IO)
+    printk( "WR(%p <- 0x%02x) ", reg, val );
   *reg = val;
+}
+
+/*
+ *  IO Register Access Routines
+ */
+static uint8_t pci_ns16550_io_get_register(uint32_t addr, uint8_t i)
+{
+  uint8_t val = rtems_inb(addr + i);
+  if (UART_PCI_IO)
+    printk( "RD(%p -> 0x%02x) ", addr + i, val );
+  return val;
+}
+
+static void pci_ns16550_io_set_register(uint32_t addr, uint8_t i, uint8_t val)
+{
+  if (UART_PCI_IO)
+    printk( "WR(%p <- 0x%02x) ", addr + i, val );
+  rtems_outb(addr + i, val);
 }
 
 void pci_uart_probe(void)
@@ -316,27 +340,28 @@ void pci_uart_probe(void)
       if ( status == PCIB_ERR_SUCCESS ) {
 	uint8_t  irq;
 	uint32_t base;
+	bool io;
 
-        boards++;
-        conf[instance].found = true;
-        conf[instance].clock =  pci_ns8250_ids[i].rclk;
-        conf[instance].ports = 1;
-        total_ports += conf[instance].ports;
-
-	pci_read_config_byte( bus, dev, fun, PCI_INTERRUPT_LINE, &irq );
 	pci_read_config_dword( bus, dev, fun, PCI_BASE_ADDRESS_0, &base );
 
-	conf[instance].irq  = irq;
-	conf[instance].base = base;
+	/*
+	 * Reject memory mapped 64-bit boards. We need 2 BAR registers and the
+	 * driver's base field is only 32-bits any way.
+	 */
+	io = (base & 1) == 1;
+	if (io || (!io && (((base >> 1) & 3) != 2))) {
+	  boards++;
+	  conf[instance].found = true;
+	  conf[instance].desc = pci_ns8250_ids[i].desc;
+	  conf[instance].clock =  pci_ns8250_ids[i].rclk;
+	  conf[instance].ports = 1;
+	  total_ports += conf[instance].ports;
 
-        printk(
-          "Found %s #%d at 0x%08x IRQ %d with %d clock\n",
-	  pci_ns8250_ids[i].desc,
-	  instance,
-	  conf[instance].base,
-	  conf[instance].irq,
-	  conf[instance].clock
-        );
+	  pci_read_config_byte( bus, dev, fun, PCI_INTERRUPT_LINE, &irq );
+
+	  conf[instance].irq  = irq;
+	  conf[instance].base = base;
+	}
       }
     }
   }
@@ -352,6 +377,10 @@ void pci_uart_probe(void)
       port_p = ports;
       device_instance = 1;
       for (b = 0; b < MAX_BOARDS; b++) {
+	uint32_t base = 0;
+	bool io;
+	const char* locatable = "";
+	const char* prefectable = locatable;
 	char name[32];
 	if ( conf[b].found == false )
 	  continue;
@@ -369,20 +398,67 @@ void pci_uart_probe(void)
 	  port_p->pDeviceFns    = &ns16550_fns_polled;
 	}
 
+	/*
+	 * PCI BAR (http://wiki.osdev.org/PCI#Base_Address_Registers):
+	 *
+	 *  Bit 0: 0 = memory, 1 = IO
+	 *
+	 * Memory:
+	 *  Bit 2-1  : 0 = any 32bit address,
+	 *             1 = < 1M
+	 *             2 = any 64bit address
+	 *  Bit 3    : 0 = no, 1 = yes
+	 *  Bit 31-4 : base address (16-byte aligned)
+	 *
+	 * IO:
+	 *  Bit 1    : reserved
+	 *  Bit 31-2 : base address (4-byte aligned)
+	 */
+
+	io = (conf[b].base & 1) == 1;
+
+	if (io) {
+	  base = conf[b].base & 0xfffffffc;
+	} else {
+	  int loc = (conf[b].base >> 1) & 3;
+	  if (loc == 0) {
+	    base = conf[b].base & 0xfffffff0;
+	    locatable = ",A32";
+	  } else if (loc == 1) {
+	    base = conf[b].base & 0x0000fff0;
+	    locatable = ",A16";
+	  }
+	  prefectable = (conf[b].base & (1 << 3)) == 0 ? ",no-prefech" : ",prefetch";
+	}
+
 	port_p->deviceProbe   = NULL;
 	port_p->pDeviceFlow   = NULL;
 	port_p->ulMargin      = 16;
 	port_p->ulHysteresis  = 8;
 	port_p->pDeviceParams = (void *) 9600;
-	port_p->ulCtrlPort1   = conf[b].base;
+	port_p->ulCtrlPort1   = base;
 	port_p->ulCtrlPort2   = 0;                   /* NA */
 	port_p->ulDataPort    = 0;                   /* NA */
-	port_p->getRegister   = pci_ns16550_get_register;
-	port_p->setRegister   = pci_ns16550_set_register;
+	if (io) {
+	  port_p->getRegister = pci_ns16550_io_get_register;
+	  port_p->setRegister = pci_ns16550_io_set_register;
+	} else {
+	  port_p->getRegister = pci_ns16550_mem_get_register;
+	  port_p->setRegister = pci_ns16550_mem_set_register;
+	}
 	port_p->getData       = NULL;                /* NA */
 	port_p->setData       = NULL;                /* NA */
 	port_p->ulClock       = conf[b].clock;
 	port_p->ulIntVector   = conf[b].irq;
+
+
+        printk(
+          "%s:%d:%s,%s:0x%x%s%s,irq:%d,clk:%d\n", /*  */
+	  name, b, conf[b].desc,
+	  io ? "io" : "mem", base, locatable, prefectable,
+	  conf[b].irq, conf[b].clock
+        );
+
 
 	port_p++;
       }    /* end boards */
