@@ -375,7 +375,7 @@ static rtems_task Init(
   test_classic_obj(ctx);
   test_posix_obj(ctx);
 
-  rtems_test_assert( queue.Queue.heads == NULL );
+  rtems_test_assert( _Thread_queue_Is_empty( &queue.Queue ) );
 
   TEST_END();
   rtems_test_exit(0);

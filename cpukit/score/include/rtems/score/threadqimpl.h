@@ -547,6 +547,13 @@ void _Thread_queue_Extract_with_proxy(
   Thread_Control       *the_thread
 );
 
+RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_empty(
+  const Thread_queue_Queue *queue
+)
+{
+  return queue->heads == NULL;
+}
+
 /**
  * @brief Returns the first thread on the thread queue if it exists, otherwise
  * @c NULL.
