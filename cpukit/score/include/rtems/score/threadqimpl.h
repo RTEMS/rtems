@@ -623,6 +623,21 @@ typedef Thread_Control *( *Thread_queue_Flush_filter )(
   ISR_lock_Context   *lock_context
 );
 
+/**
+ * @brief Default thread queue flush filter function.
+ *
+ * @param the_thread The thread to extract.
+ * @param queue Unused.
+ * @param lock_context Unused.
+ *
+ * @retval the_thread Extract this thread.
+ */
+Thread_Control *_Thread_queue_Flush_default_filter(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+);
+
 size_t _Thread_queue_Do_flush_critical(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,

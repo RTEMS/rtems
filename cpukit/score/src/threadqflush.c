@@ -20,6 +20,17 @@
 
 #include <rtems/score/threadimpl.h>
 
+Thread_Control *_Thread_queue_Flush_default_filter(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+)
+{
+  (void) queue;
+  (void) lock_context;
+  return the_thread;
+}
+
 size_t _Thread_queue_Do_flush_critical(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
