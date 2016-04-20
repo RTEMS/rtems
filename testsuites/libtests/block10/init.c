@@ -25,6 +25,7 @@
 
 #include <assert.h>
 #include <errno.h>
+#include <stdlib.h>
 
 #include <rtems.h>
 #include <rtems/bdbuf.h>
