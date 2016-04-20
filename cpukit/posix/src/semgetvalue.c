@@ -37,13 +37,22 @@ int sem_getvalue(
 {
   POSIX_Semaphore_Control          *the_semaphore;
   Objects_Locations                 location;
+  ISR_lock_Context                  lock_context;
 
-  the_semaphore = _POSIX_Semaphore_Get( sem, &location );
+  the_semaphore = _POSIX_Semaphore_Get_interrupt_disable(
+    sem,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      /*
+       * Assume a relaxed atomic load of the value on SMP configurations.
+       * Thus, there is no need to acquire a lock.
+       */
       *sval = _CORE_semaphore_Get_count( &the_semaphore->Semaphore );
-      _Objects_Put( &the_semaphore->Object );
+      _ISR_lock_ISR_enable( &lock_context );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)
