@@ -1,6 +1,6 @@
 /**
  *  @file
- *  
+ *
  *  This file contains the TTY driver for the National Semiconductor NS16550.
  *
  *  This part is widely cloned and second sourced.  It is found in a number
@@ -234,7 +234,7 @@ void ns16550_init(int minor)
   Console_Port_Data[minor].pDeviceContext=(void *)pns16550Context;
   pns16550Context->ucModemCtrl=SP_MODEM_IRQ;
 
-  pNS16550 = c->ulCtrlPort1;    
+  pNS16550 = c->ulCtrlPort1;
   setReg   = c->setRegister;
   getReg   = c->getRegister;
 
@@ -389,7 +389,7 @@ void ns16550_outch_polled(console_tbl *c, char out)
 void ns16550_write_polled(int minor, char out)
 {
   console_tbl *c = Console_Port_Tbl [minor];
-  
+
   ns16550_outch_polled( c, out );
 }
 
@@ -616,27 +616,28 @@ NS16550_STATIC void ns16550_process( int minor)
   NS16550Context *ctx = d->pDeviceContext;
   uint32_t port = c->ulCtrlPort1;
   getRegister_f get = c->getRegister;
-  int i = 0;
+  int i;
   char buf [SP_FIFO_SIZE];
 
   /* Iterate until no more interrupts are pending */
   do {
     /* Fetch received characters */
-    for (i = 0; i < SP_FIFO_SIZE; ++i) {
-      if ((get( port, NS16550_LINE_STATUS) & SP_LSR_RDY) != 0) {
-        buf [i] = (char) get(port, NS16550_RECEIVE_BUFFER);
-      } else {
-        break;
+    i = 0;
+    while ((get(port, NS16550_LINE_STATUS) & SP_LSR_RDY) != 0) {
+      buf[i++] = (char) get(port, NS16550_RECEIVE_BUFFER);
+      if (i == SP_FIFO_SIZE) {
+        /* Enqueue fetched characters */
+        rtems_termios_enqueue_raw_characters( d->termios_data, buf, i);
+        i = 0;
       }
     }
 
-    /* Enqueue fetched characters */
-    rtems_termios_enqueue_raw_characters( d->termios_data, buf, i);
+    if (i > 0)
+      rtems_termios_enqueue_raw_characters( d->termios_data, buf, i);
 
     /* Check if we can dequeue transmitted characters */
     if (ctx->transmitFifoChars > 0
         && (get( port, NS16550_LINE_STATUS) & SP_LSR_THOLD) != 0) {
-
       /* Dequeue transmitted characters */
       rtems_termios_dequeue_characters(
         d->termios_data,
@@ -869,6 +870,6 @@ int ns16550_inch_polled(
 int ns16550_inbyte_nonblocking_polled(int minor)
 {
   console_tbl *c = Console_Port_Tbl [minor];
-  
+
   return ns16550_inch_polled( c );
 }
