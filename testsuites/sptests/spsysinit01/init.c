@@ -514,7 +514,7 @@ static size_t user_extensions_pre_posix_cleanup;
 FIRST(RTEMS_SYSINIT_POSIX_CLEANUP)
 {
   user_extensions_pre_posix_cleanup =
-    _Chain_Node_count_unprotected(&_User_extensions_List);
+    _Chain_Node_count_unprotected(&_User_extensions_List.Active);
   next_step(POSIX_CLEANUP_PRE);
 }
 
@@ -522,7 +522,7 @@ LAST(RTEMS_SYSINIT_POSIX_CLEANUP)
 {
   assert(
     user_extensions_pre_posix_cleanup + 1 ==
-      _Chain_Node_count_unprotected(&_User_extensions_List)
+      _Chain_Node_count_unprotected(&_User_extensions_List.Active)
   );
   next_step(POSIX_CLEANUP_POST);
 }
