@@ -70,6 +70,7 @@ libbsp_a_SOURCES += \
 	../shared/startup/bspidle.c \
 	../shared/uboot_getenv.c \
 	../shared/uboot_dump_bdinfo.c \
+	startup/l2cache.S \
 	startup/mmu.c \
 	startup/mmu-tlb1.S \
 	startup/mmu-config.c \
