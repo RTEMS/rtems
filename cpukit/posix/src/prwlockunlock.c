@@ -20,47 +20,22 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
-#include <errno.h>
-
-#include <rtems/system.h>
 #include <rtems/posix/rwlockimpl.h>
-
-/*
- *  pthread_rwlock_unlock
- *
- *  This directive attempts to release a lock on an RWLock.
- *
- *  Input parameters:
- *    rwlock          - pointer to rwlock id
- *
- *  Output parameters:
- *    0          - if successful
- *    error code - if unsuccessful
- */
 
 int pthread_rwlock_unlock(
   pthread_rwlock_t  *rwlock
 )
 {
-  POSIX_RWLock_Control  *the_rwlock;
-  Objects_Locations      location;
-  CORE_RWLock_Status     status;
+  POSIX_RWLock_Control *the_rwlock;
+  ISR_lock_Context      lock_context;
+  CORE_RWLock_Status    status;
 
-  the_rwlock = _POSIX_RWLock_Get( rwlock, &location );
-  switch ( location ) {
+  the_rwlock = _POSIX_RWLock_Get( rwlock, &lock_context );
 
-    case OBJECTS_LOCAL:
-      status = _CORE_RWLock_Surrender( &the_rwlock->RWLock, _Thread_Executing );
-      _Objects_Put( &the_rwlock->Object );
-      return _POSIX_RWLock_Translate_core_RWLock_return_code( status );
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( the_rwlock == NULL ) {
+    return EINVAL;
   }
 
-  return EINVAL;
+  status = _CORE_RWLock_Surrender( &the_rwlock->RWLock, &lock_context );
+  return _POSIX_RWLock_Translate_core_RWLock_return_code( status );
 }

@@ -23,6 +23,7 @@
 #include <rtems/score/corerwlockimpl.h>
 #include <rtems/score/objectimpl.h>
 
+#include <errno.h>
 #include <pthread.h>
 
 #ifdef __cplusplus
@@ -86,8 +87,8 @@ RTEMS_INLINE_ROUTINE void _POSIX_RWLock_Free (
 }
 
 POSIX_RWLock_Control *_POSIX_RWLock_Get(
-  pthread_rwlock_t  *rwlock,
-  Objects_Locations *location
+  pthread_rwlock_t *rwlock,
+  ISR_lock_Context *lock_context
 );
 
 #ifdef __cplusplus
