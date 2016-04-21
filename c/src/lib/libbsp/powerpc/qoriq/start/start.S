@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -195,6 +195,12 @@ _start:
 	LWI	r0, QORIQ_INITIAL_BUCSR
 	mtspr	FSL_EIS_BUCSR, r0
 	isync
+#endif
+
+#ifdef QORIQ_INITIAL_HID0
+	/* HID0 initialization */
+	LWI	r0, QORIQ_INITIAL_HID0
+	mtspr	HID0, r0
 #endif
 
 	/* Invalidate TLS anchor */
