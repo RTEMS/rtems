@@ -18,12 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/address.h>
 #include <rtems/rtems/dpmemimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/address.h>
 
 rtems_status_code rtems_port_external_to_internal(
   rtems_id   id,
@@ -31,31 +27,28 @@ rtems_status_code rtems_port_external_to_internal(
   void     **internal
 )
 {
-  Dual_ported_memory_Control          *the_port;
-  Objects_Locations                    location;
-  uint32_t                             ending;
+  Dual_ported_memory_Control *the_port;
+  ISR_lock_Context            lock_context;
+  uint32_t                    ending;
 
-  if ( !internal )
+  if ( internal == NULL ) {
     return RTEMS_INVALID_ADDRESS;
-
-  the_port = _Dual_ported_memory_Get( id, &location );
-  switch ( location ) {
-    case OBJECTS_LOCAL:
-      ending = _Addresses_Subtract( external, the_port->external_base );
-      if ( ending > the_port->length )
-        *internal = external;
-      else
-        *internal = _Addresses_Add_offset( the_port->internal_base,
-                                           ending );
-      _Objects_Put( &the_port->Object );
-      return RTEMS_SUCCESSFUL;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:        /* this error cannot be returned */
-#endif
-    case OBJECTS_ERROR:
-      break;
   }
 
-  return RTEMS_INVALID_ID;
+  the_port = _Dual_ported_memory_Get( id, &lock_context );
+
+  if ( the_port == NULL ) {
+    return RTEMS_INVALID_ID;
+  }
+
+  ending = _Addresses_Subtract( external, the_port->external_base );
+
+  if ( ending > the_port->length ) {
+    *internal = external;
+  } else {
+    *internal = _Addresses_Add_offset( the_port->internal_base, ending );
+  }
+
+  _ISR_lock_ISR_enable( &lock_context );
+  return RTEMS_SUCCESSFUL;
 }

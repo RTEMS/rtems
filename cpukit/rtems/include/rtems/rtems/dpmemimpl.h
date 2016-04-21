@@ -66,23 +66,13 @@ RTEMS_INLINE_ROUTINE void _Dual_ported_memory_Free (
   _Objects_Free( &_Dual_ported_memory_Information, &the_port->Object );
 }
 
-/**
- *  @brief Maps port IDs to port control blocks.
- *
- *  This function maps port IDs to port control blocks.  If ID
- *  corresponds to a local port, then it returns the_port control
- *  pointer which maps to ID and location is set to OBJECTS_LOCAL.
- *  Global ports are not supported, thus if ID  does not map to a
- *  local port, location is set to OBJECTS_ERROR and the_port is
- *  undefined.
- */
-RTEMS_INLINE_ROUTINE Dual_ported_memory_Control *_Dual_ported_memory_Get (
-  Objects_Id         id,
-  Objects_Locations *location
+RTEMS_INLINE_ROUTINE Dual_ported_memory_Control *_Dual_ported_memory_Get(
+  Objects_Id        id,
+  ISR_lock_Context *lock_context
 )
 {
   return (Dual_ported_memory_Control *)
-     _Objects_Get( &_Dual_ported_memory_Information, id, location );
+    _Objects_Get_local( id, &_Dual_ported_memory_Information, lock_context );
 }
 
 /**@}*/

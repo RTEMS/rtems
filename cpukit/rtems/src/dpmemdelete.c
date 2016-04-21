@@ -18,39 +18,26 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/address.h>
 #include <rtems/rtems/dpmemimpl.h>
-#include <rtems/score/thread.h>
 
 rtems_status_code rtems_port_delete(
   rtems_id id
 )
 {
-  Dual_ported_memory_Control          *the_port;
-  Objects_Locations                    location;
+  Dual_ported_memory_Control *the_port;
+  ISR_lock_Context            lock_context;
 
   _Objects_Allocator_lock();
-  the_port = _Dual_ported_memory_Get( id, &location );
-  switch ( location ) {
+  the_port = _Dual_ported_memory_Get( id, &lock_context );
 
-    case OBJECTS_LOCAL:
-      _Objects_Close( &_Dual_ported_memory_Information, &the_port->Object );
-      _Objects_Put( &the_port->Object );
-      _Dual_ported_memory_Free( the_port );
-      _Objects_Allocator_unlock();
-      return RTEMS_SUCCESSFUL;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:        /* this error cannot be returned */
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( the_port == NULL ) {
+    _Objects_Allocator_unlock();
+    return RTEMS_INVALID_ID;
   }
 
+  _Objects_Close( &_Dual_ported_memory_Information, &the_port->Object );
+  _ISR_lock_ISR_enable( &lock_context );
+  _Dual_ported_memory_Free( the_port );
   _Objects_Allocator_unlock();
-
-  return RTEMS_INVALID_ID;
+  return RTEMS_SUCCESSFUL;
 }
