@@ -42,15 +42,18 @@ void bsp_fdt_copy(const void *src)
 #else
   uint32_t *d = &bsp_fdt_blob[0];
 #endif
-  uint32_t m = MIN(sizeof(bsp_fdt_blob), fdt_totalsize(src));
-  uint32_t n = (m + sizeof(*d) - 1) / sizeof(*d);
-  uint32_t i;
 
-  for (i = 0; i < n; ++i) {
-    d[i] = s[i];
+  if (s != d) {
+    uint32_t m = MIN(sizeof(bsp_fdt_blob), fdt_totalsize(src));
+    uint32_t n = (m + sizeof(*d) - 1) / sizeof(*d);
+    uint32_t i;
+
+    for (i = 0; i < n; ++i) {
+      d[i] = s[i];
+    }
+
+    rtems_cache_flush_multiple_data_lines(d, m);
   }
-
-  rtems_cache_flush_multiple_data_lines(d, m);
 }
 
 const void *bsp_fdt_get(void)
