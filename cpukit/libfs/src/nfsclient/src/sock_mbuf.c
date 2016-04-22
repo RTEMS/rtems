@@ -105,6 +105,8 @@
 #include <net/if.h>
 #include <net/route.h>
 
+#include "nfsclient-private.h"
+
 struct socket *rtems_bsdnet_fdToSocket(int fd);
 
 /*

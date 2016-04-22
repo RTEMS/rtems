@@ -87,6 +87,7 @@
 #include <sys/cpuset.h>
 
 #include "rpcio.h"
+#include "nfsclient-private.h"
 
 /****************************************************************/
 /* CONFIGURABLE PARAMETERS                                      */
@@ -308,7 +309,6 @@ typedef union  RpcBufU_ {
 typedef	struct mbuf *		RxBuf;	/* an MBUF chain */
 static  void   				bufFree(struct mbuf **m);
 #define XID(ibuf) 			(*(mtod((ibuf), u_long *)))
-extern void 				xdrmbuf_create(XDR *, struct mbuf *, enum xdr_op);
 #else
 typedef RpcBuf				RxBuf;
 #define	bufFree(b)			do { MY_FREE(*(b)); *(b)=0; } while(0)
@@ -1627,9 +1627,6 @@ RpcUdpXactPool pool;
 
 #define _KERNEL
 #include <sys/mbuf.h>
-
-ssize_t
-recv_mbuf_from(int s, struct mbuf **ppm, long len, struct sockaddr *fromaddr, int *fromlen);
 
 static void
 bufFree(struct mbuf **m)

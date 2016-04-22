@@ -99,6 +99,8 @@ my_free(void *p)
 #include <stdio.h>
 #endif
 
+#include "nfsclient-private.h"
+
 static bool_t	xdrmbuf_getlong_aligned(XDR *xdrs, long *lp);
 static bool_t	xdrmbuf_putlong_aligned(XDR *xdrs, const long *lp);
 static bool_t	xdrmbuf_getlong_unaligned(XDR *xdrs, long *lp);
