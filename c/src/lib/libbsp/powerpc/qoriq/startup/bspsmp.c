@@ -248,7 +248,7 @@ void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
     rtems_status_code sc;
 
     sc = rtems_interrupt_handler_install(
-      QORIQ_IRQ_IPI_0,
+      QORIQ_IRQ_IPI_0 + IPI_INDEX,
       "IPI",
       RTEMS_INTERRUPT_UNIQUE,
       bsp_inter_processor_interrupt,
