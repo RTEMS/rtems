@@ -467,6 +467,13 @@ lidate */
 
 #define FSL_EIS_SVR 1023
 
+/* Freescale Book E Implementation Standards (EIS): Thread Management and Control Registers */
+
+#define FSL_EIS_TENSR 437
+#define FSL_EIS_TENS 438
+#define FSL_EIS_TENC 439
+#define FSL_EIS_PPR32 898
+
 /* Freescale Book E Implementation Standards (EIS): MMU Control and Status */
 
 #define FSL_EIS_MAS0 624

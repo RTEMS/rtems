@@ -107,7 +107,7 @@ static void start_thread_if_necessary(uint32_t cpu_index_self)
       PPC_SET_THREAD_MGMT_REGISTER(289, QORIQ_INITIAL_MSR);
 
       /* Thread Enable Set (TENS) */
-      PPC_SET_SPECIAL_PURPOSE_REGISTER(438, 1U << i);
+      PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_TENS, 1U << i);
     }
   }
 #endif
