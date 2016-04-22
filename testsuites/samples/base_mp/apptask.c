@@ -1,15 +1,13 @@
-/*  Application_task
+/**
+ * @file
  *
- *  This routine is as an example of an application task which
- *  prints a message including its RTEMS task id.  This task
- *  then invokes exit to return to the monitor.
- *
- *  Input parameters:
- *    node - processor's node number
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1999.
+ * This routine is as an example of an application task which
+ * prints a message including its RTEMS task id.  This task
+ * then invokes exit to return to the monitor.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-1999, 2016.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,7 +32,8 @@ rtems_task Application_task(
   rtems_id          tid;
   rtems_status_code status;
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  (void) status;
   printf( "This task was invoked with the node argument (%" PRIdrtems_task_argument ")\n", node );
   printf( "This task has the id of 0x%" PRIxrtems_id "\n",  tid );
   TEST_END();
