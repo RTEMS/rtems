@@ -34,7 +34,7 @@
 
 shm_config_table BSP_shm_cfgtbl;
 
-uint32_t         *BSP_int_address()
+static uint32_t *BSP_int_address(void)
 {
   uint32_t         id, offset;
 
