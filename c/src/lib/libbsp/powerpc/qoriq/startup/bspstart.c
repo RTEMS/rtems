@@ -44,6 +44,9 @@
 
 LINKER_SYMBOL(bsp_exc_vector_base);
 
+qoriq_start_spin_table *
+qoriq_start_spin_table_addr[QORIQ_CPU_COUNT / QORIQ_THREAD_COUNT];
+
 /* Configuration parameters for console driver, ... */
 unsigned int BSP_bus_frequency;
 

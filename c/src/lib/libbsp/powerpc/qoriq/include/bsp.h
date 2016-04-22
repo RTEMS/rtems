@@ -68,9 +68,6 @@ int qoriq_if_intercom_attach_detach(
   );
 #endif
 
-/* Internal SMP startup function */
-void qoriq_start_thread(void);
-
 void *bsp_idle_thread( uintptr_t ignored );
 #define BSP_IDLE_TASK_BODY bsp_idle_thread
 
@@ -81,6 +78,25 @@ void *bsp_idle_thread( uintptr_t ignored );
 #define RTEMS_BSP_NETWORK_DRIVER_NAME2 "tsec2"
 #define RTEMS_BSP_NETWORK_DRIVER_NAME3 "tsec3"
 #define RTEMS_BSP_NETWORK_DRIVER_NAME4 "intercom1"
+
+/* Internal data and functions */
+
+typedef struct {
+  uint32_t addr_upper;
+  uint32_t addr_lower;
+  uint32_t r3_upper;
+  uint32_t r3_lower;
+  uint32_t reserved_0;
+  uint32_t pir;
+  uint32_t r6_upper;
+  uint32_t r6_lower;
+  uint32_t reserved_1[8];
+} qoriq_start_spin_table;
+
+extern qoriq_start_spin_table *
+qoriq_start_spin_table_addr[QORIQ_CPU_COUNT / QORIQ_THREAD_COUNT];
+
+void qoriq_start_thread(void);
 
 #ifdef __cplusplus
 }

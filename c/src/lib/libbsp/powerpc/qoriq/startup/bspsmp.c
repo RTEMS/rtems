@@ -54,18 +54,6 @@ void _start_secondary_processor(void);
   #define SPIN_TABLE (BOOT_BEGIN + U_BOOT_BOOT_PAGE_SPIN_OFFSET)
 #endif
 
-typedef struct {
-  uint32_t addr_upper;
-  uint32_t addr_lower;
-  uint32_t r3_upper;
-  uint32_t r3_lower;
-  uint32_t reserved_0;
-  uint32_t pir;
-  uint32_t r6_upper;
-  uint32_t r6_lower;
-  uint32_t reserved_1[8];
-} uboot_spin_table;
-
 #if QORIQ_THREAD_COUNT > 1
 static bool is_started_by_u_boot(uint32_t cpu_index)
 {
@@ -143,10 +131,6 @@ static void bsp_inter_processor_interrupt(void *arg)
   _SMP_Inter_processor_interrupt_handler();
 }
 
-#ifdef U_BOOT_USE_FDT
-static uboot_spin_table *spin_table_addr[QORIQ_CPU_COUNT / QORIQ_THREAD_COUNT];
-#endif
-
 static uint32_t discover_processors(void)
 {
 #if defined(HAS_UBOOT)
@@ -164,7 +148,10 @@ static uint32_t discover_processors(void)
     fdt64_t *addr_fdt = (fdt64_t *)
       fdt_getprop(fdt, node, "cpu-release-addr", &len);
 
-    if (addr_fdt != NULL && cpu < RTEMS_ARRAY_SIZE(spin_table_addr)) {
+    if (
+      addr_fdt != NULL
+        && cpu < RTEMS_ARRAY_SIZE(qoriq_start_spin_table_addr)
+    ) {
       uintptr_t addr = (uintptr_t) fdt64_to_cpu(*addr_fdt);
 
       if (addr < begin) {
@@ -175,7 +162,7 @@ static uint32_t discover_processors(void)
         last = addr;
       }
 
-      spin_table_addr[cpu] = (uboot_spin_table *) addr;
+      qoriq_start_spin_table_addr[cpu] = (qoriq_start_spin_table *) addr;
       ++cpu;
     }
 
@@ -199,7 +186,10 @@ uint32_t _CPU_SMP_Initialize(void)
   return cpu_count;
 }
 
-static void release_processor(uboot_spin_table *spin_table, uint32_t cpu_index)
+static void release_processor(
+  qoriq_start_spin_table *spin_table,
+  uint32_t cpu_index
+)
 {
   const Per_CPU_Control *cpu = _Per_CPU_Get_by_index(cpu_index);
 
@@ -212,24 +202,30 @@ static void release_processor(uboot_spin_table *spin_table, uint32_t cpu_index)
   rtems_cache_flush_multiple_data_lines(spin_table, sizeof(*spin_table));
 }
 
-static uboot_spin_table *get_spin_table(uint32_t cpu_index)
+static qoriq_start_spin_table *get_spin_table(uint32_t cpu_index)
 {
+  qoriq_start_spin_table *spin_table;
+
 #if defined(HAS_UBOOT)
 #if QORIQ_THREAD_COUNT > 1
-  return &((uboot_spin_table *) SPIN_TABLE)[cpu_index / 2 - 1];
+  spin_table = &((qoriq_start_spin_table *) SPIN_TABLE)[cpu_index / 2 - 1];
+  qoriq_start_spin_table_addr[cpu_index / 2 - 1] = spin_table;
 #else
-  return (uboot_spin_table *) SPIN_TABLE;
+  spin_table = (qoriq_start_spin_table *) SPIN_TABLE;
+  qoriq_start_spin_table_addr[0] = spin_table;
 #endif
 #elif defined(U_BOOT_USE_FDT)
-  return spin_table_addr[cpu_index / 2];
+  spin_table = qoriq_start_spin_table_addr[cpu_index / 2];
 #endif
+
+  return spin_table;
 }
 
 bool _CPU_SMP_Start_processor(uint32_t cpu_index)
 {
 #if QORIQ_THREAD_COUNT > 1
   if (is_started_by_u_boot(cpu_index)) {
-    uboot_spin_table *spin_table = get_spin_table(cpu_index);
+    qoriq_start_spin_table *spin_table = get_spin_table(cpu_index);
 
     release_processor(spin_table, cpu_index);
 
@@ -238,7 +234,7 @@ bool _CPU_SMP_Start_processor(uint32_t cpu_index)
     return _SMP_Should_start_processor(cpu_index - 1);
   }
 #else
-  uboot_spin_table *spin_table = get_spin_table(cpu_index);
+  qoriq_start_spin_table *spin_table = get_spin_table(cpu_index);
 
   release_processor(spin_table, cpu_index);
 
