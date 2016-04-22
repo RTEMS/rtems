@@ -165,11 +165,6 @@ _start:
 
 	/* Do not use r3 here, since this could be the U-Boot board info */
 .Linitearly:
-	/* Reset time base */
-	li	r0, 0
-	mtspr	TBWU, r0
-	mtspr	TBWL, r0
-
 	/* Disable decrementer */
 	mfspr	r0, BOOKE_TCR
 	LWI	r4, BOOKE_TCR_DIE
