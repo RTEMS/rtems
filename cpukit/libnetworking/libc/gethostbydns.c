@@ -73,6 +73,7 @@
 #include <strings.h>
 #endif
 #include <netdb.h>
+#include <rtems/rtems_netdb.h>
 #include <resolv.h>
 #include <ctype.h>
 #include <errno.h>

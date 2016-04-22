@@ -51,6 +51,7 @@
 #include <arpa/inet.h>
 #include <arpa/nameser.h>
 #include <netdb.h>
+#include <rtems/rtems_netdb.h>
 #include <stdio.h>
 #include <string.h>
 #ifdef HAVE_STRINGS_H

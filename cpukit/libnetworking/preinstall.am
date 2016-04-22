@@ -310,6 +310,10 @@ $(PROJECT_INCLUDE)/rtems/rtems_mii_ioctl.h: rtems/rtems_mii_ioctl.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems_mii_ioctl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems_mii_ioctl.h
 
+$(PROJECT_INCLUDE)/rtems/rtems_netdb.h: rtems/rtems_netdb.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems_netdb.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems_netdb.h
+
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)

@@ -60,6 +60,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <rtems/rtems_netdb.h>
 #include <stdio.h>
 #include <stdlib.h> /* realloc, malloc, free */
 #include <ctype.h>
