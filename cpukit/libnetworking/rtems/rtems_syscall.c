@@ -28,11 +28,7 @@
 #include <net/if.h>
 #include <net/route.h>
 
-/*
- *  Since we are "in the kernel", these do not get prototyped in sys/socket.h
- */
-ssize_t	send(int, const void *, size_t, int);
-ssize_t	recv(int, void *, size_t, int);
+#include "rtems_syscall.h"
 
 /*
  * Hooks to RTEMS I/O system
@@ -145,7 +141,7 @@ socket (int domain, int type, int protocol)
 }
 
 int
-bind (int s, struct sockaddr *name, int namelen)
+bind (int s, const struct sockaddr *name, socklen_t namelen)
 {
 	int error;
 	int ret = -1;
@@ -172,7 +168,7 @@ bind (int s, struct sockaddr *name, int namelen)
 }
 
 int
-connect (int s, struct sockaddr *name, int namelen)
+connect (int s, const struct sockaddr *name, socklen_t namelen)
 {
 	int error;
 	int ret = -1;
@@ -244,7 +240,7 @@ listen (int s, int backlog)
 }
 
 int
-accept (int s, struct sockaddr *name, int *namelen)
+accept (int s, struct sockaddr *name, socklen_t *namelen)
 {
 	int fd;
 	struct socket *head, *so;
@@ -412,7 +408,7 @@ sendmsg (int s, const struct msghdr *mp, int flags)
  * Send a message to a host
  */
 ssize_t
-sendto (int s, const void *buf, size_t buflen, int flags, const struct sockaddr *to, int tolen)
+sendto (int s, const void *buf, size_t buflen, int flags, const struct sockaddr *to, socklen_t tolen)
 {
 	struct msghdr msg;
 	struct iovec iov;
@@ -526,7 +522,7 @@ recvmsg (int s, struct msghdr *mp, int flags)
  * Receive a message from a host
  */
 ssize_t
-recvfrom (int s, void *buf, size_t buflen, int flags, const struct sockaddr *from, int *fromlen)
+recvfrom (int s, void *buf, size_t buflen, int flags, struct sockaddr *from, socklen_t *fromlen)
 {
 	struct msghdr msg;
 	struct iovec iov;
@@ -550,7 +546,7 @@ recvfrom (int s, void *buf, size_t buflen, int flags, const struct sockaddr *fro
 }
 
 int
-setsockopt (int s, int level, int name, const void *val, int len)
+setsockopt (int s, int level, int name, const void *val, socklen_t len)
 {
 	struct socket *so;
 	struct mbuf *m = NULL;
@@ -585,7 +581,7 @@ setsockopt (int s, int level, int name, const void *val, int len)
 }
 
 int
-getsockopt (int s, int level, int name, void *aval, int *avalsize)
+getsockopt (int s, int level, int name, void *aval, socklen_t *avalsize)
 {
 	struct socket *so;
 	struct mbuf *m = NULL, *m0;
@@ -628,7 +624,7 @@ getsockopt (int s, int level, int name, void *aval, int *avalsize)
 }
 
 static int
-getpeersockname (int s, struct sockaddr *name, int *namelen, int pflag)
+getpeersockname (int s, struct sockaddr *name, socklen_t *namelen, int pflag)
 {
 	struct socket *so;
 	struct mbuf *m;
@@ -667,19 +663,19 @@ getpeersockname (int s, struct sockaddr *name, int *namelen, int pflag)
 }
 
 int
-getpeername (int s, struct sockaddr *name, int *namelen)
+getpeername (int s, struct sockaddr *name, socklen_t *namelen)
 {
 	return getpeersockname (s, name, namelen, 1);
 }
 int
-getsockname (int s, struct sockaddr *name, int *namelen)
+getsockname (int s, struct sockaddr *name, socklen_t *namelen)
 {
 	return getpeersockname (s, name, namelen, 0);
 }
 
 int
-sysctl(int *name, u_int namelen, void *oldp,
-       size_t *oldlenp, void *newp, size_t newlen)
+sysctl(const int *name, u_int namelen, void *oldp,
+       size_t *oldlenp, const void *newp, size_t newlen)
 {
   int    error;
 	size_t j;

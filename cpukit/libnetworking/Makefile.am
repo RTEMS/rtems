@@ -255,6 +255,7 @@ lib_a_CPPFLAGS = $(AM_CPPFLAGS) $(lib_CPPFLAGS) -D__BSD_VISIBLE
 
 lib_a_SOURCES = lib/getprotoby.c lib/rtems_bsdnet_ntp.c lib/ftpfs.c \
     lib/syslog.c lib/tftpDriver.c
+lib_a_SOURCES += rtems/rtems_syscall_api.c
 endif
 
 EXTRA_DIST += $(UNUSED_FILES)
