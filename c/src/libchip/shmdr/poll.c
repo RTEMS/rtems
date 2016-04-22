@@ -1,8 +1,11 @@
+/**
+ * @file
+ * This routine polls to see if a packet has arrived.  If one
+ * has it informs the executive. It uses a Classic API Timer
+ */
+
 /*
- *  This routine polls to see if a packet has arrived.  If one
- *  has it informs the executive. It uses a Classic API Timer
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2008, 2016.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,7 +21,7 @@
 
 #include "shm_driver.h"
 
-rtems_timer_service_routine Shm_Poll_TSR(
+static rtems_timer_service_routine Shm_Poll_TSR(
   rtems_id  id,
   void     *ignored_address
 )
