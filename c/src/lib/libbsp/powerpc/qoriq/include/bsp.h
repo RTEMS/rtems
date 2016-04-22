@@ -68,6 +68,8 @@ int qoriq_if_intercom_attach_detach(
   );
 #endif
 
+void bsp_restart(void *addr) RTEMS_NO_RETURN;
+
 void *bsp_idle_thread( uintptr_t ignored );
 #define BSP_IDLE_TASK_BODY bsp_idle_thread
 
@@ -97,6 +99,10 @@ extern qoriq_start_spin_table *
 qoriq_start_spin_table_addr[QORIQ_CPU_COUNT / QORIQ_THREAD_COUNT];
 
 void qoriq_start_thread(void);
+
+void qoriq_restart_secondary_processor(
+  const qoriq_start_spin_table *spin_table
+) RTEMS_NO_RETURN;
 
 #ifdef __cplusplus
 }

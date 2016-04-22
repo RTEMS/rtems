@@ -75,9 +75,11 @@ libbsp_a_SOURCES += \
 	startup/mmu.c \
 	startup/mmu-tlb1.S \
 	startup/mmu-config.c \
+	startup/restart.S \
 	startup/bsppredriverhook.c \
 	startup/bspstart.c \
-	startup/bspreset.c
+	startup/bspreset.c \
+	startup/bsprestart.c
 
 # Clock
 libbsp_a_SOURCES += clock/clock-config.c \
