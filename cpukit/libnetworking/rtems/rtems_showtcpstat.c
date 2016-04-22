@@ -20,6 +20,8 @@
 #include <netinet/tcp_seq.h>
 #include <netinet/tcp_var.h>
 
+#include <rtems/rtems_bsdnet.h>
+
 /*
  * Display TCP statistics
  * Don't lock the rest of the network tasks out while printing.

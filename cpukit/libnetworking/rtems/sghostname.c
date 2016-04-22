@@ -9,6 +9,7 @@
 
 #include <string.h>
 #include <errno.h>
+#include <unistd.h>
 #include <rtems/rtems_bsdnet.h>
 #include <sys/param.h>
 #include <sys/malloc.h>

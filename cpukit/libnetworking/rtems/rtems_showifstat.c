@@ -17,6 +17,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#include <rtems/rtems_bsdnet.h>
+
 /*
  * Display an address
  */

@@ -54,6 +54,8 @@
 #include <netinet/in_var.h>
 #include <netinet/ip_var.h>
 
+#ifdef IPDIVERT
+
 /*
  * Divert sockets
  */
@@ -380,3 +382,4 @@ release:
 		m_freem(m);
 	return (error);
 }
+#endif /* IPDIVERT */

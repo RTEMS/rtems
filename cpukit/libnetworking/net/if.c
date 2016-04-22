@@ -435,7 +435,7 @@ if_slowtimo(void *arg)
  * Map interface name to
  * interface structure pointer.
  */
-struct ifnet *
+static struct ifnet *
 ifunit(char *name)
 {
 	char *cp;
@@ -715,7 +715,7 @@ ifconf(u_long cmd, caddr_t data)
 	struct ifconf *ifc = (struct ifconf *)data;
 	struct ifnet *ifp = ifnet;
 	struct ifaddr *ifa;
-	struct ifreq ifr, *ifrp;
+	struct ifreq ifr;
 	char              *ifrpc;
 	int space = ifc->ifc_len, error = 0;
 

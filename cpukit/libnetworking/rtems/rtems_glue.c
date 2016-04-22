@@ -25,6 +25,7 @@
 #include <sys/callout.h>
 #include <sys/proc.h>
 #include <sys/ioctl.h>
+#include <sys/systm.h>
 #include <net/if.h>
 #include <net/route.h>
 #include <netinet/in.h>
@@ -35,11 +36,6 @@
 #include <net/route.h>
 
 #include "loop.h"
-
-/*
- * Sysctl init all.
- */
-void sysctl_register_all(void *arg);
 
 /*
  * Memory allocation
@@ -263,13 +259,6 @@ bsd_init (void)
 	ifinit (NULL);
 	return 0;
 }
-
-/*
- * RTEMS Specific Helper Routines
- */
-extern void rtems_set_udp_buffer_sizes( u_long, u_long );
-extern void rtems_set_tcp_buffer_sizes( u_long, u_long );
-extern void rtems_set_sb_efficiency( u_long );
 
 /*
  * Initialize and start network operations
@@ -843,8 +832,11 @@ rtems_bsdnet_log (int priority, const char *fmt, ...)
 /*
  * IP header checksum routine for processors which don't have an inline version
  */
+
+u_int in_cksum_hdr(const struct ip *);
+
 u_int
-in_cksum_hdr (const void *ip)
+in_cksum_hdr (const struct ip *ip)
 {
 	uint32_t   sum;
 	const uint16_t   *sp;

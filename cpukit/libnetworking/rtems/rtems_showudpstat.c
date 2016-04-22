@@ -18,6 +18,8 @@
 #include <netinet/udp.h>
 #include <netinet/udp_var.h>
 
+#include <rtems/rtems_bsdnet.h>
+
 /*
  * Display UDP statistics
  * Don't lock the rest of the network tasks out while printing.

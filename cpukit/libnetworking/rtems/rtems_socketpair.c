@@ -30,6 +30,8 @@
 #include <sys/socket.h>
 #include <errno.h>
 
+#include "rtems_syscall.h"
+
 int socketpair (int domain, int type, int protocol, int *rsv)
 {
   if ( !rsv ) {

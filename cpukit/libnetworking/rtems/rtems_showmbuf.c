@@ -10,6 +10,8 @@
 #include <sys/proc.h>
 #include <sys/mbuf.h>
 
+#include <rtems/rtems_bsdnet.h>
+
 /*
  * Display MBUF statistics
  * Don't lock the rest of the network tasks out while printing.

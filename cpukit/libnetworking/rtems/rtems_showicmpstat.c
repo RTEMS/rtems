@@ -15,6 +15,8 @@
 #include <netinet/ip_icmp.h>
 #include <netinet/icmp_var.h>
 
+#include <rtems/rtems_bsdnet.h>
+
 /*
  * Display ICMP statistics
  * Don't lock the rest of the network tasks out while printing.

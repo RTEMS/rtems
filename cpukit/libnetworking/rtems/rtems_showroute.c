@@ -29,6 +29,8 @@
 #undef random
 #include <stdlib.h>
 
+#include <rtems/rtems_bsdnet.h>
+
 /*
  * Information per route
  */

@@ -223,6 +223,14 @@ int ioctl (int, ioctl_command_t, ...);
 
 struct socket *rtems_bsdnet_fdToSocket(int fd);
 
+void sysctl_register_all(void *);
+
+void rtems_set_udp_buffer_sizes(u_long, u_long);
+
+void rtems_set_tcp_buffer_sizes(u_long, u_long);
+
+void rtems_set_sb_efficiency(u_long);
+
 #ifdef __cplusplus
 }
 #endif
