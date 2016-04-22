@@ -18,13 +18,7 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
-#include <errno.h>
-
-#include <rtems/system.h>
-#include <rtems/score/watchdog.h>
 #include <rtems/posix/condimpl.h>
-#include <rtems/posix/muteximpl.h>
 
 /**
  *  11.4.2 Initializing and Destroying a Condition Variable,
@@ -57,11 +51,7 @@ int pthread_cond_init(
     return ENOMEM;
   }
 
-  the_cond->process_shared  = the_attr->process_shared;
-
-  the_cond->Mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
-
-  _Thread_queue_Initialize( &the_cond->Wait_queue );
+  _POSIX_Condition_variables_Initialize( the_cond );
 
   _Objects_Open_u32(
     &_POSIX_Condition_variables_Information,

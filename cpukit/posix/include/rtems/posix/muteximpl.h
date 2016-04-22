@@ -131,6 +131,16 @@ POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable(
   ISR_lock_Context *lock_context
 );
 
+RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get_no_protection(
+  const pthread_mutex_t *mutex
+)
+{
+  return (POSIX_Mutex_Control *) _Objects_Get_no_protection(
+    (Objects_Id) *mutex,
+    &_POSIX_Mutex_Information
+  );
+}
+
 #ifdef __cplusplus
 }
 #endif

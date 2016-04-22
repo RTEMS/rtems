@@ -18,13 +18,7 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
-#include <errno.h>
-
-#include <rtems/system.h>
-#include <rtems/score/watchdog.h>
 #include <rtems/posix/condimpl.h>
-#include <rtems/posix/muteximpl.h>
 
 /**
  *  11.4.3 Broadcasting and Signaling a Condition, P1003.1c/Draft 10, p. 101

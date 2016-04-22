@@ -385,6 +385,14 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_locked(
   return the_mutex->holder != NULL;
 }
 
+RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_owner(
+  const CORE_mutex_Control *the_mutex,
+  const Thread_Control     *the_thread
+)
+{
+  return the_mutex->holder == the_thread;
+}
+
 /**
  * @brief Does core mutex use FIFO blocking.
  *

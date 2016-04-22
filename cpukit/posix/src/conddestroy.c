@@ -18,13 +18,7 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
-#include <errno.h>
-
-#include <rtems/system.h>
-#include <rtems/score/watchdog.h>
 #include <rtems/posix/condimpl.h>
-#include <rtems/posix/muteximpl.h>
 
 /**
  *  11.4.2 Initializing and Destroying a Condition Variable,
@@ -35,42 +29,31 @@ int pthread_cond_destroy(
 )
 {
   POSIX_Condition_variables_Control *the_cond;
-  Objects_Locations                  location;
+  ISR_lock_Context                   lock_context;
 
   _Objects_Allocator_lock();
-  the_cond = _POSIX_Condition_variables_Get( cond, &location );
-  switch ( location ) {
+  the_cond = _POSIX_Condition_variables_Get( cond, &lock_context );
 
-    case OBJECTS_LOCAL:
-
-      if (
-        _Thread_queue_First(
-          &the_cond->Wait_queue,
-          POSIX_CONDITION_VARIABLES_TQ_OPERATIONS
-        )
-      ) {
-        _Objects_Put( &the_cond->Object );
-        _Objects_Allocator_unlock();
-        return EBUSY;
-      }
-
-      _Objects_Close(
-        &_POSIX_Condition_variables_Information,
-        &the_cond->Object
-      );
-      _Objects_Put( &the_cond->Object );
-      _POSIX_Condition_variables_Free( the_cond );
-      _Objects_Allocator_unlock();
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( the_cond == NULL ) {
+    _Objects_Allocator_unlock();
+    return EINVAL;
   }
 
-  _Objects_Allocator_unlock();
+  _POSIX_Condition_variables_Acquire_critical( the_cond, &lock_context );
 
-  return EINVAL;
+  if ( !_Thread_queue_Is_empty( &the_cond->Wait_queue.Queue ) ) {
+    _POSIX_Condition_variables_Release( the_cond, &lock_context );
+    _Objects_Allocator_unlock();
+    return EBUSY;
+  }
+
+  _Objects_Close(
+    &_POSIX_Condition_variables_Information,
+    &the_cond->Object
+  );
+  _POSIX_Condition_variables_Release( the_cond, &lock_context );
+  _POSIX_Condition_variables_Destroy( the_cond );
+  _POSIX_Condition_variables_Free( the_cond );
+  _Objects_Allocator_unlock();
+  return 0;
 }

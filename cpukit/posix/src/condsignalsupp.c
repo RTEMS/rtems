@@ -18,13 +18,7 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
-#include <errno.h>
-
-#include <rtems/system.h>
-#include <rtems/score/watchdog.h>
 #include <rtems/posix/condimpl.h>
-#include <rtems/posix/muteximpl.h>
 
 /*
  *  _POSIX_Condition_variables_Signal_support
@@ -38,35 +32,39 @@ int _POSIX_Condition_variables_Signal_support(
   bool                       is_broadcast
 )
 {
-  POSIX_Condition_variables_Control          *the_cond;
-  Objects_Locations                           location;
-  Thread_Control                             *the_thread;
+  Thread_Control *the_thread;
 
-  the_cond = _POSIX_Condition_variables_Get( cond, &location );
-  switch ( location ) {
+  do {
+    POSIX_Condition_variables_Control *the_cond;
+    ISR_lock_Context                   lock_context;
 
-    case OBJECTS_LOCAL:
-      do {
-        the_thread = _Thread_queue_Dequeue(
-          &the_cond->Wait_queue,
-          POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
-          NULL,
-          0
-        );
-        if ( !the_thread )
-          the_cond->Mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
-      } while ( is_broadcast && the_thread );
+    the_cond = _POSIX_Condition_variables_Get( cond, &lock_context );
 
-      _Objects_Put( &the_cond->Object );
+    if ( the_cond == NULL ) {
+      return EINVAL;
+    }
 
-      return 0;
+    _POSIX_Condition_variables_Acquire_critical( the_cond, &lock_context );
 
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
-  }
+    the_thread = _Thread_queue_First_locked(
+      &the_cond->Wait_queue,
+      POSIX_CONDITION_VARIABLES_TQ_OPERATIONS
+    );
 
-  return EINVAL;
+    if ( the_thread != NULL ) {
+      _Thread_queue_Extract_critical(
+        &the_cond->Wait_queue.Queue,
+        POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
+        the_thread,
+        NULL,
+        0,
+        &lock_context
+      );
+    } else {
+      the_cond->mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
+      _POSIX_Condition_variables_Release( the_cond, &lock_context );
+    }
+  } while ( is_broadcast && the_thread != NULL );
+
+  return 0;
 }

@@ -11,45 +11,49 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
-#include <errno.h>
-
-#include <rtems/system.h>
-#include <rtems/score/watchdog.h>
 #include <rtems/posix/condimpl.h>
-#include <rtems/posix/muteximpl.h>
 
-POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
-  pthread_cond_t    *cond,
-  Objects_Locations *location
+static bool _POSIX_Condition_variables_Check_id_and_auto_init(
+  pthread_cond_t *cond
 )
 {
-  int status;
-
-  if ( !cond ) {
-    *location = OBJECTS_ERROR;
-    return (POSIX_Condition_variables_Control *) 0;
+  if ( cond == NULL ) {
+    return false;
   }
 
   if ( *cond == PTHREAD_COND_INITIALIZER ) {
-    /*
-     *  Do an "auto-create" here.
-     */
+    int eno;
 
-    status = pthread_cond_init( cond, 0 );
-    if ( status ) {
-      *location = OBJECTS_ERROR;
-      return (POSIX_Condition_variables_Control *) 0;
+    _Once_Lock();
+
+    if ( *cond == PTHREAD_COND_INITIALIZER ) {
+      eno = pthread_cond_init( cond, NULL );
+    } else {
+      eno = 0;
+    }
+
+    _Once_Unlock();
+
+    if ( eno != 0 ) {
+      return false;
     }
   }
 
-  /*
-   *  Now call Objects_Get()
-   */
-  return (POSIX_Condition_variables_Control *)_Objects_Get(
-    &_POSIX_Condition_variables_Information,
-    (Objects_Id) *cond,
-    location
-  );
+  return true;
 }
 
+POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get(
+  pthread_cond_t   *cond,
+  ISR_lock_Context *lock_context
+)
+{
+  if ( !_POSIX_Condition_variables_Check_id_and_auto_init( cond ) ) {
+    return NULL;
+  }
+
+  return (POSIX_Condition_variables_Control *) _Objects_Get_local(
+    (Objects_Id) *cond,
+    &_POSIX_Condition_variables_Information,
+    lock_context
+  );
+}

@@ -20,7 +20,8 @@
 #include <rtems/posix/cond.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/threadqimpl.h>
-#include <rtems/score/watchdog.h>
+
+#include <errno.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,6 +46,37 @@ extern Objects_Information _POSIX_Condition_variables_Information;
  */
 extern const pthread_condattr_t _POSIX_Condition_variables_Default_attributes;
 
+RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Initialize(
+  POSIX_Condition_variables_Control *the_cond
+)
+{
+  _Thread_queue_Initialize( &the_cond->Wait_queue );
+  the_cond->mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
+}
+
+RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Destroy(
+  POSIX_Condition_variables_Control *the_cond
+)
+{
+  _Thread_queue_Destroy( &the_cond->Wait_queue );
+}
+
+RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Acquire_critical(
+  POSIX_Condition_variables_Control *the_cond,
+  ISR_lock_Context                  *lock_context
+)
+{
+  _Thread_queue_Acquire_critical( &the_cond->Wait_queue, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Release(
+  POSIX_Condition_variables_Control *the_cond,
+  ISR_lock_Context                  *lock_context
+)
+{
+  _Thread_queue_Release( &the_cond->Wait_queue, lock_context );
+}
+
 /**
  *  @brief POSIX Condition Variable Allocate
  *
@@ -68,27 +100,15 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Free (
   POSIX_Condition_variables_Control *the_condition_variable
 )
 {
-  _Thread_queue_Destroy( &the_condition_variable->Wait_queue );
   _Objects_Free(
     &_POSIX_Condition_variables_Information,
     &the_condition_variable->Object
   );
 }
 
-/**
- *  @brief POSIX Condition Variable Get
- *
- *  This function maps condition variable IDs to condition variable control
- *  blocks.  If ID corresponds to a local condition variable, then it returns
- *  the_condition variable control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  if the condition variable ID is global and
- *  resides on a remote node, then location is set to OBJECTS_REMOTE,
- *  and the_condition variable is undefined.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_condition variable is undefined.
- */
-POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
-  pthread_cond_t    *cond,
-  Objects_Locations *location
+POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get(
+  pthread_cond_t   *cond,
+  ISR_lock_Context *lock_context
 );
 
 /**
