@@ -183,8 +183,11 @@ _start:
 .Linitmore:
 	mflr	SAVED_LINK_REGISTER
 
-	/* Initial MMU setup */
-	bl	qoriq_tlb1_ts_0_only
+	/* Invalidate all TS1 MMU entries */
+	li	r3, 1
+	bl	qoriq_tlb1_invalidate_all_by_ts
+
+	/* Add TS1 entry for the first 4GiB of RAM */
 	li	r3, SCRATCH_TLB
 	li	r4, FSL_EIS_MAS1_TS
 	li	r5, FSL_EIS_MAS2_I
@@ -194,7 +197,7 @@ _start:
 	li	r9, 11
 	bl	qoriq_tlb1_write
 
-	/* MSR initialization */
+	/* MSR initialization and use TS1 for address translation */
 	LWI	INITIAL_MSR, QORIQ_INITIAL_MSR
 	ori	r0, INITIAL_MSR, MSR_IS | MSR_DS
 	mtmsr	r0
@@ -227,7 +230,6 @@ _start:
 
 	mtlr	SAVED_LINK_REGISTER
 	blr
-
 
 #ifdef INITIALIZE_FPU
 	/*
