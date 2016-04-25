@@ -48,7 +48,6 @@
 static int _POSIX_Message_queue_Create_support(
   const char                    *name_arg,
   size_t                         name_len,
-  int                            pshared,
   struct mq_attr                *attr_ptr,
   POSIX_Message_queue_Control  **message_queue
 )
@@ -97,7 +96,6 @@ static int _POSIX_Message_queue_Create_support(
     rtems_set_errno_and_return_minus_one( ENOMEM );
   }
 
-  the_mq->process_shared  = pshared;
   the_mq->named = true;
   the_mq->open_count = 1;
   the_mq->linked = true;
@@ -230,7 +228,6 @@ mqd_t mq_open(
   status = _POSIX_Message_queue_Create_support(
     name,
     name_len,
-    true,         /* shared across processes */
     attr,
     &the_mq
   );
