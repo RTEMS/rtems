@@ -45,6 +45,95 @@
 
 #define MQ_OPEN_FAILED ((mqd_t) -1)
 
+static int _POSIX_Message_queue_Create_support(
+  const char                    *name_arg,
+  size_t                         name_len,
+  int                            pshared,
+  struct mq_attr                *attr_ptr,
+  POSIX_Message_queue_Control  **message_queue
+)
+{
+  POSIX_Message_queue_Control   *the_mq;
+  struct mq_attr                 attr;
+  char                          *name;
+
+  /* length of name has already been validated */
+
+  /*
+   *  There is no real basis for the default values.  They will work
+   *  but were not compared against any existing implementation for
+   *  compatibility.  See README.mqueue for an example program we
+   *  think will print out the defaults.  Report anything you find with it.
+   */
+  if ( attr_ptr == NULL ) {
+    attr.mq_maxmsg  = 10;
+    attr.mq_msgsize = 16;
+  } else {
+    if ( attr_ptr->mq_maxmsg <= 0 ){
+      rtems_set_errno_and_return_minus_one( EINVAL );
+    }
+
+    if ( attr_ptr->mq_msgsize <= 0 ){
+      rtems_set_errno_and_return_minus_one( EINVAL );
+    }
+
+    attr = *attr_ptr;
+  }
+
+  the_mq = _POSIX_Message_queue_Allocate();
+  if ( !the_mq ) {
+    _Objects_Allocator_unlock();
+    rtems_set_errno_and_return_minus_one( ENFILE );
+  }
+
+  /*
+   * Make a copy of the user's string for name just in case it was
+   * dynamically constructed.
+   */
+  name = _Workspace_String_duplicate( name_arg, name_len );
+  if ( !name ) {
+    _POSIX_Message_queue_Free( the_mq );
+    _Objects_Allocator_unlock();
+    rtems_set_errno_and_return_minus_one( ENOMEM );
+  }
+
+  the_mq->process_shared  = pshared;
+  the_mq->named = true;
+  the_mq->open_count = 1;
+  the_mq->linked = true;
+
+  /*
+   *  NOTE: That thread blocking discipline should be based on the
+   *  current scheduling policy.
+   *
+   *  Joel: Cite POSIX or OpenGroup on above statement so we can determine
+   *        if it is a real requirement.
+   */
+  if ( !_CORE_message_queue_Initialize(
+           &the_mq->Message_queue,
+           CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO,
+           attr.mq_maxmsg,
+           attr.mq_msgsize
+      ) ) {
+
+    _POSIX_Message_queue_Free( the_mq );
+    _Workspace_Free(name);
+    _Objects_Allocator_unlock();
+    rtems_set_errno_and_return_minus_one( ENOSPC );
+  }
+
+  _Objects_Open_string(
+    &_POSIX_Message_queue_Information,
+    &the_mq->Object,
+    name
+  );
+
+  *message_queue = the_mq;
+
+  _Objects_Allocator_unlock();
+  return 0;
+}
+
 /*
  *  15.2.2 Open a Message Queue, P1003.1b-1993, p. 272
  */

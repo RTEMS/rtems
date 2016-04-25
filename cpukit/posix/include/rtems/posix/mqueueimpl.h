@@ -40,20 +40,6 @@ extern Objects_Information _POSIX_Message_queue_Information;
 extern Objects_Information _POSIX_Message_queue_Information_fds;
 
 /**
- *  @brief POSIX Message Queue Create Support
- *
- *  This routine performs the creation of a message queue utilizing the
- *  core message queue.
- */
-int _POSIX_Message_queue_Create_support(
-  const char                    *name,
-  size_t                         name_len,
-  int                            pshared,
-  struct mq_attr                *attr,
-  POSIX_Message_queue_Control  **message_queue
-);
-
-/**
  * @brief Delete a POSIX Message Queue
  *
  * This routine supports the mq_unlink and mq_close routines by

@@ -96,7 +96,7 @@ libposix_a_SOURCES += src/munmap.c
 
 ## MESSAGE_QUEUE_C_FILES
 libposix_a_SOURCES += src/mqueue.c src/mqueueclose.c \
-    src/mqueuecreatesupp.c src/mqueuedeletesupp.c src/mqueuegetattr.c \
+    src/mqueuedeletesupp.c src/mqueuegetattr.c \
     src/mqueuenotify.c src/mqueueopen.c \
     src/mqueuereceive.c src/mqueuerecvsupp.c src/mqueuesend.c \
     src/mqueuesendsupp.c src/mqueuesetattr.c src/mqueuetimedreceive.c \
