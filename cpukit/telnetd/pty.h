@@ -61,6 +61,14 @@ rtems_device_driver pty_control(
        { pty_initialize , pty_open , pty_close , \
    pty_read , pty_write , pty_control }
 
+/* Internal functions */
+
+int telnet_pty_initialize(void);
+
+int telnet_pty_finalize(void);
+
+char *telnet_get_pty(int);
+
 #ifdef __cplusplus
 }
 #endif	

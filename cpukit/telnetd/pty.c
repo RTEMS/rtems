@@ -35,6 +35,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/bspIo.h>
+#include <rtems/pty.h>
 #include <errno.h>
 #include <sys/socket.h>
 /*-----------------------------------------*/

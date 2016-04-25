@@ -69,9 +69,8 @@
 
 #include <rtems/telnetd.h>
 
+#include "des.h"
 #include "passwd.h"
-
-char *__des_crypt_r( const char *, const char *, char *, int);
 
 /**
  * @brief Standard Telnet login check that uses DES to encrypt the passphrase.
