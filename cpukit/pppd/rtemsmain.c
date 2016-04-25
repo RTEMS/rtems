@@ -552,7 +552,7 @@ struct protocol_list {
 /*
  * protocol_name - find a name for a PPP protocol.
  */
-const char *
+static const char *
 protocol_name(
     int proto)
 {
