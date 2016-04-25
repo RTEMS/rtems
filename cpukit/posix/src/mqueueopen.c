@@ -96,7 +96,6 @@ static int _POSIX_Message_queue_Create_support(
     rtems_set_errno_and_return_minus_one( ENOMEM );
   }
 
-  the_mq->named = true;
   the_mq->open_count = 1;
   the_mq->linked = true;
 

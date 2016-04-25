@@ -55,7 +55,6 @@ extern "C" {
 typedef struct {
    Objects_Control             Object;
    CORE_message_queue_Control  Message_queue;
-   bool                        named;
    bool                        linked;
    uint32_t                    open_count;
    struct sigevent             notification;
