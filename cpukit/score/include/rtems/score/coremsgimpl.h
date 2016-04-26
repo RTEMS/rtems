@@ -129,12 +129,12 @@ bool _CORE_message_queue_Initialize(
 );
 
 void _CORE_message_queue_Do_close(
-  CORE_message_queue_Control *the_message_queue
+  CORE_message_queue_Control *the_message_queue,
 #if defined(RTEMS_MULTIPROCESSING)
-  ,
   Thread_queue_MP_callout     mp_callout,
-  Objects_Id                  mp_id
+  Objects_Id                  mp_id,
 #endif
+  ISR_lock_Context           *lock_context
 );
 
 /**
@@ -151,26 +151,32 @@ void _CORE_message_queue_Do_close(
  *  @param[in] mp_callout is the routine to call for each thread
  *         that is extracted from the set of waiting threads
  *  @param[in] mp_id the object identifier of the message queue object
+ *  @param[in] lock_context The lock context of the
+ *    _CORE_message_queue_Acquire() or _CORE_message_queue_Acquire_critical().
  */
 #if defined(RTEMS_MULTIPROCESSING)
   #define _CORE_message_queue_Close( \
     the_message_queue, \
     mp_callout, \
-    mp_id \
+    mp_id, \
+    lock_context \
   ) \
     _CORE_message_queue_Do_close( \
       the_message_queue, \
       mp_callout, \
-      mp_id \
+      mp_id, \
+      lock_context \
     )
 #else
   #define _CORE_message_queue_Close( \
     the_message_queue, \
     mp_callout, \
-    mp_id \
+    mp_id, \
+    lock_context \
   ) \
     _CORE_message_queue_Do_close( \
-      the_message_queue \
+      the_message_queue, \
+      lock_context \
     )
 #endif
 

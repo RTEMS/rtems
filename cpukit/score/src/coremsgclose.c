@@ -33,29 +33,27 @@ static Thread_Control *_CORE_message_queue_Was_deleted(
 }
 
 void _CORE_message_queue_Do_close(
-  CORE_message_queue_Control *the_message_queue
+  CORE_message_queue_Control *the_message_queue,
 #if defined(RTEMS_MULTIPROCESSING)
-  ,
   Thread_queue_MP_callout     mp_callout,
-  Objects_Id                  mp_id
+  Objects_Id                  mp_id,
 #endif
+  ISR_lock_Context           *lock_context
 )
 {
-  ISR_lock_Context lock_context;
 
   /*
    *  This will flush blocked threads whether they were blocked on
    *  a send or receive.
    */
 
-  _CORE_message_queue_Acquire( the_message_queue, &lock_context );
   _Thread_queue_Flush_critical(
     &the_message_queue->Wait_queue.Queue,
     the_message_queue->operations,
     _CORE_message_queue_Was_deleted,
     mp_callout,
     mp_id,
-    &lock_context
+    lock_context
   );
 
   (void) _Workspace_Free( the_message_queue->message_buffers );

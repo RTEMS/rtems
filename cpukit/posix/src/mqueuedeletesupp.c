@@ -41,6 +41,7 @@ void _POSIX_Message_queue_Delete(
 {
   if ( !the_mq->linked && !the_mq->open_count ) {
       Objects_Control *the_object = &the_mq->Object;
+      ISR_lock_Context lock_context;
 
       #if defined(RTEMS_DEBUG)
         /*
@@ -55,12 +56,15 @@ void _POSIX_Message_queue_Delete(
         }
       #endif
 
+      _CORE_message_queue_Acquire( &the_mq->Message_queue, &lock_context );
+
       _Objects_Close( &_POSIX_Message_queue_Information, the_object );
 
       _CORE_message_queue_Close(
         &the_mq->Message_queue,
         NULL,        /* no MP support */
-        0
+        0,
+        &lock_context
       );
 
     _POSIX_Message_queue_Free( the_mq );

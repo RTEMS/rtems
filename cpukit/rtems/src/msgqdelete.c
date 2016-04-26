@@ -18,17 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/coremsgimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/messageimpl.h>
-#include <rtems/rtems/options.h>
-#include <rtems/rtems/support.h>
+#include <rtems/rtems/attrimpl.h>
 
 rtems_status_code rtems_message_queue_delete(
   rtems_id id
@@ -36,19 +27,30 @@ rtems_status_code rtems_message_queue_delete(
 {
   Message_queue_Control          *the_message_queue;
   Objects_Locations               location;
+  ISR_lock_Context                lock_context;
 
   _Objects_Allocator_lock();
-  the_message_queue = _Message_queue_Get( id, &location );
+  the_message_queue = _Message_queue_Get_interrupt_disable(
+    id,
+    &location,
+    &lock_context
+  );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      _CORE_message_queue_Acquire_critical(
+        &the_message_queue->message_queue,
+        &lock_context
+      );
+
       _Objects_Close( &_Message_queue_Information,
                       &the_message_queue->Object );
 
       _CORE_message_queue_Close(
         &the_message_queue->message_queue,
         _Message_queue_MP_Send_object_was_deleted,
-        id
+        id,
+        &lock_context
       );
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -66,7 +68,6 @@ rtems_status_code rtems_message_queue_delete(
         );
       }
 #endif
-      _Objects_Put( &the_message_queue->Object );
       _Message_queue_Free( the_message_queue );
       _Objects_Allocator_unlock();
       return RTEMS_SUCCESSFUL;
