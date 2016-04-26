@@ -30,17 +30,6 @@
 #include "config.h"
 #endif
 
-#include <stdarg.h>
-
-#include <pthread.h>
-#include <limits.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <mqueue.h>
-
-#include <rtems/system.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
 
 /*
@@ -52,36 +41,37 @@ int mq_getattr(
   struct mq_attr *mqstat
 )
 {
-  POSIX_Message_queue_Control          *the_mq;
-  POSIX_Message_queue_Control_fd       *the_mq_fd;
-  Objects_Locations                     location;
+  POSIX_Message_queue_Control *the_mq;
+  ISR_lock_Context             lock_context;
 
-  if ( !mqstat )
+  if ( mqstat == NULL ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
-
-  the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
-  switch ( location ) {
-
-    case OBJECTS_LOCAL:
-      the_mq = the_mq_fd->Queue;
-
-      /*
-       *  Return the old values.
-       */
-      mqstat->mq_flags   = the_mq_fd->oflag;
-      mqstat->mq_msgsize = the_mq->Message_queue.maximum_message_size;
-      mqstat->mq_maxmsg  = the_mq->Message_queue.maximum_pending_messages;
-      mqstat->mq_curmsgs = the_mq->Message_queue.number_of_pending_messages;
-
-      _Objects_Put( &the_mq_fd->Object );
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
   }
 
-  rtems_set_errno_and_return_minus_one( EBADF );
+  the_mq = _POSIX_Message_queue_Get( mqdes, &lock_context );
+
+  if ( the_mq == NULL ) {
+    rtems_set_errno_and_return_minus_one( EBADF );
+  }
+
+  _CORE_message_queue_Acquire_critical(
+    &the_mq->Message_queue,
+    &lock_context
+  );
+
+  if ( the_mq->open_count == 0 ) {
+    _CORE_message_queue_Release( &the_mq->Message_queue, &lock_context );
+    rtems_set_errno_and_return_minus_one( EBADF );
+  }
+
+  /*
+   *  Return the old values.
+   */
+  mqstat->mq_flags   = the_mq->oflag;
+  mqstat->mq_msgsize = the_mq->Message_queue.maximum_message_size;
+  mqstat->mq_maxmsg  = the_mq->Message_queue.maximum_pending_messages;
+  mqstat->mq_curmsgs = the_mq->Message_queue.number_of_pending_messages;
+
+  _CORE_message_queue_Release( &the_mq->Message_queue, &lock_context );
+  return 0;
 }

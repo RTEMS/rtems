@@ -94,17 +94,6 @@ typedef struct {
 
   /**
    * This field contains the maximum number of POSIX API
-   * message queue file descriptors which are configured
-   * for this application.
-   *
-   * @note There can be one or more file descriptors used with
-   *       each message queue. This value should be greater than
-   *       or equal to the number of message queues.
-   */
-  uint32_t                            maximum_message_queue_descriptors;
-
-  /**
-   * This field contains the maximum number of POSIX API
    * semaphores which are configured for this application.
    */
   uint32_t                            maximum_semaphores;

@@ -18,17 +18,6 @@
 #include "config.h"
 #endif
 
-#include <stdarg.h>
-
-#include <pthread.h>
-#include <limits.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <mqueue.h>
-
-#include <rtems/system.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
 
 int mq_setattr(
@@ -37,41 +26,42 @@ int mq_setattr(
   struct mq_attr       *__restrict omqstat
 )
 {
-  POSIX_Message_queue_Control_fd *the_mq_fd;
-  CORE_message_queue_Control     *the_core_mq;
-  Objects_Locations               location;
+  POSIX_Message_queue_Control *the_mq;
+  ISR_lock_Context             lock_context;
 
-  if ( !mqstat )
+  if ( mqstat == NULL ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
-
-  the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
-  switch ( location ) {
-
-    case OBJECTS_LOCAL:
-
-      the_core_mq = &the_mq_fd->Queue->Message_queue;
-
-      /*
-       *  Return the old values.
-       */
-
-      if ( omqstat ) {
-        omqstat->mq_flags   = the_mq_fd->oflag;
-        omqstat->mq_msgsize = the_core_mq->maximum_message_size;
-        omqstat->mq_maxmsg  = the_core_mq->maximum_pending_messages;
-        omqstat->mq_curmsgs = the_core_mq->number_of_pending_messages;
-      }
-
-      the_mq_fd->oflag = mqstat->mq_flags;
-      _Objects_Put( &the_mq_fd->Object );
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
   }
 
-  rtems_set_errno_and_return_minus_one( EBADF );
+  the_mq = _POSIX_Message_queue_Get( mqdes, &lock_context );
+
+  if ( the_mq == NULL ) {
+    rtems_set_errno_and_return_minus_one( EBADF );
+  }
+
+  _CORE_message_queue_Acquire_critical(
+    &the_mq->Message_queue,
+    &lock_context
+  );
+
+  if ( the_mq->open_count == 0 ) {
+    _CORE_message_queue_Release( &the_mq->Message_queue, &lock_context );
+    rtems_set_errno_and_return_minus_one( EBADF );
+  }
+
+  /*
+   *  Return the old values.
+   */
+
+  if ( omqstat != NULL ) {
+    omqstat->mq_flags   = the_mq->oflag;
+    omqstat->mq_msgsize = the_mq->Message_queue.maximum_message_size;
+    omqstat->mq_maxmsg  = the_mq->Message_queue.maximum_pending_messages;
+    omqstat->mq_curmsgs = the_mq->Message_queue.number_of_pending_messages;
+  }
+
+  the_mq->oflag = mqstat->mq_flags;
+
+  _CORE_message_queue_Release( &the_mq->Message_queue, &lock_context );
+  return 0;
 }

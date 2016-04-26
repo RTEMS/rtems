@@ -70,7 +70,6 @@ static const Objects_Information *const objects_info_table[] = {
     &_POSIX_Barrier_Information,
     &_POSIX_Condition_variables_Information,
     &_POSIX_Message_queue_Information,
-    &_POSIX_Message_queue_Information_fds,
     &_POSIX_Mutex_Information,
     &_POSIX_RWLock_Information,
     &_POSIX_Semaphore_Information,

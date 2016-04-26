@@ -18,25 +18,9 @@
 #include "config.h"
 #endif
 
-#include <stdarg.h>
-
-#include <pthread.h>
-#include <limits.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <mqueue.h>
-#include <sys/types.h>
-#include <signal.h>
-
-#include <rtems/system.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
 
-/*
- *  _POSIX_Message_queue_Notify_handler
- *
- */
+#include <signal.h>
 
 static void _POSIX_Message_queue_Notify_handler(
   CORE_message_queue_Control *the_message_queue,
@@ -64,45 +48,41 @@ int mq_notify(
   const struct sigevent *notification
 )
 {
-  POSIX_Message_queue_Control    *the_mq;
-  POSIX_Message_queue_Control_fd *the_mq_fd;
-  Objects_Locations               location;
+  POSIX_Message_queue_Control *the_mq;
+  ISR_lock_Context             lock_context;
 
-  the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
-  switch ( location ) {
+  the_mq = _POSIX_Message_queue_Get( mqdes, &lock_context );
 
-    case OBJECTS_LOCAL:
-      the_mq = the_mq_fd->Queue;
-
-      if ( notification ) {
-        if ( _CORE_message_queue_Is_notify_enabled( &the_mq->Message_queue ) ) {
-          _Objects_Put( &the_mq_fd->Object );
-          rtems_set_errno_and_return_minus_one( EBUSY );
-        }
-
-        _CORE_message_queue_Set_notify( &the_mq->Message_queue, NULL );
-
-        the_mq->notification = *notification;
-
-        _CORE_message_queue_Set_notify(
-          &the_mq->Message_queue,
-          _POSIX_Message_queue_Notify_handler
-        );
-      } else {
-
-        _CORE_message_queue_Set_notify( &the_mq->Message_queue, NULL );
-
-      }
-
-      _Objects_Put( &the_mq_fd->Object );
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( the_mq == NULL ) {
+    rtems_set_errno_and_return_minus_one( EBADF );
   }
 
-  rtems_set_errno_and_return_minus_one( EBADF );
+  _CORE_message_queue_Acquire_critical(
+    &the_mq->Message_queue,
+    &lock_context
+  );
+
+  if ( the_mq->open_count == 0 ) {
+    _CORE_message_queue_Release( &the_mq->Message_queue, &lock_context );
+    rtems_set_errno_and_return_minus_one( EBADF );
+  }
+
+  if ( notification != NULL ) {
+    if ( _CORE_message_queue_Is_notify_enabled( &the_mq->Message_queue ) ) {
+      _CORE_message_queue_Release( &the_mq->Message_queue, &lock_context );
+      rtems_set_errno_and_return_minus_one( EBUSY );
+    }
+
+    the_mq->notification = *notification;
+
+    _CORE_message_queue_Set_notify(
+      &the_mq->Message_queue,
+      _POSIX_Message_queue_Notify_handler
+    );
+  } else {
+    _CORE_message_queue_Set_notify( &the_mq->Message_queue, NULL );
+  }
+
+  _CORE_message_queue_Release( &the_mq->Message_queue, &lock_context );
+  return 0;
 }

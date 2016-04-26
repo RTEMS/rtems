@@ -130,7 +130,6 @@ const char rtems_test_name[] = "PSXCONFIG 1";
 #endif
 
 #ifdef POSIX_MQ_COUNT
-  #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS POSIX_MQ_COUNT
   #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES POSIX_MQ_COUNT
 
   #define POSIX_MQ_0_COUNT 2
@@ -500,10 +499,6 @@ static rtems_task Init(rtems_task_argument argument)
     rtems_test_assert(mq >= 0);
   }
   rtems_resource_snapshot_take(&snapshot);
-  rtems_test_assert(
-    snapshot.posix_api.active_message_queue_descriptors
-      == CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
-  );
   rtems_test_assert(
     snapshot.posix_api.active_message_queues
       == CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES

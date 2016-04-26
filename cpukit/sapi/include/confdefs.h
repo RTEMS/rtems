@@ -2029,10 +2029,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES \
         rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
     #endif
-    #if !defined(CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS)
-      #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS \
-        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-    #endif
     #if !defined(CONFIGURE_MAXIMUM_POSIX_SEMAPHORES)
       #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES \
         rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
@@ -2582,17 +2578,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #endif
 
   /**
-   * This configuration parameter specifies the maximum number of
-   * POSIX API messages queue descriptors.
-   *
-   * This defaults to the number of POSIX API message queues.
-   */
-  #ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
-     #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS \
-             CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
-  #endif
-
-  /**
    * This macro is calculated to specify the memory required for
    * POSIX API message queues.
    *
@@ -2601,16 +2586,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
     _Configure_POSIX_Named_Object_RAM( \
        _message_queues, sizeof(POSIX_Message_queue_Control) )
-
-  /**
-   * This macro is calculated to specify the memory required for
-   * POSIX API message queue descriptors.
-   *
-   * This is an internal parameter.
-   */
-  #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUE_DESCRIPTORS(_mqueue_fds) \
-    _Configure_Object_RAM( \
-       _mqueue_fds, sizeof(POSIX_Message_queue_Control_fd) )
 
   /**
    * This configuration parameter specifies the maximum number of
@@ -2907,8 +2882,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
         CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS) + \
       CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES( \
         CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES) + \
-      CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUE_DESCRIPTORS( \
-        CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS) + \
       CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \
         CONFIGURE_MAXIMUM_POSIX_SEMAPHORES) + \
       CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(CONFIGURE_MAXIMUM_POSIX_BARRIERS) + \
@@ -3369,7 +3342,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       CONFIGURE_MAXIMUM_POSIX_TIMERS,
       CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
       CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,
-      CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS,
       CONFIGURE_MAXIMUM_POSIX_SEMAPHORES,
       CONFIGURE_MAXIMUM_POSIX_BARRIERS,
       CONFIGURE_MAXIMUM_POSIX_RWLOCKS,
@@ -3727,7 +3699,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
        (CONFIGURE_MAXIMUM_POSIX_TIMERS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES != 0) || \
-       (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_SEMAPHORES != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_BARRIERS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_SPINLOCKS != 0) || \
@@ -3795,14 +3766,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #error "Maximum priority configured higher than supported by target."
 #endif
 
-/*
- *  If you have fewer POSIX Message Queue Descriptors than actual
- *  POSIX Message Queues, then you will not be able to open all the
- *  queues.
- */
-#if (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS < \
-     CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES)
-  #error "Fewer POSIX Message Queue descriptors than Queues!"
+#ifdef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
+  #warning "The CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTOR configuration option is obsolete!"
 #endif
 
 /*

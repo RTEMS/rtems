@@ -18,19 +18,10 @@
 #include "config.h"
 #endif
 
-#include <stdarg.h>
-
-#include <pthread.h>
-#include <limits.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <mqueue.h>
-
-#include <rtems/system.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/score/threadimpl.h>
-#include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
+#include <rtems/score/threadimpl.h>
+
+#include <fcntl.h>
 
 THREAD_WAIT_QUEUE_OBJECT_ASSERT(
   POSIX_Message_queue_Control,
@@ -53,90 +44,82 @@ ssize_t _POSIX_Message_queue_Receive_support(
   Watchdog_Interval   timeout
 )
 {
-  POSIX_Message_queue_Control     *the_mq;
-  POSIX_Message_queue_Control_fd  *the_mq_fd;
-  Objects_Locations                location;
-  size_t                           length_out;
-  bool                             do_wait;
-  Thread_Control                  *executing;
-  ISR_lock_Context                 lock_context;
+  POSIX_Message_queue_Control *the_mq;
+  ISR_lock_Context             lock_context;
+  size_t                       length_out;
+  bool                         do_wait;
+  Thread_Control              *executing;
 
-  the_mq_fd = _POSIX_Message_queue_Get_fd_interrupt_disable(
-    mqdes,
-    &location,
-    &lock_context
-  );
-  switch ( location ) {
+  the_mq = _POSIX_Message_queue_Get( mqdes, &lock_context );
 
-    case OBJECTS_LOCAL:
-      if ( (the_mq_fd->oflag & O_ACCMODE) == O_WRONLY ) {
-        _ISR_lock_ISR_enable( &lock_context );
-        rtems_set_errno_and_return_minus_one( EBADF );
-      }
-
-      the_mq = the_mq_fd->Queue;
-
-      if ( msg_len < the_mq->Message_queue.maximum_message_size ) {
-        _ISR_lock_ISR_enable( &lock_context );
-        rtems_set_errno_and_return_minus_one( EMSGSIZE );
-      }
-
-      /*
-       *  Now if something goes wrong, we return a "length" of -1
-       *  to indicate an error.
-       */
-
-      length_out = -1;
-
-      /*
-       *  A timed receive with a bad time will do a poll regardless.
-       */
-      if ( wait )
-        do_wait = (the_mq_fd->oflag & O_NONBLOCK) ? false : true;
-      else
-        do_wait = wait;
-
-      _CORE_message_queue_Acquire_critical(
-        &the_mq->Message_queue,
-        &lock_context
-      );
-
-      /*
-       *  Now perform the actual message receive
-       */
-      executing = _Thread_Executing;
-      _CORE_message_queue_Seize(
-        &the_mq->Message_queue,
-        executing,
-        mqdes,
-        msg_ptr,
-        &length_out,
-        do_wait,
-        timeout,
-        &lock_context
-      );
-
-      if (msg_prio) {
-        *msg_prio = _POSIX_Message_queue_Priority_from_core(
-             executing->Wait.count
-          );
-      }
-
-      if ( !executing->Wait.return_code )
-        return length_out;
-
-      rtems_set_errno_and_return_minus_one(
-        _POSIX_Message_queue_Translate_core_message_queue_return_code(
-          executing->Wait.return_code
-        )
-      );
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( the_mq == NULL ) {
+    rtems_set_errno_and_return_minus_one( EBADF );
   }
 
-  rtems_set_errno_and_return_minus_one( EBADF );
+  if ( ( the_mq->oflag & O_ACCMODE ) == O_WRONLY ) {
+    _ISR_lock_ISR_enable( &lock_context );
+    rtems_set_errno_and_return_minus_one( EBADF );
+  }
+
+  if ( msg_len < the_mq->Message_queue.maximum_message_size ) {
+    _ISR_lock_ISR_enable( &lock_context );
+    rtems_set_errno_and_return_minus_one( EMSGSIZE );
+  }
+
+  /*
+   *  Now if something goes wrong, we return a "length" of -1
+   *  to indicate an error.
+   */
+
+  length_out = -1;
+
+  /*
+   *  A timed receive with a bad time will do a poll regardless.
+   */
+  if ( wait ) {
+    do_wait = ( the_mq->oflag & O_NONBLOCK ) == 0;
+  } else {
+    do_wait = wait;
+  }
+
+  _CORE_message_queue_Acquire_critical(
+    &the_mq->Message_queue,
+    &lock_context
+  );
+
+  if ( the_mq->open_count == 0 ) {
+    _CORE_message_queue_Release( &the_mq->Message_queue, &lock_context );
+    rtems_set_errno_and_return_minus_one( EBADF );
+  }
+
+  /*
+   *  Now perform the actual message receive
+   */
+  executing = _Thread_Executing;
+  _CORE_message_queue_Seize(
+    &the_mq->Message_queue,
+    executing,
+    mqdes,
+    msg_ptr,
+    &length_out,
+    do_wait,
+    timeout,
+    &lock_context
+  );
+
+  if ( msg_prio != NULL ) {
+    *msg_prio = _POSIX_Message_queue_Priority_from_core(
+      executing->Wait.count
+    );
+  }
+
+  if ( executing->Wait.return_code != CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL ) {
+    rtems_set_errno_and_return_minus_one(
+      _POSIX_Message_queue_Translate_core_message_queue_return_code(
+        executing->Wait.return_code
+      )
+    );
+  }
+
+  return length_out;
 }

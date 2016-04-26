@@ -18,10 +18,7 @@
 #include "config.h"
 #endif
 
-#include <mqueue.h>
-
 #include <rtems/posix/mqueueimpl.h>
-#include <rtems/seterr.h>
 
 /*
  *  15.2.2 Remove a Message Queue, P1003.1b-1993, p. 276
@@ -33,6 +30,7 @@ int mq_unlink(
 {
   POSIX_Message_queue_Control *the_mq;
   Objects_Get_by_name_error    error;
+  ISR_lock_Context             lock_context;
 
   _Objects_Allocator_lock();
 
@@ -42,9 +40,12 @@ int mq_unlink(
     rtems_set_errno_and_return_minus_one( _POSIX_Get_by_name_error( error ) );
   }
 
-  the_mq->linked = false;
   _POSIX_Message_queue_Namespace_remove( the_mq );
-  _POSIX_Message_queue_Delete( the_mq );
+
+  _CORE_message_queue_Acquire( &the_mq->Message_queue, &lock_context );
+
+  the_mq->linked = false;
+  _POSIX_Message_queue_Delete( the_mq, &lock_context );
 
   _Objects_Allocator_unlock();
   return 0;

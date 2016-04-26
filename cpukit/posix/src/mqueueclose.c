@@ -30,17 +30,6 @@
 #include "config.h"
 #endif
 
-#include <stdarg.h>
-
-#include <pthread.h>
-#include <limits.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <mqueue.h>
-
-#include <rtems/system.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
 
 /*
@@ -52,42 +41,31 @@ int mq_close(
   mqd_t  mqdes
 )
 {
-  POSIX_Message_queue_Control    *the_mq;
-  POSIX_Message_queue_Control_fd *the_mq_fd;
-  Objects_Locations               location;
+  POSIX_Message_queue_Control *the_mq;
+  ISR_lock_Context             lock_context;
 
   _Objects_Allocator_lock();
-  the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
-  if ( location == OBJECTS_LOCAL ) {
-      /* OBJECTS_LOCAL:
-       *
-       *  First update the actual message queue to reflect this descriptor
-       *  being disassociated.  This may result in the queue being really
-       *  deleted.
-       */
+  the_mq = _POSIX_Message_queue_Get( mqdes, &lock_context );
 
-      the_mq = the_mq_fd->Queue;
-      the_mq->open_count -= 1;
-      _POSIX_Message_queue_Delete( the_mq );
+  if ( the_mq == NULL ) {
+    _Objects_Allocator_unlock();
+    rtems_set_errno_and_return_minus_one( EBADF );
+  }
 
-      /*
-       *  Now close this file descriptor.
-       */
+  _CORE_message_queue_Acquire_critical(
+    &the_mq->Message_queue,
+    &lock_context
+  );
 
-      _Objects_Close(
-        &_POSIX_Message_queue_Information_fds, &the_mq_fd->Object );
-      _POSIX_Message_queue_Free_fd( the_mq_fd );
+  if ( the_mq->open_count == 0 ) {
+    _CORE_message_queue_Release( &the_mq->Message_queue, &lock_context );
+    _Objects_Allocator_unlock();
+    rtems_set_errno_and_return_minus_one( EBADF );
+  }
 
-      _Objects_Put( &the_mq_fd->Object );
-      _Objects_Allocator_unlock();
-      return 0;
-   }
+  the_mq->open_count -= 1;
+  _POSIX_Message_queue_Delete( the_mq, &lock_context );
 
-   _Objects_Allocator_unlock();
-
-   /*
-    *  OBJECTS_REMOTE:
-    *  OBJECTS_ERROR:
-    */
-   rtems_set_errno_and_return_minus_one( EBADF );
+  _Objects_Allocator_unlock();
+  return 0;
 }

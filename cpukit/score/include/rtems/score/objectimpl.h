@@ -86,7 +86,6 @@ typedef enum {
   OBJECTS_POSIX_THREADS             = 1,
   OBJECTS_POSIX_KEYS                = 2,
   OBJECTS_POSIX_INTERRUPTS          = 3,
-  OBJECTS_POSIX_MESSAGE_QUEUE_FDS   = 4,
   OBJECTS_POSIX_MESSAGE_QUEUES      = 5,
   OBJECTS_POSIX_MUTEXES             = 6,
   OBJECTS_POSIX_SEMAPHORES          = 7,

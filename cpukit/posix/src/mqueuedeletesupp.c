@@ -18,56 +18,22 @@
 #include "config.h"
 #endif
 
-#include <stdarg.h>
-
-#include <pthread.h>
-#include <limits.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <mqueue.h>
-
-#include <rtems/system.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>
-#if defined(RTEMS_DEBUG)
-  #include <rtems/bspIo.h>
-#endif
 
 void _POSIX_Message_queue_Delete(
-  POSIX_Message_queue_Control *the_mq
+  POSIX_Message_queue_Control *the_mq,
+  ISR_lock_Context            *lock_context
 )
 {
-  if ( !the_mq->linked && !the_mq->open_count ) {
-      Objects_Control *the_object = &the_mq->Object;
-      ISR_lock_Context lock_context;
-
-      #if defined(RTEMS_DEBUG)
-        /*
-         *  the name memory will have been freed by unlink.
-         */
-	if ( the_object->name.name_p ) {
-          printk(
-            "POSIX MQ name (%p) not freed by unlink\n",
-	    (void *)the_object->name.name_p
-          );
-	  _Workspace_Free( (void *)the_object->name.name_p );
-        }
-      #endif
-
-      _CORE_message_queue_Acquire( &the_mq->Message_queue, &lock_context );
-
-      _Objects_Close( &_POSIX_Message_queue_Information, the_object );
-
-      _CORE_message_queue_Close(
-        &the_mq->Message_queue,
-        NULL,        /* no MP support */
-        0,
-        &lock_context
-      );
-
+  if ( !the_mq->linked && the_mq->open_count == 0 ) {
+    _CORE_message_queue_Close(
+      &the_mq->Message_queue,
+      NULL,        /* no MP support */
+      0,
+      lock_context
+    );
     _POSIX_Message_queue_Free( the_mq );
-
+  } else {
+    _CORE_message_queue_Release( &the_mq->Message_queue, lock_context );
   }
 }

@@ -23,6 +23,8 @@
 #include <rtems/posix/posixapi.h>
 #include <rtems/score/coremsgimpl.h>
 
+#include <rtems/seterr.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -34,19 +36,14 @@ extern "C" {
 extern Objects_Information _POSIX_Message_queue_Information;
 
 /**
- *  The is used to manage the set of "file descriptors" associated with
- *  the message queues.
- */
-extern Objects_Information _POSIX_Message_queue_Information_fds;
-
-/**
  * @brief Delete a POSIX Message Queue
  *
  * This routine supports the mq_unlink and mq_close routines by
  * doing most of the work involved with removing a message queue.
  */
 void _POSIX_Message_queue_Delete(
-  POSIX_Message_queue_Control *the_mq
+  POSIX_Message_queue_Control *the_mq,
+  ISR_lock_Context            *lock_context
 );
 
 /*@
@@ -88,17 +85,11 @@ int _POSIX_Message_queue_Send_support(
   Watchdog_Interval   timeout
 );
 
-/**
- *  @brief POSIX Message Queue Allocate
- *
- *  This function allocates a message queue control block from
- *  the inactive chain of free message queue control blocks.
- */
-RTEMS_INLINE_ROUTINE
-  POSIX_Message_queue_Control *_POSIX_Message_queue_Allocate( void )
+RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *
+  _POSIX_Message_queue_Allocate_unprotected( void )
 {
   return (POSIX_Message_queue_Control *)
-    _Objects_Allocate( &_POSIX_Message_queue_Information );
+    _Objects_Allocate_unprotected( &_POSIX_Message_queue_Information );
 }
 
 /**
@@ -115,24 +106,13 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free(
 }
 
 
-/**
- *  @brief POSIX Message Queue Get
- *
- *  This function maps message queue IDs to message queue control blocks.
- *  If ID corresponds to a local message queue, then it returns
- *  the_mq control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  if the message queue ID is global and
- *  resides on a remote node, then location is set to OBJECTS_REMOTE,
- *  and the_message queue is undefined.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_mq is undefined.
- */
-RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
-  Objects_Id         id,
-  Objects_Locations *location
+RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get(
+  Objects_Id        id,
+  ISR_lock_Context *lock_context
 )
 {
   return (POSIX_Message_queue_Control *)
-    _Objects_Get( &_POSIX_Message_queue_Information, id, location );
+    _Objects_Get_local( id, &_POSIX_Message_queue_Information, lock_context );
 }
 
 /*
@@ -171,26 +151,6 @@ RTEMS_INLINE_ROUTINE unsigned int _POSIX_Message_queue_Priority_from_core(
 int _POSIX_Message_queue_Translate_core_message_queue_return_code(
   uint32_t   the_message_queue_status
 );
- 
-/**
- *  @brief POSIX Message Queue Allocate File Descriptor
- */
-RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *
-  _POSIX_Message_queue_Allocate_fd( void )
-{
-  return (POSIX_Message_queue_Control_fd *)
-    _Objects_Allocate( &_POSIX_Message_queue_Information_fds );
-}
- 
-/**
- *  @brief POSIX Message Queue Free File Descriptor
- */
-RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free_fd (
-  POSIX_Message_queue_Control_fd *the_mq_fd
-)
-{
-  _Objects_Free( &_POSIX_Message_queue_Information_fds, &the_mq_fd->Object );
-}
 
 /**
  *  @brief POSIX Message Queue Remove from Namespace
@@ -202,33 +162,16 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Namespace_remove (
   _Objects_Namespace_remove( 
     &_POSIX_Message_queue_Information, &the_mq->Object );
 }
- 
-/*
- *  @brief POSIX Message Queue Get File Descriptor
- */
-RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *_POSIX_Message_queue_Get_fd (
-  mqd_t              id,
-  Objects_Locations *location
-)
-{
-  return (POSIX_Message_queue_Control_fd *) _Objects_Get(
-    &_POSIX_Message_queue_Information_fds,
-    (Objects_Id)id,
-    location
-  );
-}
 
-RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *
-_POSIX_Message_queue_Get_fd_interrupt_disable(
+RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *
+_POSIX_Message_queue_Get_interrupt_disable(
   mqd_t              id,
-  Objects_Locations *location,
   ISR_lock_Context  *lock_context
 )
 {
-  return (POSIX_Message_queue_Control_fd *) _Objects_Get_isr_disable(
-    &_POSIX_Message_queue_Information_fds,
-    (Objects_Id)id,
-    location,
+  return (POSIX_Message_queue_Control *) _Objects_Get_local(
+    (Objects_Id) id,
+    &_POSIX_Message_queue_Information,
     lock_context
   );
 }

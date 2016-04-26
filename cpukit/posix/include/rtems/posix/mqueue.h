@@ -58,13 +58,8 @@ typedef struct {
    bool                        linked;
    uint32_t                    open_count;
    struct sigevent             notification;
+   int                         oflag;
 }  POSIX_Message_queue_Control;
-
-typedef struct {
-   Objects_Control              Object;
-   POSIX_Message_queue_Control *Queue;
-   int                          oflag;
-} POSIX_Message_queue_Control_fd;
 
 /** @} */
 
