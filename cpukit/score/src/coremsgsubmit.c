@@ -44,11 +44,9 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
   Thread_Control                    *the_thread;
 
   if ( size > the_message_queue->maximum_message_size ) {
-    _ISR_lock_ISR_enable( lock_context );
+    _CORE_message_queue_Release( the_message_queue, lock_context );
     return CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE;
   }
-
-  _CORE_message_queue_Acquire_critical( the_message_queue, lock_context );
 
   /*
    *  Is there a thread currently waiting on this message queue?

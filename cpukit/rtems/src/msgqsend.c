@@ -52,6 +52,10 @@ rtems_status_code rtems_message_queue_send(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      _CORE_message_queue_Acquire_critical(
+        &the_message_queue->message_queue,
+        &lock_context
+      );
       status = _CORE_message_queue_Send(
         &the_message_queue->message_queue,
         buffer,
