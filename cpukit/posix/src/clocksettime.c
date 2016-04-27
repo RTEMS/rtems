@@ -19,9 +19,7 @@
 #endif
 
 #include <time.h>
-#include <errno.h>
 
-#include <rtems/score/threaddispatch.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/seterr.h>
 
@@ -41,9 +39,7 @@ int clock_settime(
     if ( tp->tv_sec < TOD_SECONDS_1970_THROUGH_1988 )
       rtems_set_errno_and_return_minus_one( EINVAL );
 
-    _Thread_Disable_dispatch();
-      _TOD_Set_with_timespec( tp );
-    _Thread_Enable_dispatch();
+    _TOD_Set_with_timespec( tp );
   }
 #ifdef _POSIX_CPUTIME
   else if ( clock_id == CLOCK_PROCESS_CPUTIME_ID )

@@ -82,7 +82,7 @@ int adjtime(
   /*
    * Now apply the adjustment
    */
-  _TOD_Adjust( delta_as_timestamp );
+  _TOD_Adjust( &delta_as_timestamp );
 
   return 0;
 }

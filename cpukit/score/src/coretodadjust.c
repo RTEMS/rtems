@@ -18,14 +18,14 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threaddispatch.h>
 #include <rtems/score/todimpl.h>
 
 void _TOD_Adjust(
-  const Timestamp_Control delta
+  const Timestamp_Control *delta
 )
 {
   Timestamp_Control tod;
+  ISR_lock_Context  lock_context;
 
   /*
    * Currently, RTEMS does the adjustment in one movement.
@@ -35,16 +35,10 @@ void _TOD_Adjust(
    * adjustment.
    */
 
-  /*
-   * This prevents context switches while we are adjusting the TOD
-   */
-  _Thread_Disable_dispatch();
-
-    _TOD_Get( &tod );
-
-    _Timestamp_Add_to( &tod, &delta );
-
-    _TOD_Set( &tod );
-
-  _Thread_Enable_dispatch();
+  _TOD_Lock();
+  _TOD_Acquire( &lock_context );
+  _TOD_Get( &tod );
+  _Timestamp_Add_to( &tod, delta );
+  _TOD_Set( &tod, &lock_context );
+  _TOD_Unlock();
 }

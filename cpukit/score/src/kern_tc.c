@@ -33,6 +33,7 @@
 #define	time_uptime _Timecounter_Time_uptime
 #define	boottimebin _Timecounter_Boottimebin
 #include <rtems/score/timecounterimpl.h>
+#include <rtems/score/smp.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #endif /* __rtems__ */
@@ -215,6 +216,8 @@ SYSCTL_PROC(_kern_timecounter, OID_AUTO, alloweddeviation,
 static void tc_windup(void);
 #ifndef __rtems__
 static void cpu_tick_calibrate(int);
+#else /* __rtems__ */
+static void _Timecounter_Windup(ISR_lock_Context *lock_context);
 #endif /* __rtems__ */
 
 void dtrace_getnanotime(struct timespec *tsp);
@@ -1344,12 +1347,12 @@ tc_getfrequency(void)
  * when we booted.
  * XXX: not locked.
  */
-#ifndef __rtems__
 void
+#ifndef __rtems__
 tc_setclock(struct timespec *ts)
 #else /* __rtems__ */
-void
-_Timecounter_Set_clock(const struct timespec *ts)
+_Timecounter_Set_clock(const struct bintime *_bt,
+    ISR_lock_Context *lock_context)
 #endif /* __rtems__ */
 {
 #ifndef __rtems__
@@ -1360,19 +1363,19 @@ _Timecounter_Set_clock(const struct timespec *ts)
 #ifndef __rtems__
 	cpu_tick_calibrate(1);
 	nanotime(&tbef);
-#endif /* __rtems__ */
 	timespec2bintime(ts, &bt);
+#else /* __rtems__ */
+	bt = *_bt;
+#endif /* __rtems__ */
 	binuptime(&bt2);
 	bintime_sub(&bt, &bt2);
 	bintime_add(&bt2, &boottimebin);
 	boottimebin = bt;
 #ifndef __rtems__
 	bintime2timeval(&bt, &boottime);
-#endif /* __rtems__ */
 
 	/* XXX fiddle all the little crinkly bits around the fiords... */
 	tc_windup();
-#ifndef __rtems__
 	nanotime(&taft);
 	if (timestepwarnings) {
 		log(LOG_INFO,
@@ -1382,6 +1385,8 @@ _Timecounter_Set_clock(const struct timespec *ts)
 		    (intmax_t)ts->tv_sec, ts->tv_nsec);
 	}
 	cpu_tick_calibrate(1);
+#else /* __rtems__ */
+	_Timecounter_Windup(lock_context);
 #endif /* __rtems__ */
 }
 
@@ -1392,6 +1397,17 @@ _Timecounter_Set_clock(const struct timespec *ts)
  */
 static void
 tc_windup(void)
+#ifdef __rtems__
+{
+        ISR_lock_Context lock_context;
+
+        _Timecounter_Acquire(&lock_context);
+        _Timecounter_Windup(&lock_context);
+}
+
+static void
+_Timecounter_Windup(ISR_lock_Context *lock_context)
+#endif /* __rtems__ */
 {
 	struct bintime bt;
 	struct timehands *th, *tho;
@@ -1399,11 +1415,6 @@ tc_windup(void)
 	uint32_t delta, ncount, ogen;
 	int i;
 	time_t t;
-#ifdef __rtems__
-	ISR_lock_Context lock_context;
-
-	_Timecounter_Acquire(&lock_context);
-#endif /* __rtems__ */
 
 	/*
 	 * Make the next timehands a copy of the current one, but do not
@@ -1565,7 +1576,7 @@ tc_windup(void)
 	timekeep_push_vdso();
 #endif /* __rtems__ */
 #ifdef __rtems__
-	_Timecounter_Release(&lock_context);
+	_Timecounter_Release(lock_context);
 #endif /* __rtems__ */
 }
 
@@ -1978,23 +1989,21 @@ tc_ticktock(int cnt)
 	if (count < tc_tick)
 		return;
 	count = 0;
+	tc_windup();
+}
 #else /* __rtems__ */
-#include <rtems/score/smp.h>
 void
 _Timecounter_Tick(void)
 {
 	Per_CPU_Control *cpu_self = _Per_CPU_Get();
 
 	if (_Per_CPU_Is_boot_processor(cpu_self)) {
-#endif /* __rtems__ */
-	tc_windup();
-#ifdef __rtems__
-	};
+                tc_windup();
+	}
 
 	_Watchdog_Tick(cpu_self);
-#endif /* __rtems__ */
 }
-#ifdef __rtems__
+
 void
 _Timecounter_Tick_simple(uint32_t delta, uint32_t offset,
     ISR_lock_Context *lock_context)
