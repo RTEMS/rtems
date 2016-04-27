@@ -40,7 +40,6 @@ void _CORE_message_queue_Seize(
   CORE_message_queue_Buffer_control *the_message;
 
   executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
-  _CORE_message_queue_Acquire_critical( the_message_queue, lock_context );
   the_message = _CORE_message_queue_Get_pending_message( the_message_queue );
   if ( the_message != NULL ) {
     the_message_queue->number_of_pending_messages -= 1;

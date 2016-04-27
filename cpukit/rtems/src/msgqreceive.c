@@ -68,6 +68,11 @@ rtems_status_code rtems_message_queue_receive(
       else
         wait = true;
 
+      _CORE_message_queue_Acquire_critical(
+        &the_message_queue->message_queue,
+        &lock_context
+      );
+
       executing = _Thread_Executing;
       _CORE_message_queue_Seize(
         &the_message_queue->message_queue,

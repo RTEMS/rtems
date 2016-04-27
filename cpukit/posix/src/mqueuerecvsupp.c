@@ -96,6 +96,11 @@ ssize_t _POSIX_Message_queue_Receive_support(
       else
         do_wait = wait;
 
+      _CORE_message_queue_Acquire_critical(
+        &the_mq->Message_queue,
+        &lock_context
+      );
+
       /*
        *  Now perform the actual message receive
        */
