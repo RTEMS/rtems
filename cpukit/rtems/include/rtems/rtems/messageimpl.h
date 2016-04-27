@@ -101,27 +101,6 @@ RTEMS_INLINE_ROUTINE void _Message_queue_Free (
   _Objects_Free( &_Message_queue_Information, &the_message_queue->Object );
 }
 
-/**
- *  @brief Maps message queue IDs to message queue control blocks.
- *
- *  This function maps message queue IDs to message queue control
- *  blocks.  If ID corresponds to a local message queue, then it
- *  returns the_message_queue control pointer which maps to ID
- *  and location is set to OBJECTS_LOCAL.  If the message queue ID is
- *  global and resides on a remote node, then location is set
- *  to OBJECTS_REMOTE, and the_message_queue is undefined.
- *  Otherwise, location is set to OBJECTS_ERROR and
- *  the_message_queue is undefined.
- */
-RTEMS_INLINE_ROUTINE Message_queue_Control *_Message_queue_Get (
-  Objects_Id         id,
-  Objects_Locations *location
-)
-{
-  return (Message_queue_Control *)
-     _Objects_Get( &_Message_queue_Information, id, location );
-}
-
 RTEMS_INLINE_ROUTINE Message_queue_Control *
 _Message_queue_Get_interrupt_disable(
   Objects_Id         id,
