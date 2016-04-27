@@ -44,7 +44,7 @@ void _TOD_Adjust(
 
     _Timestamp_Add_to( &tod, &delta );
 
-    _TOD_Set_with_timestamp( &tod );
+    _TOD_Set( &tod );
 
   _Thread_Enable_dispatch();
 }

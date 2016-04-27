@@ -39,7 +39,7 @@ rtems_status_code rtems_clock_set(
     _Timestamp_Set( &tod_as_timestamp, seconds, nanoseconds );
 
     _Thread_Disable_dispatch();
-      _TOD_Set_with_timestamp( &tod_as_timestamp );
+      _TOD_Set( &tod_as_timestamp );
     _Thread_Enable_dispatch();
 
     return RTEMS_SUCCESSFUL;

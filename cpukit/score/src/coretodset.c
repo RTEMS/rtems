@@ -22,7 +22,7 @@
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/watchdogimpl.h>
 
-void _TOD_Set_with_timestamp(
+void _TOD_Set(
   const Timestamp_Control *tod_as_timestamp
 )
 {

@@ -42,7 +42,7 @@ int clock_settime(
       rtems_set_errno_and_return_minus_one( EINVAL );
 
     _Thread_Disable_dispatch();
-      _TOD_Set( tp );
+      _TOD_Set_with_timespec( tp );
     _Thread_Enable_dispatch();
   }
 #ifdef _POSIX_CPUTIME

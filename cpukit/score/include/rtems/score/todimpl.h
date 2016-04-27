@@ -143,30 +143,23 @@ typedef struct {
 extern TOD_Control _TOD;
 
 /**
- *  @brief Sets the time of day from timestamp.
+ * @brief Sets the time of day.
  *
- *  The @a tod_as_timestamp timestamp represents the time since UNIX epoch.
- *  The watchdog seconds chain will be adjusted.
- *
- *  @param[in] tod_as_timestamp is the constant of the time of day as a timestamp
+ * @param tod_as_timestamp The new time of day in timestamp format representing
+ *   the time since UNIX Epoch.
  */
-void _TOD_Set_with_timestamp(
+void _TOD_Set(
   const Timestamp_Control *tod_as_timestamp
 );
 
 /**
- *  @brief Sets the time of day from timespec.
+ * @brief Sets the time of day with timespec format.
  *
- *  The @a tod_as_timestamp timestamp represents the time since UNIX epoch.
- *  The watchdog seconds chain will be adjusted.
+ * @param tod_as_timespec The new time of day in timespec format.
  *
- *  In the process the input given as timespec will be transformed to FreeBSD
- *  bintime format to guarantee the right format for later setting it with a
- *  timestamp.
- *
- *  @param[in] tod_as_timespec is the constant of the time of day as a timespec
+ * @see _TOD_Set().
  */
-static inline void _TOD_Set(
+static inline void _TOD_Set_with_timespec(
   const struct timespec *tod_as_timespec
 )
 {
@@ -177,7 +170,7 @@ static inline void _TOD_Set(
     tod_as_timespec->tv_sec,
     tod_as_timespec->tv_nsec
   );
-  _TOD_Set_with_timestamp( &tod_as_timestamp );
+  _TOD_Set( &tod_as_timestamp );
 }
 
 /**
