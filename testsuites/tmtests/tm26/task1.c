@@ -575,8 +575,16 @@ void complete_test( void )
   thread_get_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) _Semaphore_Get( Semaphore_id, &location );
+    for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
+      ISR_lock_Context lock_context;
+
+      (void) _Semaphore_Get_interrupt_disable(
+        Semaphore_id,
+        &location,
+        &lock_context
+      );
+      _ISR_lock_ISR_enable( &lock_context );
+    }
   semaphore_get_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
@@ -592,7 +600,7 @@ void complete_test( void )
   set_thread_heir( _Thread_Get_executing() );
   set_thread_dispatch_necessary( false );
 
-  for (index = 0; index < 2 * OPERATION_COUNT; ++index) {
+  for (index = 0; index < OPERATION_COUNT; ++index) {
     _Thread_Unnest_dispatch();
   }
 

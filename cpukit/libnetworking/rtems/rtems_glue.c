@@ -330,11 +330,8 @@ rtems_bsdnet_initialize (void)
 		return -1;
 	}
 #ifdef RTEMS_FAST_MUTEX
-	{
-	Objects_Locations location;
-	the_networkSemaphore = _Semaphore_Get( networkSemaphore, &location );
-	_Thread_Enable_dispatch();
-	}
+	the_networkSemaphore = (Semaphore_Control *)
+		_Objects_Get_no_protection(networkSemaphore, &_Semaphore_Information);
 #endif
 
 	/*

@@ -145,26 +145,6 @@ RTEMS_INLINE_ROUTINE void _Semaphore_Free (
  *  and the_semaphore is undefined.  Otherwise, location is set
  *  to OBJECTS_ERROR and the_semaphore is undefined.
  */
-RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get (
-  Objects_Id         id,
-  Objects_Locations *location
-)
-{
-  return (Semaphore_Control *)
-    _Objects_Get( &_Semaphore_Information, id, location );
-}
-
-/**
- *  @brief Maps semaphore IDs to semaphore control blocks.
- *
- *  This function maps semaphore IDs to semaphore control blocks.
- *  If ID corresponds to a local semaphore, then it returns
- *  the_semaphore control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  if the semaphore ID is global and
- *  resides on a remote node, then location is set to OBJECTS_REMOTE,
- *  and the_semaphore is undefined.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_semaphore is undefined.
- */
 RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get_interrupt_disable (
   Objects_Id         id,
   Objects_Locations *location,
