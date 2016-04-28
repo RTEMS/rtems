@@ -121,26 +121,6 @@ typedef struct {
   Priority_Control             priority_ceiling;
 }   CORE_mutex_Attributes;
 
-#ifdef __RTEMS_STRICT_ORDER_MUTEX__
-/**
- * @brief The control block to manage lock chain of priority inheritance mutex.
- *
- * The following defines the control block used to manage lock chain of
- * priority inheritance mutex.
- */
-  typedef struct{
-    /** This field is a chian of locked mutex by a thread,new mutex will
-     *  be added to the head of queue, and the mutex which will be released
-     *  must be the head of queue.
-     */
-    Chain_Node                lock_queue;
-    /** This field is the priority of thread before locking this mutex
-     *
-     */
-    Priority_Control          priority_before;
-  }  CORE_mutex_order_list;
-#endif
-
 /**
  *  @brief Control block used to manage each mutex.
  *
@@ -170,11 +150,6 @@ typedef struct {
    *  has not unlocked it.  If the thread is not locked, there is no holder.
    */
   Thread_Control         *holder;
-#ifdef __RTEMS_STRICT_ORDER_MUTEX__
-  /** This field is used to manipulate the priority inheritance mutex queue*/
-  CORE_mutex_order_list   queue;
-#endif
-
 }   CORE_mutex_Control;
 
 /**@}*/

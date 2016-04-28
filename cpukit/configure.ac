@@ -272,12 +272,6 @@ RTEMS_CPUOPT([__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__],
   [1],
   [disable inlining _Thread_Enable_dispatch])
 
-## This gives the same behavior as 4.8 and older
-RTEMS_CPUOPT([__RTEMS_STRICT_ORDER_MUTEX__],
-  [test x"${ENABLE_STRICT_ORDER_MUTEX}" = x"1"],
-  [1],
-  [disable strict order mutex])
-
 ## Deactivate ada bindings
 RTEMS_CPUOPT([__RTEMS_ADA__],
   [test x"${enable_ada}" = x"yes"],

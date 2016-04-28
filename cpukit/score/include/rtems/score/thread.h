@@ -808,12 +808,6 @@ struct _Thread_Control {
   SMP_lock_Stats Potpourri_stats;
 #endif
 
-#ifdef __RTEMS_STRICT_ORDER_MUTEX__
-  /** This field is the head of queue of priority inheritance mutex
-   *  held by the thread.
-   */
-  Chain_Control            lock_mutex;
-#endif
 #if defined(RTEMS_SMP)
   /**
    * @brief Resource node to build a dependency tree in case this thread owns

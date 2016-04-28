@@ -145,11 +145,6 @@ bool _Thread_Initialize(
   }
   _Thread_queue_Heads_initialize( the_thread->Wait.spare_heads );
 
-  #ifdef __RTEMS_STRICT_ORDER_MUTEX__
-    /* Initialize the head of chain of held mutexes */
-    _Chain_Initialize_empty(&the_thread->lock_mutex);
-  #endif
-
   /*
    *  General initialization
    */

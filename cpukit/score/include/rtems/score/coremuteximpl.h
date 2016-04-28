@@ -66,13 +66,6 @@ typedef enum {
    */
   CORE_MUTEX_TIMEOUT,
 
-#if defined(__RTEMS_STRICT_ORDER_MUTEX__)
-  /** This status indicates that a thread not release the mutex which has
-   *  the priority inheritance property in a right order.
-   */
-  CORE_MUTEX_RELEASE_NOT_ORDER,
-#endif
-
   /** This status indicates that a thread of logically greater importance
    *  than the ceiling priority attempted to lock this mutex.
    */
@@ -489,13 +482,6 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
     the_mutex->nest_count = 1;
     if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
          _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ){
-
-#ifdef __RTEMS_STRICT_ORDER_MUTEX__
-       _Chain_Prepend_unprotected( &executing->lock_mutex,
-                                   &the_mutex->queue.lock_queue );
-       the_mutex->queue.priority_before = executing->current_priority;
-#endif
-
       executing->resource_count++;
     }
 
