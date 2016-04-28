@@ -78,10 +78,19 @@ typedef struct {
 	.mas7 = QORIQ_MMU_DEVICE_MAS7 \
 }
 
+/*
+ * MMU entry for BMan and QMan software portals.
+ *
+ * The M bit must be set if stashing is used, see 3.3.8.6 DQRR Entry Stashing
+ * and 3.3.8 Software Portals in T4240DPAARM.
+ *
+ * The G bit must be set, otherwise ECC errors in the QMan software portals
+ * will occur.  No documentation reference for this is available.
+ */
 #define ENTRY_DEV_CACHED(b, s) { \
 	.begin = (uint32_t) b, \
 	.size = (uint32_t) s, \
-	.mas2 = 0, \
+	.mas2 = FSL_EIS_MAS2_M | FSL_EIS_MAS2_G, \
 	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW, \
 	.mas7 = QORIQ_MMU_DEVICE_MAS7 \
 }
