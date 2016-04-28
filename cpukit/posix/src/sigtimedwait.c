@@ -150,20 +150,18 @@ int sigtimedwait(
 
   the_info->si_signo = -1;
 
-  _Thread_Disable_dispatch();
-    executing->Wait.return_code     = EINTR;
-    executing->Wait.option          = *set;
-    executing->Wait.return_argument = the_info;
-    _Thread_queue_Enqueue_critical(
-      &_POSIX_signals_Wait_queue.Queue,
-      POSIX_SIGNALS_TQ_OPERATIONS,
-      executing,
-      STATES_WAITING_FOR_SIGNAL | STATES_INTERRUPTIBLE_BY_SIGNAL,
-      interval,
-      EAGAIN,
-      &lock_context
-    );
-  _Thread_Enable_dispatch();
+  executing->Wait.return_code     = EINTR;
+  executing->Wait.option          = *set;
+  executing->Wait.return_argument = the_info;
+  _Thread_queue_Enqueue_critical(
+    &_POSIX_signals_Wait_queue.Queue,
+    POSIX_SIGNALS_TQ_OPERATIONS,
+    executing,
+    STATES_WAITING_FOR_SIGNAL | STATES_INTERRUPTIBLE_BY_SIGNAL,
+    interval,
+    EAGAIN,
+    &lock_context
+  );
 
   /*
    * When the thread is set free by a signal, it is need to eliminate
