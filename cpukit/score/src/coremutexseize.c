@@ -24,25 +24,6 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/thread.h>
 
-#if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
-void _CORE_mutex_Seize(
-  CORE_mutex_Control  *_the_mutex,
-  Thread_Control      *_executing,
-  bool                 _wait,
-  Watchdog_Interval    _timeout,
-  ISR_Level            _level
-)
-{
-  _CORE_mutex_Seize_body(
-    _the_mutex,
-    _executing,
-    _wait,
-    _timeout,
-    _level
-  );
-}
-#endif
-
 void _CORE_mutex_Seize_interrupt_blocking(
   CORE_mutex_Control  *the_mutex,
   Thread_Control      *executing,

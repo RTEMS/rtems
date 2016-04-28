@@ -266,12 +266,6 @@ RTEMS_CPUOPT([__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__],
   [1],
   [disable inlining _Thread_Enable_dispatch])
 
-## This improves both the size and coverage analysis.
-RTEMS_CPUOPT([__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__],
-  [test x"${RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE}" = x"1"],
-  [1],
-  [disable inlining _Thread_Enable_dispatch])
-
 ## Deactivate ada bindings
 RTEMS_CPUOPT([__RTEMS_ADA__],
   [test x"${enable_ada}" = x"yes"],

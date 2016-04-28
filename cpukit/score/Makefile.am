@@ -176,8 +176,7 @@ libscore_a_SOURCES += src/coremsg.c src/coremsgbroadcast.c \
 
 ## CORE_MUTEX_C_FILES
 libscore_a_SOURCES += src/coremutex.c \
-    src/coremutexseize.c src/coremutexsurrender.c \
-    src/coremutexseizeintr.c
+    src/coremutexseize.c src/coremutexsurrender.c
 
 ## CORE_PERCPU_C_FILES
 libscore_a_SOURCES += src/percpu.c
