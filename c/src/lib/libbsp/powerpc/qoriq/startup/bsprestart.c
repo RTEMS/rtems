@@ -34,6 +34,8 @@ static RTEMS_NO_RETURN void do_restart(void *addr)
   void (*restart)(uintptr_t);
   uintptr_t fdt;
 
+  qoriq_reset_qman_and_bman();
+
   restart = addr;
 
   fdt = (uintptr_t) bsp_fdt_get();

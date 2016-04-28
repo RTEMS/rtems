@@ -529,6 +529,17 @@ extern uint8_t qoriq_bman_portal[2][16777216];
 extern uint8_t qoriq_qman_portal[2][16777216];
 #endif
 
+static inline void qoriq_reset_qman_and_bman(void)
+{
+#if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
+  qoriq.dcfg.qmbm_warmrst = 0x3;
+
+  while ((qoriq.dcfg.qmbm_warmrst & 0x3) != 0) {
+    /* Wait for reset done */
+  }
+#endif
+}
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
