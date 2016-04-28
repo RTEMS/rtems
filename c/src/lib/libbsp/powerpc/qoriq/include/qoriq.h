@@ -272,6 +272,11 @@ typedef struct {
 } qoriq_law;
 
 typedef struct {
+  uint32_t reserved_0x0[640];
+  uint32_t qmbm_warmrst;
+} qoriq_dcfg;
+
+typedef struct {
   QORIQ_RESERVE(0x0000, 0x1000);
 } qoriq_bman;
 
@@ -291,7 +296,10 @@ typedef struct {
   QORIQ_RESERVE(0x001000, 0x040000);
   qoriq_pic pic;
   QORIQ_FILL(0x040000, 0x070000, qoriq_pic);
-  QORIQ_RESERVE(0x070000, 0x114000);
+  QORIQ_RESERVE(0x070000, 0x0e0000);
+  qoriq_dcfg dcfg;
+  QORIQ_FILL(0x0e0000, 0x0e1000, qoriq_dcfg);
+  QORIQ_RESERVE(0x0e1000, 0x114000);
   qoriq_esdhc esdhc;
   QORIQ_FILL(0x114000, 0x115000, qoriq_esdhc);
   QORIQ_RESERVE(0x115000, 0x11c500);
