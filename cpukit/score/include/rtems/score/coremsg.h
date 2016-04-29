@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_COREMSG_H
 
 #include <rtems/score/chain.h>
+#include <rtems/score/isrlock.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/watchdog.h>
 
@@ -62,6 +63,8 @@ extern "C" {
    */
   #define RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND
 #endif
+
+typedef struct CORE_message_queue_Control CORE_message_queue_Control;
 
 /**
  *  @brief Data types needed to manipulate the contents of message buffers.
@@ -117,7 +120,10 @@ typedef enum {
    *  notification handler is invoked when the message queue makes a
    *  0->1 transition on pending messages.
    */
-  typedef void (*CORE_message_queue_Notify_Handler)( void * );
+  typedef void (*CORE_message_queue_Notify_Handler)(
+    CORE_message_queue_Control *,
+    ISR_lock_Context *
+  );
 #endif
 
 /**
@@ -126,7 +132,7 @@ typedef enum {
  *  The following defines the control block used to manage each
  *  Message Queue.
  */
-typedef struct {
+struct CORE_message_queue_Control {
   /** This field is the Waiting Queue used to manage the set of tasks
    *  which are blocked waiting to receive a message from this queue.
    */
@@ -162,14 +168,12 @@ typedef struct {
      *  from zero (0) messages pending to one (1) message pending.
      */
     CORE_message_queue_Notify_Handler  notify_handler;
-    /** This field is the argument passed to the @ref notify_argument. */
-    void                              *notify_argument;
   #endif
   /** This chain is the set of inactive messages.  A message is inactive
    *  when it does not contain a pending message.
    */
   Chain_Control                      Inactive_messages;
-}   CORE_message_queue_Control;
+};
 
 /**@}*/
 

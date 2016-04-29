@@ -612,17 +612,15 @@ RTEMS_INLINE_ROUTINE
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
   RTEMS_INLINE_ROUTINE void _CORE_message_queue_Set_notify (
     CORE_message_queue_Control        *the_message_queue,
-    CORE_message_queue_Notify_Handler  the_handler,
-    void                              *the_argument
+    CORE_message_queue_Notify_Handler  the_handler
   )
   {
-    the_message_queue->notify_handler  = the_handler;
-    the_message_queue->notify_argument = the_argument;
+    the_message_queue->notify_handler = the_handler;
   }
 #else
   /* turn it into nothing if not enabled */
-  #define _CORE_message_queue_Set_notify( \
-           the_message_queue, the_handler, the_argument )
+  #define _CORE_message_queue_Set_notify( the_message_queue, the_handler ) \
+    do { } while ( 0 )
 #endif
 
 RTEMS_INLINE_ROUTINE Thread_Control *_CORE_message_queue_Do_dequeue_receiver(

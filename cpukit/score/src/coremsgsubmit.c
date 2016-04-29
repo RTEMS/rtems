@@ -79,7 +79,28 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
       size,
       submit_type
     );
+
+#if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
+    /*
+     *  According to POSIX, does this happen before or after the message
+     *  is actually enqueued.  It is logical to think afterwards, because
+     *  the message is actually in the queue at this point.
+     */
+    if (
+      the_message_queue->number_of_pending_messages == 1
+        && the_message_queue->notify_handler != NULL
+    ) {
+      ( *the_message_queue->notify_handler )(
+        the_message_queue,
+        lock_context
+      );
+    } else {
+      _CORE_message_queue_Release( the_message_queue, lock_context );
+    }
+#else
     _CORE_message_queue_Release( the_message_queue, lock_context );
+#endif
+
     return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
   }
 

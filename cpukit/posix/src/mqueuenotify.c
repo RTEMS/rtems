@@ -39,16 +39,24 @@
  */
 
 static void _POSIX_Message_queue_Notify_handler(
-  void    *user_data
+  CORE_message_queue_Control *the_message_queue,
+  ISR_lock_Context           *lock_context
 )
 {
   POSIX_Message_queue_Control *the_mq;
+  int                          signo;
 
-  the_mq = user_data;
+  the_mq = RTEMS_CONTAINER_OF(
+    the_message_queue,
+    POSIX_Message_queue_Control,
+    Message_queue
+  );
 
-  kill( getpid(), the_mq->notification.sigev_signo );
+  signo = the_mq->notification.sigev_signo;
+  _CORE_message_queue_Set_notify( &the_mq->Message_queue, NULL );
+  _CORE_message_queue_Release( &the_mq->Message_queue, lock_context );
 
-  _CORE_message_queue_Set_notify( &the_mq->Message_queue, NULL, NULL );
+  kill( getpid(), signo );
 }
 
 int mq_notify(
@@ -72,18 +80,17 @@ int mq_notify(
           rtems_set_errno_and_return_minus_one( EBUSY );
         }
 
-        _CORE_message_queue_Set_notify( &the_mq->Message_queue, NULL, NULL );
+        _CORE_message_queue_Set_notify( &the_mq->Message_queue, NULL );
 
         the_mq->notification = *notification;
 
         _CORE_message_queue_Set_notify(
           &the_mq->Message_queue,
-          _POSIX_Message_queue_Notify_handler,
-          the_mq
+          _POSIX_Message_queue_Notify_handler
         );
       } else {
 
-        _CORE_message_queue_Set_notify( &the_mq->Message_queue, NULL, NULL );
+        _CORE_message_queue_Set_notify( &the_mq->Message_queue, NULL );
 
       }
 

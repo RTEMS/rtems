@@ -55,7 +55,7 @@ bool _CORE_message_queue_Initialize(
   the_message_queue->maximum_pending_messages   = maximum_pending_messages;
   the_message_queue->number_of_pending_messages = 0;
   the_message_queue->maximum_message_size       = maximum_message_size;
-  _CORE_message_queue_Set_notify( the_message_queue, NULL, NULL );
+  _CORE_message_queue_Set_notify( the_message_queue, NULL );
 
   allocated_message_size = maximum_message_size;
 
