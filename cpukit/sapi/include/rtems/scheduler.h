@@ -151,6 +151,26 @@
     }
 #endif
 
+#ifdef CONFIGURE_SCHEDULER_STRONG_APA
+  #include <rtems/score/schedulerstrongapa.h>
+
+  #define RTEMS_SCHEDULER_CONTEXT_STRONG_APA_NAME( name ) \
+    RTEMS_SCHEDULER_CONTEXT_NAME( strong_APA_ ## name )
+
+  #define RTEMS_SCHEDULER_CONTEXT_STRONG_APA( name, prio_count ) \
+    static struct { \
+      Scheduler_strong_APA_Context Base; \
+      Chain_Control                Ready[ ( prio_count ) ]; \
+    } RTEMS_SCHEDULER_CONTEXT_STRONG_APA_NAME( name )
+
+  #define RTEMS_SCHEDULER_CONTROL_STRONG_APA( name, obj_name ) \
+    { \
+      &RTEMS_SCHEDULER_CONTEXT_STRONG_APA_NAME( name ).Base.Base.Base, \
+      SCHEDULER_STRONG_APA_ENTRY_POINTS, \
+      ( obj_name ) \
+    }
+#endif
+
 #ifdef CONFIGURE_SCHEDULER_SIMPLE
   #include <rtems/score/schedulersimple.h>
 

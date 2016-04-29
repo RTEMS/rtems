@@ -771,6 +771,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  *  - CONFIGURE_SCHEDULER_PRIORITY_SMP - Deterministic Priority SMP Scheduler
  *  - CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP - Deterministic
  *    Priority SMP Affinity Scheduler
+ *  - CONFIGURE_SCHEDULER_STRONG_APA - Strong APA Scheduler
  *  - CONFIGURE_SCHEDULER_SIMPLE - Light-weight Priority Scheduler
  *  - CONFIGURE_SCHEDULER_SIMPLE_SMP - Simple SMP Priority Scheduler
  *  - CONFIGURE_SCHEDULER_EDF - EDF Scheduler
@@ -795,6 +796,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY_SMP) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP) && \
+    !defined(CONFIGURE_SCHEDULER_STRONG_APA) && \
     !defined(CONFIGURE_SCHEDULER_SIMPLE) && \
     !defined(CONFIGURE_SCHEDULER_SIMPLE_SMP) && \
     !defined(CONFIGURE_SCHEDULER_EDF) && \
@@ -886,6 +888,30 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
         dflt, \
         CONFIGURE_SCHEDULER_NAME \
       )
+  #endif
+#endif
+
+/*
+ * If the Strong APA Scheduler is selected, then configure for
+ * it.
+ */
+#if defined(CONFIGURE_SCHEDULER_STRONG_APA)
+  #if !defined(CONFIGURE_SCHEDULER_NAME)
+    /** Configure the name of the scheduler instance */
+    #define CONFIGURE_SCHEDULER_NAME rtems_build_name('M', 'A', 'P', 'A')
+  #endif
+
+  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+    /** Configure the context needed by the scheduler instance */
+    #define CONFIGURE_SCHEDULER_CONTEXT \
+      RTEMS_SCHEDULER_CONTEXT_STRONG_APA( \
+        dflt, \
+        CONFIGURE_MAXIMUM_PRIORITY + 1 \
+      )
+
+    /** Configure the controls for this scheduler instance */
+    #define CONFIGURE_SCHEDULER_CONTROLS \
+      RTEMS_SCHEDULER_CONTROL_STRONG_APA(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
 
@@ -3263,6 +3289,9 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       #endif
       #ifdef CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
         Scheduler_priority_affinity_SMP_Node Priority_affinity_SMP;
+      #endif
+      #ifdef CONFIGURE_SCHEDULER_STRONG_APA
+        Scheduler_strong_APA_Node Strong_APA;
       #endif
       #ifdef CONFIGURE_SCHEDULER_USER_PER_THREAD
         CONFIGURE_SCHEDULER_USER_PER_THREAD User;

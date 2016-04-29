@@ -38,6 +38,7 @@ SUBDIRS += smpscheduler02
 SUBDIRS += smpscheduler03
 SUBDIRS += smpschedsem01
 SUBDIRS += smpsignal01
+SUBDIRS += smpstrongapa01
 SUBDIRS += smpswitchextension01
 SUBDIRS += smpthreadlife01
 SUBDIRS += smpunsupported01

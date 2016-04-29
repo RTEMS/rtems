@@ -128,6 +128,7 @@ if HAS_SMP
 include_rtems_score_HEADERS += include/rtems/score/schedulerprioritysmpimpl.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerpriorityaffinitysmp.h
 include_rtems_score_HEADERS += include/rtems/score/schedulersimplesmp.h
+include_rtems_score_HEADERS += include/rtems/score/schedulerstrongapa.h
 endif
 
 ## src
@@ -148,6 +149,7 @@ libscore_a_SOURCES += src/schedulerchangeroot.c
 libscore_a_SOURCES += src/schedulerpriorityaffinitysmp.c
 libscore_a_SOURCES += src/schedulerprioritysmp.c
 libscore_a_SOURCES += src/schedulersimplesmp.c
+libscore_a_SOURCES += src/schedulerstrongapa.c
 libscore_a_SOURCES += src/schedulersmpdebug.c
 libscore_a_SOURCES += src/smp.c
 libscore_a_SOURCES += src/smplock.c
