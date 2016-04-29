@@ -580,22 +580,6 @@ RTEMS_INLINE_ROUTINE int _CORE_message_queue_Get_message_priority (
 }
 
 /**
- * This function sets the priority of @a the_message.
- *
- * @note It encapsulates the optional behavior that message priority is
- *       disabled if no API requires it.
- */
-RTEMS_INLINE_ROUTINE void _CORE_message_queue_Set_message_priority (
-  CORE_message_queue_Buffer_control *the_message,
-  int                                priority
-)
-{
-  #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
-    the_message->priority = priority;
-  #endif
-}
-
-/**
  * This function removes the first message from the_message_queue
  * and returns a pointer to it.
  */

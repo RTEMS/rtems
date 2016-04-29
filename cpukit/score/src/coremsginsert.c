@@ -48,7 +48,10 @@ void _CORE_message_queue_Insert_message(
   bool           notify;
 #endif
 
-  _CORE_message_queue_Set_message_priority( the_message, submit_type );
+#if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+  the_message->priority = submit_type;
+#endif
+
   pending_messages = &the_message_queue->Pending_messages;
 
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
