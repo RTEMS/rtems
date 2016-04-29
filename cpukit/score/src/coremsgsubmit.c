@@ -72,16 +72,12 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
   the_message =
       _CORE_message_queue_Allocate_message_buffer( the_message_queue );
   if ( the_message ) {
-    the_message->Contents.size = size;
-    _CORE_message_queue_Copy_buffer(
-      buffer,
-      the_message->Contents.buffer,
-      size
-    );
     _CORE_message_queue_Insert_message(
-       the_message_queue,
-       the_message,
-       submit_type
+      the_message_queue,
+      the_message,
+      buffer,
+      size,
+      submit_type
     );
     _CORE_message_queue_Release( the_message_queue, lock_context );
     return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;

@@ -430,21 +430,21 @@ void _CORE_message_queue_Seize(
 /**
  *  @brief Insert a message into the message queue.
  *
- *  This kernel routine inserts the specified message into the
- *  message queue.  It is assumed that the message has been filled
- *  in before this routine is called.
+ *  Copies the specified content into the message storage space and then
+ *  inserts the message into the message queue according to the submit type.
  *
  *  @param[in] the_message_queue points to the message queue
  *  @param[in] the_message is the message to enqueue
+ *  @param[in] content_source the message content source
+ *  @param[in] content_size the message content size in bytes
  *  @param[in] submit_type determines whether the message is prepended,
  *         appended, or enqueued in priority order.
- *
- *  - INTERRUPT LATENCY:
- *    + insert
  */
 void _CORE_message_queue_Insert_message(
   CORE_message_queue_Control        *the_message_queue,
   CORE_message_queue_Buffer_control *the_message,
+  const void                        *content_source,
+  size_t                             content_size,
   CORE_message_queue_Submit_types    submit_type
 );
 

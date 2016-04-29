@@ -90,16 +90,12 @@ void _CORE_message_queue_Seize(
        *  puts the messages in the message queue on behalf of the
        *  waiting task.
        */
-      the_message->Contents.size = (size_t) the_thread->Wait.option;
-      _CORE_message_queue_Copy_buffer(
-        the_thread->Wait.return_argument_second.immutable_object,
-        the_message->Contents.buffer,
-        the_message->Contents.size
-      );
       _CORE_message_queue_Insert_message(
         the_message_queue,
         the_message,
-        the_thread->Wait.count
+        the_thread->Wait.return_argument_second.immutable_object,
+        (size_t) the_thread->Wait.option,
+        (CORE_message_queue_Submit_types) the_thread->Wait.count
       );
       _Thread_queue_Extract_critical(
         &the_message_queue->Wait_queue.Queue,

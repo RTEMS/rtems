@@ -40,6 +40,8 @@ static bool _CORE_message_queue_Order(
 void _CORE_message_queue_Insert_message(
   CORE_message_queue_Control        *the_message_queue,
   CORE_message_queue_Buffer_control *the_message,
+  const void                        *content_source,
+  size_t                             content_size,
   CORE_message_queue_Submit_types    submit_type
 )
 {
@@ -47,6 +49,14 @@ void _CORE_message_queue_Insert_message(
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
   bool           notify;
 #endif
+
+  the_message->Contents.size = content_size;
+
+  _CORE_message_queue_Copy_buffer(
+    content_source,
+    the_message->Contents.buffer,
+    content_size
+  );
 
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
   the_message->priority = submit_type;
