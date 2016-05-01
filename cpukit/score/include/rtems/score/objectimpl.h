@@ -630,8 +630,10 @@ Objects_Control *_Objects_Get_isr_disable(
  *
  * @param id The object identifier.  This is the first parameter since usual
  *   callers get the object identifier as the first parameter themself.
+ * @param lock_context The interrupt lock context.  This is the second
+ *   parameter since usual callers get the interrupt lock context as the second
+ *   parameter themself.
  * @param information The object class information block.
- * @param lock_context The interrupt lock context.
  *
  * @retval NULL No associated object exists.
  * @retval other The pointer to the associated object control block.
@@ -640,8 +642,8 @@ Objects_Control *_Objects_Get_isr_disable(
  */
 Objects_Control *_Objects_Get_local(
   Objects_Id                 id,
-  const Objects_Information *information,
-  ISR_lock_Context          *lock_context
+  ISR_lock_Context          *lock_context,
+  const Objects_Information *information
 );
 
 /**

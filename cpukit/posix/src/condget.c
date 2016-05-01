@@ -53,7 +53,7 @@ POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get(
 
   return (POSIX_Condition_variables_Control *) _Objects_Get_local(
     (Objects_Id) *cond,
-    &_POSIX_Condition_variables_Information,
-    lock_context
+    lock_context,
+    &_POSIX_Condition_variables_Information
   );
 }

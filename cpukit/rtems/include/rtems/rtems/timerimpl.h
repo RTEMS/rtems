@@ -89,8 +89,8 @@ RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Get(
 {
   return (Timer_Control *) _Objects_Get_local(
     id,
-    &_Timer_Information,
-    lock_context
+    lock_context,
+    &_Timer_Information
   );
 }
 

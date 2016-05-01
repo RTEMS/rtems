@@ -63,8 +63,8 @@ POSIX_RWLock_Control *_POSIX_RWLock_Get(
 
   return (POSIX_RWLock_Control *) _Objects_Get_local(
     *rwlock,
-    &_POSIX_RWLock_Information,
-    lock_context
+    lock_context,
+    &_POSIX_RWLock_Information
   );
 }
 

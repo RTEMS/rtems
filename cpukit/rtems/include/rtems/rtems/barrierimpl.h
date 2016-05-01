@@ -75,7 +75,7 @@ RTEMS_INLINE_ROUTINE Barrier_Control *_Barrier_Get(
 )
 {
   return (Barrier_Control *)
-    _Objects_Get_local( id, &_Barrier_Information, lock_context );
+    _Objects_Get_local( id, lock_context, &_Barrier_Information );
 }
 
 /**

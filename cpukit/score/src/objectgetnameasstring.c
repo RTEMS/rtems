@@ -56,7 +56,7 @@ char *_Objects_Get_name_as_string(
   if ( !information )
     return NULL;
 
-  the_object = _Objects_Get_local( tmpId, information, &lock_context );
+  the_object = _Objects_Get_local( tmpId, &lock_context, information );
   if ( the_object == NULL ) {
     return NULL;
   }

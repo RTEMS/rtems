@@ -86,8 +86,8 @@ RTEMS_INLINE_ROUTINE POSIX_Spinlock_Control *_POSIX_Spinlock_Get(
 
   return (POSIX_Spinlock_Control *) _Objects_Get_local(
     *spinlock,
-    &_POSIX_Spinlock_Information,
-    lock_context
+    lock_context,
+    &_POSIX_Spinlock_Information
   );
 }
 

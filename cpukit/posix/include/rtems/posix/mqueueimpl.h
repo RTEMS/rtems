@@ -112,7 +112,7 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get(
 )
 {
   return (POSIX_Message_queue_Control *)
-    _Objects_Get_local( id, &_POSIX_Message_queue_Information, lock_context );
+    _Objects_Get_local( id, lock_context, &_POSIX_Message_queue_Information );
 }
 
 /*
@@ -161,19 +161,6 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Namespace_remove (
 {
   _Objects_Namespace_remove( 
     &_POSIX_Message_queue_Information, &the_mq->Object );
-}
-
-RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *
-_POSIX_Message_queue_Get_interrupt_disable(
-  mqd_t              id,
-  ISR_lock_Context  *lock_context
-)
-{
-  return (POSIX_Message_queue_Control *) _Objects_Get_local(
-    (Objects_Id) id,
-    &_POSIX_Message_queue_Information,
-    lock_context
-  );
 }
 
 RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *

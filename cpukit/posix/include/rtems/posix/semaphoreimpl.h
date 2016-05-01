@@ -67,8 +67,8 @@ RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get(
 {
   return (POSIX_Semaphore_Control *) _Objects_Get_local(
     (Objects_Id) *id,
-    &_POSIX_Semaphore_Information,
-    lock_context
+    lock_context,
+    &_POSIX_Semaphore_Information
   );
 }
 

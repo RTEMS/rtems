@@ -72,7 +72,7 @@ RTEMS_INLINE_ROUTINE Dual_ported_memory_Control *_Dual_ported_memory_Get(
 )
 {
   return (Dual_ported_memory_Control *)
-    _Objects_Get_local( id, &_Dual_ported_memory_Information, lock_context );
+    _Objects_Get_local( id, lock_context, &_Dual_ported_memory_Information );
 }
 
 /**@}*/
