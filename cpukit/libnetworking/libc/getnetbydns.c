@@ -80,8 +80,6 @@
 
 #include "res_config.h"
 
-extern int h_errno;
-
 #define BYADDR 0
 #define BYNAME 1
 #define	MAXALIASES	35

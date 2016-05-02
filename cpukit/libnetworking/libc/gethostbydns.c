@@ -118,7 +118,6 @@ typedef union {
     char ac;
 } align;
 
-extern int h_errno;
 int _dns_ttl_;
 
 #ifdef DEBUG

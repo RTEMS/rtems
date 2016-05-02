@@ -69,15 +69,6 @@
 #define	__RES	19960801
 
 /*%
- * This used to be defined in res_query.c, now it's in herror.c.  It was
- * never extern'd by any *.h file before it was placed here.  herror.c is
- * part of libresolv.a even though it might make more sense in libnetdb.a
- * or even libnet.a.
- */
-
-extern int h_errno;
-
-/*%
  * Resolver configuration file.
  * Normally not present, but may contain the address of the
  * initial name server(s) to query and the domain search list.

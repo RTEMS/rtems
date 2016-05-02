@@ -10,11 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
- * 4. Neither the name of the University nor the names of its contributors
+ * 3. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
  *
@@ -55,19 +51,38 @@
 /*
  *      @(#)netdb.h	8.1 (Berkeley) 6/2/93
  *      From: Id: netdb.h,v 8.9 1996/11/19 08:39:29 vixie Exp $
- * $FreeBSD: src/include/netdb.h,v 1.34 2005/02/14 11:33:11 phantom Exp $
+ * $FreeBSD: head/include/netdb.h 301711 2016-06-09 01:28:44Z markj $
  */
- 
 
 #ifndef _NETDB_H_
 #define _NETDB_H_
 
 #include <sys/cdefs.h>
-#include <rtems/bsdnet/_types.h>
+#include <sys/_types.h>
+
+#ifndef _IN_ADDR_T_DECLARED
+typedef	__uint32_t	in_addr_t;
+#define	_IN_ADDR_T_DECLARED
+#endif
+
+#ifndef _IN_PORT_T_DECLARED
+typedef	__uint16_t	in_port_t;
+#define	_IN_PORT_T_DECLARED
+#endif
+
+#ifndef _SIZE_T_DECLARED
+typedef	__size_t	size_t;
+#define	_SIZE_T_DECLARED
+#endif
 
 #ifndef _SOCKLEN_T_DECLARED
 typedef	__socklen_t	socklen_t;
 #define	_SOCKLEN_T_DECLARED
+#endif
+
+#ifndef _UINT32_T_DECLARED
+typedef	__uint32_t	uint32_t;
+#define	_UINT32_T_DECLARED
 #endif
 
 #ifndef _PATH_HEQUIV
@@ -77,15 +92,16 @@ typedef	__socklen_t	socklen_t;
 #define	_PATH_NETWORKS	"/etc/networks"
 #define	_PATH_PROTOCOLS	"/etc/protocols"
 #define	_PATH_SERVICES	"/etc/services"
+#define	_PATH_SERVICES_DB "/var/db/services.db"
 
-extern int h_errno;
+#define	h_errno (*__h_errno())
 
 /*
  * Structures returned by network data base library.  All addresses are
  * supplied in host order, and returned in network order (suitable for
  * use in system calls).
  */
-struct	hostent {
+struct hostent {
 	char	*h_name;	/* official name of host */
 	char	**h_aliases;	/* alias list */
 	int	h_addrtype;	/* host address type */
@@ -94,25 +110,38 @@ struct	hostent {
 #define	h_addr	h_addr_list[0]	/* address, for backward compatibility */
 };
 
-struct	netent {
+struct netent {
 	char		*n_name;	/* official name of net */
 	char		**n_aliases;	/* alias list */
 	int		n_addrtype;	/* net address type */
 	uint32_t	n_net;		/* network # */
 };
 
-struct	servent {
+struct servent {
 	char	*s_name;	/* official service name */
 	char	**s_aliases;	/* alias list */
 	int	s_port;		/* port # */
 	char	*s_proto;	/* protocol to use */
 };
 
-struct	protoent {
+struct protoent {
 	char	*p_name;	/* official protocol name */
 	char	**p_aliases;	/* alias list */
 	int	p_proto;	/* protocol # */
 };
+
+struct addrinfo {
+	int	ai_flags;	/* AI_PASSIVE, AI_CANONNAME, AI_NUMERICHOST */
+	int	ai_family;	/* AF_xxx */
+	int	ai_socktype;	/* SOCK_xxx */
+	int	ai_protocol;	/* 0 or IPPROTO_xxx for IPv4 and IPv6 */
+	socklen_t ai_addrlen;	/* length of ai_addr */
+	char	*ai_canonname;	/* canonical name for hostname */
+	struct	sockaddr *ai_addr;	/* binary address */
+	struct	addrinfo *ai_next;	/* next structure in linked list */
+};
+
+#define	IPPORT_RESERVED	1024
 
 /*
  * Error return codes from gethostbyname() and gethostbyaddr()
@@ -127,14 +156,82 @@ struct	protoent {
 #define	NO_DATA		4 /* Valid name, no data record of requested type */
 #define	NO_ADDRESS	NO_DATA		/* no address, look for MX record */
 
+/*
+ * Error return codes from getaddrinfo()
+ */
+#if 0
+/* obsoleted */
+#define	EAI_ADDRFAMILY	 1	/* address family for hostname not supported */
+#endif
+#define	EAI_AGAIN	 2	/* temporary failure in name resolution */
+#define	EAI_BADFLAGS	 3	/* invalid value for ai_flags */
+#define	EAI_FAIL	 4	/* non-recoverable failure in name resolution */
+#define	EAI_FAMILY	 5	/* ai_family not supported */
+#define	EAI_MEMORY	 6	/* memory allocation failure */
+#if 0
+/* obsoleted */
+#define	EAI_NODATA	 7	/* no address associated with hostname */
+#endif
+#define	EAI_NONAME	 8	/* hostname nor servname provided, or not known */
+#define	EAI_SERVICE	 9	/* servname not supported for ai_socktype */
+#define	EAI_SOCKTYPE	10	/* ai_socktype not supported */
+#define	EAI_SYSTEM	11	/* system error returned in errno */
+#define	EAI_BADHINTS	12	/* invalid value for hints */
+#define	EAI_PROTOCOL	13	/* resolved protocol is unknown */
+#define	EAI_OVERFLOW	14	/* argument buffer overflow */
+#define	EAI_MAX		15
+
+/*
+ * Flag values for getaddrinfo()
+ */
+#define	AI_PASSIVE	0x00000001 /* get address to use bind() */
+#define	AI_CANONNAME	0x00000002 /* fill ai_canonname */
+#define	AI_NUMERICHOST	0x00000004 /* prevent host name resolution */
+#define	AI_NUMERICSERV	0x00000008 /* prevent service name resolution */
+/* valid flags for addrinfo (not a standard def, apps should not use it) */
+#define AI_MASK \
+    (AI_PASSIVE | AI_CANONNAME | AI_NUMERICHOST | AI_NUMERICSERV | \
+    AI_ADDRCONFIG | AI_ALL | AI_V4MAPPED)
+
+#define	AI_ALL		0x00000100 /* IPv6 and IPv4-mapped (with AI_V4MAPPED) */
+#define	AI_V4MAPPED_CFG	0x00000200 /* accept IPv4-mapped if kernel supports */
+#define	AI_ADDRCONFIG	0x00000400 /* only if any address is assigned */
+#define	AI_V4MAPPED	0x00000800 /* accept IPv4-mapped IPv6 address */
+/* special recommended flags for getipnodebyname */
+#define	AI_DEFAULT	(AI_V4MAPPED_CFG | AI_ADDRCONFIG)
+
+/*
+ * Constants for getnameinfo()
+ */
+#define	NI_MAXHOST	1025
+#define	NI_MAXSERV	32
+
+/*
+ * Flag values for getnameinfo()
+ */
+#define	NI_NOFQDN	0x00000001
+#define	NI_NUMERICHOST	0x00000002
+#define	NI_NAMEREQD	0x00000004
+#define	NI_NUMERICSERV	0x00000008
+#define	NI_DGRAM	0x00000010
+#if 0 /* obsolete */
+#define NI_WITHSCOPEID	0x00000020
+#endif
+
+/*
+ * Scope delimit character
+ */
+#define	SCOPE_DELIMITER	'%'
+
 __BEGIN_DECLS
 void		endhostent(void);
 void		endnetent(void);
 void		endprotoent(void);
 void		endservent(void);
+#if __BSD_VISIBLE || (__POSIX_VISIBLE && __POSIX_VISIBLE <= 200112)
 struct hostent	*gethostbyaddr(const void *, socklen_t, int);
 struct hostent	*gethostbyname(const char *);
-struct hostent	*gethostbyname2(const char *, int);
+#endif
 struct hostent	*gethostent(void);
 struct netent	*getnetbyaddr(uint32_t, int);
 struct netent	*getnetbyname(const char *);
@@ -145,29 +242,65 @@ struct protoent	*getprotoent(void);
 struct servent	*getservbyname(const char *, const char *);
 struct servent	*getservbyport(int, const char *);
 struct servent	*getservent(void);
-void		herror(const char *);
-__const char	*hstrerror(int);
 void		sethostent(int);
 /* void		sethostfile(const char *); */
 void		setnetent(int);
 void		setprotoent(int);
+int		getaddrinfo(const char *, const char *,
+			    const struct addrinfo *, struct addrinfo **);
+int		getnameinfo(const struct sockaddr *, socklen_t, char *,
+			    size_t, char *, size_t, int);
+void		freeaddrinfo(struct addrinfo *);
+const char	*gai_strerror(int);
 void		setservent(int);
 
-#ifdef _THREAD_SAFE
-struct hostent* gethostent_r(char* buf, int len);
-int gethostbyname_r(const char*      name, 
-                    struct hostent*  result,
-                    char            *buf, 
-                    int              buflen,
-                    struct hostent **RESULT, 
-                    int             *h_errnop) ;
-#endif		    
+#if __BSD_VISIBLE
+void		endnetgrent(void);
+void		freehostent(struct hostent *);
+int		gethostbyaddr_r(const void *, socklen_t, int, struct hostent *,
+    char *, size_t, struct hostent **, int *);
+int		gethostbyname_r(const char *, struct hostent *, char *, size_t,
+    struct hostent **, int *);
+struct hostent	*gethostbyname2(const char *, int);
+int		gethostbyname2_r(const char *, int, struct hostent *, char *,
+    size_t, struct hostent **, int *);
+int		gethostent_r(struct hostent *, char *, size_t,
+    struct hostent **, int *);
+struct hostent	*getipnodebyaddr(const void *, size_t, int, int *);
+struct hostent	*getipnodebyname(const char *, int, int, int *);
+int		getnetbyaddr_r(uint32_t, int, struct netent *, char *, size_t,
+    struct netent**, int *);
+int		getnetbyname_r(const char *, struct netent *, char *, size_t,
+    struct netent **, int *);
+int		getnetent_r(struct netent *, char *, size_t, struct netent **,
+    int *);
+int		getnetgrent(char **, char **, char **);
+int		getnetgrent_r(char **, char **, char **, char *, size_t);
+int		getprotobyname_r(const char *, struct protoent *, char *,
+    size_t, struct protoent **);
+int		getprotobynumber_r(int, struct protoent *, char *, size_t,
+    struct protoent **);
+int		getprotoent_r(struct protoent *, char *, size_t,
+    struct protoent **);
+int		getservbyname_r(const char *, const char *, struct servent *,
+    char *, size_t, struct servent **);
+int		getservbyport_r(int, const char *, struct servent *, char *,
+    size_t, struct servent **);
+int		getservent_r(struct servent *, char *, size_t,
+    struct servent **);
+void		herror(const char *);
+const char	*hstrerror(int);
+int		innetgr(const char *, const char *, const char *, const char *);
+void		setnetgrent(const char *);
+#endif
+
 
 /*
  * PRIVATE functions specific to the FreeBSD implementation
  */
 
 /* DO NOT USE THESE, THEY ARE SUBJECT TO CHANGE AND ARE NOT PORTABLE!!! */
+int	* __h_errno(void);
 __END_DECLS
 
 #endif /* !_NETDB_H_ */
