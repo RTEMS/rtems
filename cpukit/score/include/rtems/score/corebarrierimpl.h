@@ -199,9 +199,9 @@ uint32_t _CORE_barrier_Do_surrender(
   ) \
     _CORE_barrier_Do_surrender( \
       the_barrier, \
+      _Thread_queue_Flush_default_filter, \
       mp_callout, \
       mp_id, \
-      _Thread_queue_Flush_default_filter, \
       lock_context \
     )
 #else
