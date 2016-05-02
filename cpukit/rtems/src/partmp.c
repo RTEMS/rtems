@@ -130,7 +130,7 @@ rtems_status_code _Partition_MP_Send_request_packet (
  *
  */
 
-void _Partition_MP_Send_response_packet (
+static void _Partition_MP_Send_response_packet (
   Partition_MP_Remote_operations  operation,
   Objects_Id                      partition_id,
   Thread_Control                 *the_thread

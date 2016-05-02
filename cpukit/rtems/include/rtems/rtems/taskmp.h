@@ -94,17 +94,6 @@ rtems_status_code _RTEMS_tasks_MP_Send_request_packet (
 );
 
 /**
- *  @brief _RTEMS_tasks_MP_Send_response_packet
- *
- *  This routine performs a remote procedure call so that a
- *  directive can be performed on another node.
- */
-void _RTEMS_tasks_MP_Send_response_packet (
-  RTEMS_tasks_MP_Remote_operations  operation,
-  Thread_Control                   *the_thread
-);
-
-/**
  *  @brief _RTEMS_tasks_MP_Process_packet
  *
  *  This routine performs the actions specific to this package for

@@ -122,18 +122,6 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
 );
 
 /**
- *  @brief _Message_queue_MP_Send_response_packet
- *
- *  This routine performs a remote procedure call so that a
- *  directive can be performed on another node.
- */
-void _Message_queue_MP_Send_response_packet (
-  Message_queue_MP_Remote_operations  operation,
-  Objects_Id                          message_queue_id,
-  Thread_Control                     *the_thread
-);
-
-/**
  *
  * @brief _Message_queue_MP_Process_packet
  *

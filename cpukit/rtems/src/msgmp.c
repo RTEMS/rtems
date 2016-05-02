@@ -199,7 +199,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
  *
  */
 
-void _Message_queue_MP_Send_response_packet (
+static void _Message_queue_MP_Send_response_packet (
   Message_queue_MP_Remote_operations  operation,
   Objects_Id                          message_queue_id,
   Thread_Control                     *the_thread

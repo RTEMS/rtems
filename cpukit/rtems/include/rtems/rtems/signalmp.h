@@ -80,17 +80,6 @@ rtems_status_code _Signal_MP_Send_request_packet (
 );
 
 /**
- *  @brief Signal MP Send Response Packet
- *
- *  This routine performs a remote procedure call so that a
- *  directive can be performed on another node.
- */
-void _Signal_MP_Send_response_packet (
-  Signal_MP_Remote_operations  operation,
-  Thread_Control              *the_thread
-);
-
-/**
  *  @brief Signal MP Process Packet
  *
  *  This routine performs the actions specific to this package for

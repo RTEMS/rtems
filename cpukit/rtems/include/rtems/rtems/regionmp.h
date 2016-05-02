@@ -98,18 +98,6 @@ rtems_status_code _Region_MP_Send_request_packet (
 );
 
 /**
- *  @brief Region MP Send Response Packet
- *
- *  This routine performs a remote procedure call so that a
- *  directive can be performed on another node.
- */
-void _Region_MP_Send_response_packet (
-  Region_MP_Remote_operations  operation,
-  Objects_Id                   region_id,
-  Thread_Control              *the_thread
-);
-
-/**
  *  @brief Region MP Process Packet
  *
  *  This routine performs the actions specific to this package for

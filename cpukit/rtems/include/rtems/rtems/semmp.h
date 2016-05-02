@@ -92,18 +92,6 @@ rtems_status_code _Semaphore_MP_Send_request_packet (
 );
 
 /**
- *  @brief Semaphore MP Send Response Packet
- *
- *  This routine performs a remote procedure call so that a
- *  directive can be performed on another node.
- */
-void _Semaphore_MP_Send_response_packet (
-  Semaphore_MP_Remote_operations  operation,
-  Objects_Id                      semaphore_id,
-  Thread_Control                 *the_thread
-);
-
-/**
  *  @brief Semaphore MP Process Packet
  *
  *  This routine performs the actions specific to this package for

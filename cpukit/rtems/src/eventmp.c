@@ -76,7 +76,7 @@ rtems_status_code _Event_MP_Send_request_packet (
   return RTEMS_SUCCESSFUL;
 }
 
-void _Event_MP_Send_response_packet (
+static void _Event_MP_Send_response_packet (
   Event_MP_Remote_operations  operation,
   Thread_Control             *the_thread
 )

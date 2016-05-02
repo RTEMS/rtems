@@ -83,17 +83,6 @@ rtems_status_code _Event_MP_Send_request_packet (
 );
 
 /**
- *  @brief Event MP Send Packet Response
- *
- *  This routine performs a remote procedure call so that a
- *  directive can be performed on another node.
- */
-void _Event_MP_Send_response_packet (
-  Event_MP_Remote_operations  operation,
-  Thread_Control             *the_thread
-);
-
-/**
  *  @brief Event MP Packet Process
  *
  *  This routine performs the actions specific to this package for

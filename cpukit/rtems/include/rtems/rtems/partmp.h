@@ -92,18 +92,6 @@ rtems_status_code _Partition_MP_Send_request_packet (
 );
 
 /**
- *  @brief Partition_MP_Send_response_packet
- *
- *  This routine performs a remote procedure call so that a
- *  directive can be performed on another node.
- */
-void _Partition_MP_Send_response_packet (
-  Partition_MP_Remote_operations  operation,
-  Objects_Id                      partition_id,
-  Thread_Control                 *the_thread
-);
-
-/**
  *
  *  @brief Partition_MP_Process_packet
  *

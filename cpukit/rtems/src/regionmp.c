@@ -122,7 +122,7 @@ rtems_status_code _Region_MP_Send_request_packet (
   return RTEMS_INTERNAL_ERROR;
 }
 
-void _Region_MP_Send_response_packet (
+static void _Region_MP_Send_response_packet (
   Region_MP_Remote_operations  operation,
   Objects_Id                   region_id,
   Thread_Control              *the_thread

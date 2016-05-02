@@ -115,7 +115,7 @@ rtems_status_code _Semaphore_MP_Send_request_packet (
   return RTEMS_SUCCESSFUL;
 }
 
-void _Semaphore_MP_Send_response_packet (
+static void _Semaphore_MP_Send_response_packet (
   Semaphore_MP_Remote_operations  operation,
   Objects_Id                      semaphore_id,
   Thread_Control                 *the_thread

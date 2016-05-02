@@ -123,7 +123,7 @@ rtems_status_code _RTEMS_tasks_MP_Send_request_packet (
  *
  */
 
-void _RTEMS_tasks_MP_Send_response_packet (
+static void _RTEMS_tasks_MP_Send_response_packet (
   RTEMS_tasks_MP_Remote_operations  operation,
   Thread_Control                   *the_thread
 )

@@ -76,7 +76,7 @@ rtems_status_code _Signal_MP_Send_request_packet (
   return RTEMS_INTERNAL_ERROR;
 }
 
-void _Signal_MP_Send_response_packet (
+static void _Signal_MP_Send_response_packet (
   Signal_MP_Remote_operations  operation,
   Thread_Control              *the_thread
 )
