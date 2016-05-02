@@ -214,7 +214,7 @@ include_HEADERS += ifaddrs.h
 libc_a_SOURCES = libc/base64.c \
     libc/gethostbydns.c libc/gethostbyht.c libc/gethostbynis.c \
     libc/gethostnamadr.c libc/getnetbydns.c libc/getnetbyht.c \
-    libc/getnetbynis.c libc/getnetnamadr.c libc/getproto.c \
+    libc/getnetbynis.c libc/getnetnamadr.c libc/getnameinfo.c libc/getproto.c \
     libc/getprotoent.c libc/getprotoname.c libc/getservbyname.c \
     libc/getservbyport.c libc/getservent.c libc/herror.c libc/inet_addr.c \
     libc/inet_lnaof.c libc/inet_makeaddr.c libc/inet_netof.c \

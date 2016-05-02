@@ -41,6 +41,7 @@ if HAS_POSIX
 _SUBDIRS += mghttpd01
 endif
 _SUBDIRS += ftp01
+_SUBDIRS += networking01
 _SUBDIRS += syscall01
 endif
 

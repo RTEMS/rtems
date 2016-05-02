@@ -1,0 +1,9 @@
+*** BEGIN OF TEST LIBNETWORKING 1 ***
+Try AF_INET6
+force node name
+force service name
+get node only
+get service only
+get node and service
+get node and service with maximum number of characters for IP
+*** END OF TEST LIBNETWORKING 1 ***
