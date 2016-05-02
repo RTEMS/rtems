@@ -128,6 +128,7 @@ lib_a_SOURCES += unistd/getppid.c
 lib_a_SOURCES += unistd/getuid.c
 lib_a_SOURCES += unistd/pause.c
 lib_a_SOURCES += unistd/setgid.c
+lib_a_SOURCES += unistd/setgroups.c
 lib_a_SOURCES += unistd/setpgid.c
 lib_a_SOURCES += unistd/setsid.c
 lib_a_SOURCES += unistd/setuid.c
