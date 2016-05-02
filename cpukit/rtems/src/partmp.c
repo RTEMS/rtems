@@ -28,6 +28,11 @@ RTEMS_STATIC_ASSERT(
   Partition_MP_Packet
 );
 
+static Partition_MP_Packet *_Partition_MP_Get_packet( void )
+{
+  return (Partition_MP_Packet *) _MPCI_Get_packet();
+}
+
 /*
  *  _Partition_MP_Send_process_packet
  *
@@ -286,16 +291,6 @@ void _Partition_MP_Send_extract_proxy (
     the_thread->Object.id
   );
 
-}
-
-/*
- *  _Partition_MP_Get_packet
- *
- */
-
-Partition_MP_Packet *_Partition_MP_Get_packet ( void )
-{
-  return ( (Partition_MP_Packet *) _MPCI_Get_packet() );
 }
 
 /* end of file */

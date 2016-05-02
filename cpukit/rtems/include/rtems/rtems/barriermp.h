@@ -117,13 +117,6 @@ void _Barrier_MP_Send_extract_proxy (
   void           *argument
 );
 
-/**
- *  @brief _Barrier_MP_Get_packet
- *
- *  This function is used to obtain a barrier mp packet.
- */
-Barrier_MP_Packet *_Barrier_MP_Get_packet ( void );
-
 /**@}*/
 
 #ifdef __cplusplus

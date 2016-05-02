@@ -125,13 +125,6 @@ void _Partition_MP_Send_extract_proxy (
   Objects_Id      id
 );
 
-/**
- *  @brief Partition_MP_Get_packet
- *
- *  This function is used to obtain a partition mp packet.
- */
-Partition_MP_Packet *_Partition_MP_Get_packet ( void );
-
 #ifdef __cplusplus
 }
 #endif

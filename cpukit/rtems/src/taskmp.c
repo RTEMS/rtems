@@ -29,6 +29,11 @@ RTEMS_STATIC_ASSERT(
   RTEMS_tasks_MP_Packet
 );
 
+static RTEMS_tasks_MP_Packet *_RTEMS_tasks_MP_Get_packet( void )
+{
+  return (RTEMS_tasks_MP_Packet *) _MPCI_Get_packet();
+}
+
 /*
  *  _RTEMS_tasks_MP_Send_process_packet
  *
@@ -273,15 +278,5 @@ void _RTEMS_tasks_MP_Process_packet (
  *  cannot be globally deleted.
  *
  */
-
-/*
- *  _RTEMS_tasks_MP_Get_packet
- *
- */
-
-RTEMS_tasks_MP_Packet *_RTEMS_tasks_MP_Get_packet ( void )
-{
-  return (RTEMS_tasks_MP_Packet *) _MPCI_Get_packet();
-}
 
 /* end of file */

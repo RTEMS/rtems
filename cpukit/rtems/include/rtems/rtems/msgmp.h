@@ -156,13 +156,6 @@ void _Message_queue_MP_Send_extract_proxy (
   Objects_Id      id
 );
 
-/**
- *  @brief _Message_queue_MP_Get_packet
- *
- *  This function is used to obtain a message queue mp packet.
- */
-Message_queue_MP_Packet *_Message_queue_MP_Get_packet ( void );
-
 /**@}*/
 
 #ifdef __cplusplus

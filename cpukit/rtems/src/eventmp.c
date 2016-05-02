@@ -27,6 +27,11 @@ RTEMS_STATIC_ASSERT(
   Event_MP_Packet
 );
 
+static Event_MP_Packet *_Event_MP_Get_packet( void )
+{
+  return (Event_MP_Packet *) _MPCI_Get_packet();
+}
+
 /*
  *  _Event_MP_Send_process_packet
  *
@@ -156,10 +161,5 @@ void _Event_MP_Process_packet (
  *  deleted by this manager.
  *
  */
-
-Event_MP_Packet *_Event_MP_Get_packet ( void )
-{
-  return ( (Event_MP_Packet *) _MPCI_Get_packet() );
-}
 
 /* end of file */

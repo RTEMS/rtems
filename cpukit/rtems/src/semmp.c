@@ -26,6 +26,11 @@ RTEMS_STATIC_ASSERT(
   Semaphore_MP_Packet
 );
 
+static Semaphore_MP_Packet *_Semaphore_MP_Get_packet( void )
+{
+  return (Semaphore_MP_Packet *) _MPCI_Get_packet();
+}
+
 void _Semaphore_MP_Send_process_packet (
   Semaphore_MP_Remote_operations  operation,
   Objects_Id                      semaphore_id,
@@ -259,11 +264,6 @@ void _Semaphore_MP_Send_extract_proxy (
     the_thread->Object.id
   );
 
-}
-
-Semaphore_MP_Packet *_Semaphore_MP_Get_packet ( void )
-{
-  return ( (Semaphore_MP_Packet *) _MPCI_Get_packet() );
 }
 
 #if defined(RTEMS_MULTIPROCESSING)

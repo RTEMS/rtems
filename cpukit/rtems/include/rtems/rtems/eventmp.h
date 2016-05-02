@@ -114,13 +114,6 @@ void _Event_MP_Process_packet (
  *  deleted by this manager.
  */
 
-/**
- *  @brief Event MP Get Packet
- *
- *  This function is used to obtain a event mp packet.
- */
-Event_MP_Packet *_Event_MP_Get_packet ( void );
-
 #ifdef __cplusplus
 }
 #endif

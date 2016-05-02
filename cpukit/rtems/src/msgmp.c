@@ -29,6 +29,12 @@ RTEMS_STATIC_ASSERT(
   Message_queue_MP_Packet
 );
 
+static Message_queue_MP_Packet *_Message_queue_MP_Get_packet( void )
+{
+  return (Message_queue_MP_Packet *) _MPCI_Get_packet();
+}
+
+
 /*
  *  _Message_queue_MP_Send_process_packet
  *
@@ -465,17 +471,6 @@ void _Message_queue_MP_Send_extract_proxy (
     the_thread->Object.id
   );
 }
-
-/*
- *  _Message_queue_MP_Get_packet
- *
- */
-
-Message_queue_MP_Packet *_Message_queue_MP_Get_packet ( void )
-{
-  return ( (Message_queue_MP_Packet *) _MPCI_Get_packet() );
-}
-
 
 /*
  *  _Message_queue_Core_message_queue_mp_support

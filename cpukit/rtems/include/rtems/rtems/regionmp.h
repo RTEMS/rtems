@@ -130,13 +130,6 @@ void _Region_MP_Send_extract_proxy (
   Objects_Id      id
 );
 
-/**
- *  @brief RegionMP Get Packet
- *
- *  This function is used to obtain a region mp packet.
- */
-Region_MP_Packet *_Region_MP_Get_packet ( void );
-
 #ifdef __cplusplus
 }
 #endif

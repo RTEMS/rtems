@@ -29,6 +29,11 @@ RTEMS_STATIC_ASSERT(
   Region_MP_Packet
 );
 
+static Region_MP_Packet *_Region_MP_Get_packet( void )
+{
+  return (Region_MP_Packet *) _MPCI_Get_packet();
+}
+
 void _Region_MP_Send_process_packet (
   Region_MP_Remote_operations  operation,
   Objects_Id                      region_id,
@@ -269,11 +274,6 @@ void _Region_MP_Send_extract_proxy (
     (rtems_name) 0,
     the_thread->Object.id
   );
-}
-
-Region_MP_Packet *_Region_MP_Get_packet ( void )
-{
-  return ( (Region_MP_Packet *) _MPCI_Get_packet() );
 }
 
 /* end of file */

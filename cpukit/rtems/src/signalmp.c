@@ -29,6 +29,11 @@ RTEMS_STATIC_ASSERT(
   Signal_MP_Packet
 );
 
+static Signal_MP_Packet *_Signal_MP_Get_packet( void )
+{
+  return (Signal_MP_Packet *) _MPCI_Get_packet();
+}
+
 /*
  *  _Signal_MP_Send_process_packet
  *
@@ -155,10 +160,5 @@ void _Signal_MP_Process_packet (
  *  deleted by this manager.
  *
  */
-
-Signal_MP_Packet *_Signal_MP_Get_packet ( void )
-{
-  return ( (Signal_MP_Packet *) _MPCI_Get_packet() );
-}
 
 /* end of file */

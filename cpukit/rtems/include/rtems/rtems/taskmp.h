@@ -126,13 +126,6 @@ void _RTEMS_tasks_MP_Process_packet (
  *
  */
 
-/**
- *  @brief _RTEMS_tasks_MP_Get_packet
- *
- *  This function is used to obtain a task mp packet.
- */
-RTEMS_tasks_MP_Packet *_RTEMS_tasks_MP_Get_packet ( void );
-
 #ifdef __cplusplus
 }
 #endif

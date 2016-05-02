@@ -111,13 +111,6 @@ void _Signal_MP_Process_packet (
  *  deleted by this manager.
  */
 
-/**
- *  @brief Signal MP Get Packet
- *
- *  This function is used to obtain a signal mp packet.
- */
-Signal_MP_Packet *_Signal_MP_Get_packet ( void );
-
 /**@}*/
 
 #ifdef __cplusplus

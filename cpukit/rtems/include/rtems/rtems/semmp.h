@@ -126,13 +126,6 @@ void _Semaphore_MP_Send_extract_proxy (
 );
 
 /**
- *  @brief Semaphore MP Get Packet
- *
- *  This function is used to obtain a semaphore mp packet.
- */
-Semaphore_MP_Packet *_Semaphore_MP_Get_packet ( void );
-
-/**
  * @brief Semaphore Core Mutex MP Support
  *
  * This function processes the global actions necessary for remote
