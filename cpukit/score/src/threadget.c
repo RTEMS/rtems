@@ -21,27 +21,6 @@
 
 #include <rtems/score/threadimpl.h>
 
-static Objects_Information *_Thread_Get_objects_information(
-  Objects_Id id
-)
-{
-  uint32_t the_api;
-
-  the_api = _Objects_Get_API( id );
-
-  if ( !_Objects_Is_api_valid( the_api ) ) {
-    return NULL;
-  }
-
-  /*
-   * Threads are always first class :)
-   *
-   * There is no need to validate the object class of the object identifier,
-   * since this will be done by the object get methods.
-   */
-  return _Objects_Information_table[ the_api ][ 1 ];
-}
-
 Thread_Control *_Thread_Get(
   Objects_Id         id,
   Objects_Locations *location

@@ -91,6 +91,17 @@ Thread_Control *_Thread_MP_Find_proxy (
  */
 void _Thread_MP_Free_proxy( Thread_Control *the_thread );
 
+RTEMS_INLINE_ROUTINE bool _Thread_MP_Is_remote( Objects_Id id )
+{
+  Objects_Information *information;
+
+  information = _Thread_Get_objects_information( id );
+  if ( information == NULL ) {
+    return false;
+  }
+
+  return _Objects_MP_Is_remote( information, id ) == OBJECTS_REMOTE;
+}
 
 /**@}*/
 
