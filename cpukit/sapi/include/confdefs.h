@@ -2978,7 +2978,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  */
 #define CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(_messages, _size) \
     _Configure_From_workspace( \
-      (_messages) * ((_size) + sizeof(CORE_message_queue_Buffer_control)))
+      (_messages) * (_Configure_Align_up(_size, sizeof(uintptr_t)) \
+        + sizeof(CORE_message_queue_Buffer_control)))
 
 /**
  * This macro is set to the amount of memory required for pending message

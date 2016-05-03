@@ -50,30 +50,26 @@ bool _CORE_message_queue_Initialize(
 )
 {
   size_t message_buffering_required = 0;
-  size_t allocated_message_size;
+  size_t aligned_message_size;
+  size_t align_mask;
 
   the_message_queue->maximum_pending_messages   = maximum_pending_messages;
   the_message_queue->number_of_pending_messages = 0;
   the_message_queue->maximum_message_size       = maximum_message_size;
   _CORE_message_queue_Set_notify( the_message_queue, NULL );
 
-  allocated_message_size = maximum_message_size;
-
-  /* 
-   * Check if allocated_message_size is aligned to uintptr-size boundary. 
-   * If not, it will increase allocated_message_size to multiplicity of pointer
-   * size.
+  /*
+   * Align up the maximum message size to be an integral multiple of the
+   * pointer size.
    */
-  if (allocated_message_size & (sizeof(uintptr_t) - 1)) {
-    allocated_message_size += sizeof(uintptr_t);
-    allocated_message_size &= ~(sizeof(uintptr_t) - 1);
-  }
+  align_mask = sizeof(uintptr_t) - 1;
+  aligned_message_size = ( maximum_message_size + align_mask ) & ~align_mask;
 
-  /* 
-   * Check for an overflow. It can occur while increasing allocated_message_size
-   * to multiplicity of uintptr_t above.
+  /*
+   * Check for an integer overflow.  It can occur while aligning up the maximum
+   * message size.
    */
-  if (allocated_message_size < maximum_message_size)
+  if (aligned_message_size < maximum_message_size)
     return false;
 
   /*
@@ -82,7 +78,7 @@ bool _CORE_message_queue_Initialize(
    */
   if ( !size_t_mult32_with_overflow(
         (size_t) maximum_pending_messages,
-        allocated_message_size + sizeof(CORE_message_queue_Buffer_control),
+        aligned_message_size + sizeof(CORE_message_queue_Buffer_control),
         &message_buffering_required ) ) 
     return false;
 
@@ -103,7 +99,7 @@ bool _CORE_message_queue_Initialize(
     &the_message_queue->Inactive_messages,
     the_message_queue->message_buffers,
     (size_t) maximum_pending_messages,
-    allocated_message_size + sizeof( CORE_message_queue_Buffer_control )
+    aligned_message_size + sizeof( CORE_message_queue_Buffer_control )
   );
 
   _Chain_Initialize_empty( &the_message_queue->Pending_messages );
