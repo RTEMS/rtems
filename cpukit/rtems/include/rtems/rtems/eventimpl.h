@@ -56,7 +56,7 @@ void _Event_Seize(
   ISR_lock_Context  *lock_context
 );
 
-void _Event_Surrender(
+rtems_status_code _Event_Surrender(
   Thread_Control    *the_thread,
   rtems_event_set    event_in,
   Event_Control     *event,

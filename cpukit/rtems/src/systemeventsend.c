@@ -43,14 +43,13 @@ rtems_status_code rtems_event_system_send(
   switch ( location ) {
     case OBJECTS_LOCAL:
       api = thread->API_Extensions[ THREAD_API_RTEMS ];
-      _Event_Surrender(
+      sc = _Event_Surrender(
         thread,
         event_in,
         &api->System_event,
         THREAD_WAIT_CLASS_SYSTEM_EVENT,
         &lock_context
       );
-      sc = RTEMS_SUCCESSFUL;
       break;
 #ifdef RTEMS_MULTIPROCESSING
     case OBJECTS_REMOTE:

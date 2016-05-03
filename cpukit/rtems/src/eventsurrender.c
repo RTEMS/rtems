@@ -65,7 +65,7 @@ static bool _Event_Is_satisfied(
     && ( *seized_events == event_condition || _Options_Is_any( option_set ) );
 }
 
-void _Event_Surrender(
+rtems_status_code _Event_Surrender(
   Thread_Control    *the_thread,
   rtems_event_set    event_in,
   Event_Control     *event,
@@ -128,4 +128,6 @@ void _Event_Surrender(
   } else {
     _Thread_Lock_release_default( the_thread, lock_context );
   }
+
+  return RTEMS_SUCCESSFUL;
 }
