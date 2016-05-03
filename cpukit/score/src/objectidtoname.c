@@ -27,8 +27,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
 {
   Objects_Id           tmpId;
   Objects_Information *information;
-  Objects_Control     *the_object = (Objects_Control *) 0;
-  Objects_Locations    ignored_location;
+  Objects_Control     *the_object;
   ISR_lock_Context     lock_context;
 
   /*
@@ -46,11 +45,10 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
       return OBJECTS_INVALID_ID;
   #endif
 
-  the_object = _Objects_Get_isr_disable(
-    information,
+  the_object = _Objects_Get_local(
     tmpId,
-    &ignored_location,
-    &lock_context
+    &lock_context,
+    information
   );
   if ( !the_object )
     return OBJECTS_INVALID_ID;
