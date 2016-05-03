@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -33,34 +33,28 @@ rtems_status_code rtems_event_system_send(
   rtems_event_set event_in
 )
 {
-  rtems_status_code  sc;
-  Thread_Control    *thread;
-  Objects_Locations  location;
+  Thread_Control    *the_thread;
   RTEMS_API_Control *api;
   ISR_lock_Context   lock_context;
 
-  thread = _Thread_Get_interrupt_disable( id, &location, &lock_context );
-  switch ( location ) {
-    case OBJECTS_LOCAL:
-      api = thread->API_Extensions[ THREAD_API_RTEMS ];
-      sc = _Event_Surrender(
-        thread,
-        event_in,
-        &api->System_event,
-        THREAD_WAIT_CLASS_SYSTEM_EVENT,
-        &lock_context
-      );
-      break;
-#ifdef RTEMS_MULTIPROCESSING
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      sc = RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
-      break;
+  the_thread = _Thread_Get_interrupt_disable( id, &lock_context );
+
+  if ( the_thread == NULL ) {
+#if defined(RTEMS_MULTIPROCESSING)
+    if ( _Thread_MP_Is_remote( id ) ) {
+      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+    }
 #endif
-    default:
-      sc = RTEMS_INVALID_ID;
-      break;
+
+    return RTEMS_INVALID_ID;
   }
 
-  return sc;
+  api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
+  return _Event_Surrender(
+    the_thread,
+    event_in,
+    &api->System_event,
+    THREAD_WAIT_CLASS_SYSTEM_EVENT,
+    &lock_context
+  );
 }

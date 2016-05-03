@@ -19,66 +19,67 @@
 #endif
 
 #include <rtems/rtems/eventimpl.h>
-#include <rtems/score/objectimpl.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/statesimpl.h>
+
+/**
+ *  The following enumerated type defines the list of
+ *  remote event operations.
+ */
+typedef enum {
+  EVENT_MP_SEND_REQUEST  =  0,
+  EVENT_MP_SEND_RESPONSE =  1
+}   Event_MP_Remote_operations;
+
+/**
+ *  The following data structure defines the packet used to perform
+ *  remote event operations.
+ */
+typedef struct {
+  rtems_packet_prefix         Prefix;
+  Event_MP_Remote_operations  operation;
+  rtems_event_set             event_in;
+}   Event_MP_Packet;
 
 RTEMS_STATIC_ASSERT(
   sizeof(Event_MP_Packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,
   Event_MP_Packet
 );
 
-static Event_MP_Packet *_Event_MP_Get_packet( void )
+static Event_MP_Packet *_Event_MP_Get_packet( Objects_Id id )
 {
+  if ( !_Thread_MP_Is_remote( id ) ) {
+    return NULL;
+  }
+
   return (Event_MP_Packet *) _MPCI_Get_packet();
 }
 
-/*
- *  _Event_MP_Send_process_packet
- *
- *  This subprogram is not needed since there are no process
- *  packets to be sent by this manager.
- *
- */
-
-rtems_status_code _Event_MP_Send_request_packet (
-  Event_MP_Remote_operations operation,
-  Objects_Id                 event_id,
-  rtems_event_set            event_in
+rtems_status_code _Event_MP_Send(
+  rtems_id        id,
+  rtems_event_set event_in
 )
 {
   Event_MP_Packet *the_packet;
 
-  switch ( operation ) {
-
-    case EVENT_MP_SEND_REQUEST:
-
-      the_packet                    = _Event_MP_Get_packet();
-      the_packet->Prefix.the_class  = MP_PACKET_EVENT;
-      the_packet->Prefix.length     = sizeof ( Event_MP_Packet );
-      the_packet->Prefix.to_convert = sizeof ( Event_MP_Packet );
-      the_packet->operation         = operation;
-      the_packet->Prefix.id         = event_id;
-      the_packet->event_in          = event_in;
-
-      return (rtems_status_code)
-        _MPCI_Send_request_packet(
-          _Objects_Get_node( event_id ),
-          &the_packet->Prefix,
-          STATES_READY,
-          RTEMS_TIMEOUT
-        );
-
-      break;
-
-    case EVENT_MP_SEND_RESPONSE:
-      break;
-
+  the_packet = _Event_MP_Get_packet( id );
+  if ( the_packet == NULL ) {
+    return RTEMS_INVALID_ID;
   }
-  /*
-   *  The following line is included to satisfy compilers which
-   *  produce warnings when a function does not end with a return.
-   */
-  return RTEMS_SUCCESSFUL;
+
+  the_packet->Prefix.the_class  = MP_PACKET_EVENT;
+  the_packet->Prefix.length     = sizeof ( *the_packet );
+  the_packet->Prefix.to_convert = sizeof ( *the_packet );
+  the_packet->operation         = EVENT_MP_SEND_REQUEST;
+  the_packet->Prefix.id         = id;
+  the_packet->event_in          = event_in;
+
+  return (rtems_status_code) _MPCI_Send_request_packet(
+    _Objects_Get_node( id ),
+    &the_packet->Prefix,
+    STATES_READY,
+    RTEMS_TIMEOUT
+  );
 }
 
 static void _Event_MP_Send_response_packet (

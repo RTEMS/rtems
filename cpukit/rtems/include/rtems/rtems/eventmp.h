@@ -41,25 +41,6 @@ extern "C" {
  */
 /**@{*/
 
-/**
- *  The following enumerated type defines the list of
- *  remote event operations.
- */
-typedef enum {
-  EVENT_MP_SEND_REQUEST  =  0,
-  EVENT_MP_SEND_RESPONSE =  1
-}   Event_MP_Remote_operations;
-
-/**
- *  The following data structure defines the packet used to perform
- *  remote event operations.
- */
-typedef struct {
-  rtems_packet_prefix         Prefix;
-  Event_MP_Remote_operations  operation;
-  rtems_event_set             event_in;
-}   Event_MP_Packet;
-
 /*
  *  @brief Event_MP_Send_process_packet
  *
@@ -71,15 +52,11 @@ typedef struct {
  */
 
 /**
- *  @brief Event MP Send Packet Request
- *
- *  This routine performs a remote procedure call so that a
- *  directive operation can be initiated on another node.
+ * @brief Issues a remote rtems_event_send() request.
  */
-rtems_status_code _Event_MP_Send_request_packet (
-  Event_MP_Remote_operations operation,
-  Objects_Id                 event_id,
-  rtems_event_set         event_in
+rtems_status_code _Event_MP_Send(
+  rtems_id        id,
+  rtems_event_set event_in
 );
 
 /**

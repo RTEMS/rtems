@@ -532,11 +532,10 @@ Thread_Control *_Thread_Get (
 /**
  * @brief Gets a thread by its identifier.
  *
- * @see _Objects_Get_isr_disable().
+ * @see _Objects_Get_local().
  */
 Thread_Control *_Thread_Get_interrupt_disable(
   Objects_Id         id,
-  Objects_Locations *location,
   ISR_lock_Context  *lock_context
 );
 

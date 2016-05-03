@@ -45,24 +45,21 @@ Thread_Control *_Thread_Get(
 
 Thread_Control *_Thread_Get_interrupt_disable(
   Objects_Id         id,
-  Objects_Locations *location,
   ISR_lock_Context  *lock_context
 )
 {
   Objects_Information *information;
 
   if ( _Objects_Are_ids_equal( id, OBJECTS_ID_OF_SELF ) ) {
-    *location = OBJECTS_LOCAL;
     _ISR_lock_ISR_disable( lock_context );
     return _Thread_Executing;
   }
 
   information = _Thread_Get_objects_information( id );
   if ( information == NULL ) {
-    *location = OBJECTS_ERROR;
     return NULL;
   }
 
   return (Thread_Control *)
-    _Objects_Get_isr_disable( information, id, location, lock_context );
+    _Objects_Get_local( id, lock_context, information );
 }
