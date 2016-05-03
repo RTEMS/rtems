@@ -25,8 +25,6 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   Objects_Name   *name
 )
 {
-  uint32_t             the_api;
-  uint32_t             the_class;
   Objects_Id           tmpId;
   Objects_Information *information;
   Objects_Control     *the_object = (Objects_Control *) 0;
@@ -39,16 +37,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
 
   tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Get_executing()->Object.id : id;
 
-  the_api = _Objects_Get_API( tmpId );
-  if ( !_Objects_Is_api_valid( the_api ) )
-    return OBJECTS_INVALID_ID;
-
-  if ( !_Objects_Information_table[ the_api ] )
-    return OBJECTS_INVALID_ID;
-
-  the_class = _Objects_Get_class( tmpId );
-
-  information = _Objects_Information_table[ the_api ][ the_class ];
+  information = _Objects_Get_information_id( tmpId );
   if ( !information )
     return OBJECTS_INVALID_ID;
 
