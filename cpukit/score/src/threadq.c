@@ -25,12 +25,6 @@
 #if HAVE_STRUCT__THREAD_QUEUE_QUEUE
 
 RTEMS_STATIC_ASSERT(
-  offsetof( Thread_queue_Syslock_queue, Queue.heads )
-    == offsetof( struct _Thread_queue_Queue, _heads ),
-  THREAD_QUEUE_SYSLOCK_QUEUE_HEADS
-);
-
-RTEMS_STATIC_ASSERT(
 #if defined(RTEMS_SMP)
   offsetof( Thread_queue_Syslock_queue, Queue.Lock.next_ticket )
 #else
@@ -48,6 +42,18 @@ RTEMS_STATIC_ASSERT(
 #endif
     == offsetof( struct _Thread_queue_Queue, _Lock._now_serving ),
   THREAD_QUEUE_SYSLOCK_QUEUE_NOW_SERVING
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( Thread_queue_Syslock_queue, Queue.heads )
+    == offsetof( struct _Thread_queue_Queue, _heads ),
+  THREAD_QUEUE_SYSLOCK_QUEUE_HEADS
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( Thread_queue_Syslock_queue, Queue.owner )
+    == offsetof( struct _Thread_queue_Queue, _owner ),
+  THREAD_QUEUE_SYSLOCK_QUEUE_OWNER
 );
 
 RTEMS_STATIC_ASSERT(

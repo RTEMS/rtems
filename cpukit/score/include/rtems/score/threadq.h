@@ -155,6 +155,22 @@ typedef struct _Thread_queue_Heads {
 
 typedef struct {
   /**
+   * @brief Lock to protect this thread queue.
+   *
+   * It may be used to protect additional state of the object embedding this
+   * thread queue.
+   *
+   * Must be the first component of this structure to be able to re-use
+   * implementation parts for structures defined by Newlib <sys/lock.h>.
+   *
+   * @see _Thread_queue_Acquire(), _Thread_queue_Acquire_critical() and
+   * _Thread_queue_Release().
+   */
+#if defined(RTEMS_SMP)
+  SMP_ticket_lock_Control Lock;
+#endif
+
+  /**
    * @brief The thread queue heads.
    *
    * This pointer is NULL, if and only if no threads are enqueued.  The first
@@ -164,17 +180,9 @@ typedef struct {
   Thread_queue_Heads *heads;
 
   /**
-   * @brief Lock to protect this thread queue.
-   *
-   * It may be used to protect additional state of the object embedding this
-   * thread queue.
-   *
-   * @see _Thread_queue_Acquire(), _Thread_queue_Acquire_critical() and
-   * _Thread_queue_Release().
+   * @brief The thread queue owner.
    */
-#if defined(RTEMS_SMP)
-  SMP_ticket_lock_Control Lock;
-#endif
+  Thread_Control *owner;
 } Thread_queue_Queue;
 
 /**

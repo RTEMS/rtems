@@ -40,8 +40,6 @@ extern "C" {
  * defined in Newlib <sys/lock.h>.
  */
 typedef struct {
-  Thread_queue_Queue Queue;
-
 #if !defined(RTEMS_SMP)
   /*
    * The struct _Thread_queue_Queue definition is independent of the RTEMS
@@ -51,6 +49,8 @@ typedef struct {
    */
   unsigned int reserved[2];
 #endif
+
+  Thread_queue_Queue Queue;
 } Thread_queue_Syslock_queue;
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Do_context_initialize(
@@ -115,10 +115,11 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_initialize(
   Thread_queue_Queue *queue
 )
 {
-  queue->heads = NULL;
 #if defined(RTEMS_SMP)
   _SMP_ticket_lock_Initialize( &queue->Lock );
 #endif
+  queue->heads = NULL;
+  queue->owner = NULL;
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_do_acquire_critical(
