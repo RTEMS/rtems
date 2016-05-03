@@ -107,7 +107,6 @@ sp25/Makefile
 sp26/Makefile
 sp27/Makefile
 sp27a/Makefile
-sp28/Makefile
 sp29/Makefile
 sp30/Makefile
 sp31/Makefile

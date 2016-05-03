@@ -856,40 +856,10 @@
  *
  * @section ClassicTasksSecPerTaskVariables Per Task Variables
  *
- * Per task variables are used to support global variables whose value may be
- * unique to a task. After indicating that a variable should be treated as
- * private (i.e. per-task) the task can access and modify the variable, but the
- * modifications will not appear to other tasks, and other tasks' modifications
- * to that variable will not affect the value seen by the task. This is
- * accomplished by saving and restoring the variable's value each time a task
- * switch occurs to or from the calling task.
- *
- * The value seen by other tasks, including those which have not added the
- * variable to their set and are thus accessing the variable as a common
- * location shared among tasks, can not be affected by a task once it has added
- * a variable to its local set. Changes made to the variable by other tasks
- * will not affect the value seen by a task which has added the variable to its
- * private set.
- *
- * This feature can be used when a routine is to be spawned repeatedly as
- * several independent tasks. Although each task will have its own stack, and
- * thus separate stack variables, they will all share the same static and
- * global variables. To make a variable not shareable (i.e. a "global" variable
- * that is specific to a single task), the tasks can call
- * rtems_task_variable_add() to make a separate copy of the variable for each
- * task, but all at the same physical address.
- *
- * Task variables increase the context switch time to and from the tasks that
- * own them so it is desirable to minimize the number of task variables. One
- * efficient method is to have a single task variable that is a pointer to a
- * dynamically allocated structure containing the task's private "global" data.
- *
- * A critical point with per-task variables is that each task must separately
- * request that the same global variable is per-task private.
- *
- * @b {WARNING}: Per-task variables are fundamentally incorrect in SMP
- *               systems and should not be used in SMP applications. They
- *               are disabled.
+ * Per task variables are no longer available.  In particular the
+ * rtems_task_variable_add(), rtems_task_variable_get() and
+ * rtems_task_variable_delete() functions are neither declared nor defined
+ * anymore.  Use thread local storage or POSIX Keys instead.
  *
  * @section ClassicTasksSecBuildingTaskAttributeSet Building a Task Attribute Set
  *

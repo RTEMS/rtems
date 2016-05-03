@@ -117,31 +117,6 @@ package RTEMS.Tasks is
       Result  :    out RTEMS.Status_Codes
    );
 
-   type Variable_Dtor is access procedure (
-      Argument : in     RTEMS.Address
-   );
-   pragma Convention (C, Variable_Dtor);
-
-   procedure Variable_Add (
-      ID            : in     RTEMS.ID;
-      Task_Variable : in     RTEMS.Address;
-      Dtor          : in     Variable_Dtor;
-      Result        :    out RTEMS.Status_Codes
-   );
-
-   procedure Variable_Get (
-      ID                  : in     RTEMS.ID;
-      Task_Variable       :    out RTEMS.Address;
-      Task_Variable_Value :    out RTEMS.Address;
-      Result              :    out RTEMS.Status_Codes
-   );
-
-   procedure Variable_Delete (
-      ID                  : in     RTEMS.ID;
-      Task_Variable       :    out RTEMS.Address;
-      Result              :    out RTEMS.Status_Codes
-   );
-
    procedure Wake_When (
       Time_Buffer : in     RTEMS.Time_Of_Day;
       Result      :    out RTEMS.Status_Codes

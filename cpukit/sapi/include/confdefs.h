@@ -2100,42 +2100,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define CONFIGURE_TASKS \
     (CONFIGURE_MAXIMUM_TASKS + CONFIGURE_LIBBLOCK_TASKS)
 
-  /**
-   * This macro calculates the memory required for task variables.
-   *
-   * @deprecated Task variables are deprecated.
-   *
-   * Each task variable is individually allocated from the Workspace.
-   * Hence, we do the multiplication on the configured size.
-   *
-   * @note Per-task variables are disabled for SMP configurations.
-   */
-  #if defined(RTEMS_SMP)
-    #ifdef CONFIGURE_MAXIMUM_TASK_VARIABLES
-      #warning "Per-Task Variables are deprecated and will be removed."
-      #error "Per-Task Variables are not safe for SMP systems and disabled."
-    #endif
-    #define CONFIGURE_MAXIMUM_TASK_VARIABLES                     0
-    #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) 0
-  #else
-    #ifndef CONFIGURE_MAXIMUM_TASK_VARIABLES
-      /** This macro specifies the maximum number of task variables. */
-      #define CONFIGURE_MAXIMUM_TASK_VARIABLES                     0
-      /**
-       * This macro is calculated to specify the memory required for task
-       * variables.
-       *
-       * This is an internal parameter.
-       */
-      #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) 0
-    #else
-      #warning "Per-Task Variables are deprecated and will be removed."
-      #define CONFIGURE_MEMORY_FOR_TASK_VARIABLES(_task_variables) \
-	(_task_variables) * \
-	   _Configure_From_workspace(sizeof(rtems_task_variable_t))
-    #endif
-  #endif
-
   #ifndef CONFIGURE_MAXIMUM_TIMERS
     /** This specifies the maximum number of Classic API timers. */
     #define CONFIGURE_MAXIMUM_TIMERS             0
@@ -2818,9 +2782,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #define CONFIGURE_MAXIMUM_GOROUTINES 400
   #endif
 
-  #define CONFIGURE_GOROUTINES_TASK_VARIABLES \
-    (2 * CONFIGURE_MAXIMUM_GOROUTINES)
-
   #ifndef CONFIGURE_MAXIMUM_GO_CHANNELS
     #define CONFIGURE_MAXIMUM_GO_CHANNELS 500
   #endif
@@ -2844,9 +2805,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
   /** This specifies the maximum number of Go co-routines. */
   #define CONFIGURE_MAXIMUM_GOROUTINES          0
-
-  /** This specifies the maximum number of Go per-task variables required. */
-  #define CONFIGURE_GOROUTINES_TASK_VARIABLES   0
 
   /** This specifies the maximum number of Go channels required. */
   #define CONFIGURE_MAXIMUM_GO_CHANNELS         0
@@ -3068,9 +3026,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * Classic API as configured.
  */
 #define CONFIGURE_MEMORY_FOR_CLASSIC \
-  (CONFIGURE_MEMORY_FOR_TASK_VARIABLES(CONFIGURE_MAXIMUM_TASK_VARIABLES + \
-    CONFIGURE_GOROUTINES_TASK_VARIABLES) + \
-   CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS + \
+   (CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS + \
     CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER ) + \
    CONFIGURE_MEMORY_FOR_SEMAPHORES(CONFIGURE_SEMAPHORES) + \
    CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(CONFIGURE_MAXIMUM_MESSAGE_QUEUES) + \
@@ -3581,7 +3537,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
     /* Classic API Pieces */
     uint32_t CLASSIC_TASKS;
-    uint32_t TASK_VARIABLES;
     uint32_t TIMERS;
     uint32_t SEMAPHORES;
     uint32_t MESSAGE_QUEUES;
@@ -3635,8 +3590,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
     /* Classic API Pieces */
     CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS, 0),
-    CONFIGURE_MEMORY_FOR_TASK_VARIABLES(CONFIGURE_MAXIMUM_TASK_VARIABLES +
-      CONFIGURE_GOROUTINES_TASK_VARIABLES),
     CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS),
     CONFIGURE_MEMORY_FOR_SEMAPHORES(CONFIGURE_SEMAPHORES),
     CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(CONFIGURE_MAXIMUM_MESSAGE_QUEUES),

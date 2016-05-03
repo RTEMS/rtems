@@ -173,35 +173,6 @@ typedef enum {
  */
 typedef void (*Thread_CPU_budget_algorithm_callout )( Thread_Control * );
 
-#if !defined(RTEMS_SMP)
-/**
- *  @brief Forward reference to the per task variable structure..
- *
- *  Forward reference to the per task variable structure.
- */
-struct rtems_task_variable_tt;
-
-/**
- *  @brief Internal structure used to manager per task variables.
- *
- *  This is the internal structure used to manager per Task Variables.
- */
-typedef struct {
-  /** This field points to the next per task variable for this task. */
-  struct rtems_task_variable_tt  *next;
-  /** This field points to the physical memory location of this per
-   *  task variable.
-   */
-  void                          **ptr;
-  /** This field is to the global value for this per task variable. */
-  void                           *gval;
-  /** This field is to this thread's value for this per task variable. */
-  void                           *tval;
-  /** This field points to the destructor for this per task variable. */
-  void                          (*dtor)(void *);
-} rtems_task_variable_t;
-#endif
-
 /**
  *  The following structure contains the information which defines
  *  the starting state of a thread.
@@ -869,11 +840,6 @@ struct _Thread_Control {
   struct _reent                        *libc_reent;
   /** This array contains the API extension area pointers. */
   void                                 *API_Extensions[ THREAD_API_LAST + 1 ];
-
-#if !defined(RTEMS_SMP)
-  /** This field points to the set of per task variables. */
-  rtems_task_variable_t                *task_variables;
-#endif
 
   /**
    * @brief The POSIX Keys information.
