@@ -448,23 +448,6 @@ rtems_task Init(
     );
     directive_failed( sc, "rtems_task_set_priority" );
 
-    /* destroy internal API pointer */
-    puts( "rtems_task_set_priority - clobber internal API info" );
-    tmp = _Objects_Information_table[ api ];
-    _Objects_Information_table[ api ] = NULL;
-
-    puts( "rtems_task_set_priority - use valid Idle thread id again" );
-    sc = rtems_task_set_priority(
-      rtems_build_id( class, api, 1, 1 ),
-      RTEMS_CURRENT_PRIORITY,
-      &old_priority
-    );
-    fatal_directive_status( sc, RTEMS_INVALID_ID, "rtems_task_set_priority" );
-
-    /* restore pointer */
-    puts( "rtems_task_set_priority - restore internal api info" );
-    _Objects_Information_table[ api ] = tmp;
-
     /* destroy internal API thread class pointer */
     puts( "rtems_task_set_priority - clobber internal thread class info" );
     tmp = _Objects_Information_table[ api ][ class ];
@@ -509,24 +492,6 @@ rtems_task Init(
     0
   );
   fatal_directive_status( sc, RTEMS_INVALID_ID, "rtems_semaphore_obtain" );
-
-  /*
-   * Invalid POSIX API pointer on get name
-   */
-  {
-    void *tmp;
-    tmp = _Objects_Information_table[OBJECTS_POSIX_API];
-    _Objects_Information_table[OBJECTS_POSIX_API] = NULL;
-
-    puts( "rtems_object_get_classic_name - bad API pointer - INVALID_ID" );
-    sc = rtems_object_get_classic_name(
-      rtems_build_id( OBJECTS_POSIX_API, OBJECTS_POSIX_THREADS, 1, 1 ),
-      &tmpName
-    );
-    fatal_directive_status( sc, RTEMS_INVALID_ID, "object_get_classic_name" );
-
-    _Objects_Information_table[OBJECTS_POSIX_API] = tmp;
-  }
 
   TEST_END();
   rtems_test_exit( 0 );

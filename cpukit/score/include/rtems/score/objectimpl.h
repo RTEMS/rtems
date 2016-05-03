@@ -213,8 +213,8 @@ extern uint16_t _Objects_Maximum_nodes;
  *  class.  From the ID, we can go to one of these information blocks,
  *  and obtain a pointer to the appropriate object control block.
  */
-extern Objects_Information
-    **_Objects_Information_table[OBJECTS_APIS_LAST + 1];
+extern Objects_Information ** const
+_Objects_Information_table[ OBJECTS_APIS_LAST + 1 ];
 
 /**
  *  This function extends an object class information record.

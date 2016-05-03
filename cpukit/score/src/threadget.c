@@ -27,7 +27,6 @@ static Objects_Information *_Thread_Get_objects_information(
 {
   uint32_t             the_api;
   uint32_t             the_class;
-  Objects_Information **api_information;
 
   the_api = _Objects_Get_API( id );
   if ( !_Objects_Is_api_valid( the_api ) ) {
@@ -39,18 +38,7 @@ static Objects_Information *_Thread_Get_objects_information(
     return NULL;
   }
 
-  api_information = _Objects_Information_table[ the_api ];
-  /*
-   *  There is no way for this to happen if POSIX is enabled.  But there
-   *  is actually a test case in sp43 for this which trips it whether or
-   *  not POSIX is enabled.  So in the interest of safety, this is left
-   *  on in all configurations.
-   */
-  if ( !api_information ) {
-    return NULL;
-  }
-
-  return api_information[ the_class ];
+  return _Objects_Information_table[ the_api ][ the_class ];
 }
 
 Thread_Control *_Thread_Get(

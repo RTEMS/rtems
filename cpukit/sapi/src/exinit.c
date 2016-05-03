@@ -51,7 +51,8 @@ static Objects_Information *_RTEMS_Objects[ OBJECTS_RTEMS_CLASSES_LAST + 1 ];
 
 static Objects_Information *_POSIX_Objects[ OBJECTS_POSIX_CLASSES_LAST + 1 ];
 
-Objects_Information **_Objects_Information_table[ OBJECTS_APIS_LAST + 1 ] = {
+Objects_Information ** const
+_Objects_Information_table[ OBJECTS_APIS_LAST + 1 ] = {
   NULL,
   &_Internal_Objects[ 0 ],
   &_RTEMS_Objects[ 0 ],
