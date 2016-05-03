@@ -53,28 +53,19 @@
 #include <bsp/pci.h>
 #include <rtems/bspIo.h>
 #include <rtems/score/percpu.h>
+#include <threads.h>
 
 #include <bsp/bspException.h>
 
 #define SRR1_TEA_EXC	(1<<(31-13))
 #define SRR1_MCP_EXC	(1<<(31-12))
 
-static volatile BSP_ExceptionExtension	BSP_exceptionExtension = 0;
-
-/*
- * We know task variables are deprecated and don't want a warning. The
- * use of task variables needs to be fixed in this file.
- */
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+static thread_local volatile BSP_ExceptionExtension	BSP_exceptionExtension = 0;
 
 BSP_ExceptionExtension
 BSP_exceptionHandlerInstall(BSP_ExceptionExtension e)
 {
 volatile BSP_ExceptionExtension	test;
-	if ( RTEMS_SUCCESSFUL != rtems_task_variable_get(RTEMS_SELF, (void*)&BSP_exceptionExtension, (void**)&test) ) {
-		/* not yet added */
-		rtems_task_variable_add(RTEMS_SELF, (void*)&BSP_exceptionExtension, 0);
-	}
 	test = BSP_exceptionExtension;
 	BSP_exceptionExtension = e;
 	return test;
@@ -100,18 +91,8 @@ int			quiet=0;
       fmt="Aieeh, Exception %d in initialization code\n";
     } else {
     /* retrieve the notepad which possibly holds an extention pointer */
-    if (RTEMS_SUCCESSFUL==rtems_task_ident(RTEMS_SELF,RTEMS_LOCAL,&id) &&
-// FIXME: Deprecated use of Notepads. #2503.
-#if 0
-/* Must not use a notepad due to unknown initial value (notepad memory is allocated from the
- * workspace)!
- */
-	        RTEMS_SUCCESSFUL==rtems_task_get_note(id, BSP_EXCEPTION_NOTEPAD, &note)
-#else
-	        RTEMS_SUCCESSFUL==rtems_task_variable_get(id, (void*)&BSP_exceptionExtension, (void**)&note)
-#endif
-         ) {
-	   ext = (BSP_ExceptionExtension)note;
+    if (RTEMS_SUCCESSFUL==rtems_task_ident(RTEMS_SELF,RTEMS_LOCAL,&id)) {
+	   ext = BSP_exceptionExtension;
 	   if (ext)
 	       quiet=ext->quiet;
 	   if (!quiet) {
