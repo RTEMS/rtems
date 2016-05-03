@@ -2514,8 +2514,9 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
    * This is an internal macro.
    */
   #define _Configure_POSIX_Named_Object_RAM(_number, _size) \
-    _Configure_Object_RAM( (_number), _size ) + \
-    (_Configure_Max_Objects(_number) * _Configure_From_workspace(NAME_MAX) )
+    (_Configure_Object_RAM(_number, _size) \
+      + _Configure_Max_Objects(_number) \
+        * _Configure_From_workspace(_POSIX_PATH_MAX + 1))
 
   /**
    * This configuration parameter specifies the maximum number of

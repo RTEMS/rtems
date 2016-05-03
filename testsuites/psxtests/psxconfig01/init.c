@@ -200,7 +200,7 @@ typedef struct {
   static area region_areas [CONFIGURE_MAXIMUM_REGIONS];
 #endif
 
-static char posix_name [NAME_MAX];
+static char posix_name [_POSIX_PATH_MAX + 1];
 
 #if !defined(RTEMS_SMP)
   static void *task_var;
@@ -208,10 +208,10 @@ static char posix_name [NAME_MAX];
 
 static char *get_posix_name(char a, char b, char c, int i)
 {
-  posix_name [NAME_MAX - 5] = a;
-  posix_name [NAME_MAX - 4] = b;
-  posix_name [NAME_MAX - 3] = c;
-  posix_name [NAME_MAX - 2] = 'A' + i;
+  posix_name [_POSIX_PATH_MAX - 4] = a;
+  posix_name [_POSIX_PATH_MAX - 3] = b;
+  posix_name [_POSIX_PATH_MAX - 2] = c;
+  posix_name [_POSIX_PATH_MAX - 1] = 'A' + i;
 
   return posix_name;
 }
