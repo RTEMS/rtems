@@ -290,24 +290,22 @@ Thread_Control *_MPCI_Process_response (
   MP_packet_Prefix  *the_packet
 )
 {
-  Thread_Control    *the_thread;
-  Objects_Locations  location;
+  ISR_lock_Context  lock_context;
+  Thread_Control   *the_thread;
 
-  the_thread = _Thread_Get( the_packet->id, &location );
-  switch ( location ) {
-    case OBJECTS_ERROR:
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-      the_thread = NULL;          /* IMPOSSIBLE */
-      break;
-    case OBJECTS_LOCAL:
-      _Thread_queue_Extract( the_thread );
-      the_thread->Wait.return_code = the_packet->return_code;
-      _Objects_Put_without_thread_dispatch( &the_thread->Object );
-    break;
-  }
+  the_thread = _Thread_Get_interrupt_disable( the_packet->id, &lock_context );
+  _Assert( the_thread != NULL );
 
+  /*
+   * FIXME: This is broken on SMP, see https://devel.rtems.org/ticket/2703.
+   *
+   * Should use _Thread_queue_Extract_critical() instead with a handler
+   * function provided by the caller of _MPCI_Process_response().  Similar to
+   * the filter function in _Thread_queue_Flush_critical().
+   */
+  _ISR_lock_ISR_enable( &lock_context );
+  _Thread_queue_Extract( the_thread );
+  the_thread->Wait.return_code = the_packet->return_code;
   return the_thread;
 }
 
