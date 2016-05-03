@@ -25,20 +25,21 @@ static Objects_Information *_Thread_Get_objects_information(
   Objects_Id id
 )
 {
-  uint32_t             the_api;
-  uint32_t             the_class;
+  uint32_t the_api;
 
   the_api = _Objects_Get_API( id );
+
   if ( !_Objects_Is_api_valid( the_api ) ) {
     return NULL;
   }
 
-  the_class = _Objects_Get_class( id );
-  if ( the_class != 1 ) {       /* threads are always first class :) */
-    return NULL;
-  }
-
-  return _Objects_Information_table[ the_api ][ the_class ];
+  /*
+   * Threads are always first class :)
+   *
+   * There is no need to validate the object class of the object identifier,
+   * since this will be done by the object get methods.
+   */
+  return _Objects_Information_table[ the_api ][ 1 ];
 }
 
 Thread_Control *_Thread_Get(
