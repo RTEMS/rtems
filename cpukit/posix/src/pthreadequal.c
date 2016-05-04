@@ -40,58 +40,16 @@ int pthread_equal(
 #ifndef RTEMS_DEBUG
   return _Objects_Are_ids_equal( t1, t2 );
 #else
-  int                status;
-  Objects_Locations  location;
-  Thread_Control    *thread_1;
-  Thread_Control    *thread_2;
+  ISR_lock_Context  lock_context_1;
+  ISR_lock_Context  lock_context_2;
+  Thread_Control   *thread_1;
+  Thread_Control   *thread_2;
 
-  /*
-   *  By default this is not a match.
-   */
+  thread_1 = _Thread_Get_interrupt_disable( t1, &lock_context_1 );
+  thread_2 = _Thread_Get_interrupt_disable( t2, &lock_context_2 );
+  _ISR_lock_ISR_enable( &lock_context_2 );
+  _ISR_lock_ISR_enable( &lock_context_1 );
 
-  status = 0;
-
-  /*
-   *  Validate the first id and return 0 if it is not valid
-   */
-
-  thread_1 = _Thread_Get( t1, &location );
-  switch ( location ) {
-
-    case OBJECTS_LOCAL:
-
-      /*
-       *  Validate the second id and return 0 if it is not valid
-       */
-
-      thread_2 = _Thread_Get( t2, &location );
-      switch ( location ) {
-
-        case OBJECTS_LOCAL:
-          status = _Objects_Are_ids_equal( t1, t2 );
-          _Objects_Put_without_thread_dispatch( &thread_2->Object );
-          _Objects_Put( &thread_1->Object );
-          break;
-
-        case OBJECTS_ERROR:
-#if defined(RTEMS_MULTIPROCESSING)
-        case OBJECTS_REMOTE:
-#endif
-          /* t1 must have been valid so exit the critical section */
-          _Objects_Put( &thread_1->Object );
-          /* return status == 0 */
-          break;
-      }
-      break;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      /* return status == 0 */
-      break;
-  }
-
-  return status;
+  return thread_1 != NULL && thread_1 == thread_2;
 #endif
 }
