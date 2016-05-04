@@ -208,10 +208,6 @@ $(PROJECT_INCLUDE)/rtems/rtems/partmp.h: include/rtems/rtems/partmp.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/partmp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/partmp.h
 
-$(PROJECT_INCLUDE)/rtems/rtems/regionmp.h: include/rtems/rtems/regionmp.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/regionmp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/regionmp.h
-
 $(PROJECT_INCLUDE)/rtems/rtems/semmp.h: include/rtems/rtems/semmp.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/semmp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/semmp.h
