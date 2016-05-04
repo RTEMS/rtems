@@ -76,7 +76,7 @@ typedef struct {
   /** This field indicates if nest level of signals being processed */
   uint32_t          nest_level;
   /** Lock to protect this structure */
-  ISR_lock_Control  Lock;
+  ISR_LOCK_MEMBER(  Lock )
 }   ASR_Information;
 
 /*

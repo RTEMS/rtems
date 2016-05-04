@@ -22,8 +22,6 @@
 #include <rtems/rtems/signalimpl.h>
 #include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/tasks.h>
-#include <rtems/score/isrlevel.h>
-#include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadimpl.h>
 
 void _Signal_Action_handler(
@@ -52,8 +50,9 @@ void _Signal_Action_handler(
   asr = &api->Signal;
   signal_set = _ASR_Get_posted_signals( asr );
 
-  if ( !signal_set ) /* similar to _ASR_Are_signals_pending( asr ) */
+  if ( signal_set == 0 ) {
     return;
+  }
 
   asr->nest_level += 1;
   rtems_task_mode( asr->mode_set, RTEMS_ALL_MODE_MASKS, &prev_mode );
@@ -74,11 +73,12 @@ rtems_status_code rtems_signal_catch(
   ASR_Information    *asr;
   ISR_lock_Context    lock_context;
 
-  executing = _Thread_Get_executing();
-  api = (RTEMS_API_Control*)executing->API_Extensions[ THREAD_API_RTEMS ];
+  _ISR_lock_ISR_disable( &lock_context );
+  executing = _Thread_Executing;
+  api = executing->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
 
-  _ASR_Acquire( asr, &lock_context );
+  _ASR_Acquire_critical( asr, &lock_context );
 
   if ( !_ASR_Is_null_handler( asr_handler ) ) {
     asr->mode_set = mode_set;
