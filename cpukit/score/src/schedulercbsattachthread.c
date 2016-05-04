@@ -26,42 +26,46 @@ int _Scheduler_CBS_Attach_thread (
   rtems_id                task_id
 )
 {
-  Objects_Locations location;
-  Thread_Control *the_thread;
+  Scheduler_CBS_Server *server;
+  ISR_lock_Context      lock_context;
+  Thread_Control       *the_thread;
+  Scheduler_CBS_Node   *node;
 
-  if ( server_id >= _Scheduler_CBS_Maximum_servers )
-    return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
-
-  /* Server is not valid. */
-  if ( !_Scheduler_CBS_Server_list[server_id].initialized )
-    return SCHEDULER_CBS_ERROR_NOSERVER;
-
-  /* Server is already attached to a thread. */
-  if ( _Scheduler_CBS_Server_list[server_id].task_id != -1 )
-    return SCHEDULER_CBS_ERROR_FULL;
-
-  the_thread = _Thread_Get(task_id, &location);
-  /* The routine _Thread_Get may disable dispatch and not enable again. */
-  if ( the_thread ) {
-    Scheduler_CBS_Node *node = _Scheduler_CBS_Thread_get_node( the_thread );
-
-    /* Thread is already attached to a server. */
-    if ( node->cbs_server ) {
-      _Objects_Put( &the_thread->Object );
-      return SCHEDULER_CBS_ERROR_FULL;
-    }
-
-    _Scheduler_CBS_Server_list[server_id].task_id = task_id;
-    node->cbs_server = &_Scheduler_CBS_Server_list[server_id];
-
-    the_thread->budget_callout   = _Scheduler_CBS_Budget_callout;
-    the_thread->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
-    the_thread->is_preemptible   = true;
-
-    _Objects_Put( &the_thread->Object );
-  } else {
+  if ( server_id >= _Scheduler_CBS_Maximum_servers ) {
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
   }
 
+  server = &_Scheduler_CBS_Server_list[ server_id ];
+
+  if ( !server->initialized ) {
+    return SCHEDULER_CBS_ERROR_NOSERVER;
+  }
+
+  if ( server->task_id != -1 ) {
+    return SCHEDULER_CBS_ERROR_FULL;
+  }
+
+  the_thread = _Thread_Get_interrupt_disable( task_id, &lock_context );
+
+  if ( the_thread == NULL ) {
+    return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
+  }
+
+  node = _Scheduler_CBS_Thread_get_node( the_thread );
+
+  if ( node->cbs_server != NULL ) {
+    _ISR_lock_ISR_enable( &lock_context );
+    return SCHEDULER_CBS_ERROR_FULL;
+  }
+
+  node->cbs_server = server;
+
+  server->task_id = task_id;
+
+  the_thread->budget_callout   = _Scheduler_CBS_Budget_callout;
+  the_thread->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
+  the_thread->is_preemptible   = true;
+
+  _ISR_lock_ISR_enable( &lock_context );
   return SCHEDULER_CBS_OK;
 }

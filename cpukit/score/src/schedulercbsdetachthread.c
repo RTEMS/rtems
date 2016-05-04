@@ -27,34 +27,40 @@ int _Scheduler_CBS_Detach_thread (
   rtems_id                task_id
 )
 {
-  Objects_Locations location;
-  Thread_Control *the_thread;
+  Scheduler_CBS_Server *server;
+  ISR_lock_Context      lock_context;
+  Thread_Control       *the_thread;
+  Scheduler_CBS_Node   *node;
 
-  if ( server_id >= _Scheduler_CBS_Maximum_servers )
-    return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
-  /* Server is not valid. */
-  if ( !_Scheduler_CBS_Server_list[server_id].initialized )
-    return SCHEDULER_CBS_ERROR_NOSERVER;
-  /* Thread and server are not attached. */
-  if ( _Scheduler_CBS_Server_list[server_id].task_id != task_id )
-    return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
-
-  the_thread = _Thread_Get(task_id, &location);
-  /* The routine _Thread_Get may disable dispatch and not enable again. */
-  if ( the_thread ) {
-    Scheduler_CBS_Node *node = _Scheduler_CBS_Thread_get_node( the_thread );
-
-    _Scheduler_CBS_Server_list[server_id].task_id = -1;
-    node->cbs_server = NULL;
-
-    the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
-    the_thread->budget_callout   = the_thread->Start.budget_callout;
-    the_thread->is_preemptible   = the_thread->Start.is_preemptible;
-
-    _Objects_Put( &the_thread->Object );
-  } else {
+  if ( server_id >= _Scheduler_CBS_Maximum_servers ) {
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
   }
 
+  server = &_Scheduler_CBS_Server_list[ server_id ];
+
+  if ( !server->initialized ) {
+    return SCHEDULER_CBS_ERROR_NOSERVER;
+  }
+
+  if ( server->task_id != task_id ) {
+    return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
+  }
+
+  the_thread = _Thread_Get_interrupt_disable( task_id, &lock_context );
+
+  if ( the_thread == NULL ) {
+    return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
+  }
+
+  node = _Scheduler_CBS_Thread_get_node( the_thread );
+  node->cbs_server = NULL;
+
+  server->task_id = -1;
+
+  the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
+  the_thread->budget_callout   = the_thread->Start.budget_callout;
+  the_thread->is_preemptible   = the_thread->Start.is_preemptible;
+
+  _ISR_lock_ISR_enable( &lock_context );
   return SCHEDULER_CBS_OK;
 }
