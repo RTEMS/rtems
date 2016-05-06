@@ -24,7 +24,7 @@
  */
 
 #include <bsp.h>
-#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <bspopts.h>
 #include <libcpu/cpuModel.h>
 #include <assert.h>
@@ -150,7 +150,7 @@ static void clockOn(void)
   }
   pc386_clock_click_count = US_TO_TICK(pc386_microseconds_per_isr);
 
-  BSP_irq_enable_at_i8259s( BSP_PERIODIC_TIMER - BSP_IRQ_VECTOR_BASE );
+  bsp_interrupt_vector_enable( BSP_PERIODIC_TIMER - BSP_IRQ_VECTOR_BASE );
 
   #if 0
     printk( "configured usecs per tick=%d \n",
@@ -256,4 +256,3 @@ void Clock_driver_support_initialize_hardware(void)
   } while (0)
 
 #include "../../../shared/clockdrv_shell.h"
-

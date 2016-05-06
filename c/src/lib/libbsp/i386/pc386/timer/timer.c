@@ -16,7 +16,7 @@
  *  This file is provided "AS IS" without warranty of any kind, either
  *  expressed or implied.
  *
- *  Based upon code by 
+ *  Based upon code by
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <bsp.h>
 #include <rtems/btimer.h>
-#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <libcpu/cpuModel.h>
 
 /*
@@ -118,7 +118,7 @@ static void timerOff(const rtems_raw_irq_connect_data* used)
   /*
    * disable interrrupt at i8259 level
    */
-   BSP_irq_disable_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
+   bsp_interrupt_vector_disable(used->idtIndex - BSP_IRQ_VECTOR_BASE);
    /* reset timer mode to standard (DOS) value */
    outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
    outport_byte(TIMER_CNTR0, 0);
@@ -135,12 +135,12 @@ static void timerOn(const rtems_raw_irq_connect_data* used)
   /*
    * enable interrrupt at i8259 level
    */
-  BSP_irq_enable_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
+  bsp_interrupt_vector_enable(used->idtIndex - BSP_IRQ_VECTOR_BASE);
 }
 
 static int timerIsOn(const rtems_raw_irq_connect_data *used)
 {
-  return BSP_irq_enabled_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
+  return bsp_interrupt_vector_enable(used->idtIndex - BSP_IRQ_VECTOR_BASE);
 }
 
 static rtems_raw_irq_connect_data timer_raw_irq_data = {
