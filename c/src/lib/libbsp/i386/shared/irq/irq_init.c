@@ -66,7 +66,7 @@ static int raw_not_connected(
 
 static rtems_raw_irq_connect_data 	idtHdl[IDT_SIZE];
 
-static rtems_raw_irq_hdl rtemsIrq[BSP_IRQ_LINES_NUMBER] = {
+static rtems_raw_irq_hdl rtemsIrq[BSP_IRQ_VECTOR_NUMBER] = {
   rtems_irq_prologue_0,
   rtems_irq_prologue_1,
   rtems_irq_prologue_2,
@@ -149,7 +149,7 @@ void  rtems_irq_mngt_init(void)
      * Patch the entry that will be used by RTEMS for interrupt management
      * with RTEMS prologue.
      */
-    for (i = 0; i < BSP_IRQ_LINES_NUMBER; i++) {
+    for (i = 0; i < BSP_IRQ_VECTOR_NUMBER; i++) {
       create_interrupt_gate_descriptor(&idtEntry, rtemsIrq[i]);
       idt_entry_tbl[i + BSP_ASM_IRQ_VECTOR_BASE] = idtEntry;
     }

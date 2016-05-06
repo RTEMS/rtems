@@ -161,6 +161,7 @@ libbsp_a_SOURCES += startup/bspreset.c
 libbsp_a_SOURCES += ../../i386/shared/irq/idt.c
 libbsp_a_SOURCES += ../../i386/shared/irq/irq.c
 libbsp_a_SOURCES += ../../i386/shared/irq/irq_init.c
+libbsp_a_SOURCES += ../../i386/shared/irq/elcr.c
 libbsp_a_SOURCES += ../../shared/bootcard.c
 libbsp_a_SOURCES += ../../shared/sbrk.c
 libbsp_a_SOURCES += startup/ldsegs.S

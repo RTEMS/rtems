@@ -16,7 +16,6 @@
 #include <rtems/asm.h>
 #include <rtems/system.h>
 #include <bspopts.h>
-#include <bsp/irq_asm.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/percpu.h>
 
@@ -28,7 +27,7 @@
 
 /* Stack frame we use for intermediate storage               */
 #define ARG_OFF	0
-#define MSK_OFF 4
+#define MSK_OFF 4        /* not used any more                */
 #define EBX_OFF 8        /* ebx                              */
 #define EBP_OFF 12       /* code restoring ebp/esp relies on */
 #define ESP_OFF 16       /* esp being on top of ebp!         */
@@ -77,7 +76,7 @@ SYM (_ISR_Handler):
          *   saved ebx
 	 *   saved ebp
 	 *   saved irq mask
-	 *   vector arg to C_dispatch_isr   <- aligned SP
+	 *   vector arg to BSP_dispatch_isr   <- aligned SP
 	 */
 	movl      esp, eax
 	subl      $FRM_SIZ, esp
@@ -85,6 +84,13 @@ SYM (_ISR_Handler):
 	movl      ebx, EBX_OFF(esp)
 	movl      eax, ESP_OFF(esp)
 	movl      ebp, EBP_OFF(esp)
+
+	/*
+	 * GCC versions starting with 4.3 no longer place the cld
+	 * instruction before string operations.  We  need to ensure
+	 * it is set correctly for ISR handlers.
+	 */
+	cld
 
 #ifdef __SSE__
 	/* NOTE: SSE only is supported if the BSP enables fxsave/fxrstor
@@ -104,39 +110,6 @@ SYM (_ISR_Handler):
 	movl   $0x1f80, ARG_OFF(esp)	/* use ARG_OFF as scratch space   */
 	ldmxcsr ARG_OFF(esp)            /* clean-slate MXCSR              */
 #endif
-
-        /* Do not disable any 8259 interrupts if this isn't from one */
-	cmp       ecx, 16               /* is this a PIC IRQ? */
-	jge       .check_stack_switch
-
-	/*
-	 * acknowledge the interrupt
-	 */
-	movw      SYM (i8259s_cache), ax /* save current i8259 interrupt mask */
-	movl      eax, MSK_OFF(esp)      /* save in stack frame */
-
-	/*
-	 * compute the new PIC mask:
-	 *
-	 * <new mask> = <old mask> | irq_mask_or_tbl[<intr number aka ecx>]
-	 */
-	movw      SYM (irq_mask_or_tbl) (,ecx,2), dx
-	orw       dx, ax
-	/*
-	 * Install new computed value on the i8259 and update cache
-	 * accordingly
-	 */
-	movw      ax, SYM (i8259s_cache)
-	outb      $PIC_MASTER_IMR_IO_PORT
-	movb      ah, al
-	outb      $PIC_SLAVE_IMR_IO_PORT
-
-	movb      $PIC_EOI, al
-	cmpl      $7, ecx
-	jbe      .master
-	outb      $PIC_SLAVE_COMMAND_IO_PORT
-.master:
-	outb      $PIC_MASTER_COMMAND_IO_PORT
 
 	/*
 	 *  Now switch stacks if necessary
@@ -172,19 +145,6 @@ nested:
 	incl      PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(ebx) /* disable
 	                                                        multitasking */
 	/*
-	 * GCC versions starting with 4.3 no longer place the cld
-	 * instruction before string operations.  We  need to ensure
-	 * it is set correctly for ISR handlers.
-	 */
-	cld
-
-	/*
-	 * re-enable interrupts at processor level as the current
-	 * interrupt source is now masked via i8259
-	 */
-	sti
-
-	/*
 	 *  ECX is preloaded with the vector number; store as arg
 	 *  on top of stack. Note that _CPU_Interrupt_stack_high
 	 *  was adjusted in _CPU_Interrupt_stack_setup() (score/rtems/cpu.h)
@@ -192,12 +152,7 @@ nested:
 	 */
 
 	movl      ecx, ARG_OFF(esp)  /* store vector arg in stack */
-	call      C_dispatch_isr
-
-	/*
-	 * disable interrupts_again
-	 */
-	cli
+	call      BSP_dispatch_isr
 
 	movl      ARG_OFF(esp), ecx     /* grab vector arg from stack */
 
@@ -207,22 +162,6 @@ nested:
 	 */
 	movl      ebp, esp
 
-	/*
-	 * restore the original i8259 masks
-	 */
-        /* Do not touch 8259 interrupts if this isn't from one */
-	cmp       ecx, 16               /* is this a PIC IRQ? */
-	jge       .dont_restore_i8259
-
-	movw      SYM (i8259s_super_imr), dx
-	movl      MSK_OFF(esp), eax
-	orw       dx, ax
-	movw      ax, SYM (i8259s_cache)
-	outb	  $PIC_MASTER_IMR_IO_PORT
-	movb	  ah, al
-	outb	  $PIC_SLAVE_IMR_IO_PORT
-
-.dont_restore_i8259:
 	decl      PER_CPU_ISR_NEST_LEVEL(ebx)  /* one less ISR nest level */
 	                                    /* If interrupts are nested, */
 	                                    /*   then dispatching is disabled */
