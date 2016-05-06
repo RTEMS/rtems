@@ -102,8 +102,14 @@
 #include <bsp.h>
 
 /*
+ * Number of debug registers.
+ */
+#define NUM_DEBUG_REGISTERS 4
+
+/*
  * Prototypes we need to avoid warnings but not going into public space.
  */
+void bsp_reset(void);
 void breakpoint (void);
 void set_debug_traps(void);
 void set_mem_err(void);
@@ -158,7 +164,6 @@ int i386_gdb_registers[NUMREGS];
 #define STACKSIZE 10000
 int i386_gdb_remcomStack[STACKSIZE / sizeof (int)];
 int *i386_gdb_stackPtr = &i386_gdb_remcomStack[STACKSIZE / sizeof (int) - 1];
-
 
 static int gdb_connected;
 
@@ -771,6 +776,65 @@ hexToInt (char **ptr, int *intValue)
 }
 
 /*
+ * Get/Set the DR registers.
+ */
+static uint32_t getDR7(void)
+{
+  uint32_t value = 0;
+  asm volatile (" movl %%dr7, %0;" : "=r" (value) : : );
+  return value;
+}
+
+static void setDR7(uint32_t value)
+{
+  asm volatile (" movl %0, %%dr7;" : : "r" (value) : );
+}
+
+static uint32_t getDR(int reg)
+{
+  uint32_t value = 0;
+  switch (reg)
+    {
+    case 0:
+      asm volatile (" movl %%dr0, %0;" : "=r" (value) : : );
+      break;
+    case 1:
+      asm volatile (" movl %%dr1, %0;" : "=r" (value) : : );
+      break;
+    case 2:
+      asm volatile (" movl %%dr2, %0;" : "=r" (value) : : );
+      break;
+    case 3:
+      asm volatile (" movl %%dr3, %0;" : "=r" (value) : : );
+      break;
+    default:
+      break;
+    }
+  return value;
+}
+
+static void setDR(int reg, uint32_t addr)
+{
+  switch (reg)
+    {
+    case 0:
+      asm volatile (" movl %0, %%dr0;" : : "r" (addr) : );
+      break;
+    case 1:
+      asm volatile (" movl %0, %%dr1;" : : "r" (addr) : );
+      break;
+    case 2:
+      asm volatile (" movl %0, %%dr2;" : : "r" (addr) : );
+      break;
+    case 3:
+      asm volatile (" movl %0, %%dr3;" : : "r" (addr) : );
+      break;
+    default:
+      break;
+    }
+}
+
+/*
  * This function does all command procesing for interfacing to gdb.
  *
  * NOTE: This method is called from assembly code so must be marked
@@ -937,6 +1001,98 @@ handle_exception (int exceptionVector)
 	    i386_gdb_registers[PS] |= 0x100;
 
 	  _returnFromException ();	/* this is a jump */
+	  break;
+
+	case 'Z':
+	case 'z':
+	  /*
+	   * Z1 = execute (00b)
+	   * Z2 = write (01b)
+	   * Z3 = read (??, need to use 11b))
+	   * Z4 = read/write (11b)
+	   */
+	  ptr = &remcomInBuffer[1];
+	  reg = *(ptr++);
+	  if (reg == '0')
+	    break;
+	  printk("hbreak\n");
+	  switch ((char) reg)
+	    {
+	    case '1':
+	      reg = 0;
+	      break;
+	    case '2':
+	      reg = 1;
+	    case '3':
+	    case '4':
+	    default:
+	      reg = 3;
+	      break;
+	    }
+	  if (*(ptr++) == ',')
+	    {
+	      bool insert = remcomInBuffer[0] == 'Z';
+	      printk("hbreak type\n", insert);
+	      if (hexToInt (&ptr, &addr))
+		{
+		  if (*(ptr++) == ',')
+		    {
+		      uint32_t dr7;
+		      int i;
+		      hexToInt(&ptr, &length);
+		      dr7 = getDR7();
+		      for (i = 0; i < NUM_DEBUG_REGISTERS; ++i)
+			{
+			  if ((dr7 & (2 << (i * 2))) == 0)
+			    {
+			      if (insert)
+				{
+				  setDR(i, addr);
+				  dr7 |=
+				    ((length - 1) << ((i * 2) + 18)) |
+				    (reg << ((i * 2) + 16)) |
+				    (2 << (i * 2));
+				  setDR7(dr7);
+				  printk("set DR%i to %08x\n", i, addr);
+				  break;
+				}
+			    }
+			  else if (!insert)
+			    {
+			      uint32_t dra = getDR(i);
+			      if (dra == addr)
+				{
+				  dr7 &= ~(2 << (i * 2));
+				  setDR7(dr7);
+				  printk("clear DR%i\n", i);
+				  break;
+				}
+			    }
+			}
+		      if (insert && (i == NUM_DEBUG_REGISTERS))
+			{
+			  ptr = 0;
+			}
+		    }
+		  else
+		    {
+		      ptr = 0;
+		    }
+		}
+	      else
+		{
+		  ptr = 0;
+		}
+	    }
+	  else
+	    {
+	      ptr = 0;
+	    }
+
+	  if (ptr)
+	    strcpy (remcomOutBuffer, "OK");
+	  else
+	    strcpy (remcomOutBuffer, "E1");
 	  break;
 
 	  /* Detach.  */
