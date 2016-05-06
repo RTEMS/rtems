@@ -17,8 +17,14 @@ void bsp_fatal_extension(
   rtems_fatal_code code
 )
 {
+  #if (BSP_PRINT_EXCEPTION_CONTEXT)
+    if ( source == RTEMS_FATAL_SOURCE_EXCEPTION ) {
+      rtems_exception_frame_print( (const rtems_exception_frame *) code );
+    }
+  #endif
+
   #if (BSP_PRESS_KEY_FOR_RESET)
-    printk( "\nEXECUTIVE SHUTDOWN! Any key to reboot..." );
+    printk( "\nFATAL ERROR - Executive shutdown! Any key to reboot..." );
 
     /*
      * Wait for a key to be pressed
@@ -27,12 +33,6 @@ void bsp_fatal_extension(
       ;
 
     printk("\n");
-  #endif
-
-  #if (BSP_PRINT_EXCEPTION_CONTEXT)
-    if ( source == RTEMS_FATAL_SOURCE_EXCEPTION ) {
-      rtems_exception_frame_print( (const rtems_exception_frame *) code );
-    }
   #endif
 
   /*
