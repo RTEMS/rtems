@@ -566,3 +566,22 @@ rtems_status_code rtems_interrupt_handler_iterate(
 {
   return bsp_interrupt_handler_iterate(vector, routine, arg);
 }
+
+bool bsp_interrupt_handler_is_empty(rtems_vector_number vector)
+{
+  rtems_vector_number index = 0;
+  bsp_interrupt_handler_entry *head = NULL;
+  bool empty;
+
+  /* For use in interrupts so no lock. */
+
+  /* Get handler table index */
+  index = bsp_interrupt_handler_index(vector);
+
+  /* Get head entry of the handler list for the vector */
+  head = &bsp_interrupt_handler_table [index];
+
+  empty = bsp_interrupt_is_empty_handler_entry(head);
+
+  return empty;
+}

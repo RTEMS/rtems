@@ -17,6 +17,8 @@
  *  Germany
  *  <rtems@embedded-brains.de>
  *
+ * Copyright (c) 2016 Chris Johns <chrisj@rtems.org>
+ *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.org/license/LICENSE.
@@ -106,7 +108,7 @@ static inline rtems_vector_number bsp_interrupt_handler_index(
  * @defgroup bsp_interrupt BSP Interrupt Support
  *
  * @ingroup bsp_shared
- * 
+ *
  * @brief Generic BSP Interrupt Support
  *
  * The BSP interrupt support manages a sequence of interrupt vector numbers
@@ -271,6 +273,17 @@ static inline void bsp_interrupt_handler_dispatch(rtems_vector_number vector)
     bsp_interrupt_handler_default(vector);
   }
 }
+
+/**
+ * @brief Is interrupt handler empty.
+ *
+ * This routine returns true if the handler is empty and has not been
+ * initialised else false is returned. The interrupt lock is not used
+ * so this call can be used from within interrupts.
+ *
+ * @return If empty true shall be returned else false is returned.
+ */
+bool bsp_interrupt_handler_is_empty(rtems_vector_number vector);
 
 /** @} */
 
