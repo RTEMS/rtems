@@ -74,66 +74,72 @@ unsigned long IDE_Controller_Count;
 
 void bsp_ide_cmdline_init(void)
 {
-  bool ide1 = IDE1_DEFAULT;
-  bool ide2 = IDE2_DEFAULT;
-  const char* ide;
+  const char* ide_disable;
 
-  /*
-   * Can have:
-   *  --ide=0,1
-   */
-  ide = bsp_cmdline_arg ("--ide=");
+  ide_disable = bsp_cmdline_arg ("--ide-disable");
 
-  if (ide)
-  {
-    int i;
+  if (ide_disable == NULL) {
+    bool ide1 = IDE1_DEFAULT;
+    bool ide2 = IDE2_DEFAULT;
+    const char* ide;
+
     /*
-     * If a command line option exists remove the defaults.
+     * Can have:
+     *  --ide=0,1
      */
-    ide1 = ide2 = false;
+    ide = bsp_cmdline_arg ("--ide=");
 
-    ide += sizeof ("--ide=") - 1;
-
-    for (i = 0; i < 3; i++)
+    if (ide)
     {
-      switch (ide[i])
+      int i;
+      /*
+       * If a command line option exists remove the defaults.
+       */
+      ide1 = ide2 = false;
+
+      ide += sizeof ("--ide=") - 1;
+
+      for (i = 0; i < 3; i++)
       {
-        case '0':
-          ide1 = true;
-          break;
-        case '1':
-          ide2 = true;
-          break;
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-        case ',':
-          break;
-        default:
-          break;
+        switch (ide[i])
+        {
+          case '0':
+            ide1 = true;
+            break;
+          case '1':
+            ide2 = true;
+            break;
+          case '2':
+          case '3':
+          case '4':
+          case '5':
+          case '6':
+          case '7':
+          case '8':
+          case '9':
+          case ',':
+            break;
+          default:
+            break;
+        }
       }
     }
+
+    if (ide2 && !ide1)
+      IDE_Controller_Table[0] = IDE_Controller_Table[1];
+
+    if (ide1)
+      IDE_Controller_Count++;
+    if (ide2)
+      IDE_Controller_Count++;
+
+    /*
+     * Allow the user to get the initialise to print probing
+     * type information.
+     */
+    ide = bsp_cmdline_arg ("--ide-show");
+
+    if (ide)
+      pc386_ide_show = true;
   }
-
-  if (ide2 && !ide1)
-    IDE_Controller_Table[0] = IDE_Controller_Table[1];
-
-  if (ide1)
-    IDE_Controller_Count++;
-  if (ide2)
-    IDE_Controller_Count++;
-
-  /*
-   * Allow the user to get the initialise to print probing
-   * type information.
-   */
-  ide = bsp_cmdline_arg ("--ide-show");
-
-  if (ide)
-    pc386_ide_show = true;
 }
