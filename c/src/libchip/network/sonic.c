@@ -826,19 +826,17 @@ SONIC_STATIC void sonic_rda_wait(
        * driver has to move the RRP back *two* entries to
        * reuse the receive buffer holding the giant packet.
        */
-      for (i = 0 ; i < 2 ; i++) {
-        if ((*sc->read_register)( rp, SONIC_REG_RRP ) ==
-            (*sc->read_register)( rp, SONIC_REG_RSA ))
-          (*sc->write_register)(
-            rp,
-            SONIC_REG_RRP,
-            (*sc->read_register)( rp, SONIC_REG_REA )
-          );
-          (*sc->write_register)(
-             rp,
-             SONIC_REG_RRP,
-             (*sc->read_register)(rp, SONIC_REG_RRP) - sizeof(ReceiveResource_t)
-          );
+      for (i = 0; i < 2; ++i) {
+        uint32_t rrp = (*sc->read_register)( rp, SONIC_REG_RRP );
+        const uint32_t rsa = (*sc->read_register)( rp, SONIC_REG_RSA );
+
+        if (rrp == rsa) {
+          const uint32_t rea = (*sc->read_register)( rp, SONIC_REG_REA );
+          (*sc->write_register)( rp, SONIC_REG_RRP, rea );
+        }
+
+        rrp = (*sc->read_register)( rp, SONIC_REG_RRP );
+        (*sc->write_register)( rp, SONIC_REG_RRP, rrp - sizeof(ReceiveResource_t) );
       }
 
       /*
