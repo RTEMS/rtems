@@ -9,7 +9,7 @@
  */
 
 #include <bsp.h>
-#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <libchip/serial.h>
 
 #include "../../../shared/console_private.h"
@@ -31,6 +31,7 @@ extern int remote_debug;
 
 /* Current uart and port used by the gdb stub */
 static int          uart_current;
+static int          uart_vector;
 static console_tbl* port_current;
 
 /*
@@ -66,16 +67,41 @@ __asm__ ("    pushl %ebx");                                  /* Push eip */
 __asm__ ("    movl  i386_gdb_uart_isr_regsav + 4, %ebx");    /* Restore ebx */
 __asm__ ("    movl  i386_gdb_uart_isr_regsav + 8, %edx");    /* Restore edx */
 __asm__ ("i386_gdb_uart_isr_1:");
-__asm__ ("    movb  $0x20, %al");
-__asm__ ("    outb  %al, $0x20");
 __asm__ ("    movl  i386_gdb_uart_isr_regsav, %eax");        /* Restore eax */
 __asm__ ("    iret");                                        /* Done */
 
 static int gdb_hello_index;
 static const char const* gdb_hello = "+";
 
+static inline uint8_t BSP_i8259a_irq_in_service_reg(uint32_t ioport)
+{
+  uint8_t isr;
+  outport_byte(ioport, PIC_OCW3_SEL | PIC_OCW3_RR | PIC_OCW3_RIS);
+  inport_byte(ioport, isr);
+  outport_byte(ioport, PIC_OCW3_SEL | PIC_OCW3_RR);
+  return isr;
+}
+
+static inline void BSP_irq_ack_at_i8259a(const int irqLine)
+{
+  uint8_t slave_isr = 0;
+  if (irqLine >= 8) {
+   outport_byte(PIC_SLAVE_COMMAND_IO_PORT, PIC_EOI);
+   slave_isr = BSP_i8259a_irq_in_service_reg(PIC_SLAVE_COMMAND_IO_PORT);
+  }
+
+  /*
+   * Only issue the EOI to the master if there are no more interrupts in
+   * service for the slave. i8259a data sheet page 18, The Special Fully Nested
+   * Mode, b.
+   */
+  if (slave_isr == 0)
+    outport_byte(PIC_MASTER_COMMAND_IO_PORT, PIC_EOI);
+}
+
 int i386_gdb_uart_ctrl_c_check(void)
 {
+  BSP_irq_ack_at_i8259a(uart_vector);
   if (port_current) {
     int c = 0;
     while (c >= 0) {
@@ -139,17 +165,17 @@ i386_stub_glue_init(int uart)
 
 static void BSP_uart_on(const rtems_raw_irq_connect_data* used)
 {
-  BSP_irq_enable_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
+  bsp_interrupt_vector_enable(used->idtIndex - BSP_IRQ_VECTOR_BASE);
 }
 
 static void BSP_uart_off(const rtems_raw_irq_connect_data* used)
 {
-  BSP_irq_disable_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
+  bsp_interrupt_vector_disable(used->idtIndex - BSP_IRQ_VECTOR_BASE);
 }
 
 static int BSP_uart_isOn(const rtems_raw_irq_connect_data* used)
 {
-  return BSP_irq_enabled_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
+  return bsp_interrupt_vector_enable(used->idtIndex - BSP_IRQ_VECTOR_BASE);
 }
 
 /*
@@ -169,6 +195,7 @@ void i386_stub_glue_init_breakin(void)
     printk("GDB: no UART interrupt support\n");
   }
   else {
+    uart_vector = port_current->ulIntVector;
     uart_raw_irq_data.idtIndex = port_current->ulIntVector + BSP_IRQ_VECTOR_BASE;
 
     if (!i386_get_current_idt_entry(&uart_raw_irq_data)) {
