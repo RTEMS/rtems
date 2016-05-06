@@ -59,14 +59,19 @@ rtems_status_code rtems_signal_send(
   }
 
   if ( asr->is_enabled ) {
+    Per_CPU_Control *cpu_self;
+
     _ASR_Post_signals( signal_set, &asr->signals_posted );
     _ASR_Release( asr, &lock_context );
+    _Thread_State_acquire( the_thread, &lock_context );
     _Thread_Add_post_switch_action(
       the_thread,
       &api->Signal_action,
       _Signal_Action_handler
     );
-    _Thread_Dispatch();
+    cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
+    _Thread_State_release( the_thread, &lock_context );
+    _Thread_Dispatch_enable( cpu_self );
   } else {
     _ASR_Post_signals( signal_set, &asr->signals_pending );
     _ASR_Release( asr, &lock_context );

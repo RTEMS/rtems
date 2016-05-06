@@ -22,13 +22,13 @@
 #include <rtems/rtems/signalimpl.h>
 #include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/tasks.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/threadimpl.h>
 
 void _Signal_Action_handler(
-  Thread_Control  *executing,
-  Thread_Action   *action,
-  Per_CPU_Control *cpu,
-  ISR_Level        level
+  Thread_Control   *executing,
+  Thread_Action    *action,
+  ISR_lock_Context *lock_context
 )
 {
   RTEMS_API_Control *api;
@@ -37,7 +37,7 @@ void _Signal_Action_handler(
   Modes_Control      prev_mode;
 
   (void) action;
-  _Thread_Action_release_and_ISR_enable( cpu, level );
+  _Thread_State_release( executing, lock_context );
 
   api = executing->API_Extensions[ THREAD_API_RTEMS ];
   if ( !api )

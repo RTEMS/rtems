@@ -32,6 +32,7 @@ rtems_status_code rtems_task_mode(
   rtems_mode *previous_mode_set
 )
 {
+  ISR_lock_Context    lock_context;
   Thread_Control     *executing;
   RTEMS_API_Control  *api;
   ASR_Information    *asr;
@@ -102,18 +103,19 @@ rtems_status_code rtems_task_mode(
 
       if ( _ASR_Swap_signals( asr ) != 0 ) {
         needs_asr_dispatching = true;
+        _Thread_State_acquire( executing, &lock_context );
         _Thread_Add_post_switch_action(
           executing,
           &api->Signal_action,
           _Signal_Action_handler
         );
+        _Thread_State_release( executing, &lock_context );
       }
     }
   }
 
   if ( preempt_enabled || needs_asr_dispatching ) {
     Per_CPU_Control  *cpu_self;
-    ISR_lock_Context  lock_context;
 
     cpu_self = _Thread_Dispatch_disable();
     _Scheduler_Acquire( executing, &lock_context );

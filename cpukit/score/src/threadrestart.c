@@ -32,6 +32,12 @@
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 
+static void _Thread_Life_action_handler(
+  Thread_Control   *executing,
+  Thread_Action    *action,
+  ISR_lock_Context *lock_context
+);
+
 typedef struct {
   Chain_Control Chain;
   ISR_lock_Control Lock;
@@ -133,6 +139,8 @@ static void _Thread_Free( Thread_Control *the_thread )
   _SMP_lock_Stats_destroy( &the_thread->Potpourri_stats );
 #endif
 
+  _Thread_queue_Destroy( &the_thread->Join_queue );
+
   _Objects_Free( &information->Objects, &the_thread->Object );
 }
 
@@ -179,11 +187,15 @@ static void _Thread_Add_life_change_action(
   Thread_Control *the_thread
 )
 {
+  ISR_lock_Context lock_context;
+
+  _Thread_State_acquire( the_thread, &lock_context );
   _Thread_Add_post_switch_action(
     the_thread,
     &the_thread->Life.Action,
     _Thread_Life_action_handler
   );
+  _Thread_State_release( the_thread, &lock_context );
 }
 
 static void _Thread_Start_life_change_for_executing(
@@ -202,10 +214,9 @@ static void _Thread_Start_life_change_for_executing(
 }
 
 void _Thread_Life_action_handler(
-  Thread_Control  *executing,
-  Thread_Action   *action,
-  Per_CPU_Control *cpu,
-  ISR_Level        level
+  Thread_Control   *executing,
+  Thread_Action    *action,
+  ISR_lock_Context *lock_context
 )
 {
   Thread_Life_state previous_life_state;
@@ -215,7 +226,7 @@ void _Thread_Life_action_handler(
   previous_life_state = executing->Life.state;
   executing->Life.state = THREAD_LIFE_PROTECTED;
 
-  _Thread_Action_release_and_ISR_enable( cpu, level );
+  _Thread_State_release( executing, lock_context );
 
   if ( _Thread_Is_life_terminating( previous_life_state ) ) {
     _User_extensions_Thread_terminate( executing );
@@ -295,15 +306,14 @@ static void _Thread_Request_life_change(
   Thread_Life_state  additional_life_state
 )
 {
-  Thread_Life_state previous_life_state;
-  Per_CPU_Control *cpu;
-  ISR_Level level;
+  Thread_Life_state        previous_life_state;
+  ISR_lock_Context         lock_context;
   const Scheduler_Control *scheduler;
 
-  cpu = _Thread_Action_ISR_disable_and_acquire( the_thread, &level );
+  _Thread_State_acquire( the_thread, &lock_context );
   previous_life_state = the_thread->Life.state;
   the_thread->Life.state = previous_life_state | additional_life_state;
-  _Thread_Action_release_and_ISR_enable( cpu, level );
+  _Thread_State_release( the_thread, &lock_context );
 
   scheduler = _Scheduler_Get( the_thread );
   if ( the_thread == executing ) {
@@ -381,14 +391,12 @@ bool _Thread_Restart(
 
 bool _Thread_Set_life_protection( bool protect )
 {
-  bool previous_life_protection;
-  ISR_Level level;
-  Per_CPU_Control *cpu;
-  Thread_Control *executing;
-  Thread_Life_state previous_life_state;
+  bool               previous_life_protection;
+  ISR_lock_Context   lock_context;
+  Thread_Control    *executing;
+  Thread_Life_state  previous_life_state;
 
-  cpu = _Thread_Action_ISR_disable_and_acquire_for_executing( &level );
-  executing = cpu->executing;
+  executing = _Thread_State_acquire_for_executing( &lock_context );
 
   previous_life_state = executing->Life.state;
   previous_life_protection = _Thread_Is_life_protected( previous_life_state );
@@ -399,7 +407,7 @@ bool _Thread_Set_life_protection( bool protect )
     executing->Life.state = previous_life_state & ~THREAD_LIFE_PROTECTED;
   }
 
-  _Thread_Action_release_and_ISR_enable( cpu, level );
+  _Thread_State_release( executing, &lock_context );
 
 #if defined(RTEMS_SMP)
   /*

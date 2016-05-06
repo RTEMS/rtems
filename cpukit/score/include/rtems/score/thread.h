@@ -343,9 +343,14 @@ typedef struct {
 typedef struct {
   /** This field is the object management structure for each proxy. */
   Objects_Control          Object;
+
+  /**
+   * @see Thread_Control::Join_queue
+   */
+  Thread_queue_Control     Join_queue;
+
   /** This field is the current execution state of this proxy. */
   States_Control           current_state;
-
   /**
    * @brief This field is the current priority state of this thread.
    *
@@ -445,24 +450,23 @@ typedef struct Thread_Action Thread_Action;
 /**
  * @brief Thread action handler.
  *
- * The thread action handler will be called with interrupts disabled and the
- * thread action lock acquired.  The handler must release the thread action
- * lock with _Thread_Action_release_and_ISR_enable().  So the thread action
- * lock can be used to protect private data fields of the particular action.
+ * The thread action handler will be called with interrupts disabled and a
+ * corresponding lock acquired, e.g. _Thread_State_acquire().  The handler must
+ * release the corresponding lock, e.g. _Thread_State_release().  So, the
+ * corresponding lock may be used to protect private data used by the
+ * particular action.
  *
- * Since the action is passed to the handler private data fields can be added
- * below the common thread action fields.
+ * Since the action is passed to the handler additional data may be accessed
+ * via RTEMS_CONTAINER_OF().
  *
- * @param[in] thread The thread performing the action.
+ * @param[in] the_thread The thread performing the action.
  * @param[in] action The thread action.
- * @param[in] cpu The processor of the thread.
- * @param[in] level The ISR level for _Thread_Action_release_and_ISR_enable().
+ * @param[in] lock_context The lock context to use for the lock release.
  */
 typedef void ( *Thread_Action_handler )(
-  Thread_Control         *thread,
-  Thread_Action          *action,
-  struct Per_CPU_Control *cpu,
-  ISR_Level               level
+  Thread_Control   *the_thread,
+  Thread_Action    *action,
+  ISR_lock_Context *lock_context
 );
 
 /**
@@ -474,13 +478,10 @@ typedef void ( *Thread_Action_handler )(
  *
  * Thread actions are the building block for efficient implementation of
  * - Classic signals delivery,
- * - POSIX signals delivery,
- * - thread restart notification,
- * - thread delete notification,
- * - forced thread migration on SMP configurations, and
- * - the Multiprocessor Resource Sharing Protocol (MrsP).
+ * - POSIX signals delivery, and
+ * - thread life-cycle changes.
  *
- * @see _Thread_Run_post_switch_actions().
+ * @see _Thread_Add_post_switch_action() and _Thread_Run_post_switch_actions().
  */
 struct Thread_Action {
   Chain_Node            Node;
@@ -710,6 +711,19 @@ typedef struct {
 struct _Thread_Control {
   /** This field is the object management structure for each thread. */
   Objects_Control          Object;
+
+  /**
+   * @brief Thread queue for thread join operations and multi-purpose lock.
+   *
+   * The lock of this thread queue is used for various purposes.  It protects
+   * the following fields
+   *
+   * - Thread_Control::Post_switch_actions.
+   *
+   * @see _Thread_State_acquire().
+   */
+  Thread_queue_Control     Join_queue;
+
   /** This field is the current execution state of this thread. */
   States_Control           current_state;
 

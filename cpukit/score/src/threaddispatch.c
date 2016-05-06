@@ -9,7 +9,7 @@
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2014 embedded brains GmbH.
+ *  Copyright (c) 2014, 2016 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -50,23 +50,22 @@ static Thread_Action *_Thread_Get_post_switch_action(
 
 static void _Thread_Run_post_switch_actions( Thread_Control *executing )
 {
-  ISR_Level        level;
-  Per_CPU_Control *cpu_self;
-  Thread_Action   *action;
+  ISR_lock_Context  lock_context;
+  Thread_Action    *action;
 
-  cpu_self = _Thread_Action_ISR_disable_and_acquire( executing, &level );
+  _Thread_State_acquire( executing, &lock_context );
   action = _Thread_Get_post_switch_action( executing );
 
   while ( action != NULL ) {
     _Chain_Set_off_chain( &action->Node );
 
-    ( *action->handler )( executing, action, cpu_self, level );
+    ( *action->handler )( executing, action, &lock_context );
 
-    cpu_self = _Thread_Action_ISR_disable_and_acquire( executing, &level );
+    _Thread_State_acquire( executing, &lock_context );
     action = _Thread_Get_post_switch_action( executing );
   }
 
-  _Thread_Action_release_and_ISR_enable( cpu_self, level );
+  _Thread_State_release( executing, &lock_context );
 }
 
 void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )

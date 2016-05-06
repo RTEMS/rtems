@@ -200,13 +200,6 @@ void _Thread_Yield( Thread_Control *executing );
 
 bool _Thread_Set_life_protection( bool protect );
 
-void _Thread_Life_action_handler(
-  Thread_Control  *executing,
-  Thread_Action   *action,
-  Per_CPU_Control *cpu,
-  ISR_Level        level
-);
-
 /**
  * @brief Kills all zombie threads in the system.
  *
@@ -336,6 +329,52 @@ void _Thread_Delay_ended(
   Objects_Id  id,
   void       *ignored
 );
+
+RTEMS_INLINE_ROUTINE void _Thread_State_acquire_critical(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _Thread_queue_Acquire_critical( &the_thread->Join_queue, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_State_acquire(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _Thread_queue_Acquire( &the_thread->Join_queue, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE Thread_Control *_Thread_State_acquire_for_executing(
+  ISR_lock_Context *lock_context
+)
+{
+  Thread_Control *executing;
+
+  _ISR_lock_ISR_disable( lock_context );
+  executing = _Thread_Executing;
+  _Thread_State_acquire_critical( executing, lock_context );
+
+  return executing;
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_State_release(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _Thread_queue_Release( &the_thread->Join_queue, lock_context );
+}
+
+#if defined(RTEMS_DEBUG)
+RTEMS_INLINE_ROUTINE bool _Thread_State_is_owner(
+  const Thread_Control *the_thread
+)
+{
+  return _Thread_queue_Is_lock_owner( &the_thread->Join_queue );
+}
+#endif
 
 /**
  * @brief Returns true if the left thread priority is less than the right
@@ -841,50 +880,17 @@ RTEMS_INLINE_ROUTINE void _Thread_Action_initialize(
   _Chain_Set_off_chain( &action->Node );
 }
 
-RTEMS_INLINE_ROUTINE Per_CPU_Control *
-  _Thread_Action_ISR_disable_and_acquire_for_executing( ISR_Level *level )
-{
-  Per_CPU_Control *cpu;
-
-  _ISR_Disable_without_giant( *level );
-  cpu = _Per_CPU_Get();
-  _Per_CPU_Acquire( cpu );
-
-  return cpu;
-}
-
-RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Action_ISR_disable_and_acquire(
-  Thread_Control *thread,
-  ISR_Level      *level
-)
-{
-  Per_CPU_Control *cpu;
-
-  _ISR_Disable_without_giant( *level );
-  cpu = _Thread_Get_CPU( thread );
-  _Per_CPU_Acquire( cpu );
-
-  return cpu;
-}
-
-RTEMS_INLINE_ROUTINE void _Thread_Action_release_and_ISR_enable(
-  Per_CPU_Control *cpu,
-  ISR_Level level
-)
-{
-  _Per_CPU_Release_and_ISR_enable( cpu, level );
-}
-
 RTEMS_INLINE_ROUTINE void _Thread_Add_post_switch_action(
-  Thread_Control        *thread,
+  Thread_Control        *the_thread,
   Thread_Action         *action,
   Thread_Action_handler  handler
 )
 {
   Per_CPU_Control *cpu_of_thread;
-  ISR_Level        level;
 
-  cpu_of_thread = _Thread_Action_ISR_disable_and_acquire( thread, &level );
+  _Assert( _Thread_State_is_owner( the_thread ) );
+
+  cpu_of_thread = _Thread_Get_CPU( the_thread );
 
   action->handler = handler;
 
@@ -899,11 +905,9 @@ RTEMS_INLINE_ROUTINE void _Thread_Add_post_switch_action(
 #endif
 
   _Chain_Append_if_is_off_chain_unprotected(
-    &thread->Post_switch_actions.Chain,
+    &the_thread->Post_switch_actions.Chain,
     &action->Node
   );
-
-  _Thread_Action_release_and_ISR_enable( cpu_of_thread, level );
 }
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_life_restarting(

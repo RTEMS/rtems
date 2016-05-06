@@ -91,19 +91,17 @@ static void _POSIX_signals_Check_signal(
 }
 
 static void _POSIX_signals_Action_handler(
-  Thread_Control  *executing,
-  Thread_Action   *action,
-  Per_CPU_Control *cpu,
-  ISR_Level        level
+  Thread_Control   *executing,
+  Thread_Action    *action,
+  ISR_lock_Context *lock_context
 )
 {
   POSIX_API_Control  *api;
   int                 signo;
-  ISR_lock_Context    lock_context;
   int                 hold_errno;
 
   (void) action;
-  _Thread_Action_release_and_ISR_enable( cpu, level );
+  _Thread_State_release( executing, lock_context );
 
   api = executing->API_Extensions[ THREAD_API_POSIX ];
 
@@ -137,13 +135,13 @@ static void _POSIX_signals_Action_handler(
    *  processed at all.  No point in doing this loop otherwise.
    */
   while (1) {
-    _POSIX_signals_Acquire( &lock_context );
+    _POSIX_signals_Acquire( lock_context );
       if ( !(api->signals_unblocked &
             (api->signals_pending | _POSIX_signals_Pending)) ) {
-       _POSIX_signals_Release( &lock_context );
+       _POSIX_signals_Release( lock_context );
        break;
      }
-    _POSIX_signals_Release( &lock_context );
+    _POSIX_signals_Release( lock_context );
 
     for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
       _POSIX_signals_Check_signal( api, signo, false );
@@ -166,11 +164,15 @@ static bool _POSIX_signals_Unblock_thread_done(
   bool               status
 )
 {
+  ISR_lock_Context lock_context;
+
+  _Thread_State_acquire( the_thread, &lock_context );
   _Thread_Add_post_switch_action(
     the_thread,
     &api->Signal_action,
     _POSIX_signals_Action_handler
   );
+  _Thread_State_release( the_thread, &lock_context );
 
   return status;
 }

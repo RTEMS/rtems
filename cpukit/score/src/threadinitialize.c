@@ -190,6 +190,8 @@ bool _Thread_Initialize(
   /* Initialize the CPU for the non-SMP schedulers */
   _Thread_Set_CPU( the_thread, cpu );
 
+  _Thread_queue_Initialize( &the_thread->Join_queue );
+
   the_thread->current_state           = STATES_DORMANT;
   the_thread->Wait.operations         = &_Thread_queue_Operations_default;
   the_thread->current_priority        = priority;
