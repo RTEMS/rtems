@@ -27,16 +27,7 @@
 #include <libchip/ns16550.h>
 #include "../../../shared/console_private.h"
 
-rtems_device_minor_number         BSPPrintkPort = 0;
-
-#if (BSP_IS_EDISON == 1)
-void edison_write_polled(int minor, char cChar); /* XXX */
-int edison_inbyte_nonblocking_polled(int minor);
-#endif
-
-#if BSP_ENABLE_COM1_COM4
-int ns16550_inbyte_nonblocking_polled( int minor );
-#endif
+rtems_device_minor_number BSPPrintkPort = 0;
 
 void BSP_outch(char ch);
 int BSP_inch(void);
@@ -44,41 +35,55 @@ int BSP_inch(void);
 void BSP_outch(char ch)
 {
   #if BSP_ENABLE_VGA
-    if ( BSPPrintkPort == BSP_CONSOLE_VGA ) {
-      _IBMPC_outch( ch );
-      return;
-    }
+    bool isVga =  BSPPrintkPort == BSP_CONSOLE_VGA;
+  #else
+    bool isVga = false;
   #endif
-  console_tbl *cptr;
 
-  cptr = &Console_Configuration_Ports[BSPPrintkPort];
-  cptr->pDeviceFns->deviceWritePolled( BSPPrintkPort, ch );
-}
-
-int BSP_inch(void) 
-{
-  int           result = -1;
+  if ( !isVga ) {
+    console_tbl *port = Console_Port_Tbl[BSPPrintkPort];
+    if (port->pDeviceFns && port->pDeviceFns->deviceWritePolled) {
+      port->pDeviceFns->deviceWritePolled( BSPPrintkPort, ch );
+      /*
+       * No termios so expand the LF to LF/CR.
+       */
+      if ( ch == '\n')
+        port->pDeviceFns->deviceWritePolled( BSPPrintkPort, '\r' );
+    }
+    return;
+  }
 
   #if BSP_ENABLE_VGA
-    if ( BSPPrintkPort == BSP_CONSOLE_VGA ) {
-      result = BSP_wait_polled_input();
-    } else
+    _IBMPC_outch( ch );
   #endif
-  #if BSP_ENABLE_COM1_COM4
-    {
+}
+
+int BSP_inch(void)
+{
+  #if BSP_ENABLE_VGA
+    bool isVga =  BSPPrintkPort == BSP_CONSOLE_VGA;
+  #else
+    bool isVga = false;
+  #endif
+
+  int result = -1;
+
+  if ( !isVga ) {
+    console_tbl *port = Console_Port_Tbl[BSPPrintkPort];
+    if (port->pDeviceFns && port->pDeviceFns->deviceRead) {
       do {
-        result = ns16550_inbyte_nonblocking_polled( BSPPrintkPort );
+        result = port->pDeviceFns->deviceRead( BSPPrintkPort );
       } while (result == -1);
+      return result;
     }
+  }
+
+  #if BSP_ENABLE_VGA
+    result = BSP_wait_polled_input();
   #endif
-  #if (BSP_IS_EDISON == 1)
-    do {
-      result = edison_inbyte_nonblocking_polled( BSPPrintkPort );
-    } while (result == -1);
-  #endif
+
   return result;
 }
 
 BSP_output_char_function_type     BSP_output_char = BSP_outch;
 BSP_polling_getchar_function_type BSP_poll_char = BSP_inch;
-
