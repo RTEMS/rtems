@@ -79,13 +79,6 @@ extern Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
 #define _POSIX_signals_Release( lock_context ) \
   _Thread_queue_Release( &_POSIX_signals_Wait_queue, lock_context )
 
-void _POSIX_signals_Action_handler(
-  Thread_Control  *executing,
-  Thread_Action   *action,
-  Per_CPU_Control *cpu,
-  ISR_Level        level
-);
-
 /**
  * @brief Unlock POSIX signals thread.
  */

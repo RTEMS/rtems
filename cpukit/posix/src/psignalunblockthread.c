@@ -34,6 +34,132 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <stdio.h>
 
+static void _POSIX_signals_Check_signal(
+  POSIX_API_Control  *api,
+  int                 signo,
+  bool                is_global
+)
+{
+  siginfo_t siginfo_struct;
+  sigset_t  saved_signals_unblocked;
+
+  if ( ! _POSIX_signals_Clear_signals( api, signo, &siginfo_struct,
+                                       is_global, true, true ) )
+    return;
+
+  /*
+   *  Since we made a union of these, only one test is necessary but this is
+   *  safer.
+   */
+  #if defined(RTEMS_DEBUG)
+    assert( _POSIX_signals_Vectors[ signo ].sa_handler ||
+            _POSIX_signals_Vectors[ signo ].sa_sigaction );
+  #endif
+
+  /*
+   *  Just to prevent sending a signal which is currently being ignored.
+   */
+  if ( _POSIX_signals_Vectors[ signo ].sa_handler == SIG_IGN )
+    return;
+
+  /*
+   *  Block the signals requested in sa_mask
+   */
+  saved_signals_unblocked = api->signals_unblocked;
+  api->signals_unblocked &= ~_POSIX_signals_Vectors[ signo ].sa_mask;
+
+  /*
+   *  Here, the signal handler function executes
+   */
+  switch ( _POSIX_signals_Vectors[ signo ].sa_flags ) {
+    case SA_SIGINFO:
+      (*_POSIX_signals_Vectors[ signo ].sa_sigaction)(
+        signo,
+        &siginfo_struct,
+        NULL        /* context is undefined per 1003.1b-1993, p. 66 */
+      );
+      break;
+    default:
+      (*_POSIX_signals_Vectors[ signo ].sa_handler)( signo );
+      break;
+  }
+
+  /*
+   *  Restore the previous set of unblocked signals
+   */
+  api->signals_unblocked = saved_signals_unblocked;
+}
+
+static void _POSIX_signals_Action_handler(
+  Thread_Control  *executing,
+  Thread_Action   *action,
+  Per_CPU_Control *cpu,
+  ISR_Level        level
+)
+{
+  POSIX_API_Control  *api;
+  int                 signo;
+  ISR_lock_Context    lock_context;
+  int                 hold_errno;
+
+  (void) action;
+  _Thread_Action_release_and_ISR_enable( cpu, level );
+
+  api = executing->API_Extensions[ THREAD_API_POSIX ];
+
+  /*
+   *  We need to ensure that if the signal handler executes a call
+   *  which overwrites the unblocking status, we restore it.
+   */
+  hold_errno = executing->Wait.return_code;
+
+  /*
+   * api may be NULL in case of a thread close in progress
+   */
+  if ( !api )
+    return;
+
+  /*
+   *  In case the executing thread is blocked or about to block on something
+   *  that uses the thread wait information, then this is a kernel bug.
+   */
+  _Assert(
+    ( _Thread_Wait_flags_get( executing )
+      & ( THREAD_WAIT_STATE_BLOCKED | THREAD_WAIT_STATE_INTEND_TO_BLOCK ) ) == 0
+  );
+
+  /*
+   *  If we invoke any user code, there is the possibility that
+   *  a new signal has been posted that we should process so we
+   *  restart the loop if a signal handler was invoked.
+   *
+   *  The first thing done is to check there are any signals to be
+   *  processed at all.  No point in doing this loop otherwise.
+   */
+  while (1) {
+    _POSIX_signals_Acquire( &lock_context );
+      if ( !(api->signals_unblocked &
+            (api->signals_pending | _POSIX_signals_Pending)) ) {
+       _POSIX_signals_Release( &lock_context );
+       break;
+     }
+    _POSIX_signals_Release( &lock_context );
+
+    for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
+      _POSIX_signals_Check_signal( api, signo, false );
+      _POSIX_signals_Check_signal( api, signo, true );
+    }
+    /* Unfortunately - nothing like __SIGFIRSTNOTRT in newlib signal .h */
+
+    for ( signo = SIGHUP ; signo <= __SIGLASTNOTRT ; signo++ ) {
+      _POSIX_signals_Check_signal( api, signo, false );
+      _POSIX_signals_Check_signal( api, signo, true );
+    }
+  }
+
+  executing->Wait.return_code = hold_errno;
+}
+
 static bool _POSIX_signals_Unblock_thread_done(
   Thread_Control    *the_thread,
   POSIX_API_Control *api,
