@@ -87,52 +87,6 @@ extern "C" {
  */
 typedef unsigned short rtems_i8259_masks;
 
-/**
- * @brief Contains the current IMR of both i8259s.
- */
-//extern rtems_i8259_masks i8259s_cache;
-
-/**
- * @brief Contains the super IMR of both i8259s to overrule i8259s_cache during
- * interrupt exit.
- *
- * This enables a bsp_interrupt_vector_disable() in interrupt handlers.  This
- * is required for the interrupt server support used by the new network stack.
- */
-//extern rtems_i8259_masks i8259s_super_imr;
-
-/*-------------------------------------------------------------------------+
-| Function Prototypes.
-+--------------------------------------------------------------------------*/
-/*
- * ------------------------ Intel 8259 (or emulation) Mngt Routines -------
- */
-
-/** @brief
- * function to disable a particular irq at 8259 level. After calling
- * this function, even if the device asserts the interrupt line it will
- * not be propagated further to the processor
- */
-//int BSP_irq_disable_at_i8259s        (const rtems_irq_number irqLine);
-/** @brief
- * function to enable a particular irq at 8259 level. After calling
- * this function, if the device asserts the interrupt line it will
- * be propagated further to the processor
- */
-//int BSP_irq_enable_at_i8259s		(const rtems_irq_number irqLine);
-/** @brief
- * function to acknoledge a particular irq at 8259 level. After calling
- * this function, if a device asserts an enabled interrupt line it will
- * be propagated further to the processor. Mainly usefull for people
- * writting raw handlers as this is automagically done for rtems managed
- * handlers.
- */
-//int BSP_irq_ack_at_i8259s           	(const rtems_irq_number irqLine);
-/** @brief
- * function to check if a particular irq is enabled at 8259 level. After calling
- */
-//int BSP_irq_enabled_at_i8259s        	(const rtems_irq_number irqLine);
-
 /** @} */
 
 #ifdef __cplusplus
