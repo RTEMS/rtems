@@ -75,6 +75,7 @@ libbsp_a_SOURCES += \
 	startup/mmu.c \
 	startup/mmu-tlb1.S \
 	startup/mmu-config.c \
+	startup/portal.c \
 	startup/restart.S \
 	startup/bsppredriverhook.c \
 	startup/bspstart.c \

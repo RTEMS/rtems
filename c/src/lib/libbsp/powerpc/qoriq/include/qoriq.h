@@ -527,6 +527,9 @@ extern volatile qoriq_ccsr qoriq;
 #if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
 extern uint8_t qoriq_bman_portal[2][16777216];
 extern uint8_t qoriq_qman_portal[2][16777216];
+
+void qoriq_clear_ce_portal(void *base, size_t size);
+void qoriq_clear_ci_portal(void *base, size_t size);
 #endif
 
 static inline void qoriq_reset_qman_and_bman(void)
