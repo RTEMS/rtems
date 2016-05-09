@@ -398,6 +398,9 @@ typedef struct {
  */
 typedef struct {
   ISR_Level isr_level;
+#if defined( RTEMS_DEBUG )
+  SMP_lock_Control *lock_used_for_acquire;
+#endif
 #if defined( RTEMS_PROFILING )
   SMP_lock_Stats_context Stats_context;
 #endif
@@ -578,11 +581,8 @@ void _SMP_lock_Release_and_ISR_enable(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
 );
-
-static inline void _SMP_lock_Release_and_ISR_enable_body(
 #else
 static inline void _SMP_lock_Release_and_ISR_enable(
-#endif
   SMP_lock_Control *lock,
   SMP_lock_Context *context
 )
@@ -590,6 +590,7 @@ static inline void _SMP_lock_Release_and_ISR_enable(
   _SMP_lock_Release( lock, context );
   _ISR_Enable_without_giant( context->isr_level );
 }
+#endif
 
 #if defined( RTEMS_DEBUG )
 /**

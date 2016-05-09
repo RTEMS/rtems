@@ -40,6 +40,9 @@ void _SMP_lock_Acquire(
   SMP_lock_Context *context
 )
 {
+#if defined(RTEMS_DEBUG)
+  context->lock_used_for_acquire = lock;
+#endif
   _SMP_lock_Acquire_body( lock, context );
 #if defined(RTEMS_DEBUG)
   lock->owner = _SMP_Get_current_processor();
@@ -52,6 +55,8 @@ void _SMP_lock_Release(
 )
 {
 #if defined(RTEMS_DEBUG)
+  _Assert( context->lock_used_for_acquire == lock );
+  context->lock_used_for_acquire = NULL;
   _Assert( lock->owner == _SMP_Get_current_processor() );
   lock->owner = SMP_LOCK_NO_OWNER;
 #endif
@@ -63,6 +68,9 @@ void _SMP_lock_ISR_disable_and_acquire(
   SMP_lock_Context *context
 )
 {
+#if defined(RTEMS_DEBUG)
+  context->lock_used_for_acquire = lock;
+#endif
   _SMP_lock_ISR_disable_and_acquire_body( lock, context );
 #if defined(RTEMS_DEBUG)
   lock->owner = _SMP_Get_current_processor();
@@ -75,10 +83,13 @@ void _SMP_lock_Release_and_ISR_enable(
 )
 {
 #if defined(RTEMS_DEBUG)
+  _Assert( context->lock_used_for_acquire == lock );
+  context->lock_used_for_acquire = NULL;
   _Assert( lock->owner == _SMP_Get_current_processor() );
   lock->owner = SMP_LOCK_NO_OWNER;
 #endif
-  _SMP_lock_Release_and_ISR_enable_body( lock, context );
+  _SMP_lock_Release_body( lock, context );
+  _ISR_Enable_without_giant( context->isr_level );
 }
 
 #if defined(RTEMS_DEBUG)
