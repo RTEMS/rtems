@@ -43,6 +43,8 @@ extern "C" {
    */
   #if defined( RTEMS_PROFILING )
     #define PER_CPU_CONTROL_SIZE_LOG2 9
+  #elif defined( RTEMS_DEBUG )
+    #define PER_CPU_CONTROL_SIZE_LOG2 8
   #else
     #define PER_CPU_CONTROL_SIZE_LOG2 7
   #endif

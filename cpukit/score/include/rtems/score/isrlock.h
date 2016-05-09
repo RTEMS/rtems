@@ -281,6 +281,25 @@ typedef struct {
     (void) _context;
 #endif
 
+#if defined( RTEMS_DEBUG )
+  /**
+   * @brief Returns true, if the ISR lock is owned by the current processor,
+   * otherwise false.
+   *
+   * On uni-processor configurations, this function returns true, if interrupts
+   * are disabled, otherwise false.
+   *
+   * @param[in] _lock The ISR lock control.
+   */
+  #if defined( RTEMS_SMP )
+    #define _ISR_lock_Is_owner( _lock ) \
+      _SMP_lock_Is_owner( &( _lock )->Lock )
+  #else
+    #define _ISR_lock_Is_owner( _lock ) \
+      ( _ISR_Get_level() != 0 )
+  #endif
+#endif
+
 /**
  * @brief Flashes an ISR lock.
  *

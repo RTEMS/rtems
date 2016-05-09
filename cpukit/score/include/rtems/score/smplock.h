@@ -10,7 +10,7 @@
  * COPYRIGHT (c) 1989-2011.
  * On-Line Applications Research Corporation (OAR).
  *
- * Copyright (c) 2013-2015 embedded brains GmbH
+ * Copyright (c) 2013, 2016 embedded brains GmbH
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -32,7 +32,7 @@
 #include <string.h>
 #endif
 
-#if defined( RTEMS_PROFILING )
+#if defined( RTEMS_PROFILING ) || defined( RTEMS_DEBUG )
 #define RTEMS_SMP_LOCK_DO_NOT_INLINE
 #endif
 
@@ -373,6 +373,21 @@ static inline void _SMP_ticket_lock_Do_release(
  */
 typedef struct {
   SMP_ticket_lock_Control Ticket_lock;
+#if defined( RTEMS_DEBUG )
+  /**
+   * @brief The index of the owning processor of this lock.
+   *
+   * The processor index is used instead of the executing thread, so that this
+   * works in interrupt and system initialization context.  It is assumed that
+   * thread dispatching is disabled in SMP lock critical sections.
+   *
+   * In case the lock is free, then the value of this field is
+   * SMP_LOCK_NO_OWNER.
+   *
+   * @see _SMP_lock_Is_owner().
+   */
+  uint32_t owner;
+#endif
 #if defined( RTEMS_PROFILING )
   SMP_lock_Stats Stats;
 #endif
@@ -388,10 +403,24 @@ typedef struct {
 #endif
 } SMP_lock_Context;
 
+#if defined( RTEMS_DEBUG )
+#define SMP_LOCK_NO_OWNER 0xffffffff
+#endif
+
 /**
  * @brief SMP lock control initializer for static initialization.
  */
-#if defined( RTEMS_PROFILING )
+#if defined( RTEMS_DEBUG ) && defined( RTEMS_PROFILING )
+  #define SMP_LOCK_INITIALIZER( name ) \
+    { \
+      SMP_TICKET_LOCK_INITIALIZER, \
+      SMP_LOCK_NO_OWNER, \
+      SMP_LOCK_STATS_INITIALIZER( name ) \
+    }
+#elif defined( RTEMS_DEBUG )
+  #define SMP_LOCK_INITIALIZER( name ) \
+    { SMP_TICKET_LOCK_INITIALIZER, SMP_LOCK_NO_OWNER }
+#elif defined( RTEMS_PROFILING )
   #define SMP_LOCK_INITIALIZER( name ) \
     { SMP_TICKET_LOCK_INITIALIZER, SMP_LOCK_STATS_INITIALIZER( name ) }
 #else
@@ -422,6 +451,9 @@ static inline void _SMP_lock_Initialize(
 )
 {
   _SMP_ticket_lock_Initialize( &lock->Ticket_lock );
+#if defined( RTEMS_DEBUG )
+  lock->owner = SMP_LOCK_NO_OWNER;
+#endif
 #if defined( RTEMS_PROFILING )
   _SMP_lock_Stats_initialize( &lock->Stats, name );
 #else
@@ -558,6 +590,16 @@ static inline void _SMP_lock_Release_and_ISR_enable(
   _SMP_lock_Release( lock, context );
   _ISR_Enable_without_giant( context->isr_level );
 }
+
+#if defined( RTEMS_DEBUG )
+/**
+ * @brief Returns true, if the SMP lock is owned by the current processor,
+ * otherwise false.
+ *
+ * @param[in] lock The SMP lock control.
+ */
+bool _SMP_lock_Is_owner( const SMP_lock_Control *lock );
+#endif
 
 #if defined( RTEMS_PROFILING )
 
