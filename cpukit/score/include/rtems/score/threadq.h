@@ -264,14 +264,37 @@ typedef struct {
  *  waiting to acquire a resource.
  */
 typedef struct {
+#if defined(RTEMS_SMP)
+#if defined(RTEMS_DEBUG)
+  /**
+   * @brief The index of the owning processor of the thread queue lock.
+   *
+   * The thread queue lock may be acquired via the thread lock also.  This path
+   * is not covered by this field.  In case the lock is not owned directly via
+   * _Thread_queue_Acquire(), then the value of this field is
+   * SMP_LOCK_NO_OWNER.
+   *
+   * Must be before the queue component of this structure to be able to re-use
+   * implementation parts for structures defined by Newlib <sys/lock.h>.
+   */
+  uint32_t owner;
+#endif
+
+#if defined(RTEMS_PROFILING)
+  /**
+   * @brief SMP lock statistics in case SMP and profiling are enabled.
+   *
+   * Must be before the queue component of this structure to be able to re-use
+   * implementation parts for structures defined by Newlib <sys/lock.h>.
+   */
+  SMP_lock_Stats Lock_stats;
+#endif
+#endif
+
   /**
    * @brief The actual thread queue.
    */
   Thread_queue_Queue Queue;
-
-#if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
-  SMP_lock_Stats Lock_stats;
-#endif
 } Thread_queue_Control;
 
 /**@}*/

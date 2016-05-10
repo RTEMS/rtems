@@ -23,6 +23,7 @@
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/scheduler.h>
+#include <rtems/score/smp.h>
 #include <rtems/score/thread.h>
 
 #ifdef __cplusplus
@@ -131,6 +132,9 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire_critical(
     &the_thread_queue->Lock_stats,
     lock_context
   );
+#if defined(RTEMS_DEBUG) && defined(RTEMS_SMP)
+  the_thread_queue->owner = _SMP_Get_current_processor();
+#endif
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire(
@@ -142,11 +146,30 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire(
   _Thread_queue_Acquire_critical( the_thread_queue, lock_context );
 }
 
+#if defined(RTEMS_DEBUG)
+RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_lock_owner(
+  const Thread_queue_Control *the_thread_queue
+)
+{
+#if defined(RTEMS_SMP)
+  return the_thread_queue->owner == _SMP_Get_current_processor();
+#else
+  return _ISR_Get_level() != 0;
+#endif
+}
+#endif
+
 RTEMS_INLINE_ROUTINE void _Thread_queue_Release(
   Thread_queue_Control *the_thread_queue,
   ISR_lock_Context     *lock_context
 )
 {
+#if defined(RTEMS_DEBUG)
+  _Assert( _Thread_queue_Is_lock_owner( the_thread_queue ) );
+#if defined(RTEMS_SMP)
+  the_thread_queue->owner = SMP_LOCK_NO_OWNER;
+#endif
+#endif
   _Thread_queue_Queue_release(
     &the_thread_queue->Queue,
     lock_context
@@ -707,14 +730,33 @@ size_t _Thread_queue_Do_flush_critical(
 
 void _Thread_queue_Initialize( Thread_queue_Control *the_thread_queue );
 
-#if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
+#if defined(RTEMS_SMP) && defined(RTEMS_DEBUG) && defined(RTEMS_PROFILING)
   #define THREAD_QUEUE_INITIALIZER( name ) \
     { \
+      .Lock_stats = SMP_LOCK_STATS_INITIALIZER( name ), \
+      .owner = SMP_LOCK_NO_OWNER, \
       .Queue = { \
         .heads = NULL, \
         .Lock = SMP_TICKET_LOCK_INITIALIZER, \
-      }, \
-      .Lock_stats = SMP_LOCK_STATS_INITIALIZER( name ) \
+      } \
+    }
+#elif defined(RTEMS_SMP) && defined(RTEMS_DEBUG)
+  #define THREAD_QUEUE_INITIALIZER( name ) \
+    { \
+      .owner = SMP_LOCK_NO_OWNER, \
+      .Queue = { \
+        .heads = NULL, \
+        .Lock = SMP_TICKET_LOCK_INITIALIZER, \
+      } \
+    }
+#elif defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
+  #define THREAD_QUEUE_INITIALIZER( name ) \
+    { \
+      .Lock_stats = SMP_LOCK_STATS_INITIALIZER( name ), \
+      .Queue = { \
+        .heads = NULL, \
+        .Lock = SMP_TICKET_LOCK_INITIALIZER, \
+      } \
     }
 #elif defined(RTEMS_SMP)
   #define THREAD_QUEUE_INITIALIZER( name ) \
