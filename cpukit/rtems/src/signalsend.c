@@ -51,10 +51,10 @@ rtems_status_code rtems_signal_send(
   api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
 
-  _ASR_Acquire_critical( asr, &lock_context );
+  _Thread_State_acquire_critical( the_thread, &lock_context );
 
   if ( _ASR_Is_null_handler( asr->handler ) ) {
-    _ASR_Release( asr, &lock_context );
+    _Thread_State_release( the_thread, &lock_context );
     return RTEMS_NOT_DEFINED;
   }
 
@@ -62,8 +62,6 @@ rtems_status_code rtems_signal_send(
     Per_CPU_Control *cpu_self;
 
     _ASR_Post_signals( signal_set, &asr->signals_posted );
-    _ASR_Release( asr, &lock_context );
-    _Thread_State_acquire( the_thread, &lock_context );
     _Thread_Add_post_switch_action(
       the_thread,
       &api->Signal_action,
@@ -74,7 +72,7 @@ rtems_status_code rtems_signal_send(
     _Thread_Dispatch_enable( cpu_self );
   } else {
     _ASR_Post_signals( signal_set, &asr->signals_pending );
-    _ASR_Release( asr, &lock_context );
+    _Thread_State_release( the_thread, &lock_context );
   }
 
   return RTEMS_SUCCESSFUL;

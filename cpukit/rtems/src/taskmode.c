@@ -98,20 +98,22 @@ rtems_status_code rtems_task_mode(
   if ( mask & RTEMS_ASR_MASK ) {
     bool is_asr_enabled = !_Modes_Is_asr_disabled( mode_set );
 
+    _Thread_State_acquire( executing, &lock_context );
+
     if ( is_asr_enabled != asr->is_enabled ) {
       asr->is_enabled = is_asr_enabled;
 
       if ( _ASR_Swap_signals( asr ) != 0 ) {
         needs_asr_dispatching = true;
-        _Thread_State_acquire( executing, &lock_context );
         _Thread_Add_post_switch_action(
           executing,
           &api->Signal_action,
           _Signal_Action_handler
         );
-        _Thread_State_release( executing, &lock_context );
       }
     }
+
+    _Thread_State_release( executing, &lock_context );
   }
 
   if ( preempt_enabled || needs_asr_dispatching ) {

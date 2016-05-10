@@ -20,44 +20,12 @@
 
 #include <rtems/config.h>
 #include <rtems/sysinit.h>
-#include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/userextimpl.h>
 
 Thread_Information _RTEMS_tasks_Information;
-
-/*
- *  _RTEMS_tasks_Create_extension
- *
- *  This routine is an extension routine that is invoked as part
- *  of creating any type of task or thread in the system.  If the
- *  task is created via another API, then this routine is invoked
- *  and this API given the opportunity to initialize its extension
- *  area.
- */
-
-static bool _RTEMS_tasks_Create_extension(
-  Thread_Control *executing,
-  Thread_Control *created
-)
-{
-  RTEMS_API_Control *api;
-
-  api = created->API_Extensions[ THREAD_API_RTEMS ];
-
-  _ASR_Create( &api->Signal );
-
-  return true;
-}
-
-/*
- *  _RTEMS_tasks_Start_extension
- *
- *  This extension routine is invoked when a task is started for the
- *  first time.
- */
 
 static void _RTEMS_tasks_Start_extension(
   Thread_Control *executing,
@@ -72,24 +40,10 @@ static void _RTEMS_tasks_Start_extension(
   _Event_Initialize( &api->System_event );
 }
 
-static void _RTEMS_tasks_Delete_extension(
-  Thread_Control *executing,
-  Thread_Control *deleted
-)
-{
-  RTEMS_API_Control *api;
-
-  api = deleted->API_Extensions[ THREAD_API_RTEMS ];
-
-  _ASR_Destroy( &api->Signal );
-}
-
 User_extensions_Control _RTEMS_tasks_User_extensions = {
   .Callouts = {
-    .thread_create  = _RTEMS_tasks_Create_extension,
     .thread_start   = _RTEMS_tasks_Start_extension,
-    .thread_restart = _RTEMS_tasks_Start_extension,
-    .thread_delete  = _RTEMS_tasks_Delete_extension
+    .thread_restart = _RTEMS_tasks_Start_extension
   }
 };
 

@@ -22,7 +22,6 @@
 #ifndef _RTEMS_RTEMS_ASR_H
 #define _RTEMS_RTEMS_ASR_H
 
-#include <rtems/score/isrlock.h>
 #include <rtems/rtems/modes.h>
 
 #ifdef __cplusplus
@@ -75,8 +74,6 @@ typedef struct {
   rtems_signal_set  signals_pending;
   /** This field indicates if nest level of signals being processed */
   uint32_t          nest_level;
-  /** Lock to protect this structure */
-  ISR_LOCK_MEMBER(  Lock )
 }   ASR_Information;
 
 /*
