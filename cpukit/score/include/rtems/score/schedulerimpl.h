@@ -599,25 +599,45 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Has_processor_ownership(
 #endif
 }
 
-RTEMS_INLINE_ROUTINE void _Scheduler_Set(
+RTEMS_INLINE_ROUTINE bool _Scheduler_Set(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
 {
 #if defined(RTEMS_SMP)
-  const Scheduler_Control *current_scheduler = _Scheduler_Get( the_thread );
+  const Scheduler_Control *current_scheduler;
+  States_Control           current_state;
 
-  if ( current_scheduler != scheduler ) {
-    _Thread_Set_state( the_thread, STATES_MIGRATING );
-    _Scheduler_Node_destroy( current_scheduler, the_thread );
-    the_thread->Scheduler.own_control = scheduler;
-    the_thread->Scheduler.control = scheduler;
-    _Scheduler_Node_initialize( scheduler, the_thread );
-    _Scheduler_Update_priority( the_thread, the_thread->current_priority );
-    _Thread_Clear_state( the_thread, STATES_MIGRATING );
+  current_scheduler = _Scheduler_Get( the_thread );
+
+  if ( current_scheduler == scheduler ) {
+    return true;
   }
+
+  if ( _Thread_Owns_resources( the_thread ) ) {
+    return false;
+  }
+
+  current_state = the_thread->current_state;
+
+  if ( _States_Is_ready( current_state ) ) {
+    _Scheduler_Block( the_thread );
+  }
+
+  _Scheduler_Node_destroy( current_scheduler, the_thread );
+  the_thread->Scheduler.own_control = scheduler;
+  the_thread->Scheduler.control = scheduler;
+  _Scheduler_Node_initialize( scheduler, the_thread );
+  _Scheduler_Update_priority( the_thread, the_thread->current_priority );
+
+  if ( _States_Is_ready( current_state ) ) {
+    _Scheduler_Unblock( the_thread );
+  }
+
+  return true;
 #else
   (void) scheduler;
+  return true;
 #endif
 }
 

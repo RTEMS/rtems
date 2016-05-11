@@ -359,6 +359,14 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_State_acquire_for_executing(
   return executing;
 }
 
+RTEMS_INLINE_ROUTINE void _Thread_State_release_critical(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _Thread_queue_Release_critical( &the_thread->Join_queue, lock_context );
+}
+
 RTEMS_INLINE_ROUTINE void _Thread_State_release(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context

@@ -108,7 +108,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_do_acquire_critical(
     _Thread_queue_Queue_do_acquire_critical( queue, lock_context )
 #endif
 
-RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_release(
+RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_release_critical(
   Thread_queue_Queue *queue,
   ISR_lock_Context   *lock_context
 )
@@ -118,7 +118,18 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_release(
     &queue->Lock,
     &lock_context->Lock_context.Stats_context
   );
+#else
+  (void) queue;
+  (void) lock_context;
 #endif
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_release(
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+)
+{
+  _Thread_queue_Queue_release_critical( queue, lock_context );
   _ISR_lock_ISR_enable( lock_context );
 }
 
@@ -159,7 +170,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_lock_owner(
 }
 #endif
 
-RTEMS_INLINE_ROUTINE void _Thread_queue_Release(
+RTEMS_INLINE_ROUTINE void _Thread_queue_Release_critical(
   Thread_queue_Control *the_thread_queue,
   ISR_lock_Context     *lock_context
 )
@@ -170,10 +181,19 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Release(
   the_thread_queue->owner = SMP_LOCK_NO_OWNER;
 #endif
 #endif
-  _Thread_queue_Queue_release(
+  _Thread_queue_Queue_release_critical(
     &the_thread_queue->Queue,
     lock_context
   );
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_queue_Release(
+  Thread_queue_Control *the_thread_queue,
+  ISR_lock_Context     *lock_context
+)
+{
+  _Thread_queue_Release_critical( the_thread_queue, lock_context );
+  _ISR_lock_ISR_enable( lock_context );
 }
 
 Thread_Control *_Thread_queue_Do_dequeue(
