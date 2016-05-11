@@ -21,48 +21,26 @@
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/threadimpl.h>
 
-/*
- *  rtems_task_is_suspended
- *
- *  This directive returns a status indicating whether or not
- *  the specified task is suspended.
- *
- *  Input parameters:
- *    id - thread id
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL        - if successful and not suspended
- *    RTEMS_ALREADY_SUSPENDED - if successful and suspended
- *    error code              - if unsuccessful
- */
-
-rtems_status_code rtems_task_is_suspended(
-  rtems_id id
-)
+rtems_status_code rtems_task_is_suspended( rtems_id id )
 {
-  Thread_Control          *the_thread;
-  Objects_Locations        location;
+  Thread_Control   *the_thread;
+  ISR_lock_Context  lock_context;
+  States_Control    current_state;
 
-  the_thread = _Thread_Get( id, &location );
-  switch ( location ) {
+  the_thread = _Thread_Get_interrupt_disable( id, &lock_context );
 
-    case OBJECTS_LOCAL:
-      if ( !_States_Is_suspended( the_thread->current_state ) ) {
-        _Objects_Put( &the_thread->Object );
-        return RTEMS_SUCCESSFUL;
-      }
-      _Objects_Put( &the_thread->Object );
-      return RTEMS_ALREADY_SUSPENDED;
-
+  if ( the_thread == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
+    if ( _Thread_MP_Is_remote( id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+    }
 #endif
 
-    case OBJECTS_ERROR:
-      break;
+    return RTEMS_INVALID_ID;
   }
 
-  return RTEMS_INVALID_ID;
+  current_state = the_thread->current_state;
+  _ISR_lock_ISR_enable( &lock_context);
+  return _States_Is_suspended( current_state ) ?
+    RTEMS_ALREADY_SUSPENDED : RTEMS_SUCCESSFUL;
 }
