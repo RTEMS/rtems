@@ -698,9 +698,9 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
 }
 
 bool _Scheduler_Set_affinity(
-  Thread_Control          *the_thread,
-  size_t                   cpusetsize,
-  const cpu_set_t         *cpuset
+  Thread_Control  *the_thread,
+  size_t           cpusetsize,
+  const cpu_set_t *cpuset
 );
 
 #endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */

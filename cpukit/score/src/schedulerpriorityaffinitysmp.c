@@ -616,10 +616,8 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
   const cpu_set_t         *cpuset
 )
 {
-  Scheduler_priority_affinity_SMP_Node *node =
-    _Scheduler_priority_affinity_SMP_Thread_get_node(thread);
-
-  (void) scheduler;
+  Scheduler_priority_affinity_SMP_Node *node;
+  States_Control                        current_state;
 
   /*
    * Validate that the cpset meets basic requirements.
@@ -628,6 +626,8 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
     return false;
   }
 
+  node = _Scheduler_priority_affinity_SMP_Thread_get_node( thread );
+
   /*
    * The old and new set are the same, there is no point in
    * doing anything.
@@ -635,9 +635,20 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
   if ( CPU_EQUAL_S( cpusetsize, cpuset, node->Affinity.set ) )
     return true;
 
-  _Thread_Set_state( thread, STATES_MIGRATING );
-    CPU_COPY( node->Affinity.set, cpuset );
-  _Thread_Clear_state( thread, STATES_MIGRATING );
+  current_state = thread->current_state;
+
+  if ( _States_Is_ready( current_state ) ) {
+    _Scheduler_priority_affinity_SMP_Block( scheduler, thread );
+  }
+
+  CPU_COPY( node->Affinity.set, cpuset );
+
+  if ( _States_Is_ready( current_state ) ) {
+    /*
+     * FIXME: Do not ignore threads in need for help.
+     */
+    (void) _Scheduler_priority_affinity_SMP_Unblock( scheduler, thread );
+  }
 
   return true;
 }

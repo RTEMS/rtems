@@ -718,6 +718,7 @@ struct _Thread_Control {
    * The lock of this thread queue is used for various purposes.  It protects
    * the following fields
    *
+   * - POSIX_API_Control::Attributes,
    * - RTEMS_API_Control::Signal,
    * - Thread_Control::current_state,
    * - Thread_Control::Post_switch_actions,

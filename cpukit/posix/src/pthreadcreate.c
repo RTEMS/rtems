@@ -74,7 +74,7 @@ int pthread_create(
   struct sched_param                  schedparam;
   Objects_Name                        name;
   int                                 rc;
-  ISR_Level                           level;
+  ISR_lock_Context                    lock_context;
 
   if ( !start_routine )
     return EFAULT;
@@ -202,11 +202,13 @@ int pthread_create(
   }
 
 #if defined(RTEMS_SMP) && __RTEMS_HAVE_SYS_CPUSET_H__
+  _ISR_lock_ISR_disable( &lock_context );
    status = _Scheduler_Set_affinity(
      the_thread,
      the_attr->affinitysetsize,
      the_attr->affinityset
    );
+  _ISR_lock_ISR_enable( &lock_context );
    if ( !status ) {
      _POSIX_Threads_Free( the_thread );
      _RTEMS_Unlock_allocator();
@@ -247,13 +249,13 @@ int pthread_create(
   #endif
 
   if ( schedpolicy == SCHED_SPORADIC ) {
-    _ISR_Disable_without_giant( level );
+    _ISR_lock_ISR_disable( &lock_context );
     _Watchdog_Per_CPU_insert_relative(
       &api->Sporadic_timer,
       _Per_CPU_Get(),
       _Timespec_To_ticks( &api->schedparam.sched_ss_repl_period )
     );
-    _ISR_Enable_without_giant( level );
+    _ISR_lock_ISR_enable( &lock_context );
   }
 
   _Thread_Enable_dispatch();
