@@ -31,11 +31,11 @@ void _Thread_Yield( Thread_Control *executing )
 {
   ISR_lock_Context lock_context;
 
-  _Scheduler_Acquire( executing, &lock_context );
+  _Thread_State_acquire( executing, &lock_context );
 
   if ( _States_Is_ready( executing->current_state ) ) {
     _Scheduler_Yield( executing );
   }
 
-  _Scheduler_Release( executing, &lock_context );
+  _Thread_State_release( executing, &lock_context );
 }

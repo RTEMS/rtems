@@ -64,7 +64,7 @@ void _Thread_Change_priority(
 
     _Thread_Lock_release( lock, &lock_context );
 
-    _Scheduler_Acquire( the_thread, &lock_context );
+    _Thread_State_acquire( the_thread, &lock_context );
 
     if ( the_thread->priority_generation == my_generation ) {
       if ( _States_Is_ready( the_thread->current_state ) ) {
@@ -78,7 +78,7 @@ void _Thread_Change_priority(
       }
     }
 
-    _Scheduler_Release( the_thread, &lock_context );
+    _Thread_State_release( the_thread, &lock_context );
   } else {
     _Thread_Lock_release( lock, &lock_context );
   }

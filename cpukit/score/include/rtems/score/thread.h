@@ -718,8 +718,11 @@ struct _Thread_Control {
    * The lock of this thread queue is used for various purposes.  It protects
    * the following fields
    *
-   * - RTEMS_API_Control::Signal, and
-   * - Thread_Control::Post_switch_actions.
+   * - RTEMS_API_Control::Signal,
+   * - Thread_Control::current_state,
+   * - Thread_Control::Post_switch_actions,
+   * - Thread_Control::Scheduler::control, and
+   * - Thread_Control::Scheduler::own_control.
    *
    * @see _Thread_State_acquire().
    */

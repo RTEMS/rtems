@@ -10,7 +10,7 @@
 /*
  *  Copyright (C) 2010 Gedare Bloom.
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
- *  Copyright (c) 2014-2015 embedded brains GmbH
+ *  Copyright (c) 2014, 2016 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -118,6 +118,42 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_user(
 }
 #endif
 
+ISR_LOCK_DECLARE( extern, _Scheduler_Lock )
+
+/**
+ * @brief Acquires the scheduler instance inside a critical section (interrupts
+ * disabled).
+ *
+ * @param[in] scheduler The scheduler instance.
+ * @param[in] lock_context The lock context to use for
+ *   _Scheduler_Release_critical().
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Acquire_critical(
+  const Scheduler_Control *scheduler,
+  ISR_lock_Context        *lock_context
+)
+{
+  (void) scheduler;
+  _ISR_lock_Acquire( &_Scheduler_Lock, lock_context );
+}
+
+/**
+ * @brief Releases the scheduler instance inside a critical section (interrupts
+ * disabled).
+ *
+ * @param[in] scheduler The scheduler instance.
+ * @param[in] lock_context The lock context used for
+ *   _Scheduler_Acquire_critical().
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Release_critical(
+  const Scheduler_Control *scheduler,
+  ISR_lock_Context        *lock_context
+)
+{
+  (void) scheduler;
+  _ISR_lock_Release( &_Scheduler_Lock, lock_context );
+}
+
 /**
  * The preferred method to add a new scheduler is to define the jump table
  * entries and add a case to the _Scheduler_Initialize routine.
@@ -143,9 +179,15 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_user(
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( Thread_Control *the_thread )
 {
-  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+  const Scheduler_Control *scheduler;
+  ISR_lock_Context         lock_context;
+
+  scheduler = _Scheduler_Get( the_thread );
+  _Scheduler_Acquire_critical( scheduler, &lock_context );
 
   ( *scheduler->Operations.schedule )( scheduler, the_thread );
+
+  _Scheduler_Release_critical( scheduler, &lock_context );
 }
 
 #if defined(RTEMS_SMP)
@@ -252,10 +294,16 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help_if_necessary(
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
 {
-  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+  const Scheduler_Control *scheduler;
+  ISR_lock_Context         lock_context;
 #if defined(RTEMS_SMP)
-  Thread_Control *needs_help;
+  Thread_Control          *needs_help;
+#endif
 
+  scheduler = _Scheduler_Get( the_thread );
+  _Scheduler_Acquire_critical( scheduler, &lock_context );
+
+#if defined(RTEMS_SMP)
   needs_help =
 #endif
   ( *scheduler->Operations.yield )( scheduler, the_thread );
@@ -263,6 +311,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
 #if defined(RTEMS_SMP)
   _Scheduler_Ask_for_help_if_necessary( needs_help );
 #endif
+
+  _Scheduler_Release_critical( scheduler, &lock_context );
 }
 
 /**
@@ -277,9 +327,15 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Block( Thread_Control *the_thread )
 {
-  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+  const Scheduler_Control *scheduler;
+  ISR_lock_Context         lock_context;
+
+  scheduler = _Scheduler_Get( the_thread );
+  _Scheduler_Acquire_critical( scheduler, &lock_context );
 
   ( *scheduler->Operations.block )( scheduler, the_thread );
+
+  _Scheduler_Release_critical( scheduler, &lock_context );
 }
 
 /**
@@ -294,10 +350,16 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Block( Thread_Control *the_thread )
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
 {
-  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+  const Scheduler_Control *scheduler;
+  ISR_lock_Context         lock_context;
 #if defined(RTEMS_SMP)
-  Thread_Control *needs_help;
+  Thread_Control          *needs_help;
+#endif
 
+  scheduler = _Scheduler_Get( the_thread );
+  _Scheduler_Acquire_critical( scheduler, &lock_context );
+
+#if defined(RTEMS_SMP)
   needs_help =
 #endif
   ( *scheduler->Operations.unblock )( scheduler, the_thread );
@@ -305,6 +367,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
 #if defined(RTEMS_SMP)
   _Scheduler_Ask_for_help_if_necessary( needs_help );
 #endif
+
+  _Scheduler_Release_critical( scheduler, &lock_context );
 }
 
 /**
@@ -329,14 +393,20 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority(
   bool                     prepend_it
 )
 {
-  const Scheduler_Control *scheduler = _Scheduler_Get_own( the_thread );
+  const Scheduler_Control *own_scheduler;
+  ISR_lock_Context         lock_context;
 #if defined(RTEMS_SMP)
-  Thread_Control *needs_help;
+  Thread_Control          *needs_help;
+#endif
 
+  own_scheduler = _Scheduler_Get_own( the_thread );
+  _Scheduler_Acquire_critical( own_scheduler, &lock_context );
+
+#if defined(RTEMS_SMP)
   needs_help =
 #endif
-  ( *scheduler->Operations.change_priority )(
-    scheduler,
+  ( *own_scheduler->Operations.change_priority )(
+    own_scheduler,
     the_thread,
     new_priority,
     prepend_it
@@ -345,6 +415,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority(
 #if defined(RTEMS_SMP)
   _Scheduler_Ask_for_help_if_necessary( needs_help );
 #endif
+
+  _Scheduler_Release_critical( own_scheduler, &lock_context );
 }
 
 /**
@@ -394,13 +466,19 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority(
   Priority_Control  new_priority
 )
 {
-  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+  const Scheduler_Control *scheduler;
+  ISR_lock_Context         lock_context;
+
+  scheduler = _Scheduler_Get( the_thread );
+  _Scheduler_Acquire_critical( scheduler, &lock_context );
 
   ( *scheduler->Operations.update_priority )(
     scheduler,
     the_thread,
     new_priority
   );
+
+  _Scheduler_Release_critical( scheduler, &lock_context );
 }
 
 /**
@@ -1341,8 +1419,6 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Ask_blocked_node_for_help(
 }
 #endif
 
-ISR_LOCK_DECLARE( extern, _Scheduler_Lock )
-
 RTEMS_INLINE_ROUTINE void _Scheduler_Update_heir(
   Thread_Control *new_heir,
   bool            force_dispatch
@@ -1365,36 +1441,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update_heir(
     _Thread_Heir = new_heir;
     _Thread_Dispatch_necessary = true;
   }
-}
-
-/**
- * @brief Acquires the scheduler instance of the thread.
- *
- * @param[in] the_thread The thread.
- * @param[in] lock_context The lock context for _Scheduler_Release().
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Acquire(
-  Thread_Control   *the_thread,
-  ISR_lock_Context *lock_context
-)
-{
-  (void) the_thread;
-  _ISR_lock_ISR_disable_and_acquire( &_Scheduler_Lock, lock_context );
-}
-
-/**
- * @brief Releases the scheduler instance of the thread.
- *
- * @param[in] the_thread The thread.
- * @param[in] lock_context The lock context used for _Scheduler_Acquire().
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Release(
-  Thread_Control   *the_thread,
-  ISR_lock_Context *lock_context
-)
-{
-  (void) the_thread;
-  _ISR_lock_Release_and_ISR_enable( &_Scheduler_Lock, lock_context );
 }
 
 /** @} */

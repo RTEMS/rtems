@@ -36,7 +36,7 @@ States_Control _Thread_Set_state(
 
   _Assert( state != 0 );
 
-  _Scheduler_Acquire( the_thread, &lock_context );
+  _Thread_State_acquire( the_thread, &lock_context );
 
   previous_state = the_thread->current_state;
   next_state = _States_Set( state, previous_state);
@@ -46,7 +46,7 @@ States_Control _Thread_Set_state(
     _Scheduler_Block( the_thread );
   }
 
-  _Scheduler_Release( the_thread, &lock_context );
+  _Thread_State_release( the_thread, &lock_context );
 
   return previous_state;
 }

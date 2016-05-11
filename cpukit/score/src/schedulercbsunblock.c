@@ -56,7 +56,12 @@ Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
       the_thread->real_priority = new_priority;
       if ( the_thread->current_priority != new_priority ) {
         the_thread->current_priority = new_priority;
-        _Scheduler_Change_priority(the_thread, new_priority, true);
+        _Scheduler_EDF_Change_priority(
+          scheduler,
+          the_thread,
+          new_priority,
+          true
+        );
       }
     }
   }

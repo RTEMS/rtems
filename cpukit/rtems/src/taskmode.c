@@ -120,9 +120,9 @@ rtems_status_code rtems_task_mode(
     Per_CPU_Control  *cpu_self;
 
     cpu_self = _Thread_Dispatch_disable();
-    _Scheduler_Acquire( executing, &lock_context );
+    _Thread_State_acquire( executing, &lock_context );
     _Scheduler_Schedule( executing );
-    _Scheduler_Release( executing, &lock_context );
+    _Thread_State_release( executing, &lock_context );
     _Thread_Dispatch_enable( cpu_self );
   }
 

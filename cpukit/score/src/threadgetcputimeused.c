@@ -33,9 +33,13 @@ void _Thread_Get_CPU_time_used(
   Timestamp_Control *cpu_time_used
 )
 {
-  ISR_lock_Context lock_context;
+  const Scheduler_Control *scheduler;
+  ISR_lock_Context         state_lock_context;
+  ISR_lock_Context         scheduler_lock_context;
 
-  _Scheduler_Acquire( the_thread, &lock_context );
+  _Thread_State_acquire( the_thread, &state_lock_context );
+  scheduler = _Scheduler_Get( the_thread );
+  _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
   if ( _Thread_Is_scheduled( the_thread ) ) {
     _Thread_Update_CPU_time_used( the_thread, _Thread_Get_CPU( the_thread ) );
@@ -43,5 +47,6 @@ void _Thread_Get_CPU_time_used(
 
   *cpu_time_used = the_thread->cpu_time_used;
 
-  _Scheduler_Release( the_thread, &lock_context );
+  _Scheduler_Release_critical( scheduler, &scheduler_lock_context );
+  _Thread_State_release( the_thread, &state_lock_context );
 }
