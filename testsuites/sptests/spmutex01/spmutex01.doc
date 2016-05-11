@@ -1,0 +1,14 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spmutex01
+
+directives:
+
+  - rtems_semaphore_create()
+  - rtems_semaphore_obtain()
+  - rtems_semaphore_release()
+
+concepts:
+
+  - Ensure that priority inheritance mechanism works.
+  - Ensure that thread priority queueing discipline works.

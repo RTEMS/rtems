@@ -33,6 +33,7 @@ _SUBDIRS = \
     spsignal_err01 spport_err01 spmsgq_err01 spmsgq_err02 spsem_err01 \
     spsem_err02 sptask_err01 spevent_err03 sptask_err03 sptask_err02 \
     sptask_err04 spclock_err01
+_SUBDIRS += spmutex01
 _SUBDIRS += spextensions01
 _SUBDIRS += spsysinit01
 if HAS_SMP

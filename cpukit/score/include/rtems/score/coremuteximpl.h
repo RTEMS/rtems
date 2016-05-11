@@ -460,25 +460,6 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_fifo(
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_FIFO;
 }
 
-/**
- * @brief Doex core mutex use priority blocking.
- *
- * This routine returns true if the mutex's wait discipline is PRIORITY and
- * false otherwise.
- *
- * @param[in] the_attribute is the attribute set of the mutex.
- *
- * @retval true The mutex is using priority blocking order.
- * @retval false The mutex is not using priority blocking order.
- *
- */
-RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_priority(
-  const CORE_mutex_Attributes *the_attribute
-)
-{
-  return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_PRIORITY;
-}
-
 /** @} */
 
 #ifdef __cplusplus
