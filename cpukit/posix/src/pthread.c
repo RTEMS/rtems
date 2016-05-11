@@ -114,7 +114,7 @@ void _POSIX_Threads_Sporadic_budget_TSR( Watchdog_Control *watchdog )
   api = RTEMS_CONTAINER_OF( watchdog, POSIX_API_Control, Sporadic_timer );
   the_thread = api->thread;
 
-  _POSIX_Threads_Scheduler_acquire( api, &lock_context );
+  _Thread_State_acquire( the_thread, &lock_context );
 
   the_thread->cpu_time_budget =
     _Timespec_To_ticks( &api->schedparam.sched_ss_init_budget );
@@ -128,7 +128,7 @@ void _POSIX_Threads_Sporadic_budget_TSR( Watchdog_Control *watchdog )
 
   new_priority = _POSIX_Priority_To_core( api->schedparam.sched_priority );
 
-  _POSIX_Threads_Scheduler_release( api, &lock_context );
+  _Thread_State_release( the_thread, &lock_context );
 
   _Thread_Change_priority(
     the_thread,
@@ -200,8 +200,6 @@ static bool _POSIX_Threads_Create_extension(
 
   api = created->API_Extensions[ THREAD_API_POSIX ];
 
-  _ISR_lock_Initialize( &api->Scheduler_lock, "POSIX Threads Scheduler" );
-
   /* XXX check all fields are touched */
   api->thread = created;
   _POSIX_Threads_Initialize_attributes( &api->Attributes );
@@ -253,7 +251,6 @@ static void _POSIX_Threads_Delete_extension(
 
   api = deleted->API_Extensions[ THREAD_API_POSIX ];
 
-  _ISR_lock_Destroy( &api->Scheduler_lock );
   _Thread_queue_Destroy( &api->Join_List );
 }
 
@@ -281,13 +278,13 @@ static void _POSIX_Threads_Terminate_extension(
 
   _Thread_Enable_dispatch();
 
-  _POSIX_Threads_Scheduler_acquire( api, &lock_context );
+  _Thread_State_acquire( executing, &lock_context );
 
   if ( api->schedpolicy == SCHED_SPORADIC ) {
     _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
   }
 
-  _POSIX_Threads_Scheduler_release( api, &lock_context );
+  _Thread_State_release( executing, &lock_context );
 }
 
 /*

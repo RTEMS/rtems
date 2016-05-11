@@ -719,7 +719,12 @@ struct _Thread_Control {
    * the following fields
    *
    * - POSIX_API_Control::Attributes,
+   * - POSIX_API_Control::schedparam,
+   * - POSIX_API_Control::schedpolicy,
    * - RTEMS_API_Control::Signal,
+   * - Thread_Control::budget_algorithm,
+   * - Thread_Control::budget_callout,
+   * - Thread_Control::cpu_time_budget,
    * - Thread_Control::current_state,
    * - Thread_Control::Post_switch_actions,
    * - Thread_Control::Scheduler::control, and

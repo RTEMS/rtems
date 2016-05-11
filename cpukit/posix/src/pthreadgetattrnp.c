@@ -26,32 +26,29 @@
 #include <rtems/score/threadimpl.h>
 
 int pthread_getattr_np(
-  pthread_t       id,
+  pthread_t       thread,
   pthread_attr_t *attr
 )
 {
-  Objects_Locations        location;
-  POSIX_API_Control       *api;
-  Thread_Control          *the_thread;
+  Thread_Control    *the_thread;
+  ISR_lock_Context   lock_context;
+  POSIX_API_Control *api;
 
-  if ( !attr )
+  if ( attr == NULL ) {
     return EINVAL;
-
-  the_thread = _Thread_Get( id, &location );
-  switch ( location ) {
-
-    case OBJECTS_LOCAL:
-      api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-      _POSIX_Threads_Copy_attributes( attr, &api->Attributes);
-      _Objects_Put( &the_thread->Object );
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
   }
 
-  return ESRCH;
+  the_thread = _Thread_Get_interrupt_disable( thread, &lock_context );
+
+  if ( the_thread == NULL ) {
+    return ESRCH;
+  }
+
+  _Thread_State_acquire_critical( the_thread, &lock_context );
+
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+  _POSIX_Threads_Copy_attributes( attr, &api->Attributes);
+
+  _Thread_State_release( the_thread, &lock_context );
+  return 0;
 }

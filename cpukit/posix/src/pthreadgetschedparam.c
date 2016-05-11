@@ -34,35 +34,29 @@ int pthread_getschedparam(
   struct sched_param *param
 )
 {
-  Objects_Locations        location;
-  POSIX_API_Control       *api;
-  Thread_Control          *the_thread;
+  Thread_Control    *the_thread;
+  ISR_lock_Context   lock_context;
+  POSIX_API_Control *api;
 
-  if ( !policy || !param  )
+  if ( policy == NULL || param == NULL ) {
     return EINVAL;
-
-  the_thread = _Thread_Get( thread, &location );
-  switch ( location ) {
-
-    case OBJECTS_LOCAL:
-      api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-      if ( policy )
-        *policy = api->schedpolicy;
-      if ( param ) {
-        *param  = api->schedparam;
-        param->sched_priority =
-          _POSIX_Priority_From_core( the_thread->current_priority );
-      }
-      _Objects_Put( &the_thread->Object );
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
   }
 
-  return ESRCH;
+  the_thread = _Thread_Get_interrupt_disable( thread, &lock_context );
 
+  if ( the_thread == NULL ) {
+    return ESRCH;
+  }
+
+  _Thread_State_acquire_critical( the_thread, &lock_context );
+
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+  *policy = api->schedpolicy;
+  *param  = api->schedparam;
+  param->sched_priority = _POSIX_Priority_From_core(
+    the_thread->current_priority
+  );
+
+  _Thread_State_release( the_thread, &lock_context );
+  return 0;
 }
