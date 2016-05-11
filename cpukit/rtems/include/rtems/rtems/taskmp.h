@@ -57,17 +57,6 @@ typedef enum {
 }   RTEMS_tasks_MP_Remote_operations;
 
 /**
- *  The following data structure defines the packet used to perform
- *  remote task operations.
- */
-typedef struct {
-  rtems_packet_prefix               Prefix;
-  RTEMS_tasks_MP_Remote_operations  operation;
-  rtems_name                        name;
-  rtems_task_priority               the_priority;
-}   RTEMS_tasks_MP_Packet;
-
-/**
  *  @brief RTEMS Tasks MP Send Process Packet
  *
  *  Multiprocessing Support for the RTEMS Task Manager
@@ -82,16 +71,23 @@ void _RTEMS_tasks_MP_Send_process_packet (
 );
 
 /**
- *  @brief _RTEMS_tasks_MP_Send_request_packet
- *
- *  This routine performs a remote procedure call so that a
- *  directive operation can be initiated on another node.
+ * @brief Issues a remote rtems_task_set_priority() request.
  */
-rtems_status_code _RTEMS_tasks_MP_Send_request_packet (
-  RTEMS_tasks_MP_Remote_operations operation,
-  Objects_Id                       task_id,
-  rtems_task_priority              the_priority
+rtems_status_code _RTEMS_tasks_MP_Set_priority(
+  rtems_id             id,
+  rtems_task_priority  new_priority,
+  rtems_task_priority *old_priority
 );
+
+/**
+ * @brief Issues a remote rtems_task_suspend() request.
+ */
+rtems_status_code _RTEMS_tasks_MP_Suspend( rtems_id id );
+
+/**
+ * @brief Issues a remote rtems_task_resume() request.
+ */
+rtems_status_code _RTEMS_tasks_MP_Resume( rtems_id id );
 
 /**
  *  @brief _RTEMS_tasks_MP_Process_packet
