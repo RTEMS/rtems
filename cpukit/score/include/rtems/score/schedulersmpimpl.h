@@ -657,6 +657,7 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_ordered(
     );
   } else {
     ( *insert_ready )( context, node );
+    needs_help = NULL;
   }
 
   return needs_help;
