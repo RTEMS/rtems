@@ -155,10 +155,9 @@ static void task(rtems_task_argument arg)
   rtems_task_suspend(rtems_task_self());
 }
 
-static void test(void)
+static void test(uint32_t cpu_count)
 {
   rtems_status_code sc;
-  uint32_t cpu_count;
   uint32_t t;
   uint32_t c;
   rtems_task_argument idx;
@@ -170,9 +169,6 @@ static void test(void)
       RTEMS_NO_INHERIT_PRIORITY |
       RTEMS_NO_PRIORITY_CEILING |
       RTEMS_FIFO, 0, &finished_sem);
-
-  /* Get the number of processors that we are using. */
-  cpu_count = rtems_get_processor_count();
 
   /*
    * Create a set of tasks per CPU. Chain them together using
@@ -266,6 +262,7 @@ static void Init(rtems_task_argument arg)
   rtems_status_code sc;
   uint32_t i;
   uint32_t cpu;
+  uint32_t cpu_count;
   uint32_t read;
   uint32_t enter_count;
   uint32_t exit_count;
@@ -282,6 +279,9 @@ static void Init(rtems_task_argument arg)
 
   TEST_BEGIN();
 
+  /* Get the number of processors that we are using. */
+  cpu_count = rtems_get_processor_count();
+
   sc = rtems_capture_open(50000, NULL);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
@@ -292,7 +292,7 @@ static void Init(rtems_task_argument arg)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   /* Run main test */
-  test();
+  test(cpu_count);
 
   /* Try to find the clock interrupt handler */
   for ( vec=BSP_INTERRUPT_VECTOR_MIN; vec<BSP_INTERRUPT_VECTOR_MAX; vec++ ) {
@@ -322,7 +322,7 @@ static void Init(rtems_task_argument arg)
   clock_tick_count = 0;
 
   /* Read out the trace from all processors */
-  for ( cpu = 0; cpu < rtems_get_processor_count(); cpu++ ) {
+  for ( cpu = 0; cpu < cpu_count; cpu++ ) {
     sc = rtems_capture_read(cpu, &read, &recs);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
@@ -400,7 +400,7 @@ static void Init(rtems_task_argument arg)
   }
 
   if( cih.found )
-    rtems_test_assert(clock_tick_count == CLOCK_TICKS);
+    rtems_test_assert(clock_tick_count == cpu_count * CLOCK_TICKS);
 
   TEST_END();
   rtems_test_exit(0);
