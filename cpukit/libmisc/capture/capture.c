@@ -92,17 +92,12 @@ static rtems_capture_global_data capture_global = {
 #define capture_reader_on_cpu( _cpu )  capture_per_cpu[ _cpu ].reader
 #define capture_lock_on_cpu( _cpu )    capture_per_cpu[ _cpu ].lock
 
-#define capture_records          capture_records_on_cpu( _SMP_Get_current_processor() )
-#define capture_count            capture_count_on_cpu(  _SMP_Get_current_processor() )
-#define capture_flags_per_cpu    capture_flags_on_cpu( _SMP_Get_current_processor() )
 #define capture_flags_global     capture_global.flags
 #define capture_controls         capture_global.controls
 #define capture_extension_index  capture_global.extension_index
 #define capture_timestamp        capture_global.timestamp
 #define capture_ceiling          capture_global.ceiling
 #define capture_floor            capture_global.floor
-#define capture_reader           capture_reader_on_cpu(  _SMP_Get_current_processor() )
-#define capture_lock_per_cpu     capture_lock_on_cpu( _SMP_Get_current_processor() )
 #define capture_lock_global      capture_global.lock
 
 /*
@@ -447,21 +442,25 @@ bool rtems_capture_filter( rtems_tcb*            tcb,
  * This function records a capture record into the capture buffer.
  */
 void *
-rtems_capture_record_open (rtems_tcb*                    tcb,
-                           uint32_t                      events,
-                           size_t                        size,
-                           rtems_interrupt_lock_context* lock_context)
+rtems_capture_record_open (rtems_tcb*                      tcb,
+                           uint32_t                        events,
+                           size_t                          size,
+                           rtems_capture_record_context_t* context)
 {
-  uint8_t*                     ptr;
-  rtems_capture_record_t*      capture_in;
+  rtems_capture_per_cpu_data* per_cpu;
+  uint8_t*                    ptr;
+  rtems_capture_record_t*     capture_in;
 
-  rtems_interrupt_lock_acquire (&capture_lock_per_cpu, lock_context);
+  rtems_interrupt_lock_interrupt_disable (&context->lock_context);
+  per_cpu = capture_per_cpu_get (rtems_get_current_processor ());
+  context->lock = &per_cpu->lock;
+  rtems_interrupt_lock_acquire_isr (&per_cpu->lock, &context->lock_context);
 
-  ptr = rtems_capture_buffer_allocate(&capture_records, size);
+  ptr = rtems_capture_buffer_allocate (&per_cpu->records, size);
   capture_in = (rtems_capture_record_t *) ptr;
   if ( capture_in )
   {
-    capture_count++;
+    ++per_cpu->count;
     capture_in->size    = size;
     capture_in->task_id = tcb->Object.id;
     capture_in->events  = (events |
@@ -476,14 +475,14 @@ rtems_capture_record_open (rtems_tcb*                    tcb,
     ptr = ptr + sizeof(*capture_in);
   }
   else
-    capture_flags_per_cpu |= RTEMS_CAPTURE_OVERFLOW;
+    per_cpu->flags |= RTEMS_CAPTURE_OVERFLOW;
 
   return ptr;
 }
 
-void rtems_capture_record_close( void *rec, rtems_interrupt_lock_context* lock_context)
+void rtems_capture_record_close( void *rec, rtems_capture_record_context_t* context)
 {
-  rtems_interrupt_lock_release (&capture_lock_per_cpu, lock_context);
+  rtems_interrupt_lock_release (context->lock, &context->lock_context);
 }
 
 /*

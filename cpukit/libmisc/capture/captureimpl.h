@@ -185,8 +185,8 @@ bool rtems_capture_filter( rtems_tcb*            task,
  */
 #define rtems_capture_begin_add_record( _task, _events, _size, _rec) \
   do { \
-    rtems_interrupt_lock_context _lock_context; \
-    *_rec = rtems_capture_record_open( _task, _events, _size, &_lock_context );
+    rtems_capture_record_context_t _context; \
+    *_rec = rtems_capture_record_open( _task, _events, _size, &_context );
 
 /**
  * @brief Capture append to record.
@@ -216,7 +216,7 @@ static inline void *rtems_capture_append_to_record(void*  rec,
  * @param[in] _rec specifies the end of the capture record
  */
 #define rtems_capture_end_add_record( _rec ) \
-    rtems_capture_record_close( _rec, &_lock_context ); \
+    rtems_capture_record_close( _rec, &_context ); \
   } while (0)
 
 /**
@@ -232,6 +232,11 @@ static inline void *rtems_capture_append_to_record(void*  rec,
  */
 void rtems_capture_get_time (rtems_capture_time_t* time);
 
+typedef struct {
+  rtems_interrupt_lock_context  lock_context;
+  rtems_interrupt_lock         *lock;
+} rtems_capture_record_context_t;
+
 /**
  * @brief Capture record open.
  *
@@ -244,15 +249,15 @@ void rtems_capture_get_time (rtems_capture_time_t* time);
  * @param[in] task specifies the caputre task block
  * @param[in] events specifies the events
  * @param[in] size specifies capture record size
- * @param[out] lock_context specifies the lock context
+ * @param[out] context specifies the record context
  *
  * @retval This method returns a pointer to the next location in
  * the capture record to store data.
  */
-void* rtems_capture_record_open (rtems_tcb*                    task,
-                                 uint32_t                      events,
-                                 size_t                        size,
-                                 rtems_interrupt_lock_context* lock_context);
+void* rtems_capture_record_open (rtems_tcb*                      task,
+                                 uint32_t                        events,
+                                 size_t                          size,
+                                 rtems_capture_record_context_t* context);
 /**
  * @brief Capture record close.
  *
@@ -261,9 +266,9 @@ void* rtems_capture_record_open (rtems_tcb*                    task,
  * method should only be used by rtems_capture_end_add_record.
  *
  * @param[in] rec specifies the record
- * @param[out] lock_context specifies the lock context
+ * @param[out] context specifies the record context
  */
-void rtems_capture_record_close( void *rec, rtems_interrupt_lock_context* lock_context);
+void rtems_capture_record_close( void *rec, rtems_capture_record_context_t* context);
 
 
 /**
