@@ -276,9 +276,8 @@ void _Thread_Life_action_handler(
 }
 
 static void _Thread_Start_life_change(
-  Thread_Control          *the_thread,
-  const Scheduler_Control *scheduler,
-  Priority_Control         priority
+  Thread_Control   *the_thread,
+  Priority_Control  priority
 )
 {
   the_thread->is_preemptible   = the_thread->Start.is_preemptible;
@@ -308,21 +307,19 @@ static void _Thread_Request_life_change(
 {
   Thread_Life_state        previous_life_state;
   ISR_lock_Context         lock_context;
-  const Scheduler_Control *scheduler;
 
   _Thread_State_acquire( the_thread, &lock_context );
   previous_life_state = the_thread->Life.state;
   the_thread->Life.state = previous_life_state | additional_life_state;
   _Thread_State_release( the_thread, &lock_context );
 
-  scheduler = _Scheduler_Get( the_thread );
   if ( the_thread == executing ) {
     Priority_Control unused;
 
     _Thread_Set_priority( the_thread, priority, &unused, true );
     _Thread_Start_life_change_for_executing( executing );
   } else if ( previous_life_state == THREAD_LIFE_NORMAL ) {
-    _Thread_Start_life_change( the_thread, scheduler, priority );
+    _Thread_Start_life_change( the_thread, priority );
   } else {
     _Thread_Clear_state( the_thread, STATES_SUSPENDED );
 
