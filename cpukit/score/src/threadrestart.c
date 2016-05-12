@@ -401,12 +401,24 @@ void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
 
 void _Thread_Exit( Thread_Control *executing )
 {
-  _Thread_Request_life_change(
-    executing,
-    executing,
-    executing->current_priority,
-    THREAD_LIFE_TERMINATING
+  ISR_lock_Context lock_context;
+
+  _Assert(
+    _Watchdog_Get_state( &executing->Timer.Watchdog ) == WATCHDOG_INACTIVE
   );
+  _Assert(
+    executing->current_state == STATES_READY
+      || executing->current_state == STATES_SUSPENDED
+  );
+
+  _Thread_State_acquire( executing, &lock_context );
+  _Thread_Change_life_locked(
+    executing,
+    0,
+    THREAD_LIFE_TERMINATING,
+    THREAD_LIFE_PROTECTED
+  );
+  _Thread_State_release( executing, &lock_context );
 }
 
 bool _Thread_Restart(
