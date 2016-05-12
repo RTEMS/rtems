@@ -279,6 +279,19 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
   _ISR_lock_Destroy( _lock )
 
 /**
+ * @brief Disables interrupts on the current processor.
+ *
+ * This function can be used in thread and interrupt context.
+ *
+ * @param[in,out] _lock_context The local interrupt lock context for an acquire
+ * and release pair.
+ *
+ * @see rtems_interrupt_lock_acquire_isr().
+ */
+#define rtems_interrupt_lock_interrupt_disable( _lock_context ) \
+  _ISR_lock_ISR_disable( _lock_context )
+
+/**
  * @brief Acquires an interrupt lock.
  *
  * Interrupts will be disabled.  On SMP configurations this function acquires
