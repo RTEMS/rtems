@@ -31,6 +31,7 @@ void _POSIX_Thread_Exit(
   void           *value_ptr
 )
 {
+  Thread_Control    *executing;
   Thread_Control    *unblocked;
   POSIX_API_Control *api;
   bool               previous_life_protection;
@@ -61,10 +62,16 @@ void _POSIX_Thread_Exit(
     }
   }
 
+  executing = _Thread_Executing;
+
   /*
    *  Now shut down the thread
    */
-  _Thread_Close( the_thread, _Thread_Executing );
+  if ( the_thread == executing ) {
+    _Thread_Exit( executing );
+  } else {
+    _Thread_Close( the_thread, executing );
+  }
 
   _Thread_Enable_dispatch();
   _Thread_Set_life_protection( previous_life_protection );

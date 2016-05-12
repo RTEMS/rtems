@@ -341,14 +341,12 @@ static void _Thread_Request_life_change(
 void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
 {
   _Assert( _Thread_Is_life_protected( executing->Life.state ) );
+  _Assert( the_thread != executing );
 
   if ( _States_Is_dormant( the_thread->current_state ) ) {
     _Thread_Make_zombie( the_thread );
   } else {
-    if (
-      the_thread != executing
-        && !_Thread_Is_life_terminating( executing->Life.state )
-    ) {
+    if ( !_Thread_Is_life_terminating( executing->Life.state ) ) {
       /*
        * Wait for termination of victim thread.  If the executing thread is
        * also terminated, then do not wait.  This avoids potential cyclic
@@ -365,6 +363,18 @@ void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
       THREAD_LIFE_TERMINATING
     );
   }
+}
+
+void _Thread_Exit( Thread_Control *executing )
+{
+  _Assert( _Thread_Is_life_protected( executing->Life.state ) );
+
+  _Thread_Request_life_change(
+    executing,
+    executing,
+    executing->current_priority,
+    THREAD_LIFE_TERMINATING
+  );
 }
 
 bool _Thread_Restart(

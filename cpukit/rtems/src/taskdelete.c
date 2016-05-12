@@ -28,6 +28,7 @@ rtems_status_code rtems_task_delete(
 )
 {
   Thread_Control    *the_thread;
+  Thread_Control    *executing;
   Objects_Locations  location;
   bool               previous_life_protection;
 
@@ -50,7 +51,13 @@ rtems_status_code rtems_task_delete(
         }
       #endif
 
-      _Thread_Close( the_thread, _Thread_Executing );
+      executing = _Thread_Executing;
+
+      if ( the_thread == executing ) {
+        _Thread_Exit( executing );
+      } else {
+        _Thread_Close( the_thread, executing );
+      }
 
       _Objects_Put( &the_thread->Object );
       _Thread_Set_life_protection( previous_life_protection );

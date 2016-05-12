@@ -211,6 +211,8 @@ bool _Thread_Set_life_protection( bool protect );
  */
 void _Thread_Kill_zombies( void );
 
+void _Thread_Exit( Thread_Control *executing );
+
 /**
  * @brief Closes the thread.
  *
