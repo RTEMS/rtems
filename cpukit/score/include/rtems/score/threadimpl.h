@@ -198,7 +198,7 @@ bool _Thread_Restart(
 
 void _Thread_Yield( Thread_Control *executing );
 
-bool _Thread_Set_life_protection( bool protect );
+Thread_Life_state _Thread_Set_life_protection( Thread_Life_state state );
 
 /**
  * @brief Kills all zombie threads in the system.
@@ -934,11 +934,11 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_life_terminating(
   return ( life_state & THREAD_LIFE_TERMINATING ) != 0;
 }
 
-RTEMS_INLINE_ROUTINE bool _Thread_Is_life_protected(
+RTEMS_INLINE_ROUTINE bool _Thread_Is_life_change_allowed(
   Thread_Life_state life_state
 )
 {
-  return ( life_state & THREAD_LIFE_PROTECTED ) != 0;
+  return ( life_state & THREAD_LIFE_PROTECTED ) == 0;
 }
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_life_changing(

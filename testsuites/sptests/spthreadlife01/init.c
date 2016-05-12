@@ -231,7 +231,7 @@ static void worker_task(rtems_task_argument arg)
   while (true) {
     test_state state = ctx->current;
     rtems_status_code sc;
-    bool previous_thread_life_protection;
+    Thread_Life_state previous_thread_life_state;
 
     switch (state) {
       case SET_PRIO:
@@ -273,14 +273,19 @@ static void worker_task(rtems_task_argument arg)
         break;
       case SET_PROTECTION:
         _Thread_Disable_dispatch();
-        previous_thread_life_protection = _Thread_Set_life_protection(true);
-        rtems_test_assert(!previous_thread_life_protection);
+        previous_thread_life_state =
+          _Thread_Set_life_protection(THREAD_LIFE_PROTECTED);
+        rtems_test_assert(
+          (previous_thread_life_state & THREAD_LIFE_PROTECTED) == 0
+        );
         _Thread_Enable_dispatch();
         break;
       case CLEAR_PROTECTION:
         _Thread_Disable_dispatch();
-        previous_thread_life_protection = _Thread_Set_life_protection(false);
-        rtems_test_assert(previous_thread_life_protection);
+        previous_thread_life_state = _Thread_Set_life_protection(0);
+        rtems_test_assert(
+          (previous_thread_life_state & THREAD_LIFE_PROTECTED) != 0
+        );
         ctx->current = DELETE_4;
         _Thread_Enable_dispatch();
         break;

@@ -221,7 +221,7 @@ static void delay_ipi_task(rtems_task_argument variant)
    * We get deleted as a side effect of enabling the thread life protection or
    * later if we enable the thread dispatching.
    */
-  _Thread_Set_life_protection(true);
+  _Thread_Set_life_protection( THREAD_LIFE_PROTECTED );
 
   if (variant != 0) {
     _Thread_Enable_dispatch();

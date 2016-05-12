@@ -218,7 +218,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
 {
   MRSP_Status status;
   MRSP_Rival rival;
-  bool initial_life_protection;
+  Thread_Life_state life_state;
   Per_CPU_Control *cpu_self;
   ISR_lock_Context giant_lock_context;
   ISR_Level level;
@@ -256,7 +256,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
     _ISR_Enable_without_giant( level );
   }
 
-  initial_life_protection = _Thread_Set_life_protection( true );
+  life_state = _Thread_Set_life_protection( THREAD_LIFE_PROTECTED );
   _Thread_Dispatch_enable( cpu_self );
 
   _Assert( _Debug_Is_thread_dispatching_allowed() );
@@ -266,7 +266,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
     status = rival.status;
   } while ( status == MRSP_WAIT_FOR_OWNERSHIP );
 
-  _Thread_Set_life_protection( initial_life_protection );
+  _Thread_Set_life_protection( life_state );
 
   if ( timeout > 0 ) {
     _ISR_Disable_without_giant( level );

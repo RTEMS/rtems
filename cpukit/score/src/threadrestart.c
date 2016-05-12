@@ -9,7 +9,7 @@
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2014 embedded brains GmbH.
+ *  Copyright (c) 2014, 2016 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -213,6 +213,42 @@ static void _Thread_Start_life_change_for_executing(
   _Thread_Add_life_change_action( executing );
 }
 
+static Thread_Life_state _Thread_Change_life_locked(
+  Thread_Control    *the_thread,
+  Thread_Life_state  clear,
+  Thread_Life_state  set,
+  Thread_Life_state  ignore
+)
+{
+  Thread_Life_state previous;
+  Thread_Life_state state;
+
+  previous = the_thread->Life.state;
+  state = previous;
+  state &= ~clear;
+  state |= set;
+  the_thread->Life.state = state;
+
+  state &= ~ignore;
+
+  if (
+    _Thread_Is_life_change_allowed( state )
+      && _Thread_Is_life_changing( state )
+  ) {
+    the_thread->is_preemptible   = the_thread->Start.is_preemptible;
+    the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
+    the_thread->budget_callout   = the_thread->Start.budget_callout;
+
+    _Thread_Add_post_switch_action(
+      the_thread,
+      &the_thread->Life.Action,
+      _Thread_Life_action_handler
+    );
+  }
+
+  return previous;
+}
+
 void _Thread_Life_action_handler(
   Thread_Control   *executing,
   Thread_Action    *action,
@@ -393,52 +429,33 @@ bool _Thread_Restart(
   return false;
 }
 
-bool _Thread_Set_life_protection( bool protect )
+static Thread_Life_state _Thread_Change_life(
+  Thread_Life_state clear,
+  Thread_Life_state set,
+  Thread_Life_state ignore
+)
 {
-  bool               previous_life_protection;
   ISR_lock_Context   lock_context;
   Thread_Control    *executing;
-  Thread_Life_state  previous_life_state;
+  Per_CPU_Control   *cpu_self;
+  Thread_Life_state  previous;
 
   executing = _Thread_State_acquire_for_executing( &lock_context );
 
-  previous_life_state = executing->Life.state;
-  previous_life_protection = _Thread_Is_life_protected( previous_life_state );
+  previous = _Thread_Change_life_locked( executing, clear, set, ignore );
 
-  if ( protect ) {
-    executing->Life.state = previous_life_state | THREAD_LIFE_PROTECTED;
-  } else {
-    executing->Life.state = previous_life_state & ~THREAD_LIFE_PROTECTED;
-  }
-
+  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
   _Thread_State_release( executing, &lock_context );
+  _Thread_Dispatch_enable( cpu_self );
 
-#if defined(RTEMS_SMP)
-  /*
-   * On SMP configurations it is possible that a life change of an executing
-   * thread is requested, but this thread didn't notice it yet.  The life
-   * change is first marked in the life state field and then all scheduling and
-   * other thread state updates are performed.  The last step is to issues an
-   * inter-processor interrupt if necessary.  Since this takes some time we
-   * have to synchronize here.
-   */
-  if (
-    !_Thread_Is_life_protected( previous_life_state )
-      && _Thread_Is_life_changing( previous_life_state )
-  ) {
-    _Thread_Disable_dispatch();
-    _Thread_Enable_dispatch();
-  }
-#endif
+  return previous;
+}
 
-  if (
-    !protect
-      && _Thread_Is_life_changing( previous_life_state )
-  ) {
-    _Thread_Disable_dispatch();
-    _Thread_Start_life_change_for_executing( executing );
-    _Thread_Enable_dispatch();
-  }
-
-  return previous_life_protection;
+Thread_Life_state _Thread_Set_life_protection( Thread_Life_state state )
+{
+  return _Thread_Change_life(
+    THREAD_LIFE_PROTECTED,
+    state & THREAD_LIFE_PROTECTED,
+    0
+  );
 }
