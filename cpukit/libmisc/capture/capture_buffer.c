@@ -28,8 +28,8 @@
 
 void * rtems_capture_buffer_allocate( rtems_capture_buffer_t* buffer, size_t size )
 {
-  static uint32_t   end;
-  static void       *ptr;
+  size_t  end;
+  void   *ptr;
 
   if ( rtems_capture_buffer_is_full( buffer ) )
     return NULL;
@@ -89,9 +89,9 @@ void * rtems_capture_buffer_allocate( rtems_capture_buffer_t* buffer, size_t siz
 
 void *rtems_capture_buffer_free( rtems_capture_buffer_t* buffer, size_t size )
 {
-    static void             *ptr;
-    static uint32_t         next;
-    size_t                  buff_size;
+    void   *ptr;
+    size_t  next;
+    size_t  buff_size;
 
     if (size == 0)
       return NULL;

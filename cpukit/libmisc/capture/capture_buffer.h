@@ -32,12 +32,12 @@ extern "C" {
 #endif
 
 typedef struct {
-  uint8_t           *buffer;
-  size_t            size;
-  volatile uint32_t count;
-  volatile uint32_t head;
-  volatile uint32_t tail;
-  volatile uint32_t end;
+  uint8_t *buffer;
+  size_t   size;
+  size_t   count;
+  size_t   head;
+  size_t   tail;
+  size_t   end;
 } rtems_capture_buffer_t;
 
 static inline void rtems_capture_buffer_flush(  rtems_capture_buffer_t* buffer )
