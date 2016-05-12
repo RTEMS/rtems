@@ -31,9 +31,6 @@
 #include "captureimpl.h"
 #include "capture_buffer.h"
 
-#include <rtems/score/statesimpl.h>
-#include <rtems/score/todimpl.h>
-
 /*
  * These events are always recorded and are not part of the
  * watch filters.
