@@ -153,9 +153,9 @@ typedef struct rtems_capture_control_s
  */
 typedef struct rtems_capture_record_s
 {
-  uint32_t              events;
   rtems_capture_time_t  time;
   size_t                size;
+  uint32_t              events;
   rtems_id              task_id;
 } rtems_capture_record_t;
 
