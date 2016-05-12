@@ -34,13 +34,11 @@ void _POSIX_Thread_Exit(
   Thread_Control    *executing;
   Thread_Control    *unblocked;
   POSIX_API_Control *api;
-  bool               previous_life_protection;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   _Assert( _Debug_Is_thread_dispatching_allowed() );
 
-  previous_life_protection = _Thread_Set_life_protection( true );
   _Thread_Disable_dispatch();
 
   the_thread->Wait.return_argument = value_ptr;
@@ -74,7 +72,6 @@ void _POSIX_Thread_Exit(
   }
 
   _Thread_Enable_dispatch();
-  _Thread_Set_life_protection( previous_life_protection );
 }
 
 void pthread_exit(

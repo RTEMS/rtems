@@ -30,9 +30,7 @@ rtems_status_code rtems_task_delete(
   Thread_Control    *the_thread;
   Thread_Control    *executing;
   Objects_Locations  location;
-  bool               previous_life_protection;
 
-  previous_life_protection = _Thread_Set_life_protection( true );
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 
@@ -60,21 +58,17 @@ rtems_status_code rtems_task_delete(
       }
 
       _Objects_Put( &the_thread->Object );
-      _Thread_Set_life_protection( previous_life_protection );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
-      _Thread_Set_life_protection( previous_life_protection );
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
 #endif
 
     case OBJECTS_ERROR:
       break;
   }
-
-  _Thread_Set_life_protection( previous_life_protection );
 
   return RTEMS_INVALID_ID;
 }

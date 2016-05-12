@@ -340,7 +340,6 @@ static void _Thread_Request_life_change(
 
 void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
 {
-  _Assert( _Thread_Is_life_protected( executing->Life.state ) );
   _Assert( the_thread != executing );
 
   if ( _States_Is_dormant( the_thread->current_state ) ) {
@@ -367,8 +366,6 @@ void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
 
 void _Thread_Exit( Thread_Control *executing )
 {
-  _Assert( _Thread_Is_life_protected( executing->Life.state ) );
-
   _Thread_Request_life_change(
     executing,
     executing,
