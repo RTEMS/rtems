@@ -70,6 +70,20 @@ static bool _Thread_Raise_real_priority_filter(
   return _Thread_Priority_less_than( current_priority, new_priority );
 }
 
+static void _Thread_Raise_real_priority(
+  Thread_Control   *the_thread,
+  Priority_Control  priority
+)
+{
+  _Thread_Change_priority(
+    the_thread,
+    priority,
+    NULL,
+    _Thread_Raise_real_priority_filter,
+    false
+  );
+}
+
 static void _Thread_Make_zombie( Thread_Control *the_thread )
 {
   ISR_lock_Context lock_context;
@@ -323,13 +337,7 @@ static void _Thread_Start_life_change(
   _Thread_Set_state( the_thread, STATES_RESTARTING );
   _Thread_queue_Extract_with_proxy( the_thread );
   _Thread_Timer_remove( the_thread );
-  _Thread_Change_priority(
-    the_thread,
-    priority,
-    NULL,
-    _Thread_Raise_real_priority_filter,
-    false
-  );
+  _Thread_Raise_real_priority( the_thread, priority );
   _Thread_Add_life_change_action( the_thread );
   _Thread_Ready( the_thread );
 }
@@ -360,13 +368,7 @@ static void _Thread_Request_life_change(
     _Thread_Clear_state( the_thread, STATES_SUSPENDED );
 
     if ( _Thread_Is_life_terminating( additional_life_state ) ) {
-      _Thread_Change_priority(
-        the_thread,
-        priority,
-        NULL,
-        _Thread_Raise_real_priority_filter,
-        false
-      );
+      _Thread_Raise_real_priority( the_thread, priority );
     }
   }
 }
