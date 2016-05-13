@@ -134,7 +134,8 @@ static void _MPCI_Create_server( void )
       }
     }
   };
-  Objects_Name name;
+  ISR_lock_Context lock_context;
+  Objects_Name     name;
 
 
   if ( !_System_state_Is_multiprocessing )
@@ -164,7 +165,8 @@ static void _MPCI_Create_server( void )
     name
   );
 
-  _Thread_Start( _MPCI_Receive_server_tcb, &entry );
+  _ISR_lock_ISR_disable( &lock_context );
+  _Thread_Start( _MPCI_Receive_server_tcb, &entry, &lock_context );
 }
 
 static void _MPCI_Initialization( void )

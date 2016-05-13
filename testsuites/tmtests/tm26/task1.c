@@ -194,13 +194,13 @@ static void thread_unblock( Thread_Control *thread )
 #endif
 }
 
-static void thread_ready( Thread_Control *thread )
+static void thread_clear_state( Thread_Control *thread, States_Control state  )
 {
 #if defined( PREVENT_SMP_ASSERT_FAILURES )
   _Thread_Disable_dispatch();
 #endif
 
-  _Thread_Ready( thread );
+  _Thread_Clear_state( thread, state );
 
 #if defined( PREVENT_SMP_ASSERT_FAILURES )
   _Thread_Unnest_dispatch();
@@ -559,7 +559,7 @@ void complete_test( void )
   thread_set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
 
   benchmark_timer_initialize();
-    thread_ready( Middle_tcb );
+    thread_clear_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
   thread_ready_time = benchmark_timer_read();
 
   benchmark_timer_initialize();

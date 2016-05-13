@@ -25,17 +25,28 @@
 
 bool _Thread_Start(
   Thread_Control                 *the_thread,
-  const Thread_Entry_information *entry
+  const Thread_Entry_information *entry,
+  ISR_lock_Context               *lock_context
 )
 {
-  if ( _States_Is_dormant( the_thread->current_state ) ) {
-    the_thread->Start.Entry = *entry;
-    _Thread_Load_environment( the_thread );
-    _Thread_Ready( the_thread );
-    _User_extensions_Thread_start( the_thread );
+  Per_CPU_Control *cpu_self;
 
-    return true;
+  _Thread_State_acquire_critical( the_thread, lock_context );
+
+  if ( !_States_Is_dormant( the_thread->current_state ) ) {
+    _Thread_State_release( the_thread, lock_context );
+    return false;
   }
 
-  return false;
+  the_thread->Start.Entry = *entry;
+  _Thread_Load_environment( the_thread );
+  _Thread_Clear_state_locked( the_thread, STATES_ALL_SET );
+
+  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
+  _Thread_State_release( the_thread, lock_context );
+
+  _User_extensions_Thread_start( the_thread );
+
+  _Thread_Dispatch_enable( cpu_self );
+  return true;
 }

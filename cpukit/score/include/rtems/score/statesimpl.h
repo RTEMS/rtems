@@ -123,7 +123,7 @@ extern "C" {
                                  STATES_WAITING_FOR_SYSTEM_EVENT | \
                                  STATES_INTERRUPTIBLE_BY_SIGNAL )
 
-/** All state bits set to one (provided for _Thread_Ready()) */
+/** All state bits set to one (provided for _Thread_Start()) */
 #define STATES_ALL_SET 0xffffffff
 
 /**

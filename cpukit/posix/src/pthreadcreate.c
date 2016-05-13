@@ -229,12 +229,11 @@ int pthread_create(
   api->schedpolicy = schedpolicy;
   api->schedparam  = schedparam;
 
-  _Thread_Disable_dispatch();
-
   /*
    *  POSIX threads are allocated and started in one operation.
    */
-  status = _Thread_Start( the_thread, &entry );
+  _ISR_lock_ISR_disable( &lock_context );
+  status = _Thread_Start( the_thread, &entry, &lock_context );
 
   #if defined(RTEMS_DEBUG)
     /*
@@ -244,7 +243,6 @@ int pthread_create(
      *        thread while we are creating it.
      */
     if ( !status ) {
-      _Thread_Enable_dispatch();
       _POSIX_Threads_Free( the_thread );
       _Objects_Allocator_unlock();
       return EINVAL;
@@ -260,8 +258,6 @@ int pthread_create(
     );
     _ISR_lock_ISR_enable( &lock_context );
   }
-
-  _Thread_Enable_dispatch();
 
   /*
    *  Return the id and indicate we successfully created the thread

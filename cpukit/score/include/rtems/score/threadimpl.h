@@ -187,7 +187,8 @@ bool _Thread_Initialize(
  */
 bool _Thread_Start(
   Thread_Control                 *the_thread,
-  const Thread_Entry_information *entry
+  const Thread_Entry_information *entry,
+  ISR_lock_Context               *lock_context
 );
 
 void _Thread_Restart_self(
@@ -286,21 +287,6 @@ States_Control _Thread_Set_state(
   Thread_Control *the_thread,
   States_Control  state
 );
-
-/**
- * @brief Clears all thread states.
- *
- * In case the previous state is a non-ready state, then the thread is
- * unblocked by the scheduler.
- *
- * @param[in] the_thread The thread.
- */
-RTEMS_INLINE_ROUTINE void _Thread_Ready(
-  Thread_Control *the_thread
-)
-{
-  _Thread_Clear_state( the_thread, STATES_ALL_SET );
-}
 
 /**
  *  @brief Initializes enviroment for a thread.
