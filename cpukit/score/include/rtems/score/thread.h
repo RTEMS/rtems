@@ -543,6 +543,11 @@ typedef struct {
    * @brief The current thread life state.
    */
   Thread_Life_state  state;
+
+  /**
+   * @brief The count of pending life change requests.
+   */
+  uint32_t pending_life_change_requests;
 } Thread_Life_control;
 
 #if defined(RTEMS_SMP)

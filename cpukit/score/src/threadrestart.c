@@ -368,7 +368,7 @@ static void _Thread_Start_life_change(
   the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
   the_thread->budget_callout   = the_thread->Start.budget_callout;
 
-  _Thread_Set_state( the_thread, STATES_RESTARTING );
+  _Thread_Set_state( the_thread, STATES_LIFE_IS_CHANGING );
   _Thread_queue_Extract_with_proxy( the_thread );
   _Thread_Timer_remove( the_thread );
   _Thread_Raise_real_priority( the_thread, priority );
@@ -405,6 +405,64 @@ static void _Thread_Request_life_change(
       _Thread_Raise_real_priority( the_thread, priority );
     }
   }
+}
+
+static void _Thread_Add_life_change_request( Thread_Control *the_thread )
+{
+  uint32_t pending_requests;
+
+  _Assert( _Thread_State_is_owner( the_thread ) );
+
+  pending_requests = the_thread->Life.pending_life_change_requests;
+  the_thread->Life.pending_life_change_requests = pending_requests + 1;
+
+  if ( pending_requests == 0 ) {
+    _Thread_Set_state_locked( the_thread, STATES_LIFE_IS_CHANGING );
+  }
+}
+
+static void _Thread_Remove_life_change_request( Thread_Control *the_thread )
+{
+  ISR_lock_Context lock_context;
+  uint32_t         pending_requests;
+
+  _Thread_State_acquire( the_thread, &lock_context );
+
+  pending_requests = the_thread->Life.pending_life_change_requests;
+  the_thread->Life.pending_life_change_requests = pending_requests - 1;
+
+  if ( pending_requests == 1 ) {
+    /*
+     * Do not remove states used for thread queues to avoid race conditions on
+     * SMP configurations.  We could interrupt an extract operation on another
+     * processor disregarding the thread wait flags.  Rely on
+     * _Thread_queue_Extract_with_proxy() for removal of these states.
+     */
+    _Thread_Clear_state_locked(
+      the_thread,
+      STATES_LIFE_IS_CHANGING | STATES_SUSPENDED
+        | ( STATES_BLOCKED & ~STATES_LOCALLY_BLOCKED )
+    );
+  }
+
+  _Thread_State_release( the_thread, &lock_context );
+}
+
+static void _Thread_Finalize_life_change(
+  Thread_Control   *the_thread,
+  Priority_Control  priority
+)
+{
+  _Thread_queue_Extract_with_proxy( the_thread );
+  _Thread_Timer_remove( the_thread );
+  _Thread_Change_priority(
+    the_thread,
+    priority,
+    NULL,
+    _Thread_Raise_real_priority_filter,
+    false
+  );
+  _Thread_Remove_life_change_request( the_thread );
 }
 
 void _Thread_Join(
@@ -486,7 +544,8 @@ bool _Thread_Restart_other(
   ISR_lock_Context               *lock_context
 )
 {
-  Per_CPU_Control *cpu_self;
+  Thread_Life_state  previous;
+  Per_CPU_Control   *cpu_self;
 
   _Thread_State_acquire_critical( the_thread, lock_context );
 
@@ -496,16 +555,27 @@ bool _Thread_Restart_other(
   }
 
   the_thread->Start.Entry = *entry;
+  previous = _Thread_Change_life_locked(
+    the_thread,
+    0,
+    THREAD_LIFE_RESTARTING,
+    0
+  );
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-  _Thread_State_release( the_thread, lock_context );
 
-  _Thread_Request_life_change(
-    the_thread,
-    NULL,
-    the_thread->Start.initial_priority,
-    THREAD_LIFE_RESTARTING
-  );
+  if ( _Thread_Is_life_change_allowed( previous ) ) {
+    _Thread_Add_life_change_request( the_thread );
+    _Thread_State_release( the_thread, lock_context );
+
+    _Thread_Finalize_life_change(
+      the_thread,
+      the_thread->Start.initial_priority
+    );
+  } else {
+    _Thread_Clear_state_locked( the_thread, STATES_SUSPENDED );
+    _Thread_State_release( the_thread, lock_context );
+  }
 
   _Thread_Dispatch_enable( cpu_self );
   return true;

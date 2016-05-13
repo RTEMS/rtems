@@ -78,8 +78,8 @@ extern "C" {
 #define STATES_WAITING_FOR_BSD_WAKEUP          0x80000
 /** This macro corresponds to a task being a zombie. */
 #define STATES_ZOMBIE                          0x200000
-/** This macro corresponds to a task restarting. */
-#define STATES_RESTARTING                      0x800000
+/** This macro corresponds to a task those life is changing. */
+#define STATES_LIFE_IS_CHANGING                0x800000
 /** This macro corresponds to a task waiting for a join. */
 #define STATES_WAITING_FOR_JOIN                0x1000000
 /** This macro corresponds to a task waiting for a <sys/lock.h> mutex. */
