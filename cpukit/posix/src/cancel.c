@@ -64,5 +64,5 @@ int pthread_cancel(
       break;
   }
 
-  return EINVAL;
+  return ESRCH;
 }

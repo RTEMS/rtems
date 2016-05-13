@@ -111,9 +111,9 @@ void *countTaskAsync(void *ignored)
   sc = pthread_setcanceltype(12, &old);
   fatal_posix_service_status( sc, EINVAL, "cancel type EINVAL" );
 
-  puts( "Init - pthread_cancel - bad ID - EINVAL" );
+  puts( "Init - pthread_cancel - bad ID - ESRCH" );
   sc = pthread_cancel(0x100);
-  fatal_posix_service_status( sc, EINVAL, "cancel bad Id" );
+  fatal_posix_service_status( sc, ESRCH, "cancel bad Id" );
 
   /* Start countTask deferred */
   {
