@@ -231,6 +231,11 @@ void _Thread_Cancel( Thread_Control *the_thread, Thread_Control *executing );
  */
 void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing );
 
+States_Control _Thread_Clear_state_locked(
+  Thread_Control *the_thread,
+  States_Control  state
+);
+
 /**
  * @brief Clears the specified thread state.
  *
