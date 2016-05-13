@@ -359,54 +359,6 @@ void _Thread_Life_action_handler(
   }
 }
 
-static void _Thread_Start_life_change(
-  Thread_Control   *the_thread,
-  Priority_Control  priority
-)
-{
-  the_thread->is_preemptible   = the_thread->Start.is_preemptible;
-  the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
-  the_thread->budget_callout   = the_thread->Start.budget_callout;
-
-  _Thread_Set_state( the_thread, STATES_LIFE_IS_CHANGING );
-  _Thread_queue_Extract_with_proxy( the_thread );
-  _Thread_Timer_remove( the_thread );
-  _Thread_Raise_real_priority( the_thread, priority );
-  _Thread_Add_life_change_action( the_thread );
-  _Thread_Ready( the_thread );
-}
-
-static void _Thread_Request_life_change(
-  Thread_Control    *the_thread,
-  Thread_Control    *executing,
-  Priority_Control   priority,
-  Thread_Life_state  additional_life_state
-)
-{
-  Thread_Life_state        previous_life_state;
-  ISR_lock_Context         lock_context;
-
-  _Thread_State_acquire( the_thread, &lock_context );
-  previous_life_state = the_thread->Life.state;
-  the_thread->Life.state = previous_life_state | additional_life_state;
-  _Thread_State_release( the_thread, &lock_context );
-
-  if ( the_thread == executing ) {
-    Priority_Control unused;
-
-    _Thread_Set_priority( the_thread, priority, &unused, true );
-    _Thread_Start_life_change_for_executing( executing );
-  } else if ( previous_life_state == THREAD_LIFE_NORMAL ) {
-    _Thread_Start_life_change( the_thread, priority );
-  } else {
-    _Thread_Clear_state( the_thread, STATES_SUSPENDED );
-
-    if ( _Thread_Is_life_terminating( additional_life_state ) ) {
-      _Thread_Raise_real_priority( the_thread, priority );
-    }
-  }
-}
-
 static void _Thread_Add_life_change_request( Thread_Control *the_thread )
 {
   uint32_t pending_requests;
@@ -488,18 +440,43 @@ void _Thread_Join(
 
 void _Thread_Cancel( Thread_Control *the_thread, Thread_Control *executing )
 {
+  ISR_lock_Context   lock_context;
+  Thread_Life_state  previous;
+  Per_CPU_Control   *cpu_self;
+  Priority_Control   priority;
+
   _Assert( the_thread != executing );
 
+  _Thread_State_acquire( the_thread, &lock_context );
+
+  previous = _Thread_Change_life_locked(
+    the_thread,
+    0,
+    THREAD_LIFE_TERMINATING,
+    0
+  );
+
+  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
+  priority = executing->current_priority;
+
   if ( _States_Is_dormant( the_thread->current_state ) ) {
+    _Thread_State_release( the_thread, &lock_context );
     _Thread_Make_zombie( the_thread );
+  } else if ( _Thread_Is_life_change_allowed( previous ) ) {
+    _Thread_Add_life_change_request( the_thread );
+    _Thread_State_release( the_thread, &lock_context );
+
+    _Thread_Finalize_life_change( the_thread, priority );
   } else {
-    _Thread_Request_life_change(
-      the_thread,
-      executing,
-      executing->current_priority,
-      THREAD_LIFE_TERMINATING
-    );
+    _Thread_Add_life_change_request( the_thread );
+    _Thread_Clear_state_locked( the_thread, STATES_SUSPENDED );
+    _Thread_State_release( the_thread, &lock_context );
+
+    _Thread_Raise_real_priority( the_thread, priority );
+    _Thread_Remove_life_change_request( the_thread );
   }
+
+  _Thread_Dispatch_enable( cpu_self );
 }
 
 void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
