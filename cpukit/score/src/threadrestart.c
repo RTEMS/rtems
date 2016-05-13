@@ -32,6 +32,8 @@
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 
+#define THREAD_JOIN_TQ_OPERATIONS &_Thread_queue_Operations_priority
+
 static void _Thread_Life_action_handler(
   Thread_Control   *executing,
   Thread_Action    *action,
@@ -84,10 +86,29 @@ static void _Thread_Raise_real_priority(
   );
 }
 
+typedef struct {
+  ISR_lock_Context  Base;
+} Thread_Join_lock_context;
+
+static void _Thread_Wake_up_joining_threads( Thread_Control *the_thread )
+{
+  Thread_Join_lock_context join_lock_context;
+
+  _Thread_State_acquire( the_thread, &join_lock_context.Base );
+  _Thread_queue_Flush_critical(
+    &the_thread->Join_queue.Queue,
+    THREAD_JOIN_TQ_OPERATIONS,
+    _Thread_queue_Flush_default_filter,
+    NULL,
+    0,
+    &join_lock_context.Base
+  );
+}
+
 static void _Thread_Make_zombie( Thread_Control *the_thread )
 {
-  ISR_lock_Context lock_context;
-  Thread_Zombie_control *zombies = &_Thread_Zombies;
+  ISR_lock_Context       lock_context;
+  Thread_Zombie_control *zombies;
 
   if ( _Thread_Owns_resources( the_thread ) ) {
     _Terminate(
@@ -102,10 +123,12 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
     &the_thread->Object
   );
 
+  _Thread_Wake_up_joining_threads( the_thread );
   _Thread_Set_state( the_thread, STATES_ZOMBIE );
   _Thread_queue_Extract_with_proxy( the_thread );
   _Thread_Timer_remove( the_thread );
 
+  zombies = &_Thread_Zombies;
   _ISR_lock_ISR_disable_and_acquire( &zombies->Lock, &lock_context );
   _Chain_Append_unprotected( &zombies->Chain, &the_thread->Object.Node );
   _ISR_lock_Release_and_ISR_enable( &zombies->Lock, &lock_context );
@@ -291,13 +314,6 @@ void _Thread_Life_action_handler(
   if ( _Thread_Is_life_terminating( previous_life_state ) ) {
     _Thread_Make_zombie( executing );
 
-    if ( executing->Life.terminator != NULL ) {
-      _Thread_Clear_state(
-        executing->Life.terminator,
-        STATES_WAITING_FOR_TERMINATION
-      );
-    }
-
     _Thread_Enable_dispatch();
     RTEMS_UNREACHABLE();
   } else {
@@ -373,23 +389,34 @@ static void _Thread_Request_life_change(
   }
 }
 
-void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
+void _Thread_Join(
+  Thread_Control    *the_thread,
+  States_Control     waiting_for_join,
+  Thread_Control    *executing,
+  ISR_lock_Context  *lock_context
+)
+{
+  _Assert( the_thread != executing );
+  _Assert( _Thread_State_is_owner( the_thread ) );
+
+  _Thread_queue_Enqueue_critical(
+    &the_thread->Join_queue.Queue,
+    THREAD_JOIN_TQ_OPERATIONS,
+    executing,
+    waiting_for_join,
+    WATCHDOG_NO_TIMEOUT,
+    0,
+    lock_context
+  );
+}
+
+void _Thread_Cancel( Thread_Control *the_thread, Thread_Control *executing )
 {
   _Assert( the_thread != executing );
 
   if ( _States_Is_dormant( the_thread->current_state ) ) {
     _Thread_Make_zombie( the_thread );
   } else {
-    if ( !_Thread_Is_life_terminating( executing->Life.state ) ) {
-      /*
-       * Wait for termination of victim thread.  If the executing thread is
-       * also terminated, then do not wait.  This avoids potential cyclic
-       * dependencies and thus dead lock.
-       */
-       the_thread->Life.terminator = executing;
-       _Thread_Set_state( executing, STATES_WAITING_FOR_TERMINATION );
-    }
-
     _Thread_Request_life_change(
       the_thread,
       executing,
@@ -397,6 +424,20 @@ void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
       THREAD_LIFE_TERMINATING
     );
   }
+}
+
+void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
+{
+  ISR_lock_Context lock_context;
+
+  _Thread_State_acquire( the_thread, &lock_context );
+  _Thread_Join(
+    the_thread,
+    STATES_WAITING_FOR_JOIN,
+    executing,
+    &lock_context
+  );
+  _Thread_Cancel( the_thread, executing );
 }
 
 void _Thread_Exit( Thread_Control *executing )

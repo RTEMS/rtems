@@ -213,6 +213,15 @@ void _Thread_Kill_zombies( void );
 
 void _Thread_Exit( Thread_Control *executing );
 
+void _Thread_Join(
+  Thread_Control    *the_thread,
+  States_Control     waiting_for_join,
+  Thread_Control    *executing,
+  ISR_lock_Context  *lock_context
+);
+
+void _Thread_Cancel( Thread_Control *the_thread, Thread_Control *executing );
+
 /**
  * @brief Closes the thread.
  *

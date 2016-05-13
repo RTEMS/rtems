@@ -543,15 +543,6 @@ typedef struct {
    * @brief The current thread life state.
    */
   Thread_Life_state  state;
-
-  /**
-   * @brief The terminator thread of this thread.
-   *
-   * In case the thread is terminated and another thread (the terminator) waits
-   * for the actual termination completion, then this field references the
-   * terminator thread.
-   */
-  Thread_Control    *terminator;
 } Thread_Life_control;
 
 #if defined(RTEMS_SMP)
