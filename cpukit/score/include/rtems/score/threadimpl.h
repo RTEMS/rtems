@@ -205,6 +205,12 @@ bool _Thread_Restart_other(
 
 void _Thread_Yield( Thread_Control *executing );
 
+Thread_Life_state _Thread_Change_life(
+  Thread_Life_state clear,
+  Thread_Life_state set,
+  Thread_Life_state ignore
+);
+
 Thread_Life_state _Thread_Set_life_protection( Thread_Life_state state );
 
 /**
@@ -933,7 +939,8 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_life_change_allowed(
   Thread_Life_state life_state
 )
 {
-  return ( life_state & THREAD_LIFE_PROTECTED ) == 0;
+  return ( life_state
+    & ( THREAD_LIFE_PROTECTED | THREAD_LIFE_CHANGE_DEFERRED ) ) == 0;
 }
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_life_changing(

@@ -31,7 +31,6 @@ endif
 
 # include/rtems/posix
 include_rtems_posix_HEADERS += include/rtems/posix/aio_misc.h
-include_rtems_posix_HEADERS += include/rtems/posix/cancel.h
 include_rtems_posix_HEADERS += include/rtems/posix/cond.h
 include_rtems_posix_HEADERS += include/rtems/posix/condimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueue.h
@@ -78,7 +77,7 @@ libposix_a_SOURCES += src/barrierattrdestroy.c src/barrierattrgetpshared.c \
     src/pbarriertranslatereturncode.c src/pbarrierwait.c
 
 ## CANCEL_C_FILES
-libposix_a_SOURCES += src/cancel.c src/canceleval.c \
+libposix_a_SOURCES += src/cancel.c \
     src/cleanuppush.c src/setcancelstate.c \
     src/setcanceltype.c src/testcancel.c
 

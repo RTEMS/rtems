@@ -61,10 +61,6 @@ $(PROJECT_INCLUDE)/rtems/posix/aio_misc.h: include/rtems/posix/aio_misc.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/aio_misc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/aio_misc.h
 
-$(PROJECT_INCLUDE)/rtems/posix/cancel.h: include/rtems/posix/cancel.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cancel.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/cancel.h
-
 $(PROJECT_INCLUDE)/rtems/posix/cond.h: include/rtems/posix/cond.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cond.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/cond.h

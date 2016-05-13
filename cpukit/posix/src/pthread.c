@@ -33,7 +33,6 @@
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/posix/cancel.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/psignalimpl.h>
@@ -207,12 +206,6 @@ static bool _POSIX_Threads_Create_extension(
   api->schedparam  = _POSIX_Threads_Default_attributes.schedparam;
   api->schedparam.sched_priority =
      _POSIX_Priority_From_core( created->current_priority );
-
-  /*
-   *  POSIX 1003.1 1996, 18.2.2.2
-   */
-  RTEMS_STATIC_ASSERT( PTHREAD_CANCEL_ENABLE == 0, cancelability_state );
-  RTEMS_STATIC_ASSERT( PTHREAD_CANCEL_DEFERRED == 0, cancelability_type );
 
   /*
    *  If the thread is not a posix thread, then all posix signals are blocked

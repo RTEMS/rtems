@@ -205,6 +205,8 @@ int pthread_create(
     the_thread->Life.state |= THREAD_LIFE_DETACHED;
   }
 
+  the_thread->Life.state |= THREAD_LIFE_CHANGE_DEFERRED;
+
 #if defined(RTEMS_SMP) && __RTEMS_HAVE_SYS_CPUSET_H__
   _ISR_lock_ISR_disable( &lock_context );
    status = _Scheduler_Set_affinity(

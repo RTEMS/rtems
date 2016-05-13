@@ -558,7 +558,7 @@ void _Thread_Exit(
     executing,
     0,
     set,
-    THREAD_LIFE_PROTECTED
+    THREAD_LIFE_PROTECTED | THREAD_LIFE_CHANGE_DEFERRED
   );
   _Thread_State_release( executing, &lock_context );
 }
@@ -630,7 +630,7 @@ void _Thread_Restart_self(
     executing,
     0,
     THREAD_LIFE_RESTARTING,
-    THREAD_LIFE_PROTECTED
+    THREAD_LIFE_PROTECTED | THREAD_LIFE_CHANGE_DEFERRED
   );
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
@@ -647,7 +647,7 @@ void _Thread_Restart_self(
   RTEMS_UNREACHABLE();
 }
 
-static Thread_Life_state _Thread_Change_life(
+Thread_Life_state _Thread_Change_life(
   Thread_Life_state clear,
   Thread_Life_state set,
   Thread_Life_state ignore

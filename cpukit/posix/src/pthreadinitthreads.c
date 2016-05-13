@@ -27,7 +27,6 @@
 #include <rtems/score/stack.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/posix/cancel.h>
 #include <rtems/posix/posixapi.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>

@@ -9,6 +9,8 @@
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2016 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -23,46 +25,43 @@
 
 #include <rtems/score/isr.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/posix/cancel.h>
-#include <rtems/posix/threadsup.h>
 
 /*
  *  18.2.1 Canceling Execution of a Thread, P1003.1c/Draft 10, p. 181
  */
 
-int pthread_cancel(
-  pthread_t  thread
-)
+int pthread_cancel( pthread_t thread )
 {
-  Thread_Control     *the_thread;
-  POSIX_API_Control  *thread_support;
-  Objects_Locations   location;
+  Thread_Control   *the_thread;
+  ISR_lock_Context  lock_context;
+  Thread_Control   *executing;
+  Per_CPU_Control  *cpu_self;
 
   /*
    *  Don't even think about deleting a resource from an ISR.
    */
 
-  if ( _ISR_Is_in_progress() )
+  if ( _ISR_Is_in_progress() ) {
     return EPROTO;
-
-  the_thread = _Thread_Get( thread, &location );
-  switch ( location ) {
-
-    case OBJECTS_LOCAL:
-      thread_support = the_thread->API_Extensions[ THREAD_API_POSIX ];
-
-      thread_support->cancelation_requested = 1;
-
-      /* This enables dispatch implicitly */
-      _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch( the_thread );
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
   }
 
-  return ESRCH;
+  the_thread = _Thread_Get_interrupt_disable( thread, &lock_context );
+
+  if ( the_thread == NULL ) {
+    return ESRCH;
+  }
+
+  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
+  _ISR_lock_ISR_enable( &lock_context );
+
+  executing = _Per_CPU_Get_executing( cpu_self );
+
+  if ( the_thread == executing ) {
+    _Thread_Exit( executing, THREAD_LIFE_TERMINATING, PTHREAD_CANCELED );
+  } else {
+    _Thread_Cancel( the_thread, executing, PTHREAD_CANCELED );
+  }
+
+  _Thread_Dispatch_enable( cpu_self );
+  return 0;
 }
