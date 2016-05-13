@@ -211,8 +211,6 @@ bool _Thread_Initialize(
 
   _Thread_Action_control_initialize( &the_thread->Post_switch_actions );
 
-  RTEMS_STATIC_ASSERT( THREAD_LIFE_NORMAL == 0, Life_state );
-
   /*
    *  Open the object
    */

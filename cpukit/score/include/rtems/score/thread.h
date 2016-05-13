@@ -523,7 +523,6 @@ typedef struct {
  * operations to manipulate and evaluate the thread life state.
  */
 typedef enum {
-  THREAD_LIFE_NORMAL = 0x0,
   THREAD_LIFE_PROTECTED = 0x1,
   THREAD_LIFE_RESTARTING = 0x2,
   THREAD_LIFE_TERMINATING = 0x4

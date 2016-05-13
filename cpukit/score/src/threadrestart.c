@@ -220,36 +220,6 @@ void _Thread_Kill_zombies( void )
   _ISR_lock_Release_and_ISR_enable( &zombies->Lock, &lock_context );
 }
 
-static void _Thread_Add_life_change_action(
-  Thread_Control *the_thread
-)
-{
-  ISR_lock_Context lock_context;
-
-  _Thread_State_acquire( the_thread, &lock_context );
-  _Thread_Add_post_switch_action(
-    the_thread,
-    &the_thread->Life.Action,
-    _Thread_Life_action_handler
-  );
-  _Thread_State_release( the_thread, &lock_context );
-}
-
-static void _Thread_Start_life_change_for_executing(
-  Thread_Control *executing
-)
-{
-  _Assert(
-    _Watchdog_Get_state( &executing->Timer.Watchdog ) == WATCHDOG_INACTIVE
-  );
-  _Assert(
-    executing->current_state == STATES_READY
-      || executing->current_state == STATES_SUSPENDED
-  );
-
-  _Thread_Add_life_change_action( executing );
-}
-
 static Thread_Life_state _Thread_Change_life_locked(
   Thread_Control    *the_thread,
   Thread_Life_state  clear,
@@ -292,12 +262,13 @@ void _Thread_Life_action_handler(
   ISR_lock_Context *lock_context
 )
 {
-  Thread_Life_state previous_life_state;
+  Thread_Life_state  previous_life_state;
+  Per_CPU_Control   *cpu_self;
 
   (void) action;
 
   previous_life_state = executing->Life.state;
-  executing->Life.state = THREAD_LIFE_PROTECTED;
+  executing->Life.state = previous_life_state | THREAD_LIFE_PROTECTED;
 
   _Thread_State_release( executing, lock_context );
 
@@ -309,54 +280,47 @@ void _Thread_Life_action_handler(
     _User_extensions_Thread_restart( executing );
   }
 
-  _Thread_Disable_dispatch();
+  cpu_self = _Thread_Dispatch_disable();
 
   if ( _Thread_Is_life_terminating( previous_life_state ) ) {
     _Thread_Make_zombie( executing );
 
-    _Thread_Enable_dispatch();
+    _Thread_Dispatch_enable( cpu_self );
     RTEMS_UNREACHABLE();
-  } else {
-    _Assert( _Thread_Is_life_restarting( previous_life_state ) );
+  }
 
-    if ( _Thread_Is_life_terminating( executing->Life.state ) ) {
-      /* Someone deleted us in the mean-time */
-      _Thread_Start_life_change_for_executing( executing );
-    } else {
-      _Assert(
-        _Watchdog_Get_state( &executing->Timer.Watchdog ) == WATCHDOG_INACTIVE
-      );
-      _Assert(
-        executing->current_state == STATES_READY
-          || executing->current_state == STATES_SUSPENDED
-      );
+  _Assert( _Thread_Is_life_restarting( previous_life_state ) );
 
-      executing->Life.state = THREAD_LIFE_NORMAL;
+  _Thread_State_acquire( executing, lock_context );
 
-      _User_extensions_Destroy_iterators( executing );
-      _Thread_Load_environment( executing );
+  _Thread_Change_life_locked(
+    executing,
+    THREAD_LIFE_PROTECTED | THREAD_LIFE_RESTARTING,
+    0,
+    0
+  );
 
-#if defined(RTEMS_SMP)
-      {
-        ISR_Level level;
+  _Thread_State_release( executing, lock_context );
 
-        _Giant_Release( _Per_CPU_Get() );
+  _Assert(
+    _Watchdog_Get_state( &executing->Timer.Watchdog ) == WATCHDOG_INACTIVE
+  );
+  _Assert(
+    executing->current_state == STATES_READY
+      || executing->current_state == STATES_SUSPENDED
+  );
 
-        _ISR_Disable_without_giant( level );
-        (void) level;
-      }
-#endif
+  _User_extensions_Destroy_iterators( executing );
+  _Thread_Load_environment( executing );
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-      if ( executing->fp_context != NULL ) {
-        _Context_Restore_fp( &executing->fp_context );
-      }
+  if ( executing->fp_context != NULL ) {
+    _Context_Restore_fp( &executing->fp_context );
+  }
 #endif
 
-      _Context_Restart_self( &executing->Registers );
-      RTEMS_UNREACHABLE();
-    }
-  }
+  _Context_Restart_self( &executing->Registers );
+  RTEMS_UNREACHABLE();
 }
 
 static void _Thread_Add_life_change_request( Thread_Control *the_thread )
