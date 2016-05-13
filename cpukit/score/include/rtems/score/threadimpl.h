@@ -190,10 +190,16 @@ bool _Thread_Start(
   const Thread_Entry_information *entry
 );
 
-bool _Thread_Restart(
-  Thread_Control                 *the_thread,
+void _Thread_Restart_self(
   Thread_Control                 *executing,
-  const Thread_Entry_information *entry
+  const Thread_Entry_information *entry,
+  ISR_lock_Context               *lock_context
+) RTEMS_NO_RETURN;
+
+bool _Thread_Restart_other(
+  Thread_Control                 *the_thread,
+  const Thread_Entry_information *entry,
+  ISR_lock_Context               *lock_context
 );
 
 void _Thread_Yield( Thread_Control *executing );
@@ -684,30 +690,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Unblock (
 )
 {
   _Thread_Clear_state( the_thread, STATES_BLOCKED );
-}
-
-/**
- * This routine resets the current context of the calling thread
- * to that of its initial state.
- */
-
-RTEMS_INLINE_ROUTINE void _Thread_Restart_self( Thread_Control *executing )
-{
-#if defined(RTEMS_SMP)
-  ISR_Level level;
-
-  _Giant_Release( _Per_CPU_Get() );
-
-  _ISR_Disable_without_giant( level );
-  ( void ) level;
-#endif
-
-#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-  if ( executing->fp_context != NULL )
-    _Context_Restore_fp( &executing->fp_context );
-#endif
-
-  _CPU_Context_Restart_self( &executing->Registers );
 }
 
 /**

@@ -20,8 +20,6 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/assert.h>
-#include <rtems/config.h>
 
 /*
  *  Conditional magic to determine what style of C++ constructor
@@ -49,6 +47,8 @@ void _Thread_Global_construction(
   const Thread_Entry_information *entry
 )
 {
+  ISR_lock_Context lock_context;
+
 #if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
   /*
    *  _init could be a weak symbol and we SHOULD test it but it isn't
@@ -58,8 +58,6 @@ void _Thread_Global_construction(
   INIT_NAME();
 #endif
 
-  _Thread_Disable_dispatch();
-  _Thread_Restart( executing, executing, entry );
-  _Thread_Enable_dispatch();
-  RTEMS_UNREACHABLE();
+  _ISR_lock_ISR_disable( &lock_context );
+  _Thread_Restart_self( _Thread_Executing, entry, &lock_context );
 }

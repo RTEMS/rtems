@@ -26,32 +26,32 @@ rtems_status_code rtems_task_restart(
   uint32_t  argument
 )
 {
-  Thread_Control          *the_thread;
-  Objects_Locations        location;
-  Thread_Entry_information entry;
+  Thread_Control           *the_thread;
+  ISR_lock_Context          lock_context;
+  Thread_Entry_information  entry;
+  bool                      ok;
 
-  the_thread = _Thread_Get( id, &location );
-  switch ( location ) {
+  the_thread = _Thread_Get_interrupt_disable( id, &lock_context );
 
-    case OBJECTS_LOCAL:
-      entry = the_thread->Start.Entry;
-      entry.Kinds.Numeric.argument = argument;
-      if ( _Thread_Restart( the_thread, _Thread_Executing, &entry ) ) {
-        _Objects_Put( &the_thread->Object );
-        return RTEMS_SUCCESSFUL;
-      }
-      _Objects_Put( &the_thread->Object );
-      return RTEMS_INCORRECT_STATE;
-
+  if ( the_thread == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
+    if ( _Thread_MP_Is_remote( id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+    }
 #endif
 
-    case OBJECTS_ERROR:
-      break;
+    return RTEMS_INVALID_ID;
   }
 
-  return RTEMS_INVALID_ID;
+  entry = the_thread->Start.Entry;
+  entry.Kinds.Numeric.argument = argument;
+
+  if ( the_thread == _Thread_Executing ) {
+    _Thread_Restart_self( the_thread, &entry, &lock_context );
+    RTEMS_UNREACHABLE();
+  }
+
+  ok = _Thread_Restart_other( the_thread, &entry, &lock_context );
+
+  return ok ? RTEMS_SUCCESSFUL : RTEMS_INCORRECT_STATE;
 }

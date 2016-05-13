@@ -335,7 +335,25 @@ void _Thread_Life_action_handler(
 
       _User_extensions_Destroy_iterators( executing );
       _Thread_Load_environment( executing );
-      _Thread_Restart_self( executing );
+
+#if defined(RTEMS_SMP)
+      {
+        ISR_Level level;
+
+        _Giant_Release( _Per_CPU_Get() );
+
+        _ISR_Disable_without_giant( level );
+        (void) level;
+      }
+#endif
+
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+      if ( executing->fp_context != NULL ) {
+        _Context_Restore_fp( &executing->fp_context );
+      }
+#endif
+
+      _Context_Restart_self( &executing->Registers );
       RTEMS_UNREACHABLE();
     }
   }
@@ -462,26 +480,76 @@ void _Thread_Exit( Thread_Control *executing )
   _Thread_State_release( executing, &lock_context );
 }
 
-bool _Thread_Restart(
+bool _Thread_Restart_other(
   Thread_Control                 *the_thread,
-  Thread_Control                 *executing,
-  const Thread_Entry_information *entry
+  const Thread_Entry_information *entry,
+  ISR_lock_Context               *lock_context
 )
 {
-  if ( !_States_Is_dormant( the_thread->current_state ) ) {
-    the_thread->Start.Entry = *entry;
+  Per_CPU_Control *cpu_self;
 
-    _Thread_Request_life_change(
-      the_thread,
-      executing,
-      the_thread->Start.initial_priority,
-      THREAD_LIFE_RESTARTING
-    );
+  _Thread_State_acquire_critical( the_thread, lock_context );
 
-    return true;
+  if ( _States_Is_dormant( the_thread->current_state ) ) {
+    _Thread_State_release( the_thread, lock_context );
+    return false;
   }
 
-  return false;
+  the_thread->Start.Entry = *entry;
+
+  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
+  _Thread_State_release( the_thread, lock_context );
+
+  _Thread_Request_life_change(
+    the_thread,
+    NULL,
+    the_thread->Start.initial_priority,
+    THREAD_LIFE_RESTARTING
+  );
+
+  _Thread_Dispatch_enable( cpu_self );
+  return true;
+}
+
+void _Thread_Restart_self(
+  Thread_Control                 *executing,
+  const Thread_Entry_information *entry,
+  ISR_lock_Context               *lock_context
+)
+{
+  Per_CPU_Control  *cpu_self;
+  Priority_Control  unused;
+
+  _Assert(
+    _Watchdog_Get_state( &executing->Timer.Watchdog ) == WATCHDOG_INACTIVE
+  );
+  _Assert(
+    executing->current_state == STATES_READY
+      || executing->current_state == STATES_SUSPENDED
+  );
+
+  _Thread_State_acquire_critical( executing, lock_context );
+
+  executing->Start.Entry = *entry;
+  _Thread_Change_life_locked(
+    executing,
+    0,
+    THREAD_LIFE_RESTARTING,
+    THREAD_LIFE_PROTECTED
+  );
+
+  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
+  _Thread_State_release( executing, lock_context );
+
+  _Thread_Set_priority(
+    executing,
+    executing->Start.initial_priority,
+    &unused,
+    true
+  );
+
+  _Thread_Dispatch_enable( cpu_self );
+  RTEMS_UNREACHABLE();
 }
 
 static Thread_Life_state _Thread_Change_life(
