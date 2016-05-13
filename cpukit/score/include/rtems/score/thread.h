@@ -518,16 +518,15 @@ typedef struct {
  * The thread life states are orthogonal to the thread states used for
  * synchronization primitives and blocking operations.  They reflect the state
  * changes triggered with thread restart and delete requests.
+ *
+ * The individual state values must be a power of two to allow use of bit
+ * operations to manipulate and evaluate the thread life state.
  */
 typedef enum {
   THREAD_LIFE_NORMAL = 0x0,
   THREAD_LIFE_PROTECTED = 0x1,
   THREAD_LIFE_RESTARTING = 0x2,
-  THREAD_LIFE_PROTECTED_RESTARTING = 0x3,
-  THREAD_LIFE_TERMINATING = 0x4,
-  THREAD_LIFE_PROTECTED_TERMINATING = 0x5,
-  THREAD_LIFE_RESTARTING_TERMINATING = 0x6,
-  THREAD_LIFE_PROTECTED_RESTARTING_TERMINATING = 0x7
+  THREAD_LIFE_TERMINATING = 0x4
 } Thread_Life_state;
 
 /**

@@ -943,7 +943,8 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_life_changing(
   Thread_Life_state life_state
 )
 {
-  return ( life_state & THREAD_LIFE_RESTARTING_TERMINATING ) != 0;
+  return ( life_state
+    & ( THREAD_LIFE_RESTARTING | THREAD_LIFE_TERMINATING ) ) != 0;
 }
 
 /**
