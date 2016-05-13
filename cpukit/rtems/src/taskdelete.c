@@ -52,7 +52,15 @@ rtems_status_code rtems_task_delete(
       executing = _Thread_Executing;
 
       if ( the_thread == executing ) {
-        _Thread_Exit( executing );
+        /*
+         * The Classic tasks are neither detached nor joinable.  In case of
+         * self deletion, they are detached, otherwise joinable by default.
+         */
+        _Thread_Exit(
+          executing,
+          THREAD_LIFE_TERMINATING | THREAD_LIFE_DETACHED,
+          NULL
+        );
       } else {
         _Thread_Close( the_thread, executing );
       }

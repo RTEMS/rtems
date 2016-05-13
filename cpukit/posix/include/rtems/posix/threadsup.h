@@ -47,10 +47,6 @@ typedef struct {
   Thread_Control         *thread;
   /** This is the POSIX threads attribute set. */
   pthread_attr_t          Attributes;
-  /** This indicates whether the thread is attached or detached. */
-  int                     detachstate;
-  /** This is the set of threads waiting for the thread to exit. */
-  Thread_queue_Control    Join_List;
   /** This is the thread's current scheduling policy. */
   int                     schedpolicy;
   /** This is the thread's current set of scheduling parameters. */

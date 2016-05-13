@@ -203,7 +203,6 @@ static bool _POSIX_Threads_Create_extension(
   /* XXX check all fields are touched */
   api->thread = created;
   _POSIX_Threads_Initialize_attributes( &api->Attributes );
-  api->detachstate = _POSIX_Threads_Default_attributes.detachstate;
   api->schedpolicy = _POSIX_Threads_Default_attributes.schedpolicy;
   api->schedparam  = _POSIX_Threads_Default_attributes.schedparam;
   api->schedparam.sched_priority =
@@ -231,8 +230,6 @@ static bool _POSIX_Threads_Create_extension(
     api->signals_unblocked = executing_api->signals_unblocked;
   }
 
-  _Thread_queue_Initialize( &api->Join_List );
-
   _Watchdog_Preinitialize( &api->Sporadic_timer, _Per_CPU_Get_by_index( 0 ) );
   _Watchdog_Initialize(
     &api->Sporadic_timer,
@@ -242,41 +239,12 @@ static bool _POSIX_Threads_Create_extension(
   return true;
 }
 
-static void _POSIX_Threads_Delete_extension(
-  Thread_Control *executing,
-  Thread_Control *deleted
-)
+static void _POSIX_Threads_Terminate_extension( Thread_Control *executing )
 {
   POSIX_API_Control *api;
-
-  api = deleted->API_Extensions[ THREAD_API_POSIX ];
-
-  _Thread_queue_Destroy( &api->Join_List );
-}
-
-static void _POSIX_Threads_Terminate_extension(
-  Thread_Control *executing
-)
-{
-  Thread_Control     *the_thread;
-  POSIX_API_Control  *api;
-  ISR_lock_Context    lock_context;
-  void              **value_ptr;
+  ISR_lock_Context   lock_context;
 
   api = executing->API_Extensions[ THREAD_API_POSIX ];
-
-  _Thread_Disable_dispatch();
-
-  /*
-   *  Wakeup all the tasks which joined with this one
-   */
-  value_ptr = (void **) executing->Wait.return_argument;
-
-  while ( ( the_thread = _POSIX_Threads_Join_dequeue( api ) ) ) {
-    *(void **)the_thread->Wait.return_argument = value_ptr;
-  }
-
-  _Thread_Enable_dispatch();
 
   _Thread_State_acquire( executing, &lock_context );
 
@@ -305,17 +273,10 @@ static void _POSIX_Threads_Exitted_extension(
 }
 
 User_extensions_Control _POSIX_Threads_User_extensions = {
-  { NULL, NULL },
-  { { NULL, NULL }, NULL },
-  { _POSIX_Threads_Create_extension,          /* create */
-    NULL,                                     /* start */
-    NULL,                                     /* restart */
-    _POSIX_Threads_Delete_extension,          /* delete */
-    NULL,                                     /* switch */
-    NULL,                                     /* begin */
-    _POSIX_Threads_Exitted_extension,         /* exitted */
-    NULL,                                     /* fatal */
-    _POSIX_Threads_Terminate_extension        /* terminate */
+  .Callouts = {
+    .thread_create    = _POSIX_Threads_Create_extension,
+    .thread_exitted   = _POSIX_Threads_Exitted_extension,
+    .thread_terminate = _POSIX_Threads_Terminate_extension
   }
 };
 

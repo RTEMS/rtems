@@ -31,47 +31,24 @@ void _POSIX_Thread_Exit(
   void           *value_ptr
 )
 {
-  Thread_Control    *executing;
-  Thread_Control    *unblocked;
-  POSIX_API_Control *api;
-
-  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+  Thread_Control  *executing;
+  Per_CPU_Control *cpu_self;
 
   _Assert( _Debug_Is_thread_dispatching_allowed() );
 
-  _Thread_Disable_dispatch();
-
-  the_thread->Wait.return_argument = value_ptr;
-
-  /*
-   * Process join
-   */
-  if ( api->detachstate == PTHREAD_CREATE_JOINABLE ) {
-    unblocked = _POSIX_Threads_Join_dequeue( api );
-    if ( unblocked ) {
-      do {
-        *(void **)unblocked->Wait.return_argument = value_ptr;
-      } while ( ( unblocked = _POSIX_Threads_Join_dequeue( api ) ) );
-    } else {
-      _Thread_Set_state( the_thread, STATES_WAITING_FOR_JOIN_AT_EXIT );
-      _Thread_Enable_dispatch();
-      /* now waiting for thread to arrive */
-      _Thread_Disable_dispatch();
-    }
-  }
-
-  executing = _Thread_Executing;
+  cpu_self = _Thread_Dispatch_disable();
+  executing = _Per_CPU_Get_executing( cpu_self );
 
   /*
    *  Now shut down the thread
    */
   if ( the_thread == executing ) {
-    _Thread_Exit( executing );
+    _Thread_Exit( executing, THREAD_LIFE_TERMINATING, value_ptr );
   } else {
-    _Thread_Close( the_thread, executing );
+    _Thread_Cancel( the_thread, executing, value_ptr );
   }
 
-  _Thread_Enable_dispatch();
+  _Thread_Dispatch_enable( cpu_self );
 }
 
 void pthread_exit(

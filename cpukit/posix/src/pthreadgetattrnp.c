@@ -49,6 +49,12 @@ int pthread_getattr_np(
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
   _POSIX_Threads_Copy_attributes( attr, &api->Attributes);
 
+  if ( _Thread_Is_joinable( the_thread ) ) {
+    attr->detachstate = PTHREAD_CREATE_JOINABLE;
+  } else {
+    attr->detachstate = PTHREAD_CREATE_DETACHED;
+  }
+
   _Thread_State_release( the_thread, &lock_context );
   return 0;
 }

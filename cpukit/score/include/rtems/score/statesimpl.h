@@ -385,6 +385,13 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_period (
    return (the_states & STATES_WAITING_FOR_PERIOD);
 }
 
+RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_join_at_exit(
+  States_Control the_states
+)
+{
+   return ( the_states & STATES_WAITING_FOR_JOIN_AT_EXIT ) != 0;
+}
+
 /**
  * This function returns true if the task's state is set in
  * way that allows it to be interrupted by a signal.

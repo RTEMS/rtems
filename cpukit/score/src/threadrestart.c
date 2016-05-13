@@ -88,17 +88,45 @@ static void _Thread_Raise_real_priority(
 
 typedef struct {
   ISR_lock_Context  Base;
+#if defined(RTEMS_POSIX_API)
+  void             *exit_value;
+#endif
 } Thread_Join_lock_context;
+
+#if defined(RTEMS_POSIX_API)
+static Thread_Control *_Thread_Join_flush_filter(
+  Thread_Control      *the_thread,
+  Thread_queue_Queue  *queue,
+  ISR_lock_Context    *lock_context
+)
+{
+  Thread_Join_lock_context *join_lock_context;
+
+  join_lock_context = (Thread_Join_lock_context *) lock_context;
+
+  the_thread->Wait.return_argument = join_lock_context->exit_value;
+
+  return the_thread;
+}
+#endif
 
 static void _Thread_Wake_up_joining_threads( Thread_Control *the_thread )
 {
   Thread_Join_lock_context join_lock_context;
 
+#if defined(RTEMS_POSIX_API)
+  join_lock_context.exit_value = the_thread->Life.exit_value;
+#endif
+
   _Thread_State_acquire( the_thread, &join_lock_context.Base );
   _Thread_queue_Flush_critical(
     &the_thread->Join_queue.Queue,
     THREAD_JOIN_TQ_OPERATIONS,
+#if defined(RTEMS_POSIX_API)
+    _Thread_Join_flush_filter,
+#else
     _Thread_queue_Flush_default_filter,
+#endif
     NULL,
     0,
     &join_lock_context.Base
@@ -256,6 +284,35 @@ static Thread_Life_state _Thread_Change_life_locked(
   return previous;
 }
 
+static Per_CPU_Control *_Thread_Wait_for_join(
+  Thread_Control  *executing,
+  Per_CPU_Control *cpu_self
+)
+{
+#if defined(RTEMS_POSIX_API)
+  ISR_lock_Context lock_context;
+
+  _Thread_State_acquire( executing, &lock_context );
+
+  if (
+    _Thread_Is_joinable( executing )
+      && _Thread_queue_Is_empty( &executing->Join_queue.Queue )
+  ) {
+    _Thread_Set_state_locked( executing, STATES_WAITING_FOR_JOIN_AT_EXIT );
+    _Thread_State_release( executing, &lock_context );
+    _Thread_Dispatch_enable( cpu_self );
+
+    /* Let other threads run */
+
+    cpu_self = _Thread_Dispatch_disable();
+  } else {
+    _Thread_State_release( executing, &lock_context );
+  }
+#endif
+
+  return cpu_self;
+}
+
 void _Thread_Life_action_handler(
   Thread_Control   *executing,
   Thread_Action    *action,
@@ -283,6 +340,8 @@ void _Thread_Life_action_handler(
   cpu_self = _Thread_Dispatch_disable();
 
   if ( _Thread_Is_life_terminating( previous_life_state ) ) {
+    cpu_self = _Thread_Wait_for_join( executing, cpu_self );
+
     _Thread_Make_zombie( executing );
 
     _Thread_Dispatch_enable( cpu_self );
@@ -391,6 +450,11 @@ void _Thread_Join(
   _Assert( the_thread != executing );
   _Assert( _Thread_State_is_owner( the_thread ) );
 
+#if defined(RTEMS_POSIX_API)
+  executing->Wait.return_code = 0;
+  executing->Wait.return_argument = NULL;
+#endif
+
   _Thread_queue_Enqueue_critical(
     &the_thread->Join_queue.Queue,
     THREAD_JOIN_TQ_OPERATIONS,
@@ -402,7 +466,21 @@ void _Thread_Join(
   );
 }
 
-void _Thread_Cancel( Thread_Control *the_thread, Thread_Control *executing )
+static void _Thread_Set_exit_value(
+  Thread_Control *the_thread,
+  void           *exit_value
+)
+{
+#if defined(RTEMS_POSIX_API)
+  the_thread->Life.exit_value = exit_value;
+#endif
+}
+
+void _Thread_Cancel(
+  Thread_Control *the_thread,
+  Thread_Control *executing,
+  void           *exit_value
+)
 {
   ISR_lock_Context   lock_context;
   Thread_Life_state  previous;
@@ -413,6 +491,7 @@ void _Thread_Cancel( Thread_Control *the_thread, Thread_Control *executing )
 
   _Thread_State_acquire( the_thread, &lock_context );
 
+  _Thread_Set_exit_value( the_thread, exit_value );
   previous = _Thread_Change_life_locked(
     the_thread,
     0,
@@ -454,10 +533,14 @@ void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
     executing,
     &lock_context
   );
-  _Thread_Cancel( the_thread, executing );
+  _Thread_Cancel( the_thread, executing, NULL );
 }
 
-void _Thread_Exit( Thread_Control *executing )
+void _Thread_Exit(
+  Thread_Control    *executing,
+  Thread_Life_state  set,
+  void              *exit_value
+)
 {
   ISR_lock_Context lock_context;
 
@@ -470,10 +553,11 @@ void _Thread_Exit( Thread_Control *executing )
   );
 
   _Thread_State_acquire( executing, &lock_context );
+  _Thread_Set_exit_value( executing, exit_value );
   _Thread_Change_life_locked(
     executing,
     0,
-    THREAD_LIFE_TERMINATING,
+    set,
     THREAD_LIFE_PROTECTED
   );
   _Thread_State_release( executing, &lock_context );

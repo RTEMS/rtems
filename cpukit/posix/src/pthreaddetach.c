@@ -9,6 +9,8 @@
  *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2016 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -21,37 +23,30 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/posix/pthreadimpl.h>
 #include <rtems/score/threadimpl.h>
 
 /**
  * 16.1.4 Detaching a Thread, P1003.1c/Draft 10, p. 149
  */
-int pthread_detach(
-  pthread_t   thread
-)
+int pthread_detach( pthread_t thread )
 {
-  Thread_Control          *the_thread;
-  POSIX_API_Control       *api;
-  Objects_Locations        location;
+  Thread_Control   *the_thread;
+  ISR_lock_Context  lock_context;
+  Per_CPU_Control  *cpu_self;
 
-  the_thread = _Thread_Get( thread, &location );
-  switch ( location ) {
+  the_thread = _Thread_Get_interrupt_disable( thread, &lock_context );
 
-    case OBJECTS_LOCAL:
-
-      api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-      api->detachstate = PTHREAD_CREATE_DETACHED;
-      api->Attributes.detachstate = PTHREAD_CREATE_DETACHED;
-      _Objects_Put( &the_thread->Object );
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( the_thread == NULL ) {
+    return ESRCH;
   }
 
-  return ESRCH;
+  _Thread_State_acquire( the_thread, &lock_context );
+
+  the_thread->Life.state |= THREAD_LIFE_DETACHED;
+  _Thread_Clear_state_locked( the_thread, STATES_WAITING_FOR_JOIN_AT_EXIT );
+
+  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
+  _Thread_State_release( the_thread, &lock_context );
+  _Thread_Dispatch_enable( cpu_self );
+  return 0;
 }

@@ -217,7 +217,11 @@ Thread_Life_state _Thread_Set_life_protection( Thread_Life_state state );
  */
 void _Thread_Kill_zombies( void );
 
-void _Thread_Exit( Thread_Control *executing );
+void _Thread_Exit(
+  Thread_Control    *executing,
+  Thread_Life_state  set,
+  void              *exit_value
+);
 
 void _Thread_Join(
   Thread_Control    *the_thread,
@@ -226,7 +230,11 @@ void _Thread_Join(
   ISR_lock_Context  *lock_context
 );
 
-void _Thread_Cancel( Thread_Control *the_thread, Thread_Control *executing );
+void _Thread_Cancel(
+  Thread_Control *the_thread,
+  Thread_Control *executing,
+  void           *exit_value
+);
 
 /**
  * @brief Closes the thread.
@@ -948,6 +956,14 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_life_changing(
 {
   return ( life_state
     & ( THREAD_LIFE_RESTARTING | THREAD_LIFE_TERMINATING ) ) != 0;
+}
+
+RTEMS_INLINE_ROUTINE bool _Thread_Is_joinable(
+  const Thread_Control *the_thread
+)
+{
+  _Assert( _Thread_State_is_owner( the_thread ) );
+  return ( the_thread->Life.state & THREAD_LIFE_DETACHED ) == 0;
 }
 
 /**

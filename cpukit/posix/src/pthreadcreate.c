@@ -201,6 +201,10 @@ int pthread_create(
     return EAGAIN;
   }
 
+  if ( the_attr->detachstate == PTHREAD_CREATE_DETACHED ) {
+    the_thread->Life.state |= THREAD_LIFE_DETACHED;
+  }
+
 #if defined(RTEMS_SMP) && __RTEMS_HAVE_SYS_CPUSET_H__
   _ISR_lock_ISR_disable( &lock_context );
    status = _Scheduler_Set_affinity(
@@ -222,7 +226,6 @@ int pthread_create(
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   _POSIX_Threads_Copy_attributes( &api->Attributes, the_attr );
-  api->detachstate = the_attr->detachstate;
   api->schedpolicy = schedpolicy;
   api->schedparam  = schedparam;
 

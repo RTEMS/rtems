@@ -525,7 +525,8 @@ typedef struct {
 typedef enum {
   THREAD_LIFE_PROTECTED = 0x1,
   THREAD_LIFE_RESTARTING = 0x2,
-  THREAD_LIFE_TERMINATING = 0x4
+  THREAD_LIFE_TERMINATING = 0x4,
+  THREAD_LIFE_DETACHED = 0x10
 } Thread_Life_state;
 
 /**
@@ -547,6 +548,18 @@ typedef struct {
    * @brief The count of pending life change requests.
    */
   uint32_t pending_life_change_requests;
+
+#if defined(RTEMS_POSIX_API)
+  /**
+   * @brief The thread exit value.
+   *
+   * It is,
+   * - the value passed to pthread_exit(), or
+   * - PTHREAD_CANCELED in case it is cancelled via pthread_cancel(), or
+   * - NULL.
+   */
+  void *exit_value;
+#endif
 } Thread_Life_control;
 
 #if defined(RTEMS_SMP)
