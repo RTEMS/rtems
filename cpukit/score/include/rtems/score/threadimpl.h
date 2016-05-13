@@ -247,6 +247,11 @@ States_Control _Thread_Clear_state(
   States_Control  state
 );
 
+States_Control _Thread_Set_state_locked(
+  Thread_Control *the_thread,
+  States_Control  state
+);
+
 /**
  * @brief Sets the specified thread state.
  *
