@@ -238,6 +238,36 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level );
 
 /**
  * @brief Disables thread dispatching inside a critical section (interrupts
+ * disabled) with the current processor.
+ *
+ * This function does not acquire the Giant lock.
+ *
+ * @param[in] cpu_self The current processor.
+ * @param[in] lock_context The lock context of the corresponding
+ * _ISR_lock_ISR_disable() that started the critical section.
+ *
+ * @return The current processor.
+ */
+RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable_with_CPU(
+  Per_CPU_Control        *cpu_self,
+  const ISR_lock_Context *lock_context
+)
+{
+  uint32_t disable_level;
+
+  disable_level = cpu_self->thread_dispatch_disable_level;
+  _Profiling_Thread_dispatch_disable_critical(
+    cpu_self,
+    disable_level,
+    lock_context
+  );
+  cpu_self->thread_dispatch_disable_level = disable_level + 1;
+
+  return cpu_self;
+}
+
+/**
+ * @brief Disables thread dispatching inside a critical section (interrupts
  * disabled).
  *
  * This function does not acquire the Giant lock.
@@ -251,19 +281,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable_critical(
   const ISR_lock_Context *lock_context
 )
 {
-  Per_CPU_Control *cpu_self;
-  uint32_t         disable_level;
-
-  cpu_self = _Per_CPU_Get();
-  disable_level = cpu_self->thread_dispatch_disable_level;
-  _Profiling_Thread_dispatch_disable_critical(
-    cpu_self,
-    disable_level,
-    lock_context
-  );
-  cpu_self->thread_dispatch_disable_level = disable_level + 1;
-
-  return cpu_self;
+  return _Thread_Dispatch_disable_with_CPU( _Per_CPU_Get(), lock_context );
 }
 
 /**
