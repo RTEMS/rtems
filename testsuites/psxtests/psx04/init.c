@@ -543,15 +543,11 @@ void *POSIX_Init(
   puts( "Init: pthread_sigmask - EINVAL (timout->nsec invalid to large)" );
 
   status = pthread_kill( Init_id, 999 );
-  if ( status != -1 )
-    printf( "status = %d\n", status );
-  rtems_test_assert( errno == EINVAL );
+  rtems_test_assert( status == EINVAL );
   puts( "Init: pthread_kill - EINVAL (sig invalid)" );
 
   status = pthread_kill( Init_id, 0 );
-  if ( status != -1 )
-    printf( "status = %d\n", status );
-  rtems_test_assert( errno == EINVAL );
+  rtems_test_assert( status == EINVAL );
   puts( "Init: pthread_kill - EINVAL (signal = 0)" );
 
   act.sa_handler = SIG_IGN;
