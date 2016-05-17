@@ -99,17 +99,14 @@ rtems_task test_task(rtems_task_argument arg)
     }
   }
   puts( "test_task exiting thread" );
-  pthread_exit( 0 );
+  pthread_exit( (void *) 123 );
 }
 
-rtems_task Init(rtems_task_argument arg)
+
+static rtems_id create_task( void )
 {
   rtems_status_code sc;
   rtems_id          task_id;
-  int               status;
-  void             *retval;
-
-  TEST_BEGIN();
 
   sc = rtems_task_create(
     rtems_build_name('T','E','S','T'),
@@ -124,6 +121,18 @@ rtems_task Init(rtems_task_argument arg)
   sc = rtems_task_start( task_id,  test_task, 0 );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
+  return task_id;
+}
+
+rtems_task Init( rtems_task_argument arg )
+{
+  rtems_id  task_id;
+  int       status;
+  void     *retval;
+
+  TEST_BEGIN();
+
+  task_id = create_task();
 
   puts( "Init - pthread_equal on Classic Ids" );
   status = pthread_equal( task_id, task_id );
@@ -136,12 +145,22 @@ rtems_task Init(rtems_task_argument arg)
   status = pthread_detach( task_id );
   rtems_test_assert( status == 0 );
 
+  retval = (void *) 456;
   status = pthread_join( task_id, &retval );
-  if ( status != EINVAL ) printf( "JOIN %s\n", strerror( status ) );
-  rtems_test_assert( status == EINVAL );
+  rtems_test_assert( status == ESRCH );
+  rtems_test_assert( retval == (void *) 456 );
+
+  status = pthread_kill( task_id, SIGUSR1 );
+  rtems_test_assert( status == ESRCH );
+
+  task_id = create_task();
 
   status = pthread_kill( task_id, SIGUSR1 );
   rtems_test_assert( status == 0 );
+
+  status = pthread_join( task_id, &retval );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( retval == (void *) 123 );
 
   TEST_END();
   exit(0);
