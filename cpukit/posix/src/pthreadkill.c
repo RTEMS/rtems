@@ -23,7 +23,6 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/psignal.h>
 #include <rtems/score/isr.h>
-#include <rtems/seterr.h>
 
 int pthread_kill(
   pthread_t   thread,
@@ -34,11 +33,9 @@ int pthread_kill(
   Thread_Control     *the_thread;
   Objects_Locations  location;
 
-  if ( !sig )
-    rtems_set_errno_and_return_minus_one( EINVAL );
-
-  if ( !is_valid_signo(sig) )
-    rtems_set_errno_and_return_minus_one( EINVAL );
+  if ( !is_valid_signo( sig ) ) {
+    return EINVAL;
+  }
 
   the_thread = _Thread_Get( thread, &location );
   switch ( location ) {
@@ -50,24 +47,22 @@ int pthread_kill(
 
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-      if ( sig ) {
-
-        if ( _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN ) {
-          _Thread_Enable_dispatch();
-          return 0;
-        }
-
-        /* XXX critical section */
-
-        api->signals_pending |= signo_to_mask( sig );
-
-        (void) _POSIX_signals_Unblock_thread( the_thread, sig, NULL );
-
-        the_thread->do_post_task_switch_extension = true;
-
-        if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
-          _ISR_Signals_to_thread_executing = true;
+      if ( _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN ) {
+        _Thread_Enable_dispatch();
+        return 0;
       }
+
+      /* XXX critical section */
+
+      api->signals_pending |= signo_to_mask( sig );
+
+      (void) _POSIX_signals_Unblock_thread( the_thread, sig, NULL );
+
+      the_thread->do_post_task_switch_extension = true;
+
+      if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
+        _ISR_Signals_to_thread_executing = true;
+
       _Thread_Enable_dispatch();
       return 0;
 
@@ -78,5 +73,5 @@ int pthread_kill(
       break;
   }
 
-  rtems_set_errno_and_return_minus_one( ESRCH );
+  return ESRCH;
 }
