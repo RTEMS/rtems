@@ -341,6 +341,18 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_enable( Per_CPU_Control *cpu_self )
 }
 
 /**
+ * @brief Unnests thread dispatching.
+ *
+ * This function does not release the Giant lock.
+ *
+ * @param[in] cpu_self The current processor.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Dispatch_unnest( Per_CPU_Control *cpu_self )
+{
+  --cpu_self->thread_dispatch_disable_level;
+}
+
+/**
  * @brief Disables thread dispatching and acquires the Giant lock.
  */
 #if defined ( __THREAD_DO_NOT_INLINE_DISABLE_DISPATCH__ )

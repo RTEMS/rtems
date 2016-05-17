@@ -108,14 +108,14 @@ void __ISR_Handler(void)
 
   _ISR_Nest_level++;
 
-  _Thread_Dispatch_increment_disable_level();
+  _Thread_Dispatch_disable();
 
   __IIC_Handler();
 
   /* Make sure that interrupts are disabled again */
   _CPU_ISR_Disable( level );
 
-  _Thread_Dispatch_decrement_disable_level();
+  _Thread_Dispatch_unnest( _Per_CPU_Get() );
 
   _ISR_Nest_level--;
 

@@ -133,7 +133,7 @@ void __ISR_Handler( uint32_t   vector)
 
   _ISR_Disable( level );
 
-  _Thread_Dispatch_increment_disable_level();
+  _Thread_Dispatch_disable();
 
 #if (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
   if ( _ISR_Nest_level == 0 )
@@ -155,7 +155,7 @@ void __ISR_Handler( uint32_t   vector)
 
   _ISR_Disable( level );
 
-  _Thread_Dispatch_decrement_disable_level();
+  _Thread_Dispatch_unnest( _Per_CPU_Get() );
 
   _ISR_Nest_level--;
 
