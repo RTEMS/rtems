@@ -34,13 +34,12 @@ static test_context ctx_instance;
 static Semaphore_Control *get_semaphore_control(rtems_id id)
 {
   Objects_Locations location;
+  ISR_lock_Context lock_context;
   Semaphore_Control *sem;
 
-  sem = (Semaphore_Control *)
-    _Objects_Get(&_Semaphore_Information, id, &location);
-  _Thread_Unnest_dispatch();
-
-  rtems_test_assert(sem != NULL && location == OBJECTS_LOCAL);
+  sem = _Semaphore_Get_interrupt_disable(id, &location, &lock_context);
+  rtems_test_assert(sem != NULL);
+  _ISR_lock_ISR_enable(&lock_context);
 
   return sem;
 }
