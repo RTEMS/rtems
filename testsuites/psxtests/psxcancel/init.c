@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sched.h>
+#include <semaphore.h>
 
 #if defined(__rtems__)
   #include <rtems.h>
@@ -32,6 +33,10 @@ static rtems_resource_snapshot initialSnapshot;
 #endif
 
 static volatile bool countTask_handler;
+
+static sem_t masterSem;
+
+static sem_t workerSem;
 
 static void countTask_cancel_handler(void *ignored)
 {
@@ -82,6 +87,37 @@ static void *countTaskAsync(void *ignored)
   }
 }
 
+static void *taskAsyncAndDetached(void *ignored)
+{
+  int sc;
+
+  sc = pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS, NULL );
+  fatal_posix_service_status( sc, 0, "cancel type taskAsyncAndDetached" );
+
+  sc = sem_post( &workerSem );
+  rtems_test_assert( sc == 0 );
+
+  sc = sem_wait( &masterSem );
+  rtems_test_assert( sc == 0 );
+
+  rtems_test_assert( 0 );
+}
+
+static void *taskSelfDetach(void *ignored)
+{
+  int sc;
+
+  sc = sem_post( &workerSem );
+  rtems_test_assert( sc == 0 );
+
+  sleep( 1 );
+
+  sc = pthread_detach( pthread_self() );
+  fatal_posix_service_status( sc, 0, "detach taskSelfDetach" );
+
+  pthread_exit( (void *) 123 );
+}
+
 static void resourceSnapshotInit( void )
 {
 #if defined(__rtems__)
@@ -106,8 +142,15 @@ static void resourceSnapshotCheck( void )
   int       taskparameter = 0;
   int       sc;
   int       old;
+  void     *exit_value;
 
   TEST_BEGIN();
+
+  sc = sem_init( &masterSem, 0, 0 );
+  rtems_test_assert( sc == 0 );
+
+  sc = sem_init( &workerSem, 0, 0 );
+  rtems_test_assert( sc == 0 );
 
   resourceSnapshotInit();
 
@@ -131,6 +174,43 @@ static void resourceSnapshotCheck( void )
   puts( "Init - pthread_cancel - bad ID - ESRCH" );
   sc = pthread_cancel(0x100);
   fatal_posix_service_status( sc, ESRCH, "cancel bad Id" );
+
+  resourceSnapshotCheck();
+
+  /* Test resource reclamation due to pthread_detach() */
+
+  sc = pthread_create( &task, NULL, taskAsyncAndDetached, NULL );
+  fatal_posix_service_status( sc, 0, "create taskAsyncAndDetached" );
+
+  sc = sem_wait( &workerSem );
+  rtems_test_assert( sc == 0 );
+
+  sc = pthread_cancel( task );
+  fatal_posix_service_status( sc, 0, "cancel taskAsyncAndDetached" );
+
+  sc = pthread_detach( task );
+  fatal_posix_service_status( sc, 0, "detach taskAsyncAndDetached" );
+
+  sched_yield();
+
+  sc = pthread_join( task, &exit_value );
+  fatal_posix_service_status( sc, ESRCH, "join taskAsyncAndDetached" );
+
+  resourceSnapshotCheck();
+
+  /* Test pthread_detach() after pthread_join() */
+
+  sc = pthread_create( &task, NULL, taskSelfDetach, NULL );
+  fatal_posix_service_status( sc, 0, "create taskSelfDetach" );
+
+  sc = sem_wait( &workerSem );
+  rtems_test_assert( sc == 0 );
+
+  sc = pthread_join( task, &exit_value );
+  fatal_posix_service_status( sc, 0, "join taskSelfDetach" );
+  rtems_test_assert( exit_value == (void *) 123 );
+
+  resourceSnapshotCheck();
 
   /* Start countTask deferred */
   {
@@ -183,6 +263,8 @@ static void resourceSnapshotCheck( void )
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 2
+#define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 2
+
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT

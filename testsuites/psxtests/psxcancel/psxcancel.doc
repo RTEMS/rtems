@@ -19,6 +19,7 @@ directives:
   pthread_cleanup_pop
   pthread_create
   pthread_cancel
+  pthread_detach
   pthread_join
  
 concepts:
@@ -41,3 +42,7 @@ concepts:
 + Verify normal paths through pthread_mutexattr_gettype
 
 + Verify normal paths through pthread_mutexattr_settype
+
++ Ensure that a pthread_detach() leads to a resource reclamation.
+
++ Ensure that a pthread_join() works if issued before a pthread_detach().
