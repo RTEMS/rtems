@@ -42,13 +42,12 @@ static test_context ctx_instance;
 
 static Thread_Control *get_tcb(rtems_id id)
 {
-  Objects_Locations location;
+  ISR_lock_Context lock_context;
   Thread_Control *tcb;
 
-  tcb = _Thread_Get(id, &location);
-  _Objects_Put(&tcb->Object);
-
-  rtems_test_assert(tcb != NULL && location == OBJECTS_LOCAL);
+  tcb = _Thread_Get_interrupt_disable(id, &lock_context);
+  rtems_test_assert(tcb != NULL);
+  _ISR_lock_ISR_enable(&lock_context);
 
   return tcb;
 }

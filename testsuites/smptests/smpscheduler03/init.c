@@ -100,12 +100,12 @@ static rtems_id start_task(rtems_task_priority prio)
 
 static Thread_Control *get_thread_by_id(rtems_id task_id)
 {
-  Objects_Locations location;
+  ISR_lock_Context lock_context;
   Thread_Control *thread;
 
-  thread = _Thread_Get(task_id, &location);
-  rtems_test_assert(location == OBJECTS_LOCAL);
-  _Thread_Enable_dispatch();
+  thread = _Thread_Get_interrupt_disable(task_id, &lock_context);
+  rtems_test_assert(thread != NULL);
+  _ISR_lock_ISR_enable(&lock_context);
 
   return thread;
 }

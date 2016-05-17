@@ -543,8 +543,9 @@ rtems_task Floating_point_task_2(
 
 void complete_test( void )
 {
-  uint32_t    index;
-  rtems_id          task_id;
+  uint32_t         index;
+  rtems_id         task_id;
+  ISR_lock_Context lock_context;
 
   benchmark_timer_initialize();
     thread_resume( Middle_tcb );
@@ -570,14 +571,14 @@ void complete_test( void )
   task_id = Middle_tcb->Object.id;
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) _Thread_Get( task_id, &location );
+    for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
+      (void) _Thread_Get_interrupt_disable( task_id, &lock_context );
+      _ISR_lock_ISR_enable( &lock_context );
+    }
   thread_get_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
-      ISR_lock_Context lock_context;
-
       (void) _Semaphore_Get_interrupt_disable(
         Semaphore_id,
         &location,
@@ -588,8 +589,10 @@ void complete_test( void )
   semaphore_get_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) _Thread_Get( 0x3, &location );
+    for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
+      (void) _Thread_Get_interrupt_disable( 0x3, &lock_context );
+      _ISR_lock_ISR_enable( &lock_context );
+    }
   thread_get_invalid_time = benchmark_timer_read();
 
   /*
@@ -755,7 +758,7 @@ void complete_test( void )
   );
 
   put_time(
-    "rtems internal: _Thread_Get",
+    "rtems internal: _Thread_Get_interrupt_disable",
     thread_get_time,
     OPERATION_COUNT,
     0,
@@ -763,7 +766,7 @@ void complete_test( void )
   );
 
   put_time(
-    "rtems internal: _Semaphore_Get",
+    "rtems internal: _Semaphore_Get_interrupt_disable",
     semaphore_get_time,
     OPERATION_COUNT,
     0,
@@ -771,7 +774,7 @@ void complete_test( void )
   );
 
   put_time(
-    "rtems internal: _Thread_Get: invalid id",
+    "rtems internal: _Thread_Get_interrupt_disable: invalid id",
     thread_get_invalid_time,
     OPERATION_COUNT,
     0,
