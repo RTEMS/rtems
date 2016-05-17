@@ -73,7 +73,6 @@ smpcapture02/Makefile
 smpclock01/Makefile
 smpfatal01/Makefile
 smpfatal02/Makefile
-smpfatal03/Makefile
 smpfatal04/Makefile
 smpfatal05/Makefile
 smpfatal08/Makefile

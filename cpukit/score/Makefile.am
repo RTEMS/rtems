@@ -299,7 +299,6 @@ libscore_a_SOURCES += src/rbtreereplace.c
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadclearstate.c src/threadcreateidle.c \
     src/threaddispatch.c \
-    src/threadenabledispatch.c src/threaddisabledispatch.c \
     src/threadget.c src/threadhandler.c src/threadinitialize.c \
     src/threadloadenv.c \
     src/threadrestart.c src/threadsetpriority.c \
@@ -314,10 +313,6 @@ libscore_a_SOURCES += src/threadglobalconstruction.c
 libscore_a_SOURCES += src/threadtimeout.c
 libscore_a_SOURCES += src/threadwaitgetid.c
 libscore_a_SOURCES += src/threadyield.c
-
-if HAS_SMP
-libscore_a_SOURCES += src/threaddispatchdisablelevel.c
-endif
 
 ## THREADQ_C_FILES
 libscore_a_SOURCES += src/threadq.c \

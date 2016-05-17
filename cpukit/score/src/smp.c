@@ -21,7 +21,6 @@
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/schedulerimpl.h>
-#include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/config.h>
 
@@ -162,14 +161,6 @@ void _SMP_Request_shutdown( void )
   Per_CPU_Control *self_cpu = _Per_CPU_Get();
 
   _Per_CPU_State_change( self_cpu, PER_CPU_STATE_SHUTDOWN );
-
-  /*
-   * We have to drop the Giant lock here in order to give other processors the
-   * opportunity to receive the inter-processor interrupts issued previously.
-   * In case the executing thread still holds SMP locks, then other processors
-   * already waiting for this SMP lock will spin forever.
-   */
-  _Giant_Drop( self_cpu );
 }
 
 void _SMP_Send_message( uint32_t cpu_index, unsigned long message )

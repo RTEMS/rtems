@@ -86,122 +86,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
   _Thread_Dispatch_disable_level = 1;
 }
 
-#if defined(RTEMS_SMP)
-  /**
-   * @brief Acquires the giant lock.
-   *
-   * The giant lock is a recursive SMP lock protecting nearly all operating
-   * system services.
-   *
-   * This lock is implicitly acquired in
-   * _Thread_Dispatch_increment_disable_level().
-   *
-   * Thread dispatching must be disabled before the Giant lock can be acquired
-   * and must no be enabled while owning the Giant lock.  The thread dispatch
-   * disable level is not altered by this function.
-   *
-   * @param[in] cpu_self The current processor.
-   */
-  void _Giant_Acquire( Per_CPU_Control *cpu_self );
-
-  /**
-   * @brief Releases the giant lock.
-   *
-   * This lock is implicitly released in
-   * _Thread_Dispatch_decrement_disable_level().
-   *
-   * The thread dispatch disable level is not altered by this function.
-   *
-   * @param[in] cpu_self The current processor.
-   */
-  void _Giant_Release( Per_CPU_Control *cpu_self );
-
-  /**
-   * @brief Releases the giant lock completely if held by the executing processor.
-   *
-   * The thread dispatch disable level is not altered by this function.
-   *
-   * The only use case for this operation is in _SMP_Request_shutdown().
-   *
-   * @param[in] cpu_self The current processor.
-   */
-  void _Giant_Drop( Per_CPU_Control *cpu_self );
-
-  /**
-   *  @brief Increments the thread dispatch level.
-   *
-   * This rountine increments the thread dispatch level
-   */
-  uint32_t _Thread_Dispatch_increment_disable_level(void);
-
-  /**
-   *  @brief Decrements the thread dispatch level.
-   *
-   * This routine decrements the thread dispatch level.
-   */
-  uint32_t _Thread_Dispatch_decrement_disable_level(void);
-#else /* RTEMS_SMP */
-  /**
-   * @brief Increase thread dispatch disable level.
-   *
-   * This rountine increments the thread dispatch level
-   */
-  RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_increment_disable_level(void)
-  {
-    uint32_t disable_level = _Thread_Dispatch_disable_level;
-#if defined( RTEMS_PROFILING )
-    ISR_Level level;
-
-    _ISR_Local_disable( level );
-    _Profiling_Thread_dispatch_disable( _Per_CPU_Get(), disable_level );
-#endif
-
-    ++disable_level;
-    _Thread_Dispatch_disable_level = disable_level;
-
-#if defined( RTEMS_PROFILING )
-    _ISR_Local_enable( level );
-#endif
-
-    return disable_level;
-  }
-
-  /**
-   * @brief Decrease thread dispatch disable level.
-   *
-   * This routine decrements the thread dispatch level.
-   */
-  RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_decrement_disable_level(void)
-  {
-    uint32_t disable_level = _Thread_Dispatch_disable_level;
-#if defined( RTEMS_PROFILING )
-    ISR_Level level;
-
-    _ISR_Local_disable( level );
-#endif
-
-    --disable_level;
-    _Thread_Dispatch_disable_level = disable_level;
-
-#if defined( RTEMS_PROFILING )
-    _Profiling_Thread_dispatch_enable( _Per_CPU_Get(), disable_level );
-    _ISR_Local_enable( level );
-#endif
-
-    return disable_level;
-  }
-
-  RTEMS_INLINE_ROUTINE void _Giant_Acquire( Per_CPU_Control *cpu_self )
-  {
-    (void) cpu_self;
-  }
-
-  RTEMS_INLINE_ROUTINE void _Giant_Release( Per_CPU_Control *cpu_self )
-  {
-    (void) cpu_self;
-  }
-#endif /* RTEMS_SMP */
-
 /**
  * @brief Performs a thread dispatch if necessary.
  *
@@ -240,8 +124,6 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level );
  * @brief Disables thread dispatching inside a critical section (interrupts
  * disabled) with the current processor.
  *
- * This function does not acquire the Giant lock.
- *
  * @param[in] cpu_self The current processor.
  * @param[in] lock_context The lock context of the corresponding
  * _ISR_lock_ISR_disable() that started the critical section.
@@ -270,8 +152,6 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable_with_CPU(
  * @brief Disables thread dispatching inside a critical section (interrupts
  * disabled).
  *
- * This function does not acquire the Giant lock.
- *
  * @param[in] lock_context The lock context of the corresponding
  * _ISR_lock_ISR_disable() that started the critical section.
  *
@@ -286,8 +166,6 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable_critical(
 
 /**
  * @brief Disables thread dispatching.
- *
- * This function does not acquire the Giant lock.
  *
  * @return The current processor.
  */
@@ -313,8 +191,6 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable( void )
  * @brief Enables thread dispatching.
  *
  * May perfrom a thread dispatch if necessary as a side-effect.
- *
- * This function does not release the Giant lock.
  *
  * @param[in] cpu_self The current processor.
  */
@@ -343,62 +219,11 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_enable( Per_CPU_Control *cpu_self )
 /**
  * @brief Unnests thread dispatching.
  *
- * This function does not release the Giant lock.
- *
  * @param[in] cpu_self The current processor.
  */
 RTEMS_INLINE_ROUTINE void _Thread_Dispatch_unnest( Per_CPU_Control *cpu_self )
 {
   --cpu_self->thread_dispatch_disable_level;
-}
-
-/**
- * @brief Disables thread dispatching and acquires the Giant lock.
- */
-#if defined ( __THREAD_DO_NOT_INLINE_DISABLE_DISPATCH__ )
-void _Thread_Disable_dispatch( void );
-#else
-RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
-{
-  _Thread_Dispatch_increment_disable_level();
-  RTEMS_COMPILER_MEMORY_BARRIER();
-}
-#endif
-
-RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch_body( void )
-{
-  Per_CPU_Control *cpu_self = _Per_CPU_Get();
-
-  _Giant_Release( cpu_self );
-  _Thread_Dispatch_enable( cpu_self );
-}
-
-/**
- * @brief Enables thread dispatching and releases the Giant lock.
- *
- * May perfrom a thread dispatch if necessary as a side-effect.
- */
-#if defined ( __THREAD_DO_NOT_INLINE_ENABLE_DISPATCH__ )
-  void _Thread_Enable_dispatch( void );
-#else
-  /* inlining of enable dispatching must be true */
-  RTEMS_INLINE_ROUTINE void _Thread_Enable_dispatch( void )
-  {
-    RTEMS_COMPILER_MEMORY_BARRIER();
-    _Thread_Enable_dispatch_body();
-  }
-#endif
-
-/**
- * @brief Enables thread dispatching and releases the Giant lock.
- *
- * @warning A thread dispatch is not performed as a side-effect.  Use this
- * function with
- */
-RTEMS_INLINE_ROUTINE void _Thread_Unnest_dispatch( void )
-{
-  RTEMS_COMPILER_MEMORY_BARRIER();
-  _Thread_Dispatch_decrement_disable_level();
 }
 
 /** @} */

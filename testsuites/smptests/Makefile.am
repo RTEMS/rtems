@@ -17,7 +17,6 @@ SUBDIRS += smpcapture02
 SUBDIRS += smpclock01
 SUBDIRS += smpfatal01
 SUBDIRS += smpfatal02
-SUBDIRS += smpfatal03
 SUBDIRS += smpfatal04
 SUBDIRS += smpfatal05
 SUBDIRS += smpfatal08

@@ -393,12 +393,6 @@ typedef struct Per_CPU_Control {
     #endif
 
     /**
-     * @brief Context for the Giant lock acquire and release pair of this
-     * processor.
-     */
-    SMP_lock_Context Giant_lock_context;
-
-    /**
      * @brief Bit field for SMP messages.
      *
      * This bit field is not protected locks.  Atomic operations are used to
