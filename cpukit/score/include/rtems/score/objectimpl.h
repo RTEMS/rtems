@@ -110,7 +110,7 @@ typedef enum {
 
 /**
  *  This enumerated type lists the locations which may be returned
- *  by _Objects_Get.  These codes indicate the success of locating
+ *  by _Objects_Get_isr_disable.  These codes indicate the success of locating
  *  an object with the specified ID.
  */
 typedef enum {
@@ -405,45 +405,33 @@ Objects_Control *_Objects_Allocate( Objects_Information *information );
  * @code
  * rtems_status_code some_delete( rtems_id id )
  * {
- *   rtems_status_code  sc;
  *   Some_Control      *some;
- *   Objects_Locations  location;
  *
  *   // The object allocator mutex protects the executing thread from
  *   // asynchronous thread restart and deletion.
  *   _Objects_Allocator_lock();
  *
- *   // This will disable thread dispatching, so this starts a thread dispatch
- *   // critical section.
+ *   // Get the object under protection of the object allocator mutex.
  *   some = (Semaphore_Control *)
- *     _Objects_Get( &_Some_Information, id, &location );
+ *     _Objects_Get_no_protection( id, &_Some_Information );
  *
- *   switch ( location ) {
- *     case OBJECTS_LOCAL:
- *       // After the object close an object get with this identifier will
- *       // fail.
- *       _Objects_Close( &_Some_Information, &some->Object );
- *
- *       _Some_Delete( some );
- *
- *       // This enables thread dispatching, so the thread dispatch critical
- *       // section ends here.
- *       _Objects_Put( &some->Object );
- *
- *       // Thread dispatching is enabled.  The object free is only protected
- *       // by the object allocator mutex.
- *       _Objects_Free( &_Some_Information, &some->Object );
- *
- *       sc = RTEMS_SUCCESSFUL;
- *       break;
- *     default:
- *       sc = RTEMS_INVALID_ID;
- *       break;
+ *   if ( some == NULL ) {
+ *     _Objects_Allocator_unlock();
+ *     return RTEMS_INVALID_ID;
  *   }
  *
- *   _Objects_Allocator_unlock();
+ *   // After the object close an object get with this identifier will
+ *   // fail.
+ *   _Objects_Close( &_Some_Information, &some->Object );
  *
- *   return sc;
+ *   _Some_Delete( some );
+ *
+ *   // Thread dispatching is enabled.  The object free is only protected
+ *   // by the object allocator mutex.
+ *   _Objects_Free( &_Some_Information, &some->Object );
+ *
+ *   _Objects_Allocator_unlock();
+ *   return RTEMS_SUCCESSFUL;
  * }
  * @endcode
  */
@@ -569,49 +557,12 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
  *  @param[in] information points to an object class information block.
  *  @param[in] id is the Id of the object whose name we are locating.
  *  @param[in] location will contain an indication of success or failure.
- *
- *  @retval This method returns one of the values from the
- *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
- *          successful or failure.  On success @a id will contain the Id of
- *          the requested object.
- *
- *  @note _Objects_Get returns with dispatching disabled for
- *  local and remote objects.  _Objects_Get_isr_disable returns with
- *  dispatching disabled for remote objects and interrupts for local
- *  objects.
- */
-Objects_Control *_Objects_Get (
-  Objects_Information *information,
-  Objects_Id           id,
-  Objects_Locations   *location
-);
-
-/**
- *  @brief Maps object ids to object control blocks.
- *
- *  This function maps object ids to object control blocks.
- *  If id corresponds to a local object, then it returns
- *  the_object control pointer which maps to id and location
- *  is set to OBJECTS_LOCAL.  If the object class supports global
- *  objects and the object id is global and resides on a remote
- *  node, then location is set to OBJECTS_REMOTE, and the_object
- *  is undefined.  Otherwise, location is set to OBJECTS_ERROR
- *  and the_object is undefined.
- *
- *  @param[in] information points to an object class information block.
- *  @param[in] id is the Id of the object whose name we are locating.
- *  @param[in] location will contain an indication of success or failure.
  *  @param[in] lock_context is the previous interrupt state being turned.
  *
  *  @retval This method returns one of the values from the
  *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
  *          successful or failure.  On success @a name will contain the name of
  *          the requested object.
- *
- *  @note _Objects_Get returns with dispatching disabled for
- *  local and remote objects.  _Objects_Get_isr_disable returns with
- *  dispatchng disabled for remote objects and interrupts for local
- *  objects.
  */
 Objects_Control *_Objects_Get_isr_disable(
   Objects_Information *information,
@@ -667,11 +618,6 @@ Objects_Control *_Objects_Get_local(
  *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
  *          successful or failure.  On success @a id will contain the Id of
  *          the requested object.
- *
- *  @note _Objects_Get returns with dispatching disabled for
- *  local and remote objects.  _Objects_Get_isr_disable returns with
- *  dispatching disabled for remote objects and interrupts for local
- *  objects.
  */
 Objects_Control *_Objects_Get_no_protection(
   Objects_Id                 id,
@@ -679,8 +625,7 @@ Objects_Control *_Objects_Get_no_protection(
 );
 
 /**
- *  Like @ref _Objects_Get, but is used to find "next" open
- *  object.
+ *  Gets the next open object after the specified object identifier.
  *
  *  Locks the object allocator mutex in case a next object exists.
  *
@@ -1057,35 +1002,6 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_string(
     _Objects_Get_index( the_object->id ),
     the_object
   );
-}
-
-/**
- * @brief Puts back an object obtained with _Objects_Get().
- *
- * This function decrements the thread dispatch disable level.  The
- * _Thread_Dispatch() is called if the level reaches zero.
- */
-RTEMS_INLINE_ROUTINE void _Objects_Put(
-  Objects_Control *the_object
-)
-{
-  (void) the_object;
-  _Thread_Enable_dispatch();
-}
-
-/**
- * @brief Puts back an object obtained with _Objects_Get().
- *
- * This function decrements the thread dispatch disable level.  The
- * _Thread_Dispatch() is not called if the level reaches zero, thus a thread
- * dispatch will not take place immediately on the current processor.
- */
-RTEMS_INLINE_ROUTINE void _Objects_Put_without_thread_dispatch(
-  Objects_Control *the_object
-)
-{
-  (void) the_object;
-  _Thread_Unnest_dispatch();
 }
 
 /**

@@ -289,7 +289,7 @@ typedef struct {
 
 /**
  *  The following defines the constant which may be used
- *  with _Objects_Get to manipulate the calling task.
+ *  to manipulate the calling task.
  */
 #define OBJECTS_ID_OF_SELF ((Objects_Id) 0)
 
