@@ -18,7 +18,7 @@
 
 #if defined(__rtems__)
   #include <rtems.h>
-  #include <bsp.h>
+  #include <rtems/libcsupport.h>
   #include <pmacros.h>
 #endif
 
@@ -26,18 +26,19 @@ const char rtems_test_name[] = "PSXCANCEL";
 
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
-void countTask_cancel_handler(void *ignored);
-void *countTaskDeferred(void *ignored);
-void *countTaskAsync(void *ignored);
 
-volatile bool countTask_handler;
+#if defined(__rtems__)
+static rtems_resource_snapshot initialSnapshot;
+#endif
 
-void countTask_cancel_handler(void *ignored)
+static volatile bool countTask_handler;
+
+static void countTask_cancel_handler(void *ignored)
 {
   countTask_handler = true;
 }
 
-void *countTaskDeferred(void *ignored)
+static void *countTaskDeferred(void *ignored)
 {
   int i=0;
   int type,state;
@@ -56,7 +57,7 @@ void *countTaskDeferred(void *ignored)
   }
 }
 
-void *countTaskAsync(void *ignored)
+static void *countTaskAsync(void *ignored)
 {
   int i=0;
   int type,state;
@@ -81,6 +82,20 @@ void *countTaskAsync(void *ignored)
   }
 }
 
+static void resourceSnapshotInit( void )
+{
+#if defined(__rtems__)
+  rtems_resource_snapshot_take( &initialSnapshot );
+#endif
+}
+
+static void resourceSnapshotCheck( void )
+{
+#if defined(__rtems__)
+  rtems_test_assert( rtems_resource_snapshot_check( &initialSnapshot ) );
+#endif
+}
+
 #if defined(__rtems__)
   void *POSIX_Init(void *ignored)
 #else
@@ -93,6 +108,8 @@ void *countTaskAsync(void *ignored)
   int       old;
 
   TEST_BEGIN();
+
+  resourceSnapshotInit();
 
   /* generate some error conditions */
   puts( "Init - pthread_setcancelstate - NULL oldstate" );
@@ -145,6 +162,7 @@ void *countTaskAsync(void *ignored)
     fatal_posix_service_status( sc, 0, "join async" );
   }
 
+  resourceSnapshotCheck();
 
   TEST_END();
 
