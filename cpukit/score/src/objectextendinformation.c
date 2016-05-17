@@ -113,7 +113,7 @@ void _Objects_Extend_information(
    *  Do we need to grow the tables?
    */
   if ( do_extend ) {
-    ISR_Level         level;
+    ISR_lock_Context  lock_context;
     void            **object_blocks;
     uint32_t         *inactive_per_block;
     Objects_Control **local_table;
@@ -225,8 +225,8 @@ void _Objects_Extend_information(
       local_table[ index ] = NULL;
     }
 
-    _Thread_Disable_dispatch();
-    _ISR_Disable( level );
+    /* FIXME: https://devel.rtems.org/ticket/2280 */
+    _ISR_lock_ISR_disable( &lock_context );
 
     old_tables = information->object_blocks;
 
@@ -241,8 +241,7 @@ void _Objects_Extend_information(
         information->maximum
       );
 
-    _ISR_Enable( level );
-    _Thread_Enable_dispatch();
+    _ISR_lock_ISR_enable( &lock_context );
 
     _Workspace_Free( old_tables );
 
