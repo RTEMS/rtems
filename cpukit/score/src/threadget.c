@@ -21,28 +21,6 @@
 
 #include <rtems/score/threadimpl.h>
 
-Thread_Control *_Thread_Get(
-  Objects_Id         id,
-  Objects_Locations *location
-)
-{
-  Objects_Information *information;
-
-  if ( _Objects_Are_ids_equal( id, OBJECTS_ID_OF_SELF ) ) {
-    _Thread_Disable_dispatch();
-    *location = OBJECTS_LOCAL;
-    return _Thread_Executing;
-  }
-
-  information = _Thread_Get_objects_information( id );
-  if ( information == NULL ) {
-    *location = OBJECTS_ERROR;
-    return NULL;
-  }
-
-  return (Thread_Control *) _Objects_Get( information, id, location );
-}
-
 Thread_Control *_Thread_Get_interrupt_disable(
   Objects_Id         id,
   ISR_lock_Context  *lock_context
