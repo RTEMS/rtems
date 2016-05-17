@@ -19,64 +19,48 @@
 #endif
 
 #include <rtems/rtems/tasksimpl.h>
-#include <rtems/score/apimutex.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/config.h>
 
 rtems_status_code rtems_task_delete(
   rtems_id id
 )
 {
-  Thread_Control    *the_thread;
-  Thread_Control    *executing;
-  Objects_Locations  location;
+  Thread_Control   *the_thread;
+  ISR_lock_Context  lock_context;
+  Thread_Control   *executing;
+  Per_CPU_Control  *cpu_self;
 
-  the_thread = _Thread_Get( id, &location );
-  switch ( location ) {
+  the_thread = _Thread_Get_interrupt_disable( id, &lock_context );
 
-    case OBJECTS_LOCAL:
-      #if defined(RTEMS_MULTIPROCESSING)
-        if ( the_thread->is_global ) {
-          _Objects_MP_Close(
-            &_RTEMS_tasks_Information.Objects,
-            the_thread->Object.id
-          );
-          _RTEMS_tasks_MP_Send_process_packet(
-            RTEMS_TASKS_MP_ANNOUNCE_DELETE,
-            the_thread->Object.id,
-            0                                /* Not used */
-          );
-        }
-      #endif
-
-      executing = _Thread_Executing;
-
-      if ( the_thread == executing ) {
-        /*
-         * The Classic tasks are neither detached nor joinable.  In case of
-         * self deletion, they are detached, otherwise joinable by default.
-         */
-        _Thread_Exit(
-          executing,
-          THREAD_LIFE_TERMINATING | THREAD_LIFE_DETACHED,
-          NULL
-        );
-      } else {
-        _Thread_Close( the_thread, executing );
-      }
-
-      _Objects_Put( &the_thread->Object );
-      return RTEMS_SUCCESSFUL;
-
+  if ( the_thread == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
+    if ( _Thread_MP_Is_remote( id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+    }
 #endif
 
-    case OBJECTS_ERROR:
-      break;
+    return RTEMS_INVALID_ID;
   }
 
-  return RTEMS_INVALID_ID;
+  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
+  _ISR_lock_ISR_enable( &lock_context );
+
+  executing = _Per_CPU_Get_executing( cpu_self );
+
+  if ( the_thread == executing ) {
+    /*
+     * The Classic tasks are neither detached nor joinable.  In case of
+     * self deletion, they are detached, otherwise joinable by default.
+     */
+    _Thread_Exit(
+      executing,
+      THREAD_LIFE_TERMINATING | THREAD_LIFE_DETACHED,
+      NULL
+    );
+  } else {
+    _Thread_Close( the_thread, executing );
+  }
+
+  _Thread_Dispatch_enable( cpu_self );
+  return RTEMS_SUCCESSFUL;
 }

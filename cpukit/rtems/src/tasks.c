@@ -40,10 +40,30 @@ static void _RTEMS_tasks_Start_extension(
   _Event_Initialize( &api->System_event );
 }
 
+#if defined(RTEMS_MULTIPROCESSING)
+static void _RTEMS_tasks_Terminate_extension( Thread_Control *executing )
+{
+  if ( executing->is_global ) {
+    _Objects_MP_Close(
+      &_RTEMS_tasks_Information.Objects,
+      executing->Object.id
+    );
+    _RTEMS_tasks_MP_Send_process_packet(
+      RTEMS_TASKS_MP_ANNOUNCE_DELETE,
+      executing->Object.id,
+      0                                /* Not used */
+    );
+  }
+}
+#endif
+
 User_extensions_Control _RTEMS_tasks_User_extensions = {
   .Callouts = {
-    .thread_start   = _RTEMS_tasks_Start_extension,
-    .thread_restart = _RTEMS_tasks_Start_extension
+#if defined(RTEMS_MULTIPROCESSING)
+    .thread_terminate = _RTEMS_tasks_Terminate_extension,
+#endif
+    .thread_start     = _RTEMS_tasks_Start_extension,
+    .thread_restart   = _RTEMS_tasks_Start_extension
   }
 };
 
