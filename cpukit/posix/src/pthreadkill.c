@@ -24,53 +24,42 @@
 #include <signal.h>
 #include <errno.h>
 
-#include <rtems/posix/pthreadimpl.h>
+#include <rtems/posix/threadsup.h>
 #include <rtems/posix/psignalimpl.h>
-#include <rtems/score/isr.h>
 #include <rtems/score/threadimpl.h>
 
-int pthread_kill(
-  pthread_t   thread,
-  int         sig
-)
+int pthread_kill( pthread_t thread, int sig )
 {
-  POSIX_API_Control  *api;
-  Thread_Control     *the_thread;
-  Objects_Locations  location;
+  Thread_Control    *the_thread;
+  ISR_lock_Context   lock_context;
+  POSIX_API_Control *api;
+  Per_CPU_Control   *cpu_self;
 
   if ( !is_valid_signo( sig ) ) {
     return EINVAL;
   }
 
-  the_thread = _Thread_Get( thread, &location );
-  switch ( location ) {
+  the_thread = _Thread_Get_interrupt_disable( thread, &lock_context );
 
-    case OBJECTS_LOCAL:
-      /*
-       *  If sig == 0 then just validate arguments
-       */
-
-      api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-
-      if ( _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN ) {
-        _Objects_Put( &the_thread->Object );
-        return 0;
-      }
-
-      /* XXX critical section */
-
-      api->signals_pending |= signo_to_mask( sig );
-
-      (void) _POSIX_signals_Unblock_thread( the_thread, sig, NULL );
-      _Objects_Put( &the_thread->Object );
-      return 0;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-#endif
-    case OBJECTS_ERROR:
-      break;
+  if ( the_thread == NULL ) {
+    return ESRCH;
   }
 
-  return ESRCH;
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+  if ( _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN ) {
+    _ISR_lock_ISR_enable( &lock_context );
+    return 0;
+  }
+
+  /* XXX critical section */
+
+  api->signals_pending |= signo_to_mask( sig );
+
+  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
+  _ISR_lock_ISR_enable( &lock_context );
+
+  (void) _POSIX_signals_Unblock_thread( the_thread, sig, NULL );
+  _Thread_Dispatch_enable( cpu_self );
+  return 0;
 }
