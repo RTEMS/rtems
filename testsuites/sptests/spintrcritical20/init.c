@@ -71,8 +71,9 @@ static bool test_body(void *arg)
 {
   test_context *ctx = arg;
   int busy;
+  Per_CPU_Control *cpu_self;
 
-  _Thread_Disable_dispatch();
+  cpu_self = _Thread_Dispatch_disable();
 
   rtems_test_assert(
     ctx->semaphore_task_tcb->Wait.return_code
@@ -105,7 +106,7 @@ static bool test_body(void *arg)
       break;
   }
 
-  _Thread_Enable_dispatch();
+  _Thread_Dispatch_enable(cpu_self);
 
   return ctx->thread_queue_was_null
     && ctx->status_was_successful

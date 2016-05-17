@@ -23,8 +23,9 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  rtems_status_code sc;
-  rtems_id          mutex;
+  rtems_status_code  sc;
+  rtems_id           mutex;
+  Per_CPU_Control   *cpu_self;
 
   TEST_BEGIN();
 
@@ -43,9 +44,9 @@ rtems_task Init(
    *  directive_failed() checks for dispatching being enabled.
    */
   puts( "rtems_semaphore_obtain - with dispatching disabled" );
-  _Thread_Disable_dispatch();
+  cpu_self = _Thread_Dispatch_disable();
     sc = rtems_semaphore_obtain(mutex, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT);
-  _Thread_Enable_dispatch();
+  _Thread_Dispatch_enable(cpu_self);
   directive_failed(sc, "rtems_semaphore_obtain");
 
   TEST_END();

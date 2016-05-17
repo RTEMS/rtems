@@ -33,7 +33,7 @@ void force_error()
 /*
  *  Case 2: Null entry
  *  Case 3: semaphore_create
- *          _Thread_Disable_dispatch
+ *          _Thread_Dispatch_disable
  *          semaphore_obtain
  */
 

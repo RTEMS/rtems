@@ -166,19 +166,19 @@ static void call_tests_isr_disabled( size_t set_size,
   }
 }
 
-static void call_tests_with_giant_acquired( size_t set_size,
+static void call_tests_with_thread_dispatch_disabled( size_t set_size,
     const cpu_set_t *cpu_set, SMP_barrier_State *bs )
 {
   size_t i;
 
   for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
-    if ( rtems_get_current_processor() == 0)
-      _Thread_Disable_dispatch();
+    Per_CPU_Control *cpu_self;
+
+    cpu_self = _Thread_Dispatch_disable();
 
     call_test( set_size, cpu_set, bs, i );
 
-    if ( rtems_get_current_processor() == 0)
-      _Thread_Enable_dispatch();
+    _Thread_Dispatch_enable( cpu_self );
   }
 }
 
@@ -208,10 +208,9 @@ static void all_tests( void )
   call_tests_isr_disabled( set_size, cpu_set, &bs );
   cmlog( "Done!\n" );
 
-  /* Call test cases with core 0 holding the giant lock */
-  cmlog( "Calling test cases with CPU0 holding "
-      "the giant lock. " );
-  call_tests_with_giant_acquired( set_size, cpu_set, &bs );
+  /* Call test cases with thread dispatch disabled */
+  cmlog( "Calling test cases with thread_dispatch_disabled. ");
+  call_tests_with_thread_dispatch_disabled( set_size, cpu_set, &bs );
   cmlog( "Done!\n");
 
   /* Done. Free up memory. */

@@ -103,8 +103,9 @@ static bool is_per_cpu_state_ok(void)
 static void test_scheduler_cross(void)
 {
   bool per_cpu_state_ok;
+  Per_CPU_Control *cpu_self;
 
-  _Thread_Disable_dispatch();
+  cpu_self = _Thread_Dispatch_disable();
 
   suspend(0);
   suspend(1);
@@ -113,7 +114,7 @@ static void test_scheduler_cross(void)
 
   per_cpu_state_ok = is_per_cpu_state_ok();
 
-  _Thread_Enable_dispatch();
+  _Thread_Dispatch_enable( cpu_self );
 
   rtems_test_assert(per_cpu_state_ok);
 }
@@ -121,8 +122,9 @@ static void test_scheduler_cross(void)
 static void test_scheduler_move_heir(void)
 {
   bool per_cpu_state_ok;
+  Per_CPU_Control *cpu_self;
 
-  _Thread_Disable_dispatch();
+  cpu_self = _Thread_Dispatch_disable();
 
   suspend(2);
   suspend(3);
@@ -136,7 +138,7 @@ static void test_scheduler_move_heir(void)
 
   resume(1);
 
-  _Thread_Enable_dispatch();
+  _Thread_Dispatch_enable( cpu_self );
 
   rtems_test_assert(per_cpu_state_ok);
 }

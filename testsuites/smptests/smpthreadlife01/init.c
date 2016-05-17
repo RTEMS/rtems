@@ -212,7 +212,7 @@ static void delay_ipi_task(rtems_task_argument variant)
   rtems_counter_delay_nanoseconds(100000000);
 
   if (variant != 0) {
-    _Thread_Disable_dispatch();
+    _Thread_Dispatch_disable();
   }
 
   _ISR_Enable_without_giant(level);
@@ -224,7 +224,7 @@ static void delay_ipi_task(rtems_task_argument variant)
   _Thread_Set_life_protection( THREAD_LIFE_PROTECTED );
 
   if (variant != 0) {
-    _Thread_Enable_dispatch();
+    _Thread_Dispatch_enable( _Per_CPU_Get() );
   }
 
   rtems_test_assert(0);

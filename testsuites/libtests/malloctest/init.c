@@ -95,10 +95,10 @@ static void test_realloc(void)
   rtems_test_assert( malloc_walk_ok );
 
   puts( "malloc_walk - in critical section path" );
-  _Thread_Disable_dispatch();
+  _Thread_Dispatch_disable();
   malloc_walk_ok = malloc_walk( 1234, false );
   rtems_test_assert( malloc_walk_ok );
-  _Thread_Enable_dispatch();
+  _Thread_Dispatch_enable( _Per_CPU_Get() );
 
   /*
    *  Realloc with a bad pointer to force a point
@@ -1142,9 +1142,9 @@ static void test_rtems_heap_allocate_aligned_with_boundary(void)
   rtems_test_assert( p != NULL );
   free(p);
 
-  _Thread_Disable_dispatch();
+  _Thread_Dispatch_disable();
   p = rtems_heap_allocate_aligned_with_boundary(1, 1, 1);
-  _Thread_Enable_dispatch();
+  _Thread_Dispatch_enable( _Per_CPU_Get() );
   rtems_test_assert( p == NULL );
 }
 

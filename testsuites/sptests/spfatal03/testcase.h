@@ -36,12 +36,10 @@ void force_error(void)
   printk("Create semaphore S0\n");
 
   printk("Obtain semaphore in dispatching critical section\n");
-  _Thread_Disable_dispatch();
+  _Thread_Dispatch_disable();
   status = rtems_semaphore_obtain( mutex, RTEMS_DEFAULT_OPTIONS, 0 );
   /* !!! SHOULD NOT RETURN FROM THE ABOVE CALL */
 
-  _Thread_Enable_dispatch();
-  printk("ERROR -- Obtain semaphore should not have returned\n");
-
+  rtems_test_assert( 0 );
   /* we will not run this far */
 }

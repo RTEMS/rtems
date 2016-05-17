@@ -151,7 +151,7 @@ rtems_task Task_1(
    *  No preempt .. nested
    */
 
-  _Thread_Disable_dispatch();
+  _Thread_Dispatch_disable();
 
   Interrupt_nest = 1;
 
@@ -165,7 +165,7 @@ rtems_task Task_1(
 #endif
   Interrupt_return_time = benchmark_timer_read();
 
-  _Thread_Unnest_dispatch();
+  _Thread_Dispatch_enable( _Per_CPU_Get() );
 
   put_time(
     "rtems interrupt: entry overhead returns to nested interrupt",

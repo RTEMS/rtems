@@ -402,8 +402,9 @@ rtems_timer_service_routine test_unblock_task(
   void     *arg
 )
 {
-  bool              in_isr;
-  rtems_status_code status;
+  bool               in_isr;
+  rtems_status_code  status;
+  Per_CPU_Control   *cpu_self;
 
   in_isr = rtems_interrupt_is_in_progress();
   status = rtems_task_is_suspended( blocked_task_id );
@@ -420,9 +421,9 @@ rtems_timer_service_routine test_unblock_task(
   }
 
   blocked_task_status = 2;
-  _Thread_Disable_dispatch();
+  cpu_self = _Thread_Dispatch_disable();
   status = rtems_task_resume( blocked_task_id );
-  _Thread_Unnest_dispatch();
+  _Thread_Dispatch_enable( cpu_self );
   directive_failed( status, "rtems_task_resume" );
 }
 

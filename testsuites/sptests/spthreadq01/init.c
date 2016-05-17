@@ -353,9 +353,7 @@ static rtems_task Init(
   TEST_BEGIN();
 
   puts( "Init - _Thread_queue_Extract - thread not blocked on a thread queue" );
-  _Thread_Disable_dispatch();
-  _Thread_queue_Extract( _Thread_Executing );
-  _Thread_Enable_dispatch();
+  _Thread_queue_Extract( _Thread_Get_executing() );
   /* is there more to check? */
 
   test_context_init(ctx);
