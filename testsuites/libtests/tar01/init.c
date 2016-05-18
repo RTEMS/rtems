@@ -44,9 +44,12 @@ void test_cat(
 void test_untar_from_memory(void)
 {
   rtems_status_code sc;
+  rtems_printer     printer;
+
+  rtems_print_printer_printf(&printer);
 
   printf("Untaring from memory - ");
-  sc = Untar_FromMemory((void *)TARFILE_START, TARFILE_SIZE);
+  sc = Untar_FromMemory_Print((void *)TARFILE_START, TARFILE_SIZE, &printer);
   if (sc != RTEMS_SUCCESSFUL) {
     printf ("error: untar failed: %s\n", rtems_status_text (sc));
     exit(1);
@@ -56,7 +59,7 @@ void test_untar_from_memory(void)
   /******************/
   printf( "========= /home/test_file =========\n" );
   test_cat( "/home/test_file", 0, 0 );
-  
+
   /******************/
   printf( "========= /symlink =========\n" );
   test_cat( "/symlink", 0, 0 );
@@ -97,7 +100,7 @@ void test_untar_from_file(void)
   /******************/
   printf( "========= /dest/home/test_file =========\n" );
   test_cat( "/dest/home/test_file", 0, 0 );
-  
+
   /******************/
   printf( "========= /dest/symlink =========\n" );
   test_cat( "/dest/symlink", 0, 0 );

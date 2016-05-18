@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Untar an Image
- * 
+ *
  * This file defines the interface to methods which can untar an image.
  */
 
@@ -17,8 +17,11 @@
 #ifndef _RTEMS_UNTAR_H
 #define _RTEMS_UNTAR_H
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <tar.h>
+
+#include <rtems/print.h>
 
 /**
  *  @defgroup libmisc_untar_img Untar Image
@@ -37,7 +40,9 @@ extern "C" {
 
 
 int Untar_FromMemory(void *tar_buf, size_t size);
+int Untar_FromMemory_Print(void *tar_buf, size_t size, const rtems_printer* printer);
 int Untar_FromFile(const char *tar_name);
+int Untar_FromFile_Print(const char *tar_name, const rtems_printer* printer);
 
 /**************************************************************************
  * This converts octal ASCII number representations into an
