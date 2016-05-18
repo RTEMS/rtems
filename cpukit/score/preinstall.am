@@ -450,4 +450,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulersimplesmp.h
 $(PROJECT_INCLUDE)/rtems/score/schedulerstrongapa.h: include/rtems/score/schedulerstrongapa.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerstrongapa.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerstrongapa.h
+
+$(PROJECT_INCLUDE)/rtems/score/smplockstats.h: include/rtems/score/smplockstats.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/smplockstats.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/smplockstats.h
 endif
