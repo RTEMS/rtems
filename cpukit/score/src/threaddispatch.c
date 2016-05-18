@@ -104,7 +104,7 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
      * to this function.
      */
 #if !defined( RTEMS_SMP )
-    _ISR_Enable( level );
+    _ISR_Local_enable( level );
 #endif
 
     _User_extensions_Thread_switch( executing, heir );
@@ -122,7 +122,7 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
     _Thread_Debug_set_real_processor( executing, cpu_self );
 
 #if !defined( RTEMS_SMP )
-    _ISR_Disable( level );
+    _ISR_Local_disable( level );
 #endif
   } while (
 #if defined( RTEMS_SMP )

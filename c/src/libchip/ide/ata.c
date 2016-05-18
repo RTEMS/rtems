@@ -387,9 +387,9 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
         return;
 
     /* get first request in the controller's queue */
-    _ISR_Disable(level);
+    _ISR_Local_disable(level);
     areq = (ata_req_t *)rtems_chain_first(&ata_ide_ctrls[ctrl_minor].reqs);
-    _ISR_Enable(level);
+    _ISR_Local_enable(level);
 
 #if 0
     /* get ATA device identifier (0 or 1) */
@@ -831,9 +831,9 @@ ata_queue_task(rtems_task_argument arg)
         rtems_ata_lock();
 
         /* get current request to the controller */
-        _ISR_Disable(level);
+        _ISR_Local_disable(level);
         areq = (ata_req_t *)rtems_chain_first(&ata_ide_ctrls[ctrl_minor].reqs);
-        _ISR_Enable(level);
+        _ISR_Local_enable(level);
 
         switch(msg.type)
         {

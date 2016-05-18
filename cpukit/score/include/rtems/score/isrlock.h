@@ -203,7 +203,7 @@ typedef struct {
     )
 #else
   #define _ISR_lock_ISR_disable_and_acquire( _lock, _context ) \
-    _ISR_Disable( ( _context )->isr_level )
+    _ISR_Local_disable( ( _context )->isr_level )
 #endif
 
 /**
@@ -228,7 +228,7 @@ typedef struct {
     )
 #else
   #define _ISR_lock_Release_and_ISR_enable( _lock, _context ) \
-    _ISR_Enable( ( _context )->isr_level )
+    _ISR_Local_enable( ( _context )->isr_level )
 #endif
 
 /**
@@ -357,7 +357,7 @@ typedef struct {
 #else
   #define _ISR_lock_ISR_disable( _context ) \
     do { \
-      _ISR_Disable( ( _context )->isr_level ); \
+      _ISR_Local_disable( ( _context )->isr_level ); \
       _ISR_lock_ISR_disable_profile( _context ) \
     } while ( 0 )
 #endif
@@ -377,7 +377,7 @@ typedef struct {
     _ISR_Local_enable( ( _context )->Lock_context.isr_level )
 #else
   #define _ISR_lock_ISR_enable( _context ) \
-    _ISR_Enable( ( _context )->isr_level )
+    _ISR_Local_enable( ( _context )->isr_level )
 #endif
 
 /** @} */

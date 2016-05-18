@@ -56,7 +56,7 @@ void __ISR_Handler( uint32_t   vector)
 {
   ISR_Level level;
 
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
 
    _Thread_Dispatch_disable();
 
@@ -72,13 +72,13 @@ void __ISR_Handler( uint32_t   vector)
 
   _ISR_Nest_level++;
 
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   /* call isp */
   if ( _ISR_Vector_table[ vector])
     (*_ISR_Vector_table[ vector ])( vector );
 
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
 
   _Thread_Dispatch_enable( _Per_CPU_Get() );
 
@@ -90,7 +90,7 @@ void __ISR_Handler( uint32_t   vector)
     stack_ptr = _old_stack_ptr;
 #endif
 
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   if ( _ISR_Nest_level )
     return;

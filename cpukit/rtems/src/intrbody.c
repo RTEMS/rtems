@@ -47,7 +47,7 @@ rtems_interrupt_level rtems_interrupt_disable( void )
 {
   rtems_interrupt_level previous_level;
 
-  _ISR_Disable( previous_level );
+  _ISR_Local_disable( previous_level );
 
   return previous_level;
 }
@@ -56,7 +56,7 @@ void rtems_interrupt_enable(
   rtems_interrupt_level previous_level
 )
 {
-  _ISR_Enable( previous_level );
+  _ISR_Local_enable( previous_level );
 }
 
 void rtems_interrupt_flash(

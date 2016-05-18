@@ -277,10 +277,10 @@ static inline unsigned int _CPU_atomic_Fetch_add_uint( CPU_atomic_Uint *obj, uns
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = val + arg;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -297,10 +297,10 @@ static inline unsigned long _CPU_atomic_Fetch_add_ulong( CPU_atomic_Ulong *obj, 
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = val + arg;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -317,10 +317,10 @@ static inline uintptr_t _CPU_atomic_Fetch_add_uintptr( CPU_atomic_Uintptr *obj, 
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = val + arg;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -337,10 +337,10 @@ static inline unsigned int _CPU_atomic_Fetch_sub_uint( CPU_atomic_Uint *obj, uns
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = val - arg;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -357,10 +357,10 @@ static inline unsigned long _CPU_atomic_Fetch_sub_ulong( CPU_atomic_Ulong *obj, 
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = val - arg;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -377,10 +377,10 @@ static inline uintptr_t _CPU_atomic_Fetch_sub_uintptr( CPU_atomic_Uintptr *obj, 
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = val - arg;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -397,10 +397,10 @@ static inline unsigned int _CPU_atomic_Fetch_or_uint( CPU_atomic_Uint *obj, unsi
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = val | arg;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -417,10 +417,10 @@ static inline unsigned long _CPU_atomic_Fetch_or_ulong( CPU_atomic_Ulong *obj, u
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = val | arg;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -437,10 +437,10 @@ static inline uintptr_t _CPU_atomic_Fetch_or_uintptr( CPU_atomic_Uintptr *obj, u
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = val | arg;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -457,10 +457,10 @@ static inline unsigned int _CPU_atomic_Fetch_and_uint( CPU_atomic_Uint *obj, uns
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = val & arg;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -477,10 +477,10 @@ static inline unsigned long _CPU_atomic_Fetch_and_ulong( CPU_atomic_Ulong *obj, 
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = val & arg;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -497,10 +497,10 @@ static inline uintptr_t _CPU_atomic_Fetch_and_uintptr( CPU_atomic_Uintptr *obj, 
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = val & arg;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -517,10 +517,10 @@ static inline unsigned int _CPU_atomic_Exchange_uint( CPU_atomic_Uint *obj, unsi
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = desired;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -537,10 +537,10 @@ static inline unsigned long _CPU_atomic_Exchange_ulong( CPU_atomic_Ulong *obj, u
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = desired;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -557,10 +557,10 @@ static inline uintptr_t _CPU_atomic_Exchange_uintptr( CPU_atomic_Uintptr *obj, u
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   val = *obj;
   *obj = desired;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return val;
 #endif
@@ -579,7 +579,7 @@ static inline bool _CPU_atomic_Compare_exchange_uint( CPU_atomic_Uint *obj, unsi
 
   (void) succ;
   (void) fail;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   actual = *obj;
   success = ( actual == *expected );
   if ( success ) {
@@ -587,7 +587,7 @@ static inline bool _CPU_atomic_Compare_exchange_uint( CPU_atomic_Uint *obj, unsi
   } else {
     *expected = actual;
   }
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return success;
 #endif
@@ -606,7 +606,7 @@ static inline bool _CPU_atomic_Compare_exchange_ulong( CPU_atomic_Ulong *obj, un
 
   (void) succ;
   (void) fail;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   actual = *obj;
   success = ( actual == *expected );
   if ( success ) {
@@ -614,7 +614,7 @@ static inline bool _CPU_atomic_Compare_exchange_ulong( CPU_atomic_Ulong *obj, un
   } else {
     *expected = actual;
   }
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return success;
 #endif
@@ -633,7 +633,7 @@ static inline bool _CPU_atomic_Compare_exchange_uintptr( CPU_atomic_Uintptr *obj
 
   (void) succ;
   (void) fail;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   actual = *obj;
   success = ( actual == *expected );
   if ( success ) {
@@ -641,7 +641,7 @@ static inline bool _CPU_atomic_Compare_exchange_uintptr( CPU_atomic_Uintptr *obj
   } else {
     *expected = actual;
   }
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return success;
 #endif
@@ -670,10 +670,10 @@ static inline bool _CPU_atomic_Flag_test_and_set( CPU_atomic_Flag *obj, CPU_atom
   ISR_Level level;
 
   (void) order;
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   flag = *obj;
   *obj = true;
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return flag;
 #endif

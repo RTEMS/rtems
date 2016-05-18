@@ -1166,7 +1166,7 @@ RTEMS_INLINE_ROUTINE void *_Thread_Lock_acquire(
     _Thread_Lock_release( lock, lock_context );
   }
 #else
-  _ISR_Disable( lock_context->isr_level );
+  _ISR_Local_disable( lock_context->isr_level );
 
   return NULL;
 #endif

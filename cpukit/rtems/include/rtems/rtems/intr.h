@@ -100,7 +100,7 @@ rtems_status_code rtems_interrupt_catch(
  *  rtems_interrupt_local_disable() is available on all configurations.
  */
 #define rtems_interrupt_disable( _isr_cookie ) \
-    _ISR_Disable(_isr_cookie)
+    _ISR_Local_disable(_isr_cookie)
 
 /**
  *  @brief Enable RTEMS Interrupt
@@ -111,7 +111,7 @@ rtems_status_code rtems_interrupt_catch(
  *  rtems_interrupt_local_enable() is available on all configurations.
  */
 #define rtems_interrupt_enable( _isr_cookie ) \
-    _ISR_Enable(_isr_cookie)
+    _ISR_Local_enable(_isr_cookie)
 
 /**
  *  @brief Flash RTEMS Interrupt

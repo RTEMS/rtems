@@ -55,10 +55,9 @@ typedef uint32_t   ISR_Level;
  *  @param[out] _level The argument @a _level will contain the previous
  *  interrupt mask level.
  */
-#define _ISR_Disable( _level ) \
+#define _ISR_Local_disable( _level ) \
   do { \
     _CPU_ISR_Disable( _level ); \
-    _Assert( _Debug_Is_owner_of_giant() ); \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
   } while (0)
 
@@ -66,17 +65,16 @@ typedef uint32_t   ISR_Level;
  *  @brief Enables interrupts on this processor.
  *
  *  This macro restores the interrupt status on the processor with the
- *  interrupt level value obtained by _ISR_Disable().  It is used at the end of
+ *  interrupt level value obtained by _ISR_Local_disable().  It is used at the end of
  *  a critical section of code to enable interrupts so they can be processed
  *  again.
  *
  *  @param[in] _level The interrupt level previously obtained by
- *  _ISR_Disable().
+ *  _ISR_Local_disable().
  */
-#define _ISR_Enable( _level ) \
+#define _ISR_Local_enable( _level ) \
   do { \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
-    _Assert( _Debug_Is_owner_of_giant() ); \
     _CPU_ISR_Enable( _level ); \
   } while (0)
 
@@ -97,12 +95,11 @@ typedef uint32_t   ISR_Level;
  *  properly protects itself.
  *
  *  @param[in] _level The interrupt level previously obtained by
- *  _ISR_Disable().
+ *  _ISR_Local_disable().
  */
 #define _ISR_Flash( _level ) \
   do { \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
-    _Assert( _Debug_Is_owner_of_giant() ); \
     _CPU_ISR_Flash( _level ); \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
   } while (0)
@@ -134,18 +131,6 @@ typedef uint32_t   ISR_Level;
     RTEMS_COMPILER_MEMORY_BARRIER();  \
     _CPU_ISR_Set_level( _new_level ); \
     RTEMS_COMPILER_MEMORY_BARRIER();  \
-  } while (0)
-
-#define _ISR_Local_disable( _level ) \
-  do { \
-    _CPU_ISR_Disable( _level ); \
-    RTEMS_COMPILER_MEMORY_BARRIER(); \
-  } while (0)
-
-#define _ISR_Local_enable( _level ) \
-  do { \
-    RTEMS_COMPILER_MEMORY_BARRIER(); \
-    _CPU_ISR_Enable( _level ); \
   } while (0)
 
 /**@}*/

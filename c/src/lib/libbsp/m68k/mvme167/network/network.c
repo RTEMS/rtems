@@ -568,7 +568,7 @@ static void uti596_addCmd(
   pCmd->status = 0;
   pCmd->next = I596_NULL;
 
-  _ISR_Disable(level);
+  _ISR_Local_disable(level);
 
   if (uti596_softc.pCmdHead == I596_NULL) {
     uti596_softc.pCmdHead = uti596_softc.pCmdTail = uti596_softc.scb.pCmd = pCmd;
@@ -578,12 +578,12 @@ static void uti596_addCmd(
 		uti596_softc.scb.command = CUC_START;
   	uti596_issueCA ( &uti596_softc, UTI596_NO_WAIT );
 
-  	_ISR_Enable(level);
+  	_ISR_Local_enable(level);
   }
   else {
     uti596_softc.pCmdTail->next = (i596_cmd *) word_swap ((unsigned long)pCmd);
     uti596_softc.pCmdTail = pCmd;
-    _ISR_Enable(level);
+    _ISR_Local_enable(level);
 	}
 
 	#ifdef DBG_ADD_CMD
@@ -1272,11 +1272,11 @@ i596_rfd * uti596_dequeue(
   ISR_Level level;
   i596_rfd * pRfd;
 
-  _ISR_Disable(level);
+  _ISR_Local_disable(level);
 
   /* invalid address, or empty queue or emptied queue */
   if( ppQ == NULL || *ppQ == NULL || *ppQ == I596_NULL) {
-    _ISR_Enable(level);
+    _ISR_Local_enable(level);
      return I596_NULL;
   }
 
@@ -1288,7 +1288,7 @@ i596_rfd * uti596_dequeue(
   *ppQ = (i596_rfd *) word_swap ((unsigned long) pRfd->next);
   pRfd->next = I596_NULL;  /* unlink the rfd being returned */
 
-  _ISR_Enable(level);
+  _ISR_Local_enable(level);
   return pRfd;
 }
 
@@ -2083,9 +2083,9 @@ void uti596_txDaemon(
 
        UTI_596_ASSERT(pRfd != I596_NULL, "Supplying NULL RFD\n")
 
-       _ISR_Disable(level);
+       _ISR_Local_disable(level);
        uti596_supplyFD ( pRfd );   /* Return RFD to RFA. */
-       _ISR_Enable(level);
+       _ISR_Local_enable(level);
 
        pRfd = uti596_dequeue( (i596_rfd **)&sc->pInboundFrameQueue); /* grab next frame */
 

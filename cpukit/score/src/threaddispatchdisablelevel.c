@@ -138,13 +138,3 @@ void _Giant_Release( Per_CPU_Control *cpu_self )
   _Giant_Do_release( cpu_self );
   _ISR_Local_enable( isr_level );
 }
-
-#if defined( RTEMS_DEBUG )
-bool _Debug_Is_owner_of_giant( void )
-{
-  Giant_Control *giant = &_Giant;
-
-  return giant->owner_cpu == _Per_CPU_Get_snapshot()
-    || !_System_state_Is_up( _System_state_Get() );
-}
-#endif

@@ -57,7 +57,7 @@ m8xx_dpram_allocate( unsigned int byte_count )
    * form, but this routine is probably being run as part of an
    * initialization sequence so the effect shouldn't be too severe.
    */
-  _ISR_Disable (level);
+  _ISR_Local_disable (level);
 
   for ( i = 0; i < NUM_DPRAM_REGIONS; i++ ) {
     /*
@@ -85,7 +85,7 @@ m8xx_dpram_allocate( unsigned int byte_count )
     }
   }
 
-  _ISR_Enable(level);
+  _ISR_Local_enable(level);
 
   if (blockp == NULL)
     rtems_panic("Can't allocate %d bytes of dual-port RAM.\n", byte_count);

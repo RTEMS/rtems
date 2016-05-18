@@ -88,7 +88,7 @@ void _CPU_ISR_install_vector(
 
    ISR_Level level;
 
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
 
   current_handler = table [vector];
 
@@ -102,7 +102,7 @@ void _CPU_ISR_install_vector(
     table [vector] = new_handler;
   }
 
-   _ISR_Enable( level );
+   _ISR_Local_enable( level );
 }
 
 void _CPU_Install_interrupt_stack( void )

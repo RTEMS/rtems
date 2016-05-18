@@ -95,21 +95,10 @@ extern "C" {
  * @brief Returns true if thread dispatching is allowed.
  *
  * Thread dispatching can be repressed via _Thread_Disable_dispatch() or
- * _ISR_Disable().
+ * _ISR_Local_disable().
  */
 #if defined( RTEMS_DEBUG )
   bool _Debug_Is_thread_dispatching_allowed( void );
-#endif
-
-/**
- * @brief Returns true if the current thread of execution owns the giant lock.
- */
-#if defined( RTEMS_DEBUG )
-  #if defined( RTEMS_SMP )
-    bool _Debug_Is_owner_of_giant( void );
-  #else
-    #define _Debug_Is_owner_of_giant() (true)
-  #endif
 #endif
 
 /**

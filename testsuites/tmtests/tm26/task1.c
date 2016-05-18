@@ -544,7 +544,7 @@ void complete_test( void )
    */
 
   put_time(
-    "rtems interrupt: _ISR_Disable",
+    "rtems interrupt: _ISR_Local_disable",
     isr_disable_time,
     1,
     0,
@@ -560,7 +560,7 @@ void complete_test( void )
   );
 
   put_time(
-    "rtems interrupt: _ISR_Enable",
+    "rtems interrupt: _ISR_Local_enable",
     isr_enable_time,
     1,
     0,

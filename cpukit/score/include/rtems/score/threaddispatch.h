@@ -152,7 +152,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
 #if defined( RTEMS_PROFILING )
     ISR_Level level;
 
-    _ISR_Disable( level );
+    _ISR_Local_disable( level );
     _Profiling_Thread_dispatch_disable( _Per_CPU_Get(), disable_level );
 #endif
 
@@ -160,7 +160,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
     _Thread_Dispatch_disable_level = disable_level;
 
 #if defined( RTEMS_PROFILING )
-    _ISR_Enable( level );
+    _ISR_Local_enable( level );
 #endif
 
     return disable_level;
@@ -177,7 +177,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
 #if defined( RTEMS_PROFILING )
     ISR_Level level;
 
-    _ISR_Disable( level );
+    _ISR_Local_disable( level );
 #endif
 
     --disable_level;
@@ -185,7 +185,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
 
 #if defined( RTEMS_PROFILING )
     _Profiling_Thread_dispatch_enable( _Per_CPU_Get(), disable_level );
-    _ISR_Enable( level );
+    _ISR_Local_enable( level );
 #endif
 
     return disable_level;

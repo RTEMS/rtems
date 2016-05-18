@@ -30,9 +30,9 @@ uint32_t _Nios2_MPU_Disable_protected( void )
   ISR_Level level;
   uint32_t config;
 
-  _ISR_Disable( level );
+  _ISR_Local_disable( level );
   config = _Nios2_MPU_Disable();
-  _ISR_Enable( level );
+  _ISR_Local_enable( level );
 
   return config;
 }

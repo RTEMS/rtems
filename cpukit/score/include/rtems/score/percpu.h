@@ -499,7 +499,7 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 #else
 #define _Per_CPU_ISR_disable_and_acquire( cpu, isr_cookie ) \
   do { \
-    _ISR_Disable( isr_cookie ); \
+    _ISR_Local_disable( isr_cookie ); \
     (void) ( cpu ); \
   } while ( 0 )
 #endif
@@ -514,7 +514,7 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 #define _Per_CPU_Release_and_ISR_enable( cpu, isr_cookie ) \
   do { \
     (void) ( cpu ); \
-    _ISR_Enable( isr_cookie ); \
+    _ISR_Local_enable( isr_cookie ); \
   } while ( 0 )
 #endif
 
@@ -530,7 +530,7 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
   } while ( 0 )
 #else
 #define _Per_CPU_Acquire_all( isr_cookie ) \
-  _ISR_Disable( isr_cookie )
+  _ISR_Local_disable( isr_cookie )
 #endif
 
 #if defined( RTEMS_SMP )
@@ -545,7 +545,7 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
   } while ( 0 )
 #else
 #define _Per_CPU_Release_all( isr_cookie ) \
-  _ISR_Enable( isr_cookie )
+  _ISR_Local_enable( isr_cookie )
 #endif
 
 /*
