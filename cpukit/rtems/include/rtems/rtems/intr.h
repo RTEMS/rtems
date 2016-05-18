@@ -139,7 +139,7 @@ rtems_status_code rtems_interrupt_catch(
  * @see rtems_interrupt_local_enable().
  */
 #define rtems_interrupt_local_disable( _isr_cookie ) \
-  _ISR_Disable_without_giant( _isr_cookie )
+  _ISR_Local_disable( _isr_cookie )
 
 /**
  * @brief This macro restores the previous interrupt level on the current
@@ -149,7 +149,7 @@ rtems_status_code rtems_interrupt_catch(
  *   rtems_interrupt_local_disable().
  */
 #define rtems_interrupt_local_enable( _isr_cookie ) \
-  _ISR_Enable_without_giant( _isr_cookie )
+  _ISR_Local_enable( _isr_cookie )
 
 /**
  *  @brief RTEMS Interrupt Is in Progress

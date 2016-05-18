@@ -36,7 +36,7 @@ void _Terminate(
 {
   ISR_Level level;
 
-  _ISR_Disable_without_giant( level );
+  _ISR_Local_disable( level );
   (void) level;
 
   _SMP_Request_shutdown();

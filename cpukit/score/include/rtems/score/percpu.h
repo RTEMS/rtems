@@ -493,7 +493,7 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 #if defined( RTEMS_SMP )
 #define _Per_CPU_ISR_disable_and_acquire( cpu, isr_cookie ) \
   do { \
-    _ISR_Disable_without_giant( isr_cookie ); \
+    _ISR_Local_disable( isr_cookie ); \
     _Per_CPU_Acquire( cpu ); \
   } while ( 0 )
 #else
@@ -508,7 +508,7 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 #define _Per_CPU_Release_and_ISR_enable( cpu, isr_cookie ) \
   do { \
     _Per_CPU_Release( cpu ); \
-    _ISR_Enable_without_giant( isr_cookie ); \
+    _ISR_Local_enable( isr_cookie ); \
   } while ( 0 )
 #else
 #define _Per_CPU_Release_and_ISR_enable( cpu, isr_cookie ) \
@@ -523,7 +523,7 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
   do { \
     uint32_t ncpus = _SMP_Get_processor_count(); \
     uint32_t cpu; \
-    _ISR_Disable_without_giant( isr_cookie ); \
+    _ISR_Local_disable( isr_cookie ); \
     for ( cpu = 0 ; cpu < ncpus ; ++cpu ) { \
       _Per_CPU_Acquire( _Per_CPU_Get_by_index( cpu ) ); \
     } \
@@ -541,7 +541,7 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
     for ( cpu = 0 ; cpu < ncpus ; ++cpu ) { \
       _Per_CPU_Release( _Per_CPU_Get_by_index( cpu ) ); \
     } \
-    _ISR_Enable_without_giant( isr_cookie ); \
+    _ISR_Local_enable( isr_cookie ); \
   } while ( 0 )
 #else
 #define _Per_CPU_Release_all( isr_cookie ) \
@@ -709,13 +709,13 @@ RTEMS_INLINE_ROUTINE struct _Thread_Control *_Thread_Get_executing( void )
   #if defined( RTEMS_SMP )
     ISR_Level level;
 
-    _ISR_Disable_without_giant( level );
+    _ISR_Local_disable( level );
   #endif
 
   executing = _Thread_Executing;
 
   #if defined( RTEMS_SMP )
-    _ISR_Enable_without_giant( level );
+    _ISR_Local_enable( level );
   #endif
 
   return executing;

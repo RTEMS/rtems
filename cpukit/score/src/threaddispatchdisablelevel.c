@@ -77,7 +77,7 @@ uint32_t _Thread_Dispatch_increment_disable_level( void )
   uint32_t disable_level;
   Per_CPU_Control *cpu_self;
 
-  _ISR_Disable_without_giant( isr_level );
+  _ISR_Local_disable( isr_level );
 
   /*
    * We must obtain the processor after interrupts are disabled to prevent
@@ -92,7 +92,7 @@ uint32_t _Thread_Dispatch_increment_disable_level( void )
   ++disable_level;
   cpu_self->thread_dispatch_disable_level = disable_level;
 
-  _ISR_Enable_without_giant( isr_level );
+  _ISR_Local_enable( isr_level );
 
   return disable_level;
 }
@@ -103,7 +103,7 @@ uint32_t _Thread_Dispatch_decrement_disable_level( void )
   uint32_t disable_level;
   Per_CPU_Control *cpu_self;
 
-  _ISR_Disable_without_giant( isr_level );
+  _ISR_Local_disable( isr_level );
 
   cpu_self = _Per_CPU_Get();
   disable_level = cpu_self->thread_dispatch_disable_level;
@@ -114,7 +114,7 @@ uint32_t _Thread_Dispatch_decrement_disable_level( void )
   _Giant_Do_release( cpu_self );
 
   _Profiling_Thread_dispatch_enable( cpu_self, disable_level );
-  _ISR_Enable_without_giant( isr_level );
+  _ISR_Local_enable( isr_level );
 
   return disable_level;
 }
@@ -123,20 +123,20 @@ void _Giant_Acquire( Per_CPU_Control *cpu_self )
 {
   ISR_Level isr_level;
 
-  _ISR_Disable_without_giant( isr_level );
+  _ISR_Local_disable( isr_level );
   _Assert( _Thread_Dispatch_disable_level != 0 );
   _Giant_Do_acquire( cpu_self );
-  _ISR_Enable_without_giant( isr_level );
+  _ISR_Local_enable( isr_level );
 }
 
 void _Giant_Release( Per_CPU_Control *cpu_self )
 {
   ISR_Level isr_level;
 
-  _ISR_Disable_without_giant( isr_level );
+  _ISR_Local_disable( isr_level );
   _Assert( _Thread_Dispatch_disable_level != 0 );
   _Giant_Do_release( cpu_self );
-  _ISR_Enable_without_giant( isr_level );
+  _ISR_Local_enable( isr_level );
 }
 
 #if defined( RTEMS_DEBUG )

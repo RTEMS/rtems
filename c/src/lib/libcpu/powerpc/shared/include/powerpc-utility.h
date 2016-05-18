@@ -588,11 +588,11 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
     ISR_Level level; \
     uint32_t val; \
     uint32_t mybits = bits; \
-    _ISR_Disable_without_giant(level); \
+    _ISR_Local_disable(level); \
     val = PPC_SPECIAL_PURPOSE_REGISTER(spr); \
     val |= mybits; \
     PPC_SET_SPECIAL_PURPOSE_REGISTER(spr, val); \
-    _ISR_Enable_without_giant(level); \
+    _ISR_Local_enable(level); \
   } while (0)
 
 /**
@@ -608,12 +608,12 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
     uint32_t val; \
     uint32_t mybits = bits; \
     uint32_t mymask = mask; \
-    _ISR_Disable_without_giant(level); \
+    _ISR_Local_disable(level); \
     val = PPC_SPECIAL_PURPOSE_REGISTER(spr); \
     val &= ~mymask; \
     val |= mybits; \
     PPC_SET_SPECIAL_PURPOSE_REGISTER(spr, val); \
-    _ISR_Enable_without_giant(level); \
+    _ISR_Local_enable(level); \
   } while (0)
 
 /**
@@ -627,11 +627,11 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
     ISR_Level level; \
     uint32_t val; \
     uint32_t mybits = bits; \
-    _ISR_Disable_without_giant(level); \
+    _ISR_Local_disable(level); \
     val = PPC_SPECIAL_PURPOSE_REGISTER(spr); \
     val &= ~mybits; \
     PPC_SET_SPECIAL_PURPOSE_REGISTER(spr, val); \
-    _ISR_Enable_without_giant(level); \
+    _ISR_Local_enable(level); \
   } while (0)
 
 /**
@@ -705,11 +705,11 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
     ISR_Level level; \
     uint32_t val; \
     uint32_t mybits = bits; \
-    _ISR_Disable_without_giant(level); \
+    _ISR_Local_disable(level); \
     val = PPC_DEVICE_CONTROL_REGISTER(dcr); \
     val |= mybits; \
     PPC_SET_DEVICE_CONTROL_REGISTER(dcr, val); \
-    _ISR_Enable_without_giant(level); \
+    _ISR_Local_enable(level); \
   } while (0)
 
 /**
@@ -725,12 +725,12 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
     uint32_t val; \
     uint32_t mybits = bits; \
     uint32_t mymask = mask; \
-    _ISR_Disable_without_giant(level); \
+    _ISR_Local_disable(level); \
     val = PPC_DEVICE_CONTROL_REGISTER(dcr); \
     val &= ~mymask; \
     val |= mybits; \
     PPC_SET_DEVICE_CONTROL_REGISTER(dcr, val); \
-    _ISR_Enable_without_giant(level); \
+    _ISR_Local_enable(level); \
   } while (0)
 
 /**
@@ -744,11 +744,11 @@ static inline void ppc_set_decrementer_register(uint32_t dec)
     ISR_Level level; \
     uint32_t val; \
     uint32_t mybits = bits; \
-    _ISR_Disable_without_giant(level); \
+    _ISR_Local_disable(level); \
     val = PPC_DEVICE_CONTROL_REGISTER(dcr); \
     val &= ~mybits; \
     PPC_SET_DEVICE_CONTROL_REGISTER(dcr, val); \
-    _ISR_Enable_without_giant(level); \
+    _ISR_Local_enable(level); \
   } while (0)
 
 static inline uint32_t ppc_time_base(void)

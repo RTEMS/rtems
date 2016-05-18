@@ -1381,7 +1381,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change(
 #if !defined(RTEMS_SMP)
   ISR_Level level;
 
-  _ISR_Disable_without_giant( level );
+  _ISR_Local_disable( level );
 #endif
 
   success = _Thread_Wait_flags_try_change_critical(
@@ -1391,7 +1391,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change(
   );
 
 #if !defined(RTEMS_SMP)
-  _ISR_Enable_without_giant( level );
+  _ISR_Local_enable( level );
 #endif
 
   return success;

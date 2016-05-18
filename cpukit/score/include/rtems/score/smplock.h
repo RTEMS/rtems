@@ -251,7 +251,7 @@ static inline void _SMP_lock_ISR_disable_and_acquire(
   SMP_lock_Context *context
 )
 {
-  _ISR_Disable_without_giant( context->isr_level );
+  _ISR_Local_disable( context->isr_level );
   _SMP_lock_Acquire( lock, context );
 }
 
@@ -274,7 +274,7 @@ static inline void _SMP_lock_Release_and_ISR_enable(
 )
 {
   _SMP_lock_Release( lock, context );
-  _ISR_Enable_without_giant( context->isr_level );
+  _ISR_Local_enable( context->isr_level );
 }
 #endif
 

@@ -89,7 +89,7 @@ void _SMP_lock_Release_and_ISR_enable(
   lock->owner = SMP_LOCK_NO_OWNER;
 #endif
   _SMP_lock_Release_body( lock, context );
-  _ISR_Enable_without_giant( context->isr_level );
+  _ISR_Local_enable( context->isr_level );
 }
 
 #if defined(RTEMS_DEBUG)

@@ -54,13 +54,13 @@ RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_is_enabled(void)
 #if defined(RTEMS_SMP)
   ISR_Level level;
 
-  _ISR_Disable_without_giant( level );
+  _ISR_Local_disable( level );
 #endif
 
   enabled = _Thread_Dispatch_disable_level == 0;
 
 #if defined(RTEMS_SMP)
-  _ISR_Enable_without_giant( level );
+  _ISR_Local_enable( level );
 #endif
 
   return enabled;
@@ -325,7 +325,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_enable( Per_CPU_Control *cpu_self )
   if ( disable_level == 1 ) {
     ISR_Level level;
 
-    _ISR_Disable_without_giant( level );
+    _ISR_Local_disable( level );
 
     if ( cpu_self->dispatch_necessary ) {
       _Thread_Do_dispatch( cpu_self, level );
@@ -334,7 +334,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_enable( Per_CPU_Control *cpu_self )
       _Profiling_Thread_dispatch_enable( cpu_self, 0 );
     }
 
-    _ISR_Enable_without_giant( level );
+    _ISR_Local_enable( level );
   } else {
     cpu_self->thread_dispatch_disable_level = disable_level - 1;
   }

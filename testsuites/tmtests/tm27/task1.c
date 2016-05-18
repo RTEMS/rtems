@@ -188,7 +188,7 @@ rtems_task Task_1(
    */
 
 #if defined(RTEMS_SMP)
-  _ISR_Disable_without_giant(level);
+  _ISR_Local_disable(level);
 #endif
 
   _Thread_Executing =
@@ -197,7 +197,7 @@ rtems_task Task_1(
   _Thread_Dispatch_necessary = 1;
 
 #if defined(RTEMS_SMP)
-  _ISR_Enable_without_giant(level);
+  _ISR_Local_enable(level);
 #endif
 
   Interrupt_occurred = 0;

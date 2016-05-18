@@ -47,7 +47,7 @@ static ISR_Level _SPARCV8_Acquire_the_one_lock( void )
 {
   ISR_Level level;
 
-  _ISR_Disable_without_giant( level );
+  _ISR_Local_disable( level );
 
 #if defined(RTEMS_SMP)
   do {
@@ -65,7 +65,7 @@ static void _SPARCV8_Release_the_one_lock( ISR_Level level )
 #if defined(RTEMS_SMP)
   _SPARCV8_The_one_lock = 0;
 #endif
-  _ISR_Enable_without_giant( level );
+  _ISR_Local_enable( level );
 }
 
 uint8_t __atomic_exchange_1( uint8_t *mem, uint8_t val, int model )

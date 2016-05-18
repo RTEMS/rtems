@@ -94,7 +94,7 @@ static void set_thread_dispatch_necessary( bool dispatch_necessary )
 #if defined( PREVENT_SMP_ASSERT_FAILURES )
   ISR_Level level;
 
-  _ISR_Disable_without_giant( level );
+  _ISR_Local_disable( level );
 #endif
 
   _Thread_Dispatch_necessary = dispatch_necessary;
@@ -104,7 +104,7 @@ static void set_thread_dispatch_necessary( bool dispatch_necessary )
   }
 
 #if defined( PREVENT_SMP_ASSERT_FAILURES )
-  _ISR_Enable_without_giant( level );
+  _ISR_Local_enable( level );
 #endif
 }
 
@@ -113,13 +113,13 @@ static void set_thread_heir( Thread_Control *thread )
 #if defined( PREVENT_SMP_ASSERT_FAILURES )
   ISR_Level level;
 
-  _ISR_Disable_without_giant( level );
+  _ISR_Local_disable( level );
 #endif
 
   _Thread_Heir = thread;
 
 #if defined( PREVENT_SMP_ASSERT_FAILURES )
-  _ISR_Enable_without_giant( level );
+  _ISR_Local_enable( level );
 #endif
 }
 
@@ -128,13 +128,13 @@ static void set_thread_executing( Thread_Control *thread )
 #if defined( PREVENT_SMP_ASSERT_FAILURES )
   ISR_Level level;
 
-  _ISR_Disable_without_giant( level );
+  _ISR_Local_disable( level );
 #endif
 
   _Thread_Executing = thread;
 
 #if defined( PREVENT_SMP_ASSERT_FAILURES )
-  _ISR_Enable_without_giant( level );
+  _ISR_Local_enable( level );
 #endif
 }
 

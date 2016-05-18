@@ -351,7 +351,7 @@ typedef struct {
 #if defined( RTEMS_SMP )
   #define _ISR_lock_ISR_disable( _context ) \
     do { \
-      _ISR_Disable_without_giant( ( _context )->Lock_context.isr_level ); \
+      _ISR_Local_disable( ( _context )->Lock_context.isr_level ); \
       _ISR_lock_ISR_disable_profile( _context ) \
     } while ( 0 )
 #else
@@ -374,7 +374,7 @@ typedef struct {
  */
 #if defined( RTEMS_SMP )
   #define _ISR_lock_ISR_enable( _context ) \
-    _ISR_Enable_without_giant( ( _context )->Lock_context.isr_level )
+    _ISR_Local_enable( ( _context )->Lock_context.isr_level )
 #else
   #define _ISR_lock_ISR_enable( _context ) \
     _ISR_Enable( ( _context )->isr_level )

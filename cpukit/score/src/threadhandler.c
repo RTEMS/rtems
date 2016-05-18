@@ -69,7 +69,7 @@ void _Thread_Handler( void )
    * Do not use the level of the thread control block, since it has a
    * different format.
    */
-  _ISR_Disable_without_giant( level );
+  _ISR_Local_disable( level );
 
   /*
    *  At this point, the dispatch disable level BETTER be 1.

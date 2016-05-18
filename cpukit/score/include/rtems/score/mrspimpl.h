@@ -251,9 +251,9 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
   if ( timeout > 0 ) {
     _Watchdog_Preinitialize( &rival.Watchdog, cpu_self );
     _Watchdog_Initialize( &rival.Watchdog, _MRSP_Timeout );
-    _ISR_Disable_without_giant( level );
+    _ISR_Local_disable( level );
     _Watchdog_Per_CPU_insert_relative( &rival.Watchdog, cpu_self, timeout );
-    _ISR_Enable_without_giant( level );
+    _ISR_Local_enable( level );
   }
 
   life_state = _Thread_Set_life_protection( THREAD_LIFE_PROTECTED );
@@ -269,13 +269,13 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
   _Thread_Set_life_protection( life_state );
 
   if ( timeout > 0 ) {
-    _ISR_Disable_without_giant( level );
+    _ISR_Local_disable( level );
     _Watchdog_Per_CPU_remove(
       &rival.Watchdog,
       cpu_self,
       &cpu_self->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ]
     );
-    _ISR_Enable_without_giant( level );
+    _ISR_Local_enable( level );
 
     if ( status == MRSP_TIMEOUT ) {
       _MRSP_Restore_priority( executing, initial_priority );

@@ -225,7 +225,7 @@ static void get_obtain_delay_estimate(test_context *ctx)
 
   _SMP_lock_Initialize(&lock, "test");
 
-  _ISR_Disable_without_giant(level);
+  _ISR_Local_disable(level);
 
   for (i = 0; i < n; ++i) {
     SMP_lock_Context lock_context;
@@ -240,7 +240,7 @@ static void get_obtain_delay_estimate(test_context *ctx)
     t[i] = rtems_counter_difference(b, a);
   }
 
-  _ISR_Enable_without_giant(level);
+  _ISR_Local_enable(level);
 
   _SMP_lock_Destroy(&lock);
 

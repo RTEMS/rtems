@@ -137,7 +137,7 @@ post_switch:
   cpu_self->thread_dispatch_disable_level = 0;
   _Profiling_Thread_dispatch_enable( cpu_self, 0 );
 
-  _ISR_Enable_without_giant( level );
+  _ISR_Local_enable( level );
 
   _Thread_Run_post_switch_actions( executing );
 }
@@ -147,7 +147,7 @@ void _Thread_Dispatch( void )
   ISR_Level        level;
   Per_CPU_Control *cpu_self;
 
-  _ISR_Disable_without_giant( level );
+  _ISR_Local_disable( level );
 
   cpu_self = _Per_CPU_Get();
 
@@ -156,6 +156,6 @@ void _Thread_Dispatch( void )
     cpu_self->thread_dispatch_disable_level = 1;
     _Thread_Do_dispatch( cpu_self, level );
   } else {
-    _ISR_Enable_without_giant( level );
+    _ISR_Local_enable( level );
   }
 }

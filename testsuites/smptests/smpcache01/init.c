@@ -158,11 +158,11 @@ static void call_tests_isr_disabled( size_t set_size,
   for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
     ISR_Level isr_level;
 
-    _ISR_Disable_without_giant( isr_level );
+    _ISR_Local_disable( isr_level );
 
     call_test( set_size, cpu_set, bs, i );
 
-    _ISR_Enable_without_giant( isr_level );
+    _ISR_Local_enable( isr_level );
   }
 }
 
