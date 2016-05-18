@@ -171,6 +171,47 @@ void _SMP_lock_Stats_destroy( SMP_lock_Stats *stats );
 
 void _SMP_lock_Stats_register( SMP_lock_Stats *stats );
 
+typedef struct {
+  CPU_Counter_ticks first;
+} SMP_lock_Stats_acquire_context;
+
+static inline void _SMP_lock_Stats_acquire_begin(
+  SMP_lock_Stats_acquire_context *acquire_context
+)
+{
+  acquire_context->first = _CPU_Counter_read();
+}
+
+static inline void _SMP_lock_Stats_acquire_end(
+  const SMP_lock_Stats_acquire_context *acquire_context,
+  SMP_lock_Stats                       *stats,
+  SMP_lock_Stats_context               *stats_context,
+  unsigned int                          queue_length
+)
+{
+  CPU_Counter_ticks second;
+  CPU_Counter_ticks delta;
+
+  second = _CPU_Counter_read();
+  stats_context->acquire_instant = second;
+  delta = _CPU_Counter_difference( second, acquire_context->first );
+
+  ++stats->usage_count;
+
+  stats->total_acquire_time += delta;
+
+  if ( stats->max_acquire_time < delta ) {
+    stats->max_acquire_time = delta;
+  }
+
+  if ( queue_length >= SMP_LOCK_STATS_CONTENTION_COUNTS ) {
+    queue_length = SMP_LOCK_STATS_CONTENTION_COUNTS - 1;
+  }
+  ++stats->contention_counts[ queue_length ];
+
+  stats_context->stats = stats;
+}
+
 /**
  * @brief Updates an SMP lock statistics block during a lock release.
  *

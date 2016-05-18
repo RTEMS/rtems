@@ -82,21 +82,18 @@ static inline void _SMP_ticket_lock_Do_acquire(
   SMP_ticket_lock_Control *lock
 #if defined(RTEMS_PROFILING)
   ,
-  SMP_lock_Stats *stats,
-  SMP_lock_Stats_context *stats_context
+  SMP_lock_Stats          *stats,
+  SMP_lock_Stats_context  *stats_context
 #endif
 )
 {
-  unsigned int my_ticket;
-  unsigned int now_serving;
-
+  unsigned int                   my_ticket;
+  unsigned int                   now_serving;
 #if defined(RTEMS_PROFILING)
-  CPU_Counter_ticks first;
-  CPU_Counter_ticks second;
-  CPU_Counter_ticks delta;
-  unsigned int initial_queue_length;
+  unsigned int                   initial_queue_length;
+  SMP_lock_Stats_acquire_context acquire_context;
 
-  first = _CPU_Counter_read();
+  _SMP_lock_Stats_acquire_begin( &acquire_context );
 #endif
 
   my_ticket =
@@ -118,24 +115,12 @@ static inline void _SMP_ticket_lock_Do_acquire(
 #if defined(RTEMS_PROFILING)
   }
 
-  second = _CPU_Counter_read();
-  stats_context->acquire_instant = second;
-  delta = _CPU_Counter_difference( second, first );
-
-  ++stats->usage_count;
-
-  stats->total_acquire_time += delta;
-
-  if ( stats->max_acquire_time < delta ) {
-    stats->max_acquire_time = delta;
-  }
-
-  if ( initial_queue_length >= SMP_LOCK_STATS_CONTENTION_COUNTS ) {
-    initial_queue_length = SMP_LOCK_STATS_CONTENTION_COUNTS - 1;
-  }
-  ++stats->contention_counts[initial_queue_length];
-
-  stats_context->stats = stats;
+  _SMP_lock_Stats_acquire_end(
+    &acquire_context,
+    stats,
+    stats_context,
+    initial_queue_length
+  );
 #endif
 }
 
