@@ -1,8 +1,6 @@
-*** POSIX TEST UALARM ***
+*** BEGIN OF TEST PSXUALARM ***
 Init's ID is 0x0b010001
-Init: ualarm in 1 us
+Init: ualarm in 500000 us
 Init: Unblock SIGALRM
-Signal: 14 caught by 0xb010001 (1)
-Signal: 14 caught by 0xb010001 (2)
-Init: clear ualarm with 0,0
-*** END OF POSIX TEST UALARM ***
+Init: clear ualarm with 0, 0
+*** END OF TEST PSXUALARM ***

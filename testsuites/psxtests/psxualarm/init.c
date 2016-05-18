@@ -20,19 +20,14 @@
 
 const char rtems_test_name[] = "PSXUALARM";
 
-volatile int Signal_count;
+static volatile int Signal_count;
 
 static void Signal_handler(
   int signo
 )
 {
-  Signal_count++;
-  printf(
-    "Signal: %d caught by 0x%" PRIxpthread_t " (%d)\n",
-    signo,
-    pthread_self(),
-    Signal_count
-  );
+  rtems_test_assert( signo == SIGALRM );
+  ++Signal_count;
 }
 
 void *POSIX_Init(
