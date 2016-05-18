@@ -552,7 +552,7 @@ void complete_test( void )
   );
 
   put_time(
-    "rtems interrupt: _ISR_Flash",
+    "rtems interrupt: _ISR_Local_flash",
     isr_flash_time,
     1,
     0,

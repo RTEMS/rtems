@@ -63,7 +63,7 @@ void rtems_interrupt_flash(
   rtems_interrupt_level previous_level
 )
 {
-  _ISR_Flash( previous_level );
+  _ISR_Local_flash( previous_level );
 }
 
 #endif /* RTEMS_SMP */

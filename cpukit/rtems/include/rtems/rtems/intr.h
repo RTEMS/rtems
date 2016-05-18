@@ -123,7 +123,7 @@ rtems_status_code rtems_interrupt_catch(
  *  available on all configurations.
  */
 #define rtems_interrupt_flash( _isr_cookie ) \
-    _ISR_Flash(_isr_cookie)
+    _ISR_Local_flash(_isr_cookie)
 
 #endif /* RTEMS_SMP */
 

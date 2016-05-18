@@ -97,7 +97,7 @@ typedef uint32_t   ISR_Level;
  *  @param[in] _level The interrupt level previously obtained by
  *  _ISR_Local_disable().
  */
-#define _ISR_Flash( _level ) \
+#define _ISR_Local_flash( _level ) \
   do { \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
     _CPU_ISR_Flash( _level ); \

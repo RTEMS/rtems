@@ -303,7 +303,7 @@ typedef struct {
 /**
  * @brief Flashes an ISR lock.
  *
- * On uni-processor configurations this a simple _ISR_Flash().  On SMP
+ * On uni-processor configurations this a simple _ISR_Local_flash().  On SMP
  * configurations this function releases an SMP lock, restores the interrupt
  * status, then disables interrupts and acquires the SMP lock again.
  *
@@ -328,7 +328,7 @@ typedef struct {
     )
 #else
   #define _ISR_lock_Flash( _lock, _context ) \
-    _ISR_Flash( ( _context )->isr_level )
+    _ISR_Local_flash( ( _context )->isr_level )
 #endif
 
 #if defined( RTEMS_PROFILING )
