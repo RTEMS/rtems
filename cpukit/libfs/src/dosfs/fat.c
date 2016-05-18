@@ -430,11 +430,13 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     /*
      * "bytes per cluster" value greater than 32K is invalid
      */
-    if ((vol->bpc = vol->bps << vol->spc_log2) > MS_BYTES_PER_CLUSTER_LIMIT)
+    if (vol->bps > (MS_BYTES_PER_CLUSTER_LIMIT >> vol->spc_log2))
     {
         rtems_disk_release(vol->dd);
         rtems_set_errno_and_return_minus_one(EINVAL);
     }
+
+    vol->bpc = vol->bps << vol->spc_log2;
 
     for (vol->bpc_log2 = 0, i = vol->bpc; (i & 1) == 0;
          i >>= 1, vol->bpc_log2++);
