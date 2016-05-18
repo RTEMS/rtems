@@ -130,6 +130,7 @@ include_rtems_score_HEADERS += include/rtems/score/schedulerpriorityaffinitysmp.
 include_rtems_score_HEADERS += include/rtems/score/schedulersimplesmp.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerstrongapa.h
 include_rtems_score_HEADERS += include/rtems/score/smplockstats.h
+include_rtems_score_HEADERS += include/rtems/score/smplockticket.h
 endif
 
 ## src
