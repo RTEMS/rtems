@@ -358,6 +358,37 @@ arm_cp15_set_translation_table_base(uint32_t *base)
   );
 }
 
+/* Translation Table Base Control Register - DDI0301H arm1176jzfs TRM 3.2.15 */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+*arm_cp15_get_translation_table_base_control_register(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t ttb_cr;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[ttb_cr], c2, c0, 2\n"
+    ARM_SWITCH_BACK
+    : [ttb_cr] "=&r" (ttb_cr) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return ttb_cr;
+}
+
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_translation_table_base_control_register(uint32_t ttb_cr)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[ttb_cr], c2, c0, 2\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [ttb_cr] "r" (ttb_cr)
+  );
+}
+
 ARM_CP15_TEXT_SECTION static inline uint32_t
 arm_cp15_get_domain_access_control(void)
 {
@@ -851,6 +882,23 @@ arm_cp15_branch_predictor_invalidate_all(void)
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mcr p15, 0, %[sbz], c7, c5, 6\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [sbz] "r" (sbz)
+    : "memory"
+  );
+}
+
+/* Flush Prefetch Buffer - DDI0301H arm1176jzfs TRM 3.2.22 */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_flush_prefetch_buffer(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t sbz = 0;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[sbz], c7, c5, 4\n"
     ARM_SWITCH_BACK
     : ARM_SWITCH_OUTPUT
     : [sbz] "r" (sbz)
