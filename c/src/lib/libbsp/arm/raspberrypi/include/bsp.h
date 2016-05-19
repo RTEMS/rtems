@@ -7,6 +7,7 @@
  */
 
 /*
+ * Copyright (c) 2015 Yang Qiao
  * Copyright (c) 2013 Alan Cudmore
  *
  *  The license and distribution terms for this file may be
@@ -34,6 +35,11 @@ extern "C" {
 #define BSP_GPIO_PIN_COUNT 32
 #define BSP_GPIO_PINS_PER_BANK 32
 #define BSP_GPIO_PINS_PER_SELECT_BANK 10
+
+void rpi_init_cmdline(void);
+const char *rpi_cmdline_get_cached(void);
+const char *rpi_cmdline_get_raw(void);
+const char *rpi_cmdline_get_arg(const char* arg);
 
 #ifdef __cplusplus
 }

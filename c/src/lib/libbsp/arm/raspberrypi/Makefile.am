@@ -95,6 +95,7 @@ libbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 # Startup
 libbsp_a_SOURCES += ../../shared/bspreset_loop.c
 libbsp_a_SOURCES += startup/bspstart.c
+libbsp_a_SOURCES += startup/cmdline.c
 
 # IRQ
 libbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
