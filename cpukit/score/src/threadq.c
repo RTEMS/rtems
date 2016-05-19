@@ -58,27 +58,6 @@ RTEMS_STATIC_ASSERT(
 
 #endif /* HAVE_STRUCT__THREAD_QUEUE_QUEUE */
 
-RBTree_Compare_result _Thread_queue_Compare_priority(
-  const RBTree_Node *left,
-  const RBTree_Node *right
-)
-{
-  const Thread_Control *left_thread;
-  const Thread_Control *right_thread;
-  Priority_Control      left_prio;
-  Priority_Control      right_prio;
-
-  left_thread = THREAD_RBTREE_NODE_TO_THREAD( left );
-  right_thread = THREAD_RBTREE_NODE_TO_THREAD( right );
-  left_prio = left_thread->current_priority;
-  right_prio = right_thread->current_priority;
-
-  /*
-   * SuperCore priorities use lower numbers to indicate greater importance.
-   */
-  return ( left_prio > right_prio ) - ( left_prio < right_prio );
-}
-
 void _Thread_queue_Initialize( Thread_queue_Control *the_thread_queue )
 {
   _Thread_queue_Queue_initialize( &the_thread_queue->Queue );

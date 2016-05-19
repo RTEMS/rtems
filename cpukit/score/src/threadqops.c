@@ -167,6 +167,20 @@ static Thread_queue_Priority_queue *_Thread_queue_Priority_queue(
 #endif
 }
 
+static bool _Thread_queue_Priority_less(
+  const void        *left,
+  const RBTree_Node *right
+)
+{
+  const Priority_Control *the_left;
+  const Thread_Control   *the_right;
+
+  the_left = left;
+  the_right = THREAD_RBTREE_NODE_TO_THREAD( right );
+
+  return *the_left < the_right->current_priority;
+}
+
 static void _Thread_queue_Priority_priority_change(
   Thread_Control     *the_thread,
   Priority_Control    new_priority,
@@ -184,11 +198,11 @@ static void _Thread_queue_Priority_priority_change(
     &priority_queue->Queue,
     &the_thread->Wait.Node.RBTree
   );
-  _RBTree_Insert(
+  _RBTree_Insert_inline(
     &priority_queue->Queue,
     &the_thread->Wait.Node.RBTree,
-    _Thread_queue_Compare_priority,
-    false
+    &new_priority,
+    _Thread_queue_Priority_less
   );
 }
 
@@ -210,6 +224,7 @@ static void _Thread_queue_Priority_do_enqueue(
 {
   Thread_queue_Priority_queue *priority_queue =
     _Thread_queue_Priority_queue( heads, the_thread );
+  Priority_Control current_priority;
 
 #if defined(RTEMS_SMP)
   if ( _RBTree_Is_empty( &priority_queue->Queue ) ) {
@@ -217,11 +232,12 @@ static void _Thread_queue_Priority_do_enqueue(
   }
 #endif
 
-  _RBTree_Insert(
+  current_priority = the_thread->current_priority;
+  _RBTree_Insert_inline(
     &priority_queue->Queue,
     &the_thread->Wait.Node.RBTree,
-    _Thread_queue_Compare_priority,
-    false
+    &current_priority,
+    _Thread_queue_Priority_less
   );
 }
 

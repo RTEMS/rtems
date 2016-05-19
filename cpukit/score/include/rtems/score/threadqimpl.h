@@ -826,21 +826,6 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Boost_priority(
 }
 #endif
 
-/**
- * @brief Compare two thread's priority for RBTree Insertion.
- *
- * @param[in] left points to the left thread's RBnode
- * @param[in] right points to the right thread's RBnode
- *
- * @retval 1 The @a left node is more important than @a right node.
- * @retval 0 The @a left node is of equal importance with @a right node.
- * @retval 1 The @a left node is less important than @a right node.
- */
-RBTree_Compare_result _Thread_queue_Compare_priority(
-  const RBTree_Node *left,
-  const RBTree_Node *right
-);
-
 #if defined(RTEMS_MULTIPROCESSING)
 void _Thread_queue_MP_callout_do_nothing(
   Thread_Control *the_proxy,
