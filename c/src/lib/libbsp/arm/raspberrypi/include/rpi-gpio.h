@@ -26,7 +26,7 @@ extern "C" {
 /**
  * @brief  Raspberry Pi GPIO functions.
  */
-#define RPI_DIGITAL_IN  7
+#define RPI_DIGITAL_IN  0
 #define RPI_DIGITAL_OUT 1
 #define RPI_ALT_FUNC_0  4
 #define RPI_ALT_FUNC_1  5
@@ -34,6 +34,7 @@ extern "C" {
 #define RPI_ALT_FUNC_3  7
 #define RPI_ALT_FUNC_4  3
 #define RPI_ALT_FUNC_5  2
+#define RPI_ALT_FUNC_MASK 7
 
 /**
  * @brief Setups a JTAG interface.

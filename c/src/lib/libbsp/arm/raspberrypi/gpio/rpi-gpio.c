@@ -52,15 +52,15 @@ static rtems_status_code rpi_select_pin_function(
   uint32_t type
 ) {
   /* Calculate the pin function select register address. */
-  volatile unsigned int *pin_addr = (unsigned int *) BCM2835_GPIO_REGS_BASE +
-                                    (pin / 10);
+  volatile uint32_t *pin_addr = (uint32_t *) BCM2835_GPIO_REGS_BASE +
+                                             (pin / 10);
+  uint32_t reg_old;
+  uint32_t reg_new;
 
-  if ( type == RPI_DIGITAL_IN ) {
-    *(pin_addr) &= ~SELECT_PIN_FUNCTION(RPI_DIGITAL_IN, pin);
-  }
-  else {
-    *(pin_addr) |= SELECT_PIN_FUNCTION(type, pin);
-  }
+  reg_new = reg_old = *pin_addr;
+  reg_new &= ~SELECT_PIN_FUNCTION(RPI_ALT_FUNC_MASK, pin);
+  reg_new |= SELECT_PIN_FUNCTION(type, pin);
+  *pin_addr = reg_new;
 
   return RTEMS_SUCCESSFUL;
 }
