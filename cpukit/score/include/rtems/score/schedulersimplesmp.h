@@ -54,6 +54,8 @@ typedef struct {
   Chain_Control         Ready;
 } Scheduler_simple_SMP_Context;
 
+#define SCHEDULER_SIMPLE_SMP_MAXIMUM_PRIORITY 255
+
 /**
  * @brief Entry points for the Simple SMP Scheduler.
  */

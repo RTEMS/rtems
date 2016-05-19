@@ -39,6 +39,8 @@ extern "C" {
  */
 /**@{*/
 
+#define SCHEDULER_CBS_MAXIMUM_PRIORITY SCHEDULER_EDF_MAXIMUM_PRIORITY
+
 /**
  *  Entry points for the Constant Bandwidth Server Scheduler.
  *

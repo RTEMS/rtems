@@ -38,6 +38,7 @@
 #define _RTEMS_RTEMS_TASKS_H
 
 #include <rtems/score/object.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/thread.h>
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/event.h>

@@ -201,6 +201,14 @@ struct Scheduler_Control {
   Scheduler_Operations Operations;
 
   /**
+   * @brief The maximum priority value of this scheduler.
+   *
+   * It defines the lowest (least important) thread priority for this
+   * scheduler.  For example the idle threads have this priority.
+   */
+  Priority_Control maximum_priority;
+
+  /**
    * @brief The scheduler name.
    */
   uint32_t name;
@@ -554,6 +562,12 @@ void _Scheduler_default_Start_idle(
 #else
   #define SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY
 #endif
+
+/**
+ * @brief This defines the lowest (least important) thread priority of the
+ * first scheduler instance.
+ */
+#define PRIORITY_MAXIMUM ( _Scheduler_Table[ 0 ].maximum_priority )
 
 /**@}*/
 

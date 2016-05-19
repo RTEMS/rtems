@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -70,6 +70,7 @@
     { \
       &RTEMS_SCHEDULER_CONTEXT_CBS_NAME( name ).Base, \
       SCHEDULER_CBS_ENTRY_POINTS, \
+      SCHEDULER_CBS_MAXIMUM_PRIORITY, \
       ( obj_name ) \
     }
 #endif
@@ -87,6 +88,7 @@
     { \
       &RTEMS_SCHEDULER_CONTEXT_EDF_NAME( name ).Base, \
       SCHEDULER_EDF_ENTRY_POINTS, \
+      SCHEDULER_EDF_MAXIMUM_PRIORITY, \
       ( obj_name ) \
     }
 #endif
@@ -107,6 +109,9 @@
     { \
       &RTEMS_SCHEDULER_CONTEXT_PRIORITY_NAME( name ).Base.Base, \
       SCHEDULER_PRIORITY_ENTRY_POINTS, \
+      RTEMS_ARRAY_SIZE( \
+        RTEMS_SCHEDULER_CONTEXT_PRIORITY_NAME( name ).Ready \
+      ) - 1, \
       ( obj_name ) \
     }
 #endif
@@ -127,6 +132,9 @@
     { \
       &RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP_NAME( name ).Base.Base.Base, \
       SCHEDULER_PRIORITY_AFFINITY_SMP_ENTRY_POINTS, \
+      RTEMS_ARRAY_SIZE( \
+        RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP_NAME( name ).Ready \
+      ) - 1, \
       ( obj_name ) \
     }
 #endif
@@ -147,6 +155,9 @@
     { \
       &RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP_NAME( name ).Base.Base.Base, \
       SCHEDULER_PRIORITY_SMP_ENTRY_POINTS, \
+      RTEMS_ARRAY_SIZE( \
+        RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP_NAME( name ).Ready \
+      ) - 1, \
       ( obj_name ) \
     }
 #endif
@@ -167,6 +178,9 @@
     { \
       &RTEMS_SCHEDULER_CONTEXT_STRONG_APA_NAME( name ).Base.Base.Base, \
       SCHEDULER_STRONG_APA_ENTRY_POINTS, \
+      RTEMS_ARRAY_SIZE( \
+        RTEMS_SCHEDULER_CONTEXT_STRONG_APA_NAME( name ).Ready \
+      ) - 1, \
       ( obj_name ) \
     }
 #endif
@@ -185,6 +199,7 @@
     { \
       &RTEMS_SCHEDULER_CONTEXT_SIMPLE_NAME( name ).Base, \
       SCHEDULER_SIMPLE_ENTRY_POINTS, \
+      SCHEDULER_SIMPLE_MAXIMUM_PRIORITY, \
       ( obj_name ) \
     }
 #endif
@@ -203,6 +218,7 @@
     { \
       &RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP_NAME( name ).Base.Base, \
       SCHEDULER_SIMPLE_SMP_ENTRY_POINTS, \
+      SCHEDULER_SIMPLE_SMP_MAXIMUM_PRIORITY, \
       ( obj_name ) \
     }
 #endif

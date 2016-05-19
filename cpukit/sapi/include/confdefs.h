@@ -883,6 +883,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
         CONFIGURE_MAXIMUM_PRIORITY + 1 \
       )
 
+    /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_CONTROLS \
       RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP( \
         dflt, \
@@ -3348,18 +3349,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
    */
   uint32_t rtems_minimum_stack_size =
     CONFIGURE_MINIMUM_TASK_STACK_SIZE;
-
-  /**
-   * This variable specifies the maximum priority value that
-   * a task may have.  This must be a power of 2 between 4
-   * and 256 and is specified in terms of Classic API
-   * priority values.
-   *
-   * NOTE: This is left as a simple uint8_t so it can be externed as
-   *       needed without requring being high enough logical to
-   *       include the full configuration table.
-   */
-  uint8_t rtems_maximum_priority = CONFIGURE_MAXIMUM_PRIORITY;
 
   /**
    * This is the primary Configuration Table for this application.

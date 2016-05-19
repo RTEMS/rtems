@@ -19,7 +19,7 @@
 #ifndef _RTEMS_POSIX_PRIORITYIMPL_H
 #define _RTEMS_POSIX_PRIORITYIMPL_H
 
-#include <rtems/score/priority.h>
+#include <rtems/score/scheduler.h>
 
 #ifdef __cplusplus
 extern "C" {

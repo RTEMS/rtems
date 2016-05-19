@@ -35,6 +35,8 @@ extern "C" {
  */
 /**@{*/
 
+#define SCHEDULER_EDF_MAXIMUM_PRIORITY 255
+
 /**
  *  Entry points for the Earliest Deadline First Scheduler.
  */

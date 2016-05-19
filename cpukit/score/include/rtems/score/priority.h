@@ -72,14 +72,6 @@ typedef uint32_t   Priority_Control;
   #define PRIORITY_DEFAULT_MAXIMUM      255
 #endif
 
-/** This defines the lowest (least important) thread priority. */
-#define PRIORITY_MAXIMUM      rtems_maximum_priority
-
-/**
- *  This variable contains the configured number of priorities
- */
-extern uint8_t rtems_maximum_priority;
-
 #ifdef __cplusplus
 }
 #endif

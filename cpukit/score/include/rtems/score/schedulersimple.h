@@ -32,6 +32,8 @@ extern "C" {
  */
 /**@{*/
 
+#define SCHEDULER_SIMPLE_MAXIMUM_PRIORITY 255
+
 /**
  *  Entry points for Scheduler Simple
  */
