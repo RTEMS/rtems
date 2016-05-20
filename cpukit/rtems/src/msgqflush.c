@@ -18,79 +18,36 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/coremsgimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/messageimpl.h>
-#include <rtems/rtems/options.h>
-#include <rtems/rtems/support.h>
-
-/*
- *  rtems_message_queue_flush
- *
- *  This directive removes all pending messages from a queue and returns
- *  the number of messages removed.  If no messages were present then
- *  a count of zero is returned.
- *
- *  Input parameters:
- *    id    - queue id
- *    count - return area for count
- *
- *  Output parameters:
- *    count             - number of messages removed ( 0 = empty queue )
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_message_queue_flush(
   rtems_id  id,
   uint32_t *count
 )
 {
-  Message_queue_Control          *the_message_queue;
-  Objects_Locations               location;
-  ISR_lock_Context                lock_context;
+  Message_queue_Control *the_message_queue;
+  ISR_lock_Context       lock_context;
 
-  if ( !count )
+  if ( count == NULL ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
   the_message_queue = _Message_queue_Get_interrupt_disable(
     id,
-    &location,
     &lock_context
   );
-  switch ( location ) {
 
-    case OBJECTS_LOCAL:
-      *count = _CORE_message_queue_Flush(
-        &the_message_queue->message_queue,
-        &lock_context
-      );
-      return RTEMS_SUCCESSFUL;
-
+  if ( the_message_queue == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Thread_Executing->Wait.return_argument = count;
-
-      return
-        _Message_queue_MP_Send_request_packet(
-          MESSAGE_QUEUE_MP_FLUSH_REQUEST,
-          id,
-          0,                               /* buffer not used */
-          0,                               /* size */
-          0,                               /* option_set not used */
-          MPCI_DEFAULT_TIMEOUT
-        );
+    _Message_queue_MP_Flush( id, count );
+#else
+    return RTEMS_INVALID_ID;
 #endif
-
-    case OBJECTS_ERROR:
-      break;
   }
 
-  return RTEMS_INVALID_ID;
+  *count = _CORE_message_queue_Flush(
+    &the_message_queue->message_queue,
+    &lock_context
+  );
+  return RTEMS_SUCCESSFUL;
 }

@@ -104,15 +104,13 @@ RTEMS_INLINE_ROUTINE void _Message_queue_Free (
 RTEMS_INLINE_ROUTINE Message_queue_Control *
 _Message_queue_Get_interrupt_disable(
   Objects_Id         id,
-  Objects_Locations *location,
   ISR_lock_Context  *lock_context
 )
 {
-  return (Message_queue_Control *) _Objects_Get_isr_disable(
-    &_Message_queue_Information,
+  return (Message_queue_Control *) _Objects_Get_local(
     id,
-    location,
-    lock_context
+    lock_context,
+    &_Message_queue_Information
   );
 }
 

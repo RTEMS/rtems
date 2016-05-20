@@ -79,6 +79,11 @@ typedef struct {
 #define MESSAGE_QUEUE_MP_PACKET_SIZE \
   offsetof(Message_queue_MP_Packet, Buffer.buffer)
 
+RTEMS_INLINE_ROUTINE bool _Message_queue_MP_Is_remote( Objects_Id id )
+{
+  return _Objects_MP_Is_remote( id, &_Message_queue_Information );
+}
+
 /**
  *  @brief Message_queue_Core_message_queue_mp_support
  *
@@ -107,18 +112,58 @@ void _Message_queue_MP_Send_process_packet (
 );
 
 /**
- *  @brief _Message_queue_MP_Send_request_packet
- *
- *  This routine performs a remote procedure call so that a
- *  directive operation can be initiated on another node.
+ * @brief Issues a remote rtems_message_queue_broadcast() request.
  */
-rtems_status_code _Message_queue_MP_Send_request_packet (
-  Message_queue_MP_Remote_operations  operation,
-  Objects_Id                          message_queue_id,
-  const void                         *buffer,
-  size_t                             *size_p,
-  rtems_option                        option_set,
-  rtems_interval                      timeout
+rtems_status_code _Message_queue_MP_Broadcast(
+  rtems_id    id,
+  const void *buffer,
+  size_t      size,
+  uint32_t   *count
+);
+
+/**
+ * @brief Issues a remote rtems_message_queue_flush() request.
+ */
+rtems_status_code _Message_queue_MP_Flush(
+  rtems_id  id,
+  uint32_t *count
+);
+
+/**
+ * @brief Issues a remote rtems_message_queue_get_number_pending() request.
+ */
+rtems_status_code _Message_queue_MP_Get_number_pending(
+  rtems_id  id,
+  uint32_t *count
+);
+
+/**
+ * @brief Issues a remote rtems_message_queue_receive() request.
+ */
+rtems_status_code _Message_queue_MP_Receive(
+  rtems_id        id,
+  void           *buffer,
+  size_t         *size,
+  rtems_option    option_set,
+  rtems_interval  timeout
+);
+
+/**
+ * @brief Issues a remote rtems_message_queue_send() request.
+ */
+rtems_status_code _Message_queue_MP_Send(
+  rtems_id    id,
+  const void *buffer,
+  size_t      size
+);
+
+/**
+ * @brief Issues a remote rtems_message_queue_urgent() request.
+ */
+rtems_status_code _Message_queue_MP_Urgent(
+  rtems_id    id,
+  const void *buffer,
+  size_t      size
 );
 
 /**

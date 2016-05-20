@@ -95,16 +95,20 @@ void _Message_queue_MP_Send_process_packet (
  *
  */
 
-rtems_status_code _Message_queue_MP_Send_request_packet (
-  Message_queue_MP_Remote_operations  operation,
+static rtems_status_code _Message_queue_MP_Send_request_packet (
   Objects_Id                          message_queue_id,
   const void                         *buffer,
   size_t                             *size_p,
   rtems_option                        option_set,
-  rtems_interval                      timeout
+  rtems_interval                      timeout,
+  Message_queue_MP_Remote_operations  operation
 )
 {
   Message_queue_MP_Packet *the_packet;
+
+  if ( !_Message_queue_MP_Is_remote( message_queue_id ) ) {
+    return RTEMS_INVALID_ID;
+  }
 
   switch ( operation ) {
 
@@ -198,6 +202,106 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
   }
 
   return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code _Message_queue_MP_Broadcast(
+  rtems_id    id,
+  const void *buffer,
+  size_t      size,
+  uint32_t   *count
+)
+{
+  _Thread_Get_executing()->Wait.return_argument = count;
+  return _Message_queue_MP_Send_request_packet(
+    id,
+    buffer,
+    &size,
+    0,
+    MPCI_DEFAULT_TIMEOUT,
+    MESSAGE_QUEUE_MP_BROADCAST_REQUEST
+  );
+}
+
+rtems_status_code _Message_queue_MP_Flush(
+  rtems_id  id,
+  uint32_t *count
+)
+{
+  _Thread_Get_executing()->Wait.return_argument = count;
+  return _Message_queue_MP_Send_request_packet(
+    id,
+    NULL,
+    NULL,
+    0,
+    MPCI_DEFAULT_TIMEOUT,
+    MESSAGE_QUEUE_MP_FLUSH_REQUEST
+  );
+}
+
+rtems_status_code _Message_queue_MP_Get_number_pending(
+  rtems_id  id,
+  uint32_t *count
+)
+{
+  _Thread_Get_executing()->Wait.return_argument = count;
+  return _Message_queue_MP_Send_request_packet(
+    id,
+    NULL,
+    NULL,
+    0,
+    MPCI_DEFAULT_TIMEOUT,
+    MESSAGE_QUEUE_MP_GET_NUMBER_PENDING_REQUEST
+  );
+}
+
+rtems_status_code _Message_queue_MP_Receive(
+  rtems_id        id,
+  void           *buffer,
+  size_t         *size,
+  rtems_option    option_set,
+  rtems_interval  timeout
+)
+{
+  return _Message_queue_MP_Send_request_packet(
+    id,
+    buffer,
+    size,
+    option_set,
+    timeout,
+    MESSAGE_QUEUE_MP_RECEIVE_REQUEST
+  );
+}
+
+rtems_status_code _Message_queue_MP_Send(
+  rtems_id    id,
+  const void *buffer,
+  size_t      size
+)
+{
+  return _Message_queue_MP_Send_request_packet(
+    id,
+    buffer,
+    &size,
+    0,
+    MPCI_DEFAULT_TIMEOUT,
+    MESSAGE_QUEUE_MP_SEND_REQUEST
+  );
+}
+
+rtems_status_code _Message_queue_MP_Urgent(
+  rtems_id    id,
+  const void *buffer,
+  size_t      size
+)
+{
+  return _Message_queue_MP_Send_request_packet(
+    id,
+    buffer,
+    &size,
+    0,
+    MPCI_DEFAULT_TIMEOUT,
+    MESSAGE_QUEUE_MP_URGENT_REQUEST
+  );
 }
 
 /*

@@ -25,64 +25,55 @@ rtems_status_code rtems_message_queue_delete(
   rtems_id id
 )
 {
-  Message_queue_Control          *the_message_queue;
-  Objects_Locations               location;
-  ISR_lock_Context                lock_context;
+  Message_queue_Control *the_message_queue;
+  ISR_lock_Context       lock_context;
 
   _Objects_Allocator_lock();
-  the_message_queue = _Message_queue_Get_interrupt_disable(
-    id,
-    &location,
-    &lock_context
-  );
-  switch ( location ) {
+  the_message_queue = _Message_queue_Get_interrupt_disable( id, &lock_context );
 
-    case OBJECTS_LOCAL:
-      _CORE_message_queue_Acquire_critical(
-        &the_message_queue->message_queue,
-        &lock_context
-      );
-
-      _Objects_Close( &_Message_queue_Information,
-                      &the_message_queue->Object );
-
-      _CORE_message_queue_Close(
-        &the_message_queue->message_queue,
-        _Message_queue_MP_Send_object_was_deleted,
-        id,
-        &lock_context
-      );
+  if ( the_message_queue == NULL ) {
+    _Objects_Allocator_unlock();
 
 #if defined(RTEMS_MULTIPROCESSING)
-      if ( _Attributes_Is_global( the_message_queue->attribute_set ) ) {
-        _Objects_MP_Close(
-          &_Message_queue_Information,
-          the_message_queue->Object.id
-        );
-
-        _Message_queue_MP_Send_process_packet(
-          MESSAGE_QUEUE_MP_ANNOUNCE_DELETE,
-          the_message_queue->Object.id,
-          0,                                 /* Not used */
-          0
-        );
-      }
-#endif
-      _Message_queue_Free( the_message_queue );
-      _Objects_Allocator_unlock();
-      return RTEMS_SUCCESSFUL;
-
-#if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Objects_Allocator_unlock();
+    if ( _Message_queue_MP_Is_remote( id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+    }
 #endif
 
-    case OBJECTS_ERROR:
-      break;
+    return RTEMS_INVALID_ID;
   }
 
-  _Objects_Allocator_unlock();
+  _CORE_message_queue_Acquire_critical(
+    &the_message_queue->message_queue,
+    &lock_context
+  );
 
-  return RTEMS_INVALID_ID;
+  _Objects_Close( &_Message_queue_Information, &the_message_queue->Object );
+
+  _CORE_message_queue_Close(
+    &the_message_queue->message_queue,
+    _Message_queue_MP_Send_object_was_deleted,
+    id,
+    &lock_context
+  );
+
+#if defined(RTEMS_MULTIPROCESSING)
+  if ( _Attributes_Is_global( the_message_queue->attribute_set ) ) {
+    _Objects_MP_Close(
+      &_Message_queue_Information,
+      the_message_queue->Object.id
+    );
+
+    _Message_queue_MP_Send_process_packet(
+      MESSAGE_QUEUE_MP_ANNOUNCE_DELETE,
+      the_message_queue->Object.id,
+      0,                         /* Not used */
+      0
+    );
+  }
+#endif
+
+  _Message_queue_Free( the_message_queue );
+  _Objects_Allocator_unlock();
+  return RTEMS_SUCCESSFUL;
 }
