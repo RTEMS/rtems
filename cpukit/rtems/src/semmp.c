@@ -72,11 +72,11 @@ void _Semaphore_MP_Send_process_packet (
   }
 }
 
-rtems_status_code _Semaphore_MP_Send_request_packet (
-  Semaphore_MP_Remote_operations operation,
+static rtems_status_code _Semaphore_MP_Send_request_packet(
   Objects_Id                     semaphore_id,
   rtems_option                   option_set,
-  rtems_interval                 timeout
+  rtems_interval                 timeout,
+  Semaphore_MP_Remote_operations operation
 )
 {
   Semaphore_MP_Packet *the_packet;
@@ -118,6 +118,30 @@ rtems_status_code _Semaphore_MP_Send_request_packet (
    *  produce warnings when a function does not end with a return.
    */
   return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code _Semaphore_MP_Obtain(
+  rtems_id        id,
+  rtems_option    option_set,
+  rtems_interval  timeout
+)
+{
+  return _Semaphore_MP_Send_request_packet(
+    id,
+    option_set,
+    timeout,
+    SEMAPHORE_MP_OBTAIN_REQUEST
+  );
+}
+
+rtems_status_code _Semaphore_MP_Release( rtems_id id )
+{
+  return _Semaphore_MP_Send_request_packet(
+    id,
+    0,
+    MPCI_DEFAULT_TIMEOUT,
+    SEMAPHORE_MP_RELEASE_REQUEST
+  );
 }
 
 static void _Semaphore_MP_Send_response_packet (

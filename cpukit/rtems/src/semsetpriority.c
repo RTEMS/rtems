@@ -88,7 +88,6 @@ rtems_status_code rtems_semaphore_set_priority(
 )
 {
   Semaphore_Control *the_semaphore;
-  Objects_Locations  location;
   ISR_lock_Context   lock_context;
 
   if ( new_priority != RTEMS_CURRENT_PRIORITY &&
@@ -106,25 +105,24 @@ rtems_status_code rtems_semaphore_set_priority(
 
   the_semaphore = _Semaphore_Get_interrupt_disable(
     semaphore_id,
-    &location,
     &lock_context
   );
-  switch ( location ) {
-    case OBJECTS_LOCAL:
-      return _Semaphore_Set_priority(
-        the_semaphore,
-        scheduler_id,
-        new_priority,
-        old_priority,
-        &lock_context
-      );
+
+  if ( the_semaphore == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
+    if ( _Semaphore_MP_Is_remote( semaphore_id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+    }
 #endif
-    case OBJECTS_ERROR:
-      break;
+
+    return RTEMS_INVALID_ID;
   }
 
-  return RTEMS_INVALID_ID;
+  return _Semaphore_Set_priority(
+    the_semaphore,
+    scheduler_id,
+    new_priority,
+    old_priority,
+    &lock_context
+  );
 }

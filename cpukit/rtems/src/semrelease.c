@@ -21,82 +21,55 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/attrimpl.h>
-#include <rtems/score/isr.h>
-#include <rtems/rtems/options.h>
 #include <rtems/rtems/semimpl.h>
-#include <rtems/score/coremuteximpl.h>
-#include <rtems/score/coresemimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/interr.h>
+#include <rtems/rtems/attrimpl.h>
 
-rtems_status_code rtems_semaphore_release(
-  rtems_id   id
-)
+rtems_status_code rtems_semaphore_release( rtems_id id )
 {
-  Semaphore_Control          *the_semaphore;
-  Objects_Locations           location;
-  CORE_mutex_Status           mutex_status;
-  CORE_semaphore_Status       semaphore_status;
-  rtems_attribute             attribute_set;
-  ISR_lock_Context            lock_context;
+  Semaphore_Control     *the_semaphore;
+  CORE_mutex_Status      mutex_status;
+  CORE_semaphore_Status  semaphore_status;
+  rtems_attribute        attribute_set;
+  ISR_lock_Context       lock_context;
 
-  the_semaphore = _Semaphore_Get_interrupt_disable(
-    id,
-    &location,
-    &lock_context
-  );
-  switch ( location ) {
+  the_semaphore = _Semaphore_Get_interrupt_disable( id, &lock_context );
 
-    case OBJECTS_LOCAL:
-      attribute_set = the_semaphore->attribute_set;
-#if defined(RTEMS_SMP)
-      if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-        MRSP_Status mrsp_status;
-
-        mrsp_status = _MRSP_Surrender(
-          &the_semaphore->Core_control.mrsp,
-          _Thread_Executing,
-          &lock_context
-        );
-        return _Semaphore_Translate_MRSP_status_code( mrsp_status );
-      } else
-#endif
-      if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
-        mutex_status = _CORE_mutex_Surrender(
-          &the_semaphore->Core_control.mutex,
-          _Semaphore_Core_mutex_mp_support,
-          id,
-          &lock_context
-        );
-        return _Semaphore_Translate_core_mutex_return_code( mutex_status );
-      } else {
-        semaphore_status = _CORE_semaphore_Surrender(
-          &the_semaphore->Core_control.semaphore,
-          _Semaphore_Core_mutex_mp_support,
-          id,
-          &lock_context
-        );
-        return
-          _Semaphore_Translate_core_semaphore_return_code( semaphore_status );
-      }
-
+  if ( the_semaphore == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      return _Semaphore_MP_Send_request_packet(
-        SEMAPHORE_MP_RELEASE_REQUEST,
-        id,
-        0,                               /* Not used */
-        MPCI_DEFAULT_TIMEOUT
-      );
+    _Semaphore_MP_Release( id );
+#else
+    return RTEMS_INVALID_ID;
 #endif
-
-    case OBJECTS_ERROR:
-      break;
   }
 
-  return RTEMS_INVALID_ID;
+  attribute_set = the_semaphore->attribute_set;
+#if defined(RTEMS_SMP)
+  if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
+    MRSP_Status mrsp_status;
+
+    mrsp_status = _MRSP_Surrender(
+      &the_semaphore->Core_control.mrsp,
+      _Thread_Executing,
+      &lock_context
+    );
+    return _Semaphore_Translate_MRSP_status_code( mrsp_status );
+  } else
+#endif
+  if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
+    mutex_status = _CORE_mutex_Surrender(
+      &the_semaphore->Core_control.mutex,
+      _Semaphore_Core_mutex_mp_support,
+      id,
+      &lock_context
+    );
+    return _Semaphore_Translate_core_mutex_return_code( mutex_status );
+  } else {
+    semaphore_status = _CORE_semaphore_Surrender(
+      &the_semaphore->Core_control.semaphore,
+      _Semaphore_Core_mutex_mp_support,
+      id,
+      &lock_context
+    );
+    return _Semaphore_Translate_core_semaphore_return_code( semaphore_status );
+  }
 }

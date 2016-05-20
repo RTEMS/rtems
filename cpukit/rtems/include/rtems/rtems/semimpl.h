@@ -134,28 +134,15 @@ RTEMS_INLINE_ROUTINE void _Semaphore_Free (
   _Objects_Free( &_Semaphore_Information, &the_semaphore->Object );
 }
 
-/**
- *  @brief Maps semaphore IDs to semaphore control blocks.
- *
- *  This function maps semaphore IDs to semaphore control blocks.
- *  If ID corresponds to a local semaphore, then it returns
- *  the_semaphore control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  if the semaphore ID is global and
- *  resides on a remote node, then location is set to OBJECTS_REMOTE,
- *  and the_semaphore is undefined.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_semaphore is undefined.
- */
-RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get_interrupt_disable (
+RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get_interrupt_disable(
   Objects_Id         id,
-  Objects_Locations *location,
   ISR_lock_Context  *lock_context
 )
 {
-  return (Semaphore_Control *) _Objects_Get_isr_disable(
-    &_Semaphore_Information,
+  return (Semaphore_Control *) _Objects_Get_local(
     id,
-    location,
-    lock_context
+    lock_context,
+    &_Semaphore_Information
   );
 }
 

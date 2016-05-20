@@ -31,8 +31,6 @@ const char rtems_test_name[] = "TIME TEST 26";
 /* TEST DATA */
 rtems_id Semaphore_id;
 
-Objects_Locations location;   /* uses internal RTEMS type */
-
 Thread_Control *Middle_tcb;   /* uses internal RTEMS type */
 
 Thread_Control *Low_tcb;      /* uses internal RTEMS type */
@@ -517,7 +515,6 @@ void complete_test( void )
     for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
       (void) _Semaphore_Get_interrupt_disable(
         Semaphore_id,
-        &location,
         &lock_context
       );
       _ISR_lock_ISR_enable( &lock_context );
