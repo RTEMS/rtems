@@ -45,7 +45,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
       return OBJECTS_INVALID_ID;
   #endif
 
-  the_object = _Objects_Get_local(
+  the_object = _Objects_Get(
     tmpId,
     &lock_context,
     information

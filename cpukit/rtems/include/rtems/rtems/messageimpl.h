@@ -107,7 +107,7 @@ _Message_queue_Get_interrupt_disable(
   ISR_lock_Context  *lock_context
 )
 {
-  return (Message_queue_Control *) _Objects_Get_local(
+  return (Message_queue_Control *) _Objects_Get(
     id,
     lock_context,
     &_Message_queue_Information

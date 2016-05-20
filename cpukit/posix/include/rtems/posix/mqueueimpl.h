@@ -112,7 +112,7 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get(
 )
 {
   return (POSIX_Message_queue_Control *)
-    _Objects_Get_local( id, lock_context, &_POSIX_Message_queue_Information );
+    _Objects_Get( id, lock_context, &_POSIX_Message_queue_Information );
 }
 
 /*

@@ -186,7 +186,7 @@ RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Get(
   ISR_lock_Context  *lock_context
 )
 {
-  return (Partition_Control *) _Objects_Get_local(
+  return (Partition_Control *) _Objects_Get(
     id,
     lock_context,
     &_Partition_Information

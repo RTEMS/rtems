@@ -87,7 +87,7 @@ RTEMS_INLINE_ROUTINE Timer_Control *_Timer_Get(
   ISR_lock_Context  *lock_context
 )
 {
-  return (Timer_Control *) _Objects_Get_local(
+  return (Timer_Control *) _Objects_Get(
     id,
     lock_context,
     &_Timer_Information

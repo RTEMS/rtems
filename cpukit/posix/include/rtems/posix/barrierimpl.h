@@ -82,7 +82,7 @@ RTEMS_INLINE_ROUTINE POSIX_Barrier_Control *_POSIX_Barrier_Get (
   ISR_lock_Context        *lock_context
 )
 {
-  return (POSIX_Barrier_Control *) _Objects_Get_local(
+  return (POSIX_Barrier_Control *) _Objects_Get(
     (Objects_Id) *barrier,
     lock_context,
     &_POSIX_Barrier_Information

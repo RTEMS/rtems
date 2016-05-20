@@ -139,7 +139,7 @@ RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get_interrupt_disable(
   ISR_lock_Context  *lock_context
 )
 {
-  return (Semaphore_Control *) _Objects_Get_local(
+  return (Semaphore_Control *) _Objects_Get(
     id,
     lock_context,
     &_Semaphore_Information

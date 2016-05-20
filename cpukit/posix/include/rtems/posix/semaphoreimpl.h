@@ -65,7 +65,7 @@ RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get(
   ISR_lock_Context  *lock_context
 )
 {
-  return (POSIX_Semaphore_Control *) _Objects_Get_local(
+  return (POSIX_Semaphore_Control *) _Objects_Get(
     (Objects_Id) *id,
     lock_context,
     &_POSIX_Semaphore_Information

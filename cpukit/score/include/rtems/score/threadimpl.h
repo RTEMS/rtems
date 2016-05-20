@@ -580,7 +580,7 @@ RTEMS_INLINE_ROUTINE Objects_Information *_Thread_Get_objects_information(
 /**
  * @brief Gets a thread by its identifier.
  *
- * @see _Objects_Get_local().
+ * @see _Objects_Get().
  */
 Thread_Control *_Thread_Get_interrupt_disable(
   Objects_Id         id,

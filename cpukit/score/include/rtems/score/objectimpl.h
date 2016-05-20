@@ -549,7 +549,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
  * Interrupts are now disabled and must be restored using the specified lock
  * context via _ISR_lock_ISR_enable() or _ISR_lock_Release_and_ISR_enable().
  */
-Objects_Control *_Objects_Get_local(
+Objects_Control *_Objects_Get(
   Objects_Id                 id,
   ISR_lock_Context          *lock_context,
   const Objects_Information *information

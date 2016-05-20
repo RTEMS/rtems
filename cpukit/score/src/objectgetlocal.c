@@ -25,7 +25,7 @@
 
 #include <rtems/score/objectimpl.h>
 
-Objects_Control *_Objects_Get_local(
+Objects_Control *_Objects_Get(
   Objects_Id                 id,
   ISR_lock_Context          *lock_context,
   const Objects_Information *information

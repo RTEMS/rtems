@@ -39,5 +39,5 @@ Thread_Control *_Thread_Get_interrupt_disable(
   }
 
   return (Thread_Control *)
-    _Objects_Get_local( id, lock_context, information );
+    _Objects_Get( id, lock_context, information );
 }

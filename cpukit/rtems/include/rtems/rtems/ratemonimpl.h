@@ -90,7 +90,7 @@ RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Get(
 )
 {
   return (Rate_monotonic_Control *)
-    _Objects_Get_local( id, lock_context, &_Rate_monotonic_Information );
+    _Objects_Get( id, lock_context, &_Rate_monotonic_Information );
 }
 
 void _Rate_monotonic_Timeout( Watchdog_Control *watchdog );
