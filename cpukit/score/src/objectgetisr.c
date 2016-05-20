@@ -43,10 +43,12 @@ Objects_Control *_Objects_Get_isr_disable(
     return NULL;
   }
 
-#if defined(RTEMS_MULTIPROCESSING)
-  *location = _Objects_MP_Is_remote( information, id );
-#else
   *location = OBJECTS_ERROR;
+
+#if defined(RTEMS_MULTIPROCESSING)
+  if ( _Objects_MP_Is_remote( id, information ) ) {
+    *location = OBJECTS_REMOTE;
+  }
 #endif
 
   return NULL;

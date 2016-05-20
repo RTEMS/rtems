@@ -351,9 +351,9 @@ Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search(
   return status;
 }
 
-Objects_Locations _Objects_MP_Is_remote(
-  Objects_Information *information,
-  Objects_Id           the_id
+bool _Objects_MP_Is_remote(
+  Objects_Id                 the_id,
+  const Objects_Information *information
 )
 {
   Objects_MP_Control *the_global_object;
@@ -371,11 +371,7 @@ Objects_Locations _Objects_MP_Is_remote(
 
   _Objects_MP_Global_release( &lock_context );
 
-  if ( the_global_object != NULL ) {
-    return OBJECTS_REMOTE;
-  } else {
-    return OBJECTS_ERROR;
-  }
+  return the_global_object != NULL;
 }
 
 Objects_MP_Control *_Objects_MP_Allocate_global_object( void )

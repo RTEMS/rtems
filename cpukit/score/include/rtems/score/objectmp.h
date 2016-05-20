@@ -144,19 +144,19 @@ Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
 );
 
 /**
- *  @brief Searches the Global Object Table managed
- *  by information for the object indicated by ID.
+ * @brief Returns true, if the object identifier is in the global object
+ * identifier cache of the specified object information, otherwise false.
  *
- *  @param[in] information points to the object information table for this
- *             object class.
- *  @param[in] the_id is the Id of the object being opened.
+ * @param id The object identifier.
+ * @param information The object information.
  *
- *  @retval OBJECTS_REMOTE A remote objects with this object identifier exits.
- *  @retval OBJECTS_ERROR Otherwise.
+ * @retval true A remote objects with this object identifier exits in the
+ * global object identifier cache of the specified information.
+ * @retval false Otherwise.
  */
-Objects_Locations _Objects_MP_Is_remote(
-  Objects_Information *information,
-  Objects_Id           the_id
+bool _Objects_MP_Is_remote(
+  Objects_Id                 id,
+  const Objects_Information *information
 );
 
 /**

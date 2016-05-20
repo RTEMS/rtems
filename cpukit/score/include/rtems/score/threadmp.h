@@ -100,7 +100,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_MP_Is_remote( Objects_Id id )
     return false;
   }
 
-  return _Objects_MP_Is_remote( information, id ) == OBJECTS_REMOTE;
+  return _Objects_MP_Is_remote( id, information );
 }
 
 /**@}*/
