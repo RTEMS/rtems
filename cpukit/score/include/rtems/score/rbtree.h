@@ -307,6 +307,16 @@ RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Root_reference(
 }
 
 /**
+ * @brief Returns a constant reference to the root pointer of the red-black tree.
+ */
+RTEMS_INLINE_ROUTINE RBTree_Node * const *_RBTree_Root_const_reference(
+  const RBTree_Control *the_rbtree
+)
+{
+  return &RB_ROOT( the_rbtree );
+}
+
+/**
  * @brief Returns a pointer to the parent of this node.
  *
  * The node must have a parent, thus it is invalid to use this function for the
@@ -542,17 +552,17 @@ RTEMS_INLINE_ROUTINE void _RBTree_Insert_inline(
  * @retval NULL No object with the specified key exists in the red-black tree.
  */
 RTEMS_INLINE_ROUTINE void *_RBTree_Find_inline(
-  RBTree_Control *the_rbtree,
-  const void     *key,
-  bool         ( *equal )( const void *, const RBTree_Node * ),
-  bool         ( *less )( const void *, const RBTree_Node * ),
-  void        *( *map )( RBTree_Node * )
+  const RBTree_Control *the_rbtree,
+  const void           *key,
+  bool               ( *equal )( const void *, const RBTree_Node * ),
+  bool               ( *less )( const void *, const RBTree_Node * ),
+  void              *( *map )( RBTree_Node * )
 )
 {
-  RBTree_Node **link;
-  RBTree_Node  *parent;
+  RBTree_Node * const *link;
+  RBTree_Node         *parent;
 
-  link = _RBTree_Root_reference( the_rbtree );
+  link = _RBTree_Root_const_reference( the_rbtree );
   parent = NULL;
 
   while ( *link != NULL ) {
