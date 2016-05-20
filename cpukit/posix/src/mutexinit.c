@@ -46,49 +46,17 @@ int pthread_mutex_init(
     return EINVAL;
 
   /*
-   *  This code should eventually be removed.
-   *
-   *  Although the POSIX specification says:
+   *  The POSIX specification says:
    *
    *  "Attempting to initialize an already initialized mutex results
    *  in undefined behavior."
    *
    *  Trying to keep the caller from doing the create when *mutex
    *  is actually a valid ID causes grief.  All it takes is the wrong
-   *  value in an uninitialized variable to make this fail.  As best
-   *  I can tell, RTEMS was the only pthread implementation to choose
-   *  this option for "undefined behavior" and doing so has created
-   *  portability problems.  In particular, Rosimildo DaSilva
-   *  <rdasilva@connecttel.com> saw seemingly random failures in the
-   *  RTEMS port of omniORB2 when this code was enabled.
+   *  value in an uninitialized variable to make this fail.
    *
-   *  Joel Sherrill <joel@OARcorp.com>     14 May 1999
-   *  NOTE: Be careful to avoid infinite recursion on call to this
-   *        routine in _POSIX_Mutex_Get.
+   *  Thus, we do not look at *mutex.
    */
-  #if 0
-  {
-    POSIX_Mutex_Control *mutex_in_use;
-    Objects_Locations    location;
-
-    if ( *mutex != PTHREAD_MUTEX_INITIALIZER ) {
-
-      /* EBUSY if *mutex is a valid id */
-
-      mutex_in_use = _POSIX_Mutex_Get( mutex, &location );
-      switch ( location ) {
-        case OBJECTS_LOCAL:
-          _Objects_Put( &mutex_in_use->Object );
-          return EBUSY;
-        #if defined(RTEMS_MULTIPROCESSING)
-          case OBJECTS_REMOTE:
-        #endif
-        case OBJECTS_ERROR:
-          break;
-      }
-    }
-  }
-  #endif
 
   if ( !the_attr->is_initialized )
     return EINVAL;
