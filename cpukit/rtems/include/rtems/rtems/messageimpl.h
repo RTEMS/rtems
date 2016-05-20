@@ -101,8 +101,7 @@ RTEMS_INLINE_ROUTINE void _Message_queue_Free (
   _Objects_Free( &_Message_queue_Information, &the_message_queue->Object );
 }
 
-RTEMS_INLINE_ROUTINE Message_queue_Control *
-_Message_queue_Get_interrupt_disable(
+RTEMS_INLINE_ROUTINE Message_queue_Control * _Message_queue_Get(
   Objects_Id         id,
   ISR_lock_Context  *lock_context
 )

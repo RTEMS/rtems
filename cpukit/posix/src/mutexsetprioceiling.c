@@ -57,7 +57,7 @@ int pthread_mutex_setprioceiling(
    *  NOTE: This makes it easier to get 100% binary coverage since the
    *        bad Id case is handled by the switch.
    */
-  the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &lock_context );
+  the_mutex = _POSIX_Mutex_Get( mutex, &lock_context );
 
   if ( the_mutex == NULL ) {
     return EINVAL;

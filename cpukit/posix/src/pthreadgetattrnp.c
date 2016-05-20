@@ -38,7 +38,7 @@ int pthread_getattr_np(
     return EINVAL;
   }
 
-  the_thread = _Thread_Get_interrupt_disable( thread, &lock_context );
+  the_thread = _Thread_Get( thread, &lock_context );
 
   if ( the_thread == NULL ) {
     return ESRCH;

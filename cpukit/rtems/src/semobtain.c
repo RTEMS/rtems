@@ -45,7 +45,7 @@ rtems_status_code rtems_semaphore_obtain(
   rtems_attribute    attribute_set;
   bool               wait;
 
-  the_semaphore = _Semaphore_Get_interrupt_disable( id, &lock_context );
+  the_semaphore = _Semaphore_Get( id, &lock_context );
 
   if ( the_semaphore == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)

@@ -31,7 +31,7 @@ rtems_status_code rtems_event_send(
   RTEMS_API_Control *api;
   ISR_lock_Context   lock_context;
 
-  the_thread = _Thread_Get_interrupt_disable( id, &lock_context );
+  the_thread = _Thread_Get( id, &lock_context );
 
   if ( the_thread == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)

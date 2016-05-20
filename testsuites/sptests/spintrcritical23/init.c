@@ -45,7 +45,7 @@ static Thread_Control *get_tcb(rtems_id id)
   ISR_lock_Context lock_context;
   Thread_Control *tcb;
 
-  tcb = _Thread_Get_interrupt_disable(id, &lock_context);
+  tcb = _Thread_Get(id, &lock_context);
   rtems_test_assert(tcb != NULL);
   _ISR_lock_ISR_enable(&lock_context);
 

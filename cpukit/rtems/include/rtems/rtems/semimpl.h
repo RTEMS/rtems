@@ -134,7 +134,7 @@ RTEMS_INLINE_ROUTINE void _Semaphore_Free (
   _Objects_Free( &_Semaphore_Information, &the_semaphore->Object );
 }
 
-RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get_interrupt_disable(
+RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get(
   Objects_Id         id,
   ISR_lock_Context  *lock_context
 )

@@ -45,7 +45,7 @@ int _Scheduler_CBS_Get_remaining_budget (
     return SCHEDULER_CBS_OK;
   }
 
-  the_thread = _Thread_Get_interrupt_disable( server->task_id, &lock_context );
+  the_thread = _Thread_Get( server->task_id, &lock_context );
 
   if ( the_thread != NULL ) {
     *remaining_budget = the_thread->cpu_time_budget;

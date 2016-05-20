@@ -38,7 +38,7 @@ rtems_status_code rtems_task_set_priority(
   if ( !old_priority )
     return RTEMS_INVALID_ADDRESS;
 
-  the_thread = _Thread_Get_interrupt_disable( id, &lock_context );
+  the_thread = _Thread_Get( id, &lock_context );
 
   if ( the_thread == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)

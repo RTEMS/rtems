@@ -34,7 +34,7 @@ int pthread_detach( pthread_t thread )
   ISR_lock_Context  lock_context;
   Per_CPU_Control  *cpu_self;
 
-  the_thread = _Thread_Get_interrupt_disable( thread, &lock_context );
+  the_thread = _Thread_Get( thread, &lock_context );
 
   if ( the_thread == NULL ) {
     return ESRCH;

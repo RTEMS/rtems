@@ -29,7 +29,7 @@ rtems_status_code rtems_message_queue_delete(
   ISR_lock_Context       lock_context;
 
   _Objects_Allocator_lock();
-  the_message_queue = _Message_queue_Get_interrupt_disable( id, &lock_context );
+  the_message_queue = _Message_queue_Get( id, &lock_context );
 
   if ( the_message_queue == NULL ) {
     _Objects_Allocator_unlock();

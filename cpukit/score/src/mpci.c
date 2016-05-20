@@ -295,7 +295,7 @@ Thread_Control *_MPCI_Process_response (
   ISR_lock_Context  lock_context;
   Thread_Control   *the_thread;
 
-  the_thread = _Thread_Get_interrupt_disable( the_packet->id, &lock_context );
+  the_thread = _Thread_Get( the_packet->id, &lock_context );
   _Assert( the_thread != NULL );
 
   /*

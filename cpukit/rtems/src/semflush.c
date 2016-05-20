@@ -27,7 +27,7 @@ rtems_status_code rtems_semaphore_flush( rtems_id id )
   ISR_lock_Context   lock_context;
   rtems_attribute    attribute_set;
 
-  the_semaphore = _Semaphore_Get_interrupt_disable( id, &lock_context );
+  the_semaphore = _Semaphore_Get( id, &lock_context );
 
   if ( the_semaphore == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)

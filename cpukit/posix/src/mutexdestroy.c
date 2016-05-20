@@ -34,7 +34,7 @@ int pthread_mutex_destroy(
 
   _Objects_Allocator_lock();
 
-  the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &lock_context );
+  the_mutex = _POSIX_Mutex_Get( mutex, &lock_context );
 
   if ( the_mutex != NULL ) {
     _CORE_mutex_Acquire_critical( &the_mutex->Mutex, &lock_context );

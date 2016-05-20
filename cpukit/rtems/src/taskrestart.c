@@ -31,7 +31,7 @@ rtems_status_code rtems_task_restart(
   Thread_Entry_information  entry;
   bool                      ok;
 
-  the_thread = _Thread_Get_interrupt_disable( id, &lock_context );
+  the_thread = _Thread_Get( id, &lock_context );
 
   if ( the_thread == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)

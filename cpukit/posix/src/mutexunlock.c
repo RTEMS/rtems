@@ -34,7 +34,7 @@ int pthread_mutex_unlock(
   CORE_mutex_Status    status;
   ISR_lock_Context     lock_context;
 
-  the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &lock_context );
+  the_mutex = _POSIX_Mutex_Get( mutex, &lock_context );
 
   if ( the_mutex == NULL ) {
     return EINVAL;

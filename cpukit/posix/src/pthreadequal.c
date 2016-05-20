@@ -45,8 +45,8 @@ int pthread_equal(
   Thread_Control   *thread_1;
   Thread_Control   *thread_2;
 
-  thread_1 = _Thread_Get_interrupt_disable( t1, &lock_context_1 );
-  thread_2 = _Thread_Get_interrupt_disable( t2, &lock_context_2 );
+  thread_1 = _Thread_Get( t1, &lock_context_1 );
+  thread_2 = _Thread_Get( t2, &lock_context_2 );
   _ISR_lock_ISR_enable( &lock_context_2 );
   _ISR_lock_ISR_enable( &lock_context_1 );
 

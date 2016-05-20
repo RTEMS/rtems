@@ -21,7 +21,7 @@
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/posixapi.h>
 
-POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable(
+POSIX_Mutex_Control *_POSIX_Mutex_Get(
   pthread_mutex_t  *mutex,
   ISR_lock_Context *lock_context
 )

@@ -45,7 +45,7 @@ int pthread_cancel( pthread_t thread )
     return EPROTO;
   }
 
-  the_thread = _Thread_Get_interrupt_disable( thread, &lock_context );
+  the_thread = _Thread_Get( thread, &lock_context );
 
   if ( the_thread == NULL ) {
     return ESRCH;

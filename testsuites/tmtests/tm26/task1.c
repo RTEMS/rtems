@@ -506,24 +506,21 @@ void complete_test( void )
 
   benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
-      (void) _Thread_Get_interrupt_disable( task_id, &lock_context );
+      (void) _Thread_Get( task_id, &lock_context );
       _ISR_lock_ISR_enable( &lock_context );
     }
   thread_get_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
-      (void) _Semaphore_Get_interrupt_disable(
-        Semaphore_id,
-        &lock_context
-      );
+      (void) _Semaphore_Get( Semaphore_id, &lock_context );
       _ISR_lock_ISR_enable( &lock_context );
     }
   semaphore_get_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
-      (void) _Thread_Get_interrupt_disable( 0x3, &lock_context );
+      (void) _Thread_Get( 0x3, &lock_context );
       _ISR_lock_ISR_enable( &lock_context );
     }
   thread_get_invalid_time = benchmark_timer_read();
@@ -687,7 +684,7 @@ void complete_test( void )
   );
 
   put_time(
-    "rtems internal: _Thread_Get_interrupt_disable",
+    "rtems internal: _Thread_Get",
     thread_get_time,
     OPERATION_COUNT,
     0,
@@ -695,7 +692,7 @@ void complete_test( void )
   );
 
   put_time(
-    "rtems internal: _Semaphore_Get_interrupt_disable",
+    "rtems internal: _Semaphore_Get",
     semaphore_get_time,
     OPERATION_COUNT,
     0,
@@ -703,7 +700,7 @@ void complete_test( void )
   );
 
   put_time(
-    "rtems internal: _Thread_Get_interrupt_disable: invalid id",
+    "rtems internal: _Thread_Get: invalid id",
     thread_get_invalid_time,
     OPERATION_COUNT,
     0,

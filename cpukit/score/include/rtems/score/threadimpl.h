@@ -582,7 +582,7 @@ RTEMS_INLINE_ROUTINE Objects_Information *_Thread_Get_objects_information(
  *
  * @see _Objects_Get().
  */
-Thread_Control *_Thread_Get_interrupt_disable(
+Thread_Control *_Thread_Get(
   Objects_Id         id,
   ISR_lock_Context  *lock_context
 );

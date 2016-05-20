@@ -46,7 +46,7 @@ int _Scheduler_CBS_Detach_thread (
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
   }
 
-  the_thread = _Thread_Get_interrupt_disable( task_id, &lock_context );
+  the_thread = _Thread_Get( task_id, &lock_context );
 
   if ( the_thread == NULL ) {
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;

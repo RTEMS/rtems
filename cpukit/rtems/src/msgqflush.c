@@ -32,10 +32,7 @@ rtems_status_code rtems_message_queue_flush(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  the_message_queue = _Message_queue_Get_interrupt_disable(
-    id,
-    &lock_context
-  );
+  the_message_queue = _Message_queue_Get( id, &lock_context );
 
   if ( the_message_queue == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)

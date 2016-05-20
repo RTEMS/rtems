@@ -32,7 +32,7 @@ rtems_status_code rtems_task_get_scheduler(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  the_thread = _Thread_Get_interrupt_disable( task_id, &lock_context );
+  the_thread = _Thread_Get( task_id, &lock_context );
 
   if ( the_thread == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)

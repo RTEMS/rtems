@@ -121,7 +121,7 @@ static Thread_Control *get_thread_by_id(rtems_id task_id)
   ISR_lock_Context lock_context;
   Thread_Control *thread;
 
-  thread = _Thread_Get_interrupt_disable(task_id, &lock_context);
+  thread = _Thread_Get(task_id, &lock_context);
   rtems_test_assert(thread != NULL);
   _ISR_lock_ISR_enable(&lock_context);
 

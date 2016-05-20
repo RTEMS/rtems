@@ -27,7 +27,7 @@ rtems_status_code rtems_task_is_suspended( rtems_id id )
   ISR_lock_Context  lock_context;
   States_Control    current_state;
 
-  the_thread = _Thread_Get_interrupt_disable( id, &lock_context );
+  the_thread = _Thread_Get( id, &lock_context );
 
   if ( the_thread == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
