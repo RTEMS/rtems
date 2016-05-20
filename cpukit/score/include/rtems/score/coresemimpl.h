@@ -256,7 +256,6 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
  *
  * @param[in] the_semaphore is the semaphore to obtain
  * @param[in,out] executing The currently executing thread.
- * @param[in] id is the Id of the owning API level Semaphore object
  * @param[in] wait is true if the thread is willing to wait
  * @param[in] timeout is the maximum number of ticks to block
  * @param[in] lock_context is a temporary variable used to contain the ISR
@@ -267,7 +266,6 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
 RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize(
   CORE_semaphore_Control  *the_semaphore,
   Thread_Control          *executing,
-  Objects_Id               id,
   bool                     wait,
   Watchdog_Interval        timeout,
   ISR_lock_Context        *lock_context

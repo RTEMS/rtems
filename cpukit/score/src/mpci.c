@@ -336,7 +336,6 @@ void _MPCI_Receive_server(
     _CORE_semaphore_Seize(
       &_MPCI_Semaphore,
       executing,
-      0,
       true,
       WATCHDOG_NO_TIMEOUT,
       &lock_context

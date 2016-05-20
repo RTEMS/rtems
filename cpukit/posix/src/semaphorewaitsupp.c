@@ -49,7 +49,6 @@ int _POSIX_Semaphore_Wait_support(
   _CORE_semaphore_Seize(
     &the_semaphore->Semaphore,
     executing,
-    the_semaphore->Object.id,
     blocking,
     timeout,
     &lock_context
