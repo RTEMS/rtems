@@ -211,7 +211,7 @@ libscore_a_SOURCES += src/heap.c src/heapallocate.c src/heapextend.c \
 ## OBJECT_C_FILES
 libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
     src/objectextendinformation.c src/objectfree.c \
-    src/objectgetisr.c src/objectgetnext.c src/objectinitializeinformation.c \
+    src/objectgetnext.c src/objectinitializeinformation.c \
     src/objectnametoid.c src/objectnametoidstring.c \
     src/objectshrinkinformation.c src/objectgetnoprotection.c \
     src/objectidtoname.c src/objectgetnameasstring.c src/objectsetname.c \

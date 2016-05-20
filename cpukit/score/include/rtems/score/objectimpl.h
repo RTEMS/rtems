@@ -108,19 +108,6 @@ typedef enum {
   OBJECTS_FAKE_OBJECTS_SCHEDULERS = 1
 } Objects_Fake_objects_API;
 
-/**
- *  This enumerated type lists the locations which may be returned
- *  by _Objects_Get_isr_disable.  These codes indicate the success of locating
- *  an object with the specified ID.
- */
-typedef enum {
-#if defined(RTEMS_MULTIPROCESSING)
-  OBJECTS_REMOTE = 2,         /* object is remote */
-#endif
-  OBJECTS_LOCAL  = 0,         /* object is local */
-  OBJECTS_ERROR  = 1          /* id was invalid */
-} Objects_Locations;
-
 #if defined(RTEMS_MULTIPROCESSING)
 /**
  *  The following type defines the callout used when a local task
@@ -540,35 +527,6 @@ Objects_Control *_Objects_Get_by_name(
 Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   Objects_Id      id,
   Objects_Name   *name
-);
-
-/**
- *  @brief Maps object ids to object control blocks.
- *
- *  This function maps object ids to object control blocks.
- *  If id corresponds to a local object, then it returns
- *  the_object control pointer which maps to id and location
- *  is set to OBJECTS_LOCAL.  If the object class supports global
- *  objects and the object id is global and resides on a remote
- *  node, then location is set to OBJECTS_REMOTE, and the_object
- *  is undefined.  Otherwise, location is set to OBJECTS_ERROR
- *  and the_object is undefined.
- *
- *  @param[in] information points to an object class information block.
- *  @param[in] id is the Id of the object whose name we are locating.
- *  @param[in] location will contain an indication of success or failure.
- *  @param[in] lock_context is the previous interrupt state being turned.
- *
- *  @retval This method returns one of the values from the
- *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
- *          successful or failure.  On success @a name will contain the name of
- *          the requested object.
- */
-Objects_Control *_Objects_Get_isr_disable(
-  Objects_Information *information,
-  Objects_Id           id,
-  Objects_Locations   *location,
-  ISR_lock_Context    *lock_context
 );
 
 /**
